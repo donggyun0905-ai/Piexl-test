@@ -1,0 +1,67 @@
+/* 모바일 화면 다듬기 (터치·좁은 화면): 게임 화면 공간 넓히기 · 세로 화면 정보 줄 · 연습장 도구 아래 창 · 일일 도전 탭 · 로비 안내 */
+
+/* 게임: 터치에서는 긴 조작 안내 대신(튜토리얼에 있음) 세로 화면일 때만 "가로로 돌리기" 안내 */
+.game-hint.touch {
+  display: none;
+}
+@media (orientation: portrait) {
+  .game-hint.touch {
+    display: block;
+    padding: 10px 16px;
+    font-size: 13px;
+    opacity: 0.8;
+  }
+  /* 층·돈·처치·시간: 숨기지 않고 HP 아래 작은 한 줄로 */
+  .hud .hud-info {
+    display: block;
+    order: 5;
+    flex: 1 1 100%;
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* 연습장 도구: 화면 아래 절반 창 (위쪽 게임이 보이게) */
+  .practice-panel {
+    top: auto;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    width: auto;
+    height: 48vh;
+  }
+}
+
+/* 가로 화면(키가 낮음): 위쪽 줄·장비 줄을 얇게 해서 게임 화면을 크게 */
+@media (max-height: 500px) {
+  .hud {
+    padding: 3px 8px;
+    gap: 6px;
+  }
+  .hud-btn {
+    padding: 2px 8px;
+    font-size: 12px;
+  }
+  .loadout {
+    padding: 2px 8px 0;
+    font-size: 12px;
+  }
+}
+
+/* 일일 도전 탭: 글자가 세로로 쪼개지지 않게 */
+.tabs {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.tabs button {
+  white-space: nowrap;
+}
+
+/* 로비: 좁은 화면이면 조작 안내를 '메인으로' 버튼 아래로 */
+@media (max-width: 640px) {
+  .lobby-help {
+    top: calc(max(12px, env(safe-area-inset-top)) + 48px);
+    left: 12px;
+    right: 12px;
+    text-align: center;
+  }
+}

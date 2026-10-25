@@ -1,0 +1,159 @@
+/* 모바일 조작: 오른쪽 아래 버튼(대시·사용 아이템·맞는 범위·상호작용) · 세로 화면 위쪽 줄 · 조작 안내 자리
+   크기는 설정의 버튼 크기(--button-scale), 옮긴 자리는 버튼마다 translate (TouchButtons) */
+.touch-buttons {
+  /* 작은 버튼 · 대시 · 맞는 범위 줄 높이 · 상호작용 높이 · 간격 (가로 화면은 아래에서 작게) */
+  --small: calc(58px * var(--button-scale, 1));
+  --big: calc(84px * var(--button-scale, 1));
+  --bar: calc(34px * var(--button-scale, 1));
+  --act: calc(44px * var(--button-scale, 1));
+  --gap: calc(10px * var(--button-scale, 1));
+  position: fixed;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: max(18px, calc(env(safe-area-inset-bottom) + 8px));
+  z-index: 2;
+  display: grid;
+  /* 엄지 자리: 대시가 오른쪽 아래 가장 크게, 아이템 1은 왼쪽, 2는 위 */
+  grid-template-columns: var(--small) var(--big);
+  grid-template-rows: auto var(--bar) var(--small) var(--big);
+  grid-template-areas:
+    "act act"
+    "hit hit"
+    ". i2"
+    "i1 dash";
+  gap: var(--gap);
+  justify-items: center;
+  align-items: center;
+  /* 버튼 사이 빈 곳을 누르면 아래 조이스틱 영역으로 */
+  pointer-events: none;
+}
+.touch-btn {
+  pointer-events: auto;
+  position: relative;
+  width: var(--small);
+  height: var(--small);
+  padding: 0;
+  border-radius: 50%;
+  background: rgb(20 18 28 / 0.75);
+  font-size: calc(12px * var(--button-scale, 1));
+  line-height: 1.1;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  transition: transform 0.06s;
+}
+.touch-btn.pressed,
+.touch-btn:active:not(:disabled) {
+  transform: scale(0.9);
+  background: rgb(242 193 78 / 0.25);
+}
+.touch-btn.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  color: var(--muted);
+}
+.touch-btn.item1 {
+  grid-area: i1;
+}
+.touch-btn.item2 {
+  grid-area: i2;
+}
+.touch-btn.item.filled {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.touch-btn.item small {
+  max-width: calc(var(--small) - 6px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: calc(9px * var(--button-scale, 1));
+}
+.touch-empty {
+  font-size: 16px;
+  opacity: 0.5;
+}
+.touch-btn.hitbox {
+  grid-area: hit;
+  justify-self: stretch;
+  width: auto;
+  height: var(--bar);
+  border-radius: calc(var(--bar) / 2);
+  color: var(--muted);
+}
+.touch-btn.dash {
+  grid-area: dash;
+  width: var(--big);
+  height: var(--big);
+  border-color: rgb(242 193 78 / 0.7);
+  font-size: calc(15px * var(--button-scale, 1));
+  font-weight: bold;
+}
+/* 대시 다시 쓸 수 있을 때까지: 남은 만큼 어둡게 덮음 (--cd 1 → 0, gameLoop가 씀) */
+.touch-btn.dash::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: conic-gradient(rgb(0 0 0 / 0.6) calc(var(--cd, 0) * 360deg), transparent 0);
+  pointer-events: none;
+}
+.touch-btn.dash.cooling {
+  color: var(--muted);
+}
+/* 상호작용 (상점·계단·무기 교체 등): 버튼 묶음 바로 위, 엄지가 닿는 자리 */
+.touch-btn.interact {
+  grid-area: act;
+  justify-self: end;
+  width: max-content;
+  max-width: min(calc(100vw - 28px), 360px);
+  height: auto;
+  min-height: var(--act);
+  padding: 6px 16px;
+  border-radius: calc(var(--act) / 2);
+  border-color: var(--accent);
+  background: rgb(20 18 28 / 0.9);
+  font-size: 14px;
+  line-height: 1.3;
+  /* 아이템 설명이 길면 잘리지 않고 여러 줄로 (위로 늘어남) */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+/* 가로 화면(키가 낮음): 버튼을 조금 작게 해 미니맵·안내와 안 겹치게 */
+@media (max-height: 500px) {
+  .touch-buttons {
+    --small: calc(50px * var(--button-scale, 1));
+    --big: calc(72px * var(--button-scale, 1));
+    --bar: calc(30px * var(--button-scale, 1));
+    --act: calc(38px * var(--button-scale, 1));
+    --gap: calc(8px * var(--button-scale, 1));
+  }
+  .touch-btn.interact {
+    font-size: 13px;
+  }
+  /* 아래 안내 글이 오른쪽 버튼 밑으로 들어가지 않게 */
+  .game-hint.touch {
+    padding-right: calc(170px * var(--button-scale, 1));
+    text-align: left;
+  }
+}
+
+/* 세로 화면: 위쪽 줄 버튼이 화면 밖으로 밀려 자동 공격 버튼이 안 보이던 것 → 두 줄로 */
+@media (orientation: portrait) {
+  .hud {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .hp {
+    flex: 1 1 calc(100% - 60px);
+  }
+  .hud-btn {
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+}

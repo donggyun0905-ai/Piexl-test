@@ -1,0 +1,131 @@
+import type { Lang } from "../index";
+
+// 화면 글자: 캐릭터 이름·설명 (캐릭터 선택·기록·배틀 대기실)
+export const CHARACTER_TEXT = {
+  warden: { ko: "파수꾼", en: "Warden", ja: "番人" },
+  wardenDesc: {
+    ko: "근접 · 큰 칼로 앞쪽을 넓게 벤다 · 체력이 높다",
+    en: "Melee · Wide greatblade sweeps · High health",
+    ja: "近接 · 大剣で前方を広く斬る · 体力が高い",
+  },
+  drifter: { ko: "떠돌이", en: "Drifter", ja: "流れ者" },
+  drifterDesc: {
+    ko: "원거리 · 쇠뇌로 멀리서 쏜다 · 발이 빠르다",
+    en: "Ranged · Crossbow from afar · Fast on foot",
+    ja: "遠距離 · クロスボウで遠くから撃つ · 足が速い",
+  },
+  mage: { ko: "마법사", en: "Mage", ja: "魔法使い" },
+  mageDesc: {
+    ko: "원거리 · 마법탄이 터져 주변 적까지 맞힌다 · 체력이 낮다",
+    en: "Ranged · Magic bolts burst and hit nearby foes · Low health",
+    ja: "遠距離 · 魔法弾が弾けて周りの敵にも当たる · 体力が低い",
+  },
+  mystic: { ko: "음양사", en: "Talisman Master", ja: "陰陽師" },
+  mysticDesc: {
+    ko: "원거리 · 부적을 맞힐 때마다 쌓여 무기마다 다른 추가 효과가 터진다 · 체력이 조금 낮다",
+    en: "Ranged · Talisman hits build up and unleash a different bonus per weapon · Slightly low health",
+    ja: "遠距離 · 符を当てるたびに溜まり、武器ごとに違う追加効果が発動 · 体力がやや低い",
+  },
+  gunner: { ko: "거너", en: "Gunner", ja: "ガンナー" },
+  gunnerDesc: {
+    ko: "총 · 탄창을 다 쓰면 장전한다 · 치명타가 터지고 발이 빠르지만 체력이 40으로 고정 (체력 아이템도 늘지 않음)",
+    en: "Guns · Reload when the magazine runs dry · Critical hits and fast feet, but max HP is fixed at 40 (HP items don't raise it)",
+    ja: "銃 · 弾倉を撃ち切るとリロード · クリティカルが出て足が速いが最大体力は40固定（体力アイテムでも増えない）",
+  },
+  beast: { ko: "야수", en: "Beastkin", ja: "獣人" },
+  beastDesc: {
+    ko: "고양이 수인 · 고양이 펫이 스스로 적에게 달려가 할퀸다 · 발이 빠르다",
+    en: "Cat-folk · Pet cats run at enemies and scratch on their own · Quick on their feet",
+    ja: "猫の獣人 · ペットの猫が自分から敵に駆け寄って引っかく · 足が速い",
+  },
+  ninja: { ko: "닌자", en: "Ninja", ja: "忍者" },
+  ninjaDesc: {
+    ko: "그림자 · 수리검으로 표식을 쌓으면 적의 그림자에서 분신이 튀어나와 벤다 · 발이 빠르다",
+    en: "Shadows · Build marks with shuriken and a shadow clone bursts from the foe's shadow to strike · Quick on their feet",
+    ja: "影 · 手裏剣で印を溜めると敵の影から分身が飛び出して斬る · 足が速い",
+  },
+  chronomancer: { ko: "시간술사", en: "Chronomancer", ja: "時間術師" },
+  chronomancerDesc: {
+    ko: "시간 · 본인 공격은 약하지만, 1초 뒤 공격한 그 자리에서 잔상이 더 세게 한 번 더 한다 · 움직이며 싸우면 지나온 자리마다 공격이 다시 터진다",
+    en: "Time · Your own attacks are weak, but 1s later an echo repeats each one harder where you made it · Fight on the move and your past self keeps striking",
+    ja: "時間 · 本人の攻撃は弱いが、1秒後に攻撃した場所で残像がより強くもう一度行う · 動きながら戦うと通った場所ごとに攻撃が再び炸裂する",
+  },
+  summoner: { ko: "소환술사", en: "Summoner", ja: "召喚術師" },
+  summonerDesc: {
+    ko: "근접 · 채찍으로 친 만큼 소환수를 부른다 · 채찍마다 해골·임프·골렘·늑대·요정·새끼 용 등 다른 소환수",
+    en: "Melee · Lash foes to call summons · Each whip calls a different ally: skeletons, imps, golems, wolves, fairies, a baby dragon and more",
+    ja: "近接 · 鞭で打った分だけ召喚獣を呼ぶ · 鞭ごとに骸骨・インプ・ゴーレム・狼・妖精・子竜など違う召喚獣",
+  },
+  charGoalLock: { ko: "도전과제 「{name}」를 이루면 열림", en: "Unlocks with the achievement “{name}”", ja: "実績「{name}」達成で解放" },
+  randomCharacter: { ko: "무작위 캐릭터로 시작 (무기·패시브·아이템도 무작위)", en: "Random character (random weapon, passive & items too)", ja: "ランダムなキャラで開始（武器・パッシブ・アイテムもランダム）" },
+  skinSwitch: { ko: "스킨 바꾸기", en: "Change skin", ja: "スキン変更" },
+  skinSwitchNone: { ko: "가진 스킨이 없습니다 (상점에서 살 수 있어요)", en: "No skins owned yet (buy them in the Shop)", ja: "スキンを持っていません（ショップで買えます）" },
+  bedouin: { ko: "베두인", en: "Bedouin", ja: "ベドウィン" },
+  bedouinDesc: {
+    ko: "차크람 · 몸만 한 차크람으로 한 바퀴 베고 멀리 던진다 · 떨어진 차크람에 닿으면 주우며 모래와 함께 크게 벤다 · 대시로 지나간 적도 벤다 · 차크람을 던져 손이 비면 발이 빨라진다",
+    en: "Chakram · Spin-slash with a body-sized chakram, then hurl it far · Touch it to pick it back up, unleashing a wide sand slash · Dashing through foes cuts them too · Moves faster while the chakram is thrown",
+    ja: "チャクラム · 体ほどのチャクラムで一回転斬りし、遠くへ投げる · 落ちたチャクラムに触れると拾い、砂と共に大きく斬る · ダッシュで通り抜けた敵も斬る · チャクラムを投げて手が空くと足が速くなる",
+  },
+  general: { ko: "장수", en: "General", ja: "武将" },
+  generalDesc: {
+    ko: "창 · 찌르기·휘두르기·돌진 내리꽂기로 끊기지 않고 이어지는 콤보 · 옛 명장들의 무기를 들면 콤보와 필살기가 달라진다",
+    en: "Spear · An unbroken combo of thrusts, swings and a lunging slam · Wield the weapons of legendary generals to change combos and finishers",
+    ja: "槍 · 突き・薙ぎ・突進叩きつけで途切れず続くコンボ · 昔の名将の武器を持つとコンボと必殺技が変わる",
+  },
+  imugi: { ko: "이무기", en: "Imugi", ja: "イムギ" },
+  imugiDesc: {
+    ko: "용창 · 찌르기와 휘두르기를 한 번에, 맞힐 때마다 콤보 · 72이면 용의 기운이 차올라 강해지고 108이면 용이 된다 (거대한 용이 맵을 지나가며 모든 적을 베고 8초 동안 더 강한 몸, 부를 때마다 영구 치명타 +15%) · 무기마다 다른 용의 힘",
+    en: "Dragon spear · Thrust and swing at once; every hit builds combo · At 72 dragon energy surges through you; at 108 you become the dragon (a giant dragon sweeps the map, striking every foe, and you are empowered for 8s; each dragon permanently adds +15% crit) · Each weapon holds a different dragon's power",
+    ja: "龍槍術 · 突きと薙ぎを同時に、当てるたびにコンボ · 72で龍の気が満ちて強くなり、108で龍になる（巨大な龍がマップを通り抜け全ての敵を斬り、8秒間さらに強い体） · 武器ごとに違う龍の力",
+  },
+  apostle: { ko: "악의 사도", en: "Apostle of Malice", ja: "悪の使徒" },
+  apostleDesc: {
+    ko: "십자가 · 하늘에서 뒤집힌 십자가가 떨어져 짓누른다 · 일곱 죄의 십자가는 저주의 장판을 남긴다 · 회복약은 독, 쓰러진 적의 영혼을 먹어야 회복 · 먹은 영혼마다 공격력 +0.01",
+    en: "Cross · Inverted crosses fall from the sky to crush foes · Crosses of the seven sins leave cursed fields · Potions hurt; eat the souls of the fallen to heal · each soul eaten adds +0.01 damage",
+    ja: "十字架 · 空から逆さ十字が落ちて押し潰す · 七つの罪の十字架は呪いの床を残す · 回復薬は毒、倒した敵の魂を食べて回復 · 食べた魂ごとに攻撃力+0.01",
+  },
+  stargazer: { ko: "별지기", en: "Stargazer", ja: "星守り" },
+  stargazerDesc: {
+    ko: "히든 · 별을 박아 별자리를 그린다 · 가까운 별끼리 빛줄기로 이어져 닿는 적을 태운다 · 별이 가득 차면 별자리가 완성되어 모든 별이 한꺼번에 터진다 · 방을 옮기면 별은 사라진다",
+    en: "Hidden · Pin stars to draw constellations · Nearby stars link with beams of light that burn foes · When the constellation is full, every star bursts at once · Stars fade when you leave the room",
+    ja: "隠しキャラ · 星を打ち込んで星座を描く · 近い星同士が光の線でつながり触れた敵を焼く · 星が満ちると星座が完成し全ての星が一斉に弾ける · 部屋を移ると星は消える",
+  },
+  duck: { ko: "오리", en: "Duck", ja: "アヒル" },
+  duckDesc: {
+    ko: "히든 캐릭터 · 꽥 음파로 앞쪽 적을 모두 밀치며 때리고, 4번째마다 둘레 전체에 큰 꽥(기절) · 새끼 오리가 줄지어 따라와 적 탄을 막고 같이 꽥 한다 · 아주 튼튼하다",
+    en: "Hidden character · Quack shockwaves hit and push back every foe in front; every 4th is a Big Quack all around (stuns) · Ducklings follow in a line, block enemy shots, and quack along · Very sturdy",
+    ja: "隠しキャラ · ガーガー音波で前方の敵をまとめて押し返して攻撃、4回ごとに周り全体へ大ガーガー（気絶） · 子アヒルが一列について来て敵の弾を防ぎ、一緒にガーガー · とても頑丈",
+  },
+  hiddenTest: { ko: "히든 · 테스트", en: "Hidden · test", ja: "隠し · テスト" },
+  hiddenFound: { ko: "★ 히든 캐릭터 등장! ★", en: "★ Hidden character appeared! ★", ja: "★ 隠しキャラ登場！ ★" },
+  novice: { ko: "풋내기", en: "Novice", ja: "見習い" },
+  noviceDesc: {
+    ko: "맨손으로 시작 · 공용 무기·공용 패시브만 쓴다 · 적을 쓰러뜨려 레벨을 올리고 스탯을 직접 찍는다",
+    en: "Starts bare-handed · Uses only common weapons and passives · Level up by defeating foes and spend stat points yourself",
+    ja: "素手で始まる · 共通の武器とパッシブだけ使う · 敵を倒してレベルを上げ、ステータスを自分で振る",
+  },
+  doctor: { ko: "의사", en: "Doctor", ja: "医者" },
+  doctorDesc: {
+    ko: "치료 · 공격하며 조금씩 회복하고, 체력이 가득 차면 넘친 회복이 보호막이 된다 · 행운이 높다",
+    en: "Healer · Heals a little with each hit; overflow healing at full health becomes a shield · High luck",
+    ja: "治療 · 攻撃しながら少しずつ回復し、体力満タン時の余った回復はシールドになる · 幸運が高い",
+  },
+  engineer: { ko: "기계공학자", en: "Engineer", ja: "エンジニア" },
+  engineerDesc: {
+    ko: "레이저 · 누르고 있으면 레이저를 계속 쏘아 녹인다 · 빗나가지 않지만 사거리가 짧다",
+    en: "Laser · Hold to keep a beam on foes and melt them · Never misses, but short range",
+    ja: "レーザー · 押し続けるとレーザーを照射し続けて溶かす · 外れないが射程が短い",
+  },
+  elementalist: { ko: "원소술사", en: "Elementalist", ja: "元素術師" },
+  elementalistDesc: {
+    ko: "회전체 · 몸 둘레를 도는 원소 구슬이 닿은 적을 때린다 · 무기마다 회전체가 크게 달라진다",
+    en: "Orbiting · Elemental orbs circle you and strike whatever they touch · Each weapon changes the orbs a lot",
+    ja: "回転体 · 体の周りを回る元素の珠が触れた敵を打つ · 武器ごとに回転体が大きく変わる",
+  },
+  brawler: { ko: "격투가", en: "Brawler", ja: "格闘家" },
+  brawlerDesc: {
+    ko: "콤보 · 적을 맞힐 때마다 다음 기술이 이어지고 마지막 기술이 강하다 · 체력이 높다",
+    en: "Combo · Each hit chains into the next move, the last one hits hardest · High health",
+    ja: "コンボ · 敵に当てるたびに次の技がつながり、最後の技が強い · 体力が高い",
+  },
+} satisfies Record<string, Record<Lang, string>>;

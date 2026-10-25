@@ -1,0 +1,82 @@
+/* 설정·닉네임·기기 연동 */
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 8px 0 12px;
+  text-align: left;
+}
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.setting-row > span {
+  flex: 1;
+}
+.setting-row input[type="range"] {
+  width: 140px;
+}
+.setting-row small {
+  width: 2.5em;
+  text-align: right;
+  opacity: 0.7;
+}
+
+/* 조작키 바꾸기: 화면 전체에 실제 버튼 자리를 보여 주고 끌어서 옮김 */
+.controls-editor {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgb(12 10 18 / 0.96);
+  touch-action: none;
+}
+.controls-editor-panel {
+  position: absolute;
+  top: max(10px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92vw, 380px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 2px solid var(--line);
+  background: var(--panel);
+  text-align: left;
+}
+.controls-editor-panel p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.controls-editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+/* 조이스틱 크기 미리 보기: 왼쪽 아래 엄지 자리 */
+.controls-editor-stick {
+  display: block;
+  left: max(80px, 18vw);
+  top: 72vh;
+}
+
+/* 닉네임 · 기기 연동 */
+.account-screen h3 {
+  margin: 12px 0 0;
+}
+.link-done {
+  margin: 0;
+  color: var(--accent);
+}
+.link-code-input {
+  font: inherit;
+  font-size: 24px;
+  letter-spacing: 6px;
+  text-align: center;
+  color: var(--text);
+  background: var(--panel);
+  border: 2px solid var(--line);
+  padding: 8px;
+}

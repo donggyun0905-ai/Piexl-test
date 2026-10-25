@@ -1,0 +1,185 @@
+/* 뽑기 연출 (shop/GachaReveal·GachaPack): 화면 전체 무대 · 봉투 뜯기. 카드는 gacha-cards.css */
+.gacha-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+  background: radial-gradient(circle at 50% 40%, rgba(40, 30, 90, 0.98), rgba(6, 4, 16, 0.99) 70%);
+  animation: gacha-fade 0.25s both;
+}
+@keyframes gacha-fade {
+  from {
+    opacity: 0;
+  }
+}
+.gacha-hint {
+  min-height: 1.2em;
+  margin: 8px 0 0;
+  color: #e8e4f4;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ───── 봉투 ───── */
+.gacha-pack-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.gacha-pack {
+  position: relative;
+  width: 180px;
+  height: 250px;
+  touch-action: none;
+  user-select: none;
+  cursor: ew-resize;
+  animation: pack-in 0.45s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+.gacha-pack.fancy {
+  width: 210px;
+  height: 290px;
+}
+@keyframes pack-in {
+  from {
+    transform: translateY(40px) scale(0.7) rotate(-6deg);
+    opacity: 0;
+  }
+}
+.pack-top,
+.pack-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border: 3px solid #b8c0e0;
+  background: linear-gradient(160deg, #4a5a9a, #2a3060);
+}
+.pack-top {
+  top: 0;
+  height: 18%;
+  border-bottom: none;
+  transition:
+    transform 0.55s cubic-bezier(0.3, 0, 0.6, 1),
+    opacity 0.55s;
+}
+.pack-body {
+  top: 18%;
+  bottom: 0;
+  border-top: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #fff;
+  overflow: hidden;
+}
+.pack-notch {
+  position: absolute;
+  right: 6px;
+  bottom: 4px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid rgba(255, 255, 255, 0.6);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+}
+.pack-star {
+  font-size: 44px;
+  line-height: 1;
+  color: #ffe08a;
+  text-shadow: 0 0 12px rgba(255, 220, 120, 0.8);
+}
+.pack-body strong {
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+.pack-count {
+  font-size: 15px;
+  color: #ffe08a;
+}
+/* 절취선: 점선 위에 쓸고 지나간 만큼 빛나는 선 */
+.pack-cut {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 18%;
+  height: 0;
+  border-top: 2px dashed rgba(255, 255, 255, 0.55);
+}
+.pack-cut span {
+  position: absolute;
+  top: -3px;
+  height: 4px;
+  background: #fff;
+  box-shadow:
+    0 0 6px #fff,
+    0 0 14px #ffd860;
+}
+.gacha-pack.torn .pack-top {
+  transform: translate(70px, -130px) rotate(28deg);
+  opacity: 0;
+}
+.gacha-pack.torn .pack-cut {
+  border-top-color: transparent;
+}
+.gacha-pack.torn .pack-body {
+  animation: pack-burst 0.55s both;
+}
+@keyframes pack-burst {
+  60% {
+    box-shadow: 0 -20px 40px rgba(255, 240, 180, 0.9);
+  }
+  to {
+    box-shadow: 0 -30px 60px rgba(255, 240, 180, 0);
+    transform: scale(1.05);
+  }
+}
+/* 10번 뽑기: 금박 봉투가 반짝반짝 */
+.gacha-pack.fancy .pack-top,
+.gacha-pack.fancy .pack-body {
+  border-color: #ffd860;
+  background: linear-gradient(115deg, #6a3a00, #e8b030 30%, #fff4c0 45%, #e8b030 60%, #7a1a5a);
+  background-size: 260% 100%;
+  animation: foil 2.4s linear infinite;
+}
+.gacha-pack.fancy {
+  filter: drop-shadow(0 0 16px rgba(255, 210, 80, 0.7));
+}
+.gacha-pack.fancy .pack-body strong {
+  color: #3a1a00;
+  text-shadow: 0 1px 0 #fff4c0;
+}
+.gacha-pack.fancy .pack-count {
+  color: #5a0a3a;
+  font-weight: bold;
+}
+@keyframes foil {
+  to {
+    background-position: -260% 0;
+  }
+}
+.pack-sparkles {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, #fff 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 75% 20%, #fff 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 60% 75%, #fff 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 30% 80%, #fff 0 1.5px, transparent 2.5px);
+  animation: twinkle 1.1s ease-in-out infinite alternate;
+}
+@keyframes twinkle {
+  from {
+    opacity: 0.2;
+  }
+}
+.gacha-skip {
+  width: auto;
+  font-size: 12px;
+  opacity: 0.8;
+}
+

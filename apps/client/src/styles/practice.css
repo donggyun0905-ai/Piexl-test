@@ -1,0 +1,256 @@
+/* 연습장 도구 */
+.practice-panel,
+.practice-toggle {
+  position: fixed;
+  right: 8px;
+  top: 52px;
+  z-index: 6;
+}
+.practice-panel {
+  width: min(380px, calc(100vw - 16px));
+  /* 화면 아래까지 꽉 채움 */
+  top: 52px;
+  bottom: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background: rgb(10 8 16 / 0.92);
+  border: 1px solid var(--accent);
+  font-size: 12px;
+}
+.practice-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.practice-row {
+  display: flex;
+  gap: 4px;
+}
+.practice-row button {
+  flex: 1;
+  padding: 4px 2px;
+  font-size: 12px;
+}
+.practice-row button.on {
+  border-color: var(--accent);
+  background: rgb(60 50 90 / 0.8);
+}
+/* 캐릭터 바꾸기: 접어 두고, 펴면 이름이 가로로 다 보이게 여러 줄 */
+.practice-chars summary {
+  cursor: pointer;
+  padding: 4px 6px;
+  border: 1px solid var(--line, #3a3450);
+}
+.practice-char-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: 4px;
+  margin-top: 4px;
+}
+.practice-char-grid button {
+  padding: 4px 2px;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.practice-char-grid button.on {
+  border-color: var(--accent);
+  background: rgb(60 50 90 / 0.8);
+}
+.practice-row button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.practice-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px 6px;
+  font-size: 12px;
+}
+/* 묶음 목록 (스크롤) */
+.practice-list {
+  flex: 1;
+  min-height: 90px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.practice-group summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 4px;
+  font-weight: bold;
+  color: var(--accent);
+  border-bottom: 1px solid rgb(255 255 255 / 0.12);
+  list-style-position: inside;
+}
+.practice-group summary small {
+  color: var(--muted);
+  font-weight: normal;
+}
+.practice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: 4px;
+  padding: 4px 0;
+}
+.practice-cell {
+  position: relative;
+}
+.practice-item {
+  position: relative;
+  width: 100%;
+  padding: 3px;
+  line-height: 0;
+  display: flex;
+  justify-content: center;
+}
+.practice-cell.owned .practice-item {
+  border-color: var(--accent);
+  background: rgb(70 60 110 / 0.8);
+}
+.practice-item b,
+.practice-item i {
+  position: absolute;
+  font-size: 11px;
+  line-height: 1.2;
+  font-style: normal;
+  color: #fff;
+  text-shadow: 0 0 2px #000;
+}
+.practice-item b {
+  right: 2px;
+  bottom: 0;
+}
+/* 여러 번 가질 수 있음 표시 */
+.practice-item i {
+  right: 2px;
+  top: 0;
+  color: #8fe08a;
+}
+.practice-minus {
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  font-size: 12px;
+  line-height: 14px;
+  border-radius: 50%;
+  background: #6a2a3a;
+}
+.practice-empty {
+  color: var(--muted);
+  text-align: center;
+}
+.practice-tip-stack {
+  display: block;
+  margin-top: 3px;
+  color: #8fe08a;
+}
+/* 적 부르기: 세기 고르기 · 묶음마다 그림과 이름 */
+.practice-floor {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.practice-floor span {
+  white-space: nowrap;
+  margin-right: 2px;
+}
+.practice-floor button {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 0;
+  font-size: 12px;
+}
+.practice-floor button.on {
+  border-color: var(--accent);
+  background: rgb(60 50 90 / 0.8);
+}
+.practice-floor-note {
+  color: var(--muted);
+}
+.practice-fit {
+  margin-left: auto;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-weight: normal;
+}
+.practice-enemies {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 4px;
+  padding: 4px 0;
+}
+.practice-enemy {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  line-height: 1.2;
+  text-align: left;
+  font-size: 12px;
+}
+.practice-enemy canvas {
+  flex: none;
+  image-rendering: pixelated;
+}
+.practice-info {
+  min-height: 52px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.practice-info strong {
+  color: var(--text, #fff);
+}
+.item-icon {
+  image-rendering: pixelated;
+  display: block;
+}
+.loadout-weapon,
+.loadout-slots .slot,
+.loadout-passives {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.loadout-passive {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+  cursor: help;
+  outline: 1px solid transparent;
+}
+.loadout-weapon-icon {
+  display: inline-flex;
+  line-height: 0;
+  cursor: help;
+  outline: 1px solid transparent;
+}
+.loadout-weapon-icon:hover,
+.loadout-weapon-icon.on,
+.loadout-passive:hover,
+.loadout-passive.on {
+  outline-color: var(--accent);
+}
+.loadout-passive b {
+  font-size: 10px;
+  line-height: 1;
+  margin-left: 1px;
+}
+.item-tip-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

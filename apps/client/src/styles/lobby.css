@@ -1,0 +1,274 @@
+/* 함께 하기 입장·대기실·채팅·일일 도전 닉네임 줄 */
+.entry-screen {
+  min-height: 100%;
+  width: min(720px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+  padding: 60px 16px 24px;
+}
+.entry-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 640px) {
+  .entry-columns {
+    grid-template-columns: 1fr;
+  }
+}
+.entry-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+}
+.entry-panel.quick {
+  border-color: var(--accent);
+}
+.entry-panel h2 {
+  margin: 0;
+  font-size: 18px;
+}
+.entry-panel .big {
+  margin-top: auto;
+}
+.entry-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.entry-divider::before,
+.entry-divider::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--line);
+}
+.entry-panel .join-form input {
+  width: auto;
+  text-align: center;
+  letter-spacing: 3px;
+}
+.entry-panel .join-form.name-ask input {
+  text-align: left;
+  letter-spacing: 0;
+}
+.entry-note {
+  text-align: center;
+}
+.status-line {
+  margin: 0;
+  min-height: 1.4em;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* ───────── 대기실 ───────── */
+.lobby-screen {
+  min-height: 100%;
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  align-items: start;
+  gap: 24px;
+  padding: 60px 16px 24px;
+}
+@media (max-width: 900px) {
+  .lobby-screen {
+    grid-template-columns: 1fr;
+    width: min(480px, 100%);
+    gap: 16px;
+  }
+}
+.lobby-code {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+  text-align: center;
+}
+.room-code-value {
+  font-size: 40px;
+  letter-spacing: 6px;
+  color: var(--accent);
+  text-shadow: 2px 2px 0 #000;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.room-code-actions {
+  display: flex;
+  gap: 6px;
+}
+.lobby-status {
+  font-size: 18px;
+}
+.lobby-main {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.lobby-characters,
+.lobby-countdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.lobby-countdown {
+  align-items: center;
+}
+.countdown {
+  margin: 0;
+  font-size: 48px;
+  letter-spacing: 3px;
+  color: var(--accent);
+}
+.mode-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 6px;
+}
+.mode-option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.mode-option.selected {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: #2a2338;
+}
+.player-list h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.seats {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: auto;
+}
+.seats span {
+  width: 8px;
+  height: 8px;
+  border: 1px dashed var(--line);
+}
+.seats span.on {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+}
+.player-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.player-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+}
+.player-list li.mine {
+  border-color: var(--accent);
+}
+.player-list .nickname {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 5px;
+  flex: none;
+}
+.badge.host {
+  background: var(--accent);
+  color: #1a1422;
+}
+.badge.me {
+  background: var(--ok);
+  color: #1a1422;
+}
+.badge.away {
+  background: var(--bad);
+  color: #1a1422;
+}
+
+/* 대기실 채팅 */
+.lobby-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.lobby-chat-log {
+  height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+}
+@media (max-width: 900px) {
+  .lobby-chat-log {
+    height: 160px;
+  }
+}
+.chat-line {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  font-size: 14px;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.chat-line small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.chat-line span {
+  padding: 4px 8px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  max-width: 90%;
+  overflow-wrap: anywhere;
+}
+.chat-line.mine {
+  align-items: flex-end;
+}
+.chat-line.mine span {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #1a1422;
+}
+.lobby-chat .join-form input {
+  width: auto;
+  letter-spacing: 0;
+}
+
+/* 일일 도전 화면의 닉네임 줄 */
+.daily-screen .nickname-bar {
+  max-width: 420px;
+}

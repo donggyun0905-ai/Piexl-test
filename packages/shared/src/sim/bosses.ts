@@ -1,0 +1,140 @@
+// 보스 행동: 강철 거구·무리 여왕·공허의 눈 (나머지 보스는 bossKit.BOSS_AI). 층마다 보스방(계단방)에 하나. 탄 방향은 16방향 고정 값으로 계산 (삼각함수 없음)
+import { ROOM_WIDTH } from "../constants";
+import { ENEMIES } from "../content";
+import { createRng, deriveSeed } from "../rng";
+import type { BossKind } from "../content";
+import type { EnemyState, RunState } from "./types";
+import { depth } from "./hero";
+import { partyHpMul } from "./party";
+import { tabooUp } from "./taboo";
+import { fan, half, ring } from "./bossKit";
+import { updateArcher, updateKnight } from "./bossesOne";
+import { updateCentaur, updatePlant, updateSiren } from "./bossesTwo";
+import { updateReaper, updateSwordGod } from "./bossesThree";
+import { updateAngel } from "./bossAngel";
+import { updateDragon } from "./bossDragon";
+import { updateHades } from "./bossHades";
+import { updateLight } from "./bossLight";
+import { updateDark } from "./bossDark";
+import { makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+
+/** 보스 체력 배율 (층마다 늘어남) */
+export function bossHpMul(floor: number): number {
+  return 1 + 0.25 * (floor - 1);
+}
+
+type BossAi = (s: RunState, e: EnemyState, toP: readonly [number, number], go: readonly [number, number], spawned: EnemyState[]) => void;
+const BOSS_AI: Partial<Record<EnemyState["kind"], BossAi>> = {
+  knight: updateKnight,
+  archer: updateArcher,
+  siren: updateSiren,
+  centaur: updateCentaur,
+  plant: updatePlant,
+  reaper: updateReaper,
+  swordgod: updateSwordGod,
+  archangel: updateAngel,
+  dragon: updateDragon,
+  godeater: updateHades,
+  plight: updateLight,
+  pdark: updateDark,
+};
+
+export function updateBoss(s: RunState, e: EnemyState, toP: readonly [number, number], go: readonly [number, number], spawned: EnemyState[]): void {
+  const def = ENEMIES[e.kind];
+  e.timer--;
+  const ai = BOSS_AI[e.kind];
+  if (ai) {
+    ai(s, e, toP, go, spawned);
+    // 라스트 보스 궁극기가 끝날 때까지는 무적
+    if (e.ultAt !== undefined) e.immune = true;
+    return;
+  }
+  if (e.kind === "hulk") {
+    // 걷기 → 멈춰서 준비 → 돌진 → 멈출 때 사방으로 탄
+    if (e.phase === "walk") {
+      e.x += toP[0] * def.speed;
+      e.y += toP[1] * def.speed;
+      if (e.timer <= 0) {
+        e.phase = "windup";
+        e.timer = 40;
+        e.dirX = toP[0];
+        e.dirY = toP[1];
+      }
+    } else if (e.phase === "windup") {
+      if (e.timer <= 0) {
+        e.phase = "charge";
+        e.timer = 30;
+      }
+    } else {
+      e.x += e.dirX * 2.8;
+      e.y += e.dirY * 2.8;
+      if (e.timer <= 0) {
+        ring(s, e, half(e) ? 1 : 2, e.count, 1.3);
+        e.count++;
+        e.phase = "walk";
+        e.timer = half(e) ? 70 : 100;
+      }
+    }
+  } else if (e.kind === "brood") {
+    // 거리를 두고, 번갈아 기는 적 부르기 · 부채꼴 탄
+    const dx = s.player.x - e.x;
+    const dy = s.player.y - e.y;
+    const d2 = dx * dx + dy * dy;
+    const dir = d2 > 80 * 80 ? 1 : d2 < 60 * 60 ? -1 : 0;
+    e.x += toP[0] * def.speed * dir;
+    e.y += toP[1] * def.speed * dir;
+    if (e.timer <= 0) {
+      if (e.count % 2 === 0) {
+        const minions = s.enemies.filter((m) => m.noGold && m.hp > 0).length + spawned.length;
+        const hpMul = 1 + 0.15 * (depth(s) - 1);
+        for (let i = 0; i < 2 && minions + i < 5; i++) {
+          const m = makeEnemy(s, "crawler", e.x + (i === 0 ? -14 : 14), e.y, hpMul, 20);
+          m.noGold = true;
+          spawned.push(m);
+        }
+      } else {
+        fan(s, e, toP, half(e) ? [-2, -1, 0, 1, 2] : [-1, 0, 1], 1.5);
+      }
+      e.count++;
+      e.timer = half(e) ? 75 : 105;
+    }
+  } else {
+    // seer: 천천히 다가오며 도는 고리 탄. 네 번째마다 깜빡이고 순간이동
+    if (e.phase === "blink") {
+      if (e.timer <= 0) {
+        const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "boss", e.count));
+        for (let tries = 0; tries < 20; tries++) {
+          e.x = rng.int(ROOM_MIN_X + 20, ROOM_MAX_X - 20);
+          e.y = rng.int(ROOM_MIN_Y + 20, ROOM_MAX_Y - 20);
+          const px = e.x - s.player.x;
+          const py = e.y - s.player.y;
+          if (px * px + py * py > 70 * 70) break;
+        }
+        e.prevX = e.x;
+        e.prevY = e.y;
+        e.phase = "walk";
+        e.timer = 40;
+      }
+      return;
+    }
+    e.x += toP[0] * def.speed;
+    e.y += toP[1] * def.speed;
+    if (e.timer <= 0) {
+      e.count++;
+      if (e.count % 4 === 0) {
+        e.phase = "blink";
+        e.timer = 30;
+        return;
+      }
+      ring(s, e, half(e) ? 1 : 2, e.count, 1.2);
+      if (half(e)) fan(s, e, toP, [0], 2);
+      e.timer = half(e) ? 55 : 70;
+    }
+  }
+}
+
+/** 보스방에 들어갔을 때: 보스 하나 (방 위쪽 가운데. 플레이어는 아래쪽 가운데에 놓임) */
+export function spawnBoss(s: RunState, kind: BossKind): EnemyState {
+  // 협동: 보스는 수 대신 체력만 조금 더
+  return makeEnemy(s, kind, ROOM_WIDTH / 2, ROOM_MIN_Y + 20, bossHpMul(depth(s)) * partyHpMul(s) * tabooUp(s, "bossHp"), 90);
+}

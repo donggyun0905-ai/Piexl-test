@@ -1,0 +1,174 @@
+// 스토리 (시즌 1): 탭 넷 — 진영 · 최종 보스 · 아카식 레코드(장 목록 → 책처럼 쪽 넘기며 읽기) · 캐릭터(자세한 설명, CharGuides)
+import { useEffect, useState } from "react";
+import type { Lang, TextKey } from "../i18n";
+import { EnemyPortrait } from "../codex/EnemyPortrait";
+import { CHAPTER_TEXT } from "../i18n/story";
+import { BOSS_STORY, CHAPTER_SUMMARY, CHAPTER_TITLE, FACTION_TEXT } from "../i18n/story/world";
+import { CharGuides } from "./CharGuides";
+import { StoryFace, speakerName } from "./StoryFace";
+import { CHAPTERS, FACTIONS, PARAS_PER_PAGE, STORY_BOSSES, type ChapterId } from "./storyData";
+
+type Tab = "factions" | "bosses" | "akashic" | "chars";
+const TABS: { id: Tab; label: TextKey }[] = [
+  { id: "factions", label: "storyFactions" },
+  { id: "bosses", label: "storyBosses" },
+  { id: "akashic", label: "storyAkashic" },
+  { id: "chars", label: "storyChars" },
+];
+
+interface Props {
+  lang: Lang;
+  t: (k: TextKey) => string;
+  onBack: () => void;
+}
+
+export function StoryScreen({ lang, t, onBack }: Props) {
+  const [tab, setTab] = useState<Tab>("factions");
+  const [reading, setReading] = useState<ChapterId | null>(null);
+  return (
+    <main className="story-screen">
+      <header className="story-head">
+        <h2>{t("story")}</h2>
+        <span>{t("storySeason1")}</span>
+      </header>
+      {reading ? (
+        <StoryReader id={reading} lang={lang} t={t} onClose={() => setReading(null)} />
+      ) : (
+        <>
+          <nav className="shop-tabs">
+            {TABS.map((x) => (
+              <button key={x.id} type="button" className={tab === x.id ? "active" : ""} onClick={() => setTab(x.id)}>
+                {t(x.label)}
+              </button>
+            ))}
+          </nav>
+          {tab === "factions" && (
+            <div className="story-cards">
+              {FACTIONS.map((f) => (
+                <section key={f.id} className="story-card story-faction" style={{ borderColor: f.color, ["--fc" as string]: f.color }}>
+                  <h3 style={{ color: f.color }}>
+                    {FACTION_TEXT[f.id].name[lang]} <small>{FACTION_TEXT[f.id].tag[lang]}</small>
+                  </h3>
+                  <p>{FACTION_TEXT[f.id].desc[lang]}</p>
+                  <div className="story-members">
+                    {f.members.map((m) => (
+                      <figure key={m}>
+                        <StoryFace who={m} size={48} />
+                        <figcaption>{m === "unknown" ? t("storyUnknown") : speakerName(m, lang, t)}</figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          )}
+          {tab === "bosses" && (
+            <div className="story-cards">
+              {STORY_BOSSES.map((b) => (
+                <section key={b.id} className="story-card story-boss">
+                  <EnemyPortrait kind={b.kind} size={72} />
+                  <div>
+                    <h3>{BOSS_STORY[b.id].name[lang]}</h3>
+                    <p>{BOSS_STORY[b.id].desc[lang]}</p>
+                  </div>
+                </section>
+              ))}
+            </div>
+          )}
+          {tab === "akashic" && (
+            <div className="story-cards">
+              {CHAPTERS.map((ch, i) => (
+                <section key={ch.id} className="story-card story-chapter">
+                  <span className="story-chapter-no">{i + 1}</span>
+                  <h3>
+                    {t("storyChapterN").replace("{n}", String(i + 1))} · {CHAPTER_TITLE[ch.id][lang]}
+                  </h3>
+                  <p className="story-summary">{CHAPTER_SUMMARY[ch.id][lang]}</p>
+                  <div className="story-members">
+                    {ch.cast.map((m) => (
+                      <StoryFace key={m} who={m} size={36} />
+                    ))}
+                  </div>
+                  <button type="button" className="primary" onClick={() => setReading(ch.id)}>
+                    {t("storyRead")}
+                  </button>
+                </section>
+              ))}
+            </div>
+          )}
+          {tab === "chars" && <CharGuides lang={lang} t={t} />}
+          <button type="button" className="secondary" onClick={onBack}>
+            {t("back")}
+          </button>
+        </>
+      )}
+    </main>
+  );
+}
+
+/** 책 읽기: 한 쪽에 몇 줄씩, 대사는 얼굴 + 이름 + 말풍선 */
+function StoryReader({ id, lang, t, onClose }: { id: ChapterId; lang: Lang; t: (k: TextKey) => string; onClose: () => void }) {
+  const [page, setPage] = useState(0);
+  const paras = CHAPTER_TEXT[id][lang];
+  const pages = Math.ceil(paras.length / PARAS_PER_PAGE);
+  const n = CHAPTERS.findIndex((c) => c.id === id) + 1;
+  // ← → 키로 쪽 넘기기
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") setPage((p) => Math.min(pages - 1, p + 1));
+      if (e.key === "ArrowLeft") setPage((p) => Math.max(0, p - 1));
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [pages]);
+  return (
+    <article className="story-book">
+      <header className="story-book-head">
+        <small>{t("storyAkashic")}</small>
+        <h3>
+          {t("storyChapterN").replace("{n}", String(n))} · {CHAPTER_TITLE[id][lang]}
+        </h3>
+        <div className="story-progress" aria-hidden="true">
+          <span style={{ width: `${((page + 1) / pages) * 100}%` }} />
+        </div>
+      </header>
+      <div className="story-page" key={page}>
+        {paras.slice(page * PARAS_PER_PAGE, (page + 1) * PARAS_PER_PAGE).map((p, i) =>
+          typeof p === "string" ? (
+            <p key={i} className="story-narration">
+              {p}
+            </p>
+          ) : (
+            <div key={i} className="story-line">
+              <StoryFace who={p[0]} size={40} />
+              <div>
+                <b>{speakerName(p[0], lang, t)}</b>
+                <p>{p[1]}</p>
+              </div>
+            </div>
+          ),
+        )}
+      </div>
+      <footer className="story-pager">
+        <button type="button" className="secondary" disabled={page === 0} onClick={() => setPage(page - 1)}>
+          {t("storyPrev")}
+        </button>
+        <span>
+          {page + 1} / {pages}
+        </span>
+        {page + 1 < pages ? (
+          <button type="button" className="primary" onClick={() => setPage(page + 1)}>
+            {t("storyNext")}
+          </button>
+        ) : (
+          <button type="button" className="primary" onClick={onClose}>
+            {t("storyToList")}
+          </button>
+        )}
+      </footer>
+      <button type="button" className="link-button" onClick={onClose}>
+        {t("storyToList")}
+      </button>
+    </article>
+  );
+}

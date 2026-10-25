@@ -1,0 +1,246 @@
+/* 레이드 명예의 전당: 금빛 빛줄기 · 흩날리는 빛 가루 · 보스마다 색이 다른 카드 · 1위는 왕관과 빛나는 이름 */
+.hall-screen {
+  --gold: #ffd76a;
+  --gold-deep: #c8902a;
+  position: relative;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 24px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(255, 200, 90, 0.35), transparent 55%),
+    radial-gradient(ellipse at 50% 120%, rgba(120, 60, 200, 0.35), transparent 60%),
+    linear-gradient(180deg, #0c0918, #191230 55%, #0c0918);
+}
+.hall-screen > :not(.hall-rays):not(.hall-sparks) {
+  position: relative;
+  z-index: 1;
+}
+
+/* 뒤에서 천천히 도는 금빛 빛줄기 */
+.hall-rays {
+  position: absolute;
+  top: -60vmax;
+  left: 50%;
+  width: 140vmax;
+  height: 140vmax;
+  margin-left: -70vmax;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 215, 106, 0.16) 0deg 6deg, transparent 6deg 18deg);
+  -webkit-mask-image: radial-gradient(circle, #000 0%, transparent 60%);
+  mask-image: radial-gradient(circle, #000 0%, transparent 60%);
+  animation: hall-spin 60s linear infinite;
+  pointer-events: none;
+}
+@keyframes hall-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 아래에서 위로 떠오르는 빛 가루 */
+.hall-sparks {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hall-sparks span {
+  position: absolute;
+  bottom: -10px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 6px 2px rgba(255, 215, 106, 0.7);
+  opacity: 0;
+  animation: hall-rise 9s linear infinite;
+}
+@keyframes hall-rise {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-110vh) translateX(30px);
+    opacity: 0;
+  }
+}
+
+/* 제목: 반짝이며 흐르는 금빛 글자 */
+.hall-head {
+  text-align: center;
+}
+.hall-laurel {
+  color: var(--gold);
+  letter-spacing: 0.5em;
+  font-size: 1.1rem;
+  text-shadow: 0 0 10px rgba(255, 215, 106, 0.8);
+}
+.hall-title {
+  margin: 6px 0 4px;
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  background: linear-gradient(100deg, #b8862a 0%, #fff4c4 25%, #ffd76a 45%, #fffbe8 55%, #c8902a 75%, #ffe9a0 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 12px rgba(255, 200, 90, 0.55));
+  animation: hall-shine 4s linear infinite;
+}
+@keyframes hall-shine {
+  to {
+    background-position: -250% 0;
+  }
+}
+.hall-sub {
+  margin: 0;
+  color: #e8dcff;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+/* 보스마다 카드 (넓으면 셋 나란히) */
+.hall-bosses {
+  width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 900px) {
+  .hall-bosses {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.hall-boss {
+  --accent: #ffd76a;
+  --accent2: #8a5ad8;
+  padding: 14px;
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 18%, transparent), transparent 45%),
+    rgba(14, 10, 28, 0.82);
+  box-shadow:
+    0 0 18px color-mix(in srgb, var(--accent) 45%, transparent),
+    inset 0 0 24px color-mix(in srgb, var(--accent2) 30%, transparent);
+}
+.hall-dragon {
+  --accent: #ff8a3a;
+  --accent2: #c02a10;
+}
+.hall-godeater {
+  --accent: #ff5a7a;
+  --accent2: #6a2ac0;
+}
+.hall-plight {
+  --accent: #fff0c0;
+  --accent2: #7a4ad8;
+}
+.hall-boss-name {
+  margin: 0 0 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--accent);
+  letter-spacing: 0.05em;
+}
+.hall-gem {
+  width: 12px;
+  height: 12px;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, #fff, var(--accent) 50%, var(--accent2));
+  box-shadow: 0 0 8px var(--accent);
+}
+
+/* 2~10위 (2위 은 · 3위 동) */
+.hall-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hall-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.hall-rank {
+  width: 22px;
+  text-align: right;
+  font-weight: 800;
+  color: var(--muted);
+}
+.hall-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hall-time {
+  font-variant-numeric: tabular-nums;
+}
+.hall-r2 {
+  background: linear-gradient(90deg, rgba(220, 230, 245, 0.25), rgba(255, 255, 255, 0.04));
+}
+.hall-r2 .hall-rank {
+  color: #e8eef8;
+}
+.hall-r3 {
+  background: linear-gradient(90deg, rgba(210, 140, 80, 0.28), rgba(255, 255, 255, 0.04));
+}
+.hall-r3 .hall-rank {
+  color: #e8a060;
+}
+.hall-note {
+  max-width: 640px;
+  text-align: center;
+}
+.hall-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* 일일 도전 화면의 명예의 전당 버튼 */
+.tabs .hall-button {
+  border-color: var(--gold-deep, #c8902a);
+  color: #ffe9a0;
+  background: linear-gradient(180deg, #3a2a10, #1f1b2b);
+}
+
+/* 라스트 보스 결과 창 */
+.raid-submit-time strong {
+  font-size: 1.3rem;
+  color: #ffd76a;
+}
+.raid-submit-rank {
+  font-weight: 800;
+  color: #ffd76a;
+  text-shadow: 0 0 8px rgba(255, 215, 106, 0.8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hall-rays,
+  .hall-sparks span,
+  .hall-title,
+  .hall-champ,
+  .hall-crown,
+  .hall-champ-name {
+    animation: none;
+  }
+}

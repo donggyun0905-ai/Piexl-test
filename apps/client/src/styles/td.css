@@ -1,0 +1,248 @@
+/* 타워 디펜스 게임 화면: 위쪽 줄 · 맵 · 옆 칸 (맵 고르기·결과 창은 td-menu.css) */
+
+/* ── 게임 화면 ── */
+.td-game {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #0e0c14;
+}
+.td-hud {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: max(6px, env(safe-area-inset-top)) 12px 6px;
+  background: var(--panel);
+  border-bottom: 2px solid var(--line);
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.td-hud b {
+  color: var(--accent);
+}
+.td-hud em {
+  color: #ff7a7a;
+  font-style: normal;
+}
+.td-lives {
+  color: #ff8a9a;
+}
+.td-gold {
+  color: #ffd76a;
+}
+.td-speed {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+.td-speed button {
+  padding: 3px 8px;
+  font-size: 13px;
+}
+.td-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+.td-field {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 8px;
+}
+.td-field canvas {
+  image-rendering: pixelated;
+  border: 2px solid #000;
+  box-shadow: 0 0 0 2px var(--line);
+  touch-action: none;
+  cursor: pointer;
+}
+.td-banner {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 22px;
+  background: rgba(20, 16, 28, 0.85);
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  pointer-events: none;
+  animation: td-pop 0.35s ease-out;
+}
+@keyframes td-pop {
+  from {
+    transform: translateX(-50%) scale(1.4);
+    opacity: 0;
+  }
+}
+.td-side {
+  width: 320px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  background: var(--panel);
+  border-left: 2px solid var(--line);
+  overflow-y: auto;
+}
+.td-start {
+  width: 100%;
+  padding: 10px;
+  font-weight: 700;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #1a1422;
+  box-shadow: 0 3px 0 #9c7a24;
+}
+.td-chars {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 6px;
+}
+.td-char {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 4px;
+  font-size: 13px;
+}
+.td-char small {
+  margin-left: 0;
+}
+.td-portrait {
+  image-rendering: pixelated;
+  background: #2a2438;
+  border: 1px solid #000;
+}
+.td-cost {
+  color: #ffd76a;
+  margin-left: 6px;
+}
+.td-cost.short {
+  color: var(--bad);
+}
+.td-tower header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.td-tower header div {
+  display: flex;
+  flex-direction: column;
+}
+.td-tower header button {
+  margin-left: auto;
+  padding: 2px 8px;
+}
+.td-lv {
+  color: var(--accent);
+  font-size: 13px;
+}
+.td-stats {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 10px;
+  margin: 8px 0;
+  font-size: 13px;
+}
+.td-stats dt {
+  color: var(--muted);
+}
+.td-stats dd {
+  margin: 0;
+  text-align: right;
+}
+.td-gear {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+}
+.td-gear-weapon {
+  border: 1px solid var(--accent);
+}
+.td-tower h4 {
+  margin: 10px 0 6px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+.td-options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.td-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  text-align: left;
+}
+.td-option.current {
+  border-color: var(--muted);
+}
+.td-option-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.td-option-text strong {
+  font-size: 13px;
+}
+.td-option-text small {
+  margin-left: 0;
+  font-size: 11px;
+  line-height: 1.35;
+}
+.td-sell {
+  margin-top: 10px;
+  width: 100%;
+  font-size: 13px;
+  padding: 6px;
+}
+
+/* 좁은 화면(모바일 세로): 맵 위, 옆 칸은 아래 */
+@media (max-width: 760px) {
+  .td-body {
+    flex-direction: column;
+  }
+  .td-field {
+    flex: none;
+    width: 100%;
+    aspect-ratio: 20 / 12;
+    padding: 4px;
+  }
+  .td-side {
+    width: auto;
+    flex: 1;
+    border-left: 0;
+    border-top: 2px solid var(--line);
+  }
+  .td-hud {
+    gap: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 13px;
+  }
+  .td-speed button {
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+  .td-chars {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .td-char span {
+    font-size: 11px;
+  }
+}
+

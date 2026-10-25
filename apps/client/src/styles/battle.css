@@ -1,0 +1,78 @@
+/* 배틀 */
+.join-form {
+  display: flex;
+  gap: 6px;
+}
+.join-form input,
+.chat input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: var(--text);
+  background: var(--panel);
+  border: 2px solid var(--line);
+  padding: 6px 10px;
+  letter-spacing: 1px;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.spectator {
+  z-index: 5;
+}
+.spectator-modal {
+  width: min(640px, 100%) !important;
+  max-height: 94vh;
+}
+.spectator-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  overflow-y: auto;
+}
+.spectator-map canvas {
+  height: 320px;
+  max-width: 100%;
+  image-rendering: pixelated;
+  background: rgb(0 0 0 / 0.4);
+}
+.floor-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.floor-tabs button {
+  padding: 2px 8px;
+  font-size: 12px;
+}
+.floor-tabs .active {
+  border-color: var(--accent);
+}
+.battle-ranking {
+  flex: 1;
+  min-width: 240px;
+}
+.battle-ranking li.me .lb-name {
+  color: var(--accent);
+}
+.lb-dot {
+  width: 8px;
+  height: 8px;
+  border: 1px solid #000;
+}
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+.chat-log {
+  height: 90px;
+  overflow-y: auto;
+  font-size: 13px;
+  background: rgb(0 0 0 / 0.3);
+  padding: 4px 8px;
+}
+.chat form {
+  display: flex;
+}

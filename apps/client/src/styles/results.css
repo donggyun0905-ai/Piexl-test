@@ -1,0 +1,261 @@
+/* 결과·시드·업적 */
+button.small {
+  padding: 2px 10px;
+  font-size: 13px;
+  margin-left: 8px;
+}
+button.primary {
+  border-color: var(--accent);
+}
+button.wide {
+  width: 100%;
+}
+.seed-line {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+.seed-line code {
+  color: var(--text);
+  letter-spacing: 1px;
+}
+.score-total {
+  margin: 0;
+  font-size: 18px;
+}
+.score-total strong {
+  color: var(--accent);
+}
+.new-best {
+  color: var(--ok);
+  font-size: 14px;
+}
+.score-parts {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.result-achievements {
+  list-style: none;
+  padding: 0 !important;
+  text-align: left;
+  font-size: 14px;
+  color: var(--accent);
+}
+.result-achievements small {
+  color: var(--muted);
+}
+.seed-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.seed-input input {
+  font: inherit;
+  color: var(--text);
+  background: var(--panel);
+  border: 2px solid var(--line);
+  padding: 6px 10px;
+  width: 200px;
+  letter-spacing: 1px;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.achievements-modal {
+  width: min(560px, 100%);
+}
+.ach-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--panel);
+  padding-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ach-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.ach-summary strong {
+  color: var(--accent);
+  font-size: 16px;
+}
+.ach-summary .ach-bar {
+  flex: 1;
+}
+.ach-bar {
+  display: block;
+  height: 8px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+.ach-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+.ach-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ach-tabs button.small {
+  padding: 3px 8px;
+  font-size: 12px;
+  gap: 4px;
+}
+.ach-tabs button small {
+  color: var(--muted);
+}
+.ach-tabs button.complete small {
+  color: var(--ok);
+}
+.ach-tabs button.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.achievement-list {
+  list-style: none;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  line-height: 1.4 !important;
+}
+.achievement-list li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 8px 10px;
+  border: 2px solid var(--line);
+  background: rgb(0 0 0 / 0.15);
+  color: var(--muted);
+}
+.achievement-list li.done {
+  border-color: #6b5626;
+  background: rgb(242 193 78 / 0.08);
+  color: var(--text);
+}
+.achievement-list li.done strong {
+  color: var(--accent);
+}
+.ach-icon {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  border: 2px solid var(--line);
+  background: var(--bg);
+  color: var(--line);
+}
+.done .ach-icon {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.ach-body {
+  flex: 1;
+  min-width: 0;
+}
+.ach-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.ach-progress .ach-bar {
+  flex: 1;
+  height: 6px;
+}
+.ach-progress .ach-bar > span {
+  background: var(--muted);
+}
+.ach-progress small {
+  font-size: 12px;
+  white-space: nowrap;
+}
+.achievement-desc,
+.achievement-unlock {
+  font-size: 13px;
+}
+.achievement-unlock {
+  color: var(--ok);
+}
+.toasts {
+  position: fixed;
+  top: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+}
+.toast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 16px;
+  background: rgb(20 18 28 / 0.92);
+  border: 2px solid var(--accent);
+  font-size: 14px;
+  animation: toast-in 0.25s ease-out;
+}
+.toast small {
+  color: var(--ok);
+  font-size: 12px;
+}
+@keyframes toast-in {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+}
+
+/* 6층 클리어 뒤 라스트 보스 도전 */
+.last-boss-choice {
+  margin: 12px 0 4px;
+  padding: 10px;
+  border: 1px solid #f2c14e;
+  background: rgba(242, 193, 78, 0.08);
+  text-align: center;
+}
+.last-boss-choice h3 {
+  margin: 0 0 4px;
+  color: #ffd84a;
+}
+.last-boss-choice p {
+  margin: 0 0 8px;
+  font-size: 0.85em;
+  opacity: 0.85;
+}
+.last-boss-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.game-overlay .modal {
+  width: min(420px, 100%);
+  overflow-y: auto;
+}
+/* 깬 판: 걸린 시간 크게 */
+.clear-time {
+  margin: 0;
+  font-size: 18px;
+  color: var(--muted);
+}
+.clear-time strong {
+  font-size: 26px;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}

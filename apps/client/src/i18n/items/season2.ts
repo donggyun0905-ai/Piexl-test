@@ -1,0 +1,33 @@
+// 시즌 2(비르디아·헬리오스·테라코어) 캐릭터 아이템 글자 모음 (names·classEffects·index에서 한 번에 가져옴)
+import { ELDER_EFFECTS, ELDER_PASSIVE_NAMES, ELDER_WEAPON_NAMES } from "./elder";
+import { FLY_EFFECTS, FLY_PASSIVE_NAMES, FLY_WEAPON_NAMES } from "./fly";
+import { IDRA_EFFECTS, IDRA_PASSIVE_NAMES, IDRA_WEAPON_NAMES } from "./idra";
+import { MORPH_EFFECTS, MORPH_PASSIVE_NAMES, MORPH_WEAPON_NAMES } from "./morph";
+import { REN_EFFECTS, REN_PASSIVE_NAMES, REN_WEAPON_NAMES } from "./ren";
+import { SPIRIT_EFFECTS, SPIRIT_PASSIVE_NAMES, SPIRIT_WEAPON_NAMES } from "./spirit";
+import { PLAGUE_EFFECTS, PLAGUE_PASSIVE_NAMES, PLAGUE_WEAPON_NAMES } from "./plague";
+import { SLAYER_EFFECTS, SLAYER_PASSIVE_NAMES, SLAYER_WEAPON_NAMES } from "./slayer";
+import { EATER_EFFECTS, EATER_PASSIVE_NAMES, EATER_WEAPON_NAMES } from "./eater";
+import { MUKIN_EFFECTS, MUKIN_PASSIVE_NAMES, MUKIN_WEAPON_NAMES } from "./mukin";
+import { SAMYEOL_EFFECTS, SAMYEOL_PASSIVE_NAMES, SAMYEOL_WEAPON_NAMES } from "./samyeol";
+import { TERRA2_EFFECTS, TERRA2_PASSIVE_NAMES, TERRA2_WEAPON_NAMES } from "./terra2";
+import { TERRA2B_EFFECTS, TERRA2B_PASSIVE_NAMES, TERRA2B_WEAPON_NAMES } from "./terra2b";
+import { TERRA2C_EFFECTS, TERRA2C_PASSIVE_NAMES, TERRA2C_WEAPON_NAMES } from "./terra2c";
+
+export const S2_WEAPON_NAMES = { ...IDRA_WEAPON_NAMES, ...MORPH_WEAPON_NAMES, ...FLY_WEAPON_NAMES, ...ELDER_WEAPON_NAMES, ...REN_WEAPON_NAMES, ...SPIRIT_WEAPON_NAMES, ...PLAGUE_WEAPON_NAMES, ...SLAYER_WEAPON_NAMES, ...EATER_WEAPON_NAMES, ...MUKIN_WEAPON_NAMES, ...SAMYEOL_WEAPON_NAMES, ...TERRA2_WEAPON_NAMES, ...TERRA2B_WEAPON_NAMES, ...TERRA2C_WEAPON_NAMES };
+export const S2_PASSIVE_NAMES = { ...IDRA_PASSIVE_NAMES, ...MORPH_PASSIVE_NAMES, ...FLY_PASSIVE_NAMES, ...ELDER_PASSIVE_NAMES, ...REN_PASSIVE_NAMES, ...SPIRIT_PASSIVE_NAMES, ...PLAGUE_PASSIVE_NAMES, ...SLAYER_PASSIVE_NAMES, ...EATER_PASSIVE_NAMES, ...MUKIN_PASSIVE_NAMES, ...SAMYEOL_PASSIVE_NAMES, ...TERRA2_PASSIVE_NAMES, ...TERRA2B_PASSIVE_NAMES, ...TERRA2C_PASSIVE_NAMES };
+export const S2_EFFECTS = { ...IDRA_EFFECTS, ...MORPH_EFFECTS, ...FLY_EFFECTS, ...ELDER_EFFECTS, ...REN_EFFECTS, ...SPIRIT_EFFECTS, ...PLAGUE_EFFECTS, ...SLAYER_EFFECTS, ...EATER_EFFECTS, ...MUKIN_EFFECTS, ...SAMYEOL_EFFECTS, ...TERRA2_EFFECTS, ...TERRA2B_EFFECTS, ...TERRA2C_EFFECTS };
+export { GAIA_DESC } from "./idra";
+export { ANIMAL_DESC } from "./morph";
+export { TALON_DESC } from "./fly";
+export { FORMATION_DESC } from "./elder";
+export { REN_DESC } from "./ren";
+export { GREAT_DESC } from "./spirit";
+export { PLAGUE_DESC } from "./plague";
+export { scytheDesc } from "./slayer";
+export { MAW_DESC } from "./eater";
+export { ramDesc } from "./mukin";
+export { needleDesc } from "./samyeol";
+export { autoDesc, rideDesc } from "./terra2";
+export { bombDesc, REPULSOR_DESC } from "./terra2b";
+export { cyberDesc } from "./terra2c";

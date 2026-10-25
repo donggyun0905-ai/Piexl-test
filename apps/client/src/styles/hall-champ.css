@@ -1,0 +1,90 @@
+/* 레이드 명예의 전당 1위 카드: 왕관 · 빛나는 테두리 · 큰 이름 (색은 hall.css의 보스 카드에서) */
+.hall-champ {
+  position: relative;
+  padding: 26px 12px 14px;
+  text-align: center;
+  border-radius: 8px;
+  border: 2px solid var(--gold);
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 215, 106, 0.28), rgba(30, 20, 50, 0.9) 70%);
+  animation: hall-glow 2.4s ease-in-out infinite alternate;
+}
+@keyframes hall-glow {
+  from {
+    box-shadow: 0 0 10px rgba(255, 215, 106, 0.45);
+  }
+  to {
+    box-shadow:
+      0 0 28px rgba(255, 215, 106, 0.95),
+      0 0 60px color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+}
+.hall-crown {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  width: 42px;
+  height: 22px;
+  margin-left: -21px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-bottom: 6px solid var(--gold);
+  filter: drop-shadow(0 0 6px rgba(255, 215, 106, 0.9));
+  animation: hall-bob 2s ease-in-out infinite;
+}
+.hall-crown span {
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 16px solid var(--gold);
+}
+.hall-crown span:nth-child(2) {
+  border-bottom-width: 22px;
+}
+@keyframes hall-bob {
+  50% {
+    transform: translateY(-3px);
+  }
+}
+.hall-champ-label {
+  color: var(--gold);
+  font-size: 0.8rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+}
+.hall-champ-name {
+  margin: 4px 0;
+  font-size: clamp(1.4rem, 5vw, 1.9rem);
+  font-weight: 900;
+  overflow-wrap: anywhere;
+  background: linear-gradient(100deg, #ffc94a, #fff6d0 35%, #ffb43a 55%, #ffe58a 80%, #ffc94a);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 6px rgba(255, 190, 60, 0.6));
+  animation: hall-shine 3s linear infinite;
+}
+.hall-champ-time {
+  font-size: 1.6rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  text-shadow: 0 0 10px var(--accent);
+}
+.hall-champ-meta {
+  margin-top: 6px;
+  color: #d8ccf0;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.hall-empty {
+  margin: 8px 0;
+  text-align: center;
+  color: #cfc3ea;
+}
+

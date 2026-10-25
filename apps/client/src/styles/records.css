@@ -1,0 +1,34 @@
+/* 기록 창 */
+.records-summary {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 12px;
+  margin: 0 0 12px;
+}
+.records-summary dt {
+  color: var(--muted);
+}
+.records-summary dd {
+  margin: 0;
+}
+.records-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.records-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: baseline;
+  padding: 4px 0;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  font-size: 13px;
+}
+.records-list li em {
+  font-style: normal;
+  color: var(--accent);
+}

@@ -1,0 +1,269 @@
+/* 게임 화면: HUD·입력·조이스틱·게임 위 창·미니맵·장비 줄·모바일 버튼 */
+.game-screen {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  touch-action: none;
+  overflow: hidden;
+}
+.hud {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+.hud-btn {
+  padding: 4px 10px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.hud-btn.on {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.hp {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+.hp-bar {
+  flex: 1;
+  max-width: 200px;
+  height: 10px;
+  background: #000;
+  border: 2px solid var(--line);
+}
+.hp-fill {
+  height: 100%;
+  width: 100%;
+  background: var(--bad);
+}
+.hp-text {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.hud-info {
+  color: var(--muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.game-canvas-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.game-canvas-wrap canvas {
+  image-rendering: pixelated;
+  display: block;
+}
+.game-hint {
+  margin: 0;
+  padding: 6px 10px 10px;
+  font-size: 12px;
+  text-align: center;
+  color: var(--muted);
+}
+/* 세로 화면(모바일): 게임 화면은 위쪽, 아래는 손가락 자리 */
+@media (orientation: portrait) {
+  .game-canvas-wrap {
+    flex: 0 1 auto;
+    height: 45vh;
+    align-items: flex-start;
+  }
+  .hud-info {
+    display: none;
+  }
+}
+
+/* 입력 영역 · 조이스틱 */
+.input-zone {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  touch-action: none;
+}
+.stick-base,
+.stick-knob {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 50%;
+}
+.stick-base {
+  /* 지름 = touchSticks의 stickRadius × 2 (설정의 조이스틱 크기) */
+  --d: calc(88px * var(--stick-scale, 1));
+  width: var(--d);
+  height: var(--d);
+  margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2);
+  border: 2px solid rgb(255 255 255 / 0.35);
+  background: rgb(255 255 255 / 0.06);
+}
+.stick-knob {
+  --d: calc(40px * var(--stick-scale, 1));
+  width: var(--d);
+  height: var(--d);
+  margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2);
+  background: rgb(255 255 255 / 0.45);
+}
+.stick-base.aim {
+  border-color: rgb(242 193 78 / 0.5);
+}
+.stick-knob.aim {
+  background: rgb(242 193 78 / 0.6);
+}
+
+/* 게임 위 창 (일시정지·나가기 확인): 뒤에 게임 화면이 희미하게 보임 */
+.game-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  background: rgb(0 0 0 / 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.game-overlay .modal {
+  width: min(320px, 100%);
+  text-align: center;
+}
+.modal-actions {
+  display: flex;
+  gap: 8px;
+}
+.modal-actions button {
+  flex: 1;
+}
+button.danger {
+  border-color: var(--bad);
+}
+.result-line {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* 미니맵 · 상호작용 안내 */
+.game-canvas-wrap {
+  position: relative;
+}
+.minimap {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  /* 노선도: 폭을 정하고 높이는 그 층 칸 수에 따라 */
+  width: clamp(54px, 6vw, 96px);
+  height: auto;
+  image-rendering: pixelated;
+  background: rgb(0 0 0 / 0.45);
+  padding: 3px;
+  pointer-events: none;
+}
+.prompt {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 12px;
+  background: rgb(0 0 0 / 0.7);
+  border: 2px solid var(--accent);
+  font-size: 14px;
+  /* 긴 설명은 화면 안에서 여러 줄로 */
+  width: max-content;
+  max-width: calc(100% - 20px);
+  text-align: center;
+  pointer-events: none;
+}
+/* 장비 줄 */
+.loadout {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 14px;
+  padding: 6px 10px 0;
+  font-size: 13px;
+}
+.loadout-slots {
+  display: flex;
+  gap: 6px;
+}
+.loadout-slots .slot {
+  padding: 2px 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.loadout-slots .slot.filled {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.loadout-slots kbd {
+  font: inherit;
+  color: var(--accent);
+}
+.loadout-passives {
+  color: var(--muted);
+  max-width: 100%;
+}
+@media (orientation: portrait) {
+  .minimap {
+    width: 48px;
+    opacity: 0.9;
+  }
+}
+
+/* 풋내기: 레벨·경험치 막대 · 스탯 버튼 (장비 줄 위) */
+.novice-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+.novice-lv {
+  color: var(--accent);
+  font-weight: 700;
+}
+.novice-exp {
+  flex: 1;
+  min-width: 80px;
+  height: 6px;
+  background: #000;
+  border: 1px solid var(--line);
+}
+.novice-exp span {
+  display: block;
+  height: 100%;
+  background: #7ae07a;
+}
+.novice-pick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  pointer-events: auto;
+}
+.novice-pick small {
+  color: #ffe080;
+  width: 100%;
+}
+.novice-pick button {
+  padding: 3px 8px;
+  font-size: 12px;
+  border-color: var(--accent);
+}
+.novice-pick b {
+  color: var(--ok);
+}

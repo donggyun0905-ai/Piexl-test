@@ -1,0 +1,58 @@
+/* 기본 색·글꼴·버튼 */
+:root {
+  --bg: #14121c;
+  --panel: #1f1b2b;
+  --line: #3a3350;
+  --text: #ece6f5;
+  --muted: #9a90b0;
+  --accent: #f2c14e;
+  --ok: #6fcf7a;
+  --bad: #e0606a;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, "Apple SD Gothic Neo", "Malgun Gothic", "Hiragino Sans", "Noto Sans JP", sans-serif;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+  color: var(--text);
+  background: var(--panel);
+  border: 2px solid var(--line);
+  padding: 10px 16px;
+  cursor: pointer;
+}
+button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+button:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+}
+button small {
+  font-size: 0.75em;
+  color: var(--muted);
+  margin-left: 6px;
+}
+
+.status.online {
+  color: var(--ok);
+}
+.status.offline {
+  color: var(--bad);
+}

@@ -1,0 +1,214 @@
+/* 스토리 화면: 진영 카드 · 최종 보스 · 장 목록 · 책 읽기 */
+.story-screen {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: max(16px, env(safe-area-inset-top)) 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.story-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.story-head h2 {
+  margin: 8px 0 0;
+  color: var(--accent);
+}
+.story-head span {
+  opacity: 0.75;
+}
+.story-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.story-card {
+  border: 2px solid #3a3446;
+  border-left-width: 6px;
+  border-radius: 6px;
+  padding: 10px 12px;
+  background: rgba(20, 16, 28, 0.85);
+}
+.story-card h3 {
+  margin: 0 0 6px;
+}
+.story-card h3 small {
+  font-size: 0.75em;
+  opacity: 0.7;
+}
+.story-card p {
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+.story-members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.story-members figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 64px;
+}
+.story-members figcaption {
+  font-size: 11px;
+  text-align: center;
+}
+.story-face-none {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #6a6478;
+  border-radius: 4px;
+  color: #9a94a8;
+}
+.story-boss {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+/* 책: 가죽 표지 테두리 + 양피지 쪽 (세로로 길게, 쪽마다 넘기는 움직임) */
+.story-book {
+  border: 10px solid #4a2a18;
+  border-image: linear-gradient(135deg, #6a3a20, #3a1e10 40%, #6a3a20 60%, #2a140a) 1;
+  box-shadow: 0 0 0 2px #c8a050 inset, 0 10px 30px rgb(0 0 0 / 0.5);
+  padding: 22px clamp(14px, 4vw, 40px);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgb(255 255 255 / 0.35), transparent 60%),
+    repeating-linear-gradient(0deg, rgb(120 90 50 / 0.05) 0 1px, transparent 1px 28px),
+    linear-gradient(180deg, #f6ecd4, #ead9b4);
+  color: #2a2018;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: min(82vh, 980px);
+}
+.story-book-head {
+  text-align: center;
+  border-bottom: 2px double #b8905a;
+  padding-bottom: 10px;
+}
+.story-book-head small {
+  letter-spacing: 3px;
+  color: #8a6a3a;
+}
+.story-book h3 {
+  margin: 4px 0 8px;
+  color: #6a3a1a;
+  font-size: 1.35em;
+}
+.story-progress {
+  height: 3px;
+  background: rgb(120 80 40 / 0.2);
+}
+.story-progress span {
+  display: block;
+  height: 100%;
+  background: #b8783a;
+  transition: width 0.3s;
+}
+.story-page {
+  flex: 1;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: story-turn 0.35s ease-out;
+}
+@keyframes story-turn {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+}
+.story-narration {
+  margin: 0;
+  line-height: 1.85;
+  font-size: 1.04em;
+  text-indent: 1em;
+}
+.story-page .story-narration:first-child::first-letter {
+  font-size: 1.9em;
+  font-weight: bold;
+  color: #8a2a1a;
+}
+.story-line {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.story-line > div {
+  position: relative;
+  background: #fffaf0;
+  border: 1px solid #c8b088;
+  border-radius: 8px;
+  padding: 6px 10px;
+  flex: 1;
+  box-shadow: 0 2px 0 rgb(120 80 40 / 0.15);
+}
+.story-line b {
+  font-size: 12px;
+  color: #6a3a1a;
+}
+.story-line p {
+  margin: 2px 0 0;
+  line-height: 1.6;
+}
+.story-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 2px double #b8905a;
+  padding-top: 10px;
+  color: #6a4a2a;
+}
+/* 진영 카드: 진영 색 띠 · 장 목록: 큰 장 번호 + 줄거리 */
+.story-faction {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--fc) 22%, transparent), rgba(20, 16, 28, 0.85) 45%);
+}
+.story-chapter {
+  position: relative;
+  overflow: hidden;
+}
+.story-chapter-no {
+  position: absolute;
+  right: 10px;
+  top: -14px;
+  font-size: 84px;
+  font-weight: 900;
+  color: rgb(184 154 255 / 0.12);
+  pointer-events: none;
+}
+.story-summary {
+  opacity: 0.85;
+  font-style: italic;
+}
+.story-book .link-button {
+  color: #6a3a1a;
+}
+/* 캐릭터 탭 (story/CharGuides) */
+.char-guide-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+}
+.char-guide-head strong {
+  flex: 1;
+}
+.char-guide ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  line-height: 1.6;
+}
+.char-guide.hidden-char {
+  border-color: #b8a0ff;
+}

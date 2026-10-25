@@ -1,0 +1,23 @@
+// 화면 글자: 광야의 새벽 각성 기술 둘째 묶음 10가지 이름·설명 (수치는 sim/swarmEvoNew.EVO2와 맞춤)
+export const SWARM_EVO_TEXT = {
+  swarmSkill_wave: { ko: "검기 폭풍", en: "Blade Tempest", ja: "剣気の嵐" },
+  swarmSkill_bounce: { ko: "튕기는 마력 화살", en: "Ricochet Bolts", ja: "跳ねる魔力の矢" },
+  swarmSkill_lance: { ko: "거대한 마력 화살", en: "Arcane Lance", ja: "巨大な魔力の矢" },
+  swarmSkill_cleave: { ko: "대지 가르기", en: "Horizon Cleave", ja: "大地断ち" },
+  swarmSkill_curse: { ko: "저주 안개", en: "Cursed Mist", ja: "呪いの霧" },
+  swarmSkill_fan: { ko: "일곱 갈래 사격", en: "Sevenfold Volley", ja: "七筋の射撃" },
+  swarmSkill_chain: { ko: "연쇄 번개", en: "Chain Lightning", ja: "連鎖の雷" },
+  swarmSkill_vortex: { ko: "블랙홀", en: "Black Hole", ja: "ブラックホール" },
+  swarmSkill_pillar: { ko: "빛기둥", en: "Pillars of Light", ja: "光の柱" },
+  swarmSkill_boomerang: { ko: "귀환 부메랑", en: "Returning Boomerang", ja: "帰還ブーメラン" },
+  swarmSkillDesc_wave: { ko: "1.2초마다 앞으로 모두 꿰뚫는 큰 검기 셋", en: "Every 1.2s, three huge piercing blade waves fly forward", ja: "1.2秒ごとにすべて貫く大きな剣気3つが前へ" },
+  swarmSkillDesc_bounce: { ko: "1.5초마다 사방으로 벽에 네 번 튕기는 마력 화살 넷", en: "Every 1.5s, four arcane bolts fly out and ricochet off walls four times", ja: "1.5秒ごとに壁で4回跳ねる魔力の矢4本を四方へ" },
+  swarmSkillDesc_lance: { ko: "1.8초마다 모두 꿰뚫는 거대한 마력 화살", en: "Every 1.8s, a giant arcane lance pierces everything", ja: "1.8秒ごとにすべて貫く巨大な魔力の矢" },
+  swarmSkillDesc_cleave: { ko: "2.2초마다 가까운 적을 지나 맵 끝까지 한 줄로 벰", en: "Every 2.2s, a slash cuts through the nearest foe across the whole map", ja: "2.2秒ごとに近い敵を通ってマップの端まで一直線に斬る" },
+  swarmSkillDesc_curse: { ko: "1초마다 둘레 적에게 독·불·느려짐", en: "Every 1s, nearby foes are poisoned, burned and slowed", ja: "1秒ごとに周りの敵に毒・炎・鈍化" },
+  swarmSkillDesc_fan: { ko: "0.75초마다 가까운 적 쪽으로 부채꼴 일곱 발", en: "Every 0.75s, a fan of seven shots toward the nearest foe", ja: "0.75秒ごとに近い敵へ扇状に7発" },
+  swarmSkillDesc_chain: { ko: "1.4초마다 적 여섯을 옮겨 가는 연쇄 번개", en: "Every 1.4s, lightning chains through six foes", ja: "1.4秒ごとに敵6体を渡る連鎖の雷" },
+  swarmSkillDesc_vortex: { ko: "2.7초마다 블랙홀이 열려 적을 빨아들였다가 터짐", en: "Every 2.7s, a black hole pulls foes in, then bursts", ja: "2.7秒ごとにブラックホールが敵を吸い込んで爆発" },
+  swarmSkillDesc_pillar: { ko: "1.7초마다 가까운 적 넷 자리에 빛기둥", en: "Every 1.7s, pillars of light strike the four nearest foes", ja: "1.7秒ごとに近い敵4体の場所に光の柱" },
+  swarmSkillDesc_boomerang: { ko: "1.25초마다 모두 꿰뚫으며 날아갔다 돌아오는 부메랑", en: "Every 1.25s, a piercing boomerang flies out and comes back", ja: "1.25秒ごとにすべて貫いて飛んで戻るブーメラン" },
+};

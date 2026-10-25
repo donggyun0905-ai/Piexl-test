@@ -1,0 +1,85 @@
+# 라이브 (main): pixel-rogue.numgame.workers.dev
+name = "pixel-rogue"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+workers_dev = true
+preview_urls = false
+
+[vars]
+APP_ENV = "live"
+ALLOWED_ORIGINS = "https://pixel-rogue.pages.dev"
+
+# Durable Objects (무료 플랜: SQLite 방식만 → migrations에 new_sqlite_classes)
+# Hub: 계정·해금·일일 도전 순위표·빠른 매칭 (하나만 씀)
+[[durable_objects.bindings]]
+name = "HUB"
+class_name = "Hub"
+
+# BattleRoom: 배틀 방 (방 코드마다 하나, 웹소켓 잠자기)
+[[durable_objects.bindings]]
+name = "BATTLE"
+class_name = "BattleRoom"
+
+# CardRoom: 로비 카드·타일 게임 같이 하기 방 (방 코드마다 하나, 웹소켓 잠자기)
+[[durable_objects.bindings]]
+name = "CARDS"
+class_name = "CardRoom"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Hub"]
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["BattleRoom"]
+
+[[migrations]]
+tag = "v3"
+new_sqlite_classes = ["CardRoom"]
+
+# 베타 (develop): pixel-rogue-beta.numgame.workers.dev
+[env.beta]
+name = "pixel-rogue-beta"
+workers_dev = true
+preview_urls = false
+
+[env.beta.vars]
+APP_ENV = "beta"
+ALLOWED_ORIGINS = "https://develop.pixel-rogue.pages.dev,https://test.pixel-rogue.pages.dev,http://localhost:5173"
+
+# 환경마다 따로 적어야 함 (위의 설정을 물려받지 않음)
+[[env.beta.durable_objects.bindings]]
+name = "HUB"
+class_name = "Hub"
+
+[[env.beta.durable_objects.bindings]]
+name = "BATTLE"
+class_name = "BattleRoom"
+
+[[env.beta.durable_objects.bindings]]
+name = "CARDS"
+class_name = "CardRoom"
+
+# 시험 (test): pixel-rogue-test.numgame.workers.dev (test 화면 전용, 저장소도 따로)
+[env.test]
+name = "pixel-rogue-test"
+workers_dev = true
+preview_urls = false
+
+[env.test.vars]
+APP_ENV = "test"
+ALLOWED_ORIGINS = "https://test.pixel-rogue-test.pages.dev,http://localhost:5173"
+# Workers 무료 플랜: 요청 하나의 계산 시간이 짧아 기록을 판 전체 다시 돌려 확인하지 않음 (유료 플랜이면 이 줄을 지우기)
+REPLAY_CHECK = "off"
+
+[[env.test.durable_objects.bindings]]
+name = "HUB"
+class_name = "Hub"
+
+[[env.test.durable_objects.bindings]]
+name = "BATTLE"
+class_name = "BattleRoom"
+
+[[env.test.durable_objects.bindings]]
+name = "CARDS"
+class_name = "CardRoom"

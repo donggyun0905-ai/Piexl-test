@@ -1,0 +1,53 @@
+import type { Lang } from "../index";
+
+// 화면 글자: 협동 (입장·대기실 연결 상태·게임 중 안내)
+export const COOP_TEXT = {
+  coop: { ko: "협동", en: "Co-op", ja: "協力プレイ" },
+  coopRoom: { ko: "협동 방", en: "Co-op room", ja: "協力部屋" },
+  coopQuickDesc: {
+    ko: "협동할 사람을 자동으로 찾아 같은 방에 모읍니다. 두 명이 모이면 잠시 뒤 시작해요.",
+    en: "Finds other players for a co-op run. Starts shortly after two players join.",
+    ja: "協力プレイの相手を自動で探して同じ部屋に集めます。2人そろうと少しして始まります。",
+  },
+  coopNote: {
+    ko: "최대 5명이 같은 방에서 함께 싸우며 층을 올라갑니다. 아이템과 돈은 각자 따로, 출구는 모두 모여야 열립니다. 게임은 친구와 직접 연결해 진행해요.",
+    en: "Up to 5 players fight side by side and climb together. Items and gold are your own, and exits open only when everyone gathers. The game runs over a direct connection between friends.",
+    ja: "最大5人が同じ部屋で一緒に戦い、階を上ります。アイテムとお金は各自別々、出口は全員がそろうと開きます。ゲームは友達と直接つないで進みます。",
+  },
+  coopCreateDesc: { ko: "방을 만들고 친구에게 코드나 링크를 보내 주세요", en: "Create a room and send your friends the code or link", ja: "部屋を作って友達にコードかリンクを送ろう" },
+  coopLinked: { ko: "연결됨", en: "Connected", ja: "接続済み" },
+  coopLinking: { ko: "연결 중", en: "Connecting", ja: "接続中" },
+  coopStartNote: {
+    ko: "모두 '연결됨'이 되면 시작을 누르세요",
+    en: "Press Start once everyone shows Connected",
+    ja: "全員が「接続済み」になったら開始を押してください",
+  },
+  coopWrongRoom: { ko: "협동 방이 아닙니다", en: "That is not a co-op room", ja: "協力部屋ではありません" },
+  coopWaitState: { ko: "방장과 연결하는 중…", en: "Connecting to the host…", ja: "ホストと接続中…" },
+  coopHostLeft: { ko: "방장과 연결이 끊겼습니다", en: "Lost connection to the host", ja: "ホストとの接続が切れました" },
+  promptGather: { ko: "모두 모이면 이동 ({have}/{need})", en: "Moves on when everyone is here ({have}/{need})", ja: "全員そろうと移動 ({have}/{need})" },
+  coopDown: {
+    ko: "쓰러졌습니다 · 친구들이 끝까지 가면 함께 기록돼요",
+    en: "You are down · your team's run still counts for you",
+    ja: "倒れました · 仲間の結果があなたの記録にもなります",
+  },
+  promptRevive: { ko: "회복약을 쓰면 친구를 일으킵니다", en: "Use a potion to revive your friend", ja: "回復薬を使うと仲間を起こせます" },
+  promptReviveWait: { ko: "전투가 끝나면 회복약으로 일으킬 수 있어요", en: "You can revive with a potion once the fight is over", ja: "戦闘が終わると回復薬で起こせます" },
+  coopRecord: { ko: "협동 {n}명", en: "Co-op ×{n}", ja: "協力 {n}人" },
+  sigHere: { ko: "여기!", en: "Here!", ja: "ここ!" },
+  sigHelp: { ko: "도와줘!", en: "Help!", ja: "助けて!" },
+  sigGo: { ko: "가자!", en: "Let's go!", ja: "行こう!" },
+  sigWait: { ko: "잠깐!", en: "Wait!", ja: "待って!" },
+  coopSignals: { ko: "신호 (3~6)", en: "Signals (3-6)", ja: "合図 (3〜6)" },
+  coopOffline: { ko: "끊김", en: "Offline", ja: "切断" },
+  coopDownTag: { ko: "쓰러짐", en: "Down", ja: "ダウン" },
+  coopStatsTitle: { ko: "같이 한 사람", en: "Team", ja: "メンバー" },
+  coopKills: { ko: "처치", en: "Kills", ja: "撃破" },
+  coopNameAskTitle: { ko: "닉네임 정하기", en: "Choose a nickname", ja: "ニックネームを決める" },
+  coopNameAskDesc: {
+    ko: "초대받은 협동 방에 들어가기 전에 같이 하는 사람에게 보일 닉네임을 정해 주세요.",
+    en: "Before joining the co-op room you were invited to, choose the nickname other players will see.",
+    ja: "招待された協力部屋に入る前に、仲間に表示されるニックネームを決めてください。",
+  },
+  coopHurt: { ko: "받은 피해", en: "Damage taken", ja: "被ダメージ" },
+} satisfies Record<string, Record<Lang, string>>;

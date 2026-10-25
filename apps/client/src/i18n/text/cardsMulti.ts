@@ -1,0 +1,32 @@
+// 화면 글자: 로비 카드·타일 게임 같이 하기 (빠른 시작 · 방 코드 · 대기 · 차례)
+export const CARDS_MULTI_TEXT = {
+  mpSolo: { ko: "혼자 하기", en: "Solo", ja: "ひとりで" },
+  mpMulti: { ko: "같이 하기", en: "With others", ja: "みんなで" },
+  mpIntro: {
+    ko: "다른 사람과 같은 테이블에서 해요. 빈자리는 시작할 때 컴퓨터가 채웁니다",
+    en: "Play at the same table with others. Empty seats are filled by CPUs at the start",
+    ja: "他の人と同じテーブルで遊びます。空席は開始時にCPUが埋めます",
+  },
+  mpQuick: { ko: "빠른 시작", en: "Quick match", ja: "クイックスタート" },
+  mpCreate: { ko: "방 만들기 (친구 초대)", en: "Create room (invite)", ja: "部屋を作る（招待）" },
+  mpCodeHint: { ko: "방 코드 6자리", en: "6-letter room code", ja: "部屋コード6文字" },
+  mpJoin: { ko: "들어가기", en: "Join", ja: "入る" },
+  mpRoom: { ko: "방 코드", en: "Room", ja: "部屋コード" },
+  mpLeave: { ko: "나가기", en: "Leave", ja: "退出" },
+  mpWaiting: {
+    ko: "방 코드를 친구에게 알려 주세요. 방장이 시작하면 빈자리는 컴퓨터가 앉습니다 (빠른 시작은 15초 뒤 저절로)",
+    en: "Share the room code. When the host starts, CPUs take empty seats (quick match starts by itself after 15s)",
+    ja: "部屋コードを友だちに教えてください。ホストが開始すると空席にCPUが座ります（クイックは15秒後に自動開始）",
+  },
+  mpStart: { ko: "시작", en: "Start", ja: "開始" },
+  mpBet: { ko: "걸기", en: "Bet", ja: "賭ける" },
+  mpWaitOthers: { ko: "다른 사람을 기다리는 중…", en: "Waiting for others…", ja: "他の人を待っています…" },
+  mpRound: { ko: "판", en: "Round", ja: "ラウンド" },
+  mpWinner: { ko: "{n} 승리!", en: "{n} wins!", ja: "{n}の勝ち！" },
+  mpLoser: { ko: "조커는 {n}에게! 살았다", en: "{n} kept the Joker! You're safe", ja: "ジョーカーは{n}に！助かった" },
+  mpTurnOf: { ko: "{n}의 차례", en: "{n}'s turn", ja: "{n}の番" },
+  mpErrFull: { ko: "방이 꽉 찼습니다", en: "The room is full", ja: "部屋が満員です" },
+  mpErrStarted: { ko: "이미 시작한 방입니다", en: "That game has already started", ja: "すでに始まっています" },
+  mpErrOffline: { ko: "서버에 연결할 수 없습니다", en: "Can't reach the server", ja: "サーバーに接続できません" },
+  mpErrClosed: { ko: "연결이 끊겼습니다", en: "Disconnected", ja: "接続が切れました" },
+};

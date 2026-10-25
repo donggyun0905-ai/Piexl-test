@@ -1,0 +1,96 @@
+/* 메인 로비: 메인 화면 뒤 배경 · 돌아다니기 · 미니 게임 창 (배틀 대기실은 lobby.css) */
+.lobby-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  image-rendering: pixelated;
+  filter: brightness(0.55) saturate(0.9);
+}
+.lobby-canvas.play {
+  filter: none;
+  touch-action: none;
+}
+.title-screen {
+  position: relative;
+  z-index: 1;
+}
+.lobby-button {
+  position: fixed;
+  left: max(12px, env(safe-area-inset-left));
+  bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(20, 18, 28, 0.85);
+}
+.lobby-mode .lobby-exit {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: 12px;
+  z-index: 2;
+  background: rgba(20, 18, 28, 0.85);
+}
+.lobby-help {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  right: 12px;
+  z-index: 2;
+  margin: 0;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--muted);
+  background: rgba(20, 18, 28, 0.7);
+}
+.lobby-enter {
+  position: fixed;
+  left: 50%;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 2;
+  padding: 12px 24px;
+  font-size: 16px;
+  animation: lobby-bob 0.9s ease-in-out infinite alternate;
+}
+@keyframes lobby-bob {
+  to {
+    transform: translate(-50%, -4px);
+  }
+}
+.lobby-preview {
+  width: 100%;
+  aspect-ratio: 336 / 208;
+  image-rendering: pixelated;
+  border: 2px solid #000;
+}
+.lobby-grid {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+.mini-backdrop {
+  z-index: 10;
+}
+.mini-game {
+  width: auto;
+  max-width: calc(100vw - 12px);
+  max-height: calc(100vh - 12px);
+  overflow: auto;
+  padding: 8px;
+}
+/* 게임 내용: 기본 너비 540, MiniGame이 화면에 맞게 최대 2.5배로 확대 */
+.mini-body {
+  width: 540px;
+}
+.mini-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mini-head h2 {
+  margin: 0;
+  color: var(--accent);
+}
