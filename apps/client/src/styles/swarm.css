@@ -1,0 +1,280 @@
+/* 이벤트 '광야의 새벽' (event/SwarmHud·SwarmLevelUp·SwarmResult) */
+.swarm-hud {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #000;
+}
+.swarm-top {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+}
+.swarm-time {
+  color: #ffe08a;
+}
+.swarm-xp {
+  width: min(320px, 70vw);
+  height: 5px;
+  border: 1px solid #000;
+  background: rgb(0 0 0 / 0.55);
+}
+.swarm-xp span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #3ac8ff, #6ae88a);
+  transition: width 0.2s;
+}
+.swarm-slots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+}
+.swarm-gap {
+  width: 8px;
+}
+.swarm-slot {
+  position: relative;
+  display: inline-flex;
+  padding: 1px;
+  border: 1px solid #5a5470;
+  background: rgb(10 8 20 / 0.7);
+}
+.swarm-slot.evo {
+  border-color: #ffd84a;
+  box-shadow: 0 0 6px #ffd84a;
+}
+.swarm-slot small {
+  position: absolute;
+  right: 1px;
+  bottom: -2px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+}
+.swarm-note {
+  margin: 4px 0 0;
+  padding: 2px 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffe08a;
+  background: rgb(0 0 0 / 0.55);
+  animation: swarm-note 0.6s ease-in-out infinite alternate;
+}
+@keyframes swarm-note {
+  to {
+    color: #fff;
+  }
+}
+.swarm-levelup .modal {
+  width: min(720px, 100%);
+  max-width: 720px;
+}
+.swarm-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.swarm-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  padding: 10px;
+  min-width: 0;
+  text-align: left;
+  white-space: normal;
+}
+.swarm-card.weapon {
+  border-color: #e8b030;
+}
+.swarm-card.passive {
+  border-color: #8a6aff;
+}
+.swarm-card-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.swarm-card-head .item-icon {
+  flex: none;
+}
+.swarm-card-head strong {
+  flex: 1;
+  min-width: 0;
+}
+.swarm-lv {
+  align-self: flex-start;
+  padding: 0 6px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #ffd84a;
+  background: rgb(0 0 0 / 0.35);
+}
+.swarm-lv.new {
+  color: #2a1a00;
+  background: #8ae88a;
+  font-weight: bold;
+}
+.swarm-kind {
+  position: absolute;
+  top: -9px;
+  left: 8px;
+  padding: 0 6px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #2a1a00;
+  background: #e8b030;
+}
+.swarm-kind.passive {
+  color: #fff;
+  background: #8a6aff;
+}
+.swarm-card .swarm-skill {
+  color: #8ad8ff;
+}
+.swarm-lvup-title {
+  color: #ffe08a;
+  text-shadow: 0 0 8px rgb(255 216 74 / 0.6);
+}
+.swarm-lvup-title span {
+  font-size: 0.7em;
+  color: #fff;
+}
+.swarm-allmax {
+  color: #8ae88a;
+}
+.swarm-card.heal,
+.swarm-card.gold,
+.swarm-card.might {
+  align-items: center;
+  text-align: center;
+  border-color: #8ae88a;
+}
+.swarm-bonus-icon {
+  font-size: 32px;
+  line-height: 1.1;
+}
+.swarm-card {
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.swarm-card:hover,
+.swarm-card:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 14px rgb(255 216 74 / 0.35);
+}
+.swarm-card small {
+  font-size: 12px;
+  color: var(--muted);
+}
+.swarm-card .swarm-combo {
+  color: #ffd84a;
+}
+.swarm-card kbd {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 10px;
+  opacity: 0.5;
+}
+.swarm-result .swarm-slots {
+  margin: 8px 0;
+}
+@media (max-width: 600px) {
+  .swarm-cards {
+    grid-template-columns: 1fr;
+  }
+  .swarm-hud {
+    top: 44px;
+  }
+}
+.swarm-endless {
+  color: #ff8aff;
+}
+.swarm-event {
+  margin: 2px 0 0;
+  padding: 2px 10px;
+  border: 1px solid #ffd84a;
+  background: rgb(40 20 10 / 0.8);
+  color: #ffe08a;
+  font-size: 13px;
+  font-weight: bold;
+}
+.swarm-event.ring {
+  border-color: #ff6a6a;
+}
+.swarm-event.rescue {
+  border-color: #6ad8ff;
+  color: #c8f0ff;
+}
+.swarm-ask p,
+.swarm-coins {
+  color: #ffe08a;
+}
+/* 맵 고르기 (td-maps 모양을 같이 씀) */
+.swarm-preview {
+  width: 192px;
+  height: 120px;
+  image-rendering: pixelated;
+  border: 1px solid #000;
+}
+.td-map-card.picked {
+  outline: 2px solid #ffd84a;
+}
+.swarm-cleared {
+  color: #8ae88a;
+  letter-spacing: 2px;
+}
+.swarm-levels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.swarm-level {
+  display: flex;
+  flex-direction: column;
+  min-width: 110px;
+  gap: 2px;
+}
+.swarm-level.lv1 {
+  border-color: #ff9a3a;
+}
+.swarm-level.lv2 {
+  border-color: #e03a3a;
+  color: #ffb0b0;
+}
+.swarm-levelup .swarm-cards {
+  margin-top: 10px;
+}
+.swarm-levelup .swarm-card {
+  padding-top: 14px;
+}
+.swarm-hud .swarm-slot {
+  pointer-events: auto;
+  cursor: help;
+}
+.swarm-tip-pips {
+  color: #ffd84a;
+  letter-spacing: 1px;
+}
+.item-tip .swarm-combo {
+  color: #ffd84a;
+}
+.item-tip .swarm-skill {
+  color: #8ad8ff;
+}

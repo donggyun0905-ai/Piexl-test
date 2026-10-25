@@ -1,0 +1,143 @@
+/* 메뉴 공통·위쪽 줄·닉네임 줄 */
+.icon {
+  width: 1em;
+  height: 1em;
+  flex: none;
+}
+.field-label {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.hint {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+:is(.title-screen, .entry-screen, .lobby-screen, .chooser, .modal) button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+:is(.title-screen, .entry-screen, .lobby-screen, .chooser, .topbar, .modal) button.small {
+  margin-left: 0;
+  padding: 4px 12px;
+  font-size: 13px;
+}
+:is(.title-screen, .entry-screen, .lobby-screen, .chooser, .modal) button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #1a1422;
+  font-weight: 700;
+  box-shadow: 0 3px 0 #9c7a24;
+}
+:is(.title-screen, .entry-screen, .lobby-screen, .chooser, .modal) button.primary:disabled {
+  opacity: 0.45;
+  color: #1a1422;
+}
+:is(.title-screen, .entry-screen, .lobby-screen) button.secondary {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+button.outline {
+  background: transparent;
+}
+button.ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--muted);
+}
+button.ghost:hover:not(:disabled) {
+  color: var(--text);
+  border-color: transparent;
+}
+button.big {
+  min-height: 52px;
+  font-size: 17px;
+  font-weight: 700;
+  width: 100%;
+}
+button.selected {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* 위쪽 줄: 오른쪽 설정 */
+.topbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 3;
+  padding: max(10px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 0 0;
+}
+/* 위쪽 줄 왼쪽: 앱 설치 */
+.topbar-left {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  padding: max(10px, env(safe-area-inset-top)) 0 0 max(12px, env(safe-area-inset-left));
+}
+@media (max-width: 600px) {
+  .topbar-left .icon-button-label {
+    display: inline; /* 설치는 아이콘만으로 알아보기 어려워 글자도 보임 */
+  }
+}
+.install-note {
+  color: var(--muted);
+  font-size: 14px;
+}
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+.icon-button .icon {
+  width: 16px;
+  height: 16px;
+}
+@media (max-width: 600px) {
+  .icon-button-label {
+    display: none;
+  }
+}
+.lang-options {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+/* 닉네임 줄 */
+.nickname-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+  width: 100%;
+}
+.nickname-bar .nickname {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 18px;
+  text-align: left;
+}
+.nickname-bar input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 2px solid var(--line);
+  padding: 6px 10px;
+  -webkit-user-select: text;
+  user-select: text;
+}

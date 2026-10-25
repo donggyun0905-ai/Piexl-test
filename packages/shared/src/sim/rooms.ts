@@ -1,0 +1,265 @@
+// 방·층 이동: 방 들어가기(적 배치), 출구 잠김·억지로 나가기, 쉼터, 계단
+import { PERKS } from "../perks";
+import { COOP_ROOM, ROOM_CX as CX, ROOM_CY as CY, setRoomSize } from "../constants";
+import { bossForFloor, type BossKind } from "../content";
+import { createRng, deriveSeed } from "../rng";
+import { FLOOR_COUNT, generateFloor, LANES, LAST_FLOOR, lastFloorMap } from "./floor";
+import { spawnBoss } from "./bosses";
+import { healPlayer } from "./combat";
+import { onRoomCleared, spawnBlessing, spawnGolden, spawnTreasure } from "./loot";
+import { makeArena } from "./bossPrimeval";
+import { arenaBig, arenaEnemies, arenaMap, arenaNext, arenaPrimeval } from "./arena";
+import { spawnShop } from "./shop";
+import { depth, heroBosses, heroNext, heroPair, lastFloorOf } from "./hero";
+import { SWARM } from "./minions";
+import { BAT_FLOCK, minionKinds } from "./critters";
+import { bodyFits, shapeGrid } from "./layout";
+import { eachSeat, partyExtraEnemies, partyHpMul, placeParty } from "./party";
+import { tabooDown, tabooN, tabooSum, tabooUp } from "./taboo";
+import type { EnemyState, RunState, TickInput } from "./types";
+import { ENEMIES } from "../content";
+import {
+  DOOR_HALF,
+  EXIT_X,
+  FLEE_COST,
+  hasPerk,
+  keepInRoom,
+  makeEnemy,
+  PLAYER_RADIUS,
+  ROOM_MAX_X,
+  ROOM_MAX_Y,
+  ROOM_MIN_X,
+  ROOM_MIN_Y,
+} from "./util";
+
+/** 계단에 닿았다고 보는 거리 */
+const STAIRS_REACH = 12;
+/** 보스 시작 자리 (방 위쪽 가운데) */
+const BOSS_START_Y = ROOM_MIN_Y + 20;
+/** 보스방에 들어온 뒤 보스가 첫 공격을 준비하기까지 최소 틱 (1.5초) */
+const BOSS_ENTRY_DELAY = 90;
+/** 보스가 여럿일 때 사이 거리 */
+const BOSS_SPREAD = 64;
+/** 쉼터에 처음 들어가면 회복하는 체력 (최대 체력 비율) */
+export const REST_HEAL = 0.3;
+
+/** 라스트 보스방 크기 (칸 수, 보통 방 21×13보다 큼 · 화면이 플레이어를 따라감) */
+export const BIG_COLS = 29;
+export const BIG_ROWS = 17;
+
+/** 이 판의 지금 방 크기로 맞춤 (게임 계산·그리기 전에) */
+export function applyRoom(s: RunState): void {
+  // 협동 3~5명: 보통 방 대신 큰 방 (방 모양 틀·출구는 가운데로)
+  if (s.big && s.roomCols === undefined) setRoomSize(COOP_ROOM.cols, COOP_ROOM.rows, true);
+  else if (s.roomCols === undefined) setRoomSize();
+  else setRoomSize(s.roomCols, s.roomRows, false);
+}
+
+/** 6층을 깬 뒤 라스트 보스에 도전: 7층(시작 방 → 황금방 → 상점 → 큰 보스방)으로 */
+export function continueToLastFloor(s: RunState, boss: BossKind): void {
+  s.lastBoss = boss;
+  s.over = false;
+  startFloor(s, LAST_FLOOR);
+}
+
+/** 층 시작: 지도 만들고 시작 방으로 */
+export function startFloor(s: RunState, floor: number): void {
+  s.floor = floor;
+  s.map = s.arenaLv ? arenaMap(s) : s.lastBoss && floor === lastFloorOf(s) ? lastFloorMap() : generateFloor(s.seed, floor);
+  s.rooms = s.map.rooms.map(() => ({ visited: false, cleared: false, pickups: [], enemies: null }));
+  s.enemies = [];
+  s.projectiles = [];
+  s.prompt = { kind: "none" };
+  s.floorLog.push({ floor, tick: s.tick, hp: Math.ceil(s.player.hp), gold: s.gold });
+  placeParty(s, ROOM_MAX_Y - PLAYER_RADIUS - 10, false);
+  enterRoom(s, s.map.startId);
+}
+
+function enterRoom(s: RunState, roomId: number): void {
+  s.roomId = roomId;
+  // 라스트 보스방은 아주 큼 (나머지는 보통 방)
+  const big = (s.lastBoss !== undefined && s.map.rooms[roomId]!.type === "exit") || arenaBig(s, roomId);
+  s.roomCols = big ? BIG_COLS : undefined;
+  s.roomRows = big ? BIG_ROWS : undefined;
+  applyRoom(s);
+  // 태초의 빛과 어둠: 큰 방에 상자 벽 6개
+  s.arena = big && (s.lastBoss === "plight" || arenaPrimeval(s, roomId)) ? makeArena(s) : undefined;
+  s.projectiles = [];
+  const info = s.map.rooms[roomId]!;
+  const st = s.rooms[roomId]!;
+  st.visited = true;
+  s.pendingBlasts = [];
+  s.hazards = [];
+  eachSeat(s, () => {
+    s.roomDamaged = false;
+    if (s.devices) s.devices = [];
+    // 금기: 피의 통행료 (방에 들어갈 때마다 체력, 1 아래로는 안 내려감)
+    if (tabooN(s, "bloodToll") > 0) s.player.hp = Math.max(1, s.player.hp - tabooSum(s, "bloodToll"));
+    // 마력 방패: 방에 들어갈 때마다 2초 동안 피해 없음
+    if (hasPerk(s.player, "arcaneShield")) s.player.shieldTicks = Math.max(s.player.shieldTicks, PERKS.arcaneShield.ticks);
+  });
+  if (st.enemies === null) {
+    st.enemies = s.arenaLv
+      ? arenaEnemies(s, roomId)
+      : info.type === "combat" || info.type === "elite"
+        ? spawnEnemies(s, roomId, info.type === "elite")
+        : info.type === "exit"
+          ? s.lastBoss === "plight"
+            ? [spawnBoss(s, "plight"), spawnBoss(s, "pdark")]
+            : s.hero && !s.lastBoss
+              ? heroPair(heroBosses(s).map((b) => spawnBoss(s, b)))
+              : [spawnBoss(s, s.lastBoss ?? bossForFloor(s.floor, s.seed))]
+          : [];
+    // 협동: 보물·상점·황금방·쉼터 회복은 사람마다
+    eachSeat(s, () => {
+      if (info.type === "treasure") spawnTreasure(s, roomId);
+      if (info.type === "shop") spawnShop(s, roomId);
+      if (info.type === "golden") spawnGolden(s, roomId);
+      if (info.type === "start" && s.lastBoss && s.floor === lastFloorOf(s)) spawnBlessing(s, roomId);
+      if (info.type === "rest") healPlayer(s, s.player.stats.maxHp * REST_HEAL * tabooDown(s, "dryWell"));
+    });
+    // 레이드 시간은 라스트 보스방에 처음 들어간 때부터
+    if (big) s.raidStart = s.tick;
+  }
+  s.enemies = st.enemies;
+  st.cleared = s.enemies.length === 0;
+  if ((info.type === "exit" || (s.arenaLv && info.type === "elite")) && !st.cleared) placeBossFight(s);
+}
+
+/** 보스방 입장: 어느 출구로 들어와도 플레이어는 아래쪽 가운데, 보스는 위쪽 가운데 같은 자리에서 시작 (들어오자마자 맞지 않게) */
+function placeBossFight(s: RunState): void {
+  placeParty(s, ROOM_MAX_Y - PLAYER_RADIUS - 16);
+  // 다시 들어온 경우: 불러낸 졸개는 치우고 보스는 처음 자리·걷기 상태로
+  s.enemies = s.enemies.filter((e) => !e.noGold);
+  s.rooms[s.roomId]!.enemies = s.enemies;
+  s.enemies.forEach((e, i) => {
+    // 보스가 여럿이면 (태초의 빛과 어둠 · 레이드 아레나) 나란히
+    e.x = e.prevX = CX + (i - (s.enemies.length - 1) / 2) * BOSS_SPREAD;
+    e.y = e.prevY = BOSS_START_Y;
+    e.phase = "walk";
+    e.timer = Math.max(e.timer, BOSS_ENTRY_DELAY);
+  });
+}
+
+/** 한 방 졸개 최대 수 (무한 모드 깊은 층) */
+const MAX_ENEMIES = 12;
+
+/** 층·방 번호로 정해지는 적 배치 (들어가는 순서와 상관없이 항상 같음). 강한 적 방은 2마리 더, 체력 1.5배 */
+export function spawnEnemies(s: RunState, roomId: number, elite: boolean): EnemyState[] {
+  const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "enemies"));
+  const d = depth(s);
+  const base = Math.min(MAX_ENEMIES, 2 + Math.floor(d / 2) + rng.int(0, 2) + (elite ? 2 : 0));
+  // 협동: 사람이 많으면 일반 적이 조금 더, 체력도 조금 더
+  // 금기: 무리 지어 (전투방 +1) · 정예 (강한 적 방 +2)
+  const count = base + partyExtraEnemies(s, base) + tabooSum(s, "horde") + (elite ? tabooSum(s, "eliteMore") : 0);
+  // 층마다 나오는 졸개 (타워 디펜스 적 8종 포함, critters.minionKinds)
+  const kinds = minionKinds(d);
+  const hpMul = (1 + 0.15 * (d - 1)) * (elite ? 1.5 : 1) * partyHpMul(s) * tabooUp(s, "fleshHp");
+  const out: EnemyState[] = [];
+  const g = shapeGrid(s.map.rooms[roomId]!.shape);
+  for (let i = 0; i < count; i++) {
+    let kind = rng.pick(kinds);
+    // 바위 골렘은 한 방에 한 마리만
+    if (kind === "golem" && out.some((e) => e.kind === "golem")) kind = "crawler";
+    const r = ENEMIES[kind].radius;
+    let x = 0;
+    let y = 0;
+    // 들어온 자리와 너무 가까운 곳, 벽·기둥·구덩이 위에는 나오지 않게 (정해진 횟수만 시도)
+    for (let tries = 0; tries < 40; tries++) {
+      x = rng.int(ROOM_MIN_X + 10, ROOM_MAX_X - 10);
+      y = rng.int(ROOM_MIN_Y + 10, ROOM_MAX_Y - 10);
+      const dx = x - s.player.x;
+      const dy = y - s.player.y;
+      if (dx * dx + dy * dy > 64 * 64 && (!g || bodyFits(g, x, y, r))) break;
+    }
+    const timer = rng.int(30, 90);
+    for (const [ox, oy] of kind === "gnat" ? SWARM : kind === "bat" ? BAT_FLOCK : [[0, 0] as const]) {
+      // 퍼진 자리가 벽·기둥·구덩이·방 밖이면 무리 가운데에서 나옴
+      const ok = x + ox > ROOM_MIN_X + r && x + ox < ROOM_MAX_X - r && y + oy > ROOM_MIN_Y + r && y + oy < ROOM_MAX_Y - r && (!g || bodyFits(g, x + ox, y + oy, r));
+      const e = makeEnemy(s, kind, ok ? x + ox : x, ok ? y + oy : y, hpMul, timer);
+      keepInRoom(e, g);
+      out.push(e);
+    }
+  }
+  return out;
+}
+
+/** 플레이어가 닿아 있는 출구 줄 (위쪽 벽에 붙어 있고 출구 구멍 안), 없으면 -1 */
+export function touchingExit(s: RunState): number {
+  const p = s.player;
+  const exits = s.map.rooms[s.roomId]!.exits;
+  if (p.y > ROOM_MIN_Y + p.r + 0.01) return -1;
+  for (let lane = 0; lane < LANES; lane++) {
+    if ((exits[lane] ?? -1) >= 0 && Math.abs(p.x - EXIT_X[lane]!) <= DOOR_HALF) return lane;
+  }
+  return -1;
+}
+
+/** 출구로 다음 방에 감: 다음 방 아래쪽 가운데에서 시작 */
+export function goThrough(s: RunState, lane: number): void {
+  const next = s.map.rooms[s.roomId]!.exits[lane]!;
+  s.rooms[s.roomId]!.enemies = s.enemies;
+  placeParty(s, ROOM_MAX_Y - PLAYER_RADIUS - 10);
+  enterRoom(s, next);
+}
+
+/** 적을 다 잡았으면 방 정리 (보상은 사람마다) */
+export function checkCleared(s: RunState): void {
+  const st = s.rooms[s.roomId]!;
+  if (!st.cleared && s.enemies.length === 0) {
+    st.cleared = true;
+    eachSeat(s, () => onRoomCleared(s, s.roomId));
+    if (s.lastBoss && s.raidStart !== undefined && s.map.rooms[s.roomId]!.type === "exit") s.raidTicks = s.tick - s.raidStart;
+  }
+}
+
+/** 계단 위에 서 있는지 (마지막 방을 정리한 뒤) */
+export function onStairs(s: RunState): boolean {
+  if (s.map.rooms[s.roomId]!.type !== "exit" || !s.rooms[s.roomId]!.cleared) return false;
+  const dx = s.player.x - CX;
+  const dy = s.player.y - CY;
+  return dx * dx + dy * dy <= STAIRS_REACH * STAIRS_REACH;
+}
+
+/** 계단으로 다음 층 (마지막 층이면 클리어) */
+export function climb(s: RunState): void {
+  if (s.arenaLv) arenaNext(s, startFloor);
+  else if (s.hero) heroNext(s, startFloor);
+  else if (s.floor >= FLOOR_COUNT && !s.endless) {
+    s.won = true;
+    s.over = true;
+  } else {
+    startFloor(s, s.floor + 1);
+  }
+}
+
+/** 플레이어가 움직인 뒤: 방 정리 여부, 문·계단 처리 */
+export function updateRoom(s: RunState, input: TickInput): void {
+  const st = s.rooms[s.roomId]!;
+  checkCleared(s);
+  s.prompt = { kind: "none" };
+
+  const p = s.player;
+  const lane = touchingExit(s);
+  if (lane >= 0) {
+    const pushing = input.moveY < 0;
+    if (st.cleared) {
+      if (pushing || p.dashTicks > 0) goThrough(s, lane);
+      return;
+    }
+    // 잠긴 출구: 지금 체력에서 최대 체력의 20%를 내고 나갈 수 있음 (체력이 모자라면 불가). 서든데스는 불가
+    if (s.sudden || s.arenaLv) return;
+    const cost = Math.ceil(p.stats.maxHp * (FLEE_COST + tabooSum(s, "fleeCost")));
+    s.prompt = { kind: "flee", lane, cost };
+    if (input.interact && p.hp > cost) {
+      p.hp -= cost;
+      goThrough(s, lane);
+    }
+    return;
+  }
+
+  if (onStairs(s)) {
+    s.prompt = { kind: "stairs" };
+    if (input.interact) climb(s);
+  }
+}

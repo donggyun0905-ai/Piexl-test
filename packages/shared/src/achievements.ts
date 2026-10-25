@@ -1,0 +1,206 @@
+// 업적 · 영구 해금 · 점수. 업적은 혼자 하기에서만 해금에 쓰임 (일일 도전·배틀은 해금 미적용)
+// 업적 하나에 보상을 붙이려면 그 줄에 unlock만 넣으면 됨 (아이템·무기·캐릭터). 나머지(잠금·해금 판정)는 아래 함수가 처리
+import { CHARACTER_IDS, type CharacterId, type WeaponId } from "./content";
+import type { PassiveId, UseItemId } from "./items";
+import { FLOOR_COUNT } from "./sim/floor";
+import type { RunState } from "./sim/types";
+import { TICK_RATE } from "./constants";
+
+/** 업적 목록 화면의 묶음 (이 순서로 보여 줌) */
+export const ACHIEVEMENT_CATEGORIES = ["progress", "combat", "boss", "wealth", "build", "character", "challenge", "career"] as const;
+export type AchievementCategory = (typeof ACHIEVEMENT_CATEGORIES)[number];
+
+export type UnlockRef =
+  | { kind: "passive"; id: PassiveId }
+  | { kind: "use"; id: UseItemId }
+  | { kind: "weapon"; id: WeaponId }
+  | { kind: "character"; id: CharacterId };
+
+/** 이 기기의 누적 기록 (끝난 판마다 더함, 연습장·튜토리얼 제외) */
+export interface CareerStats {
+  runs: number;
+  wins: number;
+  kills: number;
+  bossKills: number;
+  goldEarned: number;
+  purchases: number;
+  /** 캐릭터별 클리어 수 */
+  clearedBy: Partial<Record<CharacterId, number>>;
+}
+
+export const EMPTY_CAREER: CareerStats = { runs: 0, wins: 0, kills: 0, bossKills: 0, goldEarned: 0, purchases: 0, clearedBy: {} };
+
+/** 누적 기록 + 지금 판 (판 수는 끝났을 때만 셈) */
+export function careerWith(c: CareerStats, s: RunState): CareerStats {
+  const ch = s.player.characterId;
+  return {
+    runs: c.runs + (s.over ? 1 : 0),
+    wins: c.wins + (s.won ? 1 : 0),
+    kills: c.kills + s.kills,
+    bossKills: c.bossKills + s.bossKills,
+    goldEarned: c.goldEarned + s.goldEarned,
+    purchases: c.purchases + s.purchases,
+    clearedBy: s.won ? { ...c.clearedBy, [ch]: (c.clearedBy[ch] ?? 0) + 1 } : c.clearedBy,
+  };
+}
+
+export interface AchievementDef {
+  id: string;
+  category: AchievementCategory;
+  /** 한 판 안에서 달성 여부 */
+  run?: (s: RunState) => boolean;
+  /** 누적 목표: value(누적 기록)가 goal 이상이면 달성. 목록에 진행도 막대로 보임 */
+  total?: { goal: number; value: (c: CareerStats) => number };
+  /** 달성하면 나오기 시작하는 것 */
+  unlock?: UnlockRef;
+}
+
+/** 클리어 시간 기준 (남은 시간 보너스·빠른 클리어) */
+export const TIME_LIMIT_TICKS = 15 * 60 * TICK_RATE;
+const MIN = 60 * TICK_RATE;
+
+const clearAs = (id: CharacterId) => (s: RunState) => s.won && s.player.characterId === id;
+const total = (goal: number, value: (c: CareerStats) => number) => ({ goal, value });
+
+// 수치는 임시. id는 저장·서버에 남으므로 바꾸지 않음 (순서·이름·조건 수치는 바꿔도 됨)
+export const ACHIEVEMENTS = [
+  // 진행
+  { id: "floor2", category: "progress", run: (s) => s.floor >= 2 },
+  { id: "floor3", category: "progress", run: (s) => s.floor >= 3 },
+  { id: "floor4", category: "progress", run: (s) => s.floor >= 4, unlock: { kind: "use", id: "elixir" } },
+  { id: "floor5", category: "progress", run: (s) => s.floor >= 5 },
+  { id: "floor6", category: "progress", run: (s) => s.floor >= 6 },
+  { id: "clearRun", category: "progress", run: (s) => s.won, unlock: { kind: "passive", id: "ironSkin" } },
+  // 전투 (한 판)
+  { id: "kills30", category: "combat", run: (s) => s.kills >= 30 },
+  { id: "kills70", category: "combat", run: (s) => s.kills >= 70 },
+  { id: "hunter", category: "combat", run: (s) => s.kills >= 120, unlock: { kind: "weapon", id: "glaive" } },
+  { id: "kills170", category: "combat", run: (s) => s.kills >= 170 },
+  // 보스
+  { id: "firstBoss", category: "boss", run: (s) => s.bossKills >= 1, unlock: { kind: "passive", id: "quickDraw" } },
+  { id: "boss3", category: "boss", run: (s) => s.bossKills >= 3 },
+  { id: "flawlessBoss", category: "boss", run: (s) => s.flawlessBosses >= 1, unlock: { kind: "weapon", id: "starwand" } },
+  { id: "flawless3", category: "boss", run: (s) => s.flawlessBosses >= 3 },
+  // 돈·상점 (한 판)
+  { id: "rich", category: "wealth", run: (s) => s.goldEarned >= 150, unlock: { kind: "passive", id: "goldTooth" } },
+  { id: "gold300", category: "wealth", run: (s) => s.goldEarned >= 300 },
+  { id: "hoard", category: "wealth", run: (s) => s.gold >= 100 },
+  { id: "shopper", category: "wealth", run: (s) => s.purchases >= 4, unlock: { kind: "use", id: "frost" } },
+  { id: "bigSpender", category: "wealth", run: (s) => s.goldSpent >= 150 },
+  // 아이템
+  { id: "passives5", category: "build", run: (s) => s.player.passives.length >= 5 },
+  { id: "passives10", category: "build", run: (s) => s.player.passives.length >= 10 },
+  { id: "fullHands", category: "build", run: (s) => s.player.useSlots.length > 0 && s.player.useSlots.every((x) => x !== null) },
+  // 캐릭터
+  { id: "clearWarden", category: "character", run: clearAs("warden") },
+  { id: "clearDrifter", category: "character", run: clearAs("drifter") },
+  { id: "clearMage", category: "character", run: clearAs("mage") },
+  { id: "clearMystic", category: "character", run: clearAs("mystic") },
+  { id: "clearEngineer", category: "character", run: clearAs("engineer") },
+  { id: "clearElementalist", category: "character", run: clearAs("elementalist") },
+  { id: "clearBrawler", category: "character", run: clearAs("brawler") },
+  { id: "clearDoctor", category: "character", run: clearAs("doctor") },
+  { id: "clearGunner", category: "character", run: clearAs("gunner") },
+  { id: "clearBeast", category: "character", run: clearAs("beast") },
+  { id: "clearNinja", category: "character", run: clearAs("ninja") },
+  { id: "clearChronomancer", category: "character", run: clearAs("chronomancer") },
+  { id: "clearSummoner", category: "character", run: clearAs("summoner") },
+  { id: "clearNovice", category: "character", run: clearAs("novice") },
+  { id: "clearBedouin", category: "character", run: clearAs("bedouin") },
+  { id: "clearGeneral", category: "character", run: clearAs("general") },
+  { id: "clearImugi", category: "character", run: clearAs("imugi") },
+  { id: "clearApostle", category: "character", run: clearAs("apostle") },
+  { id: "clearDuck", category: "character", run: clearAs("duck") },
+  { id: "clearScribe", category: "character", run: clearAs("scribe") },
+  { id: "clearAbandoned", category: "character", run: clearAs("abandoned") },
+  { id: "clearTitan", category: "character", run: clearAs("titan") },
+  { id: "clearOni", category: "character", run: clearAs("oni") },
+  { id: "clearAll", category: "character", total: total(CHARACTER_IDS.length, (c) => Object.values(c.clearedBy).filter((n) => (n ?? 0) > 0).length) },
+  // 도전 (클리어 조건)
+  { id: "fastClear", category: "challenge", run: (s) => s.won && s.tick <= 12 * MIN },
+  { id: "swiftClear", category: "challenge", run: (s) => s.won && s.tick <= 10 * MIN },
+  { id: "thrift", category: "challenge", run: (s) => s.won && s.purchases === 0 },
+  { id: "closeCall", category: "challenge", run: (s) => s.won && s.player.hp <= 10 },
+  { id: "suddenClear", category: "challenge", run: (s) => s.won && s.sudden === true },
+  // 누적
+  { id: "runs10", category: "career", total: total(10, (c) => c.runs) },
+  { id: "runs50", category: "career", total: total(50, (c) => c.runs) },
+  { id: "wins5", category: "career", total: total(5, (c) => c.wins) },
+  { id: "wins20", category: "career", total: total(20, (c) => c.wins) },
+  { id: "kills1000", category: "career", total: total(1000, (c) => c.kills) },
+  { id: "kills5000", category: "career", total: total(5000, (c) => c.kills) },
+  { id: "bosses10", category: "career", total: total(10, (c) => c.bossKills) },
+  { id: "bosses50", category: "career", total: total(50, (c) => c.bossKills) },
+  { id: "gold1000", category: "career", total: total(1000, (c) => c.goldEarned) },
+  { id: "gold5000", category: "career", total: total(5000, (c) => c.goldEarned) },
+] as const satisfies readonly AchievementDef[];
+
+export type AchievementId = (typeof ACHIEVEMENTS)[number]["id"];
+
+export const ACHIEVEMENT_IDS: readonly AchievementId[] = ACHIEVEMENTS.map((a) => a.id);
+
+const DEFS: readonly AchievementDef[] = ACHIEVEMENTS;
+
+export function achievementDef(id: string): AchievementDef | undefined {
+  return DEFS.find((a) => a.id === id);
+}
+
+/** 해금해야 나오는 것 (종류:id) */
+const LOCKED = new Set(DEFS.flatMap((a) => (a.unlock ? [`${a.unlock.kind}:${a.unlock.id}`] : [])));
+
+/** 쓸 수 있는지 (아이템·무기·캐릭터). unlocks: 달성한 업적 id. 어떤 업적에도 걸려 있지 않으면 처음부터 열림 */
+export function isUnlocked(kind: UnlockRef["kind"], id: string, unlocks: readonly string[]): boolean {
+  const key = `${kind}:${id}`;
+  if (!LOCKED.has(key)) return true;
+  return DEFS.some((a) => a.unlock && `${a.unlock.kind}:${a.unlock.id}` === key && unlocks.includes(a.id));
+}
+
+/** 이 판에서 나올 수 있는 아이템인지 */
+export function itemAvailable(kind: Exclude<UnlockRef["kind"], "character">, id: string, unlocks: readonly string[]): boolean {
+  return isUnlocked(kind, id, unlocks);
+}
+
+/** 고를 수 있는 캐릭터인지 (캐릭터 해금 업적을 붙이면 바로 적용) */
+export function characterAvailable(id: CharacterId, unlocks: readonly string[]): boolean {
+  return isUnlocked("character", id, unlocks);
+}
+
+/** 지금 판에서 달성한 업적 (이미 가진 것 포함). career: 이 판 전까지의 누적 기록 */
+export function achievedIn(s: RunState, career: CareerStats = EMPTY_CAREER): AchievementId[] {
+  // 레이드 아레나는 업적을 세지 않음 (보통 판과 진행이 다름)
+  if (s.arenaLv) return [];
+  let c: CareerStats | null = null;
+  return ACHIEVEMENTS.filter((a: AchievementDef) => {
+    if (a.run) return a.run(s);
+    if (!a.total) return false;
+    c ??= careerWith(career, s);
+    return a.total.value(c) >= a.total.goal;
+  }).map((a) => a.id);
+}
+
+/** 누적 업적 진행도 (한 판 업적은 null) */
+export function achievementProgress(id: string, career: CareerStats): { value: number; goal: number } | null {
+  const t = achievementDef(id)?.total;
+  return t ? { value: Math.min(t.value(career), t.goal), goal: t.goal } : null;
+}
+
+// ───────── 점수 (일일 도전·배틀 공통, 임시 수치) ─────────
+
+export interface ScoreBreakdown {
+  floor: number;
+  kills: number;
+  bosses: number;
+  clear: number;
+  time: number;
+  total: number;
+}
+
+/** 도달 층 + 처치 + 보스 처치 + 클리어 보너스 + 남은 시간 보너스(클리어했을 때만, 15분 기준) */
+export function computeScore(s: RunState): ScoreBreakdown {
+  const floor = (Math.min(s.floor, FLOOR_COUNT) - 1) * 500;
+  const kills = s.kills * 10;
+  const bosses = s.bossKills * 300;
+  const clear = s.won ? 2000 : 0;
+  const time = s.won ? Math.max(0, Math.floor((TIME_LIMIT_TICKS - s.tick) / TICK_RATE)) * 3 : 0;
+  return { floor, kills, bosses, clear, time, total: floor + kills + bosses + clear + time };
+}

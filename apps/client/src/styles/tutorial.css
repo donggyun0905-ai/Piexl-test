@@ -1,0 +1,34 @@
+/* 튜토리얼 안내 */
+/* 게임 화면 위에 겹치지 않게 HUD와 방 사이에 둠 (방 위쪽 문·보상을 가리지 않게) */
+.tutorial-banner {
+  position: relative;
+  z-index: 3;
+  align-self: center;
+  flex: none;
+  width: min(720px, calc(100vw - 24px));
+  margin-bottom: 4px;
+  padding: 6px 12px;
+  background: rgb(10 8 16 / 0.94);
+  border: 1px solid var(--accent);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.tutorial-banner small {
+  color: var(--accent);
+}
+.tutorial-banner p {
+  margin: 2px 0 6px;
+}
+.tutorial-banner .tutorial-sub {
+  color: var(--muted);
+  font-size: 12px;
+}
+.tutorial-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+.tutorial-actions button {
+  padding: 4px 10px;
+  font-size: 12px;
+}

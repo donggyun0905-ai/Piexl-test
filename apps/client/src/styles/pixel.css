@@ -1,0 +1,220 @@
+/* 도트 편집 페이지 (/pixel/) */
+.pixel-app {
+  padding: 12px;
+  color: var(--text);
+}
+.px-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.px-top h1 {
+  margin: 0 8px 0 0;
+  font-size: 20px;
+}
+.px-draft {
+  color: var(--accent);
+  font-size: 13px;
+}
+.px-file input {
+  display: none;
+}
+.px-file {
+  cursor: pointer;
+  padding: 6px 10px;
+  border: 2px solid var(--line);
+}
+.px-help {
+  color: var(--muted);
+  font-size: 13px;
+}
+.px-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+}
+.px-left,
+.px-center,
+.px-compare,
+.px-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.px-compare {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+/* 넓은 화면: 시트 · 편집 · 비교 카드를 한 줄에 (비교 카드는 세로로 2장) */
+@media (min-width: 1100px) {
+  .px-main {
+    flex-wrap: nowrap;
+  }
+  .px-compare {
+    flex-direction: column;
+  }
+}
+.px-compare h2 {
+  width: 100%;
+  margin: 0;
+  font-size: 15px;
+}
+.px-card {
+  padding: 8px;
+  border: 2px solid var(--line);
+  background: var(--panel);
+}
+.px-row,
+.px-tools,
+.px-colors {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  max-width: 640px;
+}
+.px-tools button.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.px-edit,
+.px-cell,
+.px-sheet {
+  image-rendering: pixelated;
+  border: 2px solid #000;
+  touch-action: none;
+}
+.px-edit {
+  max-width: 100%;
+  cursor: crosshair;
+}
+.px-sheet {
+  cursor: pointer;
+}
+.px-colors .sw {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 2px solid #000;
+}
+.px-colors .sw.active {
+  outline: 2px solid var(--accent);
+}
+.px-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.px-picker input {
+  width: 130px;
+}
+.px-picker select:last-child {
+  max-width: 260px;
+}
+.px-apply {
+  font-size: 13px;
+  color: var(--accent);
+}
+.px-warn {
+  color: var(--accent);
+}
+.px-back {
+  padding: 6px 10px;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  text-decoration: none;
+}
+.px-base {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+/* 그리는 칸: 크게 확대하면 스크롤 */
+.px-canvas-wrap {
+  max-width: min(100%, 92vw);
+  max-height: 72vh;
+  overflow: auto;
+  border: 2px solid var(--line);
+}
+.px-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 640px;
+}
+.px-tools button {
+  padding: 4px 8px;
+  font-size: 13px;
+}
+.px-tools button.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.px-size,
+.px-zoom {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+}
+.px-size input {
+  width: 80px;
+}
+.px-colors {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 640px;
+}
+.px-color-now {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.px-big-swatch {
+  width: 44px;
+  height: 44px;
+  border: 2px solid #fff;
+  outline: 2px solid #000;
+  cursor: pointer;
+}
+.px-big-swatch input,
+.px-all-colors input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.px-all-colors {
+  display: inline-block;
+  padding: 4px 10px;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 13px;
+}
+.px-hex {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  margin-top: 4px;
+}
+.px-hex input {
+  width: 84px;
+  font-family: monospace;
+}
+.px-swatches small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.px-swatches div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}

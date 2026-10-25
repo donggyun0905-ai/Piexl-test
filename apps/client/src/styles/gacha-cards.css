@@ -1,0 +1,200 @@
+/* 뽑기 카드 (shop/GachaReveal): 뒷면으로 깔림 · 누르면 결과 색으로 빛나며 뒤집힘 */
+.gacha-table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+}
+.gacha-cards {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 92px));
+  gap: 8px;
+}
+.gacha-cards.single {
+  grid-template-columns: minmax(0, 200px);
+}
+.gacha-bonus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffe08a;
+  font-size: 13px;
+}
+.gacha-bonus .gacha-card {
+  width: 92px;
+}
+.gacha-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  padding: 0;
+  border: none;
+  background: none;
+  perspective: 600px;
+  animation: card-deal 0.4s cubic-bezier(0.2, 1.3, 0.4, 1) both;
+}
+.gacha-card:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.gacha-card.big {
+  aspect-ratio: 5 / 7;
+}
+@keyframes card-deal {
+  from {
+    transform: translateY(-60px) rotate(-10deg) scale(0.6);
+    opacity: 0;
+  }
+}
+.card-inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.3, 1.2, 0.5, 1);
+}
+.gacha-card.front .card-inner {
+  transform: rotateY(180deg);
+}
+.card-back,
+.card-front {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px;
+  border: 3px solid #b8c0e0;
+  backface-visibility: hidden;
+  font-size: 11px;
+  text-align: center;
+  color: #fff;
+}
+.card-back {
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.06) 0 6px, transparent 6px 12px),
+    linear-gradient(160deg, #4a5a9a, #22284e);
+}
+.gacha-card:not(:disabled):hover .card-back {
+  border-color: #fff;
+  transform: translateY(-3px);
+}
+.card-back .pack-star {
+  font-size: 28px;
+}
+.gacha-card.big .card-back .pack-star {
+  font-size: 56px;
+}
+.card-front {
+  transform: rotateY(180deg);
+  background: linear-gradient(180deg, #2a2440, #14101e);
+}
+.card-front strong {
+  font-size: 11px;
+}
+.gacha-card.big .card-front strong {
+  font-size: 15px;
+}
+.card-front .gacha-coupon {
+  line-height: 1.4;
+}
+
+/* 빛: 누르면 결과 색으로 크게 번쩍, 뒤집힌 뒤에도 테두리가 그 색으로 빛남 */
+.card-light {
+  position: absolute;
+  inset: -55%;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(circle, var(--glow) 0, transparent 65%);
+}
+.gacha-card.glow .card-light {
+  animation: card-flash 0.42s ease-out both;
+}
+.gacha-card.glow .card-inner {
+  animation: card-shake 0.42s both;
+}
+@keyframes card-flash {
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+@keyframes card-shake {
+  25% {
+    transform: rotate(-3deg) scale(1.05);
+  }
+  75% {
+    transform: rotate(3deg) scale(1.05);
+  }
+}
+.gacha-card.gold {
+  --glow: rgba(255, 210, 80, 0.95);
+}
+.gacha-card.purple {
+  --glow: rgba(180, 110, 255, 0.95);
+}
+.gacha-card.green {
+  --glow: rgba(106, 232, 106, 0.95);
+}
+.gacha-card.rainbow {
+  --glow: rgba(255, 255, 255, 0.95);
+}
+.gacha-card.rainbow .card-light {
+  background: conic-gradient(#ff5a5a, #ffd860, #6ad86a, #5ac8ff, #a05aff, #ff5ad8, #ff5a5a);
+  filter: blur(14px);
+}
+.gacha-card.front .card-front {
+  box-shadow: 0 0 14px var(--glow);
+  border-color: var(--glow);
+}
+.gacha-card.rainbow.front .card-front {
+  border-image: linear-gradient(90deg, #ff5a5a, #ffd860, #6ad86a, #5ac8ff, #a05aff) 1;
+  animation: rainbow-glow 1.2s linear infinite;
+}
+@keyframes rainbow-glow {
+  0% {
+    box-shadow: 0 0 18px #ff5a5a;
+  }
+  33% {
+    box-shadow: 0 0 18px #6ad86a;
+  }
+  66% {
+    box-shadow: 0 0 18px #5ac8ff;
+  }
+  100% {
+    box-shadow: 0 0 18px #ff5ad8;
+  }
+}
+.gacha-card.rainbow.front .card-light {
+  animation: rainbow-spin 3s linear infinite;
+  opacity: 0.45;
+}
+@keyframes rainbow-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.gacha-stage-buttons {
+  display: flex;
+  gap: 10px;
+}
+.gacha-stage-buttons button {
+  width: auto;
+}
+@media (max-width: 520px) {
+  .gacha-cards {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 4px;
+    width: 100%;
+  }
+  .card-front strong {
+    font-size: 9px;
+  }
+}

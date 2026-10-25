@@ -1,0 +1,18 @@
+/* 숫자 타일 바닥 빌리기·붙이기 '+' · 조커 게임 뽑은 카드·짝 누르기 */
+.meld .tile {
+  cursor: pointer;
+}
+.meld-add {
+  min-width: 20px;
+  padding: 0 4px;
+  font-weight: bold;
+  color: var(--accent);
+}
+.card.got {
+  outline: 3px solid var(--accent);
+  transform: translateY(-6px);
+}
+.card.pairable {
+  cursor: pointer;
+  padding: 0;
+}

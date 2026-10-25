@@ -1,0 +1,106 @@
+// 광야의 새벽 각성 기술: 각성한 무기는 능력치 + 무기마다 정해진 기술 하나 (번개 폭풍 · 별똥별 · 서리 고리 · 회전 칼날 · 탄 세례 · 각성 파동)
+// 지금 run.player 기준 (그림자 공격자는 swarmGhosts가 run.player를 바꿔 부름)
+import { WEAPON_IDS, type WeaponId } from "../content";
+import { createRng, deriveSeed } from "../rng";
+import { SWARM } from "../swarmDefs";
+import { blastAt, dotDamage } from "./combat";
+import type { EnemyState, RunState } from "./types";
+import { addEffect, dist2, normalize } from "./util";
+
+export type SwarmSkill = "storm" | "comet" | "frost" | "blades" | "barrage" | "nova";
+const SKILLS: readonly SwarmSkill[] = ["storm", "comet", "frost", "blades", "barrage", "nova"];
+const K = SWARM.skills;
+
+/** 무기마다 정해진 각성 기술 (무기 순서대로 돌아가며) */
+export const evoSkill = (id: WeaponId): SwarmSkill => SKILLS[Math.max(0, WEAPON_IDS.indexOf(id)) % SKILLS.length]!;
+
+/** 회전 칼날 자리 (그리기도 같이 씀) */
+export function bladeSpots(tick: number, x: number, y: number): { x: number; y: number }[] {
+  const out: { x: number; y: number }[] = [];
+  for (let i = 0; i < K.blades.count; i++) {
+    const a = tick * 0.09 + (i * Math.PI * 2) / K.blades.count;
+    out.push({ x: x + Math.cos(a) * K.blades.r, y: y + Math.sin(a) * K.blades.r });
+  }
+  return out;
+}
+
+const alive = (s: RunState) => s.enemies.filter((e) => e.hp > 0 && !e.svBox);
+
+/** 가까운 적 n (range 안) */
+function nearest(s: RunState, n: number, range: number): EnemyState[] {
+  const p = s.player;
+  return alive(s)
+    .filter((e) => dist2(e, p) < range * range)
+    .sort((a, b) => dist2(a, p) - dist2(b, p) || a.id - b.id)
+    .slice(0, n);
+}
+
+/** 틱마다: 각성한 무기면 그 기술 */
+export function evoNova(s: RunState): void {
+  const p = s.player;
+  if (!p.svEvo) return;
+  const dmg = p.stats.damage;
+  const t = s.tick;
+  switch (evoSkill(p.weaponId)) {
+    case "storm":
+      if (t % K.storm.every) return;
+      for (const e of nearest(s, K.storm.count, K.storm.range)) {
+        dotDamage(s, e, "shock", dmg * K.storm.mul);
+        addEffect(s, { kind: "bolt", x: e.x, y: e.y - 44, dirX: 0, dirY: 0, size: 2, maxTicks: 10, toX: e.x, toY: e.y, width: 2 });
+      }
+      return;
+    case "comet": {
+      if (t % K.comet.every) return;
+      const rng = createRng(deriveSeed(s.seed, "evoComet", t + p.x));
+      const near = nearest(s, 12, K.comet.range);
+      for (let i = 0; i < K.comet.count && near.length; i++) {
+        const e = near.splice(rng.int(0, near.length - 1), 1)[0]!;
+        blastAt(s, e.x, e.y, K.comet.r, dmg * K.comet.mul, { still: true });
+        addEffect(s, { kind: "meteor", x: e.x, y: e.y, dirX: 0, dirY: 0, size: K.comet.r, maxTicks: 18 });
+      }
+      return;
+    }
+    case "frost":
+      if (t % K.frost.every) return;
+      for (const e of alive(s)) {
+        if (dist2(e, p) > (K.frost.r + e.r) ** 2) continue;
+        dotDamage(s, e, "frost", dmg * K.frost.mul);
+        e.stunTicks = Math.max(e.stunTicks ?? 0, K.frost.stun);
+      }
+      addEffect(s, { kind: "oFrost", x: p.x, y: p.y, dirX: 0, dirY: 0, size: K.frost.r, maxTicks: 24, tint: "#8ad8ff" });
+      return;
+    case "blades":
+      if (t % K.blades.every) return;
+      for (const b of bladeSpots(t, p.x, p.y)) for (const e of alive(s)) if (dist2(e, b) < (K.blades.hit + e.r) ** 2) dotDamage(s, e, "bleed", dmg * K.blades.mul);
+      return;
+    case "barrage":
+      if (t % K.barrage.every) return;
+      for (let i = 0; i < K.barrage.count; i++) {
+        const a = (i * Math.PI * 2) / K.barrage.count + t * 0.01;
+        const d = normalize(Math.cos(a), Math.sin(a)) ?? [1, 0];
+        s.projectiles.push({
+          id: s.nextId++,
+          fromPlayer: true,
+          x: p.x,
+          y: p.y,
+          prevX: p.x,
+          prevY: p.y,
+          r: 3,
+          vx: d[0] * K.barrage.speed,
+          vy: d[1] * K.barrage.speed,
+          damage: dmg * K.barrage.mul,
+          ticksLeft: 60,
+          homing: true,
+          ghost: true,
+          tint: "#ffd84a",
+        });
+      }
+      return;
+    default: {
+      const e = SWARM.evo;
+      if (t % e.novaEvery) return;
+      blastAt(s, p.x, p.y, e.novaR, dmg * e.novaMul, { still: true });
+      addEffect(s, { kind: "ring", x: p.x, y: p.y, dirX: 0, dirY: 0, size: e.novaR, maxTicks: 18, width: 2 });
+    }
+  }
+}

@@ -1,0 +1,285 @@
+import { AIM_DIST_MAX, AIM_DIST_STEP, quantize, type TickInput } from "@pixel-rogue/shared";
+import type { ClickTarget } from "./clickTargets";
+import { drawSticks, type StickElements } from "./sticks";
+import { moveVector, TouchSticks } from "./touchSticks";
+
+// 조작 입력 (PC: 키보드+마우스 / 모바일: 왼쪽 이동·오른쪽 조준 조이스틱, 손가락 댄 자리에 생기고 드래그 중에만 보임)
+
+const AIM_DEADZONE = 6;
+/** 조준 방향 정밀도 (−100~100). 입력 기록이 너무 길어지지 않게 */
+const AIM_STEPS = 100;
+/** 화면 확대 한도 (1 = 방 전체가 보임) */
+export const ZOOM_MIN = 1;
+export const ZOOM_MAX = 2.5;
+/** PC 사용 아이템 키: 1번 칸 Q·1, 2번 칸 E·2 */
+const USE_KEYS: Record<string, number> = { KeyQ: 1, Digit1: 1, KeyE: 2, Digit2: 2 };
+
+export interface ControlsOptions {
+  /** 터치·마우스를 받는 화면 전체 영역 */
+  zone: HTMLElement;
+  sticks: StickElements;
+  /** 플레이어의 화면 위치 (마우스 조준 계산용) */
+  /** scale: 게임 1픽셀의 화면 크기 */
+  playerScreenPos: () => { x: number; y: number; scale: number } | null;
+  onEscape: () => void;
+  onPause: () => void;
+  onAutoAimChange: (on: boolean) => void;
+  /** C: 능력치 수치 보기 켜기·끄기 */
+  onToggleStats: () => void;
+  /** H: 맞는 범위 늘 보기 켜기·끄기 */
+  onToggleHitbox: () => void;
+  onToggleRange: () => void;
+  /** 처음 터치하면 모바일 화면(버튼·안내)으로 전환 */
+  onTouch: () => void;
+  onZoomChange: (zoom: number) => void;
+  /** 누른 자리가 층 보상·미니맵 방이면 그 입력 (클릭·탭) */
+  clickTarget: (x: number, y: number) => ClickTarget | null;
+}
+
+export class Controls {
+  /** 자동 공격 (기본). 끄면 수동 조준 */
+  autoAim = true;
+  private keys = new Set<string>();
+  private mouseX: number | null = null;
+  private mouseY = 0;
+  private mouseAttack = false;
+  private dashQueued = false;
+  /** 우클릭을 누르고 있는 동안 대시가 찰 때마다 계속 대시 */
+  private dashHeld = false;
+  /** Space·화면 버튼을 누르고 있는 동안 맞는 범위 보기 */
+  hitboxHeld = false;
+  private interactQueued = false;
+  /** 이번에 쓸 사용 아이템 칸 (0 = 없음, 1·2) */
+  private useQueued = 0;
+  /** 풋내기 스탯 찍기 (1~7, 장비 줄의 스탯 버튼) */
+  private statQueued = 0;
+  /** 클릭·탭으로 고른 층 보상·미니맵 방 */
+  private clickQueued: ClickTarget | null = null;
+  zoom = 1;
+  private touch: TouchSticks;
+  private cleanup: (() => void)[] = [];
+
+  constructor(private opt: ControlsOptions) {
+    this.touch = new TouchSticks({
+      zone: opt.zone,
+      onTouch: opt.onTouch,
+      clickTarget: opt.clickTarget,
+      zoom: () => this.zoom,
+      setZoom: (z) => this.setZoom(z),
+      queueDash: () => this.queueDash(),
+      queueClick: (c) => {
+        this.clickQueued = c;
+      },
+      redraw: () => this.drawSticks(),
+    });
+    const on = <K extends keyof WindowEventMap>(
+      target: Window | HTMLElement,
+      type: K,
+      fn: (e: WindowEventMap[K]) => void,
+      options?: AddEventListenerOptions,
+    ) => {
+      target.addEventListener(type, fn as EventListener, options);
+      this.cleanup.push(() => target.removeEventListener(type, fn as EventListener, options));
+    };
+
+    on(window, "keydown", (e) => {
+      if (e.repeat) return;
+      // 글자 입력 칸(채팅 등)에 쓰는 중이면 게임 조작으로 받지 않음
+      const el = e.target as HTMLElement | null;
+      if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) return;
+      if (e.code === "Escape") return opt.onEscape();
+      if (e.code === "KeyP") return opt.onPause();
+      if (e.code === "KeyR") return this.setAutoAim(!this.autoAim);
+      if (e.code === "KeyC" && !e.ctrlKey && !e.metaKey) return opt.onToggleStats();
+      if (e.code === "KeyH") return opt.onToggleHitbox();
+      if (e.code === "KeyG") return opt.onToggleRange();
+      if (e.code === "KeyF") {
+        this.interactQueued = true;
+        return;
+      }
+      if (e.code === "Space") {
+        e.preventDefault(); // 페이지 스크롤·버튼 눌림 막기
+        this.hitboxHeld = true;
+        return;
+      }
+      const slot = USE_KEYS[e.code];
+      if (slot) {
+        this.useQueued = slot;
+        return;
+      }
+      this.keys.add(e.code);
+    });
+    on(window, "keyup", (e) => {
+      // 눌러 둔 화면 버튼이 Space로 눌리지 않게
+      if (e.code === "Space") {
+        e.preventDefault();
+        this.hitboxHeld = false;
+      }
+      this.keys.delete(e.code);
+    });
+    on(window, "blur", () => this.releaseAll());
+    on(window, "mousemove", (e) => {
+      this.mouseX = e.clientX;
+      this.mouseY = e.clientY;
+    });
+    on(
+      window,
+      "wheel",
+      (e) => {
+        // 스크롤되는 창(연습장 아이템 목록 등) 위에서는 그 창을 스크롤
+        if (inScrollable(e.target)) return;
+        // 휠: 게임 화면 확대·축소 (Ctrl+휠도 브라우저 확대 대신 게임 화면)
+        e.preventDefault();
+        if (e.deltaY !== 0) this.setZoom(this.zoom * (e.deltaY < 0 ? 1.1 : 1 / 1.1));
+      },
+      { passive: false },
+    );
+    on(window, "mouseup", (e) => {
+      if (e.button === 0) this.mouseAttack = false;
+      if (e.button === 2) this.dashHeld = false;
+    });
+
+    const zone = opt.zone;
+    on(zone, "contextmenu", (e) => e.preventDefault());
+    // 마우스 버튼은 mousedown으로 받음: 좌클릭을 누른 채 우클릭하면 pointerdown이 오지 않아 대시가 안 됐음
+    on(zone, "mousedown", (e) => {
+      if (e.button === 0) {
+        const c = opt.clickTarget(e.clientX, e.clientY);
+        if (c) this.clickQueued = c;
+        else this.mouseAttack = true;
+      }
+      if (e.button === 2) this.dashQueued = this.dashHeld = true;
+      if (e.button === 1) e.preventDefault(); // 휠 버튼 자동 스크롤 막기
+    });
+    on(zone, "pointerdown", (e) => this.touch.down(e));
+    on(zone, "pointermove", (e) => this.touch.moveTo(e));
+    on(zone, "pointerup", (e) => this.touch.up(e));
+    on(zone, "pointercancel", (e) => this.touch.up(e));
+  }
+
+  setAutoAim(on: boolean): void {
+    this.autoAim = on;
+    this.opt.onAutoAimChange(on);
+  }
+
+  /** 대시를 한 번 누른 것으로 처리 (화면 버튼 등) */
+  setZoom(z: number): void {
+    this.zoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z));
+    this.opt.onZoomChange(this.zoom);
+  }
+
+  /** 사용 아이템 쓰기 (화면 버튼). slot: 1·2 */
+  queueStat(k: number): void {
+    this.statQueued = k;
+  }
+
+  queueUse(slot: number): void {
+    this.useQueued = slot;
+  }
+
+  /** 상호작용을 한 번 누른 것으로 처리 (모바일 버튼) */
+  queueInteract(): void {
+    this.interactQueued = true;
+  }
+
+  queueDash(): void {
+    this.dashQueued = true;
+  }
+
+  /** 마우스 위치 (화면 좌표). 마우스를 쓰지 않았으면 null */
+  get mouse(): { x: number; y: number } | null {
+    return this.mouseX === null ? null : { x: this.mouseX, y: this.mouseY };
+  }
+
+  releaseAll(): void {
+    this.keys.clear();
+    this.mouseAttack = false;
+    this.dashHeld = false;
+    this.hitboxHeld = false;
+    this.touch.release();
+    this.drawSticks();
+  }
+
+  dispose(): void {
+    for (const fn of this.cleanup) fn();
+    this.cleanup = [];
+  }
+
+  /** 이번 틱 입력. 대시는 한 번 읽으면 사라짐 */
+  read(): TickInput {
+    const { move, aim, pinch } = this.touch;
+    let moveX = 0;
+    let moveY = 0;
+    if (move) {
+      const v = moveVector(move);
+      moveX = quantize(v.x, 100);
+      moveY = quantize(v.y, 100);
+    } else {
+      const k = (a: string, b: string) => (this.keys.has(a) || this.keys.has(b) ? 100 : 0);
+      moveX = k("KeyD", "ArrowRight") - k("KeyA", "ArrowLeft");
+      moveY = k("KeyS", "ArrowDown") - k("KeyW", "ArrowUp");
+    }
+
+    let aimX = 0;
+    let aimY = 0;
+    let attack = false;
+    if (aim && !pinch) {
+      const len = Math.hypot(aim.dx, aim.dy);
+      // 자동 공격 중에는 오른쪽 터치가 대시(두 번 탭)·확대에만 쓰임
+      if (!this.autoAim && len > AIM_DEADZONE) {
+        // 조이스틱은 방향만: 거리 단계를 최대로 (누른 곳 없음 = 멀리)
+        aimX = quantize(aim.dx / len, AIM_STEPS) * AIM_DIST_MAX;
+        aimY = quantize(aim.dy / len, AIM_STEPS) * AIM_DIST_MAX;
+        attack = true;
+      }
+    } else {
+      const p = this.opt.playerScreenPos();
+      if (p && this.mouseX !== null) {
+        const dx = this.mouseX - p.x;
+        const dy = this.mouseY - p.y;
+        const len = Math.hypot(dx, dy);
+        if (len > 0) {
+          // 방향 × 누른 곳까지 거리 단계 (기계공학자가 누른 곳에 던지게)
+          const k = Math.max(1, Math.min(AIM_DIST_MAX, Math.round(len / p.scale / AIM_DIST_STEP)));
+          aimX = quantize(dx / len, AIM_STEPS) * k;
+          aimY = quantize(dy / len, AIM_STEPS) * k;
+        }
+      }
+      attack = !this.autoAim && this.mouseAttack;
+    }
+
+    const dash = this.dashQueued || this.dashHeld;
+    const interact = this.interactQueued;
+    const useSlot = this.useQueued;
+    const pickChoice = this.clickQueued?.pickChoice ?? 0;
+    const statPick = this.statQueued;
+    this.statQueued = 0;
+    this.dashQueued = false;
+    this.interactQueued = false;
+    this.useQueued = 0;
+    this.clickQueued = null;
+    // 자동 공격 중에는 조준·공격 입력을 쓰지 않으므로 0으로 (입력 기록이 짧아지고, 기록 = 계산에 쓴 값)
+    if (this.autoAim) return { moveX, moveY, aimX: 0, aimY: 0, attack: false, dash, interact, useSlot, pickChoice, statPick, autoAim: true };
+    return { moveX, moveY, aimX, aimY, attack, dash, interact, useSlot, pickChoice, statPick, autoAim: false };
+  }
+
+  /** 모바일 조준 중인지 (조준점 표시용) */
+  get touchAiming(): boolean {
+    const { aim, pinch } = this.touch;
+    return !this.autoAim && !pinch && aim !== null && Math.hypot(aim.dx, aim.dy) > AIM_DEADZONE;
+  }
+
+  private drawSticks(): void {
+    // 자동 공격 중에는 조준하지 않으므로 조준 조이스틱을 그리지 않음
+    drawSticks(this.opt.sticks, this.touch.move, this.autoAim ? null : this.touch.aim);
+  }
+}
+
+/** 휠을 굴린 곳이 내용이 넘쳐 스크롤되는 창 안인지 */
+function inScrollable(target: EventTarget | null): boolean {
+  for (let el = target instanceof Element ? target : null; el && el !== document.body; el = el.parentElement) {
+    const oy = getComputedStyle(el).overflowY;
+    if ((oy === "auto" || oy === "scroll") && el.scrollHeight > el.clientHeight) return true;
+  }
+  return false;
+}

@@ -1,0 +1,132 @@
+/* 협동: 대기실 연결 표시 · 방장을 기다리는 화면 · 방장 연결 끊김 알림 */
+.badge.linked {
+  background: var(--ok);
+  color: #1a1422;
+}
+.badge.linking {
+  background: var(--line);
+  color: var(--muted);
+}
+
+.coop-wait {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 100dvh;
+  padding: 16px;
+  text-align: center;
+}
+
+.coop-banner {
+  position: fixed;
+  left: 50%;
+  top: 72px;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: calc(100vw - 32px);
+  padding: 10px 14px;
+  background: var(--panel);
+  border: 2px solid var(--bad);
+  color: var(--text);
+}
+
+/* 협동: 왼쪽 위 같이 하는 사람 체력 줄 · 신호 버튼 */
+.coop-party {
+  position: fixed;
+  left: 8px;
+  top: 52px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: min(240px, calc(100vw - 16px));
+  pointer-events: none;
+  font-size: 12px;
+}
+.coop-party ul {
+  margin: 0;
+  padding: 6px 8px;
+  list-style: none;
+  background: rgba(16, 12, 24, 0.7);
+  border-radius: 6px;
+}
+.coop-party li {
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr) 60px 44px;
+  align-items: center;
+  gap: 6px;
+  line-height: 18px;
+}
+.coop-party li.me .name {
+  font-weight: bold;
+}
+.coop-party li.down {
+  opacity: 0.6;
+}
+.coop-party .name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.coop-party .bar {
+  height: 6px;
+  background: #3a2a3a;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.coop-party .bar span {
+  display: block;
+  height: 100%;
+  background: #e05a5a;
+}
+.coop-party .tag {
+  text-align: right;
+  color: var(--muted, #aaa);
+  font-size: 11px;
+}
+.coop-party .tag.slow {
+  color: #ffb050;
+}
+.coop-party .dot,
+.coop-stats .dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.coop-signals {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+  pointer-events: auto;
+}
+.coop-signals button {
+  padding: 2px 5px;
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0.75;
+}
+.coop-signals kbd {
+  opacity: 0.6;
+  font-size: 10px;
+}
+.coop-stats {
+  width: 100%;
+  margin: 8px 0;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.coop-stats th,
+.coop-stats td {
+  padding: 3px 6px;
+  text-align: right;
+}
+.coop-stats th:first-child,
+.coop-stats td:first-child {
+  text-align: left;
+}

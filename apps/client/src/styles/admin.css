@@ -1,0 +1,257 @@
+/* 관리자 페이지 (/admin/). 게임 화면에는 들어가지 않음 */
+html,
+body,
+#root {
+  height: auto;
+  min-height: 100%;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.admin {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 16px 16px 96px;
+}
+.admin h1 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+.admin h2 {
+  font-size: 1.05rem;
+}
+.admin button {
+  padding: 6px 12px;
+}
+.admin button.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.admin button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #1a1424;
+}
+.admin input,
+.admin select {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 2px solid var(--line);
+  padding: 6px 8px;
+}
+
+.admin-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.admin-tabs,
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.admin-server {
+  padding: 4px 10px;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+}
+.admin-logout {
+  margin-left: auto;
+}
+.admin-tabs {
+  margin: 8px 0 12px;
+}
+
+.admin-hint {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.admin-error {
+  color: var(--bad);
+}
+.admin-ok {
+  color: var(--ok);
+}
+
+.admin-login {
+  max-width: 420px;
+  padding: 16px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+}
+.admin-login form {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.admin-login input {
+  flex: 1;
+  min-width: 0;
+  letter-spacing: 0.1em;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+}
+.admin-table {
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.admin-table th,
+.admin-table td {
+  border: 1px solid var(--line);
+  padding: 4px 6px;
+  text-align: left;
+  white-space: nowrap;
+}
+.admin-table th small {
+  display: block;
+  color: var(--muted);
+  font-weight: normal;
+  font-size: 0.75em;
+}
+.admin-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--panel);
+}
+.admin-na {
+  color: var(--line);
+  text-align: center !important;
+}
+
+.admin-cell {
+  position: relative;
+}
+.admin-cell input {
+  width: 76px;
+  padding: 3px 4px;
+}
+.admin-cell.changed input {
+  background: #3a3218;
+  color: var(--accent);
+}
+.admin-cell.dirty input {
+  border-color: var(--accent);
+}
+.admin-reset {
+  margin-left: 2px;
+  padding: 0 4px !important;
+  border-width: 1px !important;
+}
+
+.admin-diff tbody tr {
+  cursor: pointer;
+}
+.admin-diff tbody tr:hover {
+  background: var(--panel);
+}
+.admin-to {
+  color: var(--accent);
+}
+.admin-actions {
+  margin-top: 12px;
+}
+
+.admin-savebar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--panel);
+  border-top: 2px solid var(--accent);
+}
+.admin-savebar input {
+  flex: 1;
+  min-width: 160px;
+}
+
+/* 오른쪽 연습장 (넓은 화면은 옆에, 좁은 화면은 아래에) */
+.admin-practice-toggle {
+  margin-left: auto;
+}
+.admin-body.with-practice {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 44%);
+  gap: 16px;
+  align-items: start;
+}
+.admin-main {
+  min-width: 0;
+}
+.admin-practice {
+  position: sticky;
+  top: 8px;
+}
+.admin-practice-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.admin-practice iframe {
+  width: 100%;
+  height: min(70vh, 640px);
+  border: 2px solid var(--line);
+  background: #000;
+}
+@media (max-width: 900px) {
+  .admin-body.with-practice {
+    grid-template-columns: 1fr;
+  }
+  .admin-practice {
+    position: static;
+  }
+}
+
+/* 항목별 목록 (패시브·상점): 항목마다 그 항목에 있는 값만 */
+.admin-list > tbody > tr > th {
+  min-width: 180px;
+  max-width: 260px;
+  vertical-align: top;
+}
+.admin-desc {
+  display: block;
+  margin-top: 4px;
+  font-weight: normal;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: normal;
+}
+.admin-mini {
+  border-collapse: collapse;
+}
+.admin-mini th {
+  font-size: 12px;
+  font-weight: normal;
+  text-align: left;
+  padding: 0 4px 2px;
+  border: 0;
+  background: none;
+}
+.admin-mini td {
+  border: 0;
+}
+/* 캐릭터별 클리어 시간 표 */
+.admin-clears table {
+  border-collapse: collapse;
+  min-width: min(520px, 100%);
+}
+.admin-clears th,
+.admin-clears td {
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+.admin-clears td strong {
+  color: var(--accent);
+}

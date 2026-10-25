@@ -1,0 +1,145 @@
+/* 금기의 서: 선택창 버튼 · 창 (금기 줄·점수 합) · 금기 점수 단계 색 · 금기 훈장 움직임 */
+.select-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.taboo-open {
+  padding: 8px 18px;
+}
+.taboo-book {
+  width: min(760px, 100%);
+}
+.taboo-total {
+  position: sticky;
+  top: -1px;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 10px;
+  margin: 6px 0 10px;
+  border: 1px solid rgba(242, 193, 78, 0.4);
+  border-radius: 6px;
+  background: #1a1524;
+}
+.taboo-total b {
+  font-size: 28px;
+}
+.taboo-total small {
+  color: var(--muted);
+}
+.taboo-total button {
+  margin-left: auto;
+}
+.taboo-group h3 {
+  margin: 12px 0 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.taboo-group ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.taboo-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border: 1px solid rgba(168, 160, 192, 0.2);
+  border-radius: 6px;
+}
+.taboo-row.on {
+  border-color: rgba(200, 60, 80, 0.8);
+  background: rgba(120, 20, 40, 0.25);
+}
+.taboo-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 4px 6px;
+  text-align: left;
+  background: none;
+  border: none;
+}
+.taboo-main strong,
+.taboo-main small {
+  width: 100%;
+}
+.taboo-main small {
+  margin-left: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+.taboo-pts {
+  color: #ff7a8a;
+  font-weight: 700;
+  font-size: 13px;
+}
+.taboo-count {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.taboo-count button {
+  width: 28px;
+  padding: 2px 0;
+}
+.taboo-count b {
+  min-width: 30px;
+  text-align: center;
+  font-size: 13px;
+}
+/* 점수 단계 색 */
+.taboo-tier-1 {
+  color: #f0b080;
+}
+.taboo-tier-2 {
+  color: #dfe4f0;
+}
+.taboo-tier-3 {
+  color: #ffd040;
+}
+.taboo-tier-4 {
+  color: #c890ff;
+}
+.taboo-tier-5 {
+  color: #ff7030;
+  text-shadow: 0 0 6px rgba(255, 96, 32, 0.6);
+}
+.taboo-tier-6 {
+  color: #fff;
+  text-shadow: 0 0 6px #ff40c0, 0 0 10px #40c0ff;
+}
+/* 금기 훈장: 빛살 돌기 · 불꽃 일렁임 */
+.medal-rays {
+  transform-origin: 50px 62px;
+  animation: medal-rays 12s linear infinite;
+}
+@keyframes medal-rays {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.medal-flames {
+  transform-origin: 50px 108px;
+  animation: medal-flames 0.9s ease-in-out infinite alternate;
+}
+@keyframes medal-flames {
+  to {
+    transform: scale(1.04, 1.08);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .medal-rays,
+  .medal-flames {
+    animation: none;
+  }
+}

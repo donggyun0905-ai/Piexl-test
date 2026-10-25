@@ -1,0 +1,179 @@
+/* 계정·일일 도전 */
+.account-screen,
+.daily-screen {
+  justify-content: flex-start;
+  padding-top: 40px;
+}
+.account-note {
+  margin: 0;
+  max-width: 420px;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
+.tabs {
+  display: flex;
+  gap: 6px;
+}
+.tabs button {
+  padding: 6px 12px;
+  font-size: 14px;
+}
+.tabs .active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(320px, 100%);
+}
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.form-row input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: var(--text);
+  background: var(--panel);
+  border: 2px solid var(--line);
+  padding: 6px 10px;
+  -webkit-user-select: text;
+  user-select: text;
+}
+.form-error {
+  margin: 0;
+  color: var(--bad);
+  font-size: 14px;
+}
+.recovery-code {
+  font-size: 22px;
+  letter-spacing: 2px;
+  padding: 10px 16px;
+  border: 2px dashed var(--accent);
+  -webkit-user-select: all;
+  user-select: all;
+}
+.board-wrap {
+  width: min(420px, 100%);
+  max-height: 50vh;
+  overflow-y: auto;
+}
+.board-wrap.small {
+  max-height: 28vh;
+}
+.leaderboard {
+  list-style: none;
+  margin: 0;
+  padding: 0 !important;
+  font-size: 14px;
+  text-align: left;
+}
+.leaderboard li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--line);
+}
+.lb-rank {
+  width: 22px;
+  text-align: right;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.lb-char {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #000;
+}
+.lb-char.warden {
+  background: #f2c14e;
+}
+.lb-char.drifter {
+  background: #6ec6e8;
+}
+.lb-char.mage {
+  background: #b58cf2;
+}
+.lb-char.mystic {
+  background: #f0e2b0;
+}
+.lb-char.doctor {
+  background: #f4f6fa;
+}
+.lb-char.gunner {
+  background: #d8b060;
+}
+.lb-char.beast {
+  background: #f0a050;
+}
+.lb-char.ninja {
+  background: #4a3a6a;
+}
+.lb-char.chronomancer {
+  background: #7ae0ff;
+}
+.lb-char.engineer {
+  background: #f08a3c;
+}
+.lb-char.elementalist {
+  background: #4ae0a8;
+}
+.lb-char.brawler {
+  background: #f07aa0;
+}
+.lb-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lb-floor {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.lb-score {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.daily-result {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.lb-char.summoner {
+  background: #3a8a5a;
+}
+.lb-char.bedouin {
+  background: #e8b860;
+}
+.lb-char.general {
+  background: #c84a3a;
+}
+.lb-char.imugi {
+  background: #ffd040;
+}
+.lb-char.apostle {
+  background: #8a1a3a;
+}
+.lb-char.abandoned {
+  background: #7aa070;
+}
+.lb-char.titan {
+  background: #c87a3a;
+}
+.lb-char.novice {
+  background: #d8c8a8;
+}
+.lb-char.duck {
+  background: #ffd84a;
+}

@@ -1,0 +1,89 @@
+/* 아이템 설명 말풍선·능력치 창 */
+.item-tip {
+  position: fixed;
+  z-index: 20;
+  /* 아이템 위쪽 가운데에 붙임 */
+  transform: translate(-50%, -100%);
+  width: max-content;
+  max-width: 256px;
+  padding: 6px 9px;
+  background: rgb(10 8 16 / 0.92);
+  border: 1px solid var(--accent);
+  font-size: 12px;
+  line-height: 1.45;
+  pointer-events: none;
+}
+.item-tip.below {
+  transform: translate(-50%, 0);
+}
+.item-tip-name {
+  font-weight: bold;
+  color: var(--accent);
+}
+.item-tip-hint {
+  margin-top: 3px;
+  color: var(--muted);
+}
+.item-tip-compare {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid rgb(255 255 255 / 0.15);
+}
+.item-tip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.item-tip-row b.up {
+  color: #7ed67e;
+}
+.item-tip-row b.down {
+  color: #e05a5a;
+}
+
+/* 능력치 보기 */
+.stats-panel {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  min-width: 150px;
+  padding: 5px 8px;
+  background: rgb(0 0 0 / 0.55);
+  font-size: 12px;
+  line-height: 1.5;
+  pointer-events: none;
+}
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+.stats-row span:last-child {
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+@media (orientation: portrait) {
+  .stats-panel {
+    min-width: 120px;
+    font-size: 11px;
+  }
+}
+/* 능력치 창 아래 '캐릭터 설명 보기' (GameHud.StatsPanel) */
+.stats-guide-btn {
+  pointer-events: auto;
+  margin-top: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+}
+.stats-guide {
+  max-width: 260px;
+  max-height: 46vh;
+  overflow-y: auto;
+  margin: 4px 0 0;
+  padding-left: 14px;
+  pointer-events: auto;
+  color: #e8e4f0;
+}
+.stats-guide li {
+  margin-bottom: 3px;
+}

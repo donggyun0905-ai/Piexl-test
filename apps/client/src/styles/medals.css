@@ -1,0 +1,92 @@
+/* 훈장: 캐릭터 카드 오른쪽 위 4칸 (2×2) · 정보 창 · 고르기 창 */
+.character-item {
+  position: relative;
+}
+.card-medals {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, 30px);
+  gap: 3px;
+}
+.medal-slot {
+  width: 30px;
+  height: 32px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(168, 160, 192, 0.25);
+  background: rgba(20, 16, 30, 0.35);
+}
+.medal-slot.filled {
+  border: 1px solid rgba(232, 176, 48, 0.8);
+  background: radial-gradient(circle at 50% 45%, rgba(232, 176, 48, 0.3), rgba(20, 16, 30, 0.7) 70%);
+  box-shadow: 0 0 6px rgba(232, 176, 48, 0.4);
+}
+.medal-slot.filled:hover {
+  transform: translateY(-1px) scale(1.08);
+}
+.medal-art {
+  overflow: visible;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+}
+.medal-shine {
+  animation: medal-shine 3.2s ease-in-out infinite;
+}
+@keyframes medal-shine {
+  0%,
+  70% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.medal-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.medal-head dl {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 4px 12px;
+  margin: 0;
+}
+.medal-head dt {
+  color: var(--muted, #a8a0c0);
+}
+.medal-head dd {
+  margin: 0;
+  font-weight: bold;
+}
+.medal-change,
+.medal-remove {
+  width: 100%;
+  margin-top: 10px;
+}
+.medal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 8px;
+}
+.medal-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px;
+}
+.medal-choice.worn {
+  outline: 2px solid #e8b030;
+}
+.medal-choice em {
+  font-size: 11px;
+  color: #e8b030;
+  font-style: normal;
+}
