@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.117",
+    date: "2026-10-26",
+    items: {
+      ko: ["능력치 창의 이동 속도가 지금 실제 빠르기로 계속 바뀌어 보임 (라이더 공격 빠르기·암살 단검, 펑크 신경 가속 등이 붙으면 '1.8 (+20%)'처럼)"],
+      en: ["Move speed in the stats panel now shows your live speed (e.g. '1.8 (+20%)' with the Rider's attack speed-up or dagger, the Punk's Neural Accel, and so on)"],
+      ja: ["能力値画面の移動速度が今の実際の速さで常に変わって表示（ライダーの攻撃加速・暗殺ダガー、パンクの神経加速などが付くと「1.8（+20%）」のように）"],
+    },
+  },
+  {
     version: "0.48.116",
     date: "2026-10-26",
     items: {

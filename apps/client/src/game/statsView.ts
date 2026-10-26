@@ -1,5 +1,5 @@
 // 능력치 보기: 지금 내 수치 (패시브·무기 반영). 설정의 '능력치 보기'를 켰을 때만 화면에 표시
-import { artChance, eaterRegen, gunCrit, IMUGI, SAMYEOL, imugiCrit, mukinDef, mukinRegen, noviceCrit, petCrit, petGold, petTaken, WEAPONS, type PlayerState, type RunState, type WeaponDef } from "@pixel-rogue/shared";
+import { artChance, classMoveMul, eaterRegen, gunCrit, IMUGI, SAMYEOL, imugiCrit, mukinDef, mukinRegen, noviceCrit, petCrit, petGold, petTaken, WEAPONS, type PlayerState, type RunState, type WeaponDef } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 
 export interface StatRow {
@@ -18,6 +18,12 @@ function critOf(p: PlayerState, w: WeaponDef): { chance: number; mul: number } {
   return { chance: 0, mul: 1.5 };
 }
 
+/** 이동 속도: 직업 배율이 붙으면 "1.8 (+20%)" */
+function moveText(base: number, mul: number): string {
+  const pct = Math.round((mul - 1) * 100);
+  return pct === 0 ? round(base) : `${round(base * mul)} (${pct > 0 ? "+" : ""}${pct}%)`;
+}
+
 export function statRows(run: RunState, t: (k: TextKey) => string): StatRow[] {
   const s = run.player.stats;
   const w: WeaponDef = WEAPONS[run.player.weaponId];
@@ -31,7 +37,8 @@ export function statRows(run: RunState, t: (k: TextKey) => string): StatRow[] {
     { label: t("statAttackSpeed"), value: round(s.attackSpeed) },
     { label: t("statDps"), value: round(perSecond) },
     { label: t("statRange"), value: round(s.range) },
-    { label: t("statMoveSpeed"), value: round(s.moveSpeed) },
+    // 지금 실제 이동 속도 (라이더 공격 빠르기·단검 · 펑크 신경 가속 · 플라이 등 직업 배율 포함, 늘면 + 표시)
+    { label: t("statMoveSpeed"), value: moveText(s.moveSpeed, classMoveMul(run.player, run.tick)) },
     ...(w.kind === "ranged" ? [{ label: t("statProjectileSpeed"), value: round(s.projectileSpeed) }] : []),
     { label: t("statLuck"), value: round(s.luck) },
     // 오니: 재생력 · 추가 공격 범위 · 추가 공격 확률

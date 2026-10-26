@@ -59,6 +59,7 @@ export { mukinDef, mukinRegen } from "./mukin";
 export { petCrit, petGold, petTaken } from "./lobbyPet";
 export { riderGauge, riderHeat, riderSpeedMul } from "./rider";
 export { flameStacks } from "./flames";
+export { classMoveMul } from "./moveMul";
 export { artifacterGauge } from "./artifacter";
 export { ARTIFACTER_HIDDEN } from "../itemsArtifacter";
 export { punkAccel, punkGauge } from "./punk";
