@@ -11,7 +11,7 @@ export const AUTOMATA_PASSIVES = {
   adFocus: S("adFocus"),
   /** 확산 렌즈: 레이저가 더 굵음 */
   adWide: S("adWide"),
-  /** 자매 부르기: 어느 무기든 자매 인형 하나가 곁에 */
+  /** 자매 부르기: 어느 무기든 자매 인형 +1 (자매 인형 무기와도 더해짐) */
   adCall: S("adCall"),
   /** 넷째 자매: 자매 인형 +1 */
   adFourth: S("adFourth"),

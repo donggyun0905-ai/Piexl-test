@@ -49,6 +49,10 @@ describe("테라코어 시즌 2", () => {
     const s = run("automata", "adSisters");
     for (let i = 0; i < 90; i++) stepSim(s, FIRE);
     expect(s.player.adDolls).toHaveLength(3);
+    // 자매 부르기를 더하면 넷
+    s.player.passives.push("adCall" as PassiveId);
+    stepSim(s, FIRE);
+    expect(s.player.adDolls).toHaveLength(4);
     // 분신은 방 밖으로 나가지 않고, 쏠 때 35% 확률로 자기 자리에서 유도 미사일
     s.enemies[0]!.x = s.enemies[0]!.prevX = ROOM_MAX_X + 200;
     let fromDoll = false;

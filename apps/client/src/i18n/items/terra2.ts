@@ -92,7 +92,7 @@ export const TERRA2_PASSIVE_NAMES: Record<TerraPassive & PassiveId, Names> = {
 export const TERRA2_EFFECTS: Partial<Record<TerraPassive & PassiveId, Names>> = {
   adFocus: c("레이저 피해 +{mul:up}%", "Laser damage +{mul:up}%", "レーザーダメージ+{mul:up}%"),
   adWide: c("레이저 굵기 +{add}", "Laser width +{add}", "レーザーの太さ+{add}"),
-  adCall: c("어느 무기든 자매 인형 {n}이 곁에서 함께 쏨", "{n} sister doll fights beside you with any weapon", "どの武器でも姉妹人形{n}体がそばで撃つ"),
+  adCall: c("어느 무기든 자매 인형 +{n} (자매 인형 무기와도 더해짐)", "+{n} sister doll with any weapon (stacks with Sister Dolls)", "どの武器でも姉妹人形+{n}（姉妹人形の武器とも重なる）"),
   adFourth: c("자매 인형 +{n}", "+{n} sister doll", "姉妹人形+{n}"),
   adWarhead: c("미사일 폭발 범위 +{r:up}%", "Missile blast +{r:up}%", "ミサイルの爆発範囲+{r:up}%"),
   adSalvo: c("미사일 확률 +{chance:pct}%, {n}발 더", "Missile chance +{chance:pct}%, {n} more missiles", "ミサイル確率+{chance:pct}%、{n}発追加"),

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.120",
+    date: "2026-10-26",
+    items: {
+      ko: ["오토마타: '자매 부르기'가 자매 인형 무기의 셋에 더해져 넷이 됨 (전에는 셋 그대로) · 유도 미사일 한 발 피해 45% → 30%"],
+      en: ["Automata: 'Call the Sisters' now adds to the Sister Dolls weapon's three for four dolls (it used to stay at three) · homing missile damage per shot 45% → 30%"],
+      ja: ["オートマタ：「姉妹呼び」が姉妹人形の武器の3体に加わり4体に（以前は3体のまま）· 誘導ミサイル1発のダメージ45% → 30%"],
+    },
+  },
+  {
     version: "0.48.119",
     date: "2026-10-26",
     items: {

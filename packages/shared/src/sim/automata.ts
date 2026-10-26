@@ -137,7 +137,8 @@ export const DOLL_TINTS = ["#ff8ad8", "#8aff9a", "#b08aff", "#ffd04a"] as const;
 /** 자매 인형: 저마다 다른 적을 찾아 돌아다니며 따로 레이저를 쏨 (나에게서 너무 멀어지면 돌아옴) */
 function dolls(s: RunState): void {
   const p = s.player;
-  const n = Math.max(styleOf(p).dolls ?? 0, hasPerk(p, "adCall") ? K.adCall.n : 0) + (hasPerk(p, "adFourth") ? K.adFourth.n : 0);
+  // 무기의 인형 수 + 아이템마다 더함 (자매 인형 무기 셋에 자매 부르기를 먹으면 넷)
+  const n = (styleOf(p).dolls ?? 0) + (hasPerk(p, "adCall") ? K.adCall.n : 0) + (hasPerk(p, "adFourth") ? K.adFourth.n : 0);
   if (n <= 0) {
     delete p.adDolls;
     return;

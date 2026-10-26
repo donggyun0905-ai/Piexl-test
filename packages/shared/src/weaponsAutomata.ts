@@ -54,7 +54,7 @@ export const AUTOMATA = {
   dollLeash: 150,
   dollSpeed: 1.6,
   /** 미사일: 한 발 피해 배율 · 폭발 반경 · 빠르기 · 날아가는 틱 · 확률로 더 나오는 수(0~이만큼) */
-  missileMul: 0.45,
+  missileMul: 0.3,
   missileBlast: 14,
   missileSpeed: 2.4,
   missileTicks: 110,
