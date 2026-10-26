@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.118",
+    date: "2026-10-26",
+    items: {
+      ko: [
+        "테라코어 다섯 명(오토마타·라이더·붐버·아티팩터·펑크)의 스킨 9테마 추가 (수영복·크리스마스·할로윈·교복·설날·일본·중국·미국·성별 바꾸기, 라이더는 오토바이 색도 테마에 맞춤)",
+        "테라코어 다섯 명에게 여름 한정 스킨 '여름 파도' 추가: 펑크는 네온 분홍 비키니와 비치는 하늘빛 사롱, 오토마타는 하늘빛 프릴 수영복, 라이더는 알로하 셔츠와 흰 오토바이, 붐버는 민소매와 수박 무늬 폭탄 띠, 아티팩터는 문신이 드러난 수영복",
+        "캐릭터 선택창의 테라코어 다섯 명 이름 옆 (미완성) 표시를 뺌",
+      ],
+      en: [
+        "Added 9 themed skins for the five Terracore characters (Automata, Rider, Bomber, Artifacter, Punk): swimsuit, Christmas, Halloween, school, New Year, Japan, China, USA and gender swap (the Rider's bike also matches each theme)",
+        "Added the limited 'Summer Wave' skin for the five Terracore characters: Punk in a neon-pink bikini with a sheer sky-blue sarong, Automata in a frilly sky-blue swimsuit, Rider in an aloha shirt on a white bike, Bomber in a tank top with a watermelon bomb belt, Artifacter in swim trunks showing his tattoos",
+        "Removed the (WIP) tag next to the five Terracore characters in character select",
+      ],
+      ja: [
+        "テラコア5人（オートマタ・ライダー・ボマー・アーティファクター・パンク）のスキン9テーマを追加（水着・クリスマス・ハロウィン・制服・お正月・日本・中国・アメリカ・性別チェンジ、ライダーはバイクの色もテーマに合わせる）",
+        "テラコア5人に夏の限定スキン「夏の波」を追加：パンクはネオンピンクのビキニと透ける空色のサロン、オートマタは空色のフリル水着、ライダーはアロハシャツと白いバイク、ボマーはタンクトップとスイカ柄の爆弾ベルト、アーティファクターはタトゥーが見える水着",
+        "キャラクター選択画面のテラコア5人の名前横の（未完成）表示を削除",
+      ],
+    },
+  },
+  {
     version: "0.48.117",
     date: "2026-10-26",
     items: {

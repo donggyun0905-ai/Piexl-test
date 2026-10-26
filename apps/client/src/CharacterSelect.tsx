@@ -47,8 +47,6 @@ function rollCharacter(withHidden: boolean): { id: CharacterId; hidden: boolean 
 }
 const NAME: Record<CharacterId, TextKey> = { warden: "warden", drifter: "drifter", mage: "mage", mystic: "mystic", engineer: "engineer", elementalist: "elementalist", brawler: "brawler", doctor: "doctor", gunner: "gunner", beast: "beast", ninja: "ninja", chronomancer: "chronomancer", summoner: "summoner", novice: "novice", bedouin: "bedouin", general: "general", imugi: "imugi", apostle: "apostle", stargazer: "stargazer", duck: "duck", abandoned: "abandoned", titan: "titan", oni: "oni", scribe: "scribe", idra: "idra", byeonhui: "byeonhui", fly: "fly", elder: "elder", ren: "ren", spiritist: "spiritist", plague: "plague", slayer: "slayer", eater: "eater", mukin: "mukin", samyeol: "samyeol", automata: "automata", rider: "rider", bomber: "bomber", artifacter: "artifacter", punk: "punk" };
 const DESC: Record<CharacterId, TextKey> = { warden: "wardenDesc", drifter: "drifterDesc", mage: "mageDesc", mystic: "mysticDesc", engineer: "engineerDesc", elementalist: "elementalistDesc", brawler: "brawlerDesc", doctor: "doctorDesc", gunner: "gunnerDesc", beast: "beastDesc", ninja: "ninjaDesc", chronomancer: "chronomancerDesc", summoner: "summonerDesc", novice: "noviceDesc", bedouin: "bedouinDesc", general: "generalDesc", imugi: "imugiDesc", apostle: "apostleDesc", stargazer: "stargazerDesc", duck: "duckDesc", abandoned: "abandonedDesc", titan: "titanDesc", oni: "oniDesc", scribe: "scribeDesc", idra: "idraDesc", byeonhui: "byeonhuiDesc", fly: "flyDesc", elder: "elderDesc", ren: "renDesc", spiritist: "spiritistDesc", plague: "plagueDesc", slayer: "slayerDesc", eater: "eaterDesc", mukin: "mukinDesc", samyeol: "samyeolDesc", automata: "automataDesc", rider: "riderDesc", bomber: "bomberDesc", artifacter: "artifacterDesc", punk: "punkDesc" };
-/** 아직 다 만들지 않은 캐릭터 (이름 옆에 (미완성)) */
-const WIP: readonly CharacterId[] = ["automata", "rider", "bomber", "artifacter", "punk"];
 
 export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialSeed = "", taboo = false, showHidden = false }: Props) {
   const [seed, setSeed] = useState(initialSeed);
@@ -103,7 +101,7 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
                   <small>{worn ? t(THEME_KEY[parseSkin(worn).theme]) : t("shopDefault")}</small>
                 </span>
                 <strong>
-                  {t(NAME[id])} {WIP.includes(id) && <small className="wip-tag">{t("wipTag")}</small>}
+                  {t(NAME[id])}
                 </strong>
                 <span className="character-desc">{t(DESC[id])}</span>
                 {!open && goal && <span className="character-lock">🔒 {t("charGoalLock").replace("{name}", achievementName(goal, lang))}</span>}

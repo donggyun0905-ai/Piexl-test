@@ -5,8 +5,8 @@ import { TEST_OPEN } from "../testFlags";
 export const SKIN_THEMES = ["swim", "xmas", "halloween", "school", "newyear", "japan", "china", "usa", "swap"] as const;
 /** 뽑기 한정 테마: 한 번 나오면 모든 캐릭터에 생김. 입으면 공격·처치·대기·발자국·강화 효과와 전용 음악 (game/limited) */
 export const LIMITED_THEMES = ["tiger", "summer"] as const;
-/** 시즌 2 캐릭터(비르디아·헬리오스): 범 풍류 대신 여름 파도 한정 스킨 */
-export const SEASON2_SKIN_CHARS: readonly CharacterId[] = ["idra", "byeonhui", "fly", "elder", "ren", "spiritist", "plague", "slayer", "eater", "mukin", "samyeol"];
+/** 시즌 2 캐릭터(비르디아·헬리오스·테라코어): 범 풍류 대신 여름 파도 한정 스킨 */
+export const SEASON2_SKIN_CHARS: readonly CharacterId[] = ["idra", "byeonhui", "fly", "elder", "ren", "spiritist", "plague", "slayer", "eater", "mukin", "samyeol", "automata", "rider", "bomber", "artifacter", "punk"];
 export type LimitedTheme = (typeof LIMITED_THEMES)[number];
 /** 나만의 스킨: 상점에서 칸을 사서 직접 그림 (그림은 이 기기에만, game/customArt.mySkinSrc) */
 export const MY_THEME = "my" as const;

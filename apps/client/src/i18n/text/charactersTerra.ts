@@ -35,6 +35,4 @@ export const CHARACTER_TEXT_TERRA = {
   repulse: { ko: "리펄스", en: "Repulsor", ja: "リパルス" },
   automaton: { ko: "레이저", en: "Laser", ja: "レーザー" },
   ride: { ko: "질주", en: "Speed", ja: "疾走" },
-  /** 아직 다 만들지 않은 캐릭터 (선택창 이름 옆) */
-  wipTag: { ko: "(미완성)", en: "(WIP)", ja: "（未完成）" },
 };

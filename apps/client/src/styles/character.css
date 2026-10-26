@@ -231,10 +231,3 @@
   background: rgb(242 230 204 / 0.85);
   padding: 2px 4px;
 }
-
-/* 아직 다 만들지 않은 캐릭터 (이름 옆 (미완성)) */
-.character-card .wip-tag {
-  color: #ffb84a;
-  font-size: 0.75em;
-  font-weight: normal;
-}
