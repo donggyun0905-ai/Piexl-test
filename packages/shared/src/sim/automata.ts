@@ -60,19 +60,21 @@ function aim(s: RunState, x: number, y: number, range: number): [number, number]
   return [(e.x - x) / d, (e.y - y) / d];
 }
 
-/** 등 뒤에서 유도 미사일 n발 · mini = 기본 능력의 작은 미사일 */
-function missiles(s: RunState, n: number, mini = false): void {
+/** 등 뒤에서 유도 미사일: 기본 능력(확률·수) 또는 무기의 미사일 값 (탄약 증설이면 확률·수 +) */
+function missiles(s: RunState, spec: { chance: number; n: number }): void {
   const p = s.player;
-  const blast = A.missileBlast * (hasPerk(p, "adWarhead") ? K.adWarhead.r : 1);
-  backMissiles(s, n, p.stats.damage * (mini ? A.miniMul : A.missileMul), mini ? blast * 0.7 : blast, mini);
+  const salvo = hasPerk(p, "adSalvo");
+  if (roll(s, "missile", 0) >= spec.chance + (salvo ? K.adSalvo.chance : 0)) return;
+  const n = spec.n + Math.floor(roll(s, "mn", 0) * (A.missileExtra + 1)) + (salvo ? K.adSalvo.n : 0);
+  backMissiles(s, n, p.stats.damage * A.missileMul, A.missileBlast * (hasPerk(p, "adWarhead") ? K.adWarhead.r : 1));
 }
 
 /** 한 번 쏘기: 레이저(여러 갈래) · 갈라짐 · 묶음 · 궤도 포격 · 미사일 */
 function fire(s: RunState): void {
   const p = s.player;
   const st = styleOf(p);
-  // 기본 능력: 확률로 등 뒤에서 작은 유도 미사일
-  if (roll(s, "mini", 0) < A.miniChance) missiles(s, A.miniN, true);
+  // 기본 능력: 확률로 등 뒤에서 유도 미사일 (전탄 발사는 늘)
+  missiles(s, st.missiles ?? A.baseMissiles);
   if (st.sword) {
     swing(s, 0);
     p.adSwing = A.swordGap;
@@ -101,10 +103,6 @@ function fire(s: RunState): void {
       count(s, e);
     }
     addEffect(s, { kind: "adSat", x: t.x, y: t.y, dirX: 0, dirY: 0, size: A.satR, maxTicks: 20 });
-  }
-  if (st.missiles) {
-    const chance = st.missiles.chance + (hasPerk(p, "adSalvo") ? K.adSalvo.chance : 0);
-    if (roll(s, "missile", 0) < chance) missiles(s, st.missiles.n + Math.floor(roll(s, "mn", 0) * (A.missileExtra + 1)) + (hasPerk(p, "adSalvo") ? K.adSalvo.n : 0));
   }
 }
 

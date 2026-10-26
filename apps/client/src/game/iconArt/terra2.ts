@@ -38,11 +38,8 @@ export const TERRA2_WEAPON_ART = {
     doll(g, 12, 3);
     g.line(4, 9, 14, 14, LZ);
   },
-  adMissile: (g) => {
-    missile(g, 6, 3);
-    missile(g, 9, 6);
-    missile(g, 5, 9);
-    hand(g, 1, 6);
+  adArsenal: (g) => {
+    for (const [x, y] of [[3, 2], [8, 2], [5, 6], [10, 6], [3, 10], [8, 10], [11, 13]]) missile(g, x!, y!);
   },
   adRed: (g) => {
     hand(g);

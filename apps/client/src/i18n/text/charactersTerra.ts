@@ -2,9 +2,9 @@
 export const CHARACTER_TEXT_TERRA = {
   automata: { ko: "오토마타", en: "Automata", ja: "オートマタ" },
   automataDesc: {
-    ko: "레이저 · 테라코어. 처음으로 자아를 가진 기계 인형. 모든 무기의 기본 공격은 손에서 쏘는 레이저(쏘고 · 다시 쏘고). 쏠 때마다 50% 확률로 등 뒤에서 작은 유도 미사일. 자매 인형 셋이 저마다 적을 찾아 사냥하거나, 등 뒤에서 연기를 뿜는 유도 미사일이 7발 넘게 솟음 · 레이저 무기 10 · 전용 아이템 10",
-    en: "Laser · Terracore. The first mechanical doll to gain a self. Every weapon's basic attack is a laser fired from her hand (fire, then fire again). Each shot has a 50% chance to launch small homing missiles from her back. Three sister dolls hunt foes on their own, or 7+ homing missiles trailing smoke launch from her back · 10 laser weapons · 10 own items",
-    ja: "レーザー · テラコア。初めて自我を持った機械人形。すべての武器の基本攻撃は手から撃つレーザー（撃って、また撃つ）。撃つたびに50%で背中から小さな誘導ミサイル。姉妹人形3体がそれぞれ敵を狩り、背中から煙を吐く誘導ミサイルが7発以上飛び出す · レーザー武器10 · 専用アイテム10",
+    ko: "레이저 · 테라코어. 처음으로 자아를 가진 기계 인형. 모든 무기의 기본 공격은 손에서 쏘는 레이저(쏘고 · 다시 쏘고). 쏠 때마다 50% 확률로 등 뒤에서 연기를 뿜는 유도 미사일이 7발 넘게 솟음. 자매 인형 셋이 저마다 적을 찾아 사냥하거나, 늘 미사일 12발 넘게 쏘는 전탄 발사 · 레이저 무기 10 · 전용 아이템 10",
+    en: "Laser · Terracore. The first mechanical doll to gain a self. Every weapon's basic attack is a laser fired from her hand (fire, then fire again). Each shot has a 50% chance to launch 7+ smoking homing missiles from her back. Three sister dolls hunt foes on their own, or Full Arsenal fires 12+ missiles every shot · 10 laser weapons · 10 own items",
+    ja: "レーザー · テラコア。初めて自我を持った機械人形。すべての武器の基本攻撃は手から撃つレーザー（撃って、また撃つ）。撃つたびに50%で背中から煙を吐く誘導ミサイルが7発以上飛び出す。姉妹人形3体がそれぞれ敵を狩り、全弾発射は常にミサイル12発以上 · レーザー武器10 · 専用アイテム10",
   },
   rider: { ko: "라이더", en: "Rider", ja: "ライダー" },
   riderDesc: {

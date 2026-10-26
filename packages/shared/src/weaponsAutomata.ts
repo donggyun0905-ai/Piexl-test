@@ -26,8 +26,6 @@ export const AUTOMATA_WEAPONS = {
   adFinger: A("adFinger", 1.1, 1.4, 140, { beams: 1, spread: 0, width: 3 }),
   /** 자매 인형: 똑같이 생긴 오토마타 셋이 곁에서 함께 레이저를 쏨 */
   adSisters: A("adSisters", 0.9, 1.2, 130, { beams: 1, spread: 0, width: 3, dolls: 3 }),
-  /** 미사일 포드: 레이저 + 쏠 때마다 확률로 등 뒤에서 유도 미사일이 7발 넘게 솟음 */
-  adMissile: A("adMissile", 0.9, 1.2, 140, { beams: 1, spread: 0, width: 3, missiles: { chance: 0.45, n: 7 } }),
   /** 붉은 레이저: 쏠 때마다 치명타 확률 5% → 10% → 15% → 20% (되풀이) */
   adRed: A("adRed", 1.05, 1.4, 140, { beams: 1, spread: 0, width: 3, crits: [0.05, 0.1, 0.15, 0.2], tint: "#ff3a4a" }),
   /** 프리즘 레이저: 맞힌 적에서 가까운 적 둘에게 갈라짐 */
@@ -40,6 +38,8 @@ export const AUTOMATA_WEAPONS = {
   adBind: A("adBind", 0.9, 1.3, 130, { beams: 1, spread: 0, width: 4, bind: 40 }),
   /** 궤도 위성: 세 번째 레이저마다 하늘에서 빛기둥이 내리꽂힘 */
   adSatellite: A("adSatellite", 0.9, 1.3, 140, { beams: 1, spread: 0, width: 3, sat: 3 }),
+  /** 전탄 발사: 레이저와 함께 늘 미사일 12발 넘게 (느림) */
+  adArsenal: A("adArsenal", 0.8, 0.7, 140, { beams: 1, spread: 0, width: 4, missiles: { chance: 1, n: 12 } }),
   /** 리펄서 소드: 양손 대검으로 두 번 이어 벰 (근접) */
   adSword: A("adSword", 1.5, 1.1, 44, { beams: 0, spread: 0, width: 0, sword: true }),
 } as const satisfies Record<string, WeaponDef>;
@@ -59,10 +59,8 @@ export const AUTOMATA = {
   missileSpeed: 2.4,
   missileTicks: 110,
   missileExtra: 4,
-  /** 기본 능력: 쏠 때마다 이 확률로 등 뒤에서 작은 미사일 · 수 · 피해 배율 */
-  miniChance: 0.5,
-  miniN: 2,
-  miniMul: 0.3,
+  /** 기본 능력: 쏠 때마다 이 확률로 등 뒤에서 유도 미사일 이만큼 넘게 (무기에 미사일이 있으면 그 무기 값) */
+  baseMissiles: { chance: 0.5, n: 7 },
   /** 붉은 레이저 치명타 배율 */
   critMul: 2,
   /** 리펄서 소드: 두 번째 베기까지 틱 · 부채꼴 (cos) · 밀어내기 */

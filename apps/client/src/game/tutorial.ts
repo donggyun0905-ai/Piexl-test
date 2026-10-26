@@ -49,7 +49,7 @@ const DEMO_WEAPONS: Record<CharacterId, [WeaponId, WeaponId] | null> = {
   eater: null,
   mukin: ["quakeRam", "chainRam"],
   samyeol: ["lotusNeedles", "threadNeedle"],
-  automata: ["adSisters", "adMissile"],
+  automata: ["adSisters", "adArsenal"],
   rider: ["rdPulse", "rdNitro"],
   bomber: ["bmFirework", "bmMega"],
   artifacter: null,

@@ -3,7 +3,7 @@ import type { Lang } from "../index";
 import type { AutoStyle, PassiveId, RideStyle, WeaponId } from "@pixel-rogue/shared";
 import type { Names } from "./names";
 
-type AutoWeapon = "adFinger" | "adSisters" | "adMissile" | "adRed" | "adPrism" | "adCannon" | "adSweep" | "adBind" | "adSatellite" | "adSword";
+type AutoWeapon = "adFinger" | "adSisters" | "adArsenal" | "adRed" | "adPrism" | "adCannon" | "adSweep" | "adBind" | "adSatellite" | "adSword";
 type RideWeapon = "rdHammer" | "rdPulse" | "rdDagger" | "rdRail" | "rdScatter" | "rdExhaust" | "rdWheel" | "rdLance" | "rdChain" | "rdNitro";
 type TerraPassive = "adCore" | "adFocus" | "adWide" | "adCall" | "adFourth" | "adWarhead" | "adSalvo" | "adEcho" | "adShield" | "adSoul" | "rdTurbo" | "rdTank" | "rdShock" | "rdDouble" | "rdSlip" | "rdRam" | "rdDrift" | "rdGear" | "rdRepair" | "rdBurn";
 const c = (ko: string, en: string, ja: string): Names => ({ ko, en, ja });
@@ -11,7 +11,7 @@ const c = (ko: string, en: string, ja: string): Names => ({ ko, en, ja });
 export const TERRA2_WEAPON_NAMES: Record<(AutoWeapon | RideWeapon) & WeaponId, Names> = {
   adFinger: c("손끝 레이저", "Fingertip Laser", "指先レーザー"),
   adSisters: c("자매 인형", "Sister Dolls", "姉妹人形"),
-  adMissile: c("미사일 포드", "Missile Pod", "ミサイルポッド"),
+  adArsenal: c("전탄 발사", "Full Arsenal", "全弾発射"),
   adRed: c("붉은 레이저", "Crimson Laser", "紅のレーザー"),
   adPrism: c("프리즘 레이저", "Prism Laser", "プリズムレーザー"),
   adCannon: c("과충전 캐논", "Overcharge Cannon", "過充電キャノン"),

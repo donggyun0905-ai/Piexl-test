@@ -24,8 +24,8 @@ export const GUIDE_KO_T2: Guide = {
   ],
   automata: [
     "테라코어 · 오토마타 · 처음으로 자아를 가진 기계 인형 · 체력 100",
-    "모든 무기의 기본 공격은 손에서 쏘는 레이저 · 가까운 적을 향해 꿰뚫는 레이저를 쏘고, 다시 쏘고 · 쏠 때마다 50% 확률로 등 뒤에서 작은 유도 미사일 2발",
-    "자매 인형: 똑같이 생긴 오토마타 셋이 저마다 다른 적을 찾아 돌아다니며 레이저를 쏨 · 미사일 포드: 쏠 때마다 45% 확률로 등 뒤에서 연기를 뿜는 유도 미사일 7~11발",
+    "모든 무기의 기본 공격은 손에서 쏘는 레이저 · 가까운 적을 향해 꿰뚫는 레이저를 쏘고, 다시 쏘고 · 쏠 때마다 50% 확률로 등 뒤에서 연기를 뿜는 유도 미사일 7~11발",
+    "자매 인형: 똑같이 생긴 오토마타 셋이 저마다 다른 적을 찾아 돌아다니며 레이저를 쏨 · 전탄 발사: 쏠 때마다 늘 유도 미사일 12~16발 (느림)",
     "붉은 레이저(치명타 5→10→15→20%)·프리즘(갈라짐)·과충전 캐논·부채·구속·궤도 위성(세 번째마다 빛기둥)·리펄서 소드(양손 대검 두 번 베기)",
   ],
   rider: [
@@ -57,8 +57,8 @@ export const GUIDE_EN_T2: Guide = {
   ],
   automata: [
     "Terracore · Automata · the first mechanical doll to gain a self · 100 HP",
-    "Every weapon's basic attack is a laser from her hand · fires a piercing laser at the nearest foe, then fires again · each shot has a 50% chance to launch 2 small homing missiles from her back",
-    "Sister Dolls: three identical automata each roam off to hunt a different foe with their lasers · Missile Pod: each shot has a 45% chance to launch 7–11 smoking homing missiles from her back",
+    "Every weapon's basic attack is a laser from her hand · fires a piercing laser at the nearest foe, then fires again · each shot has a 50% chance to launch 7–11 smoking homing missiles from her back",
+    "Sister Dolls: three identical automata each roam off to hunt a different foe with their lasers · Full Arsenal: every shot launches 12–16 homing missiles (slow)",
     "Crimson (crit 5→10→15→20%), Prism (splits), Overcharge Cannon, Fan, Binding, Orbital Satellite (a pillar of light every third shot), Repulser Sword (two greatsword slashes)",
   ],
   rider: [
@@ -90,8 +90,8 @@ export const GUIDE_JA_T2: Guide = {
   ],
   automata: [
     "テラコア · オートマタ · 初めて自我を持った機械人形 · 体力100",
-    "すべての武器の基本攻撃は手から撃つレーザー · 近い敵へ貫通レーザーを撃ち、また撃つ · 撃つたび50%で背中から小さな誘導ミサイル2発",
-    "姉妹人形：そっくりなオートマタ3体がそれぞれ別の敵を探して動き回り、レーザーを撃つ · ミサイルポッド：撃つたび45%で背中から煙を吐く誘導ミサイル7〜11発",
+    "すべての武器の基本攻撃は手から撃つレーザー · 近い敵へ貫通レーザーを撃ち、また撃つ · 撃つたび50%で背中から煙を吐く誘導ミサイル7〜11発",
+    "姉妹人形：そっくりなオートマタ3体がそれぞれ別の敵を探して動き回り、レーザーを撃つ · 全弾発射：撃つたび常に誘導ミサイル12〜16発（遅い）",
     "紅（会心5→10→15→20%）・プリズム（分裂）・過充電キャノン・扇・拘束・軌道衛星（3発目ごとに光の柱）・リパルサーソード（両手大剣で2連斬り）",
   ],
   rider: [

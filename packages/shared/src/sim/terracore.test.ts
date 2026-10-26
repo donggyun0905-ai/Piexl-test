@@ -50,8 +50,8 @@ describe("테라코어 시즌 2", () => {
     expect(s.player.adDolls).toHaveLength(3);
   });
 
-  it("미사일 포드: 등 뒤에서 유도 미사일이 7발 넘게 (모든 미사일은 늘 쫓아감)", () => {
-    const s = run("automata", "adMissile");
+  it("기본 능력: 쏠 때 50% 확률로 등 뒤에서 유도 미사일이 7발 넘게 (모든 미사일은 늘 쫓아감)", () => {
+    const s = run("automata", "adFinger");
     let most = 0;
     for (let i = 0; i < 120; i++) {
       stepSim(s, FIRE);
@@ -61,14 +61,10 @@ describe("테라코어 시즌 2", () => {
     expect(s.projectiles.filter((p) => p.spirit === "adMissile").every((p) => p.seek)).toBe(true);
   });
 
-  it("오토마타 기본: 쏠 때 반쯤은 작은 미사일 · 리펄서 소드 두 번 베기 · 붉은 레이저 치명타", () => {
-    const s = run("automata", "adFinger");
-    let mini = false;
-    for (let i = 0; i < 120 && !mini; i++) {
-      stepSim(s, FIRE);
-      mini = s.projectiles.some((p) => p.spirit === "adMissile" && p.r < 2);
-    }
-    expect(mini).toBe(true);
+  it("오토마타: 전탄 발사는 늘 12발 넘게 · 리펄서 소드 두 번 베기 · 붉은 레이저 치명타", () => {
+    const s = run("automata", "adArsenal");
+    stepSim(s, FIRE);
+    expect(s.projectiles.filter((p) => p.spirit === "adMissile").length).toBeGreaterThanOrEqual(12);
     const sw = run("automata", "adSword");
     const swings = new Set<number>();
     for (let i = 0; i < 12; i++) {

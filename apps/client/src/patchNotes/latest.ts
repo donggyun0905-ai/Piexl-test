@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.116",
+    date: "2026-10-26",
+    items: {
+      ko: ["오토마타: 기본 미사일이 50% 확률로 등 뒤에서 유도 미사일 7~11발 (작은 미사일 2발 대신) · '미사일 포드'를 빼고 '리펄서 소드'를 넣음 · '전탄 발사'(늘 미사일 12발 넘게)를 되돌림"],
+      en: ["Automata: her base missiles now launch 7–11 homing missiles at a 50% chance (instead of 2 small ones) · 'Missile Pod' is replaced by 'Repulser Sword' · 'Full Arsenal' (always 12+ missiles) is back"],
+      ja: ["オートマタ：基本ミサイルが50%で背中から誘導ミサイル7〜11発（小さなミサイル2発の代わり）· 「ミサイルポッド」を外し「リパルサーソード」を追加 · 「全弾発射」（常にミサイル12発以上）を元に戻す"],
+    },
+  },
+  {
     version: "0.48.115",
     date: "2026-10-26",
     items: {
