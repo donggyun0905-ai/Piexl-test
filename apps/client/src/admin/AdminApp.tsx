@@ -49,6 +49,10 @@ export function AdminApp() {
             클리어 시간
           </button>
         </span>
+        {/* 몬스터·보스 그림(도트) 고치기: 도트 편집 페이지의 몬스터 묶음 */}
+        <a className="admin-pixel-link" href={`${import.meta.env.BASE_URL}pixel/`} target="_blank" rel="noreferrer">
+          몬스터·보스 그림 고치기
+        </a>
         {loggedIn && (
           <button
             type="button"

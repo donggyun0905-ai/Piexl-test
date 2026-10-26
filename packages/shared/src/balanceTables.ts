@@ -83,9 +83,15 @@ const SKIP = /_WEAPONS$|_PASSIVES$|^PASSIVES$|_USE$|_HIDDEN$|^SHOP_PRICES$|_COLO
 const hasNumber = (v: unknown, d = 0): boolean =>
   typeof v === "number" || (typeof v === "object" && v !== null && d < 4 && Object.values(v).some((x) => hasNumber(x, d + 1)));
 
-function collect(): { rules: Record<string, unknown>; effects: Record<string, unknown> } {
+/** 적·보스 기술 수치는 적·보스 탭으로 (계산 파일 이름으로 나눔) */
+const BOSS_RULE = /^BOSS/;
+const ENEMY_RULE = /^(ENEMIES|MINIONS|CRITTERS|HAZARDS)_RULES$/;
+
+function collect(): { rules: Record<string, unknown>; effects: Record<string, unknown>; boss: Record<string, unknown>; enemy: Record<string, unknown> } {
   const rules: Record<string, unknown> = {};
   const effects: Record<string, unknown> = {};
+  const boss: Record<string, unknown> = {};
+  const enemy: Record<string, unknown> = {};
   for (const mod of MODULES) {
     for (const [name, v] of Object.entries(mod)) {
       if (!/^[A-Z][A-Z0-9_]*$/.test(name) || SKIP.test(name) || typeof v !== "object" || v === null || Array.isArray(v) || !hasNumber(v)) continue;
@@ -94,8 +100,8 @@ function collect(): { rules: Record<string, unknown>; effects: Record<string, un
       else rules[name] = v;
     }
   }
-  for (const [name, v] of Object.entries(SIM_RULES)) rules[name] = v;
-  return { rules, effects };
+  for (const [name, v] of Object.entries(SIM_RULES)) (BOSS_RULE.test(name) ? boss : ENEMY_RULE.test(name) ? enemy : rules)[name] = v;
+  return { rules, effects, boss, enemy };
 }
 
-export const { rules: RULE_TABLES, effects: EFFECT_TABLES } = collect();
+export const { rules: RULE_TABLES, effects: EFFECT_TABLES, boss: BOSS_RULE_TABLES, enemy: ENEMY_RULE_TABLES } = collect();

@@ -3,7 +3,7 @@ import { CHARACTERS, ENEMIES, WEAPONS } from "./content";
 import { PASSIVES, USE_ITEMS } from "./items";
 import { SHOP_PRICES } from "./perks";
 import { autoGroup } from "./balanceAuto";
-import { EFFECT_TABLES, RULE_TABLES } from "./balanceTables";
+import { BOSS_RULE_TABLES, EFFECT_TABLES, ENEMY_RULE_TABLES, RULE_TABLES } from "./balanceTables";
 import type { StatKey, StatMod } from "./stats";
 
 export type BalanceGroupId = "characters" | "weapons" | "rules" | "effects" | "enemies" | "bosses" | "passives" | "useItems" | "shop" | TdBalanceGroupId;
@@ -37,22 +37,19 @@ export interface BalanceGroup {
 
 const table = (t: object) => t as Record<string, Record<string, unknown>>;
 
-const enemyFields: BalanceField[] = [
-  { key: "hp", min: 1, max: 99999, int: true },
-  { key: "speed", min: 0, max: 5 },
-  { key: "contactDamage", min: 0, max: 999, int: true },
-  { key: "gold", min: 0, max: 999, int: true },
-  { key: "radius", min: 2, max: 30 },
-  { key: "shield", min: 0, max: 99, int: true },
-  { key: "parry", min: 0, max: 1 },
-];
-
 const TD_ONLY = new Set<string>(["slime", "runner", "bat", "beetle", "golem", "shaman", "eggsac", "wisp"]);
 const enemyIds = (boss: boolean) =>
   Object.values(ENEMIES)
     // 타워 디펜스 전용 적은 타워 디펜스 수치에서 따로
     .filter((e) => e.kind !== "dummy" && !TD_ONLY.has(e.kind) && !!e.boss === boss)
     .map((e) => e.kind);
+
+/** 적·보스 묶음: 적 표의 줄 + 기술 수치 표 (같은 객체를 가리켜 바꾸면 바로 게임에) */
+function enemyGroup(id: "enemies" | "bosses", kinds: string[], rules: Record<string, unknown>): BalanceGroup {
+  const rows: Record<string, unknown> = { ...rules };
+  for (const k of kinds) rows[k] = (ENEMIES as Record<string, unknown>)[k];
+  return autoGroup(id, rows, { ids: [...kinds, ...Object.keys(rules)] });
+}
 
 // 패시브: 능력치 변화는 "능력치.add"·"능력치.mul", 효과 수치는 PERKS의 값 이름 그대로
 const STATS: StatKey[] = ["maxHp", "damage", "attackSpeed", "range", "moveSpeed", "projectileSpeed", "luck"];
@@ -91,8 +88,9 @@ export const BALANCE_GROUPS: readonly BalanceGroup[] = [
   // 캐릭터마다 규칙 수치(무기·아이템 파일의 표 + 계산 파일의 수치 묶음) · 아이템 효과 수치
   autoGroup("rules", RULE_TABLES),
   autoGroup("effects", EFFECT_TABLES),
-  { id: "enemies", table: table(ENEMIES), ids: enemyIds(false), fields: enemyFields },
-  { id: "bosses", table: table(ENEMIES), ids: enemyIds(true), fields: enemyFields },
+  // 적·보스: 표의 숫자 모두 + 기술 수치(계산 파일의 수치 묶음: 보스 BOSS_*, 적 ENEMIES·MINIONS·CRITTERS·HAZARDS)
+  enemyGroup("enemies", enemyIds(false), ENEMY_RULE_TABLES),
+  enemyGroup("bosses", enemyIds(true), BOSS_RULE_TABLES),
   passiveGroup,
   {
     id: "useItems",

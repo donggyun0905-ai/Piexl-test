@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.124",
+    date: "2026-10-26",
+    items: {
+      ko: ["관리자 페이지: 적·보스 탭에 표의 모든 숫자와 기술 수치(보스마다 브레스·운석·패턴 등) · 위쪽에 '몬스터·보스 그림 고치기'(도트 편집) 바로 가기"],
+      en: ["Admin page: the Enemies and Bosses tabs now show every stat plus skill numbers (each boss's breath, meteors, patterns and more) · added a 'Edit monster/boss art' link to the pixel editor"],
+      ja: ["管理者ページ：敵・ボスタブに表のすべての数値と技の数値（ボスごとのブレス・隕石・パターンなど）· 上に「モンスター・ボスの絵を直す」（ドット編集）へのリンク"],
+    },
+  },
+  {
     version: "0.48.123",
     date: "2026-10-26",
     items: {

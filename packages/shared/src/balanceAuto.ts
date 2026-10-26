@@ -44,6 +44,13 @@ const KNOWN: Record<string, Omit<BalanceField, "key">> = {
   attackSpeed: { min: 0.1, max: 20 },
   range: { min: 4, max: 400 },
   luck: { min: -10, max: 20, int: true },
+  // 적·보스
+  hp: { min: 1, max: 99999, int: true },
+  contactDamage: { min: 0, max: 999, int: true },
+  gold: { min: 0, max: 999, int: true },
+  radius: { min: 2, max: 60 },
+  shield: { min: 0, max: 99, int: true },
+  parry: { min: 0, max: 1 },
   // 추가 기본 스탯 (처음 값이 0이라 범위를 따로)
   critChance: { min: 0, max: 1 },
   critDamage: { min: 1, max: 10 },
@@ -60,7 +67,9 @@ const KNOWN: Record<string, Omit<BalanceField, "key">> = {
 /** 처음 값과 이름으로 범위 정하기: 확률은 0~1, 배율·속도는 소수, 그 밖의 정수는 정수 · 처음 값의 5배까지 */
 export function autoField(key: string, v: number): BalanceField {
   const last = key.split(".").pop() ?? key;
-  if (!key.includes(".") && KNOWN[key]) return { key, ...KNOWN[key] };
+  // 이름이 같아도 처음 값이 그 범위·정수와 맞을 때만 (아이템 효과의 gold 1.5 같은 배율은 자동으로)
+  const known = !key.includes(".") ? KNOWN[key] : undefined;
+  if (known && v >= known.min && v <= known.max && (!known.int || Number.isInteger(v))) return { key, ...known };
   if (/chance|Chance|odds|Odds/.test(last) && v >= 0 && v <= 1) return { key, min: 0, max: 1 };
   const decimal = /mul|Mul|ratio|Ratio|speed|Speed|scale|Scale|rate|Rate|slow|Slow|turn|Turn|taken|Taken/.test(last);
   const int = Number.isInteger(v) && !decimal;

@@ -1,5 +1,5 @@
 // 관리자 페이지 글자 (운영자용이라 한국어만). 캐릭터·무기 이름은 게임 번역에서 가져옴
-import { BOSS_TEXT } from "../i18n/enemies";
+import { BOSS_TEXT, enemyName } from "../i18n/enemies";
 import { DUNGEON_BALANCE, PASSIVES, TD_BALANCE, WEAPONS, type BalanceGroupId, type BalanceSet } from "@pixel-rogue/shared";
 import { autoFieldLabel, ruleCategory, ruleLabel } from "./autoLabels";
 import type { SetKind } from "./adminApi";
@@ -131,7 +131,9 @@ export function rowLabel(group: BalanceGroupId, id: string): string {
   if (group === "rules") return ruleLabel(id);
   if (group === "useItems") return itemName("use", id, "ko");
   if (group === "shop") return "가격";
-  return ENEMY_NAME[id] ?? id;
+  // 적·보스: 기술 수치 표는 표 이름, 적은 게임의 이름 (설명이 있으면 그것)
+  if (id.endsWith("_RULES")) return ruleLabel(id);
+  return ENEMY_NAME[id] ?? enemyName(id, "ko") ?? id;
 }
 
 /** 항목 설명 (패시브·사용 아이템: 게임에 보이는 설명을 지금 수치로) */
