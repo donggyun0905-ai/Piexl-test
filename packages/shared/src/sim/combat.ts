@@ -8,6 +8,9 @@ import { ENEMIES } from "../content";
 import { SWARM } from "../swarmDefs";
 import { titanHurt, titanParried } from "./titan";
 import { afterHurt, classTaken } from "./classTaken";
+import { dodged, extraTaken, goldMul, onHitExtra, sharpBonus } from "./baseStats";
+import { tickDots } from "./status";
+export { dotDamage, ignite } from "./status";
 import { swarmLucky } from "./swarmRules";
 import { SWARM_LEVELS } from "../swarmMaps";
 import { ultBoss } from "./bossKit";
@@ -17,9 +20,9 @@ import { apostleKill } from "./apostleSouls";
 import { seatNo, useSeat } from "./party";
 import { tabooDown, tabooN, tabooUp } from "./taboo";
 import { addHazard } from "./hazards";
-import { dotCrit, gainExp, rollCrit } from "./novice";
-import type { DotKind, EnemyState, RunState } from "./types";
-import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, KNOCKBACK, keepInRoom, markCrit, markDot, normalize, roomGrid, RUSH_TICKS, STILL_TICKS } from "./util";
+import { gainExp, rollCrit } from "./novice";
+import type { EnemyState, RunState } from "./types";
+import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, KNOCKBACK, keepInRoom, markCrit, normalize, roomGrid, RUSH_TICKS, STILL_TICKS } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -31,11 +34,11 @@ const R = {
   RECYCLE_BARRIER: 4, RECYCLE_MAX: 0.25,
   /** 의사 가운: 받는 피해 배율, 맞은 뒤 빨라지는 틱 (1초) · 항체 반응: 막은 피해의 이 배율을 돌려줌 */
   GOWN_TAKEN: 0.85, FIRST_AID_HEAL: 3, GOWN_TICKS: 60, ANTIBODY_MUL: 2,
+  /** 장갑 용해(부식): 중첩당 받는 피해 증가 */
+  MELT_ADD: 0.02,
 };
 export { R as COMBAT_RULES };
 
-/** 장갑 용해: 중첩당 받는 피해 증가 */
-export const MELT_ADD = 0.02;
 
 export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: number, dirY: number, knock = true): void {
   // 차례가 아닌 천사장 탑: 맞지 않음
@@ -62,10 +65,10 @@ export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: numbe
   if (roll.crit) markCrit(s, e);
   // 풍뎅이 부적(베두인): 보스에게 피해 +30%
   if (ENEMIES[e.kind].boss && hasPerk(s.player, "scarabCharm")) dmg *= BEDOUIN_PERKS.scarabCharm.boss;
-  // 탐식(악의 사도): 방어력이 깎인 적은 더 아픔
-  // 각주(서기관): 기록이 새겨진 적은 더 아픔
-  dmg *= 1 + (e.apDef ?? 0) + inkTaken(s.player, e);
-  e.hp -= e.melt ? dmg * (1 + MELT_ADD * e.melt) : dmg;
+  // 탐식(악의 사도)·예리함: 방어력이 깎인 적은 더 아픔 · 각주(서기관): 기록이 새겨진 적은 더 아픔
+  dmg *= 1 + (e.apDef ?? 0) + inkTaken(s.player, e) + sharpBonus(s, e);
+  e.hp -= e.melt ? dmg * (1 + R.MELT_ADD * e.melt) : dmg;
+  onHitExtra(s, e, dmg);
   e.hitFlash = 6;
   if (s.party) e.lastHit = seatNo(s);
   // 돌진 중인 적·보스는 밀리지 않음 (소환수 공격은 밀지 않음)
@@ -81,8 +84,8 @@ export function damagePlayer(s: RunState, dmg: number): void {
   const p = s.player;
   // 대시 중·맞은 뒤 무적·보호막이면 피해 없음
   if (p.dashTicks > 0 || p.invulnTicks > 0 || p.shieldTicks > 0) return;
-  // 거인 패링: 피해 없이 그대로 에너지로
-  if (titanParried(s, dmg)) return;
+  // 거인 패링: 피해 없이 그대로 에너지로 · 회피
+  if (titanParried(s, dmg) || dodged(s)) return;
   // 서든데스: 한 대라도 맞으면 끝
   if (s.sudden) {
     p.hp = 0;
@@ -112,7 +115,7 @@ export function damagePlayer(s: RunState, dmg: number): void {
     p.gownTicks = R.GOWN_TICKS;
   }
   // 직업마다 (버려진 자들·거인·오니·이드라·변희)
-  taken = classTaken(s, taken);
+  taken = extraTaken(p, classTaken(s, taken));
   // 보호막(에너지 회수·차력쇼·의사 초과 치료)이 먼저 깎임
   if ((p.shieldPts ?? 0) > 0) {
     const used = Math.min(p.shieldPts ?? 0, taken);
@@ -182,43 +185,9 @@ export function healPlayer(s: RunState, amount: number): void {
   heal(s, amount);
 }
 
-/** 상태이상 피해 (화면에 그 색 숫자): 맞음 효과·밀림 없이 체력만 · 탐식 방어력 깎기 · 악의(악의 사도) */
-export function dotDamage(s: RunState, e: EnemyState, kind: DotKind, amount: number): void {
-  if (e.immune || e.hp <= 0 || amount <= 0) return;
-  const dmg = dotCrit(s, e, amount) * (1 + (e.apDef ?? 0)) * (hasPerk(s.player, "malice") ? PERKS.malice.dot : 1);
-  e.hp -= dmg;
-  e.hitFlash = 3;
-  markDot(s, e, kind, dmg);
-}
-
-/** 점화: 2초 동안 0.5초마다 공격력의 25% 피해 (총 공격력만큼) */
-export function ignite(e: EnemyState, dmg: number): void {
-  e.burnTicks = 120;
-  e.burnDmg = dmg * PERKS.igniteTip.damage;
-}
-
 /** 틱마다: 불타는 적 피해, 잠시 뒤 터지는 폭발 */
 export function updateDelayed(s: RunState): void {
-  if (s.tick % 30 === 0) {
-    for (const e of s.enemies) {
-      if (e.hp > 0 && (e.burnTicks ?? 0) > 0 && !e.immune) {
-        const d = dotCrit(s, e, e.burnDmg ?? 0);
-        e.hp -= d;
-        e.hitFlash = 3;
-        markDot(s, e, "burn", d);
-      }
-      if (e.hp > 0 && (e.poisonTicks ?? 0) > 0 && !e.immune) {
-        const d = dotCrit(s, e, e.poisonDmg ?? 0);
-        e.hp -= d;
-        e.hitFlash = 3;
-        markDot(s, e, "poison", d);
-      }
-    }
-  }
-  for (const e of s.enemies) {
-    if ((e.burnTicks ?? 0) > 0) e.burnTicks = (e.burnTicks ?? 0) - 1;
-    if ((e.poisonTicks ?? 0) > 0) e.poisonTicks = (e.poisonTicks ?? 0) - 1;
-  }
+  tickDots(s);
   updatePending(s);
   removeDead(s);
 }
@@ -291,7 +260,7 @@ export function addGold(s: RunState, amount: number): void {
   // 돈 주머니: 얻는 돈 +50%
   if (hasPerk(s.player, "goldPouch")) amount = Math.round(amount * PERKS.goldPouch.gold);
   // 황금 거북(로비 펫)
-  amount = Math.round(amount * petGold(s));
+  amount = Math.round(amount * petGold(s) * goldMul(s.player));
   // 금기: 가난
   if (s.taboo) amount = Math.round(amount * tabooDown(s, "poverty"));
   s.gold += amount;

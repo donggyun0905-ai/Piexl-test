@@ -2,7 +2,7 @@
 // 무기마다 공격 방식은 laserWeapons, 틱마다 장치(포탑·지뢰 등) 처리는 laserGear
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../content";
-import { blastAt, MELT_ADD } from "./combat";
+import { blastAt, COMBAT_RULES } from "./combat";
 import { blocksShot } from "./layout";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid, weaponOf } from "./util";
@@ -147,7 +147,7 @@ export function beamHit(s: RunState, e: EnemyState, dmg: number, ticks: number):
   const p = s.player;
   if (e.immune) return;
   if ((e.stunTicks ?? 0) > 0) dmg *= R.STUN_MUL;
-  e.hp -= dmg * (1 + MELT_ADD * (e.melt ?? 0));
+  e.hp -= dmg * (1 + COMBAT_RULES.MELT_ADD * (e.melt ?? 0));
   e.hitFlash = Math.max(e.hitFlash, 2);
   if (hasPerk(p, "armorMelt")) e.melt = Math.min(R.MELT_MAX, (e.melt ?? 0) + 1);
   if (hasPerk(p, "heatBuildup")) {

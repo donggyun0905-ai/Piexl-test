@@ -60,6 +60,8 @@ const WORDS: Record<string, string> = {
   duration: "시간", delay: "지연", arc: "부채꼴", angle: "각도", spread: "퍼짐", shots: "발 수", shot: "탄", ammo: "탄창", reload: "장전",
   wave: "파동", size: "크기", scale: "크기 배율", per: "당", hit: "맞힘", hits: "맞힘", kill: "처치", kills: "처치", accel: "가속",
   auto: "모양", ride: "모양", cyber: "모양", gun: "총", talon: "발톱", needle: "독침", maw: "그림자",
+  defense: "방어력", reduction: "피해 감소", dodge: "회피", lifesteal: "흡혈", sharpness: "예리함", status: "상태이상", power: "강화", gain: "획득",
+  venom: "독", sting: "독침", pct: "%", div: "나눔", corrode: "부식", swarm: "떼", cloud: "구름", rats: "쥐", rat: "쥐", gas: "가스",
   dash: "대시", move: "이동", attack: "공격", sword: "검", swing: "휘두르기", split: "갈라짐", sat: "위성", bind: "묶음", beams: "줄기 수",
 };
 

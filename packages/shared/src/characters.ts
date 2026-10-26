@@ -98,6 +98,27 @@ export const CHARACTERS = {
   scribe: { id: "scribe", maxHp: 95, damage: 11, moveSpeed: 1.3, luck: 2, startWeapon: "quillPen" },
 } as const satisfies Record<string, CharacterDef>;
 
+/** 모든 캐릭터 공통 추가 기본 스탯 (sim/baseStats). 캐릭터 표에 처음 값으로 들어가 관리자에서 캐릭터마다 바꿈 */
+export interface ExtraStats {
+  /** 치명타 확률 (0~1) · 치명타 피해 배율 */
+  critChance: number;
+  critDamage: number;
+  /** 방어력 (받는 피해 100/(100+방어력)) · 피해 감소 (0~0.9) · 회피 확률 */
+  defense: number;
+  reduction: number;
+  dodge: number;
+  /** 재생력 (10초마다 회복) · 흡혈 (준 피해의 비율) */
+  regen: number;
+  lifesteal: number;
+  /** 예리함 (맞힐 때 방어 깎기 + 출혈 확률) · 상태이상 강화 (+비율) · 돈 획득 (+비율) */
+  sharpness: number;
+  statusPower: number;
+  goldGain: number;
+}
+export const EXTRA_DEFAULTS: ExtraStats = { critChance: 0, critDamage: 1.5, defense: 0, reduction: 0, dodge: 0, regen: 0, lifesteal: 0, sharpness: 0, statusPower: 0, goldGain: 0 };
+// 모든 캐릭터에 추가 스탯 처음 값 넣기 (관리자 수치 표에 보이게)
+for (const row of Object.values(CHARACTERS)) for (const [k, v] of Object.entries(EXTRA_DEFAULTS)) if (!(k in row)) (row as Record<string, unknown>)[k] = v;
+
 export type CharacterId = keyof typeof CHARACTERS;
 /** 숨은 캐릭터: 선택창·순위표·타워 디펜스에는 없고 무작위 캐릭터(10%)·연습장에서만 */
 export const HIDDEN_CHARACTERS: readonly CharacterId[] = ["stargazer", "duck", "scribe"];

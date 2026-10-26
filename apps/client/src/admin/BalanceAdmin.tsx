@@ -6,6 +6,7 @@ import { BalanceEditor } from "./BalanceEditor";
 import { HistoryView } from "./HistoryView";
 import { GROUP_LABEL, SETS } from "./labels";
 import { PracticePreview } from "./PracticePreview";
+import { StatusView } from "./StatusView";
 import { TdPreview } from "./TdPreview";
 
 interface Props {
@@ -90,6 +91,11 @@ export function BalanceAdmin({ server, kind, onLoggedOut }: Props) {
             {GROUP_LABEL[g.id]}
           </button>
         ))}
+        {kind === "dungeon" && (
+          <button type="button" className={tab === "status" ? "active" : undefined} onClick={() => setTab("status")}>
+            상태이상
+          </button>
+        )}
         <button type="button" className={tab === "history" ? "active" : undefined} onClick={() => setTab("history")}>
           바꾼 기록
         </button>
@@ -108,6 +114,7 @@ export function BalanceAdmin({ server, kind, onLoggedOut }: Props) {
               <BalanceEditor set={set} group={group} draft={draft} saved={saved.values} onChange={(id, key, v) => edit(group.id, id, key, v)} />
             </>
           )}
+          {tab === "status" && <StatusView set={set} draft={draft} saved={saved.values} onChange={edit} />}
           {tab === "history" && <HistoryView server={server} kind={kind} current={saved.hash} busy={busy} onApply={(v, n) => void save(v, n)} />}
         </div>
         {practice && (kind === "td" ? <TdPreview draft={draft} /> : <PracticePreview draft={draft} />)}

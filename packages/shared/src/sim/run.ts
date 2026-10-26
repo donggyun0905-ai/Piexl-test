@@ -30,6 +30,7 @@ import { giveRandomKit } from "./randomKit";
 import { eachSeat } from "./party";
 import { addEffect, hasPerk, PLAYER_RADIUS } from "./util";
 import { TITAN } from "../weaponsTitan";
+import { extraTick } from "./baseStats";
 
 // ───────── 시작 ─────────
 
@@ -154,6 +155,7 @@ export function stepSim(s: RunState, input: TickInput): void {
 /** 플레이어 한 사람: 움직임·공격·직업 장치 (협동은 자리마다) */
 export function stepPlayer(s: RunState, input: TickInput): void {
   updatePlayer(s, input);
+  extraTick(s);
   updateLaserGear(s);
   updateOrbit(s);
   updateMedicGear(s);

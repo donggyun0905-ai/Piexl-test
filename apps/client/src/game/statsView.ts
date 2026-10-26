@@ -1,5 +1,5 @@
 // 능력치 보기: 지금 내 수치 (패시브·무기 반영). 설정의 '능력치 보기'를 켰을 때만 화면에 표시
-import { artChance, classMoveMul, eaterRegen, gunCrit, IMUGI, SAMYEOL, imugiCrit, mukinDef, mukinRegen, noviceCrit, petCrit, petGold, petTaken, WEAPONS, type PlayerState, type RunState, type WeaponDef } from "@pixel-rogue/shared";
+import { artChance, CHARACTERS, classMoveMul, type ExtraStats, eaterRegen, gunCrit, IMUGI, SAMYEOL, imugiCrit, mukinDef, mukinRegen, noviceCrit, petCrit, petGold, petTaken, WEAPONS, type PlayerState, type RunState, type WeaponDef } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 
 export interface StatRow {
@@ -11,6 +11,13 @@ const round = (v: number) => String(Math.round(v * 100) / 100);
 
 /** 지금 치명타 확률 · 피해 배율 (풋내기 스탯 · 이무기 용 부른 수 · 거너 총, 없으면 0%) */
 function critOf(p: PlayerState, w: WeaponDef): { chance: number; mul: number } {
+  const ex = CHARACTERS[p.characterId] as unknown as ExtraStats;
+  const c = baseCrit(p, w);
+  // 모든 캐릭터 공통 기본 치명타 (sim/baseStats)
+  return ex.critChance > 0 ? { chance: c.chance + ex.critChance, mul: c.chance > 0 ? c.mul : ex.critDamage } : c;
+}
+
+function baseCrit(p: PlayerState, w: WeaponDef): { chance: number; mul: number } {
   if (p.characterId === "novice") return noviceCrit(p);
   if (p.characterId === "imugi") return { chance: imugiCrit(p), mul: IMUGI.critMul };
   if (w.kind === "gun") return gunCrit(p);
@@ -22,6 +29,23 @@ function critOf(p: PlayerState, w: WeaponDef): { chance: number; mul: number } {
 function moveText(base: number, mul: number): string {
   const pct = Math.round((mul - 1) * 100);
   return pct === 0 ? round(base) : `${round(base * mul)} (${pct > 0 ? "+" : ""}${pct}%)`;
+}
+
+/** 공통 추가 스탯: 값이 있을 때만 (방어력·재생력·흡혈 등) */
+function extraRows(p: PlayerState, t: (k: TextKey) => string): StatRow[] {
+  const ex = CHARACTERS[p.characterId] as unknown as ExtraStats;
+  const pct = (v: number) => `${Math.round(v * 100)}%`;
+  const rows: [TextKey, number, string][] = [
+    ["statArmor", ex.defense, round(ex.defense)],
+    ["statReduction", ex.reduction, pct(ex.reduction)],
+    ["statDodge", ex.dodge, pct(ex.dodge)],
+    ["statRegen10", ex.regen, round(ex.regen)],
+    ["statLifesteal", ex.lifesteal, pct(ex.lifesteal)],
+    ["statSharpness", ex.sharpness, pct(ex.sharpness)],
+    ["statStatusPower", ex.statusPower, `+${pct(ex.statusPower)}`],
+    ["statGoldGain", ex.goldGain, `+${pct(ex.goldGain)}`],
+  ];
+  return rows.filter(([, v]) => v > 0).map(([k, , value]) => ({ label: t(k), value }));
 }
 
 export function statRows(run: RunState, t: (k: TextKey) => string): StatRow[] {
@@ -52,6 +76,7 @@ export function statRows(run: RunState, t: (k: TextKey) => string): StatRow[] {
     // 묵인: 방어력 · 재생력 · 이터: 재생력 (먹은 적마다)
     ...(run.player.characterId === "mukin" ? [{ label: t("statDefense"), value: round(mukinDef(run.player)) }, { label: t("statRegen10"), value: round(mukinRegen(run.player)) }] : []),
     ...(run.player.characterId === "eater" ? [{ label: t("statRegen10"), value: round(eaterRegen(run.player)) }] : []),
+    ...extraRows(run.player, t),
     { label: t("statCritChance"), value: `${Math.round(crit.chance * 100)}%` },
     { label: t("statCritDamage"), value: `${Math.round(crit.mul * 100)}%` },
     // 로비 펫: 받는 피해 · 얻는 돈 · 되살아남

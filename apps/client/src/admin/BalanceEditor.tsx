@@ -133,7 +133,7 @@ interface CellProps {
   onChange: (v: number | undefined) => void;
 }
 
-function Cell({ field, base, value, saved, onChange, grid, label }: CellProps) {
+export function Cell({ field, base, value, saved, onChange, grid, label }: CellProps) {
   const shown = value ?? base;
   const [text, setText] = useState(String(shown));
 

@@ -44,6 +44,17 @@ const KNOWN: Record<string, Omit<BalanceField, "key">> = {
   attackSpeed: { min: 0.1, max: 20 },
   range: { min: 4, max: 400 },
   luck: { min: -10, max: 20, int: true },
+  // 추가 기본 스탯 (처음 값이 0이라 범위를 따로)
+  critChance: { min: 0, max: 1 },
+  critDamage: { min: 1, max: 10 },
+  defense: { min: 0, max: 500, int: true },
+  reduction: { min: 0, max: 0.9 },
+  dodge: { min: 0, max: 0.9 },
+  regen: { min: 0, max: 500 },
+  lifesteal: { min: 0, max: 1 },
+  sharpness: { min: 0, max: 1 },
+  statusPower: { min: 0, max: 10 },
+  goldGain: { min: 0, max: 10 },
 };
 
 /** 처음 값과 이름으로 범위 정하기: 확률은 0~1, 배율·속도는 소수, 그 밖의 정수는 정수 · 처음 값의 5배까지 */

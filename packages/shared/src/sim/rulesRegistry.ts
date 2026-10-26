@@ -2,6 +2,7 @@
 import { ABANDONED_KIDS_RULES } from "./abandonedKids";
 import { ABANDONED_SHOW_RULES } from "./abandonedShow";
 import { ARENA_RULES } from "./arena";
+import { BASE_STATS_RULES } from "./baseStats";
 import { BEAST_RULES } from "./beast";
 import { BOSS_ANGEL_RULES } from "./bossAngel";
 import { BOSS_BINDS_RULES } from "./bossBinds";
@@ -53,6 +54,7 @@ import { PROJECTILES_RULES } from "./projectiles";
 import { ROOMS_RULES } from "./rooms";
 import { SHADES_RULES } from "./shades";
 import { SUMMONS_RULES } from "./summons";
+import { STATUS_RULES } from "./status";
 import { TALISMAN_RULES } from "./talisman";
 import { TD_RULES } from "./td";
 import { TD_WAVES_RULES } from "./tdWaves";
@@ -62,6 +64,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   ABANDONED_KIDS_RULES,
   ABANDONED_SHOW_RULES,
   ARENA_RULES,
+  BASE_STATS_RULES,
   BEAST_RULES,
   BOSS_ANGEL_RULES,
   BOSS_BINDS_RULES,
@@ -113,6 +116,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   ROOMS_RULES,
   SHADES_RULES,
   SUMMONS_RULES,
+  STATUS_RULES,
   TALISMAN_RULES,
   TD_RULES,
   TD_WAVES_RULES,

@@ -12,6 +12,7 @@ import type { StatKey, StatMod } from "../stats";
 import { recalcStats } from "./items";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, markCrit } from "./util";
+import { extraOf } from "./baseStats";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -106,11 +107,13 @@ export function rollCrit(s: RunState, e: EnemyState, dmg: number): { dmg: number
   // 병아리(로비 펫): 치명타 확률 +
   const pet = petCrit(s);
   const tang = p.characterId === "samyeol";
-  if ((p.characterId !== "novice" && !tang && wake <= 0 && pet <= 0) || dmg <= 0) return { dmg, crit: false };
+  // 기본 스탯 치명타 (모든 캐릭터, sim/baseStats)
+  const ex = extraOf(p);
+  if ((p.characterId !== "novice" && !tang && wake <= 0 && pet <= 0 && ex.critChance <= 0) || dmg <= 0) return { dmg, crit: false };
   p.critRolls = (p.critRolls ?? 0) + 1;
   // 사멸: 기본 치명타 20%
-  const base = p.characterId === "novice" ? noviceCrit(p) : tang ? { chance: SAMYEOL.critChance, mul: SAMYEOL.critMul } : wake > 0 ? { chance: wake, mul: IMUGI.critMul } : { chance: 0, mul: LOBBY_PETS.chick.critMul };
-  const c = { chance: base.chance + pet, mul: base.mul };
+  const base = p.characterId === "novice" ? noviceCrit(p) : tang ? { chance: SAMYEOL.critChance, mul: SAMYEOL.critMul } : wake > 0 ? { chance: wake, mul: IMUGI.critMul } : { chance: 0, mul: ex.critChance > 0 ? ex.critDamage : LOBBY_PETS.chick.critMul };
+  const c = { chance: base.chance + pet + ex.critChance, mul: base.mul };
   const crit = createRng(deriveSeed(s.seed, "ncrit", e.id, p.critRolls)).nextFloat() < c.chance;
   return { dmg: crit ? dmg * c.mul : dmg, crit };
 }
