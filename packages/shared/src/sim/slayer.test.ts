@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { CHARACTER_IDS, CHARACTERS, SLAYER, type WeaponId } from "../content";
 import { PASSIVES, type PassiveDef, type PassiveId } from "../items";
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
-import { characterWeapons } from "./loot";
+import { characterWeapons, passivePool } from "./loot";
 import { recalcStats } from "./items";
 import { damagePlayer, healPlayer } from "./combat";
 import { enemy, FIRE } from "./perkTestUtil";
@@ -20,6 +20,11 @@ function sl(weapon: WeaponId = "bloodScythe", ...perks: PassiveId[]): RunState {
 const lost = (s: RunState) => s.enemies.reduce((sum, e) => sum + e.maxHp - e.hp, 0);
 
 describe("학살자", () => {
+  it("전용 아이템을 다 모으면 공용 아이템이 나옴 (상점 진열대가 비어 멈추지 않게)", () => {
+    const own = Object.keys(PASSIVES).filter((id) => (PASSIVES[id as PassiveId] as PassiveDef).exclusive === "slayer") as PassiveId[];
+    expect(passivePool(sl()).every((id) => own.includes(id))).toBe(true);
+    expect(passivePool(sl("bloodScythe", ...own)).length).toBeGreaterThan(0);
+  });
   it("헬리오스 보통 캐릭터 · 체력 280 · 대낫 10 · 전용 아이템 10", () => {
     expect(CHARACTER_IDS).toContain("slayer");
     expect(CHARACTERS.slayer.maxHp).toBe(280);

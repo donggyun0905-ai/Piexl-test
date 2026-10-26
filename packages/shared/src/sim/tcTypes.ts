@@ -18,6 +18,10 @@ export interface Bomb {
   after?: boolean;
   echo?: boolean;
   tint?: string;
+  /** 끈끈이: 적 몸에 붙었는지 · 붙은 수 (많을수록 크게 터짐) · 불꽃놀이 별 */
+  stuck?: boolean;
+  stack?: number;
+  star?: boolean;
 }
 
 export interface TcPlayerState {
@@ -25,6 +29,8 @@ export interface TcPlayerState {
   adDolls?: { x: number; y: number; cd: number }[];
   adShots?: number;
   adKills?: number;
+  /** 오토마타 리펄서 소드: 두 번째 베기까지 남은 틱 */
+  adSwing?: number;
   /** 라이더: 달린 거리 게이지 · 늦게 터질 두 번째 펄스(남은 틱) · 들이받기 쿨 · 대시 뒤 강해진 공격 · 불꽃 자국 · 불꽃 놓기까지 거리 */
   rdGauge?: number;
   rdEcho?: number;
@@ -32,9 +38,13 @@ export interface TcPlayerState {
   rdDrift?: boolean;
   rdFire?: { x: number; y: number; t: number; dmg: number }[];
   rdTrail?: number;
-  /** 붐버: 날아가는 폭탄 · 깔린 지뢰 · 불바다 · 예술 연쇄 칸·마지막으로 터진 틱 */
+  /** 라이더: 공격으로 쌓인 빠르기 · 사라지기까지 틱 · 지난 틱에 대시 중이었는지 */
+  rdHeat?: number;
+  rdHeatT?: number;
+  rdDash?: boolean;
+  /** 붐버: 날아가는 폭탄 · 깔린 지뢰(쫓는 적 · 깨어난 틱) · 불바다 · 예술 연쇄 칸·마지막으로 터진 틱 */
   bmBombs?: Bomb[];
-  bmMines?: { x: number; y: number; dmg: number; r: number }[];
+  bmMines?: { x: number; y: number; dmg: number; r: number; run?: number; t?: number }[];
   bmFires?: { x: number; y: number; t: number; dmg: number }[];
   bmArt?: number;
   bmArtT?: number;

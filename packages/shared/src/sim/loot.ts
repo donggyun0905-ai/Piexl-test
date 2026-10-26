@@ -63,20 +63,27 @@ export function characterWeapons(c: CharacterId): WeaponId[] {
 /** 이 캐릭터가 얻을 수 있는 패시브 (공용 + 자기 전용, 해금된 것만, 공격 방식 아이템은 이미 가졌으면 제외, 정해진 자리 아이템 제외) */
 export function passivePool(s: RunState): PassiveId[] {
   const c = s.player.characterId;
-  const pool = PASSIVE_IDS.filter((id) => {
+  const ownOnly = c === "idra" || c === "slayer";
+  // 이드라·학살자: 공용 아이템 없이 자기 전용만 (전용 아이템을 다 모았으면 공용 아이템도: 빈 진열대로 멈추지 않게)
+  const own = poolOf(s, ownOnly);
+  const pool = own.length > 0 || !ownOnly ? own : poolOf(s, false);
+  // 무기 전용 아이템은 행운이 높을수록 잘 나옴 (행운 1마다 한 번 더 넣음, 최대 4번)
+  const extra = Math.min(4, Math.floor(s.player.stats.luck));
+  return extra > 0 ? [...pool, ...pool.filter((id) => (PASSIVES[id] as PassiveDef).forWeapon).flatMap((id) => Array<PassiveId>(extra).fill(id))] : pool;
+}
+
+function poolOf(s: RunState, ownOnly: boolean): PassiveId[] {
+  const c = s.player.characterId;
+  return PASSIVE_IDS.filter((id) => {
     const def: PassiveDef = PASSIVES[id];
     if (def.special || (def.exclusive !== undefined && def.exclusive !== c)) return false;
-    // 이드라: 공용 아이템 없이 자기 전용만
-    if ((c === "idra" || c === "slayer") && def.exclusive !== c) return false;
+    if (ownOnly && def.exclusive !== c) return false;
     // 오니: 무기 전용 아이템은 그 무기를 들었을 때만
     if (def.forWeapon !== undefined && def.forWeapon !== s.player.weaponId) return false;
     if (def.effect && s.player.passives.includes(id)) return false;
     if (s.sudden && HEAL_ITEMS.has(`passive:${id}`)) return false;
     return itemAvailable("passive", id, s.unlocks);
   });
-  // 무기 전용 아이템은 행운이 높을수록 잘 나옴 (행운 1마다 한 번 더 넣음, 최대 4번)
-  const extra = Math.min(4, Math.floor(s.player.stats.luck));
-  return extra > 0 ? [...pool, ...pool.filter((id) => (PASSIVES[id] as PassiveDef).forWeapon).flatMap((id) => Array<PassiveId>(extra).fill(id))] : pool;
 }
 
 export function usePool(s: RunState): UseItemId[] {

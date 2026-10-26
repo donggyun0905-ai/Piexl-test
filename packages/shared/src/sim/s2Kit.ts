@@ -105,7 +105,7 @@ export function rushTick(s: RunState, onHit?: (e: EnemyState) => void): boolean 
   keepInRoom(p, roomGrid(s));
   if (r.invuln) p.invulnTicks = Math.max(p.invulnTicks, 2);
   // 한 틱에 멀리 가도 사이의 적을 빠뜨리지 않게 지나온 줄 전체로 맞힘
-  for (const e of onSegment(s, ax, ay, p.x, p.y, p.r + 4)) {
+  for (const e of onSegment(s, ax, ay, p.x, p.y, r.w ?? p.r + 4)) {
     if (r.hit.includes(e.id)) continue;
     r.hit.push(e.id);
     strike(s, e, r.dmg, r.push);

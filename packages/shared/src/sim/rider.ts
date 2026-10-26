@@ -4,9 +4,10 @@ import { TICK_RATE } from "../constants";
 import { RIDER_PERKS as K } from "../itemsRider";
 import { RIDER as R, type RideStyle } from "../weaponsRider";
 import { blastAt, damageEnemy, healPlayer, ignite } from "./combat";
-import { fan, inCircle, inCone, inLine, shoot, startRush, rushTick, stun, strike } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
-import { addEffect, hasPerk, weaponOf } from "./util";
+import { addEffect, dist2, hasPerk, weaponOf } from "./util";
+import { addFlame } from "./flames";
+import { alive, fan, inCircle, inCone, inLine, shoot, startRush, rushTick, stun, strike } from "./s2Kit";
 
 const styleOf = (p: PlayerState): RideStyle => weaponOf(p).ride ?? { move: "smash", reach: 30 };
 /** 이번 틱에 움직인 거리 */
@@ -18,6 +19,15 @@ export function riderSpeedMul(p: PlayerState): number {
   const gear = hasPerk(p, "rdGear") ? K.rdGear.mul : 1;
   return 1 + (moved(p) * R.speedMul + Math.max(0, p.stats.moveSpeed - 1) * R.statMul) * gear;
 }
+
+/** 이동 속도 배율: 단검은 훨씬 빠름 · 공격할 때마다 쌓이는 빠르기 */
+export function riderMoveMul(p: PlayerState): number {
+  if (p.characterId !== "rider") return 1;
+  return (1 + (styleOf(p).fast ?? 0)) * (1 + (p.rdHeat ?? 0) * R.heatSpeed);
+}
+
+/** 쌓인 빠르기 0~1 (화면용) */
+export const riderHeat = (p: PlayerState) => Math.min(1, (p.rdHeat ?? 0) / R.heatMax);
 
 /** 슬립스트림: 달리는 동안 받는 피해 (classTaken) */
 export const riderTaken = (p: PlayerState) => (p.characterId === "rider" && hasPerk(p, "rdSlip") && moved(p) > 0.3 ? K.rdSlip.taken : 1);
@@ -31,16 +41,46 @@ function pulse(s: RunState, mul: number): void {
   if (hasPerk(p, "rdRepair")) healPlayer(s, K.rdRepair.heal);
 }
 
+/** 게이지 채우기 (가득이면 펄스) */
+function fill(s: RunState, amount: number): void {
+  const p = s.player;
+  p.rdGauge = (p.rdGauge ?? 0) + amount * (hasPerk(p, "rdTank") ? K.rdTank.mul : 1);
+  if (p.rdGauge < R.gaugeMax) return;
+  p.rdGauge = 0;
+  pulse(s, 1);
+  if (hasPerk(p, "rdDouble")) p.rdEcho = K.rdDouble.delay;
+}
+
+/** 공격 한 번: 게이지가 차고 조금 더 빨라짐 */
+function hitDone(s: RunState): void {
+  const p = s.player;
+  fill(s, R.hitGauge);
+  p.rdHeat = Math.min(R.heatMax, (p.rdHeat ?? 0) + 1);
+  p.rdHeatT = R.heatTicks;
+}
+
+/** 단검 대시: 지나가며 가까운 적들의 목을 벰 (공격 한 번으로 셈) */
+function cut(s: RunState): void {
+  const p = s.player;
+  const dmg = p.stats.damage * R.cutMul * riderSpeedMul(p);
+  const near = alive(s)
+    .filter((e) => dist2(e, p) <= (R.cutReach + e.r) ** 2)
+    .sort((a, b) => dist2(a, p) - dist2(b, p) || a.id - b.id)
+    .slice(0, R.cutN);
+  for (const e of near) {
+    strike(s, e, dmg);
+    addEffect(s, { kind: "rdCut", x: e.x, y: e.y, dirX: p.faceX, dirY: p.faceY, size: e.r + 6, maxTicks: 16 });
+  }
+  addEffect(s, { kind: "rdStab", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: R.cutReach, maxTicks: 10, width: 1 });
+  hitDone(s);
+}
+
 /** 달린 거리 → 게이지 · 들이받기 · 불꽃 자국 */
 function drive(s: RunState): void {
   const p = s.player;
   const d = moved(p);
-  p.rdGauge = (p.rdGauge ?? 0) + d * (hasPerk(p, "rdTank") ? K.rdTank.mul : 1);
-  if (p.rdGauge >= R.gaugeMax) {
-    p.rdGauge = 0;
-    pulse(s, 1);
-    if (hasPerk(p, "rdDouble")) p.rdEcho = K.rdDouble.delay;
-  }
+  fill(s, d);
+  if ((p.rdHeatT ?? 0) > 0 && --p.rdHeatT! === 0) p.rdHeat = 0;
   if ((p.rdEcho ?? 0) > 0 && --p.rdEcho! === 0) pulse(s, K.rdDouble.mul);
   if (p.dashTicks > 0 && hasPerk(p, "rdDrift")) p.rdDrift = true;
   // 들이받기: 달리며 닿은 적
@@ -56,10 +96,11 @@ function drive(s: RunState): void {
     (p.rdFire ??= []).push({ x: p.x, y: p.y + 3, t: R.fireTicks, dmg: p.stats.damage * R.fireMul });
   }
   if (p.rdFire?.length) {
+    const blue = styleOf(p).move === "flame";
     for (const f of p.rdFire) {
       if (--f.t % 30 !== 0) continue;
       // 점화는 0.5초마다 넣은 값의 25% → 불꽃 자국 피해가 그대로 들어가게 4배로
-      for (const e of inCircle(s, f.x, f.y, R.fireR)) ignite(e, f.dmg * 4);
+      for (const e of inCircle(s, f.x, f.y, R.fireR)) ignite(e, f.dmg * 4 * (blue ? addFlame(s, e) : 1));
     }
     p.rdFire = p.rdFire.filter((f) => f.t > 0).slice(-40);
   }
@@ -74,7 +115,8 @@ function attack(s: RunState): void {
     dmg *= K.rdDrift.mul;
     p.rdDrift = false;
   }
-  const fx = (kind: "rdSmash" | "rdStab" | "rdSpin" | "rdFlame", size: number) => addEffect(s, { kind, x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size, maxTicks: 12 });
+  hitDone(s);
+  const fx = (kind: "rdSmash" | "rdStab" | "rdSpin" | "rdFlame" | "rdLance", size: number) => addEffect(s, { kind, x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size, maxTicks: 12 });
   switch (st.move) {
     case "smash":
       for (const e of inCone(s, st.reach, 0.3)) strike(s, e, dmg, st.push ?? 0);
@@ -89,7 +131,7 @@ function attack(s: RunState): void {
         strike(s, e, dmg, 4);
         stun(e, st.stun ?? 0);
       }
-      fx("rdStab", st.reach);
+      fx("rdLance", st.reach);
       break;
     case "spin":
       for (const e of inCircle(s, p.x, p.y, st.reach)) strike(s, e, dmg, st.push ?? 0);
@@ -97,8 +139,9 @@ function attack(s: RunState): void {
       break;
     case "flame":
       for (const e of inCone(s, st.reach, 0.6)) {
-        damageEnemy(s, e, dmg, p.faceX, p.faceY, false);
-        ignite(e, dmg);
+        const mul = addFlame(s, e);
+        damageEnemy(s, e, dmg * mul, p.faceX, p.faceY, false);
+        ignite(e, dmg * mul);
       }
       fx("rdFlame", st.reach);
       break;
@@ -116,7 +159,7 @@ function attack(s: RunState): void {
       s.projectiles.push({ id: s.nextId++, fromPlayer: true, x: p.x, y: p.y, prevX: p.x, prevY: p.y, r: 5, vx: p.faceX * 3.4, vy: p.faceY * 3.4, damage: dmg, ticksLeft: Math.ceil(st.reach / 3.4), pierce: 99, hitIds: [], back: true, span: Math.ceil(st.reach / 3.4), spirit: "rdWheel" });
       break;
     case "nitro":
-      startRush(p, { t: R.nitroTicks, dx: p.faceX, dy: p.faceY, step: R.nitroStep, dmg, push: st.push ?? 0, invuln: true, tint: "#3a6aff" });
+      startRush(p, { t: R.nitroTicks, dx: p.faceX, dy: p.faceY, step: st.reach / R.nitroTicks, dmg, push: st.push ?? 0, invuln: true, tint: "#3a6aff", w: R.nitroW });
       break;
   }
 }
@@ -126,6 +169,9 @@ export function riderTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
   drive(s);
   if (p.s2Rush) rushTick(s);
+  const dashing = p.dashTicks > 0;
+  if (dashing && !p.rdDash && styleOf(p).cut) cut(s);
+  p.rdDash = dashing;
   if (!want || p.attackCooldown > 0) return;
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
@@ -134,7 +180,7 @@ export function riderTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetRider(p: PlayerState): void {
-  for (const k of ["rdGauge", "rdEcho", "rdFire", "rdTrail", "rdDrift"] as const) delete p[k];
+  for (const k of ["rdGauge", "rdEcho", "rdFire", "rdTrail", "rdDrift", "rdHeat", "rdHeatT", "rdDash"] as const) delete p[k];
 }
 
 /** 게이지 0~1 (화면용) */

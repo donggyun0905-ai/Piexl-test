@@ -7,7 +7,7 @@ import { createRng, deriveSeed } from "../rng";
 import { PUNK as P, type CyberStyle } from "../weaponsPunk";
 import { nearest } from "./brawlMoves";
 import { blastAt, dotDamage, healPlayer } from "./combat";
-import { alive, fan, inCircle, inCone, inLine, isBoss, shoot, strike, stun } from "./s2Kit";
+import { alive, fan, inCircle, inCone, inLine, shoot, strike, stun } from "./s2Kit";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, markCrit, weaponOf } from "./util";
 
@@ -112,6 +112,18 @@ function attack(s: RunState, mul: number): void {
   }
 }
 
+/** 이동 속도 배율: 빠른 몸 · 신경 가속 중 훨씬 빠름 */
+export function punkMoveMul(p: PlayerState): number {
+  if (p.characterId !== "punk") return 1;
+  return P.baseMove * (punkAccel(p) ? P.accelMove : 1);
+}
+
+/** 신경 가속 중: 적이 이번 틱을 쉬는지 (일반 적은 네 틱 중 세 틱, 보스는 두 틱 중 한 틱 쉼) */
+export function timeSlowed(s: RunState, boss: boolean): boolean {
+  if (!punkAccel(s.player)) return false;
+  return s.tick % (boss ? P.bossEvery : P.slowEvery) !== 0;
+}
+
 /** 신경 가속 켜기 (게이지가 가득일 때 대시하면) · 광학 위장 */
 function onDash(s: RunState): void {
   const p = s.player;
@@ -127,7 +139,8 @@ function accel(s: RunState): void {
   const p = s.player;
   if (!punkAccel(p)) return;
   p.cyAccel!--;
-  for (const e of s.enemies) if (e.hp > 0 && !isBoss(e)) e.slowTicks = Math.max(e.slowTicks ?? 0, 2);
+  // 무적
+  p.invulnTicks = Math.max(p.invulnTicks, 2);
   const frozen = new Set(p.cyFrozen ?? []);
   for (const pr of s.projectiles) {
     if (pr.fromPlayer || frozen.has(pr.id)) continue;

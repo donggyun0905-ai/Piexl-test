@@ -3,7 +3,7 @@ import type { Lang } from "../index";
 import type { AutoStyle, PassiveId, RideStyle, WeaponId } from "@pixel-rogue/shared";
 import type { Names } from "./names";
 
-type AutoWeapon = "adFinger" | "adSisters" | "adMissile" | "adTwin" | "adPrism" | "adCannon" | "adSweep" | "adBind" | "adSatellite" | "adArsenal";
+type AutoWeapon = "adFinger" | "adSisters" | "adMissile" | "adRed" | "adPrism" | "adCannon" | "adSweep" | "adBind" | "adSatellite" | "adSword";
 type RideWeapon = "rdHammer" | "rdPulse" | "rdDagger" | "rdRail" | "rdScatter" | "rdExhaust" | "rdWheel" | "rdLance" | "rdChain" | "rdNitro";
 type TerraPassive = "adCore" | "adFocus" | "adWide" | "adCall" | "adFourth" | "adWarhead" | "adSalvo" | "adEcho" | "adShield" | "adSoul" | "rdTurbo" | "rdTank" | "rdShock" | "rdDouble" | "rdSlip" | "rdRam" | "rdDrift" | "rdGear" | "rdRepair" | "rdBurn";
 const c = (ko: string, en: string, ja: string): Names => ({ ko, en, ja });
@@ -12,13 +12,13 @@ export const TERRA2_WEAPON_NAMES: Record<(AutoWeapon | RideWeapon) & WeaponId, N
   adFinger: c("손끝 레이저", "Fingertip Laser", "指先レーザー"),
   adSisters: c("자매 인형", "Sister Dolls", "姉妹人形"),
   adMissile: c("미사일 포드", "Missile Pod", "ミサイルポッド"),
-  adTwin: c("쌍둥이 레이저", "Twin Laser", "ツインレーザー"),
+  adRed: c("붉은 레이저", "Crimson Laser", "紅のレーザー"),
   adPrism: c("프리즘 레이저", "Prism Laser", "プリズムレーザー"),
   adCannon: c("과충전 캐논", "Overcharge Cannon", "過充電キャノン"),
   adSweep: c("부채 레이저", "Fan Laser", "扇レーザー"),
   adBind: c("구속 레이저", "Binding Laser", "拘束レーザー"),
   adSatellite: c("궤도 위성", "Orbital Satellite", "軌道衛星"),
-  adArsenal: c("전탄 발사", "Full Arsenal", "全弾発射"),
+  adSword: c("리펄서 소드", "Repulser Sword", "リパルサーソード"),
   rdHammer: c("기계 망치", "Mech Hammer", "機械ハンマー"),
   rdPulse: c("펄스건", "Pulse Gun", "パルスガン"),
   rdDagger: c("암살 단검", "Assassin's Dagger", "暗殺ダガー"),
@@ -33,12 +33,14 @@ export const TERRA2_WEAPON_NAMES: Record<(AutoWeapon | RideWeapon) & WeaponId, N
 
 /** 오토마타 무기 설명: 레이저 몇 줄 + 더하는 것 */
 export function autoDesc(st: AutoStyle, lang: Lang): string {
+  if (st.sword) return c("양손 대검으로 앞을 두 번 이어 벰 (근접)", "two-handed greatsword: two quick slashes ahead (melee)", "両手大剣で前方を2連続斬り（近接）")[lang];
   const parts: Names[] = [st.beams > 1 ? c(`레이저 ${st.beams}갈래`, `${st.beams} laser beams`, `レーザー${st.beams}本`) : c("꿰뚫는 레이저", "piercing laser", "貫通レーザー")];
   if (st.width >= 8) parts.push(c("아주 굵음", "very thick", "とても太い"));
   if (st.dolls) parts.push(c(`자매 인형 ${st.dolls}이 함께 쏨`, `${st.dolls} sister dolls fire with her`, `姉妹人形${st.dolls}体も撃つ`));
   if (st.missiles) parts.push(st.missiles.chance >= 1 ? c(`쏠 때마다 유도 미사일 ${st.missiles.n}발 넘게`, `${st.missiles.n}+ homing missiles every shot`, `撃つたびに誘導ミサイル${st.missiles.n}発以上`) : c(`${Math.round(st.missiles.chance * 100)}% 확률로 등 뒤에서 유도 미사일 ${st.missiles.n}발 넘게`, `${Math.round(st.missiles.chance * 100)}% chance of ${st.missiles.n}+ homing missiles from her back`, `${Math.round(st.missiles.chance * 100)}%で背中から誘導ミサイル${st.missiles.n}発以上`));
   if (st.split) parts.push(c(`맞힌 적에서 ${st.split}갈래로 갈라짐`, `splits to ${st.split} nearby foes`, `当たった敵から${st.split}本に分かれる`));
   if (st.bind) parts.push(c("맞으면 묶임", "binds on hit", "当たると拘束"));
+  if (st.crits) parts.push(c(`쏠 때마다 치명타 확률 ${st.crits.map((v) => Math.round(v * 100)).join("→")}% (되풀이)`, `crit chance ${st.crits.map((v) => Math.round(v * 100)).join("→")}% per shot (repeats)`, `撃つたびに会心率${st.crits.map((v) => Math.round(v * 100)).join("→")}%（繰り返し）`));
   if (st.sat) parts.push(c(`${st.sat}번째마다 궤도 포격`, `orbital strike every ${st.sat} shots`, `${st.sat}発ごとに軌道砲撃`));
   return parts.map((p) => p[lang]).join(" · ");
 }
@@ -51,13 +53,17 @@ export function rideDesc(st: RideStyle, lang: Lang): string {
     shot: c("빠른 에너지탄", "fast energy bolts", "速いエネルギー弾"),
     spread: c(`에너지탄 ${st.n ?? 5}발을 부채꼴로`, `${st.n ?? 5} bolts in a fan`, `エネルギー弾${st.n ?? 5}発を扇状に`),
     rail: c("모두 꿰뚫는 한 줄", "a line that pierces everything", "すべて貫く一直線"),
-    flame: c("불을 뿜어 불태움 · 달린 자리에 불꽃", "breathes fire and leaves flames where you drive", "炎を噴いて燃やす · 走った跡に炎"),
+    flame: c("푸른 불을 뿜어 불태움 · 불꽃 스택 x1~x5 · 달린 자리에 푸른 불꽃", "breathes blue fire · flame stacks x1–x5 · leaves blue flames where you drive", "青い炎を噴いて燃やす · 炎スタックx1〜x5 · 走った跡に青い炎"),
     wheel: c("꿰뚫고 돌아오는 톱날", "a saw that pierces and returns", "貫いて戻るノコギリ"),
     lance: c("길게 찔러 감전 (잠깐 멈춤)", "long thrust that shocks (brief stun)", "長く突いて感電（少し停止）"),
     spin: c("둘레 한 바퀴", "a full circle around you", "周囲を一周"),
     nitro: c("앞으로 내달려 들이받음", "boosts forward and rams", "前方へ突っ込んで体当たり"),
   };
-  return [shape[st.move], c("빠를수록 피해 증가", "faster = more damage", "速いほどダメージ増加")].map((p) => p[lang]).join(" · ");
+  const parts = [shape[st.move]];
+  if (st.fast) parts.push(c(`이동 속도 +${Math.round(st.fast * 100)}%`, `move speed +${Math.round(st.fast * 100)}%`, `移動速度+${Math.round(st.fast * 100)}%`));
+  if (st.cut) parts.push(c("대시하면 지나가며 목을 벰 (공격으로 셈)", "dashing slashes throats as you pass (counts as an attack)", "ダッシュで通り過ぎざまに喉を斬る（攻撃扱い）"));
+  parts.push(c("빠를수록 피해 증가", "faster = more damage", "速いほどダメージ増加"));
+  return parts.map((p) => p[lang]).join(" · ");
 }
 
 export const TERRA2_PASSIVE_NAMES: Record<TerraPassive & PassiveId, Names> = {

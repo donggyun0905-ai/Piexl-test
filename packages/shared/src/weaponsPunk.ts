@@ -42,11 +42,17 @@ export const PUNK_WEAPONS = {
 
 /** 펑크 수치 (배율 1 = 100%, 시간은 틱, 거리는 픽셀) */
 export const PUNK = {
-  /** 신경 가속: 맞힐 때마다 게이지 +1, 이만큼 차면 다음 대시에 켜짐 · 켜진 틱 · 그동안 공격 속도 배율 · 적 탄 빠르기 배율 */
+  /** 신경 가속: 맞힐 때마다 게이지 +1, 이만큼 차면 다음 대시에 켜짐 · 켜진 틱 · 그동안 공격 속도 배율 · 이동 속도 배율 · 적 탄 빠르기 배율
+   *  그동안 무적이고, 적은 시간이 느려져 일반 적은 네 틱 중 한 틱만 · 보스는 두 틱 중 한 틱만 움직이고 공격함 */
   gaugeMax: 40,
   accelTicks: 240,
-  accelSpeed: 1.6,
-  shotSlow: 0.3,
+  accelSpeed: 2.6,
+  accelMove: 1.7,
+  shotSlow: 0.2,
+  slowEvery: 4,
+  bossEvery: 2,
+  /** 기본 이동 속도 배율 (빠른 몸) */
+  baseMove: 1.1,
   /** 모노와이어 출혈 · EMP가 터지기까지 틱 */
   bleedMul: 0.4,
   empFuse: 24,

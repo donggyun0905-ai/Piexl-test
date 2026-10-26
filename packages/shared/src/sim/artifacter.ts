@@ -48,7 +48,7 @@ function craftOne(s: RunState): void {
   }
   if (!id) return;
   p.passives.push(id);
-  addEffect(s, { kind: "afCraft", x: p.x, y: p.y - 10, dirX: 0, dirY: 0, size: secret ? 26 : 16, maxTicks: 40, tint: secret ? "#ffd040" : "#6ab8ff", width: secret ? 1 : 0 });
+  addEffect(s, { kind: "afCraft", x: p.x, y: p.y - 10, dirX: 0, dirY: 0, size: secret ? 26 : 16, maxTicks: 60, tint: secret ? "#ffd040" : "#6ab8ff", width: secret ? 1 : 0 });
 }
 
 /** 제작 게이지: 쓰러뜨린 적마다 (가득이면 만듦) */

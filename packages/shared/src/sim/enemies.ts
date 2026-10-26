@@ -16,6 +16,7 @@ import { distanceField, walkToward } from "./layout";
 import { eachSeat, nearestSeat, seatNo, useSeat } from "./party";
 import { dist2, enemyShot, keepInRoom, normalize, roomGrid } from "./util";
 import { furyTick, tabooUp } from "./taboo";
+import { timeSlowed } from "./punk";
 
 /** 성기사 빛기둥: 간격 · 예고 · 반경 · 피해 */
 const PALADIN_GAP = 160;
@@ -63,8 +64,8 @@ export function updateEnemies(s: RunState): void {
     // 느려짐(토룡·교만): 움직임과 공격이 모두 느림 (일반 적은 두 틱에 한 번, 보스는 네 틱에 한 번 쉼)
     if ((e.sluggish ?? 0) > 0) e.sluggish = (e.sluggish ?? 0) - 1;
     if ((e.stunTicks ?? 0) > 0) e.stunTicks = (e.stunTicks ?? 0) - 1;
-    else if ((e.sluggish ?? 0) > 0 && s.tick % (def.boss ? 4 : 2) === 0) {
-      // 이번 틱은 쉼
+    else if (((e.sluggish ?? 0) > 0 && s.tick % (def.boss ? 4 : 2) === 0) || timeSlowed(s, !!def.boss)) {
+      // 이번 틱은 쉼 (펑크 신경 가속: 시간이 느려져 더 자주 쉼)
     } else if ((e.fearTicks ?? 0) > 0) {
       // 위압: 플레이어 반대쪽으로 도망
       e.fearTicks = (e.fearTicks ?? 0) - 1;

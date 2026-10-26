@@ -18,6 +18,8 @@ export interface S2Rush {
   hit: number[];
   invuln: boolean;
   tint: string;
+  /** 맞히는 폭 (없으면 몸 크기 + 4) */
+  w?: number;
 }
 
 export interface IdraPlayerState {
@@ -101,6 +103,9 @@ export interface SpiritPlayerState {
 export interface S2EnemyState {
   /** 렌의 토목 감옥에 갇힌 남은 틱 */
   renJail?: number;
+  /** 불꽃 스택 (라이더 화염 배기 · 붐버 네이팜): 쌓인 수 · 마지막으로 쌓인 틱 */
+  flameN?: number;
+  flameAt?: number;
 }
 
 export interface PetRunState {

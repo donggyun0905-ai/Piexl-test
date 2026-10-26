@@ -44,9 +44,10 @@ export const TERRA2_WEAPON_ART = {
     missile(g, 5, 9);
     hand(g, 1, 6);
   },
-  adTwin: (g) => {
+  adRed: (g) => {
     hand(g);
-    g.line(5, 11, 15, 10, LZ);
+    g.line(5, 11, 15, 10, "#ff3a4a").line(5, 12, 15, 11, "#ffb0b8");
+    g.px(14, 6, "#ffe14a").px(13, 5, "#ffe14a").px(15, 5, "#ffe14a");
   },
   adPrism: (g) => {
     g.line(1, 13, 8, 8, LZ).line(8, 8, 14, 2, "#c8a8ff").line(8, 8, 15, 8, "#ff8ac8").line(8, 8, 13, 14, "#8aff9a");
@@ -68,8 +69,9 @@ export const TERRA2_WEAPON_ART = {
     g.rect(5, 1, 6, 3, STEEL).rect(1, 2, 4, 1, LZ).rect(11, 2, 4, 1, LZ);
     g.rect(7, 4, 2, 10, LZ).rect(5, 13, 6, 2, LZW);
   },
-  adArsenal: (g) => {
-    for (const [x, y] of [[3, 2], [8, 2], [5, 6], [10, 6], [3, 10], [8, 10], [11, 13]]) missile(g, x!, y!);
+  adSword: (g) => {
+    g.line(3, 13, 13, 3, "#c8f0ff").line(4, 13, 14, 3, LZ).line(4, 12, 13, 3, LZW);
+    g.line(2, 10, 6, 14, STEEL).rect(1, 14, 2, 2, DARK);
   },
   rdHammer: (g) => {
     g.line(3, 14, 10, 7, "#6a4a2a");

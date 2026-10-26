@@ -35,6 +35,15 @@ function arc(ctx: Ctx, x: number, y: number, r: number, a: number, w: number, c:
   }
 }
 
+/** 지지직 깨지는 네온 조각 (글리치) */
+function glitch(ctx: Ctx, x: number, y: number, r: number, t: number, seed: number): void {
+  for (let i = 0; i < 6; i++) {
+    const k = (seed * 7 + i * 13) % 17;
+    ctx.fillStyle = i % 2 ? PINK : CYAN;
+    ctx.fillRect(Math.round(x + ((k / 17) - 0.5) * r * 2), Math.round(y + (((k * 3) % 17) / 17 - 0.5) * r * 1.4 - t * 4), 2 + (i % 3), 1);
+  }
+}
+
 /** 효과: 베기·줄·주먹·회오리·해킹·EMP·신경 가속 */
 export function drawTerraFxC(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const t = 1 - fx.ticks / fx.maxTicks;
@@ -44,7 +53,10 @@ export function drawTerraFxC(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   ctx.globalAlpha = (1 - t) * (fx.width ? 0.5 : 1);
   switch (fx.kind) {
     case "cySlash":
+      // 네온 베기: 분홍 호 + 살짝 어긋난 하늘빛 잔상 + 깨지는 조각
+      arc(ctx, x + 1, y, fx.size * (0.6 + t * 0.4), a + (t - 0.5) * 1.2 - 0.12, 0.8, CYAN);
       arc(ctx, x, y, fx.size * (0.6 + t * 0.4), a + (t - 0.5) * 1.2, 0.9, PINK);
+      glitch(ctx, x + fx.dirX * fx.size * 0.6, y + fx.dirY * fx.size * 0.6, 8, t, fx.ticks);
       break;
     case "cyMantis":
       arc(ctx, x, y, fx.size * 0.8, a - 0.9 + t, 0.6, PINK);
@@ -71,6 +83,8 @@ export function drawTerraFxC(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       break;
     case "cySpin":
       for (let i = 0; i < 2; i++) arc(ctx, x, y, fx.size * 0.8, t * 9 + i * Math.PI, 0.7, i ? CYAN : PINK);
+      for (let i = 0; i < 2; i++) arc(ctx, x, y, fx.size * 0.55, -t * 7 + i * Math.PI, 0.4, i ? PINK : CYAN);
+      glitch(ctx, x, y, fx.size * 0.7, t, fx.ticks);
       break;
     case "cyHack": {
       // 머리 위에서 적에게 꺾이며 이어지는 데이터 줄
@@ -99,16 +113,23 @@ export function drawTerraFxC(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       }
       break;
     case "cyAccel":
+      // 켜지는 순간: 분홍·하늘빛 두 겹 고리가 퍼지고 시계 눈금이 멈춰 섬
       ctx.strokeStyle = PINK;
       ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.arc(x, y, fx.size * t, 0, Math.PI * 2);
+      ctx.arc(x, y, fx.size * t * 1.6, 0, Math.PI * 2);
       ctx.stroke();
       ctx.strokeStyle = CYAN;
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.arc(x, y, fx.size * t * 0.8, 0, Math.PI * 2);
+      ctx.arc(x, y, fx.size * t * 1.3, 0, Math.PI * 2);
       ctx.stroke();
+      for (let i = 0; i < 12; i++) {
+        const b = (i / 12) * Math.PI * 2;
+        ctx.fillStyle = i % 3 ? CYAN : WHITE;
+        ctx.fillRect(Math.round(x + Math.cos(b) * fx.size * 0.7) - 1, Math.round(y + Math.sin(b) * fx.size * 0.7) - 1, 2, 2);
+      }
+      glitch(ctx, x, y, fx.size * 0.8, t, fx.ticks);
       break;
     default:
       ctx.globalAlpha = 1;
@@ -134,15 +155,29 @@ export function drawTerraAuraC(ctx: Ctx, s: RunState, alpha: number, snap: Snap)
   const x = snap(lerp(p.prevX, p.x, alpha));
   const y = snap(lerp(p.prevY, p.y, alpha));
   if (punkAccel(p)) {
+    // 느려진 시간: 보랏빛 둘레 · 천천히 도는 시계 눈금 · 분홍/하늘빛 잔상 · 무적 네온 테두리
     ctx.globalAlpha = 0.12;
     ctx.fillStyle = "#a84aff";
     ctx.beginPath();
-    ctx.arc(x, y, 90, 0, Math.PI * 2);
+    ctx.arc(x, y, 110, 0, Math.PI * 2);
     ctx.fill();
+    ctx.globalAlpha = 0.45;
+    for (let i = 0; i < 24; i++) {
+      const b = (i / 24) * Math.PI * 2 + s.tick * 0.004;
+      ctx.fillStyle = i % 6 ? "#c87aff" : WHITE;
+      ctx.fillRect(Math.round(x + Math.cos(b) * 104), Math.round(y + Math.sin(b) * 104), i % 6 ? 1 : 2, i % 6 ? 1 : 2);
+    }
     for (const [i, q] of (p.cyTrail ?? []).entries()) {
       ctx.globalAlpha = 0.15 + i * 0.06;
-      drawCharacter(ctx, "punk", snap(q.x), snap(q.y), p.r, { faceX: p.faceX, faceY: p.faceY, moving: true, casting: false, step: i });
+      const off = i % 2 ? 1 : -1;
+      drawCharacter(ctx, "punk", snap(q.x) + off, snap(q.y), p.r, { faceX: p.faceX, faceY: p.faceY, moving: true, casting: false, step: i });
     }
+    ctx.globalAlpha = 0.5 + Math.sin(s.tick * 0.5) * 0.3;
+    ctx.strokeStyle = s.tick % 8 < 4 ? PINK : CYAN;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.ellipse(x, y - 6, 8, 12, 0, 0, Math.PI * 2);
+    ctx.stroke();
     ctx.globalAlpha = 1;
   }
   // 오른쪽 옆 세로 게이지 (가득이면 분홍·하늘빛으로 깜빡: 대시하면 켜짐)

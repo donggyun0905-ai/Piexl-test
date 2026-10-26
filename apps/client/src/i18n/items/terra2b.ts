@@ -26,17 +26,17 @@ export function bombDesc(st: BombStyle, lang: Lang): string {
   const n = st.n ?? 0;
   const how: Record<BombStyle["mode"], Names> = {
     lob: c("겨눈 곳에 던져 터뜨림", "thrown where you aim and explodes", "狙った所に投げて爆発"),
-    sticky: c("적에게 붙었다가 크게 터짐", "sticks to a foe, then blows up big", "敵にくっついて大きく爆発"),
+    sticky: c("적 몸에 붙어 4.5초 뒤 터짐 · 많이 붙을수록 범위와 힘 증가", "sticks to a foe and blows 4.5s later · more bombs = bigger, stronger blast", "敵の体にくっつき4.5秒後に爆発 · 多く付くほど範囲と威力が増す"),
     cluster: c(`터지며 작은 폭탄 ${n}개가 흩어짐`, `bursts into ${n} bomblets`, `爆発して小型爆弾${n}個が散らばる`),
-    mine: c(`발밑에 지뢰 (최대 ${n}, 밟으면 터짐)`, `lays mines at your feet (up to ${n}, triggered by foes)`, `足元に地雷（最大${n}、踏むと爆発）`),
-    rocket: c("곧게 날아가 맞으면 터짐", "flies straight and explodes on hit", "まっすぐ飛び当たると爆発"),
+    mine: c(`적이 없어도 유도 지뢰를 박아 둠 (최대 ${n}) · 적이 오면 눈을 뜨고 달려가 터짐`, `plants homing mines even with no foes (up to ${n}) · they wake, run at foes and explode`, `敵がいなくても誘導地雷を埋める（最大${n}）· 敵が来ると目を開けて走り寄り爆発`),
+    rocket: c("늘 쫓아가 맞으면 터짐 · 25% 확률로 등 뒤에서 작은 유도 미사일", "always homes in and explodes · 25% chance of small homing missiles from your back", "常に追尾し当たると爆発 · 25%で背中から小さな誘導ミサイル"),
     fan: c(`${n}개를 부채꼴로 던짐`, `throws ${n} in a fan`, `${n}本を扇状に投げる`),
-    firework: c(`하늘로 쏘아 올려 별 모양으로 ${n}번 터짐`, `launches skyward and bursts ${n} times in a star`, `空へ打ち上げ星形に${n}回爆発`),
-    napalm: c("터진 자리에 불바다", "leaves a sea of flames", "爆発跡に火の海"),
+    firework: c(`하늘로 쏘아 올려 넓게 별처럼 ${n}번 터짐`, `launches skyward and bursts wide ${n} times like stars`, `空へ打ち上げ広く星のように${n}回爆発`),
+    napalm: c("화염병처럼 넓게 번지는 불바다 · 불꽃 스택 x1~x5", "a wide, molotov-like sea of flames · flame stacks x1–x5", "火炎瓶のように広がる火の海 · 炎スタックx1〜x5"),
     chain: c(`가까운 적에게 이어서 ${n}번까지 터짐`, `chains to nearby foes up to ${n} times`, `近くの敵へ最大${n}回連鎖爆発`),
     mega: c("아주 느리고 아주 큰 한 방", "very slow, very big blast", "とても遅くとても大きな一発"),
   };
-  return [how[st.mode], c(`폭발 반경 ${st.r}`, `blast radius ${st.r}`, `爆発半径${st.r}`), c("잇따라 터지면 예술 연쇄", "consecutive blasts build an Art Chain", "連続爆発で芸術連鎖")].map((p) => p[lang]).join(" · ");
+  return [how[st.mode], c(`폭발 반경 ${st.r}`, `blast radius ${st.r}`, `爆発半径${st.r}`), c("잇따라 터지면 예술 연쇄", "consecutive blasts build an Art Chain", "連続爆発で芸術連鎖"), c("폭발에 휘말리면 나도 피해 20", "you take 20 damage if caught in a blast", "爆発に巻き込まれると自分も20ダメージ")].map((p) => p[lang]).join(" · ");
 }
 
 /** 리펄스 총 설명 */

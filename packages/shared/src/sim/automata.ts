@@ -7,9 +7,10 @@ import type { StatMod } from "../stats";
 import { AUTOMATA as A, type AutoStyle } from "../weaponsAutomata";
 import { nearest } from "./brawlMoves";
 import { recalcStats } from "./items";
-import { alive, onSegment, root, strike } from "./s2Kit";
+import { backMissiles } from "./missiles";
+import { alive, inCone, onSegment, root, strike } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { addEffect, dist2, hasPerk, weaponOf } from "./util";
+import { addEffect, dist2, hasPerk, markCrit, weaponOf } from "./util";
 
 const styleOf = (p: PlayerState): AutoStyle => weaponOf(p).auto ?? { beams: 1, spread: 0, width: 3 };
 const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.seed, tag, s.tick, n)).nextFloat();
@@ -34,12 +35,14 @@ function count(s: RunState, e: EnemyState): void {
 }
 
 /** (x,y)에서 방향 (dx,dy)로 len만큼 레이저 한 줄: 닿는 적 모두 (반환: 맞힌 적) */
-function beam(s: RunState, x: number, y: number, dx: number, dy: number, len: number, w: number, dmg: number, tint?: string): EnemyState[] {
+function beam(s: RunState, x: number, y: number, dx: number, dy: number, len: number, w: number, dmg: number, tint?: string, crit = 0): EnemyState[] {
   const bx = x + dx * len;
   const by = y + dy * len;
   const hit = onSegment(s, x, y, bx, by, w);
   for (const e of hit) {
-    strike(s, e, dmg);
+    const c = crit > 0 && roll(s, "adCrit", e.id) < crit;
+    if (c) markCrit(s, e);
+    strike(s, e, c ? dmg * A.critMul : dmg);
     count(s, e);
   }
   addEffect(s, { kind: "adBeam", x, y, dirX: dx, dirY: dy, size: w, toX: bx, toY: by, maxTicks: 10, tint });
@@ -57,27 +60,26 @@ function aim(s: RunState, x: number, y: number, range: number): [number, number]
   return [(e.x - x) / d, (e.y - y) / d];
 }
 
-/** 등 뒤에서 유도 미사일 n발 (연기를 뿜으며 솟았다가 적에게) */
-function missiles(s: RunState, n: number): void {
+/** 등 뒤에서 유도 미사일 n발 · mini = 기본 능력의 작은 미사일 */
+function missiles(s: RunState, n: number, mini = false): void {
   const p = s.player;
-  const dmg = p.stats.damage * A.missileMul;
   const blast = A.missileBlast * (hasPerk(p, "adWarhead") ? K.adWarhead.r : 1);
-  const [ax, ay] = aim(s, p.x, p.y, p.stats.range * 1.5);
-  const base = Math.atan2(ay, ax);
-  for (let i = 0; i < n; i++) {
-    // 등 뒤 양쪽으로 펼쳐 나갔다가 휘어 들어감
-    const a = base + Math.PI + (i - (n - 1) / 2) * (2.4 / Math.max(1, n - 1)) * 0.9;
-    const sp = A.missileSpeed * (0.85 + roll(s, "msp", i) * 0.3);
-    s.projectiles.push({ id: s.nextId++, fromPlayer: true, x: p.x - p.faceX * 4, y: p.y - 6, prevX: p.x, prevY: p.y - 6, r: 2.5, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 0.8, damage: dmg, ticksLeft: A.missileTicks, homing: true, blast, splash: 0.8, spirit: "adMissile" });
-  }
-  addEffect(s, { kind: "adLaunch", x: p.x, y: p.y - 8, dirX: -p.faceX, dirY: -1, size: n, maxTicks: 18 });
+  backMissiles(s, n, p.stats.damage * (mini ? A.miniMul : A.missileMul), mini ? blast * 0.7 : blast, mini);
 }
 
 /** 한 번 쏘기: 레이저(여러 갈래) · 갈라짐 · 묶음 · 궤도 포격 · 미사일 */
 function fire(s: RunState): void {
   const p = s.player;
   const st = styleOf(p);
+  // 기본 능력: 확률로 등 뒤에서 작은 유도 미사일
+  if (roll(s, "mini", 0) < A.miniChance) missiles(s, A.miniN, true);
+  if (st.sword) {
+    swing(s, 0);
+    p.adSwing = A.swordGap;
+    return;
+  }
   const dmg = p.stats.damage * (hasPerk(p, "adFocus") ? K.adFocus.mul : 1);
+  const crit = st.crits ? st.crits[(p.adShots ?? 0) % st.crits.length]! : 0;
   const w = st.width + (hasPerk(p, "adWide") ? K.adWide.add : 0);
   const [dx, dy] = aim(s, p.x, p.y, p.stats.range);
   const times = hasPerk(p, "adEcho") && roll(s, "echo", 0) < K.adEcho.chance ? 2 : 1;
@@ -86,7 +88,7 @@ function fire(s: RunState): void {
       const a = (i - (st.beams - 1) / 2) * st.spread;
       const bx = dx * Math.cos(a) - dy * Math.sin(a);
       const by = dx * Math.sin(a) + dy * Math.cos(a);
-      const hit = beam(s, p.x + bx * 4, p.y - 4 + by * 4, bx, by, p.stats.range, w, dmg);
+      const hit = beam(s, p.x + bx * 4, p.y - 4 + by * 4, bx, by, p.stats.range, w, dmg, st.tint, crit);
       for (const e of hit) if (st.bind) root(e, st.bind);
       if (st.split && hit[0]) prism(s, hit[0], st.split, dmg * A.splitMul, w);
     }
@@ -118,7 +120,20 @@ function prism(s: RunState, from: EnemyState, n: number, dmg: number, w: number)
   }
 }
 
-/** 자매 인형: 내 뒤 양옆에 줄지어 따라오며 따로 레이저를 쏨 */
+/** 리펄서 소드: 바라보는 쪽(가까운 적) 부채꼴을 양손 대검으로 벰 (k = 몇 번째 베기) */
+function swing(s: RunState, k: number): void {
+  const p = s.player;
+  const [dx, dy] = aim(s, p.x, p.y, p.stats.range + 20);
+  p.faceX = dx;
+  p.faceY = dy;
+  for (const e of inCone(s, p.stats.range, A.swordArc)) {
+    strike(s, e, p.stats.damage * (hasPerk(p, "adFocus") ? K.adFocus.mul : 1), A.swordPush);
+    count(s, e);
+  }
+  addEffect(s, { kind: "adSword", x: p.x, y: p.y, dirX: dx, dirY: dy, size: p.stats.range, maxTicks: 10, width: k });
+}
+
+/** 자매 인형: 저마다 다른 적을 찾아 돌아다니며 따로 레이저를 쏨 (나에게서 너무 멀어지면 돌아옴) */
 function dolls(s: RunState): void {
   const p = s.player;
   const n = Math.max(styleOf(p).dolls ?? 0, hasPerk(p, "adCall") ? K.adCall.n : 0) + (hasPerk(p, "adFourth") ? K.adFourth.n : 0);
@@ -128,18 +143,37 @@ function dolls(s: RunState): void {
   }
   const list = (p.adDolls ?? []).slice(0, n);
   while (list.length < n) list.push({ x: p.x, y: p.y, cd: A.dollEvery / 2 + list.length * 7 });
+  const taken = new Set<number>();
   list.forEach((d, i) => {
-    const a = Math.atan2(-p.faceY, -p.faceX) + (i - (n - 1) / 2) * 0.9;
-    const tx = p.x + Math.cos(a) * A.dollGap;
-    const ty = p.y + Math.sin(a) * A.dollGap;
-    d.x += (tx - d.x) * 0.2;
-    d.y += (ty - d.y) * 0.2;
-    if (--d.cd > 0) return;
-    const target = alive(s).some((e) => dist2(e, d) <= (A.dollRange + e.r) ** 2);
-    if (!target) return;
+    // 가까운 적 중 다른 인형이 고르지 않은 적 (없으면 아무 적)
+    const near = alive(s)
+      .filter((e) => dist2(e, p) <= A.dollLeash ** 2)
+      .sort((a, b) => dist2(a, d) - dist2(b, d) || a.id - b.id);
+    const e = near.find((o) => !taken.has(o.id)) ?? near[0];
+    let tx: number;
+    let ty: number;
+    if (e) {
+      taken.add(e.id);
+      // 적에게서 사거리 반쯤 떨어진 자리로 (인형마다 다른 쪽에서)
+      const a = Math.atan2(d.y - e.y, d.x - e.x) + (i - (n - 1) / 2) * 0.3;
+      tx = e.x + Math.cos(a) * A.dollRange * 0.45;
+      ty = e.y + Math.sin(a) * A.dollRange * 0.45;
+    } else {
+      // 적이 없으면 내 둘레를 저마다 다른 자리에서 천천히 돔
+      const a = (i / n) * Math.PI * 2 + s.tick * 0.012;
+      tx = p.x + Math.cos(a) * A.dollGap;
+      ty = p.y + Math.sin(a) * A.dollGap;
+    }
+    const dd = Math.hypot(tx - d.x, ty - d.y);
+    if (dd > 1) {
+      const step = Math.min(dd, A.dollSpeed * (dd > A.dollLeash ? 3 : 1));
+      d.x += ((tx - d.x) / dd) * step;
+      d.y += ((ty - d.y) / dd) * step;
+    }
+    if (--d.cd > 0 || !e || dist2(e, d) > (A.dollRange + e.r) ** 2) return;
     d.cd = A.dollEvery;
-    const [dx, dy] = aim(s, d.x, d.y, A.dollRange);
-    beam(s, d.x + dx * 3, d.y - 4 + dy * 3, dx, dy, A.dollRange, 2, p.stats.damage * A.dollMul, "#8ae8ff");
+    const dl = Math.hypot(e.x - d.x, e.y - d.y) || 1;
+    beam(s, d.x, d.y - 4, (e.x - d.x) / dl, (e.y - d.y) / dl, A.dollRange, 2, p.stats.damage * A.dollMul, "#8ae8ff");
   });
   p.adDolls = list;
 }
@@ -148,6 +182,11 @@ function dolls(s: RunState): void {
 export function automataTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
   dolls(s);
+  // 리펄서 소드: 두 번째 베기
+  if (p.adSwing && --p.adSwing <= 0) {
+    delete p.adSwing;
+    swing(s, 1);
+  }
   if (!want || p.attackCooldown > 0) return;
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
@@ -156,5 +195,5 @@ export function automataTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetAutomata(p: PlayerState): void {
-  for (const k of ["adDolls", "adShots"] as const) delete p[k];
+  for (const k of ["adDolls", "adShots", "adSwing"] as const) delete p[k];
 }

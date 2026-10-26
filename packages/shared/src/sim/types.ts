@@ -134,10 +134,10 @@ export interface ProjectileState extends Body, GunShotState, BeastShotState, Orb
   /** 관통: 더 뚫고 지나갈 수 있는 적 수, 이미 맞힌 적 id */
   pierce?: number;
   hitIds?: number[];
-  /** 벽에 맞으면 튕길 수 있는 남은 횟수 */
-  bounces?: number;
-  /** 가까운 적 쪽으로 휘어짐 */
+  bounces?: number; // 벽에 맞으면 튕길 수 있는 남은 횟수
+  /** 가까운 적 쪽으로 휘어짐 · seek = 유도 미사일 (멀리 있는 적도 늘 쫓아감, 더 세게 꺾임) */
   homing?: boolean;
+  seek?: boolean;
   /** 사거리 끝에서 한 번 되돌아옴 (span = 되돌아갈 때 날아갈 틱 수) */
   back?: boolean;
   span?: number;

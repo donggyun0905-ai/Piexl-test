@@ -163,9 +163,12 @@ function ease(pr: ProjectileState, to: number): void {
   if (k !== BLOOM_EASE) pr.easeTo = undefined;
 }
 
+/** 유도 미사일(seek)이 꺾이는 정도 */
+const SEEK_TURN = 0.28;
+
 function steer(s: RunState, pr: ProjectileState): void {
   let best: EnemyState | null = null;
-  let bestD = PERKS.seekerFeather.reach * PERKS.seekerFeather.reach;
+  let bestD = pr.seek ? Infinity : PERKS.seekerFeather.reach * PERKS.seekerFeather.reach;
   for (const e of s.enemies) {
     if (e.hp <= 0 || pr.hitIds?.includes(e.id)) continue;
     const d = dist2(e, pr);
@@ -178,7 +181,8 @@ function steer(s: RunState, pr: ProjectileState): void {
   const speed = Math.sqrt(pr.vx * pr.vx + pr.vy * pr.vy);
   const to = normalize(best.x - pr.x, best.y - pr.y);
   if (!to || speed === 0) return;
-  const dir = normalize(pr.vx + to[0] * speed * PERKS.seekerFeather.turn, pr.vy + to[1] * speed * PERKS.seekerFeather.turn);
+  const turn = pr.seek ? SEEK_TURN : PERKS.seekerFeather.turn;
+  const dir = normalize(pr.vx + to[0] * speed * turn, pr.vy + to[1] * speed * turn);
   if (!dir) return;
   pr.vx = dir[0] * speed;
   pr.vy = dir[1] * speed;

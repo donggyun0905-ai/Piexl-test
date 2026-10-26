@@ -8,10 +8,7 @@ import { blastAt, damageEnemy } from "./combat";
 import { afterCharmAttack, charmFields, HASTE_MUL } from "./talisman";
 import { beamInterval } from "./laser";
 import { fireLaser } from "./laserWeapons";
-import { orbitMoveMul } from "./orbit";
 import { orbitAttack } from "./orbitAttack";
-import { brawlMoveMul } from "./brawl";
-import { gunMoveMul } from "./gun";
 import { mercGuard } from "./gunExtras";
 import { BEDOUIN } from "../weaponsBedouin";
 import { canDash, dashCooldownMul, rechargeDash, spendDash } from "./bedouin";
@@ -20,14 +17,13 @@ import { CLASS_TICKS } from "./classTicks";
 import { abandonedTag, tagReachMul } from "./abandoned";
 import { titanParry } from "./titan";
 import { idraSwap } from "./idra";
-import { flyMoveMul } from "./fly";
-import { slayerMoveMul } from "./slayer";
 import { petTick } from "./lobbyPet";
 import { ABANDONED } from "../weaponsAbandoned";
 import { TITAN } from "../weaponsTitan";
 import { beastSpeedMul } from "./pets";
 import { fireMedic } from "./medicWeapons";
-import { medicMoveMul, medicSpeedMul } from "./heal";
+import { medicSpeedMul } from "./heal";
+import { classMoveMul } from "./moveMul";
 import type { EnemyState, RunState, TickInput } from "./types";
 import { AIM_DIST_STEP } from "./types";
 import { addEffect, shotDirs, DASH_COOLDOWN, DASH_SPEED_MUL, DASH_TICKS, dist2, hasPerk, keepInRoom, normalize, roomGrid, STILL_TICKS, weaponOf } from "./util";
@@ -132,7 +128,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
     p.y += p.dashDirY * sp;
   } else {
     // 결벽증·의사 가운: 맞은 뒤 잠깐 빨라짐 · 속도는 곧 힘: 콤보를 이어 갈수록 빨라짐 · 버티기·모으기 중에는 못 움직임
-    const ms = (p.rootTicks ?? 0) > 0 ? 0 : p.stats.moveSpeed * orbitMoveMul(p) * brawlMoveMul(p) * medicMoveMul(p) * gunMoveMul(p, s.tick) * flyMoveMul(p) * slayerMoveMul(p);
+    const ms = (p.rootTicks ?? 0) > 0 ? 0 : p.stats.moveSpeed * classMoveMul(p, s.tick);
     // 베두인: 차크람을 던져 손이 비면 빨라짐
     const empty = p.ckHeld === false && p.characterId === "bedouin" ? BEDOUIN.emptySpeed : 0;
     p.x += mx * (ms + empty);

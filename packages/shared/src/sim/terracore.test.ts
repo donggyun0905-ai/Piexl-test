@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { ARTIFACTER, AUTOMATA, CHARACTER_IDS, PUNK, RIDER, type WeaponId } from "../content";
+import { ARTIFACTER, AUTOMATA, BOMBER, CHARACTER_IDS, PUNK, RIDER, type WeaponId } from "../content";
+import { boom } from "./bomber";
 import { EMPTY_INPUT } from "./inputTypes";
 import { ARTIFACTER_HIDDEN } from "../itemsArtifacter";
 import type { CharacterId } from "../characters";
@@ -8,7 +9,9 @@ import { createRun, stepSim, type RunState } from "./index";
 import { characterWeapons, passivePool } from "./loot";
 import { recalcStats } from "./items";
 import { enemy, FIRE } from "./perkTestUtil";
-import { riderSpeedMul } from "./rider";
+import { riderMoveMul, riderSpeedMul } from "./rider";
+import { punkMoveMul, timeSlowed } from "./punk";
+import { FLAME, flameStacks } from "./flames";
 
 function run(c: CharacterId, weapon: WeaponId, ...perks: PassiveId[]): RunState {
   const s = createRun(7, c);
@@ -47,15 +50,36 @@ describe("테라코어 시즌 2", () => {
     expect(s.player.adDolls).toHaveLength(3);
   });
 
-  it("미사일 포드: 등 뒤에서 유도 미사일이 7발 넘게", () => {
-    const s = run("automata", "adArsenal");
+  it("미사일 포드: 등 뒤에서 유도 미사일이 7발 넘게 (모든 미사일은 늘 쫓아감)", () => {
+    const s = run("automata", "adMissile");
     let most = 0;
     for (let i = 0; i < 120; i++) {
       stepSim(s, FIRE);
       most = Math.max(most, s.projectiles.filter((p) => p.spirit === "adMissile").length);
     }
     expect(most).toBeGreaterThanOrEqual(7);
-    expect(AUTOMATA.missileExtra).toBeGreaterThan(0);
+    expect(s.projectiles.filter((p) => p.spirit === "adMissile").every((p) => p.seek)).toBe(true);
+  });
+
+  it("오토마타 기본: 쏠 때 반쯤은 작은 미사일 · 리펄서 소드 두 번 베기 · 붉은 레이저 치명타", () => {
+    const s = run("automata", "adFinger");
+    let mini = false;
+    for (let i = 0; i < 120 && !mini; i++) {
+      stepSim(s, FIRE);
+      mini = s.projectiles.some((p) => p.spirit === "adMissile" && p.r < 2);
+    }
+    expect(mini).toBe(true);
+    const sw = run("automata", "adSword");
+    const swings = new Set<number>();
+    for (let i = 0; i < 12; i++) {
+      stepSim(sw, FIRE);
+      for (const f of sw.effects) if (f.kind === "adSword") swings.add(f.width ?? -1);
+    }
+    expect([...swings].sort()).toEqual([0, 1]);
+    const red = run("automata", "adRed");
+    for (let i = 0; i < 600; i++) stepSim(red, FIRE);
+    expect(red.crits ?? 0).toBeGreaterThan(0);
+    expect(AUTOMATA.critMul).toBeGreaterThan(1);
   });
 
   it("라이더: 달리면 피해가 커지고, 게이지가 차면 펄스", () => {
@@ -75,11 +99,22 @@ describe("테라코어 시즌 2", () => {
     expect(Object.values(PASSIVES).filter((p) => (p as PassiveDef).exclusive === "bomber")).toHaveLength(10);
     for (const w of characterWeapons("bomber")) {
       const s = run("bomber", w);
-      // 지뢰는 밟아야 터짐
-      if (w === "bmMine") s.enemies[0]!.x = s.enemies[0]!.prevX = 56;
-      for (let i = 0; i < 180; i++) stepSim(s, FIRE);
+      // 끈끈이는 붙고 4.5초 뒤에 터짐
+      for (let i = 0; i < 330; i++) stepSim(s, FIRE);
       expect(lost(s), w).toBeGreaterThan(0);
     }
+    // 끈끈이가 여럿 붙으면 하나로 합쳐 수가 늘어남 · 지뢰는 적이 없어도 박아 둠 · 터지는 자리에 나도 있으면 아픔
+    const st = run("bomber", "bmSticky");
+    for (let i = 0; i < 200; i++) stepSim(st, FIRE);
+    expect(Math.max(...(st.player.bmBombs ?? []).map((b) => b.stack ?? 0))).toBeGreaterThan(1);
+    const mine = run("bomber", "bmMine");
+    mine.enemies = [];
+    for (let i = 0; i < 120; i++) stepSim(mine, FIRE);
+    expect(mine.player.bmMines?.length ?? 0).toBeGreaterThan(0);
+    const self = run("bomber", "bmGrenade");
+    const hp = self.player.hp;
+    boom(self, self.player.x, self.player.y, 20, 1);
+    expect(self.player.hp).toBe(hp - BOMBER.selfDmg);
     const s = run("bomber", "bmFirework");
     let art = 0;
     for (let i = 0; i < 180; i++) {
@@ -118,5 +153,26 @@ describe("테라코어 시즌 2", () => {
     stepSim(s, EMPTY_INPUT);
     expect(s.player.cyAccel ?? 0).toBeGreaterThan(0);
     expect(Math.abs(s.projectiles.find((p) => p.id === 999)!.vx)).toBeLessThan(2);
+    // 가속 중: 무적 · 빠름 · 적은 쉬는 틱이 많음
+    expect(s.player.invulnTicks).toBeGreaterThan(0);
+    expect(punkMoveMul(s.player)).toBeGreaterThan(PUNK.baseMove);
+    let rests = 0;
+    for (let i = 0; i < 8; i++) if (timeSlowed({ ...s, tick: i }, false)) rests++;
+    expect(rests).toBe(6);
+  });
+
+  it("라이더: 공격하면 게이지가 차고 빨라짐 · 단검은 더 빠르고 대시로 목을 벰 · 화염 배기 불꽃 스택", () => {
+    const s = run("rider", "rdHammer");
+    stepSim(s, FIRE);
+    expect(s.player.rdGauge ?? 0).toBeGreaterThanOrEqual(RIDER.hitGauge);
+    expect(riderMoveMul(s.player)).toBeGreaterThan(1);
+    const d = run("rider", "rdDagger");
+    expect(riderMoveMul(d.player)).toBeGreaterThan(1.3);
+    const before = lost(d);
+    stepSim(d, { ...EMPTY_INPUT, dash: true, moveX: 100 });
+    expect(lost(d)).toBeGreaterThan(before);
+    const f = run("rider", "rdExhaust");
+    for (let i = 0; i < 120; i++) stepSim(f, FIRE);
+    expect(Math.max(...f.enemies.map((e) => flameStacks(f, e)))).toBe(FLAME.max);
   });
 });

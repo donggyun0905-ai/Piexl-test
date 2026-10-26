@@ -5,7 +5,10 @@ import { BOMBER_PERKS as K } from "../itemsBomber";
 import { createRng, deriveSeed } from "../rng";
 import { BOMBER as B, type BombMode, type BombStyle } from "../weaponsBomber";
 import { nearest } from "./brawlMoves";
-import { blastAt, ignite } from "./combat";
+import { blastAt, damagePlayer, ignite } from "./combat";
+import { addFlame } from "./flames";
+import { placeMine, updateMines } from "./bomberMines";
+import { backMissiles } from "./missiles";
 import { alive, inCircle } from "./s2Kit";
 import type { Bomb } from "./tcTypes";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
@@ -25,7 +28,7 @@ function toss(p: PlayerState, b: Omit<Bomb, "max">): void {
 }
 
 /** 펑: 예술 연쇄 · 반경·피해 아이템 · 여진 · 파편 · 불 · 여진 아이템 (after: 여진이면 더 잇지 않음) */
-export function boom(s: RunState, x: number, y: number, r0: number, dmg0: number, opt: { tint?: string; after?: boolean; echo?: boolean } = {}): void {
+export function boom(s: RunState, x: number, y: number, r0: number, dmg0: number, opt: { tint?: string; after?: boolean; echo?: boolean; star?: boolean } = {}): void {
   const p = s.player;
   const max = hasPerk(p, "bmArtist") ? K.bmArtist.max : B.artMax;
   p.bmArt = s.tick - (p.bmArtT ?? -999) <= B.artWindow ? Math.min(max, (p.bmArt ?? 0) + 1) : 0;
@@ -35,7 +38,9 @@ export function boom(s: RunState, x: number, y: number, r0: number, dmg0: number
   const dmg = dmg0 * (1 + art * B.artDmg) * (hasPerk(p, "bmPowder") ? K.bmPowder.mul : 1);
   const before = inCircle(s, x, y, r);
   blastAt(s, x, y, r, dmg, { push: 4 });
-  addEffect(s, { kind: "bmBoom", x, y, dirX: 0, dirY: 0, size: r, maxTicks: 20, tint: opt.tint, width: art });
+  addEffect(s, { kind: opt.star ? "bmStar" : "bmBoom", x, y, dirX: 0, dirY: 0, size: r, maxTicks: opt.star ? 34 : 20, tint: opt.tint, width: art });
+  // 터지는 자리에 나도 있으면 피해 (폭발은 예술이지만 나에게도 아픔)
+  if (dist2(p, { x, y }) <= (r + p.r) ** 2) damagePlayer(s, B.selfDmg);
   if (hasPerk(p, "bmBurn")) for (const e of before) ignite(e, dmg * 0.5);
   if (hasPerk(p, "bmShrapnel") && !opt.after) shrapnel(s, x, y, dmg * K.bmShrapnel.mul);
   if (opt.after) return;
@@ -64,7 +69,13 @@ function land(s: RunState, b: Bomb): void {
       b.y = e.y;
     }
   }
-  if (b.after || b.echo || b.small) return boom(s, b.x, b.y, b.r, b.dmg, { after: b.after, echo: b.echo, tint: b.tint });
+  if (b.mode === "sticky" && !b.stuck) return stick(s, b);
+  if (b.stuck) {
+    // 붙은 수만큼 크고 세게
+    const k = (b.stack ?? 1) - 1;
+    return boom(s, b.x, b.y, b.r * (1 + k * B.stickR), b.dmg * (1 + k * B.stickMul), { tint: TINT.sticky });
+  }
+  if (b.after || b.echo || b.small) return boom(s, b.x, b.y, b.r, b.dmg, { after: b.after, echo: b.echo, tint: b.tint, star: b.star });
   boom(s, b.x, b.y, b.r, b.dmg, { tint: TINT[b.mode] });
   switch (b.mode) {
     case "cluster":
@@ -77,11 +88,17 @@ function land(s: RunState, b: Bomb): void {
     case "firework":
       for (let i = 0; i < (st.n ?? 8); i++) {
         const a = (i / (st.n ?? 8)) * Math.PI * 2;
-        toss(p, { x: b.x + Math.cos(a) * 26, y: b.y + Math.sin(a) * 26, sx: b.x, sy: b.y, t: 6 + i * 2, dmg: b.dmg, r: st.r, mode: "lob", small: true, tint: STARS[i % STARS.length] });
+        const d = B.starSpread * (i % 2 ? 0.6 : 1);
+        toss(p, { x: b.x + Math.cos(a) * d, y: b.y + Math.sin(a) * d, sx: b.x, sy: b.y, t: 6 + i * 2, dmg: b.dmg, r: st.r, mode: "lob", small: true, star: true, tint: STARS[i % STARS.length] });
       }
       break;
     case "napalm":
-      (p.bmFires ??= []).push({ x: b.x, y: b.y, t: B.fireTicks, dmg: p.stats.damage * B.fireMul });
+      // 화염병처럼 넓게 번지는 불바다 (가운데 + 둘레)
+      for (let i = 0; i <= B.napalmPatches; i++) {
+        const a = (i / B.napalmPatches) * Math.PI * 2 + roll(s, "np", 0) * 3;
+        const d = i === 0 ? 0 : B.napalmSpread;
+        (p.bmFires ??= []).push({ x: b.x + Math.cos(a) * d, y: b.y + Math.sin(a) * d * 0.7, t: B.fireTicks, dmg: p.stats.damage * B.fireMul });
+      }
       break;
     case "chain":
       if ((b.chain ?? 0) > 0) {
@@ -92,6 +109,20 @@ function land(s: RunState, b: Bomb): void {
       }
       break;
   }
+}
+
+/** 끈끈이가 닿음: 적 몸에 붙음 (이미 붙은 끈끈이가 있으면 하나로 합쳐 수가 늘어남) */
+function stick(s: RunState, b: Bomb): void {
+  const p = s.player;
+  const e = b.stick !== undefined ? s.enemies.find((o) => o.id === b.stick && o.hp > 0) : undefined;
+  if (!e) return boom(s, b.x, b.y, b.r, b.dmg, { tint: TINT.sticky });
+  const on = (p.bmBombs ?? []).find((o) => o.stuck && o.stick === e.id);
+  if (on) {
+    on.stack = Math.min(B.stickMax, (on.stack ?? 1) + 1);
+    on.dmg += b.dmg;
+    return;
+  }
+  toss(p, { ...b, x: e.x, y: e.y, sx: e.x, sy: e.y, t: B.stickTicks, stuck: true, stack: 1 });
 }
 
 /** 한 번 던지기 */
@@ -106,17 +137,15 @@ function attack(s: RunState): void {
   const flight = Math.max(8, st.fuse);
   const throwAt = (x: number, y: number, extra: Partial<Bomb> = {}) => toss(p, { x, y, sx: p.x, sy: p.y - 6, t: flight, dmg, r: st.r, mode: st.mode, ...extra });
   switch (st.mode) {
-    case "mine": {
-      const list = (p.bmMines ?? []).slice(-((st.n ?? 6) + more - 1));
-      list.push({ x: p.x, y: p.y + 2, dmg, r: st.r });
-      p.bmMines = list;
+    case "mine":
+      placeMine(s, (st.n ?? 6) + more, dmg, st.r);
       return;
-    }
     case "rocket":
       for (let i = 0; i <= more; i++) {
         const a = Math.atan2(ty - p.y, tx - p.x) + (i - more / 2) * 0.15;
-        s.projectiles.push({ id: s.nextId++, fromPlayer: true, x: p.x, y: p.y - 4, prevX: p.x, prevY: p.y - 4, r: 3, vx: Math.cos(a) * 3.8, vy: Math.sin(a) * 3.8, damage: dmg, ticksLeft: Math.ceil(p.stats.range / 3.8), spirit: "bmRocket" });
+        s.projectiles.push({ id: s.nextId++, fromPlayer: true, x: p.x, y: p.y - 4, prevX: p.x, prevY: p.y - 4, r: 3, vx: Math.cos(a) * 3.8, vy: Math.sin(a) * 3.8, damage: dmg, ticksLeft: Math.ceil((p.stats.range * 2) / 3.8), homing: true, seek: true, spirit: "bmRocket" });
       }
+      if (roll(s, "rmini", 0) < B.rocketMini) backMissiles(s, B.rocketMiniN, dmg * B.rocketMiniMul, 10, true);
       return;
     case "fan": {
       const n = (st.n ?? 3) + more;
@@ -129,7 +158,7 @@ function attack(s: RunState): void {
       return;
     }
     case "sticky":
-      for (let i = 0; i <= more; i++) throwAt(tx + i * 6, ty, { stick: t?.id, t: flight });
+      for (let i = 0; i <= more; i++) throwAt(tx + i * 6, ty, { stick: t?.id });
       return;
     case "chain":
       throwAt(tx, ty, { chain: st.n ?? 4 });
@@ -147,6 +176,7 @@ function update(s: RunState): void {
   if (p.bmBombs?.length) {
     const now = p.bmBombs;
     p.bmBombs = [];
+    const landed: Bomb[] = [];
     for (const b of now) {
       if (b.stick !== undefined) {
         const e = s.enemies.find((o) => o.id === b.stick && o.hp > 0);
@@ -156,21 +186,16 @@ function update(s: RunState): void {
         }
       }
       if (--b.t > 0) p.bmBombs.push(b);
-      else land(s, b);
+      else landed.push(b);
     }
+    // 다 돌고 나서 터뜨림 (끈끈이가 이미 붙은 끈끈이를 찾을 수 있게)
+    for (const b of landed) land(s, b);
   }
-  if (p.bmMines?.length) {
-    const keep = [];
-    for (const m of p.bmMines) {
-      if (inCircle(s, m.x, m.y, B.mineTrigger).length) boom(s, m.x, m.y, m.r, m.dmg);
-      else keep.push(m);
-    }
-    p.bmMines = keep;
-  }
+  updateMines(s, (x, y, r, dmg) => boom(s, x, y, r, dmg));
   if (p.bmFires?.length) {
     for (const f of p.bmFires) {
       if (--f.t % 30 !== 0) continue;
-      for (const e of inCircle(s, f.x, f.y, B.fireR)) ignite(e, f.dmg * 4);
+      for (const e of inCircle(s, f.x, f.y, B.fireR)) ignite(e, f.dmg * 4 * addFlame(s, e));
     }
     p.bmFires = p.bmFires.filter((f) => f.t > 0);
   }
@@ -186,7 +211,8 @@ export function rocketHit(s: RunState, pr: ProjectileState, e: EnemyState): void
 export function bomberTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
   update(s);
-  if (!want || p.attackCooldown > 0) return;
+  // 유도 지뢰는 적이 없어도 박아 둠
+  if ((!want && styleOf(p).mode !== "mine") || p.attackCooldown > 0) return;
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
   attack(s);

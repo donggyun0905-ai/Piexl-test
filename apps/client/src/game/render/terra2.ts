@@ -1,15 +1,14 @@
 // 테라코어 시즌 2 그리기: 오토마타 레이저(빛 줄기·끝 섬광)·자매 인형(똑같은 오토마타)·연기를 뿜는 유도 미사일·궤도 포격
-// 라이더 펄스 고리·망치·찌르기·회전·불꽃·에너지탄·톱날·달린 자리 불꽃 · 옆의 달린 거리 게이지
-import { riderGauge, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+// 라이더는 render/rider
+import { type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { drawCharacter } from "../sprites";
-import { lerp, type Snap } from "./palette";
+import { type Snap } from "./palette";
+import { drawRiderAura, drawRiderFx, drawRiderGround, drawRiderShot } from "./rider";
 
 type Ctx = CanvasRenderingContext2D;
 const LZ = "#8ae8ff";
 const LZW = "#ffffff";
-const FIRE = "#ff8a3a";
 const HOT = "#ffd040";
-const PULSE = "#6ae8ff";
 
 /** 탄: 유도 미사일(뒤로 연기) · 에너지탄 · 톱날 */
 export function drawTerraShot(ctx: Ctx, pr: ProjectileState, x: number, y: number, tick: number): boolean {
@@ -35,32 +34,7 @@ export function drawTerraShot(ctx: Ctx, pr: ProjectileState, x: number, y: numbe
     ctx.fillRect(Math.round(x + dx * 2), Math.round(y + dy * 2), 1, 1);
     return true;
   }
-  if (pr.spirit === "rdBolt") {
-    ctx.strokeStyle = PULSE;
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(x - dx * 5, y - dy * 5);
-    ctx.lineTo(x + dx, y + dy);
-    ctx.stroke();
-    ctx.fillStyle = LZW;
-    ctx.fillRect(Math.round(x), Math.round(y), 1, 1);
-    return true;
-  }
-  if (pr.spirit === "rdWheel") {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(tick * 0.6);
-    ctx.strokeStyle = "#c8ccd8";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(0, 0, 4, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.fillStyle = "#ffffff";
-    for (let i = 0; i < 6; i++) ctx.fillRect(Math.round(Math.cos((i / 6) * Math.PI * 2) * 6), Math.round(Math.sin((i / 6) * Math.PI * 2) * 6), 1, 1);
-    ctx.restore();
-    return true;
-  }
-  return false;
+  return drawRiderShot(ctx, pr, x, y, tick);
 }
 
 /** 원 테두리 */
@@ -116,43 +90,26 @@ export function drawTerraFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       ctx.fillRect(x - fx.size * 0.15, y - 80, fx.size * 0.3, 80);
       ring(ctx, x, y, fx.size * (0.5 + t * 0.6), LZ, 2);
       break;
-    case "rdPulse":
-      ctx.globalAlpha = 1 - t;
-      ring(ctx, x, y, fx.size * t, PULSE, 3);
-      ring(ctx, x, y, fx.size * t * 0.7, LZW, 1);
-      break;
-    case "rdSmash":
-    case "rdSpin":
-    case "rdStab":
-    case "rdFlame": {
+    case "adSword": {
+      // 양손 대검의 푸른 반발 베기: 두 번째는 반대쪽에서 휘두름 · 끝을 따라 흰 칼날 자국
       const a = Math.atan2(fx.dirY, fx.dirX);
-      ctx.globalAlpha = 1 - t;
-      if (fx.kind === "rdSpin") ring(ctx, x, y, fx.size * (0.6 + t * 0.4), "#d8dce8", 2);
-      else if (fx.kind === "rdStab") {
-        ctx.strokeStyle = LZW;
-        ctx.lineWidth = 1;
+      const side = fx.width ? -1 : 1;
+      const sweep = a + side * (-1.1 + t * 2.2);
+      ctx.globalAlpha = 1 - t * 0.7;
+      for (const [r, w, c] of [[fx.size, 6, "rgba(138,232,255,0.35)"], [fx.size * 0.92, 3, LZ], [fx.size * 0.92, 1, LZW]] as const) {
+        ctx.strokeStyle = c;
+        ctx.lineWidth = w;
         ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(x + fx.dirX * fx.size, y + fx.dirY * fx.size);
+        ctx.arc(x, y - 4, r, side > 0 ? a - 1.1 : sweep, side > 0 ? sweep : a + 1.1);
         ctx.stroke();
-      } else {
-        ctx.fillStyle = fx.kind === "rdFlame" ? FIRE : "#d8dce8";
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.arc(x, y, fx.size * (0.5 + t * 0.5), a - 0.7, a + 0.7);
-        ctx.fill();
-        if (fx.kind === "rdFlame") {
-          ctx.fillStyle = HOT;
-          ctx.beginPath();
-          ctx.moveTo(x, y);
-          ctx.arc(x, y, fx.size * 0.5, a - 0.4, a + 0.4);
-          ctx.fill();
-        }
       }
+      // 칼끝 섬광
+      ctx.fillStyle = LZW;
+      ctx.fillRect(Math.round(x + Math.cos(sweep) * fx.size) - 1, Math.round(y - 4 + Math.sin(sweep) * fx.size) - 1, 3, 3);
       break;
     }
     default:
-      return false;
+      return drawRiderFx(ctx, fx, snap);
   }
   ctx.globalAlpha = 1;
   return true;
@@ -160,13 +117,7 @@ export function drawTerraFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
 
 /** 바닥: 라이더가 달린 자리의 불꽃 자국 */
 export function drawTerraGround(ctx: Ctx, s: RunState, snap: Snap): void {
-  for (const f of s.player.rdFire ?? []) {
-    const k = Math.min(1, f.t / 30);
-    ctx.globalAlpha = 0.8 * k;
-    ctx.fillStyle = (s.tick + f.x) % 6 < 3 ? FIRE : HOT;
-    ctx.fillRect(snap(f.x) - 1, snap(f.y) - 2 - ((s.tick + f.y) % 3), 2, 3);
-  }
-  ctx.globalAlpha = 1;
+  drawRiderGround(ctx, s, snap);
 }
 
 /** 몸 곁: 자매 인형 (똑같은 오토마타, 조금 투명한 하늘빛 테두리) · 라이더 게이지 */
@@ -186,14 +137,5 @@ export function drawTerraAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap):
       ctx.fillRect(x - 2, y - 8, 4, 8);
     }
   }
-  if (p.characterId !== "rider") return;
-  // 오른쪽 옆 세로 게이지 (가득이면 반짝)
-  const x = snap(lerp(p.prevX, p.x, alpha)) + 14;
-  const y = snap(lerp(p.prevY, p.y, alpha)) - 14;
-  const g = riderGauge(p);
-  ctx.fillStyle = "rgba(10,10,20,0.7)";
-  ctx.fillRect(x, y, 3, 18);
-  ctx.fillStyle = g > 0.9 && s.tick % 10 < 5 ? LZW : PULSE;
-  const h = Math.round(16 * g);
-  ctx.fillRect(x + 1, y + 17 - h, 1, h);
+  drawRiderAura(ctx, s, alpha, snap);
 }
