@@ -60,6 +60,7 @@ export { petCrit, petGold, petTaken } from "./lobbyPet";
 export { riderGauge, riderHeat, riderSpeedMul } from "./rider";
 export { flameStacks } from "./flames";
 export { classMoveMul } from "./moveMul";
+export { DOLL_TINTS } from "./automata";
 export { artifacterGauge } from "./artifacter";
 export { ARTIFACTER_HIDDEN } from "../itemsArtifacter";
 export { punkAccel, punkGauge } from "./punk";

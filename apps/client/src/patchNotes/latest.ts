@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.119",
+    date: "2026-10-26",
+    items: {
+      ko: ["오토마타: 자매 인형(무기·아이템으로 부른 분신 모두)이 쏠 때 35% 확률로 자기 자리에서 유도 미사일 · 인형이 방 밖에서 공격하던 문제 고침 · 인형마다 옷과 레이저 색을 다르게 (분홍·연두·보라·금빛)"],
+      en: ["Automata: Sister Dolls (from weapons or items) now have a 35% chance to launch homing missiles from where they stand when they fire · fixed dolls attacking from outside the room · each doll has its own outfit and laser color (pink, green, purple, gold)"],
+      ja: ["オートマタ：姉妹人形（武器・アイテムで呼んだ分身すべて）が撃つ時35%でその場から誘導ミサイル · 人形が部屋の外から攻撃していた問題を修正 · 人形ごとに服とレーザーの色を変更（ピンク・黄緑・紫・金）"],
+    },
+  },
+  {
     version: "0.48.118",
     date: "2026-10-26",
     items: {

@@ -10,7 +10,7 @@ import { recalcStats } from "./items";
 import { backMissiles } from "./missiles";
 import { alive, inCone, onSegment, root, strike } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { addEffect, dist2, hasPerk, markCrit, weaponOf } from "./util";
+import { addEffect, dist2, hasPerk, keepInRoom, markCrit, roomGrid, weaponOf } from "./util";
 
 const styleOf = (p: PlayerState): AutoStyle => weaponOf(p).auto ?? { beams: 1, spread: 0, width: 3 };
 const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.seed, tag, s.tick, n)).nextFloat();
@@ -61,12 +61,12 @@ function aim(s: RunState, x: number, y: number, range: number): [number, number]
 }
 
 /** 등 뒤에서 유도 미사일: 기본 능력(확률·수) 또는 무기의 미사일 값 (탄약 증설이면 확률·수 +) */
-function missiles(s: RunState, spec: { chance: number; n: number }): void {
+function missiles(s: RunState, spec: { chance: number; n: number }, from?: { x: number; y: number }, salt = 0): void {
   const p = s.player;
   const salvo = hasPerk(p, "adSalvo");
-  if (roll(s, "missile", 0) >= spec.chance + (salvo ? K.adSalvo.chance : 0)) return;
-  const n = spec.n + Math.floor(roll(s, "mn", 0) * (A.missileExtra + 1)) + (salvo ? K.adSalvo.n : 0);
-  backMissiles(s, n, p.stats.damage * A.missileMul, A.missileBlast * (hasPerk(p, "adWarhead") ? K.adWarhead.r : 1));
+  if (roll(s, "missile", salt) >= spec.chance + (salvo ? K.adSalvo.chance : 0)) return;
+  const n = spec.n + Math.floor(roll(s, "mn", salt) * (A.missileExtra + 1)) + (salvo ? K.adSalvo.n : 0);
+  backMissiles(s, n, p.stats.damage * A.missileMul, A.missileBlast * (hasPerk(p, "adWarhead") ? K.adWarhead.r : 1), false, from);
 }
 
 /** 한 번 쏘기: 레이저(여러 갈래) · 갈라짐 · 묶음 · 궤도 포격 · 미사일 */
@@ -131,6 +131,9 @@ function swing(s: RunState, k: number): void {
   addEffect(s, { kind: "adSword", x: p.x, y: p.y, dirX: dx, dirY: dy, size: p.stats.range, maxTicks: 10, width: k });
 }
 
+/** 자매 인형마다 레이저 색 (화면의 인형 색과 맞춤: 분홍 · 연두 · 보라 · 금빛) */
+export const DOLL_TINTS = ["#ff8ad8", "#8aff9a", "#b08aff", "#ffd04a"] as const;
+
 /** 자매 인형: 저마다 다른 적을 찾아 돌아다니며 따로 레이저를 쏨 (나에게서 너무 멀어지면 돌아옴) */
 function dolls(s: RunState): void {
   const p = s.player;
@@ -142,6 +145,7 @@ function dolls(s: RunState): void {
   const list = (p.adDolls ?? []).slice(0, n);
   while (list.length < n) list.push({ x: p.x, y: p.y, cd: A.dollEvery / 2 + list.length * 7 });
   const taken = new Set<number>();
+  const grid = roomGrid(s);
   list.forEach((d, i) => {
     // 가까운 적 중 다른 인형이 고르지 않은 적 (없으면 아무 적)
     const near = alive(s)
@@ -168,10 +172,17 @@ function dolls(s: RunState): void {
       d.x += ((tx - d.x) / dd) * step;
       d.y += ((ty - d.y) / dd) * step;
     }
+    // 방 밖·벽 안으로 나가지 않게
+    const body = { x: d.x, y: d.y, prevX: d.x, prevY: d.y, r: 4 };
+    keepInRoom(body, grid);
+    d.x = body.x;
+    d.y = body.y;
     if (--d.cd > 0 || !e || dist2(e, d) > (A.dollRange + e.r) ** 2) return;
     d.cd = A.dollEvery;
     const dl = Math.hypot(e.x - d.x, e.y - d.y) || 1;
-    beam(s, d.x, d.y - 4, (e.x - d.x) / dl, (e.y - d.y) / dl, A.dollRange, 2, p.stats.damage * A.dollMul, "#8ae8ff");
+    beam(s, d.x, d.y - 4, (e.x - d.x) / dl, (e.y - d.y) / dl, A.dollRange, 2, p.stats.damage * A.dollMul, DOLL_TINTS[i % DOLL_TINTS.length]);
+    // 분신도 확률로 등 뒤에서 유도 미사일
+    missiles(s, { ...A.baseMissiles, chance: A.dollMissile }, d, i + 1);
   });
   p.adDolls = list;
 }

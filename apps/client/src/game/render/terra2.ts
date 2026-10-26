@@ -1,6 +1,6 @@
 // 테라코어 시즌 2 그리기: 오토마타 레이저(빛 줄기·끝 섬광)·자매 인형(똑같은 오토마타)·연기를 뿜는 유도 미사일·궤도 포격
 // 라이더는 render/rider
-import { type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { DOLL_TINTS, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { drawCharacter } from "../sprites";
 import { type Snap } from "./palette";
 import { drawRiderAura, drawRiderFx, drawRiderGround, drawRiderShot } from "./rider";
@@ -8,6 +8,8 @@ import { drawRiderAura, drawRiderFx, drawRiderGround, drawRiderShot } from "./ri
 type Ctx = CanvasRenderingContext2D;
 const LZ = "#8ae8ff";
 const LZW = "#ffffff";
+/** 자매 인형 옷 (스킨 그림을 빌려 색으로 구분: 분홍 · 연두 · 보라 · 금빛, DOLL_TINTS와 같은 차례) */
+const DOLL_SKINS = ["automata_newyear", "automata_xmas", "automata_halloween", "automata_china"] as const;
 const HOT = "#ffd040";
 
 /** 탄: 유도 미사일(뒤로 연기) · 에너지탄 · 톱날 */
@@ -124,16 +126,18 @@ export function drawTerraGround(ctx: Ctx, s: RunState, snap: Snap): void {
 export function drawTerraAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const p = s.player;
   for (const [i, d] of (p.adDolls ?? []).entries()) {
+    // 인형마다 다른 옷 색 (레이저 색과 같은 발밑 빛)
     const x = snap(d.x);
     const y = snap(d.y);
+    const tint = DOLL_TINTS[i % DOLL_TINTS.length]!;
     ctx.globalAlpha = 0.6;
-    ctx.fillStyle = LZ;
+    ctx.fillStyle = tint;
     ctx.beginPath();
     ctx.ellipse(x, y + 6, 5, 1.5, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.globalAlpha = 1;
-    if (!drawCharacter(ctx, "automata", x, y, 6, { faceX: p.faceX, faceY: p.faceY, moving: true, casting: d.cd > 40, step: Math.floor(s.tick / 8 + i) })) {
-      ctx.fillStyle = "#e8e0f0";
+    if (!drawCharacter(ctx, DOLL_SKINS[i % DOLL_SKINS.length]!, x, y, 6, { faceX: p.faceX, faceY: p.faceY, moving: true, casting: d.cd > 40, step: Math.floor(s.tick / 8 + i) })) {
+      ctx.fillStyle = tint;
       ctx.fillRect(x - 2, y - 8, 4, 8);
     }
   }

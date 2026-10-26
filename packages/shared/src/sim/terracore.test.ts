@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { ARTIFACTER, AUTOMATA, BOMBER, CHARACTER_IDS, PUNK, RIDER, type WeaponId } from "../content";
 import { boom } from "./bomber";
+import { ROOM_MAX_X } from "../constants";
 import { EMPTY_INPUT } from "./inputTypes";
 import { ARTIFACTER_HIDDEN } from "../itemsArtifacter";
 import type { CharacterId } from "../characters";
@@ -48,6 +49,16 @@ describe("테라코어 시즌 2", () => {
     const s = run("automata", "adSisters");
     for (let i = 0; i < 90; i++) stepSim(s, FIRE);
     expect(s.player.adDolls).toHaveLength(3);
+    // 분신은 방 밖으로 나가지 않고, 쏠 때 35% 확률로 자기 자리에서 유도 미사일
+    s.enemies[0]!.x = s.enemies[0]!.prevX = ROOM_MAX_X + 200;
+    let fromDoll = false;
+    for (let i = 0; i < 600; i++) {
+      stepSim(s, FIRE);
+      for (const d of s.player.adDolls ?? []) expect(d.x).toBeLessThanOrEqual(ROOM_MAX_X);
+      fromDoll ||= s.effects.some((f) => f.kind === "adLaunch" && Math.abs(f.x - s.player.x) > 6);
+    }
+    expect(fromDoll).toBe(true);
+    expect(AUTOMATA.dollMissile).toBe(0.35);
   });
 
   it("기본 능력: 쏠 때 50% 확률로 등 뒤에서 유도 미사일이 7발 넘게 (모든 미사일은 늘 쫓아감)", () => {

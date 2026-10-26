@@ -61,6 +61,8 @@ export const AUTOMATA = {
   missileExtra: 4,
   /** 기본 능력: 쏠 때마다 이 확률로 등 뒤에서 유도 미사일 이만큼 넘게 (무기에 미사일이 있으면 그 무기 값) */
   baseMissiles: { chance: 0.5, n: 7 },
+  /** 자매 인형(분신)이 쏠 때 유도 미사일이 나올 확률 */
+  dollMissile: 0.35,
   /** 붉은 레이저 치명타 배율 */
   critMul: 2,
   /** 리펄서 소드: 두 번째 베기까지 틱 · 부채꼴 (cos) · 밀어내기 */
