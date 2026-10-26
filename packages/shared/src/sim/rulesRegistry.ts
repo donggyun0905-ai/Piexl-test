@@ -1,0 +1,120 @@
+// 계산 파일마다 있는 수치 묶음 모음 (관리자 페이지 '규칙 수치'). 자동으로 만든 목록: 파일에 *_RULES를 더하면 여기에도 한 줄
+import { ABANDONED_KIDS_RULES } from "./abandonedKids";
+import { ABANDONED_SHOW_RULES } from "./abandonedShow";
+import { ARENA_RULES } from "./arena";
+import { BEAST_RULES } from "./beast";
+import { BOSS_ANGEL_RULES } from "./bossAngel";
+import { BOSS_BINDS_RULES } from "./bossBinds";
+import { BOSS_BLADES_RULES } from "./bossBlades";
+import { BOSS_CAGE_RULES } from "./bossCage";
+import { BOSS_DARK_RULES } from "./bossDark";
+import { BOSS_DRAGON_RULES } from "./bossDragon";
+import { BOSS_HADES_RULES } from "./bossHades";
+import { BOSS_LIGHT_RULES } from "./bossLight";
+import { BOSS_PRIMEVAL_RULES } from "./bossPrimeval";
+import { BOSS_ULTS_RULES } from "./bossUlts";
+import { BOSS_WAVES_RULES } from "./bossWaves";
+import { BOSS_ZONES_RULES } from "./bossZones";
+import { BOSSES_ONE_RULES } from "./bossesOne";
+import { BOSSES_THREE_RULES } from "./bossesThree";
+import { BOSSES_TWO_RULES } from "./bossesTwo";
+import { BRAWL_RULES } from "./brawl";
+import { BRAWL_MOVES_RULES } from "./brawlMoves";
+import { BRAWL_STAR_RULES } from "./brawlStar";
+import { CHRONO_RULES } from "./chrono";
+import { COMBAT_RULES } from "./combat";
+import { CRITTERS_RULES } from "./critters";
+import { DUCKLINGS_RULES } from "./ducklings";
+import { ENEMIES_RULES } from "./enemies";
+import { GUN_RULES } from "./gun";
+import { GUN_EXTRAS_RULES } from "./gunExtras";
+import { HAZARDS_RULES } from "./hazards";
+import { HEAL_RULES } from "./heal";
+import { HERO_RULES } from "./hero";
+import { ITEMS_RULES } from "./items";
+import { LASER_RULES } from "./laser";
+import { LASER_GEAR_RULES } from "./laserGear";
+import { LASER_WEAPONS_RULES } from "./laserWeapons";
+import { LOOT_RULES } from "./loot";
+import { MEDIC_GEAR_RULES } from "./medicGear";
+import { MEDIC_WEAPONS_RULES } from "./medicWeapons";
+import { MINIONS_RULES } from "./minions";
+import { NINJA_RULES } from "./ninja";
+import { NOVICE_RULES } from "./novice";
+import { ORBIT_RULES } from "./orbit";
+import { ORBIT_ATTACK_RULES } from "./orbitAttack";
+import { ORBIT_BLADES_RULES } from "./orbitBlades";
+import { ORBIT_ELEMENTS_RULES } from "./orbitElements";
+import { ORBIT_PERKS_RULES } from "./orbitPerks";
+import { PARTY_RULES } from "./party";
+import { PETS_RULES } from "./pets";
+import { PLAYER_RULES } from "./player";
+import { PROJECTILES_RULES } from "./projectiles";
+import { ROOMS_RULES } from "./rooms";
+import { SHADES_RULES } from "./shades";
+import { SUMMONS_RULES } from "./summons";
+import { TALISMAN_RULES } from "./talisman";
+import { TD_RULES } from "./td";
+import { TD_WAVES_RULES } from "./tdWaves";
+import { UTIL_RULES } from "./util";
+
+export const SIM_RULES: Record<string, Record<string, number>> = {
+  ABANDONED_KIDS_RULES,
+  ABANDONED_SHOW_RULES,
+  ARENA_RULES,
+  BEAST_RULES,
+  BOSS_ANGEL_RULES,
+  BOSS_BINDS_RULES,
+  BOSS_BLADES_RULES,
+  BOSS_CAGE_RULES,
+  BOSS_DARK_RULES,
+  BOSS_DRAGON_RULES,
+  BOSS_HADES_RULES,
+  BOSS_LIGHT_RULES,
+  BOSS_PRIMEVAL_RULES,
+  BOSS_ULTS_RULES,
+  BOSS_WAVES_RULES,
+  BOSS_ZONES_RULES,
+  BOSSES_ONE_RULES,
+  BOSSES_THREE_RULES,
+  BOSSES_TWO_RULES,
+  BRAWL_RULES,
+  BRAWL_MOVES_RULES,
+  BRAWL_STAR_RULES,
+  CHRONO_RULES,
+  COMBAT_RULES,
+  CRITTERS_RULES,
+  DUCKLINGS_RULES,
+  ENEMIES_RULES,
+  GUN_RULES,
+  GUN_EXTRAS_RULES,
+  HAZARDS_RULES,
+  HEAL_RULES,
+  HERO_RULES,
+  ITEMS_RULES,
+  LASER_RULES,
+  LASER_GEAR_RULES,
+  LASER_WEAPONS_RULES,
+  LOOT_RULES,
+  MEDIC_GEAR_RULES,
+  MEDIC_WEAPONS_RULES,
+  MINIONS_RULES,
+  NINJA_RULES,
+  NOVICE_RULES,
+  ORBIT_RULES,
+  ORBIT_ATTACK_RULES,
+  ORBIT_BLADES_RULES,
+  ORBIT_ELEMENTS_RULES,
+  ORBIT_PERKS_RULES,
+  PARTY_RULES,
+  PETS_RULES,
+  PLAYER_RULES,
+  PROJECTILES_RULES,
+  ROOMS_RULES,
+  SHADES_RULES,
+  SUMMONS_RULES,
+  TALISMAN_RULES,
+  TD_RULES,
+  TD_WAVES_RULES,
+  UTIL_RULES,
+};

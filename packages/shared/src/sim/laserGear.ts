@@ -6,11 +6,15 @@ import { gearPeriod, mineBlast, ORBITAL_RADIUS, turretShot } from "./laserWeapon
 import type { Device, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, roomGrid, weaponOf } from "./util";
 
-/** 지뢰: 적이 이만큼 가까이 오면 터짐 (몸 반지름에 더함) */
-const MINE_TOUCH = 8;
-/** 자기장: 끌어당기는 속도, 이 거리 안으로는 안 끌어당김 (몸 반지름 합에 더함) */
-const MAGNET_PULL = 0.45;
-const MAGNET_GAP = 10;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 지뢰: 적이 이만큼 가까이 오면 터짐 (몸 반지름에 더함) */
+  MINE_TOUCH: 8,
+  /** 자기장: 끌어당기는 속도, 이 거리 안으로는 안 끌어당김 (몸 반지름 합에 더함) */
+  MAGNET_PULL: 0.45,
+  MAGNET_GAP: 10,
+};
+export { R as LASER_GEAR_RULES };
 
 /** 둔화 남은 시간 줄이기 (틱마다 한 번) */
 export function decaySlow(s: RunState): void {
@@ -60,7 +64,7 @@ export function updateLaserGear(s: RunState): void {
       }
     } else if (d.kind === "mine") {
       const touched = s.enemies.some((e) => {
-        const rr = e.r + MINE_TOUCH;
+        const rr = e.r + R.MINE_TOUCH;
         return e.hp > 0 && (e.x - d.x) * (e.x - d.x) + (e.y - d.y) * (e.y - d.y) <= rr * rr;
       });
       if (touched) mineBlast(s, d, false);
@@ -87,9 +91,9 @@ function magnetPull(s: RunState): void {
   for (const e of s.enemies) {
     if (!e.slowTicks || e.hp <= 0 || ENEMIES[e.kind].boss || e.kind === "dummy") continue;
     const d = Math.sqrt(dist2(e, p));
-    if (d <= p.r + e.r + MAGNET_GAP) continue;
-    e.x += ((p.x - e.x) / d) * MAGNET_PULL;
-    e.y += ((p.y - e.y) / d) * MAGNET_PULL;
+    if (d <= p.r + e.r + R.MAGNET_GAP) continue;
+    e.x += ((p.x - e.x) / d) * R.MAGNET_PULL;
+    e.y += ((p.y - e.y) / d) * R.MAGNET_PULL;
     keepInRoom(e, g);
   }
 }

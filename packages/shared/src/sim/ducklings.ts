@@ -5,8 +5,12 @@ import { damageEnemy, healPlayer } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
 
-/** 너무 멀어지면(방을 옮김 등) 앞 오리 곁으로 */
-const LEASH = 60;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 너무 멀어지면(방을 옮김 등) 앞 오리 곁으로 */
+  LEASH: 60,
+};
+export { R as DUCKLINGS_RULES };
 
 /** 이 무기·아이템으로 데리고 다닐 새끼 오리 수 */
 export function ducklingCount(p: PlayerState): number {
@@ -32,7 +36,7 @@ export function updateDucklings(s: RunState): void {
     d.prevY = d.y;
     if (d.cd > 0) d.cd--;
     const far = Math.sqrt(dist2(d, lead));
-    if (far > LEASH) {
+    if (far > R.LEASH) {
       d.x = d.prevX = lead.x;
       d.y = d.prevY = lead.y;
       return;

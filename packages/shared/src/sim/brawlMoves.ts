@@ -7,31 +7,36 @@ import { damageEnemy, healPlayer } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
 
-/** 위압: 30% 확률로 1.5초 도망 · K.O: 5% 확률로 10초 기절 (보스 1초) */
-const FEAR_CHANCE = 0.3;
-const FEAR_TICKS = 90;
-const KO_CHANCE = 0.05;
-const KO_TICKS = 600;
-const KO_BOSS_TICKS = 60;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 위압: 30% 확률로 1.5초 도망 · K.O: 5% 확률로 10초 기절 (보스 1초) */
+  FEAR_CHANCE: 0.3,
+  FEAR_TICKS: 90,
+  KO_CHANCE: 0.05,
+  KO_TICKS: 600,
+  KO_BOSS_TICKS: 60,
+  COUNTER_MUL: 3,
+  EXECUTE_HP: 0.2,
+  /** 파동탄 사방 난사: 빠르기 배율 0.6~1.4 */
+  /** 이만큼 좁은 앞쪽 치기는 찌르기 (효과만 다름) */
+  STAB_ARC: 0.8,
+  KI_SCATTER_MIN: 0.6,
+  KI_SCATTER_ADD: 0.8,
+  /** 쌍검 베기 안쪽 칼날 자국 크기 · 보스 앞에서 바위를 들 때 닿는 거리 */
+  TWIN_INNER: 0.75,
+  ROCK_REACH: 12,
+  /** 가라테 마무리: 입힌 피해의 30% 회복 */
+  EXECUTE_HEAL: 0.3,
+};
+export { R as BRAWL_MOVES_RULES };
+
 /** 고정: 3초 동안 0.5초마다 · 버티기 3초 · 받은 피해 되받아치기 배율 · 마무리 기준 체력 */
 export const GUARD_TICKS = 180;
-const COUNTER_MUL = 3;
-const EXECUTE_HP = 0.2;
-/** 파동탄 사방 난사: 빠르기 배율 0.6~1.4 */
-/** 이만큼 좁은 앞쪽 치기는 찌르기 (효과만 다름) */
-const STAB_ARC = 0.8;
-const KI_SCATTER_MIN = 0.6;
-const KI_SCATTER_ADD = 0.8;
 
 const roll = (s: RunState, label: string, id: number) => createRng(deriveSeed(s.seed, label, s.tick, id)).nextFloat();
 const isBig = (e: EnemyState) => ENEMIES[e.kind].boss || e.kind === "dummy";
 /** 돌진은 적 바로 앞(이만큼 띄워서)에서 멈춤 (몸이 닿아 피해를 받지 않게) */
 export const STOP_GAP = 4;
-/** 쌍검 베기 안쪽 칼날 자국 크기 · 보스 앞에서 바위를 들 때 닿는 거리 */
-const TWIN_INNER = 0.75;
-const ROCK_REACH = 12;
-/** 가라테 마무리: 입힌 피해의 30% 회복 */
-const EXECUTE_HEAL = 0.3;
 
 /** 한 적 맞히기: 피해 + 밀침·기절 + 위압·K.O */
 export function hit(s: RunState, e: EnemyState, dmg: number, m: ComboMove, dx: number, dy: number): void {
@@ -50,9 +55,9 @@ export function hit(s: RunState, e: EnemyState, dmg: number, m: ComboMove, dx: n
     keepInRoom(e, roomGrid(s));
   }
   if (m.stun && e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? m.stun / 2 : m.stun);
-  if (hasPerk(p, "intimidate") && !isBig(e) && roll(s, "fear", e.id) < FEAR_CHANCE) e.fearTicks = FEAR_TICKS;
-  if (hasPerk(p, "knockout") && e.kind !== "dummy" && roll(s, "ko", e.id) < KO_CHANCE) {
-    e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? KO_BOSS_TICKS : KO_TICKS);
+  if (hasPerk(p, "intimidate") && !isBig(e) && roll(s, "fear", e.id) < R.FEAR_CHANCE) e.fearTicks = R.FEAR_TICKS;
+  if (hasPerk(p, "knockout") && e.kind !== "dummy" && roll(s, "ko", e.id) < R.KO_CHANCE) {
+    e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? R.KO_BOSS_TICKS : R.KO_TICKS);
     addEffect(s, { kind: "burst", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r * 3, maxTicks: 16 });
   }
 }
@@ -70,7 +75,7 @@ export function strike(s: RunState, dmg: number, m: ComboMove, fx: number, fy: n
     hit(s, e, dmg, m, d === 0 ? fx : dx / d, d === 0 ? fy : dy / d);
   }
   // 좁은 앞쪽(찌르기)은 뻗는 찌르기 효과, 나머지는 휘두르기
-  if (arc >= STAB_ARC) addEffect(s, { kind: "stab", x: p.x + fx * p.r, y: p.y + fy * p.r, dirX: fx, dirY: fy, size: m.range, maxTicks: 10, toX: p.x + fx * (m.range + 4), toY: p.y + fy * (m.range + 4), width: 2 });
+  if (arc >= R.STAB_ARC) addEffect(s, { kind: "stab", x: p.x + fx * p.r, y: p.y + fy * p.r, dirX: fx, dirY: fy, size: m.range, maxTicks: 10, toX: p.x + fx * (m.range + 4), toY: p.y + fy * (m.range + 4), width: 2 });
   else addEffect(s, { kind: "swing", x: p.x, y: p.y, dirX: arc <= -1 ? 0 : fx, dirY: arc <= -1 ? 0 : fy, size: m.range, maxTicks: 8 });
 }
 
@@ -131,7 +136,7 @@ export function grab(s: RunState, dmg: number, m: ComboMove): void {
   if (e) {
     p.grabId = e.id;
     p.comboHit = true;
-  } else if (nearest(s, m.range + ROCK_REACH)) {
+  } else if (nearest(s, m.range + R.ROCK_REACH)) {
     // 보스·허수아비는 못 드니 바위를 만들어 듦 (던질 때까지 무적)
     p.rock = true;
     p.comboHit = true;
@@ -148,7 +153,7 @@ export function slamHeld(s: RunState, dmg: number, m: ComboMove): void {
   if (p.rock) {
     // 바위를 가장 가까운 적에게 던져 내리꽂음
     p.rock = false;
-    const t = nearest(s, m.range + ROCK_REACH * 3);
+    const t = nearest(s, m.range + R.ROCK_REACH * 3);
     const x = t ? t.x : p.x + p.faceX * m.range;
     const y = t ? t.y : p.y + p.faceY * m.range;
     addEffect(s, { kind: "burst", x, y, dirX: 0, dirY: 0, size: 10, maxTicks: 14 });
@@ -198,7 +203,7 @@ export function twinSlash(s: RunState, dmg: number, m: ComboMove): void {
       hit(s, e, dmg, m, d === 0 ? p.faceX : dx / d, d === 0 ? p.faceY : dy / d);
     }
   }
-  for (const r of [m.range, m.range * TWIN_INNER]) {
+  for (const r of [m.range, m.range * R.TWIN_INNER]) {
     addEffect(s, { kind: "swing", x: p.x, y: p.y, dirX: arc <= -1 ? 0 : p.faceX, dirY: arc <= -1 ? 0 : p.faceY, size: r, maxTicks: r === m.range ? 8 : 10 });
   }
 }
@@ -215,7 +220,7 @@ export function guard(s: RunState, m: ComboMove): void {
 /** 되받아치기: 공격력 + 버티는 동안 받은 피해 ×3 범위 일격, 기절 */
 export function counter(s: RunState, dmg: number, m: ComboMove): void {
   const p = s.player;
-  spin(s, dmg + (p.guardTaken ?? 0) * COUNTER_MUL, m);
+  spin(s, dmg + (p.guardTaken ?? 0) * R.COUNTER_MUL, m);
   p.guardTicks = p.rootTicks = p.guardTaken = 0;
 }
 
@@ -226,7 +231,7 @@ export function execute(s: RunState, dmg: number, m: ComboMove): void {
   const before = s.enemies.reduce((sum, e) => sum + Math.max(0, e.hp), 0);
   for (const e of s.enemies) {
     const rr = m.range + e.r;
-    if (e.hp <= 0 || dist2(e, p) > rr * rr || e.hp > e.maxHp * EXECUTE_HP || e.kind === "dummy") continue;
+    if (e.hp <= 0 || dist2(e, p) > rr * rr || e.hp > e.maxHp * R.EXECUTE_HP || e.kind === "dummy") continue;
     any = true;
     const dir = normalize(e.x - p.x, e.y - p.y) ?? [1, 0];
     hit(s, e, ENEMIES[e.kind].boss ? dmg : e.hp, m, dir[0], dir[1]);
@@ -235,7 +240,7 @@ export function execute(s: RunState, dmg: number, m: ComboMove): void {
   if (!any) spin(s, dmg * 0.3, m, p.x, p.y, 26);
   // 입힌 피해의 30% 회복
   const dealt = before - s.enemies.reduce((sum, e) => sum + Math.max(0, e.hp), 0);
-  if (dealt > 0) healPlayer(s, dealt * EXECUTE_HEAL);
+  if (dealt > 0) healPlayer(s, dealt * R.EXECUTE_HEAL);
 }
 
 /** 파동탄: 바라보는 쪽으로 hits발 (spread면 부채꼴), scatter면 사방으로 빠르기도 제각각 */
@@ -257,7 +262,7 @@ export function kiShots(s: RunState, dmg: number, m: ComboMove): void {
   for (let i = 0; i < n; i++) {
     const rng = createRng(deriveSeed(s.seed, "ki", s.tick, i));
     const d = m.scatter ? (normalize(rng.nextFloat() - 0.5, rng.nextFloat() - 0.5) ?? [1, 0]) : dirs[i % dirs.length]!;
-    const speed = base * (m.scatter ? KI_SCATTER_MIN + rng.nextFloat() * KI_SCATTER_ADD : 1);
+    const speed = base * (m.scatter ? R.KI_SCATTER_MIN + rng.nextFloat() * R.KI_SCATTER_ADD : 1);
     s.projectiles.push({
       id: s.nextId++,
       fromPlayer: true,

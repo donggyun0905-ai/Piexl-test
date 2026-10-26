@@ -18,14 +18,17 @@ import { dist2, enemyShot, keepInRoom, normalize, roomGrid } from "./util";
 import { furyTick, tabooUp } from "./taboo";
 import { timeSlowed } from "./punk";
 
-/** 성기사 빛기둥: 간격 · 예고 · 반경 · 피해 */
-const PALADIN_GAP = 160;
-const PALADIN_WARN = 45;
-const PALADIN_R = 14;
-const PALADIN_DMG = 12;
-
-/** 둔화된 적의 이동 배율 */
-const SLOW_MUL = 0.6;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 성기사 빛기둥: 간격 · 예고 · 반경 · 피해 */
+  PALADIN_GAP: 160,
+  PALADIN_WARN: 45,
+  PALADIN_R: 14,
+  PALADIN_DMG: 12,
+  /** 둔화된 적의 이동 배율 */
+  SLOW_MUL: 0.6,
+};
+export { R as ENEMIES_RULES };
 
 export function updateEnemies(s: RunState): void {
   /** 보스가 부른 적 (다 돌고 나서 넣음) */
@@ -81,8 +84,8 @@ export function updateEnemies(s: RunState): void {
       e.x += go[0] * def.speed;
       e.y += go[1] * def.speed;
       if (--e.timer <= 0) {
-        e.timer = PALADIN_GAP;
-        addShape(s, PALADIN_WARN, { x: p.x, y: p.y, radius: PALADIN_R, damage: PALADIN_DMG, fx: "holy" });
+        e.timer = R.PALADIN_GAP;
+        addShape(s, R.PALADIN_WARN, { x: p.x, y: p.y, radius: R.PALADIN_R, damage: R.PALADIN_DMG, fx: "holy" });
       }
     } else if (e.kind === "crawler" || e.kind === "soul") {
       e.x += go[0] * def.speed;
@@ -149,8 +152,8 @@ export function updateEnemies(s: RunState): void {
     }
     // 둔화(자기장): 이번 틱에 움직인 거리를 줄임 (보스 제외)
     if ((e.slowTicks ?? 0) > 0 && !def.boss) {
-      e.x = x0 + (e.x - x0) * SLOW_MUL;
-      e.y = y0 + (e.y - y0) * SLOW_MUL;
+      e.x = x0 + (e.x - x0) * R.SLOW_MUL;
+      e.y = y0 + (e.y - y0) * R.SLOW_MUL;
     }
     // 속박(붕대 채찍): 움직이지 못함 (공격은 함)
     if ((e.rootTicks ?? 0) > 0) {

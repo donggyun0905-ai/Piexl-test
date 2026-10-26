@@ -1,10 +1,12 @@
 // 관리자 페이지에서 바꿀 수 있는 수치 목록 (묶음 → 항목 → 값). 규칙은 balance.ts
 import { CHARACTERS, ENEMIES, WEAPONS } from "./content";
 import { PASSIVES, USE_ITEMS } from "./items";
-import { PERKS, SHOP_PRICES } from "./perks";
+import { SHOP_PRICES } from "./perks";
+import { autoGroup } from "./balanceAuto";
+import { EFFECT_TABLES, RULE_TABLES } from "./balanceTables";
 import type { StatKey, StatMod } from "./stats";
 
-export type BalanceGroupId = "characters" | "weapons" | "enemies" | "bosses" | "passives" | "useItems" | "shop" | TdBalanceGroupId;
+export type BalanceGroupId = "characters" | "weapons" | "rules" | "effects" | "enemies" | "bosses" | "passives" | "useItems" | "shop" | TdBalanceGroupId;
 /** 타워 디펜스 수치 묶음 (tdBalanceFields) */
 export type TdBalanceGroupId = "tdRules" | "tdTowers" | "tdEnemies" | "tdBosses" | "tdRounds";
 
@@ -29,11 +31,11 @@ export interface BalanceGroup {
   /** 표가 아닌 곳에 있는 값 읽기·넣기 (패시브 능력치처럼). 없으면 table[id][key] */
   get?: (id: string, key: string) => number | undefined;
   set?: (id: string, key: string, v: number) => void;
+  /** 항목마다 값 목록이 다른 자동 묶음 (balanceAuto.autoGroup). 있으면 fields 대신 */
+  rowFields?: (id: string) => BalanceField[];
 }
 
 const table = (t: object) => t as Record<string, Record<string, unknown>>;
-/** 탄을 쏘는 무기만 (근접 등은 0) */
-const shoots = (r: Record<string, unknown>) => typeof r.projectileSpeed === "number" && r.projectileSpeed > 0;
 
 const enemyFields: BalanceField[] = [
   { key: "hp", min: 1, max: 99999, int: true },
@@ -59,75 +61,36 @@ const modOf = (id: string, key: string): StatMod | undefined => {
   const mods = (PASSIVES as Record<string, { mods: readonly StatMod[] }>)[id]?.mods ?? [];
   return mods.find((m) => m.stat === stat && m[how] !== undefined);
 };
-const perkOf = (id: string) => (PERKS as Record<string, Record<string, number>>)[id];
-
-/** 효과 수치 이름과 범위 (정수 = 횟수·틱) */
-const PERK_FIELDS: BalanceField[] = [
-  ...["hp", "heal", "gold", "cooldown", "damage", "turn", "speed", "below", "invuln", "taken", "blast", "splash"].map((key) => ({ key, min: 0, max: 100 })),
-  ...["reach", "radius", "push"].map((key) => ({ key, min: 0, max: 400 })),
-  { key: "chance", min: 0, max: 1 },
-  { key: "mul", min: 0, max: 20 },
-  ...["bounces", "pierce", "stacks"].map((key) => ({ key, min: 0, max: 50, int: true })),
-  ...["every", "hits"].map((key) => ({ key, min: 1, max: 50, int: true })),
-  { key: "ticks", min: 0, max: 3600, int: true },
-];
-
 const passiveGroup: BalanceGroup = {
   id: "passives",
   table: table(PASSIVES),
   ids: Object.keys(PASSIVES),
   list: true,
   fields: [
+    // 효과 수치(PERKS)는 '아이템 효과' 묶음에서 (같은 값을 두 곳에서 넣지 않게)
     ...STATS.flatMap((st) => [
       { key: `${st}.add`, min: -999, max: 999, int: st === "maxHp" || st === "luck" },
       { key: `${st}.mul`, min: 0, max: 20 },
     ]),
-    ...PERK_FIELDS,
   ],
   get: (id, key) => {
-    if (key.includes(".")) {
-      const m = modOf(id, key);
-      return key.endsWith(".add") ? m?.add : m?.mul;
-    }
-    return perkOf(id)?.[key];
+    const m = modOf(id, key);
+    return key.endsWith(".add") ? m?.add : m?.mul;
   },
   set: (id, key, v) => {
-    if (!key.includes(".")) {
-      const row = perkOf(id);
-      if (row) row[key] = v;
-      return;
-    }
     const m = modOf(id, key) as { add?: number; mul?: number } | undefined;
     if (m) m[key.endsWith(".add") ? "add" : "mul"] = v;
   },
 };
 
 export const BALANCE_GROUPS: readonly BalanceGroup[] = [
-  {
-    id: "characters",
-    table: table(CHARACTERS),
-    ids: Object.keys(CHARACTERS),
-    fields: [
-      { key: "maxHp", min: 1, max: 999, int: true },
-      { key: "damage", min: 0.1, max: 999 },
-      { key: "moveSpeed", min: 0.1, max: 5 },
-      { key: "luck", min: -10, max: 20, int: true },
-    ],
-  },
-  {
-    id: "weapons",
-    table: table(WEAPONS),
-    ids: Object.keys(WEAPONS),
-    fields: [
-      { key: "damageMul", min: 0, max: 20 },
-      { key: "attackSpeed", min: 0.1, max: 20 },
-      { key: "range", min: 4, max: 400 },
-      { key: "projectileSpeed", min: 0.3, max: 20, when: shoots },
-      { key: "arcCos", min: -1, max: 1 },
-      { key: "blast", min: 0, max: 200 },
-      { key: "pierce", min: 0, max: 20, int: true },
-    ],
-  },
+  // 캐릭터·무기: 표 안의 숫자를 모두 (무기 모양 안의 미사일 수·확률 같은 값까지)
+  autoGroup("characters", table(CHARACTERS)),
+  // 탄을 쏘지 않는 무기(탄 속도 0)는 탄 속도 칸 없음
+  autoGroup("weapons", table(WEAPONS), { skip: (k, v) => k === "projectileSpeed" && v === 0 }),
+  // 캐릭터마다 규칙 수치(무기·아이템 파일의 표 + 계산 파일의 수치 묶음) · 아이템 효과 수치
+  autoGroup("rules", RULE_TABLES),
+  autoGroup("effects", EFFECT_TABLES),
   { id: "enemies", table: table(ENEMIES), ids: enemyIds(false), fields: enemyFields },
   { id: "bosses", table: table(ENEMIES), ids: enemyIds(true), fields: enemyFields },
   passiveGroup,

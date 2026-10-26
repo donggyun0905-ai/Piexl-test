@@ -18,9 +18,15 @@ import { eachSeat, isAlive, seatNo, useSeat } from "./party";
 import { SCRIBE } from "../weaponsScribe";
 import { dist2, hasPerk, markCrit, markDot, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid } from "./util";
 
-/** 갈라지는 촉: 양옆으로 갈라지는 방향 (±45도 고정 값), 갈라진 탄이 날아가는 틱 (피해 비율은 PERKS) */
-const SPLIT_DIAG = 0.7071;
-const SPLIT_TICKS = 24;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 갈라지는 촉: 양옆으로 갈라지는 방향 (±45도 고정 값), 갈라진 탄이 날아가는 틱 (피해 비율은 PERKS) */
+  SPLIT_DIAG: 0.7071,
+  SPLIT_TICKS: 24,
+  /** 유도 미사일(seek)이 꺾이는 정도 */
+  SEEK_TURN: 0.28,
+};
+export { R as PROJECTILES_RULES };
 
 /** frozen: 적 탄은 그 자리에 멈춤 (얼음 시계) */
 export function updateProjectiles(s: RunState, frozen = false): void {
@@ -163,9 +169,6 @@ function ease(pr: ProjectileState, to: number): void {
   if (k !== BLOOM_EASE) pr.easeTo = undefined;
 }
 
-/** 유도 미사일(seek)이 꺾이는 정도 */
-const SEEK_TURN = 0.28;
-
 function steer(s: RunState, pr: ProjectileState): void {
   let best: EnemyState | null = null;
   let bestD = pr.seek ? Infinity : PERKS.seekerFeather.reach * PERKS.seekerFeather.reach;
@@ -181,7 +184,7 @@ function steer(s: RunState, pr: ProjectileState): void {
   const speed = Math.sqrt(pr.vx * pr.vx + pr.vy * pr.vy);
   const to = normalize(best.x - pr.x, best.y - pr.y);
   if (!to || speed === 0) return;
-  const turn = pr.seek ? SEEK_TURN : PERKS.seekerFeather.turn;
+  const turn = pr.seek ? R.SEEK_TURN : PERKS.seekerFeather.turn;
   const dir = normalize(pr.vx + to[0] * speed * turn, pr.vy + to[1] * speed * turn);
   if (!dir) return;
   pr.vx = dir[0] * speed;
@@ -191,8 +194,8 @@ function steer(s: RunState, pr: ProjectileState): void {
 /** 갈라지는 촉: 맞은 자리에서 양옆 대각선으로 작은 탄 두 개 */
 function spawnSplits(s: RunState, pr: ProjectileState, hit: EnemyState, out: ProjectileState[]): void {
   for (const k of [1, -1]) {
-    const vx = (pr.vx * SPLIT_DIAG - pr.vy * SPLIT_DIAG * k);
-    const vy = (pr.vx * SPLIT_DIAG * k + pr.vy * SPLIT_DIAG);
+    const vx = (pr.vx * R.SPLIT_DIAG - pr.vy * R.SPLIT_DIAG * k);
+    const vy = (pr.vx * R.SPLIT_DIAG * k + pr.vy * R.SPLIT_DIAG);
     out.push({
       id: s.nextId++,
       fromPlayer: true,
@@ -204,7 +207,7 @@ function spawnSplits(s: RunState, pr: ProjectileState, hit: EnemyState, out: Pro
       vx,
       vy,
       damage: pr.damage * PERKS.splitHead.damage,
-      ticksLeft: SPLIT_TICKS,
+      ticksLeft: R.SPLIT_TICKS,
       hitIds: [hit.id],
       ...(pr.shooter !== undefined ? { shooter: pr.shooter } : {}),
     });

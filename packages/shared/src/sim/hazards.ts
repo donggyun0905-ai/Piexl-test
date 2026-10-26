@@ -5,11 +5,16 @@ import type { RunState } from "./types";
 import { eachSeat } from "./party";
 import { addEffect, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 심판: 이만큼(0.2초) 안 움직였으면 가만히 있던 것 */
+  STILL_JUDGE: 12,
+};
+export { R as HAZARDS_RULES };
+
 /** 표시가 뜨고 터지기까지 (0.85초): 보고 피할 수 있는 시간 */
 export const HAZARD_WARN_TICKS = 50;
 export const HAZARD_RADIUS = 22;
-/** 심판: 이만큼(0.2초) 안 움직였으면 가만히 있던 것 */
-const STILL_JUDGE = 12;
 
 export function addHazard(s: RunState, x: number, y: number, damage: number): void {
   (s.hazards ??= []).push({ tick: s.tick + HAZARD_WARN_TICKS, start: s.tick, x, y, radius: HAZARD_RADIUS, damage });
@@ -53,7 +58,7 @@ export function updateHazards(s: RunState): void {
       s,
       () => {
         const p = s.player;
-        const hit = h.still ? (h.still === "black") === p.stillTicks < STILL_JUDGE : inHazard(h, p.x, p.y, p.r);
+        const hit = h.still ? (h.still === "black") === p.stillTicks < R.STILL_JUDGE : inHazard(h, p.x, p.y, p.r);
         if (hit && h.damage > 0) damagePlayer(s, h.damage);
       },
       !!s.party,

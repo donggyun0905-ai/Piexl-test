@@ -9,26 +9,31 @@ import { damagePlayer } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, enemyShot, makeEnemy, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
-/** 궁극기를 쓰는 체력 비율 */
-const ULT_HP = 0.1;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 궁극기를 쓰는 체력 비율 */
+  ULT_HP: 0.1,
+  HELL_PAUSE: 50,
+  HELL_GAP: 60,
+  /** 화염 가루 (틱마다 생기는 수는 EMBERS_PER_TICK): 가장 느린 빠르기(벚꽃처럼 느림, 최대 2배) · 아래로 흘러내리는 정도 · 남는 틱 · 플레이어 둘레에 안 생기는 거리 */
+  EMBER_SPEED: 0.15,
+  EMBER_FALL: 0.4,
+  EMBER_LIFE: 360,
+  EMBER_CLEAR: 30,
+  EMBERS_PER_TICK: 2,
+  EMBER_DAMAGE: 2,
+};
+export { R as BOSS_ULTS_RULES };
+
 /** 염옥: 칸 나누기 · 불덩이가 커지는 틱 · 한 장면 보이는 틱 · 다 보인 뒤 쉬는 틱 · 터지는 간격 · 장면 수 */
 export const HELL_COLS = 6;
 export const HELL_ROWS = 4;
 export const HELL_CHARGE = 120;
 export const HELL_SHOW = 40;
-const HELL_PAUSE = 50;
-const HELL_GAP = 60;
 export const HELL_WAVES = 7;
-/** 화염 가루 (틱마다 생기는 수는 EMBERS_PER_TICK): 가장 느린 빠르기(벚꽃처럼 느림, 최대 2배) · 아래로 흘러내리는 정도 · 남는 틱 · 플레이어 둘레에 안 생기는 거리 */
-const EMBER_SPEED = 0.15;
-const EMBER_FALL = 0.4;
-const EMBER_LIFE = 360;
-const EMBER_CLEAR = 30;
-const EMBERS_PER_TICK = 2;
-const EMBER_DAMAGE = 2;
 /** 체력 10% 아래로 처음 내려갔으면 true (한 번만) */
 export function ultReady(e: EnemyState): boolean {
-  if (e.ultDone || e.hp <= 0 || e.hp >= e.maxHp * ULT_HP) return false;
+  if (e.ultDone || e.hp <= 0 || e.hp >= e.maxHp * R.ULT_HP) return false;
   e.ultDone = true;
   e.ultAt = undefined;
   return true;
@@ -45,7 +50,7 @@ export function hellCell(q: number): [number, number, number, number] {
 
 /** 장면 i가 터지는 때 (시작부터 틱). 마지막에 보인 장면부터 거꾸로 */
 export function hellFireAt(i: number): number {
-  return HELL_CHARGE + HELL_WAVES * HELL_SHOW + HELL_PAUSE + (HELL_WAVES - 1 - i) * HELL_GAP;
+  return HELL_CHARGE + HELL_WAVES * HELL_SHOW + R.HELL_PAUSE + (HELL_WAVES - 1 - i) * R.HELL_GAP;
 }
 
 /** 용 염옥 시작: 장면마다 안전한 칸 하나 (이웃 칸으로만 옮겨 가서 따라갈 수 있게) */
@@ -78,10 +83,10 @@ function ember(s: RunState, k: number): void {
   const rng = createRng(deriveSeed(s.seed, "ember", s.tick, k));
   const x = ROOM_MIN_X + rng.nextFloat() * (ROOM_MAX_X - ROOM_MIN_X);
   const y = ROOM_MIN_Y + rng.nextFloat() * (ROOM_MAX_Y - ROOM_MIN_Y);
-  if (Math.hypot(x - p.x, y - p.y) < EMBER_CLEAR) return;
-  const d = normalize(rng.nextFloat() * 2 - 1, rng.nextFloat() * 2 - 1 + EMBER_FALL) ?? [0, 1];
-  const speed = EMBER_SPEED + rng.nextFloat() * EMBER_SPEED;
-  Object.assign(enemyShot(s, x, y, d[0], d[1], speed, EMBER_DAMAGE), { look: "ember" as const, r: 1, ticksLeft: EMBER_LIFE });
+  if (Math.hypot(x - p.x, y - p.y) < R.EMBER_CLEAR) return;
+  const d = normalize(rng.nextFloat() * 2 - 1, rng.nextFloat() * 2 - 1 + R.EMBER_FALL) ?? [0, 1];
+  const speed = R.EMBER_SPEED + rng.nextFloat() * R.EMBER_SPEED;
+  Object.assign(enemyShot(s, x, y, d[0], d[1], speed, R.EMBER_DAMAGE), { look: "ember" as const, r: 1, ticksLeft: R.EMBER_LIFE });
 }
 
 /** 분화구에 휩쓸림: 화염 가루에 맞은 뒤 무적·대시 중이어도 맞음 (기억으로만 피함) */
@@ -99,7 +104,7 @@ export function updateHellfire(s: RunState, e: EnemyState): void {
   const safeCells = e.ultSafe;
   if (e.ultAt === undefined || !safeCells) return;
   const t = s.tick - e.ultAt;
-  if (t >= HELL_CHARGE && t < hellFireAt(0)) for (let k = 0; k < EMBERS_PER_TICK; k++) ember(s, k);
+  if (t >= HELL_CHARGE && t < hellFireAt(0)) for (let k = 0; k < R.EMBERS_PER_TICK; k++) ember(s, k);
   if (t === HELL_CHARGE) addEffect(s, { kind: "burst", x: e.x, y: e.y, dirX: 0, dirY: 0, size: 110, maxTicks: 24 });
   for (let i = 0; i < HELL_WAVES; i++) {
     if (t !== hellFireAt(i)) continue;

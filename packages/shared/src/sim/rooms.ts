@@ -32,14 +32,21 @@ import {
   ROOM_MIN_Y,
 } from "./util";
 
-/** 계단에 닿았다고 보는 거리 */
-const STAIRS_REACH = 12;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 계단에 닿았다고 보는 거리 */
+  STAIRS_REACH: 12,
+  /** 보스방에 들어온 뒤 보스가 첫 공격을 준비하기까지 최소 틱 (1.5초) */
+  BOSS_ENTRY_DELAY: 90,
+  /** 보스가 여럿일 때 사이 거리 */
+  BOSS_SPREAD: 64,
+  /** 한 방 졸개 최대 수 (무한 모드 깊은 층) */
+  MAX_ENEMIES: 12,
+};
+export { R as ROOMS_RULES };
+
 /** 보스 시작 자리 (방 위쪽 가운데) */
 const BOSS_START_Y = ROOM_MIN_Y + 20;
-/** 보스방에 들어온 뒤 보스가 첫 공격을 준비하기까지 최소 틱 (1.5초) */
-const BOSS_ENTRY_DELAY = 90;
-/** 보스가 여럿일 때 사이 거리 */
-const BOSS_SPREAD = 64;
 /** 쉼터에 처음 들어가면 회복하는 체력 (최대 체력 비율) */
 export const REST_HEAL = 0.3;
 
@@ -134,21 +141,18 @@ function placeBossFight(s: RunState): void {
   s.rooms[s.roomId]!.enemies = s.enemies;
   s.enemies.forEach((e, i) => {
     // 보스가 여럿이면 (태초의 빛과 어둠 · 레이드 아레나) 나란히
-    e.x = e.prevX = CX + (i - (s.enemies.length - 1) / 2) * BOSS_SPREAD;
+    e.x = e.prevX = CX + (i - (s.enemies.length - 1) / 2) * R.BOSS_SPREAD;
     e.y = e.prevY = BOSS_START_Y;
     e.phase = "walk";
-    e.timer = Math.max(e.timer, BOSS_ENTRY_DELAY);
+    e.timer = Math.max(e.timer, R.BOSS_ENTRY_DELAY);
   });
 }
-
-/** 한 방 졸개 최대 수 (무한 모드 깊은 층) */
-const MAX_ENEMIES = 12;
 
 /** 층·방 번호로 정해지는 적 배치 (들어가는 순서와 상관없이 항상 같음). 강한 적 방은 2마리 더, 체력 1.5배 */
 export function spawnEnemies(s: RunState, roomId: number, elite: boolean): EnemyState[] {
   const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "enemies"));
   const d = depth(s);
-  const base = Math.min(MAX_ENEMIES, 2 + Math.floor(d / 2) + rng.int(0, 2) + (elite ? 2 : 0));
+  const base = Math.min(R.MAX_ENEMIES, 2 + Math.floor(d / 2) + rng.int(0, 2) + (elite ? 2 : 0));
   // 협동: 사람이 많으면 일반 적이 조금 더, 체력도 조금 더
   // 금기: 무리 지어 (전투방 +1) · 정예 (강한 적 방 +2)
   const count = base + partyExtraEnemies(s, base) + tabooSum(s, "horde") + (elite ? tabooSum(s, "eliteMore") : 0);
@@ -218,7 +222,7 @@ export function onStairs(s: RunState): boolean {
   if (s.map.rooms[s.roomId]!.type !== "exit" || !s.rooms[s.roomId]!.cleared) return false;
   const dx = s.player.x - CX;
   const dy = s.player.y - CY;
-  return dx * dx + dy * dy <= STAIRS_REACH * STAIRS_REACH;
+  return dx * dx + dy * dy <= R.STAIRS_REACH * R.STAIRS_REACH;
 }
 
 /** 계단으로 다음 층 (마지막 층이면 클리어) */

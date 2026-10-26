@@ -9,6 +9,15 @@ import type { TdSpawn, TdState } from "./tdTypes";
 import type { EnemyState } from "./types";
 import { addEffect, dist2, hasPerk, makeEnemy } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 묶여 있을 수 있는 최대 틱 (넘으면 잠깐 기절·속박·도망이 듣지 않음): 일반 · 보스 · 풀린 뒤 면역 */
+  HOLD_MAX: 90,
+  HOLD_MAX_BOSS: 40,
+  HOLD_FREE: 120,
+};
+export { R as TD_WAVES_RULES };
+
 /** 길 하나: 꺾이는 점(픽셀)과 처음부터 그 점까지 거리 */
 interface PathLine {
   pts: [number, number][];
@@ -175,11 +184,6 @@ export function updateTdEnemies(td: TdState): void {
   s.enemies = keep.concat(spawned);
 }
 
-/** 묶여 있을 수 있는 최대 틱 (넘으면 잠깐 기절·속박·도망이 듣지 않음): 일반 · 보스 · 풀린 뒤 면역 */
-const HOLD_MAX = 90;
-const HOLD_MAX_BOSS = 40;
-const HOLD_FREE = 120;
-
 /** 기절·속박·도망이 너무 오래 이어지면 풀어 줌 (계속 묶어 두기만 해서 라운드가 끝나지 않는 일 없게) */
 function breakHold(e: EnemyState, boss: boolean): void {
   if ((e.tdFree ?? 0) > 0) {
@@ -189,9 +193,9 @@ function breakHold(e: EnemyState, boss: boolean): void {
   }
   const held = (e.stunTicks ?? 0) > 0 || (e.rootTicks ?? 0) > 0 || (e.fearTicks ?? 0) > 0;
   e.tdHeld = held ? (e.tdHeld ?? 0) + 1 : Math.max(0, (e.tdHeld ?? 0) - 1);
-  if (e.tdHeld > (boss ? HOLD_MAX_BOSS : HOLD_MAX)) {
+  if (e.tdHeld > (boss ? R.HOLD_MAX_BOSS : R.HOLD_MAX)) {
     e.tdHeld = 0;
-    e.tdFree = HOLD_FREE;
+    e.tdFree = R.HOLD_FREE;
     e.stunTicks = e.rootTicks = e.fearTicks = 0;
   }
 }

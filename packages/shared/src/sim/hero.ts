@@ -6,10 +6,15 @@ import { createRng, deriveSeed } from "../rng";
 import { LAST_FLOOR } from "./floor";
 import type { EnemyState, RunState } from "./types";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  GROUP: 4,
+  PAIR_HP: 0.8,
+};
+export { R as HERO_RULES };
+
 /** 전체 단계 수 · 보스 단계 하나에 묶인 단계 수 · 보스 2마리 단계의 체력 배율 (한 마리마다) */
 export const HERO_FLOORS = 13;
-const GROUP = 4;
-const PAIR_HP = 0.8;
 
 /** 라스트 보스 층 번호 (보통 판 7층 · 영웅의 길 13단계) */
 export const lastFloorOf = (s: RunState) => (s.hero ? HERO_FLOORS : LAST_FLOOR);
@@ -22,19 +27,19 @@ export function depth(s: RunState): number {
 
 /** 이 단계의 보스들 (시드로 섞어 앞에서 1마리 또는 2마리) */
 export function heroBosses(s: RunState): BossKind[] {
-  const tier = [...BOSS_TIERS[Math.min(BOSS_TIERS.length - 1, Math.floor((s.floor - 1) / GROUP))]!];
+  const tier = [...BOSS_TIERS[Math.min(BOSS_TIERS.length - 1, Math.floor((s.floor - 1) / R.GROUP))]!];
   const rng = createRng(deriveSeed(s.seed, "hero", s.floor));
   for (let i = tier.length - 1; i > 0; i--) {
     const j = rng.int(0, i);
     [tier[i], tier[j]] = [tier[j]!, tier[i]!];
   }
-  return tier.slice(0, (s.floor - 1) % GROUP < 2 ? 1 : 2);
+  return tier.slice(0, (s.floor - 1) % R.GROUP < 2 ? 1 : 2);
 }
 
 /** 보스 2마리 단계면 한 마리마다 체력을 조금 줄임 */
 export function heroPair(list: EnemyState[]): EnemyState[] {
   if (list.length < 2) return list;
-  for (const e of list) e.hp = e.maxHp = Math.round(e.maxHp * PAIR_HP);
+  for (const e of list) e.hp = e.maxHp = Math.round(e.maxHp * R.PAIR_HP);
   return list;
 }
 

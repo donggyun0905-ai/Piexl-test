@@ -8,15 +8,20 @@ import { instinct, updatePets } from "./pets";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
 
-/** 덮치기: 뛰어드는 최대 거리 · 털실 튕김 횟수 · 캣닢 구름(0.5초마다 6번, 범위) · 방울 기절 · 낮잠(1초 뒤 초당 1 회복) */
-const POUNCE_LEAP = 40;
-const YARN_BOUNCES = 3;
-const CATNIP_PULSES = 6;
-const CATNIP_EVERY = 30;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 덮치기: 뛰어드는 최대 거리 · 털실 튕김 횟수 · 캣닢 구름(0.5초마다 6번, 범위) · 방울 기절 · 낮잠(1초 뒤 초당 1 회복) */
+  POUNCE_LEAP: 40,
+  YARN_BOUNCES: 3,
+  CATNIP_PULSES: 6,
+  CATNIP_EVERY: 30,
+  BELL_STUN: 30,
+  NAP_TICKS: 60,
+  NAP_HEAL: 1,
+};
+export { R as BEAST_RULES };
+
 export const CATNIP_RADIUS = 26;
-const BELL_STUN = 30;
-const NAP_TICKS = 60;
-const NAP_HEAL = 1;
 
 /** 틱마다 (야수 무기를 들었을 때 player에서) */
 export function beastTick(s: RunState, want: boolean, speed: number): void {
@@ -29,7 +34,7 @@ export function beastTick(s: RunState, want: boolean, speed: number): void {
     if (left > 0) p.hp = p.stats.maxHp;
   }
   // 고양이 낮잠: 가만히 있으면 조금씩 회복
-  if (hasPerk(p, "catNap") && p.stillTicks >= NAP_TICKS) healPlayer(s, NAP_HEAL / TICK_RATE);
+  if (hasPerk(p, "catNap") && p.stillTicks >= R.NAP_TICKS) healPlayer(s, R.NAP_HEAL / TICK_RATE);
   if (!want || p.attackCooldown > 0) return;
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
@@ -37,7 +42,7 @@ export function beastTick(s: RunState, want: boolean, speed: number): void {
   const dmg = p.stats.damage;
   if (w.beast === "swipe") swipe(s, dmg, p.stats.range, w.arcCos ?? 0.3, w.range, w.id === "tigerclaw");
   else if (w.beast === "pounce") pounce(s, dmg);
-  else if (w.beast === "yarn") shot(s, dmg, { bounces: YARN_BOUNCES, spirit: "yarn", r: 2.5 });
+  else if (w.beast === "yarn") shot(s, dmg, { bounces: R.YARN_BOUNCES, spirit: "yarn", r: 2.5 });
   else if (w.beast === "hairball") shot(s, dmg, { sticky: true, spirit: "hairball", r: 2.5 });
   else if (w.beast === "catnip") catnip(s, dmg);
   else if (w.beast === "bell") bell(s, dmg);
@@ -78,7 +83,7 @@ function nearest(s: RunState, range: number): EnemyState | null {
 function pounce(s: RunState, dmg: number): void {
   const p = s.player;
   const tiger = (p.tigerTicks ?? 0) > 0;
-  const leap = tiger ? TIGER.leap : POUNCE_LEAP;
+  const leap = tiger ? TIGER.leap : R.POUNCE_LEAP;
   const e = nearest(s, leap + 10);
   if (e) {
     const dir = normalize(e.x - p.x, e.y - p.y) ?? [p.faceX, p.faceY];
@@ -132,8 +137,8 @@ function catnip(s: RunState, dmg: number): void {
   const d = Math.min(p.stats.range, e ? Math.sqrt(dist2(e, p)) : (p.aimDist ?? p.stats.range));
   const x = p.x + p.faceX * d;
   const y = p.y + p.faceY * d;
-  for (let i = 0; i < CATNIP_PULSES; i++) s.pendingBlasts.push({ tick: s.tick + 10 + i * CATNIP_EVERY, x, y, radius: CATNIP_RADIUS, damage: dmg });
-  addEffect(s, { kind: "catnip", x, y, dirX: 0, dirY: 0, size: CATNIP_RADIUS, maxTicks: 10 + CATNIP_PULSES * CATNIP_EVERY });
+  for (let i = 0; i < R.CATNIP_PULSES; i++) s.pendingBlasts.push({ tick: s.tick + 10 + i * R.CATNIP_EVERY, x, y, radius: CATNIP_RADIUS, damage: dmg });
+  addEffect(s, { kind: "catnip", x, y, dirX: 0, dirY: 0, size: CATNIP_RADIUS, maxTicks: 10 + R.CATNIP_PULSES * R.CATNIP_EVERY });
 }
 
 /** 방울: 둘레 적에게 피해 + 짧게 기절 */
@@ -144,7 +149,7 @@ function bell(s: RunState, dmg: number): void {
     if (e.hp <= 0 || dist2(e, p) > rr * rr) continue;
     const dir = normalize(e.x - p.x, e.y - p.y) ?? [1, 0];
     damageEnemy(s, e, dmg * instinct(p, e), dir[0], dir[1]);
-    if (e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? BELL_STUN / 2 : BELL_STUN);
+    if (e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? R.BELL_STUN / 2 : R.BELL_STUN);
   }
   addEffect(s, { kind: "ring", x: p.x, y: p.y, dirX: 0, dirY: 0, size: p.stats.range, maxTicks: 14, width: 1 });
 }

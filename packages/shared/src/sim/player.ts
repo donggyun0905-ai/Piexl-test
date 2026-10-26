@@ -29,6 +29,12 @@ import { AIM_DIST_STEP } from "./types";
 import { addEffect, shotDirs, DASH_COOLDOWN, DASH_SPEED_MUL, DASH_TICKS, dist2, hasPerk, keepInRoom, normalize, roomGrid, STILL_TICKS, weaponOf } from "./util";
 import { tabooUp } from "./taboo";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 확대 폭발: 범위 피해가 없는 무기에도 이만큼의 기본 범위를 줌 (×1.5) */
+  WIDE_BASE_BLAST: 12,
+};
+export { R as PLAYER_RULES };
 
 /** 대시 대기 시간 (아이템으로 줄어듦) */
 function dashCooldown(p: RunState["player"]): number {
@@ -52,9 +58,6 @@ function nearestEnemy(s: RunState): EnemyState | null {
   }
   return best;
 }
-
-/** 확대 폭발: 범위 피해가 없는 무기에도 이만큼의 기본 범위를 줌 (×1.5) */
-const WIDE_BASE_BLAST = 12;
 
 export function updatePlayer(s: RunState, raw: TickInput): void {
   const p = s.player;
@@ -255,7 +258,7 @@ function attack(s: RunState): void {
         vy: dy * speed,
         damage: dmg * mul,
         ticksLeft: ticks,
-        ...(w.blast || wide ? { blast: (w.blast ?? WIDE_BASE_BLAST) * (wide ? PERKS.wideBlast.blast : 1), ...(wide ? { splash: PERKS.wideBlast.splash } : {}) } : {}),
+        ...(w.blast || wide ? { blast: (w.blast ?? R.WIDE_BASE_BLAST) * (wide ? PERKS.wideBlast.blast : 1), ...(wide ? { splash: PERKS.wideBlast.splash } : {}) } : {}),
         ...(pierce > 0 ? { pierce, hitIds: [] } : {}),
         ...(hasPerk(p, "ricochet") ? { bounces: PERKS.ricochet.bounces } : {}),
         ...(hasPerk(p, "seekerFeather") ? { homing: true } : {}),

@@ -25,7 +25,9 @@
 ## 쓰기
 
 - 로그인: '디스코드로 코드 받기' → 채널에 온 8자 코드 입력 (5분 유효, 30초에 한 번만 요청) → 12시간 로그인
-- 캐릭터·무기·적·보스·패시브·사용 아이템·상점 가격 탭: 칸을 고치고 아래 '저장'. 노란 칸 = 처음 값과 다름, ↺ = 처음 값으로. 칸에 마우스를 올리면 처음 값·범위
+- 캐릭터·무기·규칙·기술 수치·아이템 효과·적·보스·패시브·사용 아이템·상점 가격 탭: 칸을 고치고 아래 '저장'.
+  - 캐릭터·무기·규칙·기술 수치·아이템 효과는 **표 안의 숫자를 자동으로 모두** 보여 줌 (무기 모양 안의 미사일 수·확률, 캐릭터마다 계산 파일의 수치까지). 위쪽 찾기 칸(이름·값 이름)과 분류(캐릭터) 고르기로 좁힘
+  - 범위는 처음 값으로 자동: 확률 0~1, 그 밖은 처음 값의 5배까지 (정수 값은 정수) 노란 칸 = 처음 값과 다름, ↺ = 처음 값으로. 칸에 마우스를 올리면 처음 값·범위
 - 저장하면 새로 시작하는 판부터 적용 (진행 중인 판은 그대로. 화면은 앱을 열 때·판이 끝날 때 새 수치를 받음, 최대 30초 늦을 수 있음)
 - 바꾼 기록: 최근 30번. '되돌리기'로 그때 수치로 다시 저장
 - **위쪽 '던전 수치 / 타워 디펜스 수치'**: 타워 디펜스 수치는 따로 (주소 `/admin/?td`). 던전과 섞이지 않고 서버에도 따로 저장·기록 (`/api/balance?set=td`)
@@ -35,6 +37,6 @@
 
 ## 코드
 
-- 공용: `packages/shared/src/balance.ts` (넣기·다듬기·지문·비교) · `balanceFields.ts` (바꿀 수 있는 값 목록과 범위. 새 묶음은 여기 추가) · `tdBalanceFields.ts` (타워 디펜스 값 목록) · `tdDefs.ts` (타워 디펜스 수치 표) · `perks.ts` (효과 패시브·상점 가격 수치 표)
+- 공용: `packages/shared/src/balance.ts` (넣기·다듬기·지문·비교) · `balanceFields.ts` (바꿀 수 있는 값 목록과 범위. 새 묶음은 여기 추가) · `balanceAuto.ts` (표 안 숫자 자동 찾기·범위) · `balanceTables.ts` (규칙·아이템 효과 표 모음: 새 무기·아이템 파일은 여기 한 줄) · `sim/rulesRegistry.ts` (계산 파일의 수치 묶음 `*_RULES` 모음) · `tdBalanceFields.ts` (타워 디펜스 값 목록) · `tdDefs.ts` (타워 디펜스 수치 표) · `perks.ts` (효과 패시브·상점 가격 수치 표)
 - 서버: `apps/server/src/adminLogin.ts` (디스코드 코드 로그인) · `balanceApi.ts` (저장·지문별 수치·기록) · `clearStats.ts` (캐릭터별 클리어 시간 모으기)
-- 화면: `apps/client/src/balance.ts` (받기·판 시작 때 넣기, 일일·레이드·아레나 제출에 지문) · `apps/client/src/admin/` (관리자 페이지: `AdminApp` 위쪽·던전/타워 디펜스 고르기 · `BalanceAdmin` 수치 세트 하나 · `ClearStats` 캐릭터별 클리어 시간 표 · `TdPreview` 타워 디펜스 연습장) · `apps/client/admin/index.html`
+- 화면: `apps/client/src/balance.ts` (받기·판 시작 때 넣기, 일일·레이드·아레나 제출에 지문) · `apps/client/src/admin/` (관리자 페이지: `AdminApp` 위쪽·던전/타워 디펜스 고르기 · `autoLabels` 자동 수치 이름·분류 · `BalanceAdmin` 수치 세트 하나 · `ClearStats` 캐릭터별 클리어 시간 표 · `TdPreview` 타워 디펜스 연습장) · `apps/client/admin/index.html`

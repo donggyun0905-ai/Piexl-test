@@ -6,6 +6,14 @@ import { orbHit, type OrbBody } from "./orbit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, markCrit } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 다 때린 뒤 잠깐 머무는 틱 · 치명타 배율 · 물 검이 따라가다 돌아오는 거리 배율(사거리 기준) */
+  LINGER: 3,
+  LEASH: 1.5,
+};
+export { R as ORBIT_BLADES_RULES };
+
 type Flyer = NonNullable<PlayerState["flyers"]>[number];
 
 /** out 날아가는 틱 · hits 때리는 횟수 · gap 때리는 간격 · back 돌아오는 틱 · mul 한 번 피해 배율 · crit 치명타 확률 · area 범위 피해 반경 */
@@ -26,10 +34,7 @@ const STRIKES: Partial<Record<OrbBody["tag"], Strike>> = {
   earth: { out: 14, hits: 1, gap: 1, back: 12, mul: 3, area: 24 },
 };
 const DEFAULT: Strike = { out: 9, hits: 1, gap: 1, back: 9, mul: 1 };
-/** 다 때린 뒤 잠깐 머무는 틱 · 치명타 배율 · 물 검이 따라가다 돌아오는 거리 배율(사거리 기준) */
-const LINGER = 3;
 export const CRIT_MUL = 1.5;
-const LEASH = 1.5;
 
 export const strikeOf = (tag: OrbBody["tag"]): Strike => STRIKES[tag] ?? DEFAULT;
 
@@ -77,8 +82,8 @@ export function flyStrikers(s: RunState, bodies: OrbBody[], dmg: number): void {
         strike(s, b, f, e, dmg, st);
         f.n = n + 1;
       }
-      const leash = (p.stats.range * LEASH) ** 2;
-      const done = (f.n ?? 0) >= st.hits && f.t >= st.out + (st.hits - 1) * st.gap + LINGER;
+      const leash = (p.stats.range * R.LEASH) ** 2;
+      const done = (f.n ?? 0) >= st.hits && f.t >= st.out + (st.hits - 1) * st.gap + R.LINGER;
       if (done || (!e && f.t >= st.out) || (e && dist2(e, p) > leash)) f.back = f.t;
     }
     if (f.back === undefined || f.t - f.back < st.back) keep.push(f);

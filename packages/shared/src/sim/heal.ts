@@ -4,21 +4,28 @@ import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, weaponOf } from "./util";
 import { tabooDown } from "./taboo";
 
-/** 보호막 최대치 (최대 체력 비율), 체력 관리면 */
-const SHIELD_CAP = 0.35;
-const CARE_CAP = 0.6;
-/** 공격 회복률 (직접 피해 비율), 상처 봉합이면 */
-const LEECH_RATE = 0.04;
-const SUTURE_RATE = 0.09;
-/** 공격 회복 초당 상한 (수혈 튜브는 더 높음) */
-const LEECH_CAP = 3;
-const TUBE_CAP = 4;
-const LEECH_WINDOW = 60;
-/** 회복 + 표시 최소 간격 (틱) */
-const PLUS_EVERY = 20;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 보호막 최대치 (최대 체력 비율), 체력 관리면 */
+  SHIELD_CAP: 0.35,
+  CARE_CAP: 0.6,
+  /** 공격 회복률 (직접 피해 비율), 상처 봉합이면 */
+  LEECH_RATE: 0.04,
+  SUTURE_RATE: 0.09,
+  /** 공격 회복 초당 상한 (수혈 튜브는 더 높음) */
+  LEECH_CAP: 3,
+  TUBE_CAP: 4,
+  LEECH_WINDOW: 60,
+  /** 회복 + 표시 최소 간격 (틱) */
+  PLUS_EVERY: 20,
+  /** 과잉 진료: 보호막이 가득이면 공격 속도 배율 · 의사 가운: 맞은 뒤 이동 속도 배율 */
+  OVERTREAT_MUL: 1.25,
+  GOWN_MOVE_MUL: 1.25,
+};
+export { R as HEAL_RULES };
 
 export function shieldCap(p: PlayerState): number {
-  return p.stats.maxHp * (hasPerk(p, "healthCare") ? CARE_CAP : SHIELD_CAP);
+  return p.stats.maxHp * (hasPerk(p, "healthCare") ? R.CARE_CAP : R.SHIELD_CAP);
 }
 
 /** 초과 치료가 켜져 있는지 (의사, 서든데스 아님) */
@@ -36,7 +43,7 @@ export function heal(s: RunState, amount: number): void {
   if (amount <= 0) return;
   const room = Math.max(0, p.stats.maxHp - p.hp);
   // 의사: 회복하면 초록 +, 보호막이 차면 파란 + (너무 자주 띄우지 않게)
-  if (p.characterId === "doctor" && s.tick - (p.plusTick ?? -PLUS_EVERY) >= PLUS_EVERY) {
+  if (p.characterId === "doctor" && s.tick - (p.plusTick ?? -R.PLUS_EVERY) >= R.PLUS_EVERY) {
     p.plusTick = s.tick;
     addEffect(s, { kind: "plus", x: p.x, y: p.y - p.r, dirX: 0, dirY: 0, size: 3, maxTicks: 30, width: overheals(s) && amount > room ? 1 : 0 });
   }
@@ -50,32 +57,28 @@ export function heal(s: RunState, amount: number): void {
 
 /** 공격 회복률 (mul: 메스 2배·수혈 3배) */
 export function leechRate(p: PlayerState, mul = 1): number {
-  return (hasPerk(p, "woundSuture") ? SUTURE_RATE : LEECH_RATE) * mul;
+  return (hasPerk(p, "woundSuture") ? R.SUTURE_RATE : R.LEECH_RATE) * mul;
 }
 
 /** 공격 회복: 1초마다 상한까지만 (처치 회복도 같은 상한) */
 export function leechHeal(s: RunState, amount: number): void {
   const p = s.player;
   if (amount <= 0) return;
-  if (s.tick - (p.leechTick ?? -LEECH_WINDOW) >= LEECH_WINDOW) {
+  if (s.tick - (p.leechTick ?? -R.LEECH_WINDOW) >= R.LEECH_WINDOW) {
     p.leechTick = s.tick;
     p.leechSum = 0;
   }
-  const cap = weaponOf(p).medic === "transfusion" ? TUBE_CAP : LEECH_CAP;
+  const cap = weaponOf(p).medic === "transfusion" ? R.TUBE_CAP : R.LEECH_CAP;
   const a = Math.min(amount, cap - (p.leechSum ?? 0));
   if (a <= 0) return;
   p.leechSum = (p.leechSum ?? 0) + a;
   heal(s, a);
 }
 
-/** 과잉 진료: 보호막이 가득이면 공격 속도 배율 · 의사 가운: 맞은 뒤 이동 속도 배율 */
-const OVERTREAT_MUL = 1.25;
-const GOWN_MOVE_MUL = 1.25;
-
 export function medicSpeedMul(p: PlayerState): number {
-  return hasPerk(p, "overtreat") && (p.shieldPts ?? 0) >= shieldCap(p) - 0.01 ? OVERTREAT_MUL : 1;
+  return hasPerk(p, "overtreat") && (p.shieldPts ?? 0) >= shieldCap(p) - 0.01 ? R.OVERTREAT_MUL : 1;
 }
 
 export function medicMoveMul(p: PlayerState): number {
-  return (p.gownTicks ?? 0) > 0 ? GOWN_MOVE_MUL : 1;
+  return (p.gownTicks ?? 0) > 0 ? R.GOWN_MOVE_MUL : 1;
 }

@@ -70,14 +70,16 @@ describe("수치 바꾸기", () => {
     expect(mergeBalance(live, diff)).toEqual(beta);
   });
 
-  it("패시브 능력치·효과 수치, 사용 아이템, 상점 가격도 넣고 되돌림", () => {
+  it("패시브 능력치·아이템 효과 수치, 사용 아이템, 상점 가격도 넣고 되돌림", () => {
     const v = cleanBalance({
-      passives: { sturdyHeart: { "maxHp.add": 35, "maxHp.mul": 2 }, goldPouch: { gold: 2 }, spinCleave: { every: 0 } },
+      passives: { sturdyHeart: { "maxHp.add": 35, "maxHp.mul": 2 } },
+      effects: { goldPouch: { gold: 2 }, spinCleave: { every: 0 } },
       useItems: { potion: { healRatio: 0.5 }, bomb: { damage: 60 } },
       shop: { price: { passive: 40 } },
     });
     // 없는 값(곱하기가 없는 아이템)은 버리고, 횟수는 1 이상
-    expect(v.passives).toEqual({ sturdyHeart: { "maxHp.add": 35 }, goldPouch: { gold: 2 }, spinCleave: { every: 1 } });
+    expect(v.passives).toEqual({ sturdyHeart: { "maxHp.add": 35 } });
+    expect(v.effects).toEqual({ goldPouch: { gold: 2 }, spinCleave: { every: 1 } });
     applyBalance(v);
     expect(PASSIVES.sturdyHeart.mods[0]!.add).toBe(35);
     expect(PERKS.goldPouch.gold).toBe(2);

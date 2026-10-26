@@ -6,15 +6,20 @@ import { damagePlayer } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
-/** 닫는 구역 수 · 첫 예고 · 구역 사이 간격 · 다 닫힌 뒤 다시 열릴 때까지 · 닫힌 구역에 머물면 다시 맞는 간격 */
-const CLOSE = 3;
-const FIRST = 70;
-const GAP = 70;
-const HOLD = 90;
-const REHIT = 30;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 닫는 구역 수 · 첫 예고 · 구역 사이 간격 · 다 닫힌 뒤 다시 열릴 때까지 · 닫힌 구역에 머물면 다시 맞는 간격 */
+  CLOSE: 3,
+  FIRST: 70,
+  GAP: 70,
+  HOLD: 90,
+  REHIT: 30,
+  BLIND_TICKS: 300,
+};
+export { R as BOSS_ZONES_RULES };
+
 /** 갇혔을 때 피해 · 깜깜한 틱 */
 export const ZONE_DAMAGE = 20;
-const BLIND_TICKS = 300;
 
 /** 사분면 q의 [왼, 위, 오른, 아래] (0 왼위 · 1 오른위 · 2 왼아래 · 3 오른아래) */
 export function zoneRect(q: number): [number, number, number, number] {
@@ -37,8 +42,8 @@ export function closeZones(s: RunState, e: EnemyState): boolean {
     const j = rng.int(0, i);
     [order[i], order[j]] = [order[j]!, order[i]!];
   }
-  e.zones = order.slice(0, CLOSE).map((q, i) => ({ q, at: s.tick + FIRST + i * GAP }));
-  e.zonesEnd = s.tick + FIRST + (CLOSE - 1) * GAP + HOLD;
+  e.zones = order.slice(0, R.CLOSE).map((q, i) => ({ q, at: s.tick + R.FIRST + i * R.GAP }));
+  e.zonesEnd = s.tick + R.FIRST + (R.CLOSE - 1) * R.GAP + R.HOLD;
   return true;
 }
 
@@ -46,7 +51,7 @@ function trap(s: RunState): void {
   const p = s.player;
   if (p.dashTicks > 0 || p.invulnTicks > 0) return;
   damagePlayer(s, ZONE_DAMAGE);
-  p.blindTicks = BLIND_TICKS;
+  p.blindTicks = R.BLIND_TICKS;
 }
 
 /** 틱마다: 낫이 내려오면 구역이 닫히고, 닫힌 구역 안의 플레이어를 맞힘 · 시간이 되면 다 열림 */
@@ -64,6 +69,6 @@ export function updateZones(s: RunState, e: EnemyState): void {
       const [l, t, r, b] = zoneRect(z.q);
       addEffect(s, { kind: "burst", x: (l + r) / 2, y: (t + b) / 2, dirX: 0, dirY: 0, size: (r - l) / 2, maxTicks: 18 });
     }
-    if ((s.tick - z.at) % REHIT === 0 && inZone(z.q, p.x, p.y)) trap(s);
+    if ((s.tick - z.at) % R.REHIT === 0 && inZone(z.q, p.x, p.y)) trap(s);
   }
 }

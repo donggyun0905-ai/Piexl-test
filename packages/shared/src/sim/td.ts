@@ -16,8 +16,12 @@ import { buildSpawns, hatch, isFinal, spawnFinal, spawnTd, updateTdEnemies } fro
 import type { EnemyKind } from "../content";
 import type { EffectState } from "./types";
 
-/** 최종 보스 라운드: 시작 뒤 첫 최종 보스가 나오는 틱 */
-const FINAL_AT = 120;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 최종 보스 라운드: 시작 뒤 첫 최종 보스가 나오는 틱 */
+  FINAL_AT: 120,
+};
+export { R as TD_RULES };
 
 export function createTd(seed: number, mapId: TdMapId): TdState {
   const run = createRun(seed, "warden");
@@ -76,7 +80,7 @@ export function stepTd(td: TdState): void {
       const sp = td.spawns.shift()!;
       spawnTd(td, sp.kind as EnemyKind, sp.path, sp.hpMul);
     }
-    if (td.finals.length > 0 && t >= FINAL_AT && !s.enemies.some(isFinal)) spawnFinal(td);
+    if (td.finals.length > 0 && t >= R.FINAL_AT && !s.enemies.some(isFinal)) spawnFinal(td);
   }
   updateTdEnemies(td);
 

@@ -5,23 +5,28 @@ import { blastAt, damageEnemy, healPlayer } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, DIR16, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 적을 찾는 거리 (주인 기준) · 너무 멀어지면 주인 곁으로 · 사자 둘레 범위 */
+  SEEK: 130,
+  LEASH: 170,
+  LION_AREA: 16,
+  /** 샤프 클로·포효·사냥 본능·골골송·생선 간식 */
+  SHARP_MUL: 1.3,
+  ROAR_MUL: 1.5,
+  INSTINCT_MUL: 1.3,
+  PURR_HEAL: 0.3,
+  /** 무리의 우두머리: 고양이 한 마리당 공격 속도 */
+  LEADER_SPEED: 0.05,
+};
+export { R as PETS_RULES };
+
 /** 고양이 종류마다: 빠르기 · 할퀴기 간격(틱) · 공격력 배율 · 몸 크기 */
 export const PET_STATS: Record<PetKind, { speed: number; every: number; mul: number; r: number }> = {
   cat: { speed: 1.7, every: 40, mul: 0.6, r: 3 },
   lion: { speed: 1.2, every: 70, mul: 2.2, r: 5 },
   shadow: { speed: 1.5, every: 45, mul: 0.7, r: 3 },
 };
-/** 적을 찾는 거리 (주인 기준) · 너무 멀어지면 주인 곁으로 · 사자 둘레 범위 */
-const SEEK = 130;
-const LEASH = 170;
-const LION_AREA = 16;
-/** 샤프 클로·포효·사냥 본능·골골송·생선 간식 */
-const SHARP_MUL = 1.3;
-const ROAR_MUL = 1.5;
-const INSTINCT_MUL = 1.3;
-const PURR_HEAL = 0.3;
-/** 무리의 우두머리: 고양이 한 마리당 공격 속도 */
-const LEADER_SPEED = 0.05;
 
 /** 이 무기·아이템으로 데리고 다닐 고양이 (무기 고양이 + 한 마리 더마다 고양이) */
 export function petKinds(p: PlayerState): PetKind[] {
@@ -33,12 +38,12 @@ export function petKinds(p: PlayerState): PetKind[] {
 
 /** 사냥 본능: 체력 절반 이하 적에게 피해 증가 */
 export function instinct(p: PlayerState, e: EnemyState): number {
-  return hasPerk(p, "hunterInstinct") && e.hp <= e.maxHp * 0.5 ? INSTINCT_MUL : 1;
+  return hasPerk(p, "hunterInstinct") && e.hp <= e.maxHp * 0.5 ? R.INSTINCT_MUL : 1;
 }
 
 /** 무리의 우두머리: 공격 속도 배율 */
 export function beastSpeedMul(p: PlayerState): number {
-  return hasPerk(p, "packLeader") ? 1 + LEADER_SPEED * (p.pets?.length ?? 0) : 1;
+  return hasPerk(p, "packLeader") ? 1 + R.LEADER_SPEED * (p.pets?.length ?? 0) : 1;
 }
 
 function nearest(s: RunState, x: number, y: number): EnemyState | null {
@@ -46,7 +51,7 @@ function nearest(s: RunState, x: number, y: number): EnemyState | null {
   let best: EnemyState | null = null;
   let bestD = Infinity;
   for (const e of s.enemies) {
-    if (e.hp <= 0 || dist2(e, p) > SEEK * SEEK) continue;
+    if (e.hp <= 0 || dist2(e, p) > R.SEEK * R.SEEK) continue;
     const d = (e.x - x) * (e.x - x) + (e.y - y) * (e.y - y);
     if (d < bestD) {
       bestD = d;
@@ -72,7 +77,7 @@ export function updatePets(s: RunState): void {
     pet.prevY = pet.y;
     const st = PET_STATS[pet.kind];
     // 방을 옮기는 등 너무 멀어지면 주인 곁으로
-    if ((pet.x - p.x) * (pet.x - p.x) + (pet.y - p.y) * (pet.y - p.y) > LEASH * LEASH) {
+    if ((pet.x - p.x) * (pet.x - p.x) + (pet.y - p.y) * (pet.y - p.y) > R.LEASH * R.LEASH) {
       pet.x = pet.prevX = p.x;
       pet.y = pet.prevY = p.y;
     }
@@ -123,11 +128,11 @@ function scratch(s: RunState, pet: Pet, e: EnemyState): void {
   const p = s.player;
   const st = PET_STATS[pet.kind];
   let dmg = p.stats.damage * st.mul * instinct(p, e);
-  if (hasPerk(p, "sharpClaws")) dmg *= SHARP_MUL;
-  if ((p.roarTicks ?? 0) > 0) dmg *= ROAR_MUL;
+  if (hasPerk(p, "sharpClaws")) dmg *= R.SHARP_MUL;
+  if ((p.roarTicks ?? 0) > 0) dmg *= R.ROAR_MUL;
   const dir = normalize(e.x - pet.x, e.y - pet.y) ?? [1, 0];
   damageEnemy(s, e, dmg, dir[0], dir[1]);
-  if (pet.kind === "lion") blastAt(s, e.x, e.y, LION_AREA, dmg * 0.5, { exclude: e });
+  if (pet.kind === "lion") blastAt(s, e.x, e.y, R.LION_AREA, dmg * 0.5, { exclude: e });
   addEffect(s, { kind: "scratch", x: e.x, y: e.y, dirX: dir[0], dirY: dir[1], size: pet.kind === "lion" ? 7 : 4, maxTicks: 8 });
-  if (hasPerk(p, "purr")) healPlayer(s, PURR_HEAL);
+  if (hasPerk(p, "purr")) healPlayer(s, R.PURR_HEAL);
 }

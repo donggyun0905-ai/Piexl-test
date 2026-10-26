@@ -7,6 +7,14 @@ import { swarmGrid } from "./swarmGrid";
 import { tabooUp } from "./taboo";
 import type { Body, DotKind, EffectState, EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  A: 0.9238795325112867,
+  B: 0.3826834323650898,
+  H: 0.7071067811865476,
+};
+export { R as UTIL_RULES };
+
 // ───────── 수치 ─────────
 
 export const PLAYER_RADIUS = 5;
@@ -90,13 +98,10 @@ export function addEffect(s: RunState, e: Omit<EffectState, "ticks">): void {
   s.effects.push(s.party ? { seat: s.seat ?? 0, ...e, ticks: e.maxTicks } : { ...e, ticks: e.maxTicks });
 }
 
-const A = 0.9238795325112867;
-const B = 0.3826834323650898;
-const H = 0.7071067811865476;
 /** 16방향 단위 벡터 (0 = 오른쪽, 시계 방향). 삼각함수 없이 고리 모양 탄을 만들기 위한 고정 값 */
 export const DIR16: readonly (readonly [number, number])[] = [
-  [1, 0], [A, B], [H, H], [B, A], [0, 1], [-B, A], [-H, H], [-A, B],
-  [-1, 0], [-A, -B], [-H, -H], [-B, -A], [0, -1], [B, -A], [H, -H], [A, -B],
+  [1, 0], [R.A, R.B], [R.H, R.H], [R.B, R.A], [0, 1], [-R.B, R.A], [-R.H, R.H], [-R.A, R.B],
+  [-1, 0], [-R.A, -R.B], [-R.H, -R.H], [-R.B, -R.A], [0, -1], [R.B, -R.A], [R.H, -R.H], [R.A, -R.B],
 ];
 
 /** 적 탄 하나 */

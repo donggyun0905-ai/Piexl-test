@@ -7,23 +7,28 @@ import type { Shade } from "./ninjaTypes";
 import type { EnemyState, RunState } from "./types";
 import { dist2, hasPerk, normalize, weaponOf } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  STRIKE_LIFE: 18,
+  STRIKE_MUL: 1.8,
+  /** X자 베기(그 적만) · 땅 가시(둘레까지): 피해 배율 · 범위 */
+  CROSS_MUL: 2,
+  SPIKE_MUL: 1.6,
+  /** 환영진: 원 반지름 = 사거리 × 이 값 · 돌진 틱 · 그림자 하나 피해 배율 · 지나가며 베는 굵기 · 가운데 내려치는 범위 */
+  RING_SCALE: 0.5,
+  RING_MUL: 0.45,
+  PASS_R: 5,
+  CENTER_R: 12,
+  /** 연막 구름: 0.5초마다 피해·표식·둔화 */
+  SMOKE_EVERY: 30,
+  SMOKE_SLOW: 40,
+};
+export { R as SHADES_RULES };
+
 /** 뒤에서 베기: 나타나서 베기까지 틱 · 사라지는 틱 · 피해 배율 */
 export const STRIKE_WAIT = 7;
-const STRIKE_LIFE = 18;
-const STRIKE_MUL = 1.8;
-/** X자 베기(그 적만) · 땅 가시(둘레까지): 피해 배율 · 범위 */
-const CROSS_MUL = 2;
-const SPIKE_MUL = 1.6;
 export const SPIKE_R = 22;
-/** 환영진: 원 반지름 = 사거리 × 이 값 · 돌진 틱 · 그림자 하나 피해 배율 · 지나가며 베는 굵기 · 가운데 내려치는 범위 */
-const RING_SCALE = 0.5;
 export const RING_TICKS = 9;
-const RING_MUL = 0.45;
-const PASS_R = 5;
-const CENTER_R = 12;
-/** 연막 구름: 0.5초마다 피해·표식·둔화 */
-const SMOKE_EVERY = 30;
-const SMOKE_SLOW = 40;
 
 /** 원 위 9곳 (40도 간격, 위에서 시작). 삼각함수 대신 정해 둔 값 · 쌍그림자용으로 20도 돌린 9곳 */
 const RING9: readonly (readonly [number, number])[] = [
@@ -57,19 +62,19 @@ function summon(s: RunState, e: EnemyState, mul: number, side: number, chain: nu
   const base = p.stats.damage * mul;
   const style = weaponOf(p).shade;
   if (style === "ring") {
-    const r = p.stats.range * RING_SCALE;
-    for (const [dx, dy] of side ? RING9B : RING9) list.push(shade("dash", e.x + dx * r, e.y + dy * r, e.x, e.y, base * RING_MUL, e.id, RING_TICKS + 8, chain));
+    const r = p.stats.range * R.RING_SCALE;
+    for (const [dx, dy] of side ? RING9B : RING9) list.push(shade("dash", e.x + dx * r, e.y + dy * r, e.x, e.y, base * R.RING_MUL, e.id, RING_TICKS + 8, chain));
     return;
   }
   if (style === "needle") {
-    list.push(shade("spike", e.x, e.y, e.x, e.y, base * SPIKE_MUL, e.id, STRIKE_LIFE, chain));
+    list.push(shade("spike", e.x, e.y, e.x, e.y, base * R.SPIKE_MUL, e.id, R.STRIKE_LIFE, chain));
     return;
   }
   // 적 뒤 (닌자 → 적 방향의 반대편). 둘째 그림자는 옆에서
   const d = normalize(e.x - p.x, e.y - p.y) ?? [1, 0];
   const [bx, by] = side ? [-d[1], d[0]] : d;
   const off = e.r + 6;
-  list.push(shade(style === "blade" ? "cross" : "strike", e.x + bx * off, e.y + by * off, e.x, e.y, base * (style === "blade" ? CROSS_MUL : STRIKE_MUL), e.id, STRIKE_LIFE, chain));
+  list.push(shade(style === "blade" ? "cross" : "strike", e.x + bx * off, e.y + by * off, e.x, e.y, base * (style === "blade" ? R.CROSS_MUL : R.STRIKE_MUL), e.id, R.STRIKE_LIFE, chain));
 }
 
 /** 연막 구름 (dmg = 0.5초마다 피해) */
@@ -126,18 +131,18 @@ export function updateShades(s: RunState): void {
       sh.x = sh.sx + (sh.tx - sh.sx) * f;
       sh.y = sh.sy + (sh.ty - sh.sy) * f;
       if (sh.t <= RING_TICKS) {
-        for (const e of around(s, sh.x, sh.y, PASS_R)) {
+        for (const e of around(s, sh.x, sh.y, R.PASS_R)) {
           if (sh.hitIds.includes(e.id)) continue;
           sh.hitIds.push(e.id);
           shadowHit(s, sh, e, sh.dmg);
         }
       }
-      if (sh.t === RING_TICKS) for (const e of around(s, sh.tx, sh.ty, CENTER_R)) shadowHit(s, sh, e, sh.dmg);
+      if (sh.t === RING_TICKS) for (const e of around(s, sh.tx, sh.ty, R.CENTER_R)) shadowHit(s, sh, e, sh.dmg);
     } else if (sh.kind === "smoke") {
-      if (sh.t > 0 && sh.t % SMOKE_EVERY === 0) {
+      if (sh.t > 0 && sh.t % R.SMOKE_EVERY === 0) {
         const r = weaponOf(p).blast ?? 26;
         for (const e of around(s, sh.x, sh.y, r)) {
-          if (!ENEMIES[e.kind].boss) e.slowTicks = Math.max(e.slowTicks ?? 0, SMOKE_SLOW);
+          if (!ENEMIES[e.kind].boss) e.slowTicks = Math.max(e.slowTicks ?? 0, R.SMOKE_SLOW);
           damageEnemy(s, e, sh.dmg, 0, 0);
           markEnemy(s, e);
         }

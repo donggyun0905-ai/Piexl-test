@@ -13,6 +13,12 @@ import { tabooN } from "./taboo";
 import { ONI } from "../weaponsOni";
 import { goldLocked, oniWeaponOk } from "./oniRules";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  GOLDEN_GOLD: 300,
+};
+export { R as LOOT_RULES };
+
 /** 방 가운데 (지금 방 크기를 따름) */
 export { ROOM_CX as CX, ROOM_CY as CY } from "../constants";
 
@@ -145,7 +151,6 @@ export function onRoomCleared(s: RunState, roomId: number): void {
 /** 황금방: 아이템 9개를 공짜로 늘어놓고 그중 3개만 가질 수 있음 (다 고르면 나머지는 사라짐) + 돈 300 */
 export const GOLDEN_GROUP = 900;
 export const GOLDEN_PICKS = 3;
-const GOLDEN_GOLD = 300;
 
 /** 라스트 보스 층 시작 방: 여신상 앞에 여신의 축복 하나 */
 export function spawnBlessing(s: RunState, roomId: number): void {
@@ -180,6 +185,6 @@ export function spawnGolden(s: RunState, roomId: number): void {
     pool = pool.filter((x) => x !== id);
     addPickup(s, roomId, "passive", id, at[0], at[1], GOLDEN_GROUP);
   }
-  addPickup(s, roomId, "coin", "coin", CX - 80, CY - 12, 0, GOLDEN_GOLD);
+  addPickup(s, roomId, "coin", "coin", CX - 80, CY - 12, 0, R.GOLDEN_GOLD);
   s.goldenPicks = 0;
 }

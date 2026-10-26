@@ -1,6 +1,7 @@
 // 관리자 페이지 글자 (운영자용이라 한국어만). 캐릭터·무기 이름은 게임 번역에서 가져옴
 import { BOSS_TEXT } from "../i18n/enemies";
-import { DUNGEON_BALANCE, TD_BALANCE, type BalanceGroupId, type BalanceSet } from "@pixel-rogue/shared";
+import { DUNGEON_BALANCE, PASSIVES, TD_BALANCE, WEAPONS, type BalanceGroupId, type BalanceSet } from "@pixel-rogue/shared";
+import { autoFieldLabel, ruleCategory, ruleLabel } from "./autoLabels";
 import type { SetKind } from "./adminApi";
 import { itemDesc, itemName } from "../i18n/items";
 import { TEXT } from "../i18n/text";
@@ -8,6 +9,8 @@ import { TEXT } from "../i18n/text";
 export const GROUP_LABEL: Record<BalanceGroupId, string> = {
   characters: "캐릭터",
   weapons: "무기",
+  rules: "규칙·기술 수치",
+  effects: "아이템 효과",
   enemies: "적",
   bosses: "보스",
   passives: "패시브",
@@ -124,7 +127,8 @@ export function rowLabel(group: BalanceGroupId, id: string): string {
   if (group.startsWith("td")) return tdRowLabel(group, id);
   if (group === "characters") return (TEXT as Record<string, { ko: string }>)[id]?.ko ?? id;
   if (group === "weapons") return itemName("weapon", id, "ko");
-  if (group === "passives") return itemName("passive", id, "ko");
+  if (group === "passives" || group === "effects") return itemName("passive", id, "ko");
+  if (group === "rules") return ruleLabel(id);
   if (group === "useItems") return itemName("use", id, "ko");
   if (group === "shop") return "가격";
   return ENEMY_NAME[id] ?? id;
@@ -133,7 +137,7 @@ export function rowLabel(group: BalanceGroupId, id: string): string {
 /** 항목 설명 (패시브·사용 아이템: 게임에 보이는 설명을 지금 수치로) */
 export function rowDesc(group: BalanceGroupId, id: string): string {
   const t = (k: string) => (TEXT as Record<string, { ko: string }>)[k]?.ko ?? k;
-  if (group === "passives") return itemDesc("passive", id, "ko", t);
+  if (group === "passives" || group === "effects") return itemDesc("passive", id, "ko", t);
   if (group === "useItems") return itemDesc("use", id, "ko", t);
   return "";
 }
@@ -171,8 +175,18 @@ export function fieldLabel(key: string, group?: BalanceGroupId): string {
   const own = group && GROUP_FIELD_LABEL[group]?.[key];
   if (own) return own;
   const [stat, how] = key.split(".");
-  if (how) return `${FIELD_LABEL[stat!] ?? stat} ${MOD_LABEL[how] ?? how}`;
-  return FIELD_LABEL[key] ?? key;
+  if (how && group === "passives") return `${FIELD_LABEL[stat!] ?? stat} ${MOD_LABEL[how] ?? how}`;
+  return FIELD_LABEL[key] ?? autoFieldLabel(key);
+}
+
+/** 항목의 분류 (캐릭터별로 걸러 보기): 캐릭터·무기·아이템 효과는 그 캐릭터, 규칙은 표 분류 */
+export function rowCategory(group: BalanceGroupId, id: string): string {
+  const name = (c: string | undefined) => (c ? ((TEXT as Record<string, { ko: string } | undefined>)[c]?.ko ?? c) : "공용");
+  if (group === "characters") return name(id);
+  if (group === "weapons") return name((WEAPONS as Record<string, { exclusive?: string }>)[id]?.exclusive);
+  if (group === "effects" || group === "passives") return name((PASSIVES as Record<string, { exclusive?: string }>)[id]?.exclusive);
+  if (group === "rules") return ruleCategory(id);
+  return "";
 }
 
 export function formatTime(ms: number): string {

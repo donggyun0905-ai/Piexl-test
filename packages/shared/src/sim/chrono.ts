@@ -9,15 +9,20 @@ import { blastAt, damageEnemy, healPlayer } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, shotDirs, weaponOf } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  PARADOX_DEPTH: 2,
+  /** 모래시계 둔화 · 스톱워치 멈춤(일반 · 보스) · 시한폭탄 터지는 틱 · 예지 낙뢰가 떨어지는 틱 */
+  SAND_SLOW: 60,
+  STOP_STUN: 24,
+  STOP_STUN_BOSS: 8,
+};
+export { R as CHRONO_RULES };
+
 /** 잔상이 나오는 틱 · 본인 공격 피해 배율 · 잔상 피해 배율 (잔상이 더 셈) · 패러독스는 잔상이 잔상을 남기는 횟수 */
 export const ECHO_DELAY = 60;
 export const SELF_MUL = 0.7;
 export const ECHO_MUL = 1.2;
-const PARADOX_DEPTH = 2;
-/** 모래시계 둔화 · 스톱워치 멈춤(일반 · 보스) · 시한폭탄 터지는 틱 · 예지 낙뢰가 떨어지는 틱 */
-const SAND_SLOW = 60;
-const STOP_STUN = 24;
-const STOP_STUN_BOSS = 8;
 export const BOMB_FUSE = 60;
 export const FUTURE_DELAY = 45;
 
@@ -114,7 +119,7 @@ function bolts(s: RunState, e: Echo, dmg: number, slow: number, echo: boolean): 
       spirit,
       ...(echo ? { echo: true } : {}),
       ...(disc ? { back: true, span: ticks, pierce: 99, hitIds: [] } : w.pierce ? { pierce: w.pierce, hitIds: [] } : {}),
-      ...(w.chrono === "sand" || slow ? { slow: Math.max(slow, w.chrono === "sand" ? SAND_SLOW : 0) } : {}),
+      ...(w.chrono === "sand" || slow ? { slow: Math.max(slow, w.chrono === "sand" ? R.SAND_SLOW : 0) } : {}),
     });
   }
 }
@@ -141,7 +146,7 @@ function stopPulse(s: RunState, e: Echo, dmg: number, slow: number, echo: boolea
     if (t.hp <= 0 || (t.x - e.x) * (t.x - e.x) + (t.y - e.y) * (t.y - e.y) > rr * rr) continue;
     const dir = normalize(t.x - e.x, t.y - e.y) ?? [1, 0];
     hit(s, t, dmg, dir[0], dir[1], slow, echo);
-    if (t.kind !== "dummy") t.stunTicks = Math.max(t.stunTicks ?? 0, ENEMIES[t.kind].boss ? STOP_STUN_BOSS : STOP_STUN);
+    if (t.kind !== "dummy") t.stunTicks = Math.max(t.stunTicks ?? 0, ENEMIES[t.kind].boss ? R.STOP_STUN_BOSS : R.STOP_STUN);
   }
   addEffect(s, { kind: "ring", x: e.x, y: e.y, dirX: 0, dirY: 0, size: r, maxTicks: 16, width: 1 });
 }
@@ -165,7 +170,7 @@ function updateEchoes(s: RunState): void {
     attack(s, e, e.mul, true);
     if (hasPerk(p, "echoBurst")) blastAt(s, e.x, e.y, CHRONO_PERKS.echoBurst.radius, p.stats.damage * CHRONO_PERKS.echoBurst.damage);
     const again =
-      (w.chrono === "paradox" && e.depth < PARADOX_DEPTH) ||
+      (w.chrono === "paradox" && e.depth < R.PARADOX_DEPTH) ||
       (hasPerk(p, "doubleEcho") && createRng(deriveSeed(s.seed, "echo", s.tick, e.depth, e.x)).nextFloat() < CHRONO_PERKS.doubleEcho.chance);
     if (again) p.echoes.push({ ...e, at: s.tick + (e.at - e.born), born: s.tick, depth: e.depth + 1 });
   }

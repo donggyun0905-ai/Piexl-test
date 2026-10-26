@@ -9,24 +9,29 @@ import { orbShot } from "./orbitPerks";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
 
-/** 강철 총알 · 트리거 탄 빠르기 */
-const STEEL_SPEED = 4.5;
-const TRIGGER_SPEED = 7;
-const TRIGGER_PIERCE = 3;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 강철 총알 · 트리거 탄 빠르기 */
+  STEEL_SPEED: 4.5,
+  TRIGGER_SPEED: 7,
+  TRIGGER_PIERCE: 3,
+  TRIGGER_GROW: 0.3,
+  /** 트리거 치명타: 기본 20%, 무기 기본 수보다 더 채워진 구슬 하나마다 +5% */
+  TRIGGER_CRIT: 0.2,
+  TRIGGER_CRIT_ADD: 0.05,
+  /** 중력: 띄웠다 찍는 기절 틱 */
+  GRAVITY_STUN: 24,
+  HAND_RADIUS: 28,
+  HAND_BOSS_MUL: 2,
+  HAND_LIFT: 18,
+};
+export { R as ORBIT_ATTACK_RULES };
+
 /** 트리거: 재장전 2초 · 쏠 때 30% 확률로 +1 · 최대 15개, 다 차면 한 번에 모두 2배로 */
 export const TRIGGER_RELOAD = 120;
-const TRIGGER_GROW = 0.3;
 export const TRIGGER_MAX = 15;
-/** 트리거 치명타: 기본 20%, 무기 기본 수보다 더 채워진 구슬 하나마다 +5% */
-const TRIGGER_CRIT = 0.2;
-const TRIGGER_CRIT_ADD = 0.05;
-/** 중력: 띄웠다 찍는 기절 틱 */
-const GRAVITY_STUN = 24;
 /** 갓 핸드: 들고 있는 틱 · 찍는 범위 · 보스전 피해 배율 · 잡은 적을 드는 높이 */
 export const HAND_TICKS = 24;
-const HAND_RADIUS = 28;
-const HAND_BOSS_MUL = 2;
-const HAND_LIFT = 18;
 
 /** 공격 키 (공격 속도 간격마다) */
 export function orbitAttack(s: RunState): void {
@@ -36,9 +41,9 @@ export function orbitAttack(s: RunState): void {
   const face: [number, number] = [p.faceX, p.faceY];
   const ticks = (speed: number) => Math.ceil(p.stats.range / speed);
   if (w.orbit === "steel") {
-    s.projectiles.push(orbShot(s, p.x + face[0] * 6, p.y + face[1] * 6, face, STEEL_SPEED, dmg, "steel", { ticksLeft: ticks(STEEL_SPEED) }));
+    s.projectiles.push(orbShot(s, p.x + face[0] * 6, p.y + face[1] * 6, face, R.STEEL_SPEED, dmg, "steel", { ticksLeft: ticks(R.STEEL_SPEED) }));
   } else if (w.orbit === "trigger") {
-    triggerShot(s, dmg, ticks(TRIGGER_SPEED));
+    triggerShot(s, dmg, ticks(R.TRIGGER_SPEED));
   } else if (w.orbit === "gravity") {
     gravitySlam(s, dmg);
   } else if (w.orbit === "hand") {
@@ -50,10 +55,10 @@ function triggerShot(s: RunState, dmg: number, life: number): void {
   const p = s.player;
   if ((p.reloadTicks ?? 0) > 0) return;
   const loaded = p.loaded ?? orbCount(p);
-  const chance = TRIGGER_CRIT + TRIGGER_CRIT_ADD * Math.max(0, loaded - orbCount(p));
+  const chance = R.TRIGGER_CRIT + R.TRIGGER_CRIT_ADD * Math.max(0, loaded - orbCount(p));
   const shot = (dx: number, dy: number, mul: number) => {
     const crit = createRng(deriveSeed(s.seed, "triggerCrit", s.nextId)).nextFloat() < chance;
-    const pr = orbShot(s, p.x, p.y, [dx, dy], TRIGGER_SPEED, dmg * mul * (crit ? CRIT_MUL : 1), "trigger", { ticksLeft: life, pierce: TRIGGER_PIERCE, hitIds: [] });
+    const pr = orbShot(s, p.x, p.y, [dx, dy], R.TRIGGER_SPEED, dmg * mul * (crit ? CRIT_MUL : 1), "trigger", { ticksLeft: life, pierce: R.TRIGGER_PIERCE, hitIds: [] });
     s.projectiles.push(crit ? { ...pr, crit } : pr);
   };
   if (loaded >= TRIGGER_MAX) {
@@ -67,7 +72,7 @@ function triggerShot(s: RunState, dmg: number, life: number): void {
   } else {
     shot(p.faceX, p.faceY, 1);
     p.loaded = loaded - 1;
-    if (createRng(deriveSeed(s.seed, "trigger", s.tick)).nextFloat() < TRIGGER_GROW) p.loaded = Math.min(TRIGGER_MAX, p.loaded + 1);
+    if (createRng(deriveSeed(s.seed, "trigger", s.tick)).nextFloat() < R.TRIGGER_GROW) p.loaded = Math.min(TRIGGER_MAX, p.loaded + 1);
   }
   if (p.loaded <= 0) p.reloadTicks = TRIGGER_RELOAD;
 }
@@ -78,7 +83,7 @@ function gravitySlam(s: RunState, dmg: number): void {
     const rr = p.stats.range + e.r;
     if (e.hp <= 0 || dist2(e, p) > rr * rr) continue;
     damageEnemy(s, e, dmg, 0, 0);
-    if (e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? GRAVITY_STUN / 2 : GRAVITY_STUN);
+    if (e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? R.GRAVITY_STUN / 2 : R.GRAVITY_STUN);
     addEffect(s, { kind: "burst", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r * 2, maxTicks: 12 });
   }
   addEffect(s, { kind: "slam", x: p.x, y: p.y, dirX: 0, dirY: 0, size: p.stats.range, maxTicks: 20 });
@@ -110,7 +115,7 @@ export function updateHand(s: RunState): void {
   const held = p.handId ? s.enemies.find((e) => e.id === p.handId && e.hp > 0) : undefined;
   if (held) {
     held.x = p.x;
-    held.y = p.y - HAND_LIFT;
+    held.y = p.y - R.HAND_LIFT;
     keepInRoom(held, roomGrid(s));
     held.stunTicks = Math.max(held.stunTicks ?? 0, 2);
   }
@@ -129,7 +134,7 @@ export function updateHand(s: RunState): void {
     keepInRoom(held, roomGrid(s));
   }
   const boss = s.enemies.some((e) => ENEMIES[e.kind].boss && e.hp > 0);
-  blastAt(s, x, y, HAND_RADIUS, p.stats.damage * (boss ? HAND_BOSS_MUL : 1));
-  addEffect(s, { kind: "slam", x, y, dirX: 0, dirY: 0, size: HAND_RADIUS, maxTicks: 18 });
+  blastAt(s, x, y, R.HAND_RADIUS, p.stats.damage * (boss ? R.HAND_BOSS_MUL : 1));
+  addEffect(s, { kind: "slam", x, y, dirX: 0, dirY: 0, size: R.HAND_RADIUS, maxTicks: 18 });
   p.handId = undefined;
 }

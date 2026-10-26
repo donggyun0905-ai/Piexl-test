@@ -212,33 +212,48 @@ body,
   }
 }
 
-/* 항목별 목록 (패시브·상점): 항목마다 그 항목에 있는 값만 */
-.admin-list > tbody > tr > th {
-  min-width: 180px;
-  max-width: 260px;
-  vertical-align: top;
+/* 항목별 목록: 위쪽 찾기·분류 · 항목마다 이름과 값 칸 (칸은 줄바꿈되며 이어짐) */
+.admin-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.admin-filter input {
+  flex: 1 1 260px;
+}
+.admin-row {
+  border-bottom: 1px solid var(--line);
+  padding: 8px 0;
+}
+.admin-row h4 {
+  margin: 0 0 4px;
+  font-size: 14px;
+}
+.admin-row h4 small {
+  color: var(--muted);
+  font-weight: normal;
 }
 .admin-desc {
-  display: block;
-  margin-top: 4px;
-  font-weight: normal;
+  margin: 0 0 6px;
   font-size: 12px;
   color: var(--muted);
-  white-space: normal;
 }
-.admin-mini {
-  border-collapse: collapse;
+.admin-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
 }
-.admin-mini th {
-  font-size: 12px;
-  font-weight: normal;
-  text-align: left;
-  padding: 0 4px 2px;
-  border: 0;
-  background: none;
+.admin-grid .admin-cell {
+  display: flex;
+  flex-direction: column;
+  min-width: 110px;
 }
-.admin-mini td {
-  border: 0;
+.admin-cell-label {
+  font-size: 11px;
+  color: var(--muted);
+  max-width: 160px;
 }
 /* 캐릭터별 클리어 시간 표 */
 .admin-clears table {

@@ -5,9 +5,14 @@ import { segDist2 } from "./orbit";
 import type { RunState } from "./types";
 import { addEffect, dist2, normalize } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  STAR_GAP: 5,
+};
+export { R as BRAWL_STAR_RULES };
+
 /** 별: 몇 번째 연속 콤보마다 · 찌르기 사이 틱 · 다섯 점을 잇는 차례 (꼭짓점 하나 건너뛰며) */
 export const STAR_RUNS = 5;
-const STAR_GAP = 5;
 const STAR_ORDER = [2, 4, 1, 3, 0];
 /** 72도씩 돌리는 [cos, sin] (삼각함수 없이 정해 둔 값) */
 const TURN72: readonly [number, number] = [0.30901699, 0.95105652];
@@ -47,7 +52,7 @@ export function startStar(s: RunState, dmg: number): void {
   const p = s.player;
   if (p.starCx === undefined) return;
   p.starLeft = STAR_ORDER.length;
-  p.starTimer = STAR_GAP;
+  p.starTimer = R.STAR_GAP;
   p.starDmg = dmg;
 }
 
@@ -70,6 +75,6 @@ export function starTick(s: RunState, m: ComboMove): boolean {
   const dir = normalize(tx - p.x, ty - p.y) ?? [p.faceX, p.faceY];
   stab(s, p.starDmg ?? 0, m, dir, Math.hypot(tx - p.x, ty - p.y));
   p.starLeft = (p.starLeft ?? 0) - 1;
-  p.starTimer = STAR_GAP;
+  p.starTimer = R.STAR_GAP;
   return true;
 }

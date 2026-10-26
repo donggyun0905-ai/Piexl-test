@@ -8,22 +8,27 @@ import { pierce, startStar, STAR_RUNS, starTick } from "./brawlStar";
 import type { PlayerState, RunState } from "./types";
 import { hasPerk, keepInRoom, roomGrid, weaponOf } from "./util";
 
-/** 다음 기술을 쓸 수 있게 된 뒤 이만큼(1초) 안 누르면 콤보가 처음부터 */
-const COMBO_RESET = 60;
-/** 존·금강불괴 확률, 존일 때 간격 배율, 금강불괴 무적 틱 */
-const ZONE_CHANCE = 0.15;
-const ZONE_PACE = 0.25;
-const IRON_CHANCE = 0.15;
-const IRON_TICKS = 180;
-/** 차력쇼: 3번 연속, 5초, 공격력 +5, 보호막 20 */
-const STRONG_RUNS = 3;
-const STRONG_TICKS = 300;
-const STRONG_DAMAGE = 5;
-const STRONG_SHIELD = 20;
-/** 속도는 곧 힘: 기술마다 이동 +8% (최대 5번) · 혈마: 체력이 바닥이면 +100% */
-const PACE_MOVE = 0.08;
-const PACE_MAX = 5;
-const BLOOD_MAX = 1;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 다음 기술을 쓸 수 있게 된 뒤 이만큼(1초) 안 누르면 콤보가 처음부터 */
+  COMBO_RESET: 60,
+  /** 존·금강불괴 확률, 존일 때 간격 배율, 금강불괴 무적 틱 */
+  ZONE_CHANCE: 0.15,
+  ZONE_PACE: 0.25,
+  IRON_CHANCE: 0.15,
+  IRON_TICKS: 180,
+  /** 차력쇼: 3번 연속, 5초, 공격력 +5, 보호막 20 */
+  STRONG_RUNS: 3,
+  STRONG_TICKS: 300,
+  STRONG_DAMAGE: 5,
+  STRONG_SHIELD: 20,
+  /** 속도는 곧 힘: 기술마다 이동 +8% (최대 5번) · 혈마: 체력이 바닥이면 +100% */
+  PACE_MOVE: 0.08,
+  PACE_MAX: 5,
+  BLOOD_MAX: 1,
+};
+export { R as BRAWL_RULES };
+
 /** 좌우 번갈아 치는 각도 [cos, sin] (약 30도) */
 const SIDE: readonly [number, number] = [0.866, 0.5];
 
@@ -36,14 +41,14 @@ function moves(p: PlayerState): readonly ComboMove[] {
 
 /** 기술 피해: (공격력 + 차력쇼) × 기술 배율 × 혈마 */
 function moveDamage(p: PlayerState, m: ComboMove): number {
-  const base = p.stats.damage + ((p.buffTicks ?? 0) > 0 ? STRONG_DAMAGE : 0);
-  const blood = hasPerk(p, "bloodDemon") ? 1 + BLOOD_MAX * (1 - Math.max(0, p.hp) / p.stats.maxHp) : 1;
+  const base = p.stats.damage + ((p.buffTicks ?? 0) > 0 ? R.STRONG_DAMAGE : 0);
+  const blood = hasPerk(p, "bloodDemon") ? 1 + R.BLOOD_MAX * (1 - Math.max(0, p.hp) / p.stats.maxHp) : 1;
   return base * m.mul * blood;
 }
 
 /** 속도는 곧 힘: 이동 속도 배율 */
 export function brawlMoveMul(p: PlayerState): number {
-  return hasPerk(p, "speedIsPower") ? 1 + PACE_MOVE * Math.min(PACE_MAX, p.paceStack ?? 0) : 1;
+  return hasPerk(p, "speedIsPower") ? 1 + R.PACE_MOVE * Math.min(R.PACE_MAX, p.paceStack ?? 0) : 1;
 }
 
 /** 틱마다 (격투가 무기를 들었을 때 player에서). want = 공격 키(자동 공격이면 사거리 안에 적) */
@@ -54,7 +59,7 @@ export function comboTick(s: RunState, want: boolean, speed: number): void {
   holdAndPin(s);
   // 다음 기술을 쓸 수 있게 된 뒤 1초 동안 안 누르면 콤보가 끊김
   if (p.attackCooldown === 0) p.comboIdle = (p.comboIdle ?? 0) + 1;
-  if ((p.comboStep ?? 0) > 0 && (p.comboIdle ?? 0) > COMBO_RESET) {
+  if ((p.comboStep ?? 0) > 0 && (p.comboIdle ?? 0) > R.COMBO_RESET) {
     // 콤보가 끊김
     p.comboStep = 0;
     p.paceStack = 0;
@@ -91,7 +96,7 @@ export function comboTick(s: RunState, want: boolean, speed: number): void {
   p.comboHit = false;
   perform(s, m, i);
   procs(s, list.length - 1 - i);
-  const pace = (m.pace ?? 1) * ((p.zoneLeft ?? 0) > 0 ? ZONE_PACE : 1);
+  const pace = (m.pace ?? 1) * ((p.zoneLeft ?? 0) > 0 ? R.ZONE_PACE : 1);
   if ((p.zoneLeft ?? 0) > 0) p.zoneLeft = (p.zoneLeft ?? 0) - 1;
   // 연속 공격·모으기는 끝난 뒤부터 간격을 셈
   const busy = m.kind === "flurry" ? (m.hits ?? 1) * (m.gap ?? 1) : m.charge ? (m.charge ?? 0) : 0;
@@ -203,8 +208,8 @@ function flurryHit(s: RunState, m: ComboMove): void {
 /** 공격할 때마다: 금강불괴(3초 무적) · 존(남은 콤보 아주 빠르게) */
 function procs(s: RunState, rest: number): void {
   const p = s.player;
-  if (hasPerk(p, "ironBody") && roll(s, "iron") < IRON_CHANCE) p.invulnTicks = Math.max(p.invulnTicks, IRON_TICKS);
-  if (hasPerk(p, "zone") && rest > 0 && (p.zoneLeft ?? 0) === 0 && roll(s, "zone") < ZONE_CHANCE) p.zoneLeft = rest;
+  if (hasPerk(p, "ironBody") && roll(s, "iron") < R.IRON_CHANCE) p.invulnTicks = Math.max(p.invulnTicks, R.IRON_TICKS);
+  if (hasPerk(p, "zone") && rest > 0 && (p.zoneLeft ?? 0) === 0 && roll(s, "zone") < R.ZONE_CHANCE) p.zoneLeft = rest;
 }
 
 /** 콤보를 끝까지 이어 감: 차력쇼 */
@@ -215,9 +220,9 @@ function finished(s: RunState): void {
   const list = moves(p);
   const last = list[list.length - 1];
   if (last?.kind === "pierce" && p.comboRuns % STAR_RUNS === 0) startStar(s, moveDamage(p, last));
-  if (hasPerk(p, "strongman") && p.comboRuns % STRONG_RUNS === 0) {
-    p.buffTicks = STRONG_TICKS;
-    p.shieldPts = Math.max(p.shieldPts ?? 0, STRONG_SHIELD);
+  if (hasPerk(p, "strongman") && p.comboRuns % R.STRONG_RUNS === 0) {
+    p.buffTicks = R.STRONG_TICKS;
+    p.shieldPts = Math.max(p.shieldPts ?? 0, R.STRONG_SHIELD);
   }
 }
 
@@ -226,7 +231,7 @@ function holdAndPin(s: RunState): void {
   const p = s.player;
   if ((p.rootTicks ?? 0) > 0) p.rootTicks = (p.rootTicks ?? 0) - 1;
   if ((p.guardTicks ?? 0) > 0) p.guardTicks = (p.guardTicks ?? 0) - 1;
-  if ((p.buffTicks ?? 0) > 0 && --p.buffTicks! === 0) p.shieldPts = Math.max(0, (p.shieldPts ?? 0) - STRONG_SHIELD);
+  if ((p.buffTicks ?? 0) > 0 && --p.buffTicks! === 0) p.shieldPts = Math.max(0, (p.shieldPts ?? 0) - R.STRONG_SHIELD);
   // 바위를 들고 있는 동안 무적
   if (p.rock) p.invulnTicks = Math.max(p.invulnTicks, 2);
   if (p.grabId) {

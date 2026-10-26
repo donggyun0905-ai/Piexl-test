@@ -6,14 +6,19 @@ import { addSmoke, markEnemy, updateShades } from "./shades";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, shotDirs, weaponOf } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  CLONE_MUL: 0.6,
+  /** 연막탄: 떨어질 때까지 · 구름이 남는 틱 (0.5초마다 피해) */
+  SMOKE_FLY: 18,
+  SMOKE_LIFE: 180,
+  /** 그림자 꿰매기: 묶이는 틱 */
+  PIN_TICKS: 30,
+};
+export { R as NINJA_RULES };
+
 /** 분신술: 분신이 서는 거리(옆으로) · 분신 피해 배율 */
 export const CLONE_GAP = 14;
-const CLONE_MUL = 0.6;
-/** 연막탄: 떨어질 때까지 · 구름이 남는 틱 (0.5초마다 피해) */
-const SMOKE_FLY = 18;
-const SMOKE_LIFE = 180;
-/** 그림자 꿰매기: 묶이는 틱 */
-const PIN_TICKS = 30;
 
 /** 틱마다 (닌자 무기를 들었을 때 player에서). want = 공격 키(자동 공격이면 사거리 안에 적) */
 export function ninjaTick(s: RunState, want: boolean, speed: number): void {
@@ -39,7 +44,7 @@ export function ninjaTick(s: RunState, want: boolean, speed: number): void {
         const cx = p.x - p.faceY * CLONE_GAP * k;
         const cy = p.y + p.faceX * CLONE_GAP * k;
         const d = normalize(ax - cx, ay - cy) ?? [p.faceX, p.faceY];
-        star(s, cx, cy, d[0], d[1], dmg * CLONE_MUL);
+        star(s, cx, cy, d[0], d[1], dmg * R.CLONE_MUL);
       }
     }
   }
@@ -95,7 +100,7 @@ export function starHit(s: RunState, pr: ProjectileState, e: EnemyState): void {
     e.poisonTicks = Math.max(e.poisonTicks ?? 0, NINJA_PERKS.venomStar.ticks);
     e.poisonDmg = Math.max(e.poisonDmg ?? 0, pr.venom);
   }
-  if (pr.pin) e.rootTicks = Math.max(e.rootTicks ?? 0, PIN_TICKS);
+  if (pr.pin) e.rootTicks = Math.max(e.rootTicks ?? 0, R.PIN_TICKS);
   markEnemy(s, e);
 }
 
@@ -121,6 +126,6 @@ function smokeBomb(s: RunState, dmg: number): void {
   const d = Math.min(p.stats.range, target ? Math.sqrt(dist2(target, p)) : (p.aimDist ?? p.stats.range));
   const x = p.x + p.faceX * d;
   const y = p.y + p.faceY * d;
-  addSmoke(s, x, y, dmg, SMOKE_FLY, SMOKE_LIFE);
-  addEffect(s, { kind: "lob", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 6, maxTicks: SMOKE_FLY, toX: x, toY: y });
+  addSmoke(s, x, y, dmg, R.SMOKE_FLY, R.SMOKE_LIFE);
+  addEffect(s, { kind: "lob", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 6, maxTicks: R.SMOKE_FLY, toX: x, toY: y });
 }

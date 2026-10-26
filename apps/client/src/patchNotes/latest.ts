@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.122",
+    date: "2026-10-26",
+    items: {
+      ko: ["관리자 페이지: 캐릭터·무기·기술·아이템 효과의 수치를 모두 바꿀 수 있게 (무기 모양 안의 미사일 수·확률·범위, 캐릭터마다 기술 수치 약 4,300개) · 찾기 칸과 캐릭터별 분류 추가"],
+      en: ["Admin page: every number for characters, weapons, skills and item effects can now be tuned (missile counts, chances and radii inside weapon styles, about 4,300 values) · added search and per-character filters"],
+      ja: ["管理者ページ：キャラ・武器・技・アイテム効果の数値をすべて調整可能に（武器の形の中のミサイル数・確率・範囲など約4,300個）· 検索欄とキャラ別の分類を追加"],
+    },
+  },
+  {
     version: "0.48.121",
     date: "2026-10-26",
     items: {

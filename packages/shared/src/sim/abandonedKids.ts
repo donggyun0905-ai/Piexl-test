@@ -7,15 +7,20 @@ import type { TagKid } from "./abandonedTypes";
 import type { EnemyState, RunState } from "./types";
 import { dist2, keepInRoom, normalize, roomGrid } from "./util";
 
-/** 아이 몸 크기 · 주인에게서 너무 멀어지면 곁으로 · 주인 곁 자리 */
-const KID_R = 4;
-const LEASH = 200;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 아이 몸 크기 · 주인에게서 너무 멀어지면 곁으로 · 주인 곁 자리 */
+  KID_R: 4,
+  LEASH: 200,
+  /** 다가가다 포기하는 틱 */
+  GO_MAX: 70,
+};
+export { R as ABANDONED_KIDS_RULES };
+
 const HOME: readonly (readonly [number, number])[] = [[-14, 6], [14, 6]];
-/** 다가가다 포기하는 틱 */
-const GO_MAX = 70;
 
 function newKid(m: number, x: number, y: number): TagKid {
-  return { m, x, y, prevX: x, prevY: y, face: 1, act: "go", t: GO_MAX, cd: 20 + m * 9, pair: 0, swing: 0 };
+  return { m, x, y, prevX: x, prevY: y, face: 1, act: "go", t: R.GO_MAX, cd: 20 + m * 9, pair: 0, swing: 0 };
 }
 
 /** 지금 나와 있는 아이를 뺀 두 아이 (없거나 맞지 않으면 주인 곁에 새로) */
@@ -61,7 +66,7 @@ function nearest(s: RunState, kid: TagKid): EnemyState | null {
 function step(s: RunState, kid: TagKid, tx: number, ty: number, sp: number): void {
   const d = normalize(tx - kid.x, ty - kid.y);
   if (!d) return;
-  const body = { x: kid.x + d[0] * sp, y: kid.y + d[1] * sp, prevX: kid.x, prevY: kid.y, r: KID_R };
+  const body = { x: kid.x + d[0] * sp, y: kid.y + d[1] * sp, prevX: kid.x, prevY: kid.y, r: R.KID_R };
   keepInRoom(body, roomGrid(s));
   kid.x = body.x;
   kid.y = body.y;
@@ -96,7 +101,7 @@ function melee(s: RunState, kid: TagKid, e: EnemyState, sp: number, dmg: number)
   step(s, kid, kid.x + away[0] - away[1] * side, kid.y + away[1] + away[0] * side, sp * 0.8);
   if (kid.t <= 0) {
     kid.act = "go";
-    kid.t = GO_MAX;
+    kid.t = R.GO_MAX;
   }
 }
 
@@ -132,7 +137,7 @@ export function updateKids(s: RunState): void {
     kid.prevX = kid.x;
     kid.prevY = kid.y;
     if (kid.swing > 0) kid.swing--;
-    if (dist2(kid, p) > LEASH * LEASH) {
+    if (dist2(kid, p) > R.LEASH * R.LEASH) {
       kid.x = kid.prevX = p.x + HOME[i]![0];
       kid.y = kid.prevY = p.y + HOME[i]![1];
     }
@@ -145,7 +150,7 @@ export function updateKids(s: RunState): void {
       if (dist2(kid, { x: hx, y: hy }) > 9) step(s, kid, hx, hy, sp);
       kid.face = p.x >= kid.x ? 1 : -1;
       kid.act = "go";
-      kid.t = GO_MAX;
+      kid.t = R.GO_MAX;
       return;
     }
     kid.face = e.x >= kid.x ? 1 : -1;

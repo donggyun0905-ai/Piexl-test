@@ -8,11 +8,15 @@ import type { Summoned } from "./summonTypes";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, DIR16, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
 
-/** 나와 너무 멀어지지 않게 (이 밖의 적은 쫓지 않음) · 적이 없으면 따라오는 거리 */
-const LEASH = 130;
-const FOLLOW = 22;
-/** 소환수끼리 띄우는 거리 (몸 크기에 더함) */
-const GAP = 2;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 나와 너무 멀어지지 않게 (이 밖의 적은 쫓지 않음) · 적이 없으면 따라오는 거리 */
+  LEASH: 130,
+  FOLLOW: 22,
+  /** 소환수끼리 띄우는 거리 (몸 크기에 더함) */
+  GAP: 2,
+};
+export { R as SUMMONS_RULES };
 
 function nearestTo(s: RunState, x: number, y: number, range: number): EnemyState | null {
   let best: EnemyState | null = null;
@@ -76,9 +80,9 @@ export function updateSummons(s: RunState): void {
       const [ox, oy] = DIR16[(m.slot * 5 + (s.tick >> 3)) % 16]!;
       moveToward(m, p.x + ox * 14, p.y + oy * 14, st.speed * 2, 0);
     }
-    const e = m.kind === "shroom" || m.kind === "fairy" ? nearestTo(s, m.x, m.y, st.reach) : nearestTo(s, p.x, p.y, LEASH);
+    const e = m.kind === "shroom" || m.kind === "fairy" ? nearestTo(s, m.x, m.y, st.reach) : nearestTo(s, p.x, p.y, R.LEASH);
     if (!e) {
-      if (m.kind !== "shroom" && m.kind !== "fairy") moveToward(m, p.x - p.faceX * 12, p.y - p.faceY * 12, st.speed, FOLLOW);
+      if (m.kind !== "shroom" && m.kind !== "fairy") moveToward(m, p.x - p.faceX * 12, p.y - p.faceY * 12, st.speed, R.FOLLOW);
       continue;
     }
     act(s, m, e, st, dmg, gone);
@@ -99,7 +103,7 @@ function spread(s: RunState, list: Summoned[]): void {
       const b = list[j]!;
       const dx = b.x - a.x;
       const dy = b.y - a.y;
-      const rr = a.r + b.r + GAP;
+      const rr = a.r + b.r + R.GAP;
       const d2 = dx * dx + dy * dy;
       if (d2 >= rr * rr) continue;
       const d = Math.sqrt(d2);

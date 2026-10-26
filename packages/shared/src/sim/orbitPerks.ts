@@ -6,12 +6,16 @@ import { segDist2, type OrbBody } from "./orbit";
 import type { ProjectileState, RunState } from "./types";
 import { addEffect, hasPerk, normalize, weaponOf } from "./util";
 
-/** 전깃줄: 닿아 있는 동안 0.15초마다, 초당 공격력의 30% · 펫 (1초마다 50%) · 튕기기 30% */
-const WIRE_TICKS = 9;
-const WIRE_DPS = 0.3;
-const PET_TICKS = 60;
-const SIDE_MUL = 0.5;
-const DEFLECT_CHANCE = 0.3;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 전깃줄: 닿아 있는 동안 0.15초마다, 초당 공격력의 30% · 펫 (1초마다 50%) · 튕기기 30% */
+  WIRE_TICKS: 9,
+  WIRE_DPS: 0.3,
+  PET_TICKS: 60,
+  SIDE_MUL: 0.5,
+  DEFLECT_CHANCE: 0.3,
+};
+export { R as ORBIT_PERKS_RULES };
 
 const near2 = (a: { x: number; y: number }, b: { x: number; y: number }) => (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
 
@@ -21,13 +25,13 @@ export function wires(s: RunState, bodies: OrbBody[], dmg: number): void {
   if (!hasPerk(p, "electronic")) return;
   p.wireCd = Math.max(0, (p.wireCd ?? 0) - 1);
   if (p.wireCd > 0) return;
-  p.wireCd = WIRE_TICKS;
+  p.wireCd = R.WIRE_TICKS;
   const hit = new Set<number>();
   for (const [a, b] of wirePairs(bodies)) {
     for (const e of s.enemies) {
       if (e.hp <= 0 || hit.has(e.id) || segDist2(e, a, b) > (e.r + 2) * (e.r + 2)) continue;
       hit.add(e.id);
-      damageEnemy(s, e, (dmg * WIRE_DPS * WIRE_TICKS) / TICK_RATE, 0, 0);
+      damageEnemy(s, e, (dmg * R.WIRE_DPS * R.WIRE_TICKS) / TICK_RATE, 0, 0);
     }
   }
 }
@@ -43,7 +47,6 @@ export function wirePairs(bodies: OrbBody[]): [OrbBody, OrbBody][] {
   return out;
 }
 
-
 /** 펫: 새빨간 회전체가 1초마다 가까운 적에게 유도탄 */
 export function pet(s: RunState, bodies: OrbBody[], dmg: number): void {
   const p = s.player;
@@ -53,9 +56,9 @@ export function pet(s: RunState, bodies: OrbBody[], dmg: number): void {
   if (p.petCd > 0) return;
   const target = s.enemies.find((e) => e.hp > 0 && near2(e, b) <= 110 * 110);
   if (!target) return;
-  p.petCd = PET_TICKS;
+  p.petCd = R.PET_TICKS;
   const dir = normalize(target.x - b.x, target.y - b.y) ?? [1, 0];
-  s.projectiles.push(orbShot(s, b.x, b.y, dir, 2.4, dmg * SIDE_MUL, "pet", { homing: true, ticksLeft: 90 }));
+  s.projectiles.push(orbShot(s, b.x, b.y, dir, 2.4, dmg * R.SIDE_MUL, "pet", { homing: true, ticksLeft: 90 }));
 }
 
 /** 원소술사가 쏘는 탄 하나 */
@@ -73,7 +76,7 @@ export function guard(s: RunState, bodies: OrbBody[], dmg: number): void {
   s.projectiles = s.projectiles.filter((pr) => {
     const touch = (b: OrbBody) => near2(pr, b) < (b.r + pr.r + 1) * (b.r + pr.r + 1);
     if (pr.fromPlayer || !bodies.some((b) => b.tag !== "pet" && touch(b))) return true;
-    if (lucky && createRng(deriveSeed(s.seed, "deflect", pr.id)).nextFloat() < DEFLECT_CHANCE) {
+    if (lucky && createRng(deriveSeed(s.seed, "deflect", pr.id)).nextFloat() < R.DEFLECT_CHANCE) {
       pr.fromPlayer = true;
       pr.vx = -pr.vx;
       pr.vy = -pr.vy;

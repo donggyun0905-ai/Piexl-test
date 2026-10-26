@@ -2,8 +2,12 @@
 import { damagePlayer } from "./combat";
 import type { EnemyState, RunState } from "./types";
 
-/** 파동 굵기(반) */
-const WAVE_W = 4;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 파동 굵기(반) */
+  WAVE_W: 4,
+};
+export { R as BOSS_WAVES_RULES };
 
 /** 파동 하나: wait틱 뒤부터 speed로 max까지 커짐 */
 export function addWave(e: EnemyState, x: number, y: number, wait: number, speed: number, max: number, damage: number): void {
@@ -22,7 +26,7 @@ export function updateWaves(s: RunState, e: EnemyState): void {
     }
     w.r += w.speed;
     const d = Math.hypot(p.x - w.x, p.y - w.y);
-    if (!w.hit && Math.abs(d - w.r) < WAVE_W + p.r && p.dashTicks === 0) {
+    if (!w.hit && Math.abs(d - w.r) < R.WAVE_W + p.r && p.dashTicks === 0) {
       w.hit = true;
       damagePlayer(s, w.damage);
     }

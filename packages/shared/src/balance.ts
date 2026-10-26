@@ -74,7 +74,7 @@ export function createBalanceSet(groups: readonly BalanceGroup[]): BalanceSet {
   const DEFAULTS = new Map<string, number>();
   for (const g of groups) {
     for (const id of g.ids) {
-      for (const f of g.fields) {
+      for (const f of g.rowFields ? g.rowFields(id) : g.fields) {
         const v = read(g, id, f.key);
         if (typeof v === "number") DEFAULTS.set(`${g.id}/${id}/${f.key}`, v);
       }
@@ -84,6 +84,7 @@ export function createBalanceSet(groups: readonly BalanceGroup[]): BalanceSet {
   const balanceFields = (g: BalanceGroup, id: string): BalanceField[] => {
     const row = g.table[id];
     if (!row) return [];
+    if (g.rowFields) return g.rowFields(id);
     return g.fields.filter((f) => DEFAULTS.has(`${g.id}/${id}/${f.key}`) && (!f.when || f.when(row)));
   };
   /** 받은 값 다듬기: 모르는 항목은 버리고, 범위 안으로, 기본값과 같은 값은 뺌 */

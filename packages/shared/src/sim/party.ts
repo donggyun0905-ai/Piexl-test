@@ -4,6 +4,13 @@
 import { ROOM_WIDTH } from "../constants";
 import type { Body, BuyLogEntry, Device, PlayerState, Prompt, RunState } from "./types";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 방에 들어설 때 자리: 가로로 나란히 (혼자면 가운데) */
+  SPREAD: 14,
+};
+export { R as PARTY_RULES };
+
 export const PARTY_MAX = 5;
 /** 협동 적 세기: 한 명 늘 때마다 적 체력 +20%, 일반 적 수 +25% (1:1로 늘리지 않음. 테스트하며 조정) */
 export const PARTY_HP_STEP = 0.2;
@@ -118,12 +125,10 @@ export function nearestSeat(s: RunState, b: Body): number {
   return best;
 }
 
-/** 방에 들어설 때 자리: 가로로 나란히 (혼자면 가운데) */
-const SPREAD = 14;
 export function placeParty(s: RunState, y: number, resetDash = true): void {
   const list = allPlayers(s);
   list.forEach((p, i) => {
-    p.x = p.prevX = ROOM_WIDTH / 2 + (i - (list.length - 1) / 2) * SPREAD;
+    p.x = p.prevX = ROOM_WIDTH / 2 + (i - (list.length - 1) / 2) * R.SPREAD;
     p.y = p.prevY = y;
     if (resetDash) p.dashTicks = 0;
   });

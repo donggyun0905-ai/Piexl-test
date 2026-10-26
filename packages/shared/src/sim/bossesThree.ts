@@ -6,13 +6,21 @@ import { addShape } from "./hazards";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
-type Vec = readonly [number, number];
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 데스: 낫 반경·부채꼴 cos(약 200도) · 등 뒤 순간이동 거리 · 한 바퀴 베기 반경 */
+  SCYTHE_R: 75,
+  SCYTHE_ARC: -0.2,
+  BEHIND: 30,
+  SPIN_R: 66,
+  /** 검신: 검기 격자 간격·굵기 · 일섬 길이·굵기 */
+  GRID: 32,
+  LINE_W: 3,
+  SLASH_LEN: 170,
+};
+export { R as BOSSES_THREE_RULES };
 
-/** 데스: 낫 반경·부채꼴 cos(약 200도) · 등 뒤 순간이동 거리 · 한 바퀴 베기 반경 */
-const SCYTHE_R = 75;
-const SCYTHE_ARC = -0.2;
-const BEHIND = 30;
-const SPIN_R = 66;
+type Vec = readonly [number, number];
 
 /** 데스: 다가오며 큰 낫 휘두르기(절반 아래면 앞뒤 두 번) · 세 번째마다 등 뒤로 순간이동해 한 바퀴 베기 · 멀면 영혼 탄 */
 export function updateReaper(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
@@ -34,15 +42,15 @@ export function updateReaper(s: RunState, e: EnemyState, toP: Vec, go: Vec): voi
   e.phase = "act";
   if (e.count % 3 === 0) {
     addEffect(s, { kind: "burst", x: e.x, y: e.y, dirX: 0, dirY: 0, size: 10, maxTicks: 12 });
-    e.x = e.prevX = p.x - p.faceX * BEHIND;
-    e.y = e.prevY = p.y - p.faceY * BEHIND;
+    e.x = e.prevX = p.x - p.faceX * R.BEHIND;
+    e.y = e.prevY = p.y - p.faceY * R.BEHIND;
     addEffect(s, { kind: "burst", x: e.x, y: e.y, dirX: 0, dirY: 0, size: 10, maxTicks: 12 });
-    addShape(s, 42, { x: e.x, y: e.y, radius: SPIN_R, damage: hitDamage(s), arc: -1, fx: "bslash" });
+    addShape(s, 42, { x: e.x, y: e.y, radius: R.SPIN_R, damage: hitDamage(s), arc: -1, fx: "bslash" });
     e.timer = 55;
   } else if (distTo(s, e) < 75) {
     const warn = h ? 30 : 38;
-    addShape(s, warn, { x: e.x, y: e.y, radius: SCYTHE_R, damage: hitDamage(s), dirX: toP[0], dirY: toP[1], arc: SCYTHE_ARC, fx: "bslash" });
-    if (h) addShape(s, warn + 24, { x: e.x, y: e.y, radius: SCYTHE_R, damage: hitDamage(s), dirX: -toP[0], dirY: -toP[1], arc: SCYTHE_ARC, fx: "bslash" });
+    addShape(s, warn, { x: e.x, y: e.y, radius: R.SCYTHE_R, damage: hitDamage(s), dirX: toP[0], dirY: toP[1], arc: R.SCYTHE_ARC, fx: "bslash" });
+    if (h) addShape(s, warn + 24, { x: e.x, y: e.y, radius: R.SCYTHE_R, damage: hitDamage(s), dirX: -toP[0], dirY: -toP[1], arc: R.SCYTHE_ARC, fx: "bslash" });
     e.timer = warn + (h ? 34 : 12);
   } else {
     fan(s, e, toP, [-1, 0, 1], 1.4, { look: "soul" });
@@ -51,17 +59,12 @@ export function updateReaper(s: RunState, e: EnemyState, toP: Vec, go: Vec): voi
   }
 }
 
-/** 검신: 검기 격자 간격·굵기 · 일섬 길이·굵기 */
-const GRID = 32;
-const LINE_W = 3;
-const SLASH_LEN = 170;
-
 /** 방 전체에 가로세로 검기를 그어 빛나게 함 (빛나지 않는 칸이 안전). red = 먼저 터지는 붉은 검기 */
 function bladeGrid(s: RunState, warn: number, ox: number, oy: number, red = false): void {
   const fx = red ? "rgleam" : "gleam";
   const dmg = hitDamage(s);
-  for (let x = ROOM_MIN_X + ox; x < ROOM_MAX_X; x += GRID) addShape(s, warn, { x, y: ROOM_MIN_Y, radius: 0, damage: dmg, toX: x, toY: ROOM_MAX_Y, width: LINE_W, fx });
-  for (let y = ROOM_MIN_Y + oy; y < ROOM_MAX_Y; y += GRID) addShape(s, warn, { x: ROOM_MIN_X, y, radius: 0, damage: dmg, toX: ROOM_MAX_X, toY: y, width: LINE_W, fx });
+  for (let x = ROOM_MIN_X + ox; x < ROOM_MAX_X; x += R.GRID) addShape(s, warn, { x, y: ROOM_MIN_Y, radius: 0, damage: dmg, toX: x, toY: ROOM_MAX_Y, width: R.LINE_W, fx });
+  for (let y = ROOM_MIN_Y + oy; y < ROOM_MAX_Y; y += R.GRID) addShape(s, warn, { x: ROOM_MIN_X, y, radius: 0, damage: dmg, toX: ROOM_MAX_X, toY: y, width: R.LINE_W, fx });
 }
 
 /** 검신: 검기 격자(절반 아래면 어긋난 격자가 한 번 더) · 플레이어를 꿰뚫는 일섬 뒤 그 끝으로 순간이동 */
@@ -91,19 +94,19 @@ export function updateSwordGod(s: RunState, e: EnemyState, toP: Vec, go: Vec): v
   e.count++;
   if (e.count % 2 === 1) {
     const rng = createRng(deriveSeed(s.seed, "bladeGrid", s.floor, e.count));
-    const ox = rng.int(4, GRID - 4);
-    const oy = rng.int(4, GRID - 4);
+    const ox = rng.int(4, R.GRID - 4);
+    const oy = rng.int(4, R.GRID - 4);
     const warn = h ? 50 : 60;
     // 절반 아래면 붉은 검기가 먼저 터지고, 어긋난 흰 검기가 뒤따름
     bladeGrid(s, warn, ox, oy, h);
-    if (h) bladeGrid(s, warn + 40, (ox + GRID / 2) % GRID, (oy + GRID / 2) % GRID);
+    if (h) bladeGrid(s, warn + 40, (ox + R.GRID / 2) % R.GRID, (oy + R.GRID / 2) % R.GRID);
     e.phase = "act";
     e.timer = warn + (h ? 50 : 10);
   } else {
     const warn = h ? 18 : 22;
     const d = normalize(s.player.x - e.x, s.player.y - e.y) ?? [1, 0];
-    const tx = Math.max(ROOM_MIN_X + 10, Math.min(ROOM_MAX_X - 10, e.x + d[0] * SLASH_LEN));
-    const ty = Math.max(ROOM_MIN_Y + 10, Math.min(ROOM_MAX_Y - 10, e.y + d[1] * SLASH_LEN));
+    const tx = Math.max(ROOM_MIN_X + 10, Math.min(ROOM_MAX_X - 10, e.x + d[0] * R.SLASH_LEN));
+    const ty = Math.max(ROOM_MIN_Y + 10, Math.min(ROOM_MAX_Y - 10, e.y + d[1] * R.SLASH_LEN));
     addShape(s, warn, { x: e.x, y: e.y, radius: 0, damage: hitDamage(s), toX: tx, toY: ty, width: 6, fx: "gleam" });
     e.auxX = tx;
     e.auxY = ty;

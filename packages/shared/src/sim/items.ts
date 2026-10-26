@@ -27,14 +27,21 @@ import { mukinPotion } from "./mukin";
 import { swarmMods } from "./swarmMods";
 import { goldLocked, oniConvert } from "./oniRules";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 닿았다고 보는 거리 (플레이어 반지름에 더함) */
+  TOUCH: 9,
+  /** 설명을 띄우는 거리 */
+  NEAR: 16,
+  /** 협동: 쓰러진 친구에게 닿는 거리 */
+  REVIVE_REACH: 16,
+};
+export { R as ITEMS_RULES };
+
 /** 처방전(의사): 포션·회복 아이템 회복량 배율 */
 export const PRESCRIPTION_MUL = 1.5;
-/** 닿았다고 보는 거리 (플레이어 반지름에 더함) */
-const TOUCH = 9;
 /** 바꾸기·고르기는 이만큼 서 있으면 가짐 (0.5초). 지나가다 실수로 바뀌지 않게 */
 export const PICKUP_HOLD_TICKS = 30;
-/** 설명을 띄우는 거리 */
-const NEAR = 16;
 
 /** 무기·패시브가 바뀌면 능력치 다시 계산. 최대 체력이 늘면 그만큼 체력도 늘어남 */
 export function recalcStats(s: RunState): void {
@@ -87,9 +94,6 @@ function touching(s: RunState, pk: Pickup, reach: number): boolean {
   return dx * dx + dy * dy <= r * r;
 }
 
-/** 협동: 쓰러진 친구에게 닿는 거리 */
-const REVIVE_REACH = 16;
-
 /** 협동: 옆에 쓰러진 친구 (없으면 null) */
 function downedNear(s: RunState): PlayerState | null {
   if (!s.party) return null;
@@ -97,7 +101,7 @@ function downedNear(s: RunState): PlayerState | null {
   const near = (p: PlayerState) => {
     const dx = p.x - me.x;
     const dy = p.y - me.y;
-    return dx * dx + dy * dy <= REVIVE_REACH * REVIVE_REACH;
+    return dx * dx + dy * dy <= R.REVIVE_REACH * R.REVIVE_REACH;
   };
   return allPlayers(s).find((p) => p !== me && p.hp <= 0 && near(p)) ?? null;
 }
@@ -126,20 +130,20 @@ export function updateItems(s: RunState, input: TickInput): void {
   for (const pk of [...room.pickups].sort((a, b) => dist2(a) - dist2(b))) {
     if (!mine(s, pk)) continue;
     const d2 = dist2(pk);
-    if (d2 < nearest && touching(s, pk, NEAR)) {
+    if (d2 < nearest && touching(s, pk, R.NEAR)) {
       nearest = d2;
       s.nearPickupId = pk.id;
     }
     if (pk.kind === "coin") {
       // 큰 동전(100원 이상, 황금방 300원)은 크게 그려서 닿는 거리도 넓음
-      if (touching(s, pk, pk.price >= BIG_COIN ? TOUCH + 8 : TOUCH)) {
+      if (touching(s, pk, pk.price >= BIG_COIN ? R.TOUCH + 8 : R.TOUCH)) {
         addGold(s, pk.price);
         room.pickups = room.pickups.filter((x) => x.id !== pk.id);
         addEffect(s, { kind: "hit", x: pk.x, y: pk.y, dirX: 0, dirY: 0, size: 3, maxTicks: 6 });
       }
       continue;
     }
-    if (!touching(s, pk, TOUCH)) {
+    if (!touching(s, pk, R.TOUCH)) {
       // 한 번 떨어지면 다시 주울 수 있음 (무기·사용 아이템을 번갈아 써 보고 고를 수 있게)
       pk.armed = true;
       if (pk.kind === "trash") pk.itemId = "0";

@@ -9,24 +9,29 @@ import { depth } from "./hero";
 import { addEffect, dist2, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 import { addShape } from "./hazards";
 
-/** 상자 벽 수 (2×2칸) */
-const BOXES = 6;
-/** 그물: 눌러야 하는 방향 수 · 틀리면 못 움직이는 틱 */
-const NET_KEYS = 5;
-const NET_STUN = 180;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 상자 벽 수 (2×2칸) */
+  BOXES: 6,
+  /** 그물: 눌러야 하는 방향 수 · 틀리면 못 움직이는 틱 */
+  NET_KEYS: 5,
+  NET_STUN: 180,
+  GHOST_TOUCH_WAIT: 60,
+  /** 다크 오라 선 빠르기 · 굵기(반) */
+  SWEEP_SPEED: 1.3,
+  SWEEP_W: 8,
+  /** 기억력: 선 수 · 하나씩 깔리는 간격 · 다 깔린 뒤 기다림 · 거꾸로 터지는 간격 · 굵기(반) */
+  MEMORY_LINES: 6,
+  MEMORY_SHOW: 24,
+  MEMORY_HOLD: 30,
+  MEMORY_FIRE: 22,
+  MEMORY_W: 7,
+};
+export { R as BOSS_PRIMEVAL_RULES };
+
 /** 어둠: 유령에 닿으면 짙어지는 틱 (5초) · 쓰러지는 횟수 · 같은 유령에 다시 닿기까지 */
 export const DARK_TICKS = 300;
 export const DARK_DEATH = 5;
-const GHOST_TOUCH_WAIT = 60;
-/** 다크 오라 선 빠르기 · 굵기(반) */
-const SWEEP_SPEED = 1.3;
-const SWEEP_W = 8;
-/** 기억력: 선 수 · 하나씩 깔리는 간격 · 다 깔린 뒤 기다림 · 거꾸로 터지는 간격 · 굵기(반) */
-const MEMORY_LINES = 6;
-const MEMORY_SHOW = 24;
-const MEMORY_HOLD = 30;
-const MEMORY_FIRE = 22;
-const MEMORY_W = 7;
 
 const grids = new WeakMap<number[], TileGrid>();
 
@@ -36,7 +41,7 @@ export function makeArena(s: RunState): number[] {
   const out: number[] = [];
   const mid = Math.floor(ROOM_COLS / 2);
   const midRow = Math.floor(ROOM_ROWS / 2);
-  for (let tries = 0; tries < 200 && out.length < BOXES * 2; tries++) {
+  for (let tries = 0; tries < 200 && out.length < R.BOXES * 2; tries++) {
     const c = rng.int(2, ROOM_COLS - 4);
     const r = rng.int(2, ROOM_ROWS - 4);
     if (Math.abs(c - mid) <= 2 && (r <= 3 || r >= ROOM_ROWS - 5)) continue;
@@ -85,7 +90,7 @@ export function netPlayer(s: RunState, id: number): void {
   const p = s.player;
   if ((p.netSeq?.length ?? 0) > 0 || (p.netStun ?? 0) > 0) return;
   const rng = createRng(deriveSeed(s.seed, "net", id));
-  p.netSeq = Array.from({ length: NET_KEYS }, () => rng.int(0, 3));
+  p.netSeq = Array.from({ length: R.NET_KEYS }, () => rng.int(0, 3));
   p.netLast = -1;
 }
 
@@ -111,7 +116,7 @@ export function netMove(s: RunState, mx: number, my: number): [number, number] {
     else {
       // 틀림: 그물은 풀리지만 3초 못 움직임
       p.netSeq = [];
-      p.netStun = NET_STUN;
+      p.netStun = R.NET_STUN;
     }
   }
   p.netLast = d;
@@ -133,7 +138,7 @@ export function updateGhost(s: RunState, e: EnemyState): void {
   if ((e.aux ?? 0) > 0) e.aux = (e.aux ?? 0) - 1;
   const rr = e.r + p.r;
   if ((e.aux ?? 0) === 0 && dist2(e, p) < rr * rr && p.dashTicks === 0) {
-    e.aux = GHOST_TOUCH_WAIT;
+    e.aux = R.GHOST_TOUCH_WAIT;
     p.darkStacks = (p.darkStacks ?? 0) + 1;
     p.darkTicks = DARK_TICKS;
     if (p.darkStacks >= DARK_DEATH) {
@@ -153,9 +158,9 @@ export function primevalTick(s: RunState, e: EnemyState): void {
       keep.push(sw);
       continue;
     }
-    sw.pos += sw.dir * SWEEP_SPEED;
+    sw.pos += sw.dir * R.SWEEP_SPEED;
     const at = sw.x ? p.x : p.y;
-    if (Math.abs(at - sw.pos) < SWEEP_W + p.r) damagePlayer(s, e.kind === "pdark" ? 10 + 2 * depth(s) : 0);
+    if (Math.abs(at - sw.pos) < R.SWEEP_W + p.r) damagePlayer(s, e.kind === "pdark" ? 10 + 2 * depth(s) : 0);
     const end = sw.x ? (sw.dir > 0 ? ROOM_MAX_X : ROOM_MIN_X) : sw.dir > 0 ? ROOM_MAX_Y : ROOM_MIN_Y;
     if ((sw.dir > 0 && sw.pos < end) || (sw.dir < 0 && sw.pos > end)) keep.push(sw);
   }
@@ -165,13 +170,13 @@ export function primevalTick(s: RunState, e: EnemyState): void {
 /** 기억력: 흰 선이 방에 하나씩 차례로 깔리고, 다 깔리면 마지막 선부터 거꾸로 하나씩 터짐 (순서를 기억해 피함) */
 export function memoryLines(s: RunState, e: EnemyState): void {
   const rng = createRng(deriveSeed(s.seed, "memory", e.id, e.count));
-  const fireAt = MEMORY_LINES * MEMORY_SHOW + MEMORY_HOLD;
-  for (let i = 0; i < MEMORY_LINES; i++) {
+  const fireAt = R.MEMORY_LINES * R.MEMORY_SHOW + R.MEMORY_HOLD;
+  for (let i = 0; i < R.MEMORY_LINES; i++) {
     const across = rng.nextFloat() < 0.5;
     const h = across
       ? { x: ROOM_MIN_X, y: rng.int(ROOM_MIN_Y + 10, ROOM_MAX_Y - 10), toX: ROOM_MAX_X }
       : { x: rng.int(ROOM_MIN_X + 10, ROOM_MAX_X - 10), y: ROOM_MIN_Y, toY: ROOM_MAX_Y };
-    const shape = { ...h, toX: h.toX ?? h.x, toY: "toY" in h ? h.toY : h.y, radius: 0, damage: 12 + 2 * depth(s), width: MEMORY_W, fx: "memory" as const };
-    addShape(s, fireAt + (MEMORY_LINES - 1 - i) * MEMORY_FIRE, shape, i * MEMORY_SHOW);
+    const shape = { ...h, toX: h.toX ?? h.x, toY: "toY" in h ? h.toY : h.y, radius: 0, damage: 12 + 2 * depth(s), width: R.MEMORY_W, fx: "memory" as const };
+    addShape(s, fireAt + (R.MEMORY_LINES - 1 - i) * R.MEMORY_FIRE, shape, i * R.MEMORY_SHOW);
   }
 }

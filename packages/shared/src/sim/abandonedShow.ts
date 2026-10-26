@@ -9,16 +9,21 @@ import { damageEnemy } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, normalize, roomGrid } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const V = {
+  VOLLEYS: 8,
+};
+export { V as ABANDONED_SHOW_RULES };
+
 const R = A.specialR;
 /** 질주·베기 횟수 (alt면 늘어남) */
 const passes = (sh: TagShow) => (sh.alt ? 5 : 3);
 const cuts = (sh: TagShow) => (sh.alt ? 8 : 6);
-const VOLLEYS = 8;
 
 function lenOf(kind: TagSpecialKind, alt: boolean): number {
   if (kind === "shadow") return 6 + (alt ? 5 : 3) * 8 + 14;
   if (kind === "blink") return 4 + (alt ? 8 : 6) * 5 + 14;
-  if (kind === "kata") return 8 + VOLLEYS * 5 + 8;
+  if (kind === "kata") return 8 + V.VOLLEYS * 5 + 8;
   if (kind === "waltz") return 50;
   if (kind === "meteor") return alt ? 48 : 28;
   return alt ? 50 : 38;
@@ -139,7 +144,7 @@ function kata(s: RunState, sh: TagShow, kids: TagKid[], t: number): void {
   const guard = kids.find((k) => k !== g)!;
   moveTo(s, g, sh.tx - sh.dx * 32, sh.ty - sh.dy * 32, 3);
   moveTo(s, guard, sh.tx - sh.dx * 16 - sh.dy * 10, sh.ty - sh.dy * 16 + sh.dx * 10, 3);
-  const end = 8 + VOLLEYS * 5;
+  const end = 8 + V.VOLLEYS * 5;
   if (t >= 8 && t < end && (t - 8) % 5 === 0) {
     const v = (t - 8) / 5;
     const aim = normalize(sh.tx - g.x, sh.ty - g.y) ?? [sh.dx, sh.dy];

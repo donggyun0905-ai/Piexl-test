@@ -8,43 +8,48 @@ import { aimPoint, FLY_TICKS } from "./laserWeapons";
 import type { Device, EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  CHECKUP_MUL: 3,
+  /** 건강 체질: 보호막이 있는 동안 피해 배율 · 수술 집도: 범위·사거리 배율 */
+  ROBUST_MUL: 1.2,
+  SURGERY_AREA: 1.25,
+  SURGERY_REACH: 1.2,
+  /** 메스·수혈 튜브 회복률 배율 */
+  SCALPEL_LEECH: 3,
+  TUBE_LEECH: 4,
+  /** 제세동기 기절 틱 (보스는 짧게) · 붕대 채찍 속박 틱 */
+  DEFIB_STUN: 60,
+  DEFIB_BOSS_STUN: 20,
+  WHIP_ROOT: 90,
+  WHIP_BOSS_ROOT: 24,
+  /** 링거 폴대 밀어내기 */
+  POLE_PUSH: 14,
+  /** 알약 산탄: 알약 수, 한 알 피해 비율, 알약 사이 각도 10도의 [cos, sin] */
+  PILL_COUNT: 7,
+  PILL_MUL: 0.25,
+  /** 구급 키트 폭발 피해 배율 */
+  MEDKIT_MUL: 1.2,
+  /** 구급차: 출발 거리(화면 밖), 속력, 한 번 달리는 틱, 왕복에 드는 보호막 */
+  AMB_START: 300,
+  AMB_SPEED: 6,
+  AMB_SHIELD: 6,
+};
+export { R as MEDIC_WEAPONS_RULES };
+
 /** 무기마다 한 번 쓰는 간격 (공격 속도 2일 때, 틱). 없으면 매 틱 공격 */
 const PERIODS: Partial<Record<string, number>> = { defib: 66, suture: 36, gas: 108, ivpole: 48, pills: 36, medkit: 96, whip: 72, ambulance: 120 };
 /** 건강 검진: 체력이 가득 찬 채로 이만큼(5초) 있으면 다음 공격 피해 배율 */
 export const CHECKUP_TICKS = 180;
-const CHECKUP_MUL = 3;
-/** 건강 체질: 보호막이 있는 동안 피해 배율 · 수술 집도: 범위·사거리 배율 */
-const ROBUST_MUL = 1.2;
-const SURGERY_AREA = 1.25;
-const SURGERY_REACH = 1.2;
-/** 메스·수혈 튜브 회복률 배율 */
-const SCALPEL_LEECH = 3;
-const TUBE_LEECH = 4;
-/** 제세동기 기절 틱 (보스는 짧게) · 붕대 채찍 속박 틱 */
-const DEFIB_STUN = 60;
-const DEFIB_BOSS_STUN = 20;
-const WHIP_ROOT = 90;
-const WHIP_BOSS_ROOT = 24;
 /** 봉합 바늘: 꽂힌 뒤 봉합까지 틱 (3초) */
 export const SUTURE_TICKS = 180;
 /** 마취 가스 장판이 남는 틱 (3초) */
 export const GAS_LIFE = 240;
-/** 링거 폴대 밀어내기 */
-const POLE_PUSH = 14;
-/** 알약 산탄: 알약 수, 한 알 피해 비율, 알약 사이 각도 10도의 [cos, sin] */
-const PILL_COUNT = 7;
-const PILL_MUL = 0.25;
 const PILL_SPREAD: readonly [number, number] = [0.9848, 0.1736];
-/** 구급 키트 폭발 피해 배율 */
-const MEDKIT_MUL = 1.2;
-/** 구급차: 출발 거리(화면 밖), 속력, 한 번 달리는 틱, 왕복에 드는 보호막 */
-const AMB_START = 300;
-const AMB_SPEED = 6;
 export const AMB_TICKS = 100;
-const AMB_SHIELD = 6;
 
-export const areaMul = (p: PlayerState) => (hasPerk(p, "surgery") ? SURGERY_AREA : 1);
-export const reachMul = (p: PlayerState) => (hasPerk(p, "surgery") ? SURGERY_REACH : 1);
+export const areaMul = (p: PlayerState) => (hasPerk(p, "surgery") ? R.SURGERY_AREA : 1);
+export const reachMul = (p: PlayerState) => (hasPerk(p, "surgery") ? R.SURGERY_REACH : 1);
 
 /** 간격이 있는 무기의 간격 (틱, 공격 속도에 따라 짧아짐). 0이면 매 틱 */
 export function medicPeriod(p: PlayerState): number {
@@ -57,7 +62,7 @@ export function medicPeriod(p: PlayerState): number {
 export function medicHit(s: RunState, e: EnemyState, dmg: number, leechMul = 1, flash = true): void {
   const p = s.player;
   if (e.immune) return;
-  if ((p.shieldPts ?? 0) > 0 && hasPerk(p, "robust")) dmg *= ROBUST_MUL;
+  if ((p.shieldPts ?? 0) > 0 && hasPerk(p, "robust")) dmg *= R.ROBUST_MUL;
   e.hp -= dmg;
   if (flash) e.hitFlash = Math.max(e.hitFlash, 2);
   leechHeal(s, dmg * leechRate(p, leechMul));
@@ -75,19 +80,19 @@ export function fireMedic(s: RunState, speed: number, interval: number): void {
   const ticks = period || interval;
   let dmg = tickDamage(p, speed, ticks);
   if (hasPerk(p, "checkup") && (p.fullTicks ?? 0) >= CHECKUP_TICKS) {
-    dmg *= CHECKUP_MUL;
+    dmg *= R.CHECKUP_MUL;
     p.fullTicks = 0;
   }
   const gear = weaponOf(p).medic;
-  if (gear === "scalpel") cone(s, dmg, SCALPEL_LEECH);
+  if (gear === "scalpel") cone(s, dmg, R.SCALPEL_LEECH);
   else if (gear === "transfusion") tube(s, dmg);
   else if (gear === "defib") {
-    for (const e of cone(s, dmg, 1)) if (e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? DEFIB_BOSS_STUN : DEFIB_STUN);
+    for (const e of cone(s, dmg, 1)) if (e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? R.DEFIB_BOSS_STUN : R.DEFIB_STUN);
   } else if (gear === "suture") fireShot(s, "needle", p.faceX, p.faceY, dmg);
   else if (gear === "gas") throwIt(s, "gas", { life: GAS_LIFE });
   else if (gear === "ivpole") pole(s, dmg);
   else if (gear === "pills") pills(s, dmg);
-  else if (gear === "medkit") throwIt(s, "medkit", { dmg: dmg * MEDKIT_MUL });
+  else if (gear === "medkit") throwIt(s, "medkit", { dmg: dmg * R.MEDKIT_MUL });
   else if (gear === "whip") whip(s, dmg);
   else if (gear === "ambulance") callAmbulance(s, dmg);
   else fireShot(s, "syringe", p.faceX, p.faceY, dmg);
@@ -150,7 +155,7 @@ function tube(s: RunState, dmg: number): void {
   e ??= traceBeam(s, p.x, p.y, p.faceX, p.faceY, range, 3, false, false).hits[0] ?? null;
   p.tubeTargetId = e?.id;
   if (!e) return;
-  medicHit(s, e, dmg, TUBE_LEECH);
+  medicHit(s, e, dmg, R.TUBE_LEECH);
   addEffect(s, { kind: "tube", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 0, maxTicks: 10, toX: e.x, toY: e.y, follow: true });
 }
 
@@ -173,8 +178,8 @@ function pole(s: RunState, dmg: number): void {
     if (e.hp <= 0 || d > radius + e.r) continue;
     medicHit(s, e, dmg);
     if (d > 0 && !ENEMIES[e.kind].boss && e.kind !== "dummy") {
-      e.x += (dx / d) * POLE_PUSH;
-      e.y += (dy / d) * POLE_PUSH;
+      e.x += (dx / d) * R.POLE_PUSH;
+      e.y += (dy / d) * R.POLE_PUSH;
       keepInRoom(e, g);
     }
   }
@@ -187,12 +192,12 @@ function pills(s: RunState, dmg: number): void {
   const [c, sn] = PILL_SPREAD;
   let lx = p.faceX, ly = p.faceY, rx = p.faceX, ry = p.faceY;
   const dirs: [number, number][] = [[lx, ly]];
-  for (let i = 0; i < (PILL_COUNT - 1) / 2; i++) {
+  for (let i = 0; i < (R.PILL_COUNT - 1) / 2; i++) {
     [lx, ly] = [lx * c - ly * sn, lx * sn + ly * c];
     [rx, ry] = [rx * c + ry * sn, -rx * sn + ry * c];
     dirs.push([lx, ly], [rx, ry]);
   }
-  for (const [dx, dy] of dirs) fireShot(s, "pill", dx, dy, dmg * PILL_MUL);
+  for (const [dx, dy] of dirs) fireShot(s, "pill", dx, dy, dmg * R.PILL_MUL);
 }
 
 /** 붕대 채찍: 앞으로 곧게 휘둘러 닿은 적 모두 속박 */
@@ -205,7 +210,7 @@ function whip(s: RunState, dmg: number): void {
     const t = ex * p.faceX + ey * p.faceY;
     if (e.hp <= 0 || t < -e.r || t > len + e.r || Math.abs(ex * p.faceY - ey * p.faceX) > e.r + 4) continue;
     medicHit(s, e, dmg);
-    if (e.kind !== "dummy") e.rootTicks = ENEMIES[e.kind].boss ? WHIP_BOSS_ROOT : WHIP_ROOT;
+    if (e.kind !== "dummy") e.rootTicks = ENEMIES[e.kind].boss ? R.WHIP_BOSS_ROOT : R.WHIP_ROOT;
   }
   addEffect(s, { kind: "lash", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: len, maxTicks: 22, follow: true });
 }
@@ -213,18 +218,18 @@ function whip(s: RunState, dmg: number): void {
 /** 구급차 호출: 조준 방향 화면 밖에서 플레이어 쪽으로 곧게 달려옴. 보호막 10이 있으면 써서 왕복 */
 function callAmbulance(s: RunState, dmg: number): void {
   const p = s.player;
-  const back = (p.shieldPts ?? 0) >= AMB_SHIELD;
-  if (back) p.shieldPts = (p.shieldPts ?? 0) - AMB_SHIELD;
+  const back = (p.shieldPts ?? 0) >= R.AMB_SHIELD;
+  if (back) p.shieldPts = (p.shieldPts ?? 0) - R.AMB_SHIELD;
   const dir = normalize(p.faceX, p.faceY) ?? [1, 0];
   (s.devices ??= []).push({
     id: s.nextId++,
     kind: "ambulance",
-    x: p.x + dir[0] * AMB_START,
-    y: p.y + dir[1] * AMB_START,
+    x: p.x + dir[0] * R.AMB_START,
+    y: p.y + dir[1] * R.AMB_START,
     timer: AMB_TICKS,
     dmg,
-    vx: -dir[0] * AMB_SPEED,
-    vy: -dir[1] * AMB_SPEED,
+    vx: -dir[0] * R.AMB_SPEED,
+    vy: -dir[1] * R.AMB_SPEED,
     hitIds: [],
     back,
   });

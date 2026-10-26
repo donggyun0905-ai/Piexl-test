@@ -11,6 +11,26 @@ import { guard, pet, wires } from "./orbitPerks";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { dist2, hasPerk, normalize, weaponOf } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const V = {
+  TAU: 6.283185307179586,
+  /** 투사체 속도 1당 한 틱에 도는 각도 (라디안) */
+  SPIN_PER_SPEED: 0.012,
+  /** 결벽증: 맞은 뒤 (RUSH_TICKS) 이동 +30%, 도는 빠르기 2.5배 */
+  RUSH_MOVE: 1.3,
+  RUSH_SPIN: 2.5,
+  /** 날아가 때리는 회전체의 다시 때리기 간격 배율 (날아가는 방식은 orbitBlades) */
+  STRIKE_SLOW: 2,
+  /** 빛 구슬 경직 (0.5초) */
+  LIGHT_STUN: 30,
+  /** 은하수: 맞을 때 불이 붙을 확률 */
+  GALAXY_BURN: 0.1,
+  /** 화려하게 15% · 중력 안에 들어온 적 탄 빠르기 */
+  FLASHY_CHANCE: 0.15,
+  GRAVITY_SHOT: 0.5,
+};
+export { V as ORBIT_RULES };
+
 export { ELEMENTS, PLANETS, type Element, type Planet } from "./orbitElements";
 
 export interface OrbBody {
@@ -24,23 +44,8 @@ export interface OrbBody {
   striker?: boolean;
 }
 
-const TAU = 6.283185307179586;
-/** 투사체 속도 1당 한 틱에 도는 각도 (라디안) */
-const SPIN_PER_SPEED = 0.012;
-/** 결벽증: 맞은 뒤 (RUSH_TICKS) 이동 +30%, 도는 빠르기 2.5배 */
-const RUSH_MOVE = 1.3;
-const RUSH_SPIN = 2.5;
-/** 날아가 때리는 회전체의 다시 때리기 간격 배율 (날아가는 방식은 orbitBlades) */
-const STRIKE_SLOW = 2;
 /** 닿아 있는 동안 틱 피해 간격 (0.15초) */
 export const ORB_TICK = 9;
-/** 빛 구슬 경직 (0.5초) */
-const LIGHT_STUN = 30;
-/** 은하수: 맞을 때 불이 붙을 확률 */
-const GALAXY_BURN = 0.1;
-/** 화려하게 15% · 중력 안에 들어온 적 탄 빠르기 */
-const FLASHY_CHANCE = 0.15;
-const GRAVITY_SHOT = 0.5;
 
 function roll(s: RunState, ...labels: (string | number)[]): number {
   return createRng(deriveSeed(s.seed, ...labels, s.tick)).nextFloat();
@@ -65,7 +70,7 @@ function rot(a: number): Vec {
 const spacing = new Map<number, Vec>();
 function step(n: number): Vec {
   let v = spacing.get(n);
-  if (!v) spacing.set(n, (v = rot(TAU / n)));
+  if (!v) spacing.set(n, (v = rot(V.TAU / n)));
   return v;
 }
 
@@ -147,7 +152,7 @@ export function orbBodies(p: PlayerState, cx: number, cy: number, tick: number):
 
 /** 결벽증으로 빨라진 이동 속도 배율 */
 export function orbitMoveMul(p: PlayerState): number {
-  return (p.rushTicks ?? 0) > 0 ? RUSH_MOVE : 1;
+  return (p.rushTicks ?? 0) > 0 ? V.RUSH_MOVE : 1;
 }
 
 /** 회전체 하나가 적을 때림 */
@@ -162,9 +167,9 @@ function orbEffect(s: RunState, b: OrbBody, e: EnemyState, dmg: number): void {
   const dir = normalize(e.x - b.x, e.y - b.y) ?? [1, 0];
   if ((ELEMENTS as readonly string[]).includes(b.tag)) elementEffect(s, e, b.tag as Element, dmg, dir[0], dir[1]);
   else if ((PLANETS as readonly string[]).includes(b.tag)) planetEffect(s, e, b.tag as Planet, dmg, dir[0], dir[1]);
-  else if (b.tag === "light" && e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? LIGHT_STUN / 2 : LIGHT_STUN);
+  else if (b.tag === "light" && e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? V.LIGHT_STUN / 2 : V.LIGHT_STUN);
   // 화려하게: 가끔 원소 효과 하나 더
-  if (hasPerk(s.player, "flashy") && roll(s, "flashy", e.id) < FLASHY_CHANCE) {
+  if (hasPerk(s.player, "flashy") && roll(s, "flashy", e.id) < V.FLASHY_CHANCE) {
     elementEffect(s, e, ELEMENTS[Math.floor(roll(s, "flashyEl", e.id) * ELEMENTS.length)]!, dmg, dir[0], dir[1]);
   }
 }
@@ -187,12 +192,12 @@ export function updateOrbit(s: RunState): void {
   if ((p.rushTicks ?? 0) > 0) p.rushTicks = (p.rushTicks ?? 0) - 1;
   if (w.kind !== "orbit") return;
   // 돌리기 (길이를 다시 1로 맞춰 오차가 쌓이지 않게)
-  const a = p.stats.projectileSpeed * SPIN_PER_SPEED * ((p.rushTicks ?? 0) > 0 ? RUSH_SPIN : 1);
+  const a = p.stats.projectileSpeed * V.SPIN_PER_SPEED * ((p.rushTicks ?? 0) > 0 ? V.RUSH_SPIN : 1);
   const d = mulV(p.orbDir ?? [1, 0], smallRot(a));
   p.orbDir = normalize(d[0], d[1]) ?? [1, 0];
   // 트리거 재장전: 기본보다 빨리 돌수록 그만큼 빨리 참 (느려져도 기본보다 늦지는 않음)
   if ((p.reloadTicks ?? 0) > 0) {
-    p.reloadTicks = Math.max(0, p.reloadTicks! - Math.max(1, a / (w.projectileSpeed * SPIN_PER_SPEED)));
+    p.reloadTicks = Math.max(0, p.reloadTicks! - Math.max(1, a / (w.projectileSpeed * V.SPIN_PER_SPEED)));
     if (p.reloadTicks === 0) p.loaded = orbCount(p);
   }
   updateHand(s);
@@ -217,7 +222,7 @@ export function updateOrbit(s: RunState): void {
       const e = pickTarget(s, b);
       if (!e) return;
       (p.flyers ??= []).push({ i, id: e.id, t: 0, x: e.x, y: e.y });
-      cd[i] = interval * STRIKE_SLOW;
+      cd[i] = interval * V.STRIKE_SLOW;
       return;
     }
     // 몸에서 구슬까지 잇는 선 전체가 휩쓸고 지나감 (몸에 붙은 적도 맞게)
@@ -242,7 +247,7 @@ export function updateOrbit(s: RunState): void {
       const rr = p.stats.range + e.r;
       if (e.hp <= 0 || dist2(e, p) > rr * rr) continue;
       tickHit(s, e, dmg);
-      if (burn && roll(s, "galaxy", e.id) < GALAXY_BURN) ignite(e, dmg);
+      if (burn && roll(s, "galaxy", e.id) < V.GALAXY_BURN) ignite(e, dmg);
     }
   } else if (w.orbit === "gravity") {
     // 중력: 사거리 안 적이 느려짐 (보스 제외는 적 쪽에서)
@@ -255,8 +260,8 @@ export function updateOrbit(s: RunState): void {
     for (const pr of s.projectiles) {
       if (pr.fromPlayer || pr.slowed || dist2(pr, p) > r2) continue;
       pr.slowed = true;
-      pr.vx *= GRAVITY_SHOT;
-      pr.vy *= GRAVITY_SHOT;
+      pr.vx *= V.GRAVITY_SHOT;
+      pr.vy *= V.GRAVITY_SHOT;
     }
   }
   wires(s, bodies, dmg);

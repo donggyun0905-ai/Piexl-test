@@ -6,54 +6,59 @@ import { beamHit, beamWidth, emitBeam, lensArea, nearestOthers, prismArea, suppo
 import type { Device, PlayerState, RunState } from "./types";
 import { addEffect, DIR16, hasPerk, normalize, weaponOf } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 레이저 포탑: 던지는 간격(1.8초), 최대 수, 버티는 틱(6초), 사거리, 한 기의 피해 */
+  TURRET_PERIOD: 108,
+  TURRET_MAX: 3,
+  TURRET_RANGE: 75,
+  TURRET_MUL: 0.45,
+  /** 반사 거울 드론: 드론 수, 도는 반지름, 한 기의 피해 */
+  DRONE_COUNT: 3,
+  DRONE_ORBIT: 11,
+  DRONE_MUL: 0.4,
+  /** 테슬라 코일: 첫 대상 찾는 굵기 추가, 한 번에 맞는 최대 수, 번개가 건너가는 거리, 건너간 번개 피해 */
+  TESLA_WIDTH: 3,
+  TESLA_MAX: 5,
+  TESLA_HOP: 50,
+  TESLA_HOP_MUL: 0.45,
+  /** 자기장 발생기: 펄스 간격(2.25초), 펄스 피해 배율, 밀어내기, 렌즈면 범위 증가 */
+  PULSE_PERIOD: 135,
+  PULSE_MUL: 0.8,
+  PULSE_PUSH: 16,
+  FIELD_LENS: 1.15,
+  /** 유압 해머: 내려찍기 간격(공격 속도 2일 때 1.2초), 밀어내기, 기절 틱 (보스는 짧게) */
+  HAMMER_PERIOD: 72,
+  HAMMER_PUSH: 8,
+  HAMMER_STUN: 60,
+  HAMMER_BOSS_STUN: 20,
+  /** 지뢰 투척기: 던지는 간격(0.75초), 최대 수, 땅에 떨어진 뒤 준비 틱, 터지는 범위(넘쳐서 터질 때 더 넓게), 피해 배율 */
+  MINE_PERIOD: 45,
+  MINE_MAX: 6,
+  MINE_ARM: 15,
+  MINE_BIG_RADIUS: 34,
+  MINE_MUL: 1.2,
+  /** 궤도 위성 포: 낙하 간격(1.5초, 공격 속도 증가는 절반만), 떨어지기까지 틱, 범위, 피해 배율 */
+  ORBITAL_PERIOD: 90,
+  ORBITAL_DELAY: 30,
+  ORBITAL_MUL: 1.15,
+};
+export { R as LASER_WEAPONS_RULES };
+
 /** 주 공격이 레이저가 아닌 무기 (빔 스플리터는 보조 레이저, 렌즈는 범위, 프리즘은 범위 피해) */
 const NON_BEAM: ReadonlySet<string> = new Set(["cutter", "tesla", "magnet", "hammer", "mines", "orbital"]);
 /** 던지는 장치(포탑·지뢰)가 날아가는 틱 */
 export const FLY_TICKS = 18;
-/** 레이저 포탑: 던지는 간격(1.8초), 최대 수, 버티는 틱(6초), 사거리, 한 기의 피해 */
-const TURRET_PERIOD = 108;
-const TURRET_MAX = 3;
 export const TURRET_LIFE = 360;
-const TURRET_RANGE = 75;
-const TURRET_MUL = 0.45;
-/** 반사 거울 드론: 드론 수, 도는 반지름, 한 기의 피해 */
-const DRONE_COUNT = 3;
-const DRONE_ORBIT = 11;
-const DRONE_MUL = 0.4;
-/** 테슬라 코일: 첫 대상 찾는 굵기 추가, 한 번에 맞는 최대 수, 번개가 건너가는 거리, 건너간 번개 피해 */
-const TESLA_WIDTH = 3;
-const TESLA_MAX = 5;
-const TESLA_HOP = 50;
-const TESLA_HOP_MUL = 0.45;
-/** 자기장 발생기: 펄스 간격(2.25초), 펄스 피해 배율, 밀어내기, 렌즈면 범위 증가 */
-const PULSE_PERIOD = 135;
-const PULSE_MUL = 0.8;
-const PULSE_PUSH = 16;
-const FIELD_LENS = 1.15;
-/** 유압 해머: 내려찍기 간격(공격 속도 2일 때 1.2초), 밀어내기, 기절 틱 (보스는 짧게) */
-const HAMMER_PERIOD = 72;
-const HAMMER_PUSH = 8;
-const HAMMER_STUN = 60;
-const HAMMER_BOSS_STUN = 20;
-/** 지뢰 투척기: 던지는 간격(0.75초), 최대 수, 땅에 떨어진 뒤 준비 틱, 터지는 범위(넘쳐서 터질 때 더 넓게), 피해 배율 */
-const MINE_PERIOD = 45;
-const MINE_MAX = 6;
-const MINE_ARM = 15;
 export const MINE_RADIUS = 24;
-const MINE_BIG_RADIUS = 34;
-const MINE_MUL = 1.2;
-/** 궤도 위성 포: 낙하 간격(1.5초, 공격 속도 증가는 절반만), 떨어지기까지 틱, 범위, 피해 배율 */
-const ORBITAL_PERIOD = 90;
-const ORBITAL_DELAY = 30;
 export const ORBITAL_RADIUS = 24;
-const ORBITAL_MUL = 1.15;
 
 /** 드론 자리 (16방향 고정 값으로 돌림. 화면도 이 자리에 그림) */
 export function droneSpots(p: { x: number; y: number }, tick: number): [number, number][] {
   const out: [number, number][] = [];
-  for (let k = 0; k < DRONE_COUNT; k++) {
+  for (let k = 0; k < R.DRONE_COUNT; k++) {
     const d = DIR16[(Math.floor(tick / 8) + k * 5) % 16]!;
-    out.push([p.x + d[0] * DRONE_ORBIT, p.y + d[1] * DRONE_ORBIT]);
+    out.push([p.x + d[0] * R.DRONE_ORBIT, p.y + d[1] * R.DRONE_ORBIT]);
   }
   return out;
 }
@@ -63,9 +68,9 @@ export function gearPeriod(p: PlayerState): number {
   const w = weaponOf(p);
   const base = w.attackSpeed;
   const speed = p.stats.attackSpeed;
-  const scaled = { turret: TURRET_PERIOD, hammer: HAMMER_PERIOD, mines: MINE_PERIOD, magnet: PULSE_PERIOD } as Record<string, number>;
+  const scaled = { turret: R.TURRET_PERIOD, hammer: R.HAMMER_PERIOD, mines: R.MINE_PERIOD, magnet: R.PULSE_PERIOD } as Record<string, number>;
   if (w.gear && scaled[w.gear]) return (scaled[w.gear]! * base) / speed;
-  if (w.gear === "orbital") return (ORBITAL_PERIOD * base) / (base + (speed - base) * 0.5);
+  if (w.gear === "orbital") return (R.ORBITAL_PERIOD * base) / (base + (speed - base) * 0.5);
   return 0;
 }
 
@@ -96,9 +101,9 @@ export function fireLaser(s: RunState, speed: number, interval: number): void {
   } else if (w.gear === "hammer") {
     if (ready) hammerSlam(s, tickDamage(p, speed, period), period);
   } else if (w.gear === "mines") {
-    if (ready) throwMine(s, tickDamage(p, speed, period) * MINE_MUL);
+    if (ready) throwMine(s, tickDamage(p, speed, period) * R.MINE_MUL);
   } else if (w.gear === "orbital") {
-    if (ready) callStrike(s, tickDamage(p, w.attackSpeed, ORBITAL_PERIOD) * ORBITAL_MUL);
+    if (ready) callStrike(s, tickDamage(p, w.attackSpeed, R.ORBITAL_PERIOD) * R.ORBITAL_MUL);
   } else {
     // 레이저 (집속 렌즈 캐논은 한 대상만)
     emitBeam(s, p.x, p.y, p.faceX, p.faceY, p.stats.range, dmg, interval, { hit: [], track: true, follow: true, single: w.gear === "focus" });
@@ -133,7 +138,7 @@ function throwDevice(s: RunState, kind: "turret" | "mine", x: number, y: number,
 /** 레이저 포탑: 조준한 곳 조금 앞에 소형 포탑을 던져 설치 (최대 3기, 6초 뒤 사라짐). 본체는 쏘지 않음 */
 function throwTurret(s: RunState): void {
   const turrets = (s.devices ?? []).filter((d) => d.kind === "turret");
-  if (turrets.length >= TURRET_MAX) s.devices = (s.devices ?? []).filter((d) => d !== turrets[0]);
+  if (turrets.length >= R.TURRET_MAX) s.devices = (s.devices ?? []).filter((d) => d !== turrets[0]);
   const [x, y] = aimPoint(s, 20);
   throwDevice(s, "turret", x, y, { life: TURRET_LIFE });
 }
@@ -141,28 +146,28 @@ function throwTurret(s: RunState): void {
 /** 포탑 한 기의 조사: 사거리 안 가까운 적에게 */
 export function turretShot(s: RunState, t: Device, speed: number, interval: number, track: boolean): void {
   const p = s.player;
-  const [target] = nearestOthers(s, t.x, t.y, TURRET_RANGE, [], 1);
+  const [target] = nearestOthers(s, t.x, t.y, R.TURRET_RANGE, [], 1);
   const dir = target ? normalize(target.x - t.x, target.y - t.y) : null;
   if (!target || !dir) return;
-  emitBeam(s, t.x, t.y, dir[0], dir[1], TURRET_RANGE + target.r, tickDamage(p, speed, interval) * TURRET_MUL, interval, { hit: [], track });
+  emitBeam(s, t.x, t.y, dir[0], dir[1], R.TURRET_RANGE + target.r, tickDamage(p, speed, interval) * R.TURRET_MUL, interval, { hit: [], track });
 }
 
 /** 반사 거울 드론: 드론 3기가 각자 다른 적에게 빔 (적이 적으면 같은 적에게 겹쳐 쏨) */
 function droneBeams(s: RunState, dmg: number, ticks: number): void {
   const p = s.player;
-  const targets = nearestOthers(s, p.x, p.y, p.stats.range, [], DRONE_COUNT);
+  const targets = nearestOthers(s, p.x, p.y, p.stats.range, [], R.DRONE_COUNT);
   if (targets.length === 0) return;
   droneSpots(p, s.tick).forEach(([x, y], k) => {
     const e = targets[k % targets.length]!;
     const dir = normalize(e.x - x, e.y - y);
-    if (dir) emitBeam(s, x, y, dir[0], dir[1], p.stats.range + 20, dmg * DRONE_MUL, ticks, { hit: targets.filter((h) => h !== e), track: k === 0 });
+    if (dir) emitBeam(s, x, y, dir[0], dir[1], p.stats.range + 20, dmg * R.DRONE_MUL, ticks, { hit: targets.filter((h) => h !== e), track: k === 0 });
   });
 }
 
 /** 테슬라 코일: 조준한 첫 적에게 번개, 가까운 적으로 건너감 (최대 5명, 프리즘이면 1명 더) */
 function teslaChain(s: RunState, dmg: number, ticks: number): void {
   const p = s.player;
-  const tr = traceBeam(s, p.x, p.y, p.faceX, p.faceY, p.stats.range, beamWidth(p) + TESLA_WIDTH, false, false);
+  const tr = traceBeam(s, p.x, p.y, p.faceX, p.faceY, p.stats.range, beamWidth(p) + R.TESLA_WIDTH, false, false);
   const first = tr.hits[0];
   const bolt = (x: number, y: number, toX: number, toY: number, follow: boolean) =>
     addEffect(s, { kind: "bolt", x, y, dirX: 0, dirY: 0, size: 0, maxTicks: ticks, toX, toY, ...(follow ? { follow } : {}) });
@@ -170,13 +175,13 @@ function teslaChain(s: RunState, dmg: number, ticks: number): void {
   bolt(p.x, p.y, first.x, first.y, true);
   beamHit(s, first, dmg * trackTarget(s, first, ticks), ticks);
   const hit = [first];
-  const max = TESLA_MAX + (hasPerk(p, "refractPrism") ? 1 : 0);
+  const max = R.TESLA_MAX + (hasPerk(p, "refractPrism") ? 1 : 0);
   let from = first;
   while (hit.length < max) {
-    const [next] = nearestOthers(s, from.x, from.y, TESLA_HOP * lensArea(p), hit, 1);
+    const [next] = nearestOthers(s, from.x, from.y, R.TESLA_HOP * lensArea(p), hit, 1);
     if (!next) break;
     bolt(from.x, from.y, next.x, next.y, false);
-    beamHit(s, next, dmg * TESLA_HOP_MUL, ticks);
+    beamHit(s, next, dmg * R.TESLA_HOP_MUL, ticks);
     hit.push(next);
     from = next;
   }
@@ -184,7 +189,7 @@ function teslaChain(s: RunState, dmg: number, ticks: number): void {
 
 /** 자기장 범위 (렌즈면 더 넓게) */
 export function fieldRadius(p: PlayerState): number {
-  return p.stats.range * (hasPerk(p, "highLens") ? FIELD_LENS : 1);
+  return p.stats.range * (hasPerk(p, "highLens") ? R.FIELD_LENS : 1);
 }
 
 /** 자기장 발생기: 누르고 있는 동안 주변 적을 끌어당기고(laserGear) 둔화, 1.5초 모이면 펄스로 한꺼번에 피해·밀어내기 */
@@ -199,7 +204,7 @@ function magnetPulse(s: RunState, speed: number, interval: number, period: numbe
   addEffect(s, { kind: "ring", x: p.x, y: p.y, dirX: 0, dirY: 0, size: radius, maxTicks: interval, follow: true });
   if (p.gearTicks < period) return;
   p.gearTicks = 0;
-  zapArea(s, p.x, p.y, radius, tickDamage(p, speed, period) * PULSE_MUL, period, PULSE_PUSH);
+  zapArea(s, p.x, p.y, radius, tickDamage(p, speed, period) * R.PULSE_MUL, period, R.PULSE_PUSH);
   addEffect(s, { kind: "ring", x: p.x, y: p.y, dirX: 0, dirY: 0, size: radius, maxTicks: 16, width: 2 });
 }
 
@@ -207,8 +212,8 @@ function magnetPulse(s: RunState, speed: number, interval: number, period: numbe
 function hammerSlam(s: RunState, dmg: number, ticks: number): void {
   const p = s.player;
   const radius = p.stats.range * lensArea(p);
-  for (const e of zapArea(s, p.x, p.y, radius, dmg, ticks, HAMMER_PUSH)) {
-    if (e.kind !== "dummy") e.stunTicks = ENEMIES[e.kind].boss ? HAMMER_BOSS_STUN : HAMMER_STUN;
+  for (const e of zapArea(s, p.x, p.y, radius, dmg, ticks, R.HAMMER_PUSH)) {
+    if (e.kind !== "dummy") e.stunTicks = ENEMIES[e.kind].boss ? R.HAMMER_BOSS_STUN : R.HAMMER_STUN;
   }
   addEffect(s, { kind: "ring", x: p.x, y: p.y, dirX: 0, dirY: 0, size: radius, maxTicks: 14, width: 1 });
 }
@@ -236,16 +241,16 @@ export function aimPoint(s: RunState, back = 0): [number, number] {
 /** 지뢰 투척기: 조준한 곳으로 지뢰를 던짐 (떨어진 뒤 잠깐 있다 준비). 6개가 넘으면 가장 오래된 지뢰가 더 넓게 터짐 */
 function throwMine(s: RunState, dmg: number): void {
   const mines = (s.devices ?? []).filter((d) => d.kind === "mine");
-  if (mines.length >= MINE_MAX) mineBlast(s, mines[0]!, true);
+  if (mines.length >= R.MINE_MAX) mineBlast(s, mines[0]!, true);
   const [x, y] = aimPoint(s);
-  throwDevice(s, "mine", x, y, { timer: MINE_ARM, dmg });
+  throwDevice(s, "mine", x, y, { timer: R.MINE_ARM, dmg });
 }
 
 /** 지뢰 터뜨리기 */
 export function mineBlast(s: RunState, m: Device, big: boolean): void {
   s.devices = (s.devices ?? []).filter((d) => d !== m);
-  const radius = (big ? MINE_BIG_RADIUS : MINE_RADIUS) * lensArea(s.player);
-  zapArea(s, m.x, m.y, radius, m.dmg ?? 0, MINE_PERIOD);
+  const radius = (big ? R.MINE_BIG_RADIUS : MINE_RADIUS) * lensArea(s.player);
+  zapArea(s, m.x, m.y, radius, m.dmg ?? 0, R.MINE_PERIOD);
   addEffect(s, { kind: "ring", x: m.x, y: m.y, dirX: 0, dirY: 0, size: radius, maxTicks: 12, width: 1 });
   addEffect(s, { kind: "burst", x: m.x, y: m.y, dirX: 0, dirY: 0, size: 6, maxTicks: 10 });
 }
@@ -253,6 +258,6 @@ export function mineBlast(s: RunState, m: Device, big: boolean): void {
 /** 궤도 위성 포: 조준한 자리에 표시 → 잠시 뒤 큰 레이저 낙하 (laserGear에서 터짐) */
 function callStrike(s: RunState, dmg: number): void {
   const [x, y] = aimPoint(s);
-  (s.devices ??= []).push({ id: s.nextId++, kind: "strike", x, y, timer: ORBITAL_DELAY, dmg });
-  addEffect(s, { kind: "mark", x, y, dirX: 0, dirY: 0, size: ORBITAL_RADIUS * lensArea(s.player), maxTicks: ORBITAL_DELAY });
+  (s.devices ??= []).push({ id: s.nextId++, kind: "strike", x, y, timer: R.ORBITAL_DELAY, dmg });
+  addEffect(s, { kind: "mark", x, y, dirX: 0, dirY: 0, size: ORBITAL_RADIUS * lensArea(s.player), maxTicks: R.ORBITAL_DELAY });
 }

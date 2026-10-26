@@ -13,6 +13,14 @@ import { recalcStats } from "./items";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, markCrit } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 레벨이 오를 때 받는 포인트 · 회복(최대 체력 비율) */
+  POINTS_PER_LEVEL: 1,
+  LEVEL_HEAL: 0.1,
+};
+export { R as NOVICE_RULES };
+
 /** 찍을 수 있는 능력치 (입력 statPick 1~9 = 이 순서) · 한 번 찍을 때 오르는 양 (mul은 배율, 치명타는 확률·배율에 더함) */
 export type NoviceStat = StatKey | "critChance" | "critDamage";
 export const NOVICE_STATS: readonly NoviceStat[] = ["damage", "attackSpeed", "maxHp", "moveSpeed", "range", "projectileSpeed", "luck", "critChance", "critDamage"];
@@ -32,9 +40,6 @@ export const NOVICE_CRIT = 0.05;
 export const NOVICE_CRIT_MUL = 1.5;
 /** 레벨마다 저절로 오르는 양 (최대 체력 더하기 · 공격력 배율) */
 export const NOVICE_GROWTH = { maxHp: 3, damage: 0.02 };
-/** 레벨이 오를 때 받는 포인트 · 회복(최대 체력 비율) */
-const POINTS_PER_LEVEL = 1;
-const LEVEL_HEAL = 0.1;
 
 /** 적 하나가 주는 경험치 = 기본 체력 ÷ 10 (올림). 보스가 부른 적·허수아비는 0 */
 export function expOf(e: EnemyState): number {
@@ -56,8 +61,8 @@ export function gainExp(s: RunState, e: EnemyState): void {
     p.exp -= expToNext(p.lv);
     p.lv++;
     recalcStats(s);
-    p.points = (p.points ?? 0) + POINTS_PER_LEVEL;
-    p.hp = Math.min(p.stats.maxHp, p.hp + p.stats.maxHp * LEVEL_HEAL);
+    p.points = (p.points ?? 0) + R.POINTS_PER_LEVEL;
+    p.hp = Math.min(p.stats.maxHp, p.hp + p.stats.maxHp * R.LEVEL_HEAL);
     addEffect(s, { kind: "ring", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 18, maxTicks: 20, width: 1, follow: true });
   }
 }

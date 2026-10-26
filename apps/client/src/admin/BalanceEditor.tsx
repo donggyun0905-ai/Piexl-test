@@ -2,7 +2,7 @@
 // 항목마다 값이 다른 묶음(패시브·상점)은 항목별 목록으로
 import type { BalanceField, BalanceGroup, BalanceSet, BalanceValues } from "@pixel-rogue/shared";
 import { useState, type ReactNode } from "react";
-import { FIELD_HINT, fieldLabel, rowDesc, rowLabel } from "./labels";
+import { FIELD_HINT, fieldLabel, rowCategory, rowDesc, rowLabel } from "./labels";
 
 interface Props {
   /** 수치 세트 (던전·타워 디펜스) */
@@ -15,8 +15,10 @@ interface Props {
 }
 
 export function BalanceEditor({ set, group, draft, saved, onChange }: Props) {
-  const cell = (id: string, f: BalanceField) => (
+  const cell = (id: string, f: BalanceField, grid?: boolean) => (
     <Cell
+      grid={grid}
+      label={grid ? fieldLabel(f.key, group.id) : undefined}
       // 값이 바깥에서 바뀌면 (저장·되돌리기·옮기기) 새로 그림
       key={`${f.key}:${draft[group.id]?.[id]?.[f.key] ?? ""}`}
       field={f}
@@ -68,54 +70,60 @@ export function BalanceEditor({ set, group, draft, saved, onChange }: Props) {
   );
 }
 
-/** 항목별 목록: 항목 이름·설명 옆에 그 항목에 있는 값만 */
-function BalanceList({ set, group, cell }: { set: BalanceSet; group: BalanceGroup; cell: (id: string, f: BalanceField) => ReactNode }) {
+/** 항목별 목록: 위쪽 찾기 칸·분류(캐릭터) 고르기 · 항목 이름·설명 아래에 그 항목에 있는 값을 칸으로 */
+function BalanceList({ set, group, cell }: { set: BalanceSet; group: BalanceGroup; cell: (id: string, f: BalanceField, grid?: boolean) => ReactNode }) {
+  const [query, setQuery] = useState("");
+  const [cat, setCat] = useState("");
+  const cats = [...new Set(group.ids.map((id) => rowCategory(group.id, id)).filter(Boolean))].sort((a, b) => a.localeCompare(b, "ko"));
+  const q = query.trim().toLowerCase();
+  const rows = group.ids.filter((id) => {
+    if (cat && rowCategory(group.id, id) !== cat) return false;
+    if (!q) return true;
+    const text = `${id} ${rowLabel(group.id, id)} ${set.balanceFields(group, id).map((f) => `${f.key} ${fieldLabel(f.key, group.id)}`).join(" ")}`.toLowerCase();
+    return text.includes(q);
+  });
   return (
     <div className="admin-table-wrap">
-      <table className="admin-table admin-list">
-        <tbody>
-          {group.ids.map((id) => {
-            const fields = set.balanceFields(group, id);
-            const desc = rowDesc(group.id, id);
-            return (
-              <tr key={id}>
-                <th>
-                  {rowLabel(group.id, id)}
-                  <small>{id}</small>
-                  {desc && <span className="admin-desc">{desc}</span>}
-                </th>
-                <td>
-                  {fields.length === 0 ? (
-                    <span className="admin-na">바꿀 수치 없음</span>
-                  ) : (
-                    <table className="admin-mini">
-                      <thead>
-                        <tr>
-                          {fields.map((f) => (
-                            <th key={f.key} title={FIELD_HINT[f.key]}>
-                              {fieldLabel(f.key, group.id)}
-                              {FIELD_HINT[f.key] && <small>{FIELD_HINT[f.key]}</small>}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>{fields.map((f) => cell(id, f))}</tr>
-                      </tbody>
-                    </table>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <div className="admin-filter">
+        <input value={query} placeholder="찾기 (이름·값 이름, 예: 미사일, chance)" onChange={(e) => setQuery(e.target.value)} />
+        {cats.length > 1 && (
+          <select value={cat} onChange={(e) => setCat(e.target.value)}>
+            <option value="">모든 분류 ({group.ids.length})</option>
+            {cats.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        )}
+        <span className="admin-hint">{rows.length}개</span>
+      </div>
+      {rows.slice(0, LIST_LIMIT).map((id) => {
+        const fields = set.balanceFields(group, id);
+        const desc = rowDesc(group.id, id);
+        return (
+          <section key={id} className="admin-row">
+            <h4>
+              {rowLabel(group.id, id)} <small>{id}</small>
+            </h4>
+            {desc && <p className="admin-desc">{desc}</p>}
+            {fields.length === 0 ? <span className="admin-na">바꿀 수치 없음</span> : <div className="admin-grid">{fields.map((f) => cell(id, f, true))}</div>}
+          </section>
+        );
+      })}
+      {rows.length > LIST_LIMIT && <p className="admin-hint">처음 {LIST_LIMIT}개만 보입니다. 찾기나 분류로 좁혀 주세요.</p>}
     </div>
   );
 }
 
+/** 한 번에 그리는 항목 수 (값이 수천 개라 느려지지 않게) */
+const LIST_LIMIT = 60;
+
 interface CellProps {
   field: BalanceField;
+  /** 목록 칸 (이름을 칸 위에) */
+  grid?: boolean;
+  label?: string;
   /** 처음(코드에 적힌) 값 */
   base: number;
   /** 바꾼 값 (없으면 처음 값) */
@@ -125,7 +133,7 @@ interface CellProps {
   onChange: (v: number | undefined) => void;
 }
 
-function Cell({ field, base, value, saved, onChange }: CellProps) {
+function Cell({ field, base, value, saved, onChange, grid, label }: CellProps) {
   const shown = value ?? base;
   const [text, setText] = useState(String(shown));
 
@@ -138,8 +146,10 @@ function Cell({ field, base, value, saved, onChange }: CellProps) {
   };
 
   const cls = ["admin-cell", value !== undefined && "changed", value !== saved && "dirty"].filter(Boolean).join(" ");
+  const Tag = grid ? "div" : "td";
   return (
-    <td className={cls}>
+    <Tag className={cls}>
+      {label && <span className="admin-cell-label" title={field.key}>{label}</span>}
       <input
         inputMode="decimal"
         value={text}
@@ -155,6 +165,6 @@ function Cell({ field, base, value, saved, onChange }: CellProps) {
           ↺
         </button>
       )}
-    </td>
+    </Tag>
   );
 }

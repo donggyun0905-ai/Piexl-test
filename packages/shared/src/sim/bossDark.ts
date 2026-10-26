@@ -9,34 +9,39 @@ import { summonHost, ultReady, updateHost } from "./bossUlts";
 import type { EnemyState, RunState } from "./types";
 import { enemyShot, makeEnemy, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 손: 따라오는 빠르기 · 플레이어 양옆 거리 · 내려찍기 반경 · 바늘 수·반경 · 박쥐 수·간격·빠르기 · 어둠 시간 · 유령 수 · 블랙홀 틱 */
+  HAND_SPEED: 0.5,
+  HAND_SIDE: 34,
+  SLAM_R: 52,
+  SPIKES: 16,
+  SPIKE_R: 18,
+  BATS: 5,
+  BAT_GAP: 8,
+  BAT_SPEED: 2.8,
+  VEIL_TICKS: 600,
+  GHOSTS: 4,
+  HOLE_TICKS: 120,
+};
+export { R as BOSS_DARK_RULES };
+
 type Vec = readonly [number, number];
 type Pattern = "slam" | "spikes" | "bats" | "darkness" | "aura" | "grip" | "hole" | "memory";
 
 const EARLY: readonly Pattern[] = ["slam", "spikes", "memory", "bats"];
 const LATE: readonly Pattern[] = ["slam", "darkness", "spikes", "aura", "memory", "bats", "grip", "hole"];
-/** 손: 따라오는 빠르기 · 플레이어 양옆 거리 · 내려찍기 반경 · 바늘 수·반경 · 박쥐 수·간격·빠르기 · 어둠 시간 · 유령 수 · 블랙홀 틱 */
-const HAND_SPEED = 0.5;
-const HAND_SIDE = 34;
-const SLAM_R = 52;
-const SPIKES = 16;
-const SPIKE_R = 18;
-const BATS = 5;
-const BAT_GAP = 8;
-const BAT_SPEED = 2.8;
-const VEIL_TICKS = 600;
-const GHOSTS = 4;
-const HOLE_TICKS = 120;
 
 /** 두 손이 플레이어 양옆으로 아주 천천히 따라감 */
 function moveHands(s: RunState, e: EnemyState): void {
   const p = s.player;
   const h = e.hands ?? [e.x - 30, e.y, e.x + 30, e.y];
   for (let i = 0; i < 2; i++) {
-    const tx = p.x + (i === 0 ? -HAND_SIDE : HAND_SIDE);
+    const tx = p.x + (i === 0 ? -R.HAND_SIDE : R.HAND_SIDE);
     const d = normalize(tx - h[i * 2]!, p.y - h[i * 2 + 1]!);
     if (d && Math.hypot(tx - h[i * 2]!, p.y - h[i * 2 + 1]!) > 2) {
-      h[i * 2] = h[i * 2]! + d[0] * HAND_SPEED;
-      h[i * 2 + 1] = h[i * 2 + 1]! + d[1] * HAND_SPEED;
+      h[i * 2] = h[i * 2]! + d[0] * R.HAND_SPEED;
+      h[i * 2 + 1] = h[i * 2 + 1]! + d[1] * R.HAND_SPEED;
     }
   }
   e.hands = h;
@@ -44,7 +49,7 @@ function moveHands(s: RunState, e: EnemyState): void {
 
 function slam(s: RunState, e: EnemyState, warn: number): void {
   const h = e.hands ?? [];
-  for (let i = 0; i + 1 < h.length; i += 2) addShape(s, warn, { x: h[i]!, y: h[i + 1]!, radius: SLAM_R, damage: hitDamage(s), fx: "dark" });
+  for (let i = 0; i + 1 < h.length; i += 2) addShape(s, warn, { x: h[i]!, y: h[i + 1]!, radius: R.SLAM_R, damage: hitDamage(s), fx: "dark" });
 }
 
 export function updateDark(s: RunState, e: EnemyState, toP: Vec, go: Vec, spawned: EnemyState[]): void {
@@ -55,7 +60,7 @@ export function updateDark(s: RunState, e: EnemyState, toP: Vec, go: Vec, spawne
   moveHands(s, e);
   const p = s.player;
   // 혼자 남으면 어둠이 걷히지 않음 (한 번 깔리면 계속), 둘일 때는 시간이 지나면 걷히고 유령도 사라짐
-  if (e.step === 2 && (e.veil ?? 0) > 0) e.veil = VEIL_TICKS;
+  if (e.step === 2 && (e.veil ?? 0) > 0) e.veil = R.VEIL_TICKS;
   else if ((e.veil ?? 0) > 0 && --e.veil! === 0) for (const g of s.enemies.filter((o) => o.kind === "ghost")) s.enemies.splice(s.enemies.indexOf(g), 1);
   if (e.phase === "act") {
     // 박쥐 5연발 · 손아귀 연타
@@ -64,11 +69,11 @@ export function updateDark(s: RunState, e: EnemyState, toP: Vec, go: Vec, spawne
       if (t % 20 === 1) slam(s, e, 28);
       if (t >= 60) e.phase = "walk";
     } else {
-      if (t % BAT_GAP === 1) {
+      if (t % R.BAT_GAP === 1) {
         const d = normalize(p.x - e.x, p.y - e.y) ?? [0, 1];
-        Object.assign(enemyShot(s, e.x, e.y, d[0], d[1], BAT_SPEED, shotDamage(s)), { look: "bat" as const });
+        Object.assign(enemyShot(s, e.x, e.y, d[0], d[1], R.BAT_SPEED, shotDamage(s)), { look: "bat" as const });
       }
-      if (t >= BATS * BAT_GAP) e.phase = "walk";
+      if (t >= R.BATS * R.BAT_GAP) e.phase = "walk";
     }
     return;
   }
@@ -86,19 +91,19 @@ export function updateDark(s: RunState, e: EnemyState, toP: Vec, go: Vec, spawne
     e.timer = 260;
   }
   else if (pat === "spikes") {
-    for (let i = 0; i < SPIKES; i++) {
-      addShape(s, 35, { x: rng.int(ROOM_MIN_X + 8, ROOM_MAX_X - 8), y: rng.int(ROOM_MIN_Y + 8, ROOM_MAX_Y - 8), radius: SPIKE_R, damage: hitDamage(s), fx: "spike" });
+    for (let i = 0; i < R.SPIKES; i++) {
+      addShape(s, 35, { x: rng.int(ROOM_MIN_X + 8, ROOM_MAX_X - 8), y: rng.int(ROOM_MIN_Y + 8, ROOM_MAX_Y - 8), radius: R.SPIKE_R, damage: hitDamage(s), fx: "spike" });
     }
-    addShape(s, 35, { x: p.x, y: p.y, radius: SPIKE_R, damage: hitDamage(s), fx: "spike" });
+    addShape(s, 35, { x: p.x, y: p.y, radius: R.SPIKE_R, damage: hitDamage(s), fx: "spike" });
   } else if (pat === "bats" || pat === "grip") {
     e.phase = "act";
     e.aux = 0;
     e.auxX = pat === "grip" ? 1 : 0;
   } else if (pat === "darkness") {
     // 어둠: 공격 범위 밖이 어두워지고 유령 4마리가 떠돎 (그리기·유령은 bossPrimeval)
-    e.veil = VEIL_TICKS;
+    e.veil = R.VEIL_TICKS;
     const alive = s.enemies.filter((o) => o.kind === "ghost").length;
-    for (let i = alive; i < GHOSTS; i++) {
+    for (let i = alive; i < R.GHOSTS; i++) {
       const g = makeEnemy(s, "ghost", rng.int(ROOM_MIN_X + 20, ROOM_MAX_X - 20), rng.int(ROOM_MIN_Y + 20, ROOM_MAX_Y - 20), 1, 0);
       g.noGold = true;
       spawned.push(g);
@@ -110,7 +115,7 @@ export function updateDark(s: RunState, e: EnemyState, toP: Vec, go: Vec, spawne
     e.sweeps = pick.map((side) => ({ x: side >= 2, dir: side % 2 === 0 ? 1 : -1, pos: side === 0 ? ROOM_MIN_Y : side === 1 ? ROOM_MAX_Y : side === 2 ? ROOM_MIN_X : ROOM_MAX_X, wait: 40 }));
   } else {
     // 블랙홀: 2초 동안 어둠 쪽으로 끌려가며 고리 탄
-    p.lureTicks = HOLE_TICKS;
+    p.lureTicks = R.HOLE_TICKS;
     p.lureId = e.id;
     ring(s, e, 2, e.count, 1.1, { look: "bat" });
   }

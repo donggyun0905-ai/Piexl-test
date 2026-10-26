@@ -21,20 +21,21 @@ import { dotCrit, gainExp, rollCrit } from "./novice";
 import type { DotKind, EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, KNOCKBACK, keepInRoom, markCrit, markDot, normalize, roomGrid, RUSH_TICKS, STILL_TICKS } from "./util";
 
-/** 야성의 포효·생선 간식 지속 틱 (3초) */
-const ROAR_TICKS = 180;
-/** 결계: 맞은 뒤 무적 틱 (3초) */
-const BARRIER_TICKS = 180;
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 야성의 포효·생선 간식 지속 틱 (3초) */
+  ROAR_TICKS: 180,
+  /** 결계: 맞은 뒤 무적 틱 (3초) */
+  BARRIER_TICKS: 180,
+  /** 에너지 회수: 처치마다 얻는 보호막, 최대 (최대 체력 비율) */
+  RECYCLE_BARRIER: 4, RECYCLE_MAX: 0.25,
+  /** 의사 가운: 받는 피해 배율, 맞은 뒤 빨라지는 틱 (1초) · 항체 반응: 막은 피해의 이 배율을 돌려줌 */
+  GOWN_TAKEN: 0.85, FIRST_AID_HEAL: 3, GOWN_TICKS: 60, ANTIBODY_MUL: 2,
+};
+export { R as COMBAT_RULES };
+
 /** 장갑 용해: 중첩당 받는 피해 증가 */
 export const MELT_ADD = 0.02;
-/** 에너지 회수: 처치마다 얻는 보호막, 최대 (최대 체력 비율) */
-const RECYCLE_BARRIER = 4;
-const RECYCLE_MAX = 0.25;
-/** 의사 가운: 받는 피해 배율, 맞은 뒤 빨라지는 틱 (1초) · 항체 반응: 막은 피해의 이 배율을 돌려줌 */
-const GOWN_TAKEN = 0.85;
-const FIRST_AID_HEAL = 3;
-const GOWN_TICKS = 60;
-const ANTIBODY_MUL = 2;
 
 export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: number, dirY: number, knock = true): void {
   // 차례가 아닌 천사장 탑: 맞지 않음
@@ -107,8 +108,8 @@ export function damagePlayer(s: RunState, dmg: number): void {
   if (hasPerk(p, "bondShield")) taken *= 1 - Math.min(PERKS.bondShield.below, PERKS.bondShield.taken * (p.summons?.length ?? 0));
   // 의사 가운: 받는 피해 감소, 맞은 뒤 잠깐 빨라짐
   if (hasPerk(p, "doctorGown")) {
-    taken *= GOWN_TAKEN;
-    p.gownTicks = GOWN_TICKS;
+    taken *= R.GOWN_TAKEN;
+    p.gownTicks = R.GOWN_TICKS;
   }
   // 직업마다 (버려진 자들·거인·오니·이드라·변희)
   taken = classTaken(s, taken);
@@ -117,7 +118,7 @@ export function damagePlayer(s: RunState, dmg: number): void {
     const used = Math.min(p.shieldPts ?? 0, taken);
     p.shieldPts = (p.shieldPts ?? 0) - used;
     // 항체 반응: 막은 피해를 모아 두었다가 주변 적에게 돌려줌 (sim/medicGear)
-    if (hasPerk(p, "antibody")) p.antiStore = (p.antiStore ?? 0) + used * ANTIBODY_MUL;
+    if (hasPerk(p, "antibody")) p.antiStore = (p.antiStore ?? 0) + used * R.ANTIBODY_MUL;
     taken -= used;
   }
   p.hp -= taken;
@@ -135,11 +136,11 @@ export function damagePlayer(s: RunState, dmg: number): void {
     addEffect(s, { kind: "puff", x: p.x, y: p.y, dirX: 0, dirY: 0, size: PERKS.smokeVeil.radius, maxTicks: 24 });
   }
   // 결계: 맞은 뒤 3초 무적
-  if (hasPerk(p, "barrier")) p.invulnTicks = BARRIER_TICKS;
+  if (hasPerk(p, "barrier")) p.invulnTicks = R.BARRIER_TICKS;
   afterHurt(s);
   // 야성의 포효: 둘레 적을 밀어내며 피해, 3초 동안 고양이 피해 증가
   if (hasPerk(p, "wildRoar")) {
-    p.roarTicks = ROAR_TICKS;
+    p.roarTicks = R.ROAR_TICKS;
     blastAt(s, p.x, p.y, 30, p.stats.damage, { push: 10 });
   }
   addEffect(s, { kind: "hit", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 6, maxTicks: 10 });
@@ -264,10 +265,10 @@ export function removeDead(s: RunState): void {
     // 생명 흡수: 처치하면 최대 체력의 3% 회복
     if (hasPerk(p, "lifeLeech") && swarmLucky(s, "leech", e.id)) healPlayer(s, p.stats.maxHp * PERKS.lifeLeech.heal);
     // 생선 간식: 처치하면 고양이가 빨라짐
-    if (hasPerk(p, "fishTreat")) p.frenzyTicks = ROAR_TICKS;
+    if (hasPerk(p, "fishTreat")) p.frenzyTicks = R.ROAR_TICKS;
     // 응급 처치: 처치하면 체력 1 (의사 공격 회복 상한에 포함)
-    if (hasPerk(p, "firstAid") && swarmLucky(s, "aid", e.id)) leechHeal(s, FIRST_AID_HEAL);
-    if (hasPerk(p, "energyRecycle") && swarmLucky(s, "recycle", e.id)) p.shieldPts = Math.min(p.stats.maxHp * RECYCLE_MAX, (p.shieldPts ?? 0) + RECYCLE_BARRIER);
+    if (hasPerk(p, "firstAid") && swarmLucky(s, "aid", e.id)) leechHeal(s, R.FIRST_AID_HEAL);
+    if (hasPerk(p, "energyRecycle") && swarmLucky(s, "recycle", e.id)) p.shieldPts = Math.min(p.stats.maxHp * R.RECYCLE_MAX, (p.shieldPts ?? 0) + R.RECYCLE_BARRIER);
     scribeKill(s, e);
     if (hasPerk(p, "chaseSteps")) p.dashCooldown = Math.max(0, p.dashCooldown - PERKS.chaseSteps.ticks);
     if (ENEMIES[e.kind].boss && !e.noGold) {

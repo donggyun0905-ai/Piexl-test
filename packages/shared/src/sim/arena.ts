@@ -10,38 +10,43 @@ import { PLAIN_SHAPE } from "./layout";
 import { addPickup, passivePool, pickDistinct, usePool, weaponPool } from "./loot";
 import type { EnemyState, Pickup, RunState } from "./types";
 
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  STAGE_LEVELS: 4,
+  /** 보상 묶음: 패시브(하나만) · 사용 아이템(두 개까지) */
+  PASSIVE_GROUP: 951,
+  USE_PICKS: 2,
+};
+export { R as ARENA_RULES };
+
 /** 전체 레벨 수 · 단계마다 레벨 수 · 단계마다 보스 체력 기준 층 */
 export const ARENA_LEVELS = 15;
-const STAGE_LEVELS = 4;
 const STAGE_FLOOR = [2, 4, 6];
-/** 보상 묶음: 패시브(하나만) · 사용 아이템(두 개까지) */
-const PASSIVE_GROUP = 951;
 export const ARENA_USE_GROUP = 950;
-const USE_PICKS = 2;
 /** 최종 보스 출구 줄 (남은 수마다) */
 const FINAL_LANES: Record<number, number[]> = { 1: [1], 2: [0, 2], 3: [0, 1, 2] };
 
 /** 최종 보스 레벨인지 (Lv13~15) */
-export const arenaFinal = (level: number) => level > STAGE_LEVELS * BOSS_TIERS.length;
+export const arenaFinal = (level: number) => level > R.STAGE_LEVELS * BOSS_TIERS.length;
 
 /** 레벨의 보스 체력 기준 층 */
 export function arenaFloor(level: number): number {
-  return arenaFinal(level) ? LAST_FLOOR : STAGE_FLOOR[Math.floor((level - 1) / STAGE_LEVELS)]!;
+  return arenaFinal(level) ? LAST_FLOOR : STAGE_FLOOR[Math.floor((level - 1) / R.STAGE_LEVELS)]!;
 }
 
 /** 승급전 레벨인지 (Lv4·8·12) */
-export const arenaPromotion = (level: number) => !arenaFinal(level) && level % STAGE_LEVELS === 0;
+export const arenaPromotion = (level: number) => !arenaFinal(level) && level % R.STAGE_LEVELS === 0;
 
 /** 이 레벨의 보스방들 (방마다 함께 나오는 보스) */
 function levelFights(s: RunState, level: number): BossKind[][] {
-  const tier = [...BOSS_TIERS[Math.floor((level - 1) / STAGE_LEVELS)]!];
+  const tier = [...BOSS_TIERS[Math.floor((level - 1) / R.STAGE_LEVELS)]!];
   const rng = createRng(deriveSeed(s.seed, "arena", level));
   for (let i = tier.length - 1; i > 0; i--) {
     const j = rng.int(0, i);
     [tier[i], tier[j]] = [tier[j]!, tier[i]!];
   }
   if (arenaPromotion(level)) return tier.map((b) => [b]);
-  return [tier.slice(0, ((level - 1) % STAGE_LEVELS) + 1)];
+  return [tier.slice(0, ((level - 1) % R.STAGE_LEVELS) + 1)];
 }
 
 /** 이 레벨 지도: 보상 방(시작) → 보스방 (승급전은 보스방이 한 줄로 이어짐 · 최종은 출구마다 남은 최종 보스) */
@@ -103,7 +108,7 @@ function arenaRewards(s: RunState, roomId: number): void {
     const n = row === 0 ? perRow : weapons.length - perRow;
     addPickup(s, roomId, "weapon", id, CX + ((i % perRow) - (n - 1) / 2) * 22, CY - 38 + row * 16);
   });
-  pickDistinct(rng, passivePool(s), 3).forEach((id, i) => addPickup(s, roomId, "passive", id, CX - 28 + i * 28, CY + 2, PASSIVE_GROUP));
+  pickDistinct(rng, passivePool(s), 3).forEach((id, i) => addPickup(s, roomId, "passive", id, CX - 28 + i * 28, CY + 2, R.PASSIVE_GROUP));
   pickDistinct(rng, usePool(s), 3).forEach((id, i) => addPickup(s, roomId, "use", id, CX - 28 + i * 28, CY + 22, ARENA_USE_GROUP));
   s.arenaPicks = 0;
 }
@@ -112,7 +117,7 @@ function arenaRewards(s: RunState, roomId: number): void {
 export function arenaUsePick(s: RunState, pk: Pickup, swapped: boolean): void {
   s.arenaPicks = (s.arenaPicks ?? 0) + 1;
   if (swapped) pk.group = 0;
-  if (s.arenaPicks >= USE_PICKS) {
+  if (s.arenaPicks >= R.USE_PICKS) {
     const room = s.rooms[s.roomId]!;
     room.pickups = room.pickups.filter((x) => x.group !== ARENA_USE_GROUP);
   }
