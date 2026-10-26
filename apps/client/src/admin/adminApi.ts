@@ -12,7 +12,7 @@ export interface ServerInfo {
 export const SERVERS: ServerInfo[] = [
   { id: "live", label: "라이브 (main)", url: "https://pixel-rogue.numgame.workers.dev" },
   { id: "beta", label: "디벨롭 (develop)", url: "https://pixel-rogue-beta.numgame.workers.dev" },
-  { id: "test", label: "테스트 (test)", url: "https://pixel-rogue-test.numgame.workers.dev" },
+  { id: "test", label: "테스트 (test)", url: "https://pixel-rogue-test.donggyun0905.workers.dev" },
 ];
 // 내 컴퓨터에서 띄운 서버 (npm run dev)
 if (SERVER_URL && !SERVERS.some((s) => s.url === SERVER_URL)) SERVERS.push({ id: "local", label: "이 컴퓨터", url: SERVER_URL });

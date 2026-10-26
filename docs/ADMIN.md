@@ -8,7 +8,7 @@
 | --- | --- | --- |
 | 라이브 (main) | `pixel-rogue.pages.dev/admin/` | `pixel-rogue` |
 | 디벨롭 (develop) | `develop.pixel-rogue.pages.dev/admin/` | `pixel-rogue-beta` |
-| 테스트 (test) | `test.pixel-rogue.pages.dev/admin/` | `pixel-rogue-test` |
+| 테스트 (test) | `test.pixel-rogue-test.pages.dev/admin/` | `pixel-rogue-test` (`pixel-rogue-test.donggyun0905.workers.dev`) |
 
 - 각 주소의 관리자 페이지는 **그 서버만** 다룸 (다른 서버는 보이지 않음, 로그인도 서버마다 따로). 관리자 요청은 그 서버의 화면 주소에서만 받음
 - test는 놀이터 서버라 따로 관리: 다른 서버 수치 가져오기 기능이 없음 (라이브·디벨롭도 test 수치는 가져오지 않음)

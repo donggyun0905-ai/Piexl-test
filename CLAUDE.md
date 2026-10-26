@@ -26,7 +26,7 @@
   - 화면이 내 조작을 바로 처리(예측)하고 서버는 같은 규칙으로 다시 계산해 확인 (점수 조작 방지)
   - 메시지는 묶어서 보낸다 (받는 메시지 수 = 비용). 저장은 값이 바뀔 때만
   - 랜덤은 시드로만 (`Math.random`으로 게임 결과를 정하지 않음)
-- 브랜치: `develop` → 테스트(`develop.pixel-rogue.pages.dev`, 서버 `pixel-rogue-beta`), `test` → 시험(`test.pixel-rogue.pages.dev`, 서버 `pixel-rogue-test`·저장소 따로), `main` → 라이브(`pixel-rogue.pages.dev`, 서버 `pixel-rogue`). 작업은 `develop`에서
+- 브랜치: `develop` → 테스트(`develop.pixel-rogue.pages.dev`, 서버 `pixel-rogue-beta`), `test` → 시험(`test.pixel-rogue-test.pages.dev`, 서버 `pixel-rogue-test.donggyun0905.workers.dev`·저장소 `donggyun0905-ai/Piexl-test`), `main` → 라이브(`pixel-rogue.pages.dev`, 서버 `pixel-rogue`). 작업은 `develop`에서
 - 그림 규격: `docs/ART.md` · 공개 전 점검: `docs/LAUNCH.md` · 관리자 페이지(게임 수치 조정): `docs/ADMIN.md`
 - 게임 계획: `docs/PLAN.md` (고치면 맨 위 '마지막 수정' 날짜·시간 갱신)
 - 개발일지: `docs/devlog/YYYY-MM.md` (월별, 최신 달만 읽기). 날짜·시간(한국 시간)으로 기록. **쓰기 전에 적을 내용을 간략히 말하고, 사용자가 작성하라고 하면 작성**
@@ -77,7 +77,7 @@
 - "계획서만 써 줘"면 문서만 고치고 코드는 건드리지 않음
 - 브랜치·배포 구조는 지시 없이 만들거나 바꾸지 않음
 - 커밋 작성자: `git -c user.name=Rokking -c user.email=sk9910064@gmail.com commit`. Co-Authored-By·세션 링크 줄 넣지 않음
-- 커밋하면 바로 `test`(시험 서버 `test.pixel-rogue.pages.dev`)에 올린다 (2026-10-20 사용자 지시, 처음엔 `develop`이었다가 `test`로 바뀜). `develop`·`main`(라이브)은 사용자가 지시할 때만
+- 커밋하면 바로 `test`(시험 서버 `test.pixel-rogue-test.pages.dev`)에 올린다 (2026-10-20 사용자 지시, 처음엔 `develop`이었다가 `test`로 바뀜). `develop`·`main`(라이브)은 사용자가 지시할 때만
 - "커밋 취소"는 되돌리기 커밋을 쌓지 말고 기록에서 지우기 (흔적 남기지 않음)
 - Claude 작업 환경에는 서명 열쇠가 없어 Claude가 만든 커밋은 GitHub에서 Unverified로 뜸 (어떤 방식으로 올려도 같음)
 - 기능 추가·변경을 올릴 때마다 버전을 올리고(`constants`의 `GAME_VERSION` = 패치 노트 맨 위 버전, 보통 끝자리 +1) 그 버전에 패치 노트 기록 (다국어면 모든 언어). 서버 `/health`·메인 화면의 버전으로 반영됐는지 확인함 (2026-10-21 사용자 지시)

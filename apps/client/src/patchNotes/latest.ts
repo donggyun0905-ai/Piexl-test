@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.114",
+    date: "2026-10-26",
+    items: {
+      ko: ["관리자 페이지의 시험(test) 서버 주소를 새 서버로 바꿈"],
+      en: ["The admin page now points to the new test server"],
+      ja: ["管理者ページの試験（test）サーバーのアドレスを新しいサーバーに変更"],
+    },
+  },
+  {
     version: "0.48.113",
     date: "2026-10-26",
     items: {
