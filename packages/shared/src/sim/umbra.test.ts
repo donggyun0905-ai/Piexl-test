@@ -54,6 +54,7 @@ describe("검은 잔영", () => {
     steps(run, 1);
     expect(boss.hp).toBe(boss.maxHp - 500);
     all.forEach((b, i) => {
+      b.ultDone = true;
       b.hp = 0;
       steps(run, 2);
       expect(boss.say).toBe(i + 1);
@@ -78,7 +79,7 @@ describe("검은 잔영", () => {
 });
 
 describe("데스웜", () => {
-  it("땅속에서는 맞지 않음 → 갑자기 표시 → 솟아오르면 맞고 사방으로 바위 → 3초 뒤 다시 땅속", () => {
+  it("땅속에서는 맞지 않음 → 갑자기 표시 → 솟아오름 → 긴 몸이 공중으로 날아 다른 땅에 박힘 → 다시 땅속", () => {
     const { run, e } = beast("sandworm");
     steps(run, 1);
     expect(e.immune).toBe(true);
@@ -90,9 +91,70 @@ describe("데스웜", () => {
     expect(e.phase).toBe("act");
     expect(e.immune).toBe(false);
     expect(run.projectiles.length).toBeGreaterThanOrEqual(5);
-    steps(run, 181);
+    const [sx, sy] = e.wormPath!;
+    steps(run, 120);
+    // 날아가는 중: 머리가 솟은 자리에서 멀어짐
+    expect(Math.hypot(e.x - sx!, e.y - sy!)).toBeGreaterThan(40);
+    for (let i = 0; i < 400 && e.phase !== "walk"; i++) steps(run, 1);
     expect(e.phase).toBe("walk");
     expect(e.immune).toBe(true);
+  });
+
+  it("필살기: 체력 10% 아래면 가운데에서 무적, 몬스터 떼를 다 잡을 때까지 이어지고 독액은 웅덩이가 됨", () => {
+    const { run, e } = beast("sandworm");
+    e.hp = 0;
+    steps(run, 1);
+    // 필살기 전에는 쓰러지지 않음
+    expect(e.hp).toBeGreaterThan(0);
+    steps(run, 2);
+    expect(e.ultAt).toBeDefined();
+    expect(e.immune).toBe(true);
+    steps(run, 500);
+    const brood = run.enemies.filter((o) => e.brood?.includes(o.id) && o.hp > 0);
+    expect(brood.length).toBeGreaterThan(6);
+    expect(e.ultAt).toBeDefined();
+    expect(e.pools?.length).toBeGreaterThan(0);
+    for (const b of brood) b.hp = 0;
+    steps(run, 3);
+    expect(e.ultAt).toBeUndefined();
+    expect(e.ultDone).toBe(true);
+  });
+});
+
+describe("필살기", () => {
+  it("거대 매: # 선 열 번(40줄) 뒤 떨어져 경직", () => {
+    const { run, e } = beast("roc");
+    e.hp = 1;
+    steps(run, 1);
+    expect(e.ultAt).toBeDefined();
+    expect(run.hazards?.length).toBe(40);
+    for (let i = 0; i < 900 && e.ultAt !== undefined; i++) steps(run, 1);
+    expect(e.phase).toBe("act");
+    expect(e.immune).toBe(false);
+  });
+
+  it("거대 전갈: 30초 동안 무적으로 검은 독액, 맞으면 죽음 상태이상(쓰러질 수 있음)", () => {
+    const { run, e } = beast("scorpion");
+    e.phase = "act";
+    e.air = false;
+    e.hp = 1;
+    steps(run, 2);
+    expect(e.ultAt).toBeDefined();
+    expect(e.immune).toBe(true);
+    steps(run, 300);
+    const doom = run.projectiles.filter((pr) => pr.doom);
+    expect(doom.length).toBeGreaterThan(30);
+    const p = run.player;
+    p.invulnTicks = 0;
+    const pr = doom[0]!;
+    pr.x = p.x;
+    pr.y = p.y;
+    stepSim(run, EMPTY_INPUT);
+    expect(p.doomTicks).toBeGreaterThan(0);
+    p.hp = 1;
+    p.invulnTicks = 0;
+    for (let i = 0; i < 40; i++) stepSim(run, EMPTY_INPUT);
+    expect(p.hp).toBeLessThanOrEqual(0);
   });
 });
 

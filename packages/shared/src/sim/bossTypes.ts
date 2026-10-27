@@ -33,6 +33,12 @@ export interface BossEnemyState {
   ultDone?: boolean;
   /** 갓이터 패링: 예고 중인 창 (나온 자리 · 방향 · 날아가는 틱 · 진짜인지) */
   spears?: { x: number; y: number; dx: number; dy: number; at: number; real: boolean }[];
+  /** 데스웜: 솟은 자리 [x, y] · 들어갈 자리 [x, y] · 머리가 길 따라 나아간 거리 */
+  wormPath?: number[];
+  /** 데스웜 필살기: 입에서 나온 몬스터 id · 날아가는 독액 · 바닥 독 웅덩이 */
+  brood?: number[];
+  globs?: { x: number; y: number; vx: number; vy: number; t: number }[];
+  pools?: { x: number; y: number; t: number }[];
   /** 흰 보호막: 체력보다 먼저 깎임 (거대 전갈) */
   ward?: number;
   /** 검은 잔영: 지금 하는 말 (0 처음 · 1~3 짐승을 하나 잡을 때마다) · 말을 시작한 틱 */
@@ -70,6 +76,9 @@ export interface BossPlayerState {
   venomTicks?: number;
   pinchTicks?: number;
   pinchBy?: number;
+  /** 죽음(거대 전갈 필살기 검은 독액): 남은 틱 · 겹 (독보다 세고 쓰러질 수 있음) */
+  doomTicks?: number;
+  doomStacks?: number;
 }
 
 /** 레이드(라스트 보스) 시간: 보스방에 처음 들어간 틱 · 보스를 다 잡기까지 걸린 틱 (명예의 전당) */
@@ -88,7 +97,7 @@ export interface ArenaRunState {
 
 export interface BossShotState {
   /** 그리기용 탄 모양 */
-  look?: "arrow" | "note" | "spear" | "seed" | "soul" | "feather" | "light" | "fire" | "wave" | "orbRuin" | "orbChaos" | "bat" | "net" | "rock" | "bigwave" | "larrow" | "darrow" | "reaper" | "ember" | "rspear" | "fspear";
+  look?: "arrow" | "note" | "spear" | "seed" | "soul" | "feather" | "light" | "fire" | "wave" | "orbRuin" | "orbChaos" | "bat" | "net" | "rock" | "bigwave" | "larrow" | "darrow" | "reaper" | "ember" | "rspear" | "fspear" | "doom";
   /** 세이렌 음표: 플레이어에 맞아도 사라지지 않고, 맞으면 끌려감. 세이렌이 쓰러지면 사라짐 */
   lure?: boolean;
   /** 플레이어에 맞아도 사라지지 않음 (갓이터의 거대한 구슬) · 이 적이 쓰러지면 사라짐 */
@@ -101,4 +110,6 @@ export interface BossShotState {
   /** 갓이터 패링의 진짜 창: 패링 자세면 받아 넘김 · 가짜 창: 플레이어에 닿아도 아무 일 없음 */
   parry?: boolean;
   fake?: boolean;
+  /** 거대 전갈 필살기 검은 독액: 맞으면 죽음 상태이상 */
+  doom?: boolean;
 }

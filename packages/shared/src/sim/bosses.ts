@@ -42,7 +42,7 @@ const BOSS_AI: Partial<Record<EnemyState["kind"], BossAi>> = {
   plight: updateLight,
   pdark: updateDark,
   umbra: updateUmbra,
-  sandworm: (s, e, toP) => updateWorm(s, e, toP),
+  sandworm: (s, e, toP, _go, spawned) => updateWorm(s, e, toP, spawned),
   scorpion: (s, e, toP) => updateScorpion(s, e, toP, ENEMIES.scorpion.speed),
   roc: (s, e) => updateRoc(s, e),
 };

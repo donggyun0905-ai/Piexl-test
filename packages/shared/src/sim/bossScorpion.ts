@@ -5,6 +5,8 @@ import { createRng, deriveSeed } from "../rng";
 import { half, hitDamage } from "./bossKit";
 import { pinchPlayer, poisonPlayer } from "./bossGrip";
 import { damagePlayer } from "./combat";
+import { ultReady } from "./bossUlts";
+import { startScorpionUlt, updateScorpionUlt } from "./beastUlts";
 import { addShape, inHazard } from "./hazards";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2 } from "./util";
@@ -50,6 +52,8 @@ function burrow(e: EnemyState): void {
 
 export function updateScorpion(s: RunState, e: EnemyState, toP: readonly [number, number], speed: number): void {
   const p = s.player;
+  if (ultReady(e)) startScorpionUlt(s, e);
+  if (e.ultAt !== undefined && updateScorpionUlt(s, e)) return;
   if (scorpionHidden(e)) {
     e.air = true;
     e.immune = true;

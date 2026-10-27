@@ -5,6 +5,8 @@ import { createRng, deriveSeed } from "../rng";
 import { half, hitDamage } from "./bossKit";
 import { damagePlayer } from "./combat";
 import { addShape } from "./hazards";
+import { ultReady } from "./bossUlts";
+import { startRocUlt, updateRocUlt } from "./beastUlts";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, DIR16, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
@@ -64,6 +66,8 @@ function daze(e: EnemyState, x: number, y: number): void {
 
 export function updateRoc(s: RunState, e: EnemyState): void {
   const p = s.player;
+  if (ultReady(e)) startRocUlt(s, e);
+  if (e.ultAt !== undefined && updateRocUlt(s, e)) return;
   if (rocHidden(e)) {
     e.air = true;
     e.immune = true;

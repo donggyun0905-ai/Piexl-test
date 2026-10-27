@@ -27,6 +27,7 @@ import { drawPrimeval, drawPrimevalOverlay } from "./primeval";
 import { drawUltGround, drawUltOverlay } from "./ults";
 import { drawArenaLabels } from "./arena";
 import { drawUmbraTalk } from "./umbra";
+import { drawBeastAir, drawBeastGround } from "./beastUlts";
 import { drawMedicAir, drawMedicGround } from "./medic";
 import { lerp, type Snap } from "./palette";
 import { drawRoom } from "./room";
@@ -144,6 +145,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   if (opt.showRange && !s.over) drawRangeRing(ctx, s, snap(lerp(s.player.prevX, s.player.x, alpha)), snap(lerp(s.player.prevY, s.player.y, alpha)));
   drawTelegraphs(ctx, s, alpha, snap);
   drawUltGround(ctx, s);
+  drawBeastGround(ctx, s);
   opt.under?.(ctx, snap);
   eachPerson(s, () => {
     drawDevices(ctx, s, snap);
@@ -212,6 +214,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   drawPrimevalOverlay(ctx, s, alpha, snap);
   drawUltOverlay(ctx, s, snap);
   drawImugiOverlay(ctx, s);
+  drawBeastAir(ctx, s);
   if (opt.legendName) drawLegendName(ctx, s, alpha, opt.legendName);
   drawMorphGot(ctx, s, alpha, snap, opt.passiveName);
   drawPaewang(ctx, s, alpha, snap);

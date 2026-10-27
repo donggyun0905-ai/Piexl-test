@@ -1,5 +1,6 @@
 // 거대 전갈이 플레이어에게 거는 것: 꼬리 독(0.5초마다 피해) · 집게에 붙잡힘(못 움직이고 대시도 못 함, 0.5초마다 피해). 둘 다 체력 1 아래로는 안 깎음
-import { shotDamage } from "./bossKit";
+// 죽음(전갈 필살기 검은 독액): 독보다 세고 겹칠수록 아픔, 쓰러질 수 있음
+import { hitDamage, shotDamage } from "./bossKit";
 import type { EnemyState, RunState, TickInput } from "./types";
 import { addEffect, keepInRoom } from "./util";
 
@@ -12,11 +13,21 @@ const R = {
   /** 집게: 붙잡는 틱 · 탄 피해에 곱하는 값 */
   PINCH_TICKS: 180,
   PINCH_MUL: 0.4,
+  /** 죽음: 남은 틱 · 최대 겹 · 근접 피해에 곱하는 값(겹마다) */
+  DOOM_TICKS: 360,
+  DOOM_MAX: 3,
+  DOOM_MUL: 0.12,
 };
 export { R as BOSS_GRIP_RULES };
 
 export function poisonPlayer(s: RunState): void {
   s.player.venomTicks = R.VENOM_TICKS;
+}
+
+export function doomPlayer(s: RunState): void {
+  const p = s.player;
+  p.doomStacks = Math.min(R.DOOM_MAX, (p.doomStacks ?? 0) + 1);
+  p.doomTicks = R.DOOM_TICKS;
 }
 
 export function pinchPlayer(s: RunState, e: EnemyState): void {
@@ -37,7 +48,15 @@ export function gripInput(s: RunState, input: TickInput): TickInput {
   const p = s.player;
   if ((p.venomTicks ?? 0) > 0) {
     p.venomTicks = (p.venomTicks ?? 0) - 1;
-    if (p.venomTicks % R.VENOM_GAP === 0) sting(s, R.VENOM_MUL);
+    if (s.tick % R.VENOM_GAP === 0) sting(s, R.VENOM_MUL);
+  }
+  if ((p.doomTicks ?? 0) > 0) {
+    p.doomTicks = (p.doomTicks ?? 0) - 1;
+    if (s.tick % R.VENOM_GAP === R.VENOM_GAP / 2 && p.shieldTicks <= 0) {
+      p.hp -= Math.max(1, Math.round(hitDamage(s) * R.DOOM_MUL * (p.doomStacks ?? 1)));
+      addEffect(s, { kind: "hit", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 5, maxTicks: 8 });
+    }
+    if (p.doomTicks === 0) p.doomStacks = 0;
   }
   if ((p.pinchTicks ?? 0) <= 0) return input;
   p.pinchTicks = (p.pinchTicks ?? 0) - 1;

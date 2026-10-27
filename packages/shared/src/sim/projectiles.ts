@@ -14,6 +14,7 @@ import { lure } from "./bossesTwo";
 import { netPlayer } from "./bossPrimeval";
 import { shatterShot } from "./bossKit";
 import { tryParry } from "./bossCage";
+import { doomPlayer } from "./bossGrip";
 import { applyBleed } from "./gunExtras";
 import { eachSeat, isAlive, seatNo, useSeat } from "./party";
 import { SCRIBE } from "../weaponsScribe";
@@ -115,7 +116,9 @@ export function updateProjectiles(s: RunState, frozen = false): void {
         if (gone || (s.party && !isAlive(p)) || dist2(p, pr) >= rr * rr || p.dashTicks !== 0) return;
         if (tryParry(s, pr) || renBlock(s, pr)) gone = true;
         else {
+          const open = p.invulnTicks <= 0 && p.shieldTicks <= 0;
           damagePlayer(s, pr.damage);
+          if (pr.doom && open) doomPlayer(s);
           // 세이렌 음표: 사라지지 않고 끌려감 · 갓이터 구슬: 사라지지 않음
           if (pr.net) netPlayer(s, pr.id);
           if (pr.lure) lure(s);

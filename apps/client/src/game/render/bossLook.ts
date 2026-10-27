@@ -1,6 +1,7 @@
 // 보스 상태 표시 (무적 방벽 등) · 적 탄 모양 (화살·음표·창·씨앗·영혼·깃털·빛 구슬·불덩이)
 import type { EnemyState, ProjectileState } from "@pixel-rogue/shared";
 import { drawLastShot } from "./lastShots";
+import { drawBeastShot } from "./beastUlts";
 
 const TAU = Math.PI * 2;
 
@@ -14,7 +15,7 @@ function line(ctx: CanvasRenderingContext2D, x: number, y: number, tx: number, t
 /** 적 탄 모양 (화살·음표·창·씨앗·영혼·깃털)이면 그리고 true */
 export function drawEnemyShot(ctx: CanvasRenderingContext2D, pr: ProjectileState, x: number, y: number, tick: number): boolean {
   if (!pr.look) return false;
-  if (drawLastShot(ctx, pr, x, y, tick)) return true;
+  if (drawLastShot(ctx, pr, x, y, tick) || drawBeastShot(ctx, pr, x, y, tick)) return true;
   const sp = Math.hypot(pr.vx, pr.vy) || 1;
   const dx = pr.vx / sp;
   const dy = pr.vy / sp;

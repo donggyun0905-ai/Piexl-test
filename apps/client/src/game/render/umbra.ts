@@ -1,5 +1,5 @@
 // 시즌 2 라스트 보스 검은 잔영과 거대한 짐승 셋 그리기: 땅속·하늘에 있을 때 숨기기 · 데스웜 솟기 · 전갈 움직이는 표시·몸 돌리기 · 매 경직·날아오르기 · 검은 잔영 말풍선
-import { BOSS_ROC_RULES, BOSS_UMBRA_RULES, BOSS_WORM_RULES, ENEMIES, UMBRA_BEASTS, UMBRA_WARD, type EnemyState, type RunState } from "@pixel-rogue/shared";
+import { BOSS_ROC_RULES, BOSS_UMBRA_RULES, BOSS_WORM_RULES, wormBody, ENEMIES, UMBRA_BEASTS, UMBRA_WARD, type EnemyState, type RunState } from "@pixel-rogue/shared";
 import { drawEnemySprite } from "../sprites";
 import { C } from "./palette";
 
@@ -25,16 +25,19 @@ export function drawUmbraActor(ctx: CanvasRenderingContext2D, s: RunState, e: En
     ctx.globalAlpha = 1;
     return true;
   }
-  if (e.kind === "sandworm") drawWorm(ctx, e, x, y, frame, tint);
+  if (e.kind === "sandworm") drawWorm(ctx, s, e, x, y, frame, tint);
   else if (e.kind === "scorpion") drawScorpion(ctx, s, e, x, y, frame, tint);
   else drawRoc(ctx, s, e, x, y, frame, tint);
   return true;
 }
 
-/** 데스웜: 땅속이면 안 보임 · 솟는 1초 동안 아래부터 드러남 · 위에서는 살짝 흔들림 */
-function drawWorm(ctx: CanvasRenderingContext2D, e: EnemyState, x: number, y: number, frame: number, tint?: readonly [string, number]): void {
+/** 데스웜: 땅속이면 안 보임 · 솟는 1초 동안 아래부터 드러남 · 그 뒤 긴 몸이 공중으로 날아 다른 땅에 박힘 · 필살기는 머리만 */
+function drawWorm(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, x: number, y: number, frame: number, tint?: readonly [string, number]): void {
   if (hidden(e)) return;
+  if (e.ultAt !== undefined) return wormHead(ctx, x, y, frame, tint, 0);
   const t = e.aux ?? 0;
+  const path = e.wormPath;
+  if (t >= BOSS_WORM_RULES.RISE && path) return wormFlight(ctx, s, e, path, frame, tint);
   const rise = Math.min(1, t / BOSS_WORM_RULES.RISE);
   const size = e.r * 3.7;
   const base = y + size / 2;
@@ -46,9 +49,48 @@ function drawWorm(ctx: CanvasRenderingContext2D, e: EnemyState, x: number, y: nu
   ctx.beginPath();
   ctx.rect(x - size, base - size * rise, size * 2, size * rise);
   ctx.clip();
-  const bob = rise >= 1 ? Math.sin(t / 8) * 1.5 : 0;
-  drawEnemySprite(ctx, "sandworm", x, y + size * (1 - rise) + bob, frame, e.dirX < 0, tint);
+  drawEnemySprite(ctx, "sandworm", x, y + size * (1 - rise), frame, e.dirX < 0, tint);
   ctx.restore();
+}
+
+/** 머리(이빨 입)만: 그림 아래쪽 몸통은 잘라 냄 · lift만큼 떠 있음 */
+function wormHead(ctx: CanvasRenderingContext2D, x: number, y: number, frame: number, tint: readonly [string, number] | undefined, lift: number): void {
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(x - 60, y - lift - 40, 120, 67);
+  ctx.clip();
+  drawEnemySprite(ctx, "sandworm", x, y - lift + 18, frame, false, tint);
+  ctx.restore();
+}
+
+/** 공중을 나는 긴 몸: 꼬리부터 마디를 그리고 머리는 맨 위 (솟은 자리·박힐 자리 사이 가운데가 가장 높음) */
+function wormFlight(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, path: number[], frame: number, tint?: readonly [string, number]): void {
+  const [sx, sy, lx, ly, u] = path as [number, number, number, number, number];
+  const len = Math.hypot(lx - sx, ly - sy) || 1;
+  const height = (px: number, py: number) => Math.sin((Math.PI * Math.min(len, Math.hypot(px - sx, py - sy))) / len) * 22;
+  const body = wormBody(path, 9);
+  ctx.fillStyle = "rgba(40, 24, 10, 0.35)";
+  for (const [bx, by] of body) ctx.fillRect(Math.round(bx - 8), Math.round(by - 2), 16, 5);
+  body.forEach(([bx, by], i) => {
+    const h = height(bx, by);
+    ctx.fillStyle = i % 2 ? "#9a6a3a" : "#b8844c";
+    ctx.beginPath();
+    ctx.arc(bx, by - h, 13, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#5a3818";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillStyle = "#e0b880";
+    ctx.fillRect(Math.round(bx - 5), Math.round(by - h - 9), 6, 3);
+  });
+  // 솟은 자리·박힌 자리 모래 구멍
+  ctx.fillStyle = "rgba(60, 36, 16, 0.6)";
+  for (const [hx, hy] of [[sx, sy], [lx, ly]] as const) {
+    ctx.beginPath();
+    ctx.ellipse(hx, hy + 6, 18, 7, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  if (u <= len) wormHead(ctx, e.x, e.y, frame, tint, height(e.x, e.y) + 4 + Math.sin(s.tick / 6));
 }
 
 /** 전갈: 모래 밑을 기면 붉은 표시가 따라다님 · 나오면 바라보는 쪽으로 몸을 돌림 */
@@ -70,6 +112,13 @@ function drawScorpion(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState,
       ctx.fillRect(Math.round(x + Math.cos(a) * e.r * 0.6), Math.round(y + Math.sin(a) * e.r * 0.6), 2, 1);
     }
     return;
+  }
+  // 필살기(검은 독액) 중: 검보라 기운
+  if (e.ultAt !== undefined) {
+    ctx.fillStyle = `rgba(40, 10, 60, ${0.35 + 0.15 * Math.sin(s.tick / 7)})`;
+    ctx.beginPath();
+    ctx.arc(x, y, e.r + 14, 0, Math.PI * 2);
+    ctx.fill();
   }
   ctx.save();
   ctx.translate(x, y);
