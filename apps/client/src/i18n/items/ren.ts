@@ -4,7 +4,7 @@ import type { Names } from "./names";
 
 type RenPassive =
   | "renStone" | "renOak" | "renSoil" | "renRootPulse" | "renMoss" | "renAmber" | "renGuardPlus" | "renThorn" | "renWall" | "renReflect"
-  | "renQuake" | "renBindLong" | "renLaunchFar" | "renPrisonDmg" | "renBigger" | "renCollapse" | "renRegrow" | "renHeavy" | "renCrushStun" | "renBurstPrison";
+  | "renQuake" | "renBindLong" | "renEarth" | "renPrisonDmg" | "renBigger" | "renCollapse" | "renRegrow" | "renHeavy" | "renCrushStun" | "renBurstPrison";
 const c = (ko: string, en: string, ja: string): Names => ({ ko, en, ja });
 
 export const REN_WEAPON_NAMES: Record<"renHands" & WeaponId, Names> = {
@@ -31,7 +31,7 @@ export const REN_PASSIVE_NAMES: Record<RenPassive & PassiveId, Names> = {
   renReflect: c("되받기", "Throwback", "跳ね返し"),
   renQuake: c("여진", "Aftershock", "余震"),
   renBindLong: c("깊은 뿌리", "Deep Roots", "深い根"),
-  renLaunchFar: c("높이 날리기", "High Launch", "高く飛ばす"),
+  renEarth: c("대지의 힘", "Power of the Earth", "大地の力"),
   renPrisonDmg: c("조여드는 감옥", "Tightening Prison", "締まる牢獄"),
   renBigger: c("거대 토목", "Colossal Earthwood", "巨大な土木"),
   renCollapse: c("대지 붕괴", "Earth Collapse", "大地崩壊"),
@@ -48,7 +48,7 @@ export const REN_EFFECTS: Partial<Record<RenPassive & PassiveId, Names>> = {
   renReflect: c("막은 탄이 적에게 되돌아감", "Blocked shots fly back at enemies", "防いだ弾が敵へ跳ね返る"),
   renQuake: c("토목이 떨어진 자리에 {delay:sec}초 뒤 한 번 더 (피해 {mul:pct}%)", "The spot is struck again after {delay:sec}s ({mul:pct}% damage)", "土木が落ちた場所に{delay:sec}秒後もう一度（ダメージ{mul:pct}%）"),
   renBindLong: c("묶기 {mul}배 오래", "Bind lasts ×{mul}", "縛る時間{mul}倍"),
-  renLaunchFar: c("날려버리기 {mul}배 멀리, 떨어질 때 피해", "Launch flings ×{mul} as far and deals damage on landing", "吹き飛ばしが{mul}倍遠く、落ちる時にダメージ"),
+  renEarth: c("대지의 추가 공격 피해 +30%", "Earth bonus attacks deal +30% damage", "大地の追加攻撃のダメージ+30%"),
   renPrisonDmg: c("가둔 적이 갇힌 동안 0.5초마다 공격력 {per:pct}% 피해", "Imprisoned foes take {per:pct}% damage every 0.5s", "閉じ込めた敵が0.5秒ごとに攻撃力{per:pct}%のダメージ"),
   renBigger: c("토목 크기 +{r:up}%", "Earthwood size +{r:up}%", "土木の大きさ+{r:up}%"),
   renCollapse: c("다섯 차례를 다 돌면 사거리 안 모든 적에게 큰 토목", "After all five moves, a great earthwood falls on every foe in range", "五つの手順を終えると射程内の全ての敵に大きな土木"),

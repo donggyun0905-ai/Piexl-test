@@ -30,8 +30,8 @@ export const REN_PASSIVES = {
   renQuake: E("renQuake"),
   /** 깊은 뿌리: 묶기 두 배 오래 */
   renBindLong: E("renBindLong"),
-  /** 높이 날리기: 날려버리기 두 배 멀리, 떨어질 때 피해 */
-  renLaunchFar: E("renLaunchFar"),
+  /** 대지의 힘: 대지의 추가 공격 피해 +30% */
+  renEarth: E("renEarth"),
   /** 조여드는 감옥: 가둔 적이 갇힌 동안 피해를 받음 */
   renPrisonDmg: E("renPrisonDmg"),
   /** 거대 토목: 토목 크기 +30% */
@@ -56,7 +56,7 @@ export const REN_PERKS = {
   renReflect: { mul: 1 },
   renQuake: { delay: 30, mul: 0.6 },
   renBindLong: { mul: 2 },
-  renLaunchFar: { mul: 2, land: 0.8 },
+  renEarth: { mul: 1.3 },
   renPrisonDmg: { per: 0.15 },
   renBigger: { r: 1.3 },
   renCollapse: { mul: 2 },

@@ -46,9 +46,10 @@ export const REN_PASSIVE_ART = {
     g.line(2, 13, 5, 11, ROCK_D).line(5, 11, 8, 14, ROCK_D).line(8, 14, 11, 11, ROCK_D).line(11, 11, 14, 13, ROCK_D);
   },
   renBindLong: (g: Pen) => g.ring(8, 8, 5, WOOD).ring(8, 8, 3, WOOD_D).line(8, 13, 6, 15, WOOD_D).line(8, 13, 10, 15, WOOD_D),
-  renLaunchFar: (g: Pen) => {
-    clod(g, 11, 4, 2);
-    g.line(3, 13, 9, 6, WH).px(9, 5, WH).px(8, 5, WH).px(10, 7, WH);
+  renEarth: (g: Pen) => {
+    // 솟아오르는 흙 덩어리 + 초록 기운 화살
+    clod(g, 8, 10, 4);
+    g.rect(3, 13, 10, 1, WOOD_D).line(8, 5, 8, 1, "#5ac84a").px(7, 2, "#5ac84a").px(9, 2, "#5ac84a").px(3, 5, "#5ac84a").px(13, 6, "#5ac84a");
   },
   renPrisonDmg: (g: Pen) => {
     for (const x of [3, 6, 9, 12]) g.rect(x, 2, 1, 12, WOOD);

@@ -4,7 +4,7 @@ import type { WeaponDef } from "./content";
 
 export const REN_WEAPONS = {
   /** 맨손 (토목을 부림): 넓고 세지만 느림 */
-  renHands: { id: "renHands", kind: "earthwood", damageMul: 2.2, attackSpeed: 0.7, range: 90, projectileSpeed: 0, exclusive: "ren" },
+  renHands: { id: "renHands", kind: "earthwood", damageMul: 2.0, attackSpeed: 0.7, range: 90, projectileSpeed: 0, exclusive: "ren" },
 } as const satisfies Record<string, WeaponDef>;
 
 /** 토목 공격 차례: 타격 · 묶기 · 날려버리기 · 짓뭉개기 · 가두기 */
@@ -28,4 +28,27 @@ export const REN = {
   block: 0.7,
   /** 몸으로 부딪히는 근접 공격은 2배로 받음 (원거리 탄을 막는 대신) */
   meleeTaken: 2,
+} as const;
+
+/** 대지의 추가 공격 (sim/renEarth): 렌 전용 아이템 3개마다 한 단계씩 열림 (최대 5). 평소 공격마다 단계당 10% (다 열면 50%로 그중 하나)
+ *  1 돌 던지기(앞으로 넓게, 멀리 날림·약함) · 2 용머리(공격한 자리) · 3 용오름(앞으로 오르내리며 나아감) · 4 머리 위 거대 토목(5개 쌓이면 큰 돌 5번) · 5 양쪽 토목이 짓뭉갬 */
+export const REN_EARTH = {
+  per: 3,
+  tiers: 5,
+  chance: 0.1,
+  rockMul: 0.35,
+  rockPush: 40,
+  rockReach: 80,
+  headMul: 0.85,
+  headR: 22,
+  wyrmMul: 1,
+  wyrmR: 12,
+  wyrmSpeed: 3,
+  wyrmTicks: 60,
+  stoneMax: 5,
+  dropMul: 1,
+  dropR: 26,
+  dropGap: 12,
+  crushMul: 1,
+  crushR: 16,
 } as const;

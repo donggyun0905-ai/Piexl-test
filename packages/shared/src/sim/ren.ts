@@ -6,6 +6,7 @@ import { createRng, deriveSeed } from "../rng";
 import { REN as R, REN_MOVES, type RenMove } from "../weaponsRen";
 import { blastAt, dotDamage, healPlayer } from "./combat";
 import { alive, inCircle, isBoss, root, stun, strike } from "./s2Kit";
+import { earthAttack, earthTick } from "./renEarth";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk } from "./util";
 
@@ -44,11 +45,7 @@ function slam(s: RunState, move: RenMove, x: number, y: number, mulAll = 1): voi
   const base = p.stats.damage * R.mul[move] * mulAll;
   for (const e of inCircle(s, x, y, r)) {
     const dmg = base * (isBoss(e) && hasPerk(p, "renHeavy") ? K.renHeavy.mul : 1);
-    if (move === "launch") {
-      const far = hasPerk(p, "renLaunchFar");
-      strike(s, e, dmg, R.launchPush * (far ? K.renLaunchFar.mul : 1));
-      if (far) s.pendingBlasts.push({ tick: s.tick + 20, x: e.x, y: e.y, radius: 14, damage: dmg * K.renLaunchFar.land });
-    } else strike(s, e, dmg);
+    strike(s, e, dmg, move === "launch" ? R.launchPush : 0);
     if (move === "bind") root(e, R.bindTicks * (hasPerk(p, "renBindLong") ? K.renBindLong.mul : 1));
     if (move === "crush" && hasPerk(p, "renCrushStun")) stun(e, K.renCrushStun.ticks);
     if (move === "prison" && !isBoss(e) && e.kind !== "dummy") {
@@ -97,12 +94,14 @@ export function renTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
   jails(s);
   guardHits(s);
+  earthTick(s);
   if (!want || p.attackCooldown > 0) return;
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
   const i = p.rMove ?? 0;
   const at = aim(s);
   slam(s, REN_MOVES[i] ?? "strike", at.x, at.y);
+  earthAttack(s, at.x, at.y);
   p.rMove = (i + 1) % REN_MOVES.length;
   // 대지 붕괴: 한 바퀴를 다 돌면 사거리 안 모든 적에게
   if (p.rMove === 0 && hasPerk(p, "renCollapse")) {
@@ -112,5 +111,5 @@ export function renTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetRen(p: PlayerState): void {
-  delete p.rMove;
+  for (const k of ["rMove", "rWyrms", "rStones", "rDrop"] as const) delete p[k];
 }

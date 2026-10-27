@@ -88,6 +88,10 @@ export interface ElderPlayerState {
 export interface RenPlayerState {
   /** 다음 토목 차례 (0 타격 · 1 묶기 · 2 날려버리기 · 3 짓뭉개기 · 4 가두기) */
   rMove?: number;
+  /** 대지의 추가 공격: 앞으로 나아가는 용오름 · 머리 위에 쌓인 거대 토목 수 · 쏟아지는 큰 돌(남은 수·다음까지 틱) */
+  rWyrms?: { x: number; y: number; dx: number; dy: number; t: number; dmg: number; hit: number[] }[];
+  rStones?: number;
+  rDrop?: { left: number; gap: number; dmg: number };
 }
 
 export interface SpiritPlayerState {

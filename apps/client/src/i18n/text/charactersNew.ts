@@ -46,9 +46,9 @@ export const CHARACTER_TEXT_NEW = {
   },
   ren: { ko: "렌", en: "Ren", ja: "レン" },
   renDesc: {
-    ko: "토목 · 비르디아. 맨손으로 거대한 토목을 부려 차례로 타격·묶기·날려버리기·짓뭉개기·가두기 (넓고 세지만 느림) · 둘레의 수호 토목이 원거리 탄을 70% 확률로 막음 · 무기는 맨손 하나",
-    en: "Earthwood · Virdia. Wields giant earthwood bare-handed: strike, bind, launch, crush and imprison in turn (wide and strong but slow) · guardian earthwood blocks ranged shots 70% of the time · bare hands only",
-    ja: "土木 · ヴィルディア。素手で巨大な土木を操り、順に打撃・縛る・吹き飛ばす・押し潰す・閉じ込める（広く強いが遅い）· 周りの守護の土木が遠距離弾を70%の確率で防ぐ · 武器は素手のみ",
+    ko: "토목 · 비르디아. 맨손으로 거대한 토목을 부려 차례로 타격·묶기·날려버리기·짓뭉개기·가두기 (넓고 세지만 느림) · 둘레의 수호 토목이 원거리 탄을 70% 확률로 막음 · 무기는 맨손 하나 · 렌 전용 아이템 3개마다 대지의 추가 공격 한 단계 (돌 던지기·용머리·용오름·머리 위 거대 토목·양쪽 토목, 단계마다 10%)",
+    en: "Earthwood · Virdia. Wields giant earthwood bare-handed: strike, bind, launch, crush and imprison in turn (wide and strong but slow) · guardian earthwood blocks ranged shots 70% of the time · bare hands only · every 3 Ren items unlock an earth bonus attack (rock toss, dragon head, dragon surge, overhead boulder, crushing blocks; 10% each)",
+    ja: "土木 · ヴィルディア。素手で巨大な土木を操り、順に打撃・縛る・吹き飛ばす・押し潰す・閉じ込める（広く強いが遅い）· 周りの守護の土木が遠距離弾を70%の確率で防ぐ · 武器は素手のみ · レン専用アイテム3つごとに大地の追加攻撃が1段階（石投げ・竜頭・竜の昇り・頭上の巨大土木・両側の土木、各10%）",
   },
   spiritist: { ko: "정령사", en: "Spiritist", ja: "精霊使い" },
   spiritistDesc: {

@@ -2,6 +2,7 @@
 import { greatSpot, guardSpots, SPIRIT_TINT, spiritSpot, WEAPONS, type EffectState, type GreatSpirit, type RunState, type WeaponDef } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
 import { drawGreatFx } from "./greatFx";
+import { drawRenEarth, drawRenEarthFx } from "./renEarth";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -25,7 +26,7 @@ function spiritImage(g: GreatSpirit): HTMLImageElement | undefined {
 }
 
 /** 흙과 나무가 엉킨 작은 덩어리 */
-function clod(ctx: Ctx, x: number, y: number, r: number, seed: number): void {
+export function clod(ctx: Ctx, x: number, y: number, r: number, seed: number): void {
   ctx.fillStyle = "#7a7268";
   ctx.beginPath();
   ctx.arc(x, y, r, 0, Math.PI * 2);
@@ -45,6 +46,7 @@ export function drawSpiritKin(ctx: Ctx, s: RunState, alpha: number, snap: Snap):
   const at = { ...p, x: lerp(p.prevX, p.x, alpha), y: lerp(p.prevY, p.y, alpha) };
   if (p.characterId === "ren") {
     guardSpots(at, s.tick).forEach((g, i) => clod(ctx, snap(g.x), snap(g.y), 2.5, i));
+    drawRenEarth(ctx, s, at, snap);
     return;
   }
   if (p.characterId !== "spiritist") return;
@@ -96,6 +98,7 @@ export function drawGreatSpirit(ctx: Ctx, s: RunState, alpha: number, snap: Snap
 
 /** 효과: 거대 토목 · 정령 공격 줄 · 대정령 기술 */
 export function drawSpiritFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
+  if (drawRenEarthFx(ctx, fx, snap)) return true;
   const t = 1 - fx.ticks / fx.maxTicks;
   const x = snap(fx.x);
   const y = snap(fx.y);
