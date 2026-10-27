@@ -163,6 +163,7 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number 
   punk: { size: 32, footPad: 2 },
   tracker: { size: 32, footPad: 2 },
   forgotten: { size: 32, footPad: 2 },
+  remnant: { size: 32, footPad: 2 },
   // 변희가 변한 동물 (옆모습만, render/actors가 옆을 보게 그림)
   ...Object.fromEntries(["wolf", "bear", "eagle", "snake", "boar", "scorpion", "bat", "elephant", "spider", "phoenix"].flatMap((a) => [[`morph-${a}`, { size: 32, footPad: 2 }], [`morph-${a}-evo`, { size: 48, footPad: 3 }]])),
   abandoned: { size: 32, footPad: 2 },

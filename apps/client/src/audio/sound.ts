@@ -26,7 +26,9 @@ export type Sfx =
   | "snipe"
   | "power"
   | "chime"
-  | "awaken";
+  | "awaken"
+  | "slice"
+  | "blink";
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;
@@ -149,6 +151,13 @@ const SOUNDS: Record<Sfx, () => void> = {
     for (const [i, f] of [523, 659, 784, 1047, 1319].entries()) tone({ type: "sine", from: f, to: f * 1.01, dur: 0.9, vol: 0.12, delay: i * 0.07 });
     tone({ type: "triangle", from: 200, to: 800, dur: 0.6, vol: 0.15 });
     noise(0.5, 0.12, 6000);
+  },
+  // 잔영: 단검 (짧고 높은 쉭) · 순간이동 (낮게 빨려 들어가는 소리 + 칼 울림)
+  slice: () => noise(0.04, 0.18, 7000),
+  blink: () => {
+    tone({ type: "sine", from: 900, to: 120, dur: 0.12, vol: 0.12 });
+    noise(0.1, 0.2, 1800);
+    tone({ type: "triangle", from: 2400, to: 2300, dur: 0.1, vol: 0.06, delay: 0.08 });
   },
   swing: () => noise(0.07, 0.15, 3000),
   shot: () => tone({ type: "square", from: 880, to: 440, dur: 0.06, vol: 0.12 }),

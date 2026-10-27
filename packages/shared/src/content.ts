@@ -41,9 +41,10 @@ import { ARTIFACTER_WEAPONS } from "./weaponsArtifacter";
 import { PUNK_WEAPONS, type CyberStyle } from "./weaponsPunk";
 import { TRACKER_WEAPONS } from "./weaponsTracker";
 import { FORGOTTEN_WEAPONS, type LightStyle } from "./weaponsForgotten";
+import { REMNANT_WEAPONS, type PhantomStyle } from "./weaponsRemnant";
 
 /** laser 기계공학자·medic 의사: 누르고 있는 동안 짧은 간격으로 틱 피해 · combo 격투가: 누를 때마다 콤보의 다음 기술 (combos) · chakram 베두인 · spear 장수 */
-export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light";
+export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom";
 export type { OrbitKind } from "./weaponsElemental";
 export type { LaserGear } from "./weaponsEngineer";
 export type { MedicGear } from "./weaponsDoctor";
@@ -80,6 +81,7 @@ export { ARTIFACTER } from "./weaponsArtifacter";
 export { PUNK, type CyberMove, type CyberStyle } from "./weaponsPunk";
 export { TRACKER } from "./weaponsTracker";
 export { FORGOTTEN, type LightPattern, type LightStyle } from "./weaponsForgotten";
+export { REMNANT, type PhantomStyle } from "./weaponsRemnant";
 
 export interface WeaponDef {
   id: string;
@@ -180,6 +182,7 @@ export interface WeaponDef {
   /** 펑크 공격 모양 (sim/punk) */
   cyber?: CyberStyle;
   light?: LightStyle;
+  phantom?: PhantomStyle;
 }
 
 /**
@@ -228,6 +231,7 @@ export const WEAPONS = {
   ...PUNK_WEAPONS,
   ...TRACKER_WEAPONS,
   ...FORGOTTEN_WEAPONS,
+  ...REMNANT_WEAPONS,
 } as const satisfies Record<string, WeaponDef>;
 
 export type WeaponId = keyof typeof WEAPONS;

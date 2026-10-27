@@ -34,6 +34,8 @@ interface Seen {
   charging: boolean;
   /** 잊혀진 자: 신족 */
   god: boolean;
+  /** 잔영: 순간이동 남은 대기 */
+  blinkCd: number;
 }
 
 /** 탄을 쏘는 느낌의 캐릭터 (나머지는 휘두르는 소리) */
@@ -68,6 +70,7 @@ function snapshot(s: RunState): Seen {
     ambush: s.player.trAmbush?.shots ?? 0,
     charging: (s.player.trCharge ?? 0) > 0,
     god: (s.player.fgGod ?? 0) > 0,
+    blinkCd: s.player.rmBlink ?? 0,
   };
 }
 
@@ -124,6 +127,10 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         if (now.attacks > seen.attacks) fx.push("chime");
         const i = fx.indexOf("shot");
         if (i >= 0) fx.splice(i, 1);
+      } else if (c === "remnant") {
+        // 잔영: 순간이동할 때마다 쉭 빨려 드는 소리, 베기는 짧은 쉭
+        if (now.blinkCd > seen.blinkCd) fx.push("blink");
+        if (now.attacks > seen.attacks && !fx.includes("swing")) fx.push("slice");
       } else if (now.attacks > seen.attacks && !fx.includes("shot") && !fx.includes("swing")) fx.push(SHOOTERS.has(c) ? "shot" : "swing");
       if (c === "elementalist" && now.hits > 0 && now.hits !== seen.hits && now.tick - orbSound >= 15) {
         orbSound = now.tick;

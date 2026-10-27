@@ -56,6 +56,7 @@ export const C = {
   punk: "#ff4ad8",
   tracker: "#5a8a4a",
   forgotten: "#ffe08a",
+  remnant: "#6a5aa8",
   abandoned: "#7aa070",
   titan: "#c87a3a",
   oni: "#d84a3a",

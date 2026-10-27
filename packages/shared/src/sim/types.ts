@@ -18,7 +18,7 @@ import type { BedouinPlayerState } from "./bedouinTypes";
 import type { GeneralPlayerState } from "./generalTypes";
 import type { ImugiEnemyState, ImugiPlayerState } from "./imugiTypes";
 import type { ApostleEnemyState, ApostlePlayerState } from "./apostleTypes";
-import type { AbandonedPlayerState, DuckPlayerState, H2EnemyState, H2PlayerState, ElderPlayerState, FlyPlayerState, IdraPlayerState, MorphPlayerState, PetRunState, RenPlayerState, S2EnemyState, SpiritPlayerState, OniEnemyState, OniPlayerState, S2Spirit, ScribeEnemyState, ScribePlayerState, StarPlayerState, TcPlayerState, TitanPlayerState, AscPlayerState, AscEnemyState, ForgottenPlayerState, ForgottenEnemyState } from "./classTypes";
+import type { AbandonedPlayerState, DuckPlayerState, H2EnemyState, H2PlayerState, ElderPlayerState, FlyPlayerState, IdraPlayerState, MorphPlayerState, PetRunState, RenPlayerState, S2EnemyState, SpiritPlayerState, OniEnemyState, OniPlayerState, S2Spirit, ScribeEnemyState, ScribePlayerState, StarPlayerState, TcPlayerState, TitanPlayerState, AscPlayerState, AscEnemyState, ForgottenPlayerState, ForgottenEnemyState, RemnantPlayerState } from "./classTypes";
 import type { Seat } from "./party";
 import type { TabooSet } from "../taboo";
 export type { Device } from "./laserTypes";
@@ -35,7 +35,7 @@ export interface Body {
   r: number;
 }
 
-export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, BrawlPlayerState, MedicPlayerState, GunPlayerState, BeastPlayerState, BossPlayerState, NinjaPlayerState, ChronoPlayerState, SummonPlayerState, NovicePlayerState, BedouinPlayerState, GeneralPlayerState, ImugiPlayerState, ApostlePlayerState, StarPlayerState, DuckPlayerState, SwarmPlayerState, AbandonedPlayerState, TitanPlayerState, OniPlayerState, ScribePlayerState, IdraPlayerState, MorphPlayerState, FlyPlayerState, ElderPlayerState, RenPlayerState, SpiritPlayerState, H2PlayerState, TcPlayerState, AscPlayerState, ForgottenPlayerState {
+export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, BrawlPlayerState, MedicPlayerState, GunPlayerState, BeastPlayerState, BossPlayerState, NinjaPlayerState, ChronoPlayerState, SummonPlayerState, NovicePlayerState, BedouinPlayerState, GeneralPlayerState, ImugiPlayerState, ApostlePlayerState, StarPlayerState, DuckPlayerState, SwarmPlayerState, AbandonedPlayerState, TitanPlayerState, OniPlayerState, ScribePlayerState, IdraPlayerState, MorphPlayerState, FlyPlayerState, ElderPlayerState, RenPlayerState, SpiritPlayerState, H2PlayerState, TcPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState {
   characterId: CharacterId;
   weaponId: WeaponId;
   /** 가진 패시브 (같은 것 여러 개 가능) */

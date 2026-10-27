@@ -1,4 +1,4 @@
-// 캐릭터 설명: 시즌 2 아스칼론 (추적자 · 잊혀진 자 …) · 한·영·일
+// 캐릭터 설명: 시즌 2 아스칼론 (추적자 · 잊혀진 자 · 잔영 …) · 한·영·일
 import type { CharacterId } from "@pixel-rogue/shared";
 
 type Guide = Partial<Record<CharacterId, readonly string[]>>;
@@ -18,6 +18,12 @@ export const GUIDE_KO_ASC: Guide = {
     "빛의 고리: 적을 쓰러뜨리면 등의 고리가 차오름 (25마리). 가득 차면 10초 동안 신족: 공격 속도 2배 + 둘레 적을 빛기둥이 저절로 침 (0.3초마다 셋, 공격력 30%)",
     "전용 아이템 10: 잊힌 기억 · 신의 잔향 · 빛기둥 강화 · 늘어나는 기둥 · 신의 가호 · 광휘 · 성흔 · 빛의 박동 · 깨어남 · 잔광",
   ],
+  remnant: [
+    "아스칼론 · 잔영 · 그림자 속을 움직이는 남자 암살자 · 체력 90 · 빠름 · 치명타 25% · 치명타 피해 250% · 모든 상태이상 면역",
+    "그림자 단검 10: 잔영 단검 · 쌍단검 · 그림자 발톱 · 스틸레토 · 그림자 투척 · 회전 칼날 · 섬영 · 그림자 낫 · 독니 · 월식",
+    "아주 빠르게 벰. 노리는 적이 칼끝에서 멀면 그 적 뒤로 순간이동해 등 뒤를 벰 (뒤에서 치면 1.5배, 스틸레토는 2.5배). 떠난 자리에는 잔영이 남아 0.3초 뒤 한 번 더 벰",
+    "전용 아이템 10: 그림자 걸음 · 등 뒤의 칼 · 처형 · 겹친 잔영 · 사라짐 · 피의 칼날 · 그림자 손놀림 · 소리 없는 발 · 연쇄 암살 · 그림자 숨기",
+  ],
 };
 
 export const GUIDE_EN_ASC: Guide = {
@@ -35,6 +41,12 @@ export const GUIDE_EN_ASC: Guide = {
     "Ring of light: kills fill the ring on her back (25). When full she takes divine form for 10s: double attack speed + pillars of light strike nearby foes on their own (three every 0.3s, 30% damage)",
     "10 exclusive items: Forgotten Memory · Echo of the Gods · Brighter Pillars · More Pillars · Divine Ward · Radiance · Stigma · Pulse of Light · Awakening · Afterglow",
   ],
+  remnant: [
+    "Ascalon · Remnant · a male assassin who moves through shadows · HP 90 · fast · 25% crit · 250% crit damage · immune to all status effects",
+    "10 shadow daggers: Afterimage Dagger · Twin Daggers · Shadow Claws · Stiletto · Shadow Throw · Spinning Blades · Flash Shadow · Shadow Sickle · Venom Fang · Eclipse",
+    "Very fast cuts. If the target is out of reach he blinks behind it and stabs its back (×1.5 from behind, Stiletto ×2.5). An afterimage stays where he left and cuts once more 0.3s later",
+    "10 exclusive items: Shadow Step · Knife in the Back · Execution · Double Afterimage · Vanish · Bloody Edge · Shadow Hands · Silent Feet · Chain Assassination · Shadow Shroud",
+  ],
 };
 
 export const GUIDE_JA_ASC: Guide = {
@@ -51,5 +63,11 @@ export const GUIDE_JA_ASC: Guide = {
     "光の武器10：光の手 · 如来神掌（空から光の十字架3つ）· 光の槍 · 聖光 · 光の雨 · 光の翼 · プリズム · 後光 · 審判の光 · 暁の斬撃",
     "光の輪：敵を倒すと背中の輪が満ちる（25体）。満ちると10秒間神族：攻撃速度2倍＋光柱が周りの敵を自動で撃つ（0.3秒ごとに3本、攻撃力30%）",
     "専用アイテム10：忘れられた記憶 · 神の残響 · 光柱強化 · 増える光柱 · 神の加護 · 光輝 · 聖痕 · 光の鼓動 · 目覚め · 残光",
+  ],
+  remnant: [
+    "アスカロン · 残影 · 影の中を動く男の暗殺者 · 体力90 · 速い · クリティカル25% · クリティカルダメージ250% · すべての状態異常に免疫",
+    "影の短剣10：残影の短剣 · 双短剣 · 影の爪 · スティレット · 影の投擲 · 回転刃 · 閃影 · 影の鎌 · 毒牙 · 月蝕",
+    "とても速く斬る。狙う敵が刃先から遠いとその敵の背後へ瞬間移動して背中を斬る（背後から1.5倍、スティレットは2.5倍）。去った場所に残影が残り0.3秒後にもう一度斬る",
+    "専用アイテム10：影歩き · 背中の刃 · 処刑 · 重なる残影 · 消失 · 血の刃 · 影の手さばき · 音なき足 · 連鎖暗殺 · 影隠れ",
   ],
 };

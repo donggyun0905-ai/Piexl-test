@@ -56,6 +56,7 @@ const DEMO_WEAPONS: Record<CharacterId, [WeaponId, WeaponId] | null> = {
   punk: ["cyMonowire", "cyHack"],
   tracker: null,
   forgotten: null,
+  remnant: null,
   abandoned: ["twinPistols", "lastPromise"],
   titan: ["pistonFist", "anvilHammer"],
   oni: ["frostClub", "tideClub"],

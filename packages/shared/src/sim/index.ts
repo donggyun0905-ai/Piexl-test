@@ -63,6 +63,7 @@ export { runeFill, spellOf, type SpellKind } from "./rune";
 export { morphXp } from "./morphXp";
 export { trackerCooldown, trackerSkills } from "./tracker";
 export { forgottenRing } from "./forgotten";
+export { statusImmune } from "./remnant";
 export { flameStacks } from "./flames";
 export { classMoveMul } from "./moveMul";
 export { DOLL_TINTS } from "./automata";

@@ -31,3 +31,12 @@ export interface ForgottenEnemyState {
   fgRad?: number;
   fgRadDmg?: number;
 }
+
+export interface RemnantPlayerState {
+  /** 잔영: 순간이동 남은 대기 · 뒤에서 친 것으로 세는 남은 틱 · 남긴 잔영(자리·남은 틱·피해) · 지난 틱 대시 · 지난 틱까지 본 처치 수 */
+  rmBlink?: number;
+  rmBack?: number;
+  rmEchoes?: { x: number; y: number; t: number; dmg: number }[];
+  rmDash?: boolean;
+  rmSeen?: number;
+}

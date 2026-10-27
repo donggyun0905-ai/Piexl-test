@@ -49,6 +49,7 @@ import { drawSwarmGround } from "./swarmMap";
 import { themeFor } from "./floorThemes";
 import { drawAmbushOverlay, drawTrackerAura } from "./tracker";
 import { drawForgottenAura, drawForgottenBack } from "./forgotten";
+import { drawRemnantEchoes } from "./remnant";
 import { drawBossBar, drawEffects, drawProjectiles, drawReticleFor } from "./shots";
 
 export interface DrawOptions {
@@ -145,6 +146,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawRuneGround(ctx, s, snap);
     drawMorphGround(ctx, s, snap);
     drawForgottenBack(ctx, s, alpha, snap);
+    drawRemnantEchoes(ctx, s, snap);
   });
   drawEnemies(ctx, s, alpha, snap);
   drawInkMarks(ctx, s, alpha, snap);

@@ -8,4 +8,4 @@ export type { ScribeEnemyState, ScribePlayerState } from "./scribeTypes";
 export type { ElderPlayerState, FlyPlayerState, IdraPlayerState, MorphPlayerState, PetRunState, RenPlayerState, S2EnemyState, S2Spirit, SpiritPlayerState } from "./s2Types";
 export type { H2EnemyState, H2PlayerState } from "./h2Types";
 export type { TcPlayerState } from "./tcTypes";
-export type { AscEnemyState, AscPlayerState, ForgottenEnemyState, ForgottenPlayerState } from "./ascTypes";
+export type { AscEnemyState, AscPlayerState, ForgottenEnemyState, ForgottenPlayerState, RemnantPlayerState } from "./ascTypes";

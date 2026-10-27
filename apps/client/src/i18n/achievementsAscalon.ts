@@ -8,4 +8,5 @@ const n = (name: Row, desc: Row) => ({
 export const ASCALON_ACHIEVEMENTS = {
   clearTracker: n(["한 발의 무게", "Weight of One Shot", "一発の重み"], ["추적자로 클리어", "Clear as Tracker", "追跡者でクリア"]),
   clearForgotten: n(["잊히지 않는 빛", "Light Unforgotten", "忘れられぬ光"], ["잊혀진 자로 클리어", "Clear as The Forgotten", "忘れられし者でクリア"]),
+  clearRemnant: n(["뒤를 조심해", "Watch Your Back", "背後に気をつけろ"], ["잔영으로 클리어", "Clear as Remnant", "残影でクリア"]),
 };

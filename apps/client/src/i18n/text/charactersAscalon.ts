@@ -14,6 +14,13 @@ export const CHARACTER_TEXT_ASCALON = {
     ja: "光 · アスカロン。古き神の最後の末裔である半神。光で戦う（武器10 · 如来神掌など）。敵を倒すと背中の光の輪が満ち、満ちると10秒間神族：攻撃速度2倍＋光柱が周りの敵を撃つ · 再生力20 · 速い · 回避20% · 専用アイテム10",
   },
   light: { ko: "빛", en: "Light", ja: "光" },
+  remnant: { ko: "잔영", en: "Remnant", ja: "残影" },
+  remnantDesc: {
+    ko: "암살 · 아스칼론. 그림자 속에서 움직이는 남자 암살자. 아주 빠른 단검 공격 · 멀리 있는 적 뒤로 순간이동해 등 뒤를 벰 · 떠난 자리에 잔영이 남아 한 번 더 벰 · 모든 상태이상 면역 · 치명타 25% · 치명타 피해 250% · 무기 10 · 전용 아이템 10",
+    en: "Assassin · Ascalon. A man who moves through the shadows. Very fast dagger cuts · blinks behind far foes to stab their backs · leaves an afterimage that cuts once more · immune to all status effects · 25% crit · 250% crit damage · 10 weapons · 10 own items",
+    ja: "暗殺 · アスカロン。影の中を動く男の暗殺者。とても速い短剣攻撃 · 遠い敵の背後へ瞬間移動して背中を斬る · 去った場所に残影が残りもう一度斬る · すべての状態異常に免疫 · クリティカル25% · クリティカルダメージ250% · 武器10 · 専用アイテム10",
+  },
+  phantom: { ko: "그림자 단검", en: "Shadow Dagger", ja: "影の短剣" },
   trSkill1: { ko: "암습 저격", en: "Ambush Snipe", ja: "暗襲狙撃" },
   trSkill2: { ko: "강력한 한방", en: "Power Shot", ja: "強力な一撃" },
   trSkill3: { ko: "연발사격", en: "Rapid Fire", ja: "連射" },

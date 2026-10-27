@@ -1,9 +1,11 @@
-# 시즌 2 아스칼론 캐릭터 방향 시트 (python3 scripts/art/ascalon_sprites.py) → apps/client/public/sprites/{tracker,forgotten}.png
+# 시즌 2 아스칼론 캐릭터 방향 시트 (python3 scripts/art/ascalon_sprites.py) → apps/client/public/sprites/{tracker,forgotten,remnant}.png
 # 그림체는 s2_common.person (시즌 1 그림체: 얼굴 아래 4줄·입 없음·보랏빛 테두리, docs/ART.md)
 # 추적자(여): 높이 묶은 밤색 포니테일 · 초록 눈 · 목 뒤로 내린 국방색 두건 망토 · 짙은 사냥복에 가죽 탄띠 · 등에 멘 긴 저격총(붉은 조준경 빛)
 #   공격 칸은 저격총을 들어 앞으로 겨눔 (긴 총열 · 위에 조준경)
 # 잊혀진 자(여): 허리까지 흘러내리는 백금빛 긴 머리 · 금빛 눈 · 이마의 금 머리띠와 하늘빛 보석 · 어깨를 드러낸 흰 여신 드레스(금 테·금 허리끈) · 팔의 금 팔찌
 #   공격 칸은 뻗은 손끝에 빛 구슬이 맺힘
+# 잔영(남): 눈만 보이는 검은 두건과 입가리개 · 보라로 빛나는 눈 · 앞머리로 비죽 나온 은회색 머리 · 끝이 해진 검은 망토 · 뒤로 흩날리는 보라 목도리 · 허리 양쪽 단검
+#   공격 칸은 단검을 거꾸로 쥐고 앞으로 그음
 from s2_common import hx, person, save_sheet
 
 TRACKER = dict(
@@ -145,14 +147,74 @@ def forgotten_deco(c, layer, g):
             c.rect(hx0, hy, hw, 3, k["hair"]); c.rect(hx0 - 1, hy + 1, 5, hh + 2, k["hair"])
             c.rect(hx0, hy + 2, hw, 1, k["gold"]); c.px(hx0 + hw - 1, hy + 2, k["gem"])
 
+REMNANT = dict(
+    skin=hx("#e8cdb8"), skinD=hx("#c0a490"), eye=hx("#2a1a4a"), eyeL=hx("#b88aff"), outline=hx("#3a2e4e"), blush=None,
+    top=hx("#24202e"), arm=hx("#24202e"), legs=hx("#1a1822"), legsD=hx("#121018"), shoe=hx("#2e2a3a"),
+    hair=hx("#9aa0b4"), hairD=hx("#6a7084"), hairL=hx("#d0d4e0"),
+    hood=hx("#1e1a28"), hoodD=hx("#141018"), scarf=hx("#7a4ae8"), scarfD=hx("#4a2aa0"), belt=hx("#4a3a5a"), blade=hx("#d8dcf0"),
+)
+
+def remnant_deco(c, layer, g):
+    k = g["k"]
+    v, hx0, hy, hw, hh = g["view"], g["hx"], g["hy"], g["hw"], g["hh"]
+    tx, ty, tw, th, cx, hip = g["tx"], g["ty"], g["tw"], g["th"], g["cx"], g["hip"]
+    if layer == "back_hair":
+        # 뒤로 흩날리는 보라 목도리 끝 (걸을 때 흔들림)
+        wave = (0, 1, 0, -1)[g["step"]]
+        if v == "front":
+            c.rect(hx0 + hw - 1, ty, 2, 6 + wave, k["scarfD"])
+        elif v == "side":
+            c.rect(hx0 - 4, ty + 1 + wave, 5, 2, k["scarf"]); c.rect(hx0 - 6, ty + 2 + wave, 3, 2, k["scarfD"])
+    if layer == "legs":
+        # 끝이 해진 짧은 망토 자락 · 허리 양쪽 단검
+        if v in ("front", "back"):
+            for i, x in enumerate(range(tx - 2, tx + tw + 2)): c.rect(x, hip, 1, 2 + (i % 2), k["hood"])
+        else:
+            for i, x in enumerate(range(cx - 5, cx + 2)): c.rect(x, hip, 1, 2 + (i % 2), k["hood"])
+    if layer == "body":
+        # 검은 망토가 어깨를 덮음 · 가슴을 가로지르는 띠 · 목에 감은 보라 목도리
+        if v in ("front", "back"):
+            c.rect(tx - 2, ty, tw + 4, 3, k["hood"]); c.rect(tx - 2, ty + 3, 2, th - 2, k["hood"]); c.rect(tx + tw, ty + 3, 2, th - 2, k["hoodD"])
+            c.rect(tx, ty, tw, 2, k["scarf"]); c.rect(tx + 1, ty + 2, tw - 2, 1, k["scarfD"])
+            c.rect(tx, hip - 1, tw, 1, k["belt"])
+            if v == "front":
+                c.line(tx + 1, ty + 3, tx + tw - 2, hip - 2, k["belt"])
+                if not g["cast"]: c.rect(tx - 3, hip - 2, 1, 4, k["blade"]); c.rect(tx + tw + 2, hip - 2, 1, 4, k["blade"])
+        else:
+            c.rect(cx - 4, ty, 8, 3, k["hood"]); c.rect(cx - 3, ty, 6, 2, k["scarf"]); c.rect(cx - 3, hip - 1, 6, 1, k["belt"])
+            c.rect(cx - 5, ty + 3, 3, th - 2, k["hood"])
+        if g["cast"]:
+            # 거꾸로 쥔 단검을 앞으로 그음 (보라 칼빛)
+            if v == "front":
+                bx = tx + tw + 5
+                c.line(bx, ty + 2, bx + 4, ty - 2, k["blade"]); c.px(bx + 5, ty - 3, hx("#ffffff")); c.px(bx + 1, ty + 4, k["scarf"])
+            else:
+                bx = cx + 7
+                c.line(bx, ty + 2, bx + 5, ty, k["blade"]); c.px(bx + 6, ty - 1, hx("#ffffff")); c.px(bx + 2, ty + 4, k["scarf"])
+    if layer == "hair":
+        # 눈만 보이는 검은 두건 + 입가리개 · 이마로 비죽 나온 은회색 앞머리
+        if v == "front":
+            c.rect(hx0 - 1, hy - 1, hw + 2, 4, k["hood"]); c.rect(hx0 - 1, hy + 3, 2, hh - 3, k["hood"]); c.rect(hx0 + hw - 1, hy + 3, 2, hh - 3, k["hood"])
+            c.rect(hx0 + 2, hy + 2, hw - 4, 1, k["hair"]); c.px(hx0 + 3, hy + 3, k["hair"]); c.px(hx0 + hw - 4, hy + 3, k["hairD"])
+            # 입가리개 (눈 아래부터)
+            c.rect(hx0 + 1, hy + hh - 2, hw - 2, 2, k["hoodD"]); c.px(cx, hy + hh - 2, k["scarfD"])
+            c.px(cx - 1, hy - 2, k["hoodD"]); c.px(cx, hy - 2, k["hoodD"])
+        elif v == "back":
+            c.rect(hx0 - 1, hy - 1, hw + 2, hh + 1, k["hood"]); c.rect(cx - 1, hy - 2, 2, 1, k["hoodD"]); c.rect(hx0, hy + hh - 1, hw, 1, k["hoodD"])
+        else:
+            c.rect(hx0 - 1, hy - 1, hw + 1, 4, k["hood"]); c.rect(hx0 - 1, hy + 3, 5, hh - 3, k["hood"])
+            c.px(hx0 + hw - 3, hy + 2, k["hair"]); c.rect(hx0 + hw - 4, hy + hh - 2, 4, 2, k["hoodD"])
+
 GEO = {
     "tracker": dict(head=(10, 9), torso=(8, 7), leg=9),
     "forgotten": dict(head=(10, 9), torso=(8, 7), leg=9),
+    "remnant": dict(head=(10, 9), torso=(9, 8), leg=8),
 }
 
 def main():
     save_sheet("tracker", lambda r, col: person(TRACKER, r, col, GEO["tracker"], tracker_deco))
     save_sheet("forgotten", lambda r, col: person(FORGOTTEN, r, col, GEO["forgotten"], forgotten_deco))
+    save_sheet("remnant", lambda r, col: person(REMNANT, r, col, GEO["remnant"], remnant_deco))
 
 if __name__ == "__main__":
     main()

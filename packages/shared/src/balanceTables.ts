@@ -37,6 +37,7 @@ import * as itemsSummon from "./itemsSummon";
 import * as itemsTitan from "./itemsTitan";
 import * as itemsTracker from "./itemsTracker";
 import * as itemsForgotten from "./itemsForgotten";
+import * as itemsRemnant from "./itemsRemnant";
 import * as weaponsAbandoned from "./weaponsAbandoned";
 import * as weaponsApostle from "./weaponsApostle";
 import * as weaponsArtifacter from "./weaponsArtifacter";
@@ -76,11 +77,12 @@ import * as weaponsSummon from "./weaponsSummon";
 import * as weaponsTitan from "./weaponsTitan";
 import * as weaponsTracker from "./weaponsTracker";
 import * as weaponsForgotten from "./weaponsForgotten";
+import * as weaponsRemnant from "./weaponsRemnant";
 import * as perks from "./perks";
 import * as combos from "./combos";
 import { SIM_RULES } from "./sim/rulesRegistry";
 
-const MODULES: Record<string, unknown>[] = [itemsAbandoned, itemsApostle, itemsArtifacter, itemsAutomata, itemsBeast, itemsBedouin, itemsBomber, itemsBrawler, itemsChrono, itemsDoctor, itemsDuck, itemsEater, itemsElder, itemsElemental, itemsFly, itemsGeneral, itemsGunner, itemsIdra, itemsImugi, itemsMorph, itemsMukin, itemsNinja, itemsOni, itemsPlague, itemsPunk, itemsRen, itemsRider, itemsSamyeol, itemsScribe, itemsSeason2, itemsSlayer, itemsSpirit, itemsStar, itemsSummon, itemsTitan, itemsTracker, itemsForgotten, weaponsAbandoned, weaponsApostle, weaponsArtifacter, weaponsAutomata, weaponsBase, weaponsBeast, weaponsBedouin, weaponsBomber, weaponsBrawler, weaponsChrono, weaponsDoctor, weaponsDuck, weaponsEater, weaponsElder, weaponsElemental, weaponsEngineer, weaponsFly, weaponsGeneral, weaponsGunner, weaponsIdra, weaponsImugi, weaponsMorph, weaponsMukin, weaponsMystic, weaponsNinja, weaponsOni, weaponsPlague, weaponsPunk, weaponsRen, weaponsRider, weaponsSamyeol, weaponsScribe, weaponsSlayer, weaponsSpirit, weaponsStar, weaponsSummon, weaponsTitan, weaponsTracker, weaponsForgotten, perks, combos];
+const MODULES: Record<string, unknown>[] = [itemsAbandoned, itemsApostle, itemsArtifacter, itemsAutomata, itemsBeast, itemsBedouin, itemsBomber, itemsBrawler, itemsChrono, itemsDoctor, itemsDuck, itemsEater, itemsElder, itemsElemental, itemsFly, itemsGeneral, itemsGunner, itemsIdra, itemsImugi, itemsMorph, itemsMukin, itemsNinja, itemsOni, itemsPlague, itemsPunk, itemsRen, itemsRider, itemsSamyeol, itemsScribe, itemsSeason2, itemsSlayer, itemsSpirit, itemsStar, itemsSummon, itemsTitan, itemsTracker, itemsForgotten, itemsRemnant, weaponsAbandoned, weaponsApostle, weaponsArtifacter, weaponsAutomata, weaponsBase, weaponsBeast, weaponsBedouin, weaponsBomber, weaponsBrawler, weaponsChrono, weaponsDoctor, weaponsDuck, weaponsEater, weaponsElder, weaponsElemental, weaponsEngineer, weaponsFly, weaponsGeneral, weaponsGunner, weaponsIdra, weaponsImugi, weaponsMorph, weaponsMukin, weaponsMystic, weaponsNinja, weaponsOni, weaponsPlague, weaponsPunk, weaponsRen, weaponsRider, weaponsSamyeol, weaponsScribe, weaponsSlayer, weaponsSpirit, weaponsStar, weaponsSummon, weaponsTitan, weaponsTracker, weaponsForgotten, weaponsRemnant, perks, combos];
 
 /** 표가 아닌 것(무기 표·패시브 표·사용 아이템·이름 목록 등)은 빼고 대문자 이름의 객체만 */
 const SKIP = /_WEAPONS$|_PASSIVES$|^PASSIVES$|_USE$|_HIDDEN$|^SHOP_PRICES$|_COLORS$/;
