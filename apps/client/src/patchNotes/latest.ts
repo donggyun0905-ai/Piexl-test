@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.160",
+    date: "2026-10-28",
+    items: {
+      ko: ["연습장 적 부르기: 라스트 보스 묶음의 검은 잔영 버튼에 이름이 안 보이던 문제 고침"],
+      en: ["Practice enemy spawner: fixed the missing name on the Black Remnant button in the final boss group"],
+      ja: ["練習場の敵呼び出し: ラストボスの黒き残影ボタンに名前が出ない問題を修正"],
+    },
+  },
+  {
     version: "0.48.159",
     date: "2026-10-28",
     items: {

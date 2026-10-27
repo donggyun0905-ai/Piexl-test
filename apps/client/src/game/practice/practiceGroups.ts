@@ -88,6 +88,7 @@ export const ENEMY_NAMES: Partial<Record<EnemyKind, TextKey>> = {
   dragon: "bossDragon",
   godeater: "bossGodEater",
   plight: "bossPrimeval",
+  umbra: "bossUmbra",
 };
 
 const MINIONS: EnemyKind[] = ["crawler", "spitter", "charger", "mortar", "gnat", "guardian", "paladin", "slime", "runner", "bat", "beetle", "golem", "shaman", "eggsac", "wisp"];
