@@ -8,17 +8,18 @@ import { blastAt, damageEnemy, healPlayer, ignite } from "./combat";
 import { alive, fan, inCircle, inCone, inLine, poison, root, rushTick, shoot, startRush, stun, strike } from "./s2Kit";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, weaponOf } from "./util";
-import { evoSkill, raidTick } from "./morphEvo";
+import { evoSkill, evoTaken, heatTick, raidTick } from "./morphEvo";
 
 const animalOf = (p: PlayerState) => (p.characterId === "byeonhui" ? weaponOf(p).animal : undefined);
 
 /** 그 동물일 때 받는 피해 배율 (combat.damagePlayer) */
 export function morphTaken(p: PlayerState): number {
   const a = animalOf(p);
-  if (a === "bear" && hasPerk(p, "bearHide")) return K.bearHide.taken;
-  if (a === "scorpion" && hasPerk(p, "scorpShell")) return K.scorpShell.taken;
-  if (a === "elephant" && hasPerk(p, "eleHerd")) return K.eleHerd.taken;
-  return 1;
+  const evo = evoTaken(p);
+  if (a === "bear" && hasPerk(p, "bearHide")) return K.bearHide.taken * evo;
+  if (a === "scorpion" && hasPerk(p, "scorpShell")) return K.scorpShell.taken * evo;
+  if (a === "elephant" && hasPerk(p, "eleHerd")) return K.eleHerd.taken * evo;
+  return evo;
 }
 
 /** 몇 번째마다 (지금 동물로 센 공격 수) */
@@ -169,6 +170,7 @@ export function morphTick(s: RunState, want: boolean, speed: number): void {
     raidTick(s);
     return;
   }
+  heatTick(s);
   if (animalOf(p) === "phoenix" && hasPerk(p, "phoenixRebirth") && p.hp > 0 && p.hp <= p.stats.maxHp * K.phoenixRebirth.below && s.tick % K.phoenixRebirth.every === 0) healPlayer(s, K.phoenixRebirth.heal);
   if (!want || p.attackCooldown > 0 || p.s2Rush) return;
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
@@ -176,8 +178,7 @@ export function morphTick(s: RunState, want: boolean, speed: number): void {
   p.mCount = (p.mCount ?? 0) + 1;
   delete p.mHuman;
   attack(s, p.stats.damage);
-  const a = animalOf(p);
-  if (a) evoSkill(s, a, p.stats.damage);
+  evoSkill(s, p.stats.damage);
 }
 
 /** 연습장 등에서 다시 시작할 때 · 무기(동물)를 바꿨을 때 */
@@ -186,4 +187,6 @@ export function resetMorph(p: PlayerState): void {
   delete p.mHuman;
   delete p.s2Rush;
   delete p.mRaid;
+  delete p.mHeat;
+  delete p.mXp;
 }

@@ -11,6 +11,7 @@ import { addEffect, hasPerk } from "./util";
 import { seatNo } from "./party";
 import { tabooN } from "./taboo";
 import { ONI } from "../weaponsOni";
+import { xpOnly } from "./morphXp";
 import { goldLocked, oniWeaponOk } from "./oniRules";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -86,6 +87,8 @@ function poolOf(s: RunState, ownOnly: boolean): PassiveId[] {
     if (ownOnly && def.exclusive !== c) return false;
     // 오니: 무기 전용 아이템은 그 무기를 들었을 때만
     if (def.forWeapon !== undefined && def.forWeapon !== s.player.weaponId) return false;
+    // 변희 동물 능력: 사냥 경험치로만 (morphXp)
+    if (xpOnly(def)) return false;
     if (def.effect && s.player.passives.includes(id)) return false;
     if (s.sudden && HEAL_ITEMS.has(`passive:${id}`)) return false;
     return itemAvailable("passive", id, s.unlocks);

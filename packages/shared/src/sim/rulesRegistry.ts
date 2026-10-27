@@ -24,6 +24,7 @@ import { BRAWL_MOVES_RULES } from "./brawlMoves";
 import { BRAWL_STAR_RULES } from "./brawlStar";
 import { CHRONO_RULES } from "./chrono";
 import { RUNE_RULES } from "./rune";
+import { MORPH_XP_RULES } from "./morphXp";
 import { COMBAT_RULES } from "./combat";
 import { CRITTERS_RULES } from "./critters";
 import { DUCKLINGS_RULES } from "./ducklings";
@@ -87,6 +88,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   BRAWL_STAR_RULES,
   CHRONO_RULES,
   RUNE_RULES,
+  MORPH_XP_RULES,
   COMBAT_RULES,
   CRITTERS_RULES,
   DUCKLINGS_RULES,

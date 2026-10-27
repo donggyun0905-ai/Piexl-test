@@ -1,5 +1,5 @@
-// 변희 각성 효과: 공중 습격 선(흰 선이 열 번 반짝이며 꿰뚫음, 불사조는 불꽃) · 각성 기술 빛
-import type { EffectState } from "@pixel-rogue/shared";
+// 변희 각성 효과: 공중 습격 선(흰 선이 열 번 반짝이며 꿰뚫음, 불사조는 불꽃) · 각성 기술 빛 · 불사조 열기 · 발밑 동물 경험치 막대
+import { morphXp, type EffectState, type RunState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -56,4 +56,39 @@ export function drawMorphFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     return true;
   }
   return false;
+}
+
+/** 발밑: 각성 불사조 열기(일렁이는 주황 원) · 동물 경험치 막대 (얻은 능력 수만큼 점) */
+export function drawMorphGround(ctx: Ctx, s: RunState, snap: Snap): void {
+  const p = s.player;
+  if (p.characterId !== "byeonhui" || p.hp <= 0) return;
+  const x = snap(p.x);
+  const y = snap(p.y);
+  if ((p.mHeat ?? 0) > 0) {
+    const r = 64 * (0.95 + 0.05 * Math.sin(s.tick * 0.3));
+    ctx.globalAlpha = 0.16 + 0.06 * Math.sin(s.tick * 0.2);
+    ctx.fillStyle = "#ff7a2a";
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 0.5;
+    ctx.strokeStyle = "#ffd27a";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    for (let i = 0; i < 10; i++) {
+      const a = i * 0.63 + s.tick * 0.02;
+      const d = r * (((i * 37 + s.tick) % 60) / 60);
+      ctx.fillStyle = i % 2 ? "#ffb040" : "#fff0a0";
+      ctx.fillRect(Math.round(x + Math.cos(a) * d), Math.round(y + Math.sin(a) * d - ((s.tick + i * 9) % 20) / 4), 1, 2);
+    }
+    ctx.globalAlpha = 1;
+  }
+  const xp = morphXp(p);
+  if (!xp) return;
+  ctx.fillStyle = "#1a1420";
+  ctx.fillRect(x - 9, y + 9, 18, 3);
+  ctx.fillStyle = "#7ad860";
+  ctx.fillRect(x - 8, y + 10, Math.round(16 * xp.fill), 1);
+  ctx.fillStyle = "#ffe07a";
+  for (let i = 0; i < xp.got; i++) ctx.fillRect(x - 9 + i * 3, y + 13, 2, 1);
 }

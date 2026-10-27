@@ -10,6 +10,7 @@ import { GUIDE_KO_B } from "./koB";
 import { GUIDE_EN_S2, GUIDE_JA_S2, GUIDE_KO_S2 } from "./s2";
 import { GUIDE_EN_H2, GUIDE_JA_H2, GUIDE_KO_H2 } from "./h2";
 import { GUIDE_EN_T2, GUIDE_JA_T2, GUIDE_KO_T2 } from "./t2";
+import { EVO_DESC } from "../items/morphEvo";
 
 const GUIDES: Record<Lang, Partial<Record<CharacterId, readonly string[]>>> = {
   ko: { ...GUIDE_KO_A, ...GUIDE_KO_B, ...GUIDE_KO_S2, ...GUIDE_KO_H2, ...GUIDE_KO_T2 },
@@ -17,4 +18,5 @@ const GUIDES: Record<Lang, Partial<Record<CharacterId, readonly string[]>>> = {
   ja: { ...GUIDE_JA_A, ...GUIDE_JA_B, ...GUIDE_JA_S2, ...GUIDE_JA_H2, ...GUIDE_JA_T2 },
 };
 
-export const charGuide = (c: CharacterId, lang: Lang): readonly string[] => GUIDES[lang][c] ?? [];
+/** 변희는 각성 기술 목록(동물 무기 설명과 같은 글)을 뒤에 붙임 */
+export const charGuide = (c: CharacterId, lang: Lang): readonly string[] => [...(GUIDES[lang][c] ?? []), ...(c === "byeonhui" ? Object.values(EVO_DESC).map((d) => d[lang]) : [])];

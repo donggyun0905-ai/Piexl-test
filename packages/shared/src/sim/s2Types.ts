@@ -43,6 +43,10 @@ export interface MorphPlayerState {
   mHuman?: boolean;
   /** 각성한 하늘 짐승의 공중 습격: 남은 내리긋기 · 다음까지 틱 · 피해 · 날아오른 자리 */
   mRaid?: { n: number; t: number; dmg: number; x: number; y: number; mul?: number; gap?: number };
+  /** 동물마다 사냥 경험치 (다 차면 그 동물 전용 능력 하나, sim/morphXp) */
+  mXp?: Partial<Record<string, number>>;
+  /** 각성 불사조 열기: 남은 틱 */
+  mHeat?: number;
 }
 
 export interface FlyPlayerState {

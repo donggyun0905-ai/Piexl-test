@@ -14,7 +14,8 @@ export const GUIDE_KO_S2: Guide = {
     "비르디아 · 만물의 소녀 · 체력 105",
     "무기가 곧 동물 · 든 동물로 변해 그 동물처럼 싸움 (동물마다 빠르기가 다름)",
     "늑대 물기 · 곰 할퀴기 · 독수리 깃털 · 뱀 독 물기 · 멧돼지 돌진 · 전갈 꼬리(멈춤) · 박쥐 음파(흡혈) · 코끼리 짓밟기(기절) · 거미 거미줄(느리게) · 불사조 불덩이",
-    "동물마다 전용 아이템이 셋씩 (그 동물로 변해 있을 때만 나옴) · 셋을 모두 모으면 그 동물이 각성 (크고 멋진 모습·체력 +20·사거리 +25%·공격력 +3·각성 기술) · 대시하면 사람 모습, 공격하면 다시 동물",
+    "동물마다 전용 능력이 셋씩: 그 동물로 사냥하면 경험치가 차고(일반 적 3 · 보스 20) 100이 되면 하나를 얻음 (상점·보물방에서는 기본 아이템만) · 얻은 능력은 무기를 바꿔도 남음",
+    "셋을 모두 얻으면 그 동물이 각성 (갑옷 입은 큰 모습·체력 +20·사거리 +25%·공격력 +3·방어력 +20·공격 속도 +25%·각성 기술) · 한 번 각성한 동물의 기술은 다른 동물이어도 계속 나옴 · 대시하면 사람 모습, 공격하면 다시 동물",
   ],
   fly: [
     "비르디아 · 잠자리 날개 · 체력 85 · 이동 속도 1.5 (아주 빠름)",
@@ -53,7 +54,8 @@ export const GUIDE_EN_S2: Guide = {
     "Virdia · The All-Shaped Girl · 105 HP",
     "Her weapons are animals · she becomes the one she holds and fights like it (each moves at its own speed)",
     "Wolf bites · bear swipes · eagle feathers · serpent venom · boar charge · scorpion sting (stop) · bat sound (lifesteal) · elephant stomp (stun) · spider webs (slow) · phoenix fireballs",
-    "Three own items per animal (they drop only while she is that animal) · collect all three to awaken it (bigger look, +20 HP, +25% range, +3 damage, an awakened skill) · dashing turns her human, attacking turns her back",
+    "Three own abilities per animal: hunting as that animal fills its XP (3 per foe · 20 per boss) and at 100 she gains one (shops and treasure rooms give only basic items) · abilities stay when she switches weapons",
+    "Gain all three to awaken it (armored, bigger look, +20 HP, +25% range, +3 damage, +20 defense, +25% attack speed, an awakened skill) · awakened skills keep firing even as other animals · dashing turns her human, attacking turns her back",
   ],
   fly: [
     "Virdia · Dragonfly wings · 85 HP · 1.5 move speed (very fast)",
@@ -92,7 +94,8 @@ export const GUIDE_JA_S2: Guide = {
     "ヴィルディア · 万物の少女 · 体力105",
     "武器は動物そのもの · 持った動物に変身してその動物のように戦う（動物ごとに速さが違う）",
     "狼の噛みつき · 熊の引っかき · 鷲の羽根 · 蛇の毒 · 猪の突進 · 蠍の尾（停止）· 蝙蝠の音波（吸血）· 象の踏みつけ（気絶）· 蜘蛛の糸（減速）· 不死鳥の火の玉",
-    "動物ごとに専用アイテム3つ（その動物の時だけ出る）· 三つ集めるとその動物が覚醒（大きく格好いい姿・体力+20・射程+25%・攻撃力+3・覚醒技）· ダッシュすると人の姿、攻撃すると再び動物",
+    "動物ごとに専用能力3つ：その動物で狩ると経験値が溜まり（通常の敵3 · ボス20）100で一つ得る（ショップ・宝部屋は基本アイテムのみ）· 得た能力は武器を替えても残る",
+    "三つ全部得るとその動物が覚醒（鎧をまとった大きな姿・体力+20・射程+25%・攻撃力+3・防御力+20・攻撃速度+25%・覚醒技）· 一度覚醒した動物の技は別の動物でも出続ける · ダッシュすると人の姿、攻撃すると再び動物",
   ],
   fly: [
     "ヴィルディア · 蜻蛉の翅 · 体力85 · 移動速度1.5（とても速い）",

@@ -1,7 +1,9 @@
 // 변희 각성: 든 동물의 전용 아이템 셋을 모두 가지면 그 동물이 각성 (하이울프·폭군 곰·폭풍 독수리·바실리스크·철갑 멧돼지 왕·사막의 제왕·흡혈 박쥐왕·매머드 왕·여왕 거미·태양 불사조)
-// 크고 멋진 모습 · 최대 체력 +20 · 사거리 +25% · 공격력 +3 · 공격할 때 20% 확률로 각성 기술
-// 하늘의 짐승(독수리·불사조)은 공중으로 날아 사라졌다가 방 끝에서 끝까지 세 번 내리긋고(그동안 무적) 다시 내려앉음
+// 크고 멋진 갑옷 모습 · 최대 체력 +20 · 사거리 +25% · 공격력 +3 · 방어력 +20 · 공격 속도 +25% · 공격할 때 20% 확률로 각성 기술
+// 한 번 각성한 동물의 기술은 다른 동물을 들어도 계속 나옴 (여럿이면 그중 하나). 독수리는 공중으로 날아 방 끝에서 끝까지 세 번 내리긋고,
+// 불사조는 둘레에 큰 열기를 피워 안의 적에게 불꽃을 겹겹이 (x1~x5, 겹칠수록 센 화상)
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
+import { WEAPONS, type WeaponDef } from "../content";
 import { PASSIVE_IDS, PASSIVES, type PassiveDef } from "../items";
 import { createRng, deriveSeed } from "../rng";
 import type { StatMod } from "../stats";
@@ -10,23 +12,48 @@ import { healPlayer, ignite } from "./combat";
 import { alive, inCircle, inCone, inLine, poison, root, stun, strike } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, weaponOf } from "./util";
+import { addFlame } from "./flames";
 
 /** 각성 수치: 능력치 · 기술 확률 · 공중 습격(내리긋기 수·한 번 틱·폭·피해 배율) */
-export const MORPH_EVO = { hp: 20, range: 1.25, damage: 3, chance: 0.2, passes: 3, passTicks: 18, raidWidth: 12, raidMul: 1.5 } as const;
+/** 방어력은 묵인과 같은 방식 (받는 피해 × (1 - 방어력/100)) · 불사조 열기: 지속 틱 · 반경 · 불꽃이 겹치는 간격 · 화상 배율 */
+export const MORPH_EVO = { hp: 20, range: 1.25, damage: 3, def: 20, speed: 1.25, chance: 0.2, passes: 3, passTicks: 18, raidWidth: 12, raidMul: 1.5, heatTicks: 300, heatR: 64, heatEvery: 30, heatMul: 0.6 } as const;
+
+/** 동물(무기 id) 전용 아이템 셋을 모두 가졌는지 */
+function owns(p: PlayerState, weaponId: string): boolean {
+  const own = PASSIVE_IDS.filter((id) => (PASSIVES[id] as PassiveDef).forWeapon === weaponId);
+  return own.length > 0 && own.every((id) => p.passives.includes(id));
+}
 
 /** 지금 든 동물이 각성했는지 (그 동물 전용 아이템 셋을 모두 가짐) */
 export function morphEvolved(p: PlayerState): boolean {
   if (p.characterId !== "byeonhui") return false;
   const w = weaponOf(p);
-  if (!w.animal) return false;
-  const own = PASSIVE_IDS.filter((id) => (PASSIVES[id] as PassiveDef).forWeapon === w.id);
-  return own.length > 0 && own.every((id) => p.passives.includes(id));
+  return !!w.animal && owns(p, w.id);
+}
+
+/** 한 번이라도 각성한 동물들 (지금 든 동물이 아니어도) */
+export function evolvedAnimals(p: PlayerState): AnimalKind[] {
+  if (p.characterId !== "byeonhui") return [];
+  return (Object.values(WEAPONS) as WeaponDef[]).filter((w) => w.animal && owns(p, w.id)).map((w) => w.animal!);
 }
 
 /** 각성 능력치 (sim/items.recalcStats) */
 export function morphMods(p: PlayerState): StatMod[] {
   if (!morphEvolved(p)) return [];
-  return [{ stat: "maxHp", add: MORPH_EVO.hp }, { stat: "range", mul: MORPH_EVO.range }, { stat: "damage", add: MORPH_EVO.damage }];
+  return [{ stat: "maxHp", add: MORPH_EVO.hp }, { stat: "range", mul: MORPH_EVO.range }, { stat: "damage", add: MORPH_EVO.damage }, { stat: "attackSpeed", mul: MORPH_EVO.speed }];
+}
+
+/** 각성 방어력: 받는 피해 배율 */
+export const evoTaken = (p: PlayerState) => (morphEvolved(p) ? 1 - MORPH_EVO.def / 100 : 1);
+
+/** 불사조 열기 한 틱: 둘레 적에게 불꽃 겹치기 + 센 화상 */
+export function heatTick(s: RunState): void {
+  const p = s.player;
+  if ((p.mHeat ?? 0) <= 0) return;
+  p.mHeat!--;
+  if (p.mHeat! % MORPH_EVO.heatEvery !== 0) return;
+  for (const e of inCircle(s, p.x, p.y, MORPH_EVO.heatR)) ignite(e, p.stats.damage * MORPH_EVO.heatMul * addFlame(s, e));
+  addEffect(s, { kind: "mEvo", x: p.x, y: p.y, dirX: 9, dirY: 1, size: MORPH_EVO.heatR, maxTicks: MORPH_EVO.heatEvery });
 }
 
 /** 공중 습격 시작 (변희 독수리·불사조 · 플라이 하늘 습격). n: 내리긋기 수 · mul: 한 번 피해 배율 · gap: 한 번 사이 틱 */
@@ -72,19 +99,26 @@ export function raidTick(s: RunState): boolean {
   return true;
 }
 
-/** 각성 기술 (동물마다). 쓰면 true */
-export function evoSkill(s: RunState, animal: AnimalKind, dmg: number): boolean {
+/** 각성 기술: 각성한 동물들 중 하나 (지금 동물이 아니어도). 쓰면 true */
+export function evoSkill(s: RunState, dmg: number): boolean {
   const p = s.player;
-  if (!morphEvolved(p)) return false;
-  if (createRng(deriveSeed(s.seed, "morphEvo", s.tick, p.attackCount)).nextFloat() >= MORPH_EVO.chance) return false;
+  const list = evolvedAnimals(p);
+  if (!list.length) return false;
+  const rng = createRng(deriveSeed(s.seed, "morphEvo", s.tick, p.attackCount));
+  if (rng.nextFloat() >= MORPH_EVO.chance) return false;
+  const animal = list[rng.int(0, list.length - 1)]!;
   const near = alive(s)
     .filter((e) => dist2(e, p) <= (p.stats.range * 3) ** 2)
     .sort((a, b) => dist2(a, p) - dist2(b, p) || a.id - b.id);
   const fx = (x: number, y: number, size: number) => addEffect(s, { kind: "mEvo", x, y, dirX: ["wolf", "bear", "eagle", "snake", "boar", "scorpion", "bat", "elephant", "spider", "phoenix"].indexOf(animal), dirY: 0, size, maxTicks: 22 });
   switch (animal) {
     case "eagle":
-    case "phoenix":
       startRaid(s, dmg);
+      return true;
+    case "phoenix":
+      // 태양의 열기: 둘레에 큰 열기 (heatTick)
+      p.mHeat = MORPH_EVO.heatTicks;
+      fx(p.x, p.y, MORPH_EVO.heatR);
       return true;
     case "wolf":
       // 그림자 늑대 셋이 가까운 적에게 덮침

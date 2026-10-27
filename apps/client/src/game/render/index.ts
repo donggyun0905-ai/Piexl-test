@@ -39,6 +39,7 @@ import { drawMukinAura } from "./mukin";
 import { drawDoomMarks, drawSamyeolGround } from "./samyeol";
 import { drawTerraAura, drawTerraGround } from "./terra2";
 import { drawClockMarks, drawRuneGround } from "./rune";
+import { drawMorphGround } from "./morphFx";
 import { drawTerraAuraB, drawTerraGroundB } from "./terra2b";
 import { drawTerraAuraC } from "./terra2c";
 import { drawGreatSpirit, drawSpiritKin } from "./spirits";
@@ -130,6 +131,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawTerraGround(ctx, s, snap);
     drawTerraGroundB(ctx, s, snap);
     drawRuneGround(ctx, s, snap);
+    drawMorphGround(ctx, s, snap);
   });
   drawEnemies(ctx, s, alpha, snap);
   drawInkMarks(ctx, s, alpha, snap);

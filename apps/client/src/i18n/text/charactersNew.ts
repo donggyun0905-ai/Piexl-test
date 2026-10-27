@@ -28,9 +28,9 @@ export const CHARACTER_TEXT_NEW = {
   },
   byeonhui: { ko: "변희", en: "Byeonhui", ja: "ビョンヒ" },
   byeonhuiDesc: {
-    ko: "만물의 소녀 · 비르디아. 무기가 곧 동물, 든 동물로 변해 싸움 (늑대·곰·독수리·뱀·멧돼지·전갈·박쥐·코끼리·거미·불사조) · 동물마다 전용 아이템 셋 (그 동물일 때만 나옴)",
-    en: "The All-Shaped Girl · Virdia. Her weapons are animals; she becomes the one she holds (wolf, bear, eagle, serpent, boar, scorpion, bat, elephant, spider, phoenix) · three own items per animal (only while that animal)",
-    ja: "万物の少女 · ヴィルディア。武器は動物そのもの、持った動物に変身して戦う（狼・熊・鷲・蛇・猪・蠍・蝙蝠・象・蜘蛛・不死鳥）· 動物ごとに専用アイテム3つ（その動物の時だけ出る）",
+    ko: "만물의 소녀 · 비르디아. 무기가 곧 동물, 든 동물로 변해 싸움 (늑대·곰·독수리·뱀·멧돼지·전갈·박쥐·코끼리·거미·불사조) · 동물마다 전용 능력 셋 (그 동물로 사냥한 경험치로 얻음) · 셋이면 각성",
+    en: "The All-Shaped Girl · Virdia. Her weapons are animals; she becomes the one she holds (wolf, bear, eagle, serpent, boar, scorpion, bat, elephant, spider, phoenix) · three own abilities per animal (earned by hunting as it) · all three awaken it",
+    ja: "万物の少女 · ヴィルディア。武器は動物そのもの、持った動物に変身して戦う（狼・熊・鷲・蛇・猪・蠍・蝙蝠・象・蜘蛛・不死鳥）· 動物ごとに専用能力3つ（その動物で狩った経験値で得る）· 三つで覚醒",
   },
   fly: { ko: "플라이", en: "Fly", ja: "フライ" },
   flyDesc: {

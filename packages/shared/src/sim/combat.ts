@@ -22,6 +22,8 @@ import { tabooDown, tabooN, tabooUp } from "./taboo";
 import { addHazard } from "./hazards";
 import { gainExp, rollCrit } from "./novice";
 import type { EnemyState, RunState } from "./types";
+import { morphKill } from "./morphXp";
+import { recalcStats } from "./items";
 import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, KNOCKBACK, keepInRoom, markCrit, normalize, roomGrid, RUSH_TICKS, STILL_TICKS } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -246,6 +248,7 @@ export function removeDead(s: RunState): void {
     }
     if (!e.noGold) addGold(s, e.bounty ?? ENEMIES[e.kind].gold);
     gainExp(s, e);
+    if (morphKill(s, e)) recalcStats(s);
   }
   s.enemies = alive;
   // 연쇄 폭발: 쓰러진 자리에서 작은 폭발 (이것으로 쓰러진 적은 다음 틱에 정리돼 한 틱씩 이어짐)
