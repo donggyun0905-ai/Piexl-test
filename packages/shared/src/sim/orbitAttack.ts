@@ -15,19 +15,22 @@ const R = {
   STEEL_SPEED: 4.5,
   TRIGGER_SPEED: 7,
   TRIGGER_PIERCE: 3,
-  TRIGGER_GROW: 0.3,
+  TRIGGER_GROW: 0.5,
   /** 트리거 치명타: 기본 20%, 무기 기본 수보다 더 채워진 구슬 하나마다 +5% */
   TRIGGER_CRIT: 0.2,
   TRIGGER_CRIT_ADD: 0.05,
   /** 중력: 띄웠다 찍는 기절 틱 */
   GRAVITY_STUN: 24,
+  /** 중력: 같은 자리에 두 번째 중력이 이 틱 뒤 한 번 더 (공격력 배율) */
+  GRAVITY_ECHO: 30,
+  GRAVITY_ECHO_MUL: 0.7,
   HAND_RADIUS: 28,
   HAND_BOSS_MUL: 2,
   HAND_LIFT: 18,
 };
 export { R as ORBIT_ATTACK_RULES };
 
-/** 트리거: 재장전 2초 · 쏠 때 30% 확률로 +1 · 최대 15개, 다 차면 한 번에 모두 2배로 */
+/** 트리거: 재장전 2초 · 쏠 때 50% 확률로 +1 · 최대 15개, 다 차면 한 번에 모두 2배로 */
 export const TRIGGER_RELOAD = 120;
 export const TRIGGER_MAX = 15;
 /** 갓 핸드: 들고 있는 틱 · 찍는 범위 · 보스전 피해 배율 · 잡은 적을 드는 높이 */
@@ -87,6 +90,9 @@ function gravitySlam(s: RunState, dmg: number): void {
     addEffect(s, { kind: "burst", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r * 2, maxTicks: 12 });
   }
   addEffect(s, { kind: "slam", x: p.x, y: p.y, dirX: 0, dirY: 0, size: p.stats.range, maxTicks: 20 });
+  // 같은 자리에 두 번째 중력: 잠시 뒤 한 번 더 내려앉음
+  s.pendingBlasts.push({ tick: s.tick + R.GRAVITY_ECHO, x: p.x, y: p.y, radius: p.stats.range, damage: dmg * R.GRAVITY_ECHO_MUL });
+  addEffect(s, { kind: "elWell", x: p.x, y: p.y, dirX: 0, dirY: 0, size: p.stats.range, maxTicks: R.GRAVITY_ECHO });
 }
 
 /** 갓 핸드: 사거리 안 가까운 일반 적을 잡아 듦. 보스·허수아비 앞이면 돌멩이를 듦 (handId 0) */

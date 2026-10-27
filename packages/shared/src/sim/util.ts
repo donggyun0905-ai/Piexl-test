@@ -170,3 +170,14 @@ export function shotDirs(x: number, y: number, shots: number, spread?: readonly 
   }
   return out;
 }
+
+/** 점과 선분(a→b) 사이 거리의 제곱 */
+export function segDist2(e: { x: number; y: number }, a: { x: number; y: number }, b: { x: number; y: number }): number {
+  const vx = b.x - a.x;
+  const vy = b.y - a.y;
+  const len2 = vx * vx + vy * vy || 1;
+  const t = Math.max(0, Math.min(1, ((e.x - a.x) * vx + (e.y - a.y) * vy) / len2));
+  const dx = a.x + vx * t - e.x;
+  const dy = a.y + vy * t - e.y;
+  return dx * dx + dy * dy;
+}

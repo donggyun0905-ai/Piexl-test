@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.128",
+    date: "2026-10-27",
+    items: {
+      ko: [
+        "원소술사 손보기: 원소마다 상태이상 (불 화상 · 물 둔화 · 땅 기절 · 번개 감전 · 풀 독) · 행성도 하나씩 상태이상",
+        "빛 구슬 30% 확률로 빛 폭발 · 은하수 안에 머문 적은 스택이 쌓여 100이면 빅뱅 · 중력은 내려찍은 자리에 두 번째 중력 · 강철 구슬 피해 +40% · 트리거 구슬 +1 확률 30% → 50%",
+        "웨폰 마스터: 칼끝이 적을 향하는 진짜 검 5자루, 셋은 휘어지며 날아가 적을 쫓고 둘은 몸 둘레를 지키며 붙은 적을 벰 · 갓 핸드 모습 새로",
+      ],
+      en: [
+        "Elementalist rework: each element inflicts a status (fire burn · water slow · earth stun · lightning shock · grass poison) · every planet now has a status too",
+        "Light Orbs 30% chance to burst · foes staying inside the Milky Way build stacks and trigger a Big Bang at 100 · Gravity leaves a second gravity on the slam spot · Steel Orbs +40% damage · Trigger +1 orb chance 30% → 50%",
+        "Blade Lord: 5 real swords with tips turned toward foes; 3 curve out to chase enemies, 2 guard your body and cut foes that close in · new God Hand look",
+      ],
+      ja: [
+        "元素術師の見直し：元素ごとに状態異常（火は火傷 · 水は鈍化 · 土は気絶 · 雷は感電 · 草は毒）· 惑星にもそれぞれ状態異常",
+        "光の珠は30%で光が弾ける · 天の川の中に留まった敵はスタックが溜まり100でビッグバン · 重力は叩きつけた場所に2つ目の重力 · 鋼の珠ダメージ+40% · トリガーの珠+1確率30% → 50%",
+        "ウェポンマスター：切っ先が敵を向く本物の剣5本、3本は弧を描いて飛び敵を追い、2本は体の周りを守り近づいた敵を斬る · ゴッドハンドの見た目を一新",
+      ],
+    },
+  },
+  {
     version: "0.48.127",
     date: "2026-10-27",
     items: {

@@ -7,7 +7,7 @@ import { createRng, deriveSeed } from "../rng";
 import { damageEnemy, healPlayer, ignite } from "./combat";
 import type { StarNode } from "./starTypes";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { addEffect, dist2, hasPerk, weaponOf } from "./util";
+import { addEffect, dist2, hasPerk, segDist2, weaponOf } from "./util";
 
 const styleOf = (p: PlayerState): StarStyle => weaponOf(p).star ?? "plain";
 const roomKey = (s: RunState) => `${s.floor}/${s.roomId}`;
@@ -177,16 +177,6 @@ function burst(s: RunState): void {
   if (p.stWard) p.stWard = Math.min(p.stWard, p.shieldPts ?? 0);
 }
 
-/** 점 e와 선분 a-b 사이 거리의 제곱 */
-function segDist2(e: { x: number; y: number }, a: { x: number; y: number }, b: { x: number; y: number }): number {
-  const dx = b.x - a.x;
-  const dy = b.y - a.y;
-  const len = dx * dx + dy * dy;
-  const t = len === 0 ? 0 : Math.max(0, Math.min(1, ((e.x - a.x) * dx + (e.y - a.y) * dy) / len));
-  const px = a.x + dx * t - e.x;
-  const py = a.y + dy * t - e.y;
-  return px * px + py * py;
-}
 
 /** 연습장 등에서 처음으로 */
 export function resetStar(p: PlayerState): void {

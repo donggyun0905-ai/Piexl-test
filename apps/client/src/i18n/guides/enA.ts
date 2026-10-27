@@ -36,6 +36,7 @@ export const GUIDE_EN_A: Partial<Record<CharacterId, readonly string[]>> = {
     "Basics: 90 HP · elemental orbs circle your body and hit whatever they touch",
     "Attack speed = how often one orb can hit again · projectile speed = spin speed · range = orbit radius",
     "The attack key fires each weapon's special (bullets · trigger · gravity · god hand)",
+    "Each element inflicts a status: fire burn · water slow · earth stun · lightning shock · grass poison (planets each have one too)",
     "Tip: walk into crowds and grind them with orbs; a wider orbit is safer",
   ],
   brawler: [

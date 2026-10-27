@@ -1,6 +1,7 @@
 // 원소술사 그리기: 은하수·중력 장판(적 아래) · 회전체·검·별·펫·전깃줄·갓 핸드(플레이어 위) · 날아간 자국·풀 범위·내려찍기 효과 · 펫·강철·트리거 탄
-import { orbBodies, WEAPONS, wirePairs, type EffectState, type OrbBody, type ProjectileState, type RunState, type WeaponDef } from "@pixel-rogue/shared";
+import { ORBIT_RULES, orbBodies, WEAPONS, wirePairs, type EffectState, type OrbBody, type ProjectileState, type RunState, type WeaponDef } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
+import { bladeAngle, drawElemFx, drawGalaxyStacks, drawGodHand, drawSword } from "./orbsNew";
 
 const ORB_COLOR: Record<OrbBody["tag"], string> = {
   fire: "#ff6a2a",
@@ -36,6 +37,7 @@ export function drawOrbitField(ctx: CanvasRenderingContext2D, s: RunState, alpha
   if (w.orbit !== "galaxy" && w.orbit !== "gravity") return;
   const [x, y] = center(s, alpha);
   const R = s.player.stats.range;
+  if (w.orbit === "galaxy") drawGalaxyStacks(ctx, s, snap, ORBIT_RULES.GALAXY_MAX);
   if (w.orbit === "galaxy") {
     // 은하수: 짙은 보랏빛 원반 위로 반짝이는 별이 천천히 돎
     ctx.fillStyle = "rgba(70, 40, 140, 0.22)";
@@ -81,8 +83,12 @@ export function drawOrbs(ctx: CanvasRenderingContext2D, s: RunState, alpha: numb
       ctx.stroke();
     }
   }
-  for (const b of bodies) drawBody(ctx, b, snap, s.tick);
-  if (w.orbit === "hand") drawHand(ctx, s, cx, cy, snap);
+  bodies.forEach((b, i) => {
+    // 웨폰 마스터: 칼끝이 적(지키는 검은 도는 방향)을 향한 진짜 검
+    if (w.orbit === "blades" && b.tag !== "pet") drawSword(ctx, snap(b.x), snap(b.y), bladeAngle(s, b, i, cx, cy), b.tag, s.tick);
+    else drawBody(ctx, b, snap, s.tick);
+  });
+  if (w.orbit === "hand") drawGodHand(ctx, s, cx, cy, snap);
 }
 
 function drawBody(ctx: CanvasRenderingContext2D, b: OrbBody, snap: Snap, tick: number): void {
@@ -113,28 +119,9 @@ function drawBody(ctx: CanvasRenderingContext2D, b: OrbBody, snap: Snap, tick: n
   ctx.fillRect(Math.round(x - b.r / 2), Math.round(y - b.r / 2), 1, 1);
 }
 
-/** 갓 핸드: 머리 위의 커다란 손 (드는 동안 잡은 것을 쥠, 보스전이면 돌멩이) */
-function drawHand(ctx: CanvasRenderingContext2D, s: RunState, cx: number, cy: number, snap: Snap): void {
-  const p = s.player;
-  const holding = (p.handTicks ?? 0) > 0;
-  const x = snap(holding ? cx : cx + 9);
-  const y = snap(holding ? cy - 24 : cy - 8 + Math.sin(s.tick * 0.08) * 1.5);
-  const size = holding ? 1 : 0.6;
-  ctx.fillStyle = "#ffe9b8";
-  ctx.fillRect(x - 5 * size, y - 3 * size, 10 * size, 6 * size);
-  for (let i = 0; i < 4; i++) ctx.fillRect(x - 5 * size + i * 2.6 * size, y - 6 * size, 1.8 * size, 3 * size);
-  ctx.fillStyle = "#d8b878";
-  ctx.fillRect(x - 5 * size, y + 2 * size, 10 * size, 1);
-  if (holding && !p.handId) {
-    ctx.fillStyle = "#8a8496";
-    disc(ctx, x, y + 6, 4);
-    ctx.fillStyle = "#b0aabc";
-    ctx.fillRect(x - 2, y + 4, 2, 1);
-  }
-}
-
 /** 원소술사 효과면 그리고 true */
 export function drawOrbitFx(ctx: CanvasRenderingContext2D, fx: EffectState, snap: Snap): boolean {
+  if (drawElemFx(ctx, fx, snap)) return true;
   const t = fx.ticks / fx.maxTicks;
   if (fx.kind === "streak") {
     ctx.strokeStyle = fx.size === 0 ? "#ffffff" : "#fff2b0";

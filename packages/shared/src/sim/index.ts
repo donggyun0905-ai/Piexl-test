@@ -5,7 +5,7 @@ export { REACTOR_BOOST, REACTOR_FULL, REACTOR_OVERHEAT } from "./laser";
 export { AMB_TICKS, GAS_LIFE } from "./medicWeapons";
 export { shieldCap } from "./heal";
 export { droneSpots, fieldRadius, FLY_TICKS, gearPeriod, TURRET_LIFE } from "./laserWeapons";
-export { orbBodies, type OrbBody, type Element as OrbElement } from "./orbit";
+export { ORBIT_RULES, orbBodies, type OrbBody, type Element as OrbElement } from "./orbit";
 export { wirePairs } from "./orbitPerks";
 export { HAND_TICKS, TRIGGER_MAX, TRIGGER_RELOAD } from "./orbitAttack";
 export { GUARD_ARC, GUARD_REACH, GUARD_SWING_TICKS } from "./minions";

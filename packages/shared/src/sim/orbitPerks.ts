@@ -1,4 +1,4 @@
-// 원소술사 회전체에 붙는 아이템 효과: 일렉트로닉 전깃줄 · 펫 유도탄 · 강철 구슬·풀 검 막기·행운 튕기기 · 원소술사 탄
+// 원소술사 회전체에 붙는 아이템 효과: 일렉트로닉 전깃줄 · 펫 유도탄 · 강철 구슬·지키는 검 막기·행운 튕기기 · 원소술사 탄
 import { TICK_RATE } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { damageEnemy } from "./combat";
@@ -70,7 +70,7 @@ export function orbShot(s: RunState, x: number, y: number, dir: readonly [number
 export function guard(s: RunState, bodies: OrbBody[], dmg: number): void {
   const p = s.player;
   const w = weaponOf(p);
-  const blockers = w.orbit === "steel" ? bodies.filter((b) => b.tag !== "pet") : w.orbit === "blades" ? bodies.filter((b) => b.tag === "grass" && !b.striker) : [];
+  const blockers = w.orbit === "steel" ? bodies.filter((b) => b.tag !== "pet") : w.orbit === "blades" ? bodies.filter((b) => !b.striker) : [];
   const lucky = hasPerk(p, "luckyDeflect");
   if (!blockers.length && !lucky) return;
   s.projectiles = s.projectiles.filter((pr) => {

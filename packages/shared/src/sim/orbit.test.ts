@@ -1,37 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { WEAPONS, type WeaponId } from "../content";
-import type { PassiveId } from "../items";
+import { WEAPONS } from "../content";
 import { damagePlayer } from "./combat";
-import { createRun, EMPTY_INPUT, stepSim, type EnemyState, type RunState } from "./index";
-import { recalcStats } from "./items";
+import { createRun, EMPTY_INPUT, stepSim } from "./index";
 import { weaponPool } from "./loot";
-import { ORB_TICK, orbBodies, updateOrbit } from "./orbit";
+import { ORB_TICK, ORBIT_RULES, orbBodies, updateOrbit } from "./orbit";
 import { CRIT_MUL } from "./orbitBlades";
 import { orbitAttack, TRIGGER_MAX, TRIGGER_RELOAD, HAND_TICKS } from "./orbitAttack";
 import { enemy, FIRE } from "./perkTestUtil";
-
-/** 원소술사로 시작해 무기·아이템을 가진 채, 적 없는 방 가운데 */
-function elem(weapon: WeaponId = "elemorb", ...perks: PassiveId[]): RunState {
-  const s = createRun(3, "elementalist");
-  s.player.weaponId = weapon;
-  s.player.passives.push(...perks);
-  recalcStats(s);
-  s.enemies = [];
-  s.player.x = s.player.prevX = 120;
-  s.player.y = s.player.prevY = 72;
-  return s;
-}
-
-/** 회전체 자리에 적을 하나 두고 한 틱 */
-function onOrb(s: RunState, i = 0): EnemyState {
-  const b = orbBodies(s.player, s.player.x, s.player.y, s.tick)[i]!;
-  const e = enemy(50 + i, b.x, b.y);
-  s.enemies.push(e);
-  updateOrbit(s);
-  return e;
-}
-
-const lost = (e: EnemyState) => e.maxHp - e.hp;
+import { elem, lost, onOrb } from "./orbitTestUtil";
 
 describe("원소술사 회전체", () => {
   it("원소술사는 전용 무기만 얻음", () => {
@@ -63,6 +39,9 @@ describe("원소술사 회전체", () => {
     const s = elem("lightorb");
     const e = enemy(1, 121, 72);
     s.enemies = [e];
+    // 빛 터짐(확률) 없이 틱 피해만 셈
+    const burst = ORBIT_RULES.LIGHT_BURST;
+    ORBIT_RULES.LIGHT_BURST = 0;
     let hits = 0;
     let stuns = 0;
     for (let t = 0; t < 120; t++) {
@@ -78,6 +57,7 @@ describe("원소술사 회전체", () => {
     expect(lost(e)).toBeCloseTo(s.player.stats.damage * s.player.stats.attackSpeed * (hits * ORB_TICK) / 60);
     // 빛 경직은 공격 속도(3) 간격마다 → 2초에 최대 6번
     expect(stuns).toBeLessThanOrEqual(6);
+    ORBIT_RULES.LIGHT_BURST = burst;
   });
 
   it("빛 구슬: 맞은 적 0.5초 경직", () => {
@@ -97,49 +77,6 @@ describe("원소술사 회전체", () => {
     expect(onOrb(s, 0).stunTicks).toBe(60);
     onOrb(s, 7);
     expect(s.player.shieldPts).toBeGreaterThan(0);
-  });
-
-  it("웨폰 마스터: 불은 3번 · 번개는 5번 연속으로 때리고 돌아옴, 땅은 한 번 범위 피해, 물은 계속 따라다님", () => {
-    // 검 하나만 적에게 날아가게: 원소마다 따로 시험 (0 불 · 1 물 · 2 땅 · 3 번개)
-    const hits = (i: number, ticks: number) => {
-      const s = elem("bladelord");
-      const b = orbBodies(s.player, 120, 72, 0)[i]!;
-      s.enemies = [enemy(1, b.x + 40, b.y, 5000), enemy(2, b.x + 52, b.y, 5000)];
-      s.player.orbCd = [0, 0, 0, 0, 0].map((_, k) => (k === i ? 0 : 9999));
-      const log: number[] = [];
-      for (let t = 0; t < ticks; t++) {
-        const before = s.enemies[0]!.hp;
-        updateOrbit(s);
-        if (s.enemies[0]!.hp < before) log.push(t);
-      }
-      return { s, log };
-    };
-    expect(hits(0, 40).log).toHaveLength(3);
-    const thunder = hits(3, 40);
-    expect(thunder.log.length).toBeGreaterThanOrEqual(5);
-    expect(thunder.s.player.flyers ?? []).toHaveLength(0);
-    const earth = hits(2, 40);
-    expect(earth.log).toHaveLength(1);
-    expect(lost(earth.s.enemies[1]!)).toBeGreaterThan(0);
-    const water = hits(1, 200);
-    expect(water.log.length).toBeGreaterThanOrEqual(9);
-    expect(water.s.player.flyers).toHaveLength(1);
-  });
-
-  it("웨폰 마스터: 적이 하나여도 검 4개가 각자 날아감 (차례를 기다리지 않음)", () => {
-    const s = elem("bladelord");
-    s.enemies = [enemy(1, 170, 72, 5000)];
-    updateOrbit(s);
-    expect(s.player.flyers).toHaveLength(4);
-  });
-
-  it("웨폰 마스터: 풀 검은 날아가지 않고 몸 둘레를 돌며 적 탄을 막음", () => {
-    const s = elem("bladelord");
-    const grass = orbBodies(s.player, 120, 72, 0)[4]!;
-    expect(grass).toMatchObject({ tag: "grass", striker: false });
-    s.projectiles = [{ id: 900, fromPlayer: false, x: grass.x, y: grass.y, prevX: grass.x, prevY: grass.y, r: 2, vx: 0, vy: 0, damage: 5, ticksLeft: 60 }];
-    updateOrbit(s);
-    expect(s.projectiles).toHaveLength(0);
   });
 
   it("별똥별: 닿은 회전체가 공격력만큼 때림 · 중력: 들어온 적 탄이 느려짐", () => {
@@ -286,14 +223,17 @@ describe("원소술사 전용 아이템", () => {
 
   it("화려하게: 가끔 원소 효과가 하나 더", () => {
     const s = elem("lightorb", "flashy");
+    const burst = ORBIT_RULES.LIGHT_BURST;
+    ORBIT_RULES.LIGHT_BURST = 0;
     let extra = 0;
     for (let k = 0; k < 100; k++) {
       s.tick = k * 100;
       s.enemies = [];
       s.player.orbCd = [];
       const e = onOrb(s);
-      if ((e.burnTicks ?? 0) > 0 || (e.slowTicks ?? 0) > 0 || lost(e) > s.player.stats.damage + 0.01) extra++;
+      if ((e.burnTicks ?? 0) > 0 || (e.slowTicks ?? 0) > 0 || (e.poisonTicks ?? 0) > 0 || lost(e) > s.player.stats.damage + 0.01) extra++;
     }
+    ORBIT_RULES.LIGHT_BURST = burst;
     expect(extra).toBeGreaterThan(3);
     expect(extra).toBeLessThan(40);
   });

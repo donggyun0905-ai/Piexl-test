@@ -5,6 +5,8 @@ export interface OrbitEnemyState {
   orbHitTick?: number;
   /** 회전체에 닿아 틱 피해를 받은 틱 (0.15초마다) */
   orbDmgTick?: number;
+  /** 은하수 안에서 쌓인 스택 (다 차면 빅뱅) */
+  galaxy?: number;
 }
 
 export interface OrbitPlayerState {

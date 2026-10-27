@@ -17,6 +17,6 @@ export const ELEMENTAL_WEAPONS = {
   gravity: { id: "gravity", kind: "orbit", damageMul: 3.2, attackSpeed: 0.45, range: 60, projectileSpeed: 1, orbit: "gravity", orbs: 0, exclusive: "elementalist" },
   godhand: { id: "godhand", kind: "orbit", damageMul: 2.6, attackSpeed: 0.6, range: 70, projectileSpeed: 1, orbit: "hand", orbs: 0, exclusive: "elementalist" },
   meteors: { id: "meteors", kind: "orbit", damageMul: 0.5, attackSpeed: 2, range: 90, projectileSpeed: 6, orbit: "stars", orbs: 3, ringR: 16, exclusive: "elementalist" },
-  steelorb: { id: "steelorb", kind: "orbit", damageMul: 1, attackSpeed: 2, range: 110, projectileSpeed: 3, orbit: "steel", orbs: 5, ringR: 20, exclusive: "elementalist" },
+  steelorb: { id: "steelorb", kind: "orbit", damageMul: 1.4, attackSpeed: 2, range: 110, projectileSpeed: 3, orbit: "steel", orbs: 5, ringR: 20, exclusive: "elementalist" },
   trigger: { id: "trigger", kind: "orbit", damageMul: 0.9, attackSpeed: 2.5, range: 140, projectileSpeed: 3, orbit: "trigger", orbs: 5, ringR: 20, exclusive: "elementalist" },
 } as const satisfies Record<string, WeaponDef>;

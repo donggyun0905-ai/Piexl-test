@@ -3,13 +3,15 @@
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../content";
 import { createRng, deriveSeed } from "../rng";
-import { damageEnemy, ignite } from "./combat";
+import { blastAt, damageEnemy, ignite } from "./combat";
 import { elementEffect, ELEMENTS, planetEffect, PLANETS, type Element, type Planet } from "./orbitElements";
 import { updateHand } from "./orbitAttack";
 import { flyK, flyStrikers, pickTarget } from "./orbitBlades";
 import { guard, pet, wires } from "./orbitPerks";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { dist2, hasPerk, normalize, weaponOf } from "./util";
+import { addEffect, dist2, hasPerk, normalize, segDist2, weaponOf } from "./util";
+
+export { segDist2 } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const V = {
@@ -28,6 +30,18 @@ const V = {
   /** 화려하게 15% · 중력 안에 들어온 적 탄 빠르기 */
   FLASHY_CHANCE: 0.15,
   GRAVITY_SHOT: 0.5,
+  /** 빛 구슬: 맞힐 때 빛이 터질 확률 · 반경 · 공격력 배율 */
+  LIGHT_BURST: 0.3,
+  LIGHT_R: 20,
+  LIGHT_MUL: 1,
+  /** 은하수: 안에 있는 적에게 이 틱마다 스택 1, 다 차면 빅뱅 (반경 · 공격력 배율) */
+  GALAXY_EVERY: 3,
+  GALAXY_MAX: 100,
+  BANG_R: 50,
+  BANG_MUL: 10,
+  /** 웨폰 마스터: 날아가는 검 수 (나머지는 몸 둘레를 지킴) · 날아갈 때 휘는 정도 */
+  BLADE_FLY: 3,
+  BLADE_CURVE: 14,
 };
 export { V as ORBIT_RULES };
 
@@ -43,6 +57,9 @@ export interface OrbBody {
   /** 닿아서 때리지 않고 날아가 때림 (웨폰 마스터 검·별똥별 바깥 고리) */
   striker?: boolean;
 }
+
+/** 웨폰 마스터 검 원소 (날아가는 셋 → 지키는 둘) */
+const BLADE_TAGS: readonly Element[] = ["fire", "water", "thunder", "earth", "grass"];
 
 /** 닿아 있는 동안 틱 피해 간격 (0.15초) */
 export const ORB_TICK = 9;
@@ -107,17 +124,13 @@ export function orbBodies(p: PlayerState, cx: number, cy: number, tick: number):
       ring(n, R, dir, 4, 0, (i) => PLANETS[i % PLANETS.length]!);
       break;
     case "blades": {
-      // 웨폰 마스터: 검은 몸 둘레에 떠 있다가 날아감. 풀 검은 날아가지 않고 몸 둘레를 빠르게 돌며 탄을 막음
-      ring(n, R, [0, -1], 3, 0, (i) => ELEMENTS[i % ELEMENTS.length]!, true);
-      const grass = out.filter((b) => b.tag === "grass");
+      // 웨폰 마스터: 앞의 검 셋(불·물·번개)은 몸 위에 떠 있다가 적에게 날아가 때림.
+      // 나머지 검(땅·풀)은 날아가지 않고 몸 둘레를 빠르게 돌며 탄을 막고 붙은 적을 벰
+      const fly = Math.min(n, V.BLADE_FLY);
+      ring(fly, R, [0, -1], 3, 0, (i) => BLADE_TAGS[i % BLADE_TAGS.length]!, true);
       const d2 = mulV(dir, dir);
-      let v = mulV(d2, d2);
-      for (const b of grass) {
-        b.x = cx + v[0] * (R + 6);
-        b.y = cy + v[1] * (R + 6);
-        b.striker = false;
-        v = mulV(v, step(grass.length));
-      }
+      ring(n - fly, R + 6, mulV(d2, d2), 3, 1, (i) => BLADE_TAGS[(fly + i) % BLADE_TAGS.length]!);
+      for (const b of out) if (b.ring === 1) b.striker = false;
       break;
     }
     case "stars": {
@@ -138,13 +151,17 @@ export function orbBodies(p: PlayerState, cx: number, cy: number, tick: number):
     default:
       break;
   }
-  // 날아가는 검·별: 제자리에서 노리는 적까지 갔다가 돌아옴
+  // 날아가는 검·별: 제자리에서 노리는 적까지 갔다가 돌아옴 (검은 곧게 가지 않고 번갈아 옆으로 휘며 날아감)
   for (const f of p.flyers ?? []) {
     const b = out[f.i];
     if (!b?.striker) continue;
     const k = flyK(f, b.tag);
-    b.x += (f.x - b.x) * k;
-    b.y += (f.y - b.y) * k;
+    const dx = f.x - b.x;
+    const dy = f.y - b.y;
+    const side = b.tag === "star" ? 0 : (f.i % 2 ? 1 : -1) * V.BLADE_CURVE * 4 * k * (1 - k);
+    const len = Math.sqrt(dx * dx + dy * dy) || 1;
+    b.x += dx * k - (dy / len) * side;
+    b.y += dy * k + (dx / len) * side;
   }
   if (hasPerk(p, "pet")) out.push({ x: cx - dir[0] * (R + 10), y: cy + dir[1] * (R + 10), r: 3, ring: 9, tag: "pet" });
   return out;
@@ -167,7 +184,14 @@ function orbEffect(s: RunState, b: OrbBody, e: EnemyState, dmg: number): void {
   const dir = normalize(e.x - b.x, e.y - b.y) ?? [1, 0];
   if ((ELEMENTS as readonly string[]).includes(b.tag)) elementEffect(s, e, b.tag as Element, dmg, dir[0], dir[1]);
   else if ((PLANETS as readonly string[]).includes(b.tag)) planetEffect(s, e, b.tag as Planet, dmg, dir[0], dir[1]);
-  else if (b.tag === "light" && e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? V.LIGHT_STUN / 2 : V.LIGHT_STUN);
+  else if (b.tag === "light") {
+    if (e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? V.LIGHT_STUN / 2 : V.LIGHT_STUN);
+    // 가끔 빛이 터짐
+    if (roll(s, "lightBurst", e.id) < V.LIGHT_BURST) {
+      blastAt(s, e.x, e.y, V.LIGHT_R, dmg * V.LIGHT_MUL, { still: true });
+      addEffect(s, { kind: "elLight", x: e.x, y: e.y, dirX: 0, dirY: 0, size: V.LIGHT_R, maxTicks: 16 });
+    }
+  }
   // 화려하게: 가끔 원소 효과 하나 더
   if (hasPerk(s.player, "flashy") && roll(s, "flashy", e.id) < V.FLASHY_CHANCE) {
     elementEffect(s, e, ELEMENTS[Math.floor(roll(s, "flashyEl", e.id) * ELEMENTS.length)]!, dmg, dir[0], dir[1]);
@@ -240,7 +264,7 @@ export function updateOrbit(s: RunState): void {
   }
 
   if (w.orbit === "galaxy") {
-    // 은하수: 사거리 안 모든 적에게 틱 피해, 공격 속도 간격마다 가끔 불
+    // 은하수: 사거리 안 모든 적에게 틱 피해, 공격 속도 간격마다 가끔 불 · 안에 있는 동안 스택이 쌓여 다 차면 빅뱅
     const burn = cd[0] === 0;
     if (burn) cd[0] = interval;
     for (const e of s.enemies) {
@@ -248,6 +272,11 @@ export function updateOrbit(s: RunState): void {
       if (e.hp <= 0 || dist2(e, p) > rr * rr) continue;
       tickHit(s, e, dmg);
       if (burn && roll(s, "galaxy", e.id) < V.GALAXY_BURN) ignite(e, dmg);
+      if (s.tick % V.GALAXY_EVERY === 0 && (e.galaxy = (e.galaxy ?? 0) + 1) >= V.GALAXY_MAX) {
+        e.galaxy = 0;
+        blastAt(s, e.x, e.y, V.BANG_R, dmg * V.BANG_MUL, { still: true });
+        addEffect(s, { kind: "elBang", x: e.x, y: e.y, dirX: 0, dirY: 0, size: V.BANG_R, maxTicks: 40 });
+      }
     }
   } else if (w.orbit === "gravity") {
     // 중력: 사거리 안 적이 느려짐 (보스 제외는 적 쪽에서)
@@ -267,15 +296,4 @@ export function updateOrbit(s: RunState): void {
   wires(s, bodies, dmg);
   pet(s, bodies, dmg);
   guard(s, bodies, dmg);
-}
-
-/** 점과 선분(a→b) 사이 거리의 제곱 */
-export function segDist2(e: { x: number; y: number }, a: { x: number; y: number }, b: { x: number; y: number }): number {
-  const vx = b.x - a.x;
-  const vy = b.y - a.y;
-  const len2 = vx * vx + vy * vy || 1;
-  const t = Math.max(0, Math.min(1, ((e.x - a.x) * vx + (e.y - a.y) * vy) / len2));
-  const dx = a.x + vx * t - e.x;
-  const dy = a.y + vy * t - e.y;
-  return dx * dx + dy * dy;
 }
