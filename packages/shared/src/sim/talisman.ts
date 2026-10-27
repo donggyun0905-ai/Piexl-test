@@ -32,7 +32,7 @@ const R = {
   /** 벚꽃: 처음엔 보통 탄 빠르기(무기 빠르기의 16배)로 나갔다가 틱마다 0.95배씩 원래 빠르기까지 느려짐 (빠르게 가는 만큼 날아가는 틱을 줄여 사거리는 같게) */
   BLOOM_BURST: 16,
   BLOOM_SAVED_TICKS: 300,
-  /** 어둠: 등 뒤에서 부채꼴(25도 간격)로 나가 적을 따라가 터지는 부적 5장 (피해 2배, 반경 20 안 모두 같은 피해) */
+  /** 어둠: 등 뒤에서 부채꼴(25도 간격)로 나가 거리와 상관없이 늘 적을 따라가 터지는 부적 5장 (피해 2배, 반경 20 안 모두 같은 피해) */
   SHADE_MISSILES: 5,
   SHADE_MUL: 2,
   SHADE_BLAST: 20,
@@ -111,7 +111,7 @@ function shadeMissiles(s: RunState, out: ProjectileState[], dmg: number): void {
     for (let i = 0; i < Math.abs(turn); i++) d = turn > 0 ? [d[0] * c - d[1] * sn, d[0] * sn + d[1] * c] : [d[0] * c + d[1] * sn, -d[0] * sn + d[1] * c];
     const x = p.x + d[0] * (p.r + 3);
     const y = p.y + d[1] * (p.r + 3);
-    out.push({ id: s.nextId++, fromPlayer: true, x, y, prevX: x, prevY: y, r: 2, vx: d[0] * R.SHADE_SPEED, vy: d[1] * R.SHADE_SPEED, damage: dmg * R.SHADE_MUL, ticksLeft: R.SHADE_TICKS, spirit: "seek", homing: true, blast: R.SHADE_BLAST, splash: 1 });
+    out.push({ id: s.nextId++, fromPlayer: true, x, y, prevX: x, prevY: y, r: 2, vx: d[0] * R.SHADE_SPEED, vy: d[1] * R.SHADE_SPEED, damage: dmg * R.SHADE_MUL, ticksLeft: R.SHADE_TICKS, spirit: "seek", homing: true, seek: true, blast: R.SHADE_BLAST, splash: 1 });
   }
 }
 

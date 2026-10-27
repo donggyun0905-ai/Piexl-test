@@ -26,6 +26,8 @@ const R = {
   PACE_MOVE: 0.08,
   PACE_MAX: 5,
   BLOOD_MAX: 1,
+  /** 택견 공격 속도 상한 (너무 빠르면 기술 무적이 끊기지 않음) */
+  TAEKKYON_SPEED: 7.6,
 };
 export { R as BRAWL_RULES };
 
@@ -55,7 +57,7 @@ export function brawlMoveMul(p: PlayerState): number {
 export function comboTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
   const list = moves(p);
-  const interval = TICK_RATE / speed;
+  const interval = TICK_RATE / (weaponOf(p).combo === "taekkyon" ? Math.min(R.TAEKKYON_SPEED, speed) : speed);
   holdAndPin(s);
   // 다음 기술을 쓸 수 있게 된 뒤 1초 동안 안 누르면 콤보가 끊김
   if (p.attackCooldown === 0) p.comboIdle = (p.comboIdle ?? 0) + 1;

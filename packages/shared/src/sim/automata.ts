@@ -61,12 +61,12 @@ function aim(s: RunState, x: number, y: number, range: number): [number, number]
 }
 
 /** 등 뒤에서 유도 미사일: 기본 능력(확률·수) 또는 무기의 미사일 값 (탄약 증설이면 확률·수 +) */
-function missiles(s: RunState, spec: { chance: number; n: number }, from?: { x: number; y: number }, salt = 0): void {
+function missiles(s: RunState, spec: { chance: number; n: number }, from?: { x: number; y: number }, salt = 0, mul = A.missileMul): void {
   const p = s.player;
   const salvo = hasPerk(p, "adSalvo");
   if (roll(s, "missile", salt) >= spec.chance + (salvo ? K.adSalvo.chance : 0)) return;
   const n = spec.n + Math.floor(roll(s, "mn", salt) * (A.missileExtra + 1)) + (salvo ? K.adSalvo.n : 0);
-  backMissiles(s, n, p.stats.damage * A.missileMul, A.missileBlast * (hasPerk(p, "adWarhead") ? K.adWarhead.r : 1), false, from);
+  backMissiles(s, n, p.stats.damage * mul, A.missileBlast * (hasPerk(p, "adWarhead") ? K.adWarhead.r : 1), false, from);
 }
 
 /** 한 번 쏘기: 레이저(여러 갈래) · 갈라짐 · 묶음 · 궤도 포격 · 미사일 */
@@ -183,7 +183,7 @@ function dolls(s: RunState): void {
     const dl = Math.hypot(e.x - d.x, e.y - d.y) || 1;
     beam(s, d.x, d.y - 4, (e.x - d.x) / dl, (e.y - d.y) / dl, A.dollRange, 2, p.stats.damage * A.dollMul, DOLL_TINTS[i % DOLL_TINTS.length]);
     // 분신도 확률로 등 뒤에서 유도 미사일
-    missiles(s, { ...A.baseMissiles, chance: A.dollMissile }, d, i + 1);
+    missiles(s, { ...A.baseMissiles, chance: A.dollMissile }, d, i + 1, A.dollMissileMul);
   });
   p.adDolls = list;
 }

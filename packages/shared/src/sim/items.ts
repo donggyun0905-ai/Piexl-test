@@ -25,7 +25,7 @@ import { imugiMods } from "./imugiMods";
 import { apostleMods, apostlePotion } from "./apostle";
 import { mukinPotion } from "./mukin";
 import { swarmMods } from "./swarmMods";
-import { goldLocked, oniConvert } from "./oniRules";
+import { goldLocked, noUseItems, oniConvert } from "./oniRules";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -154,6 +154,7 @@ export function updateItems(s: RunState, input: TickInput): void {
       continue;
     }
     if (!pk.armed || !room.pickups.includes(pk)) continue;
+    if (pk.kind === "use" && noUseItems(p)) continue;
     if (pk.price > 0) {
       // 상점 물건: 서 있기로는 사지 않고 F·버튼으로만 (금봉을 든 오니는 상점을 못 씀)
       if (s.prompt.kind !== "none" || goldLocked(p)) continue;

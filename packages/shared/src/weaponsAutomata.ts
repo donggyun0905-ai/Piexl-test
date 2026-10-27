@@ -48,13 +48,13 @@ export const AUTOMATA_WEAPONS = {
 export const AUTOMATA = {
   /** 자매 인형: 쏘는 사이 틱 · 피해 배율 · 사거리 · 돌아다니는 거리 · 나에게서 멀어질 수 있는 거리 · 빠르기 */
   dollEvery: 45,
-  dollMul: 0.45,
+  dollMul: 0.5,
   dollRange: 120,
   dollGap: 30,
   dollLeash: 150,
   dollSpeed: 1.6,
   /** 미사일: 한 발 피해 배율 · 폭발 반경 · 빠르기 · 날아가는 틱 · 확률로 더 나오는 수(0~이만큼) */
-  missileMul: 0.2,
+  missileMul: 0.1,
   missileBlast: 14,
   missileSpeed: 2.4,
   missileTicks: 110,
@@ -63,6 +63,8 @@ export const AUTOMATA = {
   baseMissiles: { chance: 0.5, n: 7 },
   /** 자매 인형(분신)이 쏠 때 유도 미사일이 나올 확률 */
   dollMissile: 0.35,
+  /** 자매 인형이 쏜 미사일 피해 배율 (본체 미사일보다 약하게) */
+  dollMissileMul: 0.05,
   /** 붉은 레이저 치명타 배율 */
   critMul: 2,
   /** 리펄서 소드: 두 번째 베기까지 틱 · 부채꼴 (cos) · 밀어내기 */

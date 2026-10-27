@@ -175,9 +175,9 @@ export function eaterTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
   if (p.s2Rush) rushTick(s, (e) => eaterOnHit(s, e));
   drainQueue(s);
-  // 재생력: 10초마다 그만큼 (1초에 1/10씩)
+  // 재생력: 다른 캐릭터보다 빠르게 0.5초마다 1/10씩 (5초에 그만큼)
   const regen = eaterRegen(p);
-  if (regen > 0 && s.tick % TICK_RATE === 0 && p.hp > 0 && p.hp < p.stats.maxHp) healPlayer(s, regen / 10);
+  if (regen > 0 && s.tick % (TICK_RATE / 2) === 0 && p.hp > 0 && p.hp < p.stats.maxHp) healPlayer(s, regen / 10);
   if (!want || p.attackCooldown > 0 || p.s2Rush) return;
   const frenzy = hasPerk(p, "eaFrenzy") ? Math.min(K.eaFrenzy.max, Math.floor((p.eaEaten ?? 0) / K.eaFrenzy.per) * K.eaFrenzy.speed) : 0;
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / (speed * (1 + frenzy))));

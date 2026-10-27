@@ -61,12 +61,12 @@ describe("이터", () => {
     expect(eaterRegen(s.player)).toBe(150);
   });
 
-  it("재생력만큼 10초에 회복", () => {
+  it("재생력만큼 5초에 회복 (0.5초마다)", () => {
     const s = ea();
     s.enemies = [];
     s.player.eaEaten = 100;
     s.player.hp = 50;
-    for (let i = 0; i < 600; i++) stepSim(s, { ...FIRE, attack: false });
+    for (let i = 0; i < 300; i++) stepSim(s, { ...FIRE, attack: false });
     expect(s.player.hp).toBeCloseTo(60, 0);
   });
 });

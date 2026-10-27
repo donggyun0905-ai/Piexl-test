@@ -20,7 +20,7 @@ export const GUIDE_KO_T2: Guide = {
     "테라코어 · 아티팩터 · 두 팔에 푸른빛 문신이 가득한 제작자 · 체력 100 · 행운 1",
     "무기는 리펄스 총 하나: 푸른 반발탄이 맞은 자리를 터뜨리며 둘레 적을 밀어냄",
     "쓰러뜨린 적 20마다 오른쪽 옆 제작 게이지가 차서 아이템 하나를 직접 만들어 바로 가짐",
-    "만드는 아이템은 보통 아이템이지만, 12% 확률로 제작으로만 나오는 숨겨진 아이템 5개(불사의 문신·과부하 문양·수호 골렘 문신·특이점·무한 회로) 중 하나",
+    "만드는 아이템은 보통 아이템이지만, 5% 확률로 제작으로만 나오는 숨겨진 아이템 5개(불사의 문신·과부하 문양·수호 골렘 문신·특이점·무한 회로) 중 하나",
   ],
   automata: [
     "테라코어 · 오토마타 · 처음으로 자아를 가진 기계 인형 · 체력 100",
@@ -31,8 +31,8 @@ export const GUIDE_KO_T2: Guide = {
   rider: [
     "테라코어 · 라이더 · 오토바이를 탄 폭주족 · 체력 110 · 아주 빠름",
     "빠를수록 피해가 커짐: 지금 달리는 빠르기와 이동 속도 능력치만큼 모든 공격이 강해짐",
-    "달린 거리와 공격만큼 오른쪽 옆 게이지가 차고 (공격할 때마다 이동 속도도 쌓여 빨라짐, 최대 +40%), 가득 차면 둘레를 크게 터뜨리는 펄스 (공격력 300%, 밀어냄)",
-    "기계 망치 · 펄스건 · 암살 단검(더 빠름, 대시로 목 베기) · 레일건 · 산탄 펄스 · 화염 배기(푸른 불, 불꽃 스택 x1~x5) · 톱날 휠 · 전기 랜스 · 체인 · 니트로 부스터(앞으로 내달려 들이받음)",
+    "달린 거리와 공격만큼 오른쪽 옆 게이지가 차고 (공격할 때마다 이동 속도도 쌓여 빨라짐, 최대 +40%), 가득 차면 둘레를 크게 터뜨리는 펄스 (공격력 300%, 밀어냄) · 오토바이라 위험해서 받는 피해 +20%",
+    "기계 망치 · 펄스건 · 암살 단검(더 빠름, 대시로 목 베기, 빠르기 피해는 최대 +40%) · 레일건 · 산탄 펄스 · 화염 배기(푸른 불, 불꽃 스택 x1~x5) · 톱날 휠 · 전기 랜스 · 체인 · 니트로 부스터(앞으로 내달려 들이받음)",
   ],
 };
 
@@ -53,7 +53,7 @@ export const GUIDE_EN_T2: Guide = {
     "Terracore · Artifacter · a maker whose arms are covered in glowing blue tattoos · 100 HP · Luck 1",
     "One weapon, the Repulsor Gun: blue repulsor shots burst on impact and push nearby foes away",
     "Every 20 foes defeated fill the craft gauge on his right, and he crafts an item and takes it at once",
-    "Crafted items are usually ordinary, but 12% of the time it's one of 5 hidden items only crafting can make (Undying Tattoo, Overdrive Glyph, Golem Ward Tattoo, Singularity, Infinity Circuit)",
+    "Crafted items are usually ordinary, but 5% of the time it's one of 5 hidden items only crafting can make (Undying Tattoo, Overdrive Glyph, Golem Ward Tattoo, Singularity, Infinity Circuit)",
   ],
   automata: [
     "Terracore · Automata · the first mechanical doll to gain a self · 100 HP",
@@ -64,8 +64,8 @@ export const GUIDE_EN_T2: Guide = {
   rider: [
     "Terracore · Rider · a biker on a motorcycle · 110 HP · very fast",
     "Faster means harder hits: every attack scales with how fast he is driving and his move speed stat",
-    "Distance driven and attacks fill the gauge on his right (each attack also stacks move speed, up to +40%); when full it bursts into a wide pulse (300% damage, knockback)",
-    "Mech Hammer · Pulse Gun · Assassin's Dagger (faster, dash throat-slash) · Railgun · Scatter Pulse · Flame Exhaust (blue fire, flame stacks x1–x5) · Saw Wheel · Shock Lance · Chain · Nitro Booster (boost forward and ram)",
+    "Distance driven and attacks fill the gauge on his right (each attack also stacks move speed, up to +40%); when full it bursts into a wide pulse (300% damage, knockback) · riding is risky: +20% damage taken",
+    "Mech Hammer · Pulse Gun · Assassin's Dagger (faster, dash throat-slash, speed bonus up to +40%) · Railgun · Scatter Pulse · Flame Exhaust (blue fire, flame stacks x1–x5) · Saw Wheel · Shock Lance · Chain · Nitro Booster (boost forward and ram)",
   ],
 };
 
@@ -86,7 +86,7 @@ export const GUIDE_JA_T2: Guide = {
     "テラコア · アーティファクター · 両腕に青く光る刺青が満ちた製作者 · 体力100 · 幸運1",
     "武器はリパルスガン一つ：青い反発弾が当たった所で弾け、周りの敵を押し返す",
     "敵を20体倒すごとに右横の製作ゲージが溜まり、アイテムを1つ自ら作ってすぐ手に入れる",
-    "作るアイテムは普通のアイテムだが、12%で製作でしか出ない隠しアイテム5つ（不死の刺青・過負荷紋様・守護ゴーレムの刺青・特異点・無限回路）のうち一つ",
+    "作るアイテムは普通のアイテムだが、5%で製作でしか出ない隠しアイテム5つ（不死の刺青・過負荷紋様・守護ゴーレムの刺青・特異点・無限回路）のうち一つ",
   ],
   automata: [
     "テラコア · オートマタ · 初めて自我を持った機械人形 · 体力100",
@@ -97,7 +97,7 @@ export const GUIDE_JA_T2: Guide = {
   rider: [
     "テラコア · ライダー · バイクに乗った暴走族 · 体力110 · とても速い",
     "速いほどダメージが上がる：今の走る速さと移動速度の能力値ですべての攻撃が強くなる",
-    "走った距離と攻撃で右横のゲージが溜まり（攻撃するたびに移動速度も上がる、最大+40%）、満タンで周囲に大きなパルス（攻撃力300%、押し返す）",
-    "機械ハンマー · パルスガン · 暗殺ダガー（より速い、ダッシュで喉斬り）· レールガン · 散弾パルス · 火炎排気（青い炎、炎スタックx1〜x5）· ノコギリホイール · 電撃ランス · チェーン · ニトロブースター（前へ突っ込んで体当たり）",
+    "走った距離と攻撃で右横のゲージが溜まり（攻撃するたびに移動速度も上がる、最大+40%）、満タンで周囲に大きなパルス（攻撃力300%、押し返す）· バイクは危険なので被ダメージ+20%",
+    "機械ハンマー · パルスガン · 暗殺ダガー（より速い、ダッシュで喉斬り、速さボーナス最大+40%）· レールガン · 散弾パルス · 火炎排気（青い炎、炎スタックx1〜x5）· ノコギリホイール · 電撃ランス · チェーン · ニトロブースター（前へ突っ込んで体当たり）",
   ],
 };

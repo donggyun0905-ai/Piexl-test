@@ -17,6 +17,8 @@ const R = {
   LEAP_WAIT: 120,
   LEAP_SPEED: 2.6,
   LEAP_TICKS: 16,
+  /** 활잡이 화살 피해 배율 (보스 탄 기본 피해에 곱함, 어렵다는 의견으로 낮춤) */
+  ARROW_MUL: 0.6,
 };
 export { R as BOSSES_ONE_RULES };
 
@@ -107,7 +109,10 @@ export function updateArcher(s: RunState, e: EnemyState, toP: Vec, go: Vec): voi
   }
   if (e.timer > 0) return;
   e.count++;
+  const from = s.projectiles.length;
   if (e.count % 3 === 0) ring(s, e, h ? 1 : 2, e.count, 1.5, { look: "arrow", bounces: 1 });
   else fan(s, e, toP, h ? [-2, -1, 0, 1, 2] : [-1, 0, 1], 2.2, { look: "arrow", bounces: h ? 2 : 1 });
+  // 방금 쏜 화살은 약하게
+  for (const pr of s.projectiles.slice(from)) pr.damage = Math.max(1, Math.round(pr.damage * R.ARROW_MUL));
   e.timer = h ? 55 : 75;
 }

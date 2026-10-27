@@ -48,19 +48,23 @@ export const RIDER = {
   speedMul: 0.35,
   statMul: 0.25,
   /** 게이지: 이만큼 달리면 가득 → 둘레 펄스 (반경 · 공격력 배율 · 밀침) */
-  gaugeMax: 700,
+  gaugeMax: 1000,
   pulseR: 80,
   pulseMul: 3,
   pulsePush: 14,
   /** 공격 한 번마다 게이지 + · 공격할 때마다 빨라짐(쌓이는 수 · 하나마다 이동 속도 · 공격이 없으면 이 틱 뒤 사라짐) */
-  hitGauge: 30,
+  hitGauge: 20,
   heatMax: 10,
   heatSpeed: 0.04,
   heatTicks: 90,
   /** 단검 대시 목 베기: 닿는 거리 · 피해 배율 · 최대 적 수 */
   cutReach: 60,
-  cutMul: 2.2,
+  cutMul: 1.6,
   cutN: 3,
+  /** 암살 단검: 빠를수록 붙는 피해는 최대 +이만큼 (빠른 이동·대시 거리로 끝없이 커지지 않게) */
+  daggerSpeedCap: 0.4,
+  /** 오토바이는 위험함: 받는 피해 배율 */
+  taken: 1.2,
   /** 불꽃 자국: 남는 틱 · 반경 · 0.5초마다 공격력 배율 */
   fireTicks: 90,
   fireR: 10,

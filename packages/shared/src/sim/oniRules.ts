@@ -34,6 +34,9 @@ export function oniConvert(p: PlayerState, mods: readonly StatMod[]): StatMod[] 
 /** 받는 피해 배율 (오니는 30% 더 받음) */
 export const oniTaken = (p: PlayerState) => (p.characterId === "oni" ? ONI.taken : 1);
 
+/** 오니는 사용 아이템(회복약·방패·폭탄 등)을 줍거나 살 수 없음 (패시브는 됨) */
+export const noUseItems = (p: PlayerState) => p.characterId === "oni";
+
 /** 금봉을 들었으면: 상점 못 씀 · 다른 무기 못 잡음 · 황금방 보너스 */
 export const goldLocked = (p: PlayerState) => p.characterId === "oni" && p.weaponId === "goldClub";
 

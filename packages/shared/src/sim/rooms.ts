@@ -100,6 +100,9 @@ function enterRoom(s: RunState, roomId: number): void {
   eachSeat(s, () => {
     s.roomDamaged = false;
     if (s.devices) s.devices = [];
+    // 바닥에 남는 사멸 독연기·라이더 불꽃 자국은 방을 옮기면 사라짐
+    delete s.player.smGas;
+    delete s.player.rdFire;
     // 금기: 피의 통행료 (방에 들어갈 때마다 체력, 1 아래로는 안 내려감)
     if (tabooN(s, "bloodToll") > 0) s.player.hp = Math.max(1, s.player.hp - tabooSum(s, "bloodToll"));
     // 마력 방패: 방에 들어갈 때마다 2초 동안 피해 없음

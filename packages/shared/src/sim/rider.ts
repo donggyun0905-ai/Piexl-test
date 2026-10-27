@@ -17,7 +17,8 @@ const moved = (p: PlayerState) => Math.hypot(p.x - p.prevX, p.y - p.prevY);
 export function riderSpeedMul(p: PlayerState): number {
   if (p.characterId !== "rider") return 1;
   const gear = hasPerk(p, "rdGear") ? K.rdGear.mul : 1;
-  return 1 + (moved(p) * R.speedMul + Math.max(0, p.stats.moveSpeed - 1) * R.statMul) * gear;
+  const bonus = (moved(p) * R.speedMul + Math.max(0, p.stats.moveSpeed - 1) * R.statMul) * gear;
+  return 1 + (styleOf(p).cut ? Math.min(R.daggerSpeedCap * gear, bonus) : bonus);
 }
 
 /** 이동 속도 배율: 단검은 훨씬 빠름 · 공격할 때마다 쌓이는 빠르기 */
@@ -29,8 +30,11 @@ export function riderMoveMul(p: PlayerState): number {
 /** 쌓인 빠르기 0~1 (화면용) */
 export const riderHeat = (p: PlayerState) => Math.min(1, (p.rdHeat ?? 0) / R.heatMax);
 
-/** 슬립스트림: 달리는 동안 받는 피해 (classTaken) */
-export const riderTaken = (p: PlayerState) => (p.characterId === "rider" && hasPerk(p, "rdSlip") && moved(p) > 0.3 ? K.rdSlip.taken : 1);
+/** 받는 피해 (classTaken): 오토바이라 늘 더 받음 · 슬립스트림은 달리는 동안 */
+export function riderTaken(p: PlayerState): number {
+  if (p.characterId !== "rider") return 1;
+  return R.taken * (hasPerk(p, "rdSlip") && moved(p) > 0.3 ? K.rdSlip.taken : 1);
+}
 
 /** 펄스: 둘레를 크게 터뜨림 (mul: 피해 배율) */
 function pulse(s: RunState, mul: number): void {
