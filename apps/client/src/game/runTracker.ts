@@ -108,10 +108,10 @@ export function createRunTracker(solo: boolean, seedText: string, run: RunState,
       if (solo && !run.arenaLv) recordMedal(run, summary);
       // 무한·아레나·영웅의 길 기록 훈장
       if (solo) recordModeMedal(run, summary);
-      // 6층을 처음 깼으면 걸린 시간을 서버로 (관리자 화면에서 캐릭터별 평균). 규칙이 다른 판은 빼고, 한 판에 한 번
-      if (solo && run.won && !clearSent && !run.lastBoss && !run.endless && !run.hero && !run.arenaLv && !run.taboo && !run.randomKit && !run.sudden) {
+      // 6층을 처음 깼으면(영웅의 길은 끝까지 깼으면, 따로) 걸린 시간을 서버로 (관리자 화면에서 캐릭터별 평균). 규칙이 다른 판은 빼고, 한 판에 한 번
+      if (solo && run.won && !clearSent && !run.lastBoss && !run.endless && !run.arenaLv && !run.taboo && !run.randomKit && !run.sudden) {
         clearSent = true;
-        void apiPost("/api/stats/clear", { player: getPlayerId(), character: run.player.characterId, ticks: run.tick });
+        void apiPost("/api/stats/clear", { player: getPlayerId(), character: run.player.characterId, ticks: run.tick, ...(run.hero ? { mode: "hero" } : {}) });
       }
       return { won: run.won, floor: run.floor, kills: run.kills, ticks: run.tick, score, newBest, achievements: [...earned], arenaLevel, summary };
     },

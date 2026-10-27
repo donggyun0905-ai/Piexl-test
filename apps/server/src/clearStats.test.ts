@@ -21,5 +21,10 @@ describe("캐릭터별 클리어 시간", () => {
       { character: "warden", count: 2, total: 30 * min, best: 10 * min },
       { character: "duck", count: 1, total: 15 * min, best: 15 * min },
     ]);
+    // 영웅의 길은 따로 (hero:캐릭터)
+    t += 3 * 60_000;
+    expect((await call(ctx, "/api/stats/clear", { player: p1, character: "warden", ticks: 200 * min, mode: "hero" })).body.ok).toBe(true);
+    expect(clearRows(ctx)).toContainEqual({ character: "hero:warden", count: 1, total: 200 * min, best: 200 * min });
+    expect((await call(ctx, "/api/stats/clear", { player: p2, character: "warden", ticks: 20 * min, mode: "x" })).body.error).toBe("bad_request");
   });
 });

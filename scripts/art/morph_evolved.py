@@ -1,5 +1,5 @@
 # 변희 각성 동물 열 마리 (python3 scripts/art/morph_evolved.py) → apps/client/public/sprites/morph-{동물}-evo.png
-# 기본 동물(morph_animals)을 1.5배 큰 48칸에 그리고, 동물마다 각성한 빛깔로 바꾼 뒤 배·가슴 쪽에 동물마다 상징 색 갑옷 판(금 테 + 원소 보석)을 입히고
+# 기본 동물(morph_animals)을 1.5배 큰 48칸에 그리고, 동물마다 각성한 빛깔로 바꾼 뒤 겹친 금속 가슴판·어깨 보호대(동물마다 상징 빛의 보석)·번쩍이는 기운을 입히고
 # 둘레에 빛나는 테두리를 두름
 # 하이울프 · 폭군 곰 · 폭풍 독수리 · 바실리스크 · 철갑 멧돼지 왕 · 사막의 제왕 · 흡혈 박쥐왕 · 매머드 왕 · 여왕 거미 · 태양 불사조
 from s2_common import Cell, hx, save_sheet
@@ -52,49 +52,72 @@ def glow(c, color):
             if q not in c.p and 0 <= q[0] < S and 0 <= q[1] < S: add[q] = (g[0], g[1], g[2], 150)
     c.p.update(add)
 
-GOLD, GOLD_D = H("#ffd040"), H("#a87818")
+# 갑옷 금속 (밝은 면 · 가운데 · 그늘 · 테두리)
+MET_L, MET, MET_D, MET_E = H("#eef2fa"), H("#a8b2c8"), H("#5a6480"), H("#2a3044")
 
-# 동물마다 갑옷 상징 색: 밝은 면 · 바탕 · 이음새(그늘)
+# 동물마다 상징 빛 (보석·기운): 진한 색 · 밝은 색
 PLATE = {
-    "wolf": ("#bfe8ff", "#3a8ad8", "#1a3a7a"),
-    "bear": ("#ff8a6a", "#c82a2a", "#5a0a0a"),
-    "eagle": ("#e0f0ff", "#4a6ac8", "#1a2a6a"),
-    "snake": ("#e0b0ff", "#8a3ac8", "#3a0a5a"),
-    "boar": ("#ffb08a", "#b8401a", "#5a1a0a"),
-    "scorpion": ("#ff9ab0", "#a8183a", "#4a0414"),
-    "bat": ("#3a3448", "#1a1424", "#0a060e"),
-    "elephant": ("#c8b0ff", "#5a3ab0", "#24145a"),
-    "spider": ("#ffb0f0", "#c82aa8", "#5a0a48"),
-    "phoenix": ("#ffd0a0", "#e8501a", "#7a1a08"),
+    "wolf": ("#3a8ad8", "#9ae8ff"),
+    "bear": ("#c82a2a", "#ff9a6a"),
+    "eagle": ("#4a6ac8", "#c8e0ff"),
+    "snake": ("#8a3ac8", "#e0a8ff"),
+    "boar": ("#d8601a", "#ffc070"),
+    "scorpion": ("#c81a4a", "#ff9ab8"),
+    "bat": ("#a81a3a", "#ff6a8a"),
+    "elephant": ("#5a3ab0", "#c8b0ff"),
+    "spider": ("#c82aa8", "#ffa8f0"),
+    "phoenix": ("#e8501a", "#fff0a0"),
 }
 
-def armor(c, name, light):
-    """배·가슴 쪽 갑옷 판: 몸통 줄(가로로 가장 넓은 줄들) 아래쪽 네 줄을 상징 색 판으로 덮고,
-    위는 밝은 면 · 맨 아래는 금 테 · 네 칸마다 이음새 · 가운데 금 받침의 원소 보석"""
-    hi, mid, dk = (H(v) for v in PLATE[name])
+def gem(c, x, y, dark, light):
+    """빛나는 둥근 보석: 금속 테 · 진한 빛 · 밝은 빛 · 흰 가운데"""
+    for dx in range(-2, 3):
+        for dy in range(-2, 3):
+            if abs(dx) + abs(dy) <= 3: c.p[(x + dx, y + dy)] = MET_E
+    for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (1, -1), (-1, 1), (1, 1)): c.p[(x + dx, y + dy)] = dark
+    for dx, dy in ((0, 0), (-1, 0), (0, -1)): c.p[(x + dx, y + dy)] = light
+    c.p[(x - 1, y - 1)] = H("#ffffff")
+
+def armor(c, name, col):
+    """사진처럼: 몸통 앞쪽(머리 쪽)을 겹친 금속 판으로 덮는 가슴판 + 앞다리 위 둥근 어깨 보호대(보석) + 둘레에 번쩍이는 기운"""
+    dark, light = (H(v) for v in PLATE[name])
     rows = {}
     for (x, y) in c.p: rows.setdefault(y, []).append(x)
     widest = max(len(v) for v in rows.values())
-    band = [y for y, xs in rows.items() if len(xs) >= widest * 0.6]
-    bottom = max(band)
+    band = sorted(y for y, xs in rows.items() if len(xs) >= widest * 0.6)
+    top, bottom = band[0], band[-1]
     xs = sorted(rows[bottom])
-    left, right = xs[0] + 1, xs[-1] - 1
-    for y in range(bottom - 3, bottom + 1):
-        for x in range(left, right + 1):
-            if (x, y) not in c.p: continue
-            k = bottom - y
-            col = GOLD if k == 0 else hi if k == 3 else mid
-            if k in (1, 2) and (x - left) % 4 == 3: col = dk
-            if k == 0 and (x - left) % 4 == 3: col = GOLD_D
-            c.p[(x, y)] = col
-    # 가운데 보석 (금 받침)
-    gx = (left + right) // 2
-    gy = bottom - 2
-    for dx, dy in ((-1, 0), (2, 0), (0, -1), (1, -1), (0, 2), (1, 2)):
-        if (gx + dx, gy + dy) in c.p: c.p[(gx + dx, gy + dy)] = GOLD
-    g = H(light)
-    for dx, dy in ((0, 0), (1, 0), (0, 1), (1, 1)): c.p[(gx + dx, gy + dy)] = g
-    c.p[(gx, gy)] = H("#ffffff")
+    left, right = xs[0], xs[-1]
+    front = left + (right - left) * 45 // 100
+    # 가슴판: 몸통 앞쪽을 덮는 둥근 판 · V자로 겹친 판(밝은 윗줄 · 그늘 아랫줄) · 가장자리는 상징 색 테
+    cx, cy = (front + right) / 2 + 1, (top + bottom) / 2 + 1
+    rx, ry = (right - front) / 2 + 0.5, (bottom - top) / 2 + 1.5
+    inside = lambda x, y: ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1
+    for y in range(top, bottom + 2):
+        for x in range(front, right + 1):
+            if (x, y) not in c.p or not inside(x, y): continue
+            edge = not all(inside(x + dx, y + dy) and (x + dx, y + dy) in c.p for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+            k = int(y - cy + abs(x - cx) * 0.6 + 40) % 4
+            c.p[(x, y)] = dark if edge else (MET_L, MET, MET, MET_D)[k]
+    # 가운데 보석 + 둘레 은은한 빛
+    gx, gy = int(cx), int(cy)
+    for dx in range(-4, 5):
+        for dy in range(-4, 5):
+            if 9 <= dx * dx + dy * dy <= 16 and (gx + dx, gy + dy) in c.p and c.p[(gx + dx, gy + dy)] in (MET, MET_D, MET_L): c.p[(gx + dx, gy + dy)] = light[:3] + (255,) if (dx + dy) % 3 == 0 else c.p[(gx + dx, gy + dy)]
+    gem(c, gx, gy, dark, light)
+    # 어깨 보호대: 가슴판 위쪽 앞에 둥근 판 + 보석
+    sx, sy = int(cx) + 1, top - 1
+    for dx in range(-4, 5):
+        for dy in range(-3, 3):
+            if (dx / 4.5) ** 2 + (dy / 3) ** 2 <= 1: c.p[(sx + dx, sy + dy)] = MET_L if dy < -1 else MET if dy < 1 else MET_D
+    for dx in range(-3, 4): c.p[(sx + dx, sy + 2)] = dark
+    c.p[(sx - 4, sy + 1)] = dark; c.p[(sx + 4, sy + 1)] = dark
+    gem(c, sx, sy, dark, light)
+    # 번쩍이는 기운: 어깨 위로 짧은 번개 갈래 (칸마다 모양이 바뀜)
+    zig = [(0, -4), (1, -5), (0, -6), (2, -7), (1, -8)] if col % 2 == 0 else [(-1, -4), (-2, -5), (-1, -6), (-3, -7)]
+    for dx, dy in zig: c.p[(sx + dx, sy + dy)] = light
+    c.p[(sx + 5, sy - 3 - col % 2)] = light
+    c.p[(sx - 5, sy - 2 + col % 2)] = light
 
 def frame_for(name, fn):
     table, light = EVO[name]
@@ -102,7 +125,7 @@ def frame_for(name, fn):
         c = Big()
         fn(c, col, row == 3)
         recolor(c, table)
-        armor(c, name, light)
+        armor(c, name, col)
         c.outline(O)
         glow(c, light)
         return c

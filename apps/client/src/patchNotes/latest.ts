@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.130",
+    date: "2026-10-27",
+    items: {
+      ko: ["변희 각성 갑옷 새로: 둥근 금속 가슴판 · 어깨 보호대 · 동물마다 상징 빛의 보석과 번쩍이는 기운", "관리자: 영웅의 길을 끝까지 깬 시간도 캐릭터마다 따로 모음"],
+      en: ["New Byeonhui awakened armor: rounded metal chest plate · shoulder guard · gems and crackling energy in each animal's own color", "Admin: Hero's Path full-clear times are now collected per character too"],
+      ja: ["ビョンヒの覚醒の鎧を一新：丸い金属の胸当て · 肩当て · 動物ごとの象徴色の宝石とほとばしる気", "管理者：英雄の道を最後までクリアした時間もキャラごとに別で集計"],
+    },
+  },
+  {
     version: "0.48.129",
     date: "2026-10-27",
     items: {

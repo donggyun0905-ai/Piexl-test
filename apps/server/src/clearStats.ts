@@ -1,5 +1,6 @@
 // 캐릭터별 클리어 시간 모으기: 혼자 하기에서 6층을 처음 깨면 화면이 걸린 시간(틱)을 보냄 → 캐릭터마다 횟수·합계·가장 빠른 시간만 저장 (한 줄 갱신)
-// 관리자 화면에서 평균(합계 ÷ 횟수)을 봄. 금기·무작위 시작 장비·무한·영웅의 길·아레나·서든데스 판은 화면에서 보내지 않음
+// 관리자 화면에서 평균(합계 ÷ 횟수)을 봄. 영웅의 길은 끝까지 깬 시간을 따로 (character 칸에 "hero:캐릭터")
+// 금기·무작위 시작 장비·무한·아레나·서든데스 판은 화면에서 보내지 않음
 import { ALL_CHARACTER_IDS, isPlayerId, TICK_RATE, type CharacterId } from "@pixel-rogue/shared";
 import type { HubContext } from "./hub";
 import { fail, json, readJson } from "./http";
@@ -11,6 +12,10 @@ export const CLEAR_SCHEMA = [
 /** 말이 안 되는 시간은 받지 않음 (3분 ~ 3시간) */
 const MIN_TICKS = TICK_RATE * 60 * 3;
 const MAX_TICKS = TICK_RATE * 60 * 180;
+/** 영웅의 길은 13단계라 더 길게 (6시간까지) */
+const HERO_MAX_TICKS = TICK_RATE * 60 * 360;
+/** 기록 칸 이름: 영웅의 길은 앞에 hero: */
+export const HERO_PREFIX = "hero:";
 /** 한 사람이 너무 자주 보내지 못하게 (2분에 한 번) */
 const GAP_MS = 2 * 60_000;
 
@@ -23,11 +28,13 @@ export interface ClearRow {
 
 export async function handleClear(ctx: HubContext, request: Request): Promise<Response> {
   if (request.method !== "POST") return fail("not_found", 404);
-  const body = await readJson<{ player?: unknown; character?: unknown; ticks?: unknown }>(request, 1024);
+  const body = await readJson<{ player?: unknown; character?: unknown; ticks?: unknown; mode?: unknown }>(request, 1024);
   const player = body?.player;
   const character = body?.character;
   const ticks = Number(body?.ticks);
-  if (!isPlayerId(player) || !ALL_CHARACTER_IDS.includes(character as CharacterId) || !Number.isInteger(ticks) || ticks < MIN_TICKS || ticks > MAX_TICKS) return fail("bad_request");
+  const hero = body?.mode === "hero";
+  if (body?.mode !== undefined && !hero) return fail("bad_request");
+  if (!isPlayerId(player) || !ALL_CHARACTER_IDS.includes(character as CharacterId) || !Number.isInteger(ticks) || ticks < MIN_TICKS || ticks > (hero ? HERO_MAX_TICKS : MAX_TICKS)) return fail("bad_request");
   const key = `clear:${player}`;
   const now = ctx.now();
   const last = ctx.limits.get(key);
@@ -37,7 +44,7 @@ export async function handleClear(ctx: HubContext, request: Request): Promise<Re
   ctx.sql.exec(
     `INSERT INTO clears (character, count, total, best) VALUES (?, 1, ?, ?)
      ON CONFLICT(character) DO UPDATE SET count = count + 1, total = total + excluded.total, best = MIN(best, excluded.best)`,
-    character as string,
+    (hero ? HERO_PREFIX : "") + (character as string),
     ticks,
     ticks,
   );
