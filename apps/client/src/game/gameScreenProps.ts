@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import type { Lang, TextKey } from "../i18n";
 import type { DrawOverlay } from "./render";
 
-export type GameMode = "solo" | "daily" | "battle" | "practice" | "tutorial" | "coop" | "swarm";
+export type GameMode = "solo" | "daily" | "battle" | "practice" | "tutorial" | "coop" | "swarm" | "paewang";
 
 export interface GameScreenProps {
   mode: GameMode;

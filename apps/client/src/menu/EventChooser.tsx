@@ -8,10 +8,11 @@ import { Choice } from "./SoloChooser";
 interface Props {
   t: (key: TextKey) => string;
   onSwarm: () => void;
+  onPaewang: () => void;
   onClose: () => void;
 }
 
-export function EventChooser({ t, onSwarm, onClose }: Props) {
+export function EventChooser({ t, onSwarm, onPaewang, onClose }: Props) {
   const closeRef = useRef<HTMLButtonElement>(null);
   useEffect(() => closeRef.current?.focus(), []);
   const best = loadSwarmBest();
@@ -26,6 +27,7 @@ export function EventChooser({ t, onSwarm, onClose }: Props) {
             desc={best ? `${t("swarmDesc")} · ${t("swarmBest").replace("{time}", formatTime(best.ticks)).replace("{lv}", String(best.lv))}` : t("swarmDesc")}
             onClick={onSwarm}
           />
+          <Choice icon="crown" title={t("paewang")} desc={t("paewangDesc")} onClick={onPaewang} />
         </div>
         <button ref={closeRef} type="button" className="ghost" onClick={onClose}>
           {t("close")}

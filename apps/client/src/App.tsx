@@ -20,6 +20,7 @@ import { TdScreen } from "./td/TdScreen";
 import { ShopScreen } from "./shop/ShopScreen";
 import { SwarmGame } from "./event/SwarmGame";
 import { SwarmMaps } from "./event/SwarmMaps";
+import { PwFlow } from "./event/PwFlow";
 import { StoryScreen } from "./story/StoryScreen";
 
 type Screen =
@@ -33,6 +34,7 @@ type Screen =
   | { name: "shop" }
   | { name: "story" }
   | { name: "swarmSelect" }
+  | { name: "paewang" }
   | { name: "swarmMap"; characterId: CharacterId }
   | { name: "swarm"; characterId: CharacterId; map: SwarmMapId; level: number; runKey: number }
   | { name: "td"; mapId: TdMapId; runKey: number }
@@ -154,13 +156,9 @@ export function App() {
       />
     );
   }
-  if (screen.name === "swarmSelect") {
-    return <CharacterSelect t={lang.t} showSeed={false} onBack={toTitle} onSelect={(characterId) => setScreen({ name: "swarmMap", characterId })} />;
-  }
-  if (screen.name === "swarmMap") {
-    const { characterId } = screen;
-    return <SwarmMaps t={lang.t} onPick={(map, level) => setScreen({ name: "swarm", characterId, map, level, runKey: 0 })} onBack={() => setScreen({ name: "swarmSelect" })} />;
-  }
+  if (screen.name === "swarmSelect") return <CharacterSelect t={lang.t} showSeed={false} onBack={toTitle} onSelect={(characterId) => setScreen({ name: "swarmMap", characterId })} />;
+  if (screen.name === "swarmMap") return <SwarmMaps t={lang.t} onPick={(map, level) => setScreen({ name: "swarm", characterId: screen.characterId, map, level, runKey: 0 })} onBack={() => setScreen({ name: "swarmSelect" })} />;
+  if (screen.name === "paewang") return <PwFlow lang={lang.lang} t={lang.t} onExit={toTitle} />;
   if (screen.name === "swarm") {
     const retry = () => setScreen({ ...screen, runKey: screen.runKey + 1 });
     const exit = () => setScreen({ name: "swarmMap", characterId: screen.characterId });
@@ -286,6 +284,7 @@ export function App() {
       onShop={() => setScreen({ name: "shop" })}
       onStory={() => setScreen({ name: "story" })}
       onSwarm={() => setScreen({ name: "swarmSelect" })}
+      onPaewang={() => setScreen({ name: "paewang" })}
       onProfile={() => setScreen({ name: "profile", back: "title" })}
       onContinue={() => {
         const saved = loadSavedRun();

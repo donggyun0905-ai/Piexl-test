@@ -11,7 +11,7 @@ export type LastBossKind = "dragon" | "godeater" | "plight" | "pdark";
 /** 고를 수 있는 라스트 보스 (태초의 빛을 고르면 태초의 어둠도 같이 나옴) */
 export const LAST_BOSSES: readonly LastBossKind[] = ["dragon", "godeater", "plight"];
 /** 연습장 전용: 움직이지도 공격하지도 않는 허수아비 */
-export type EnemyKind = MinionKind | BossKind | "dummy";
+export type EnemyKind = MinionKind | BossKind | "dummy" | "fighter";
 
 export interface EnemyDef {
   kind: EnemyKind;
@@ -31,6 +31,8 @@ export interface EnemyDef {
 
 export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   dummy: { kind: "dummy", hp: 99999, radius: 8, speed: 0, contactDamage: 0, gold: 0 },
+  /** 패왕전 AI 캐릭터: 체력·공격은 캐릭터마다 (sim/paewangAi). 처형·즉사 효과를 받지 않게 보스로 침 */
+  fighter: { kind: "fighter", hp: 100, radius: 6, speed: 0, contactDamage: 0, gold: 0, boss: true },
   /** 다가와서 몸으로 부딪힘 */
   crawler: { kind: "crawler", hp: 30, radius: 5, speed: 0.55, contactDamage: 10, gold: 1 },
   /** 거리를 두고 탄을 쏨 */

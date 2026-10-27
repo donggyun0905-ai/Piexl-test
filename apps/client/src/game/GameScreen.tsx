@@ -30,7 +30,7 @@ export type { GameMode } from "./gameScreenProps";
 export function GameScreen(props: GameScreenProps) {
   const { mode, characterId, seedText, sudden = false, endless = false, arena = false, hero = false, lang, t, onExit } = props;
   const sandbox = mode === "practice" || mode === "tutorial";
-  const canPause = mode === "solo" || mode === "swarm" || sandbox;
+  const canPause = mode === "solo" || mode === "swarm" || mode === "paewang" || sandbox;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const zoneRef = useRef<HTMLDivElement>(null);
@@ -247,7 +247,7 @@ export function GameScreen(props: GameScreenProps) {
           style={{ width: VIEW_WIDTH * scale, height: VIEW_HEIGHT * scale }}
         />
         {stats && <StatsPanel rows={stats} character={characterId} lang={lang} t={t} />}
-        {mode !== "practice" && mode !== "swarm" && (
+        {mode !== "practice" && mode !== "swarm" && mode !== "paewang" && (
           <canvas ref={miniRef} className="minimap" width={MINIMAP_WIDTH} height={MINIMAP_HEIGHT} aria-label={t("minimap")} />
         )}
         {prompt.text && (!touchMode || !prompt.interact) && (

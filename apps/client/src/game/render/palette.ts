@@ -75,6 +75,7 @@ export const C = {
   shotMagic: "#d9a6ff",
   playerEdge: "#1a1622",
   dummy: "#c8a060",
+  fighter: "#e0a040",
   mortar: "#d8884a",
   gnat: "#b8c060",
   guardian: "#7a8ab0",

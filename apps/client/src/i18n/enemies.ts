@@ -14,6 +14,7 @@ export const BOSS_TEXT: Record<string, string> = {
 /** 보스가 아닌 적 이름 */
 const NAMES: Record<string, Names> = {
   dummy: n("허수아비", "Scarecrow", "かかし"),
+  fighter: n("패왕전 도전자", "Champion Rival", "覇王戦の挑戦者"),
   crawler: n("기어 오는 벌레", "Crawler", "這い寄る虫"),
   spitter: n("침 뱉는 벌레", "Spitter", "唾吐き虫"),
   mortar: n("포격 버섯", "Mortar Shroom", "砲撃キノコ"),
@@ -40,6 +41,7 @@ const NAMES: Record<string, Names> = {
 /** 한 줄 설명 */
 const DESC: Record<string, Names> = {
   dummy: n("연습장에서 마음껏 때려 보는 허수아비", "A scarecrow to hit freely in practice", "練習場で思いきり叩けるかかし"),
+  fighter: n("패왕전에서 겨루는 AI 캐릭터", "An AI character you face in the Champion Clash", "覇王戦で戦うAIキャラクター"),
   crawler: n("다가와서 몸으로 부딪힘", "Crawls close and rams you", "近づいて体当たりする"),
   spitter: n("거리를 두고 탄을 쏨", "Keeps its distance and shoots", "距離を取って弾を撃つ"),
   mortar: n("내 자리에 붉은 표시를 남기고 잠시 뒤 터뜨림", "Marks your spot in red, then it explodes", "足元に赤い印を残し、少し後に爆発させる"),

@@ -1,6 +1,7 @@
 // 적·플레이어 그리기: 공격 예고선 · 적(체력 줄·자동 조준 표시) · 플레이어(대시 잔상·방향·맞는 범위·보호막)
 import { allPlayers, DASH_TICKS, ENEMIES, isAlive, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
 import { drawCrate } from "./swarm";
+import { drawFighter } from "./paewang";
 import { drawAimMark, drawHitRing } from "../aimMark";
 import { drawCharacter, drawEnemySprite, drawSprite, isCasting, sheetFor, type CharacterPose } from "../sprites";
 import { C, CHARM_INK, lerp, type Snap } from "./palette";
@@ -67,6 +68,10 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
     const size = e.r * 2;
     if (e.svBox) {
       drawCrate(ctx, x, y, e);
+      continue;
+    }
+    if (e.pw) {
+      drawFighter(ctx, s, e, alpha, snap);
       continue;
     }
     // 하늘로 날아오른 보스: 그림자만
@@ -138,6 +143,8 @@ function drawDown(ctx: CanvasRenderingContext2D, p: PlayerState, snap: Snap): vo
 export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap, showHitbox: boolean, hideBody = false): void {
   const p = s.player;
   if (s.party && !isAlive(p)) return drawDown(ctx, p, snap);
+  // 패왕전에서 쓰러져 내 편을 지켜보는 중
+  if (s.pw?.down) return;
   const px = lerp(p.prevX, p.x, alpha);
   const py = lerp(p.prevY, p.y, alpha);
   // 잔영 그림자: 깜빡이지 않고 어두운 반투명 몸

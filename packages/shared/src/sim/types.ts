@@ -26,6 +26,7 @@ export type { EffectKind, EffectState, Hazard, PendingBlast } from "./fxTypes";
 import type { EffectState, Hazard, PendingBlast } from "./fxTypes";
 export * from "./inputTypes";
 import type { SwarmEnemyState, SwarmPlayerState, SwarmRunState } from "./swarmTypes";
+import type { PwEnemyState, PwRunState, PwShotState } from "./paewangTypes";
 export interface Body {
   x: number;
   y: number;
@@ -81,7 +82,7 @@ export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, B
 /** 적 행동 단계. 보스는 volley(탄 쏘기)·summon(부르기)·blink(순간이동), 가디언은 swing(휘두르기)도 씀 */
 export type ChargerPhase = "walk" | "windup" | "charge" | "volley" | "summon" | "blink" | "swing" | "act";
 
-export interface EnemyState extends Body, LaserEnemyState, OrbitEnemyState, BrawlEnemyState, MedicEnemyState, GunEnemyState, BossEnemyState, TdEnemyState, NinjaEnemyState, ImugiEnemyState, ApostleEnemyState, SwarmEnemyState, OniEnemyState, ScribeEnemyState, S2EnemyState, H2EnemyState, ChronoEnemyState, AscalonEnemyState {
+export interface EnemyState extends Body, LaserEnemyState, OrbitEnemyState, BrawlEnemyState, MedicEnemyState, GunEnemyState, BossEnemyState, TdEnemyState, NinjaEnemyState, ImugiEnemyState, ApostleEnemyState, SwarmEnemyState, OniEnemyState, ScribeEnemyState, S2EnemyState, H2EnemyState, ChronoEnemyState, AscalonEnemyState, PwEnemyState {
   /** 이 자리에 붙어 있음 (연습장 허수아비: 밀려도 제자리, sim/enemies) */
   anchor?: [number, number];
   id: number;
@@ -122,7 +123,7 @@ export interface EnemyState extends Body, LaserEnemyState, OrbitEnemyState, Braw
   shield?: number;
 }
 
-export interface ProjectileState extends Body, GunShotState, BeastShotState, OrbitShotState, BossShotState, NinjaShotState, ChronoShotState {
+export interface ProjectileState extends Body, GunShotState, BeastShotState, OrbitShotState, BossShotState, NinjaShotState, ChronoShotState, PwShotState {
   id: number;
   fromPlayer: boolean;
   vx: number;
@@ -218,11 +219,10 @@ export interface BuyLogEntry {
   itemId: string;
   price: number;
 }
-
 /** 상태이상 피해 종류: 출혈 · 화상 · 독 · 저주(수양 부적) */
 export type DotKind = "bleed" | "burn" | "poison" | "curse" | "storm" | "rot" | "death" | "hellfire" | "shock" | "frost" | "tide" | "gold" | "radiance" | "voidbolt";
 
-export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, PetRunState {
+export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, PetRunState, PwRunState {
   seed: number;
   tick: number;
   player: PlayerState;

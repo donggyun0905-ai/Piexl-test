@@ -33,7 +33,7 @@ export function noteRun(s: RunState): void {
     st[kind].add(id);
     changed = true;
   };
-  for (const e of s.enemies) if (e.kind !== "dummy") add("enemy", e.kind);
+  for (const e of s.enemies) if (e.kind !== "dummy" && e.kind !== "fighter") add("enemy", e.kind);
   add("weapon", s.player.weaponId);
   for (const id of s.player.passives) add("passive", id);
   for (const id of s.player.useSlots) add("use", id);

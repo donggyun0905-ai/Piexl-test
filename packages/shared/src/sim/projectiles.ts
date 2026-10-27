@@ -107,7 +107,7 @@ export function updateProjectiles(s: RunState, frozen = false): void {
           break;
         }
       }
-    } else if (!gone && !pr.fake) {
+    } else if (!gone && !pr.fake && pr.pwTeam !== 0) {
       // 적 탄: 처음 닿은 사람 (협동은 자리 순서대로, 쓰러진 사람은 빼고)
       eachSeat(s, () => {
         const p = s.player;

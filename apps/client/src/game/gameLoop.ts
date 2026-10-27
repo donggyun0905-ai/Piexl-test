@@ -113,6 +113,8 @@ export function startGameLoop(o: LoopOptions): () => void {
     const time = o.timeText ? o.timeText() : formatTime(run.tick);
     const where = run.swarm
       ? t("swarm")
+      : run.pw
+      ? t("paewang")
       : run.arenaLv
       ? `${t("arenaRun")} Lv ${run.arenaLv}/${ARENA_LEVELS}`
       : run.hero

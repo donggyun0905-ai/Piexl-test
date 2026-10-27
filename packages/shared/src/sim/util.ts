@@ -4,6 +4,7 @@ import { ENEMIES, WEAPONS, type EnemyKind, type WeaponDef } from "../content";
 import { pushOutOfTiles, shapeGrid, type TileGrid } from "./layout";
 import { arenaGrid } from "./bossPrimeval";
 import { swarmGrid } from "./swarmGrid";
+import { pwGrid } from "./paewangGrid";
 import { tabooUp } from "./taboo";
 import type { Body, DotKind, EffectState, EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 
@@ -46,6 +47,8 @@ export function clamp(v: number, min: number, max: number): number {
 /** 지금 방의 칸 배열 (네모 방이면 null) */
 export function roomGrid(s: RunState): TileGrid | null {
   if (s.arena) return arenaGrid(s.arena);
+  // 패왕전: 경기장마다 벽·나무·물 (sim/paewangGrid)
+  if (s.pw) return pwGrid(s.pw.arena);
   // 광야의 새벽: 맵마다 건물·바위·물웅덩이 (들판은 테두리만)
   if (s.swarm) return s.swarm.map && s.swarm.map !== "plains" ? swarmGrid(s.swarm.map) : null;
   const room = s.map.rooms[s.roomId];

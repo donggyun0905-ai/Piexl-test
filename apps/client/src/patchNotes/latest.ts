@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.148",
+    date: "2026-10-27",
+    items: {
+      ko: [
+        "새 이벤트 '패왕전': AI 캐릭터들과 겨루는 대결 6종 · 1대1(작은 경기장·쉬움) · 3대3(넓은 경기장·보통) · 5대5(나무가 우거진 큰 숲, 수풀에 숨기·가시 함정·어려움) · 토너먼트(3명씩 1대1로 차례로, 체력 회복 없이 연달아·보통) · 대난투(20명이 큰 들판에서, 아이템이 떨어짐·지옥) · 데스매치(5명이 저택에서, 처치할 때마다 더 약한 캐릭터로 21레벨까지·보통)",
+        "준비방: 무기 1개 · 패시브 10개(여러 번 가질 수 있는 것은 겹쳐서) · 사용 아이템 2개를 골라 가져감 (데스매치는 캐릭터·무기·패시브 모두 무작위) · 팀 대결에서 내가 쓰러지면 내 편을 지켜봄",
+        "이기면 칩: 1대1 1,000 · 3대3 3,000 · 5대5 5,000 · 토너먼트 3,000 · 대난투 20,000 · 데스매치 10,000",
+      ],
+      en: [
+        "New event 'Champion Clash': six battles against AI characters · 1v1 (small arena, Easy) · 3v3 (wide arena, Normal) · 5v5 (a vast dense forest with bushes to hide in and spike traps, Hard) · Tournament (three per side, one on one in turn without healing, Normal) · Brawl (20 fighters on a huge field with item drops, Brutal) · Deathmatch (five in a manor, each kill turns you into a weaker character up to level 21, Normal)",
+        "Preparation room: bring 1 weapon, 10 passives (stackable ones can be doubled) and 2 consumables (Deathmatch is all random) · if you fall in a team battle you watch your allies",
+        "Win chips: 1v1 1,000 · 3v3 3,000 · 5v5 5,000 · Tournament 3,000 · Brawl 20,000 · Deathmatch 10,000",
+      ],
+      ja: [
+        "新イベント「覇王戦」: AIキャラクターと戦う対決6種 · 1対1（小さな闘技場・やさしい）· 3対3（広い闘技場・ふつう）· 5対5（木々が生い茂る大きな森、茂みに隠れる・トゲの罠・むずかしい）· トーナメント（3人ずつ1対1で順番に、回復なしで連戦・ふつう）· 大乱闘（20人が広い野原で、アイテムが落ちる・地獄）· デスマッチ（5人で屋敷にて、倒すたびに弱いキャラへ21レベルまで・ふつう）",
+        "準備部屋: 武器1つ・パッシブ10個（重ねて持てるものは重複可）・使用アイテム2個を選んで持っていく（デスマッチはキャラ・武器・パッシブすべてランダム）· チーム戦で倒れたら味方を観戦",
+        "勝てばチップ: 1対1 1,000 · 3対3 3,000 · 5対5 5,000 · トーナメント 3,000 · 大乱闘 20,000 · デスマッチ 10,000",
+      ],
+    },
+  },
+  {
     version: "0.48.147",
     date: "2026-10-27",
     items: {

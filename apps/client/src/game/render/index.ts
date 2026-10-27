@@ -47,6 +47,7 @@ import { drawHaloHud } from "./forgottenHalo";
 import { drawRunPet } from "./runPet";
 import { drawOniUps, type OniUp } from "./oniUps";
 import { drawSwarmGround } from "./swarmMap";
+import { drawPwGround } from "./paewang";
 import { themeFor } from "./floorThemes";
 import { drawAmbushOverlay, drawTrackerAura } from "./tracker";
 import { drawForgottenAura, drawForgottenBack } from "./forgotten";
@@ -129,6 +130,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
 
   drawRoom(ctx, s, alpha, snap);
   drawSwarmGround(ctx, s, snap);
+  drawPwGround(ctx, s);
   if (opt.bossName) drawArenaLabels(ctx, s, opt.bossName);
   if (opt.showRange && !s.over) drawRangeRing(ctx, s, snap(lerp(s.player.prevX, s.player.x, alpha)), snap(lerp(s.player.prevY, s.player.y, alpha)));
   drawTelegraphs(ctx, s, alpha, snap);

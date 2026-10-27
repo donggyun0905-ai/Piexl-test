@@ -69,6 +69,9 @@ const THEMES: Record<string, FloorTheme> = {
   plight: T("#26242c", "#2c2a33", "#4a4658", "#6a6680", "#5a566a", "#8a86a0", "#060508", "#141218", [["star", "#fff4c0"], ["star", "#3a2a5a"]], 0.24),
 };
 
+/** 패왕전 경기장 → 테마 */
+const PW_THEME = { small: "swordgod", wide: "centaur", forest: "archer", field: "plant", manor: "knight" } as const;
+
 /** 광야의 새벽 맵 → 테마 */
 const SWARM_THEME = { plains: "centaur", ruins: "knight", fort: "reaper", swamp: "plant", volcano: "dragon" } as const;
 
@@ -76,6 +79,7 @@ const SWARM_THEME = { plains: "centaur", ruins: "knight", fort: "reaper", swamp:
 export function themeFor(s: RunState): FloorTheme {
   if (s.tdShared) return BASE;
   if (s.swarm) return THEMES[SWARM_THEME[s.swarm.map ?? "plains"]]!;
+  if (s.pw) return THEMES[PW_THEME[s.pw.arena]]!;
   let boss: string | undefined;
   if (s.lastBoss) boss = s.lastBoss === "pdark" ? "plight" : s.lastBoss;
   else if (s.arenaLv) boss = s.enemies.find((e) => ENEMIES[e.kind].boss)?.kind;

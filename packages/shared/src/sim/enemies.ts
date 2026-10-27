@@ -74,6 +74,8 @@ export function updateEnemies(s: RunState): void {
       e.fearTicks = (e.fearTicks ?? 0) - 1;
       e.x -= toP[0] * def.speed * 1.2;
       e.y -= toP[1] * def.speed * 1.2;
+    } else if (e.kind === "fighter") {
+      // 패왕전 AI 캐릭터: 움직임·공격은 sim/paewangAi (기절·둔화·속박은 여기서 줄고 그쪽에서 확인)
     } else if (e.kind === "gnat") updateGnat(s, e, go);
     else if (e.kind === "tower") updateTower(s, e);
     else if (e.kind === "ghost") updateGhost(s, e);
@@ -171,7 +173,7 @@ export function updateEnemies(s: RunState): void {
         const rr = e.r + q.r;
         // 용 염옥(필살기) 중에는 몸에 닿아도 피해 없음 (안전한 칸이 몸 쪽에 떠도 갈 수 있게)
         if (e.ultAt !== undefined && e.ultSafe) return;
-        if (dist2(e, q) < rr * rr && e.id !== q.grabId && !e.air) damagePlayer(s, renMelee(s, def.contactDamage * tabooUp(s, "fangs")));
+        if (def.contactDamage > 0 && dist2(e, q) < rr * rr && e.id !== q.grabId && !e.air) damagePlayer(s, renMelee(s, def.contactDamage * tabooUp(s, "fangs")));
       },
       !!s.party,
     );

@@ -5,6 +5,7 @@ import { drawOrbitFx, drawOrbShot } from "./orbs";
 import { drawKiShot } from "./brawl";
 import { drawBossFx } from "./bossFx";
 import { drawEnemyShot } from "./bossLook";
+import { drawPwShot } from "./paewang";
 import { drawCleaveFx } from "./minions";
 import { drawBullet, drawGunFx } from "./guns";
 import { drawTagFx } from "./abandoned";
@@ -34,7 +35,7 @@ export function drawProjectiles(ctx: CanvasRenderingContext2D, s: RunState, alph
     const x = snap(lerp(pr.prevX, pr.x, alpha));
     const y = snap(lerp(pr.prevY, pr.y, alpha));
     if (pr.fromPlayer && drawOrbShot(ctx, pr, x, y)) continue;
-    if (!pr.fromPlayer && drawEnemyShot(ctx, pr, x, y, s.tick)) continue;
+    if (!pr.fromPlayer && (drawPwShot(ctx, pr, x, y) || drawEnemyShot(ctx, pr, x, y, s.tick))) continue;
     if (pr.fromPlayer && (drawBullet(ctx, pr, x, y) || drawKiShot(ctx, pr, x, y))) continue;
     if (pr.fromPlayer && (drawBeastShot(ctx, pr, x, y, s.tick) || drawNinjaShot(ctx, pr, x, y, s.tick) || drawChronoShot(ctx, pr, x, y, s.tick) || drawSummonShot(ctx, pr, x, y, s.tick) || drawBedouinShot(ctx, pr, x, y, s.tick) || drawGeneralShot(ctx, pr, x, y) || drawImugiShot(ctx, pr, x, y) || drawDuckShot(ctx, pr, x, y, s.tick) || drawScribeShot(ctx, pr, x, y) || drawS2Shot(ctx, pr, x, y, s.tick))) continue;
     if (pr.fromPlayer && (pr.charm || pr.spirit)) {
@@ -169,7 +170,7 @@ function drawReticle(ctx: CanvasRenderingContext2D, x: number, y: number): void 
 
 /** 보스 체력 막대: 화면 위쪽 고정 */
 export function drawBossBar(ctx: CanvasRenderingContext2D, s: RunState): void {
-  const boss = s.enemies.find((e) => ENEMIES[e.kind].boss);
+  const boss = s.enemies.find((e) => ENEMIES[e.kind].boss && !e.pw);
   if (!boss) return;
   const w = ctx.canvas.width;
   const h = ctx.canvas.height;
