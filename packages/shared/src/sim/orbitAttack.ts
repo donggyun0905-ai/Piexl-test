@@ -7,6 +7,7 @@ import { orbCount } from "./orbit";
 import { CRIT_MUL } from "./orbitBlades";
 import { orbShot } from "./orbitPerks";
 import type { EnemyState, RunState } from "./types";
+import { weaponDot } from "./orbitElements";
 import { addEffect, dist2, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -16,6 +17,7 @@ const R = {
   TRIGGER_SPEED: 7,
   TRIGGER_PIERCE: 3,
   TRIGGER_GROW: 0.5,
+  TRIGGER_ADD: 2,
   /** 트리거 치명타: 기본 20%, 무기 기본 수보다 더 채워진 구슬 하나마다 +5% */
   TRIGGER_CRIT: 0.2,
   TRIGGER_CRIT_ADD: 0.05,
@@ -30,7 +32,7 @@ const R = {
 };
 export { R as ORBIT_ATTACK_RULES };
 
-/** 트리거: 재장전 2초 · 쏠 때 50% 확률로 +1 · 최대 15개, 다 차면 한 번에 모두 2배로 */
+/** 트리거: 재장전 2초 · 쏠 때 50% 확률로 +2 · 최대 15개, 다 차면 한 번에 모두 2배로 */
 export const TRIGGER_RELOAD = 120;
 export const TRIGGER_MAX = 15;
 /** 갓 핸드: 들고 있는 틱 · 찍는 범위 · 보스전 피해 배율 · 잡은 적을 드는 높이 */
@@ -44,7 +46,7 @@ export function orbitAttack(s: RunState): void {
   const face: [number, number] = [p.faceX, p.faceY];
   const ticks = (speed: number) => Math.ceil(p.stats.range / speed);
   if (w.orbit === "steel") {
-    s.projectiles.push(orbShot(s, p.x + face[0] * 6, p.y + face[1] * 6, face, R.STEEL_SPEED, dmg, "steel", { ticksLeft: ticks(R.STEEL_SPEED) }));
+    s.projectiles.push(orbShot(s, p.x + face[0] * 6, p.y + face[1] * 6, face, R.STEEL_SPEED, dmg, "steel", { ticksLeft: ticks(R.STEEL_SPEED), dot: "bleed" }));
   } else if (w.orbit === "trigger") {
     triggerShot(s, dmg, ticks(R.TRIGGER_SPEED));
   } else if (w.orbit === "gravity") {
@@ -61,7 +63,7 @@ function triggerShot(s: RunState, dmg: number, life: number): void {
   const chance = R.TRIGGER_CRIT + R.TRIGGER_CRIT_ADD * Math.max(0, loaded - orbCount(p));
   const shot = (dx: number, dy: number, mul: number) => {
     const crit = createRng(deriveSeed(s.seed, "triggerCrit", s.nextId)).nextFloat() < chance;
-    const pr = orbShot(s, p.x, p.y, [dx, dy], R.TRIGGER_SPEED, dmg * mul * (crit ? CRIT_MUL : 1), "trigger", { ticksLeft: life, pierce: R.TRIGGER_PIERCE, hitIds: [] });
+    const pr = orbShot(s, p.x, p.y, [dx, dy], R.TRIGGER_SPEED, dmg * mul * (crit ? CRIT_MUL : 1), "trigger", { ticksLeft: life, pierce: R.TRIGGER_PIERCE, hitIds: [], dot: "storm" });
     s.projectiles.push(crit ? { ...pr, crit } : pr);
   };
   if (loaded >= TRIGGER_MAX) {
@@ -75,7 +77,7 @@ function triggerShot(s: RunState, dmg: number, life: number): void {
   } else {
     shot(p.faceX, p.faceY, 1);
     p.loaded = loaded - 1;
-    if (createRng(deriveSeed(s.seed, "trigger", s.tick)).nextFloat() < R.TRIGGER_GROW) p.loaded = Math.min(TRIGGER_MAX, p.loaded + 1);
+    if (createRng(deriveSeed(s.seed, "trigger", s.tick)).nextFloat() < R.TRIGGER_GROW) p.loaded = Math.min(TRIGGER_MAX, p.loaded + R.TRIGGER_ADD);
   }
   if (p.loaded <= 0) p.reloadTicks = TRIGGER_RELOAD;
 }
@@ -86,6 +88,7 @@ function gravitySlam(s: RunState, dmg: number): void {
     const rr = p.stats.range + e.r;
     if (e.hp <= 0 || dist2(e, p) > rr * rr) continue;
     damageEnemy(s, e, dmg, 0, 0);
+    weaponDot(s, e, "curse", dmg);
     if (e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? R.GRAVITY_STUN / 2 : R.GRAVITY_STUN);
     addEffect(s, { kind: "burst", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r * 2, maxTicks: 12 });
   }
@@ -141,6 +144,7 @@ export function updateHand(s: RunState): void {
   }
   const boss = s.enemies.some((e) => ENEMIES[e.kind].boss && e.hp > 0);
   blastAt(s, x, y, R.HAND_RADIUS, p.stats.damage * (boss ? R.HAND_BOSS_MUL : 1));
+  for (const e of s.enemies) if (e.hp > 0 && (e.x - x) ** 2 + (e.y - y) ** 2 <= (R.HAND_RADIUS + e.r) ** 2) weaponDot(s, e, "gold", p.stats.damage);
   addEffect(s, { kind: "slam", x, y, dirX: 0, dirY: 0, size: R.HAND_RADIUS, maxTicks: 18 });
   p.handId = undefined;
 }

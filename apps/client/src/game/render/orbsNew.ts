@@ -16,6 +16,7 @@ function disc(ctx: Ctx, x: number, y: number, r: number): void {
 /** 검이 향할 방향: 날아가는 검은 노리는 적 · 떠 있는 검은 가까운 적 · 지키는 검은 도는 방향 */
 export function bladeAngle(s: RunState, b: OrbBody, i: number, cx: number, cy: number): number {
   const f = (s.player.flyers ?? []).find((x) => x.i === i);
+  if (f?.vx !== undefined) return Math.atan2(f.vy!, f.vx);
   if (f) return Math.atan2(f.y - b.y, f.x - b.x);
   if (b.striker) {
     let best: { x: number; y: number } | null = null;
@@ -33,12 +34,23 @@ export function bladeAngle(s: RunState, b: OrbBody, i: number, cx: number, cy: n
   return Math.atan2(b.y - cy, b.x - cx) + Math.PI / 2;
 }
 
-/** 진짜 검 하나: 칼날(밝은 강철 + 가운데 홈) · 코등이 · 원소 색 손잡이 · 원소 빛 */
-export function drawSword(ctx: Ctx, x: number, y: number, a: number, tag: OrbBody["tag"], tick: number): void {
+/** 진짜 검 하나 (크게): 칼날(밝은 강철 + 가운데 홈) · 코등이 · 원소 색 손잡이 · 원소 빛. flying이면 뒤로 원소 빛 꼬리 */
+export function drawSword(ctx: Ctx, x: number, y: number, a: number, tag: OrbBody["tag"], tick: number, flying = false): void {
   const glow = GLOW[tag] ?? "#e8ecf4";
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(a);
+  if (flying) {
+    // 날아온 길에 남는 빛 꼬리
+    const g = ctx.createLinearGradient(-26, 0, 0, 0);
+    g.addColorStop(0, "rgba(255,255,255,0)");
+    g.addColorStop(1, glow);
+    ctx.globalAlpha = 0.75;
+    ctx.fillStyle = g;
+    ctx.fillRect(-26, -1.5, 24, 3);
+    ctx.globalAlpha = 1;
+  }
+  ctx.scale(1.6, 1.6);
   // 원소 빛
   ctx.globalAlpha = 0.3 + 0.15 * Math.abs(Math.sin(tick * 0.15 + x));
   ctx.fillStyle = glow;

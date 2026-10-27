@@ -1,15 +1,21 @@
-import { describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { WEAPONS } from "../content";
 import { damagePlayer } from "./combat";
 import { createRun, EMPTY_INPUT, stepSim } from "./index";
 import { weaponPool } from "./loot";
-import { ORB_TICK, ORBIT_RULES, orbBodies, updateOrbit } from "./orbit";
+import { ORB_TICK, orbBodies, updateOrbit } from "./orbit";
+import { ORBIT_ELEMENTS_RULES } from "./orbitElements";
 import { CRIT_MUL } from "./orbitBlades";
 import { orbitAttack, TRIGGER_MAX, TRIGGER_RELOAD, HAND_TICKS } from "./orbitAttack";
 import { enemy, FIRE } from "./perkTestUtil";
 import { elem, lost, onOrb } from "./orbitTestUtil";
 
 describe("원소술사 회전체", () => {
+  // 이 파일은 맞히는 피해만 셈: 상태이상 피해(orbitNew에서 확인)는 끔
+  const dots = { ...ORBIT_ELEMENTS_RULES };
+  beforeAll(() => Object.assign(ORBIT_ELEMENTS_RULES, { WEAPON_DOT: 0, ELEMENT_DOT: 0, PLANET_DOT: 0 }));
+  afterAll(() => Object.assign(ORBIT_ELEMENTS_RULES, dots));
+
   it("원소술사는 전용 무기만 얻음", () => {
     for (const id of weaponPool(elem())) expect(WEAPONS[id]).toMatchObject({ exclusive: "elementalist" });
   });
@@ -40,8 +46,8 @@ describe("원소술사 회전체", () => {
     const e = enemy(1, 121, 72);
     s.enemies = [e];
     // 빛 터짐(확률) 없이 틱 피해만 셈
-    const burst = ORBIT_RULES.LIGHT_BURST;
-    ORBIT_RULES.LIGHT_BURST = 0;
+    const burst = ORBIT_ELEMENTS_RULES.LIGHT_BURST;
+    ORBIT_ELEMENTS_RULES.LIGHT_BURST = 0;
     let hits = 0;
     let stuns = 0;
     for (let t = 0; t < 120; t++) {
@@ -57,7 +63,7 @@ describe("원소술사 회전체", () => {
     expect(lost(e)).toBeCloseTo(s.player.stats.damage * s.player.stats.attackSpeed * (hits * ORB_TICK) / 60);
     // 빛 경직은 공격 속도(3) 간격마다 → 2초에 최대 6번
     expect(stuns).toBeLessThanOrEqual(6);
-    ORBIT_RULES.LIGHT_BURST = burst;
+    ORBIT_ELEMENTS_RULES.LIGHT_BURST = burst;
   });
 
   it("빛 구슬: 맞은 적 0.5초 경직", () => {
@@ -223,8 +229,8 @@ describe("원소술사 전용 아이템", () => {
 
   it("화려하게: 가끔 원소 효과가 하나 더", () => {
     const s = elem("lightorb", "flashy");
-    const burst = ORBIT_RULES.LIGHT_BURST;
-    ORBIT_RULES.LIGHT_BURST = 0;
+    const burst = ORBIT_ELEMENTS_RULES.LIGHT_BURST;
+    ORBIT_ELEMENTS_RULES.LIGHT_BURST = 0;
     let extra = 0;
     for (let k = 0; k < 100; k++) {
       s.tick = k * 100;
@@ -233,7 +239,7 @@ describe("원소술사 전용 아이템", () => {
       const e = onOrb(s);
       if ((e.burnTicks ?? 0) > 0 || (e.slowTicks ?? 0) > 0 || (e.poisonTicks ?? 0) > 0 || lost(e) > s.player.stats.damage + 0.01) extra++;
     }
-    ORBIT_RULES.LIGHT_BURST = burst;
+    ORBIT_ELEMENTS_RULES.LIGHT_BURST = burst;
     expect(extra).toBeGreaterThan(3);
     expect(extra).toBeLessThan(40);
   });

@@ -20,7 +20,7 @@ export const ELEMENTAL_WEAPON_NAMES: Record<ElemWeapon & WeaponId, Names> = {
 
 export const ORBIT_DESC: Record<OrbitKind, Names> = {
   elements: {
-    ko: "구슬 5개가 돌며 닿은 적을 때림: 불(화상) · 물(둔화) · 땅(밀침+기절) · 번개(감전) · 풀(주변 넓게 독)",
+    ko: "구슬 5개가 돌며 닿은 적을 때림: 불(화상) · 물(둔화+물결) · 땅(밀침+기절+부식) · 번개(감전) · 풀(주변 넓게 독)",
     en: "5 orbs circle you and hit what they touch: fire (burn) · water (slow) · earth (push + stun) · lightning (shock) · grass (wide poison)",
     ja: "5つの珠が回り触れた敵を打つ：火（燃える）· 水（遅くする）· 土（押す＋気絶）· 雷（感電）· 草（周りを広く毒に）",
   },
@@ -32,9 +32,9 @@ export const ORBIT_DESC: Record<OrbitKind, Names> = {
     ja: "ゆっくり回る強い惑星8つ：凍結 · 範囲＋感電 · 押し出し＋鈍化 · 炎 · 吸血＋毒 · 鈍化 · 攻撃を遅らせる＋霜 · シールド＋光輝",
   },
   blades: {
-    ko: "진짜 검 5자루, 칼끝이 늘 적을 향함: 불·물·번개 검 셋은 휘어지며 날아가 적을 쫓아 벰 (불 세게 3번 · 물 계속 따라다님 · 번개 빠르게 5번, 치명타 15%) · 땅·풀 검 둘은 몸 둘레를 돌며 적 탄을 막고 붙은 적을 벰 · 검마다 원소 상태이상",
-    en: "5 real swords, tips always turned toward foes: the fire, water and lightning swords curve out to chase and slash (fire 3 hard hits · water keeps chasing · lightning 5 fast hits, 15% crit) · the earth and grass swords circle you, block enemy shots and cut foes that close in · each sword applies its element's status",
-    ja: "本物の剣5本、切っ先は常に敵を向く：火・水・雷の3本は弧を描いて飛び敵を追って斬る（火は強く3回 · 水は追い続ける · 雷は速く5回、クリティカル15%）· 土・草の2本は体の周りを回り敵の弾を防ぎ近づいた敵を斬る · 剣ごとに元素の状態異常",
+    ko: "큰 진짜 검 5자루: 불·물·번개 검 셋은 빛 꼬리를 끌며 휘어 날아가 적을 꿰뚫고 지나쳐, 크게 돌아 다시 꿰뚫기를 되풀이한 뒤 돌아옴 (불 세게 3번 · 물 약하게 8번 · 번개 빠르게 5번, 치명타 15%) · 땅·풀 검 둘은 몸 둘레를 돌며 적 탄을 막고 붙은 적을 벰 · 검마다 원소 상태이상",
+    en: "5 big real swords: the fire, water and lightning swords curve out trailing light, pierce through foes, overshoot, swing around and pierce again before returning (fire 3 hard hits · water 8 light hits · lightning 5 fast hits, 15% crit) · the earth and grass swords circle you, block enemy shots and cut foes that close in · each sword applies its element's status",
+    ja: "大きな本物の剣5本：火・水・雷の3本は光の尾を引いて弧を描き、敵を貫いて通り過ぎ、大きく回ってまた貫くのを繰り返してから戻る（火は強く3回 · 水は弱く8回 · 雷は速く5回、クリティカル15%）· 土・草の2本は体の周りを回り敵の弾を防ぎ近づいた敵を斬る · 剣ごとに元素の状態異常",
   },
   gravity: {
     ko: "사거리 안 적과 적 탄이 느려짐 · 공격하면 사거리 안 적을 모두 띄워 내려찍음 (기절) · 공격 속도 매우 느림 · 내려찍은 자리에 두 번째 중력이 생겨 잠시 뒤 한 번 더 (70%)",
@@ -53,9 +53,9 @@ export const ORBIT_DESC: Record<OrbitKind, Names> = {
   },
   steel: { ko: "구슬 5개가 적 탄을 막음 · 공격하면 강철 총알을 쏨", en: "5 orbs block enemy shots · Attacking fires steel bullets", ja: "珠5つが敵の弾を防ぐ · 攻撃すると鋼の弾を撃つ" },
   trigger: {
-    ko: "공격하면 구슬이 아주 빠르게 날아감 (3명 관통), 다 쓰면 2초 재장전 (구슬이 빨리 돌수록 그만큼 빨리 참) · 쏠 때 50% 확률로 +1 (최대 15) · 15개면 한 번에 모두 2배 피해 · 치명타 20%, 기본보다 더 채워진 구슬마다 +5%",
-    en: "Attacking launches an orb very fast (pierces 3); reload 2s when empty (faster the faster the orbs spin) · 50% chance of +1 per shot (max 15) · At 15, all fire at once for 2x · 20% crit, +5% per orb loaded beyond the base",
-    ja: "攻撃で珠がとても速く飛ぶ（3体貫通）、使い切ると2秒リロード（珠が速く回るほど速くたまる） · 撃つたび50%で+1（最大15） · 15個なら一度に全て2倍ダメージ · クリティカル20%、基本より多く込めた珠ごとに+5%",
+    ko: "공격하면 구슬이 아주 빠르게 날아감 (3명 관통), 다 쓰면 2초 재장전 (구슬이 빨리 돌수록 그만큼 빨리 참) · 쏠 때 50% 확률로 +2 (최대 15) · 15개면 한 번에 모두 2배 피해 · 치명타 20%, 기본보다 더 채워진 구슬마다 +5%",
+    en: "Attacking launches an orb very fast (pierces 3); reload 2s when empty (faster the faster the orbs spin) · 50% chance of +2 per shot (max 15) · At 15, all fire at once for 2x · 20% crit, +5% per orb loaded beyond the base",
+    ja: "攻撃で珠がとても速く飛ぶ（3体貫通）、使い切ると2秒リロード（珠が速く回るほど速くたまる） · 撃つたび50%で+2（最大15） · 15個なら一度に全て2倍ダメージ · クリティカル20%、基本より多く込めた珠ごとに+5%",
   },
 };
 

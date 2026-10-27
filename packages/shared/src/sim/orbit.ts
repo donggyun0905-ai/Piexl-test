@@ -1,10 +1,9 @@
 // 원소술사 회전체: 도는 자리 계산(삼각함수 없이 사칙연산만) · 닿으면 때리기 · 원소·행성 효과 · 날아가 때리는 검·별 · 은하수 장판·중력 둔화
 // 공격 키로 쓰는 것(강철 총알·트리거·중력 내려찍기·갓 핸드)은 orbitAttack, 전깃줄·펫·탄 막기는 orbitPerks
 import { TICK_RATE } from "../constants";
-import { ENEMIES } from "../content";
 import { createRng, deriveSeed } from "../rng";
 import { blastAt, damageEnemy, ignite } from "./combat";
-import { elementEffect, ELEMENTS, planetEffect, PLANETS, type Element, type Planet } from "./orbitElements";
+import { elementEffect, ELEMENTS, lightEffect, planetEffect, PLANETS, weaponDot, type Element, type Planet } from "./orbitElements";
 import { updateHand } from "./orbitAttack";
 import { flyK, flyStrikers, pickTarget } from "./orbitBlades";
 import { guard, pet, wires } from "./orbitPerks";
@@ -23,25 +22,18 @@ const V = {
   RUSH_SPIN: 2.5,
   /** 날아가 때리는 회전체의 다시 때리기 간격 배율 (날아가는 방식은 orbitBlades) */
   STRIKE_SLOW: 2,
-  /** 빛 구슬 경직 (0.5초) */
-  LIGHT_STUN: 30,
   /** 은하수: 맞을 때 불이 붙을 확률 */
   GALAXY_BURN: 0.1,
   /** 화려하게 15% · 중력 안에 들어온 적 탄 빠르기 */
   FLASHY_CHANCE: 0.15,
   GRAVITY_SHOT: 0.5,
-  /** 빛 구슬: 맞힐 때 빛이 터질 확률 · 반경 · 공격력 배율 */
-  LIGHT_BURST: 0.3,
-  LIGHT_R: 20,
-  LIGHT_MUL: 1,
   /** 은하수: 안에 있는 적에게 이 틱마다 스택 1, 다 차면 빅뱅 (반경 · 공격력 배율) */
   GALAXY_EVERY: 3,
   GALAXY_MAX: 100,
   BANG_R: 50,
   BANG_MUL: 10,
-  /** 웨폰 마스터: 날아가는 검 수 (나머지는 몸 둘레를 지킴) · 날아갈 때 휘는 정도 */
+  /** 웨폰 마스터: 날아가는 검 수 (나머지는 몸 둘레를 지킴) */
   BLADE_FLY: 3,
-  BLADE_CURVE: 14,
 };
 export { V as ORBIT_RULES };
 
@@ -56,6 +48,9 @@ export interface OrbBody {
   tag: Element | Planet | "plain" | "light" | "blade" | "star" | "steel" | "pet";
   /** 닿아서 때리지 않고 날아가 때림 (웨폰 마스터 검·별똥별 바깥 고리) */
   striker?: boolean;
+  /** 날아간 검·별이 돌아올 제자리 */
+  homeX?: number;
+  homeY?: number;
 }
 
 /** 웨폰 마스터 검 원소 (날아가는 셋 → 지키는 둘) */
@@ -127,9 +122,9 @@ export function orbBodies(p: PlayerState, cx: number, cy: number, tick: number):
       // 웨폰 마스터: 앞의 검 셋(불·물·번개)은 몸 위에 떠 있다가 적에게 날아가 때림.
       // 나머지 검(땅·풀)은 날아가지 않고 몸 둘레를 빠르게 돌며 탄을 막고 붙은 적을 벰
       const fly = Math.min(n, V.BLADE_FLY);
-      ring(fly, R, [0, -1], 3, 0, (i) => BLADE_TAGS[i % BLADE_TAGS.length]!, true);
+      ring(fly, R, [0, -1], 5, 0, (i) => BLADE_TAGS[i % BLADE_TAGS.length]!, true);
       const d2 = mulV(dir, dir);
-      ring(n - fly, R + 6, mulV(d2, d2), 3, 1, (i) => BLADE_TAGS[(fly + i) % BLADE_TAGS.length]!);
+      ring(n - fly, R + 8, mulV(d2, d2), 5, 1, (i) => BLADE_TAGS[(fly + i) % BLADE_TAGS.length]!);
       for (const b of out) if (b.ring === 1) b.striker = false;
       break;
     }
@@ -151,17 +146,20 @@ export function orbBodies(p: PlayerState, cx: number, cy: number, tick: number):
     default:
       break;
   }
-  // 날아가는 검·별: 제자리에서 노리는 적까지 갔다가 돌아옴 (검은 곧게 가지 않고 번갈아 옆으로 휘며 날아감)
+  // 날아가는 검·별: 별은 제자리에서 노리는 적까지 갔다가 돌아옴 · 검은 자유롭게 날아다니는 자리 (orbitBlades)
   for (const f of p.flyers ?? []) {
     const b = out[f.i];
     if (!b?.striker) continue;
+    b.homeX = b.x;
+    b.homeY = b.y;
+    if (f.px !== undefined) {
+      b.x = f.px;
+      b.y = f.py!;
+      continue;
+    }
     const k = flyK(f, b.tag);
-    const dx = f.x - b.x;
-    const dy = f.y - b.y;
-    const side = b.tag === "star" ? 0 : (f.i % 2 ? 1 : -1) * V.BLADE_CURVE * 4 * k * (1 - k);
-    const len = Math.sqrt(dx * dx + dy * dy) || 1;
-    b.x += dx * k - (dy / len) * side;
-    b.y += dy * k + (dx / len) * side;
+    b.x += (f.x - b.x) * k;
+    b.y += (f.y - b.y) * k;
   }
   if (hasPerk(p, "pet")) out.push({ x: cx - dir[0] * (R + 10), y: cy + dir[1] * (R + 10), r: 3, ring: 9, tag: "pet" });
   return out;
@@ -184,14 +182,8 @@ function orbEffect(s: RunState, b: OrbBody, e: EnemyState, dmg: number): void {
   const dir = normalize(e.x - b.x, e.y - b.y) ?? [1, 0];
   if ((ELEMENTS as readonly string[]).includes(b.tag)) elementEffect(s, e, b.tag as Element, dmg, dir[0], dir[1]);
   else if ((PLANETS as readonly string[]).includes(b.tag)) planetEffect(s, e, b.tag as Planet, dmg, dir[0], dir[1]);
-  else if (b.tag === "light") {
-    if (e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? V.LIGHT_STUN / 2 : V.LIGHT_STUN);
-    // 가끔 빛이 터짐
-    if (roll(s, "lightBurst", e.id) < V.LIGHT_BURST) {
-      blastAt(s, e.x, e.y, V.LIGHT_R, dmg * V.LIGHT_MUL, { still: true });
-      addEffect(s, { kind: "elLight", x: e.x, y: e.y, dirX: 0, dirY: 0, size: V.LIGHT_R, maxTicks: 16 });
-    }
-  }
+  else if (b.tag === "star") weaponDot(s, e, "storm", dmg);
+  else if (b.tag === "light") lightEffect(s, e, dmg, roll(s, "lightBurst", e.id));
   // 화려하게: 가끔 원소 효과 하나 더
   if (hasPerk(s.player, "flashy") && roll(s, "flashy", e.id) < V.FLASHY_CHANCE) {
     elementEffect(s, e, ELEMENTS[Math.floor(roll(s, "flashyEl", e.id) * ELEMENTS.length)]!, dmg, dir[0], dir[1]);
@@ -272,6 +264,7 @@ export function updateOrbit(s: RunState): void {
       if (e.hp <= 0 || dist2(e, p) > rr * rr) continue;
       tickHit(s, e, dmg);
       if (burn && roll(s, "galaxy", e.id) < V.GALAXY_BURN) ignite(e, dmg);
+      if (burn) weaponDot(s, e, "voidbolt", dmg);
       if (s.tick % V.GALAXY_EVERY === 0 && (e.galaxy = (e.galaxy ?? 0) + 1) >= V.GALAXY_MAX) {
         e.galaxy = 0;
         blastAt(s, e.x, e.y, V.BANG_R, dmg * V.BANG_MUL, { still: true });

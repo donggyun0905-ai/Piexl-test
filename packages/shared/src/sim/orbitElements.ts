@@ -1,7 +1,7 @@
 // 원소술사 원소(불·물·땅·번개·풀)와 행성 8개의 효과 (피해는 orbit에서 따로)
 import { ENEMIES } from "../content";
 import { blastAt, dotDamage, healPlayer, ignite } from "./combat";
-import type { EnemyState, RunState } from "./types";
+import type { DotKind, EnemyState, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, roomGrid } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -19,6 +19,14 @@ const R = {
   POISON_MUL: 0.2,
   PLANET_DOT: 0.3,
   PLANET_SLOW: 60,
+  /** 물(물결)·땅(부식) 상태이상 피해 배율 · 무기마다 상태이상 피해 배율(빛 광휘·은하수 공허·중력 저주·갓 핸드 황금·별 폭풍) */
+  ELEMENT_DOT: 0.4,
+  WEAPON_DOT: 0.3,
+  /** 빛 구슬: 경직 틱(0.5초, 보스 절반) · 맞힐 때 빛이 터질 확률 · 반경 · 공격력 배율 */
+  LIGHT_STUN: 30,
+  LIGHT_BURST: 0.3,
+  LIGHT_R: 20,
+  LIGHT_MUL: 1,
 };
 export { R as ORBIT_ELEMENTS_RULES };
 
@@ -27,6 +35,20 @@ export const ELEMENTS: readonly Element[] = ["fire", "water", "earth", "thunder"
 /** 행성 8개: 빙결 · 범위 · 밀치기 · 불 · 흡혈 · 둔화 · 공격 늦추기 · 보호막 */
 export type Planet = "freeze" | "area" | "push" | "burn" | "leech" | "slow" | "stall" | "guard";
 export const PLANETS: readonly Planet[] = ["freeze", "area", "push", "burn", "leech", "slow", "stall", "guard"];
+
+/** 빛 구슬: 광휘 · 경직 · 가끔 빛이 터짐 (r: 0~1 시드 랜덤) */
+export function lightEffect(s: RunState, e: EnemyState, dmg: number, r: number): void {
+  weaponDot(s, e, "radiance", dmg);
+  if (e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? R.LIGHT_STUN / 2 : R.LIGHT_STUN);
+  if (r >= R.LIGHT_BURST) return;
+  blastAt(s, e.x, e.y, R.LIGHT_R, dmg * R.LIGHT_MUL, { still: true });
+  addEffect(s, { kind: "elLight", x: e.x, y: e.y, dirX: 0, dirY: 0, size: R.LIGHT_R, maxTicks: 16 });
+}
+
+/** 무기마다 상태이상 피해 (빛 광휘 · 은하수 공허 · 중력 저주 · 갓 핸드 황금 · 별 폭풍) */
+export function weaponDot(s: RunState, e: EnemyState, kind: DotKind, dmg: number): void {
+  dotDamage(s, e, kind, dmg * R.WEAPON_DOT);
+}
 
 /** 독: 정해진 틱 동안 0.5초마다 (status) */
 function poison(e: EnemyState, dmg: number): void {
@@ -38,8 +60,11 @@ function poison(e: EnemyState, dmg: number): void {
 export function elementEffect(s: RunState, e: EnemyState, el: Element, dmg: number, dx: number, dy: number): void {
   const boss = ENEMIES[e.kind].boss;
   if (el === "fire") ignite(e, dmg);
-  else if (el === "water") e.slowTicks = Math.max(e.slowTicks ?? 0, R.WATER_SLOW);
-  else if (el === "earth" && e.kind !== "dummy") {
+  else if (el === "water") {
+    e.slowTicks = Math.max(e.slowTicks ?? 0, R.WATER_SLOW);
+    dotDamage(s, e, "tide", dmg * R.ELEMENT_DOT);
+  } else if (el === "earth" && e.kind !== "dummy") {
+    dotDamage(s, e, "rot", dmg * R.ELEMENT_DOT);
     e.stunTicks = Math.max(e.stunTicks ?? 0, boss ? R.EARTH_STUN / 2 : R.EARTH_STUN);
     if (boss) return;
     e.x += dx * R.EARTH_PUSH;
@@ -58,7 +83,10 @@ export function planetEffect(s: RunState, e: EnemyState, pl: Planet, dmg: number
   const p = s.player;
   const boss = ENEMIES[e.kind].boss;
   // 행성마다 상태이상: 빙결 · 범위+감전 · 밀침(땅 기절 대신 둔화) · 화상 · 흡혈+독 · 둔화 · 공격 늦추기+서리 · 보호막+광휘
-  if (pl === "freeze") e.stunTicks = boss ? 30 : 60;
+  if (pl === "freeze") {
+    e.stunTicks = boss ? 30 : 60;
+    dotDamage(s, e, "frost", dmg * R.PLANET_DOT);
+  }
   else if (pl === "area") {
     blastAt(s, e.x, e.y, 22, dmg * R.SIDE_MUL, { exclude: e });
     dotDamage(s, e, "shock", dmg * R.PLANET_DOT);
@@ -69,11 +97,16 @@ export function planetEffect(s: RunState, e: EnemyState, pl: Planet, dmg: number
       keepInRoom(e, roomGrid(s));
     }
     if (!boss) e.slowTicks = Math.max(e.slowTicks ?? 0, R.PLANET_SLOW);
+    dotDamage(s, e, "rot", dmg * R.PLANET_DOT);
   } else if (pl === "burn") ignite(e, dmg);
   else if (pl === "leech") {
     healPlayer(s, dmg * 0.1);
     poison(e, dmg);
-  } else if (pl === "slow") e.slowTicks = Math.max(e.slowTicks ?? 0, 120);
+    dotDamage(s, e, "bleed", dmg * R.PLANET_DOT);
+  } else if (pl === "slow") {
+    e.slowTicks = Math.max(e.slowTicks ?? 0, 120);
+    dotDamage(s, e, "tide", dmg * R.PLANET_DOT);
+  }
   else if (pl === "stall") {
     e.timer += 40;
     dotDamage(s, e, "frost", dmg * R.PLANET_DOT);

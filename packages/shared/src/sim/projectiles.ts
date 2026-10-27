@@ -5,7 +5,7 @@ import { renBlock } from "./ren";
 import { ENEMIES } from "../content";
 import { starHit } from "./ninja";
 import { echoHit } from "./chrono";
-import { blastAt, damageEnemy, damagePlayer, healPlayer, ignite, removeDead } from "./combat";
+import { blastAt, damageEnemy, damagePlayer, dotDamage, healPlayer, ignite, removeDead } from "./combat";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 import { summonShot } from "./summonTypes";
 import { blocksShot, type TileGrid } from "./layout";
@@ -83,6 +83,7 @@ export function updateProjectiles(s: RunState, frozen = false): void {
             if (pr.spirit === "spore") markDot(s, e, "poison", before - e.hp);
           }
           if (pr.bleed) applyBleed(e);
+          if (pr.dot) dotDamage(s, e, pr.dot, pr.damage * 0.3);
           if (pr.mark) starHit(s, pr, e);
           if (pr.spirit === "ink") e.ink = Math.min(SCRIBE.maxInk, (e.ink ?? 0) + 1);
           s2Hit(s, pr, e);

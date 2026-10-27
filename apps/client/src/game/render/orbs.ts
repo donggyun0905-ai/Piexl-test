@@ -85,7 +85,7 @@ export function drawOrbs(ctx: CanvasRenderingContext2D, s: RunState, alpha: numb
   }
   bodies.forEach((b, i) => {
     // 웨폰 마스터: 칼끝이 적(지키는 검은 도는 방향)을 향한 진짜 검
-    if (w.orbit === "blades" && b.tag !== "pet") drawSword(ctx, snap(b.x), snap(b.y), bladeAngle(s, b, i, cx, cy), b.tag, s.tick);
+    if (w.orbit === "blades" && b.tag !== "pet") drawSword(ctx, snap(b.x), snap(b.y), bladeAngle(s, b, i, cx, cy), b.tag, s.tick, (p.flyers ?? []).some((f) => f.i === i));
     else drawBody(ctx, b, snap, s.tick);
   });
   if (w.orbit === "hand") drawGodHand(ctx, s, cx, cy, snap);

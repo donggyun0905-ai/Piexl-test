@@ -22,8 +22,9 @@ export interface OrbitPlayerState {
   /** 갓 핸드: 잡은 적 id (0 = 돌멩이) · 내려찍을 때까지 남은 틱 · 보스전이면 피해 2배 */
   handId?: number;
   handTicks?: number;
-  /** 날아가 때리는 검·별: 회전체 번호 · 노리는 적 id · 날아간 틱 · 노리는 자리 · 때린 횟수 · 돌아오기 시작한 틱 */
-  flyers?: { i: number; id: number; t: number; x: number; y: number; n?: number; back?: number }[];
+  /** 날아가 때리는 검·별: 회전체 번호 · 노리는 적 id · 날아간 틱 · 노리는 자리 · 때린 횟수 · 돌아오기 시작한 틱
+   *  웨폰 마스터 검은 자유롭게 날아다님: 지금 자리(px·py) · 빠르기(vx·vy) · 마지막으로 꿰뚫은 적·틱 */
+  flyers?: { i: number; id: number; t: number; x: number; y: number; n?: number; back?: number; px?: number; py?: number; vx?: number; vy?: number; lastId?: number; lastT?: number }[];
   /** 펫·전깃줄: 다음까지 남은 틱 */
   petCd?: number;
   wireCd?: number;
@@ -32,4 +33,6 @@ export interface OrbitPlayerState {
 export interface OrbitShotState {
   /** 중력 안에 들어와 느려진 적 탄 */
   slowed?: boolean;
+  /** 맞히면 이 상태이상 피해도 (원소술사 강철 출혈 · 트리거 폭풍, 탄 피해의 30%) */
+  dot?: import("./types").DotKind;
 }
