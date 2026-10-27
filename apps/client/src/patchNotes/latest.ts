@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.146",
+    date: "2026-10-27",
+    items: {
+      ko: ["영사: 실 한 가닥 피해를 더 낮춤 (기본 공격력의 50% → 20%) · 진짜 피해는 얽힘 5로 찢기·과다출혈 (그대로)"],
+      en: ["Silk: thread damage lowered further (50% → 20% of base attack) · the real damage is tearing at 5 tangles and Hemorrhage (unchanged)"],
+      ja: ["影糸使い: 糸1本のダメージをさらに下げた（基本攻撃力の50% → 20%）· 本当のダメージは絡み5の引き裂き・大量出血（そのまま）"],
+    },
+  },
+  {
     version: "0.48.145",
     date: "2026-10-27",
     items: {

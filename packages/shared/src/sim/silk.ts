@@ -1,6 +1,6 @@
 // 영사(아스칼론, 시즌 2): 실을 다루는 여자. 실 100가닥을 장전해 아주 빠르게 쏨 (실 하나 = 방 끝에서 끝까지 1초 보이는 실선, 그 줄의 적을 벰)
 // 실에 얽힘이 5 쌓인 적은 실이 당겨 찢김 (공격력 250% + 출혈) · 실 30가닥을 쓸 때마다 노리는 적을 가로지르는 실 30가닥 연사
-// (남은 실이 10 이하일 때 쏜 실은 연사에 안 셈) · 다 쓰면 장전 · 실 피해는 기본 공격력의 절반(아이템 무관), 맞을 때마다 출혈 스택 30이면 과다출혈 500%. 수치는 weaponsSilk.SILK, 아이템은 itemsSilk
+// (남은 실이 10 이하일 때 쏜 실은 연사에 안 셈) · 다 쓰면 장전 · 실 피해는 기본 공격력의 20%(아이템 무관), 맞을 때마다 출혈 스택 30이면 과다출혈 500%. 수치는 weaponsSilk.SILK, 아이템은 itemsSilk
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, TICK_RATE } from "../constants";
 import { SILK_PERKS as K } from "../itemsSilk";
 import { createRng, deriveSeed } from "../rng";
