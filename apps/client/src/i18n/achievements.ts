@@ -5,6 +5,7 @@ import { itemName } from "./items";
 import { TEXT } from "./text";
 import { charactersFor } from "../characterGoals";
 import { TERRA_ACHIEVEMENTS } from "./achievementsTerra";
+import { ASCALON_ACHIEVEMENTS } from "./achievementsAscalon";
 
 type Names = Record<Lang, string>;
 type Row = [ko: string, en: string, ja: string];
@@ -69,6 +70,7 @@ const NAMES: Record<AchievementId, { name: Names; desc: Names }> = {
   clearMukin: n(["말없는 성벽", "The Silent Wall", "無言の城壁"], ["묵인으로 클리어", "Clear as Mukin", "黙忍でクリア"]),
   clearSamyeol: n(["만천화우", "A Sky of Falling Needles", "満天花雨"], ["사멸로 클리어", "Clear as Samyeol", "死滅でクリア"]),
   ...TERRA_ACHIEVEMENTS,
+  ...ASCALON_ACHIEVEMENTS,
   clearSlayer: n(["피로 물든 미소", "Blood-Soaked Grin", "血染めの笑み"], ["학살자로 클리어", "Clear as the Slayer", "虐殺者でクリア"]),
   clearOni: n(["신인족의 강림", "Descent of the Shinin", "神人族の降臨"], ["오니로 클리어", "Clear as the Oni", "鬼でクリア"]),
   clearTitan: n(["무너지지 않는 거인", "The Unfallen Titan", "倒れぬ巨人"], ["거인으로 클리어", "Clear as the Titan", "巨人でクリア"]),

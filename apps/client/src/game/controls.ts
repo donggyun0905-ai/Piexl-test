@@ -13,6 +13,8 @@ export const ZOOM_MIN = 1;
 export const ZOOM_MAX = 2.5;
 /** PC 사용 아이템 키: 1번 칸 Q·1, 2번 칸 E·2 */
 const USE_KEYS: Record<string, number> = { KeyQ: 1, Digit1: 1, KeyE: 2, Digit2: 2 };
+/** 스킬이 있는 캐릭터(추적자)는 숫자 1·2·3이 스킬 (아이템은 Q·E) */
+const SKILL_KEYS: Record<string, number> = { Digit1: 1, Digit2: 2, Digit3: 3, Numpad1: 1, Numpad2: 2, Numpad3: 3 };
 
 export interface ControlsOptions {
   /** 터치·마우스를 받는 화면 전체 영역 */
@@ -53,6 +55,8 @@ export class Controls {
   private useQueued = 0;
   /** 풋내기 스탯 찍기 (1~7, 장비 줄의 스탯 버튼) */
   private statQueued = 0;
+  private skillQueued = 0;
+  skillKeys = false; // 숫자 키를 스킬로 씀 (추적자)
   /** 클릭·탭으로 고른 층 보상·미니맵 방 */
   private clickQueued: ClickTarget | null = null;
   zoom = 1;
@@ -100,6 +104,10 @@ export class Controls {
       if (e.code === "Space") {
         e.preventDefault(); // 페이지 스크롤·버튼 눌림 막기
         this.hitboxHeld = true;
+        return;
+      }
+      if (this.skillKeys && SKILL_KEYS[e.code]) {
+        this.skillQueued = SKILL_KEYS[e.code]!;
         return;
       }
       const slot = USE_KEYS[e.code];
@@ -175,6 +183,11 @@ export class Controls {
 
   queueUse(slot: number): void {
     this.useQueued = slot;
+  }
+
+  /** 스킬 쓰기 (화면 버튼). 1~3 */
+  queueSkill(n: number): void {
+    this.skillQueued = n;
   }
 
   /** 상호작용을 한 번 누른 것으로 처리 (모바일 버튼) */
@@ -253,14 +266,16 @@ export class Controls {
     const useSlot = this.useQueued;
     const pickChoice = this.clickQueued?.pickChoice ?? 0;
     const statPick = this.statQueued;
+    const skill = this.skillQueued;
     this.statQueued = 0;
+    this.skillQueued = 0;
     this.dashQueued = false;
     this.interactQueued = false;
     this.useQueued = 0;
     this.clickQueued = null;
     // 자동 공격 중에는 조준·공격 입력을 쓰지 않으므로 0으로 (입력 기록이 짧아지고, 기록 = 계산에 쓴 값)
-    if (this.autoAim) return { moveX, moveY, aimX: 0, aimY: 0, attack: false, dash, interact, useSlot, pickChoice, statPick, autoAim: true };
-    return { moveX, moveY, aimX, aimY, attack, dash, interact, useSlot, pickChoice, statPick, autoAim: false };
+    if (this.autoAim) return { moveX, moveY, aimX: 0, aimY: 0, attack: false, dash, interact, useSlot, pickChoice, statPick, skill, autoAim: true };
+    return { moveX, moveY, aimX, aimY, attack, dash, interact, useSlot, pickChoice, statPick, skill, autoAim: false };
   }
 
   /** 모바일 조준 중인지 (조준점 표시용) */

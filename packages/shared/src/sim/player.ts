@@ -26,8 +26,8 @@ import { fireMedic } from "./medicWeapons";
 import { medicSpeedMul } from "./heal";
 import { classMoveMul } from "./moveMul";
 import type { EnemyState, PlayerState, RunState, TickInput } from "./types";
-import { AIM_DIST_STEP } from "./types";
 import { addEffect, shotDirs, DASH_COOLDOWN, DASH_SPEED_MUL, DASH_TICKS, dist2, hasPerk, keepInRoom, normalize, roomGrid, STILL_TICKS, weaponOf } from "./util";
+import { readAim } from "./tracker";
 import { tabooUp } from "./taboo";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -93,8 +93,8 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
   } else {
     aim = normalize(input.aimX, input.aimY);
   }
-  // 기계공학자: 누른 곳까지 거리 (지뢰·위성 포·포탑을 거기로)
-  if (weaponOf(p).kind === "laser" || weaponOf(p).kind === "medic" || weaponOf(p).kind === "gun") p.aimDist = input.autoAim ? undefined : (Math.sqrt(input.aimX * input.aimX + input.aimY * input.aimY) / 100) * AIM_DIST_STEP;
+  // 누른 곳까지 거리 (지뢰·위성 포·포탑·저격을 거기로) · 추적자 스킬 키
+  readAim(p, input);
   if (aim) {
     p.faceX = aim[0];
     p.faceY = aim[1];

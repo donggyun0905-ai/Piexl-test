@@ -23,6 +23,7 @@ import { resetRider } from "./rider";
 import { resetBomber } from "./bomber";
 import { resetArtifacter } from "./artifacter";
 import { resetPunk } from "./punk";
+import { resetTracker } from "./tracker";
 import { resetRen } from "./ren";
 import { resetSpirit } from "./spirit";
 import { resetAbandoned } from "./abandoned";
@@ -208,6 +209,7 @@ export function practiceReset(s: RunState): void {
   resetBomber(p);
   resetArtifacter(p);
   resetPunk(p);
+  resetTracker(p);
   resetRen(p);
   resetSpirit(p);
   resetAbandoned(p);

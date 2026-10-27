@@ -39,9 +39,10 @@ import { RIDER_WEAPONS, type RideStyle } from "./weaponsRider";
 import { BOMBER_WEAPONS, type BombStyle } from "./weaponsBomber";
 import { ARTIFACTER_WEAPONS } from "./weaponsArtifacter";
 import { PUNK_WEAPONS, type CyberStyle } from "./weaponsPunk";
+import { TRACKER_WEAPONS } from "./weaponsTracker";
 
 /** laser 기계공학자·medic 의사: 누르고 있는 동안 짧은 간격으로 틱 피해 · combo 격투가: 누를 때마다 콤보의 다음 기술 (combos) · chakram 베두인 · spear 장수 */
-export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber";
+export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe";
 export type { OrbitKind } from "./weaponsElemental";
 export type { LaserGear } from "./weaponsEngineer";
 export type { MedicGear } from "./weaponsDoctor";
@@ -76,6 +77,7 @@ export { RIDER, type RideMove, type RideStyle } from "./weaponsRider";
 export { BOMBER, type BombMode, type BombStyle } from "./weaponsBomber";
 export { ARTIFACTER } from "./weaponsArtifacter";
 export { PUNK, type CyberMove, type CyberStyle } from "./weaponsPunk";
+export { TRACKER } from "./weaponsTracker";
 
 export interface WeaponDef {
   id: string;
@@ -221,6 +223,7 @@ export const WEAPONS = {
   ...BOMBER_WEAPONS,
   ...ARTIFACTER_WEAPONS,
   ...PUNK_WEAPONS,
+  ...TRACKER_WEAPONS,
 } as const satisfies Record<string, WeaponDef>;
 
 export type WeaponId = keyof typeof WEAPONS;

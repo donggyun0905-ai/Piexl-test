@@ -23,6 +23,8 @@ export interface TickInput {
   pickChoice: number;
   /** 풋내기 스탯 찍기: 0 = 안 찍음, 1~7 = 그 능력치 (누른 순간만, sim/novice) */
   statPick: number;
+  /** 추적자 스킬 키: 0 = 안 누름, 1~3 = 그 스킬 (누른 순간만, sim/tracker) */
+  skill: number;
   autoAim: boolean;
 }
 
@@ -37,6 +39,7 @@ export const EMPTY_INPUT: TickInput = {
   useSlot: 0,
   pickChoice: 0,
   statPick: 0,
+  skill: 0,
   autoAim: false,
 };
 

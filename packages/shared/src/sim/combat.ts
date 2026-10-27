@@ -24,6 +24,7 @@ import { gainExp, rollCrit } from "./novice";
 import type { EnemyState, RunState } from "./types";
 import { morphKill } from "./morphXp";
 import { recalcStats } from "./items";
+import { trackerTaken } from "./tracker";
 import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, KNOCKBACK, keepInRoom, markCrit, normalize, roomGrid, RUSH_TICKS, STILL_TICKS } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -68,7 +69,7 @@ export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: numbe
   // 풍뎅이 부적(베두인): 보스에게 피해 +30%
   if (ENEMIES[e.kind].boss && hasPerk(s.player, "scarabCharm")) dmg *= BEDOUIN_PERKS.scarabCharm.boss;
   // 탐식(악의 사도)·예리함: 방어력이 깎인 적은 더 아픔 · 각주(서기관): 기록이 새겨진 적은 더 아픔
-  dmg *= 1 + (e.apDef ?? 0) + inkTaken(s.player, e) + sharpBonus(s, e);
+  dmg *= (1 + (e.apDef ?? 0) + inkTaken(s.player, e) + sharpBonus(s, e)) * trackerTaken(e);
   e.hp -= e.melt ? dmg * (1 + R.MELT_ADD * e.melt) : dmg;
   onHitExtra(s, e, dmg);
   e.hitFlash = 6;

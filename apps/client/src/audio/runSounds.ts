@@ -29,6 +29,9 @@ interface Seen {
   /** 공격 횟수 (탄·휘두르기 효과가 없는 캐릭터도 공격 소리가 나게) */
   attacks: number;
   tick: number;
+  /** 추적자: 암습 저격 남은 발 · 강력한 한방 모으는 중 */
+  ambush: number;
+  charging: boolean;
 }
 
 /** 탄을 쏘는 느낌의 캐릭터 (나머지는 휘두르는 소리) */
@@ -60,6 +63,8 @@ function snapshot(s: RunState): Seen {
     guards: s.player.mercGuards ?? 0,
     attacks: s.player.attackCount,
     tick: s.tick,
+    ambush: s.player.trAmbush?.shots ?? 0,
+    charging: (s.player.trCharge ?? 0) > 0,
   };
 }
 
@@ -96,7 +101,18 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
       if (now.swings > seen.swings) fx.push("swing");
       // 전용 효과만 쓰는 캐릭터: 공격할 때마다 소리 (이번에 탄·휘두르기 소리가 없었으면)
       const c = run.player.characterId;
-      if (now.attacks > seen.attacks && !fx.includes("shot") && !fx.includes("swing")) fx.push(SHOOTERS.has(c) ? "shot" : "swing");
+      if (c === "tracker") {
+        // 추적자: 총성마다 다르게, 암습 저격·강력한 한방은 화면이 크게 흔들림
+        if (now.ambush < seen.ambush) {
+          fx.push("snipe");
+          onShake(3);
+        } else if (seen.charging && !now.charging) {
+          fx.push("power");
+          onShake(7);
+        } else if (now.attacks > seen.attacks) fx.push("rifle");
+        const i = fx.indexOf("shot");
+        if (i >= 0 && fx.some((f) => f === "snipe" || f === "power" || f === "rifle")) fx.splice(i, 1);
+      } else if (now.attacks > seen.attacks && !fx.includes("shot") && !fx.includes("swing")) fx.push(SHOOTERS.has(c) ? "shot" : "swing");
       if (c === "elementalist" && now.hits > 0 && now.hits !== seen.hits && now.tick - orbSound >= 15) {
         orbSound = now.tick;
         if (!fx.includes("swing")) fx.push("swing");

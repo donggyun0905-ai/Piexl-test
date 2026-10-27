@@ -1,5 +1,5 @@
 // 게임 진행: 고정 간격 계산 + 화면 주사율에 맞춘 그리기 + HUD 갱신 (React 밖에서 돌림)
-import { applyRoom, ARENA_LEVELS, expToNext, FLOOR_COUNT, HERO_FLOORS, LEGENDS, tabooPoints, VIEW_HEIGHT, VIEW_WIDTH, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
+import { applyRoom, ARENA_LEVELS, expToNext, FLOOR_COUNT, HERO_FLOORS, LEGENDS, tabooPoints, trackerSkills, VIEW_HEIGHT, VIEW_WIDTH, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { LEGEND_NAMES } from "../i18n/items/general";
 import { SPECIAL_NAMES } from "../i18n/items/abandoned";
@@ -60,6 +60,8 @@ export interface LoopOptions {
 
 export function startGameLoop(o: LoopOptions): () => void {
   const { run, ctx, controls, t, lang } = o;
+  // 추적자는 숫자 1·2·3이 스킬 (아이템은 Q·E)
+  controls.skillKeys = run.player.characterId === "tracker";
   let acc = 0;
   let last = performance.now();
   let frame = 0;
@@ -133,6 +135,8 @@ export function startGameLoop(o: LoopOptions): () => void {
       slots: [...p.useSlots],
       passives: [...p.passives],
       ...(p.characterId === "novice" ? { novice: { lv: p.lv ?? 1, exp: p.exp ?? 0, need: expToNext(p.lv ?? 1), points: p.points ?? 0 } } : {}),
+      // 추적자 스킬 대기 (5% 단위로만 바뀌게)
+      ...(p.characterId === "tracker" ? { skills: trackerSkills(p).map((v) => Math.ceil(v * 20) / 20) } : {}),
     };
     const lk = loadoutKey(view);
     if (lk !== shownLoadout) {
@@ -191,6 +195,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       showRange: getSettings().showRange,
       pixelScale: ctx.canvas.width / VIEW_WIDTH,
       zoom: controls.zoom,
+      cursor: () => controls.mouse,
       legendName: (i) => LEGEND_NAMES[LEGENDS[i] ?? "charge"][lang],
       tagName: (kind) => SPECIAL_NAMES[kind][lang],
       oniUp: (k) => t(k === "hp" ? "oniUpHp" : k === "regen" ? "oniUpRegen" : "oniUpReach"),

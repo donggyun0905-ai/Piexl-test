@@ -1,4 +1,5 @@
 import { NovicePanel, type NoviceView } from "./NovicePanel";
+import { SkillButtons } from "./SkillButtons";
 import type { PassiveId, UseItemId, WeaponId } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { useState, type MouseEvent } from "react";
@@ -13,6 +14,8 @@ export interface LoadoutView {
   passives: PassiveId[];
   /** 풋내기 레벨·경험치·스탯 포인트 */
   novice?: NoviceView;
+  /** 스킬이 있는 캐릭터(추적자): 스킬마다 남은 대기 0~1 */
+  skills?: number[];
 }
 
 /** PC 사용 아이템 키 표시 (controls의 USE_KEYS와 같게) */
@@ -21,7 +24,7 @@ const USE_KEY_LABELS = ["Q", "E"];
 /** 화면 바뀜 판단용 */
 export function loadoutKey(v: LoadoutView): string {
   const n = v.novice ? `|${v.novice.lv},${v.novice.exp},${v.novice.points}` : "";
-  return `${v.weaponId}|${v.slots.join(",")}|${v.passives.join(",")}${n}`;
+  return `${v.weaponId}|${v.slots.join(",")}|${v.passives.join(",")}${n}|${v.skills?.join(",") ?? ""}`;
 }
 
 interface Props {
@@ -65,6 +68,7 @@ export function Loadout({ view, lang, t, touchMode, controls }: Props) {
   return (
     <div className="loadout">
       {view.novice && <NovicePanel view={view.novice} t={t} controls={controls} />}
+      {view.skills && <SkillButtons skills={view.skills} t={t} controls={controls} />}
       <span className="loadout-weapon">
         {t("weapon")}:{" "}
         <span className={`loadout-weapon-icon ${isOn(weapon) ? "on" : ""}`} {...tipProps(weapon)}>

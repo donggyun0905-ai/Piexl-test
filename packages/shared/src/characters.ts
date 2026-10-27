@@ -2,7 +2,7 @@
 import type { WeaponId } from "./content";
 
 /** 전용 무기·아이템을 가질 수 있는 캐릭터 (content.WeaponDef.exclusive · items.PassiveDef.exclusive) */
-export type ExclusiveId = "warden" | "drifter" | "mage" | "mystic" | "engineer" | "elementalist" | "brawler" | "doctor" | "gunner" | "beast" | "ninja" | "chronomancer" | "summoner" | "novice" | "bedouin" | "general" | "imugi" | "apostle" | "stargazer" | "duck" | "abandoned" | "titan" | "oni" | "scribe" | "idra" | "byeonhui" | "fly" | "elder" | "ren" | "spiritist" | "plague" | "slayer" | "eater" | "mukin" | "samyeol" | "automata" | "rider" | "bomber" | "artifacter" | "punk";
+export type ExclusiveId = "warden" | "drifter" | "mage" | "mystic" | "engineer" | "elementalist" | "brawler" | "doctor" | "gunner" | "beast" | "ninja" | "chronomancer" | "summoner" | "novice" | "bedouin" | "general" | "imugi" | "apostle" | "stargazer" | "duck" | "abandoned" | "titan" | "oni" | "scribe" | "idra" | "byeonhui" | "fly" | "elder" | "ren" | "spiritist" | "plague" | "slayer" | "eater" | "mukin" | "samyeol" | "automata" | "rider" | "bomber" | "artifacter" | "punk" | "tracker";
 
 export interface CharacterDef {
   id: string;
@@ -90,6 +90,8 @@ export const CHARACTERS = {
   artifacter: { id: "artifacter", maxHp: 100, damage: 12, moveSpeed: 1.3, luck: 1, startWeapon: "afRepulsor" },
   /** 펑크 (테라코어): 네온과 크롬의 사이버 무기 · 몸에 심는 능력 · 신경 가속(게이지가 차면 대시로 켜서 시간을 느리게) (sim/punk) */
   punk: { id: "punk", maxHp: 95, damage: 12, moveSpeed: 1.4, luck: 1, startWeapon: "cyKatana" },
+  /** 추적자 (아스칼론): 저격총 하나 · 스킬 셋(1 암습 저격 · 2 강력한 한방 · 3 연발사격) (sim/tracker) */
+  tracker: { id: "tracker", maxHp: 90, damage: 13, moveSpeed: 1.3, luck: 0, startWeapon: "trSniper" },
   /** 별지기 (히든, 무작위 10%): 별자리를 그려 빛줄기로 태움 (sim/star) */
   stargazer: { id: "stargazer", maxHp: 110, damage: 12, moveSpeed: 1.3, luck: 1, startWeapon: "starStaff" },
   /** 오리 (히든, 무작위 5%): 꽥 음파·새끼 오리 (sim/duck) */

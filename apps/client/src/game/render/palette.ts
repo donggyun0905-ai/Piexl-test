@@ -54,6 +54,7 @@ export const C = {
   bomber: "#ff6a2a",
   artifacter: "#4a9aff",
   punk: "#ff4ad8",
+  tracker: "#5a8a4a",
   abandoned: "#7aa070",
   titan: "#c87a3a",
   oni: "#d84a3a",

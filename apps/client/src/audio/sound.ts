@@ -21,7 +21,10 @@ export type Sfx =
   | "guard1"
   | "guard2"
   | "guard3"
-  | "crit";
+  | "crit"
+  | "rifle"
+  | "snipe"
+  | "power";
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;
@@ -118,6 +121,23 @@ function critSound(): void {
 
 const SOUNDS: Record<Sfx, () => void> = {
   crit: critSound,
+  // 추적자: 평소 저격 (짧고 날카로운 총성) · 암습 저격 (크게 "탕!" + 메아리) · 강력한 한방 (묵직한 폭음 + 긴 여운)
+  rifle: () => {
+    noise(0.12, 0.5, 4200);
+    tone({ type: "square", from: 300, to: 70, dur: 0.1, vol: 0.18 });
+  },
+  snipe: () => {
+    noise(0.28, 0.95, 5200);
+    tone({ type: "sawtooth", from: 180, to: 38, dur: 0.32, vol: 0.4 });
+    noise(0.4, 0.22, 900);
+    noise(0.3, 0.12, 2400);
+  },
+  power: () => {
+    noise(0.6, 1, 2600);
+    tone({ type: "sawtooth", from: 120, to: 26, dur: 0.8, vol: 0.5 });
+    tone({ type: "sine", from: 60, to: 30, dur: 1.1, vol: 0.5 });
+    tone({ type: "triangle", from: 1600, to: 400, dur: 0.25, vol: 0.2 });
+  },
   swing: () => noise(0.07, 0.15, 3000),
   shot: () => tone({ type: "square", from: 880, to: 440, dur: 0.06, vol: 0.12 }),
   hit: () => tone({ type: "square", from: 220, to: 110, dur: 0.05, vol: 0.15 }),

@@ -47,6 +47,7 @@ import { drawRunPet } from "./runPet";
 import { drawOniUps, type OniUp } from "./oniUps";
 import { drawSwarmGround } from "./swarmMap";
 import { themeFor } from "./floorThemes";
+import { drawAmbushOverlay, drawTrackerAura } from "./tracker";
 import { drawBossBar, drawEffects, drawProjectiles, drawReticleFor } from "./shots";
 
 export interface DrawOptions {
@@ -61,6 +62,8 @@ export interface DrawOptions {
   pixelScale: number;
   /** 화면 확대 (1 = 방 전체) */
   zoom: number;
+  /** 마우스 자리 (브라우저 화면 좌표, 추적자 암습 저격 조준 원). 없으면 자동 조준 */
+  cursor?: () => { x: number; y: number } | null;
   /** 보스 이름 (레이드 아레나 최종 보스 출구 표시) */
   bossName?: (kind: string) => string;
   /** 장수 필살기 이름 (generalLegends.LEGENDS 순번) */
@@ -93,6 +96,14 @@ function eachPerson(s: RunState, fn: (me: boolean) => void): void {
   }
   useSeat(s, mine);
   fn(true);
+}
+
+/** 마우스 자리 → 게임 좌표 */
+function cursorWorld(ctx: CanvasRenderingContext2D, opt: DrawOptions, k: number, camX: number, camY: number): { x: number; y: number } | null {
+  const m = opt.cursor?.();
+  if (!m) return null;
+  const r = ctx.canvas.getBoundingClientRect();
+  return { x: ((m.x - r.left) * (ctx.canvas.width / r.width)) / k + camX, y: ((m.y - r.top) * (ctx.canvas.height / r.height)) / k + camY };
 }
 
 export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions): void {
@@ -169,6 +180,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawTerraAura(ctx, s, alpha, snap);
     drawTerraAuraB(ctx, s, alpha, snap);
     drawTerraAuraC(ctx, s, alpha, snap);
+    drawTrackerAura(ctx, s, alpha, snap);
   });
   drawProjectiles(ctx, s, alpha, snap);
   drawEffects(ctx, s, alpha, snap);
@@ -179,6 +191,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   opt.overlay?.(ctx, snap);
   drawOniUps(ctx, s, alpha, snap, opt.oniUp);
   opt.modeOverlay?.(ctx, s, alpha, snap);
+  drawAmbushOverlay(ctx, s, snap, s.player.aimDist === undefined ? null : cursorWorld(ctx, opt, k, camX, camY));
   drawBossBar(ctx, s);
   if (opt.showReticle && !s.over) drawReticleFor(ctx, s, alpha, snap);
   // 화면에 붙는 글자 (카메라와 상관없이 왼쪽 위)

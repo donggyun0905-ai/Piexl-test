@@ -28,7 +28,7 @@ export const BOARD_SIZE = 30;
 const FIELDS = 6;
 
 function flagsOf(i: TickInput): number {
-  return (i.attack ? 1 : 0) | (i.dash ? 2 : 0) | (i.interact ? 4 : 0) | (i.autoAim ? 8 : 0) | (i.useSlot << 4) | (i.pickChoice << 6) | (i.statPick << 8);
+  return (i.attack ? 1 : 0) | (i.dash ? 2 : 0) | (i.interact ? 4 : 0) | (i.autoAim ? 8 : 0) | (i.useSlot << 4) | (i.pickChoice << 6) | (i.statPick << 8) | (i.skill << 12);
 }
 
 export function encodeInputs(inputs: readonly TickInput[]): Int16Array {
@@ -66,6 +66,7 @@ export function decodeInputs(data: Int16Array): TickInput[] {
       useSlot: (f >> 4) & 3,
       pickChoice: (f >> 6) & 3,
       statPick: (f >> 8) & 15,
+      skill: (f >> 12) & 3,
     };
     for (let j = 0; j < n; j++) out.push(input);
   }

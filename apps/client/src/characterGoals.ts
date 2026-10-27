@@ -65,6 +65,7 @@ export const CHARACTER_GOALS: Partial<Record<CharacterId, string>> = {
   bomber: "kills5000",
   artifacter: "kills5000",
   punk: "kills5000",
+  tracker: "kills5000",
   /** 풋내기: 첫 클리어 (처음부터 다시 시작하는 도전) */
   novice: "clearRun",
 };

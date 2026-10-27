@@ -16,6 +16,7 @@ function randomInputs(seed: number, ticks: number): TickInput[] {
     if (i % 20 === 0) {
       cur = {
         statPick: 0,
+        skill: 0,
         moveX: rng.int(-100, 100),
         moveY: rng.int(-100, 100),
         aimX: rng.int(-1000, 1000),
