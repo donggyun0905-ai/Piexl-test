@@ -12,7 +12,7 @@ import type { BeastPlayerState, BeastShotState } from "./beastTypes";
 import type { MedicEnemyState, MedicPlayerState } from "./medicTypes";
 import type { TdEnemyState } from "./tdTypes";
 import type { NinjaEnemyState, NinjaPlayerState, NinjaShotState } from "./ninjaTypes";
-import type { ChronoPlayerState, ChronoShotState } from "./chronoTypes";
+import type { ChronoEnemyState, ChronoPlayerState, ChronoShotState } from "./chronoTypes";
 import type { NovicePlayerState, SummonPlayerState } from "./summonTypes";
 import type { BedouinPlayerState } from "./bedouinTypes";
 import type { GeneralPlayerState } from "./generalTypes";
@@ -81,7 +81,7 @@ export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, B
 /** 적 행동 단계. 보스는 volley(탄 쏘기)·summon(부르기)·blink(순간이동), 가디언은 swing(휘두르기)도 씀 */
 export type ChargerPhase = "walk" | "windup" | "charge" | "volley" | "summon" | "blink" | "swing" | "act";
 
-export interface EnemyState extends Body, LaserEnemyState, OrbitEnemyState, BrawlEnemyState, MedicEnemyState, GunEnemyState, BossEnemyState, TdEnemyState, NinjaEnemyState, ImugiEnemyState, ApostleEnemyState, SwarmEnemyState, OniEnemyState, ScribeEnemyState, S2EnemyState, H2EnemyState {
+export interface EnemyState extends Body, LaserEnemyState, OrbitEnemyState, BrawlEnemyState, MedicEnemyState, GunEnemyState, BossEnemyState, TdEnemyState, NinjaEnemyState, ImugiEnemyState, ApostleEnemyState, SwarmEnemyState, OniEnemyState, ScribeEnemyState, S2EnemyState, H2EnemyState, ChronoEnemyState {
   /** 이 자리에 붙어 있음 (연습장 허수아비: 밀려도 제자리, sim/enemies) */
   anchor?: [number, number];
   id: number;

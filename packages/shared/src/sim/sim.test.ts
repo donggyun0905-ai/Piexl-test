@@ -4,6 +4,7 @@ import { createRng } from "../rng";
 import { FLOOR_COUNT, generateFloor, LANES, middleLayersFor } from "./floor";
 import { EXIT_X } from "./util";
 import { WEAPONS } from "../content";
+import { RUNE_RULES } from "./rune";
 import { createRun, EMPTY_INPUT, stepSim, type EnemyState, type RunState, type TickInput } from "./index";
 
 /** 시드로 만든 무작위 입력 기록 */
@@ -242,7 +243,7 @@ describe("게임 계산", () => {
     expect(run.kills).toBe(1);
   });
 
-  it("마법사 마법탄은 맞은 자리에서 터져 주변 적에게 절반 피해", () => {
+  it("마법사 마법탄(일반 공격 75%)은 맞은 자리에서 터져 주변 적에게 절반 피해", () => {
     const run = createRun(3, "mage");
     run.player.weaponId = "stormstaff";
     const hit = enemy(1, run.player.x + 40, run.player.y);
@@ -252,7 +253,7 @@ describe("게임 계산", () => {
     stepSim(run, { ...EMPTY_INPUT, aimX: 1000, attack: true });
     expect(run.projectiles[0]!.blast).toBeGreaterThan(0);
     play(run, Array(30).fill(EMPTY_INPUT));
-    const dmg = run.player.stats.damage;
+    const dmg = run.player.stats.damage * RUNE_RULES.NORMAL_MUL;
     expect(hit.hp).toBeCloseTo(100 - dmg);
     expect(near.hp).toBeCloseTo(100 - dmg / 2);
     expect(far.hp).toBe(100);

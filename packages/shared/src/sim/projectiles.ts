@@ -4,6 +4,7 @@ import { s2Hit } from "./s2Hits";
 import { renBlock } from "./ren";
 import { ENEMIES } from "../content";
 import { starHit } from "./ninja";
+import { echoHit } from "./chrono";
 import { blastAt, damageEnemy, damagePlayer, healPlayer, ignite, removeDead } from "./combat";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 import { summonShot } from "./summonTypes";
@@ -86,7 +87,7 @@ export function updateProjectiles(s: RunState, frozen = false): void {
           if (pr.spirit === "ink") e.ink = Math.min(SCRIBE.maxInk, (e.ink ?? 0) + 1);
           s2Hit(s, pr, e);
           if (pr.slow && !ENEMIES[e.kind].boss) e.slowTicks = Math.max(e.slowTicks ?? 0, pr.slow);
-          if (pr.echo && hasPerk(p, "eternity")) healPlayer(s, PERKS.eternity.heal);
+          if (pr.echo) echoHit(s, e);
           // 헤어볼: 끈적해서 느려지고 불탐
           if (pr.sticky) {
             e.slowTicks = Math.max(e.slowTicks ?? 0, 90);

@@ -6,6 +6,7 @@ import { bindInput } from "./bossBinds";
 import { TICK_RATE } from "../constants";
 import { blastAt, damageEnemy } from "./combat";
 import { afterCharmAttack, charmFields, HASTE_MUL } from "./talisman";
+import { runeStroke } from "./rune";
 import { beamInterval } from "./laser";
 import { fireLaser } from "./laserWeapons";
 import { orbitAttack } from "./orbitAttack";
@@ -200,8 +201,9 @@ function attack(s: RunState): void {
     dmg *= PERKS.ambush.damage;
     p.ambushTicks = 0;
   }
-  // 분노: 체력이 낮을수록 공격력 증가
+  // 분노: 체력이 낮을수록 공격력 증가 · 마법사는 일반 공격이 약하고 공격마다 마법진에 한 획 (sim/rune)
   if (hasPerk(p, "rage")) dmg *= 1 + PERKS.rage.damage * (1 - Math.max(0, p.hp) / p.stats.maxHp);
+  dmg *= runeStroke(s, dmg);
   p.attackCount++;
   if (w.kind === "melee") {
     // 회전 베기: 몇 번째 공격마다 한 바퀴

@@ -16,6 +16,7 @@ export const GUIDE_EN_A: Partial<Record<CharacterId, readonly string[]>> = {
   ],
   mage: [
     "Basics: 75 HP (low) · 1 luck · magic shots burst on hit and damage nearby foes",
+    "Magic Runes: weapon attacks are basic attacks (75% damage), and each one carves a stroke into the circle at your feet. At 6 strokes a big spell matching your weapon lands on the nearest foe (fire nova, lightning, frost, comet, starfall, void)",
     "Higher range and projectile speed make the bursts reach farther and faster",
     "Tip: great against packs. Your HP is low, so don't get close",
   ],
@@ -70,6 +71,7 @@ export const GUIDE_EN_A: Partial<Record<CharacterId, readonly string[]>> = {
   chronomancer: [
     "Basics: 90 HP · your own attacks are weak (70%)",
     "One second later, an afterimage attacks again at the same spot for 120%",
+    "Time Collapse: each afterimage hit adds a clock mark over the foe; at 5 the clock shatters for 400% damage (half to foes nearby)",
     "Fight on the move and attacks erupt again everywhere you've been · each weapon attacks differently",
     "Tip: attack the path foes will walk so the afterimage catches them",
   ],

@@ -16,9 +16,9 @@ export const CHARACTER_TEXT = {
   },
   mage: { ko: "마법사", en: "Mage", ja: "魔法使い" },
   mageDesc: {
-    ko: "원거리 · 마법탄이 터져 주변 적까지 맞힌다 · 체력이 낮다",
-    en: "Ranged · Magic bolts burst and hit nearby foes · Low health",
-    ja: "遠距離 · 魔法弾が弾けて周りの敵にも当たる · 体力が低い",
+    ko: "원거리 · 공격할 때마다 발밑 마법진에 한 획씩, 다 새기면 큰 마법이 떨어진다 · 체력이 낮다",
+    en: "Ranged · Each attack carves a rune stroke at your feet; complete it and a great spell falls · Low health",
+    ja: "遠距離 · 攻撃するたびに足元の魔法陣に一画ずつ、刻み終えると大魔法が落ちる · 体力が低い",
   },
   mystic: { ko: "음양사", en: "Talisman Master", ja: "陰陽師" },
   mysticDesc: {
@@ -46,9 +46,9 @@ export const CHARACTER_TEXT = {
   },
   chronomancer: { ko: "시간술사", en: "Chronomancer", ja: "時間術師" },
   chronomancerDesc: {
-    ko: "시간 · 본인 공격은 약하지만, 1초 뒤 공격한 그 자리에서 잔상이 더 세게 한 번 더 한다 · 움직이며 싸우면 지나온 자리마다 공격이 다시 터진다",
-    en: "Time · Your own attacks are weak, but 1s later an echo repeats each one harder where you made it · Fight on the move and your past self keeps striking",
-    ja: "時間 · 本人の攻撃は弱いが、1秒後に攻撃した場所で残像がより強くもう一度行う · 動きながら戦うと通った場所ごとに攻撃が再び炸裂する",
+    ko: "시간 · 본인 공격은 약하지만, 1초 뒤 공격한 그 자리에서 잔상이 더 세게 한 번 더 한다 · 움직이며 싸우면 지나온 자리마다 공격이 다시 터진다 · 잔상에 5번 맞은 적은 시간 붕괴",
+    en: "Time · Your own attacks are weak, but 1s later an echo repeats each one harder where you made it · Fight on the move and your past self keeps striking · 5 afterimage hits trigger Time Collapse",
+    ja: "時間 · 本人の攻撃は弱いが、1秒後に攻撃した場所で残像がより強くもう一度行う · 動きながら戦うと通った場所ごとに攻撃が再び炸裂する · 残像に5回当たった敵は時間崩壊",
   },
   summoner: { ko: "소환술사", en: "Summoner", ja: "召喚術師" },
   summonerDesc: {

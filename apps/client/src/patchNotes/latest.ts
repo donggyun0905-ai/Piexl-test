@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.127",
+    date: "2026-10-27",
+    items: {
+      ko: [
+        "마법사 새 특징 '마법 문양': 무기 공격은 일반 공격(피해 75%), 공격할 때마다 발밑 마법진에 한 획씩 새겨지고 6획이 차면 무기에 맞는 큰 마법이 가까운 적에게 떨어짐 (불꽃 폭발·번개 줄기·얼음·혜성·별비·공허) · 전보다 강해짐",
+        "시간술사 '시간 붕괴': 잔상에 맞을 때마다 적 머리 위 시계 표식이 쌓이고, 5개가 되면 시계가 금 가며 깨져 공격력 400% (둘레 적에게도 절반)",
+      ],
+      en: [
+        "Mage's new trait 'Magic Runes': weapon attacks are basic attacks (75% damage); each one carves a stroke into the circle at your feet, and at 6 strokes a big spell matching your weapon lands on the nearest foe (fire nova, lightning, frost, comet, starfall, void) · stronger than before",
+        "Chronomancer 'Time Collapse': each afterimage hit stacks a clock mark over the foe; at 5 the clock cracks and shatters for 400% damage (half to foes nearby)",
+      ],
+      ja: [
+        "魔法使いの新しい特徴「魔法紋様」：武器の攻撃は通常攻撃（ダメージ75%）、攻撃するたびに足元の魔法陣に一画ずつ刻まれ、6画で武器に合った大魔法が近くの敵に落ちる（炎の爆発・雷・氷・彗星・星の雨・虚空）· 以前より強く",
+        "時間術師「時間崩壊」：残像に当たるたびに敵の頭上に時計の印が溜まり、5つでひび割れて砕け攻撃力400%（周りの敵にも半分）",
+      ],
+    },
+  },
+  {
     version: "0.48.126",
     date: "2026-10-27",
     items: {

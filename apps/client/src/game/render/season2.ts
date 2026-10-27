@@ -14,6 +14,7 @@ import { drawNeedleShot, drawSamyeolFx } from "./samyeol";
 import { drawTerraFx, drawTerraShot } from "./terra2";
 import { drawTerraFxB, drawTerraShotB } from "./terra2b";
 import { drawTerraFxC, drawTerraShotC } from "./terra2c";
+import { drawRuneFx } from "./rune";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -132,7 +133,7 @@ export function drawS2Shot(ctx: Ctx, pr: ProjectileState, x: number, y: number, 
 
 /** 모습 바꿈: 새 모습 색의 잎 고리가 퍼짐 */
 export function drawS2Fx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
-  if (fx.kind !== "gaiaSwap") return drawElderFx(ctx, fx, snap) || drawSpiritFx(ctx, fx, snap) || drawMorphFx(ctx, fx, snap) || drawClawFx(ctx, fx, snap) || drawPlagueFx(ctx, fx, snap) || drawSlayerFx(ctx, fx, snap) || drawEaterFx(ctx, fx, snap) || drawMukinFx(ctx, fx, snap) || drawSamyeolFx(ctx, fx, snap) || drawTerraFx(ctx, fx, snap) || drawTerraFxB(ctx, fx, snap) || drawTerraFxC(ctx, fx, snap);
+  if (fx.kind !== "gaiaSwap") return drawElderFx(ctx, fx, snap) || drawSpiritFx(ctx, fx, snap) || drawMorphFx(ctx, fx, snap) || drawClawFx(ctx, fx, snap) || drawPlagueFx(ctx, fx, snap) || drawSlayerFx(ctx, fx, snap) || drawEaterFx(ctx, fx, snap) || drawMukinFx(ctx, fx, snap) || drawSamyeolFx(ctx, fx, snap) || drawTerraFx(ctx, fx, snap) || drawTerraFxB(ctx, fx, snap) || drawTerraFxC(ctx, fx, snap) || drawRuneFx(ctx, fx, snap);
   const t = 1 - fx.ticks / fx.maxTicks;
   const r = fx.size * (0.4 + 0.6 * t);
   const x = snap(fx.x);

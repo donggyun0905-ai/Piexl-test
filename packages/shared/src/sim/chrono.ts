@@ -16,6 +16,11 @@ const R = {
   SAND_SLOW: 60,
   STOP_STUN: 24,
   STOP_STUN_BOSS: 8,
+  /** 시간 붕괴: 잔상에 맞을 때마다 시계 표식 1, 이만큼 쌓이면 터짐 (공격력 배율 · 둘레 반경 · 둘레 피해 비율) */
+  CLOCK_MAX: 5,
+  COLLAPSE_MUL: 4,
+  COLLAPSE_R: 24,
+  COLLAPSE_SPLASH: 0.5,
 };
 export { R as CHRONO_RULES };
 
@@ -84,10 +89,11 @@ function attack(s: RunState, e: Echo, mul: number, echo: boolean): void {
       s.pendingBlasts.push({ tick: s.tick + BOMB_FUSE, x: e.tx, y: e.ty, radius: w.blast ?? 28, damage: dmg });
       addEffect(s, { kind: "lob", x: e.x, y: e.y, dirX: 0, dirY: 0, size: 5, maxTicks: 18, toX: e.tx, toY: e.ty });
       addEffect(s, { kind: "mark", x: e.tx, y: e.ty, dirX: 0, dirY: 0, size: w.blast ?? 28, maxTicks: BOMB_FUSE });
+      if (echo) markArea(s, e.tx, e.ty, w.blast ?? 28);
       return;
     case "future": {
       const t = s.enemies.find((x) => x.id === e.target && x.hp > 0) ?? nearest(s, e.x, e.y, p.stats.range);
-      if (t) (p.foresights ??= []).push({ at: s.tick + FUTURE_DELAY, target: t.id, x: t.x, y: t.y, dmg });
+      if (t) (p.foresights ??= []).push({ at: s.tick + FUTURE_DELAY, target: t.id, x: t.x, y: t.y, dmg, ...(echo ? { echo: true } : {}) });
       return;
     }
     default:
@@ -151,11 +157,31 @@ function stopPulse(s: RunState, e: Echo, dmg: number, slow: number, echo: boolea
   addEffect(s, { kind: "ring", x: e.x, y: e.y, dirX: 0, dirY: 0, size: r, maxTicks: 16, width: 1 });
 }
 
-/** 피해 + 시간 감속 + 영원(잔상 회복) */
+/** 피해 + 시간 감속 + 잔상이면 시계 표식·영원 */
 export function hit(s: RunState, t: EnemyState, dmg: number, dx: number, dy: number, slow: number, echo: boolean): void {
   damageEnemy(s, t, dmg, dx, dy);
   if (slow > 0 && !ENEMIES[t.kind].boss) t.slowTicks = Math.max(t.slowTicks ?? 0, slow);
-  if (echo && hasPerk(s.player, "eternity")) healPlayer(s, CHRONO_PERKS.eternity.heal);
+  if (echo) echoHit(s, t);
+}
+
+/** 잔상(또는 잔상의 탄)이 맞힘: 영원(회복) · 시계 표식, 다 차면 시간 붕괴 */
+export function echoHit(s: RunState, t: EnemyState): void {
+  const p = s.player;
+  if (hasPerk(p, "eternity")) healPlayer(s, CHRONO_PERKS.eternity.heal);
+  if (t.hp <= 0) return;
+  t.clock = (t.clock ?? 0) + 1;
+  if (t.clock < R.CLOCK_MAX) return;
+  t.clock = 0;
+  // 시간 붕괴: 시계가 깨지며 그 적에게 큰 피해, 둘레에도 조금
+  const dmg = p.stats.damage * R.COLLAPSE_MUL;
+  damageEnemy(s, t, dmg, 0, 0, false);
+  blastAt(s, t.x, t.y, R.COLLAPSE_R, dmg * R.COLLAPSE_SPLASH, { exclude: t, still: true });
+  addEffect(s, { kind: "chCollapse", x: t.x, y: t.y, dirX: 0, dirY: 0, size: t.r + 10, maxTicks: 36 });
+}
+
+/** 잔상 시한폭탄·낙뢰: 그 자리 적들에게 시계 표식 */
+function markArea(s: RunState, x: number, y: number, r: number): void {
+  for (const t of s.enemies) if (t.hp > 0 && (t.x - x) ** 2 + (t.y - y) ** 2 <= (r + t.r) ** 2) echoHit(s, t);
 }
 
 /** 때가 된 잔상이 공격 (패러독스·겹잔상이면 잔상을 또 남김) */
@@ -189,6 +215,7 @@ function updateForesights(s: RunState): void {
     if (f.at === s.tick) {
       const r = weaponOf(p).blast ?? 14;
       blastAt(s, f.x, f.y, r, f.dmg);
+      if (f.echo) markArea(s, f.x, f.y, r);
       addEffect(s, { kind: "bolt", x: f.x, y: f.y - 40, dirX: 0, dirY: 0, size: 2, maxTicks: 10, toX: f.x, toY: f.y, width: 2 });
     }
   }

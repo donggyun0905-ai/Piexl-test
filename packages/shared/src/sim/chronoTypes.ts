@@ -25,11 +25,20 @@ export interface Foresight {
   x: number;
   y: number;
   dmg: number;
+  /** 잔상이 부른 낙뢰 (시계 표식) */
+  echo?: boolean;
 }
 
 export interface ChronoPlayerState {
   echoes?: Echo[];
   foresights?: Foresight[];
+  /** 마법사: 발밑 마법진에 새겨진 획 수 (sim/rune) */
+  mgRune?: number;
+}
+
+export interface ChronoEnemyState {
+  /** 시간술사 잔상에 맞아 쌓인 시계 표식 (다 차면 시간 붕괴) */
+  clock?: number;
 }
 
 export interface ChronoShotState {

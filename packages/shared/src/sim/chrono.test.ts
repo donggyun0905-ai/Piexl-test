@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { CHARACTERS, WEAPONS, type WeaponId } from "../content";
 import type { PassiveId } from "../items";
-import { ECHO_DELAY } from "./chrono";
+import { CHRONO_RULES, ECHO_DELAY } from "./chrono";
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
 import { recalcStats } from "./items";
 import { weaponPool } from "./loot";
@@ -105,5 +105,19 @@ describe("시간술사", () => {
     expect(Math.min(...one)).toBeGreaterThan(Math.max(...one) / 2);
     const both = ids.map((_, i) => one[i]! + three[i]! / 2);
     expect(Math.min(...both)).toBeGreaterThan(Math.max(...both) / 2);
+  });
+  it("잔상에 맞을 때마다 시계 표식, 5개면 시간 붕괴 (큰 피해 · 표식 0으로)", () => {
+    const s = chrono("clockhands");
+    dummies(s, [80, 72]);
+    let collapsed = false;
+    let most = 0;
+    for (let i = 0; i < 900 && !collapsed; i++) {
+      step(s, 1);
+      most = Math.max(most, s.enemies[0]!.clock ?? 0);
+      collapsed = s.effects.some((f) => f.kind === "chCollapse");
+    }
+    expect(most).toBe(CHRONO_RULES.CLOCK_MAX - 1);
+    expect(collapsed).toBe(true);
+    expect(s.enemies[0]!.clock).toBe(0);
   });
 });
