@@ -46,6 +46,8 @@ export interface RemnantPlayerState {
   rmSeen?: number;
   /** 그림자 상태 남은 틱 (투명·무적, 다음 공격이 뒤치기) */
   rmShade?: number;
+  /** 그림자에서 친 뒤치기: 이번 피해는 반드시 치명타 (novice.rollCrit) */
+  rmSure?: boolean;
 }
 
 export interface WandererPlayerState {

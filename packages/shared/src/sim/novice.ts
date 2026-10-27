@@ -109,6 +109,8 @@ export function rollCrit(s: RunState, e: EnemyState, dmg: number): { dmg: number
   const tang = p.characterId === "samyeol";
   // 기본 스탯 치명타 (모든 캐릭터, sim/baseStats)
   const ex = extraOf(p);
+  // 잔영: 그림자에서 친 뒤치기는 반드시 치명타
+  if (p.rmSure && dmg > 0) return { dmg: dmg * Math.max(1.5, ex.critDamage), crit: true };
   if ((p.characterId !== "novice" && !tang && wake <= 0 && pet <= 0 && ex.critChance <= 0) || dmg <= 0) return { dmg, crit: false };
   p.critRolls = (p.critRolls ?? 0) + 1;
   // 사멸: 기본 치명타 20%

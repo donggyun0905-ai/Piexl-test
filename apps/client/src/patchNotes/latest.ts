@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.147",
+    date: "2026-10-27",
+    items: {
+      ko: ["잔영: 공격 속도가 아이템·버프로 오르지 않음 (무기 그대로) · 그림자 상태에서 친 뒤치기는 반드시 치명타 · '그림자 손놀림'은 공격 속도 +15% → 공격력 +15%"],
+      en: ["Remnant: attack speed can no longer be raised by items or buffs (stays at the weapon's) · backstabs from the shadow are always critical · 'Shadow Hands' changed from +15% attack speed to +15% damage"],
+      ja: ["残影: 攻撃速度がアイテム・バフで上がらない（武器のまま）· 影状態からの背後討ちは必ず会心 ·「影の手さばき」は攻撃速度+15% → 攻撃力+15%"],
+    },
+  },
+  {
     version: "0.48.146",
     date: "2026-10-27",
     items: {

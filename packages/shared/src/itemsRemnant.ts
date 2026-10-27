@@ -17,8 +17,8 @@ export const REMNANT_PASSIVES = {
   rmVanish: R("rmVanish"),
   /** 피의 칼날: 벨 때 출혈 */
   rmBlood: R("rmBlood"),
-  /** 그림자 손놀림: 공격 속도 +15% */
-  rmHaste: { id: "rmHaste", mods: [{ stat: "attackSpeed", mul: 1.15 }] as StatMod[], exclusive: "remnant" as const },
+  /** 그림자 손놀림: 공격력 +15% (잔영은 공격 속도가 오르지 않음) */
+  rmHaste: { id: "rmHaste", mods: [{ stat: "damage", mul: 1.15 }] as StatMod[], exclusive: "remnant" as const },
   /** 소리 없는 발: 이동 속도 +10% */
   rmSwift: { id: "rmSwift", mods: [{ stat: "moveSpeed", mul: 1.1 }] as StatMod[], exclusive: "remnant" as const },
   /** 연쇄 암살: 적을 쓰러뜨리면 순간이동 대기가 바로 끝남 */

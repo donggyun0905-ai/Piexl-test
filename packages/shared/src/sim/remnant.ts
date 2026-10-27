@@ -1,6 +1,6 @@
 // 잔영(아스칼론, 시즌 2): 그림자 속 암살자. 아주 빠른 단검 공격 · 모든 상태이상 면역 · 치명타 25%/250%(characters)
 // 노리는 적이 칼끝에서 멀면 그 적 등 뒤 조금 떨어진 곳으로 순간이동해 그림자(투명·무적)가 되고, 떠난 자리에는 분신이 남아 적을 끌어모음(어그로)
-// 그림자에서 다음 공격은 등 뒤로 바짝 붙어 치는 뒤치기 (크게 아픔, 그림자가 풀림) · 분신은 1.5초 뒤 그 자리에서 한 번 벰
+// 그림자에서 다음 공격은 등 뒤로 바짝 붙어 치는 뒤치기 (크게 아프고 반드시 치명타, 그림자가 풀림) · 공격 속도는 무기 그대로 (오르지 않음) · 분신은 1.5초 뒤 그 자리에서 한 번 벰
 // 수치는 weaponsRemnant.REMNANT, 아이템은 itemsRemnant
 import { TICK_RATE } from "../constants";
 import { REMNANT_PERKS as K } from "../itemsRemnant";
@@ -99,9 +99,13 @@ function cut(s: RunState, e: EnemyState, dmg: number, shade = false): void {
   const st = styleOf(p);
   let d = dmg;
   if (fromBehind(p, e)) d *= st.backMul + (hasPerk(p, "rmBackstab") ? K.rmBackstab.add : 0);
-  if (shade) d *= R.shadeMul;
+  if (shade) {
+    d *= R.shadeMul;
+    p.rmSure = true;
+  }
   if (hasPerk(p, "rmExecute") && e.hp <= e.maxHp * K.rmExecute.hp) d *= K.rmExecute.mul;
   strike(s, e, d);
+  delete p.rmSure;
   if (st.venom) poison(e, dmg * st.venom, R.venomTicks);
   if (hasPerk(p, "rmBlood") && e.hp > 0) applyBleed(e);
 }
@@ -159,12 +163,13 @@ function update(s: RunState): void {
 }
 
 /** 틱마다 (그림자 단검을 들었을 때 player에서) */
-export function remnantTick(s: RunState, want: boolean, speed: number): void {
+export function remnantTick(s: RunState, want: boolean, _speed: number): void {
   const p = s.player;
   if (!isRemnant(p)) return;
   update(s);
   if (!want || p.attackCooldown > 0) return;
-  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
+  // 공격 속도는 무기 그대로 (아이템·버프로 오르지 않음)
+  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / weaponOf(p).attackSpeed));
   p.attackCount++;
   slash(s);
 }

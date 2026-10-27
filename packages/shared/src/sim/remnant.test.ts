@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { CHARACTERS } from "../characters";
-import type { WeaponId } from "../content";
+import { WEAPONS, type WeaponId } from "../content";
 import { REMNANT_PERKS as K } from "../itemsRemnant";
 import { REMNANT as R } from "../weaponsRemnant";
 import { createRun, stepSim, type RunState } from "./index";
@@ -98,5 +98,22 @@ describe("잔영", () => {
       return [lost(s), s.player.x];
     };
     expect(run()).toEqual(run());
+  });
+
+  it("공격 속도는 무기 그대로 (아이템으로 안 오름) · 그림자에서 친 뒤치기는 반드시 치명타", () => {
+    const a = remnant();
+    a.enemies[0]!.x = 70;
+    a.player.stats.attackSpeed *= 3;
+    stepSim(a, FIRE);
+    expect(a.player.attackCooldown).toBe(Math.round(60 / (WEAPONS.rmDagger as { attackSpeed: number }).attackSpeed));
+    let crit = 0;
+    for (let k = 0; k < 6; k++) {
+      const s = remnant();
+      stepSim(s, FIRE);
+      const before = s.crits ?? 0;
+      for (let i = 0; i < 30 && (s.player.rmShade ?? 0) > 0; i++) stepSim(s, FIRE);
+      if ((s.crits ?? 0) > before) crit++;
+    }
+    expect(crit).toBe(6);
   });
 });
