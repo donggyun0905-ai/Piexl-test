@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.153",
+    date: "2026-10-28",
+    items: {
+      ko: ["에테르 광부: 캐릭터 그림을 키워 몸보다 큰 거대한 곡괭이를 직접 듦 (아주 긴 짙은 남색 자루 · 끝이 날카로운 파란 ^ 날) · 걸을 때는 어깨에 메고, 공격하면 치켜들었다가 앞으로 휘두름"],
+      en: ["Ether Miner: bigger sprite so the miner now holds a giant pickaxe larger than their body (very long navy handle · sharp-tipped blue ^ blade) · carried on the shoulder while walking, raised and swung forward when attacking"],
+      ja: ["エーテル鉱夫: キャラ絵を大きくし、体より大きい巨大なつるはしを直接持つ（とても長い濃紺の柄 · 先の鋭い青い^の刃）· 歩く時は肩に担ぎ、攻撃では振り上げて前へ振り抜く"],
+    },
+  },
+  {
     version: "0.48.152",
     date: "2026-10-28",
     items: {

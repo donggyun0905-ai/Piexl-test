@@ -117,7 +117,7 @@ def person(k, row, col, geo, deco):
     hy = ty - hh + bob          # 머리 위 (목 한 줄은 몸통 첫 줄)
     ty += bob
     cx = size // 2
-    g = dict(k=k, view=view, step=step, cast=cast, bob=bob, hy=hy, hx=cx - hw // 2, ty=ty, tx=cx - tw // 2, hip=hip + bob, cx=cx, hw=hw, hh=hh, tw=tw, th=th, leg=leg)
+    g = dict(k=k, view=view, step=step, cast=cast, bob=bob, hy=hy, hx=cx - hw // 2, ty=ty, tx=cx - tw // 2, hip=hip + bob, cx=cx, hw=hw, hh=hh, tw=tw, th=th, leg=leg, col=col)
     deco(c, "back_hair", g)
     # 다리
     if view in ("front", "back"):
