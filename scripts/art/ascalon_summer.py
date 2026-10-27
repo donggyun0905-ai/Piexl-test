@@ -93,7 +93,26 @@ def wanderer(c, layer, g, before):
         else:
             c.rect(cx - 3, hip, 6, 3, hx("#3ac8e8"))
 
-SUMMER = dict(tracker=tracker, forgotten=forgotten, remnant=remnant, wanderer=wanderer)
+def silk(c, layer, g, before):
+    # 영사: 드레스를 벗은 맨살 + 검은·분홍 끈 비키니 · 허리에 묶은 비치는 분홍 사롱(금 테) · 은실 반지 그대로 · 머리 옆 분홍 꽃
+    k = g["k"]
+    v, tx, tw, cx, hip = g["view"], g["tx"], g["tw"], g["cx"], g["hip"]
+    pink, black, sheer = hx("#ff4aa8"), hx("#2a1a2e"), hx("#ffc0e0")
+    if layer == "body":
+        _restore(c, before, lambda x, y, col: col not in (k["dress"], k["dressD"], k["trim"]))
+        _top(c, g, black, pink)
+    if layer == "legs":
+        _restore(c, before, lambda x, y, col: col not in (k["dress"], k["dressD"], k["trim"]))
+        _bottom(c, g, black, pink)
+        if v in ("front", "back"):
+            for i in range(5): c.rect(tx, hip + 2 + i, tw - 2, 1, sheer if i % 2 else pink)
+            c.rect(tx, hip + 7, tw - 2, 1, hx("#ffd860"))
+        else:
+            for i in range(5): c.rect(cx - 3, hip + 2 + i, 5, 1, sheer if i % 2 else pink)
+    if layer == "hat":
+        flower(c, g, hx("#ff6ab8"), hx("#ffffff"), 2)
+
+SUMMER = dict(tracker=tracker, forgotten=forgotten, remnant=remnant, wanderer=wanderer, silk=silk)
 
 def _p(**kw):
     return {k: hx(v) for k, v in kw.items()}
@@ -102,5 +121,6 @@ SUMMER_COLORS = {
     "forgotten": _p(outline=OUT, legs="#fbe8dc", legsD="#e0c0b0", shoe="#f2c040"),
     "remnant": _p(outline=OUT, top="#e8cdb8", arm="#e8cdb8", legs="#e8cdb8", legsD="#c0a490", shoe="#2a2a3a", scarf="#5ad0ff"),
     "wanderer": _p(outline=OUT, coat="#3aa8e8", coatD="#1e7ab8", arm="#3aa8e8", legs="#e8c4a4", legsD="#c09878", sheath="#7ab84a", blade="#c8e890", shoe="#c8a870"),
+    "silk": _p(outline=OUT, top="#f8e0d4", shoe="#ff4aa8"),
     "tracker": _p(outline=OUT, top="#f2d6c2", arm="#f2d6c2", legs="#f2d6c2", legsD="#d0ac96", shoe="#ffd040", gun="#3ac8e8", stock="#ffd040", scope="#ff6a8a"),
 }

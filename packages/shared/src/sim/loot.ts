@@ -45,7 +45,7 @@ export function seatSalt(s: RunState): (string | number)[] {
 }
 
 /** 캐릭터가 쓰는 공격 방식: 공용 무기는 이 방식만 얻을 수 있음 (전용 아이템 효과가 맞게). 음양사는 부적(전용 무기)만 */
-const NATIVE_KIND: Record<CharacterId, WeaponKind | null> = { warden: "melee", drifter: "ranged", mage: "ranged", mystic: null, engineer: "laser", elementalist: null, brawler: null, doctor: "medic", gunner: null, beast: null, ninja: null, chronomancer: null, summoner: null, novice: null, bedouin: null, general: null, imugi: null, apostle: null, stargazer: null, duck: null, abandoned: null, titan: null, oni: null, scribe: null, idra: null, byeonhui: null, fly: null, elder: null, ren: null, spiritist: null, plague: null, slayer: null, eater: null, mukin: null, samyeol: null, automata: null, rider: null, bomber: null, artifacter: null, punk: null, tracker: null, forgotten: null, remnant: null, wanderer: null };
+const NATIVE_KIND: Record<CharacterId, WeaponKind | null> = { warden: "melee", drifter: "ranged", mage: "ranged", mystic: null, engineer: "laser", elementalist: null, brawler: null, doctor: "medic", gunner: null, beast: null, ninja: null, chronomancer: null, summoner: null, novice: null, bedouin: null, general: null, imugi: null, apostle: null, stargazer: null, duck: null, abandoned: null, titan: null, oni: null, scribe: null, idra: null, byeonhui: null, fly: null, elder: null, ren: null, spiritist: null, plague: null, slayer: null, eater: null, mukin: null, samyeol: null, automata: null, rider: null, bomber: null, artifacter: null, punk: null, tracker: null, forgotten: null, remnant: null, wanderer: null, silk: null };
 
 /** 이 캐릭터가 얻을 수 있는 무기 (자기 전용 + 자기 공격 방식의 공용, 지금 든 무기 제외, 해금된 것만 · all이면 해금과 상관없이) */
 export function weaponPool(s: RunState, all = false): WeaponId[] {

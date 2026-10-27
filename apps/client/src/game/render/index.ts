@@ -51,6 +51,7 @@ import { drawAmbushOverlay, drawTrackerAura } from "./tracker";
 import { drawForgottenAura, drawForgottenBack } from "./forgotten";
 import { drawRemnantEchoes } from "./remnant";
 import { drawWandererAura, drawWandererGround } from "./wanderer";
+import { drawSilkAmmo, drawSilkStacks } from "./silk";
 import { drawBossBar, drawEffects, drawProjectiles, drawReticleFor } from "./shots";
 
 export interface DrawOptions {
@@ -189,6 +190,8 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawTrackerAura(ctx, s, alpha, snap);
     drawForgottenAura(ctx, s, alpha, snap);
     drawWandererAura(ctx, s, alpha, snap);
+    drawSilkAmmo(ctx, s, alpha, snap);
+    drawSilkStacks(ctx, s, snap);
   });
   drawProjectiles(ctx, s, alpha, snap);
   drawEffects(ctx, s, alpha, snap);

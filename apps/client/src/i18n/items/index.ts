@@ -16,7 +16,7 @@ import { SIN_DESC } from "./apostle";
 import { STAR_DESC } from "./star";
 import { DUCK_DESC, type DuckWeapon } from "./duck";
 import { EVO_DESC } from "./morphEvo";
-import { ANIMAL_DESC, autoDesc, bombDesc, cyberDesc, FORMATION_DESC, GAIA_DESC, GREAT_DESC, MAW_DESC, needleDesc, PLAGUE_DESC, ramDesc, REPULSOR_DESC, rideDesc, REN_DESC, scytheDesc, SNIPER_DESC, TALON_DESC, lightDesc, phantomDesc, katanaDesc } from "./season2";
+import { ANIMAL_DESC, autoDesc, bombDesc, cyberDesc, FORMATION_DESC, GAIA_DESC, GREAT_DESC, MAW_DESC, needleDesc, PLAGUE_DESC, ramDesc, REPULSOR_DESC, rideDesc, REN_DESC, scytheDesc, SNIPER_DESC, TALON_DESC, lightDesc, phantomDesc, katanaDesc, silkDesc } from "./season2";
 import { WORD_DESC } from "./scribe";
 import { tagDesc } from "./abandoned";
 import { titanDesc } from "./titan";
@@ -131,6 +131,7 @@ export function itemDesc(kind: ItemKind, id: string, lang: Lang, t: (k: TextKey)
       w.light ? lightDesc(w.light, lang) : "",
       w.phantom ? phantomDesc(w.phantom, lang) : "",
       w.katana ? katanaDesc(w.katana, lang) : "",
+      w.silk ? silkDesc(w.silk, lang) : "",
       w.returns ? t("statReturns") : "",
     ]
       .filter(Boolean)

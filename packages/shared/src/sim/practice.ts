@@ -27,6 +27,7 @@ import { resetTracker } from "./tracker";
 import { resetForgotten } from "./forgotten";
 import { resetRemnant } from "./remnant";
 import { resetWanderer } from "./wanderer";
+import { resetSilk } from "./silk";
 import { resetRen } from "./ren";
 import { resetSpirit } from "./spirit";
 import { resetAbandoned } from "./abandoned";
@@ -216,6 +217,7 @@ export function practiceReset(s: RunState): void {
   resetForgotten(p);
   resetRemnant(p);
   resetWanderer(p);
+  resetSilk(p);
   resetRen(p);
   resetSpirit(p);
   resetAbandoned(p);

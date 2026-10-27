@@ -39,6 +39,9 @@ interface Seen {
   /** 예리함 칼빛 · 천검란 (화면에 있는 효과 수) */
   sharps: number;
   storms: number;
+  /** 영사: 찢기 · 장전 끝 (화면에 있는 효과 수) */
+  rends: number;
+  reloads: number;
 }
 
 /** 탄을 쏘는 느낌의 캐릭터 (나머지는 휘두르는 소리) */
@@ -76,6 +79,8 @@ function snapshot(s: RunState): Seen {
     blinkCd: s.player.rmBlink ?? 0,
     sharps: s.effects.filter((f) => f.kind === "wdSharp").length,
     storms: s.effects.filter((f) => f.kind === "wdTempest").length,
+    rends: s.effects.filter((f) => f.kind === "skRend").length,
+    reloads: s.effects.filter((f) => f.kind === "skReload").length,
   };
 }
 
@@ -132,6 +137,11 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         if (now.attacks > seen.attacks) fx.push("chime");
         const i = fx.indexOf("shot");
         if (i >= 0) fx.splice(i, 1);
+      } else if (c === "silk") {
+        // 영사: 실은 작게 튕기는 소리, 찢으면 "띵", 장전이 끝나면 실 감는 소리
+        if (now.rends > seen.rends) fx.push("ting");
+        else if (now.attacks > seen.attacks) fx.push("string");
+        if (now.reloads > seen.reloads) fx.push("spool");
       } else if (c === "wanderer") {
         // 방랑객: 카타나 소리 · 천검란은 화면이 흔들림
         if (now.attacks > seen.attacks) fx.push("katana");

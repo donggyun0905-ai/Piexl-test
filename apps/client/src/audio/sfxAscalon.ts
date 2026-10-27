@@ -45,4 +45,14 @@ export const ASCALON_SOUNDS = {
     for (let i = 0; i < 4; i++) noise(0.08, 0.35, 3000 + i * 900);
     tone({ type: "triangle", from: 2800, to: 2600, dur: 0.3, vol: 0.08 });
   },
+  // 영사: 실 (아주 작고 높게 튕기는 소리) · 찢기 ("띵" 울리는 현 + 빠르게 풀리는 실) · 장전 (실 감는 소리)
+  string: () => tone({ type: "sine", from: 2600, to: 2500, dur: 0.04, vol: 0.04 }),
+  ting: () => {
+    tone({ type: "triangle", from: 1568, to: 1560, dur: 0.5, vol: 0.14 });
+    tone({ type: "sine", from: 3136, to: 3130, dur: 0.35, vol: 0.06 });
+    noise(0.12, 0.15, 6500);
+  },
+  spool: () => {
+    for (let i = 0; i < 3; i++) noise(0.04, 0.08, 4000 + i * 600);
+  },
 };

@@ -53,6 +53,17 @@ SKINS = {
         "usa": (P(coat="#8a5a32", coatD="#5a3a20", arm="#8a5a32", sash="#d8303a", hat="#c8a070", hatD="#8a6a3a", legs="#3a5aa8", legsD="#2a3a7a", top="#f4f4f4"), {}),
         "swap": (P(coat="#6a2a4a", coatD="#4a1a32", arm="#6a2a4a", sash="#f0c8d8", blush="#f09696", hair="#1e1a20"), dict(extra=long_hair(hx("#1e1a20"), hx("#100e12")))),
     },
+    "silk": {
+        "swim": (P(dress="#1a7aa8", dressD="#125a80", trim="#7ae8ff", hair="#2a5a9a", hairD="#183a6a", hairL="#6aa8e8"), FLOWER),
+        "xmas": (P(dress="#c8202a", dressD="#8a1a20", trim="#ffffff", ring="#3ad87a"), SANTA),
+        "halloween": (P(dress="#2a1a36", dressD="#1a1022", trim="#f28a2a", hair="#3a1a4a", hairD="#24102e", hairL="#8a4ab8", eyeL="#f28a2a"), WITCH),
+        "school": (P(dress="#2a3458", dressD="#1a2038", trim="#d83a4a", top="#f4f4f8", hair="#1a1a24", hairD="#0e0e14", hairL="#4a4a5a"), H("mortar", "#1a1a24", "#f2c040")),
+        "newyear": (P(dress="#e84a6a", dressD="#b83050", trim="#ffd040", hair="#1a1424", hairD="#0e0a16", hairL="#5a3a6a"), JOB),
+        "japan": (P(dress="#4a1a5a", dressD="#2e0e3a", trim="#ff8aa8", hair="#1a1a24", hairD="#0e0e14", hairL="#4a4a5a"), FLOWER),
+        "china": (P(dress="#c8202a", dressD="#8a1a20", trim="#e8b030", hair="#1a1424", hairD="#0e0a16", hairL="#3e3254"), BUNS),
+        "usa": (P(dress="#3a5aa8", dressD="#2a3a7a", trim="#d8303a", hair="#e8c060", hairD="#a8803a", hairL="#fff0a0"), COWBOY),
+        "swap": (P(dress="#2a1a2e", dressD="#1a0e1e", top="#2a1a2e", arm="#2a1a2e", legs="#2a2a34", legsD="#1a1a22") | {"blush": None}, dict(short=True)),
+    },
 }
 
 BASES = {
@@ -60,6 +71,7 @@ BASES = {
     "forgotten": (As.FORGOTTEN, As.forgotten_deco),
     "remnant": (As.REMNANT, As.remnant_deco),
     "wanderer": (As.WANDERER, As.wanderer_deco),
+    "silk": (As.SILK, As.silk_deco),
 }
 
 def main():

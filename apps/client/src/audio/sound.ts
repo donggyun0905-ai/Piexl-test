@@ -32,7 +32,10 @@ export type Sfx =
   | "blink"
   | "katana"
   | "sharp"
-  | "tempest";
+  | "tempest"
+  | "string"
+  | "ting"
+  | "spool";
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;

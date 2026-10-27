@@ -1,4 +1,5 @@
-# 시즌 2 아스칼론 캐릭터 방향 시트 (python3 scripts/art/ascalon_sprites.py) → apps/client/public/sprites/{tracker,forgotten,remnant,wanderer}.png
+# 시즌 2 아스칼론 캐릭터 방향 시트 (python3 scripts/art/ascalon_sprites.py) → apps/client/public/sprites/{tracker,forgotten,remnant,wanderer,silk}.png
+# 영사(여): 허리까지 물결치는 와인빛 긴 머리 · 분홍 눈 · 어깨가 드러나고 옆이 깊게 트인 검은 드레스(분홍 테) · 손가락 금반지 · 공격 칸은 손끝에서 은실 세 가닥
 # 그림체는 s2_common.person (시즌 1 그림체: 얼굴 아래 4줄·입 없음·보랏빛 테두리, docs/ART.md)
 # 추적자(여): 높이 묶은 밤색 포니테일 · 초록 눈 · 목 뒤로 내린 국방색 두건 망토 · 짙은 사냥복에 가죽 탄띠 · 등에 멘 긴 저격총(붉은 조준경 빛)
 #   공격 칸은 저격총을 들어 앞으로 겨눔 (긴 총열 · 위에 조준경)
@@ -264,11 +265,63 @@ def wanderer_deco(c, layer, g):
         for i in range(3): c.rect(x0 + 3 + i * 2, hy - 1 - i, brim - 6 - i * 4, 1, k["hat"])
         for x in range(x0 + 2, x0 + brim - 2, 3): c.px(x, hy + 2, k["hatD"])
 
+SILK = dict(
+    skin=hx("#f8e0d4"), skinD=hx("#d8b4a4"), eye=hx("#5a1a3a"), eyeL=hx("#ff6ab8"), outline=hx("#4e4262"), blush=hx("#ff9ab8"),
+    top=hx("#2a1a2e"), arm=hx("#f8e0d4"), legs=hx("#f8e0d4"), legsD=hx("#d8b4a4"), shoe=hx("#1a1020"),
+    hair=hx("#8a1e4a"), hairD=hx("#5a0e30"), hairL=hx("#d8508a"),
+    dress=hx("#2a1a2e"), dressD=hx("#1a0e1e"), trim=hx("#ff4aa8"), thread=hx("#f4e8ff"), ring=hx("#ffd860"),
+)
+
+def silk_deco(c, layer, g):
+    k = g["k"]
+    v, hx0, hy, hw, hh = g["view"], g["hx"], g["hy"], g["hw"], g["hh"]
+    tx, ty, tw, th, cx, hip = g["tx"], g["ty"], g["tw"], g["th"], g["cx"], g["hip"]
+    if layer == "back_hair":
+        # 허리까지 물결치는 긴 와인빛 머리
+        if v == "front":
+            for x0 in (hx0 - 1, hx0 + hw - 1):
+                c.rect(x0, hy + 3, 2, hh + 7, k["hairD"]); c.px(x0 + (1 if x0 < cx else -1), hy + hh + 6, k["hairD"])
+        elif v == "side":
+            c.rect(hx0 - 2, hy + 2, 5, hh + 8, k["hairD"]); c.px(hx0 - 3, hy + hh + 4, k["hairD"])
+    if layer == "legs":
+        # 발목까지 오는 검은 드레스 · 한쪽 옆이 깊게 트임(분홍 단) · 검은 굽
+        if v in ("front", "back"):
+            for i in range(7): c.rect(tx, hip + i, tw, 1, k["dress"] if i % 3 else k["dressD"])
+            if v == "front": c.rect(cx + 1, hip + 1, 2, 6, k["skin"]); c.line(cx + 1, hip, cx + 1, hip + 6, k["trim"])
+        else:
+            for i in range(7): c.rect(cx - 3, hip + i, 6, 1, k["dress"])
+            c.rect(cx + 1, hip + 2, 2, 5, k["skin"])
+    if layer == "body":
+        # 어깨가 드러난 검은 드레스 윗옷 · 분홍 테 · 가슴의 분홍 매듭 · 손가락의 금반지와 은실
+        if v in ("front", "back"):
+            c.rect(tx, ty + 2, tw, th - 2, k["dress"]); c.rect(tx, ty + 2, tw, 1, k["trim"]); c.rect(tx, hip - 2, tw, 1, k["trim"])
+            if v == "front": c.px(cx - 1, ty + 3, k["trim"]); c.px(cx, ty + 3, k["trim"])
+            c.px(tx - 2, ty + th - 1, k["ring"])
+        else:
+            c.rect(cx - 3, ty + 2, 6, th - 2, k["dress"]); c.rect(cx - 3, ty + 2, 6, 1, k["trim"])
+        if g["cast"]:
+            # 뻗은 손끝에서 은실 세 가닥이 뻗음
+            bx = tx + tw + 5 if v == "front" else cx + 7
+            c.px(bx, ty + 1, k["ring"])
+            for dy in (-2, 0, 2): c.line(bx + 1, ty + 1, bx + 8, ty + 1 + dy * 2, k["thread"])
+    if layer == "hair":
+        # 한쪽으로 넘긴 물결 앞머리 · 얼굴 옆으로 길게
+        if v == "front":
+            c.rect(hx0, hy, hw, 3, k["hair"]); c.rect(hx0 - 1, hy + 1, 2, hh + 2, k["hair"]); c.rect(hx0 + hw - 1, hy + 1, 2, hh + 2, k["hair"])
+            c.rect(hx0 + 1, hy + 2, 4, 1, k["hair"]); c.px(hx0 + 1, hy + 3, k["hair"])
+            c.px(hx0 + hw - 2, hy + 1, k["trim"])
+        elif v == "back":
+            c.rect(hx0 - 1, hy, hw + 2, hh + 3, k["hair"]); c.rect(hx0, hy + hh + 3, hw, 4, k["hair"]); c.rect(hx0 + 2, hy + hh + 7, hw - 4, 2, k["hair"])
+            for y in range(hy + 4, hy + hh + 8, 3): c.px(cx - 2, y, k["hairD"]); c.px(cx + 2, y + 1, k["hairD"])
+        else:
+            c.rect(hx0, hy, hw, 3, k["hair"]); c.rect(hx0 - 1, hy + 1, 5, hh + 1, k["hair"]); c.px(hx0 + hw - 1, hy + 1, k["trim"])
+
 GEO = {
     "tracker": dict(head=(10, 9), torso=(8, 7), leg=9),
     "forgotten": dict(head=(10, 9), torso=(8, 7), leg=9),
     "remnant": dict(head=(10, 9), torso=(9, 8), leg=8),
     "wanderer": dict(head=(10, 9), torso=(9, 8), leg=8),
+    "silk": dict(head=(10, 9), torso=(8, 7), leg=9),
 }
 
 def main():
@@ -276,6 +329,7 @@ def main():
     save_sheet("forgotten", lambda r, col: person(FORGOTTEN, r, col, GEO["forgotten"], forgotten_deco))
     save_sheet("remnant", lambda r, col: person(REMNANT, r, col, GEO["remnant"], remnant_deco))
     save_sheet("wanderer", lambda r, col: person(WANDERER, r, col, GEO["wanderer"], wanderer_deco))
+    save_sheet("silk", lambda r, col: person(SILK, r, col, GEO["silk"], silk_deco))
 
 if __name__ == "__main__":
     main()

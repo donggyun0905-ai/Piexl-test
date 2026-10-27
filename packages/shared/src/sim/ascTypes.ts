@@ -57,6 +57,20 @@ export interface WandererEnemyState {
   wdCutT?: number;
 }
 
+export interface SilkPlayerState {
+  /** 영사: 남은 실 · 장전 남은 틱 · 연사까지 센 실 · 실 연사(노리는 적·남은 수·다음까지 틱) · 남아 있는 실(하프 현: 양 끝·남은 틱) */
+  skAmmo?: number;
+  skReload?: number;
+  skUsed?: number;
+  skBurst?: { id: number; left: number; gap: number };
+  skLines?: { x0: number; y0: number; x1: number; y1: number; t: number; dmg: number }[];
+}
+
+export interface SilkEnemyState {
+  /** 영사 실 얽힘 */
+  skStacks?: number;
+}
+
 /** 아스칼론 캐릭터 상태 모음 (types에서 한 이름으로 씀) */
-export interface AscalonPlayerState extends AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState {}
-export interface AscalonEnemyState extends AscEnemyState, ForgottenEnemyState, WandererEnemyState {}
+export interface AscalonPlayerState extends AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState {}
+export interface AscalonEnemyState extends AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState {}

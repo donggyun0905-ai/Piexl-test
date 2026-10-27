@@ -31,10 +31,7 @@ import { HELIOS_C_PASSIVE_ART } from "./heliosC";
 import { TERRA2_PASSIVE_ART } from "./terra2";
 import { TERRA2B_PASSIVE_ART } from "./terra2b";
 import { TERRA2C_PASSIVE_ART } from "./terra2c";
-import { ASC_PASSIVE_ART } from "./ascalon";
-import { FG_PASSIVE_ART } from "./forgotten";
-import { RM_PASSIVE_ART } from "./remnant";
-import { WD_PASSIVE_ART } from "./wanderer";
+import { ASCALON_PASSIVE_ART } from "./ascalonAll";
 import { REN_PASSIVE_ART } from "./ren";
 import { SPIRIT_PASSIVE_ART } from "./spirit";
 
@@ -75,10 +72,7 @@ export const PASSIVE_ART: Partial<Record<PassiveId, (g: Pen) => void>> = {
   ...TERRA2_PASSIVE_ART,
   ...TERRA2B_PASSIVE_ART,
   ...TERRA2C_PASSIVE_ART,
-  ...ASC_PASSIVE_ART,
-  ...FG_PASSIVE_ART,
-  ...RM_PASSIVE_ART,
-  ...WD_PASSIVE_ART,
+  ...ASCALON_PASSIVE_ART,
   ...REN_PASSIVE_ART,
   ...SPIRIT_PASSIVE_ART,
   sturdyHeart: (g) => {

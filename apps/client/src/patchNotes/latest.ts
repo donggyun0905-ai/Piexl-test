@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.138",
+    date: "2026-10-27",
+    items: {
+      ko: [
+        "아스칼론 새 캐릭터 '영사' (여, 보이지 않는 실을 다루는 · 체력 90 · 빠름 · 아주 빠른 공격)",
+        "실 100가닥 장전 (다 쓰면 장전) · 실 하나는 방 끝에서 끝까지 1초 보이는 실선, 그 줄의 적을 모두 벰 · 얽힘 5가 쌓이면 실 다섯이 \"띵\" 하고 당겨 찢음 (250% + 출혈) · 30가닥마다 노리는 적을 가로지르는 실 30가닥 연사",
+        "실 무기 10 · 전용 아이템 10 · 테마 스킨 9 + 여름 한정 '여름 파도'",
+      ],
+      en: [
+        "New Ascalon character 'Silk' (female thread-wielder · HP 90 · fast · very fast attacks)",
+        "100 threads loaded (reload when empty) · each thread is a wall-to-wall line shown for 1s that cuts every foe on it · at 5 tangles, five threads pull tight with a 'ting' and tear the foe apart (250% + bleed) · every 30 threads, a 30-thread barrage crosses the target",
+        "10 thread weapons · 10 exclusive items · 9 theme skins + the limited Summer Wave skin",
+      ],
+      ja: [
+        "アスカロンの新キャラクター「影糸使い」（女性、見えない糸を操る · 体力90 · 速い · とても速い攻撃）",
+        "糸100本を装填（使い切ると装填）· 糸1本は部屋の端から端まで1秒見える線で、その線上の敵をすべて斬る · 絡みが5溜まると糸5本が「ティン」と引かれ引き裂く（250%＋出血）· 30本ごとに狙う敵を横切る糸30本の連射",
+        "糸の武器10 · 専用アイテム10 · テーマスキン9＋限定「夏の波」",
+      ],
+    },
+  },
+  {
     version: "0.48.137",
     date: "2026-10-27",
     items: {

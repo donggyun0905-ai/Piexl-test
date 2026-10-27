@@ -28,6 +28,13 @@ export const CHARACTER_TEXT_ASCALON = {
     ja: "剣 · アスカロン。刀一振りで流れ歩く男の剣士。基本の鋭さ25%（当てると確率で防御-25%＋出血）· 刀10（抜刀 · 無心の円 · 刃の嵐 · 千剣乱など）· 専用アイテム10",
   },
   katana: { ko: "카타나", en: "Katana", ja: "刀" },
+  silk: { ko: "영사", en: "Silk", ja: "影糸使い" },
+  silkDesc: {
+    ko: "실 · 아스칼론. 보이지 않는 실을 다루는 매혹적인 여자. 실 100가닥을 장전해 아주 빠르게 쏨 (방 끝에서 끝까지 가는 실선) · 얽힘 5가 쌓인 적은 실이 당겨 찢김 (250% + 출혈) · 30가닥마다 노리는 적을 가로지르는 실 30가닥 연사 · 무기 10 · 전용 아이템 10",
+    en: "Thread · Ascalon. An alluring woman who wields unseen threads. Loads 100 threads and fires them very fast (each a line from wall to wall) · foes with 5 tangles are torn apart (250% + bleed) · every 30 threads, a barrage of 30 threads crosses the target · 10 weapons · 10 own items",
+    ja: "糸 · アスカロン。見えない糸を操る魅惑的な女性。糸100本を装填しとても速く放つ（部屋の端から端までの糸）· 絡みが5溜まった敵は糸が引かれ引き裂かれる（250%＋出血）· 30本ごとに狙う敵を横切る糸30本の連射 · 武器10 · 専用アイテム10",
+  },
+  thread: { ko: "실", en: "Thread", ja: "糸" },
   trSkill1: { ko: "암습 저격", en: "Ambush Snipe", ja: "暗襲狙撃" },
   trSkill2: { ko: "강력한 한방", en: "Power Shot", ja: "強力な一撃" },
   trSkill3: { ko: "연발사격", en: "Rapid Fire", ja: "連射" },

@@ -2,7 +2,7 @@
 import type { WeaponId } from "./content";
 
 /** 전용 무기·아이템을 가질 수 있는 캐릭터 (content.WeaponDef.exclusive · items.PassiveDef.exclusive) */
-export type ExclusiveId = "warden" | "drifter" | "mage" | "mystic" | "engineer" | "elementalist" | "brawler" | "doctor" | "gunner" | "beast" | "ninja" | "chronomancer" | "summoner" | "novice" | "bedouin" | "general" | "imugi" | "apostle" | "stargazer" | "duck" | "abandoned" | "titan" | "oni" | "scribe" | "idra" | "byeonhui" | "fly" | "elder" | "ren" | "spiritist" | "plague" | "slayer" | "eater" | "mukin" | "samyeol" | "automata" | "rider" | "bomber" | "artifacter" | "punk" | "tracker" | "forgotten" | "remnant" | "wanderer";
+export type ExclusiveId = "warden" | "drifter" | "mage" | "mystic" | "engineer" | "elementalist" | "brawler" | "doctor" | "gunner" | "beast" | "ninja" | "chronomancer" | "summoner" | "novice" | "bedouin" | "general" | "imugi" | "apostle" | "stargazer" | "duck" | "abandoned" | "titan" | "oni" | "scribe" | "idra" | "byeonhui" | "fly" | "elder" | "ren" | "spiritist" | "plague" | "slayer" | "eater" | "mukin" | "samyeol" | "automata" | "rider" | "bomber" | "artifacter" | "punk" | "tracker" | "forgotten" | "remnant" | "wanderer" | "silk";
 
 export interface CharacterDef extends Partial<ExtraStats> {
   id: string;
@@ -98,6 +98,8 @@ export const CHARACTERS = {
   remnant: { id: "remnant", maxHp: 90, damage: 9, moveSpeed: 1.45, luck: 1, startWeapon: "rmDagger", critChance: 0.25, critDamage: 2.5 },
   /** 방랑객 (아스칼론): 카타나를 든 떠돌이 무사 · 카타나 10 · 기본 예리함 25% (sim/wanderer) */
   wanderer: { id: "wanderer", maxHp: 105, damage: 13, moveSpeed: 1.3, luck: 0, startWeapon: "wdKatana", sharpness: 0.25 },
+  /** 영사 (아스칼론): 실을 다루는 여자 · 실 100가닥 장전 · 아주 빠른 실 · 얽힘 5면 찢기 · 30가닥마다 실 연사 (sim/silk) */
+  silk: { id: "silk", maxHp: 90, damage: 10, moveSpeed: 1.35, luck: 1, startWeapon: "skThread" },
   /** 별지기 (히든, 무작위 10%): 별자리를 그려 빛줄기로 태움 (sim/star) */
   stargazer: { id: "stargazer", maxHp: 110, damage: 12, moveSpeed: 1.3, luck: 1, startWeapon: "starStaff" },
   /** 오리 (히든, 무작위 5%): 꽥 음파·새끼 오리 (sim/duck) */
