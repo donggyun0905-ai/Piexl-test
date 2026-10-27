@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.157",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "검은 잔영: 거대한 짐승 셋(데스웜 · 거대 전갈 · 거대 매)이 한꺼번에 나와 1대3 · 하나 쓰러질 때마다 한마디 · 체력 막대는 짐승마다 같은 길이로 떨어진 막대 셋",
+        "거대 전갈이 탱커로: 체력 2000 → 3000 + 흰 보호막(최대 체력의 50%, 체력보다 먼저 깎임) · 데스웜 땅속·거대 매 하늘에 있는 시간을 조금 늘림",
+      ],
+      en: [
+        "Black Remnant: all three colossal beasts (Death Worm · Colossal Scorpion · Colossal Hawk) now appear at once, 1 vs 3 · it speaks each time one falls · three separate health bars of equal length, one per beast",
+        "The Colossal Scorpion is now the tank: health 2000 → 3000 plus a white barrier (50% of max health, drained before health) · the Death Worm stays underground and the Hawk in the sky a little longer",
+      ],
+      ja: [
+        "黒き残影: 巨大な獣三体（デスワーム · 巨大サソリ · 巨大な鷹）が同時に現れて1対3 · 一体倒れるごとに一言 · 体力バーは獣ごとに同じ長さで離れた3本",
+        "巨大サソリがタンク役に: 体力2000 → 3000 + 白いバリア（最大体力の50%、体力より先に削れる）· デスワームの地中・鷹の空にいる時間を少し延長",
+      ],
+    },
+  },
+  {
     version: "0.48.156",
     date: "2026-10-28",
     items: {

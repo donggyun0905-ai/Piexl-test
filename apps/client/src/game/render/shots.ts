@@ -1,4 +1,5 @@
 // 투사체 · 효과(휘두르기·맞음·폭발) · 보스 체력 막대 · 모바일 조준점
+import { drawUmbraBar } from "./umbra";
 import { allPlayers, ENEMIES, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { drawLaserFx } from "./beams";
 import { drawOrbitFx, drawOrbShot } from "./orbs";
@@ -179,13 +180,10 @@ export function drawBossBar(ctx: CanvasRenderingContext2D, s: RunState): void {
   const bh = Math.max(4, Math.round(h * 0.02));
   const bx = Math.round((w - bw) / 2);
   const by = Math.round(h * 0.04);
+  // 검은 잔영: 짐승마다 따로 떨어진 같은 길이 막대 셋
+  if (boss.kind === "umbra") return drawUmbraBar(ctx, s, boss, bx, by, bw, bh);
   ctx.fillStyle = "rgba(0,0,0,0.7)";
   ctx.fillRect(bx - 2, by - 2, bw + 4, bh + 4);
   ctx.fillStyle = C.bossCore;
   ctx.fillRect(bx, by, Math.round((bw * Math.max(0, boss.hp)) / boss.maxHp), bh);
-  // 검은 잔영: 막대 하나에 금 두 줄 (짐승 셋의 체력)
-  if (boss.kind === "umbra") {
-    ctx.fillStyle = "#f2e6c4";
-    for (const f of [1 / 3, 2 / 3]) ctx.fillRect(Math.round(bx + bw * f) - 1, by - 2, 2, bh + 4);
-  }
 }

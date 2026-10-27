@@ -30,6 +30,7 @@ function beast(kind: "sandworm" | "scorpion" | "roc"): { run: RunState; e: Enemy
   steps(run, 160);
   const e = find(run, "sandworm")!;
   run.enemies = [e];
+  delete e.ward;
   run.projectiles = [];
   e.kind = kind;
   e.phase = "walk";
@@ -38,7 +39,7 @@ function beast(kind: "sandworm" | "scorpion" | "roc"): { run: RunState; e: Enemy
 }
 
 describe("검은 잔영", () => {
-  it("맞지 않고, 짐승 셋을 하나씩 부르고, 체력은 세 짐승의 합 → 셋을 다 잡으면 사라짐", () => {
+  it("맞지 않고, 짐승 셋을 한꺼번에 부르고, 체력은 셋의 합 → 하나씩 쓰러질 때마다 한마디, 셋 다 잡으면 사라짐", () => {
     const run = umbraRun();
     const boss = find(run, "umbra")!;
     steps(run, 2);
@@ -46,22 +47,33 @@ describe("검은 잔영", () => {
     damageEnemy(run, boss, 1000, 0, 0);
     expect(boss.hp).toBe(boss.maxHp);
     steps(run, 160);
-    const worm = find(run, "sandworm")!;
-    expect(worm).toBeDefined();
-    expect(boss.maxHp).toBe(worm.maxHp * 3);
-    worm.hp -= 500;
+    const all = ["sandworm", "scorpion", "roc"].map((k) => find(run, k)!);
+    expect(all.every(Boolean)).toBe(true);
+    expect(boss.maxHp).toBe(all.reduce((sum, b) => sum + b.maxHp, 0));
+    all[0]!.hp -= 500;
     steps(run, 1);
     expect(boss.hp).toBe(boss.maxHp - 500);
-    for (const kind of ["sandworm", "scorpion", "roc"]) {
-      const b = find(run, kind)!;
-      expect(b).toBeDefined();
+    all.forEach((b, i) => {
       b.hp = 0;
       steps(run, 2);
-      expect(boss.say).toBeGreaterThan(0);
-      steps(run, 220);
-    }
+      expect(boss.say).toBe(i + 1);
+    });
+    steps(run, 220);
     expect(find(run, "umbra")).toBeUndefined();
     expect(run.enemies.filter((e) => e.kind !== "dummy")).toHaveLength(0);
+  });
+
+  it("거대 전갈: 체력이 많고 흰 보호막이 먼저 깎임", () => {
+    const run = umbraRun();
+    steps(run, 160);
+    const sc = find(run, "scorpion")!;
+    expect(sc.maxHp).toBeGreaterThan(find(run, "roc")!.maxHp);
+    const ward = sc.ward!;
+    expect(ward).toBeGreaterThan(0);
+    sc.immune = false;
+    damageEnemy(run, sc, 100, 0, 0);
+    expect(sc.hp).toBe(sc.maxHp);
+    expect(sc.ward).toBeLessThan(ward);
   });
 });
 

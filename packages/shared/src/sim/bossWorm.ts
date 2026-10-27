@@ -8,8 +8,8 @@ import { DIR16, enemyShot } from "./util";
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
   /** 땅속에서 다니는 틱 (절반 아래) · 땅속 빠르기 */
-  UNDER: 130,
-  UNDER_HALF: 90,
+  UNDER: 170,
+  UNDER_HALF: 120,
   UNDER_SPEED: 1.1,
   /** 갑자기 뜨는 표시가 터지기까지 · 솟는 범위(몸 반경에 더함) · 솟는 데 · 위에 있는 틱 */
   WARN: 34,

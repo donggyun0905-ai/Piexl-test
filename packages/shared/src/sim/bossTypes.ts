@@ -33,6 +33,8 @@ export interface BossEnemyState {
   ultDone?: boolean;
   /** 갓이터 패링: 예고 중인 창 (나온 자리 · 방향 · 날아가는 틱 · 진짜인지) */
   spears?: { x: number; y: number; dx: number; dy: number; at: number; real: boolean }[];
+  /** 흰 보호막: 체력보다 먼저 깎임 (거대 전갈) */
+  ward?: number;
   /** 검은 잔영: 지금 하는 말 (0 처음 · 1~3 짐승을 하나 잡을 때마다) · 말을 시작한 틱 */
   say?: number;
   sayAt?: number;

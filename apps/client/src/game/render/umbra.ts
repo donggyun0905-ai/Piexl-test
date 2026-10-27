@@ -1,5 +1,5 @@
 // 시즌 2 라스트 보스 검은 잔영과 거대한 짐승 셋 그리기: 땅속·하늘에 있을 때 숨기기 · 데스웜 솟기 · 전갈 움직이는 표시·몸 돌리기 · 매 경직·날아오르기 · 검은 잔영 말풍선
-import { BOSS_ROC_RULES, BOSS_UMBRA_RULES, BOSS_WORM_RULES, type EnemyState, type RunState } from "@pixel-rogue/shared";
+import { BOSS_ROC_RULES, BOSS_UMBRA_RULES, BOSS_WORM_RULES, ENEMIES, UMBRA_BEASTS, UMBRA_WARD, type EnemyState, type RunState } from "@pixel-rogue/shared";
 import { drawEnemySprite } from "../sprites";
 import { C } from "./palette";
 
@@ -19,7 +19,7 @@ export function drawUmbraActor(ctx: CanvasRenderingContext2D, s: RunState, e: En
   const tint = tintOf(s, e);
   if (e.kind === "umbra") {
     // 마지막 말을 하고 나면 서서히 사라짐
-    const fade = e.step === 2 && e.phase === "walk" ? Math.max(0, e.timer / BOSS_UMBRA_RULES.VANISH) : 1;
+    const fade = e.step === UMBRA_BEASTS.length && e.phase === "walk" ? Math.max(0, e.timer / BOSS_UMBRA_RULES.VANISH) : 1;
     ctx.globalAlpha = (0.7 + 0.15 * Math.sin(s.tick / 20)) * fade;
     drawEnemySprite(ctx, "umbra", x, y + Math.sin(s.tick / 30) * 2, frame, false);
     ctx.globalAlpha = 1;
@@ -76,6 +76,14 @@ function drawScorpion(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState,
   ctx.rotate(Math.atan2(e.dirY, e.dirX));
   drawEnemySprite(ctx, "scorpion", 0, 0, e.phase === "charge" ? frame : 0, false, tint);
   ctx.restore();
+  // 흰 보호막이 남아 있으면 몸 둘레에 흰 막
+  if ((e.ward ?? 0) > 0) {
+    ctx.strokeStyle = `rgba(255, 255, 255, ${0.45 + 0.2 * Math.sin(s.tick / 8)})`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(x, y, e.r + 6, 0, Math.PI * 2);
+    ctx.stroke();
+  }
 }
 
 /** 매: 하늘에 있으면 안 보임 · 경직이면 땅에 떨어져 머리 위로 별 · 날아오르면 커지며 흐려짐 */
@@ -122,4 +130,28 @@ export function drawUmbraTalk(ctx: CanvasRenderingContext2D, s: RunState, scale:
   ctx.fillStyle = "#e8d8ff";
   ctx.fillText(text, bx + face + 8 * scale, by + h / 2 + 3 * scale);
   ctx.globalAlpha = 1;
+}
+
+/** 체력 막대: 짐승마다 같은 길이로 띄워 셋 · 붉은 체력 뒤에 흰 보호막 (칸 = 최대 체력 + 흰 보호막) */
+export function drawUmbraBar(ctx: CanvasRenderingContext2D, s: RunState, boss: EnemyState, bx: number, by: number, bw: number, bh: number): void {
+  const mul = boss.maxHp / ENEMIES.umbra.hp;
+  const summoned = (boss.step ?? -1) >= 0;
+  const gap = Math.round(bw * 0.05);
+  const w = Math.floor((bw - gap * (UMBRA_BEASTS.length - 1)) / UMBRA_BEASTS.length);
+  UMBRA_BEASTS.forEach((kind, i) => {
+    const x = bx + i * (w + gap);
+    const max = ENEMIES[kind].hp * mul;
+    const cap = max * (1 + (UMBRA_WARD[kind] ?? 0));
+    // 부르기 전에는 가득, 쓰러졌으면 빈 칸
+    const b = s.enemies.find((o) => o.kind === kind && o.hp > 0);
+    const hp = summoned ? (b?.hp ?? 0) : max;
+    const ward = summoned ? (b?.ward ?? 0) : max * (UMBRA_WARD[kind] ?? 0);
+    const hw = Math.round((w * hp) / cap);
+    ctx.fillStyle = "rgba(0,0,0,0.7)";
+    ctx.fillRect(x - 2, by - 2, w + 4, bh + 4);
+    ctx.fillStyle = C.bossCore;
+    ctx.fillRect(x, by, hw, bh);
+    ctx.fillStyle = "#f4f4f4";
+    ctx.fillRect(x + hw, by, Math.round((w * ward) / cap), bh);
+  });
 }

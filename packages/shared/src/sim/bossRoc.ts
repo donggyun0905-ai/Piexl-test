@@ -11,8 +11,8 @@ import { addEffect, DIR16, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
   /** 하늘에서 맴도는 틱 (절반 아래) */
-  SKY: 110,
-  SKY_HALF: 80,
+  SKY: 160,
+  SKY_HALF: 120,
   /** 내려찍기: 예고 (절반 아래) · 반경 · 피해 배율 */
   DIVE_WARN: 48,
   DIVE_WARN_HALF: 38,

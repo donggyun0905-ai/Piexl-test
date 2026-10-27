@@ -72,7 +72,14 @@ export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: numbe
   if (ENEMIES[e.kind].boss && hasPerk(s.player, "scarabCharm")) dmg *= BEDOUIN_PERKS.scarabCharm.boss;
   // 탐식(악의 사도)·예리함: 방어력이 깎인 적은 더 아픔 · 각주(서기관): 기록이 새겨진 적은 더 아픔
   dmg *= (1 + (e.apDef ?? 0) + inkTaken(s.player, e) + sharpBonus(s, e)) * trackerTaken(e);
-  e.hp -= e.melt ? dmg * (1 + R.MELT_ADD * e.melt) : dmg;
+  let hurt = e.melt ? dmg * (1 + R.MELT_ADD * e.melt) : dmg;
+  // 흰 보호막(거대 전갈): 체력보다 먼저 깎임
+  if ((e.ward ?? 0) > 0 && hurt > 0) {
+    const used = Math.min(e.ward ?? 0, hurt);
+    e.ward = (e.ward ?? 0) - used;
+    hurt -= used;
+  }
+  e.hp -= hurt;
   onHitExtra(s, e, dmg);
   e.hitFlash = 6;
   if (s.party) e.lastHit = seatNo(s);
