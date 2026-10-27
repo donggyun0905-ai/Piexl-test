@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.133",
+    date: "2026-10-27",
+    items: {
+      ko: ["마법사·떠돌이 한정 '범 풍류' 스킨을 예전 디자인 그대로 새 그림체로 (금빛 테두리 · 마법사 범 귀 흰 두건과 남색·금 옷 · 떠돌이 금테 남색 두건과 흰·금 옷, 한정 효과도 그대로)"],
+      en: ["Mage and Drifter limited Tiger skins now keep their original design in the new art style (golden outline · Mage's white tiger-ear hood with navy and gold · Drifter's gold-trimmed navy hood with white and gold; limited effects unchanged)"],
+      ja: ["魔法使い・流れ者の限定「虎の風流」スキンを以前のデザインのまま新しい絵柄に（金の縁取り · 魔法使いは虎耳の白い頭巾と紺・金の服 · 流れ者は金縁の紺の頭巾と白・金の服、限定エフェクトもそのまま）"],
+    },
+  },
+  {
     version: "0.48.132",
     date: "2026-10-27",
     items: {
