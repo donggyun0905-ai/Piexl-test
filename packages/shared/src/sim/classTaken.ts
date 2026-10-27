@@ -17,7 +17,7 @@ import { bomberTaken } from "./bomber";
 import { artifacterTaken } from "./artifacter";
 import { punkTaken } from "./punk";
 import { slayerTaken } from "./slayer";
-import { forgottenTaken } from "./forgotten";
+import { forgottenHurt, forgottenTaken } from "./forgotten";
 import { silkTaken } from "./silk";
 import type { RunState } from "./types";
 
@@ -32,4 +32,5 @@ export function classTaken(s: RunState, taken: number): number {
 export function afterHurt(s: RunState): void {
   if (s.enemies.some((e) => e.ultAt !== undefined && (e.kind === "dragon" || e.kind === "godeater"))) s.player.invulnTicks = 0;
   mukinHurt(s);
+  forgottenHurt(s);
 }

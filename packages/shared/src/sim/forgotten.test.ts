@@ -4,6 +4,7 @@ import { FORGOTTEN_PERKS as K } from "../itemsForgotten";
 import { FORGOTTEN as F } from "../weaponsForgotten";
 import { createRun, stepSim, type RunState } from "./index";
 import { recalcStats } from "./items";
+import { damagePlayer } from "./combat";
 import { enemy, FIRE } from "./perkTestUtil";
 import type { WeaponId } from "../content";
 
@@ -44,12 +45,15 @@ describe("잊혀진 자", () => {
     expect(lost(s)).toBeGreaterThan(0);
   });
 
-  it("처치로 빛의 고리가 차면 신족: 공격 2배 빠르게 + 빛기둥", () => {
+  it("맞힐 때마다 빛의 고리가 차고(맞으면 깎임), 가득 차면 신족: 공격 2배 빠르게 + 빛기둥", () => {
+    const h = forgotten();
+    h.player.fgRing = 10;
+    damagePlayer(h, 1);
+    expect(h.player.fgRing).toBe(10 - F.ringLoss);
     const s = forgotten();
-    stepSim(s, IDLE);
-    s.kills += F.ringKills;
-    stepSim(s, IDLE);
-    expect(s.player.fgGod).toBeGreaterThan(F.godTicks - 5);
+    s.player.fgRing = F.ringKills - 1;
+    for (let i = 0; i < 60 && !s.player.fgGod; i++) stepSim(s, FIRE);
+    expect(s.player.fgGod).toBeGreaterThan(F.godTicks - 70);
     expect(s.player.fgRing).toBe(0);
     for (let i = 0; i < F.pillarGap * 2; i++) stepSim(s, IDLE);
     expect(lost(s)).toBeGreaterThanOrEqual(s.player.stats.damage * F.pillarMul);
@@ -60,13 +64,12 @@ describe("잊혀진 자", () => {
     expect(s.player.fgGod).toBe(0);
   });
 
-  it("잊힌 기억·신의 잔향·깨어남: 고리 16 · 15초 · 회복", () => {
+  it("잊힌 기억·신의 잔향·깨어남: 고리 28 · 15초 · 회복", () => {
     const s = forgotten("fgGrace", "fgMemory", "fgEcho", "fgHeal");
     s.player.hp = 10;
-    stepSim(s, IDLE);
-    s.kills += K.fgMemory.kills;
-    stepSim(s, IDLE);
-    expect(s.player.fgGod).toBeGreaterThan(K.fgEcho.ticks - 5);
+    s.player.fgRing = K.fgMemory.kills - 1;
+    for (let i = 0; i < 60 && !s.player.fgGod; i++) stepSim(s, FIRE);
+    expect(s.player.fgGod).toBeGreaterThan(K.fgEcho.ticks - 70);
     expect(s.player.hp).toBeGreaterThan(10 + s.player.stats.maxHp * 0.25);
   });
 

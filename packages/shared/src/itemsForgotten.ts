@@ -29,7 +29,7 @@ export const FORGOTTEN_PASSIVES = {
 
 /** 잊혀진 자 아이템 수치 */
 export const FORGOTTEN_PERKS = {
-  fgMemory: { kills: 16 },
+  fgMemory: { kills: 28 },
   fgEcho: { ticks: 900 },
   fgPillar: { mul: 0.5 },
   fgMany: { n: 2 },

@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.144",
+    date: "2026-10-27",
+    items: {
+      ko: [
+        "잊혀진 자: 빛의 고리 게이지가 화면 왼쪽 위에 화려한 금빛 테두리(큰 뿔 넷·작은 뿔 넷)로 둘러싸인 원 게이지로 (다섯 빛깔로 차오름, 맵을 가리지 않게 모서리)",
+        "등 뒤 빛의 고리는 게이지 없이 지금의 1.5배 크기로 늘 보이는 몸의 일부 · 신족이 되면 흰 금빛으로 타오르며 빛살이 도는 고리로 바뀜",
+        "게이지는 적을 맞힌 공격 한 번마다 1씩 참 (40, 잊힌 기억은 28) · 적에게 맞으면 4씩 깎임",
+      ],
+      en: [
+        "The Forgotten: the ring-of-light gauge is now a round gauge at the top-left framed by an ornate gold border (four large and four small spikes), filling in five colors, tucked in the corner so it doesn't cover the map",
+        "The halo on her back is now always shown at 1.5× size as part of her look (no gauge) · in divine form it turns into a blazing white-gold halo with turning rays",
+        "The gauge fills by 1 for each attack that hits (40; 28 with Forgotten Memory) · taking damage drains 4",
+      ],
+      ja: [
+        "忘れられし者: 光の輪のゲージを画面左上の華やかな金の縁（大きな角4・小さな角4）に囲まれた円ゲージに（5色で満ちる、マップを隠さない隅に）",
+        "背中の光の輪はゲージなしで今の1.5倍の大きさで常に見える姿の一部 · 神族になると白金に燃え光条が回る輪に変わる",
+        "ゲージは敵に当てた攻撃1回ごとに1溜まる（40、忘れられた記憶は28）· 被弾で4減る",
+      ],
+    },
+  },
+  {
     version: "0.48.143",
     date: "2026-10-27",
     items: {

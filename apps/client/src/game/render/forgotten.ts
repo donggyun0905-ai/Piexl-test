@@ -1,6 +1,7 @@
-// 잊혀진 자 그리기: 빛 탄 · 등 뒤의 빛의 고리(처치로 차오름) · 신족(금빛 기운·빛 날개·도는 빛 조각) · 떨어지는 빛 십자가 · 빛줄기 · 터짐 · 빛 베기 · 빛기둥 · 깨어남
-import { forgottenRing, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+// 잊혀진 자 그리기: 빛 탄 · 등 뒤의 빛의 고리(forgottenHalo) · 신족(금빛 기운·빛 날개·도는 빛 조각) · 떨어지는 빛 십자가 · 빛줄기 · 터짐 · 빛 베기 · 빛기둥 · 깨어남
+import { type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
+import { drawHaloBack } from "./forgottenHalo";
 
 type Ctx = CanvasRenderingContext2D;
 const TAU = Math.PI * 2;
@@ -52,14 +53,13 @@ export function drawForgottenShot(ctx: Ctx, pr: ProjectileState, x: number, y: n
   return true;
 }
 
-/** 등 뒤의 빛의 고리 (몸보다 먼저 그려 등 뒤로 보임): 처치로 차오르고, 신족이면 빛 날개와 함께 환하게 */
+/** 등 뒤의 빛의 고리 (몸보다 먼저 그려 등 뒤로 보임): 신족이면 빛 날개와 함께 환하게 */
 export function drawForgottenBack(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const p = s.player;
   if (p.characterId !== "forgotten") return;
   const x = snap(lerp(p.prevX, p.x, alpha));
   const y = snap(lerp(p.prevY, p.y, alpha) - 11);
   const god = (p.fgGod ?? 0) > 0;
-  const k = forgottenRing(p);
   if (god) {
     // 빛 날개 (깃 다섯 장씩, 천천히 퍼덕임)
     const flap = Math.sin(s.tick * 0.12) * 0.15;
@@ -74,21 +74,8 @@ export function drawForgottenBack(ctx: Ctx, s: RunState, alpha: number, snap: Sn
     ctx.globalAlpha = 0.18 + 0.08 * Math.sin(s.tick * 0.2);
     disc(ctx, x, y + 8, 18, PALE);
   }
-  // 고리: 어두운 바탕 + 찬 만큼 금빛 (가득이거나 신족이면 흰빛으로 빛남)
-  ctx.globalAlpha = 0.45;
-  circle(ctx, x, y, 8, "#6a5a3a", 2);
-  ctx.globalAlpha = god ? 0.9 : 0.95;
-  circle(ctx, x, y, 8, god ? "#ffffff" : GOLD, god ? 2 : 1.5, -Math.PI / 2, -Math.PI / 2 + TAU * k);
-  if (god) {
-    ctx.globalAlpha = 0.5 + 0.3 * Math.sin(s.tick * 0.3);
-    circle(ctx, x, y, 10, GOLD, 1);
-    for (let i = 0; i < 6; i++) {
-      const a = s.tick * 0.05 + (i * TAU) / 6;
-      ctx.fillStyle = PALE;
-      ctx.fillRect(Math.round(x + Math.cos(a) * 10) - 1, Math.round(y + Math.sin(a) * 10) - 1, 2, 2);
-    }
-  }
-  ctx.globalAlpha = 1;
+  // 등 뒤 고리 (게이지는 화면 왼쪽 위, forgottenHalo)
+  drawHaloBack(ctx, s, alpha, snap);
 }
 
 /** 신족인 동안 몸 위: 떠오르는 빛 알갱이 */

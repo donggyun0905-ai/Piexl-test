@@ -27,6 +27,8 @@ export interface ForgottenPlayerState {
   fgGod?: number;
   fgFalls?: { x: number; y: number; t: number; r: number; dmg: number; slow?: number }[];
   fgCount?: number;
+  /** 빛의 고리에 마지막으로 센 공격 번호 (한 공격은 한 번만 셈) */
+  fgCounted?: number;
 }
 
 export interface ForgottenEnemyState {

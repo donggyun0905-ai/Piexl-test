@@ -15,7 +15,7 @@ export const GUIDE_KO_ASC: Guide = {
   forgotten: [
     "아스칼론 · 잊혀진 자 · 옛 신의 마지막 후손인 반신, 빛으로 싸우는 여자 · 체력 85 · 아주 빠름 · 재생력 20 · 회피 20%",
     "빛 무기 10: 빛의 손길 · 여래신장(하늘에서 빛 십자가 셋) · 빛의 창 · 성광 · 빛비 · 빛의 날개 · 프리즘 · 후광 · 심판의 빛 · 새벽 베기",
-    "빛의 고리: 적을 쓰러뜨리면 등의 고리가 차오름 (25마리). 가득 차면 10초 동안 신족: 공격 속도 2배 + 둘레 적을 빛기둥이 저절로 침 (0.3초마다 셋, 공격력 30%)",
+    "빛의 고리: 적을 맞힌 공격마다 화면 왼쪽 위 게이지가 차오름 (40번, 적에게 맞으면 4 깎임). 가득 차면 10초 동안 신족: 공격 속도 2배 + 둘레 적을 빛기둥이 저절로 침 (0.3초마다 셋, 공격력 30%)",
     "전용 아이템 10: 잊힌 기억 · 신의 잔향 · 빛기둥 강화 · 늘어나는 기둥 · 신의 가호 · 광휘 · 성흔 · 빛의 박동 · 깨어남 · 잔광",
   ],
   remnant: [
@@ -45,7 +45,7 @@ export const GUIDE_EN_ASC: Guide = {
   forgotten: [
     "Ascalon · The Forgotten · a demigod woman, last descendant of the old gods, who fights with light · HP 85 · very fast · Regen 20 · 20% dodge",
     "10 light weapons: Touch of Light · Tathagata Palm (three light crosses from the sky) · Spear of Light · Holy Flash · Light Rain · Wings of Light · Prism · Halo · Light of Judgment · Dawn Cleave",
-    "Ring of light: kills fill the ring on her back (25). When full she takes divine form for 10s: double attack speed + pillars of light strike nearby foes on their own (three every 0.3s, 30% damage)",
+    "Ring of light: each attack that hits fills the gauge at the top-left (40; taking damage drains 4). When full she takes divine form for 10s: double attack speed + pillars of light strike nearby foes on their own (three every 0.3s, 30% damage)",
     "10 exclusive items: Forgotten Memory · Echo of the Gods · Brighter Pillars · More Pillars · Divine Ward · Radiance · Stigma · Pulse of Light · Awakening · Afterglow",
   ],
   remnant: [
@@ -75,7 +75,7 @@ export const GUIDE_JA_ASC: Guide = {
   forgotten: [
     "アスカロン · 忘れられし者 · 古き神の最後の末裔、光で戦う半神の女性 · 体力85 · とても速い · 再生力20 · 回避20%",
     "光の武器10：光の手 · 如来神掌（空から光の十字架3つ）· 光の槍 · 聖光 · 光の雨 · 光の翼 · プリズム · 後光 · 審判の光 · 暁の斬撃",
-    "光の輪：敵を倒すと背中の輪が満ちる（25体）。満ちると10秒間神族：攻撃速度2倍＋光柱が周りの敵を自動で撃つ（0.3秒ごとに3本、攻撃力30%）",
+    "光の輪：敵に当てた攻撃ごとに画面左上のゲージが満ちる（40回、被弾で4減る）。満ちると10秒間神族：攻撃速度2倍＋光柱が周りの敵を自動で撃つ（0.3秒ごとに3本、攻撃力30%）",
     "専用アイテム10：忘れられた記憶 · 神の残響 · 光柱強化 · 増える光柱 · 神の加護 · 光輝 · 聖痕 · 光の鼓動 · 目覚め · 残光",
   ],
   remnant: [

@@ -9,9 +9,9 @@ export const CHARACTER_TEXT_ASCALON = {
   snipe: { ko: "저격", en: "Sniper", ja: "狙撃" },
   forgotten: { ko: "잊혀진 자", en: "The Forgotten", ja: "忘れられし者" },
   forgottenDesc: {
-    ko: "빛 · 아스칼론. 옛 신의 마지막 후손인 반신. 빛으로 싸움 (무기 10 · 여래신장 등). 적을 쓰러뜨리면 등의 빛의 고리가 차고, 가득 차면 10초 동안 신족: 공격 속도 2배 + 빛기둥이 둘레 적을 침 · 재생력 20 · 빠름 · 회피 20% · 전용 아이템 10",
-    en: "Light · Ascalon. A demigod, last descendant of the old gods, who fights with light (10 weapons incl. Tathagata Palm). Kills fill the ring of light on her back; when full she takes divine form for 10s: double attack speed + pillars of light strike nearby foes · Regen 20 · fast · 20% dodge · 10 own items",
-    ja: "光 · アスカロン。古き神の最後の末裔である半神。光で戦う（武器10 · 如来神掌など）。敵を倒すと背中の光の輪が満ち、満ちると10秒間神族：攻撃速度2倍＋光柱が周りの敵を撃つ · 再生力20 · 速い · 回避20% · 専用アイテム10",
+    ko: "빛 · 아스칼론. 옛 신의 마지막 후손인 반신. 빛으로 싸움 (무기 10 · 여래신장 등). 적을 맞힐 때마다 빛의 고리 게이지가 차고(맞으면 깎임, 화면 왼쪽 위), 가득 차면 10초 동안 신족: 공격 속도 2배 + 빛기둥이 둘레 적을 침 · 재생력 20 · 빠름 · 회피 20% · 전용 아이템 10",
+    en: "Light · Ascalon. A demigod, last descendant of the old gods, who fights with light (10 weapons incl. Tathagata Palm). Each hit fills the ring-of-light gauge (taking damage drains it; top-left of the screen); when full she takes divine form for 10s: double attack speed + pillars of light strike nearby foes · Regen 20 · fast · 20% dodge · 10 own items",
+    ja: "光 · アスカロン。古き神の最後の末裔である半神。光で戦う（武器10 · 如来神掌など）。敵に当てるたび光の輪のゲージが満ち（被弾で減る、画面左上）、満ちると10秒間神族：攻撃速度2倍＋光柱が周りの敵を撃つ · 再生力20 · 速い · 回避20% · 専用アイテム10",
   },
   light: { ko: "빛", en: "Light", ja: "光" },
   remnant: { ko: "잔영", en: "Remnant", ja: "残影" },

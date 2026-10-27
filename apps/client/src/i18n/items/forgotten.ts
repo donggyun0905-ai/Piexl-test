@@ -50,7 +50,7 @@ export const FG_PASSIVE_NAMES: Record<FgPassive & PassiveId, Names> = {
 };
 
 export const FG_EFFECTS: Partial<Record<FgPassive & PassiveId, Names>> = {
-  fgMemory: c("빛의 고리가 {kills}마리 만에 참 (원래 25)", "The ring of light fills after {kills} kills (was 25)", "光の輪が{kills}体で満ちる（元は25）"),
+  fgMemory: c("빛의 고리가 {kills}번 맞히면 참 (원래 40)", "The ring of light fills after {kills} hits (was 40)", "光の輪が{kills}回の命中で満ちる（元は40）"),
   fgEcho: c("신족 10초 → {ticks:sec}초", "Divine form 10s → {ticks:sec}s", "神族10秒 → {ticks:sec}秒"),
   fgPillar: c("빛기둥 피해 30% → {mul:pct}%", "Pillar damage 30% → {mul:pct}%", "光柱のダメージ30% → {mul:pct}%"),
   fgMany: c("빛기둥 +{n}", "+{n} pillars", "光柱+{n}"),

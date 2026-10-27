@@ -46,8 +46,9 @@ export const FORGOTTEN_WEAPONS = {
 
 /** 잊혀진 자 수치 (배율 1 = 100%, 시간은 틱, 거리는 픽셀) */
 export const FORGOTTEN = {
-  /** 등의 빛의 고리: 이만큼 쓰러뜨리면 가득 → 신족 (틱) */
-  ringKills: 25,
+  /** 빛의 고리 게이지: 적을 맞힌 공격 한 번마다 1 · 이만큼이면 가득 → 신족 (틱) · 적에게 맞으면 깎이는 양 */
+  ringKills: 40,
+  ringLoss: 4,
   godTicks: 600,
   /** 신족: 공격 속도 배율 · 빛기둥 간격 틱 · 한 번에 기둥 수 · 닿는 거리 · 피해(공격력 배율) */
   godSpeed: 2,

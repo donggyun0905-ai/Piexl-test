@@ -43,6 +43,7 @@ import { drawMorphGround } from "./morphFx";
 import { drawTerraAuraB, drawTerraGroundB } from "./terra2b";
 import { drawTerraAuraC } from "./terra2c";
 import { drawGreatSpirit, drawSpiritKin } from "./spirits";
+import { drawHaloHud } from "./forgottenHalo";
 import { drawRunPet } from "./runPet";
 import { drawOniUps, type OniUp } from "./oniUps";
 import { drawSwarmGround } from "./swarmMap";
@@ -207,6 +208,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   if (opt.showReticle && !s.over) drawReticleFor(ctx, s, alpha, snap);
   // 화면에 붙는 글자 (카메라와 상관없이 왼쪽 위)
   drawComboHud(ctx, s, opt.pixelScale);
+  drawHaloHud(ctx, s, opt.pixelScale);
   drawSoulHud(ctx, s, opt.pixelScale);
   drawEaterHud(ctx, s, opt.pixelScale);
   drawTagHud(ctx, s, opt.pixelScale, opt.tagName);
