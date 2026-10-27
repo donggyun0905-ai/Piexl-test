@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.150",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "패왕전: AI도 진짜 캐릭터로 싸움 (그 캐릭터의 공격·장치·기술을 그대로 쓰고, 무작위 무기·패시브 10개·서로 다른 사용 아이템 2개를 들고 나옴) · 전투에 나가면 모두(AI 포함) 체력 ×10, 보호막 100으로 시작",
+        "준비방 규칙: 같은 패시브는 3개까지(효과 아이템은 1개) · 사용 아이템 2개는 서로 달라야 함",
+        "친구와 같이 하기: 방을 만들거나 코드·초대 링크로 들어가 함께 (최대 5명, 빈자리는 AI) · 방장이 대결을 고르고 저마다 준비방에서 장비 · 팀 대결은 같은 편부터 채우고 1대1은 서로 맞대결",
+        "점수판(Tab·버튼): 우리 편·상대 편 처치·데스·순위 · 모두의 무기·패시브·사용 아이템",
+      ],
+      en: [
+        "Champion Clash: AI now fight as real characters (using that character's attacks, devices and skills, with a random weapon, 10 passives and 2 different consumables) · Everyone, AI included, enters battle with 10× HP and a 100 shield",
+        "Preparation rules: up to 3 of the same passive (effect items 1) · the 2 consumables must differ",
+        "Play with friends: create a room or join by code or invite link (up to 5 players, AI fills empty seats) · the host picks the battle and everyone sets gear · team battles fill your side first; 1v1 is head to head",
+        "Scoreboard (Tab or button): kills, deaths and rank for both teams · everyone's weapon, passives and consumables",
+      ],
+      ja: [
+        "覇王戦: AIも本物のキャラとして戦う（そのキャラの攻撃・装置・スキルをそのまま使い、ランダムな武器・パッシブ10個・異なる使用アイテム2個を持つ）· 戦闘では全員（AI含む）体力×10、シールド100で開始",
+        "準備部屋のルール: 同じパッシブは3個まで（効果アイテムは1個）· 使用アイテム2個は異なるもの",
+        "友だちと一緒に: 部屋を作るかコード・招待リンクで参加（最大5人、空き席はAI）· ホストが対決を選び各自装備を決める · チーム戦は同じ側から埋まり、1対1は対戦",
+        "スコアボード（Tab・ボタン）: 味方・相手の撃破・デス・順位 · 全員の武器・パッシブ・使用アイテム",
+      ],
+    },
+  },
+  {
     version: "0.48.149",
     date: "2026-10-28",
     items: {

@@ -4,7 +4,7 @@ import type { PassiveId, UseItemId } from "../items";
 import type { WeaponId } from "../content";
 import type { PwMode } from "../paewangDefs";
 import type { PwArenaId } from "../paewangMaps";
-import type { Body } from "./types";
+import type { Body, EnemyState } from "./types";
 
 /** AI 캐릭터의 머리: 공격 방식·쿨타임·움직임 */
 export interface PwBrain {
@@ -102,7 +102,52 @@ export interface PwState {
   same?: number;
 }
 
+/** 패왕전 자리 하나 (나·친구·AI 모두 진짜 캐릭터: 협동 자리 s.party를 씀, sim/pvp) */
+export interface PvpSeat {
+  team: number;
+  /** 사람이 조작 (아니면 AI 입력, sim/pvpBot) */
+  human: boolean;
+  /** 경기장에 나와 있음 (토너먼트 대기·쓰러져 끝난 사람은 false) */
+  on: boolean;
+  kills: number;
+  deaths: number;
+  /** 마지막으로 나를 때린 자리 (쓰러지면 처치를 그 자리에) */
+  by?: number;
+  /** 데스매치 레벨 · 다시 나올 틱 */
+  lv: number;
+  back?: number;
+  /** 기절·느려짐·묶임 남은 틱 (상대 공격이 그림자 적에 남긴 상태를 옮겨 옴) */
+  stun: number;
+  slow: number;
+  root: number;
+  /** AI 움직임 */
+  side: number;
+  sideT: number;
+  stuck: number;
+  goalX: number;
+  goalY: number;
+  dashCd: number;
+  /** 지난번 AI 입력 때 자리 (막힘 판정) */
+  lastX?: number;
+  lastY?: number;
+}
+
+export interface PvpState {
+  mode: PwMode;
+  arena: PwArenaId;
+  seats: PvpSeat[];
+  /** 자리마다 그림자 적 (상대 쪽 자리 목록 s.enemies에 들어가 맞음) */
+  proxies: EnemyState[];
+  /** 대난투에서 내가(0번) 쓰러질 때 순위 */
+  place?: number;
+  /** 이긴 편 (모두가 적이면 자리 번호 + 100) */
+  winner?: number;
+}
+
 export interface PwRunState {
+  /** 패왕전 (좌석 대결) */
+  pvp?: PvpState;
+  /** 무한 모드 AI 대결 (적으로 나오는 AI, sim/endless·paewangUnits) */
   pw?: PwState;
   /** 무한 모드: 이 층 보스방 AI 이벤트 (방을 나갔다 오면 다시 꺼냄) */
   pwRoom?: PwState;

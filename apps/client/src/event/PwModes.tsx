@@ -7,6 +7,8 @@ import { pwWins } from "./pwRecords";
 interface Props {
   t: (key: TextKey) => string;
   onPick: (mode: PwMode) => void;
+  /** 친구와 같이 하기 (협동 방) */
+  onMulti: () => void;
   onBack: () => void;
 }
 
@@ -42,7 +44,7 @@ export function ArenaPreview({ id }: { id: PwArenaId }) {
   return <canvas ref={ref} width={a.cols * CELL} height={a.rows * CELL} className="pw-preview" aria-hidden="true" />;
 }
 
-export function PwModes({ t, onPick, onBack }: Props) {
+export function PwModes({ t, onPick, onMulti, onBack }: Props) {
   return (
     <div className="td-maps pw-modes">
       <h2>{t("paewang")}</h2>
@@ -68,6 +70,10 @@ export function PwModes({ t, onPick, onBack }: Props) {
           );
         })}
       </div>
+      <button type="button" className="primary" onClick={onMulti}>
+        👥 {t("pwMulti")}
+      </button>
+      <p className="hint">{t("pwMultiDesc")}</p>
       <button type="button" className="ghost" onClick={onBack}>
         {t("back")}
       </button>

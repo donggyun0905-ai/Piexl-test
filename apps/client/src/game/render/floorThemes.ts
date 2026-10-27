@@ -79,7 +79,8 @@ const SWARM_THEME = { plains: "centaur", ruins: "knight", fort: "reaper", swamp:
 export function themeFor(s: RunState): FloorTheme {
   if (s.tdShared) return BASE;
   if (s.swarm) return THEMES[SWARM_THEME[s.swarm.map ?? "plains"]]!;
-  if (s.pw) return THEMES[PW_THEME[s.pw.arena]]!;
+  const pa = s.pvp?.arena ?? s.pw?.arena;
+  if (pa) return THEMES[PW_THEME[pa]]!;
   let boss: string | undefined;
   if (s.lastBoss) boss = s.lastBoss === "pdark" ? "plight" : s.lastBoss;
   else if (s.arenaLv) boss = s.enemies.find((e) => ENEMIES[e.kind].boss)?.kind;

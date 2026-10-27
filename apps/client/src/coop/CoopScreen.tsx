@@ -10,6 +10,7 @@ import { loadNickname } from "../player";
 import { loadAchievements } from "../records";
 import { loadText, saveText } from "../storage";
 import { CoopGame } from "./CoopGame";
+import { PwRoomPanel, usePwRoom } from "../event/PwRoom";
 import { CoopNameAsk } from "./CoopNameAsk";
 import type { CoopMsg } from "./lockstep";
 import { fetchIce, PeerNet } from "./peer";
@@ -20,6 +21,7 @@ interface Props {
   t: (key: TextKey) => string;
   /** 초대 링크로 들어온 방 코드 (바로 들어감) */
   initialCode?: string;
+  pw?: boolean; // 패왕전 같이 하기로 들어옴 (방장이 대결을 고름)
   onExit: () => void;
 }
 
@@ -46,9 +48,11 @@ export interface CoopWire {
   pending: { pid: string; msg: CoopMsg }[];
   onOpen: (pid: string) => void;
   onClose: (pid: string) => void;
+  onPw?: (pid: string, msg: CoopMsg) => void; // 패왕전 같이 하기: 대기실 메시지 · 연결됨 (event/PwRoom)
+  onPwOpen?: (pid: string) => void;
 }
 
-export function CoopScreen({ lang, setLang, t, initialCode, onExit }: Props) {
+export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false, onExit }: Props) {
   const [characterId, setCharacterId] = useState<CharacterId>(loadCharacter);
   const [room, setRoom] = useState<RoomView | null>(null);
   const [you, setYou] = useState("");
@@ -144,6 +148,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, onExit }: Props) {
 
   const hostPid = room?.hostPid ?? "";
   const isHost = !!you && hostPid === you;
+  const pw = usePwRoom(wire, pwStart, isHost, () => (isHost ? (room?.players.map((p) => p.pid).filter((p) => p !== you) ?? []) : [hostPid]));
 
   // 직접 연결: 방장이 바뀌면 새로 (손님은 방장하고만 연결)
   useEffect(() => {
@@ -158,10 +163,12 @@ export function CoopScreen({ lang, setLang, t, initialCode, onExit }: Props) {
           setLinked((s) => new Set(s).add(pid));
           if (pid === hostPid && !isHost) net?.send(pid, { t: "hi", unlocks: loadAchievements() } satisfies CoopMsg);
           w.onOpen(pid);
+          w.onPwOpen?.(pid);
         },
         onMessage: (pid, msg) => {
           const m = msg as CoopMsg;
           if (m.t === "hi" && Array.isArray(m.unlocks)) w.unlocks.set(pid, m.unlocks.map(String));
+          if (m.t === "pwm" || m.t === "pwlo") return w.onPw?.(pid, m);
           w.onMessage(pid, m);
         },
         onClose: (pid) => {
@@ -229,6 +236,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, onExit }: Props) {
         you={you}
         characterId={room.players.find((p) => p.pid === you)?.characterId ?? characterId}
         wire={wire.current}
+        pw={pw.game}
         lang={lang}
         t={t}
         onExit={() => {
@@ -241,6 +249,8 @@ export function CoopScreen({ lang, setLang, t, initialCode, onExit }: Props) {
 
   if (room) {
     return (
+      <>
+      <PwRoomPanel room={room} you={you} isHost={isHost} characterId={room.players.find((p) => p.pid === you)?.characterId ?? characterId} pw={pw} lang={lang} t={t} />
       <BattleLobby
         lang={lang}
         setLang={setLang}
@@ -264,6 +274,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, onExit }: Props) {
           return linked.has(peer) ? <span className="badge linked">{t("coopLinked")}</span> : <span className="badge linking">{t("coopLinking")}</span>;
         }}
       />
+      </>
     );
   }
 
@@ -276,9 +287,9 @@ export function CoopScreen({ lang, setLang, t, initialCode, onExit }: Props) {
       t={t}
       busy={busy}
       error={error}
-      note="coopNote"
+      note={pwStart ? "pwMultiDesc" : "coopNote"}
       quickDesc="coopQuickDesc"
-      onQuick={() => void quick()}
+      onQuick={pwStart ? undefined : () => void quick()}
       onCreate={() => void create()}
       onJoin={(code) => connect(code)}
       onBack={onExit}

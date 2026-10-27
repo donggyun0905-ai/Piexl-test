@@ -1,22 +1,25 @@
 import { describe, expect, it } from "vitest";
 import { TICK_RATE } from "../constants";
-import { PW, PW_MODE, PW_MODES, PW_TIERS, type PwMode } from "../paewangDefs";
+import { PW, PW_MODE, PW_MODES, PW_TIERS } from "../paewangDefs";
 import { PW_ARENAS, type PwArenaId } from "../paewangMaps";
 import { distanceField, tileAt, TILE_FLOOR } from "./layout";
-import { createPaewang, paewangResult, stepPaewang } from "./paewang";
 import { spotXY } from "./paewangGrid";
-import { pwLoadoutOk, pwPassiveChoices } from "./paewangKit";
+import { pwLoadoutOk, pwPassiveChoices, pwStackMax } from "./paewangKit";
+import { allPlayers } from "./party";
+import { createPvp, pvpResult, pwSeatCount, stepPvp } from "./pvp";
 import { EMPTY_INPUT, type RunState } from "./types";
 import { roomGrid } from "./util";
 
-/** 자동 조준으로 계속 공격하며 가장 가까운 AI 쪽으로 걸음 */
+/** 나는 가만히 자동 공격 (AI들끼리·나와 싸움). tough: 나는 죽지 않음 */
 function play(s: RunState, ticks: number, tough = false): void {
   for (let i = 0; i < ticks && !s.over; i++) {
     if (tough) s.player.hp = s.player.stats.maxHp;
-    const e = s.enemies.find((o) => o.pw && o.hp > 0);
-    const dx = e ? Math.sign(e.x - s.player.x) * 40 : 0;
-    const dy = e ? Math.sign(e.y - s.player.y) * 40 : 0;
-    stepPaewang(s, { ...EMPTY_INPUT, autoAim: true, attack: true, moveX: dx, moveY: dy });
+    // 내 상대 그림자 적 중 가장 가까운 쪽으로 걸어감
+    const p = s.player;
+    const e = s.enemies.reduce<(typeof s.enemies)[number] | null>((a, x) => (x.hp > 0 && (!a || (x.x - p.x) ** 2 + (x.y - p.y) ** 2 < (a.x - p.x) ** 2 + (a.y - p.y) ** 2) ? x : a), null);
+    const mx = e ? Math.sign(e.x - p.x) * 60 : 0;
+    const my = e ? Math.sign(e.y - p.y) * 60 : 0;
+    stepPvp(s, [{ ...EMPTY_INPUT, autoAim: true, attack: true, moveX: mx, moveY: my }]);
   }
 }
 
@@ -24,7 +27,7 @@ describe("패왕전", () => {
   it("경기장 자리는 모두 바닥이고 서로 걸어서 닿음", () => {
     for (const id of Object.keys(PW_ARENAS) as PwArenaId[]) {
       const def = PW_ARENAS[id];
-      const s = createPaewang(1, id === "field" ? "brawl" : id === "manor" ? "gungame" : id === "forest" ? "squad" : id === "wide" ? "trio" : "duel", "warden");
+      const s = createPvp(1, id === "field" ? "brawl" : id === "manor" ? "gungame" : id === "forest" ? "squad" : id === "wide" ? "trio" : "duel", [{ characterId: "warden" }]);
       const g = roomGrid(s)!;
       const spots = [...def.teamA, ...def.teamB, ...def.spots];
       for (const [c, r] of spots) expect(tileAt(g, c, r), `${id} ${c},${r}`).toBe(TILE_FLOOR);
@@ -34,66 +37,56 @@ describe("패왕전", () => {
     }
   });
 
-  it("모드마다 인원 · 데스매치 21레벨 표", () => {
+  it("모두 진짜 캐릭터 자리 · 체력 ×10 · 보호막 100 · AI는 무작위 무기·패시브 10·서로 다른 아이템 2", () => {
     expect(PW_TIERS).toHaveLength(PW.gunLevels);
     for (const mode of PW_MODES) {
-      const s = createPaewang(3, mode, "drifter", { weapon: "crossbow", passives: [], uses: [] });
-      const def = PW_MODE[mode];
-      const foes = s.enemies.filter((e) => e.pw).length;
-      expect(foes, mode).toBe(mode === "tourney" ? 1 : def.foes);
-      expect(s.pw!.allies.length, mode).toBe(mode === "tourney" ? 0 : def.allies);
+      const s = createPvp(3, mode, [{ characterId: "drifter", loadout: { weapon: "crossbow", passives: [], uses: [] } }]);
+      expect(s.party!.length, mode).toBe(pwSeatCount(mode));
+      const players = allPlayers(s);
+      expect(players[0]!.stats.maxHp, mode).toBeGreaterThanOrEqual(90 * PW.hpMul);
+      expect(players[0]!.shieldPts).toBe(PW.shield);
+      const ai = players[players.length - 1]!;
+      if (mode !== "gungame") expect(ai.passives.length, mode).toBe(PW.passives);
+      expect(new Set(ai.useSlots).size, mode).toBe(2);
     }
   });
 
-  it("준비방 장비: 패시브 10개(겹치기 가능)·사용 아이템 2개 · 규칙에 안 맞으면 받지 않음", () => {
+  it("장비 규칙: 같은 패시브 3개까지(효과 아이템 1) · 사용 아이템은 서로 달라야", () => {
     const pool = pwPassiveChoices("warden", "greatblade");
-    const stack = pool.find((id) => pwLoadoutOk("warden", { weapon: "greatblade", passives: [id, id], uses: [] }))!;
-    const lo = { weapon: "greatblade" as const, passives: Array(10).fill(stack), uses: ["potion" as never] };
+    const stack = pool.find((id) => pwStackMax(id) === 3)!;
+    const lo = { weapon: "greatblade" as const, passives: [stack, stack, stack], uses: ["potion" as never, "bomb" as never] };
     expect(pwLoadoutOk("warden", lo)).toBe(true);
-    expect(pwLoadoutOk("warden", { ...lo, passives: Array(11).fill(stack) })).toBe(false);
+    expect(pwLoadoutOk("warden", { ...lo, passives: [stack, stack, stack, stack] })).toBe(false);
+    expect(pwLoadoutOk("warden", { ...lo, uses: ["potion" as never, "potion" as never] })).toBe(false);
     expect(pwLoadoutOk("warden", { ...lo, weapon: "crossbow" })).toBe(false);
   });
 
-  it("여섯 모드 모두 1분 동안 문제없이 · 같은 시드면 같은 결과", () => {
+  it("여섯 모드 모두 20초 동안 문제없이 · 같은 시드면 같은 결과 · 누군가 맞음", () => {
     for (const mode of PW_MODES) {
-      const a = createPaewang(7, mode, "mage");
-      const b = createPaewang(7, mode, "mage");
-      play(a, TICK_RATE * 30);
-      play(b, TICK_RATE * 30);
-      expect(paewangResult(a), mode).toEqual(paewangResult(b));
-      expect(a.tick, mode).toBe(b.tick);
+      const a = createPvp(7, mode, [{ characterId: "mage" }]);
+      const b = createPvp(7, mode, [{ characterId: "mage" }]);
+      play(a, TICK_RATE * 20);
+      play(b, TICK_RATE * 20);
+      const hp = (s: RunState) => allPlayers(s).map((p) => Math.round(p.hp));
+      expect(hp(a), mode).toEqual(hp(b));
+      expect(a.pvp!.seats.map((x) => x.kills), mode).toEqual(b.pvp!.seats.map((x) => x.kills));
+      // 누군가는 피해를 입음 (서로 싸움)
+      expect(allPlayers(a).some((p) => p.hp < p.stats.maxHp || (p.shieldPts ?? 0) < PW.shield), mode).toBe(true);
     }
-  }, 30000);
+  }, 120000);
 
-  it("1대1·토너먼트는 죽지 않으면 이김 · 대난투는 AI끼리도 싸움", () => {
-    for (const mode of ["duel", "tourney"] as PwMode[]) {
-      const s = createPaewang(11, mode, "warden");
-      play(s, TICK_RATE * 300, true);
-      expect(s.over && s.won, mode).toBe(true);
-      expect(paewangResult(s).reward).toBe(PW_MODE[mode].reward);
-    }
-    const s = createPaewang(5, "brawl", "warden");
-    const n = s.enemies.length;
-    play(s, TICK_RATE * 90, true);
-    expect(s.enemies.filter((e) => e.pw).length).toBeLessThan(n);
-  }, 30000);
+  it("1대1: 죽지 않으면 결국 이김 · 보상", () => {
+    const s = createPvp(11, "duel", [{ characterId: "warden" }]);
+    play(s, TICK_RATE * 600, true);
+    expect(s.over && s.won).toBe(true);
+    expect(pvpResult(s).reward).toBe(PW_MODE.duel.reward);
+    expect(s.pvp!.seats[0]!.kills).toBe(1);
+  }, 60000);
 
-  it("데스매치: 처치하면 다음 레벨 캐릭터로 바뀌고 AI도 레벨이 오름", () => {
-    const s = createPaewang(9, "gungame", "warden");
-    expect(s.player.characterId).toBe(PW_TIERS[0]);
-    play(s, TICK_RATE * 240, true);
-    expect(s.pw!.lv).toBeGreaterThan(1);
-    expect(s.player.characterId).toBe(PW_TIERS[Math.min(20, s.pw!.lv - 1)]);
-  }, 30000);
-
-  it("팀 대결에서 내가 쓰러지면 내 편을 지켜봄", () => {
-    const s = createPaewang(4, "trio", "mage");
-    s.player.hp = 0;
-    stepPaewang(s, EMPTY_INPUT);
-    expect(s.pw!.down || s.over).toBe(true);
-    if (!s.over) {
-      play(s, TICK_RATE * 5);
-      expect(s.player.hp).toBe(0);
-    }
+  it("친구와 같이: 사람 둘은 같은 편(3대3) · 1대1이면 서로 맞대결", () => {
+    const t = createPvp(2, "trio", [{ characterId: "warden" }, { characterId: "mage" }]);
+    expect(t.pvp!.seats.slice(0, 2).map((x) => [x.human, x.team])).toEqual([[true, 0], [true, 0]]);
+    const d = createPvp(2, "duel", [{ characterId: "warden" }, { characterId: "mage" }]);
+    expect(d.pvp!.seats.map((x) => x.team)).toEqual([0, 1]);
   });
 });

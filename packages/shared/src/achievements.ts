@@ -189,7 +189,7 @@ export function characterAvailable(id: CharacterId, unlocks: readonly string[]):
 /** 지금 판에서 달성한 업적 (이미 가진 것 포함). career: 이 판 전까지의 누적 기록 */
 export function achievedIn(s: RunState, career: CareerStats = EMPTY_CAREER): AchievementId[] {
   // 레이드 아레나·패왕전은 업적을 세지 않음 (보통 판과 진행이 다름)
-  if (s.arenaLv || s.pw) return [];
+  if (s.arenaLv || s.pw || s.pvp) return [];
   let c: CareerStats | null = null;
   return ACHIEVEMENTS.filter((a: AchievementDef) => {
     if (a.run) return a.run(s);

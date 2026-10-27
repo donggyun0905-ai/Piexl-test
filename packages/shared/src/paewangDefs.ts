@@ -61,6 +61,11 @@ export const PW = {
   /** 준비방: 고르는 패시브 수 · 사용 아이템 수 */
   passives: 10,
   uses: 2,
+  /** 같은 패시브는 이만큼까지 (효과 아이템은 하나) · 사용 아이템은 서로 달라야 함 */
+  stackMax: 3,
+  /** 전투에 나가면 모두(AI 포함) 최대 체력 × hpMul · 보호막 shield로 시작 */
+  hpMul: 10,
+  shield: 100,
   /** AI 체력 = 캐릭터 최대 체력 × hpBase × 보정 · 한 번 공격 피해 = 캐릭터 공격력 × 무기 배율 × dmgBase × 보정 */
   hpBase: 2.6,
   dmgBase: 0.85,
@@ -84,10 +89,9 @@ export const PW = {
   /** 다음 상대가 나오기까지(토너먼트) · 다시 살아나기까지(데스매치) 틱 */
   nextFoe: 90,
   respawn: 180,
-  /** 데스매치 레벨 수 · 다시 살아난 뒤 무적 틱 · 무작위로 드는 패시브 수 */
+  /** 데스매치 레벨 수 · 다시 살아난 뒤 무적 틱 */
   gunLevels: 21,
   spawnGuard: 120,
-  gunPassives: 4,
   /** 숲 함정: 간격 · 튀어나와 있는 틱 · 피해 */
   trapEvery: 150,
   trapUp: 40,

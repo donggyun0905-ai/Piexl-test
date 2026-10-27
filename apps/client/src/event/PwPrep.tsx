@@ -1,5 +1,5 @@
 // 패왕전 준비방: 무기 1개 · 패시브 10개(여러 번 가질 수 있는 것은 겹쳐서) · 사용 아이템 2개 고르기 (연습장 아이템 칸을 그대로 씀)
-import { CHARACTERS, characterWeapons, PASSIVES, PW, pwCanStack, pwPassiveChoices, USE_ITEM_IDS, type CharacterId, type PassiveDef, type PassiveId, type PwLoadout, type UseItemId, type WeaponId } from "@pixel-rogue/shared";
+import { CHARACTERS, characterWeapons, PASSIVES, PW, pwCanStack, pwPassiveChoices, pwStackMax, USE_ITEM_IDS, type CharacterId, type PassiveDef, type PassiveId, type PwLoadout, type UseItemId, type WeaponId } from "@pixel-rogue/shared";
 import { useMemo, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { ItemIcon, type IconItem } from "../game/itemIcon";
 import { ItemTip, tipPos, useCloseOutside, type TipPos } from "../game/ItemTip";
@@ -52,10 +52,15 @@ export function PwPrep({ characterId, lang, t, onStart, onBack }: Props) {
     }
     if (it.kind === "passive") {
       const id = it.id as PassiveId;
-      if (lo.passives.length >= PW.passives || (!pwCanStack(id) && lo.passives.includes(id))) return setNote(t(lo.passives.length >= PW.passives ? "pwFull" : "practiceOnce"));
+      // 같은 패시브는 3개까지 (효과 아이템은 하나)
+      const max = pwStackMax(id);
+      if (lo.passives.length >= PW.passives) return setNote(t("pwFull"));
+      if (lo.passives.filter((x) => x === id).length >= max) return setNote(t(max === 1 ? "practiceOnce" : "pwMax3"));
       return setLo({ ...lo, passives: [...lo.passives, id] });
     }
     if (lo.uses.length >= PW.uses) return setNote(t("pwFull"));
+    // 사용 아이템은 서로 다른 것만
+    if (lo.uses.includes(it.id as UseItemId)) return setNote(t("pwUseDiff"));
     setLo({ ...lo, uses: [...lo.uses, it.id as UseItemId] });
   };
 
@@ -120,7 +125,7 @@ export function PwPrep({ characterId, lang, t, onStart, onBack }: Props) {
       </div>
       {tip && (
         <ItemTip pos={tip} icon={tip.item} name={itemName(tip.item.kind, tip.item.id, lang)} desc={itemDesc(tip.item.kind, tip.item.id, lang, t)}>
-          {tip.item.kind === "passive" && <small className="practice-tip-stack">{t(pwCanStack(tip.item.id as PassiveId) ? "practiceStack" : "practiceOnce")}</small>}
+          {tip.item.kind === "passive" && <small className="practice-tip-stack">{t(pwCanStack(tip.item.id as PassiveId) ? "pwMax3" : "practiceOnce")}</small>}
         </ItemTip>
       )}
     </div>

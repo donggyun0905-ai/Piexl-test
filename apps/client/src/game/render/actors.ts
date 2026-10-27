@@ -1,5 +1,5 @@
 // 적·플레이어 그리기: 공격 예고선 · 적(체력 줄·자동 조준 표시) · 플레이어(대시 잔상·방향·맞는 범위·보호막)
-import { allPlayers, DASH_TICKS, ENEMIES, isAlive, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, DASH_TICKS, inPlay, ENEMIES, isAlive, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
 import { drawCrate } from "./swarm";
 import { drawFighter } from "./paewang";
 import { drawAimMark, drawHitRing } from "../aimMark";
@@ -70,6 +70,8 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       drawCrate(ctx, x, y, e);
       continue;
     }
+    // 패왕전 그림자 적은 그리지 않음 (사람 몸을 그림) · 무한 모드 AI 상대
+    if (s.pvp) continue;
     if (e.pw) {
       drawFighter(ctx, s, e, alpha, snap);
       continue;
@@ -142,9 +144,9 @@ function drawDown(ctx: CanvasRenderingContext2D, p: PlayerState, snap: Snap): vo
 /** hideBody: 몸을 그리지 않음 (범 풍류 대기 때 백호 위에 누운 모습을 따로 그림) */
 export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap, showHitbox: boolean, hideBody = false): void {
   const p = s.player;
+  // 패왕전: 경기장에 없는 사람(대기·쓰러짐)은 그리지 않음
+  if (s.pvp && !inPlay(s, s.seat ?? 0)) return;
   if (s.party && !isAlive(p)) return drawDown(ctx, p, snap);
-  // 패왕전에서 쓰러져 내 편을 지켜보는 중
-  if (s.pw?.down) return;
   const px = lerp(p.prevX, p.x, alpha);
   const py = lerp(p.prevY, p.y, alpha);
   // 잔영 그림자: 깜빡이지 않고 어두운 반투명 몸

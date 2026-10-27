@@ -1,4 +1,5 @@
 // 아이템: 바닥 아이템 줍기·바꾸기, 사용 아이템 쓰기, 능력치 다시 계산 (놓기는 loot, 상점은 shop)
+import { pvpStats } from "./pvp";
 import { BIG_COIN } from "../constants";
 import { morphMods } from "./morphEvo";
 import { eaterMods } from "./eater";
@@ -54,6 +55,8 @@ export function recalcStats(s: RunState): void {
   // 거너: 최대 체력 고정 (체력 아이템을 먹어도 그대로)
   const fixed = (CHARACTERS[p.characterId] as CharacterDef).fixedHp;
   if (fixed) p.stats.maxHp = fixed;
+  // 패왕전: 모두 최대 체력 ×10, AI는 모드 보정
+  pvpStats(s);
   if (p.stats.maxHp > oldMax) p.hp += p.stats.maxHp - oldMax;
   if (p.hp > p.stats.maxHp) p.hp = p.stats.maxHp;
 }

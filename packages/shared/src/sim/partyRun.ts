@@ -1,4 +1,5 @@
 // 협동 한 판: 시작·한 틱. 혼자 하기(run.ts)와 같은 순서로, 사람마다 자리를 꺼내 놓고 계산 (party.ts)
+import { stepPvp } from "./pvp";
 import type { CharacterId } from "../content";
 import { updateItems } from "./items";
 import { allPlayers, eachSeat, isAlive, seatNo, seatOf, useSeat } from "./party";
@@ -40,6 +41,8 @@ export function createParty(seed: number, members: readonly PartyMember[]): RunS
  * 화면마다 꺼내 놓은 자리(내 자리)가 달라도 결과가 같게, 계산은 늘 0번 자리를 꺼내 놓고 시작함
  */
 export function stepParty(s: RunState, inputs: readonly TickInput[]): void {
+  // 패왕전을 같이 하는 판 (협동 방·진행 맞추기를 그대로 씀)
+  if (s.pvp) return stepPvp(s, inputs);
   if (s.over) return;
   applyRoom(s);
   const view = seatNo(s);

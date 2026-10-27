@@ -221,7 +221,7 @@ export function checkDeath(s: RunState): boolean {
   return true;
 }
 
-function updateEffects(s: RunState): void {
+export function updateEffects(s: RunState): void {
   for (const fx of s.effects) fx.ticks--;
   s.effects = s.effects.filter((fx) => fx.ticks > 0);
 }

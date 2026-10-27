@@ -2,7 +2,7 @@
 // 사람마다 다른 값(플레이어·돈·안내·주운 기록 등)은 자리(Seat)에 두고, 계산할 때 그 사람 자리를 RunState에 꺼내 놓는다.
 // 그래서 기존 계산 코드는 s.player만 보면 됨. 혼자 하기(party 없음)는 아무것도 바뀌지 않음
 import { ROOM_WIDTH } from "../constants";
-import type { Body, BuyLogEntry, Device, PlayerState, Prompt, RunState } from "./types";
+import type { Body, BuyLogEntry, Device, EnemyState, PendingBlast, PlayerState, Prompt, RunState } from "./types";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -45,6 +45,9 @@ export interface Seat {
   buys: BuyLogEntry[];
   /** 기계공학자 장치 */
   devices?: Device[];
+  /** 패왕전: 이 사람의 상대(그림자 적) 목록 · 이 사람이 남긴 잠시 뒤 폭발 (sim/pvpWorld) */
+  enemies?: EnemyState[];
+  pendingBlasts?: PendingBlast[];
 }
 
 export function seatOf(s: Seat | RunState): Seat {
@@ -63,6 +66,7 @@ export function seatOf(s: Seat | RunState): Seat {
     unlocks: s.unlocks,
     buys: s.buys,
     devices: s.devices,
+    ...("pvp" in s && s.pvp ? { enemies: s.enemies, pendingBlasts: s.pendingBlasts } : {}),
   };
 }
 

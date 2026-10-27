@@ -170,7 +170,7 @@ function drawReticle(ctx: CanvasRenderingContext2D, x: number, y: number): void 
 
 /** 보스 체력 막대: 화면 위쪽 고정 */
 export function drawBossBar(ctx: CanvasRenderingContext2D, s: RunState): void {
-  const boss = s.enemies.find((e) => ENEMIES[e.kind].boss && !e.pw);
+  const boss = s.enemies.find((e) => ENEMIES[e.kind].boss && e.kind !== "fighter");
   if (!boss) return;
   const w = ctx.canvas.width;
   const h = ctx.canvas.height;

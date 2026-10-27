@@ -158,7 +158,7 @@ export function App() {
   }
   if (screen.name === "swarmSelect") return <CharacterSelect t={lang.t} showSeed={false} onBack={toTitle} onSelect={(characterId) => setScreen({ name: "swarmMap", characterId })} />;
   if (screen.name === "swarmMap") return <SwarmMaps t={lang.t} onPick={(map, level) => setScreen({ name: "swarm", characterId: screen.characterId, map, level, runKey: 0 })} onBack={() => setScreen({ name: "swarmSelect" })} />;
-  if (screen.name === "paewang") return <PwFlow lang={lang.lang} t={lang.t} onExit={toTitle} />;
+  if (screen.name === "paewang") return <PwFlow lang={lang.lang} setLang={lang.setLang} t={lang.t} onExit={toTitle} />;
   if (screen.name === "swarm") {
     const retry = () => setScreen({ ...screen, runKey: screen.runKey + 1 });
     const exit = () => setScreen({ name: "swarmMap", characterId: screen.characterId });

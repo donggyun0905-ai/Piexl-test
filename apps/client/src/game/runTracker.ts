@@ -64,7 +64,7 @@ export function createRunTracker(solo: boolean, seedText: string, run: RunState,
         // 일일 미션 (혼자 하기·일일 도전)
         if (solo || run.sudden) recordRun(run);
         // 레이드 아레나·패왕전은 누적 기록·최고 기록에 넣지 않음 (순위표는 따로)
-        if (!run.arenaLv && !run.pw) addCareer(run);
+        if (!run.arenaLv && !run.pw && !run.pvp) addCareer(run);
       }
       const score = computeScore(run);
       let newBest = false;

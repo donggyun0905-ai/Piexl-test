@@ -1,5 +1,5 @@
 // 패왕전 그리기: AI 캐릭터(상대·내 편) 몸·체력 줄·편 표시 · 휘두름 · AI 탄 · 바닥(2층 발판·가시 함정) · 수풀(위에 덮음)
-import { PW_ARENAS, TILE_SIZE, trapUp, type EnemyState, type ProjectileState, type PwAlly, type PwBrain, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, inPlay, PW, PW_ARENAS, TILE_SIZE, trapUp, type EnemyState, type ProjectileState, type PwAlly, type PwBrain, type RunState } from "@pixel-rogue/shared";
 import { drawBody } from "./actors";
 import { lerp, type Snap } from "./palette";
 
@@ -63,8 +63,9 @@ export function drawPwShot(ctx: Ctx, pr: ProjectileState, x: number, y: number):
 
 /** 바닥: 2층 발판(나무 판자 + 그림자) · 가시 함정 */
 export function drawPwGround(ctx: Ctx, s: RunState): void {
-  if (!s.pw) return;
-  const a = PW_ARENAS[s.pw.arena];
+  const id = s.pvp?.arena ?? s.pw?.arena;
+  if (!id) return;
+  const a = PW_ARENAS[id];
   for (const [c, r, w, h] of a.decks) {
     ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
     ctx.fillRect(c * TILE_SIZE + 3, r * TILE_SIZE + 3, w * TILE_SIZE, h * TILE_SIZE);
@@ -84,10 +85,11 @@ export function drawPwGround(ctx: Ctx, s: RunState): void {
 
 /** 맨 위 그리기 (render/index, 패왕전·무한 모드 AI 대결): 내 편 AI · 수풀(사람 위를 반쯤 덮음) · 숲 나무 꼭대기 */
 export function drawPaewang(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
-  const pw = s.pw;
-  if (!pw) return;
-  for (const a of pw.allies as PwAlly[]) drawUnit(ctx, s, a, a.pw, alpha, snap);
-  const arena = PW_ARENAS[pw.arena];
+  const id = s.pvp?.arena ?? s.pw?.arena;
+  if (!id) return;
+  for (const a of (s.pw?.allies ?? []) as PwAlly[]) drawUnit(ctx, s, a, a.pw, alpha, snap);
+  if (s.pvp) drawSeats(ctx, s, alpha, snap);
+  const arena = PW_ARENAS[id];
   // 수풀: 잎 덩어리 여러 개 (안에 숨은 사람이 반쯤 보임)
   for (const [c, r, w, h] of arena.bushes) {
     for (let yy = 0; yy < h; yy++) {
@@ -102,7 +104,7 @@ export function drawPaewang(ctx: Ctx, s: RunState, alpha: number, snap: Snap): v
     }
   }
   // 숲: 나무 기둥 위에 잎이 무성한 꼭대기
-  if (pw.arena === "forest") {
+  if (id === "forest") {
     for (const [c, r, w, h] of arena.rocks) {
       const x = (c + w / 2) * TILE_SIZE;
       const y = (r + h / 2) * TILE_SIZE - 8;
@@ -119,4 +121,42 @@ function leaf(ctx: Ctx, x: number, y: number, r: number, color: string): void {
   ctx.beginPath();
   ctx.arc(x, y, r, 0, Math.PI * 2);
   ctx.fill();
+}
+
+/** 패왕전 자리마다: 발밑 편 고리 · 머리 위 체력 줄(+보호막) · 데스매치 레벨 */
+function drawSeats(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
+  const pv = s.pvp!;
+  const me = pv.seats[s.seat ?? 0]!.team;
+  allPlayers(s).forEach((p, i) => {
+    const seat = pv.seats[i]!;
+    if (!inPlay(s, i)) return;
+    const x = snap(lerp(p.prevX, p.x, alpha));
+    const y = snap(lerp(p.prevY, p.y, alpha));
+    // 나 노랑 · 같은 편 파랑 · 상대 빨강 (모두가 적이면 주황)
+    const color = i === (s.seat ?? 0) ? "#ffd860" : seat.team === me ? "#5ab0ff" : seat.team === 1 ? "#ff5a5a" : "#ffa040";
+    ctx.strokeStyle = color;
+    ctx.globalAlpha = 0.75;
+    ctx.beginPath();
+    ctx.ellipse(x, y + p.r - 1, p.r + 2, (p.r + 2) / 2, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    if (i === (s.seat ?? 0)) return;
+    const w = 16;
+    const top = y - p.r - 9;
+    ctx.fillStyle = "#000";
+    ctx.fillRect(x - w / 2, top, w, 3);
+    ctx.fillStyle = color;
+    ctx.fillRect(x - w / 2, top, Math.max(1, Math.round((w * Math.max(0, p.hp)) / p.stats.maxHp)), 3);
+    const sh = Math.min(1, (p.shieldPts ?? 0) / PW.shield);
+    if (sh > 0) {
+      ctx.fillStyle = "#c8e8ff";
+      ctx.fillRect(x - w / 2, top - 2, Math.round(w * sh), 1);
+    }
+    if (pv.mode === "gungame") {
+      ctx.font = "6px monospace";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#fff";
+      ctx.fillText(String(seat.lv), x, top - 3);
+    }
+  });
 }

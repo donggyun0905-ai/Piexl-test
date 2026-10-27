@@ -47,8 +47,9 @@ export function clamp(v: number, min: number, max: number): number {
 /** 지금 방의 칸 배열 (네모 방이면 null) */
 export function roomGrid(s: RunState): TileGrid | null {
   if (s.arena) return arenaGrid(s.arena);
-  // 패왕전: 경기장마다 벽·나무·물 (sim/paewangGrid)
-  if (s.pw) return pwGrid(s.pw.arena);
+  // 패왕전·무한 모드 AI 대결: 경기장마다 벽·나무·물 (sim/paewangGrid)
+  const pa = s.pvp?.arena ?? s.pw?.arena;
+  if (pa) return pwGrid(pa);
   // 광야의 새벽: 맵마다 건물·바위·물웅덩이 (들판은 테두리만)
   if (s.swarm) return s.swarm.map && s.swarm.map !== "plains" ? swarmGrid(s.swarm.map) : null;
   const room = s.map.rooms[s.roomId];
