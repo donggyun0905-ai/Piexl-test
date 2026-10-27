@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.143",
+    date: "2026-10-27",
+    items: {
+      ko: [
+        "방랑객: 발도를 뺀 모든 카타나 공격이 휘두르는 베기 대신, 사거리 안의 적 몸에 바늘처럼 가는 일직선 칼선이 바로 들어감 (\"삥\" 소리)",
+        "무심의 원: 하늘색 · 대시해도 끌어당기지 않고, 원 안 적이 모두 멈추고 한 번씩 크게(공격력 400%) 베이며 나는 앞으로 발도 급습",
+        "칼날 폭풍: 초승달 검기 여러 겹이 소용돌이치는 검기 폭풍 · 천검란: 방 곳곳에 하얀 초승달 검기 · 달빛 일섬: 앞으로 길게 내달리고 2초 뒤 지나간 줄의 적이 한꺼번에 베임",
+      ],
+      en: [
+        "Wanderer: every katana attack except Quick Draw now lands a needle-thin straight cut right on foes within range instead of a swinging arc (with a sharp 'ping')",
+        "Circle of No-Mind: now sky blue · dashing no longer pulls; every foe inside freezes and takes one big cut (400%) while you quick-draw forward",
+        "Blade Storm: a swirling storm of layered crescent sword waves · Thousand Swords: white crescent waves all over the room · Moonlit Flash: dash far forward, and 2s later every foe on the line is cut at once",
+      ],
+      ja: [
+        "放浪者: 抜刀以外のすべての刀攻撃が、振り斬りの代わりに射程内の敵の体へ針のように細い一直線の斬撃が即座に入る（「ピン」という音）",
+        "無心の円: 水色に · ダッシュで引き寄せず、円の中の敵が全員止まり一度ずつ大きく（攻撃力400%）斬られ、自分は前へ抜刀奇襲",
+        "刃の嵐: 三日月の剣気が幾重にも渦巻く剣気の嵐 · 千剣乱: 部屋のあちこちに白い三日月の剣気 · 月光一閃: 前へ長く駆け抜け、2秒後に通った線上の敵がまとめて斬られる",
+      ],
+    },
+  },
+  {
     version: "0.48.142",
     date: "2026-10-27",
     items: {

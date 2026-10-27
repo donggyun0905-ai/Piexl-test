@@ -31,6 +31,7 @@ export type Sfx =
   | "slice"
   | "blink"
   | "katana"
+  | "ping"
   | "sharp"
   | "tempest"
   | "string"

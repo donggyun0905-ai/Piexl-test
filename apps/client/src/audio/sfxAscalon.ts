@@ -36,6 +36,12 @@ export const ASCALON_SOUNDS = {
     noise(0.1, 0.3, 2600);
     tone({ type: "triangle", from: 1200, to: 600, dur: 0.06, vol: 0.06 });
   },
+  // 바늘 같은 일직선 칼선: 아주 높고 짧게 "삥"
+  ping: () => {
+    tone({ type: "square", from: 4200, to: 3900, dur: 0.07, vol: 0.05 });
+    tone({ type: "sine", from: 6400, to: 6200, dur: 0.12, vol: 0.04 });
+    noise(0.02, 0.12, 10000);
+  },
   sharp: () => {
     tone({ type: "triangle", from: 3800, to: 3700, dur: 0.18, vol: 0.12 });
     tone({ type: "sine", from: 5200, to: 5100, dur: 0.25, vol: 0.06, delay: 0.01 });

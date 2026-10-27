@@ -53,7 +53,9 @@ export interface WandererPlayerState {
   wdGauge?: number;
   wdTempest?: { left: number; gap: number };
   wdLast?: number;
-  wdDash?: { x: number; y: number };
+  wdDash?: { x: number; y: number; zone?: boolean };
+  /** 달빛 일섬: 지나간 줄의 적 (2초 뒤 한꺼번에 베임) */
+  wdMoon?: { ids: number[]; t: number; dmg: number }[];
   wdSeen?: number;
 }
 

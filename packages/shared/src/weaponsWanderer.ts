@@ -36,8 +36,8 @@ export const WANDERER_WEAPONS = {
   wdNodachi: K("wdNodachi", 1.5, 0.9, 70, { mode: "slash", reach: 48, arc: -0.1 }),
   /** 연참: 세 번을 잇따라 벰 */
   wdFlurry: K("wdFlurry", 0.55, 1.3, 60, { mode: "slash", reach: 32, arc: 0.2, hits: 3 }),
-  /** 달빛 일섬: 앞으로 내달리며 지나간 줄을 벰 */
-  wdMoon: K("wdMoon", 1.4, 1, 80, { mode: "lunge", reach: 46, arc: 1 }),
+  /** 달빛 일섬: 앞으로 길게 내달리고, 2초 뒤 지나간 줄의 적이 한꺼번에 베임 */
+  wdMoon: K("wdMoon", 1.4, 1, 100, { mode: "lunge", reach: 96, arc: 1 }),
 } as const satisfies Record<string, WeaponDef>;
 
 /** 방랑객 수치 (배율 1 = 100%, 시간은 틱, 거리는 픽셀) */
@@ -53,6 +53,11 @@ export const WANDERER = {
   zoneGap: 45,
   zoneLinger: 30,
   zonePull: 30,
+  /** 무심의 원에서 대시: 원 안 적이 모두 멈추는 틱 · 한 번씩 크게 베는 피해 배율 */
+  zoneStun: 60,
+  zoneDashMul: 4,
+  /** 달빛 일섬: 지나간 줄의 적이 베이기까지 틱 */
+  moonDelay: 120,
   /** 칼날 폭풍·초승달 검기: 피해 배율 · 크기 · 속도 */
   waveMul: 0.8,
   waveR: 6,

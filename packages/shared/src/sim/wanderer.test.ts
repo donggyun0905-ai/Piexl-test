@@ -30,10 +30,25 @@ describe("방랑객", () => {
   for (const w of ["wdKatana", "wdIai", "wdZone", "wdStorm", "wdTempest", "wdCrescent", "wdTwin", "wdNodachi", "wdFlurry", "wdMoon"] as WeaponId[]) {
     it(`무기 ${w}: 적에게 피해`, () => {
       const s = wanderer(w);
-      for (let i = 0; i < 90; i++) stepSim(s, FIRE);
+      // 달빛 일섬은 2초 뒤에 베임
+      for (let i = 0; i < 90 + (w === "wdMoon" ? W.moonDelay : 0); i++) stepSim(s, FIRE);
       expect(lost(s)).toBeGreaterThan(0);
     });
   }
+
+  it("달빛 일섬: 지나간 줄의 적은 2초 뒤에 베임 · 무심의 원에서 대시하면 원 안 적이 멈추고 크게 베임", () => {
+    const m = wanderer("wdMoon");
+    for (let i = 0; i < 20 && !m.player.wdMoon?.length; i++) stepSim(m, FIRE);
+    expect(m.player.wdMoon?.length).toBe(1);
+    const z = wanderer("wdZone");
+    z.player.wdZone = { x: z.player.x, y: z.player.y, linger: 99 };
+    z.enemies[0]!.x = z.player.x + 30;
+    z.enemies[0]!.wdCutT = 999999;
+    z.player.dashTicks = 5;
+    stepSim(z, { ...FIRE, attack: false });
+    expect(z.enemies[0]!.stunTicks).toBeGreaterThan(0);
+    expect(lost(z)).toBeGreaterThan(z.player.stats.damage * 3);
+  });
 
   it("무심의 원: 1초 가만히 서면 원이 펼쳐지고, 멀리 있어도 원 안의 적을 바로 벰", () => {
     const s = wanderer("wdZone");

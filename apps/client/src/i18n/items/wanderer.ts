@@ -25,10 +25,10 @@ export function katanaDesc(st: KatanaStyle, lang: Lang): string {
   const mode: Record<KatanaStyle["mode"], Names> = {
     slash: (st.hits ?? 1) > 1 ? c(`${st.hits}번 잇따라 벰`, `${st.hits} cuts in a row`, `${st.hits}回続けて斬る`) : st.arc < 0 ? c("길고 넓게 벰", "long, wide cuts", "長く広く斬る") : c("앞쪽을 벰", "cuts ahead", "前方を斬る"),
     iai: c("칼을 뽑으며 앞으로 길게 한 줄", "draws and cuts a long line ahead", "抜きながら前方へ長く一直線"),
-    zone: c("1초 가만히 서면 큰 원이 펼쳐지고 원에 들어온 적은 거리와 상관없이 바로 베임 · 대시하면 둘레 적을 원 안으로 끌어당김", "stand still 1s to open a wide circle; foes inside are cut instantly at any range · dashing pulls foes into it", "1秒じっとすると大きな円が開き、円に入った敵は距離に関係なく即座に斬られる · ダッシュで周りの敵を円へ引き寄せる"),
+    zone: c("1초 가만히 서면 큰 원이 펼쳐지고 원에 들어온 적은 거리와 상관없이 바로 베임 · 대시하면 원 안 적이 모두 멈추고 크게 베이며 앞으로 발도 급습", "stand still 1s to open a wide circle; foes inside are cut instantly at any range · dashing freezes every foe inside, cuts them hard and you quick-draw forward", "1秒じっとすると大きな円が開き、円に入った敵は距離に関係なく即座に斬られる · ダッシュで円の中の敵が全員止まり大きく斬られ、前へ抜刀奇襲"),
     storm: c("꿰뚫고 나아가는 칼날 폭풍을 날림", "sends piercing blade storms", "貫いて進む刃の嵐を放つ"),
     tempest: c("벨 때마다 게이지가 차고, 가득 차면 방 전체에 칼날 폭풍 (공격력 120% × 5)", "cuts fill a gauge; when full, a blade storm hits the whole room (120% × 5)", "斬るたびにゲージが溜まり、満ちると部屋全体に刃の嵐（攻撃力120%×5）"),
-    lunge: c("앞으로 내달리며 지나간 줄을 벰", "dashes forward cutting through the line", "前へ駆け抜けながら斬る"),
+    lunge: c("앞으로 길게 내달리고 2초 뒤 지나간 줄의 적이 한꺼번에 베임", "dashes far forward; 2s later every foe on the line is cut at once", "前へ長く駆け抜け、2秒後に通った線上の敵がまとめて斬られる"),
   };
   const parts: Names[] = [mode[st.mode]];
   if (st.waves && st.mode !== "storm") parts.push(c("초승달 검기를 날림", "sends a crescent wave", "三日月の剣気を放つ"));

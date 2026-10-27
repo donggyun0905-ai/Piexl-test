@@ -38,6 +38,7 @@ interface Seen {
   blinkCd: number;
   /** 예리함 칼빛 · 천검란 (화면에 있는 효과 수) */
   sharps: number;
+  cuts: number;
   storms: number;
   /** 영사: 찢기 · 장전 끝 (화면에 있는 효과 수) */
   rends: number;
@@ -78,6 +79,7 @@ function snapshot(s: RunState): Seen {
     god: (s.player.fgGod ?? 0) > 0,
     blinkCd: s.player.rmBlink ?? 0,
     sharps: s.effects.filter((f) => f.kind === "wdSharp").length,
+    cuts: s.effects.filter((f) => f.kind === "wdCut" && f.ticks >= f.maxTicks - 1).length,
     storms: s.effects.filter((f) => f.kind === "wdTempest").length,
     rends: s.effects.filter((f) => f.kind === "skRend").length,
     reloads: s.effects.filter((f) => f.kind === "skReload").length,
@@ -143,8 +145,9 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         else if (now.attacks > seen.attacks) fx.push("string");
         if (now.reloads > seen.reloads) fx.push("spool");
       } else if (c === "wanderer") {
-        // 방랑객: 카타나 소리 · 천검란은 화면이 흔들림
-        if (now.attacks > seen.attacks) fx.push("katana");
+        // 방랑객: 적에게 칼선이 들어가면 "삥" · 그 밖의 칼질은 카타나 소리 · 천검란은 화면이 흔들림
+        if (now.cuts > 0 && now.tick !== seen.tick) fx.push("ping");
+        else if (now.attacks > seen.attacks) fx.push("katana");
         if (now.storms > seen.storms) {
           fx.push("tempest");
           onShake(4);

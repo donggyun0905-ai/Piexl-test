@@ -27,7 +27,7 @@ export const GUIDE_KO_ASC: Guide = {
   wanderer: [
     "아스칼론 · 방랑객 · 카타나 한 자루로 떠도는 남자 무사 · 체력 105 · 기본 예리함 25% (맞히면 확률로 방어 -25% + 출혈, 터지면 칼빛과 쇳소리)",
     "카타나 10: 방랑 카타나 · 발도 · 무심의 원 · 칼날 폭풍 · 천검란 · 초승달 베기 · 이도류 · 노다치 · 연참 · 달빛 일섬",
-    "무심의 원: 1초 가만히 서면 큰 원이 펼쳐지고, 원에 들어온 적은 거리와 상관없이 바로 베임 (공격력 200%). 대시하면 둘레 적을 원 안으로 끌어당김",
+    "무심의 원: 1초 가만히 서면 큰 원이 펼쳐지고, 원에 들어온 적은 거리와 상관없이 바로 베임 (공격력 200%). 대시하면 원 안 적이 모두 멈추고 크게 베이며 앞으로 발도 급습",
     "천검란: 벨 때마다 발밑 게이지가 차고, 가득 차면 방 전체에 칼날 폭풍 (공격력 120% × 5)",
     "전용 아이템 10: 숫돌 · 깊은 상처 · 명경지수 · 바람의 칼 · 납도 · 검기 응축 · 낭인의 걸음 · 집중 · 피의 비 · 잔월",
   ],
@@ -57,7 +57,7 @@ export const GUIDE_EN_ASC: Guide = {
   wanderer: [
     "Ascalon · Wanderer · a swordsman who roams with a single katana · HP 105 · base Sharpness 25% (hits may cut defense by 25% and cause bleeding, with a flash and a ring of steel)",
     "10 katanas: Wanderer's Katana · Quick Draw · Circle of No-Mind · Blade Storm · Thousand Swords · Crescent Cut · Two Swords · Nodachi · Flurry · Moonlit Flash",
-    "Circle of No-Mind: stand still for 1s to open a wide circle; any foe that enters is cut instantly at any range (200%). Dashing pulls nearby foes into it",
+    "Circle of No-Mind: stand still for 1s to open a wide circle; any foe that enters is cut instantly at any range (200%). Dashing freezes every foe inside, cuts them hard and you quick-draw forward",
     "Thousand Swords: cuts fill the gauge under your feet; when full, a blade storm hits the whole room (120% × 5)",
     "10 exclusive items: Whetstone · Deep Wound · Still Water · Wind Blade · Sheathe · Condensed Edge · Ronin's Stride · Focus · Blood Rain · Waning Moon",
   ],
@@ -87,7 +87,7 @@ export const GUIDE_JA_ASC: Guide = {
   wanderer: [
     "アスカロン · 放浪者 · 刀一振りで流れ歩く男の剣士 · 体力105 · 基本の鋭さ25%（当てると確率で防御-25%＋出血、発動すると刃の光と金属音）",
     "刀10：流浪の刀 · 抜刀 · 無心の円 · 刃の嵐 · 千剣乱 · 三日月斬り · 二刀流 · 野太刀 · 連斬 · 月光一閃",
-    "無心の円：1秒じっとすると大きな円が開き、円に入った敵は距離に関係なく即座に斬られる（攻撃力200%）。ダッシュすると周りの敵を円の中へ引き寄せる",
+    "無心の円：1秒じっとすると大きな円が開き、円に入った敵は距離に関係なく即座に斬られる（攻撃力200%）。ダッシュすると円の中の敵が全員止まり大きく斬られ、前へ抜刀奇襲",
     "千剣乱：斬るたびに足元のゲージが溜まり、満ちると部屋全体に刃の嵐（攻撃力120%×5）",
     "専用アイテム10：砥石 · 深い傷 · 明鏡止水 · 風の刃 · 納刀 · 剣気凝縮 · 浪人の歩み · 集中 · 血の雨 · 残月",
   ],
