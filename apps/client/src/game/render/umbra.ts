@@ -4,6 +4,8 @@ import { drawEnemySprite } from "../sprites";
 import { C } from "./palette";
 
 const BEASTS = new Set(["umbra", "sandworm", "scorpion", "roc"]);
+/** 짐승 셋은 그림을 1.5배로 */
+const BIG = 1.5;
 const hidden = (e: EnemyState) => e.phase === "walk" || e.phase === "windup";
 
 function tintOf(s: RunState, e: EnemyState): readonly [string, number] | undefined {
@@ -49,7 +51,7 @@ function drawWorm(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, x: 
   ctx.beginPath();
   ctx.rect(x - size, base - size * rise, size * 2, size * rise);
   ctx.clip();
-  drawEnemySprite(ctx, "sandworm", x, y + size * (1 - rise), frame, e.dirX < 0, tint);
+  drawEnemySprite(ctx, "sandworm", x, y + size * (1 - rise), frame, e.dirX < 0, tint, BIG);
   ctx.restore();
 }
 
@@ -57,9 +59,9 @@ function drawWorm(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, x: 
 function wormHead(ctx: CanvasRenderingContext2D, x: number, y: number, frame: number, tint: readonly [string, number] | undefined, lift: number): void {
   ctx.save();
   ctx.beginPath();
-  ctx.rect(x - 60, y - lift - 40, 120, 67);
+  ctx.rect(x - 90, y - lift - 60, 180, 100);
   ctx.clip();
-  drawEnemySprite(ctx, "sandworm", x, y - lift + 18, frame, false, tint);
+  drawEnemySprite(ctx, "sandworm", x, y - lift + 27, frame, false, tint, BIG);
   ctx.restore();
 }
 
@@ -70,24 +72,24 @@ function wormFlight(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, p
   const height = (px: number, py: number) => Math.sin((Math.PI * Math.min(len, Math.hypot(px - sx, py - sy))) / len) * 22;
   const body = wormBody(path, 9);
   ctx.fillStyle = "rgba(40, 24, 10, 0.35)";
-  for (const [bx, by] of body) ctx.fillRect(Math.round(bx - 8), Math.round(by - 2), 16, 5);
+  for (const [bx, by] of body) ctx.fillRect(Math.round(bx - 12), Math.round(by - 3), 24, 7);
   body.forEach(([bx, by], i) => {
     const h = height(bx, by);
     ctx.fillStyle = i % 2 ? "#9a6a3a" : "#b8844c";
     ctx.beginPath();
-    ctx.arc(bx, by - h, 13, 0, Math.PI * 2);
+    ctx.arc(bx, by - h, 20, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = "#5a3818";
     ctx.lineWidth = 1;
     ctx.stroke();
     ctx.fillStyle = "#e0b880";
-    ctx.fillRect(Math.round(bx - 5), Math.round(by - h - 9), 6, 3);
+    ctx.fillRect(Math.round(bx - 8), Math.round(by - h - 14), 9, 4);
   });
   // 솟은 자리·박힌 자리 모래 구멍
   ctx.fillStyle = "rgba(60, 36, 16, 0.6)";
   for (const [hx, hy] of [[sx, sy], [lx, ly]] as const) {
     ctx.beginPath();
-    ctx.ellipse(hx, hy + 6, 18, 7, 0, 0, Math.PI * 2);
+    ctx.ellipse(hx, hy + 9, 27, 10, 0, 0, Math.PI * 2);
     ctx.fill();
   }
   if (u <= len) wormHead(ctx, e.x, e.y, frame, tint, height(e.x, e.y) + 4 + Math.sin(s.tick / 6));
@@ -123,7 +125,7 @@ function drawScorpion(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState,
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(Math.atan2(e.dirY, e.dirX));
-  drawEnemySprite(ctx, "scorpion", 0, 0, e.phase === "charge" ? frame : 0, false, tint);
+  drawEnemySprite(ctx, "scorpion", 0, 0, e.phase === "charge" ? frame : 0, false, tint, BIG);
   ctx.restore();
   // 흰 보호막이 남아 있으면 몸 둘레에 흰 막
   if ((e.ward ?? 0) > 0) {
@@ -141,16 +143,16 @@ function drawRoc(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, x: n
   if (e.phase === "blink") {
     const f = 1 - Math.max(0, e.timer) / BOSS_ROC_RULES.RISE;
     ctx.globalAlpha = 1 - f;
-    drawEnemySprite(ctx, "roc", x, y - f * 30, frame, e.dirX < 0, tint, 1 + f * 0.5);
+    drawEnemySprite(ctx, "roc", x, y - f * 30, frame, e.dirX < 0, tint, (1 + f * 0.5) * BIG);
     ctx.globalAlpha = 1;
     return;
   }
-  drawEnemySprite(ctx, "roc", x, y, 1, e.dirX < 0, tint);
+  drawEnemySprite(ctx, "roc", x, y, 1, e.dirX < 0, tint, BIG);
   // 어지러운 별
   ctx.fillStyle = "#ffe066";
   for (let i = 0; i < 3; i++) {
     const a = s.tick / 10 + (i * Math.PI * 2) / 3;
-    ctx.fillRect(Math.round(x + 18 + Math.cos(a) * 10), Math.round(y - e.r * 0.4 + Math.sin(a) * 4), 2, 2);
+    ctx.fillRect(Math.round(x + 27 + Math.cos(a) * 14), Math.round(y - e.r * 0.4 + Math.sin(a) * 5), 3, 3);
   }
 }
 

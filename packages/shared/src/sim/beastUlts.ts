@@ -1,6 +1,6 @@
 // 거대 매 · 거대 전갈 필살기 (체력 10% 아래 한 번, 끝날 때까지 무적 — bosses.updateBoss)
-// 매: 맵 전체에 갓이터만큼 굵은 # 모양 선(세로 둘·가로 둘)이 뜨고 매가 빠르게 가로지름 → 바로 앞 선이 없던 자리에 다음 # · 10번 뒤 떨어져 경직
-// 전갈: 그 자리에 버티고 꼬리에서 검은 독액(죽음)을 30초 동안 천천히 뿜음 (돌아가는 소용돌이 + 플레이어 쪽 부채꼴)
+// 매: 맵 전체에 아주 굵은 # 모양 선(세로 둘·가로 둘, 사이에 작은 네모만 남음)이 뜨고 매가 빠르게 가로지름 → 바로 앞 선이 있던 자리가 다음 피할 칸 · 10번 뒤 떨어져 경직
+// 전갈: 그 자리에 버티고 꼬리에서 검은 독액(죽음)을 30초 동안 천천히 뿜음 (돌아가는 소용돌이 + 플레이어 쪽 부채꼴). 둘 다 대시 무적으로 피하지 못함
 import { createRng, deriveSeed } from "../rng";
 import { hitDamage, shotDamage } from "./bossKit";
 import { addShape } from "./hazards";
@@ -11,17 +11,18 @@ import { ROOM_CX, ROOM_CY } from "../constants";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
-  /** 매 #: 횟수 · 다음 #까지 · 보이고 터지기까지 · 선 굵기(반) · 피해 배율 · 끝나고 경직 */
+  /** 매 #: 횟수 · 다음 #까지 · 보이고 터지기까지(대시를 섞어야 다음 칸에 닿음) · 피할 칸 가로·세로 · 피해 배율 · 끝나고 경직 */
   GRID_TIMES: 10,
-  GRID_GAP: 75,
-  GRID_WARN: 70,
-  GRID_W: 24,
+  GRID_GAP: 58,
+  GRID_WARN: 54,
+  GRID_SAFE_X: 60,
+  GRID_SAFE_Y: 40,
   GRID_MUL: 1.2,
   GRID_DAZE: 180,
   /** 전갈 검은 독액: 틱 · 소용돌이 간격 · 갈래 · 도는 빠르기 · 탄 빠르기 · 부채꼴 간격 · 부채꼴 탄 빠르기 */
   DOOM_TICKS: 1800,
   SPIRAL_GAP: 8,
-  ARMS: 3,
+  ARMS: 6,
   SPIN: 0.11,
   SPEED: 0.6,
   FAN_GAP: 90,
@@ -44,14 +45,15 @@ export function startRocUlt(s: RunState, e: EnemyState): void {
   for (let i = 0; i < R.GRID_TIMES; i++) {
     const appear = i * R.GRID_GAP;
     const fire = appear + R.GRID_WARN;
-    const line = { radius: 0, damage: hitDamage(s) * R.GRID_MUL, width: R.GRID_W, fx: "gleam" as const };
+    // 선은 아주 굵어서 선 사이에 작은 네모만 남음 (대시로 피하지 못함)
+    const line = { radius: 0, damage: hitDamage(s) * R.GRID_MUL, fx: "gleam" as const, noDodge: true };
     for (const f of [ox, ox + 0.5]) {
       const x = ROOM_MIN_X + w * f;
-      addShape(s, fire, { ...line, x, y: ROOM_MIN_Y, toX: x, toY: ROOM_MAX_Y }, appear);
+      addShape(s, fire, { ...line, width: (w / 2 - R.GRID_SAFE_X) / 2, x, y: ROOM_MIN_Y, toX: x, toY: ROOM_MAX_Y }, appear);
     }
     for (const f of [oy, oy + 0.5]) {
       const y = ROOM_MIN_Y + h * f;
-      addShape(s, fire, { ...line, x: ROOM_MIN_X, y, toX: ROOM_MAX_X, toY: y }, appear);
+      addShape(s, fire, { ...line, width: (h / 2 - R.GRID_SAFE_Y) / 2, x: ROOM_MIN_X, y, toX: ROOM_MAX_X, toY: y }, appear);
     }
     ox = (ox + 0.25) % 0.5;
     oy = (oy + 0.25) % 0.5;
@@ -103,7 +105,7 @@ export function updateScorpionUlt(s: RunState, e: EnemyState): boolean {
   }
   if (t % R.FAN_GAP === R.FAN_GAP / 2) {
     const to = normalize(s.player.x - tx, s.player.y - ty) ?? [0, 1];
-    for (const k of [-0.4, -0.2, 0, 0.2, 0.4]) {
+    for (const k of [-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6]) {
       const r = rot(k);
       shot(to[0] * r[0] - to[1] * r[1], to[0] * r[1] + to[1] * r[0], R.FAN_SPEED);
     }

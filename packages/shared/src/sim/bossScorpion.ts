@@ -20,8 +20,8 @@ const R = {
   HIDE: 28,
   /** 꼬리 찌르기: 예고 · 길이 · 굵기(반) · 찌른 뒤 서 있는 틱 */
   STING_WARN: 22,
-  STING_LEN: 120,
-  STING_W: 9,
+  STING_LEN: 170,
+  STING_W: 13,
   STING_STAY: 150,
   /** 돌진: 틱 · 빠르기(플레이어보다 아주 조금 빠름) · 끝나고 지쳐 있는 틱 */
   CHARGE: 180,

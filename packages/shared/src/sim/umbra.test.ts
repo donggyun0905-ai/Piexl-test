@@ -128,6 +128,7 @@ describe("필살기", () => {
     steps(run, 1);
     expect(e.ultAt).toBeDefined();
     expect(run.hazards?.length).toBe(40);
+    expect(run.hazards?.every((h) => h.noDodge)).toBe(true);
     for (let i = 0; i < 900 && e.ultAt !== undefined; i++) steps(run, 1);
     expect(e.phase).toBe("act");
     expect(e.immune).toBe(false);
@@ -149,6 +150,8 @@ describe("필살기", () => {
     const pr = doom[0]!;
     pr.x = p.x;
     pr.y = p.y;
+    // 대시 중이어도 맞음
+    p.dashTicks = 5;
     stepSim(run, EMPTY_INPUT);
     expect(p.doomTicks).toBeGreaterThan(0);
     p.hp = 1;

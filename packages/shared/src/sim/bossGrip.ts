@@ -24,6 +24,15 @@ export function poisonPlayer(s: RunState): void {
   s.player.venomTicks = R.VENOM_TICKS;
 }
 
+/** 대시 무적을 무시하고 (짐승 필살기: 대시로 씹지 못하게) */
+export function throughDash(s: RunState, f: () => void): void {
+  const p = s.player;
+  const dash = p.dashTicks;
+  p.dashTicks = 0;
+  f();
+  p.dashTicks = dash;
+}
+
 export function doomPlayer(s: RunState): void {
   const p = s.player;
   p.doomStacks = Math.min(R.DOOM_MAX, (p.doomStacks ?? 0) + 1);

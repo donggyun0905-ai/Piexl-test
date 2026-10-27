@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.159",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "검은 잔영 더 어렵게: 데스웜·거대 전갈·거대 매가 1.5배 크기 (공격 범위도 같이) · 보스방이 사막 맵 (연습장도)",
+        "데스웜 필살기: 독액 2배 · 독 웅덩이는 대시 중에도 걸림 · 몬스터 떼가 3배이고 잡기 어려운 것만 (땅 골렘 · 딱정벌레 · 방패 가디언 · 성기사)",
+        "거대 매 필살기: # 선이 훨씬 굵어져 피할 칸이 작은 네모뿐 · 더 빨리 터져 대시를 섞어 다음 칸으로 들어가야 함 · 대시 무적으로 피하지 못함",
+        "거대 전갈 필살기: 검은 독액 2배 · 대시 무적으로 피하지 못함",
+      ],
+      en: [
+        "Black Remnant is harder: the Death Worm, Colossal Scorpion and Colossal Hawk are 1.5× bigger (attack ranges too) · the boss room is now a desert (Practice too)",
+        "Death Worm ultimate: twice the venom · poison pools affect you even mid-dash · the horde is 3× larger and only tough foes (earth golems · beetles · shield guardians · paladins)",
+        "Colossal Hawk ultimate: much thicker # lines leave only small safe squares · they strike faster, so you must dash into the next square · dash invincibility no longer dodges them",
+        "Colossal Scorpion ultimate: twice the black venom · dash invincibility no longer dodges it",
+      ],
+      ja: [
+        "黒き残影がより難しく: デスワーム · 巨大サソリ · 巨大な鷹が1.5倍の大きさ（攻撃範囲も）· ボス部屋が砂漠マップに（練習場も）",
+        "デスワームの必殺技: 毒液2倍 · 毒の水たまりはダッシュ中でもかかる · 魔物の群れが3倍で倒しにくいものだけ（土ゴーレム · カブトムシ · 盾のガーディアン · 聖騎士）",
+        "巨大な鷹の必殺技: # の線がずっと太くなり安全地帯は小さな四角だけ · 早く炸裂するのでダッシュを混ぜて次の四角へ · ダッシュ無敵では避けられない",
+        "巨大サソリの必殺技: 黒い毒液2倍 · ダッシュ無敵では避けられない",
+      ],
+    },
+  },
+  {
     version: "0.48.158",
     date: "2026-10-28",
     items: {

@@ -22,11 +22,11 @@ const R = {
   RISE_PAD: 8,
   RISE: 60,
   /** 공중으로 날아가는 거리 · 빠르기 (절반 아래) · 몸 길이 · 몸 굵기(반) */
-  FLY: 230,
+  FLY: 260,
   FLY_SPEED: 1.7,
   FLY_SPEED_HALF: 2.2,
-  BODY: 180,
-  BODY_R: 13,
+  BODY: 270,
+  BODY_R: 20,
   /** 솟을 때·들어갈 때 바위 빠르기 */
   ROCK_SPEED: 1.5,
 };

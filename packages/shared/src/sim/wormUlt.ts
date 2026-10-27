@@ -1,5 +1,5 @@
 // 데스웜 필살기 (체력 10% 아래 한 번): 맵 가운데에 머리만 내밀고 무적 · 둘레에 동그란 모래지옥(안에 있으면 조금씩 끌려감)
-// 입에서 몬스터 떼(땅 골렘 · 슬라임)와 독액이 사방으로 · 독액은 바닥에 닿으면 독 웅덩이 · 몬스터를 다 잡을 때까지 무적이 이어짐
+// 입에서 잡기 어려운 몬스터 떼(땅 골렘 · 딱정벌레 · 방패 가디언 · 성기사)와 독액이 사방으로 · 독액은 바닥에 닿으면 독 웅덩이(대시로 못 피함) · 몬스터를 다 잡을 때까지 무적이 이어짐
 import { ROOM_CX, ROOM_CY } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import type { EnemyKind } from "../content";
@@ -7,20 +7,23 @@ import { poisonPlayer } from "./bossGrip";
 import { depth } from "./hero";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, DIR16, makeEnemy } from "./util";
+import { rot } from "./orbit";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
   /** 모래지옥 반경 · 끌려가는 빠르기 */
-  PIT_R: 150,
+  PIT_R: 190,
   PULL: 0.32,
-  /** 몬스터 떼: 몇 번 · 간격 · 한 번에 골렘 · 슬라임 수 */
+  /** 몬스터 떼: 몇 번 · 간격 · 한 번에 골렘 · 딱정벌레 · 방패 가디언 · 성기사 수 (잡기 어려운 것만) */
   WAVES: 3,
   WAVE_GAP: 140,
-  GOLEMS: 3,
-  SLIMES: 3,
+  GOLEMS: 6,
+  BEETLES: 6,
+  GUARDS: 3,
+  PALADINS: 3,
   /** 독액: 간격 · 한 번에 수 · 날아가는 빠르기 · 가장 짧은·긴 날아가는 틱 */
   GLOB_GAP: 60,
-  GLOBS: 4,
+  GLOBS: 8,
   GLOB_SPEED: 1.6,
   GLOB_MIN: 30,
   GLOB_MAX: 110,
@@ -46,11 +49,20 @@ export function startWormUlt(s: RunState, e: EnemyState): void {
 
 /** 입에서 몬스터 떼 */
 function brood(s: RunState, e: EnemyState, wave: number, spawned: EnemyState[]): void {
-  const kinds: EnemyKind[] = [...Array<EnemyKind>(R.GOLEMS).fill("golem"), ...Array<EnemyKind>(R.SLIMES).fill("slime")];
+  const kinds: EnemyKind[] = (
+    [
+      ["golem", R.GOLEMS],
+      ["beetle", R.BEETLES],
+      ["guardian", R.GUARDS],
+      ["paladin", R.PALADINS],
+    ] as const
+  ).flatMap(([k, n]) => Array<EnemyKind>(n).fill(k));
   const hpMul = 1 + 0.15 * (depth(s) - 1);
   kinds.forEach((k, i) => {
-    const d = DIR16[(Math.floor((i * 16) / kinds.length) + wave * 3) % 16]!;
-    const m = makeEnemy(s, k, e.x + d[0] * (e.r + 14), e.y + d[1] * (e.r + 14), hpMul, 30);
+    // 입 둘레 두 겹으로 고르게
+    const d = rot(((i + wave * 0.5) / kinds.length) * Math.PI * 2 - Math.PI);
+    const far = e.r + 16 + (i % 2) * 22;
+    const m = makeEnemy(s, k, e.x + d[0] * far, e.y + d[1] * far, hpMul, 30);
     spawned.push(m);
     e.brood!.push(m.id);
   });
@@ -104,7 +116,8 @@ export function updatePools(s: RunState, e: EnemyState): void {
   for (const pool of e.pools) {
     pool.t--;
     const rr = R.POOL_R + p.r;
-    if ((pool.x - p.x) ** 2 + (pool.y - p.y) ** 2 < rr * rr && p.dashTicks <= 0) poisonPlayer(s);
+    // 대시 중이어도 독에 걸림
+    if ((pool.x - p.x) ** 2 + (pool.y - p.y) ** 2 < rr * rr) poisonPlayer(s);
   }
   e.pools = e.pools.filter((pool) => pool.t > 0);
 }

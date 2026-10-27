@@ -76,6 +76,8 @@ export interface Hazard {
   fx?: BossFx;
   /** 방 전체 심판 (갓이터): black = 그 순간 움직이고 있으면 맞음 · red = 가만히 있으면 맞음 */
   still?: "black" | "red";
+  /** 대시 중이어도 맞음 (거대 매 필살기) */
+  noDodge?: boolean;
 }
 
 /** 잠시 뒤 터지는 폭발 (메아리 폭발) */

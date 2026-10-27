@@ -18,13 +18,13 @@ const R = {
   /** 내려찍기: 예고 (절반 아래) · 반경 · 피해 배율 */
   DIVE_WARN: 48,
   DIVE_WARN_HALF: 38,
-  DIVE_R: 34,
+  DIVE_R: 50,
   DIVE_MUL: 1.3,
   /** 세 줄 활강: 첫 선이 터지기까지 · 선 사이 (절반 아래) · 굵기(반) */
   SWEEP_WARN: 55,
   SWEEP_GAP: 32,
   SWEEP_GAP_HALF: 24,
-  SWEEP_W: 12,
+  SWEEP_W: 18,
   /** 경직 · 날아오르는 틱 */
   DAZE: 180,
   RISE: 24,

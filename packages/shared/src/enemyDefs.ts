@@ -111,11 +111,11 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   /** 시즌 2 라스트 보스 검은 잔영: 맞지 않고 위에서 지켜봄. 체력 = 세 짐승 체력의 합 (막대 하나를 세 칸으로, sim/bossUmbra) */
   umbra: { kind: "umbra", hp: 7000, radius: 12, speed: 0, contactDamage: 0, gold: 100, boss: true },
   /** 데스웜: 땅속에서 예고 없이 다가와 갑자기 솟음 (sim/bossWorm) */
-  sandworm: { kind: "sandworm", hp: 2000, radius: 26, speed: 1.1, contactDamage: 18, gold: 0, boss: true },
+  sandworm: { kind: "sandworm", hp: 2000, radius: 39, speed: 1.1, contactDamage: 18, gold: 0, boss: true },
   /** 거대 전갈: 움직이는 표시로 땅속을 기어다니다 꼬리 찌르기(독) · 앞으로만 밀고 오는 돌진(집게에 붙잡힘). 셋 중 탱커: 체력이 많고 흰 보호막(UMBRA_WARD) */
-  scorpion: { kind: "scorpion", hp: 3000, radius: 26, speed: 0.8, contactDamage: 16, gold: 0, boss: true },
+  scorpion: { kind: "scorpion", hp: 3000, radius: 39, speed: 0.8, contactDamage: 16, gold: 0, boss: true },
   /** 거대 매: 늘 하늘에 있다가 내려찍기 · 세 줄 활강. 피하면 떨어져 경직 (sim/bossRoc) */
-  roc: { kind: "roc", hp: 2000, radius: 28, speed: 0, contactDamage: 14, gold: 0, boss: true },
+  roc: { kind: "roc", hp: 2000, radius: 42, speed: 0, contactDamage: 14, gold: 0, boss: true },
 };
 
 /** 단계마다 나올 수 있는 보스 (1·2층 · 3·4층 · 5·6층) */

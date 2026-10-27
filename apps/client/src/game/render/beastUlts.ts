@@ -61,7 +61,7 @@ export function drawBeastAir(ctx: CanvasRenderingContext2D, s: RunState): void {
         ctx.globalAlpha = 0.85;
         ctx.translate(h.x + (h.toX - h.x) * f, h.y + (h.toY - h.y) * f);
         ctx.rotate(Math.atan2(h.toY - h.y, h.toX - h.x));
-        drawEnemySprite(ctx, "roc", 0, 0, 0, false, undefined, 0.8);
+        drawEnemySprite(ctx, "roc", 0, 0, 0, false, undefined, 1.2);
         ctx.restore();
       }
     }

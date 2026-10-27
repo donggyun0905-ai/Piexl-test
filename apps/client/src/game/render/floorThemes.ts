@@ -67,6 +67,8 @@ const THEMES: Record<string, FloorTheme> = {
   godeater: T("#1a0e14", "#20111a", "#3a1424", "#5a1e36", "#4a1a2e", "#6a2a44", "#0a0206", "#2a0612", [["ember", "#c83a5a"], ["crack", "#0a0206"]]),
   /** 태초의 빛과 어둠: 빛과 그림자가 갈린 바닥 */
   plight: T("#26242c", "#2c2a33", "#4a4658", "#6a6680", "#5a566a", "#8a86a0", "#060508", "#141218", [["star", "#fff4c0"], ["star", "#3a2a5a"]], 0.24),
+  /** 검은 잔영: 사막 (모래 바닥·사암 벽·모래·뼈) */
+  umbra: T("#6a5234", "#735a39", "#8a6a40", "#b08a52", "#9a7646", "#c09a5e", "#2a1a0a", "#4a3018", [["sand", "#a8844c"], ["bone", "#d8ccb0"]], 0.3),
 };
 
 /** 패왕전 경기장 → 테마 */
@@ -83,6 +85,8 @@ export function themeFor(s: RunState): FloorTheme {
   if (pa) return THEMES[PW_THEME[pa]]!;
   let boss: string | undefined;
   if (s.lastBoss) boss = s.lastBoss === "pdark" ? "plight" : s.lastBoss;
+  // 연습장에서 부른 검은 잔영도 사막
+  else if (s.enemies.some((e) => e.kind === "umbra")) boss = "umbra";
   else if (s.arenaLv) boss = s.enemies.find((e) => ENEMIES[e.kind].boss)?.kind;
   else if (s.hero) boss = heroBosses(s)[0];
   else if (s.floor >= 1) boss = bossForFloor(s.floor, s.seed);

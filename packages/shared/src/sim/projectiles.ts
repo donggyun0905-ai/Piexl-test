@@ -14,7 +14,7 @@ import { lure } from "./bossesTwo";
 import { netPlayer } from "./bossPrimeval";
 import { shatterShot } from "./bossKit";
 import { tryParry } from "./bossCage";
-import { doomPlayer } from "./bossGrip";
+import { doomPlayer, throughDash } from "./bossGrip";
 import { applyBleed } from "./gunExtras";
 import { eachSeat, isAlive, seatNo, useSeat } from "./party";
 import { SCRIBE } from "../weaponsScribe";
@@ -113,11 +113,13 @@ export function updateProjectiles(s: RunState, frozen = false): void {
       eachSeat(s, () => {
         const p = s.player;
         const rr = p.r + pr.r;
-        if (gone || (s.party && !isAlive(p)) || dist2(p, pr) >= rr * rr || p.dashTicks !== 0) return;
+        // 검은 독액(전갈 필살기)은 대시로 피하지 못함
+        if (gone || (s.party && !isAlive(p)) || dist2(p, pr) >= rr * rr || (p.dashTicks !== 0 && !pr.doom)) return;
         if (tryParry(s, pr) || renBlock(s, pr)) gone = true;
         else {
           const open = p.invulnTicks <= 0 && p.shieldTicks <= 0;
-          damagePlayer(s, pr.damage);
+          if (pr.doom) throughDash(s, () => damagePlayer(s, pr.damage));
+          else damagePlayer(s, pr.damage);
           if (pr.doom && open) doomPlayer(s);
           // 세이렌 음표: 사라지지 않고 끌려감 · 갓이터 구슬: 사라지지 않음
           if (pr.net) netPlayer(s, pr.id);

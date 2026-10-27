@@ -1,5 +1,6 @@
 // 적이 남기는 위험 표시: 미리 보이고, 정해진 틱에 범위 안 플레이어에게 피해 (원 · 부채꼴 · 선). 대시 중이면 피함
 import { damagePlayer } from "./combat";
+import { throughDash } from "./bossGrip";
 import type { Hazard } from "./fxTypes";
 import type { RunState } from "./types";
 import { eachSeat } from "./party";
@@ -59,7 +60,10 @@ export function updateHazards(s: RunState): void {
       () => {
         const p = s.player;
         const hit = h.still ? (h.still === "black") === p.stillTicks < R.STILL_JUDGE : inHazard(h, p.x, p.y, p.r);
-        if (hit && h.damage > 0) damagePlayer(s, h.damage);
+        if (hit && h.damage > 0) {
+          if (h.noDodge) throughDash(s, () => damagePlayer(s, h.damage));
+          else damagePlayer(s, h.damage);
+        }
       },
       !!s.party,
     );
