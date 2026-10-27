@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.131",
+    date: "2026-10-27",
+    items: {
+      ko: [
+        "마법사 새 모습 '별빛 마법사' (은빛 긴 머리 · 보석 이마띠 · 남색 로브 · 수정 지팡이) · 떠돌이 새 모습 '바람 유랑자' (바람에 날리는 목도리 · 가죽 재킷 · 화살통) · 두 캐릭터의 테마 스킨 9개와 한정 백호 스킨도 새로",
+        "능력치 창: 처음부터 켜져 있고 캐릭터 설명이 펼쳐져 있음 (버튼으로 접기) · 아래에 이 캐릭터의 무기·전용 아이템 목록, 마우스를 올리면(모바일은 누르면) 설명",
+      ],
+      en: [
+        "New Mage look 'Starlight Mage' (long silver hair · jeweled circlet · navy robe · crystal staff) · new Drifter look 'Wind Wanderer' (windswept scarf · leather jacket · quiver) · their 9 theme skins and limited White Tiger skins are redrawn too",
+        "Stats panel: on from the start with the character guide open (a button folds it) · lists the character's weapons and own items below; hover (or tap on mobile) for details",
+      ],
+      ja: [
+        "魔法使いの新しい姿「星明かりの魔法使い」（銀の長い髪 · 宝石の額飾り · 紺のローブ · 水晶の杖）· 流れ者の新しい姿「風の旅人」（風になびくマフラー · 革のジャケット · 矢筒）· 二人のテーマスキン9つと限定白虎スキンも描き直し",
+        "能力値画面：最初から表示され、キャラ説明も開いた状態（ボタンで閉じる）· 下にこのキャラの武器・専用アイテム一覧、マウスを乗せると（モバイルはタップで）説明",
+      ],
+    },
+  },
+  {
     version: "0.48.130",
     date: "2026-10-27",
     items: {

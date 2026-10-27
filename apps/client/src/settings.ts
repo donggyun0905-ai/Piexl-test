@@ -32,7 +32,7 @@ const DEFAULTS: Settings = {
   music: 0.35,
   vibration: true,
   shake: true,
-  showStats: false,
+  showStats: true,
   showHitbox: false,
   showRange: true,
   showDamage: true,

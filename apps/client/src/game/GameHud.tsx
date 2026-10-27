@@ -5,6 +5,7 @@ import type { CharacterId } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { charGuide } from "../i18n/guides";
 import { setSettings, useSettings } from "../settings";
+import { CharKit } from "./CharKit";
 import type { StatRow } from "./statsView";
 
 interface Props {
@@ -52,9 +53,9 @@ export function GameHud({ t, touchMode, autoAim, onPause, onAutoAim, hpFillRef, 
   );
 }
 
-/** 능력치 창 (C 키) · 아래에 '캐릭터 설명 보기' (누르면 지금 캐릭터 설명이 펼쳐짐) */
+/** 능력치 창 (C 키) · 아래에 지금 캐릭터 설명 (처음부터 펼쳐져 있고 버튼으로 접음) · 무기·전용 아이템 목록 (올리면 설명) */
 export function StatsPanel({ rows, character, lang, t }: { rows: StatRow[]; character?: CharacterId; lang?: Lang; t?: (k: TextKey) => string }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const guide = character && lang ? charGuide(character, lang) : [];
   return (
     <div className="stats-panel">
@@ -78,6 +79,7 @@ export function StatsPanel({ rows, character, lang, t }: { rows: StatRow[]; char
           )}
         </>
       )}
+      {character && lang && t && <CharKit character={character} lang={lang} t={t} />}
     </div>
   );
 }

@@ -89,3 +89,32 @@
 .stats-guide li {
   margin-bottom: 3px;
 }
+
+/* 능력치 창 아래 무기·전용 아이템 목록 (game/CharKit) */
+.char-kit {
+  margin-top: 4px;
+  max-width: 260px;
+  pointer-events: auto;
+}
+.char-kit-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 3px;
+  font-size: 11px;
+}
+.char-kit-row > span:first-child {
+  margin-right: 4px;
+  color: #c8c0d8;
+}
+.char-kit-item {
+  display: inline-flex;
+  padding: 1px;
+  border-radius: 3px;
+  cursor: help;
+}
+.char-kit-item:hover,
+.char-kit-item.on {
+  background: rgba(255, 255, 255, 0.18);
+}
