@@ -1,4 +1,4 @@
-// 설정 (이 기기에 저장): 효과음·음악 크기, 진동, 화면 흔들림, 능력치 보기, 공격 사거리 보기, 피해 숫자 보기, 맞는 범위 보기, 모바일 조작키 크기·위치
+// 설정 (이 기기에 저장): 효과음·음악 크기, 진동, 화면 흔들림, 능력치 보기, 공격 사거리 보기, 피해 숫자 보기, 맞는 범위 보기, 모바일 조작키 크기·위치, PC 스킬 키
 import { useSyncExternalStore } from "react";
 import { loadText, saveText } from "./storage";
 
@@ -22,6 +22,8 @@ export interface Settings {
   stickScale: number;
   /** 모바일 버튼을 기본 자리에서 옮긴 거리 [화면 너비 비율, 화면 높이 비율] (화면을 돌려도 비슷한 자리에 있게 비율로) */
   buttonPos: Partial<Record<TouchButtonId, [number, number]>>;
+  /** PC 스킬 키 1·2·3 (추적자, KeyboardEvent.code) */
+  skillKeys: string[];
 }
 
 /** 모바일 버튼 (TouchButtons의 data-act) */
@@ -39,7 +41,19 @@ const DEFAULTS: Settings = {
   buttonScale: 1,
   stickScale: 1,
   buttonPos: {},
+  skillKeys: ["Digit1", "Digit2", "Digit3"],
 };
+
+/** 스킬 키: 설정에서 고른 키 (숫자 패드 1·2·3도 늘 됨) · 0 = 스킬 키 아님 */
+export function skillOf(code: string): number {
+  const i = current.skillKeys.indexOf(code);
+  return i >= 0 ? i + 1 : (({ Numpad1: 1, Numpad2: 2, Numpad3: 3 }) as Record<string, number>)[code] ?? 0;
+}
+
+/** 키 코드 → 보이는 이름 (Digit1 → 1, KeyQ → Q, Numpad1 → Num1) */
+export function keyLabel(code: string): string {
+  return code.replace(/^Digit/, "").replace(/^Key/, "").replace(/^Numpad/, "Num").replace(/^Arrow/, "");
+}
 
 function read(): Settings {
   try {

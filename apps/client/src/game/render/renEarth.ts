@@ -1,68 +1,128 @@
-// 렌 대지의 추가 공격 그리기: 앞으로 나아가는 용오름 · 머리 위 거대 토목 · 돌 던지기 · 용머리 · 큰 돌 · 양쪽 토목 짓뭉개기
+// 렌 대지의 추가 공격 그리기 (그림 sprites/ren-*.png, scripts/art/ren_earth.py)
+// 앞으로 나아가는 흙·나무 용(용오름: 머리 + 굵은 몸 마디가 땅을 드나듦) · 머리 위 거대 바위 · 돌 던지기 · 땅에서 솟아 적을 삼키는 용머리 · 큰 돌 · 양쪽 토목 기둥 짓뭉개기
 import type { EffectState, RunState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
-import { clod } from "./spirits";
 
 type Ctx = CanvasRenderingContext2D;
-const MOSS = "#5ac84a";
-const BARK = "#8a6a3a";
-const STONE = "#a8a090";
+const TAU = Math.PI * 2;
+const DIRT = "#6a4a2a";
+const DUST = "#c8a878";
 
-/** 흙·나무 용머리 (x,y: 목 아래, h: 솟은 높이 0~1, dir: 바라보는 쪽 ±1) */
-function dragonHead(ctx: Ctx, x: number, y: number, h: number, dir: number, size: number): void {
-  const top = y - size * 1.6 * h;
-  ctx.fillStyle = BARK;
-  ctx.fillRect(Math.round(x - size * 0.35), Math.round(top), Math.ceil(size * 0.7), Math.ceil(y - top));
-  ctx.fillStyle = "#7a7268";
-  ctx.beginPath();
-  ctx.ellipse(x + dir * size * 0.3, top, size * 0.75, size * 0.5, 0, 0, Math.PI * 2);
-  ctx.fill();
-  // 위턱·뿔·눈
-  ctx.fillStyle = STONE;
-  ctx.fillRect(Math.round(x + dir * size * 0.2), Math.round(top - size * 0.35), Math.round(dir * size * 0.9), Math.ceil(size * 0.25));
-  ctx.fillStyle = MOSS;
-  ctx.fillRect(Math.round(x - dir * size * 0.3), Math.round(top - size * 0.8), 2, Math.ceil(size * 0.45));
-  ctx.fillStyle = "#ffd36a";
-  ctx.fillRect(Math.round(x + dir * size * 0.35), Math.round(top - size * 0.15), 2, 2);
+const images = new Map<string, HTMLImageElement>();
+function art(name: string): HTMLImageElement | undefined {
+  let img = images.get(name);
+  if (!img) {
+    img = new Image();
+    img.src = `${import.meta.env.BASE_URL}sprites/${name}.png`;
+    images.set(name, img);
+  }
+  return img.complete && img.naturalWidth > 0 ? img : undefined;
+}
+// 처음 나올 때 비어 보이지 않게 미리 불러 둠
+for (const n of ["ren-dragon-head", "ren-dragon-body", "ren-block", "ren-rocks", "ren-boulder"]) art(n);
+
+/** 그림의 (sx, 0, sw, sh) 칸을 (x, y) 가운데로 w 너비, 각도 a, 좌우 뒤집기 */
+function blit(ctx: Ctx, img: HTMLImageElement, sx: number, sw: number, sh: number, x: number, y: number, w: number, a = 0, flip = false): void {
+  const h = (w * sh) / sw;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(a);
+  if (flip) ctx.scale(-1, 1);
+  ctx.drawImage(img, sx, 0, sw, sh, -w / 2, -h / 2, w, h);
+  ctx.restore();
 }
 
-/** 바닥이 갈라지는 고리 */
-function crack(ctx: Ctx, x: number, y: number, r: number, a: number): void {
+/** 땅이 갈라지며 흙이 솟은 구멍 */
+function hole(ctx: Ctx, x: number, y: number, r: number, a: number): void {
+  ctx.globalAlpha = a * 0.7;
+  ctx.fillStyle = "#2a1c10";
+  ctx.beginPath();
+  ctx.ellipse(x, y, r, r * 0.4, 0, 0, TAU);
+  ctx.fill();
   ctx.globalAlpha = a;
-  ctx.strokeStyle = BARK;
+  ctx.strokeStyle = DIRT;
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.ellipse(x, y, r, r * 0.45, 0, 0, Math.PI * 2);
+  ctx.ellipse(x, y, r, r * 0.4, 0, 0, TAU);
   ctx.stroke();
+  // 갈라진 금
+  ctx.strokeStyle = "#3a2614";
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 6; i++) {
+    const t = (i / 6) * TAU + 0.3;
+    ctx.beginPath();
+    ctx.moveTo(x + Math.cos(t) * r, y + Math.sin(t) * r * 0.4);
+    ctx.lineTo(x + Math.cos(t) * r * 1.5, y + Math.sin(t) * r * 0.6);
+    ctx.stroke();
+  }
   ctx.globalAlpha = 1;
 }
 
-/** 플레이어 곁 (렌일 때): 용오름 · 머리 위 거대 토목 */
+/** 튀는 흙·돌 조각 */
+function debris(ctx: Ctx, x: number, y: number, r: number, t: number, n: number, seed: number): void {
+  const rocks = art("ren-rocks");
+  for (let i = 0; i < n; i++) {
+    const a = ((seed + i * 47) % 360) * (Math.PI / 180);
+    const d = r * (0.4 + t * 1.1) * (0.6 + ((i * 13) % 5) / 10);
+    const px = x + Math.cos(a) * d;
+    const py = y + Math.sin(a) * d * 0.5 - Math.sin(t * Math.PI) * (10 + (i % 4) * 4);
+    ctx.globalAlpha = 1 - t * 0.8;
+    if (rocks) blit(ctx, rocks, (i % 4) * 16, 16, 16, px, py, 5 + (i % 3) * 2, t * 6 + i);
+    else {
+      ctx.fillStyle = DIRT;
+      ctx.fillRect(px - 1, py - 1, 3, 3);
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+/** 플레이어 곁 (렌일 때): 용오름 · 머리 위 거대 바위 */
 export function drawRenEarth(ctx: Ctx, s: RunState, at: { x: number; y: number }, snap: Snap): void {
   const p = s.player;
+  const head = art("ren-dragon-head");
+  const body = art("ren-dragon-body");
   for (const w of p.rWyrms ?? []) {
-    // 좌우로 솟구쳤다 바닥으로 들어가길 되풀이하며 나아감 (몸 마디 6개)
-    for (let i = 0; i < 6; i++) {
-      const back = i * 5;
-      const bx = w.x - w.dx * back;
-      const by = w.y - w.dy * back;
-      const ph = (w.t + i * 3) * 0.25;
+    const ang = Math.atan2(w.dy, w.dx);
+    const flip = w.dx < 0;
+    // 지나온 길을 따라 굵은 몸 마디 18개: 옆으로 물결치며, 큰 파도처럼 땅 위로 솟았다 들어감
+    const pts: { x: number; y: number; up: number; a: number }[] = [];
+    for (let i = 0; i <= 18; i++) {
+      const back = i * 6;
+      const ph = (w.t + i * 3) * 0.16;
       const side = Math.sin(ph) * 6;
-      const up = Math.max(0, Math.cos(ph)) * 8;
-      const x = snap(bx - w.dy * side);
-      const y = snap(by + w.dx * side - up);
-      if (up > 0.5) clod(ctx, x, y, 3.5 - i * 0.3, i);
-      else crack(ctx, x, snap(by + w.dx * side), 4, 0.5);
+      const up = Math.sin((w.t * 0.12 - i * 0.45));
+      pts.push({ x: w.x - w.dx * back - w.dy * side, y: w.y - w.dy * back + w.dx * side, up, a: ang });
     }
-    dragonHead(ctx, snap(w.x), snap(w.y), 0.5 + Math.abs(Math.cos(w.t * 0.25)) * 0.5, w.dx < 0 ? -1 : 1, 6);
+    for (let i = pts.length - 1; i >= 1; i--) {
+      const q = pts[i]!;
+      const n = pts[i - 1]!;
+      if (q.up < -0.2) {
+        hole(ctx, snap(q.x), snap(q.y + 4), 7, 0.8);
+        continue;
+      }
+      const lift = Math.max(0, q.up) * 8;
+      const nl = Math.max(0, n.up) * 8;
+      const tail = i === pts.length - 1;
+      if (body) blit(ctx, body, tail ? 64 : (Math.floor(s.tick / 8) + i) % 2 ? 32 : 0, 32, 32, snap(q.x), snap(q.y - lift), tail ? 22 : 26 - i * 0.5, Math.atan2(n.y - nl - (q.y - lift), n.x - q.x), false);
+      if (q.up < 0.2) hole(ctx, snap(q.x), snap(q.y + 6), 9, 0.6);
+    }
+    // 머리: 늘 땅 위, 입을 벌렸다 다물며 나아감
+    const f = Math.floor(s.tick / 6) % 4;
+    if (head) blit(ctx, head, [0, 1, 2, 1][f]! * 64, 64, 48, snap(w.x + w.dx * 8), snap(w.y - 10), 44, flip ? ang - Math.PI : ang, flip);
+    debris(ctx, w.x, w.y + 4, 10, (s.tick % 20) / 20, 4, w.t * 7);
   }
   const n = p.rStones ?? 0;
-  if (n > 0) {
-    // 머리 위에 떠 있는 거대 토목 하나, 쌓인 수만큼 둘레에 작은 돌
+  const boulder = art("ren-boulder");
+  if (n > 0 && boulder) {
+    // 머리 위에 떠 있는 거대 바위 (쌓일수록 커짐) + 둘레를 도는 작은 바위 n개
     const bob = Math.sin(s.tick * 0.08) * 1.5;
-    const y = at.y - 28 + bob;
-    clod(ctx, snap(at.x), snap(y), 6 + n * 0.8, 1);
-    for (let i = 0; i < n; i++) clod(ctx, snap(at.x - 10 + i * 5), snap(y + 9), 1.8, i);
+    const y = at.y - 30 + bob;
+    blit(ctx, boulder, 0, 40, 36, snap(at.x), snap(y), 20 + n * 3);
+    const rocks = art("ren-rocks");
+    for (let i = 0; i < n && rocks; i++) {
+      const a = s.tick * 0.05 + (i * TAU) / n;
+      blit(ctx, rocks, (i % 4) * 16, 16, 16, snap(at.x + Math.cos(a) * 16), snap(y + Math.sin(a) * 6), 7, a);
+    }
   }
 }
 
@@ -72,56 +132,134 @@ export function drawRenEarthFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const x = snap(fx.x);
   const y = snap(fx.y);
   switch (fx.kind) {
-    case "renRock":
-      // 앞으로 넓게 흩뿌려지는 돌
-      for (let i = 0; i < 9; i++) {
-        const a = Math.atan2(fx.dirY, fx.dirX) + (i - 4) * 0.16;
-        const d = fx.size * t * (0.6 + (i % 3) * 0.2);
-        clod(ctx, snap(fx.x + Math.cos(a) * d), snap(fx.y + Math.sin(a) * d - Math.sin(t * Math.PI) * 8), 2.6, i);
+    case "renRock": {
+      // 앞으로 넓게 흩뿌려지는 큰 돌·나무 덩어리 18개 (포물선 + 그림자) + 흙먼지
+      const rocks = art("ren-rocks");
+      const base = Math.atan2(fx.dirY, fx.dirX);
+      for (let i = 0; i < 18; i++) {
+        const a = base + ((i % 9) - 4) * 0.2 + (i >= 9 ? 0.1 : 0);
+        const d = fx.size * Math.min(1, t * 1.3) * (0.45 + ((i * 7) % 6) / 10);
+        const gx = fx.x + Math.cos(a) * d;
+        const gy = fx.y + Math.sin(a) * d * 0.8;
+        const h = Math.sin(Math.min(1, t * 1.3) * Math.PI) * (14 + (i % 3) * 6);
+        ctx.globalAlpha = 0.3 * (1 - t);
+        ctx.fillStyle = "#000";
+        ctx.beginPath();
+        ctx.ellipse(gx, gy + 3, 4, 1.5, 0, 0, TAU);
+        ctx.fill();
+        ctx.globalAlpha = t > 0.85 ? (1 - t) / 0.15 : 1;
+        if (rocks) blit(ctx, rocks, (i % 4) * 16, 16, 16, snap(gx), snap(gy - h), 9 + (i % 3) * 3, t * 8 + i);
       }
+      ctx.globalAlpha = (1 - t) * 0.5;
+      ctx.fillStyle = DUST;
+      ctx.beginPath();
+      ctx.ellipse(x + fx.dirX * 14, y + 4, 14 * (0.5 + t), 5, 0, 0, TAU);
+      ctx.fill();
+      ctx.globalAlpha = 1;
       return true;
+    }
     case "renHead": {
-      // 바닥에서 솟아오른 용머리, 마지막에 무너짐
-      const h = t < 0.3 ? t / 0.3 : t > 0.75 ? (1 - t) / 0.25 : 1;
-      crack(ctx, x, y, fx.size, 1 - t);
-      dragonHead(ctx, x, y, h, fx.dirX < 0 ? -1 : 1, 9);
+      // 땅이 갈라지고 → 거대한 용머리가 입을 크게 벌리고 솟음 → 덥석 물고 → 땅으로 꺼짐
+      const head = art("ren-dragon-head");
+      const r = fx.size;
+      const rise = t < 0.3 ? t / 0.3 : t > 0.8 ? (1 - t) / 0.2 : 1;
+      const frame = t < 0.15 ? 0 : t < 0.42 ? 2 : t < 0.5 ? 1 : 0;
+      hole(ctx, x, y + 6, r * 0.9, Math.min(1, (1 - t) * 2));
+      if (head) {
+        const w = r * 2.6;
+        // 아래부터 서서히 보이게 (땅에서 솟음)
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(x - w, y - w * 1.5, w * 2, w * 1.5 + 8);
+        ctx.clip();
+        // 입(그림의 46, 29 근처)이 적 자리에 오게 맞춤
+        const k = w / 64;
+        blit(ctx, head, frame * 64, 64, 48, x - fx.dirX * 14 * k, y - 5 * k + (1 - rise) * w * 0.5, w, -0.15 * fx.dirX, fx.dirX < 0);
+        ctx.restore();
+      }
+      if (t > 0.42 && t < 0.55) {
+        // 무는 순간 번쩍
+        ctx.globalAlpha = 1 - (t - 0.42) / 0.13;
+        ctx.strokeStyle = "#ffe0a0";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x, y - 6, r * 0.8, 0, TAU);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+      debris(ctx, x, y, r, Math.min(1, t * 2), 10, Math.round(fx.x));
       return true;
     }
     case "renStone":
+      // 바위가 하나 더 붙음: 초록 빛 고리
       ctx.globalAlpha = 1 - t;
-      ctx.strokeStyle = MOSS;
+      ctx.strokeStyle = "#7ae05a";
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.arc(x, y, fx.size + t * 6, 0, Math.PI * 2);
+      ctx.arc(x, y, fx.size + t * 10, 0, TAU);
       ctx.stroke();
       ctx.globalAlpha = 1;
       return true;
     case "renDrop": {
-      // 위에서 떨어지는 큰 돌 → 바닥 갈라짐
+      // 하늘에서 거대 바위가 떨어짐 (그림자가 커지다가) → 쾅: 갈라짐 + 파편 + 흙먼지
+      const boulder = art("ren-boulder");
       const fall = Math.min(1, t * 2.5);
-      if (fall < 1) clod(ctx, x, snap(fx.y - 60 * (1 - fall)), fx.size * 0.45, 2);
-      else {
-        crack(ctx, x, y, fx.size * (0.6 + t * 0.4), 1 - t);
-        for (let i = 0; i < 6; i++) clod(ctx, snap(fx.x + Math.cos(i) * fx.size * t), snap(fx.y + Math.sin(i) * fx.size * 0.4 * t), 2, i);
+      if (fall < 1) {
+        ctx.globalAlpha = 0.25 + fall * 0.3;
+        ctx.fillStyle = "#000";
+        ctx.beginPath();
+        ctx.ellipse(x, y + 2, fx.size * fall, fx.size * 0.35 * fall, 0, 0, TAU);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        if (boulder) blit(ctx, boulder, 0, 40, 36, x, snap(fx.y - 90 * (1 - fall)), fx.size * 1.4, fall * 0.6);
+      } else {
+        const k = (t - 0.4) / 0.6;
+        hole(ctx, x, y + 2, fx.size, 1 - k);
+        if (boulder && k < 0.4) blit(ctx, boulder, 0, 40, 36, x, y - 4, fx.size * 1.4 * (1 - k * 0.5));
+        ctx.globalAlpha = (1 - k) * 0.5;
+        ctx.fillStyle = DUST;
+        ctx.beginPath();
+        ctx.ellipse(x, y, fx.size * (0.8 + k), fx.size * 0.4 * (0.8 + k), 0, 0, TAU);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        debris(ctx, x, y, fx.size, k, 12, Math.round(fx.y));
       }
       return true;
     }
     case "renCrush": {
-      // 좌우의 네모난 토목이 맞부딪혀 부서짐
-      const gap = Math.max(0, 1 - t * 2.5) * fx.size * 1.4;
-      const w = fx.size * 0.8;
-      const h = fx.size * 1.3;
-      ctx.globalAlpha = t > 0.6 ? (1 - t) / 0.4 : 1;
+      // 적 좌우에서 거대한 토목 기둥 둘이 땅을 가르며 솟아 → 쾅 맞부딪혀 짓뭉갬 → 부서져 흩어짐
+      const block = art("ren-block");
+      const r = fx.size;
+      const close = Math.min(1, t / 0.35);
+      const gap = (1 - close * close) * r * 1.6;
+      const rise = Math.min(1, t / 0.15);
+      const h = r * 2.6;
+      const w = (h * 24) / 40;
+      ctx.globalAlpha = t > 0.7 ? (1 - t) / 0.3 : 1;
       for (const side of [-1, 1]) {
-        const bx = snap(fx.x + side * (gap + w / 2) - w / 2);
-        ctx.fillStyle = "#7a7268";
-        ctx.fillRect(bx, snap(fx.y - h * 0.7), Math.round(w), Math.round(h));
-        ctx.fillStyle = BARK;
-        ctx.fillRect(bx, snap(fx.y - h * 0.7), Math.round(w), 2);
-        ctx.fillStyle = MOSS;
-        ctx.fillRect(bx + 1, snap(fx.y - h * 0.7) - 1, 3, 1);
+        const bx = x + side * (gap + w / 2 - 2);
+        hole(ctx, bx, y + 4, w * 0.6, 1 - t);
+        if (block) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(bx - w, y - h * 1.2, w * 2, h * 1.2 + 6);
+          ctx.clip();
+          // 맞부딪힌 뒤에는 조금씩 기울며 부서짐
+          blit(ctx, block, 0, 24, 40, bx, y + 4 - (h / 2) * rise, w, close >= 1 ? side * (t - 0.35) * 0.6 : 0, side > 0);
+          ctx.restore();
+        }
       }
       ctx.globalAlpha = 1;
-      if (gap <= 0) for (let i = 0; i < 5; i++) clod(ctx, snap(fx.x + (i - 2) * 4), snap(fx.y - 6 + t * 10), 1.8, i);
+      if (close >= 1) {
+        const k = (t - 0.35) / 0.65;
+        ctx.globalAlpha = (1 - k) * 0.7;
+        ctx.fillStyle = DUST;
+        ctx.beginPath();
+        ctx.ellipse(x, y - h * 0.3, r * (0.4 + k), r * 0.5 * (0.4 + k), 0, 0, TAU);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        debris(ctx, x, y - h * 0.3, r, k, 14, Math.round(fx.x * 3));
+      }
       return true;
     }
   }

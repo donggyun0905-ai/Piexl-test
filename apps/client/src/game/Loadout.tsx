@@ -17,8 +17,6 @@ export interface LoadoutView {
   novice?: NoviceView;
   /** 스킬이 있는 캐릭터(추적자): 스킬마다 남은 대기 0~1 */
   skills?: number[];
-  /** 추적자 강력한 한방 남은 횟수 */
-  skillUses?: number;
   /** 상점 방: 팔면 받는 돈 (0·1 = 사용 아이템 칸, 2~ = 패시브 순서, 0원 = 못 팜) */
   sell?: number[];
 }
@@ -29,7 +27,7 @@ const USE_KEY_LABELS = ["Q", "E"];
 /** 화면 바뀜 판단용 */
 export function loadoutKey(v: LoadoutView): string {
   const n = v.novice ? `|${v.novice.lv},${v.novice.exp},${v.novice.points}` : "";
-  return `${v.weaponId}|${v.slots.join(",")}|${v.passives.join(",")}${n}|${v.skills?.join(",") ?? ""}|${v.skillUses ?? ""}|${v.sell?.join(",") ?? ""}`;
+  return `${v.weaponId}|${v.slots.join(",")}|${v.passives.join(",")}${n}|${v.skills?.join(",") ?? ""}|${v.sell?.join(",") ?? ""}`;
 }
 
 interface Props {
@@ -74,7 +72,7 @@ export function Loadout({ view, lang, t, touchMode, controls }: Props) {
     <div className="loadout">
       {view.novice && <NovicePanel view={view.novice} t={t} controls={controls} />}
       {view.sell && <SellBar view={view} lang={lang} t={t} controls={controls} />}
-      {view.skills && <SkillButtons skills={view.skills} uses={view.skillUses} t={t} controls={controls} />}
+      {view.skills && <SkillButtons skills={view.skills} t={t} controls={controls} />}
       <span className="loadout-weapon">
         {t("weapon")}:{" "}
         <span className={`loadout-weapon-icon ${isOn(weapon) ? "on" : ""}`} {...tipProps(weapon)}>

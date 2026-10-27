@@ -1,6 +1,6 @@
 // 추적자 그리기: 저격탄·연발탄 꼬리 · 강력한 한방 모으기(앞의 빛 벽·조준 레이저·총구 빛) · 빔 · 저격 맞음
 // 암습 저격: 화면 전체가 까매지고 조준 원 안만 보임 (PC는 마우스 자리, 모바일·자동 조준은 노리는 적) · 쏠 때 원이 위로 튐 · 남은 발·남은 시간 표시
-import { TRACKER, type EffectState, type EnemyState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { TRACKER, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -100,56 +100,47 @@ export function drawTrackerFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   return true;
 }
 
-/** 자동 조준이 노리는 적 (가장 가까운 적) */
-function autoTarget(s: RunState): EnemyState | undefined {
-  const p = s.player;
-  let best: EnemyState | undefined;
-  let bd = Infinity;
-  for (const e of s.enemies) {
-    const d = (e.x - p.x) ** 2 + (e.y - p.y) ** 2;
-    if (e.hp > 0 && !e.immune && d < bd) [best, bd] = [e, d];
-  }
-  return best;
-}
 
 /** 암습 저격 화면: 조준 원만 남기고 까맣게. cursor = 마우스 자리(게임 좌표, 없으면 자동 조준) */
 export function drawAmbushOverlay(ctx: Ctx, s: RunState, snap: Snap, cursor: { x: number; y: number } | null): void {
   const p = s.player;
   const a = p.trAmbush;
   if (p.characterId !== "tracker" || !a) return;
-  const ring = TRACKER.ambushR * (p.passives.includes("trScope") ? 1.5 : 1) + 6;
-  const target = cursor ? null : autoTarget(s);
+  // 가운데 작은 원 (이 안에 적 몸 가운데가 들어와야 맞음) · 바깥 조준경
+  const small = TRACKER.ambushR * (p.passives.includes("trScope") ? 1.5 : 1);
+  const ring = small + 14;
   // 쏜 뒤 잠깐 위로 튐 (반동)
   const kick = Math.max(0, 1 - (s.tick - (p.trShot ?? -99)) / 10);
-  const cx = snap((cursor?.x ?? target?.x ?? p.x + p.faceX * 60));
-  const cy = snap((cursor?.y ?? target?.y ?? p.y + p.faceY * 60) - kick * 7);
+  const cx = snap(cursor?.x ?? p.x + p.faceX * 60);
+  const cy = snap((cursor?.y ?? p.y + p.faceY * 60) - kick * 7);
   ctx.save();
-  ctx.fillStyle = "rgba(0, 0, 0, 0.94)";
+  // 화면은 30% 어둡게 (적은 보이게), 조준경 안은 밝게
+  ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
   ctx.beginPath();
   ctx.rect(-2000, -2000, 5000, 5000);
   ctx.arc(cx, cy, ring, 0, TAU, true);
   ctx.fill();
-  // 조준경: 원 테두리 · 십자선 · 가운데 점
   ctx.strokeStyle = SCOPE;
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.arc(cx, cy, ring, 0, TAU);
   ctx.stroke();
-  line(ctx, cx - ring, cy, cx - 3, cy, SCOPE, 0.6);
-  line(ctx, cx + 3, cy, cx + ring, cy, SCOPE, 0.6);
-  line(ctx, cx, cy - ring, cx, cy - 3, SCOPE, 0.6);
-  line(ctx, cx, cy + 3, cx, cy + ring, SCOPE, 0.6);
-  ctx.fillStyle = SCOPE;
+  line(ctx, cx - ring, cy, cx - small - 2, cy, SCOPE, 0.6);
+  line(ctx, cx + small + 2, cy, cx + ring, cy, SCOPE, 0.6);
+  line(ctx, cx, cy - ring, cx, cy - small - 2, SCOPE, 0.6);
+  line(ctx, cx, cy + small + 2, cx, cy + ring, SCOPE, 0.6);
+  // 가운데 작은 원 (빨강) + 점
+  ctx.strokeStyle = "#ff3a3a";
+  ctx.beginPath();
+  ctx.arc(cx, cy, small, 0, TAU);
+  ctx.stroke();
+  ctx.fillStyle = "#ff3a3a";
   ctx.fillRect(cx - 0.5, cy - 0.5, 1, 1);
-  // 남은 시간 (바깥 금빛 호) · 남은 발 (아래 점)
+  // 남은 시간 (바깥 금빛 호)
   ctx.strokeStyle = GOLD;
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.arc(cx, cy, ring + 3, -Math.PI / 2, -Math.PI / 2 + TAU * (a.t / TRACKER.ambushTicks));
   ctx.stroke();
-  for (let i = 0; i < a.shots; i++) {
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(cx - a.shots * 1.5 + i * 3, cy + ring + 5, 2, 2);
-  }
   ctx.restore();
 }

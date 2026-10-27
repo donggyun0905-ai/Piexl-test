@@ -80,3 +80,12 @@
   border: 2px solid var(--line);
   padding: 8px;
 }
+/* 스킬 키 바꾸기: 키를 기다리는 칸은 밝게 */
+.skill-key-set {
+  display: flex;
+  gap: 4px;
+}
+.skill-key-set button.on {
+  border-color: var(--accent);
+  color: var(--accent);
+}

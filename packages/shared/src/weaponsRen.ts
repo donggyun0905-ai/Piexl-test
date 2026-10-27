@@ -36,19 +36,26 @@ export const REN_EARTH = {
   per: 3,
   tiers: 5,
   chance: 0.1,
+  /** 1 돌 던지기: 피해 배율 · 날리는 거리 · 닿는 거리 · 넓이(코사인, 작을수록 넓음) */
   rockMul: 0.35,
-  rockPush: 40,
-  rockReach: 80,
+  rockPush: 55,
+  rockReach: 120,
+  rockArc: -0.15,
+  /** 2 용머리: 피해 배율 · 반경(기본 공격 폭발만큼) · 물고 있는 틱 */
   headMul: 0.85,
-  headR: 22,
+  headR: 30,
+  headHold: 40,
+  /** 3 용오름: 피해 배율 · 몸 굵기 · 빠르기 · 틱 */
   wyrmMul: 1,
-  wyrmR: 12,
+  wyrmR: 18,
   wyrmSpeed: 3,
-  wyrmTicks: 60,
+  wyrmTicks: 70,
+  /** 4 머리 위 거대 토목: 쌓이는 수 · 큰 돌 피해 배율 · 반경 · 사이 틱 */
   stoneMax: 5,
   dropMul: 1,
-  dropR: 26,
+  dropR: 30,
   dropGap: 12,
+  /** 5 양쪽 토목: 피해 배율 · 반경 */
   crushMul: 1,
-  crushR: 16,
+  crushR: 24,
 } as const;

@@ -30,24 +30,31 @@ describe("추적자", () => {
     expect(lost(s)).toBeGreaterThan(0);
   });
 
-  it("1 암습 저격: 무적 · 제자리 · 10발 (한 발 200%) · 끝나면 대기 10초", () => {
+  it("1 암습 저격: 보호막 20 · 조준경 가운데 작은 원에 정확히 대야 맞음 (자동 조준 안 됨) · 5초 · 다시 누르면 끝", () => {
     const s = tracker();
+    s.player.shieldPts = 5;
     stepSim(s, KEY(1));
-    expect(s.player.trAmbush?.shots).toBe(T.ambushShots);
-    let shots = 0;
-    for (let i = 0; i < T.ambushTicks + 5 && s.player.trAmbush; i++) {
-      const before = s.player.trAmbush?.shots ?? 0;
-      stepSim(s, FIRE);
-      expect(s.player.invulnTicks).toBeGreaterThan(0);
-      if ((s.player.trAmbush?.shots ?? 0) < before) shots++;
-    }
-    expect(shots + 1).toBeGreaterThanOrEqual(T.ambushShots);
+    expect(s.player.trAmbush).toBeDefined();
+    expect(s.player.shieldPts).toBe(T.ambushShield);
+    expect(s.player.invulnTicks).toBe(0);
+    // 적(100칸 오른쪽)에 정확히 겨눔 (암습 저격 동안은 화면이 거리를 잘게 보냄)
+    const AIM = { ...FIRE, aimX: Math.round((100 / 12) * 100), aimY: 0 };
+    const MISS = { ...AIM, aimY: Math.round((-12 / 12) * 100) };
+    for (let i = 0; i < 30; i++) stepSim(s, MISS);
+    expect(lost(s)).toBe(0);
+    for (let i = 0; i < 30; i++) stepSim(s, AIM);
+    expect(lost(s)).toBeGreaterThanOrEqual(s.player.stats.damage * T.ambushMul);
+    // 자동 조준이면 쏘지 않음
+    const before = lost(s);
+    for (let i = 0; i < 30; i++) stepSim(s, { ...EMPTY_INPUT, autoAim: true });
+    expect(lost(s)).toBe(before);
+    stepSim(s, KEY(1));
     expect(s.player.trAmbush).toBeUndefined();
-    expect(lost(s)).toBeGreaterThanOrEqual(s.player.stats.damage * T.ambushMul * 9);
+    expect(s.player.shieldPts).toBe(5);
     expect(s.player.trCd?.[0]).toBeGreaterThan(T.cooldowns[0]! - 5);
   });
 
-  it("암습 저격은 10초가 지나면 다 못 쏴도 끝남", () => {
+  it("암습 저격은 5초가 지나면 끝남", () => {
     const s = tracker();
     stepSim(s, KEY(1));
     for (let i = 0; i < T.ambushTicks + 2; i++) stepSim(s, { ...EMPTY_INPUT, aimX: 1000 });
@@ -83,14 +90,8 @@ describe("추적자", () => {
     expect(s.player.trCd?.[2]).toBe(T.cooldowns[2]! - 60);
   });
 
-  it("2 강력한 한방은 한 판에 3번 · 스킬 중에도 움직임 · 위장복은 대시 뒤 받는 피해 감소", () => {
+  it("스킬 중에도 움직임 · 위장복은 대시 뒤 받는 피해 감소", () => {
     const s = tracker("trCamo");
-    for (let n = 0; n < 4; n++) {
-      s.player.trCd = [0, 0, 0];
-      stepSim(s, KEY(2));
-      expect(!!s.player.trCharge).toBe(n < T.powerUses);
-      delete s.player.trCharge;
-    }
     stepSim(s, KEY(1));
     const x = s.player.x;
     for (let i = 0; i < 10; i++) stepSim(s, { ...EMPTY_INPUT, moveX: 1 });

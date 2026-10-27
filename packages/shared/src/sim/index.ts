@@ -62,7 +62,7 @@ export { riderGauge, riderHeat, riderSpeedMul } from "./rider";
 export { attackSpeedNow } from "./player";
 export { runeFill, spellOf, type SpellKind } from "./rune";
 export { morphXp } from "./morphXp";
-export { trackerCooldown, trackerPowerLeft, trackerSkills } from "./tracker";
+export { trackerCooldown, trackerSkills } from "./tracker";
 export { forgottenRing } from "./forgotten";
 export { statusImmune } from "./remnant";
 export { wandererGauge, zoneRadius } from "./wanderer";

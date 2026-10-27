@@ -1,5 +1,5 @@
 // 게임 진행: 고정 간격 계산 + 화면 주사율에 맞춘 그리기 + HUD 갱신 (React 밖에서 돌림)
-import { applyRoom, ARENA_LEVELS, expToNext, FLOOR_COUNT, HERO_FLOORS, LEGENDS, sellPrice, tabooPoints, trackerPowerLeft, trackerSkills, VIEW_HEIGHT, VIEW_WIDTH, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
+import { applyRoom, ARENA_LEVELS, expToNext, FLOOR_COUNT, HERO_FLOORS, LEGENDS, sellPrice, tabooPoints, trackerSkills, VIEW_HEIGHT, VIEW_WIDTH, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { LEGEND_NAMES } from "../i18n/items/general";
 import { SPECIAL_NAMES } from "../i18n/items/abandoned";
@@ -62,6 +62,8 @@ export function startGameLoop(o: LoopOptions): () => void {
   const { run, ctx, controls, t, lang } = o;
   // 추적자는 숫자 1·2·3이 스킬 (아이템은 Q·E)
   controls.skillKeys = run.player.characterId === "tracker";
+  /** 추적자 암습 저격 동안 자동 공격을 잠깐 끔 (끝나면 다시 켬) */
+  let autoBack = false;
   let acc = 0;
   let last = performance.now();
   let frame = 0;
@@ -130,13 +132,22 @@ export function startGameLoop(o: LoopOptions): () => void {
       const passive = run.prompt.kind === "gather" || run.prompt.kind === "revive" || (!!run.party && p.hp <= 0);
       o.setPrompt({ text, interact: action !== "" && !passive });
     }
+    const ambush = !!p.trAmbush;
+    controls.fineAim = ambush;
+    if (ambush && controls.autoAim) {
+      controls.setAutoAim(false);
+      autoBack = true;
+    } else if (!ambush && autoBack) {
+      controls.setAutoAim(true);
+      autoBack = false;
+    }
     const view: LoadoutView = {
       weaponId: p.weaponId,
       slots: [...p.useSlots],
       passives: [...p.passives],
       ...(p.characterId === "novice" ? { novice: { lv: p.lv ?? 1, exp: p.exp ?? 0, need: expToNext(p.lv ?? 1), points: p.points ?? 0 } } : {}),
       // 추적자 스킬 대기 (5% 단위로만 바뀌게)
-      ...(p.characterId === "tracker" ? { skills: trackerSkills(p).map((v) => Math.ceil(v * 20) / 20), skillUses: trackerPowerLeft(p) } : {}),
+      ...(p.characterId === "tracker" ? { skills: trackerSkills(p).map((v) => Math.ceil(v * 20) / 20) } : {}),
       // 상점 방: 팔 수 있는 값 (사용 아이템 2칸 + 패시브 순서, 0 = 못 팜)
       ...(run.map.rooms[run.roomId]?.type === "shop" && !run.party ? { sell: [1, 2, ...p.passives.map((_, i) => i + 3)].map((n) => sellPrice(run, n)) } : {}),
     };

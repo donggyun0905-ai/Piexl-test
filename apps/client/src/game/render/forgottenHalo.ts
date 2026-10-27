@@ -1,5 +1,5 @@
 // 잊혀진 자 빛의 고리: 등 뒤 고리(지금의 1.5배, 몸 그림의 일부처럼 늘 보임 · 신족이면 불타는 금빛 고리로 바뀜)
-// · 화면 왼쪽 위 게이지(화려한 금빛 테두리 안에 다섯 빛깔이 차오름, 신족이면 남은 시간)
+// · 화면 왼쪽 위 게이지(화려한 금빛 테두리 안에 노란 원이 한 바퀴 차오름, 신족이면 남은 시간)
 import { forgottenRing, type RunState } from "@pixel-rogue/shared";
 import { hudScale } from "./imugiAura";
 import { lerp, type Snap } from "./palette";
@@ -9,8 +9,6 @@ const TAU = Math.PI * 2;
 const GOLD = "#ffd860";
 const DEEP = "#b8862a";
 const PALE = "#fff6c0";
-/** 게이지 다섯 빛깔 (보라 · 흰빛 · 주황 · 노랑 · 파랑) */
-const HUES = ["#8a7aff", "#f4f0ff", "#ff7a3a", "#ffd040", "#4a8aff"];
 
 function ring(ctx: Ctx, x: number, y: number, r: number, c: string, w: number, a0 = 0, a1 = TAU): void {
   ctx.strokeStyle = c;
@@ -75,14 +73,9 @@ export function drawHaloHud(ctx: Ctx, s: RunState, scale: number): void {
   ctx.beginPath();
   ctx.arc(cx, cy, R + 2, 0, TAU);
   ctx.fill();
-  // 다섯 빛깔 게이지 (위에서 시계 방향, 찬 만큼)
-  const start = -Math.PI / 2;
-  for (let i = 0; i < HUES.length; i++) {
-    const a0 = start + (i / HUES.length) * TAU;
-    const a1 = start + Math.min(fill, (i + 1) / HUES.length) * TAU;
-    if (a1 <= a0) break;
-    ring(ctx, cx, cy, R - 3, HUES[i]!, 5, a0, a1);
-  }
+  // 노란 게이지: 위에서 시계 방향으로 찬 만큼, 한 바퀴 다 차면 신족 (빈 곳은 어둡게)
+  ring(ctx, cx, cy, R - 3, "#3a3020", 5);
+  if (fill > 0) ring(ctx, cx, cy, R - 3, god ? "#fff3a0" : "#ffd23a", 5, -Math.PI / 2, -Math.PI / 2 + TAU * Math.min(1, fill));
   // 가운데 어두운 구멍 · 신족이면 빛
   ctx.fillStyle = god ? `rgba(255,246,192,${0.5 + 0.3 * Math.sin(s.tick * 0.3)})` : "#140e1e";
   ctx.beginPath();

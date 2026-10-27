@@ -12,17 +12,14 @@ export const TRACKER = {
   pierce: 1,
   /** 스킬 대기 시간: 1 암습 저격 10초 · 2 강력한 한방 60초 · 3 연발사격 3초 */
   cooldowns: [600, 3600, 180] as readonly number[],
-  /** 암습 저격: 발 수 · 제한 시간(이 안에 다 쏴야 함) · 한 발 피해 배율 · 발 사이 틱 · 조준 원 반지름 · 자동 조준 간격 */
-  ambushShots: 10,
-  ambushTicks: 600,
+  /** 암습 저격: 제한 시간(5초) · 한 발 피해 배율 · 발 사이 틱 · 조준경 가운데 작은 원 반지름(이 안에 적 몸 가운데가 들어와야 맞음) · 받는 보호막(겹치지 않고 고정) */
+  ambushTicks: 300,
   ambushMul: 2,
   ambushGap: 12,
-  ambushR: 12,
-  ambushAuto: 30,
+  ambushR: 4,
+  ambushShield: 20,
   /** 강력한 한방: 모으는 틱 · 공격력 배율 · 최대 체력 비율 (보스는 그 1/5) · 앞 막는 벽 거리·폭 · 줄 폭 */
   powerCharge: 90,
-  /** 강력한 한방: 한 판에 쓸 수 있는 횟수 (라스트 보스방에 들어가면 다시 채움) */
-  powerUses: 3,
   powerMul: 10,
   powerHp: 0.2,
   powerBoss: 0.2,

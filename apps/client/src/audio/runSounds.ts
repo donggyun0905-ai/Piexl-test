@@ -74,7 +74,7 @@ function snapshot(s: RunState): Seen {
     guards: s.player.mercGuards ?? 0,
     attacks: s.player.attackCount,
     tick: s.tick,
-    ambush: s.player.trAmbush?.shots ?? 0,
+    ambush: s.player.trAmbush ? (s.player.trShot ?? 0) : 0,
     charging: (s.player.trCharge ?? 0) > 0,
     god: (s.player.fgGod ?? 0) > 0,
     blinkCd: s.player.rmBlink ?? 0,
@@ -121,7 +121,7 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
       const c = run.player.characterId;
       if (c === "tracker") {
         // 추적자: 총성마다 다르게, 암습 저격·강력한 한방은 화면이 크게 흔들림
-        if (now.ambush < seen.ambush) {
+        if (now.ambush > 0 && now.ambush !== seen.ambush) {
           fx.push("snipe");
           onShake(3);
         } else if (seen.charging && !now.charging) {

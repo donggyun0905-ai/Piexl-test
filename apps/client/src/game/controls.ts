@@ -1,4 +1,5 @@
 import { AIM_DIST_MAX, AIM_DIST_STEP, quantize, type TickInput } from "@pixel-rogue/shared";
+import { skillOf } from "../settings";
 import type { ClickTarget } from "./clickTargets";
 import { drawSticks, type StickElements } from "./sticks";
 import { moveVector, TouchSticks } from "./touchSticks";
@@ -14,7 +15,6 @@ export const ZOOM_MAX = 2.5;
 /** PC 사용 아이템 키: 1번 칸 Q·1, 2번 칸 E·2 */
 const USE_KEYS: Record<string, number> = { KeyQ: 1, Digit1: 1, KeyE: 2, Digit2: 2 };
 /** 스킬이 있는 캐릭터(추적자)는 숫자 1·2·3이 스킬 (아이템은 Q·E) */
-const SKILL_KEYS: Record<string, number> = { Digit1: 1, Digit2: 2, Digit3: 3, Numpad1: 1, Numpad2: 2, Numpad3: 3 };
 
 export interface ControlsOptions {
   /** 터치·마우스를 받는 화면 전체 영역 */
@@ -58,6 +58,7 @@ export class Controls {
   private skillQueued = 0;
   private sellQueued = 0;
   skillKeys = false; // 숫자 키를 스킬로 씀 (추적자)
+  fineAim = false; // 누른 곳까지 거리를 잘게 (추적자 암습 저격: 조준경 가운데에 정확히 대야 맞음)
   /** 클릭·탭으로 고른 층 보상·미니맵 방 */
   private clickQueued: ClickTarget | null = null;
   zoom = 1;
@@ -93,6 +94,11 @@ export class Controls {
       const el = e.target as HTMLElement | null;
       if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) return;
       if (e.code === "Escape") return opt.onEscape();
+      // 스킬 키 (설정에서 바꾼 키가 다른 키보다 먼저)
+      if (this.skillKeys && skillOf(e.code)) {
+        this.skillQueued = skillOf(e.code);
+        return;
+      }
       if (e.code === "KeyP") return opt.onPause();
       if (e.code === "KeyR") return this.setAutoAim(!this.autoAim);
       if (e.code === "KeyC" && !e.ctrlKey && !e.metaKey) return opt.onToggleStats();
@@ -105,10 +111,6 @@ export class Controls {
       if (e.code === "Space") {
         e.preventDefault(); // 페이지 스크롤·버튼 눌림 막기
         this.hitboxHeld = true;
-        return;
-      }
-      if (this.skillKeys && SKILL_KEYS[e.code]) {
-        this.skillQueued = SKILL_KEYS[e.code]!;
         return;
       }
       const slot = USE_KEYS[e.code];
@@ -186,13 +188,8 @@ export class Controls {
   queueSell(n: number): void { this.sellQueued = n; }
 
   /** 상호작용을 한 번 누른 것으로 처리 (모바일 버튼) */
-  queueInteract(): void {
-    this.interactQueued = true;
-  }
-
-  queueDash(): void {
-    this.dashQueued = true;
-  }
+  queueInteract(): void { this.interactQueued = true; }
+  queueDash(): void { this.dashQueued = true; }
 
   /** 마우스 위치 (화면 좌표). 마우스를 쓰지 않았으면 null */
   get mouse(): { x: number; y: number } | null {
@@ -248,9 +245,14 @@ export class Controls {
         const len = Math.hypot(dx, dy);
         if (len > 0) {
           // 방향 × 누른 곳까지 거리 단계 (기계공학자가 누른 곳에 던지게)
-          const k = Math.max(1, Math.min(AIM_DIST_MAX, Math.round(len / p.scale / AIM_DIST_STEP)));
-          aimX = quantize(dx / len, AIM_STEPS) * k;
-          aimY = quantize(dy / len, AIM_STEPS) * k;
+          // 암습 저격은 거리를 0.01 단계로 (최대 30단계 = 360칸)
+          const kf = Math.max(0.1, Math.min(30, len / p.scale / AIM_DIST_STEP));
+          if (this.fineAim) [aimX, aimY] = [Math.round((dx / len) * 100 * kf), Math.round((dy / len) * 100 * kf)];
+          else {
+            const k = Math.max(1, Math.min(AIM_DIST_MAX, Math.round(len / p.scale / AIM_DIST_STEP)));
+            aimX = quantize(dx / len, AIM_STEPS) * k;
+            aimY = quantize(dy / len, AIM_STEPS) * k;
+          }
         }
       }
       attack = !this.autoAim && this.mouseAttack;

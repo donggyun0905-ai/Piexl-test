@@ -1,13 +1,13 @@
 // 추적자(아스칼론, 시즌 2): 저격총 하나 + 스킬 셋 (PC 1·2·3 키, 모바일 스킬 버튼)
-// 1 암습 저격: 무적이 되고 화면이 어두워진 채 10초 안에 10발 (한 발 공격력 200%, 조준 원 안의 적) · 대기 10초
-// 2 강력한 한방: 모으는 동안 앞에 탄을 막는 벽 → 방을 꿰뚫는 한 줄 (공격력 1000% + 최대 체력 20%, 보스는 그 1/5) · 대기 60초 · 한 판 3번 (라스트 보스방에서 다시 3번)
+// 1 암습 저격: 보호막 20, 화면이 어두워진 채 5초 동안 직접 조준해 쏨 (조준경 가운데 작은 원 안의 적만 맞음, 한 발 200%, 다시 누르면 끝) · 대기 10초
+// 2 강력한 한방: 모으는 동안 앞에 탄을 막는 벽 → 방을 꿰뚫는 한 줄 (공격력 1000% + 최대 체력 20%, 보스는 그 1/5) · 대기 60초
 // 3 연발사격: 조준 없이 10발을 흩뿌려 쏨 · 대기 3초. 수치는 weaponsTracker.TRACKER, 아이템은 itemsTracker
 import { TICK_RATE } from "../constants";
 import { TRACKER_PERKS as K } from "../itemsTracker";
 import { createRng, deriveSeed } from "../rng";
 import { TRACKER as T } from "../weaponsTracker";
 import { alive, inLine, isBoss, shoot, strike } from "./s2Kit";
-import { AIM_DIST_MAX, AIM_DIST_STEP, type TickInput } from "./inputTypes";
+import { AIM_DIST_STEP, type TickInput } from "./inputTypes";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
 
@@ -31,11 +31,8 @@ export function trackerCooldown(p: PlayerState, i: number): number {
 
 /** 화면용: 스킬마다 남은 대기 0~1 (0 = 쓸 수 있음) */
 export function trackerSkills(p: PlayerState): number[] {
-  return [0, 1, 2].map((i) => (i === 1 && trackerPowerLeft(p) <= 0 ? 1 : Math.min(1, (p.trCd?.[i] ?? 0) / Math.max(1, trackerCooldown(p, i)))));
+  return [0, 1, 2].map((i) => Math.min(1, (p.trCd?.[i] ?? 0) / Math.max(1, trackerCooldown(p, i))));
 }
-
-/** 강력한 한방: 이번 판에 남은 횟수 (라스트 보스방에 들어가면 다시 채움) */
-export const trackerPowerLeft = (p: PlayerState) => T.powerUses - (p.trUsed ?? 0);
 
 /** 한 발 피해 배율: 할로 포인트(평소만) · 양각대 · 헤드샷 */
 function shotMul(s: RunState, normal: boolean, n: number): number {
@@ -65,40 +62,35 @@ export function trackerShotHit(s: RunState, pr: ProjectileState, e: EnemyState):
   s.projectiles.push({ id: s.nextId++, fromPlayer: true, x: e.x, y: e.y, prevX: e.x, prevY: e.y, r: 2, vx: d[0] * 6, vy: d[1] * 6, damage: pr.damage * K.trRicochet.mul, ticksLeft: 20, spirit: "trRico", hitIds: [e.id], pierce: 0 });
 }
 
-/** 암습 저격 한 발: 조준 원 안의 적 (자동 조준이면 가장 가까운 적) */
+/** 암습 저격 한 발: 누른 곳(조준경 가운데)의 작은 원 안에 몸 가운데가 들어온 적만 맞음 (자동 조준 없음) */
 function ambushShot(s: RunState): void {
   const p = s.player;
   const a = p.trAmbush!;
-  const auto = p.aimDist === undefined;
   const r = T.ambushR * (hasPerk(p, "trScope") ? K.trScope.ring : 1);
-  const far = AIM_DIST_MAX * AIM_DIST_STEP * 0.95;
+  const x = p.x + p.faceX * (p.aimDist ?? 60);
+  const y = p.y + p.faceY * (p.aimDist ?? 60);
   let best: EnemyState | undefined;
-  let bestScore = Infinity;
+  let bestD = Infinity;
   for (const e of alive(s)) {
-    const dx = e.x - p.x;
-    const dy = e.y - p.y;
-    if (auto) {
-      const d = dx * dx + dy * dy;
-      if (d < bestScore) [best, bestScore] = [e, d];
-      continue;
-    }
-    // 바라보는 쪽 줄 위에서 조준 원에 들어오는 적 (누른 거리에 가장 가까운 적, 끝까지 겨누면 줄에 가장 가까운 적)
-    const along = dx * p.faceX + dy * p.faceY;
-    const perp = Math.abs(dx * p.faceY - dy * p.faceX);
-    if (along <= 0 || perp > r + e.r) continue;
-    const score = p.aimDist! >= far ? perp : Math.abs(along - p.aimDist!);
-    if (score < bestScore) [best, bestScore] = [e, score];
+    const d = Math.hypot(e.x - x, e.y - y);
+    if (d <= r + e.r * 0.5 && d < bestD) [best, bestD] = [e, d];
   }
-  a.shots--;
-  a.gap = auto ? T.ambushAuto : T.ambushGap;
+  a.gap = T.ambushGap;
   p.trShot = s.tick;
-  const x = best ? best.x : p.x + p.faceX * (p.aimDist ?? 60);
-  const y = best ? best.y : p.y + p.faceY * (p.aimDist ?? 60);
   if (best) {
-    strike(s, best, p.stats.damage * T.ambushMul * shotMul(s, false, a.shots));
+    strike(s, best, p.stats.damage * T.ambushMul * shotMul(s, false, s.tick));
     marked(p, best);
   }
   addEffect(s, { kind: "trSnipe", x, y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 14, width: best ? 1 : 0 });
+}
+
+/** 암습 저격 끝: 대기 시작 · 받은 보호막 거둠 */
+function endAmbush(p: PlayerState): void {
+  const a = p.trAmbush;
+  if (!a) return;
+  delete p.trAmbush;
+  p.shieldPts = Math.min(p.shieldPts ?? 0, a.base);
+  (p.trCd ??= [0, 0, 0])[0] = trackerCooldown(p, 0);
 }
 
 /** 강력한 한방: 방을 꿰뚫는 한 줄 */
@@ -135,9 +127,15 @@ function wallBlock(s: RunState): void {
 function useSkill(s: RunState, i: number): void {
   const p = s.player;
   const cd = (p.trCd ??= [0, 0, 0]);
-  if ((cd[i] ?? 0) > 0 || p.trAmbush || p.trCharge || (i === 1 && trackerPowerLeft(p) <= 0)) return;
-  if (i === 1) p.trUsed = (p.trUsed ?? 0) + 1;
-  if (i === 0) p.trAmbush = { shots: T.ambushShots, t: T.ambushTicks, gap: 0 };
+  // 암습 저격 중에 1을 다시 누르면 바로 끝 (대기는 그대로 돎)
+  if (i === 0 && p.trAmbush) return endAmbush(p);
+  if ((cd[i] ?? 0) > 0 || p.trAmbush || p.trCharge) return;
+  if (i === 0) {
+    // 무적 대신 보호막 20 (겹치지 않고 20으로 맞춤)
+    const base = p.shieldPts ?? 0;
+    p.shieldPts = Math.max(base, T.ambushShield);
+    p.trAmbush = { t: T.ambushTicks, gap: 0, base };
+  }
   else if (i === 1) p.trCharge = T.powerCharge;
   else p.trBurst = { left: hasPerk(p, "trDrum") ? K.trDrum.shots : T.burstShots, gap: 0 };
   // 암습 저격은 끝난 뒤부터 대기
@@ -166,18 +164,13 @@ export function trackerTick(s: RunState, want: boolean, speed: number): void {
     b.gap = T.burstGap;
     if (--b.left <= 0) delete p.trBurst;
   }
-  // 암습 저격: 무적 · 움직이며 10초 안에 10발
+  // 암습 저격: 움직이며 5초 동안 직접 조준해 쏨 (자동 조준이면 쏘지 않음)
   const am = p.trAmbush;
   if (am) {
-    p.invulnTicks = Math.max(p.invulnTicks, 2);
     am.t--;
     if (am.gap > 0) am.gap--;
-    const auto = p.aimDist === undefined;
-    if (am.gap <= 0 && (auto ? alive(s).length > 0 : want)) ambushShot(s);
-    if (am.shots <= 0 || am.t <= 0) {
-      delete p.trAmbush;
-      cd[0] = trackerCooldown(p, 0);
-    }
+    if (am.gap <= 0 && want && p.aimDist !== undefined) ambushShot(s);
+    if (am.t <= 0) endAmbush(p);
     return;
   }
   // 강력한 한방: 모으는 동안 앞에 벽 (움직일 수 있음)
@@ -204,5 +197,5 @@ export const trackerGuard = (p: PlayerState) => ((p.trCamo ?? 0) > 0 ? K.trCamo.
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetTracker(p: PlayerState): void {
-  for (const k of ["trCd", "trAmbush", "trCharge", "trBurst", "trShot", "trDash", "trKey", "trCamo", "trUsed"] as const) delete p[k];
+  for (const k of ["trCd", "trAmbush", "trCharge", "trBurst", "trShot", "trDash", "trKey", "trCamo"] as const) delete p[k];
 }

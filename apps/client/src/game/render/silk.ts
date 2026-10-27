@@ -25,14 +25,21 @@ export function drawSilkStacks(ctx: Ctx, s: RunState, snap: Snap): void {
     const n = e.skStacks ?? 0;
     if (e.hp <= 0) continue;
     const x = snap(e.x);
-    const y = snap(e.y - e.r - 6);
-    // 출혈 스택 막대 (30이면 과다출혈)
+    // 아래부터: 체력바(몸 위 4) · 얽힘 점(몸 위 8) · 출혈 게이지(몸 위 12, 30이면 과다출혈)
+    const y = snap(e.y - e.r - 8);
     const b = (e.skBleed ?? 0) / 30;
     if (b > 0) {
-      ctx.fillStyle = "rgba(0,0,0,0.55)";
-      ctx.fillRect(x - 8, y + 3, 16, 2);
-      ctx.fillStyle = b > 0.8 ? "#ff2040" : "#a8102a";
-      ctx.fillRect(x - 8, y + 3, Math.max(1, Math.round(16 * b)), 2);
+      const by = snap(e.y - e.r - 12);
+      ctx.fillStyle = "rgba(0,0,0,0.7)";
+      ctx.fillRect(x - 9, by - 1, 18, 4);
+      ctx.fillStyle = b > 0.8 && s.tick % 10 < 5 ? "#ff6a7a" : "#e01836";
+      ctx.fillRect(x - 8, by, Math.max(1, Math.round(16 * b)), 2);
+      // 핏방울 표시 (체력바와 구분)
+      ctx.fillStyle = "#ff3a4a";
+      ctx.fillRect(x - 12, by - 1, 1, 1);
+      ctx.fillRect(x - 13, by, 3, 2);
+      ctx.fillStyle = "#ffd0d0";
+      ctx.fillRect(x - 13, by, 1, 1);
     }
     for (let i = 0; i < n; i++) {
       ctx.fillStyle = n >= 4 ? RED : PINK;

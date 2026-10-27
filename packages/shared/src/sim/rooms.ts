@@ -129,11 +129,7 @@ function enterRoom(s: RunState, roomId: number): void {
       if (info.type === "rest") healPlayer(s, s.player.stats.maxHp * REST_HEAL * tabooDown(s, "dryWell"));
     });
     // 레이드 시간은 라스트 보스방에 처음 들어간 때부터
-    if (big) {
-      s.raidStart = s.tick;
-      // 추적자: 강력한 한방 다시 3번
-      eachSeat(s, () => delete s.player.trUsed);
-    }
+    if (big) s.raidStart = s.tick;
   }
   s.enemies = st.enemies;
   st.cleared = s.enemies.length === 0;

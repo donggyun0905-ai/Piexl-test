@@ -3,16 +3,16 @@
 export interface AscPlayerState {
   /** 추적자: 스킬 셋 남은 대기 틱 · 암습 저격(남은 발·남은 틱·다음 발까지) · 강력한 한방 모으는 남은 틱 · 연발사격(남은 발·다음 발까지) · 마지막 저격 틱(반동) · 지난 틱 대시 */
   trCd?: number[];
-  trAmbush?: { shots: number; t: number; gap: number };
+  /** 암습 저격: 남은 틱 · 다음 발까지 · 쓰기 전 보호막(끝나면 그 위로 받은 보호막을 거둠) */
+  trAmbush?: { t: number; gap: number; base: number };
   trCharge?: number;
   trBurst?: { left: number; gap: number };
   trShot?: number;
   trDash?: boolean;
   /** 이 틱에 누른 스킬 키 (0 = 없음, 1~3) */
   trKey?: number;
-  /** 위장복 남은 틱 · 강력한 한방을 쓴 횟수 */
+  /** 위장복 남은 틱 */
   trCamo?: number;
-  trUsed?: number;
 }
 
 export interface AscEnemyState {

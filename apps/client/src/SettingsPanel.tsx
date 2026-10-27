@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { Lang, TextKey } from "./i18n";
 import { applyVolume, play, unlockAudio } from "./audio/sound";
 import { ControlsEditor } from "./game/ControlsEditor";
+import { SkillKeysRow } from "./SkillKeysRow";
 import { setSettings, useSettings, type Settings } from "./settings";
 
 /** 터치 화면이 있는 기기에서만 조작키 바꾸기를 보여 줌 */
@@ -46,6 +47,7 @@ export function SettingsPanel({ lang, t }: { lang: Lang; t: (key: TextKey) => st
       {toggle("showRange", "showRange")}
       {toggle("showDamage", "showDamage")}
       {toggle("showHitbox", "showHitbox")}
+      <SkillKeysRow t={t} />
       {hasTouch && (
         <div className="setting-row">
           <span>{t("touchControls")}</span>

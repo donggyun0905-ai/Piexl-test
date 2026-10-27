@@ -4,7 +4,7 @@ import { REN_PERKS as K } from "../itemsRen";
 import { PASSIVES, type PassiveDef } from "../items";
 import { createRng, deriveSeed } from "../rng";
 import { REN_EARTH as E } from "../weaponsRen";
-import { alive, inCircle, inCone, onSegment, strike } from "./s2Kit";
+import { alive, inCircle, inCone, onSegment, strike, stun } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk } from "./util";
 
@@ -34,15 +34,19 @@ export function earthAttack(s: RunState, x: number, y: number): void {
 /** 1 돌 던지기: 앞으로 넓게 흩뿌려 멀리 날림 (피해는 약함) */
 function rocks(s: RunState): void {
   const p = s.player;
-  for (const e of inCone(s, E.rockReach, 0.3)) strike(s, e, power(p, E.rockMul), E.rockPush);
-  addEffect(s, { kind: "renRock", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: E.rockReach, maxTicks: 22 });
+  for (const e of inCone(s, E.rockReach, E.rockArc)) strike(s, e, power(p, E.rockMul), E.rockPush);
+  addEffect(s, { kind: "renRock", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: E.rockReach, maxTicks: 26 });
 }
 
 /** 2 용머리: 공격한 자리 바닥에서 솟아오름 */
 function head(s: RunState, x: number, y: number): void {
   const p = s.player;
-  for (const e of inCircle(s, x, y, E.headR)) strike(s, e, power(p, E.headMul), 6);
-  addEffect(s, { kind: "renHead", x, y, dirX: p.faceX, dirY: 0, size: E.headR, maxTicks: 30 });
+  // 입을 벌리고 솟아 적을 물어 삼킴 (무는 동안 꼼짝 못 함)
+  for (const e of inCircle(s, x, y, E.headR)) {
+    strike(s, e, power(p, E.headMul));
+    stun(e, E.headHold);
+  }
+  addEffect(s, { kind: "renHead", x, y, dirX: p.faceX < 0 ? -1 : 1, dirY: 0, size: E.headR, maxTicks: 44 });
 }
 
 /** 3 용오름: 내 자리에서 앞으로 오르내리며 나아감 */
@@ -68,7 +72,7 @@ function crush(s: RunState, x: number, y: number): void {
   const cx = t?.x ?? x;
   const cy = t?.y ?? y;
   for (const e of inCircle(s, cx, cy, E.crushR)) strike(s, e, power(p, E.crushMul));
-  addEffect(s, { kind: "renCrush", x: cx, y: cy, dirX: 0, dirY: 0, size: E.crushR, maxTicks: 24 });
+  addEffect(s, { kind: "renCrush", x: cx, y: cy, dirX: 0, dirY: 0, size: E.crushR, maxTicks: 30 });
 }
 
 /** 틱마다: 용오름 나아가기 · 큰 돌 쏟기 */
@@ -97,7 +101,7 @@ export function earthTick(s: RunState): void {
     const x = e?.x ?? p.x + p.faceX * 40;
     const y = e?.y ?? p.y + p.faceY * 40;
     for (const o of inCircle(s, x, y, E.dropR)) strike(s, o, d.dmg, 6);
-    addEffect(s, { kind: "renDrop", x, y, dirX: 0, dirY: 0, size: E.dropR, maxTicks: 22 });
+    addEffect(s, { kind: "renDrop", x, y, dirX: 0, dirY: 0, size: E.dropR, maxTicks: 24 });
     d.gap = E.dropGap;
     if (--d.left <= 0) delete p.rDrop;
   }

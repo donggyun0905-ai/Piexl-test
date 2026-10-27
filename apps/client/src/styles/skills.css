@@ -43,16 +43,6 @@
     font-size: 20px;
   }
 }
-/* 강력한 한방 남은 횟수 (오른쪽 위) */
-.skill-btn .skill-uses {
-  position: absolute;
-  top: 2px;
-  right: 4px;
-  z-index: 1;
-  font-style: normal;
-  font-weight: bold;
-  color: #ffd76a;
-}
 /* 상점 판매 줄: 한 번 누르면 확인(빨강), 한 번 더 누르면 팜 */
 .sell-bar {
   display: flex;
