@@ -17,7 +17,7 @@ export interface LoadoutView {
   novice?: NoviceView;
   /** 스킬이 있는 캐릭터(추적자): 스킬마다 남은 대기 0~1 */
   skills?: number[];
-  /** 상점 방: 팔면 받는 돈 (0·1 = 사용 아이템 칸, 2~ = 패시브 순서, 0원 = 못 팜) */
+  /** 상점 휴지통 판매 창이 열려 있을 때: 팔면 받는 돈 (sellCodes 순서: 무기 · 사용 아이템 2칸 · 패시브 순서, 0원 = 못 팜) */
   sell?: number[];
 }
 

@@ -134,7 +134,7 @@ export function updateTraps(s: RunState): void {
   const ph = s.tick % PW.trapEvery;
   if (!traps.length || (ph !== 1 && ph !== 20)) return;
   eachSeat(s, (i) => {
-    if (inPlay(s, i) && traps.some((t) => inRect(s.player.x, s.player.y, t))) damagePlayer(s, PW.trapDmg * PW.hpMul);
+    if (inPlay(s, i) && traps.some((t) => inRect(s.player.x, s.player.y, t))) damagePlayer(s, PW.trapDmg);
   });
 }
 

@@ -43,21 +43,47 @@
     font-size: 20px;
   }
 }
-/* 상점 판매 줄: 한 번 누르면 확인(빨강), 한 번 더 누르면 팜 */
-.sell-bar {
+/* 상점 휴지통 판매 창: 한 번 누르면 확인(빨강), 한 번 더 누르면 팜 */
+.sell-window {
+  position: fixed;
+  bottom: 96px;
+  left: 50%;
+  z-index: 4;
+  transform: translateX(-50%);
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
   gap: 4px;
+  max-width: min(560px, 94vw);
+  max-height: 46vh;
+  padding: 8px 10px;
+  border: 1px solid #6a6478;
+  border-radius: 8px;
+  background: rgb(16 14 22 / 0.94);
   pointer-events: auto;
+}
+.sell-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 4px;
+  overflow-y: auto;
+}
+.sell-item.weapon {
+  border-color: #ffd860;
 }
 .sell-item {
   display: flex;
   align-items: center;
-  gap: 3px;
-  padding: 2px 5px;
+  gap: 4px;
+  padding: 3px 6px;
   font-size: 11px;
+  text-align: left;
   touch-action: none;
+}
+.sell-item span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .sell-item small {
   color: #ffd76a;

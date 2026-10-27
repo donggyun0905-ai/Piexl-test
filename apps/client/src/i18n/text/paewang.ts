@@ -42,9 +42,9 @@ export const PAEWANG_TEXT = {
   pwReward: { ko: "승리 {n}칩", en: "Win {n} chips", ja: "勝利 {n}チップ" },
   pwPrep: { ko: "준비방", en: "Preparation", ja: "準備部屋" },
   pwPrepHint: {
-    ko: "무기 1개 · 패시브 {p}개(같은 것은 3개까지) · 서로 다른 사용 아이템 {u}개를 골라 가져갑니다 · 전투에서는 모두 체력 ×10, 보호막 100으로 시작",
-    en: "Bring 1 weapon, {p} passives (up to 3 of the same) and {u} different consumables · Everyone starts battle with 10× HP and a 100 shield",
-    ja: "武器1つ・パッシブ{p}個（同じものは3個まで）・異なる使用アイテム{u}個を選んで持っていきます · 戦闘では全員体力×10、シールド100で開始",
+    ko: "무기 1개 · 패시브 {p}개(같은 것은 3개까지) · 서로 다른 사용 아이템 {u}개를 골라 가져갑니다 · 전투에서는 모두 보호막 500으로 시작",
+    en: "Bring 1 weapon, {p} passives (up to 3 of the same) and {u} different consumables · Everyone starts battle with a 500 shield",
+    ja: "武器1つ・パッシブ{p}個（同じものは3個まで）・異なる使用アイテム{u}個を選んで持っていきます · 戦闘では全員シールド500で開始",
   },
   pwWeapon: { ko: "무기", en: "Weapon", ja: "武器" },
   pwPassives: { ko: "패시브 {n}/{max}", en: "Passives {n}/{max}", ja: "パッシブ {n}/{max}" },

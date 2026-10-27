@@ -47,6 +47,9 @@ export interface MorphPlayerState {
   mXp?: Partial<Record<string, number>>;
   /** 각성 불사조 열기: 남은 틱 */
   mHeat?: number;
+  /** 화면용: 경험치로 방금 얻은 능력 · 방금 각성한 동물 (언제) — 게임 계산에는 쓰지 않음 */
+  mGot?: { id: string; tick: number };
+  mWake?: { animal: string; tick: number };
 }
 
 export interface FlyPlayerState {

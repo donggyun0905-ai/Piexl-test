@@ -40,6 +40,7 @@ import { drawDoomMarks, drawSamyeolGround } from "./samyeol";
 import { drawTerraAura, drawTerraGround } from "./terra2";
 import { drawClockMarks, drawRuneGround } from "./rune";
 import { drawMorphGround } from "./morphFx";
+import { drawMorphGot, drawMorphWake } from "./morphWake";
 import { drawTerraAuraB, drawTerraGroundB } from "./terra2b";
 import { drawTerraAuraC } from "./terra2c";
 import { drawGreatSpirit, drawSpiritKin } from "./spirits";
@@ -74,6 +75,8 @@ export interface DrawOptions {
   bossName?: (kind: string) => string;
   /** 장수 필살기 이름 (generalLegends.LEGENDS 순번) */
   legendName?: (i: number) => string;
+  /** 패시브 이름 (변희가 경험치로 얻은 능력을 머리 위에) */
+  passiveName?: (id: string) => string;
   /** 오니 능력치 오름 글자 (화면 언어) */
   oniUp?: (k: OniUp) => string;
   /** 버려진 자들 특수기 이름 (화면 언어) */
@@ -202,12 +205,14 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   drawUltOverlay(ctx, s, snap);
   drawImugiOverlay(ctx, s);
   if (opt.legendName) drawLegendName(ctx, s, alpha, opt.legendName);
+  drawMorphGot(ctx, s, alpha, snap, opt.passiveName);
   drawPaewang(ctx, s, alpha, snap);
   opt.overlay?.(ctx, snap);
   drawOniUps(ctx, s, alpha, snap, opt.oniUp);
   opt.modeOverlay?.(ctx, s, alpha, snap);
   drawAmbushOverlay(ctx, s, snap, s.player.aimDist === undefined ? null : cursorWorld(ctx, opt, k, camX, camY));
   drawBossBar(ctx, s);
+  drawMorphWake(ctx, s);
   if (opt.showReticle && !s.over) drawReticleFor(ctx, s, alpha, snap);
   // 화면에 붙는 글자 (카메라와 상관없이 왼쪽 위)
   drawComboHud(ctx, s, opt.pixelScale);

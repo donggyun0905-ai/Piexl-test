@@ -37,13 +37,13 @@ describe("패왕전", () => {
     }
   });
 
-  it("모두 진짜 캐릭터 자리 · 체력 ×10 · 보호막 100 · AI는 무작위 무기·패시브 10·서로 다른 아이템 2", () => {
+  it("모두 진짜 캐릭터 자리 · 보호막 500 · AI는 무작위 무기·패시브 10·서로 다른 아이템 2", () => {
     expect(PW_TIERS).toHaveLength(PW.gunLevels);
     for (const mode of PW_MODES) {
       const s = createPvp(3, mode, [{ characterId: "drifter", loadout: { weapon: "crossbow", passives: [], uses: [] } }]);
       expect(s.party!.length, mode).toBe(pwSeatCount(mode));
       const players = allPlayers(s);
-      expect(players[0]!.stats.maxHp, mode).toBeGreaterThanOrEqual(90 * PW.hpMul);
+      expect(players[0]!.stats.maxHp, mode).toBeGreaterThanOrEqual(90);
       expect(players[0]!.shieldPts).toBe(PW.shield);
       const ai = players[players.length - 1]!;
       if (mode !== "gungame") expect(ai.passives.length, mode).toBe(PW.passives);

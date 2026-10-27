@@ -1,6 +1,6 @@
 export * from "./floor";
 export { mine, PICKUP_HOLD_TICKS, recalcStats, rewardChoices } from "./items";
-export { sellPrice } from "./shop";
+export { SELL_WEAPON, sellPrice } from "./shop";
 export { applyRoom, continueToLastFloor, REST_HEAL } from "./rooms";
 export { REACTOR_BOOST, REACTOR_FULL, REACTOR_OVERHEAT } from "./laser";
 export { AMB_TICKS, GAS_LIFE } from "./medicWeapons";

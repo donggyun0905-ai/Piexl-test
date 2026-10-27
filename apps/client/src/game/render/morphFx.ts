@@ -87,8 +87,9 @@ export function drawMorphGround(ctx: Ctx, s: RunState, snap: Snap): void {
   if (!xp) return;
   ctx.fillStyle = "#1a1420";
   ctx.fillRect(x - 9, y + 9, 18, 3);
-  ctx.fillStyle = "#7ad860";
+  // 변희 사냥 경험치는 노랑 (풋내기 경험치와 다른 색)
+  ctx.fillStyle = "#ffd21a";
   ctx.fillRect(x - 8, y + 10, Math.round(16 * xp.fill), 1);
-  ctx.fillStyle = "#ffe07a";
+  ctx.fillStyle = "#ffffff";
   for (let i = 0; i < xp.got; i++) ctx.fillRect(x - 9 + i * 3, y + 13, 2, 1);
 }

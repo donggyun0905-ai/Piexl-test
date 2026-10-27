@@ -48,6 +48,9 @@ export function morphKill(s: RunState, e: EnemyState): boolean {
     const pick = left[createRng(deriveSeed(s.seed, "morphXp", w.animal, p.passives.length)).int(0, left.length - 1)]!;
     p.passives.push(pick);
     gained = true;
+    p.mGot = { id: pick, tick: s.tick };
+    // 마지막 능력 = 그 동물 각성
+    if (left.length === 1) p.mWake = { animal: w.animal, tick: s.tick };
     if (left.length === 1) v = 0;
     addEffect(s, { kind: "mEvo", x: p.x, y: p.y, dirX: ANIMALS.indexOf(w.animal), dirY: 0, size: left.length === 1 ? 48 : 24, maxTicks: 30 });
   }

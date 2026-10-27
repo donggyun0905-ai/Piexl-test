@@ -45,7 +45,7 @@ export function spawnShop(s: RunState, roomId: number): void {
   if (!s.sudden) addPickup(s, roomId, "use", "potion", CX + SHOP_X.potion, shopY(), 0, shopPrice(s, useBase("potion")));
   // 새로고침: itemId는 이 상점에서 누른 횟수
   addPickup(s, roomId, "reroll", "0", CX, CY + 18, 0, rerollPrice(s, PRICE.reroll));
-  // 휴지통: price = 버리면 돌려받는 돈 (무기 값의 1/4), itemId "1" = 한 번 눌러 확인을 기다리는 중
+  // 휴지통: F로 판매 창 열기·닫기 (itemId "1" = 열림), price = 무기를 팔면 받는 돈 (무기 값의 1/4)
   addPickup(s, roomId, "trash", "0", CX + SHOP_X.potion, CY + 18, 0, Math.max(1, Math.round(shopPrice(s, PRICE.weapon) / 4)));
 }
 
@@ -57,22 +57,15 @@ export function clearShelf(pk: Pickup): void {
 /** 무기를 버린 빈손 (풋내기 맨손과 같음, 땅에 내려놓지 않음) */
 export const EMPTY_HANDS: WeaponId = "fists";
 
-/** 휴지통 앞: F 한 번 = 확인 안내, 한 번 더 = 들고 있는 무기를 버리고 빈손(맨손)으로 (돈을 조금 돌려받음). 이미 빈손이면 안내 없음 */
+/** 휴지통 앞: F = 판매 창 열기·닫기 (confirm = 열림). 창에서 무기·사용 아이템·패시브를 골라 팜 (sellItem) */
 export function trashAt(s: RunState, pk: Pickup, interact: boolean): void {
-  const p = s.player;
-  if (s.prompt.kind !== "none" || p.weaponId === EMPTY_HANDS || goldLocked(p)) return;
-  const confirm = pk.itemId === "1";
-  s.prompt = { kind: "trash", price: pk.price, confirm };
-  if (!interact) return;
-  if (!confirm) {
-    pk.itemId = "1";
-    return;
-  }
-  pk.itemId = "0";
-  equipWeapon(s, EMPTY_HANDS);
-  addGold(s, pk.price);
-  addEffect(s, { kind: "hit", x: pk.x, y: pk.y, dirX: 0, dirY: 0, size: 6, maxTicks: 10 });
+  if (s.prompt.kind !== "none" || goldLocked(s.player)) return;
+  if (interact) pk.itemId = pk.itemId === "1" ? "0" : "1";
+  s.prompt = { kind: "trash", price: pk.price, confirm: pk.itemId === "1" };
 }
+
+/** 판매 번호: 무기 (-1) · 사용 아이템 칸 1·2 · 패시브 3~ (3 = 첫째) */
+export const SELL_WEAPON = -1;
 
 /** 팔 수 있는 패시브: 상점·보상에서 얻는 것만 (축복·경험치로 얻는 능력 등은 못 팜) */
 function sellable(id: PassiveId): boolean {
@@ -84,6 +77,8 @@ function sellable(id: PassiveId): boolean {
 export function sellPrice(s: RunState, n: number): number {
   const p = s.player;
   if (s.map.rooms[s.roomId]?.type !== "shop" || goldLocked(p)) return 0;
+  // 무기: 팔면 빈손(맨손) · 이미 빈손이면 못 팜
+  if (n === SELL_WEAPON) return p.weaponId === EMPTY_HANDS ? 0 : Math.max(1, Math.round(shopPrice(s, PRICE.weapon) / 4));
   if (n === 1 || n === 2) {
     const id = p.useSlots[n - 1];
     return id ? Math.max(1, Math.round(shopPrice(s, useBase(id)) / 4)) : 0;
@@ -92,12 +87,13 @@ export function sellPrice(s: RunState, n: number): number {
   return id && sellable(id) ? Math.max(1, Math.round(shopPrice(s, PRICE.passive) / 4)) : 0;
 }
 
-/** 상점에서 장비 팔기 (n: 1·2 = 사용 아이템 칸, 3~ = 패시브 순서). 패시브를 팔면 능력치도 다시 계산 */
+/** 상점에서 장비 팔기 (n: -1 = 무기, 1·2 = 사용 아이템 칸, 3~ = 패시브 순서). 패시브를 팔면 능력치도 다시 계산 */
 export function sellItem(s: RunState, n: number): void {
   const p = s.player;
   const price = sellPrice(s, n);
   if (price <= 0) return;
-  if (n <= 2) p.useSlots[n - 1] = null;
+  if (n === SELL_WEAPON) equipWeapon(s, EMPTY_HANDS);
+  else if (n <= 2) p.useSlots[n - 1] = null;
   else {
     p.passives.splice(n - 3, 1);
     recalcStats(s);

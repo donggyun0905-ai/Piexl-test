@@ -109,14 +109,14 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
   useSeat(s, view);
 }
 
-/** 패왕전 능력치: 모두 최대 체력 ×10 · AI는 모드 보정(체력·공격력) (items.recalcStats가 부름) */
+/** 패왕전 능력치: AI는 모드 보정(체력·공격력) (items.recalcStats가 부름) */
 export function pvpStats(s: RunState): void {
   const pv = s.pvp;
   if (!pv) return;
   const st = s.player.stats;
   const seat = pv.seats[seatNo(s)];
   const diff = PW_MODE[pv.mode].diff;
-  st.maxHp = Math.round(st.maxHp * PW.hpMul * (seat && !seat.human ? diff.hp : 1));
+  st.maxHp = Math.round(st.maxHp * (seat && !seat.human ? diff.hp : 1));
   if (seat && !seat.human) st.damage *= diff.dmg;
 }
 

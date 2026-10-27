@@ -2,12 +2,13 @@ import { describe, expect, it } from "vitest";
 import { CHARACTERS } from "../content";
 import { createRun, EMPTY_INPUT, stepSim } from "./index";
 import { addPickup } from "./loot";
-import { EMPTY_HANDS, spawnShop } from "./shop";
+import { EMPTY_HANDS, SELL_WEAPON, sellPrice, spawnShop } from "./shop";
 
 describe("상점 휴지통", () => {
-  it("F 한 번은 확인만, 한 번 더 누르면 무기를 버리고 빈손으로 · 돈을 조금 돌려받음 · 다음 무기를 주우면 빈손은 남지 않음", () => {
+  it("F로 판매 창 열기·닫기 · 창에서 무기를 팔면 빈손으로 돈을 조금 돌려받음 · 다음 무기를 주우면 빈손은 남지 않음", () => {
     const run = createRun(5, "warden");
     const p = run.player;
+    run.map.rooms[run.roomId]!.type = "shop";
     run.rooms[run.roomId]!.pickups = [];
     spawnShop(run, run.roomId);
     const trash = run.rooms[run.roomId]!.pickups.find((x) => x.kind === "trash")!;
@@ -17,16 +18,17 @@ describe("상점 휴지통", () => {
     stepSim(run, EMPTY_INPUT);
     expect(run.prompt).toMatchObject({ kind: "trash", confirm: false });
     stepSim(run, { ...EMPTY_INPUT, interact: true });
-    expect(p.weaponId).toBe("shortsword");
-    stepSim(run, EMPTY_INPUT);
     expect(run.prompt).toMatchObject({ kind: "trash", confirm: true });
+    expect(p.weaponId).toBe("shortsword");
     const gold = run.gold;
-    stepSim(run, { ...EMPTY_INPUT, interact: true });
+    expect(sellPrice(run, SELL_WEAPON)).toBe(trash.price);
+    stepSim(run, { ...EMPTY_INPUT, sell: SELL_WEAPON });
     expect(p.weaponId).toBe(EMPTY_HANDS);
     expect(run.gold).toBe(gold + trash.price);
-    // 빈손은 버릴 것이 없어 안내도 없음
-    stepSim(run, EMPTY_INPUT);
-    expect(run.prompt.kind).toBe("none");
+    // 빈손은 팔 무기가 없음 · F를 다시 누르면 창이 닫힘
+    expect(sellPrice(run, SELL_WEAPON)).toBe(0);
+    stepSim(run, { ...EMPTY_INPUT, interact: true });
+    expect(run.prompt).toMatchObject({ kind: "trash", confirm: false });
     // 바닥 무기를 주우면 빈손은 내려놓지 않음
     const room = run.rooms[run.roomId]!;
     room.pickups = [];
