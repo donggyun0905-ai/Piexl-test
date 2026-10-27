@@ -76,6 +76,8 @@ export interface DrawOptions {
   bossName?: (kind: string) => string;
   /** 장수 필살기 이름 (generalLegends.LEGENDS 순번) */
   legendName?: (i: number) => string;
+  /** 운명의 여행자 운명 이름 (버프 0 · 기술 1 · 능력 2, 칸 번호) */
+  fateName?: (part: 0 | 1 | 2, i: number) => string;
   /** 패시브 이름 (변희가 경험치로 얻은 능력을 머리 위에) */
   passiveName?: (id: string) => string;
   /** 오니 능력치 오름 글자 (화면 언어) */
@@ -200,7 +202,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawWandererAura(ctx, s, alpha, snap);
     drawSilkAmmo(ctx, s, alpha, snap);
     drawSilkStacks(ctx, s, snap);
-    drawSecretAura(ctx, s, alpha, snap);
+    drawSecretAura(ctx, s, alpha, snap, opt.fateName);
   });
   drawProjectiles(ctx, s, alpha, snap);
   drawEffects(ctx, s, alpha, snap);

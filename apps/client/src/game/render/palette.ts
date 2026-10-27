@@ -60,6 +60,7 @@ export const C = {
   wanderer: "#c84a4a",
   silk: "#ff8ad8",
   miner: "#5ad8e8",
+  voyager: "#e8b040",
   abandoned: "#7aa070",
   titan: "#c87a3a",
   oni: "#d84a3a",

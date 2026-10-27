@@ -39,7 +39,9 @@ export type Sfx =
   | "ting"
   | "spool"
   | "clank"
-  | "rumble";
+  | "rumble"
+  | "twang"
+  | "dice";
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;

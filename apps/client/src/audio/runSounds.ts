@@ -45,6 +45,8 @@ interface Seen {
   reloads: number;
   /** 에테르 광부: 광산 붕괴 (화면에 있는 효과 수) */
   caves: number;
+  /** 운명의 여행자: 모래시계 뒤집힘 수 */
+  flips: number;
 }
 
 /** 탄을 쏘는 느낌의 캐릭터 (나머지는 휘두르는 소리) */
@@ -86,6 +88,7 @@ function snapshot(s: RunState): Seen {
     rends: s.effects.filter((f) => f.kind === "skRend").length,
     reloads: s.effects.filter((f) => f.kind === "skReload").length,
     caves: s.effects.filter((f) => f.kind === "mnCave").length,
+    flips: s.player.vyFlips ?? 0,
   };
 }
 
@@ -154,6 +157,12 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
           fx.push("rumble");
           onShake(6);
         }
+      } else if (c === "voyager") {
+        // 운명의 여행자: 쏠 때 시위 소리 · 모래시계가 뒤집히면 주사위 구르는 소리
+        if (now.attacks > seen.attacks) fx.push("twang");
+        if (now.flips > seen.flips) fx.push("dice");
+        const i = fx.indexOf("shot");
+        if (i >= 0) fx.splice(i, 1);
       } else if (c === "wanderer") {
         // 방랑객: 적에게 칼선이 들어가면 "삥" · 그 밖의 칼질은 카타나 소리 · 천검란은 화면이 흔들림
         if (now.cuts > 0 && now.tick !== seen.tick) fx.push("ping");

@@ -7,8 +7,9 @@ import { orbitMoveMul } from "./orbit";
 import { punkMoveMul } from "./punk";
 import { riderMoveMul } from "./rider";
 import { slayerMoveMul } from "./slayer";
+import { voyagerMoveMul } from "./voyager";
 import type { PlayerState } from "./types";
 
 export function classMoveMul(p: PlayerState, tick: number): number {
-  return orbitMoveMul(p) * brawlMoveMul(p) * medicMoveMul(p) * gunMoveMul(p, tick) * flyMoveMul(p) * slayerMoveMul(p) * riderMoveMul(p) * punkMoveMul(p);
+  return orbitMoveMul(p) * brawlMoveMul(p) * medicMoveMul(p) * gunMoveMul(p, tick) * flyMoveMul(p) * slayerMoveMul(p) * riderMoveMul(p) * punkMoveMul(p) * voyagerMoveMul(p);
 }

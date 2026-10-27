@@ -1,5 +1,6 @@
 // 게임 진행: 고정 간격 계산 + 화면 주사율에 맞춘 그리기 + HUD 갱신 (React 밖에서 돌림)
 import { itemName } from "../i18n/items";
+import { fateParts } from "../i18n/items/voyagerAbilities";
 import { sellCodes } from "./SellBar";
 import { applyRoom, ARENA_LEVELS, expToNext, FLOOR_COUNT, HERO_FLOORS, LEGENDS, sellPrice, tabooPoints, trackerSkills, VIEW_HEIGHT, VIEW_WIDTH, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
@@ -215,6 +216,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       cursor: () => controls.mouse,
       legendName: (i) => LEGEND_NAMES[LEGENDS[i] ?? "charge"][lang],
       passiveName: (id) => itemName("passive", id as never, lang),
+      fateName: (part, i) => fateParts(i, lang)[part]!.name,
       tagName: (kind) => SPECIAL_NAMES[kind][lang],
       oniUp: (k) => t(k === "hp" ? "oniUpHp" : k === "regen" ? "oniUpRegen" : "oniUpReach"),
       bossName: (k) => t(k === "dragon" ? "bossDragon" : k === "godeater" ? "bossGodEater" : "bossPrimeval"),

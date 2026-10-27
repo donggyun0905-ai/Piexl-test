@@ -2,18 +2,22 @@
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
 import { drawMinerAura, drawMinerFx, drawMinerGround, drawMinerShot } from "./miner";
 import type { Snap } from "./palette";
+import { drawVoyagerAura, drawVoyagerGround, drawVoyagerShot, type FateName } from "./voyager";
+import { drawVoyagerFx } from "./voyagerFx";
 
 type Ctx = CanvasRenderingContext2D;
 
 export function drawSecretGround(ctx: Ctx, s: RunState, snap: Snap): void {
   drawMinerGround(ctx, s, snap);
+  drawVoyagerGround(ctx, s, snap);
 }
-export function drawSecretAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
+export function drawSecretAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap, fateName?: FateName): void {
   drawMinerAura(ctx, s, alpha, snap);
+  drawVoyagerAura(ctx, s, alpha, snap, fateName);
 }
 export function drawSecretShot(ctx: Ctx, pr: ProjectileState, x: number, y: number, tick: number): boolean {
-  return drawMinerShot(ctx, pr, x, y, tick);
+  return drawMinerShot(ctx, pr, x, y, tick) || drawVoyagerShot(ctx, pr, x, y, tick);
 }
 export function drawSecretFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
-  return drawMinerFx(ctx, fx, snap);
+  return drawMinerFx(ctx, fx, snap) || drawVoyagerFx(ctx, fx, snap);
 }

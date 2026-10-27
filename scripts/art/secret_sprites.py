@@ -1,4 +1,4 @@
-# 시즌 2 히든 캐릭터 방향 시트 (python3 scripts/art/secret_sprites.py) → apps/client/public/sprites/{miner}.png
+# 시즌 2 히든 캐릭터 방향 시트 (python3 scripts/art/secret_sprites.py) → apps/client/public/sprites/{miner,voyager}.png
 # 몸·얼굴은 s2_common.person (시즌 1 그림체), 캐릭터마다 다른 것은 *_deco 꾸밈 함수에만
 # 에테르 광부는 거대한 곡괭이를 들어서 64칸 (몸 크기는 32칸 캐릭터와 같음)
 import math
@@ -84,12 +84,77 @@ def miner_pick(c, k, g):
     # 휘두를 때는 칸 안에 들어오게 자루를 조금 짧게
     big_pick(c, k, hand[0], hand[1], deg, L=18 if g["cast"] and deg > -90 else 26)
 
+VOYAGER = dict(
+    skin=hx("#d8a884"), skinD=hx("#b08060"), eye=hx("#1e2a4a"), eyeL=hx("#4a5a8a"), outline=hx("#4e4262"),
+    top=hx("#c8a060"), arm=hx("#d8a884"), legs=hx("#d8a884"), legsD=hx("#b08060"), shoe=hx("#6a4a2a"),
+    hair=hx("#2a1e18"), hairD=hx("#1a120e"), hairL=hx("#4a3a30"),
+    armor=hx("#c8903a"), armorL=hx("#f0c060"), cloak=hx("#a8302a"), cloakD=hx("#701e1a"), skirt=hx("#e8dcc0"),
+    bow=hx("#e8b040"), bowL=hx("#ffe08a"), string=hx("#c8e8ff"), shaft=hx("#a87a4a"), tip=hx("#ffffff"), dice=hx("#f2ecdc"),
+)
+
+def bow(c, k, x, y, h=11, bend=4, drawn=False, d=1):
+    """큰 금빛 활 (가운데 손 x, y · 위아래 h · d 쪽으로 휨) · drawn이면 시위를 당겨 화살을 걸어 둠"""
+    for j in range(-h, h + 1):
+        u = abs(j) / h
+        bx = x + d * round(bend * (1 - u * u))
+        c.px(bx, y + j, k["bowL"] if abs(j) < 2 else k["bow"])
+        if u > 0.85: c.px(bx - d, y + j, k["bow"])
+    pull = -6 * d if drawn else 0
+    c.line(x, y - h, x + pull, y, k["string"]); c.line(x + pull, y, x, y + h, k["string"])
+    if drawn:
+        c.line(x + pull, y, x + d * (bend + 6), y, k["shaft"]); c.px(x + d * (bend + 7), y, k["tip"]); c.px(x + d * (bend + 6), y - 1, k["tip"]); c.px(x + d * (bend + 6), y + 1, k["tip"])
+
+def voyager_deco(c, layer, g):
+    k = g["k"]
+    v, hx0, hy, hw, hh = g["view"], g["hx"], g["hy"], g["hw"], g["hh"]
+    tx, ty, tw, th, cx, hip = g["tx"], g["ty"], g["tw"], g["th"], g["cx"], g["hip"]
+    if layer == "back_hair":
+        # 붉은 망토 (등 뒤로 길게)
+        if v == "back": c.rect(tx - 1, ty, tw + 2, th + 6, k["cloak"]); c.rect(cx, ty + 2, 1, th + 3, k["cloakD"])
+        elif v == "side": c.rect(cx - 6, ty + 1, 3, th + 5, k["cloak"])
+        else: c.px(tx - 1, ty + th + 2, k["cloak"]); c.px(tx + tw, ty + th + 2, k["cloak"])
+    if layer == "legs":
+        # 흰 천 치마 · 샌들 끈
+        if v in ("front", "back"): c.rect(tx, hip - 1, tw, 4, k["skirt"]); c.px(cx, hip + 1, k["armor"])
+        else: c.rect(cx - 3, hip - 1, 6, 4, k["skirt"])
+    if layer == "body":
+        # 청동 흉갑 · 어깨에 망토 매듭 · 허리에 주사위 주머니
+        if v in ("front", "back"):
+            c.rect(tx, ty, tw, th - 1, k["armor"])
+            if v == "front":
+                c.rect(cx - 2, ty + 2, 1, 3, k["armorL"]); c.rect(cx + 1, ty + 2, 1, 3, k["armorL"]); c.rect(tx, ty + th - 2, tw, 1, k["armorL"])
+                c.px(tx, ty, k["cloak"]); c.px(tx + tw - 1, ty, k["cloak"]); c.rect(tx + tw - 2, hip - 2, 2, 2, k["dice"])
+        else:
+            c.rect(cx - 3, ty, 6, th - 1, k["armor"]); c.px(cx + 1, ty + 2, k["armorL"]); c.rect(cx + 2, hip - 2, 2, 2, k["dice"])
+    if layer == "hair":
+        # 짧게 곱슬진 검은 머리 · 짧은 수염 (턱 아래)
+        if v == "front":
+            c.rect(hx0, hy, hw, 3, k["hair"]); c.rect(hx0 - 1, hy + 1, 2, hh - 4, k["hair"]); c.rect(hx0 + hw - 1, hy + 1, 2, hh - 4, k["hair"])
+            for x in range(hx0, hx0 + hw, 2): c.px(x, hy - 1, k["hair"])
+            c.rect(hx0 + 2, hy + hh, hw - 4, 1, k["hairD"])
+        elif v == "back":
+            c.rect(hx0 - 1, hy, hw + 2, hh, k["hair"])
+            for x in range(hx0 - 1, hx0 + hw + 1, 2): c.px(x, hy - 1, k["hair"])
+        else:
+            c.rect(hx0, hy, hw, 3, k["hair"]); c.rect(hx0 - 1, hy + 1, 5, hh - 3, k["hair"]); c.px(hx0 + hw - 3, hy + hh, k["hairD"])
+            for x in range(hx0, hx0 + hw, 2): c.px(x, hy - 1, k["hair"])
+    if layer == "hat":
+        # 큰 금빛 활: 걸을 땐 왼손(앞)·등(뒤)·앞(옆), 공격은 시위를 당긴 모습
+        if g["cast"]:
+            if v == "front": bow(c, k, tx + tw + 6, ty + 2, 12, 4, True)
+            else: bow(c, k, cx + 7, ty + 2, 12, 4, True)
+        elif v == "front": bow(c, k, tx - 3, ty + 4, 11, 3, False, -1)
+        elif v == "back": c.line(tx - 1, ty - 4, tx + tw, ty + th + 3, k["bow"]); c.line(tx, ty - 4, tx + tw + 1, ty + th + 3, k["bowL"])
+        else: bow(c, k, cx + 3, ty + 4, 11, 3)
+
 GEO = {
     "miner": dict(head=(10, 9), torso=(10, 8), leg=7, size=64),
+    "voyager": dict(head=(10, 9), torso=(10, 8), leg=8, size=48),
 }
 
 def main():
     save_sheet("miner", lambda r, col: person(MINER, r, col, GEO["miner"], miner_deco), size=64)
+    save_sheet("voyager", lambda r, col: person(VOYAGER, r, col, GEO["voyager"], voyager_deco), size=48)
 
 if __name__ == "__main__":
     main()

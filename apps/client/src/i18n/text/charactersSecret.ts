@@ -8,4 +8,11 @@ export const CHARACTER_TEXT_SECRET = {
   },
   pick: { ko: "곡괭이", en: "Pickaxe", ja: "つるはし" },
   minerOre: { ko: "원석", en: "Ore", ja: "原石" },
+  voyager: { ko: "운명의 여행자", en: "Voyager of Fate", ja: "運命の旅人" },
+  voyagerDesc: {
+    ko: "히든 · 신들의 바다를 떠도는 활잡이. 무기는 운명의 활 하나: 아주 느리지만 모아 쏘는 한 발이 강함 · 모래시계가 다 차면 뒤집히며 주사위를 굴려 운명이 바뀜 (버프 36 · 기술 36 · 능력 36: 배·병사·세이렌·외눈 거인의 바위·목마 등) · 전용 아이템 10 (두 개의 주사위 등)",
+    en: "Hidden · An archer adrift on the sea of the gods. One weapon, the Bow of Fate: very slow, but each drawn shot hits hard · when the hourglass fills it flips and the dice decide a new fate (36 buffs · 36 skills · 36 abilities: ships, soldiers, sirens, a giant's boulder, a wooden horse and more) · 10 own items (Twin Dice and more)",
+    ja: "ヒドゥン · 神々の海をさすらう弓使い。武器は運命の弓ひとつ：とても遅いが溜めて撃つ一発が強い · 砂時計が満ちると返り、サイコロで運命が変わる（バフ36 · 技36 · 能力36：船・兵士・セイレーン・一つ目巨人の岩・木馬など）· 専用アイテム10（二つのサイコロなど）",
+  },
+  fate: { ko: "운명의 활", en: "Bow of Fate", ja: "運命の弓" },
 };

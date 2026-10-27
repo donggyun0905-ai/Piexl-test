@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.154",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "시즌 2 히든 캐릭터 운명의 여행자 (무작위 캐릭터 5% · 연습장): 운명의 활 하나로 시위를 당겨 쏘는 강한 한 발 (아주 느리지만 끝까지 당기면 기술 발동 · 1.5배)",
+        "머리 위 모래시계가 15초마다 뒤집히며 주사위를 굴려 운명이 바뀜: 버프 36 · 기술 36(유도·휘는 화살·거대한 마력 화살·화살비·빛줄기·번개 등) · 능력 36(배·병사·세이렌·거인의 바위·나무 목마·충견 등), 이전 운명은 사라짐 · 운명 36칸 목록은 캐릭터 설명에",
+        "운명의 여행자 전용 아이템 10 (두 개의 주사위: 36칸 중 정확한 칸 · 손때 묻은 주사위 · 운명 붙잡기 · 여섯 눈의 축복 등)",
+      ],
+      en: [
+        "New Season 2 hidden character Voyager of Fate (5% from Random Character · Practice): one Bow of Fate, drawn for a single strong shot (very slow, but a full draw triggers a skill and deals ×1.5)",
+        "Every 15s the hourglass above your head flips and the dice change your fate: 36 buffs · 36 skills (homing, curving arrows, giant mana arrow, arrow rain, beams, lightning and more) · 36 abilities (ships, soldiers, sirens, a giant's boulder, a wooden horse, a loyal hound and more); the previous fate fades · the full 36-cell list is in the character guide",
+        "Voyager of Fate has 10 own items (Twin Dice: the exact cell of 36 · Worn Lucky Die · Hold Fast to Fate · Blessing of Sixes and more)",
+      ],
+      ja: [
+        "シーズン2ヒドゥンキャラクター 運命の旅人（ランダムキャラ5% · 練習場）: 運命の弓ひとつで引き絞って撃つ強い一発（とても遅いが最後まで引くと技が発動 · 1.5倍）",
+        "頭上の砂時計が15秒ごとに返り、サイコロで運命が変わる: バフ36 · 技36（誘導・曲がる矢・巨大な魔力の矢・矢の雨・光の筋・雷など）· 能力36（船・兵士・セイレーン・巨人の岩・木馬・忠犬など）、前の運命は消える · 36マスの一覧はキャラクター説明に",
+        "運命の旅人の専用アイテム10（二つのサイコロ：36マスの正確なマス · 使い込んだサイコロ · 運命をつかむ · 六の目の祝福など）",
+      ],
+    },
+  },
+  {
     version: "0.48.153",
     date: "2026-10-28",
     items: {

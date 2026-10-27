@@ -22,3 +22,4 @@ export * from "./tdMaps";
 export * from "./cards/index";
 export * from "./taboo";
 export * from "./petDefs";
+export * from "./voyagerFates";

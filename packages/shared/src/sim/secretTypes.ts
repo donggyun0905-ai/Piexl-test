@@ -10,6 +10,9 @@ export interface GroundMark {
   tx?: number;
   ty?: number;
   hit?: number[];
+  /** 범위 · 종류 (운명의 여행자 화살비·운석·목마) */
+  r?: number;
+  kind?: string;
 }
 
 export interface MinerPlayerState {
@@ -32,6 +35,35 @@ export interface MinerEnemyState {
   mnGemT?: number;
 }
 
+export interface VoyagerFateState {
+  /** 운명 칸(0~35) · 주사위 눈(하나 또는 둘) · 세기(눈의 합) · 버프 두 배(같은 눈) */
+  i: number;
+  dice: number[];
+  pips: number;
+  blessed?: boolean;
+}
+
+export interface VoyagerPlayerState {
+  /** 운명의 여행자: 모래시계(찬 틱) · 지금 운명 · 바로 전 운명(운명 붙잡기) · 몇 번째 뒤집힘 · 모은 틱 · 첫 발(first 버프) */
+  vyGlass?: number;
+  vyFate?: VoyagerFateState;
+  vyPrev?: VoyagerFateState;
+  vyFlips?: number;
+  vyCharge?: number;
+  vyFirst?: boolean;
+  /** 잇따라 쏠 화살(남은 틱) · 떨어질 화살비·운석·목마 · 능력마다 다음까지 틱 · 지난 틱까지 본 처치 수 */
+  vyVolley?: { t: number; mul: number }[];
+  vyMarks?: GroundMark[];
+  vyCd?: Record<string, number>;
+  vySeen?: number;
+}
+
+export interface VoyagerEnemyState {
+  /** 운명의 여행자 버프로 더 아픈 틱까지 · 더 받는 비율 */
+  vyShredT?: number;
+  vyShred?: number;
+}
+
 /** 시즌 2 히든 캐릭터 상태 모음 (types에서 한 이름으로 씀) */
-export interface SecretPlayerState extends MinerPlayerState {}
-export interface SecretEnemyState extends MinerEnemyState {}
+export interface SecretPlayerState extends MinerPlayerState, VoyagerPlayerState {}
+export interface SecretEnemyState extends MinerEnemyState, VoyagerEnemyState {}

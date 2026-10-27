@@ -2,7 +2,7 @@
 import type { WeaponId } from "./content";
 
 /** 전용 무기·아이템을 가질 수 있는 캐릭터 (content.WeaponDef.exclusive · items.PassiveDef.exclusive) */
-export type ExclusiveId = "warden" | "drifter" | "mage" | "mystic" | "engineer" | "elementalist" | "brawler" | "doctor" | "gunner" | "beast" | "ninja" | "chronomancer" | "summoner" | "novice" | "bedouin" | "general" | "imugi" | "apostle" | "stargazer" | "duck" | "abandoned" | "titan" | "oni" | "scribe" | "idra" | "byeonhui" | "fly" | "elder" | "ren" | "spiritist" | "plague" | "slayer" | "eater" | "mukin" | "samyeol" | "automata" | "rider" | "bomber" | "artifacter" | "punk" | "tracker" | "forgotten" | "remnant" | "wanderer" | "silk" | "miner";
+export type ExclusiveId = "warden" | "drifter" | "mage" | "mystic" | "engineer" | "elementalist" | "brawler" | "doctor" | "gunner" | "beast" | "ninja" | "chronomancer" | "summoner" | "novice" | "bedouin" | "general" | "imugi" | "apostle" | "stargazer" | "duck" | "abandoned" | "titan" | "oni" | "scribe" | "idra" | "byeonhui" | "fly" | "elder" | "ren" | "spiritist" | "plague" | "slayer" | "eater" | "mukin" | "samyeol" | "automata" | "rider" | "bomber" | "artifacter" | "punk" | "tracker" | "forgotten" | "remnant" | "wanderer" | "silk" | "miner" | "voyager";
 
 export interface CharacterDef extends Partial<ExtraStats> {
   id: string;
@@ -102,6 +102,8 @@ export const CHARACTERS = {
   silk: { id: "silk", maxHp: 90, damage: 10, moveSpeed: 1.35, luck: 1, startWeapon: "skThread" },
   /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 쓰러진 적은 에테르 결정 · 대시는 땅굴 · 원석 100이면 광산 붕괴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },
+  /** 운명의 여행자 (히든, 시즌 2): 운명의 활로 모아 쏘는 한 발 · 모래시계가 뒤집힐 때마다 주사위로 운명(버프·기술·능력 36칸) (sim/voyager) */
+  voyager: { id: "voyager", maxHp: 105, damage: 14, moveSpeed: 1.3, luck: 2, startWeapon: "vyBow" },
   /** 별지기 (히든, 무작위 10%): 별자리를 그려 빛줄기로 태움 (sim/star) */
   stargazer: { id: "stargazer", maxHp: 110, damage: 12, moveSpeed: 1.3, luck: 1, startWeapon: "starStaff" },
   /** 오리 (히든, 무작위 5%): 꽥 음파·새끼 오리 (sim/duck) */
@@ -133,7 +135,7 @@ for (const row of Object.values(CHARACTERS)) for (const [k, v] of Object.entries
 
 export type CharacterId = keyof typeof CHARACTERS;
 /** 숨은 캐릭터: 선택창·순위표·타워 디펜스에는 없고 무작위 캐릭터(10%)·연습장에서만 */
-export const HIDDEN_CHARACTERS: readonly CharacterId[] = ["stargazer", "duck", "scribe", "miner"];
+export const HIDDEN_CHARACTERS: readonly CharacterId[] = ["stargazer", "duck", "scribe", "miner", "voyager"];
 /** 보통 고를 수 있는 캐릭터 (숨은 캐릭터 빼고) · ALL_CHARACTER_IDS는 숨은 캐릭터까지 */
 export const ALL_CHARACTER_IDS = Object.keys(CHARACTERS) as CharacterId[];
 export const CHARACTER_IDS = ALL_CHARACTER_IDS.filter((id) => !HIDDEN_CHARACTERS.includes(id));
