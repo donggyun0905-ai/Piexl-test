@@ -44,8 +44,12 @@ export const REMNANT_WEAPONS = {
 export const REMNANT = {
   /** 뒤로 순간이동한 뒤 이 틱 동안은 뒤에서 친 것으로 셈 */
   backWindow: 20,
-  /** 남긴 잔영: 이 틱 뒤에 그 자리에서 한 번 벰 (반경 · 공격력 배율) */
-  echoDelay: 20,
+  /** 순간이동은 적 바로 뒤가 아니라 이만큼 더 떨어진 곳으로 · 그림자(투명·무적) 최대 틱 · 그림자에서 나와 친 뒤치기 추가 배율 */
+  blinkBack: 24,
+  shadeTicks: 150,
+  shadeMul: 2,
+  /** 남긴 분신: 이 틱 동안 적이 분신을 쫓고(어그로), 끝날 때 그 자리에서 한 번 벰 (반경 · 공격력 배율) */
+  echoDelay: 90,
   echoR: 22,
   echoMul: 0.5,
   /** 독: 0.5초마다 피해의 venom배, 이 틱 동안 */

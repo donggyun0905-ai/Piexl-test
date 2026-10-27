@@ -140,7 +140,9 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
   if (s.party && !isAlive(p)) return drawDown(ctx, p, snap);
   const px = lerp(p.prevX, p.x, alpha);
   const py = lerp(p.prevY, p.y, alpha);
-  const blink = p.invulnTicks > 0 && Math.floor(p.invulnTicks / 3) % 2 === 0;
+  // 잔영 그림자: 깜빡이지 않고 어두운 반투명 몸
+  const shade = (p.rmShade ?? 0) > 0;
+  const blink = !shade && p.invulnTicks > 0 && Math.floor(p.invulnTicks / 3) % 2 === 0;
   const moving = p.x !== p.prevX || p.y !== p.prevY;
   const pose = { faceX: p.faceX, faceY: p.faceY, moving, casting: isCasting(s.tick, p.attackCount), step: Math.floor(s.tick / 8) };
   if (p.dashTicks > 0) {
@@ -176,8 +178,13 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     // 변희: 든 동물의 모습 (옆모습)
     const body = morphSheet(p) ?? (p.ckHeld === false ? `${sheet}_bare` : sheet);
     // 각성한 하늘 짐승이 공중 습격 중이면 몸이 보이지 않음
+    if (shade) {
+      ctx.globalAlpha = 0.4;
+      ctx.filter = "brightness(0.15) sepia(1) hue-rotate(220deg) saturate(2)";
+    }
     if (!hideBody && !p.mRaid) drawBody(ctx, p.characterId, x, y, p.r, morphPose(p, pose), moving ? Math.floor(s.tick / 8) : 0, body, club);
     if (twirl) ctx.restore();
+    ctx.filter = "none";
     ctx.globalAlpha = 1;
     if (showHitbox) drawHitRing(ctx, x, y, p.r);
     if (!hideBody && !s.sudden) drawPlayerHp(ctx, p, x, y, s.tick);

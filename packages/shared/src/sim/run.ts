@@ -12,6 +12,7 @@ import { ROOM_COLS, ROOM_ROWS, TILE_SIZE } from "../constants";
 import { baseStats, CHARACTERS, type CharacterId } from "../content";
 import { computeStats } from "../stats";
 import { updateEnemies } from "./enemies";
+import { withDecoy } from "./remnant";
 import { ultBusy } from "./bossKit";
 import { updatePlayer } from "./player";
 import { updateLaserGear } from "./laserGear";
@@ -167,7 +168,8 @@ export function stepWorld(s: RunState): void {
   const frozen = s.freezeTicks > 0 && !s.enemies.some(ultBusy);
   if (frozen) s.freezeTicks--;
   else {
-    updateEnemies(s);
+    // 잔영 분신이 있으면 적은 분신을 쫓음
+    withDecoy(s, () => updateEnemies(s));
     updateHazards(s);
   }
   updateProjectiles(s, frozen);

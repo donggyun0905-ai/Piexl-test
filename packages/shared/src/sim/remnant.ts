@@ -1,5 +1,6 @@
 // 잔영(아스칼론, 시즌 2): 그림자 속 암살자. 아주 빠른 단검 공격 · 모든 상태이상 면역 · 치명타 25%/250%(characters)
-// 노리는 적이 칼끝에서 멀면 그 적 뒤로 순간이동해 등 뒤를 벰 (뒤에서 친 피해 배율). 떠난 자리에는 잔영이 남아 잠시 뒤 한 번 더 벰
+// 노리는 적이 칼끝에서 멀면 그 적 등 뒤 조금 떨어진 곳으로 순간이동해 그림자(투명·무적)가 되고, 떠난 자리에는 분신이 남아 적을 끌어모음(어그로)
+// 그림자에서 다음 공격은 등 뒤로 바짝 붙어 치는 뒤치기 (크게 아픔, 그림자가 풀림) · 분신은 1.5초 뒤 그 자리에서 한 번 벰
 // 수치는 weaponsRemnant.REMNANT, 아이템은 itemsRemnant
 import { TICK_RATE } from "../constants";
 import { REMNANT_PERKS as K } from "../itemsRemnant";
@@ -27,23 +28,59 @@ function cleanse(p: PlayerState): void {
 /** 순간이동 대기 */
 const blinkGap = (p: PlayerState) => Math.round(styleOf(p).blinkGap * (hasPerk(p, "rmStep") ? K.rmStep.cd : 1));
 
-/** 적 뒤로 순간이동 (떠난 자리에 잔영) */
+/** 적 뒤로 순간이동: 떠난 자리에 분신(적이 쫓음), 나는 적 등 뒤 조금 떨어진 곳에서 그림자(투명·무적)가 됨 */
 function blink(s: RunState, e: EnemyState): void {
   const p = s.player;
   const d = normalize(e.x - p.x, e.y - p.y) ?? [p.faceX, p.faceY];
   leaveEcho(s, p.x, p.y);
   addEffect(s, { kind: "rmVanish", x: p.x, y: p.y, dirX: d[0], dirY: d[1], size: 8, maxTicks: 14 });
-  p.x = e.x + d[0] * (e.r + p.r + 4);
-  p.y = e.y + d[1] * (e.r + p.r + 4);
-  keepInRoom(p, roomGrid(s));
-  p.prevX = p.x;
-  p.prevY = p.y;
+  moveTo(s, e.x + d[0] * (e.r + p.r + R.blinkBack), e.y + d[1] * (e.r + p.r + R.blinkBack));
   p.faceX = -d[0];
   p.faceY = -d[1];
   p.rmBlink = blinkGap(p);
+  p.rmShade = R.shadeTicks;
+  p.invulnTicks = Math.max(p.invulnTicks, 2);
+}
+
+function moveTo(s: RunState, x: number, y: number): void {
+  const p = s.player;
+  p.x = x;
+  p.y = y;
+  keepInRoom(p, roomGrid(s));
+  p.prevX = p.x;
+  p.prevY = p.y;
+}
+
+/** 그림자에서 나와 뒤치기: 노리는 적 등 뒤로 바짝 붙어 크게 벰 (그림자가 풀림) */
+function ambush(s: RunState, e: EnemyState): void {
+  const p = s.player;
+  const d = normalize(p.x - e.x, p.y - e.y) ?? [-p.faceX, -p.faceY];
+  moveTo(s, e.x + d[0] * (e.r + p.r + 2), e.y + d[1] * (e.r + p.r + 2));
+  p.faceX = -d[0];
+  p.faceY = -d[1];
+  p.rmShade = 0;
   p.rmBack = R.backWindow;
   if (hasPerk(p, "rmVanish")) p.invulnTicks = Math.max(p.invulnTicks, K.rmVanish.ticks);
-  addEffect(s, { kind: "rmAppear", x: p.x, y: p.y, dirX: -d[0], dirY: -d[1], size: 10, maxTicks: 14 });
+  addEffect(s, { kind: "rmAppear", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: 10, maxTicks: 14 });
+}
+
+/** 적 움직임을 계산하는 동안 분신 자리를 플레이어 자리로 보여 줌 (분신에게 어그로: 쫓기·공격·기술 모두 분신 쪽). 그동안 받는 피해는 없음 */
+export function withDecoy(s: RunState, fn: () => void): void {
+  const d = remnantDecoy(s);
+  if (!d) return fn();
+  const p = s.player;
+  const keep = { x: p.x, y: p.y, prevX: p.prevX, prevY: p.prevY, invulnTicks: p.invulnTicks };
+  p.x = p.prevX = d.x;
+  p.y = p.prevY = d.y;
+  p.invulnTicks = Math.max(p.invulnTicks, 2);
+  fn();
+  Object.assign(p, keep);
+}
+
+/** 분신: 적이 쫓는 자리 (가장 최근에 남긴 분신, 없으면 없음) */
+export function remnantDecoy(s: RunState): { x: number; y: number } | undefined {
+  const p = s.player;
+  return isRemnant(p) && !s.party ? p.rmEchoes?.[p.rmEchoes.length - 1] : undefined;
 }
 
 function leaveEcho(s: RunState, x: number, y: number): void {
@@ -57,11 +94,12 @@ function fromBehind(p: PlayerState, e: EnemyState): boolean {
   return e.dirX * (p.x - e.x) + e.dirY * (p.y - e.y) < 0;
 }
 
-function cut(s: RunState, e: EnemyState, dmg: number): void {
+function cut(s: RunState, e: EnemyState, dmg: number, shade = false): void {
   const p = s.player;
   const st = styleOf(p);
   let d = dmg;
   if (fromBehind(p, e)) d *= st.backMul + (hasPerk(p, "rmBackstab") ? K.rmBackstab.add : 0);
+  if (shade) d *= R.shadeMul;
   if (hasPerk(p, "rmExecute") && e.hp <= e.maxHp * K.rmExecute.hp) d *= K.rmExecute.mul;
   strike(s, e, d);
   if (st.venom) poison(e, dmg * st.venom, R.venomTicks);
@@ -73,13 +111,16 @@ function slash(s: RunState): void {
   const p = s.player;
   const st = styleOf(p);
   const target = nearest(s, p.stats.range);
-  if (target) {
+  const shade = (p.rmShade ?? 0) > 0 && !!target;
+  if (target && shade) ambush(s, target);
+  else if (target) {
     const far = Math.hypot(target.x - p.x, target.y - p.y) > st.reach + target.r;
-    if (far && (p.rmBlink ?? 0) <= 0) blink(s, target);
+    // 멀면 순간이동해 그림자가 됨 (이번 공격은 쉬고, 다음 공격이 뒤치기)
+    if (far && (p.rmBlink ?? 0) <= 0) return blink(s, target);
     const d = normalize(target.x - p.x, target.y - p.y);
     if (d) [p.faceX, p.faceY] = d;
   }
-  for (let h = 0; h < st.hits; h++) for (const e of inCone(s, st.reach, st.arc)) cut(s, e, p.stats.damage);
+  for (let h = 0; h < st.hits; h++) for (const e of inCone(s, st.reach, st.arc)) cut(s, e, p.stats.damage, shade);
   addEffect(s, { kind: "rmSlash", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: st.reach, maxTicks: 8, width: st.arc <= -1 ? 0 : st.hits });
   if (st.throws) for (let i = 0; i < st.throws; i++) shoot(s, (i - (st.throws - 1) / 2) * R.throwSpread, { damage: p.stats.damage * 0.6, spirit: "rmKnife", r: R.throwR, range: p.stats.range });
 }
@@ -88,6 +129,11 @@ function slash(s: RunState): void {
 function update(s: RunState): void {
   const p = s.player;
   cleanse(p);
+  // 그림자: 투명·무적 (공격하면 풀림)
+  if ((p.rmShade ?? 0) > 0) {
+    p.rmShade = (p.rmShade ?? 0) - 1;
+    p.invulnTicks = Math.max(p.invulnTicks, 2);
+  }
   if (hasPerk(p, "rmBlood")) updateBleed(s);
   if ((p.rmBlink ?? 0) > 0) p.rmBlink = (p.rmBlink ?? 0) - 1;
   if ((p.rmBack ?? 0) > 0) p.rmBack = (p.rmBack ?? 0) - 1;
@@ -125,5 +171,5 @@ export function remnantTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetRemnant(p: PlayerState): void {
-  for (const k of ["rmBlink", "rmBack", "rmEchoes", "rmDash", "rmSeen"] as const) delete p[k];
+  for (const k of ["rmBlink", "rmBack", "rmEchoes", "rmDash", "rmSeen", "rmShade"] as const) delete p[k];
 }

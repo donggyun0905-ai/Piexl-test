@@ -39,15 +39,18 @@ export function drawRemnantShot(ctx: Ctx, pr: ProjectileState, x: number, y: num
   return true;
 }
 
-/** 남아 있는 잔영: 떠난 자리에 옅은 몸 그림자 (곧 한 번 벰) */
+/** 남아 있는 분신: 떠난 자리에 나와 똑같은 몸 (적이 쫓음, 끝날 때 한 번 벰) · 발밑 보라 고리 · 사라지기 직전 옅어짐 */
 export function drawRemnantEchoes(ctx: Ctx, s: RunState, snap: Snap): void {
   const p = s.player;
   if (p.characterId !== "remnant" || !p.rmEchoes?.length) return;
   for (const e of p.rmEchoes) {
+    const x = snap(e.x);
+    const y = snap(e.y);
     ctx.save();
-    ctx.globalAlpha = 0.25 + 0.2 * (e.t / 20);
-    ctx.filter = "grayscale(1) brightness(0.6) sepia(1) hue-rotate(220deg) saturate(3)";
-    drawCharacter(ctx, "remnant", snap(e.x), snap(e.y), p.r, { faceX: p.faceX, faceY: p.faceY, moving: false, casting: true, step: 0 });
+    ctx.globalAlpha = 0.5;
+    arc(ctx, x, y + p.r - 1, p.r + 2 + Math.sin(s.tick * 0.3), 0, TAU, VIO, 1);
+    ctx.globalAlpha = Math.min(1, 0.3 + e.t / 15);
+    drawCharacter(ctx, "remnant", x, y, p.r, { faceX: p.faceX, faceY: p.faceY, moving: false, casting: e.t < 8, step: 0 });
     ctx.restore();
   }
 }

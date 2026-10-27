@@ -16,9 +16,9 @@ export const CHARACTER_TEXT_ASCALON = {
   light: { ko: "빛", en: "Light", ja: "光" },
   remnant: { ko: "잔영", en: "Remnant", ja: "残影" },
   remnantDesc: {
-    ko: "암살 · 아스칼론. 그림자 속에서 움직이는 남자 암살자. 아주 빠른 단검 공격 · 멀리 있는 적 뒤로 순간이동해 등 뒤를 벰 · 떠난 자리에 잔영이 남아 한 번 더 벰 · 모든 상태이상 면역 · 치명타 25% · 치명타 피해 250% · 무기 10 · 전용 아이템 10",
-    en: "Assassin · Ascalon. A man who moves through the shadows. Very fast dagger cuts · blinks behind far foes to stab their backs · leaves an afterimage that cuts once more · immune to all status effects · 25% crit · 250% crit damage · 10 weapons · 10 own items",
-    ja: "暗殺 · アスカロン。影の中を動く男の暗殺者。とても速い短剣攻撃 · 遠い敵の背後へ瞬間移動して背中を斬る · 去った場所に残影が残りもう一度斬る · すべての状態異常に免疫 · クリティカル25% · クリティカルダメージ250% · 武器10 · 専用アイテム10",
+    ko: "암살 · 아스칼론. 그림자 속에서 움직이는 남자 암살자. 아주 빠른 단검 공격 · 멀리 있는 적 뒤로 순간이동해 등 뒤를 벰 · 떠난 자리에 잔영이 남아 한 번 더 벰 · 모든 상태이상 면역 · 치명타 25% · 치명타 피해 250% · 무기 10 · 전용 아이템 10 · 순간이동하면 떠난 자리의 분신이 적을 끌어모으고, 나는 그림자(무적)로 숨었다가 뒤치기로 크게 벰",
+    en: "Assassin · Ascalon. A man who moves through the shadows. Very fast dagger cuts · blinks behind far foes to stab their backs · leaves an afterimage that cuts once more · immune to all status effects · 25% crit · 250% crit damage · 10 weapons · 10 own items · when blinking, a decoy left behind draws enemies while you hide as a shadow (invulnerable) and strike a heavy backstab",
+    ja: "暗殺 · アスカロン。影の中を動く男の暗殺者。とても速い短剣攻撃 · 遠い敵の背後へ瞬間移動して背中を斬る · 去った場所に残影が残りもう一度斬る · すべての状態異常に免疫 · クリティカル25% · クリティカルダメージ250% · 武器10 · 専用アイテム10 · 瞬間移動すると残した分身が敵を引きつけ、自分は影（無敵）に潜んで背後から大きく斬る",
   },
   phantom: { ko: "그림자 단검", en: "Shadow Dagger", ja: "影の短剣" },
   wanderer: { ko: "방랑객", en: "Wanderer", ja: "放浪者" },

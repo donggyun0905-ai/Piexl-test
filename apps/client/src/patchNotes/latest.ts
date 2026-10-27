@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.142",
+    date: "2026-10-27",
+    items: {
+      ko: [
+        "잔영: 순간이동하면 떠난 자리에 내 모습 그대로의 분신이 남아 적이 분신을 쫓고 공격·기술도 분신 쪽으로 (1.5초, 끝날 때 한 번 벰)",
+        "나는 적 등 뒤 조금 떨어진 곳에서 그림자(어두운 반투명·무적)가 됨 → 다음 공격은 등 뒤로 바짝 붙어 치는 뒤치기 (피해 2배 더, 그림자가 풀림) · '사라짐'은 뒤치기 뒤 0.5초 무적",
+      ],
+      en: [
+        "Remnant: blinking leaves a decoy that looks just like you; enemies chase it and aim attacks and skills at it (1.5s, it slashes once at the end)",
+        "You become a shadow (dark, translucent, invulnerable) a bit behind the enemy → your next attack is a close backstab (×2 more damage, ends the shadow) · 'Vanish' now grants 0.5s invulnerability after the backstab",
+      ],
+      ja: [
+        "残影: 瞬間移動すると元の場所に自分そっくりの分身が残り、敵は分身を追い攻撃・技も分身へ（1.5秒、最後に1回斬る）",
+        "自分は敵の背後少し離れた所で影（暗い半透明・無敵）になる → 次の攻撃は背後に詰めて斬る背後討ち（ダメージさらに2倍、影が解ける）·「消失」は背後討ち後0.5秒無敵",
+      ],
+    },
+  },
+  {
     version: "0.48.141",
     date: "2026-10-27",
     items: {

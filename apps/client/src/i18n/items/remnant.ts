@@ -51,7 +51,7 @@ export const RM_EFFECTS: Partial<Record<RmPassive & PassiveId, Names>> = {
   rmBackstab: c("뒤에서 친 피해 +{add:pct}%", "+{add:pct}% damage from behind", "背後からのダメージ+{add:pct}%"),
   rmExecute: c("체력 {hp:pct}% 이하 적에게 피해 +{mul:up}%", "+{mul:up}% damage to foes under {hp:pct}% HP", "体力{hp:pct}%以下の敵へダメージ+{mul:up}%"),
   rmEcho: c("남긴 잔영이 {n}번 벰", "Afterimages cut {n} times", "残影が{n}回斬る"),
-  rmVanish: c("순간이동한 뒤 {ticks:sec}초 무적", "Invulnerable for {ticks:sec}s after a blink", "瞬間移動後{ticks:sec}秒無敵"),
+  rmVanish: c("그림자에서 나와 뒤치기한 뒤 {ticks:sec}초 무적", "Invulnerable for {ticks:sec}s after leaving the shadow with a backstab", "影から出て背後を斬った後{ticks:sec}秒無敵"),
   rmBlood: c("벨 때 출혈", "Cuts cause bleeding", "斬ると出血"),
   rmFrenzy: c("적을 쓰러뜨리면 순간이동 대기가 바로 끝남", "Kills reset the blink cooldown", "敵を倒すと瞬間移動の待ち時間がすぐ終わる"),
   rmShroud: c("대시하면 가까운 적 뒤로 순간이동", "Dashing blinks you behind a nearby foe", "ダッシュすると近くの敵の背後へ瞬間移動"),

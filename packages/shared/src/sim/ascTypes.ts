@@ -42,6 +42,8 @@ export interface RemnantPlayerState {
   rmEchoes?: { x: number; y: number; t: number; dmg: number }[];
   rmDash?: boolean;
   rmSeen?: number;
+  /** 그림자 상태 남은 틱 (투명·무적, 다음 공격이 뒤치기) */
+  rmShade?: number;
 }
 
 export interface WandererPlayerState {

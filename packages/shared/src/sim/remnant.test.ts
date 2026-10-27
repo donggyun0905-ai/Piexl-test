@@ -25,13 +25,29 @@ describe("잔영", () => {
     expect(CHARACTERS.remnant).toMatchObject({ critChance: 0.25, critDamage: 2.5 });
   });
 
-  it("멀리 있는 적 뒤로 순간이동해 벰 · 떠난 자리에 잔영", () => {
+  it("멀리 있는 적 등 뒤 떨어진 곳으로 순간이동해 그림자(무적) · 떠난 자리에 분신 · 다음 공격은 뒤치기로 크게 벰", () => {
     const s = remnant();
     stepSim(s, FIRE);
-    expect(s.player.x).toBeGreaterThan(120);
+    const e = s.enemies[0]!;
+    expect(s.player.x).toBeGreaterThan(e.x + e.r + R.blinkBack);
     expect(s.player.rmEchoes?.length).toBe(1);
-    expect(lost(s)).toBeGreaterThan(0);
+    expect(s.player.rmShade).toBeGreaterThan(0);
+    expect(s.player.invulnTicks).toBeGreaterThan(0);
     expect(s.player.rmBlink).toBeGreaterThan(0);
+    for (let i = 0; i < 30 && (s.player.rmShade ?? 0) > 0; i++) stepSim(s, FIRE);
+    expect(s.player.rmShade).toBe(0);
+    expect(lost(s)).toBeGreaterThan(s.player.stats.damage * R.shadeMul);
+  });
+
+  it("분신이 있는 동안 적은 분신을 쫓음 (어그로)", () => {
+    const s = remnant();
+    const e = s.enemies[0]!;
+    e.rootTicks = 0;
+    stepSim(s, FIRE);
+    const decoy = s.player.rmEchoes![0]!;
+    const d0 = Math.hypot(e.x - decoy.x, e.y - decoy.y);
+    for (let i = 0; i < 20; i++) stepSim(s, IDLE);
+    expect(Math.hypot(e.x - decoy.x, e.y - decoy.y)).toBeLessThan(d0);
   });
 
   for (const w of ["rmDagger", "rmTwin", "rmClaw", "rmStiletto", "rmKunai", "rmSpin", "rmFlash", "rmReaper", "rmFang", "rmEclipse"] as WeaponId[]) {
@@ -66,11 +82,12 @@ describe("잔영", () => {
     expect(s.player.blindTicks).toBe(0);
   });
 
-  it("사라짐: 순간이동 뒤 무적 · 그림자 숨기: 대시로 순간이동", () => {
+  it("사라짐: 뒤치기 뒤 무적 · 그림자 숨기: 대시로 순간이동", () => {
     const s = remnant("rmDagger", "rmVanish", "rmShroud");
     s.player.dashTicks = 5;
     stepSim(s, IDLE);
     expect(s.player.x).toBeGreaterThan(110);
+    for (let i = 0; i < 30 && (s.player.rmShade ?? 0) > 0; i++) stepSim(s, FIRE);
     expect(s.player.invulnTicks).toBeGreaterThan(K.rmVanish.ticks - 5);
   });
 

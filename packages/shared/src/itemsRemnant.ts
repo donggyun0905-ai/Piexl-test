@@ -33,6 +33,6 @@ export const REMNANT_PERKS = {
   rmBackstab: { add: 0.5 },
   rmExecute: { hp: 0.3, mul: 1.5 },
   rmEcho: { n: 2 },
-  rmVanish: { ticks: 18 },
+  rmVanish: { ticks: 30 },
   rmShroud: { reach: 140 },
 };
