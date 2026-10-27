@@ -30,9 +30,9 @@ export const CHARACTER_TEXT_ASCALON = {
   katana: { ko: "카타나", en: "Katana", ja: "刀" },
   silk: { ko: "영사", en: "Silk", ja: "影糸使い" },
   silkDesc: {
-    ko: "실 · 아스칼론. 보이지 않는 실을 다루는 매혹적인 여자. 실 100가닥을 장전해 아주 빠르게 쏨 (방 끝에서 끝까지 가는 실선) · 얽힘 5가 쌓인 적은 실이 당겨 찢김 (250% + 출혈) · 30가닥마다 노리는 적을 가로지르는 실 30가닥 연사 · 무기 10 · 전용 아이템 10",
-    en: "Thread · Ascalon. An alluring woman who wields unseen threads. Loads 100 threads and fires them very fast (each a line from wall to wall) · foes with 5 tangles are torn apart (250% + bleed) · every 30 threads, a barrage of 30 threads crosses the target · 10 weapons · 10 own items",
-    ja: "糸 · アスカロン。見えない糸を操る魅惑的な女性。糸100本を装填しとても速く放つ（部屋の端から端までの糸）· 絡みが5溜まった敵は糸が引かれ引き裂かれる（250%＋出血）· 30本ごとに狙う敵を横切る糸30本の連射 · 武器10 · 専用アイテム10",
+    ko: "실 · 아스칼론. 보이지 않는 실을 다루는 매혹적인 여자. 실 100가닥을 장전해 아주 빠르게 쏨 (방 끝에서 끝까지 가는 실선) · 얽힘 5가 쌓인 적은 실이 당겨 찢김 (250% + 출혈) · 30가닥마다 노리는 적을 가로지르는 실 30가닥 연사 · 무기 10 · 전용 아이템 10 · 실 피해는 약하고 공격력 아이템은 찢기만 세짐 · 실에 맞을 때마다 출혈 스택, 30이면 과다출혈(500%)",
+    en: "Thread · Ascalon. An alluring woman who wields unseen threads. Loads 100 threads and fires them very fast (each a line from wall to wall) · foes with 5 tangles are torn apart (250% + bleed) · every 30 threads, a barrage of 30 threads crosses the target · 10 weapons · 10 own items · threads deal little damage and attack items only boost tearing · each thread hit adds a bleed stack; 30 triggers Hemorrhage (500%)",
+    ja: "糸 · アスカロン。見えない糸を操る魅惑的な女性。糸100本を装填しとても速く放つ（部屋の端から端までの糸）· 絡みが5溜まった敵は糸が引かれ引き裂かれる（250%＋出血）· 30本ごとに狙う敵を横切る糸30本の連射 · 武器10 · 専用アイテム10 · 糸のダメージは弱く攻撃力アイテムは引き裂きだけ強化 · 糸が当たるたび出血スタック、30で大量出血（500%）",
   },
   thread: { ko: "실", en: "Thread", ja: "糸" },
   trSkill1: { ko: "암습 저격", en: "Ambush Snipe", ja: "暗襲狙撃" },

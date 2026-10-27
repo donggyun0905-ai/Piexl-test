@@ -23,9 +23,17 @@ export function drawSilkStacks(ctx: Ctx, s: RunState, snap: Snap): void {
   if (s.player.characterId !== "silk") return;
   for (const e of s.enemies) {
     const n = e.skStacks ?? 0;
-    if (n <= 0 || e.hp <= 0) continue;
+    if (e.hp <= 0) continue;
     const x = snap(e.x);
     const y = snap(e.y - e.r - 6);
+    // 출혈 스택 막대 (30이면 과다출혈)
+    const b = (e.skBleed ?? 0) / 30;
+    if (b > 0) {
+      ctx.fillStyle = "rgba(0,0,0,0.55)";
+      ctx.fillRect(x - 8, y + 3, 16, 2);
+      ctx.fillStyle = b > 0.8 ? "#ff2040" : "#a8102a";
+      ctx.fillRect(x - 8, y + 3, Math.max(1, Math.round(16 * b)), 2);
+    }
     for (let i = 0; i < n; i++) {
       ctx.fillStyle = n >= 4 ? RED : PINK;
       ctx.fillRect(x - n * 1.5 + i * 3, y, 2, 2);
@@ -58,12 +66,14 @@ export function drawSilkFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const tx = snap(fx.toX ?? fx.x);
       const ty = snap(fx.toY ?? fx.y);
       ctx.globalAlpha = t < 0.1 ? 0.9 : 0.55 * (1 - t);
-      line(ctx, x, y, tx, ty, t < 0.1 ? "#ffffff" : SILK, t < 0.1 ? 1.5 : 0.6);
+      line(ctx, x, y, tx, ty, t < 0.1 ? "#ffffff" : (fx.tint ?? SILK), t < 0.1 ? 1.5 : 0.6);
       break;
     }
     case "skRend": {
       // 0~0.35: 실 다섯이 적 둘레에서 조여 들고(띵) · 그 뒤 다섯 방향으로 방 끝까지 휙 날아감 + 붉은 조각
+      // 얽힘 실은 빨강 (핏빛 실은 검정: tint)
       const r = fx.size;
+      const knot = fx.tint ?? RED;
       for (let i = 0; i < 5; i++) {
         const a = (i * TAU) / 5 - Math.PI / 2;
         const cx = Math.cos(a);
@@ -71,14 +81,29 @@ export function drawSilkFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         if (t < 0.35) {
           const k = 1 - t / 0.35;
           ctx.globalAlpha = 0.9;
-          line(ctx, x + cx * (r * (0.3 + k)), y + cy * (r * (0.3 + k)), x - cy * r * 0.8, y + cx * r * 0.8, PINK, 1);
+          line(ctx, x + cx * (r * (0.3 + k)), y + cy * (r * (0.3 + k)), x - cy * r * 0.8, y + cx * r * 0.8, knot, 1.2);
         } else {
           const k = (t - 0.35) / 0.65;
           ctx.globalAlpha = 1 - k;
-          line(ctx, x + cx * r * 0.4, y + cy * r * 0.4, x + cx * (r + k * 400), y + cy * (r + k * 400), SILK, 1);
+          line(ctx, x + cx * r * 0.4, y + cy * r * 0.4, x + cx * (r + k * 400), y + cy * (r + k * 400), knot, 1);
           ctx.fillStyle = RED;
           ctx.fillRect(Math.round(x + cx * r * k * 1.5), Math.round(y + cy * r * k * 1.5 + k * 6), 2, 2);
         }
+      }
+      break;
+    }
+    case "skBleed": {
+      // 과다출혈: 붉은 고리가 터지며 핏방울이 사방으로
+      ctx.globalAlpha = 1 - t;
+      ctx.strokeStyle = "#ff2040";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(x, y, fx.size * (0.4 + t), 0, TAU);
+      ctx.stroke();
+      ctx.fillStyle = "#c0102a";
+      for (let i = 0; i < 10; i++) {
+        const a = (i * TAU) / 10;
+        ctx.fillRect(Math.round(x + Math.cos(a) * fx.size * t * 1.4), Math.round(y + Math.sin(a) * fx.size * t + t * t * 10), 2, 2);
       }
       break;
     }

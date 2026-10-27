@@ -75,4 +75,22 @@ describe("영사", () => {
     };
     expect(run()).toBe(run());
   });
+
+  it("실 피해는 공격력 아이템과 상관없음 · 맞을 때마다 출혈 스택, 30이면 과다출혈 500%", () => {
+    const a = silk();
+    const b = silk("skThread", "whetstone");
+    a.enemies[0]!.skStacks = -99;
+    b.enemies[0]!.skStacks = -99;
+    stepSim(a, FIRE);
+    stepSim(b, FIRE);
+    expect(lost(b)).toBeCloseTo(lost(a), 5);
+    expect(a.enemies[0]!.skBleed).toBe(1);
+    const c = silk();
+    const e = c.enemies[0]!;
+    e.skStacks = -99;
+    e.skBleed = S.bleedMax - 1;
+    stepSim(c, FIRE);
+    expect(e.skBleed).toBe(0);
+    expect(lost(c)).toBeGreaterThan(c.player.stats.damage * S.overbleedMul);
+  });
 });

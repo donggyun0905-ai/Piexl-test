@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.141",
+    date: "2026-10-27",
+    items: {
+      ko: [
+        "영사: 실 피해 절반 (아이템을 뺀 기본 공격력 기준, 공격력 아이템은 찢기·과다출혈만 세짐) · 실에 맞을 때마다 출혈 스택 (최대 30, 출혈 피해는 그대로) · 30개가 쌓이면 과다출혈 (공격력 500%)",
+        "얽힘(찢기) 실은 빨간색 · 핏빛 실은 실 자체가 빨갛고 얽힘 실은 검정 · 적 머리 위에 출혈 스택 막대",
+      ],
+      en: [
+        "Silk: thread damage halved (based on base attack without items; attack items only boost tearing and Hemorrhage) · each thread hit adds a bleed stack (up to 30, bleed damage unchanged) · at 30 stacks, Hemorrhage (500% attack)",
+        "Tangle (tear) threads are now red · Crimson Thread has red threads with black tangles · bleed stack bar over enemies",
+      ],
+      ja: [
+        "影糸使い: 糸のダメージ半分（アイテム抜きの基本攻撃力基準、攻撃力アイテムは引き裂き・大量出血だけ強化）· 糸が当たるたび出血スタック（最大30、出血ダメージはそのまま）· 30溜まると大量出血（攻撃力500%）",
+        "絡み（引き裂き）の糸は赤 · 血の糸は糸自体が赤く絡みの糸は黒 · 敵の頭上に出血スタックバー",
+      ],
+    },
+  },
+  {
     version: "0.48.140",
     date: "2026-10-27",
     items: {

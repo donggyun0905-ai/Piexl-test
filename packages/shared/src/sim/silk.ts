@@ -1,6 +1,6 @@
 // 영사(아스칼론, 시즌 2): 실을 다루는 여자. 실 100가닥을 장전해 아주 빠르게 쏨 (실 하나 = 방 끝에서 끝까지 1초 보이는 실선, 그 줄의 적을 벰)
 // 실에 얽힘이 5 쌓인 적은 실이 당겨 찢김 (공격력 250% + 출혈) · 실 30가닥을 쓸 때마다 노리는 적을 가로지르는 실 30가닥 연사
-// (남은 실이 10 이하일 때 쏜 실은 연사에 안 셈) · 다 쓰면 장전. 수치는 weaponsSilk.SILK, 아이템은 itemsSilk
+// (남은 실이 10 이하일 때 쏜 실은 연사에 안 셈) · 다 쓰면 장전 · 실 피해는 기본 공격력의 절반(아이템 무관), 맞을 때마다 출혈 스택 30이면 과다출혈 500%. 수치는 weaponsSilk.SILK, 아이템은 itemsSilk
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, TICK_RATE } from "../constants";
 import { SILK_PERKS as K } from "../itemsSilk";
 import { createRng, deriveSeed } from "../rng";
@@ -12,10 +12,13 @@ import { rot } from "./orbit";
 import { inCircle, onSegment, stun, strike } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, normalize, weaponOf } from "./util";
+import { baseStats } from "../content";
 
 const styleOf = (p: PlayerState): SilkStyle => weaponOf(p).silk ?? { n: 1, spread: 0, stacks: 5, rendMul: 2.5, ammo: 100 };
 const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.seed, tag, s.tick, n)).nextFloat();
 const isSilk = (p: PlayerState) => p.characterId === "silk";
+/** 핏빛 실: 실이 빨갛고 얽힘(찢기) 실은 검정 (그리기 색만) */
+const crimson = (p: PlayerState) => p.weaponId === "skCrimson";
 
 /** 장전 수 */
 export const silkMag = (p: PlayerState) => styleOf(p).ammo + (hasPerk(p, "skMore") ? K.skMore.n : 0);
@@ -63,7 +66,21 @@ function rend(s: RunState, e: EnemyState): void {
     }
   }
   if (hasPerk(p, "skBlood")) healPlayer(s, K.skBlood.heal);
-  addEffect(s, { kind: "skRend", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 10, maxTicks: 24 });
+  addEffect(s, { kind: "skRend", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 10, maxTicks: 24, ...(crimson(p) ? { tint: "#141014" } : {}) });
+}
+
+/** 실 한 가닥 피해: 아이템을 뺀 기본 공격력 기준 (공격력 아이템은 찢기·과다출혈만 세짐) */
+const threadDmg = (p: PlayerState) => baseStats(p.characterId, p.weaponId).damage * S.threadMul * (hasPerk(p, "skEdge") ? K.skEdge.mul : 1);
+
+/** 실에 맞음: 출혈 스택 (최대 30) · 다 쌓이면 과다출혈 (공격력 500%) */
+function bleedStack(s: RunState, e: EnemyState): void {
+  if (e.hp <= 0) return;
+  applyBleed(e);
+  e.skBleed = (e.skBleed ?? 0) + 1;
+  if (e.skBleed < S.bleedMax) return;
+  e.skBleed = 0;
+  strike(s, e, s.player.stats.damage * S.overbleedMul);
+  addEffect(s, { kind: "skBleed", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 14, maxTicks: 30 });
 }
 
 /** 실 한 가닥: (x, y)를 지나 방 끝에서 끝까지 · 그 줄의 적을 베고 얽힘 */
@@ -74,11 +91,12 @@ function thread(s: RunState, x: number, y: number, dx: number, dy: number, dmg: 
   const need = st.stacks - (hasPerk(p, "skTangle") ? K.skTangle.n : 0);
   for (const e of onSegment(s, x0, y0, x1, y1, S.width)) {
     strike(s, e, dmg);
+    bleedStack(s, e);
     if (st.slow) e.slowTicks = Math.max(e.slowTicks ?? 0, st.slow);
     e.skStacks = (e.skStacks ?? 0) + 1;
     if (e.hp > 0 && e.skStacks >= need) rend(s, e);
   }
-  addEffect(s, { kind: "skLine", x: x0, y: y0, dirX: dx, dirY: dy, size: 1, toX: x1, toY: y1, maxTicks: S.lineTicks });
+  addEffect(s, { kind: "skLine", x: x0, y: y0, dirX: dx, dirY: dy, size: 1, toX: x1, toY: y1, maxTicks: S.lineTicks, ...(crimson(p) ? { tint: "#e0203a" } : {}) });
   if (st.linger) (p.skLines ??= []).push({ x0, y0, x1, y1, t: S.lineTicks, dmg });
 }
 
@@ -89,7 +107,7 @@ function fire(s: RunState): void {
   const target = nearest(s, p.stats.range * 1.5);
   const d = (target && normalize(target.x - p.x, target.y - p.y)) || [p.faceX, p.faceY];
   [p.faceX, p.faceY] = d;
-  const dmg = p.stats.damage * (hasPerk(p, "skEdge") ? K.skEdge.mul : 1);
+  const dmg = threadDmg(p);
   const before = p.skAmmo ?? silkMag(p);
   const n = Math.min(st.n, before);
   for (let i = 0; i < n; i++) {
@@ -125,7 +143,7 @@ function update(s: RunState): void {
     if (!e) delete p.skBurst;
     else {
       const [c, sn] = rot(roll(s, "skBurst", b.left) * Math.PI);
-      thread(s, e.x, e.y, c, sn, p.stats.damage * S.burstMul);
+      thread(s, e.x, e.y, c, sn, threadDmg(p) * S.burstMul);
       b.gap = S.burstGap;
       if (--b.left <= 0) delete p.skBurst;
     }

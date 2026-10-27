@@ -72,6 +72,8 @@ export interface SilkPlayerState {
 export interface SilkEnemyState {
   /** 영사 실 얽힘 */
   skStacks?: number;
+  /** 영사 실 출혈 스택 (30이면 과다출혈) */
+  skBleed?: number;
 }
 
 /** 아스칼론 캐릭터 상태 모음 (types에서 한 이름으로 씀) */
