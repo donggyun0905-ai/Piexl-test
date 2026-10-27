@@ -82,7 +82,7 @@ export function drawPwGround(ctx: Ctx, s: RunState): void {
   }
 }
 
-/** 모드 맨 위 그리기 (GameScreen overlay): 내 편 AI · 수풀(사람 위를 반쯤 덮음) */
+/** 맨 위 그리기 (render/index, 패왕전·무한 모드 AI 대결): 내 편 AI · 수풀(사람 위를 반쯤 덮음) · 숲 나무 꼭대기 */
 export function drawPaewang(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const pw = s.pw;
   if (!pw) return;

@@ -47,7 +47,7 @@ import { drawHaloHud } from "./forgottenHalo";
 import { drawRunPet } from "./runPet";
 import { drawOniUps, type OniUp } from "./oniUps";
 import { drawSwarmGround } from "./swarmMap";
-import { drawPwGround } from "./paewang";
+import { drawPaewang, drawPwGround } from "./paewang";
 import { themeFor } from "./floorThemes";
 import { drawAmbushOverlay, drawTrackerAura } from "./tracker";
 import { drawForgottenAura, drawForgottenBack } from "./forgotten";
@@ -202,6 +202,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   drawUltOverlay(ctx, s, snap);
   drawImugiOverlay(ctx, s);
   if (opt.legendName) drawLegendName(ctx, s, alpha, opt.legendName);
+  drawPaewang(ctx, s, alpha, snap);
   opt.overlay?.(ctx, snap);
   drawOniUps(ctx, s, alpha, snap, opt.oniUp);
   opt.modeOverlay?.(ctx, s, alpha, snap);

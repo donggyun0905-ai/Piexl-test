@@ -18,6 +18,7 @@ export interface Unit {
 /** 캐릭터의 처음 무기로 공격 방식을 정함 (근접·원거리 · 사거리 · 피해 · 빠르기) */
 export function makeBrain(s: RunState, char: CharacterId, team: number, tag: number, lv?: number): PwBrain {
   const diff = PW_MODE[s.pw!.mode].diff;
+  const same = s.pw!.same;
   const c = CHARACTERS[char];
   const w: WeaponDef = WEAPONS[c.startWeapon];
   const melee = w.kind === "melee" || w.range < PW.meleeRange || w.projectileSpeed <= 0;
@@ -29,8 +30,8 @@ export function makeBrain(s: RunState, char: CharacterId, team: number, tag: num
     tag,
     melee,
     range: melee ? Math.max(24, Math.min(40, w.range)) : Math.max(PW.rangeMin, Math.min(PW.rangeMax, w.range)),
-    // 여러 발 쏘는 무기는 한 발 피해를 나눔
-    dmg: (c.damage * w.damageMul * PW.dmgBase * diff.dmg * (shots > 1 ? 1.6 / shots : 1)) / (c.damage > 20 ? 2 : 1),
+    // 여러 발 쏘는 무기는 한 발 피해를 나눔 · 무한 모드 이벤트는 내 공격력 기준 (층마다 세지는 것은 받는 피해에서 combat.endlessPow)
+    dmg: same ? s.player.stats.damage * w.damageMul * PW.dmgBase * (shots > 1 ? 1.6 / shots : 1) : (c.damage * w.damageMul * PW.dmgBase * diff.dmg * (shots > 1 ? 1.6 / shots : 1)) / (c.damage > 20 ? 2 : 1),
     every: Math.round(60 / rate),
     speed: c.moveSpeed * PW.moveBase * diff.speed,
     shotSpeed: Math.max(2.2, Math.min(4, w.projectileSpeed || 3)),
@@ -55,7 +56,12 @@ export function makeBrain(s: RunState, char: CharacterId, team: number, tag: num
 }
 
 /** AI 체력: 캐릭터 최대 체력 × hpBase × 보정 (거너처럼 체력이 고정된 캐릭터는 90으로 침) */
-export const foeHp = (s: RunState, char: CharacterId) => Math.round(((CHARACTERS[char] as CharacterDef).fixedHp ? 90 : CHARACTERS[char].maxHp) * PW.hpBase * PW_MODE[s.pw!.mode].diff.hp);
+export const foeHp = (s: RunState, char: CharacterId): number => {
+  // 무한 모드 이벤트: 내 최대 체력 기준
+  const same = s.pw!.same;
+  if (same) return Math.round(s.player.stats.maxHp * same);
+  return Math.round(((CHARACTERS[char] as CharacterDef).fixedHp ? 90 : CHARACTERS[char].maxHp) * PW.hpBase * PW_MODE[s.pw!.mode].diff.hp);
+};
 
 /** 상대 AI 하나 놓기 */
 export function spawnFoe(s: RunState, char: CharacterId, team: number, x: number, y: number, tag: number, lv?: number): EnemyState {

@@ -2,7 +2,6 @@
 import { createPaewang, paewangResult, stepPaewang, type CharacterId, type PwLoadout, type PwMode } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 import { GameScreen } from "../game/GameScreen";
-import { drawPaewang } from "../game/render/paewang";
 import type { Lang, TextKey } from "../i18n";
 import { PwHud } from "./PwHud";
 import { savePwResult } from "./pwRecords";
@@ -42,7 +41,6 @@ export function PwGame({ mode, characterId, loadout, lang, t, onExit, onRetry }:
         t={t}
         onExit={onExit}
         step={stepPaewang}
-        overlay={drawPaewang}
         onRunEnd={(end) => setChips(savePwResult(mode, end.won))}
         afterRun={
           r ? (

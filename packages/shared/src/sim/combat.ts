@@ -1,4 +1,5 @@
 // 피해 주고받기·처치
+import { endlessPow } from "./endless";
 import { inkTaken, scribeKill } from "./scribe";
 import { petGold } from "./lobbyPet";
 import { BEDOUIN_PERKS } from "../itemsBedouin";
@@ -97,7 +98,8 @@ export function damagePlayer(s: RunState, dmg: number): void {
     return;
   }
   // 금기: 취약 (받는 피해 증가) · 광야의 새벽은 적이 많아 받는 피해를 줄임
-  dmg *= tabooUp(s, "frail") * (s.swarm ? SWARM.taken * (SWARM_LEVELS[s.swarm.level ?? 0]?.taken ?? 1) : 1);
+  // 무한 모드 7층부터: 보스방을 깰 때마다 적이 세짐
+  dmg *= endlessPow(s) * tabooUp(s, "frail") * (s.swarm ? SWARM.taken * (SWARM_LEVELS[s.swarm.level ?? 0]?.taken ?? 1) : 1);
   // 방패 자세: 가만히 서 있으면 받는 피해 절반
   let taken = hasPerk(p, "bulwarkStance") && p.stillTicks >= STILL_TICKS ? dmg * PERKS.bulwarkStance.taken : dmg;
   // 버티기(가라테): 받는 피해 절반, 받은 만큼 모아 되받아침

@@ -98,8 +98,12 @@ export interface PwState {
   place?: number;
   /** 다음 이름표 번호 */
   tags: number;
+  /** 무한 모드 이벤트: AI가 내 능력치(최대 체력·공격력)에 이 배율을 곱해 씀 */
+  same?: number;
 }
 
 export interface PwRunState {
   pw?: PwState;
+  /** 무한 모드: 이 층 보스방 AI 이벤트 (방을 나갔다 오면 다시 꺼냄) */
+  pwRoom?: PwState;
 }

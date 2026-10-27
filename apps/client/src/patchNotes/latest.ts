@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.149",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "무한 모드 업데이트: 1~6층은 그대로 · 7~10층 보스방에 보스 2마리 · 11~13층 랜덤 라스트 보스 · 14~16층 라스트 보스 + 보스 (3마리) · 17~19층 라스트 보스 3종 (라스트 보스방 2배 크기)",
+        "7층부터 보스방을 깰 때마다 적 체력·주는 피해가 12%씩 오름 · 20층부터 보스방은 내 능력치를 그대로 가진 랜덤 캐릭터 AI와의 대결 이벤트 (1대1·3대3·5대5·난투전 중 하나, 다 쓰러뜨리면 계단)",
+      ],
+      en: [
+        "Endless mode update: floors 1–6 unchanged · floors 7–10 boss rooms have 2 bosses · 11–13 a random last boss · 14–16 a last boss plus bosses (3 in total) · 17–19 all three last bosses (in a room twice the last boss room)",
+        "From floor 7, each cleared boss room makes enemies 12% tougher and harder-hitting · from floor 20 the boss room becomes a battle against AI characters with your own stats (1v1, 3v3, 5v5 or a brawl; defeat them all for the stairs)",
+      ],
+      ja: [
+        "無限モード更新: 1〜6階はそのまま · 7〜10階のボス部屋にボス2体 · 11〜13階ランダムなラストボス · 14〜16階ラストボス＋ボス（計3体）· 17〜19階ラストボス3種（ラストボス部屋の2倍の広さ）",
+        "7階からボス部屋を突破するたびに敵の体力・与ダメージが12%ずつ上がる · 20階からボス部屋は自分と同じ能力のランダムキャラAIとの対決イベント（1対1・3対3・5対5・乱闘のどれか、全員倒すと階段）",
+      ],
+    },
+  },
+  {
     version: "0.48.148",
     date: "2026-10-27",
     items: {
