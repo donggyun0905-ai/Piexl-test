@@ -117,17 +117,19 @@ function soulTick(s: RunState): void {
       o.y += ((p.y - o.y) / d) * K.soulMagnet.pull;
     }
     if (d > pick) return true;
-    eatSoul(s, o.x, o.y);
+    eatSoul(s, o.x, o.y, o.light);
     return false;
   });
 }
 
-function eatSoul(s: RunState, x: number, y: number): void {
+function eatSoul(s: RunState, x: number, y: number, light?: boolean): void {
   const p = s.player;
   healPlayer(s, p.stats.maxHp * (hasPerk(p, "soulFeast") ? K.soulFeast.heal : APOSTLE.soulHeal));
-  // 먹은 영혼만큼 공격력이 쌓임
-  p.apEaten = (p.apEaten ?? 0) + 1;
-  recalcStats(s);
+  // 먹은 영혼만큼 공격력이 쌓임 (보스가 부른 적의 옅은 영혼은 회복만)
+  if (!light) {
+    p.apEaten = (p.apEaten ?? 0) + 1;
+    recalcStats(s);
+  }
   if (hasPerk(p, "bloodPact")) p.hasteTicks = Math.max(p.hasteTicks ?? 0, K.bloodPact.ticks);
   if (hasPerk(p, "soulBurst")) blastAt(s, x, y, K.soulBurst.radius, power(p) * K.soulBurst.mul);
   addEffect(s, { kind: "apSoul", x, y, dirX: 0, dirY: 0, size: 8, maxTicks: 18 });

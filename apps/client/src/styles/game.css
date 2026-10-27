@@ -268,3 +268,8 @@ button.danger {
   color: var(--ok);
 }
 
+/* 게임 화면 전용 커서: 밝은 분홍 고리 + 노란 십자 + 흰 점 (어두운 테두리로 어떤 바닥에서도 잘 보이게) */
+.game-canvas-wrap,
+.game-screen .input-zone {
+  cursor: url("/cursors/aim.svg") 16 16, crosshair;
+}

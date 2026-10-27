@@ -6,20 +6,20 @@ import { hasPerk } from "./util";
 
 export const soulWhere = (s: RunState) => `${s.floor}/${s.roomId}`;
 
-export function addSoul(s: RunState, x: number, y: number): void {
+export function addSoul(s: RunState, x: number, y: number, light?: boolean): void {
   const p = s.player;
   if (p.characterId !== "apostle") return;
   const souls = (p.apSouls ??= []);
-  souls.push({ x, y, left: APOSTLE.soulTicks, where: soulWhere(s) });
+  souls.push({ x, y, left: APOSTLE.soulTicks, where: soulWhere(s), ...(light ? { light } : {}) });
   if (souls.length > APOSTLE.maxSouls) souls.shift();
 }
 
-/** 적이 쓰러지면: 영혼 · 검은 미사 보호막 */
-export function apostleKill(s: RunState, x: number, y: number): void {
+/** 적이 쓰러지면: 영혼 · 검은 미사 보호막 (보스가 부른 적은 회복만 되는 옅은 영혼, 보호막 없음) */
+export function apostleKill(s: RunState, x: number, y: number, minion = false): void {
   const p = s.player;
   if (p.characterId !== "apostle") return;
-  addSoul(s, x, y);
-  if (!hasPerk(p, "blackMass")) return;
+  addSoul(s, x, y, minion);
+  if (minion || !hasPerk(p, "blackMass")) return;
   const add = Math.min(K.blackMass.max - (p.apMass ?? 0), K.blackMass.shield);
   if (add <= 0) return;
   p.apMass = (p.apMass ?? 0) + add;

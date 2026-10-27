@@ -21,6 +21,8 @@ export const TRACKER = {
   ambushAuto: 30,
   /** 강력한 한방: 모으는 틱 · 공격력 배율 · 최대 체력 비율 (보스는 그 1/5) · 앞 막는 벽 거리·폭 · 줄 폭 */
   powerCharge: 90,
+  /** 강력한 한방: 한 판에 쓸 수 있는 횟수 (라스트 보스방에 들어가면 다시 채움) */
+  powerUses: 3,
   powerMul: 10,
   powerHp: 0.2,
   powerBoss: 0.2,

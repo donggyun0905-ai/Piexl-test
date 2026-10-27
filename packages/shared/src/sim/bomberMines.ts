@@ -1,4 +1,4 @@
-// 붐버 유도 지뢰: 적이 없어도 땅에 박아 둠 (내 둘레에 흩어서) · 사거리 안에 적이 오면 눈을 뜨고 달려가 닿으면 터짐
+// 붐버 유도 지뢰: 적이 없어도 땅에 박아 둠 (내 둘레에 흩어서) · 사거리 안에 적이 오면 눈을 뜨고 달려가 닿으면 터짐 · 3초 지나면 저절로 터짐
 import { BOMBER as B } from "../weaponsBomber";
 import { alive } from "./s2Kit";
 import type { RunState } from "./types";
@@ -9,7 +9,7 @@ export function placeMine(s: RunState, max: number, dmg: number, r: number): voi
   const p = s.player;
   const list = (p.bmMines ?? []).slice(-(max - 1));
   const a = (p.attackCount * 2.4) % (Math.PI * 2);
-  list.push({ x: p.x + Math.cos(a) * 10, y: p.y + 2 + Math.sin(a) * 6, dmg, r });
+  list.push({ x: p.x + Math.cos(a) * 10, y: p.y + 2 + Math.sin(a) * 6, dmg, r, born: s.tick });
   p.bmMines = list;
 }
 
@@ -33,6 +33,11 @@ export function updateMines(s: RunState, boom: (x: number, y: number, r: number,
         m.t ??= 0;
         taken.add(e.id);
       } else delete m.run;
+    }
+    // 3초 넘게 박혀 있으면 그 자리에서 저절로 터짐 (깔아 두고 쌓아 두기만 하지 않게)
+    if (!e && s.tick - (m.born ?? s.tick) >= B.mineFuse) {
+      boom(m.x, m.y, m.r, m.dmg);
+      continue;
     }
     if (e) {
       const d = Math.hypot(e.x - m.x, e.y - m.y) || 1;

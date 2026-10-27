@@ -169,6 +169,8 @@ export function updateEnemies(s: RunState): void {
       () => {
         const q = s.player;
         const rr = e.r + q.r;
+        // 용 염옥(필살기) 중에는 몸에 닿아도 피해 없음 (안전한 칸이 몸 쪽에 떠도 갈 수 있게)
+        if (e.ultAt !== undefined && e.ultSafe) return;
         if (dist2(e, q) < rr * rr && e.id !== q.grabId && !e.air) damagePlayer(s, renMelee(s, def.contactDamage * tabooUp(s, "fangs")));
       },
       !!s.party,

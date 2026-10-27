@@ -10,6 +10,9 @@ export interface AscPlayerState {
   trDash?: boolean;
   /** 이 틱에 누른 스킬 키 (0 = 없음, 1~3) */
   trKey?: number;
+  /** 위장복 남은 틱 · 강력한 한방을 쓴 횟수 */
+  trCamo?: number;
+  trUsed?: number;
 }
 
 export interface AscEnemyState {

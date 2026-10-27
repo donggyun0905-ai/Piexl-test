@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.139",
+    date: "2026-10-27",
+    items: {
+      ko: [
+        "상점: 사용 아이템·패시브 팔기 (상점 방 아래 '판매' 줄, 한 번 누르면 확인·한 번 더 누르면 판매, 상점 값의 1/4) · 한 번만 먹는 패시브가 두 자리에 같이 나와도 하나만 먹어짐",
+        "보스가 부른 적은 처치 수·쌓이는 힘(빛의 고리·잔영·경험치·먹은 영혼 등)에 들어가지 않음 (악의 사도는 그 영혼으로 회복만 됨)",
+        "멸망의 용 염옥(필살기) 중에는 몸에 닿아도 피해 없음 · 게임 화면 전용 커서 (잘 보이는 조준 커서)",
+        "추적자: 스킬을 쓰는 동안에도 움직일 수 있음 · 강력한 한방은 한 판에 3번 (라스트 보스방에 들어가면 다시 3번, 버튼에 남은 횟수) · 위장복: 대시 뒤 1초 무적 → 1초 동안 받는 피해 -40%",
+        "붐버: 유도 지뢰는 박힌 지 3초가 지나면 저절로 터짐 · 네이팜은 자동 조준을 끄면 누른 곳으로 · 사거리 안의 적에게만 던짐 (폭발 반경만큼 사거리 밖을 맞히지 않게)",
+      ],
+      en: [
+        "Shop: sell use items and passives (the 'Sell' row in shop rooms; tap once to confirm, again to sell, for 1/4 of the shop price) · a one-time passive shown on two shelves can only be taken once",
+        "Enemies summoned by bosses no longer count as kills or toward stacking powers (Halo, Remnant, EXP, eaten souls, etc.); the Apostle still heals from their souls",
+        "No contact damage from the Dragon of Ruin's body during its Hellfire ultimate · a custom, easy-to-see aiming cursor in game",
+        "Tracker: can move while using skills · Power Shot is limited to 3 per run (refilled when entering the last boss room; uses shown on the button) · Ghillie Suit: 1s invulnerable after a dash → 40% less damage for 1s",
+        "Bomber: homing mines explode on their own after 3s in place · Napalm goes where you aim when auto-aim is off · bombs only target foes within range (blast radius no longer reaches past it)",
+      ],
+      ja: [
+        "ショップ: 使用アイテム・パッシブを売却（ショップ部屋の「売却」列、1回押して確認・もう1回で売却、ショップ価格の1/4）· 1回だけ取れるパッシブが2か所に並んでも1つしか取れない",
+        "ボスが呼んだ敵は撃破数・溜まる力（光の輪・残影・経験値・食べた魂など）に数えない（悪の使徒はその魂で回復のみ）",
+        "滅びの竜の炎獄（必殺技）中は体に触れてもダメージなし · ゲーム画面専用の見やすい照準カーソル",
+        "追跡者: スキル中も移動できる · 強力な一撃は1プレイ3回（ラストボス部屋に入ると再び3回、ボタンに残り回数）· ギリースーツ: ダッシュ後1秒無敵 → 1秒間受けるダメージ-40%",
+        "ボマー: 誘導地雷は設置から3秒で自動で爆発 · ナパームはオートエイムをオフにすると狙った場所へ · 射程内の敵にだけ投げる（爆発範囲で射程外に届かない）",
+      ],
+    },
+  },
+  {
     version: "0.48.138",
     date: "2026-10-27",
     items: {

@@ -21,7 +21,7 @@ export const TRACKER_PASSIVES = {
   trDrum: S("trDrum"),
   /** 고압 장약: 강력한 한방 대기 시간 60초 → 40초 */
   trCharge: S("trCharge"),
-  /** 위장복: 대시한 뒤 1초 동안 무적 */
+  /** 위장복: 대시한 뒤 1초 동안 받는 피해 -40% */
   trCamo: S("trCamo"),
   /** 헤드샷: 15% 확률로 치명타 (2배) */
   trHeadshot: S("trHeadshot"),
@@ -37,6 +37,6 @@ export const TRACKER_PERKS = {
   trRicochet: { mul: 0.5, reach: 90 },
   trDrum: { shots: 15 },
   trCharge: { cd: 2400 },
-  trCamo: { ticks: 60 },
+  trCamo: { ticks: 60, taken: 0.6 },
   trHeadshot: { chance: 0.15, mul: 2 },
 };

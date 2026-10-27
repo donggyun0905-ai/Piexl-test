@@ -38,6 +38,6 @@ export const ASC_EFFECTS: Partial<Record<TrackerPassive & PassiveId, Names>> = {
   trRicochet: c("평소 저격이 맞은 뒤 가까운 적에게 한 번 튕김 ({mul:pct}%)", "Normal shots ricochet once to a nearby foe ({mul:pct}%)", "通常狙撃が当たった後、近くの敵へ一度跳ねる（{mul:pct}%）"),
   trDrum: c("연발사격 10발 → {shots}발", "Rapid Fire 10 → {shots} shots", "連射10発 → {shots}発"),
   trCharge: c("강력한 한방 대기 시간 60초 → {cd:sec}초", "Power Shot cooldown 60s → {cd:sec}s", "強力な一撃の待ち時間60秒 → {cd:sec}秒"),
-  trCamo: c("대시한 뒤 {ticks:sec}초 무적", "Invulnerable for {ticks:sec}s after a dash", "ダッシュ後{ticks:sec}秒無敵"),
+  trCamo: c("대시한 뒤 {ticks:sec}초 동안 받는 피해 -40%", "Take 40% less damage for {ticks:sec}s after a dash", "ダッシュ後{ticks:sec}秒間、受けるダメージ-40%"),
   trHeadshot: c("{chance:pct}% 확률로 치명타 ({mul}배)", "{chance:pct}% chance to crit (×{mul})", "{chance:pct}%でクリティカル（{mul}倍）"),
 };

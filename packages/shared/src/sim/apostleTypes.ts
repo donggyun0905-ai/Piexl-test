@@ -17,7 +17,7 @@ export interface ApostlePlayerState {
   /** 떨어지는 십자가: 자리·남은 틱·무기·공격력 */
   apDrops?: { x: number; y: number; left: number; sin: SinKind; dmg: number }[];
   /** 영혼: 자리·남은 틱 (방 "층/방") */
-  apSouls?: { x: number; y: number; left: number; where: string }[];
+  apSouls?: { x: number; y: number; left: number; where: string; light?: boolean }[];
   /** 사탄의 가면: 죽음이 올라올 적·남은 틱 */
   apDooms?: { id: number; left: number; dmg: number }[];
   /** 타락한 성배 남은 틱 · 검은 미사로 생긴 보호막 */

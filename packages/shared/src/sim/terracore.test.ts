@@ -110,8 +110,8 @@ describe("테라코어 시즌 2", () => {
     expect(Object.values(PASSIVES).filter((p) => (p as PassiveDef).exclusive === "bomber")).toHaveLength(10);
     for (const w of characterWeapons("bomber")) {
       const s = run("bomber", w);
-      // 끈끈이는 붙고 4.5초 뒤에 터짐
-      for (let i = 0; i < 330; i++) stepSim(s, FIRE);
+      // 끈끈이는 붙고 4.5초 뒤에 터짐 · 네이팜은 누른 곳(적 쪽 36칸)으로
+      for (let i = 0; i < 330; i++) stepSim(s, w === "bmNapalm" ? { ...FIRE, aimX: 300 } : FIRE);
       expect(lost(s), w).toBeGreaterThan(0);
     }
     // 끈끈이가 여럿 붙으면 하나로 합쳐 수가 늘어남 · 지뢰는 적이 없어도 박아 둠 · 터지는 자리에 나도 있으면 아픔
@@ -122,6 +122,9 @@ describe("테라코어 시즌 2", () => {
     mine.enemies = [];
     for (let i = 0; i < 120; i++) stepSim(mine, FIRE);
     expect(mine.player.bmMines?.length ?? 0).toBeGreaterThan(0);
+    // 박힌 지 3초가 지난 지뢰는 저절로 터짐
+    for (let i = 0; i < BOMBER.mineFuse + 5; i++) stepSim(mine, EMPTY_INPUT);
+    expect(Math.min(...mine.player.bmMines!.map((m) => m.born!))).toBeGreaterThan(mine.tick - BOMBER.mineFuse - 1);
     const self = run("bomber", "bmGrenade");
     const hp = self.player.hp;
     boom(self, self.player.x, self.player.y, 20, 1);

@@ -66,6 +66,8 @@ export const BOMBER = {
   /** 유도 지뢰: 달리는 빠르기 · 이 틱 동안 못 닿으면 그 자리에서 터짐 */
   mineSpeed: 2.4,
   mineTicks: 150,
+  /** 유도 지뢰: 박힌 채 이만큼 지나면 그 자리에서 저절로 터짐 (3초) */
+  mineFuse: 180,
   /** 로켓: 등 뒤 작은 미사일 확률 · 수 · 피해 배율 */
   rocketMini: 0.25,
   rocketMiniN: 3,

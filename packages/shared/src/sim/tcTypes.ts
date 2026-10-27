@@ -44,7 +44,7 @@ export interface TcPlayerState {
   rdDash?: boolean;
   /** 붐버: 날아가는 폭탄 · 깔린 지뢰(쫓는 적 · 깨어난 틱) · 불바다 · 예술 연쇄 칸·마지막으로 터진 틱 */
   bmBombs?: Bomb[];
-  bmMines?: { x: number; y: number; dmg: number; r: number; run?: number; t?: number }[];
+  bmMines?: { x: number; y: number; dmg: number; r: number; run?: number; t?: number; born?: number }[];
   bmFires?: { x: number; y: number; t: number; dmg: number }[];
   bmArt?: number;
   bmArtT?: number;

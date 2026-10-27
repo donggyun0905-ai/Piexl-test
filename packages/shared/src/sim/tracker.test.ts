@@ -4,6 +4,7 @@ import { TRACKER as T } from "../weaponsTracker";
 import { decodeInputs, encodeInputs } from "../daily";
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
 import { recalcStats } from "./items";
+import { trackerGuard } from "./tracker";
 import { enemy, FIRE } from "./perkTestUtil";
 
 function tracker(...perks: string[]): RunState {
@@ -80,5 +81,21 @@ describe("추적자", () => {
     stepSim(d, KEY(3));
     expect(d.player.trBurst?.left).toBeGreaterThanOrEqual(K.trDrum.shots - 1);
     expect(s.player.trCd?.[2]).toBe(T.cooldowns[2]! - 60);
+  });
+
+  it("2 강력한 한방은 한 판에 3번 · 스킬 중에도 움직임 · 위장복은 대시 뒤 받는 피해 감소", () => {
+    const s = tracker("trCamo");
+    for (let n = 0; n < 4; n++) {
+      s.player.trCd = [0, 0, 0];
+      stepSim(s, KEY(2));
+      expect(!!s.player.trCharge).toBe(n < T.powerUses);
+      delete s.player.trCharge;
+    }
+    stepSim(s, KEY(1));
+    const x = s.player.x;
+    for (let i = 0; i < 10; i++) stepSim(s, { ...EMPTY_INPUT, moveX: 1 });
+    expect(s.player.x).toBeGreaterThan(x);
+    s.player.trCamo = 10;
+    expect(trackerGuard(s.player)).toBe(K.trCamo.taken);
   });
 });

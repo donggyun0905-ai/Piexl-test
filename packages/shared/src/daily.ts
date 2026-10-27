@@ -24,6 +24,7 @@ export const BOARD_SIZE = 30;
 
 // ───────── 입력 기록 ─────────
 // 같은 입력이 이어지는 구간을 [틱 수, moveX, moveY, aimX, aimY, 버튼] 6개 정수로 묶음 (Int16)
+// 상점 팔기(sell)는 드물어서 그 틱 앞에 [-판 번호, 0, 0, 0, 0, 0] 묶음을 하나 더 넣음 (예전 기록에는 없음)
 
 const FIELDS = 6;
 
@@ -38,8 +39,10 @@ export function encodeInputs(inputs: readonly TickInput[]): Int16Array {
     const a = inputs[i]!;
     const f = flagsOf(a);
     let n = 1;
-    while (i + n < inputs.length && n < 32767) {
+    if (a.sell) out.push(-a.sell, 0, 0, 0, 0, 0);
+    while (!a.sell && i + n < inputs.length && n < 32767) {
       const b = inputs[i + n]!;
+      if (b.sell) break;
       if (b.moveX !== a.moveX || b.moveY !== a.moveY || b.aimX !== a.aimX || b.aimY !== a.aimY || flagsOf(b) !== f) break;
       n++;
     }
@@ -51,8 +54,13 @@ export function encodeInputs(inputs: readonly TickInput[]): Int16Array {
 
 export function decodeInputs(data: Int16Array): TickInput[] {
   const out: TickInput[] = [];
+  let sell = 0;
   for (let k = 0; k + FIELDS <= data.length; k += FIELDS) {
     const n = data[k]!;
+    if (n < 0) {
+      sell = -n;
+      continue;
+    }
     const f = data[k + 5]!;
     const input: TickInput = {
       moveX: data[k + 1]!,
@@ -68,6 +76,12 @@ export function decodeInputs(data: Int16Array): TickInput[] {
       statPick: (f >> 8) & 15,
       skill: (f >> 12) & 3,
     };
+    if (sell) {
+      out.push({ ...input, sell });
+      sell = 0;
+      for (let j = 1; j < n; j++) out.push(input);
+      continue;
+    }
     for (let j = 0; j < n; j++) out.push(input);
   }
   return out;

@@ -1,5 +1,6 @@
 export * from "./floor";
 export { mine, PICKUP_HOLD_TICKS, recalcStats, rewardChoices } from "./items";
+export { sellPrice } from "./shop";
 export { applyRoom, continueToLastFloor, REST_HEAL } from "./rooms";
 export { REACTOR_BOOST, REACTOR_FULL, REACTOR_OVERHEAT } from "./laser";
 export { AMB_TICKS, GAS_LIFE } from "./medicWeapons";
@@ -61,7 +62,7 @@ export { riderGauge, riderHeat, riderSpeedMul } from "./rider";
 export { attackSpeedNow } from "./player";
 export { runeFill, spellOf, type SpellKind } from "./rune";
 export { morphXp } from "./morphXp";
-export { trackerCooldown, trackerSkills } from "./tracker";
+export { trackerCooldown, trackerPowerLeft, trackerSkills } from "./tracker";
 export { forgottenRing } from "./forgotten";
 export { statusImmune } from "./remnant";
 export { wandererGauge, zoneRadius } from "./wanderer";

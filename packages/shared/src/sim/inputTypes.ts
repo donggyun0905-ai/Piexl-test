@@ -25,6 +25,8 @@ export interface TickInput {
   statPick: number;
   /** 추적자 스킬 키: 0 = 안 누름, 1~3 = 그 스킬 (누른 순간만, sim/tracker) */
   skill: number;
+  /** 상점에서 판 장비: 없음·0 = 안 팜, 1·2 = 사용 아이템 칸, 3~ = 패시브 (3 = 첫째, 누른 순간만, sim/shop) */
+  sell?: number;
   autoAim: boolean;
 }
 

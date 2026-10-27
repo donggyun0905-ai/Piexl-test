@@ -6,7 +6,7 @@ import { automataMods } from "./automata";
 import { petMods } from "./lobbyPet";
 import { TIGER } from "../weaponsBeast";
 import { baseStats, CHARACTERS, type CharacterDef, type WeaponId } from "../content";
-import { PASSIVES, USE_ITEMS, type PassiveId, type UseItemId } from "../items";
+import { PASSIVES, USE_ITEMS, type PassiveDef, type PassiveId, type UseItemId } from "../items";
 import { computeStats, type StatMod } from "../stats";
 import { addGold, damageEnemy, healPlayer, removeDead } from "./combat";
 import { GOLDEN_GROUP, GOLDEN_PICKS } from "./loot";
@@ -16,7 +16,7 @@ import { allPlayers, seatNo } from "./party";
 import { tabooDown, tabooMods } from "./taboo";
 import { addEffect, hasPerk } from "./util";
 import { charmed } from "./bossesTwo";
-import { clearShelf, EMPTY_HANDS, rerollShop, trashAt } from "./shop";
+import { clearShelf, EMPTY_HANDS, rerollShop, sellItem, trashAt } from "./shop";
 import { resetCombo } from "./brawl";
 import { resetGun } from "./gun";
 import { resetAbandoned } from "./abandoned";
@@ -113,6 +113,7 @@ export function updateItems(s: RunState, input: TickInput): void {
   // 세이렌에게 홀린 동안은 물약 등 사용 아이템을 못 씀
   if (input.useSlot > 0 && !charmed(s.player)) useSlot(s, input.useSlot - 1);
   if (input.statPick > 0) spendStat(s, input.statPick);
+  if (input.sell) sellItem(s, input.sell);
   // 층 보상은 클릭(모바일은 탭)으로 고름. 거리 상관없음
   if (input.pickChoice > 0) {
     const pk = rewardChoices(s)[input.pickChoice - 1];
@@ -246,6 +247,8 @@ function take(s: RunState, pk: Pickup): void {
       // 보상 묶음은 하나만 고를 수 있음
       remove((x) => x.id === pk.id || (pk.group > 0 && x.group === pk.group && x.owner === pk.owner));
     }
+    // 한 번만 먹는 패시브: 같은 것이 둘 놓여 있었으면(상점 두 자리 등) 나머지도 치움
+    if ((PASSIVES[pk.itemId as PassiveId] as PassiveDef | undefined)?.effect) remove((x) => x.kind === "passive" && x.itemId === pk.itemId && x.owner === pk.owner);
   }
   addEffect(s, { kind: "hit", x: pk.x, y: pk.y, dirX: 0, dirY: 0, size: 5, maxTicks: 8 });
 }

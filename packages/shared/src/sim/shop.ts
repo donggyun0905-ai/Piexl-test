@@ -1,16 +1,17 @@
 // 상점: 진열·가격·새로고침
-import type { UseItemId } from "../items";
+import { PASSIVES, type PassiveDef, type PassiveId, type UseItemId } from "../items";
 import { SHOP_PRICES } from "../perks";
 import { createRng, deriveSeed } from "../rng";
 import { addPickup, CX, CY, passivePool, seatSalt, usePool, weaponPool, weaponSlot } from "./loot";
 import type { WeaponId } from "../content";
 import { addGold } from "./combat";
-import { equipWeapon } from "./items";
+import { equipWeapon, recalcStats } from "./items";
 import { goldLocked } from "./oniRules";
 import type { Pickup, RunState } from "./types";
 import { addEffect } from "./util";
 import { depth, lastFloorOf } from "./hero";
 import { tabooN, tabooUp } from "./taboo";
+import { xpOnly } from "./morphXp";
 
 const PRICE = SHOP_PRICES.price;
 
@@ -71,6 +72,38 @@ export function trashAt(s: RunState, pk: Pickup, interact: boolean): void {
   equipWeapon(s, EMPTY_HANDS);
   addGold(s, pk.price);
   addEffect(s, { kind: "hit", x: pk.x, y: pk.y, dirX: 0, dirY: 0, size: 6, maxTicks: 10 });
+}
+
+/** 팔 수 있는 패시브: 상점·보상에서 얻는 것만 (축복·경험치로 얻는 능력 등은 못 팜) */
+function sellable(id: PassiveId): boolean {
+  const def: PassiveDef | undefined = PASSIVES[id];
+  return !!def && !def.special && !xpOnly(def);
+}
+
+/** 장비를 팔면 받는 돈: 상점 가격의 1/4. 못 팔면 0 (화면도 같이 씀) */
+export function sellPrice(s: RunState, n: number): number {
+  const p = s.player;
+  if (s.map.rooms[s.roomId]?.type !== "shop" || goldLocked(p)) return 0;
+  if (n === 1 || n === 2) {
+    const id = p.useSlots[n - 1];
+    return id ? Math.max(1, Math.round(shopPrice(s, useBase(id)) / 4)) : 0;
+  }
+  const id = p.passives[n - 3];
+  return id && sellable(id) ? Math.max(1, Math.round(shopPrice(s, PRICE.passive) / 4)) : 0;
+}
+
+/** 상점에서 장비 팔기 (n: 1·2 = 사용 아이템 칸, 3~ = 패시브 순서). 패시브를 팔면 능력치도 다시 계산 */
+export function sellItem(s: RunState, n: number): void {
+  const p = s.player;
+  const price = sellPrice(s, n);
+  if (price <= 0) return;
+  if (n <= 2) p.useSlots[n - 1] = null;
+  else {
+    p.passives.splice(n - 3, 1);
+    recalcStats(s);
+  }
+  addGold(s, price);
+  addEffect(s, { kind: "hit", x: p.x, y: p.y - 6, dirX: 0, dirY: 0, size: 6, maxTicks: 10 });
 }
 
 /** 새로고침: 아직 안 산 진열 물건(회복약 자리 제외)만 다시 뽑음. 산 자리는 비어 있는 그대로 (라스트 보스 층은 산 자리도 채움) */

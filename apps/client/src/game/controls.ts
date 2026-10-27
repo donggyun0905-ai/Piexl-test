@@ -56,6 +56,7 @@ export class Controls {
   /** 풋내기 스탯 찍기 (1~7, 장비 줄의 스탯 버튼) */
   private statQueued = 0;
   private skillQueued = 0;
+  private sellQueued = 0;
   skillKeys = false; // 숫자 키를 스킬로 씀 (추적자)
   /** 클릭·탭으로 고른 층 보상·미니맵 방 */
   private clickQueued: ClickTarget | null = null;
@@ -177,18 +178,12 @@ export class Controls {
   }
 
   /** 사용 아이템 쓰기 (화면 버튼). slot: 1·2 */
-  queueStat(k: number): void {
-    this.statQueued = k;
-  }
-
-  queueUse(slot: number): void {
-    this.useQueued = slot;
-  }
-
+  queueStat(k: number): void { this.statQueued = k; }
+  queueUse(slot: number): void { this.useQueued = slot; }
   /** 스킬 쓰기 (화면 버튼). 1~3 */
-  queueSkill(n: number): void {
-    this.skillQueued = n;
-  }
+  queueSkill(n: number): void { this.skillQueued = n; }
+  /** 상점에서 장비 팔기 (판매 줄). 1·2 = 사용 아이템 칸, 3~ = 패시브 순서 */
+  queueSell(n: number): void { this.sellQueued = n; }
 
   /** 상호작용을 한 번 누른 것으로 처리 (모바일 버튼) */
   queueInteract(): void {
@@ -267,6 +262,8 @@ export class Controls {
     const pickChoice = this.clickQueued?.pickChoice ?? 0;
     const statPick = this.statQueued;
     const skill = this.skillQueued;
+    const sell = this.sellQueued ? { sell: this.sellQueued } : {};
+    this.sellQueued = 0;
     this.statQueued = 0;
     this.skillQueued = 0;
     this.dashQueued = false;
@@ -274,8 +271,8 @@ export class Controls {
     this.useQueued = 0;
     this.clickQueued = null;
     // 자동 공격 중에는 조준·공격 입력을 쓰지 않으므로 0으로 (입력 기록이 짧아지고, 기록 = 계산에 쓴 값)
-    if (this.autoAim) return { moveX, moveY, aimX: 0, aimY: 0, attack: false, dash, interact, useSlot, pickChoice, statPick, skill, autoAim: true };
-    return { moveX, moveY, aimX, aimY, attack, dash, interact, useSlot, pickChoice, statPick, skill, autoAim: false };
+    if (this.autoAim) return { moveX, moveY, aimX: 0, aimY: 0, attack: false, dash, interact, useSlot, pickChoice, statPick, skill, ...sell, autoAim: true };
+    return { moveX, moveY, aimX, aimY, attack, dash, interact, useSlot, pickChoice, statPick, skill, ...sell, autoAim: false };
   }
 
   /** 모바일 조준 중인지 (조준점 표시용) */

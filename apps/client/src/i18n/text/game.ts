@@ -75,6 +75,8 @@ export const GAME_TEXT = {
   },
   promptTrash: { ko: "F: 들고 있는 무기를 버리겠습니까? (+{price}G, 빈손이 됨)", en: "F: Throw away your weapon? (+{price}G, you'll be empty-handed)", ja: "F: 持っている武器を捨てますか？（+{price}G、素手になる）" },
   promptTrashSure: { ko: "정말 버릴까요? F를 한 번 더 누르면 버립니다", en: "Really? Press F again to throw it away", ja: "本当に捨てますか？もう一度Fで捨てます" },
+  sellTitle: { ko: "판매", en: "Sell", ja: "売却" },
+  sellConfirm: { ko: "판매?", en: "Sell?", ja: "売る？" },
   promptBuy: { ko: "{price}G에 사기", en: "Buy for {price}G", ja: "{price}Gで買う" },
   promptNoGold: { ko: "돈이 모자람 ({price}G)", en: "Not enough gold ({price}G)", ja: "お金が足りない ({price}G)" },
   gold: { ko: "돈", en: "Gold", ja: "ゴールド" },

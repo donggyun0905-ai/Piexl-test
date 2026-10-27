@@ -24,7 +24,7 @@ import { gainExp, rollCrit } from "./novice";
 import type { EnemyState, RunState } from "./types";
 import { morphKill } from "./morphXp";
 import { recalcStats } from "./items";
-import { trackerTaken } from "./tracker";
+import { trackerGuard, trackerTaken } from "./tracker";
 import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, KNOCKBACK, keepInRoom, markCrit, normalize, roomGrid, RUSH_TICKS, STILL_TICKS } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -110,6 +110,8 @@ export function damagePlayer(s: RunState, dmg: number): void {
   if (hasPerk(p, "ironWall") && (p.gPause ?? 0) > 0) taken *= PERKS.ironWall.taken;
   // 용린갑(이무기)
   if (hasPerk(p, "scaleArmor")) taken *= PERKS.scaleArmor.taken;
+  // 위장복(추적자)
+  taken *= trackerGuard(p);
   // 계약의 방패(소환술사): 소환수 하나마다 받는 피해 감소
   if (hasPerk(p, "bondShield")) taken *= 1 - Math.min(PERKS.bondShield.below, PERKS.bondShield.taken * (p.summons?.length ?? 0));
   // 의사 가운: 받는 피해 감소, 맞은 뒤 잠깐 빨라짐
@@ -223,17 +225,19 @@ export function removeDead(s: RunState): void {
     if (tabooN(s, "deathBurst") > 0 && e.kind !== "dummy") addHazard(s, e.x, e.y, ENEMIES[e.kind].contactDamage);
     // 협동: 마지막으로 때린 사람이 처치 효과·돈을 받음
     useSeat(s, e.lastHit ?? back);
-    s.kills++;
+    // 보스가 부른 적(돈 없음)은 처치 수·쌓이는 힘(빛의 고리·잔영·경험치·먹은 영혼 등)에 넣지 않음
+    const minion = e.noGold;
+    if (!minion) s.kills++;
     hatchSlimes(s, e, alive);
     const p = s.player;
-    if (s.party) p.kills = (p.kills ?? 0) + 1;
-    if (hasPerk(p, "huntFrenzy")) {
+    if (s.party && !minion) p.kills = (p.kills ?? 0) + 1;
+    if (hasPerk(p, "huntFrenzy") && !minion) {
       p.streak = Math.min(PERKS.huntFrenzy.stacks, p.streak + 1);
       p.streakTicks = PERKS.huntFrenzy.ticks;
     }
     fallen.push({ x: e.x, y: e.y, seat: seatNo(s) });
     // 광야의 새벽에서는 영혼·처치 회복이 확률로만 (swarmLucky)
-    if (swarmLucky(s, "soul", e.id, SWARM.limits.soulChance)) apostleKill(s, e.x, e.y);
+    if (swarmLucky(s, "soul", e.id, SWARM.limits.soulChance)) apostleKill(s, e.x, e.y, minion);
     // 생명 흡수: 처치하면 최대 체력의 3% 회복
     if (hasPerk(p, "lifeLeech") && swarmLucky(s, "leech", e.id)) healPlayer(s, p.stats.maxHp * PERKS.lifeLeech.heal);
     // 생선 간식: 처치하면 고양이가 빨라짐
@@ -248,6 +252,7 @@ export function removeDead(s: RunState): void {
       if (!s.roomDamaged) s.flawlessBosses++;
     }
     if (!e.noGold) addGold(s, e.bounty ?? ENEMIES[e.kind].gold);
+    if (minion) continue;
     gainExp(s, e);
     if (morphKill(s, e)) recalcStats(s);
   }

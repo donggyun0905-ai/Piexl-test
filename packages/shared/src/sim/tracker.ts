@@ -1,6 +1,6 @@
 // 추적자(아스칼론, 시즌 2): 저격총 하나 + 스킬 셋 (PC 1·2·3 키, 모바일 스킬 버튼)
 // 1 암습 저격: 무적이 되고 화면이 어두워진 채 10초 안에 10발 (한 발 공격력 200%, 조준 원 안의 적) · 대기 10초
-// 2 강력한 한방: 모으는 동안 앞에 탄을 막는 벽 → 방을 꿰뚫는 한 줄 (공격력 1000% + 최대 체력 20%, 보스는 그 1/5) · 대기 60초
+// 2 강력한 한방: 모으는 동안 앞에 탄을 막는 벽 → 방을 꿰뚫는 한 줄 (공격력 1000% + 최대 체력 20%, 보스는 그 1/5) · 대기 60초 · 한 판 3번 (라스트 보스방에서 다시 3번)
 // 3 연발사격: 조준 없이 10발을 흩뿌려 쏨 · 대기 3초. 수치는 weaponsTracker.TRACKER, 아이템은 itemsTracker
 import { TICK_RATE } from "../constants";
 import { TRACKER_PERKS as K } from "../itemsTracker";
@@ -14,7 +14,7 @@ import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
 /** 입력 중 이 틱에 쓰는 것을 담아 둠: 누른 곳까지 거리(레이저·의사·거너·저격) · 누른 스킬 키 (player에서 부름) */
 export function readAim(p: PlayerState, input: TickInput): void {
   const k = weaponOf(p).kind;
-  if (k === "laser" || k === "medic" || k === "gun" || k === "snipe") p.aimDist = input.autoAim ? undefined : (Math.sqrt(input.aimX * input.aimX + input.aimY * input.aimY) / 100) * AIM_DIST_STEP;
+  if (k === "laser" || k === "medic" || k === "gun" || k === "snipe" || k === "bomb") p.aimDist = input.autoAim ? undefined : (Math.sqrt(input.aimX * input.aimX + input.aimY * input.aimY) / 100) * AIM_DIST_STEP;
   p.trKey = input.skill;
 }
 
@@ -31,8 +31,11 @@ export function trackerCooldown(p: PlayerState, i: number): number {
 
 /** 화면용: 스킬마다 남은 대기 0~1 (0 = 쓸 수 있음) */
 export function trackerSkills(p: PlayerState): number[] {
-  return [0, 1, 2].map((i) => Math.min(1, (p.trCd?.[i] ?? 0) / Math.max(1, trackerCooldown(p, i))));
+  return [0, 1, 2].map((i) => (i === 1 && trackerPowerLeft(p) <= 0 ? 1 : Math.min(1, (p.trCd?.[i] ?? 0) / Math.max(1, trackerCooldown(p, i)))));
 }
+
+/** 강력한 한방: 이번 판에 남은 횟수 (라스트 보스방에 들어가면 다시 채움) */
+export const trackerPowerLeft = (p: PlayerState) => T.powerUses - (p.trUsed ?? 0);
 
 /** 한 발 피해 배율: 할로 포인트(평소만) · 양각대 · 헤드샷 */
 function shotMul(s: RunState, normal: boolean, n: number): number {
@@ -132,7 +135,8 @@ function wallBlock(s: RunState): void {
 function useSkill(s: RunState, i: number): void {
   const p = s.player;
   const cd = (p.trCd ??= [0, 0, 0]);
-  if ((cd[i] ?? 0) > 0 || p.trAmbush || p.trCharge) return;
+  if ((cd[i] ?? 0) > 0 || p.trAmbush || p.trCharge || (i === 1 && trackerPowerLeft(p) <= 0)) return;
+  if (i === 1) p.trUsed = (p.trUsed ?? 0) + 1;
   if (i === 0) p.trAmbush = { shots: T.ambushShots, t: T.ambushTicks, gap: 0 };
   else if (i === 1) p.trCharge = T.powerCharge;
   else p.trBurst = { left: hasPerk(p, "trDrum") ? K.trDrum.shots : T.burstShots, gap: 0 };
@@ -148,8 +152,9 @@ export function trackerTick(s: RunState, want: boolean, speed: number): void {
   const cd = (p.trCd ??= [0, 0, 0]);
   for (let i = 0; i < cd.length; i++) if (cd[i]! > 0) cd[i]!--;
   for (const e of s.enemies) if ((e.trMarked ?? 0) > 0) e.trMarked!--;
-  // 위장복: 대시하면 잠깐 무적
-  if (p.dashTicks > 0 && !p.trDash && hasPerk(p, "trCamo")) p.invulnTicks = Math.max(p.invulnTicks, K.trCamo.ticks);
+  // 위장복: 대시하면 잠깐 받는 피해 줄어듦 (trackerGuard)
+  if (p.dashTicks > 0 && !p.trDash && hasPerk(p, "trCamo")) p.trCamo = K.trCamo.ticks;
+  if ((p.trCamo ?? 0) > 0) p.trCamo!--;
   p.trDash = p.dashTicks > 0;
   if (p.trKey && p.trKey >= 1 && p.trKey <= 3) useSkill(s, p.trKey - 1);
   // 연발사격 (움직이며 쏠 수 있음)
@@ -161,11 +166,10 @@ export function trackerTick(s: RunState, want: boolean, speed: number): void {
     b.gap = T.burstGap;
     if (--b.left <= 0) delete p.trBurst;
   }
-  // 암습 저격: 무적 · 제자리 · 10초 안에 10발
+  // 암습 저격: 무적 · 움직이며 10초 안에 10발
   const am = p.trAmbush;
   if (am) {
     p.invulnTicks = Math.max(p.invulnTicks, 2);
-    p.rootTicks = Math.max(p.rootTicks ?? 0, 2);
     am.t--;
     if (am.gap > 0) am.gap--;
     const auto = p.aimDist === undefined;
@@ -176,9 +180,8 @@ export function trackerTick(s: RunState, want: boolean, speed: number): void {
     }
     return;
   }
-  // 강력한 한방: 모으는 동안 제자리 · 앞에 벽
+  // 강력한 한방: 모으는 동안 앞에 벽 (움직일 수 있음)
   if (p.trCharge) {
-    p.rootTicks = Math.max(p.rootTicks ?? 0, 2);
     wallBlock(s);
     if (--p.trCharge <= 0) {
       delete p.trCharge;
@@ -196,7 +199,10 @@ export function trackerTick(s: RunState, want: boolean, speed: number): void {
 /** 사냥감 표식이 붙은 적이 받는 피해 배율 (combat) */
 export const trackerTaken = (e: EnemyState) => ((e.trMarked ?? 0) > 0 ? K.trMark.taken : 1);
 
+/** 위장복: 대시한 뒤 잠깐 플레이어가 받는 피해 배율 (combat) */
+export const trackerGuard = (p: PlayerState) => ((p.trCamo ?? 0) > 0 ? K.trCamo.taken : 1);
+
 /** 연습장 등에서 다시 시작할 때 */
 export function resetTracker(p: PlayerState): void {
-  for (const k of ["trCd", "trAmbush", "trCharge", "trBurst", "trShot", "trDash", "trKey"] as const) delete p[k];
+  for (const k of ["trCd", "trAmbush", "trCharge", "trBurst", "trShot", "trDash", "trKey", "trCamo", "trUsed"] as const) delete p[k];
 }
