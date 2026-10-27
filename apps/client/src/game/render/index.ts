@@ -55,6 +55,7 @@ import { drawForgottenAura, drawForgottenBack } from "./forgotten";
 import { drawRemnantEchoes } from "./remnant";
 import { drawWandererAura, drawWandererGround } from "./wanderer";
 import { drawSilkAmmo, drawSilkStacks } from "./silk";
+import { drawSecretAura, drawSecretGround } from "./secret";
 import { drawBossBar, drawEffects, drawProjectiles, drawReticleFor } from "./shots";
 
 export interface DrawOptions {
@@ -156,6 +157,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawForgottenBack(ctx, s, alpha, snap);
     drawRemnantEchoes(ctx, s, snap);
     drawWandererGround(ctx, s, snap);
+    drawSecretGround(ctx, s, snap);
   });
   drawEnemies(ctx, s, alpha, snap);
   drawInkMarks(ctx, s, alpha, snap);
@@ -198,6 +200,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawWandererAura(ctx, s, alpha, snap);
     drawSilkAmmo(ctx, s, alpha, snap);
     drawSilkStacks(ctx, s, snap);
+    drawSecretAura(ctx, s, alpha, snap);
   });
   drawProjectiles(ctx, s, alpha, snap);
   drawEffects(ctx, s, alpha, snap);

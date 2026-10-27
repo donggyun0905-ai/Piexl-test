@@ -112,6 +112,7 @@ export const ACHIEVEMENTS = [
   { id: "clearApostle", category: "character", run: clearAs("apostle") },
   { id: "clearDuck", category: "character", run: clearAs("duck") },
   { id: "clearScribe", category: "character", run: clearAs("scribe") },
+  { id: "clearMiner", category: "character", run: clearAs("miner") },
   { id: "clearAbandoned", category: "character", run: clearAs("abandoned") },
   { id: "clearTitan", category: "character", run: clearAs("titan") },
   { id: "clearOni", category: "character", run: clearAs("oni") },

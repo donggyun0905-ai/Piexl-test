@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.152",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "시즌 2 히든 캐릭터 에테르 광부 (무작위 캐릭터 5% · 연습장): 곡괭이로 맞힐 때마다 에테르 원석을 캐고, 원석 100이면 광산 붕괴(방 전체 바위) · 쓰러진 보통 적은 에테르 결정이 되어 깨면 파편이 튐 · 대시는 땅굴(땅속은 무적, 나오며 터뜨림)",
+        "에테르 광부 곡괭이 10 (땅 갈라짐 · 드릴 · 다이너마이트 · 광차 · 빠지면 끝나는 구덩이 · 자석 · 보석 · 던지는 곡괭이 · 에테르 기둥) · 전용 아이템 10 (카나리아 · 두더지 · 대박 원석 등)",
+      ],
+      en: [
+        "New Season 2 hidden character Ether Miner (5% from Random Character · Practice): every pickaxe hit mines Ether Ore, and 100 ore causes a Cave-In (rocks over the whole room) · fallen normal foes become Ether Crystals that burst into shards · Dash is a tunnel (invincible underground, erupts on exit)",
+        "Ether Miner has 10 pickaxes (ground cracks · Drill · Dynamite · Minecart · a Pit foes never leave · Magnet · Gem · Throwing Pick · Ether Pillar) and 10 own items (Canary · Mole · Jackpot Ore and more)",
+      ],
+      ja: [
+        "シーズン2ヒドゥンキャラクター エーテル鉱夫（ランダムキャラ5% · 練習場）: つるはしで当てるたびにエーテル原石を掘り、原石100で落盤（部屋全体に岩）· 倒れた普通の敵はエーテル結晶になり、割ると破片が飛ぶ · ダッシュはトンネル（地中は無敵、出る時に吹き飛ばす）",
+        "エーテル鉱夫のつるはし10（地割れ · ドリル · ダイナマイト · トロッコ · 落ちたら終わりの穴 · 磁石 · 宝石 · 投げつるはし · エーテルの柱）· 専用アイテム10（カナリア · モグラ · 大当たり原石など）",
+      ],
+    },
+  },
+  {
     version: "0.48.151",
     date: "2026-10-28",
     items: {

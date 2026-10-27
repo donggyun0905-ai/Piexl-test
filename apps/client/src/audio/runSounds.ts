@@ -43,6 +43,8 @@ interface Seen {
   /** 영사: 찢기 · 장전 끝 (화면에 있는 효과 수) */
   rends: number;
   reloads: number;
+  /** 에테르 광부: 광산 붕괴 (화면에 있는 효과 수) */
+  caves: number;
 }
 
 /** 탄을 쏘는 느낌의 캐릭터 (나머지는 휘두르는 소리) */
@@ -83,6 +85,7 @@ function snapshot(s: RunState): Seen {
     storms: s.effects.filter((f) => f.kind === "wdTempest").length,
     rends: s.effects.filter((f) => f.kind === "skRend").length,
     reloads: s.effects.filter((f) => f.kind === "skReload").length,
+    caves: s.effects.filter((f) => f.kind === "mnCave").length,
   };
 }
 
@@ -144,6 +147,13 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         if (now.rends > seen.rends) fx.push("ting");
         else if (now.attacks > seen.attacks) fx.push("string");
         if (now.reloads > seen.reloads) fx.push("spool");
+      } else if (c === "miner") {
+        // 에테르 광부: 곡괭이는 "깡" · 광산 붕괴는 우르르 + 화면이 크게 흔들림
+        if (now.attacks > seen.attacks) fx.push("clank");
+        if (now.caves > seen.caves) {
+          fx.push("rumble");
+          onShake(6);
+        }
       } else if (c === "wanderer") {
         // 방랑객: 적에게 칼선이 들어가면 "삥" · 그 밖의 칼질은 카타나 소리 · 천검란은 화면이 흔들림
         if (now.cuts > 0 && now.tick !== seen.tick) fx.push("ping");

@@ -1,6 +1,7 @@
 // 효과음·음악: 파일 없이 브라우저에서 바로 만든 소리 (저작권 걱정 없음). 그림처럼 나중에 직접 만든 소리로 바꿀 수 있음
 import { getSettings } from "../settings";
 import { ASCALON_SOUNDS } from "./sfxAscalon";
+import { SECRET_SOUNDS } from "./sfxSecret";
 
 export type Sfx =
   | "swing"
@@ -36,7 +37,9 @@ export type Sfx =
   | "tempest"
   | "string"
   | "ting"
-  | "spool";
+  | "spool"
+  | "clank"
+  | "rumble";
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;
@@ -134,6 +137,7 @@ function critSound(): void {
 const SOUNDS: Record<Sfx, () => void> = {
   crit: critSound,
   ...ASCALON_SOUNDS,
+  ...SECRET_SOUNDS,
   blink: () => {
     tone({ type: "sine", from: 900, to: 120, dur: 0.12, vol: 0.12 });
     noise(0.1, 0.2, 1800);

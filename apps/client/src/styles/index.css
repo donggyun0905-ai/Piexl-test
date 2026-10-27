@@ -2,6 +2,7 @@
 @import "./base.css";
 @import "./patch-notes.css";
 @import "./character.css";
+@import "./secret.css";
 @import "./game.css";
 @import "./skills.css";
 @import "./touch.css";

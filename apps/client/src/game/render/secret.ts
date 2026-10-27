@@ -1,0 +1,19 @@
+// 시즌 2 히든 캐릭터 그리기 모음 (index·season2가 한 줄로 부름)
+import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
+import { drawMinerAura, drawMinerFx, drawMinerGround, drawMinerShot } from "./miner";
+import type { Snap } from "./palette";
+
+type Ctx = CanvasRenderingContext2D;
+
+export function drawSecretGround(ctx: Ctx, s: RunState, snap: Snap): void {
+  drawMinerGround(ctx, s, snap);
+}
+export function drawSecretAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
+  drawMinerAura(ctx, s, alpha, snap);
+}
+export function drawSecretShot(ctx: Ctx, pr: ProjectileState, x: number, y: number, tick: number): boolean {
+  return drawMinerShot(ctx, pr, x, y, tick);
+}
+export function drawSecretFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
+  return drawMinerFx(ctx, fx, snap);
+}

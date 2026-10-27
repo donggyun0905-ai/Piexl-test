@@ -59,6 +59,7 @@ const DEMO_WEAPONS: Record<CharacterId, [WeaponId, WeaponId] | null> = {
   remnant: null,
   wanderer: null,
   silk: null,
+  miner: ["mnTnt", "mnPit"],
   abandoned: ["twinPistols", "lastPromise"],
   titan: ["pistonFist", "anvilHammer"],
   oni: ["frostClub", "tideClub"],

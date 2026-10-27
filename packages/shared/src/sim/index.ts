@@ -67,6 +67,7 @@ export { forgottenRing } from "./forgotten";
 export { statusImmune } from "./remnant";
 export { wandererGauge, zoneRadius } from "./wanderer";
 export { silkAmmo } from "./silk";
+export { caveNeed, minerOre } from "./miner";
 export { flameStacks } from "./flames";
 export { classMoveMul } from "./moveMul";
 export { DOLL_TINTS } from "./automata";

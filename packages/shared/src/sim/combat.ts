@@ -1,6 +1,7 @@
 // 피해 주고받기·처치
 import { endlessPow } from "./endless";
 import { inkTaken, scribeKill } from "./scribe";
+import { minerKill } from "./minerGround";
 import { petGold } from "./lobbyPet";
 import { BEDOUIN_PERKS } from "../itemsBedouin";
 import { PERKS } from "../perks";
@@ -248,6 +249,7 @@ export function removeDead(s: RunState): void {
     if (hasPerk(p, "firstAid") && swarmLucky(s, "aid", e.id)) leechHeal(s, R.FIRST_AID_HEAL);
     if (hasPerk(p, "energyRecycle") && swarmLucky(s, "recycle", e.id)) p.shieldPts = Math.min(p.stats.maxHp * R.RECYCLE_MAX, (p.shieldPts ?? 0) + R.RECYCLE_BARRIER);
     scribeKill(s, e);
+    minerKill(s, e);
     if (hasPerk(p, "chaseSteps")) p.dashCooldown = Math.max(0, p.dashCooldown - PERKS.chaseSteps.ticks);
     if (ENEMIES[e.kind].boss && !e.noGold) {
       s.bossKills++;

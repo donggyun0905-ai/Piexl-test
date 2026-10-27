@@ -1,4 +1,5 @@
 // 아스칼론 시즌 2 캐릭터 상태 타입. 모두 선택 값 (예전 저장에는 없음)
+import type { SecretEnemyState, SecretPlayerState } from "./secretTypes";
 
 export interface AscPlayerState {
   /** 추적자: 스킬 셋 남은 대기 틱 · 암습 저격(남은 발·남은 틱·다음 발까지) · 강력한 한방 모으는 남은 틱 · 연발사격(남은 발·다음 발까지) · 마지막 저격 틱(반동) · 지난 틱 대시 */
@@ -84,6 +85,6 @@ export interface SilkEnemyState {
   skBleed?: number;
 }
 
-/** 아스칼론 캐릭터 상태 모음 (types에서 한 이름으로 씀) */
-export interface AscalonPlayerState extends AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState {}
-export interface AscalonEnemyState extends AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState {}
+/** 아스칼론 캐릭터 상태 모음 + 시즌 2 히든 (types에서 한 이름으로 씀) */
+export interface AscalonPlayerState extends AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState {}
+export interface AscalonEnemyState extends AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState {}
