@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.155",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "시즌 2 히든 캐릭터 제우스 (무작위 캐릭터 5% · 연습장): 번개 무기 10 (번개창 · 하늘의 벼락 · 연쇄 번개 · 폭풍 구름 · 아이기스 · 신의 독수리 · 천둥소리 · 신의 벼락창 · 구전 · 거인 사냥)",
+        "제우스: 맞힐 때마다 감전이 쌓여 더 아픔 · 천벌 게이지가 차면 제우스 강림 (방 안 적 모두에게 벼락 · 8초 무적 · 공격 두 배 · 방 곳곳에 벼락) · 대시한 길에 번개 · 전용 아이템 10 (과부하 · 분노한 신 · 응징 등)",
+      ],
+      en: [
+        "New Season 2 hidden character Zeus (5% from Random Character · Practice): 10 lightning weapons (Lightning Javelin · Bolt from the Sky · Chain Lightning · Storm Cloud · Aegis · Eagle of the Sky King · Thunderclap · Divine Thunder Spear · Ball Lightning · Titan Hunt)",
+        "Zeus: each hit stacks Shock so foes take more · a full Wrath gauge brings the Descent of Zeus (bolts on every foe · 8s invincible · double attack speed · bolts all over the room) · lightning along your dash · 10 own items (Overload · Wrathful God · Retribution and more)",
+      ],
+      ja: [
+        "シーズン2ヒドゥンキャラクター ゼウス（ランダムキャラ5% · 練習場）: 雷の武器10（雷の槍 · 天の雷 · 連鎖する雷 · 嵐の雲 · アイギス · 天空王の鷲 · 雷鳴 · 神の雷槍 · 球雷 · 巨人狩り）",
+        "ゼウス: 当てるたびに感電が溜まり痛くなる · 天罰ゲージが満ちるとゼウス降臨（部屋の敵全員に雷 · 8秒無敵 · 攻撃2倍 · 部屋中に雷）· ダッシュの道に雷 · 専用アイテム10（過負荷 · 怒れる神 · 報いなど）",
+      ],
+    },
+  },
+  {
     version: "0.48.154",
     date: "2026-10-28",
     items: {

@@ -15,4 +15,11 @@ export const CHARACTER_TEXT_SECRET = {
     ja: "ヒドゥン · 神々の海をさすらう弓使い。武器は運命の弓ひとつ：とても遅いが溜めて撃つ一発が強い · 砂時計が満ちると返り、サイコロで運命が変わる（バフ36 · 技36 · 能力36：船・兵士・セイレーン・一つ目巨人の岩・木馬など）· 専用アイテム10（二つのサイコロなど）",
   },
   fate: { ko: "운명의 활", en: "Bow of Fate", ja: "運命の弓" },
+  zeus: { ko: "제우스", en: "Zeus", ja: "ゼウス" },
+  zeusDesc: {
+    ko: "히든 · 신들의 왕. 번개 무기 10 (번개창 · 하늘의 벼락 · 연쇄 번개 · 폭풍 구름 · 아이기스 · 구전 등) · 맞힐 때마다 감전이 쌓여 더 아픔 · 천벌 게이지가 차면 제우스 강림 (8초 무적 · 공격 두 배 · 방 곳곳에 벼락) · 대시한 길에 번개 · 전용 아이템 10",
+    en: "Hidden · King of the gods. 10 lightning weapons (Lightning Javelin · Bolt from the Sky · Chain Lightning · Storm Cloud · Aegis · Ball Lightning and more) · each hit stacks Shock so foes take more · a full Wrath gauge brings the Descent of Zeus (8s invincible · double attack speed · bolts all over the room) · lightning along your dash · 10 own items",
+    ja: "ヒドゥン · 神々の王。雷の武器10（雷の槍 · 天の雷 · 連鎖する雷 · 嵐の雲 · アイギス · 球雷など）· 当てるたびに感電が溜まり痛くなる · 天罰ゲージが満ちるとゼウス降臨（8秒無敵 · 攻撃2倍 · 部屋中に雷）· ダッシュの道に雷 · 専用アイテム10",
+  },
+  thunder: { ko: "번개", en: "Lightning", ja: "雷" },
 };

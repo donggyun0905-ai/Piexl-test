@@ -4,20 +4,23 @@ import { drawMinerAura, drawMinerFx, drawMinerGround, drawMinerShot } from "./mi
 import type { Snap } from "./palette";
 import { drawVoyagerAura, drawVoyagerGround, drawVoyagerShot, type FateName } from "./voyager";
 import { drawVoyagerFx } from "./voyagerFx";
+import { drawZeusAura, drawZeusFx, drawZeusGround, drawZeusShot } from "./zeus";
 
 type Ctx = CanvasRenderingContext2D;
 
 export function drawSecretGround(ctx: Ctx, s: RunState, snap: Snap): void {
   drawMinerGround(ctx, s, snap);
   drawVoyagerGround(ctx, s, snap);
+  drawZeusGround(ctx, s, snap);
 }
 export function drawSecretAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap, fateName?: FateName): void {
   drawMinerAura(ctx, s, alpha, snap);
   drawVoyagerAura(ctx, s, alpha, snap, fateName);
+  drawZeusAura(ctx, s, alpha, snap);
 }
 export function drawSecretShot(ctx: Ctx, pr: ProjectileState, x: number, y: number, tick: number): boolean {
-  return drawMinerShot(ctx, pr, x, y, tick) || drawVoyagerShot(ctx, pr, x, y, tick);
+  return drawMinerShot(ctx, pr, x, y, tick) || drawVoyagerShot(ctx, pr, x, y, tick) || drawZeusShot(ctx, pr, x, y, tick);
 }
 export function drawSecretFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
-  return drawMinerFx(ctx, fx, snap) || drawVoyagerFx(ctx, fx, snap);
+  return drawMinerFx(ctx, fx, snap) || drawVoyagerFx(ctx, fx, snap) || drawZeusFx(ctx, fx, snap);
 }

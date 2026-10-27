@@ -14,6 +14,13 @@ export const GUIDE_KO_SECRET = {
     "주사위 하나는 나온 눈의 줄(6칸)에서 한 칸 · 두 개의 주사위(전용 아이템)는 두 눈의 칸 그대로 · 눈의 합만큼 한 발이 셈",
     "줄: ⚀ 바다 · ⚁ 바람 · ⚂ 괴물 · ⚃ 신들 · ⚄ 전쟁 · ⚅ 귀향 (아래는 36칸 모두: 버프 / 기술 / 능력)",
   ],
+  zeus: [
+    "히든 · 신들의 왕 · 체력 140 · 공격력 15 · 행운 3",
+    "번개 무기 10: 번개창(옮겨 붙음) · 하늘의 벼락 · 연쇄 번개 · 폭풍 구름 · 아이기스(받는 피해 -25%) · 신의 독수리 · 천둥소리 · 신의 벼락창 · 구전 · 거인 사냥",
+    "맞힐 때마다 감전이 쌓여(최대 5) 하나마다 받는 피해 +6% · 감전된 적은 몸에서 불꽃이 튐",
+    "천벌 게이지(발밑 하늘색)가 차면 제우스 강림: 방 안 적 모두에게 벼락 · 8초 동안 무적 · 공격 두 배 · 방 곳곳에 벼락",
+    "대시는 번개 걸음: 지나간 길의 적에게 번개",
+  ],
 };
 export const GUIDE_EN_SECRET = {
   miner: [
@@ -30,6 +37,13 @@ export const GUIDE_EN_SECRET = {
     "One die picks a cell in the row of the number rolled · Twin Dice (own item) pick the exact cell · the sum of the pips makes the shot stronger",
     "Rows: ⚀ Sea · ⚁ Wind · ⚂ Monsters · ⚃ Gods · ⚄ War · ⚅ Homecoming (all 36 cells below: buff / skill / ability)",
   ],
+  zeus: [
+    "Hidden · King of the gods · HP 140 · Attack 15 · Luck 3",
+    "10 lightning weapons: Lightning Javelin (chains) · Bolt from the Sky · Chain Lightning · Storm Cloud · Aegis (-25% damage taken) · Eagle of the Sky King · Thunderclap · Divine Thunder Spear · Ball Lightning · Titan Hunt",
+    "Each hit stacks Shock (up to 5), +6% damage taken per stack · shocked foes spark",
+    "When the Wrath gauge (cyan bar under your feet) fills: the Descent of Zeus strikes every foe · 8s invincible · double attack speed · bolts all over the room",
+    "Dash is a Lightning Step: foes along your path are struck",
+  ],
 };
 export const GUIDE_JA_SECRET = {
   miner: [
@@ -45,5 +59,12 @@ export const GUIDE_JA_SECRET = {
     "頭上の砂時計が15秒ごとに満ちると返ってサイコロを振る → 運命1マスのバフ（一発を強く）· 技（撃ち方）· 能力（補助）を得て、前の運命は消える",
     "サイコロ1つは出た目の列（6マス）から1マス · 二つのサイコロ（専用アイテム）は二つの目のマスそのまま · 目の合計だけ一発が強くなる",
     "列：⚀ 海 · ⚁ 風 · ⚂ 怪物 · ⚃ 神々 · ⚄ 戦争 · ⚅ 帰郷（下に36マス全部：バフ / 技 / 能力）",
+  ],
+  zeus: [
+    "ヒドゥン · 神々の王 · 体力140 · 攻撃力15 · 運3",
+    "雷の武器10：雷の槍（連鎖）· 天の雷 · 連鎖する雷 · 嵐の雲 · アイギス（被ダメージ-25%）· 天空王の鷲 · 雷鳴 · 神の雷槍 · 球雷 · 巨人狩り",
+    "当てるたびに感電が溜まり（最大5）1つごとに被ダメージ+6% · 感電した敵は体から火花が散る",
+    "天罰ゲージ（足元の水色）が満ちるとゼウス降臨：部屋の敵全員に雷 · 8秒無敵 · 攻撃2倍 · 部屋中に雷",
+    "ダッシュは稲妻の歩み：通った道の敵に雷",
   ],
 };

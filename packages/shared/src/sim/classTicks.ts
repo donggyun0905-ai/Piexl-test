@@ -39,6 +39,7 @@ import { wandererTick } from "./wanderer";
 import { silkTick } from "./silk";
 import { minerTick } from "./miner";
 import { voyagerTick } from "./voyager";
+import { zeusTick } from "./zeus";
 import type { RunState } from "./types";
 
 type ClassTick = (s: RunState, want: boolean, speed: number) => void;
@@ -83,4 +84,5 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   thread: silkTick,
   pick: minerTick,
   fate: voyagerTick,
+  thunder: zeusTick,
 };

@@ -64,6 +64,19 @@ export interface VoyagerEnemyState {
   vyShred?: number;
 }
 
+export interface ZeusPlayerState {
+  /** 제우스: 천벌 게이지 · 제우스 강림 남은 틱 · 폭풍 구름(자리·남은 틱) · 대시 시작 자리 */
+  zsWrath?: number;
+  zsGod?: number;
+  zsClouds?: GroundMark[];
+  zsDash?: { x: number; y: number };
+}
+
+export interface ZeusEnemyState {
+  /** 감전 쌓임 */
+  zsShock?: number;
+}
+
 /** 시즌 2 히든 캐릭터 상태 모음 (types에서 한 이름으로 씀) */
-export interface SecretPlayerState extends MinerPlayerState, VoyagerPlayerState {}
-export interface SecretEnemyState extends MinerEnemyState, VoyagerEnemyState {}
+export interface SecretPlayerState extends MinerPlayerState, VoyagerPlayerState, ZeusPlayerState {}
+export interface SecretEnemyState extends MinerEnemyState, VoyagerEnemyState, ZeusEnemyState {}

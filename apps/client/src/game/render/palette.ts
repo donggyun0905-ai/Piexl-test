@@ -61,6 +61,7 @@ export const C = {
   silk: "#ff8ad8",
   miner: "#5ad8e8",
   voyager: "#e8b040",
+  zeus: "#8ac8ff",
   abandoned: "#7aa070",
   titan: "#c87a3a",
   oni: "#d84a3a",

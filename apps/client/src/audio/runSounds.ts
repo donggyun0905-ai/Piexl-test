@@ -47,6 +47,8 @@ interface Seen {
   caves: number;
   /** 운명의 여행자: 모래시계 뒤집힘 수 */
   flips: number;
+  /** 제우스 강림 중 */
+  zsGod: boolean;
 }
 
 /** 탄을 쏘는 느낌의 캐릭터 (나머지는 휘두르는 소리) */
@@ -89,6 +91,7 @@ function snapshot(s: RunState): Seen {
     reloads: s.effects.filter((f) => f.kind === "skReload").length,
     caves: s.effects.filter((f) => f.kind === "mnCave").length,
     flips: s.player.vyFlips ?? 0,
+    zsGod: (s.player.zsGod ?? 0) > 0,
   };
 }
 
@@ -157,6 +160,15 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
           fx.push("rumble");
           onShake(6);
         }
+      } else if (c === "zeus") {
+        // 제우스: 번개마다 지직 · 강림하면 큰 천둥 + 화면이 크게 흔들림
+        if (now.attacks > seen.attacks) fx.push("zap");
+        if (now.zsGod && !seen.zsGod) {
+          fx.push("descend");
+          onShake(8);
+        }
+        const i = fx.indexOf("shot");
+        if (i >= 0) fx.splice(i, 1);
       } else if (c === "voyager") {
         // 운명의 여행자: 쏠 때 시위 소리 · 모래시계가 뒤집히면 주사위 구르는 소리
         if (now.attacks > seen.attacks) fx.push("twang");

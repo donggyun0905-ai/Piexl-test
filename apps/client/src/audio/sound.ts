@@ -41,7 +41,9 @@ export type Sfx =
   | "clank"
   | "rumble"
   | "twang"
-  | "dice";
+  | "dice"
+  | "zap"
+  | "descend";
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;

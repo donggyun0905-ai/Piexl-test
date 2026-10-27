@@ -1,4 +1,4 @@
-# 시즌 2 히든 캐릭터 방향 시트 (python3 scripts/art/secret_sprites.py) → apps/client/public/sprites/{miner,voyager}.png
+# 시즌 2 히든 캐릭터 방향 시트 (python3 scripts/art/secret_sprites.py) → apps/client/public/sprites/{miner,voyager,zeus}.png
 # 몸·얼굴은 s2_common.person (시즌 1 그림체), 캐릭터마다 다른 것은 *_deco 꾸밈 함수에만
 # 에테르 광부는 거대한 곡괭이를 들어서 64칸 (몸 크기는 32칸 캐릭터와 같음)
 import math
@@ -147,14 +147,77 @@ def voyager_deco(c, layer, g):
         elif v == "back": c.line(tx - 1, ty - 4, tx + tw, ty + th + 3, k["bow"]); c.line(tx, ty - 4, tx + tw + 1, ty + th + 3, k["bowL"])
         else: bow(c, k, cx + 3, ty + 4, 11, 3)
 
+ZEUS = dict(
+    skin=hx("#e8c4a4"), skinD=hx("#c09878"), eye=hx("#2a5ab8"), eyeL=hx("#8ac8ff"), outline=hx("#4e4262"),
+    top=hx("#f2f0ea"), arm=hx("#e8c4a4"), legs=hx("#e8c4a4"), legsD=hx("#c09878"), shoe=hx("#a8743a"),
+    hair=hx("#c8ccdc"), hairD=hx("#8a90a8"), hairL=hx("#f0f2ff"),
+    sash=hx("#2a4aa8"), sashL=hx("#4a7ae8"), toga=hx("#f2f0ea"), togaD=hx("#c8c4b8"), trim=hx("#ffd040"), laurel=hx("#6aa040"), bolt=hx("#ffe060"), boltL=hx("#ffffff"), glow=hx("#8ac8ff"),
+)
+
+def thunderbolt(c, k, x, y, up=True):
+    """손에 든 번개 (x, y 손 · up이면 위로, 아니면 앞으로 뻗음)"""
+    pts = [(0, 0), (2, -3), (0, -4), (3, -8), (1, -9), (4, -13)] if up else [(0, 0), (3, -2), (4, 0), (8, -2), (9, 0), (13, -2)]
+    for (ax, ay), (bx, by) in zip(pts, pts[1:]): c.line(x + ax, y + ay, x + bx, y + by, k["bolt"])
+    ex, ey = pts[-1]
+    c.px(x + ex, y + ey, k["boltL"]); c.px(x + ex + (1 if not up else 0), y + ey - (1 if up else 0), k["glow"])
+
+def zeus_deco(c, layer, g):
+    k = g["k"]
+    v, hx0, hy, hw, hh = g["view"], g["hx"], g["hy"], g["hw"], g["hh"]
+    tx, ty, tw, th, cx, hip = g["tx"], g["ty"], g["tw"], g["th"], g["cx"], g["hip"]
+    if layer == "back_hair":
+        # 어깨 아래까지 내려오는 흰 머리
+        if v == "front": c.rect(hx0 - 1, hy + 2, 2, hh + 3, k["hair"]); c.rect(hx0 + hw - 1, hy + 2, 2, hh + 3, k["hair"])
+        elif v == "side": c.rect(hx0 - 1, hy + 2, 5, hh + 4, k["hair"])
+    if layer == "legs":
+        # 무릎까지 오는 토가 자락 · 샌들
+        if v in ("front", "back"): c.rect(tx - 1, hip - 1, tw + 2, 5, k["toga"]); c.rect(tx - 1, hip + 3, tw + 2, 1, k["trim"])
+        else: c.rect(cx - 4, hip - 1, 8, 5, k["toga"]); c.rect(cx - 4, hip + 3, 8, 1, k["trim"])
+    if layer == "body":
+        # 한쪽 어깨에 걸친 흰 토가 (금빛 테두리 비스듬히) · 드러난 왼쪽 어깨
+        if v in ("front", "back"):
+            c.rect(tx, ty, tw, th, k["toga"])
+            if v == "front":
+                c.px(tx, ty, k["skin"]); c.px(tx + 1, ty, k["skin"]); c.px(tx, ty + 1, k["skin"])
+                # 왼쪽 어깨에서 오른쪽 허리로 넓은 파란 망토 띠 (금빛 테두리)
+                for d in range(3): c.line(tx + 1 + d, ty, tx + tw - 2 + d, ty + th - 2, k["sash"] if d else k["sashL"])
+                c.line(tx + 4, ty, tx + tw + 1, ty + th - 2, k["trim"]); c.rect(tx, ty + th - 1, tw, 1, k["trim"])
+            else:
+                for d in range(3): c.line(tx + d, ty + th - 2, tx + tw - 3 + d, ty, k["sash"])
+        else:
+            c.rect(cx - 3, ty, 6, th, k["toga"])
+            for d in range(2): c.line(cx - 3 + d, ty + th - 1, cx + 2 + d, ty, k["sash"])
+            c.line(cx - 1, ty + th - 1, cx + 4, ty, k["trim"])
+    if layer == "hair":
+        # 흰 머리 · 긴 흰 수염 (얼굴 아래로 길게)
+        if v == "front":
+            c.rect(hx0, hy, hw, 3, k["hair"]); c.rect(hx0 - 1, hy + 1, 2, hh, k["hair"]); c.rect(hx0 + hw - 1, hy + 1, 2, hh, k["hair"])
+            c.rect(hx0 + 1, hy + hh - 1, hw - 2, 2, k["hair"]); c.rect(hx0 + 2, hy + hh + 1, hw - 4, 2, k["hair"]); c.rect(hx0 + 3, hy + hh + 3, hw - 6, 1, k["hairD"])
+        elif v == "back":
+            c.rect(hx0 - 1, hy, hw + 2, hh + 4, k["hair"]); c.rect(cx - 1, hy + 2, 1, hh, k["hairD"])
+        else:
+            c.rect(hx0, hy, hw, 3, k["hair"]); c.rect(hx0 - 1, hy + 1, 5, hh + 1, k["hair"])
+            c.rect(hx0 + hw - 4, hy + hh - 1, 4, 3, k["hair"]); c.rect(hx0 + hw - 4, hy + hh + 2, 3, 3, k["hairD"])
+    if layer == "hat":
+        # 금빛 띠에 초록 월계관 · 손에 든 번개 (공격: 앞은 치켜듦, 옆은 앞으로 내던짐)
+        c.rect(hx0, hy + 1, hw, 1, k["trim"])
+        for x in range(hx0 - 1, hx0 + hw + 1, 2): c.px(x, hy, k["laurel"])
+        if g["cast"]:
+            if v == "front": thunderbolt(c, k, tx + tw + 5, ty + 1, True)
+            else: thunderbolt(c, k, cx + 7, ty + 2, False)
+        elif v == "front": thunderbolt(c, k, tx + tw + 1, ty + th - 1, True)
+        elif v == "side": thunderbolt(c, k, cx, ty + th - 1, True)
+
 GEO = {
     "miner": dict(head=(10, 9), torso=(10, 8), leg=7, size=64),
     "voyager": dict(head=(10, 9), torso=(10, 8), leg=8, size=48),
+    "zeus": dict(head=(10, 9), torso=(11, 9), leg=8, size=48),
 }
 
 def main():
     save_sheet("miner", lambda r, col: person(MINER, r, col, GEO["miner"], miner_deco), size=64)
     save_sheet("voyager", lambda r, col: person(VOYAGER, r, col, GEO["voyager"], voyager_deco), size=48)
+    save_sheet("zeus", lambda r, col: person(ZEUS, r, col, GEO["zeus"], zeus_deco), size=48)
 
 if __name__ == "__main__":
     main()
