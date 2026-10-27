@@ -73,7 +73,7 @@ function smallRot(a: number): Vec {
 }
 
 /** 아무 각도: 16등분해 돌린 뒤 네 번 제곱 */
-function rot(a: number): Vec {
+export function rot(a: number): Vec {
   let v = smallRot(a / 16);
   for (let i = 0; i < 4; i++) v = mulV(v, v);
   return v;

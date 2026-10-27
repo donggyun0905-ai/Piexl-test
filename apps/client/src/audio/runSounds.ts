@@ -32,6 +32,8 @@ interface Seen {
   /** 추적자: 암습 저격 남은 발 · 강력한 한방 모으는 중 */
   ambush: number;
   charging: boolean;
+  /** 잊혀진 자: 신족 */
+  god: boolean;
 }
 
 /** 탄을 쏘는 느낌의 캐릭터 (나머지는 휘두르는 소리) */
@@ -65,6 +67,7 @@ function snapshot(s: RunState): Seen {
     tick: s.tick,
     ambush: s.player.trAmbush?.shots ?? 0,
     charging: (s.player.trCharge ?? 0) > 0,
+    god: (s.player.fgGod ?? 0) > 0,
   };
 }
 
@@ -112,6 +115,15 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         } else if (now.attacks > seen.attacks) fx.push("rifle");
         const i = fx.indexOf("shot");
         if (i >= 0 && fx.some((f) => f === "snipe" || f === "power" || f === "rifle")) fx.splice(i, 1);
+      } else if (c === "forgotten") {
+        // 잊혀진 자: 빛 공격은 맑은 종소리, 신족이 되면 오르는 화음
+        if (!seen.god && now.god) {
+          fx.push("awaken");
+          onShake(4);
+        }
+        if (now.attacks > seen.attacks) fx.push("chime");
+        const i = fx.indexOf("shot");
+        if (i >= 0) fx.splice(i, 1);
       } else if (now.attacks > seen.attacks && !fx.includes("shot") && !fx.includes("swing")) fx.push(SHOOTERS.has(c) ? "shot" : "swing");
       if (c === "elementalist" && now.hits > 0 && now.hits !== seen.hits && now.tick - orbSound >= 15) {
         orbSound = now.tick;

@@ -61,6 +61,7 @@ export const ACCENT: Record<string, string> = {
   mage: "#ff5a3a",
   drifter: "#7ad8e8",
   tracker: "#ff6a5a",
+  forgotten: "#ffd860",
   mystic: "#ff6a8a",
   engineer: "#5ad0f0",
   elementalist: "#5af0c0",

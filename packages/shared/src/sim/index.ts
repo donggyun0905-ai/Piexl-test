@@ -62,6 +62,7 @@ export { attackSpeedNow } from "./player";
 export { runeFill, spellOf, type SpellKind } from "./rune";
 export { morphXp } from "./morphXp";
 export { trackerCooldown, trackerSkills } from "./tracker";
+export { forgottenRing } from "./forgotten";
 export { flameStacks } from "./flames";
 export { classMoveMul } from "./moveMul";
 export { DOLL_TINTS } from "./automata";

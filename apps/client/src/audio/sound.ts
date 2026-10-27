@@ -24,7 +24,9 @@ export type Sfx =
   | "crit"
   | "rifle"
   | "snipe"
-  | "power";
+  | "power"
+  | "chime"
+  | "awaken";
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;
@@ -137,6 +139,16 @@ const SOUNDS: Record<Sfx, () => void> = {
     tone({ type: "sawtooth", from: 120, to: 26, dur: 0.8, vol: 0.5 });
     tone({ type: "sine", from: 60, to: 30, dur: 1.1, vol: 0.5 });
     tone({ type: "triangle", from: 1600, to: 400, dur: 0.25, vol: 0.2 });
+  },
+  // 잊혀진 자: 빛 공격 (맑은 종소리) · 신족 (위로 오르는 화음 + 여운)
+  chime: () => {
+    tone({ type: "sine", from: 1760, to: 1700, dur: 0.12, vol: 0.09 });
+    tone({ type: "triangle", from: 2640, to: 2600, dur: 0.08, vol: 0.05 });
+  },
+  awaken: () => {
+    for (const [i, f] of [523, 659, 784, 1047, 1319].entries()) tone({ type: "sine", from: f, to: f * 1.01, dur: 0.9, vol: 0.12, delay: i * 0.07 });
+    tone({ type: "triangle", from: 200, to: 800, dur: 0.6, vol: 0.15 });
+    noise(0.5, 0.12, 6000);
   },
   swing: () => noise(0.07, 0.15, 3000),
   shot: () => tone({ type: "square", from: 880, to: 440, dur: 0.06, vol: 0.12 }),

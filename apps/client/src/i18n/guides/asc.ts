@@ -1,4 +1,4 @@
-// 캐릭터 설명: 시즌 2 아스칼론 (추적자 …) · 한·영·일
+// 캐릭터 설명: 시즌 2 아스칼론 (추적자 · 잊혀진 자 …) · 한·영·일
 import type { CharacterId } from "@pixel-rogue/shared";
 
 type Guide = Partial<Record<CharacterId, readonly string[]>>;
@@ -12,6 +12,12 @@ export const GUIDE_KO_ASC: Guide = {
     "3 연발사격(대기 3초): 조준 없이 10발을 흩뿌려 쏨",
     "전용 아이템 10: 고배율 조준경 · 할로 포인트탄 · 소음기 · 양각대 · 사냥감 표식 · 도탄 · 확장 탄창 · 고압 장약 · 위장복 · 헤드샷",
   ],
+  forgotten: [
+    "아스칼론 · 잊혀진 자 · 옛 신의 마지막 후손인 반신, 빛으로 싸우는 여자 · 체력 85 · 아주 빠름 · 재생력 20 · 회피 20%",
+    "빛 무기 10: 빛의 손길 · 여래신장(하늘에서 빛 십자가 셋) · 빛의 창 · 성광 · 빛비 · 빛의 날개 · 프리즘 · 후광 · 심판의 빛 · 새벽 베기",
+    "빛의 고리: 적을 쓰러뜨리면 등의 고리가 차오름 (25마리). 가득 차면 10초 동안 신족: 공격 속도 2배 + 둘레 적을 빛기둥이 저절로 침 (0.3초마다 셋, 공격력 30%)",
+    "전용 아이템 10: 잊힌 기억 · 신의 잔향 · 빛기둥 강화 · 늘어나는 기둥 · 신의 가호 · 광휘 · 성흔 · 빛의 박동 · 깨어남 · 잔광",
+  ],
 };
 
 export const GUIDE_EN_ASC: Guide = {
@@ -23,6 +29,12 @@ export const GUIDE_EN_ASC: Guide = {
     "3 Rapid Fire (3s cooldown): 10 scattered shots without aiming",
     "10 exclusive items: High-Power Scope · Hollow Points · Suppressor · Bipod · Quarry Mark · Ricochet · Extended Mag · High-Pressure Charge · Ghillie Suit · Headshot",
   ],
+  forgotten: [
+    "Ascalon · The Forgotten · a demigod woman, last descendant of the old gods, who fights with light · HP 85 · very fast · Regen 20 · 20% dodge",
+    "10 light weapons: Touch of Light · Tathagata Palm (three light crosses from the sky) · Spear of Light · Holy Flash · Light Rain · Wings of Light · Prism · Halo · Light of Judgment · Dawn Cleave",
+    "Ring of light: kills fill the ring on her back (25). When full she takes divine form for 10s: double attack speed + pillars of light strike nearby foes on their own (three every 0.3s, 30% damage)",
+    "10 exclusive items: Forgotten Memory · Echo of the Gods · Brighter Pillars · More Pillars · Divine Ward · Radiance · Stigma · Pulse of Light · Awakening · Afterglow",
+  ],
 };
 
 export const GUIDE_JA_ASC: Guide = {
@@ -33,5 +45,11 @@ export const GUIDE_JA_ASC: Guide = {
     "2 強力な一撃（待ち60秒）：1.5秒溜める間、前に敵弾を防ぐ光の壁（無敵ではない）→ 部屋を貫く一直線（1000%＋最大体力20%、ボスはその1/5）",
     "3 連射（待ち3秒）：狙わずに10発ばらまく",
     "専用アイテム10：高倍率スコープ · ホローポイント弾 · サプレッサー · バイポッド · 獲物の印 · 跳弾 · 拡張マガジン · 高圧装薬 · ギリースーツ · ヘッドショット",
+  ],
+  forgotten: [
+    "アスカロン · 忘れられし者 · 古き神の最後の末裔、光で戦う半神の女性 · 体力85 · とても速い · 再生力20 · 回避20%",
+    "光の武器10：光の手 · 如来神掌（空から光の十字架3つ）· 光の槍 · 聖光 · 光の雨 · 光の翼 · プリズム · 後光 · 審判の光 · 暁の斬撃",
+    "光の輪：敵を倒すと背中の輪が満ちる（25体）。満ちると10秒間神族：攻撃速度2倍＋光柱が周りの敵を自動で撃つ（0.3秒ごとに3本、攻撃力30%）",
+    "専用アイテム10：忘れられた記憶 · 神の残響 · 光柱強化 · 増える光柱 · 神の加護 · 光輝 · 聖痕 · 光の鼓動 · 目覚め · 残光",
   ],
 };

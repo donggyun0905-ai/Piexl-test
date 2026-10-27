@@ -16,3 +16,18 @@ export interface AscEnemyState {
   /** 추적자 사냥감 표식 남은 틱 */
   trMarked?: number;
 }
+
+export interface ForgottenPlayerState {
+  /** 잊혀진 자: 빛의 고리에 모인 처치 수 · 지난 틱까지 본 처치 수 · 신족 남은 틱 · 떨어지는 빛 십자가 · 공격 횟수(성흔) */
+  fgRing?: number;
+  fgSeen?: number;
+  fgGod?: number;
+  fgFalls?: { x: number; y: number; t: number; r: number; dmg: number; slow?: number }[];
+  fgCount?: number;
+}
+
+export interface ForgottenEnemyState {
+  /** 광휘 남은 틱 · 1초마다 피해 */
+  fgRad?: number;
+  fgRadDmg?: number;
+}

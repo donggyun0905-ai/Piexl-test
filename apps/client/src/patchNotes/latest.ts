@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.135",
+    date: "2026-10-27",
+    items: {
+      ko: [
+        "아스칼론 새 캐릭터 '잊혀진 자' (여, 옛 신의 후손인 반신 · 체력 85 · 아주 빠름 · 재생력 20 · 회피 20%)",
+        "빛 무기 10: 빛의 손길 · 여래신장(하늘에서 빛 십자가가 떨어짐) · 빛의 창 · 성광 · 빛비 · 빛의 날개 · 프리즘 · 후광 · 심판의 빛 · 새벽 베기",
+        "빛의 고리: 적을 쓰러뜨리면 등의 고리가 차오르고, 가득 차면 10초 동안 신족 (공격 속도 2배 · 빛 날개 · 빛기둥이 둘레 적을 저절로 침, 공격력 30%)",
+        "전용 아이템 10 · 테마 스킨 9 + 여름 한정 '여름 파도'",
+      ],
+      en: [
+        "New Ascalon character 'The Forgotten' (female demigod, descendant of the old gods · HP 85 · very fast · Regen 20 · 20% dodge)",
+        "10 light weapons: Touch of Light · Tathagata Palm (light crosses fall from the sky) · Spear of Light · Holy Flash · Light Rain · Wings of Light · Prism · Halo · Light of Judgment · Dawn Cleave",
+        "Ring of light: kills fill the ring on her back; when full she takes divine form for 10s (double attack speed · wings of light · pillars of light strike nearby foes on their own for 30%)",
+        "10 exclusive items · 9 theme skins + the limited Summer Wave skin",
+      ],
+      ja: [
+        "アスカロンの新キャラクター「忘れられし者」（女性、古き神の末裔の半神 · 体力85 · とても速い · 再生力20 · 回避20%）",
+        "光の武器10：光の手 · 如来神掌（空から光の十字架が落ちる）· 光の槍 · 聖光 · 光の雨 · 光の翼 · プリズム · 後光 · 審判の光 · 暁の斬撃",
+        "光の輪：敵を倒すと背中の輪が満ち、満ちると10秒間神族（攻撃速度2倍 · 光の翼 · 光柱が周りの敵を自動で撃つ、攻撃力30%）",
+        "専用アイテム10 · テーマスキン9＋限定「夏の波」",
+      ],
+    },
+  },
+  {
     version: "0.48.134",
     date: "2026-10-27",
     items: {

@@ -8,6 +8,7 @@ import { rocketHit } from "./bomber";
 import { repulsorHit } from "./artifacter";
 import { punkShotHit } from "./punk";
 import { trackerShotHit } from "./tracker";
+import { lightBoltHit } from "./forgotten";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 
 export function s2Hit(s: RunState, pr: ProjectileState, e: EnemyState): void {
@@ -19,5 +20,6 @@ export function s2Hit(s: RunState, pr: ProjectileState, e: EnemyState): void {
   else if (pr.spirit === "afBlast") repulsorHit(s, pr, e);
   else if (pr.spirit === "cyBullet") punkShotHit(s, pr, e);
   else if (pr.spirit === "trBullet" || pr.spirit === "trBurst" || pr.spirit === "trRico") trackerShotHit(s, pr, e);
+  else if (pr.spirit === "fgBolt") lightBoltHit(s, pr, e);
   else if (pr.spirit === "eagleFeather" || pr.spirit === "venomSpit" || pr.spirit === "web" || pr.spirit === "phoenixFire" || pr.spirit === "batling") morphShotHit(s, pr, e);
 }

@@ -32,6 +32,7 @@ import { TERRA2_WEAPON_ART } from "./terra2";
 import { TERRA2B_WEAPON_ART } from "./terra2b";
 import { TERRA2C_WEAPON_ART } from "./terra2c";
 import { ASC_WEAPON_ART } from "./ascalon";
+import { FG_WEAPON_ART } from "./forgotten";
 import { REN_WEAPON_ART } from "./ren";
 import { SPIRIT_WEAPON_ART } from "./spirit";
 
@@ -66,6 +67,7 @@ const WEAPON_ART: Record<WeaponId, (g: Pen) => void> = {
   ...TERRA2B_WEAPON_ART,
   ...TERRA2C_WEAPON_ART,
   ...ASC_WEAPON_ART,
+  ...FG_WEAPON_ART,
   ...REN_WEAPON_ART,
   ...SPIRIT_WEAPON_ART,
   // 공용 (0.48.0) · 풋내기 맨손

@@ -48,6 +48,7 @@ import { drawOniUps, type OniUp } from "./oniUps";
 import { drawSwarmGround } from "./swarmMap";
 import { themeFor } from "./floorThemes";
 import { drawAmbushOverlay, drawTrackerAura } from "./tracker";
+import { drawForgottenAura, drawForgottenBack } from "./forgotten";
 import { drawBossBar, drawEffects, drawProjectiles, drawReticleFor } from "./shots";
 
 export interface DrawOptions {
@@ -143,6 +144,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawTerraGroundB(ctx, s, snap);
     drawRuneGround(ctx, s, snap);
     drawMorphGround(ctx, s, snap);
+    drawForgottenBack(ctx, s, alpha, snap);
   });
   drawEnemies(ctx, s, alpha, snap);
   drawInkMarks(ctx, s, alpha, snap);
@@ -181,6 +183,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawTerraAuraB(ctx, s, alpha, snap);
     drawTerraAuraC(ctx, s, alpha, snap);
     drawTrackerAura(ctx, s, alpha, snap);
+    drawForgottenAura(ctx, s, alpha, snap);
   });
   drawProjectiles(ctx, s, alpha, snap);
   drawEffects(ctx, s, alpha, snap);

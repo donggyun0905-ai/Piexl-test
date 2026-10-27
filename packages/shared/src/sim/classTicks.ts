@@ -33,6 +33,7 @@ import { bomberTick } from "./bomber";
 import { artifacterTick } from "./artifacter";
 import { punkTick } from "./punk";
 import { trackerTick } from "./tracker";
+import { forgottenTick } from "./forgotten";
 import type { RunState } from "./types";
 
 type ClassTick = (s: RunState, want: boolean, speed: number) => void;
@@ -71,4 +72,5 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   repulse: artifacterTick,
   cyber: punkTick,
   snipe: trackerTick,
+  light: forgottenTick,
 };
