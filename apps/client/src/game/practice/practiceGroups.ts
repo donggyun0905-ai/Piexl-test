@@ -96,5 +96,5 @@ const MINIONS: EnemyKind[] = ["crawler", "spitter", "charger", "mortar", "gnat",
 export const ENEMY_GROUPS: (Group<EnemyKind> & { floor: number })[] = [
   { key: "minion", title: "practiceMinions", open: true, list: MINIONS, floor: 1 },
   ...BOSS_TIERS.map((tier, i) => ({ key: `tier${i}`, title: `practiceTier${i + 1}` as TextKey, open: true, list: [...tier], floor: i * 2 + 1 })),
-  { key: "last", title: "practiceLast", open: true, list: ["dragon", "godeater", "plight"], floor: 7 },
+  { key: "last", title: "practiceLast", open: true, list: ["dragon", "godeater", "plight", "umbra"], floor: 7 },
 ];

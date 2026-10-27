@@ -1,6 +1,6 @@
 // 연습장: 문 없는 방 하나에서 아이템을 마음대로 가져 보고 적을 불러 시험함 (기록·업적 없음)
 import { ROOM_CX, ROOM_HEIGHT, ROOM_MAX_Y, ROOM_MIN_Y, ROOM_WIDTH } from "../constants";
-import { CHARACTERS, ENEMIES, LAST_BOSSES, type CharacterId, type EnemyKind, type WeaponId } from "../content";
+import { CHARACTERS, ENEMIES, LAST_BOSSES, S2_LAST_BOSSES, type CharacterId, type EnemyKind, type WeaponId } from "../content";
 import { PASSIVES, type PassiveDef, type PassiveId, type UseItemId } from "../items";
 import { resetCombo } from "./brawl";
 import { resetGeneral } from "./general";
@@ -132,7 +132,7 @@ export function practiceRemoveUse(s: RunState, id: UseItemId): void {
 export function practiceSpawn(s: RunState, kind: EnemyKind): void {
   const p = s.player;
   // 라스트 보스: 실제와 같은 큰 방에서 (태초의 빛과 어둠은 상자 벽 방에 둘이 같이)
-  if ((LAST_BOSSES as readonly string[]).includes(kind) || kind === "pdark") {
+  if ([...LAST_BOSSES, ...S2_LAST_BOSSES].includes(kind as never) || kind === "pdark") {
     practiceClearEnemies(s);
     s.roomCols = BIG_COLS;
     s.roomRows = BIG_ROWS;

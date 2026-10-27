@@ -3,6 +3,7 @@
 import { createRng, deriveSeed } from "../rng";
 import { hitDamage } from "./bossKit";
 import { parryInput } from "./bossCage";
+import { gripInput } from "./bossGrip";
 import { dirOf } from "./bossPrimeval";
 import { damagePlayer } from "./combat";
 import type { RunState, TickInput } from "./types";
@@ -45,7 +46,7 @@ function chainFail(s: RunState): void {
 /** 틱마다 (플레이어가 움직이기 전): 갓이터 구역 어둠이 옅어짐 · 사슬에 묶여 있으면 이동·대시 대신 방향 누르기를 셈(새로 누른 방향만) · 거울이면 이동 방향을 뒤집음 */
 export function bindInput(s: RunState, input: TickInput): TickInput {
   const p = s.player;
-  let out = parryInput(s, input);
+  let out = gripInput(s, parryInput(s, input));
   if ((p.blindTicks ?? 0) > 0) p.blindTicks = (p.blindTicks ?? 0) - 1;
   if ((p.mirrorTicks ?? 0) > 0) {
     p.mirrorTicks = (p.mirrorTicks ?? 0) - 1;

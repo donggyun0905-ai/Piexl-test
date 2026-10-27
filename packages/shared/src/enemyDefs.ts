@@ -7,11 +7,16 @@ export type TdMinionKind = "slime" | "runner" | "bat" | "beetle" | "golem" | "sh
 /** 보스: 1·2층(1단계) 강철 거구·검은 기사·얍삽한 활잡이 · 3·4층(2단계) 무리 여왕·세이렌·켄타우로스·하드플랜트 · 5·6층(3단계) 공허의 눈·데스·검신·천사장 */
 export type BossKind = "hulk" | "knight" | "archer" | "brood" | "siren" | "centaur" | "plant" | "seer" | "reaper" | "swordgod" | "archangel" | LastBossKind;
 /** 라스트 보스 (6층을 깬 뒤 골라서 도전, 7층 큰 보스방) */
-export type LastBossKind = "dragon" | "godeater" | "plight" | "pdark";
+export type LastBossKind = "dragon" | "godeater" | "plight" | "pdark" | "umbra";
 /** 고를 수 있는 라스트 보스 (태초의 빛을 고르면 태초의 어둠도 같이 나옴) */
 export const LAST_BOSSES: readonly LastBossKind[] = ["dragon", "godeater", "plight"];
+/** 시즌 2 라스트 보스 (미리 만든 것: 6층 도전·연습장에서만, 무한·영웅의 길·타워 디펜스·레이드에는 아직 안 나옴) */
+export const S2_LAST_BOSSES: readonly LastBossKind[] = ["umbra"];
+/** 검은 잔영이 차례로 부르는 거대한 짐승 셋 (sim/bossUmbra) */
+export type BeastKind = "sandworm" | "scorpion" | "roc";
+export const UMBRA_BEASTS: readonly BeastKind[] = ["sandworm", "scorpion", "roc"];
 /** 연습장 전용: 움직이지도 공격하지도 않는 허수아비 */
-export type EnemyKind = MinionKind | BossKind | "dummy" | "fighter";
+export type EnemyKind = MinionKind | BossKind | BeastKind | "dummy" | "fighter";
 
 export interface EnemyDef {
   kind: EnemyKind;
@@ -101,6 +106,14 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   /** 어둠의 유령: 맞지 않고, 닿으면 어둠이 짙어짐 */
   ghost: { kind: "ghost", hp: 9999, radius: 6, speed: 0.4, contactDamage: 0, gold: 0 },
   dragon: { kind: "dragon", hp: 9600, radius: 24, speed: 0.35, contactDamage: 20, gold: 100, boss: true },
+  /** 시즌 2 라스트 보스 검은 잔영: 맞지 않고 위에서 지켜봄. 체력 = 세 짐승 체력의 합 (막대 하나를 세 칸으로, sim/bossUmbra) */
+  umbra: { kind: "umbra", hp: 6000, radius: 12, speed: 0, contactDamage: 0, gold: 100, boss: true },
+  /** 데스웜: 땅속에서 예고 없이 다가와 갑자기 솟음 (sim/bossWorm) */
+  sandworm: { kind: "sandworm", hp: 2000, radius: 26, speed: 1.1, contactDamage: 18, gold: 0, boss: true },
+  /** 거대 전갈: 움직이는 표시로 땅속을 기어다니다 꼬리 찌르기(독) · 앞으로만 밀고 오는 돌진(집게에 붙잡힘) */
+  scorpion: { kind: "scorpion", hp: 2000, radius: 26, speed: 0.8, contactDamage: 16, gold: 0, boss: true },
+  /** 거대 매: 늘 하늘에 있다가 내려찍기 · 세 줄 활강. 피하면 떨어져 경직 (sim/bossRoc) */
+  roc: { kind: "roc", hp: 2000, radius: 28, speed: 0, contactDamage: 14, gold: 0, boss: true },
 };
 
 /** 단계마다 나올 수 있는 보스 (1·2층 · 3·4층 · 5·6층) */

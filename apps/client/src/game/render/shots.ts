@@ -183,4 +183,9 @@ export function drawBossBar(ctx: CanvasRenderingContext2D, s: RunState): void {
   ctx.fillRect(bx - 2, by - 2, bw + 4, bh + 4);
   ctx.fillStyle = C.bossCore;
   ctx.fillRect(bx, by, Math.round((bw * Math.max(0, boss.hp)) / boss.maxHp), bh);
+  // 검은 잔영: 막대 하나에 금 두 줄 (짐승 셋의 체력)
+  if (boss.kind === "umbra") {
+    ctx.fillStyle = "#f2e6c4";
+    for (const f of [1 / 3, 2 / 3]) ctx.fillRect(Math.round(bx + bw * f) - 1, by - 2, 2, bh + 4);
+  }
 }

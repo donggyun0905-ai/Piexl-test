@@ -62,7 +62,8 @@ export function updateEnemies(s: RunState): void {
     const x0 = e.x;
     const y0 = e.y;
     // 라스트 보스 궁극기는 기절·위압에 멈추지 않음
-    if (ultBusy(e)) e.stunTicks = e.fearTicks = 0;
+    // 검은 잔영(지켜보기만 함)도
+    if (ultBusy(e) || e.kind === "umbra") e.stunTicks = e.fearTicks = 0;
     // 얼음 부적·유압 해머: 경직된 적은 움직이지도 공격하지도 않음 (몸에 닿으면 피해는 그대로)
     // 느려짐(토룡·교만): 움직임과 공격이 모두 느림 (일반 적은 두 틱에 한 번, 보스는 네 틱에 한 번 쉼)
     if ((e.sluggish ?? 0) > 0) e.sluggish = (e.sluggish ?? 0) - 1;
@@ -188,6 +189,8 @@ export function updateEnemies(s: RunState): void {
     for (let j = i + 1; j < list.length; j++) {
       const a = list[i]!;
       const b = list[j]!;
+      // 하늘·땅속에 있는 적은 밀지 않음
+      if (a.air || b.air) continue;
       const dx = b.x - a.x;
       const dy = b.y - a.y;
       const rr = a.r + b.r;

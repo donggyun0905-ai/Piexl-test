@@ -3,6 +3,7 @@ import { allPlayers, DASH_TICKS, inPlay, ENEMIES, isAlive, morphEvolved, WEAPONS
 import { drawCrate } from "./swarm";
 import { drawFighter } from "./paewang";
 import { drawAimMark, drawHitRing } from "../aimMark";
+import { drawUmbraActor } from "./umbra";
 import { drawCharacter, drawEnemySprite, drawSprite, isCasting, sheetFor, type CharacterPose } from "../sprites";
 import { C, CHARM_INK, lerp, type Snap } from "./palette";
 import { drawGuardianWarn, drawMinionDetail } from "./minions";
@@ -76,6 +77,8 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       drawFighter(ctx, s, e, alpha, snap);
       continue;
     }
+    // 검은 잔영·거대한 짐승 셋 (땅속·하늘·솟기)
+    if (drawUmbraActor(ctx, s, e, x, y)) continue;
     // 하늘로 날아오른 보스: 그림자만
     if (e.air) {
       ctx.fillStyle = "rgba(0, 0, 0, 0.45)";

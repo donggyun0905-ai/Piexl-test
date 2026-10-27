@@ -19,7 +19,7 @@ for (const name of SPRITE_FILES) {
 export const ENEMY_SPRITES: readonly string[] = [
   "dummy", "crawler", "spitter", "mortar", "charger", "gnat", "guardian", "paladin", "tower", "soul", "ghost",
   "hulk", "brood", "seer", "knight", "archer", "siren", "centaur", "plant", "reaper", "swordgod", "archangel",
-  "godeater", "ruinblade", "chaosblade", "plight", "pdark", "dragon",
+  "godeater", "ruinblade", "chaosblade", "plight", "pdark", "dragon", "umbra", "sandworm", "scorpion", "roc",
   "slime", "runner", "bat", "beetle", "golem", "shaman", "eggsac", "wisp",
   // 서큐버스(무리 여왕)가 부른 졸개
   "incubus",

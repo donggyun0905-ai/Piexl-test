@@ -19,6 +19,9 @@ export { DASH_TICKS, DOOR_HALF, EXIT_X, FLEE_COST, PLAYER_RADIUS, roomGrid } fro
 export { beamDirs } from "./bossLight";
 export { DARK_DEATH } from "./bossPrimeval";
 export { zoneRect } from "./bossZones";
+export { BOSS_UMBRA_RULES } from "./bossUmbra";
+export { BOSS_WORM_RULES } from "./bossWorm";
+export { BOSS_ROC_RULES } from "./bossRoc";
 export { cageRect, PARRY_TICKS } from "./bossCage";
 export { HELL_CHARGE, HELL_COLS, HELL_ROWS, HELL_SHOW, HELL_WAVES, hellCell } from "./bossUlts";
 export * from "./practice";

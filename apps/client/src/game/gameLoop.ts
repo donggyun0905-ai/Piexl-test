@@ -25,6 +25,8 @@ import { activeFx } from "../shop/effects";
 
 /** 한 번에 따라잡는 최대 틱 수 (탭을 오래 비웠다 돌아올 때 멈춤 방지) */
 const MAX_CATCH_UP = 10;
+/** 검은 잔영 대사 */
+const UMBRA_LINES: readonly TextKey[] = ["umbraSay0", "umbraSay1", "umbraSay2", "umbraSay3"];
 
 export interface LoopOptions {
   run: RunState;
@@ -219,6 +221,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       fateName: (part, i) => fateParts(i, lang)[part]!.name,
       tagName: (kind) => SPECIAL_NAMES[kind][lang],
       oniUp: (k) => t(k === "hp" ? "oniUpHp" : k === "regen" ? "oniUpRegen" : "oniUpReach"),
+      umbraLine: (i) => t(UMBRA_LINES[i] ?? "umbraSay0"),
       bossName: (k) => t(k === "dragon" ? "bossDragon" : k === "godeater" ? "bossGodEater" : "bossPrimeval"),
       hidePlayer: tiger ? () => resting(tiger) : undefined,
       under: tiger ? (c, snap) => under(c, tiger, run, acc / TICK_MS, snap, run.tick) : undefined,

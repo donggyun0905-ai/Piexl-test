@@ -26,6 +26,7 @@ import { drawStarGround, drawStarNodes } from "./star";
 import { drawPrimeval, drawPrimevalOverlay } from "./primeval";
 import { drawUltGround, drawUltOverlay } from "./ults";
 import { drawArenaLabels } from "./arena";
+import { drawUmbraTalk } from "./umbra";
 import { drawMedicAir, drawMedicGround } from "./medic";
 import { lerp, type Snap } from "./palette";
 import { drawRoom } from "./room";
@@ -74,6 +75,8 @@ export interface DrawOptions {
   cursor?: () => { x: number; y: number } | null;
   /** 보스 이름 (레이드 아레나 최종 보스 출구 표시) */
   bossName?: (kind: string) => string;
+  /** 검은 잔영 대사 (0 처음 · 1~3 짐승을 잡을 때마다) */
+  umbraLine?: (i: number) => string;
   /** 장수 필살기 이름 (generalLegends.LEGENDS 순번) */
   legendName?: (i: number) => string;
   /** 운명의 여행자 운명 이름 (버프 0 · 기술 1 · 능력 2, 칸 번호) */
@@ -217,6 +220,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   opt.modeOverlay?.(ctx, s, alpha, snap);
   drawAmbushOverlay(ctx, s, snap, s.player.aimDist === undefined ? null : cursorWorld(ctx, opt, k, camX, camY));
   drawBossBar(ctx, s);
+  drawUmbraTalk(ctx, s, opt.pixelScale, opt.umbraLine);
   drawMorphWake(ctx, s);
   if (opt.showReticle && !s.over) drawReticleFor(ctx, s, alpha, snap);
   // 화면에 붙는 글자 (카메라와 상관없이 왼쪽 위)

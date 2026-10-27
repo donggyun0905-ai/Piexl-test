@@ -10,11 +10,16 @@ import { BOSS_BLADES_RULES } from "./bossBlades";
 import { BOSS_CAGE_RULES } from "./bossCage";
 import { BOSS_DARK_RULES } from "./bossDark";
 import { BOSS_DRAGON_RULES } from "./bossDragon";
+import { BOSS_GRIP_RULES } from "./bossGrip";
 import { BOSS_HADES_RULES } from "./bossHades";
 import { BOSS_LIGHT_RULES } from "./bossLight";
 import { BOSS_PRIMEVAL_RULES } from "./bossPrimeval";
+import { BOSS_ROC_RULES } from "./bossRoc";
+import { BOSS_SCORPION_RULES } from "./bossScorpion";
 import { BOSS_ULTS_RULES } from "./bossUlts";
+import { BOSS_UMBRA_RULES } from "./bossUmbra";
 import { BOSS_WAVES_RULES } from "./bossWaves";
+import { BOSS_WORM_RULES } from "./bossWorm";
 import { BOSS_ZONES_RULES } from "./bossZones";
 import { BOSSES_ONE_RULES } from "./bossesOne";
 import { BOSSES_THREE_RULES } from "./bossesThree";
@@ -74,11 +79,16 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   BOSS_CAGE_RULES,
   BOSS_DARK_RULES,
   BOSS_DRAGON_RULES,
+  BOSS_GRIP_RULES,
   BOSS_HADES_RULES,
   BOSS_LIGHT_RULES,
   BOSS_PRIMEVAL_RULES,
+  BOSS_ROC_RULES,
+  BOSS_SCORPION_RULES,
   BOSS_ULTS_RULES,
+  BOSS_UMBRA_RULES,
   BOSS_WAVES_RULES,
+  BOSS_WORM_RULES,
   BOSS_ZONES_RULES,
   BOSSES_ONE_RULES,
   BOSSES_THREE_RULES,

@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.156",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "시즌 2 라스트 보스 '검은 잔영' 미리 공개 (6층 클리어 뒤 도전 · 연습장): 위에서 지켜보며 거대한 짐승 셋을 차례로 부르고, 하나 잡을 때마다 \"호오...\" \"제법이군...\" \"지켜볼 가치가 있어..\" 뒤 사라짐 · 체력 막대 한 줄을 세 칸으로",
+        "데스웜: 땅속에서는 예고 없이 다가와 갑자기 표시가 뜨고 솟아오름(사방으로 바위) · 솟는 1초 · 위에서 2초(이때 때리기) · 순식간에 들어감",
+        "거대 전갈: 움직이는 표시로 모래 밑을 기어다니다 꼬리 찌르기(맞으면 독) · 앞으로만 밀고 오는 3초 돌진(부딪히면 집게에 3초 붙잡혀 못 움직이고 피해) → 옆으로 피한 뒤 지쳐 있을 때 때리기",
+        "거대 매: 늘 하늘에 있어 보이지 않음 · 갑자기 뜨는 내려찍기(피하면 3초 경직, 맞으면 바로 하늘로) · 차례로 뜨는 세 줄 활강 뒤 어지러워 떨어져 3초 경직",
+      ],
+      en: [
+        "Season 2 final boss preview, the Black Remnant (challenge after clearing floor 6 · Practice): it watches from above and calls three colossal beasts in turn; after each one falls it says \"Hoh...\", \"Not bad...\", \"Worth watching..\" and then vanishes · one health bar split into three",
+        "Death Worm: moves underground with no warning, then a marker suddenly appears and it bursts up (rocks in all directions) · 1s to rise · 2s up top (strike now) · dives back in an instant",
+        "Colossal Scorpion: crawls under the sand with a moving marker · tail sting (poisons) · a 3s straight-line charge it cannot turn (a hit pins you in its claws for 3s) → sidestep and strike while it is worn out",
+        "Colossal Hawk: always unseen in the sky · sudden dive (dodge it and it is dazed for 3s, get hit and it flies right back up) · three swoop lines in a row, then it falls dazed for 3s",
+      ],
+      ja: [
+        "シーズン2ラストボス「黒き残影」先行公開（6階クリア後の挑戦 · 練習場）: 上から見届けつつ巨大な獣を三体順に呼び、一体倒すごとに「ほう…」「なかなかやるな…」「見届ける価値がある..」と言い残して消える · 体力バー1本を3区切りに",
+        "デスワーム: 地中では予告なく近づき、突然表示が出て飛び出す（全方向に岩）· 出るのに1秒 · 地上に2秒（ここで攻撃）· 一瞬で潜る",
+        "巨大サソリ: 動く表示とともに砂の下を這う · 尾の突き（当たると毒）· 向きを変えられない3秒の直進突進（ぶつかるとハサミに3秒捕まり動けずダメージ）→ 横に避けて疲れている間に攻撃",
+        "巨大な鷹: いつも空にいて見えない · 突然の急降下（避けると3秒硬直、当たるとすぐ空へ）· 順に出る三本の滑空の後、目を回して落ち3秒硬直",
+      ],
+    },
+  },
+  {
     version: "0.48.155",
     date: "2026-10-28",
     items: {
