@@ -64,6 +64,21 @@ describe("야수와 고양이", () => {
     expect(kinds("claws", "extraCat", "extraCat")).toEqual(["cat", "cat", "cat"]);
   });
 
+  it("한 마리 더 + 그림자 발로 바꿔도 고양이가 사라지지 않고 그대로 있음", () => {
+    const s = beast("catpack", "extraCat");
+    updatePets(s);
+    s.player.weaponId = "shadowpaw";
+    recalcStats(s);
+    updatePets(s);
+    const first = [...s.player.pets!];
+    for (let i = 0; i < 5; i++) updatePets(s);
+    expect(s.player.pets!.map((p) => p.kind)).toEqual(["shadow", "shadow", "cat"]);
+    expect(s.player.pets).toEqual(first);
+    s.player.passives.push("extraCat");
+    updatePets(s);
+    expect(s.player.pets).toHaveLength(4);
+  });
+
   it("할퀴기·덮치기: 덮치기는 가까운 적에게 뛰어듦", () => {
     const s = beast();
     s.enemies = [enemy(1, 135, 72)];

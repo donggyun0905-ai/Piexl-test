@@ -24,7 +24,7 @@ import { beastSpeedMul } from "./pets";
 import { fireMedic } from "./medicWeapons";
 import { medicSpeedMul } from "./heal";
 import { classMoveMul } from "./moveMul";
-import type { EnemyState, RunState, TickInput } from "./types";
+import type { EnemyState, PlayerState, RunState, TickInput } from "./types";
 import { AIM_DIST_STEP } from "./types";
 import { addEffect, shotDirs, DASH_COOLDOWN, DASH_SPEED_MUL, DASH_TICKS, dist2, hasPerk, keepInRoom, normalize, roomGrid, STILL_TICKS, weaponOf } from "./util";
 import { tabooUp } from "./taboo";
@@ -158,11 +158,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
   // 자동 공격: 누르지 않아도 사거리 안에 적이 있으면 공격. 수동: 누르고 있으면 공격
   // 세이렌에게 홀린 동안은 공격하지 못함
   const wantAttack = !charmed(p) && (input.autoAim ? autoInRange : input.attack);
-  const still = p.stillTicks >= STILL_TICKS && hasPerk(p, "overcharge") ? PERKS.overcharge.speed : 1;
-  // 땅의 부적: 5번 맞히면 잠깐 공격 속도 증가
-  const haste = (p.hasteTicks ?? 0) > 0 ? HASTE_MUL : 1;
-  // 과잉 진료(의사): 보호막이 가득이면 빨라짐
-  const speed = p.stats.attackSpeed * (1 + PERKS.huntFrenzy.speed * p.streak) * still * haste * medicSpeedMul(p) * beastSpeedMul(p);
+  const speed = attackSpeedNow(p);
   // 직업 무기: 누르고 있는 동안(연속 공격·모으기·에너지파 게이지)도 매 틱 처리 (classTicks)
   const classTick = CLASS_TICKS[weaponOf(p).kind];
   petTick(s);
@@ -186,6 +182,13 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
       attack(s);
     }
   }
+}
+
+/** 지금 공격 속도 (사냥 열기·과충전·땅의 부적·의사 과잉 진료·무리의 우두머리 반영, 능력치 창도 이 값) */
+export function attackSpeedNow(p: PlayerState): number {
+  const still = p.stillTicks >= STILL_TICKS && hasPerk(p, "overcharge") ? PERKS.overcharge.speed : 1;
+  const haste = (p.hasteTicks ?? 0) > 0 ? HASTE_MUL : 1;
+  return p.stats.attackSpeed * (1 + PERKS.huntFrenzy.speed * p.streak) * still * haste * medicSpeedMul(p) * beastSpeedMul(p);
 }
 
 function attack(s: RunState): void {

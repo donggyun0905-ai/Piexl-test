@@ -28,6 +28,8 @@ export type MoveKind =
   | "counter"
   /** 체력 20% 이하 적에게 돌진해 쓰러뜨림 (보스는 3배 피해) */
   | "execute"
+  /** 정권 지르기: 앞으로 곧게 친 뒤 주먹 끝에서 범위 (area 반경 · areaMul 배율) */
+  | "punch"
   /** 파동탄 hits발 (spread가 있으면 부채꼴, charge가 있으면 먼저 모음, scatter면 사방으로 아무렇게나) */
   | "shot";
 
@@ -51,6 +53,11 @@ export interface ComboMove {
   /** 파동탄: 부채꼴 사이 각 [cos, sin] · 사방으로 아무렇게나 */
   spread?: readonly [number, number];
   scatter?: boolean;
+  /** 정권 끝 범위: 반경 · 공격력 배율 */
+  area?: number;
+  areaMul?: number;
+  /** 이 기술을 쓰면 보호막을 이 값으로 (쌓이지 않음) */
+  shield?: number;
 }
 
 export type ComboStyle = "fist" | "boxing" | "kick" | "muaythai" | "judo" | "jiujitsu" | "mma" | "karate" | "taekkyon" | "energy";
@@ -94,10 +101,12 @@ export const COMBOS: Record<ComboStyle, readonly ComboMove[]> = {
     { kind: "throw", mul: 3, range: 32, pace: 1.6 },
     { kind: "strike", mul: 2, range: 34, arc: -0.2, push: 24, pace: 0.6 },
   ],
+  // 가라테: 정권 지르기(끝에서 범위) 두 번 → 보호막 20 + 앞차기 → 큰 정권 + 큰 범위
   karate: [
-    { kind: "guard", mul: 0, range: 50, push: 14, pace: 3 },
-    { kind: "counter", mul: 1, range: 40, stun: 60 },
-    { kind: "execute", mul: 3, range: 100, invuln: true },
+    { kind: "punch", mul: 1, range: 30, arc: 0.85, area: 16, areaMul: 0.6 },
+    { kind: "punch", mul: 1, range: 30, arc: 0.85, area: 16, areaMul: 0.6 },
+    { kind: "strike", mul: 1.4, range: 34, arc: 0.7, push: 18, shield: 20 },
+    { kind: "punch", mul: 2.6, range: 40, arc: 0.85, area: 40, areaMul: 1.6, stun: 30, invuln: true },
   ],
   taekkyon: [
     { kind: "flurry", mul: 1, range: 22, arc: 0.3, hits: 3, gap: 3, side: true },

@@ -39,9 +39,9 @@ export const COMBO_DESC: Record<ComboStyle, Names> = {
     ja: "5段コンボ：遅い突き → 速い左右連打 → 敵の前まで無敵の突進でつかむ → 叩きつけ（範囲） → 広く押し出す蹴り",
   },
   karate: {
-    ko: "콤보: 빨아들이고 3초 버티기 (받는 피해 절반) → 받은 피해 ×3 범위 일격·기절 → 체력 20% 이하 적을 돌진해 쓰러뜨림 (보스는 3배 피해), 입힌 피해의 30% 회복",
-    en: "Combo: pull in and brace for 3s (half damage taken) → area strike of 3x damage taken plus stun → dash through enemies at 20% health or less to finish them (3x damage to bosses), healing 30% of the damage dealt",
-    ja: "コンボ：引き寄せて3秒耐える（被ダメージ半分） → 受けたダメージ×3の範囲一撃・気絶 → 体力20%以下の敵へ突進して倒す（ボスは3倍ダメージ）、与えたダメージの30%回復",
+    ko: "4단 콤보: 정권 지르기 (주먹 끝에서 작은 범위) 두 번 → 보호막 20 (쌓이지 않음) + 밀치는 앞차기 → 무적 큰 정권 지르기 + 큰 범위 (기절)",
+    en: "4-step combo: straight punch (small burst at the fist) twice → 20 shield (doesn't stack) + pushing front kick → invulnerable heavy straight punch + big burst (stun)",
+    ja: "4段コンボ：正拳突き（拳の先で小さな範囲）2回 → シールド20（重ならない）＋押し出す前蹴り → 無敵の大きな正拳突き＋大きな範囲（気絶）",
   },
   taekkyon: {
     ko: "4단 콤보를 아주 빠르게: 좌·우·앞 3연타 → 강하게 밀치는 찌르기 → 무적 돌진 넓은 범위 (기절) → 내려찍기",

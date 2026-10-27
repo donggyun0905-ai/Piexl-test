@@ -58,6 +58,7 @@ export { eaterRegen, eaterRegenCap } from "./eater";
 export { mukinDef, mukinRegen } from "./mukin";
 export { petCrit, petGold, petTaken } from "./lobbyPet";
 export { riderGauge, riderHeat, riderSpeedMul } from "./rider";
+export { attackSpeedNow } from "./player";
 export { flameStacks } from "./flames";
 export { classMoveMul } from "./moveMul";
 export { DOLL_TINTS } from "./automata";

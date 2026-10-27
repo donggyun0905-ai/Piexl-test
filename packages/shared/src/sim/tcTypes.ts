@@ -53,7 +53,7 @@ export interface TcPlayerState {
   afMade?: number;
   afSurge?: number;
   afRevived?: boolean;
-  /** 펑크: 신경 가속 게이지 · 켜진 남은 틱 · 느리게 한 적 탄 · 잔상 자리 · 날아가는 EMP · 맞힌 수(혈액 정화기) · 지난 틱에 대시 중이었는지 */
+  /** 펑크: 신경 가속 게이지 · 켜진 남은 틱 · 느리게 한 적 탄 · 잔상 자리 · 날아가는 EMP · 맞힌 수(혈액 정화기) · 지난 틱에 대시 중이었는지 · 퀵 해킹 */
   cyGauge?: number;
   cyAccel?: number;
   cyFrozen?: number[];
@@ -61,4 +61,6 @@ export interface TcPlayerState {
   cyEmp?: { x: number; y: number; sx: number; sy: number; t: number; dmg: number }[];
   cyHits?: number;
   cyDash?: boolean;
+  /** 신경 가속 중 퀵 해킹까지 남은 틱 */
+  cyQuick?: number;
 }

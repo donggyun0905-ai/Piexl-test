@@ -56,4 +56,10 @@ export const PUNK = {
   /** 모노와이어 출혈 · EMP가 터지기까지 틱 */
   bleedMul: 0.4,
   empFuse: 24,
+  /** 신경 가속 중 퀵 해킹: 무기 공격과 따로, 공격하는 동안 이 틱마다 가까운 적 몇에게 (닿는 거리 · 공격력 배율 · 멈춤 틱) */
+  quickEvery: 18,
+  quickN: 2,
+  quickReach: 120,
+  quickMul: 0.7,
+  quickStun: 10,
 };

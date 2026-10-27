@@ -172,6 +172,19 @@ describe("테라코어 시즌 2", () => {
     expect(rests).toBe(6);
   });
 
+  it("펑크 신경 가속 중에는 무기와 따로 퀵 해킹이 가까운 적을 때림", () => {
+    const s = run("punk", "cyKatana");
+    s.player.cyAccel = 100;
+    // 칼은 닿지 않는 거리의 적
+    for (const e of s.enemies) e.x += 60;
+    stepSim(s, FIRE);
+    expect(s.enemies.filter((e) => e.hp < e.maxHp)).toHaveLength(PUNK.quickN);
+    const off = run("punk", "cyKatana");
+    for (const e of off.enemies) e.x += 60;
+    stepSim(off, FIRE);
+    expect(lost(off)).toBe(0);
+  });
+
   it("라이더: 공격하면 게이지가 차고 빨라짐 · 단검은 더 빠르고 대시로 목을 벰 · 화염 배기 불꽃 스택", () => {
     const s = run("rider", "rdHammer");
     stepSim(s, FIRE);

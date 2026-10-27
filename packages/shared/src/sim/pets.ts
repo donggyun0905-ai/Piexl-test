@@ -65,8 +65,12 @@ function nearest(s: RunState, x: number, y: number): EnemyState | null {
 export function updatePets(s: RunState): void {
   const p = s.player;
   const kinds = petKinds(p);
-  const pets = (p.pets ?? []).filter((pet, i) => kinds[i] === pet.kind);
-  for (let i = pets.length; i < kinds.length; i++) pets.push({ kind: kinds[i]!, x: p.x, y: p.y, prevX: p.x, prevY: p.y, cd: 20 + i * 7, face: 1 });
+  // 무기를 바꿔도 같은 종류 고양이는 그대로 이어 받음 (자리 번호로 맞추면 섞인 무리에서 매 틱 사라졌다 생김)
+  const left = [...(p.pets ?? [])];
+  const pets = kinds.map((kind, i) => {
+    const k = left.findIndex((pet) => pet.kind === kind);
+    return k >= 0 ? left.splice(k, 1)[0]! : { kind, x: p.x, y: p.y, prevX: p.x, prevY: p.y, cd: 20 + i * 7, face: 1 };
+  });
   p.pets = pets;
   if ((p.frenzyTicks ?? 0) > 0) p.frenzyTicks = (p.frenzyTicks ?? 0) - 1;
   if ((p.roarTicks ?? 0) > 0) p.roarTicks = (p.roarTicks ?? 0) - 1;

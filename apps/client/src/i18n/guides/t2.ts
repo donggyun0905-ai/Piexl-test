@@ -7,7 +7,7 @@ export const GUIDE_KO_T2: Guide = {
   punk: [
     "테라코어 · 펑크 · 네온 머리와 크롬 팔의 매혹적인 여자 · 체력 95 · 빠름 · 행운 1",
     "사이버 무기 10: 열선 카타나 · 모노와이어(출혈) · 스마트 건(휘는 총알) · 맨티스 블레이드 · 네온 산탄총 · 관통 권총 · 퀵해킹(감전·멈춤) · 고릴라 팔 · EMP 수류탄 · 네온 쌍검",
-    "신경 가속: 맞힐 때마다 오른쪽 옆 게이지가 차고, 가득일 때 대시하면 4초 동안 둘레의 시간이 느려짐 (그동안 무적 · 적은 네 틱 중 한 틱만 움직이고 공격함, 보스는 두 틱 중 한 틱 · 적 탄은 아주 느려짐 · 내 공격 2.6배, 이동 1.7배 빨라지며 잔상이 남음)",
+    "신경 가속: 맞힐 때마다 오른쪽 옆 게이지가 차고, 가득일 때 대시하면 4초 동안 둘레의 시간이 느려짐 (그동안 무적 · 적은 네 틱 중 한 틱만 움직이고 공격함, 보스는 두 틱 중 한 틱 · 적 탄은 아주 느려짐 · 내 공격 2.6배, 이동 1.7배 빨라지며 잔상이 남음 · 공격하는 동안 무기와 따로 퀵 해킹이 가까운 적 둘을 감전시킴: 0.3초마다 공격력 70%)",
     "전용 아이템은 몸에 심는 능력 10: 크롬 눈(치명타) · 반사 신경 · 가속기 증폭 · 빠른 충전 · 광전사 칩 · 혈액 정화기 · 피하 장갑 · 광학 위장 · 오버클럭 · 잔상 분신",
   ],
   bomber: [
@@ -40,7 +40,7 @@ export const GUIDE_EN_T2: Guide = {
   punk: [
     "Terracore · Punk · an alluring woman with neon hair and a chrome arm · 95 HP · fast · Luck 1",
     "10 cyber weapons: Thermal Katana · Monowire (bleed) · Smart Gun (curving bullets) · Mantis Blades · Neon Shotgun · Piercing Pistol · Quickhack (shock, stun) · Gorilla Arms · EMP Grenade · Twin Neon Blades",
-    "Neural Accel: hits fill the gauge on her right; dash when it's full and time slows around her for 4s (she is invulnerable · foes move and attack only one tick in four, bosses one in two · enemy shots crawl · her attacks are 2.6× and her movement 1.7× faster, leaving afterimages)",
+    "Neural Accel: hits fill the gauge on her right; dash when it's full and time slows around her for 4s (she is invulnerable · foes move and attack only one tick in four, bosses one in two · enemy shots crawl · her attacks are 2.6× and her movement 1.7× faster, leaving afterimages · while attacking, a separate Quick Hack zaps the 2 nearest foes every 0.3s for 70% damage)",
     "Her own items are 10 implanted abilities: Chrome Eyes (crits) · Reflex Booster · Accelerator Amp · Quick Charge · Berserker Chip · Blood Pump · Subdermal Armor · Optical Camo · Overclock · Afterimage Clone",
   ],
   bomber: [
@@ -73,7 +73,7 @@ export const GUIDE_JA_T2: Guide = {
   punk: [
     "テラコア · パンク · ネオンの髪とクロームの腕の魅惑的な女 · 体力95 · 速い · 幸運1",
     "サイバー武器10：熱線カタナ · モノワイヤー（出血）· スマートガン（曲がる弾）· マンティスブレード · ネオンショットガン · 貫通ピストル · クイックハック（感電・停止）· ゴリラアーム · EMPグレネード · ネオン双剣",
-    "神経加速：当てるたびに右横のゲージが溜まり、満タンでダッシュすると4秒間周囲の時間が遅くなる（その間無敵 · 敵は4ティックに1回しか動かず攻撃せず、ボスは2回に1回 · 敵弾はとても遅い · 自分の攻撃2.6倍・移動1.7倍速くなり残像が残る）",
+    "神経加速：当てるたびに右横のゲージが溜まり、満タンでダッシュすると4秒間周囲の時間が遅くなる（その間無敵 · 敵は4ティックに1回しか動かず攻撃せず、ボスは2回に1回 · 敵弾はとても遅い · 自分の攻撃2.6倍・移動1.7倍速くなり残像が残る · 攻撃中は武器とは別にクイックハックが近くの敵2体を感電させる：0.3秒ごとに攻撃力70%）",
     "専用アイテムは体に埋め込む能力10：クロームアイ（クリティカル）· 反射神経 · 加速器増幅 · 急速充電 · 狂戦士チップ · 血液浄化器 · 皮下装甲 · 光学迷彩 · オーバークロック · 残像分身",
   ],
   bomber: [

@@ -112,6 +112,21 @@ function attack(s: RunState, mul: number): void {
   }
 }
 
+/** 신경 가속 중 퀵 해킹: 무기와 같이 따로 때리는 두 번째 공격 (가까운 적에게 전기 해킹) */
+function quickHack(s: RunState, want: boolean): void {
+  const p = s.player;
+  if ((p.cyQuick ?? 0) > 0) p.cyQuick!--;
+  if (!want || !punkAccel(p) || (p.cyQuick ?? 0) > 0) return;
+  const list = alive(s)
+    .filter((e) => dist2(e, p) <= (P.quickReach + e.r) ** 2)
+    .sort((a, b) => dist2(a, p) - dist2(b, p) || a.id - b.id)
+    .slice(0, P.quickN);
+  if (!list.length) return;
+  p.cyQuick = P.quickEvery;
+  hitAll(s, list, p.stats.damage * P.quickMul, false, 0, P.quickStun);
+  for (const e of list) addEffect(s, { kind: "cyHack", x: p.x, y: p.y - 8, dirX: 0, dirY: 0, size: 3, toX: e.x, toY: e.y, maxTicks: 16 });
+}
+
 /** 이동 속도 배율: 빠른 몸 · 신경 가속 중 훨씬 빠름 */
 export function punkMoveMul(p: PlayerState): number {
   if (p.characterId !== "punk") return 1;
@@ -186,6 +201,7 @@ export function punkTick(s: RunState, want: boolean, speed: number): void {
   p.cyDash = p.dashTicks > 0;
   accel(s);
   emps(s);
+  quickHack(s, want);
   if (!want || p.attackCooldown > 0) return;
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / (speed * (punkAccel(p) ? P.accelSpeed : 1))));
   p.attackCount++;
@@ -195,5 +211,5 @@ export function punkTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetPunk(p: PlayerState): void {
-  for (const k of ["cyGauge", "cyAccel", "cyFrozen", "cyTrail", "cyEmp", "cyHits"] as const) delete p[k];
+  for (const k of ["cyGauge", "cyAccel", "cyFrozen", "cyTrail", "cyEmp", "cyHits", "cyQuick"] as const) delete p[k];
 }

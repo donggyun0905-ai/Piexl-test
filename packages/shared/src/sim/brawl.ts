@@ -128,12 +128,17 @@ function perform(s: RunState, m: ComboMove, i: number): void {
   const p = s.player;
   const dmg = moveDamage(p, m);
   if (m.invuln) p.invulnTicks = Math.max(p.invulnTicks, invulnFor(m));
+  if (m.shield) p.shieldPts = Math.max(p.shieldPts ?? 0, m.shield);
   switch (m.kind) {
     case "strike":
       strike(s, dmg, m, p.faceX, p.faceY);
       break;
     case "spin":
       spin(s, dmg, m);
+      break;
+    case "punch":
+      strike(s, dmg, m, p.faceX, p.faceY);
+      spin(s, dmg * (m.areaMul ?? 1), m, p.x + p.faceX * m.range, p.y + p.faceY * m.range, m.area ?? 16);
       break;
     case "flurry":
       p.flurryLeft = m.hits ?? 1;

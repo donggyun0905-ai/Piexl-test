@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.126",
+    date: "2026-10-27",
+    items: {
+      ko: [
+        "격투가 가라테 새로: 정권 지르기(주먹 끝에서 범위) 두 번 → 보호막 20(쌓이지 않음) + 앞차기 → 큰 정권 지르기 + 큰 범위 · 쌍광연격·택견 빼고 다른 무기 공격력 +15%",
+        "야수: 무기를 바꾸면 '한 마리 더'로 늘린 고양이가 계속 사라졌다 생기던 문제 고침 (그림자 발 등)",
+        "펑크: 신경 가속 중에는 무기와 따로 퀵 해킹이 가까운 적 둘을 감전시킴 (0.3초마다 공격력 70%)",
+        "능력치 창: 공격력·공격 속도·초당 피해가 지금 걸린 효과(공격 속도 버프·라이더 빠르기 등)까지 실시간으로 보임",
+      ],
+      en: [
+        "Brawler Karate remade: straight punch (burst at the fist) twice → 20 shield (doesn't stack) + front kick → heavy straight punch + big burst · all other weapons except Twin Light Barrage and Taekkyon +15% damage",
+        "Beastkin: fixed extra cats from 'One More Cat' vanishing and respawning after switching weapons (Shadow Paw etc.)",
+        "Punk: during Neural Accel, a separate Quick Hack zaps the 2 nearest foes alongside the weapon (70% damage every 0.3s)",
+        "Stats panel: damage, attack speed and DPS now update live with active effects (attack speed buffs, Rider speed, etc.)",
+      ],
+      ja: [
+        "格闘家の空手を一新：正拳突き（拳の先で範囲）2回 → シールド20（重ならない）＋前蹴り → 大きな正拳突き＋大きな範囲 · 双光連撃・テッキョン以外の武器の攻撃力+15%",
+        "獣人：武器を替えると「もう一匹」で増やした猫が消えては現れ続けた問題を修正（影の肉球など）",
+        "パンク：神経加速中は武器とは別にクイックハックが近くの敵2体を感電させる（0.3秒ごとに攻撃力70%）",
+        "能力値画面：攻撃力・攻撃速度・秒間ダメージがかかっている効果（攻撃速度バフ・ライダーの速さなど）までリアルタイムで表示",
+      ],
+    },
+  },
+  {
     version: "0.48.125",
     date: "2026-10-27",
     items: {

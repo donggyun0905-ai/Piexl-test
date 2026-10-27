@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { WEAPONS } from "../content";
-import { damagePlayer } from "./combat";
 import { createRun, EMPTY_INPUT, stepSim } from "./index";
 import { weaponPool } from "./loot";
 import { brawler, hold, lost, nextMove } from "./brawlTestUtil";
@@ -178,24 +177,28 @@ describe("격투가 콤보", () => {
     expect(k.player.comboStep).toBe(1);
   });
 
-  it("가라테: 버티는 동안 받는 피해 절반, 받은 피해 ×3으로 되받아침, 마지막은 체력 20% 이하 적을 쓰러뜨림", () => {
+  it("가라테: 정권(끝에서 범위) 두 번 → 보호막 20 + 앞차기 → 큰 정권과 큰 범위", () => {
     const s = brawler("karate");
     const e = enemy(1, 150, 72, 1000);
-    s.enemies = [e];
+    const side = enemy(2, 162, 72, 1000);
+    s.enemies = [e, side];
+    const dmg = s.player.stats.damage;
     nextMove(s);
-    expect(s.player.rootTicks).toBeGreaterThan(0);
-    const hp = s.player.hp;
-    damagePlayer(s, 10);
-    expect(hp - s.player.hp).toBe(5);
-    s.player.invulnTicks = 0;
+    // 바로 앞 적은 정권 + 끝 범위, 주먹 끝 너머 적은 끝 범위만
+    expect(lost(e)).toBeCloseTo(dmg * 1.6);
+    expect(lost(side)).toBeCloseTo(dmg * 0.6);
     nextMove(s);
-    expect(lost(e)).toBeCloseTo(s.player.stats.damage + 15);
-    e.hp = 150;
-    s.player.hp = 50;
     nextMove(s);
-    expect(e.hp).toBeLessThanOrEqual(0);
-    // 입힌 피해(150)의 30% 회복
-    expect(s.player.hp).toBeCloseTo(50 + 45);
+    expect(s.player.shieldPts).toBe(20);
+    s.player.shieldPts = 20;
+    e.x = s.player.x + 30;
+    e.y = s.player.y;
+    const before = lost(e);
+    nextMove(s);
+    // 정권 260% + 큰 범위 160% (치명타가 터지면 더)
+    expect(lost(e) - before).toBeGreaterThanOrEqual(dmg * 4.2 - 0.01);
+    expect(e.stunTicks).toBeGreaterThan(0);
+    expect(s.player.comboStep).toBe(0);
   });
 
   it("택견: 네 단계, 세 번째에 기절", () => {
@@ -222,7 +225,7 @@ describe("격투가 콤보", () => {
     expect(s.player.comboStep).toBe(0);
   });
 
-  it("콤보(파동탄): 1발 → 부채꼴 3발 → 5발 → 기를 모아 사방으로 30발, 한 발 5", () => {
+  it("콤보(파동탄): 1발 → 부채꼴 3발 → 5발 → 기를 모아 사방으로 30발, 한 발 약 5.7", () => {
     const s = brawler("energywave");
     const kis = () => s.projectiles.filter((pr) => pr.spirit === "ki");
     const counts: number[] = [];
@@ -232,7 +235,7 @@ describe("격투가 콤보", () => {
       counts.push(kis().length);
     }
     expect(counts).toEqual([1, 3, 5]);
-    expect(kis()[0]!.damage).toBeCloseTo(5, 0);
+    expect(kis()[0]!.damage).toBeCloseTo(5.7, 0);
     s.projectiles = [];
     nextMove(s);
     expect(kis()).toHaveLength(0);
