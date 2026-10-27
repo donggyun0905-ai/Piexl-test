@@ -36,6 +36,9 @@ interface Seen {
   god: boolean;
   /** 잔영: 순간이동 남은 대기 */
   blinkCd: number;
+  /** 예리함 칼빛 · 천검란 (화면에 있는 효과 수) */
+  sharps: number;
+  storms: number;
 }
 
 /** 탄을 쏘는 느낌의 캐릭터 (나머지는 휘두르는 소리) */
@@ -71,6 +74,8 @@ function snapshot(s: RunState): Seen {
     charging: (s.player.trCharge ?? 0) > 0,
     god: (s.player.fgGod ?? 0) > 0,
     blinkCd: s.player.rmBlink ?? 0,
+    sharps: s.effects.filter((f) => f.kind === "wdSharp").length,
+    storms: s.effects.filter((f) => f.kind === "wdTempest").length,
   };
 }
 
@@ -127,6 +132,15 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         if (now.attacks > seen.attacks) fx.push("chime");
         const i = fx.indexOf("shot");
         if (i >= 0) fx.splice(i, 1);
+      } else if (c === "wanderer") {
+        // 방랑객: 카타나 소리 · 천검란은 화면이 흔들림
+        if (now.attacks > seen.attacks) fx.push("katana");
+        if (now.storms > seen.storms) {
+          fx.push("tempest");
+          onShake(4);
+        }
+        const i = fx.indexOf("swing");
+        if (i >= 0) fx.splice(i, 1);
       } else if (c === "remnant") {
         // 잔영: 순간이동할 때마다 쉭 빨려 드는 소리, 베기는 짧은 쉭
         if (now.blinkCd > seen.blinkCd) fx.push("blink");
@@ -136,6 +150,8 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         orbSound = now.tick;
         if (!fx.includes("swing")) fx.push("swing");
       }
+      // 예리함이 터지면 (어느 캐릭터든) 맑은 쇳소리
+      if (now.sharps > seen.sharps) fx.push("sharp");
       if (now.parried > seen.parried) fx.push("parry");
       // 특수용병 보호막 성공: 1콤보 뒤 팅 · 2콤보 뒤 탕 · 3콤보(와 마무리) 뒤 펑
       if (now.guards > seen.guards) fx.push((["guard3", "guard1", "guard2", "guard3"] as const)[run.player.mercGuardStep ?? 0]!);

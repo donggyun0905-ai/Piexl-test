@@ -1,6 +1,7 @@
 # 시즌 2 아스칼론 한정 스킨 '여름 파도' 옷 꾸밈 (ascalon_skins에서 씀): 기본 그림 위에 여름옷을 덧그림
 # 잊혀진 자: 드레스를 벗은 맨살 + 흰·금 비키니(하늘빛 보석) · 허리에 두른 비치는 하늘빛 사롱(금 테) · 금 머리띠 그대로 · 머리 옆 하얀 꽃
 # 잔영: 두건·입가리개를 벗어 은회색 머리와 얼굴이 보임 · 앞을 푼 검은 셔츠 + 보라 수영 반바지(흰 줄) · 목에 건 하늘빛 수건 · 머리 옆 보라 꽃
+# 방랑객: 삿갓은 그대로(여름 햇빛 가리개) · 앞을 푼 하늘빛 꽃무늬 하오리 + 가운데 맨살 · 붉은 허리띠 그대로 · 하늘빛 수영 반바지(흰 줄) · 카타나는 대나무 칼
 # 추적자: 망토·사냥복을 벗은 맨살 + 산호빛 비키니(하늘빛 매듭) · 하늘빛 보드 반바지 · 저격총은 노랑·하늘빛 물총 · 머리 옆 히비스커스
 from s2_common import hx
 from virdia_summer import _restore, _top, _bottom
@@ -73,7 +74,26 @@ def remnant(c, layer, g, before):
     if layer == "hat":
         flower(c, g, hx("#b88aff"), hx("#ffffff"), 2)
 
-SUMMER = dict(tracker=tracker, forgotten=forgotten, remnant=remnant)
+def wanderer(c, layer, g, before):
+    k = g["k"]
+    v, tx, ty, tw, th, cx, hip = g["view"], g["tx"], g["ty"], g["tw"], g["th"], g["cx"], g["hip"]
+    if layer == "body":
+        # 겉옷에 흰·노랑 꽃무늬 · 가운데 맨살 (흰 속옷 대신)
+        for (x, y), col in list(c.p.items()):
+            if before.get((x, y)) == col: continue
+            if col == k["coat"] and (x * 3 + y * 2) % 7 == 0: c.p[(x, y)] = hx("#ffffff")
+            elif col == k["coat"] and (x + y * 5) % 11 == 0: c.p[(x, y)] = hx("#ffd040")
+            elif col == k["top"]: c.p[(x, y)] = k["skin"]
+        if v == "front": c.rect(cx - 1, ty + 1, 2, th - 3, k["skin"])
+    if layer == "legs":
+        # 하카마 → 하늘빛 수영 반바지 (흰 줄) · 맨다리
+        _restore(c, before, lambda x, y, col: col not in (k["legs"], k["legsD"]))
+        if v in ("front", "back"):
+            c.rect(tx, hip, tw, 3, hx("#3ac8e8")); c.px(tx, hip + 1, hx("#ffffff")); c.px(tx + tw - 1, hip + 1, hx("#ffffff"))
+        else:
+            c.rect(cx - 3, hip, 6, 3, hx("#3ac8e8"))
+
+SUMMER = dict(tracker=tracker, forgotten=forgotten, remnant=remnant, wanderer=wanderer)
 
 def _p(**kw):
     return {k: hx(v) for k, v in kw.items()}
@@ -81,5 +101,6 @@ def _p(**kw):
 SUMMER_COLORS = {
     "forgotten": _p(outline=OUT, legs="#fbe8dc", legsD="#e0c0b0", shoe="#f2c040"),
     "remnant": _p(outline=OUT, top="#e8cdb8", arm="#e8cdb8", legs="#e8cdb8", legsD="#c0a490", shoe="#2a2a3a", scarf="#5ad0ff"),
+    "wanderer": _p(outline=OUT, coat="#3aa8e8", coatD="#1e7ab8", arm="#3aa8e8", legs="#e8c4a4", legsD="#c09878", sheath="#7ab84a", blade="#c8e890", shoe="#c8a870"),
     "tracker": _p(outline=OUT, top="#f2d6c2", arm="#f2d6c2", legs="#f2d6c2", legsD="#d0ac96", shoe="#ffd040", gun="#3ac8e8", stock="#ffd040", scope="#ff6a8a"),
 }

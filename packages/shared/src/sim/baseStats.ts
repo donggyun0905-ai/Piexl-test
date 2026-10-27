@@ -6,7 +6,8 @@ import { createRng, deriveSeed } from "../rng";
 import { healPlayer } from "./combat";
 import { applyBleed, updateBleed } from "./gunExtras";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { addEffect, weaponOf } from "./util";
+import { WANDERER_PERKS } from "../itemsWanderer";
+import { addEffect, hasPerk, weaponOf } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -42,16 +43,20 @@ export function extraTaken(p: PlayerState, taken: number): number {
 }
 
 /** 예리함이 걸린 적이 더 받는 피해 */
-export const sharpBonus = (s: RunState, e: EnemyState) => ((e.sharpT ?? 0) > s.tick ? R.SHARP_DEF : 0);
+/** (방랑객 깊은 상처: 더 크게) */
+export const sharpBonus = (s: RunState, e: EnemyState) => ((e.sharpT ?? 0) > s.tick ? (hasPerk(s.player, "wdDeep") ? WANDERER_PERKS.wdDeep.def : R.SHARP_DEF) : 0);
 
 /** 적을 맞힌 뒤: 흡혈 · 예리함 (확률로 방어 깎기 + 출혈) */
 export function onHitExtra(s: RunState, e: EnemyState, dmg: number): void {
   const ex = extraOf(s.player);
   if (dmg <= 0) return;
   if (ex.lifesteal > 0) healPlayer(s, dmg * ex.lifesteal);
-  if (ex.sharpness > 0 && e.hp > 0 && roll(s, "sharp", e.id) < ex.sharpness) {
+  // 예리함 (방랑객 숫돌: 더 자주) · 터지면 칼빛 효과
+  const sharp = ex.sharpness + (hasPerk(s.player, "wdHone") ? WANDERER_PERKS.wdHone.add : 0);
+  if (sharp > 0 && e.hp > 0 && roll(s, "sharp", e.id) < sharp) {
     e.sharpT = s.tick + R.SHARP_TICKS;
     applyBleed(e);
+    addEffect(s, { kind: "wdSharp", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 6, maxTicks: 12 });
   }
 }
 

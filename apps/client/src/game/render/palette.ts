@@ -57,6 +57,7 @@ export const C = {
   tracker: "#5a8a4a",
   forgotten: "#ffe08a",
   remnant: "#6a5aa8",
+  wanderer: "#c84a4a",
   abandoned: "#7aa070",
   titan: "#c87a3a",
   oni: "#d84a3a",

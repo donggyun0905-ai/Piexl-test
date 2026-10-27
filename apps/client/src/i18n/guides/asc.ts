@@ -1,4 +1,4 @@
-// 캐릭터 설명: 시즌 2 아스칼론 (추적자 · 잊혀진 자 · 잔영 …) · 한·영·일
+// 캐릭터 설명: 시즌 2 아스칼론 (추적자 · 잊혀진 자 · 잔영 · 방랑객 …) · 한·영·일
 import type { CharacterId } from "@pixel-rogue/shared";
 
 type Guide = Partial<Record<CharacterId, readonly string[]>>;
@@ -24,6 +24,13 @@ export const GUIDE_KO_ASC: Guide = {
     "아주 빠르게 벰. 노리는 적이 칼끝에서 멀면 그 적 뒤로 순간이동해 등 뒤를 벰 (뒤에서 치면 1.5배, 스틸레토는 2.5배). 떠난 자리에는 잔영이 남아 0.3초 뒤 한 번 더 벰",
     "전용 아이템 10: 그림자 걸음 · 등 뒤의 칼 · 처형 · 겹친 잔영 · 사라짐 · 피의 칼날 · 그림자 손놀림 · 소리 없는 발 · 연쇄 암살 · 그림자 숨기",
   ],
+  wanderer: [
+    "아스칼론 · 방랑객 · 카타나 한 자루로 떠도는 남자 무사 · 체력 105 · 기본 예리함 25% (맞히면 확률로 방어 -25% + 출혈, 터지면 칼빛과 쇳소리)",
+    "카타나 10: 방랑 카타나 · 발도 · 무심의 원 · 칼날 폭풍 · 천검란 · 초승달 베기 · 이도류 · 노다치 · 연참 · 달빛 일섬",
+    "무심의 원: 1초 가만히 서면 큰 원이 펼쳐지고, 원에 들어온 적은 거리와 상관없이 바로 베임 (공격력 200%). 대시하면 둘레 적을 원 안으로 끌어당김",
+    "천검란: 벨 때마다 발밑 게이지가 차고, 가득 차면 방 전체에 칼날 폭풍 (공격력 120% × 5)",
+    "전용 아이템 10: 숫돌 · 깊은 상처 · 명경지수 · 바람의 칼 · 납도 · 검기 응축 · 낭인의 걸음 · 집중 · 피의 비 · 잔월",
+  ],
 };
 
 export const GUIDE_EN_ASC: Guide = {
@@ -47,6 +54,13 @@ export const GUIDE_EN_ASC: Guide = {
     "Very fast cuts. If the target is out of reach he blinks behind it and stabs its back (×1.5 from behind, Stiletto ×2.5). An afterimage stays where he left and cuts once more 0.3s later",
     "10 exclusive items: Shadow Step · Knife in the Back · Execution · Double Afterimage · Vanish · Bloody Edge · Shadow Hands · Silent Feet · Chain Assassination · Shadow Shroud",
   ],
+  wanderer: [
+    "Ascalon · Wanderer · a swordsman who roams with a single katana · HP 105 · base Sharpness 25% (hits may cut defense by 25% and cause bleeding, with a flash and a ring of steel)",
+    "10 katanas: Wanderer's Katana · Quick Draw · Circle of No-Mind · Blade Storm · Thousand Swords · Crescent Cut · Two Swords · Nodachi · Flurry · Moonlit Flash",
+    "Circle of No-Mind: stand still for 1s to open a wide circle; any foe that enters is cut instantly at any range (200%). Dashing pulls nearby foes into it",
+    "Thousand Swords: cuts fill the gauge under your feet; when full, a blade storm hits the whole room (120% × 5)",
+    "10 exclusive items: Whetstone · Deep Wound · Still Water · Wind Blade · Sheathe · Condensed Edge · Ronin's Stride · Focus · Blood Rain · Waning Moon",
+  ],
 };
 
 export const GUIDE_JA_ASC: Guide = {
@@ -69,5 +83,12 @@ export const GUIDE_JA_ASC: Guide = {
     "影の短剣10：残影の短剣 · 双短剣 · 影の爪 · スティレット · 影の投擲 · 回転刃 · 閃影 · 影の鎌 · 毒牙 · 月蝕",
     "とても速く斬る。狙う敵が刃先から遠いとその敵の背後へ瞬間移動して背中を斬る（背後から1.5倍、スティレットは2.5倍）。去った場所に残影が残り0.3秒後にもう一度斬る",
     "専用アイテム10：影歩き · 背中の刃 · 処刑 · 重なる残影 · 消失 · 血の刃 · 影の手さばき · 音なき足 · 連鎖暗殺 · 影隠れ",
+  ],
+  wanderer: [
+    "アスカロン · 放浪者 · 刀一振りで流れ歩く男の剣士 · 体力105 · 基本の鋭さ25%（当てると確率で防御-25%＋出血、発動すると刃の光と金属音）",
+    "刀10：流浪の刀 · 抜刀 · 無心の円 · 刃の嵐 · 千剣乱 · 三日月斬り · 二刀流 · 野太刀 · 連斬 · 月光一閃",
+    "無心の円：1秒じっとすると大きな円が開き、円に入った敵は距離に関係なく即座に斬られる（攻撃力200%）。ダッシュすると周りの敵を円の中へ引き寄せる",
+    "千剣乱：斬るたびに足元のゲージが溜まり、満ちると部屋全体に刃の嵐（攻撃力120%×5）",
+    "専用アイテム10：砥石 · 深い傷 · 明鏡止水 · 風の刃 · 納刀 · 剣気凝縮 · 浪人の歩み · 集中 · 血の雨 · 残月",
   ],
 };

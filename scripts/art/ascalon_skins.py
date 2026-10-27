@@ -1,6 +1,7 @@
 # 시즌 2 아스칼론 캐릭터의 테마 스킨 9개 + 여름 한정 (python3 scripts/art/ascalon_skins.py) → apps/client/public/sprites/skins/{캐릭터}_{테마}.png
 # 기본 그림(ascalon_sprites)의 옷 색을 테마에 맞게 바꾸고 소품을 얹음 (virdia_skins의 wrap·hat 같이 씀)
-# swap(성별 바꾸기): 추적자·잊혀진 자는 짧은 머리의 남자, 잔영은 긴 머리의 여자
+# swap(성별 바꾸기): 추적자·잊혀진 자는 짧은 머리의 남자, 잔영·방랑객은 긴 머리의 여자
+# 방랑객은 삿갓을 늘 쓰므로 테마 모자 대신 삿갓·옷 색을 테마에 맞춤
 from s2_common import hx, person, save_sheet
 from helios2_skins import long_hair
 import ascalon_sprites as As
@@ -41,12 +42,24 @@ SKINS = {
         "usa": (P(hood="#3a5aa8", hoodD="#2a3a7a", scarf="#d8303a", scarfD="#a81e26", top="#8a5a32", arm="#8a5a32"), COWBOY),
         "swap": (P(scarf="#ff6aa8", scarfD="#c84a88", hair="#c8c8dc", hairD="#8a8aa0", hairL="#ffffff", blush="#f0a0b0"), dict(extra=long_hair(hx("#c8c8dc"), hx("#8a8aa0")))),
     },
+    "wanderer": {
+        "swim": (P(coat="#1a7aa8", coatD="#125a80", arm="#1a7aa8", sash="#ffd040", hat="#f4f0e0", hatD="#c8c0a8", legs="#2a8ac8", legsD="#1e6a9a"), {}),
+        "xmas": (P(coat="#c8202a", coatD="#8a1a20", arm="#c8202a", sash="#2a8a3a", hat="#ffffff", hatD="#c8c8d8", top="#ffffff"), {}),
+        "halloween": (P(coat="#2a2032", coatD="#1a1420", arm="#2a2032", sash="#f28a2a", hat="#4a2a6a", hatD="#2e1a44", eyeL="#f28a2a"), {}),
+        "school": (P(coat="#2a3458", coatD="#1a2038", arm="#2a3458", sash="#d83a4a", hat="#1a1a24", hatD="#0e0e14", top="#f4f4f8"), {}),
+        "newyear": (P(coat="#e84a6a", coatD="#b83050", arm="#e84a6a", sash="#ffd040", hat="#ffd040", hatD="#c8a020", legs="#3a6ad8", legsD="#2a4aa8"), {}),
+        "japan": (P(coat="#f4f0f4", coatD="#c8c0d0", arm="#f4f0f4", sash="#e83a3a", top="#e85a7a", legs="#2a2028", legsD="#1a1418"), {}),
+        "china": (P(coat="#c8202a", coatD="#8a1a20", arm="#c8202a", sash="#e8b030", hat="#e8b030", hatD="#a8802a", legs="#2a2028"), {}),
+        "usa": (P(coat="#8a5a32", coatD="#5a3a20", arm="#8a5a32", sash="#d8303a", hat="#c8a070", hatD="#8a6a3a", legs="#3a5aa8", legsD="#2a3a7a", top="#f4f4f4"), {}),
+        "swap": (P(coat="#6a2a4a", coatD="#4a1a32", arm="#6a2a4a", sash="#f0c8d8", blush="#f09696", hair="#1e1a20"), dict(extra=long_hair(hx("#1e1a20"), hx("#100e12")))),
+    },
 }
 
 BASES = {
     "tracker": (As.TRACKER, As.tracker_deco),
     "forgotten": (As.FORGOTTEN, As.forgotten_deco),
     "remnant": (As.REMNANT, As.remnant_deco),
+    "wanderer": (As.WANDERER, As.wanderer_deco),
 }
 
 def main():

@@ -50,6 +50,7 @@ import { themeFor } from "./floorThemes";
 import { drawAmbushOverlay, drawTrackerAura } from "./tracker";
 import { drawForgottenAura, drawForgottenBack } from "./forgotten";
 import { drawRemnantEchoes } from "./remnant";
+import { drawWandererAura, drawWandererGround } from "./wanderer";
 import { drawBossBar, drawEffects, drawProjectiles, drawReticleFor } from "./shots";
 
 export interface DrawOptions {
@@ -147,6 +148,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawMorphGround(ctx, s, snap);
     drawForgottenBack(ctx, s, alpha, snap);
     drawRemnantEchoes(ctx, s, snap);
+    drawWandererGround(ctx, s, snap);
   });
   drawEnemies(ctx, s, alpha, snap);
   drawInkMarks(ctx, s, alpha, snap);
@@ -186,6 +188,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawTerraAuraC(ctx, s, alpha, snap);
     drawTrackerAura(ctx, s, alpha, snap);
     drawForgottenAura(ctx, s, alpha, snap);
+    drawWandererAura(ctx, s, alpha, snap);
   });
   drawProjectiles(ctx, s, alpha, snap);
   drawEffects(ctx, s, alpha, snap);

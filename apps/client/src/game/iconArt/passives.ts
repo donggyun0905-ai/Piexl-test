@@ -34,6 +34,7 @@ import { TERRA2C_PASSIVE_ART } from "./terra2c";
 import { ASC_PASSIVE_ART } from "./ascalon";
 import { FG_PASSIVE_ART } from "./forgotten";
 import { RM_PASSIVE_ART } from "./remnant";
+import { WD_PASSIVE_ART } from "./wanderer";
 import { REN_PASSIVE_ART } from "./ren";
 import { SPIRIT_PASSIVE_ART } from "./spirit";
 
@@ -77,6 +78,7 @@ export const PASSIVE_ART: Partial<Record<PassiveId, (g: Pen) => void>> = {
   ...ASC_PASSIVE_ART,
   ...FG_PASSIVE_ART,
   ...RM_PASSIVE_ART,
+  ...WD_PASSIVE_ART,
   ...REN_PASSIVE_ART,
   ...SPIRIT_PASSIVE_ART,
   sturdyHeart: (g) => {

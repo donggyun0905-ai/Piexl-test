@@ -21,6 +21,13 @@ export const CHARACTER_TEXT_ASCALON = {
     ja: "暗殺 · アスカロン。影の中を動く男の暗殺者。とても速い短剣攻撃 · 遠い敵の背後へ瞬間移動して背中を斬る · 去った場所に残影が残りもう一度斬る · すべての状態異常に免疫 · クリティカル25% · クリティカルダメージ250% · 武器10 · 専用アイテム10",
   },
   phantom: { ko: "그림자 단검", en: "Shadow Dagger", ja: "影の短剣" },
+  wanderer: { ko: "방랑객", en: "Wanderer", ja: "放浪者" },
+  wandererDesc: {
+    ko: "검 · 아스칼론. 카타나 한 자루로 떠도는 남자 무사. 기본 예리함 25% (맞히면 확률로 방어 -25% + 출혈) · 카타나 10 (발도 · 무심의 원 · 칼날 폭풍 · 천검란 등) · 전용 아이템 10",
+    en: "Sword · Ascalon. A wandering swordsman with a single katana. Base Sharpness 25% (hits may cut defense by 25% and cause bleeding) · 10 katanas (Quick Draw · Circle of No-Mind · Blade Storm · Thousand Swords and more) · 10 own items",
+    ja: "剣 · アスカロン。刀一振りで流れ歩く男の剣士。基本の鋭さ25%（当てると確率で防御-25%＋出血）· 刀10（抜刀 · 無心の円 · 刃の嵐 · 千剣乱など）· 専用アイテム10",
+  },
+  katana: { ko: "카타나", en: "Katana", ja: "刀" },
   trSkill1: { ko: "암습 저격", en: "Ambush Snipe", ja: "暗襲狙撃" },
   trSkill2: { ko: "강력한 한방", en: "Power Shot", ja: "強力な一撃" },
   trSkill3: { ko: "연발사격", en: "Rapid Fire", ja: "連射" },

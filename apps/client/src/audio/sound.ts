@@ -1,5 +1,6 @@
 // 효과음·음악: 파일 없이 브라우저에서 바로 만든 소리 (저작권 걱정 없음). 그림처럼 나중에 직접 만든 소리로 바꿀 수 있음
 import { getSettings } from "../settings";
+import { ASCALON_SOUNDS } from "./sfxAscalon";
 
 export type Sfx =
   | "swing"
@@ -28,7 +29,10 @@ export type Sfx =
   | "chime"
   | "awaken"
   | "slice"
-  | "blink";
+  | "blink"
+  | "katana"
+  | "sharp"
+  | "tempest";
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;
@@ -125,35 +129,7 @@ function critSound(): void {
 
 const SOUNDS: Record<Sfx, () => void> = {
   crit: critSound,
-  // 추적자: 평소 저격 (짧고 날카로운 총성) · 암습 저격 (크게 "탕!" + 메아리) · 강력한 한방 (묵직한 폭음 + 긴 여운)
-  rifle: () => {
-    noise(0.12, 0.5, 4200);
-    tone({ type: "square", from: 300, to: 70, dur: 0.1, vol: 0.18 });
-  },
-  snipe: () => {
-    noise(0.28, 0.95, 5200);
-    tone({ type: "sawtooth", from: 180, to: 38, dur: 0.32, vol: 0.4 });
-    noise(0.4, 0.22, 900);
-    noise(0.3, 0.12, 2400);
-  },
-  power: () => {
-    noise(0.6, 1, 2600);
-    tone({ type: "sawtooth", from: 120, to: 26, dur: 0.8, vol: 0.5 });
-    tone({ type: "sine", from: 60, to: 30, dur: 1.1, vol: 0.5 });
-    tone({ type: "triangle", from: 1600, to: 400, dur: 0.25, vol: 0.2 });
-  },
-  // 잊혀진 자: 빛 공격 (맑은 종소리) · 신족 (위로 오르는 화음 + 여운)
-  chime: () => {
-    tone({ type: "sine", from: 1760, to: 1700, dur: 0.12, vol: 0.09 });
-    tone({ type: "triangle", from: 2640, to: 2600, dur: 0.08, vol: 0.05 });
-  },
-  awaken: () => {
-    for (const [i, f] of [523, 659, 784, 1047, 1319].entries()) tone({ type: "sine", from: f, to: f * 1.01, dur: 0.9, vol: 0.12, delay: i * 0.07 });
-    tone({ type: "triangle", from: 200, to: 800, dur: 0.6, vol: 0.15 });
-    noise(0.5, 0.12, 6000);
-  },
-  // 잔영: 단검 (짧고 높은 쉭) · 순간이동 (낮게 빨려 들어가는 소리 + 칼 울림)
-  slice: () => noise(0.04, 0.18, 7000),
+  ...ASCALON_SOUNDS,
   blink: () => {
     tone({ type: "sine", from: 900, to: 120, dur: 0.12, vol: 0.12 });
     noise(0.1, 0.2, 1800);

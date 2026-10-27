@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.137",
+    date: "2026-10-27",
+    items: {
+      ko: [
+        "아스칼론 새 캐릭터 '방랑객' (남, 카타나를 든 떠돌이 무사 · 체력 105 · 기본 예리함 25%)",
+        "카타나 10: 방랑 카타나 · 발도 · 무심의 원(1초 가만히 서면 원이 펼쳐지고 들어온 적은 거리와 상관없이 바로 베임, 대시로 끌어당김) · 칼날 폭풍 · 천검란(게이지가 차면 방 전체 칼날 폭풍) · 초승달 베기 · 이도류 · 노다치 · 연참 · 달빛 일섬",
+        "예리함이 터지면 새 칼빛 효과와 맑은 쇳소리 (예리함을 가진 모든 캐릭터)",
+        "전용 아이템 10 · 테마 스킨 9 + 여름 한정 '여름 파도'",
+      ],
+      en: [
+        "New Ascalon character 'Wanderer' (male swordsman with a katana · HP 105 · base Sharpness 25%)",
+        "10 katanas: Wanderer's Katana · Quick Draw · Circle of No-Mind (stand still 1s to open a circle; foes entering are cut instantly at any range, dash pulls them in) · Blade Storm · Thousand Swords (full gauge unleashes a room-wide blade storm) · Crescent Cut · Two Swords · Nodachi · Flurry · Moonlit Flash",
+        "Sharpness procs now show a new blade flash with a ringing steel sound (for every character with Sharpness)",
+        "10 exclusive items · 9 theme skins + the limited Summer Wave skin",
+      ],
+      ja: [
+        "アスカロンの新キャラクター「放浪者」（男性、刀を持つ流浪の剣士 · 体力105 · 基本の鋭さ25%）",
+        "刀10：流浪の刀 · 抜刀 · 無心の円（1秒じっとすると円が開き、入った敵は距離に関係なく即座に斬られる、ダッシュで引き寄せる）· 刃の嵐 · 千剣乱（ゲージが満ちると部屋全体に刃の嵐）· 三日月斬り · 二刀流 · 野太刀 · 連斬 · 月光一閃",
+        "鋭さが発動すると新しい刃の光と澄んだ金属音（鋭さを持つすべてのキャラクター）",
+        "専用アイテム10 · テーマスキン9＋限定「夏の波」",
+      ],
+    },
+  },
+  {
     version: "0.48.136",
     date: "2026-10-27",
     items: {

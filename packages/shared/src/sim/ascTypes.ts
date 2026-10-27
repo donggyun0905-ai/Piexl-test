@@ -40,3 +40,23 @@ export interface RemnantPlayerState {
   rmDash?: boolean;
   rmSeen?: number;
 }
+
+export interface WandererPlayerState {
+  /** 방랑객: 연참 남은 칼(남은 틱) · 무심의 원(자리·움직인 뒤 남은 틱) · 천검란 게이지 · 방 전체 폭풍 남은 횟수(다음까지 틱) · 마지막 공격 틱 · 지난 틱 대시(시작 자리) · 지난 틱까지 본 처치 수 */
+  wdQueue?: number[];
+  wdZone?: { x: number; y: number; linger: number };
+  wdGauge?: number;
+  wdTempest?: { left: number; gap: number };
+  wdLast?: number;
+  wdDash?: { x: number; y: number };
+  wdSeen?: number;
+}
+
+export interface WandererEnemyState {
+  /** 무심의 원이 이 적을 다시 벨 수 있는 틱 */
+  wdCutT?: number;
+}
+
+/** 아스칼론 캐릭터 상태 모음 (types에서 한 이름으로 씀) */
+export interface AscalonPlayerState extends AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState {}
+export interface AscalonEnemyState extends AscEnemyState, ForgottenEnemyState, WandererEnemyState {}

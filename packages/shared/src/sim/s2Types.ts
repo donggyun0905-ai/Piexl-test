@@ -4,7 +4,7 @@ import type { SmallSpirit } from "../weaponsSpirit";
 import type { LobbyPetId } from "../petDefs";
 
 /** 시즌 2 캐릭터 탄 모양 (그리기 · 맞힘 처리 s2Hits) */
-export type S2Spirit = "gaiaArrow" | "eagleFeather" | "venomSpit" | "web" | "phoenixFire" | "batling" | "windBlade" | "wingBlade" | "magicMissile" | "slBlade" | "slThrow" | "eaBlade" | "smNeedle" | "adMissile" | "rdBolt" | "rdWheel" | "bmRocket" | "bmShard" | "afBlast" | "cyBullet" | "trBullet" | "trBurst" | "trRico" | "fgBolt" | "rmKnife";
+export type S2Spirit = "gaiaArrow" | "eagleFeather" | "venomSpit" | "web" | "phoenixFire" | "batling" | "windBlade" | "wingBlade" | "magicMissile" | "slBlade" | "slThrow" | "eaBlade" | "smNeedle" | "adMissile" | "rdBolt" | "rdWheel" | "bmRocket" | "bmShard" | "afBlast" | "cyBullet" | "trBullet" | "trBurst" | "trRico" | "fgBolt" | "rmKnife" | "wdWave" | "wdStorm";
 
 /** 몸으로 내달리는 공격 (변희 멧돼지 돌진 · 플라이 급습, s2Kit.rushTick) */
 export interface S2Rush {
