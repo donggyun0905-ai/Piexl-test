@@ -10,6 +10,7 @@ import { PLAIN_SHAPE } from "./layout";
 import { applyRoom } from "./rooms";
 import { createRun, newPlayer } from "./run";
 import { updateSeals } from "./talisman";
+import { hitTowers } from "./tdHealth";
 import { updateTowers } from "./tdTowers";
 import type { TdState } from "./tdTypes";
 import { buildSpawns, hatch, isFinal, spawnFinal, spawnTd, updateTdEnemies } from "./tdWaves";
@@ -54,6 +55,7 @@ export function createTd(seed: number, mapId: TdMapId): TdState {
     breakTicks: 0,
     worldFx,
     leaked: 0,
+    rebuild: {},
   };
 }
 
@@ -83,6 +85,7 @@ export function stepTd(td: TdState): void {
     if (td.finals.length > 0 && t >= R.FINAL_AT && !s.enemies.some(isFinal)) spawnFinal(td);
   }
   updateTdEnemies(td);
+  hitTowers(td);
 
   const before = s.enemies.slice();
   // 적 상태 시간(둔화·수양·출혈·불)은 타워마다가 아니라 여기서 한 번

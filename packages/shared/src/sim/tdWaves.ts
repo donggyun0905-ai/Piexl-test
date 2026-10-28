@@ -1,4 +1,5 @@
 // 타워 디펜스 적: 라운드마다 나올 적 목록 · 길 따라 걷기 · 적·보스마다 기술 · 빠져나가기
+import { finalQuake } from "./tdHealth";
 import { TILE_SIZE } from "../constants";
 import { BOSS_TIERS, ENEMIES, LAST_BOSSES, type EnemyKind } from "../content";
 import { createRng, deriveSeed } from "../rng";
@@ -123,7 +124,8 @@ export function spawnFinal(td: TdState): void {
   if (!kind) return;
   const map = TD_MAPS.find((m) => m.id === td.mapId) ?? TD_MAPS[0]!;
   const kinds: EnemyKind[] = kind === "plight" ? ["plight", "pdark"] : [kind as EnemyKind];
-  kinds.forEach((k, i) => spawnTd(td, k, i % map.paths.length, map.hpMul, -i * 20));
+  const first = kinds.map((k, i) => spawnTd(td, k, i % map.paths.length, map.hpMul, -i * 20))[0];
+  if (first) finalQuake(td, first.x, first.y);
 }
 
 export const isFinal = (e: EnemyState) => (LAST_BOSSES as readonly string[]).includes(e.kind) || e.kind === "pdark";

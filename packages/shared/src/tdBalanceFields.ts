@@ -26,6 +26,15 @@ const RULE_FIELDS: BalanceField[] = [
   n("leakGolem", 99, true),
   n("leakBoss", 99, true),
   { key: "finalSpeed", min: 0.05, max: 5 },
+  n("towerHp", 99999, true, 1),
+  n("towerHpLevel", 9999, true),
+  n("enemyReach", 200, true),
+  n("enemyHitEvery", 600, true, 1),
+  n("enemyHitMul", 20),
+  n("bossHitMul", 50),
+  n("finalQuake", 1),
+  n("repairCost", 20),
+  n("rebuildSec", 600, true),
 ];
 
 const UNIT_FIELDS: BalanceField[] = [n("hp", 999999, true, 1), n("speed", 5), n("gold", 9999, true), { key: "radius", min: 2, max: 24 }, n("shield", 99, true)];

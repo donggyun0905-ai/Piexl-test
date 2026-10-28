@@ -41,6 +41,7 @@ export { chooseSwarm, evoPassive, swarmPassives, weaponLv, xpNeed } from "./swar
 export { eachFighter, withGhost } from "./swarmGhosts";
 export { bladeSpots, evoSkill, type SwarmSkill } from "./swarmEvo";
 export { canBuild, mapTiles, nextUpgrade, placeTower, sellTower, tileCenter, towerAt, towerCost, upgradeCost, upgradeTower, withAttacker } from "./tdTowers";
+export { charFree, rebuildLeft, repairCost, repairTower, towerMaxHp } from "./tdHealth";
 export { mapPaths, pathPoint } from "./tdWaves";
 export { RING_TICKS, STRIKE_WAIT } from "./shades";
 export { CLONE_GAP } from "./ninja";

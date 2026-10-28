@@ -246,3 +246,32 @@
   }
 }
 
+/* 타워 체력 줄 · 수리 · 재건축 중 (td/TdPanel) */
+.td-hp {
+  position: relative;
+  height: 12px;
+  margin: 6px 0;
+  border-radius: 6px;
+  background: #2a1a20;
+  overflow: hidden;
+}
+.td-hp span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, #e04a5a, #7aff8a);
+}
+.td-hp b {
+  position: relative;
+  display: block;
+  font-size: 10px;
+  line-height: 12px;
+  text-align: center;
+  text-shadow: 0 0 2px #000;
+}
+.td-repair {
+  width: 100%;
+  margin-bottom: 6px;
+}
+.td-char.rebuild {
+  filter: grayscale(0.8);
+}

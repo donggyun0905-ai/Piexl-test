@@ -6,6 +6,7 @@ import { canBuild, mapTiles, nextUpgrade, placeTower, towerCost, upgradeCost, up
 import { mapPaths, pathPoint } from "./tdWaves";
 import type { TdMapId } from "../tdMaps";
 import type { TdState } from "./tdTypes";
+import { charFree, repairCost, repairTower } from "./tdHealth";
 
 /** 길이 가장 많이 지나가는 빈 칸 */
 function bestSpot(td: TdState): [number, number] | null {
@@ -31,10 +32,20 @@ function botPlay(mapId: TdMapId, seed: number): TdState {
   for (let tick = 0; tick < 60 * 60 * 30 && td.phase !== "won" && td.phase !== "lost"; tick++) {
     if (td.phase === "build" || (td.phase === "break" && td.breakTicks < 600)) startRound(td);
     if (tick % 20 === 0) {
+      // 반 넘게 깎인 타워는 먼저 수리
+      const broken = td.towers.find((t) => t.hp < t.maxHp * 0.5 && td.run.gold >= repairCost(t));
+      if (broken) repairTower(td, broken.id);
       const ups = td.towers.filter((t) => nextUpgrade(td, t).kind !== "max").sort((a, b) => upgradeCost(a) - upgradeCost(b));
       if (td.towers.length < Math.min(16, 3 + Math.floor(td.round * 0.7)) && td.run.gold >= towerCost(td)) {
         const spot = bestSpot(td);
-        if (spot) placeTower(td, CHARACTER_IDS[k++ % CHARACTER_IDS.length]!, ...spot);
+        // 캐릭터마다 하나만 (부서져 재건축 중인 캐릭터는 건너뜀)
+        const n = CHARACTER_IDS.length;
+        let c: (typeof CHARACTER_IDS)[number] | undefined;
+        for (let j = 0; j < n && !c; j++) {
+          const id = CHARACTER_IDS[(k + j) % n]!;
+          if (charFree(td, id)) [c, k] = [id, k + j + 1];
+        }
+        if (spot && c) placeTower(td, c, ...spot);
       } else if (ups[0] && td.run.gold >= upgradeCost(ups[0])) {
         const up = nextUpgrade(td, ups[0]);
         // 무기는 타워마다 아무거나 (처음 하는 사람처럼), 패시브는 첫 후보

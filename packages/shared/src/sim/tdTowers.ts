@@ -17,6 +17,7 @@ import { recallChakram } from "./bedouin";
 import { updateProjectiles } from "./projectiles";
 import { newPlayer } from "./run";
 import { updateCharms } from "./talisman";
+import { charFree, towerMaxHp } from "./tdHealth";
 import type { TdAttacker, TdState, TdTower, TdUpgrade } from "./tdTypes";
 import { AIM_DIST_MAX, AIM_DIST_STEP, EMPTY_INPUT, type EnemyState, type RunState, type TickInput } from "./types";
 import { dist2 } from "./util";
@@ -73,9 +74,11 @@ function attacker(character: CharacterId, col: number, row: number): TdAttacker 
 /** 타워 세우기 (돈이 모자라거나 자리가 안 되면 false) */
 export function placeTower(td: TdState, character: CharacterId, col: number, row: number): boolean {
   const cost = towerCost(td);
-  if (td.run.gold < cost || !canBuild(td, col, row) || td.phase === "won" || td.phase === "lost") return false;
+  // 캐릭터마다 하나만 · 부서진 캐릭터는 재건축이 끝나야 (tdHealth)
+  if (td.run.gold < cost || !canBuild(td, col, row) || !charFree(td, character) || td.phase === "won" || td.phase === "lost") return false;
   td.run.gold -= cost;
-  const t: TdTower = { id: td.nextTowerId++, character, col, row, level: 1, spent: cost, atk: [attacker(character, col, row)], dmg: 0, kills: 0, stunTicks: 0 };
+  const hp = towerMaxHp(1);
+  const t: TdTower = { id: td.nextTowerId++, character, col, row, level: 1, spent: cost, atk: [attacker(character, col, row)], dmg: 0, kills: 0, stunTicks: 0, hp, maxHp: hp };
   td.towers.push(t);
   refreshStats(td, t);
   return true;
@@ -113,6 +116,9 @@ export function upgradeTower(td: TdState, id: number, choice: string): boolean {
   td.run.gold -= cost;
   t.spent += cost;
   t.level++;
+  // 레벨이 오르면 최대 체력도 (늘어난 만큼 채움)
+  t.hp += towerMaxHp(t.level) - t.maxHp;
+  t.maxHp = towerMaxHp(t.level);
   if (up.kind === "weapon") withAttacker(td, t.atk[0]!, () => equipWeapon(td.run, choice as WeaponId));
   else if (up.kind === "second") {
     const a = attacker(t.character, t.col, t.row);

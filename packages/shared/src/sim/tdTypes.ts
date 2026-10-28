@@ -17,6 +17,8 @@ export interface TdEnemyState {
   tdFree?: number;
   /** 처치하면 주는 돈 (타워 디펜스 수치, 없으면 ENEMIES 값) */
   bounty?: number;
+  /** 다음에 타워를 때리기까지 틱 (tdHealth) */
+  tdHitCd?: number;
 }
 
 /** 무기 하나를 든 공격자 (타워 하나에 무기 1~2개). 탄·장치·효과·잠시 뒤 폭발은 공격자마다 따로 */
@@ -42,6 +44,9 @@ export interface TdTower {
   kills: number;
   /** 용의 불길 등으로 공격을 못 하는 남은 틱 */
   stunTicks: number;
+  /** 체력 (적에게 맞음, 0이면 부서짐 · tdHealth) */
+  hp: number;
+  maxHp: number;
 }
 
 /** 다음 레벨에 고를 것: 무기 바꾸기(2레벨) · 패시브 · 두 번째 무기(만렙) · 이미 만렙 */
@@ -82,4 +87,6 @@ export interface TdState {
   worldFx: EffectState[];
   /** 빠져나간 적 수 */
   leaked: number;
+  /** 부서진 캐릭터 → 다시 세울 수 있는 틱 (재건축 중) */
+  rebuild: Record<string, number>;
 }

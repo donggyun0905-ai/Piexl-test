@@ -1,6 +1,6 @@
 // 타워 디펜스 옆 칸: 세울 캐릭터 목록 · 고른 타워 정보(능력치·무기·패시브)·레벨 올리기 후보·팔기
 import { characterOpen } from "../characterGoals";
-import { CHARACTER_IDS, nextUpgrade, TD_RULES, towerCost, upgradeCost, type CharacterId, type TdState, type TdTower } from "@pixel-rogue/shared";
+import { CHARACTER_IDS, nextUpgrade, rebuildLeft, repairCost, TD_RULES, towerCost, upgradeCost, type CharacterId, type TdState, type TdTower } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { itemDesc, itemName } from "../i18n/items";
 import { ItemIcon, type IconItem } from "../game/itemIcon";
@@ -15,6 +15,7 @@ interface Props {
   onPlacing: (id: CharacterId | null) => void;
   onClose: () => void;
   onUpgrade: (choice: string) => void;
+  onRepair: () => void;
   onSell: () => void;
 }
 
@@ -30,25 +31,31 @@ function BuildList({ td, t, placing, onPlacing }: Props) {
     <div className="td-build">
       <p className="hint">{placing ? t("tdPlacing") : t("tdBuildHint")}</p>
       <div className="td-chars">
-        {CHARACTER_IDS.map((id) => (
-          <button
-            key={id}
-            type="button"
-            className={`td-char ${placing === id ? "selected" : ""}`}
-            disabled={(td.run.gold < cost && placing !== id) || !characterOpen(id)}
-            onClick={() => onPlacing(placing === id ? null : id)}
-          >
-            <TdPortrait id={id} />
-            <span>{t(id as TextKey)}</span>
-            <small className="td-cost">{cost}G</small>
-          </button>
-        ))}
+        {CHARACTER_IDS.map((id) => {
+          // 캐릭터마다 타워 하나 · 부서지면 재건축이 끝날 때까지 못 세움
+          const placed = td.towers.some((x) => x.character === id);
+          const wait = rebuildLeft(td, id);
+          return (
+            <button
+              key={id}
+              type="button"
+              className={`td-char ${placing === id ? "selected" : ""} ${wait > 0 ? "rebuild" : ""}`}
+              disabled={(td.run.gold < cost && placing !== id) || !characterOpen(id) || placed || wait > 0}
+              onClick={() => onPlacing(placing === id ? null : id)}
+            >
+              <TdPortrait id={id} />
+              <span>{t(id as TextKey)}</span>
+              <small className="td-cost">{placed ? t("tdPlaced") : wait > 0 ? t("tdRebuild").replace("{s}", String(wait)) : `${cost}G`}</small>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-function TowerInfo({ td, lang, t, tower, onClose, onUpgrade, onSell }: Props & { tower: TdTower }) {
+function TowerInfo({ td, lang, t, tower, onClose, onUpgrade, onRepair, onSell }: Props & { tower: TdTower }) {
+  const fix = repairCost(tower);
   const p = tower.atk[0]!.p;
   const up = nextUpgrade(td, tower);
   const cost = upgradeCost(tower);
@@ -66,6 +73,15 @@ function TowerInfo({ td, lang, t, tower, onClose, onUpgrade, onSell }: Props & {
           ✕
         </button>
       </header>
+      <div className="td-hp" title={t("tdHp")}>
+        <span style={{ width: `${Math.max(0, (tower.hp / tower.maxHp) * 100)}%` }} />
+        <b>
+          {Math.ceil(tower.hp)} / {tower.maxHp}
+        </b>
+      </div>
+      <button type="button" className="td-repair outline" disabled={fix <= 0 || td.run.gold < fix} onClick={onRepair}>
+        {fix > 0 ? t("tdRepair").replace("{g}", String(fix)) : t("tdFull")}
+      </button>
       <dl className="td-stats">
         <dt>{t("statDamage")}</dt>
         <dd>{p.stats.damage.toFixed(1)}</dd>

@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.199",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "타워 디펜스: 타워에 체력이 생겨 지나가는 적이 가까운 타워를 때림 (보스는 더 아프게) · 최종 보스가 나오면 파동이 퍼지며 모든 타워 체력 −10%",
+        "타워는 캐릭터마다 하나만 (같은 캐릭터 둘 안 됨) · 타워를 눌러 돈으로 수리 · 부서진 캐릭터는 30초 동안 '재건축 중'",
+        "타워 디펜스 이펙트가 넓은 맵에서도 보이게: 타워가 공격하면 그 캐릭터 색으로 빛나는 베기, 적이 맞으면 불똥, 타워가 맞으면 붉은 섬광 · 깎인 타워 머리 위 체력 줄",
+      ],
+      en: [
+        "Tower Defense: towers now have HP and passing enemies hit nearby towers (bosses hit harder) · when a final boss appears, a shockwave takes 10% HP from every tower",
+        "Only one tower per character (no duplicates) · tap a tower to repair it with gold · a destroyed character is 'Rebuilding' for 30 seconds",
+        "Tower Defense effects are visible on the wide map: towers flash a glowing slash in their character's color when attacking, enemies spark when hit, towers flash red when hit · damaged towers show an HP bar",
+      ],
+      ja: [
+        "タワーディフェンス: タワーに体力がつき、通る敵が近くのタワーを攻撃 (ボスはより痛い) · 最終ボスが出ると波動が広がり全タワーの体力−10%",
+        "タワーはキャラごとに1つだけ (同じキャラ2体は不可) · タワーを押してお金で修理 · 壊れたキャラは30秒間「再建中」",
+        "タワーディフェンスのエフェクトを広いマップでも見えるように: タワーが攻撃するとキャラの色で光る斬撃、敵が当たると火花、タワーが当たると赤い閃光 · 削れたタワーの頭上に体力バー",
+      ],
+    },
+  },
+  {
     version: "0.48.198",
     date: "2026-10-28",
     items: {

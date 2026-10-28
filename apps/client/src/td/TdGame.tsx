@@ -5,6 +5,7 @@ import {
   canBuild,
   createTd,
   placeTower,
+  repairTower,
   sellTower,
   startRound,
   stepTd,
@@ -242,6 +243,10 @@ export function TdGame({ mapId, lang, t, onRetry, onExit }: Props) {
             onClose={() => setSelectedId(null)}
             onUpgrade={(choice) => {
               if (selected && upgradeTower(td, selected.id, choice)) play("pickup");
+              setHud((n) => n + 1);
+            }}
+            onRepair={() => {
+              if (selected && repairTower(td, selected.id)) play("pickup");
               setHud((n) => n + 1);
             }}
             onSell={() => {

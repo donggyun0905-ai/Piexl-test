@@ -37,6 +37,17 @@ export const TD_RULES = {
   leakBoss: 3,
   /** 최종 보스 걷는 빠르기 배율 (크고 느리게) */
   finalSpeed: 0.6,
+  /** 타워 체력: 처음 + 레벨마다 · 적이 때리는 거리·간격(틱)·피해 배율(적 몸통 피해 ×, 보스 ×) · 최종 보스 등장 파동(최대 체력 비율) */
+  towerHp: 300,
+  towerHpLevel: 80,
+  enemyReach: 26,
+  enemyHitEvery: 60,
+  enemyHitMul: 0.25,
+  bossHitMul: 2.5,
+  finalQuake: 0.1,
+  /** 수리: 채울 체력 1당 돈 · 부서지면 같은 캐릭터를 다시 세우기까지(초) */
+  repairCost: 0.5,
+  rebuildSec: 30,
 };
 
 export const tdLevelCost = (level: number) => TD_RULES.levelCost + TD_RULES.levelCostStep * (level - 1);
