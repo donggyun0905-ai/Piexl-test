@@ -22,6 +22,10 @@ import { updateScorpion } from "./bossScorpion";
 import { updateRoc } from "./bossRoc";
 import { updateDemigod } from "./bossDemigod";
 import { updateSage } from "./bossSage";
+import { updateToad } from "./bossToad";
+import { updateSalamander } from "./bossSalamander";
+import { updateJelly } from "./bossJelly";
+import { updateCaptain } from "./bossCaptain";
 import { makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
 /** 보스 체력 배율 (층마다 늘어남) */
@@ -49,6 +53,11 @@ const BOSS_AI: Partial<Record<EnemyState["kind"], BossAi>> = {
   roc: (s, e) => updateRoc(s, e),
   demigod: updateDemigod,
   sage: updateSage,
+  // 시즌 2 새 보스
+  toad: (s, e, toP) => updateToad(s, e, toP),
+  salamander: (s, e, toP, go) => updateSalamander(s, e, toP, go),
+  jelly: (s, e, toP, go) => updateJelly(s, e, toP, go),
+  captain: updateCaptain,
 };
 
 export function updateBoss(s: RunState, e: EnemyState, toP: readonly [number, number], go: readonly [number, number], spawned: EnemyState[]): void {

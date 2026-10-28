@@ -3,7 +3,7 @@
 // 벽·기둥: 몸과 탄을 모두 막음 · 구덩이: 몸만 막고 탄은 넘어감
 import { ROOM_COLS, ROOM_ROWS, SHAPE_DX, SHAPE_DY, TILE_SIZE } from "../constants";
 import type { Rng } from "../rng";
-import { ROOM_SHAPES } from "./roomShapes";
+import { BOSS_SHAPES, ROOM_SHAPES } from "./roomShapes";
 import type { Body } from "./types";
 
 export { ROOM_SHAPES };
@@ -39,7 +39,8 @@ export function shapeGrid(shape: RoomShape): TileGrid | null {
   const key = (shape.id * 2 + (shape.flip ? 1 : 0)) * 2 + (SHAPE_DX > 0 ? 1 : 0);
   const hit = cache.get(key);
   if (hit) return hit;
-  const rows = ROOM_SHAPES[shape.id]!;
+  // 1000부터는 새 보스방 틀
+  const rows = (shape.id >= 1000 ? BOSS_SHAPES[shape.id - 1000] : ROOM_SHAPES[shape.id])!;
   const g = new Uint8Array(ROOM_COLS * ROOM_ROWS);
   for (let row = 0; row < ROOM_ROWS; row++) {
     for (let col = 0; col < ROOM_COLS; col++) {

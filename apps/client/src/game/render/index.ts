@@ -33,6 +33,7 @@ import { drawSageAir, drawSageBanner, drawSageGround } from "./sage";
 import { drawMedicAir, drawMedicGround } from "./medic";
 import { lerp, type Snap } from "./palette";
 import { drawRoom } from "./room";
+import { drawTerrain } from "./terrain";
 import { drawInkMarks } from "./scribe";
 import { drawIdra } from "./season2";
 import { drawElderGround } from "./elder";
@@ -143,6 +144,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   ctx.imageSmoothingEnabled = false;
 
   drawRoom(ctx, s, alpha, snap);
+  drawTerrain(ctx, s, snap);
   drawSwarmGround(ctx, s, snap);
   drawPwGround(ctx, s);
   if (opt.bossName) drawArenaLabels(ctx, s, opt.bossName);

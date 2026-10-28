@@ -15,7 +15,7 @@ import { drawTagCue } from "./tagCue";
 import { drawSlayerGauge } from "./slayer";
 
 /** 곧 탄·소환·범위 공격을 쓰기 전 몸 둘레 고리가 줄어드는 보스 */
-const RING_WARN = new Set<string>(["brood", "seer", "archer", "siren", "plant", "reaper", "archangel"]);
+const RING_WARN = new Set<string>(["brood", "seer", "archer", "siren", "plant", "reaper", "archangel", "toad", "salamander", "jelly", "captain"]);
 
 /** 공격 예고선: 탄을 쏘기 직전의 겨냥선, 돌진 직전의 돌진 방향 */
 export function drawTelegraphs(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {

@@ -27,6 +27,7 @@ import type { EffectState, Hazard, PendingBlast } from "./fxTypes";
 export * from "./inputTypes";
 import type { SwarmEnemyState, SwarmPlayerState, SwarmRunState } from "./swarmTypes";
 import type { PwEnemyState, PwRunState, PwShotState } from "./paewangTypes";
+import type { TerrainRunState } from "./terrainTypes";
 export interface Body {
   x: number;
   y: number;
@@ -35,7 +36,6 @@ export interface Body {
   prevY: number;
   r: number;
 }
-
 export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, BrawlPlayerState, MedicPlayerState, GunPlayerState, BeastPlayerState, BossPlayerState, NinjaPlayerState, ChronoPlayerState, SummonPlayerState, NovicePlayerState, BedouinPlayerState, GeneralPlayerState, ImugiPlayerState, ApostlePlayerState, StarPlayerState, DuckPlayerState, SwarmPlayerState, AbandonedPlayerState, TitanPlayerState, OniPlayerState, ScribePlayerState, IdraPlayerState, MorphPlayerState, FlyPlayerState, ElderPlayerState, RenPlayerState, SpiritPlayerState, H2PlayerState, TcPlayerState, AscalonPlayerState {
   characterId: CharacterId;
   weaponId: WeaponId;
@@ -95,9 +95,9 @@ export interface EnemyState extends Body, LaserEnemyState, OrbitEnemyState, Braw
   dirX: number;
   dirY: number;
   hitFlash: number;
-  /** 마지막으로 치명타를 맞은 틱 (화면 피해 숫자 표시용, 게임 계산에는 쓰지 않음) */
+  /** 마지막으로 치명타를 맞은 틱 (화면 표시용) */
   critTick?: number;
-  /** 상태이상 피해를 받은 틱 · 그 틱에 받은 종류별 양 (화면 피해 숫자 색, 게임 계산에는 쓰지 않음) */
+  /** 상태이상 피해를 받은 틱 · 그 틱에 받은 종류별 양 (화면 표시용) */
   dotTick?: number;
   dotAmt?: Partial<Record<DotKind, number>>;
   /** 보스 행동 횟수 (패턴 회전·순간이동 위치 계산용). 일반 적은 0 */
@@ -222,7 +222,7 @@ export interface BuyLogEntry {
 /** 상태이상 피해 종류: 출혈 · 화상 · 독 · 저주(수양 부적) */
 export type DotKind = "bleed" | "burn" | "poison" | "curse" | "storm" | "rot" | "death" | "hellfire" | "shock" | "frost" | "tide" | "gold" | "radiance" | "voidbolt";
 
-export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, PetRunState, PwRunState {
+export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, PetRunState, PwRunState, TerrainRunState {
   seed: number;
   tick: number;
   player: PlayerState;

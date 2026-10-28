@@ -4,8 +4,8 @@ import { createRng, deriveSeed } from "./rng";
 export type MinionKind = "crawler" | "spitter" | "charger" | "mortar" | "gnat" | "guardian" | "paladin" | "tower" | "ruinblade" | "chaosblade" | "soul" | "ghost" | TdMinionKind;
 /** 타워 디펜스에만 나오는 적 (sim/tdWaves) */
 export type TdMinionKind = "slime" | "runner" | "bat" | "beetle" | "golem" | "shaman" | "eggsac" | "wisp";
-/** 보스: 1·2층(1단계) 강철 거구·검은 기사·얍삽한 활잡이 · 3·4층(2단계) 무리 여왕·세이렌·켄타우로스·하드플랜트 · 5·6층(3단계) 공허의 눈·데스·검신·천사장 */
-export type BossKind = "hulk" | "knight" | "archer" | "brood" | "siren" | "centaur" | "plant" | "seer" | "reaper" | "swordgod" | "archangel" | LastBossKind;
+/** 보스: 1·2층(1단계) 강철 거구·검은 기사·얍삽한 활잡이·두꺼비 왕·불도롱뇽 · 3·4층(2단계) 무리 여왕·세이렌·켄타우로스·하드플랜트·번개 해파리 · 5·6층(3단계) 공허의 눈·데스·검신·천사장·유령선 선장 */
+export type BossKind = "hulk" | "knight" | "archer" | "toad" | "salamander" | "brood" | "siren" | "centaur" | "plant" | "jelly" | "seer" | "reaper" | "swordgod" | "archangel" | "captain" | LastBossKind;
 /** 라스트 보스 (6층을 깬 뒤 골라서 도전, 7층 큰 보스방) */
 export type LastBossKind = "dragon" | "godeater" | "plight" | "pdark" | "umbra" | "demigod" | "sage";
 /** 고를 수 있는 라스트 보스 (태초의 빛을 고르면 태초의 어둠도 같이 나옴) */
@@ -95,6 +95,14 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   swordgod: { kind: "swordgod", hp: 620, radius: 9, speed: 0.45, contactDamage: 14, gold: 30, boss: true },
   /** 보스: 성기사 소환 · 빛기둥 */
   archangel: { kind: "archangel", hp: 600, radius: 10, speed: 0.3, contactDamage: 12, gold: 30, boss: true },
+  /** 시즌 2 1단계 보스: 늪의 두꺼비 왕 (뛰어 내려찍기 · 혀로 끌어당기기 · 진흙탄, sim/bossToad) */
+  toad: { kind: "toad", hp: 460, radius: 12, speed: 0.4, contactDamage: 15, gold: 20, boss: true },
+  /** 시즌 2 1단계 보스: 불도롱뇽 (용암 웅덩이로 잠수했다 튀어나옴 · 지나간 자리 불길, sim/bossSalamander) */
+  salamander: { kind: "salamander", hp: 420, radius: 10, speed: 0.55, contactDamage: 14, gold: 20, boss: true },
+  /** 시즌 2 2단계 보스: 번개 해파리 (물을 감전시킴 · 떠다니는 전기 방울, sim/bossJelly) */
+  jelly: { kind: "jelly", hp: 560, radius: 11, speed: 0.3, contactDamage: 12, gold: 25, boss: true },
+  /** 시즌 2 3단계 보스: 유령선 선장 (대포 줄 포격 · 닻 던져 끌기 · 밀물 · 물에 빠진 선원, sim/bossCaptain) */
+  captain: { kind: "captain", hp: 660, radius: 10, speed: 0.4, contactDamage: 16, gold: 30, boss: true },
   /** 라스트 보스: 멸망의 용 (sim/bossDragon) */
   /** 라스트 보스: 갓이터 (대검 두 자루를 먼저 부숴야 맞음, sim/bossHades·bossBlades) */
   godeater: { kind: "godeater", hp: 2800, radius: 24, speed: 0.3, contactDamage: 18, gold: 100, boss: true, parry: 0.4 },
@@ -124,9 +132,9 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
 
 /** 단계마다 나올 수 있는 보스 (1·2층 · 3·4층 · 5·6층) */
 export const BOSS_TIERS: readonly (readonly BossKind[])[] = [
-  ["hulk", "knight", "archer"],
-  ["brood", "siren", "centaur", "plant"],
-  ["seer", "reaper", "swordgod", "archangel"],
+  ["hulk", "knight", "archer", "toad", "salamander"],
+  ["brood", "siren", "centaur", "plant", "jelly"],
+  ["seer", "reaper", "swordgod", "archangel", "captain"],
 ];
 
 /** 층마다 나오는 보스: 그 단계 보스 중 시드로 하나 (무한 모드 7층부터는 모든 보스 중) */

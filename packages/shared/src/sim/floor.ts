@@ -2,7 +2,9 @@
 // 한 층은 갈림길: 아래(시작 방)에서 위(보스방)로 칸(layer)을 하나씩 올라감.
 // 칸마다 방이 2~3개 있고, 방을 정리하면 위쪽 벽의 출구로 다음 칸의 가까운 방 중 하나를 골라 감. 되돌아가지 않음
 import { createRng, deriveSeed } from "../rng";
+import { bossForFloor } from "../enemyDefs";
 import { PLAIN_SHAPE, pickShape, type RoomShape } from "./layout";
+import { BOSS_SHAPE_KINDS } from "./roomShapes";
 
 export const FLOOR_COUNT = 6;
 /** 6층을 깬 뒤 도전하는 라스트 보스 층 */
@@ -92,6 +94,9 @@ export function generateFloor(seed: number, floor: number): FloorMap {
   // 방 모양: 방마다 따로 시드를 써서 지도 모양·방 종류에는 영향 없음
   for (const r of rooms) {
     if (r.type === "combat" || r.type === "elite") r.shape = pickShape(createRng(deriveSeed(seed, "floor", floor, "room", r.id, "shape")));
+    // 시즌 2 새 보스방은 그 보스에 맞는 벽 배치
+    const bossShape = BOSS_SHAPE_KINDS.indexOf(bossForFloor(floor, seed) as (typeof BOSS_SHAPE_KINDS)[number]);
+    if (r.type === "exit" && floor <= 6 && bossShape >= 0) r.shape = { id: 1000 + bossShape, flip: false };
   }
 
   return { floor, rooms, startId: 0, exitId: exit.id, layers: byLayer.length };

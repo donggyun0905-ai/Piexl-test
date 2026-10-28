@@ -134,11 +134,12 @@ describe("보스", () => {
       const exit = run.map.rooms[run.map.exitId]!;
       enterFrom(run, beforeBoss(run)[0]!);
       expect(run.roomId).toBe(exit.id);
-      expect(run.enemies).toHaveLength(1);
-      expect(run.enemies[0]!.kind).toBe(kind);
-      // 보스를 쓰러뜨림
+      // 그 층 보스가 나옴 (천사장은 탑을 같이 데리고 나옴)
+      const boss = run.enemies.find((e) => e.kind === kind)!;
+      expect(boss).toBeDefined();
+      // 보스를 쓰러뜨림 (함께 나온 것도)
       run.player.invulnTicks = 99999;
-      run.enemies[0]!.hp = 0;
+      for (const e of run.enemies) e.hp = 0;
       const gold = run.gold;
       stepSim(run, EMPTY_INPUT);
       stepSim(run, EMPTY_INPUT);

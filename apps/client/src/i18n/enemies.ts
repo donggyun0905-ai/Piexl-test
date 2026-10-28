@@ -10,6 +10,7 @@ export const BOSS_TEXT: Record<string, string> = {
   hulk: "bossHulk", brood: "bossBrood", seer: "bossSeer", knight: "bossKnight", archer: "bossArcher", siren: "bossSiren", centaur: "bossCentaur",
   plant: "bossPlant", reaper: "bossReaper", swordgod: "bossSwordGod", archangel: "bossAngel", dragon: "bossDragon", godeater: "bossGodEater", plight: "bossLight", pdark: "bossDark",
   umbra: "bossUmbra", sandworm: "bossSandworm", scorpion: "bossScorpion", roc: "bossRoc", demigod: "bossDemigod", sage: "bossSage",
+  toad: "bossToad", salamander: "bossSalamander", jelly: "bossJelly", captain: "bossCaptain",
 };
 
 /** 보스가 아닌 적 이름 */
@@ -81,6 +82,10 @@ const DESC: Record<string, Names> = {
   pdark: n("라스트 보스. 태초의 빛과 체력을 나눠 가짐", "Final boss. Shares its health with Primeval Light", "ラストボス。太初の光と体力を分け合う"),
   umbra: n("시즌 2 라스트 보스. 거대한 짐승 셋을 차례로 부르고 지켜봄", "Season 2 final boss. Summons three colossal beasts in turn and watches", "シーズン2ラストボス。巨大な獣を三体順に呼び、見届ける"),
   demigod: n("시즌 2 라스트 보스. 아르테의 태산에서 내려온 반신, 맨주먹으로 1대1", "Season 2 final boss. A demigod down from Mount Arte, fighting one-on-one with bare fists", "シーズン2ラストボス。アルテの泰山から降りてきた半神、素手で一対一"),
+  toad: n("늪을 뛰어다니며 내려찍고(떨어진 자리는 진흙), 혀로 끌어당기고, 진흙 덩이를 뱉음", "Leaps and slams through the bog (leaving mud), pulls you in with its tongue and spits mud", "沼を跳ねて叩きつけ（落ちた所は泥）、舌で引き寄せ、泥の塊を吐く"),
+  salamander: n("불길을 남기며 돌진하고, 용암 웅덩이로 잠수했다가 발밑에서 솟구침", "Charges leaving fire, dives into lava pools and erupts beneath you", "炎を残して突進し、溶岩だまりに潜って足元から噴き出す"),
+  jelly: n("물을 감전시키고(물 위면 데미지), 떠도는 전기 방울과 번개 줄을 쏨", "Electrifies the water (it hurts to stand in), sends drifting sparks and lightning lines", "水を感電させ（水の上だとダメージ）、漂う電気玉と雷の線を放つ"),
+  captain: n("대포 포격 · 닻으로 끌어당기기 · 방 절반을 쓰는 밀물 · 물에 빠진 선원 부르기", "Cannon barrages, an anchor that drags you in, a tide that sweeps half the room, and drowned crew", "大砲の砲撃・錨で引き寄せ・部屋の半分を流す潮・溺れた船員を呼ぶ"),
   sage: n("시즌 2 마지막 라스트 보스. 세레스티아를 지켜 온 반신, 여의봉과 근두운으로 따로 공격", "Season 2's last final boss. The demigod guarding Celestia, attacking separately with his staff and his cloud", "シーズン2最後のラストボス。セレスティアを守ってきた半神、如意棒と觔斗雲で別々に攻撃"),
   sandworm: n("땅속에서 예고 없이 솟아오름. 위에 있을 때 때리기", "Bursts up from underground without warning. Strike while it is up", "地中から予告なく飛び出す。地上にいる間に攻撃"),
   scorpion: n("꼬리 독 찌르기·앞으로만 밀고 오는 돌진. 옆으로 피한 뒤 때리기", "Venom sting and a straight-line charge. Sidestep, then strike", "尾の毒突きと直進の突進。横に避けてから攻撃"),

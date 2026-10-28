@@ -21,6 +21,7 @@ import { updateOrbit } from "./orbit";
 import { updateMedicGear } from "./medicGear";
 import { updateDelayed } from "./combat";
 import { updateHazards } from "./hazards";
+import { updateTerrain } from "./terrain";
 import { updateProjectiles } from "./projectiles";
 import { updateCharms } from "./talisman";
 import type { PlayerState, RunState, TickInput } from "./types";
@@ -167,6 +168,8 @@ export function stepPlayer(s: RunState, input: TickInput): void {
 
 /** 플레이어 다음: 적·위험 표시·투사체·부적·폭발·효과 (협동도 같이 씀) */
 export function stepWorld(s: RunState): void {
+  // 지형: 진흙·물에서 느려짐 · 용암 · 가시 · 감전 (사람마다)
+  updateTerrain(s);
   // 얼음 시계: 적·적 탄이 멈춤 (라스트 보스 궁극기 동안은 멈추지 않음)
   const frozen = s.freezeTicks > 0 && !s.enemies.some(ultBusy);
   if (frozen) s.freezeTicks--;

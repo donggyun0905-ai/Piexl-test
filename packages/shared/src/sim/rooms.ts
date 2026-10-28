@@ -5,6 +5,7 @@ import { bossForFloor, type BossKind } from "../content";
 import { createRng, deriveSeed } from "../rng";
 import { FLOOR_COUNT, generateFloor, LANES, LAST_FLOOR, lastFloorMap } from "./floor";
 import { spawnBoss } from "./bosses";
+import { makeTerrain } from "./terrain";
 import { healPlayer } from "./combat";
 import { onRoomCleared, spawnBlessing, spawnGolden, spawnTreasure } from "./loot";
 import { makeArena } from "./bossPrimeval";
@@ -104,6 +105,8 @@ function enterRoom(s: RunState, roomId: number): void {
   st.visited = true;
   s.pendingBlasts = [];
   s.hazards = [];
+  // 층 보스에 맞는 지형 (진흙·용암·물·가시 함정)
+  s.terrain = makeTerrain(s, roomId);
   eachSeat(s, () => {
     s.roomDamaged = false;
     if (s.devices) s.devices = [];
