@@ -1,5 +1,6 @@
 // 원소술사 그리기 (새 효과): 웨폰 마스터 진짜 검(칼끝이 적을 향함) · 은하수 스택 고리 · 빛 터짐 · 빅뱅 · 두 번째 중력 · 갓 핸드
 import type { EffectState, OrbBody, RunState } from "@pixel-rogue/shared";
+import { additive, glow as softGlow, shock } from "./pwFxBits";
 import type { Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -159,7 +160,8 @@ export function drawElemFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const y = snap(fx.y);
   const r = fx.size;
   if (fx.kind === "elLight") {
-    // 빛 줄기 8개가 뻗고 가운데가 하얗게
+    // 빛 줄기 8개가 뻗고 가운데가 하얗게 (둘레 빛 번짐)
+    additive(ctx, () => softGlow(ctx, x, y, r * (0.5 + t * 0.5), "#fff6c0", 1 - t, 1.5));
     ctx.globalAlpha = 1 - t;
     ctx.strokeStyle = "#fff6c0";
     ctx.lineWidth = 1;
@@ -175,6 +177,10 @@ export function drawElemFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     disc(ctx, x, y, 3 * (1 - t) + 1);
   } else if (fx.kind === "elBang") {
     // 빅뱅: 한 점으로 모였다가 하얀 섬광 → 보랏빛·금빛 고리가 퍼지고 별가루가 흩어짐
+    additive(ctx, () => {
+      softGlow(ctx, x, y, r * (t < 0.15 ? 0.5 : 0.4 + t), t < 0.15 ? "#ffffff" : "#c8a0ff", t < 0.15 ? 1 : 1 - t, 1.5);
+      if (t >= 0.15) shock(ctx, x, y, r * (0.3 + t), "#ffd27a", 1 - t, 8);
+    });
     if (t < 0.15) {
       ctx.globalAlpha = 1;
       ctx.fillStyle = "#ffffff";
@@ -200,7 +206,8 @@ export function drawElemFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       }
     }
   } else {
-    // 두 번째 중력: 같은 자리에 어두운 소용돌이가 조여 들다가 내려앉음
+    // 두 번째 중력: 같은 자리에 어두운 소용돌이가 조여 들다가 내려앉음 (가장자리 보랏빛)
+    additive(ctx, () => shock(ctx, x, y, r * (1 - t * 0.3), "#8a5aff", 0.6, 6));
     ctx.globalAlpha = 0.25 + 0.2 * t;
     ctx.fillStyle = "#281446";
     disc(ctx, x, y, r * (1 - t * 0.3));

@@ -32,12 +32,14 @@ import { drawCustomFx, drawCustomShot } from "./customFx";
 import { C, CHARM_INK, lerp, type Snap } from "./palette";
 import { drawCoinFx } from "../drawPickup";
 import { drawBloom, drawBlossomFlurry } from "./sakura";
+import { drawFxBloom, drawShotBloom } from "./fxBloom";
 import { drawBaseShot, drawBlast, drawBurst, drawHit, drawSwing } from "./baseFx";
 
 export function drawProjectiles(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   for (const pr of s.projectiles) {
     const x = snap(lerp(pr.prevX, pr.x, alpha));
     const y = snap(lerp(pr.prevY, pr.y, alpha));
+    if (pr.fromPlayer) drawShotBloom(ctx, s, pr, x, y);
     if (pr.fromPlayer && drawOrbShot(ctx, pr, x, y)) continue;
     if (!pr.fromPlayer && (drawPwShot(ctx, pr, x, y) || drawEnemyShot(ctx, pr, x, y, s.tick))) continue;
     if (pr.fromPlayer && (drawBullet(ctx, pr, x, y) || drawKiShot(ctx, pr, x, y))) continue;
@@ -101,6 +103,7 @@ export function drawEffects(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       if ((fx.seat ?? 0) === (s.seat ?? 0)) drawCoinFx(ctx, snap(fx.x), snap(fx.y), fx.size, t);
       continue;
     }
+    drawFxBloom(ctx, fx, px, py, snap);
     if (drawPwSkillFx(ctx, fx, snap) || drawTintedFx(ctx, fx, px, py, snap) || drawCustomFx(ctx, fx, px, py, snap)) continue;
     if (drawLaserFx(ctx, s, fx, px, py, snap) || drawMedicFx(ctx, s, fx, px, py, snap)) continue;
     if (drawOrbitFx(ctx, fx, snap)) continue;

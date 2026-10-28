@@ -1,6 +1,7 @@
 // 원소술사 그리기: 은하수·중력 장판(적 아래) · 회전체·검·별·펫·전깃줄·갓 핸드(플레이어 위) · 날아간 자국·풀 범위·내려찍기 효과 · 펫·강철·트리거 탄
 import { ORBIT_RULES, orbBodies, WEAPONS, wirePairs, type EffectState, type OrbBody, type ProjectileState, type RunState, type WeaponDef } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
+import { additive, beam, glow, shock, sparks } from "./pwFxBits";
 import { bladeAngle, drawElemFx, drawGalaxyStacks, drawGodHand, drawSword } from "./orbsNew";
 
 const ORB_COLOR: Record<OrbBody["tag"], string> = {
@@ -74,14 +75,11 @@ export function drawOrbs(ctx: CanvasRenderingContext2D, s: RunState, alpha: numb
   const [cx, cy] = center(s, alpha);
   const bodies = orbBodies(p, cx, cy, s.tick);
   if (p.passives.includes("electronic")) {
-    ctx.strokeStyle = `rgba(140, 240, 255, ${0.35 + 0.3 * Math.abs(Math.sin(s.tick * 0.4))})`;
-    ctx.lineWidth = 1;
-    for (const [a, b] of wirePairs(bodies)) {
-      ctx.beginPath();
-      ctx.moveTo(snap(a.x), snap(a.y));
-      ctx.lineTo(snap(b.x), snap(b.y));
-      ctx.stroke();
-    }
+    // 전깃줄: 회전체 사이를 잇는 번쩍이는 빛줄기
+    const k = 0.45 + 0.35 * Math.abs(Math.sin(s.tick * 0.4));
+    additive(ctx, () => {
+      for (const [a, b] of wirePairs(bodies)) beam(ctx, snap(a.x), snap(a.y), snap(b.x), snap(b.y), 1.2, "#8af0ff", k);
+    });
   }
   bodies.forEach((b, i) => {
     // 웨폰 마스터: 칼끝이 적(지키는 검은 도는 방향)을 향한 진짜 검
@@ -104,11 +102,13 @@ function drawBody(ctx: CanvasRenderingContext2D, b: OrbBody, snap: Snap, tick: n
     ctx.fillRect(x - 1, y + 3, 2, 1);
     return;
   }
-  // 은은한 빛 + 몸 + 하이라이트
-  ctx.globalAlpha = b.tag === "light" || b.tag === "star" ? 0.3 + 0.25 * Math.abs(Math.sin(tick * 0.2 + b.x)) : 0.25;
-  ctx.fillStyle = c;
-  disc(ctx, x, y, b.r + 1);
-  ctx.globalAlpha = 1;
+  // 원소 빛 (겹치면 밝아짐) · 불은 일렁이고 번개는 튀고 빛·별은 반짝임
+  const pulse = 0.55 + 0.3 * Math.abs(Math.sin(tick * 0.2 + b.x));
+  additive(ctx, () => {
+    glow(ctx, x, y, b.r * 3.2, c, b.tag === "light" || b.tag === "star" ? pulse : 0.55);
+    if (b.tag === "thunder" && tick % 6 < 2) sparks(ctx, x, y, 3, b.r * 3, 0.4, "#fff4a0", tick + b.x);
+    if (b.tag === "fire" || b.tag === "burn") glow(ctx, x, y - 1.5, b.r * 1.8 * (0.9 + 0.2 * Math.sin(tick * 0.7 + b.y)), "#ffd060", 0.6);
+  });
   if (b.tag === "steel") {
     ctx.fillStyle = "#5a6070";
     disc(ctx, x, y, b.r);
@@ -124,26 +124,22 @@ export function drawOrbitFx(ctx: CanvasRenderingContext2D, fx: EffectState, snap
   if (drawElemFx(ctx, fx, snap)) return true;
   const t = fx.ticks / fx.maxTicks;
   if (fx.kind === "streak") {
-    ctx.strokeStyle = fx.size === 0 ? "#ffffff" : "#fff2b0";
-    ctx.globalAlpha = t;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(snap(fx.x), snap(fx.y));
-    ctx.lineTo(snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y));
-    ctx.stroke();
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(snap(fx.toX ?? fx.x) - 1, snap(fx.toY ?? fx.y) - 1, 2, 2);
-    ctx.globalAlpha = 1;
+    // 날아간 자국: 빛줄기 + 끝의 빛
+    const tx = snap(fx.toX ?? fx.x);
+    const ty = snap(fx.toY ?? fx.y);
+    additive(ctx, () => {
+      beam(ctx, snap(fx.x), snap(fx.y), tx, ty, 1.6, fx.size === 0 ? "#ffffff" : "#fff2b0", t);
+      glow(ctx, tx, ty, 6, "#fff2b0", t, 1.2);
+    });
     return true;
   }
   if (fx.kind === "verdant") {
-    ctx.strokeStyle = "#5ad05a";
-    ctx.globalAlpha = t;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(snap(fx.x), snap(fx.y), Math.max(1, fx.size * (1.1 - t * 0.6)), 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.globalAlpha = 1;
+    // 풀 범위: 초록 충격파 + 잎빛 불똥
+    const r = Math.max(2, fx.size * (1.1 - t * 0.6));
+    additive(ctx, () => {
+      shock(ctx, snap(fx.x), snap(fx.y), r, "#5ad05a", t, 5);
+      sparks(ctx, snap(fx.x), snap(fx.y), 6, r, 1 - t, "#b8f07a", fx.x + fx.y);
+    });
     return true;
   }
   if (fx.kind === "slam") {
@@ -152,12 +148,12 @@ export function drawOrbitFx(ctx: CanvasRenderingContext2D, fx: EffectState, snap
     ctx.fillStyle = "#a070ff";
     ctx.globalAlpha = 0.25 * t;
     disc(ctx, x, y, fx.size);
+    additive(ctx, () => {
+      glow(ctx, x, y, fx.size, "#a070ff", t * 0.8, 1);
+      shock(ctx, x, y, Math.max(2, fx.size * (1.2 - t * 0.4)), "#d8c0ff", t, 6);
+    });
     ctx.globalAlpha = t;
     ctx.strokeStyle = "#d8c0ff";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(x, y, Math.max(1, fx.size * (1.2 - t * 0.4)), 0, Math.PI * 2);
-    ctx.stroke();
     // 갈라지는 땅
     ctx.lineWidth = 1;
     for (let i = 0; i < 6; i++) {

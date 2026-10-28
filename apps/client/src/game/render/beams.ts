@@ -1,113 +1,14 @@
 // 기계공학자 그리기: 레이저·번개·플라즈마 부채꼴·위성 포 표시 · 포탑·지뢰·드론 · 보호막·리액터 게이지 · 기절 표시
 import { droneSpots, FLY_TICKS, gearPeriod, TURRET_LIFE, REACTOR_BOOST, REACTOR_FULL, REACTOR_OVERHEAT, WEAPONS, type EffectState, type RunState, type WeaponDef } from "@pixel-rogue/shared";
 import { C, lerp, type Snap } from "./palette";
+import { drawLaserKind } from "./laserFx";
 
 /** 레이저 효과면 그리고 true (나머지 효과는 shots에서) */
 export function drawLaserFx(ctx: CanvasRenderingContext2D, s: RunState, fx: EffectState, px: number, py: number, snap: Snap): boolean {
-  const t = fx.ticks / fx.maxTicks;
   // 플레이어에서 나가는 빔은 지금 플레이어 자리에서 시작
   const x = snap(fx.follow ? px : fx.x);
   const y = snap(fx.follow ? py : fx.y);
-  if (fx.kind === "beam") {
-    const tx = snap(fx.toX ?? fx.x);
-    const ty = snap(fx.toY ?? fx.y);
-    const w = fx.width ?? 1;
-    ctx.lineCap = "round";
-    ctx.strokeStyle = C.beam;
-    ctx.globalAlpha = 0.55;
-    ctx.lineWidth = w * 2 + 1;
-    line(ctx, x, y, tx, ty);
-    ctx.globalAlpha = 1;
-    ctx.strokeStyle = C.beamCore;
-    ctx.lineWidth = Math.max(1, w * 0.8);
-    line(ctx, x, y, tx, ty);
-    // 맞는 자리의 불꽃
-    ctx.fillStyle = C.beamCore;
-    ctx.fillRect(tx - 1, ty - 1, 3, 3);
-    ctx.lineCap = "butt";
-    return true;
-  }
-  if (fx.kind === "bolt") {
-    const tx = fx.toX ?? fx.x;
-    const ty = fx.toY ?? fx.y;
-    // 번개: 가운데 두 점을 옆으로 흔든 꺾은선
-    const nx = -(ty - y) * 0.15;
-    const ny = (tx - x) * 0.15;
-    const k = Math.sin(s.tick * 1.7);
-    ctx.strokeStyle = C.bolt;
-    ctx.globalAlpha = t;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(lerp(x, tx, 0.33) + nx * k, lerp(y, ty, 0.33) + ny * k);
-    ctx.lineTo(lerp(x, tx, 0.66) - nx * k, lerp(y, ty, 0.66) - ny * k);
-    ctx.lineTo(tx, ty);
-    ctx.stroke();
-    ctx.globalAlpha = 1;
-    return true;
-  }
-  if (fx.kind === "flame") {
-    const a = Math.atan2(fx.dirY, fx.dirX);
-    const half = Math.acos(Math.max(-1, Math.min(1, fx.width ?? 0.6)));
-    ctx.fillStyle = C.flame;
-    ctx.globalAlpha = 0.35 + 0.15 * Math.sin(s.tick * 0.9);
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.arc(x, y, fx.size, a - half, a + half);
-    ctx.closePath();
-    ctx.fill();
-    ctx.globalAlpha = 1;
-    return true;
-  }
-  if (fx.kind === "ring") {
-    if (fx.follow) {
-      // 자기장 장판: 플레이어 둘레의 옅은 원
-      ctx.fillStyle = C.bolt;
-      ctx.globalAlpha = 0.12;
-      ctx.beginPath();
-      ctx.arc(x, y, fx.size, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.globalAlpha = 0.5;
-      ctx.strokeStyle = C.bolt;
-      ctx.lineWidth = 1;
-      ctx.stroke();
-    } else {
-      // 해머·지뢰 충격파: 퍼지는 주황 원
-      ctx.strokeStyle = C.flame;
-      ctx.globalAlpha = t;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(x, y, Math.max(1, fx.size * (1.1 - t * 0.5)), 0, Math.PI * 2);
-      ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-    return true;
-  }
-  if (fx.kind === "mark") {
-    // 위성 포 낙하 표시: 줄어드는 원 + 십자
-    ctx.strokeStyle = C.beam;
-    ctx.globalAlpha = 0.9 - 0.5 * t;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(x, y, fx.size, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(x, y, Math.max(1, fx.size * t), 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.fillStyle = C.beam;
-    ctx.fillRect(x - 4, y, 9, 1);
-    ctx.fillRect(x, y - 4, 1, 9);
-    ctx.globalAlpha = 1;
-    return true;
-  }
-  return false;
-}
-
-function line(ctx: CanvasRenderingContext2D, x0: number, y0: number, x1: number, y1: number): void {
-  ctx.beginPath();
-  ctx.moveTo(x0, y0);
-  ctx.lineTo(x1, y1);
-  ctx.stroke();
+  return drawLaserKind(ctx, s, fx, x, y, snap);
 }
 
 /** 바닥의 장치(포탑·지뢰)와 기절한 적 표시 (적보다 먼저 그림) */

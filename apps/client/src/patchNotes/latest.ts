@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.205",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "효과 다듬기 4: 기계공학자 레이저(일렁이는 빛줄기·맞은 곳 불똥)·번개(갈라지는 줄기)·화염(흰빛→주황→붉은 불)·충격파·낙하 조준선 · 원소술사 회전체 빛·전깃줄·풀 범위·내려찍기·빛 터짐·빅뱅 · 격투가 파동탄 꼬리·기 모으기·버티기 기운 · 의사 효과마다 빛",
+        "모든 캐릭터 효과에 그 캐릭터 느낌의 색으로 빛과 충격파를 더하고, 내 탄에도 캐릭터 색 빛",
+      ],
+      en: [
+        "Effects polish 4: Engineer lasers (shimmering beams, impact sparks), lightning (forking bolts), flames (white → orange → red), shockwaves and strike reticles · Elementalist orb glow, wires, grass field, slam, light burst, Big Bang · Brawler ki-shot trail, charging and guard aura · glow for every Doctor effect",
+        "Every character's effects gain light and shockwaves in that character's colors, and your shots glow in your character's color",
+      ],
+      ja: [
+        "エフェクト調整4: 機械工学者のレーザー(揺らぐ光線・着弾の火花)・稲妻(枝分かれ)・火炎(白→橙→赤)・衝撃波・落下照準 · 元素術師の回転体の光・電線・草の範囲・叩きつけ・光の爆発・ビッグバン · 格闘家の波動弾の尾・気溜め・踏ん張りのオーラ · 医者の全エフェクトに光",
+        "全キャラのエフェクトにそのキャラらしい色の光と衝撃波を追加、自分の弾もキャラ色に光る",
+      ],
+    },
+  },
+  {
     version: "0.48.204",
     date: "2026-10-28",
     items: {
