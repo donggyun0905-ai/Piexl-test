@@ -1,6 +1,7 @@
 // 소환술사 그리기: 소환수 10종(작은 픽셀 그림) · 남은 시간이 적으면 깜빡임 · 불덩이·뼈 화살·포자·요정 별 · 채찍 자국
 import { SUMMON_STATS, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
+import { additive, beam, glow, shock } from "./pwFxBits";
 
 type Ctx = CanvasRenderingContext2D;
 type Px = (c: string, x: number, y: number, w: number, h: number) => void;
@@ -104,64 +105,96 @@ export function drawSummons(ctx: Ctx, s: RunState, alpha: number, snap: Snap): v
   }
 }
 
-/** 소환수 탄이면 그리고 true */
+/** 소환수 탄이면 그리고 true: 불덩이(불꼬리) · 뼈(돌며 날아감) · 포자(초록 빛) · 요정(반짝이는 빛) */
 export function drawSummonShot(ctx: Ctx, pr: ProjectileState, x: number, y: number, tick: number): boolean {
   const sp = pr.spirit;
+  const v = Math.hypot(pr.vx, pr.vy) || 1;
+  const ux = pr.vx / v;
+  const uy = pr.vy / v;
   if (sp === "fireball") {
     const r = pr.r + 1;
+    additive(ctx, () => {
+      beam(ctx, x - ux * r * 4, y - uy * r * 4, x, y, r * 1.6, "#ff6a1a", 0.7);
+      glow(ctx, x, y, r * 3, "#ff8a2a", 0.9, 1);
+    });
     ctx.fillStyle = "#c83a1a";
-    ctx.fillRect(x - r, y - r, r * 2, r * 2);
-    ctx.fillStyle = "#ffb040";
-    ctx.fillRect(x - r + 1, y - r + 1, r * 2 - 2, r * 2 - 2);
-    ctx.fillStyle = "rgba(255, 120, 40, 0.5)";
-    ctx.fillRect(x - pr.vx * 2 - 1, y - pr.vy * 2 - 1, 2, 2);
+    ctx.beginPath();
+    ctx.arc(x, y, r * (1 + Math.sin(tick / 2 + pr.id) * 0.1), 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#ffd060";
+    ctx.beginPath();
+    ctx.arc(x, y, r * 0.55, 0, Math.PI * 2);
+    ctx.fill();
     return true;
   }
   if (sp === "bone") {
-    const len = Math.hypot(pr.vx, pr.vy) || 1;
-    ctx.strokeStyle = "#ece4d0";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(x - (pr.vx / len) * 4, y - (pr.vy / len) * 4);
-    ctx.lineTo(x + (pr.vx / len) * 2, y + (pr.vy / len) * 2);
-    ctx.stroke();
+    // 빙글 도는 뼈 (양 끝 둥근 마디)
+    additive(ctx, () => glow(ctx, x, y, 6, "#c8b8ff", 0.35));
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(tick / 2 + pr.id);
+    ctx.fillStyle = "#ece4d0";
+    ctx.fillRect(-3, -0.5, 6, 1);
+    for (const e of [-3, 3]) {
+      ctx.fillRect(e - 1, -1.5, 2, 1);
+      ctx.fillRect(e - 1, 0.5, 2, 1);
+    }
+    ctx.restore();
     return true;
   }
   if (sp === "spore") {
+    additive(ctx, () => glow(ctx, x, y, 5, "#b8e070", 0.7));
     ctx.fillStyle = "#b8e070";
-    ctx.fillRect(x - 1, y - 1, 2, 2);
-    ctx.fillStyle = "rgba(184, 224, 112, 0.4)";
-    ctx.fillRect(x - 2 + ((tick >> 2) % 3), y - 2, 1, 1);
+    ctx.beginPath();
+    ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "rgba(184, 224, 112, 0.5)";
+    ctx.fillRect(x - 3 + ((tick >> 2) % 3), y - 3, 1, 1);
+    ctx.fillRect(x + 2 - ((tick >> 2) % 3), y + 2, 1, 1);
     return true;
   }
   if (sp === "fairy") {
-    ctx.fillStyle = "#ff9ad8";
-    ctx.fillRect(x - 1.5, y - 0.5, 3, 1);
-    ctx.fillRect(x - 0.5, y - 1.5, 1, 3);
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(x - 0.5, y - 0.5, 1, 1);
+    // 요정 빛: 분홍 빛 + 십자 반짝임 + 반짝이 꼬리
+    additive(ctx, () => {
+      glow(ctx, x, y, 7, "#ff9ad8", 0.9, 1.2);
+      for (let i = 1; i <= 3; i++) glow(ctx, x - ux * i * 3, y - uy * i * 3, 2.5 - i * 0.5, "#ffd0f0", 0.6 - i * 0.15);
+    });
+    const k = 2 + ((tick >> 1) % 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(x - k, y - 0.5, k * 2, 1);
+    ctx.fillRect(x - 0.5, y - k, 1, k * 2);
     return true;
   }
   return false;
 }
 
-/** 채찍 자국 (swing 효과 width 2): 몸에서 앞으로 출렁이는 선 + 끝에서 탁 튀는 빛 */
+/** 채찍 자국 (swing 효과 width 2): 몸에서 앞으로 출렁이는 가죽 채찍 + 끝에서 탁 튀는 빛 */
 export function drawWhip(ctx: Ctx, fx: EffectState, px: number, py: number, t: number): void {
   const len = fx.size;
   const nx = -fx.dirY;
   const ny = fx.dirX;
-  ctx.strokeStyle = `rgba(200, 150, 90, ${t})`;
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(px, py);
-  for (let i = 1; i <= 8; i++) {
-    const f = i / 8;
+  const pts: [number, number][] = [[px, py]];
+  for (let i = 1; i <= 10; i++) {
+    const f = i / 10;
     const wave = Math.sin(f * Math.PI * 2 + (1 - t) * 6) * 4 * f * t;
-    ctx.lineTo(px + fx.dirX * len * f + nx * wave, py + fx.dirY * len * f + ny * wave);
+    pts.push([px + fx.dirX * len * f + nx * wave, py + fx.dirY * len * f + ny * wave]);
   }
-  ctx.stroke();
-  if (t > 0.5) {
-    ctx.fillStyle = `rgba(255, 240, 200, ${t})`;
-    ctx.fillRect(px + fx.dirX * len - 1, py + fx.dirY * len - 1, 2, 2);
+  ctx.lineCap = "round";
+  for (const [c, w] of [["rgba(60, 30, 10, " + t + ")", 3], ["rgba(200, 150, 90, " + t + ")", 1.6]] as const) {
+    ctx.strokeStyle = c;
+    ctx.lineWidth = w;
+    ctx.beginPath();
+    pts.forEach(([a, b], i) => (i ? ctx.lineTo(a, b) : ctx.moveTo(a, b)));
+    ctx.stroke();
+  }
+  ctx.lineCap = "butt";
+  // 끝이 탁 터지는 소리 빛
+  const [ex, ey] = pts[pts.length - 1]!;
+  if (t > 0.35) {
+    const k = (t - 0.35) / 0.65;
+    additive(ctx, () => {
+      glow(ctx, ex, ey, 8, "#fff0c8", k, 1.4);
+      shock(ctx, ex, ey, 3 + (1 - k) * 8, "#ffe8b0", k, 2);
+    });
   }
 }

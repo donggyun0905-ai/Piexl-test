@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.207",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "효과 새로 그리기 1: 거너 예광탄·수류탄(도는 몸·그림자·조여 드는 조준)·유령 총 · 닌자 보랏빛 칼빛·연막·그림자 가시·수리검 잔상 · 시간술사 시계판 잔상·시계 조준·시간탄 잔상·되감기 원반·톱니 · 마법사 번개·혜성·얼음 결정·공허·폭발 · 소환술사 불덩이·도는 뼈·포자·요정 빛·가죽 채찍 · 음양사 부적 빛",
+        "도트 편집으로 넣어 두었던 공용 휘두르기·맞음·마법 폭발·기본 탄 그림을 빼고 새 빛 효과로 바꿈",
+      ],
+      en: [
+        "Effects redraw 1: Gunner tracers, grenades (spinning, shadowed, tightening target) and ghost gun · Ninja violet blade light, smoke, shadow spikes, shuriken afterimages · Chronomancer clock-face echoes, clock reticle, time-shot afterimages, rewind disc, gears · Mage lightning, comets, ice crystals, void, blasts · Summoner fireballs, spinning bones, spores, fairy light, leather whip · Talisman Master charm glow",
+        "The pixel-editor images for the shared swing, hit, magic blast and default shots were removed in favor of the new light effects",
+      ],
+      ja: [
+        "エフェクト描き直し1: ガンナーの曳光弾・手榴弾(回転・影・絞られる照準)・幽霊銃 · 忍者の紫の刃光・煙幕・影の棘・手裏剣の残像 · 時間術師の時計盤の残像・時計照準・時間弾の残像・巻き戻し円盤・歯車 · 魔法使いの雷・彗星・氷の結晶・虚空・爆発 · 召喚術師の火の玉・回る骨・胞子・妖精の光・革の鞭 · 陰陽師の札の光",
+        "ドット編集で入れていた共通の振り・ヒット・魔法爆発・基本弾の絵を外し、新しい光のエフェクトに",
+      ],
+    },
+  },
+  {
     version: "0.48.206",
     date: "2026-10-28",
     items: {

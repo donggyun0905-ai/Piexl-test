@@ -2,6 +2,7 @@
 // 시간술사 시계 표식(적 머리 위 작은 시계, 표식만큼 눈금이 켜짐) · 시간 붕괴(시계가 금 가며 깨져 조각이 흩어짐)
 import { runeFill, spellOf, type EffectState, type RunState, type SpellKind } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
+import { additive, beam, glow, shock, sparks } from "./pwFxBits";
 
 type Ctx = CanvasRenderingContext2D;
 const TAU = Math.PI * 2;
@@ -52,6 +53,8 @@ export function drawRuneGround(ctx: Ctx, s: RunState, snap: Snap): void {
   ctx.globalAlpha = 0.55 + 0.35 * fill;
   // 바깥 고리: 새겨진 만큼
   if (fill > 0) ring(ctx, 0, 0, 15, light, 1.5, -Math.PI / 2 + spin, -Math.PI / 2 + spin + TAU * fill);
+  // 마법진 빛 (차오를수록 밝게)
+  additive(ctx, () => glow(ctx, 0, 0, 18, dark, 0.2 + 0.4 * fill));
   // 육각별: 한 획 = 한 변
   const n = Math.round(fill * 6);
   for (let i = 0; i < n; i++) {
@@ -147,67 +150,90 @@ function spell(ctx: Ctx, fx: EffectState, x: number, y: number, t: number): void
   // 떨어지는 마법: 처음엔 위에서 내려옴
   const fall = Math.min(1, t * 3);
   const after = Math.max(0, (t - 0.33) / 0.67);
+  const seed = fx.x * 3 + fx.y;
   switch (kind) {
     case "cast":
-      ctx.globalAlpha = 1 - t;
-      ring(ctx, x, y, r * (0.6 + t), light, 2);
-      ring(ctx, x, y, r * (0.3 + t), dark, 1);
+      // 시전: 손끝에서 마법진 고리 두 겹이 퍼짐
+      additive(ctx, () => {
+        shock(ctx, x, y, r * (0.6 + t), light, 1 - t, 3);
+        shock(ctx, x, y, r * (0.3 + t), dark, 1 - t, 3);
+        glow(ctx, x, y, r * 0.6, dark, 1 - t, 1);
+      });
       return;
     case "storm":
+      // 번개: 하늘에서 꺾이며 내리꽂힘 (흰 속 + 푸른 빛) → 땅에서 번쩍
       if (t < 0.4) {
-        ctx.globalAlpha = 1;
-        let px = x;
-        let py = y - 60;
-        for (let i = 1; i <= 6; i++) {
-          const nx = x + (((i * 37) % 9) - 4) * (i < 6 ? 1 : 0);
-          const ny = y - 60 + i * 10;
-          line(ctx, px, py, nx, ny, i % 2 ? light : dark, 2);
-          px = nx;
-          py = ny;
-        }
+        const a = 1 - t / 0.4;
+        additive(ctx, () => {
+          let px = x;
+          let py = y - 60;
+          for (let i = 1; i <= 6; i++) {
+            const nx = x + (((i * 37 + Math.floor(fx.ticks / 2) * 13) % 11) - 5) * (i < 6 ? 1 : 0);
+            const ny = y - 60 + i * 10;
+            beam(ctx, px, py, nx, ny, 2.5, dark, a);
+            px = nx;
+            py = ny;
+          }
+          glow(ctx, x, y, r, light, a, 1.5);
+        });
       }
       break;
     case "comet":
-    case "stars":
+    case "stars": {
+      // 혜성·별비: 불꼬리를 끌며 비스듬히 떨어짐
       if (fall < 1) {
         const cx = x + (1 - fall) * 30;
         const cy = y - (1 - fall) * 70;
-        ctx.globalAlpha = 1;
-        line(ctx, cx + 10, cy - 20, cx, cy, dark, kind === "comet" ? 5 : 2);
-        ctx.fillStyle = light;
-        ctx.beginPath();
-        ctx.arc(cx, cy, kind === "comet" ? 5 : 2.5, 0, TAU);
-        ctx.fill();
+        const big = kind === "comet";
+        additive(ctx, () => {
+          beam(ctx, cx + 15, cy - 30, cx, cy, big ? 6 : 2.5, dark, 0.8);
+          glow(ctx, cx, cy, big ? 12 : 6, light, 1, 1.4);
+        });
         return;
       }
       break;
+    }
     case "void":
-      ctx.globalAlpha = 0.8 * (1 - t);
-      ctx.fillStyle = "#14082a";
+      // 공허: 검은 구멍 + 빨려 드는 보랏빛 고리와 별빛
+      ctx.globalAlpha = 0.85 * (1 - t);
+      ctx.fillStyle = "#0c0418";
       ctx.beginPath();
       ctx.arc(x, y, r * (1 - after * 0.6), 0, TAU);
       ctx.fill();
-      for (let i = 0; i < 3; i++) ring(ctx, x, y, r * (1 - ((t * 2 + i / 3) % 1)), dark, 1);
-      break;
+      ctx.globalAlpha = 1;
+      additive(ctx, () => {
+        shock(ctx, x, y, r * (1 - after * 0.6), dark, 1 - t, 5);
+        for (let i = 0; i < 3; i++) shock(ctx, x, y, Math.max(2, r * (1 - ((t * 2 + i / 3) % 1))), light, 0.5 * (1 - t), 2);
+        sparks(ctx, x, y, 8, r, 1 - t, light, seed);
+      });
+      return;
     case "frost":
+      // 얼음: 바닥에서 솟는 얼음 결정 여덟 + 서리 안개
+      additive(ctx, () => glow(ctx, x, y, r * 1.1, dark, 0.6 * (1 - t)));
       ctx.globalAlpha = 1 - t;
       for (let i = 0; i < 8; i++) {
         const a = (i * TAU) / 8;
-        line(ctx, x, y, x + Math.cos(a) * r * Math.min(1, t * 2.5), y + Math.sin(a) * r * Math.min(1, t * 2.5) * 0.6, i % 2 ? light : dark, 2);
+        const len = r * Math.min(1, t * 2.5) * (i % 2 ? 0.7 : 1);
+        const ex = x + Math.cos(a) * len;
+        const ey = y + Math.sin(a) * len * 0.6;
+        ctx.fillStyle = i % 2 ? light : dark;
+        ctx.beginPath();
+        ctx.moveTo(x - Math.sin(a) * 2, y + Math.cos(a) * 1.2);
+        ctx.lineTo(ex, ey);
+        ctx.lineTo(x + Math.sin(a) * 2, y - Math.cos(a) * 1.2);
+        ctx.fill();
       }
+      ctx.globalAlpha = 1;
       break;
     default:
   }
-  // 바닥 폭발 고리
-  ctx.globalAlpha = 1 - after;
-  ctx.fillStyle = dark;
-  ctx.globalAlpha = 0.35 * (1 - after);
-  ctx.beginPath();
-  ctx.arc(x, y, r * (0.5 + after * 0.5), 0, TAU);
-  ctx.fill();
-  ctx.globalAlpha = 1 - after;
-  ring(ctx, x, y, r * (0.4 + after * 0.7), light, 2);
-  ring(ctx, x, y, r * (0.2 + after * 0.9), dark, 1);
+  // 바닥 폭발: 빛 덩이 + 충격파 두 겹 + 불똥
+  additive(ctx, () => {
+    glow(ctx, x, y, r * (0.6 + after * 0.5), dark, 1 - after, after < 0.2 ? 1.5 : 0.5);
+    shock(ctx, x, y, r * (0.4 + after * 0.8), light, 1 - after, 6);
+    shock(ctx, x, y, r * (0.2 + after * 0.9), dark, 1 - after, 4);
+    sparks(ctx, x, y, 10, r * 1.2, after, light, seed);
+  });
 }
 
 /** 효과: 마법 · 시간 붕괴 */

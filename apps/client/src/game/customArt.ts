@@ -2,7 +2,7 @@
 // 1) 저장소에 넣은 그림: 캐릭터·스킨·몬스터는 원래 파일을 바꾸고, 코드로 그리던 것(아이콘·효과·탄)은 public/sprites/custom/{파일}.png + 아래 목록
 // 2) 이 기기에서 '게임에 바로 써 보기'를 켜면 고치던 초안(localStorage)을 먼저 씀
 /** 저장소에 넣은 코드 그림 교체 (id, 예: "icon:weapon:club", "fx:swing", "shot:player") */
-export const CUSTOM_FILES: readonly string[] = ["fx:swing", "fx:hit", "fx:blast", "shot:player", "shot:magic", "shot:enemy", "tiger:claw", "tiger:crit", "tiger:seal", "tiger:ring", "tiger:pillar", "tiger:aura", "tiger:sleep", "tiger:tail", "tiger:band"];
+export const CUSTOM_FILES: readonly string[] = ["tiger:claw", "tiger:crit", "tiger:seal", "tiger:ring", "tiger:pillar", "tiger:aura", "tiger:sleep", "tiger:tail", "tiger:band"];
 
 const APPLY_KEY = "pixel-rogue:pixel:apply";
 /** 초안 저장 자리 (캐릭터·스킨은 시트 이름 그대로) */

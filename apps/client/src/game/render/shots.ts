@@ -33,6 +33,7 @@ import { C, CHARM_INK, lerp, type Snap } from "./palette";
 import { drawCoinFx } from "../drawPickup";
 import { drawBloom, drawBlossomFlurry } from "./sakura";
 import { drawFxBloom, drawShotBloom } from "./fxBloom";
+import { additive, beam, glow } from "./pwFxBits";
 import { drawBaseShot, drawBlast, drawBurst, drawHit, drawSwing } from "./baseFx";
 
 export function drawProjectiles(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
@@ -68,6 +69,11 @@ function drawCharm(ctx: CanvasRenderingContext2D, pr: ProjectileState, x: number
     return;
   }
   const ink = pr.charm ? CHARM_INK[pr.charm] : CHARM_INK.shade;
+  // 부적: 먹빛 기운 + 날아온 길에 흩날리는 종이 빛
+  additive(ctx, () => {
+    beam(ctx, x - pr.vx * 3, y - pr.vy * 3, x, y, 2, ink, 0.4);
+    glow(ctx, x, y, 7, ink, 0.7, pr.charged ? 1.2 : 0);
+  });
   const flat = Math.abs(pr.vx) >= Math.abs(pr.vy);
   const w = flat ? 6 : 4;
   const h = flat ? 4 : 6;

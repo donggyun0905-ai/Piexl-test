@@ -1,6 +1,7 @@
 // 닌자 그리기: 그림자 분신(뒤에서 베기·X자·땅 가시·환영진 돌진) · 분신술 분신 · 연막 구름 · 적에게 쌓인 표식 · 수리검·쿠나이·풍마 수리검·바늘
 import { CLONE_GAP, RING_TICKS, STRIKE_WAIT, WEAPONS, type ProjectileState, type RunState, type Shade, type WeaponDef } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
+import { additive, beam, glow, shock } from "./pwFxBits";
 
 const INK = "#1c1428";
 const EDGE = "#8a5ad8";
@@ -8,6 +9,8 @@ const EYE = "#ff4a6a";
 
 /** 그림자 분신 하나 (x, y = 몸 가운데, face = 바라보는 쪽 -1·1, a = 진하기) */
 function figure(ctx: CanvasRenderingContext2D, x: number, y: number, face: number, a: number, tick: number): void {
+  // 보랏빛 그림자 기운
+  additive(ctx, () => glow(ctx, x, y, 11, EDGE, a * 0.6));
   ctx.globalAlpha = a;
   ctx.fillStyle = EDGE;
   ctx.fillRect(x - 3, y - 5, 6, 10);
@@ -23,20 +26,15 @@ function figure(ctx: CanvasRenderingContext2D, x: number, y: number, face: numbe
   ctx.globalAlpha = 1;
 }
 
-/** 베는 순간의 칼빛 (from → to, 두 줄) */
+/** 베는 순간의 칼빛 (from → to): 보랏빛 날 + 흰 속 · X자면 두 줄 · 가운데 번쩍 */
 function slashLine(ctx: CanvasRenderingContext2D, x0: number, y0: number, x1: number, y1: number, a: number, cross: boolean): void {
-  ctx.strokeStyle = `rgba(200, 160, 255, ${a})`;
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
   const dx = x1 - x0;
   const dy = y1 - y0;
-  ctx.moveTo(x1 - dx * 0.6 - dy * 0.3, y1 - dy * 0.6 + dx * 0.3);
-  ctx.lineTo(x1 + dx * 0.4 + dy * 0.3, y1 + dy * 0.4 - dx * 0.3);
-  if (cross) {
-    ctx.moveTo(x1 - dx * 0.6 + dy * 0.3, y1 - dy * 0.6 - dx * 0.3);
-    ctx.lineTo(x1 + dx * 0.4 - dy * 0.3, y1 + dy * 0.4 + dx * 0.3);
-  }
-  ctx.stroke();
+  additive(ctx, () => {
+    beam(ctx, x1 - dx * 0.6 - dy * 0.3, y1 - dy * 0.6 + dx * 0.3, x1 + dx * 0.4 + dy * 0.3, y1 + dy * 0.4 - dx * 0.3, 2.2, "#b08aff", a);
+    if (cross) beam(ctx, x1 - dx * 0.6 + dy * 0.3, y1 - dy * 0.6 - dx * 0.3, x1 + dx * 0.4 - dy * 0.3, y1 + dy * 0.4 + dx * 0.3, 2.2, "#b08aff", a);
+    glow(ctx, x1, y1, 8, "#e0d0ff", a, 1.4);
+  });
 }
 
 function drawShade(ctx: CanvasRenderingContext2D, sh: Shade, snap: Snap, tick: number): void {
@@ -48,11 +46,13 @@ function drawShade(ctx: CanvasRenderingContext2D, sh: Shade, snap: Snap, tick: n
     for (let i = 0; i < 7; i++) {
       const a = (i / 7) * Math.PI * 2 + tick / 40;
       const r = 26 * (0.55 + 0.3 * Math.sin(tick / 15 + i));
-      ctx.fillStyle = `rgba(70, 60, 90, ${0.35 * fade})`;
+      ctx.fillStyle = `rgba(${i % 2 ? "50, 40, 70" : "90, 80, 110"}, ${0.38 * fade})`;
       ctx.beginPath();
-      ctx.arc(x + Math.cos(a) * r * 0.6, y + Math.sin(a) * r * 0.5, 10, 0, Math.PI * 2);
+      ctx.arc(x + Math.cos(a) * r * 0.6, y + Math.sin(a) * r * 0.5, 9 + (i % 3) * 2, 0, Math.PI * 2);
       ctx.fill();
     }
+    // 연기 가장자리에 감도는 보랏빛
+    additive(ctx, () => shock(ctx, x, y, 28, EDGE, 0.35 * fade, 8));
     return;
   }
   const face = sh.tx >= sh.x ? 1 : -1;
@@ -65,13 +65,25 @@ function drawShade(ctx: CanvasRenderingContext2D, sh: Shade, snap: Snap, tick: n
   if (sh.kind === "spike") {
     // 땅에서 솟는 그림자 가시
     const up = sh.t < STRIKE_WAIT ? sh.t / STRIKE_WAIT : Math.max(0, 1 - (sh.t - STRIKE_WAIT) / 10);
+    // 바닥 갈라짐 빛 → 뾰족한 그림자 가시 (끝이 보랏빛)
+    additive(ctx, () => {
+      ctx.save();
+      ctx.translate(x, y + 4);
+      ctx.scale(1, 0.4);
+      glow(ctx, 0, 0, 16, EDGE, 0.6 * up);
+      ctx.restore();
+    });
     ctx.fillStyle = INK;
     for (let i = -2; i <= 2; i++) {
-      const h = (8 - Math.abs(i) * 2) * up;
-      ctx.fillRect(x + i * 4 - 1, y + 4 - h, 2, h);
+      const h = (10 - Math.abs(i) * 2.5) * up;
+      ctx.beginPath();
+      ctx.moveTo(x + i * 4 - 1.8, y + 4);
+      ctx.lineTo(x + i * 4, y + 4 - h);
+      ctx.lineTo(x + i * 4 + 1.8, y + 4);
+      ctx.fill();
     }
-    ctx.fillStyle = `rgba(138, 90, 216, ${0.5 * up})`;
-    ctx.fillRect(x - 11, y + 4, 22, 1);
+    ctx.fillStyle = `rgba(200, 160, 255, ${0.8 * up})`;
+    for (let i = -2; i <= 2; i++) ctx.fillRect(x + i * 4, y + 4 - (10 - Math.abs(i) * 2.5) * up, 1, 1);
     return;
   }
   // 뒤에서 베기·X자: 스르륵 나타나 베고 사라짐
@@ -87,15 +99,15 @@ function drawRing(ctx: CanvasRenderingContext2D, sh: Shade, snap: Snap): void {
   const r = Math.hypot(sh.sx - sh.tx, sh.sy - sh.ty);
   const f = Math.min(1, sh.t / RING_TICKS);
   if (sh.t <= RING_TICKS) {
+    // 환영진: 조여 드는 보랏빛 진
     ctx.fillStyle = `rgba(138, 90, 216, ${0.1 * (1 - f)})`;
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = `rgba(190, 150, 255, ${0.6 * (1 - f)})`;
-    ctx.lineWidth = 1;
-    ctx.stroke();
+    additive(ctx, () => shock(ctx, cx, cy, Math.max(3, r * (1 - f * 0.4)), "#be96ff", 0.7 * (1 - f), 4));
     return;
   }
+  additive(ctx, () => glow(ctx, cx, cy, 14, "#e6d2ff", Math.max(0, 1 - (sh.t - RING_TICKS) / 8), 1.5));
   // 모인 순간: 짧은 빛살 8줄
   const a = 1 - (sh.t - RING_TICKS) / 8;
   if (a <= 0) return;
@@ -150,6 +162,8 @@ export function drawNinjaShot(ctx: CanvasRenderingContext2D, pr: ProjectileState
     const len = Math.hypot(pr.vx, pr.vy) || 1;
     const dx = pr.vx / len;
     const dy = pr.vy / len;
+    // 바람을 가르는 빛 꼬리
+    additive(ctx, () => beam(ctx, x - dx * 10, y - dy * 10, x, y, 1.5, sp === "needle" ? EDGE : "#c8d8ff", 0.5));
     ctx.strokeStyle = sp === "needle" ? "#2a1c3c" : "#c8d0e0";
     ctx.lineWidth = sp === "needle" ? 1 : 1.5;
     ctx.beginPath();
@@ -160,9 +174,13 @@ export function drawNinjaShot(ctx: CanvasRenderingContext2D, pr: ProjectileState
     ctx.fillRect(x - dx * 5 - 0.5, y - dy * 5 - 0.5, 1, 1);
     return true;
   }
-  // 돌아가는 별
+  // 돌아가는 별 (도는 잔상 고리 + 날 끝 반짝임)
   const r = sp === "fuma" ? pr.r + 1 : pr.r + 0.5;
   const a = tick / 2;
+  additive(ctx, () => {
+    shock(ctx, x, y, r + 1, "#c8d0ff", 0.45, 2.5);
+    glow(ctx, x, y, r * 2.2, "#a8b8ff", 0.35);
+  });
   ctx.fillStyle = sp === "fuma" ? "#5a5a6a" : "#b8c0d0";
   for (let i = 0; i < 4; i++) {
     const c = Math.cos(a + (i * Math.PI) / 2);
