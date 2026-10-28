@@ -1,6 +1,7 @@
 // 잊혀진 자 빛의 고리: 등 뒤 고리(지금의 1.5배, 몸 그림의 일부처럼 늘 보임 · 신족이면 불타는 금빛 고리로 바뀜)
 // · 화면 왼쪽 위 게이지(화려한 금빛 테두리 안에 노란 원이 한 바퀴 차오름, 신족이면 남은 시간)
 import { forgottenRing, type RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { hudScale } from "./imugiAura";
 import { lerp, type Snap } from "./palette";
 
@@ -15,6 +16,9 @@ function ring(ctx: Ctx, x: number, y: number, r: number, c: string, w: number, a
   ctx.lineWidth = w;
   ctx.beginPath();
   ctx.arc(x, y, Math.max(0.5, r), a0, a1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 

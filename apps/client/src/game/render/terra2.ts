@@ -1,6 +1,7 @@
 // 테라코어 시즌 2 그리기: 오토마타 레이저(빛 줄기·끝 섬광)·자매 인형(똑같은 오토마타)·연기를 뿜는 유도 미사일·궤도 포격
 // 라이더는 render/rider
 import { DOLL_TINTS, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { drawCharacter } from "../sprites";
 import { type Snap } from "./palette";
 import { drawRiderAura, drawRiderFx, drawRiderGround, drawRiderShot } from "./rider";
@@ -45,6 +46,9 @@ function ring(ctx: Ctx, x: number, y: number, r: number, c: string, w: number): 
   ctx.lineWidth = w;
   ctx.beginPath();
   ctx.arc(x, y, Math.max(0.5, r), 0, Math.PI * 2);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 

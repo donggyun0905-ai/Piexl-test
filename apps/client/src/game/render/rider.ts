@@ -2,6 +2,7 @@
 // 전기 랜스(번개가 감긴 창끝) · 체인 휘두르기 · 푸른 화염 배기 · 에너지탄 · 톱날(불티를 튀기며 도는 날)
 // 달린 자리 불꽃 자국(화염 배기는 푸른 불) · 불꽃 스택 x1~x5 · 옆의 게이지·빠르기 막대
 import { flameStacks, riderGauge, riderHeat, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -16,6 +17,9 @@ function ring(ctx: Ctx, x: number, y: number, r: number, c: string, w: number): 
   ctx.lineWidth = w;
   ctx.beginPath();
   ctx.arc(x, y, Math.max(0.5, r), 0, Math.PI * 2);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 
@@ -25,6 +29,9 @@ function line(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, c: strin
   ctx.beginPath();
   ctx.moveTo(x0, y0);
   ctx.lineTo(x1, y1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 

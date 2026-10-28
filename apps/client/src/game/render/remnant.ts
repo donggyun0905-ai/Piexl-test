@@ -1,5 +1,6 @@
 // 잔영 그리기: 그림자 칼 · 단검 베기(보라 빛 궤적) · 사라짐(검은 연기) · 나타남(보라 섬광) · 남긴 잔영(옅은 몸 그림자가 한 번 더 벰 / 월식은 터짐)
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { drawCharacter } from "../sprites";
 import type { Snap } from "./palette";
 
@@ -13,6 +14,9 @@ function arc(ctx: Ctx, x: number, y: number, r: number, a0: number, a1: number, 
   ctx.lineWidth = w;
   ctx.beginPath();
   ctx.arc(x, y, Math.max(0.5, r), a0, a1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 

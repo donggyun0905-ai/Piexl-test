@@ -1,6 +1,7 @@
 // 테라코어 시즌 2 그리기 (둘째): 붐버 날아가는 폭탄(포물선·그림자)·적 몸에 붙은 끈끈이(붙은 수)·유도 지뢰(땅에 박힘 → 눈을 뜨고 달려감)
 // 넓은 불바다(화염병처럼 일렁이는 불)·폭발(예술 연쇄가 쌓일수록 크고 화려)·불꽃놀이(별처럼 퍼져 떨어지는 불티)·로켓·파편 · 아티팩터는 render/artifacter
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { drawArtifacterAura, drawArtifacterFx, drawArtifacterShot } from "./artifacter";
 import { lerp, type Snap } from "./palette";
 
@@ -45,6 +46,9 @@ function ring(ctx: Ctx, x: number, y: number, r: number, c: string, w: number): 
   ctx.lineWidth = w;
   ctx.beginPath();
   ctx.arc(x, y, Math.max(0.5, r), 0, Math.PI * 2);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 

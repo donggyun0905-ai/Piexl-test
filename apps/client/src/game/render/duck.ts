@@ -1,5 +1,6 @@
 // 오리(히든) 그리기: 줄지어 따라오는 새끼 오리 · 깃털·거품 탄 · 꽥 음파·물보라·큰 꽥·날아가는 황금알
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
+import { additive, glow, shock } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 const YEL = "#ffd84a";
@@ -78,15 +79,20 @@ export function drawDuckFx(ctx: CanvasRenderingContext2D, fx: EffectState, px: n
     const a = Math.atan2(fx.dirY, fx.dirX);
     const grow = 1 - t;
     const rgb = fx.kind === "splash" ? "90, 176, 232" : WAVE;
-    ctx.lineWidth = 1;
-    for (let i = 0; i < 3; i++) {
-      const r = fx.size * Math.min(1, grow * 1.3 - i * 0.15);
-      if (r <= 1) continue;
-      ctx.strokeStyle = `rgba(${rgb}, ${0.85 * t})`;
-      ctx.beginPath();
-      ctx.arc(x, y, r, a - spread, a + spread);
-      ctx.stroke();
-    }
+    // 음파: 빛나는 호 세 줄 (겹치면 밝아짐)
+    additive(ctx, () => {
+      for (let i = 0; i < 3; i++) {
+        const r = fx.size * Math.min(1, grow * 1.3 - i * 0.15);
+        if (r <= 1) continue;
+        for (const [w, al] of [[5, 0.25], [1.5, 0.9]] as const) {
+          ctx.strokeStyle = `rgba(${rgb}, ${al * t})`;
+          ctx.lineWidth = w;
+          ctx.beginPath();
+          ctx.arc(x, y, r, a - spread, a + spread);
+          ctx.stroke();
+        }
+      }
+    });
     if (fx.kind === "splash") {
       ctx.fillStyle = `rgba(${rgb}, ${0.2 * t})`;
       ctx.beginPath();
@@ -98,6 +104,11 @@ export function drawDuckFx(ctx: CanvasRenderingContext2D, fx: EffectState, px: n
   if (fx.kind === "bigQuack") {
     // 굵은 노란 고리 두 겹 + 둘레의 음파 점
     const grow = 1 - t * t;
+    // 큰 꽥: 노란 충격파 + 가운데 빛
+    additive(ctx, () => {
+      glow(ctx, x, y, fx.size * grow * 0.8, "#ffd84a", t * 0.6, t > 0.8 ? 1.2 : 0);
+      shock(ctx, x, y, fx.size * grow, "#ffd84a", t, 7);
+    });
     ctx.lineWidth = 2;
     ctx.strokeStyle = `rgba(255, 216, 74, ${0.9 * t})`;
     ctx.beginPath();
@@ -127,6 +138,7 @@ export function drawDuckFx(ctx: CanvasRenderingContext2D, fx: EffectState, px: n
     ctx.beginPath();
     ctx.arc(snap(tx), snap(ty), fx.size * (0.4 + 0.6 * k), 0, Math.PI * 2);
     ctx.stroke();
+    additive(ctx, () => glow(ctx, ex, ey, 7, "#f2c14e", 0.8, 0.6));
     ctx.fillStyle = "#f2c14e";
     ctx.fillRect(ex - 2, ey - 3, 4, 5);
     ctx.fillStyle = "#fff6c0";

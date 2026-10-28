@@ -1,5 +1,6 @@
 // 서기관(히든) 그리기: 잉크 탄(보랏빛 잉크 방울 + 꼬리) · 글자 효과(써진 한자가 빛나며 떠오름) · 적에게 새겨진 기록(잉크 점)
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
+import { additive, glow, shock } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -40,10 +41,11 @@ export function drawScribeFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   ctx.save();
   ctx.globalAlpha = Math.min(1, t * 1.6);
   // 뒤에 빛나는 원 + 회전하는 글자 고리
-  ctx.fillStyle = `${GLOW[i] ?? "#b89aff"}55`;
-  ctx.beginPath();
-  ctx.arc(x, y - 4, 10 * pop, 0, Math.PI * 2);
-  ctx.fill();
+  const gc = GLOW[i] ?? "#b89aff";
+  additive(ctx, () => {
+    glow(ctx, x, y - 4, 16 * pop, gc, 0.8, t > 0.75 ? 1 : 0);
+    shock(ctx, x, y - 4, 10 + (1 - t) * 14, gc, t, 3);
+  });
   ctx.strokeStyle = GLOW[i] ?? "#b89aff";
   ctx.lineWidth = 1;
   ctx.setLineDash([2, 2]);

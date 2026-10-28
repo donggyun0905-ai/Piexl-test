@@ -1,5 +1,6 @@
 // 잊혀진 자 그리기: 빛 탄 · 등 뒤의 빛의 고리(forgottenHalo) · 신족(금빛 기운·빛 날개·도는 빛 조각) · 떨어지는 빛 십자가 · 빛줄기 · 터짐 · 빛 베기 · 빛기둥 · 깨어남
 import { type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 import { drawHaloBack } from "./forgottenHalo";
 
@@ -15,6 +16,9 @@ function line(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, c: strin
   ctx.beginPath();
   ctx.moveTo(x0, y0);
   ctx.lineTo(x1, y1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 function circle(ctx: Ctx, x: number, y: number, r: number, c: string, w: number, a0 = 0, a1 = TAU): void {
@@ -22,6 +26,9 @@ function circle(ctx: Ctx, x: number, y: number, r: number, c: string, w: number,
   ctx.lineWidth = w;
   ctx.beginPath();
   ctx.arc(x, y, Math.max(0.5, r), a0, a1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 function disc(ctx: Ctx, x: number, y: number, r: number, c: string): void {

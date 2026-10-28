@@ -1,6 +1,7 @@
 // 영사 그리기: 방 끝에서 끝까지 가는 실선(1초, 점점 옅어짐) · 적 머리 위 얽힘 점 · 찢기(적 둘레 실 다섯이 조였다가 방 끝으로 휙 날아감)
 // 장전(손끝 빛) · 발밑 실 남은 양 막대(장전 중이면 차오름)
 import { silkAmmo, type EffectState, type RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -15,6 +16,9 @@ function line(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, c: strin
   ctx.beginPath();
   ctx.moveTo(x0, y0);
   ctx.lineTo(x1, y1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 

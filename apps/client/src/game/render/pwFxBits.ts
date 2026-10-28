@@ -228,3 +228,14 @@ export function lineBand(ctx: Ctx, x: number, y: number, tx: number, ty: number,
   beam(ctx, x + (tx - x) * tail, y + (ty - y) * tail, hx, hy, Math.max(2, r * 0.9) * t, c, t);
   glow(ctx, hx, hy, r * 2.2, c, 0.9 * t, 1.2);
 }
+
+/** 방금 그린 길(path)에 겹치면 밝아지는 넓은 빛 테두리 (c가 #rrggbb일 때만). 부른 뒤 선 색·굵기는 다시 정해야 함 */
+export function glowEdge(ctx: Ctx, c: string, w: number): void {
+  if (!/^#[0-9a-f]{6}$/i.test(c)) return;
+  const op = ctx.globalCompositeOperation;
+  ctx.globalCompositeOperation = "lighter";
+  ctx.strokeStyle = alpha(c, 0.28);
+  ctx.lineWidth = w * 3 + 2;
+  ctx.stroke();
+  ctx.globalCompositeOperation = op;
+}

@@ -1,6 +1,7 @@
 // 에테르 광부 그리기: 바닥(구덩이·에테르 결정·다이너마이트·떨어질 바위 그림자) · 땅굴 흙더미 · 원석 막대
 // 탄: 결정 파편 · 광차 · 도는 곡괭이 / 효과: 곡괭이질 · 땅 갈라짐·분출 · 바위 · 폭발 · 결정 깨짐 · 구덩이에 빠짐 · 보석 · 에테르 기둥 · 카나리아
 import { caveNeed, minerOre, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -18,6 +19,9 @@ function line(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, c: strin
   ctx.beginPath();
   ctx.moveTo(x0, y0);
   ctx.lineTo(x1, y1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 function disc(ctx: Ctx, x: number, y: number, r: number, c: string): void {

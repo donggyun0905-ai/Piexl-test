@@ -1,6 +1,7 @@
 // 아티팩터 그리기: 푸른 반발탄 · 반발 고리 · 총구 섬광 · 제작 연출 · 팔의 문신 빛 · 옆의 제작 게이지
 // 제작: 발밑에 도는 회로 마법진 → 둘레에서 빛 조각이 빨려 들어와 맞물리는 두 톱니 → 번쩍이며 머리 위로 떠오르는 아이템 빛 (숨겨진 아이템은 금빛 빛줄기)
 import { artifacterGauge, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -13,6 +14,9 @@ function ring(ctx: Ctx, x: number, y: number, r: number, c: string, w: number): 
   ctx.lineWidth = w;
   ctx.beginPath();
   ctx.arc(x, y, Math.max(0.5, r), 0, Math.PI * 2);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 

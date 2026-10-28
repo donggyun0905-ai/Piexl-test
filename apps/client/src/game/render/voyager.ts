@@ -1,6 +1,7 @@
 // 운명의 여행자 그리기: 바닥(화살비·운석·바위·목마 떨어질 자리) · 머리 위 모래시계·주사위·시위 당김 · 운명이 바뀌면 이름 세 줄
 // 탄: 운명의 화살 · 거대한 마력 화살 · 번개 화살 · 물결 · 배 · 창 · 망령 (효과는 voyagerFx)
 import { voyagerCharge, voyagerGlass, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -121,6 +122,9 @@ function arrow(ctx: Ctx, x: number, y: number, a: number, len: number, shaft: st
   ctx.beginPath();
   ctx.moveTo(x - dx * len, y - dy * len);
   ctx.lineTo(x + dx * len * 0.6, y + dy * len * 0.6);
+  glowEdge(ctx, head, 1.5);
+  ctx.strokeStyle = shaft;
+  ctx.lineWidth = 1.5;
   ctx.stroke();
   ctx.fillStyle = head;
   ctx.beginPath();

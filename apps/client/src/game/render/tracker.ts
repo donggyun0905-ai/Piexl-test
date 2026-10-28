@@ -1,6 +1,7 @@
 // 추적자 그리기: 저격탄·연발탄 꼬리 · 강력한 한방 모으기(앞의 빛 벽·조준 레이저·총구 빛) · 빔 · 저격 맞음
 // 암습 저격: 화면 전체가 까매지고 조준 원 안만 보임 (PC는 마우스 자리, 모바일·자동 조준은 노리는 적) · 쏠 때 원이 위로 튐 · 남은 발·남은 시간 표시
 import { TRACKER, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -14,6 +15,9 @@ function line(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, c: strin
   ctx.beginPath();
   ctx.moveTo(x0, y0);
   ctx.lineTo(x1, y1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 

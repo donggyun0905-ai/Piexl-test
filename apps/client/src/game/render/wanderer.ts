@@ -1,6 +1,7 @@
 // 방랑객 그리기: 무심의 원(바닥의 하늘색 원·도는 칼 눈금, 서 있으면 차오름) · 천검란 게이지 · 초승달 검기 · 칼날 폭풍(초승달 검기 소용돌이)
 // 효과: 베기 · 발도 한 줄 · 적 몸의 바늘 같은 일직선 칼선 · 원 대시 · 방 전체 초승달 검기 · 예리함(새 칼빛: 번쩍이는 십자 빛 + 붉은 방울)
 import { WANDERER, wandererGauge, zoneRadius, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -15,6 +16,9 @@ function line(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, c: strin
   ctx.beginPath();
   ctx.moveTo(x0, y0);
   ctx.lineTo(x1, y1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 function arc(ctx: Ctx, x: number, y: number, r: number, a0: number, a1: number, c: string, w: number): void {
@@ -22,6 +26,9 @@ function arc(ctx: Ctx, x: number, y: number, r: number, a0: number, a1: number, 
   ctx.lineWidth = w;
   ctx.beginPath();
   ctx.arc(x, y, Math.max(0.5, r), a0, a1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 

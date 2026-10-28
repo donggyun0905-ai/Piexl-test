@@ -1,6 +1,7 @@
 // 테라코어 시즌 2 그리기 (셋째): 펑크 네온 베기·모노와이어·맨티스·고릴라 주먹·회오리·해킹 줄·EMP·네온 총알
 // 신경 가속: 켜질 때 퍼지는 고리 · 지나온 자리에 분홍·하늘빛 잔상 · 둘레가 보랏빛으로 물듦 · 옆의 게이지
 import { punkAccel, punkGauge, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { drawCharacter } from "../sprites";
 import { lerp, type Snap } from "./palette";
 
@@ -31,7 +32,10 @@ function arc(ctx: Ctx, x: number, y: number, r: number, a: number, w: number, c:
     ctx.lineWidth = lw;
     ctx.beginPath();
     ctx.arc(x, y, r, a - w, a + w);
-    ctx.stroke();
+    glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
+  ctx.stroke();
   }
 }
 

@@ -1,5 +1,6 @@
 // 운명의 여행자 효과: 운명 뒤집힘 · 시위 놓음 · 치명 · 빛줄기 · 번개 · 화살비 · 운석 · 바위 · 목마 · 바람 · 보호막 · 세이렌 · 파도 · 소용돌이 · 물기 · 벼락 · 돼지 · 섬 · 태양
 import type { EffectState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import type { Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -11,6 +12,9 @@ function ring(ctx: Ctx, x: number, y: number, r: number, c: string, w: number): 
   ctx.lineWidth = w;
   ctx.beginPath();
   ctx.arc(x, y, Math.max(0.5, r), 0, TAU);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 function disc(ctx: Ctx, x: number, y: number, r: number, c: string): void {
@@ -25,6 +29,9 @@ function line(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, c: strin
   ctx.beginPath();
   ctx.moveTo(x0, y0);
   ctx.lineTo(x1, y1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 /** 번개 지그재그 */

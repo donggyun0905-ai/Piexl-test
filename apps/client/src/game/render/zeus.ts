@@ -1,6 +1,7 @@
 // 제우스 그리기: 폭풍 구름 · 감전된 적의 불꽃 · 강림 기운 · 천벌 게이지 / 탄: 번개창 · 독수리 · 구전
 // 효과: 벼락 · 번개 줄기 · 과부하 · 강림 · 아이기스 · 천둥 파동 · 벼락창
 import { zeusWrath, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { glowEdge } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -21,6 +22,9 @@ function zig(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, c: string
     ctx.lineTo(x0 + (x1 - x0) * k + off * 1.1, y0 + (y1 - y0) * k - off * 0.6);
   }
   ctx.lineTo(x1, y1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
   ctx.stroke();
 }
 function bolt(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, seed: number, w = 2): void {

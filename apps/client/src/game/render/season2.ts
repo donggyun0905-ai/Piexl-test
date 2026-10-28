@@ -1,5 +1,6 @@
 // 시즌 2(비르디아) 그리기: 이드라 손의 가이아(대궁·단검·방패·채찍)·모습 바꿈·사계 꽃잎 · 이드라·변희 탄(화살·깃털·독 침·거미줄·불덩이·작은 박쥐)
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
+import { additive, glow, shock } from "./pwFxBits";
 import { drawElderFx } from "./elder";
 import { drawSpiritFx } from "./spirits";
 import { drawMorphFx } from "./morphFx";
@@ -144,12 +145,13 @@ export function drawS2Fx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const r = fx.size * (0.4 + 0.6 * t);
   const x = snap(fx.x);
   const y = snap(fx.y);
+  // 이드라 모습 바꾸기: 모습 색 빛 기둥 + 충격파 + 꽃잎·잎
+  const fc = FORM_GLOW[fx.dirX] ?? "#9ae870";
+  additive(ctx, () => {
+    glow(ctx, x, y, r * 1.2, fc, 1 - t, t < 0.2 ? 1.2 : 0.3);
+    shock(ctx, x, y, r, fc, 1 - t, 5);
+  });
   ctx.globalAlpha = 1 - t;
-  ctx.strokeStyle = FORM_GLOW[fx.dirX] ?? "#9ae870";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(x, y, r, 0, Math.PI * 2);
-  ctx.stroke();
   for (let i = 0; i < 8; i++) {
     const a = (i / 8) * Math.PI * 2 + t * 2;
     ctx.fillStyle = i % 2 ? "#5ac84a" : "#ff8ac8";

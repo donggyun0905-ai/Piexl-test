@@ -1,11 +1,13 @@
 // 별지기(히든) 그리기: 바닥의 별자리(이어진 빛줄기·반짝이는 별) · 별 박기·혜성 꼬리·별자리 터짐 효과
 import { STAR_COLORS, starLinks, starMax, type EffectState, type RunState, type StarStyle, type WeaponDef, WEAPONS } from "@pixel-rogue/shared";
+import { additive, beam, glow, shock, sparks } from "./pwFxBits";
 import type { Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
 
 /** 네 갈래 별 (가운데 x, y · 갈래 길이 n) */
 function star(ctx: Ctx, x: number, y: number, n: number, c: string): void {
+  additive(ctx, () => glow(ctx, x, y, n * 2 + 3, c, 0.7, 1));
   ctx.fillStyle = c;
   ctx.fillRect(x - n, y, n * 2 + 1, 1);
   ctx.fillRect(x, y - n, 1, n * 2 + 1);
@@ -79,6 +81,7 @@ export function drawStarFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const c = fx.tint ?? "#fff2a8";
   ctx.save();
   if (fx.kind === "stPlace") {
+    additive(ctx, () => shock(ctx, x, y, fx.size * (1.2 - t * 0.6), c, t, 4));
     ctx.globalAlpha = t;
     ctx.strokeStyle = c;
     ctx.lineWidth = 1;
@@ -87,6 +90,7 @@ export function drawStarFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     ctx.stroke();
     star(ctx, x, y, Math.round(2 + t * 5), c);
   } else if (fx.kind === "stComet") {
+    additive(ctx, () => beam(ctx, x, y, snap(fx.x + fx.dirX), snap(fx.y + fx.dirY), 2 + t * 4, c, t));
     ctx.globalAlpha = t * 0.8;
     ctx.strokeStyle = c;
     ctx.lineWidth = 1 + t * 3;
@@ -98,6 +102,11 @@ export function drawStarFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   } else {
     // 별자리 터짐: 커지는 빛 원 + 돌아가는 8갈래 빛살
     const r = fx.size * (1.1 - t * 0.7);
+    additive(ctx, () => {
+      glow(ctx, x, y, r * 1.2, c, t, 1.3);
+      shock(ctx, x, y, r * 1.1, c, t, 6);
+      sparks(ctx, x, y, 12, r * 1.4, 1 - t, "#ffffff", fx.x + fx.y);
+    });
     ctx.globalAlpha = t * 0.45;
     ctx.fillStyle = c;
     ctx.beginPath();
