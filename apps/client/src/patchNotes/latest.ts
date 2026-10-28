@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.175",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "메인의 '스토리' 버튼이 '아카이브'로 바뀜: 누르면 메뉴 창에서 스토리(그대로)와 새 티어표를 고름",
+        "티어표: 반신급·국밥급·중간계·애매함·쓰레기 다섯 단계 · 전체/시즌 1/시즌 2 · 캐릭터 얼굴에 마우스를 올리면 그 자리인 이유",
+        "티어표에서 캐릭터 얼굴을 누르면 아래에서 그 캐릭터가 시작 무기로 허수아비를 때리는 미리보기 (피해 숫자·초당 피해)",
+      ],
+      en: [
+        "The main 'Story' button is now 'Archive': it opens a menu with Story (unchanged) and the new Tier List",
+        "Tier List: five tiers (Demigod, Reliable, Middle, Awkward, Struggling) · All / Season 1 / Season 2 · hover a character face to see why it sits there",
+        "Click a face in the Tier List to watch that character hit the dummy with its starting weapon below (damage numbers, DPS)",
+      ],
+      ja: [
+        "メインの「ストーリー」ボタンが「アーカイブ」に: 押すとメニューでストーリー（そのまま）と新しいティア表を選べる",
+        "ティア表: 半神級・定番級・中間・微妙・苦戦の5段階 · 全体/シーズン1/シーズン2 · キャラの顔にマウスを乗せるとその位置の理由",
+        "ティア表でキャラの顔を押すと、下でそのキャラが初期武器でカカシを叩くプレビュー（ダメージ数字・秒間ダメージ）",
+      ],
+    },
+  },
+  {
     version: "0.48.174",
     date: "2026-10-28",
     items: {

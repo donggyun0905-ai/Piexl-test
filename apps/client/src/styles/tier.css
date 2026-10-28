@@ -1,0 +1,131 @@
+/* 티어표 (아카이브): 단계 줄 · 얼굴 · 이유 말풍선 · 허수아비 미리보기 */
+.tier-note {
+  margin: 0;
+  opacity: 0.75;
+  font-size: 0.85rem;
+}
+.tier-table {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tier-row {
+  display: flex;
+  border: 2px solid #3a3446;
+  border-left: 6px solid var(--tc);
+  background: #1a1622;
+}
+.tier-label {
+  flex: 0 0 72px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #16121c;
+  background: var(--tc);
+  font-size: 0.95rem;
+}
+.tier-faces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px;
+}
+.tier-face {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 76px;
+  padding: 4px 2px;
+  border: 2px solid transparent;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.tier-face small {
+  font-size: 0.7rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.tier-face:hover,
+.tier-face:focus-visible,
+.tier-face.active {
+  border-color: var(--tc);
+  background: #2a2434;
+}
+.tier-tip {
+  display: none;
+  position: absolute;
+  z-index: 20;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  padding: 8px 10px;
+  border: 2px solid var(--tc);
+  background: #0f0c14;
+  text-align: left;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  white-space: normal;
+  pointer-events: none;
+}
+.tier-tip strong {
+  display: block;
+  color: var(--tc);
+  margin-bottom: 2px;
+}
+.tier-face:hover .tier-tip,
+.tier-face:focus-visible .tier-tip {
+  display: block;
+}
+.tier-preview {
+  border: 2px solid #3a3446;
+  background: #1a1622;
+  padding: 10px;
+}
+.tier-preview h3 {
+  margin: 0 0 8px;
+  color: var(--accent);
+}
+.tier-preview h3 small {
+  opacity: 0.7;
+  font-size: 0.75rem;
+}
+.tier-preview p {
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+.tier-preview .tier-pick {
+  margin: 0;
+  opacity: 0.7;
+  text-align: center;
+}
+.tier-preview-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+/* 터치 화면은 말풍선 대신 아래 미리보기 글로 */
+@media (hover: none) {
+  .tier-face:hover .tier-tip,
+  .tier-face:focus-visible .tier-tip {
+    display: none;
+  }
+}
+@media (max-width: 520px) {
+  .tier-label {
+    flex-basis: 52px;
+    font-size: 0.8rem;
+  }
+  .tier-face {
+    width: 62px;
+  }
+}

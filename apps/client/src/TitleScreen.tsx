@@ -12,6 +12,7 @@ import { Modal } from "./menu/Modal";
 import { NicknameBar } from "./menu/NicknameBar";
 import { SoloChooser } from "./menu/SoloChooser";
 import { EventChooser } from "./menu/EventChooser";
+import { ArchiveChooser } from "./menu/ArchiveChooser";
 import { TopBar } from "./menu/TopBar";
 import { PATCH_NOTES } from "./patchNotes";
 import { loadBest, loadSavedRun } from "./records";
@@ -36,12 +37,14 @@ interface Props {
   onPaewang: () => void;
   /** 스토리 (진영·최종 보스·아카식 레코드) */
   onStory: () => void;
+  /** 티어표 (아카이브 메뉴) */
+  onTierList: () => void;
 }
 
-type Popup = "none" | "solo" | "events" | "notes" | "achievements" | "records" | "codex";
+type Popup = "none" | "solo" | "events" | "archive" | "notes" | "achievements" | "records" | "codex";
 
 /** 메인 화면: 로고 · 닉네임 · 큰 버튼 3개(혼자 하기 · 일일 도전 · 함께 하기) · 아래 링크 · 위쪽 설정 */
-export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily, onBattle, onCoop, onPractice, onTutorial, onTowerDefense, onProfile, onShop, onSwarm, onPaewang, onStory }: Props) {
+export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily, onBattle, onCoop, onPractice, onTutorial, onTowerDefense, onProfile, onShop, onSwarm, onPaewang, onStory, onTierList }: Props) {
   const [popup, setPopup] = useState<Popup>("none");
   const [saved] = useState(loadSavedRun);
   const [best] = useState(loadBest);
@@ -98,9 +101,9 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
               <Icon name="star" />
               {t("events")}
             </button>
-            <button type="button" className="secondary big" onClick={onStory}>
+            <button type="button" className="secondary big" onClick={() => setPopup("archive")}>
               <Icon name="book" />
-              {t("story")}
+              {t("archive")}
             </button>
             <button type="button" className="secondary big" onClick={onShop}>
               <Icon name="bag" />
@@ -162,6 +165,7 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
         />
       )}
       {popup === "events" && <EventChooser t={t} onSwarm={onSwarm} onPaewang={onPaewang} onClose={close} />}
+      {popup === "archive" && <ArchiveChooser t={t} onStory={onStory} onTierList={onTierList} onClose={close} />}
       {popup === "notes" && (
         <Modal title={t("patchNotes")} t={t} onClose={close}>
           {PATCH_NOTES.map((note) => (

@@ -22,6 +22,7 @@ import { SwarmGame } from "./event/SwarmGame";
 import { SwarmMaps } from "./event/SwarmMaps";
 import { PwFlow } from "./event/PwFlow";
 import { StoryScreen } from "./story/StoryScreen";
+import { TierScreen } from "./archive/TierScreen";
 
 type Screen =
   | { name: "title" }
@@ -33,6 +34,7 @@ type Screen =
   | { name: "tdMaps" }
   | { name: "shop" }
   | { name: "story" }
+  | { name: "tier" }
   | { name: "swarmSelect" }
   | { name: "paewang" }
   | { name: "swarmMap"; characterId: CharacterId }
@@ -166,6 +168,7 @@ export function App() {
   }
   if (screen.name === "shop") return <ShopScreen lang={lang.lang} t={lang.t} onBack={toTitle} />;
   if (screen.name === "story") return <StoryScreen lang={lang.lang} t={lang.t} onBack={toTitle} />;
+  if (screen.name === "tier") return <TierScreen lang={lang.lang} t={lang.t} onBack={toTitle} />;
   if (screen.name === "tdMaps") return <TdScreen t={lang.t} onPick={(mapId) => setScreen({ name: "td", mapId, runKey: 0 })} onBack={toTitle} />;
   if (screen.name === "practice") {
     return (
@@ -283,6 +286,7 @@ export function App() {
       onTowerDefense={() => setScreen({ name: "tdMaps" })}
       onShop={() => setScreen({ name: "shop" })}
       onStory={() => setScreen({ name: "story" })}
+      onTierList={() => setScreen({ name: "tier" })}
       onSwarm={() => setScreen({ name: "swarmSelect" })}
       onPaewang={() => setScreen({ name: "paewang" })}
       onProfile={() => setScreen({ name: "profile", back: "title" })}
