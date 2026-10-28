@@ -73,7 +73,14 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
     }));
     // 패왕전: 사람은 앞 자리, 나머지는 AI (모드·장비는 대기실에서)
     // 경기장: 방장이 고른 곳 (랭크전·무작위는 판 시드로 정함)
-    if (pw) return createPvp(parseSeed(room.seedText), pw.mode, seatsRef.current.map((pid, i) => (pid ? { characterId: members[i]!.characterId, loadout: pid === you ? pw.lo : pw.los.get(pid) } : null)), (!room.rank && pw.map) || undefined);
+    if (pw) {
+      // 밴픽을 했으면 자리마다 고른 캐릭터 (사람이 없는 자리는 그 캐릭터의 AI)
+      const loOf = (pid: string) => (pid === you ? pw.lo : pw.los.get(pid));
+      const humans = pw.picks
+        ? pw.picks.map((c, i) => (seatsRef.current[i] ? { characterId: c, loadout: loOf(seatsRef.current[i]!) } : { characterId: c, ai: true }))
+        : seatsRef.current.map((pid, i) => (pid ? { characterId: members[i]!.characterId, loadout: loOf(pid) } : null));
+      return createPvp(parseSeed(room.seedText), pw.mode, humans, (!room.rank && pw.map) || undefined);
+    }
     return createParty(parseSeed(room.seedText), members);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -188,7 +195,7 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
     <>
       <GameScreen
         mode="coop"
-        characterId={characterId}
+        characterId={pw?.picks?.[mySeat] ?? characterId}
         seedText={room.seedText}
         initialRun={run}
         unlocks={[]}

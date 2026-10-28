@@ -130,7 +130,8 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
 
   const hostPid = room?.hostPid ?? "";
   const isHost = !!you && hostPid === you;
-  const pw = usePwRoom(wire, rank ? RANK_MODE[rank] : pwStart, isHost, () => (isHost ? (room?.players.map((p) => p.pid).filter((p) => p !== you) ?? []) : [hostPid]));
+  const seatPids = room?.players.filter((p) => p.state !== "watch").map((p) => p.pid) ?? [];
+  const pw = usePwRoom(wire, rank ? RANK_MODE[rank] : pwStart, isHost, () => (isHost ? (room?.players.map((p) => p.pid).filter((p) => p !== you) ?? []) : [hostPid]), you, seatPids);
 
   // 직접 연결: 방장이 바뀌면 새로 (손님은 방장하고만 연결)
   useEffect(() => {
@@ -150,7 +151,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
         onMessage: (pid, msg) => {
           const m = msg as CoopMsg;
           if (m.t === "hi" && Array.isArray(m.unlocks)) w.unlocks.set(pid, m.unlocks.map(String));
-          if (m.t === "pwm" || m.t === "pwlo") return w.onPw?.(pid, m);
+          if (m.t === "pwm" || m.t === "pwlo" || m.t === "pwd" || m.t === "pwda") return w.onPw?.(pid, m);
           w.onMessage(pid, m);
         },
         onClose: (pid) => {
@@ -256,7 +257,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
           saveText("coopCharacter", c);
           conn?.send({ t: "character", characterId: c });
         }}
-        onStart={() => conn?.send({ t: "start" })}
+        onStart={() => pw.canStart && conn?.send({ t: "start" })}
         onChat={(text) => conn?.send({ t: "chat", text })}
         onLeave={rank ? onExit : leave}
         badge={(pid) => {

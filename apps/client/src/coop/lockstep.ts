@@ -2,7 +2,7 @@
 // 게임 계산은 시드·입력이 같으면 결과가 같음. 그래서 모두의 입력이 다 모인 틱까지는 "확정"으로 계산하고(모든 화면이 같음),
 // 그 뒤 지금 시각까지는 아직 안 온 남의 입력을 "마지막 입력 그대로"로 짐작해 미리 계산해서 보여 줌 (내 조작은 바로 반응).
 // 실제 입력이 오면 확정에서 다시 계산하므로 짐작이 틀려도 결과는 모두 같음. 방장이 입력을 확정해 나눠 줌 (hostSync · guestSync)
-import { applyRoom, EMPTY_INPUT, stepParty, useSeat, allPlayers, type PwArenaId, type PwLoadout, type PwMode, type RunState, type TickInput } from "@pixel-rogue/shared";
+import { applyRoom, EMPTY_INPUT, stepParty, useSeat, allPlayers, type CharacterId, type PwArenaId, type PwDraft, type PwLoadout, type PwMode, type RunState, type TickInput } from "@pixel-rogue/shared";
 
 /** 직접 연결로 주고받는 메시지 */
 export type CoopMsg =
@@ -23,6 +23,9 @@ export type CoopMsg =
   /** 패왕전 같이 하기 대기실: 방장 → 손님 대결 · 손님 → 방장 내 준비방 장비 (event/PwRoom) */
   | { t: "pwm"; mode: PwMode; map?: PwArenaId | null }
   | { t: "pwlo"; lo: PwLoadout }
+  /** 패왕전 밴픽: 방장 → 손님 지금 상태(left = 이 차례 남은 밀리초) · 손님 → 방장 내 차례에 고른 것(at = 차례 번호) */
+  | { t: "pwd"; d: PwDraft | null; left: number }
+  | { t: "pwda"; c: CharacterId | null; at: number }
   | { t: "po"; ts: number };
 
 /** 몇 틱마다 상태 요약을 보내 비교할지 (2초) */

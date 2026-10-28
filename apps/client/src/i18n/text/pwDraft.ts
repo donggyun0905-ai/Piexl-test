@@ -4,7 +4,7 @@ export const PW_DRAFT_TEXT = {
   pwDraftOurs: { ko: "우리 편", en: "Our team", ja: "味方" },
   pwDraftTheirs: { ko: "상대 편", en: "Enemy team", ja: "相手" },
   pwDraftBanTurn: { ko: "{team} 밴 차례", en: "{team} bans", ja: "{team}のバン" },
-  pwDraftPickTurn: { ko: "{name} 픽 차례", en: "{name} picks", ja: "{name}のピック" },
+  pwDraftPickTurn: { ko: "{name} 픽 차례", en: "Pick: {name}", ja: "{name}のピック" },
   pwDraftMine: { ko: "내 차례!", en: "Your turn!", ja: "あなたの番!" },
   pwDraftWait: { ko: "고르는 중…", en: "Choosing…", ja: "選択中…" },
   pwDraftBan: { ko: "밴하기", en: "Ban", ja: "バンする" },

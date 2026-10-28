@@ -15,6 +15,8 @@ interface Props {
   /** 고른 경기장 (null = 무작위) */
   map: PwMapPick;
   characterId: CharacterId;
+  /** 밴픽으로 정한 자리마다 캐릭터 (0번 = 나, 나머지는 그 캐릭터의 AI) */
+  picks?: readonly CharacterId[];
   loadout?: PwLoadout;
   lang: Lang;
   t: (key: TextKey) => string;
@@ -24,9 +26,9 @@ interface Props {
 
 const HUD_MS = 250;
 
-export function PwGame({ mode, map, characterId, loadout, lang, t, onExit, onRetry }: Props) {
+export function PwGame({ mode, map, characterId, picks, loadout, lang, t, onExit, onRetry }: Props) {
   // 꾸밈이 아니라 판 시드: 판마다 다르게 (판 안의 계산은 이 시드로만)
-  const [run] = useState(() => createPvp(Math.floor(Math.random() * 0x7fffffff), mode, [{ characterId, loadout }], map ?? undefined));
+  const [run] = useState(() => createPvp(Math.floor(Math.random() * 0x7fffffff), mode, picks ? picks.map((c, i) => (i ? { characterId: c, ai: true } : { characterId: c, loadout })) : [{ characterId, loadout }], map ?? undefined));
   const [, refresh] = useState(0);
   const [chips, setChips] = useState<number | null>(null);
   const [board, toggleBoard] = useBoard();

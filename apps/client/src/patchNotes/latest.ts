@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.183",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "패왕전 밴픽: 편 대결(1대1·2대2·3대3·5대5·토너먼트)은 시작 전에 편마다 번갈아 캐릭터를 막고(밴, 3명 이상이면 2개씩) 지그재그 차례로 고름 (우리 1 → 상대 2 → 우리 2 …) · 같은 캐릭터는 한 판에 한 번만",
+        "차례마다 20초 · 시간이 다하면 밴은 넘어가고 픽은 무작위 · 캐릭터를 누르면 상대가 고른 캐릭터까지 스킬을 볼 수 있음 · 우리 편 AI는 고르면 한마디",
+        "혼자 하기와 친구 방 모두 밴픽 (친구 방은 방장이 '밴픽 시작', 편 첫 자리 사람이 밴, 빈 자리는 AI) · 랭크전은 지금처럼",
+      ],
+      en: [
+        "Champion Clash draft: team battles (1v1, 2v2, 3v3, 5v5, Tournament) now start with teams taking turns banning characters (2 each with 3+ per team) and picking in a snake order (us 1 → them 2 → us 2 …) · each character only once per match",
+        "20 seconds per turn · if time runs out a ban is skipped and a pick is random · tap any character, even an enemy pick, to see its skills · AI allies say a word when they pick",
+        "Draft works both solo and in friend rooms (the host presses 'Start draft', the first player of each team bans, empty seats are AI) · ranked stays as before",
+      ],
+      ja: [
+        "覇王戦バンピック: チーム対決(1対1・2対2・3対3・5対5・トーナメント)は開始前にチームが交互にキャラをバン(3人以上なら2つずつ)し、ジグザグ順でピック (味方1 → 相手2 → 味方2 …) · 同じキャラは1戦に1回だけ",
+        "1手20秒 · 時間切れはバンなし、ピックはランダム · キャラを押すと相手が選んだキャラもスキルを確認できる · 味方AIは選ぶとひと言",
+        "ソロでもフレンド部屋でもバンピック (部屋はホストが「バンピック開始」、チームの最初の人がバン、空き席はAI) · ランク戦は今まで通り",
+      ],
+    },
+  },
+  {
     version: "0.48.182",
     date: "2026-10-28",
     items: {
