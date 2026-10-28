@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.168",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "패왕전 버그 수정: 맞은 뒤 무적·대시 중인 캐릭터가 공격을 받으면 처치 판정(악의 사도 영혼 등)만 나오고 실제로는 죽지 않던 문제 (이제 무적일 때는 맞지 않음)",
+        "패왕전 버그 수정: 폭탄처럼 몸을 바로 때리는 공격과 다른 공격이 같은 순간에 들어오면 다른 공격 피해가 통째로 사라지던 문제",
+      ],
+      en: [
+        "Champion Clash fix: hitting a character who was invulnerable after a hit or dashing counted as a kill (Apostle souls, etc.) without actually killing them (invulnerable characters now can't be hit)",
+        "Champion Clash fix: when a direct hit (like a bomb) and other attacks landed at the same moment, the other attacks' damage was lost",
+      ],
+      ja: [
+        "覇王戦の不具合修正: 被弾後の無敵中・ダッシュ中のキャラを攻撃すると撃破判定（悪の使徒の魂など）だけ出て実際には倒れなかった問題（無敵中は当たらなくなりました）",
+        "覇王戦の不具合修正: 爆弾のように体を直接打つ攻撃と他の攻撃が同時に当たると、他の攻撃のダメージが消えていた問題",
+      ],
+    },
+  },
+  {
     version: "0.48.167",
     date: "2026-10-28",
     items: {

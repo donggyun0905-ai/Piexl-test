@@ -50,12 +50,21 @@ export function syncProxies(s: RunState): number[] {
     e.lastHit = undefined;
     return e.hp;
   });
+  guardProxies(s);
   assignFoes(s);
   return start;
 }
 
+/** 사람이 무적(맞은 뒤·대시·결계)이면 그림자 적도 맞지 않음 (안 죽는데 처치·영혼만 나오지 않게) */
+function guardProxies(s: RunState): void {
+  allPlayers(s).forEach((p, i) => {
+    s.pvp!.proxies[i]!.immune = p.dashTicks > 0 || p.invulnTicks > 0 || p.shieldTicks > 0;
+  });
+}
+
 /** 사람들이 움직인 뒤: 탄·부적·잠시 뒤 폭발 → 그림자 적 상태이상 피해 → 받은 것을 사람에게 */
 export function pvpWorld(s: RunState, start: number[]): void {
+  guardProxies(s);
   updateProjectiles(s, false);
   // 처치로 목록이 섞일 수 있어 단계마다 다시 나눔
   assignFoes(s);
@@ -88,7 +97,15 @@ function transfer(s: RunState, start: number[]): void {
     if (!inPlay(s, i)) return;
     const dmg = start[i]! - Math.max(0, e.hp);
     if (e.lastHit !== undefined && e.lastHit !== i) seat.by = e.lastHit;
-    if (dmg > 0) damagePlayer(s, dmg);
+    if (dmg > 0) {
+      // 맞을 수 있던 그림자 적이 받은 피해는 이번 틱에 다른 공격으로 생긴 무적에 막히지 않음
+      const p = s.player;
+      const keep = [p.invulnTicks, p.shieldTicks] as const;
+      if (!e.immune) p.invulnTicks = p.shieldTicks = 0;
+      damagePlayer(s, dmg);
+      p.invulnTicks = Math.max(p.invulnTicks, keep[0]);
+      p.shieldTicks = Math.max(p.shieldTicks, keep[1]);
+    }
     seat.stun = Math.max(seat.stun, Math.min(90, e.stunTicks ?? 0));
     seat.slow = Math.max(seat.slow, Math.min(180, e.slowTicks ?? 0));
     seat.root = Math.max(seat.root, Math.min(120, e.rootTicks ?? 0));
