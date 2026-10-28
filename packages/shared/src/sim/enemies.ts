@@ -104,7 +104,7 @@ export function updateEnemies(s: RunState): void {
       e.timer--;
       if (e.timer <= 0) {
         e.timer = 100;
-        enemyShot(s, e.x, e.y, toP[0], toP[1], 1.4, 8);
+        enemyShot(s, e.x, e.y, toP[0], toP[1], 1.4, 8).from = "spitter";
       }
     } else if (e.kind === "mortar") {
       // 멀리서 거리를 유지하며, 일정 간격으로 플레이어가 서 있는 자리에 위험 표시를 남김
@@ -116,7 +116,7 @@ export function updateEnemies(s: RunState): void {
       e.timer--;
       if (e.timer <= 0) {
         e.timer = 150;
-        addHazard(s, p.x, p.y, 14);
+        addHazard(s, p.x, p.y, 14, "mortar");
       }
     } else if (e.kind === "charger") {
       // charger: 걷기 → 멈춰서 준비 → 돌진

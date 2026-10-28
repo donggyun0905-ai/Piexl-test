@@ -1,6 +1,7 @@
 // 졸개 그리기: 가디언 방패(앞쪽 판·남은 칸) · 가디언 휘두르기 예고·휘두르기 효과
 import { GUARD_ARC, GUARD_REACH, GUARD_SWING_TICKS, type EffectState, type EnemyState, type RunState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
+import { additive, crescent, glow, sparks } from "./pwFxBits";
 
 /** 몸 위에 덧그리기 (가디언 방패. 날벌레 날개는 그림에 있음) */
 export function drawMinionDetail(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, x: number, y: number): void {
@@ -24,12 +25,25 @@ export function drawGuardianWarn(ctx: CanvasRenderingContext2D, e: EnemyState, x
   const k = 1 - Math.max(0, e.timer) / GUARD_SWING_TICKS;
   const a = Math.atan2(e.dirY, e.dirX);
   const half = Math.acos(GUARD_ARC);
-  ctx.fillStyle = `rgba(255, 90, 90, ${0.12 + 0.3 * k})`;
+  ctx.fillStyle = `rgba(255, 90, 90, ${0.1 + 0.15 * k})`;
   ctx.beginPath();
   ctx.moveTo(x, y);
   ctx.arc(x, y, GUARD_REACH, a - half, a + half);
   ctx.closePath();
   ctx.fill();
+  // 안쪽부터 차오르는 칠 + 또렷한 테두리 · 다 찰 무렵 방패에 빛이 모임
+  ctx.fillStyle = `rgba(255, 90, 90, ${0.2 + 0.25 * k})`;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.arc(x, y, GUARD_REACH * k, a - half, a + half);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = `rgba(255, 200, 200, ${0.5 + 0.4 * k})`;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(x, y, GUARD_REACH, a - half, a + half);
+  ctx.stroke();
+  if (k > 0.6) additive(ctx, () => glow(ctx, x + Math.cos(a) * e.r, y + Math.sin(a) * e.r, 8, "#d8e4ff", (k - 0.6) * 2.5, 1));
 }
 
 /** 가디언 휘두르기 효과면 그리고 true */
@@ -38,12 +52,14 @@ export function drawCleaveFx(ctx: CanvasRenderingContext2D, fx: EffectState, sna
   const t = fx.ticks / fx.maxTicks;
   const a = Math.atan2(fx.dirY, fx.dirX);
   const half = Math.acos(GUARD_ARC);
-  ctx.strokeStyle = "#ffe0d0";
-  ctx.globalAlpha = t;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(snap(fx.x), snap(fx.y), fx.size * (1.1 - 0.2 * t), a - half, a + half);
-  ctx.stroke();
-  ctx.globalAlpha = 1;
+  // 방패 휘두르기: 푸른 쇠빛 두 겹 초승달 + 날 끝 불똥
+  const x = snap(fx.x);
+  const y = snap(fx.y);
+  const r = fx.size * (1.1 - 0.2 * t);
+  additive(ctx, () => {
+    crescent(ctx, x, y, r, a, half, 7 * t + 1, "#8ab8ff", t);
+    crescent(ctx, x, y, r * 0.86, a, half * 0.85, 3 * t, "#ffffff", t * 0.8);
+    sparks(ctx, x + Math.cos(a) * r, y + Math.sin(a) * r, 5, r * 0.5, 1 - t, "#d8e4ff", fx.x + fx.y);
+  });
   return true;
 }

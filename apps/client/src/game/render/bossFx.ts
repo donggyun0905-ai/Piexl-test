@@ -3,6 +3,7 @@ import { ROOM_HEIGHT, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, ROOM_WIDTH
 import type { Snap } from "./palette";
 import { drawBossHit } from "./bossHits";
 import { s2HazardTint } from "./s2Bosses";
+import { drawMortarShell } from "./s1Bosses";
 import { additive, shock } from "./pwFxBits";
 
 const TAU = Math.PI * 2;
@@ -52,6 +53,7 @@ export function drawHazards(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       drawLineHazard(ctx, h, x, y, snap(h.toX), snap(h.toY), f, s.tick, s2);
       continue;
     }
+    drawMortarShell(ctx, h, f, s.tick);
     const tint = s2 ? s2 : h.fx === "holy" ? "255, 220, 120" : h.fx === "pillar" || h.fx === "meteor" ? "255, 140, 40" : h.fx === "fake" ? "170, 90, 255" : h.fx === "dark" || h.fx === "scythe" || h.fx === "spike" ? "120, 60, 160" : "230, 70, 70";
     // 바닥 전체는 옅게, 안쪽부터 진하게 차오름 (원·부채꼴 모두) · 테두리는 또렷하게 · 터지기 직전 밝게 번쩍임
     ctx.fillStyle = `rgba(${tint}, 0.1)`;

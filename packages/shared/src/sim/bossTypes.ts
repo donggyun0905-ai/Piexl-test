@@ -134,6 +134,8 @@ export interface ArenaRunState {
 }
 
 export interface BossShotState {
+  /** 그리기용: 쏜 적 종류 (탄 모양을 그 적 느낌으로) */
+  from?: string;
   /** 그리기용 탄 모양 */
   look?: "arrow" | "note" | "spear" | "seed" | "soul" | "feather" | "light" | "fire" | "wave" | "orbRuin" | "orbChaos" | "bat" | "net" | "rock" | "bigwave" | "larrow" | "darrow" | "reaper" | "ember" | "rspear" | "fspear" | "doom" | "kifist" | "staff" | "bolt";
   /** 세이렌 음표: 플레이어에 맞아도 사라지지 않고, 맞으면 끌려감. 세이렌이 쓰러지면 사라짐 */

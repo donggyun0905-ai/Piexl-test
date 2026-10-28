@@ -35,6 +35,7 @@ import { drawBloom, drawBlossomFlurry } from "./sakura";
 import { drawFxBloom, drawShotBloom } from "./fxBloom";
 import { drawS2BossFx } from "./s2Bosses";
 import { drawS2BossShot } from "./s2BossShots";
+import { drawFoeShot, drawS1BossFx } from "./s1Bosses";
 import { additive, beam, glow } from "./pwFxBits";
 import { drawBaseShot, drawBlast, drawBurst, drawHit, drawSwing } from "./baseFx";
 
@@ -44,7 +45,7 @@ export function drawProjectiles(ctx: CanvasRenderingContext2D, s: RunState, alph
     const y = snap(lerp(pr.prevY, pr.y, alpha));
     if (pr.fromPlayer) drawShotBloom(ctx, s, pr, x, y);
     if (pr.fromPlayer && drawOrbShot(ctx, pr, x, y)) continue;
-    if (!pr.fromPlayer && drawS2BossShot(ctx, s, pr, x, y, s.tick)) continue;
+    if (!pr.fromPlayer && (drawS2BossShot(ctx, s, pr, x, y, s.tick) || drawFoeShot(ctx, pr, x, y, s.tick))) continue;
     if (!pr.fromPlayer && (drawPwShot(ctx, pr, x, y) || drawEnemyShot(ctx, pr, x, y, s.tick))) continue;
     if (pr.fromPlayer && (drawBullet(ctx, pr, x, y) || drawKiShot(ctx, pr, x, y))) continue;
     if (pr.fromPlayer && (drawBeastShot(ctx, pr, x, y, s.tick) || drawNinjaShot(ctx, pr, x, y, s.tick) || drawChronoShot(ctx, pr, x, y, s.tick) || drawSummonShot(ctx, pr, x, y, s.tick) || drawBedouinShot(ctx, pr, x, y, s.tick) || drawGeneralShot(ctx, pr, x, y) || drawImugiShot(ctx, pr, x, y) || drawDuckShot(ctx, pr, x, y, s.tick) || drawScribeShot(ctx, pr, x, y) || drawS2Shot(ctx, pr, x, y, s.tick))) continue;
@@ -113,7 +114,7 @@ export function drawEffects(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       continue;
     }
     drawFxBloom(ctx, fx, px, py, snap);
-    if (drawS2BossFx(ctx, s, fx, snap)) continue;
+    if (drawS2BossFx(ctx, s, fx, snap) || drawS1BossFx(ctx, s, fx, snap)) continue;
     if (drawPwSkillFx(ctx, fx, snap) || drawTintedFx(ctx, fx, px, py, snap) || drawCustomFx(ctx, fx, px, py, snap)) continue;
     if (drawLaserFx(ctx, s, fx, px, py, snap) || drawMedicFx(ctx, s, fx, px, py, snap)) continue;
     if (drawOrbitFx(ctx, fx, snap)) continue;

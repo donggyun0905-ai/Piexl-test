@@ -61,10 +61,14 @@ export interface EffectState {
   seat?: number;
   /** 적의 위험 표시가 터진 것 (그리기: 시즌 2 층 보스 모양) */
   foe?: boolean;
+  /** 그리기용: 만든 적 종류 (박격포 등) */
+  from?: string;
 }
 
 /** 적이 남긴 위험 표시: tick이 되면 범위 안 플레이어에게 피해. 기본은 원, dir·arc가 있으면 부채꼴, toX·toY가 있으면 굵기 width인 선 */
 export interface Hazard {
+  /** 그리기용: 만든 적 종류 (박격포 등) */
+  from?: string;
   /** 터지는 틱 */
   tick: number;
   /** 표시가 뜬 틱 (그리기용) */

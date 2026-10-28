@@ -17,8 +17,8 @@ export { R as HAZARDS_RULES };
 export const HAZARD_WARN_TICKS = 50;
 export const HAZARD_RADIUS = 22;
 
-export function addHazard(s: RunState, x: number, y: number, damage: number): void {
-  (s.hazards ??= []).push({ tick: s.tick + HAZARD_WARN_TICKS, start: s.tick, x, y, radius: HAZARD_RADIUS, damage });
+export function addHazard(s: RunState, x: number, y: number, damage: number, from?: string): void {
+  (s.hazards ??= []).push({ tick: s.tick + HAZARD_WARN_TICKS, start: s.tick, x, y, radius: HAZARD_RADIUS, damage, ...(from ? { from } : {}) });
 }
 
 /** 모양 있는 위험 표시 (warn틱 뒤 터짐, appear틱 뒤부터 보임) */
@@ -67,8 +67,8 @@ export function updateHazards(s: RunState): void {
       },
       !!s.party,
     );
-    if (h.fx) addEffect(s, { kind: h.fx, x: h.x, y: h.y, dirX: h.dirX ?? 0, dirY: h.dirY ?? 0, size: h.radius, maxTicks: 14, toX: h.toX, toY: h.toY, width: h.toX !== undefined ? h.width : h.arc, foe: true });
-    else addEffect(s, { kind: "burst", x: h.x, y: h.y, dirX: 0, dirY: 0, size: h.radius * 0.6, maxTicks: 14, foe: true });
+    if (h.fx) addEffect(s, { kind: h.fx, x: h.x, y: h.y, dirX: h.dirX ?? 0, dirY: h.dirY ?? 0, size: h.radius, maxTicks: 14, toX: h.toX, toY: h.toY, width: h.toX !== undefined ? h.width : h.arc, foe: true, from: h.from });
+    else addEffect(s, { kind: "burst", x: h.x, y: h.y, dirX: 0, dirY: 0, size: h.radius * 0.6, maxTicks: 14, foe: true, from: h.from });
     return false;
   });
 }

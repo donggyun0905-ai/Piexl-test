@@ -1,5 +1,5 @@
-// 적·플레이어 그리기: 공격 예고선 · 적(체력 줄·자동 조준 표시) · 플레이어(대시 잔상·방향·맞는 범위·보호막)
-import { allPlayers, DASH_TICKS, inBush, inPlay, ENEMIES, isAlive, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
+// 적·플레이어 그리기 (공격 예고선은 telegraphs): 적(체력 줄·자동 조준 표시) · 플레이어(대시 잔상·방향·맞는 범위·보호막)
+import { DASH_TICKS, inBush, inPlay, ENEMIES, isAlive, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
 import { breathe, footShadow, hitPop } from "./bodyMotion";
 import { drawCrate } from "./swarm";
 import { drawFighter } from "./paewang";
@@ -12,59 +12,11 @@ import { drawSageActor } from "./sage";
 import { drawStalker } from "./stalkers";
 import { drawCharacter, drawEnemySprite, drawSprite, isCasting, sheetFor, type CharacterPose } from "../sprites";
 import { C, CHARM_INK, lerp, type Snap } from "./palette";
-import { drawGuardianWarn, drawMinionDetail } from "./minions";
+import { drawMinionDetail } from "./minions";
 import { drawBossStatus } from "./bossLook";
 import { drawParryCd } from "./titan";
 import { drawTagCue } from "./tagCue";
 import { drawSlayerGauge } from "./slayer";
-
-/** 곧 탄·소환·범위 공격을 쓰기 전 몸 둘레 고리가 줄어드는 보스 */
-const RING_WARN = new Set<string>(["brood", "seer", "archer", "siren", "plant", "reaper", "archangel", "toad", "salamander", "jelly", "captain"]);
-
-/** 공격 예고선: 탄을 쏘기 직전의 겨냥선, 돌진 직전의 돌진 방향 */
-export function drawTelegraphs(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
-  for (const e of s.enemies) {
-    const x = snap(lerp(e.prevX, e.x, alpha));
-    const y = snap(lerp(e.prevY, e.y, alpha));
-    drawGuardianWarn(ctx, e, x, y);
-    let dx = 0;
-    let dy = 0;
-    let len = 0;
-    if (e.kind === "spitter" && e.timer > 0 && e.timer <= 28) {
-      const p = nearest(s, e);
-      dx = p.x - e.x;
-      dy = p.y - e.y;
-      const d = Math.sqrt(dx * dx + dy * dy) || 1;
-      dx /= d;
-      dy /= d;
-      len = Math.min(d, 90);
-    } else if ((e.kind === "charger" || e.kind === "hulk" || e.kind === "guardian" || e.kind === "centaur") && e.phase === "windup") {
-      // 켄타우로스는 돌진 방향을 마지막에 정하므로 플레이어 쪽
-      const c = e.kind === "centaur" ? (Math.hypot(s.player.x - e.x, s.player.y - e.y) || 1) : 1;
-      dx = e.kind === "centaur" ? (s.player.x - e.x) / c : e.dirX;
-      dy = e.kind === "centaur" ? (s.player.y - e.y) / c : e.dirY;
-      len = e.kind === "hulk" ? 86 : e.kind === "centaur" ? 64 : 62;
-    } else if (RING_WARN.has(e.kind) && e.phase !== "blink" && e.phase !== "act" && e.timer > 0 && e.timer <= 22) {
-      // 보스가 곧 탄·소환을 씀: 몸 둘레의 고리가 줄어들며 깜빡임
-      const f = e.timer / 22;
-      ctx.strokeStyle = `rgba(255, 90, 90, ${0.9 - 0.5 * f})`;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(x, y, e.r + 3 + 10 * f, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-    if (len > 0) {
-      ctx.strokeStyle = "rgba(255, 90, 90, 0.55)";
-      ctx.lineWidth = 1;
-      ctx.setLineDash([3, 3]);
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + dx * len, y + dy * len);
-      ctx.stroke();
-      ctx.setLineDash([]);
-    }
-  }
-}
 
 export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   // 무리 여왕이 부른 기는 적은 인큐버스 그림
@@ -118,19 +70,6 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
     drawStuckCharms(ctx, e, x, y);
     if (e.id === s.autoTargetId) drawTargetMark(ctx, x, y, e.r + 3);
   }
-}
-
-/** 협동: 적이 노리는 가장 가까운 살아 있는 사람 (혼자면 나) */
-function nearest(s: RunState, e: EnemyState): PlayerState {
-  let best = s.player;
-  let bestD = Infinity;
-  for (const p of allPlayers(s)) {
-    const dx = p.x - e.x;
-    const dy = p.y - e.y;
-    const d = dx * dx + dy * dy;
-    if (isAlive(p) && d < bestD) [best, bestD] = [p, d];
-  }
-  return best;
 }
 
 /** 협동: 쓰러진 사람 (흐리게 엎드린 표시) */

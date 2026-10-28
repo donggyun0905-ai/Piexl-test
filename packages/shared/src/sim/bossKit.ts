@@ -43,7 +43,7 @@ export function turn(d: Vec, k: number): [number, number] {
 export function ring(s: RunState, e: EnemyState, step: number, offset: number, speed: number, extra: Extra = {}): void {
   for (let i = offset % step; i < 16; i += step) {
     const d = DIR16[i]!;
-    Object.assign(enemyShot(s, e.x, e.y, d[0], d[1], speed, shotDamage(s)), extra);
+    Object.assign(enemyShot(s, e.x, e.y, d[0], d[1], speed, shotDamage(s)), { from: e.kind }, extra);
   }
 }
 
@@ -51,7 +51,7 @@ export function ring(s: RunState, e: EnemyState, step: number, offset: number, s
 export function fan(s: RunState, e: EnemyState, toP: Vec, spread: number[], speed: number, extra: Extra = {}): void {
   for (const k of spread) {
     const d = turn(toP, k);
-    Object.assign(enemyShot(s, e.x, e.y, d[0], d[1], speed, shotDamage(s)), extra);
+    Object.assign(enemyShot(s, e.x, e.y, d[0], d[1], speed, shotDamage(s)), { from: e.kind }, extra);
   }
 }
 

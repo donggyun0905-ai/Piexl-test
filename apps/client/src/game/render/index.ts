@@ -2,7 +2,8 @@
 import { applyRoom, useSeat, type RunState, type TagSpecialKind } from "@pixel-rogue/shared";
 import { cameraFor } from "../camera";
 import { drawRangeRing } from "../rangeRing";
-import { drawEnemies, drawPlayer, drawTelegraphs } from "./actors";
+import { drawEnemies, drawPlayer } from "./actors";
+import { drawTelegraphs } from "./telegraphs";
 import { drawDevices, drawEngineerGear } from "./beams";
 import { drawOrbitField, drawOrbs } from "./orbs";
 import { drawBrawl } from "./brawl";
