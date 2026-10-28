@@ -6,7 +6,7 @@ import { ACCENT, FUR, GOLD, INK } from "./tigerArt";
 
 /** 여름 파도(summerFx)가 더 씀: drop 물방울 · bubble 거품 · wave 물결 자국 · foot 맨발 자국 · glint 햇빛 반짝임 */
 /** theme: 이벤트 상점 테마 효과 조각 (모양은 shape, themeFx·themeDraw) */
-export type PartKind = "spark" | "dust" | "petal" | "paw" | "claw" | "ring" | "pillar" | "text" | "seal" | "drop" | "bubble" | "wave" | "foot" | "glint" | "theme";
+export type PartKind = "spark" | "dust" | "petal" | "paw" | "claw" | "ring" | "pillar" | "text" | "seal" | "drop" | "bubble" | "wave" | "foot" | "glint" | "theme" | "flash" | "slash";
 
 export interface Part {
   kind: PartKind;
@@ -182,6 +182,7 @@ export class TigerFx {
       this.add({ kind: "spark", x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 10, size: 1, rot: a, color: i % 2 ? "#ff6a2a" : "#ffb040" });
     }
     this.hits++;
+    this.add({ kind: "flash", x, y, vx: 0, vy: 0, life: 8, size: Math.max(9, r + 6), rot: 0, color: "#ffb040" });
     const light = Math.random() < 0.3;
     const size = Math.max(10, Math.min(22, r * 2)) * (light ? rand(0.55, 0.75) : rand(0.85, 1.15));
     this.add({
@@ -207,6 +208,7 @@ export class TigerFx {
       this.add({ kind: "dust", x: x + Math.cos(a) * d, y: y + Math.sin(a) * d, vx: Math.cos(a) * rand(0.1, 0.6), vy: rand(-0.6, -0.1), life: Math.floor(rand(24, boss ? 80 : 46)), size: rand(1, 3), rot: 0, color: [INK, GOLD, FUR, this.accent][i % 4]! });
     }
     this.ringAt(x, y, r + 8, INK);
+    this.add({ kind: "flash", x, y, vx: 0, vy: 0, life: boss ? 26 : 14, size: r + (boss ? 34 : 16), rot: 0, color: GOLD });
     this.add({ kind: "paw", x, y: y + r * 0.3, vx: 0, vy: 0, life: 40, size: boss ? 3 : 2, rot: -Math.PI / 2, color: GOLD });
     if (boss) this.add({ kind: "seal", x, y: y - r - 8, vx: 0, vy: -0.05, life: 90, size: 1, rot: 0, color: "#d8283a", text: "K.O" });
   }
@@ -235,6 +237,7 @@ export class TigerFx {
   }
 
   protected muzzle(x: number, y: number, a: number): void {
+    this.add({ kind: "flash", x: x + Math.cos(a) * 6, y: y + Math.sin(a) * 6, vx: 0, vy: 0, life: 6, size: 8, rot: 0, color: GOLD });
     for (let i = 0; i < 4; i++) {
       const b = a + rand(-0.6, 0.6);
       this.add({ kind: "spark", x: x + Math.cos(a) * 6, y: y + Math.sin(a) * 6, vx: Math.cos(b) * rand(0.8, 1.6), vy: Math.sin(b) * rand(0.8, 1.6), life: 9, size: 1, rot: b, color: i % 2 ? GOLD : this.accent });
@@ -243,6 +246,7 @@ export class TigerFx {
   }
 
   protected clawAt(x: number, y: number, a: number): void {
+    this.add({ kind: "slash", x, y, vx: 0, vy: 0, life: 10, size: 15, rot: a, color: GOLD });
     this.add({ kind: "claw", x: x + Math.cos(a) * 9, y: y + Math.sin(a) * 9, vx: 0, vy: 0, life: 12, size: 16, rot: a - Math.PI / 2 - 0.5, color: this.accent });
     this.hooks.roar(false);
   }

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.202",
+    date: "2026-10-28",
+    items: {
+      ko: ["효과 다듬기 1: 이벤트 상점 테마 효과·범 풍류·여름 파도 — 맞힐 때 섬광·빛 베기, 처치 때 큰 빛, 대기 때 발밑 문양이 돌고 조각이 내 둘레를 돎, 걸음 자국이 은은히 빛남, 탄 꼬리가 빛줄기로 · 피해 숫자가 튀어나오며 좌우로 비껴 뜨고 큰 피해는 금빛, 테마 데미지 스킨은 빛 번짐"],
+      en: ["Effects polish 1: event shop theme effects, Tiger and Summer — flashes and light slashes on hit, big bursts on kills, a spinning sigil and orbiting bits while idle, softly glowing footprints, light-streak shot trails · damage numbers pop out and drift sideways, big hits turn gold, theme damage skins glow"],
+      ja: ["エフェクト調整1: イベントショップのテーマ効果・虎・夏 — ヒット時の閃光と光の斬撃、撃破時の大きな光、待機時に足元の紋様が回り周りを欠片が回る、足跡がほのかに光る、弾の尾が光の筋に · ダメージ数字が弾けて左右にずれ、大ダメージは金色、テーマのダメージスキンは光がにじむ"],
+    },
+  },
+  {
     version: "0.48.201",
     date: "2026-10-28",
     items: {

@@ -36,6 +36,7 @@ export class SummerFx extends TigerFx {
   protected override hitAt(x: number, y: number, r: number): void {
     this.drops(x, y - r * 0.3, 5, 1.6);
     this.hits++;
+    this.add({ kind: "flash", x, y, vx: 0, vy: 0, life: 8, size: Math.max(9, r + 6), rot: 0, color: SEA });
     const light = Math.random() < 0.3;
     this.add({ kind: "wave", x: x + rand(-r, r) * 0.3, y: y + rand(-r, r) * 0.3, vx: 0, vy: 0, life: light ? 10 : 13, size: Math.max(10, Math.min(22, r * 2)) * (light ? 0.7 : 1), rot: rand(-0.6, 0.6), color: this.accent, flip: this.hits % 2 === 0 });
   }
@@ -48,6 +49,7 @@ export class SummerFx extends TigerFx {
     }
     this.drops(x, y, boss ? 14 : 7, 2);
     this.ringAt(x, y, r + 8, FOAM);
+    this.add({ kind: "flash", x, y, vx: 0, vy: 0, life: boss ? 24 : 14, size: r + (boss ? 30 : 14), rot: 0, color: SEA });
     if (boss) this.add({ kind: "seal", x, y: y - r - 10, vx: 0, vy: -0.05, life: 90, size: 1, rot: 0, color: CORAL, text: "K.O" });
   }
 
@@ -74,6 +76,7 @@ export class SummerFx extends TigerFx {
   }
 
   protected override clawAt(x: number, y: number, a: number): void {
+    this.add({ kind: "slash", x, y, vx: 0, vy: 0, life: 10, size: 15, rot: a, color: FOAM });
     this.add({ kind: "wave", x: x + Math.cos(a) * 10, y: y + Math.sin(a) * 10, vx: 0, vy: 0, life: 13, size: 18, rot: a, color: this.accent });
     this.hooks.roar(false);
   }

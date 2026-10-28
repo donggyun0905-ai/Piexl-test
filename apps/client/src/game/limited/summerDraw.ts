@@ -1,5 +1,6 @@
 // 여름 파도 그리기: 바닥(맨발 자국·대기 장면) · 위(탄 거품 꼬리·물방울·물결 자국·파동·물기둥·글자·구명튜브 K.O·갈매기) (피해 숫자는 summerNumber)
 import type { RunState } from "@pixel-rogue/shared";
+import { drawLight } from "./fxLight";
 import type { Snap } from "../render/palette";
 import { drawMap } from "./tigerArt";
 import { idleLevel } from "./tigerDraw";
@@ -93,6 +94,7 @@ function drawBuoy(ctx: Ctx, p: Part): void {
 
 function drawPart(ctx: Ctx, p: Part): void {
   const f = p.life / p.max;
+  if (drawLight(ctx, p)) return;
   switch (p.kind) {
     case "drop":
     case "dust":

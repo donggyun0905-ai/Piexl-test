@@ -5,7 +5,7 @@ import { drawShape } from "./limited/themeShapes";
 
 /** 맞힘·치명타 숫자를 그 스킨으로 그림 (font·정렬은 부르는 쪽에서 맞춰 둠) */
 export function drawSkinNumber(ctx: CanvasRenderingContext2D, style: Exclude<DmgStyle, "tiger" | "summer">, text: string, x: number, y: number, age: number, crit: boolean): void {
-  const pop = crit ? 1 + 0.6 * Math.max(0, 1 - age / 8) : 1;
+  const pop = 1 + (crit ? 0.7 : 0.3) * Math.max(0, 1 - age / (crit ? 8 : 5));
   ctx.save();
   ctx.translate(x, y);
   ctx.scale(pop, pop);
@@ -13,15 +13,25 @@ export function drawSkinNumber(ctx: CanvasRenderingContext2D, style: Exclude<Dmg
   const th = themeOf(style)?.dmg;
   if (th) {
     // 테마 숫자: 두꺼운 테두리 · 글자색 · 치명타는 색이 바뀌고 옆에 테마 장식
+    // 테마 빛 번짐 (겹치면 밝아짐)
+    const a0 = ctx.globalAlpha;
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = a0 * (crit ? 0.5 : 0.3);
+    ctx.strokeStyle = crit ? th.critFill : th.fill;
+    ctx.lineWidth = crit ? 6 : 5;
+    ctx.strokeText(text, 0, 0);
+    ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = a0;
     ctx.strokeStyle = th.stroke;
     ctx.lineWidth = 3;
     ctx.strokeText(text, 0, 0);
-    ctx.fillStyle = crit ? th.critFill : th.fill;
+    // 위는 밝고 아래로 테마 색
+    const g = ctx.createLinearGradient(0, crit ? -8 : -6, 0, 0);
+    g.addColorStop(0, "#ffffff");
+    g.addColorStop(0.45, crit ? th.critFill : th.fill);
+    g.addColorStop(1, crit ? th.critFill : th.stroke);
+    ctx.fillStyle = g;
     ctx.fillText(text, 0, 0);
-    ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
-    ctx.fillText(text, 0, -1);
-    ctx.fillStyle = crit ? th.critFill : th.fill;
-    ctx.fillText(text, 0, 0.4);
     if (crit) {
       const w = ctx.measureText(text).width / 2 + 5;
       for (const side of [-1, 1]) {

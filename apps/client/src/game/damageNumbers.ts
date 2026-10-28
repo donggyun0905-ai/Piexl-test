@@ -177,8 +177,11 @@ export class DamageTracker {
     for (const n of this.numbers) {
       const age = (tick - n.born) / LIFE;
       const text = formatDamage(n.amount);
-      const x = snap(n.x);
-      const y = snap(n.y - 2 - RISE * age);
+      // 빨리 솟았다 천천히 멈춤 · 맞을 때마다 좌우로 번갈아 살짝 비껴 남 (겹쳐도 읽히게)
+      const ease = 1 - (1 - Math.min(1, age)) ** 3;
+      const side = (n.enemyId + n.born) % 2 ? 1 : -1;
+      const x = snap(n.x + side * 5 * ease);
+      const y = snap(n.y - 2 - RISE * 1.3 * ease);
       ctx.globalAlpha = Math.min(1, 2 - age * 2);
       if (this.style && (n.kind === "hit" || n.kind === "crit")) {
         if (this.style === "tiger") drawTigerNumber(ctx, text, x, y, tick - n.born, n.kind === "crit");
@@ -192,11 +195,29 @@ export class DamageTracker {
         drawCrit(ctx, text, x, y, tick - n.born);
         continue;
       }
+      // 처음 살짝 크게 튀어나왔다 제 크기로 (큰 피해일수록 더)
+      const big = n.kind === "hit" && n.amount >= 20;
+      const pop = 1 + (big ? 0.6 : 0.35) * Math.max(0, 1 - (tick - n.born) / 6);
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(pop, pop);
       // 죽음(검은 숫자)은 밝은 테두리
       ctx.strokeStyle = n.kind === "death" ? "#c8b8d8" : "#1a1622";
-      ctx.strokeText(text, x, y);
-      ctx.fillStyle = n.kind !== "hit" ? DOT_COLOR[n.kind] : n.amount >= 20 ? "#ffd060" : "#ffffff";
-      ctx.fillText(text, x, y);
+      ctx.strokeText(text, 0, 0);
+      if (big) {
+        // 큰 피해: 위는 흰빛 → 금빛
+        const g = ctx.createLinearGradient(0, -6, 0, 0);
+        g.addColorStop(0, "#fffbe0");
+        g.addColorStop(1, "#ffb830");
+        ctx.fillStyle = g;
+      } else ctx.fillStyle = n.kind !== "hit" ? DOT_COLOR[n.kind] : "#ffffff";
+      ctx.fillText(text, 0, 0);
+      // 막 나왔을 때 하얗게 번쩍
+      if (tick - n.born < 2) {
+        ctx.fillStyle = "rgba(255,255,255,0.6)";
+        ctx.fillText(text, 0, 0);
+      }
+      ctx.restore();
       // 상태이상: 숫자 왼쪽에 핏방울·불꽃·독 거품·해골·폭풍·녹아내린 구슬·푸른 불꽃
       if (n.kind !== "hit") drawDotIcon(ctx, n.kind, Math.round(x - ctx.measureText(text).width / 2 - 2 - dotIconWidth(n.kind)), y - 6);
     }

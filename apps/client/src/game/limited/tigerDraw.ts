@@ -1,5 +1,7 @@
 // 범 풍류 그리기: 바닥(발자국·백호 기운) · 위(탄 꼬리·불꽃·발톱·파동·기둥·글자·K.O 도장·까치) (화면 전용, 피해 숫자는 tigerNumber)
 import type { RunState } from "@pixel-rogue/shared";
+import { drawLight } from "./fxLight";
+import { additive, glow as softGlow } from "../render/pwFxBits";
 import type { Snap } from "../render/palette";
 import { drawMap, FUR, GOLD, HEAD_COLORS, INK, MAGPIE, MAGPIE_COLORS, PAW, TIGER_HEAD } from "./tigerArt";
 import { clawPath } from "./tigerNumber";
@@ -145,6 +147,7 @@ function drawSeal(ctx: Ctx, p: Part): void {
 
 function drawPart(ctx: Ctx, p: Part): void {
   const f = p.life / p.max;
+  if (drawLight(ctx, p)) return;
   switch (p.kind) {
     case "spark":
     case "dust":
@@ -153,6 +156,8 @@ function drawPart(ctx: Ctx, p: Part): void {
       ctx.fillStyle = p.color;
       const w = p.kind === "petal" ? 2 : p.kind === "dust" ? Math.round(p.size) : f > 0.5 ? 2 : 1;
       ctx.fillRect(p.x - w / 2, p.y - w / 2, w, p.kind === "petal" ? 1 : w);
+      // 불씨는 둘레가 은은히 빛남
+      if (p.kind === "spark") additive(ctx, () => softGlow(ctx, p.x, p.y, 4, p.color, f * 0.8));
       break;
     }
     case "claw":

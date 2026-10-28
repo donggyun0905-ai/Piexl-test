@@ -14,6 +14,8 @@ const RISE: readonly ThemeShape[] = ["ember", "mist", "firefly", "note", "heart"
 const FALL: readonly ThemeShape[] = ["petal", "leaf", "flake"];
 
 export class ThemeFx extends TigerFx {
+  /** 그리기용 틱 (상점 미리 보기) */
+  tick = 0;
   constructor(
     hooks: TigerHooks,
     readonly themes: ThemeSlots,
@@ -54,6 +56,9 @@ export class ThemeFx extends TigerFx {
     if (!t) return;
     this.burst(t, t.hit.bits, x, y, 5, 1.6, 16);
     this.hits++;
+    // 맞힌 순간 섬광 + 번갈아 휘는 빛 베기
+    this.add({ kind: "flash", x, y, vx: 0, vy: 0, life: 8, size: Math.max(8, r + 5), rot: 0, color: t.colors[0] });
+    this.add({ kind: "slash", x, y, vx: 0, vy: 0, life: 10, size: Math.max(8, r + 6), rot: rand(0, Math.PI * 2), color: t.colors[this.hits % 2 ? 1 : 0] });
     const size = Math.max(0.9, Math.min(1.8, r / 7));
     this.add({ kind: "theme", shape: t.hit.mark, x: x + rand(-r, r) * 0.3, y: y + rand(-r, r) * 0.3, vx: 0, vy: -0.05, life: 14, size: size * 1.6, rot: rand(-0.6, 0.6), color: t.colors[0], flip: this.hits % 2 === 0 });
   }
@@ -62,6 +67,7 @@ export class ThemeFx extends TigerFx {
     const t = this.themes.hit;
     if (!t) return;
     this.burst(t, t.hit.bits, x, y, boss ? 40 : 14, boss ? 2.4 : 1.6, boss ? 60 : 34);
+    this.add({ kind: "flash", x, y, vx: 0, vy: 0, life: boss ? 24 : 14, size: r + (boss ? 30 : 14), rot: 0, color: t.colors[0] });
     this.ringAt(x, y, r + 8, t.colors[0]);
     if (boss) {
       this.ringAt(x, y, r + 20, t.colors[1]);
@@ -91,6 +97,7 @@ export class ThemeFx extends TigerFx {
   protected override muzzle(x: number, y: number, a: number): void {
     const t = this.themes.hit;
     if (!t) return;
+    this.add({ kind: "flash", x: x + Math.cos(a) * 6, y: y + Math.sin(a) * 6, vx: 0, vy: 0, life: 6, size: 7, rot: 0, color: t.colors[0] });
     for (let i = 0; i < 3; i++) {
       const b = a + rand(-0.5, 0.5);
       this.bit(t, t.hit.bits, x + Math.cos(a) * 6, y + Math.sin(a) * 6, Math.cos(b) * rand(0.8, 1.5), Math.sin(b) * rand(0.8, 1.5), 9, 0.8);
@@ -100,11 +107,13 @@ export class ThemeFx extends TigerFx {
   protected override clawAt(x: number, y: number, a: number): void {
     const t = this.themes.hit;
     if (!t) return;
+    this.add({ kind: "slash", x, y, vx: 0, vy: 0, life: 10, size: 14, rot: a, color: t.colors[0] });
     this.add({ kind: "theme", shape: t.hit.mark, x: x + Math.cos(a) * 10, y: y + Math.sin(a) * 10, vx: 0, vy: 0, life: 12, size: 2, rot: a, color: t.colors[1] });
   }
 
   /** 상점 미리 보기: 그 칸 효과를 흉내 내어 조각을 만듦 (cx·cy 가운데) */
   preview(slot: "hit" | "idle" | "walk", tick: number, cx: number, cy: number): void {
+    this.tick = tick;
     if (slot === "hit" && tick % 14 === 0) this.hitAt(cx + rand(-6, 6), cy + rand(-4, 4), 7);
     if (slot === "hit" && tick % 70 === 35) this.ko(cx, cy, 8, false);
     if (slot === "idle") this.idleAura(cx, cy + 8);
