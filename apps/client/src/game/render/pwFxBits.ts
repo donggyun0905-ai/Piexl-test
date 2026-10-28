@@ -31,7 +31,9 @@ export function ring(ctx: Ctx, x: number, y: number, r: number, color: string, w
 }
 
 /** 부드러운 빛 (가운데가 밝음, white: 가운데 흰 빛) */
-export function glow(ctx: Ctx, x: number, y: number, r: number, color: string, a: number, white = 0): void {
+export function glow(ctx: Ctx, x: number, y: number, r: number, color: string, a0: number, white = 0): void {
+  // 큰 빛은 덜 진하게 (겹쳐 하얗게 타 버리지 않게)
+  const a = a0 * Math.min(1, Math.max(0.35, 34 / Math.max(1, r)));
   const g = ctx.createRadialGradient(x, y, 0, x, y, Math.max(1, r));
   if (white > 0) g.addColorStop(0, `rgba(255,255,255,${Math.min(1, a * white)})`);
   g.addColorStop(white > 0 ? 0.25 : 0, alpha(color, a));
@@ -158,14 +160,42 @@ export function warn(ctx: Ctx, fx: EffectState, c: string, f: number): void {
     ctx.strokeStyle = alpha(c, 0.9);
     ctx.lineWidth = 1;
     ctx.strokeRect(0, -w / 2, len, w);
-  } else {
-    ctx.fillStyle = alpha(c, 0.1);
+    // 앞으로 흐르는 화살 무늬
+    ctx.strokeStyle = `rgba(255,255,255,${0.35 + flash * 0.5})`;
+    const step = Math.max(10, w * 1.2);
     ctx.beginPath();
-    ctx.arc(fx.x, fx.y, fx.size, 0, Math.PI * 2);
+    for (let d = ((f * 40) % step); d < len - 2; d += step) {
+      ctx.moveTo(d, -w * 0.3);
+      ctx.lineTo(d + w * 0.3, 0);
+      ctx.lineTo(d, w * 0.3);
+    }
+    ctx.stroke();
+  } else {
+    const r = fx.size;
+    // 가장자리가 진한 바닥 · 안쪽부터 차오르는 빛 · 도는 점선 · 네 방향 눈금
+    const g = ctx.createRadialGradient(fx.x, fx.y, r * 0.5, fx.x, fx.y, r);
+    g.addColorStop(0, alpha(c, 0.06));
+    g.addColorStop(1, alpha(c, 0.28 + flash * 0.2));
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(fx.x, fx.y, r, 0, Math.PI * 2);
     ctx.fill();
-    glow(ctx, fx.x, fx.y, fx.size * f, c, 0.35 + flash * 0.3);
-    ring(ctx, fx.x, fx.y, fx.size, alpha(c, 0.95), 1.5);
-    ring(ctx, fx.x, fx.y, fx.size * f, `rgba(255,255,255,${0.5 + flash * 0.5})`, 1);
+    glow(ctx, fx.x, fx.y, r * f, c, 0.3 + flash * 0.3);
+    ring(ctx, fx.x, fx.y, r, alpha(c, 0.95), 1.5);
+    ctx.setLineDash([3, 4]);
+    ctx.lineDashOffset = -f * 30;
+    ring(ctx, fx.x, fx.y, r * 0.8, alpha(c, 0.6), 1);
+    ctx.setLineDash([]);
+    ring(ctx, fx.x, fx.y, Math.max(1, r * f), `rgba(255,255,255,${0.45 + flash * 0.55})`, 1.2);
+    ctx.strokeStyle = alpha(c, 0.9);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (let k = 0; k < 4; k++) {
+      const aa = (k / 4) * Math.PI * 2 + Math.PI / 4;
+      ctx.moveTo(fx.x + Math.cos(aa) * r * 1.02, fx.y + Math.sin(aa) * r * 1.02);
+      ctx.lineTo(fx.x + Math.cos(aa) * r * 1.16, fx.y + Math.sin(aa) * r * 1.16);
+    }
+    ctx.stroke();
   }
   ctx.restore();
 }

@@ -30,7 +30,7 @@ describe("패왕전", () => {
     for (const m of PW_MODES) expect(new Set(PW_MODE[m].maps).size, m).toBe(5);
     for (const id of Object.keys(PW_ARENAS) as PwArenaId[]) {
       const def = PW_ARENAS[id];
-      const mode = PW_MODES.find((m) => PW_MODE[m].maps.includes(id))!;
+      const mode = PW_MODES.find((m) => PW_MODE[m].maps.includes(id)) ?? (id === "practice" ? "trio" : undefined)!;
       expect(mode, id).toBeDefined();
       const s = createPvp(1, mode, [{ characterId: "warden" }], id);
       expect(s.pvp!.arena).toBe(id);

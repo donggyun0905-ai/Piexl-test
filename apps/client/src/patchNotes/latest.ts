@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.192",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "붐버 기본 공격은 마우스 위치 (자동 조준·유도 없음)",
+        "플라이: 신기루(스킬 3)를 쓰면 다음 공격은 꼭 붉은 급습(피해 2배)",
+        "연습장 경기장은 늘 장애물 없는 '연습 초원'",
+        "패왕전 머리 위 정보: 회복 초록 +숫자 · 보호막 파랑 +숫자 · 내가 받은 피해 빨강 −숫자 · 기절·둔화·속박·침묵 · 공격력↑·피해 감소·속도↑·재생·은신 · 풋내기 버팀!",
+        "이펙트 더 다듬음: 큰 빛이 하얗게 뭉개지지 않게 · 예고 원에 도는 점선·눈금, 줄 예고에 흐르는 화살 무늬 · 회오리는 가는 칼날과 잔상 · 그림자는 보랏빛 연기, 피는 핏방울, 기계는 빛나는 회로 불똥, 독은 거품, 잎은 날리는 잎사귀, 충격은 돌 조각, 야수는 휘어진 발톱 자국 · 장판 바닥은 더 맑게",
+      ],
+      en: [
+        "Bomber basic attacks go where your mouse is (no auto-aim or homing)",
+        "Fly: after Mirage (skill 3), the next attack is always a red swoop (double damage)",
+        "The Training Ground always uses the obstacle-free Practice Meadow",
+        "Champion Clash overhead info: heals in green +numbers · shields in blue +numbers · damage you take in red −numbers · Stunned, Slowed, Rooted, Silenced · Attack↑, Guard, Speed↑, Regen, Hidden · Novice Holding on!",
+        "More effect polish: big glows no longer wash out to white · circle telegraphs get a spinning dashed ring and ticks, line telegraphs get flowing arrows · spins use thin blades with afterimages · shadow is violet smoke, blood is droplets, machines are glowing circuit sparks, poison is bubbles, leaves flutter, impacts throw rock chips, beasts leave curved claw marks · clearer ground fields",
+      ],
+      ja: [
+        "ボマーの通常攻撃はマウスの位置 (自動照準・誘導なし)",
+        "フライ: 蜃気楼(スキル3)を使うと次の攻撃は必ず赤い急襲(ダメージ2倍)",
+        "練習場は常に障害物のない「練習の草原」",
+        "覇王戦の頭上の情報: 回復 緑 +数字 · シールド 青 +数字 · 自分が受けたダメージ 赤 −数字 · 気絶・鈍化・拘束・沈黙 · 攻撃力↑・被ダメ減・速度↑・再生・隠密 · 見習い 踏ん張り!",
+        "エフェクトをさらに調整: 大きな光が白く潰れないように · 円の予告に回る点線と目盛り、線の予告に流れる矢印 · 回転は細い刃と残像 · 影は紫の煙、血は血しぶき、機械は光る回路の火花、毒は泡、葉は舞う葉、衝撃は石の破片、獣は曲がった爪痕 · フィールドの床をより澄んだ色に",
+      ],
+    },
+  },
+  {
     version: "0.48.191",
     date: "2026-10-28",
     items: {

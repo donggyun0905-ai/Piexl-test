@@ -1,5 +1,6 @@
 // 붐버(테라코어, 시즌 2): "폭발은 예술이다". 던지고·붙이고·깔고·쏘아 올려 터뜨림
 // 예술 연쇄: 1초 안에 또 터지면 한 칸씩 쌓여 폭발이 커짐 · 터져 쓰러진 적 자리에 여진. 수치는 weaponsBomber.BOMBER, 아이템은 itemsBomber
+import { manualAim } from "./pwBasic";
 import { TICK_RATE } from "../constants";
 import { BOMBER_PERKS as K } from "../itemsBomber";
 import { createRng, deriveSeed } from "../rng";
@@ -132,11 +133,13 @@ function attack(s: RunState): void {
   const dmg = p.stats.damage;
   const more = hasPerk(p, "bmMore") ? K.bmMore.n : 0;
   // 사거리 안의 적만 (폭발 반경만큼 사거리를 넘어 맞히지 않게) · 네이팜은 수동 조준이면 누른 곳으로
+  // 패왕전 사람은 늘 마우스 자리 (자동 조준 없음)
+  const manual = manualAim(s, p.stats.range);
   const aimed = st.mode === "napalm" && p.aimDist !== undefined;
-  const t = aimed ? null : nearest(s, p.stats.range);
+  const t = aimed || manual ? null : nearest(s, p.stats.range);
   const far = aimed ? Math.min(p.aimDist!, p.stats.range) : p.stats.range * 0.7;
-  const tx = t ? t.x : p.x + p.faceX * far;
-  const ty = t ? t.y : p.y + p.faceY * far;
+  const tx = manual ? manual.x : t ? t.x : p.x + p.faceX * far;
+  const ty = manual ? manual.y : t ? t.y : p.y + p.faceY * far;
   const flight = Math.max(8, st.fuse);
   const throwAt = (x: number, y: number, extra: Partial<Bomb> = {}) => toss(p, { x, y, sx: p.x, sy: p.y - 6, t: flight, dmg, r: st.r, mode: st.mode, ...extra });
   switch (st.mode) {
@@ -146,7 +149,7 @@ function attack(s: RunState): void {
     case "rocket":
       for (let i = 0; i <= more; i++) {
         const a = Math.atan2(ty - p.y, tx - p.x) + (i - more / 2) * 0.15;
-        s.projectiles.push({ id: s.nextId++, fromPlayer: true, x: p.x, y: p.y - 4, prevX: p.x, prevY: p.y - 4, r: 3, vx: Math.cos(a) * 3.8, vy: Math.sin(a) * 3.8, damage: dmg, ticksLeft: Math.ceil((p.stats.range * 1.1) / 3.8), homing: true, seek: true, spirit: "bmRocket" });
+        s.projectiles.push({ id: s.nextId++, fromPlayer: true, x: p.x, y: p.y - 4, prevX: p.x, prevY: p.y - 4, r: 3, vx: Math.cos(a) * 3.8, vy: Math.sin(a) * 3.8, damage: dmg, ticksLeft: Math.ceil((p.stats.range * 1.1) / 3.8), homing: !manual, seek: !manual, spirit: "bmRocket" });
       }
       if (roll(s, "rmini", 0) < B.rocketMini) backMissiles(s, B.rocketMiniN, dmg * B.rocketMiniMul, 10, true);
       return;

@@ -147,9 +147,17 @@ const spin: Draw = (ctx, { x, y, r, c, t, f }) => {
   const rr = Math.max(14, r);
   const rot = easeOut(f) * Math.PI * 5;
   additive(ctx, () => {
-    for (let k = 0; k < 3; k++) crescent(ctx, x, y, rr, rot + (k / 3) * Math.PI * 2, 0.9, rr * 0.3, c, t * 0.9);
-    glow(ctx, x, y, rr * 0.7, c, 0.4 * t);
-    shock(ctx, x, y, rr * (0.8 + f * 0.3), c, 0.5 * t, rr * 0.15);
+    // 칼날 셋 + 지나간 자리의 가는 잔상
+    for (let k = 0; k < 3; k++) {
+      const a0 = rot + (k / 3) * Math.PI * 2;
+      crescent(ctx, x, y, rr, a0, 0.7, rr * 0.16, c, t * 0.75);
+      ctx.strokeStyle = alpha(c, 0.35 * t);
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(x, y, rr * 0.92, a0 - 1.6, a0 - 0.6);
+      ctx.stroke();
+    }
+    shock(ctx, x, y, rr * (0.8 + f * 0.3), c, 0.4 * t, rr * 0.12);
   });
 };
 
@@ -205,8 +213,8 @@ const aura: Draw = (ctx, { x, y, r, c, t, f, seed, fx }) => {
 
 const field: Draw = (ctx, { x, y, r, c, t, f }) => {
   const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-  g.addColorStop(0, alpha(c, 0.15 + 0.1 * t));
-  g.addColorStop(0.85, alpha(c, 0.3 + 0.15 * t));
+  g.addColorStop(0, alpha(c, 0.08 + 0.06 * t));
+  g.addColorStop(0.85, alpha(c, 0.2 + 0.1 * t));
   g.addColorStop(1, alpha(c, 0));
   ctx.fillStyle = g;
   ctx.beginPath();

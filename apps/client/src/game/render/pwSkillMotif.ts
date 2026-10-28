@@ -36,7 +36,7 @@ const px = (ctx: Ctx, x: number, y: number, w: number, h: number, c: string) => 
 
 const SCALE = 1.7;
 /** 빛나는 느낌 (겹치면 밝아짐) · 나머지(연기·피·잎 등)는 그냥 칠함 */
-const GLOWING = new Set(["fire", "elements", "ice", "lightning", "holy", "spirit", "tech", "time", "wind", "blade"]);
+const GLOWING = new Set(["fire", "elements", "ice", "lightning", "holy", "spirit", "tech", "time", "wind", "blade", "beast"]);
 
 type Draw = (ctx: Ctx, x: number, y: number, k: number, t: number, f: number, c: string, fx: EffectState) => void;
 
@@ -65,16 +65,30 @@ const MOTIFS: Record<string, Draw> = {
     ctx.stroke();
   },
   poison: (ctx, x, y, k, t, f) => {
-    ctx.strokeStyle = k % 2 ? "#a8ff6a" : "#6ac83a";
-    ctx.lineWidth = 1;
+    // 떠오르다 터지는 독 거품 (밝은 점 하나)
+    const yy = y - f * 9;
+    const r = 1.4 + (k % 3) * 0.6;
+    ctx.fillStyle = `rgba(110,210,70,${0.35 * t})`;
     ctx.beginPath();
-    ctx.arc(x, y - f * 8, 1.5 + (k % 3) * 0.7, 0, Math.PI * 2);
+    ctx.arc(x, yy, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = `rgba(190,255,120,${0.9 * t})`;
+    ctx.lineWidth = 0.6;
     ctx.stroke();
+    ctx.fillStyle = `rgba(255,255,255,${0.8 * t})`;
+    ctx.fillRect(x - r * 0.4, yy - r * 0.5, 0.6, 0.6);
   },
   shadow: (ctx, x, y, k, t, f) => {
-    ctx.fillStyle = k % 3 ? "#1a1424" : "#5a3a8a";
+    // 흩어지며 사라지는 보랏빛 그림자 연기
+    const yy = y - f * 7;
+    const r = (2 + (k % 3)) * (0.6 + f * 0.6);
+    const g = ctx.createRadialGradient(x, yy, 0, x, yy, r);
+    g.addColorStop(0, `rgba(40,20,70,${0.55 * t})`);
+    g.addColorStop(0.6, `rgba(90,50,150,${0.3 * t})`);
+    g.addColorStop(1, "rgba(90,50,150,0)");
+    ctx.fillStyle = g;
     ctx.beginPath();
-    ctx.arc(x + Math.sin(f * 6 + k) * 2, y - f * 7, 2.5 - f * 1.5, 0, Math.PI * 2);
+    ctx.arc(x + Math.sin(f * 6 + k) * 1.5, yy, r, 0, Math.PI * 2);
     ctx.fill();
   },
   holy: (ctx, x, y, k, t, f) => {
@@ -97,13 +111,32 @@ const MOTIFS: Record<string, Draw> = {
     glow(ctx, x, yy, s, "#fff0a0", 0.6 * t);
   },
   blood: (ctx, x, y, k, t, f) => {
-    px(ctx, x, y + f * 6, 2, 2, "#c8102a");
-    if (k % 2) px(ctx, x, y + f * 6 - 1, 1, 1, "#ff5a6a");
+    // 튀는 핏방울 (둥근 머리 + 가는 꼬리)
+    const yy = y + f * 5 - (1 - f) * 2;
+    ctx.fillStyle = `rgba(200,16,42,${t})`;
+    ctx.beginPath();
+    ctx.arc(x, yy, 1.1 + (k % 2) * 0.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillRect(x - 0.3, yy - 2.2, 0.6, 2);
+    ctx.fillStyle = `rgba(255,120,130,${0.8 * t})`;
+    ctx.fillRect(x - 0.5, yy - 0.6, 0.5, 0.5);
   },
   nature: (ctx, x, y, k, t, f) => {
-    const sway = Math.sin(f * 5 + k) * 3;
-    px(ctx, x + sway, y - f * 6, 3, 2, k % 2 ? "#6ad84a" : "#a8e86a");
-    px(ctx, x + sway + 1, y - f * 6 + 2, 1, 1, "#3a8a2a");
+    // 흔들리며 날리는 잎사귀 (잎맥 하나)
+    ctx.save();
+    ctx.translate(x + Math.sin(f * 5 + k) * 3, y - f * 7);
+    ctx.rotate(f * 4 + k);
+    ctx.fillStyle = k % 2 ? `rgba(110,216,74,${t})` : `rgba(168,232,106,${t})`;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 2.2, 1, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = `rgba(40,110,30,${t})`;
+    ctx.lineWidth = 0.4;
+    ctx.beginPath();
+    ctx.moveTo(-2, 0);
+    ctx.lineTo(2, 0);
+    ctx.stroke();
+    ctx.restore();
   },
   spirit: (ctx, x, y, k, t, f) => {
     if (k % 3 === 0) {
@@ -118,12 +151,16 @@ const MOTIFS: Record<string, Draw> = {
     }
   },
   tech: (ctx, x, y, k, t, f) => {
-    px(ctx, x + (k % 2 ? f * 5 : -f * 5), y - f * 3, 2, 2, k % 2 ? "#5ad8ff" : "#ffd060");
-    if (k % 4 === 0) {
-      ctx.strokeStyle = "#5ad8ff";
-      ctx.lineWidth = 1;
-      ctx.strokeRect(Math.round(x) - 2, Math.round(y) - 2, 4, 4);
-    }
+    // 빛나는 회로 불똥: 꺾인 짧은 선 + 끝에 빛 점
+    const d = f * 5 * (k % 2 ? 1 : -1);
+    ctx.strokeStyle = k % 2 ? `rgba(90,216,255,${t})` : `rgba(255,208,96,${t})`;
+    ctx.lineWidth = 0.7;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + d, y);
+    ctx.lineTo(x + d, y - 2.5);
+    ctx.stroke();
+    glow(ctx, x + d, y - 2.5, 2, k % 2 ? "#5ad8ff" : "#ffd060", t, 1);
   },
   wind: (ctx, x, y, k, t, f) => {
     ctx.strokeStyle = "#e8f4ff";
@@ -142,7 +179,16 @@ const MOTIFS: Record<string, Draw> = {
     ctx.stroke();
   },
   impact: (ctx, x, y, k, t, f) => {
-    px(ctx, x + (rnd(k, 3) - 0.5) * f * 12, y + (rnd(3, k) - 0.5) * f * 12 - f * 4, 2, 2, k % 2 ? "#c8b090" : "#ffffff");
+    // 튀어 오르는 돌 조각 (작은 삼각형)
+    const dx = (rnd(k, 3) - 0.5) * f * 14;
+    const dy = (rnd(3, k) - 0.5) * f * 10 - f * (1 - f) * 16;
+    ctx.fillStyle = k % 2 ? `rgba(200,176,144,${t})` : `rgba(140,120,100,${t})`;
+    ctx.beginPath();
+    ctx.moveTo(x + dx, y + dy - 1.5);
+    ctx.lineTo(x + dx + 1.5, y + dy + 1);
+    ctx.lineTo(x + dx - 1.5, y + dy + 1);
+    ctx.closePath();
+    ctx.fill();
   },
   blade: (ctx, x, y, k) => {
     ctx.strokeStyle = k % 2 ? "#ffffff" : "#c8d8ff";
@@ -152,16 +198,19 @@ const MOTIFS: Record<string, Draw> = {
     ctx.lineTo(x + 4, y - 2);
     ctx.stroke();
   },
-  beast: (ctx, x, y, k) => {
+  beast: (ctx, x, y, k, t) => {
     if (k % 2) return;
-    ctx.strokeStyle = "#ffffff";
-    ctx.lineWidth = 1;
+    // 휘어진 발톱 자국 셋 (흰 빛)
+    ctx.strokeStyle = `rgba(255,255,255,${t})`;
+    ctx.lineWidth = 0.9;
+    ctx.lineCap = "round";
     for (let j = -1; j <= 1; j++) {
       ctx.beginPath();
-      ctx.moveTo(x - 3 + j * 2, y - 3);
-      ctx.lineTo(x + 1 + j * 2, y + 3);
+      ctx.moveTo(x - 3 + j * 2, y - 4);
+      ctx.quadraticCurveTo(x + j * 2, y - 1, x + 1.5 + j * 2, y + 4);
       ctx.stroke();
     }
+    ctx.lineCap = "butt";
   },
 };
 

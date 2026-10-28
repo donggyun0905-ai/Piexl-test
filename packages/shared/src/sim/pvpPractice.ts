@@ -17,7 +17,8 @@ const DUMMY_GAP_Y = 72;
 export function createPractice(seed: number, characterId: CharacterId, arena?: PwArenaId, dummies?: readonly CharacterId[]): RunState {
   const rng = createRng(deriveSeed(seed, "pwPractice"));
   const foes = [0, 1, 2].map((k) => dummies?.[k] ?? rng.pick(CHARACTER_IDS));
-  const s = createPvp(seed, "trio", [{ characterId }, null, null, ...foes.map((c) => ({ characterId: c, ai: true }))], arena);
+  // 경기장은 늘 장애물 없는 초원
+  const s = createPvp(seed, "trio", [{ characterId }, null, null, ...foes.map((c) => ({ characterId: c, ai: true }))], arena ?? "practice");
   const pv = s.pvp!;
   pv.seats[1]!.on = pv.seats[2]!.on = false;
   pv.practice = { dummy: "still", noCd: true };

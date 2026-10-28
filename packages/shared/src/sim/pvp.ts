@@ -44,7 +44,8 @@ export function pwSeatCount(mode: PwMode): number {
 /** map: 고른 경기장 (없으면 그 대결의 경기장 5개 중 시드로 무작위, 랭크전은 늘 무작위) */
 export function createPvp(seed: number, mode: PwMode, humans: readonly (PwHuman | null)[], map?: PwArenaId): RunState {
   const def = PW_MODE[mode];
-  const arenaId = map && def.maps.includes(map) ? map : createRng(deriveSeed(seed, "pwMap")).pick(def.maps);
+  // 연습장 초원은 어느 대결로도 씀
+  const arenaId = map && (def.maps.includes(map) || map === "practice") ? map : createRng(deriveSeed(seed, "pwMap")).pick(def.maps);
   const arena = PW_ARENAS[arenaId];
   const n = pwSeatCount(mode);
   const size = def.allies + 1;
