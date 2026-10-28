@@ -1,5 +1,5 @@
 // 패왕전 준비방: 무기 1개 · 패시브 10개(여러 번 가질 수 있는 것은 겹쳐서) · 사용 아이템 2개 고르기 (연습장 아이템 칸을 그대로 씀)
-import { CHARACTERS, characterWeapons, PASSIVES, PW, pwCanStack, pwPassiveChoices, pwStackMax, USE_ITEM_IDS, type CharacterId, type PassiveDef, type PassiveId, type PwLoadout, type UseItemId, type WeaponId } from "@pixel-rogue/shared";
+import { CHARACTERS, characterWeapons, PW, pwCanStack, pwPassiveChoices, pwStackMax, USE_ITEM_IDS, type CharacterId, type PassiveId, type PwLoadout, type UseItemId, type WeaponId } from "@pixel-rogue/shared";
 import { useMemo, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { ItemIcon, type IconItem } from "../game/itemIcon";
 import { ItemTip, tipPos, useCloseOutside, type TipPos } from "../game/ItemTip";
@@ -22,12 +22,8 @@ type Tip = { item: IconItem } & TipPos;
 function groupsFor(tab: Tab, c: CharacterId, weapon: WeaponId): Group<IconItem>[] {
   if (tab === "weapon") return [{ key: "mine", title: "practiceUsable", who: c, open: true, list: characterWeapons(c).map((id) => ({ kind: "weapon", id })) }];
   if (tab === "use") return [{ key: "use", title: "practiceUse", open: true, list: USE_ITEM_IDS.map((id) => ({ kind: "use", id })) }];
-  const all = pwPassiveChoices(c, weapon);
-  const own = all.filter((id) => (PASSIVES[id] as PassiveDef).exclusive === c);
-  const groups: Group<IconItem>[] = [];
-  if (own.length) groups.push({ key: "mine", title: "practiceOnly", who: c, open: true, list: own.map((id) => ({ kind: "passive", id })) });
-  groups.push({ key: "common", title: "practiceCommon", open: true, list: all.filter((id) => !own.includes(id)).map((id) => ({ kind: "passive", id })) });
-  return groups;
+  // 캐릭터 전용만 고름 (공용은 전투에 나갈 때 무작위)
+  return [{ key: "mine", title: "practiceOnly", who: c, open: true, list: pwPassiveChoices(c, weapon).map((id) => ({ kind: "passive", id })) }];
 }
 
 export function PwPrep({ characterId, lang, t, onStart, onBack }: Props) {
@@ -92,7 +88,7 @@ export function PwPrep({ characterId, lang, t, onStart, onBack }: Props) {
       <h2>
         {t("pwPrep")} · {t(characterId)}
       </h2>
-      <p className="hint">{t("pwPrepHint").replace("{p}", String(PW.passives)).replace("{u}", String(PW.uses))}</p>
+      <p className="hint">{t("pwPrepHint").replace("{p}", String(PW.passives)).replace("{u}", String(PW.uses)).replace("{r}", String(PW.randomPassives))}</p>
       <div className="pw-chosen">
         {chosen.map((it, i) => (
           <span key={`${it.kind}${it.id}${i}`} className={`pw-chosen-slot ${it.kind}`} title={itemName(it.kind, it.id, lang)}>

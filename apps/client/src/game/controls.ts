@@ -41,6 +41,8 @@ export interface ControlsOptions {
 export class Controls {
   /** 자동 공격 (기본). 끄면 수동 조준 */
   autoAim = true;
+  /** 패왕전: 자동 공격 없이 직접 조준만 */
+  manualOnly = false;
   private keys = new Set<string>();
   private mouseX: number | null = null;
   private mouseY = 0;
@@ -169,7 +171,7 @@ export class Controls {
   }
 
   setAutoAim(on: boolean): void {
-    this.autoAim = on;
+    this.autoAim = on && !this.manualOnly;
     this.opt.onAutoAimChange(on);
   }
 

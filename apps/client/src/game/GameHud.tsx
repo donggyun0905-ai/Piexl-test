@@ -12,6 +12,8 @@ interface Props {
   t: (key: TextKey) => string;
   touchMode: boolean;
   autoAim: boolean;
+  /** 패왕전: 자동 공격 버튼 없음 */
+  manualOnly?: boolean;
   onPause: (() => void) | null;
   onAutoAim: (on: boolean) => void;
   hpFillRef: RefObject<HTMLDivElement | null>;
@@ -28,7 +30,7 @@ function Toggle({ on, label, keyName, touchMode, t, onClick }: { on: boolean; la
   );
 }
 
-export function GameHud({ t, touchMode, autoAim, onPause, onAutoAim, hpFillRef, hpTextRef, infoRef }: Props) {
+export function GameHud({ t, touchMode, autoAim, manualOnly, onPause, onAutoAim, hpFillRef, hpTextRef, infoRef }: Props) {
   const { showStats, showHitbox, showRange } = useSettings();
   const toggle = { touchMode, t };
   return (
@@ -48,7 +50,7 @@ export function GameHud({ t, touchMode, autoAim, onPause, onAutoAim, hpFillRef, 
       <Toggle {...toggle} on={showStats} label="statsToggle" keyName="C" onClick={() => setSettings({ showStats: !showStats })} />
       <Toggle {...toggle} on={showRange} label="rangeToggle" keyName="G" onClick={() => setSettings({ showRange: !showRange })} />
       <Toggle {...toggle} on={showHitbox} label="hitboxToggle" keyName="H" onClick={() => setSettings({ showHitbox: !showHitbox })} />
-      <Toggle {...toggle} on={autoAim} label="autoAim" keyName="R" onClick={() => onAutoAim(!autoAim)} />
+      {!manualOnly && <Toggle {...toggle} on={autoAim} label="autoAim" keyName="R" onClick={() => onAutoAim(!autoAim)} />}
     </div>
   );
 }

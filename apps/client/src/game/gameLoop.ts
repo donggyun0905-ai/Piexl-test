@@ -67,6 +67,11 @@ export function startGameLoop(o: LoopOptions): () => void {
   const { run, ctx, controls, t, lang } = o;
   // 추적자는 숫자 1·2·3이 스킬 (아이템은 Q·E)
   controls.skillKeys = run.player.characterId === "tracker";
+  // 패왕전은 자동 공격 없이 직접 조준만
+  if (run.pvp) {
+    controls.manualOnly = true;
+    controls.setAutoAim(false);
+  }
   /** 추적자 암습 저격 동안 자동 공격을 잠깐 끔 (끝나면 다시 켬) */
   let autoBack = false;
   let acc = 0;

@@ -89,7 +89,8 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
     const seat = pv.seats[i]!;
     s.prompt = { kind: "none" };
     if (!inPlay(s, i)) return;
-    let input = seat.human ? (inputs[i] ?? EMPTY_INPUT) : botInput(s);
+    // 사람은 자동 공격 없이 직접 조준만 (AI는 그대로)
+    let input = seat.human ? { ...(inputs[i] ?? EMPTY_INPUT), autoAim: false } : botInput(s);
     // 기절: 아무것도 못 함 · 묶임: 못 움직임 · 느려짐: 반만
     if (seat.stun > 0) input = EMPTY_INPUT;
     else if (seat.root > 0) input = { ...input, moveX: 0, moveY: 0, dash: false };

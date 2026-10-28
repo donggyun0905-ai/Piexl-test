@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.163",
+    date: "2026-10-28",
+    items: {
+      ko: ["패왕전: 준비방에서는 캐릭터 전용 패시브 5개만 고르고, 공용 패시브 5개는 전투에 나갈 때 무작위로 받음 (AI도 같은 규칙) · 자동 공격 없이 직접 조준해 공격 (자동 공격 버튼·R 키 없음)"],
+      en: ["Champion Battle: in preparation you pick only 5 character passives; 5 common passives are given at random when the battle starts (same for AI) · No auto-attack, you aim and attack yourself (no auto-attack button or R key)"],
+      ja: ["覇王戦: 準備部屋ではキャラ専用パッシブ5個だけ選び、共通パッシブ5個は戦闘開始時にランダムで付与（AIも同じ）· オートアタックなし、自分で照準して攻撃（オートアタックボタン・Rキーなし）"],
+    },
+  },
+  {
     version: "0.48.162",
     date: "2026-10-28",
     items: {

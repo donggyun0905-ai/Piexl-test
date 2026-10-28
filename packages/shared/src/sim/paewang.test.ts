@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { TICK_RATE } from "../constants";
+import { CHARACTER_IDS, CHARACTERS } from "../content";
+import { PASSIVE_IDS, PASSIVES } from "../items";
 import { PW, PW_MODE, PW_MODES, PW_TIERS } from "../paewangDefs";
 import { PW_ARENAS, type PwArenaId } from "../paewangMaps";
 import { distanceField, tileAt, TILE_FLOOR } from "./layout";
@@ -37,7 +39,7 @@ describe("패왕전", () => {
     }
   });
 
-  it("모두 진짜 캐릭터 자리 · 보호막 500 · AI는 무작위 무기·패시브 10·서로 다른 아이템 2", () => {
+  it("모두 진짜 캐릭터 자리 · 보호막 500 · 공용 패시브 5개는 무작위 · AI는 전용 패시브도 무작위 · 서로 다른 아이템 2", () => {
     expect(PW_TIERS).toHaveLength(PW.gunLevels);
     for (const mode of PW_MODES) {
       const s = createPvp(3, mode, [{ characterId: "drifter", loadout: { weapon: "crossbow", passives: [], uses: [] } }]);
@@ -45,20 +47,29 @@ describe("패왕전", () => {
       const players = allPlayers(s);
       expect(players[0]!.stats.maxHp, mode).toBeGreaterThanOrEqual(90);
       expect(players[0]!.shieldPts).toBe(PW.shield);
+      // 나(전용 패시브를 안 고름)는 공용 5개만
+      if (mode !== "gungame") expect(players[0]!.passives.length, mode).toBe(PW.randomPassives);
       const ai = players[players.length - 1]!;
-      if (mode !== "gungame") expect(ai.passives.length, mode).toBe(PW.passives);
+      if (mode !== "gungame") expect(ai.passives.length, mode).toBeGreaterThanOrEqual(PW.randomPassives);
+      if (mode !== "gungame") expect(ai.passives.length, mode).toBeLessThanOrEqual(PW.passives + PW.randomPassives);
       expect(new Set(ai.useSlots).size, mode).toBe(2);
     }
   });
 
-  it("장비 규칙: 같은 패시브 3개까지(효과 아이템 1) · 사용 아이템은 서로 달라야", () => {
+  it("장비 규칙: 고르는 것은 캐릭터 전용 패시브만 · 같은 패시브 3개까지(효과 아이템 1) · 사용 아이템은 서로 달라야", () => {
     const pool = pwPassiveChoices("warden", "greatblade");
-    const stack = pool.find((id) => pwStackMax(id) === 3)!;
-    const lo = { weapon: "greatblade" as const, passives: [stack, stack, stack], uses: ["potion" as never, "bomb" as never] };
-    expect(pwLoadoutOk("warden", lo)).toBe(true);
-    expect(pwLoadoutOk("warden", { ...lo, passives: [stack, stack, stack, stack] })).toBe(false);
-    expect(pwLoadoutOk("warden", { ...lo, uses: ["potion" as never, "potion" as never] })).toBe(false);
-    expect(pwLoadoutOk("warden", { ...lo, weapon: "crossbow" })).toBe(false);
+    expect(pool.every((id) => (PASSIVES[id] as { exclusive?: string }).exclusive === "warden")).toBe(true);
+    // 같은 것을 3개까지 가질 수 있는 전용 패시브가 있는 캐릭터로
+    const c = CHARACTER_IDS.find((id) => pwPassiveChoices(id, CHARACTERS[id].startWeapon).some((x) => pwStackMax(x) === 3))!;
+    const weapon = CHARACTERS[c].startWeapon;
+    const stack = pwPassiveChoices(c, weapon).find((id) => pwStackMax(id) === 3)!;
+    const lo = { weapon, passives: [stack, stack, stack], uses: ["potion" as never, "bomb" as never] };
+    expect(pwLoadoutOk(c, lo)).toBe(true);
+    expect(pwLoadoutOk(c, { ...lo, passives: [stack, stack, stack, stack] })).toBe(false);
+    expect(pwLoadoutOk(c, { ...lo, uses: ["potion" as never, "potion" as never] })).toBe(false);
+    // 공용 패시브는 고를 수 없음
+    const common = PASSIVE_IDS.find((id) => (PASSIVES[id] as { exclusive?: string; special?: boolean }).exclusive === undefined)!;
+    expect(pwLoadoutOk(c, { ...lo, passives: [common] })).toBe(false);
   });
 
   it("여섯 모드 모두 20초 동안 문제없이 · 같은 시드면 같은 결과 · 누군가 맞음", () => {

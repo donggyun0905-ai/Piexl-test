@@ -58,8 +58,9 @@ export const PW_TIERS: readonly CharacterId[] = [
 
 /** 패왕전 공통 수치 */
 export const PW = {
-  /** 준비방: 고르는 패시브 수 · 사용 아이템 수 */
-  passives: 10,
+  /** 준비방: 고르는 캐릭터 전용 패시브 수 · 전투에 나가면 무작위로 받는 공용 패시브 수 · 사용 아이템 수 */
+  passives: 5,
+  randomPassives: 5,
   uses: 2,
   /** 같은 패시브는 이만큼까지 (효과 아이템은 하나) · 사용 아이템은 서로 달라야 함 */
   stackMax: 3,
