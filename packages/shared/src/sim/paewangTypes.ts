@@ -242,6 +242,8 @@ export interface PvpState {
   wins?: Record<number, number>;
   round?: number;
   lastRound?: { team: number; at: number };
+  /** 판이 끝나고 다음 판 자리 정리를 할 틱 (그때까지 경기장을 그대로 보여 줌) */
+  resetAt?: number;
   readyAt?: number;
   /** 연습장: 허수아비(가만히 · 움직이기만 · 싸움) · 스킬 대기 없음. 판이 끝나지 않고 쓰러지면 바로 다시 참 (sim/pvpPractice) */
   practice?: PwPractice;

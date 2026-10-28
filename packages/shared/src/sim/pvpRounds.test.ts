@@ -28,12 +28,15 @@ describe("패왕전 3판 2선승", () => {
     }
     expect(s.pvp!.round).toBe(2);
     expect(s.pvp!.seats.filter((x) => x.team === 1).map((x) => x.deaths)).toEqual([1, 1, 1]);
+    // 마지막에 쓰러진 뒤 3초는 그대로 보여 주고, 그다음 자리 정리
+    expect(s.pvp!.resetAt).toBe(s.tick + PW.roundWait);
+    while (s.pvp!.resetAt !== undefined) stepPvp(s, [EMPTY_INPUT]);
     expect(s.pvp!.seats.map((x) => x.on)).toEqual([true, false, false, true, false, false]);
     // 다음 판 준비 동안은 아무도 못 움직임
     expect(s.pvp!.readyAt).toBeGreaterThan(s.tick);
     for (let k = 0; k < 8000 && !s.over; k++) {
       allPlayers(s)[0]!.hp = allPlayers(s)[0]!.stats.maxHp;
-      if (s.tick > s.pvp!.readyAt!) downFoes(s);
+      if (s.tick > s.pvp!.readyAt! && s.pvp!.resetAt === undefined) downFoes(s);
       stepPvp(s, [EMPTY_INPUT]);
     }
     expect(s.over && s.won).toBe(true);

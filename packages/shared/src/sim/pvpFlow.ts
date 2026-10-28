@@ -7,7 +7,7 @@ import { inRect, spotXY } from "./paewangGrid";
 import { gunSwap } from "./paewangKit";
 import { allPlayers, eachSeat, useSeat } from "./party";
 import { inPlay } from "./pvpWorld";
-import { nextRound } from "./pvpRounds";
+import { nextRound, resetRound } from "./pvpRounds";
 import { recapEnv, recapReset } from "./pvpRecap";
 import { clearSkills } from "./pwSkill";
 import type { RunState } from "./types";
@@ -148,6 +148,11 @@ export function watchTeam(s: RunState): void {
 /** 이긴 편 정하기: 한 편만 남으면 (데스매치는 21레벨 처치로) */
 export function decide(s: RunState): void {
   const pv = s.pvp!;
+  // 판이 끝나 정리를 기다리는 중: 그대로 보여 주다가 때가 되면 다음 판 준비
+  if (pv.resetAt !== undefined) {
+    if (s.tick >= pv.resetAt) resetRound(s);
+    return;
+  }
   if (pv.winner === undefined && pv.mode !== "gungame") {
     const alive = new Set(pv.seats.filter((x, j) => inPlay(s, j) || x.back !== undefined).map((x) => x.team));
     // 3판 2선승이면 다음 판으로 (시리즈를 이긴 편이 나오면 끝)

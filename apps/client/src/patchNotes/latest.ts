@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.195",
+    date: "2026-10-28",
+    items: {
+      ko: ["패왕전 3판 2선승: 한 판이 끝나면 바로 넘어가지 않고 마지막으로 쓰러진 장면을 3초 동안 그대로 보여 준 뒤(이번 판 승리/패배·받은 피해 정리) 다음 판 준비"],
+      en: ["Champion Clash best of 3: when a round ends, the final moments stay on screen for 3 seconds (round result and damage recap) before the next round is set up"],
+      ja: ["覇王戦3本中2本先取: ラウンドが終わってもすぐ切り替えず、最後に倒れた場面を3秒そのまま表示 (ラウンド勝敗・受けたダメージのまとめ) してから次のラウンドへ"],
+    },
+  },
+  {
     version: "0.48.194",
     date: "2026-10-28",
     items: {

@@ -81,13 +81,15 @@ export function PwHud({ run, me, names, t, onBoard }: Props) {
 function PwCount({ run, me, goal, t }: { run: RunState; me: number; goal: string; t: (k: TextKey) => string }) {
   const pv = run.pvp!;
   const left = (pv.readyAt ?? PW.ready) - run.tick;
-  if (left < -TICK_RATE) return null;
+  // 판이 막 끝나 정리 전(경기장을 그대로 보여 주는 3초)에도 결과를 띄움
+  const waiting = pv.resetAt !== undefined;
+  if (left < -TICK_RATE && !waiting) return null;
   const n = Math.ceil(left / TICK_RATE);
   const text = left > 0 ? String(n) : "START!";
   const last = pv.lastRound;
   const mine = pv.seats[me]!.team;
   // 판이 막 끝나 다음 판 준비 전: 이긴 판·진 판
-  const result = last && left > PW.ready ? t(last.team < 0 ? "pwRoundDraw" : last.team === mine ? "pwRoundWin" : "pwRoundLose") : "";
+  const result = last && (waiting || left > PW.ready) ? t(last.team < 0 ? "pwRoundDraw" : last.team === mine ? "pwRoundWin" : "pwRoundLose") : "";
   return (
     <>
       {PW_MODE[pv.mode].rounds > 1 && (

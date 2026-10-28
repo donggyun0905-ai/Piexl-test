@@ -34,6 +34,16 @@ export function nextRound(s: RunState, team: number): boolean {
   if (team >= 0 && wins[team]! > def.rounds / 2) return false;
   pv.round = (pv.round ?? 1) + 1;
   pv.lastRound = { team, at: s.tick };
+  // 마지막에 쓰러진 사람도 끝난 장면을 보게 잠시 그대로 두었다가 정리 (resetRound)
+  pv.resetAt = s.tick + PW.roundWait;
+  return true;
+}
+
+/** 다음 판 준비: 판 사이 정리 · 자리로 · 3·2·1 */
+export function resetRound(s: RunState): void {
+  const pv = s.pvp!;
+  const def = PW_MODE[pv.mode];
+  pv.resetAt = undefined;
   pv.readyAt = s.tick + PW.ready + PW.roundGap;
   // 판 사이 정리: 탄·효과·폭발·위험 표시·바닥 물건·얼음
   s.projectiles = [];
@@ -59,5 +69,4 @@ export function nextRound(s: RunState, team: number): boolean {
     placeSeat(s, i);
     freshStart(s);
   });
-  return true;
 }
