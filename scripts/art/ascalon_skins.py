@@ -82,7 +82,7 @@ def main():
         for th, (over, theme) in themes.items():
             k = dict(base); k.update(over)
             d = wrap(deco, theme)
-            save_sheet(f"skins/{name}_{th}", lambda r, col, k=k, d=d: person(k, r, col, geo, d))
+            save_sheet(f"skins/{name}_{th}", lambda r, col, k=k, d=d: person(k, r, col, geo, d), size=geo.get("size", 32))
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,5 @@
 // 잔영(아스칼론, 시즌 2): 그림자 속 암살자. 아주 빠른 단검 공격 · 모든 상태이상 면역 · 치명타 25%/250%(characters)
-// 노리는 적이 칼끝에서 멀면 그 적 등 뒤 조금 떨어진 곳으로 순간이동해 그림자(투명·무적)가 되고, 떠난 자리에는 분신이 남아 적을 끌어모음(어그로)
+// 노리는 적이 칼끝에서 멀면 그 적 등 뒤 조금 떨어진 곳으로 순간이동해 그림자(투명·몸 부딪힘 피해 없음)가 되고, 떠난 자리에는 분신이 남아 적을 끌어모음(어그로)
 // 그림자에서 다음 공격은 등 뒤로 바짝 붙어 치는 뒤치기 (크게 아프고 반드시 치명타, 그림자가 풀림) · 공격 속도는 무기 그대로 (오르지 않음) · 분신은 1.5초 뒤 그 자리에서 한 번 벰
 // 수치는 weaponsRemnant.REMNANT, 아이템은 itemsRemnant
 import { TICK_RATE } from "../constants";
@@ -28,7 +28,7 @@ function cleanse(p: PlayerState): void {
 /** 순간이동 대기 */
 const blinkGap = (p: PlayerState) => Math.round(styleOf(p).blinkGap * (hasPerk(p, "rmStep") ? K.rmStep.cd : 1));
 
-/** 적 뒤로 순간이동: 떠난 자리에 분신(적이 쫓음), 나는 적 등 뒤 조금 떨어진 곳에서 그림자(투명·무적)가 됨 */
+/** 적 뒤로 순간이동: 떠난 자리에 분신(적이 쫓음), 나는 적 등 뒤 조금 떨어진 곳에서 그림자(투명·몸 부딪힘 피해 없음)가 됨 */
 function blink(s: RunState, e: EnemyState): void {
   const p = s.player;
   const d = normalize(e.x - p.x, e.y - p.y) ?? [p.faceX, p.faceY];
@@ -39,7 +39,6 @@ function blink(s: RunState, e: EnemyState): void {
   p.faceY = -d[1];
   p.rmBlink = blinkGap(p);
   p.rmShade = R.shadeTicks;
-  p.invulnTicks = Math.max(p.invulnTicks, 2);
 }
 
 function moveTo(s: RunState, x: number, y: number): void {
@@ -133,11 +132,8 @@ function slash(s: RunState): void {
 function update(s: RunState): void {
   const p = s.player;
   cleanse(p);
-  // 그림자: 투명·무적 (공격하면 풀림)
-  if ((p.rmShade ?? 0) > 0) {
-    p.rmShade = (p.rmShade ?? 0) - 1;
-    p.invulnTicks = Math.max(p.invulnTicks, 2);
-  }
+  // 그림자: 투명·몸 부딪힘 피해 없음 (원거리 공격은 맞음, 공격하면 풀림)
+  if ((p.rmShade ?? 0) > 0) p.rmShade = (p.rmShade ?? 0) - 1;
   if (hasPerk(p, "rmBlood")) updateBleed(s);
   if ((p.rmBlink ?? 0) > 0) p.rmBlink = (p.rmBlink ?? 0) - 1;
   if ((p.rmBack ?? 0) > 0) p.rmBack = (p.rmBack ?? 0) - 1;

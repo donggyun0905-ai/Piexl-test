@@ -7,8 +7,8 @@
 #   공격 칸은 뻗은 손끝에 빛 구슬이 맺힘
 # 잔영(남): 눈만 보이는 검은 두건과 입가리개 · 보라로 빛나는 눈 · 앞머리로 비죽 나온 은회색 머리 · 끝이 해진 검은 망토 · 뒤로 흩날리는 보라 목도리 · 허리 양쪽 단검
 #   공격 칸은 단검을 거꾸로 쥐고 앞으로 그음
-# 방랑객(남): 넓은 삿갓(밀짚색) · 묶어 올린 검은 머리 · 해진 쪽빛 겉옷(하오리)과 흰 속옷 · 붉은 허리띠에 찬 카타나 · 짚신
-#   공격 칸은 카타나를 뽑아 앞으로 벰
+# 방랑객(남): 넓은 삿갓(밀짚색) · 묶어 올린 검은 머리 · 해진 쪽빛 겉옷(하오리)과 흰 속옷 · 붉은 허리띠에 찬 긴 카타나(그림 칸 48) · 짚신
+#   공격 칸은 긴 카타나를 뽑아 치켜듦 → 비스듬히 벰 → 앞으로 그음 (옆은 찌름)
 from s2_common import hx, person, save_sheet
 
 TRACKER = dict(
@@ -215,13 +215,36 @@ WANDERER = dict(
     coat=hx("#2a3a6a"), coatD=hx("#1a2648"), hat=hx("#d8b878"), hatD=hx("#a8884a"), sash=hx("#c83a3a"), sheath=hx("#2a1e22"), blade=hx("#e8ecf4"),
 )
 
+def _dark(col, f=0.68):
+    return (int(col[0] * f), int(col[1] * f), int(col[2] * f), 255)
+
+def katana(c, k, x, y, ux, uy, n):
+    """손(x, y)에서 (ux, uy) 쪽으로 뻗은 긴 카타나: 손잡이(감은 끈) · 금빛 코등이 · 살짝 휜 두 줄 칼날 · 반짝이는 칼끝"""
+    m = (ux * ux + uy * uy) ** 0.5
+    ux, uy = ux / m, uy / m
+    px, py = -uy, ux
+    if py > 0: px, py = -px, -py   # 칼등은 늘 위쪽
+    for i in range(1, 5): c.px(x - ux * i, y - uy * i, k.get("wrap", hx("#1a1418")) if i % 2 else k.get("wrapL", hx("#e8e0d0")))
+    c.px(x - ux * 5, y - uy * 5, k.get("tsuba", hx("#d8b040")))
+    gx, gy = x + ux, y + uy
+    for s in (-1, 0, 1): c.px(gx + px * s, gy + py * s, k.get("tsuba", hx("#d8b040")))
+    spine = _dark(k["blade"])
+    sx, sy = round(px), round(py)
+    pts = [(x + ux * i + px * 1.4 * i * (n - i) / (n * n), y + uy * i + py * 1.4 * i * (n - i) / (n * n)) for i in range(2, n + 1)]
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        c.line(x0 + sx, y0 + sy, x1 + sx, y1 + sy, spine)
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]): c.line(x0, y0, x1, y1, k["blade"])
+    c.px(x + ux * (n + 1), y + uy * (n + 1), hx("#ffffff"))
+    for i in (n // 2, n // 2 + 1): c.px(*pts[i - 2], hx("#ffffff"))
+
 def wanderer_deco(c, layer, g):
     k = g["k"]
     v, hx0, hy, hw, hh = g["view"], g["hx"], g["hy"], g["hw"], g["hh"]
     tx, ty, tw, th, cx, hip = g["tx"], g["ty"], g["tw"], g["th"], g["cx"], g["hip"]
+    tsuba, wrapc = k.get("tsuba", hx("#d8b040")), k.get("wrap", hx("#1a1418"))
     if layer == "back_hair" and v == "side":
-        # 허리 뒤로 비스듬히 찬 칼집
-        c.line(cx - 6, hip - 4, cx + 2, hip + 1, k["sheath"])
+        # 허리 뒤로 길게 비스듬히 찬 칼집
+        c.line(cx + 1, hip - 3, cx - 11, hip + 3, k["sheath"])
     if layer == "legs":
         # 넓은 바지(하카마) 자락
         if v in ("front", "back"):
@@ -229,26 +252,24 @@ def wanderer_deco(c, layer, g):
         else:
             c.rect(cx - 4, hip, 7, 4, k["legs"])
     if layer == "body":
-        # 쪽빛 겉옷(앞이 열려 흰 속옷이 V자로) · 해진 소매 끝 · 붉은 허리띠 · 칼집
+        # 쪽빛 겉옷(앞이 열려 흰 속옷이 V자로) · 해진 소매 끝 · 붉은 허리띠 · 긴 칼집(뽑으면 빈 칼집만)
         if v in ("front", "back"):
             c.rect(tx, ty, tw, th, k["coat"])
             if v == "front":
                 for i in range(4): c.rect(cx - 2 + i // 2, ty + i, 4 - (i // 2) * 2, 1, k["top"])
             c.rect(tx, hip - 2, tw, 2, k["sash"])
             c.px(tx - 2, ty + th - 1, k["coatD"]); c.px(tx + tw + 1, ty + th - 1, k["coatD"])
+            sd = -1 if v == "front" else 1
+            ex = tx + 1 if v == "front" else tx + tw - 2
+            c.line(ex, hip - 1, ex + sd * 9, hip + 4, k["sheath"])
             if not g["cast"]:
-                if v == "front": c.line(tx - 2, hip - 1, tx + 2, hip - 3, k["sheath"]); c.px(tx - 3, hip, k["sash"])
-                else: c.line(tx + tw + 1, hip - 1, tx + tw - 3, hip - 3, k["sheath"])
+                c.px(ex - sd, hip - 2, tsuba); c.px(ex - sd * 2, hip - 2, tsuba)
+                c.line(ex - sd * 2, hip - 3, ex - sd * 4, hip - 5, wrapc); c.px(ex - sd * 3, hip - 4, k.get("wrapL", hx("#e8e0d0")))
         else:
             c.rect(cx - 3, ty, 6, th, k["coat"]); c.rect(cx - 3, hip - 2, 6, 2, k["sash"]); c.px(cx + 2, ty + 1, k["top"])
-        if g["cast"]:
-            # 뽑아 든 카타나 (살짝 휜 은빛 칼날)
-            if v == "front":
-                bx = tx + tw + 5
-                c.px(bx, ty + 2, k["sheath"]); c.line(bx + 1, ty + 1, bx + 6, ty - 3, k["blade"]); c.px(bx + 7, ty - 5, hx("#ffffff"))
-            else:
-                bx = cx + 7
-                c.px(bx, ty + 2, k["sheath"]); c.line(bx + 1, ty + 1, bx + 8, ty - 1, k["blade"]); c.px(bx + 9, ty - 2, hx("#ffffff"))
+            if not g["cast"]:
+                c.px(cx + 3, hip - 3, tsuba); c.px(cx + 3, hip - 4, tsuba)
+                c.line(cx + 4, hip - 4, cx + 7, hip - 6, wrapc); c.px(cx + 5, hip - 5, k.get("wrapL", hx("#e8e0d0")))
     if layer == "hair":
         # 묶어 올린 검은 머리 (뒤 상투) · 옆머리
         if v == "front":
@@ -264,6 +285,13 @@ def wanderer_deco(c, layer, g):
         c.rect(x0, hy + 1, brim, 2, k["hat"]); c.rect(x0 + 1, hy + 3, brim - 2, 1, k["hatD"])
         for i in range(3): c.rect(x0 + 3 + i * 2, hy - 1 - i, brim - 6 - i * 4, 1, k["hat"])
         for x in range(x0 + 2, x0 + brim - 2, 3): c.px(x, hy + 2, k["hatD"])
+        if g["cast"]:
+            # 뽑아 든 긴 카타나: 앞모습은 치켜듦 → 비스듬히 벰 → 앞으로 내려 그음, 옆모습은 앞으로 길게 찌름
+            if v == "front":
+                ux, uy, n = ((0.3, -1.0, 21), (0.8, -0.65, 15), (1.0, -0.12, 11))[min(g["col"], 2)]
+                katana(c, k, tx + tw + 5, ty + 1, ux, uy, n)
+            else:
+                katana(c, k, cx + 7, ty + 1, 1.0, -0.55, 14)
 
 SILK = dict(
     skin=hx("#f8e0d4"), skinD=hx("#d8b4a4"), eye=hx("#5a1a3a"), eyeL=hx("#ff6ab8"), outline=hx("#4e4262"), blush=hx("#ff9ab8"),
@@ -320,7 +348,7 @@ GEO = {
     "tracker": dict(head=(10, 9), torso=(8, 7), leg=9),
     "forgotten": dict(head=(10, 9), torso=(8, 7), leg=9),
     "remnant": dict(head=(10, 9), torso=(9, 8), leg=8),
-    "wanderer": dict(head=(10, 9), torso=(9, 8), leg=8),
+    "wanderer": dict(head=(10, 9), torso=(9, 8), leg=8, size=48),
     "silk": dict(head=(10, 9), torso=(8, 7), leg=9),
 }
 
@@ -328,7 +356,7 @@ def main():
     save_sheet("tracker", lambda r, col: person(TRACKER, r, col, GEO["tracker"], tracker_deco))
     save_sheet("forgotten", lambda r, col: person(FORGOTTEN, r, col, GEO["forgotten"], forgotten_deco))
     save_sheet("remnant", lambda r, col: person(REMNANT, r, col, GEO["remnant"], remnant_deco))
-    save_sheet("wanderer", lambda r, col: person(WANDERER, r, col, GEO["wanderer"], wanderer_deco))
+    save_sheet("wanderer", lambda r, col: person(WANDERER, r, col, GEO["wanderer"], wanderer_deco), size=48)
     save_sheet("silk", lambda r, col: person(SILK, r, col, GEO["silk"], silk_deco))
 
 if __name__ == "__main__":

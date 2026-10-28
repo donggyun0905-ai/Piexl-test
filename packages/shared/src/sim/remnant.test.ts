@@ -21,18 +21,33 @@ const lost = (s: RunState) => s.enemies.reduce((sum, e) => sum + e.maxHp - e.hp,
 const IDLE = { ...FIRE, attack: false };
 
 describe("잔영", () => {
-  it("기본: 치명타 25% · 치명타 피해 250%", () => {
+  it("기본: 치명타 25% · 치명타 피해 250% · 체력 45 고정 (체력 아이템으로 안 늘어남)", () => {
     expect(CHARACTERS.remnant).toMatchObject({ critChance: 0.25, critDamage: 2.5 });
+    const s = remnant("rmDagger", "sturdyHeart");
+    expect(s.player.stats.maxHp).toBe(45);
   });
 
-  it("멀리 있는 적 등 뒤 떨어진 곳으로 순간이동해 그림자(무적) · 떠난 자리에 분신 · 다음 공격은 뒤치기로 크게 벰", () => {
+  it("그림자: 적 몸에 부딪혀도 피해 없음", () => {
+    const s = remnant();
+    s.player.rmShade = 30;
+    s.enemies[0]!.x = s.player.x;
+    s.enemies[0]!.y = s.player.y;
+    const hp = s.player.hp;
+    stepSim(s, IDLE);
+    expect(s.player.hp).toBe(hp);
+    s.player.rmShade = 0;
+    stepSim(s, IDLE);
+    expect(s.player.hp).toBeLessThan(hp);
+  });
+
+  it("멀리 있는 적 등 뒤 떨어진 곳으로 순간이동해 그림자(몸 부딪힘 무효) · 떠난 자리에 분신 · 다음 공격은 뒤치기로 크게 벰", () => {
     const s = remnant();
     stepSim(s, FIRE);
     const e = s.enemies[0]!;
     expect(s.player.x).toBeGreaterThan(e.x + e.r + R.blinkBack);
     expect(s.player.rmEchoes?.length).toBe(1);
     expect(s.player.rmShade).toBeGreaterThan(0);
-    expect(s.player.invulnTicks).toBeGreaterThan(0);
+    expect(s.player.invulnTicks).toBe(0);
     expect(s.player.rmBlink).toBeGreaterThan(0);
     for (let i = 0; i < 30 && (s.player.rmShade ?? 0) > 0; i++) stepSim(s, FIRE);
     expect(s.player.rmShade).toBe(0);

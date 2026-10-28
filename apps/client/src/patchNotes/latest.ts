@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.167",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "잔영: 체력 45 고정 (체력 아이템을 먹어도 늘지 않음)",
+        "잔영 그림자: 무적 대신 적 몸에 부딪혀 받는 피해만 막음 (원거리 공격은 맞음)",
+        "방랑객 그림: 길게 뻗은 카타나로 새로 그림 (금빛 코등이·감은 손잡이·살짝 휜 칼날) · 공격할 때 치켜듦 → 비스듬히 벰 → 앞으로 그음 · 허리에 긴 칼집 (모든 스킨)",
+      ],
+      en: [
+        "Remnant: HP fixed at 45 (HP items don't raise it)",
+        "Remnant shadow: no longer invulnerable — it only blocks contact damage from enemies (ranged attacks still hit)",
+        "Wanderer art: redrawn with a long katana (gold guard, wrapped grip, slightly curved blade) · attacks raise it → slash diagonally → cut forward · long scabbard at the hip (all skins)",
+      ],
+      ja: [
+        "残影: 体力45固定（体力アイテムで増えない）",
+        "残影の影: 無敵ではなく、敵の体に触れて受けるダメージだけを防ぐ（遠距離攻撃は当たる）",
+        "放浪者の絵: 長く伸びた刀で描き直し（金の鍔・巻いた柄・少し反った刀身）· 攻撃時は振りかぶる → 斜めに斬る → 前へ斬り下ろす · 腰に長い鞘（すべてのスキン）",
+      ],
+    },
+  },
+  {
     version: "0.48.166",
     date: "2026-10-28",
     items: {

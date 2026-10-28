@@ -164,7 +164,7 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number 
   tracker: { size: 32, footPad: 2 },
   forgotten: { size: 32, footPad: 2 },
   remnant: { size: 32, footPad: 2 },
-  wanderer: { size: 32, footPad: 2 },
+  wanderer: { size: 48, footPad: 3 },
   silk: { size: 32, footPad: 2 },
   miner: { size: 64, footPad: 3 },
   voyager: { size: 48, footPad: 3 }, zeus: { size: 48, footPad: 3 },
@@ -200,8 +200,8 @@ export function sheetFor(id: string, lv = 1, member = 0): string {
 
 /** 스킨 그림 (public/sprites/skins/): 처음 쓸 때 불러옴 (다 불러오기 전에는 기본 그림) */
 const SKIN_SHEET = { size: 32, footPad: 2 };
-/** 거인·오니(큰 방망이) 그림은 48칸 */
-export const bigSheet = (name: string) => name.startsWith("titan") || name.startsWith("oni") || name.startsWith("mukin") || name.startsWith("slayer") || name.startsWith("rider");
+/** 거인·오니(큰 방망이)·방랑객(긴 카타나) 그림은 48칸 */
+export const bigSheet = (name: string) => name.startsWith("titan") || name.startsWith("oni") || name.startsWith("mukin") || name.startsWith("slayer") || name.startsWith("rider") || name.startsWith("wanderer");
 /** 거인·오니 스킨은 큰 그림 */
 const TITAN_SKIN_SHEET = { size: 48, footPad: 3 };
 const skinImages = new Map<string, HTMLImageElement | null>();
