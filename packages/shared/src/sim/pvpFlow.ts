@@ -8,6 +8,7 @@ import { gunSwap } from "./paewangKit";
 import { allPlayers, eachSeat, useSeat } from "./party";
 import { inPlay } from "./pvpWorld";
 import { nextRound } from "./pvpRounds";
+import { recapEnv, recapReset } from "./pvpRecap";
 import { clearSkills } from "./pwSkill";
 import type { RunState } from "./types";
 import { addEffect } from "./util";
@@ -119,7 +120,7 @@ export function bringBack(s: RunState): void {
     if (seat.back === undefined || seat.back > s.tick) return;
     seat.back = undefined;
     seat.on = true;
-    seat.recv = undefined;
+    recapReset(seat);
     const def = PW_ARENAS[pv.arena];
     const [x, y] = pv.mode === "tourney" ? spotXY((seat.team === 0 ? def.teamA : def.teamB)[0]!) : farSpot(s, i);
     const p = s.player;
@@ -166,6 +167,10 @@ export function updateTraps(s: RunState): void {
   const ph = s.tick % PW.trapEvery;
   if (!traps.length || (ph !== 1 && ph !== 20)) return;
   eachSeat(s, (i) => {
-    if (inPlay(s, i) && traps.some((t) => inRect(s.player.x, s.player.y, t))) damagePlayer(s, PW.trapDmg);
+    if (inPlay(s, i) && traps.some((t) => inRect(s.player.x, s.player.y, t))) {
+      const before = s.player.hp;
+      damagePlayer(s, PW.trapDmg);
+      recapEnv(s, before);
+    }
   });
 }

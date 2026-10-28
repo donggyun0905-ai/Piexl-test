@@ -6,6 +6,7 @@ import { TERRAIN } from "../terrainDefs";
 import { damagePlayer } from "./combat";
 import { eachSeat } from "./party";
 import { inPlay } from "./pvpWorld";
+import { recapEnv } from "./pvpRecap";
 import { spikeState } from "./terrain";
 import type { TerrainRect, TerrainState } from "./terrainTypes";
 import type { RunState } from "./types";
@@ -34,9 +35,16 @@ export function updatePvpTerrain(s: RunState): void {
         p.y = p.prevY + (p.y - p.prevY) * slow;
       }
     }
-    if (s.tick % TERRAIN.lavaEvery === 0 && at(t.lava)) damagePlayer(s, PW.lavaDmg);
+    if (s.tick % TERRAIN.lavaEvery === 0 && at(t.lava)) envHurt(s, PW.lavaDmg);
     t.spikes.forEach((r, k) => {
-      if (spikeState(s.tick, k) === 2 && (s.tick + k * 37) % 15 === 0 && at([r])) damagePlayer(s, PW.spikeDmg);
+      if (spikeState(s.tick, k) === 2 && (s.tick + k * 37) % 15 === 0 && at([r])) envHurt(s, PW.spikeDmg);
     });
   });
+}
+
+/** 지형 피해 (받은 피해 정리에 '지형'으로 적힘) */
+function envHurt(s: RunState, dmg: number): void {
+  const before = s.player.hp;
+  damagePlayer(s, dmg);
+  recapEnv(s, before);
 }

@@ -5,7 +5,7 @@ import { kitOf } from "../pwKits";
 import type { TickInput } from "./inputTypes";
 import { damageEnemy } from "./combat";
 import { recalcStats } from "./items";
-import { PW_SRC_SUMMON } from "./pvpRecap";
+import { PW_SRC_SUMMON, recapHeal } from "./pvpRecap";
 import { seatNo } from "./party";
 import { castSkill, skillDef, stepCast } from "./pwSkill";
 import { castFx, PW_FX_STYLES, skillPow } from "./pwSkillHit";
@@ -27,7 +27,11 @@ export function pwSkillTick(s: RunState, input: TickInput): TickInput {
   const before = statBuffs(s);
   for (const b of p.pwBuffs ?? []) {
     b.t--;
-    if (b.regen) p.hp = Math.min(p.stats.maxHp, p.hp + (p.stats.maxHp * b.regen * PW.heal) / 60);
+    if (b.regen) {
+      const add = Math.max(0, Math.min(p.stats.maxHp - p.hp, (p.stats.maxHp * b.regen * PW.heal) / 60));
+      p.hp += add;
+      recapHeal(s, seatNo(s), add);
+    }
   }
   if (p.pwBuffs?.length) p.pwBuffs = p.pwBuffs.filter((b) => b.t > 0);
   if (statBuffs(s) !== before || p.pwSig !== before) {

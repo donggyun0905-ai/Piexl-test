@@ -7,6 +7,7 @@ import type { PwCast } from "./paewangTypes";
 import { allPlayers, seatNo } from "./party";
 import { inPlay } from "./pvpWorld";
 import { onSegment } from "./s2Kit";
+import { recapHeal } from "./pvpRecap";
 import { damageEnemy } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
@@ -106,7 +107,12 @@ export function resolveCast(s: RunState, def: PwSkillDef, c: PwCast): void {
   for (const e of foes) hitFoe(s, def, e, c.dx, c.dy);
   // 아군 회복 (장판이면 매번) · 버프 (처음 한 번)
   const reach = def.shape === "self" || def.shape === "cone" ? Math.max(def.radius, 30) : def.radius;
-  if (def.heal) for (const q of alliesNear(s, c.x, c.y, reach)) q.hp = Math.min(q.stats.maxHp, q.hp + q.stats.maxHp * def.heal * PW.heal * roleHealMul(s));
+  if (def.heal)
+    for (const q of alliesNear(s, c.x, c.y, reach)) {
+      const add = Math.min(q.stats.maxHp - q.hp, q.stats.maxHp * def.heal * PW.heal * roleHealMul(s));
+      q.hp += Math.max(0, add);
+      recapHeal(s, allPlayers(s).indexOf(q), add);
+    }
   if (def.buff && first) for (const q of def.buff.allies ? alliesNear(s, c.x, c.y, reach) : [p]) addBuff(q, def);
   castFx(s, def, c.x, c.y, c.dx, c.dy, def.repeat ? Math.max(12, def.repeat.every) : 20);
 }

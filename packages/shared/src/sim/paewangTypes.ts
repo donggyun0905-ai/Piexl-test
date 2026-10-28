@@ -139,6 +139,9 @@ export interface PvpSeat {
   taken?: number;
   /** 다시 나온 뒤 받은 피해 (누가 · 출처 · 합 · 가장 큰 한 방, pvpRecap) */
   recv?: { by: number; src: number; dmg: number; max: number }[];
+  /** 다시 나온 뒤 상대마다 준 피해 · 받은 회복 */
+  gave?: { to: number; dmg: number }[];
+  healed?: number;
   /** 얼음 시계에 얼어 있는 끝 틱 (그림) */
   iced?: number;
   /** 이번 판에 쓰러짐 (토너먼트 다음 차례 고르기) */

@@ -189,8 +189,39 @@
   animation: pw-in 0.25s ease-out;
 }
 .pw-recap h4 {
+  display: flex;
+  align-items: center;
   margin: 0 0 6px;
   font-size: 13px;
+}
+.pw-recap h4 button {
+  margin-left: auto;
+  padding: 2px 8px;
+  font-size: 11px;
+  pointer-events: auto;
+}
+.pw-recap-sum {
+  margin-bottom: 8px !important;
+  padding-bottom: 6px !important;
+  border-bottom: 1px solid #ffffff22;
+}
+.pw-recap .taken .pw-recap-bar {
+  background: #ff6a6a;
+}
+.pw-recap .dealt .pw-recap-bar {
+  background: #ffc860;
+}
+.pw-recap .healed .pw-recap-bar {
+  background: #6ae08a;
+}
+.pw-recap .env {
+  color: #d8b070;
+}
+.pw-recap.mini {
+  font-size: 11px;
+}
+.pw-recap.mini ul {
+  gap: 2px;
 }
 .pw-recap h4 b {
   color: #ff8a8a;

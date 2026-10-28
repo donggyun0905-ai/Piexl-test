@@ -1,6 +1,8 @@
 // 회복: 모든 체력 회복이 지나는 길 (combat.healPlayer). 의사는 체력이 가득 차면 넘친 회복이 보호막이 됨 (초과 치료).
 // 의사 공격 회복(직접 피해의 일부)은 1초마다 상한이 있음
 import { roleHealMul } from "./pwMatchup";
+import { seatNo } from "./party";
+import { recapHeal } from "./pvpRecap";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, weaponOf } from "./util";
 import { tabooDown } from "./taboo";
@@ -54,6 +56,7 @@ export function heal(s: RunState, amount: number): void {
     p.plusTick = s.tick;
     addEffect(s, { kind: "plus", x: p.x, y: p.y - p.r, dirX: 0, dirY: 0, size: 3, maxTicks: 30, width: overheals(s) && amount > room ? 1 : 0 });
   }
+  if (s.pvp) recapHeal(s, seatNo(s), Math.min(amount, room));
   if (overheals(s) && amount > room) {
     p.hp = p.stats.maxHp;
     p.shieldPts = Math.max(p.shieldPts ?? 0, Math.min(shieldCap(p), (p.shieldPts ?? 0) + amount - room));

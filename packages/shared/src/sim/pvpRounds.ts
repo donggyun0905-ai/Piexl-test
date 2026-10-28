@@ -4,6 +4,7 @@ import { PW_ARENAS } from "../paewangMaps";
 import { spotXY } from "./paewangGrid";
 import { eachSeat } from "./party";
 import { freshStart } from "./pvpFlow";
+import { recapReset } from "./pvpRecap";
 import type { RunState } from "./types";
 
 /** i번 자리를 시작 자리에 (팀 대결은 편마다 자리, 모두가 적이면 자리 목록) */
@@ -15,7 +16,7 @@ export function placeSeat(s: RunState, i: number): void {
   const size = def.allies + 1;
   const spot = def.ffa ? arena.spots[i % arena.spots.length]! : (seat.team === 0 ? arena.teamA : arena.teamB)[(i % size) % arena.teamA.length]!;
   const [x, y] = spotXY(spot);
-  seat.recv = undefined;
+  recapReset(seat);
   const p = s.player;
   p.x = p.prevX = x;
   p.y = p.prevY = y;

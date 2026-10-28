@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.194",
+    date: "2026-10-28",
+    items: {
+      ko: ["패왕전 쓰러졌을 때 정리에 받은 피해·준 피해·받은 회복 합 막대 추가 · 함정·용암·가시 피해도 '지형'으로 들어감 · 상대마다 준 피해 · '막대만' 버튼으로 막대만 보이게 바꾸고 기억함"],
+      en: ["The Champion Clash knockout recap now shows bars for damage taken, damage dealt and healing received · trap, lava and spike damage appears as 'Terrain' · damage dealt to each opponent · the 'Bars only' button switches to a bars-only view and is remembered"],
+      ja: ["覇王戦で倒れたときのまとめに受けたダメージ・与えたダメージ・受けた回復の合計バーを追加 · 罠・溶岩・トゲのダメージも「地形」として表示 · 相手ごとの与ダメージ · 「バーだけ」ボタンでバーだけの表示に切り替え・記憶"],
+    },
+  },
+  {
     version: "0.48.193",
     date: "2026-10-28",
     items: {
