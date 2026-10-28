@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.206",
+    date: "2026-10-28",
+    items: {
+      ko: ["효과 다듬기 5: 캐릭터와 적 발밑에 그림자 · 가만히 서 있으면 숨 쉬듯 살짝 오르내림 · 맞은 적이 순간 살짝 부풀었다 돌아옴"],
+      en: ["Effects polish 5: shadows under characters and enemies · characters gently breathe while standing still · enemies swell slightly for an instant when hit"],
+      ja: ["エフェクト調整5: キャラと敵の足元に影 · 立ち止まると呼吸するように少し上下 · 当たった敵が一瞬少し膨らんで戻る"],
+    },
+  },
+  {
     version: "0.48.205",
     date: "2026-10-28",
     items: {

@@ -1,5 +1,6 @@
 // 적·플레이어 그리기: 공격 예고선 · 적(체력 줄·자동 조준 표시) · 플레이어(대시 잔상·방향·맞는 범위·보호막)
 import { allPlayers, DASH_TICKS, inBush, inPlay, ENEMIES, isAlive, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
+import { breathe, footShadow, hitPop } from "./bodyMotion";
 import { drawCrate } from "./swarm";
 import { drawFighter } from "./paewang";
 import { drawPwBody } from "./pwLook";
@@ -66,7 +67,7 @@ export function drawTelegraphs(ctx: CanvasRenderingContext2D, s: RunState, alpha
 }
 
 export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
-  // 서큐버스(무리 여왕)가 부른 기는 적은 작은 인큐버스로 보임 (그림만)
+  // 무리 여왕이 부른 기는 적은 인큐버스 그림
   const brood = s.enemies.some((b) => b.kind === "brood");
   for (const e of s.enemies) {
     const x = snap(lerp(e.prevX, e.x, alpha));
@@ -76,7 +77,7 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       drawCrate(ctx, x, y, e);
       continue;
     }
-    // 패왕전 그림자 적은 그리지 않음 (사람 몸을 그림) · 무한 모드 AI 상대
+    // 패왕전 그림자 적은 안 그림 · 무한 모드 AI
     if (s.pvp) continue;
     if (e.pw) {
       drawFighter(ctx, s, e, alpha, snap);
@@ -96,10 +97,10 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
     const stunned = s.freezeTicks > 0 || (e.stunTicks ?? 0) > 0;
     const tint: readonly [string, number] | undefined = e.hitFlash > 0 ? [C.hit, 1] : stunned ? [C.frozen, 0.5] : flashing ? [C.windup, 0.55] : undefined;
     const look = brood && e.kind === "crawler" && e.noGold ? "incubus" : e.kind;
-    if (drawEnemySprite(ctx, look, x, y, Math.floor(s.tick / 12), e.dirX < 0, tint, e.r / ENEMIES[e.kind].radius)) {
+    footShadow(ctx, x, y, e.r);
+    if (drawEnemySprite(ctx, look, x, y, Math.floor(s.tick / 12), e.dirX < 0, tint, (e.r / ENEMIES[e.kind].radius) * hitPop(e.hitFlash))) {
       drawBossStatus(ctx, e, x, y);
     } else {
-      // 그림을 아직 못 불러왔으면 네모
       ctx.fillStyle = C.enemyEdge;
       ctx.fillRect(x - e.r - 1, y - e.r - 1, size + 2, size + 2);
       ctx.fillStyle = tint ? tint[0] : C[e.kind];
@@ -163,7 +164,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
   const moving = p.x !== p.prevX || p.y !== p.prevY;
   const pose = { faceX: p.faceX, faceY: p.faceY, moving, casting: isCasting(s.tick, p.attackCount), step: Math.floor(s.tick / 8) };
   if (p.dashTicks > 0) {
-    // 대시 잔상: 그림이 있으면 캐릭터 모양 그대로 반투명하게
+    // 대시 잔상 (반투명 몸)
     const gx = snap(p.prevX - p.dashDirX * 6);
     const gy = snap(p.prevY - p.dashDirY * 6);
     ctx.globalAlpha = 0.35;
@@ -178,9 +179,9 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     const x = snap(px);
     const y = snap(py);
     if (!hideBody) drawAimMark(ctx, x, y, p.r, p.faceX, p.faceY);
-    // 갓이터 혼돈의 영혼이 남아 있으면 몸이 거의 보이지 않음
+    // 혼돈의 영혼이 있으면 몸이 흐림
     if (s.enemies.some((e) => e.kind === "soul" && e.aux === 1 && e.hp > 0)) ctx.globalAlpha = 0.12;
-    // 베두인: 차크람을 던져 손이 비면 등에 차크람이 없는 그림 (_bare)
+    // 베두인: 차크람을 던지면 _bare 그림
     // 오니 신인족: 긴 뿔의 날렵한 모습
     const sheet = p.characterId === "oni" && (p.oGod ?? 0) > 0 ? "oni_god" : p.characterId === "slayer" && (p.slRage ?? 0) > 0 ? "slayer_rage" : sheetFor(p.characterId, p.lv, p.abM);
     // 베두인 무희의 춤: 대시하는 동안 몸이 한 바퀴 빙글 돎
@@ -202,8 +203,9 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     const look = [p.characterId, x, y, p.r, morphPose(p, pose), moving ? Math.floor(s.tick / 8) : 0, body, club] as const;
     // 패왕전: 편 색 외곽선
     if (s.pw && inBush(s.pw.arena, x, y)) ctx.globalAlpha *= 0.5;
+    if (!hideBody && !p.mRaid) footShadow(ctx, x, y, p.r);
     if (!hideBody && !p.mRaid && s.pvp) drawPwBody(ctx, s, ...look);
-    else if (!hideBody && !p.mRaid) drawBody(ctx, ...look);
+    else if (!hideBody && !p.mRaid) breathe(ctx, x, y + p.r, s.tick, !moving && !pose.casting, () => drawBody(ctx, ...look));
     if (twirl) ctx.restore();
     ctx.filter = "none";
     ctx.globalAlpha = 1;
