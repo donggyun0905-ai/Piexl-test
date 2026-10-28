@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.213",
+    date: "2026-10-28",
+    items: {
+      ko: ["효과 새로 그리기 7 (시즌 2 층 보스): 늪의 두꺼비 왕 분홍 혀가 뻗었다 감김·진흙 철퍽 튐·반들반들한 진흙 덩이 · 불도롱뇽 땅이 갈라지며 솟는 용암 분출·검게 굳은 용암 덩이 · 번개 해파리 갈라지는 번개 줄·둘레로 뻗는 전기 촉수 · 유령선 선장 대포 포격 줄(포탄과 화약 연기)·쇠사슬 닻·밀물 파도 벽·푸른 유령빛 해적 칼 · 위험 표시가 보스마다 진흙·불·전기·바다 색"],
+      en: ["Effects redraw 7 (season 2 floor bosses): Bog Toad King's pink tongue that lashes out and reels back, splattering mud, glossy mud balls · Magma Salamander's lava eruptions bursting from cracked ground, crusted lava globs · Storm Jellyfish's forking lightning lines and electric tentacles · Ghost Ship Captain's cannon barrages (cannonball and gun smoke), chained anchor, tidal wave wall, ghostly blue cutlass · warning zones colored mud, fire, electric or sea per boss"],
+      ja: ["エフェクト描き直し7 (シーズン2の階層ボス): 沼のガマ王のピンクの舌が伸びて戻る・泥のはね・つやつやの泥の塊 · 溶岩サラマンダーの地割れから噴き出す溶岩・黒く固まった溶岩の塊 · 雷クラゲの枝分かれする雷・周りに伸びる電気の触手 · 幽霊船の船長の砲撃列(砲弾と硝煙)・鎖の錨・満ち潮の波の壁・青い幽霊光のカトラス · 危険表示がボスごとに泥・炎・電気・海の色"],
+    },
+  },
+  {
     version: "0.48.212",
     date: "2026-10-28",
     items: {

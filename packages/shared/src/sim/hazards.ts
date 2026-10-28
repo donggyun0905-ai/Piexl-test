@@ -67,8 +67,8 @@ export function updateHazards(s: RunState): void {
       },
       !!s.party,
     );
-    if (h.fx) addEffect(s, { kind: h.fx, x: h.x, y: h.y, dirX: h.dirX ?? 0, dirY: h.dirY ?? 0, size: h.radius, maxTicks: 14, toX: h.toX, toY: h.toY, width: h.toX !== undefined ? h.width : h.arc });
-    else addEffect(s, { kind: "burst", x: h.x, y: h.y, dirX: 0, dirY: 0, size: h.radius * 0.6, maxTicks: 14 });
+    if (h.fx) addEffect(s, { kind: h.fx, x: h.x, y: h.y, dirX: h.dirX ?? 0, dirY: h.dirY ?? 0, size: h.radius, maxTicks: 14, toX: h.toX, toY: h.toY, width: h.toX !== undefined ? h.width : h.arc, foe: true });
+    else addEffect(s, { kind: "burst", x: h.x, y: h.y, dirX: 0, dirY: 0, size: h.radius * 0.6, maxTicks: 14, foe: true });
     return false;
   });
 }

@@ -59,6 +59,8 @@ export interface EffectState {
   motif?: string;
   /** 협동: 만든 사람 자리 (그 사람 둘레에 그림) */
   seat?: number;
+  /** 적의 위험 표시가 터진 것 (그리기: 시즌 2 층 보스 모양) */
+  foe?: boolean;
 }
 
 /** 적이 남긴 위험 표시: tick이 되면 범위 안 플레이어에게 피해. 기본은 원, dir·arc가 있으면 부채꼴, toX·toY가 있으면 굵기 width인 선 */
