@@ -1,11 +1,17 @@
 // 패왕전 한정 캐릭터 보정 (던전·다른 모드에는 없음): 체력·공격력 배율. AI끼리 무작위 1대1을 많이 돌려 승률이 너무 높거나 낮지 않게 맞춤 (스킬을 자주 쓰는 경우 7 : 가끔 쓰는 경우 3으로 섞어 봄)
-import type { CharacterId } from "./characters";
+import { CHARACTER_IDS, type CharacterId } from "./characters";
 
+/** 배율 (1 = 그대로). 관리자 '패왕전 수치 · 캐릭터 능력치'에서 바꿈 */
 export interface PwCharTune {
   hp?: number;
   dmg?: number;
   /** 받는 피해 배율 (피해가 공격력으로 정해지지 않는 캐릭터용) */
   taken?: number;
+  /** 스킬 피해 · 공격 속도 · 사거리 · 이동 속도 */
+  skill?: number;
+  rate?: number;
+  range?: number;
+  move?: number;
 }
 
 export const PW_CHAR: Partial<Record<CharacterId, PwCharTune>> = {
@@ -52,3 +58,6 @@ export const PW_CHAR: Partial<Record<CharacterId, PwCharTune>> = {
   wanderer: { hp: 1.1, dmg: 1.1, taken: 0.89 },
   warden: { hp: 1.12, dmg: 1.12, taken: 1.05 },
 };
+
+// 관리자에서 모든 캐릭터의 모든 배율을 고를 수 있게 빈 값은 1로 채움
+for (const c of CHARACTER_IDS) PW_CHAR[c] = { hp: 1, dmg: 1, taken: 1, skill: 1, rate: 1, range: 1, move: 1, ...PW_CHAR[c] };

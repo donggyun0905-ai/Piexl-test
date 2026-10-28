@@ -105,6 +105,14 @@ describe("게임 수치 저장", () => {
     const log = await authed(s.ctx, "/api/admin/history?set=td", session);
     expect((log.body.entries as { note: string }[]).map((e) => e.note)).toEqual(["TD 돈"]);
   });
+  it("패왕전 수치(?set=pw)도 따로 저장 (역할군 옮기기 포함)", async () => {
+    const s = setup();
+    const session = await login(s);
+    const pw = await authed(s.ctx, "/api/admin/balance?set=pw", session, { values: { pwRoles: { warden: { role: 4 } }, pwChars: { mage: { hp: 1.2 } }, tdRules: { rules: { startGold: 1 } } }, note: "패왕전" });
+    expect(pw.body.values).toEqual({ pwRoles: { warden: { role: 4 } }, pwChars: { mage: { hp: 1.2 } } });
+    expect((await call(s.ctx, "/api/balance?set=pw")).body.values).toEqual({ pwRoles: { warden: { role: 4 } }, pwChars: { mage: { hp: 1.2 } } });
+    expect((await call(s.ctx, "/api/balance")).body.values).toEqual({});
+  });
 });
 
 describe("일일 도전 기록은 그 판의 수치로 확인", () => {

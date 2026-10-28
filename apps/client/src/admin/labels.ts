@@ -1,7 +1,8 @@
 // 관리자 페이지 글자 (운영자용이라 한국어만). 캐릭터·무기 이름은 게임 번역에서 가져옴
 import { BOSS_TEXT, enemyName } from "../i18n/enemies";
-import { DUNGEON_BALANCE, PASSIVES, TD_BALANCE, WEAPONS, type BalanceGroupId, type BalanceSet } from "@pixel-rogue/shared";
+import { DUNGEON_BALANCE, PASSIVES, PW_BALANCE, TD_BALANCE, WEAPONS, type BalanceGroupId, type BalanceSet } from "@pixel-rogue/shared";
 import { autoFieldLabel, ruleCategory, ruleLabel } from "./autoLabels";
+import { PW_GROUP_LABEL, pwFieldLabel, pwRowLabel } from "./pwLabels";
 import type { SetKind } from "./adminApi";
 import { itemDesc, itemName } from "../i18n/items";
 import { TEXT } from "../i18n/text";
@@ -21,10 +22,11 @@ export const GROUP_LABEL: Record<BalanceGroupId, string> = {
   tdEnemies: "적",
   tdBosses: "보스",
   tdRounds: "보스 라운드",
+  ...PW_GROUP_LABEL,
 };
 
 /** 관리자 페이지에서 고르는 수치 세트 */
-export const SETS: Record<SetKind, BalanceSet> = { dungeon: DUNGEON_BALANCE, td: TD_BALANCE };
+export const SETS: Record<SetKind, BalanceSet> = { dungeon: DUNGEON_BALANCE, td: TD_BALANCE, pw: PW_BALANCE };
 
 export const FIELD_LABEL: Record<string, string> = {
   maxHp: "최대 체력",
@@ -125,6 +127,7 @@ function tdRowLabel(group: BalanceGroupId, id: string): string {
 
 export function rowLabel(group: BalanceGroupId, id: string): string {
   if (group.startsWith("td")) return tdRowLabel(group, id);
+  if (group.startsWith("pw")) return pwRowLabel(group, id);
   if (group === "characters") return (TEXT as Record<string, { ko: string }>)[id]?.ko ?? id;
   if (group === "weapons") return itemName("weapon", id, "ko");
   if (group === "passives" || group === "effects") return itemName("passive", id, "ko");
@@ -174,7 +177,7 @@ const GROUP_FIELD_LABEL: Partial<Record<BalanceGroupId, Record<string, string>>>
 };
 
 export function fieldLabel(key: string, group?: BalanceGroupId): string {
-  const own = group && GROUP_FIELD_LABEL[group]?.[key];
+  const own = group && (GROUP_FIELD_LABEL[group]?.[key] ?? pwFieldLabel(group, key));
   if (own) return own;
   const [stat, how] = key.split(".");
   if (how && group === "passives") return `${FIELD_LABEL[stat!] ?? stat} ${MOD_LABEL[how] ?? how}`;

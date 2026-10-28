@@ -55,15 +55,19 @@ export function newDraft(mode: PwMode): PwDraft {
 export const draftTurn = (d: PwDraft): PwDraftTurn | undefined => d.turns[d.at];
 export const draftDone = (d: PwDraft): boolean => d.at >= d.turns.length;
 
-/** 이미 막혔거나 골라진 캐릭터 */
-export function draftTaken(d: PwDraft): Set<CharacterId> {
-  return new Set([...d.bans, ...d.picks].filter((c): c is CharacterId => !!c));
+/** 1대1은 서로 고른 것을 모름 (같은 캐릭터도 됨, 밴만 막음) */
+export const draftBlind = (mode: PwMode): boolean => draftSize(mode) === 1;
+
+/** 이미 막혔거나 골라진 캐릭터 (team: 그 편이 볼 때. 1대1은 상대 픽을 빼고) */
+export function draftTaken(d: PwDraft, team?: 0 | 1): Set<CharacterId> {
+  const picks = d.picks.filter((_, i) => team === undefined || !draftBlind(d.mode) || draftTeam(d.mode, i) === team);
+  return new Set([...d.bans, ...picks].filter((c): c is CharacterId => !!c));
 }
 
 /** 지금 차례에 c를 밴·픽 (null = 밴 넘기기, 픽은 넘길 수 없음). 됐으면 true */
 export function draftAct(d: PwDraft, c: CharacterId | null): boolean {
   const turn = draftTurn(d);
-  if (!turn || (c && (!CHARACTER_IDS.includes(c) || draftTaken(d).has(c)))) return false;
+  if (!turn || (c && (!CHARACTER_IDS.includes(c) || draftTaken(d, turn.team).has(c)))) return false;
   if (turn.ban) d.bans[d.turns.slice(0, d.at).filter((x) => x.ban).length] = c;
   else if (c) d.picks[turn.seat] = c;
   else return false;
@@ -73,7 +77,7 @@ export function draftAct(d: PwDraft, c: CharacterId | null): boolean {
 
 /** AI 또는 시간 초과: 밴은 상대 편이 좋아할 만한 것 아무거나, 픽은 남은 것 중 아무거나 (rnd 0~1) */
 export function draftAuto(d: PwDraft, rnd: () => number): CharacterId {
-  const taken = draftTaken(d);
+  const taken = draftTaken(d, draftTurn(d)?.team);
   const free = CHARACTER_IDS.filter((c) => !taken.has(c));
   return free[Math.floor(rnd() * free.length) % free.length]!;
 }

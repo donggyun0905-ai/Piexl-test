@@ -26,7 +26,7 @@ function pixels(ctx: Ctx, rows: string[], x: number, y: number, color: string): 
   });
 }
 
-/** 소환한 것들 (편 색 테두리 고리 + 남은 시간 + 때릴 때 빛줄기) */
+/** 소환한 것들 (편 색 테두리 고리 + 체력·남은 시간 + 때릴 때 빛줄기) */
 export function drawPwMinions(ctx: Ctx, s: RunState, alpha: number, snap: Snap, tint: (i: number) => string): void {
   const players = allPlayers(s);
   for (const m of s.pvp?.mins ?? []) {
@@ -47,12 +47,15 @@ export function drawPwMinions(ctx: Ctx, s: RunState, alpha: number, snap: Snap, 
     ctx.scale(2, 2);
     pixels(ctx, LOOKS[sm.look] ?? LOOKS.spirit!, 0, 0, def.tint);
     ctx.restore();
-    // 남은 시간 (머리 위 얇은 줄)
+    // 체력 (편 색, 부술 수 있음) · 그 아래 남은 시간 (흰 얇은 줄)
+    const hp = m.body ? Math.max(0, m.body.hp / m.body.maxHp) : 1;
     const f = Math.max(0, m.t / sm.ticks);
     ctx.fillStyle = "#0a0810";
-    ctx.fillRect(x - 6, y - 17, 12, 2);
+    ctx.fillRect(x - 7, y - 19, 14, 4);
     ctx.fillStyle = team;
-    ctx.fillRect(x - 6, y - 17, Math.round(12 * f), 2);
+    ctx.fillRect(x - 6, y - 18, Math.round(12 * hp), 2);
+    ctx.fillStyle = "#e8e4f0";
+    ctx.fillRect(x - 6, y - 16, Math.round(12 * f), 1);
     if (m.shot && s.tick - m.shot.at < 8) {
       const a = 1 - (s.tick - m.shot.at) / 8;
       ctx.globalAlpha = a;

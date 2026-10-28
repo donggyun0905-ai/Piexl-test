@@ -21,7 +21,7 @@ export const plagueTaken = (p: PlayerState) => (p.characterId === "plague" && ha
 
 function nearest(s: RunState, x: number, y: number, r: number, ok: (e: EnemyState) => boolean = () => true): EnemyState | undefined {
   return alive(s)
-    .filter((e) => ok(e) && dist2(e, { x, y }) <= r * r)
+    .filter((e) => !e.pwHid && ok(e) && dist2(e, { x, y }) <= r * r)
     .sort((a, b) => dist2(a, { x, y }) - dist2(b, { x, y }) || a.id - b.id)[0];
 }
 

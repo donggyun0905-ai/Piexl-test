@@ -2,6 +2,7 @@
 // PC: 칸을 누르면 숫자 키와 같음 (조준 모드 또는 바로 사용) · 올리면 설명 · 모바일: 누르면 바라보는 쪽으로 바로
 import { kitOf, type CharacterId } from "@pixel-rogue/shared";
 import { useState } from "react";
+import { pwPassiveKey } from "../event/PwSkillList";
 import { skillLines, skillName } from "../event/pwSkillText";
 import type { TextKey } from "../i18n";
 import { keyLabel, useSettings } from "../settings";
@@ -22,7 +23,12 @@ export interface PwSkillView {
 export function PwSkillBar({ view, t, touchMode, controls }: { view: PwSkillView; t: (k: TextKey) => string; touchMode: boolean; controls: () => Controls | null }) {
   const keys = useSettings().skillKeys;
   const kit = kitOf(view.chr);
+  /** 설명 칸: 0~3 스킬 · -1 패시브 */
   const [tip, setTip] = useState<{ k: number; pos: TipPos } | null>(null);
+  const hover = (k: number) => (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    if (!touchMode) setTip({ k, pos: tipPos(r.left + r.width / 2, r.top - 4, 0, false) });
+  };
   if (!kit) return null;
   const use = (k: number) => {
     const c = controls();
@@ -32,6 +38,9 @@ export function PwSkillBar({ view, t, touchMode, controls }: { view: PwSkillView
   };
   return (
     <span className="pw-skill-bar">
+      <span className="pw-skill pw-skill-passive" onMouseEnter={hover(-1)} onMouseLeave={() => setTip(null)} onPointerDown={(e) => touchMode && hover(-1)(e)}>
+        P
+      </span>
       {kit.skills.map((def, k) => (
         <button
           key={k}
@@ -42,10 +51,7 @@ export function PwSkillBar({ view, t, touchMode, controls }: { view: PwSkillView
             e.preventDefault();
             use(k);
           }}
-          onMouseEnter={(e) => {
-            const r = e.currentTarget.getBoundingClientRect();
-            if (!touchMode) setTip({ k, pos: tipPos(r.left + r.width / 2, r.top - 4, 0, false) });
-          }}
+          onMouseEnter={hover(k)}
           onMouseLeave={() => setTip(null)}
         >
           <ItemIcon item={{ kind: "weapon", id: def.icon }} size={26} />
@@ -53,7 +59,10 @@ export function PwSkillBar({ view, t, touchMode, controls }: { view: PwSkillView
           {view.left[k]! > 0 && <b className="pw-skill-left">{view.left[k]}</b>}
         </button>
       ))}
-      {tip && (
+      {tip && tip.k < 0 && (
+        <ItemTip pos={tip.pos} icon={null} name={t("pwSkPassive")} desc={t(pwPassiveKey(view.chr))} />
+      )}
+      {tip && tip.k >= 0 && (
         <ItemTip pos={tip.pos} icon={{ kind: "weapon", id: kit.skills[tip.k]!.icon }} name={skillName(view.chr, tip.k, t)} desc="">
           {skillLines(kit.skills[tip.k]!, t).map((l) => (
             <div key={l}>{l}</div>

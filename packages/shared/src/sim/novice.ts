@@ -54,7 +54,8 @@ export const expToNext = (level: number) => 10 + 6 * (level - 1);
 /** 쓰러뜨린 적의 경험치 받기 (풋내기만) */
 export function gainExp(s: RunState, e: EnemyState): void {
   const p = s.player;
-  if (p.characterId !== "novice") return;
+  // 패왕전은 레벨업 대신 마지막 버팀 (pvpFlow)
+  if (p.characterId !== "novice" || s.pvp) return;
   p.lv ??= 1;
   // 광야의 새벽: 적이 아주 많아 경험치를 줄임
   p.exp = (p.exp ?? 0) + expOf(e) * (s.swarm ? SWARM.limits.noviceExp : 1);

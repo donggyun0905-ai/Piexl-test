@@ -6,6 +6,12 @@ import { itemName } from "../i18n/items";
 import { keyLabel, useSettings } from "../settings";
 import { skillLines, skillName } from "./pwSkillText";
 
+/** 패왕전에서만 바꾼 패시브 · 기본 공격 설명 */
+const PAS: Partial<Record<CharacterId, TextKey>> = { novice: "pwPasNovice", rider: "pwPasRider" };
+/** 패왕전 패시브 설명 글자 (스킬 칸 왼쪽 패시브 칸도 씀) */
+export const pwPassiveKey = (c: CharacterId): TextKey => PAS[c] ?? (`${c}Desc` as TextKey);
+const BASIC: Partial<Record<CharacterId, TextKey>> = { bedouin: "pwBasicBedouin", slayer: "pwBasicSlayer", remnant: "pwBasicRemnant", apostle: "pwBasicAim", elder: "pwBasicAim", silk: "pwBasicAim" };
+
 export function PwSkillList({ characterId, lang, t }: { characterId: CharacterId; lang: Lang; t: (key: TextKey) => string }) {
   const keys = useSettings().skillKeys;
   const kit = kitOf(characterId);
@@ -17,13 +23,14 @@ export function PwSkillList({ characterId, lang, t }: { characterId: CharacterId
         <span>
           <b>{t("pwSkBasic")}</b> · {itemName("weapon", weapon, lang)}
           {kit && kit.basic > 1 && <small> (+{Math.round((kit.basic - 1) * 100)}%)</small>}
+          {BASIC[characterId] && <small>{t(BASIC[characterId]!)}</small>}
         </span>
       </div>
       <div className="pw-skill-row">
         <span className="pw-skill-badge">P</span>
         <span>
           <b>{t("pwSkPassive")}</b>
-          <small>{t(`${characterId}Desc` as TextKey)}</small>
+          <small>{t(pwPassiveKey(characterId))}</small>
         </span>
       </div>
       {kit?.skills.map((def, k) => (

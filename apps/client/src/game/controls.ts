@@ -1,5 +1,5 @@
 import { AIM_DIST_MAX, AIM_DIST_STEP, quantize, type TickInput } from "@pixel-rogue/shared";
-import { skillOf } from "../settings";
+import { skillOf, useOf } from "../settings";
 import { SkillArm } from "./skillArm";
 import type { ClickTarget } from "./clickTargets";
 import { drawSticks, type StickElements } from "./sticks";
@@ -13,8 +13,6 @@ const AIM_STEPS = 100;
 /** 화면 확대 한도 (1 = 방 전체가 보임) */
 export const ZOOM_MIN = 1;
 export const ZOOM_MAX = 2.5;
-/** PC 사용 아이템 키: 1번 칸 Q·1, 2번 칸 E·2 (스킬이 있으면 숫자는 스킬, 아이템은 Q·E) */
-const USE_KEYS: Record<string, number> = { KeyQ: 1, Digit1: 1, KeyE: 2, Digit2: 2 };
 
 export interface ControlsOptions {
   /** 터치·마우스를 받는 화면 전체 영역 */
@@ -115,7 +113,8 @@ export class Controls {
         this.hitboxHeld = true;
         return;
       }
-      const slot = USE_KEYS[e.code];
+      // PC 사용 아이템 키: 설정의 두 키(기본 Q·E) · 숫자 1·2 (스킬이 있으면 숫자는 스킬)
+      const slot = useOf(e.code);
       if (slot) {
         this.useQueued = slot;
         return;

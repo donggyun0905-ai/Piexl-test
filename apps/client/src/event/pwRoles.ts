@@ -1,17 +1,11 @@
-// 패왕전 역할군 (밴픽 탭·캐릭터 옆 노란 글씨): 원딜(원거리) · 근딜(근거리) · 힐러 · 탱커
-import type { CharacterId } from "@pixel-rogue/shared";
+// 패왕전 역할군 화면 글자 (밴픽 탭·캐릭터 옆 노란 글씨, 마우스를 올리면 설명). 누가 어느 역할인지는 공용 pwRoles (관리자에서 옮김)
+import { PW_ROLE_IDS, pwRoleOf, type PwRoleId } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 
-export type PwRole = "ranged" | "melee" | "healer" | "tank";
-export const PW_ROLES: readonly PwRole[] = ["ranged", "melee", "healer", "tank"];
+export type PwRole = PwRoleId;
+export const PW_ROLES = PW_ROLE_IDS;
+export const roleOf = pwRoleOf;
 
-const TANK: readonly CharacterId[] = ["warden", "titan", "oni", "mukin", "slayer", "ren", "abandoned"];
-const HEALER: readonly CharacterId[] = ["doctor", "mystic", "apostle", "spiritist"];
-const MELEE: readonly CharacterId[] = ["elementalist", "brawler", "beast", "summoner", "novice", "general", "imugi", "byeonhui", "fly", "eater", "rider", "punk", "wanderer"];
-
-/** 캐릭터 역할 (나머지는 원딜) */
-export const roleOf = (c: CharacterId): PwRole => (TANK.includes(c) ? "tank" : HEALER.includes(c) ? "healer" : MELEE.includes(c) ? "melee" : "ranged");
-
-/** 캐릭터 옆 짧은 이름 · 탭 이름 */
-export const ROLE_TAG: Record<PwRole, TextKey> = { ranged: "pwRoleRanged", melee: "pwRoleMelee", healer: "pwRoleHealer", tank: "pwRoleTank" };
-export const ROLE_TAB: Record<PwRole, TextKey> = { ranged: "pwTabRanged", melee: "pwTabMelee", healer: "pwRoleHealer", tank: "pwRoleTank" };
+/** 역할 이름 (탭·캐릭터 옆) · 마우스를 올리면 나오는 설명 */
+export const ROLE_TAG: Record<PwRole, TextKey> = { warrior: "pwRoleWarrior", ranged: "pwRoleRanged", mage: "pwRoleMage", assassin: "pwRoleAssassin", support: "pwRoleSupport" };
+export const ROLE_TIP: Record<PwRole, TextKey> = { warrior: "pwRoleWarriorTip", ranged: "pwRoleRangedTip", mage: "pwRoleMageTip", assassin: "pwRoleAssassinTip", support: "pwRoleSupportTip" };

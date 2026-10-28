@@ -6,9 +6,11 @@ import { autoGroup } from "./balanceAuto";
 import { BOSS_RULE_TABLES, EFFECT_TABLES, ENEMY_RULE_TABLES, RULE_TABLES } from "./balanceTables";
 import type { StatKey, StatMod } from "./stats";
 
-export type BalanceGroupId = "characters" | "weapons" | "rules" | "effects" | "enemies" | "bosses" | "passives" | "useItems" | "shop" | TdBalanceGroupId;
+export type BalanceGroupId = "characters" | "weapons" | "rules" | "effects" | "enemies" | "bosses" | "passives" | "useItems" | "shop" | TdBalanceGroupId | PwBalanceGroupId;
 /** 타워 디펜스 수치 묶음 (tdBalanceFields) */
 export type TdBalanceGroupId = "tdRules" | "tdTowers" | "tdEnemies" | "tdBosses" | "tdRounds";
+/** 패왕전 수치 묶음 (pwBalanceFields) */
+export type PwBalanceGroupId = "pwRoles" | "pwChars" | "pwSkills" | "pwRules";
 
 export interface BalanceField {
   key: string;

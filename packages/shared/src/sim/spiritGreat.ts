@@ -26,8 +26,9 @@ export function greatSpot(p: PlayerState): { x: number; y: number } {
 
 function inRange(s: RunState, r: number): EnemyState[] {
   const p = s.player;
+  // 패왕전: 수풀·투명으로 안 보이는 상대는 노리지 않음 (markHidden)
   return alive(s)
-    .filter((e) => dist2(e, p) <= r * r)
+    .filter((e) => !e.pwHid && dist2(e, p) <= r * r)
     .sort((a, b) => dist2(a, p) - dist2(b, p) || a.id - b.id);
 }
 

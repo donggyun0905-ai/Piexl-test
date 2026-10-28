@@ -75,9 +75,9 @@ export interface ClearRow {
   best: number;
 }
 
-/** 수치 세트: 던전(기본) · 타워 디펜스 */
-export type SetKind = "dungeon" | "td";
-const q = (kind: SetKind, more = "") => (kind === "td" ? `?set=td${more ? `&${more}` : ""}` : more ? `?${more}` : "");
+/** 수치 세트: 던전(기본) · 타워 디펜스 · 패왕전 */
+export type SetKind = "dungeon" | "td" | "pw";
+const q = (kind: SetKind, more = "") => (kind !== "dungeon" ? `?set=${kind}${more ? `&${more}` : ""}` : more ? `?${more}` : "");
 
 export const adminApi = {
   requestCode: (s: ServerInfo) => call<{ pending: string }>(s, "/api/admin/login/request", {}, false),

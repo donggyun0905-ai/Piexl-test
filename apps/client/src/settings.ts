@@ -26,6 +26,8 @@ export interface Settings {
   skillKeys: string[];
   /** 패왕전 스킬마다 바로 사용 (키를 누르면 조준 없이 마우스 쪽으로) */
   quickCast: boolean[];
+  /** PC 사용 아이템 칸 1·2 키 (기본 Q·E) */
+  useKeys: string[];
 }
 
 /** 모바일 버튼 (TouchButtons의 data-act) */
@@ -45,12 +47,19 @@ const DEFAULTS: Settings = {
   buttonPos: {},
   skillKeys: ["Digit1", "Digit2", "Digit3", "Digit4"],
   quickCast: [false, false, false, false],
+  useKeys: ["KeyQ", "KeyE"],
 };
 
 /** 스킬 키: 설정에서 고른 키 (숫자 패드 1~4도 늘 됨) · 0 = 스킬 키 아님 */
 export function skillOf(code: string): number {
   const i = current.skillKeys.indexOf(code);
   return i >= 0 ? i + 1 : (({ Numpad1: 1, Numpad2: 2, Numpad3: 3, Numpad4: 4 }) as Record<string, number>)[code] ?? 0;
+}
+
+/** 사용 아이템 키: 설정에서 고른 키 (스킬 키가 아닐 때는 숫자 1·2도 됨) · 0 = 아님 */
+export function useOf(code: string): number {
+  const i = current.useKeys.indexOf(code);
+  return i >= 0 ? i + 1 : (({ Digit1: 1, Digit2: 2 }) as Record<string, number>)[code] ?? 0;
 }
 
 /** 키 코드 → 보이는 이름 (Digit1 → 1, KeyQ → Q, Numpad1 → Num1) */

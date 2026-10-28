@@ -158,6 +158,12 @@ export interface PwPlayerState {
   pwDash?: { dx: number; dy: number; left: number; total: number; speed: number; hit: number[]; k: number; seg?: number };
   /** 능력치를 바꾸는 버프 수 (바뀌면 능력치를 다시 계산) */
   pwSig?: number;
+  /** 풋내기 패시브(마지막 버팀): 체력 1로 버티는 끝 틱 · -1 = 이번 판에 이미 씀 */
+  pwStand?: number;
+  /** 잔영 패왕전 기본 공격: 찌르기까지 남은 틱 (sim/pwBasic) */
+  pwRm?: { t: number };
+  /** 패왕전 직접 조준: 누른 곳까지 거리 (사람만, tracker.readAim) */
+  pwAimD?: number;
 }
 
 /** 스킬이 남긴 것: 예고 뒤 터짐·여러 번 터지는 장판·늦게 나가는 줄 (자리 · 스킬 번호 · 자리 · 방향 · 다음까지 틱 · 남은 횟수 · 나를 따라감) */
@@ -186,6 +192,8 @@ export interface PwMinion {
   cd: number;
   /** 마지막 공격 대상 자리 (그림: 빛줄기) */
   shot?: { x: number; y: number; at: number };
+  /** 맞는 몸 (상대 쪽 s.enemies에 들어가 맞음 · 체력이 다하면 부서짐, pvpWorld.assignFoes) */
+  body?: EnemyState;
 }
 
 /** 패왕전 바닥 강화 구슬: 0 회복 · 1 공격 속도 · 2 이동 속도 (닿으면 바로) */

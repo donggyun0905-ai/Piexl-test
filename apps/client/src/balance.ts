@@ -1,7 +1,7 @@
 // 게임 수치 (관리자 페이지에서 바꾼 값) 받기. 앱을 열 때·판이 끝날 때 서버에서 받고, 못 받으면 마지막으로 받은 값.
 // 판 도중에는 바꾸지 않음 (일일 도전 기록은 판을 시작할 때의 수치 지문과 함께 냄)
-// 던전 수치와 타워 디펜스 수치(tdBalance)는 따로 받고 따로 넣음
-import { DEFAULT_BALANCE_HASH, DUNGEON_BALANCE, TD_BALANCE, type BalanceSet, type BalanceValues } from "@pixel-rogue/shared";
+// 던전 수치와 타워 디펜스 수치(tdBalance)·패왕전 수치(pwBalance)는 따로 받고 따로 넣음
+import { DEFAULT_BALANCE_HASH, DUNGEON_BALANCE, PW_BALANCE, TD_BALANCE, type BalanceSet, type BalanceValues } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 import { apiGet } from "./api";
 import { loadText, saveText } from "./storage";
@@ -79,9 +79,18 @@ const dungeon = balanceClient(DUNGEON_BALANCE, "balance", "", ADMIN_PREVIEW_KEY)
 /** 타워 디펜스 수치 (판 시작 begin · 끝 end) */
 export const tdBalance = balanceClient(TD_BALANCE, "tdBalance", "?set=td", ADMIN_TD_PREVIEW_KEY);
 
-/** 서버에서 지금 수치 받기 (던전·타워 디펜스) */
+/** 패왕전 수치 (역할군·캐릭터 능력치·스킬, 판 시작 begin · 끝 end) */
+export const pwBalance = balanceClient(PW_BALANCE, "pwBalance", "?set=pw", "pixel-rogue:adminPwPreview");
+
+/** 패왕전 판 동안 수치 고정 (판 도중에 받은 새 수치는 끝난 뒤에) */
+export function usePwBalanceRun(): void {
+  useState(() => pwBalance.begin());
+  useEffect(() => () => pwBalance.end(), []);
+}
+
+/** 서버에서 지금 수치 받기 (던전·타워 디펜스·패왕전) */
 export async function refreshBalance(): Promise<void> {
-  await Promise.all([dungeon.refresh(), tdBalance.refresh()]);
+  await Promise.all([dungeon.refresh(), tdBalance.refresh(), pwBalance.refresh()]);
 }
 
 /** 내 화면의 수치 지문 (배틀·협동 방에 알림) */

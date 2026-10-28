@@ -1,4 +1,5 @@
 // 악의 사도: 하늘에서 뒤집힌 십자가 (짓누르기 · 일곱 죄는 장판) · 사탄의 가면 · 역천의 베드로 · 쓰러진 적의 영혼을 먹어 회복 (회복약은 오히려 피해)
+import { manualAim } from "./pwBasic";
 import { TICK_RATE } from "../constants";
 import { CHARACTERS } from "../content";
 import { ENEMIES } from "../enemyDefs";
@@ -44,10 +45,12 @@ export function apostleTick(s: RunState, want: boolean, speed: number): void {
     return;
   }
   // 십자가: 사거리 안 가장 가까운 적 위 (없으면 앞쪽)
-  const target = nearest(s, p.stats.range);
+  // 패왕전 사람은 마우스 자리 (자동 조준 없음)
+  const aim = manualAim(s, p.stats.range);
+  const target = aim ? null : nearest(s, p.stats.range);
   swing(p, speed);
-  const x = target ? target.x : p.x + p.faceX * 50;
-  const y = target ? target.y : p.y + p.faceY * 50;
+  const x = aim ? aim.x : target ? target.x : p.x + p.faceX * 50;
+  const y = aim ? aim.y : target ? target.y : p.y + p.faceY * 50;
   (p.apDrops ??= []).push({ x, y, left: APOSTLE.drop, sin, dmg: power(p) });
   addEffect(s, { kind: "apCross", x, y, dirX: 0, dirY: 0, size: crushR(p), maxTicks: APOSTLE.drop + 12, tint: SIN_COLORS[sin] });
 }

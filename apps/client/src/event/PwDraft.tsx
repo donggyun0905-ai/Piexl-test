@@ -1,10 +1,10 @@
 // 패왕전 밴픽 화면 (혼자 하기 PwDraftSolo · 친구 방·랭크전 PwRoomDraft, 모두 같은 화면): 왼쪽 우리 편 · 가운데 큰 캐릭터 목록(역할 탭·이름 찾기) · 오른쪽 상대 편
 // 위쪽 차례·제한 시간 · 아래 밴·확정 · 우리 편 AI 말 (스킬은 다음 준비 화면에서 써 봄)
-import { CHARACTER_IDS, draftDone, draftSize, draftTaken, draftTeam, draftTurn, type CharacterId, type PwDraft } from "@pixel-rogue/shared";
+import { CHARACTER_IDS, draftBlind, draftDone, draftSize, draftTaken, draftTeam, draftTurn, type CharacterId, type PwDraft } from "@pixel-rogue/shared";
 import { useEffect, useState, type ReactNode } from "react";
 import type { TextKey } from "../i18n";
 import { SkinPreview } from "../shop/SkinPreview";
-import { PW_ROLES, ROLE_TAB, ROLE_TAG, roleOf, type PwRole } from "./pwRoles";
+import { PW_ROLES, ROLE_TAG, ROLE_TIP, roleOf, type PwRole } from "./pwRoles";
 
 interface Props {
   d: PwDraft;
@@ -33,8 +33,10 @@ export function PwDraftView({ d, names, ai, me, mine, endAt, onAct, t, children 
   const size = draftSize(d.mode);
   const myTeam = me >= 0 ? draftTeam(d.mode, me) : 0;
   const turn = draftTurn(d);
-  const taken = draftTaken(d);
+  const taken = draftTaken(d, myTeam);
   const done = draftDone(d);
+  // 1대1: 상대 픽은 끝날 때까지 안 보임
+  const hide = (seat: number) => draftBlind(d.mode) && !done && draftTeam(d.mode, seat) !== myTeam;
   const sec = Math.max(0, Math.ceil((endAt - now) / 1000));
   const teamName = (team: number) => t(team === myTeam ? "pwDraftOurs" : "pwDraftTheirs");
   const status = done || !turn ? t("pwDraftDone") : turn.ban ? t("pwDraftBanTurn").replace("{team}", teamName(turn.team)) : t("pwDraftPickTurn").replace("{name}", names[turn.seat] ?? "AI");
@@ -44,16 +46,20 @@ export function PwDraftView({ d, names, ai, me, mine, endAt, onAct, t, children 
   const list = CHARACTER_IDS.filter((c) => (!tab || roleOf(c) === tab) && (!q || t(c).toLowerCase().includes(q)));
   const say = d.turns
     .slice(0, d.at)
-    .filter((x) => !x.ban && x.team === myTeam && x.seat !== me && ai[x.seat])
+    .filter((x) => !x.ban && x.team === myTeam && x.seat !== me && ai[x.seat] && !hide(x.seat))
     .map((x) => `${names[x.seat]}: ${t("pwDraftAiSay").replace("{c}", t(d.picks[x.seat]!))}`);
-  const role = (c: CharacterId) => <em className="pw-role">{t(ROLE_TAG[roleOf(c)])}</em>;
+  const role = (c: CharacterId) => (
+    <em className="pw-role" title={t(ROLE_TIP[roleOf(c)])}>
+      {t(ROLE_TAG[roleOf(c)])}
+    </em>
+  );
   // 왼쪽은 우리 편, 오른쪽은 상대 편
   const team = (k: 0 | 1) => (
     <aside className={`pw-draft-team ${k === myTeam ? "ours" : "theirs"} ${turn && turn.team === k && !done ? "turn" : ""}`}>
       <h4>{teamName(k)}</h4>
       {Array.from({ length: size }, (_, j) => {
         const seat = k * size + j;
-        const c = d.picks[seat];
+        const c = hide(seat) ? null : d.picks[seat];
         return (
           <div key={seat} className={`pw-draft-seat ${turn && !turn.ban && turn.seat === seat ? "now" : ""} ${seat === me ? "me" : ""}`}>
             {c ? <SkinPreview sheet={c} size={64} /> : <span className="pw-draft-empty">?</span>}
@@ -89,8 +95,8 @@ export function PwDraftView({ d, names, ai, me, mine, endAt, onAct, t, children 
               {t("pwDraftAll")}
             </button>
             {PW_ROLES.map((r) => (
-              <button key={r} type="button" className={tab === r ? "on" : ""} onClick={() => setTab(r)}>
-                {t(ROLE_TAB[r])}
+              <button key={r} type="button" className={tab === r ? "on" : ""} title={t(ROLE_TIP[r])} onClick={() => setTab(r)}>
+                {t(ROLE_TAG[r])}
               </button>
             ))}
             <input type="search" value={find} placeholder={t("pwDraftSearch")} onChange={(e) => setFind(e.target.value)} />

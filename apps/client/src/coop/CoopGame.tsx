@@ -1,5 +1,6 @@
 // 협동 한 판: 방장은 게임을 진행하며 입력을 나눠 주고, 손님은 받은 입력으로 같이 진행.
 // 방장이 나가면 서버가 정한 다음 사람이 지금 상태 그대로 이어서 방장이 됨
+import { usePwBalanceRun } from "../balance";
 import { createParty, createPvp, parseSeed, pvpResult, rankSeats, type CharacterId, type RankChange, type RoomView, type RunState } from "@pixel-rogue/shared";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { GameScreen } from "../game/GameScreen";
@@ -65,6 +66,7 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
   }, [room.players, room.rank]);
   const seatsRef = useRef(seats);
   // run = 화면에 보이는 상태 (확정 + 짐작). 확정 상태는 HostSync·GuestSync가 따로 들고 있음
+  usePwBalanceRun();
   const run = useMemo((): RunState => {
     if (!isHost) return {} as RunState;
     const members = seatsRef.current.map((pid) => ({

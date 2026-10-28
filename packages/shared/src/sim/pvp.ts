@@ -143,8 +143,9 @@ export function pvpStats(s: RunState): void {
   // 스킬 대결: 평타 배율 · 버프(공격력·이동·공격 속도)
   const p = s.player;
   st.damage *= (kitOf(p.characterId)?.basic ?? 1) * buffMul(p, "dmg");
-  st.moveSpeed *= buffMul(p, "move");
-  st.attackSpeed *= buffMul(p, "rate");
+  st.moveSpeed *= buffMul(p, "move") * (tune.move ?? 1);
+  st.attackSpeed *= buffMul(p, "rate") * (tune.rate ?? 1);
+  st.range *= tune.range ?? 1;
 }
 
 /** 결과 (me = 내 자리): 이겼는지 · 처치·데스 · 데스매치 레벨 · 대난투 순위 · 받을 돈 */

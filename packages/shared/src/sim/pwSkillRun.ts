@@ -103,12 +103,19 @@ function minionsStep(s: RunState): void {
     m.prevX = m.x;
     m.prevY = m.y;
     m.t--;
+    // 상대에게 맞아 부서짐
+    if (m.body && m.body.hp <= 0) {
+      m.t = 0;
+      addEffect(s, { kind: "burst", x: m.x, y: m.y, dirX: 0, dirY: 0, size: 14, maxTicks: 14 });
+      continue;
+    }
     if (!sm) continue;
     let best = null;
     let bd = Infinity;
+    // 수풀·투명으로 안 보이는 상대는 못 노림 (markHidden: 쓴 사람 기준)
     for (const e of s.enemies) {
       const dd = (e.x - m.x) ** 2 + (e.y - m.y) ** 2;
-      if (e.hp > 0 && dd < bd) [bd, best] = [dd, e];
+      if (e.hp > 0 && !e.pwHid && dd < bd) [bd, best] = [dd, e];
     }
     if (!best) continue;
     const d = Math.sqrt(bd);
@@ -119,6 +126,7 @@ function minionsStep(s: RunState): void {
       keepInRoom(b, roomGrid(s));
       [m.x, m.y] = [b.x, b.y];
     }
+    if (m.body) [m.body.x, m.body.y, m.body.prevX, m.body.prevY] = [m.x, m.y, m.x, m.y];
     if (--m.cd > 0 || d > sm.range + best.r) continue;
     m.cd = sm.every;
     damageEnemy(s, best, skillPow(s.player) * sm.dmg, (best.x - m.x) / (d || 1), (best.y - m.y) / (d || 1), false);

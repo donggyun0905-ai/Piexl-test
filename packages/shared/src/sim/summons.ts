@@ -22,7 +22,7 @@ function nearestTo(s: RunState, x: number, y: number, range: number): EnemyState
   let best: EnemyState | null = null;
   let bestD = Infinity;
   for (const e of s.enemies) {
-    if (e.hp <= 0 || e.immune) continue;
+    if (e.hp <= 0 || e.immune || e.pwHid) continue;
     const d = (e.x - x) * (e.x - x) + (e.y - y) * (e.y - y);
     if (d > (range + e.r) * (range + e.r) || d >= bestD) continue;
     best = e;

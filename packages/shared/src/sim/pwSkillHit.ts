@@ -35,7 +35,7 @@ export function castFx(s: RunState, def: PwSkillDef, x: number, y: number, dx: n
 /** 지금 자리의 버프 곱 (공격력·이동·공격 속도·받는 피해) */
 export const buffMul = (p: PlayerState, k: "dmg" | "move" | "rate" | "taken"): number => (p.pwBuffs ?? []).reduce((m, b) => m * (b[k] ?? 1), 1);
 /** 스킬 한 번 피해의 바탕 (캐릭터 보정 공격력 배율 포함) */
-export const skillPow = (p: PlayerState): number => PW.skillDmg * (PW_CHAR[p.characterId]?.dmg ?? 1);
+export const skillPow = (p: PlayerState): number => PW.skillDmg * (PW_CHAR[p.characterId]?.dmg ?? 1) * (PW_CHAR[p.characterId]?.skill ?? 1);
 /** 투명(상대에게 안 보임) 버프 중인지 */
 export const pwHidden = (p: PlayerState): boolean => !!p.pwBuffs?.some((b) => b.hide);
 

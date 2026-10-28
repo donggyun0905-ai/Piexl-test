@@ -9,6 +9,7 @@ import { itemDesc, itemName } from "../i18n/items";
 import type { Controls } from "./controls";
 import { ItemIcon } from "./itemIcon";
 import { ItemTip, tipPos, useCloseOutside, type TipPos } from "./ItemTip";
+import { keyLabel, useSettings } from "../settings";
 
 export interface LoadoutView {
   weaponId: WeaponId;
@@ -25,7 +26,6 @@ export interface LoadoutView {
 }
 
 /** PC 사용 아이템 키 표시 (controls의 USE_KEYS와 같게) */
-const USE_KEY_LABELS = ["Q", "E"];
 
 /** 화면 바뀜 판단용 */
 export function loadoutKey(v: LoadoutView): string {
@@ -57,6 +57,7 @@ export function Loadout({ view, lang, t, touchMode, controls }: Props) {
   const counts = new Map<PassiveId, number>();
   for (const id of view.passives) counts.set(id, (counts.get(id) ?? 0) + 1);
   const [tip, setTip] = useState<LoadoutTip | null>(null);
+  const useKeys = useSettings().useKeys;
 
   // 모바일: 다른 곳을 누르면 닫기
   useCloseOutside(!!tip && touchMode, ".loadout-passive, .loadout-weapon-icon", setTip);
@@ -95,7 +96,7 @@ export function Loadout({ view, lang, t, touchMode, controls }: Props) {
               disabled={!id}
               onClick={() => controls()?.queueUse(i + 1)}
             >
-              <kbd>{USE_KEY_LABELS[i]}</kbd> {id && <ItemIcon item={{ kind: "use", id }} size={20} />} {id ? itemName("use", id, lang) : t("empty")}
+              <kbd>{keyLabel(useKeys[i] ?? "")}</kbd> {id && <ItemIcon item={{ kind: "use", id }} size={20} />} {id ? itemName("use", id, lang) : t("empty")}
             </button>
           ))}
         </span>

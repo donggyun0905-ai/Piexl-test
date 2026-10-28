@@ -51,6 +51,8 @@ export const RIDER = {
   gaugeMax: 1000,
   pulseR: 80,
   pulseMul: 3,
+  /** 패왕전: 펄스가 터질 때 나도 받는 피해 (펄스 피해 × 이 값) */
+  pvpSelf: 0.35,
   pulsePush: 14,
   /** 공격 한 번마다 게이지 + · 공격할 때마다 빨라짐(쌓이는 수 · 하나마다 이동 속도 · 공격이 없으면 이 틱 뒤 사라짐) */
   hitGauge: 20,

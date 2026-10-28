@@ -18,6 +18,25 @@ export function freshStart(s: RunState): void {
   p.hp = p.stats.maxHp;
   p.shieldPts = PW.shield;
   p.invulnTicks = PW.spawnGuard;
+  p.pwStand = undefined;
+}
+
+/** 풋내기 패시브: 쓰러질 때 한 번 체력 1로 3초 버팀 (그동안 안 쓰러짐), 끝나면 쓰러짐. 버티는 중이면 true */
+function lastStand(s: RunState): boolean {
+  const p = s.player;
+  if (p.characterId !== "novice" || p.pwStand === -1) return false;
+  if (p.pwStand === undefined) {
+    if (p.hp >= 0.5) return false;
+    p.pwStand = s.tick + PW.standTicks;
+    addEffect(s, { kind: "burst", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 22, maxTicks: 20 });
+  }
+  if (s.tick < p.pwStand) {
+    p.hp = Math.max(p.hp, 1);
+    return true;
+  }
+  p.pwStand = -1;
+  p.hp = 0;
+  return false;
 }
 
 /** 경기장 자리 중 살아 있는 사람들과 가장 먼 곳 */
@@ -47,6 +66,7 @@ export function settleDeaths(s: RunState): void {
   eachSeat(s, (i) => {
     const seat = pv.seats[i]!;
     // 화면에 0으로 보이는 체력(0.5 미만)은 쓰러짐
+    if (seat.on && lastStand(s)) return;
     if (seat.on && s.player.hp > 0 && s.player.hp < 0.5) s.player.hp = 0;
     if (!seat.on || s.player.hp > 0 || !checkDeath(s)) return;
     seat.on = false;

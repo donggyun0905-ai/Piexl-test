@@ -1,9 +1,10 @@
 // 게임 수치 바꾸기 (관리자 페이지). 기본값과 다른 값만 { 묶음: { 항목: { 값 이름: 숫자 } } }로 주고받고,
 // 게임이 읽는 표(CHARACTERS·WEAPONS·ENEMIES 등)에 그대로 넣음 → 게임 계산 코드는 그대로.
 // 같은 수치 = 같은 지문(hash). 일일 도전 기록·배틀·협동 방은 지문으로 어떤 수치로 했는지 맞춤
-// 수치 세트는 둘: 던전(BALANCE_GROUPS) · 타워 디펜스(TD_BALANCE_GROUPS). 서로 섞이지 않고 서버에도 따로 저장
+// 수치 세트는 셋: 던전(BALANCE_GROUPS) · 타워 디펜스(TD_BALANCE_GROUPS) · 패왕전(PW_BALANCE_GROUPS). 서로 섞이지 않고 서버에도 따로 저장
 import { BALANCE_GROUPS, type BalanceField, type BalanceGroup } from "./balanceFields";
 import { TD_BALANCE_GROUPS } from "./tdBalanceFields";
+import { PW_BALANCE_GROUPS } from "./pwBalanceFields";
 
 export * from "./balanceFields";
 export { TD_BALANCE_GROUPS } from "./tdBalanceFields";
@@ -170,5 +171,7 @@ export function createBalanceSet(groups: readonly BalanceGroup[]): BalanceSet {
 export const DUNGEON_BALANCE = createBalanceSet(BALANCE_GROUPS);
 /** 타워 디펜스 수치 (규칙·타워·적·보스·보스 라운드) */
 export const TD_BALANCE = createBalanceSet(TD_BALANCE_GROUPS);
+/** 패왕전 수치 (역할군·캐릭터 능력치·스킬·규칙) */
+export const PW_BALANCE = createBalanceSet(PW_BALANCE_GROUPS);
 
 export const { balanceDefault, balanceFields, cleanBalance, balanceHash, currentBalance, applyBalance, withBalance, balanceDiff, mergeBalance } = DUNGEON_BALANCE;

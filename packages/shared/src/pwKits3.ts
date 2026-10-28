@@ -36,7 +36,7 @@ export const PW_KITS_3: PwKits = {
   automata: kit(1,
     sk("adBind", "line", 10, "#ff5a8a", { range: 190, radius: 6, hit: { dmg: 0.9, root: 1 * SEC } }),
     sk("adSweep", "cone", 8, "#ff8aa0", { radius: 100, arc: 0.6, fx: "beam", hit: { dmg: 1.6 } }),
-    sk("adSisters", "summon", 16, "#ffb0c8", { summon: { n: 3, ticks: 8 * SEC, dmg: 0.35, range: 100, every: 24, look: "doll" } }),
+    sk("adSisters", "summon", 16, "#ffb0c8", { summon: { n: 3, hp: 0.15, ticks: 8 * SEC, dmg: 0.35, range: 100, every: 24, look: "doll" } }),
     sk("adArsenal", "point", 60, "#ff6a6a", { range: 180, radius: 58, fx: "rain", repeat: { n: 8, every: 9 }, hit: { dmg: 0.7 } }),
   ),
   rider: kit(1,

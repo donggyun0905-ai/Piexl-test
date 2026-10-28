@@ -42,6 +42,8 @@ import { voyagerTick } from "./voyager";
 import { zeusTick } from "./zeus";
 import type { RunState } from "./types";
 
+export { pwBasicTick } from "./pwBasic";
+
 type ClassTick = (s: RunState, want: boolean, speed: number) => void;
 
 export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {

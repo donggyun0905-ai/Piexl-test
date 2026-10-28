@@ -16,6 +16,8 @@ export function readAim(p: PlayerState, input: TickInput): void {
   const k = weaponOf(p).kind;
   if (k === "laser" || k === "medic" || k === "gun" || k === "snipe" || k === "bomb") p.aimDist = input.autoAim ? undefined : (Math.sqrt(input.aimX * input.aimX + input.aimY * input.aimY) / 100) * AIM_DIST_STEP;
   p.trKey = input.skill;
+  // 패왕전 직접 조준: 누른 곳까지 거리 (자동 조준이면 없음, pwBasic.manualAim)
+  p.pwAimD = input.autoAim ? undefined : (Math.sqrt(input.aimX * input.aimX + input.aimY * input.aimY) / 100) * AIM_DIST_STEP;
 }
 
 const isTracker = (p: PlayerState) => p.characterId === "tracker" && weaponOf(p).kind === "snipe";

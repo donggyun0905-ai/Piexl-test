@@ -1,4 +1,5 @@
 // 수치 세트 하나(던전 또는 타워 디펜스)의 관리 화면: 묶음 탭 · 수치 표 · 바꾼 기록 · 오른쪽 연습장 · 저장 줄
+import { PwRolesEditor } from "./PwRolesEditor";
 import { type BalanceValues } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 import { adminApi, errorText, logout, type BalanceRes, type ServerInfo, type SetKind } from "./adminApi";
@@ -111,13 +112,17 @@ export function BalanceAdmin({ server, kind, onLoggedOut }: Props) {
               <p className="admin-hint">
                 노란 칸 = 처음 값과 다름 · 테두리 칸 = 아직 저장 안 함 · ↺ = 처음 값으로. 칸에 마우스를 올리면 처음 값·범위가 보입니다.
               </p>
-              <BalanceEditor set={set} group={group} draft={draft} saved={saved.values} onChange={(id, key, v) => edit(group.id, id, key, v)} />
+              {group.id === "pwRoles" ? (
+                <PwRolesEditor set={set} draft={draft} saved={saved.values} onChange={(id, key, v) => edit(group.id, id, key, v)} />
+              ) : (
+                <BalanceEditor set={set} group={group} draft={draft} saved={saved.values} onChange={(id, key, v) => edit(group.id, id, key, v)} />
+              )}
             </>
           )}
           {tab === "status" && <StatusView set={set} draft={draft} saved={saved.values} onChange={edit} />}
           {tab === "history" && <HistoryView server={server} kind={kind} current={saved.hash} busy={busy} onApply={(v, n) => void save(v, n)} />}
         </div>
-        {practice && (kind === "td" ? <TdPreview draft={draft} /> : <PracticePreview draft={draft} />)}
+        {practice && kind !== "pw" && (kind === "td" ? <TdPreview draft={draft} /> : <PracticePreview draft={draft} />)}
       </div>
 
       {changes.length > 0 && (

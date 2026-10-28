@@ -1,0 +1,9 @@
+// 화면 글자: 패왕전에서만 바꾼 기본 공격·패시브 설명 (event/PwSkillList)
+export const PW_CHANGES_TEXT = {
+  pwPasNovice: { ko: "마지막 버팀: 쓰러질 때 한 번 체력 1로 3초 버팀 (그동안 안 쓰러짐), 끝나면 쓰러짐", en: "Last Stand: once, when you would fall, hold on at 1 HP for 3 seconds (you can't fall meanwhile), then fall", ja: "最後の踏ん張り: 倒れる時に一度だけ体力1で3秒耐える (その間は倒れない)、終わると倒れる" },
+  pwPasRider: { ko: "게이지가 차면 내 공격 범위만큼 둘레를 터뜨림 (나도 피해를 조금 받음)", en: "When the gauge fills, blasts around you within your attack range (you also take some damage)", ja: "ゲージが満ちると自分の攻撃範囲で周囲を爆発 (自分も少しダメージ)" },
+  pwBasicBedouin: { ko: "차크람을 던지지 않고 둘레를 한 번 베기", en: "Slashes once all around you instead of throwing the chakram", ja: "チャクラムを投げず周囲を一回斬る" },
+  pwBasicSlayer: { ko: "대낫으로 앞을 베기 (맵을 가르는 베기·검기 없음)", en: "Slashes ahead with the scythe (no map-splitting cut or blade waves)", ja: "大鎌で前方を斬る (マップを裂く斬撃・剣気なし)" },
+  pwBasicRemnant: { ko: "뒤로 물러나 그림자(안 보임)가 된 뒤 앞을 크게 찌름 · 그 뒤 5초 동안 기본 공격 못 함", en: "Steps back into the shadows (unseen), then strikes hard ahead · no basic attack for 5 seconds after", ja: "後ろに下がって影(見えない)になり前方を強く突く · その後5秒間通常攻撃不可" },
+  pwBasicAim: { ko: "마우스 위치를 공격 (자동 조준 없음)", en: "Attacks where your mouse is (no auto-aim)", ja: "マウスの位置を攻撃 (自動照準なし)" },
+} as const;

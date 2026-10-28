@@ -1,0 +1,43 @@
+/* 관리자 '패왕전 수치 · 역할군' (admin/PwRolesEditor): 역할 다섯 칸, 캐릭터를 끌어 옮김 */
+.pw-roles-cols {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  gap: 8px;
+}
+.pw-roles-col {
+  min-height: 240px;
+  padding: 8px;
+  border: 2px dashed #4a4658;
+  border-radius: 10px;
+  background: rgb(0 0 0 / 0.2);
+}
+.pw-roles-col.target {
+  border-color: #ffd860;
+  cursor: pointer;
+}
+.pw-roles-col h4 {
+  margin: 0 0 6px;
+}
+.pw-roles-chip {
+  display: block;
+  width: 100%;
+  margin: 3px 0;
+  padding: 4px 8px;
+  text-align: left;
+  cursor: grab;
+}
+.pw-roles-chip.changed {
+  background: #5a4a10;
+}
+.pw-roles-chip.unsaved {
+  outline: 2px solid #ffd860;
+}
+.pw-roles-chip.on {
+  color: #1a1622;
+  background: #ffd860;
+}
+@media (max-width: 760px) {
+  .pw-roles-cols {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

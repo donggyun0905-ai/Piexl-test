@@ -13,6 +13,7 @@ import type { EnemyState, RunState } from "./types";
 import { dist2, makeEnemy } from "./util";
 import { inBush } from "./paewangGrid";
 import { buffMul, pwHidden } from "./pwSkillHit";
+import { practiceSafe } from "./pvpPractice";
 
 /** 경기장에 나와 살아 있는 자리인지 */
 export function inPlay(s: RunState, i: number): boolean {
@@ -34,7 +35,9 @@ export function assignFoes(s: RunState): void {
   const live = pv.proxies.filter((_, j) => inPlay(s, j));
   eachSeat(s, (i) => {
     const team = pv.seats[i]!.team;
-    s.enemies = live.filter((e) => pv.seats[pv.proxies.indexOf(e)]!.team !== team);
+    // 상대 쪽 사람 + 상대가 소환한 것 (부술 수 있음)
+    const mins = (pv.mins ?? []).filter((m) => m.body && m.body.hp > 0 && m.t > 0 && pv.seats[m.seat]!.team !== team).map((m) => m.body!);
+    s.enemies = live.filter((e) => pv.seats[pv.proxies.indexOf(e)]!.team !== team).concat(mins);
   });
 }
 
@@ -109,6 +112,10 @@ function transfer(s: RunState, start: number[]): void {
     const e: EnemyState = pv.proxies[i]!;
     const seat = pv.seats[i]!;
     if (!inPlay(s, i)) return;
+    if (practiceSafe(s, i)) {
+      e.stunTicks = e.slowTicks = e.rootTicks = e.fearTicks = 0;
+      return;
+    }
     // 넘친 피해까지 그대로 (잘라 넘기면 받는 피해가 줄어드는 캐릭터는 체력이 0에 끝없이 가까워지기만 함)
     // 한 틱에 받는 피해는 (최대 체력 + 처음 보호막)의 burstCap까지 (한 방에 쓰러지지 않게)
     // 모두가 받는 피해 배율(PW.taken) × 캐릭터별 패왕전 받는 피해 보정 (paewangBalance) × 스킬 막기 버프

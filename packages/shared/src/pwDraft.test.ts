@@ -24,6 +24,15 @@ describe("패왕전 밴픽", () => {
     expect(draftTaken(d).size).toBe(5);
     expect(d.picks.every((c) => c && CHARACTER_IDS.includes(c))).toBe(true);
   });
+  it("1대1은 서로 모르게 골라 같은 캐릭터도 됨 (밴은 막음)", () => {
+    const d = newDraft("duel");
+    draftAct(d, "mage");
+    draftAct(d, null);
+    expect(draftAct(d, "mage")).toBe(false);
+    expect(draftAct(d, "ninja")).toBe(true);
+    expect(draftAct(d, "ninja")).toBe(true);
+    expect(d.picks).toEqual(["ninja", "ninja"]);
+  });
   it("밴픽으로 정한 AI 자리는 그 캐릭터로 AI가 됨", () => {
     const s = createPvp(3, "duel", [{ characterId: "mage" }, { characterId: "ninja", ai: true }]);
     expect(s.pvp!.seats.map((x) => x.human)).toEqual([true, false]);

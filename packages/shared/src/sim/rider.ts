@@ -3,7 +3,7 @@
 import { TICK_RATE } from "../constants";
 import { RIDER_PERKS as K } from "../itemsRider";
 import { RIDER as R, type RideStyle } from "../weaponsRider";
-import { blastAt, damageEnemy, healPlayer, ignite } from "./combat";
+import { blastAt, damageEnemy, damagePlayer, healPlayer, ignite } from "./combat";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, weaponOf } from "./util";
 import { addFlame } from "./flames";
@@ -39,8 +39,11 @@ export function riderTaken(p: PlayerState): number {
 /** 펄스: 둘레를 크게 터뜨림 (mul: 피해 배율) */
 function pulse(s: RunState, mul: number): void {
   const p = s.player;
-  const r = R.pulseR * (hasPerk(p, "rdShock") ? K.rdShock.r : 1);
-  blastAt(s, p.x, p.y, r, p.stats.damage * R.pulseMul * mul * riderSpeedMul(p), { push: R.pulsePush, still: true });
+  // 패왕전: 터지는 범위 = 내 공격 범위 · 나도 그 피해의 일부를 받음
+  const r = s.pvp ? p.stats.range : R.pulseR * (hasPerk(p, "rdShock") ? K.rdShock.r : 1);
+  const dmg = p.stats.damage * R.pulseMul * mul * riderSpeedMul(p);
+  blastAt(s, p.x, p.y, r, dmg, { push: R.pulsePush, still: true });
+  if (s.pvp) damagePlayer(s, dmg * R.pvpSelf);
   addEffect(s, { kind: "rdPulse", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, maxTicks: 22 });
   if (hasPerk(p, "rdRepair")) healPlayer(s, K.rdRepair.heal);
 }

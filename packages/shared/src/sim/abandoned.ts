@@ -88,7 +88,9 @@ export function abandonedTick(s: RunState, want: boolean): void {
   if ((p.abGuard ?? 0) > 0) p.abGuard = (p.abGuard ?? 0) - 1;
   if ((p.abBuff ?? 0) > 0) p.abBuff = (p.abBuff ?? 0) - 1;
   if ((p.abMiss ?? 0) > 0) p.abMiss = (p.abMiss ?? 0) - 1;
-  updateKids(s);
+  // 패왕전: 곁의 두 아이는 나와서 싸우지 않음 (특수기도 없음)
+  if (s.pvp) delete p.abKids;
+  else updateKids(s);
   updateShow(s);
   const set = tagSet(p);
   // 탭을 누를 수 없는 공격자(타워·두 번째 무기)는 조합대로 스스로 교대
@@ -118,8 +120,10 @@ function special(s: RunState, set: TagSet): void {
   const p = s.player;
   const spc = set.specials[p.abStage ?? 0]!;
   const dmg = p.stats.damage * spc.mul * (hasPerk(p, "alleyBond") ? K.alleyBond.damage : 1) * buff(p);
-  kidsOf(s);
-  startShow(s, spc, dmg);
+  if (!s.pvp) {
+    kidsOf(s);
+    startShow(s, spc, dmg);
+  }
   if (hasPerk(p, "grewTogether")) healPlayer(s, p.stats.maxHp * K.grewTogether.heal);
   if (hasPerk(p, "threeAsOne")) p.abBuff = K.threeAsOne.ticks;
 }

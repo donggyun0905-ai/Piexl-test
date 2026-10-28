@@ -39,6 +39,8 @@ export interface PwSummon {
   look: string;
   /** 움직이지 않음 (포탑·장판) */
   still?: boolean;
+  /** 하나의 체력 = 쓴 사람 최대 체력 × 이 값 (없으면 PW.minionHp). 상대가 때려 부술 수 있음 */
+  hp?: number;
 }
 
 export interface PwSkillDef {

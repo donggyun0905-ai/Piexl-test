@@ -7,7 +7,7 @@ import { seatNo } from "./party";
 import { inPlay } from "./pvpWorld";
 import { castFx, resolveCast } from "./pwSkillHit";
 import type { RunState } from "./types";
-import { keepInRoom, roomGrid } from "./util";
+import { keepInRoom, makeEnemy, roomGrid } from "./util";
 
 /** 지금 자리의 k번 스킬 (없으면 undefined) */
 export const skillDef = (s: RunState, k: number): PwSkillDef | undefined => kitOf(s.player.characterId)?.skills[k];
@@ -74,7 +74,11 @@ export function castSkill(s: RunState, k: number, input: TickInput): void {
         // 벽 안에 생기지 않게 방 안으로
         const b = { x, y, prevX: x, prevY: y, r: 4 };
         keepInRoom(b, roomGrid(s));
-        mins.push({ id: s.nextId++, seat: i, k, x: b.x, y: b.y, prevX: b.x, prevY: b.y, t: sm.ticks, cd: 20 + n * 6 });
+        const body = makeEnemy(s, "fighter", b.x, b.y, 1, 0);
+        body.noGold = true;
+        body.r = 5;
+        body.hp = body.maxHp = Math.max(1, Math.round(p.stats.maxHp * (sm.hp ?? PW.minionHp)));
+        mins.push({ id: s.nextId++, seat: i, k, x: b.x, y: b.y, prevX: b.x, prevY: b.y, t: sm.ticks, cd: 20 + n * 6, body });
         castFx(s, def, b.x, b.y, 0, 0, 24);
       }
       return;

@@ -31,7 +31,7 @@ export const PW_KITS_2: PwKits = {
     sk("scrapShield", "cone", 8, "#8aff8a", { radius: 40, arc: 0.9, fx: "wave", hit: { dmg: 1.2, stun: 0.8 * SEC, push: 6 } }),
     sk("twinPistols", "cone", 8, "#ff6a6a", { radius: 120, arc: 0.4, fx: "rain", repeat: { n: 4, every: 8 }, hit: { dmg: 0.6 } }),
     sk("brokenBlade", "dash", 8, "#6aa8ff", { range: 100, speed: 8, hit: { dmg: 1.8 } }),
-    sk("lastPromise", "self", 60, "#ffe070", { radius: 60, fx: "spin", repeat: { n: 8, every: 30 }, hit: { dmg: 0.8 }, buff: { ticks: 4 * SEC, taken: 0.7 } }),
+    sk("lastPromise", "self", 60, "#ffe070", { radius: 60, fx: "slash", repeat: { n: 3, every: 5 }, hit: { dmg: 1.9 } }),
   ),
   titan: kit(1,
     sk("pistonFist", "line", 8, "#ffb050", { range: 150, radius: 12, hit: { dmg: 1.8, push: 10 } }),

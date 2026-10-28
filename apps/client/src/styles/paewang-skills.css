@@ -156,3 +156,15 @@
     transform: scale(1.6);
   }
 }
+/* 스킬 칸 왼쪽 패시브 칸 (game/PwSkillBar) */
+.pw-skill-passive {
+  box-sizing: border-box;
+  border-color: #ffd860;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #1a1622;
+  background: #ffd860;
+  cursor: help;
+}

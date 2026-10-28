@@ -50,3 +50,21 @@ describe("패왕전 연습장", () => {
     expect(s.pvp!.winner).toBeUndefined();
   });
 });
+
+describe("패왕전 소환물", () => {
+  it("소환한 것은 상대 목록에 들어가 맞고, 체력이 다하면 부서짐", () => {
+    const s = createPvp(7, "duel", [{ characterId: "engineer" }, { characterId: "mage", ai: true }]);
+    s.tick = 400;
+    s.player.pwCd = [0, 0, 0, 0];
+    stepPvp(s, [{ ...EMPTY_INPUT, skill: 1, aimX: 100, aimY: 0 }]);
+    const m = s.pvp!.mins?.[0];
+    expect(m?.body?.hp).toBeGreaterThan(0);
+    useSeat(s, 1);
+    markHidden(s);
+    expect(s.enemies).toContain(m!.body);
+    useSeat(s, 0);
+    m!.body!.hp = 0;
+    stepPvp(s, [EMPTY_INPUT]);
+    expect(s.pvp!.mins!.length).toBe(0);
+  });
+});

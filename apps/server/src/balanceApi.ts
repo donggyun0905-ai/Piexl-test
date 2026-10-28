@@ -1,8 +1,8 @@
 // 게임 수치 (관리자 페이지에서 바꿈). 서버마다 따로 저장. 바꿀 때마다 그 수치를 지문(hash)으로 남겨 둠
 // → 일일 도전 기록은 그 판을 한 수치로 다시 돌려 확인할 수 있음
-// 수치 세트는 둘: 던전(기본) · 타워 디펜스(?set=td). 표·지금 수치·바꾼 기록 모두 따로
+// 수치 세트는 셋: 던전(기본) · 타워 디펜스(?set=td) · 패왕전(?set=pw). 표·지금 수치·바꾼 기록 모두 따로
 import { clearRows } from "./clearStats";
-import { DEFAULT_BALANCE_HASH, DUNGEON_BALANCE, TD_BALANCE, type BalanceSet, type BalanceValues } from "@pixel-rogue/shared";
+import { DEFAULT_BALANCE_HASH, DUNGEON_BALANCE, PW_BALANCE, TD_BALANCE, type BalanceSet, type BalanceValues } from "@pixel-rogue/shared";
 import { handleLogin, isAdmin } from "./adminLogin";
 import type { HubContext } from "./hub";
 import { fail, json, readJson } from "./http";
@@ -18,16 +18,17 @@ interface Store {
 
 const DUNGEON: Store = { set: DUNGEON_BALANCE, versions: "balance_versions", log: "balance_log", meta: "balance" };
 const TD: Store = { set: TD_BALANCE, versions: "td_balance_versions", log: "td_balance_log", meta: "tdBalance" };
+const PW: Store = { set: PW_BALANCE, versions: "pw_balance_versions", log: "pw_balance_log", meta: "pwBalance" };
 
-export const BALANCE_SCHEMA = [DUNGEON, TD].flatMap((s) => [
+export const BALANCE_SCHEMA = [DUNGEON, TD, PW].flatMap((s) => [
   `CREATE TABLE IF NOT EXISTS ${s.versions} (hash TEXT PRIMARY KEY, data TEXT NOT NULL, created INTEGER NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS ${s.log} (at INTEGER NOT NULL, hash TEXT NOT NULL, note TEXT NOT NULL)`,
 ]);
 /** 바꾼 기록은 최근 이만큼만 보여 줌 */
 const LOG_SIZE = 30;
 
-/** 주소의 ?set=td 이면 타워 디펜스 수치 */
-const storeOf = (request: Request): Store => (new URL(request.url).searchParams.get("set") === "td" ? TD : DUNGEON);
+/** 주소의 ?set=td 이면 타워 디펜스 수치 · ?set=pw 이면 패왕전 수치 */
+const storeOf = (request: Request): Store => ({ td: TD, pw: PW })[new URL(request.url).searchParams.get("set") ?? ""] ?? DUNGEON;
 
 function versionIn(ctx: HubContext, store: Store, hash: string): BalanceValues | null {
   if (hash === DEFAULT_BALANCE_HASH) return {};
