@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.191",
+    date: "2026-10-28",
+    items: {
+      ko: ["패왕전 스킬 이펙트를 새로 다듬음: 겹치면 밝아지는 빛 · 흰 섬광과 두 겹 충격파 · 꼬리 달린 불똥 · 하늘에서 떨어지는 운석 · 끝이 가는 초승달 베기 · 흰 속이 빛나는 빛줄기 · 도는 바닥 문양(장판·회복·오라·소환) · 또렷한 예고(터지기 직전 깜빡임) · 불씨·별빛처럼 부드러운 캐릭터 느낌 · 그림이 조금 더 오래 남음"],
+      en: ["Reworked Champion Clash skill effects: light that brightens where it overlaps · white flashes and double shockwaves · sparks with trails · meteors falling from the sky · tapered crescent slashes · beams with a glowing white core · rotating ground runes (fields, heals, auras, summons) · crisp telegraphs that blink right before they hit · softer character flavors like embers and starlight · effects linger a little longer"],
+      ja: ["覇王戦スキルエフェクトを作り直し: 重なると明るくなる光 · 白い閃光と二重の衝撃波 · 尾を引く火花 · 空から落ちる隕石 · 先細りの三日月斬り · 白い芯が光るビーム · 回る地面の紋様(フィールド・回復・オーラ・召喚) · はっきりした予告(当たる直前に点滅) · 火の粉・星明かりのような柔らかいキャラの雰囲気 · エフェクトが少し長く残る"],
+    },
+  },
+  {
     version: "0.48.190",
     date: "2026-10-28",
     items: {

@@ -23,7 +23,8 @@ export function castFx(s: RunState, def: PwSkillDef, x: number, y: number, dx: n
     dirX: dx,
     dirY: dy,
     size: def.shape === "dash" || def.shape === "blink" ? Math.max(14, def.radius) : def.radius,
-    maxTicks: ticks,
+    // 그림만 조금 더 길게 (계산과 상관없음) · 예고는 터질 때까지 그대로
+    maxTicks: warn ? ticks : Math.round(ticks * PW.fxLinger),
     tint: def.tint,
     style: PW_FX_STYLES.indexOf(def.fx),
     ...(line ? { toX: x + dx * def.range, toY: y + dy * def.range } : {}),
