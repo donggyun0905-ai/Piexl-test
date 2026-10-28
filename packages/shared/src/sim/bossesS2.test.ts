@@ -33,6 +33,12 @@ function play(run: RunState, n: number) {
   return { hazards, shots, minions };
 }
 
+/** 멀리 허수아비 하나: 방이 정리되지 않게 (지형이 작동하는 상태) */
+function keepFight(run: RunState): void {
+  run.rooms[run.roomId]!.cleared = false;
+  run.enemies.push(makeEnemy(run, "dummy", 40, 40, 1, 0));
+}
+
 describe("시즌 2 새 보스 · 지형", () => {
   it("단계마다 새 보스가 섞여 나옴", () => {
     expect(BOSS_TIERS[0]).toContain("toad");
@@ -77,6 +83,7 @@ describe("시즌 2 새 보스 · 지형", () => {
 
   it("지형: 진흙에서 느려짐 · 가시는 주기적으로 솟음 · 층 보스에 맞게 깔림", () => {
     const run = createRun(1, "warden");
+    keepFight(run);
     run.terrain = { room: run.roomId, mud: [[run.player.x - 20, run.player.y - 20, 40, 40]], lava: [], water: [], spikes: [] };
     const x0 = run.player.x;
     stepSim(run, { ...EMPTY_INPUT, moveX: 100 });
@@ -95,5 +102,31 @@ describe("시즌 2 새 보스 · 지형", () => {
       if (room) found = (makeTerrain(r, room.id)?.lava.length ?? 0) > 0;
     }
     expect(found).toBe(true);
+  });
+
+  it("방의 적을 다 잡으면 지형이 멈춤 (용암 피해·진흙 느려짐·독가스 없음)", () => {
+    const run = createRun(1, "warden");
+    const p = run.player;
+    const room = run.rooms[run.roomId]!;
+    const area = (): [number, number, number, number] => [p.x - 30, p.y - 30, 60, 60];
+    room.cleared = false;
+    keepFight(run);
+    run.terrain = { room: run.roomId, mud: [], lava: [area()], water: [], spikes: [], gas: [{ x: p.x, y: p.y, r: 20, until: 9999 }] };
+    for (let i = 0; i < 60; i++) stepSim(run, EMPTY_INPUT);
+    expect(p.hp).toBeLessThan(p.stats.maxHp);
+    room.cleared = true;
+    run.enemies = [];
+    p.hp = p.stats.maxHp;
+    run.terrain = { room: run.roomId, mud: [area()], lava: [area()], water: [], spikes: [], gas: [{ x: p.x, y: p.y, r: 20, until: 9999 }] };
+    const x0 = p.x;
+    stepSim(run, { ...EMPTY_INPUT, moveX: 100 });
+    const moved = p.x - x0;
+    for (let i = 0; i < 60; i++) stepSim(run, EMPTY_INPUT);
+    expect(p.hp).toBe(p.stats.maxHp);
+    expect(run.terrain.gas).toBeUndefined();
+    run.terrain = undefined;
+    const x1 = p.x;
+    stepSim(run, { ...EMPTY_INPUT, moveX: 100 });
+    expect(moved).toBeCloseTo(p.x - x1, 3);
   });
 });

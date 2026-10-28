@@ -13,6 +13,8 @@ function withOne(kind: EnemyKind, who: CharacterId = "warden", seed = 4): RunSta
   const e = makeEnemy(run, kind, run.player.x + 40, run.player.y - 30, 1, 10);
   e.hp = e.maxHp = 5000;
   run.enemies = [e];
+  // 시작 방은 이미 정리돼 있음: 싸우는 방으로 (정리된 방은 지형이 멈춤)
+  run.rooms[run.roomId]!.cleared = false;
   return run;
 }
 

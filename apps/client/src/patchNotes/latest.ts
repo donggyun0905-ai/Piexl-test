@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.176",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "방의 적을 다 잡으면 지형이 멈춤: 진흙·물에서 느려지지 않고, 용암·감전된 물·가시 함정·독가스 피해가 없음 (가시는 들어간 채)",
+        "바닥 아이템이 늘 지형(진흙·용암·물·가시·독가스) 위에 보여서 가려지지 않음",
+      ],
+      en: [
+        "Terrain stops once a room is cleared: no slowing in mud or water, and no damage from lava, shocked water, spike traps or poison gas (spikes stay down)",
+        "Floor items are always drawn above terrain (mud, lava, water, spikes, poison gas), so they're never hidden",
+      ],
+      ja: [
+        "部屋の敵を全滅させると地形が止まる: 泥・水で遅くならず、溶岩・感電した水・トゲの罠・毒ガスのダメージなし (トゲは引っ込んだまま)",
+        "床のアイテムが常に地形 (泥・溶岩・水・トゲ・毒ガス) の上に表示され、隠れない",
+      ],
+    },
+  },
+  {
     version: "0.48.175",
     date: "2026-10-28",
     items: {

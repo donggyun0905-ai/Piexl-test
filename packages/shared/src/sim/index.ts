@@ -90,5 +90,5 @@ export { inBush, onDeck } from "./paewangGrid";
 export { trapUp } from "./pvpFlow";
 export { inPlay } from "./pvpWorld";
 
-export { spikeState, makeTerrain } from "./terrain";
+export { spikeState, makeTerrain, terrainIdle } from "./terrain";
 export type { TerrainState } from "./terrainTypes";

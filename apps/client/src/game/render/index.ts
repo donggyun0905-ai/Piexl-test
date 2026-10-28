@@ -32,7 +32,7 @@ import { drawDemigodAir } from "./demigod";
 import { drawSageAir, drawSageBanner, drawSageGround } from "./sage";
 import { drawMedicAir, drawMedicGround } from "./medic";
 import { lerp, type Snap } from "./palette";
-import { drawRoom } from "./room";
+import { drawPickups, drawRoom } from "./room";
 import { drawTerrain } from "./terrain";
 import { drawInkMarks } from "./scribe";
 import { drawIdra } from "./season2";
@@ -143,10 +143,11 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   ctx.setTransform(k, 0, 0, k, -camX * k, -camY * k);
   ctx.imageSmoothingEnabled = false;
 
-  drawRoom(ctx, s, alpha, snap);
+  drawRoom(ctx, s);
   drawTerrain(ctx, s, snap);
   drawSwarmGround(ctx, s, snap);
   drawPwGround(ctx, s);
+  drawPickups(ctx, s, alpha, snap);
   if (opt.bossName) drawArenaLabels(ctx, s, opt.bossName);
   if (opt.showRange && !s.over) drawRangeRing(ctx, s, snap(lerp(s.player.prevX, s.player.x, alpha)), snap(lerp(s.player.prevY, s.player.y, alpha)));
   drawTelegraphs(ctx, s, alpha, snap);

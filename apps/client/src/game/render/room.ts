@@ -6,7 +6,7 @@ import { drawRoomFeatures } from "../roomFeatures";
 import { C, type Snap } from "./palette";
 import { drawDeco, themeFor, type FloorTheme } from "./floorThemes";
 
-export function drawRoom(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
+export function drawRoom(ctx: CanvasRenderingContext2D, s: RunState): void {
   // 방 모양 (태초의 빛과 어둠 방은 상자 벽)
   // 층 테마: 그 층 보스에 어울리는 색·바닥 꾸밈
   const grid = roomGrid(s);
@@ -22,6 +22,10 @@ export function drawRoom(ctx: CanvasRenderingContext2D, s: RunState, alpha: numb
   if (grid) drawShapeTiles(ctx, grid, th);
 
   drawRoomFeatures(ctx, s);
+}
+
+/** 바닥 아이템·가격: 지형(진흙·용암·물·가시·독가스) 위에 그려서 가려지지 않게 */
+export function drawPickups(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   for (const pk of s.rooms[s.roomId]?.pickups ?? []) {
     // 협동: 다른 사람 아이템은 보이지 않음
     if (!mine(s, pk)) continue;
