@@ -181,13 +181,6 @@ export function drawEngineerGear(ctx: CanvasRenderingContext2D, s: RunState, alp
     ctx.arc(x, y, p.r + 6, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * f);
     ctx.stroke();
   }
-  if ((p.shieldPts ?? 0) >= 1) {
-    ctx.strokeStyle = "rgba(255, 200, 120, 0.8)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(x, y, p.r + 3, 0, Math.PI * 2);
-    ctx.stroke();
-  }
   if (w.gear === "reactor") {
     // 게이지: 차는 중 주황, 두 배 중 흰색으로 줄어듦, 과열 중 빨간색
     const boost = p.boostTicks ?? 0;

@@ -100,4 +100,6 @@ export const PAEWANG_TEXT = {
   pwKill4: { ko: "멈출 수 없다!", en: "Unstoppable!", ja: "止められない!" },
   pwDown: { ko: "쓰러졌습니다", en: "You fell", ja: "倒れました" },
   pwBackIn: { ko: "{n}초 뒤 다시 나갑니다", en: "Back in {n}s", ja: "{n}秒後に復帰" },
+  pwDealt: { ko: "준 피해", en: "Dealt", ja: "与ダメ" },
+  pwTaken: { ko: "받은 피해", en: "Taken", ja: "被ダメ" },
 };

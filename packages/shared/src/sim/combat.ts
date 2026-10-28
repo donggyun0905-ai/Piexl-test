@@ -144,8 +144,8 @@ export function damagePlayer(s: RunState, dmg: number): void {
   titanHurt(s, dmg);
   if (s.party) p.hurt = (p.hurt ?? 0) + taken;
   s.roomDamaged = true;
-  // 배수의 진: 체력이 30% 이하면 무적 시간 2배
-  p.invulnTicks = Math.round(HIT_INVULN_TICKS * (hasPerk(p, "lastStand") && p.hp <= p.stats.maxHp * PERKS.lastStand.below ? PERKS.lastStand.invuln : 1) * tabooDown(s, "shortInvuln"));
+  // 배수의 진: 체력이 30% 이하면 무적 시간 2배 · 패왕전은 맞은 뒤 무적 없음
+  p.invulnTicks = s.pvp ? 0 : Math.round(HIT_INVULN_TICKS * (hasPerk(p, "lastStand") && p.hp <= p.stats.maxHp * PERKS.lastStand.below ? PERKS.lastStand.invuln : 1) * tabooDown(s, "shortInvuln"));
   // 결벽증: 맞으면 잠깐 빨라짐
   if (hasPerk(p, "cleanFreak")) p.rushTicks = RUSH_TICKS;
   // 연막(닌자): 둘레 적이 느려지고 1초 더 무적

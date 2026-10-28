@@ -39,7 +39,7 @@ describe("패왕전", () => {
     }
   });
 
-  it("모두 진짜 캐릭터 자리 · 보호막 500 · 공용 패시브 5개는 무작위 · AI는 전용 패시브도 무작위 · 서로 다른 아이템 2", () => {
+  it("모두 진짜 캐릭터 자리 · 처음 보호막(PW.shield) · 공용 패시브 5개는 무작위 · AI는 전용 패시브도 무작위 · 서로 다른 아이템 2", () => {
     expect(PW_TIERS).toHaveLength(PW.gunLevels);
     for (const mode of PW_MODES) {
       const s = createPvp(3, mode, [{ characterId: "drifter", loadout: { weapon: "crossbow", passives: [], uses: [] } }]);

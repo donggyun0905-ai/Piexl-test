@@ -1,13 +1,10 @@
-// 패왕전 진행: 쓰러짐(처치·데스) · 토너먼트 다음 차례 · 데스매치 레벨·다시 나오기 · 숲 함정 · 대난투 아이템 · 승패
-import { TILE_SIZE } from "../constants";
+// 패왕전 진행: 쓰러짐(처치·데스) · 토너먼트 다음 차례 · 데스매치 레벨·다시 나오기 · 숲 함정 · 승패 (떨어지는 물건은 pvpExtras)
 import { PW, PW_TIERS } from "../paewangDefs";
 import { PW_ARENAS } from "../paewangMaps";
-import { createRng, deriveSeed } from "../rng";
 import { checkDeath } from "./run";
 import { damagePlayer } from "./combat";
-import { addPickup, passivePool, usePool, weaponPool } from "./loot";
 import { inRect, spotXY } from "./paewangGrid";
-import { gunSwap, pwWeapons } from "./paewangKit";
+import { gunSwap } from "./paewangKit";
 import { allPlayers, eachSeat, useSeat } from "./party";
 import { inPlay } from "./pvpWorld";
 import type { RunState } from "./types";
@@ -52,6 +49,8 @@ export function settleDeaths(s: RunState): void {
     if (!seat.on || s.player.hp > 0 || !checkDeath(s)) return;
     seat.on = false;
     seat.deaths++;
+    // 쓰러지면 그 사람이 쏜 탄도 바로 사라짐
+    s.projectiles = s.projectiles.filter((pr) => !pr.fromPlayer || pr.shooter !== i);
     addEffect(s, { kind: "burst", x: s.player.x, y: s.player.y, dirX: 0, dirY: 0, size: 16, maxTicks: 16 });
     const k = seat.by !== undefined ? pv.seats[seat.by] : undefined;
     if (k && seat.by !== i) k.kills++;
@@ -138,22 +137,4 @@ export function updateTraps(s: RunState): void {
   eachSeat(s, (i) => {
     if (inPlay(s, i) && traps.some((t) => inRect(s.player.x, s.player.y, t))) damagePlayer(s, PW.trapDmg);
   });
-}
-
-/** 대난투: 간격마다 들판 아무 곳에 무기·패시브·사용 아이템 (누구나 주울 수 있음) */
-export function updateDrops(s: RunState): void {
-  if (s.pvp!.mode !== "brawl" || s.tick % PW.dropEvery !== 0) return;
-  const room = s.rooms[s.roomId]!;
-  if (room.pickups.length >= PW.dropMax) return;
-  const def = PW_ARENAS[s.pvp!.arena];
-  const rng = createRng(deriveSeed(s.seed, "pwDrop", s.tick));
-  const x = (3 + rng.nextFloat() * (def.cols - 6)) * TILE_SIZE;
-  const y = (3 + rng.nextFloat() * (def.rows - 6)) * TILE_SIZE;
-  const r = rng.nextFloat();
-  const weapons = weaponPool(s, true).filter((id) => pwWeapons(s.player.characterId).includes(id));
-  if (r < 0.2 && weapons.length) addPickup(s, s.roomId, "weapon", rng.pick(weapons), x, y);
-  else if (r < 0.5) addPickup(s, s.roomId, "use", rng.pick(usePool(s)), x, y);
-  else addPickup(s, s.roomId, "passive", rng.pick(passivePool(s)), x, y);
-  delete room.pickups[room.pickups.length - 1]!.owner;
-  addEffect(s, { kind: "burst", x, y, dirX: 0, dirY: 0, size: 16, maxTicks: 20 });
 }

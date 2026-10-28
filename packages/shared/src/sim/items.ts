@@ -1,5 +1,6 @@
 // 아이템: 바닥 아이템 줍기·바꾸기, 사용 아이템 쓰기, 능력치 다시 계산 (놓기는 loot, 상점은 shop)
 import { pvpStats } from "./pvp";
+import { throwIce } from "./pvpExtras";
 import { BIG_COIN } from "../constants";
 import { morphMods } from "./morphEvo";
 import { eaterMods } from "./eater";
@@ -99,7 +100,8 @@ function touching(s: RunState, pk: Pickup, reach: number): boolean {
 
 /** 협동: 옆에 쓰러진 친구 (없으면 null) */
 function downedNear(s: RunState): PlayerState | null {
-  if (!s.party) return null;
+  // 패왕전은 살리기 없음
+  if (!s.party || s.pvp) return null;
   const me = s.player;
   const near = (p: PlayerState) => {
     const dx = p.x - me.x;
@@ -114,7 +116,7 @@ export function updateItems(s: RunState, input: TickInput): void {
   const p = s.player;
   if (p.shieldTicks > 0) p.shieldTicks--;
   // 세이렌에게 홀린 동안은 물약 등 사용 아이템을 못 씀
-  if (input.useSlot > 0 && !charmed(s.player)) useSlot(s, input.useSlot - 1);
+  if (input.useSlot > 0 && !charmed(s.player)) useSlot(s, input.useSlot - 1, input);
   if (input.statPick > 0) spendStat(s, input.statPick);
   if (input.sell) sellItem(s, input.sell);
   // 층 보상은 클릭(모바일은 탭)으로 고름. 거리 상관없음
@@ -256,7 +258,7 @@ function take(s: RunState, pk: Pickup): void {
   addEffect(s, { kind: "hit", x: pk.x, y: pk.y, dirX: 0, dirY: 0, size: 5, maxTicks: 8 });
 }
 
-function useSlot(s: RunState, slot: number): void {
+function useSlot(s: RunState, slot: number, input: TickInput): void {
   const p = s.player;
   const item = p.useSlots[slot];
   if (!item) return;
@@ -275,7 +277,9 @@ function useSlot(s: RunState, slot: number): void {
     else if (p.characterId === "mukin") mukinPotion(s, amount);
     else healPlayer(s, amount);
   } else if (item === "frost") {
-    s.freezeTicks = USE_ITEMS.frost.ticks;
+    // 패왕전: 누른 곳으로 얼음 폭탄을 던져 범위 안 상대를 얼림
+    if (s.pvp) throwIce(s, input);
+    else s.freezeTicks = USE_ITEMS.frost.ticks;
   } else if (item === "bomb") {
     const { damage, radius } = USE_ITEMS.bomb;
     for (const e of s.enemies) {

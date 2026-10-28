@@ -54,6 +54,7 @@ import { drawRunPet } from "./runPet";
 import { drawOniUps, type OniUp } from "./oniUps";
 import { drawSwarmGround } from "./swarmMap";
 import { drawPaewang, drawPwGround } from "./paewang";
+import { pwShown } from "./pwLook";
 import { themeFor } from "./floorThemes";
 import { drawAmbushOverlay, drawTrackerAura } from "./tracker";
 import { drawForgottenAura, drawForgottenBack } from "./forgotten";
@@ -106,17 +107,18 @@ export interface DrawOptions {
 export type DrawOverlay = (ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: (v: number) => number) => void;
 
 /** 사람마다 그 자리를 꺼내 놓고 그림 (협동은 다른 사람 먼저, 나는 맨 위). me: 내 자리 */
+/** 패왕전: 쓰러진 사람·수풀에 숨은 상대는 몸·장치·효과를 하나도 그리지 않음 */
 function eachPerson(s: RunState, fn: (me: boolean) => void): void {
   const party = s.party;
   if (!party) return fn(true);
   const mine = s.seat ?? 0;
   for (let i = 0; i < party.length; i++) {
-    if (i === mine) continue;
+    if (i === mine || (s.pvp && !pwShown(s, i))) continue;
     useSeat(s, i);
     fn(false);
   }
   useSeat(s, mine);
-  fn(true);
+  if (!s.pvp || pwShown(s, mine)) fn(true);
 }
 
 /** 마우스 자리 → 게임 좌표 */
@@ -149,7 +151,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   drawPwGround(ctx, s);
   drawPickups(ctx, s, alpha, snap);
   if (opt.bossName) drawArenaLabels(ctx, s, opt.bossName);
-  if (opt.showRange && !s.over) drawRangeRing(ctx, s, snap(lerp(s.player.prevX, s.player.x, alpha)), snap(lerp(s.player.prevY, s.player.y, alpha)));
+  if (opt.showRange && !s.over && (!s.pvp || pwShown(s, s.seat ?? 0))) drawRangeRing(ctx, s, snap(lerp(s.player.prevX, s.player.x, alpha)), snap(lerp(s.player.prevY, s.player.y, alpha)));
   drawTelegraphs(ctx, s, alpha, snap);
   drawUltGround(ctx, s);
   drawBeastGround(ctx, s);

@@ -130,6 +130,35 @@ export interface PvpSeat {
   /** 지난번 AI 입력 때 자리 (막힘 판정) */
   lastX?: number;
   lastY?: number;
+  /** 이 판에 상대에게 준 피해 · 받은 피해 합 (점수판) */
+  dealt?: number;
+  taken?: number;
+  /** 얼음 시계에 얼어 있는 끝 틱 (그림) */
+  iced?: number;
+}
+
+/** 패왕전 사람 자리 값 */
+export interface PwPlayerState {
+  /** 이동 속도 강화 구슬 남은 틱 */
+  pwFast?: number;
+}
+
+/** 패왕전 바닥 강화 구슬: 0 회복 · 1 공격 속도 · 2 이동 속도 (닿으면 바로) */
+export interface PwOrb {
+  id: number;
+  kind: 0 | 1 | 2;
+  x: number;
+  y: number;
+}
+
+/** 패왕전 얼음 시계: 던진 자리(x·y)에서 떨어질 곳(tx·ty)으로 날아가 터지며 범위 안 상대를 얼림 · t 남은 틱(0 아래는 터진 뒤 그림만) */
+export interface PwIce {
+  x: number;
+  y: number;
+  tx: number;
+  ty: number;
+  t: number;
+  team: number;
 }
 
 export interface PvpState {
@@ -142,6 +171,8 @@ export interface PvpState {
   place?: number;
   /** 이긴 편 (모두가 적이면 자리 번호 + 100) */
   winner?: number;
+  orbs?: PwOrb[];
+  ice?: PwIce[];
 }
 
 export interface PwRunState {

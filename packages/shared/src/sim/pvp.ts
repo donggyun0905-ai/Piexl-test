@@ -14,7 +14,8 @@ import type { PvpSeat, PwLoadout } from "./paewangTypes";
 import { allPlayers, eachSeat, seatNo, useSeat } from "./party";
 import { createParty } from "./partyRun";
 import { botInput } from "./pvpBot";
-import { bringBack, decide, freshStart, settleDeaths, updateDrops, updateTraps, watchTeam } from "./pvpFlow";
+import { pickOrbs, updateDrops, updateIce } from "./pvpExtras";
+import { bringBack, decide, freshStart, settleDeaths, updateTraps, watchTeam } from "./pvpFlow";
 import { inPlay, makeProxies, pvpWorld, syncProxies } from "./pvpWorld";
 import { applyRoom } from "./rooms";
 import { stepPlayer } from "./run";
@@ -85,6 +86,11 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
     b.prevX = b.x;
     b.prevY = b.y;
   }
+  // 시작 준비: 아무도 못 움직임 (화면이 3·2·1·START를 셈)
+  if (s.tick <= PW.ready) {
+    useSeat(s, view);
+    return;
+  }
   const start = syncProxies(s);
   eachSeat(s, (i) => {
     const seat = pv.seats[i]!;
@@ -103,7 +109,9 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
   });
   pvpWorld(s, start);
   updateTraps(s);
+  updateIce(s);
   updateDrops(s);
+  pickOrbs(s);
   settleDeaths(s);
   bringBack(s);
   watchTeam(s);

@@ -1,4 +1,4 @@
-// 패왕전 점수판 (Tab을 누르는 동안 · 버튼으로 열고 닫기): 편마다 이름·캐릭터·처치·데스·순위·무기·패시브·사용 아이템
+// 패왕전 점수판 (Tab을 누르는 동안 · 버튼으로 열고 닫기): 편마다 이름·캐릭터·처치·데스·준 피해·받은 피해·순위·무기·패시브·사용 아이템
 import { allPlayers, inPlay, type PassiveId, type RunState } from "@pixel-rogue/shared";
 import { useEffect, useState, type MouseEvent } from "react";
 import { ItemIcon, type IconItem } from "../game/itemIcon";
@@ -52,6 +52,8 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
               <th>{t("pwWho")}</th>
               <th>K</th>
               <th>D</th>
+              <th>{t("pwDealt")}</th>
+              <th>{t("pwTaken")}</th>
               {pv.mode === "gungame" && <th>Lv</th>}
               <th>{t("pwGear")}</th>
             </tr>
@@ -71,6 +73,8 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
                   </td>
                   <td>{seat.kills}</td>
                   <td>{seat.deaths}</td>
+                  <td className="pw-dealt">{Math.round(seat.dealt ?? 0)}</td>
+                  <td className="pw-taken">{Math.round(seat.taken ?? 0)}</td>
                   {pv.mode === "gungame" && <td>{seat.lv}</td>}
                   <td className="pw-gear">
                     <span {...hover({ kind: "weapon", id: p.weaponId })}>

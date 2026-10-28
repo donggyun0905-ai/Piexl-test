@@ -26,7 +26,7 @@ export type { EffectKind, EffectState, Hazard, PendingBlast } from "./fxTypes";
 import type { EffectState, Hazard, PendingBlast } from "./fxTypes";
 export * from "./inputTypes";
 import type { SwarmEnemyState, SwarmPlayerState, SwarmRunState } from "./swarmTypes";
-import type { PwEnemyState, PwRunState, PwShotState } from "./paewangTypes";
+import type { PwEnemyState, PwPlayerState, PwRunState, PwShotState } from "./paewangTypes";
 import type { TerrainRunState } from "./terrainTypes";
 export interface Body {
   x: number;
@@ -36,7 +36,7 @@ export interface Body {
   prevY: number;
   r: number;
 }
-export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, BrawlPlayerState, MedicPlayerState, GunPlayerState, BeastPlayerState, BossPlayerState, NinjaPlayerState, ChronoPlayerState, SummonPlayerState, NovicePlayerState, BedouinPlayerState, GeneralPlayerState, ImugiPlayerState, ApostlePlayerState, StarPlayerState, DuckPlayerState, SwarmPlayerState, AbandonedPlayerState, TitanPlayerState, OniPlayerState, ScribePlayerState, IdraPlayerState, MorphPlayerState, FlyPlayerState, ElderPlayerState, RenPlayerState, SpiritPlayerState, H2PlayerState, TcPlayerState, AscalonPlayerState {
+export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, BrawlPlayerState, MedicPlayerState, GunPlayerState, BeastPlayerState, BossPlayerState, NinjaPlayerState, ChronoPlayerState, SummonPlayerState, NovicePlayerState, BedouinPlayerState, GeneralPlayerState, ImugiPlayerState, ApostlePlayerState, StarPlayerState, DuckPlayerState, SwarmPlayerState, AbandonedPlayerState, TitanPlayerState, OniPlayerState, ScribePlayerState, IdraPlayerState, MorphPlayerState, FlyPlayerState, ElderPlayerState, RenPlayerState, SpiritPlayerState, H2PlayerState, TcPlayerState, AscalonPlayerState, PwPlayerState {
   characterId: CharacterId;
   weaponId: WeaponId;
   /** 가진 패시브 (같은 것 여러 개 가능) */

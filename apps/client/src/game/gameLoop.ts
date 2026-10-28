@@ -2,7 +2,7 @@
 import { itemName } from "../i18n/items";
 import { fateParts } from "../i18n/items/voyagerAbilities";
 import { sellCodes } from "./SellBar";
-import { applyRoom, ARENA_LEVELS, expToNext, FLOOR_COUNT, HERO_FLOORS, LEGENDS, sellPrice, tabooPoints, trackerSkills, VIEW_HEIGHT, VIEW_WIDTH, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
+import { applyRoom, ARENA_LEVELS, expToNext, FLOOR_COUNT, HERO_FLOORS, LEGENDS, sellPrice, tabooPoints, trackerSkills, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { LEGEND_NAMES } from "../i18n/items/general";
 import { SPECIAL_NAMES } from "../i18n/items/abandoned";
@@ -10,6 +10,7 @@ import type { Controls } from "./controls";
 import { formatTime, pickupText, promptText } from "./hudText";
 import { loadoutKey, type LoadoutView } from "./Loadout";
 import { drawMinimap } from "./minimap";
+import { viewH, viewW } from "./viewSize";
 import { drawFrame, type DrawOverlay } from "./render";
 import { getSettings } from "../settings";
 import { statRows, type StatRow } from "./statsView";
@@ -224,7 +225,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       showReticle: controls.touchAiming,
       showHitbox: controls.hitboxHeld || getSettings().showHitbox,
       showRange: getSettings().showRange,
-      pixelScale: ctx.canvas.width / VIEW_WIDTH,
+      pixelScale: ctx.canvas.width / viewW(),
       zoom: controls.zoom,
       cursor: () => controls.mouse,
       legendName: (i) => LEGEND_NAMES[LEGENDS[i] ?? "charge"][lang],
@@ -266,8 +267,8 @@ export function startGameLoop(o: LoopOptions): () => void {
 export function playerScreenPos(canvas: HTMLCanvasElement, run: RunState, zoom: number, cam: { x: number; y: number }) {
   const rect = canvas.getBoundingClientRect();
   return {
-    x: rect.left + (((run.player.x - cam.x) * zoom) / VIEW_WIDTH) * rect.width,
-    y: rect.top + (((run.player.y - cam.y) * zoom) / VIEW_HEIGHT) * rect.height,
-    scale: (zoom * rect.width) / VIEW_WIDTH,
+    x: rect.left + (((run.player.x - cam.x) * zoom) / viewW()) * rect.width,
+    y: rect.top + (((run.player.y - cam.y) * zoom) / viewH()) * rect.height,
+    scale: (zoom * rect.width) / viewW(),
   };
 }

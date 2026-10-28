@@ -9,7 +9,8 @@ import { riderMoveMul } from "./rider";
 import { slayerMoveMul } from "./slayer";
 import { voyagerMoveMul } from "./voyager";
 import type { PlayerState } from "./types";
+import { PW } from "../paewangDefs";
 
 export function classMoveMul(p: PlayerState, tick: number): number {
-  return orbitMoveMul(p) * brawlMoveMul(p) * medicMoveMul(p) * gunMoveMul(p, tick) * flyMoveMul(p) * slayerMoveMul(p) * riderMoveMul(p) * punkMoveMul(p) * voyagerMoveMul(p);
+  return orbitMoveMul(p) * brawlMoveMul(p) * medicMoveMul(p) * gunMoveMul(p, tick) * flyMoveMul(p) * slayerMoveMul(p) * riderMoveMul(p) * punkMoveMul(p) * voyagerMoveMul(p) * ((p.pwFast ?? 0) > 0 ? PW.orbMove : 1);
 }

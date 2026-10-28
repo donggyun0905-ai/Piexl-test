@@ -1,5 +1,5 @@
 // 장수 그리기: 찌르기(창날 선 + 끝 반짝) · 청룡 검기·창 그림자 투사체 · 필살기(빛 터짐 + 이름 크게)
-import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
+import { allPlayers, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -140,8 +140,10 @@ export function drawLegendName(ctx: Ctx, s: RunState, alpha: number, name: (i: n
   const fx = s.effects.find((e) => e.kind === "legend");
   if (!fx) return;
   const t = fx.ticks / fx.maxTicks;
-  const x = lerp(s.player.prevX, s.player.x, alpha);
-  const y = lerp(s.player.prevY, s.player.y, alpha) - 22 - (1 - t) * 6;
+  // 쓴 사람 머리 위 (협동·패왕전은 그 자리 사람, 남이 쓴 필살기가 내 머리 위에 뜨지 않게)
+  const p = allPlayers(s)[fx.seat ?? 0] ?? s.player;
+  const x = lerp(p.prevX, p.x, alpha);
+  const y = lerp(p.prevY, p.y, alpha) - 22 - (1 - t) * 6;
   const text = name(fx.dirX);
   const size = 9 + Math.min(1, (1 - t) * 6) * 3;
   ctx.font = `bold ${size}px sans-serif`;

@@ -9,6 +9,8 @@ import { EMPTY_INPUT, type RunState } from "./types";
 function duel(c: "warden" | "titan"): RunState {
   const s = createPvp(3, "duel", [{ characterId: "warden" }, { characterId: c }]);
   for (const p of allPlayers(s)) p.invulnTicks = 0;
+  // 시작 준비(3초 멈춤)는 건너뜀
+  s.tick = PW.ready;
   const foe = allPlayers(s)[1]!;
   s.pendingBlasts.push({ tick: s.tick + 1, x: foe.x, y: foe.y, radius: 20, damage: 99999 });
   return s;
@@ -21,7 +23,7 @@ describe("패왕전 안전장치", () => {
     expect(pwLoadoutOk("oni", { weapon: "blackThunder", passives: [], uses: [] })).toBe(false);
   });
 
-  it("한 번에 받는 피해는 (최대 체력 + 보호막)의 일정 비율까지", () => {
+  it("한 번에 받는 피해는 최대 체력의 일정 비율까지", () => {
     const s = duel("warden");
     const foe = allPlayers(s)[1]!;
     const pool = foe.hp + (foe.shieldPts ?? 0);

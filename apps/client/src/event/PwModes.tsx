@@ -3,6 +3,7 @@ import { PW_ARENAS, PW_MODE, PW_MODES, type PwArenaId, type PwDiff, type PwMode,
 import { useEffect, useRef } from "react";
 import type { TextKey } from "../i18n";
 import { pwWins } from "./pwRecords";
+import { PwGuide } from "./PwGuide";
 import { RankPanel } from "./RankPanel";
 
 interface Props {
@@ -51,6 +52,7 @@ export function PwModes({ t, onPick, onMulti, onRank, onBack }: Props) {
   return (
     <div className="td-maps pw-modes">
       <h2>{t("paewang")}</h2>
+      <PwGuide t={t} />
       <RankPanel t={t} onPlay={onRank} />
       <p className="hint">{t("pwPick")}</p>
       <div className="td-map-list">

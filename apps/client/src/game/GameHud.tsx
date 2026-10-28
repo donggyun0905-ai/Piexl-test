@@ -14,6 +14,8 @@ interface Props {
   autoAim: boolean;
   /** 패왕전: 자동 공격 버튼 없음 */
   manualOnly?: boolean;
+  /** 패왕전: 필요 없는 정보·버튼 숨김 */
+  pvp?: boolean;
   onPause: (() => void) | null;
   onAutoAim: (on: boolean) => void;
   hpFillRef: RefObject<HTMLDivElement | null>;
@@ -30,7 +32,7 @@ function Toggle({ on, label, keyName, touchMode, t, onClick }: { on: boolean; la
   );
 }
 
-export function GameHud({ t, touchMode, autoAim, manualOnly, onPause, onAutoAim, hpFillRef, hpTextRef, infoRef }: Props) {
+export function GameHud({ t, touchMode, autoAim, manualOnly, pvp, onPause, onAutoAim, hpFillRef, hpTextRef, infoRef }: Props) {
   const { showStats, showHitbox, showRange } = useSettings();
   const toggle = { touchMode, t };
   return (
@@ -46,10 +48,11 @@ export function GameHud({ t, touchMode, autoAim, manualOnly, onPause, onAutoAim,
         </div>
         <span ref={hpTextRef} className="hp-text" />
       </div>
-      <span ref={infoRef} className="hud-info" />
-      <Toggle {...toggle} on={showStats} label="statsToggle" keyName="C" onClick={() => setSettings({ showStats: !showStats })} />
+      {/* 패왕전: 위쪽 정보 줄·능력치·맞는 범위 버튼은 숨김 (공격 범위만) */}
+      <span ref={infoRef} className="hud-info" hidden={pvp} />
+      {!pvp && <Toggle {...toggle} on={showStats} label="statsToggle" keyName="C" onClick={() => setSettings({ showStats: !showStats })} />}
       <Toggle {...toggle} on={showRange} label="rangeToggle" keyName="G" onClick={() => setSettings({ showRange: !showRange })} />
-      <Toggle {...toggle} on={showHitbox} label="hitboxToggle" keyName="H" onClick={() => setSettings({ showHitbox: !showHitbox })} />
+      {!pvp && <Toggle {...toggle} on={showHitbox} label="hitboxToggle" keyName="H" onClick={() => setSettings({ showHitbox: !showHitbox })} />}
       {!manualOnly && <Toggle {...toggle} on={autoAim} label="autoAim" keyName="R" onClick={() => onAutoAim(!autoAim)} />}
     </div>
   );

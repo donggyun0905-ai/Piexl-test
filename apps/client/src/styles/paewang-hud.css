@@ -1,9 +1,9 @@
-/* 패왕전 게임 중 위쪽 점수판·목표·가까운 적·처치 알림·큰 글자 (event/PwHud·PwFeed) */
+/* 패왕전 게임 중 위쪽 한 줄 정보: 편 점수·남은 사람·내 기록·가까운 적 (event/PwHud) */
 .pw-score {
   display: flex;
   align-items: stretch;
-  gap: 6px;
-  padding: 4px 8px;
+  gap: 4px;
+  padding: 2px 5px;
   border: 1px solid rgb(255 255 255 / 0.18);
   border-radius: 10px;
   background: rgb(10 8 16 / 0.78);
@@ -11,8 +11,8 @@
 }
 .pw-score.ffa {
   align-items: center;
-  gap: 10px;
-  font-size: 15px;
+  gap: 8px;
+  font-size: 12px;
   color: #fff;
 }
 .pw-score strong {
@@ -22,9 +22,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 84px;
-  padding: 0 8px;
-  border-radius: 6px;
+  min-width: 56px;
+  padding: 0 5px;
+  border-radius: 5px;
 }
 .pw-side.ours {
   background: linear-gradient(180deg, rgb(74 168 255 / 0.35), rgb(74 168 255 / 0.08));
@@ -35,11 +35,11 @@
   color: #ff8a8a;
 }
 .pw-side small {
-  font-size: 11px;
+  font-size: 9px;
   font-weight: bold;
 }
 .pw-side b {
-  font-size: 26px;
+  font-size: 17px;
   line-height: 1;
   color: #fff;
 }
@@ -49,8 +49,8 @@
   margin: 3px 0 2px;
 }
 .pw-dots i {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border: 1px solid currentcolor;
   border-radius: 50%;
 }
@@ -67,23 +67,10 @@
   opacity: 0.3;
   border-style: dashed;
 }
-.pw-mid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-}
-.pw-mid em {
-  font-size: 18px;
-  font-style: normal;
-  font-weight: bold;
-  color: #fff;
-}
 .pw-sub {
-  padding: 1px 8px;
-  border-radius: 6px;
-  font-size: 12px;
+  padding: 0 6px;
+  border-radius: 5px;
+  font-size: 11px;
   color: #f0ecf8;
   background: rgb(10 8 16 / 0.6);
 }
@@ -92,10 +79,10 @@
   color: #ffd860;
 }
 .pw-target {
-  padding: 2px 10px;
+  padding: 1px 8px;
   border: 1px solid #ff3c3c;
-  border-radius: 8px;
-  font-size: 13px;
+  border-radius: 6px;
+  font-size: 11px;
   font-weight: bold;
   color: #fff;
   background: rgb(120 10 16 / 0.75);
@@ -106,111 +93,45 @@
     box-shadow: 0 0 10px rgb(255 60 60 / 0.8);
   }
 }
-.pw-feed {
-  position: fixed;
-  top: 52px;
-  right: 8px;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  pointer-events: none;
-}
-.pw-feed li {
-  display: flex;
-  gap: 5px;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  background: rgb(10 8 16 / 0.72);
-  animation: pw-in 0.25s ease-out;
-}
-.pw-feed .ours {
-  color: #8cc8ff;
-}
-.pw-feed .theirs {
-  color: #ff8a8a;
-}
-.pw-feed .me {
-  color: #ffd860;
-}
-.pw-x {
-  color: #ddd;
-}
-@keyframes pw-in {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-}
-.pw-banner {
-  position: fixed;
-  top: 32%;
-  left: 50%;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
+/* 한 줄로: 위쪽 정보를 가로로 늘어놓음 (높이를 낮게) */
+.pw-hud {
+  flex-direction: row;
   align-items: center;
-  transform: translateX(-50%);
-  font-size: 34px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  white-space: nowrap;
-  pointer-events: none;
-  text-shadow:
-    0 0 6px #000,
-    0 2px 0 #000;
-  animation: pw-pop 0.35s ease-out;
+  gap: 4px;
 }
-.pw-banner.kill {
-  color: #ffd860;
+.pw-hud .pw-score {
+  align-items: center;
+  padding: 1px 4px;
 }
-.pw-banner.kill.s2 {
-  color: #ffa040;
-  font-size: 40px;
+.pw-hud .pw-side {
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 0 5px;
 }
-.pw-banner.kill.s3,
-.pw-banner.kill.s4 {
-  color: #ff5a5a;
-  font-size: 46px;
+.pw-hud .pw-side.theirs {
+  flex-direction: row-reverse;
 }
-.pw-banner.down {
-  color: #ff8a8a;
-  font-size: 28px;
+.pw-hud .pw-side b {
+  font-size: 14px;
 }
-.pw-banner small {
-  font-size: 15px;
+.pw-hud .pw-dots {
+  margin: 0;
+}
+.pw-vs {
+  font-size: 11px;
+  font-style: normal;
+  font-weight: bold;
   color: #fff;
 }
-@keyframes pw-pop {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) scale(1.8);
-  }
+.pw-hud .pw-sub,
+.pw-hud .pw-target,
+.pw-hud .pw-board-btn {
+  line-height: 18px;
 }
-@media (max-width: 600px) {
-  .pw-side {
-    min-width: 60px;
-  }
-  .pw-side b {
-    font-size: 20px;
-  }
-  .pw-sub,
-  .pw-target {
-    font-size: 11px;
-    white-space: normal;
-    max-width: 90vw;
-    text-align: center;
-  }
-  .pw-feed {
-    top: auto;
-    bottom: 140px;
-  }
-  .pw-banner {
-    font-size: 26px;
-  }
+.pw-hud .pw-watch {
+  position: absolute;
+  top: 100%;
+  margin-top: 4px;
 }

@@ -1,5 +1,6 @@
 // 마우스·탭으로 누를 수 있는 것: 바닥 아이템(설명·층 보상 고르기)
-import { mine, VIEW_HEIGHT, VIEW_WIDTH, rewardChoices, type Pickup, type RunState } from "@pixel-rogue/shared";
+import { mine, rewardChoices, type Pickup, type RunState } from "@pixel-rogue/shared";
+import { viewH, viewW } from "./viewSize";
 import { cameraFor } from "./camera";
 
 /** 아이템을 가리켰다고 보는 거리 (게임 픽셀) */
@@ -15,8 +16,8 @@ export function pickupAt(run: RunState, canvas: HTMLCanvasElement, zoom: number,
   const rect = canvas.getBoundingClientRect();
   if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) return null;
   const cam = cameraFor(run, zoom);
-  const wx = cam.x + ((x - rect.left) / rect.width) * (VIEW_WIDTH / zoom);
-  const wy = cam.y + ((y - rect.top) / rect.height) * (VIEW_HEIGHT / zoom);
+  const wx = cam.x + ((x - rect.left) / rect.width) * (viewW() / zoom);
+  const wy = cam.y + ((y - rect.top) / rect.height) * (viewH() / zoom);
   let best: Pickup | null = null;
   let bestD = PICK_RADIUS * PICK_RADIUS;
   for (const pk of run.rooms[run.roomId]?.pickups ?? []) {
@@ -35,8 +36,8 @@ export function pickupScreenPos(run: RunState, canvas: HTMLCanvasElement, zoom: 
   const rect = canvas.getBoundingClientRect();
   const cam = cameraFor(run, zoom);
   return {
-    x: rect.left + (((pk.x - cam.x) * zoom) / VIEW_WIDTH) * rect.width,
-    y: rect.top + (((pk.y - cam.y) * zoom) / VIEW_HEIGHT) * rect.height - 8 * zoom * (rect.height / VIEW_HEIGHT),
+    x: rect.left + (((pk.x - cam.x) * zoom) / viewW()) * rect.width,
+    y: rect.top + (((pk.y - cam.y) * zoom) / viewH()) * rect.height - 8 * zoom * (rect.height / viewH()),
   };
 }
 

@@ -115,8 +115,10 @@ export class TigerFx {
     }
     // 걸음 · 가만히
     const moved = Math.hypot(p.x - p.prevX, p.y - p.prevY);
-    const shot = s.projectiles.reduce((m, x) => (x.fromPlayer ? Math.max(m, x.id) : m), 0);
-    const swings = s.effects.filter((e) => e.kind === "swing" || e.kind === "scratch" || e.kind === "cleave");
+    // 내 것만 (협동·패왕전에서 남의 탄·휘두름으로 내 스킨 효과가 나지 않게)
+    const me = s.seat ?? 0;
+    const shot = s.projectiles.reduce((m, x) => (x.fromPlayer && (x.shooter ?? me) === me ? Math.max(m, x.id) : m), 0);
+    const swings = s.effects.filter((e) => (e.kind === "swing" || e.kind === "scratch" || e.kind === "cleave") && (e.seat ?? me) === me);
     if (shot > this.shotId || swings.length > this.swings) busy = true;
     this.idle = moved < 0.05 && !busy && !s.over ? this.idle + 1 : 0;
     if (Math.hypot(p.x - this.stepX, p.y - this.stepY) >= STEP) {

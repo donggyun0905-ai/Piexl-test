@@ -51,7 +51,8 @@ export function GameScreen(props: GameScreenProps) {
   useLayoutEffect(() => {
     cb.current = props;
   });
-  const scale = useFitScale(wrapRef);
+  const pvp = mode === "paewang" || !!props.initialRun?.pvp; // 패왕전: 화면 꽉 채움 (좌우 빈칸 없음) · 필요 없는 정보 숨김
+  const [scale, wide] = useFitScale(wrapRef, pvp);
   const dpr = window.devicePixelRatio || 1;
   const [overlay, setOverlay] = useState<Overlay>("none");
   const overlayRef = useRef<Overlay>("none");
@@ -214,7 +215,7 @@ export function GameScreen(props: GameScreenProps) {
       <GameHud
         t={t}
         touchMode={touchMode}
-        autoAim={autoAim} manualOnly={mode === "paewang" || !!props.initialRun?.pvp}
+        autoAim={autoAim} manualOnly={pvp} pvp={pvp}
         onPause={canPause ? () => setOverlay("pause") : null}
         onAutoAim={(on) => controlsRef.current?.setAutoAim(on)}
         hpFillRef={hpFillRef}
@@ -239,14 +240,14 @@ export function GameScreen(props: GameScreenProps) {
       )}
 
       <div ref={wrapRef} className="game-canvas-wrap">
+        {/* 실제 화면 해상도 크기 (고해상도 화면 포함) */}
         <canvas
           ref={canvasRef}
-          // 실제 화면 해상도 크기 (고해상도 화면 포함)
-          width={Math.round(VIEW_WIDTH * scale * dpr)}
+          width={Math.round(VIEW_WIDTH * wide * scale * dpr)}
           height={Math.round(VIEW_HEIGHT * scale * dpr)}
-          style={{ width: VIEW_WIDTH * scale, height: VIEW_HEIGHT * scale }}
+          style={{ width: VIEW_WIDTH * wide * scale, height: VIEW_HEIGHT * scale }}
         />
-        {stats && <StatsPanel rows={stats} character={characterId} lang={lang} t={t} />}
+        {stats && !pvp && <StatsPanel rows={stats} character={characterId} lang={lang} t={t} />}
         {mode !== "practice" && mode !== "swarm" && mode !== "paewang" && (
           <canvas ref={miniRef} className="minimap" width={MINIMAP_WIDTH} height={MINIMAP_HEIGHT} aria-label={t("minimap")} />
         )}
@@ -258,7 +259,7 @@ export function GameScreen(props: GameScreenProps) {
         <PracticePanel run={() => runRef.current} loadout={loadout} characterId={characterId} lang={lang} t={t} onCharacter={props.onPracticeCharacter} />
       )}
       {loadout && <Loadout view={loadout} lang={lang} t={t} touchMode={touchMode} controls={() => controlsRef.current} />}
-      <p className={`game-hint ${touchMode ? "touch" : ""}`}>{t(touchMode ? "hintRotate" : "hintPc")}</p>
+      {!pvp && <p className={`game-hint ${touchMode ? "touch" : ""}`}>{t(touchMode ? "hintRotate" : "hintPc")}</p>}
 
       {/* 터치·마우스 입력 영역 (화면 전체). 조이스틱은 드래그할 때만 보임 */}
       <div ref={zoneRef} className="input-zone" />
@@ -278,7 +279,6 @@ export function GameScreen(props: GameScreenProps) {
       )}
       {tip && <PickupTip tip={tip} t={t} />}
       <AchievementToast toasts={toasts} lang={lang} t={t} />
-
       {result && props.afterRun ? (
         props.afterRun
       ) : (

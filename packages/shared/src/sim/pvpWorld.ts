@@ -99,15 +99,20 @@ function transfer(s: RunState, start: number[]): void {
     if (!inPlay(s, i)) return;
     // 넘친 피해까지 그대로 (잘라 넘기면 받는 피해가 줄어드는 캐릭터는 체력이 0에 끝없이 가까워지기만 함)
     // 한 틱에 받는 피해는 (최대 체력 + 처음 보호막)의 burstCap까지 (한 방에 쓰러지지 않게)
-    // 캐릭터별 패왕전 받는 피해 보정 (paewangBalance)
-    const dmg = Math.min((start[i]! - e.hp) * (PW_CHAR[s.player.characterId]?.taken ?? 1), (s.player.stats.maxHp + PW.shield) * PW.burstCap);
+    // 모두가 받는 피해 배율(PW.taken) × 캐릭터별 패왕전 받는 피해 보정 (paewangBalance)
+    const dmg = Math.min((start[i]! - e.hp) * PW.taken * (PW_CHAR[s.player.characterId]?.taken ?? 1), (s.player.stats.maxHp + PW.shield) * PW.burstCap);
     if (e.lastHit !== undefined && e.lastHit !== i) seat.by = e.lastHit;
     if (dmg > 0) {
       // 맞을 수 있던 그림자 적이 받은 피해는 이번 틱에 다른 공격으로 생긴 무적에 막히지 않음
       const p = s.player;
       const keep = [p.invulnTicks, p.shieldTicks] as const;
       if (!e.immune) p.invulnTicks = p.shieldTicks = 0;
+      const before = p.hp;
       damagePlayer(s, dmg);
+      // 점수판: 받은 피해 · 마지막으로 때린 자리가 준 피해
+      const lost = Math.max(0, before - Math.max(0, p.hp));
+      seat.taken = (seat.taken ?? 0) + lost;
+      if (e.lastHit !== undefined && e.lastHit !== i) pv.seats[e.lastHit]!.dealt = (pv.seats[e.lastHit]!.dealt ?? 0) + lost;
       p.invulnTicks = Math.max(p.invulnTicks, keep[0]);
       p.shieldTicks = Math.max(p.shieldTicks, keep[1]);
     }

@@ -217,7 +217,8 @@
 .pw-watch-click {
   position: fixed;
   inset: 56px 0 0;
-  z-index: 5;
+  /* 게임 입력(1) 위 · 일시정지·나가기 창(3) 아래: 나가기를 누르면 관전 대상이 바뀌지 않게 */
+  z-index: 2;
   display: flex;
   align-items: flex-end;
   justify-content: center;

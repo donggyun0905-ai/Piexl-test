@@ -1,8 +1,9 @@
 // 적·플레이어 그리기: 공격 예고선 · 적(체력 줄·자동 조준 표시) · 플레이어(대시 잔상·방향·맞는 범위·보호막)
-import { allPlayers, DASH_TICKS, inPlay, ENEMIES, isAlive, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, DASH_TICKS, inBush, inPlay, ENEMIES, isAlive, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
 import { drawCrate } from "./swarm";
 import { drawFighter } from "./paewang";
 import { drawPwBody } from "./pwLook";
+import { drawGuardFx } from "./guardFx";
 import { drawAimMark, drawHitRing } from "../aimMark";
 import { drawUmbraActor } from "./umbra";
 import { drawDemigodActor } from "./demigod";
@@ -158,7 +159,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
   const py = lerp(p.prevY, p.y, alpha);
   // 잔영 그림자: 깜빡이지 않고 어두운 반투명 몸
   const shade = (p.rmShade ?? 0) > 0;
-  const blink = !shade && p.invulnTicks > 0 && Math.floor(p.invulnTicks / 3) % 2 === 0;
+  const blink = !shade && !s.pvp && p.invulnTicks > 0 && Math.floor(p.invulnTicks / 3) % 2 === 0;
   const moving = p.x !== p.prevX || p.y !== p.prevY;
   const pose = { faceX: p.faceX, faceY: p.faceY, moving, casting: isCasting(s.tick, p.attackCount), step: Math.floor(s.tick / 8) };
   if (p.dashTicks > 0) {
@@ -200,6 +201,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     }
     const look = [p.characterId, x, y, p.r, morphPose(p, pose), moving ? Math.floor(s.tick / 8) : 0, body, club] as const;
     // 패왕전: 편 색 외곽선
+    if (s.pw && inBush(s.pw.arena, x, y)) ctx.globalAlpha *= 0.5;
     if (!hideBody && !p.mRaid && s.pvp) drawPwBody(ctx, s, ...look);
     else if (!hideBody && !p.mRaid) drawBody(ctx, ...look);
     if (twirl) ctx.restore();
@@ -208,13 +210,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     if (showHitbox) drawHitRing(ctx, x, y, p.r);
     // 패왕전은 편 색 체력 줄(paewang)만
     if (!hideBody && !s.sudden && !s.pvp) drawPlayerHp(ctx, p, x, y, s.tick);
-    if (p.shieldTicks > 0) {
-      ctx.strokeStyle = "rgba(120, 200, 255, 0.85)";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(x, y, p.r + 4, 0, Math.PI * 2);
-      ctx.stroke();
-    }
+    drawGuardFx(ctx, s, p, x, y);
   }
 }
 

@@ -1,23 +1,32 @@
 // 게임 화면 도우미: 화면 배율 · 뒤로가기 · 맞을 때 흔들림
 import { VIEW_HEIGHT, VIEW_WIDTH } from "@pixel-rogue/shared";
 import { useEffect, useState, type RefObject } from "react";
+import { setViewWide } from "./viewSize";
 
 /** 화면에 맞는 배율: 남는 곳 없이 꽉 채움 (정수배로 줄이지 않음) */
 function fitScale(w: number, h: number): number {
   return Math.max(0.5, Math.min(w / VIEW_WIDTH, h / VIEW_HEIGHT));
 }
 
-/** 감싼 칸 크기에 맞춰 배율 조정 */
-export function useFitScale(wrapRef: RefObject<HTMLElement | null>): number {
-  const [scale, setScale] = useState(1);
+/** 감싼 칸 크기에 맞춰 배율 조정. fill(패왕전): 높이에 맞추고 남는 가로는 보이는 영역을 넓혀 채움 → [배율, 가로 넓힘] */
+export function useFitScale(wrapRef: RefObject<HTMLElement | null>, fill = false): [number, number] {
+  const [fit, setFit] = useState<[number, number]>([1, 1]);
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
-    const ro = new ResizeObserver(() => setScale(fitScale(wrap.clientWidth, wrap.clientHeight)));
+    const ro = new ResizeObserver(() => {
+      const scale = fitScale(wrap.clientWidth, wrap.clientHeight);
+      const wide = fill ? Math.min(2.2, Math.max(1, wrap.clientWidth / scale / VIEW_WIDTH)) : 1;
+      setViewWide(wide);
+      setFit([scale, wide]);
+    });
     ro.observe(wrap);
-    return () => ro.disconnect();
-  }, [wrapRef]);
-  return scale;
+    return () => {
+      ro.disconnect();
+      setViewWide(1);
+    };
+  }, [wrapRef, fill]);
+  return fit;
 }
 
 /** 모바일 뒤로가기 → 페이지를 나가지 않고 onBack (onBack은 바뀌지 않는 함수로) */

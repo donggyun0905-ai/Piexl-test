@@ -64,8 +64,12 @@ export const PW = {
   uses: 2,
   /** 같은 패시브는 이만큼까지 (효과 아이템은 하나) · 사용 아이템은 서로 달라야 함 */
   stackMax: 3,
-  /** 전투에 나가면 모두(AI 포함) 체력은 그대로 · 보호막 shield로 시작 */
-  shield: 300,
+  /** 전투에 나가면 모두(AI 포함) 체력 가득 · 처음 보호막(없음) · 대신 모두가 받는 피해 배율 */
+  shield: 0,
+  taken: 0.85,
+  heal: 0.8,
+  /** 시작하고 아무도 못 움직이는 틱 (화면에 3·2·1·START) */
+  ready: 180,
   /** AI 체력 = 캐릭터 최대 체력 × hpBase × 보정 · 한 번 공격 피해 = 캐릭터 공격력 × 무기 배율 × dmgBase × 보정 */
   hpBase: 2.6,
   dmgBase: 0.85,
@@ -100,7 +104,18 @@ export const PW = {
   trapEvery: 150,
   trapUp: 40,
   trapDmg: 14,
-  /** 대난투: 아이템이 떨어지는 간격 · 바닥에 남는 최대 수 */
+  /** 모든 모드: 경기장에 사용 아이템·강화 구슬이 떨어지는 간격 · 바닥에 남는 최대 수(대난투는 더 많이) */
   dropEvery: 420,
-  dropMax: 8,
+  dropMax: 4,
+  dropMaxBrawl: 10,
+  /** 강화 구슬: 회복(최대 체력 비율) · 공격 속도·이동 속도 강화 틱 */
+  orbHeal: 0.25,
+  orbTicks: 300,
+  orbMove: 1.4,
+  /** 얼음 시계: 던지는 최대 거리 · 날아가는 틱 · 얼리는 범위 · 얼리는 틱 · 터진 뒤 그림 틱 */
+  iceRange: 150,
+  iceFly: 18,
+  iceRadius: 40,
+  iceStun: 90,
+  iceShow: 24,
 };

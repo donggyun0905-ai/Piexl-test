@@ -1,5 +1,5 @@
 // 패왕전 편 구별 그리기: 캐릭터 그림 외곽선을 편 색으로 바꿔 그림(스킨 외곽선은 가림) · 편 색 · 가장 가까운 적(내 둘레 빨간 화살표 · 적 머리 위 조준 표시)
-import { allPlayers, inPlay, type CharacterId, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, inBush, inPlay, PW, type CharacterId, type RunState } from "@pixel-rogue/shared";
 import { drawCharacter, type CharacterPose } from "../sprites";
 import { drawBody } from "./actors";
 
@@ -21,11 +21,27 @@ export function pwIsAlly(s: RunState, i: number): boolean {
 }
 export const pwTint = (s: RunState, i: number) => (pwIsAlly(s, i) ? PW_ALLY : PW_FOE);
 
+/** 화면 주인에게 보이는 정도: 0 안 보임(쓰러짐 · 수풀에 숨은 상대) · 0.5 수풀 속 나·내 편(반투명) · 1 보통 */
+export function pwShown(s: RunState, i: number): number {
+  if (!inPlay(s, i)) return 0;
+  const ps = allPlayers(s);
+  const p = ps[i]!;
+  if (!inBush(s.pvp!.arena, p.x, p.y)) return 1;
+  if (pwIsAlly(s, i)) return 0.5;
+  // 상대는 내 편 누군가가 아주 가까이 있어야 보임 (AI가 보는 규칙과 같음)
+  const near = ps.some((q, j) => pwIsAlly(s, j) && inPlay(s, j) && (q.x - p.x) ** 2 + (q.y - p.y) ** 2 <= PW.hideNear ** 2);
+  return near ? 1 : 0;
+}
+
+/** 자리마다 캐릭터 그림 맨 위(발 기준 y에서 뺄 값). 체력 줄을 머리 위에 정확히 두려고 그림에서 잼 */
+const heads = new Map<number, number>();
+export const pwHead = (i: number, r: number): number => heads.get(i) ?? 31 - r;
+
 /** 외곽선을 바꾼 그림 (그림 이름·자세·편 색마다 한 번 만들어 둠) */
 const SIZE = 80;
-const cache = new Map<string, HTMLCanvasElement>();
+const cache = new Map<string, { c: HTMLCanvasElement; top: number }>();
 
-function outlined(sheet: string, id: CharacterId, r: number, pose: CharacterPose, club: string | null | undefined, color: string): HTMLCanvasElement | null {
+function outlined(sheet: string, id: CharacterId, r: number, pose: CharacterPose, club: string | null | undefined, color: string): { c: HTMLCanvasElement; top: number } | null {
   const side = Math.abs(pose.faceX) > Math.abs(pose.faceY);
   const key = `${sheet}|${club}|${r}|${side}|${pose.faceY < 0}|${pose.faceX < 0}|${pose.casting && pose.faceY > -0.5}|${pose.moving ? pose.step % 4 : 0}|${color}`;
   const hit = cache.get(key);
@@ -45,8 +61,10 @@ function outlined(sheet: string, id: CharacterId, r: number, pose: CharacterPose
   const cb = parseInt(color.slice(5, 7), 16);
   const ring: number[] = [];
   const edge: number[] = [];
+  let top = SIZE;
   for (let y = 0; y < SIZE; y++) {
     for (let x = 0; x < SIZE; x++) {
+      if (solid(x, y)) top = Math.min(top, y);
       const near = solid(x - 1, y) || solid(x + 1, y) || solid(x, y - 1) || solid(x, y + 1);
       const open = !solid(x - 1, y) || !solid(x + 1, y) || !solid(x, y - 1) || !solid(x, y + 1);
       if (!solid(x, y)) {
@@ -69,15 +87,25 @@ function outlined(sheet: string, id: CharacterId, r: number, pose: CharacterPose
   paint(ring, 1);
   paint(edge, 0.7);
   o.putImageData(img, 0, 0);
-  cache.set(key, c);
-  return c;
+  // 그림 맨 위(외곽선 한 칸 포함)가 몸 가운데에서 얼마나 위인지
+  const out = { c, top: SIZE / 2 - top + 1 };
+  cache.set(key, out);
+  return out;
 }
 
 /** 패왕전 사람 몸: 편 색 외곽선 그림 (못 만들면 보통 그림) */
 export function drawPwBody(ctx: Ctx, s: RunState, id: CharacterId, x: number, y: number, r: number, pose: CharacterPose, frame: number, sheet: string, club: string | null): void {
-  const c = outlined(sheet, id, r, pose, club, pwTint(s, s.seat ?? 0));
-  if (!c) return drawBody(ctx, id, x, y, r, pose, frame, sheet, club);
-  ctx.drawImage(c, Math.round(x) - SIZE / 2, Math.round(y) - SIZE / 2);
+  const i = s.seat ?? 0;
+  const o = outlined(sheet, id, r, pose, club, pwTint(s, i));
+  // 수풀 속 나·내 편은 반투명
+  const a = ctx.globalAlpha;
+  ctx.globalAlpha = a * Math.max(0.5, pwShown(s, i));
+  if (!o) drawBody(ctx, id, x, y, r, pose, frame, sheet, club);
+  else {
+    heads.set(i, o.top);
+    ctx.drawImage(o.c, Math.round(x) - SIZE / 2, Math.round(y) - SIZE / 2);
+  }
+  ctx.globalAlpha = a;
 }
 
 /** 화면 주인에게서 가장 가까운 경기 중인 적 자리 (없으면 -1) */
@@ -88,7 +116,7 @@ export function pwNearestFoe(s: RunState, me: number): number {
   let best = -1;
   let bestD = Infinity;
   ps.forEach((p, i) => {
-    if (i === me || !inPlay(s, i) || s.pvp!.seats[i]!.team === s.pvp!.seats[me]!.team) return;
+    if (i === me || pwShown(s, i) === 0 || s.pvp!.seats[i]!.team === s.pvp!.seats[me]!.team) return;
     const dd = (p.x - m.x) ** 2 + (p.y - m.y) ** 2;
     if (dd < bestD) {
       bestD = dd;
