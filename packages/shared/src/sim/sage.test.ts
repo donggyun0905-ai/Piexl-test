@@ -34,7 +34,7 @@ describe("제천대성", () => {
     expect(e.hp).toBeGreaterThan(0);
   });
 
-  it("체력 10%: 무적으로 근두운에서 내려와 체력 70%로 강해지고, 공격이 깜박임", () => {
+  it("체력 10%: 무적으로 근두운에서 내려와 체력이 가득 차 강해지고, 공격이 깜박임", () => {
     const { run, e } = sage();
     steps(run, 2);
     e.hp = e.maxHp * 0.05;
@@ -44,7 +44,7 @@ describe("제천대성", () => {
     steps(run, SAGE_DISMOUNT);
     expect(e.sage!.foot).toBe(true);
     expect(e.immune).toBe(false);
-    expect(e.hp).toBe(Math.round(e.maxHp * 0.7));
+    expect(e.hp).toBe(e.maxHp);
     steps(run, 300);
     expect((run.hazards ?? []).length === 0 || run.hazards!.every((h) => h.cue)).toBe(true);
   });

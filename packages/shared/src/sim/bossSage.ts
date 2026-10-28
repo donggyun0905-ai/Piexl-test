@@ -1,6 +1,6 @@
 // 시즌 2 마지막 라스트 보스 제천대성: 근두운을 탄 반신. 몸 하나지만 공격은 두 갈래가 따로 돎 (2대1 느낌)
 // 몸 갈래: 꼬리·주먹 10(sageBody) + 여의봉 10(sageStaff) 중 무작위 · 근두운 갈래: 번개·속도 10(sageCloud) 중 무작위
-// 체력 10%가 되면 무적으로 근두운에서 내려와 체력 70%로 강해짐 (범위·피해 증가, 모든 공격이 터지기 직전 깜박여 대시 시점을 알려 줌). 내린 뒤 근두운은 따로 떠다니며 공격
+// 체력 10%가 되면 무적으로 근두운에서 내려와 체력이 가득 찬 채로 강해짐 (범위·피해 증가, 모든 공격이 터지기 직전 깜박여 대시 시점을 알려 줌). 내린 뒤 근두운은 따로 떠다니며 공격
 import { keepAway } from "./bossKit";
 import { updateWaves } from "./bossWaves";
 import { ultReady } from "./bossUlts";
@@ -10,7 +10,7 @@ import { BODY_MOVES, bodyTick } from "./sageBody";
 import { STAFF_MOVES, staffTick } from "./sageStaff";
 import { CLOUD_MOVES, cloudTick } from "./sageCloud";
 import { ENEMIES } from "../content";
-import { sageRng } from "./sageKit";
+import { fireLater, sageRng } from "./sageKit";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -19,9 +19,9 @@ const R = {
   BODY_GAP: 70,
   CLOUD_GAP: 95,
   FOOT_FAST: 0.8,
-  /** 내려오는 틱 · 되찾는 체력 */
+  /** 내려오는 틱 · 되찾는 체력 (가득) */
   DISMOUNT: 120,
-  FOOT_HP: 0.7,
+  FOOT_HP: 1,
   /** 여의봉 벽 굵기(반) */
   WALL_W: 6,
 };
@@ -47,12 +47,14 @@ export function updateSage(s: RunState, e: EnemyState, toP: readonly [number, nu
   const g = (e.sage ??= { cx: e.x, cy: e.y, ct: 60, cn: 0, walls: [] });
   walls(s, g);
   updateWaves(s, e);
-  // 체력 10%: 근두운에서 내려옴 (무적) → 체력 70%로 강해짐
+  fireLater(s, e);
+  // 체력 10%: 근두운에서 내려옴 (무적) → 체력이 가득 차 강해짐
   if (ultReady(e)) {
     e.ultAt = s.tick;
     delete g.bAct;
     delete g.cAct;
     g.walls = [];
+    g.later = [];
     addEffect(s, { kind: "burst", x: e.x, y: e.y, dirX: 0, dirY: 0, size: 40, maxTicks: 24 });
   }
   if (e.ultAt !== undefined) {

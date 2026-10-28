@@ -5,7 +5,7 @@ import { shotDamage } from "./bossKit";
 import { damagePlayer } from "./combat";
 import { inHazard } from "./hazards";
 import { rot } from "./orbit";
-import { hz, sageDmg, sageRange } from "./sageKit";
+import { hz, later, sageDmg, sageRange } from "./sageKit";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, enemyShot, normalize } from "./util";
 
@@ -19,7 +19,7 @@ const R = {
   LEAP_R: 55,
   PALM_R: 150,
   PALM_ARC: 0.5,
-  FLURRY: 7,
+  FLURRY: 11,
   CLONE_R: 40,
   CAGE_R: 60,
   CAGE_N: 8,
@@ -47,16 +47,25 @@ export const BODY_MOVES: readonly ((s: RunState, e: EnemyState) => number)[] = [
   (s, e) => {
     const d = toward(s, e);
     for (let i = 0; i < 3; i++) hz(s, e, 22 + i * 10, { x: e.x + d[0] * (20 + i * 22), y: e.y + d[1] * (20 + i * 22), radius: R.JAB_R, damage: sageDmg(s, e, 0.8) });
+    // 마지막 지르기에서 기 주먹이 앞으로 뻗어 나감
+    later(s, e, 42, "fist", e.x + d[0] * 60, e.y + d[1] * 60, 3);
     return 50;
   },
   // 꼬리 한 바퀴
-  (s, e) => (hz(s, e, 36, { x: e.x, y: e.y, radius: R.TAIL_SPIN_R, damage: sageDmg(s, e), arc: -1, fx: "bslash" }), 40),
+  (s, e) => {
+    hz(s, e, 36, { x: e.x, y: e.y, radius: R.TAIL_SPIN_R, damage: sageDmg(s, e), arc: -1, fx: "bslash" });
+    // 꼬리가 바닥을 쓸어 흙더미가 사방으로
+    later(s, e, 36, "rocks", e.x, e.y, 10);
+    return 40;
+  },
   // 꼬리 채찍: 길게 한 줄
   (s, e) => {
     const d = toward(s, e);
     const len = R.LASH_LEN * sageRange(e);
     hz(s, e, 26, { x: e.x, y: e.y, radius: 0, toX: e.x + d[0] * len, toY: e.y + d[1] * len, width: R.LASH_W, damage: sageDmg(s, e), fx: "stab" });
-    return 30;
+    // 꼬리 끝이 땅을 때려 터짐
+    hz(s, e, 38, { x: e.x + d[0] * len, y: e.y + d[1] * len, radius: 26, damage: sageDmg(s, e), fx: "meteor" });
+    return 40;
   },
   // 뛰어올라 플레이어 자리에 내려찍기
   (s, e) => {
@@ -67,12 +76,16 @@ export const BODY_MOVES: readonly ((s: RunState, e: EnemyState) => number)[] = [
     g.bY = s.player.y;
     e.air = e.immune = true;
     hz(s, e, R.LEAP_AIR, { x: g.bX, y: g.bY, radius: R.LEAP_R, damage: sageDmg(s, e, 1.3), fx: "meteor" });
-    return R.LEAP_AIR;
+    // 내려찍은 자리에서 바위 파편 · 파동
+    later(s, e, R.LEAP_AIR, "rocks", g.bX, g.bY, 12);
+    later(s, e, R.LEAP_AIR, "wave", g.bX, g.bY);
+    return R.LEAP_AIR + 10;
   },
   // 장풍: 큰 부채꼴
   (s, e) => {
     const d = toward(s, e);
     hz(s, e, 38, { x: e.x, y: e.y, radius: R.PALM_R, damage: sageDmg(s, e, 1.2), dirX: d[0], dirY: d[1], arc: R.PALM_ARC, fx: "bslash" });
+    later(s, e, 38, "fist", e.x, e.y, 5);
     return 42;
   },
   // 여의봉을 키워 뒤를 막고, 꼬리로 감아 붙잡은 뒤 주먹
@@ -95,7 +108,9 @@ export const BODY_MOVES: readonly ((s: RunState, e: EnemyState) => number)[] = [
       const r = rot(-0.6 + (1.2 * i) / (R.FLURRY - 1));
       Object.assign(enemyShot(s, e.x, e.y, d[0] * r[0] - d[1] * r[1], d[0] * r[1] + d[1] * r[0], 2.4, shotDamage(s)), { look: "kifist" as const, r: 4 });
     }
-    return 20;
+    // 한 번 더 (그때 플레이어 쪽으로)
+    later(s, e, 22, "fist", e.x, e.y, 7);
+    return 30;
   },
   // 털로 만든 분신 셋이 둘레에서 차례로 내려찍고, 마지막에 그 자리
   (s, e) => {
@@ -103,6 +118,7 @@ export const BODY_MOVES: readonly ((s: RunState, e: EnemyState) => number)[] = [
     for (let i = 0; i < 3; i++) {
       const r = rot((i * Math.PI * 2) / 3 - Math.PI + 0.4);
       hz(s, e, 30 + i * 15, { x: p.x + r[0] * 50, y: p.y + r[1] * 50, radius: R.CLONE_R, damage: sageDmg(s, e), fx: "meteor" });
+      later(s, e, 30 + i * 15, "rocks", p.x + r[0] * 50, p.y + r[1] * 50, 5);
     }
     hz(s, e, 80, { x: p.x, y: p.y, radius: R.CLONE_R, damage: sageDmg(s, e), fx: "meteor" });
     return 80;
@@ -115,7 +131,8 @@ export const BODY_MOVES: readonly ((s: RunState, e: EnemyState) => number)[] = [
       hz(s, e, 40, { x: p.x + r[0] * R.CAGE_R, y: p.y + r[1] * R.CAGE_R, radius: 22, damage: sageDmg(s, e, 0.8) });
     }
     hz(s, e, 72, { x: p.x, y: p.y, radius: 30, damage: sageDmg(s, e, 1.2), fx: "meteor" });
-    return 72;
+    later(s, e, 72, "wave", p.x, p.y);
+    return 76;
   },
   // 돌진해 올려치기
   (s, e) => {
@@ -151,6 +168,7 @@ export function bodyTick(s: RunState, e: EnemyState): boolean {
       e.y += e.dirY * R.RUSH_SPEED;
     } else {
       hz(s, e, 10, { x: e.x + e.dirX * 10, y: e.y + e.dirY * 10, radius: R.UPPER_R, damage: sageDmg(s, e, 1.2), fx: "meteor" });
+      later(s, e, 10, "rocks", e.x + e.dirX * 10, e.y + e.dirY * 10, 10);
       delete g.bAct;
     }
     return true;

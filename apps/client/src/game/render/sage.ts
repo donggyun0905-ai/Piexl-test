@@ -2,6 +2,7 @@
 // 여의봉 벽 · 맵 전체 휘두르기(금빛 깜박임 세 번 → 거대한 여의봉) · 즉사기(문구·살 수 있는 원·늘어나는 여의봉) · 강해진 뒤 터지기 직전 하얀 깜박임 · 던진 여의봉·번개 탄
 import { SAGE_DISMOUNT, SAGE_MAX_SAFE, SAGE_MAX_WARN, SAGE_SWEEP, type EnemyState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { drawEnemySprite } from "../sprites";
+import { drawRuyi, line, plunge, PLUNGE, staffW } from "./ruyi";
 import { C } from "./palette";
 
 const TAU = Math.PI * 2;
@@ -38,36 +39,13 @@ export function drawSageActor(ctx: CanvasRenderingContext2D, s: RunState, e: Ene
   return true;
 }
 
-/** 여의봉 하나 (붉은 봉 · 양 끝 금테) */
-function staffBar(ctx: CanvasRenderingContext2D, x0: number, y0: number, x1: number, y1: number, w: number): void {
-  ctx.lineCap = "round";
-  ctx.strokeStyle = "#1a0a10";
-  ctx.lineWidth = w + 2;
-  line(ctx, x0, y0, x1, y1);
-  ctx.strokeStyle = "#b81c22";
-  ctx.lineWidth = w;
-  line(ctx, x0, y0, x1, y1);
-  ctx.strokeStyle = "#e8c040";
-  const len = Math.hypot(x1 - x0, y1 - y0) || 1;
-  const cap = Math.min(0.15, (w * 2) / len);
-  line(ctx, x0, y0, x0 + (x1 - x0) * cap, y0 + (y1 - y0) * cap);
-  line(ctx, x1, y1, x1 - (x1 - x0) * cap, y1 - (y1 - y0) * cap);
-  ctx.lineCap = "butt";
-}
-
-function line(ctx: CanvasRenderingContext2D, x: number, y: number, tx: number, ty: number): void {
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-  ctx.lineTo(tx, ty);
-  ctx.stroke();
-}
 
 /** 바닥 위: 여의봉 벽 · 즉사기 때 살 수 있는 원 */
 export function drawSageGround(ctx: CanvasRenderingContext2D, s: RunState): void {
   for (const e of s.enemies) {
     const g = e.sage;
     if (e.kind !== "sage" || !g) continue;
-    for (const w of g.walls) staffBar(ctx, w[0]!, w[1]!, w[2]!, w[3]!, 8);
+    for (const w of g.walls) drawRuyi(ctx, w[0]!, w[1]!, w[2]!, w[3]!, 9, 0.6);
     if (g.bAct === "max") {
       ctx.strokeStyle = s.tick % 10 < 5 ? "rgba(255, 220, 90, 0.95)" : "rgba(255, 255, 255, 0.8)";
       ctx.lineWidth = 2;
@@ -95,6 +73,29 @@ export function drawSageAir(ctx: CanvasRenderingContext2D, s: RunState): void {
       ctx.stroke();
     }
   }
+  // 여의봉 공격 예고: 여의봉이 처음 자리에서 끝까지 서서히 뻗어 나옴 · 돌리기는 천천히 도는 여의봉
+  for (const h of s.hazards ?? []) {
+    if (s.tick < h.start || (h.fx !== "staff" && h.fx !== "staffSpin")) continue;
+    const f = Math.min(1, (s.tick - h.start) / Math.max(1, h.tick - h.start));
+    ctx.globalAlpha = 0.3 + 0.45 * f;
+    if (h.fx === "staff" && h.toX !== undefined && h.toY !== undefined) {
+      // 수직 내려찍기: 하늘 높이에서 거대한 여의봉이 내려옴 (그림자가 짙어짐)
+      if (plunge(h.x, h.y, h.toX, h.toY)) {
+        ctx.fillStyle = `rgba(0, 0, 0, ${0.15 + 0.35 * f})`;
+        ctx.beginPath();
+        ctx.ellipse(h.toX, h.toY, 10 + 10 * f, 4 + 4 * f, 0, 0, TAU);
+        ctx.fill();
+        const top = h.toY - PLUNGE - 200 * (1 - f);
+        drawRuyi(ctx, h.toX, top, h.toX, top + PLUNGE * 0.9, staffW(h.width), f);
+      } else drawRuyi(ctx, h.x, h.y, h.x + (h.toX - h.x) * f, h.y + (h.toY - h.y) * f, staffW(h.width), f);
+    }
+    else if (h.fx === "staffSpin") {
+      const a = f * Math.PI * 1.5;
+      const r = h.radius * (0.4 + 0.6 * f);
+      drawRuyi(ctx, h.x - Math.cos(a) * r, h.y - Math.sin(a) * r, h.x + Math.cos(a) * r, h.y + Math.sin(a) * r, 6, f);
+    }
+    ctx.globalAlpha = 1;
+  }
   for (const e of s.enemies) {
     const g = e.sage;
     if (e.kind !== "sage" || !g?.bAct || g.bAt === undefined) continue;
@@ -107,11 +108,11 @@ export function drawSageAir(ctx: CanvasRenderingContext2D, s: RunState): void {
       if (flash) screen(ctx, "rgba(255, 200, 40, 0.3)");
       // 크게 키운 여의봉이 플레이어 쪽으로 기울며 커짐 → 휘두르는 순간 맵을 가로지름
       const k = Math.min(1, t / hit);
-      staffBar(ctx, e.x - 400 * k, e.y - 30 * (1 - k), e.x + 400 * k, e.y - 30 * (1 - k), 6 + 18 * k);
-      if (t >= hit - 1) staffBar(ctx, e.x - 600, p.y, e.x + 600, p.y, 26);
+      drawRuyi(ctx, e.x - 400 * k, e.y - 30 * (1 - k), e.x + 400 * k, e.y - 30 * (1 - k), 6 + 18 * k, 0.4 + 0.6 * k);
+      if (t >= hit - 1) drawRuyi(ctx, e.x - 600, p.y, e.x + 600, p.y, 26, 1);
     } else if (g.bAct === "max") {
       const k = Math.min(1, t / SAGE_MAX_WARN);
-      staffBar(ctx, e.x, e.y - 20 - 400 * k, e.x, e.y + 20 + 400 * k, 6 + 30 * k);
+      drawRuyi(ctx, e.x, e.y - 20 - 400 * k, e.x, e.y + 20 + 400 * k, 6 + 30 * k, 0.4 + 0.6 * k);
       if (t >= SAGE_MAX_WARN - 2) screen(ctx, "rgba(255, 245, 210, 0.7)");
     }
   }
@@ -146,7 +147,7 @@ export function drawSageShot(ctx: CanvasRenderingContext2D, pr: ProjectileState,
   if (pr.look === "staff") {
     const a = tick * 0.4;
     const r = pr.r + 6;
-    staffBar(ctx, x - Math.cos(a) * r, y - Math.sin(a) * r, x + Math.cos(a) * r, y + Math.sin(a) * r, 3);
+    drawRuyi(ctx, x - Math.cos(a) * r * 1.6, y - Math.sin(a) * r * 1.6, x + Math.cos(a) * r * 1.6, y + Math.sin(a) * r * 1.6, 4, 0.8);
     return true;
   }
   if (pr.look !== "bolt") return false;

@@ -1,5 +1,5 @@
 // 제천대성 근두운 갈래: 번개·속도 10가지 (몸 갈래와 따로 무작위, 따로 시간이 돎)
-// 따라붙는 번개 셋 · 둘레 번개 다섯 · 가로지르는 돌진 · 방 전체 번개비 · 둘러싸는 번개 · 들이받기 추격 · 번개 줄기 · 지그재그 돌진 · 떨어지는 번개 · 느린 전기 구슬
+// 따라붙는 번개 셋 · 둘레 번개 여덟 · 가로지르는 돌진 · 방 전체 번개비 · 둘러싸는 번개 · 들이받기 추격 · 번개 줄기 · 지그재그 돌진 · 떨어지는 번개 · 느린 전기 구슬
 // 타고 있으면 근두운이 움직일 때 제천대성도 같이 움직임 (bossSage)
 import { shotDamage } from "./bossKit";
 import { damagePlayer } from "./combat";
@@ -12,7 +12,7 @@ import { enemyShot, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } 
 const R = {
   BOLT_R: 24,
   BOLT_WARN: 32,
-  STORM: 12,
+  STORM: 18,
   RING_R: 60,
   DASH_LEN: 260,
   DASH_W: 14,
@@ -50,7 +50,7 @@ export const CLOUD_MOVES: readonly ((s: RunState, e: EnemyState) => number)[] = 
   // 둘레 번개 다섯
   (s, e) => {
     const rng = sageRng(s, e, "chain");
-    for (let i = 0; i < 5; i++) bolt(s, e, s.player.x + rng.int(-60, 60), s.player.y + rng.int(-60, 60), 36);
+    for (let i = 0; i < 8; i++) bolt(s, e, s.player.x + rng.int(-70, 70), s.player.y + rng.int(-70, 70), 36);
     return 40;
   },
   // 가로지르는 돌진: 플레이어를 지나 방 끝까지

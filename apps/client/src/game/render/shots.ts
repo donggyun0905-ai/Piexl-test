@@ -5,6 +5,7 @@ import { drawLaserFx } from "./beams";
 import { drawOrbitFx, drawOrbShot } from "./orbs";
 import { drawKiShot } from "./brawl";
 import { drawBossFx } from "./bossFx";
+import { drawSageFx } from "./ruyi";
 import { drawEnemyShot } from "./bossLook";
 import { drawPwShot } from "./paewang";
 import { drawCleaveFx } from "./minions";
@@ -111,7 +112,7 @@ export function drawEffects(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
     if (drawLaserFx(ctx, s, fx, px, py, snap) || drawMedicFx(ctx, s, fx, px, py, snap)) continue;
     if (drawOrbitFx(ctx, fx, snap)) continue;
     if (drawCleaveFx(ctx, fx, snap) || drawBedouinFx(ctx, fx, s.tick, snap) || drawGeneralFx(ctx, fx, snap) || drawImugiPowerFx(ctx, fx, snap) || drawImugiFx(ctx, fx, snap) || drawApostleFx(ctx, fx, snap) || drawStarFx(ctx, fx, snap) || drawDuckFx(ctx, fx, px, py, snap)) continue;
-    if (drawGunFx(ctx, fx, snap) || drawBeastFx(ctx, fx, snap) || drawBossFx(ctx, fx, snap) || drawTagFx(ctx, fx, snap) || drawTitanFx(ctx, fx, snap) || drawOniFx(ctx, fx, snap) || drawScribeFx(ctx, fx, snap) || drawS2Fx(ctx, fx, snap)) continue;
+    if (drawGunFx(ctx, fx, snap) || drawBeastFx(ctx, fx, snap) || drawSageFx(ctx, fx, snap) || drawBossFx(ctx, fx, snap) || drawTagFx(ctx, fx, snap) || drawTitanFx(ctx, fx, snap) || drawOniFx(ctx, fx, snap) || drawScribeFx(ctx, fx, snap) || drawS2Fx(ctx, fx, snap)) continue;
     if (fx.kind === "swing" && fx.width === 2) drawWhip(ctx, fx, snap(px), snap(py), t);
     else if (fx.kind === "swing") {
       const a = Math.atan2(fx.dirY, fx.dirX);

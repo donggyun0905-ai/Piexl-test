@@ -74,6 +74,8 @@ export interface SageState {
   lastC?: number;
   /** 즉사기를 마지막으로 쓴 공격 수 */
   maxN?: number;
+  /** 늦게 터지는 것 (sageKit.later) */
+  later?: { at: number; kind: "rocks" | "wave" | "fist"; x: number; y: number; n: number }[];
 }
 
 export interface BossPlayerState {
