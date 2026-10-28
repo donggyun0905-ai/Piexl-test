@@ -41,7 +41,8 @@ const GAMES: Record<GameId, (p: { t: (k: TextKey) => string }) => React.JSX.Elem
 /** 같이 하기가 되는 게임 */
 const MULTI: readonly GameId[] = ["blackjack", "tiles", "joker"];
 
-export function MiniGame({ game, t, onClose }: { game: GameId; t: (k: TextKey) => string; onClose: () => void }) {
+/** solo: 혼자 하기만 (랭크전 기다리는 동안 등) */
+export function MiniGame({ game, t, onClose, solo = false }: { game: GameId; t: (k: TextKey) => string; onClose: () => void; solo?: boolean }) {
   useEffect(() => {
     const esc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", esc);
@@ -50,7 +51,7 @@ export function MiniGame({ game, t, onClose }: { game: GameId; t: (k: TextKey) =
   const Game = GAMES[game];
   const [bodyRef, zoom] = useFitZoom();
   const [multi, setMulti] = useState(false);
-  const canMulti = MULTI.includes(game as CardGame);
+  const canMulti = !solo && MULTI.includes(game as CardGame);
   return (
     <div className="modal-backdrop mini-backdrop">
       <div className="modal mini-game" role="dialog" aria-modal="true" aria-label={t(GAME_NAME[game])}>

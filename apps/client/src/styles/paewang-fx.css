@@ -100,6 +100,9 @@
 .pw-taken {
   color: #ff8a8a;
 }
+.pw-healed {
+  color: #7ae08a;
+}
 .pw-count {
   position: fixed;
   top: 38%;

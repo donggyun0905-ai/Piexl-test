@@ -27,7 +27,9 @@ export function recapEnv(s: RunState, before: number): void {
 /** 받은 회복 (seat: 회복한 자리, 실제로 늘어난 체력) */
 export function recapHeal(s: RunState, seat: number, amt: number): void {
   const x = s.pvp?.seats[seat];
-  if (x && amt > 0) x.healed = (x.healed ?? 0) + amt;
+  if (!x || amt <= 0) return;
+  x.healed = (x.healed ?? 0) + amt;
+  x.healAll = (x.healAll ?? 0) + amt;
 }
 
 /** 그림자 적이 맞음 (지금 자리 = 때린 사람, 출처는 pv.src) */

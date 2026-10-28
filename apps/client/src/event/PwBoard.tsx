@@ -54,6 +54,7 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
               <th>D</th>
               <th>{t("pwDealt")}</th>
               <th>{t("pwTaken")}</th>
+              <th>{t("pwHealed")}</th>
               {pv.mode === "gungame" && <th>Lv</th>}
               <th>{t("pwGear")}</th>
             </tr>
@@ -75,6 +76,7 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
                   <td>{seat.deaths}</td>
                   <td className="pw-dealt">{Math.round(seat.dealt ?? 0)}</td>
                   <td className="pw-taken">{Math.round(seat.taken ?? 0)}</td>
+                  <td className="pw-healed">{Math.round(seat.healAll ?? 0)}</td>
                   {pv.mode === "gungame" && <td>{seat.lv}</td>}
                   <td className="pw-gear">
                     <span {...hover({ kind: "weapon", id: p.weaponId })}>

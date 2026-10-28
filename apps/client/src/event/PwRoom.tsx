@@ -10,6 +10,7 @@ import { diffKey, PW_NAME } from "./PwModes";
 import { type PwMapPick, PwMapList } from "./PwMaps";
 import { PwDraftView } from "./PwDraft";
 import { PwPrep } from "./PwPrep";
+import { WaitGames } from "./WaitGames";
 import { usePwRoomDraft } from "./pwRoomDraft";
 
 /** 게임 화면에 넘기는 것: 대결 · 내 장비 · 사람마다 장비(방장) */
@@ -73,7 +74,11 @@ export function usePwRoom(wireRef: RefObject<CoopWire>, start: boolean | PwMode,
   const game: PwRoomGame | null = mode ? { mode, map, lo, los, picks } : null;
   /** 시작해도 되는지 (밴픽이 있으면 끝나야 함) */
   const canStart = !draft.on || !!picks;
-  return { mode, setMode, map, setMap, lo, ready, game, draft, canStart };
+  // 밴픽이 끝나면 준비방(스킬 설명·작은 연습장)을 저절로 띄움 · 닫으면 그 밴픽 동안은 대기실
+  const [shutFor, setShutFor] = useState<object | null>(null);
+  const prepOpen = !!picks && shutFor !== draft.d;
+  const closePrep = () => setShutFor(draft.d ?? null);
+  return { mode, setMode, map, setMap, lo, ready, game, draft, canStart, prepOpen, closePrep };
 }
 
 /** 밴픽 자리 = 게임 자리 (CoopGame과 같은 규칙: 친구 방은 들어온 순서, 랭크전은 두 편에 나눔) */
@@ -109,16 +114,28 @@ interface DraftProps {
   lang: Lang;
   /** 랭크전: 판 시작까지 남은 초 (밴픽이 끝나면 준비방을 보여 줌) */
   startIn?: number;
+  /** 친구 방 방장: 준비방에서 대결 시작 */
+  onStart?: () => void;
   t: (key: TextKey) => string;
 }
 
 /** 친구 방·랭크전 밴픽 (혼자 하기와 같은 전체 화면): 사람 이름 · 빈 자리는 AI · 아래 채팅·나가기 · 랭크전은 끝나면 준비방 */
-export function PwRoomDraft({ room, you, pw, chat, onChat, onLeave, lang, startIn, t }: DraftProps) {
+export function PwRoomDraft({ room, you, pw, chat, onChat, onLeave, lang, startIn, onStart, t }: DraftProps) {
   const { draft } = pw;
   if (!draft.d) return null;
-  // 랭크전: 다 고르면 혼자 하기처럼 준비방 (스킬 설명 · 오른쪽 작은 연습장), 판은 저절로 시작
+  // 다 고르면 혼자 하기처럼 준비방 (스킬 설명 · 오른쪽 작은 연습장)
+  // 랭크전: 판은 저절로 시작 · 친구 방: 방장이 여기서 시작(손님은 기다림), 뒤로 가면 대기실
   const mine = draft.d.picks[draft.me];
-  if (room.rank && draftDone(draft.d) && mine) return <PwPrep characterId={mine} lang={lang} t={t} startIn={startIn !== undefined && startIn > RANK_PREP_MS / 1000 + 5 ? -1 : startIn} onStart={() => {}} onBack={onLeave} />;
+  if (draftDone(draft.d) && mine) {
+    const wait = room.rank
+      ? startIn === undefined || startIn > RANK_PREP_MS / 1000 + 5
+        ? t("pwPrepSoon")
+        : t("pwPrepStartIn").replace("{n}", String(startIn))
+      : onStart
+        ? undefined
+        : t("pwPrepHost");
+    return <PwPrep characterId={mine} lang={lang} t={t} wait={wait} onStart={() => onStart?.()} onBack={room.rank ? onLeave : pw.closePrep} />;
+  }
   const names = draft.d.picks.map((_, i) => room.players.find((p) => p.pid === draft.seats[i])?.name ?? "AI");
   return (
     <PwDraftView d={draft.d} names={names} ai={names.map((_, i) => !draft.seats[i])} me={draft.me} mine={draft.mine} endAt={draft.endAt} onAct={draft.act} t={t}>
@@ -130,8 +147,8 @@ export function PwRoomDraft({ room, you, pw, chat, onChat, onLeave, lang, startI
   );
 }
 
-/** 밴픽 화면을 보일 때: 밴픽 중 (랭크전은 끝나도 판이 시작될 때까지) */
-export const pwDrafting = (room: RoomView, pw: ReturnType<typeof usePwRoom>): boolean => !!pw.draft.d && (!draftDone(pw.draft.d) || !!room.rank);
+/** 밴픽 화면을 보일 때: 밴픽 중 · 끝나면 준비방 (랭크전은 판이 시작될 때까지, 친구 방은 닫기 전까지) */
+export const pwDrafting = (room: RoomView, pw: ReturnType<typeof usePwRoom>): boolean => !!pw.draft.d && (!draftDone(pw.draft.d) || !!room.rank || pw.prepOpen);
 
 interface PanelProps {
   room: RoomView;
@@ -185,6 +202,7 @@ export function PwRoomPanel({ room, you, isHost, characterId, pw, lang, t }: Pan
         </button>
       )}
       {def.prep && !draft.on && isHost && <small> {t("pwReady").replace("{n}", String(done)).replace("{m}", String(room.players.length))}</small>}
+      {room.rank && <WaitGames t={t} />}
     </div>
   );
 }

@@ -31,4 +31,6 @@ export const PW_DRAFT_TEXT = {
   pwDraftAgain: { ko: "밴픽 다시", en: "Redo draft", ja: "バンピックやり直し" },
   pwPrepStartIn: { ko: "{n}초 뒤 대결 시작", en: "Battle starts in {n}s", ja: "{n}秒後に対決開始" },
   pwPrepSoon: { ko: "잠시 뒤 대결 시작", en: "Battle starts shortly", ja: "まもなく対決開始" },
+  pwPrepHost: { ko: "방장이 시작하면 대결이 시작돼요", en: "The match starts when the host starts it", ja: "部屋主が開始すると対決が始まります" },
+  waitGames: { ko: "기다리는 동안 미니 게임", en: "Mini games while you wait", ja: "待っている間にミニゲーム" },
 } as const;

@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.196",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "패왕전 점수판(Tab)에 치유량(이 판에 받은 회복) 칸 추가",
+        "랭크전 상대를 찾거나 대기실에서 기다리는 동안 미니 게임 8가지를 눌러서 바로 할 수 있음",
+        "친구 방 패왕전: 밴픽이 끝나면 랭크전처럼 스킬 설명·작은 연습장 준비방이 저절로 뜨고, 방장은 거기서 대결 시작 (손님은 방장을 기다림, 뒤로 가면 대기실)",
+      ],
+      en: [
+        "Added a Healed column (healing received this match) to the Champion Clash scoreboard (Tab)",
+        "While searching for a Ranked match or waiting in its lobby, you can play any of 8 mini games",
+        "Champion Clash friend rooms: after the draft, the skill list and small practice area open automatically like Ranked, and the host starts the match from there (guests wait for the host; going back returns to the lobby)",
+      ],
+      ja: [
+        "覇王戦スコアボード (Tab) に回復量 (この試合で受けた回復) の列を追加",
+        "ランク戦の相手探し中や待機部屋で待つ間、ミニゲーム8種をすぐに遊べる",
+        "友だち部屋の覇王戦: バンピック後、ランク戦のようにスキル説明・小さな練習場の準備画面が自動で開き、部屋主がそこで対決開始 (ゲストは部屋主を待つ、戻ると待機部屋)",
+      ],
+    },
+  },
+  {
     version: "0.48.195",
     date: "2026-10-28",
     items: {

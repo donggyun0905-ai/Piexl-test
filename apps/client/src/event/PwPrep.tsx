@@ -11,11 +11,11 @@ interface Props {
   t: (key: TextKey) => string;
   onStart: (lo: PwLoadout) => void;
   onBack: () => void;
-  /** 랭크전: 판이 저절로 시작되기까지 남은 초 (시작 버튼 대신, -1 = 곧) */
-  startIn?: number;
+  /** 시작 버튼 대신 보일 글 (랭크전 남은 초 · 친구 방 손님은 방장 기다림) */
+  wait?: string;
 }
 
-export function PwPrep({ characterId, lang, t, onStart, onBack, startIn }: Props) {
+export function PwPrep({ characterId, lang, t, onStart, onBack, wait }: Props) {
   const weapon = CHARACTERS[characterId].startWeapon;
   return (
     <div className="pw-prep-split">
@@ -26,12 +26,12 @@ export function PwPrep({ characterId, lang, t, onStart, onBack, startIn }: Props
         <PwSkillList characterId={characterId} lang={lang} t={t} />
         <p className="hint">{t("pwSkAimHint")}</p>
         <div className="pw-prep-actions">
-          {startIn === undefined ? (
+          {wait === undefined ? (
             <button type="button" className="primary" onClick={() => onStart({ weapon, passives: [], uses: [] })}>
               {t("pwSkReady")}
             </button>
           ) : (
-            <b className="pw-prep-wait">{startIn < 0 ? t("pwPrepSoon") : t("pwPrepStartIn").replace("{n}", String(startIn))}</b>
+            <b className="pw-prep-wait">{wait}</b>
           )}
           <button type="button" className="ghost" onClick={onBack}>
             {t("back")}

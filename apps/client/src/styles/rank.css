@@ -108,3 +108,35 @@
   align-items: center;
   text-align: center;
 }
+/* 기다리는 동안 미니 게임 (랭크전 상대 찾기·대기실) */
+.wait-games {
+  width: min(520px, 100%);
+  margin: 12px auto 0;
+  text-align: center;
+}
+.wait-games h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #ffd860;
+}
+.wait-games-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.wait-games-grid button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px;
+  font-size: 12px;
+}
+.wait-game-icon {
+  font-size: 22px;
+}
+@media (max-width: 480px) {
+  .wait-games-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

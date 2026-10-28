@@ -1,4 +1,5 @@
 // 랭크전 화면 조각: 상대 찾는 중(방에 들어가기 전) · 끝난 뒤 내 점수 변화(로고 · 티어 · +점수)
+import { WaitGames } from "./WaitGames";
 import { rankOf, type RankChange, type RankQueue } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 import { RankEmblem } from "./RankEmblem";
@@ -10,7 +11,8 @@ export function RankFinding({ queue, error, t, onBack }: { queue: RankQueue; err
       <h2>
         🏆 {t("rankTitle")} · {t(QUEUE_NAME[queue])}
       </h2>
-      {error ? <p className="error">{error}</p> : <p className="hint">{t("rankFinding")}</p>}
+      {error ? <p className="error">{error}</p> : <p className="hint rank-finding-dots">{t("rankFinding")}</p>}
+      <WaitGames t={t} />
       <button type="button" className="ghost" onClick={onBack}>
         {t("back")}
       </button>

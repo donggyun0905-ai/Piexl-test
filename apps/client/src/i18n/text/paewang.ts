@@ -102,4 +102,5 @@ export const PAEWANG_TEXT = {
   pwBackIn: { ko: "{n}초 뒤 다시 나갑니다", en: "Back in {n}s", ja: "{n}秒後に復帰" },
   pwDealt: { ko: "준 피해", en: "Dealt", ja: "与ダメ" },
   pwTaken: { ko: "받은 피해", en: "Taken", ja: "被ダメ" },
+  pwHealed: { ko: "치유량", en: "Healed", ja: "回復量" },
 };
