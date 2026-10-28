@@ -214,8 +214,7 @@ export function GameScreen(props: GameScreenProps) {
       <GameHud
         t={t}
         touchMode={touchMode}
-        autoAim={autoAim}
-        manualOnly={mode === "paewang" || !!props.initialRun?.pvp}
+        autoAim={autoAim} manualOnly={mode === "paewang" || !!props.initialRun?.pvp}
         onPause={canPause ? () => setOverlay("pause") : null}
         onAutoAim={(on) => controlsRef.current?.setAutoAim(on)}
         hpFillRef={hpFillRef}
