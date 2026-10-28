@@ -1,13 +1,9 @@
 import { CHARACTER_IDS, TD_MAPS, type CharacterId, type RunState, type SwarmMapId, type TdMapId } from "@pixel-rogue/shared";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ProfileScreen } from "./ProfileScreen";
-import { BattleScreen } from "./battle/BattleScreen";
 import { takeRoomFromUrl } from "./battle/invite";
-import { CoopScreen } from "./coop/CoopScreen";
 import { CharacterSelect } from "./CharacterSelect";
 import { DailyGame } from "./daily/DailyGame";
-import { HallOfFame } from "./daily/HallOfFame";
-import { ArenaBoard } from "./daily/ArenaBoard";
 import { DailyScreen, type DailyMode, type DailyStart } from "./daily/DailyScreen";
 import { GameScreen } from "./game/GameScreen";
 import { SoloGame } from "./game/SoloGame";
@@ -15,14 +11,7 @@ import { ADMIN_PRACTICE, ADMIN_TD } from "./balance";
 import { useLang } from "./i18n";
 import { loadAchievements, loadSavedRun, newSeedText, seedFromUrl } from "./records";
 import { TitleScreen } from "./TitleScreen";
-import { TdGame } from "./td/TdGame";
-import { TdScreen } from "./td/TdScreen";
-import { ShopScreen } from "./shop/ShopScreen";
-import { SwarmGame } from "./event/SwarmGame";
-import { SwarmMaps } from "./event/SwarmMaps";
-import { PwFlow } from "./event/PwFlow";
-import { StoryScreen } from "./story/StoryScreen";
-import { TierScreen } from "./archive/TierScreen";
+import { ArenaBoard, BattleScreen, CoopScreen, HallOfFame, PwFlow, ShopScreen, StoryScreen, SwarmGame, SwarmMaps, TdGame, TdScreen, TierScreen } from "./lazyScreens";
 
 type Screen =
   | { name: "title" }

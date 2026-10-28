@@ -1,7 +1,8 @@
 // 웹앱 설치용 서비스 워커: 한 번 받은 화면 파일을 저장해 두고, 인터넷이 없을 때 꺼내 씀 (혼자 하기)
 // 페이지·그림은 늘 새로 받고 실패할 때만 저장본 → 업데이트가 바로 보임
 // 서버(게임 서버·순위표) 요청은 다른 주소라 건드리지 않음
-const CACHE = "pixel-rogue-v1";
+// 이름은 게임 버전마다 바뀜 (install.ts가 sw.js?v=버전으로 등록) → 새 버전이 켜질 때 예전 저장본을 모두 지워 저장 공간이 쌓이지 않게
+const CACHE = "pixel-rogue-" + (new URL(self.location.href).searchParams.get("v") || "v1");
 
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (e) => {

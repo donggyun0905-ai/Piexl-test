@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
 import { unlockAudio } from "./audio/sound";
@@ -15,6 +15,8 @@ for (const ev of ["pointerdown", "keydown"]) window.addEventListener(ev, unlockA
 window.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.code === "KeyS") e.preventDefault();
 });
+// 새 버전이 올라가 예전 화면 파일이 없어졌으면 (나눠 받는 화면) 새로 고쳐 새 버전으로
+window.addEventListener("vite:preloadError", () => location.reload());
 // 웹앱 설치 준비 (서비스 워커·설치 창)
 setupInstall();
 // 다른 기기에서 바꾼 닉네임·해금 맞추기 (열 때 한 번)
@@ -23,6 +25,8 @@ void syncProfile();
 void refreshBalance();
 createRoot(root).render(
   <StrictMode>
-    <App />
+    <Suspense fallback={null}>
+      <App />
+    </Suspense>
   </StrictMode>,
 );

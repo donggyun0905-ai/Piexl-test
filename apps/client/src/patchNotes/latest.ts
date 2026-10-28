@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.215",
+    date: "2026-10-28",
+    items: {
+      ko: ["첫 접속이 빨라짐: 상점·스토리·타워 디펜스·이벤트·배틀·협동·패치 노트 등은 들어갈 때 받음 (처음 받는 양 약 25% 줄어듦) · 웹앱 저장본은 새 버전이 켜질 때 예전 것을 지워 휴대폰 저장 공간이 쌓이지 않음"],
+      en: ["Faster first load: the shop, story, tower defense, events, battle, co-op, patch notes and more now load when you open them (about 25% less to download at first) · the web app now clears old cached files when a new version starts, so they no longer pile up on your phone"],
+      ja: ["初回の読み込みが速く: ショップ・ストーリー・タワーディフェンス・イベント・バトル・協力・パッチノートなどは開いたときに読み込み (最初のダウンロード量が約25%減) · Webアプリの保存データは新しいバージョンの起動時に古いものを消すので、スマホの容量がたまらない"],
+    },
+  },
+  {
     version: "0.48.214",
     date: "2026-10-28",
     items: {

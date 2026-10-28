@@ -1,4 +1,5 @@
 // 웹앱 설치: 서비스 워커 등록 · 크롬 계열의 설치 창 붙잡아 두기 · 지금 앱으로 열렸는지
+import { GAME_VERSION } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 
 interface InstallPromptEvent extends Event {
@@ -47,7 +48,7 @@ export function setupInstall() {
     notify();
   });
   if (import.meta.env.PROD && "serviceWorker" in navigator) {
-    window.addEventListener("load", () => void navigator.serviceWorker.register("/sw.js").catch(() => {}));
+    window.addEventListener("load", () => void navigator.serviceWorker.register(`/sw.js?v=${GAME_VERSION}`).catch(() => {}));
   }
 }
 

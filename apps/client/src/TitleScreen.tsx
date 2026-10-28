@@ -1,8 +1,7 @@
 import { GAME_VERSION } from "@pixel-rogue/shared";
 import { CodexPanel } from "./codex/CodexPanel";
-import { LobbyMode } from "./lobby/LobbyMode";
 import { LobbyStage } from "./lobby/LobbyStage";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { AchievementList } from "./AchievementList";
 import { RecordsPanel } from "./RecordsPanel";
 import type { Lang, TextKey } from "./i18n";
@@ -14,7 +13,7 @@ import { SoloChooser } from "./menu/SoloChooser";
 import { EventChooser } from "./menu/EventChooser";
 import { ArchiveChooser } from "./menu/ArchiveChooser";
 import { TopBar } from "./menu/TopBar";
-import { PATCH_NOTES } from "./patchNotes";
+import { LobbyMode, PatchNotesList } from "./lazyScreens";
 import { loadBest, loadSavedRun } from "./records";
 import { useServerStatus } from "./serverStatus";
 
@@ -168,18 +167,9 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
       {popup === "archive" && <ArchiveChooser t={t} onStory={onStory} onTierList={onTierList} onClose={close} />}
       {popup === "notes" && (
         <Modal title={t("patchNotes")} t={t} onClose={close}>
-          {PATCH_NOTES.map((note) => (
-            <section key={note.version}>
-              <h3>
-                {note.version} <small>{note.date}</small>
-              </h3>
-              <ul>
-                {note.items[lang].map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </section>
-          ))}
+          <Suspense fallback={null}>
+            <PatchNotesList lang={lang} />
+          </Suspense>
         </Modal>
       )}
       {popup === "records" && (
