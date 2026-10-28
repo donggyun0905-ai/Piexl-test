@@ -1,0 +1,206 @@
+/* 패왕전 밴픽 (event/PwDraft): 왼쪽 우리 편 · 가운데 큰 캐릭터 목록 · 오른쪽 상대 편, 화면 너비를 다 씀 */
+.pw-draft {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+  padding: 12px 16px;
+  text-align: left;
+}
+.pw-room .pw-draft {
+  min-height: 0;
+  padding: 8px 0;
+}
+.pw-draft-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+.pw-draft-top h2 {
+  margin: 0;
+  font-size: 22px;
+}
+.pw-draft-top p {
+  margin: 0;
+  font-size: 18px;
+}
+.pw-draft-top p.mine {
+  color: #ffd860;
+  font-weight: bold;
+}
+.pw-draft-sec {
+  min-width: 48px;
+  padding: 2px 12px;
+  border-radius: 10px;
+  font-size: 24px;
+  text-align: center;
+  color: #1a1622;
+  background: #ffd860;
+}
+.pw-draft-main {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) 1fr minmax(180px, 260px);
+  gap: 12px;
+  align-items: start;
+}
+.pw-draft-team {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border: 2px solid #3a3648;
+  border-radius: 10px;
+  background: rgb(0 0 0 / 0.25);
+}
+.pw-draft-team.ours {
+  border-color: #4a90e2;
+}
+.pw-draft-team.theirs {
+  border-color: #e24a4a;
+}
+.pw-draft-team.turn {
+  box-shadow: 0 0 14px rgb(255 216 96 / 0.35);
+}
+.pw-draft-team h4 {
+  margin: 0;
+  font-size: 16px;
+}
+.pw-draft-team.theirs h4 {
+  text-align: right;
+}
+.pw-draft-seat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 76px;
+  padding: 4px 8px;
+  text-align: left;
+}
+.pw-draft-team.theirs .pw-draft-seat {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.pw-draft-seat > span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.pw-draft-seat b {
+  font-size: 15px;
+}
+.pw-draft-seat.now {
+  outline: 3px solid #ffd860;
+  animation: pw-draft-blink 1s ease-in-out infinite alternate;
+}
+.pw-draft-seat.me b {
+  color: #ffd860;
+}
+@keyframes pw-draft-blink {
+  to {
+    outline-color: rgb(255 216 96 / 0.3);
+  }
+}
+.pw-draft-empty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  font-size: 24px;
+  color: #8a86a0;
+}
+.pw-draft-bans {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+.pw-draft-team.theirs .pw-draft-bans {
+  justify-content: flex-end;
+}
+.pw-draft-bans canvas {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+.pw-draft-center {
+  min-width: 0;
+}
+.pw-draft-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.pw-draft-tabs button {
+  padding: 6px 12px;
+  border-bottom: 3px solid var(--fc, #8a86a0);
+}
+.pw-draft-tabs button.on {
+  color: #1a1622;
+  background: var(--fc, #ffd860);
+}
+.pw-draft-tabs input {
+  flex: 1;
+  min-width: 120px;
+  padding: 6px 10px;
+}
+.pw-draft-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 6px;
+  max-height: 62vh;
+  overflow-y: auto;
+}
+.pw-draft-grid button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 2px;
+}
+.pw-draft-grid small {
+  overflow: hidden;
+  max-width: 100%;
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.pw-draft-grid button.on {
+  outline: 3px solid #ffd860;
+}
+.pw-draft-grid button.taken {
+  filter: grayscale(1);
+  opacity: 0.3;
+}
+.pw-draft-act {
+  margin-top: 10px;
+}
+.pw-draft-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 10px;
+}
+.pw-draft-look h3 {
+  margin: 0;
+}
+.pw-draft-say {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #a8e0a0;
+}
+@media (max-width: 760px) {
+  .pw-draft-main,
+  .pw-draft-bottom {
+    grid-template-columns: 1fr;
+  }
+  .pw-draft-grid {
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  }
+}
+/* 같이 하기 대기실: 밴픽 중에는 넓게 */
+.pw-room:has(.pw-draft) {
+  max-width: none;
+}

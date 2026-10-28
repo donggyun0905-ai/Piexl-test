@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.184",
+    date: "2026-10-28",
+    items: {
+      ko: ["패왕전 밴픽 화면을 크게: 왼쪽 우리 편 · 오른쪽 상대 편 · 가운데 큰 캐릭터 그림, 위쪽 전체·아스칼론·테라코어·헬리오스·비르디아 탭과 이름 찾기"],
+      en: ["Bigger Champion Clash draft screen: our team on the left, enemies on the right, large character art in the middle with All / Ascalon / Terracore / Helios / Virdia tabs and name search"],
+      ja: ["覇王戦バンピック画面を大きく: 左に味方 · 右に相手 · 中央に大きなキャラ絵、上に すべて・アスカロン・テラコア・ヘリオス・ヴィルディア タブと名前検索"],
+    },
+  },
+  {
     version: "0.48.183",
     date: "2026-10-28",
     items: {

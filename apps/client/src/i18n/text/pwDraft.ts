@@ -12,9 +12,11 @@ export const PW_DRAFT_TEXT = {
   pwDraftSkip: { ko: "밴 넘기기", en: "Skip ban", ja: "バンしない" },
   pwDraftBans: { ko: "밴", en: "Bans", ja: "バン" },
   pwDraftDone: { ko: "모두 골랐어요! 곧 시작합니다", en: "All locked in! Starting soon", ja: "全員決定! まもなく開始" },
-  pwDraftHint: { ko: "캐릭터를 눌러 스킬을 보고, 내 차례에 밴·확정하세요. 시간이 다하면 무작위로 정해져요", en: "Tap a character to see its skills, then ban or lock in on your turn. If time runs out, one is chosen at random", ja: "キャラを押してスキルを確認し、自分の番にバン・確定。時間切れはランダム" },
+  pwDraftHint: { ko: "캐릭터를 눌러 스킬을 보고, 내 차례에 밴·확정하세요. 시간이 다하면 밴은 넘어가고 픽은 무작위예요", en: "Tap a character to see its skills, then ban or lock in on your turn. If time runs out, the ban is skipped and the pick is random", ja: "キャラを押してスキルを確認し、自分の番にバン・確定。時間切れはバンなし、ピックはランダム" },
   pwDraftAiSay: { ko: "{c} 갈게요!", en: "I'll go {c}!", ja: "{c}でいきます!" },
   pwDraftStart: { ko: "밴픽 시작", en: "Start draft", ja: "バンピック開始" },
   pwDraftNeed: { ko: "밴픽을 마치면 시작할 수 있어요", en: "Finish the draft to start", ja: "バンピックが終わると開始できます" },
+  pwDraftAll: { ko: "전체", en: "All", ja: "すべて" },
+  pwDraftSearch: { ko: "캐릭터 찾기", en: "Find a character", ja: "キャラを探す" },
   pwDraftAgain: { ko: "밴픽 다시", en: "Redo draft", ja: "バンピックやり直し" },
 } as const;
