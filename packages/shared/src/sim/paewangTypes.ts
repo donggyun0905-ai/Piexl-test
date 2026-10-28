@@ -137,6 +137,8 @@ export interface PvpSeat {
   /** 이 판에 상대에게 준 피해 · 받은 피해 합 (점수판) */
   dealt?: number;
   taken?: number;
+  /** 다시 나온 뒤 받은 피해 (누가 · 출처 · 합 · 가장 큰 한 방, pvpRecap) */
+  recv?: { by: number; src: number; dmg: number; max: number }[];
   /** 얼음 시계에 얼어 있는 끝 틱 (그림) */
   iced?: number;
   /** 이번 판에 쓰러짐 (토너먼트 다음 차례 고르기) */
@@ -215,6 +217,9 @@ export interface PwIce {
 }
 
 export interface PvpState {
+  /** 이번 틱 그림자 적이 맞은 날것 피해 · 지금 피해의 출처 (pvpRecap) */
+  hits?: { to: number; by: number; src: number; amt: number }[];
+  src?: number;
   mode: PwMode;
   arena: PwArenaId;
   seats: PvpSeat[];

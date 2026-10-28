@@ -172,3 +172,62 @@
   align-self: center;
   color: #ffd860;
 }
+/* 받은 피해 정리 (쓰러져 있는 동안, 아래 가운데) */
+.pw-recap {
+  position: fixed;
+  bottom: 70px;
+  left: 50%;
+  z-index: 2;
+  width: min(360px, calc(100vw - 32px));
+  padding: 8px 12px;
+  border: 1px solid #ff8a8a66;
+  border-radius: 10px;
+  background: rgb(10 8 16 / 0.86);
+  font-size: 12px;
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: pw-in 0.25s ease-out;
+}
+.pw-recap h4 {
+  margin: 0 0 6px;
+  font-size: 13px;
+}
+.pw-recap h4 b {
+  color: #ff8a8a;
+}
+.pw-recap ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pw-recap-head {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+}
+.pw-recap-head span {
+  margin-left: auto;
+  font-weight: 700;
+}
+.pw-recap-head small,
+.pw-recap-src {
+  color: #b8b0c8;
+}
+.pw-recap-bar {
+  display: block;
+  height: 4px;
+  margin: 2px 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #ff5a5a, #ffb070);
+}
+.pw-recap .ours {
+  color: #8cc8ff;
+}
+.pw-recap .theirs {
+  color: #ff8a8a;
+}
+.pw-recap-big {
+  margin: 6px 0 0;
+}

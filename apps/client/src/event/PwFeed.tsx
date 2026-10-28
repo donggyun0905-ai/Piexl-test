@@ -1,8 +1,9 @@
 // 패왕전 처치 알림: 오른쪽 위 처치 기록(누가 누구를) · 내가 처치하면 가운데 큰 글자(연속 처치는 더 크게) · 내가 쓰러지면 안내(데스매치는 다시 나오기까지 초)
-// 점수(처치·데스)가 늘어난 자리를 지난번과 비교해 찾음 (화면 전용) · 누가 궁극기를 쓰면 위쪽에 이름
+// 쓰러져 있는 동안 받은 피해 정리(PwRecap) · 점수(처치·데스)가 늘어난 자리를 지난번과 비교해 찾음 (화면 전용) · 누가 궁극기를 쓰면 위쪽에 이름
 import { allPlayers, TICK_RATE, type RunState } from "@pixel-rogue/shared";
 import { useState } from "react";
 import type { TextKey } from "../i18n";
+import { PwRecap } from "./PwRecap";
 import { skillName } from "./pwSkillText";
 
 interface Props {
@@ -113,6 +114,7 @@ export function PwFeed({ run, me, who, t }: Props) {
           {wait > 0 && <small>{t("pwBackIn").replace("{n}", String(wait))}</small>}
         </div>
       )}
+      <PwRecap run={run} me={me} who={who} t={t} />
     </>
   );
 }

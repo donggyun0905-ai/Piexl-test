@@ -9,6 +9,7 @@ import { createRng, deriveSeed } from "../rng";
 import { ENEMIES } from "../content";
 import { SWARM } from "../swarmDefs";
 import { titanHurt, titanParried } from "./titan";
+import { logHit } from "./pvpRecap";
 import { afterHurt, classTaken } from "./classTaken";
 import { dodged, extraTaken, goldMul, onHitExtra, sharpBonus } from "./baseStats";
 import { tickDots } from "./status";
@@ -81,6 +82,7 @@ export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: numbe
     hurt -= used;
   }
   e.hp -= hurt;
+  logHit(s, e, hurt);
   onHitExtra(s, e, dmg);
   e.hitFlash = 6;
   if (s.party) e.lastHit = seatNo(s);

@@ -15,6 +15,7 @@ export function placeSeat(s: RunState, i: number): void {
   const size = def.allies + 1;
   const spot = def.ffa ? arena.spots[i % arena.spots.length]! : (seat.team === 0 ? arena.teamA : arena.teamB)[(i % size) % arena.teamA.length]!;
   const [x, y] = spotXY(spot);
+  seat.recv = undefined;
   const p = s.player;
   p.x = p.prevX = x;
   p.y = p.prevY = y;

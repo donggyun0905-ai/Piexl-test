@@ -46,7 +46,10 @@ function hitFoe(s: RunState, def: PwSkillDef, e: EnemyState, dx: number, dy: num
   const h = def.hit;
   if (!h || e.immune || e.hp <= 0) return;
   const p = s.player;
+  const pw = s.pvp!;
+  pw.src = 1 + Math.max(0, kitOf(p.characterId)?.skills.indexOf(def) ?? 0);
   damageEnemy(s, e, skillPow(p) * h.dmg * buffMul(p, "dmg"), dx, dy, false);
+  pw.src = undefined;
   if (h.stun) e.stunTicks = Math.max(e.stunTicks ?? 0, h.stun);
   if (h.slow) e.slowTicks = Math.max(e.slowTicks ?? 0, h.slow);
   if (h.root) e.rootTicks = Math.max(e.rootTicks ?? 0, h.root);

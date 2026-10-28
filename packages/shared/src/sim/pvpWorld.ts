@@ -14,6 +14,7 @@ import { dist2, makeEnemy } from "./util";
 import { inBush } from "./paewangGrid";
 import { buffMul, pwHidden } from "./pwSkillHit";
 import { practiceSafe } from "./pvpPractice";
+import { recapTake } from "./pvpRecap";
 
 /** 경기장에 나와 살아 있는 자리인지 */
 export function inPlay(s: RunState, i: number): boolean {
@@ -132,6 +133,7 @@ function transfer(s: RunState, start: number[]): void {
       const lost = Math.max(0, before - Math.max(0, p.hp));
       seat.taken = (seat.taken ?? 0) + lost;
       if (e.lastHit !== undefined && e.lastHit !== i) pv.seats[e.lastHit]!.dealt = (pv.seats[e.lastHit]!.dealt ?? 0) + lost;
+      recapTake(s, i, lost, e.lastHit);
       p.invulnTicks = Math.max(p.invulnTicks, keep[0]);
       p.shieldTicks = Math.max(p.shieldTicks, keep[1]);
     }
@@ -140,4 +142,5 @@ function transfer(s: RunState, start: number[]): void {
     seat.root = Math.max(seat.root, Math.min(120, e.rootTicks ?? 0));
     e.stunTicks = e.slowTicks = e.rootTicks = e.fearTicks = 0;
   });
+  pv.hits = undefined;
 }

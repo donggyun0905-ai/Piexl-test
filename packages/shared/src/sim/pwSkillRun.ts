@@ -5,6 +5,7 @@ import { kitOf } from "../pwKits";
 import type { TickInput } from "./inputTypes";
 import { damageEnemy } from "./combat";
 import { recalcStats } from "./items";
+import { PW_SRC_SUMMON } from "./pvpRecap";
 import { seatNo } from "./party";
 import { castSkill, skillDef, stepCast } from "./pwSkill";
 import { castFx, PW_FX_STYLES, skillPow } from "./pwSkillHit";
@@ -129,7 +130,9 @@ function minionsStep(s: RunState): void {
     if (m.body) [m.body.x, m.body.y, m.body.prevX, m.body.prevY] = [m.x, m.y, m.x, m.y];
     if (--m.cd > 0 || d > sm.range + best.r) continue;
     m.cd = sm.every;
+    pv.src = PW_SRC_SUMMON;
     damageEnemy(s, best, skillPow(s.player) * sm.dmg, (best.x - m.x) / (d || 1), (best.y - m.y) / (d || 1), false);
+    pv.src = undefined;
     m.shot = { x: best.x, y: best.y, at: s.tick };
   }
   pv.mins = pv.mins.filter((m) => m.t > 0);

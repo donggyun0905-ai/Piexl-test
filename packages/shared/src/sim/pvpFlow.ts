@@ -119,6 +119,7 @@ export function bringBack(s: RunState): void {
     if (seat.back === undefined || seat.back > s.tick) return;
     seat.back = undefined;
     seat.on = true;
+    seat.recv = undefined;
     const def = PW_ARENAS[pv.arena];
     const [x, y] = pv.mode === "tourney" ? spotXY((seat.team === 0 ? def.teamA : def.teamB)[0]!) : farSpot(s, i);
     const p = s.player;

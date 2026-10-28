@@ -37,4 +37,8 @@ export const PW_SKILL_UI_TEXT = {
   pwSkKeys: { ko: "패왕전 스킬 키", en: "Champion Clash skill keys", ja: "覇王戦スキルキー" },
   pwSkView: { ko: "스킬 보기", en: "View skills", ja: "スキルを見る" },
   pwSkReady: { ko: "이 캐릭터로 시작", en: "Start with this character", ja: "このキャラで開始" },
+  pwRecap: { ko: "받은 피해", en: "Damage taken", ja: "受けたダメージ" },
+  pwRecapBig: { ko: "가장 아팠던 한 방:", en: "Biggest hit:", ja: "一番痛かった一撃:" },
+  pwRecapSummon: { ko: "소환", en: "Summon", ja: "召喚" },
+  pwRecapDot: { ko: "지속 피해", en: "Damage over time", ja: "継続ダメージ" },
 };
