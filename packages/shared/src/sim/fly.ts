@@ -73,7 +73,9 @@ function swoop(s: RunState): void {
     startRaid(s, dmg, F.raidPasses, F.raidMul, F.raidGap);
     return;
   }
-  const red = raid && !!s.pvp;
+  // 패왕전 신기루(스킬 3)를 쓴 뒤 다음 급습은 꼭 붉은 급습
+  const red = (raid || !!p.pwRed) && !!s.pvp;
+  delete p.pwRed;
   if (red) dmg *= F.pvpRedMul;
   // 겹눈: 가장 가까운 적 쪽으로
   let dir: readonly [number, number] = [p.faceX, p.faceY];

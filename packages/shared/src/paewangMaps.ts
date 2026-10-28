@@ -110,6 +110,20 @@ const BASE_ARENAS = {
     teamB: NONE,
     spots: [[24, 3], [5, 14], [43, 15], [24, 27], [29, 10], [19, 19], [6, 5], [41, 24]],
   },
+  /** 연습장 전용: 장애물 없는 초원 (대결 경기장 목록에는 없음) */
+  practice: {
+    cols: 33,
+    rows: 19,
+    walls: NONE,
+    rocks: NONE,
+    ponds: NONE,
+    bushes: NONE,
+    traps: NONE,
+    decks: NONE,
+    teamA: [[8, 9], [4, 5], [4, 13]],
+    teamB: [[20, 9], [20, 5], [20, 13]],
+    spots: NONE,
+  },
 } satisfies Record<string, PwArenaDef>;
 
 /** 모든 경기장 (처음 5개 + 작은·중간 + 큰) */

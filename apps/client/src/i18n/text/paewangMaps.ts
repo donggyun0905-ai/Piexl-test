@@ -1,5 +1,6 @@
 // 화면 글자: 패왕전 경기장 이름 (키 = "pwMap_" + 경기장 id) · 경기장 고르기 · 3판 2선승
 export const PAEWANG_MAP_TEXT = {
+  pwMap_practice: { ko: "연습 초원", en: "Practice Meadow", ja: "練習の草原" },
   pwMap_small: { ko: "기둥 경기장", en: "Pillar Arena", ja: "柱の闘技場" },
   pwMap_dLava: { ko: "용암 다리", en: "Lava Bridge", ja: "溶岩の橋" },
   pwMap_dMarsh: { ko: "늪지", en: "Marsh", ja: "沼地" },
