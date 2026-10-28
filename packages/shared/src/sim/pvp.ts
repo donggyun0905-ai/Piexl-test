@@ -29,6 +29,8 @@ import { EMPTY_INPUT, type RunState, type TickInput } from "./types";
 export interface PwHuman {
   characterId: CharacterId;
   loadout?: PwLoadout;
+  /** 밴픽에서 캐릭터만 정해진 AI 자리 */
+  ai?: boolean;
 }
 
 /** 모드의 전체 자리 수 */
@@ -58,7 +60,7 @@ export function createPvp(seed: number, mode: PwMode, humans: readonly (PwHuman 
     const team = def.ffa ? 100 + i : i < size ? 0 : 1;
     // 토너먼트는 편마다 첫 사람만 나옴
     const on = mode !== "tourney" || i % size === 0;
-    return { team, human: !!humans[i], on, kills: 0, deaths: 0, lv: 1, stun: 0, slow: 0, root: 0, side: i % 2 ? 1 : -1, sideT: 60, stuck: 0, goalX: 0, goalY: 0, dashCd: 0 };
+    return { team, human: !!humans[i] && !humans[i]!.ai, on, kills: 0, deaths: 0, lv: 1, stun: 0, slow: 0, root: 0, side: i % 2 ? 1 : -1, sideT: 60, stuck: 0, goalX: 0, goalY: 0, dashCd: 0 };
   });
   s.pvp = { mode, arena: arenaId, seats, proxies: [] };
   s.terrain = arenaTerrain(arena);

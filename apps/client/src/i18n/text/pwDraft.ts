@@ -1,0 +1,20 @@
+// 화면 글자: 패왕전 밴픽 (event/PwDraft·PwDraftSolo·PwRoom)
+export const PW_DRAFT_TEXT = {
+  pwDraft: { ko: "밴픽", en: "Draft", ja: "バンピック" },
+  pwDraftOurs: { ko: "우리 편", en: "Our team", ja: "味方" },
+  pwDraftTheirs: { ko: "상대 편", en: "Enemy team", ja: "相手" },
+  pwDraftBanTurn: { ko: "{team} 밴 차례", en: "{team} bans", ja: "{team}のバン" },
+  pwDraftPickTurn: { ko: "{name} 픽 차례", en: "{name} picks", ja: "{name}のピック" },
+  pwDraftMine: { ko: "내 차례!", en: "Your turn!", ja: "あなたの番!" },
+  pwDraftWait: { ko: "고르는 중…", en: "Choosing…", ja: "選択中…" },
+  pwDraftBan: { ko: "밴하기", en: "Ban", ja: "バンする" },
+  pwDraftPick: { ko: "확정", en: "Lock in", ja: "確定" },
+  pwDraftSkip: { ko: "밴 넘기기", en: "Skip ban", ja: "バンしない" },
+  pwDraftBans: { ko: "밴", en: "Bans", ja: "バン" },
+  pwDraftDone: { ko: "모두 골랐어요! 곧 시작합니다", en: "All locked in! Starting soon", ja: "全員決定! まもなく開始" },
+  pwDraftHint: { ko: "캐릭터를 눌러 스킬을 보고, 내 차례에 밴·확정하세요. 시간이 다하면 무작위로 정해져요", en: "Tap a character to see its skills, then ban or lock in on your turn. If time runs out, one is chosen at random", ja: "キャラを押してスキルを確認し、自分の番にバン・確定。時間切れはランダム" },
+  pwDraftAiSay: { ko: "{c} 갈게요!", en: "I'll go {c}!", ja: "{c}でいきます!" },
+  pwDraftStart: { ko: "밴픽 시작", en: "Start draft", ja: "バンピック開始" },
+  pwDraftNeed: { ko: "밴픽을 마치면 시작할 수 있어요", en: "Finish the draft to start", ja: "バンピックが終わると開始できます" },
+  pwDraftAgain: { ko: "밴픽 다시", en: "Redo draft", ja: "バンピックやり直し" },
+} as const;
