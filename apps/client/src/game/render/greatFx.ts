@@ -1,5 +1,6 @@
 // 대정령 기술 그리기: 티탄코어 돌주먹 내려찍기 · 아비스루인 심연 입방체 · 실반가드 주문·거대 마법 화살 · 엄브라 그림자 레이저 · 베놈하이드 독가스 · 머리 위 마법 문자(▤▥▧▨)
 import type { EffectState } from "@pixel-rogue/shared";
+import { additive, glow, shock } from "./pwFxBits";
 import type { Snap } from "./palette";
 import { GREAT_GLOW, GREATS } from "./spirits";
 
@@ -24,6 +25,15 @@ function impact(ctx: Ctx, x: number, y: number, r: number, k: number, landed: bo
     return;
   }
   const u = Math.min(1, after / 14);
+  // 내리찍은 자리 빛 + 땅 충격파
+  additive(ctx, () => {
+    ctx.save();
+    ctx.translate(x, y + 2);
+    ctx.scale(1, 0.5);
+    if (u < 0.3) glow(ctx, 0, 0, r, c, 1 - u / 0.3, 1.2);
+    shock(ctx, 0, 0, r * (0.6 + u * 0.8), c, 1 - u, 7);
+    ctx.restore();
+  });
   ctx.globalAlpha = 1 - u;
   ctx.strokeStyle = c;
   ctx.lineWidth = 2;
@@ -140,12 +150,11 @@ export function drawGreatFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     }
     case "gsChant": {
       // 주문: 대정령 둘레를 도는 초록 마법진 + 앞으로 모이는 빛
+      additive(ctx, () => {
+        shock(ctx, x, y, r * (1.2 - t * 0.5), "#7ae05a", 0.8, 4);
+        glow(ctx, x + fx.dirX * 8, y + fx.dirY * 8, 4 + t * 8, "#c8ff8a", t, 1.2);
+      });
       ctx.globalAlpha = 0.8;
-      ctx.strokeStyle = "#7ae05a";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(x, y, r * (1.2 - t * 0.5), 0, Math.PI * 2);
-      ctx.stroke();
       for (let i = 0; i < 6; i++) {
         const a = (i / 6) * Math.PI * 2 + t * 6;
         ctx.fillStyle = "#c8ff8a";
@@ -167,6 +176,7 @@ export function drawGreatFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const reach = arrow ? Math.min(1, t * 3) : 1;
       const ex = x + (tx - x) * reach;
       const ey = y + (ty - y) * reach;
+      additive(ctx, () => glow(ctx, ex, ey, r * 2.5, arrow ? "#9aff6a" : "#ff3a6a", 1 - t, 1));
       ctx.lineCap = "round";
       for (const [c, w] of (arrow ? [["rgba(122,224,90,0.45)", r * 1.6], ["#9aff6a", r * 0.8], ["#ffffff", r * 0.3]] : [["rgba(90,0,30,0.5)", r * 1.6], ["#ff3a6a", r * 0.9], ["#ffd0dc", r * 0.3]]) as [string, number][]) {
         ctx.globalAlpha = 1 - t * 0.8;

@@ -1,5 +1,6 @@
 // 사멸 그리기: 은빛 독침(끝이 비취빛) · 바닥의 독가스 · 죽음이 걸린 적 위 보랏빛 기운 · 독가스 피어남 · 사방 침 섬광
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
+import { additive, beam, glow, shock } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -13,6 +14,11 @@ export function drawNeedleShot(ctx: Ctx, pr: ProjectileState, x: number, y: numb
   const len = Math.hypot(pr.vx, pr.vy) || 1;
   const dx = pr.vx / len;
   const dy = pr.vy / len;
+  // 비취빛 독 꼬리 + 끝 빛
+  additive(ctx, () => {
+    beam(ctx, x - dx * 12, y - dy * 12, x, y, 1.4, TIP, 0.5);
+    glow(ctx, x + dx * 2, y + dy * 2, 3, TIP, 0.9);
+  });
   ctx.strokeStyle = PIN;
   ctx.lineWidth = 1;
   ctx.beginPath();
@@ -74,20 +80,31 @@ export function drawSamyeolFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const y = snap(fx.y);
   if (fx.kind === "smGas") {
     // 독가스가 피어남: 퍼지는 고리 + 솟는 거품
-    ctx.globalAlpha = (1 - t) * 0.7;
-    ctx.strokeStyle = "#6ac87a";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.ellipse(x, y, fx.size * (0.3 + t * 0.8), fx.size * (0.2 + t * 0.5), 0, 0, Math.PI * 2);
-    ctx.stroke();
+    additive(ctx, () => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(1, 0.62);
+      glow(ctx, 0, 0, fx.size * (0.4 + t * 0.8), "#6ac87a", (1 - t) * 0.6);
+      shock(ctx, 0, 0, fx.size * (0.3 + t * 0.8), "#9aff9a", (1 - t) * 0.8, 5);
+      ctx.restore();
+    });
+    // 솟는 독 거품
+    ctx.fillStyle = "#b8ffb0";
+    for (let i = 0; i < 5; i++) {
+      ctx.globalAlpha = (1 - t) * 0.8;
+      ctx.fillRect(Math.round(x + (i - 2) * fx.size * 0.25), Math.round(y - t * 10 - (i % 2) * 4), 1, 1);
+    }
   } else if (fx.kind === "smBurst") {
     // 사방 침: 몸 둘레에 은빛 섬광 열둘
-    ctx.globalAlpha = 1 - t;
-    ctx.fillStyle = PIN;
-    for (let i = 0; i < 12; i++) {
-      const a = (i / 12) * Math.PI * 2;
-      ctx.fillRect(Math.round(x + Math.cos(a) * fx.size * (0.5 + t)), Math.round(y + Math.sin(a) * fx.size * (0.5 + t)), 1, 1);
-    }
+    // 사방 침: 은빛 빛살 열둘이 뻗어 나감
+    additive(ctx, () => {
+      glow(ctx, x, y, fx.size * 0.8, PIN, (1 - t) * 0.6, 1);
+      for (let i = 0; i < 12; i++) {
+        const a = (i / 12) * Math.PI * 2;
+        const r0 = fx.size * (0.3 + t * 0.8);
+        beam(ctx, x + Math.cos(a) * r0, y + Math.sin(a) * r0, x + Math.cos(a) * (r0 + 6), y + Math.sin(a) * (r0 + 6), 1, i % 2 ? TIP : PIN, 1 - t);
+      }
+    });
   } else return false;
   ctx.globalAlpha = 1;
   return true;

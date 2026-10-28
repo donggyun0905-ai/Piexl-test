@@ -1,5 +1,6 @@
 // 렌·정령사 그리기: 렌 둘레를 도는 수호 토목 · 떨어지는 거대 토목 · 정령사 곁의 작은 정령 · 어깨 뒤에 크게 떠 있는 대정령(그림 sprites/spirit-*.png) · 정령 공격 줄 · 대정령 기술
 import { greatSpot, guardSpots, SPIRIT_TINT, spiritSpot, WEAPONS, type EffectState, type GreatSpirit, type RunState, type WeaponDef } from "@pixel-rogue/shared";
+import { additive, beam, glow, shock } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 import { drawGreatFx } from "./greatFx";
 import { drawRenEarth, drawRenEarthFx } from "./renEarth";
@@ -111,12 +112,16 @@ export function drawSpiritFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       for (let i = 0; i < 5; i++) clod(ctx, x + Math.cos(i * 1.3) * r * 0.4, y - 40 * (1 - fall) - 4 + Math.sin(i * 1.7) * r * 0.3, r * 0.35, i);
       return true;
     }
+    // 땅에 닿으면 차례 색 충격파
+    additive(ctx, () => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(1, 0.58);
+      if (t < 0.5) glow(ctx, 0, 0, r, tint, (0.5 - t) * 2, 1);
+      shock(ctx, 0, 0, r * (0.6 + t * 0.5), tint, 1 - t, 6);
+      ctx.restore();
+    });
     ctx.globalAlpha = 1 - t;
-    ctx.strokeStyle = tint;
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.ellipse(x, y, r * (0.6 + t * 0.5), r * (0.35 + t * 0.3), 0, 0, Math.PI * 2);
-    ctx.stroke();
     for (let i = 0; i < 6; i++) {
       const a = (i / 6) * Math.PI * 2;
       clod(ctx, x + Math.cos(a) * r * (0.3 + t * 0.6), y + Math.sin(a) * r * 0.4 * (0.3 + t * 0.6), r * 0.18, i);
@@ -125,39 +130,25 @@ export function drawSpiritFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     return true;
   }
   if (fx.kind === "spBeam") {
-    ctx.globalAlpha = 1 - t;
-    ctx.strokeStyle = fx.tint ?? "#ffffff";
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y));
-    ctx.stroke();
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(snap(fx.toX ?? fx.x) - 1, snap(fx.toY ?? fx.y) - 1, 2, 2);
-    ctx.globalAlpha = 1;
+    // 정령 빛줄기 + 맞은 곳 빛
+    const tx = snap(fx.toX ?? fx.x);
+    const ty = snap(fx.toY ?? fx.y);
+    additive(ctx, () => {
+      beam(ctx, x, y, tx, ty, 2, fx.tint ?? "#ffffff", 1 - t);
+      glow(ctx, tx, ty, 6, fx.tint ?? "#ffffff", 1 - t, 1.3);
+    });
     return true;
   }
   if (drawGreatFx(ctx, fx, snap)) return true;
   if (fx.kind === "gsCast") {
     const g = GREATS[fx.dirX] ?? "titanCore";
     const c = GREAT_GLOW[g];
-    ctx.globalAlpha = (1 - t) * 0.8;
-    ctx.fillStyle = c;
-    ctx.beginPath();
-    ctx.arc(x, y, fx.size * (0.4 + t * 0.6), 0, Math.PI * 2);
-    ctx.globalAlpha = (1 - t) * 0.25;
-    ctx.fill();
-    ctx.globalAlpha = 1 - t;
-    ctx.strokeStyle = c;
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    // 대정령에서 내려오는 빛 줄기
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y));
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    ctx.globalAlpha = 1;
+    // 대정령 시전: 내려오는 빛줄기 + 빛 덩이 + 충격파
+    additive(ctx, () => {
+      beam(ctx, snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y), x, y, 2.5, c, 1 - t);
+      glow(ctx, x, y, fx.size * (0.5 + t * 0.6), c, 1 - t, 0.8);
+      shock(ctx, x, y, fx.size * (0.4 + t * 0.6), c, 1 - t, 5);
+    });
     return true;
   }
   return false;

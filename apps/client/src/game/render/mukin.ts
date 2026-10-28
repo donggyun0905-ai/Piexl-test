@@ -1,5 +1,6 @@
 // 묵인 그리기: 돌진할 때 몸 앞에 생기는 거대한 마력 방패(무기마다 모양·색이 다름) · 요새 방벽 · 회복약이 차오르는 빛
 import type { EffectState, RunState } from "@pixel-rogue/shared";
+import { additive, glow } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -146,10 +147,20 @@ export function drawMukinFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const t = 1 - fx.ticks / fx.maxTicks;
   const x = snap(fx.x);
   const y = snap(fx.y);
-  ctx.globalAlpha = 1 - t;
-  ctx.strokeStyle = "#e8c070";
-  ctx.lineWidth = 2;
-  ctx.strokeRect(x - fx.size * (1 + t * 0.4), y - fx.size * (1.3 + t * 0.4), fx.size * 2 * (1 + t * 0.4), fx.size * 2.2 * (1 + t * 0.4));
-  ctx.globalAlpha = 1;
+  // 금빛 방벽: 겹치는 빛 네모 두 겹 + 가운데 빛 + 모서리 반짝임
+  const k = 1 + t * 0.4;
+  const w = fx.size * 2 * k;
+  const h = fx.size * 2.2 * k;
+  additive(ctx, () => {
+    glow(ctx, x, y - fx.size * 0.1, fx.size * 1.6, "#e8c070", (1 - t) * 0.6, t < 0.2 ? 1 : 0);
+    for (const [c, lw, m] of [["rgba(232,192,112,0.35)", 6, 1], ["#ffe8a0", 2, 1], ["#ffffff", 1, 0.85]] as const) {
+      ctx.globalAlpha = 1 - t;
+      ctx.strokeStyle = c;
+      ctx.lineWidth = lw;
+      ctx.strokeRect(x - (w * m) / 2, y - fx.size * 0.1 - (h * m) / 2, w * m, h * m);
+    }
+    ctx.globalAlpha = 1;
+    for (const [sx, sy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]] as const) glow(ctx, x + (sx * w) / 2, y - fx.size * 0.1 + (sy * h) / 2, 4, "#ffffff", 1 - t, 1);
+  });
   return true;
 }

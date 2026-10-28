@@ -1,6 +1,7 @@
 // 렌 대지의 추가 공격 그리기 (그림 sprites/ren-*.png, scripts/art/ren_earth.py)
 // 앞으로 나아가는 흙·나무 용(용오름: 머리 + 굵은 몸 마디가 땅을 드나듦) · 머리 위 거대 바위 · 돌 던지기 · 땅에서 솟아 적을 삼키는 용머리 · 큰 돌 · 양쪽 토목 기둥 짓뭉개기
 import type { EffectState, RunState } from "@pixel-rogue/shared";
+import { additive, glow, shock } from "./pwFxBits";
 import type { Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -179,26 +180,21 @@ export function drawRenEarthFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       }
       if (t > 0.42 && t < 0.55) {
         // 무는 순간 번쩍
-        ctx.globalAlpha = 1 - (t - 0.42) / 0.13;
-        ctx.strokeStyle = "#ffe0a0";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(x, y - 6, r * 0.8, 0, TAU);
-        ctx.stroke();
-        ctx.globalAlpha = 1;
+        const k = 1 - (t - 0.42) / 0.13;
+        additive(ctx, () => {
+          glow(ctx, x, y - 6, r, "#ffe0a0", k, 1.4);
+          shock(ctx, x, y - 6, r * (1.2 - k * 0.4), "#ffd080", k, 5);
+        });
       }
       debris(ctx, x, y, r, Math.min(1, t * 2), 10, Math.round(fx.x));
       return true;
     }
     case "renStone":
       // 바위가 하나 더 붙음: 초록 빛 고리
-      ctx.globalAlpha = 1 - t;
-      ctx.strokeStyle = "#7ae05a";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(x, y, fx.size + t * 10, 0, TAU);
-      ctx.stroke();
-      ctx.globalAlpha = 1;
+      additive(ctx, () => {
+        glow(ctx, x, y, fx.size + 6, "#7ae05a", (1 - t) * 0.6);
+        shock(ctx, x, y, fx.size + t * 12, "#a8f08a", 1 - t, 4);
+      });
       return true;
     case "renDrop": {
       // 하늘에서 거대 바위가 떨어짐 (그림자가 커지다가) → 쾅: 갈라짐 + 파편 + 흙먼지
@@ -214,6 +210,15 @@ export function drawRenEarthFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         if (boulder) blit(ctx, boulder, 0, 40, 36, x, snap(fx.y - 90 * (1 - fall)), fx.size * 1.4, fall * 0.6);
       } else {
         const k = (t - 0.4) / 0.6;
+        // 쾅: 흙빛 충격파가 땅을 따라 퍼짐
+        additive(ctx, () => {
+          ctx.save();
+          ctx.translate(x, y + 2);
+          ctx.scale(1, 0.45);
+          if (k < 0.25) glow(ctx, 0, 0, fx.size * 1.4, "#ffd8a0", 1 - k * 4, 1.2);
+          shock(ctx, 0, 0, fx.size * (0.8 + k * 1.2), "#e8c890", 1 - k, 8);
+          ctx.restore();
+        });
         hole(ctx, x, y + 2, fx.size, 1 - k);
         if (boulder && k < 0.4) blit(ctx, boulder, 0, 40, 36, x, y - 4, fx.size * 1.4 * (1 - k * 0.5));
         ctx.globalAlpha = (1 - k) * 0.5;
@@ -252,6 +257,11 @@ export function drawRenEarthFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       ctx.globalAlpha = 1;
       if (close >= 1) {
         const k = (t - 0.35) / 0.65;
+        // 맞부딪힌 순간 하얀 섬광 + 충격파
+        additive(ctx, () => {
+          if (k < 0.3) glow(ctx, x, y - h * 0.3, r * 1.2, "#fff4d8", 1 - k / 0.3, 1.5);
+          shock(ctx, x, y - h * 0.3, r * (0.5 + k * 1.2), "#e8d0a0", 1 - k, 6);
+        });
         ctx.globalAlpha = (1 - k) * 0.7;
         ctx.fillStyle = DUST;
         ctx.beginPath();

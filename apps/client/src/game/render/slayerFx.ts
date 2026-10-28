@@ -1,5 +1,6 @@
 // 학살자 공격 효과: 핏빛 초승달 베기 · 더욱 강하게 · 내려찍기 · 회오리 · 땅 뒤집기 · 일직선 · X자 · 피의 검기 폭발 · 끌어당기기 · 강하 · 급습 자국 · 피의 학살 시작
 import type { EffectState } from "@pixel-rogue/shared";
+import { additive, alpha as tone, glow } from "./pwFxBits";
 import { BLOOD, DEEP, EDGE } from "./slayer";
 import type { Snap } from "./palette";
 
@@ -11,6 +12,7 @@ function splatter(ctx: Ctx, x: number, y: number, r: number, t: number, n: numbe
     const a = seed + i * 2.399;
     const d = r * (0.4 + ((i * 37) % 10) / 16) * t;
     ctx.fillStyle = i % 4 === 0 ? EDGE : i % 4 === 1 ? DEEP : BLOOD;
+    if (i % 4 === 0) additive(ctx, () => glow(ctx, x + Math.cos(a) * d, y + Math.sin(a) * d + t * t * 6, 3, BLOOD, 0.6));
     ctx.fillRect(Math.round(x + Math.cos(a) * d), Math.round(y + Math.sin(a) * d + t * t * 6), i % 3 ? 2 : 1, i % 2 ? 2 : 1);
   }
 }
@@ -22,6 +24,14 @@ function crescent(ctx: Ctx, x: number, y: number, r: number, a0: number, side: n
   const to = from + side * span * 2 * Math.min(1, k * 2.4);
   const lo = Math.min(from, to);
   const hi = Math.max(from, to);
+  // 핏빛 날이 공기를 태우는 빛 (겹치면 밝아짐)
+  additive(ctx, () => {
+    ctx.strokeStyle = tone(BLOOD, 0.35 * ctx.globalAlpha);
+    ctx.lineWidth = thick + 9;
+    ctx.beginPath();
+    ctx.arc(x, y, r * 0.88, lo, hi);
+    ctx.stroke();
+  });
   for (const [w, c, f] of [[thick + 3, DEEP, 0.8], [thick, BLOOD, 0.86], [Math.max(1, thick / 3), EDGE, 0.93], [1, "#ffffff", 0.97]] as const) {
     ctx.strokeStyle = c;
     ctx.lineWidth = w;

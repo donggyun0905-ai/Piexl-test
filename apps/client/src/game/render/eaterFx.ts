@@ -1,5 +1,6 @@
 // 이터 공격 효과: 그림자 베기·물어뜯는 아가리(그림자 촉수가 뻗음)·심연의 괴물·그림자 창·X자 발톱·땅에서 솟는 포식자·먹힌 혼
 import type { EffectState } from "@pixel-rogue/shared";
+import { additive, alpha as tone, glow } from "./pwFxBits";
 import { GLOW, INK, maw, RED, tendril, VOID } from "./eater";
 import type { Snap } from "./palette";
 
@@ -11,6 +12,7 @@ function shards(ctx: Ctx, x: number, y: number, r: number, t: number, n: number,
     const a = seed + i * 2.399;
     const d = r * (0.3 + ((i * 37) % 10) / 14) * t;
     ctx.fillStyle = i % 3 === 0 ? GLOW : i % 3 === 1 ? VOID : INK;
+    if (i % 3 === 0) additive(ctx, () => glow(ctx, x + Math.cos(a) * d, y + Math.sin(a) * d - t * 4, 3, GLOW, 0.6));
     ctx.fillRect(Math.round(x + Math.cos(a) * d), Math.round(y + Math.sin(a) * d - t * 4), i % 2 ? 2 : 1, 2);
   }
 }
@@ -29,6 +31,14 @@ export function drawEaterFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const from = a0 - side * 1.5;
       const to = from + side * 3 * Math.min(1, t * 2.4);
       ctx.globalAlpha = fade;
+      // 보랏빛 그림자 기운 (겹치면 밝아짐)
+      additive(ctx, () => {
+        ctx.strokeStyle = tone(GLOW, 0.35 * fade);
+        ctx.lineWidth = 14;
+        ctx.beginPath();
+        ctx.arc(x, y, fx.size * 0.82, Math.min(from, to), Math.max(from, to));
+        ctx.stroke();
+      });
       for (const [w, c, k] of [[9, VOID, 0.8], [6, INK, 0.82], [1, GLOW, 0.92], [1, RED, 0.72]] as const) {
         ctx.strokeStyle = c;
         ctx.lineWidth = w;

@@ -1,5 +1,6 @@
 // 역병의사 그리기: 바닥의 연기 구역 · 쥐떼 · 모기떼 · 흑사병에 걸린 적(검은 기운·파리) · 효과(쥐 터짐·흑사병 표시·모기 갉기·연기 퍼짐·죽음의 손아귀)
 import type { EffectState, RunState } from "@pixel-rogue/shared";
+import { additive, glow, shock, sparks } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -89,61 +90,75 @@ export function drawPlagueFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const t = 1 - fx.ticks / fx.maxTicks;
   const x = snap(fx.x);
   const y = snap(fx.y);
+  const seed = fx.x + fx.y * 3;
   switch (fx.kind) {
     case "plBurst":
-      // 쥐가 터짐: 검붉은 물방울이 사방으로
-      for (let i = 0; i < 8; i++) {
-        const a = (i / 8) * Math.PI * 2;
+      // 쥐가 터짐: 병든 초록 섬광 + 검붉은·초록 물방울이 포물선으로 튐 + 독 안개
+      additive(ctx, () => {
+        glow(ctx, x, y, fx.size * 1.4, "#7ad86a", (1 - t) * 0.7, t < 0.2 ? 1 : 0);
+        shock(ctx, x, y, fx.size * (0.5 + t * 1.2), "#a0e060", 1 - t, 4);
+      });
+      for (let i = 0; i < 10; i++) {
+        const a = (i / 10) * Math.PI * 2 + seed;
         ctx.globalAlpha = 1 - t;
         ctx.fillStyle = i % 2 ? "#7a1a14" : "#4a8a3a";
-        ctx.fillRect(Math.round(x + Math.cos(a) * fx.size * t * 1.5), Math.round(y + Math.sin(a) * fx.size * t * 1.5), 2, 2);
+        ctx.fillRect(Math.round(x + Math.cos(a) * fx.size * t * 1.6), Math.round(y + Math.sin(a) * fx.size * t * 1.2 - Math.sin(t * Math.PI) * 6 + t * t * 4), 2, 2);
       }
       break;
     case "plMark": {
-      // 흑사병(초록 고리) · 죽음의 손아귀 즉사(dirX 1: 해골)
+      // 흑사병: 초록 독 고리가 조여 듦 · 죽음의 손아귀 즉사(dirX 1): 하얀 해골이 떠오름
+      const c = fx.dirX ? "#e8e0f0" : "#9aff6a";
+      additive(ctx, () => {
+        shock(ctx, x, y, fx.size * (0.6 + t * 0.6), c, 1 - t, 4);
+        glow(ctx, x, y, fx.size * 0.8, c, (1 - t) * 0.5);
+      });
       ctx.globalAlpha = 1 - t;
-      ctx.strokeStyle = fx.dirX ? "#e8e0f0" : "#9aff6a";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(x, y, fx.size * (0.6 + t * 0.6), 0, Math.PI * 2);
-      ctx.stroke();
       if (fx.dirX) {
+        additive(ctx, () => glow(ctx, x, y - 6 - t * 6, 8, "#d8f0ff", 1 - t, 1));
         ctx.fillStyle = "#f0e8e0";
         ctx.fillRect(x - 3, y - 8 - t * 6, 6, 5);
+        ctx.fillRect(x - 2, y - 3 - t * 6, 4, 2);
         ctx.fillStyle = "#1e1a24";
         ctx.fillRect(x - 2, y - 7 - t * 6, 1, 2);
         ctx.fillRect(x + 1, y - 7 - t * 6, 1, 2);
       }
       break;
     }
-    case "plSwarmBite":
+    case "plSwarmBite": {
+      // 쥐떼가 물어뜯음: 어두운 덩어리 + 붉은 이빨 자국 빛
       ctx.globalAlpha = (1 - t) * 0.5;
       ctx.fillStyle = "#3a2a3a";
       ctx.beginPath();
       ctx.arc(x, y, fx.size * (0.7 + t * 0.3), 0, Math.PI * 2);
       ctx.fill();
+      additive(ctx, () => sparks(ctx, x, y, 6, fx.size, t, "#ff5a5a", seed));
       break;
+    }
     case "plPuff":
-      ctx.globalAlpha = (1 - t) * 0.6;
-      ctx.strokeStyle = "#9aa86a";
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.ellipse(x, y, fx.size * (0.3 + t * 0.8), fx.size * (0.2 + t * 0.5), 0, 0, Math.PI * 2);
-      ctx.stroke();
+      // 역병 연기: 부풀어 퍼지는 누런 초록 구름 세 겹
+      for (let i = 0; i < 3; i++) {
+        ctx.globalAlpha = (1 - t) * (0.35 - i * 0.08);
+        ctx.fillStyle = i % 2 ? "#9aa86a" : "#7a8a4a";
+        ctx.beginPath();
+        ctx.ellipse(x + (i - 1) * fx.size * 0.25, y - i * 2, fx.size * (0.3 + t * 0.8) * (1 - i * 0.15), fx.size * (0.2 + t * 0.5), 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      additive(ctx, () => glow(ctx, x, y, fx.size * (0.4 + t), "#b8d070", (1 - t) * 0.4));
       break;
     case "plGrip": {
-      // 검은 손이 움켜쥠: 다섯 손가락이 앞에서 오므려짐
+      // 검은 손이 움켜쥠: 초록 저주 빛 속에서 다섯 손가락이 오므려짐 → 쥐는 순간 번쩍
       const close = Math.min(1, t * 2.5);
+      const a0 = Math.atan2(fx.dirY, fx.dirX);
+      additive(ctx, () => glow(ctx, x, y, fx.size * 0.8, "#9aff6a", (1 - t) * 0.6, close >= 1 ? 1 : 0));
       ctx.globalAlpha = 1 - Math.max(0, t - 0.5) * 2;
       ctx.strokeStyle = "#1e1a24";
       ctx.lineWidth = 3;
       ctx.lineCap = "round";
-      const a0 = Math.atan2(fx.dirY, fx.dirX);
       for (let i = -2; i <= 2; i++) {
         const a = a0 + i * 0.35 * (1 - close * 0.6);
         ctx.beginPath();
         ctx.moveTo(x - fx.dirX * 6, y - fx.dirY * 6);
-        ctx.lineTo(x + Math.cos(a) * fx.size * 0.5, y + Math.sin(a) * fx.size * 0.5);
+        ctx.quadraticCurveTo(x + Math.cos(a) * fx.size * 0.4, y + Math.sin(a) * fx.size * 0.4, x + Math.cos(a + i * 0.2 * close) * fx.size * 0.5, y + Math.sin(a + i * 0.2 * close) * fx.size * 0.5);
         ctx.stroke();
       }
       ctx.lineCap = "butt";

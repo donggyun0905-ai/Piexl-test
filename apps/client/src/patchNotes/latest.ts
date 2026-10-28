@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.210",
+    date: "2026-10-28",
+    items: {
+      ko: ["효과 새로 그리기 4: 렌 용머리 무는 섬광·거대 바위 낙하 흙빛 충격파·토목 기둥 충돌 섬광 · 정령사 빛줄기·대정령 시전·내리찍기 충격파·주문 빛·화살 빛 · 역병의사 쥐 터짐·흑사병 고리·떠오르는 해골·역병 연기·저주의 손아귀 · 학살자 핏빛 날 빛·핏방울 빛 · 이터 그림자 베기 보랏빛·그림자 조각 빛 · 묵인 금빛 방벽 · 사멸 독침 꼬리·독가스 피어남·사방 침 빛살"],
+      en: ["Effects redraw 4: Ren dragon-bite flash, earthen shockwave from falling boulders, colliding-pillar flash · Spiritist light beams, great-spirit casts, slam shockwaves, chant and arrow glow · Plague Doctor rat bursts, plague rings, rising skull, plague smoke, cursed grip · Slayer crimson blade glow and blood drops · Eater violet shadow slashes and glowing shards · Mukin golden barrier · Samyeol needle trails, blooming poison gas, radial needle rays"],
+      ja: ["エフェクト描き直し4: レンの竜頭の噛みつき閃光・巨岩落下の土の衝撃波・土木柱衝突の閃光 · 精霊師の光線・大精霊の詠唱・叩きつけ衝撃波・呪文と矢の光 · ペスト医師のネズミ破裂・黒死病の輪・浮かぶ髑髏・疫病の煙・呪いの握り · 殺戮者の血の刃の光・血の雫 · イーターの紫の影斬り・影の欠片 · ムクインの金の防壁 · 四滅の毒針の尾・毒ガス・全方位の針の光"],
+    },
+  },
+  {
     version: "0.48.209",
     date: "2026-10-28",
     items: {
