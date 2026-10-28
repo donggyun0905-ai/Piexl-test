@@ -103,6 +103,8 @@ export const PW = {
   minionHp: 0.3,
   /** 풋내기 패시브: 체력 1로 버티는 틱 */
   standTicks: 180,
+  /** 스킬 그림이 남는 시간 배율 (그림만) */
+  fxLinger: 1.6,
   /** 다음 상대가 나오기까지(토너먼트) · 다시 살아나기까지(데스매치) 틱 */
   nextFoe: 90,
   respawn: 180,

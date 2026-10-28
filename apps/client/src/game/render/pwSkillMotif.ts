@@ -3,7 +3,7 @@
 // 기계(네모 불똥·육각) · 바람(소용돌이 줄) · 시간(시계 바늘) · 충격(금·파편) · 칼날(가는 베기 줄) · 야수(발톱 자국) · 쥐(쥐떼가 줄을 따라 달림)
 // 줄 모양 스킬(toX·toY)은 줄을 따라, 나머지는 범위 안에 뿌림. 궁극기는 알갱이 두 배 + 바깥 빛 고리
 import type { EffectState } from "@pixel-rogue/shared";
-import { rnd } from "./pwFxBits";
+import { additive, glow, rnd } from "./pwFxBits";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -35,16 +35,18 @@ const px = (ctx: Ctx, x: number, y: number, w: number, h: number, c: string) => 
 };
 
 const SCALE = 1.7;
+/** 빛나는 느낌 (겹치면 밝아짐) · 나머지(연기·피·잎 등)는 그냥 칠함 */
+const GLOWING = new Set(["fire", "elements", "ice", "lightning", "holy", "spirit", "tech", "time", "wind", "blade"]);
 
 type Draw = (ctx: Ctx, x: number, y: number, k: number, t: number, f: number, c: string, fx: EffectState) => void;
 
 const MOTIFS: Record<string, Draw> = {
   fire: (ctx, x, y, k, t, f) => {
-    const h = 3 + (k % 3);
-    const yy = y - f * 10 - (k % 4);
-    px(ctx, x, yy, 2, h, "#ff5a1a");
-    px(ctx, x, yy + h - 2, 2, 2, "#ffd040");
-    if (k % 3 === 0) px(ctx, x, yy - 2, 1, 1, "#fff0a0");
+    // 솟아오르며 작아지는 불씨 (주황 → 노랑 속)
+    const yy = y - f * 12 - (k % 4);
+    const s = (2.4 + (k % 3) * 0.6) * (1 - f * 0.6);
+    glow(ctx, x, yy, s * 2, "#ff5a1a", 0.9 * t);
+    glow(ctx, x, yy, s, "#ffd040", t, 1);
   },
   elements: (ctx, x, y, k, t, f) => MOTIFS[["fire", "ice", "lightning"][k % 3]!]!(ctx, x, y, k, t, f, "", {} as EffectState),
   ice: (ctx, x, y, k) => {
@@ -76,9 +78,23 @@ const MOTIFS: Record<string, Draw> = {
     ctx.fill();
   },
   holy: (ctx, x, y, k, t, f) => {
-    const s = k % 3 === 0 ? 2 : 1;
-    px(ctx, x - s, y - f * 6, s * 2 + 1, 1, "#fff6c0");
-    px(ctx, x, y - f * 6 - s, 1, s * 2 + 1, "#fff6c0");
+    // 반짝이는 네 갈래 별
+    const s = (k % 3 === 0 ? 4 : 2.5) * (0.6 + 0.4 * Math.sin(f * 12 + k));
+    const yy = y - f * 6;
+    ctx.fillStyle = `rgba(255,246,200,${t})`;
+    ctx.beginPath();
+    ctx.moveTo(x, yy - s);
+    ctx.lineTo(x + s * 0.25, yy);
+    ctx.lineTo(x, yy + s);
+    ctx.lineTo(x - s * 0.25, yy);
+    ctx.closePath();
+    ctx.moveTo(x - s, yy);
+    ctx.lineTo(x, yy + s * 0.25);
+    ctx.lineTo(x + s, yy);
+    ctx.lineTo(x, yy - s * 0.25);
+    ctx.closePath();
+    ctx.fill();
+    glow(ctx, x, yy, s, "#fff0a0", 0.6 * t);
   },
   blood: (ctx, x, y, k, t, f) => {
     px(ctx, x, y + f * 6, 2, 2, "#c8102a");
@@ -183,14 +199,18 @@ export function drawMotif(ctx: Ctx, fx: EffectState, t: number, f: number, seed:
     const draw = MOTIFS[m];
     if (draw) {
       const n = Math.round((fx.ult ? 22 : 11) * Math.min(2, Math.max(0.6, fx.size / 30)));
-      // 알갱이는 1.7배로 (작은 도트가 묻히지 않게)
-      for (const [k, [x, y]] of spots(fx, n, seed).entries()) {
-        ctx.save();
-        ctx.translate(Math.round(x), Math.round(y));
-        ctx.scale(SCALE, SCALE);
-        draw(ctx, 0, 0, k, t, f, fx.tint ?? "#ffffff", fx);
-        ctx.restore();
-      }
+      // 알갱이는 1.7배로 (작은 도트가 묻히지 않게) · 빛나는 느낌은 겹치면 밝아지게
+      const each = () => {
+        for (const [k, [x, y]] of spots(fx, n, seed).entries()) {
+          ctx.save();
+          ctx.translate(Math.round(x), Math.round(y));
+          ctx.scale(SCALE, SCALE);
+          draw(ctx, 0, 0, k, t, f, fx.tint ?? "#ffffff", fx);
+          ctx.restore();
+        }
+      };
+      if (GLOWING.has(m)) additive(ctx, each);
+      else each();
     }
   }
   // 궁극기: 바깥으로 번지는 두 겹 빛 고리
