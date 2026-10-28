@@ -88,4 +88,15 @@ describe("패왕전 스킬", () => {
     run(h, 1, cast(4, 10));
     expect(pwHidden(allPlayers(h)[0]!)).toBe(true);
   });
+
+  it("잔영 기본 공격: 노린 상대 등 뒤로 순간이동해 숨었다가 그 상대를 찌름", () => {
+    const s = duel("remnant", "warden", 100);
+    const foe = allPlayers(s)[1]!;
+    const hp = foe.hp;
+    run(s, 1, { ...EMPTY_INPUT, attack: true, aimX: 100, aimY: 0 });
+    expect(allPlayers(s)[0]!.x).toBeGreaterThan(foe.x);
+    expect(pwHidden(allPlayers(s)[0]!)).toBe(true);
+    run(s, 20);
+    expect(foe.hp).toBeLessThan(hp);
+  });
 });

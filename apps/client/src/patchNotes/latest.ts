@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.198",
+    date: "2026-10-28",
+    items: {
+      ko: ["패왕전 잔영 기본 공격: 뒤로 물러나던 것을 마우스에 가장 가까운 상대(사거리 안) 등 뒤로 순간이동해 숨었다가 그 상대를 찌르게 바꿈 (사거리 안에 상대가 없으면 제자리에서 숨었다가 앞을 찌름)"],
+      en: ["Champion Clash Remnant basic attack: instead of stepping back, it now blinks behind the opponent nearest your cursor (in range), hides, then stabs that opponent (with no one in range it hides in place and stabs ahead)"],
+      ja: ["覇王戦の残影の通常攻撃: 後ろに下がる代わりに、カーソルに一番近い相手(射程内)の背後へ瞬間移動して隠れ、その相手を突くように変更 (射程内に相手がいなければその場で隠れて前方を突く)"],
+    },
+  },
+  {
     version: "0.48.197",
     date: "2026-10-28",
     items: {

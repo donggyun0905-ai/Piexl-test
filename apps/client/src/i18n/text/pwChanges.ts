@@ -15,6 +15,6 @@ export const PW_CHANGES_TEXT = {
   pwInfoStand: { ko: "버팀!", en: "Holding on!", ja: "踏ん張り!" },
   pwBasicBedouin: { ko: "차크람을 던지지 않고 둘레를 한 번 베기", en: "Slashes once all around you instead of throwing the chakram", ja: "チャクラムを投げず周囲を一回斬る" },
   pwBasicSlayer: { ko: "대낫으로 앞을 베기 (맵을 가르는 베기·검기 없음)", en: "Slashes ahead with the scythe (no map-splitting cut or blade waves)", ja: "大鎌で前方を斬る (マップを裂く斬撃・剣気なし)" },
-  pwBasicRemnant: { ko: "뒤로 물러나 그림자(안 보임)가 된 뒤 앞을 크게 찌름 · 그 뒤 5초 동안 기본 공격 못 함", en: "Steps back into the shadows (unseen), then strikes hard ahead · no basic attack for 5 seconds after", ja: "後ろに下がって影(見えない)になり前方を強く突く · その後5秒間通常攻撃不可" },
+  pwBasicRemnant: { ko: "마우스에 가장 가까운 상대(사거리 안) 등 뒤로 순간이동해 그림자(안 보임)가 된 뒤 그 상대를 크게 찌름 · 그 뒤 5초 동안 기본 공격 못 함", en: "Blinks behind the opponent nearest your cursor (in range) and turns to shadow (unseen), then strikes them hard · no basic attack for 5 seconds after", ja: "カーソルに一番近い相手(射程内)の背後へ瞬間移動して影(見えない)になり、その相手を強く突く · その後5秒間通常攻撃不可" },
   pwBasicAim: { ko: "마우스 위치를 공격 (자동 조준 없음)", en: "Attacks where your mouse is (no auto-aim)", ja: "マウスの位置を攻撃 (自動照準なし)" },
 } as const;

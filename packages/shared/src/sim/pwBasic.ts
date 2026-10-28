@@ -1,11 +1,11 @@
-// 패왕전에서만 바꾼 기본 공격 (player가 무기 대신 부름): 베두인 둘레 한 번 베기 · 학살자 대낫 베기만 · 잔영 뒤로 물러나 그림자에서 찌르고 5초 쉼
+// 패왕전에서만 바꾼 기본 공격 (player가 무기 대신 부름): 베두인 둘레 한 번 베기 · 학살자 대낫 베기만 · 잔영 노린 상대 등 뒤로 순간이동해 그림자에서 찌르고 5초 쉼
 // 맞는 상대·그림은 스킬과 같은 방식(resolveCast). 피해는 공격력 × 배율
 import { TICK_RATE } from "../constants";
 import type { PwSkillDef } from "../pwKits";
 import { seatNo } from "./party";
-import { addBuff, resolveCast, skillPow } from "./pwSkillHit";
-import type { PlayerState, RunState } from "./types";
-import { keepInRoom, roomGrid } from "./util";
+import { addBuff, PW_FX_STYLES, resolveCast, skillPow } from "./pwSkillHit";
+import type { EnemyState, PlayerState, RunState } from "./types";
+import { addEffect, keepInRoom, roomGrid } from "./util";
 
 type Tick = (s: RunState, want: boolean, speed: number) => void;
 
@@ -13,7 +13,7 @@ type Tick = (s: RunState, want: boolean, speed: number) => void;
 const R = {
   bedouin: { radius: 42, mul: 1 },
   slayer: { radius: 48, arc: 0.9, mul: 1.1 },
-  remnant: { back: 40, delay: 14, radius: 46, arc: 0.7, mul: 3.2, rest: 5 * TICK_RATE, hide: 50 },
+  remnant: { reach: 150, behind: 10, delay: 14, radius: 46, arc: 0.7, mul: 3.2, rest: 5 * TICK_RATE, hide: 50 },
 };
 export { R as PW_BASIC_RULES };
 
@@ -22,6 +22,25 @@ function strike(s: RunState, shape: "self" | "cone", radius: number, dmgMul: num
   const p = s.player;
   const def: PwSkillDef = { icon: p.weaponId as PwSkillDef["icon"], shape, cd: 0, tint, fx, range: 0, radius, arc, hit: { dmg: (p.stats.damage * dmgMul) / skillPow(p) } };
   resolveCast(s, def, { seat: seatNo(s), k: -1, x, y, dx, dy, t: 0, left: 1 });
+}
+
+function faceTo(p: PlayerState, x: number, y: number): void {
+  const d = Math.hypot(x - p.x, y - p.y);
+  if (d > 0) [p.faceX, p.faceY] = [(x - p.x) / d, (y - p.y) / d];
+}
+
+/** 잔영이 노릴 상대: 사거리 안에서 마우스(조준점)에 가장 가까운 상대 (AI는 가장 가까운 상대) */
+function remnantTarget(s: RunState): EnemyState | undefined {
+  const p = s.player;
+  const aim = manualAim(s, R.remnant.reach) ?? { x: p.x, y: p.y };
+  let best: EnemyState | undefined;
+  let bd = Infinity;
+  for (const e of s.enemies) {
+    if (e.hp <= 0 || e.pwHid || Math.hypot(e.x - p.x, e.y - p.y) > R.remnant.reach + e.r) continue;
+    const d = Math.hypot(e.x - aim.x, e.y - aim.y);
+    if (d < bd) [best, bd] = [e, d];
+  }
+  return best;
 }
 
 const cool = (p: PlayerState, speed: number) => (p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed)));
@@ -39,19 +58,31 @@ const BASICS: Partial<Record<string, Tick>> = {
     cool(p, speed);
     strike(s, "cone", R.slayer.radius, R.slayer.mul, p.faceX, p.faceY, "#ff2a3a", "slash", R.slayer.arc);
   },
-  // 잔영: 누르면 뒤로 물러나며 그림자(안 보임) → 잠시 뒤 앞을 크게 찌름 → 5초 동안 기본 공격 못 함
+  // 잔영: 누르면 노린 상대(마우스에 가장 가까운, 사거리 안) 등 뒤로 순간이동하며 그림자(안 보임) → 잠시 뒤 그 상대 쪽을 크게 찌름 → 5초 동안 기본 공격 못 함
+  // 사거리 안에 상대가 없으면 그 자리에서 숨었다가 앞을 찌름
   remnant: (s, want) => {
     const p = s.player;
     const rm = (p.pwRm ??= { t: 0 });
     if (rm.t > 0 && --rm.t === 0) {
+      const e = s.enemies.find((x) => x.id === rm.id && x.hp > 0);
+      if (e) faceTo(p, e.x, e.y);
       strike(s, "cone", R.remnant.radius, R.remnant.mul, p.faceX, p.faceY, "#8a8ac8", "slash", R.remnant.arc);
       p.attackCooldown = R.remnant.rest;
       return;
     }
     if (!want || p.attackCooldown > 0 || rm.t > 0) return;
-    const b = { x: p.x - p.faceX * R.remnant.back, y: p.y - p.faceY * R.remnant.back, prevX: p.x, prevY: p.y, r: p.r };
-    keepInRoom(b, roomGrid(s));
-    [p.x, p.y] = [b.x, b.y];
+    const e = remnantTarget(s);
+    rm.id = e?.id;
+    if (e) {
+      // 나에게서 상대를 지나 그 뒤쪽 (벽이면 방 안으로)
+      const d = Math.hypot(e.x - p.x, e.y - p.y) || 1;
+      const k = (e.r + p.r + R.remnant.behind) / d;
+      const b = { x: e.x + (e.x - p.x) * k, y: e.y + (e.y - p.y) * k, prevX: p.x, prevY: p.y, r: p.r };
+      keepInRoom(b, roomGrid(s));
+      addEffect(s, { kind: "pwFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: 14, maxTicks: 16, tint: "#5a5a8a", style: PW_FX_STYLES.indexOf("blink") });
+      [p.x, p.y, p.prevX, p.prevY] = [b.x, b.y, b.x, b.y];
+      faceTo(p, e.x, e.y);
+    }
     addBuff(p, { icon: "rmDagger", shape: "self", cd: 0, tint: "#5a5a8a", fx: "blink", range: 0, radius: 0, buff: { ticks: R.remnant.hide, hide: true } } as PwSkillDef);
     rm.t = R.remnant.delay;
     p.attackCooldown = R.remnant.rest;

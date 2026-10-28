@@ -168,7 +168,7 @@ export interface PwPlayerState {
   /** 풋내기 패시브(마지막 버팀): 체력 1로 버티는 끝 틱 · -1 = 이번 판에 이미 씀 */
   pwStand?: number;
   /** 잔영 패왕전 기본 공격: 찌르기까지 남은 틱 (sim/pwBasic) */
-  pwRm?: { t: number };
+  pwRm?: { t: number; id?: number };
   /** 패왕전 직접 조준: 누른 곳까지 거리 (사람만, tracker.readAim) */
   pwAimD?: number;
   /** 플라이: 다음 급습이 붉은 급습 (신기루를 쓴 뒤) */
