@@ -2,6 +2,7 @@
 import { allPlayers, DASH_TICKS, inPlay, ENEMIES, isAlive, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
 import { drawCrate } from "./swarm";
 import { drawFighter } from "./paewang";
+import { drawPwBody } from "./pwLook";
 import { drawAimMark, drawHitRing } from "../aimMark";
 import { drawUmbraActor } from "./umbra";
 import { drawDemigodActor } from "./demigod";
@@ -197,12 +198,16 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
       ctx.globalAlpha = 0.4;
       ctx.filter = "brightness(0.15) sepia(1) hue-rotate(220deg) saturate(2)";
     }
-    if (!hideBody && !p.mRaid) drawBody(ctx, p.characterId, x, y, p.r, morphPose(p, pose), moving ? Math.floor(s.tick / 8) : 0, body, club);
+    const look = [p.characterId, x, y, p.r, morphPose(p, pose), moving ? Math.floor(s.tick / 8) : 0, body, club] as const;
+    // 패왕전: 편 색 외곽선
+    if (!hideBody && !p.mRaid && s.pvp) drawPwBody(ctx, s, ...look);
+    else if (!hideBody && !p.mRaid) drawBody(ctx, ...look);
     if (twirl) ctx.restore();
     ctx.filter = "none";
     ctx.globalAlpha = 1;
     if (showHitbox) drawHitRing(ctx, x, y, p.r);
-    if (!hideBody && !s.sudden) drawPlayerHp(ctx, p, x, y, s.tick);
+    // 패왕전은 편 색 체력 줄(paewang)만
+    if (!hideBody && !s.sudden && !s.pvp) drawPlayerHp(ctx, p, x, y, s.tick);
     if (p.shieldTicks > 0) {
       ctx.strokeStyle = "rgba(120, 200, 255, 0.85)";
       ctx.lineWidth = 1;

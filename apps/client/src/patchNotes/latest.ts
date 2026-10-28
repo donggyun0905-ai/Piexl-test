@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.178",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "패왕전 편 구별: 캐릭터 외곽선이 편 색(우리 편 파랑 · 상대 빨강)으로 바뀌고 스킨 외곽선은 가려짐 · 초록 체력 줄을 없애고 편 색 체력 줄 하나로 (나도 표시)",
+        "패왕전 화면 다듬기: 위쪽 점수판(편마다 처치 수 · 남은 사람 점) · 모드 목표 안내 · 가장 가까운 적 이름 표시",
+        "가장 가까운 적을 내 몸 둘레의 빨간 화살표가 가리키고, 그 적에게 빨간 조준 표시와 머리 위 꺾쇠가 붙음",
+        "처치 알림: 오른쪽 위에 누가 누구를 쓰러뜨렸는지 · 내가 처치하면 가운데 큰 글자(더블·트리플 킬) · 쓰러지면 안내와 다시 나오기까지 초",
+      ],
+      en: [
+        "Champion Clash teams: character outlines now use team colors (allies blue, rivals red) and hide skin outlines · the green HP bar is gone, leaving one team-colored HP bar (shown for you too)",
+        "Champion Clash HUD polish: top scoreboard (team KOs and alive dots) · mode goal · nearest rival's name",
+        "A red arrow around you points at the nearest rival, who gets a red target mark and a bouncing marker overhead",
+        "KO alerts: a top-right feed of who took down whom · big center text when you score (Double/Triple KO) · a notice with respawn countdown when you fall",
+      ],
+      ja: [
+        "覇王戦のチーム区別: キャラクターの輪郭がチーム色 (味方は青・相手は赤) になり、スキンの輪郭は隠れる · 緑の体力バーをなくし、チーム色の体力バー1本に (自分にも表示)",
+        "覇王戦の画面を改善: 上部スコアボード (チームごとの撃破数・残り人数の点) · モードの目標 · 一番近い敵の名前",
+        "一番近い敵を自分の周りの赤い矢印が指し、その敵に赤い照準と頭上のマーカーが付く",
+        "撃破通知: 右上に誰が誰を倒したか · 自分が倒すと中央に大きな文字 (ダブル・トリプル撃破) · 倒れると案内と復帰までの秒数",
+      ],
+    },
+  },
+  {
     version: "0.48.177",
     date: "2026-10-28",
     items: {

@@ -214,7 +214,7 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
       />
       {!ended && !pw && <CoopParty run={run} members={members} extras={extras} t={t} onSignal={signal} />}
       {!ended && pw && run.pvp && <PwWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}
-      {!ended && pw && run.pvp && !watching && <PwHud run={run} me={mySeat} t={t} onBoard={toggleBoard} />}
+      {!ended && pw && run.pvp && !watching && <PwHud run={run} me={mySeat} names={names} t={t} onBoard={toggleBoard} />}
       {!ended && watching && <div className="coop-banner">{t("lobbyWatchNote")}</div>}
       {ended && !rank && (
         <div className="coop-back">

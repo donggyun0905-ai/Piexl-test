@@ -1,6 +1,8 @@
 // 패왕전 그리기: AI 캐릭터(상대·내 편) 몸·체력 줄·편 표시 · 휘두름 · AI 탄 · 바닥(2층 발판·가시 함정) · 수풀(위에 덮음)
 import { allPlayers, inPlay, PW, PW_ARENAS, TILE_SIZE, trapUp, type EnemyState, type ProjectileState, type PwAlly, type PwBrain, type RunState } from "@pixel-rogue/shared";
 import { drawBody } from "./actors";
+import { bigSheet } from "../sprites";
+import { drawFoeCue, pwTint, setPwViewer } from "./pwLook";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -63,6 +65,7 @@ export function drawPwShot(ctx: Ctx, pr: ProjectileState, x: number, y: number):
 
 /** 바닥: 2층 발판(나무 판자 + 그림자) · 가시 함정 */
 export function drawPwGround(ctx: Ctx, s: RunState): void {
+  if (s.pvp) setPwViewer(s);
   const id = s.pvp?.arena ?? s.pw?.arena;
   if (!id) return;
   const a = PW_ARENAS[id];
@@ -123,40 +126,60 @@ function leaf(ctx: Ctx, x: number, y: number, r: number, color: string): void {
   ctx.fill();
 }
 
-/** 패왕전 자리마다: 발밑 편 고리 · 머리 위 체력 줄(+보호막) · 데스매치 레벨 */
+/** 패왕전 자리마다: 발밑 편 고리 · 그림 위 편 색 체력 줄(+보호막) · 데스매치 레벨 · 가까운 적 표시 */
 function drawSeats(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const pv = s.pvp!;
-  const me = pv.seats[s.seat ?? 0]!.team;
-  allPlayers(s).forEach((p, i) => {
-    const seat = pv.seats[i]!;
-    if (!inPlay(s, i)) return;
+  const me = s.seat ?? 0;
+  const ps = allPlayers(s);
+  const at = (i: number) => {
+    const p = ps[i]!;
     const x = snap(lerp(p.prevX, p.x, alpha));
     const y = snap(lerp(p.prevY, p.y, alpha));
-    // 나 노랑 · 같은 편 파랑 · 상대 빨강 (모두가 적이면 주황)
-    const color = i === (s.seat ?? 0) ? "#ffd860" : seat.team === me ? "#5ab0ff" : seat.team === 1 ? "#ff5a5a" : "#ffa040";
+    // 캐릭터 그림(32칸, 큰 그림은 48칸)의 맨 위
+    return { x, y, top: y + p.r - (bigSheet(p.characterId) ? 46 : 31) };
+  };
+  ps.forEach((p, i) => {
+    const seat = pv.seats[i]!;
+    if (!inPlay(s, i)) return;
+    const { x, y, top } = at(i);
+    const color = pwTint(s, i);
+    // 발밑 고리: 나는 노랑 두 겹
     ctx.strokeStyle = color;
-    ctx.globalAlpha = 0.75;
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.ellipse(x, y + p.r - 1, p.r + 2, (p.r + 2) / 2, 0, 0, Math.PI * 2);
+    ctx.ellipse(x, y + p.r - 1, p.r + 3, (p.r + 3) / 2, 0, 0, Math.PI * 2);
     ctx.stroke();
-    ctx.globalAlpha = 1;
-    if (i === (s.seat ?? 0)) return;
-    const w = 16;
-    const top = y - p.r - 9;
-    ctx.fillStyle = "#000";
+    if (i === me) {
+      ctx.strokeStyle = "#ffd860";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.ellipse(x, y + p.r - 1, p.r + 5, (p.r + 5) / 2, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.lineWidth = 1;
+    const w = 20;
+    const hp = Math.max(0, Math.min(1, p.hp / p.stats.maxHp));
+    ctx.fillStyle = "#0a0810";
+    ctx.fillRect(x - w / 2 - 1, top - 1, w + 2, 5);
+    ctx.fillStyle = "#3a3444";
     ctx.fillRect(x - w / 2, top, w, 3);
     ctx.fillStyle = color;
-    ctx.fillRect(x - w / 2, top, Math.max(1, Math.round((w * Math.max(0, p.hp)) / p.stats.maxHp)), 3);
+    ctx.fillRect(x - w / 2, top, Math.max(hp > 0 ? 1 : 0, Math.round(w * hp)), 3);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
+    ctx.fillRect(x - w / 2, top, Math.round(w * hp), 1);
     const sh = Math.min(1, (p.shieldPts ?? 0) / PW.shield);
     if (sh > 0) {
-      ctx.fillStyle = "#c8e8ff";
+      ctx.fillStyle = "#e8f4ff";
       ctx.fillRect(x - w / 2, top - 2, Math.round(w * sh), 1);
     }
     if (pv.mode === "gungame") {
-      ctx.font = "6px monospace";
+      ctx.font = "bold 6px monospace";
       ctx.textAlign = "center";
-      ctx.fillStyle = "#fff";
-      ctx.fillText(String(seat.lv), x, top - 3);
+      ctx.fillStyle = "#0a0810";
+      ctx.fillText(`Lv${seat.lv}`, x + 0.5, top - 3.5);
+      ctx.fillStyle = color;
+      ctx.fillText(`Lv${seat.lv}`, x, top - 4);
     }
   });
+  if (!s.over) drawFoeCue(ctx, s, at);
 }

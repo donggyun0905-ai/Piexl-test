@@ -1,0 +1,216 @@
+/* 패왕전 게임 중 위쪽 점수판·목표·가까운 적·처치 알림·큰 글자 (event/PwHud·PwFeed) */
+.pw-score {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 10px;
+  background: rgb(10 8 16 / 0.78);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.5);
+}
+.pw-score.ffa {
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: #fff;
+}
+.pw-score strong {
+  color: #ffd860;
+}
+.pw-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 84px;
+  padding: 0 8px;
+  border-radius: 6px;
+}
+.pw-side.ours {
+  background: linear-gradient(180deg, rgb(74 168 255 / 0.35), rgb(74 168 255 / 0.08));
+  color: #8cc8ff;
+}
+.pw-side.theirs {
+  background: linear-gradient(180deg, rgb(255 60 60 / 0.35), rgb(255 60 60 / 0.08));
+  color: #ff8a8a;
+}
+.pw-side small {
+  font-size: 11px;
+  font-weight: bold;
+}
+.pw-side b {
+  font-size: 26px;
+  line-height: 1;
+  color: #fff;
+}
+.pw-dots {
+  display: flex;
+  gap: 3px;
+  margin: 3px 0 2px;
+}
+.pw-dots i {
+  width: 8px;
+  height: 8px;
+  border: 1px solid currentcolor;
+  border-radius: 50%;
+}
+.pw-side.ours .pw-dots i.on {
+  background: #4aa8ff;
+}
+.pw-side.theirs .pw-dots i.on {
+  background: #ff3c3c;
+}
+.pw-dots i.wait {
+  opacity: 0.7;
+}
+.pw-dots i.out {
+  opacity: 0.3;
+  border-style: dashed;
+}
+.pw-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+.pw-mid em {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: bold;
+  color: #fff;
+}
+.pw-sub {
+  padding: 1px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #f0ecf8;
+  background: rgb(10 8 16 / 0.6);
+}
+.pw-kd {
+  font-weight: bold;
+  color: #ffd860;
+}
+.pw-target {
+  padding: 2px 10px;
+  border: 1px solid #ff3c3c;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+  background: rgb(120 10 16 / 0.75);
+  animation: pw-pulse 1s ease-in-out infinite alternate;
+}
+@keyframes pw-pulse {
+  to {
+    box-shadow: 0 0 10px rgb(255 60 60 / 0.8);
+  }
+}
+.pw-feed {
+  position: fixed;
+  top: 52px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+.pw-feed li {
+  display: flex;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  background: rgb(10 8 16 / 0.72);
+  animation: pw-in 0.25s ease-out;
+}
+.pw-feed .ours {
+  color: #8cc8ff;
+}
+.pw-feed .theirs {
+  color: #ff8a8a;
+}
+.pw-feed .me {
+  color: #ffd860;
+}
+.pw-x {
+  color: #ddd;
+}
+@keyframes pw-in {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+.pw-banner {
+  position: fixed;
+  top: 32%;
+  left: 50%;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateX(-50%);
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow:
+    0 0 6px #000,
+    0 2px 0 #000;
+  animation: pw-pop 0.35s ease-out;
+}
+.pw-banner.kill {
+  color: #ffd860;
+}
+.pw-banner.kill.s2 {
+  color: #ffa040;
+  font-size: 40px;
+}
+.pw-banner.kill.s3,
+.pw-banner.kill.s4 {
+  color: #ff5a5a;
+  font-size: 46px;
+}
+.pw-banner.down {
+  color: #ff8a8a;
+  font-size: 28px;
+}
+.pw-banner small {
+  font-size: 15px;
+  color: #fff;
+}
+@keyframes pw-pop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(1.8);
+  }
+}
+@media (max-width: 600px) {
+  .pw-side {
+    min-width: 60px;
+  }
+  .pw-side b {
+    font-size: 20px;
+  }
+  .pw-sub,
+  .pw-target {
+    font-size: 11px;
+    white-space: normal;
+    max-width: 90vw;
+    text-align: center;
+  }
+  .pw-feed {
+    top: auto;
+    bottom: 140px;
+  }
+  .pw-banner {
+    font-size: 26px;
+  }
+}
