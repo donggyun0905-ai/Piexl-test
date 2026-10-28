@@ -28,6 +28,7 @@ import { drawUltGround, drawUltOverlay } from "./ults";
 import { drawArenaLabels } from "./arena";
 import { drawUmbraTalk } from "./umbra";
 import { drawBeastAir, drawBeastGround } from "./beastUlts";
+import { drawDemigodAir } from "./demigod";
 import { drawMedicAir, drawMedicGround } from "./medic";
 import { lerp, type Snap } from "./palette";
 import { drawRoom } from "./room";
@@ -215,6 +216,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   drawUltOverlay(ctx, s, snap);
   drawImugiOverlay(ctx, s);
   drawBeastAir(ctx, s);
+  drawDemigodAir(ctx, s);
   if (opt.legendName) drawLegendName(ctx, s, alpha, opt.legendName);
   drawMorphGot(ctx, s, alpha, snap, opt.passiveName);
   drawPaewang(ctx, s, alpha, snap);

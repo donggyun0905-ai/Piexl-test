@@ -22,6 +22,7 @@ export { zoneRect } from "./bossZones";
 export { BOSS_UMBRA_RULES } from "./bossUmbra";
 export { BOSS_WORM_RULES, wormBody } from "./bossWorm";
 export { WORM_PIT_R, WORM_POOL_R } from "./wormUlt";
+export { SPIRIT_BLINK, SPIRIT_CHARGE, spiritBlink, spiritSlam } from "./demigodUlts";
 export { BOSS_ROC_RULES } from "./bossRoc";
 export { cageRect, PARRY_TICKS } from "./bossCage";
 export { HELL_CHARGE, HELL_COLS, HELL_ROWS, HELL_SHOW, HELL_WAVES, hellCell } from "./bossUlts";

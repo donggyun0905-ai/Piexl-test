@@ -9,7 +9,7 @@ const n = (ko: string, en: string, ja: string): Names => ({ ko, en, ja });
 export const BOSS_TEXT: Record<string, string> = {
   hulk: "bossHulk", brood: "bossBrood", seer: "bossSeer", knight: "bossKnight", archer: "bossArcher", siren: "bossSiren", centaur: "bossCentaur",
   plant: "bossPlant", reaper: "bossReaper", swordgod: "bossSwordGod", archangel: "bossAngel", dragon: "bossDragon", godeater: "bossGodEater", plight: "bossLight", pdark: "bossDark",
-  umbra: "bossUmbra", sandworm: "bossSandworm", scorpion: "bossScorpion", roc: "bossRoc",
+  umbra: "bossUmbra", sandworm: "bossSandworm", scorpion: "bossScorpion", roc: "bossRoc", demigod: "bossDemigod",
 };
 
 /** 보스가 아닌 적 이름 */
@@ -80,6 +80,7 @@ const DESC: Record<string, Names> = {
   plight: n("라스트 보스. 태초의 어둠과 체력을 나눠 가짐", "Final boss. Shares its health with Primeval Dark", "ラストボス。太初の闇と体力を分け合う"),
   pdark: n("라스트 보스. 태초의 빛과 체력을 나눠 가짐", "Final boss. Shares its health with Primeval Light", "ラストボス。太初の光と体力を分け合う"),
   umbra: n("시즌 2 라스트 보스. 거대한 짐승 셋을 차례로 부르고 지켜봄", "Season 2 final boss. Summons three colossal beasts in turn and watches", "シーズン2ラストボス。巨大な獣を三体順に呼び、見届ける"),
+  demigod: n("시즌 2 라스트 보스. 아르테의 태산에서 내려온 반신, 맨주먹으로 1대1", "Season 2 final boss. A demigod down from Mount Arte, fighting one-on-one with bare fists", "シーズン2ラストボス。アルテの泰山から降りてきた半神、素手で一対一"),
   sandworm: n("땅속에서 예고 없이 솟아오름. 위에 있을 때 때리기", "Bursts up from underground without warning. Strike while it is up", "地中から予告なく飛び出す。地上にいる間に攻撃"),
   scorpion: n("꼬리 독 찌르기·앞으로만 밀고 오는 돌진. 옆으로 피한 뒤 때리기", "Venom sting and a straight-line charge. Sidestep, then strike", "尾の毒突きと直進の突進。横に避けてから攻撃"),
   roc: n("하늘에서 내려찍기·세 줄 활강. 피하면 떨어져 경직", "Dives and triple swoops from the sky. Dodge and it falls dazed", "空からの急降下と三本の滑空。避けると落ちて硬直"),

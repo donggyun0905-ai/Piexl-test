@@ -1,5 +1,5 @@
 // 시즌 2 라스트 보스 검은 잔영: 맞지 않고 방 위쪽에서 지켜보며 거대한 짐승 셋(데스웜 · 거대 전갈 · 거대 매)을 한꺼번에 불러 1대3
-// 짐승이 하나 쓰러질 때마다 한마디 → 셋을 다 잡으면 검은 모습으로 셋을 되살림 (필살기는 다시 안 씀, 공격 주기가 더 빠름)
+// 짐승이 하나 쓰러질 때마다 한마디 → 셋을 다 잡으면 검은 모습으로 셋을 체력 절반으로 되살림 (필살기는 다시 안 씀, 공격 주기가 더 빠름)
 // 되살린 셋도 다 잡으면 "지켜볼 가치가 있어.." 뒤 사라짐 (그때 쓰러진 것으로 셈)
 // 체력은 세 짐승 체력의 합: 화면은 막대 하나를 짐승마다 한 칸씩 세 칸으로 (전갈 칸은 흰 보호막까지)
 import { ENEMIES, UMBRA_BEASTS, UMBRA_WARD } from "../content";
@@ -32,7 +32,12 @@ function summon(s: RunState, e: EnemyState, spawned: EnemyState[], dark: boolean
     const b = makeEnemy(s, kind, ROOM_CX + SPOTS[i]!, ROOM_MIN_Y + 70, mul, 60 + i * 40);
     const ward = UMBRA_WARD[kind];
     if (ward) b.ward = Math.round(b.maxHp * ward);
-    if (dark) b.dark = b.ultDone = true;
+    // 되살린 셋은 체력·보호막 절반
+    if (dark) {
+      b.dark = b.ultDone = true;
+      b.hp = Math.round(b.maxHp / 2);
+      if (b.ward) b.ward = Math.round(b.ward / 2);
+    }
     spawned.push(b);
     addEffect(s, { kind: "burst", x: b.x, y: b.y, dirX: 0, dirY: 0, size: b.r * 2, maxTicks: 20 });
   });

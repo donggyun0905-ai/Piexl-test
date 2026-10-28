@@ -39,6 +39,11 @@ export interface BossEnemyState {
   brood?: number[];
   globs?: { x: number; y: number; vx: number; vy: number; t: number }[];
   pools?: { x: number; y: number; t: number }[];
+  /** 괴력난신: 앞으로만 나가는 근접 콤보 (남은 타 · 다음 타까지 · 방향 · 범위 배율) · 지금 필살기(1 70% · 2 50% · 3 10%) · 쓴 필살기(비트) · 원기옥을 피한 횟수 */
+  combo?: { left: number; t: number; dx: number; dy: number; reach: number };
+  gUlt?: number;
+  gDone?: number;
+  gDodge?: number;
   /** 검은 잔영이 되살린 검은 짐승 (필살기 없음 · 공격 주기가 더 빠름) */
   dark?: boolean;
   /** 흰 보호막: 체력보다 먼저 깎임 (거대 전갈) */
@@ -99,7 +104,7 @@ export interface ArenaRunState {
 
 export interface BossShotState {
   /** 그리기용 탄 모양 */
-  look?: "arrow" | "note" | "spear" | "seed" | "soul" | "feather" | "light" | "fire" | "wave" | "orbRuin" | "orbChaos" | "bat" | "net" | "rock" | "bigwave" | "larrow" | "darrow" | "reaper" | "ember" | "rspear" | "fspear" | "doom";
+  look?: "arrow" | "note" | "spear" | "seed" | "soul" | "feather" | "light" | "fire" | "wave" | "orbRuin" | "orbChaos" | "bat" | "net" | "rock" | "bigwave" | "larrow" | "darrow" | "reaper" | "ember" | "rspear" | "fspear" | "doom" | "kifist";
   /** 세이렌 음표: 플레이어에 맞아도 사라지지 않고, 맞으면 끌려감. 세이렌이 쓰러지면 사라짐 */
   lure?: boolean;
   /** 플레이어에 맞아도 사라지지 않음 (갓이터의 거대한 구슬) · 이 적이 쓰러지면 사라짐 */

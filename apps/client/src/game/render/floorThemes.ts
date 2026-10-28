@@ -68,6 +68,8 @@ const THEMES: Record<string, FloorTheme> = {
   /** 태초의 빛과 어둠: 빛과 그림자가 갈린 바닥 */
   plight: T("#26242c", "#2c2a33", "#4a4658", "#6a6680", "#5a566a", "#8a86a0", "#060508", "#141218", [["star", "#fff4c0"], ["star", "#3a2a5a"]], 0.24),
   /** 검은 잔영: 사막 (모래 바닥·사암 벽·모래·뼈) */
+  /** 괴력난신: 아르테의 태산 (바위 산길·이끼·금) */
+  demigod: T("#3a3630", "#403b34", "#5a5248", "#7a7064", "#6a6258", "#8a8276", "#14110e", "#2a241e", [["crack", "#2a261f"], ["grass", "#5a7a3a"]], 0.3),
   umbra: T("#6a5234", "#735a39", "#8a6a40", "#b08a52", "#9a7646", "#c09a5e", "#2a1a0a", "#4a3018", [["sand", "#a8844c"], ["bone", "#d8ccb0"]], 0.3),
 };
 
@@ -85,8 +87,8 @@ export function themeFor(s: RunState): FloorTheme {
   if (pa) return THEMES[PW_THEME[pa]]!;
   let boss: string | undefined;
   if (s.lastBoss) boss = s.lastBoss === "pdark" ? "plight" : s.lastBoss;
-  // 연습장에서 부른 검은 잔영도 사막
-  else if (s.enemies.some((e) => e.kind === "umbra")) boss = "umbra";
+  // 연습장에서 부른 시즌 2 라스트 보스도 그 맵
+  else if (s.enemies.some((e) => e.kind === "umbra" || e.kind === "demigod")) boss = s.enemies.find((e) => e.kind === "umbra" || e.kind === "demigod")!.kind;
   else if (s.arenaLv) boss = s.enemies.find((e) => ENEMIES[e.kind].boss)?.kind;
   else if (s.hero) boss = heroBosses(s)[0];
   else if (s.floor >= 1) boss = bossForFloor(s.floor, s.seed);

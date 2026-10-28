@@ -62,7 +62,7 @@ describe("검은 잔영", () => {
     steps(run, 200);
     const dark = ["sandworm", "scorpion", "roc"].map((k) => find(run, k)!);
     expect(dark.every((b) => b?.dark && b.ultDone)).toBe(true);
-    expect(boss.hp).toBe(boss.maxHp);
+    expect(dark.every((b) => b.hp === Math.round(b.maxHp / 2))).toBe(true);
     dark.forEach((b) => {
       b.hp = 0;
       steps(run, 2);

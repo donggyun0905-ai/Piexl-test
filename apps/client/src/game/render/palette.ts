@@ -101,6 +101,7 @@ export const C = {
   dragon: "#8a2a1a",
   godeater: "#2a2438",
   umbra: "#1a1424",
+  demigod: "#e8dcc8",
   sandworm: "#9a6a3a",
   scorpion: "#6a3a2a",
   roc: "#7a5a3a",

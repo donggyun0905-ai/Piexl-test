@@ -20,6 +20,7 @@ import { updateUmbra } from "./bossUmbra";
 import { updateWorm } from "./bossWorm";
 import { updateScorpion } from "./bossScorpion";
 import { updateRoc } from "./bossRoc";
+import { updateDemigod } from "./bossDemigod";
 import { makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
 /** 보스 체력 배율 (층마다 늘어남) */
@@ -45,6 +46,7 @@ const BOSS_AI: Partial<Record<EnemyState["kind"], BossAi>> = {
   sandworm: (s, e, toP, _go, spawned) => updateWorm(s, e, toP, spawned),
   scorpion: (s, e, toP) => updateScorpion(s, e, toP, ENEMIES.scorpion.speed),
   roc: (s, e) => updateRoc(s, e),
+  demigod: updateDemigod,
 };
 
 export function updateBoss(s: RunState, e: EnemyState, toP: readonly [number, number], go: readonly [number, number], spawned: EnemyState[]): void {
