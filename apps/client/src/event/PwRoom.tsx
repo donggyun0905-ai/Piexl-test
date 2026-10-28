@@ -16,8 +16,9 @@ export interface PwRoomGame {
 }
 
 /** peers: 메시지를 보낼 다른 사람들 (방장은 손님 모두, 손님은 방장) */
-export function usePwRoom(wireRef: RefObject<CoopWire>, start: boolean, isHost: boolean, peers: () => string[]) {
-  const [mode, setModeState] = useState<PwMode | null>(start ? "trio" : null);
+/** start: 패왕전으로 들어옴(처음엔 3대3) · 대결을 정해서 들어옴(랭크전) */
+export function usePwRoom(wireRef: RefObject<CoopWire>, start: boolean | PwMode, isHost: boolean, peers: () => string[]) {
+  const [mode, setModeState] = useState<PwMode | null>(typeof start === "string" ? start : start ? "trio" : null);
   const [lo, setLo] = useState<PwLoadout | undefined>();
   /** 손님마다 받은 장비 (방장) */
   const [los, setLos] = useState<ReadonlyMap<string, PwLoadout>>(new Map());
@@ -79,7 +80,7 @@ export function PwRoomPanel({ room, you, isHost, characterId, pw, lang, t }: Pan
       <h3>
         {t("paewang")} · {t(PW_NAME[pw.mode])} <em className={`pw-diff ${diffKey(def.diff)}`}>{t(diffKey(def.diff))}</em>
       </h3>
-      {isHost && (
+      {isHost && !room.rank && (
         <div className="pw-room-modes">
           {PW_MODES.map((m) => (
             <button key={m} type="button" className={m === pw.mode ? "on" : ""} onClick={() => pw.setMode(m)}>

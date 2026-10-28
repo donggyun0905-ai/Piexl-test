@@ -1,4 +1,4 @@
-// Hub Durable Object (하나만 씀): 플레이어(기기 ID)별 닉네임·해금 · 기기 연동 · 일일 도전 순위표 · 레이드 명예의 전당 · 레이드 아레나 순위표 · 배틀 빠른 매칭.
+// Hub Durable Object (하나만 씀): 플레이어(기기 ID)별 닉네임·해금 · 기기 연동 · 일일 도전 순위표 · 레이드 명예의 전당 · 레이드 아레나 순위표 · 배틀 빠른 매칭 · 패왕전 랭크 점수.
 // 저장은 값이 바뀔 때만 (닉네임을 바꾸거나 해금이 늘 때, 내 최고 기록이 오를 때)
 import { postWebhook, type AdminState } from "./adminLogin";
 import { BALANCE_SCHEMA, handleAdmin, handleBalance } from "./balanceApi";
@@ -9,6 +9,7 @@ import { handlePlayer } from "./player";
 import { handleRaid } from "./raidApi";
 import { handleArena } from "./arenaApi";
 import { CLEAR_SCHEMA, handleClear } from "./clearStats";
+import { handleRank, handleRankApply, RANK_SCHEMA } from "./rankApi";
 import { first, type SqlLike } from "./sql";
 import { takeTurn } from "./turnBudget";
 
@@ -61,6 +62,8 @@ const SCHEMA = [
   ...BALANCE_SCHEMA,
   // 캐릭터별 클리어 시간 (횟수·합계·가장 빠른 시간)
   ...CLEAR_SCHEMA,
+  // 패왕전 랭크전 점수
+  ...RANK_SCHEMA,
 ];
 
 function randomKey(): string {
@@ -100,6 +103,8 @@ export async function routeHub(ctx: HubContext, request: Request): Promise<Respo
   if (path === "/api/stats/clear") return handleClear(ctx, request);
   if (path.startsWith("/api/admin/")) return handleAdmin(ctx, path.slice("/api/admin/".length), request);
   if (path.startsWith("/api/match/")) return handleMatch(ctx, path.slice("/api/match/".length), request);
+  if (path.startsWith("/api/rank/")) return handleRank(ctx, path.slice("/api/rank/".length), request);
+  if (path === "/internal/rank" && request.method === "POST") return handleRankApply(ctx, request);
   // 안에서만 부름 (밖에서 오는 요청은 /api/만 여기로 옴)
   if (path === "/internal/turn") return Response.json({ ok: takeTurn(ctx, request.headers.get("x-ip") ?? "") });
   return fail("not_found", 404);

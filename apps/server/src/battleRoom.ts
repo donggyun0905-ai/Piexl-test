@@ -1,6 +1,6 @@
 // BattleRoom Durable Object: 방 코드마다 하나. 웹소켓 잠자기 API (연결을 붙잡고 있어도 쉬는 동안은 비용 없음)
 // 저장: 방 구조(들어오기·나가기·시작·끝)는 저장소에, 자주 바뀌는 체력·위치는 각 연결의 첨부 값에 (저장 쓰기 줄이기)
-import { createRng, seedToText, type BattlePlayer, type ClientMsg, type RoomKind, type ServerMsg } from "@pixel-rogue/shared";
+import { createRng, RANK_QUEUES, seedToText, type BattlePlayer, type ClientMsg, type RankChange, type RankQueue, type RoomKind, type ServerMsg } from "@pixel-rogue/shared";
 import { newRoom, RoomLogic, type Out, type RoomData } from "./roomLogic";
 
 interface Attachment {
@@ -24,15 +24,23 @@ function randomSeedText(): string {
   return seedToText(createRng(crypto.getRandomValues(new Uint32Array(1))[0] ?? 1));
 }
 
+/** 랭크전 점수를 반영할 Hub (없으면 반영하지 않음: 시험) */
+interface RoomEnv {
+  HUB?: { idFromName(name: string): unknown; get(id: unknown, opt?: unknown): { fetch(req: Request): Promise<Response> } };
+}
+
 export class BattleRoom {
   private logic: RoomLogic | null = null;
 
-  constructor(private state: State) {}
+  constructor(
+    private state: State,
+    private env: RoomEnv = {},
+  ) {}
 
-  private async load(code: string, mode: "quick" | "private", kind: RoomKind = "battle"): Promise<RoomLogic> {
+  private async load(code: string, mode: "quick" | "private", kind: RoomKind = "battle", rank?: RankQueue): Promise<RoomLogic> {
     if (this.logic) return this.logic;
     const stored = await this.state.storage.get<RoomData>("room");
-    const data = stored ?? newRoom(code, mode, kind);
+    const data = stored ?? newRoom(code, mode, kind, rank);
     // 잠자는 동안 메모리가 비워졌으면: 살아 있는 연결의 첨부 값으로 최신 상태를 되살림
     const live = new Set<string>();
     for (const ws of this.state.getWebSockets()) {
@@ -58,6 +66,7 @@ export class BattleRoom {
     if (alarm > 0) await this.state.storage.setAlarm(alarm);
     else await this.state.storage.deleteAlarm();
     // 첨부 값 갱신 (체력·위치 등)
+    if (logic.rankJob !== undefined) await this.applyRank(logic, outs);
     for (const ws of this.state.getWebSockets()) {
       const a = ws.deserializeAttachment() as Attachment | null;
       const p = a && logic.data.players.find((x) => x.pid === a.pid);
@@ -67,6 +76,30 @@ export class BattleRoom {
       }
     }
     this.send(outs);
+  }
+
+  /** 랭크전 결과를 Hub에 반영하고 점수 변화를 모두에게 (결과가 맞지 않았으면 빈 목록) */
+  private async applyRank(logic: RoomLogic, outs: Out[]): Promise<void> {
+    const job = logic.rankJob;
+    logic.rankJob = undefined;
+    let changes: RankChange[] = [];
+    const hub = this.env.HUB;
+    // 점수는 기기 ID로 저장하고, 모두에게는 참가 id로 돌려줌 (기기 ID는 열쇠라 보내지 않음)
+    const accounts = logic.data.accounts ?? {};
+    const pidOf = new Map(Object.entries(accounts).map(([pid, acc]) => [acc, pid]));
+    if (job && hub) {
+      job.entries = job.entries.flatMap((e) => (accounts[e.pid] ? [{ ...e, pid: accounts[e.pid]! }] : []));
+      const names = Object.fromEntries(logic.data.players.flatMap((p) => (accounts[p.pid] ? [[accounts[p.pid]!, p.name]] : [])));
+      try {
+        const res = await hub.get(hub.idFromName("main"), { locationHint: "apac" }).fetch(
+          new Request("https://hub/internal/rank", { method: "POST", body: JSON.stringify({ job, names }) }),
+        );
+        changes = (((await res.json()) as { changes?: RankChange[] }).changes ?? []).map((c) => ({ ...c, pid: pidOf.get(c.pid) ?? "" }));
+      } catch {
+        changes = [];
+      }
+    }
+    outs.push({ to: "all", msg: { t: "rank", changes } });
   }
 
   private send(outs: Out[]): void {
@@ -92,7 +125,8 @@ export class BattleRoom {
     const code = url.pathname.split("/").pop() ?? "";
     const mode = url.searchParams.get("mode") === "quick" ? "quick" : "private";
     const kind = url.searchParams.get("kind") === "coop" ? "coop" : "battle";
-    const logic = await this.load(code, mode, kind);
+    const rankParam = url.searchParams.get("rank") as RankQueue;
+    const logic = await this.load(code, mode, kind, RANK_QUEUES.includes(rankParam) ? rankParam : undefined);
     if (logic.dirty) {
       logic.dirty = false;
       await this.state.storage.put("room", logic.data);
@@ -116,7 +150,7 @@ export class BattleRoom {
     const a = ws.deserializeAttachment() as Attachment | null;
     if (msg.t === "hello") {
       if (a) return;
-      const res = logic.join(String(msg.pid), String(msg.name), msg.characterId, msg.balance);
+      const res = logic.join(String(msg.pid), String(msg.name), msg.characterId, msg.balance, msg.player);
       if (!Array.isArray(res)) {
         ws.send(JSON.stringify(res));
         ws.close(1000, res.t === "error" ? res.error : "bad");

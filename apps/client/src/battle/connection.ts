@@ -5,10 +5,13 @@ import {
   STATUS_INTERVAL_MS,
   type CharacterId,
   type ClientMsg,
+  type RankChange,
+  type RankQueue,
   type RoomView,
   type RunState,
   type ServerMsg,
 } from "@pixel-rogue/shared";
+import { getPlayerId } from "../player";
 import { SERVER_URL } from "../serverStatus";
 
 /** 이 탭의 배틀 참가 id (다시 연결할 때 같은 사람으로) */
@@ -30,6 +33,8 @@ export interface ConnectionEvents {
   onError: (error: string) => void;
   /** 협동: 직접 연결 주선 내용 */
   onSignal?: (from: string, data: string) => void;
+  /** 랭크전: 점수 변화 (결과가 맞지 않으면 빈 목록) */
+  onRank?: (changes: RankChange[]) => void;
 }
 
 export class BattleConnection {
@@ -51,17 +56,18 @@ export class BattleConnection {
     private characterId: CharacterId,
     private ev: ConnectionEvents,
     private kind: "battle" | "coop" = "battle",
+    private rank?: RankQueue,
   ) {
     this.open();
   }
 
   private open(): void {
     const base = SERVER_URL.replace(/^http/, "ws");
-    const ws = new WebSocket(`${base}/battle/${this.code}?mode=${this.mode}&kind=${this.kind}`);
+    const ws = new WebSocket(`${base}/battle/${this.code}?mode=${this.mode}&kind=${this.kind}${this.rank ? `&rank=${this.rank}` : ""}`);
     this.ws = ws;
     ws.onopen = () => {
       this.gaveUpAt = 0;
-      this.raw({ t: "hello", pid: this.pid, name: this.name, characterId: this.characterId, balance: latestBalanceHash() });
+      this.raw({ t: "hello", pid: this.pid, name: this.name, characterId: this.characterId, balance: latestBalanceHash(), ...(this.rank ? { player: getPlayerId() } : {}) });
     };
     ws.onmessage = (e) => {
       let msg: ServerMsg;
@@ -75,6 +81,7 @@ export class BattleConnection {
         this.ev.onRoom(msg.room, msg.you, msg.room.now - Date.now());
       } else if (msg.t === "chat") this.ev.onChat(msg.name, msg.text);
       else if (msg.t === "signal") this.ev.onSignal?.(msg.from, msg.data);
+      else if (msg.t === "rank") this.ev.onRank?.(msg.changes);
       else if (msg.t === "error") {
         this.closed = true;
         this.ev.onError(msg.error);

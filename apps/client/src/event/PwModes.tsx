@@ -1,14 +1,17 @@
 // 패왕전 대결 고르기: 6가지 (경기장 미리 보기 · 난이도 · 승리 보상 · 이긴 횟수)
-import { PW_ARENAS, PW_MODE, PW_MODES, type PwArenaId, type PwDiff, type PwMode } from "@pixel-rogue/shared";
+import { PW_ARENAS, PW_MODE, PW_MODES, type PwArenaId, type PwDiff, type PwMode, type RankQueue } from "@pixel-rogue/shared";
 import { useEffect, useRef } from "react";
 import type { TextKey } from "../i18n";
 import { pwWins } from "./pwRecords";
+import { RankPanel } from "./RankPanel";
 
 interface Props {
   t: (key: TextKey) => string;
   onPick: (mode: PwMode) => void;
   /** 친구와 같이 하기 (협동 방) */
   onMulti: () => void;
+  /** 랭크전 (모르는 사람과 점수 대결) */
+  onRank: (queue: RankQueue) => void;
   onBack: () => void;
 }
 
@@ -44,10 +47,11 @@ export function ArenaPreview({ id }: { id: PwArenaId }) {
   return <canvas ref={ref} width={a.cols * CELL} height={a.rows * CELL} className="pw-preview" aria-hidden="true" />;
 }
 
-export function PwModes({ t, onPick, onMulti, onBack }: Props) {
+export function PwModes({ t, onPick, onMulti, onRank, onBack }: Props) {
   return (
     <div className="td-maps pw-modes">
       <h2>{t("paewang")}</h2>
+      <RankPanel t={t} onPlay={onRank} />
       <p className="hint">{t("pwPick")}</p>
       <div className="td-map-list">
         {PW_MODES.map((m) => {

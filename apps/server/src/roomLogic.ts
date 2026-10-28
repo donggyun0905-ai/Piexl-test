@@ -8,16 +8,22 @@ import {
   COOP_ROOM_MS,
   cleanChat,
   cleanNickname,
+  isPlayerId,
   FLOOR_COUNT,
   QUICK_WAIT_MS,
+  RANK,
+  RANK_SEATS,
   RECONNECT_MS,
   type BattlePlayer,
   type CharacterId,
   type ClientMsg,
+  type RankQueue,
   type RoomKind,
   type RoomView,
   type ServerMsg,
 } from "@pixel-rogue/shared";
+import { rankFinish, rankReport, type RankJob } from "./rankRoom";
+import { backToLobby } from "./roomLobby";
 
 export interface RoomData {
   code: string;
@@ -33,6 +39,13 @@ export interface RoomData {
   players: BattlePlayer[];
   /** 이 판의 게임 수치 지문 */
   balance?: string;
+  /** 패왕전 랭크전 방 · 사람마다 받은 결과(이긴 편) · 결과를 기다리는 끝 시각 · 점수 반영을 마침 */
+  rank?: RankQueue;
+  reports?: Record<string, number>;
+  reportBy?: number;
+  rankDone?: boolean;
+  /** 랭크전: 참가 id → 기기 ID (점수 저장용. 방 정보로 보내지 않음) */
+  accounts?: Record<string, string>;
 }
 
 /** 보낼 메시지: 모두에게 또는 특정 사람에게 */
@@ -41,8 +54,8 @@ export interface Out {
   msg: ServerMsg;
 }
 
-export function newRoom(code: string, mode: "quick" | "private", kind: RoomKind = "battle"): RoomData {
-  return { code, mode, kind, phase: "lobby", seedText: "", startAt: 0, endAt: 0, hostPid: "", autoStartAt: 0, players: [] };
+export function newRoom(code: string, mode: "quick" | "private", kind: RoomKind = "battle", rank?: RankQueue): RoomData {
+  return { code, mode, kind, phase: "lobby", seedText: "", startAt: 0, endAt: 0, hostPid: "", autoStartAt: 0, players: [], ...(rank ? { rank, kind: "coop" as const, mode: "quick" as const } : {}) };
 }
 
 /** 협동 방: 게임 중에 들어와 관전할 수 있는 사람 수 (자리와 따로) */
@@ -67,13 +80,16 @@ export class RoomLogic {
 
   /** 구조가 바뀌어 저장해야 하는지 (상태 숫자만 바뀐 것은 저장하지 않음) */
   dirty = false;
+  /** 랭크전: 결과를 정할 때 (BattleRoom이 Hub에 점수를 반영하고 비움. null = 결과가 맞지 않음) */
+  rankJob: RankJob | null | undefined = undefined;
 
   view(): RoomView {
-    const d = this.data;
+    const { reports: _r, reportBy: _b, rankDone: _d, accounts: _a, ...d } = this.data;
     return { ...d, players: d.players.map((p) => ({ ...p })), now: this.now() };
   }
 
   private get max(): number {
+    if (this.data.rank) return RANK_SEATS[this.data.rank];
     return this.data.kind === "coop" ? COOP_MAX_PLAYERS : BATTLE_MAX_PLAYERS;
   }
 
@@ -86,8 +102,9 @@ export class RoomLogic {
   }
 
   /** 들어오기 (다시 연결 포함). 실패하면 오류 메시지 */
-  join(pid: string, name: string, characterId: unknown, balance?: unknown): Out[] | ServerMsg {
+  join(pid: string, name: string, characterId: unknown, balance?: unknown, account?: unknown): Out[] | ServerMsg {
     const d = this.data;
+    if (d.rank && isPlayerId(account)) (d.accounts ??= {})[pid] = account;
     const p = this.player(pid);
     if (p) {
       if (p.state === "forfeit") return { t: "error", error: "started" };
@@ -98,7 +115,7 @@ export class RoomLogic {
     }
     // 협동 방은 게임 중에 들어오면 관전 (끝나고 방으로 돌아가면 같이 함)
     const watch = d.phase !== "lobby";
-    if (watch && d.kind !== "coop") return { t: "error", error: "started" };
+    if (watch && (d.kind !== "coop" || d.rank)) return { t: "error", error: "started" };
     if (d.players.length >= this.max + (watch ? WATCH_MAX : 0)) return { t: "error", error: "full" };
     if (typeof pid !== "string" || pid.length < 8 || pid.length > 40) return { t: "error", error: "bad" };
     d.players.push({
@@ -133,7 +150,7 @@ export class RoomLogic {
       // 시작 전·관전하던 사람은 바로 빠짐
       d.players = d.players.filter((x) => x.pid !== pid);
       if (d.hostPid === pid) d.hostPid = d.players[0]?.pid ?? "";
-      if (d.players.length < 2) d.autoStartAt = 0;
+      if (d.players.length < (d.rank ? 1 : 2)) d.autoStartAt = 0;
       // 자리가 나면 대기실의 관전자가 들어옴
       const wait = d.phase === "lobby" && d.players.filter((x) => x.state !== "watch").length < this.max && d.players.find((x) => x.state === "watch");
       if (wait) wait.state = "alive";
@@ -151,7 +168,8 @@ export class RoomLogic {
     const d = this.data;
     if (d.phase !== "lobby" || d.mode !== "quick") return;
     if (d.players.length >= this.max) this.start();
-    else if (d.players.length >= 2 && d.autoStartAt === 0) d.autoStartAt = this.now() + QUICK_WAIT_MS;
+    // 랭크전은 혼자여도 잠시 기다린 뒤 AI를 채워 시작
+    else if (d.players.length >= (d.rank ? 1 : 2) && d.autoStartAt === 0) d.autoStartAt = this.now() + (d.rank ? RANK.waitMs : QUICK_WAIT_MS);
   }
 
   private start(): void {
@@ -168,19 +186,6 @@ export class RoomLogic {
     this.dirty = true;
   }
 
-  /** 협동: 끝난 판에서 모두 대기실로 (나간 사람은 빠지고, 관전하던 사람은 자리가 있으면 같이) */
-  private backToLobby(): void {
-    const d = this.data;
-    d.phase = "lobby";
-    d.players = d.players.filter((p) => p.connected);
-    d.players.forEach((p, i) => {
-      p.state = i < this.max ? "alive" : "watch";
-      p.finishedAt = 0;
-    });
-    if (!d.players.some((p) => p.pid === d.hostPid)) d.hostPid = d.players[0]?.pid ?? "";
-    this.dirty = true;
-  }
-
   handle(pid: string, msg: ClientMsg): Out[] {
     const d = this.data;
     const p = this.player(pid);
@@ -192,9 +197,15 @@ export class RoomLogic {
       this.dirty = true;
       return [this.broadcast()];
     }
+    if (msg.t === "rankres") {
+      if (rankReport(d, pid, msg.winner, now)) this.rankJob = rankFinish(d);
+      this.dirty = true;
+      return [];
+    }
     if (msg.t === "lobby") {
-      if (d.kind !== "coop" || d.phase === "lobby" || d.hostPid !== pid) return [];
-      this.backToLobby();
+      if (d.kind !== "coop" || d.rank || d.phase === "lobby" || d.hostPid !== pid) return [];
+      backToLobby(d, this.max);
+      this.dirty = true;
       return [this.broadcast()];
     }
     if (msg.t === "start") {
@@ -250,6 +261,8 @@ export class RoomLogic {
     const now = this.now();
     const before = JSON.stringify(d);
     if (d.phase === "lobby" && d.autoStartAt > 0 && now >= d.autoStartAt) this.start();
+    // 랭크전: 결과를 다 못 받았어도 기다리는 시간이 끝나면 받은 것으로 정함
+    if (d.reportBy && now >= d.reportBy && !d.rankDone) this.rankJob = rankFinish(d);
     if (d.phase === "playing") {
       for (const p of d.players) {
         if (p.state === "alive" && !p.connected && p.leftAt > 0 && now - p.leftAt >= RECONNECT_MS) {
@@ -277,6 +290,7 @@ export class RoomLogic {
     const d = this.data;
     const times: number[] = [];
     if (d.phase === "lobby" && d.autoStartAt > 0) times.push(d.autoStartAt);
+    if (d.reportBy && !d.rankDone) times.push(d.reportBy);
     if (d.phase === "playing") {
       times.push(d.endAt);
       for (const p of d.players) if (p.state === "alive" && !p.connected && p.leftAt > 0) times.push(p.leftAt + RECONNECT_MS);

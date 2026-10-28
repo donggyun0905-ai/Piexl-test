@@ -1,6 +1,6 @@
 // 협동 한 판: 방장은 게임을 진행하며 입력을 나눠 주고, 손님은 받은 입력으로 같이 진행.
 // 방장이 나가면 서버가 정한 다음 사람이 지금 상태 그대로 이어서 방장이 됨
-import { createParty, createPvp, parseSeed, pvpResult, type CharacterId, type RoomView, type RunState } from "@pixel-rogue/shared";
+import { createParty, createPvp, parseSeed, pvpResult, rankSeats, type CharacterId, type RankChange, type RoomView, type RunState } from "@pixel-rogue/shared";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { GameScreen } from "../game/GameScreen";
 import type { Lang, TextKey } from "../i18n";
@@ -16,6 +16,7 @@ import type { PwRoomGame } from "../event/PwRoom";
 import { PwBoard, useBoard } from "../event/PwBoard";
 import { PwHud } from "../event/PwHud";
 import { PwWatch } from "../event/PwWatch";
+import { RankOutcome } from "../event/RankResult";
 import { PwResult } from "../event/PwResult";
 import { savePwResult } from "../event/pwRecords";
 
@@ -31,11 +32,13 @@ interface Props {
   onExit: () => void;
   /** 방장: 끝난 판에서 모두 대기실로 */
   onBackRoom: () => void;
+  /** 랭크전: 점수 변화 · 내 결과 보내기 · 다시 찾기 */
+  rank?: { changes: RankChange[] | null; report: (winner: number) => void; again: () => void };
 }
 
 type Sync = { host: HostSync; guest: null } | { host: null; guest: GuestSync };
 
-export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, onBackRoom }: Props) {
+export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, onBackRoom, rank }: Props) {
   const hostPid = room.hostPid;
   const isHost = hostPid === you;
   const hostRef = useRef(hostPid);
@@ -55,7 +58,11 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
 
   // 자리 순서 = 방에 들어온 순서 (시작할 때 0번이 방장). 판은 한 객체를 끝까지 씀 (손님은 받은 상태로 내용만 바꿈)
   // 게임 중에 들어온 관전자는 자리가 없음
-  const seats = useMemo(() => room.players.filter((p) => p.state !== "watch").map((p) => p.pid), [room.players]);
+  // 랭크전은 사람을 두 편에 나누고 빈 자리("")는 AI (서버와 같은 규칙)
+  const seats = useMemo(() => {
+    const pids = room.players.filter((p) => p.state !== "watch").map((p) => p.pid);
+    return room.rank ? rankSeats(room.rank, pids) : pids;
+  }, [room.players, room.rank]);
   const seatsRef = useRef(seats);
   // run = 화면에 보이는 상태 (확정 + 짐작). 확정 상태는 HostSync·GuestSync가 따로 들고 있음
   const run = useMemo((): RunState => {
@@ -65,7 +72,7 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
       unlocks: pid === you ? loadAchievements() : (wire.unlocks.get(pid) ?? []),
     }));
     // 패왕전: 사람은 앞 자리, 나머지는 AI (모드·장비는 대기실에서)
-    if (pw) return createPvp(parseSeed(room.seedText), pw.mode, seatsRef.current.map((pid, i) => ({ characterId: members[i]!.characterId, loadout: pid === you ? pw.lo : pw.los.get(pid) })));
+    if (pw) return createPvp(parseSeed(room.seedText), pw.mode, seatsRef.current.map((pid, i) => (pid ? { characterId: members[i]!.characterId, loadout: pid === you ? pw.lo : pw.los.get(pid) } : null)));
     return createParty(parseSeed(room.seedText), members);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -75,7 +82,7 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
     const p = room.players.find((x) => x.pid === pid);
     return { pid, name: p?.name ?? "?", connected: p?.connected ?? false };
   });
-  const names = members.map((m) => m.name);
+  const names = members.map((m) => (m.pid ? m.name : "AI"));
   const watching = !seatsRef.current.includes(you);
   const mySeat = Math.max(0, seatsRef.current.indexOf(you));
   const namesRef = useRef(names);
@@ -190,9 +197,10 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
         onRunEnd={(r) => {
           setEnded(true);
           if (r.pvp && !watching) savePwResult(r.pvp.mode, pvpResult(r, mySeat).won);
+          if (r.pvp && rank && !watching) rank.report(r.pvp.winner ?? -1);
         }}
         resultExtra={ended && !pw ? <CoopStats run={run} members={members} t={t} /> : null}
-        afterRun={ended && pw ? <PwResult run={run} me={mySeat} names={names} watching={watching} lang={lang} t={t} onExit={onExit} /> : undefined}
+        afterRun={ended && pw ? <PwResult run={run} me={mySeat} names={names} watching={watching} lang={lang} t={t} onExit={onExit} {...(rank ? { extra: <RankOutcome changes={rank.changes} me={you} t={t} />, onRetry: rank.again, retryLabel: t("rankTitle") } : {})} /> : undefined}
         overlay={pw ? undefined : (ctx, r, alpha, snap) => drawCoopOverlay(ctx, r, alpha, snap, namesRef.current, extras, t)}
         step={(r, input) => {
           const s = sync.current;
@@ -208,7 +216,7 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
       {!ended && pw && run.pvp && <PwWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}
       {!ended && pw && run.pvp && !watching && <PwHud run={run} me={mySeat} t={t} onBoard={toggleBoard} />}
       {!ended && watching && <div className="coop-banner">{t("lobbyWatchNote")}</div>}
-      {ended && (
+      {ended && !rank && (
         <div className="coop-back">
           {isHost ? (
             <button type="button" className="primary" onClick={onBackRoom}>

@@ -1,5 +1,6 @@
 // 배틀 공용: 서버와 주고받는 메시지 · 순위 매기기. 서버는 게임을 다시 계산하지 않고 상태만 전달
 import type { CharacterId } from "./content";
+import type { RankChange, RankQueue } from "./rank";
 
 export const BATTLE_MAX_PLAYERS = 10;
 /** 협동 방 (같은 대기실을 씀): 최대 인원, 시간 제한 없음 (방은 이만큼 지나면 정리) */
@@ -60,15 +61,20 @@ export interface RoomView {
   balance?: string;
   /** 서버 시각 (화면 시계 맞추기) */
   now: number;
+  /** 패왕전 랭크전 방 (협동 방을 그대로 씀) */
+  rank?: RankQueue;
 }
 
 /** 화면 → 서버 */
 export type ClientMsg =
-  | { t: "hello"; pid: string; name: string; characterId: CharacterId; balance?: string }
+  /** player: 랭크전만 기기 ID (점수 저장용, 서버만 알고 다른 사람에게는 보내지 않음) */
+  | { t: "hello"; pid: string; name: string; characterId: CharacterId; balance?: string; player?: string }
   | { t: "character"; characterId: CharacterId }
   | { t: "start" }
   /** 협동: 방장이 끝난 판에서 모두 대기실로 (같은 방에서 다시) */
   | { t: "lobby" }
+  /** 랭크전: 내 화면에서 이긴 편 (모두의 결과가 같아야 점수에 반영) */
+  | { t: "rankres"; winner: number }
   | { t: "status"; floor: number; roomId: number; hp: number; maxHp: number; score: number; kills: number }
   | { t: "end"; state: "dead" | "cleared"; floor: number; roomId: number; hp: number; score: number; kills: number }
   | { t: "chat"; text: string }
@@ -80,6 +86,8 @@ export type ServerMsg =
   | { t: "room"; room: RoomView; you: string }
   | { t: "chat"; name: string; text: string; at: number }
   | { t: "signal"; from: string; data: string }
+  /** 랭크전: 점수 변화 (결과가 맞지 않으면 빈 목록) */
+  | { t: "rank"; changes: RankChange[] }
   | { t: "error"; error: "full" | "started" | "bad" };
 
 const ORDER: Record<BattleState, number> = { cleared: 0, alive: 0, timeout: 0, dead: 0, forfeit: 1, watch: 2 };

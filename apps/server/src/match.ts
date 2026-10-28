@@ -1,5 +1,5 @@
 // 배틀 방 코드 나눠 주기: 빠른 매칭(모으는 중인 공개 방) · 방 만들기(친구 초대용 코드)
-import { BATTLE_MAX_PLAYERS, CARD_GAMES, COOP_MAX_PLAYERS, CARD_QUICK_WAIT_MS, CARD_SEATS, type CardGame } from "@pixel-rogue/shared";
+import { BATTLE_MAX_PLAYERS, CARD_GAMES, COOP_MAX_PLAYERS, CARD_QUICK_WAIT_MS, CARD_SEATS, RANK, RANK_SEATS, type CardGame, type RankQueue } from "@pixel-rogue/shared";
 import type { HubContext } from "./hub";
 import { fail, json, readJson } from "./http";
 
@@ -14,6 +14,8 @@ export interface MatchState {
   open: OpenRoom;
   /** 협동 빠른 매칭 방 (배틀과 따로) */
   openCoop?: OpenRoom;
+  /** 패왕전 랭크전: 대결마다 모으는 중인 방 */
+  rank?: Partial<Record<RankQueue, NonNullable<OpenRoom>>>;
   /** 로비 카드·타일 게임 빠른 시작: 게임마다 모으는 중인 방 */
   cards?: Partial<Record<CardGame, NonNullable<OpenRoom>>>;
 }
@@ -37,6 +39,15 @@ export async function handleMatch(ctx: HubContext, action: string, request: Requ
     }
     o.count++;
     return json({ ok: true, code: o.code, mode: "quick" });
+  }
+  if (action === "rank") {
+    const queue: RankQueue = body.kind === "team" ? "team" : "solo";
+    const rank = (ctx.match.rank ??= {});
+    const o = rank[queue];
+    // 기다리는 시간이 지났으면(이미 시작) 새 방
+    if (!o || now - o.createdAt > RANK.waitMs - 2000 || o.count >= RANK_SEATS[queue] || o.code === body.exclude) rank[queue] = { code: roomCode(), count: 0, createdAt: now };
+    rank[queue]!.count++;
+    return json({ ok: true, code: rank[queue]!.code, mode: "quick" });
   }
   if (action === "create") return json({ ok: true, code: roomCode(), mode: "private" });
   if (action === "cards") {

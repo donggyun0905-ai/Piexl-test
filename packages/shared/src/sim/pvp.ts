@@ -31,8 +31,8 @@ export function pwSeatCount(mode: PwMode): number {
   return def.ffa ? def.foes + 1 : (def.allies + 1) * 2;
 }
 
-/** 판 만들기: 사람은 앞 자리부터 (팀 대결은 우리 편이 다 차면 상대 편으로), 나머지는 AI */
-export function createPvp(seed: number, mode: PwMode, humans: readonly PwHuman[]): RunState {
+/** 판 만들기: 사람은 앞 자리부터 (팀 대결은 우리 편이 다 차면 상대 편으로), 나머지는 AI · null 자리도 AI (랭크전은 사람을 두 편에 나눔) */
+export function createPvp(seed: number, mode: PwMode, humans: readonly (PwHuman | null)[]): RunState {
   const def = PW_MODE[mode];
   const arena = PW_ARENAS[def.arena];
   const n = pwSeatCount(mode);
@@ -50,7 +50,7 @@ export function createPvp(seed: number, mode: PwMode, humans: readonly PwHuman[]
     const team = def.ffa ? 100 + i : i < size ? 0 : 1;
     // 토너먼트는 편마다 첫 사람만 나옴
     const on = mode !== "tourney" || i % size === 0;
-    return { team, human: i < humans.length, on, kills: 0, deaths: 0, lv: 1, stun: 0, slow: 0, root: 0, side: i % 2 ? 1 : -1, sideT: 60, stuck: 0, goalX: 0, goalY: 0, dashCd: 0 };
+    return { team, human: !!humans[i], on, kills: 0, deaths: 0, lv: 1, stun: 0, slow: 0, root: 0, side: i % 2 ? 1 : -1, sideT: 60, stuck: 0, goalX: 0, goalY: 0, dashCd: 0 };
   });
   s.pvp = { mode, arena: def.arena, seats, proxies: [] };
   applyRoom(s);

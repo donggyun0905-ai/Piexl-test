@@ -1,0 +1,110 @@
+/* 패왕전 랭크전 (event/RankPanel · RankResult · RankEmblem): 내 티어 카드 · 순위표 · 결과 점수 변화 */
+.rank-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 4px 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, #221c34, #16121f);
+}
+.rank-panel h3 {
+  margin: 0;
+}
+.rank-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+}
+.rank-card {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  text-align: left;
+  border: 2px solid var(--line);
+}
+.rank-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.rank-card-text b {
+  font-size: 18px;
+}
+.rank-card.gold,
+.rank-card.crystal,
+.rank-card.star,
+.rank-card.overlord {
+  box-shadow: 0 0 12px rgb(255 220 120 / 0.25);
+}
+.rank-card.clay b { color: #c89a6a; }
+.rank-card.stone b { color: #c4c4cc; }
+.rank-card.bronze b { color: #f0b070; }
+.rank-card.silver b { color: #e2e8f4; }
+.rank-card.gold b { color: #ffd860; }
+.rank-card.crystal b { color: #8ae8f4; }
+.rank-card.star b { color: #b8acff; }
+.rank-card.overlord b { color: #ff7a6a; }
+.rank-emblem {
+  flex: none;
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.5));
+}
+.rank-emblem.overlord {
+  animation: rank-glow 1.6s ease-in-out infinite alternate;
+}
+@keyframes rank-glow {
+  from { filter: drop-shadow(0 0 2px #ff8a3a); }
+  to { filter: drop-shadow(0 0 10px #ffd860); }
+}
+.rank-board {
+  width: min(560px, 94vw);
+  max-height: 86vh;
+  overflow-y: auto;
+}
+.rank-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.rank-tabs .on {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.rank-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.rank-rows li {
+  display: grid;
+  grid-template-columns: 28px 34px 1fr auto;
+  grid-template-areas: "no emb name pts" "no emb name rec";
+  align-items: center;
+  gap: 0 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--line);
+}
+.rank-no { grid-area: no; text-align: right; color: var(--muted); }
+.rank-rows .rank-emblem { grid-area: emb; }
+.rank-name { grid-area: name; display: flex; flex-direction: column; min-width: 0; }
+.rank-name b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rank-pts { grid-area: pts; text-align: right; }
+.rank-rec { grid-area: rec; text-align: right; color: var(--muted); }
+.rank-outcome {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin: 6px 0;
+}
+.rank-outcome span {
+  display: flex;
+  flex-direction: column;
+}
+.rank-outcome .up { color: #6ae86a; font-style: normal; }
+.rank-outcome .down { color: #ff6a6a; font-style: normal; }
+.rank-finding {
+  align-items: center;
+  text-align: center;
+}

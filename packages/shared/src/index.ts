@@ -13,6 +13,7 @@ export * from "./achievements";
 export * from "./daily";
 export * from "./names";
 export * from "./battle";
+export * from "./rank";
 export * from "./player";
 export * from "./raid";
 export * from "./balance";

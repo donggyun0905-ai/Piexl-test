@@ -1,5 +1,5 @@
 // 협동: 입장(빠른 매칭 · 방 만들기 · 코드) → 대기실(배틀 대기실을 같이 씀, 방장과 직접 연결) → 게임
-import { CHARACTER_IDS, type CharacterId, type RoomView } from "@pixel-rogue/shared";
+import { RANK_MODE, type CharacterId, type RankChange, type RankQueue, type RoomView } from "@pixel-rogue/shared";
 import { useEffect, useRef, useState } from "react";
 import { apiPost } from "../api";
 import { BattleEntry } from "../battle/BattleEntry";
@@ -9,7 +9,10 @@ import type { Lang, TextKey } from "../i18n";
 import { loadNickname } from "../player";
 import { loadAchievements } from "../records";
 import { loadText, saveText } from "../storage";
+import { RankFinding } from "../event/RankResult";
 import { CoopGame } from "./CoopGame";
+import { ERRORS, loadCharacter, type CoopWire } from "./coopWire";
+export type { CoopWire } from "./coopWire";
 import { PwRoomPanel, usePwRoom } from "../event/PwRoom";
 import { CoopNameAsk } from "./CoopNameAsk";
 import type { CoopMsg } from "./lockstep";
@@ -22,37 +25,13 @@ interface Props {
   /** 초대 링크로 들어온 방 코드 (바로 들어감) */
   initialCode?: string;
   pw?: boolean; // 패왕전 같이 하기로 들어옴 (방장이 대결을 고름)
+  /** 패왕전 랭크전 (빠른 매칭으로 바로 들어가고, 대결은 정해져 있음) · 끝나고 다시 찾기 */
+  rank?: RankQueue;
+  onAgain?: () => void;
   onExit: () => void;
 }
 
-const ERRORS: Record<string, TextKey> = {
-  full: "battleFull",
-  started: "battleStarted",
-  disconnected: "battleDisconnected",
-  offline: "errOffline",
-  wrong: "coopWrongRoom",
-};
-
-function loadCharacter(): CharacterId {
-  const saved = loadText("coopCharacter") as CharacterId;
-  return CHARACTER_IDS.includes(saved) ? saved : "warden";
-}
-
-/** 직접 연결에서 받은 메시지를 게임 쪽으로 넘기는 곳 */
-export interface CoopWire {
-  net: PeerNet | null;
-  /** 손님이 보낸 해금 목록 (방장이 판을 만들 때 씀) */
-  unlocks: Map<string, string[]>;
-  onMessage: (pid: string, msg: CoopMsg) => void;
-  /** 게임 화면이 뜨기 전에 온 메시지 (게임 화면이 뜨면 차례로 넘김) */
-  pending: { pid: string; msg: CoopMsg }[];
-  onOpen: (pid: string) => void;
-  onClose: (pid: string) => void;
-  onPw?: (pid: string, msg: CoopMsg) => void; // 패왕전 같이 하기: 대기실 메시지 · 연결됨 (event/PwRoom)
-  onPwOpen?: (pid: string) => void;
-}
-
-export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false, onExit }: Props) {
+export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false, rank, onAgain, onExit }: Props) {
   const [characterId, setCharacterId] = useState<CharacterId>(loadCharacter);
   const [room, setRoom] = useState<RoomView | null>(null);
   const [you, setYou] = useState("");
@@ -63,6 +42,8 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
   const [now, setNow] = useState(() => Date.now());
   const [conn, setConn] = useState<BattleConnection | null>(null);
   const [linked, setLinked] = useState<ReadonlySet<string>>(new Set());
+  /** 랭크전 점수 변화 (null = 아직 · 빈 목록 = 반영 안 됨) */
+  const [rankChanges, setRankChanges] = useState<RankChange[] | null>(null);
   // 초대 링크로 왔는데 저장된 닉네임이 없으면 먼저 닉네임부터
   const [askName, setAskName] = useState(() => !!initialCode && !loadText("nickname"));
   const wire = useRef<CoopWire>({
@@ -114,15 +95,17 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
           setError(t(ERRORS[e] ?? "errUnknown"));
         },
         onSignal: (from, data) => void wire.current.net?.onSignal(from, data),
+        onRank: setRankChanges,
       },
       "coop",
+      rank,
     );
     setConn(next);
   };
 
   const quick = async (exclude?: string) => {
     setBusy(true);
-    const res = await apiPost<{ code: string }>("/api/match/quick", { exclude, kind: "coop" });
+    const res = rank ? await apiPost<{ code: string }>("/api/match/rank", { exclude, kind: rank }) : await apiPost<{ code: string }>("/api/match/quick", { exclude, kind: "coop" });
     if (res.ok && res.data) connect(res.data.code, "quick");
     else {
       setBusy(false);
@@ -147,7 +130,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
 
   const hostPid = room?.hostPid ?? "";
   const isHost = !!you && hostPid === you;
-  const pw = usePwRoom(wire, pwStart, isHost, () => (isHost ? (room?.players.map((p) => p.pid).filter((p) => p !== you) ?? []) : [hostPid]));
+  const pw = usePwRoom(wire, rank ? RANK_MODE[rank] : pwStart, isHost, () => (isHost ? (room?.players.map((p) => p.pid).filter((p) => p !== you) ?? []) : [hostPid]));
 
   // 직접 연결: 방장이 바뀌면 새로 (손님은 방장하고만 연결)
   useEffect(() => {
@@ -202,6 +185,12 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHost, players, you]);
 
+  // 랭크전: 들어오자마자 빠른 매칭
+  useEffect(() => {
+    if (rank) void quick();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // 초대 링크로 왔으면 그 방에 바로
   const invitedRef = useRef(false);
   useEffect(() => {
@@ -245,6 +234,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
           onExit();
         }}
         onBackRoom={() => conn.send({ t: "lobby" })}
+        rank={rank ? { changes: rankChanges, report: (winner) => conn.send({ t: "rankres", winner }), again: () => (leave(), onAgain?.()) } : undefined}
       />
     );
   }
@@ -268,7 +258,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
         }}
         onStart={() => conn?.send({ t: "start" })}
         onChat={(text) => conn?.send({ t: "chat", text })}
-        onLeave={leave}
+        onLeave={rank ? onExit : leave}
         badge={(pid) => {
           // 방장과 나 사이의 직접 연결 상태 (방장 화면에서는 손님마다)
           const peer = isHost ? pid : pid === hostPid ? pid : "";
@@ -279,6 +269,8 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
       </>
     );
   }
+
+  if (rank) return <RankFinding queue={rank} error={error} t={t} onBack={onExit} />;
 
   if (askName) return <CoopNameAsk lang={lang} setLang={setLang} t={t} onDone={() => setAskName(false)} onBack={onExit} />;
 

@@ -1,5 +1,6 @@
 // 패왕전 결과 창: 승패 · 받은 칩 · 처치/데스·레벨·순위 · 점수판 · 다시/나가기 (혼자·같이 하기 같이 씀)
 import { pvpResult, type RunState } from "@pixel-rogue/shared";
+import type { ReactNode } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { PwBoard } from "./PwBoard";
 
@@ -13,9 +14,13 @@ interface Props {
   onRetry?: () => void;
   /** 관전자: 승패·보상 없이 점수판만 */
   watching?: boolean;
+  /** 승패 아래에 덧붙임 (랭크전 점수 변화) */
+  extra?: ReactNode;
+  /** 다시 하기 버튼 글자 (없으면 '다시') */
+  retryLabel?: string;
 }
 
-export function PwResult({ run, me, names, lang, t, onExit, onRetry, watching = false }: Props) {
+export function PwResult({ run, me, names, lang, t, onExit, onRetry, watching = false, extra, retryLabel }: Props) {
   const r = pvpResult(run, me);
   const mode = run.pvp!.mode;
   return (
@@ -27,6 +32,7 @@ export function PwResult({ run, me, names, lang, t, onExit, onRetry, watching = 
           {t("pwKills").replace("{n}", String(r.kills))} · {r.deaths}D{mode === "gungame" && ` · ${t("pwLevel").replace("{lv}", String(r.lv))}`}
           {mode === "brawl" && r.place > 0 && ` · ${t("pwPlace").replace("{n}", String(r.place))}`}
         </p>}
+        {extra}
         <PwBoard run={run} me={me} names={names} lang={lang} t={t} />
         <div className="modal-actions">
           <button type="button" onClick={onExit}>
@@ -34,7 +40,7 @@ export function PwResult({ run, me, names, lang, t, onExit, onRetry, watching = 
           </button>
           {onRetry && (
             <button type="button" onClick={onRetry}>
-              {t("pwAgain")}
+              {retryLabel ?? t("pwAgain")}
             </button>
           )}
         </div>

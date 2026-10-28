@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.170",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "패왕전 랭크전: 1대1 랭크·3대3 랭크 (점수 따로) · 빠른 매칭으로 모르는 사람과 대결 (사람이 모자라면 잠시 뒤 AI가 채움, 이때 점수 변화는 작게)",
+        "티어: 흙 · 돌 · 청동 · 은 · 금 · 수정 (각 III → II → I, 100점마다) → 성좌 → 패왕(성좌 중 순위표 10위 안) · 티어마다 다른 로고",
+        "패왕전 첫 화면에 내 티어 카드(점수 · 승패 · 승률 · 순위)와 순위표 · 끝나면 점수 변화와 새 티어 · 모두의 화면 결과가 같아야 점수에 반영, 중간에 나가면 패배",
+      ],
+      en: [
+        "Champion Clash Ranked: 1v1 and 3v3 ranked (separate points) · quick matching against strangers (AI fills in after a short wait, with smaller point changes)",
+        "Tiers: Clay · Stone · Bronze · Silver · Gold · Crystal (III → II → I, every 100 points) → Constellation → Overlord (top 10 of Constellation) · each tier has its own emblem",
+        "Your tier cards (points, W/L, win rate, place) and leaderboards on the Champion Clash screen · point change and new tier after each game · counts only when everyone's screen agrees; leaving counts as a loss",
+      ],
+      ja: [
+        "覇王戦ランク戦: 1対1ランク・3対3ランク（スコア別）· クイックマッチで知らない人と対戦（人数が足りなければ少し待ってAIが入り、その場合の変動は小さめ）",
+        "ティア: 土 · 石 · 青銅 · 銀 · 金 · 水晶（各III → II → I、100点ごと）→ 星座 → 覇王（星座のうちランキング10位以内）· ティアごとに違うロゴ",
+        "覇王戦の最初の画面に自分のティアカード（スコア・勝敗・勝率・順位）とランキング · 終了後にスコア変動と新ティア · 全員の画面の結果が一致したときだけ反映、途中退出は敗北",
+      ],
+    },
+  },
+  {
     version: "0.48.169",
     date: "2026-10-28",
     items: {

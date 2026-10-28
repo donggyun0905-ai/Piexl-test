@@ -95,7 +95,7 @@ export default {
       const seconds = url.searchParams.has("v") ? VERSION_CACHE_SECONDS : BOARD_CACHE_SECONDS;
       return withHeaders(await cachedBoard(request, env, seconds), cors);
     }
-    if ((url.pathname === "/api/daily/board" || url.pathname === "/api/raid/board" || url.pathname === "/api/arena/board") && request.method === "GET") {
+    if (["/api/daily/board", "/api/raid/board", "/api/arena/board", "/api/rank/board"].includes(url.pathname) && request.method === "GET") {
       return withHeaders(await cachedBoard(request, env), cors);
     }
     // 배틀 방 웹소켓: /battle/<코드>?mode=quick|private
@@ -106,6 +106,7 @@ export default {
         return json({ ok: false, error: "origin" }, 403);
       }
       const stub = env.BATTLE.get(env.BATTLE.idFromName(battle[1]!), { locationHint: "apac" });
+      // 랭크전 방은 끝나면 Hub에 점수를 반영 (BattleRoom이 hub를 부름)
       return stub.fetch(request);
     }
     // 로비 카드·타일 게임 방 웹소켓: /cards/<코드>?game=blackjack|tiles|joker&mode=quick|private
