@@ -7,7 +7,7 @@ import { damageEnemy } from "./combat";
 import { recalcStats } from "./items";
 import { seatNo } from "./party";
 import { castSkill, skillDef, stepCast } from "./pwSkill";
-import { castFx, PW_FX_STYLES } from "./pwSkillHit";
+import { castFx, PW_FX_STYLES, skillPow } from "./pwSkillHit";
 import type { RunState } from "./types";
 import { addEffect, keepInRoom, roomGrid } from "./util";
 
@@ -121,7 +121,7 @@ function minionsStep(s: RunState): void {
     }
     if (--m.cd > 0 || d > sm.range + best.r) continue;
     m.cd = sm.every;
-    damageEnemy(s, best, PW.skillDmg * sm.dmg, (best.x - m.x) / (d || 1), (best.y - m.y) / (d || 1), false);
+    damageEnemy(s, best, skillPow(s.player) * sm.dmg, (best.x - m.x) / (d || 1), (best.y - m.y) / (d || 1), false);
     m.shot = { x: best.x, y: best.y, at: s.tick };
   }
   pv.mins = pv.mins.filter((m) => m.t > 0);

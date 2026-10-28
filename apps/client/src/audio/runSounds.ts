@@ -2,6 +2,7 @@
 import { ENEMIES, type RunState } from "@pixel-rogue/shared";
 import { getSettings } from "../settings";
 import { wornLimited } from "../game/limited/limited";
+import { skillSounds } from "./sfxSkills";
 import { play, setMusicBoss, startMusic, stopMusic, type Sfx } from "./sound";
 import { setTigerMusic } from "./tigerSound";
 import { setSummerMusic } from "./summerSound";
@@ -199,6 +200,7 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
       if (now.parried > seen.parried) fx.push("parry");
       // 특수용병 보호막 성공: 1콤보 뒤 팅 · 2콤보 뒤 탕 · 3콤보(와 마무리) 뒤 펑
       if (now.guards > seen.guards) fx.push((["guard3", "guard1", "guard2", "guard3"] as const)[run.player.mercGuardStep ?? 0]!);
+      skillSounds(run, fx, onShake);
       if (now.floor !== seen.floor) {
         fx.push("stairs");
         startMusic(now.floor, false);

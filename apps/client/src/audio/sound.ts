@@ -2,6 +2,7 @@
 import { getSettings } from "../settings";
 import { ASCALON_SOUNDS } from "./sfxAscalon";
 import { SECRET_SOUNDS } from "./sfxSecret";
+import { SKILL_SOUNDS, type SkillSfx } from "./sfxSkills";
 
 export type Sfx =
   | "swing"
@@ -43,7 +44,8 @@ export type Sfx =
   | "twang"
   | "dice"
   | "zap"
-  | "descend";
+  | "descend"
+  | SkillSfx;
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;
@@ -142,6 +144,7 @@ const SOUNDS: Record<Sfx, () => void> = {
   crit: critSound,
   ...ASCALON_SOUNDS,
   ...SECRET_SOUNDS,
+  ...SKILL_SOUNDS,
   blink: () => {
     tone({ type: "sine", from: 900, to: 120, dur: 0.12, vol: 0.12 });
     noise(0.1, 0.2, 1800);

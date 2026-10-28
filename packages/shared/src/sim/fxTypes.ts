@@ -53,6 +53,8 @@ export interface EffectState {
   /** 패왕전 스킬 그림(pwFx·pwWarn): 모양 번호(PW_FX_STYLES) · 부채꼴 반각 */
   style?: number;
   arc?: number;
+  /** 패왕전 궁극기 그림 (소리·이름 알림, 쓴 사람은 seat) */
+  ult?: boolean;
   /** 협동: 만든 사람 자리 (그 사람 둘레에 그림) */
   seat?: number;
 }

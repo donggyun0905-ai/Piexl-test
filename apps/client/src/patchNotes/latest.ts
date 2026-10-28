@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.182",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "패왕전 캐릭터 42명 밸런스: AI끼리 1대1을 수천 판 돌려 승률이 모두 43~56% 안에 들도록 체력·공격력 보정을 다시 맞춤 (스킬 피해도 보정을 따라감)",
+        "스킬 효과음: 터짐·운석·번개·화살비·빔·베기·돌진·순간이동·버프·회복·소환·장판마다 소리, 곧 터지는 예고는 짧은 삐",
+        "궁극기를 쓰면 위쪽 가운데에 '누가 · 궁극기 이름!'이 뜨고 북과 금관 소리가 남 · 가까우면 화면이 흔들림",
+      ],
+      en: [
+        "Champion Clash balance for all 42 characters: thousands of AI 1v1s were run and HP/attack tuning reset so every win rate falls between 43% and 56% (skill damage now follows the tuning too)",
+        "Skill sounds: bursts, meteors, lightning, arrow rain, beams, slashes, dashes, blinks, buffs, heals, summons and fields each have their own sound, and incoming blasts give a short beep",
+        "Casting an ultimate shows 'Who · Ultimate name!' at the top center with a drum and brass hit · the screen shakes if you are close",
+      ],
+      ja: [
+        "覇王戦キャラクター42人のバランス: AI同士の1対1を数千戦回し、勝率がすべて43~56%に収まるよう体力・攻撃力の補正を調整 (スキルダメージも補正に従う)",
+        "スキル効果音: 爆発・隕石・雷・矢の雨・ビーム・斬撃・突進・瞬間移動・バフ・回復・召喚・フィールドごとに音、もうすぐ爆発する予告は短いピッ",
+        "奥義を使うと上中央に「誰 · 奥義名!」が表示され太鼓と金管の音 · 近いと画面が揺れる",
+      ],
+    },
+  },
+  {
     version: "0.48.181",
     date: "2026-10-28",
     items: {

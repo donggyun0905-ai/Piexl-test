@@ -108,3 +108,51 @@
   justify-content: center;
   gap: 8px;
 }
+/* 궁극기 외침: 위쪽 가운데에 누가 무엇을 썼는지 */
+.pw-ult-calls {
+  position: fixed;
+  top: 92px;
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+.pw-ult-calls li {
+  padding: 3px 12px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  background: rgb(10 8 16 / 0.8);
+  text-shadow: 0 0 6px currentColor;
+  animation: pw-ult-in 0.35s ease-out;
+}
+.pw-ult-calls b {
+  color: #fff;
+  font-weight: 600;
+  text-shadow: none;
+}
+.pw-ult-calls .ours {
+  color: #8cc8ff;
+}
+.pw-ult-calls .theirs {
+  color: #ff8a8a;
+}
+.pw-ult-calls .me {
+  color: #ffd860;
+}
+@keyframes pw-ult-in {
+  from {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
