@@ -227,6 +227,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       tagName: (kind) => SPECIAL_NAMES[kind][lang],
       oniUp: (k) => t(k === "hp" ? "oniUpHp" : k === "regen" ? "oniUpRegen" : "oniUpReach"),
       umbraLine: (i) => t(UMBRA_LINES[i] ?? "umbraSay0"),
+      sageText: t("sageMaxStaff"),
       bossName: (k) => t(k === "dragon" ? "bossDragon" : k === "godeater" ? "bossGodEater" : "bossPrimeval"),
       hidePlayer: tiger ? () => resting(tiger) : undefined,
       under: tiger ? (c, snap) => under(c, tiger, run, acc / TICK_MS, snap, run.tick) : undefined,

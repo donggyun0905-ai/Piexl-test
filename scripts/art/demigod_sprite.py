@@ -117,8 +117,10 @@ def head(c, f):
         c.line(bx + 0.8, 6, bx + 0.2, 1 - h, GOLD_L)
         c.px(bx - 1, 6, GOLD_D); c.px(bx - 3, -1 - h, GOLD_D)
 
-def body(f):
+def body(f, deco=None, back=None):
+    """deco(c, f): 위에 덧그림 · back(c, f): 몸 뒤에 먼저 그림 (제천대성이 같이 씀)"""
     c = Cell(S)
+    if back: back(c, f)
     legs(c, 0 if f in (0, 2, 3) else 1)
     # 뒤쪽 팔 (왼팔)
     if f == 3:
@@ -142,11 +144,13 @@ def body(f):
         wraps(c, 46 + sw, 36, 46 + sw, 40); fist(c, 46 + sw, 43, 1.15)
     c.line(44, 27, 46, 32, RED)
     head(c, f)
+    if deco: deco(c, f)
     c.outline(EDGE)
     return c
 
-img = Image.new("RGBA", (S * 4, S), (0, 0, 0, 0))
-for k in range(4):
-    for (x, y), col in body(k).p.items(): img.putpixel((k * S + x, y), col)
-img.save(os.path.join(OUT, "demigod.png"), optimize=True)
-print("demigod ok")
+if __name__ == "__main__":
+    img = Image.new("RGBA", (S * 4, S), (0, 0, 0, 0))
+    for k in range(4):
+        for (x, y), col in body(k).p.items(): img.putpixel((k * S + x, y), col)
+    img.save(os.path.join(OUT, "demigod.png"), optimize=True)
+    print("demigod ok")

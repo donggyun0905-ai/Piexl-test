@@ -44,6 +44,8 @@ export interface BossEnemyState {
   gUlt?: number;
   gDone?: number;
   gDodge?: number;
+  /** 제천대성 (sim/bossSage) */
+  sage?: SageState;
   /** 검은 잔영이 되살린 검은 짐승 (필살기 없음 · 공격 주기가 더 빠름) */
   dark?: boolean;
   /** 흰 보호막: 체력보다 먼저 깎임 (거대 전갈) */
@@ -51,6 +53,27 @@ export interface BossEnemyState {
   /** 검은 잔영: 지금 하는 말 (0 처음 · 1~3 짐승을 하나 잡을 때마다) · 말을 시작한 틱 */
   say?: number;
   sayAt?: number;
+}
+
+/** 제천대성: 근두운 자리·다음 공격까지·공격 수·하는 중인 공격(이름·시작 틱·방향·자리) · 몸 쪽 하는 중인 공격 · 여의봉 벽 [x0, y0, x1, y1, 끝 틱] · 내려선 뒤(강해짐) · 지난 공격 번호 */
+export interface SageState {
+  cx: number;
+  cy: number;
+  ct: number;
+  cn: number;
+  cAct?: string;
+  cAt?: number;
+  cDir?: [number, number];
+  bAct?: string;
+  bAt?: number;
+  bX?: number;
+  bY?: number;
+  walls: number[][];
+  foot?: boolean;
+  lastB?: number;
+  lastC?: number;
+  /** 즉사기를 마지막으로 쓴 공격 수 */
+  maxN?: number;
 }
 
 export interface BossPlayerState {
@@ -104,7 +127,7 @@ export interface ArenaRunState {
 
 export interface BossShotState {
   /** 그리기용 탄 모양 */
-  look?: "arrow" | "note" | "spear" | "seed" | "soul" | "feather" | "light" | "fire" | "wave" | "orbRuin" | "orbChaos" | "bat" | "net" | "rock" | "bigwave" | "larrow" | "darrow" | "reaper" | "ember" | "rspear" | "fspear" | "doom" | "kifist";
+  look?: "arrow" | "note" | "spear" | "seed" | "soul" | "feather" | "light" | "fire" | "wave" | "orbRuin" | "orbChaos" | "bat" | "net" | "rock" | "bigwave" | "larrow" | "darrow" | "reaper" | "ember" | "rspear" | "fspear" | "doom" | "kifist" | "staff" | "bolt";
   /** 세이렌 음표: 플레이어에 맞아도 사라지지 않고, 맞으면 끌려감. 세이렌이 쓰러지면 사라짐 */
   lure?: boolean;
   /** 플레이어에 맞아도 사라지지 않음 (갓이터의 거대한 구슬) · 이 적이 쓰러지면 사라짐 */

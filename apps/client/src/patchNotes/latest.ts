@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.164",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "시즌 2 마지막 라스트 보스 '제천대성' 미리 공개 (6층 클리어 뒤 도전 · 연습장, 세레스티아 맵): 근두운을 타고 여의봉을 든 반신 · 몸과 근두운이 따로 공격하는 2대1 · 공격 30가지 중 무작위 (변칙성이 핵심)",
+        "몸 갈래 20가지 — 꼬리·주먹 10 (세 번 지르기 · 꼬리 한 바퀴·채찍 · 뛰어올라 내려찍기 · 장풍 · 여의봉으로 뒤를 막고 꼬리로 붙잡아 주먹 · 주먹 난타 · 분신 · 둘러싸기 · 돌진 올려치기) · 여의봉 10 (찌르기 · 한 바퀴 · 내려찍기 · 세 갈래 · 쏟아지는 여의봉 · 던지기 · X자 · 땅 울림 · 맵 전체 휘두르기 · 즉사기)",
+        "맵 전체 휘두르기: 맵이 금빛으로 세 번 깜박인 다음 박자에 대시해야 피함 · \"제천대성이 여의봉을 크기를 최대한 늘립니다!\" 문구가 뜨면 즉사기 — 제천대성 몸 가까이(점선 원 안)에 붙어야 삶",
+        "근두운 갈래 10가지 — 따라붙는 번개 · 둘레 번개 · 가로지르는 돌진 · 방 전체 번개비 · 둘러싸는 번개 · 들이받기 · 번개 줄기 · 지그재그 돌진 · 떨어지는 번개 · 전기 구슬",
+        "체력 10%: 무적으로 근두운에서 내려와 체력 70%로 강해짐 (범위·피해 증가, 근두운은 따로 떠다니며 공격, 모든 공격이 터지기 직전 하얗게 깜박여 대시 시점을 알려 줌)",
+      ],
+      en: [
+        "Season 2's last final boss preview, the Great Sage Equal to Heaven (challenge after clearing floor 6 · Practice, Celestia map): a demigod riding his cloud with his staff · his body and his cloud attack separately, like 2 vs 1 · picks at random from 30 attacks (unpredictability is the point)",
+        "Body branch, 20 attacks — 10 tail and fist (triple jab · tail spin and lash · leaping slam · palm blast · staff wall behind you then tail grab and punch · fist barrage · clones · encircling tail · rushing uppercut) · 10 staff (thrust · spin · overhead slam · triple thrust · raining staves · thrown staff · X cross · ground quake · map-wide sweep · instant kill)",
+        "Map-wide sweep: the map blinks gold three times, dash on the next beat · When \"The Great Sage stretches his staff to its utmost size!\" appears it is an instant kill — stay right next to him (inside the dotted circle) to survive",
+        "Cloud branch, 10 attacks — homing bolts · bolts around you · crossing dash · room-wide lightning storm · encircling bolts · ramming · lightning beam · zigzag dash · falling lightning · electric orbs",
+        "At 10% health he dismounts while invincible and comes back with 70% health, stronger (bigger, harder hits; the cloud floats and attacks on its own; every attack blinks white right before it lands to cue your dash)",
+      ],
+      ja: [
+        "シーズン2最後のラストボス「斉天大聖」先行公開（6階クリア後の挑戦 · 練習場、セレスティアマップ）: 觔斗雲に乗り如意棒を持つ半神 · 体と觔斗雲が別々に攻撃する2対1 · 30種の攻撃からランダム（変則性が核心）",
+        "体の系統20種 — 尾・拳10（三連突き · 尾の一回転・鞭 · 跳び上がって叩きつけ · 掌風 · 如意棒で背後を塞ぎ尾で捕まえて拳 · 拳の連打 · 分身 · 囲い込み · 突進アッパー）· 如意棒10（突き · 一回転 · 振り下ろし · 三方向 · 降り注ぐ如意棒 · 投げ · X字 · 地鳴り · マップ全体の薙ぎ払い · 即死技）",
+        "マップ全体の薙ぎ払い: マップが金色に三回点滅した次の拍子にダッシュで回避 · 「斉天大聖が如意棒を最大まで伸ばします！」が出たら即死技 — 斉天大聖のすぐそば（点線の円の中）にいれば助かる",
+        "觔斗雲の系統10種 — 追ってくる雷 · 周りの雷 · 横切る突進 · 部屋全体の雷雨 · 囲む雷 · 体当たり · 雷の筋 · ジグザグ突進 · 降ってくる雷 · 電気の玉",
+        "体力10%で無敵になり觔斗雲から降り、体力70%で強化（範囲・ダメージ増加、觔斗雲は別に浮かんで攻撃、全攻撃が当たる直前に白く点滅してダッシュの合図）",
+      ],
+    },
+  },
+  {
     version: "0.48.163",
     date: "2026-10-28",
     items: {

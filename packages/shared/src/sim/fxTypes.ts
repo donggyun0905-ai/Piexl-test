@@ -78,6 +78,8 @@ export interface Hazard {
   still?: "black" | "red";
   /** 대시 중이어도 맞음 (거대 매 필살기) */
   noDodge?: boolean;
+  /** 터지기 직전 하얗게 깜박여 대시 시점을 알려 줌 (강해진 제천대성) */
+  cue?: boolean;
 }
 
 /** 잠시 뒤 터지는 폭발 (메아리 폭발) */

@@ -5,6 +5,8 @@ export const UMBRA_TEXT = {
   bossScorpion: { ko: "거대 전갈", en: "Colossal Scorpion", ja: "巨大サソリ" },
   bossRoc: { ko: "거대 매", en: "Colossal Hawk", ja: "巨大な鷹" },
   bossDemigod: { ko: "괴력난신", en: "Demigod of Wild Might", ja: "怪力乱神" },
+  bossSage: { ko: "제천대성", en: "Great Sage Equal to Heaven", ja: "斉天大聖" },
+  sageMaxStaff: { ko: "제천대성이 여의봉을 크기를 최대한 늘립니다!", en: "The Great Sage stretches his staff to its utmost size!", ja: "斉天大聖が如意棒を最大まで伸ばします！" },
   umbraSay0: { ko: "……어디 놀아 볼까.", en: "...Let us play.", ja: "……遊んでやろう。" },
   umbraSay1: { ko: "호오...", en: "Hoh...", ja: "ほう…" },
   umbraSay2: { ko: "제법이군...", en: "Not bad...", ja: "なかなかやるな…" },

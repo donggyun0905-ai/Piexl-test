@@ -8,6 +8,7 @@ const BOSSES: { kind: string; label: TextKey }[] = [
   { kind: "plight", label: "bossPrimeval" },
   { kind: "umbra", label: "bossUmbra" },
   { kind: "demigod", label: "bossDemigod" },
+  { kind: "sage", label: "bossSage" },
 ];
 
 export function LastBossChoice({ t, onChoose }: { t: (key: TextKey) => string; onChoose: (boss: LastBossKind) => void }) {

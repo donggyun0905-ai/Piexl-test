@@ -7,11 +7,11 @@ export type TdMinionKind = "slime" | "runner" | "bat" | "beetle" | "golem" | "sh
 /** 보스: 1·2층(1단계) 강철 거구·검은 기사·얍삽한 활잡이 · 3·4층(2단계) 무리 여왕·세이렌·켄타우로스·하드플랜트 · 5·6층(3단계) 공허의 눈·데스·검신·천사장 */
 export type BossKind = "hulk" | "knight" | "archer" | "brood" | "siren" | "centaur" | "plant" | "seer" | "reaper" | "swordgod" | "archangel" | LastBossKind;
 /** 라스트 보스 (6층을 깬 뒤 골라서 도전, 7층 큰 보스방) */
-export type LastBossKind = "dragon" | "godeater" | "plight" | "pdark" | "umbra" | "demigod";
+export type LastBossKind = "dragon" | "godeater" | "plight" | "pdark" | "umbra" | "demigod" | "sage";
 /** 고를 수 있는 라스트 보스 (태초의 빛을 고르면 태초의 어둠도 같이 나옴) */
 export const LAST_BOSSES: readonly LastBossKind[] = ["dragon", "godeater", "plight"];
 /** 시즌 2 라스트 보스 (미리 만든 것: 6층 도전·연습장에서만, 무한·영웅의 길·타워 디펜스·레이드에는 아직 안 나옴) */
-export const S2_LAST_BOSSES: readonly LastBossKind[] = ["umbra", "demigod"];
+export const S2_LAST_BOSSES: readonly LastBossKind[] = ["umbra", "demigod", "sage"];
 /** 검은 잔영이 차례로 부르는 거대한 짐승 셋 (sim/bossUmbra) */
 export type BeastKind = "sandworm" | "scorpion" | "roc";
 export const UMBRA_BEASTS: readonly BeastKind[] = ["sandworm", "scorpion", "roc"];
@@ -112,6 +112,8 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   umbra: { kind: "umbra", hp: 7000, radius: 12, speed: 0, contactDamage: 0, gold: 100, boss: true },
   /** 시즌 2 라스트 보스 괴력난신: 거인만 한 반신, 맨주먹으로 1대1 (sim/bossDemigod·demigodUlts) */
   demigod: { kind: "demigod", hp: 9000, radius: 13, speed: 1.05, contactDamage: 16, gold: 100, boss: true },
+  /** 시즌 2 마지막 라스트 보스 제천대성: 근두운을 탄 반신, 몸(꼬리·주먹·여의봉)과 근두운이 따로 공격 (sim/bossSage·sageBody·sageStaff·sageCloud) */
+  sage: { kind: "sage", hp: 9000, radius: 14, speed: 1.1, contactDamage: 16, gold: 100, boss: true },
   /** 데스웜: 땅속에서 예고 없이 다가와 갑자기 솟음 (sim/bossWorm) */
   sandworm: { kind: "sandworm", hp: 2000, radius: 39, speed: 1.1, contactDamage: 18, gold: 0, boss: true },
   /** 거대 전갈: 움직이는 표시로 땅속을 기어다니다 꼬리 찌르기(독) · 앞으로만 밀고 오는 돌진(집게에 붙잡힘). 셋 중 탱커: 체력이 많고 흰 보호막(UMBRA_WARD) */

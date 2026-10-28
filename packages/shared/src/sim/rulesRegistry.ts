@@ -11,6 +11,11 @@ import { BOSS_BLADES_RULES } from "./bossBlades";
 import { BOSS_CAGE_RULES } from "./bossCage";
 import { BOSS_DARK_RULES } from "./bossDark";
 import { BOSS_DEMIGOD_RULES } from "./bossDemigod";
+import { BOSS_SAGE_RULES } from "./bossSage";
+import { SAGE_BODY_RULES } from "./sageBody";
+import { SAGE_KIT_RULES } from "./sageKit";
+import { SAGE_STAFF_RULES } from "./sageStaff";
+import { SAGE_CLOUD_RULES } from "./sageCloud";
 import { DEMIGOD_ULTS_RULES } from "./demigodUlts";
 import { BOSS_DRAGON_RULES } from "./bossDragon";
 import { BOSS_GRIP_RULES } from "./bossGrip";
@@ -84,6 +89,11 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   BOSS_CAGE_RULES,
   BOSS_DARK_RULES,
   BOSS_DEMIGOD_RULES,
+  BOSS_SAGE_RULES,
+  SAGE_BODY_RULES,
+  SAGE_KIT_RULES,
+  SAGE_STAFF_RULES,
+  SAGE_CLOUD_RULES,
   DEMIGOD_ULTS_RULES,
   BOSS_DRAGON_RULES,
   BOSS_GRIP_RULES,

@@ -21,7 +21,7 @@ export function hitDamage(s: RunState): number {
 /** 궁극기를 쓰는 라스트 보스 (태초의 빛·어둠은 혼자 남은 쪽만, 불려 나온 보스 제외) */
 export function ultBoss(e: EnemyState): boolean {
   if (e.noGold) return false;
-  return e.kind === "dragon" || e.kind === "godeater" || e.kind === "sandworm" || e.kind === "scorpion" || e.kind === "roc" || e.kind === "demigod" || ((e.kind === "plight" || e.kind === "pdark") && e.step === 2);
+  return e.kind === "dragon" || e.kind === "godeater" || e.kind === "sandworm" || e.kind === "scorpion" || e.kind === "roc" || e.kind === "demigod" || e.kind === "sage" || ((e.kind === "plight" || e.kind === "pdark") && e.step === 2);
 }
 
 /** 궁극기 중이거나 곧 쓸 차례 (체력 10% 아래, 아직 안 씀): 기절·위압·얼음 시계에 멈추지 않음 */

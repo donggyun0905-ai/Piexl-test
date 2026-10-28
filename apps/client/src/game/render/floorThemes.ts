@@ -70,6 +70,8 @@ const THEMES: Record<string, FloorTheme> = {
   /** 검은 잔영: 사막 (모래 바닥·사암 벽·모래·뼈) */
   /** 괴력난신: 아르테의 태산 (바위 산길·이끼·금) */
   demigod: T("#3a3630", "#403b34", "#5a5248", "#7a7064", "#6a6258", "#8a8276", "#14110e", "#2a241e", [["crack", "#2a261f"], ["grass", "#5a7a3a"]], 0.3),
+  /** 제천대성: 고대인들의 옛 땅 세레스티아 (구름 위 금빛 신전 바닥·꽃잎·깃털) */
+  sage: T("#3a3848", "#423f52", "#6a5a3a", "#9a8250", "#7a6a4a", "#b8a070", "#141220", "#2a2638", [["petal", "#ffd860"], ["feather", "#f4f0ff"]], 0.26),
   umbra: T("#6a5234", "#735a39", "#8a6a40", "#b08a52", "#9a7646", "#c09a5e", "#2a1a0a", "#4a3018", [["sand", "#a8844c"], ["bone", "#d8ccb0"]], 0.3),
 };
 
@@ -86,9 +88,10 @@ export function themeFor(s: RunState): FloorTheme {
   const pa = s.pvp?.arena ?? s.pw?.arena;
   if (pa) return THEMES[PW_THEME[pa]]!;
   let boss: string | undefined;
-  if (s.lastBoss) boss = s.lastBoss === "pdark" ? "plight" : s.lastBoss;
   // 연습장에서 부른 시즌 2 라스트 보스도 그 맵
-  else if (s.enemies.some((e) => e.kind === "umbra" || e.kind === "demigod")) boss = s.enemies.find((e) => e.kind === "umbra" || e.kind === "demigod")!.kind;
+  const s2 = s.enemies.find((e) => e.kind === "umbra" || e.kind === "demigod" || e.kind === "sage")?.kind;
+  if (s.lastBoss) boss = s.lastBoss === "pdark" ? "plight" : s.lastBoss;
+  else if (s2) boss = s2;
   else if (s.arenaLv) boss = s.enemies.find((e) => ENEMIES[e.kind].boss)?.kind;
   else if (s.hero) boss = heroBosses(s)[0];
   else if (s.floor >= 1) boss = bossForFloor(s.floor, s.seed);

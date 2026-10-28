@@ -39,8 +39,8 @@ export function doomPlayer(s: RunState): void {
   p.doomTicks = R.DOOM_TICKS;
 }
 
-export function pinchPlayer(s: RunState, e: EnemyState): void {
-  s.player.pinchTicks = R.PINCH_TICKS;
+export function pinchPlayer(s: RunState, e: EnemyState, ticks = R.PINCH_TICKS): void {
+  s.player.pinchTicks = ticks;
   s.player.pinchBy = e.id;
 }
 
