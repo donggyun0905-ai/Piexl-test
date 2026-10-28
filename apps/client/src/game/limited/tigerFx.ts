@@ -5,7 +5,8 @@ import { ENEMIES, type RunState } from "@pixel-rogue/shared";
 import { ACCENT, FUR, GOLD, INK } from "./tigerArt";
 
 /** 여름 파도(summerFx)가 더 씀: drop 물방울 · bubble 거품 · wave 물결 자국 · foot 맨발 자국 · glint 햇빛 반짝임 */
-export type PartKind = "spark" | "dust" | "petal" | "paw" | "claw" | "ring" | "pillar" | "text" | "seal" | "drop" | "bubble" | "wave" | "foot" | "glint";
+/** theme: 이벤트 상점 테마 효과 조각 (모양은 shape, themeFx·themeDraw) */
+export type PartKind = "spark" | "dust" | "petal" | "paw" | "claw" | "ring" | "pillar" | "text" | "seal" | "drop" | "bubble" | "wave" | "foot" | "glint" | "theme";
 
 export interface Part {
   kind: PartKind;
@@ -24,6 +25,9 @@ export interface Part {
   /** 발톱 자국: 줄 수(1~3) · 좌우 뒤집기 */
   claws?: number;
   flip?: boolean;
+  /** 테마 조각 모양 · 바닥에 남는 자국인지 */
+  shape?: string;
+  ground?: boolean;
 }
 
 const MAX_PARTS = 420;

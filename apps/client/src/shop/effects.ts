@@ -3,10 +3,11 @@
 import { loadText, saveText } from "../storage";
 import { TEST_OPEN } from "../testFlags";
 import { spendEventCoins } from "../event/eventCoins";
+import { FX_THEMES, themeOf, type FxTheme, type FxThemeId } from "./fxThemes";
 
 export type FxSlot = "hit" | "idle" | "walk" | "dmg";
-/** 피해 숫자 모양 (damageNumbers.style) */
-export type DmgStyle = "tiger" | "summer" | "gold" | "neon";
+/** 피해 숫자 모양 (damageNumbers.style): 범·여름 · 황금·네온 · 테마 세트 (shop/fxThemes) */
+export type DmgStyle = "tiger" | "summer" | "gold" | "neon" | FxThemeId;
 
 export interface FxItem {
   id: string;
@@ -15,6 +16,8 @@ export interface FxItem {
   /** 도트 편집으로 고칠 수 있는 그림 (game/limited/tigerSprites) */
   sprites: readonly string[];
   dmg?: DmgStyle;
+  /** 테마 세트 효과 (game/limited/themeFx) */
+  theme?: FxThemeId;
 }
 
 export const FX_ITEMS: readonly FxItem[] = [
@@ -24,6 +27,13 @@ export const FX_ITEMS: readonly FxItem[] = [
   { id: "tigerDmg", slot: "dmg", price: 25, sprites: ["tiger:crit"], dmg: "tiger" },
   { id: "goldDmg", slot: "dmg", price: 15, sprites: [], dmg: "gold" },
   { id: "neonDmg", slot: "dmg", price: 15, sprites: [], dmg: "neon" },
+  // 테마 세트 10개: 타격 · 대기 · 걸음 (앞 8세트는 데미지 스킨도). 세트 가격은 타격 20 · 대기 18 · 걸음 12 · 숫자 15
+  ...FX_THEMES.flatMap((th): FxItem[] => [
+    { id: `${th.id}Hit`, slot: "hit", price: 20, sprites: [], theme: th.id },
+    { id: `${th.id}Idle`, slot: "idle", price: 18, sprites: [], theme: th.id },
+    { id: `${th.id}Walk`, slot: "walk", price: 12, sprites: [], theme: th.id },
+    ...(th.dmg ? [{ id: `${th.id}Dmg`, slot: "dmg" as const, price: 15, sprites: [], dmg: th.id, theme: th.id }] : []),
+  ]),
 ];
 export const FX_SLOTS: readonly FxSlot[] = ["hit", "idle", "walk", "dmg"];
 
@@ -67,15 +77,18 @@ export function equipFx(slot: FxSlot, id: string | null): void {
 
 /** 판 시작 때: 켜진 효과 (한정 스킨 범 풍류를 입었으면 전부 범) */
 /** limited: 입은 한정 스킨 테마 (범 풍류·여름 파도면 효과 전부) */
-export function activeFx(limited: "tiger" | "summer" | null): { hit: boolean; idle: boolean; walk: boolean; rest: boolean; dmg: DmgStyle | null } {
-  if (limited) return { hit: true, idle: true, walk: true, rest: true, dmg: limited };
+/** 범 효과는 hit·idle·walk (범 항목만), 테마 세트 효과는 themes (칸마다 다른 세트) */
+export function activeFx(limited: "tiger" | "summer" | null): { hit: boolean; idle: boolean; walk: boolean; rest: boolean; dmg: DmgStyle | null; themes: Partial<Record<"hit" | "idle" | "walk", FxTheme>> } {
+  if (limited) return { hit: true, idle: true, walk: true, rest: true, dmg: limited, themes: {} };
   const e = equippedFx();
   const own = ownedFx();
   const on = (slot: FxSlot) => {
     const id = e[slot];
     return id && own.includes(id) ? FX_ITEMS.find((x) => x.id === id) : undefined;
   };
-  return { hit: !!on("hit"), idle: !!on("idle"), walk: !!on("walk"), rest: false, dmg: on("dmg")?.dmg ?? null };
+  const tiger = (slot: FxSlot) => !!on(slot) && !on(slot)!.theme;
+  const themes = Object.fromEntries((["hit", "idle", "walk"] as const).flatMap((slot) => (on(slot)?.theme ? [[slot, themeOf(on(slot)!.theme)!]] : [])));
+  return { hit: tiger("hit"), idle: tiger("idle"), walk: tiger("walk"), rest: false, dmg: on("dmg")?.dmg ?? null, themes };
 }
 
 /** 도트 편집으로 고칠 수 있는 그림 (가진 효과의 그림) */

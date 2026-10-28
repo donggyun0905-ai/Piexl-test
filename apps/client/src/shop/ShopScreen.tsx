@@ -1,6 +1,6 @@
 // 상점: 위에 만능 쿠폰 수·이벤트 코인 수, 탭 다섯 (스킨 · 로비 꾸밈 · 뽑기 · 이벤트(이벤트 코인 효과) · 미션)
 import { useState } from "react";
-import type { TextKey } from "../i18n";
+import type { Lang, TextKey } from "../i18n";
 import { EventTab } from "./EventTab";
 import { GachaTab } from "./GachaTab";
 import { LobbyTab } from "./LobbyTab";
@@ -19,7 +19,7 @@ const TABS: { id: Tab; label: TextKey }[] = [
   { id: "missions", label: "shopMissions" },
 ];
 
-export function ShopScreen({ t, onBack }: { t: (k: TextKey) => string; onBack: () => void }) {
+export function ShopScreen({ lang, t, onBack }: { lang: Lang; t: (k: TextKey) => string; onBack: () => void }) {
   const [tab, setTab] = useState<Tab>("skins");
   const [money, setMoney] = useState(coupons);
   const [ecoins, setEcoins] = useState(eventCoins);
@@ -50,7 +50,7 @@ export function ShopScreen({ t, onBack }: { t: (k: TextKey) => string; onBack: (
       {tab === "skins" && <SkinTab t={t} onChange={refresh} />}
       {tab === "lobby" && <LobbyTab t={t} onChange={refresh} />}
       {tab === "gacha" && <GachaTab t={t} onChange={refresh} />}
-      {tab === "event" && <EventTab t={t} onChange={refresh} />}
+      {tab === "event" && <EventTab lang={lang} t={t} onChange={refresh} />}
       {tab === "missions" && <MissionTab t={t} onChange={refresh} />}
       <button type="button" className="secondary" onClick={onBack}>
         {t("back")}

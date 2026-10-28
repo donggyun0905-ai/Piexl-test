@@ -5,16 +5,25 @@ import { drawMap, GOLD, PAW } from "../game/limited/tigerArt";
 import { drawTigerNumber } from "../game/limited/tigerNumber";
 import { drawTigerSprite } from "../game/limited/tigerSprites";
 import type { FxItem } from "./effects";
+import { drawThemePreview } from "../game/limited/themeDraw";
+import { ThemeFx } from "../game/limited/themeFx";
+import { themeOf } from "./fxThemes";
 
 const W = 64;
 const H = 48;
 /** 확대 배율 (게임 픽셀 → 화면) */
 const K = 2;
 
-function frame(ctx: CanvasRenderingContext2D, item: FxItem, tick: number): void {
+function frame(ctx: CanvasRenderingContext2D, item: FxItem, tick: number, fx: ThemeFx | null): void {
   ctx.setTransform(K, 0, 0, K, 0, 0);
   ctx.clearRect(0, 0, W, H);
   ctx.imageSmoothingEnabled = false;
+  // 테마 세트: 효과 엔진을 그대로 돌려 보여 줌
+  if (fx && item.slot !== "dmg") {
+    fx.preview(item.slot, tick, W / 2, H / 2 - 4);
+    drawThemePreview(ctx, fx, item.slot === "idle" ? { x: W / 2, y: H / 2 + 8 } : undefined);
+    return;
+  }
   if (item.slot === "dmg") {
     const age = tick % 24;
     const crit = Math.floor(tick / 24) % 2 === 1;
@@ -49,9 +58,12 @@ export function FxPreview({ item }: { item: FxItem }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     let tick = 0;
+    const th = themeOf(item.theme);
+    const slot = item.slot === "dmg" ? null : item.slot;
+    const fx = th && slot ? new ThemeFx({ powerText: "", roar: () => {}, on: { hit: false, idle: false, walk: false, rest: false } }, { [slot]: th }) : null;
     const draw = () => {
       const ctx = ref.current?.getContext("2d");
-      if (ctx) frame(ctx, item, tick++);
+      if (ctx) frame(ctx, item, tick++, fx);
     };
     draw();
     const id = window.setInterval(draw, 60);

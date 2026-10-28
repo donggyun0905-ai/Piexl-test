@@ -17,6 +17,8 @@ import { DamageTracker } from "./damageNumbers";
 import { wornLimited } from "./limited/limited";
 import { drawTigerOver, drawTigerUnder, tigerResting } from "./limited/tigerDraw";
 import { TigerFx } from "./limited/tigerFx";
+import { drawThemeOver, drawThemeUnder } from "./limited/themeDraw";
+import { ThemeFx } from "./limited/themeFx";
 import { SummerFx } from "./limited/summerFx";
 import { drawSummerOver, drawSummerUnder, summerResting } from "./limited/summerDraw";
 import { splash } from "../audio/summerSound";
@@ -93,6 +95,9 @@ export function startGameLoop(o: LoopOptions): () => void {
   const fx = activeFx(wornLimited(run.player.characterId));
   const hooks = { powerText: t(summer ? "summerPower" : "tigerPower"), roar: fx.rest ? (summer ? splash : roar) : () => {}, on: fx };
   const tiger = fx.hit || fx.idle || fx.walk ? (summer ? new SummerFx(hooks) : new TigerFx(hooks)) : null;
+  // 이벤트 상점 테마 효과 (칸마다 다른 세트, 범 효과와 같이 씀)
+  const th = fx.themes;
+  const theme = th.hit || th.idle || th.walk ? new ThemeFx({ ...hooks, roar: () => {}, on: { hit: !!th.hit, idle: !!th.idle, walk: !!th.walk, rest: false } }, th) : null;
   const [under, over, resting] = summer ? [drawSummerUnder, drawSummerOver, summerResting] : [drawTigerUnder, drawTigerOver, tigerResting];
   damage.style = fx.dmg;
   const dummyLabels = [t("dummyAvg"), t("dummyDps"), t("dummyLast"), t("dummyTotal")];
@@ -201,6 +206,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       }
       damage.observe(run);
       tiger?.observe(run);
+      theme?.observe(run);
       if (o.practice && run.over) {
         run.over = false;
         run.player.hp = run.player.stats.maxHp;
@@ -230,9 +236,13 @@ export function startGameLoop(o: LoopOptions): () => void {
       sageText: t("sageMaxStaff"),
       bossName: (k) => t(k === "dragon" ? "bossDragon" : k === "godeater" ? "bossGodEater" : "bossPrimeval"),
       hidePlayer: tiger ? () => resting(tiger) : undefined,
-      under: tiger ? (c, snap) => under(c, tiger, run, acc / TICK_MS, snap, run.tick) : undefined,
+      under: tiger || theme ? (c, snap) => {
+        if (theme) drawThemeUnder(c, theme, run, acc / TICK_MS, snap);
+        if (tiger) under(c, tiger, run, acc / TICK_MS, snap, run.tick);
+      } : undefined,
       overlay: (c, snap) => {
         if (tiger) over(c, tiger, run, acc / TICK_MS, snap, run.tick);
+        if (theme) drawThemeOver(c, theme, run, acc / TICK_MS, snap);
         if (getSettings().showDamage) damage.draw(c, run.tick, snap);
         damage.drawDummy(c, run, dummyLabels, snap);
       },

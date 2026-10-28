@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.172",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "이벤트 상점 테마 효과 10세트: 벚꽃 · 뇌전 · 서리 · 화염 · 은하 · 사탕 · 8비트 · 그림자 · 리듬 · 숲 (세트마다 타격 · 대기 · 걸음, 앞 8세트는 데미지 스킨도 · 모두 38개)",
+        "칸마다 다른 세트를 섞어 낄 수 있고, 범 풍류 효과와도 같이 낄 수 있음 · 상점 카드에서 움직이는 미리 보기",
+      ],
+      en: [
+        "10 themed effect sets in the event shop: Sakura · Thunder · Frost · Inferno · Galaxy · Candy · 8-Bit · Shadow · Rhythm · Forest (hits, idle and steps each, plus damage skins for the first 8 · 38 in total)",
+        "Mix different sets per slot, even alongside the Tiger effects · animated previews on the shop cards",
+      ],
+      ja: [
+        "イベントショップのテーマエフェクト10セット: 桜・雷電・霜・火炎・銀河・キャンディ・8ビット・影・リズム・森（セットごとに打撃・待機・歩み、最初の8セットはダメージスキンも・全38個）",
+        "スロットごとに別セットを組み合わせ可能、虎の風流エフェクトとも併用可 · ショップのカードで動くプレビュー",
+      ],
+    },
+  },
+  {
     version: "0.48.171",
     date: "2026-10-28",
     items: {

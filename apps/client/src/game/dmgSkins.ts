@@ -1,5 +1,7 @@
-// 데미지 스킨 (이벤트 상점): 금빛 · 네온 피해 숫자. 범 발톱 숫자는 limited/tigerNumber
+// 데미지 스킨 (이벤트 상점): 금빛 · 네온 · 테마 세트 피해 숫자. 범 발톱 숫자는 limited/tigerNumber
 import type { DmgStyle } from "../shop/effects";
+import { themeOf } from "../shop/fxThemes";
+import { drawShape } from "./limited/themeShapes";
 
 /** 맞힘·치명타 숫자를 그 스킨으로 그림 (font·정렬은 부르는 쪽에서 맞춰 둠) */
 export function drawSkinNumber(ctx: CanvasRenderingContext2D, style: Exclude<DmgStyle, "tiger" | "summer">, text: string, x: number, y: number, age: number, crit: boolean): void {
@@ -8,7 +10,28 @@ export function drawSkinNumber(ctx: CanvasRenderingContext2D, style: Exclude<Dmg
   ctx.translate(x, y);
   ctx.scale(pop, pop);
   if (crit) ctx.font = "bold 8px monospace";
-  if (style === "gold") {
+  const th = themeOf(style)?.dmg;
+  if (th) {
+    // 테마 숫자: 두꺼운 테두리 · 글자색 · 치명타는 색이 바뀌고 옆에 테마 장식
+    ctx.strokeStyle = th.stroke;
+    ctx.lineWidth = 3;
+    ctx.strokeText(text, 0, 0);
+    ctx.fillStyle = crit ? th.critFill : th.fill;
+    ctx.fillText(text, 0, 0);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+    ctx.fillText(text, 0, -1);
+    ctx.fillStyle = crit ? th.critFill : th.fill;
+    ctx.fillText(text, 0, 0.4);
+    if (crit) {
+      const w = ctx.measureText(text).width / 2 + 5;
+      for (const side of [-1, 1]) {
+        ctx.save();
+        ctx.translate(side * w, -3);
+        drawShape(ctx, th.mark, 0.7, side * 0.4, th.critFill);
+        ctx.restore();
+      }
+    }
+  } else if (style === "gold") {
     ctx.strokeStyle = "#3a2400";
     ctx.lineWidth = 3;
     ctx.strokeText(text, 0, 0);

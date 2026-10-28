@@ -1,12 +1,13 @@
 // 상점 이벤트 탭: 이벤트 코인으로 효과 사기·장착 (타격 · 대기 · 걸음 · 피해 숫자), 산 효과 그림은 도트로 고치기
 import { useState } from "react";
-import type { TextKey } from "../i18n";
+import type { Lang, TextKey } from "../i18n";
 import { eventCoins } from "../event/eventCoins";
 import { buyFx, equipFx, equippedFx, FX_ITEMS, FX_SLOTS, ownedFx } from "./effects";
 import { FxPreview } from "./FxPreview";
+import { fxThemeDesc, fxThemeName } from "./fxText";
 import { EcoinIcon } from "../event/EcoinIcon";
 
-export function EventTab({ t, onChange }: { t: (k: TextKey) => string; onChange: () => void }) {
+export function EventTab({ lang, t, onChange }: { lang: Lang; t: (k: TextKey) => string; onChange: () => void }) {
   const [, redraw] = useState(0);
   const act = (fn: () => void) => {
     fn();
@@ -31,8 +32,8 @@ export function EventTab({ t, onChange }: { t: (k: TextKey) => string; onChange:
               return (
                 <div key={x.id} className={`skin-card${on ? " wearing" : ""}`}>
                   <FxPreview item={x} />
-                  <strong>{t(`shopFx_${x.id}` as TextKey)}</strong>
-                  <small>{t(`shopFxDesc_${x.id}` as TextKey)}</small>
+                  <strong>{x.theme ? fxThemeName(x.theme, slot, lang) : t(`shopFx_${x.id}` as TextKey)}</strong>
+                  <small>{x.theme ? fxThemeDesc(x.theme, slot, lang) : t(`shopFxDesc_${x.id}` as TextKey)}</small>
                   {!have ? (
                     <button type="button" className="primary" disabled={coins < x.price} title={coins < x.price ? t("shopNoEcoin") : undefined} onClick={() => act(() => buyFx(x.id))}>
                       <EcoinIcon /> {x.price}

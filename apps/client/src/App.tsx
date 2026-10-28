@@ -164,7 +164,7 @@ export function App() {
     const exit = () => setScreen({ name: "swarmMap", characterId: screen.characterId });
     return <SwarmGame key={screen.runKey} characterId={screen.characterId} map={screen.map} level={screen.level} lang={lang.lang} t={lang.t} onExit={exit} onRetry={retry} />;
   }
-  if (screen.name === "shop") return <ShopScreen t={lang.t} onBack={toTitle} />;
+  if (screen.name === "shop") return <ShopScreen lang={lang.lang} t={lang.t} onBack={toTitle} />;
   if (screen.name === "story") return <StoryScreen lang={lang.lang} t={lang.t} onBack={toTitle} />;
   if (screen.name === "tdMaps") return <TdScreen t={lang.t} onPick={(mapId) => setScreen({ name: "td", mapId, runKey: 0 })} onBack={toTitle} />;
   if (screen.name === "practice") {
