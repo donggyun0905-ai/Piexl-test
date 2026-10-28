@@ -90,8 +90,9 @@ export interface SilkEnemyState {
 export interface OriginPlayerState {
   counterTicks?: number;
 }
-/** 떠돌이 기습 패시브 탄: 처음 맞힌 적 최대 체력 × 이 값만큼 더 */
+/** 떠돌이 기습 탄: 1 = 특징 · 2 = 기습 패시브 (그리기용) · 패시브면 처음 맞힌 적 최대 체력 × hpCut만큼 더 */
 export interface OriginShotState {
+  ambush?: number;
   hpCut?: number;
 }
 

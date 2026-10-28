@@ -4,7 +4,7 @@
 import { ENEMIES } from "../content";
 import { PERKS } from "../perks";
 import { blastAt } from "./combat";
-import { hasPerk } from "./util";
+import { addEffect, hasPerk } from "./util";
 import type { EnemyState, PlayerState, RunState } from "./types";
 
 const R = {
@@ -22,17 +22,22 @@ export function readyAmbush(p: PlayerState): void {
   if (p.characterId === "drifter" || hasPerk(p, "ambush")) p.ambushTicks = hasPerk(p, "ambush") ? PERKS.ambush.ticks : R.ambushTicks;
 }
 
-/** 공격할 때: 기습·반격이 준비돼 있으면 쓰고 배율 · 체력 비례 몫 · 한 바퀴 베기 여부 */
-export function takeOrigin(p: PlayerState, melee: boolean): { mul: number; cut: number; spin: boolean; reach: number } {
+/** 공격할 때: 기습·반격이 준비돼 있으면 쓰고 배율 · 체력 비례 몫 · 한 바퀴 베기 여부 · 범위 배율 · 기습 탄 표시 (1 특징 · 2 패시브) */
+export function takeOrigin(s: RunState, melee: boolean): { mul: number; cut: number; spin: boolean; reach: number; amb: number } {
+  const p = s.player;
   let mul = 1;
   let cut = 0;
   let spin = false;
   let reach = 1;
+  let amb = 0;
   if (p.ambushTicks > 0) {
     const perk = hasPerk(p, "ambush");
     mul *= perk ? PERKS.ambush.damage : R.ambushMul;
     if (perk) cut = PERKS.ambush.hpCut;
     p.ambushTicks = 0;
+    amb = perk ? 2 : 1;
+    // 쏘는 순간 활 끝 섬광 (size = 1 특징 · 2 패시브)
+    if (!melee) addEffect(s, { kind: "ogShot", x: p.x + p.faceX * 8, y: p.y + p.faceY * 8, dirX: p.faceX, dirY: p.faceY, size: amb, maxTicks: 12 });
   }
   if (melee && (p.counterTicks ?? 0) > 0) {
     const perk = hasPerk(p, "counterGuard");
@@ -40,8 +45,15 @@ export function takeOrigin(p: PlayerState, melee: boolean): { mul: number; cut: 
     if (perk) reach = PERKS.counterGuard.reach;
     spin = true;
     p.counterTicks = 0;
+    // 반격 베기: 금빛 방패 충격파 (width 2 = 반격의 방패)
+    addEffect(s, { kind: "ogCounter", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: p.stats.range * reach, maxTicks: 18, width: perk ? 2 : 1 });
   }
-  return { mul, cut, spin, reach };
+  return { mul, cut, spin, reach, amb };
+}
+
+/** 기습 탄이 맞았을 때: 맞은 자리에 터짐 (그리기용) */
+export function ambushHitFx(s: RunState, kind: number, x: number, y: number, dx: number, dy: number): void {
+  addEffect(s, { kind: "ogHit", x, y, dirX: dx, dirY: dy, size: kind, maxTicks: 16 });
 }
 
 /** 맞았을 때: 파수꾼·반격의 방패는 반격 준비 · 반격의 방패는 주변 적을 밀어내며 공격력만큼 피해 */

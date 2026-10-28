@@ -51,6 +51,7 @@ import { drawTerraAuraB, drawTerraGroundB } from "./terra2b";
 import { drawTerraAuraC } from "./terra2c";
 import { drawGreatSpirit, drawSpiritKin } from "./spirits";
 import { drawHaloHud } from "./forgottenHalo";
+import { drawOriginAura } from "./origin";
 import { drawRunPet } from "./runPet";
 import { drawOniUps, type OniUp } from "./oniUps";
 import { drawSwarmGround } from "./swarmMap";
@@ -217,6 +218,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawTerraAuraB(ctx, s, alpha, snap);
     drawTerraAuraC(ctx, s, alpha, snap);
     drawTrackerAura(ctx, s, alpha, snap);
+    drawOriginAura(ctx, s, alpha, snap);
     drawForgottenAura(ctx, s, alpha, snap);
     drawWandererAura(ctx, s, alpha, snap);
     drawSilkAmmo(ctx, s, alpha, snap);

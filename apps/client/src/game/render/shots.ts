@@ -37,6 +37,7 @@ import { drawS2BossFx } from "./s2Bosses";
 import { drawS2BossShot } from "./s2BossShots";
 import { drawFoeShot, drawS1BossFx } from "./s1Bosses";
 import { additive, beam, glow } from "./pwFxBits";
+import { drawAmbushShot, drawOriginFx } from "./origin";
 import { drawBaseShot, drawBlast, drawBurst, drawHit, drawSwing } from "./baseFx";
 
 export function drawProjectiles(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
@@ -44,7 +45,7 @@ export function drawProjectiles(ctx: CanvasRenderingContext2D, s: RunState, alph
     const x = snap(lerp(pr.prevX, pr.x, alpha));
     const y = snap(lerp(pr.prevY, pr.y, alpha));
     if (pr.fromPlayer) drawShotBloom(ctx, s, pr, x, y);
-    if (pr.fromPlayer && drawOrbShot(ctx, pr, x, y)) continue;
+    if (pr.fromPlayer && (drawOrbShot(ctx, pr, x, y) || drawAmbushShot(ctx, pr, x, y, s.tick))) continue;
     if (!pr.fromPlayer && (drawS2BossShot(ctx, s, pr, x, y, s.tick) || drawFoeShot(ctx, pr, x, y, s.tick))) continue;
     if (!pr.fromPlayer && (drawPwShot(ctx, pr, x, y) || drawEnemyShot(ctx, pr, x, y, s.tick))) continue;
     if (pr.fromPlayer && (drawBullet(ctx, pr, x, y) || drawKiShot(ctx, pr, x, y))) continue;
@@ -114,7 +115,7 @@ export function drawEffects(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       continue;
     }
     drawFxBloom(ctx, fx, px, py, snap);
-    if (drawS2BossFx(ctx, s, fx, snap) || drawS1BossFx(ctx, s, fx, snap)) continue;
+    if (drawOriginFx(ctx, fx, snap) || drawS2BossFx(ctx, s, fx, snap) || drawS1BossFx(ctx, s, fx, snap)) continue;
     if (drawPwSkillFx(ctx, fx, snap) || drawTintedFx(ctx, fx, px, py, snap) || drawCustomFx(ctx, fx, px, py, snap)) continue;
     if (drawLaserFx(ctx, s, fx, px, py, snap) || drawMedicFx(ctx, s, fx, px, py, snap)) continue;
     if (drawOrbitFx(ctx, fx, snap)) continue;

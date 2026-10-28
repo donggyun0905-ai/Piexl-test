@@ -198,7 +198,7 @@ function attack(s: RunState): void {
   const w = weaponOf(p);
   let dmg = p.stats.damage;
   if (p.stillTicks >= STILL_TICKS && hasPerk(p, "steadyBreath")) dmg *= PERKS.steadyBreath.damage;
-  const og = takeOrigin(p, w.kind === "melee"); // 떠돌이 기습 · 파수꾼 반격 (sim/origin)
+  const og = takeOrigin(s, w.kind === "melee"); // 떠돌이 기습 · 파수꾼 반격 (sim/origin)
   dmg *= og.mul;
   // 분노: 체력이 낮을수록 공격력 증가 · 마법사는 일반 공격이 약하고 공격마다 마법진에 한 획 (sim/rune)
   if (hasPerk(p, "rage")) dmg *= 1 + PERKS.rage.damage * (1 - Math.max(0, p.hp) / p.stats.maxHp);
@@ -268,7 +268,7 @@ function attack(s: RunState): void {
         ...(hasPerk(p, "seekerFeather") ? { homing: true } : {}),
         ...(hasPerk(p, "returnFletch") || w.returns ? { back: true, span: ticks, hitIds: [] } : {}),
         ...(hasPerk(p, "splitHead") ? { split: true } : {}),
-        ...(og.cut ? { hpCut: og.cut } : {}),
+        ...(og.amb ? { ambush: og.amb, ...(og.cut ? { hpCut: og.cut } : {}) } : {}),
         ...charmFields(w, dmg * mul),
       });
     };
