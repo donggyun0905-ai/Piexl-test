@@ -1,6 +1,7 @@
 // 변희 각성 효과: 공중 습격 선(흰 선이 열 번 반짝이며 꿰뚫음, 불사조는 불꽃) · 각성 기술 빛 · 불사조 열기 · 발밑 동물 경험치 막대
 import { morphXp, type EffectState, type RunState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
+import { additive, beam, glow, shock, sparks } from "./pwFxBits";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -23,13 +24,9 @@ export function drawMorphFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const off = (i - 4.5) * (fx.size / 5);
       const on = (fx.ticks + i) % 3 !== 0;
       if (!on) continue;
-      ctx.globalAlpha = (1 - t) * (0.5 + 0.5 * ((i * 7) % 3) / 2);
-      ctx.strokeStyle = fire ? (i % 2 ? "#ffb040" : "#fff0a0") : "#ffffff";
-      ctx.lineWidth = i === 4 || i === 5 ? 2 : 1;
-      ctx.beginPath();
-      ctx.moveTo(x0 + nx * off, y0 + ny * off);
-      ctx.lineTo(x1 + nx * off, y1 + ny * off);
-      ctx.stroke();
+      // 하늘에서 꿰뚫는 빛줄기 (불사조는 불꽃 빛)
+      const a = (1 - t) * (0.5 + 0.5 * ((i * 7) % 3) / 2);
+      additive(ctx, () => beam(ctx, x0 + nx * off, y0 + ny * off, x1 + nx * off, y1 + ny * off, i === 4 || i === 5 ? 3 : 1.6, fire ? (i % 2 ? "#ffb040" : "#fff0a0") : "#d8e8ff", a));
     }
     ctx.globalAlpha = 1;
     return true;
@@ -38,15 +35,13 @@ export function drawMorphFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     const c = EVO_GLOW[fx.dirX] ?? "#ffffff";
     const x = snap(fx.x);
     const y = snap(fx.y);
-    ctx.globalAlpha = (1 - t) * 0.3;
-    ctx.fillStyle = c;
-    ctx.beginPath();
-    ctx.arc(x, y, fx.size * (0.5 + t * 0.5), 0, Math.PI * 2);
-    ctx.fill();
+    // 각성 빛: 동물 색 빛 덩이 + 충격파 + 별빛
+    additive(ctx, () => {
+      glow(ctx, x, y, fx.size * (0.6 + t * 0.6), c, 1 - t, t < 0.2 ? 1.6 : 0.5);
+      shock(ctx, x, y, fx.size * (0.5 + t * 0.6), c, 1 - t, 6);
+      sparks(ctx, x, y, 12, fx.size * 1.3, t, "#ffffff", fx.x + fx.y);
+    });
     ctx.globalAlpha = 1 - t;
-    ctx.strokeStyle = c;
-    ctx.lineWidth = 2;
-    ctx.stroke();
     for (let i = 0; i < 8; i++) {
       const a = (i / 8) * Math.PI * 2 + t * 3;
       ctx.fillStyle = "#ffffff";
@@ -66,15 +61,12 @@ export function drawMorphGround(ctx: Ctx, s: RunState, snap: Snap): void {
   const y = snap(p.y);
   if ((p.mHeat ?? 0) > 0) {
     const r = 64 * (0.95 + 0.05 * Math.sin(s.tick * 0.3));
-    ctx.globalAlpha = 0.16 + 0.06 * Math.sin(s.tick * 0.2);
-    ctx.fillStyle = "#ff7a2a";
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fill();
+    // 불사조 열기: 일렁이는 불빛 + 가장자리 불꽃 고리
+    additive(ctx, () => {
+      glow(ctx, x, y, r, "#ff7a2a", 0.35 + 0.1 * Math.sin(s.tick * 0.2));
+      shock(ctx, x, y, r, "#ffd27a", 0.6, 6);
+    });
     ctx.globalAlpha = 0.5;
-    ctx.strokeStyle = "#ffd27a";
-    ctx.lineWidth = 1;
-    ctx.stroke();
     for (let i = 0; i < 10; i++) {
       const a = i * 0.63 + s.tick * 0.02;
       const d = r * (((i * 37 + s.tick) % 60) / 60);

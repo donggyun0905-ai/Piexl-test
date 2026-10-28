@@ -1,6 +1,7 @@
 // 발톱 효과: 변희 곰 할퀴기(묵직한 세 갈래 찢김·먼지) · 플라이 끝 할퀴기(날렵한 X자 섬광) · 바람 칼날(소용돌이 초승달)
 import type { EffectState, ProjectileState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
+import { additive, glow, shock } from "./pwFxBits";
 
 type Ctx = CanvasRenderingContext2D;
 type Pt = readonly [number, number];
@@ -57,6 +58,11 @@ function bearSwipe(ctx: Ctx, fx: EffectState, t: number, snap: Snap): void {
       gash(ctx, a, c, b, n * 0.2 * wMul, draw);
     }
   }
+  // 찢긴 자리의 주황 빛 + 묵직한 충격
+  additive(ctx, () => {
+    glow(ctx, x, y, n * 1.2, "#ff7a3a", 0.6 * fade, t < 0.25 ? 1 : 0);
+    shock(ctx, x, y, n * (0.6 + t), "#ffb070", 0.6 * fade, 4);
+  });
   // 튀는 흙·핏빛 조각
   ctx.globalAlpha = fade;
   for (let i = 0; i < 7; i++) {
@@ -85,12 +91,17 @@ function flyRake(ctx: Ctx, fx: EffectState, t: number, snap: Snap): void {
     const from: Pt = [x - dx * n, y - dy * n];
     const to: Pt = [x + dx * n, y + dy * n];
     const mid: Pt = [x + Math.cos(a + Math.PI / 2) * n * 0.2, y + Math.sin(a + Math.PI / 2) * n * 0.2];
-    for (const [color, w, al] of [["rgba(106,216,255,0.5)", 0.28, 1], ["#c8f4ff", 0.13, 1], ["#ffffff", 0.05, 1]] as const) {
-      ctx.globalAlpha = al * fade;
-      ctx.fillStyle = color;
-      gash(ctx, from, mid, to, n * w, draw);
-    }
+    // 겹치면 밝아지는 하늘빛 날 (X자 가운데가 하얗게 탐)
+    additive(ctx, () => {
+      for (const [color, w, al] of [["rgba(106,216,255,0.5)", 0.32, 1], ["#c8f4ff", 0.14, 1], ["#ffffff", 0.06, 1]] as const) {
+        ctx.globalAlpha = al * fade;
+        ctx.fillStyle = color;
+        gash(ctx, from, mid, to, n * w, draw);
+      }
+      ctx.globalAlpha = 1;
+    });
   }
+  additive(ctx, () => glow(ctx, x, y, n * 0.8, "#a8f0ff", fade, 1.2));
   // 날개 비늘 같은 반짝임과 끝의 별빛
   ctx.globalAlpha = fade;
   for (let i = 0; i < 6; i++) {

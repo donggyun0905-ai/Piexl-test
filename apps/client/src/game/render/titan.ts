@@ -1,5 +1,6 @@
 // 거인 그리기: 기계팔 주먹 불빛(에너지만큼, 강타 때 불꽃 줄기) · 발밑 에너지 막대 · 내려침·강타 충격파
 import { TITAN, WEAPONS, type EffectState, type PlayerState, type RunState } from "@pixel-rogue/shared";
+import { additive, glow, shock, sparks } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -151,12 +152,13 @@ export function drawTitanFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     const t = fx.ticks / fx.maxTicks;
     const x = snap(fx.x);
     const y = snap(fx.y - 4);
+    // 패링: 금빛 섬광 + 충격파 + 튀는 불똥
+    additive(ctx, () => {
+      glow(ctx, x, y, fx.size * 1.3, "#ffcf70", t, t > 0.7 ? 1.6 : 0.5);
+      shock(ctx, x, y, fx.size * (1.6 - t), "#fff4c0", t, 5);
+      sparks(ctx, x, y, 10, fx.size * 2, 1 - t, "#ffe08a", fx.x + fx.y);
+    });
     ctx.globalAlpha = t;
-    ctx.strokeStyle = "#fff4c0";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.arc(x, y, fx.size * (1.6 - t), 0, Math.PI * 2);
-    ctx.stroke();
     ctx.fillStyle = "#ffcf70";
     for (let i = 0; i < 8; i++) {
       const a = (i / 8) * Math.PI * 2;
@@ -179,6 +181,24 @@ export function drawTitanFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const x = snap(fx.x);
   const y = snap(fx.y);
   const big = fx.kind === "titanSmash";
+  // 내려침·강타: 땅에 눕힌 충격파 + 먼지 (강타는 주황 빛과 불똥)
+  additive(ctx, () => {
+    ctx.save();
+    ctx.translate(x, y + 2);
+    ctx.scale(1, 0.6);
+    if (big) glow(ctx, 0, 0, fx.size, "#ff9a3c", t * 0.7, t > 0.8 ? 1.4 : 0.3);
+    shock(ctx, 0, 0, fx.size * (1.1 - t * 0.6), big ? "#ffb060" : "#c8a888", t, big ? 8 : 5);
+    ctx.restore();
+    if (big) sparks(ctx, x, y, 10, fx.size * 1.2, 1 - t, "#ffd060", fx.x + fx.y);
+  });
+  ctx.fillStyle = `rgba(90, 70, 50, ${0.35 * t})`;
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 + 0.4;
+    const r = fx.size * (1 - t) * 0.8;
+    ctx.beginPath();
+    ctx.arc(x + Math.cos(a) * r, y + 2 + Math.sin(a) * r * 0.5 - (1 - t) * 3, 3 + (1 - t) * 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
   ctx.globalAlpha = t * (big ? 0.9 : 0.7);
   ctx.strokeStyle = big ? "#ff9a3c" : "#a88a6a";
   ctx.lineWidth = big ? 3 : 2;

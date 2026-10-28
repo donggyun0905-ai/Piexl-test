@@ -1,5 +1,6 @@
 // 장로 그리기: 바닥에 깔린 네모난 진(발동 전엔 채워지는 빛, 진마다 꾸밈) · 진 효과(불·빛기둥 · 양쪽 벽 · 떨어지는 검 · 바위 주먹)
 import { FORMATIONS, type EffectState, type ElderSeal, type FormationKind, type RunState } from "@pixel-rogue/shared";
+import { additive, beam, glow, shock, sparks } from "./pwFxBits";
 import type { Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -106,11 +107,26 @@ export function drawElderFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     ctx.fillStyle = grad;
     ctx.fillRect(x - r * 0.6, y - h, r * 1.2, h + r * 0.4);
     ctx.globalAlpha = 1;
+    // 기둥 속 흰 빛 + 바닥 빛 고리 + 오르는 불씨
+    additive(ctx, () => {
+      beam(ctx, x, y - h, x, y, r * 0.35, fx.tint ?? "#ffd07a", 1 - t);
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(1, 0.45);
+      shock(ctx, 0, 0, r * (0.8 + t), fx.tint ?? "#ff9a3a", 1 - t, 5);
+      ctx.restore();
+      sparks(ctx, x, y - h * 0.5, 6, h * 0.6, t, fx.tint ?? "#ffd060", fx.x + fx.y);
+    });
     return true;
   }
   if (fx.kind === "elWalls") {
     // 양쪽에서 다가와 부딪히는 벽
     const gap = r * Math.max(0, 1 - t * 2.5);
+    // 부딪히는 순간 먼지 충격
+    if (gap <= 0) additive(ctx, () => {
+      glow(ctx, x + 3, y, r, "#d8d0c0", (1 - t) * 0.8, 1);
+      sparks(ctx, x + 3, y, 8, r * 1.2, t, "#e8e0d0", fx.x);
+    });
     ctx.fillStyle = "#7a7a8a";
     ctx.fillRect(x - gap - 6, y - r, 6, r * 2);
     ctx.fillRect(x + gap, y - r, 6, r * 2);
@@ -123,6 +139,14 @@ export function drawElderFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     // 하늘에서 떨어져 꽂히는 강철 검
     const fall = Math.min(1, t * 3);
     const sy = y - 40 * (1 - fall);
+    // 떨어지는 빛 꼬리 → 꽂힐 때 번쩍
+    additive(ctx, () => {
+      if (fall < 1) beam(ctx, x, sy - 40, x, sy, 3, "#c8d8ff", 0.6);
+      else {
+        glow(ctx, x, y, 14, "#e8ecf4", 1 - t, 1.4);
+        shock(ctx, x, y, 6 + (t - 0.33) * 30, "#ffffff", 1 - t, 3);
+      }
+    });
     ctx.fillStyle = "#e8ecf4";
     ctx.fillRect(x - 1, sy - 14, 2, 14);
     ctx.fillStyle = "#ffd040";
@@ -134,6 +158,14 @@ export function drawElderFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   if (fx.kind === "elFist") {
     // 바닥에서 솟는 바위 주먹
     const up = Math.sin(Math.min(1, t * 1.6) * Math.PI) * r;
+    // 땅이 갈라지는 빛 + 튀는 돌
+    additive(ctx, () => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(1, 0.4);
+      shock(ctx, 0, 0, r * (0.6 + t), "#ffb070", 1 - t, 5);
+      ctx.restore();
+    });
     ctx.fillStyle = "#8a8478";
     ctx.fillRect(x - r * 0.5, y - up, r, up);
     ctx.fillStyle = "#a8a090";

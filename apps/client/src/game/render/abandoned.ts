@@ -1,5 +1,6 @@
 // 버려진 자들 그리기: 곁에서 싸우는 두 아이 · 교대·특수기 효과(연출 효과는 abandonedFx) · 왼쪽 위 조합 표(아이 그림 칸·탭·특수기 이름, 틀리면 ✕)
 import { TAG_SETS, WEAPONS, type EffectState, type RunState, type TagSpecialKind, type WeaponDef } from "@pixel-rogue/shared";
+import { additive, glow, shock } from "./pwFxBits";
 import { sheetFor } from "../sprites";
 import { drawBody } from "./actors";
 import { hudScale } from "./imugiAura";
@@ -46,25 +47,21 @@ export function drawTagFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   if (drawTagShowFx(ctx, fx, snap)) return true;
   const t = fx.ticks / fx.maxTicks;
   if (fx.kind === "tagSwap") {
-    ctx.globalAlpha = t;
-    ctx.strokeStyle = MEMBER_COLORS[fx.dirX] ?? "#fff";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(snap(fx.x), snap(fx.y), fx.size * (1.6 - t), 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.globalAlpha = 1;
+    // 교대: 들어온 아이 색 빛 기둥 + 퍼지는 고리
+    const c = MEMBER_COLORS[fx.dirX] ?? "#ffffff";
+    additive(ctx, () => {
+      glow(ctx, snap(fx.x), snap(fx.y), fx.size * 1.2, c, t, 1.2);
+      shock(ctx, snap(fx.x), snap(fx.y), fx.size * (1.6 - t), c, t, 4);
+    });
     return true;
   }
   if (fx.kind === "tagSpecial") {
     const x = snap(fx.x);
     const y = snap(fx.y);
-    MEMBER_COLORS.forEach((c, i) => {
-      ctx.globalAlpha = t * 0.8;
-      ctx.strokeStyle = c;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(x, y, fx.size * (0.6 + i * 0.25) * (1.3 - t * 0.5), 0, Math.PI * 2);
-      ctx.stroke();
+    // 세 아이의 색 충격파 세 겹
+    additive(ctx, () => {
+      glow(ctx, x, y, fx.size, "#ffffff", t * 0.5, 1);
+      MEMBER_COLORS.forEach((c, i) => shock(ctx, x, y, fx.size * (0.6 + i * 0.25) * (1.3 - t * 0.5), c, t * 0.9, 5));
     });
     ctx.globalAlpha = t;
     ctx.strokeStyle = "#fff";

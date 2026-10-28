@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.209",
+    date: "2026-10-28",
+    items: {
+      ko: ["효과 새로 그리기 3: 버려진 자들 빛 테두리 그림자 자국·초록 충격파 찍기·방패 밀침 파도·총구 섬광·교대 빛 기둥 · 거인 패링 금빛 섬광·내려침 땅 충격파와 먼지 · 오니 방망이 바람·번개 빛·서리·어둠·빛 기둥·해일·영령·신인족 각성 · 변희 습격 빛줄기·각성 빛·불사조 열기 · 플라이 하늘빛 X자 · 곰 할퀴기 충격 · 장로 불기둥·벽 부딪힘·떨어지는 검·바위 주먹"],
+      en: ["Effects redraw 3: Abandoned glowing shadow trails, green shockwave slams, shield-shove waves, muzzle flashes, tag light pillars · Titan golden parry flash, ground-slam shockwaves and dust · Oni club gusts, lightning glow, frost, darkness, light pillars, tides, spirits, divine awakening · Byeonhui raid light beams, awakening light, phoenix heat · Fly sky-blue X rakes · bear swipe impact · Elder fire pillars, colliding walls, falling swords, rock fists"],
+      ja: ["エフェクト描き直し3: 捨てられた子たちの光る影の跡・緑の衝撃波・盾押しの波・銃口の閃光・交代の光の柱 · 巨人のパリィの金の閃光・叩きつけの地面の衝撃波と砂埃 · 鬼の棍棒の風・雷の光・霜・闇・光の柱・津波・英霊・神人族覚醒 · 変姫の襲撃の光線・覚醒の光・不死鳥の熱 · フライの空色のX · 熊の引っかきの衝撃 · 長老の火柱・壁の衝突・落ちる剣・岩の拳"],
+    },
+  },
+  {
     version: "0.48.208",
     date: "2026-10-28",
     items: {

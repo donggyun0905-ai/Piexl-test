@@ -1,5 +1,6 @@
 // 오니 그리기: 바닥 한파·서리 · 폭풍 · 신인족 기운 · 캐릭터 왼쪽 게이지 · 추가 공격 효과(번개·불꽃·금화·한파·어둠·빛·해일·물보라·영령·각성·휘두르기)
 import { ONI, WEAPONS, type EffectState, type RunState } from "@pixel-rogue/shared";
+import { additive, crescent, glow, shock, sparks } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -107,6 +108,13 @@ function bolts(ctx: Ctx, fx: EffectState, x: number, y: number, t: number): void
       const off = (hash(i * 11 + j + Math.floor(fx.ticks / 3)) - 0.5) * 8;
       pts.push([x + Math.cos(a) * d - Math.sin(a) * off, y + Math.sin(a) * d + Math.cos(a) * off]);
     }
+    if (!dark) additive(ctx, () => {
+      ctx.strokeStyle = `rgba(255,240,150,${0.35 * t})`;
+      ctx.lineWidth = 7;
+      ctx.beginPath();
+      pts.forEach(([px, py], k) => (k ? ctx.lineTo(px, py) : ctx.moveTo(px, py)));
+      ctx.stroke();
+    });
     for (const [w, c] of dark ? [[3, "#9a6aff"], [1, "#0a0610"]] : [[3, fx.tint ?? "#ffe04a"], [1, "#ffffff"]]) {
       ctx.strokeStyle = c as string;
       ctx.lineWidth = w as number;
@@ -123,6 +131,8 @@ function scatter(ctx: Ctx, fx: EffectState, x: number, y: number, t: number, col
   const half = Math.acos(Math.max(-1, Math.min(1, fx.width ?? 0.2)));
   const base = Math.atan2(fx.dirY, fx.dirX);
   const go = 1 - t;
+  // 부채꼴 가운데 빛
+  additive(ctx, () => glow(ctx, x + Math.cos(base) * fx.size * 0.4 * go, y + Math.sin(base) * fx.size * 0.4 * go, fx.size * 0.6, colors[1]!, t * 0.6));
   for (let i = 0; i < 26; i++) {
     const a = base + (hash(i) * 2 - 1) * half;
     const r = fx.size * (0.2 + hash(i + 50) * 0.8) * Math.min(1, go * 1.6);
@@ -146,6 +156,8 @@ export function drawOniFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     case "oSwing": {
       const a = Math.atan2(fx.dirY, fx.dirX);
       const sweep = (1 - t) * 2.2 - 1.1;
+      // 방망이 바람: 방망이 색 빛 초승달
+      additive(ctx, () => crescent(ctx, x, y - 3, fx.size * 0.9, (a - 1.1 + a + sweep) / 2, Math.max(0.2, (sweep + 1.1) / 2), 6 * t + 1, tint, t));
       ctx.globalAlpha = t * 0.8;
       ctx.strokeStyle = "#e8e0f0";
       ctx.lineWidth = 4;
@@ -167,6 +179,14 @@ export function drawOniFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       scatter(ctx, fx, x, y, t, ["#ffd040", "#fff0a0", "#c88a20"], 3);
       break;
     case "oFrost": {
+      additive(ctx, () => {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(1, 0.7);
+        shock(ctx, 0, 0, fx.size * (1.1 - t * 0.5), tint, t, 7);
+        glow(ctx, 0, 0, fx.size, "#c8f4ff", t * 0.5);
+        ctx.restore();
+      });
       ctx.globalAlpha = t;
       ctx.strokeStyle = tint;
       ctx.lineWidth = 3;
@@ -183,6 +203,7 @@ export function drawOniFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       break;
     }
     case "oDark": {
+      additive(ctx, () => shock(ctx, x, y - 3, fx.size * (1.2 - t * 0.7), "#8a5ab8", t, 6));
       ctx.globalAlpha = t;
       ctx.fillStyle = "#2a1040";
       ctx.beginPath();
@@ -203,11 +224,18 @@ export function drawOniFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     case "oPillar": {
       // 하늘에서 내리꽂는 빛 기둥 + 사방으로 터지는 빛
       const w = 10 * t + 2;
+      additive(ctx, () => {
+        for (const [ww, a] of [[3, 0.3], [1, 0.7], [0.45, 1]] as const) {
+          const g = ctx.createLinearGradient(0, y - 120, 0, y);
+          g.addColorStop(0, "rgba(255,248,216,0)");
+          g.addColorStop(1, `rgba(255,248,216,${a * t})`);
+          ctx.fillStyle = g;
+          ctx.fillRect(x - (w * ww) / 2, y - 120, w * ww, 120);
+        }
+        glow(ctx, x, y, fx.size, "#ffd040", t, 1.2);
+        shock(ctx, x, y, fx.size * (1.3 - t), "#fff0a0", t, 5);
+      });
       ctx.globalAlpha = t;
-      ctx.fillStyle = "#fff8d8";
-      ctx.fillRect(x - w / 2, y - 120, w, 120);
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(x - w / 4, y - 120, w / 2, 120);
       ctx.strokeStyle = "#ffd040";
       ctx.lineWidth = 2;
       for (let i = 0; i < 12; i++) {
@@ -226,12 +254,7 @@ export function drawOniFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       for (let i = 0; i < 3; i++) {
         const r = fx.size * ((1 - t) * 0.9 + 0.1) - i * 6;
         if (r <= 2) continue;
-        ctx.globalAlpha = t * (1 - i * 0.25);
-        ctx.strokeStyle = i === 0 ? "#e0f4ff" : tint;
-        ctx.lineWidth = 4 - i;
-        ctx.beginPath();
-        ctx.arc(x, y - 2, r, a - half, a + half);
-        ctx.stroke();
+        additive(ctx, () => crescent(ctx, x, y - 2, r, a, half, 5 - i, i === 0 ? "#e0f4ff" : tint, t * (1 - i * 0.25)));
       }
       break;
     }
@@ -258,6 +281,10 @@ export function drawOniFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     case "oSpirit": {
       // 서늘한 영령이 솟아오름
       const up = (1 - t) * 14;
+      additive(ctx, () => {
+        glow(ctx, x, y - 8 - up, 10, "#c8f4ff", t * 0.8, 1);
+        shock(ctx, x, y, fx.size * (1 - t * 0.5), tint, t, 4);
+      });
       ctx.globalAlpha = t * 0.9;
       ctx.fillStyle = "#e0f8ff";
       ctx.beginPath();
@@ -275,6 +302,12 @@ export function drawOniFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       break;
     }
     case "oGod": {
+      // 신인족 각성: 금빛 폭발 + 붉은 충격파
+      additive(ctx, () => {
+        glow(ctx, x, y - 6, fx.size * 1.5, "#ffd040", t, t > 0.8 ? 1.8 : 0.5);
+        shock(ctx, x, y - 6, fx.size * (1.6 - t), "#ff6a2a", t, 7);
+        sparks(ctx, x, y - 6, 16, fx.size * 2, 1 - t, "#fff0a0", fx.x + fx.y);
+      });
       ctx.globalAlpha = t;
       ctx.strokeStyle = "#ffd040";
       ctx.lineWidth = 3;
