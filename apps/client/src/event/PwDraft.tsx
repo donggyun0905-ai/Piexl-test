@@ -1,17 +1,10 @@
-// 패왕전 밴픽 화면 (혼자 하기 PwDraftSolo · 같이 하기 PwRoom): 왼쪽 우리 편 · 가운데 큰 캐릭터 목록(진영 탭·이름 찾기) · 오른쪽 상대 편
-// 위쪽 차례·제한 시간 · 아래 누른 캐릭터의 스킬 보기 · 우리 편 AI 말
+// 패왕전 밴픽 화면 (혼자 하기 PwDraftSolo · 친구 방·랭크전 PwRoomDraft, 모두 같은 화면): 왼쪽 우리 편 · 가운데 큰 캐릭터 목록(역할 탭·이름 찾기) · 오른쪽 상대 편
+// 위쪽 차례·제한 시간 · 아래 밴·확정 · 우리 편 AI 말 (스킬은 다음 준비 화면에서 써 봄)
 import { CHARACTER_IDS, draftDone, draftSize, draftTaken, draftTeam, draftTurn, type CharacterId, type PwDraft } from "@pixel-rogue/shared";
 import { useEffect, useState, type ReactNode } from "react";
-import type { Lang, TextKey } from "../i18n";
-import { FACTION_TEXT } from "../i18n/story/world";
+import type { TextKey } from "../i18n";
 import { SkinPreview } from "../shop/SkinPreview";
-import { FACTIONS, type FactionId } from "../story/storyData";
-import { PwSkillList } from "./PwSkillList";
-
-/** 캐릭터 고르기 탭 (아카식은 숨은 캐릭터뿐이라 없음) */
-const TABS: readonly FactionId[] = ["ascalon", "terracore", "helios", "virdia"];
-/** 진영 소속 (버려진 자들은 세 아이 이름으로 들어 있음) */
-const inFaction = (f: FactionId, c: CharacterId) => !!FACTIONS.find((x) => x.id === f)?.members.some((m) => m === c || (c === "abandoned" && m === "cain"));
+import { PW_ROLES, ROLE_TAB, ROLE_TAG, roleOf, type PwRole } from "./pwRoles";
 
 interface Props {
   d: PwDraft;
@@ -23,14 +16,14 @@ interface Props {
   mine: boolean;
   endAt: number;
   onAct: (c: CharacterId | null) => void;
-  lang: Lang;
   t: (key: TextKey) => string;
+  /** 아래쪽 (채팅·나가기) */
   children?: ReactNode;
 }
 
-export function PwDraftView({ d, names, ai, me, mine, endAt, onAct, lang, t, children }: Props) {
+export function PwDraftView({ d, names, ai, me, mine, endAt, onAct, t, children }: Props) {
   const [sel, setSel] = useState<CharacterId | null>(null);
-  const [tab, setTab] = useState<FactionId | null>(null);
+  const [tab, setTab] = useState<PwRole | null>(null);
   const [find, setFind] = useState("");
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
@@ -47,13 +40,13 @@ export function PwDraftView({ d, names, ai, me, mine, endAt, onAct, lang, t, chi
   const status = done || !turn ? t("pwDraftDone") : turn.ban ? t("pwDraftBanTurn").replace("{team}", teamName(turn.team)) : t("pwDraftPickTurn").replace("{name}", names[turn.seat] ?? "AI");
   // 밴 차례 번호마다 편 (draftTurns 순서 그대로)
   const banTeams = d.turns.filter((x) => x.ban).map((x) => x.team);
-  const look = sel ?? d.picks[me] ?? null;
   const q = find.trim().toLowerCase();
-  const list = CHARACTER_IDS.filter((c) => (!tab || inFaction(tab, c)) && (!q || t(c).toLowerCase().includes(q)));
+  const list = CHARACTER_IDS.filter((c) => (!tab || roleOf(c) === tab) && (!q || t(c).toLowerCase().includes(q)));
   const say = d.turns
     .slice(0, d.at)
     .filter((x) => !x.ban && x.team === myTeam && x.seat !== me && ai[x.seat])
     .map((x) => `${names[x.seat]}: ${t("pwDraftAiSay").replace("{c}", t(d.picks[x.seat]!))}`);
+  const role = (c: CharacterId) => <em className="pw-role">{t(ROLE_TAG[roleOf(c)])}</em>;
   // 왼쪽은 우리 편, 오른쪽은 상대 편
   const team = (k: 0 | 1) => (
     <aside className={`pw-draft-team ${k === myTeam ? "ours" : "theirs"} ${turn && turn.team === k && !done ? "turn" : ""}`}>
@@ -62,13 +55,17 @@ export function PwDraftView({ d, names, ai, me, mine, endAt, onAct, lang, t, chi
         const seat = k * size + j;
         const c = d.picks[seat];
         return (
-          <button key={seat} type="button" className={`pw-draft-seat ${turn && !turn.ban && turn.seat === seat ? "now" : ""} ${seat === me ? "me" : ""}`} onClick={() => c && setSel(c)}>
+          <div key={seat} className={`pw-draft-seat ${turn && !turn.ban && turn.seat === seat ? "now" : ""} ${seat === me ? "me" : ""}`}>
             {c ? <SkinPreview sheet={c} size={64} /> : <span className="pw-draft-empty">?</span>}
             <span>
               <b>{names[seat] ?? "AI"}</b>
-              <small>{c ? t(c) : ""}</small>
+              {c && (
+                <small>
+                  {t(c)} {role(c)}
+                </small>
+              )}
             </span>
-          </button>
+          </div>
         );
       })}
       <div className="pw-draft-bans">
@@ -78,7 +75,7 @@ export function PwDraftView({ d, names, ai, me, mine, endAt, onAct, lang, t, chi
     </aside>
   );
   return (
-    <div className="pw-draft pw-skills">
+    <div className="pw-draft">
       <header className="pw-draft-top">
         <h2>{t("pwDraft")}</h2>
         <p className={mine && !done ? "mine" : ""}>{mine && !done ? `${t("pwDraftMine")} · ${status}` : status}</p>
@@ -91,54 +88,47 @@ export function PwDraftView({ d, names, ai, me, mine, endAt, onAct, lang, t, chi
             <button type="button" className={!tab ? "on" : ""} onClick={() => setTab(null)}>
               {t("pwDraftAll")}
             </button>
-            {TABS.map((f) => (
-              <button key={f} type="button" className={tab === f ? "on" : ""} style={{ ["--fc" as string]: FACTIONS.find((x) => x.id === f)?.color }} onClick={() => setTab(f)}>
-                {FACTION_TEXT[f].name[lang]}
+            {PW_ROLES.map((r) => (
+              <button key={r} type="button" className={tab === r ? "on" : ""} onClick={() => setTab(r)}>
+                {t(ROLE_TAB[r])}
               </button>
             ))}
             <input type="search" value={find} placeholder={t("pwDraftSearch")} onChange={(e) => setFind(e.target.value)} />
           </div>
           <div className="pw-draft-grid">
             {list.map((c) => (
-              <button key={c} type="button" className={`${c === sel ? "on" : ""} ${taken.has(c) ? "taken" : ""}`} onClick={() => setSel(c)}>
+              <button key={c} type="button" className={`${c === sel ? "on" : ""} ${taken.has(c) ? "taken" : ""}`} disabled={taken.has(c)} onClick={() => setSel(c)}>
                 <SkinPreview sheet={c} size={72} />
                 <small>{t(c)}</small>
+                {role(c)}
               </button>
             ))}
           </div>
-          {mine && turn && !done && (
-            <div className="pw-prep-actions pw-draft-act">
-              <button type="button" className="primary big" disabled={!sel || taken.has(sel)} onClick={() => sel && (onAct(sel), setSel(null))}>
-                {turn.ban ? t("pwDraftBan") : t("pwDraftPick")}
-                {sel && ` · ${t(sel)}`}
-              </button>
-              {turn.ban && (
-                <button type="button" className="ghost" onClick={() => onAct(null)}>
-                  {t("pwDraftSkip")}
+          <div className="pw-draft-act">
+            {mine && turn && !done && (
+              <>
+                <button type="button" className="primary" disabled={!sel || taken.has(sel)} onClick={() => sel && (onAct(sel), setSel(null))}>
+                  {turn.ban ? t("pwDraftBan") : t("pwDraftPick")}
+                  {sel && ` · ${t(sel)}`}
                 </button>
-              )}
-            </div>
-          )}
-        </section>
-        {team((1 - myTeam) as 0 | 1)}
-      </div>
-      <div className="pw-draft-bottom">
-        {look && (
-          <div className="pw-draft-look">
-            <h3>{t(look)}</h3>
-            <PwSkillList characterId={look} lang={lang} t={t} />
+                {turn.ban && (
+                  <button type="button" className="ghost" onClick={() => onAct(null)}>
+                    {t("pwDraftSkip")}
+                  </button>
+                )}
+              </>
+            )}
           </div>
-        )}
-        <div>
           {say.map((l) => (
             <p key={l} className="pw-draft-say">
               {l}
             </p>
           ))}
           <p className="hint">{t("pwDraftHint")}</p>
-          {children}
-        </div>
+        </section>
+        {team((1 - myTeam) as 0 | 1)}
       </div>
+      {children && <div className="pw-draft-bottom">{children}</div>}
     </div>
   );
 }

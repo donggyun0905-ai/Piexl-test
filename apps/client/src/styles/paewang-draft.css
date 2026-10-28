@@ -1,14 +1,13 @@
 /* 패왕전 밴픽 (event/PwDraft): 왼쪽 우리 편 · 가운데 큰 캐릭터 목록 · 오른쪽 상대 편, 화면 너비를 다 씀 */
 .pw-draft {
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
   min-height: 100vh;
   padding: 12px 16px;
   text-align: left;
-}
-.pw-room .pw-draft {
-  min-height: 0;
-  padding: 8px 0;
 }
 .pw-draft-top {
   display: flex;
@@ -42,7 +41,7 @@
   display: grid;
   grid-template-columns: minmax(180px, 260px) 1fr minmax(180px, 260px);
   gap: 12px;
-  align-items: start;
+  align-items: center;
 }
 .pw-draft-team {
   display: flex;
@@ -70,6 +69,10 @@
   text-align: right;
 }
 .pw-draft-seat {
+  box-sizing: border-box;
+  border: 1px solid #3a3648;
+  border-radius: 8px;
+  background: rgb(0 0 0 / 0.2);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -134,12 +137,12 @@
   margin-bottom: 8px;
 }
 .pw-draft-tabs button {
-  padding: 6px 12px;
-  border-bottom: 3px solid var(--fc, #8a86a0);
+  margin: 0;
+  padding: 6px 14px;
 }
 .pw-draft-tabs button.on {
   color: #1a1622;
-  background: var(--fc, #ffd860);
+  background: #ffd860;
 }
 .pw-draft-tabs input {
   flex: 1;
@@ -150,10 +153,11 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
   gap: 6px;
-  max-height: 62vh;
+  max-height: 58vh;
   overflow-y: auto;
 }
 .pw-draft-grid button {
+  margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -174,17 +178,43 @@
   filter: grayscale(1);
   opacity: 0.3;
 }
+/* 밴하기·밴 넘기기 · 확정: 같은 크기 */
 .pw-draft-act {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
   margin-top: 10px;
+}
+.pw-draft-act button.ghost {
+  border: 1px solid #8a86a0;
+}
+.pw-draft-act button {
+  width: 220px;
+  height: 48px;
+  margin: 0;
+  font-size: 16px;
+}
+.pw-draft-center .hint {
+  text-align: center;
+}
+/* 역할 (원딜·근딜·힐러·탱커) */
+.pw-role {
+  font-size: 11px;
+  font-style: normal;
+  color: #ffd860;
 }
 .pw-draft-bottom {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  max-width: 560px;
+  margin: 10px auto 0;
 }
-.pw-draft-look h3 {
-  margin: 0;
+.pw-draft-bottom .lobby-chat {
+  width: 100%;
 }
 .pw-draft-say {
   margin: 2px 0;
@@ -192,17 +222,12 @@
   color: #a8e0a0;
 }
 @media (max-width: 760px) {
-  .pw-draft-main,
-  .pw-draft-bottom {
+  .pw-draft-main {
     grid-template-columns: 1fr;
   }
   .pw-draft-grid {
     grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
   }
-}
-/* 같이 하기 대기실: 밴픽 중에는 넓게 */
-.pw-room:has(.pw-draft) {
-  max-width: none;
 }
 /* 패왕전 연습장 칸 (event/PwPractice): 왼쪽 위 (체력 줄 아래) */
 .pw-practice {
@@ -226,4 +251,35 @@
 .pw-practice button.on {
   color: #1a1622;
   background: #ffd860;
+}
+/* 패왕전 준비방: 왼쪽 스킬 설명 · 오른쪽 작은 연습장 (event/PwPrep) */
+.pw-prep-split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 100vh;
+  padding: 12px 16px;
+  box-sizing: border-box;
+}
+.pw-prep-split > .pw-prep {
+  flex: 1 1 380px;
+  max-width: 520px;
+  margin: 0;
+}
+.pw-mini {
+  position: relative;
+  flex: 1 1 520px;
+  max-width: 900px;
+  height: min(560px, 80vh);
+  overflow: hidden;
+  border: 2px solid #4a4658;
+  border-radius: 10px;
+  transform: translateZ(0);
+}
+.pw-mini .pw-practice {
+  position: absolute;
+  top: 84px;
+  left: 8px;
 }

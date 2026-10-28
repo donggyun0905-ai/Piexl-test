@@ -2,6 +2,7 @@
 // 편 대결은 대기실에서 밴픽(pwRoomDraft)으로 캐릭터를 정함 (랭크전은 자리가 정해진 뒤 시작 전에 방장이 바로 밴픽을 시작). 초대 링크로 들어온 손님은 방장이 보낸 대결(pwm)을 받으면 패왕전 대기실로 바뀜
 import { draftDone, PW_MODE, PW_MODES, rankSeats, type CharacterId, type PwLoadout, type PwMode, type RoomView } from "@pixel-rogue/shared";
 import { useEffect, useState, type RefObject } from "react";
+import { ChatBox } from "../battle/ChatBox";
 import type { CoopWire } from "../coop/CoopScreen";
 import type { CoopMsg } from "../coop/lockstep";
 import type { Lang, TextKey } from "../i18n";
@@ -91,6 +92,34 @@ export function useRankDraft(drafting: boolean, pw: ReturnType<typeof usePwRoom>
   }, [drafting, pw.draft.d, pw.canStart]);
 }
 
+interface DraftProps {
+  room: RoomView;
+  you: string;
+  pw: ReturnType<typeof usePwRoom>;
+  chat: { name: string; text: string }[];
+  onChat: (text: string) => void;
+  onLeave: () => void;
+  t: (key: TextKey) => string;
+}
+
+/** 친구 방·랭크전 밴픽 (혼자 하기와 같은 전체 화면): 사람 이름 · 빈 자리는 AI · 아래 채팅·나가기 */
+export function PwRoomDraft({ room, you, pw, chat, onChat, onLeave, t }: DraftProps) {
+  const { draft } = pw;
+  if (!draft.d) return null;
+  const names = draft.d.picks.map((_, i) => room.players.find((p) => p.pid === draft.seats[i])?.name ?? "AI");
+  return (
+    <PwDraftView d={draft.d} names={names} ai={names.map((_, i) => !draft.seats[i])} me={draft.me} mine={draft.mine} endAt={draft.endAt} onAct={draft.act} t={t}>
+      <ChatBox t={t} messages={chat} myName={room.players.find((p) => p.pid === you)?.name ?? ""} onSend={onChat} />
+      <button type="button" className="ghost" onClick={onLeave}>
+        {t("back")}
+      </button>
+    </PwDraftView>
+  );
+}
+
+/** 밴픽 화면을 보일 때: 밴픽 중 (랭크전은 끝나도 판이 시작될 때까지) */
+export const pwDrafting = (room: RoomView, pw: ReturnType<typeof usePwRoom>): boolean => !!pw.draft.d && (!draftDone(pw.draft.d) || !!room.rank);
+
 interface PanelProps {
   room: RoomView;
   you: string;
@@ -111,7 +140,7 @@ export function PwRoomPanel({ room, you, isHost, characterId, pw, lang, t }: Pan
   if (prep) {
     return (
       <div className="pw-room-prep">
-        <PwPrep characterId={characterId} lang={lang} t={t} onBack={() => setPrep(false)} onStart={(l) => (pw.ready(l), setPrep(false))} />
+        <PwPrep characterId={pw.game?.picks?.[draft.me] ?? characterId} lang={lang} t={t} onBack={() => setPrep(false)} onStart={(l) => (pw.ready(l), setPrep(false))} />
       </div>
     );
   }
@@ -131,16 +160,13 @@ export function PwRoomPanel({ room, you, isHost, characterId, pw, lang, t }: Pan
       )}
       {!room.rank && <PwMapList mode={pw.mode} pick={pw.map} t={t} onPick={pw.setMap} disabled={!isHost} />}
       <p className="hint">{t("pwRoomHint")}</p>
-      {draft.on && draft.d && (
-        <PwDraftView d={draft.d} names={draft.seats.map((pid) => room.players.find((p) => p.pid === pid)?.name ?? "AI").concat(Array(draft.d.picks.length).fill("AI")).slice(0, draft.d.picks.length)} ai={draft.d.picks.map((_, i) => !draft.seats[i])} me={draft.me} mine={draft.mine} endAt={draft.endAt} onAct={draft.act} lang={lang} t={t} />
-      )}
       {draft.on && isHost && !room.rank && (
         <button type="button" className={draft.d ? "ghost" : "primary"} onClick={draft.start}>
           {t(draft.d ? "pwDraftAgain" : "pwDraftStart")}
         </button>
       )}
       {draft.on && !room.rank && !pw.canStart && <small> {t("pwDraftNeed")}</small>}
-      {def.prep && !draft.on && (
+      {def.prep && (!draft.on || pw.canStart) && (
         <button type="button" className={pw.lo ? "ghost" : "primary"} onClick={() => setPrep(true)}>
           {t("pwPrep")} {pw.lo ? "✓" : ""}
         </button>

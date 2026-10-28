@@ -102,6 +102,9 @@ export function startGameLoop(o: LoopOptions): () => void {
   // 이벤트 상점 테마 효과 (칸마다 다른 세트, 범 효과와 같이 씀)
   const th = fx.themes;
   const theme = th.hit || th.idle || th.walk ? new ThemeFx({ ...hooks, roar: () => {}, on: { hit: !!th.hit, idle: !!th.idle, walk: !!th.walk, rest: false } }, th) : null;
+  // 내 자리에서만 (관전으로 다른 사람을 볼 때는 내 스킨 효과를 그리지 않음). 손님은 상태를 처음 받을 때 자리가 정해짐
+  let mySeat: number | undefined;
+  const onMe = () => (mySeat ??= run.seat) === undefined || run.seat === mySeat;
   const [under, over, resting] = summer ? [drawSummerUnder, drawSummerOver, summerResting] : [drawTigerUnder, drawTigerOver, tigerResting];
   damage.style = fx.dmg;
   const dummyLabels = [t("dummyAvg"), t("dummyDps"), t("dummyLast"), t("dummyTotal")];
@@ -210,8 +213,8 @@ export function startGameLoop(o: LoopOptions): () => void {
         break;
       }
       damage.observe(run);
-      tiger?.observe(run);
-      theme?.observe(run);
+      if (onMe()) tiger?.observe(run);
+      if (onMe()) theme?.observe(run);
       if (o.practice && run.over) {
         run.over = false;
         run.player.hp = run.player.stats.maxHp;
@@ -241,14 +244,15 @@ export function startGameLoop(o: LoopOptions): () => void {
       umbraLine: (i) => t(UMBRA_LINES[i] ?? "umbraSay0"),
       sageText: t("sageMaxStaff"),
       bossName: (k) => t(k === "dragon" ? "bossDragon" : k === "godeater" ? "bossGodEater" : "bossPrimeval"),
-      hidePlayer: tiger ? () => resting(tiger) : undefined,
+      hidePlayer: tiger ? () => onMe() && resting(tiger) : undefined,
       under: tiger || theme ? (c, snap) => {
+        if (!onMe()) return;
         if (theme) drawThemeUnder(c, theme, run, acc / TICK_MS, snap);
         if (tiger) under(c, tiger, run, acc / TICK_MS, snap, run.tick);
       } : undefined,
       overlay: (c, snap) => {
-        if (tiger) over(c, tiger, run, acc / TICK_MS, snap, run.tick);
-        if (theme) drawThemeOver(c, theme, run, acc / TICK_MS, snap);
+        if (tiger && onMe()) over(c, tiger, run, acc / TICK_MS, snap, run.tick);
+        if (theme && onMe()) drawThemeOver(c, theme, run, acc / TICK_MS, snap);
         if (getSettings().showDamage) damage.draw(c, run.tick, snap);
         damage.drawDummy(c, run, dummyLabels, snap);
       },

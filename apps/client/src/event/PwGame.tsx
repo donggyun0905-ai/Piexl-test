@@ -29,6 +29,8 @@ const HUD_MS = 250;
 export function PwGame({ mode, map, characterId, picks, loadout, lang, t, onExit, onRetry }: Props) {
   // 꾸밈이 아니라 판 시드: 판마다 다르게 (판 안의 계산은 이 시드로만)
   const [run] = useState(() => createPvp(Math.floor(Math.random() * 0x7fffffff), mode, picks ? picks.map((c, i) => (i ? { characterId: c, ai: true } : { characterId: c, loadout })) : [{ characterId, loadout }], map ?? undefined));
+  // 게임 화면은 처음 캐릭터로 고정 (데스매치 레벨업·관전으로 바뀌어도 다시 시작하지 않게 · 누르던 키 유지)
+  const [firstChar] = useState(() => run.player.characterId);
   const [, refresh] = useState(0);
   const [chips, setChips] = useState<number | null>(null);
   const [board, toggleBoard] = useBoard();
@@ -41,7 +43,7 @@ export function PwGame({ mode, map, characterId, picks, loadout, lang, t, onExit
     <>
       <GameScreen
         mode="paewang"
-        characterId={run.player.characterId}
+        characterId={firstChar}
         seedText=""
         initialRun={run}
         unlocks={[]}

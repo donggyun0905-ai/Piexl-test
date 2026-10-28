@@ -13,7 +13,7 @@ import { RankFinding } from "../event/RankResult";
 import { CoopGame } from "./CoopGame";
 import { ERRORS, loadCharacter, type CoopWire } from "./coopWire";
 export type { CoopWire } from "./coopWire";
-import { PwRoomPanel, pwSeatPids, usePwRoom, useRankDraft } from "../event/PwRoom";
+import { pwDrafting, PwRoomDraft, PwRoomPanel, pwSeatPids, usePwRoom, useRankDraft } from "../event/PwRoom";
 import { CoopNameAsk } from "./CoopNameAsk";
 import type { CoopMsg } from "./lockstep";
 import { fetchIce, PeerNet } from "./peer";
@@ -238,6 +238,12 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
         onBackRoom={() => conn.send({ t: "lobby" })}
         rank={rank ? { changes: rankChanges, report: (winner) => conn.send({ t: "rankres", winner }), again: () => (leave(), onAgain?.()) } : undefined}
       />
+    );
+  }
+
+  if (room && pwDrafting(room, pw)) {
+    return (
+      <PwRoomDraft room={room} you={you} pw={pw} chat={chat} onChat={(text) => conn?.send({ t: "chat", text })} onLeave={rank ? onExit : leave} t={t} />
     );
   }
 

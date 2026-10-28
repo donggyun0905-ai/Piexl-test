@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.187",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "패왕전 밴픽 화면: 혼자 하기·친구 방·랭크전 모두 같은 전체 화면 · 위쪽 탭을 전체·원거리·근거리·힐러·탱커로 · 캐릭터마다 역할(원딜·근딜·힐러·탱커) 노란 글씨 · 세로 가운데 정렬 · 밴하기·밴 넘기기 버튼 같은 크기 · 밴픽 화면의 스킬 설명은 빼고 다음 화면에서",
+        "스킬 보기 화면 오른쪽에 작은 연습장: 고른 캐릭터로 허수아비에게 스킬을 바로 써 볼 수 있음 (모든 대결, 친구 방은 밴픽이 끝난 뒤 준비방에서)",
+        "패왕전 밸런스: 사람처럼 스킬을 자주 쓰는 AI끼리 1대1을 많이 돌려 센 캐릭터(야수·소환술사·풋내기·격투가·학살자·정령사 등)는 받는 피해를 늘리고 약한 캐릭터는 줄임",
+        "고침: 관전할 때 내 한정 스킨 효과가 보고 있는 사람에게 보이던 것 · 데스매치에서 처치하고 레벨이 오르면 누르던 방향키가 멈추던 것",
+      ],
+      en: [
+        "Champion Clash draft: solo, friend rooms and ranked all use the same full screen · tabs are now All / Ranged / Melee / Healer / Tank · each character shows its role in yellow · centered layout · Ban and Skip ban buttons are the same size · skill details moved to the next screen",
+        "A small training ground now sits to the right of the skill screen so you can try your character's skills on dummies right away (all battles; in friend rooms, from the preparation room after the draft)",
+        "Champion Clash balance: after many AI 1v1s with frequent skill use (closer to real play), strong characters (Beastkin, Summoner, Novice, Brawler, Slayer, Spiritist and others) take more damage and weak ones take less",
+        "Fixed: your limited skin effects showing on the player you spectate · in Deathmatch, the held direction key stopping after a kill levels you up",
+      ],
+      ja: [
+        "覇王戦バンピック画面: ソロ・フレンド部屋・ランク戦すべて同じ全画面 · 上のタブを すべて・遠距離・近距離・ヒーラー・タンク に · キャラごとに役割(遠距離・近距離・ヒーラー・タンク)を黄色で表示 · 縦中央揃え · バン・バンしないボタンを同じ大きさに · スキル説明は次の画面へ",
+        "スキル確認画面の右に小さな練習場: 選んだキャラでかかしにすぐスキルを試せる (全対決、フレンド部屋はバンピック後の準備部屋で)",
+        "覇王戦バランス: スキルをよく使うAI同士の1対1を多数回し(実際のプレイに近く)、強いキャラ(獣人・召喚術師・見習い・格闘家・虐殺者・精霊使いなど)は受けるダメージを増やし、弱いキャラは減らした",
+        "修正: 観戦中に自分の限定スキン効果が見ている相手に表示されていた · デスマッチで倒してレベルが上がると押していた方向キーが止まっていた",
+      ],
+    },
+  },
+  {
     version: "0.48.186",
     date: "2026-10-28",
     items: {

@@ -45,7 +45,7 @@ export function PwFlow({ lang, setLang, t, onExit }: { lang: Lang; setLang: (l: 
   }
   if (step.name === "draft") {
     const { mode, map } = step;
-    return <PwDraftSolo key={step.key} mode={mode} lang={lang} t={t} onBack={() => setStep({ name: "maps", mode })} onDone={(picks) => setStep({ name: "prep", mode, map, characterId: picks[0]!, picks })} />;
+    return <PwDraftSolo key={step.key} mode={mode} t={t} onBack={() => setStep({ name: "maps", mode })} onDone={(picks) => setStep({ name: "prep", mode, map, characterId: picks[0]!, picks })} />;
   }
   if (step.name === "prep") {
     const { mode, map, characterId, picks } = step;
