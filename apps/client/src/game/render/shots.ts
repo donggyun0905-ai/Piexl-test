@@ -32,6 +32,7 @@ import { drawCustomFx, drawCustomShot } from "./customFx";
 import { C, CHARM_INK, lerp, type Snap } from "./palette";
 import { drawCoinFx } from "../drawPickup";
 import { drawBloom, drawBlossomFlurry } from "./sakura";
+import { drawBaseShot, drawBlast, drawBurst, drawHit, drawSwing } from "./baseFx";
 
 export function drawProjectiles(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   for (const pr of s.projectiles) {
@@ -46,16 +47,7 @@ export function drawProjectiles(ctx: CanvasRenderingContext2D, s: RunState, alph
       continue;
     }
     if (drawCustomShot(ctx, pr.blast ? "shot:magic" : pr.fromPlayer ? "shot:player" : "shot:enemy", pr, x, y)) continue;
-    if (pr.blast) {
-      // 마법탄: 보라색 + 흰 가운데
-      ctx.fillStyle = C.shotMagic;
-      ctx.fillRect(x - pr.r - 1, y - pr.r - 1, pr.r * 2 + 2, pr.r * 2 + 2);
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(x - 1, y - 1, 2, 2);
-      continue;
-    }
-    ctx.fillStyle = pr.fromPlayer ? C.shotPlayer : C.shotEnemy;
-    ctx.fillRect(x - pr.r, y - pr.r, pr.r * 2, pr.r * 2);
+    drawBaseShot(ctx, pr, x, y, s.tick);
   }
 }
 
@@ -115,42 +107,11 @@ export function drawEffects(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
     if (drawCleaveFx(ctx, fx, snap) || drawBedouinFx(ctx, fx, s.tick, snap) || drawGeneralFx(ctx, fx, snap) || drawImugiPowerFx(ctx, fx, snap) || drawImugiFx(ctx, fx, snap) || drawApostleFx(ctx, fx, snap) || drawStarFx(ctx, fx, snap) || drawDuckFx(ctx, fx, px, py, snap)) continue;
     if (drawGunFx(ctx, fx, snap) || drawBeastFx(ctx, fx, snap) || drawSageFx(ctx, fx, snap) || drawBossFx(ctx, fx, snap) || drawTagFx(ctx, fx, snap) || drawTitanFx(ctx, fx, snap) || drawOniFx(ctx, fx, snap) || drawScribeFx(ctx, fx, snap) || drawS2Fx(ctx, fx, snap)) continue;
     if (fx.kind === "swing" && fx.width === 2) drawWhip(ctx, fx, snap(px), snap(py), t);
-    else if (fx.kind === "swing") {
-      const a = Math.atan2(fx.dirY, fx.dirX);
-      const spin = fx.dirX === 0 && fx.dirY === 0;
-      ctx.strokeStyle = C.swing;
-      ctx.globalAlpha = t;
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      if (spin) ctx.arc(snap(px), snap(py), fx.size, 0, Math.PI * 2);
-      else ctx.arc(snap(px), snap(py), fx.size, a - 1.05, a + 1.05);
-      ctx.stroke();
-      ctx.globalAlpha = 1;
-    } else if (fx.kind === "hit") {
-      ctx.fillStyle = C.hit;
-      ctx.globalAlpha = t;
-      const sz = Math.max(1, Math.round(fx.size * t));
-      ctx.fillRect(snap(fx.x) - sz, snap(fx.y) - sz, sz * 2, sz * 2);
-      ctx.globalAlpha = 1;
-    } else if (fx.kind === "bloom") {
-      drawBloom(ctx, fx, s.tick);
-    } else if (fx.kind === "blast") {
-      // 마법탄 폭발: 퍼지는 원
-      ctx.strokeStyle = C.shotMagic;
-      ctx.globalAlpha = t;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(snap(fx.x), snap(fx.y), Math.max(1, fx.size * (1.2 - t * 0.6)), 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.globalAlpha = 1;
-    } else {
-      ctx.strokeStyle = "#fff";
-      ctx.globalAlpha = t;
-      ctx.lineWidth = 1;
-      const r = fx.size * (1.5 - t);
-      ctx.strokeRect(Math.round(fx.x - r), Math.round(fx.y - r), Math.round(r * 2), Math.round(r * 2));
-      ctx.globalAlpha = 1;
-    }
+    else if (fx.kind === "swing") drawSwing(ctx, fx, snap(px), snap(py), t);
+    else if (fx.kind === "hit") drawHit(ctx, fx, snap, t);
+    else if (fx.kind === "bloom") drawBloom(ctx, fx, s.tick);
+    else if (fx.kind === "blast") drawBlast(ctx, fx, snap, t);
+    else drawBurst(ctx, fx, t);
   }
 }
 

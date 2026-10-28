@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.203",
+    date: "2026-10-28",
+    items: {
+      ko: ["효과 다듬기 2: 공용 효과 — 휘두르기가 빛 초승달로 쓸고 지나감, 맞으면 섬광·빛살·불똥, 마법 폭발은 충격파·별빛, 그 밖의 터짐은 빛 고리 · 기본 탄은 빛나는 구슬과 꼬리 (적 탄은 어두운 테두리로 잘 보이게)"],
+      en: ["Effects polish 2: shared effects — swings sweep as glowing crescents, hits flash with rays and sparks, magic blasts send shockwaves and starlight, other bursts glow as rings · default shots are glowing orbs with trails (enemy shots get a dark rim to stand out)"],
+      ja: ["エフェクト調整2: 共通エフェクト — 振りは光る三日月で薙ぐ、ヒットで閃光・光条・火花、魔法の爆発は衝撃波と星の光、その他の爆発は光の輪 · 基本弾は光る玉と尾 (敵弾は暗い縁で見やすく)"],
+    },
+  },
+  {
     version: "0.48.202",
     date: "2026-10-28",
     items: {
