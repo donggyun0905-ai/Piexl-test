@@ -1,6 +1,6 @@
 // 패왕전 같이 하기 대기실 (협동 방을 그대로 씀): 방장이 대결을 고르고, 저마다 준비방에서 장비를 골라 방장에게 보냄.
-// 편 대결은 대기실에서 밴픽(pwRoomDraft)으로 캐릭터를 정함 (랭크전 제외). 초대 링크로 들어온 손님은 방장이 보낸 대결(pwm)을 받으면 패왕전 대기실로 바뀜
-import { draftDone, PW_MODE, PW_MODES, type CharacterId, type PwLoadout, type PwMode, type RoomView } from "@pixel-rogue/shared";
+// 편 대결은 대기실에서 밴픽(pwRoomDraft)으로 캐릭터를 정함 (랭크전은 자리가 정해진 뒤 시작 전에 방장이 바로 밴픽을 시작). 초대 링크로 들어온 손님은 방장이 보낸 대결(pwm)을 받으면 패왕전 대기실로 바뀜
+import { draftDone, PW_MODE, PW_MODES, rankSeats, type CharacterId, type PwLoadout, type PwMode, type RoomView } from "@pixel-rogue/shared";
 import { useEffect, useState, type RefObject } from "react";
 import type { CoopWire } from "../coop/CoopScreen";
 import type { CoopMsg } from "../coop/lockstep";
@@ -23,7 +23,7 @@ export interface PwRoomGame {
 }
 
 /** peers: 메시지를 보낼 다른 사람들 (방장은 손님 모두, 손님은 방장) */
-/** start: 패왕전으로 들어옴(처음엔 3대3) · 대결을 정해서 들어옴(랭크전) · seatPids: 게임에 나올 사람들 (밴픽 자리) */
+/** start: 패왕전으로 들어옴(처음엔 3대3) · 대결을 정해서 들어옴(랭크전) · seatPids: 자리마다 사람 (밴픽 자리, "" = AI) */
 export function usePwRoom(wireRef: RefObject<CoopWire>, start: boolean | PwMode, isHost: boolean, peers: () => string[], you: string, seatPids: readonly string[]) {
   const [mode, setModeState] = useState<PwMode | null>(typeof start === "string" ? start : start ? "trio" : null);
   const [map, setMapState] = useState<PwMapPick>(null);
@@ -36,7 +36,7 @@ export function usePwRoom(wireRef: RefObject<CoopWire>, start: boolean | PwMode,
     if (to) net.send(to, msg);
     else for (const pid of peers()) if (net.isOpen(pid)) net.send(pid, msg);
   };
-  const draft = usePwRoomDraft(mode, typeof start === "string", isHost, you, seatPids, send);
+  const draft = usePwRoomDraft(mode, isHost, you, seatPids, send);
   useEffect(() => {
     const wire = wireRef.current;
     wire.onPw = (pid, msg) => {
@@ -73,6 +73,22 @@ export function usePwRoom(wireRef: RefObject<CoopWire>, start: boolean | PwMode,
   /** 시작해도 되는지 (밴픽이 있으면 끝나야 함) */
   const canStart = !draft.on || !!picks;
   return { mode, setMode, map, setMap, lo, ready, game, draft, canStart };
+}
+
+/** 밴픽 자리 = 게임 자리 (CoopGame과 같은 규칙: 친구 방은 들어온 순서, 랭크전은 두 편에 나눔) */
+export function pwSeatPids(room: RoomView | null): string[] {
+  const pids = room?.players.filter((p) => p.state !== "watch").map((p) => p.pid) ?? [];
+  return room?.rank ? rankSeats(room.rank, pids) : pids;
+}
+
+/** 랭크전 밴픽: 자리가 정해지면(시작 전) 방장이 밴픽을 시작하고, 다 고르면 done (서버에 알려 곧 시작) */
+export function useRankDraft(drafting: boolean, pw: ReturnType<typeof usePwRoom>, done: () => void) {
+  useEffect(() => {
+    if (!drafting) return;
+    if (!pw.draft.d) pw.draft.start();
+    else if (pw.canStart) done();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [drafting, pw.draft.d, pw.canStart]);
 }
 
 interface PanelProps {
@@ -118,12 +134,12 @@ export function PwRoomPanel({ room, you, isHost, characterId, pw, lang, t }: Pan
       {draft.on && draft.d && (
         <PwDraftView d={draft.d} names={draft.seats.map((pid) => room.players.find((p) => p.pid === pid)?.name ?? "AI").concat(Array(draft.d.picks.length).fill("AI")).slice(0, draft.d.picks.length)} ai={draft.d.picks.map((_, i) => !draft.seats[i])} me={draft.me} mine={draft.mine} endAt={draft.endAt} onAct={draft.act} lang={lang} t={t} />
       )}
-      {draft.on && isHost && (
+      {draft.on && isHost && !room.rank && (
         <button type="button" className={draft.d ? "ghost" : "primary"} onClick={draft.start}>
           {t(draft.d ? "pwDraftAgain" : "pwDraftStart")}
         </button>
       )}
-      {draft.on && !pw.canStart && <small> {t("pwDraftNeed")}</small>}
+      {draft.on && !room.rank && !pw.canStart && <small> {t("pwDraftNeed")}</small>}
       {def.prep && !draft.on && (
         <button type="button" className={pw.lo ? "ghost" : "primary"} onClick={() => setPrep(true)}>
           {t("pwPrep")} {pw.lo ? "✓" : ""}

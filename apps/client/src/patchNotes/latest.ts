@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.185",
+    date: "2026-10-28",
+    items: {
+      ko: ["패왕전 랭크전에도 밴픽: 상대가 정해지면 판 시작 전에 밴픽 (빈 자리는 AI가 고름) · 다 고르면 바로 시작 · 밴픽 중에는 모두 채팅 가능"],
+      en: ["Ranked Champion Clash now has a draft too: once the match is found, teams draft before the battle (AI picks for empty seats) · it starts as soon as everyone has picked · everyone can chat during the draft"],
+      ja: ["覇王戦ランク戦にもバンピック: 相手が決まると試合前にバンピック (空き席はAIが選ぶ) · 全員決まるとすぐ開始 · バンピック中は全員チャット可能"],
+    },
+  },
+  {
     version: "0.48.184",
     date: "2026-10-28",
     items: {

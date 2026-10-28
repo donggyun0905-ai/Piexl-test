@@ -1,6 +1,7 @@
 // 패왕전 랭크전 (화면·서버 공용): 대결 둘(1대1 · 3대3) · 점수 → 티어 · 이기고 진 점수 · 자리 배치
 // 티어: 흙 · 돌 · 청동 · 은 · 금 · 수정 (각 III → II → I, 100점마다) → 성좌 → 패왕(성좌 중 상위 10명)
 import type { PwMode } from "./paewangDefs";
+import { draftTurns, PW_DRAFT_SEC } from "./pwDraft";
 
 export type RankQueue = "solo" | "team";
 export const RANK_QUEUES: readonly RankQueue[] = ["solo", "team"];
@@ -8,6 +9,8 @@ export const RANK_QUEUES: readonly RankQueue[] = ["solo", "team"];
 export const RANK_MODE: Record<RankQueue, PwMode> = { solo: "duel", team: "trio" };
 /** 랭크전 방 사람 수 (나머지 자리는 AI) */
 export const RANK_SEATS: Record<RankQueue, number> = { solo: 2, team: 6 };
+/** 랭크전 밴픽에 주는 시간 (ms): 모든 차례가 제한 시간을 다 써도 끝날 만큼. 다 고르면 방장이 알려 바로 시작 */
+export const rankDraftMs = (queue: RankQueue): number => draftTurns(RANK_MODE[queue]).length * PW_DRAFT_SEC * 1000 + 5000;
 
 export const RANK = {
   /** 처음 점수 */

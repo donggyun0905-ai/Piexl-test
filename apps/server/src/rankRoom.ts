@@ -1,6 +1,6 @@
 // 랭크전 방 규칙 (roomLogic이 부름): 사람마다 화면에서 본 이긴 편을 받아, 모두 같으면 점수 반영할 판 결과를 만듦.
 // 나간 사람은 진 것으로. 결과가 서로 다르면 반영하지 않음 (조작 막기)
-import { RANK, rankSeats, rankTeam, type RankEntry, type RankQueue } from "@pixel-rogue/shared";
+import { BATTLE_COUNTDOWN_MS, COOP_ROOM_MS, RANK, rankDraftMs, rankSeats, rankTeam, type RankEntry, type RankQueue } from "@pixel-rogue/shared";
 import type { RoomData } from "./roomLogic";
 
 /** Hub에 넘길 한 판 결과 */
@@ -10,6 +10,17 @@ export interface RankJob {
   winner: number;
   /** 편마다 AI 수 */
   ai: number[];
+}
+
+/** 판 시작 전 밴픽 시간 (랭크전만, 자리가 정해진 뒤 화면끼리 진행) */
+export const rankDraftWait = (d: RoomData): number => (d.rank ? rankDraftMs(d.rank) : 0);
+
+/** 방장이 밴픽을 마침: 남은 밴픽 시간을 줄여 곧 시작. 바뀌었으면 true */
+export function rankDraftDone(d: RoomData, pid: string, now: number): boolean {
+  if (!d.rank || d.phase !== "playing" || pid !== d.hostPid || now + BATTLE_COUNTDOWN_MS >= d.startAt) return false;
+  d.startAt = now + BATTLE_COUNTDOWN_MS;
+  d.endAt = d.startAt + COOP_ROOM_MS;
+  return true;
 }
 
 /** 결과 하나 받기. 모두(연결된 사람) 보냈으면 true */

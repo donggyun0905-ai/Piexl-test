@@ -13,7 +13,7 @@ import { RankFinding } from "../event/RankResult";
 import { CoopGame } from "./CoopGame";
 import { ERRORS, loadCharacter, type CoopWire } from "./coopWire";
 export type { CoopWire } from "./coopWire";
-import { PwRoomPanel, usePwRoom } from "../event/PwRoom";
+import { PwRoomPanel, pwSeatPids, usePwRoom, useRankDraft } from "../event/PwRoom";
 import { CoopNameAsk } from "./CoopNameAsk";
 import type { CoopMsg } from "./lockstep";
 import { fetchIce, PeerNet } from "./peer";
@@ -130,7 +130,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
 
   const hostPid = room?.hostPid ?? "";
   const isHost = !!you && hostPid === you;
-  const seatPids = room?.players.filter((p) => p.state !== "watch").map((p) => p.pid) ?? [];
+  const seatPids = pwSeatPids(room);
   const pw = usePwRoom(wire, rank ? RANK_MODE[rank] : pwStart, isHost, () => (isHost ? (room?.players.map((p) => p.pid).filter((p) => p !== you) ?? []) : [hostPid]), you, seatPids);
 
   // 직접 연결: 방장이 바뀌면 새로 (손님은 방장하고만 연결)
@@ -203,6 +203,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
 
   const serverNow = now + offset;
   const inGame = !!room && room.phase !== "lobby" && serverNow >= room.startAt;
+  useRankDraft(!!rank && isHost && room?.phase === "playing" && !inGame, pw, () => conn?.send({ t: "draftdone" }));
   // 판이 끝나 대기실로 돌아오면 지난 판 메시지는 버림
   useEffect(() => void (inGame || wire.current.pending.splice(0)), [inGame]);
 

@@ -75,6 +75,8 @@ export type ClientMsg =
   | { t: "lobby" }
   /** 랭크전: 내 화면에서 이긴 편 (모두의 결과가 같아야 점수에 반영) */
   | { t: "rankres"; winner: number }
+  /** 랭크전: 방장 화면에서 밴픽이 끝남 (남은 밴픽 시간을 줄여 곧 시작) */
+  | { t: "draftdone" }
   | { t: "status"; floor: number; roomId: number; hp: number; maxHp: number; score: number; kills: number }
   | { t: "end"; state: "dead" | "cleared"; floor: number; roomId: number; hp: number; score: number; kills: number }
   | { t: "chat"; text: string }

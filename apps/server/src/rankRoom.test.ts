@@ -1,4 +1,4 @@
-import { RANK, rankOf, rankSeats } from "@pixel-rogue/shared";
+import { BATTLE_COUNTDOWN_MS, RANK, rankDraftMs, rankOf, rankSeats } from "@pixel-rogue/shared";
 import { describe, expect, it } from "vitest";
 import { setupHub } from "./hub";
 import { applyRank } from "./rankApi";
@@ -39,6 +39,17 @@ describe("패왕전 랭크전", () => {
     bad.handle(P(1), { t: "rankres", winner: 0 });
     bad.handle(P(2), { t: "rankres", winner: 1 });
     expect(bad.rankJob).toBeNull();
+  });
+
+  it("밴픽: 시작하면 밴픽 시간만큼 뒤에 판 시작 · 방장이 다 골랐다고 하면 곧 시작 · 그동안 채팅은 모두", () => {
+    const r = room("solo");
+    r.join(P(1), "A", "warden");
+    r.join(P(2), "B", "mage");
+    expect(r.data.startAt).toBe(1_000_000 + BATTLE_COUNTDOWN_MS + rankDraftMs("solo"));
+    expect(r.handle(P(2), { t: "chat", text: "hi" })).toHaveLength(1);
+    expect(r.handle(P(2), { t: "draftdone" })).toEqual([]);
+    r.handle(r.data.hostPid, { t: "draftdone" });
+    expect(r.data.startAt).toBe(1_000_000 + BATTLE_COUNTDOWN_MS);
   });
 
   it("점수 반영: 이기면 오르고 지면 내림 · 승패 수 · 순위표·내 점수", async () => {

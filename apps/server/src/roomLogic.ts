@@ -22,7 +22,7 @@ import {
   type RoomView,
   type ServerMsg,
 } from "@pixel-rogue/shared";
-import { rankFinish, rankReport, type RankJob } from "./rankRoom";
+import { rankDraftDone, rankDraftWait, rankFinish, rankReport, type RankJob } from "./rankRoom";
 import { backToLobby } from "./roomLobby";
 
 export interface RoomData {
@@ -177,7 +177,7 @@ export class RoomLogic {
     const now = this.now();
     d.phase = "playing";
     d.seedText = this.newSeed();
-    d.startAt = now + BATTLE_COUNTDOWN_MS;
+    d.startAt = now + BATTLE_COUNTDOWN_MS + rankDraftWait(d);
     d.endAt = d.startAt + (d.kind === "coop" ? COOP_ROOM_MS : BATTLE_DURATION_MS);
     d.autoStartAt = 0;
     // 모두 같은 수치로: 방장 화면의 수치
@@ -202,6 +202,7 @@ export class RoomLogic {
       this.dirty = true;
       return [];
     }
+    if (msg.t === "draftdone") return rankDraftDone(d, pid, now) ? ((this.dirty = true), [this.broadcast()]) : [];
     if (msg.t === "lobby") {
       if (d.kind !== "coop" || d.rank || d.phase === "lobby" || d.hostPid !== pid) return [];
       backToLobby(d, this.max);
@@ -235,8 +236,8 @@ export class RoomLogic {
       return [{ to: [String(msg.to)], msg: { t: "signal", from: pid, data: msg.data } }];
     }
     if (msg.t === "chat") {
-      // 대기실에서는 모두, 게임 중에는 먼저 끝난 사람끼리만
-      const lobby = d.phase === "lobby";
+      // 대기실·시작 전(랭크전 밴픽)에는 모두, 게임 중에는 먼저 끝난 사람끼리만
+      const lobby = d.phase === "lobby" || now < d.startAt;
       if (!lobby && p.state === "alive" && d.phase !== "done") return [];
       const text = cleanChat(String(msg.text ?? ""));
       if (!text) return [];
@@ -284,7 +285,6 @@ export class RoomLogic {
     this.dirty = true;
     return [this.broadcast()];
   }
-
   /** 다음 알람 시각 (없으면 0) */
   nextAlarm(): number {
     const d = this.data;
