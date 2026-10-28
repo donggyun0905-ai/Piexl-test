@@ -229,32 +229,6 @@
     grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
   }
 }
-/* 패왕전 연습장 칸 (event/PwPractice): 왼쪽 세로 (위쪽 궁극기 알림·점수판을 가리지 않게) */
-.pw-practice {
-  position: fixed;
-  left: 12px;
-  top: 92px;
-  flex-direction: column;
-  align-items: stretch;
-  width: 170px;
-  z-index: 30;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  max-width: calc(100vw - 24px);
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 13px;
-  background: rgb(0 0 0 / 0.6);
-}
-.pw-practice button {
-  padding: 4px 8px;
-}
-.pw-practice button.on {
-  color: #1a1622;
-  background: #ffd860;
-}
 /* 패왕전 준비방: 왼쪽 스킬 설명 · 오른쪽 작은 연습장 (event/PwPrep) */
 .pw-prep-split {
   display: flex;

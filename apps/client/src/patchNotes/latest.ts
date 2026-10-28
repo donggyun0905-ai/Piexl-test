@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.200",
+    date: "2026-10-28",
+    items: {
+      ko: ["패왕전 '모든 캐릭터 둘러보기' (연습장 아래): 역할 탭 · 캐릭터 카드를 누르면 평타·패시브·스킬 1~4 설명 창 · '연습장에서 해 보기'로 바로 써 봄"],
+      en: ["Champion Clash 'Browse all characters' (below the Training Ground): role tabs · tap a character card for its basic attack, passive and skills 1–4 · 'Try in the Training Ground' to play it right away"],
+      ja: ["覇王戦「全キャラを見る」(練習場の下): 役割タブ · キャラカードを押すと通常攻撃・パッシブ・スキル1~4の説明 · 「練習場で試す」ですぐ使える"],
+    },
+  },
+  {
     version: "0.48.199",
     date: "2026-10-28",
     items: {

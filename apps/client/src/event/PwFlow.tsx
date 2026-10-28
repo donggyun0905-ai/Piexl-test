@@ -8,6 +8,7 @@ import { PwDraftSolo } from "./PwDraftSolo";
 import { PwGame } from "./PwGame";
 import { type PwMapPick, PwMaps } from "./PwMaps";
 import { PwModes } from "./PwModes";
+import { PwBrowse } from "./PwBrowse";
 import { PwPracticeGame } from "./PwPractice";
 import { PwPrep } from "./PwPrep";
 
@@ -18,6 +19,8 @@ type Step =
   | { name: "maps"; mode: PwMode }
   /** 연습장: 캐릭터 고르기 → 허수아비와 연습 */
   | { name: "practice"; characterId?: CharacterId; key: number }
+  /** 모든 캐릭터 둘러보기 (카드를 누르면 스킬 설명) */
+  | { name: "browse" }
   | { name: "select"; mode: PwMode; map: PwMapPick }
   | { name: "draft"; mode: PwMode; map: PwMapPick; key: number }
   /** picks: 밴픽으로 정한 자리마다 캐릭터 (0번 = 나) */
@@ -31,6 +34,7 @@ export function PwFlow({ lang, setLang, t, onExit }: { lang: Lang; setLang: (l: 
   if (step.name === "multi") return <CoopScreen pw lang={lang} setLang={setLang} t={t} onExit={modes} />;
   // 랭크전: 같은 방 구조로 빠른 매칭 (끝나면 다시 찾기 또는 나가기)
   if (step.name === "rank") return <CoopScreen key={step.key} pw rank={step.queue} lang={lang} setLang={setLang} t={t} onExit={modes} onAgain={() => setStep({ ...step, key: step.key + 1 })} />;
+  if (step.name === "browse") return <PwBrowse lang={lang} t={t} onBack={modes} onTry={(characterId) => setStep({ name: "practice", characterId, key: 1 })} />;
   if (step.name === "practice") {
     if (!step.characterId) return <CharacterSelect t={t} showSeed={false} onBack={modes} onSelect={(characterId) => setStep({ name: "practice", characterId, key: step.key + 1 })} />;
     return <PwPracticeGame key={step.key} characterId={step.characterId} lang={lang} t={t} onChange={() => setStep({ name: "practice", key: step.key })} onExit={modes} />;
@@ -55,5 +59,5 @@ export function PwFlow({ lang, setLang, t, onExit }: { lang: Lang; setLang: (l: 
   if (step.name === "game") {
     return <PwGame key={step.key} mode={step.mode} map={step.map} characterId={step.characterId} picks={step.picks} loadout={step.loadout} lang={lang} t={t} onExit={modes} onRetry={() => setStep({ ...step, key: step.key + 1 })} />;
   }
-  return <PwModes t={t} onBack={onExit} onMulti={() => setStep({ name: "multi" })} onPractice={() => setStep({ name: "practice", key: 0 })} onRank={(queue) => setStep({ name: "rank", queue, key: 0 })} onPick={(mode) => setStep({ name: "maps", mode })} />;
+  return <PwModes t={t} onBack={onExit} onMulti={() => setStep({ name: "multi" })} onPractice={() => setStep({ name: "practice", key: 0 })} onBrowse={() => setStep({ name: "browse" })} onRank={(queue) => setStep({ name: "rank", queue, key: 0 })} onPick={(mode) => setStep({ name: "maps", mode })} />;
 }

@@ -1,0 +1,43 @@
+/* 패왕전 연습장 칸 · 모든 캐릭터 둘러보기 (event/PwPractice · PwBrowse) */
+/* 패왕전 연습장 칸 (event/PwPractice): 왼쪽 세로 (위쪽 궁극기 알림·점수판을 가리지 않게) */
+.pw-practice {
+  position: fixed;
+  left: 12px;
+  top: 92px;
+  flex-direction: column;
+  align-items: stretch;
+  width: 170px;
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100vw - 24px);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  background: rgb(0 0 0 / 0.6);
+}
+.pw-practice button {
+  padding: 4px 8px;
+}
+.pw-practice button.on {
+  color: #1a1622;
+  background: #ffd860;
+}
+/* 패왕전 모든 캐릭터 둘러보기 (event/PwBrowse) */
+.pw-browse {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 16px;
+}
+.pw-browse-grid {
+  max-height: none;
+  margin-bottom: 12px;
+}
+.pw-browse-card {
+  max-width: 560px;
+  max-height: 88vh;
+  overflow-y: auto;
+  text-align: left;
+}
