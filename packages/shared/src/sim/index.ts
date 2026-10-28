@@ -84,6 +84,7 @@ export { artifacterGauge } from "./artifacter";
 export { ARTIFACTER_HIDDEN } from "../itemsArtifacter";
 export { punkAccel, punkGauge } from "./punk";
 export { createPvp, pvpResult, pwSeatCount, stepPvp, type PwHuman } from "./pvp";
+export { createPractice } from "./pvpPractice";
 export * from "./paewangTypes";
 export { pwCanStack, pwLoadoutOk, pwPassiveChoices, pwStackMax, pwWeapons } from "./paewangKit";
 export { inBush, onDeck } from "./paewangGrid";

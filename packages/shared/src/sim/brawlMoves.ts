@@ -122,7 +122,7 @@ export function nearest(s: RunState, range: number, ok: (e: EnemyState) => boole
   let best: EnemyState | null = null;
   for (const e of s.enemies) {
     const rr = range + e.r;
-    if (e.hp <= 0 || dist2(e, p) > rr * rr || !ok(e)) continue;
+    if (e.hp <= 0 || e.pwHid || dist2(e, p) > rr * rr || !ok(e)) continue;
     if (!best || dist2(e, p) < dist2(best, p)) best = e;
   }
   return best;

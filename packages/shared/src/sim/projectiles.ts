@@ -180,7 +180,7 @@ function steer(s: RunState, pr: ProjectileState): void {
   let best: EnemyState | null = null;
   let bestD = pr.seek ? Infinity : PERKS.seekerFeather.reach * PERKS.seekerFeather.reach;
   for (const e of s.enemies) {
-    if (e.hp <= 0 || pr.hitIds?.includes(e.id)) continue;
+    if (e.hp <= 0 || e.pwHid || pr.hitIds?.includes(e.id)) continue;
     const d = dist2(e, pr);
     if (d < bestD) {
       bestD = d;

@@ -130,6 +130,10 @@ export interface PvpSeat {
   /** 지난번 AI 입력 때 자리 (막힘 판정) */
   lastX?: number;
   lastY?: number;
+  /** AI가 상대를 마지막으로 본 곳 · 그쪽을 찾는 남은 틱 (수풀에 숨으면 정확한 자리는 모름) */
+  seenX?: number;
+  seenY?: number;
+  seenT?: number;
   /** 이 판에 상대에게 준 피해 · 받은 피해 합 (점수판) */
   dealt?: number;
   taken?: number;
@@ -221,6 +225,13 @@ export interface PvpState {
   round?: number;
   lastRound?: { team: number; at: number };
   readyAt?: number;
+  /** 연습장: 허수아비(가만히 · 움직이기만 · 싸움) · 스킬 대기 없음. 판이 끝나지 않고 쓰러지면 바로 다시 참 (sim/pvpPractice) */
+  practice?: PwPractice;
+}
+
+export interface PwPractice {
+  dummy: "still" | "move" | "fight";
+  noCd: boolean;
 }
 
 export interface PwRunState {

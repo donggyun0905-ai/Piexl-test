@@ -8,6 +8,7 @@ import { PwDraftSolo } from "./PwDraftSolo";
 import { PwGame } from "./PwGame";
 import { type PwMapPick, PwMaps } from "./PwMaps";
 import { PwModes } from "./PwModes";
+import { PwPracticeGame } from "./PwPractice";
 import { PwPrep } from "./PwPrep";
 
 type Step =
@@ -15,6 +16,8 @@ type Step =
   | { name: "multi" }
   | { name: "rank"; queue: RankQueue; key: number }
   | { name: "maps"; mode: PwMode }
+  /** 연습장: 캐릭터 고르기 → 허수아비와 연습 */
+  | { name: "practice"; characterId?: CharacterId; key: number }
   | { name: "select"; mode: PwMode; map: PwMapPick }
   | { name: "draft"; mode: PwMode; map: PwMapPick; key: number }
   /** picks: 밴픽으로 정한 자리마다 캐릭터 (0번 = 나) */
@@ -28,6 +31,10 @@ export function PwFlow({ lang, setLang, t, onExit }: { lang: Lang; setLang: (l: 
   if (step.name === "multi") return <CoopScreen pw lang={lang} setLang={setLang} t={t} onExit={modes} />;
   // 랭크전: 같은 방 구조로 빠른 매칭 (끝나면 다시 찾기 또는 나가기)
   if (step.name === "rank") return <CoopScreen key={step.key} pw rank={step.queue} lang={lang} setLang={setLang} t={t} onExit={modes} onAgain={() => setStep({ ...step, key: step.key + 1 })} />;
+  if (step.name === "practice") {
+    if (!step.characterId) return <CharacterSelect t={t} showSeed={false} onBack={modes} onSelect={(characterId) => setStep({ name: "practice", characterId, key: step.key + 1 })} />;
+    return <PwPracticeGame key={step.key} characterId={step.characterId} lang={lang} t={t} onChange={() => setStep({ name: "practice", key: step.key })} onExit={modes} />;
+  }
   if (step.name === "maps") {
     const { mode } = step;
     return <PwMaps mode={mode} t={t} onBack={modes} onPick={(map) => setStep(mode === "gungame" ? { name: "game", mode, map, characterId: "warden", key: 0 } : pwHasDraft(mode) ? { name: "draft", mode, map, key: 0 } : { name: "select", mode, map })} />;
@@ -48,5 +55,5 @@ export function PwFlow({ lang, setLang, t, onExit }: { lang: Lang; setLang: (l: 
   if (step.name === "game") {
     return <PwGame key={step.key} mode={step.mode} map={step.map} characterId={step.characterId} picks={step.picks} loadout={step.loadout} lang={lang} t={t} onExit={modes} onRetry={() => setStep({ ...step, key: step.key + 1 })} />;
   }
-  return <PwModes t={t} onBack={onExit} onMulti={() => setStep({ name: "multi" })} onRank={(queue) => setStep({ name: "rank", queue, key: 0 })} onPick={(mode) => setStep({ name: "maps", mode })} />;
+  return <PwModes t={t} onBack={onExit} onMulti={() => setStep({ name: "multi" })} onPractice={() => setStep({ name: "practice", key: 0 })} onRank={(queue) => setStep({ name: "rank", queue, key: 0 })} onPick={(mode) => setStep({ name: "maps", mode })} />;
 }

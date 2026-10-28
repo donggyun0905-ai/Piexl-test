@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.186",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "패왕전 수풀: 수풀에 숨으면 상대가 가까이 와야 보임 · AI가 멀리서 자동으로 맞히지 않고, 숨은 걸 알아도 정확한 자리는 몰라 마지막에 본 수풀 쪽으로 가서 때려 봄 (유도탄도 숨은 상대를 따라가지 않음)",
+        "패왕전 연습장: 아무 캐릭터나 골라 허수아비 셋에게 스킬을 마음껏 · 허수아비는 가만히·움직이기·싸움 · 스킬 대기 없음 켜고 끄기 · 허수아비·캐릭터 바꾸기 · 쓰러져도 바로 다시 참",
+      ],
+      en: [
+        "Champion Clash bushes: hiding in a bush keeps you unseen until a rival comes close · AI no longer auto-hits you from afar; it knows you went in but not exactly where, so it goes to the bush where it last saw you and attacks there (homing shots no longer follow hidden rivals)",
+        "Champion Clash Training Ground: pick any character and try its skills on three dummies · dummies can stand, move or fight · toggle no cooldowns · swap dummies or your character · nobody stays down",
+      ],
+      ja: [
+        "覇王戦の草むら: 草むらに隠れると相手が近づくまで見えない · AIが遠くから自動で当てなくなり、隠れたのは分かっても正確な位置は分からず、最後に見た草むらへ行って攻撃してみる (誘導弾も隠れた相手を追わない)",
+        "覇王戦 練習場: 好きなキャラを選び、かかし3体にスキルを自由に · かかしは静止・移動・戦う · クールタイムなしの切り替え · かかし・キャラ変更 · 倒れてもすぐ全回復",
+      ],
+    },
+  },
+  {
     version: "0.48.185",
     date: "2026-10-28",
     items: {

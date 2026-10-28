@@ -49,7 +49,7 @@ function nearestEnemy(s: RunState): EnemyState | null {
   let best: EnemyState | null = null;
   let bestD = Infinity;
   for (const e of s.enemies) {
-    if (e.immune) continue;
+    if (e.immune || e.pwHid) continue;
     // 광야의 새벽 상자는 적보다 두 배 가까울 때만 · 같은 거리면 먼저 나온 적 (순서가 항상 같게)
     const d = dist2(e, s.player) * (e.svBox ? 4 : 1);
     if (d < bestD) {

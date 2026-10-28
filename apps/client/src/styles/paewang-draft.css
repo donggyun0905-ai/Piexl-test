@@ -204,3 +204,26 @@
 .pw-room:has(.pw-draft) {
   max-width: none;
 }
+/* 패왕전 연습장 칸 (event/PwPractice): 왼쪽 위 (체력 줄 아래) */
+.pw-practice {
+  position: fixed;
+  left: 12px;
+  top: 92px;
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100vw - 24px);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  background: rgb(0 0 0 / 0.6);
+}
+.pw-practice button {
+  padding: 4px 8px;
+}
+.pw-practice button.on {
+  color: #1a1622;
+  background: #ffd860;
+}

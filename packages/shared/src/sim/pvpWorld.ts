@@ -10,8 +10,9 @@ import { updateEffects } from "./run";
 import { tickDots } from "./status";
 import { updateCharms } from "./talisman";
 import type { EnemyState, RunState } from "./types";
-import { makeEnemy } from "./util";
-import { buffMul } from "./pwSkillHit";
+import { dist2, makeEnemy } from "./util";
+import { inBush } from "./paewangGrid";
+import { buffMul, pwHidden } from "./pwSkillHit";
 
 /** 경기장에 나와 살아 있는 자리인지 */
 export function inPlay(s: RunState, i: number): boolean {
@@ -35,6 +36,16 @@ export function assignFoes(s: RunState): void {
     const team = pv.seats[i]!.team;
     s.enemies = live.filter((e) => pv.seats[pv.proxies.indexOf(e)]!.team !== team);
   });
+}
+
+/** 지금 자리(s.player) 눈에 안 보이는 상대 표시: 수풀 안이면 가까이서만 보임 · 투명 스킬 */
+export function markHidden(s: RunState): void {
+  const pv = s.pvp!;
+  const players = allPlayers(s);
+  for (const e of s.enemies) {
+    const who = players[pv.proxies.indexOf(e)];
+    e.pwHid = (inBush(pv.arena, e.x, e.y) && dist2(e, s.player) > PW.hideNear * PW.hideNear) || (!!who && pwHidden(who));
+  }
 }
 
 /** 틱 시작: 그림자 적을 그 사람 자리·체력(+보호막)으로 맞춤. 맞춘 체력을 돌려줌 */
