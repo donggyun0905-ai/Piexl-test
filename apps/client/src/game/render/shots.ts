@@ -13,7 +13,7 @@ import { drawCleaveFx } from "./minions";
 import { drawBullet, drawGunFx } from "./guns";
 import { drawTagFx } from "./abandoned";
 import { drawTitanFx } from "./titan";
-import { drawOniFx } from "./oni";
+import { drawOniFx } from "./oniFx";
 import { drawMedicFx } from "./medicFx";
 import { drawBeastFx, drawBeastShot } from "./pets";
 import { drawNinjaShot } from "./ninja";
