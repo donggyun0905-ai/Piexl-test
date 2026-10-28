@@ -61,7 +61,8 @@ const buff = (p: PlayerState) => ((p.abBuff ?? 0) > 0 ? K.threeAsOne.damage : 1)
 export function abandonedTag(s: RunState): number {
   const p = s.player;
   const from = p.abM ?? 0;
-  if (from === 2 ? !p.abDone : record(p, tagSet(p), -1) === "miss") {
+  // 패왕전은 순서를 틀려도 처음으로 돌아가지 않음
+  if ((from === 2 ? !p.abDone : record(p, tagSet(p), -1) === "miss") && !s.pvp) {
     miss(s);
     return 0;
   }
@@ -112,7 +113,7 @@ export function abandonedTick(s: RunState, want: boolean): void {
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / weaponOf(p).attackSpeed));
   const r = record(p, set, m);
   if (r === "done") special(s, set);
-  else if (r === "miss") miss(s);
+  else if (r === "miss" && !s.pvp) miss(s);
 }
 
 /** 단계 특수기: 곁에서 싸우던 두 아이의 연출 공격 */

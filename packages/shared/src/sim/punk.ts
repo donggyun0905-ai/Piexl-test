@@ -1,6 +1,7 @@
 // 펑크(테라코어, 시즌 2): 네온과 크롬으로 몸을 바꾼 여자. 사이버 무기 10 + 몸에 심는 능력(전용 아이템) 10
 // 신경 가속: 맞힐 때마다 게이지가 차고, 가득 차면 다음 대시에 켜짐 → 둘레의 시간이 느려지고(적·적 탄) 내 공격이 빨라지며 잔상이 남음
 // 수치는 weaponsPunk.PUNK, 아이템은 itemsPunk
+import { PW_PASSIVE } from "../paewangPassive";
 import { TICK_RATE } from "../constants";
 import { PUNK_PERKS as K } from "../itemsPunk";
 import { createRng, deriveSeed } from "../rng";
@@ -148,7 +149,7 @@ function onDash(s: RunState): void {
   if (hasPerk(p, "cyCloak")) p.cyAmbush = K.cyCloak.ticks;
   if ((p.cyGauge ?? 0) < P.gaugeMax || punkAccel(p)) return;
   p.cyGauge = 0;
-  p.cyAccel = Math.round(P.accelTicks * (hasPerk(p, "cyBoost") ? K.cyBoost.mul : 1));
+  p.cyAccel = s.pvp ? PW_PASSIVE.punkTicks : Math.round(P.accelTicks * (hasPerk(p, "cyBoost") ? K.cyBoost.mul : 1));
   addEffect(s, { kind: "cyAccel", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 60, maxTicks: 24 });
 }
 
@@ -157,8 +158,8 @@ function accel(s: RunState): void {
   const p = s.player;
   if (!punkAccel(p)) return;
   p.cyAccel!--;
-  // 무적
-  p.invulnTicks = Math.max(p.invulnTicks, 2);
+  // 무적 (패왕전은 무적 대신 둘레 상대가 느려짐, pwPassive)
+  if (!s.pvp) p.invulnTicks = Math.max(p.invulnTicks, 2);
   const frozen = new Set(p.cyFrozen ?? []);
   for (const pr of s.projectiles) {
     if (pr.fromPlayer || frozen.has(pr.id)) continue;

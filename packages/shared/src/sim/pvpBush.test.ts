@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PW_MODE } from "../paewangDefs";
+import { PW, PW_MODE } from "../paewangDefs";
 import { PW_ARENAS } from "../paewangMaps";
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { inBush } from "./paewangGrid";
@@ -76,11 +76,11 @@ describe("패왕전 역할군 상성", () => {
     syncProxies(s);
     const [, , warden, beast] = s.pvp!.proxies;
     useSeat(s, 0);
-    expect(roleDmgMul(s, warden!)).toBeCloseTo(0.7);
+    expect(roleDmgMul(s, warden!)).toBeCloseTo(PW.roles.warriorTaken);
     useSeat(s, 1);
-    expect(roleDmgMul(s, warden!)).toBeCloseTo(1.3);
+    expect(roleDmgMul(s, warden!)).toBeCloseTo(PW.roles.rangedVsWarrior);
     expect(roleDmgMul(s, beast!)).toBe(1);
     useSeat(s, 3);
-    expect(roleDmgMul(s, s.pvp!.proxies[0]!)).toBeCloseTo(1.3);
+    expect(roleDmgMul(s, s.pvp!.proxies[0]!)).toBeCloseTo(PW.roles.assassinVsRangedMage);
   });
 });

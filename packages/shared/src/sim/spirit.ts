@@ -107,7 +107,8 @@ function smallTick(s: RunState): void {
   // 방이 바뀌어도 정령은 그대로, 비어 있으면 채움
   while ((p.spirits?.length ?? 0) < maxSmall(p)) summon(s);
   p.spSwap = (p.spSwap ?? 0) + 1;
-  if (p.spSwap >= (hasPerk(p, "spLonger") ? K.spLonger.ticks : P.swapTicks)) {
+  // 패왕전은 정령이 바뀌지 않음 (예측할 수 있게)
+  if (p.spSwap >= (hasPerk(p, "spLonger") ? K.spLonger.ticks : P.swapTicks) && !s.pvp) {
     p.spSwap = 0;
     const gone = p.spirits?.shift();
     if (gone && hasPerk(p, "spFarewell")) {

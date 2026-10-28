@@ -12,6 +12,7 @@ import { gunSwap, plainKit } from "./paewangKit";
 import { kitOf } from "../pwKits";
 import { buffMul } from "./pwSkillHit";
 import { pwSkillTick } from "./pwSkillRun";
+import { passiveTick } from "./pwPassive";
 import type { PvpSeat, PwLoadout } from "./paewangTypes";
 import { allPlayers, eachSeat, seatNo, useSeat } from "./party";
 import { createParty } from "./partyRun";
@@ -113,6 +114,7 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
     // 스킬 1~4 · 돌진 · 장판 · 소환한 것
     input = pwSkillTick(s, input);
     stepPlayer(s, input);
+    passiveTick(s);
     for (const pr of s.projectiles) if (pr.fromPlayer && pr.shooter === undefined) pr.shooter = i;
     updateItems(s, input);
   });

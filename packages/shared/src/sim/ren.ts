@@ -1,5 +1,6 @@
 // 렌(비르디아): 맨손으로 거대한 토목을 부림. 공격마다 차례로 타격 → 묶기 → 날려버리기 → 짓뭉개기 → 가두기 (넓고 세지만 느림)
 // 둘레를 도는 수호 토목: 부딪힌 적에게 조금씩 피해 · 원거리 탄은 확률로 막음 (몸으로 부딪히는 공격은 못 막음). 수치는 weaponsRen.REN, 아이템은 itemsRen
+import { PW_PASSIVE } from "../paewangPassive";
 import { TICK_RATE } from "../constants";
 import { REN_PERKS as K } from "../itemsRen";
 import { createRng, deriveSeed } from "../rng";
@@ -27,7 +28,7 @@ export const renMelee = (s: RunState, dmg: number): number => (s.player.characte
 export function renBlock(s: RunState, pr: ProjectileState): boolean {
   const p = s.player;
   if (p.characterId !== "ren") return false;
-  const chance = hasPerk(p, "renWall") ? K.renWall.block : R.block;
+  const chance = s.pvp ? PW_PASSIVE.renBlock : hasPerk(p, "renWall") ? K.renWall.block : R.block;
   if (createRng(deriveSeed(s.seed, "renBlock", pr.id, s.tick)).nextFloat() >= chance) return false;
   addEffect(s, { kind: "hit", x: pr.x, y: pr.y, dirX: 0, dirY: 0, size: 5, maxTicks: 8, tint: "#c8a060" });
   if (hasPerk(p, "renRegrow")) healPlayer(s, K.renRegrow.heal);

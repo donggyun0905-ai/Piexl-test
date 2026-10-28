@@ -74,7 +74,7 @@ export const PW = {
   taken: 0.6,
   heal: 0.8,
   /** 역할군 상성 (sim/pwMatchup): 전사가 마법사·암살자에게 받는 피해 · 원딜→전사 · 마법사→암살자 · 암살자→원딜·마법사 주는 피해 · 서포터 회복량 */
-  roles: { warriorTaken: 0.7, rangedVsWarrior: 1.3, mageVsAssassin: 1.3, assassinVsRangedMage: 1.3, supportHeal: 1.3 },
+  roles: { warriorTaken: 1, rangedVsWarrior: 1, mageVsAssassin: 1.49, assassinVsRangedMage: 1.24, supportHeal: 1.3 },
   /** 시작하고 아무도 못 움직이는 틱 (화면에 3·2·1·START) */
   ready: 180,
   /** 3판 2선승: 판이 끝나고 다음 판 준비 전에 결과를 보여 주는 틱 */

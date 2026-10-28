@@ -75,7 +75,8 @@ export function addCombo(s: RunState, n: number): void {
   if (hasPerk(p, "scaleGuard") && Math.floor(after / K.scaleGuard.every) > Math.floor(before / K.scaleGuard.every)) {
     p.imGuard = (p.imGuard ?? 0) + raiseShield(p, K.scaleGuard.shield, K.scaleGuard.max);
   }
-  if (after >= IMUGI.ult) return callDragon(s);
+  // 패왕전은 맵을 지나가는 용 없음 (용의 기운 오라까지만)
+  if (after >= IMUGI.ult && !s.pvp) return callDragon(s);
   if (before < IMUGI.aura && after >= IMUGI.aura) {
     // 오라 보호막은 20으로 채움 (쌓이지 않음)
     if (!p.imAura) raiseShield(p, IMUGI.auraShield, IMUGI.auraShield);

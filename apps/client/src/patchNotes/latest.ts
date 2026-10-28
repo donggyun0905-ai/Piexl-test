@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.201",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "패왕전 전용 패시브: 대부분의 캐릭터 패시브를 대결에 맞게 바꿈 (예: 파수꾼 수호 보호막 · 장수 기세 기절 · 사멸 5번째 3배 · 역병의사 회복 감소 · 악의 사도 오라 · 변희·이드라 스킬 순환 버프) · 스킬 보기 패시브 칸에 설명",
+        "패왕전 밸런스: 역할 상성(전사 > 암살자·마법사, 원딜 > 전사, 암살자·마법사·원딜은 서로 비슷)에 맞게 AI 대결을 많이 돌려 캐릭터 받는 피해·역할 상성 수치를 다시 맞춤",
+      ],
+      en: [
+        "Champion Clash passives: most character passives reworked for duels (e.g. Warden guardian shield · General momentum stun · Samyeol 3x every 5th hit · Plague Doctor healing cut · Apostle aura · Byeonhui/Idra skill-cycle buffs) · shown in the passive slot",
+        "Champion Clash balance: retuned damage taken per character and role matchup values from many AI duels toward the role matchups (Warrior > Assassin/Mage, Marksman > Warrior, Assassin/Mage/Marksman close to even)",
+      ],
+      ja: [
+        "覇王戦専用パッシブ: ほとんどのキャラのパッシブを対戦向けに変更 (例: 守護者のシールド · 将軍の気勢気絶 · 四滅の5回目3倍 · 疫病医の回復減少 · 悪の使徒のオーラ · 変姫・イドラのスキル循環バフ) · パッシブ欄に説明",
+        "覇王戦バランス: 役割相性(戦士 > 暗殺者・魔法使い、遠距離 > 戦士、暗殺者・魔法使い・遠距離はほぼ互角)に合わせ、AI対戦を多数回してキャラの被ダメと相性数値を再調整",
+      ],
+    },
+  },
+  {
     version: "0.48.200",
     date: "2026-10-28",
     items: {

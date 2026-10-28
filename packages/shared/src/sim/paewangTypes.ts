@@ -173,6 +173,8 @@ export interface PwPlayerState {
   pwAimD?: number;
   /** 플라이: 다음 급습이 붉은 급습 (신기루를 쓴 뒤) */
   pwRed?: boolean;
+  /** 패왕전 전용 패시브가 세는 값 (sim/pwPassive) */
+  pwPs?: Record<string, number>;
 }
 
 /** 스킬이 남긴 것: 예고 뒤 터짐·여러 번 터지는 장판·늦게 나가는 줄 (자리 · 스킬 번호 · 자리 · 방향 · 다음까지 틱 · 남은 횟수 · 나를 따라감) */

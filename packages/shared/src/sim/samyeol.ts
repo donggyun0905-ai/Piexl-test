@@ -97,7 +97,8 @@ function throwNeedles(s: RunState): void {
   }
   // 던진 침이 쌓이면 독가스
   const every = hasPerk(p, "smMist") ? K.smMist.every : S.gasEvery;
-  p.smCount = (p.smCount ?? 0) + n + (st.plusFan ?? 0);
+  // 패왕전은 맵에 독가스가 피어나지 않음 (맹독 패시브로, pwPassive)
+  p.smCount = s.pvp ? 0 : (p.smCount ?? 0) + n + (st.plusFan ?? 0);
   while ((p.smCount ?? 0) >= every) {
     p.smCount = (p.smCount ?? 0) - every;
     const at = aimAt(s);

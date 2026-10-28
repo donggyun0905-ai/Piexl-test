@@ -11,6 +11,8 @@ import { recapHeal } from "./pvpRecap";
 import { damageEnemy } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
+import { plagueCut } from "./pwPassive";
+import { PW_PASSIVE } from "../paewangPassive";
 
 /** 스킬 그림 모양 순서 (EffectState.style) */
 export const PW_FX_STYLES = ["burst", "meteor", "pillar", "rain", "beam", "wave", "slash", "spin", "dash", "blink", "aura", "field", "heal", "net", "summon"] as const;
@@ -73,7 +75,7 @@ function hitFoe(s: RunState, def: PwSkillDef, e: EnemyState, dx: number, dy: num
 }
 
 /** 지금 자리 사람과 같은 편 (경기장에 있는) 사람들 · 반경 안 */
-function alliesNear(s: RunState, x: number, y: number, r: number): PlayerState[] {
+export function alliesNear(s: RunState, x: number, y: number, r: number): PlayerState[] {
   const pv = s.pvp!;
   const me = seatNo(s);
   return allPlayers(s).filter((q, j) => (j === me || pv.seats[j]!.team === pv.seats[me]!.team) && inPlay(s, j) && (q.x - x) ** 2 + (q.y - y) ** 2 <= (r + q.r) ** 2);
@@ -109,8 +111,11 @@ export function resolveCast(s: RunState, def: PwSkillDef, c: PwCast): void {
   const reach = def.shape === "self" || def.shape === "cone" ? Math.max(def.radius, 30) : def.radius;
   if (def.heal)
     for (const q of alliesNear(s, c.x, c.y, reach)) {
-      const add = Math.min(q.stats.maxHp - q.hp, q.stats.maxHp * def.heal * PW.heal * roleHealMul(s));
+      const raw = q.stats.maxHp * def.heal * PW.heal * roleHealMul(s) * plagueCut(s, q);
+      const add = Math.min(q.stats.maxHp - q.hp, raw);
       q.hp += Math.max(0, add);
+      // 의사 패시브: 넘친 회복은 보호막 (최대 체력 비율까지)
+      if (p.characterId === "doctor" && raw > add) q.shieldPts = Math.min(q.stats.maxHp * PW_PASSIVE.doctorShieldMax, (q.shieldPts ?? 0) + raw - Math.max(0, add));
       recapHeal(s, allPlayers(s).indexOf(q), add);
     }
   if (def.buff && first) for (const q of def.buff.allies ? alliesNear(s, c.x, c.y, reach) : [p]) addBuff(q, def);

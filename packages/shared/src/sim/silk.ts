@@ -79,7 +79,7 @@ function bleedStack(s: RunState, e: EnemyState): void {
   if (e.hp <= 0) return;
   applyBleed(e);
   e.skBleed = (e.skBleed ?? 0) + 1;
-  if (e.skBleed < S.bleedMax) return;
+  if (e.skBleed < S.bleedMax || s.pvp) return;
   e.skBleed = 0;
   strike(s, e, s.player.stats.damage * S.overbleedMul);
   addEffect(s, { kind: "skBleed", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 14, maxTicks: 30 });
@@ -122,7 +122,8 @@ function fire(s: RunState): void {
   }
   p.skAmmo = before - n;
   // 실을 쓴 만큼 연사 (남은 실이 적을 때 쏜 건 안 셈)
-  if (before > S.burstLow) {
+  // 패왕전은 30가닥 연사 없음
+  if (before > S.burstLow && !s.pvp) {
     const every = hasPerk(p, "skFrenzy") ? K.skFrenzy.every : S.burstEvery;
     p.skUsed = (p.skUsed ?? 0) + n;
     if (p.skUsed >= every && target && !p.skBurst) {

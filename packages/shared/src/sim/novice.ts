@@ -13,6 +13,7 @@ import { recalcStats } from "./items";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, markCrit } from "./util";
 import { extraOf } from "./baseStats";
+import { PW_PASSIVE } from "../paewangPassive";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -109,7 +110,8 @@ export function rollCrit(s: RunState, e: EnemyState, dmg: number): { dmg: number
   const pet = petCrit(s);
   const tang = p.characterId === "samyeol";
   // 기본 스탯 치명타 (모든 캐릭터, sim/baseStats)
-  const ex = extraOf(p);
+  // 패왕전 잔영: 치명타 피해 고정 (pwPassive)
+  const ex = s.pvp && p.characterId === "remnant" ? { ...extraOf(p), critDamage: PW_PASSIVE.remnantCrit } : extraOf(p);
   // 잔영: 그림자에서 친 뒤치기는 반드시 치명타
   if (p.rmSure && dmg > 0) return { dmg: dmg * Math.max(1.5, ex.critDamage), crit: true };
   if ((p.characterId !== "novice" && !tang && wake <= 0 && pet <= 0 && ex.critChance <= 0) || dmg <= 0) return { dmg, crit: false };

@@ -20,6 +20,7 @@ export function freshStart(s: RunState): void {
   p.shieldPts = PW.shield;
   p.invulnTicks = PW.spawnGuard;
   p.pwStand = undefined;
+  p.pwPs = undefined;
 }
 
 /** 풋내기 패시브: 쓰러질 때 한 번 체력 1로 3초 버팀 (그동안 안 쓰러짐), 끝나면 쓰러짐. 버티는 중이면 true */

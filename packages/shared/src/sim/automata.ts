@@ -1,5 +1,7 @@
 // 오토마타(테라코어, 시즌 2): 처음으로 자아를 가진 기계 인형. 손에서 레이저를 쏘고 · 다시 쏘고 (모든 무기의 기본 공격)
 // 자매 인형(똑같은 오토마타)이 곁에서 함께 쏘거나, 등 뒤에서 유도 미사일이 7발 넘게 솟음. 수치는 weaponsAutomata.AUTOMATA, 아이템은 itemsAutomata
+import { PW_PASSIVE } from "../paewangPassive";
+import { pwCount } from "./pwPassive";
 import { TICK_RATE } from "../constants";
 import { AUTOMATA_PERKS as K } from "../itemsAutomata";
 import { createRng, deriveSeed } from "../rng";
@@ -73,8 +75,9 @@ function missiles(s: RunState, spec: { chance: number; n: number }, from?: { x: 
 function fire(s: RunState): void {
   const p = s.player;
   const st = styleOf(p);
-  // 기본 능력: 확률로 등 뒤에서 유도 미사일 (전탄 발사는 늘)
-  missiles(s, st.missiles ?? A.baseMissiles);
+  // 기본 능력: 확률로 등 뒤에서 유도 미사일 (전탄 발사는 늘) · 패왕전은 n번마다 몇 발만
+  if (!s.pvp) missiles(s, st.missiles ?? A.baseMissiles);
+  else if (pwCount(p, "am") % PW_PASSIVE.automataEvery === 0) missiles(s, { chance: 1, n: PW_PASSIVE.automataMissiles });
   if (st.sword) {
     swing(s, 0);
     p.adSwing = A.swordGap;

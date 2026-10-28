@@ -4,6 +4,7 @@
 import { PW } from "../paewangDefs";
 import { pwRoleOf } from "../pwRoles";
 import { allPlayers } from "./party";
+import { passiveHitMul } from "./pwPassive";
 import type { EnemyState, RunState } from "./types";
 
 /** 지금 자리(s.player)가 그림자 적 e(상대 사람)를 때릴 때 배율. 사람이 아닌 것(소환물 등)은 1 */
@@ -21,7 +22,8 @@ export function roleDmgMul(s: RunState, e: EnemyState): number {
   if (atk === "ranged" && def === "warrior") m *= R.rangedVsWarrior;
   if (atk === "mage" && def === "assassin") m *= R.mageVsAssassin;
   if (atk === "assassin" && (def === "ranged" || def === "mage")) m *= R.assassinVsRangedMage;
-  return m;
+  // 패왕전 전용 패시브 (pwPassive)
+  return m * passiveHitMul(s, e, j, target);
 }
 
 /** 지금 자리(s.player)가 하는 회복 배율 (서포터) */

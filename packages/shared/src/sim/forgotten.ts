@@ -1,6 +1,7 @@
 // 잊혀진 자(아스칼론, 시즌 2): 옛 신의 마지막 후손, 반신. 빛으로 싸움 (무기 10: 빛 탄·빛줄기·터짐·떨어지는 빛 십자가·빛 베기)
 // 적을 맞힐 때마다 빛의 고리가 차고(맞으면 깎임), 가득 차면 10초 동안 신족: 공격 속도 2배 + 둘레 적을 빛기둥이 저절로 침 (공격력 30%)
 // 수치는 weaponsForgotten.FORGOTTEN, 아이템은 itemsForgotten
+import { PW_PASSIVE } from "../paewangPassive";
 import { TICK_RATE } from "../constants";
 import { FORGOTTEN_PERKS as K } from "../itemsForgotten";
 import { createRng, deriveSeed } from "../rng";
@@ -128,7 +129,7 @@ function cast(s: RunState): void {
 function awaken(s: RunState): void {
   const p = s.player;
   p.fgRing = 0;
-  p.fgGod = godTicks(p);
+  p.fgGod = s.pvp ? PW_PASSIVE.forgottenGod : godTicks(p);
   if (hasPerk(p, "fgHeal")) healPlayer(s, p.stats.maxHp * K.fgHeal.hp);
   addEffect(s, { kind: "fgAwaken", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 60, maxTicks: 40 });
 }

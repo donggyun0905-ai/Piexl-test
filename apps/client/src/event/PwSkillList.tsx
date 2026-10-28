@@ -3,13 +3,17 @@ import { CHARACTERS, kitOf, type CharacterId } from "@pixel-rogue/shared";
 import { ItemIcon } from "../game/itemIcon";
 import type { Lang, TextKey } from "../i18n";
 import { itemName } from "../i18n/items";
+import { PW_PASSIVE_TEXT } from "../i18n/text/pwPassives";
 import { keyLabel, useSettings } from "../settings";
 import { skillLines, skillName } from "./pwSkillText";
 
 /** 패왕전에서만 바꾼 패시브 · 기본 공격 설명 */
 const PAS: Partial<Record<CharacterId, TextKey>> = { novice: "pwPasNovice", rider: "pwPasRider", fly: "pwPasFly" };
 /** 패왕전 패시브 설명 글자 (스킬 칸 왼쪽 패시브 칸도 씀) */
-export const pwPassiveKey = (c: CharacterId): TextKey => PAS[c] ?? (`${c}Desc` as TextKey);
+export function pwPassiveKey(c: CharacterId): TextKey {
+  const pv = `pwPv${c[0]!.toUpperCase()}${c.slice(1)}`;
+  return PAS[c] ?? (pv in PW_PASSIVE_TEXT ? (pv as TextKey) : (`${c}Desc` as TextKey));
+}
 const BASIC: Partial<Record<CharacterId, TextKey>> = { bedouin: "pwBasicBedouin", slayer: "pwBasicSlayer", remnant: "pwBasicRemnant", apostle: "pwBasicAim", elder: "pwBasicAim", silk: "pwBasicAim" };
 
 export function PwSkillList({ characterId, lang, t }: { characterId: CharacterId; lang: Lang; t: (key: TextKey) => string }) {

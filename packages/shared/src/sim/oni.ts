@@ -1,6 +1,7 @@
 // 오니(도깨비): 방망이를 느리고 세게 휘두름 · 맞으면 무기마다 확률로 추가 공격(oniArts) · 휘두를 때마다 신인족 게이지가 차고
 // 다 차면 30초 신인족(공격력 +45% · 최대 체력 +50% · 추가 공격 100%). 틱마다 재생력 회복 · 한파·서리·폭풍·물보라·죽음 처리
 // 능력치 바꾸기·제한은 oniRules, 무기 표는 weaponsOni
+import { PW_PASSIVE } from "../paewangPassive";
 import { TICK_RATE } from "../constants";
 import { ONI_PERKS as K } from "../itemsOni";
 import { ONI } from "../weaponsOni";
@@ -39,9 +40,9 @@ function gauge(s: RunState): void {
   const p = s.player;
   if ((p.oGod ?? 0) > 0) return;
   p.oGauge = (p.oGauge ?? 0) + 1;
-  if (p.oGauge < ONI.gaugeMax) return;
+  if (p.oGauge < (s.pvp ? PW_PASSIVE.oniGauge : ONI.gaugeMax)) return;
   p.oGauge = 0;
-  p.oGod = ONI.godTicks;
+  p.oGod = s.pvp ? PW_PASSIVE.oniGodTicks : ONI.godTicks;
   recalcStats(s);
   addEffect(s, { kind: "oGod", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 30, maxTicks: 40, tint: "#ffd040" });
 }

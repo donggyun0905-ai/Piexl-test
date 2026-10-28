@@ -1,5 +1,6 @@
 // 붐버(테라코어, 시즌 2): "폭발은 예술이다". 던지고·붙이고·깔고·쏘아 올려 터뜨림
 // 예술 연쇄: 1초 안에 또 터지면 한 칸씩 쌓여 폭발이 커짐 · 터져 쓰러진 적 자리에 여진. 수치는 weaponsBomber.BOMBER, 아이템은 itemsBomber
+import { PW_PASSIVE } from "../paewangPassive";
 import { manualAim } from "./pwBasic";
 import { TICK_RATE } from "../constants";
 import { BOMBER_PERKS as K } from "../itemsBomber";
@@ -41,7 +42,7 @@ export function boom(s: RunState, x: number, y: number, r0: number, dmg0: number
   blastAt(s, x, y, r, dmg, { push: 4 });
   addEffect(s, { kind: opt.star ? "bmStar" : "bmBoom", x, y, dirX: 0, dirY: 0, size: r, maxTicks: opt.star ? 34 : 20, tint: opt.tint, width: art });
   // 터지는 자리에 나도 있으면 피해 (폭발은 예술이지만 나에게도 아픔)
-  if (dist2(p, { x, y }) <= (r + p.r) ** 2) damagePlayer(s, B.selfDmg);
+  if (dist2(p, { x, y }) <= (r + p.r) ** 2) damagePlayer(s, s.pvp ? p.stats.maxHp * PW_PASSIVE.bomberSelf : B.selfDmg);
   if (hasPerk(p, "bmBurn")) for (const e of before) ignite(e, dmg * 0.5);
   if (hasPerk(p, "bmShrapnel") && !opt.after) shrapnel(s, x, y, dmg * K.bmShrapnel.mul);
   if (opt.after) return;
