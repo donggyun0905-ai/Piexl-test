@@ -117,6 +117,8 @@ describe("시즌 2 새 보스 · 지형", () => {
     room.cleared = true;
     run.enemies = [];
     p.hp = p.stats.maxHp;
+    // 앞에서 밟은 독가스의 독은 따로 남으므로 지움 (정리된 방의 지형만 봄)
+    p.poison = p.corrode = 0;
     run.terrain = { room: run.roomId, mud: [area()], lava: [area()], water: [], spikes: [], gas: [{ x: p.x, y: p.y, r: 20, until: 9999 }] };
     const x0 = p.x;
     stepSim(run, { ...EMPTY_INPUT, moveX: 100 });

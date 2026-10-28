@@ -34,7 +34,7 @@ const R = {
   FISH_WARN: 34,
   FISH_R: 20,
   FISH_DMG: 10,
-  FISH_JUMP: 40,
+  FISH_JUMP: 100,
   FISH_LEAP: 70,
   /** 그림자: 등 뒤 거리 · 그 자리에 가까우면 공격 · 예고 · 범위 · 피해(층 세기에 더함) · 쉬는 틱 */
   LURK_BEHIND: 26,

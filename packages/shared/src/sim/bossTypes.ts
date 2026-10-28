@@ -81,6 +81,8 @@ export interface SageState {
 export interface BossPlayerState {
   /** 부식독 남은 틱 (베놈 독가스): 모든 회복·재생 감소 (sim/heal) */
   corrode?: number;
+  /** 독 남은 틱 (베놈 독가스를 밟음): 0.5초마다 독 피해, 가스를 나가도 남음 (sim/terrain) */
+  poison?: number;
   /** 끌려가는 남은 틱 (세이렌 음표 · 어둠의 블랙홀) · 끌어당기는 적 id (없으면 세이렌) */
   lureTicks?: number;
   lureId?: number;

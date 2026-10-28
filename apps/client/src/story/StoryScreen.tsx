@@ -1,5 +1,5 @@
-// 스토리 (시즌 1): 탭 넷 — 진영 · 최종 보스 · 아카식 레코드(장 목록 → 책처럼 쪽 넘기며 읽기) · 캐릭터(자세한 설명, CharGuides)
-import { useEffect, useState } from "react";
+// 스토리 (시즌 1·2): 탭 넷 — 진영 · 최종 보스 · 아카식 레코드(장 목록 → 책처럼 쪽 넘기며 읽기) · 캐릭터(자세한 설명, CharGuides)
+import { Fragment, useEffect, useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { EnemyPortrait } from "../codex/EnemyPortrait";
 import { CHAPTER_TEXT } from "../i18n/story";
@@ -64,35 +64,41 @@ export function StoryScreen({ lang, t, onBack }: Props) {
           )}
           {tab === "bosses" && (
             <div className="story-cards">
-              {STORY_BOSSES.map((b) => (
-                <section key={b.id} className="story-card story-boss">
-                  <EnemyPortrait kind={b.kind} size={72} />
-                  <div>
-                    <h3>{BOSS_STORY[b.id].name[lang]}</h3>
-                    <p>{BOSS_STORY[b.id].desc[lang]}</p>
-                  </div>
-                </section>
+              {STORY_BOSSES.map((b, i) => (
+                <Fragment key={b.id}>
+                  {(i === 0 || STORY_BOSSES[i - 1]!.season !== b.season) && <h4 className="story-season">{t(b.season === 1 ? "storyS1" : "storyS2")}</h4>}
+                  <section className="story-card story-boss">
+                    <EnemyPortrait kind={b.kind} size={72} />
+                    <div>
+                      <h3>{BOSS_STORY[b.id].name[lang]}</h3>
+                      <p>{BOSS_STORY[b.id].desc[lang]}</p>
+                    </div>
+                  </section>
+                </Fragment>
               ))}
             </div>
           )}
           {tab === "akashic" && (
             <div className="story-cards">
               {CHAPTERS.map((ch, i) => (
-                <section key={ch.id} className="story-card story-chapter">
-                  <span className="story-chapter-no">{i + 1}</span>
-                  <h3>
-                    {t("storyChapterN").replace("{n}", String(i + 1))} · {CHAPTER_TITLE[ch.id][lang]}
-                  </h3>
-                  <p className="story-summary">{CHAPTER_SUMMARY[ch.id][lang]}</p>
-                  <div className="story-members">
-                    {ch.cast.map((m) => (
-                      <StoryFace key={m} who={m} size={36} />
-                    ))}
-                  </div>
-                  <button type="button" className="primary" onClick={() => setReading(ch.id)}>
-                    {t("storyRead")}
-                  </button>
-                </section>
+                <Fragment key={ch.id}>
+                  {(i === 0 || CHAPTERS[i - 1]!.season !== ch.season) && <h4 className="story-season">{t(ch.season === 1 ? "storyS1" : "storyS2")}</h4>}
+                  <section className="story-card story-chapter">
+                    <span className="story-chapter-no">{i + 1}</span>
+                    <h3>
+                      {t("storyChapterN").replace("{n}", String(i + 1))} · {CHAPTER_TITLE[ch.id][lang]}
+                    </h3>
+                    <p className="story-summary">{CHAPTER_SUMMARY[ch.id][lang]}</p>
+                    <div className="story-members">
+                      {ch.cast.map((m) => (
+                        <StoryFace key={m} who={m} size={36} />
+                      ))}
+                    </div>
+                    <button type="button" className="primary" onClick={() => setReading(ch.id)}>
+                      {t("storyRead")}
+                    </button>
+                  </section>
+                </Fragment>
               ))}
             </div>
           )}

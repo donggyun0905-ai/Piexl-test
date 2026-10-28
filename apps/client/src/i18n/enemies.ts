@@ -67,7 +67,7 @@ const DESC: Record<string, Names> = {
   eggsac: n("터지면 작은 슬라임 셋이 나옴", "Bursts into three small slimes", "割れると小さいスライムが3匹出る"),
   wisp: n("가끔 앞으로 순간이동", "Sometimes teleports forward", "ときどき前に瞬間移動する"),
   doppel: n("나와 똑같은 모습. 내 무기가 멀리 쏘면 거리를 두고 쏘고, 아니면 다가와 벰 (능력치·무기는 따라 하지 못함)", "Looks just like you. Shoots from afar if your weapon is ranged, otherwise closes in to slash (can't copy your stats or weapon)", "自分とそっくりの姿。武器が遠距離なら距離を取って撃ち、そうでなければ近づいて斬る（能力値・武器は真似できない）"),
-  venom: n("독잠자리. 이리저리 날며 방 곳곳에 독가스를 퍼뜨림. 가스 안에 있으면 부식독(모든 회복·재생 40% 감소)", "A venomous dragonfly that spreads poison gas around the room. Standing in it inflicts Corrosion (all healing and regen −40%)", "毒トンボ。飛び回って部屋中に毒ガスをまく。ガスの中にいると腐食毒（すべての回復・再生40%減少）"),
+  venom: n("독잠자리. 이리저리 날며 방 곳곳에 독가스를 퍼뜨림. 가스를 밟으면 독 3초(0.5초마다 피해) + 부식독 6초(모든 회복·재생 40% 감소)", "A venomous dragonfly that spreads poison gas around the room. Stepping in it inflicts Poison for 3s (damage every 0.5s) and Corrosion for 6s (all healing and regen −40%)", "毒トンボ。飛び回って部屋中に毒ガスをまく。ガスを踏むと毒3秒（0.5秒ごとにダメージ）+ 腐食毒6秒（すべての回復・再生40%減少）"),
   landfish: n("땅속에서 나를 따라오는 원 → 멈춰 깜빡이면 솟구침 → 다른 자리로 뛰어드는데 그 자리도 터짐. 뛰어오른 동안만 맞음", "A circle that follows you underground; when it stops and blinks, it bursts out, then leaps into another spot that also explodes. Only hittable mid-leap", "地中で追ってくる円 → 止まって点滅すると飛び出す → 別の場所に飛び込み、そこも爆発。跳んでいる間だけ攻撃が当たる"),
   lurker: n("희미하게 비쳐 잘 보이지 않음. 등 뒤로 돌아가 큰 한 방 (칠 때만 짙어짐)", "Faint and nearly invisible. Slips behind you for one heavy blow (only darkens as it strikes)", "かすかに透けてほとんど見えない。背後に回り込んで重い一撃（攻撃の瞬間だけ濃くなる）"),
   incubus: n("무리 여왕이 부르는 졸개", "A minion called by the Brood Queen", "群れの女王が呼ぶ手下"),

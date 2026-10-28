@@ -3,7 +3,9 @@ import type { Lang } from "../index";
 // 화면 글자: 스토리 (메인 메뉴 버튼 · 탭 · 책 넘기기)
 export const STORY_TEXT = {
   story: { ko: "스토리", en: "Story", ja: "ストーリー" },
-  storySeason1: { ko: "시즌 1 · 캐릭터별 서사", en: "Season 1 · Character Tales", ja: "シーズン1 · キャラクター別の物語" },
+  storySeason1: { ko: "시즌 1·2 · 캐릭터별 서사", en: "Seasons 1–2 · Character Tales", ja: "シーズン1・2 · キャラクター別の物語" },
+  storyS1: { ko: "시즌 1", en: "Season 1", ja: "シーズン1" },
+  storyS2: { ko: "시즌 2", en: "Season 2", ja: "シーズン2" },
   storyFactions: { ko: "진영", en: "Factions", ja: "陣営" },
   storyBosses: { ko: "최종 보스", en: "Final Bosses", ja: "最終ボス" },
   storyAkashic: { ko: "아카식 레코드", en: "Akashic Records", ja: "アカシックレコード" },

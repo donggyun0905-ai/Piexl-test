@@ -58,6 +58,15 @@ describe("시즌 2 새 몬스터", () => {
     run.player.y = run.player.prevY = gas[0]!.y;
     stepSim(run, EMPTY_INPUT);
     expect(run.player.corrode ?? 0).toBeGreaterThan(0);
+    // 밟으면 독 3초: 가스를 나가도 남아 0.5초마다 피해
+    expect(run.player.poison).toBe(TERRAIN.poisonTicks);
+    const hp0 = run.player.hp;
+    run.player.invulnTicks = 0;
+    for (let i = 0; i < 80; i++) {
+      stepSim(run, { ...EMPTY_INPUT, moveX: 100 });
+      run.player.invulnTicks = 0;
+    }
+    expect(run.player.hp).toBeLessThan(hp0);
     run.player.hp = 10;
     heal(run, 10);
     expect(run.player.hp).toBeCloseTo(10 + 10 * (1 - TERRAIN.corrodeCut));
@@ -66,6 +75,7 @@ describe("시즌 2 새 몬스터", () => {
     run.terrain = undefined;
     play(run, TERRAIN.corrodeTicks + 2);
     expect(run.player.corrode ?? 0).toBe(0);
+    expect(run.player.poison ?? 0).toBe(0);
   });
 
   it("땅 물고기: 땅속에선 맞지 않고, 솟구쳐 뛰어오를 때 맞을 수 있음 · 자리가 터짐", () => {

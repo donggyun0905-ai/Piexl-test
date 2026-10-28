@@ -35,9 +35,10 @@ export const TERRAIN = {
   /** 감전된 물: 몇 틱마다 피해 · 피해 */
   shockEvery: 20,
   shockDamage: 5,
-  /** 베놈 독가스: 부식독 틱 · 회복 감소 비율 · 몇 틱마다 독 피해 · 피해(층 세기 절반에 더함) */
-  corrodeTicks: 180,
+  /** 베놈 독가스: 부식독 틱 · 회복 감소 비율 · 독 상태이상 틱(가스를 나가도 남음) · 몇 틱마다 독 피해 · 피해(층 세기 절반에 더함) */
+  corrodeTicks: 360,
   corrodeCut: 0.4,
+  poisonTicks: 180,
   gasEvery: 30,
   gasDamage: 2,
   /** 덩어리 크기 (칸): 너비 · 높이 범위 */

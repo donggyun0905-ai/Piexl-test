@@ -111,4 +111,12 @@ export function drawGas(ctx: Ctx, s: RunState, snap: Snap): void {
       ctx.fillRect(snap(p.x - 4 + i * 4), snap(p.y + p.r - k / 3), 2, 2);
     }
   }
+  // 독: 머리 위로 초록 방울이 떠오름
+  if ((p.poison ?? 0) > 0 && p.hp > 0) {
+    for (let i = 0; i < 2; i++) {
+      const k = (s.tick + i * 20) % 40;
+      ctx.fillStyle = `rgba(110, 230, 80, ${0.9 - k / 50})`;
+      ctx.fillRect(snap(p.x - 3 + i * 5), snap(p.y - p.r - 4 - k / 4), 2, 2);
+    }
+  }
 }
