@@ -19,7 +19,7 @@ export const PUNK_PASSIVES = {
   cyLeech: S("cyLeech"),
   /** 피하 장갑: 받는 피해 -20% */
   cySkin: S("cySkin"),
-  /** 광학 위장: 대시한 뒤 0.5초 무적 */
+  /** 광학 위장: 대시한 뒤 1.5초 안의 첫 공격이 기습 (피해 ×1.8) */
   cyCloak: S("cyCloak"),
   /** 오버클럭: 공격 속도 +20% */
   cyOverclock: { id: "cyOverclock", mods: [{ stat: "attackSpeed", mul: 1.2 }] as StatMod[], exclusive: "punk" as const },
@@ -35,6 +35,6 @@ export const PUNK_PERKS = {
   cyBerserk: { mul: 1.4 },
   cyLeech: { every: 8, heal: 1 },
   cySkin: { taken: 0.8 },
-  cyCloak: { ticks: 30 },
+  cyCloak: { ticks: 90, mul: 1.8 },
   cyEcho: { mul: 0.5 },
 };

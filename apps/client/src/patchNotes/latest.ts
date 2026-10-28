@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.165",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "제천대성 그림을 새로: 원숭이 반신 (황금빛 털 · 하트 모양 얼굴과 큰 귀 · 금테와 붉은 보석 · 머리 위 깃털 둘 · 금빛 비늘 갑옷 · 붉은 망토와 전투 치마 · 금빛 장화 · 끝이 밝은 긴 꼬리) · 여의봉을 굵고 정교하게 (붉은 쇠 봉에 빛 줄 · 가운데 금 문양 띠 · 양 끝 세 줄 금테 마개)",
+        "펑크 '광학 위장': 대시한 뒤 0.5초 무적 → 대시한 뒤 1.5초 안의 첫 공격이 기습 (피해 ×1.8) · 대시를 자주 써도 무적이 되지 않음",
+      ],
+      en: [
+        "New art for the Great Sage: a monkey demigod (golden fur · heart-shaped face and big ears · golden circlet with a red gem · two plumes on his head · golden scale armor · red cape and battle skirt · golden boots · long tail with a light tip) · a thicker, finer staff (red iron rod with a highlight · golden patterned band in the middle · triple golden caps at both ends)",
+        "Punk 'Optical Camo': 0.5s invulnerability after a dash → your first attack within 1.5s after a dash is an ambush (×1.8 damage) · frequent dashing no longer makes you invulnerable",
+      ],
+      ja: [
+        "斉天大聖の絵を一新: 猿の半神（黄金色の毛 · ハート形の顔と大きな耳 · 赤い宝石の金の輪 · 頭上の羽根二本 · 金の鱗鎧 · 赤いマントと戦袴 · 金の長靴 · 先が明るい長い尻尾）· 如意棒を太く精巧に（光の筋が入った赤い鉄の棒 · 中央の金の文様帯 · 両端の三本線の金の口金）",
+        "パンク「光学迷彩」: ダッシュ後0.5秒無敵 → ダッシュ後1.5秒以内の最初の攻撃が奇襲（ダメージ×1.8）· ダッシュを多用しても無敵にならない",
+      ],
+    },
+  },
+  {
     version: "0.48.164",
     date: "2026-10-28",
     items: {

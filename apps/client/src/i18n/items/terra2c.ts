@@ -58,6 +58,6 @@ export const TERRA2C_EFFECTS: Partial<Record<PunkPassive & PassiveId, Names>> = 
   cyBerserk: c("신경 가속 중 피해 +{mul:up}%", "+{mul:up}% damage during Neural Accel", "神経加速中のダメージ+{mul:up}%"),
   cyLeech: c("{every}번 맞힐 때마다 체력 {heal} 회복", "Heal {heal} HP every {every} hits", "{every}回当てるごとに体力{heal}回復"),
   cySkin: c("받는 피해 -{taken:down}%", "Damage taken -{taken:down}%", "被ダメージ-{taken:down}%"),
-  cyCloak: c("대시한 뒤 {ticks:sec}초 무적", "Invulnerable for {ticks:sec}s after a dash", "ダッシュ後{ticks:sec}秒無敵"),
+  cyCloak: c("대시한 뒤 {ticks:sec}초 안의 첫 공격이 기습 (피해 ×{mul})", "Your first attack within {ticks:sec}s after a dash is an ambush (×{mul} damage)", "ダッシュ後{ticks:sec}秒以内の最初の攻撃が奇襲（ダメージ×{mul}）"),
   cyEcho: c("신경 가속 중 공격마다 잔상이 한 번 더 ({mul:pct}%)", "During Neural Accel, an afterimage repeats each attack ({mul:pct}%)", "神経加速中、攻撃ごとに残像がもう一度（{mul:pct}%）"),
 };

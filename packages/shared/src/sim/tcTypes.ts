@@ -63,4 +63,6 @@ export interface TcPlayerState {
   cyDash?: boolean;
   /** 신경 가속 중 퀵 해킹까지 남은 틱 */
   cyQuick?: number;
+  /** 광학 위장: 대시한 뒤 기습 공격이 남은 틱 */
+  cyAmbush?: number;
 }

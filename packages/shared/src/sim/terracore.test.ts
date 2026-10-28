@@ -188,6 +188,18 @@ describe("테라코어 시즌 2", () => {
     expect(lost(off)).toBe(0);
   });
 
+  it("펑크 광학 위장: 대시해도 무적이 아니고, 대시 뒤 첫 공격만 기습으로 세짐", () => {
+    const s = run("punk", "cyKatana", "cyCloak");
+    // 적과 반대쪽으로 대시 (몸에 닿아 맞은 무적과 헷갈리지 않게)
+    stepSim(s, { ...EMPTY_INPUT, dash: true, moveY: 100 });
+    for (let i = 0; i < 12; i++) stepSim(s, EMPTY_INPUT);
+    expect(s.player.invulnTicks).toBe(0);
+    expect(s.player.cyAmbush ?? 0).toBeGreaterThan(0);
+    s.player.x = s.player.prevX = 50;
+    stepSim(s, FIRE);
+    expect(s.player.cyAmbush ?? 0).toBe(0);
+  });
+
   it("라이더: 공격하면 게이지가 차고 빨라짐 · 단검은 더 빠르고 대시로 목을 벰 · 화염 배기 불꽃 스택", () => {
     const s = run("rider", "rdHammer");
     stepSim(s, FIRE);

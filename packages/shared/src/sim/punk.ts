@@ -54,7 +54,10 @@ function attack(s: RunState, mul: number): void {
   const p = s.player;
   const st = styleOf(p);
   const crit = hasPerk(p, "cyOptics") && roll(s, "cyCrit", mul) < K.cyOptics.chance;
-  const dmg = p.stats.damage * mul * (crit ? K.cyOptics.mul : 1) * (punkAccel(p) && hasPerk(p, "cyBerserk") ? K.cyBerserk.mul : 1);
+  // 광학 위장: 대시한 뒤 첫 공격은 기습 (한 번 쓰면 끝)
+  const ambush = (p.cyAmbush ?? 0) > 0 && mul === 1;
+  if (ambush) p.cyAmbush = 0;
+  const dmg = p.stats.damage * mul * (crit ? K.cyOptics.mul : 1) * (punkAccel(p) && hasPerk(p, "cyBerserk") ? K.cyBerserk.mul : 1) * (ambush ? K.cyCloak.mul : 1);
   const fx = (kind: "cySlash" | "cyWire" | "cyMantis" | "cyPunch" | "cySpin", size: number) => addEffect(s, { kind, x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size, maxTicks: 12, width: mul < 1 ? 1 : 0 });
   switch (st.move) {
     case "slash":
@@ -142,7 +145,7 @@ export function timeSlowed(s: RunState, boss: boolean): boolean {
 /** 신경 가속 켜기 (게이지가 가득일 때 대시하면) · 광학 위장 */
 function onDash(s: RunState): void {
   const p = s.player;
-  if (hasPerk(p, "cyCloak")) p.invulnTicks = Math.max(p.invulnTicks, K.cyCloak.ticks);
+  if (hasPerk(p, "cyCloak")) p.cyAmbush = K.cyCloak.ticks;
   if ((p.cyGauge ?? 0) < P.gaugeMax || punkAccel(p)) return;
   p.cyGauge = 0;
   p.cyAccel = Math.round(P.accelTicks * (hasPerk(p, "cyBoost") ? K.cyBoost.mul : 1));
@@ -199,6 +202,7 @@ export function punkTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
   if (p.dashTicks > 0 && !p.cyDash) onDash(s);
   p.cyDash = p.dashTicks > 0;
+  if ((p.cyAmbush ?? 0) > 0) p.cyAmbush!--;
   accel(s);
   emps(s);
   quickHack(s, want);
@@ -211,5 +215,5 @@ export function punkTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetPunk(p: PlayerState): void {
-  for (const k of ["cyGauge", "cyAccel", "cyFrozen", "cyTrail", "cyEmp", "cyHits", "cyQuick"] as const) delete p[k];
+  for (const k of ["cyGauge", "cyAccel", "cyFrozen", "cyTrail", "cyEmp", "cyHits", "cyQuick", "cyAmbush"] as const) delete p[k];
 }
