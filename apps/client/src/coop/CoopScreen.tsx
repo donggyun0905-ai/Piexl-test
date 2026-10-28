@@ -243,7 +243,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
 
   if (room && pwDrafting(room, pw)) {
     return (
-      <PwRoomDraft room={room} you={you} pw={pw} chat={chat} onChat={(text) => conn?.send({ t: "chat", text })} onLeave={rank ? onExit : leave} t={t} />
+      <PwRoomDraft room={room} you={you} pw={pw} chat={chat} onChat={(text) => conn?.send({ t: "chat", text })} onLeave={rank ? onExit : leave} lang={lang} startIn={room.phase === "playing" ? Math.max(0, Math.ceil((room.startAt - serverNow) / 1000)) : undefined} t={t} />
     );
   }
 

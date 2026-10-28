@@ -2,7 +2,7 @@
 import { itemName } from "../i18n/items";
 import { fateParts } from "../i18n/items/voyagerAbilities";
 import { sellCodes } from "./SellBar";
-import { applyRoom, ARENA_LEVELS, expToNext, FLOOR_COUNT, HERO_FLOORS, LEGENDS, sellPrice, tabooPoints, trackerSkills, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
+import { applyRoom, ARENA_LEVELS, inPlay, expToNext, FLOOR_COUNT, HERO_FLOORS, LEGENDS, sellPrice, tabooPoints, trackerSkills, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { LEGEND_NAMES } from "../i18n/items/general";
 import { SPECIAL_NAMES } from "../i18n/items/abandoned";
@@ -104,7 +104,8 @@ export function startGameLoop(o: LoopOptions): () => void {
   const theme = th.hit || th.idle || th.walk ? new ThemeFx({ ...hooks, roar: () => {}, on: { hit: !!th.hit, idle: !!th.idle, walk: !!th.walk, rest: false } }, th) : null;
   // 내 자리에서만 (관전으로 다른 사람을 볼 때는 내 스킨 효과를 그리지 않음). 손님은 상태를 처음 받을 때 자리가 정해짐
   let mySeat: number | undefined;
-  const onMe = () => (mySeat ??= run.seat) === undefined || run.seat === mySeat;
+  // 패왕전에서 쓰러져 관전 중이면 내 스킨 효과(대기 장면 포함)를 아예 그리지 않음
+  const onMe = () => ((mySeat ??= run.seat) === undefined || run.seat === mySeat) && (!run.pvp || inPlay(run, run.seat ?? 0));
   const [under, over, resting] = summer ? [drawSummerUnder, drawSummerOver, summerResting] : [drawTigerUnder, drawTigerOver, tigerResting];
   damage.style = fx.dmg;
   const dummyLabels = [t("dummyAvg"), t("dummyDps"), t("dummyLast"), t("dummyTotal")];

@@ -29,4 +29,6 @@ export const PW_DRAFT_TEXT = {
   pwRoleAssassinTip: { ko: "암살 및 극딜", en: "Assassination and burst damage", ja: "暗殺・瞬間火力" },
   pwRoleSupportTip: { ko: "힐링 및 버핑", en: "Healing and buffs", ja: "回復・バフ" },
   pwDraftAgain: { ko: "밴픽 다시", en: "Redo draft", ja: "バンピックやり直し" },
+  pwPrepStartIn: { ko: "{n}초 뒤 대결 시작", en: "Battle starts in {n}s", ja: "{n}秒後に対決開始" },
+  pwPrepSoon: { ko: "잠시 뒤 대결 시작", en: "Battle starts shortly", ja: "まもなく対決開始" },
 } as const;

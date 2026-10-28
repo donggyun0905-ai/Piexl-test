@@ -82,12 +82,19 @@ export function pwSeatPids(room: RoomView | null): string[] {
   return room?.rank ? rankSeats(room.rank, pids) : pids;
 }
 
+/** 랭크전 밴픽이 끝난 뒤 준비방 시간 */
+const RANK_PREP_MS = 15000;
+
 /** 랭크전 밴픽: 자리가 정해지면(시작 전) 방장이 밴픽을 시작하고, 다 고르면 done (서버에 알려 곧 시작) */
 export function useRankDraft(drafting: boolean, pw: ReturnType<typeof usePwRoom>, done: () => void) {
   useEffect(() => {
     if (!drafting) return;
     if (!pw.draft.d) pw.draft.start();
-    else if (pw.canStart) done();
+    else if (pw.canStart) {
+      // 다 고른 뒤 준비방(스킬 설명·작은 연습장)을 볼 시간을 주고 시작
+      const id = window.setTimeout(done, RANK_PREP_MS);
+      return () => window.clearTimeout(id);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [drafting, pw.draft.d, pw.canStart]);
 }
@@ -99,13 +106,19 @@ interface DraftProps {
   chat: { name: string; text: string }[];
   onChat: (text: string) => void;
   onLeave: () => void;
+  lang: Lang;
+  /** 랭크전: 판 시작까지 남은 초 (밴픽이 끝나면 준비방을 보여 줌) */
+  startIn?: number;
   t: (key: TextKey) => string;
 }
 
-/** 친구 방·랭크전 밴픽 (혼자 하기와 같은 전체 화면): 사람 이름 · 빈 자리는 AI · 아래 채팅·나가기 */
-export function PwRoomDraft({ room, you, pw, chat, onChat, onLeave, t }: DraftProps) {
+/** 친구 방·랭크전 밴픽 (혼자 하기와 같은 전체 화면): 사람 이름 · 빈 자리는 AI · 아래 채팅·나가기 · 랭크전은 끝나면 준비방 */
+export function PwRoomDraft({ room, you, pw, chat, onChat, onLeave, lang, startIn, t }: DraftProps) {
   const { draft } = pw;
   if (!draft.d) return null;
+  // 랭크전: 다 고르면 혼자 하기처럼 준비방 (스킬 설명 · 오른쪽 작은 연습장), 판은 저절로 시작
+  const mine = draft.d.picks[draft.me];
+  if (room.rank && draftDone(draft.d) && mine) return <PwPrep characterId={mine} lang={lang} t={t} startIn={startIn !== undefined && startIn > RANK_PREP_MS / 1000 + 5 ? -1 : startIn} onStart={() => {}} onBack={onLeave} />;
   const names = draft.d.picks.map((_, i) => room.players.find((p) => p.pid === draft.seats[i])?.name ?? "AI");
   return (
     <PwDraftView d={draft.d} names={names} ai={names.map((_, i) => !draft.seats[i])} me={draft.me} mine={draft.mine} endAt={draft.endAt} onAct={draft.act} t={t}>

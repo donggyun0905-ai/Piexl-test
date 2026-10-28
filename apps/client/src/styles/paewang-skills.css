@@ -168,3 +168,7 @@
   background: #ffd860;
   cursor: help;
 }
+.pw-prep-wait {
+  align-self: center;
+  color: #ffd860;
+}

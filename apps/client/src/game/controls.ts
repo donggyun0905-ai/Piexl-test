@@ -146,14 +146,14 @@ export class Controls {
       },
       { passive: false },
     );
-    on(window, "mouseup", (e) => {
-      if (e.button === 0) this.mouseAttack = false;
-      if (e.button === 2) this.dashHeld = false;
-    });
+    on(window, "mouseup", (e) => void (e.button === 0 ? (this.mouseAttack = false) : e.button === 2 && (this.dashHeld = false)));
 
     const zone = opt.zone;
-    on(zone, "contextmenu", (e) => e.preventDefault());
-    // 마우스 버튼은 mousedown으로 받음: 좌클릭을 누른 채 우클릭하면 pointerdown이 오지 않아 대시가 안 됐음
+    // 게임 중 우클릭은 어디서든 브라우저 메뉴 대신 대시 (좌클릭 공격을 누른 채로도) · 좌클릭은 mousedown으로 받음
+    on(window, "contextmenu", (e) => e.preventDefault());
+    on(window, "mousedown", (e) => {
+      if (e.button === 2 && !zone.contains(e.target as Node) && !this.arm.cancel()) this.dashQueued = this.dashHeld = true;
+    });
     on(zone, "mousedown", (e) => {
       if (e.button === 0) {
         const c = opt.clickTarget(e.clientX, e.clientY);
