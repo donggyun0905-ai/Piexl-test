@@ -8,8 +8,6 @@ import {
   isPlayerId,
   nextDayStart,
   parseSeed,
-  replayRun,
-  summarize,
   TICK_MS,
   unpackInputs,
   withBalance,
@@ -19,6 +17,7 @@ import { balanceVersion } from "./balanceApi";
 import { hmac, safeEqual } from "./crypto";
 import type { HubContext } from "./hub";
 import { fail, json, readJson } from "./http";
+import { queueReplay, REPLAY_TOP } from "./replayQueue";
 import { first } from "./sql";
 
 const SEED_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -86,7 +85,7 @@ interface BoardEntry {
 export function board(ctx: HubContext, day: string): BoardEntry[] {
   return ctx.sql
     .exec(
-      "SELECT nickname, score, floor, won, ticks, character, verified FROM daily WHERE day = ? ORDER BY score DESC, finished ASC LIMIT ?",
+      "SELECT nickname, score, floor, won, ticks, character, verified FROM daily WHERE day = ? AND verified >= 0 ORDER BY score DESC, finished ASC LIMIT ?",
       day,
       BOARD_SIZE,
     )
@@ -105,7 +104,7 @@ export function board(ctx: HubContext, day: string): BoardEntry[] {
 
 /** 이 점수가 몇 위가 되는지 (같은 점수면 먼저 낸 사람이 위 → 지금 내면 같은 점수 뒤) */
 function rankFor(ctx: HubContext, day: string, score: number, user: string): number {
-  const row = first(ctx.sql, "SELECT COUNT(*) AS n FROM daily WHERE day = ? AND score >= ? AND user != ?", day, score, user);
+  const row = first(ctx.sql, "SELECT COUNT(*) AS n FROM daily WHERE day = ? AND verified >= 0 AND score >= ? AND user != ?", day, score, user);
   return Number(row?.n ?? 0) + 1;
 }
 
@@ -115,7 +114,7 @@ function myBest(ctx: HubContext, day: string, user: string) {
   const score = Number(row.score);
   const ahead = first(
     ctx.sql,
-    "SELECT COUNT(*) AS n FROM daily WHERE day = ? AND (score > ? OR (score = ? AND finished < ?))",
+    "SELECT COUNT(*) AS n FROM daily WHERE day = ? AND verified >= 0 AND (score > ? OR (score = ? AND finished < ?))",
     day,
     score,
     score,
@@ -197,27 +196,15 @@ export async function handleDaily(ctx: HubContext, action: string, request: Requ
     if (prev && prev.score >= s.score) {
       return json({ ok: true, improved: false, best: prev, entries: board(ctx, day) });
     }
-    // 2. 30위 안에 드는 기록만 판 전체 다시 돌리기
+    // 2. 1~3위 기록은 입력 기록이 풀리는지 보고 받아 둔 뒤, 알람으로 나눠 판 전체를 다시 돌려 확인 (replayQueue)
     const rank = rankFor(ctx, day, s.score, user);
-    let verified = false;
-    // (확인을 끈 서버는 다시 돌리지 않고 확인 안 된 기록으로 받음)
-    if (rank <= BOARD_SIZE && ctx.replay) {
-      let inputs;
+    const check = rank <= REPLAY_TOP;
+    if (check) {
       try {
-        inputs = await unpackInputs(body.inputs);
+        if ((await unpackInputs(body.inputs)).length > MAX_TICKS) return fail("bad_inputs");
       } catch {
         return fail("bad_inputs");
       }
-      if (inputs.length > MAX_TICKS) return fail("bad_inputs");
-      const replayed = withBalance(balance, () => summarize(replayRun(seed, s.characterId, inputs, sudden)));
-      const same =
-        replayed.score === s.score &&
-        replayed.floor === s.floor &&
-        replayed.kills === s.kills &&
-        replayed.won === s.won &&
-        replayed.ticks === s.ticks;
-      if (!same) return fail("replay");
-      verified = true;
     }
     const nickname = cleanNickname(typeof body.nickname === "string" ? body.nickname : "");
     ctx.sql.exec(
@@ -235,8 +222,12 @@ export async function handleDaily(ctx: HubContext, action: string, request: Requ
       s.ticks,
       s.characterId,
       now,
-      verified ? 1 : 0,
+      0,
     );
+    if (check) {
+      const seedText = await dailySeedText(ctx, ticket.day);
+      queueReplay(ctx, { kind: "daily", board: day, user, seedText, character: s.characterId, sudden, balance: typeof body.balance === "string" ? body.balance : "default", score: s.score, floor: s.floor, kills: s.kills, won: s.won, ticks: s.ticks }, body.inputs);
+    }
     return json({ ok: true, improved: true, best: myBest(ctx, day, user), entries: board(ctx, day) });
   }
 

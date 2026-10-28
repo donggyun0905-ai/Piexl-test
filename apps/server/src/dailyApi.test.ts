@@ -1,7 +1,7 @@
 import { createRng, createRun, EMPTY_INPUT, packInputs, parseSeed, stepSim, summarize, type TickInput } from "@pixel-rogue/shared";
 import { describe, expect, it } from "vitest";
 import { setupHub } from "./hub";
-import { call, memorySql } from "./testing";
+import { call, drainReplays, memorySql } from "./testing";
 
 function randomInputs(seed: number, ticks: number): TickInput[] {
   const rng = createRng(seed);
@@ -41,7 +41,7 @@ describe("일일 도전", () => {
     expect((await call(ctx, "/api/daily/start", { player: "x" })).body.error).toBe("player");
   });
 
-  it("제출 → 다시 돌려 확인하고 순위표에 오름. 더 낮은 기록은 바꾸지 않음", async () => {
+  it("제출 → 순위표에 오르고(확인 중) 나눠 다시 돌린 뒤 확인됨. 더 낮은 기록은 바꾸지 않음", async () => {
     const s = await setup();
     s.later(40_000);
     const res = await call(s.ctx, "/api/daily/submit", {
@@ -53,7 +53,9 @@ describe("일일 도전", () => {
     });
     expect(res.body).toMatchObject({ ok: true, improved: true });
     const entries = res.body.entries as { nickname: string; score: number; verified: boolean }[];
-    expect(entries[0]).toMatchObject({ nickname: "Tester", score: s.summary.score, verified: true });
+    expect(entries[0]).toMatchObject({ nickname: "Tester", score: s.summary.score, verified: false });
+    await drainReplays(s.ctx);
+    expect((await call(s.ctx, "/api/daily/board")).body.entries).toMatchObject([{ nickname: "Tester", verified: true }]);
     const again = await call(s.ctx, "/api/daily/submit", {
       player: s.player,
       ticket: s.start.body.ticket,
@@ -84,7 +86,9 @@ describe("일일 도전", () => {
     // 처치 수를 늘리고 점수도 맞춰 고침 → 진행 기록 검사는 통과해도 다시 돌리면 다름
     const forged = { ...s.summary, kills: s.summary.kills + 5, score: s.summary.score + 50 };
     const res = await call(s.ctx, "/api/daily/submit", { player: s.player, ticket: s.start.body.ticket, summary: forged, inputs: s.packed });
-    expect(res.body.error).toBe("replay");
+    expect(res.body.improved).toBe(true);
+    await drainReplays(s.ctx);
+    expect((await call(s.ctx, "/api/daily/board")).body.entries).toEqual([]);
     // 점수만 고치면 진행 기록 검사에서 걸림
     const bad = await call(s.ctx, "/api/daily/submit", {
       player: s.player,
@@ -114,7 +118,10 @@ describe("일일 도전", () => {
     // 일반 판 기록을 서든데스 시작표로 내면 다시 돌렸을 때 다름
     if (s.summary.ticks !== run.tick) {
       const wrong = await call(s.ctx, "/api/daily/submit", { player: s.player, ticket: sd.body.ticket, summary: s.summary, inputs: s.packed });
-      expect(wrong.body.error).toBe("replay");
+      expect(wrong.body.improved).toBe(true);
+      await drainReplays(s.ctx);
+      // 숨겨진 기록보다 높아야 다시 받으므로 지움
+      s.ctx.sql.exec("DELETE FROM daily WHERE verified = -1");
     }
     // 모드 표시를 떼면 서명이 맞지 않음
     const stripped = String(sd.body.ticket).replace(/\.sd$/, "");
@@ -122,8 +129,8 @@ describe("일일 도전", () => {
     expect(forged.body.error).toBe("ticket");
     const res = await call(s.ctx, "/api/daily/submit", { player: s.player, ticket: sd.body.ticket, nickname: "Sudden", summary: summarize(run), inputs: packed });
     expect(res.body).toMatchObject({ ok: true, improved: true });
-    expect((res.body.entries as { nickname: string; verified: boolean }[])[0]).toMatchObject({ nickname: "Sudden", verified: true });
-    expect((await call(s.ctx, "/api/daily/board?mode=sudden")).body.entries).toHaveLength(1);
+    await drainReplays(s.ctx);
+    expect((await call(s.ctx, "/api/daily/board?mode=sudden")).body.entries).toMatchObject([{ nickname: "Sudden", verified: true }]);
     expect((await call(s.ctx, "/api/daily/board")).body.entries).toHaveLength(0);
     const me = await call(s.ctx, "/api/daily/me", { player: s.player, mode: "sudden" });
     expect(me.body.best).toMatchObject({ rank: 1 });

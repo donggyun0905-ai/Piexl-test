@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.217",
+    date: "2026-10-28",
+    items: {
+      ko: ["일일 도전·레이드 명예의 전당·레이드 아레나 1~3위 기록 확인: 서버가 그 판을 처음부터 다시 돌려 보고, 결과가 다르면 순위표에서 빠짐 (확인하는 동안 일일 도전 순위표에 ⏳ 표시)"],
+      en: ["Daily Challenge, Raid Hall of Fame and Raid Arena top-3 records are now checked: the server replays the run from the start, and records that don't match are removed from the board (a ⏳ shows on the Daily board while checking)"],
+      ja: ["デイリーチャレンジ・レイド殿堂・レイドアリーナの1~3位の記録を確認: サーバーがそのプレイを最初から再現し、結果が違えばランキングから外れる (確認中はデイリーのランキングに⏳)"],
+    },
+  },
+  {
     version: "0.48.216",
     date: "2026-10-28",
     items: {

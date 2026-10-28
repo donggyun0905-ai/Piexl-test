@@ -1,5 +1,6 @@
 // 시험용: Node SQLite로 Durable Object 저장소 흉내 (배포 코드에서는 쓰지 않음)
 import { routeHub, type HubContext } from "./hub";
+import { runReplayChunk } from "./replayQueue";
 import type { Row, SqlLike } from "./sql";
 
 interface NodeSqlite {
@@ -28,3 +29,8 @@ export async function call(ctx: HubContext, path: string, body?: unknown) {
   return { status: res.status, body: (await res.json()) as Record<string, unknown> };
 }
 
+
+/** 알람 대신: 대기 중인 다시 돌리기를 모두 끝냄 */
+export async function drainReplays(ctx: HubContext): Promise<void> {
+  while (await runReplayChunk(ctx));
+}

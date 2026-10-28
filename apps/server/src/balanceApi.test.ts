@@ -13,7 +13,7 @@ import {
 } from "@pixel-rogue/shared";
 import { afterEach, describe, expect, it } from "vitest";
 import { routeHub, setupHub } from "./hub";
-import { call, memorySql } from "./testing";
+import { call, drainReplays, memorySql } from "./testing";
 
 afterEach(() => {
   applyBalance({});
@@ -145,6 +145,7 @@ describe("일일 도전 기록은 그 판의 수치로 확인", () => {
     expect((await call(s.ctx, "/api/daily/submit", { ...body, balance: "nope" })).body.error).toBe("balance");
     const ok = await call(s.ctx, "/api/daily/submit", { ...body, balance: hash });
     expect(ok.body).toMatchObject({ ok: true, improved: true });
-    expect((ok.body.entries as { verified: boolean }[])[0]!.verified).toBe(true);
+    await drainReplays(s.ctx);
+    expect((await call(s.ctx, "/api/daily/board")).body.entries).toMatchObject([{ verified: true }]);
   });
 });

@@ -16,14 +16,18 @@ export function raidCleared(run: RunState): boolean {
 /** 입력 기록으로 판 전체 다시 돌리기: 6층을 깨고 끝나면 그 자리에서 라스트 보스에 도전 */
 export function replayRaid(seed: number, characterId: CharacterId, unlocks: readonly string[], boss: LastBossKind, inputs: readonly TickInput[]): RunState {
   const run = createRun(seed, characterId, unlocks);
-  for (const input of inputs) {
-    if (run.over) {
-      if (!run.won || run.lastBoss) break;
-      continueToLastFloor(run, boss);
-    }
-    stepSim(run, input);
-  }
+  for (const input of inputs) if (!raidReplayStep(run, boss, input)) break;
   return run;
+}
+
+/** 레이드 다시 돌리기 한 틱 (서버가 나눠 돌릴 때도 씀). 더 돌릴 게 없으면 false */
+export function raidReplayStep(run: RunState, boss: LastBossKind, input: TickInput): boolean {
+  if (run.over) {
+    if (!run.won || run.lastBoss) return false;
+    continueToLastFloor(run, boss);
+  }
+  stepSim(run, input);
+  return true;
 }
 
 /** 레이드 아레나 순위표 수 (전체 기간) */

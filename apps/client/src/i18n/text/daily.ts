@@ -19,6 +19,7 @@ export const DAILY_TEXT = {
   myBest: { ko: "내 최고", en: "My best", ja: "自己ベスト" },
   rankFmt: { ko: "{n}위", en: "#{n}", ja: "{n}位" },
   boardEmpty: { ko: "아직 기록이 없습니다", en: "No records yet", ja: "まだ記録がありません" },
+  boardChecking: { ko: "기록 확인 중 (판을 다시 돌려 보는 중)", en: "Checking this record (replaying the run)", ja: "記録を確認中 (プレイを再現中)" },
   submitting: { ko: "기록 보내는 중…", en: "Submitting…", ja: "記録を送信中…" },
   submitImproved: { ko: "기록이 올라갔습니다", en: "Record submitted", ja: "記録を登録しました" },
   submitNotBetter: { ko: "최고 기록보다 낮아 그대로입니다", en: "Not above your best", ja: "ベストを超えませんでした" },

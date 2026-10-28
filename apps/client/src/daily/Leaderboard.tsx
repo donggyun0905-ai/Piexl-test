@@ -21,7 +21,15 @@ export function Leaderboard({ entries, t }: { entries: BoardEntry[]; t: (key: Te
         <li key={e.rank}>
           <span className="lb-rank">{e.rank}</span>
           <span className={`lb-char ${e.character}`} />
-          <span className="lb-name">{e.nickname}</span>
+          <span className="lb-name">
+            {e.nickname}
+            {/* 1~3위는 서버가 판을 다시 돌려 확인하는 동안 표시 */}
+            {e.rank <= 3 && !e.verified && (
+              <small className="lb-checking" title={t("boardChecking")}>
+                {" "}⏳
+              </small>
+            )}
+          </span>
           <span className="lb-floor">
             {e.won ? "★" : `${t("floor")} ${e.floor}`} · {formatTime(e.ticks)}
           </span>

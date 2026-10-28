@@ -1,7 +1,7 @@
 import { createRng, EMPTY_INPUT, packInputs, type TickInput } from "@pixel-rogue/shared";
 import { describe, expect, it } from "vitest";
 import { setupHub } from "./hub";
-import { call, memorySql } from "./testing";
+import { call, drainReplays, memorySql } from "./testing";
 
 const player = "raider00-0000-4000-8000-000000000000";
 
@@ -23,17 +23,13 @@ describe("레이드 명예의 전당", () => {
     expect((await call(ctx, "/api/raid/submit", submit(-5, ""))).body.error).toBe("bad_request");
   });
 
-  it("다시 돌려서 보스를 그 시간에 잡지 못하면 거절", async () => {
+  it("1~3위는 받아 둔 뒤 나눠 다시 돌려서 보스를 그 시간에 잡지 못하면 순위표에서 숨김", async () => {
     const ctx = setupHub(memorySql());
     const res = await call(ctx, "/api/raid/submit", submit(3000, await packInputs(randomInputs(600))));
-    expect(res.body.error).toBe("replay");
-  });
-
-  it("확인을 끈 서버(무료 플랜 REPLAY_CHECK=off)는 다시 돌리지 않고 기록을 받음", async () => {
-    const ctx = setupHub(memorySql(), Date.now, { REPLAY_CHECK: "off" });
-    const res = await call(ctx, "/api/raid/submit", submit(3000, await packInputs(randomInputs(600))));
-    expect(res.body.improved).toBe(true);
-    expect(res.body.rank).toBe(1);
+    expect(res.body).toMatchObject({ improved: true, rank: 1 });
+    expect((await call(ctx, "/api/raid/submit", submit(2000, "x"))).body.error).toBe("bad_inputs");
+    await drainReplays(ctx);
+    expect(((await call(ctx, "/api/raid/board")).body.boards as Record<string, unknown[]>).dragon).toEqual([]);
   });
 
   it("10위 안에 못 들면 확인 없이 그냥 돌려줌 · 순위표는 빠른 순", async () => {

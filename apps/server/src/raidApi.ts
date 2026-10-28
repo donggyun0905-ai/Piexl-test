@@ -1,15 +1,12 @@
 // 레이드 명예의 전당: 라스트 보스(용·갓이터·태초의 빛과 어둠)를 보스방에 들어가 잡기까지 걸린 시간, 보스별 빠른 순.
-// 10위 안에 드는 기록만 받고, 받기 전에 판 전체를 입력 기록으로 다시 돌려 확인 (저장은 기록이 줄 때만)
+// 10위 안에 드는 기록만 받고, 1~3위는 판 전체를 입력 기록으로 나눠 다시 돌려 확인 (replayQueue, 저장은 기록이 줄 때만)
 import {
   CHARACTER_IDS,
   cleanNickname,
   isPlayerId,
-  parseSeed,
   RAID_BOARD_SIZE,
   RAID_BOSSES,
-  replayRaid,
   unpackInputs,
-  withBalance,
   type CharacterId,
   type LastBossKind,
 } from "@pixel-rogue/shared";
@@ -17,6 +14,7 @@ import { balanceVersion } from "./balanceApi";
 import type { HubContext } from "./hub";
 import { fail, json, readJson } from "./http";
 import { cleanUnlocks, loadProfile } from "./player";
+import { queueReplay, REPLAY_TOP } from "./replayQueue";
 import { first } from "./sql";
 
 /** 한 판 최대 길이 (2시간) */
@@ -32,7 +30,7 @@ export interface RaidEntry {
 
 export function raidBoard(ctx: HubContext, boss: string): RaidEntry[] {
   return ctx.sql
-    .exec("SELECT nickname, ticks, character, finished FROM raid WHERE boss = ? ORDER BY ticks ASC, finished ASC LIMIT ?", boss, RAID_BOARD_SIZE)
+    .exec("SELECT nickname, ticks, character, finished FROM raid WHERE boss = ? AND verified >= 0 ORDER BY ticks ASC, finished ASC LIMIT ?", boss, RAID_BOARD_SIZE)
     .toArray()
     .map((r, i) => ({ rank: i + 1, nickname: String(r.nickname), ticks: Number(r.ticks), character: String(r.character), finished: Number(r.finished) }));
 }
@@ -43,7 +41,7 @@ function boards(ctx: HubContext): Record<string, RaidEntry[]> {
 
 /** 이 시간이 몇 위가 되는지 (같은 시간이면 먼저 낸 사람이 위) */
 function rankFor(ctx: HubContext, boss: string, ticks: number, user: string): number {
-  const row = first(ctx.sql, "SELECT COUNT(*) AS n FROM raid WHERE boss = ? AND ticks <= ? AND user != ?", boss, ticks, user);
+  const row = first(ctx.sql, "SELECT COUNT(*) AS n FROM raid WHERE boss = ? AND verified >= 0 AND ticks <= ? AND user != ?", boss, ticks, user);
   return Number(row?.n ?? 0) + 1;
 }
 
@@ -79,9 +77,10 @@ export async function handleRaid(ctx: HubContext, action: string, request: Reque
   const rank = rankFor(ctx, boss, ticks, user);
   if (rank > RAID_BOARD_SIZE) return json({ ok: true, improved: false, rank: null, boards: boards(ctx) });
 
-  // 판 전체 다시 돌리기: 같은 보스를 같은 시간에 잡아야 함 (확인을 끈 서버는 그대로 받음)
-  if (ctx.replay) {
-    const problem = await replayProblem(ctx, body, boss, character, ticks);
+  // 1~3위는 받아 둔 뒤 알람으로 나눠 판 전체를 다시 돌려 같은 보스를 같은 시간에 잡는지 확인 (replayQueue)
+  const check = rank <= REPLAY_TOP;
+  if (check) {
+    const problem = await inputsProblem(ctx, body);
     if (problem) return fail(problem);
   }
 
@@ -96,22 +95,19 @@ export async function handleRaid(ctx: HubContext, action: string, request: Reque
     character,
     ctx.now(),
   );
+  if (check) {
+    const job = { kind: "raid" as const, board: boss, user, seedText: body.seedText, character, unlocks: cleanUnlocks(body.unlocks), balance: typeof body.balance === "string" ? body.balance : "default", ticks };
+    queueReplay(ctx, job, body.inputs);
+  }
   return json({ ok: true, improved: true, rank, boards: boards(ctx) });
 }
 
-/** 판 전체를 다시 돌려 같은 보스를 같은 시간에 잡는지 (문제가 있으면 그 이유) */
-async function replayProblem(ctx: HubContext, body: SubmitBody, boss: LastBossKind, character: CharacterId, ticks: number): Promise<string | null> {
-  let inputs;
+/** 입력 기록이 풀리고 그 판의 게임 수치가 있는지 (문제가 있으면 그 이유) */
+async function inputsProblem(ctx: HubContext, body: SubmitBody): Promise<string | null> {
   try {
-    inputs = await unpackInputs(String(body.inputs));
+    if ((await unpackInputs(String(body.inputs))).length > MAX_TICKS) return "bad_inputs";
   } catch {
     return "bad_inputs";
   }
-  if (inputs.length > MAX_TICKS) return "bad_inputs";
-  // 그 판을 한 게임 수치로 (관리자 페이지에서 바꾼 수치)
-  const balance = balanceVersion(ctx, typeof body.balance === "string" ? body.balance : "default");
-  if (!balance) return "balance";
-  const seed = parseSeed(String(body.seedText));
-  const run = withBalance(balance, () => replayRaid(seed, character, cleanUnlocks(body.unlocks), boss, inputs));
-  return !run.won || run.lastBoss !== boss || run.raidTicks !== ticks ? "replay" : null;
+  return balanceVersion(ctx, typeof body.balance === "string" ? body.balance : "default") ? null : "balance";
 }

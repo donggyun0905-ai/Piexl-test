@@ -11,6 +11,7 @@ import { handleRaid } from "./raidApi";
 import { handleArena } from "./arenaApi";
 import { CLEAR_SCHEMA, handleClear } from "./clearStats";
 import { handleRank, handleRankApply, RANK_SCHEMA } from "./rankApi";
+import { REPLAY_SCHEMA, runReplayChunk } from "./replayQueue";
 import { first, type SqlLike } from "./sql";
 import { takeTurn } from "./turnBudget";
 
@@ -26,8 +27,8 @@ export interface HubContext {
   match: MatchState;
   /** 관리자 로그인 (게임 수치 바꾸기) */
   admin: AdminState;
-  /** 기록을 판 전체 다시 돌려 확인할지 (무료 플랜은 요청 하나의 계산 시간이 짧아 끔: REPLAY_CHECK = "off") */
-  replay: boolean;
+  /** 이 시각에 알람 (1~3위 기록을 나눠 다시 돌리기: replayQueue) */
+  wake: (at: number) => void;
 }
 
 /** 서버 설정 중 Hub가 쓰는 값 */
@@ -35,8 +36,6 @@ export interface HubEnv {
   APP_ENV?: string;
   /** 관리자 로그인 코드를 받을 디스코드 웹훅 (Secret) */
   ADMIN_LOGIN_WEBHOOK?: string;
-  /** "off"면 일일 도전·레이드·아레나 기록을 다시 돌려 확인하지 않음 (Workers 무료 플랜용) */
-  REPLAY_CHECK?: string;
 }
 
 const SCHEMA = [
@@ -67,6 +66,8 @@ const SCHEMA = [
   ...RANK_SCHEMA,
   // 상점 쪽 저장 백업
   ...CLOUD_SCHEMA,
+  // 1~3위 다시 돌려 확인할 대기열
+  ...REPLAY_SCHEMA,
 ];
 
 function randomKey(): string {
@@ -74,8 +75,16 @@ function randomKey(): string {
 }
 
 /** 처음 한 번 표 만들기·열쇠 준비 */
-export function setupHub(sql: SqlLike, now: () => number = Date.now, env: HubEnv = {}, send = postWebhook): HubContext {
+export function setupHub(sql: SqlLike, now: () => number = Date.now, env: HubEnv = {}, send = postWebhook, wake: (at: number) => void = () => {}): HubContext {
   for (const q of SCHEMA) sql.exec(q);
+  // 예전 표에 확인 칸 더하기 (이미 있으면 그대로)
+  for (const t of ["raid", "arena"]) {
+    try {
+      sql.exec(`ALTER TABLE ${t} ADD COLUMN verified INTEGER NOT NULL DEFAULT 0`);
+    } catch {
+      // 이미 있음
+    }
+  }
   const meta = (k: string): string => {
     const row = first(sql, "SELECT v FROM meta WHERE k = ?", k);
     if (row) return String(row.v);
@@ -91,7 +100,7 @@ export function setupHub(sql: SqlLike, now: () => number = Date.now, env: HubEnv
     limits: new Map(),
     match: { open: null },
     admin: { webhook: env.ADMIN_LOGIN_WEBHOOK?.trim() ?? "", appEnv: env.APP_ENV ?? "local", send, lastCodeAt: 0, fails: 0 },
-    replay: env.REPLAY_CHECK !== "off",
+    wake,
   };
 }
 
@@ -117,10 +126,16 @@ export async function routeHub(ctx: HubContext, request: Request): Promise<Respo
 /** Durable Object 클래스 */
 export class Hub {
   private ctx: HubContext;
-  constructor(state: { storage: { sql: SqlLike } }, env: HubEnv) {
-    this.ctx = setupHub(state.storage.sql, Date.now, env);
+  private storage: { sql: SqlLike; setAlarm(at: number): Promise<void> };
+  constructor(state: { storage: { sql: SqlLike; setAlarm(at: number): Promise<void> } }, env: HubEnv) {
+    this.storage = state.storage;
+    this.ctx = setupHub(state.storage.sql, Date.now, env, postWebhook, (at) => void this.storage.setAlarm(at));
   }
   fetch(request: Request): Promise<Response> {
     return routeHub(this.ctx, request);
+  }
+  /** 1~3위 기록 다시 돌리기를 조금씩 (남았으면 바로 다음 알람) */
+  async alarm(): Promise<void> {
+    if (await runReplayChunk(this.ctx)) await this.storage.setAlarm(Date.now());
   }
 }

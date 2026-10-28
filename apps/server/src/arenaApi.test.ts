@@ -1,18 +1,20 @@
 import { EMPTY_INPUT, packInputs } from "@pixel-rogue/shared";
 import { describe, expect, it } from "vitest";
 import { setupHub } from "./hub";
-import { call, memorySql } from "./testing";
+import { call, drainReplays, memorySql } from "./testing";
 
 const player = "arena000-0000-4000-8000-000000000000";
 const submit = (level: number, ticks: number, inputs: string) => ({ player, nickname: "아레나", seedText: "ABCD1234", character: "warden", unlocks: [], level, ticks, inputs });
 
 describe("레이드 아레나 순위표", () => {
-  it("잘못된 레벨·시간은 거절 · 다시 돌려서 맞지 않으면 거절", async () => {
+  it("잘못된 레벨·시간은 거절 · 나눠 다시 돌려서 맞지 않으면 순위표에서 숨김", async () => {
     const ctx = setupHub(memorySql());
     expect((await call(ctx, "/api/arena/submit", submit(0, 100, ""))).body.error).toBe("bad_request");
     expect((await call(ctx, "/api/arena/submit", submit(16, 100, ""))).body.error).toBe("bad_request");
     const inputs = await packInputs(Array.from({ length: 300 }, () => EMPTY_INPUT));
-    expect((await call(ctx, "/api/arena/submit", submit(5, 300, inputs))).body.error).toBe("replay");
+    expect((await call(ctx, "/api/arena/submit", submit(5, 300, inputs))).body.improved).toBe(true);
+    await drainReplays(ctx);
+    expect((await call(ctx, "/api/arena/board")).body.entries).toEqual([]);
   });
 
   it("높은 레벨이 위, 같으면 빠른 시간 · 30위 안에 못 들면 확인 없이 돌려줌", async () => {

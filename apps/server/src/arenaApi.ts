@@ -1,10 +1,11 @@
 // 레이드 아레나 순위표 (전체 기간): 깬 레벨이 높은 순, 같으면 빠른 시간 순. 사람마다 가장 좋은 기록 하나.
-// 30위 안에 드는 기록만 받고, 받기 전에 판 전체를 입력 기록으로 다시 돌려 확인 (저장은 기록이 좋아질 때만)
-import { ARENA_BOARD_SIZE, ARENA_LEVELS, arenaCleared, CHARACTER_IDS, cleanNickname, isPlayerId, parseSeed, replayArena, unpackInputs, withBalance, type CharacterId } from "@pixel-rogue/shared";
+// 30위 안에 드는 기록만 받고, 1~3위는 판 전체를 입력 기록으로 나눠 다시 돌려 확인 (replayQueue, 저장은 기록이 좋아질 때만)
+import { ARENA_BOARD_SIZE, ARENA_LEVELS, CHARACTER_IDS, cleanNickname, isPlayerId, unpackInputs, type CharacterId } from "@pixel-rogue/shared";
 import { balanceVersion } from "./balanceApi";
 import type { HubContext } from "./hub";
 import { fail, json, readJson } from "./http";
 import { cleanUnlocks, loadProfile } from "./player";
+import { queueReplay, REPLAY_TOP } from "./replayQueue";
 import { first } from "./sql";
 
 /** 한 판 최대 길이 (3시간) */
@@ -20,14 +21,14 @@ export interface ArenaEntry {
 
 export function arenaBoard(ctx: HubContext): ArenaEntry[] {
   return ctx.sql
-    .exec("SELECT nickname, level, ticks, character FROM arena ORDER BY level DESC, ticks ASC, finished ASC LIMIT ?", ARENA_BOARD_SIZE)
+    .exec("SELECT nickname, level, ticks, character FROM arena WHERE verified >= 0 ORDER BY level DESC, ticks ASC, finished ASC LIMIT ?", ARENA_BOARD_SIZE)
     .toArray()
     .map((r, i) => ({ rank: i + 1, nickname: String(r.nickname), level: Number(r.level), ticks: Number(r.ticks), character: String(r.character) }));
 }
 
 /** 이 기록이 몇 위가 되는지 (같으면 먼저 낸 사람이 위) */
 function rankFor(ctx: HubContext, level: number, ticks: number, user: string): number {
-  const row = first(ctx.sql, "SELECT COUNT(*) AS n FROM arena WHERE user != ? AND (level > ? OR (level = ? AND ticks <= ?))", user, level, level, ticks);
+  const row = first(ctx.sql, "SELECT COUNT(*) AS n FROM arena WHERE verified >= 0 AND user != ? AND (level > ? OR (level = ? AND ticks <= ?))", user, level, level, ticks);
   return Number(row?.n ?? 0) + 1;
 }
 
@@ -64,21 +65,16 @@ export async function handleArena(ctx: HubContext, action: string, request: Requ
   const rank = rankFor(ctx, level, ticks, user);
   if (rank > ARENA_BOARD_SIZE) return json({ ok: true, improved: false, rank: null, entries: arenaBoard(ctx) });
 
-  // 판 전체 다시 돌리기: 같은 레벨까지 같은 시간에 끝나야 함 (확인을 끈 서버는 그대로 받음)
-  if (ctx.replay) {
-    let inputs;
+  // 1~3위는 받아 둔 뒤 알람으로 나눠 판 전체를 다시 돌려 같은 레벨까지 같은 시간에 끝나는지 확인 (replayQueue)
+  const check = rank <= REPLAY_TOP;
+  const balance = typeof body.balance === "string" ? body.balance : "default";
+  if (check) {
     try {
-      inputs = await unpackInputs(body.inputs);
+      if ((await unpackInputs(body.inputs)).length > MAX_TICKS) return fail("bad_inputs");
     } catch {
       return fail("bad_inputs");
     }
-    if (inputs.length > MAX_TICKS) return fail("bad_inputs");
-    // 그 판을 한 게임 수치로 (관리자 페이지에서 바꾼 수치)
-    const balance = balanceVersion(ctx, typeof body.balance === "string" ? body.balance : "default");
-    if (!balance) return fail("balance");
-    const seed = parseSeed(body.seedText);
-    const run = withBalance(balance, () => replayArena(seed, character, cleanUnlocks(body.unlocks), inputs));
-    if (!run.over || arenaCleared(run) !== level || run.tick !== ticks) return fail("replay");
+    if (!balanceVersion(ctx, balance)) return fail("balance");
   }
 
   const nickname = cleanNickname(typeof body.nickname === "string" ? body.nickname : "") || loadProfile(ctx, user).nickname || "???";
@@ -92,5 +88,6 @@ export async function handleArena(ctx: HubContext, action: string, request: Requ
     character,
     ctx.now(),
   );
+  if (check) queueReplay(ctx, { kind: "arena", board: "", user, seedText: body.seedText, character, unlocks: cleanUnlocks(body.unlocks), balance, level, ticks }, body.inputs);
   return json({ ok: true, improved: true, rank, entries: arenaBoard(ctx) });
 }

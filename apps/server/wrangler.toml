@@ -69,8 +69,6 @@ preview_urls = false
 [env.test.vars]
 APP_ENV = "test"
 ALLOWED_ORIGINS = "https://test.pixel-rogue-test.pages.dev,http://localhost:5173"
-# Workers 무료 플랜: 요청 하나의 계산 시간이 짧아 기록을 판 전체 다시 돌려 확인하지 않음 (유료 플랜이면 이 줄을 지우기)
-REPLAY_CHECK = "off"
 
 [[env.test.durable_objects.bindings]]
 name = "HUB"
