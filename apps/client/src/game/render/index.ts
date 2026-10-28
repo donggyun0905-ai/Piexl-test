@@ -55,6 +55,7 @@ import { drawOniUps, type OniUp } from "./oniUps";
 import { drawSwarmGround } from "./swarmMap";
 import { drawPaewang, drawPwGround } from "./paewang";
 import { pwShown } from "./pwLook";
+import { drawSkillAim } from "./pwAim";
 import { themeFor } from "./floorThemes";
 import { drawAmbushOverlay, drawTrackerAura } from "./tracker";
 import { drawForgottenAura, drawForgottenBack } from "./forgotten";
@@ -100,6 +101,8 @@ export interface DrawOptions {
   under?: (ctx: CanvasRenderingContext2D, snap: Snap) => void;
   /** 효과 위에 더 그릴 것 (피해 숫자) */
   overlay?: (ctx: CanvasRenderingContext2D, snap: Snap) => void;
+  /** 패왕전 조준 중인 스킬 (0~3, 없으면 -1) */
+  skillAim?: number;
   /** 모드별로 맨 위에 더 그리기 (협동 이름표·신호) */
   modeOverlay?: DrawOverlay | undefined;
 }
@@ -234,6 +237,8 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   drawOniUps(ctx, s, alpha, snap, opt.oniUp);
   opt.modeOverlay?.(ctx, s, alpha, snap);
   drawAmbushOverlay(ctx, s, snap, s.player.aimDist === undefined ? null : cursorWorld(ctx, opt, k, camX, camY));
+  // 패왕전 스킬 조준 미리보기
+  if (s.pvp && (opt.skillAim ?? -1) >= 0 && !s.over) drawSkillAim(ctx, s, opt.skillAim!, cursorWorld(ctx, opt, k, camX, camY), alpha, snap);
   drawBossBar(ctx, s);
   drawUmbraTalk(ctx, s, opt.pixelScale, opt.umbraLine);
   drawSageBanner(ctx, s, opt.pixelScale, opt.sageText);

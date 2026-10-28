@@ -9,6 +9,7 @@ import { SPECIAL_NAMES } from "../i18n/items/abandoned";
 import type { Controls } from "./controls";
 import { formatTime, pickupText, promptText } from "./hudText";
 import { loadoutKey, type LoadoutView } from "./Loadout";
+import { pwSkillView } from "./pwSkillView";
 import { drawMinimap } from "./minimap";
 import { viewH, viewW } from "./viewSize";
 import { drawFrame, type DrawOverlay } from "./render";
@@ -69,7 +70,9 @@ export interface LoopOptions {
 export function startGameLoop(o: LoopOptions): () => void {
   const { run, ctx, controls, t, lang } = o;
   // 추적자는 숫자 1·2·3이 스킬 (아이템은 Q·E)
-  controls.skillKeys = run.player.characterId === "tracker";
+  // 패왕전은 숫자 1~4가 스킬 (조준 모드)
+  controls.skillKeys = run.player.characterId === "tracker" || !!run.pvp;
+  controls.arm.on = !!run.pvp;
   // 패왕전은 자동 공격 없이 직접 조준만
   if (run.pvp) {
     controls.manualOnly = true;
@@ -151,7 +154,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       o.setPrompt({ text, interact: action !== "" && !passive });
     }
     const ambush = !!p.trAmbush;
-    controls.fineAim = ambush;
+    controls.fineAim = ambush || !!run.pvp;
     if (ambush && controls.autoAim) {
       controls.setAutoAim(false);
       autoBack = true;
@@ -166,6 +169,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       ...(p.characterId === "novice" ? { novice: { lv: p.lv ?? 1, exp: p.exp ?? 0, need: expToNext(p.lv ?? 1), points: p.points ?? 0 } } : {}),
       // 추적자 스킬 대기 (5% 단위로만 바뀌게)
       ...(p.characterId === "tracker" ? { skills: trackerSkills(p).map((v) => Math.ceil(v * 20) / 20) } : {}),
+      ...(run.pvp ? { pw: pwSkillView(run, controls.arm.armed) } : {}),
       // 상점 휴지통에서 F로 판매 창을 열었을 때: 팔 수 있는 값 (무기 + 사용 아이템 2칸 + 패시브 순서, 0 = 못 팜)
       ...(run.prompt.kind === "trash" && run.prompt.confirm && !run.party ? { sell: sellCodes(p.passives.length).map((n) => sellPrice(run, n)) } : {}),
     };
@@ -225,6 +229,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       showReticle: controls.touchAiming,
       showHitbox: controls.hitboxHeld || getSettings().showHitbox,
       showRange: getSettings().showRange,
+      skillAim: controls.arm.armed,
       pixelScale: ctx.canvas.width / viewW(),
       zoom: controls.zoom,
       cursor: () => controls.mouse,

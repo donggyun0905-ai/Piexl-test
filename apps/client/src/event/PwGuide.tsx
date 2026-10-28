@@ -4,7 +4,7 @@ import type { TextKey } from "../i18n";
 import { Modal } from "../menu/Modal";
 import { loadText, saveText } from "../storage";
 
-const SEEN = "pwGuideSeen";
+const SEEN = "pwGuideSeen2";
 const PARTS: readonly [TextKey, TextKey][] = [
   ["pwGuideGoalH", "pwGuideGoal"],
   ["pwGuideKeysH", "pwGuideKeys"],

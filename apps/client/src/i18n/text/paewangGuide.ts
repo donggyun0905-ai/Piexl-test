@@ -9,9 +9,9 @@ export const PAEWANG_GUIDE_TEXT = {
   },
   pwGuideKeysH: { ko: "조작", en: "Controls", ja: "操作" },
   pwGuideKeys: {
-    ko: "WASD 이동 · 마우스로 조준하고 왼쪽 클릭으로 공격 (자동 공격 없음) · 오른쪽 클릭 대시 · Q·E 사용 아이템 · Tab 점수판 · G 공격 범위 표시 · 모바일은 왼쪽 조이스틱 이동, 오른쪽 조이스틱 조준·공격",
-    en: "WASD to move · aim with the mouse, left-click to attack (no auto attack) · right-click to dash · Q/E consumables · Tab scoreboard · G attack range · on mobile, left stick moves and right stick aims and attacks",
-    ja: "WASDで移動 · マウスで狙って左クリックで攻撃 (自動攻撃なし) · 右クリックでダッシュ · Q・Eで使用アイテム · Tabでスコアボード · Gで攻撃範囲 · モバイルは左スティックで移動、右スティックで狙って攻撃",
+    ko: "WASD 이동 · 마우스로 조준하고 왼쪽 클릭으로 평타 (자동 공격 없음) · 1·2·3·4 스킬: 키를 누르면 범위가 보이고 왼쪽 클릭으로 시전, 오른쪽 클릭·Esc 취소 (설정에서 키 바꾸기·바로 사용) · 4번은 궁극기 · 오른쪽 클릭 대시 · Q·E 사용 아이템 · Tab 점수판 · G 공격 범위 표시 · 모바일은 왼쪽 조이스틱 이동, 오른쪽 조이스틱 조준·공격, 아래 스킬 칸을 누르면 바로 시전",
+    en: "WASD to move · aim with the mouse, left-click for basic attacks (no auto attack) · skills 1·2·3·4: press the key to see the area, left-click to cast, right-click or Esc to cancel (rebind keys and quick cast in Settings) · 4 is the ultimate · right-click to dash · Q/E consumables · Tab scoreboard · G attack range · on mobile, left stick moves, right stick aims and attacks, and tapping a skill slot casts it",
+    ja: "WASDで移動 · マウスで狙って左クリックで通常攻撃 (自動攻撃なし) · スキル1・2・3・4: キーを押すと範囲が見え、左クリックで発動、右クリック・Escで取消 (設定でキー変更・即時使用) · 4は奥義 · 右クリックでダッシュ · Q・Eで使用アイテム · Tabでスコアボード · Gで攻撃範囲 · モバイルは左スティックで移動、右スティックで狙って攻撃、下のスキル枠を押すとすぐ発動",
   },
   pwGuideSeeH: { ko: "화면 보기", en: "Reading the screen", ja: "画面の見方" },
   pwGuideSee: {

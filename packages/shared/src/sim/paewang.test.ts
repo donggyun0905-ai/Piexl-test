@@ -46,20 +46,17 @@ describe("패왕전", () => {
     }
   });
 
-  it("모두 진짜 캐릭터 자리 · 처음 보호막(PW.shield) · 공용 패시브 5개는 무작위 · AI는 전용 패시브도 무작위 · 서로 다른 아이템 2", () => {
+  it("모두 진짜 캐릭터 자리 · 처음 보호막(PW.shield) · 장비는 기본 무기(평타)만 · 패시브·사용 아이템 없음", () => {
     expect(PW_TIERS).toHaveLength(PW.gunLevels);
     for (const mode of PW_MODES) {
-      const s = createPvp(3, mode, [{ characterId: "drifter", loadout: { weapon: "crossbow", passives: [], uses: [] } }]);
+      const s = createPvp(3, mode, [{ characterId: "drifter" }]);
       expect(s.party!.length, mode).toBe(pwSeatCount(mode));
-      const players = allPlayers(s);
-      expect(players[0]!.stats.maxHp, mode).toBeGreaterThanOrEqual(90);
-      expect(players[0]!.shieldPts).toBe(PW.shield);
-      // 나(전용 패시브를 안 고름)는 공용 5개만
-      if (mode !== "gungame") expect(players[0]!.passives.length, mode).toBe(PW.randomPassives);
-      const ai = players[players.length - 1]!;
-      if (mode !== "gungame") expect(ai.passives.length, mode).toBeGreaterThanOrEqual(PW.randomPassives);
-      if (mode !== "gungame") expect(ai.passives.length, mode).toBeLessThanOrEqual(PW.passives + PW.randomPassives);
-      expect(new Set(ai.useSlots).size, mode).toBe(2);
+      for (const p of allPlayers(s)) {
+        expect(p.weaponId, mode).toBe(CHARACTERS[p.characterId].startWeapon);
+        expect(p.passives, mode).toEqual([]);
+        expect(p.useSlots.every((x) => x === null), mode).toBe(true);
+        expect(p.shieldPts ?? 0).toBe(PW.shield);
+      }
     }
   });
 

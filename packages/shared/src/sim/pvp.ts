@@ -8,7 +8,10 @@ import { PW_ARENAS, type PwArenaId } from "../paewangMaps";
 import { createRng, deriveSeed } from "../rng";
 import { updateItems } from "./items";
 import { PLAIN_SHAPE } from "./layout";
-import { applyLoadout, gunSwap, randomLoadout } from "./paewangKit";
+import { gunSwap, plainKit } from "./paewangKit";
+import { kitOf } from "../pwKits";
+import { buffMul } from "./pwSkillHit";
+import { pwSkillTick } from "./pwSkillRun";
 import type { PvpSeat, PwLoadout } from "./paewangTypes";
 import { allPlayers, eachSeat, seatNo, useSeat } from "./party";
 import { createParty } from "./partyRun";
@@ -62,9 +65,9 @@ export function createPvp(seed: number, mode: PwMode, humans: readonly (PwHuman 
   applyRoom(s);
   eachSeat(s, (i) => {
     placeSeat(s, i);
-    const lo = humans[i]?.loadout;
-    if (mode === "gungame") gunSwap(s, chars[i]!, i * 100 + 1);
-    else applyLoadout(s, lo ?? randomLoadout(chars[i]!, createRng(deriveSeed(seed, "pwBotKit", i))));
+    // 스킬 대결: 기본 무기(평타)만 (무기·패시브 고르기 없음)
+    if (mode === "gungame") gunSwap(s, chars[i]!);
+    else plainKit(s);
     freshStart(s);
   });
   useSeat(s, 0);
@@ -101,6 +104,8 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
     else if (seat.root > 0) input = { ...input, moveX: 0, moveY: 0, dash: false };
     else if (seat.slow > 0) input = { ...input, moveX: Math.round(input.moveX / 2), moveY: Math.round(input.moveY / 2) };
     for (const k of ["stun", "slow", "root"] as const) if (seat[k] > 0) seat[k]--;
+    // 스킬 1~4 · 돌진 · 장판 · 소환한 것
+    input = pwSkillTick(s, input);
     stepPlayer(s, input);
     for (const pr of s.projectiles) if (pr.fromPlayer && pr.shooter === undefined) pr.shooter = i;
     updateItems(s, input);
@@ -129,6 +134,11 @@ export function pvpStats(s: RunState): void {
   const tune = PW_CHAR[s.player.characterId] ?? {};
   st.maxHp = Math.round(st.maxHp * (tune.hp ?? 1) * (seat && !seat.human ? diff.hp : 1));
   st.damage *= (tune.dmg ?? 1) * (seat && !seat.human ? diff.dmg : 1);
+  // 스킬 대결: 평타 배율 · 버프(공격력·이동·공격 속도)
+  const p = s.player;
+  st.damage *= (kitOf(p.characterId)?.basic ?? 1) * buffMul(p, "dmg");
+  st.moveSpeed *= buffMul(p, "move");
+  st.attackSpeed *= buffMul(p, "rate");
 }
 
 /** 결과 (me = 내 자리): 이겼는지 · 처치·데스 · 데스매치 레벨 · 대난투 순위 · 받을 돈 */

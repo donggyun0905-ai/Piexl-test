@@ -8,6 +8,7 @@ import { drawBossFx } from "./bossFx";
 import { drawSageFx } from "./ruyi";
 import { drawEnemyShot } from "./bossLook";
 import { drawPwShot } from "./paewang";
+import { drawPwSkillFx } from "./pwSkillFx";
 import { drawCleaveFx } from "./minions";
 import { drawBullet, drawGunFx } from "./guns";
 import { drawTagFx } from "./abandoned";
@@ -108,7 +109,7 @@ export function drawEffects(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       if ((fx.seat ?? 0) === (s.seat ?? 0)) drawCoinFx(ctx, snap(fx.x), snap(fx.y), fx.size, t);
       continue;
     }
-    if (drawTintedFx(ctx, fx, px, py, snap) || drawCustomFx(ctx, fx, px, py, snap)) continue;
+    if (drawPwSkillFx(ctx, fx, snap) || drawTintedFx(ctx, fx, px, py, snap) || drawCustomFx(ctx, fx, px, py, snap)) continue;
     if (drawLaserFx(ctx, s, fx, px, py, snap) || drawMedicFx(ctx, s, fx, px, py, snap)) continue;
     if (drawOrbitFx(ctx, fx, snap)) continue;
     if (drawCleaveFx(ctx, fx, snap) || drawBedouinFx(ctx, fx, s.tick, snap) || drawGeneralFx(ctx, fx, snap) || drawImugiPowerFx(ctx, fx, snap) || drawImugiFx(ctx, fx, snap) || drawApostleFx(ctx, fx, snap) || drawStarFx(ctx, fx, snap) || drawDuckFx(ctx, fx, px, py, snap)) continue;

@@ -137,12 +137,51 @@ export interface PvpSeat {
   iced?: number;
   /** 이번 판에 쓰러짐 (토너먼트 다음 차례 고르기) */
   fell?: boolean;
+  /** 침묵(스킬 못 씀) 남은 틱 · 밀려나는 중 (틱마다 움직임 · 남은 틱) */
+  silence?: number;
+  push?: { vx: number; vy: number; t: number };
 }
 
 /** 패왕전 사람 자리 값 */
 export interface PwPlayerState {
   /** 이동 속도 강화 구슬 남은 틱 */
   pwFast?: number;
+  /** 스킬 1~4 남은 대기 틱 */
+  pwCd?: number[];
+  /** 걸린 버프 (스킬): 남은 틱과 효과 */
+  pwBuffs?: { t: number; dmg?: number; move?: number; rate?: number; taken?: number; regen?: number; hide?: boolean }[];
+  /** 스킬 돌진 중: 방향 · 남은·전체 거리 · 속도 · 맞힌 상대 · 스킬 번호 · 지난 구간(여러 번 돌진) */
+  pwDash?: { dx: number; dy: number; left: number; total: number; speed: number; hit: number[]; k: number; seg?: number };
+  /** 능력치를 바꾸는 버프 수 (바뀌면 능력치를 다시 계산) */
+  pwSig?: number;
+}
+
+/** 스킬이 남긴 것: 예고 뒤 터짐·여러 번 터지는 장판·늦게 나가는 줄 (자리 · 스킬 번호 · 자리 · 방향 · 다음까지 틱 · 남은 횟수 · 나를 따라감) */
+export interface PwCast {
+  seat: number;
+  k: number;
+  x: number;
+  y: number;
+  dx: number;
+  dy: number;
+  t: number;
+  left: number;
+  follow?: boolean;
+}
+
+/** 스킬로 부른 것 (맞지 않음, 시간이 다하면 사라짐) */
+export interface PwMinion {
+  id: number;
+  seat: number;
+  k: number;
+  x: number;
+  y: number;
+  prevX: number;
+  prevY: number;
+  t: number;
+  cd: number;
+  /** 마지막 공격 대상 자리 (그림: 빛줄기) */
+  shot?: { x: number; y: number; at: number };
 }
 
 /** 패왕전 바닥 강화 구슬: 0 회복 · 1 공격 속도 · 2 이동 속도 (닿으면 바로) */
@@ -175,6 +214,8 @@ export interface PvpState {
   winner?: number;
   orbs?: PwOrb[];
   ice?: PwIce[];
+  casts?: PwCast[];
+  mins?: PwMinion[];
   /** 3판 2선승: 편마다 이긴 판 수 · 지금 판(1부터) · 지난 판 결과(화면 글자) · 이번 판 준비가 끝나는 틱 */
   wins?: Record<number, number>;
   round?: number;

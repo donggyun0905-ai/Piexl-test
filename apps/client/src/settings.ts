@@ -22,8 +22,10 @@ export interface Settings {
   stickScale: number;
   /** 모바일 버튼을 기본 자리에서 옮긴 거리 [화면 너비 비율, 화면 높이 비율] (화면을 돌려도 비슷한 자리에 있게 비율로) */
   buttonPos: Partial<Record<TouchButtonId, [number, number]>>;
-  /** PC 스킬 키 1·2·3 (추적자, KeyboardEvent.code) */
+  /** PC 스킬 키 1~4 (추적자 1·2·3 · 패왕전 1~4, KeyboardEvent.code) */
   skillKeys: string[];
+  /** 패왕전 스킬마다 바로 사용 (키를 누르면 조준 없이 마우스 쪽으로) */
+  quickCast: boolean[];
 }
 
 /** 모바일 버튼 (TouchButtons의 data-act) */
@@ -41,13 +43,14 @@ const DEFAULTS: Settings = {
   buttonScale: 1,
   stickScale: 1,
   buttonPos: {},
-  skillKeys: ["Digit1", "Digit2", "Digit3"],
+  skillKeys: ["Digit1", "Digit2", "Digit3", "Digit4"],
+  quickCast: [false, false, false, false],
 };
 
-/** 스킬 키: 설정에서 고른 키 (숫자 패드 1·2·3도 늘 됨) · 0 = 스킬 키 아님 */
+/** 스킬 키: 설정에서 고른 키 (숫자 패드 1~4도 늘 됨) · 0 = 스킬 키 아님 */
 export function skillOf(code: string): number {
   const i = current.skillKeys.indexOf(code);
-  return i >= 0 ? i + 1 : (({ Numpad1: 1, Numpad2: 2, Numpad3: 3 }) as Record<string, number>)[code] ?? 0;
+  return i >= 0 ? i + 1 : (({ Numpad1: 1, Numpad2: 2, Numpad3: 3, Numpad4: 4 }) as Record<string, number>)[code] ?? 0;
 }
 
 /** 키 코드 → 보이는 이름 (Digit1 → 1, KeyQ → Q, Numpad1 → Num1) */
@@ -58,7 +61,9 @@ export function keyLabel(code: string): string {
 function read(): Settings {
   try {
     const raw = loadText("settings");
-    return raw ? { ...DEFAULTS, ...(JSON.parse(raw) as Partial<Settings>) } : DEFAULTS;
+    const got = raw ? { ...DEFAULTS, ...(JSON.parse(raw) as Partial<Settings>) } : DEFAULTS;
+    // 예전 저장(스킬 키 셋)에는 4번 키를 더함
+    return got.skillKeys.length < 4 ? { ...got, skillKeys: [...got.skillKeys, ...DEFAULTS.skillKeys.slice(got.skillKeys.length)] } : got;
   } catch {
     return DEFAULTS;
   }

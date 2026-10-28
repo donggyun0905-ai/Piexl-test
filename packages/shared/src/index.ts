@@ -10,6 +10,7 @@ export * from "./paewangDefs";
 export * from "./paewangBalance";
 export * from "./terrainDefs";
 export * from "./paewangMaps";
+export * from "./pwKits";
 export * from "./stats";
 export * from "./achievements";
 export * from "./daily";

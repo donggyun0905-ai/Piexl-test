@@ -1,5 +1,6 @@
 import { NovicePanel, type NoviceView } from "./NovicePanel";
 import { SkillButtons } from "./SkillButtons";
+import { PwSkillBar, type PwSkillView } from "./PwSkillBar";
 import { SellBar } from "./SellBar";
 import type { PassiveId, UseItemId, WeaponId } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
@@ -17,6 +18,8 @@ export interface LoadoutView {
   novice?: NoviceView;
   /** 스킬이 있는 캐릭터(추적자): 스킬마다 남은 대기 0~1 */
   skills?: number[];
+  /** 패왕전 스킬 칸 */
+  pw?: PwSkillView;
   /** 상점 휴지통 판매 창이 열려 있을 때: 팔면 받는 돈 (sellCodes 순서: 무기 · 사용 아이템 2칸 · 패시브 순서, 0원 = 못 팜) */
   sell?: number[];
 }
@@ -27,7 +30,8 @@ const USE_KEY_LABELS = ["Q", "E"];
 /** 화면 바뀜 판단용 */
 export function loadoutKey(v: LoadoutView): string {
   const n = v.novice ? `|${v.novice.lv},${v.novice.exp},${v.novice.points}` : "";
-  return `${v.weaponId}|${v.slots.join(",")}|${v.passives.join(",")}${n}|${v.skills?.join(",") ?? ""}|${v.sell?.join(",") ?? ""}`;
+  const pw = v.pw ? `|${v.pw.cds.join(",")}|${v.pw.armed}|${v.pw.silenced}` : "";
+  return `${v.weaponId}|${v.slots.join(",")}|${v.passives.join(",")}${n}|${v.skills?.join(",") ?? ""}|${v.sell?.join(",") ?? ""}${pw}`;
 }
 
 interface Props {
@@ -73,6 +77,7 @@ export function Loadout({ view, lang, t, touchMode, controls }: Props) {
       {view.novice && <NovicePanel view={view.novice} t={t} controls={controls} />}
       {view.sell && <SellBar view={view} lang={lang} t={t} controls={controls} />}
       {view.skills && <SkillButtons skills={view.skills} t={t} controls={controls} />}
+      {view.pw && <PwSkillBar view={view.pw} t={t} touchMode={touchMode} controls={controls} />}
       <span className="loadout-weapon">
         {t("weapon")}:{" "}
         <span className={`loadout-weapon-icon ${isOn(weapon) ? "on" : ""}`} {...tipProps(weapon)}>

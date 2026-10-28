@@ -41,13 +41,19 @@ export function nextRound(s: RunState, team: number): boolean {
   s.rooms[s.roomId]!.pickups = [];
   pv.orbs = [];
   pv.ice = [];
+  pv.casts = [];
+  pv.mins = [];
   const size = def.allies + 1;
   eachSeat(s, (i) => {
     const seat = pv.seats[i]!;
     seat.on = pv.mode !== "tourney" || i % size === 0;
     seat.fell = false;
     seat.back = seat.by = seat.iced = undefined;
-    seat.stun = seat.slow = seat.root = 0;
+    seat.stun = seat.slow = seat.root = seat.silence = 0;
+    seat.push = undefined;
+    const p = s.player;
+    p.pwCd = undefined;
+    p.pwBuffs = p.pwDash = undefined;
     placeSeat(s, i);
     freshStart(s);
   });

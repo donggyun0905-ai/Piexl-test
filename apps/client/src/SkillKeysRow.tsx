@@ -1,4 +1,4 @@
-// 설정의 스킬 키 바꾸기 (추적자 1·2·3): 칸을 누르고 원하는 키를 누르면 바뀜 (Esc는 취소)
+// 설정의 스킬 키 바꾸기 (추적자 1·2·3 · 패왕전 1~4): 칸을 누르고 원하는 키를 누르면 바뀜 (Esc는 취소) · 패왕전 스킬마다 바로 사용
 import { useEffect, useState } from "react";
 import type { TextKey } from "./i18n";
 import { getSettings, keyLabel, setSettings, useSettings } from "./settings";
@@ -26,15 +26,27 @@ export function SkillKeysRow({ t }: { t: (key: TextKey) => string }) {
     return () => window.removeEventListener("keydown", onKey, true);
   }, [wait]);
   return (
-    <div className="setting-row">
-      <span>{t("skillKeys")}</span>
-      <span className="skill-key-set">
-        {s.skillKeys.map((code, i) => (
-          <button key={i} type="button" className={`small ${wait === i ? "on" : ""}`} onClick={() => setWait(i)}>
-            {i + 1}: {wait === i ? t("pressKey") : keyLabel(code)}
-          </button>
-        ))}
-      </span>
-    </div>
+    <>
+      <div className="setting-row">
+        <span>{t("skillKeys")}</span>
+        <span className="skill-key-set">
+          {s.skillKeys.map((code, i) => (
+            <button key={i} type="button" className={`small ${wait === i ? "on" : ""}`} onClick={() => setWait(i)}>
+              {i + 1}: {wait === i ? t("pressKey") : keyLabel(code)}
+            </button>
+          ))}
+        </span>
+      </div>
+      <div className="setting-row">
+        <span>{t("pwSkQuick")}</span>
+        <span className="skill-key-set">
+          {s.quickCast.map((on, i) => (
+            <button key={i} type="button" className={`small ${on ? "on" : ""}`} onClick={() => setSettings({ quickCast: s.quickCast.map((v, j) => (j === i ? !v : v)) })}>
+              {i + 1}: {on ? t("on") : t("off")}
+            </button>
+          ))}
+        </span>
+      </div>
+    </>
   );
 }

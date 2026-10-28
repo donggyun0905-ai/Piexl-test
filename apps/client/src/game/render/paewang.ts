@@ -2,6 +2,7 @@
 import { allPlayers, inBush, PW, PW_ARENAS, TILE_SIZE, trapUp, type EnemyState, type ProjectileState, type PwAlly, type PwBrain, type RunState } from "@pixel-rogue/shared";
 import { drawBody } from "./actors";
 import { drawFoeCue, pwHead, pwIsAlly, pwShown, pwTint, setPwViewer } from "./pwLook";
+import { drawPwBuffs, drawPwMinions, drawPwStatus } from "./pwUnits";
 import { drawFrozen, drawIce, drawMeArrow, drawOrbs, drawPrepAura, readyEnd } from "./pwMarks";
 import { lerp, type Snap } from "./palette";
 
@@ -128,7 +129,8 @@ export function drawPaewang(ctx: Ctx, s: RunState, alpha: number, snap: Snap): v
       leaf(ctx, x + R * 0.3, y - R * 0.35, R * 0.5, "rgba(52, 104, 44, 0.9)");
     }
   }
-  // 체력 줄·표시는 수풀·나무 위에
+  // 체력 줄·표시는 수풀·나무 위에 (소환한 것도)
+  if (s.pvp) drawPwMinions(ctx, s, alpha, snap, (i) => pwTint(s, i));
   if (s.pvp) drawSeats(ctx, s, alpha, snap);
 }
 
@@ -159,6 +161,7 @@ function drawSeats(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
     const color = pwTint(s, i);
     ctx.globalAlpha = shown;
     drawFrozen(ctx, s, x, y, p.r, seat.iced);
+    drawPwBuffs(ctx, s, p, x, y);
     // 발밑 편 고리
     ctx.strokeStyle = color;
     ctx.lineWidth = 1.5;
@@ -192,6 +195,7 @@ function drawSeats(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
       ctx.fillText(`Lv${seat.lv}`, x, top - 4);
       ctx.textAlign = "start";
     }
+    drawPwStatus(ctx, s, i, x, top, y + p.r);
     ctx.globalAlpha = 1;
     if (i === me) drawMeArrow(ctx, s, x, top - (pv.mode === "gungame" ? 6 : 0));
   });

@@ -1,5 +1,5 @@
 // 패왕전 장비: 준비방에서 고른 무기·캐릭터 전용 패시브 5개·사용 아이템 2개 + 공용 패시브 5개는 무작위 · AI는 모두 무작위 · 데스매치는 레벨마다 캐릭터를 바꾸고 모두 무작위
-import { type CharacterId, type WeaponId } from "../content";
+import { CHARACTERS, type CharacterId, type WeaponId } from "../content";
 import { PASSIVE_IDS, PASSIVES, USE_ITEM_IDS, type PassiveDef, type PassiveId } from "../items";
 import { PW } from "../paewangDefs";
 import { createRng, deriveSeed, type Rng } from "../rng";
@@ -80,8 +80,18 @@ export function applyLoadout(s: RunState, lo: PwLoadout): void {
   p.hp = p.stats.maxHp;
 }
 
-/** 데스매치: 지금 자리 캐릭터를 바꾸고 무기·패시브·사용 아이템을 모두 무작위로 (자리는 그대로) · salt: 자리·레벨 */
-export function gunSwap(s: RunState, c: CharacterId, salt: number): void {
+/** 스킬 대결 장비: 기본 무기(평타)만 · 패시브·사용 아이템 없음 (사용 아이템은 경기장에서 주움) */
+export function plainKit(s: RunState): void {
+  const p = s.player;
+  p.weaponId = CHARACTERS[p.characterId].startWeapon;
+  p.passives = [];
+  p.useSlots = p.useSlots.map(() => null);
+  recalcStats(s);
+  p.hp = p.stats.maxHp;
+}
+
+/** 데스매치: 지금 자리 캐릭터를 바꿈 (자리는 그대로, 장비는 기본 무기만) */
+export function gunSwap(s: RunState, c: CharacterId): void {
   const old = s.player;
   const p = newPlayer(c, old.x, old.y);
   p.prevX = old.prevX;
@@ -91,5 +101,5 @@ export function gunSwap(s: RunState, c: CharacterId, salt: number): void {
   s.devices = [];
   // 앞 캐릭터가 쏜 탄은 정리 (직업마다 탄 모양이 달라서)
   s.projectiles = s.projectiles.filter((pr) => !pr.fromPlayer || pr.shooter !== seatNo(s));
-  applyLoadout(s, randomLoadout(c, createRng(deriveSeed(s.seed, "pwKit", salt, s.tick))));
+  plainKit(s);
 }

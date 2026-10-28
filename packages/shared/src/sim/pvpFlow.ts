@@ -8,6 +8,7 @@ import { gunSwap } from "./paewangKit";
 import { allPlayers, eachSeat, useSeat } from "./party";
 import { inPlay } from "./pvpWorld";
 import { nextRound } from "./pvpRounds";
+import { clearSkills } from "./pwSkill";
 import type { RunState } from "./types";
 import { addEffect } from "./util";
 
@@ -50,6 +51,11 @@ export function settleDeaths(s: RunState): void {
     if (!seat.on || s.player.hp > 0 || !checkDeath(s)) return;
     seat.on = false;
     seat.fell = true;
+    // 쓰러지면 스킬 장판·예고·소환·버프·돌진도 끝
+    clearSkills(s, i);
+    s.player.pwBuffs = s.player.pwDash = undefined;
+    seat.silence = 0;
+    seat.push = undefined;
     seat.deaths++;
     // 쓰러지면 그 사람이 쏜 탄도 바로 사라짐
     s.projectiles = s.projectiles.filter((pr) => !pr.fromPlayer || pr.shooter !== i);
@@ -80,7 +86,7 @@ function levelUp(s: RunState, k: number): void {
   const back = s.seat ?? 0;
   useSeat(s, k);
   const shield = s.player.shieldPts;
-  gunSwap(s, PW_TIERS[seat.lv - 1]!, k * 100 + seat.lv);
+  gunSwap(s, PW_TIERS[seat.lv - 1]!);
   s.player.shieldPts = shield;
   useSeat(s, back);
 }

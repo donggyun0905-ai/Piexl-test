@@ -1,5 +1,6 @@
 import { AIM_DIST_MAX, AIM_DIST_STEP, quantize, type TickInput } from "@pixel-rogue/shared";
 import { skillOf } from "../settings";
+import { SkillArm } from "./skillArm";
 import type { ClickTarget } from "./clickTargets";
 import { drawSticks, type StickElements } from "./sticks";
 import { moveVector, TouchSticks } from "./touchSticks";
@@ -12,9 +13,8 @@ const AIM_STEPS = 100;
 /** 화면 확대 한도 (1 = 방 전체가 보임) */
 export const ZOOM_MIN = 1;
 export const ZOOM_MAX = 2.5;
-/** PC 사용 아이템 키: 1번 칸 Q·1, 2번 칸 E·2 */
+/** PC 사용 아이템 키: 1번 칸 Q·1, 2번 칸 E·2 (스킬이 있으면 숫자는 스킬, 아이템은 Q·E) */
 const USE_KEYS: Record<string, number> = { KeyQ: 1, Digit1: 1, KeyE: 2, Digit2: 2 };
-/** 스킬이 있는 캐릭터(추적자)는 숫자 1·2·3이 스킬 (아이템은 Q·E) */
 
 export interface ControlsOptions {
   /** 터치·마우스를 받는 화면 전체 영역 */
@@ -58,7 +58,8 @@ export class Controls {
   private statQueued = 0;
   private skillQueued = 0;
   private sellQueued = 0;
-  skillKeys = false; // 숫자 키를 스킬로 씀 (추적자)
+  skillKeys = false; // 숫자 키를 스킬로 씀 (추적자·패왕전)
+  arm = new SkillArm();
   fineAim = false; // 누른 곳까지 거리를 잘게 (추적자 암습 저격: 조준경 가운데에 정확히 대야 맞음)
   /** 클릭·탭으로 고른 층 보상·미니맵 방 */
   private clickQueued: ClickTarget | null = null;
@@ -94,10 +95,10 @@ export class Controls {
       // 글자 입력 칸(채팅 등)에 쓰는 중이면 게임 조작으로 받지 않음
       const el = e.target as HTMLElement | null;
       if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) return;
-      if (e.code === "Escape") return opt.onEscape();
+      if (e.code === "Escape") return this.arm.cancel() ? undefined : opt.onEscape();
       // 스킬 키 (설정에서 바꾼 키가 다른 키보다 먼저)
       if (this.skillKeys && skillOf(e.code)) {
-        this.skillQueued = skillOf(e.code);
+        this.skillQueued = this.arm.key(skillOf(e.code));
         return;
       }
       if (e.code === "KeyP") return opt.onPause();
@@ -158,9 +159,9 @@ export class Controls {
       if (e.button === 0) {
         const c = opt.clickTarget(e.clientX, e.clientY);
         if (c) this.clickQueued = c;
-        else this.mouseAttack = true;
+        else if (!(this.skillQueued = this.arm.fire())) this.mouseAttack = true;
       }
-      if (e.button === 2) this.dashQueued = this.dashHeld = true;
+      if (e.button === 2 && !this.arm.cancel()) this.dashQueued = this.dashHeld = true;
       if (e.button === 1) e.preventDefault(); // 휠 버튼 자동 스크롤 막기
     });
     on(zone, "pointerdown", (e) => this.touch.down(e));
@@ -174,7 +175,6 @@ export class Controls {
     this.opt.onAutoAimChange(on);
   }
 
-  /** 대시를 한 번 누른 것으로 처리 (화면 버튼 등) */
   setZoom(z: number): void {
     this.zoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z));
     this.opt.onZoomChange(this.zoom);
@@ -183,11 +183,10 @@ export class Controls {
   /** 사용 아이템 쓰기 (화면 버튼). slot: 1·2 */
   queueStat(k: number): void { this.statQueued = k; }
   queueUse(slot: number): void { this.useQueued = slot; }
-  /** 스킬 쓰기 (화면 버튼). 1~3 */
+  /** 스킬 쓰기 (화면 버튼). 1~4 */
   queueSkill(n: number): void { this.skillQueued = n; }
   /** 상점에서 장비 팔기 (판매 줄). 1·2 = 사용 아이템 칸, 3~ = 패시브 순서 */
   queueSell(n: number): void { this.sellQueued = n; }
-
   /** 상호작용을 한 번 누른 것으로 처리 (모바일 버튼) */
   queueInteract(): void { this.interactQueued = true; }
   queueDash(): void { this.dashQueued = true; }
@@ -265,6 +264,7 @@ export class Controls {
     const pickChoice = this.clickQueued?.pickChoice ?? 0;
     const statPick = this.statQueued;
     const skill = this.skillQueued;
+    if (skill) [aimX, aimY] = this.arm.take(aimX, aimY);
     const sell = this.sellQueued ? { sell: this.sellQueued } : {};
     this.sellQueued = 0;
     this.statQueued = 0;

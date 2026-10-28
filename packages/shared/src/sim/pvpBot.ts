@@ -6,7 +6,9 @@ import { HEAL_ITEMS } from "../items";
 import { PW, PW_MODE } from "../paewangDefs";
 import { createRng, deriveSeed } from "../rng";
 import { inBush, onDeck } from "./paewangGrid";
-import { seatNo } from "./party";
+import { allPlayers, seatNo } from "./party";
+import { canCast, skillDef } from "./pwSkill";
+import { pwHidden } from "./pwSkillHit";
 import { EMPTY_INPUT, type EnemyState, type RunState, type TickInput } from "./types";
 import { dist2, normalize, weaponOf } from "./util";
 
@@ -19,9 +21,13 @@ function target(s: RunState): EnemyState | null {
   const sight = PW.sight * (onDeck(arena, p.x, p.y) ? 1.4 : 1);
   let best: EnemyState | null = null;
   let bd = Infinity;
+  const players = allPlayers(s);
   for (const e of s.enemies) {
     const d = dist2(p, e);
     if (e.hp <= 0 || d > sight * sight || (inBush(arena, e.x, e.y) && d > PW.hideNear * PW.hideNear)) continue;
+    // 투명 스킬을 쓴 상대는 보이지 않음
+    const who = players[s.pvp!.proxies.indexOf(e)];
+    if (who && pwHidden(who)) continue;
     if (d < bd) {
       bd = d;
       best = e;
@@ -100,7 +106,7 @@ export function botInput(s: RunState): TickInput {
     const heal = HEAL_ITEMS.has(`use:${id}`);
     if ((heal && low) || (!heal && t && roll(s, i, `use${k}`) < 0.002)) useSlot = k + 1;
   });
-  const aimLen = t ? Math.min(10, Math.max(1, Math.round(Math.sqrt(dist2(p, t)) / 12))) : 1;
+  const aimLen = t ? Math.min(30, Math.max(1, Math.round(Math.sqrt(dist2(p, t)) / 12))) : 1;
   const aim = (t && normalize(t.x - p.x, t.y - p.y)) || [p.faceX, p.faceY];
   return {
     ...EMPTY_INPUT,
@@ -111,9 +117,22 @@ export function botInput(s: RunState): TickInput {
     attack: !!t,
     dash,
     useSlot,
-    // 스킬 키(추적자)·스탯 찍기(풋내기)는 가끔
-    skill: t && roll(s, i, "skill") < 0.01 ? 1 + Math.floor(roll(s, i, "sk") * 3) : 0,
+    skill: t ? botSkill(s, i, Math.sqrt(dist2(p, t))) : 0,
     statPick: (p.points ?? 0) > 0 && s.tick % 30 === 0 ? 1 + Math.floor(roll(s, i, "stat") * 7) : 0,
     autoAim: true,
   };
+}
+
+/** AI 스킬: 가끔, 쓸 수 있고 상대가 닿는 스킬 하나 (없으면 0) */
+function botSkill(s: RunState, i: number, d: number): number {
+  if (roll(s, i, "skill") > PW.botSkill) return 0;
+  const start = Math.floor(roll(s, i, "sk") * 4);
+  for (let n = 0; n < 4; n++) {
+    const k = (start + n) % 4;
+    const def = skillDef(s, k);
+    if (!def || !canCast(s, k)) continue;
+    const reach = def.shape === "self" || def.shape === "cone" ? def.radius + 16 : def.shape === "summon" ? 200 : def.range + def.radius;
+    if (d <= reach) return k + 1;
+  }
+  return 0;
 }

@@ -11,6 +11,7 @@ import { tickDots } from "./status";
 import { updateCharms } from "./talisman";
 import type { EnemyState, RunState } from "./types";
 import { makeEnemy } from "./util";
+import { buffMul } from "./pwSkillHit";
 
 /** 경기장에 나와 살아 있는 자리인지 */
 export function inPlay(s: RunState, i: number): boolean {
@@ -99,8 +100,8 @@ function transfer(s: RunState, start: number[]): void {
     if (!inPlay(s, i)) return;
     // 넘친 피해까지 그대로 (잘라 넘기면 받는 피해가 줄어드는 캐릭터는 체력이 0에 끝없이 가까워지기만 함)
     // 한 틱에 받는 피해는 (최대 체력 + 처음 보호막)의 burstCap까지 (한 방에 쓰러지지 않게)
-    // 모두가 받는 피해 배율(PW.taken) × 캐릭터별 패왕전 받는 피해 보정 (paewangBalance)
-    const dmg = Math.min((start[i]! - e.hp) * PW.taken * (PW_CHAR[s.player.characterId]?.taken ?? 1), (s.player.stats.maxHp + PW.shield) * PW.burstCap);
+    // 모두가 받는 피해 배율(PW.taken) × 캐릭터별 패왕전 받는 피해 보정 (paewangBalance) × 스킬 막기 버프
+    const dmg = Math.min((start[i]! - e.hp) * PW.taken * (PW_CHAR[s.player.characterId]?.taken ?? 1) * buffMul(s.player, "taken"), (s.player.stats.maxHp + PW.shield) * PW.burstCap);
     if (e.lastHit !== undefined && e.lastHit !== i) seat.by = e.lastHit;
     if (dmg > 0) {
       // 맞을 수 있던 그림자 적이 받은 피해는 이번 틱에 다른 공격으로 생긴 무적에 막히지 않음

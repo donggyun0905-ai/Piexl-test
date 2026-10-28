@@ -1,0 +1,110 @@
+/* 패왕전 스킬 칸 넷 (아래쪽 장비 줄, game/PwSkillBar) */
+.pw-skill-bar {
+  display: inline-flex;
+  gap: 4px;
+  margin-right: 8px;
+}
+.pw-skill {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 2px solid var(--tint);
+  border-radius: 8px;
+  background: rgb(14 12 20 / 0.85);
+  overflow: hidden;
+}
+.pw-skill.ult {
+  border-width: 3px;
+  box-shadow: 0 0 6px var(--tint);
+}
+.pw-skill.cooling::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(rgb(0 0 0 / 0.72) calc(var(--cd) * 360deg), transparent 0);
+}
+.pw-skill.armed {
+  outline: 2px solid #fff;
+  box-shadow: 0 0 12px var(--tint);
+  transform: translateY(-3px);
+}
+.pw-skill.silenced {
+  filter: grayscale(1) brightness(0.6);
+}
+.pw-skill kbd {
+  position: absolute;
+  left: 1px;
+  top: 0;
+  z-index: 1;
+  font-size: 10px;
+  color: #fff;
+  text-shadow: 0 1px 0 #000;
+}
+.pw-skill-left {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: #fff;
+  text-shadow: 0 0 3px #000;
+}
+/* 패왕전 스킬 보기 (event/PwPrep) */
+.pw-skills .pw-skill-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 6px 0;
+  padding: 6px 8px;
+  border: 1px solid #3a3648;
+  border-left: 4px solid var(--tint, #8a86a0);
+  border-radius: 8px;
+  background: rgb(0 0 0 / 0.25);
+  text-align: left;
+}
+.pw-skills .pw-skill-row.ult {
+  box-shadow: inset 0 0 12px rgb(255 216 96 / 0.15);
+}
+.pw-skills .pw-skill-row > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.pw-skills small {
+  color: #c8c4d8;
+}
+.pw-skills em {
+  font-style: normal;
+  color: #ffd860;
+}
+.pw-skill-icon {
+  position: relative;
+}
+.pw-skill-icon kbd {
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  padding: 0 3px;
+  border-radius: 3px;
+  font-size: 10px;
+  background: #1a1622;
+}
+.pw-skill-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #1a1622;
+  background: #ffd860;
+}
+.pw-prep-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
