@@ -7,6 +7,7 @@ import { inRect, spotXY } from "./paewangGrid";
 import { gunSwap } from "./paewangKit";
 import { allPlayers, eachSeat, useSeat } from "./party";
 import { inPlay } from "./pvpWorld";
+import { nextRound } from "./pvpRounds";
 import type { RunState } from "./types";
 import { addEffect } from "./util";
 
@@ -48,6 +49,7 @@ export function settleDeaths(s: RunState): void {
     if (seat.on && s.player.hp > 0 && s.player.hp < 0.5) s.player.hp = 0;
     if (!seat.on || s.player.hp > 0 || !checkDeath(s)) return;
     seat.on = false;
+    seat.fell = true;
     seat.deaths++;
     // 쓰러지면 그 사람이 쏜 탄도 바로 사라짐
     s.projectiles = s.projectiles.filter((pr) => !pr.fromPlayer || pr.shooter !== i);
@@ -60,7 +62,7 @@ export function settleDeaths(s: RunState): void {
       if (k && seat.by !== undefined) levelUp(s, seat.by);
     } else if (pv.mode === "tourney") {
       // 같은 편 다음 사람이 잠시 뒤 나옴
-      const next = pv.seats.findIndex((x, j) => j !== i && x.team === seat.team && !x.on && x.deaths === 0 && x.back === undefined);
+      const next = pv.seats.findIndex((x, j) => j !== i && x.team === seat.team && !x.on && !x.fell && x.back === undefined);
       if (next >= 0) pv.seats[next]!.back = s.tick + PW.nextFoe;
     }
     seat.by = undefined;
@@ -120,7 +122,9 @@ export function decide(s: RunState): void {
   const pv = s.pvp!;
   if (pv.winner === undefined && pv.mode !== "gungame") {
     const alive = new Set(pv.seats.filter((x, j) => inPlay(s, j) || x.back !== undefined).map((x) => x.team));
-    if (alive.size <= 1) pv.winner = [...alive][0] ?? -1;
+    // 3판 2선승이면 다음 판으로 (시리즈를 이긴 편이 나오면 끝)
+    const w = [...alive][0] ?? -1;
+    if (alive.size <= 1 && !nextRound(s, w)) pv.winner = w;
   }
   if (pv.winner === undefined) return;
   s.over = true;

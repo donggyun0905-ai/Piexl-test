@@ -2,6 +2,7 @@
 // 실에 얽힘이 5 쌓인 적은 실이 당겨 찢김 (공격력 250% + 출혈) · 실 30가닥을 쓸 때마다 노리는 적을 가로지르는 실 30가닥 연사
 // (남은 실이 10 이하일 때 쏜 실은 연사에 안 셈) · 다 쓰면 장전 · 실 피해는 기본 공격력의 20%(아이템 무관), 맞을 때마다 출혈 스택 30이면 과다출혈 500%. 수치는 weaponsSilk.SILK, 아이템은 itemsSilk
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, TICK_RATE } from "../constants";
+import { PW } from "../paewangDefs";
 import { SILK_PERKS as K } from "../itemsSilk";
 import { createRng, deriveSeed } from "../rng";
 import { SILK as S, type SilkStyle } from "../weaponsSilk";
@@ -87,7 +88,10 @@ function bleedStack(s: RunState, e: EnemyState): void {
 function thread(s: RunState, x: number, y: number, dx: number, dy: number, dmg: number): void {
   const p = s.player;
   const st = styleOf(p);
-  const [x0, y0, x1, y1] = edgeLine(x, y, dx, dy);
+  // 패왕전: 방 끝까지 가면 화면을 다 덮어서, 내 앞(연사는 표적 둘레)으로 짧게
+  const L = PW.silkReach;
+  const self = x === p.x;
+  const [x0, y0, x1, y1] = s.pvp ? [self ? x : x - (dx * L) / 2, self ? y : y - (dy * L) / 2, x + (dx * L) / (self ? 1 : 2), y + (dy * L) / (self ? 1 : 2)] : edgeLine(x, y, dx, dy);
   const need = st.stacks - (hasPerk(p, "skTangle") ? K.skTangle.n : 0);
   for (const e of onSegment(s, x0, y0, x1, y1, S.width)) {
     strike(s, e, dmg);

@@ -4,17 +4,18 @@
 import { CHARACTER_IDS, type CharacterId } from "../content";
 import { PW_CHAR } from "../paewangBalance";
 import { PW, PW_MODE, PW_TIERS, type PwMode } from "../paewangDefs";
-import { PW_ARENAS } from "../paewangMaps";
+import { PW_ARENAS, type PwArenaId } from "../paewangMaps";
 import { createRng, deriveSeed } from "../rng";
 import { updateItems } from "./items";
 import { PLAIN_SHAPE } from "./layout";
-import { spotXY } from "./paewangGrid";
 import { applyLoadout, gunSwap, randomLoadout } from "./paewangKit";
 import type { PvpSeat, PwLoadout } from "./paewangTypes";
 import { allPlayers, eachSeat, seatNo, useSeat } from "./party";
 import { createParty } from "./partyRun";
 import { botInput } from "./pvpBot";
 import { pickOrbs, updateDrops, updateIce } from "./pvpExtras";
+import { placeSeat } from "./pvpRounds";
+import { arenaTerrain, updatePvpTerrain } from "./pvpTerrain";
 import { bringBack, decide, freshStart, settleDeaths, updateTraps, watchTeam } from "./pvpFlow";
 import { inPlay, makeProxies, pvpWorld, syncProxies } from "./pvpWorld";
 import { applyRoom } from "./rooms";
@@ -34,9 +35,11 @@ export function pwSeatCount(mode: PwMode): number {
 }
 
 /** 판 만들기: 사람은 앞 자리부터 (팀 대결은 우리 편이 다 차면 상대 편으로), 나머지는 AI · null 자리도 AI (랭크전은 사람을 두 편에 나눔) */
-export function createPvp(seed: number, mode: PwMode, humans: readonly (PwHuman | null)[]): RunState {
+/** map: 고른 경기장 (없으면 그 대결의 경기장 5개 중 시드로 무작위, 랭크전은 늘 무작위) */
+export function createPvp(seed: number, mode: PwMode, humans: readonly (PwHuman | null)[], map?: PwArenaId): RunState {
   const def = PW_MODE[mode];
-  const arena = PW_ARENAS[def.arena];
+  const arenaId = map && def.maps.includes(map) ? map : createRng(deriveSeed(seed, "pwMap")).pick(def.maps);
+  const arena = PW_ARENAS[arenaId];
   const n = pwSeatCount(mode);
   const size = def.allies + 1;
   const rng = createRng(deriveSeed(seed, "pwRoster"));
@@ -54,16 +57,11 @@ export function createPvp(seed: number, mode: PwMode, humans: readonly (PwHuman 
     const on = mode !== "tourney" || i % size === 0;
     return { team, human: !!humans[i], on, kills: 0, deaths: 0, lv: 1, stun: 0, slow: 0, root: 0, side: i % 2 ? 1 : -1, sideT: 60, stuck: 0, goalX: 0, goalY: 0, dashCd: 0 };
   });
-  s.pvp = { mode, arena: def.arena, seats, proxies: [] };
+  s.pvp = { mode, arena: arenaId, seats, proxies: [] };
+  s.terrain = arenaTerrain(arena);
   applyRoom(s);
   eachSeat(s, (i) => {
-    const seat = seats[i]!;
-    const spot = def.ffa ? arena.spots[i % arena.spots.length]! : (seat.team === 0 ? arena.teamA : arena.teamB)[(i % size) % arena.teamA.length]!;
-    const [x, y] = spotXY(spot);
-    const p = s.player;
-    p.x = p.prevX = x;
-    p.y = p.prevY = y;
-    p.faceX = seat.team === 1 ? -1 : 1;
+    placeSeat(s, i);
     const lo = humans[i]?.loadout;
     if (mode === "gungame") gunSwap(s, chars[i]!, i * 100 + 1);
     else applyLoadout(s, lo ?? randomLoadout(chars[i]!, createRng(deriveSeed(seed, "pwBotKit", i))));
@@ -87,7 +85,7 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
     b.prevY = b.y;
   }
   // 시작 준비: 아무도 못 움직임 (화면이 3·2·1·START를 셈)
-  if (s.tick <= PW.ready) {
+  if (s.tick <= (pv.readyAt ?? PW.ready)) {
     useSeat(s, view);
     return;
   }
@@ -109,6 +107,7 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
   });
   pvpWorld(s, start);
   updateTraps(s);
+  updatePvpTerrain(s);
   updateIce(s);
   updateDrops(s);
   pickOrbs(s);

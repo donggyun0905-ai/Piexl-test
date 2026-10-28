@@ -233,3 +233,45 @@
   background: rgb(30 60 110 / 0.8);
   pointer-events: none;
 }
+.pw-bo3 {
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-style: normal;
+  color: #1a1622;
+  background: #ffd860;
+}
+.pw-maps {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.pw-map-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+.pw-map-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 150px;
+  padding: 6px;
+}
+.pw-map-card .pw-preview {
+  max-width: 136px;
+  max-height: 86px;
+}
+.pw-map-card.on {
+  border-color: #ffd860;
+  color: #ffd860;
+}
+.pw-map-card.random {
+  justify-content: center;
+}
+.pw-map-dice {
+  font-size: 34px;
+}

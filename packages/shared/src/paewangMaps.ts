@@ -1,27 +1,11 @@
-// 패왕전 경기장 5개 (계산은 sim/paewangGrid·paewangField). 칸 좌표 [열, 행, 너비, 높이], 자리는 [열, 행]
+// 패왕전 경기장 (계산은 sim/paewangGrid·paewangField): 처음 5개 + paewangMapsSmall·paewangMapsBig. 칸 좌표 [열, 행, 너비, 높이], 자리는 [열, 행]
 // 벽(walls)·나무와 바위(rocks)·물(ponds)은 막힘 · 수풀(bushes)은 숨는 곳 · 함정(traps) · 2층 발판(decks: 난간과 계단이 있는 높은 곳)
 
-export type PwArenaId = "small" | "wide" | "forest" | "field" | "manor";
+import { NONE, type PwArenaDef, type Rect, type Spot } from "./paewangMapKit";
+import { BIG_ARENAS } from "./paewangMapsBig";
+import { SMALL_ARENAS } from "./paewangMapsSmall";
 
-type Rect = readonly [number, number, number, number];
-type Spot = readonly [number, number];
-
-export interface PwArenaDef {
-  cols: number;
-  rows: number;
-  walls: readonly Rect[];
-  rocks: readonly Rect[];
-  ponds: readonly Rect[];
-  bushes: readonly Rect[];
-  traps: readonly Rect[];
-  decks: readonly Rect[];
-  /** 팀 대결: 내 편(A)·상대 편(B) 자리 · 모두가 적일 때: spots 전부 (0번이 나) */
-  teamA: readonly Spot[];
-  teamB: readonly Spot[];
-  spots: readonly Spot[];
-}
-
-const NONE: readonly never[] = [];
+export type { PwArenaDef } from "./paewangMapKit";
 
 /** 숲 나무: 줄마다 엇갈리게, 몇 그루는 큰 나무(2×2) */
 function forestTrees(): Rect[] {
@@ -47,7 +31,7 @@ for (const r of [6, 15, 25, 34]) for (const c of [8, 20, 32, 44, 56]) FIELD_SPOT
 // 나는 가운데 쪽에서
 FIELD_SPOTS.unshift(...FIELD_SPOTS.splice(FIELD_SPOTS.findIndex(([c, r]) => c === 32 && r === 15), 1));
 
-export const PW_ARENAS: Record<PwArenaId, PwArenaDef> = {
+const BASE_ARENAS = {
   /** 작은 경기장: 기둥 넷 */
   small: {
     cols: 21,
@@ -126,4 +110,19 @@ export const PW_ARENAS: Record<PwArenaId, PwArenaDef> = {
     teamB: NONE,
     spots: [[24, 3], [5, 14], [43, 15], [24, 27], [29, 10], [19, 19], [6, 5], [41, 24]],
   },
-};
+} satisfies Record<string, PwArenaDef>;
+
+/** 모든 경기장 (처음 5개 + 작은·중간 + 큰) */
+const ALL_ARENAS = { ...BASE_ARENAS, ...SMALL_ARENAS, ...BIG_ARENAS };
+export type PwArenaId = keyof typeof ALL_ARENAS;
+export const PW_ARENAS: Record<PwArenaId, PwArenaDef> = ALL_ARENAS;
+
+/** 대결 유형마다 고를 수 있는 경기장 5개 (맨 앞이 처음 경기장) */
+export const PW_MAP_SETS = {
+  duel: ["small", "dLava", "dMarsh", "dGarden", "dSpike"],
+  pair: ["pCross", "pLava", "pMaze", "pShore", "pMud"],
+  trio: ["wide", "tFort", "tRiver", "tGrove", "tTemple"],
+  squad: ["forest", "qVolcano", "qSwamp", "qCanyon", "qGarden"],
+  brawl: ["field", "bLava", "bPonds", "bGrass", "bRuins"],
+  gungame: ["manor", "gCastle", "gVolcano", "gVillage", "gPrison"],
+} as const satisfies Record<string, readonly PwArenaId[]>;

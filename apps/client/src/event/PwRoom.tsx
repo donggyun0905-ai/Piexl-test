@@ -6,11 +6,14 @@ import type { CoopWire } from "../coop/CoopScreen";
 import type { CoopMsg } from "../coop/lockstep";
 import type { Lang, TextKey } from "../i18n";
 import { diffKey, PW_NAME } from "./PwModes";
+import { type PwMapPick, PwMapList } from "./PwMaps";
 import { PwPrep } from "./PwPrep";
 
 /** 게임 화면에 넘기는 것: 대결 · 내 장비 · 사람마다 장비(방장) */
 export interface PwRoomGame {
   mode: PwMode;
+  /** 방장이 고른 경기장 (null = 무작위, 랭크전은 늘 무작위) */
+  map: PwMapPick;
   lo?: PwLoadout;
   los: ReadonlyMap<string, PwLoadout>;
 }
@@ -19,6 +22,7 @@ export interface PwRoomGame {
 /** start: 패왕전으로 들어옴(처음엔 3대3) · 대결을 정해서 들어옴(랭크전) */
 export function usePwRoom(wireRef: RefObject<CoopWire>, start: boolean | PwMode, isHost: boolean, peers: () => string[]) {
   const [mode, setModeState] = useState<PwMode | null>(typeof start === "string" ? start : start ? "trio" : null);
+  const [map, setMapState] = useState<PwMapPick>(null);
   const [lo, setLo] = useState<PwLoadout | undefined>();
   /** 손님마다 받은 장비 (방장) */
   const [los, setLos] = useState<ReadonlyMap<string, PwLoadout>>(new Map());
@@ -31,25 +35,34 @@ export function usePwRoom(wireRef: RefObject<CoopWire>, start: boolean | PwMode,
   useEffect(() => {
     const wire = wireRef.current;
     wire.onPw = (pid, msg) => {
-      if (msg.t === "pwm" && PW_MODES.includes(msg.mode)) setModeState(msg.mode);
+      if (msg.t === "pwm" && PW_MODES.includes(msg.mode)) {
+        setModeState(msg.mode);
+        setMapState(msg.map && PW_MODE[msg.mode].maps.includes(msg.map) ? msg.map : null);
+      }
       if (msg.t === "pwlo" && msg.lo) setLos((m) => new Map(m).set(pid, msg.lo));
     };
     // 방장: 새로 연결된 손님에게 지금 대결 · 손님: 방장과 연결되면 내 장비
     wire.onPwOpen = (pid) => {
-      if (isHost && mode) send({ t: "pwm", mode }, pid);
+      if (isHost && mode) send({ t: "pwm", mode, map }, pid);
       if (!isHost && lo) send({ t: "pwlo", lo }, pid);
     };
   });
   const setMode = (m: PwMode) => {
     setModeState(m);
-    if (isHost) send({ t: "pwm", mode: m });
+    setMapState(null);
+    if (isHost) send({ t: "pwm", mode: m, map: null });
+  };
+  const setMap = (m: PwMapPick) => {
+    if (!mode || !isHost) return;
+    setMapState(m);
+    send({ t: "pwm", mode, map: m });
   };
   const ready = (l: PwLoadout) => {
     setLo(l);
     if (!isHost) send({ t: "pwlo", lo: l });
   };
-  const game: PwRoomGame | null = mode ? { mode, lo, los } : null;
-  return { mode, setMode, lo, ready, game };
+  const game: PwRoomGame | null = mode ? { mode, map, lo, los } : null;
+  return { mode, setMode, map, setMap, lo, ready, game };
 }
 
 interface PanelProps {
@@ -89,6 +102,7 @@ export function PwRoomPanel({ room, you, isHost, characterId, pw, lang, t }: Pan
           ))}
         </div>
       )}
+      {!room.rank && <PwMapList mode={pw.mode} pick={pw.map} t={t} onPick={pw.setMap} disabled={!isHost} />}
       <p className="hint">{t("pwRoomHint")}</p>
       {def.prep && (
         <button type="button" className={pw.lo ? "ghost" : "primary"} onClick={() => setPrep(true)}>

@@ -84,7 +84,7 @@ export function endlessEvent(s: RunState, cleared: boolean): PwState | undefined
   if (s.pwRoom?.lv === s.floor) return s.pwRoom;
   const mode = createRng(deriveSeed(s.seed, "endlessDuel", s.floor)).pick(EVENT_MODES);
   // lv에 층을 적어 둠 (다른 층의 이벤트와 구분)
-  s.pwRoom = { mode, arena: PW_MODE[mode].arena, allies: [], benchA: [], benchB: [], waiting: [], down: false, lv: s.floor, kills: 0, tags: 1, same: R.SAME * endlessPow(s) };
+  s.pwRoom = { mode, arena: PW_MODE[mode].maps[0]!, allies: [], benchA: [], benchB: [], waiting: [], down: false, lv: s.floor, kills: 0, tags: 1, same: R.SAME * endlessPow(s) };
   return s.pwRoom;
 }
 

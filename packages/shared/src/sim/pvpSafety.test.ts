@@ -39,7 +39,10 @@ describe("패왕전 안전장치", () => {
     foe.hp = 5;
     foe.shieldPts = 0;
     stepPvp(s, [EMPTY_INPUT, EMPTY_INPUT]);
-    expect(foe.hp).toBe(0);
-    expect(s.pvp!.seats[1]!.on).toBe(false);
+    // 쓰러짐 → 3판 2선승이라 내 편이 한 판 이기고 다음 판이 열림 (체력 다시 가득)
+    expect(s.pvp!.seats[1]!.deaths).toBe(1);
+    expect(s.pvp!.wins).toEqual({ 0: 1 });
+    expect(s.pvp!.round).toBe(2);
+    expect(allPlayers(s)[1]!.hp).toBe(allPlayers(s)[1]!.stats.maxHp);
   });
 });

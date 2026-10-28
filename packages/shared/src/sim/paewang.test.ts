@@ -26,13 +26,20 @@ function play(s: RunState, ticks: number, tough = false): void {
 }
 
 describe("패왕전", () => {
-  it("경기장 자리는 모두 바닥이고 서로 걸어서 닿음", () => {
+  it("대결 유형마다 경기장 5개 · 경기장 자리는 모두 바닥이고 서로 걸어서 닿음", () => {
+    for (const m of PW_MODES) expect(new Set(PW_MODE[m].maps).size, m).toBe(5);
     for (const id of Object.keys(PW_ARENAS) as PwArenaId[]) {
       const def = PW_ARENAS[id];
-      const s = createPvp(1, id === "field" ? "brawl" : id === "manor" ? "gungame" : id === "forest" ? "squad" : id === "wide" ? "trio" : "duel", [{ characterId: "warden" }]);
+      const mode = PW_MODES.find((m) => PW_MODE[m].maps.includes(id))!;
+      expect(mode, id).toBeDefined();
+      const s = createPvp(1, mode, [{ characterId: "warden" }], id);
+      expect(s.pvp!.arena).toBe(id);
       const g = roomGrid(s)!;
       const spots = [...def.teamA, ...def.teamB, ...def.spots];
       for (const [c, r] of spots) expect(tileAt(g, c, r), `${id} ${c},${r}`).toBe(TILE_FLOOR);
+      // 시작 자리는 용암·가시 위가 아님
+      const inside = (list: readonly (readonly number[])[] | undefined, c: number, r: number) => (list ?? []).some(([x = 0, y = 0, w = 0, h = 0]) => c >= x && c < x + w && r >= y && r < y + h);
+      for (const [c, r] of spots) expect(inside(def.lava, c, r) || inside(def.spikes, c, r), `${id} ${c},${r} 지형`).toBe(false);
       const [x, y] = spotXY(spots[0]!);
       const field = distanceField(g, x, y);
       for (const [c, r] of spots) expect(field[r * def.cols + c], `${id} ${c},${r} 닿음`).toBeGreaterThanOrEqual(0);
@@ -72,7 +79,7 @@ describe("패왕전", () => {
     expect(pwLoadoutOk(c, { ...lo, passives: [common] })).toBe(false);
   });
 
-  it("여섯 모드 모두 20초 동안 문제없이 · 같은 시드면 같은 결과 · 누군가 맞음", () => {
+  it("일곱 모드 모두 20초 동안 문제없이 · 같은 시드면 같은 결과 · 누군가 맞음", () => {
     for (const mode of PW_MODES) {
       const a = createPvp(7, mode, [{ characterId: "mage" }]);
       const b = createPvp(7, mode, [{ characterId: "mage" }]);
@@ -82,16 +89,17 @@ describe("패왕전", () => {
       expect(hp(a), mode).toEqual(hp(b));
       expect(a.pvp!.seats.map((x) => x.kills), mode).toEqual(b.pvp!.seats.map((x) => x.kills));
       // 누군가는 피해를 입음 (서로 싸움)
-      expect(allPlayers(a).some((p) => p.hp < p.stats.maxHp || (p.shieldPts ?? 0) < PW.shield), mode).toBe(true);
+      expect(a.pvp!.seats.some((x) => (x.taken ?? 0) > 0), mode).toBe(true);
     }
   }, 120000);
 
-  it("1대1: 죽지 않으면 결국 이김 · 보상", () => {
+  it("1대1: 죽지 않으면 결국 이김 (3판 2선승: 두 판) · 보상", () => {
     const s = createPvp(11, "duel", [{ characterId: "warden" }]);
     play(s, TICK_RATE * 600, true);
     expect(s.over && s.won).toBe(true);
     expect(pvpResult(s).reward).toBe(PW_MODE.duel.reward);
-    expect(s.pvp!.seats[0]!.kills).toBe(1);
+    expect(s.pvp!.seats[0]!.kills).toBe(2);
+    expect(s.pvp!.wins).toEqual({ 0: 2 });
   }, 60000);
 
   it("친구와 같이: 사람 둘은 같은 편(3대3) · 1대1이면 서로 맞대결", () => {

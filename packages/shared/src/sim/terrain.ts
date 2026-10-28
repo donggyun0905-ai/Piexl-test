@@ -62,8 +62,8 @@ export function spikeState(tick: number, i: number): 0 | 1 | 2 {
   return ph >= up ? 2 : ph >= up - TERRAIN.spikeWarn ? 1 : 0;
 }
 
-/** 방의 적을 다 잡으면 지형은 멈춤 (느려짐·피해·감전·독가스 없음, 가시는 들어간 채) */
-export const terrainIdle = (s: RunState): boolean => !!s.rooms[s.roomId]?.cleared;
+/** 방의 적을 다 잡으면 지형은 멈춤 (느려짐·피해·감전·독가스 없음, 가시는 들어간 채) · 패왕전 경기장 지형은 늘 움직임 */
+export const terrainIdle = (s: RunState): boolean => !s.pvp && !!s.rooms[s.roomId]?.cleared;
 
 /** 틱마다 (플레이어가 움직인 뒤): 진흙·물에서 느려짐 · 용암 · 가시 · 감전된 물 */
 export function updateTerrain(s: RunState): void {

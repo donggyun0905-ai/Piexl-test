@@ -2,7 +2,7 @@
 import { allPlayers, inBush, PW, PW_ARENAS, TILE_SIZE, trapUp, type EnemyState, type ProjectileState, type PwAlly, type PwBrain, type RunState } from "@pixel-rogue/shared";
 import { drawBody } from "./actors";
 import { drawFoeCue, pwHead, pwIsAlly, pwShown, pwTint, setPwViewer } from "./pwLook";
-import { drawFrozen, drawIce, drawMeArrow, drawOrbs, drawPrepAura } from "./pwMarks";
+import { drawFrozen, drawIce, drawMeArrow, drawOrbs, drawPrepAura, readyEnd } from "./pwMarks";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -196,5 +196,5 @@ function drawSeats(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
     if (i === me) drawMeArrow(ctx, s, x, top - (pv.mode === "gungame" ? 6 : 0));
   });
   drawIce(ctx, s);
-  if (!s.over && s.tick > PW.ready) drawFoeCue(ctx, s, at);
+  if (!s.over && s.tick > readyEnd(s)) drawFoeCue(ctx, s, at);
 }

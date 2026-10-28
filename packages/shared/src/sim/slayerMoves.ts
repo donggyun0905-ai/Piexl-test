@@ -1,6 +1,7 @@
 // 학살자 대낫 기술 하나하나 (콤보 차례·체력·흡혈은 sim/slayer)
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { SLAYER_PERKS as K } from "../itemsSlayer";
+import { PW } from "../paewangDefs";
 import { SLAYER as S, type ScytheMove } from "../weaponsSlayer";
 import { nearest } from "./brawlMoves";
 import { inCircle, inCone, inLine, isBoss, onSegment, shoot, startRush } from "./s2Kit";
@@ -58,7 +59,8 @@ function blink(s: RunState, x: number, y: number): void {
 /** 기술 하나 (n: 콤보 몇 번째) */
 export function scytheMove(s: RunState, move: ScytheMove, dmg: number, hit: Hit, n: number): void {
   const p = s.player;
-  const r = p.stats.range;
+  // 패왕전: 평타가 화면을 덮지 않게 크기를 줄임
+  const r = p.stats.range * (s.pvp ? PW.bigBasic : 1);
   const d = dmg * S.mul[move];
   switch (move) {
     case "slash3":

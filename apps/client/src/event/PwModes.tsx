@@ -1,4 +1,4 @@
-// 패왕전 대결 고르기: 6가지 (경기장 미리 보기 · 난이도 · 승리 보상 · 이긴 횟수)
+// 패왕전 대결 고르기: 7가지 (경기장 미리 보기 · 난이도 · 승리 보상 · 이긴 횟수)
 import { PW_ARENAS, PW_MODE, PW_MODES, type PwArenaId, type PwDiff, type PwMode, type RankQueue } from "@pixel-rogue/shared";
 import { useEffect, useRef } from "react";
 import type { TextKey } from "../i18n";
@@ -17,9 +17,10 @@ interface Props {
 }
 
 const CELL = 2;
-const NAME: Record<PwMode, TextKey> = { duel: "pwDuel", trio: "pwTrio", squad: "pwSquad", tourney: "pwTourney", brawl: "pwBrawl", gungame: "pwGungame" };
-const DESC: Record<PwMode, TextKey> = { duel: "pwDuelDesc", trio: "pwTrioDesc", squad: "pwSquadDesc", tourney: "pwTourneyDesc", brawl: "pwBrawlDesc", gungame: "pwGungameDesc" };
-const GROUND: Record<PwArenaId, string> = { small: "#6a5a44", wide: "#6a5a44", forest: "#2e4a2a", field: "#4a6a34", manor: "#5a4e44" };
+const NAME: Record<PwMode, TextKey> = { duel: "pwDuel", pair: "pwPair", trio: "pwTrio", squad: "pwSquad", tourney: "pwTourney", brawl: "pwBrawl", gungame: "pwGungame" };
+const DESC: Record<PwMode, TextKey> = { duel: "pwDuelDesc", pair: "pwPairDesc", trio: "pwTrioDesc", squad: "pwSquadDesc", tourney: "pwTourneyDesc", brawl: "pwBrawlDesc", gungame: "pwGungameDesc" };
+/** 미리 보기 바닥색: 숲·들판은 풀빛, 나머지는 흙빛 */
+const groundOf = (id: PwArenaId) => (id === "forest" || id.startsWith("q") || id.startsWith("b") || id === "field" ? "#3e5a30" : "#6a5a44");
 
 /** 난이도 글자: AI 체력 보정으로 나눔 */
 export const diffKey = (d: PwDiff): TextKey => (d.hp < 1 ? "pwEasy" : d.hp < 1.2 ? "pwNormal" : d.hp < 1.5 ? "pwHard" : "pwBrutal");
@@ -30,13 +31,17 @@ export function ArenaPreview({ id }: { id: PwArenaId }) {
   useEffect(() => {
     const ctx = ref.current?.getContext("2d");
     if (!ctx) return;
-    ctx.fillStyle = GROUND[id];
+    ctx.fillStyle = groundOf(id);
     ctx.fillRect(0, 0, a.cols * CELL, a.rows * CELL);
     const rects = (list: readonly (readonly number[])[], color: string) => {
       ctx.fillStyle = color;
       for (const [c = 0, r = 0, w = 1, h = 1] of list) ctx.fillRect(c * CELL, r * CELL, w * CELL, h * CELL);
     };
     rects(a.decks, "#8a6a40");
+    rects(a.mud ?? [], "#5a4024");
+    rects(a.water ?? [], "#3a8ab0");
+    rects(a.lava ?? [], "#e0581e");
+    rects(a.spikes ?? [], "#c8c8d0");
     rects(a.bushes, "#3a7a34");
     rects(a.traps, "#a03a3a");
     rects(a.ponds, "#2a5a8a");
@@ -61,10 +66,11 @@ export function PwModes({ t, onPick, onMulti, onRank, onBack }: Props) {
           const wins = pwWins(m);
           return (
             <button key={m} type="button" className="td-map-card pw-mode-card" onClick={() => onPick(m)}>
-              <ArenaPreview id={def.arena} />
+              <ArenaPreview id={def.maps[0]!} />
               <span className="td-map-text">
                 <strong>
                   {t(NAME[m])} <em className={`pw-diff ${diffKey(def.diff)}`}>{t(diffKey(def.diff))}</em>
+                  {def.rounds > 1 && <em className="pw-bo3">{t("pwBo3")}</em>}
                 </strong>
                 <small>{t(DESC[m])}</small>
                 <small className="pw-reward">

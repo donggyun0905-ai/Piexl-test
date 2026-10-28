@@ -1,6 +1,6 @@
 // 층 테마: 그 층 보스에 어울리는 바닥·벽 색과 바닥 꾸밈 (그리기 전용, 게임 계산과 상관없음)
 // 보통 판은 bossForFloor, 영웅의 길은 heroBosses, 라스트 보스 층은 그 보스, 레이드 아레나는 지금 방의 보스
-import { bossForFloor, ENEMIES, heroBosses, type RunState } from "@pixel-rogue/shared";
+import { bossForFloor, ENEMIES, heroBosses, type PwArenaId, type RunState } from "@pixel-rogue/shared";
 import { C } from "./palette";
 
 /** 바닥 꾸밈: grass 풀 · leaf 잎 · rivet 쇠못 · ember 불씨 · crack 금 · bubble 물방울 · egg 알 · star 별 · bone 뼈 · petal 꽃잎 · feather 깃털 · sand 모래 · flower 꽃 */
@@ -84,7 +84,15 @@ const THEMES: Record<string, FloorTheme> = {
 };
 
 /** 패왕전 경기장 → 테마 */
-const PW_THEME = { small: "swordgod", wide: "centaur", forest: "archer", field: "plant", manor: "knight" } as const;
+const PW_THEME: Record<PwArenaId, string> = {
+  small: "swordgod", wide: "centaur", forest: "archer", field: "plant", manor: "knight",
+  dLava: "salamander", dMarsh: "toad", dGarden: "jelly", dSpike: "reaper",
+  pCross: "centaur", pLava: "salamander", pMaze: "archer", pShore: "siren", pMud: "toad",
+  tFort: "dragon", tRiver: "jelly", tGrove: "plant", tTemple: "swordgod",
+  qVolcano: "salamander", qSwamp: "toad", qCanyon: "centaur", qGarden: "plant",
+  bLava: "dragon", bPonds: "jelly", bGrass: "archer", bRuins: "knight",
+  gCastle: "knight", gVolcano: "salamander", gVillage: "toad", gPrison: "reaper",
+};
 
 /** 광야의 새벽 맵 → 테마 */
 const SWARM_THEME = { plains: "centaur", ruins: "knight", fort: "reaper", swamp: "plant", volcano: "dragon" } as const;

@@ -72,7 +72,8 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
       unlocks: pid === you ? loadAchievements() : (wire.unlocks.get(pid) ?? []),
     }));
     // 패왕전: 사람은 앞 자리, 나머지는 AI (모드·장비는 대기실에서)
-    if (pw) return createPvp(parseSeed(room.seedText), pw.mode, seatsRef.current.map((pid, i) => (pid ? { characterId: members[i]!.characterId, loadout: pid === you ? pw.lo : pw.los.get(pid) } : null)));
+    // 경기장: 방장이 고른 곳 (랭크전·무작위는 판 시드로 정함)
+    if (pw) return createPvp(parseSeed(room.seedText), pw.mode, seatsRef.current.map((pid, i) => (pid ? { characterId: members[i]!.characterId, loadout: pid === you ? pw.lo : pw.los.get(pid) } : null)), (!room.rank && pw.map) || undefined);
     return createParty(parseSeed(room.seedText), members);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

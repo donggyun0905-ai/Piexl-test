@@ -1,5 +1,5 @@
 // 패왕전 위쪽 정보 (한 줄): 편 대결 점수(편 처치 수·남은 사람 점) 또는 대난투·데스매치 줄 · 내 처치/데스·준 피해·받은 피해 · 가까운 적 · 목표는 시작 카운트다운 때만 · 지켜보는 중 안내 · 점수판 버튼(Tab) · 처치 알림(PwFeed)
-import { allPlayers, inPlay, PW, TICK_RATE, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, inPlay, PW, PW_MODE, TICK_RATE, type RunState } from "@pixel-rogue/shared";
 import { pwNearestFoe } from "../game/render/pwLook";
 import type { TextKey } from "../i18n";
 import { seatWho } from "./PwBoard";
@@ -22,6 +22,7 @@ export function PwHud({ run, me, names, t, onBoard }: Props) {
   const n = (k: TextKey, v: number) => t(k).replace("{n}", String(v));
   const live = pv.seats.map((_, i) => inPlay(run, i));
   const ffa = pv.mode === "brawl" || pv.mode === "gungame";
+  const bo3 = PW_MODE[pv.mode].rounds > 1;
   let line = "";
   if (pv.mode === "gungame") {
     const top = Math.max(...pv.seats.map((x) => x.lv));
@@ -31,7 +32,7 @@ export function PwHud({ run, me, names, t, onBoard }: Props) {
   const side = (ours: boolean) => {
     const list = pv.seats.map((x, i) => ({ x, i })).filter(({ x }) => (x.team === mine.team) === ours);
     const kills = list.reduce((a, { x }) => a + x.kills, 0);
-    const dots = list.map(({ x, i }) => <i key={i} className={live[i] ? "on" : x.deaths === 0 || x.back !== undefined ? "wait" : "out"} />);
+    const dots = list.map(({ x, i }) => <i key={i} className={live[i] ? "on" : !x.fell || x.back !== undefined ? "wait" : "out"} />);
     return (
       <div className={`pw-side ${ours ? "ours" : "theirs"}`}>
         <small>{t(ours ? "pwOurs" : "pwTheirs")}</small>
@@ -53,7 +54,8 @@ export function PwHud({ run, me, names, t, onBoard }: Props) {
         ) : (
           <div className="pw-score">
             {side(true)}
-            <em className="pw-vs">VS</em>
+            {/* 3판 2선승: 가운데에 이긴 판 수 */}
+            <em className="pw-vs">{bo3 ? `${pv.wins?.[mine.team] ?? 0} : ${Object.entries(pv.wins ?? {}).reduce((a, [k, v]) => (Number(k) === mine.team ? a : a + v), 0)}` : "VS"}</em>
             {side(false)}
           </div>
         )}
@@ -70,23 +72,35 @@ export function PwHud({ run, me, names, t, onBoard }: Props) {
         </button>
       </div>
       <PwFeed run={run} me={me} who={(i) => seatWho(run, i, names, t)} t={t} />
-      <PwCount tick={run.tick} goal={t(GOAL[pv.mode] ?? "pwGoalTeam")} />
+      <PwCount run={run} me={me} goal={t(GOAL[pv.mode] ?? "pwGoalTeam")} t={t} />
     </>
   );
 }
 
-/** 시작 준비: 화면 가운데 큰 3 · 2 · 1 → START! · 그 아래 이번 대결 목표 */
-function PwCount({ tick, goal }: { tick: number; goal: string }) {
-  const left = PW.ready - tick;
+/** 판 준비: 화면 가운데 큰 3 · 2 · 1 → START! · 그 아래 목표 · 3판 2선승은 위에 몇 번째 판과 지난 판 결과 */
+function PwCount({ run, me, goal, t }: { run: RunState; me: number; goal: string; t: (k: TextKey) => string }) {
+  const pv = run.pvp!;
+  const left = (pv.readyAt ?? PW.ready) - run.tick;
   if (left < -TICK_RATE) return null;
   const n = Math.ceil(left / TICK_RATE);
   const text = left > 0 ? String(n) : "START!";
+  const last = pv.lastRound;
+  const mine = pv.seats[me]!.team;
+  // 판이 막 끝나 다음 판 준비 전: 이긴 판·진 판
+  const result = last && left > PW.ready ? t(last.team < 0 ? "pwRoundDraw" : last.team === mine ? "pwRoundWin" : "pwRoundLose") : "";
   return (
     <>
-      <div key={text} className={`pw-count ${left > 0 ? "" : "go"}`}>
-        {text}
-      </div>
-      <div className="pw-goal">{goal}</div>
+      {PW_MODE[pv.mode].rounds > 1 && (
+        <div className="pw-round">
+          {result || t("pwRound").replace("{n}", String(pv.round ?? 1))}
+        </div>
+      )}
+      {!result && (
+        <div key={text} className={`pw-count ${left > 0 ? "" : "go"}`}>
+          {text}
+        </div>
+      )}
+      {!result && <div className="pw-goal">{goal}</div>}
     </>
   );
 }

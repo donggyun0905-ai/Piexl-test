@@ -4,12 +4,14 @@ import { PW_ALLY, PW_FOE } from "./pwLook";
 
 type Ctx = CanvasRenderingContext2D;
 
-/** 시작 준비 중인지 · 끝나고 화살표가 사라지기까지 */
+/** 화살표가 준비가 끝나고 사라지기까지 */
 const ARROW_AFTER = 120;
+/** 이번 판 준비가 끝나는 틱 (3판 2선승은 판마다 다시) */
+export const readyEnd = (s: RunState): number => s.pvp?.readyAt ?? PW.ready;
 
 /** 발밑 편 오라 (시작 준비 동안): 둥글게 퍼지는 빛 + 위로 오르는 빛 알갱이 */
 export function drawPrepAura(ctx: Ctx, s: RunState, x: number, y: number, r: number, ally: boolean): void {
-  if (s.tick > PW.ready) return;
+  if (s.tick > readyEnd(s)) return;
   const color = ally ? PW_ALLY : PW_FOE;
   const t = s.tick;
   const R = r + 10 + Math.sin(t / 6) * 2;
@@ -34,7 +36,7 @@ export function drawPrepAura(ctx: Ctx, s: RunState, x: number, y: number, r: num
 
 /** 내 캐릭터 머리 위 큰 초록 화살표 (시작 준비 동안 + 시작 뒤 2초, 끝에 흐려짐) */
 export function drawMeArrow(ctx: Ctx, s: RunState, x: number, top: number): void {
-  const left = PW.ready + ARROW_AFTER - s.tick;
+  const left = readyEnd(s) + ARROW_AFTER - s.tick;
   if (left <= 0) return;
   ctx.globalAlpha = Math.min(1, left / 40);
   const bob = Math.sin(s.tick / 6) * 2.5;

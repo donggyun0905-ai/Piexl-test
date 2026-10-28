@@ -190,3 +190,19 @@
     max-width: 90vw;
   }
 }
+.pw-round {
+  position: fixed;
+  top: calc(38% - 78px);
+  left: 50%;
+  z-index: 4;
+  transform: translateX(-50%);
+  padding: 2px 14px;
+  border-radius: 8px;
+  font-size: 22px;
+  font-weight: 900;
+  color: #ffd860;
+  background: rgb(10 8 16 / 0.7);
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 2px 0 #000;
+}

@@ -5,12 +5,15 @@ import { GameScreen } from "../game/GameScreen";
 import type { Lang, TextKey } from "../i18n";
 import { PwBoard, useBoard } from "./PwBoard";
 import { PwHud } from "./PwHud";
+import type { PwMapPick } from "./PwMaps";
 import { PwResult } from "./PwResult";
 import { PwWatch } from "./PwWatch";
 import { savePwResult } from "./pwRecords";
 
 interface Props {
   mode: PwMode;
+  /** 고른 경기장 (null = 무작위) */
+  map: PwMapPick;
   characterId: CharacterId;
   loadout?: PwLoadout;
   lang: Lang;
@@ -21,9 +24,9 @@ interface Props {
 
 const HUD_MS = 250;
 
-export function PwGame({ mode, characterId, loadout, lang, t, onExit, onRetry }: Props) {
+export function PwGame({ mode, map, characterId, loadout, lang, t, onExit, onRetry }: Props) {
   // 꾸밈이 아니라 판 시드: 판마다 다르게 (판 안의 계산은 이 시드로만)
-  const [run] = useState(() => createPvp(Math.floor(Math.random() * 0x7fffffff), mode, [{ characterId, loadout }]));
+  const [run] = useState(() => createPvp(Math.floor(Math.random() * 0x7fffffff), mode, [{ characterId, loadout }], map ?? undefined));
   const [, refresh] = useState(0);
   const [chips, setChips] = useState<number | null>(null);
   const [board, toggleBoard] = useBoard();

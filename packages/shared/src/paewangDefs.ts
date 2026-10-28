@@ -1,9 +1,9 @@
-// 이벤트 '패왕전': AI 캐릭터들과 겨루는 여섯 가지 대결 수치 (계산은 sim/paewang·paewangAi, 맵은 paewangMaps)
+// 이벤트 '패왕전': AI 캐릭터들과 겨루는 일곱 가지 대결 수치 (계산은 sim/paewang·paewangAi, 맵은 paewangMaps)
 import type { CharacterId } from "./characters";
-import type { PwArenaId } from "./paewangMaps";
+import { PW_MAP_SETS, type PwArenaId } from "./paewangMaps";
 
-export type PwMode = "duel" | "trio" | "squad" | "tourney" | "brawl" | "gungame";
-export const PW_MODES: readonly PwMode[] = ["duel", "trio", "squad", "tourney", "brawl", "gungame"];
+export type PwMode = "duel" | "pair" | "trio" | "squad" | "tourney" | "brawl" | "gungame";
+export const PW_MODES: readonly PwMode[] = ["duel", "pair", "trio", "squad", "tourney", "brawl", "gungame"];
 
 /** AI 보정: 체력 · 피해 · 공격 빠르기 · 조준 정확도(0~1) · 이동 빠르기 · 피하기(대시) 확률 */
 export interface PwDiff {
@@ -21,7 +21,10 @@ const HARD: PwDiff = { hp: 1.3, dmg: 1.25, rate: 1.15, aim: 0.88, speed: 1.08, d
 const BRUTAL: PwDiff = { hp: 1.7, dmg: 1.5, rate: 1.3, aim: 0.95, speed: 1.15, dodge: 0.6 };
 
 export interface PwModeDef {
-  arena: PwArenaId;
+  /** 고를 수 있는 경기장 5개 (paewangMaps.PW_MAP_SETS) */
+  maps: readonly PwArenaId[];
+  /** 판 수: 3이면 3판 2선승 */
+  rounds: number;
   /** 내 편 AI 수 · 상대 AI 수 (토너먼트는 차례로 하나씩 나옴) */
   allies: number;
   foes: number;
@@ -35,18 +38,20 @@ export interface PwModeDef {
 }
 
 export const PW_MODE: Record<PwMode, PwModeDef> = {
-  /** 1대1: 작은 경기장 · 쉬움 */
-  duel: { arena: "small", allies: 0, foes: 1, ffa: false, reward: 1000, diff: EASY, prep: true },
-  /** 3대3: 넓은 경기장 · 보통 */
-  trio: { arena: "wide", allies: 2, foes: 3, ffa: false, reward: 3000, diff: NORMAL, prep: true },
-  /** 5대5: 함정과 나무가 우거진 큰 숲 · 어려움 */
-  squad: { arena: "forest", allies: 4, foes: 5, ffa: false, reward: 5000, diff: HARD, prep: true },
-  /** 토너먼트: 3명씩, 1대1로 차례로 (이긴 사람은 체력 그대로 다음 상대) · 보통 */
-  tourney: { arena: "small", allies: 2, foes: 3, ffa: false, reward: 3000, diff: NORMAL, prep: true },
-  /** 대난투: 20명이 큰 들판에서 · 아이템이 떨어짐 · 아주 어려움 */
-  brawl: { arena: "field", allies: 0, foes: 19, ffa: true, reward: 20000, diff: BRUTAL, prep: true },
-  /** 데스매치: 5명 · 처치할 때마다 다음 레벨(더 약한 캐릭터) · 21레벨에서 처치하면 승리 · 보통 */
-  gungame: { arena: "manor", allies: 0, foes: 4, ffa: true, reward: 10000, diff: NORMAL, prep: false },
+  /** 1대1: 작은 경기장 · 쉬움 · 3판 2선승 */
+  duel: { maps: PW_MAP_SETS.duel, rounds: 3, allies: 0, foes: 1, ffa: false, reward: 1000, diff: EASY, prep: true },
+  /** 2대2: 중간 경기장 · 보통 · 3판 2선승 */
+  pair: { maps: PW_MAP_SETS.pair, rounds: 3, allies: 1, foes: 2, ffa: false, reward: 2000, diff: NORMAL, prep: true },
+  /** 3대3: 넓은 경기장 · 보통 · 3판 2선승 */
+  trio: { maps: PW_MAP_SETS.trio, rounds: 3, allies: 2, foes: 3, ffa: false, reward: 3000, diff: NORMAL, prep: true },
+  /** 5대5: 큰 경기장 · 어려움 · 3판 2선승 */
+  squad: { maps: PW_MAP_SETS.squad, rounds: 3, allies: 4, foes: 5, ffa: false, reward: 5000, diff: HARD, prep: true },
+  /** 토너먼트: 3명씩, 1대1로 차례로 (이긴 사람은 체력 그대로 다음 상대) · 보통 · 3판 2선승 */
+  tourney: { maps: PW_MAP_SETS.duel, rounds: 3, allies: 2, foes: 3, ffa: false, reward: 3000, diff: NORMAL, prep: true },
+  /** 대난투: 20명이 큰 들판에서 · 아주 어려움 · 단판 */
+  brawl: { maps: PW_MAP_SETS.brawl, rounds: 1, allies: 0, foes: 19, ffa: true, reward: 20000, diff: BRUTAL, prep: true },
+  /** 데스매치: 5명 · 처치할 때마다 다음 레벨(더 약한 캐릭터) · 21레벨에서 처치하면 승리 · 보통 · 단판 */
+  gungame: { maps: PW_MAP_SETS.gungame, rounds: 1, allies: 0, foes: 4, ffa: true, reward: 10000, diff: NORMAL, prep: false },
 };
 
 /** 데스매치 레벨별 캐릭터: 1레벨이 가장 센 티어, 21레벨이 가장 약한 캐릭터 (관리자가 바꿔 가며 조정) */
@@ -70,6 +75,8 @@ export const PW = {
   heal: 0.8,
   /** 시작하고 아무도 못 움직이는 틱 (화면에 3·2·1·START) */
   ready: 180,
+  /** 3판 2선승: 판이 끝나고 다음 판 준비 전에 결과를 보여 주는 틱 */
+  roundGap: 90,
   /** AI 체력 = 캐릭터 최대 체력 × hpBase × 보정 · 한 번 공격 피해 = 캐릭터 공격력 × 무기 배율 × dmgBase × 보정 */
   hpBase: 2.6,
   dmgBase: 0.85,
@@ -104,6 +111,13 @@ export const PW = {
   trapEvery: 150,
   trapUp: 40,
   trapDmg: 14,
+  /** 경기장 지형: 용암(0.5초마다) · 솟은 가시 피해 */
+  lavaDmg: 9,
+  /** 거대한 평타 줄이기 (화면을 덮지 않게): 영사 실 길이 */
+  silkReach: 150,
+  /** 거대한 평타(학살자 대낫 콤보) 크기 배율 */
+  bigBasic: 0.6,
+  spikeDmg: 12,
   /** 모든 모드: 경기장에 사용 아이템·강화 구슬이 떨어지는 간격 · 바닥에 남는 최대 수(대난투는 더 많이) */
   dropEvery: 420,
   dropMax: 4,

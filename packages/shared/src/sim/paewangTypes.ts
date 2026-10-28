@@ -135,6 +135,8 @@ export interface PvpSeat {
   taken?: number;
   /** 얼음 시계에 얼어 있는 끝 틱 (그림) */
   iced?: number;
+  /** 이번 판에 쓰러짐 (토너먼트 다음 차례 고르기) */
+  fell?: boolean;
 }
 
 /** 패왕전 사람 자리 값 */
@@ -173,6 +175,11 @@ export interface PvpState {
   winner?: number;
   orbs?: PwOrb[];
   ice?: PwIce[];
+  /** 3판 2선승: 편마다 이긴 판 수 · 지금 판(1부터) · 지난 판 결과(화면 글자) · 이번 판 준비가 끝나는 틱 */
+  wins?: Record<number, number>;
+  round?: number;
+  lastRound?: { team: number; at: number };
+  readyAt?: number;
 }
 
 export interface PwRunState {
