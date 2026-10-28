@@ -14,8 +14,8 @@ export const LOBBY_TEXT = {
   lobbyUsing: { ko: "쓰는 중", en: "In use", ja: "使用中" },
   mgBlackjack: { ko: "블랙잭", en: "Blackjack", ja: "ブラックジャック" },
   mgTiles: { ko: "숫자 타일", en: "Number Tiles", ja: "数字タイル" },
-  mgApples: { ko: "사과 상자", en: "Apple Box", ja: "リンゴ箱" },
-  mgBlocks: { ko: "블록 쌓기", en: "Block Stack", ja: "ブロック積み" },
+  mgApples: { ko: "별사탕 상자", en: "Star Candy Box", ja: "金平糖の箱" },
+  mgBlocks: { ko: "룬 블록", en: "Rune Drop", ja: "ルーンブロック" },
   mgJoker: { ko: "조커 게임", en: "Joker Game", ja: "ジョーカーゲーム" },
   mgSlots: { ko: "슬롯머신", en: "Slot Machine", ja: "スロット" },
   mgDice: { ko: "주사위 대소", en: "Dice Big/Small", ja: "サイコロ大小" },
@@ -51,9 +51,9 @@ export const LOBBY_TEXT = {
     ja: "同じ数字・違う色3〜4枚、または同じ色の連番3枚以上を出す。場の組に付けるには「+」。場のタイルを押して借り、自分のタイルと組んでもよい（残った場の組も正しいこと）。先に全部出せば勝ち",
   },
   mgApplesRule: {
-    ko: "끌어서 네모로 묶은 사과 숫자의 합이 10이면 사라짐 (2분)",
-    en: "Drag a box around apples that add up to 10 to clear them (2 minutes)",
-    ja: "ドラッグで囲んだリンゴの合計が10なら消える（2分）",
+    ko: "끌어서 네모로 묶은 별사탕 숫자의 합이 10이면 톡 터짐 · 한 번에 많이 터뜨리면 보너스 (2분)",
+    en: "Drag a box around candies that add up to 10 to pop them · bigger boxes give a bonus (2 minutes)",
+    ja: "ドラッグで囲んだ金平糖の合計が10ならはじける · 一度にたくさんでボーナス（2分）",
   },
   mgJokerRule: {
     ko: "같은 숫자 두 장은 버리고, 차례마다 옆 사람 카드를 한 장 뽑기. 뽑은 카드의 짝이 있으면 내 손에서 그 짝을 눌러 버림. 마지막까지 조커를 가진 사람이 짐",
@@ -107,4 +107,8 @@ export const LOBBY_TEXT = {
   mgCash: { ko: "챙기기", en: "Cash out", ja: "受け取る" },
   mgDeal: { ko: "시작", en: "Deal", ja: "スタート" },
   mgSame: { ko: "같은 숫자! 그대로", en: "Same! Pot kept", ja: "同じ数字！そのまま" },
+  mgBest: { ko: "최고", en: "Best", ja: "ベスト" },
+  mgLevel: { ko: "단계", en: "Level", ja: "レベル" },
+  mgPoints: { ko: "점수", en: "Points", ja: "スコア" },
+  mgNext: { ko: "다음", en: "Next", ja: "次" },
 };

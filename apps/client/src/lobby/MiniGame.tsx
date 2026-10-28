@@ -4,8 +4,8 @@ import type { TextKey } from "../i18n";
 import type { GameId } from "./lobbyMap";
 import { Blackjack } from "./games/Blackjack";
 import { TileGame } from "./games/TileGame";
-import { AppleBox } from "./games/AppleBox";
-import { Blocks } from "./games/Blocks";
+import { CandyBox } from "./games/CandyBox";
+import { RuneDrop } from "./games/RuneDrop";
 import { JokerGame } from "./games/JokerGame";
 import { Slots } from "./games/Slots";
 import { DiceGame } from "./games/DiceGame";
@@ -29,8 +29,8 @@ export const GAME_NAME: Record<GameId, TextKey> = {
 const GAMES: Record<GameId, (p: { t: (k: TextKey) => string }) => React.JSX.Element> = {
   blackjack: Blackjack,
   tiles: TileGame,
-  apples: AppleBox,
-  blocks: Blocks,
+  apples: CandyBox,
+  blocks: RuneDrop,
   joker: JokerGame,
   slots: Slots,
   dice: DiceGame,

@@ -5,10 +5,9 @@ import { useState } from "react";
 import type { TextKey } from "../../i18n";
 import { addChips, loadChips } from "../chips";
 import { BetBar } from "./BetBar";
+import { PlayingCard } from "./PlayingCard";
 import { shuffle } from "./util";
 
-const SUITS = ["♠", "♥", "♦", "♣"];
-const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 const DEALER_STOP = 17;
 
 /** 카드 = 0~51 (무늬 · 숫자) */
@@ -113,16 +112,9 @@ export function Row({ label, cards, hideFrom = 99 }: { label: string; cards: num
   return (
     <div className="mg-hand">
       <span>{label}</span>
-      {cards.map((c, i) =>
-        i >= hideFrom ? (
-          <span key={i} className="card back" />
-        ) : (
-          <span key={i} className={`card${cardSuit(c) % 3 !== 0 ? " red" : ""}`}>
-            {RANKS[cardRank(c)]}
-            <small>{SUITS[cardSuit(c)]}</small>
-          </span>
-        ),
-      )}
+      {cards.map((c, i) => (
+        <PlayingCard key={i} rank={cardRank(c)} suit={cardSuit(c)} back={i >= hideFrom} />
+      ))}
     </div>
   );
 }

@@ -128,13 +128,17 @@ function screenIcon(ctx: Ctx, g: GameId, x: number, y: number, t: number): void 
       ["#d8283a", "#3a8ad0", "#222", "#e8a020"].forEach((c, i) => r(ctx, x - 5 + i * 3, y - 2, 2, 4, c));
       break;
     case "apples":
-      ell(ctx, x - 2, y, 2, 2, "#ff4a4a");
-      ell(ctx, x + 3, y, 2, 2, "#ff4a4a");
-      if (blink) r(ctx, x - 5, y - 3, 11, 1, "#7aff7a");
+      // 별사탕 셋 (분홍·노랑·하늘)
+      ell(ctx, x - 3, y, 2, 2, "#ff8ab0");
+      ell(ctx, x + 1, y - 1, 2, 2, "#ffe45a");
+      ell(ctx, x + 4, y + 1, 2, 2, "#6ab8ff");
+      if (blink) r(ctx, x - 5, y - 3, 1, 1, "#fff");
       break;
     case "blocks":
-      r(ctx, x - 4, y + 1, 9, 2, "#5ab8ff");
-      r(ctx, x - 1, y - 3 + (blink ? 1 : 0), 3, 3, "#ffd040");
+      // 룬 돌 (보라 돌에 빛나는 무늬)
+      r(ctx, x - 4, y + 1, 9, 2, "#4a3a6a");
+      r(ctx, x - 1, y - 3 + (blink ? 1 : 0), 3, 3, "#2a4a5a");
+      r(ctx, x, y - 2 + (blink ? 1 : 0), 1, 1, "#6ae0ff");
       break;
     case "joker":
       ell(ctx, x, y, 3, 3, "#f4f4f4");

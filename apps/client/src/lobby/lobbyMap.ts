@@ -24,8 +24,8 @@ export interface Machine {
 export const MACHINES: readonly Machine[] = [
   { game: "blackjack", x: 3.5 * TILE, y: 3.6 * TILE, color: "#5ad08a" },
   { game: "tiles", x: 7.5 * TILE, y: 3.6 * TILE, color: "#ffb84a" },
-  { game: "apples", x: 13.5 * TILE, y: 3.6 * TILE, color: "#ff5a6a" },
-  { game: "blocks", x: 17.5 * TILE, y: 3.6 * TILE, color: "#5ab8ff" },
+  { game: "apples", x: 13.5 * TILE, y: 3.6 * TILE, color: "#ff8ab0" },
+  { game: "blocks", x: 17.5 * TILE, y: 3.6 * TILE, color: "#8a6ad0" },
   { game: "joker", x: 1.9 * TILE, y: 7.4 * TILE, color: "#c88aff" },
   { game: "slots", x: 19.1 * TILE, y: 6.4 * TILE, color: "#ffd84a" },
   { game: "dice", x: 19.1 * TILE, y: 9.0 * TILE, color: "#f4f4f4" },

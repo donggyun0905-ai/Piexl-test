@@ -1,0 +1,300 @@
+/* 미니 게임 꾸밈 (카드·테이블·주사위·슬롯·하이로우): 펠트 테이블 · 트럼프 카드 · 점 주사위 · 결과 튀어나옴 */
+.mg.blackjack,
+.mg.hilo,
+.mg.dice,
+.mg.joker,
+.mg.slots {
+  padding: 12px 14px;
+  border: 3px solid #5a3a1a;
+  border-radius: 14px;
+  background: radial-gradient(ellipse at 50% 30%, #2f7a4a 0%, #1d5634 60%, #143e26 100%);
+  box-shadow: inset 0 0 0 2px #c8a050, inset 0 0 24px #0008;
+}
+.mg.slots {
+  background: radial-gradient(ellipse at 50% 30%, #6a2a4a 0%, #3e1830 70%, #26101e 100%);
+}
+.mg.blackjack .mg-note,
+.mg.hilo .mg-note,
+.mg.dice .mg-note,
+.mg.joker .mg-note,
+.mg.slots .mg-note {
+  color: #d8e8d8;
+}
+.mg-result {
+  padding: 2px 14px;
+  border-radius: 999px;
+  background: #0008;
+  animation: mg-pop 0.35s ease-out;
+}
+@keyframes mg-pop {
+  from {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* 트럼프 카드 */
+.pcard {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 62px;
+  border: 1px solid #2a2030;
+  border-radius: 6px;
+  background: linear-gradient(160deg, #fffdf6 0%, #f1ead8 100%);
+  color: #22202a;
+  box-shadow: 0 2px 0 #0006, 0 4px 8px #0004;
+  animation: pcard-in 0.3s ease-out;
+}
+.pcard.red {
+  color: #d0283a;
+}
+.pcard.big {
+  width: 76px;
+  height: 106px;
+}
+.pc-top,
+.pc-bot {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  line-height: 1;
+}
+.pc-top {
+  top: 3px;
+  left: 4px;
+}
+.pc-bot {
+  right: 4px;
+  bottom: 3px;
+  transform: rotate(180deg);
+}
+.pc-top i,
+.pc-bot i {
+  font-style: normal;
+  font-size: 10px;
+}
+.pc-mid {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: normal;
+  font-size: 24px;
+}
+.pcard.face .pc-mid {
+  margin: 12px 9px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-weight: 800;
+  font-size: 18px;
+  background: repeating-linear-gradient(135deg, #0000 0 4px, #0000000d 4px 6px);
+}
+.pcard.big .pc-top,
+.pcard.big .pc-bot {
+  font-size: 18px;
+}
+.pcard.big .pc-mid {
+  font-size: 44px;
+}
+.pcard.big.face .pc-mid {
+  margin: 20px 14px;
+  font-size: 30px;
+}
+.pcard.back {
+  background:
+    radial-gradient(circle at 50% 50%, #ffd860 0 5px, #0000 6px),
+    repeating-linear-gradient(45deg, #7a3ab0 0 4px, #5a2a90 4px 8px);
+  box-shadow: inset 0 0 0 3px #fff, 0 2px 0 #0006;
+}
+@keyframes pcard-in {
+  from {
+    transform: translateY(-14px) rotateY(90deg);
+    opacity: 0;
+  }
+}
+.mg-hand {
+  gap: 4px;
+  color: #fff;
+}
+
+/* 하이로우: 지난 카드 */
+.hilo-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hilo-trail {
+  display: flex;
+  gap: 3px;
+  opacity: 0.8;
+}
+.hilo-trail b {
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: #fff;
+  color: #222;
+  font-size: 12px;
+}
+
+/* 주사위: 3×3 칸 점 */
+.die {
+  display: inline-grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 48px;
+  height: 48px;
+  padding: 6px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #ffffff, #e2dccc);
+  box-shadow: inset -3px -3px 0 #0002, 0 3px 0 #0005;
+  font-size: 0;
+}
+.die i {
+  display: block;
+  margin: auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+.die i.pip {
+  background: #222;
+}
+.die.one i.pip {
+  width: 13px;
+  height: 13px;
+  background: #d0283a;
+}
+.dice-sum {
+  min-width: 44px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: #0008;
+  color: #ffd860;
+  font-weight: 800;
+  font-size: 22px;
+  text-align: center;
+}
+.dice-row.rolling .die {
+  animation: die-roll 0.16s infinite alternate;
+}
+@keyframes die-roll {
+  to {
+    transform: rotate(18deg) translateY(-6px);
+  }
+}
+
+/* 슬롯: 릴 창 · 돌 때 흐림 · 이기면 빛 */
+.slot-reels {
+  border-radius: 10px;
+  background: linear-gradient(#1a0a14, #3a1a28);
+  box-shadow: inset 0 0 12px #000;
+}
+.reel {
+  overflow: hidden;
+  border-radius: 6px;
+  background: linear-gradient(#d8d2c4, #fffdf6 30%, #fffdf6 70%, #d8d2c4);
+}
+.reel i {
+  font-style: normal;
+}
+.reel.spin i {
+  animation: reel-roll 0.07s linear infinite;
+  filter: blur(2px);
+}
+.reel.seven {
+  color: #e8283a;
+  text-shadow: 2px 2px 0 #ffd860;
+}
+@keyframes reel-roll {
+  from {
+    transform: translateY(-40%);
+  }
+  to {
+    transform: translateY(40%);
+  }
+}
+.slot-reels.won {
+  animation: slot-win 0.4s ease-in-out 4 alternate;
+}
+@keyframes slot-win {
+  to {
+    box-shadow: inset 0 0 12px #000, 0 0 24px #ffd860;
+  }
+}
+
+/* 별사탕 상자: 남은 시간 막대 */
+.candy-time {
+  display: block;
+  align-self: stretch;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #ff8ab0, #ffe45a);
+  transition: width 1s linear;
+}
+.apple-canvas {
+  border: 3px solid #3a1e0e;
+  border-radius: 8px;
+  box-shadow: 0 4px 0 #0006;
+}
+
+/* 숫자 타일: 펠트 판 · 상아 타일 */
+.mg.tiles {
+  padding: 12px 14px;
+  border: 3px solid #5a3a1a;
+  border-radius: 14px;
+  background: radial-gradient(ellipse at 50% 30%, #2a5a7a 0%, #1a3e58 70%, #10283c 100%);
+  box-shadow: inset 0 0 0 2px #c8a050, inset 0 0 24px #0008;
+}
+.mg.tiles .mg-rule,
+.mg.tiles .mg-note {
+  color: #d8e4f0;
+}
+.tile-table {
+  border-radius: 8px;
+  background: #0f2a3c88;
+  border-color: #c8a05088;
+}
+.tile {
+  width: 28px;
+  height: 38px;
+  border: 1px solid #b8a880;
+  border-radius: 5px;
+  background: linear-gradient(160deg, #fffaf0, #eadfc4);
+  box-shadow: 0 3px 0 #8a7a5a, 0 4px 6px #0005;
+  font-size: 16px;
+}
+button.tile.sel {
+  transform: translateY(-8px);
+  box-shadow: 0 3px 0 #8a7a5a, 0 0 10px #ffd860;
+}
+
+/* 조커 게임 카드: 트럼프 카드와 같은 종이 */
+.card {
+  border: 1px solid #2a2030;
+  border-radius: 6px;
+  background: linear-gradient(160deg, #fffdf6 0%, #f1ead8 100%);
+  box-shadow: 0 2px 0 #0006, 0 3px 6px #0004;
+}
+.card.back {
+  background:
+    radial-gradient(circle at 50% 50%, #ffd860 0 3px, #0000 4px),
+    repeating-linear-gradient(45deg, #7a3ab0 0 4px, #5a2a90 4px 8px);
+  box-shadow: inset 0 0 0 2px #fff, 0 2px 0 #0006;
+}
+.card.pairable {
+  outline: 2px solid #ffd860;
+  animation: card-glow 0.8s ease-in-out infinite alternate;
+}
+@keyframes card-glow {
+  to {
+    transform: translateY(-3px);
+  }
+}
+.seat {
+  border-radius: 8px;
+  background: #0006;
+  color: #e8e8f0;
+}

@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { TextKey } from "../../i18n";
 import { addChips, loadChips } from "../chips";
 import { BetBar } from "./BetBar";
+import { PlayingCard } from "./PlayingCard";
 import { randInt } from "./util";
 
 const STEP = 1.5;
@@ -11,6 +12,9 @@ export function HiLo({ t }: { t: (k: TextKey) => string }) {
   const [chips, setChips] = useState(loadChips);
   const [bet, setBet] = useState(10);
   const [card, setCard] = useState(7);
+  // 무늬는 꾸밈 (숫자만 셈) · 지난 카드 몇 장
+  const [suit, setSuit] = useState(0);
+  const [trail, setTrail] = useState<number[]>([]);
   const [pot, setPot] = useState(0);
   const [streak, setStreak] = useState(0);
   const [msg, setMsg] = useState<string | null>(null);
@@ -21,11 +25,15 @@ export function HiLo({ t }: { t: (k: TextKey) => string }) {
     setPot(bet);
     setStreak(0);
     setCard(randInt(1, 13));
+    setSuit(randInt(0, 3));
+    setTrail([]);
     setMsg(null);
   };
   const guess = (high: boolean) => {
     const next = randInt(1, 13);
+    setTrail((l) => [...l, card].slice(-6));
     setCard(next);
+    setSuit(randInt(0, 3));
     if (next === card) return setMsg(t("mgSame"));
     if (next > card === high) {
       setPot(Math.floor(pot * STEP));
@@ -46,7 +54,14 @@ export function HiLo({ t }: { t: (k: TextKey) => string }) {
     <div className="mg hilo">
       <BetBar t={t} chips={chips} bet={bet} setBet={setBet} />
       <div className="hilo-card">
-        <span className="card big">{card}</span>
+        {trail.length > 0 && (
+          <span className="hilo-trail">
+            {trail.map((c, i) => (
+              <b key={i}>{c === 1 ? "A" : c > 10 ? "JQK"[c - 11] : c}</b>
+            ))}
+          </span>
+        )}
+        <PlayingCard rank={card - 1} suit={suit} big />
       </div>
       {pot > 0 ? (
         <>

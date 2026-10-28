@@ -8,7 +8,8 @@ import { randInt } from "./util";
 type Pick = "small" | "big" | "odd" | "even" | "triple";
 const PAY: Record<Pick, number> = { small: 2, big: 2, odd: 2, even: 2, triple: 31 };
 const LABEL: Record<Pick, TextKey> = { small: "mgSmall", big: "mgBig", odd: "mgOdd", even: "mgEven", triple: "mgTriple" };
-const FACE = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+/** 눈마다 점 자리 (3×3 칸 번호 0~8) */
+const PIPS = [[4], [0, 8], [0, 4, 8], [0, 2, 6, 8], [0, 2, 4, 6, 8], [0, 2, 3, 5, 6, 8]];
 
 function wins(p: Pick, d: number[]): boolean {
   const s = d[0]! + d[1]! + d[2]!;
@@ -50,11 +51,13 @@ export function DiceGame({ t }: { t: (k: TextKey) => string }) {
       <BetBar t={t} chips={chips} bet={bet} setBet={setBet} />
       <div className={`dice-row${rolling ? " rolling" : ""}`}>
         {dice.map((d, i) => (
-          <span key={i} className="die">
-            {FACE[d - 1]}
+          <span key={`${i}-${d}`} className={`die${d === 1 ? " one" : ""}`}>
+            {Array.from({ length: 9 }, (_, k) => (
+              <i key={k} className={PIPS[d - 1]!.includes(k) ? "pip" : ""} />
+            ))}
           </span>
         ))}
-        <span className="mg-sum">= {dice[0]! + dice[1]! + dice[2]!}</span>
+        <span className="dice-sum">{dice[0]! + dice[1]! + dice[2]!}</span>
       </div>
       <div className="mg-row">
         {(Object.keys(PAY) as Pick[]).map((p) => (

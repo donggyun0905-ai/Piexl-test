@@ -58,10 +58,10 @@ export function Slots({ t }: { t: (k: TextKey) => string }) {
   return (
     <div className="mg slots">
       <BetBar t={t} chips={chips} bet={bet} setBet={setBet} />
-      <div className="slot-reels">
+      <div className={`slot-reels${win ? " won" : ""}`}>
         {reels.map((r, i) => (
-          <span key={i} className={`reel${spinning && i >= 3 - spinning ? " spin" : ""}`}>
-            {SYMBOLS[r]}
+          <span key={i} className={`reel${spinning && i >= 3 - spinning ? " spin" : ""}${SYMBOLS[r] === "7" ? " seven" : ""}`}>
+            <i>{SYMBOLS[r]}</i>
           </span>
         ))}
       </div>
