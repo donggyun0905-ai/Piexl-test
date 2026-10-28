@@ -3,6 +3,7 @@
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../enemyDefs";
 import { TITAN_PERKS as K } from "../itemsTitan";
+import { PW } from "../paewangDefs";
 import { TITAN, type SmashKind } from "../weaponsTitan";
 import { bullet } from "./abandonedMoves";
 import { blastAt, healPlayer } from "./combat";
@@ -159,7 +160,8 @@ function smash(s: RunState, kind: SmashKind, dmg: number): void {
   }
   addEffect(s, { kind: "titanSmash", x: p.x, y: p.y, dirX: f[0], dirY: f[1], size: r * 1.8, maxTicks: 24 });
   p.tSwing = 20;
-  if (hasPerk(p, "scrapRepair")) healPlayer(s, p.stats.maxHp * K.scrapRepair.heal);
+  // 패왕전은 맞을수록 강타가 자주 나와 회복이 끝없지 않게 줄임
+  if (hasPerk(p, "scrapRepair")) healPlayer(s, p.stats.maxHp * K.scrapRepair.heal * (s.pvp ? PW.titanRepair : 1));
   if (hasPerk(p, "gyroStabilizer")) p.tGyro = K.gyroStabilizer.ticks;
 }
 

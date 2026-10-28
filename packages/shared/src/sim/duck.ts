@@ -7,6 +7,7 @@ import { damageEnemy } from "./combat";
 import { echoQuack, updateDucklings } from "./ducklings";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, roomGrid, shotDirs, weaponOf } from "./util";
+import { raiseShield } from "./imugiMods";
 
 /** 공격력 (오리 가족: 새끼 오리 수만큼 더 셈 · 백조의 노래: 잃은 체력만큼 더 셈) */
 export function duckPower(p: PlayerState): number {
@@ -78,7 +79,7 @@ function bigQuack(s: RunState, dmg: number): void {
     push(s, e, dir[0], dir[1], DUCK.big.push);
     if (e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? DUCK.big.stun / 2 : DUCK.big.stun);
   }
-  if (hasPerk(p, "featherShield")) p.shieldPts = Math.min(p.stats.maxHp * K.featherShield.max, (p.shieldPts ?? 0) + K.featherShield.shield);
+  if (hasPerk(p, "featherShield")) raiseShield(p, K.featherShield.shield, p.stats.maxHp * K.featherShield.max);
   addEffect(s, { kind: "bigQuack", x: p.x, y: p.y, dirX: 0, dirY: 0, size: radius, maxTicks: 18, follow: true });
 }
 

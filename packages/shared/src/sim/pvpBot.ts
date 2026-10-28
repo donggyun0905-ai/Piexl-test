@@ -80,6 +80,11 @@ export function botInput(s: RunState): TickInput {
     mx = to[0] * 0.7;
     my = to[1] * 0.7;
   }
+  // 베두인: 던진 차크람이 바닥에 떨어져 있으면 주우러 감
+  if (p.ckHeld === false && p.ck?.mode === "ground") {
+    const to = normalize(p.ck.x - p.x, p.ck.y - p.y);
+    if (to) [mx, my] = to;
+  }
   // 막혔으면 옆으로 비켜 감 (지난 15틱 동안 거의 못 움직임)
   if (st.stuck > 0) [mx, my] = [-my * st.side, mx * st.side];
   else if (s.tick % 15 === i % 15) {

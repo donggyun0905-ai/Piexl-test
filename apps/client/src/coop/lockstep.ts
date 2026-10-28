@@ -12,8 +12,8 @@ export type CoopMsg =
   | { t: "in"; n: number; i: number[][] }
   /** 손님 → 방장: 상태가 어긋남, 전체 상태 다시 */
   | { t: "resync" }
-  /** 방장 → 손님: 확정 상태와 내 자리. at = 보낼 때 방장의 지금 틱 */
-  | { t: "state"; seat: number; s: RunState; at: number }
+  /** 방장 → 손님: 확정 상태와 내 자리. at = 보낼 때 방장의 지금 틱 · watch = 게임 중에 들어온 관전자 (자리 없이 보기만) */
+  | { t: "state"; seat: number; s: RunState; at: number; watch?: boolean }
   /** 방장 → 손님: n번 틱부터 확정된 모두의 입력. h = 마지막 틱 뒤 상태 요약, at = 방장의 지금 틱 */
   | { t: "ticks"; n: number; ins: number[][][]; h?: number; at: number }
   /** 빠른 신호 (게임 계산과 상관없음. 방장이 다른 손님에게 넘겨 줌) */

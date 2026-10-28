@@ -130,3 +130,15 @@
 .coop-stats td:first-child {
   text-align: left;
 }
+/* 판이 끝난 뒤: 방장은 방으로 돌아가기 버튼 · 손님은 안내 (결과 창 위) */
+.coop-back {
+  position: fixed;
+  left: 50%;
+  bottom: 14px;
+  z-index: 30;
+  transform: translateX(-50%);
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #fff;
+  background: rgb(20 18 30 / 0.85);
+}

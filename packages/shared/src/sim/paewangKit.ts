@@ -44,9 +44,15 @@ export const pwCanStack = (id: PassiveId): boolean => !(PASSIVES[id] as PassiveD
 /** 이 패시브를 몇 개까지 가질 수 있는지 (효과 아이템 1 · 나머지 3) */
 export const pwStackMax = (id: PassiveId): number => (pwCanStack(id) ? PW.stackMax : 1);
 
+/** 패왕전에서 쓸 수 없는 무기: 오니 히든 무기 (최대 체력·재생력에 비례해 한 방에 끝남) */
+const PW_NO_WEAPONS: readonly WeaponId[] = ["blackThunder", "azureThunder"];
+
+/** 패왕전에서 이 캐릭터가 쓸 수 있는 무기 */
+export const pwWeapons = (c: CharacterId): WeaponId[] => characterWeapons(c).filter((id) => !PW_NO_WEAPONS.includes(id));
+
 /** 고른 것이 규칙에 맞는지: 이 캐릭터 무기 · 전용 패시브 5개 이하(같은 것은 3개까지, 효과 아이템은 하나) · 서로 다른 사용 아이템 2개 이하 */
 export function pwLoadoutOk(c: CharacterId, lo: PwLoadout): boolean {
-  if (!characterWeapons(c).includes(lo.weapon)) return false;
+  if (!pwWeapons(c).includes(lo.weapon)) return false;
   const ok = pwPassiveChoices(c, lo.weapon);
   if (lo.passives.length > PW.passives || lo.passives.some((id) => !ok.includes(id))) return false;
   if (lo.passives.some((id) => lo.passives.filter((x) => x === id).length > pwStackMax(id))) return false;
@@ -56,7 +62,7 @@ export function pwLoadoutOk(c: CharacterId, lo: PwLoadout): boolean {
 
 /** AI 장비: 이 캐릭터가 쓸 수 있는 무기 하나 · 전용 패시브 5개(규칙대로) · 서로 다른 사용 아이템 2개 (판 시드로) */
 export function randomLoadout(c: CharacterId, rng: Rng): PwLoadout {
-  const weapon = rng.pick(characterWeapons(c));
+  const weapon = rng.pick(pwWeapons(c));
   return { weapon, passives: pickPassives(rng, pwPassiveChoices(c, weapon), PW.passives), uses: pickDistinct(rng, USE_ITEM_IDS, PW.uses) };
 }
 

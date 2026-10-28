@@ -20,7 +20,8 @@ export const STATUS_INTERVAL_MS = 1000;
 
 /** playing은 startAt 전까지 카운트다운 */
 export type BattlePhase = "lobby" | "playing" | "done";
-export type BattleState = "alive" | "dead" | "cleared" | "timeout" | "forfeit";
+/** watch: 협동 방에 게임 중에 들어와 관전하는 사람 (방으로 돌아가면 같이 함) */
+export type BattleState = "alive" | "dead" | "cleared" | "timeout" | "forfeit" | "watch";
 
 export interface BattlePlayer {
   pid: string;
@@ -66,6 +67,8 @@ export type ClientMsg =
   | { t: "hello"; pid: string; name: string; characterId: CharacterId; balance?: string }
   | { t: "character"; characterId: CharacterId }
   | { t: "start" }
+  /** 협동: 방장이 끝난 판에서 모두 대기실로 (같은 방에서 다시) */
+  | { t: "lobby" }
   | { t: "status"; floor: number; roomId: number; hp: number; maxHp: number; score: number; kills: number }
   | { t: "end"; state: "dead" | "cleared"; floor: number; roomId: number; hp: number; score: number; kills: number }
   | { t: "chat"; text: string }
@@ -79,7 +82,7 @@ export type ServerMsg =
   | { t: "signal"; from: string; data: string }
   | { t: "error"; error: "full" | "started" | "bad" };
 
-const ORDER: Record<BattleState, number> = { cleared: 0, alive: 0, timeout: 0, dead: 0, forfeit: 1 };
+const ORDER: Record<BattleState, number> = { cleared: 0, alive: 0, timeout: 0, dead: 0, forfeit: 1, watch: 2 };
 
 /** 순위: 기권은 맨 뒤, 나머지는 점수 → 먼저 끝낸 사람 */
 export function rankPlayers(players: readonly BattlePlayer[]): BattlePlayer[] {

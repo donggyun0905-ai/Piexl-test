@@ -23,6 +23,8 @@ export class HostSync {
   /** 확정했지만 아직 안 보낸 틱들 (from 틱부터) */
   private frames: number[][][] = [];
   private from = 0;
+  /** 게임 중에 들어와 보기만 하는 사람 (확정 입력만 받음) */
+  private watchers = new Set<string>();
 
   constructor(
     readonly confirmed: RunState,
@@ -35,7 +37,9 @@ export class HostSync {
     this.last = seats.map(() => EMPTY_INPUT);
   }
 
-  onGuestLeft(_pid: string): void {}
+  onGuestLeft(pid: string): void {
+    this.watchers.delete(pid);
+  }
 
   onGuestInput(pid: string, n: number, packed: number[][]): void {
     const seat = this.seats.indexOf(pid);
@@ -50,9 +54,11 @@ export class HostSync {
   /** 연결되거나 어긋났다는 손님에게 확정 상태 */
   sendState(pid: string): void {
     const seat = this.seats.indexOf(pid);
-    if (seat < 0 || seat === this.mySeat) return;
+    if (seat === this.mySeat) return;
     syncSeat(this.confirmed);
-    this.link.send(pid, { t: "state", seat, s: this.confirmed, at: this.tickNow });
+    // 자리가 없는 사람은 관전자 (0번 자리를 보며 확정 입력만 받음)
+    if (seat < 0) this.watchers.add(pid);
+    this.link.send(pid, { t: "state", seat: Math.max(0, seat), s: this.confirmed, at: this.tickNow, ...(seat < 0 ? { watch: true } : {}) });
   }
 
   /** 한 틱 (게임 화면이 틱마다 부름): 내 입력 기록 → 확정할 수 있는 만큼 확정 */
@@ -101,6 +107,7 @@ export class HostSync {
     this.seats.forEach((pid, i) => {
       if (i !== this.mySeat && this.link.isOpen(pid)) this.link.send(pid, msg);
     });
+    for (const pid of this.watchers) if (this.link.isOpen(pid)) this.link.send(pid, msg);
     this.frames = [];
   }
 }

@@ -15,6 +15,7 @@ import type { CoopMsg } from "./lockstep";
 import type { PwRoomGame } from "../event/PwRoom";
 import { PwBoard, useBoard } from "../event/PwBoard";
 import { PwHud } from "../event/PwHud";
+import { PwWatch } from "../event/PwWatch";
 import { PwResult } from "../event/PwResult";
 import { savePwResult } from "../event/pwRecords";
 
@@ -28,11 +29,13 @@ interface Props {
   lang: Lang;
   t: (key: TextKey) => string;
   onExit: () => void;
+  /** 방장: 끝난 판에서 모두 대기실로 */
+  onBackRoom: () => void;
 }
 
 type Sync = { host: HostSync; guest: null } | { host: null; guest: GuestSync };
 
-export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit }: Props) {
+export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, onBackRoom }: Props) {
   const hostPid = room.hostPid;
   const isHost = hostPid === you;
   const hostRef = useRef(hostPid);
@@ -40,11 +43,19 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit }: 
   const [ready, setReady] = useState(isHost);
   const [hostLost, setHostLost] = useState(false);
   const [ended, setEnded] = useState(false);
+  // 패왕전 위쪽 정보·관전 갱신
+  const [, refresh] = useState(0);
+  useEffect(() => {
+    if (!pw) return;
+    const id = setInterval(() => refresh((n) => n + 1), 250);
+    return () => clearInterval(id);
+  }, [pw]);
   const [board, toggleBoard] = useBoard();
   const extras = useMemo(() => new CoopExtras(), []);
 
   // 자리 순서 = 방에 들어온 순서 (시작할 때 0번이 방장). 판은 한 객체를 끝까지 씀 (손님은 받은 상태로 내용만 바꿈)
-  const seats = useMemo(() => room.players.map((p) => p.pid), [room.players]);
+  // 게임 중에 들어온 관전자는 자리가 없음
+  const seats = useMemo(() => room.players.filter((p) => p.state !== "watch").map((p) => p.pid), [room.players]);
   const seatsRef = useRef(seats);
   // run = 화면에 보이는 상태 (확정 + 짐작). 확정 상태는 HostSync·GuestSync가 따로 들고 있음
   const run = useMemo((): RunState => {
@@ -65,6 +76,7 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit }: 
     return { pid, name: p?.name ?? "?", connected: p?.connected ?? false };
   });
   const names = members.map((m) => m.name);
+  const watching = !seatsRef.current.includes(you);
   const mySeat = Math.max(0, seatsRef.current.indexOf(you));
   const namesRef = useRef(names);
   namesRef.current = names;
@@ -177,10 +189,10 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit }: 
         onExit={onExit}
         onRunEnd={(r) => {
           setEnded(true);
-          if (r.pvp) savePwResult(r.pvp.mode, pvpResult(r, mySeat).won);
+          if (r.pvp && !watching) savePwResult(r.pvp.mode, pvpResult(r, mySeat).won);
         }}
         resultExtra={ended && !pw ? <CoopStats run={run} members={members} t={t} /> : null}
-        afterRun={ended && pw ? <PwResult run={run} me={mySeat} names={names} lang={lang} t={t} onExit={onExit} /> : undefined}
+        afterRun={ended && pw ? <PwResult run={run} me={mySeat} names={names} watching={watching} lang={lang} t={t} onExit={onExit} /> : undefined}
         overlay={pw ? undefined : (ctx, r, alpha, snap) => drawCoopOverlay(ctx, r, alpha, snap, namesRef.current, extras, t)}
         step={(r, input) => {
           const s = sync.current;
@@ -193,7 +205,20 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit }: 
         }}
       />
       {!ended && !pw && <CoopParty run={run} members={members} extras={extras} t={t} onSignal={signal} />}
-      {!ended && pw && run.pvp && <PwHud run={run} me={mySeat} t={t} onBoard={toggleBoard} />}
+      {!ended && pw && run.pvp && <PwWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}
+      {!ended && pw && run.pvp && !watching && <PwHud run={run} me={mySeat} t={t} onBoard={toggleBoard} />}
+      {!ended && watching && <div className="coop-banner">{t("lobbyWatchNote")}</div>}
+      {ended && (
+        <div className="coop-back">
+          {isHost ? (
+            <button type="button" className="primary" onClick={onBackRoom}>
+              {t("lobbyBackRoom")}
+            </button>
+          ) : (
+            <span>{t("lobbyWaitBack")}</span>
+          )}
+        </div>
+      )}
       {pw && run.pvp && board && <PwBoard run={run} me={mySeat} names={names} lang={lang} t={t} />}
       {hostLost && (
         <div className="coop-banner" role="alert">

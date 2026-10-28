@@ -3,6 +3,7 @@ import { ENEMIES } from "../content";
 import { blastAt, dotDamage, healPlayer, ignite } from "./combat";
 import type { DotKind, EnemyState, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, roomGrid } from "./util";
+import { raiseShield } from "./imugiMods";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -111,7 +112,7 @@ export function planetEffect(s: RunState, e: EnemyState, pl: Planet, dmg: number
     e.timer += 40;
     dotDamage(s, e, "frost", dmg * R.PLANET_DOT);
   } else {
-    p.shieldPts = Math.min(p.stats.maxHp * 0.2, (p.shieldPts ?? 0) + 2);
+    raiseShield(p, 2, p.stats.maxHp * 0.2);
     dotDamage(s, e, "radiance", dmg * R.PLANET_DOT);
   }
 }

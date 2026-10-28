@@ -8,6 +8,8 @@ const MARGIN = 2;
 
 export class GuestSync {
   seat = -1;
+  /** 관전자: 입력을 보내지 않고 확정만 따라감 */
+  watch = false;
   confirmed: RunState | null = null;
   /** 지금 틱 (짐작해서 보여 주는 곳) */
   tickNow = 0;
@@ -37,8 +39,9 @@ export class GuestSync {
     return this.hostAt + (performance.now() - this.hostAtTime) / TICK_MS;
   }
 
-  onState(display: RunState, msg: { seat: number; s: RunState; at: number }): void {
+  onState(display: RunState, msg: { seat: number; s: RunState; at: number; watch?: boolean }): void {
     this.seat = msg.seat;
+    this.watch = !!msg.watch;
     // 확정 상태도 내 자리를 꺼내 놓음 (짐작 계산·화면이 내 자리 기준)
     useSeat(msg.s, msg.seat);
     this.confirmed = msg.s;
@@ -88,6 +91,10 @@ export class GuestSync {
     const diff = target - this.tickNow;
     let todo = diff > 6 ? 2 : diff < -6 ? 0 : 1;
     if (this.tickNow - c.tick >= MAX_AHEAD) todo = 0;
+    if (this.watch) {
+      this.tickNow += todo;
+      return true;
+    }
     let input = this.pending ? { ...local, ...onceOf(this.pending, local) } : local;
     if (todo === 0) {
       this.pending = input;
@@ -112,7 +119,7 @@ export class GuestSync {
   show = (display: RunState): void => {
     const c = this.confirmed;
     if (!c || this.seat < 0) return;
-    showPredicted(display, c, this.tickNow, (t) => this.last.map((x, i) => (i === this.seat ? (this.mine.get(t) ?? held(x)) : held(x))));
+    showPredicted(display, c, this.tickNow, (t) => this.last.map((x, i) => (i === this.seat && !this.watch ? (this.mine.get(t) ?? held(x)) : held(x))));
   };
 }
 

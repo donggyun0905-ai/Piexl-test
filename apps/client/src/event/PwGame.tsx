@@ -6,6 +6,7 @@ import type { Lang, TextKey } from "../i18n";
 import { PwBoard, useBoard } from "./PwBoard";
 import { PwHud } from "./PwHud";
 import { PwResult } from "./PwResult";
+import { PwWatch } from "./PwWatch";
 import { savePwResult } from "./pwRecords";
 
 interface Props {
@@ -49,6 +50,7 @@ export function PwGame({ mode, characterId, loadout, lang, t, onExit, onRetry }:
         onRunEnd={(end) => setChips(savePwResult(mode, end.won))}
         afterRun={ended ? <PwResult run={run} me={0} lang={lang} t={t} onExit={onExit} onRetry={onRetry} /> : undefined}
       />
+      {!ended && <PwWatch run={run} me={0} t={t} />}
       {!ended && <PwHud run={run} me={0} t={t} onBoard={toggleBoard} />}
       {board && <PwBoard run={run} me={0} lang={lang} t={t} />}
     </>

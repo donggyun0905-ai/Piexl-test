@@ -28,6 +28,7 @@ import { morphKill } from "./morphXp";
 import { recalcStats } from "./items";
 import { trackerGuard, trackerTaken } from "./tracker";
 import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, KNOCKBACK, keepInRoom, markCrit, normalize, roomGrid, RUSH_TICKS, STILL_TICKS } from "./util";
+import { raiseShield } from "./imugiMods";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -254,7 +255,7 @@ export function removeDead(s: RunState): void {
     if (hasPerk(p, "fishTreat")) p.frenzyTicks = R.ROAR_TICKS;
     // 응급 처치: 처치하면 체력 1 (의사 공격 회복 상한에 포함)
     if (hasPerk(p, "firstAid") && swarmLucky(s, "aid", e.id)) leechHeal(s, R.FIRST_AID_HEAL);
-    if (hasPerk(p, "energyRecycle") && swarmLucky(s, "recycle", e.id)) p.shieldPts = Math.min(p.stats.maxHp * R.RECYCLE_MAX, (p.shieldPts ?? 0) + R.RECYCLE_BARRIER);
+    if (hasPerk(p, "energyRecycle") && swarmLucky(s, "recycle", e.id)) raiseShield(p, R.RECYCLE_BARRIER, p.stats.maxHp * R.RECYCLE_MAX);
     scribeKill(s, e);
     minerKill(s, e);
     if (hasPerk(p, "chaseSteps")) p.dashCooldown = Math.max(0, p.dashCooldown - PERKS.chaseSteps.ticks);

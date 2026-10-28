@@ -52,4 +52,10 @@ export const BATTLE_TEXT = {
   chatEmpty: { ko: "아직 대화가 없어요", en: "No messages yet", ja: "まだメッセージはありません" },
   chatInput: { ko: "메시지 입력", en: "Type a message", ja: "メッセージを入力" },
   send: { ko: "보내기", en: "Send", ja: "送信" },
+  lobbyFind: { ko: "캐릭터 이름 찾기", en: "Find a character", ja: "キャラ名で探す" },
+  lobbyNoChar: { ko: "맞는 캐릭터가 없어요", en: "No matching character", ja: "該当するキャラがいません" },
+  lobbyWatcher: { ko: "관전", en: "Watching", ja: "観戦" },
+  lobbyBackRoom: { ko: "방으로 돌아가기", en: "Back to room", ja: "部屋に戻る" },
+  lobbyWaitBack: { ko: "방장이 방으로 돌아가면 같이 돌아갑니다", en: "You'll return when the host goes back to the room", ja: "ホストが部屋に戻ると一緒に戻ります" },
+  lobbyWatchNote: { ko: "게임이 진행 중이라 관전합니다 · 끝나고 방으로 돌아가면 같이 할 수 있어요", en: "A game is in progress, so you're watching · Join in once everyone returns to the room", ja: "ゲーム中のため観戦します · 終わって部屋に戻れば一緒に遊べます" },
 } satisfies Record<string, Record<Lang, string>>;

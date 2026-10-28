@@ -10,6 +10,7 @@ import { alive, fan, inCircle, poison, root, stun, strike } from "./s2Kit";
 import { greatTick, harmonyMul } from "./spiritGreat";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, roomGrid, weaponOf } from "./util";
+import { raiseShield } from "./imugiMods";
 
 /** 정령 빛깔 (효과 · 그리기) */
 export const SPIRIT_TINT: Record<SmallSpirit, string> = {
@@ -31,7 +32,7 @@ function summon(s: RunState): void {
   p.spCount = (p.spCount ?? 0) + 1;
   const rng = createRng(deriveSeed(s.seed, "spirit", p.spCount));
   (p.spirits ??= []).push({ kind: rng.pick(SMALL_SPIRITS), cd: rng.int(0, P.smallEvery) });
-  if (hasPerk(p, "spShield")) p.shieldPts = Math.min(p.stats.maxHp * K.spShield.max, (p.shieldPts ?? 0) + K.spShield.shield);
+  if (hasPerk(p, "spShield")) raiseShield(p, K.spShield.shield, p.stats.maxHp * K.spShield.max);
   addEffect(s, { kind: "ring", x: p.x, y: p.y - 6, dirX: 0, dirY: 0, size: 10, maxTicks: 14, width: 1 });
 }
 

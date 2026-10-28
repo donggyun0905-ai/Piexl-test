@@ -8,6 +8,7 @@ import { SCRIBE as S, type ScribeWord } from "../weaponsScribe";
 import { blastAt, damageEnemy, healPlayer, ignite } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
+import { raiseShield } from "./imugiMods";
 
 /** 아카식 원본이 차례로 쓰는 글자 */
 const ORIGIN: readonly ScribeWord[] = ["blade", "burst", "seal", "bolt", "frost", "flame", "recall", "star", "void"];
@@ -131,7 +132,7 @@ function write(s: RunState, word: ScribeWord, power: number): void {
       break;
     }
   }
-  if (hasPerk(p, "parchment")) p.shieldPts = Math.min(p.stats.maxHp * K.parchment.max, (p.shieldPts ?? 0) + K.parchment.shield);
+  if (hasPerk(p, "parchment")) raiseShield(p, K.parchment.shield, p.stats.maxHp * K.parchment.max);
 }
 
 /** 잉크 탄 한 발 (각도 a만큼 돌려서) */

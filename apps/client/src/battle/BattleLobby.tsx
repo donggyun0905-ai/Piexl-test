@@ -1,10 +1,11 @@
 // 함께 하기 대기실: 방 코드·초대 | 캐릭터 고르기·참가자·시작 | 채팅
-import { characterOpen } from "../characterGoals";
-import { BATTLE_MAX_PLAYERS, CHARACTER_IDS, COOP_MAX_PLAYERS, type CharacterId, type RoomView } from "@pixel-rogue/shared";
+import { BATTLE_MAX_PLAYERS, COOP_MAX_PLAYERS, type CharacterId, type RoomView } from "@pixel-rogue/shared";
 import { useState, type ReactNode } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { TopBar } from "../menu/TopBar";
+import { TdPortrait } from "../td/TdScreen";
 import { ChatBox } from "./ChatBox";
+import { LobbyCharPicker } from "./LobbyCharPicker";
 import { copyText, inviteUrl } from "./invite";
 
 interface Props {
@@ -50,6 +51,7 @@ export function BattleLobby({ lang, setLang, t, room, you, serverNow, chat, onCh
   const counting = room.phase !== "lobby";
   const coop = room.kind === "coop";
   const max = coop ? COOP_MAX_PLAYERS : BATTLE_MAX_PLAYERS;
+  const playing = room.players.filter((p) => p.state !== "watch").length;
 
   const copyLink = async () => {
     if (await copyText(inviteUrl(room.code, coop))) {
@@ -108,38 +110,21 @@ export function BattleLobby({ lang, setLang, t, room, you, serverNow, chat, onCh
               <p className="countdown">{formatClock(room.startAt - serverNow)}</p>
             </div>
           ) : (
-            <section className="lobby-characters">
-              <span className="field-label">{t("chooseCharacter")}</span>
-              <div className="mode-options" role="radiogroup" aria-label={t("chooseCharacter")}>
-                {CHARACTER_IDS.map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    role="radio"
-                    aria-checked={me?.characterId === c}
-                    className={me?.characterId === c ? "mode-option selected" : "mode-option"}
-                    disabled={!characterOpen(c)}
-                    onClick={() => onCharacter(c)}
-                  >
-                    <span className={`lb-char ${c}`} />
-                    {t(c)}
-                  </button>
-                ))}
-              </div>
-              {me && <p className="hint">{t(`${me.characterId}Desc` as TextKey)}</p>}
-            </section>
+            <LobbyCharPicker t={t} picked={me?.characterId} onPick={onCharacter} />
           )}
 
           <section className="player-list">
             <h3>
-              {t("players")} {room.players.length}/{max}
-              <Seats filled={room.players.length} max={max} />
+              {t("players")} {playing}/{max}
+              <Seats filled={playing} max={max} />
             </h3>
             <ul>
               {room.players.map((p) => (
                 <li key={p.pid} className={p.pid === you ? "mine" : undefined}>
-                  <span className={`lb-char ${p.characterId}`} />
+                  <TdPortrait id={p.characterId} size={28} />
                   <span className="nickname">{p.name}</span>
+                  <small className="lobby-char-name">{t(p.characterId)}</small>
+                  {p.state === "watch" && <span className="badge away">{t("lobbyWatcher")}</span>}
                   {p.pid === room.hostPid && isPrivate && <span className="badge host">{t("host")}</span>}
                   {p.pid === you && <span className="badge me">{t("you")}</span>}
                   {!p.connected && <span className="badge away">{t("bsAway")}</span>}

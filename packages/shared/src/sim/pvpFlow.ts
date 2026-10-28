@@ -7,7 +7,7 @@ import { checkDeath } from "./run";
 import { damagePlayer } from "./combat";
 import { addPickup, passivePool, usePool, weaponPool } from "./loot";
 import { inRect, spotXY } from "./paewangGrid";
-import { gunSwap } from "./paewangKit";
+import { gunSwap, pwWeapons } from "./paewangKit";
 import { allPlayers, eachSeat, useSeat } from "./party";
 import { inPlay } from "./pvpWorld";
 import type { RunState } from "./types";
@@ -47,6 +47,8 @@ export function settleDeaths(s: RunState): void {
   const pv = s.pvp!;
   eachSeat(s, (i) => {
     const seat = pv.seats[i]!;
+    // 화면에 0으로 보이는 체력(0.5 미만)은 쓰러짐
+    if (seat.on && s.player.hp > 0 && s.player.hp < 0.5) s.player.hp = 0;
     if (!seat.on || s.player.hp > 0 || !checkDeath(s)) return;
     seat.on = false;
     seat.deaths++;
@@ -148,7 +150,7 @@ export function updateDrops(s: RunState): void {
   const x = (3 + rng.nextFloat() * (def.cols - 6)) * TILE_SIZE;
   const y = (3 + rng.nextFloat() * (def.rows - 6)) * TILE_SIZE;
   const r = rng.nextFloat();
-  const weapons = weaponPool(s, true);
+  const weapons = weaponPool(s, true).filter((id) => pwWeapons(s.player.characterId).includes(id));
   if (r < 0.2 && weapons.length) addPickup(s, s.roomId, "weapon", rng.pick(weapons), x, y);
   else if (r < 0.5) addPickup(s, s.roomId, "use", rng.pick(usePool(s)), x, y);
   else addPickup(s, s.roomId, "passive", rng.pick(passivePool(s)), x, y);

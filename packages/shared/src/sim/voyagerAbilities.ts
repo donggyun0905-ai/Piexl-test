@@ -10,6 +10,7 @@ import { alive, inCircle, isBoss, strike, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, keepInRoom, normalize, roomGrid } from "./util";
 import { drop } from "./voyagerSkills";
+import { raiseShield } from "./imugiMods";
 
 /** 지금 켜진 능력 값 (지금 운명 · 붙잡은 운명 중 그 종류, 없으면 null) */
 export function abilityVal(s: RunState, kind: AbilityKind): number | null {
@@ -64,7 +65,7 @@ function act(s: RunState, kind: AbilityKind, v: number): void {
       addEffect(s, { kind: "vyWind", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 120, maxTicks: 24 });
       break;
     case "shield":
-      p.shieldPts = Math.min(v * 3, (p.shieldPts ?? 0) + v);
+      raiseShield(p, v, v * 3);
       addEffect(s, { kind: "vyShield", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 16, maxTicks: 24 });
       break;
     case "regen":

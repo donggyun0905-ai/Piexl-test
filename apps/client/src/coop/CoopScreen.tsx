@@ -139,7 +139,6 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
       setError(t("errOffline"));
     }
   };
-
   const leave = () => {
     setConn(null);
     setRoom(null);
@@ -214,6 +213,8 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
 
   const serverNow = now + offset;
   const inGame = !!room && room.phase !== "lobby" && serverNow >= room.startAt;
+  // 판이 끝나 대기실로 돌아오면 지난 판 메시지는 버림
+  useEffect(() => void (inGame || wire.current.pending.splice(0)), [inGame]);
 
   // 브라우저 뒤로가기: 대기실이면 방 나가기, 게임 중이면 무시(게임 안 메뉴로), 입장 화면이면 메뉴로
   const stateRef = useRef({ room, inGame });
@@ -243,6 +244,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
           leave();
           onExit();
         }}
+        onBackRoom={() => conn.send({ t: "lobby" })}
       />
     );
   }

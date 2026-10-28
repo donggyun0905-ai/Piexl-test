@@ -8,6 +8,7 @@ import { blastAt, healPlayer } from "./combat";
 import { fan, inCone, inLine, poison, root, roomKey, strike } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, DASH_TICKS, hasPerk } from "./util";
+import { raiseShield } from "./imugiMods";
 
 const formOf = (p: PlayerState) => GAIA_FORMS[p.gForm ?? 0] ?? "bow";
 
@@ -75,7 +76,7 @@ function attack(s: RunState, dmg: number): void {
       strike(s, e, dmg, I.shieldPush);
       n++;
     }
-    if (n > 0) p.shieldPts = Math.min(p.stats.maxHp * I.shieldMax, (p.shieldPts ?? 0) + gain * n);
+    if (n > 0) raiseShield(p, gain * n, p.stats.maxHp * I.shieldMax);
     addEffect(s, { kind: "swing", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, maxTicks: 9, width: 3, tint: "#c8a060" });
     return;
   }

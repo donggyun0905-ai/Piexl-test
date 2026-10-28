@@ -224,3 +224,21 @@
   overflow-y: auto;
   background: var(--bg, #121018);
 }
+.pw-watch-click {
+  position: fixed;
+  inset: 56px 0 0;
+  z-index: 5;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 18px;
+  cursor: pointer;
+}
+.pw-watch-click span {
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #fff;
+  background: rgb(30 60 110 / 0.8);
+  pointer-events: none;
+}

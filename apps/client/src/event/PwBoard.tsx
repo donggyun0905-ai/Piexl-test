@@ -1,9 +1,10 @@
 // 패왕전 점수판 (Tab을 누르는 동안 · 버튼으로 열고 닫기): 편마다 이름·캐릭터·처치·데스·순위·무기·패시브·사용 아이템
 import { allPlayers, inPlay, type PassiveId, type RunState } from "@pixel-rogue/shared";
-import { useEffect, useState } from "react";
-import { ItemIcon } from "../game/itemIcon";
+import { useEffect, useState, type MouseEvent } from "react";
+import { ItemIcon, type IconItem } from "../game/itemIcon";
+import { ItemTip, tipPos, useCloseOutside, type TipPos } from "../game/ItemTip";
 import type { Lang, TextKey } from "../i18n";
-import { itemName } from "../i18n/items";
+import { itemDesc, itemName } from "../i18n/items";
 
 interface Props {
   run: RunState;
@@ -16,6 +17,17 @@ interface Props {
 
 export function PwBoard({ run, me, names, lang, t }: Props) {
   const pv = run.pvp!;
+  // 무기·패시브·사용 아이템에 마우스를 올리면(모바일은 누르면) 설명 말풍선
+  const [tip, setTip] = useState<{ pos: TipPos; item: IconItem } | null>(null);
+  const touch = window.matchMedia("(pointer: coarse)").matches;
+  useCloseOutside(!!tip && touch, ".pw-gear span", setTip);
+  const hover = (item: IconItem) => {
+    const show = (e: MouseEvent<HTMLElement>) => {
+      const r = e.currentTarget.getBoundingClientRect();
+      setTip({ pos: tipPos(r.left + r.width / 2, r.top - 4, r.bottom + 4), item });
+    };
+    return { onMouseEnter: (e: MouseEvent<HTMLElement>) => !touch && show(e), onMouseLeave: () => !touch && setTip(null), onClick: (e: MouseEvent<HTMLElement>) => touch && show(e) };
+  };
   const players = allPlayers(run);
   // 순위: 처치 많은 순 (같으면 데스 적은 순 · 데스매치는 레벨 먼저)
   const order = players.map((_, i) => i).sort((a, b) => {
@@ -50,7 +62,7 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
               const seat = pv.seats[i]!;
               const counts = new Map<PassiveId, number>();
               for (const id of p.passives) counts.set(id, (counts.get(id) ?? 0) + 1);
-              const who = names?.[i] ?? (seat.human ? t("pwYou") : `AI`);
+              const who = seatWho(run, i, names, t);
               return (
                 <tr key={i} className={`${i === me ? "me" : ""} ${inPlay(run, i) ? "" : "out"}`}>
                   <td>{rank.get(i)}</td>
@@ -61,18 +73,18 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
                   <td>{seat.deaths}</td>
                   {pv.mode === "gungame" && <td>{seat.lv}</td>}
                   <td className="pw-gear">
-                    <span title={itemName("weapon", p.weaponId, lang)}>
+                    <span {...hover({ kind: "weapon", id: p.weaponId })}>
                       <ItemIcon item={{ kind: "weapon", id: p.weaponId }} size={18} />
                     </span>
                     {[...counts].map(([id, c]) => (
-                      <span key={id} title={itemName("passive", id, lang)}>
+                      <span key={id} {...hover({ kind: "passive", id })}>
                         <ItemIcon item={{ kind: "passive", id }} size={18} />
                         {c > 1 && <i>×{c}</i>}
                       </span>
                     ))}
                     {p.useSlots.map((id, k) =>
                       id ? (
-                        <span key={`u${k}`} className="use" title={itemName("use", id, lang)}>
+                        <span key={`u${k}`} className="use" {...hover({ kind: "use", id })}>
                           <ItemIcon item={{ kind: "use", id }} size={18} />
                         </span>
                       ) : null,
@@ -84,6 +96,7 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
           </tbody>
         </table>
       ))}
+      {tip && <ItemTip pos={tip.pos} icon={tip.item} name={itemName(tip.item.kind, tip.item.id, lang)} desc={itemDesc(tip.item.kind, tip.item.id, lang, t)} />}
     </div>
   );
 }
@@ -107,4 +120,9 @@ export function useBoard(): [boolean, () => void] {
     };
   }, []);
   return [held || pinned, () => setPinned((v) => !v)];
+}
+
+/** 자리 이름: 같이 하기는 사람 이름 · 혼자 하기는 나 / AI */
+export function seatWho(run: RunState, i: number, names: readonly string[] | undefined, t: (k: TextKey) => string): string {
+  return names?.[i] ?? (run.pvp!.seats[i]!.human ? t("pwYou") : "AI");
 }

@@ -45,6 +45,9 @@ export function newRoom(code: string, mode: "quick" | "private", kind: RoomKind 
   return { code, mode, kind, phase: "lobby", seedText: "", startAt: 0, endAt: 0, hostPid: "", autoStartAt: 0, players: [] };
 }
 
+/** 협동 방: 게임 중에 들어와 관전할 수 있는 사람 수 (자리와 따로) */
+const WATCH_MAX = 6;
+
 /** 데이터 크기 제한: 직접 연결 주선 내용 (연결 정보 글자) */
 const SIGNAL_MAX = 6000;
 
@@ -93,15 +96,17 @@ export class RoomLogic {
       this.dirty = true;
       return [this.broadcast()];
     }
-    if (d.phase !== "lobby") return { t: "error", error: "started" };
-    if (d.players.length >= this.max) return { t: "error", error: "full" };
+    // 협동 방은 게임 중에 들어오면 관전 (끝나고 방으로 돌아가면 같이 함)
+    const watch = d.phase !== "lobby";
+    if (watch && d.kind !== "coop") return { t: "error", error: "started" };
+    if (d.players.length >= this.max + (watch ? WATCH_MAX : 0)) return { t: "error", error: "full" };
     if (typeof pid !== "string" || pid.length < 8 || pid.length > 40) return { t: "error", error: "bad" };
     d.players.push({
       pid,
       name: cleanNickname(String(name ?? "")),
       characterId: validChar(characterId) ? characterId : "warden",
       connected: true,
-      state: "alive",
+      state: watch ? "watch" : "alive",
       floor: 1,
       roomId: 0,
       hp: 0,
@@ -124,11 +129,14 @@ export class RoomLogic {
     const p = this.player(pid);
     if (!p) return [];
     this.dirty = true;
-    if (d.phase === "lobby") {
-      // 시작 전에는 바로 빠짐
+    if (d.phase === "lobby" || p.state === "watch") {
+      // 시작 전·관전하던 사람은 바로 빠짐
       d.players = d.players.filter((x) => x.pid !== pid);
       if (d.hostPid === pid) d.hostPid = d.players[0]?.pid ?? "";
       if (d.players.length < 2) d.autoStartAt = 0;
+      // 자리가 나면 대기실의 관전자가 들어옴
+      const wait = d.phase === "lobby" && d.players.filter((x) => x.state !== "watch").length < this.max && d.players.find((x) => x.state === "watch");
+      if (wait) wait.state = "alive";
     } else {
       p.connected = false;
       p.leftAt = this.now();
@@ -156,7 +164,20 @@ export class RoomLogic {
     d.autoStartAt = 0;
     // 모두 같은 수치로: 방장 화면의 수치
     d.balance = (this.player(d.hostPid) ?? d.players[0])?.balance;
-    for (const p of d.players) p.state = "alive";
+    for (const p of d.players) if (p.state !== "watch") p.state = "alive";
+    this.dirty = true;
+  }
+
+  /** 협동: 끝난 판에서 모두 대기실로 (나간 사람은 빠지고, 관전하던 사람은 자리가 있으면 같이) */
+  private backToLobby(): void {
+    const d = this.data;
+    d.phase = "lobby";
+    d.players = d.players.filter((p) => p.connected);
+    d.players.forEach((p, i) => {
+      p.state = i < this.max ? "alive" : "watch";
+      p.finishedAt = 0;
+    });
+    if (!d.players.some((p) => p.pid === d.hostPid)) d.hostPid = d.players[0]?.pid ?? "";
     this.dirty = true;
   }
 
@@ -169,6 +190,11 @@ export class RoomLogic {
       if (d.phase !== "lobby" || !validChar(msg.characterId)) return [];
       p.characterId = msg.characterId;
       this.dirty = true;
+      return [this.broadcast()];
+    }
+    if (msg.t === "lobby") {
+      if (d.kind !== "coop" || d.phase === "lobby" || d.hostPid !== pid) return [];
+      this.backToLobby();
       return [this.broadcast()];
     }
     if (msg.t === "start") {

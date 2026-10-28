@@ -1,5 +1,5 @@
 // 패왕전 준비방: 무기 1개 · 패시브 10개(여러 번 가질 수 있는 것은 겹쳐서) · 사용 아이템 2개 고르기 (연습장 아이템 칸을 그대로 씀)
-import { CHARACTERS, characterWeapons, PW, pwCanStack, pwPassiveChoices, pwStackMax, USE_ITEM_IDS, type CharacterId, type PassiveId, type PwLoadout, type UseItemId, type WeaponId } from "@pixel-rogue/shared";
+import { CHARACTERS, PW, pwCanStack, pwPassiveChoices, pwStackMax, pwWeapons, USE_ITEM_IDS, type CharacterId, type PassiveId, type PwLoadout, type UseItemId, type WeaponId } from "@pixel-rogue/shared";
 import { useMemo, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { ItemIcon, type IconItem } from "../game/itemIcon";
 import { ItemTip, tipPos, useCloseOutside, type TipPos } from "../game/ItemTip";
@@ -20,7 +20,7 @@ type Tab = "weapon" | "passive" | "use";
 type Tip = { item: IconItem } & TipPos;
 
 function groupsFor(tab: Tab, c: CharacterId, weapon: WeaponId): Group<IconItem>[] {
-  if (tab === "weapon") return [{ key: "mine", title: "practiceUsable", who: c, open: true, list: characterWeapons(c).map((id) => ({ kind: "weapon", id })) }];
+  if (tab === "weapon") return [{ key: "mine", title: "practiceUsable", who: c, open: true, list: pwWeapons(c).map((id) => ({ kind: "weapon", id })) }];
   if (tab === "use") return [{ key: "use", title: "practiceUse", open: true, list: USE_ITEM_IDS.map((id) => ({ kind: "use", id })) }];
   // 캐릭터 전용만 고름 (공용은 전투에 나갈 때 무작위)
   return [{ key: "mine", title: "practiceOnly", who: c, open: true, list: pwPassiveChoices(c, weapon).map((id) => ({ kind: "passive", id })) }];
