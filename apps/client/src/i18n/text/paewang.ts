@@ -87,5 +87,6 @@ export const PAEWANG_TEXT = {
   },
   pwReady: { ko: "장비 고름 {n}/{m}", en: "Gear ready {n}/{m}", ja: "装備決定 {n}/{m}" },
   pwMax3: { ko: "같은 것은 3개까지", en: "Up to 3 of the same", ja: "同じものは3個まで" },
+  pwTune: { ko: "패왕전 보정: 체력 {hp} · 공격력 {dmg} · 받는 피해 {taken}", en: "Champion Clash tuning: HP {hp} · damage {dmg} · damage taken {taken}", ja: "覇王戦補正: 体力{hp} · 攻撃力{dmg} · 被ダメージ{taken}" },
   pwUseDiff: { ko: "사용 아이템은 서로 다른 것 2개", en: "Consumables must be 2 different items", ja: "使用アイテムは異なる2個" },
 };

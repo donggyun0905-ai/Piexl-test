@@ -1,5 +1,5 @@
 // 패왕전 준비방: 무기 1개 · 패시브 10개(여러 번 가질 수 있는 것은 겹쳐서) · 사용 아이템 2개 고르기 (연습장 아이템 칸을 그대로 씀)
-import { CHARACTERS, PW, pwCanStack, pwPassiveChoices, pwStackMax, pwWeapons, USE_ITEM_IDS, type CharacterId, type PassiveId, type PwLoadout, type UseItemId, type WeaponId } from "@pixel-rogue/shared";
+import { CHARACTERS, PW, PW_CHAR, pwCanStack, pwPassiveChoices, pwStackMax, pwWeapons, USE_ITEM_IDS, type CharacterId, type PassiveId, type PwLoadout, type UseItemId, type WeaponId } from "@pixel-rogue/shared";
 import { useMemo, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { ItemIcon, type IconItem } from "../game/itemIcon";
 import { ItemTip, tipPos, useCloseOutside, type TipPos } from "../game/ItemTip";
@@ -88,6 +88,7 @@ export function PwPrep({ characterId, lang, t, onStart, onBack }: Props) {
       <h2>
         {t("pwPrep")} · {t(characterId)}
       </h2>
+      <PwTuneLine c={characterId} t={t} />
       <p className="hint">{t("pwPrepHint").replace("{p}", String(PW.passives)).replace("{u}", String(PW.uses)).replace("{r}", String(PW.randomPassives))}</p>
       <div className="pw-chosen">
         {chosen.map((it, i) => (
@@ -125,5 +126,17 @@ export function PwPrep({ characterId, lang, t, onStart, onBack }: Props) {
         </ItemTip>
       )}
     </div>
+  );
+}
+
+/** 이 캐릭터의 패왕전 한정 보정 (없으면 안 보임) */
+function PwTuneLine({ c, t }: { c: CharacterId; t: (k: TextKey) => string }) {
+  const tune = PW_CHAR[c];
+  if (!tune) return null;
+  const pct = (v = 1) => `${v >= 1 ? "+" : ""}${Math.round((v - 1) * 100)}%`;
+  return (
+    <p className="hint pw-tune">
+      {t("pwTune").replace("{hp}", pct(tune.hp)).replace("{dmg}", pct(tune.dmg)).replace("{taken}", pct(tune.taken))}
+    </p>
   );
 }

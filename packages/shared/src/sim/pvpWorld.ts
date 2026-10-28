@@ -1,6 +1,7 @@
 // 패왕전 세계 한 틱: 자리(나·친구·AI)마다 '그림자 적'(proxy, kind "fighter")을 하나씩 두고,
 // 그 자리를 꺼내 놓을 때 s.enemies = 상대 쪽 그림자 적 목록 → 기존 캐릭터 공격 계산이 그대로 상대를 때림.
 // 틱 끝에 그림자 적이 받은 피해·기절·느려짐을 그 사람에게 옮김 (보호막·회피·무적은 damagePlayer가 처리)
+import { PW_CHAR } from "../paewangBalance";
 import { PW } from "../paewangDefs";
 import { damagePlayer, removeDead, updatePending } from "./combat";
 import { allPlayers, eachSeat, isAlive, seatNo, useSeat } from "./party";
@@ -98,7 +99,8 @@ function transfer(s: RunState, start: number[]): void {
     if (!inPlay(s, i)) return;
     // 넘친 피해까지 그대로 (잘라 넘기면 받는 피해가 줄어드는 캐릭터는 체력이 0에 끝없이 가까워지기만 함)
     // 한 틱에 받는 피해는 (최대 체력 + 처음 보호막)의 burstCap까지 (한 방에 쓰러지지 않게)
-    const dmg = Math.min(start[i]! - e.hp, (s.player.stats.maxHp + PW.shield) * PW.burstCap);
+    // 캐릭터별 패왕전 받는 피해 보정 (paewangBalance)
+    const dmg = Math.min((start[i]! - e.hp) * (PW_CHAR[s.player.characterId]?.taken ?? 1), (s.player.stats.maxHp + PW.shield) * PW.burstCap);
     if (e.lastHit !== undefined && e.lastHit !== i) seat.by = e.lastHit;
     if (dmg > 0) {
       // 맞을 수 있던 그림자 적이 받은 피해는 이번 틱에 다른 공격으로 생긴 무적에 막히지 않음

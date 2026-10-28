@@ -7,6 +7,7 @@ export * from "./sim/index";
 export * from "./swarmDefs";
 export * from "./swarmMaps";
 export * from "./paewangDefs";
+export * from "./paewangBalance";
 export * from "./paewangMaps";
 export * from "./stats";
 export * from "./achievements";

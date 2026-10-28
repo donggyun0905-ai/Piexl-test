@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.171",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "패왕전 시작 보호막 500 → 300",
+        "패왕전 한정 캐릭터 밸런스: AI끼리 무작위 1대1 약 4,700판을 돌려 승률이 너무 높거나 낮은 캐릭터의 체력·공격력·받는 피해를 패왕전에서만 보정 (대부분 40~60% 사이로). 준비방에 그 캐릭터의 보정이 보임",
+        "크게 낮춘 캐릭터: 묵인 · 격투가 · 잔영 · 오토마타 · 라이더 · 거인 · 오니 / 크게 올린 캐릭터: 버려진 자들 · 영사 · 풋내기 · 시간술사 · 악의 사도 · 떠돌이 · 변희 · 역병의사",
+      ],
+      en: [
+        "Champion Clash starting shield 500 → 300",
+        "Champion Clash-only character balance: after about 4,700 random AI 1v1s, HP, damage and damage taken were tuned only in Champion Clash for characters winning too much or too little (most now 40–60%). The prep room shows each character's tuning",
+        "Toned down most: Mukin, Brawler, Remnant, Automata, Rider, Titan, Oni / Boosted most: Abandoned, Silk, Novice, Chronomancer, Apostle, Drifter, Byeonhui, Plague Doctor",
+      ],
+      ja: [
+        "覇王戦の開始シールド 500 → 300",
+        "覇王戦限定のキャラバランス: AI同士のランダム1対1を約4,700戦回し、勝率が高すぎる・低すぎるキャラの体力・攻撃力・被ダメージを覇王戦だけで補正（ほとんど40〜60%に）。準備室にそのキャラの補正が表示される",
+        "大きく下げたキャラ: 黙忍・格闘家・残影・オートマタ・ライダー・巨人・鬼 / 大きく上げたキャラ: 捨てられた者たち・影糸使い・見習い・時間術師・悪の使徒・流れ者・ビョンヒ・疫病医",
+      ],
+    },
+  },
+  {
     version: "0.48.170",
     date: "2026-10-28",
     items: {

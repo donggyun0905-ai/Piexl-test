@@ -65,7 +65,7 @@ export const PW = {
   /** 같은 패시브는 이만큼까지 (효과 아이템은 하나) · 사용 아이템은 서로 달라야 함 */
   stackMax: 3,
   /** 전투에 나가면 모두(AI 포함) 체력은 그대로 · 보호막 shield로 시작 */
-  shield: 500,
+  shield: 300,
   /** AI 체력 = 캐릭터 최대 체력 × hpBase × 보정 · 한 번 공격 피해 = 캐릭터 공격력 × 무기 배율 × dmgBase × 보정 */
   hpBase: 2.6,
   dmgBase: 0.85,

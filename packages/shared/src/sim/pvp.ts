@@ -2,6 +2,7 @@
 // 파일: pvpWorld(그림자 적·피해 옮기기) · pvpBot(AI 입력) · pvpFlow(쓰러짐·차례·레벨·함정·아이템·승패) · paewangKit(장비)
 // · 상태 paewangTypes(PvpState) · 수치 paewangDefs·paewangMaps
 import { CHARACTER_IDS, type CharacterId } from "../content";
+import { PW_CHAR } from "../paewangBalance";
 import { PW, PW_MODE, PW_TIERS, type PwMode } from "../paewangDefs";
 import { PW_ARENAS } from "../paewangMaps";
 import { createRng, deriveSeed } from "../rng";
@@ -117,8 +118,10 @@ export function pvpStats(s: RunState): void {
   const st = s.player.stats;
   const seat = pv.seats[seatNo(s)];
   const diff = PW_MODE[pv.mode].diff;
-  st.maxHp = Math.round(st.maxHp * (seat && !seat.human ? diff.hp : 1));
-  if (seat && !seat.human) st.damage *= diff.dmg;
+  // 캐릭터별 패왕전 보정 (모두 같음) · AI는 모드 난이도 보정
+  const tune = PW_CHAR[s.player.characterId] ?? {};
+  st.maxHp = Math.round(st.maxHp * (tune.hp ?? 1) * (seat && !seat.human ? diff.hp : 1));
+  st.damage *= (tune.dmg ?? 1) * (seat && !seat.human ? diff.dmg : 1);
 }
 
 /** 결과 (me = 내 자리): 이겼는지 · 처치·데스 · 데스매치 레벨 · 대난투 순위 · 받을 돈 */
