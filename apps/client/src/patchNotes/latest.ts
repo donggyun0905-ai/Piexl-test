@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.189",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "패왕전 스킬 이펙트: 캐릭터마다 느낌을 얹음 (불꽃·얼음·번개·독 거품·그림자 연기·빛 반짝이·피·잎·부적과 혼불·기계 불똥·바람·시계 바늘·충격 파편·칼날·발톱 자국) · 줄 모양 스킬은 줄을 따라 빛 띠가 달려감 · 궁극기는 알갱이 두 배와 바깥 빛 고리",
+        "역병의사 쥐떼 스킬: 쥐떼가 줄을 따라 달려가는 모습이 보임",
+        "버프를 받으면 모두에게 보이게: 발밑 빛과 몸 둘레로 피어오르는 기운 (공격력 빨강·막기 파랑 방패 막·빠름 노랑 바람·재생 초록), 끝나 가면 깜빡임",
+        "플라이: 패왕전에서는 하늘 습격(맵을 가로지르는 무적 연속 공격)이 없어지고, 대신 20% 확률로 급습이 붉은 줄이 되며 피해 2배",
+        "연습장 칸을 왼쪽 세로로 옮겨 궁극기 알림을 가리지 않음 · 패왕전 풋내기는 레벨 줄이 안 보임",
+      ],
+      en: [
+        "Champion Clash skill effects: each character now adds its own flavor (flames, ice, lightning, poison bubbles, shadow smoke, holy sparkles, blood, leaves, talismans and wisps, machine sparks, wind, clock hands, impact debris, blades, claw marks) · line skills send a light band along the line · ultimates get twice the particles and an outer glow ring",
+        "Plague Doctor's rat skill now shows a pack of rats running along the line",
+        "Buffs are visible to everyone: a glow underfoot and energy rising around the body (attack red, guard blue shield, haste yellow wind, regen green), blinking as they run out",
+        "Fly: in Champion Clash the sky raid (invincible attacks across the map) is gone; instead there is a 20% chance the swoop turns red and deals double damage",
+        "The Training Ground panel moved to a left column so it no longer covers ultimate alerts · the Novice level bar is hidden in Champion Clash",
+      ],
+      ja: [
+        "覇王戦スキルエフェクト: キャラごとの雰囲気を追加 (炎・氷・雷・毒の泡・影の煙・光のきらめき・血・葉・札と鬼火・機械の火花・風・時計の針・衝撃の破片・刃・爪痕) · 線のスキルは線に沿って光の帯が走る · 奥義は粒子2倍と外側の光の輪",
+        "ペスト医師のネズミのスキル: ネズミの群れが線に沿って走る姿が見える",
+        "バフを受けると全員に見える: 足元の光と体の周りに立ち上る気 (攻撃力 赤・防御 青い盾・速さ 黄色い風・再生 緑)、切れかけると点滅",
+        "フライ: 覇王戦では空襲(マップを横切る無敵連続攻撃)がなくなり、代わりに20%で急襲が赤い線になりダメージ2倍",
+        "練習場の欄を左の縦に移し奥義の通知を隠さない · 覇王戦の見習いはレベルバーを表示しない",
+      ],
+    },
+  },
+  {
     version: "0.48.188",
     date: "2026-10-28",
     items: {

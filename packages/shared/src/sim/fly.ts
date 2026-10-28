@@ -1,5 +1,6 @@
 // 플라이(비르디아): 잠자리 날개로 공중을 가르는 급습. 공격하면 겨눈 쪽으로 날아가며(그동안 무적) 지나간 적을 베고, 끝에서 앞쪽을 할큄
 // 공격할 때 20% 확률로 하늘 습격: 날아올라 사라졌다가(무적) 방 끝에서 끝까지 10번 내리긋고 내려옴 (한 번에 공격력 30%)
+// 패왕전은 하늘 습격 대신 그 급습이 붉은 줄이 되고 피해 2배
 // 발톱마다 더하는 것: 두 번 · 바람 칼날 · 독 · 연쇄 번개 · 서리 · 흡혈 · 신기루 · 그림자 분신 · 날개 칼날. 수치는 weaponsFly.FLY, 아이템은 itemsFly
 import { TICK_RATE } from "../constants";
 import { FLY_PERKS as K } from "../itemsFly";
@@ -66,11 +67,14 @@ function swoop(s: RunState): void {
     dmg *= K.flyFrenzy.mul;
     delete p.fFrenzy;
   }
-  // 하늘 습격 (20%)
-  if (createRng(deriveSeed(s.seed, "flyRaid", s.tick, p.fCount)).nextFloat() < F.raidChance) {
+  // 하늘 습격 (20%) · 패왕전은 습격 대신 이번 급습이 붉어지고 피해 2배
+  const raid = createRng(deriveSeed(s.seed, "flyRaid", s.tick, p.fCount)).nextFloat() < F.raidChance;
+  if (raid && !s.pvp) {
     startRaid(s, dmg, F.raidPasses, F.raidMul, F.raidGap);
     return;
   }
+  const red = raid && !!s.pvp;
+  if (red) dmg *= F.pvpRedMul;
   // 겹눈: 가장 가까운 적 쪽으로
   let dir: readonly [number, number] = [p.faceX, p.faceY];
   if (hasPerk(p, "flyDragonEye")) {
@@ -80,7 +84,7 @@ function swoop(s: RunState): void {
   }
   const reach = p.stats.range * (hasPerk(p, "flyLonger") ? K.flyLonger.reach : 1) * (hasPerk(p, "flyDragonEye") ? K.flyDragonEye.reach : 1) * F.reachMul;
   const shade = styleOf(p) === "shadow";
-  startRush(p, { t: F.swoopTicks, dx: dir[0], dy: dir[1], step: reach / F.swoopTicks, dmg, push: hasPerk(p, "flyGust") ? K.flyGust.push : 3, invuln: true, tint: shade ? "#6a4aa8" : "#a8f0ff" });
+  startRush(p, { t: F.swoopTicks, dx: dir[0], dy: dir[1], step: reach / F.swoopTicks, dmg, push: hasPerk(p, "flyGust") ? K.flyGust.push : 3, invuln: true, tint: red ? "#ff2a2a" : shade ? "#6a4aa8" : "#a8f0ff" });
   p.fStart = { x: p.x, y: p.y };
   if (hasPerk(p, "flyAfterburn")) {
     p.fBoost = K.flyAfterburn.ticks;

@@ -7,7 +7,7 @@ import { keyLabel, useSettings } from "../settings";
 import { skillLines, skillName } from "./pwSkillText";
 
 /** 패왕전에서만 바꾼 패시브 · 기본 공격 설명 */
-const PAS: Partial<Record<CharacterId, TextKey>> = { novice: "pwPasNovice", rider: "pwPasRider" };
+const PAS: Partial<Record<CharacterId, TextKey>> = { novice: "pwPasNovice", rider: "pwPasRider", fly: "pwPasFly" };
 /** 패왕전 패시브 설명 글자 (스킬 칸 왼쪽 패시브 칸도 씀) */
 export const pwPassiveKey = (c: CharacterId): TextKey => PAS[c] ?? (`${c}Desc` as TextKey);
 const BASIC: Partial<Record<CharacterId, TextKey>> = { bedouin: "pwBasicBedouin", slayer: "pwBasicSlayer", remnant: "pwBasicRemnant", apostle: "pwBasicAim", elder: "pwBasicAim", silk: "pwBasicAim" };

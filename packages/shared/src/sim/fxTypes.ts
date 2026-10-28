@@ -55,6 +55,8 @@ export interface EffectState {
   arc?: number;
   /** 패왕전 궁극기 그림 (소리·이름 알림, 쓴 사람은 seat) */
   ult?: boolean;
+  /** 패왕전 스킬 그림 위에 얹는 캐릭터 느낌 (불·얼음·번개·독·그림자·빛·피·자연·영혼·기계·바람·시간·충격·칼날·야수·쥐, pwKits.PW_MOTIF) */
+  motif?: string;
   /** 협동: 만든 사람 자리 (그 사람 둘레에 그림) */
   seat?: number;
 }

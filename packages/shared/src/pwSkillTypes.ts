@@ -71,6 +71,8 @@ export interface PwSkillDef {
   /** 이펙트 색 · 이펙트 종류 (pw 공용 그림) */
   tint: string;
   fx: PwFxStyle;
+  /** 그림 위에 얹는 느낌 (없으면 캐릭터 느낌 PW_MOTIF) */
+  motif?: string;
 }
 
 /** 공용 스킬 그림 모양 (render/pwSkillFx) */

@@ -1,7 +1,7 @@
 // 패왕전 스킬이 닿을 때: 모양마다 맞는 상대 고르기 · 피해·기절·둔화·속박·침묵·밀치기/끌어오기·독 · 아군 회복·버프 · 스킬 그림(pwFx)
 import { PW_CHAR } from "../paewangBalance";
 import { PW } from "../paewangDefs";
-import { kitOf, type PwSkillDef } from "../pwKits";
+import { kitOf, PW_MOTIF, type PwSkillDef } from "../pwKits";
 import type { PwCast } from "./paewangTypes";
 import { allPlayers, seatNo } from "./party";
 import { inPlay } from "./pvpWorld";
@@ -29,6 +29,7 @@ export function castFx(s: RunState, def: PwSkillDef, x: number, y: number, dx: n
     ...(line ? { toX: x + dx * def.range, toY: y + dy * def.range } : {}),
     ...(def.shape === "cone" ? { arc: def.arc ?? 0.8 } : {}),
     ...(kitOf(s.player.characterId)?.skills[3] === def ? { ult: true } : {}),
+    motif: def.motif ?? PW_MOTIF[s.player.characterId],
   });
 }
 

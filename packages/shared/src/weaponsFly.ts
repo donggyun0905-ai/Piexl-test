@@ -59,6 +59,8 @@ export const FLY = {
   shadeMul: 0.9,
   /** 하늘 습격: 확률 · 내리긋기 수 · 한 번 배율 · 사이 틱 */
   raidChance: 0.2,
+  /** 패왕전: 하늘 습격 대신 붉은 급습 피해 배율 */
+  pvpRedMul: 2,
   raidPasses: 10,
   raidMul: 0.3,
   raidGap: 6,

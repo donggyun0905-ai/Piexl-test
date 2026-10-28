@@ -5,7 +5,7 @@ import type { PwKits } from "./pwSkillTypes";
 export const PW_KITS_3: PwKits = {
   plague: kit(1.1,
     sk("miasmaCenser", "point", 10, "#8ac84a", { range: 150, radius: 46, fx: "field", repeat: { n: 6, every: 30 }, hit: { dmg: 0.4, dot: 2 * SEC } }),
-    sk("ratKing", "line", 9, "#a08a70", { range: 170, radius: 14, fx: "wave", repeat: { n: 3, every: 10 }, hit: { dmg: 0.6 } }),
+    sk("ratKing", "line", 9, "#a08a70", { range: 170, radius: 14, fx: "wave", motif: "rats", repeat: { n: 3, every: 10 }, hit: { dmg: 0.6 } }),
     sk("mosquitoSwarm", "point", 14, "#c8e870", { range: 140, radius: 40, fx: "net", hit: { dmg: 0.8, slow: 2 * SEC, silence: 1 * SEC } }),
     sk("deathGrip", "point", 70, "#4a3a5a", { range: 150, radius: 30, delay: 30, fx: "pillar", hit: { dmg: 3.5, stun: 1 * SEC } }),
   ),

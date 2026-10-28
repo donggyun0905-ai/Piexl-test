@@ -229,11 +229,14 @@
     grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
   }
 }
-/* 패왕전 연습장 칸 (event/PwPractice): 왼쪽 위 (체력 줄 아래) */
+/* 패왕전 연습장 칸 (event/PwPractice): 왼쪽 세로 (위쪽 궁극기 알림·점수판을 가리지 않게) */
 .pw-practice {
   position: fixed;
   left: 12px;
   top: 92px;
+  flex-direction: column;
+  align-items: stretch;
+  width: 170px;
   z-index: 30;
   display: flex;
   flex-wrap: wrap;
@@ -282,4 +285,5 @@
   position: absolute;
   top: 84px;
   left: 8px;
+  width: 140px;
 }

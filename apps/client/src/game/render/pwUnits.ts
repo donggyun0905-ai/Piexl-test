@@ -1,5 +1,5 @@
-// 패왕전 스킬 그림 (사람·소환): 소환한 것(포탑·드론·고양이·해골·새끼 용·정령·인형) · 버프 오라 · 상태이상 표시(기절 별·침묵·속박 사슬·둔화)
-import { allPlayers, kitOf, type PlayerState, type RunState } from "@pixel-rogue/shared";
+// 패왕전 스킬 그림 (사람·소환): 소환한 것(포탑·드론·고양이·해골·새끼 용·정령·인형) · 상태이상 표시(기절 별·침묵·속박 사슬·둔화) · 버프는 pwBuffFx
+import { allPlayers, kitOf, type RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -69,26 +69,6 @@ export function drawPwMinions(ctx: Ctx, s: RunState, alpha: number, snap: Snap, 
       ctx.globalAlpha = 1;
     }
   }
-}
-
-/** 버프 오라: 공격력(빨강) · 받는 피해 감소(파랑 방패) · 빠름(노랑 줄) · 재생(초록) */
-export function drawPwBuffs(ctx: Ctx, s: RunState, p: PlayerState, x: number, y: number): void {
-  for (const b of p.pwBuffs ?? []) {
-    const pulse = (Math.sin(s.tick / 5) + 1) / 2;
-    const c = b.dmg ? "#ff5a4a" : b.taken ? "#6ab8ff" : b.rate || b.move ? "#ffe070" : b.regen ? "#7aff8a" : "";
-    if (!c) continue;
-    ctx.globalAlpha = 0.35 + pulse * 0.35;
-    ctx.strokeStyle = c;
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.ellipse(x, y + p.r - 1, p.r + 6 + pulse * 2, (p.r + 6) / 2, 0, 0, Math.PI * 2);
-    ctx.stroke();
-    if (b.rate || b.move) {
-      for (let k = 0; k < 3; k++) ctx.fillRect(x - p.r - 6 - k * 3, y - 8 + k * 4, 4, 1);
-    }
-  }
-  ctx.globalAlpha = 1;
-  ctx.lineWidth = 1;
 }
 
 /** 상태이상 표시 (체력 줄 위): 기절 도는 별 · 침묵 ✕ · 속박 사슬 · 둔화 달팽이 줄 */

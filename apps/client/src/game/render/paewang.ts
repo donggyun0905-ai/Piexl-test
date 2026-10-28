@@ -2,7 +2,8 @@
 import { allPlayers, inBush, PW, PW_ARENAS, TILE_SIZE, trapUp, type EnemyState, type ProjectileState, type PwAlly, type PwBrain, type RunState } from "@pixel-rogue/shared";
 import { drawBody } from "./actors";
 import { drawFoeCue, pwHead, pwIsAlly, pwShown, pwTint, setPwViewer } from "./pwLook";
-import { drawPwBuffs, drawPwMinions, drawPwStatus } from "./pwUnits";
+import { drawPwMinions, drawPwStatus } from "./pwUnits";
+import { drawPwBuffs } from "./pwBuffFx";
 import { drawFrozen, drawIce, drawMeArrow, drawOrbs, drawPrepAura, readyEnd } from "./pwMarks";
 import { lerp, type Snap } from "./palette";
 

@@ -1,69 +1,11 @@
-// 패왕전 스킬 그림 (pwFx·pwWarn, 색은 스킬마다 tint): 폭발 · 낙하 · 기둥 · 비 · 빛줄기 · 파동 · 베기 · 회오리 · 돌진 자국 · 순간이동 · 오라 · 장판 · 회복 · 그물 · 소환 · 예고(원·줄·부채꼴)
+// 패왕전 스킬 그림 (pwFx·pwWarn, 색은 스킬마다 tint, 위에 캐릭터 느낌 pwSkillMotif): 폭발 · 낙하 · 기둥 · 비 · 빛줄기 · 파동 · 베기 · 회오리 · 돌진 자국 · 순간이동 · 오라 · 장판 · 회복 · 그물 · 소환 · 예고(원·줄·부채꼴)
 import type { EffectState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
+import { cone, glow, lineBand, ring, rnd, warn } from "./pwFxBits";
+import { drawMotif } from "./pwSkillMotif";
 
 type Ctx = CanvasRenderingContext2D;
 const STYLES = ["burst", "meteor", "pillar", "rain", "beam", "wave", "slash", "spin", "dash", "blink", "aura", "field", "heal", "net", "summon"] as const;
-
-/** 꾸밈용 고정 난수 (같은 효과는 늘 같은 모양) */
-const rnd = (a: number, b: number) => {
-  const v = Math.sin(a * 12.9898 + b * 78.233) * 43758.5453;
-  return v - Math.floor(v);
-};
-
-function ring(ctx: Ctx, x: number, y: number, r: number, color: string, w: number): void {
-  ctx.strokeStyle = color;
-  ctx.lineWidth = w;
-  ctx.beginPath();
-  ctx.arc(x, y, Math.max(0.5, r), 0, Math.PI * 2);
-  ctx.stroke();
-}
-
-function glow(ctx: Ctx, x: number, y: number, r: number, color: string, a: number): void {
-  const g = ctx.createRadialGradient(x, y, 0, x, y, Math.max(1, r));
-  g.addColorStop(0, `${color}${Math.round(a * 255).toString(16).padStart(2, "0")}`);
-  g.addColorStop(1, `${color}00`);
-  ctx.fillStyle = g;
-  ctx.beginPath();
-  ctx.arc(x, y, Math.max(1, r), 0, Math.PI * 2);
-  ctx.fill();
-}
-
-/** 예고: 범위가 안쪽부터 차오름 (다 차면 터짐) */
-function warn(ctx: Ctx, fx: EffectState, c: string, f: number): void {
-  ctx.globalAlpha = 0.25 + f * 0.35;
-  if (fx.toX !== undefined && fx.toY !== undefined) {
-    ctx.strokeStyle = c;
-    ctx.lineCap = "round";
-    ctx.lineWidth = fx.size * 2;
-    ctx.globalAlpha = 0.18;
-    ctx.beginPath();
-    ctx.moveTo(fx.x, fx.y);
-    ctx.lineTo(fx.toX, fx.toY);
-    ctx.stroke();
-    ctx.globalAlpha = 0.5;
-    ctx.lineWidth = fx.size * 2 * f;
-    ctx.beginPath();
-    ctx.moveTo(fx.x, fx.y);
-    ctx.lineTo(fx.x + (fx.toX - fx.x) * f, fx.y + (fx.toY - fx.y) * f);
-    ctx.stroke();
-    ctx.lineCap = "butt";
-  } else {
-    ctx.fillStyle = c;
-    ctx.globalAlpha = 0.15;
-    ctx.beginPath();
-    ctx.arc(fx.x, fx.y, fx.size, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = 0.35;
-    ctx.beginPath();
-    ctx.arc(fx.x, fx.y, fx.size * f, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = 0.9;
-    ring(ctx, fx.x, fx.y, fx.size, c, 1.5);
-  }
-  ctx.globalAlpha = 1;
-  ctx.lineWidth = 1;
-}
 
 export function drawPwSkillFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   if (fx.kind !== "pwFx" && fx.kind !== "pwWarn") return false;
@@ -81,7 +23,10 @@ export function drawPwSkillFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const a = Math.atan2(fx.dirY, fx.dirX);
   const seed = Math.round(fx.x * 7 + fx.y * 3);
   ctx.save();
-  switch (style) {
+  // 줄 모양 스킬인데 줄 그림이 아닌 모양(파동·회오리·장판 등)은 줄을 따라 빛 띠로 (예전엔 시작점에 작은 고리만 보였음)
+  const line = fx.toX !== undefined && fx.toY !== undefined && style !== "beam" && style !== "slash";
+  if (line) lineBand(ctx, x, y, fx.toX!, fx.toY!, r, c, t, f);
+  else switch (style) {
     case "burst":
     case "meteor": {
       // 퍼지는 원 + 빛 + 튀는 조각 (낙하는 위에서 떨어진 자국과 금)
@@ -271,22 +216,6 @@ export function drawPwSkillFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     }
   }
   ctx.restore();
+  drawMotif(ctx, fx, t, f, seed);
   return true;
-}
-
-/** 부채꼴 빛 */
-function cone(ctx: Ctx, x: number, y: number, a: number, arc: number, r: number, c: string, t: number): void {
-  ctx.globalAlpha = 0.5 * t;
-  ctx.fillStyle = c;
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-  ctx.arc(x, y, r, a - arc, a + arc);
-  ctx.closePath();
-  ctx.fill();
-  ctx.globalAlpha = t;
-  ctx.strokeStyle = "#ffffff";
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.arc(x, y, r, a - arc, a + arc);
-  ctx.stroke();
 }
