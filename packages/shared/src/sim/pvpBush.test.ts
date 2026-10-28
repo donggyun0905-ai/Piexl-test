@@ -9,6 +9,7 @@ import { createPractice } from "./pvpPractice";
 import { EMPTY_INPUT } from "./types";
 import { botInput } from "./pvpBot";
 import { markHidden, syncProxies } from "./pvpWorld";
+import { roleDmgMul } from "./pwMatchup";
 
 describe("패왕전 수풀", () => {
   it("수풀에 숨으면 멀리 있는 AI는 못 노리고, 마지막 본 곳(수풀 쪽)을 찾아가 직접 조준해 때림 · 가까이 오면 보임", () => {
@@ -66,5 +67,20 @@ describe("패왕전 소환물", () => {
     m!.body!.hp = 0;
     stepPvp(s, [EMPTY_INPUT]);
     expect(s.pvp!.mins!.length).toBe(0);
+  });
+});
+
+describe("패왕전 역할군 상성", () => {
+  it("전사는 마법사에게 덜 받고, 원딜은 전사에게 더 주고, 암살자는 마법사에게 더 줌", () => {
+    const s = createPvp(3, "pair", [{ characterId: "mage" }, { characterId: "gunner", ai: true }, { characterId: "warden", ai: true }, { characterId: "beast", ai: true }]);
+    syncProxies(s);
+    const [, , warden, beast] = s.pvp!.proxies;
+    useSeat(s, 0);
+    expect(roleDmgMul(s, warden!)).toBeCloseTo(0.7);
+    useSeat(s, 1);
+    expect(roleDmgMul(s, warden!)).toBeCloseTo(1.3);
+    expect(roleDmgMul(s, beast!)).toBe(1);
+    useSeat(s, 3);
+    expect(roleDmgMul(s, s.pvp!.proxies[0]!)).toBeCloseTo(1.3);
   });
 });

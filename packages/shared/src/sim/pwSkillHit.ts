@@ -1,4 +1,5 @@
 // 패왕전 스킬이 닿을 때: 모양마다 맞는 상대 고르기 · 피해·기절·둔화·속박·침묵·밀치기/끌어오기·독 · 아군 회복·버프 · 스킬 그림(pwFx)
+import { roleHealMul } from "./pwMatchup";
 import { PW_CHAR } from "../paewangBalance";
 import { PW } from "../paewangDefs";
 import { kitOf, PW_MOTIF, type PwSkillDef } from "../pwKits";
@@ -105,7 +106,7 @@ export function resolveCast(s: RunState, def: PwSkillDef, c: PwCast): void {
   for (const e of foes) hitFoe(s, def, e, c.dx, c.dy);
   // 아군 회복 (장판이면 매번) · 버프 (처음 한 번)
   const reach = def.shape === "self" || def.shape === "cone" ? Math.max(def.radius, 30) : def.radius;
-  if (def.heal) for (const q of alliesNear(s, c.x, c.y, reach)) q.hp = Math.min(q.stats.maxHp, q.hp + q.stats.maxHp * def.heal * PW.heal);
+  if (def.heal) for (const q of alliesNear(s, c.x, c.y, reach)) q.hp = Math.min(q.stats.maxHp, q.hp + q.stats.maxHp * def.heal * PW.heal * roleHealMul(s));
   if (def.buff && first) for (const q of def.buff.allies ? alliesNear(s, c.x, c.y, reach) : [p]) addBuff(q, def);
   castFx(s, def, c.x, c.y, c.dx, c.dy, def.repeat ? Math.max(12, def.repeat.every) : 20);
 }

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.193",
+    date: "2026-10-28",
+    items: {
+      ko: ["패왕전 역할군 상성: 전사는 마법사·암살자에게 받는 피해 −30% · 원딜은 전사에게 주는 피해 +30% · 마법사는 암살자에게 +30% · 암살자는 원딜·마법사에게 +30% · 서포터는 회복량 +30% (바로 맞히는 피해만, 역할 이름에 마우스를 올리면 보임)"],
+      en: ["Champion Clash role matchups: Warriors take 30% less damage from Mages and Assassins · Marksmen deal 30% more to Warriors · Mages deal 30% more to Assassins · Assassins deal 30% more to Marksmen and Mages · Supports heal 30% more (direct hits only; hover a role name to see it)"],
+      ja: ["覇王戦の役割の相性: 戦士は魔法使い・暗殺者から受けるダメージ−30% · 射手は戦士に+30% · 魔法使いは暗殺者に+30% · 暗殺者は射手・魔法使いに+30% · サポーターは回復量+30% (直接ダメージのみ、役割名にマウスを乗せると表示)"],
+    },
+  },
+  {
     version: "0.48.192",
     date: "2026-10-28",
     items: {
