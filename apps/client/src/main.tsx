@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { App } from "./App";
 import { unlockAudio } from "./audio/sound";
 import { refreshBalance } from "./balance";
+import { syncCloud } from "./cloudSave";
 import { setupInstall } from "./install";
 import { syncProfile } from "./player";
 import "./styles/index.css";
@@ -21,6 +22,8 @@ window.addEventListener("vite:preloadError", () => location.reload());
 setupInstall();
 // 다른 기기에서 바꾼 닉네임·해금 맞추기 (열 때 한 번)
 void syncProfile();
+// 쿠폰·스킨 등 상점 쪽 저장을 서버 백업과 맞춤
+void syncCloud();
 // 게임 수치 (관리자 페이지에서 바꾼 값). 못 받으면 마지막으로 받은 값으로
 void refreshBalance();
 createRoot(root).render(

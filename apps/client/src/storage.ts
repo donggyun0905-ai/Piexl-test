@@ -9,10 +9,15 @@ export function loadText(key: string): string | null {
   }
 }
 
+/** 저장할 때마다 부름 (cloudSave가 서버 백업할 것을 알아챔) */
+let onSave: ((key: string) => void) | null = null;
+export const watchSaves = (fn: (key: string) => void) => (onSave = fn);
+
 export function saveText(key: string, value: string): void {
   try {
     localStorage.setItem(PREFIX + key, value);
   } catch {
     // 저장 실패는 무시 (게임 진행에는 영향 없음)
   }
+  onSave?.(key);
 }

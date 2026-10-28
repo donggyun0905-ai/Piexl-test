@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.216",
+    date: "2026-10-28",
+    items: {
+      ko: ["쿠폰·스킨·이벤트 코인·효과·펫·로비 칩·일일 미션을 서버에도 저장: 브라우저 저장소를 지워도 다시 받아지고, 기기 연동하면 두 기기의 것이 합쳐짐 (가진 스킨은 모두 남고 쿠폰·코인은 두 기기에서 쓰고 받은 만큼 반영)"],
+      en: ["Coupons, skins, event coins, effects, pets, lobby chips and daily missions are now also saved on the server: they come back even if you clear browser storage, and linking devices merges both (all owned skins stay, and coupons and coins reflect what you earned and spent on each device)"],
+      ja: ["クーポン・スキン・イベントコイン・エフェクト・ペット・ロビーチップ・デイリーミッションをサーバーにも保存: ブラウザのデータを消しても戻り、端末連携すると両方の端末の分がまとまる (持っているスキンはすべて残り、クーポン・コインは各端末で得た分と使った分を反映)"],
+    },
+  },
+  {
     version: "0.48.215",
     date: "2026-10-28",
     items: {

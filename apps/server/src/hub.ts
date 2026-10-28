@@ -6,6 +6,7 @@ import { handleDaily } from "./dailyApi";
 import { fail } from "./http";
 import { handleMatch, type MatchState } from "./match";
 import { handlePlayer } from "./player";
+import { CLOUD_SCHEMA, handleCloud } from "./cloudSave";
 import { handleRaid } from "./raidApi";
 import { handleArena } from "./arenaApi";
 import { CLEAR_SCHEMA, handleClear } from "./clearStats";
@@ -64,6 +65,8 @@ const SCHEMA = [
   ...CLEAR_SCHEMA,
   // 패왕전 랭크전 점수
   ...RANK_SCHEMA,
+  // 상점 쪽 저장 백업
+  ...CLOUD_SCHEMA,
 ];
 
 function randomKey(): string {
@@ -96,6 +99,7 @@ export function setupHub(sql: SqlLike, now: () => number = Date.now, env: HubEnv
 export async function routeHub(ctx: HubContext, request: Request): Promise<Response> {
   const path = new URL(request.url).pathname;
   if (path.startsWith("/api/player/")) return handlePlayer(ctx, path.slice("/api/player/".length), request);
+  if (path.startsWith("/api/cloud/")) return handleCloud(ctx, path.slice("/api/cloud/".length), request);
   if (path.startsWith("/api/daily/")) return handleDaily(ctx, path.slice("/api/daily/".length), request);
   if (path.startsWith("/api/raid/")) return handleRaid(ctx, path.slice("/api/raid/".length), request);
   if (path.startsWith("/api/arena/")) return handleArena(ctx, path.slice("/api/arena/".length), request);

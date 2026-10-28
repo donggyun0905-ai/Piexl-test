@@ -3,6 +3,7 @@ import { LINK_CODE_LENGTH, NICKNAME_MAX } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 import { apiPost } from "./api";
 import type { TextKey } from "./i18n";
+import { syncCloud } from "./cloudSave";
 import { applyProfile, getPlayerId, loadNickname, replacePlayerId, resetPlayerId, saveNickname } from "./player";
 
 interface Props {
@@ -63,6 +64,7 @@ export function ProfileScreen({ t, onBack }: Props) {
             onClick={() => {
               if (!window.confirm(t("unlinkConfirm"))) return;
               resetPlayerId();
+              void syncCloud();
               setNickname(loadNickname());
               setNotice(t("unlinkDone"));
             }}
@@ -122,6 +124,7 @@ function EnterCode({ t, onLinked }: { t: (key: TextKey) => string; onLinked: () 
     if (!res.ok || !res.data) return setError(t(ERRORS[res.error ?? ""] ?? "errUnknown"));
     replacePlayerId(res.data.player);
     applyProfile(res.data);
+    void syncCloud();
     onLinked();
   };
   return (

@@ -1,6 +1,7 @@
 // 만능 쿠폰 · 가진 스킨 · 입은 스킨 (이 기기에 저장). 쿠폰 = 업적 보상 + 일일 미션 보상 - 쓴 것
 import { ACHIEVEMENTS, type AchievementCategory, type CharacterId } from "@pixel-rogue/shared";
 import { loadAchievements } from "../records";
+import { onCloudApplied } from "../cloudSave";
 import { loadText, saveText } from "../storage";
 import { addEventCoins } from "../event/eventCoins";
 import { GACHA_ECOIN_ODDS, GACHA_ECOINS, GACHA_COUPONS, GACHA_LIMITED_ODDS, GACHA_ONLY, GACHA_REFUND, GACHA_SKIN_ODDS, LIMITED_REFUND, LIMITED_THEMES, limitedSkins, MY_SKIN_PRICE, MY_THEME, SHOP_SKINS, SKIN_PRICE, ALL_SKINS, CHARACTER_IDS, mySkinId, TEST_ALL_SKINS, type LimitedTheme } from "./skins";
@@ -33,6 +34,8 @@ interface Wallet {
 
 /** 그릴 때마다 읽으므로 한 번 읽은 것을 기억 */
 let cache: Wallet | null = null;
+// 서버 백업으로 바뀌면 다시 읽음
+onCloudApplied(() => (cache = null));
 
 function load(): Wallet {
   if (cache) return structuredClone(cache);

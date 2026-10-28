@@ -104,6 +104,8 @@ export async function handlePlayer(ctx: HubContext, action: string, request: Req
     const player = String(row.player);
     if (isPlayerId(body.old) && body.old !== player) {
       ctx.sql.exec("DELETE FROM players WHERE id = ?", body.old);
+      // 이 기기의 상점 백업은 화면이 연동한 ID 쪽에 합쳐 올림
+      ctx.sql.exec("DELETE FROM cloud WHERE id = ?", body.old);
       // 일반·서든데스 둘 다
       ctx.sql.exec("DELETE FROM daily WHERE day IN (?, ?) AND user = ?", dayKey(now), `sd:${dayKey(now)}`, body.old);
     }
