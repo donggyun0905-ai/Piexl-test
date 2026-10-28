@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.212",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "효과 새로 그리기 6 (특수 보스): 태초의 빛 네 방향 빛기둥·태초의 어둠 보랏빛 거대한 손·불타는 원형 파동·다크 오라 어둠의 벽 · 제천대성 여의봉 꽂힘 충격파·부딪힘 섬광·돌리기 빛 초승달·맵 휘두르기 빛·번개 탄 · 괴력난신 붉은 주먹 파동·원기옥에 빨려 드는 빛·기 주먹 꼬리 · 데스웜 모래지옥·독 웅덩이 빛·독액 · 거대 매 바람 빛줄기 · 전갈 검은 독액 · 빛·어둠 화살·갓이터 창·낫 붉은 잔상·화염 가루 · 멸망의 용 염옥 불덩이·분화구 불기둥 · 패링 빛 고리",
+        "의사: 모든 선에 빛 테두리 · 구급 키트 폭발 섬광 · 붕대 채찍 끝 빛 · 회복 + 빛 · 구급차 충돌 불똥",
+      ],
+      en: [
+        "Effects redraw 6 (special bosses): Primeval Light four-way light pillars, Primeval Dark giant violet hands, burning ring waves, Dark Aura walls · Great Sage staff-plunge shockwaves, impact flashes, spinning light crescents, map-wide sweep light, lightning shots · Demigod red fist waves, light drawn into the Spirit Bomb, ki-fist trails · Death Worm sand pit, glowing poison pools and spit · Giant Hawk wind trails · Scorpion black venom · light and dark arrows, Godeater spears, scythe's red afterimage, fire embers · Doom Dragon hellfire orb and crater flame pillars · parry light ring",
+        "Doctor: glowing edges on every line · first-aid kit burst flash · bandage whip tip glow · healing plus glow · ambulance crash sparks",
+      ],
+      ja: [
+        "エフェクト描き直し6 (特殊ボス): 太初の光の四方向の光柱・太初の闇の紫の巨大な手・燃える円形の波動・ダークオーラの闇の壁 · 斉天大聖の如意棒の突き刺し衝撃波・衝突の閃光・回転の光の三日月・マップ薙ぎ払いの光・雷弾 · 怪力乱神の赤い拳の波動・元気玉に吸い込まれる光・気の拳の尾 · デスワームの砂地獄・毒の水たまりの光・毒液 · 巨大な鷹の風の光線 · サソリの黒い毒液 · 光・闇の矢・ゴッドイーターの槍・大鎌の赤い残像・火の粉 · 滅亡の竜の炎獄の火球・噴火口の火柱 · パリィの光の輪",
+        "医者: すべての線に光の縁 · 救急キット爆発の閃光 · 包帯の鞭の先の光 · 回復+の光 · 救急車衝突の火花",
+      ],
+    },
+  },
+  {
     version: "0.48.211",
     date: "2026-10-28",
     items: {

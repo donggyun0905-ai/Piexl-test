@@ -1,6 +1,7 @@
 // 시즌 2 라스트 보스 괴력난신 그리기: 동작마다 그림 칸(걷기·주먹·두 손 들기) · 50% 필살기 붉은 주먹 기운 · 기 주먹 난사 노란 기운
 // 10% 원기옥: 머리 위에서 커지는 거대한 기 구슬 · 맵 전체 노란 깜박임 세 번(다음 박자에 대시) · 기 주먹 탄
 import { SPIRIT_BLINK, SPIRIT_CHARGE, spiritBlink, spiritSlam, type EnemyState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { additive, beam, glow as softGlow, glowStroke, shock } from "./pwFxBits";
 import { drawEnemySprite } from "../sprites";
 import { C } from "./palette";
 
@@ -44,11 +45,15 @@ export function drawDemigodActor(ctx: CanvasRenderingContext2D, s: RunState, e: 
   if (e.gUlt === 2) {
     for (const side of [-1, 1]) {
       const fx = x + (flip ? -1 : 1) * (side > 0 ? 14 : -12);
+      additive(ctx, () => {
+        softGlow(ctx, fx, y + 8, 14, "#ff2a2a", 0.8, 0.5);
+        shock(ctx, fx, y + 8, 6 + (s.tick % 12), "#ff6a4a", 1 - (s.tick % 12) / 12, 3);
+      });
       ctx.strokeStyle = `rgba(255, 40, 40, ${0.6 + 0.3 * Math.sin(s.tick / 2 + side)})`;
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.arc(fx, y + 8, 6 + (s.tick % 6), 0, TAU);
-      ctx.stroke();
+      glowStroke(ctx);
     }
   }
   // 그로기: 머리 위 별
@@ -64,9 +69,19 @@ export function drawDemigodActor(ctx: CanvasRenderingContext2D, s: RunState, e: 
     const t = s.tick - e.ultAt;
     const r = Math.min(1, t / SPIRIT_CHARGE) * 34 + 6;
     glow(ctx, x, y - 46 - r * 0.5, r * 1.6, "rgba(255, 230, 120, A)", 0.45);
+    // 원기옥: 빨려 드는 빛 줄기 + 도는 빛 고리
+    const cy = y - 46 - r * 0.5;
+    additive(ctx, () => {
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * TAU + s.tick / 15;
+        const d = r * 2.5 + ((s.tick * 2 + i * 13) % 30);
+        beam(ctx, x + Math.cos(a) * d, cy + Math.sin(a) * d, x + Math.cos(a) * r, cy + Math.sin(a) * r, 1.5, "#ffe080", 0.6);
+      }
+      shock(ctx, x, cy, r * 1.25, "#fff4b0", 0.7, 4);
+    });
     ctx.fillStyle = "#fff4b0";
     ctx.beginPath();
-    ctx.arc(x, y - 46 - r * 0.5, r, 0, TAU);
+    ctx.arc(x, cy, r, 0, TAU);
     ctx.fill();
     ctx.fillStyle = "#ffd040";
     ctx.beginPath();
@@ -103,12 +118,11 @@ export function drawKiFist(ctx: CanvasRenderingContext2D, pr: ProjectileState, x
   const sp = Math.hypot(pr.vx, pr.vy) || 1;
   const dx = pr.vx / sp;
   const dy = pr.vy / sp;
-  ctx.strokeStyle = "rgba(255, 200, 60, 0.5)";
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo(x - dx * 8, y - dy * 8);
-  ctx.lineTo(x, y);
-  ctx.stroke();
+  // 기 주먹: 노란 기의 꼬리 + 빛 번짐
+  additive(ctx, () => {
+    beam(ctx, x - dx * 14, y - dy * 14, x, y, pr.r * 1.4, "#ffc83c", 0.7);
+    softGlow(ctx, x, y, pr.r * 3, "#ffd84a", 0.8, 0.6);
+  });
   ctx.fillStyle = tick % 8 < 4 ? "#ffd84a" : "#ffb020";
   ctx.beginPath();
   ctx.arc(x, y, pr.r + 1, 0, TAU);

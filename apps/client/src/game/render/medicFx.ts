@@ -1,6 +1,7 @@
 // 의사 효과 그리기 (전부 의사만의 모양): 메스 교차 베기·베인 자국 · 수혈 튜브 · 심전도·전기 불꽃 · 링거 폴대 회전 · 가스 퍼짐
 // · 알약 터짐 · 구급 키트 폭발 · 붕대 채찍 · 바느질 · 회복 + · 항체 반사 · 구급차 충돌
 import type { EffectState, RunState } from "@pixel-rogue/shared";
+import { additive, glow, glowStroke, sparks } from "./pwFxBits";
 import { C, lerp, type Snap } from "./palette";
 
 const PILL_COLORS = ["#ff6a7a", "#7fd88a", "#ffd060"];
@@ -98,10 +99,10 @@ const FX: Partial<Record<EffectState["kind"], FxDraw>> = {
     ctx.lineWidth = 2;
     ctx.beginPath();
     pts.forEach(([px, py], i) => (i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py)));
-    ctx.stroke();
+    glowStroke(ctx);
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 0.8;
-    ctx.stroke();
+    glowStroke(ctx);
   },
   // 전기 불꽃: 노란 빛줄기 네 갈래
   zap(ctx, fx, t, x, y, tick) {
@@ -124,7 +125,7 @@ const FX: Partial<Record<EffectState["kind"], FxDraw>> = {
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.arc(x, y, r * 0.85, a - 1.2, a);
-    ctx.stroke();
+    glowStroke(ctx);
     ctx.globalAlpha = 1;
     ctx.strokeStyle = "#c8d0e0";
     ctx.lineWidth = 1.5;
@@ -161,11 +162,7 @@ const FX: Partial<Record<EffectState["kind"], FxDraw>> = {
   // 구급 키트 폭발: 흰 빛 → 커지는 붉은 십자 + 사방으로 날아가는 붕대 조각
   medburst(ctx, fx, t, x, y) {
     const k = 1 - t;
-    ctx.globalAlpha = t * 0.5;
-    ctx.fillStyle = "#ffffff";
-    ctx.beginPath();
-    ctx.arc(x, y, fx.size * Math.min(1, k * 2), 0, Math.PI * 2);
-    ctx.fill();
+    additive(ctx, () => glow(ctx, x, y, fx.size * Math.min(1, k * 2) + 4, "#ffffff", t, 1.5));
     ctx.globalAlpha = t;
     const c = 3 + fx.size * 0.4 * k;
     ctx.fillStyle = C.blood;
@@ -195,7 +192,7 @@ const FX: Partial<Record<EffectState["kind"], FxDraw>> = {
     ctx.lineWidth = 0.6;
     ctx.beginPath();
     ctx.arc(3, 0, 1.5, 0, Math.PI * 2);
-    ctx.stroke();
+    glowStroke(ctx);
     if (reach < 2) return;
     // 띠 + 거즈 격자
     ctx.fillStyle = C.bandage;
@@ -210,6 +207,7 @@ const FX: Partial<Record<EffectState["kind"], FxDraw>> = {
     ctx.globalAlpha = 1;
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(3 + reach - 1, -2, 2, 4);
+    if (u >= 0.35 && u < 0.7) additive(ctx, () => glow(ctx, 3 + reach, 0, 8, "#ffffff", 1 - (u - 0.35) / 0.35, 1.4));
     // 끝까지 뻗은 순간 탁: 흰 불똥
     if (u >= 0.35 && u < 0.7) {
       const k = (u - 0.35) / 0.35;
@@ -243,6 +241,7 @@ const FX: Partial<Record<EffectState["kind"], FxDraw>> = {
   // 회복: 위로 떠오르는 + (초록 = 체력, 파랑 = 보호막)
   plus(ctx, fx, t, x, y) {
     const yy = y - 4 - (1 - t) * 10;
+    additive(ctx, () => glow(ctx, x, yy, 6, fx.width ? "#8ad0ff" : "#6ee87a", Math.min(1, t * 2), 0.8));
     ctx.globalAlpha = Math.min(1, t * 2);
     ctx.fillStyle = fx.width ? "#8ad0ff" : "#6ee87a";
     ctx.fillRect(x - 1, yy - 3, 2, 6);
@@ -265,6 +264,7 @@ const FX: Partial<Record<EffectState["kind"], FxDraw>> = {
   },
   // 구급차 충돌: 노란 별 조각
   bump(ctx, fx, t, x, y) {
+    additive(ctx, () => sparks(ctx, x, y, 8, fx.size * 1.4, 1 - t, "#ffe070", x + y));
     ctx.globalAlpha = t;
     ctx.fillStyle = "#ffe070";
     for (let i = 0; i < 5; i++) {
@@ -279,12 +279,12 @@ function line(ctx: CanvasRenderingContext2D, x0: number, y0: number, x1: number,
   ctx.beginPath();
   ctx.moveTo(x0, y0);
   ctx.lineTo(x1, y1);
-  ctx.stroke();
+  glowStroke(ctx);
 }
 
 function curve(ctx: CanvasRenderingContext2D, x0: number, y0: number, cx: number, cy: number, x1: number, y1: number): void {
   ctx.beginPath();
   ctx.moveTo(x0, y0);
   ctx.quadraticCurveTo(cx, cy, x1, y1);
-  ctx.stroke();
+  glowStroke(ctx);
 }

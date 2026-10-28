@@ -1,6 +1,7 @@
 // 의사 그리기: 날아가는 주사기·바늘·알약 · 가스 구름 · 봉합 바늘과 실 · 회복 알약 · 날아가는 가스통·구급 키트 · 구급차 · 붕대에 묶인 적
 // (효과는 medicFx)
 import { AMB_TICKS, FLY_TICKS, GAS_LIFE, type Device, type RunState } from "@pixel-rogue/shared";
+import { glowStroke } from "./pwFxBits";
 import { C, type Snap } from "./palette";
 
 const PILL_COLORS = ["#ff6a7a", "#7fd88a", "#ffd060"];
@@ -36,7 +37,7 @@ export function drawMedicGround(ctx: CanvasRenderingContext2D, s: RunState, snap
     ctx.beginPath();
     ctx.moveTo(snap(a.x), snap(a.y));
     ctx.quadraticCurveTo((a.x + b.x) / 2, (a.y + b.y) / 2 + 4, snap(b.x), snap(b.y));
-    ctx.stroke();
+    glowStroke(ctx);
   }
   ctx.globalAlpha = 1;
   for (const n of needles) {
@@ -48,7 +49,7 @@ export function drawMedicGround(ctx: CanvasRenderingContext2D, s: RunState, snap
     ctx.beginPath();
     ctx.moveTo(x - 3, y - 4);
     ctx.lineTo(x + 1, y);
-    ctx.stroke();
+    glowStroke(ctx);
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(x + 1, y, 1, 1);
   }
@@ -80,7 +81,7 @@ export function drawMedicAir(ctx: CanvasRenderingContext2D, s: RunState, snap: S
     for (const k of [0, Math.PI / 2]) {
       ctx.beginPath();
       ctx.ellipse(snap(e.x), snap(e.y), e.r + 2, (e.r + 2) * 0.35, spin + k, 0, Math.PI * 2);
-      ctx.stroke();
+      glowStroke(ctx);
     }
   }
   for (const d of s.devices ?? []) {
@@ -111,7 +112,7 @@ function drawShot(ctx: CanvasRenderingContext2D, d: Device, snap: Snap): void {
     ctx.beginPath();
     ctx.moveTo(-10, 1);
     ctx.quadraticCurveTo(-6, -1, -3, 0);
-    ctx.stroke();
+    glowStroke(ctx);
     ctx.fillStyle = "#e8ecf4";
     ctx.fillRect(-3, -0.5, 6, 1);
     ctx.fillStyle = "#ffffff";

@@ -239,3 +239,13 @@ export function glowEdge(ctx: Ctx, c: string, w: number): void {
   ctx.stroke();
   ctx.globalCompositeOperation = op;
 }
+
+/** 지금 정해 둔 선 색·굵기로 방금 그린 길에 빛 테두리를 씌우고 다시 그 색으로 그림 (선 색이 #rrggbb일 때만 빛) */
+export function glowStroke(ctx: Ctx): void {
+  const c = ctx.strokeStyle;
+  const w = ctx.lineWidth;
+  if (typeof c === "string") glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
+  ctx.stroke();
+}

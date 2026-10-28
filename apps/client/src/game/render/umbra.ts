@@ -1,5 +1,6 @@
 // 시즌 2 라스트 보스 검은 잔영과 거대한 짐승 셋 그리기: 땅속·하늘에 있을 때 숨기기 · 데스웜 솟기 · 전갈 움직이는 표시·몸 돌리기 · 매 경직·날아오르기 · 검은 잔영 말풍선
 import { BOSS_ROC_RULES, BOSS_UMBRA_RULES, BOSS_WORM_RULES, wormBody, ENEMIES, UMBRA_BEASTS, UMBRA_WARD, type EnemyState, type RunState } from "@pixel-rogue/shared";
+import { glowStroke } from "./pwFxBits";
 import { drawEnemySprite } from "../sprites";
 import { C } from "./palette";
 
@@ -83,7 +84,7 @@ function wormFlight(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, p
     ctx.fill();
     ctx.strokeStyle = e.dark ? "#000000" : "#5a3818";
     ctx.lineWidth = 1;
-    ctx.stroke();
+    glowStroke(ctx);
     ctx.fillStyle = e.dark ? "#4a4458" : "#e0b880";
     ctx.fillRect(Math.round(bx - 8), Math.round(by - h - 14), 9, 4);
   });
@@ -108,7 +109,7 @@ function drawScorpion(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState,
     ctx.beginPath();
     ctx.arc(x, y, e.r, 0, Math.PI * 2);
     ctx.fill();
-    ctx.stroke();
+    glowStroke(ctx);
     // 모래가 들썩임
     ctx.fillStyle = "rgba(200, 160, 100, 0.8)";
     for (let i = 0; i < 6; i++) {
@@ -135,7 +136,7 @@ function drawScorpion(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState,
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(x, y, e.r + 6, 0, Math.PI * 2);
-    ctx.stroke();
+    glowStroke(ctx);
   }
 }
 

@@ -1,5 +1,6 @@
 // 제천대성 여의봉 그리기: 금빛 기운 · 검붉은 쇠 봉(빛 줄·그늘) · 새긴 금 고리 · 가운데 금 띠 · 골 진 금테 마개와 빛나는 끝 · 친 순간(속도선·섬광)·돌리기(잔상)·하늘에서 내리꽂기
 import type { EffectState } from "@pixel-rogue/shared";
+import { additive, crescent, glow as softGlow, glowStroke, shock, sparks } from "./pwFxBits";
 
 const TAU = Math.PI * 2;
 
@@ -88,7 +89,7 @@ export function line(ctx: CanvasRenderingContext2D, x: number, y: number, tx: nu
   ctx.beginPath();
   ctx.moveTo(x, y);
   ctx.lineTo(tx, ty);
-  ctx.stroke();
+  glowStroke(ctx);
 }
 
 /** 여의봉이 친 순간: 번쩍이는 여의봉과 속도선 · 돌린 여의봉은 잔상을 남기며 한 바퀴 */
@@ -104,10 +105,16 @@ export function drawSageFx(ctx: CanvasRenderingContext2D, fx: EffectState, snap:
     if (plunge(x, y, tx, ty)) {
       // 꽂힌 여의봉 · 땅이 갈라지는 섬광
       drawRuyi(ctx, tx, ty - PLUNGE * t, tx, ty, w, 1);
-      ctx.fillStyle = `rgba(255, 235, 170, ${0.85 * t})`;
-      ctx.beginPath();
-      ctx.ellipse(tx, ty, w * (5 - 3 * t), w * (2 - t), 0, 0, TAU);
-      ctx.fill();
+      // 꽂힌 자리: 금빛 섬광 + 땅을 따라 퍼지는 충격파 + 돌 조각
+      additive(ctx, () => {
+        ctx.save();
+        ctx.translate(tx, ty);
+        ctx.scale(1, 0.4);
+        softGlow(ctx, 0, 0, w * 6, "#ffe8a0", t, t > 0.7 ? 1.5 : 0.4);
+        shock(ctx, 0, 0, w * (2 + 6 * (1 - t)), "#ffd060", t, w * 2);
+        ctx.restore();
+        sparks(ctx, tx, ty, 12, w * 7, 1 - t, "#fff0c0", tx + ty);
+      });
       return true;
     }
     ctx.globalAlpha = Math.min(1, t * 1.6);
@@ -119,11 +126,12 @@ export function drawSageFx(ctx: CanvasRenderingContext2D, fx: EffectState, snap:
     ctx.lineWidth = 1;
     for (const k of [-1.8, -1.2, 1.2, 1.8]) line(ctx, x + nx * w * k, y + ny * w * k, x + (tx - x) * 0.8 + nx * w * k, y + (ty - y) * 0.8 + ny * w * k);
     drawRuyi(ctx, x, y, tx, ty, w, 1);
-    // 끝이 부딪힌 섬광
-    ctx.fillStyle = `rgba(255, 245, 200, ${0.8 * t})`;
-    ctx.beginPath();
-    ctx.arc(tx, ty, w * (2.5 - 1.5 * t), 0, TAU);
-    ctx.fill();
+    // 끝이 부딪힌 섬광 + 충격파 + 불똥
+    additive(ctx, () => {
+      softGlow(ctx, tx, ty, w * (3.5 - 1.5 * t), "#fff5c8", t, 1.5);
+      shock(ctx, tx, ty, w * (2 + 3 * (1 - t)), "#ffd060", t, w);
+      sparks(ctx, tx, ty, 8, w * 5, 1 - t, "#ffe8a0", tx);
+    });
     ctx.globalAlpha = 1;
     return true;
   }
@@ -135,13 +143,17 @@ export function drawSageFx(ctx: CanvasRenderingContext2D, fx: EffectState, snap:
     ctx.globalAlpha = t * (k === 0 ? 1 : 0.25 / k);
     drawRuyi(ctx, x - Math.cos(a) * r, y - Math.sin(a) * r, x + Math.cos(a) * r, y + Math.sin(a) * r, 7, k === 0 ? 1 : 0);
   }
+  additive(ctx, () => {
+    crescent(ctx, x, y, r, a0 - 0.6, 0.6, 6 * t + 1, "#ffd060", t);
+    crescent(ctx, x, y, r, a0 - 0.6 + Math.PI, 0.6, 6 * t + 1, "#ffd060", t);
+  });
   ctx.globalAlpha = t * 0.5;
   ctx.strokeStyle = "#fff0b0";
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.arc(x, y, r, a0 - 1.2, a0);
   ctx.arc(x, y, r, a0 - 1.2 + Math.PI, a0 + Math.PI);
-  ctx.stroke();
+  glowStroke(ctx);
   ctx.globalAlpha = 1;
   return true;
 }

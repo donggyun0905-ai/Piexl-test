@@ -1,5 +1,6 @@
 // 검은 잔영 짐승 셋 필살기·상태 그리기: 데스웜 모래지옥·독액·독 웅덩이 · 매 # 선을 가로지르는 매 · 전갈 검은 독액 · 플레이어 독·죽음 표시
 import { WORM_PIT_R, WORM_POOL_R, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { additive, beam, glow, glowStroke, shock } from "./pwFxBits";
 import { drawEnemySprite } from "../sprites";
 
 const TAU = Math.PI * 2;
@@ -17,16 +18,19 @@ export function drawBeastGround(ctx: CanvasRenderingContext2D, s: RunState): voi
       ctx.beginPath();
       ctx.arc(e.x, e.y, WORM_PIT_R, 0, TAU);
       ctx.fill();
+      // 가운데 어둠으로 빨려 드는 모래 빛
+      additive(ctx, () => shock(ctx, e.x, e.y, WORM_PIT_R, "#e8c890", 0.4, 10));
       ctx.strokeStyle = "rgba(120, 80, 40, 0.6)";
       ctx.lineWidth = 1;
       for (let i = 0; i < 4; i++) {
         const r = WORM_PIT_R * (1 - (((s.tick / 90 + i / 4) % 1)));
         ctx.beginPath();
         ctx.arc(e.x, e.y, r, s.tick / 30 + i, s.tick / 30 + i + Math.PI * 1.2);
-        ctx.stroke();
+        glowStroke(ctx);
       }
     }
     for (const p of e.pools ?? []) {
+      additive(ctx, () => glow(ctx, p.x, p.y, WORM_POOL_R * 1.2, "#7ad040", Math.min(0.5, p.t / 120)));
       ctx.fillStyle = `rgba(110, 200, 60, ${Math.min(0.45, p.t / 120)})`;
       ctx.beginPath();
       ctx.ellipse(p.x, p.y, WORM_POOL_R, WORM_POOL_R * 0.7, 0, 0, TAU);
@@ -45,6 +49,7 @@ export function drawBeastAir(ctx: CanvasRenderingContext2D, s: RunState): void {
         const lift = Math.min(18, g.t * 0.4);
         ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
         ctx.fillRect(Math.round(g.x - 2), Math.round(g.y), 4, 2);
+        additive(ctx, () => glow(ctx, g.x, g.y - lift, 6, "#7ad040", 0.8));
         ctx.fillStyle = "#7ad040";
         ctx.fillRect(Math.round(g.x - 2), Math.round(g.y - lift - 2), 4, 4);
         ctx.fillStyle = "#c8ff90";
@@ -57,6 +62,8 @@ export function drawBeastAir(ctx: CanvasRenderingContext2D, s: RunState): void {
         const left = h.tick - s.tick;
         if (h.toX === undefined || h.toY === undefined || left < 0 || left > 12) continue;
         const f = 1 - left / 12;
+        // 매가 지나간 자리에 바람 빛줄기
+        additive(ctx, () => beam(ctx, h.x, h.y, h.x + (h.toX! - h.x) * f, h.y + (h.toY! - h.y) * f, 6, "#e8f0ff", 0.6));
         ctx.save();
         ctx.globalAlpha = 0.85;
         ctx.translate(h.x + (h.toX - h.x) * f, h.y + (h.toY - h.y) * f);
@@ -80,19 +87,24 @@ export function drawBeastAir(ctx: CanvasRenderingContext2D, s: RunState): void {
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.r + 3, 0, TAU);
-    ctx.stroke();
+    glowStroke(ctx);
   }
 }
 
 /** 전갈 검은 독액 탄 */
 export function drawBeastShot(ctx: CanvasRenderingContext2D, pr: ProjectileState, x: number, y: number, tick: number): boolean {
   if (pr.look !== "doom") return false;
+  // 검은 독액: 보랏빛 기운과 꼬리
+  additive(ctx, () => {
+    beam(ctx, x - pr.vx * 3, y - pr.vy * 3, x, y, pr.r * 1.5, "#8a3ac8", 0.5);
+    glow(ctx, x, y, pr.r * 3, "#8a3ac8", 0.7);
+  });
   ctx.fillStyle = "#0c0612";
   ctx.beginPath();
   ctx.arc(x, y, pr.r + 1, 0, TAU);
   ctx.fill();
   ctx.strokeStyle = tick % 20 < 10 ? "#8a3ac8" : "#5a2088";
   ctx.lineWidth = 1;
-  ctx.stroke();
+  glowStroke(ctx);
   return true;
 }

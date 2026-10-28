@@ -1,6 +1,7 @@
 // 시즌 2 마지막 라스트 보스 제천대성 그리기: 근두운 위·땅 위 그림 · 근두운에서 내려오기 · 뛰어오르기 · 따로 떠다니는 근두운
 // 여의봉 벽 · 맵 전체 휘두르기(금빛 깜박임 세 번 → 거대한 여의봉) · 즉사기(문구·살 수 있는 원·늘어나는 여의봉) · 강해진 뒤 터지기 직전 하얀 깜박임 · 던진 여의봉·번개 탄
 import { SAGE_DISMOUNT, SAGE_MAX_SAFE, SAGE_MAX_WARN, SAGE_SWEEP, type EnemyState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { additive, beam, glow, glowStroke } from "./pwFxBits";
 import { drawEnemySprite } from "../sprites";
 import { drawRuyi, line, plunge, PLUNGE, staffW } from "./ruyi";
 import { C } from "./palette";
@@ -52,7 +53,7 @@ export function drawSageGround(ctx: CanvasRenderingContext2D, s: RunState): void
       ctx.setLineDash([4, 3]);
       ctx.beginPath();
       ctx.arc(e.x, e.y, e.r + SAGE_MAX_SAFE, 0, TAU);
-      ctx.stroke();
+      glowStroke(ctx);
       ctx.setLineDash([]);
     }
   }
@@ -70,7 +71,7 @@ export function drawSageAir(ctx: CanvasRenderingContext2D, s: RunState): void {
     else {
       ctx.beginPath();
       ctx.arc(h.x, h.y, h.radius, 0, TAU);
-      ctx.stroke();
+      glowStroke(ctx);
     }
   }
   // 여의봉 공격 예고: 여의봉이 처음 자리에서 끝까지 서서히 뻗어 나옴 · 돌리기는 천천히 도는 여의봉
@@ -106,6 +107,7 @@ export function drawSageAir(ctx: CanvasRenderingContext2D, s: RunState): void {
       let flash = false;
       for (let j = 0; j < 3; j++) if (t >= SAGE_SWEEP.first + j * SAGE_SWEEP.blink && t < SAGE_SWEEP.first + j * SAGE_SWEEP.blink + 6) flash = true;
       if (flash) screen(ctx, "rgba(255, 200, 40, 0.3)");
+      if (t >= hit - 1) additive(ctx, () => beam(ctx, e.x - 600, p.y, e.x + 600, p.y, 30, "#ffd060", 0.7));
       // 크게 키운 여의봉이 플레이어 쪽으로 기울며 커짐 → 휘두르는 순간 맵을 가로지름
       const k = Math.min(1, t / hit);
       drawRuyi(ctx, e.x - 400 * k, e.y - 30 * (1 - k), e.x + 400 * k, e.y - 30 * (1 - k), 6 + 18 * k, 0.4 + 0.6 * k);
@@ -113,6 +115,7 @@ export function drawSageAir(ctx: CanvasRenderingContext2D, s: RunState): void {
     } else if (g.bAct === "max") {
       const k = Math.min(1, t / SAGE_MAX_WARN);
       drawRuyi(ctx, e.x, e.y - 20 - 400 * k, e.x, e.y + 20 + 400 * k, 6 + 30 * k, 0.4 + 0.6 * k);
+      additive(ctx, () => glow(ctx, e.x, e.y, 40 + 60 * k, "#ffe8a0", 0.3 + 0.5 * k, k));
       if (t >= SAGE_MAX_WARN - 2) screen(ctx, "rgba(255, 245, 210, 0.7)");
     }
   }
@@ -151,6 +154,10 @@ export function drawSageShot(ctx: CanvasRenderingContext2D, pr: ProjectileState,
     return true;
   }
   if (pr.look !== "bolt") return false;
+  additive(ctx, () => {
+    beam(ctx, x, y - 16, x, y + 3, 3, "#9ad8ff", 0.7);
+    glow(ctx, x, y, 7, "#fff6a0", 0.9, 1.2);
+  });
   ctx.strokeStyle = tick % 6 < 3 ? "#fff6a0" : "#9ad8ff";
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -158,6 +165,6 @@ export function drawSageShot(ctx: CanvasRenderingContext2D, pr: ProjectileState,
   ctx.lineTo(x + 2, y - 5);
   ctx.lineTo(x - 2, y - 1);
   ctx.lineTo(x + 1, y + 3);
-  ctx.stroke();
+  glowStroke(ctx);
   return true;
 }

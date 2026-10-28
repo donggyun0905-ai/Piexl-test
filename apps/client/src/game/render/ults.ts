@@ -1,5 +1,6 @@
 // 라스트 보스 궁극기 그리기: 용 염옥(커지는 불덩이 · 분화구 장면, 터질 때는 예고 없음) · 갓이터 패링(작은 방 밖이 깜깜, 패링 자세)
 import { cageRect, PARRY_TICKS, HELL_CHARGE, HELL_COLS, HELL_ROWS, HELL_SHOW, HELL_WAVES, hellCell, type RunState } from "@pixel-rogue/shared";
+import { additive, beam, glow, shock } from "./pwFxBits";
 import type { Snap } from "./palette";
 
 const TAU = Math.PI * 2;
@@ -25,8 +26,12 @@ export function drawUltGround(ctx: CanvasRenderingContext2D, s: RunState): void 
       ctx.beginPath();
       ctx.ellipse(cx, cy + 4, (r - l) / 4, (b - top) / 6, 0, 0, TAU);
       ctx.fill();
-      ctx.fillStyle = (s.tick + q) % 8 < 4 ? "#ffb040" : "#ff6a20";
-      ctx.fillRect(cx - 3, cy - 10, 6, 12);
+      // 분화구에서 일렁이며 솟는 불기둥 + 빛
+      const h = 14 + Math.sin(s.tick / 3 + q) * 4;
+      additive(ctx, () => {
+        glow(ctx, cx, cy, (r - l) / 3, "#ff6a20", 0.6);
+        beam(ctx, cx, cy + 2, cx, cy - h, 5, (s.tick + q) % 8 < 4 ? "#ffb040" : "#ff6a20", 0.9);
+      });
     }
   }
 }
@@ -67,11 +72,11 @@ function drawParry(ctx: CanvasRenderingContext2D, s: RunState, snap: Snap, l: nu
   for (const [tx, ty] of [[x, top], [x, bottom], [l, y], [r, y]] as const) chain(ctx, x, y, tx, ty);
   const k = (p.parryTicks ?? 0) / PARRY_TICKS;
   if (k <= 0) return;
-  ctx.strokeStyle = `rgba(255, 250, 220, ${0.4 + 0.6 * k})`;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(snap(p.x), snap(p.y), p.r + 5, 0, TAU);
-  ctx.stroke();
+  // 패링 자세: 금빛 빛 고리 + 몸을 감싼 빛
+  additive(ctx, () => {
+    glow(ctx, snap(p.x), snap(p.y), p.r + 10, "#fff0c0", 0.5 * k, 0.6);
+    shock(ctx, snap(p.x), snap(p.y), p.r + 6, "#fffadc", 0.4 + 0.6 * k, 4);
+  });
 }
 
 /** 맨 위에: 용 입에서 커지는 염옥 불덩이 · 갓이터 패링 작은 방 밖 어둠 */
@@ -83,10 +88,16 @@ export function drawUltOverlay(ctx: CanvasRenderingContext2D, s: RunState, snap:
       const r = 110 * (t / HELL_CHARGE);
       const x = snap(e.x + (e.dirX ?? 0) * e.r);
       const y = snap(e.y + (e.dirY ?? 0) * e.r);
-      ctx.fillStyle = "rgba(255, 80, 20, 0.45)";
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, TAU);
-      ctx.fill();
+      // 염옥 불덩이: 겹치면 밝아지는 불빛 + 빨려 드는 불길 + 일렁이는 테두리
+      additive(ctx, () => {
+        glow(ctx, x, y, r * 1.3, "#ff5014", 0.8, 0.6);
+        shock(ctx, x, y, r * (1 + 0.05 * Math.sin(s.tick / 2)), "#ffb040", 0.7, 8);
+        for (let i = 0; i < 8; i++) {
+          const a = (i / 8) * TAU + s.tick / 10;
+          const d = r * 1.6 + ((s.tick * 3 + i * 17) % 40);
+          beam(ctx, x + Math.cos(a) * d, y + Math.sin(a) * d, x + Math.cos(a) * r, y + Math.sin(a) * r, 2, "#ff8a3a", 0.5);
+        }
+      });
       ctx.fillStyle = "rgba(255, 220, 120, 0.6)";
       ctx.beginPath();
       ctx.arc(x, y, r * 0.55, 0, TAU);
