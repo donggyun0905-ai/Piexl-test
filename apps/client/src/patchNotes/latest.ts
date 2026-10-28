@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.161",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "검은 잔영 2단계: 짐승 셋을 다 잡으면 \"……아직이다. 일어나라.\" 하고 셋을 검은 모습(검은 몸 · 흰 이빨·부리·독침 · 붉은 눈)으로 되살림 · 필살기는 다시 쓰지 않지만 공격 주기가 더 빠름 · 체력 막대는 보라색 · 되살린 셋도 다 잡아야 클리어",
+        "추적자: 1 암습 저격을 일찍 끝내면 남은 시간만큼 대기가 줄어듦 · 1·2·3 스킬을 서로 쓰는 도중에도 같이 쓸 수 있음",
+      ],
+      en: [
+        "Black Remnant phase 2: once all three beasts fall it says \"...Not yet. Rise.\" and revives them in black (black bodies · white teeth, beak and stinger · red eyes) · no ultimates this time, but they attack more often · purple health bars · you must beat the revived three to clear",
+        "Tracker: ending Ambush Snipe early shortens its cooldown by the time left · skills 1, 2 and 3 can now be used while another is active",
+      ],
+      ja: [
+        "黒き残影の第2段階: 獣三体を倒すと「……まだだ。起きろ。」と黒い姿（黒い体 · 白い牙・くちばし・毒針 · 赤い目）で三体を蘇らせる · 必殺技は使わないが攻撃の間隔が短い · 体力バーは紫 · 蘇った三体も倒すとクリア",
+        "追跡者: 暗襲狙撃を早く終えると残り時間分だけ待ち時間が短くなる · スキル1・2・3を他のスキルの使用中でも同時に使える",
+      ],
+    },
+  },
+  {
     version: "0.48.160",
     date: "2026-10-28",
     items: {

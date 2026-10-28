@@ -1,7 +1,7 @@
 // 추적자(아스칼론, 시즌 2): 저격총 하나 + 스킬 셋 (PC 1·2·3 키, 모바일 스킬 버튼)
-// 1 암습 저격: 보호막 20, 화면이 어두워진 채 5초 동안 직접 조준해 쏨 (조준경 가운데 작은 원 안의 적만 맞음, 한 발 200%, 다시 누르면 끝) · 대기 10초
+// 1 암습 저격: 보호막 20, 화면이 어두워진 채 5초 동안 직접 조준해 쏨 (조준경 가운데 작은 원 안의 적만 맞음, 한 발 200%, 다시 누르면 끝 · 일찍 끝내면 남은 시간만큼 대기가 줄어듦) · 대기 10초
 // 2 강력한 한방: 모으는 동안 앞에 탄을 막는 벽 → 방을 꿰뚫는 한 줄 (공격력 1000% + 최대 체력 20%, 보스는 그 1/5) · 대기 60초
-// 3 연발사격: 조준 없이 10발을 흩뿌려 쏨 · 대기 3초. 수치는 weaponsTracker.TRACKER, 아이템은 itemsTracker
+// 3 연발사격: 조준 없이 10발을 흩뿌려 쏨 · 대기 3초. 세 스킬은 서로 쓰는 도중에도 같이 쓸 수 있음. 수치는 weaponsTracker.TRACKER, 아이템은 itemsTracker
 import { TICK_RATE } from "../constants";
 import { TRACKER_PERKS as K } from "../itemsTracker";
 import { createRng, deriveSeed } from "../rng";
@@ -84,13 +84,13 @@ function ambushShot(s: RunState): void {
   addEffect(s, { kind: "trSnipe", x, y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 14, width: best ? 1 : 0 });
 }
 
-/** 암습 저격 끝: 대기 시작 · 받은 보호막 거둠 */
+/** 암습 저격 끝: 대기 시작 (일찍 끝내면 남은 시간만큼 덜 기다림) · 받은 보호막 거둠 */
 function endAmbush(p: PlayerState): void {
   const a = p.trAmbush;
   if (!a) return;
   delete p.trAmbush;
   p.shieldPts = Math.min(p.shieldPts ?? 0, a.base);
-  (p.trCd ??= [0, 0, 0])[0] = trackerCooldown(p, 0);
+  (p.trCd ??= [0, 0, 0])[0] = Math.max(0, trackerCooldown(p, 0) - Math.max(0, a.t));
 }
 
 /** 강력한 한방: 방을 꿰뚫는 한 줄 */
@@ -127,9 +127,9 @@ function wallBlock(s: RunState): void {
 function useSkill(s: RunState, i: number): void {
   const p = s.player;
   const cd = (p.trCd ??= [0, 0, 0]);
-  // 암습 저격 중에 1을 다시 누르면 바로 끝 (대기는 그대로 돎)
+  // 암습 저격 중에 1을 다시 누르면 바로 끝 · 다른 스킬을 쓰는 도중에도 쓸 수 있음
   if (i === 0 && p.trAmbush) return endAmbush(p);
-  if ((cd[i] ?? 0) > 0 || p.trAmbush || p.trCharge) return;
+  if ((cd[i] ?? 0) > 0 || (i === 1 && p.trCharge)) return;
   if (i === 0) {
     // 무적 대신 보호막 20 (겹치지 않고 20으로 맞춤)
     const base = p.shieldPts ?? 0;
@@ -171,18 +171,17 @@ export function trackerTick(s: RunState, want: boolean, speed: number): void {
     if (am.gap > 0) am.gap--;
     if (am.gap <= 0 && want && p.aimDist !== undefined) ambushShot(s);
     if (am.t <= 0) endAmbush(p);
-    return;
   }
-  // 강력한 한방: 모으는 동안 앞에 벽 (움직일 수 있음)
+  // 강력한 한방: 모으는 동안 앞에 벽 (움직일 수 있음, 암습 저격과 같이 쓸 수 있음)
   if (p.trCharge) {
     wallBlock(s);
     if (--p.trCharge <= 0) {
       delete p.trCharge;
       powerShot(s);
     }
-    return;
   }
-  if (!want || p.attackCooldown > 0) return;
+  // 평소 사격은 암습 저격·모으기 중에는 쉼
+  if (p.trAmbush || p.trCharge || !want || p.attackCooldown > 0) return;
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
   p.trShot = s.tick;

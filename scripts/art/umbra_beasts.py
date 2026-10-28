@@ -1,4 +1,4 @@
-# 시즌 2 라스트 보스 검은 잔영과 거대한 짐승 셋 (데스웜 · 거대 전갈 · 거대 매) 몬스터 그림
+# 시즌 2 라스트 보스 검은 잔영과 거대한 짐승 셋 (데스웜 · 거대 전갈 · 거대 매) 몬스터 그림 + 되살린 검은 모습(*_dark: 몸은 검정, 이빨·부리·독침은 흰색, 눈은 빨강)
 # 규격(docs/ART.md): enemies/{종류}.png, 움직임 칸 2장을 가로로, 오른쪽을 봄. 아주 크게 (데스웜 96 · 전갈 104 · 매 120 · 검은 잔영 56)
 import os
 from PIL import Image
@@ -178,3 +178,34 @@ save("sandworm", [worm(0), worm(1)], 96)
 save("scorpion", [scorpion(0), scorpion(1)], 104)
 save("roc", [roc(0), roc(1)], 120)
 save("umbra", [umbra(0), umbra(1)], 56)
+
+# ── 되살린 검은 모습: 원래 그림에서 색만 바꿈 ──
+WHITE = {"#f2e6c4", "#c8b48a", "#e8c050", "#fff0a0", "#f0b830"}
+RED = {"#ffe040", "#9aff60", "#ff3a1a", "#0a0000"}
+
+def darken(name):
+    src = Image.open(os.path.join(OUT, f"{name}.png")).convert("RGBA")
+    out = src.copy()
+    for y in range(src.height):
+        for x in range(src.width):
+            r, g, b, a = src.getpixel((x, y))
+            if a == 0: continue
+            h = "#%02x%02x%02x" % (r, g, b)
+            if h in WHITE: out.putpixel((x, y), (236, 236, 240, a))
+            elif h in RED: out.putpixel((x, y), (255, 36, 40, a))
+            elif h == "#5a1218": out.putpixel((x, y), (110, 10, 18, a))
+            else:
+                lum = (r * 0.3 + g * 0.59 + b * 0.11) / 255
+                d = int(8 + lum * 62)
+                out.putpixel((x, y), (d, int(d * 0.9), int(d * 1.15), a))
+    # 눈은 크게 (빨간 점 둘레 한 칸씩 더, 데스웜 목구멍은 그대로)
+    if name != "sandworm":
+        eyes = [(x, y) for y in range(src.height) for x in range(src.width) if out.getpixel((x, y))[:3] == (255, 36, 40)]
+        for x, y in eyes:
+            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                q = (x + dx, y + dy)
+                if 0 <= q[0] < src.width and 0 <= q[1] < src.height and out.getpixel(q)[3] > 0: out.putpixel(q, (255, 36, 40, 255))
+    out.save(os.path.join(OUT, f"{name}_dark.png"), optimize=True)
+    print(name + "_dark", "ok")
+
+for n in ("sandworm", "scorpion", "roc"): darken(n)

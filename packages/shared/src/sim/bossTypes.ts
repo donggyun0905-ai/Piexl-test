@@ -39,6 +39,8 @@ export interface BossEnemyState {
   brood?: number[];
   globs?: { x: number; y: number; vx: number; vy: number; t: number }[];
   pools?: { x: number; y: number; t: number }[];
+  /** 검은 잔영이 되살린 검은 짐승 (필살기 없음 · 공격 주기가 더 빠름) */
+  dark?: boolean;
   /** 흰 보호막: 체력보다 먼저 깎임 (거대 전갈) */
   ward?: number;
   /** 검은 잔영: 지금 하는 말 (0 처음 · 1~3 짐승을 하나 잡을 때마다) · 말을 시작한 틱 */

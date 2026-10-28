@@ -6,6 +6,8 @@ import { C } from "./palette";
 const BEASTS = new Set(["umbra", "sandworm", "scorpion", "roc"]);
 /** 짐승 셋은 그림을 1.5배로 */
 const BIG = 1.5;
+/** 되살린 검은 짐승은 검은 그림 */
+const look = (e: EnemyState) => (e.dark ? `${e.kind}_dark` : e.kind);
 const hidden = (e: EnemyState) => e.phase === "walk" || e.phase === "windup";
 
 function tintOf(s: RunState, e: EnemyState): readonly [string, number] | undefined {
@@ -21,7 +23,7 @@ export function drawUmbraActor(ctx: CanvasRenderingContext2D, s: RunState, e: En
   const tint = tintOf(s, e);
   if (e.kind === "umbra") {
     // 마지막 말을 하고 나면 서서히 사라짐
-    const fade = e.step === UMBRA_BEASTS.length && e.phase === "walk" ? Math.max(0, e.timer / BOSS_UMBRA_RULES.VANISH) : 1;
+    const fade = e.count === 1 && e.step === UMBRA_BEASTS.length && e.phase === "walk" ? Math.max(0, e.timer / BOSS_UMBRA_RULES.VANISH) : 1;
     ctx.globalAlpha = (0.7 + 0.15 * Math.sin(s.tick / 20)) * fade;
     drawEnemySprite(ctx, "umbra", x, y + Math.sin(s.tick / 30) * 2, frame, false);
     ctx.globalAlpha = 1;
@@ -36,7 +38,7 @@ export function drawUmbraActor(ctx: CanvasRenderingContext2D, s: RunState, e: En
 /** 데스웜: 땅속이면 안 보임 · 솟는 1초 동안 아래부터 드러남 · 그 뒤 긴 몸이 공중으로 날아 다른 땅에 박힘 · 필살기는 머리만 */
 function drawWorm(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, x: number, y: number, frame: number, tint?: readonly [string, number]): void {
   if (hidden(e)) return;
-  if (e.ultAt !== undefined) return wormHead(ctx, x, y, frame, tint, 0);
+  if (e.ultAt !== undefined) return wormHead(ctx, look(e), x, y, frame, tint, 0);
   const t = e.aux ?? 0;
   const path = e.wormPath;
   if (t >= BOSS_WORM_RULES.RISE && path) return wormFlight(ctx, s, e, path, frame, tint);
@@ -51,17 +53,17 @@ function drawWorm(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, x: 
   ctx.beginPath();
   ctx.rect(x - size, base - size * rise, size * 2, size * rise);
   ctx.clip();
-  drawEnemySprite(ctx, "sandworm", x, y + size * (1 - rise), frame, e.dirX < 0, tint, BIG);
+  drawEnemySprite(ctx, look(e), x, y + size * (1 - rise), frame, e.dirX < 0, tint, BIG);
   ctx.restore();
 }
 
 /** 머리(이빨 입)만: 그림 아래쪽 몸통은 잘라 냄 · lift만큼 떠 있음 */
-function wormHead(ctx: CanvasRenderingContext2D, x: number, y: number, frame: number, tint: readonly [string, number] | undefined, lift: number): void {
+function wormHead(ctx: CanvasRenderingContext2D, name: string, x: number, y: number, frame: number, tint: readonly [string, number] | undefined, lift: number): void {
   ctx.save();
   ctx.beginPath();
   ctx.rect(x - 90, y - lift - 60, 180, 100);
   ctx.clip();
-  drawEnemySprite(ctx, "sandworm", x, y - lift + 27, frame, false, tint, BIG);
+  drawEnemySprite(ctx, name, x, y - lift + 27, frame, false, tint, BIG);
   ctx.restore();
 }
 
@@ -75,14 +77,14 @@ function wormFlight(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, p
   for (const [bx, by] of body) ctx.fillRect(Math.round(bx - 12), Math.round(by - 3), 24, 7);
   body.forEach(([bx, by], i) => {
     const h = height(bx, by);
-    ctx.fillStyle = i % 2 ? "#9a6a3a" : "#b8844c";
+    ctx.fillStyle = e.dark ? (i % 2 ? "#16141c" : "#24202c") : i % 2 ? "#9a6a3a" : "#b8844c";
     ctx.beginPath();
     ctx.arc(bx, by - h, 20, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = "#5a3818";
+    ctx.strokeStyle = e.dark ? "#000000" : "#5a3818";
     ctx.lineWidth = 1;
     ctx.stroke();
-    ctx.fillStyle = "#e0b880";
+    ctx.fillStyle = e.dark ? "#4a4458" : "#e0b880";
     ctx.fillRect(Math.round(bx - 8), Math.round(by - h - 14), 9, 4);
   });
   // 솟은 자리·박힌 자리 모래 구멍
@@ -92,7 +94,7 @@ function wormFlight(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, p
     ctx.ellipse(hx, hy + 9, 27, 10, 0, 0, Math.PI * 2);
     ctx.fill();
   }
-  if (u <= len) wormHead(ctx, e.x, e.y, frame, tint, height(e.x, e.y) + 4 + Math.sin(s.tick / 6));
+  if (u <= len) wormHead(ctx, look(e), e.x, e.y, frame, tint, height(e.x, e.y) + 4 + Math.sin(s.tick / 6));
 }
 
 /** 전갈: 모래 밑을 기면 붉은 표시가 따라다님 · 나오면 바라보는 쪽으로 몸을 돌림 */
@@ -125,7 +127,7 @@ function drawScorpion(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState,
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(Math.atan2(e.dirY, e.dirX));
-  drawEnemySprite(ctx, "scorpion", 0, 0, e.phase === "charge" ? frame : 0, false, tint, BIG);
+  drawEnemySprite(ctx, look(e), 0, 0, e.phase === "charge" ? frame : 0, false, tint, BIG);
   ctx.restore();
   // 흰 보호막이 남아 있으면 몸 둘레에 흰 막
   if ((e.ward ?? 0) > 0) {
@@ -143,11 +145,11 @@ function drawRoc(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, x: n
   if (e.phase === "blink") {
     const f = 1 - Math.max(0, e.timer) / BOSS_ROC_RULES.RISE;
     ctx.globalAlpha = 1 - f;
-    drawEnemySprite(ctx, "roc", x, y - f * 30, frame, e.dirX < 0, tint, (1 + f * 0.5) * BIG);
+    drawEnemySprite(ctx, look(e), x, y - f * 30, frame, e.dirX < 0, tint, (1 + f * 0.5) * BIG);
     ctx.globalAlpha = 1;
     return;
   }
-  drawEnemySprite(ctx, "roc", x, y, 1, e.dirX < 0, tint, BIG);
+  drawEnemySprite(ctx, look(e), x, y, 1, e.dirX < 0, tint, BIG);
   // 어지러운 별
   ctx.fillStyle = "#ffe066";
   for (let i = 0; i < 3; i++) {
@@ -200,7 +202,7 @@ export function drawUmbraBar(ctx: CanvasRenderingContext2D, s: RunState, boss: E
     const hw = Math.round((w * hp) / cap);
     ctx.fillStyle = "rgba(0,0,0,0.7)";
     ctx.fillRect(x - 2, by - 2, w + 4, bh + 4);
-    ctx.fillStyle = C.bossCore;
+    ctx.fillStyle = b?.dark ? "#9a3ad8" : C.bossCore;
     ctx.fillRect(x, by, hw, bh);
     ctx.fillStyle = "#f4f4f4";
     ctx.fillRect(x + hw, by, Math.round((w * ward) / cap), bh);

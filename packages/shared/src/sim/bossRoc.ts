@@ -15,6 +15,9 @@ const R = {
   /** 하늘에서 맴도는 틱 (절반 아래) */
   SKY: 160,
   SKY_HALF: 120,
+  /** 되살린 검은 매 (예전의 빠른 주기) */
+  SKY_DARK: 110,
+  SKY_DARK_HALF: 80,
   /** 내려찍기: 예고 (절반 아래) · 반경 · 피해 배율 */
   DIVE_WARN: 48,
   DIVE_WARN_HALF: 38,
@@ -50,7 +53,7 @@ function across(x: number, y: number, d: readonly [number, number]): [number, nu
 
 function toSky(e: EnemyState): void {
   e.phase = "walk";
-  e.timer = half(e) ? R.SKY_HALF : R.SKY;
+  e.timer = e.dark ? (half(e) ? R.SKY_DARK_HALF : R.SKY_DARK) : half(e) ? R.SKY_HALF : R.SKY;
   e.air = true;
   e.immune = true;
 }

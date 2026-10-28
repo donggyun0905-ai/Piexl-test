@@ -39,7 +39,7 @@ function beast(kind: "sandworm" | "scorpion" | "roc"): { run: RunState; e: Enemy
 }
 
 describe("검은 잔영", () => {
-  it("맞지 않고, 짐승 셋을 한꺼번에 부르고, 체력은 셋의 합 → 하나씩 쓰러질 때마다 한마디, 셋 다 잡으면 사라짐", () => {
+  it("맞지 않고, 짐승 셋을 한꺼번에 부르고, 체력은 셋의 합 → 셋 다 잡으면 검은 모습으로 되살리고, 그것도 다 잡으면 사라짐", () => {
     const run = umbraRun();
     const boss = find(run, "umbra")!;
     steps(run, 2);
@@ -53,12 +53,21 @@ describe("검은 잔영", () => {
     all[0]!.hp -= 500;
     steps(run, 1);
     expect(boss.hp).toBe(boss.maxHp - 500);
-    all.forEach((b, i) => {
+    all.forEach((b) => {
       b.ultDone = true;
       b.hp = 0;
       steps(run, 2);
-      expect(boss.say).toBe(i + 1);
     });
+    // 셋을 다 잡으면 검은 모습으로 되살림 (필살기 없음)
+    steps(run, 200);
+    const dark = ["sandworm", "scorpion", "roc"].map((k) => find(run, k)!);
+    expect(dark.every((b) => b?.dark && b.ultDone)).toBe(true);
+    expect(boss.hp).toBe(boss.maxHp);
+    dark.forEach((b) => {
+      b.hp = 0;
+      steps(run, 2);
+    });
+    expect(boss.say).toBe(3);
     steps(run, 220);
     expect(find(run, "umbra")).toBeUndefined();
     expect(run.enemies.filter((e) => e.kind !== "dummy")).toHaveLength(0);

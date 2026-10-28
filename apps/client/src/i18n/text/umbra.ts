@@ -8,4 +8,7 @@ export const UMBRA_TEXT = {
   umbraSay1: { ko: "호오...", en: "Hoh...", ja: "ほう…" },
   umbraSay2: { ko: "제법이군...", en: "Not bad...", ja: "なかなかやるな…" },
   umbraSay3: { ko: "지켜볼 가치가 있어..", en: "Worth watching..", ja: "見届ける価値がある.." },
+  umbraSay4: { ko: "……아직이다. 일어나라.", en: "...Not yet. Rise.", ja: "……まだだ。起きろ。" },
+  umbraSay5: { ko: "흥미롭군...", en: "Interesting...", ja: "面白い…" },
+  umbraSay6: { ko: "놀랍군...", en: "Remarkable...", ja: "驚いたな…" },
 };

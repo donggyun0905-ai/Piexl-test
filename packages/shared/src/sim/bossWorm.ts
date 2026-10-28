@@ -16,6 +16,9 @@ const R = {
   /** 땅속에서 다니는 틱 (절반 아래) · 땅속 빠르기 */
   UNDER: 150,
   UNDER_HALF: 100,
+  /** 되살린 검은 데스웜 (예전의 빠른 주기) */
+  UNDER_DARK: 130,
+  UNDER_DARK_HALF: 90,
   UNDER_SPEED: 1.1,
   /** 갑자기 뜨는 표시가 터지기까지 · 솟는 범위(몸 반경에 더함) · 솟는 데 */
   WARN: 34,
@@ -46,7 +49,7 @@ function rocks(s: RunState, e: EnemyState, x: number, y: number): void {
 
 function hide(e: EnemyState): void {
   e.phase = "walk";
-  e.timer = half(e) ? R.UNDER_HALF : R.UNDER;
+  e.timer = e.dark ? (half(e) ? R.UNDER_DARK_HALF : R.UNDER_DARK) : half(e) ? R.UNDER_HALF : R.UNDER;
   e.air = true;
   e.immune = true;
   delete e.wormPath;

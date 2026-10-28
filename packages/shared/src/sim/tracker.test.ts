@@ -48,10 +48,22 @@ describe("추적자", () => {
     const before = lost(s);
     for (let i = 0; i < 30; i++) stepSim(s, { ...EMPTY_INPUT, autoAim: true });
     expect(lost(s)).toBe(before);
+    // 일찍 끝내면 남은 시간만큼 대기가 줄어듦
+    const left = s.player.trAmbush!.t;
     stepSim(s, KEY(1));
     expect(s.player.trAmbush).toBeUndefined();
     expect(s.player.shieldPts).toBe(5);
-    expect(s.player.trCd?.[0]).toBeGreaterThan(T.cooldowns[0]! - 5);
+    expect(s.player.trCd?.[0]).toBe(T.cooldowns[0]! - left);
+  });
+
+  it("세 스킬은 서로 쓰는 도중에도 같이 쓸 수 있음", () => {
+    const s = tracker();
+    stepSim(s, KEY(1));
+    stepSim(s, KEY(2));
+    stepSim(s, KEY(3));
+    expect(s.player.trAmbush).toBeDefined();
+    expect(s.player.trCharge).toBeGreaterThan(0);
+    expect(s.player.trBurst).toBeDefined();
   });
 
   it("암습 저격은 5초가 지나면 끝남", () => {

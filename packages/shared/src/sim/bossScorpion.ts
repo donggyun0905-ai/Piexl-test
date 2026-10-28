@@ -16,6 +16,9 @@ const R = {
   /** 모래 밑에서 기는 틱 (절반 아래) */
   UNDER: 150,
   UNDER_HALF: 110,
+  /** 되살린 검은 전갈 */
+  UNDER_DARK: 120,
+  UNDER_DARK_HALF: 90,
   /** 표시가 사라지고 나오기까지 */
   HIDE: 28,
   /** 꼬리 찌르기: 예고 · 길이 · 굵기(반) · 찌른 뒤 서 있는 틱 */
@@ -45,7 +48,7 @@ function surface(e: EnemyState, toP: readonly [number, number]): void {
 
 function burrow(e: EnemyState): void {
   e.phase = "walk";
-  e.timer = half(e) ? R.UNDER_HALF : R.UNDER;
+  e.timer = e.dark ? (half(e) ? R.UNDER_DARK_HALF : R.UNDER_DARK) : half(e) ? R.UNDER_HALF : R.UNDER;
   e.air = true;
   e.immune = true;
 }

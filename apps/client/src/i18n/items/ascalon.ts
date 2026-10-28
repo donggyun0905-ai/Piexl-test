@@ -11,9 +11,9 @@ export const ASC_WEAPON_NAMES: Record<"trSniper" & WeaponId, Names> = {
 
 /** 추적자 저격총 설명 */
 export const SNIPER_DESC: Names = c(
-  "멀리 꿰뚫는 한 발 · 스킬 1 암습 저격(보호막 20, 5초 동안 직접 조준: 조준경 가운데 작은 원에 정확히 대야 맞음, 한 발 200%, 다시 누르면 끝) · 2 강력한 한방(벽을 세우고 모아 방을 꿰뚫음, 1000% + 최대 체력 20%) · 3 연발사격(10발 흩뿌림)",
-  "one long piercing shot · skill 1 Ambush Snipe (20 shield, aim by hand for 5s: only foes in the small center circle are hit, 200% each, press again to end) · 2 Power Shot (raise a wall, charge and pierce the whole room for 1000% + 20% max HP) · 3 Rapid Fire (10 scattered shots)",
-  "遠くまで貫く一発 · スキル1 暗襲狙撃（シールド20、5秒間手動で照準：スコープ中央の小さな円にぴったり合わせた敵だけ命中、1発200%、もう一度押すと終了）· 2 強力な一撃（壁を立てて溜め、部屋を貫く、1000%＋最大体力20%）· 3 連射（10発ばらまく）",
+  "멀리 꿰뚫는 한 발 · 스킬 1 암습 저격(보호막 20, 5초 동안 직접 조준: 조준경 가운데 작은 원에 정확히 대야 맞음, 한 발 200%, 다시 누르면 끝 · 일찍 끝내면 남은 시간만큼 대기 줄어듦) · 2 강력한 한방(벽을 세우고 모아 방을 꿰뚫음, 1000% + 최대 체력 20%) · 3 연발사격(10발 흩뿌림) · 세 스킬은 같이 쓸 수 있음",
+  "one long piercing shot · skill 1 Ambush Snipe (20 shield, aim by hand for 5s: only foes in the small center circle are hit, 200% each, press again to end · ending early shortens the cooldown by the time left) · 2 Power Shot (raise a wall, charge and pierce the whole room for 1000% + 20% max HP) · 3 Rapid Fire (10 scattered shots) · all three skills can be used together",
+  "遠くまで貫く一発 · スキル1 暗襲狙撃（シールド20、5秒間手動で照準：スコープ中央の小さな円にぴったり合わせた敵だけ命中、1発200%、もう一度押すと終了 · 早く終えると残り時間分待ち時間が短くなる）· 2 強力な一撃（壁を立てて溜め、部屋を貫く、1000%＋最大体力20%）· 3 連射（10発ばらまく）· 3つのスキルは同時に使える",
 );
 
 export const ASC_PASSIVE_NAMES: Record<TrackerPassive & PassiveId, Names> = {
