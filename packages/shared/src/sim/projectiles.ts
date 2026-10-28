@@ -1,4 +1,5 @@
 // 투사체
+import { ambushCut } from "./origin";
 import { PERKS } from "../perks";
 import { s2Hit } from "./s2Hits";
 import { renBlock } from "./ren";
@@ -79,7 +80,9 @@ export function updateProjectiles(s: RunState, frozen = false): void {
           else {
             if (pr.crit) markCrit(s, e);
             const before = e.hp;
-            damageEnemy(s, e, pr.damage, dir[0], dir[1], !summonShot(pr));
+            // 떠돌이 기습 패시브: 처음 맞힌 적에게만 체력 비례 피해 (sim/origin)
+            damageEnemy(s, e, pr.damage + ambushCut(p, e, pr.hpCut), dir[0], dir[1], !summonShot(pr));
+            pr.hpCut = undefined;
             // 독버섯 포자: 독 피해로 보이게 (화면 표시만)
             if (pr.spirit === "spore") markDot(s, e, "poison", before - e.hp);
           }

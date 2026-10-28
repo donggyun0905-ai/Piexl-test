@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.218",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "떠돌이 특징 '기습': 대시 직후 1.5초 안의 첫 공격이 늘 2배 피해 · 전용 패시브 '기습'은 이것을 키움: 2.5배 + 맞힌 적 최대 체력의 6% 피해 (보스는 그 25%만, 공격력의 4배까지)",
+        "파수꾼 특징 '반격': 맞은 뒤 1.5초 안의 첫 휘두르기가 한 바퀴 베기 + 1.5배 피해 · 전용 패시브 '반격의 방패'는 맞을 때 충격파에 더해 반격 베기를 2배·범위 +30%로 키움",
+      ],
+      en: [
+        "Drifter trait 'Ambush': the first attack within 1.5s after a dash always deals 2x damage · the Drifter's 'Ambush' passive now empowers it: 2.5x plus 6% of the target's max HP (only 25% of that on bosses, up to 4x your damage)",
+        "Warden trait 'Counter': the first swing within 1.5s after taking a hit becomes a full spin with 1.5x damage · the Warden's 'Counter Shield' passive keeps its shockwave and raises the counter spin to 2x with +30% reach",
+      ],
+      ja: [
+        "流れ者の特徴「奇襲」: ダッシュ後1.5秒以内の最初の攻撃が常に2倍ダメージ · 専用パッシブ「奇襲」はこれを強化: 2.5倍 + 当てた敵の最大体力の6%ダメージ (ボスはその25%、攻撃力の4倍まで)",
+        "番人の特徴「反撃」: 被弾後1.5秒以内の最初の攻撃が全周斬り + 1.5倍ダメージ · 専用パッシブ「反撃の盾」は被弾時の衝撃波に加え、反撃の斬りを2倍・範囲+30%に強化",
+      ],
+    },
+  },
+  {
     version: "0.48.217",
     date: "2026-10-28",
     items: {

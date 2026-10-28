@@ -2,6 +2,7 @@
 import { ABANDONED_KIDS_RULES } from "./abandonedKids";
 import { ABANDONED_SHOW_RULES } from "./abandonedShow";
 import { ARENA_RULES } from "./arena";
+import { ORIGIN_RULES } from "./origin";
 import { BASE_STATS_RULES } from "./baseStats";
 import { BEAST_RULES } from "./beast";
 import { BEAST_ULTS_RULES } from "./beastUlts";
@@ -85,6 +86,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   ABANDONED_KIDS_RULES,
   ABANDONED_SHOW_RULES,
   ARENA_RULES,
+  ORIGIN_RULES,
   BASE_STATS_RULES,
   BEAST_RULES,
   BEAST_ULTS_RULES,

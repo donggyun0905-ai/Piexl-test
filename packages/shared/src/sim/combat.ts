@@ -5,6 +5,7 @@ import { minerKill } from "./minerGround";
 import { petGold } from "./lobbyPet";
 import { BEDOUIN_PERKS } from "../itemsBedouin";
 import { PERKS } from "../perks";
+import { readyCounter } from "./origin";
 import { createRng, deriveSeed } from "../rng";
 import { ENEMIES } from "../content";
 import { SWARM } from "../swarmDefs";
@@ -166,8 +167,8 @@ export function damagePlayer(s: RunState, dmg: number): void {
     blastAt(s, p.x, p.y, 30, p.stats.damage, { push: 10 });
   }
   addEffect(s, { kind: "hit", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 6, maxTicks: 10 });
-  // 반격의 방패: 맞으면 주변 적을 밀어내며 공격력만큼 피해
-  if (hasPerk(p, "counterGuard")) blastAt(s, p.x, p.y, PERKS.counterGuard.radius, p.stats.damage * PERKS.counterGuard.damage, { push: PERKS.counterGuard.push });
+  // 파수꾼 반격 준비 · 반격의 방패 충격파 (sim/origin)
+  readyCounter(s);
 }
 
 /** 범위 안 적 모두에게 피해 (밖으로 밀림). exclude: 제외할 적. 맞힌 적 수를 돌려줌 */

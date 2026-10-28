@@ -134,13 +134,14 @@ describe("전용 공격 방식 아이템", () => {
     expect(t.projectiles[0]!.damage).toBeCloseTo(t.player.stats.damage);
   });
 
-  it("기습: 대시 직후 첫 공격만 2배 피해", () => {
+  it("기습 패시브: 대시 직후 첫 공격만 2.5배 + 맞힌 적 체력 비례 피해", () => {
     const s = drifter("ambush");
     stepSim(s, { ...EMPTY_INPUT, dash: true, moveX: 100 });
     run(s, 12);
     expect(s.player.ambushTicks).toBeGreaterThan(0);
     stepSim(s, FIRE);
-    expect(s.projectiles[0]!.damage).toBeCloseTo(s.player.stats.damage * 2);
+    expect(s.projectiles[0]!.damage).toBeCloseTo(s.player.stats.damage * 2.5);
+    expect(s.projectiles[0]!.hpCut).toBe(0.06);
     run(s, 25);
     stepSim(s, FIRE);
     expect(s.projectiles[s.projectiles.length - 1]!.damage).toBeCloseTo(s.player.stats.damage);

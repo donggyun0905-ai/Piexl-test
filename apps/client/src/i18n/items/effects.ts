@@ -2,10 +2,12 @@ import type { PassiveId } from "@pixel-rogue/shared";
 import { CLASS_EFFECTS } from "./classEffects";
 import type { Names } from "./names";
 import { DOCTOR_EFFECT_DESC } from "./doctor";
+import { ORIGIN_EFFECT_DESC } from "./origin";
 
 /** 공격 방식을 바꾸는 패시브 설명. {값 이름:모양}은 PERKS의 지금 수치로 채움 (관리자 페이지에서 바뀔 수 있음, items/index.ts) */
 export const EFFECT_DESC: Partial<Record<PassiveId, Names>> = {
   ...DOCTOR_EFFECT_DESC,
+  ...ORIGIN_EFFECT_DESC,
   secondWind: { ko: "쓰러질 때 한 번, 체력 {hp:pct}%로 되살아남 (쓰면 사라짐)", en: "Once, when you would die, revive with {hp:pct}% health (used up)", ja: "倒れる時に1度だけ体力{hp:pct}%で復活（使うと消える）" },
   regenCharm: { ko: "방을 정리할 때마다 최대 체력의 {heal:pct}% 회복", en: "Heal {heal:pct}% of max health each time you clear a room", ja: "部屋を片付けるたびに最大体力の{heal:pct}%回復" },
   goldPouch: { ko: "얻는 돈 +{gold:up}%", en: "+{gold:up}% gold gained", ja: "獲得ゴールド+{gold:up}%" },
@@ -30,13 +32,7 @@ export const EFFECT_DESC: Partial<Record<PassiveId, Names>> = {
     ja: "撃破後{ticks:sec}秒以内にまた撃破すると攻撃速度+{speed:pct}%ずつ（最大{stacks}回）",
   },
   steadyBreath: { ko: "0.5초 이상 가만히 서 있으면 공격력 +{damage:up}%", en: "Standing still for 0.5s+: damage +{damage:up}%", ja: "0.5秒以上じっとしていると攻撃力+{damage:up}%" },
-  ambush: { ko: "대시 직후 {ticks:sec}초 안의 첫 공격이 {damage}배 피해", en: "First attack within {ticks:sec}s after a dash deals {damage}x damage", ja: "ダッシュ後{ticks:sec}秒以内の最初の攻撃が{damage}倍ダメージ" },
   volleyCharm: { ko: "{every}번째 공격마다 발 수 +2 (부채꼴)", en: "Every {every:nth} attack fires 2 extra shots in a fan", ja: "{every}回目の攻撃ごとに弾数+2（扇状）" },
-  counterGuard: {
-    ko: "맞으면 주변 적을 밀어내며 공격력만큼 피해",
-    en: "When hit, push back nearby enemies and deal your damage to them",
-    ja: "被弾すると周りの敵を押し返し、攻撃力分のダメージ",
-  },
   spinCleave: { ko: "{every}번째 공격마다 한 바퀴 휘두름", en: "Every {every:nth} attack is a full spin", ja: "{every}回目の攻撃ごとに全周攻撃" },
   waveSlash: {
     ko: "휘두를 때마다 앞으로 검기를 날림 ({damage:pct}% 피해, {pierce}명 관통)",

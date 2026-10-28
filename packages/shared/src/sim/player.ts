@@ -1,5 +1,6 @@
 // 플레이어: 이동·조준·대시·공격
 import { PERKS } from "../perks";
+import { ambushCut, readyAmbush, takeOrigin, tickOrigin } from "./origin";
 import { charmed, lureMove } from "./bossesTwo";
 import { netMove } from "./bossPrimeval";
 import { bindInput } from "./bossBinds";
@@ -68,7 +69,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
   if (p.dashCooldown > 0) p.dashCooldown--;
   if (p.invulnTicks > 0) p.invulnTicks--;
   if (p.streakTicks > 0 && --p.streakTicks === 0) p.streak = 0;
-  if (p.ambushTicks > 0) p.ambushTicks--;
+  tickOrigin(p);
 
   // 이동 방향 (조이스틱 중간 값 허용, 최대 길이 1). 끌려가는 중이면 끄는 쪽, 그물에 걸리면 멈춤
   let [mx, my] = netMove(s, ...lureMove(s, input.moveX / 100, input.moveY / 100));
@@ -150,7 +151,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
     }
   }
   if (wasDashing && p.dashTicks === 0) {
-    if (hasPerk(p, "ambush")) p.ambushTicks = PERKS.ambush.ticks;
+    readyAmbush(p);
     // 대지 흔들기: 대시가 끝나면 주변에 충격파
     if (hasPerk(p, "earthshaker")) blastAt(s, p.x, p.y, PERKS.earthshaker.radius, p.stats.damage * PERKS.earthshaker.damage, { push: PERKS.earthshaker.push });
   }
@@ -197,18 +198,16 @@ function attack(s: RunState): void {
   const w = weaponOf(p);
   let dmg = p.stats.damage;
   if (p.stillTicks >= STILL_TICKS && hasPerk(p, "steadyBreath")) dmg *= PERKS.steadyBreath.damage;
-  if (p.ambushTicks > 0) {
-    dmg *= PERKS.ambush.damage;
-    p.ambushTicks = 0;
-  }
+  const og = takeOrigin(p, w.kind === "melee"); // 떠돌이 기습 · 파수꾼 반격 (sim/origin)
+  dmg *= og.mul;
   // 분노: 체력이 낮을수록 공격력 증가 · 마법사는 일반 공격이 약하고 공격마다 마법진에 한 획 (sim/rune)
   if (hasPerk(p, "rage")) dmg *= 1 + PERKS.rage.damage * (1 - Math.max(0, p.hp) / p.stats.maxHp);
   dmg *= runeStroke(s, dmg);
   p.attackCount++;
   if (w.kind === "melee") {
     // 회전 베기: 몇 번째 공격마다 한 바퀴
-    const arcCos = hasPerk(p, "spinCleave") && p.attackCount % PERKS.spinCleave.every === 0 ? -1 : (w.arcCos ?? 0.5);
-    const range = p.stats.range;
+    const arcCos = og.spin || (hasPerk(p, "spinCleave") && p.attackCount % PERKS.spinCleave.every === 0) ? -1 : (w.arcCos ?? 0.5);
+    const range = p.stats.range * og.reach;
     const executes = hasPerk(p, "executioner");
     for (const e of s.enemies) {
       const dx = e.x - p.x;
@@ -219,7 +218,7 @@ function attack(s: RunState): void {
       if (d > p.r + e.r && (dx * p.faceX + dy * p.faceY) / d < arcCos) continue;
       // 처형인의 표식: 체력 25% 이하 적에게 2배
       const mul = executes && e.hp <= e.maxHp * PERKS.executioner.below ? PERKS.executioner.damage : 1;
-      damageEnemy(s, e, dmg * mul, d === 0 ? p.faceX : dx / d, d === 0 ? p.faceY : dy / d);
+      damageEnemy(s, e, dmg * mul + ambushCut(p, e, og.cut), d === 0 ? p.faceX : dx / d, d === 0 ? p.faceY : dy / d);
     }
     // 검기: 휘두를 때마다 앞으로 관통하는 파동
     if (hasPerk(p, "waveSlash")) {
@@ -269,6 +268,7 @@ function attack(s: RunState): void {
         ...(hasPerk(p, "seekerFeather") ? { homing: true } : {}),
         ...(hasPerk(p, "returnFletch") || w.returns ? { back: true, span: ticks, hitIds: [] } : {}),
         ...(hasPerk(p, "splitHead") ? { split: true } : {}),
+        ...(og.cut ? { hpCut: og.cut } : {}),
         ...charmFields(w, dmg * mul),
       });
     };

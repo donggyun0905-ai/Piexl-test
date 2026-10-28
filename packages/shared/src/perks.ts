@@ -33,10 +33,12 @@ export const PERKS = {
   /** 처치할 때마다 공격 속도 +speed, 최대 stacks번, ticks 안에 또 처치해야 이어짐 */
   huntFrenzy: { speed: 0.1, stacks: 5, ticks: 180 },
   steadyBreath: { damage: 1.5 },
-  ambush: { damage: 2, ticks: 90 },
+  /** 떠돌이 기습(특징 2배)을 키움: × damage · 맞힌 적 최대 체력 × hpCut (보스는 × bossCut, 공격력의 cap배까지) */
+  ambush: { damage: 2.5, ticks: 90, hpCut: 0.06, bossCut: 0.25, cap: 4 },
   volleyCharm: { every: 4 },
   chaseSteps: { ticks: 15 },
-  counterGuard: { damage: 1, radius: 34, push: 8 },
+  /** 맞으면 충격파 + 파수꾼 반격(특징 1.5배 한 바퀴 베기)을 × swing · 범위 × reach로 키움 */
+  counterGuard: { damage: 1, radius: 34, push: 8, swing: 2, reach: 1.3 },
   spinCleave: { every: 3 },
   waveSlash: { damage: 0.5, pierce: 3 },
   /** 체력이 below 이하인 적에게 × damage */

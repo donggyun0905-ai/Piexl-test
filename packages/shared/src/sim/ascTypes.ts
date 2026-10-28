@@ -86,5 +86,14 @@ export interface SilkEnemyState {
 }
 
 /** 아스칼론 캐릭터 상태 모음 + 시즌 2 히든 (types에서 한 이름으로 씀) */
-export interface AscalonPlayerState extends AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState {}
+/** 처음 두 캐릭터 특징 (sim/origin): 파수꾼 반격이 준비된 남은 틱 */
+export interface OriginPlayerState {
+  counterTicks?: number;
+}
+/** 떠돌이 기습 패시브 탄: 처음 맞힌 적 최대 체력 × 이 값만큼 더 */
+export interface OriginShotState {
+  hpCut?: number;
+}
+
+export interface AscalonPlayerState extends OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState {}
 export interface AscalonEnemyState extends AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState {}

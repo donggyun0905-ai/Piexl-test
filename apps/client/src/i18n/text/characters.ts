@@ -4,15 +4,15 @@ import type { Lang } from "../index";
 export const CHARACTER_TEXT = {
   warden: { ko: "파수꾼", en: "Warden", ja: "番人" },
   wardenDesc: {
-    ko: "근접 · 큰 칼로 앞쪽을 넓게 벤다 · 체력이 높다",
-    en: "Melee · Wide greatblade sweeps · High health",
-    ja: "近接 · 大剣で前方を広く斬る · 体力が高い",
+    ko: "근접 · 큰 칼로 앞쪽을 넓게 벤다 · 반격: 맞은 뒤 1.5초 안의 첫 휘두르기가 한 바퀴 베기 + 1.5배 피해 · 체력이 높다",
+    en: "Melee · Wide greatblade sweeps · Counter: the first swing within 1.5s after taking a hit becomes a full spin with 1.5x damage · High health",
+    ja: "近接 · 大剣で前方を広く斬る · 反撃: 被弾後1.5秒以内の最初の攻撃が全周斬り+1.5倍ダメージ · 体力が高い",
   },
   drifter: { ko: "떠돌이", en: "Drifter", ja: "流れ者" },
   drifterDesc: {
-    ko: "원거리 · 쇠뇌로 멀리서 쏜다 · 발이 빠르다",
-    en: "Ranged · Crossbow from afar · Fast on foot",
-    ja: "遠距離 · クロスボウで遠くから撃つ · 足が速い",
+    ko: "원거리 · 쇠뇌로 멀리서 쏜다 · 기습: 대시 직후 1.5초 안의 첫 공격이 2배 피해 · 발이 빠르다",
+    en: "Ranged · Crossbow from afar · Ambush: the first attack within 1.5s after a dash deals 2x damage · Fast on foot",
+    ja: "遠距離 · クロスボウで遠くから撃つ · 奇襲: ダッシュ後1.5秒以内の最初の攻撃が2倍ダメージ · 足が速い",
   },
   mage: { ko: "마법사", en: "Mage", ja: "魔法使い" },
   mageDesc: {

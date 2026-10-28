@@ -1,4 +1,5 @@
 // 거너(총)용 상태 타입. 모두 선택 값 (예전 저장에는 없음)
+import type { OriginShotState } from "./ascTypes";
 import type { WeaponId } from "../content";
 
 export interface GunPlayerState {
@@ -34,7 +35,7 @@ export interface GunEnemyState {
   bleedTicks?: number;
 }
 
-export interface GunShotState {
+export interface GunShotState extends OriginShotState {
   /** 치명타 탄 (그리기용) · 맞으면 출혈 */
   crit?: boolean;
   bleed?: boolean;
