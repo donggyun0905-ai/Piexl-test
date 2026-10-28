@@ -1,6 +1,7 @@
-// 던전 지형 그리기 (sim/terrain): 진흙(갈색·거품) · 용암(일렁이는 금·빛) · 얕은 물(물결, 감전 예고는 노랗게 깜빡 · 감전 중엔 번개) · 가시 함정(예고 붉게 · 솟으면 가시)
+// 던전 지형 그리기 (sim/terrain, 독가스는 stalkers): 진흙(갈색·거품) · 용암(일렁이는 금·빛) · 얕은 물(물결, 감전 예고는 노랗게 깜빡 · 감전 중엔 번개) · 가시 함정(예고 붉게 · 솟으면 가시)
 import { spikeState, type RunState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
+import { drawGas } from "./stalkers";
 
 type Ctx = CanvasRenderingContext2D;
 type Rect = readonly [number, number, number, number];
@@ -123,10 +124,10 @@ function drawSpikes(ctx: Ctx, r: Rect, state: 0 | 1 | 2, tick: number): void {
 
 /** 바닥 위 · 적과 플레이어 아래 */
 export function drawTerrain(ctx: Ctx, s: RunState, snap: Snap): void {
+  drawGas(ctx, s, snap);
   const t = s.terrain;
   if (!t || t.room !== s.roomId) return;
   const tick = s.tick;
-  void snap;
   for (const r of t.mud) drawMud(ctx, r, tick);
   for (const r of t.lava) drawLava(ctx, r, tick);
   const shocking = (t.shock ?? 0) > 0;

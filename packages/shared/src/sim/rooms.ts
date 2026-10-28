@@ -16,6 +16,7 @@ import { PW_ARENAS } from "../paewangMaps";
 import { depth, heroBosses, heroNext, heroPair, lastFloorOf } from "./hero";
 import { SWARM } from "./minions";
 import { BAT_FLOCK, minionKinds } from "./critters";
+import { STALKER_MAX, stalkerKinds } from "./stalkers";
 import { bodyFits, shapeGrid } from "./layout";
 import { eachSeat, partyExtraEnemies, partyHpMul, placeParty } from "./party";
 import { tabooDown, tabooN, tabooSum, tabooUp } from "./taboo";
@@ -173,7 +174,7 @@ export function spawnEnemies(s: RunState, roomId: number, elite: boolean): Enemy
   // 금기: 무리 지어 (전투방 +1) · 정예 (강한 적 방 +2)
   const count = base + partyExtraEnemies(s, base) + tabooSum(s, "horde") + (elite ? tabooSum(s, "eliteMore") : 0);
   // 층마다 나오는 졸개 (타워 디펜스 적 8종 포함, critters.minionKinds)
-  const kinds = minionKinds(d);
+  const kinds = [...minionKinds(d), ...stalkerKinds(d)];
   const hpMul = (1 + 0.15 * (d - 1)) * (elite ? 1.5 : 1) * partyHpMul(s) * tabooUp(s, "fleshHp");
   const out: EnemyState[] = [];
   const g = shapeGrid(s.map.rooms[roomId]!.shape);
@@ -181,6 +182,8 @@ export function spawnEnemies(s: RunState, roomId: number, elite: boolean): Enemy
     let kind = rng.pick(kinds);
     // 바위 골렘은 한 방에 한 마리만
     if (kind === "golem" && out.some((e) => e.kind === "golem")) kind = "crawler";
+    // 새 몬스터도 한 방에 정해진 수까지만
+    if (out.filter((e) => e.kind === kind).length >= (STALKER_MAX[kind] ?? 99)) kind = "crawler";
     const r = ENEMIES[kind].radius;
     let x = 0;
     let y = 0;

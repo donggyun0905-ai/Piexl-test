@@ -9,6 +9,7 @@ import { updateBlade } from "./bossBlades";
 import { updateGhost } from "./bossPrimeval";
 import { addHazard, addShape } from "./hazards";
 import { updateCritter } from "./critters";
+import { updateStalker } from "./stalkers";
 import { guardSpot, updateGnat, updateGuardian } from "./minions";
 import { domainSlow } from "./talisman";
 import type { EnemyState, RunState } from "./types";
@@ -142,7 +143,7 @@ export function updateEnemies(s: RunState): void {
           e.timer = 120;
         }
       }
-    } else if (!updateCritter(s, e, toP, go)) {
+    } else if (!updateCritter(s, e, toP, go) && !updateStalker(s, e, toP, go)) {
       updateBoss(s, e, toP, go, spawned);
     }
     domainSlow(s, e, x0, y0);

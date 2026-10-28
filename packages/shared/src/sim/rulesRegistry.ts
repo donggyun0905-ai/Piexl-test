@@ -40,6 +40,11 @@ import { RUNE_RULES } from "./rune";
 import { MORPH_XP_RULES } from "./morphXp";
 import { COMBAT_RULES } from "./combat";
 import { CRITTERS_RULES } from "./critters";
+import { STALKERS_RULES } from "./stalkers";
+import { BOSS_TOAD_RULES } from "./bossToad";
+import { BOSS_SALAMANDER_RULES } from "./bossSalamander";
+import { BOSS_JELLY_RULES } from "./bossJelly";
+import { BOSS_CAPTAIN_RULES } from "./bossCaptain";
 import { DUCKLINGS_RULES } from "./ducklings";
 import { ENEMIES_RULES } from "./enemies";
 import { GUN_RULES } from "./gun";
@@ -118,6 +123,11 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   MORPH_XP_RULES,
   COMBAT_RULES,
   CRITTERS_RULES,
+  STALKERS_RULES,
+  BOSS_TOAD_RULES,
+  BOSS_SALAMANDER_RULES,
+  BOSS_JELLY_RULES,
+  BOSS_CAPTAIN_RULES,
   DUCKLINGS_RULES,
   ENEMIES_RULES,
   GUN_RULES,

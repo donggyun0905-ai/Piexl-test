@@ -1,7 +1,9 @@
 // 적 정의 (졸개·보스·허수아비 수치, 층마다 보스). content에서 다시 내보냄
 import { createRng, deriveSeed } from "./rng";
 
-export type MinionKind = "crawler" | "spitter" | "charger" | "mortar" | "gnat" | "guardian" | "paladin" | "tower" | "ruinblade" | "chaosblade" | "soul" | "ghost" | TdMinionKind;
+export type MinionKind = "crawler" | "spitter" | "charger" | "mortar" | "gnat" | "guardian" | "paladin" | "tower" | "ruinblade" | "chaosblade" | "soul" | "ghost" | StalkerKind | TdMinionKind;
+/** 시즌 2 새 몬스터 (sim/stalkers): 도플갱어 · 베놈 · 땅 물고기 · 그림자 */
+export type StalkerKind = "doppel" | "venom" | "landfish" | "lurker";
 /** 타워 디펜스에만 나오는 적 (sim/tdWaves) */
 export type TdMinionKind = "slime" | "runner" | "bat" | "beetle" | "golem" | "shaman" | "eggsac" | "wisp";
 /** 보스: 1·2층(1단계) 강철 거구·검은 기사·얍삽한 활잡이·두꺼비 왕·불도롱뇽 · 3·4층(2단계) 무리 여왕·세이렌·켄타우로스·하드플랜트·번개 해파리 · 5·6층(3단계) 공허의 눈·데스·검신·천사장·유령선 선장 */
@@ -73,6 +75,15 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   eggsac: { kind: "eggsac", hp: 64, radius: 6, speed: 0.32, contactDamage: 8, gold: 2 },
   /** 도깨비불: 가끔 앞으로 순간이동 */
   wisp: { kind: "wisp", hp: 34, radius: 4, speed: 0.48, contactDamage: 9, gold: 2 },
+  // 시즌 2 새 몬스터 (sim/stalkers)
+  /** 도플갱어: 나와 같은 모습. 내 무기가 멀리 쏘면 거리를 두고 쏘고, 아니면 다가와 벰 */
+  doppel: { kind: "doppel", hp: 70, radius: 6, speed: 0.6, contactDamage: 8, gold: 3 },
+  /** 베놈: 독잠자리. 이리저리 날며 독가스를 퍼뜨림 (부식독: 회복·재생 40% 감소) */
+  venom: { kind: "venom", hp: 34, radius: 5, speed: 0.6, contactDamage: 7, gold: 2 },
+  /** 땅 물고기: 땅속에서 따라오다 솟구쳐 다른 자리로 뛰어듦 (뛰어오른 동안만 맞음) */
+  landfish: { kind: "landfish", hp: 52, radius: 6, speed: 0.75, contactDamage: 9, gold: 2 },
+  /** 그림자: 희미하게 비치며 등 뒤로 돌아가 큰 한 방 */
+  lurker: { kind: "lurker", hp: 30, radius: 5, speed: 0.7, contactDamage: 5, gold: 3 },
   /** 보스: 다가오다 돌진, 멈출 때 사방으로 탄 */
   hulk: { kind: "hulk", hp: 420, radius: 11, speed: 0.45, contactDamage: 16, gold: 20, boss: true },
   /** 보스: 거리를 두고 기는 적을 부르고 부채꼴로 탄 */

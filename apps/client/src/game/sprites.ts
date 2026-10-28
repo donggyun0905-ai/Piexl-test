@@ -20,7 +20,7 @@ export const ENEMY_SPRITES: readonly string[] = [
   "dummy", "crawler", "spitter", "mortar", "charger", "gnat", "guardian", "paladin", "tower", "soul", "ghost",
   "hulk", "brood", "seer", "knight", "archer", "siren", "centaur", "plant", "reaper", "swordgod", "archangel", "toad", "salamander", "jelly", "captain",
   "godeater", "ruinblade", "chaosblade", "plight", "pdark", "dragon", "umbra", "sandworm", "scorpion", "roc", "sandworm_dark", "scorpion_dark", "roc_dark", "demigod", "sage", "sage_cloud",
-  "slime", "runner", "bat", "beetle", "golem", "shaman", "eggsac", "wisp",
+  "slime", "runner", "bat", "beetle", "golem", "shaman", "eggsac", "wisp", "doppel", "venom", "landfish", "lurker",
   // 서큐버스(무리 여왕)가 부른 졸개
   "incubus",
 ];

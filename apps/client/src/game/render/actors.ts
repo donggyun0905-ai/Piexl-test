@@ -6,6 +6,7 @@ import { drawAimMark, drawHitRing } from "../aimMark";
 import { drawUmbraActor } from "./umbra";
 import { drawDemigodActor } from "./demigod";
 import { drawSageActor } from "./sage";
+import { drawStalker } from "./stalkers";
 import { drawCharacter, drawEnemySprite, drawSprite, isCasting, sheetFor, type CharacterPose } from "../sprites";
 import { C, CHARM_INK, lerp, type Snap } from "./palette";
 import { drawGuardianWarn, drawMinionDetail } from "./minions";
@@ -80,7 +81,7 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       continue;
     }
     // 검은 잔영·거대한 짐승 셋 (땅속·하늘·솟기)
-    if (drawUmbraActor(ctx, s, e, x, y) || drawDemigodActor(ctx, s, e, x, y) || drawSageActor(ctx, s, e, x, y)) continue;
+    if (drawUmbraActor(ctx, s, e, x, y) || drawDemigodActor(ctx, s, e, x, y) || drawSageActor(ctx, s, e, x, y) || drawStalker(ctx, s, e, x, y)) continue;
     // 하늘로 날아오른 보스: 그림자만
     if (e.air) {
       ctx.fillStyle = "rgba(0, 0, 0, 0.45)";

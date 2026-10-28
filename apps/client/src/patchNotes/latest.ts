@@ -4,6 +4,36 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.174",
+    date: "2026-10-28",
+    items: {
+      ko: [
+        "새 몬스터 넷 (2층부터): 베놈 · 땅 물고기 / (3층부터): 도플갱어 · 그림자",
+        "도플갱어: 내 캐릭터와 똑같은 모습(어둡고 붉은 눈). 내 무기가 멀리 쏘는 것이면 거리를 두고 쏘고, 아니면 다가와 벰 (능력치·무기는 따라 하지 못함)",
+        "베놈: 독잠자리. 이리저리 날며 방 곳곳에 독가스를 퍼뜨림 · 가스 안에 있으면 조금씩 독 피해와 새 상태이상 '부식독'(3초 동안 모든 회복·재생 40% 감소)",
+        "땅 물고기: 땅속에서 나를 따라오는 원 → 멈춰 빠르게 깜빡이면 솟구침 → 다른 자리로 뛰어드는데 그 자리도 표시되고 터짐. 뛰어오른 동안만 맞음",
+        "그림자: 희미하게 비쳐 잘 보이지 않음. 내 등 뒤로 돌아가 큰 한 방 (칠 때만 짙어짐)",
+        "연습장에서 새 몬스터와 시즌 2 새 보스 넷을 부를 수 있음",
+      ],
+      en: [
+        "4 new monsters (from floor 2): Venom · Land Fish / (from floor 3): Doppelganger · Shadow",
+        "Doppelganger: looks exactly like your character (dark, red eyes). Shoots from afar if your weapon is ranged, otherwise closes in to slash (can't copy your stats or weapon)",
+        "Venom: a poison dragonfly that spreads poison gas around the room · standing in it deals light poison damage and inflicts the new status 'Corrosion' (all healing and regen −40% for 3s)",
+        "Land Fish: a circle follows you underground → when it stops and blinks fast it bursts out → leaps into another marked spot that also explodes. Only hittable mid-leap",
+        "Shadow: faint and hard to see. Slips behind you for a heavy blow (only darkens as it strikes)",
+        "The new monsters and the 4 new Season 2 bosses can be summoned in Practice",
+      ],
+      ja: [
+        "新モンスター4体（2階から）: ヴェノム・土ザカナ／（3階から）: ドッペルゲンガー・影",
+        "ドッペルゲンガー: 自分のキャラとそっくりの姿（暗く赤い目）。武器が遠距離なら距離を取って撃ち、そうでなければ近づいて斬る（能力値・武器は真似できない）",
+        "ヴェノム: 毒トンボ。飛び回って部屋中に毒ガスをまく・ガスの中にいると少しずつ毒ダメージと新しい状態異常「腐食毒」（3秒間すべての回復・再生40%減少）",
+        "土ザカナ: 地中で追ってくる円 → 止まって速く点滅すると飛び出す → 別の場所に飛び込み、そこも表示されて爆発。跳んでいる間だけ攻撃が当たる",
+        "影: かすかに透けて見えにくい。背後に回り込んで重い一撃（攻撃の瞬間だけ濃くなる）",
+        "練習場で新モンスターとシーズン2の新ボス4体を呼べる",
+      ],
+    },
+  },
+  {
     version: "0.48.173",
     date: "2026-10-28",
     items: {

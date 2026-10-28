@@ -12,6 +12,8 @@ export interface TerrainState {
   /** 물 감전: 남은 틱 (번개 해파리) · 감전 예고가 끝나는 틱 */
   shock?: number;
   shockAt?: number;
+  /** 베놈 독가스 (sim/stalkers): 가운데 · 반경 · 사라지는 틱 */
+  gas?: { x: number; y: number; r: number; until: number }[];
 }
 
 export interface TerrainRunState {
