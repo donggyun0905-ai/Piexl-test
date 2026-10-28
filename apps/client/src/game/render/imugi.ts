@@ -3,6 +3,7 @@ import { ROOM_MAX_X, ROOM_MIN_X, type EffectState, type ProjectileState, type Ru
 import { shapeSprite } from "../sprites";
 import { drawImugiBody } from "./imugiAura";
 import type { Snap } from "./palette";
+import { additive, beam, glow as softGlow, shock, sparks } from "./pwFxBits";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -63,6 +64,11 @@ export function drawImugi(ctx: Ctx, s: RunState, alpha: number, snap: Snap): voi
 /** 은빛 파편 */
 export function drawImugiShot(ctx: Ctx, pr: ProjectileState, x: number, y: number): boolean {
   if (pr.spirit !== "shard") return false;
+  // 은빛 비늘 파편: 빛 꼬리 + 반짝임
+  additive(ctx, () => {
+    beam(ctx, x - pr.vx * 2.5, y - pr.vy * 2.5, x, y, 1.6, pr.tint ?? "#c8e0ff", 0.55);
+    softGlow(ctx, x, y, 4, pr.tint ?? "#e8eef8", 0.7);
+  });
   ctx.fillStyle = pr.tint ?? "#e8eef8";
   ctx.fillRect(x - 1, y - 1, 3, 2);
   ctx.fillStyle = "#fff";
@@ -165,33 +171,38 @@ export function drawImugiFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   if (fx.kind === "imBolt") {
     drawBolt(ctx, x, y, t, c, fx.dirX === 1);
   } else if (fx.kind === "imBoom" || fx.kind === "imLight" || fx.kind === "imSky") {
+    // 용의 기운 폭발: 빛 덩이 + 충격파 + 불똥 · 빛은 빛살 여덟 · 천룡은 하늘 조각이 빛을 끌며 떨어짐
     const r = fx.size * (1.1 - t * 0.5);
-    ctx.fillStyle = c;
-    ctx.globalAlpha = t * 0.45;
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = t;
-    ctx.strokeStyle = fx.kind === "imLight" ? "#fff" : c;
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    if (fx.kind === "imLight") for (let i = 0; i < 8; i++) {
-      const a = (i / 8) * Math.PI * 2;
-      ctx.beginPath();
-      ctx.moveTo(x + Math.cos(a) * r * 0.4, y + Math.sin(a) * r * 0.4);
-      ctx.lineTo(x + Math.cos(a) * r * 1.2, y + Math.sin(a) * r * 1.2);
-      ctx.stroke();
-    }
-    // 천룡: 위에서 떨어지는 하늘 조각
-    if (fx.kind === "imSky") {
-      ctx.fillStyle = "#8aa8ff";
-      const fall = (1 - t) * 30;
-      for (let i = -2; i <= 2; i++) ctx.fillRect(x + i * 8 - 3, y - 30 + fall, 6, 4);
-    }
+    ctx.globalAlpha = 1;
+    additive(ctx, () => {
+      softGlow(ctx, x, y, r, c, t * 0.8, fx.kind === "imLight" ? 1.5 : 0.6);
+      shock(ctx, x, y, r, fx.kind === "imLight" ? "#ffffff" : c, t, 5);
+      sparks(ctx, x, y, 10, r * 1.3, 1 - t, c, fx.x + fx.y);
+      if (fx.kind === "imLight") {
+        ctx.strokeStyle = `rgba(255,255,255,${t})`;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        for (let i = 0; i < 8; i++) {
+          const a = (i / 8) * Math.PI * 2 + (1 - t);
+          ctx.moveTo(x + Math.cos(a) * r * 0.3, y + Math.sin(a) * r * 0.3);
+          ctx.lineTo(x + Math.cos(a) * r * 1.3, y + Math.sin(a) * r * 1.3);
+        }
+        ctx.stroke();
+      }
+      if (fx.kind === "imSky") {
+        const fall = (1 - t) * 30;
+        for (let i = -2; i <= 2; i++) {
+          beam(ctx, x + i * 8, y - 52 + fall, x + i * 8, y - 30 + fall, 3, "#8aa8ff", t);
+          softGlow(ctx, x + i * 8, y - 30 + fall, 5, "#c8d8ff", t, 1);
+        }
+      }
+    });
   } else if (fx.kind === "imBite") {
     // 어둠 늑대 이빨: 위아래로 다무는 송곳니 (깨문 차례가 뒤일수록 큼)
     const w = fx.size + fx.dirX * 2;
     const close = Math.min(1, (1 - t) * 3);
+    // 어둠 기운 + 다무는 순간 번쩍
+    additive(ctx, () => softGlow(ctx, x, y, w, c, t * 0.5, close >= 1 ? 1 : 0));
     ctx.fillStyle = c;
     for (let i = -2; i <= 2; i++) {
       const fxp = x + i * (w / 3);

@@ -1,6 +1,7 @@
 // 베두인 그리기: 던진 차크람(날아감·바닥에서 반짝·돌아옴) · 환영 차크람 · 줍기 모래 회전 베기 · 모래 회오리 · 대시 모래바람 · 모아 둔 대시 칸
 import { DASH_TICKS, PERKS, dashMax, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
+import { additive, crescent, glow, shock } from "./pwFxBits";
 
 type Ctx = CanvasRenderingContext2D;
 const SAND = ["#f2d08a", "#e8b860", "#c8904a", "#fff0c8"];
@@ -174,7 +175,12 @@ export function drawBedouin(ctx: Ctx, s: RunState, alpha: number, snap: Snap): v
 /** 환영 차크람 (사막 환영): 푸르스름한 반투명 고리 */
 export function drawBedouinShot(ctx: Ctx, pr: ProjectileState, x: number, y: number, tick: number): boolean {
   if (pr.spirit !== "chakram") return false;
-  ring(ctx, x, y, pr.r + 1, -tick * 0.6, "#c8e0ff", 0.6);
+  // 환영 차크람: 도는 잔상 고리 + 푸른 빛
+  additive(ctx, () => {
+    glow(ctx, x, y, pr.r * 3, "#8ab8ff", 0.5);
+    shock(ctx, x, y, pr.r * 1.8, "#c8e0ff", 0.5, 3);
+  });
+  ring(ctx, x, y, pr.r + 1, -tick * 0.6, "#c8e0ff", 0.7);
   return true;
 }
 
@@ -185,6 +191,11 @@ export function drawBedouinFx(ctx: Ctx, fx: EffectState, tick: number, snap: Sna
   const x = snap(fx.x);
   const y = snap(fx.y);
   const r = fx.size * (1.05 - t * 0.35);
+  // 금빛 모래 빛 + 빛나는 세 갈래 칼날 궤적
+  additive(ctx, () => {
+    glow(ctx, x, y, r, "#f2c14e", t * 0.45);
+    for (let k = 0; k < 3; k++) crescent(ctx, x, y, r * (1 - k * 0.12), (1 - t) * 9 + k * 2.1, 0.9, 4 * t, k ? "#e8b860" : "#fff0c8", t);
+  });
   for (let k = 0; k < 4; k++) {
     ctx.globalAlpha = t * (0.55 - k * 0.1);
     ctx.strokeStyle = SAND[k]!;

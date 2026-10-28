@@ -2,6 +2,7 @@
 import { hudScale } from "./imugiAura";
 import { APOSTLE, SIN_COLORS, soulAttack, type EffectState, type RunState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
+import { additive, beam, glow, shock, sparks } from "./pwFxBits";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -85,80 +86,107 @@ export function drawApostleFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const x = snap(fx.x);
   const y = snap(fx.y);
   const c = fx.tint ?? "#c8c0d8";
+  const seed = fx.x + fx.y * 3;
   if (fx.kind === "apCross") {
-    // 하늘에서 떨어지는 큰 뒤집힌 십자가 (떨어지는 동안 바닥에 그림자)
+    // 하늘에서 떨어지는 큰 뒤집힌 십자가: 붉은 기운을 두르고 떨어져 땅에 박히면 검붉은 충격파
     const fallT = Math.max(0, fx.ticks - 12) / APOSTLE.drop;
     const h = 14 + fx.size;
+    const cy = y - fallT * 90;
     ctx.globalAlpha = 0.35 * (1 - fallT);
     ctx.fillStyle = "#000";
     ctx.beginPath();
     ctx.ellipse(x, y + 2, fx.size * (1 - fallT * 0.6), fx.size * 0.4, 0, 0, Math.PI * 2);
     ctx.fill();
+    ctx.globalAlpha = 1;
+    additive(ctx, () => {
+      glow(ctx, x, cy - h / 2, h * 0.9, c, fx.ticks > 12 ? 0.6 : fx.ticks / 20);
+      if (fallT <= 0.05 && fx.ticks <= 12) {
+        const k = fx.ticks / 12;
+        shock(ctx, x, y, fx.size * (1.6 - k), "#ff3a4a", k, 6);
+        sparks(ctx, x, y, 10, fx.size * 1.5, 1 - k, c, seed);
+      }
+    });
     ctx.globalAlpha = fx.ticks > 12 ? 1 : fx.ticks / 12;
-    cross(ctx, x, y - fallT * 90, h, c);
+    cross(ctx, x, cy, h, c);
   } else if (fx.kind === "apAura") {
-    // 검은 오라가 발밑에서 올라옴
+    // 발밑에서 솟는 검은 불길 + 붉은 테두리 빛
     const up = 1 - t;
+    additive(ctx, () => {
+      ctx.save();
+      ctx.translate(x, y + fx.size * 0.5);
+      ctx.scale(1, 0.35);
+      shock(ctx, 0, 0, fx.size, "#d8283a", 0.8, 6);
+      ctx.restore();
+    });
     ctx.globalAlpha = 0.85;
     ctx.fillStyle = "#120c16";
     for (let i = -3; i <= 3; i++) {
-      const h = (8 + (i % 2 ? 4 : 0)) * up + 2;
-      ctx.fillRect(x + i * (fx.size / 3.5) - 1, y + fx.size * 0.5 - h, 3, h);
+      const h = (9 + (i % 2 ? 5 : 0)) * up + 2;
+      const bx = x + i * (fx.size / 3.5);
+      ctx.beginPath();
+      ctx.moveTo(bx - 2, y + fx.size * 0.5);
+      ctx.lineTo(bx, y + fx.size * 0.5 - h);
+      ctx.lineTo(bx + 2, y + fx.size * 0.5);
+      ctx.fill();
     }
-    ctx.strokeStyle = "#a8202e";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.ellipse(x, y + fx.size * 0.5, fx.size, fx.size * 0.35, 0, 0, Math.PI * 2);
-    ctx.stroke();
   } else if (fx.kind === "apBeam") {
-    ctx.globalAlpha = t;
-    ctx.strokeStyle = c;
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y));
-    ctx.stroke();
-    ctx.strokeStyle = "#fff";
-    ctx.lineWidth = 1;
-    ctx.stroke();
+    // 색욕 광선: 분홍빛 굵은 빛줄기 + 끝 빛
+    const tx = snap(fx.toX ?? fx.x);
+    const ty = snap(fx.toY ?? fx.y);
+    additive(ctx, () => {
+      beam(ctx, x, y, tx, ty, 3 + 2 * t, c, t);
+      glow(ctx, tx, ty, 8, c, t, 1.4);
+    });
   } else if (fx.kind === "apCoin") {
-    ctx.globalAlpha = t;
+    // 탐욕: 반짝이며 튀어 오르는 금화
     for (let i = 0; i < 3; i++) {
-      ctx.fillStyle = i === 1 ? "#fff0a0" : "#ffd040";
-      ctx.fillRect(x - 5 + i * 4, y - 14 + (1 - t) * 14 - i * 3, 3, 3);
+      const cx = x - 5 + i * 5;
+      const cy = y - 14 + (1 - t) * 14 - i * 3;
+      additive(ctx, () => glow(ctx, cx, cy, 4, "#ffd040", t));
+      ctx.globalAlpha = t;
+      ctx.fillStyle = "#b8860b";
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, 2, 2 * Math.abs(Math.cos(fx.ticks / 3 + i)) + 0.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#fff0a0";
+      ctx.fillRect(cx - 0.5, cy - 1, 1, 1);
     }
   } else if (fx.kind === "apGrav") {
-    ctx.globalAlpha = t;
-    ctx.strokeStyle = c;
-    ctx.lineWidth = 2;
-    for (let k = 0; k < 3; k++) {
-      ctx.beginPath();
-      ctx.ellipse(x, y, fx.size * (t + k * 0.3) * 0.9, fx.size * (t + k * 0.3) * 0.6, 0, 0, Math.PI * 2);
-      ctx.stroke();
-    }
+    // 교만 중력: 조여 드는 고리 셋 + 가운데 어둠
+    additive(ctx, () => {
+      for (let k = 0; k < 3; k++) shock(ctx, x, y, Math.max(2, fx.size * (t + k * 0.3) * 0.9), c, t, 3);
+    });
+    ctx.globalAlpha = 0.4 * t;
+    ctx.fillStyle = "#0c0814";
+    ctx.beginPath();
+    ctx.arc(x, y, fx.size * 0.35, 0, Math.PI * 2);
+    ctx.fill();
   } else if (fx.kind === "apSleep") {
+    // 나태 잠: 떠오르는 Z + 보랏빛 졸음 안개
+    additive(ctx, () => glow(ctx, x, y - 4, 8, c, t * 0.6));
     ctx.globalAlpha = t;
     ctx.fillStyle = c;
     ctx.font = "bold 6px monospace";
     ctx.fillText("Z", x, y - (1 - t) * 8);
+    ctx.font = "bold 4px monospace";
     ctx.fillText("z", x + 4, y - 4 - (1 - t) * 10);
   } else if (fx.kind === "apSoul") {
-    ctx.globalAlpha = t;
-    ctx.strokeStyle = "#b8f0ff";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(x, y, fx.size * (1.6 - t), 0, Math.PI * 2);
-    ctx.stroke();
+    // 영혼 먹기: 푸른 영혼 빛이 빨려 들며 고리
+    additive(ctx, () => {
+      shock(ctx, x, y, fx.size * (1.6 - t), "#b8f0ff", t, 3);
+      glow(ctx, x, y, fx.size * 0.8 * t, "#b8f0ff", t, 1);
+    });
   } else if (fx.kind === "apFlame") {
-    // 하늘색 불꽃이 앞쪽으로 확 퍼짐
-    for (let i = 0; i < 9; i++) {
-      const k = (i * 37) % 9;
-      ctx.globalAlpha = t * 0.9;
-      ctx.fillStyle = i % 3 === 0 ? "#e0fbff" : i % 2 ? "#2a8aff" : "#6ad8ff";
-      const d = fx.size * (0.3 + (k / 9) * 0.9) * (1.2 - t * 0.4);
-      const a = Math.atan2(fx.dirY, fx.dirX) + (i - 4) * 0.18;
-      ctx.fillRect(x + Math.cos(a) * d - 1, y + Math.sin(a) * d - 3 * (1 - t), 3, 4);
-    }
+    // 역천 하늘색 불꽃: 앞쪽으로 확 퍼지는 푸른 불길
+    const a0 = Math.atan2(fx.dirY, fx.dirX);
+    additive(ctx, () => {
+      for (let i = 0; i < 9; i++) {
+        const k = (i * 37) % 9;
+        const d = fx.size * (0.3 + (k / 9) * 0.9) * (1.2 - t * 0.4);
+        const a = a0 + (i - 4) * 0.18;
+        glow(ctx, x + Math.cos(a) * d, y + Math.sin(a) * d - 3 * (1 - t), 5 + k * 0.4, i % 3 === 0 ? "#e0fbff" : i % 2 ? "#2a8aff" : "#6ad8ff", t * 0.9);
+      }
+    });
   }
   ctx.globalAlpha = 1;
   return true;

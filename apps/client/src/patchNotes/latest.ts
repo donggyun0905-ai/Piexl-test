@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.208",
+    date: "2026-10-28",
+    items: {
+      ko: ["효과 새로 그리기 2: 베두인 환영 차크람 잔상·모래 회전 베기 빛 칼날 · 장수 청룡 검기 두 겹 초승달·창 그림자·빛 창날 찌르기·필살기 충격파 · 이무기 비늘 파편·용 기운 폭발·하늘 조각·늑대 이빨 · 악의 사도 붉은 기운 십자가·검은 불길·색욕 광선·금화·중력·잠·영혼·푸른 불길 · 야수 발톱 자국·호랑이 발톱 빛·털실·캣닢"],
+      en: ["Effects redraw 2: Bedouin phantom chakram trails and light blades on the sand spin · General jade crescent waves, spear shadows, light-blade thrusts, ultimate shockwaves · Imugi scale shards, dragon-aura bursts, falling sky shards, wolf fangs · Apostle crimson crosses, black flames, lust beams, coins, gravity, sleep, souls, blue fire · Beastkin claw marks, tiger claw glow, yarn, catnip"],
+      ja: ["エフェクト描き直し2: ベドウィンの幻のチャクラムの残像・砂の回転斬りの光の刃 · 将軍の青龍の二重三日月・槍の影・光の穂先の突き・必殺技の衝撃波 · イムギの鱗の破片・竜の気の爆発・空の欠片・狼の牙 · 悪の使徒の赤い気の十字架・黒い炎・色欲の光線・金貨・重力・眠り・魂・青い炎 · 獣人の爪痕・虎の爪の光・毛糸・キャットニップ"],
+    },
+  },
+  {
     version: "0.48.207",
     date: "2026-10-28",
     items: {

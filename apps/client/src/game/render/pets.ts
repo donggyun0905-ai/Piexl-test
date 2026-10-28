@@ -1,5 +1,6 @@
 // 야수 그리기: 고양이·사자·그림자 고양이 · 털실·헤어볼 · 할퀴기 자국(호랑이 발톱은 굵은 네 줄) · 캣닢 구름
 import { PET_STATS, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { additive, beam, glow } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 /** 종류마다: 털 · 줄무늬(사자는 갈기) · 눈 */
@@ -48,7 +49,13 @@ export function drawPets(ctx: CanvasRenderingContext2D, s: RunState, alpha: numb
 /** 털실·헤어볼이면 그리고 true */
 export function drawBeastShot(ctx: CanvasRenderingContext2D, pr: ProjectileState, x: number, y: number, tick: number): boolean {
   if (pr.spirit === "yarn") {
-    // 분홍 털실 뭉치 + 풀린 실
+    // 분홍 털실 뭉치 + 꼬불꼬불 풀린 실
+    ctx.strokeStyle = "#ffb0c8";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    for (let i = 1; i <= 4; i++) ctx.lineTo(x - pr.vx * i * 1.2 + Math.sin(tick / 2 + i) * 1.5, y - pr.vy * i * 1.2 + Math.cos(tick / 2 + i) * 1.5);
+    ctx.stroke();
     ctx.fillStyle = "#e85a8a";
     ctx.fillRect(x - 2, y - 2, 4, 4);
     ctx.fillStyle = "#ffb0c8";
@@ -72,24 +79,24 @@ export function drawBeastShot(ctx: CanvasRenderingContext2D, pr: ProjectileState
 export function drawBeastFx(ctx: CanvasRenderingContext2D, fx: EffectState, snap: Snap): boolean {
   const t = fx.ticks / fx.maxTicks;
   if (fx.kind === "scratch") {
-    // 비스듬한 흰 발톱 자국 세 줄
+    // 발톱 자국 세 줄: 붉은 기운 + 흰 날, 그어지며 끝이 가늘어짐
     const x = snap(fx.x);
     const y = snap(fx.y);
     const n = fx.size;
     const px = -fx.dirY;
     const py = fx.dirX;
-    ctx.strokeStyle = "#fff";
-    ctx.globalAlpha = t;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    for (let i = -1; i <= 1; i++) {
-      const ox = px * i * n * 0.5;
-      const oy = py * i * n * 0.5;
-      ctx.moveTo(x + ox - fx.dirX * n - px * n * 0.4, y + oy - fx.dirY * n - py * n * 0.4);
-      ctx.lineTo(x + ox + fx.dirX * n + px * n * 0.4, y + oy + fx.dirY * n + py * n * 0.4);
-    }
-    ctx.stroke();
-    ctx.globalAlpha = 1;
+    const draw = Math.min(1, (1 - t) * 4);
+    additive(ctx, () => {
+      for (let i = -1; i <= 1; i++) {
+        const ox = px * i * n * 0.5;
+        const oy = py * i * n * 0.5;
+        const sx = x + ox - fx.dirX * n - px * n * 0.4;
+        const sy = y + oy - fx.dirY * n - py * n * 0.4;
+        const ex = x + ox + fx.dirX * n + px * n * 0.4;
+        const ey = y + oy + fx.dirY * n + py * n * 0.4;
+        beam(ctx, sx, sy, lerp(sx, ex, draw), lerp(sy, ey, draw), 1.6, "#ff8a5a", t);
+      }
+    });
     return true;
   }
   if (fx.kind === "tigerScratch") {
@@ -122,6 +129,8 @@ export function drawBeastFx(ctx: CanvasRenderingContext2D, fx: EffectState, snap
     }
     ctx.lineCap = "butt";
     ctx.globalAlpha = 1;
+    // 그어진 끝에 주황 빛
+    additive(ctx, () => glow(ctx, x + fx.dirX * n, y + fx.dirY * n, n * 0.9, "#ff9a3a", t * 0.7));
     return true;
   }
   if (fx.kind === "catnip") {
@@ -129,7 +138,8 @@ export function drawBeastFx(ctx: CanvasRenderingContext2D, fx: EffectState, snap
     const x = snap(fx.x);
     const y = snap(fx.y);
     const fade = Math.min(1, t * 6);
-    ctx.fillStyle = `rgba(120, 220, 110, ${0.18 * fade})`;
+    additive(ctx, () => glow(ctx, x, y, fx.size, "#78dc6e", 0.4 * fade));
+    ctx.fillStyle = `rgba(120, 220, 110, ${0.12 * fade})`;
     ctx.beginPath();
     ctx.arc(x, y, fx.size, 0, Math.PI * 2);
     ctx.fill();
