@@ -99,6 +99,8 @@ export const MENU_TEXT = {
   hitboxToggle: { ko: "맞는 범위", en: "Hitbox", ja: "当たり判定" },
   rangeToggle: { ko: "사거리", en: "Range", ja: "射程" },
   showRange: { ko: "공격 사거리 보기", en: "Show attack range", ja: "攻撃の射程を表示" },
+  namesToggle: { ko: "이름", en: "Names", ja: "名前" },
+  showNames: { ko: "패왕전 캐릭터 이름 보기", en: "Show character names in Champion Clash", ja: "覇王戦でキャラ名を表示" },
   showDamage: { ko: "피해 숫자 보기", en: "Show damage numbers", ja: "ダメージの数字を表示" },
   showHitbox: { ko: "맞는 범위 늘 보기", en: "Always show hitbox", ja: "当たり判定を常に表示" },
   screenShake: { ko: "화면 흔들림", en: "Screen shake", ja: "画面の揺れ" },

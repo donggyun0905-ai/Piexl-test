@@ -14,6 +14,8 @@ export interface Settings {
   showHitbox: boolean;
   /** 내 공격 사거리 원을 보여 줌 (적이 다가올수록 진해짐) */
   showRange: boolean;
+  /** 패왕전: 체력 줄 위에 캐릭터 이름 (스킨을 입어도 누군지 알게) */
+  showNames: boolean;
   /** 적에게 들어간 피해를 숫자로 띄움 */
   showDamage: boolean;
   /** 모바일 오른쪽 아래 버튼 크기 배율 */
@@ -41,6 +43,7 @@ const DEFAULTS: Settings = {
   showStats: true,
   showHitbox: false,
   showRange: true,
+  showNames: true,
   showDamage: true,
   buttonScale: 1,
   stickScale: 1,

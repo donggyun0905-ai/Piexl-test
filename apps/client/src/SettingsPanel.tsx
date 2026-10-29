@@ -31,7 +31,7 @@ export function SettingsPanel({ lang, t }: { lang: Lang; t: (key: TextKey) => st
       <small>{Math.round(s[key] * 100)}</small>
     </label>
   );
-  const toggle = (key: "vibration" | "shake" | "showStats" | "showRange" | "showHitbox" | "showDamage", label: TextKey) => (
+  const toggle = (key: "vibration" | "shake" | "showStats" | "showRange" | "showNames" | "showHitbox" | "showDamage", label: TextKey) => (
     <label className="setting-row">
       <span>{t(label)}</span>
       <input type="checkbox" checked={s[key]} onChange={(e) => setSettings({ [key]: e.target.checked } as Partial<Settings>)} />
@@ -45,6 +45,7 @@ export function SettingsPanel({ lang, t }: { lang: Lang; t: (key: TextKey) => st
       {toggle("shake", "screenShake")}
       {toggle("showStats", "showStats")}
       {toggle("showRange", "showRange")}
+      {toggle("showNames", "showNames")}
       {toggle("showDamage", "showDamage")}
       {toggle("showHitbox", "showHitbox")}
       <SkillKeysRow t={t} />

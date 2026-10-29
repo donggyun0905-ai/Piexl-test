@@ -101,7 +101,7 @@ export function drawPwGround(ctx: Ctx, s: RunState): void {
 }
 
 /** 맨 위 그리기 (render/index, 패왕전·무한 모드 AI 대결): 내 편 AI · 수풀(사람 위를 반쯤 덮음) · 숲 나무 꼭대기 */
-export function drawPaewang(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
+export function drawPaewang(ctx: Ctx, s: RunState, alpha: number, snap: Snap, charName?: (id: string) => string): void {
   const id = s.pvp?.arena ?? s.pw?.arena;
   if (!id) return;
   for (const a of (s.pw?.allies ?? []) as PwAlly[]) drawUnit(ctx, s, a, a.pw, alpha, snap);
@@ -132,7 +132,20 @@ export function drawPaewang(ctx: Ctx, s: RunState, alpha: number, snap: Snap): v
   }
   // 체력 줄·표시는 수풀·나무 위에 (소환한 것도)
   if (s.pvp) drawPwMinions(ctx, s, alpha, snap, (i) => pwTint(s, i));
-  if (s.pvp) drawSeats(ctx, s, alpha, snap);
+  if (s.pvp) drawSeats(ctx, s, alpha, snap, charName);
+}
+
+/** 체력 줄 위 작은 이름 (검은 테두리 + 편 색) */
+function drawName(ctx: Ctx, name: string, x: number, y: number, color: string): void {
+  ctx.font = "bold 6px sans-serif";
+  ctx.textAlign = "center";
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "rgba(10, 8, 16, 0.85)";
+  ctx.strokeText(name, x, y);
+  ctx.fillStyle = color;
+  ctx.fillText(name, x, y);
+  ctx.textAlign = "start";
+  ctx.lineWidth = 1;
 }
 
 function leaf(ctx: Ctx, x: number, y: number, r: number, color: string): void {
@@ -143,7 +156,7 @@ function leaf(ctx: Ctx, x: number, y: number, r: number, color: string): void {
 }
 
 /** 패왕전 자리마다: 발밑 편 고리 · 그림 맨 위에 체력 줄(나는 초록 · 내 편 파랑 · 상대 빨강) · 데스매치 레벨 · 얼음 · 내 화살표 · 가까운 적 표시 */
-function drawSeats(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
+function drawSeats(ctx: Ctx, s: RunState, alpha: number, snap: Snap, charName?: (id: string) => string): void {
   const pv = s.pvp!;
   const me = s.seat ?? 0;
   const ps = allPlayers(s);
@@ -196,6 +209,8 @@ function drawSeats(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
       ctx.fillText(`Lv${seat.lv}`, x, top - 4);
       ctx.textAlign = "start";
     }
+    // 캐릭터 이름 (스킨을 입어도 누군지 알게, 설정 '이름'으로 끔). 나는 빼고, 데스매치 레벨 위에
+    if (charName && i !== me) drawName(ctx, charName(p.characterId), x, top - (pv.mode === "gungame" ? 10 : 3), fill);
     drawPwStatus(ctx, s, i, x, top, y + p.r);
     ctx.globalAlpha = 1;
     if (i === me) drawMeArrow(ctx, s, x, top - (pv.mode === "gungame" ? 6 : 0));

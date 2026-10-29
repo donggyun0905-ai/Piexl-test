@@ -239,6 +239,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       showReticle: controls.touchAiming,
       showHitbox: controls.hitboxHeld || getSettings().showHitbox,
       showRange: getSettings().showRange,
+      ...(run.pvp && getSettings().showNames ? { charName: (id: string) => t(id as TextKey) } : {}),
       skillAim: controls.arm.armed,
       pixelScale: ctx.canvas.width / viewW(),
       zoom: controls.zoom,

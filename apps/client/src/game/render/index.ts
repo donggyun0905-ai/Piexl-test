@@ -75,6 +75,8 @@ export interface DrawOptions {
   showHitbox: boolean;
   /** 공격 사거리 원 */
   showRange: boolean;
+  /** 패왕전: 체력 줄 위 캐릭터 이름 (없으면 안 그림) */
+  charName?: (id: string) => string;
   /** 게임 1픽셀이 실제 화면(기기) 몇 픽셀인지 (확대 전) */
   pixelScale: number;
   /** 화면 확대 (1 = 방 전체) */
@@ -235,7 +237,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   drawSageAir(ctx, s);
   if (opt.legendName) drawLegendName(ctx, s, alpha, opt.legendName);
   drawMorphGot(ctx, s, alpha, snap, opt.passiveName);
-  drawPaewang(ctx, s, alpha, snap);
+  drawPaewang(ctx, s, alpha, snap, opt.charName);
   opt.overlay?.(ctx, snap);
   drawOniUps(ctx, s, alpha, snap, opt.oniUp);
   opt.modeOverlay?.(ctx, s, alpha, snap);

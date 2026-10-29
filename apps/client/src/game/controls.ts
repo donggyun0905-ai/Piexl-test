@@ -17,15 +17,14 @@ export interface ControlsOptions {
   /** 터치·마우스를 받는 화면 전체 영역 */
   zone: HTMLElement;
   sticks: StickElements;
-  /** 플레이어의 화면 위치 (마우스 조준 계산용) */
-  /** scale: 게임 1픽셀의 화면 크기 */
+  /** 플레이어의 화면 위치 (마우스 조준 계산용, scale: 게임 1픽셀의 화면 크기) */
   playerScreenPos: () => { x: number; y: number; scale: number } | null;
   onEscape: () => void;
   onPause: () => void;
   onAutoAimChange: (on: boolean) => void;
-  /** C: 능력치 수치 보기 켜기·끄기 */
+  /** 켜기·끄기: C 능력치 수치 · N 패왕전 이름표 · H 맞는 범위 늘 보기 · G 사거리 */
   onToggleStats: () => void;
-  /** H: 맞는 범위 늘 보기 켜기·끄기 */
+  onToggleNames?: () => void;
   onToggleHitbox: () => void;
   onToggleRange: () => void;
   /** 처음 터치하면 모바일 화면(버튼·안내)으로 전환 */
@@ -104,6 +103,7 @@ export class Controls {
       if (e.code === "KeyC" && !e.ctrlKey && !e.metaKey) return opt.onToggleStats();
       if (e.code === "KeyH") return opt.onToggleHitbox();
       if (e.code === "KeyG") return opt.onToggleRange();
+      if (e.code === "KeyN") return opt.onToggleNames?.();
       if (e.code === "KeyF") {
         this.interactQueued = true;
         return;

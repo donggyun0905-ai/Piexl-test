@@ -117,8 +117,7 @@ export function GameScreen(props: GameScreenProps) {
       zone,
       sticks: sticks as { moveBase: HTMLElement; moveKnob: HTMLElement; aimBase: HTMLElement; aimKnob: HTMLElement },
       playerScreenPos: () => playerScreenPos(canvas, run, controls.zoom, cameraFor(run, controls.zoom)),
-      // 모든 모드에서 Esc를 누르면 항상 나가기 확인. 확인 창에서 한 번 더 누르면 닫힘
-      onEscape: toggleExit,
+      onEscape: toggleExit, // 모든 모드에서 Esc = 나가기 확인 (확인 창에서 한 번 더 누르면 닫힘)
       onPause: () => {
         if (canPause) setOverlay((o) => (o === "pause" ? "none" : o === "none" ? "pause" : o));
       },
@@ -126,6 +125,7 @@ export function GameScreen(props: GameScreenProps) {
       onToggleStats: () => setSettings({ showStats: !getSettings().showStats }),
       onToggleHitbox: () => setSettings({ showHitbox: !getSettings().showHitbox }),
       onToggleRange: () => setSettings({ showRange: !getSettings().showRange }),
+      onToggleNames: () => setSettings({ showNames: !getSettings().showNames }),
       onTouch: () => setTouchMode(true),
       onZoomChange: () => {},
       clickTarget: (x, y) => clickTargetAt(run, canvas, controls.zoom, x, y),

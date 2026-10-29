@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.222",
+    date: "2026-10-29",
+    items: {
+      ko: [
+        "업적 보상 13개 추가 (달성하면 그 물건이 나오기 시작함): 3층 도착 사냥꾼의 눈 · 5층 부메랑 · 6층 두 번째 숨 · 한 판 30처치 단도 · 70처치 분노의 인장 · 170처치 투창 · 보스 3마리 무거운 판금 · 안 맞고 보스 3마리 회피 망토 · 한 판 300 벌기 돈 주머니 · 100 모으기 깃털 촉 · 150 쓰기 연발 쇠뇌 · 패시브 5개 재생 부적 · 사용 칸 둘 다 투석끈",
+        "패왕전: 체력 줄 위에 캐릭터 이름이 작게 뜸 (스킨을 입어도 누군지 알게) · 위쪽 '이름' 버튼·N 키·설정에서 켜고 끔",
+      ],
+      en: [
+        "13 new achievement rewards (the item starts appearing once unlocked): reach floor 3 Hunter's Eye · floor 5 Boomerang · floor 6 Second Wind · 30 kills in a run Dagger · 70 kills Fury Seal · 170 kills Javelin · 3 bosses Heavy Plate · 3 flawless bosses Dodge Cloak · earn 300 in a run Gold Pouch · hold 100 Feather Tip · spend 150 Repeater · 5 passives Regen Charm · both item slots full Sling",
+        "Champion Clash: character names now show above health bars (so you can tell who is who even in skins) · toggle with the 'Names' button at the top, the N key, or in settings",
+      ],
+      ja: [
+        "実績報酬を13個追加 (達成するとそのアイテムが出始める): 3階到達 狩人の目 · 5階 ブーメラン · 6階 二度目の息 · 1回で30撃破 短刀 · 70撃破 憤怒の印 · 170撃破 投げ槍 · ボス3体 重い板金 · 無被弾ボス3体 回避のマント · 1回で300稼ぐ 金の袋 · 100貯める 羽の鏃 · 150使う 連弩 · パッシブ5個 再生の護符 · アイテム枠2つとも スリング",
+        "覇王戦: 体力バーの上にキャラ名が小さく表示 (スキンを着ていても誰か分かる) · 上の「名前」ボタン・Nキー・設定でオン・オフ",
+      ],
+    },
+  },
+  {
     version: "0.48.221",
     date: "2026-10-29",
     items: {
