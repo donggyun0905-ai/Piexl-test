@@ -3,6 +3,7 @@ import { allPlayers, inPlay, PW, PW_MODE, pvpTimeLeft, pvpZone, TICK_RATE, type 
 import { pwNearestFoe } from "../game/render/pwLook";
 import type { TextKey } from "../i18n";
 import { seatWho } from "./PwBoard";
+import { PwCapHud } from "./PwCapHud";
 import { PwFeed } from "./PwFeed";
 import { PW_NAME } from "./PwModes";
 
@@ -14,7 +15,7 @@ interface Props {
   onBoard: () => void;
 }
 
-const GOAL: Record<string, TextKey> = { tourney: "pwGoalTourney", brawl: "pwGoalBrawl", gungame: "pwGoalGun" };
+const GOAL: Record<string, TextKey> = { tourney: "pwGoalTourney", brawl: "pwGoalBrawl", gungame: "pwGoalGun", capture: "pwGoalCapture" };
 
 export function PwHud({ run, me, names, t, onBoard }: Props) {
   const pv = run.pvp!;
@@ -72,6 +73,7 @@ export function PwHud({ run, me, names, t, onBoard }: Props) {
           {t("pwBoard")} (Tab)
         </button>
       </div>
+      <PwCapHud run={run} me={me} t={t} />
       <PwFeed run={run} me={me} who={(i) => seatWho(run, i, names, t)} t={t} />
       <PwCount run={run} me={me} goal={t(GOAL[pv.mode] ?? "pwGoalTeam")} t={t} />
     </>

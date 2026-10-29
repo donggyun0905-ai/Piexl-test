@@ -92,6 +92,7 @@ const PW_THEME: Record<PwArenaId, string> = {
   qVolcano: "salamander", qSwamp: "toad", qCanyon: "centaur", qGarden: "plant",
   bLava: "dragon", bPonds: "jelly", bGrass: "archer", bRuins: "knight",
   gCastle: "knight", gVolcano: "salamander", gVillage: "toad", gPrison: "reaper",
+  cHall: "knight", cCliff: "reaper", cRing: "swordgod",
   practice: "plant",
 };
 

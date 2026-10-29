@@ -19,8 +19,8 @@ interface Props {
 }
 
 const CELL = 2;
-const NAME: Record<PwMode, TextKey> = { duel: "pwDuel", pair: "pwPair", trio: "pwTrio", squad: "pwSquad", tourney: "pwTourney", brawl: "pwBrawl", gungame: "pwGungame" };
-const DESC: Record<PwMode, TextKey> = { duel: "pwDuelDesc", pair: "pwPairDesc", trio: "pwTrioDesc", squad: "pwSquadDesc", tourney: "pwTourneyDesc", brawl: "pwBrawlDesc", gungame: "pwGungameDesc" };
+const NAME: Record<PwMode, TextKey> = { duel: "pwDuel", pair: "pwPair", trio: "pwTrio", squad: "pwSquad", tourney: "pwTourney", brawl: "pwBrawl", gungame: "pwGungame", capture: "pwCapture" };
+const DESC: Record<PwMode, TextKey> = { duel: "pwDuelDesc", pair: "pwPairDesc", trio: "pwTrioDesc", squad: "pwSquadDesc", tourney: "pwTourneyDesc", brawl: "pwBrawlDesc", gungame: "pwGungameDesc", capture: "pwCaptureDesc" };
 /** 미리 보기 바닥색: 숲·들판은 풀빛, 나머지는 흙빛 */
 const groundOf = (id: PwArenaId) => (id === "forest" || id.startsWith("q") || id.startsWith("b") || id === "field" ? "#3e5a30" : "#6a5a44");
 
@@ -49,6 +49,17 @@ export function ArenaPreview({ id }: { id: PwArenaId }) {
     rects(a.ponds, "#2a5a8a");
     rects(a.walls, "#2a2630");
     rects(a.rocks, id === "forest" ? "#1a3018" : "#8a8478");
+    // 점령전: 낭떠러지 · 점령 구역 · 버프 자리
+    rects(a.cliffs ?? [], "#07060a");
+    if (a.zone?.rect) rects([a.zone.rect], "rgba(90, 140, 255, 0.55)");
+    if (a.zone?.circle) {
+      const [c, r, rad] = a.zone.circle;
+      ctx.fillStyle = "rgba(90, 140, 255, 0.55)";
+      ctx.beginPath();
+      ctx.arc((c + 0.5) * CELL, (r + 0.5) * CELL, rad * CELL, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    rects((a.buffs ?? []).map(([c, r]) => [c, r, 1, 1]), "#f2d040");
     ctx.strokeStyle = "#2a2630";
     ctx.strokeRect(0.5, 0.5, a.cols * CELL - 1, a.rows * CELL - 1);
   }, [id, a]);

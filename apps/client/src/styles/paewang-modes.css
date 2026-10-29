@@ -1,0 +1,54 @@
+/* 패왕전 새 대결 유형 (점령전 점령도 막대 등) */
+.pw-cap {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 2px 0;
+}
+.pw-cap-bar {
+  position: relative;
+  width: 110px;
+  height: 10px;
+  background: rgb(10 8 16 / 0.75);
+  border: 1px solid #3a3444;
+}
+.pw-cap-bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: #5ab0ff;
+}
+.pw-cap-bar.theirs i {
+  inset: 0 0 0 auto;
+  background: #ff5a5a;
+}
+.pw-cap-bar b {
+  position: relative;
+  display: block;
+  font-size: 8px;
+  line-height: 10px;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 1px 1px #000;
+}
+.pw-cap small {
+  min-width: 64px;
+  font-size: 10px;
+  text-align: center;
+  color: #d8d0e8;
+}
+.pw-cap .pwCapOurs {
+  color: #8ac8ff;
+}
+.pw-cap .pwCapTheirs {
+  color: #ff8a8a;
+}
+.pw-cap .pwCapContest {
+  color: #f2d040;
+}

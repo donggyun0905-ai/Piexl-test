@@ -151,6 +151,10 @@ export interface PvpSeat {
   /** 침묵(스킬 못 씀) 남은 틱 · 밀려나는 중 (틱마다 움직임 · 남은 틱) */
   silence?: number;
   push?: { vx: number; vy: number; t: number };
+  /** 점령전: 점프대로 뛰는 중(시작·끝 자리·지난 틱) · 마지막으로 내린 틱 · 버프 자리에서 버티는 중(자리 번호·끝 틱) */
+  jump?: { fx: number; fy: number; tx: number; ty: number; t: number };
+  landAt?: number;
+  chan?: { k: number; end: number };
 }
 
 /** 패왕전 사람 자리 값 */
@@ -251,6 +255,8 @@ export interface PvpState {
   readyAt?: number;
   /** 연습장: 허수아비(가만히 · 움직이기만 · 싸움) · 스킬 대기 없음. 판이 끝나지 않고 쓰러지면 바로 다시 참 (sim/pvpPractice) */
   practice?: PwPractice;
+  /** 점령전: 편마다 점령도(0~100) · 버프 자리마다 다시 생기는 틱 (sim/pwCapture) */
+  cap?: { prog: Record<number, number>; buffAt: number[] };
 }
 
 export interface PwPractice {

@@ -27,7 +27,7 @@ function play(s: RunState, ticks: number, tough = false): void {
 
 describe("패왕전", () => {
   it("대결 유형마다 경기장 5개 · 경기장 자리는 모두 바닥이고 서로 걸어서 닿음", () => {
-    for (const m of PW_MODES) expect(new Set(PW_MODE[m].maps).size, m).toBe(5);
+    for (const m of PW_MODES) expect(new Set(PW_MODE[m].maps).size, m).toBe(PW_MODE[m].rule ? PW_MODE[m].maps.length : 5);
     for (const id of Object.keys(PW_ARENAS) as PwArenaId[]) {
       const def = PW_ARENAS[id];
       const mode = PW_MODES.find((m) => PW_MODE[m].maps.includes(id)) ?? (id === "practice" ? "trio" : undefined)!;

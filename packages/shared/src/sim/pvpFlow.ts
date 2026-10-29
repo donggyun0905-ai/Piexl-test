@@ -1,5 +1,7 @@
 // 패왕전 진행: 쓰러짐(처치·데스) · 토너먼트 다음 차례 · 데스매치 레벨·다시 나오기 · 숲 함정 · 승패 (떨어지는 물건은 pvpExtras)
-import { PW, PW_TIERS } from "../paewangDefs";
+import { PW, PW_MODE, PW_TIERS } from "../paewangDefs";
+import { PW_CAP } from "../pwRules";
+import { capWinner } from "./pwCapture";
 import { PW_ARENAS } from "../paewangMaps";
 import { checkDeath } from "./run";
 import { damagePlayer } from "./combat";
@@ -7,7 +9,7 @@ import { inRect, spotXY } from "./paewangGrid";
 import { gunSwap } from "./paewangKit";
 import { allPlayers, eachSeat, useSeat } from "./party";
 import { inPlay } from "./pvpWorld";
-import { nextRound, resetRound } from "./pvpRounds";
+import { nextRound, placeSeat, resetRound } from "./pvpRounds";
 import { recapEnv, recapReset } from "./pvpRecap";
 import { timeWinner } from "./pvpZone";
 import { clearSkills } from "./pwSkill";
@@ -86,7 +88,9 @@ export function settleDeaths(s: RunState): void {
     const k = seat.by !== undefined ? pv.seats[seat.by] : undefined;
     if (k && seat.by !== i) k.kills++;
     if (i === 0 && pv.mode === "brawl") pv.place = pv.seats.filter((x, j) => j !== i && inPlay(s, j)).length + 1;
-    if (pv.mode === "gungame") {
+    // 점령전: 잠시 뒤 집에서 다시
+    if (PW_MODE[pv.mode].rule) seat.back = s.tick + PW_CAP.respawn;
+    else if (pv.mode === "gungame") {
       seat.back = s.tick + PW.respawn;
       if (k && seat.by !== undefined) levelUp(s, seat.by);
     } else if (pv.mode === "tourney") {
@@ -124,10 +128,14 @@ export function bringBack(s: RunState): void {
     seat.on = true;
     recapReset(seat);
     const def = PW_ARENAS[pv.arena];
-    const [x, y] = pv.mode === "tourney" ? spotXY((seat.team === 0 ? def.teamA : def.teamB)[0]!) : farSpot(s, i);
     const p = s.player;
-    p.x = p.prevX = x;
-    p.y = p.prevY = y;
+    seat.jump = seat.chan = undefined;
+    if (PW_MODE[pv.mode].rule) placeSeat(s, i);
+    else {
+      const [x, y] = pv.mode === "tourney" ? spotXY((seat.team === 0 ? def.teamA : def.teamB)[0]!) : farSpot(s, i);
+      p.x = p.prevX = x;
+      p.y = p.prevY = y;
+    }
     // 토너먼트 다음 사람은 처음 체력 그대로 · 데스매치는 다시 가득
     freshStart(s);
   });
@@ -155,19 +163,26 @@ export function decide(s: RunState): void {
     if (s.tick >= pv.resetAt) resetRound(s);
     return;
   }
-  // 시간 제한: 다 되면 남은 사람·체력 비율이 많은 편이 이 판을 이김 (데스매치는 레벨)
-  const late = pv.winner === undefined ? timeWinner(s) : undefined;
+  // 점령전: 점령도로만 정함
+  if (PW_MODE[pv.mode].rule === "capture") pv.winner ??= capWinner(s);
+  else if (pv.winner === undefined) lastTeam(s);
+  if (pv.winner === undefined) return;
+  s.over = true;
+  s.won = pv.winner === pv.seats[s.seat ?? 0]!.team;
+}
+
+/** 시간 제한: 다 되면 남은 사람·체력 비율이 많은 편이 이 판을 이김 (데스매치는 레벨) · 아니면 한 편만 남았을 때 */
+function lastTeam(s: RunState): void {
+  const pv = s.pvp!;
+  const late = timeWinner(s);
   if (late !== undefined) {
     if (pv.mode === "gungame" || !nextRound(s, late)) pv.winner = late;
-  } else if (pv.winner === undefined && pv.mode !== "gungame") {
+  } else if (pv.mode !== "gungame") {
     const alive = new Set(pv.seats.filter((x, j) => inPlay(s, j) || x.back !== undefined).map((x) => x.team));
     // 3판 2선승이면 다음 판으로 (시리즈를 이긴 편이 나오면 끝)
     const w = [...alive][0] ?? -1;
     if (alive.size <= 1 && !nextRound(s, w)) pv.winner = w;
   }
-  if (pv.winner === undefined) return;
-  s.over = true;
-  s.won = pv.winner === pv.seats[s.seat ?? 0]!.team;
 }
 
 /** 숲 함정: 간격마다 가시가 튀어나와 위에 선 모두를 찌름 */

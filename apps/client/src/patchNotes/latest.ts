@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.240",
+    date: "2026-10-29",
+    items: {
+      ko: [
+        "패왕전 새 대결 '점령전' (5대5, 밴픽): 점령 구역에 우리 편만 있으면 점령도가 오르고 100%가 되면 승리 · 쓰러지면 6초 뒤 집에서 다시 태어남 · 8분이 지나면 점령도가 높은 편이 승리",
+        "점령전 경기장 3종: 네 갈래 회랑(양옆 방에서 통로 넷) · 낭떠러지 섬(가운데를 낭떠러지가 둘러싸 떨어지면 쓰러짐, 점프대로 건넘) · 원형 제단(위쪽 동그라미 구역)",
+        "노랑 버프 자리: F를 누르고 3초 동안 가만히 있으면 40초 동안 공격력·공격 속도·이동 속도가 오르고 체력이 조금씩 참 · 먹으면 1분 뒤 다시 생김",
+      ],
+      en: [
+        "New Champion Clash battle 'Capture' (5v5, with draft): while only your team stands in the zone your capture rises — reach 100% to win · fallen fighters respawn at home after 6s · after 8 minutes the team with more capture wins",
+        "Three Capture arenas: Four-Way Hall (four corridors from the side rooms) · Cliff Island (a cliff surrounds the center — fall and you're down; cross with jump pads) · Ring Altar (a round zone at the top)",
+        "Yellow buff spots: press F and hold still for 3s for 40s of extra damage, attack speed and move speed plus slow healing · respawns 1 minute after being taken",
+      ],
+      ja: [
+        "覇王戦の新しい対決「占領戦」(5対5、バンピック): 占領区域に味方だけがいると占領度が上がり、100%で勝利 · 倒れると6秒後に拠点で復活 · 8分経つと占領度が高いチームの勝利",
+        "占領戦の闘技場3種: 四つ筋の回廊（両側の部屋から通路が4本）· 断崖の島（中央を断崖が囲み、落ちると倒れる。ジャンプ台で渡る）· 円形の祭壇（上の丸い区域）",
+        "黄色のバフ地点: Fを押して3秒じっとすると40秒間、攻撃力・攻撃速度・移動速度が上がり体力が少しずつ回復 · 取られると1分後に再出現",
+      ],
+    },
+  },
+  {
     version: "0.48.239",
     date: "2026-10-29",
     items: {

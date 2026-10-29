@@ -4,6 +4,7 @@
 import { NONE, type PwArenaDef, type Rect, type Spot } from "./paewangMapKit";
 import { BIG_ARENAS } from "./paewangMapsBig";
 import { SMALL_ARENAS } from "./paewangMapsSmall";
+import { CAPTURE_ARENAS } from "./paewangMapsCapture";
 
 export type { PwArenaDef } from "./paewangMapKit";
 
@@ -126,12 +127,12 @@ const BASE_ARENAS = {
   },
 } satisfies Record<string, PwArenaDef>;
 
-/** 모든 경기장 (처음 5개 + 작은·중간 + 큰) */
-const ALL_ARENAS = { ...BASE_ARENAS, ...SMALL_ARENAS, ...BIG_ARENAS };
+/** 모든 경기장 (처음 5개 + 작은·중간 + 큰 + 점령전) */
+const ALL_ARENAS = { ...BASE_ARENAS, ...SMALL_ARENAS, ...BIG_ARENAS, ...CAPTURE_ARENAS };
 export type PwArenaId = keyof typeof ALL_ARENAS;
 export const PW_ARENAS: Record<PwArenaId, PwArenaDef> = ALL_ARENAS;
 
-/** 대결 유형마다 고를 수 있는 경기장 5개 (맨 앞이 처음 경기장) */
+/** 대결 유형마다 고를 수 있는 경기장 5개 (점령전은 3개) (맨 앞이 처음 경기장) */
 export const PW_MAP_SETS = {
   duel: ["small", "dLava", "dMarsh", "dGarden", "dSpike"],
   pair: ["pCross", "pLava", "pMaze", "pShore", "pMud"],
@@ -139,4 +140,5 @@ export const PW_MAP_SETS = {
   squad: ["forest", "qVolcano", "qSwamp", "qCanyon", "qGarden"],
   brawl: ["field", "bLava", "bPonds", "bGrass", "bRuins"],
   gungame: ["manor", "gCastle", "gVolcano", "gVillage", "gPrison"],
+  capture: ["cHall", "cCliff", "cRing"],
 } as const satisfies Record<string, readonly PwArenaId[]>;

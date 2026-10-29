@@ -1,5 +1,6 @@
 // 패왕전 그리기: AI 캐릭터(상대·내 편) 몸·체력 줄·편 표시 · 휘두름 · AI 탄 · 바닥(2층 발판·가시 함정) · 수풀(위에 덮음)
 import { drawPwZone } from "./pwZone";
+import { drawCapChan, drawCapGround } from "./pwCapture";
 import { allPlayers, inBush, PW, PW_ARENAS, TILE_SIZE, trapUp, type EnemyState, type ProjectileState, type PwAlly, type PwBrain, type RunState } from "@pixel-rogue/shared";
 import { drawBody } from "./actors";
 import { drawFoeCue, pwHead, pwIsAlly, pwShown, pwTint, setPwViewer } from "./pwLook";
@@ -95,6 +96,7 @@ export function drawPwGround(ctx: Ctx, s: RunState): void {
     for (let yy = 0; yy < h * 4; yy++) for (let xx = 0; xx < w * 4; xx++) ctx.fillRect(c * TILE_SIZE + xx * 4 + 1, r * TILE_SIZE + yy * 4 + (up ? 0 : 2), 2, up ? 3 : 1);
   }
   if (!s.pvp) return;
+  drawCapGround(ctx, s);
   drawPwZone(ctx, s);
   drawOrbs(ctx, s);
   allPlayers(s).forEach((p, i) => {
@@ -214,6 +216,7 @@ function drawSeats(ctx: Ctx, s: RunState, alpha: number, snap: Snap, charName?: 
     // 캐릭터 이름 (스킨을 입어도 누군지 알게, 설정 '이름'으로 끔). 나는 빼고, 데스매치 레벨 위에
     if (charName && i !== me) drawName(ctx, charName(p.characterId), x, top - (pv.mode === "gungame" ? 10 : 3), fill);
     drawPwStatus(ctx, s, i, x, top, y + p.r);
+    drawCapChan(ctx, s, i, x, top);
     ctx.globalAlpha = 1;
     if (i === me) drawMeArrow(ctx, s, x, top - (pv.mode === "gungame" ? 6 : 0));
   });

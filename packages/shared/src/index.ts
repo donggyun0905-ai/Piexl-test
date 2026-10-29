@@ -13,6 +13,7 @@ export * from "./pwItems";
 export * from "./pwRoles";
 export * from "./terrainDefs";
 export * from "./paewangMaps";
+export * from "./pwRules";
 export * from "./pwKits";
 export * from "./pwDraft";
 export * from "./stats";

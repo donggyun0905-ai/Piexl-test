@@ -33,7 +33,7 @@ export const PAEWANG_MAP_TEXT = {
   pwMap_gPrison: { ko: "가시 감옥", en: "Spike Prison", ja: "トゲの牢獄" },
   pwMapPick: { ko: "경기장 고르기", en: "Choose an arena", ja: "闘技場を選ぶ" },
   pwMapRandom: { ko: "무작위", en: "Random", ja: "ランダム" },
-  pwMapRandomDesc: { ko: "다섯 경기장 중 하나", en: "One of the five arenas", ja: "5つの闘技場から1つ" },
+  pwMapRandomDesc: { ko: "위 경기장 중 하나", en: "One of the arenas above", ja: "上の闘技場から1つ" },
   pwPair: { ko: "2대2", en: "2 vs 2", ja: "2対2" },
   pwPairDesc: { ko: "둘씩 편을 짜 맞대결", en: "Two-on-two team battle", ja: "2人ずつのチーム対決" },
   pwBo3: { ko: "3판 2선승", en: "Best of 3", ja: "3本先取2勝" },

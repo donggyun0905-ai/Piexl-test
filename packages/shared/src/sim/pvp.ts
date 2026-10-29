@@ -24,6 +24,7 @@ import { bringBack, decide, freshStart, settleDeaths, updateTraps, watchTeam } f
 import { inPlay, makeProxies, markHidden, pvpWorld, syncProxies } from "./pvpWorld";
 import { dummyInput, practiceTick } from "./pvpPractice";
 import { updateZone, zoneSteer } from "./pvpZone";
+import { capInput, capSteer, capTick } from "./pwCapture";
 import { applyRoom } from "./rooms";
 import { stepPlayer } from "./run";
 import { EMPTY_INPUT, type RunState, type TickInput } from "./types";
@@ -106,12 +107,14 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
     // 수풀에 숨은 상대는 가까이 가야 보임 (자동 조준·유도탄·AI가 못 노림)
     markHidden(s);
     // 사람은 자동 공격 없이 직접 조준만 (AI는 그대로)
-    let input = seat.human ? { ...(inputs[i] ?? EMPTY_INPUT), autoAim: false } : pv.practice ? dummyInput(pv.practice, botInput(s)) : zoneSteer(s, botInput(s));
+    let input = seat.human ? { ...(inputs[i] ?? EMPTY_INPUT), autoAim: false } : pv.practice ? dummyInput(pv.practice, botInput(s)) : capSteer(s, zoneSteer(s, botInput(s)));
     // 기절: 아무것도 못 함 · 묶임: 못 움직임 · 느려짐: 반만
     if (seat.stun > 0) input = EMPTY_INPUT;
     else if (seat.root > 0) input = { ...input, moveX: 0, moveY: 0, dash: false };
     else if (seat.slow > 0) input = { ...input, moveX: Math.round(input.moveX / 2), moveY: Math.round(input.moveY / 2) };
     for (const k of ["stun", "slow", "root"] as const) if (seat[k] > 0) seat[k]--;
+    // 점령전: 점프대 · 버프 자리
+    input = capInput(s, input);
     // 스킬 1~4 · 돌진 · 장판 · 소환한 것
     input = pwSkillTick(s, input);
     stepPlayer(s, input);
@@ -123,6 +126,7 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
   updateTraps(s);
   updateZone(s);
   updatePvpTerrain(s);
+  capTick(s);
   updateIce(s);
   updateDrops(s);
   pickOrbs(s);

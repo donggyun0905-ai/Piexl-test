@@ -3,9 +3,9 @@ export const PAEWANG_GUIDE_TEXT = {
   pwGuide: { ko: "대결 방법", en: "How to play", ja: "対決の遊び方" },
   pwGuideGoalH: { ko: "목표", en: "Goal", ja: "目標" },
   pwGuideGoal: {
-    ko: "1대1·3대3·5대5: 상대 편을 모두 쓰러뜨리면 승리 · 토너먼트: 1대1로 차례로 붙어 상대 편 마지막 사람까지 이기기 · 대난투: 20명 중 끝까지 살아남기 · 데스매치: 처치할 때마다 다음 레벨, 21레벨에서 처치하면 승리",
-    en: "1v1·3v3·5v5: defeat the whole enemy team · Tournament: win the 1v1 rounds until the last rival falls · Brawl: be the last of 20 standing · Deathmatch: each KO levels you up, a KO at Lv 21 wins",
-    ja: "1対1・3対3・5対5: 相手チームを全員倒せば勝利 · トーナメント: 1対1で順に戦い、相手の最後の一人まで勝つ · 大乱闘: 20人の中で最後まで生き残る · デスマッチ: 倒すたびに次のレベル、レベル21で倒せば勝利",
+    ko: "1대1·3대3·5대5: 상대 편을 모두 쓰러뜨리면 승리 · 토너먼트: 1대1로 차례로 붙어 상대 편 마지막 사람까지 이기기 · 대난투: 20명 중 끝까지 살아남기 · 데스매치: 처치할 때마다 다음 레벨, 21레벨에서 처치하면 승리 · 점령전: 점령 구역에 우리 편만 있으면 점령도가 올라 100%면 승리 (쓰러지면 집에서 다시, 노랑 버프 자리는 F 누르고 3초 가만히)",
+    en: "1v1·3v3·5v5: defeat the whole enemy team · Tournament: win the 1v1 rounds until the last rival falls · Brawl: be the last of 20 standing · Deathmatch: each KO levels you up, a KO at Lv 21 wins · Capture: while only your team holds the zone your capture rises — 100% wins (respawn at home; at a yellow buff spot press F and hold still for 3s)",
+    ja: "1対1・3対3・5対5: 相手チームを全員倒せば勝利 · トーナメント: 1対1で順に戦い、相手の最後の一人まで勝つ · 大乱闘: 20人の中で最後まで生き残る · デスマッチ: 倒すたびに次のレベル、レベル21で倒せば勝利 · 占領戦: 区域に味方だけがいると占領度が上がり100%で勝利（倒れると拠点で復活、黄色のバフ地点はFを押して3秒じっと）",
   },
   pwGuideKeysH: { ko: "조작", en: "Controls", ja: "操作" },
   pwGuideKeys: {

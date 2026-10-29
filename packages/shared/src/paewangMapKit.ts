@@ -24,6 +24,11 @@ export interface PwArenaDef {
   teamA: readonly Spot[];
   teamB: readonly Spot[];
   spots: readonly Spot[];
+  /** 점령전 (sim/pwCapture): 점령 구역(네모 또는 동그라미 [열, 행, 반지름 칸]) · 버프 자리 · 낭떠러지(떨어지면 쓰러짐) · 점프대(밟으면 to로 뛰어감) */
+  zone?: { rect?: Rect; circle?: readonly [number, number, number] };
+  buffs?: readonly Spot[];
+  cliffs?: readonly Rect[];
+  jumps?: readonly { pad: Rect; to: Spot }[];
 }
 
 export const NONE: readonly never[] = [];
@@ -65,4 +70,28 @@ export function teamMap(cols: number, rows: number, teamA: readonly Spot[], d: L
 /** 모두가 적인 맵: 왼쪽 위 4분의 1만 적으면 상하좌우 거울 */
 export function ffaMap(cols: number, rows: number, spots: readonly Spot[], d: Lists): PwArenaDef {
   return { ...build(cols, rows, d, (l) => flipY(rows, flipX(cols, l))), teamA: NONE, teamB: NONE, spots };
+}
+
+/** 열린 곳(길·방)만 적으면 나머지를 벽으로 채움: 줄마다 막힌 칸을 이어 붙이고, 위아래로 같은 폭이면 합침 */
+export function carve(cols: number, rows: number, open: readonly Rect[]): Rect[] {
+  const isOpen = (c: number, r: number) => open.some(([x, y, w, h]) => c >= x && c < x + w && r >= y && r < y + h);
+  const out: [number, number, number, number][] = [];
+  const last = new Map<string, [number, number, number, number]>();
+  for (let r = 1; r < rows - 1; r++) {
+    for (let c = 1; c < cols - 1; c++) {
+      if (isOpen(c, r)) continue;
+      let w = 1;
+      while (c + w < cols - 1 && !isOpen(c + w, r)) w++;
+      const key = `${c},${w}`;
+      const prev = last.get(key);
+      if (prev && prev[1] + prev[3] === r) prev[3]++;
+      else {
+        const rect: [number, number, number, number] = [c, r, w, 1];
+        out.push(rect);
+        last.set(key, rect);
+      }
+      c += w - 1;
+    }
+  }
+  return out;
 }

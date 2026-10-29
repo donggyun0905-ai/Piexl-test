@@ -1,5 +1,5 @@
 // HUD 글자: 시간, 상호작용 안내, 바닥 아이템 설명
-import { FLOOR_COUNT, HERO_FLOORS, TICK_RATE, type RunState } from "@pixel-rogue/shared";
+import { FLOOR_COUNT, HERO_FLOORS, isCapture, nearBuff, TICK_RATE, type RunState } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { itemDesc, itemName } from "../i18n/items";
 
@@ -13,6 +13,8 @@ export function promptText(run: RunState, lang: Lang, t: (k: TextKey) => string)
   const pr = run.prompt;
   // 패왕전은 쓰러짐 안내를 위쪽(PwFeed)에서 따로 보여 줌
   if (run.party && run.player.hp <= 0) return run.pvp ? "" : t("coopDown");
+  // 점령전 버프 자리 옆
+  if (run.pvp && isCapture(run) && !run.pvp.seats[run.seat ?? 0]?.chan && nearBuff(run, run.player.x, run.player.y) >= 0) return t("pwCapBuffPrompt");
   if (pr.kind === "feed") return t(pr.has ? "promptFeed" : "promptFeedNone");
   if (pr.kind === "revive") return t(pr.ready ? "promptRevive" : "promptReviveWait");
   if (pr.kind === "gather") return t("promptGather").replace("{have}", String(pr.have)).replace("{need}", String(pr.need));

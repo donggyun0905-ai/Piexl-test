@@ -2,9 +2,9 @@
 export const PAEWANG_TEXT = {
   paewang: { ko: "패왕전", en: "Champion Clash", ja: "覇王戦" },
   paewangDesc: {
-    ko: "AI 캐릭터들과 겨루는 대결 6종. 1대1·3대3·5대5·토너먼트·대난투·데스매치 · 이기면 칩",
-    en: "Six kinds of battles against AI characters: 1v1, 3v3, 5v5, Tournament, Brawl and Deathmatch · Win chips",
-    ja: "AIキャラクターと戦う対決6種。1対1・3対3・5対5・トーナメント・大乱闘・デスマッチ · 勝てばチップ",
+    ko: "AI 캐릭터들과 겨루는 여러 대결. 1대1·3대3·5대5·토너먼트·대난투·데스매치·점령전 · 이기면 칩",
+    en: "Many kinds of battles against AI characters: 1v1, 3v3, 5v5, Tournament, Brawl, Deathmatch and Capture · Win chips",
+    ja: "AIキャラクターと戦う様々な対決。1対1・3対3・5対5・トーナメント・大乱闘・デスマッチ・占領戦 · 勝てばチップ",
   },
   pwPick: { ko: "대결 고르기", en: "Choose a battle", ja: "対決を選ぶ" },
   pwDuel: { ko: "1대1", en: "1 vs 1", ja: "1対1" },
