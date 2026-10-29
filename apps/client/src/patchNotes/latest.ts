@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.224",
+    date: "2026-10-29",
+    items: {
+      ko: ["차원의 순례자 그림을 캐릭터처럼 새로 그림: 하늘색 단발 · 진한 파랑 눈동자 안에 노란 십자 · 흰 셔츠와 청바지 · 키보다 훨씬 큰 배낭(침낭·칼·지팡이·깃발·물약·황금 잔이 삐죽삐죽) · 앞·뒤·옆 걷기"],
+      en: ["Redrew the Dimensional Pilgrim like a playable character: sky-blue bob, deep-blue pupils with a yellow cross, white shirt and jeans, a backpack far bigger than she is (bedroll, sword, staff, flag, potion and golden cup poking out), with front, back and side walks"],
+      ja: ["次元の巡礼者をキャラクターのように描き直し: 水色のボブ · 濃い青の瞳に黄色い十字 · 白シャツとジーンズ · 背より大きなリュック (寝袋・剣・杖・旗・薬・金の杯がはみ出す) · 前・後ろ・横の歩き"],
+    },
+  },
+  {
     version: "0.48.223",
     date: "2026-10-29",
     items: {

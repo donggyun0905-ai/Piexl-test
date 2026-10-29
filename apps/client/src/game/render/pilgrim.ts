@@ -3,6 +3,7 @@
 import { pilgrimWalk, relicStacks, ROOM_CX, ROOM_CY, type EffectState, type RunState } from "@pixel-rogue/shared";
 import { RELIC_COLORS } from "../iconArt/hidden";
 import { hudScale } from "./imugiAura";
+import { drawCharacter } from "../sprites";
 import type { Snap } from "./palette";
 import { additive, alpha, beam, glow, shock, sparks } from "./pwFxBits";
 
@@ -39,7 +40,9 @@ export function drawPilgrim(ctx: Ctx, s: RunState, line: string | undefined): vo
     });
   }
   const bob = f < 1 ? Math.round(Math.abs(Math.sin(s.tick * 0.3)) * 1) : Math.round(Math.sin(s.tick * 0.08) * 0.6);
-  drawGirl(ctx, x, y - bob, s.tick, f < 1);
+  // 캐릭터 시트 (scripts/art/pilgrim_sprite.py, 나중에 히든 캐릭터로도 씀). 아직 못 불러왔으면 간단한 그림
+  const pose = { faceX: 0, faceY: 1, moving: f < 1, casting: false, step: (s.tick >> 3) % 4 };
+  if (!drawCharacter(ctx, "pilgrim", x, y - 6, 6, pose)) drawGirl(ctx, x, y - bob, s.tick, f < 1);
   if (f >= 1 && line && s.tick - npc.t0 < 110 + 240) drawBubble(ctx, x, y - 50, line);
 }
 
