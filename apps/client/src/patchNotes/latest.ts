@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.249",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "쟁탈전·전쟁의 서막·기간토마키아: 처음부터 화면을 조금 줄인 상태(0.75배)로 시작 · 화면 끌어 보기: PC는 휠 버튼을 누른 채 끌기(휠 버튼 한 번 = 내 캐릭터로), 모바일은 오른쪽 두 손가락을 같이 끌기 · 옮겼으면 왼쪽 아래 '내 캐릭터로' 버튼 · 판 시작 뒤 15초 동안 왼쪽 아래에 조작 설명 (대결 방법 안내에도 적음)",
+        "관리자 패왕전 수치: 병사·포탑·집 보스·몬스터 · 쟁탈전·전쟁의 서막(성장·증강) · 점령전 · 기간토마키아 · 집 상점 장비 탭 추가",
+      ],
+      en: [
+        "Divine Contest / Prelude to War / Gigantomachia: the view now starts slightly zoomed out (0.75×) · drag the view: hold the wheel button and drag on PC (click the wheel button to snap back), drag two fingers together on the right on mobile · a 'Back to me' button appears bottom-left after moving the view · controls hint at the bottom-left for 15s after the match starts (also in How to play)",
+        "Admin Champion Clash values: new tabs for minions, towers, home bosses & monsters · Divine Contest / Prelude to War (growth, augments) · Capture · Gigantomachia · home shop gear",
+      ],
+      ja: [
+        "争奪戦・戦争の序幕・ギガントマキア: 最初から少し縮小した画面(0.75倍)で開始 · 画面ドラッグ: PCはホイールボタンを押したままドラッグ（ホイールボタン1回 = 自分のキャラへ）、モバイルは右側の2本指を一緒にドラッグ · 動かしたら左下に「自分のキャラへ」ボタン · 開始後15秒間、左下に操作説明（遊び方ガイドにも記載）",
+        "管理者の覇王戦数値: 兵士・砲塔・拠点ボス・モンスター · 争奪戦・戦争の序幕（成長・強化）· 占領戦 · ギガントマキア · 拠点ショップ装備のタブを追加",
+      ],
+    },
+  },
+  {
     version: "0.48.248",
     date: "2026-10-30",
     items: {

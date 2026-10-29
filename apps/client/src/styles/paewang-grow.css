@@ -207,3 +207,25 @@
   outline: 1px solid #f2d040;
   border-radius: 3px;
 }
+/* 넓게 보는 대결: 확대·끌어 보기 설명 · 내 캐릭터로 버튼 (미니맵 맞은편 왼쪽 아래) */
+.pan-hint {
+  position: fixed;
+  left: 8px;
+  bottom: 64px;
+  z-index: 3;
+  max-width: min(46vw, 360px);
+  margin: 0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(16, 12, 24, 0.72);
+  color: #d8d0e8;
+  font-size: 11px;
+  pointer-events: none;
+}
+.pan-hint.pan-back {
+  border: 1px solid #f2d040;
+  color: #f2d040;
+  font-size: 13px;
+  cursor: pointer;
+  pointer-events: auto;
+}

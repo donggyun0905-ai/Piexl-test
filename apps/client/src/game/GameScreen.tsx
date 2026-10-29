@@ -3,7 +3,7 @@ import { LastBossChoice } from "./LastBossChoice";
 import { beginRun, endRun } from "../balance";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AchievementToast } from "./AchievementToast";
-import { cameraFor, zoomMinFor } from "./camera";
+import { cameraFor, zoomFor } from "./camera";
 import { clickTargetAt } from "./clickTargets";
 import type { StatRow } from "./statsView";
 import { Controls } from "./controls";
@@ -17,7 +17,7 @@ import { formatTime } from "./hudText";
 import { Loadout, type LoadoutView } from "./Loadout";
 import { MINIMAP_HEIGHT, MINIMAP_WIDTH } from "./minimap";
 import { floorTipAt, PickupTip, type FloorTip } from "./PickupTip";
-import { GameHud, StatsPanel } from "./GameHud";
+import { GameHud, PanHint, StatsPanel } from "./GameHud";
 import { createShaker, useBackButton, useFitScale } from "./screenHooks";
 import { PracticePanel } from "./PracticePanel";
 import { createTutorial, type Tutorial, type TutorialStepId } from "./tutorial";
@@ -128,7 +128,7 @@ export function GameScreen(props: GameScreenProps) {
       onToggleRange: () => setSettings({ showRange: !getSettings().showRange }),
       onToggleNames: () => setSettings({ showNames: !getSettings().showNames }),
       onTouch: () => setTouchMode(true),
-      zoomMin: zoomMinFor(run),
+      zoom: zoomFor(run),
       clickTarget: (x, y) => clickTargetAt(run, canvas, controls.zoom, x, y),
     });
     controlsRef.current = controls;
@@ -260,7 +260,7 @@ export function GameScreen(props: GameScreenProps) {
         <PracticePanel run={() => runRef.current} loadout={loadout} characterId={characterId} lang={lang} t={t} onCharacter={props.onPracticeCharacter} />
       )}
       {loadout && <Loadout view={loadout} lang={lang} t={t} touchMode={touchMode} controls={() => controlsRef.current} />}
-      {!pvp && <p className={`game-hint ${touchMode ? "touch" : ""}`}>{t(touchMode ? "hintRotate" : "hintPc")}</p>}
+      {pvp ? <PanHint t={t} touchMode={touchMode} /> : <p className={`game-hint ${touchMode ? "touch" : ""}`}>{t(touchMode ? "hintRotate" : "hintPc")}</p>}
 
       {/* 터치·마우스 입력 영역 (화면 전체). 조이스틱은 드래그할 때만 보임 */}
       <div ref={zoneRef} className="input-zone" />

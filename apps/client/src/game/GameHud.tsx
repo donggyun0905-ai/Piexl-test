@@ -1,10 +1,11 @@
-// 게임 화면 위쪽 줄(일시정지 · 체력 · 정보 · 켜고 끄기 버튼)과 능력치 창
-import { useState } from "react";
+// 게임 화면 위쪽 줄(일시정지 · 체력 · 정보 · 켜고 끄기 버튼)과 능력치 창 · 넓게 보는 대결의 확대·끌어 보기 설명(PanHint)
+import { useEffect, useState } from "react";
 import type { RefObject } from "react";
 import type { CharacterId } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { charGuide } from "../i18n/guides";
 import { setSettings, useSettings } from "../settings";
+import { resetPan, usePan } from "./cameraPan";
 import { CharKit } from "./CharKit";
 import type { StatRow } from "./statsView";
 
@@ -88,4 +89,25 @@ export function StatsPanel({ rows, character, lang, t }: { rows: StatRow[]; char
       {character && lang && t && <CharKit character={character} lang={lang} t={t} />}
     </div>
   );
+}
+
+/** 확대·끌어 보기 설명이 보이는 시간 (ms) */
+const HINT_MS = 15000;
+
+/** 넓게 보는 대결(쟁탈전·전쟁의 서막·기간토마키아) 왼쪽 아래: 판 시작 뒤 잠깐 확대·끌어 보기 설명 · 화면을 옮겼으면 '내 캐릭터로' 버튼 */
+export function PanHint({ t, touchMode }: { t: (k: TextKey) => string; touchMode: boolean }) {
+  const [on, panned] = usePan();
+  const [hint, setHint] = useState(true);
+  useEffect(() => {
+    const id = setTimeout(() => setHint(false), HINT_MS);
+    return () => clearTimeout(id);
+  }, []);
+  if (!on) return null;
+  if (panned)
+    return (
+      <button type="button" className="pan-hint pan-back" onClick={resetPan}>
+        {t("panBack")}
+      </button>
+    );
+  return hint ? <p className="pan-hint">{t(touchMode ? "panHintTouch" : "panHintPc")}</p> : null;
 }

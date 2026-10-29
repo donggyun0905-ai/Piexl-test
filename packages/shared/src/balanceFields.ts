@@ -10,7 +10,7 @@ export type BalanceGroupId = "characters" | "weapons" | "rules" | "effects" | "e
 /** 타워 디펜스 수치 묶음 (tdBalanceFields) */
 export type TdBalanceGroupId = "tdRules" | "tdTowers" | "tdEnemies" | "tdBosses" | "tdRounds";
 /** 패왕전 수치 묶음 (pwBalanceFields) */
-export type PwBalanceGroupId = "pwRoles" | "pwChars" | "pwSkills" | "pwItems" | "pwRules";
+export type PwBalanceGroupId = "pwRoles" | "pwChars" | "pwSkills" | "pwItems" | "pwRules" | "pwUnits" | "pwGrow" | "pwCapture" | "pwGiga" | "pwShop";
 
 export interface BalanceField {
   key: string;

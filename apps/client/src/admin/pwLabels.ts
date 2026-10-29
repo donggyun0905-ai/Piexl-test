@@ -1,9 +1,17 @@
 // 관리자 '패왕전 수치' 글자 (운영자용이라 한국어만): 묶음 이름 · 항목(캐릭터) 이름 · 스킬 값 이름 (skills.0.hit.dmg → 스킬 1 · 피해 배율)
 import { TEXT } from "../i18n/text";
+import { pwModeFieldLabel, pwModeRowLabel } from "./pwModeLabels";
 
 const ko = (k: string) => (TEXT as Record<string, { ko: string } | undefined>)[k]?.ko ?? k;
 
-export const PW_GROUP_LABEL = { pwRoles: "역할군", pwChars: "캐릭터 능력치", pwSkills: "스킬", pwItems: "사용 아이템 (패왕전 전용)", pwRules: "규칙" } as const;
+export const PW_GROUP_LABEL = { pwRoles: "역할군", pwChars: "캐릭터 능력치", pwSkills: "스킬", pwItems: "사용 아이템 (패왕전 전용)",
+  pwRules: "규칙",
+  pwUnits: "병사·포탑·집 보스·몬스터",
+  pwGrow: "쟁탈전·전쟁의 서막 (성장·증강)",
+  pwCapture: "점령전",
+  pwGiga: "기간토마키아",
+  pwShop: "집 상점 장비",
+} as const;
 
 const CHAR_FIELD: Record<string, string> = {
   hp: "체력 배율",
@@ -49,14 +57,14 @@ const SKILL_PART: Record<string, string> = {
 /** 항목 이름: 규칙 묶음은 '규칙'·'바뀐 기본 공격', 나머지는 캐릭터 이름 */
 export function pwRowLabel(group: string, id: string): string {
   if (group === "pwRules") return id === "basic" ? "바뀐 기본 공격 (베두인·학살자·잔영)" : "규칙";
-  return ko(id);
+  return pwModeRowLabel(group, id) ?? ko(id);
 }
 
 /** 값 이름 (모르는 값은 null → 자동 이름) */
 export function pwFieldLabel(group: string, key: string): string | null {
   if (group === "pwRoles") return "역할";
   if (group === "pwChars") return CHAR_FIELD[key] ?? null;
-  if (group !== "pwSkills") return null;
+  if (group !== "pwSkills") return pwModeFieldLabel(group, key);
   if (key === "basic") return "평타 배율";
   const m = /^skills\.(\d)\.(.+)$/.exec(key);
   if (!m) return null;

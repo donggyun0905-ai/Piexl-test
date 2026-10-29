@@ -22,6 +22,9 @@ export function fieldDoc(group: BalanceGroupId, id: string, key: string): string
   if (group === "pwSkills") return up(DOCS.PW_KITS, `${id}.${key}`);
   if (group === "pwRules") return up(DOCS[PW_RULE_TABLE[id] ?? ""], key);
   if (group === "pwItems") return up(DOCS.PW_ITEMS, `${id}.${key}`);
+  if (group === "pwUnits") return up(DOCS.PW_UNIT, id === "etc" ? key : `${id}.${key}`);
+  if (id.startsWith("aug_")) return up(DOCS.PW_AUGS, `${id.slice(4)}.${key}`);
+  if (id.startsWith("fx_")) return up(DOCS.PW_GEAR_FX, id.slice(3)) ?? INDEX[`${id.slice(3)}.${key}`];
   if (group === "characters") return DOCS.CHARACTERS?.[id];
   return INDEX[`${id}.${key}`] ?? (group === "effects" || group === "useItems" ? INDEX[id] : undefined);
 }

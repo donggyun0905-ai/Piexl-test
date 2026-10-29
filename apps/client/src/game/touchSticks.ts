@@ -1,4 +1,5 @@
-// 모바일 터치 조이스틱: 왼쪽 이동 · 오른쪽 조준(두 번 탭 = 대시) · 오른쪽 두 손가락 확대·축소 · 짧은 탭 = 층 보상·미니맵 고르기
+// 모바일 터치 조이스틱: 왼쪽 이동 · 오른쪽 조준(두 번 탭 = 대시) · 오른쪽 두 손가락 확대·축소·끌어 보기 · 짧은 탭 = 층 보상·미니맵 고르기
+import { panScreen } from "./cameraPan";
 import type { ClickTarget } from "./clickTargets";
 import { getSettings } from "../settings";
 import type { Stick } from "./sticks";
@@ -31,8 +32,8 @@ export interface TouchHost {
 export class TouchSticks {
   move: Stick | null = null;
   aim: Stick | null = null;
-  /** 두 손가락 확대·축소 (오른쪽 자리) */
-  pinch: { a: number; b: number; startDist: number; startZoom: number } | null = null;
+  /** 두 손가락 확대·축소 + 끌어 보기 (오른쪽 자리) · mx·my: 지난 두 손가락 가운데 */
+  pinch: { a: number; b: number; startDist: number; startZoom: number; mx: number; my: number } | null = null;
   private touchPoints = new Map<number, { x: number; y: number }>();
   private lastRightTapEnd = -1e9;
 
@@ -65,6 +66,8 @@ export class TouchSticks {
           b: e.pointerId,
           startDist: Math.max(1, Math.hypot(a.x - e.clientX, a.y - e.clientY)),
           startZoom: this.host.zoom(),
+          mx: (a.x + e.clientX) / 2,
+          my: (a.y + e.clientY) / 2,
         };
         this.aim.dx = 0;
         this.aim.dy = 0;
@@ -85,7 +88,12 @@ export class TouchSticks {
     if (this.pinch && (e.pointerId === this.pinch.a || e.pointerId === this.pinch.b)) {
       const a = this.touchPoints.get(this.pinch.a);
       const b = this.touchPoints.get(this.pinch.b);
-      if (a && b) this.host.setZoom(this.pinch.startZoom * (Math.hypot(a.x - b.x, a.y - b.y) / this.pinch.startDist));
+      if (!a || !b) return;
+      this.host.setZoom(this.pinch.startZoom * (Math.hypot(a.x - b.x, a.y - b.y) / this.pinch.startDist));
+      // 두 손가락을 같이 움직이면 화면을 끌어 봄 (넓게 보는 대결만)
+      const [mx, my] = [(a.x + b.x) / 2, (a.y + b.y) / 2];
+      panScreen(mx - this.pinch.mx, my - this.pinch.my);
+      [this.pinch.mx, this.pinch.my] = [mx, my];
       return;
     }
     const stick = this.move?.pointerId === e.pointerId ? this.move : this.aim?.pointerId === e.pointerId ? this.aim : null;

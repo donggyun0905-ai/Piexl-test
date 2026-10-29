@@ -4,6 +4,9 @@ const l = (ko: string, en: string, ja: string): L => ({ ko, en, ja });
 
 export const PW_GROW_TEXT = {
   pwContest: l("쟁탈전", "Divine Contest", "争奪戦"),
+  panHintPc: l("🖱 휠: 확대·축소 · 휠 버튼 누른 채 끌기: 화면 옮기기 · 휠 버튼 한 번: 내 캐릭터로", "🖱 Wheel: zoom · hold the wheel button and drag: move the view · click the wheel button: back to you", "🖱 ホイール: 拡大・縮小 · ホイールボタンを押したままドラッグ: 画面移動 · ホイールボタン1回: 自分のキャラへ"),
+  panHintTouch: l("✌ 오른쪽 두 손가락: 벌리고 좁혀 확대·축소, 같이 끌어 화면 옮기기", "✌ Two fingers on the right: pinch to zoom, drag together to move the view", "✌ 右側を2本指: 広げて縮めて拡大・縮小、一緒にドラッグで画面移動"),
+  panBack: l("⌖ 내 캐릭터로", "⌖ Back to me", "⌖ 自分のキャラへ"),
   pwContestDesc: l(
     "5대5. 신의 힘을 얻기 위한 싸움. 병사·포탑이 있는 한 줄 길 · 레벨 18·돈·집 상점 · 상대 포탑 둘을 부수고 가운데를 점령한 뒤, 상대 집 보스를 잡고 집을 점령하면 승리",
     "5v5. A fight for divine power on a single lane with minions and towers · level up to 18, earn gold and shop at home · break both enemy towers and take the center, then slay the boss guarding their home and capture it to win",

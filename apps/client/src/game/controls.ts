@@ -1,5 +1,6 @@
 import { AIM_DIST_MAX, AIM_DIST_STEP, quantize, type TickInput } from "@pixel-rogue/shared";
 import { skillOf, useOf } from "../settings";
+import { bindPan } from "./cameraPan";
 import { SkillArm } from "./skillArm";
 import type { ClickTarget } from "./clickTargets";
 import { drawSticks, type StickElements } from "./sticks";
@@ -9,8 +10,7 @@ import { moveVector, TouchSticks } from "./touchSticks";
 const AIM_DEADZONE = 6;
 /** 조준 방향 정밀도 (−100~100). 입력 기록이 너무 길어지지 않게 */
 const AIM_STEPS = 100;
-/** 화면 확대 한도 (1 = 방 전체가 보임 · 줄이는 한도는 옵션 zoomMin) */
-export const ZOOM_MAX = 2.5;
+export const ZOOM_MAX = 2.5; // 화면 확대 한도 (1 = 방 전체가 보임 · 줄이는 한도는 옵션 zoom.min)
 
 export interface ControlsOptions {
   /** 터치·마우스를 받는 화면 전체 영역 */
@@ -28,8 +28,7 @@ export interface ControlsOptions {
   onToggleRange: () => void;
   /** 처음 터치하면 모바일 화면(버튼·안내)으로 전환 */
   onTouch: () => void;
-  /** 가장 작게 줄이는 배율 (camera zoomMinFor) */
-  zoomMin: number;
+  zoom: { min: number; start: number }; // 확대 한도·처음 배율 (camera zoomFor)
   /** 누른 자리가 층 보상·미니맵 방이면 그 입력 (클릭·탭) */
   clickTarget: (x: number, y: number) => ClickTarget | null;
 }
@@ -60,11 +59,13 @@ export class Controls {
   fineAim = false; // 누른 곳까지 거리를 잘게 (추적자 암습 저격: 조준경 가운데에 정확히 대야 맞음)
   /** 클릭·탭으로 고른 층 보상·미니맵 방 */
   private clickQueued: ClickTarget | null = null;
-  zoom = 1;
+  zoom: number; // 화면 배율 (휠·두 손가락)
   private touch: TouchSticks;
   private cleanup: (() => void)[] = [];
 
   constructor(private opt: ControlsOptions) {
+    this.zoom = opt.zoom.start;
+    this.cleanup.push(bindPan(opt.zone, opt.zoom.min < 1, () => opt.playerScreenPos()?.scale ?? 1));
     this.touch = new TouchSticks({
       zone: opt.zone,
       onTouch: opt.onTouch,
@@ -175,7 +176,7 @@ export class Controls {
   }
 
   setZoom(z: number): void {
-    this.zoom = Math.min(ZOOM_MAX, Math.max(this.opt.zoomMin, z));
+    this.zoom = Math.min(ZOOM_MAX, Math.max(this.opt.zoom.min, z));
   }
 
   /** 사용 아이템 쓰기 (화면 버튼). slot: 1·2 */
