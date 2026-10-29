@@ -3,7 +3,7 @@ import { LastBossChoice } from "./LastBossChoice";
 import { beginRun, endRun } from "../balance";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AchievementToast } from "./AchievementToast";
-import { cameraFor } from "./camera";
+import { cameraFor, zoomMinFor } from "./camera";
 import { clickTargetAt } from "./clickTargets";
 import type { StatRow } from "./statsView";
 import { Controls } from "./controls";
@@ -128,7 +128,7 @@ export function GameScreen(props: GameScreenProps) {
       onToggleRange: () => setSettings({ showRange: !getSettings().showRange }),
       onToggleNames: () => setSettings({ showNames: !getSettings().showNames }),
       onTouch: () => setTouchMode(true),
-      onZoomChange: () => {},
+      zoomMin: zoomMinFor(run),
       clickTarget: (x, y) => clickTargetAt(run, canvas, controls.zoom, x, y),
     });
     controlsRef.current = controls;

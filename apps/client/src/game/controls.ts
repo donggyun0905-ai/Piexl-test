@@ -9,8 +9,7 @@ import { moveVector, TouchSticks } from "./touchSticks";
 const AIM_DEADZONE = 6;
 /** 조준 방향 정밀도 (−100~100). 입력 기록이 너무 길어지지 않게 */
 const AIM_STEPS = 100;
-/** 화면 확대 한도 (1 = 방 전체가 보임) */
-export const ZOOM_MIN = 1;
+/** 화면 확대 한도 (1 = 방 전체가 보임 · 줄이는 한도는 옵션 zoomMin) */
 export const ZOOM_MAX = 2.5;
 
 export interface ControlsOptions {
@@ -29,7 +28,8 @@ export interface ControlsOptions {
   onToggleRange: () => void;
   /** 처음 터치하면 모바일 화면(버튼·안내)으로 전환 */
   onTouch: () => void;
-  onZoomChange: (zoom: number) => void;
+  /** 가장 작게 줄이는 배율 (camera zoomMinFor) */
+  zoomMin: number;
   /** 누른 자리가 층 보상·미니맵 방이면 그 입력 (클릭·탭) */
   clickTarget: (x: number, y: number) => ClickTarget | null;
 }
@@ -175,8 +175,7 @@ export class Controls {
   }
 
   setZoom(z: number): void {
-    this.zoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z));
-    this.opt.onZoomChange(this.zoom);
+    this.zoom = Math.min(ZOOM_MAX, Math.max(this.opt.zoomMin, z));
   }
 
   /** 사용 아이템 쓰기 (화면 버튼). slot: 1·2 */

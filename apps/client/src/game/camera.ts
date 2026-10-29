@@ -18,3 +18,8 @@ export function cameraFor(s: RunState, zoom: number, alpha = 1): { x: number; y:
   const clampTo = (v: number, max: number) => (max < 0 ? max / 2 : Math.min(max, Math.max(0, v)));
   return { x: clampTo(px - vw / 2, ROOM_WIDTH - vw), y: clampTo(py - vh / 2, ROOM_HEIGHT - vh) };
 }
+
+/** 가장 작게 줄이는 배율 (휠·두 손가락): 보통 1(방 전체) · 큰 패왕전 경기장(쟁탈전·전쟁의 서막·기간토마키아)은 위아래가 좁아 더 줄여 넓게 볼 수 있게 */
+export function zoomMinFor(s: RunState): number {
+  return s.pvp && ["contest", "war", "giganto"].includes(s.pvp.mode) ? 0.6 : 1;
+}

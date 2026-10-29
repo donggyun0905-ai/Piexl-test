@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.248",
+    date: "2026-10-30",
+    items: {
+      ko: ["쟁탈전·전쟁의 서막·기간토마키아: 화면을 더 작게 줄여 넓게 보기 (PC 마우스 휠 · 모바일 오른쪽 두 손가락, 위아래가 지금보다 최대 1.7배 넓게 보임 · 버튼·창·미니맵 크기는 그대로)"],
+      en: ["Divine Contest / Prelude to War / Gigantomachia: you can now zoom further out to see more (mouse wheel on PC · two-finger pinch on the right on mobile; up to 1.7× more of the field vertically · buttons, windows and the minimap keep their size)"],
+      ja: ["争奪戦・戦争の序幕・ギガントマキア: 画面をさらに縮小して広く見られるように（PCはマウスホイール · モバイルは右側を2本指、上下が最大1.7倍広く見える · ボタン・ウィンドウ・ミニマップの大きさはそのまま）"],
+    },
+  },
+  {
     version: "0.48.247",
     date: "2026-10-30",
     items: {
