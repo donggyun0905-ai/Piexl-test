@@ -110,7 +110,12 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
   eachSeat(s, (i) => {
     const seat = pv.seats[i]!;
     s.prompt = { kind: "none" };
-    if (!inPlay(s, i)) return;
+    // 쓰러져 기다리는 동안에도 상점은 씀 (성장 대결)
+    if (!inPlay(s, i)) {
+      const m = seat.human ? inputs[i]?.menu : 0;
+      if (m) growMenu(s, m);
+      return;
+    }
     // 수풀에 숨은 상대는 가까이 가야 보임 (자동 조준·유도탄·AI가 못 노림)
     markHidden(s);
     // 사람은 자동 공격 없이 직접 조준만 (AI는 그대로)

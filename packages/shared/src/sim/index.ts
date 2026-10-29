@@ -98,7 +98,7 @@ export { createPvp, pvpResult, pwSeatCount, stepPvp, type PwHuman } from "./pvp"
 export { createPractice } from "./pvpPractice";
 export * from "./paewangTypes";
 export { pwCanStack, pwLoadoutOk, pwPassiveChoices, pwStackMax, pwWeapons } from "./paewangKit";
-export { fogAt, inBush, onDeck, spotXY } from "./paewangGrid";
+export { fogAt, inBush, onDeck, pwGrid, spotXY } from "./paewangGrid";
 export { trapUp } from "./pvpFlow";
 export { pvpTimeLeft, pvpZone, type PwZone } from "./pvpZone";
 export { capCenter, inCapZone, isCapture, nearBuff } from "./pwCapture";

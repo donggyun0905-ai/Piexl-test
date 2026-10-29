@@ -6,7 +6,8 @@ import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { HEAL_ITEMS } from "../items";
 import { PW, PW_MODE } from "../paewangDefs";
 import { createRng, deriveSeed } from "../rng";
-import { onDeck } from "./paewangGrid";
+import { onDeck, pwGrid } from "./paewangGrid";
+import { wallBetween } from "./layout";
 import { seatNo } from "./party";
 import { canCast, skillDef } from "./pwSkill";
 import { EMPTY_INPUT, type EnemyState, type RunState, type TickInput } from "./types";
@@ -19,11 +20,13 @@ function target(s: RunState): EnemyState | null {
   const p = s.player;
   const arena = s.pvp!.arena;
   const sight = PW.sight * (onDeck(arena, p.x, p.y) ? 1.4 : 1);
+  // 새 대결(점령전·쟁탈전·전쟁의 서막·기간토마키아): 벽 너머 상대는 못 봄 (벽을 끼고 싸우느라 목표를 버리지 않게)
+  const walls = PW_MODE[s.pvp!.mode].rule ? pwGrid(arena) : null;
   let best: EnemyState | null = null;
   let bd = Infinity;
   for (const e of s.enemies) {
     const d = dist2(p, e);
-    if (e.hp <= 0 || e.pwHid || d > sight * sight) continue;
+    if (e.hp <= 0 || e.pwHid || d > sight * sight || (walls && wallBetween(walls, p.x, p.y, e.x, e.y))) continue;
     if (d < bd) {
       bd = d;
       best = e;

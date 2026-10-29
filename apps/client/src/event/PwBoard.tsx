@@ -1,10 +1,11 @@
 // 패왕전 점수판 (Tab을 누르는 동안 · 버튼으로 열고 닫기): 편마다 이름·캐릭터·처치·데스·준 피해·받은 피해·순위·무기·패시브·사용 아이템
-import { allPlayers, inPlay, type PassiveId, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, inPlay, isGrow, type PassiveId, type RunState } from "@pixel-rogue/shared";
 import { useEffect, useState, type MouseEvent } from "react";
 import { ItemIcon, type IconItem } from "../game/itemIcon";
 import { ItemTip, tipPos, useCloseOutside, type TipPos } from "../game/ItemTip";
 import type { Lang, TextKey } from "../i18n";
 import { itemDesc, itemName } from "../i18n/items";
+import { gearLines } from "./PwShop";
 
 interface Props {
   run: RunState;
@@ -18,13 +19,13 @@ interface Props {
 export function PwBoard({ run, me, names, lang, t }: Props) {
   const pv = run.pvp!;
   // 무기·패시브·사용 아이템에 마우스를 올리면(모바일은 누르면) 설명 말풍선
-  const [tip, setTip] = useState<{ pos: TipPos; item: IconItem } | null>(null);
+  const [tip, setTip] = useState<{ pos: TipPos; item: IconItem; grow?: boolean } | null>(null);
   const touch = window.matchMedia("(pointer: coarse)").matches;
   useCloseOutside(!!tip && touch, ".pw-gear span", setTip);
-  const hover = (item: IconItem) => {
+  const hover = (item: IconItem, grow = false) => {
     const show = (e: MouseEvent<HTMLElement>) => {
       const r = e.currentTarget.getBoundingClientRect();
-      setTip({ pos: tipPos(r.left + r.width / 2, r.top - 4, r.bottom + 4), item });
+      setTip({ pos: tipPos(r.left + r.width / 2, r.top - 4, r.bottom + 4), item, grow });
     };
     return { onMouseEnter: (e: MouseEvent<HTMLElement>) => !touch && show(e), onMouseLeave: () => !touch && setTip(null), onClick: (e: MouseEvent<HTMLElement>) => touch && show(e) };
   };
@@ -40,6 +41,9 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
   const mine = pv.seats[me]!.team;
   teams.sort((a, b) => (a === mine ? -1 : b === mine ? 1 : a - b));
   const ffa = teams.length > 2;
+  // 성장 대결: 레벨 · 지금까지 번 돈 · 산 장비 (상대 편도 보임)
+  const grow = isGrow(run);
+  const earned = (i: number) => ((run.seat ?? 0) === i ? run.goldEarned : (run.party?.[i]?.goldEarned ?? 0));
   const groups = ffa ? [order] : teams.map((tm) => order.filter((i) => pv.seats[i]!.team === tm));
   return (
     <div className="pw-board" role="dialog" aria-label={t("pwBoard")}>
@@ -55,7 +59,8 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
               <th>{t("pwDealt")}</th>
               <th>{t("pwTaken")}</th>
               <th>{t("pwHealed")}</th>
-              {pv.mode === "gungame" && <th>Lv</th>}
+              {(pv.mode === "gungame" || grow) && <th>Lv</th>}
+              {grow && <th>🪙</th>}
               <th>{t("pwGear")}</th>
             </tr>
           </thead>
@@ -78,6 +83,8 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
                   <td className="pw-taken">{Math.round(seat.taken ?? 0)}</td>
                   <td className="pw-healed">{Math.round(seat.healAll ?? 0)}</td>
                   {pv.mode === "gungame" && <td>{seat.lv}</td>}
+                  {grow && <td className="pw-lv">{p.pwLv ?? 1}</td>}
+                  {grow && <td className="pw-gold">{earned(i).toLocaleString()}</td>}
                   <td className="pw-gear">
                     <span {...hover({ kind: "weapon", id: p.weaponId })}>
                       <ItemIcon item={{ kind: "weapon", id: p.weaponId }} size={18} />
@@ -86,6 +93,11 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
                       <span key={id} {...hover({ kind: "passive", id })}>
                         <ItemIcon item={{ kind: "passive", id }} size={18} />
                         {c > 1 && <i>×{c}</i>}
+                      </span>
+                    ))}
+                    {(p.pwGear ?? []).map((id, k) => (
+                      <span key={`g${k}`} className="grow" {...hover({ kind: "passive", id: id as PassiveId }, true)}>
+                        <ItemIcon item={{ kind: "passive", id: id as PassiveId }} size={18} />
                       </span>
                     ))}
                     {p.useSlots.map((id, k) =>
@@ -102,7 +114,7 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
           </tbody>
         </table>
       ))}
-      {tip && <ItemTip pos={tip.pos} icon={tip.item} name={itemName(tip.item.kind, tip.item.id, lang)} desc={itemDesc(tip.item.kind, tip.item.id, lang, t)} />}
+      {tip && <ItemTip pos={tip.pos} icon={tip.item} name={itemName(tip.item.kind, tip.item.id, lang)} desc={tip.grow ? gearLines(tip.item.id, t).join(" · ") : itemDesc(tip.item.kind, tip.item.id, lang, t)} />}
     </div>
   );
 }

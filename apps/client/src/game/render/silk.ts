@@ -31,7 +31,7 @@ export function drawSilkStacks(ctx: Ctx, s: RunState, snap: Snap): void {
     const x = snap(e.x);
     // 아래부터: 체력바(몸 위 4) · 얽힘 점(몸 위 8) · 출혈 게이지(몸 위 12, 30이면 과다출혈)
     const y = snap(e.y - e.r - 8);
-    const b = (e.skBleed ?? 0) / 30;
+    const b = Math.min(1, (e.skBleed ?? 0) / 30);
     if (b > 0) {
       const by = snap(e.y - e.r - 12);
       ctx.fillStyle = "rgba(0,0,0,0.7)";

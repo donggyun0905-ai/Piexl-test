@@ -177,7 +177,8 @@ export function capSteer(s: RunState, input: TickInput): TickInput {
   const p = s.player;
   const a = arenaOf(s);
   if (seat.chan) return { ...input, moveX: 0, moveY: 0, attack: false };
-  if (input.attack) return cliffGuard(s, input);
+  // 싸우는 중이어도 구역 밖이면 반은 구역 쪽으로 걸으며 싸움 (공격은 그대로)
+  if (input.attack && (i % 2 === 1 || inCapZone(a, p.x, p.y))) return cliffGuard(s, input);
   if (nearBuff(s, p.x, p.y) >= 0) return { ...input, moveX: 0, moveY: 0, interact: true };
   let goal = capCenter(a);
   let toBuff = false;

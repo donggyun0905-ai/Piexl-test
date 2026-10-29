@@ -78,7 +78,8 @@ const threadDmg = (p: PlayerState) => baseStats(p.characterId, p.weaponId).damag
 function bleedStack(s: RunState, e: EnemyState): void {
   if (e.hp <= 0) return;
   applyBleed(e);
-  e.skBleed = (e.skBleed ?? 0) + 1;
+  // 패왕전은 과다출혈 없이 가득 찬 채로 (넘쳐 쌓이지 않게)
+  e.skBleed = Math.min(S.bleedMax, (e.skBleed ?? 0) + 1);
   if (e.skBleed < S.bleedMax || s.pvp) return;
   e.skBleed = 0;
   strike(s, e, s.player.stats.damage * S.overbleedMul);

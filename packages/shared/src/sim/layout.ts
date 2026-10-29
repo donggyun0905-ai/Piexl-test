@@ -148,6 +148,15 @@ function walkLine(g: TileGrid, x0: number, y0: number, x1: number, y1: number): 
   return true;
 }
 
+/** 두 점 사이를 벽이 가로막는지 (보이는지, 기둥·구덩이는 안 막음) */
+export function wallBetween(g: TileGrid, x0: number, y0: number, x1: number, y1: number): boolean {
+  const dx = x1 - x0;
+  const dy = y1 - y0;
+  const steps = Math.ceil(Math.sqrt(dx * dx + dy * dy) / (TILE_SIZE / 2));
+  for (let i = 1; i < steps; i++) if (tileAt(g, Math.floor((x0 + (dx * i) / steps) / TILE_SIZE), Math.floor((y0 + (dy * i) / steps) / TILE_SIZE)) === TILE_WALL) return true;
+  return false;
+}
+
 /** 목표 칸까지 걸어서 몇 칸인지 (막힌 칸·못 가는 칸은 -1) */
 export function distanceField(g: TileGrid, x: number, y: number): Int16Array {
   const dist = new Int16Array(ROOM_COLS * ROOM_ROWS).fill(-1);

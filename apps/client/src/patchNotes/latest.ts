@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.246",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "고침: 패왕전에서 영사 출혈 스택이 상한 없이 쌓여 게이지가 넘치던 문제 (가득 차면 그대로 · 다시 태어나면 처음부터) · 새 대결에서 AI가 벽 너머 상대와 싸우느라 점령을 안 하던 문제 (벽 너머는 못 보고, 점령전에서는 싸우면서 구역으로 감)",
+        "점수판(Tab): 성장 대결에서 모두의 레벨 · 번 돈 · 산 장비(상대 편도, 마우스를 올리면 능력치) · 증강 고르기를 카드 셋으로 (증강마다 픽셀 그림 12종)",
+        "집 상점: 맨 위 역할군별 추천 장비 셋(왜 좋은지 설명) · 전설 장비를 누르면 재료 창 (재료 하나씩 사기 · 한 번에 완성) · 쓰러져 기다리는 동안에도 삼 · Esc로 상점만 닫힘 · 글자·그림 크게 · 영어로 보이던 히든 장비 이름 한글로",
+        "쟁탈전·전쟁의 서막(·기간토마키아)은 경기장 고르기 없이 바로 밴픽 · 병사가 캐릭터에게 주는 피해 크게 줄이고(×0.35) 포탑에는 더 세게(×2) · 포탑이 맞아도 밀리지 않음",
+        "진영 꾸밈: 우리 쪽(왼쪽 아래) 현대 무기 진영 = 강철 판 바닥·격벽·경고 줄무늬·쌍열 포신 포탑 · 상대 쪽(오른쪽 위) 대정령의 세계수 진영 = 풀밭·꽃·뿌리·숲 벽·세계수 포탑 (빛줄기로 쏨)",
+      ],
+      en: [
+        "Fixed: Silk's bleed stacks in Champion Clash grew without a cap and overflowed the gauge (now it stays full and resets on respawn) · AI in the new modes fought enemies through walls instead of capturing (they can't see through walls now, and in Capture they keep walking to the zone while fighting)",
+        "Scoreboard (Tab): in growth modes, everyone's level, gold earned and gear (enemies too, hover for stats) · augment picks are now three cards with 12 pixel-art icons",
+        "Home Shop: three role-based recommendations at the top with reasons · tap a legendary to open its parts window (buy parts one by one or complete at once) · shop while waiting to respawn · Esc closes just the shop · bigger text and icons · hidden gear names no longer show in English",
+        "Divine Contest and Prelude to War (and Gigantomachia) skip the arena picker · minions deal much less damage to fighters (×0.35) and more to towers (×2) · towers no longer get pushed around",
+        "Faction looks: our side (bottom-left) is a modern-arms base with steel floors, bulkheads, hazard stripes and twin-barrel turrets · the enemy side (top-right) is the Great Spirits' World Tree with grass, flowers, roots, forest walls and world-tree turrets that fire beams",
+      ],
+      ja: [
+        "修正: 覇王戦で影師の出血スタックが上限なく積もりゲージがあふれていた問題（満タンで止まり、復活でリセット）· 新しい対決でAIが壁越しの相手と戦って占領しなかった問題（壁の向こうは見えず、占領戦では戦いながら区域へ向かう）",
+        "スコアボード(Tab): 成長対決で全員のレベル・稼いだお金・買った装備（相手チームも、マウスを乗せると能力値）· 強化選択を3枚のカードに（強化ごとのピクセル絵12種）",
+        "拠点ショップ: 一番上に役割別おすすめ装備3つ（理由つき）· 伝説装備を押すと素材ウィンドウ（素材を1つずつ購入・まとめて完成）· 倒れて復活を待つ間も購入可 · Escでショップだけ閉じる · 文字・絵を大きく · 英語で出ていたヒドゥン装備名を日本語に",
+        "争奪戦・戦争の序幕（・ギガントマキア）は闘技場選択なしですぐバンピック · 兵士がキャラに与えるダメージを大きく減らし(×0.35)、砲塔にはより強く(×2) · 砲塔が攻撃されても押されない",
+        "陣営の装い: 味方側（左下）は現代兵器の陣営 = 鋼板の床・隔壁・警告ストライプ・二連砲身の砲塔 · 相手側（右上）は大精霊の世界樹の陣営 = 草原・花・根・森の壁・世界樹の砲塔（光線で撃つ）",
+      ],
+    },
+  },
+  {
     version: "0.48.245",
     date: "2026-10-30",
     items: {

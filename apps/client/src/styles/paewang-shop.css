@@ -1,0 +1,148 @@
+/* 패왕전 집 상점 · 전설 재료 창 */
+.pw-shop {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 7;
+  transform: translate(-50%, -50%);
+  width: min(1040px, calc(100vw - 24px));
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: rgb(16 12 26 / 0.97);
+  border: 2px solid #6a5aa0;
+  color: #eee;
+  font-size: 15px;
+}
+.pw-shop header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 22px;
+}
+.pw-shop header small {
+  font-size: 13px;
+  color: #a8a0c0;
+}
+.pw-shop header .ghost {
+  margin-left: auto;
+  font-size: 20px;
+}
+.pw-shop h4 {
+  margin: 14px 0 6px;
+  font-size: 17px;
+  color: #c8b8ff;
+}
+.pw-shop-gold {
+  color: #f2d040;
+  font-weight: bold;
+}
+.pw-shop-away {
+  margin: 6px 0;
+  font-size: 15px;
+  color: #ff9a8a;
+}
+.pw-shop-list,
+.pw-shop-rec,
+.pw-shop-parts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 6px;
+}
+.pw-shop-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  text-align: left;
+  border-radius: 8px;
+}
+.pw-shop-item.dim {
+  opacity: 0.55;
+}
+.pw-shop-item.legend {
+  border-color: #b48a30;
+}
+.pw-shop-item.rec {
+  background: linear-gradient(90deg, #3a2a10 0%, #1e1630 100%);
+  border-color: #f2d040;
+}
+.pw-shop-item.own {
+  border-color: #5ad86a;
+}
+.pw-shop-item span {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.pw-shop-item b {
+  font-size: 16px;
+}
+.pw-shop-item small {
+  font-size: 13px;
+  line-height: 1.3;
+  color: #c8c0d8;
+}
+.pw-shop-item small.why {
+  color: #ffe07a;
+}
+.pw-shop-item em {
+  font-style: normal;
+  font-size: 15px;
+  font-weight: bold;
+  color: #f2d040;
+  white-space: nowrap;
+}
+.pw-shop-item.part-fee {
+  border: 1px dashed #6a5aa0;
+}
+.pw-shop-mine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 46px;
+}
+.pw-shop-mine button {
+  padding: 4px;
+}
+.pw-shop-detail {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 8;
+  transform: translate(-50%, -50%);
+  width: min(720px, calc(100vw - 32px));
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: rgb(22 16 36 / 0.99);
+  border: 2px solid #f2d040;
+  box-shadow: 0 0 30px rgb(0 0 0 / 0.6);
+}
+.pw-shop-detail header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pw-shop-detail header span {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+.pw-shop-detail header b {
+  font-size: 20px;
+  color: #ffe07a;
+}
+.pw-shop-detail header small {
+  font-size: 14px;
+  color: #e0d8f0;
+}
+.pw-shop-make {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  font-size: 17px;
+}

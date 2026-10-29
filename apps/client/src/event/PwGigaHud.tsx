@@ -5,7 +5,7 @@ import type { Controls } from "../game/controls";
 import { ItemIcon } from "../game/itemIcon";
 import type { Lang, TextKey } from "../i18n";
 import { itemName } from "../i18n/items";
-import { gearLines } from "./PwShop";
+import { gearItem, gearLines, gearName } from "./pwGearView";
 
 interface Props {
   run: RunState;
@@ -22,8 +22,8 @@ function Item({ id, lang, t }: { id: string; lang: Lang; t: (k: TextKey) => stri
   const use = id.startsWith("u:");
   const key = use ? id.slice(2) : id;
   return (
-    <span title={use ? itemName("use", key, lang) : `${itemName("passive", key, lang)}\n${gearLines(key, t).join("\n")}`}>
-      <ItemIcon item={{ kind: use ? "use" : "passive", id: key } as never} size={22} />
+    <span title={use ? itemName("use", key, lang) : `${gearName(key, lang)}\n${gearLines(key, t).join("\n")}`}>
+      <ItemIcon item={use ? ({ kind: "use", id: key } as never) : gearItem(key, lang)} size={22} />
     </span>
   );
 }
@@ -103,7 +103,7 @@ export function PwGigaHud({ run, me, lang, t, controls }: Props) {
             <small>{t("pwGigaCraft")}</small>
             {craft.map((id) => (
               <button key={id} type="button" disabled={!!p.pwCraft} title={gearLines(id, t).join("\n")} onClick={() => send(GIGA_MENU.craft + LEGENDS.indexOf(id))}>
-                <ItemIcon item={{ kind: "passive", id } as never} size={22} /> {PW_LEGEND[id]!.cost}
+                <ItemIcon item={gearItem(id, lang)} size={22} /> {PW_LEGEND[id]!.cost}
               </button>
             ))}
           </div>

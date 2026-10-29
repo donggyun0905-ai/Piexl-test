@@ -2,6 +2,7 @@
 import { drawPwZone } from "./pwZone";
 import { drawCapChan, drawCapGround } from "./pwCapture";
 import { drawGrowGround, drawGrowUnits, drawWarFog } from "./pwGrowDraw";
+import { drawGrowTheme } from "./pwGrowTheme";
 import { allPlayers, inBush, PW, PW_ARENAS, TILE_SIZE, trapUp, type EnemyState, type ProjectileState, type PwAlly, type PwBrain, type RunState } from "@pixel-rogue/shared";
 import { drawBody } from "./actors";
 import { drawFoeCue, pwHead, pwIsAlly, pwShown, pwTint, setPwViewer } from "./pwLook";
@@ -98,6 +99,7 @@ export function drawPwGround(ctx: Ctx, s: RunState): void {
   }
   if (!s.pvp) return;
   drawCapGround(ctx, s);
+  drawGrowTheme(ctx, s);
   drawGrowGround(ctx, s);
   drawGrowUnits(ctx, s);
   drawPwZone(ctx, s);

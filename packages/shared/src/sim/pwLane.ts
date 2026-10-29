@@ -74,7 +74,8 @@ function attack(s: RunState, u: PwUnit, t: Target): void {
   const d = PW_UNIT[u.kind];
   u.cd = d.every;
   u.shot = { x: t.x, y: t.y, at: s.tick };
-  const dmg = d.dmg * u.mul;
+  const minion = u.kind === "minion" || u.kind === "archer";
+  const dmg = d.dmg * u.mul * (minion && t.unit?.kind === "tower" ? PW_UNIT.vsTower : minion && t.seat !== undefined ? PW_UNIT.vsHero : 1);
   if (t.unit) {
     t.unit.body.hp -= dmg;
     t.unit.body.hitFlash = 6;
@@ -126,6 +127,8 @@ export function laneTick(s: RunState): void {
   for (const u of g.units) {
     const b = u.body;
     if (b.hp <= 0) continue;
+    // 포탑은 맞아 밀려도 늘 제자리
+    if (u.kind === "tower") [b.x, b.y] = [u.hx, u.hy];
     b.prevX = b.x;
     b.prevY = b.y;
     if (b.hitFlash > 0) b.hitFlash--;

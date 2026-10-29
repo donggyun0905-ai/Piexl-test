@@ -134,6 +134,9 @@ export function bringBack(s: RunState): void {
     seat.back = undefined;
     seat.on = true;
     recapReset(seat);
+    // 다시 나오면 몸에 남은 표시(얽힘·출혈 스택)도 처음부터
+    const proxy = pv.proxies[i];
+    if (proxy) proxy.skStacks = proxy.skBleed = 0;
     const def = PW_ARENAS[pv.arena];
     const p = s.player;
     seat.jump = seat.chan = undefined;

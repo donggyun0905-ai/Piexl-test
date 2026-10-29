@@ -1,8 +1,9 @@
 // 패왕전 성장 대결 화면 위 정보: 레벨·경험치 막대·돈·상점 버튼(B) · 쟁탈전 진행(포탑·가운데·집 점령) · 증강 고르기 · 상점 창
 import { allPlayers, atHome, GROW_MENU, isGrow, PW_ARENAS, PW_GROW, towersLeft, type RunState } from "@pixel-rogue/shared";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Controls } from "../game/controls";
 import type { Lang, TextKey } from "../i18n";
+import { PwAugPick } from "./PwAugPick";
 import { PwShop } from "./PwShop";
 
 interface Props {
@@ -18,12 +19,22 @@ const goldOf = (run: RunState, me: number) => ((run.seat ?? 0) === me ? run.gold
 
 export function PwGrowHud({ run, me, lang, t, controls }: Props) {
   const [shop, setShop] = useState(false);
+  const open = useRef(false);
   useEffect(() => {
+    open.current = shop;
+  }, [shop]);
+  useEffect(() => {
+    // B: 열기·닫기 · Esc: 상점이 열려 있으면 상점만 닫음 (나가기 확인 창이 뜨지 않게, 먼저 받음)
     const key = (e: KeyboardEvent) => {
       if (e.code === "KeyB" && !e.repeat) setShop((v) => !v);
+      if (e.code === "Escape" && open.current) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        setShop(false);
+      }
     };
-    window.addEventListener("keydown", key);
-    return () => window.removeEventListener("keydown", key);
+    window.addEventListener("keydown", key, true);
+    return () => window.removeEventListener("keydown", key, true);
   }, []);
   if (!isGrow(run)) return null;
   const p = allPlayers(run)[me]!;
@@ -72,16 +83,7 @@ export function PwGrowHud({ run, me, lang, t, controls }: Props) {
             ) : null,
           )}
       </div>
-      {p.pwOffer && (
-        <div className="pw-aug" role="dialog" aria-label={t("pwAugPick")}>
-          <b>{t("pwAugPick")}</b>
-          {p.pwOffer.map((id, k) => (
-            <button key={id} type="button" onClick={() => controls()?.queueMenu(GROW_MENU.aug + k)}>
-              {t(`pwAug_${id}` as TextKey)}
-            </button>
-          ))}
-        </div>
-      )}
+      {p.pwOffer && <PwAugPick offer={p.pwOffer} t={t} controls={controls} />}
       {shop && <PwShop run={run} me={me} lang={lang} t={t} controls={controls} onClose={() => setShop(false)} />}
     </>
   );

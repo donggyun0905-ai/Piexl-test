@@ -155,7 +155,8 @@ export function growMenu(s: RunState, code: number): boolean {
   if (code >= GROW_MENU.tp) teleport(s, code - GROW_MENU.tp);
   else if (code >= GROW_MENU.aug) pickAug(s, code - GROW_MENU.aug);
   else if (code >= GROW_MENU.sell) sell(s, code - GROW_MENU.sell);
-  else if (atHome(s, i)) buy(s, PW_SHOP_IDS[code - GROW_MENU.buy] ?? "");
+  // 집에 있거나, 쓰러져 다시 나오기를 기다리는 동안
+  else if (atHome(s, i) || !inPlay(s, i)) buy(s, PW_SHOP_IDS[code - GROW_MENU.buy] ?? "");
   recalcStats(s);
   p.hp = Math.min(p.hp, p.stats.maxHp);
   return true;
@@ -214,7 +215,7 @@ function buy(s: RunState, id: string): void {
 function sell(s: RunState, k: number): void {
   const p = s.player;
   const id = p.pwGear?.[k];
-  if (!id || !atHome(s, seatNo(s))) return;
+  if (!id || (!atHome(s, seatNo(s)) && inPlay(s, seatNo(s)))) return;
   p.pwGear = p.pwGear!.filter((_, j) => j !== k);
   s.gold += Math.floor(fullCost(id) / 2);
 }
