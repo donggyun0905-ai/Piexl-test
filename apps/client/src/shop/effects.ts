@@ -100,7 +100,12 @@ export function equipFx(slot: FxSlot, id: string | null): void {
 /** 판 시작 때: 켜진 효과 (한정 스킨 범 풍류를 입었으면 전부 범) */
 /** limited: 입은 한정 스킨 테마 (범 풍류·여름 파도면 효과 전부) */
 /** 범 효과는 hit·idle·walk (범 항목만), 테마 세트 효과는 themes (칸마다 다른 세트) */
-export function activeFx(limited: "tiger" | "summer" | null): { hit: boolean; idle: boolean; walk: boolean; rest: boolean; dmg: DmgStyle | null; themes: Partial<Record<"hit" | "idle" | "walk", FxTheme>> } {
+export function activeFx(limited: "tiger" | "summer" | "victory" | null): { hit: boolean; idle: boolean; walk: boolean; rest: boolean; dmg: DmgStyle | null; themes: Partial<Record<"hit" | "idle" | "walk", FxTheme>> } {
+  // 승리 한정 스킨: 승리 효과 세트 넷을 모두
+  if (limited === "victory") {
+    const v = themeOf("victory")!;
+    return { hit: false, idle: false, walk: false, rest: false, dmg: "victory", themes: { hit: v, idle: v, walk: v } };
+  }
   if (limited) return { hit: true, idle: true, walk: true, rest: true, dmg: limited, themes: {} };
   const e = equippedFx();
   const own = ownedFx();

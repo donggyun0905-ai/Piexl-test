@@ -8,9 +8,11 @@ export const LIMITED_THEMES = ["tiger", "summer"] as const;
 /** 시즌 2 캐릭터(비르디아·헬리오스·테라코어): 범 풍류 대신 여름 파도 한정 스킨 */
 export const SEASON2_SKIN_CHARS: readonly CharacterId[] = ["idra", "byeonhui", "fly", "elder", "ren", "spiritist", "plague", "slayer", "eater", "mukin", "samyeol", "automata", "rider", "bomber", "artifacter", "punk", "tracker", "forgotten", "remnant", "wanderer", "silk"];
 export type LimitedTheme = (typeof LIMITED_THEMES)[number];
+/** 보상 한정 테마: 뽑기에 안 나오고 보상으로만 (월드 워 리그 우승 '승리', 모든 캐릭터) */
+export const VICTORY_THEME = "victory" as const;
 /** 나만의 스킨: 상점에서 칸을 사서 직접 그림 (그림은 이 기기에만, game/customArt.mySkinSrc) */
 export const MY_THEME = "my" as const;
-export type SkinTheme = (typeof SKIN_THEMES)[number] | LimitedTheme | typeof MY_THEME;
+export type SkinTheme = (typeof SKIN_THEMES)[number] | LimitedTheme | typeof VICTORY_THEME | typeof MY_THEME;
 
 /** 바로 사기 · 뽑기 1번 · 10번(1번 덤) · 이미 가진 스킨이 나오면 돌려받는 쿠폰 */
 export const SKIN_PRICE = 30;
@@ -33,7 +35,8 @@ export const SHOP_SKINS: readonly string[] = CHARACTER_IDS.flatMap((c) => SKIN_T
 export const hasLimited = (theme: LimitedTheme, c: CharacterId) => (theme === "summer") === SEASON2_SKIN_CHARS.includes(c);
 export const limitedSkins = (theme: LimitedTheme) => CHARACTER_IDS.filter((c) => hasLimited(theme, c)).map((c) => skinId(c, theme));
 export const GACHA_ONLY: readonly string[] = LIMITED_THEMES.flatMap(limitedSkins);
-export const ALL_SKINS: readonly string[] = [...SHOP_SKINS, ...GACHA_ONLY];
+export const VICTORY_SKINS: readonly string[] = CHARACTER_IDS.map((c) => skinId(c, VICTORY_THEME));
+export const ALL_SKINS: readonly string[] = [...SHOP_SKINS, ...GACHA_ONLY, ...VICTORY_SKINS];
 export const isLimitedTheme = (th: string): th is LimitedTheme => (LIMITED_THEMES as readonly string[]).includes(th);
 
 /** 뽑기 한 번에 나오는 것: 한정 테마 1% · 상점 스킨 44% · 나머지는 쿠폰 (적게) */

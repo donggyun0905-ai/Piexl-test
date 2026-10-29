@@ -1,7 +1,8 @@
 // 게임 상태가 바뀐 것을 보고 소리·진동·화면 흔들림을 냄 (게임 계산에는 영향 없음)
 import { ENEMIES, type RunState } from "@pixel-rogue/shared";
 import { getSettings } from "../settings";
-import { wornLimited } from "../game/limited/limited";
+import { wornLimited, wornVictory } from "../game/limited/limited";
+import { setVictoryMusic } from "./victorySound";
 import { skillSounds } from "./sfxSkills";
 import { play, setMusicBoss, startMusic, stopMusic, type Sfx } from "./sound";
 import { setTigerMusic } from "./tigerSound";
@@ -114,6 +115,7 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
   const limited = wornLimited(run.player.characterId);
   setTigerMusic(limited === "tiger");
   setSummerMusic(limited === "summer");
+  setVictoryMusic(!limited && wornVictory(run.player.characterId));
   startMusic(run.floor, seen.boss);
   return {
     /** 틱을 진행한 프레임마다 */

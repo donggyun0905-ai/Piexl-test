@@ -4,7 +4,7 @@ import { loadAchievements } from "../records";
 import { onCloudApplied } from "../cloudSave";
 import { loadText, saveText } from "../storage";
 import { addEventCoins } from "../event/eventCoins";
-import { GACHA_ECOIN_ODDS, GACHA_ECOINS, GACHA_COUPONS, GACHA_LIMITED_ODDS, GACHA_ONLY, GACHA_REFUND, GACHA_SKIN_ODDS, LIMITED_REFUND, LIMITED_THEMES, limitedSkins, MY_SKIN_PRICE, MY_THEME, SHOP_SKINS, SKIN_PRICE, ALL_SKINS, CHARACTER_IDS, mySkinId, TEST_ALL_SKINS, type LimitedTheme } from "./skins";
+import { GACHA_ECOIN_ODDS, GACHA_ECOINS, GACHA_COUPONS, GACHA_LIMITED_ODDS, GACHA_ONLY, GACHA_REFUND, GACHA_SKIN_ODDS, LIMITED_REFUND, LIMITED_THEMES, limitedSkins, MY_SKIN_PRICE, MY_THEME, VICTORY_SKINS, SHOP_SKINS, SKIN_PRICE, ALL_SKINS, CHARACTER_IDS, mySkinId, TEST_ALL_SKINS, type LimitedTheme } from "./skins";
 
 /** 업적 하나에 받는 쿠폰 (어려운 종류일수록 많이) */
 export const ACHIEVEMENT_COUPONS: Record<AchievementCategory, number> = {
@@ -75,6 +75,15 @@ export function grantLimitedSkin(): string | null {
   else w.refund += LIMITED_REFUND;
   save(w);
   return theme ?? null;
+}
+
+/** 월드 워 리그 우승: 모든 캐릭터 '승리' 한정 스킨. 새로 받은 게 있으면 true */
+export function grantVictorySkins(): boolean {
+  const w = load();
+  const add = VICTORY_SKINS.filter((id) => !w.owned.includes(id));
+  w.owned.push(...add);
+  save(w);
+  return add.length > 0;
 }
 
 export function addMissionCoupons(n: number): void {

@@ -17,7 +17,7 @@ import { getSettings } from "../settings";
 import { statRows, type StatRow } from "./statsView";
 import { DamageTracker } from "./damageNumbers";
 import { PwInfoNumbers } from "./pwInfoNumbers";
-import { wornLimited } from "./limited/limited";
+import { wornLimited, wornVictory } from "./limited/limited";
 import { drawTigerOver, drawTigerUnder, tigerResting } from "./limited/tigerDraw";
 import { TigerFx } from "./limited/tigerFx";
 import { drawThemeOver, drawThemeUnder } from "./limited/themeDraw";
@@ -102,7 +102,7 @@ export function startGameLoop(o: LoopOptions): () => void {
   // 한정 스킨(범 풍류) 효과: 입었을 때만
   // 범 풍류: 한정 스킨이면 전부, 아니면 이벤트 상점에서 장착한 효과만 (울음소리는 한정 스킨만)
   const summer = wornLimited(run.player.characterId) === "summer";
-  const fx = activeFx(wornLimited(run.player.characterId));
+  const fx = activeFx(wornLimited(run.player.characterId) ?? (wornVictory(run.player.characterId) ? "victory" : null));
   const hooks = { powerText: t(summer ? "summerPower" : "tigerPower"), roar: fx.rest ? (summer ? splash : roar) : () => {}, on: fx };
   const tiger = fx.hit || fx.idle || fx.walk ? (summer ? new SummerFx(hooks) : new TigerFx(hooks)) : null;
   // 이벤트 상점 테마 효과 (칸마다 다른 세트, 범 효과와 같이 씀)

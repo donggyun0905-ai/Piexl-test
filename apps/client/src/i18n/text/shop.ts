@@ -51,6 +51,7 @@ export const SHOP_TEXT = {
   skinUsa: { ko: "미국풍", en: "American", ja: "アメリカ風" },
   skinTiger: { ko: "범 풍류", en: "Tiger Revelry", ja: "虎の風流" },
   skinSummer: { ko: "여름 파도", en: "Summer Splash", ja: "真夏のしぶき" },
+  skinVictory: { ko: "승리", en: "Victory", ja: "勝利" },
   skinMy: { ko: "나만의 스킨", en: "My Own Skin", ja: "マイスキン" },
   shopMyDesc: {
     ko: "도트를 한 칸씩 직접 찍어 이 캐릭터의 스킨을 만듭니다. 칸을 사면 '그리기'로 언제든 다시 고칠 수 있고, 고친 그림은 저장하는 즉시 게임에 나옵니다",

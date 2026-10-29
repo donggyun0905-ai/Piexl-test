@@ -3,6 +3,9 @@ import type { CharacterId } from "@pixel-rogue/shared";
 import { isLimitedTheme, parseSkin, type LimitedTheme } from "../../shop/skins";
 import { equippedSkin } from "../../shop/wallet";
 
+/** 월드 워 리그 '승리' 한정 스킨을 입었는지 (입으면 승리 효과 세트 + 행진곡) */
+export const wornVictory = (c: CharacterId): boolean => equippedSkin(c)?.endsWith("_victory") ?? false;
+
 export function wornLimited(c: CharacterId): LimitedTheme | null {
   const id = equippedSkin(c);
   if (!id) return null;

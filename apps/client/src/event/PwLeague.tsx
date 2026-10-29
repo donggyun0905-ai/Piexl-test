@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { addChips } from "../lobby/chips";
 import { grantFx } from "../shop/effects";
+import { grantVictorySkins } from "../shop/wallet";
 import { PwDraftSolo } from "./PwDraftSolo";
 import { PwGame } from "./PwGame";
 import { PW_NAME } from "./PwModes";
@@ -40,7 +41,10 @@ export function PwLeague({ lang, t, onExit }: Props) {
     const c = advanceLeague(league);
     if (c !== undefined) {
       setChamp(c);
-      if (c === 0) grantFx("league");
+      if (c === 0) {
+        grantFx("league");
+        grantVictorySkins();
+      }
     }
     setLeague({ ...league });
     redraw((n) => n + 1);

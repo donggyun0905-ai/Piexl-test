@@ -6,7 +6,7 @@ import { bigSheet, ENEMY_SPRITES } from "../game/sprites";
 import { itemName } from "../i18n/items";
 import { TEXT } from "../i18n/text";
 import type { TextKey } from "../i18n";
-import { hasLimited, LIMITED_THEMES, SKIN_THEMES } from "../shop/skins";
+import { hasLimited, LIMITED_THEMES, SKIN_THEMES, VICTORY_THEME } from "../shop/skins";
 import { THEME_KEY } from "../shop/SkinTab";
 import { fxImage, iconImage, shotImage } from "./defaults";
 import { FX_LABELS, SHOT_LABELS, TIGER_LABELS, type GroupId } from "./labels";
@@ -71,7 +71,7 @@ export function allAssets(): Asset[] {
   for (const c of chars) out.push(sheet(c, "char", charName(c), ""));
   for (const n of [5, 10, 15, 20]) out.push(sheet(`novice${n}`, "char", `${charName("novice")} · ${n}레벨 옷`, ""));
   for (const c of chars)
-    for (const th of [...SKIN_THEMES, ...LIMITED_THEMES.filter((x) => hasLimited(x, c))]) {
+    for (const th of [...SKIN_THEMES, ...LIMITED_THEMES.filter((x) => hasLimited(x, c)), VICTORY_THEME]) {
       const label = `${charName(c)} · ${ko(THEME_KEY[th])}`;
       out.push(sheet(`${c}_${th}`, "skin", label, "skins/"));
       if (c === "bedouin") out.push(sheet(`${c}_${th}_bare`, "skin", `${label} (던진 뒤)`, "skins/"));
@@ -123,7 +123,7 @@ export function myAsset(c: CharacterId): Asset {
 
 /** 나만의 스킨 바탕으로 불러올 수 있는 그림: 기본 + 가진 스킨 */
 export function myBases(c: CharacterId, owned: readonly string[], t: (k: TextKey) => string): Asset[] {
-  const themes = [...LIMITED_THEMES, ...SKIN_THEMES].filter((th) => owned.includes(`${c}_${th}`));
+  const themes = [...LIMITED_THEMES, VICTORY_THEME, ...SKIN_THEMES].filter((th) => owned.includes(`${c}_${th}`));
   const name = t(c as TextKey);
   return [sheet(c, "char", `${name} · ${t("shopDefault")}`, ""), ...themes.map((th) => sheet(`${c}_${th}`, "skin", `${name} · ${t(THEME_KEY[th])}`, "skins/"))];
 }

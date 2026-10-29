@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { TextKey } from "../i18n";
 import { MySkinCard } from "./MySkinCard";
 import { SkinPreview } from "./SkinPreview";
-import { CHARACTER_IDS, hasLimited, LIMITED_THEMES, SKIN_PRICE, SKIN_THEMES, skinId, type SkinTheme } from "./skins";
+import { CHARACTER_IDS, hasLimited, LIMITED_THEMES, SKIN_PRICE, SKIN_THEMES, skinId, VICTORY_THEME, type SkinTheme } from "./skins";
 import { buySkin, coupons, equippedSkin, equipSkin, ownedSkins } from "./wallet";
 
 export const THEME_KEY: Record<SkinTheme, TextKey> = {
@@ -19,6 +19,7 @@ export const THEME_KEY: Record<SkinTheme, TextKey> = {
   swap: "skinSwap",
   tiger: "skinTiger",
   summer: "skinSummer",
+  victory: "skinVictory",
   my: "skinMy",
 };
 
@@ -32,9 +33,10 @@ export function SkinTab({ t, onChange }: { t: (k: TextKey) => string; onChange: 
     redraw((n) => n + 1);
     onChange();
   };
-  const cards: { id: string | null; label: string; limited?: boolean }[] = [
+  const cards: { id: string | null; label: string; limited?: boolean; reward?: boolean }[] = [
     { id: null, label: t("shopDefault") },
     ...LIMITED_THEMES.filter((th) => hasLimited(th, char)).map((th) => ({ id: skinId(char, th), label: t(THEME_KEY[th]), limited: true })),
+    { id: skinId(char, VICTORY_THEME), label: t("skinVictory"), limited: true, reward: true },
     ...SKIN_THEMES.map((th) => ({ id: skinId(char, th), label: t(THEME_KEY[th]) })),
   ];
   return (
@@ -48,7 +50,7 @@ export function SkinTab({ t, onChange }: { t: (k: TextKey) => string; onChange: 
       </div>
       <MySkinCard t={t} char={char} act={act} />
       <div className="shop-grid">
-        {cards.map(({ id, label, limited }) => {
+        {cards.map(({ id, label, limited, reward }) => {
           const has = id === null || owned.includes(id);
           const wearing = worn === id;
           return (
@@ -63,7 +65,7 @@ export function SkinTab({ t, onChange }: { t: (k: TextKey) => string; onChange: 
                   {t("shopEquip")}
                 </button>
               ) : limited ? (
-                <span className="skin-tag">{t("shopLimitedLock")}</span>
+                <span className="skin-tag">{t(reward ? "pwLeagueOnly" : "shopLimitedLock")}</span>
               ) : (
                 <button type="button" className="primary" disabled={coupons() < SKIN_PRICE} title={coupons() < SKIN_PRICE ? t("shopNoCoupon") : undefined} onClick={() => act(() => buySkin(id!))}>
                   {t("shopBuy")} · 🎟 {SKIN_PRICE}

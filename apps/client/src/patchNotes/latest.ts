@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.245",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "월드 워 리그 우승 보상에 모든 캐릭터 '승리' 한정 스킨 추가: 남색 제복 · 금빛 견장·단추 · 가슴 훈장 둘 · 붉은 어깨띠·허리띠 · 붉은 망토(뒷모습은 등 전체, 앞·옆은 펄럭임) · 금빛 테두리 (버려진 자들 P2·P3, 베두인 던진 뒤 그림까지)",
+        "'승리' 스킨을 입으면: 금빛 훈장 별 타격 · 승리의 별 대기 · 금빛 별 걸음 · 훈장 숫자 효과가 모두 켜지고 전용 행진곡(작은북 행진 + 나팔 가락)이 흐름 · 상점 스킨 탭에 '리그 우승 보상'으로 잠겨 있다가 우승하면 열림",
+      ],
+      en: [
+        "World War League champions now also get the limited 'Victory' skin for every character: navy uniform · gold epaulettes and buttons · two chest medals · red sash and belt · red cape (full back view, fluttering from the front and side) · gold outline (including The Abandoned P2/P3 and Bedouin's thrown pose)",
+        "Wearing a 'Victory' skin turns on golden medal-star hits, rising victory stars, golden star steps and medal numbers, and plays its own march (snare drum + trumpet melody) · locked in the shop's Skins tab as a league champion reward until you win",
+      ],
+      ja: [
+        "ワールドウォーリーグ優勝報酬に全キャラの「勝利」限定スキンを追加: 紺の制服 · 金の肩章・ボタン · 胸の勲章2つ · 赤い肩帯・ベルト · 赤いマント（後ろ姿は背中全体、前・横はなびく）· 金の縁取り（捨てられた者たちP2・P3、ベドウィンの投げた後の絵まで）",
+        "「勝利」スキンを着ると: 金の勲章の星の打撃 · 勝利の星の待機 · 金の星の歩み · 勲章数字のエフェクトがすべてオンになり、専用の行進曲（スネアの行進 + ラッパの旋律）が流れる · ショップのスキンタブに「リーグ優勝報酬」としてロックされ、優勝すると解放",
+      ],
+    },
+  },
+  {
     version: "0.48.244",
     date: "2026-10-30",
     items: {
