@@ -55,11 +55,27 @@ export const PW_UNIT = {
   tower: { hp: 1500, dmg: 30, every: 70, range: 112, speed: 0, r: 12 },
   boss: { hp: 3600, dmg: 36, every: 80, range: 70, speed: 0.5, r: 13 },
   jungle: { hp: 520, dmg: 12, every: 60, range: 22, speed: 0.6, r: 8 },
+  /** 전쟁의 서막 안개 지역: 보스 몬스터 · 큰 보스 둘 */
+  elite: { hp: 1600, dmg: 24, every: 70, range: 30, speed: 0.6, r: 11 },
+  dragon: { hp: 5200, dmg: 40, every: 80, range: 60, speed: 0.5, r: 16 },
+  godeater: { hp: 5200, dmg: 40, every: 80, range: 60, speed: 0.5, r: 16 },
   /** 병사 한 무리: 근접 · 원거리 수 · 나오는 간격 틱 · 시간이 갈수록 강해짐(1분마다 체력·공격 배율) · 가운데를 점령한 편 병사 배율 */
   wave: { melee: 3, ranged: 2, every: 28 * TICK_RATE, grow: 0.04, center: 1.4 },
   /** 병사가 상대를 찾는 거리 · 보스·정글 몬스터가 집에서 벗어나는 최대 거리 */
   aggro: 90,
   leash: 110,
+};
+
+/** 전쟁의 서막 (sim/pwWar): 체크포인트 점령 초·반지름(px) · 상대 집 점령 초 · 정글·큰 보스 다시 나오기 · 큰 보스 처치 팀 강화(남는 틱 · 파멸의 용 공격력·공격 속도 · 갓이터 받는 피해·재생) */
+export const PW_WAR = {
+  pointSec: 6,
+  pointR: 40,
+  baseSec: 10,
+  campBack: 75 * TICK_RATE,
+  bigBack: 180 * TICK_RATE,
+  buffTicks: 150 * TICK_RATE,
+  dragon: { dmg: 1.2, rate: 1.1 },
+  godeater: { taken: 0.85, regen: 0.012 },
 };
 
 /** 쟁탈전 (sim/pwContest): 가운데·상대 집 점령에 걸리는 초 */

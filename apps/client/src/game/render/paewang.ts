@@ -1,7 +1,7 @@
 // 패왕전 그리기: AI 캐릭터(상대·내 편) 몸·체력 줄·편 표시 · 휘두름 · AI 탄 · 바닥(2층 발판·가시 함정) · 수풀(위에 덮음)
 import { drawPwZone } from "./pwZone";
 import { drawCapChan, drawCapGround } from "./pwCapture";
-import { drawGrowGround, drawGrowUnits } from "./pwGrowDraw";
+import { drawGrowGround, drawGrowUnits, drawWarFog } from "./pwGrowDraw";
 import { allPlayers, inBush, PW, PW_ARENAS, TILE_SIZE, trapUp, type EnemyState, type ProjectileState, type PwAlly, type PwBrain, type RunState } from "@pixel-rogue/shared";
 import { drawBody } from "./actors";
 import { drawFoeCue, pwHead, pwIsAlly, pwShown, pwTint, setPwViewer } from "./pwLook";
@@ -139,6 +139,7 @@ export function drawPaewang(ctx: Ctx, s: RunState, alpha: number, snap: Snap, ch
   }
   // 체력 줄·표시는 수풀·나무 위에 (소환한 것도)
   if (s.pvp) drawPwMinions(ctx, s, alpha, snap, (i) => pwTint(s, i));
+  if (s.pvp) drawWarFog(ctx, s);
   if (s.pvp) drawSeats(ctx, s, alpha, snap, charName);
 }
 

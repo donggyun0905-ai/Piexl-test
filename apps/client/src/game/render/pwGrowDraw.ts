@@ -1,5 +1,5 @@
 // 패왕전 성장 대결 그리기: 집(깃발 둘레 원) · 쟁탈전 가운데 점령지(가진 편 색) · 병사·포탑·보스(던전 몬스터 그림 + 편 고리 + 체력 줄) · 포탑·원거리 병사 공격 빛줄기
-import { BASE_R, capCenter, ENEMIES, PW_ARENAS, PW_GROW, TILE_SIZE, type EnemyKind, type RunState } from "@pixel-rogue/shared";
+import { BASE_R, capCenter, ENEMIES, fogAt, PW_ARENAS, PW_GROW, PW_WAR, spotXY, TILE_SIZE, type EnemyKind, type RunState } from "@pixel-rogue/shared";
 import { drawEnemySprite } from "../sprites";
 
 type Ctx = CanvasRenderingContext2D;
@@ -28,6 +28,26 @@ export function drawGrowGround(ctx: Ctx, s: RunState): void {
     ctx.stroke();
     ctx.setLineDash([]);
   });
+  // 전쟁의 서막 체크포인트: 가진 편 색 동그라미 · 점령 중이면 바깥 호
+  (a.points ?? []).forEach((pt, k) => {
+    const [x, y] = spotXY(pt.at);
+    const st = g.points?.[k];
+    const own = st?.owner ?? -1;
+    ctx.fillStyle = own < 0 ? "rgba(220, 220, 230, 0.15)" : own === mine ? "rgba(90, 176, 255, 0.22)" : "rgba(255, 90, 90, 0.22)";
+    ctx.strokeStyle = own < 0 ? "#d8d8e8" : color(own, mine);
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(x, y, PW_WAR.pointR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    for (const [team, v] of Object.entries(st?.prog ?? {})) {
+      ctx.strokeStyle = color(Number(team), mine);
+      ctx.beginPath();
+      ctx.arc(x, y, PW_WAR.pointR + 4, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * v) / 100);
+      ctx.stroke();
+    }
+    ctx.lineWidth = 1;
+  });
   // 가운데 점령지
   if (a.zone?.rect) {
     const [c, r, w, h] = a.zone.rect;
@@ -51,9 +71,13 @@ export function drawGrowUnits(ctx: Ctx, s: RunState): void {
   const g = pv?.grow;
   if (!pv || !g) return;
   const mine = pv.seats[s.seat ?? 0]!.team;
+  const myFog = fogAt(pv.arena, s.player.x, s.player.y);
   for (const u of g.units) {
     const b = u.body;
     if (b.hp <= 0) continue;
+    // 안개 안은 같은 안개에 있어야 보임
+    const f = fogAt(pv.arena, b.x, b.y);
+    if (f >= 0 && f !== myFog) continue;
     const col = color(u.team, mine);
     // 공격 빛줄기
     if (u.shot && s.tick - u.shot.at < 8 && u.kind !== "minion") {
@@ -88,4 +112,26 @@ export function drawGrowUnits(ctx: Ctx, s: RunState): void {
       ctx.strokeRect(b.x - 1.5, b.y - b.r - 16, 4, 4);
     }
   }
+}
+
+/** 전쟁의 서막 안개 지역: 내가 들어가 있지 않은 안개는 자욱하게 덮음 (사람·체력 줄 위에) */
+export function drawWarFog(ctx: Ctx, s: RunState): void {
+  const pv = s.pvp;
+  const fogs = pv && PW_ARENAS[pv.arena].fogs;
+  if (!fogs) return;
+  const mine = fogAt(pv.arena, s.player.x, s.player.y);
+  fogs.forEach((rects, k) => {
+    ctx.fillStyle = k === mine ? "rgba(120, 110, 150, 0.12)" : "rgba(58, 54, 72, 0.88)";
+    for (const [c, r, w, h] of rects) ctx.fillRect(c * T, r * T, w * T, h * T);
+    if (k === mine) return;
+    // 연기 덩어리 (천천히 흐름)
+    ctx.fillStyle = "rgba(150, 140, 170, 0.18)";
+    rects.forEach(([c, r, w], j) => {
+      if (j % 4) return;
+      const x = (c + ((j * 7 + s.tick / 30) % Math.max(1, w))) * T;
+      ctx.beginPath();
+      ctx.arc(x, r * T, 18, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  });
 }

@@ -2,6 +2,7 @@
 import { PW, PW_MODE, PW_TIERS } from "../paewangDefs";
 import { capWinner } from "./pwCapture";
 import { contestWinner } from "./pwContest";
+import { warWinner } from "./pwWar";
 import { gearSave } from "./pwGear";
 import { homeOf, isGrow, respawnTicks, reward } from "./pwGrow";
 import { PW_ARENAS } from "../paewangMaps";
@@ -170,6 +171,7 @@ export function decide(s: RunState): void {
   // 점령전: 점령도로만 정함
   if (PW_MODE[pv.mode].rule === "capture") pv.winner ??= capWinner(s);
   else if (PW_MODE[pv.mode].rule === "contest") pv.winner ??= contestWinner(s);
+  else if (PW_MODE[pv.mode].rule === "war") pv.winner ??= warWinner(s);
   else if (pv.winner === undefined) lastTeam(s);
   if (pv.winner === undefined) return;
   s.over = true;

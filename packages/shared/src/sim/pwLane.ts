@@ -14,7 +14,7 @@ import type { RunState } from "./types";
 import { addEffect, makeEnemy } from "./util";
 
 /** 그림 (던전 몬스터 그림을 씀) */
-const LOOK: Record<PwUnitKind, string> = { minion: "paladin", archer: "spitter", tower: "tower", boss: "hulk", jungle: "charger" };
+const LOOK: Record<PwUnitKind, string> = { minion: "paladin", archer: "spitter", tower: "tower", boss: "hulk", jungle: "charger", elite: "knight", dragon: "dragon", godeater: "godeater" };
 
 export function makeUnit(s: RunState, kind: PwUnitKind, team: number, x: number, y: number, mul = 1, lane = 0, wp = 0): PwUnit {
   const d = PW_UNIT[kind];
@@ -44,6 +44,19 @@ function nearest(s: RunState, u: PwUnit, within: number, unitsFirst: boolean): T
   return best;
 }
 
+/** 중립(정글) 몬스터: 때린 사람을 잠시 쫓음 (자리에서 너무 멀어지면 포기) */
+function jungleFoe(s: RunState, u: PwUnit, home: number): Target | null {
+  const b = u.body;
+  if (u.lastHp !== undefined && b.hp < u.lastHp && b.lastHit !== undefined) [u.foe, u.foeUntil] = [b.lastHit, s.tick + 300];
+  u.lastHp = b.hp;
+  if (u.foe === undefined || (u.foeUntil ?? 0) < s.tick || home > PW_UNIT.leash * 1.5 || !inPlay(s, u.foe)) {
+    u.foe = undefined;
+    return null;
+  }
+  const p = allPlayers(s)[u.foe]!;
+  return { x: p.x, y: p.y, r: p.r, seat: u.foe };
+}
+
 /** 캐릭터 하나를 때림 (맞은 뒤 무적을 남기지 않음) */
 function hitSeat(s: RunState, i: number, dmg: number): void {
   const back = seatNo(s);
@@ -68,10 +81,10 @@ function attack(s: RunState, u: PwUnit, t: Target): void {
     t.unit.body.lastHit = undefined;
   } else if (t.seat !== undefined) hitSeat(s, t.seat, dmg);
   // 보스: 내려찍어 주변 캐릭터도
-  if (u.kind === "boss") {
+  if (u.kind === "boss" || u.kind === "dragon" || u.kind === "godeater") {
     addEffect(s, { kind: "slam", x: t.x, y: t.y, dirX: 0, dirY: 0, size: 26, maxTicks: 16 });
     allPlayers(s).forEach((p, i) => {
-      if (i !== t.seat && inPlay(s, i) && s.pvp!.seats[i]!.team !== u.team && (p.x - t.x) ** 2 + (p.y - t.y) ** 2 < 26 * 26) hitSeat(s, i, dmg * 0.6);
+      if (i !== t.seat && inPlay(s, i) && (u.team === 2 || s.pvp!.seats[i]!.team !== u.team) && (p.x - t.x) ** 2 + (p.y - t.y) ** 2 < 26 * 26) hitSeat(s, i, dmg * 0.6);
     });
   }
 }
@@ -95,9 +108,11 @@ export function spawnWave(s: RunState, mul: number, centerMul: (team: number) =>
     for (const team of [0, 1]) {
       const first = team === 0 ? 0 : lane.length - 1;
       const [x, y] = spotXY(lane[first]!);
+      // 길이 여럿이면 무리를 줄임 (전체 병사 수를 비슷하게)
       const w = PW_UNIT.wave;
-      for (let k = 0; k < w.melee + w.ranged; k++) {
-        const u = makeUnit(s, k < w.melee ? "minion" : "archer", team, x + (k % 3) * 8 - 8, y + Math.floor(k / 3) * 8, mul * centerMul(team), li, team === 0 ? 1 : lane.length - 2);
+      const [melee, ranged] = (a.lanes ?? []).length > 1 ? [w.melee - 1, w.ranged - 1] : [w.melee, w.ranged];
+      for (let k = 0; k < melee + ranged; k++) {
+        const u = makeUnit(s, k < melee ? "minion" : "archer", team, x + (k % 3) * 8 - 8, y + Math.floor(k / 3) * 8, mul * centerMul(team), li, team === 0 ? 1 : lane.length - 2);
         g.units.push(u);
       }
     }
@@ -118,7 +133,7 @@ export function laneTick(s: RunState): void {
     const d = PW_UNIT[u.kind];
     const home = Math.hypot(b.x - u.hx, b.y - u.hy);
     const leash = PW_UNIT.leash;
-    const t = u.kind === "tower" ? nearest(s, u, d.range, true) : nearest(s, u, Math.max(PW_UNIT.aggro, d.range), u.kind !== "boss" && u.kind !== "jungle");
+    const t = u.team === 2 ? jungleFoe(s, u, home) : u.kind === "tower" ? nearest(s, u, d.range, true) : nearest(s, u, Math.max(PW_UNIT.aggro, d.range), u.kind !== "boss");
     const reach = t ? Math.hypot(t.x - b.x, t.y - b.y) - t.r - b.r : Infinity;
     if (t && reach <= d.range) {
       if (u.cd === 0) attack(s, u, t);
@@ -132,6 +147,8 @@ export function laneTick(s: RunState): void {
       if (Math.hypot(tx - b.x, ty - b.y) < 6) u.wp += u.team === 0 ? 1 : -1;
       u.wp = Math.max(0, Math.min(lane.length - 1, u.wp));
     } else if (d.speed > 0 && home > 2) step(u, u.hx, u.hy, d.speed * 1.5);
+    // 정글: 집에 돌아와 쉬면 체력이 참
+    else if (u.team === 2 && !t) b.hp = Math.min(b.maxHp, b.hp + b.maxHp * 0.01);
   }
   // 같은 편 병사끼리 겹치지 않게 살짝 밀어냄
   const walkers = g.units.filter((u) => u.body.hp > 0 && (u.kind === "minion" || u.kind === "archer"));

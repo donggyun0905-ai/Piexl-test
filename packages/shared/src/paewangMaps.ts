@@ -143,4 +143,5 @@ export const PW_MAP_SETS = {
   gungame: ["manor", "gCastle", "gVolcano", "gVillage", "gPrison"],
   capture: ["cHall", "cCliff", "cRing"],
   contest: ["gContest"],
+  war: ["gWar"],
 } as const satisfies Record<string, readonly PwArenaId[]>;

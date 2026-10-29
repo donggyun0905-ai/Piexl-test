@@ -1,5 +1,5 @@
 // 패왕전 성장 대결 화면 위 정보: 레벨·경험치 막대·돈·상점 버튼(B) · 쟁탈전 진행(포탑·가운데·집 점령) · 증강 고르기 · 상점 창
-import { allPlayers, GROW_MENU, isGrow, PW_GROW, towersLeft, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, atHome, GROW_MENU, isGrow, PW_ARENAS, PW_GROW, towersLeft, type RunState } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 import type { Controls } from "../game/controls";
 import type { Lang, TextKey } from "../i18n";
@@ -34,6 +34,7 @@ export function PwGrowHud({ run, me, lang, t, controls }: Props) {
   const mine = pv.seats[me]!.team;
   const who = g.owner === undefined ? t("pwContestNone") : t(g.owner === mine ? "pwContestOurs" : "pwContestTheirs");
   const pct = (v?: number) => String(Math.floor(v ?? 0));
+  const owned = (team: number) => (g.points ?? []).filter((x) => x.owner === team).length;
   return (
     <>
       <div className="pw-grow">
@@ -48,9 +49,26 @@ export function PwGrowHud({ run, me, lang, t, controls }: Props) {
         {pv.mode === "contest" && (
           <small>
             {t("pwContestTowers").replace("{a}", String(towersLeft(run, mine))).replace("{b}", String(towersLeft(run, 1 - mine)))} · {t("pwContestMid").replace("{who}", who)}
-            {(g.base[0] || g.base[1]) && ` · ${t("pwContestBase").replace("{a}", pct(g.base[mine])).replace("{b}", pct(g.base[1 - mine]))}`}
+            {!!(g.base[0] || g.base[1]) && ` · ${t("pwContestBase").replace("{a}", pct(g.base[mine])).replace("{b}", pct(g.base[1 - mine]))}`}
           </small>
         )}
+        {pv.mode === "war" && (
+          <small>
+            {t("pwContestTowers").replace("{a}", String(towersLeft(run, mine))).replace("{b}", String(towersLeft(run, 1 - mine)))} ·{" "}
+            {t("pwWarPoints").replace("{a}", String(owned(mine))).replace("{b}", String(owned(1 - mine)))}
+            {!!(g.base[0] || g.base[1]) && ` · ${t("pwContestBase").replace("{a}", pct(g.base[mine])).replace("{b}", pct(g.base[1 - mine]))}`}
+          </small>
+        )}
+        {/* 전쟁의 서막: 집에서 우리 체크포인트로 순간이동 */}
+        {pv.mode === "war" &&
+          atHome(run, me) &&
+          (PW_ARENAS[pv.arena].points ?? []).map((_, k) =>
+            g.points?.[k]?.owner === mine ? (
+              <button key={k} type="button" onClick={() => controls()?.queueMenu(GROW_MENU.tp + k)}>
+                ✦ {t("pwWarTp")} · {t(`pwLane${k}` as TextKey)}
+              </button>
+            ) : null,
+          )}
       </div>
       {p.pwOffer && (
         <div className="pw-aug" role="dialog" aria-label={t("pwAugPick")}>

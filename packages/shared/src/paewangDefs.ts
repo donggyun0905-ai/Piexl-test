@@ -2,8 +2,8 @@
 import type { CharacterId } from "./characters";
 import { PW_MAP_SETS, type PwArenaId } from "./paewangMaps";
 
-export type PwMode = "duel" | "pair" | "trio" | "squad" | "tourney" | "brawl" | "gungame" | "capture" | "contest";
-export const PW_MODES: readonly PwMode[] = ["duel", "pair", "trio", "squad", "tourney", "brawl", "gungame", "capture", "contest"];
+export type PwMode = "duel" | "pair" | "trio" | "squad" | "tourney" | "brawl" | "gungame" | "capture" | "contest" | "war";
+export const PW_MODES: readonly PwMode[] = ["duel", "pair", "trio", "squad", "tourney", "brawl", "gungame", "capture", "contest", "war"];
 
 /** AI 보정: 체력 · 피해 · 공격 빠르기 · 조준 정확도(0~1) · 이동 빠르기 · 피하기(대시) 확률 */
 export interface PwDiff {
@@ -61,6 +61,8 @@ export const PW_MODE: Record<PwMode, PwModeDef> = {
   capture: { maps: PW_MAP_SETS.capture, rounds: 1, allies: 4, foes: 5, ffa: false, reward: 6000, diff: HARD, prep: true, timeSec: 480, rule: "capture" },
   /** 쟁탈전: 5대5 · 레벨·돈·집 상점 · 병사·포탑 · 상대 포탑 둘을 부수고 가운데 점령 → 상대 집 보스를 잡고 집 점령하면 승리 · 단판 */
   contest: { maps: PW_MAP_SETS.contest, rounds: 1, allies: 4, foes: 5, ffa: false, reward: 8000, diff: HARD, prep: true, timeSec: 1500, rule: "contest" },
+  /** 전쟁의 서막: 5대5 · 길 셋 · 체크포인트 순간이동 · 물가 · 안개 지역(큰 보스 둘) · 포탑을 다 부수고 상대 집을 점령하면 승리 · 단판 */
+  war: { maps: PW_MAP_SETS.war, rounds: 1, allies: 4, foes: 5, ffa: false, reward: 10000, diff: HARD, prep: true, timeSec: 1800, rule: "war" },
 };
 
 /** 데스매치 레벨별 캐릭터: 1레벨이 가장 센 티어, 21레벨이 가장 약한 캐릭터 (관리자가 바꿔 가며 조정) */

@@ -11,7 +11,7 @@ import { tickDots } from "./status";
 import { updateCharms } from "./talisman";
 import type { EnemyState, RunState } from "./types";
 import { dist2, makeEnemy } from "./util";
-import { inBush } from "./paewangGrid";
+import { fogAt, inBush } from "./paewangGrid";
 import { buffMul, pwHidden } from "./pwSkillHit";
 import { practiceSafe } from "./pvpPractice";
 import { recapTake } from "./pvpRecap";
@@ -51,7 +51,9 @@ export function markHidden(s: RunState): void {
   const players = allPlayers(s);
   for (const e of s.enemies) {
     const who = players[pv.proxies.indexOf(e)];
-    e.pwHid = (inBush(pv.arena, e.x, e.y) && dist2(e, s.player) > PW.hideNear * PW.hideNear) || (!!who && pwHidden(who));
+    // 전쟁의 서막 안개: 같은 안개 안에 있어야 보임
+    const fog = fogAt(pv.arena, e.x, e.y);
+    e.pwHid = (inBush(pv.arena, e.x, e.y) && dist2(e, s.player) > PW.hideNear * PW.hideNear) || (!!who && pwHidden(who)) || (fog >= 0 && fog !== fogAt(pv.arena, s.player.x, s.player.y));
   }
 }
 

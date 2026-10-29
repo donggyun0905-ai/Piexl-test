@@ -1,5 +1,5 @@
 // 패왕전 편 구별 그리기: 캐릭터 그림 외곽선을 편 색으로 바꿔 그림(스킨 외곽선은 가림) · 편 색 · 가장 가까운 적(내 둘레 빨간 화살표 · 적 머리 위 조준 표시)
-import { allPlayers, inBush, inPlay, PW, pwHidden, type CharacterId, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, fogAt, inBush, inPlay, PW, pwHidden, type CharacterId, type RunState } from "@pixel-rogue/shared";
 import { drawCharacter, type CharacterPose } from "../sprites";
 import { drawBody } from "./actors";
 
@@ -28,6 +28,9 @@ export function pwShown(s: RunState, i: number): number {
   const p = ps[i]!;
   // 투명 스킬: 상대에게는 안 보이고 나·내 편에게는 반투명
   if (pwHidden(p)) return pwIsAlly(s, i) ? 0.5 : 0;
+  // 전쟁의 서막 안개: 같은 안개에 우리 편이 있어야 보임
+  const fog = fogAt(s.pvp!.arena, p.x, p.y);
+  if (fog >= 0 && !pwIsAlly(s, i) && !ps.some((q, j) => pwIsAlly(s, j) && inPlay(s, j) && fogAt(s.pvp!.arena, q.x, q.y) === fog)) return 0;
   if (!inBush(s.pvp!.arena, p.x, p.y)) return 1;
   if (pwIsAlly(s, i)) return 0.5;
   // 상대는 내 편 누군가가 아주 가까이 있어야 보임 (AI가 보는 규칙과 같음)

@@ -33,6 +33,10 @@ export interface PwArenaDef {
   homes?: readonly [Spot, Spot];
   lanes?: readonly (readonly Spot[])[];
   towers?: readonly { team: 0 | 1; at: Spot; lane: number; order: number }[];
+  /** 전쟁의 서막: 체크포인트(길 끝, 점령하면 집에서 순간이동) · 안개 지역(줄마다 네모, 안이 밖에서 안 보임) · 정글 몬스터 자리(안개 지역 번호) */
+  points?: readonly { at: Spot; lane: number }[];
+  fogs?: readonly (readonly Rect[])[];
+  camps?: readonly { kind: "jungle" | "elite" | "dragon" | "godeater"; at: Spot }[];
 }
 
 export const NONE: readonly never[] = [];

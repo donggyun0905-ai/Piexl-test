@@ -105,6 +105,14 @@ export function gearHits(s: RunState, hits: readonly { to: number; by: number; a
   }
 }
 
+/** 능력치를 바꾸는 값 묶음 (바뀌면 다시 계산) */
+function gearSig(p: PlayerState): number {
+  const f = p.pwFx ?? {};
+  let n = (f.green ?? 0) * 7 + (f.portal ?? 0) * 1000 + (f.crown ?? 0) * 100 + (f.cupid ?? 0) * 13;
+  for (const [id, [k]] of Object.entries(p.pwStk ?? {})) n += k * (id.length * 31 + id.charCodeAt(0));
+  return n;
+}
+
 /** 틱마다 (자리마다): 중첩 끝 · 녹색·포탈건·왕관 · 수정구 회복 · 화상·회오리·독 · 저주받은 주사위 영역. 능력치가 바뀌면 다시 계산 */
 export function gearTick(s: RunState): void {
   const pv = s.pvp!;
@@ -112,7 +120,7 @@ export function gearTick(s: RunState): void {
     const p = s.player;
     if (p.pwLv === undefined || !inPlay(s, i)) return;
     const f = fxOf(p);
-    const sig = JSON.stringify([p.pwStk, f.green, f.portal, f.crown, f.cupid]);
+    const sig = gearSig(p);
     for (const [id, [, t]] of Object.entries(p.pwStk ?? {})) {
       if (s.tick - t <= PW_GROW.stackKeep) continue;
       delete p.pwStk![id];
@@ -137,7 +145,7 @@ export function gearTick(s: RunState): void {
         });
       }
     }
-    if (JSON.stringify([p.pwStk, f.green, f.portal, f.crown, f.cupid]) !== sig) recalcStats(s);
+    if (gearSig(p) !== sig) recalcStats(s);
   });
 }
 

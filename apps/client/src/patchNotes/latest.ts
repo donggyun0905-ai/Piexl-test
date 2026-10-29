@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.242",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "패왕전 새 대결 '전쟁의 서막' (5대5, 밴픽): 아스칼론 진영과 엘프 진영의 전쟁 · 큰 네모 들판에 길 셋(위·가운데 대각선·아래), 길마다 편마다 포탑 둘 · 레벨·돈·집 상점·증강은 쟁탈전과 같음",
+        "체크포인트 (윗길 왼쪽 위 귀퉁이 · 가운데 · 아랫길 오른쪽 아래 귀퉁이): 그 길 상대 맨 앞 포탑을 부숴야 점령할 수 있고, 점령하면 집에서 그곳으로 순간이동 · 다시 빼앗을 수 있음",
+        "물가(왼쪽 위에서 오른쪽 아래로 흐르는 띠)는 늘 느려짐 · 안개 지역 넷은 들어가야 안이 보임: 위 파멸의 용·아래 갓이터(잡은 편 모두 2분 30초 강화), 양옆은 정글 몬스터·보스 몬스터 · 포탑을 다 부수고 상대 집을 점령하면 승리",
+      ],
+      en: [
+        "New Champion Clash battle 'Prelude to War' (5v5, with draft): the war between Ascalon and the elves · three lanes on a huge square field (top, diagonal mid, bottom) with two towers per lane per team · levels, gold, home shop and augments work like the Divine Contest",
+        "Checkpoints (top-left corner, center, bottom-right corner): break the front enemy tower of that lane to claim it, then teleport there from home · they can be taken back",
+        "The river (top-left to bottom-right) always slows you · four fog zones hide what's inside until you step in: Doom Dragon at the top and God Eater at the bottom (the slaying team gets a 2:30 buff), jungle monsters and boss monsters on the sides · destroy every tower and capture their home to win",
+      ],
+      ja: [
+        "覇王戦の新しい対決「戦争の序幕」(5対5、バンピック): アスカロン陣営とエルフ陣営の戦争 · 大きな四角い野に3本の道（上・中央の斜め・下）、道ごと・チームごとに砲塔2つ · レベル・お金・拠点ショップ・強化は争奪戦と同じ",
+        "チェックポイント（上の道の左上の角・中央・下の道の右下の角）: その道の相手の最前の砲塔を壊すと占領でき、占領すると拠点からそこへ瞬間移動 · 奪い返せる",
+        "水辺（左上から右下へ流れる帯）は常に遅くなる · 4つの霧の地域は入らないと中が見えない: 上に破滅の竜・下にゴッドイーター（倒したチーム全員が2分30秒強化）、両側は野生モンスター・ボスモンスター · 砲塔をすべて壊して相手拠点を占領すれば勝利",
+      ],
+    },
+  },
+  {
     version: "0.48.241",
     date: "2026-10-30",
     items: {

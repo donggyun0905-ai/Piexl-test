@@ -98,11 +98,12 @@ export { createPvp, pvpResult, pwSeatCount, stepPvp, type PwHuman } from "./pvp"
 export { createPractice } from "./pvpPractice";
 export * from "./paewangTypes";
 export { pwCanStack, pwLoadoutOk, pwPassiveChoices, pwStackMax, pwWeapons } from "./paewangKit";
-export { inBush, onDeck } from "./paewangGrid";
+export { fogAt, inBush, onDeck, spotXY } from "./paewangGrid";
 export { trapUp } from "./pvpFlow";
 export { pvpTimeLeft, pvpZone, type PwZone } from "./pvpZone";
 export { capCenter, inCapZone, isCapture, nearBuff } from "./pwCapture";
 export { BASE_R, canTakeCenter, towersLeft } from "./pwContest";
+export { canPoint } from "./pwWar";
 export { atHome, buyPlan, fullCost, GROW_MENU, homeOf, isGrow } from "./pwGrow";
 export { gearSum } from "./pwGearStat";
 export type { PwGrowState, PwUnit } from "./pwGrowTypes";

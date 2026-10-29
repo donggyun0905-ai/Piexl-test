@@ -23,7 +23,7 @@ export const isGrow = (s: RunState): boolean => {
 };
 
 /** 상점 입력 번호: 사기(목록 자리) · 팔기(장비 칸) · 증강 고르기(셋 중) */
-export const GROW_MENU = { buy: 1_000_000, sell: 1_100_000, aug: 1_200_000 };
+export const GROW_MENU = { buy: 1_000_000, sell: 1_100_000, aug: 1_200_000, tp: 1_300_000 };
 
 /** 편의 집 (픽셀) */
 export function homeOf(s: RunState, team: number): [number, number] {
@@ -151,12 +151,26 @@ export function growMenu(s: RunState, code: number): boolean {
   if (!isGrow(s) || code < GROW_MENU.buy) return false;
   const p = s.player;
   const i = seatNo(s);
-  if (code >= GROW_MENU.aug) pickAug(s, code - GROW_MENU.aug);
+  if (code >= GROW_MENU.tp) teleport(s, code - GROW_MENU.tp);
+  else if (code >= GROW_MENU.aug) pickAug(s, code - GROW_MENU.aug);
   else if (code >= GROW_MENU.sell) sell(s, code - GROW_MENU.sell);
   else if (atHome(s, i)) buy(s, PW_SHOP_IDS[code - GROW_MENU.buy] ?? "");
   recalcStats(s);
   p.hp = Math.min(p.hp, p.stats.maxHp);
   return true;
+}
+
+/** 전쟁의 서막: 집에서 우리 편이 가진 체크포인트로 순간이동 */
+function teleport(s: RunState, k: number): void {
+  const pv = s.pvp!;
+  const i = seatNo(s);
+  const pt = PW_ARENAS[pv.arena].points?.[k];
+  if (!pt || pv.grow?.points?.[k]?.owner !== pv.seats[i]!.team || !atHome(s, i)) return;
+  const p = s.player;
+  addEffect(s, { kind: "burst", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 20, maxTicks: 16 });
+  [p.x, p.y] = spotXY(pt.at);
+  [p.prevX, p.prevY] = [p.x, p.y];
+  addEffect(s, { kind: "burst", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 20, maxTicks: 16 });
 }
 
 /** 장비 하나의 모든 값 (전설은 재료 값까지) */

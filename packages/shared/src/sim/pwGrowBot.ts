@@ -9,6 +9,8 @@ import { pwGrid } from "./paewangGrid";
 import { eachSeat, seatNo } from "./party";
 import { inPlay } from "./pvpWorld";
 import { capCenter } from "./pwCapture";
+import { spotXY } from "./paewangGrid";
+import { canPoint } from "./pwWar";
 import { atHome, buyPlan, GROW_MENU, growMenu, homeOf, isGrow } from "./pwGrow";
 import type { RunState, TickInput } from "./types";
 
@@ -66,11 +68,16 @@ function walk(s: RunState, input: TickInput, x: number, y: number): TickInput {
   return d ? { ...input, moveX: Math.round(d[0] * 100), moveY: Math.round(d[1] * 100) } : input;
 }
 
-/** 지금 갈 목표: 상대 포탑(앞 것부터) → 가운데(쟁탈전, 아직 안 가졌으면) → 상대 집 */
-function objective(s: RunState, team: number): [number, number] {
+/** 지금 갈 목표: 상대 포탑(내 길 앞 것부터, 전쟁의 서막은 자리마다 길을 나눔) → 점령할 수 있는 체크포인트 → 가운데(쟁탈전) → 상대 집 */
+function objective(s: RunState, i: number, team: number): [number, number] {
   const pv = s.pvp!;
   const g = pv.grow!;
-  const tower = g.units.filter((u) => u.kind === "tower" && u.team !== team && u.body.hp > 0).sort((a, b) => (a.order ?? 0) - (b.order ?? 0))[0];
+  const a = PW_ARENAS[pv.arena];
+  const lane = i % (a.lanes?.length ?? 1);
+  const pt = a.points?.[lane];
+  if (pt && g.points?.[lane]?.owner !== team && canPoint(s, team, lane)) return spotXY(pt.at);
+  const towers = g.units.filter((u) => u.kind === "tower" && u.team !== team && u.body.hp > 0);
+  const tower = [...towers.filter((u) => u.lane === lane), ...towers].sort((x, y) => Number(y.lane === lane) - Number(x.lane === lane) || (x.order ?? 0) - (y.order ?? 0))[0];
   if (tower) return [tower.body.x, tower.body.y];
   if (PW_MODE[pv.mode].rule === "contest" && g.owner !== team) return capCenter(PW_ARENAS[pv.arena]);
   return homeOf(s, 1 - team);
@@ -88,5 +95,8 @@ export function growSteer(s: RunState, input: TickInput): TickInput {
   if (atHome(s, i) && p.hp < p.stats.maxHp * 0.9) return { ...input, moveX: 0, moveY: 0 };
   if (low) return walk(s, input, ...home);
   if (input.attack) return input;
-  return walk(s, input, ...objective(s, team));
+  // 전쟁의 서막: 집에서 내 길 체크포인트로 순간이동
+  const lane = i % (PW_ARENAS[s.pvp!.arena].lanes?.length ?? 1);
+  if (atHome(s, i) && s.pvp!.grow!.points?.[lane]?.owner === team) growMenu(s, GROW_MENU.tp + lane);
+  return walk(s, input, ...objective(s, i, team));
 }

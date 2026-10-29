@@ -34,3 +34,23 @@ export const inBush = (arena: PwArenaId, x: number, y: number): boolean => PW_AR
 
 /** 2층 발판 위에 있는지 */
 export const onDeck = (arena: PwArenaId, x: number, y: number): boolean => PW_ARENAS[arena].decks.some((d) => inRect(x, y, d));
+
+const fogCache = new Map<PwArenaId, Int8Array | null>();
+
+/** 안개 지역 번호 (전쟁의 서막, 없으면 -1). 경기장마다 칸 지도를 한 번 만들어 둠 */
+export function fogAt(arena: PwArenaId, x: number, y: number): number {
+  let g = fogCache.get(arena);
+  if (g === undefined) {
+    const def = PW_ARENAS[arena];
+    g = def.fogs ? new Int8Array(def.cols * def.rows).fill(-1) : null;
+    def.fogs?.forEach((f, k) => {
+      for (const [c0, r0, w, h] of f) for (let r = r0; r < r0 + h; r++) for (let c = c0; c < c0 + w; c++) g![r * def.cols + c] = k;
+    });
+    fogCache.set(arena, g);
+  }
+  if (!g) return -1;
+  const c = Math.floor(x / TILE_SIZE);
+  const r = Math.floor(y / TILE_SIZE);
+  const cols = PW_ARENAS[arena].cols;
+  return c < 0 || r < 0 || c >= cols ? -1 : (g[r * cols + c] ?? -1);
+}
