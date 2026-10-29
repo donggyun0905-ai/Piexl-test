@@ -18,7 +18,7 @@ import { allPlayers, seatNo } from "./party";
 import { tabooDown, tabooMods } from "./taboo";
 import { addEffect, hasPerk } from "./util";
 import { charmed } from "./bossesTwo";
-import { clearShelf, EMPTY_HANDS, rerollShop, sellItem, trashAt } from "./shop";
+import { clearShelf, EMPTY_HANDS, isStation, rerollShop, sellItem, stationAt, stationMenu, stationMods, trashAt } from "./shop";
 import { resetCombo } from "./brawl";
 import { resetGun } from "./gun";
 import { resetAbandoned } from "./abandoned";
@@ -51,7 +51,7 @@ export function recalcStats(s: RunState): void {
   const oldMax = p.stats.maxHp;
   // 풋내기가 찍은 스탯도 능력치 변화로
   // 오니: 공격력·공격 속도·사거리 변화는 최대 체력·재생력·효과 범위로 (oniRules)
-  p.mods = oniConvert(p, [...p.passives.flatMap((id): StatMod[] => [...PASSIVES[id].mods]), ...noviceMods(p), ...imugiMods(p), ...apostleMods(p), ...tabooMods(s), ...swarmMods(p), ...morphMods(p), ...eaterMods(p), ...automataMods(p), ...petMods(s)]);
+  p.mods = oniConvert(p, [...p.passives.flatMap((id): StatMod[] => [...PASSIVES[id].mods]), ...noviceMods(p), ...imugiMods(p), ...apostleMods(p), ...tabooMods(s), ...swarmMods(p), ...morphMods(p), ...eaterMods(p), ...automataMods(p), ...petMods(s), ...stationMods(s)]);
   p.stats = computeStats(baseStats(p.characterId, p.weaponId), p.mods);
   // 거너: 최대 체력 고정 (체력 아이템을 먹어도 그대로)
   const fixed = (CHARACTERS[p.characterId] as CharacterDef).fixedHp;
@@ -119,8 +119,8 @@ export function updateItems(s: RunState, input: TickInput): void {
   if (input.useSlot > 0 && !charmed(s.player)) useSlot(s, input.useSlot - 1, input);
   if (input.statPick > 0) spendStat(s, input.statPick);
   if (input.sell) sellItem(s, input.sell);
-  // 층 보상은 클릭(모바일은 탭)으로 고름. 거리 상관없음
-  if (input.pickChoice > 0) {
+  if (input.menu) stationMenu(s, input.menu);
+  if (input.pickChoice > 0) { // 층 보상은 클릭(모바일은 탭)으로 고름. 거리 상관없음
     const pk = rewardChoices(s)[input.pickChoice - 1];
     if (pk) take(s, pk);
   }
@@ -152,11 +152,11 @@ export function updateItems(s: RunState, input: TickInput): void {
     if (!touching(s, pk, R.TOUCH)) {
       // 한 번 떨어지면 다시 주울 수 있음 (무기·사용 아이템을 번갈아 써 보고 고를 수 있게)
       pk.armed = true;
-      if (pk.kind === "trash") pk.itemId = "0";
+      if (pk.kind === "trash" || isStation(pk)) pk.itemId = "0";
       continue;
     }
-    if (pk.kind === "trash") {
-      trashAt(s, pk, input.interact);
+    if (pk.kind === "trash" || isStation(pk)) {
+      (pk.kind === "trash" ? trashAt : stationAt)(s, pk, input.interact);
       continue;
     }
     if (!pk.armed || !room.pickups.includes(pk)) continue;

@@ -39,7 +39,7 @@ const FLAG = { attack: 1, dash: 2, interact: 4, autoAim: 8 };
 
 export function packInput(i: TickInput): number[] {
   const flags = (i.attack ? FLAG.attack : 0) | (i.dash ? FLAG.dash : 0) | (i.interact ? FLAG.interact : 0) | (i.autoAim ? FLAG.autoAim : 0);
-  return [i.moveX, i.moveY, i.aimX, i.aimY, flags, i.useSlot, i.pickChoice, i.statPick, i.skill, i.sell ?? 0];
+  return [i.moveX, i.moveY, i.aimX, i.aimY, flags, i.useSlot, i.pickChoice, i.statPick, i.skill, i.sell ?? 0, i.menu ?? 0];
 }
 
 export function unpackInput(a: readonly number[] | undefined): TickInput {
@@ -59,12 +59,13 @@ export function unpackInput(a: readonly number[] | undefined): TickInput {
     statPick: a[7] ?? 0,
     skill: a[8] ?? 0,
     ...(a[9] ? { sell: a[9] } : {}),
+    ...(a[10] ? { menu: a[10] } : {}),
   };
 }
 
 /** 짐작용: 계속 누르는 값만 남기고 한 번 누르는 값(대시·상호작용·아이템·보상 고르기·스탯 찍기)은 뺌 */
 export function held(i: TickInput): TickInput {
-  return i.dash || i.interact || i.useSlot || i.pickChoice || i.statPick || i.skill || i.sell ? { ...i, dash: false, interact: false, useSlot: 0, pickChoice: 0, statPick: 0, skill: 0, sell: 0 } : i;
+  return i.dash || i.interact || i.useSlot || i.pickChoice || i.statPick || i.skill || i.sell || i.menu ? { ...i, dash: false, interact: false, useSlot: 0, pickChoice: 0, statPick: 0, skill: 0, sell: 0, menu: 0 } : i;
 }
 
 /** 상태 요약 값 (틱·위치·체력) */

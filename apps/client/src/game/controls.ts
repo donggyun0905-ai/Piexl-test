@@ -6,7 +6,6 @@ import { drawSticks, type StickElements } from "./sticks";
 import { moveVector, TouchSticks } from "./touchSticks";
 
 // 조작 입력 (PC: 키보드+마우스 / 모바일: 왼쪽 이동·오른쪽 조준 조이스틱, 손가락 댄 자리에 생기고 드래그 중에만 보임)
-
 const AIM_DEADZONE = 6;
 /** 조준 방향 정밀도 (−100~100). 입력 기록이 너무 길어지지 않게 */
 const AIM_STEPS = 100;
@@ -56,6 +55,7 @@ export class Controls {
   private statQueued = 0;
   private skillQueued = 0;
   private sellQueued = 0;
+  private menuQueued = 0;
   skillKeys = false; // 숫자 키를 스킬로 씀 (추적자·패왕전)
   arm = new SkillArm();
   fineAim = false; // 누른 곳까지 거리를 잘게 (추적자 암습 저격: 조준경 가운데에 정확히 대야 맞음)
@@ -184,8 +184,9 @@ export class Controls {
   queueUse(slot: number): void { this.useQueued = slot; }
   /** 스킬 쓰기 (화면 버튼). 1~4 */
   queueSkill(n: number): void { this.skillQueued = n; }
-  /** 상점에서 장비 팔기 (판매 줄). 1·2 = 사용 아이템 칸, 3~ = 패시브 순서 */
+  /** 상점에서 장비 팔기 (판매 줄: 1·2 = 사용 아이템 칸, 3~ = 패시브 순서) · 작업대 창에서 누름 (sim/station.menuCode) */
   queueSell(n: number): void { this.sellQueued = n; }
+  queueMenu(code: number): void { this.menuQueued = code; }
   /** 상호작용을 한 번 누른 것으로 처리 (모바일 버튼) */
   queueInteract(): void { this.interactQueued = true; }
   queueDash(): void { this.dashQueued = true; }
@@ -264,8 +265,8 @@ export class Controls {
     const statPick = this.statQueued;
     const skill = this.skillQueued;
     if (skill) [aimX, aimY] = this.arm.take(aimX, aimY);
-    const sell = this.sellQueued ? { sell: this.sellQueued } : {};
-    this.sellQueued = 0;
+    const sell = { ...(this.sellQueued ? { sell: this.sellQueued } : {}), ...(this.menuQueued ? { menu: this.menuQueued } : {}) };
+    this.sellQueued = this.menuQueued = 0;
     this.statQueued = 0;
     this.skillQueued = 0;
     this.dashQueued = false;

@@ -1,0 +1,190 @@
+/* 작업대 창 (game/StationWindow): 아티팩터 거대한 제작대 · 추적자 튜닝소 · 결과 연출 */
+.station-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 6;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(680px, 94vw);
+  max-height: 86vh;
+  overflow: auto;
+  padding: 12px 14px;
+  border: 2px solid #4a5a7a;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgb(20 24 36 / 0.97), rgb(12 12 20 / 0.97));
+  box-shadow: 0 0 24px rgb(80 160 255 / 0.25);
+  pointer-events: auto;
+}
+.station-window.tune {
+  border-color: #7a6a3a;
+  box-shadow: 0 0 24px rgb(255 213 106 / 0.2);
+}
+.station-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.station-head b {
+  font-size: 1.15em;
+  color: #c8ecff;
+}
+.station-window.tune .station-head b {
+  color: #ffe6a0;
+}
+.station-head small {
+  margin-left: auto;
+  opacity: 0.6;
+}
+.station-gold strong {
+  color: #ffd040;
+}
+
+/* 제작대 */
+.bench-tabs {
+  display: flex;
+  gap: 6px;
+}
+.bench-tabs button {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid #3a4a6a;
+  border-radius: 6px;
+  background: #182030;
+  color: #9ab;
+}
+.bench-tabs button.on {
+  border-color: #6ab8ff;
+  background: #1e3a5a;
+  color: #fff;
+  box-shadow: inset 0 0 8px rgb(106 184 255 / 0.4);
+}
+.bench-hint {
+  margin: 0;
+  font-size: 0.82em;
+  opacity: 0.75;
+  line-height: 1.4;
+}
+.bench-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 6px;
+}
+.bench-card {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 6px;
+  align-items: center;
+  padding: 5px 6px;
+  border: 1px solid #333a48;
+  border-radius: 6px;
+  background: #161a24;
+  color: #dde;
+  text-align: left;
+  font-size: 0.8em;
+}
+.bench-card > :first-child {
+  grid-row: span 2;
+}
+.bench-card small {
+  color: #8ab;
+}
+.bench-card.own {
+  border-color: #2a5a8a;
+}
+.bench-card.own small {
+  color: #6ab8ff;
+}
+.bench-card.hidden {
+  border-color: #8a6a1a;
+  background: linear-gradient(135deg, #241c0c, #161a24);
+}
+.bench-card.hidden small {
+  color: #ffd040;
+}
+.bench-card.on {
+  outline: 2px solid #ffd56a;
+  box-shadow: 0 0 10px rgb(255 213 106 / 0.5);
+}
+.bench-card:disabled {
+  opacity: 0.35;
+}
+.bench-go {
+  padding: 9px;
+  border: 1px solid #6ab8ff;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #2a5a8a, #1a3a5a);
+  color: #fff;
+  font-weight: bold;
+}
+.station-window.tune .bench-go {
+  border-color: #ffd56a;
+  background: linear-gradient(180deg, #7a5a1a, #4a3a10);
+}
+.bench-go:disabled {
+  opacity: 0.4;
+}
+
+/* 튜닝소 */
+.sniper-svg {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: repeating-linear-gradient(0deg, #1a1c22 0 19px, #22252e 19px 20px), #1a1c22;
+}
+.sniper-hit {
+  cursor: pointer;
+}
+.sniper-hit:hover rect {
+  fill: rgb(255 213 106 / 0.08);
+}
+.sniper-lv {
+  fill: #8a96a8;
+  font-size: 13px;
+  font-weight: bold;
+}
+.sniper-lv.on {
+  fill: #ffd56a;
+}
+.tune-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tune-detail > b {
+  color: #ffe6a0;
+}
+.tune-parts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 6px;
+}
+.tune-part {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  border: 1px solid #3a3a2a;
+  border-radius: 6px;
+  background: #1c1a14;
+  color: #eed;
+  text-align: left;
+  font-size: 0.8em;
+}
+.tune-part small {
+  color: #ab9;
+}
+.tune-part em {
+  font-style: normal;
+  color: #ffd040;
+}
+.tune-part.on {
+  border-color: #ffd56a;
+  box-shadow: inset 0 0 8px rgb(255 213 106 / 0.35);
+}
+.tune-part:disabled:not(.on) {
+  opacity: 0.45;
+}

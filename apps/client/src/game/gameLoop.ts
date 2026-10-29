@@ -1,4 +1,5 @@
 // 게임 진행: 고정 간격 계산 + 화면 주사율에 맞춘 그리기 + HUD 갱신 (React 밖에서 돌림)
+import { stationView } from "./stationView";
 import { itemName } from "../i18n/items";
 import { fateParts } from "../i18n/items/voyagerAbilities";
 import { sellCodes } from "./SellBar";
@@ -179,6 +180,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       ...(run.pvp ? { pw: pwSkillView(run, controls.arm.armed) } : {}),
       // 상점 휴지통에서 F로 판매 창을 열었을 때: 팔 수 있는 값 (무기 + 사용 아이템 2칸 + 패시브 순서, 0 = 못 팜)
       ...(run.prompt.kind === "trash" && run.prompt.confirm && !run.party ? { sell: sellCodes(p.passives.length).map((n) => sellPrice(run, n)) } : {}),
+      ...(run.prompt.kind === "station" ? { station: stationView(run) } : {}),
     };
     const lk = loadoutKey(view);
     if (lk !== shownLoadout) {

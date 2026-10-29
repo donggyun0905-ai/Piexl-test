@@ -2,9 +2,9 @@
 export const CHARACTER_TEXT_ASCALON = {
   tracker: { ko: "추적자", en: "Tracker", ja: "追跡者" },
   trackerDesc: {
-    ko: "저격 · 아스칼론. 왕국의 그림자 속에서 표적을 쫓는 여자 저격수. 무기는 튜닝한 저격총 하나뿐이고 스킬 셋으로 싸움 (PC 1·2·3 키, 모바일 스킬 버튼): 1 암습 저격 · 2 강력한 한방 · 3 연발사격 · 전용 아이템 10",
-    en: "Sniper · Ascalon. A woman who hunts her marks from the kingdom's shadows. Her only weapon is a tuned rifle, and she fights with three skills (keys 1·2·3 on PC, skill buttons on mobile): 1 Ambush Snipe · 2 Power Shot · 3 Rapid Fire · 10 own items",
-    ja: "狙撃 · アスカロン。王国の影から標的を追う女狙撃手。武器はチューニングした狙撃銃ただ一つで、スキル3つで戦う（PCは1・2・3キー、モバイルはスキルボタン）：1 暗襲狙撃 · 2 強力な一撃 · 3 連射 · 専用アイテム10",
+    ko: "저격 · 아스칼론. 왕국의 그림자 속에서 표적을 쫓는 여자 저격수. 무기는 튜닝한 저격총 하나뿐이고 스킬 셋으로 싸움 (PC 1·2·3 키, 모바일 스킬 버튼): 1 암습 저격 · 2 강력한 한방 · 3 연발사격 · 라스트 보스 층 상점 대신 튜닝소(저격총 부품 교체·강화) · 전용 아이템 10",
+    en: "Sniper · Ascalon. A woman who hunts her marks from the kingdom's shadows. Her only weapon is a tuned rifle, and she fights with three skills (keys 1·2·3 on PC, skill buttons on mobile): 1 Ambush Snipe · 2 Power Shot · 3 Rapid Fire · on the last boss floor the shop becomes a Tuning Bay (swap and upgrade rifle parts) · 10 own items",
+    ja: "狙撃 · アスカロン。王国の影から標的を追う女狙撃手。武器はチューニングした狙撃銃ただ一つで、スキル3つで戦う（PCは1・2・3キー、モバイルはスキルボタン）：1 暗襲狙撃 · 2 強力な一撃 · 3 連射 · ラスボス階のショップはチューニング工房に (狙撃銃のパーツ交換・強化) · 専用アイテム10",
   },
   snipe: { ko: "저격", en: "Sniper", ja: "狙撃" },
   forgotten: { ko: "잊혀진 자", en: "The Forgotten", ja: "忘れられし者" },

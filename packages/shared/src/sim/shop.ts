@@ -12,6 +12,9 @@ import { addEffect } from "./util";
 import { depth, lastFloorOf } from "./hero";
 import { tabooN, tabooUp } from "./taboo";
 import { xpOnly } from "./morphXp";
+import { spawnStation } from "./station";
+
+export { isStation, stationAt, stationMenu, stationMods } from "./station";
 
 const PRICE = SHOP_PRICES.price;
 
@@ -35,6 +38,8 @@ const shopY = () => CY - 8;
 
 /** 상점: 패시브 · 무기 · 사용 아이템 · 회복약 + 새로고침. F(모바일은 버튼)로만 삼 */
 export function spawnShop(s: RunState, roomId: number): void {
+  // 아티팩터 제작대 · 추적자 튜닝소 (sim/station)
+  if (spawnStation(s, roomId)) return;
   const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "shop", ...seatSalt(s)));
   const use = rng.pick(usePool(s));
   addPickup(s, roomId, "passive", rng.pick(passivePool(s)), CX + SHOP_X.passive, shopY(), 0, shopPrice(s, PRICE.passive));

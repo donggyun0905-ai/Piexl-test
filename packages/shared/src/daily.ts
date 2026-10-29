@@ -25,9 +25,11 @@ export const BOARD_SIZE = 30;
 // ───────── 입력 기록 ─────────
 // 같은 입력이 이어지는 구간을 [틱 수, moveX, moveY, aimX, aimY, 버튼] 6개 정수로 묶음 (Int16)
 // 상점 팔기(sell)는 드물어서 그 틱 앞에 [-판 번호, 0, 0, 0, 0, 0] 묶음을 하나 더 넣음 (예전 기록에는 없음). 무기 팔기(-1)는 SELL_WEAPON_CODE로 적음
+// 작업대 창 누름(menu, sim/station)도 드물어서 [-MENU_CODE, 누른 값, 0, 0, 0, 0] 묶음을 하나 더 넣음
 
 const FIELDS = 6;
 const SELL_WEAPON_CODE = 32000;
+const MENU_CODE = 31000;
 
 function flagsOf(i: TickInput): number {
   return (i.attack ? 1 : 0) | (i.dash ? 2 : 0) | (i.interact ? 4 : 0) | (i.autoAim ? 8 : 0) | (i.useSlot << 4) | (i.pickChoice << 6) | (i.statPick << 8) | (i.skill << 12);
@@ -41,9 +43,10 @@ export function encodeInputs(inputs: readonly TickInput[]): Int16Array {
     const f = flagsOf(a);
     let n = 1;
     if (a.sell) out.push(-(a.sell < 0 ? SELL_WEAPON_CODE : a.sell), 0, 0, 0, 0, 0);
-    while (!a.sell && i + n < inputs.length && n < 32767) {
+    if (a.menu) out.push(-MENU_CODE, a.menu, 0, 0, 0, 0);
+    while (!a.sell && !a.menu && i + n < inputs.length && n < 32767) {
       const b = inputs[i + n]!;
-      if (b.sell) break;
+      if (b.sell || b.menu) break;
       if (b.moveX !== a.moveX || b.moveY !== a.moveY || b.aimX !== a.aimX || b.aimY !== a.aimY || flagsOf(b) !== f) break;
       n++;
     }
@@ -56,8 +59,13 @@ export function encodeInputs(inputs: readonly TickInput[]): Int16Array {
 export function decodeInputs(data: Int16Array): TickInput[] {
   const out: TickInput[] = [];
   let sell = 0;
+  let menu = 0;
   for (let k = 0; k + FIELDS <= data.length; k += FIELDS) {
     const n = data[k]!;
+    if (n === -MENU_CODE) {
+      menu = data[k + 1]!;
+      continue;
+    }
     if (n < 0) {
       sell = -n === SELL_WEAPON_CODE ? -1 : -n;
       continue;
@@ -77,9 +85,9 @@ export function decodeInputs(data: Int16Array): TickInput[] {
       statPick: (f >> 8) & 15,
       skill: (f >> 12) & 3,
     };
-    if (sell) {
-      out.push({ ...input, sell });
-      sell = 0;
+    if (sell || menu) {
+      out.push({ ...input, ...(sell ? { sell } : {}), ...(menu ? { menu } : {}) });
+      sell = menu = 0;
       for (let j = 1; j < n; j++) out.push(input);
       continue;
     }
@@ -220,7 +228,8 @@ export function checkProgress(seed: number, r: RunSummary, sudden = false): stri
     maps.set(b.floor, map);
     if (map.rooms[b.roomId]?.type !== "shop") return "buy";
     if (b.kind === "coin" || b.kind === "trash") return "buy";
-    if (b.kind !== "reroll" && !itemAvailable(b.kind, b.itemId, [])) return "buy";
+    // 작업대(아티팩터 제작대·추적자 튜닝소)에 쓴 돈은 물건이 아니라 itemId = 기능 번호
+    if (b.kind !== "reroll" && b.kind !== "bench" && b.kind !== "tune" && !itemAvailable(b.kind, b.itemId, [])) return "buy";
     if (sudden && HEAL_ITEMS.has(`${b.kind}:${b.itemId}`)) return "buy";
     spent += b.price;
   }

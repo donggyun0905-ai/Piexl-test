@@ -27,6 +27,8 @@ export interface TickInput {
   skill: number;
   /** 상점에서 판 장비: 없음·0 = 안 팜, 1·2 = 사용 아이템 칸, 3~ = 패시브 (3 = 첫째, 누른 순간만, sim/shop) */
   sell?: number;
+  /** 작업대 창에서 누름: 없음·0 = 안 누름, 아니면 기능 × 4096 + 고른 것 a × 64 + b (누른 순간만, sim/station) */
+  menu?: number;
   autoAim: boolean;
 }
 

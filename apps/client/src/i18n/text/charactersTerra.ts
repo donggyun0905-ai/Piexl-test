@@ -20,9 +20,9 @@ export const CHARACTER_TEXT_TERRA = {
   },
   artifacter: { ko: "아티팩터", en: "Artifacter", ja: "アーティファクター" },
   artifacterDesc: {
-    ko: "제작 · 테라코어. 두 팔에 푸른빛 문신이 가득한 제작자. 무기는 리펄스 총 딱 하나(맞은 자리를 터뜨리며 밀어냄). 쓰러뜨린 적으로 제작 게이지가 차면 아이템을 직접 만들고, 가끔 제작으로만 나오는 숨겨진 아이템 5개 중 하나가 나옴 · 리펄스 총 1 · 전용 아이템 10 + 숨겨진 5",
-    en: "Crafting · Terracore. A maker whose arms are covered in glowing blue tattoos. His only weapon is the Repulsor Gun (bursts on impact and pushes foes away). Defeated foes fill a craft gauge to make items himself, sometimes one of 5 hidden items only crafting can make · 1 Repulsor Gun · 10 own items + 5 hidden",
-    ja: "製作 · テラコア。両腕に青く光る刺青が満ちた製作者。武器はリパルスガンただ一つ（当たった所で弾け敵を押し返す）。倒した敵で製作ゲージが溜まるとアイテムを自ら作り、時々製作でしか出ない隠しアイテム5つのうち一つが出る · リパルスガン1 · 専用アイテム10＋隠し5",
+    ko: "제작 · 테라코어. 두 팔에 푸른빛 문신이 가득한 제작자. 무기는 리펄스 총 딱 하나(맞은 자리를 터뜨리며 밀어냄). 쓰러뜨린 적으로 제작 게이지가 차면 아이템을 직접 만들고, 가끔 제작으로만 나오는 숨겨진 아이템 5개 중 하나가 나옴. 상점 대신 거대한 제작대(패시브 강화·교체·튜닝) · 리펄스 총 1 · 전용 아이템 10 + 숨겨진 5",
+    en: "Crafting · Terracore. A maker whose arms are covered in glowing blue tattoos. His only weapon is the Repulsor Gun (bursts on impact and pushes foes away). Defeated foes fill a craft gauge to make items himself, sometimes one of 5 hidden items only crafting can make. Shops are replaced by a Grand Workbench (enhance, swap and tune passives) · 1 Repulsor Gun · 10 own items + 5 hidden",
+    ja: "製作 · テラコア。両腕に青く光る刺青が満ちた製作者。武器はリパルスガンただ一つ（当たった所で弾け敵を押し返す）。倒した敵で製作ゲージが溜まるとアイテムを自ら作り、時々製作でしか出ない隠しアイテム5つのうち一つが出る。ショップの代わりに巨大な作業台 (パッシブの強化・交換・チューニング) · リパルスガン1 · 専用アイテム10＋隠し5",
   },
   punk: { ko: "펑크", en: "Punk", ja: "パンク" },
   punkDesc: {

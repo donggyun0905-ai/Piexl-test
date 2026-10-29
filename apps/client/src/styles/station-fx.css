@@ -1,0 +1,141 @@
+/* 작업대 결과 연출 (game/StationResultFx): 성공 · 실패 · 파괴 · 단계 하락 */
+.station-result {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgb(0 0 0 / 0.45);
+  pointer-events: none;
+  animation: sr-fade 1.6s ease forwards;
+}
+.station-result .sr-item {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+}
+.sr-part {
+  font-size: 44px;
+  color: #ffd56a;
+}
+.sr-label {
+  font-size: 1.6em;
+  letter-spacing: 0.05em;
+}
+.sr-rays {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  opacity: 0;
+}
+/* 성공: 금빛 빛줄기가 돌고 아이템이 커지며 떠오름 */
+.station-result.ok .sr-rays {
+  opacity: 1;
+  background: repeating-conic-gradient(rgb(255 213 106 / 0.5) 0 10deg, transparent 10deg 30deg);
+  mask: radial-gradient(circle, #000 20%, transparent 70%);
+  animation: sr-spin 1.6s linear;
+}
+.station-result.ok .sr-item {
+  animation: sr-rise 0.7s cubic-bezier(0.2, 1.6, 0.4, 1);
+  filter: drop-shadow(0 0 10px #ffd56a);
+}
+.station-result.ok .sr-label {
+  color: #ffd56a;
+  text-shadow: 0 0 10px #ff9a3a;
+}
+/* 실패: 회색 연기가 피어오르며 흔들림 */
+.station-result.fail .sr-rays {
+  opacity: 1;
+  background: radial-gradient(circle, rgb(160 160 170 / 0.55), transparent 60%);
+  animation: sr-smoke 1.6s ease-out;
+}
+.station-result.fail .sr-item {
+  animation: sr-shake 0.45s ease;
+  filter: grayscale(1) brightness(0.7);
+}
+.station-result.fail .sr-label {
+  color: #aab;
+}
+/* 파괴: 금이 가며 산산조각, 파편이 사방으로 */
+.station-result.break .sr-item > :first-child {
+  animation: sr-crack 0.9s ease forwards;
+}
+.station-result.break .sr-rays {
+  opacity: 1;
+  background: radial-gradient(circle, rgb(255 80 60 / 0.6), transparent 55%);
+  animation: sr-flash 0.6s ease-out;
+}
+.sr-shards i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 4px;
+  background: #ff6a4a;
+  box-shadow: 0 0 6px #ff3a2a;
+  transform: rotate(var(--a)) translateX(0);
+  animation: sr-shard 0.9s ease-out 0.35s forwards;
+  opacity: 0;
+}
+.station-result.break .sr-label {
+  color: #ff5a48;
+  text-shadow: 0 0 12px #ff2a1a;
+}
+/* 단계 하락: 붉게 번쩍이며 아래로 */
+.station-result.drop .sr-item {
+  animation: sr-drop 0.8s ease-in;
+}
+.station-result.drop .sr-rays {
+  opacity: 1;
+  background: radial-gradient(circle, rgb(255 90 72 / 0.45), transparent 60%);
+  animation: sr-flash 0.6s ease-out;
+}
+.station-result.drop .sr-label {
+  color: #ff8a6a;
+}
+@keyframes sr-fade {
+  0%, 80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes sr-spin {
+  from { transform: rotate(0) scale(0.6); }
+  to { transform: rotate(120deg) scale(1.1); }
+}
+@keyframes sr-rise {
+  from { transform: translateY(20px) scale(0.3); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+@keyframes sr-smoke {
+  from { transform: translateY(10px) scale(0.5); }
+  to { transform: translateY(-30px) scale(1.4); opacity: 0; }
+}
+@keyframes sr-shake {
+  0%, 100% { transform: none; }
+  20%, 60% { transform: translateX(-6px) rotate(-4deg); }
+  40%, 80% { transform: translateX(6px) rotate(4deg); }
+}
+@keyframes sr-crack {
+  0% { transform: none; filter: none; }
+  30% { transform: scale(1.1) rotate(-3deg); filter: brightness(1.6) sepia(1) hue-rotate(-30deg); }
+  45% { transform: scale(1.05) rotate(3deg); }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.2); opacity: 0; }
+}
+@keyframes sr-shard {
+  0% { opacity: 1; transform: rotate(var(--a)) translateX(0); }
+  100% { opacity: 0; transform: rotate(var(--a)) translateX(70px) rotate(200deg); }
+}
+@keyframes sr-flash {
+  from { transform: scale(0.4); }
+  to { transform: scale(1.3); opacity: 0; }
+}
+@keyframes sr-drop {
+  0% { transform: none; }
+  30% { transform: translateY(-8px); filter: brightness(1.5) sepia(1) hue-rotate(-40deg); }
+  100% { transform: translateY(24px); opacity: 0.4; }
+}

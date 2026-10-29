@@ -18,7 +18,7 @@ import type { BedouinPlayerState } from "./bedouinTypes";
 import type { GeneralPlayerState } from "./generalTypes";
 import type { ImugiEnemyState, ImugiPlayerState } from "./imugiTypes";
 import type { ApostleEnemyState, ApostlePlayerState } from "./apostleTypes";
-import type { AbandonedPlayerState, DuckPlayerState, H2EnemyState, H2PlayerState, ElderPlayerState, FlyPlayerState, IdraPlayerState, MorphPlayerState, PetRunState, RenPlayerState, S2EnemyState, SpiritPlayerState, OniEnemyState, OniPlayerState, S2Spirit, ScribeEnemyState, ScribePlayerState, StarPlayerState, TcPlayerState, TitanPlayerState, AscalonPlayerState, AscalonEnemyState } from "./classTypes";
+import type { AbandonedPlayerState, DuckPlayerState, H2EnemyState, H2PlayerState, ElderPlayerState, FlyPlayerState, IdraPlayerState, MorphPlayerState, PetRunState, RenPlayerState, S2EnemyState, SpiritPlayerState, OniEnemyState, OniPlayerState, S2Spirit, ScribeEnemyState, ScribePlayerState, StarPlayerState, TcPlayerState, TitanPlayerState, AscalonPlayerState, AscalonEnemyState, StationKind, StationPrompt } from "./classTypes";
 import type { Seat } from "./party";
 import type { TabooSet } from "../taboo";
 export type { Device } from "./laserTypes";
@@ -161,9 +161,8 @@ export interface ProjectileState extends Body, GunShotState, BeastShotState, Orb
   spirit?: "orb" | "seek" | "pet" | "steel" | "trigger" | "bullet" | "yarn" | "hairball" | "ki" | "shuriken" | "kunai" | "fuma" | "needle" | "chrono" | "sand" | "disc" | "gear" | "fireball" | "bone" | "spore" | "fairy" | "chakram" | "crescent" | "spearShot" | "shard" | "feather" | "bubble" | "ink" | S2Spirit;
 }
 
-/** 방마다 남는 상태 */
 /** reroll: 상점 새로고침 (itemId = 누른 횟수, price = 다음 가격) */
-export type PickupKind = "weapon" | "use" | "passive" | "coin" | "reroll" | "trash";
+export type PickupKind = StationKind | "weapon" | "use" | "passive" | "coin" | "reroll" | "trash";
 
 /** 바닥에 놓인 아이템 */
 export interface Pickup {
@@ -191,7 +190,7 @@ export interface RoomState {
 }
 
 /** 화면에 띄울 안내 (상호작용 가능한 것) */
-export type Prompt =
+export type Prompt = StationPrompt
   | { kind: "none" }
   /** 잠긴 출구 (lane = 출구 줄) */
   | { kind: "flee"; lane: number; cost: number }
@@ -200,7 +199,7 @@ export type Prompt =
   | { kind: "pick"; pickupId: number }
   /** 상점 물건: F·버튼으로만 삼 (실수로 사지 않게) */
   | { kind: "buy"; pickupId: number; price: number }
-  | { kind: "trash"; price: number; confirm: boolean } // 상점 휴지통 (confirm = 한 번 눌러 확인을 기다림)
+  | { kind: "trash"; price: number; confirm: boolean } // 상점 휴지통 (confirm = 확인 대기)
   /** 협동: 출구·계단에 모두 모이기를 기다림 · 쓰러진 친구 옆 (ready = 전투가 끝나 회복약으로 일으킬 수 있음) */
   | { kind: "gather"; have: number; need: number }
   | { kind: "revive"; ready: boolean };

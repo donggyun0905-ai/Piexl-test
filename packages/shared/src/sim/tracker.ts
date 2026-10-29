@@ -2,6 +2,7 @@
 // 1 암습 저격: 보호막 20, 화면이 어두워진 채 5초 동안 직접 조준해 쏨 (조준경 가운데 작은 원 안의 적만 맞음, 한 발 200%, 다시 누르면 끝 · 일찍 끝내면 남은 시간만큼 대기가 줄어듦) · 대기 10초
 // 2 강력한 한방: 모으는 동안 앞에 탄을 막는 벽 → 방을 꿰뚫는 한 줄 (공격력 1000% + 최대 체력 20%, 보스는 그 1/5) · 대기 60초
 // 3 연발사격: 조준 없이 10발을 흩뿌려 쏨 · 대기 3초. 세 스킬은 서로 쓰는 도중에도 같이 쓸 수 있음. 수치는 weaponsTracker.TRACKER, 아이템은 itemsTracker
+import { tuneVal } from "./trTune";
 import { TICK_RATE } from "../constants";
 import { TRACKER_PERKS as K } from "../itemsTracker";
 import { createRng, deriveSeed } from "../rng";
@@ -25,7 +26,7 @@ const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.see
 
 /** 스킬마다 대기 틱 (아이템 반영) */
 export function trackerCooldown(p: PlayerState, i: number): number {
-  const base = T.cooldowns[i] ?? 0;
+  const base = Math.round((T.cooldowns[i] ?? 0) * tuneVal(p, "cd") * (i === 2 ? tuneVal(p, "cd3") : 1));
   if (i === 0 && hasPerk(p, "trSilencer")) return Math.round(base * K.trSilencer.cd);
   if (i === 1 && hasPerk(p, "trCharge")) return K.trCharge.cd;
   return base;
@@ -68,7 +69,7 @@ export function trackerShotHit(s: RunState, pr: ProjectileState, e: EnemyState):
 function ambushShot(s: RunState): void {
   const p = s.player;
   const a = p.trAmbush!;
-  const r = T.ambushR * (hasPerk(p, "trScope") ? K.trScope.ring : 1);
+  const r = T.ambushR * tuneVal(p, "scopeR") * (hasPerk(p, "trScope") ? K.trScope.ring : 1);
   const x = p.x + p.faceX * (p.aimDist ?? 60);
   const y = p.y + p.faceY * (p.aimDist ?? 60);
   let best: EnemyState | undefined;
@@ -112,7 +113,7 @@ function wallBlock(s: RunState): void {
   const p = s.player;
   const cx = p.x + p.faceX * T.wallDist;
   const cy = p.y + p.faceY * T.wallDist;
-  const half = T.wallWidth / 2;
+  const half = (T.wallWidth * tuneVal(s.player, "wall")) / 2;
   s.projectiles = s.projectiles.filter((pr) => {
     if (pr.fromPlayer) return true;
     const dx = pr.x - cx;
@@ -135,8 +136,8 @@ function useSkill(s: RunState, i: number): void {
   if (i === 0) {
     // 무적 대신 보호막 20 (겹치지 않고 20으로 맞춤)
     const base = p.shieldPts ?? 0;
-    p.shieldPts = Math.max(base, T.ambushShield);
-    p.trAmbush = { t: T.ambushTicks, gap: 0, base };
+    p.shieldPts = Math.max(base, T.ambushShield + tuneVal(p, "shield"));
+    p.trAmbush = { t: Math.round(T.ambushTicks * tuneVal(p, "ambT")), gap: 0, base };
   }
   else if (i === 1) p.trCharge = T.powerCharge;
   else p.trBurst = { left: hasPerk(p, "trDrum") ? K.trDrum.shots : T.burstShots, gap: 0 };
@@ -160,7 +161,7 @@ export function trackerTick(s: RunState, want: boolean, speed: number): void {
   // 연발사격 (움직이며 쏠 수 있음)
   const b = p.trBurst;
   if (b && --b.gap <= 0) {
-    const a = (roll(s, "trBurst", b.left) - 0.5) * 2 * T.burstSpread;
+    const a = (roll(s, "trBurst", b.left) - 0.5) * 2 * T.burstSpread * tuneVal(s.player, "spread");
     shoot(s, a, { damage: p.stats.damage * T.burstMul * shotMul(s, false, b.left), spirit: "trBurst", range: p.stats.range * 0.8, speed: 7, r: 2 });
     p.trShot = s.tick;
     b.gap = T.burstGap;

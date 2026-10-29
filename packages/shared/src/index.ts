@@ -21,6 +21,7 @@ export * from "./battle";
 export * from "./rank";
 export * from "./player";
 export * from "./raid";
+export * from "./trackerParts";
 export * from "./balance";
 export * from "./perks";
 export * from "./tdDefs";

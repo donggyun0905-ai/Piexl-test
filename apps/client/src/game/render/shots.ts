@@ -38,6 +38,7 @@ import { drawS2BossShot } from "./s2BossShots";
 import { drawFoeShot, drawS1BossFx } from "./s1Bosses";
 import { additive, beam, glow } from "./pwFxBits";
 import { drawAmbushShot, drawOriginFx } from "./origin";
+import { drawStationFx } from "./stationFx";
 import { drawBaseShot, drawBlast, drawBurst, drawHit, drawSwing } from "./baseFx";
 
 export function drawProjectiles(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
@@ -115,7 +116,7 @@ export function drawEffects(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       continue;
     }
     drawFxBloom(ctx, fx, px, py, snap);
-    if (drawOriginFx(ctx, fx, snap) || drawS2BossFx(ctx, s, fx, snap) || drawS1BossFx(ctx, s, fx, snap)) continue;
+    if (drawOriginFx(ctx, fx, snap) || drawStationFx(ctx, fx, snap) || drawS2BossFx(ctx, s, fx, snap) || drawS1BossFx(ctx, s, fx, snap)) continue;
     if (drawPwSkillFx(ctx, fx, snap) || drawTintedFx(ctx, fx, px, py, snap) || drawCustomFx(ctx, fx, px, py, snap)) continue;
     if (drawLaserFx(ctx, s, fx, px, py, snap) || drawMedicFx(ctx, s, fx, px, py, snap)) continue;
     if (drawOrbitFx(ctx, fx, snap)) continue;

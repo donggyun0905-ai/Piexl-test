@@ -1,5 +1,6 @@
 import { BIG_COIN, type Pickup } from "@pixel-rogue/shared";
 import { iconCanvas, type IconItem } from "./iconArt";
+import { drawStation } from "./drawStation";
 
 /** 바닥 아이템 (임시 그림). hold: 서 있어서 가지기까지 찬 정도 (0~1) */
 export function drawPickup(ctx: CanvasRenderingContext2D, pk: Pickup, tick: number, near: boolean, hold: number): void {
@@ -7,7 +8,7 @@ export function drawPickup(ctx: CanvasRenderingContext2D, pk: Pickup, tick: numb
   const x = Math.round(pk.x);
   const y = Math.round(pk.y) + bob;
   ctx.globalAlpha = pk.armed ? 1 : 0.55;
-  if (near) {
+  if (near && pk.kind !== "bench" && pk.kind !== "tune") {
     ctx.strokeStyle = "rgba(255,255,255,0.7)";
     ctx.lineWidth = 1;
     ctx.strokeRect(x - 7.5, y - 7.5, 15, 15);
@@ -26,6 +27,11 @@ export function drawPickup(ctx: CanvasRenderingContext2D, pk: Pickup, tick: numb
   if (pk.kind === "trash") {
     drawTrash(ctx, x, Math.round(pk.y), pk.itemId === "1");
     ctx.globalAlpha = 1;
+    return;
+  }
+  if (pk.kind === "bench" || pk.kind === "tune") {
+    ctx.globalAlpha = 1;
+    drawStation(ctx, pk.kind, x, Math.round(pk.y), tick, pk.itemId === "1");
     return;
   }
   if (pk.kind === "reroll") {

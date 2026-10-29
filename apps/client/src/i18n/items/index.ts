@@ -25,6 +25,7 @@ import { ORBIT_DESC } from "./elemental";
 import { GEAR_DESC } from "./gears";
 import { MEDIC_DESC } from "./doctor";
 import { PASSIVE_NAMES, USE_DESC, USE_NAMES, WEAPON_NAMES, type Names } from "./names";
+import { STATION_DESC, STATION_NAME } from "./station";
 
 const STAT_LABEL: Record<StatKey, TextKey> = {
   maxHp: "statHp",
@@ -53,7 +54,7 @@ function fill(text: string, row: Record<string, unknown> | undefined): string {
   });
 }
 
-type ItemKind = "weapon" | "use" | "passive" | "coin" | "reroll" | "trash";
+type ItemKind = "weapon" | "use" | "passive" | "coin" | "reroll" | "trash" | "bench" | "tune";
 
 const COIN_NAME: Names = { ko: "돈", en: "Gold", ja: "ゴールド" };
 const REROLL_NAME: Names = { ko: "새로고침", en: "Refresh", ja: "入れ替え" };
@@ -74,6 +75,7 @@ export function itemName(kind: ItemKind, id: string, lang: Lang): string {
   if (kind === "coin") return COIN_NAME[lang];
   if (kind === "reroll") return REROLL_NAME[lang];
   if (kind === "trash") return TRASH_NAME[lang];
+  if (kind === "bench" || kind === "tune") return STATION_NAME[kind][lang];
   const table = kind === "weapon" ? WEAPON_NAMES : kind === "use" ? USE_NAMES : PASSIVE_NAMES;
   return (table as Record<string, Names>)[id]?.[lang] ?? id;
 }
@@ -82,6 +84,7 @@ export function itemDesc(kind: ItemKind, id: string, lang: Lang, t: (k: TextKey)
   if (kind === "coin") return "";
   if (kind === "reroll") return REROLL_DESC[lang];
   if (kind === "trash") return TRASH_DESC[lang];
+  if (kind === "bench" || kind === "tune") return STATION_DESC[kind][lang];
   if (kind === "use") return fill(USE_DESC[id as UseItemId][lang], USE_ITEMS[id as UseItemId]);
   if (kind === "weapon") {
     const w: WeaponDef = WEAPONS[id as WeaponId];

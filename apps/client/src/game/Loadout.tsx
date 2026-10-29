@@ -2,6 +2,8 @@ import { NovicePanel, type NoviceView } from "./NovicePanel";
 import { SkillButtons } from "./SkillButtons";
 import { PwSkillBar, type PwSkillView } from "./PwSkillBar";
 import { SellBar } from "./SellBar";
+import { StationWindow } from "./StationWindow";
+import type { StationView } from "./stationView";
 import type { PassiveId, UseItemId, WeaponId } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { useState, type MouseEvent } from "react";
@@ -23,6 +25,8 @@ export interface LoadoutView {
   pw?: PwSkillView;
   /** 상점 휴지통 판매 창이 열려 있을 때: 팔면 받는 돈 (sellCodes 순서: 무기 · 사용 아이템 2칸 · 패시브 순서, 0원 = 못 팜) */
   sell?: number[];
+  /** 작업대 창이 열려 있을 때 (아티팩터 제작대 · 추적자 튜닝소) */
+  station?: StationView;
 }
 
 /** PC 사용 아이템 키 표시 (controls의 USE_KEYS와 같게) */
@@ -31,7 +35,7 @@ export interface LoadoutView {
 export function loadoutKey(v: LoadoutView): string {
   const n = v.novice ? `|${v.novice.lv},${v.novice.exp},${v.novice.points}` : "";
   const pw = v.pw ? `|${v.pw.cds.join(",")}|${v.pw.armed}|${v.pw.silenced}` : "";
-  return `${v.weaponId}|${v.slots.join(",")}|${v.passives.join(",")}${n}|${v.skills?.join(",") ?? ""}|${v.sell?.join(",") ?? ""}${pw}`;
+  return `${v.weaponId}|${v.slots.join(",")}|${v.passives.join(",")}${n}|${v.skills?.join(",") ?? ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}`;
 }
 
 interface Props {
@@ -77,6 +81,7 @@ export function Loadout({ view, lang, t, touchMode, controls }: Props) {
     <div className="loadout">
       {view.novice && <NovicePanel view={view.novice} t={t} controls={controls} />}
       {view.sell && <SellBar view={view} lang={lang} t={t} controls={controls} />}
+      {view.station && <StationWindow view={view.station} lang={lang} t={t} controls={controls} />}
       {view.skills && <SkillButtons skills={view.skills} t={t} controls={controls} />}
       {view.pw && <PwSkillBar view={view.pw} t={t} touchMode={touchMode} controls={controls} />}
       <span className="loadout-weapon">

@@ -9,3 +9,4 @@ export type { ElderPlayerState, FlyPlayerState, IdraPlayerState, MorphPlayerStat
 export type { H2EnemyState, H2PlayerState } from "./h2Types";
 export type { TcPlayerState } from "./tcTypes";
 export type { AscalonEnemyState, AscalonPlayerState } from "./ascTypes";
+export type { StationKind, StationPrompt } from "./stationTypes";

@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.221",
+    date: "2026-10-29",
+    items: {
+      ko: [
+        "아티팩터: 모든 상점(라스트 보스 층 포함)이 거대한 제작대로 바뀜. F로 들어가 골드를 내고 · 강화 = 자기 패시브를 50% 확률로 한 단계 강화 (최대 3단계, 단계마다 효과 +50%), 일반 패시브 두 개를 고르면 무작위 자기 패시브 하나로 합침 (히든 10%) · 교체 = 자기 패시브는 다른 자기 패시브로, 일반 패시브는 다른 일반 패시브로 · 튜닝 = 자기 패시브를 50% 확률로 히든 패시브로, 실패하면 부서짐 · 성공·실패·파괴 연출",
+        "추적자: 라스트 보스 층 상점이 튜닝소로 바뀜. 창 가득한 저격총에서 부위(총열·조준경·개머리판·탄창·총구·레일)를 눌러 부품을 갈아 끼우거나 골드로 강화 (부위마다 부품 4개, 효과는 사거리·이동 속도·탄속·체력·행운·스킬 대기·암습·연발 흔들림 등 편의성만, 공격력 없음) · 강화 성공 확률 100 → 75 → 50 → 25 → 10%, 실패하면 한 단계 내려감 · 단계마다 효과 +15%",
+      ],
+      en: [
+        "Artifacter: every shop (including the last boss floor) is now a Grand Workbench. Press F and pay gold to · Enhance = upgrade one of your own passives by a level at 50% (up to 3 levels, +50% effect each), or pick two general passives to fuse them into a random passive of your own (10% hidden) · Swap = own passive into another own passive, general into another general · Tune = turn an own passive into a hidden one at 50%, or it breaks · success, failure and destruction effects",
+        "Tracker: the shop on the last boss floor is now a Tuning Bay. Click a part of the rifle that fills the window (barrel, scope, stock, magazine, muzzle, rail) to swap in another part or upgrade it with gold (4 parts per slot; effects are convenience only: range, move speed, bullet speed, HP, luck, skill cooldowns, ambush and rapid-fire spread, no damage) · upgrade success 100 → 75 → 50 → 25 → 10%, failure drops one level · +15% effect per level",
+      ],
+      ja: [
+        "アーティファクター: すべてのショップ (ラスボス階も) が巨大な作業台に。Fで入りゴールドを払って · 強化 = 自分のパッシブを50%で1段階強化 (最大3段階、段階ごとに効果+50%)、一般パッシブを2つ選ぶとランダムな自分のパッシブ1つに合成 (ヒドゥン10%) · 交換 = 自分のパッシブは別の自分のパッシブに、一般パッシブは別の一般パッシブに · チューニング = 自分のパッシブを50%でヒドゥンに、失敗すると壊れる · 成功・失敗・破壊の演出",
+        "トラッカー: ラスボス階のショップがチューニング工房に。画面いっぱいの狙撃銃で部位 (銃身・スコープ・銃床・弾倉・銃口・レール) を押してパーツを交換したりゴールドで強化 (部位ごとにパーツ4つ、効果は射程・移動速度・弾速・体力・幸運・スキル待ち時間・暗襲・連射のぶれなど利便性のみ、攻撃力なし) · 強化成功率 100 → 75 → 50 → 25 → 10%、失敗すると1段階下がる · 段階ごとに効果+15%",
+      ],
+    },
+  },
+  {
     version: "0.48.220",
     date: "2026-10-29",
     items: {
