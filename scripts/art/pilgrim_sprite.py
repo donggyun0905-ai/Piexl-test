@@ -1,12 +1,19 @@
 # 차원의 순례자 방향 시트 (python3 scripts/art/pilgrim_sprite.py) → apps/client/public/sprites/pilgrim.png
-# 히든 상점 여자아이 = 히든 캐릭터 '차원의 순례자'. 48칸 (발 여백 3), 머리가 큰 귀여운 비율 · 얼굴은 갸름한 V라인
+# 히든 상점 여자아이 = 히든 캐릭터 '차원의 순례자'. 80칸 (발 여백 3, 몸은 48칸 크기 그대로 · 배낭이 키보다 훨씬 큰 거대한 크기, 뒤에서는 배낭만 보임), 머리가 큰 귀여운 비율 · 얼굴은 갸름한 V라인
 # 허리까지 풍성하게 물결치는 분홍빛 긴 머리 · 큰 파랑 눈 안 노란 십자 · 헐렁한 회녹색 후드 재킷(넓은 소매)·흰 티·남색 반바지·베이지 끈 부츠
 # 등에 몸보다 훨씬 큰 둥글고 푹신한 천 배낭: 위 양쪽 귀 같은 주머니 덮개 · 옆주머니 · 꿰맨 선 · 차원 수정 열쇠고리 (두 손으로 어깨끈을 꼭 쥠)
 from s2_common import Cell, hx, save_sheet, shade
 
-S = 48
-FOOT = S - 3
-CX = S // 2
+S = 80
+# 그리기는 48칸 좌표 그대로, 80칸 시트 안에서 아래 가운데로 옮김 (커진 배낭이 위·옆으로 넉넉히 들어감)
+OX, OY = 16, 32
+FOOT = 48 - 3
+CX = 24
+
+
+class Big(Cell):
+    def px(self, x, y, c):
+        super().px(x + OX, y + OY, c)
 
 K = {
     "H": hx("#eeaaa2"), "h": hx("#c47a78"), "L": hx("#ffd8d0"),
@@ -18,7 +25,7 @@ C = dict(
     shorts=hx("#3c5490"), shortsD=hx("#2a3c6c"), shortsL=hx("#6a80b8"), skin=K["S"], skinD=K["s"],
     boot=hx("#e2d2a8"), bootD=hx("#b09c70"), lace=hx("#6a5a3a"),
     bag=hx("#c8955a"), bagD=hx("#9a6a3a"), bagDD=hx("#74481f"), bagL=hx("#e2b57c"), stitch=hx("#f0d8a8"),
-    strap=hx("#a8743e"), crystal=hx("#6ae0ff"), crystalL=hx("#e0fbff"), steelD=hx("#8a94a8"),
+    strap=hx("#a8743e"), buckle=hx("#ffd050"), patch=hx("#8a5aff"), crystal=hx("#6ae0ff"), crystalL=hx("#e0fbff"), steelD=hx("#8a94a8"),
     outline=hx("#4a3248"),
 )
 
@@ -106,27 +113,68 @@ def flyaway(c, x, y, dx, n):
 
 
 def round_bag(c, cx, cy, rx, ry, view, tick):
-    """둥글고 푹신한 천 배낭: 몸통 · 아래 그늘 · 위 밝은 면 · 위 양쪽 귀 덮개 · 옆주머니 · 꿰맨 선 · 열쇠고리"""
-    c.oval(cx, cy, rx, ry, C["bagD"])
-    c.oval(cx - 1, cy - 1, rx - 1, ry - 1, C["bagL"])
-    c.oval(cx, cy, rx - 2, ry - 2, C["bag"])
-    for x in range(cx - rx + 3, cx + rx - 2): c.px(x, cy + ry - 2, C["bagDD"])
+    """거대한 둥근 천 배낭 (바닥은 눌려 넓적): 오른쪽·아래 그늘 · 왼쪽 위 빛 · 푹신한 주름 · 위 입구(말린 천·조임 끈·끈 고리)
+    · 귀 같은 덮개 둘 · 옆주머니 · 꿰맨 선 · 뒤에서 보면 큰 앞주머니(덮개·버클)·별 패치·달 패치·수정 열쇠고리"""
+    import math
+    rows = {}
+    for y in range(cy - ry, cy + ry + 1):
+        t = (y - cy) / ry
+        hw = rx * math.sqrt(max(0.0, 1 - t * t)) * (1 + 0.12 * max(0.0, t))
+        if t > 0.85: hw *= 0.92
+        rows[y] = hw
+        for x in range(int(cx - hw), int(cx + hw) + 1):
+            k = (x - cx) / max(hw, 1)
+            col = C["bag"]
+            if k > 0.55 or t > 0.8: col = C["bagD"]
+            if k > 0.85 or t > 0.93: col = C["bagDD"]
+            if k < -0.45 and t < 0.1 or t < -0.75 and k < 0.3: col = C["bagL"]
+            c.px(x, y, col)
+    # 푹신한 주름 (아래로 휘는 짙은 선 넷)
+    for i, fx in enumerate((-0.55, -0.2, 0.2, 0.55)):
+        for y in range(cy - ry // 3, cy + ry - 3):
+            hw = rows.get(y, 0)
+            x = cx + fx * hw * 0.9 + (1 if (y // 4 + i) % 2 else 0)
+            if (y + i) % 7 < 4: c.px(x, y, C["bagD"])
+    # 가운데 꿰맨 선 (둥글게)
+    for x in range(int(cx - rx + 4), int(cx + rx - 3), 2):
+        c.px(x, cy + 4 + int(abs(x - cx) * abs(x - cx) / (rx * 6)), C["stitch"])
+    # 위 입구: 말린 천 · 조임 끈 · 끈 고리
+    top = cy - ry
+    c.oval(cx, top + 2, rx // 3, 3, C["bagD"]); c.oval(cx, top + 1, rx // 3 - 1, 2, C["bagL"])
+    for x in range(cx - rx // 3 + 2, cx + rx // 3 - 1, 3): c.px(x, top + 3, C["bagDD"])
+    c.line(cx - 2, top + 4, cx - 5, top + 9, C["strap"]); c.line(cx + 2, top + 4, cx + 4, top + 10, C["strap"])
+    c.rect(cx - 6, top + 9, 2, 3, C["crystal"]); c.rect(cx + 3, top + 10, 2, 2, C["buckle"])
+    # 귀 같은 덮개 둘 (위 양쪽 모서리에 붙어 바깥으로)
     for sx in (-1, 1):
-        ex = cx + sx * (rx - 4)
-        ey = cy - ry + 3
-        c.rect(ex - 2, ey - 1, 5, 3, C["bag"]); c.px(ex + sx * 2, ey - 2, C["bag"]); c.px(ex + sx * 3, ey - 2, C["bagD"])
-        c.rect(ex - 2, ey + 2, 5, 1, C["bagDD"])
+        ex, ey = cx + sx * int(rx * 0.68), cy - int(ry * 0.72)
+        c.oval(ex, ey, 4, 3, C["bagD"]); c.oval(ex - sx, ey - 1, 3, 2, C["bag"])
+        c.px(ex + sx * 4, ey - 3, C["bagD"]); c.px(ex + sx * 3, ey - 3, C["bag"]); c.px(ex + sx * 5, ey - 4, C["bagD"])
+    # 옆주머니 (양쪽으로 불룩 · 덮개 · 단추)
     if view != "side":
         for sx in (-1, 1):
-            px0 = cx + sx * rx - (2 if sx > 0 else 1)
-            c.rect(px0, cy + 1, 3, 7, C["bag"]); c.rect(px0, cy + 1, 3, 2, C["bagD"]); c.px(px0 + 1, cy + 4, C["stitch"])
-    for x in range(cx - rx + 4, cx + rx - 3, 2): c.px(x, cy + 3, C["stitch"])
+            px0 = cx + sx * (rx + 1) - 3
+            c.oval(px0 + 3 - sx, cy + 6, 4, 7, C["bagD"]); c.oval(px0 + 3 - sx * 2, cy + 6, 3, 6, C["bag"])
+            c.rect(px0 + 1 - sx, cy, 5, 2, C["bagDD"]); c.px(px0 + 3 - sx, cy + 2, C["buckle"])
     if view == "back":
-        for sx in (-5, 5): c.rect(cx + sx, cy - ry + 4, 1, ry - 2, C["strap"])
-        kx = cx + 7
-        c.px(kx, cy + 4, C["steelD"]); c.px(kx, cy + 5, C["steelD"])
-        c.rect(kx - 1, cy + 6, 3, 2, C["crystal"]); c.px(kx, cy + 8, C["crystal"])
-        if tick % 2 == 0: c.px(kx - 1, cy + 6, C["crystalL"])
+        # 큰 앞주머니 (덮개 · 버클 끈 둘 · 꿰맨 테두리)
+        pw, ph = rx, ry // 2
+        x0, y0 = cx - pw // 2, cy - 2
+        c.rect(x0, y0, pw, ph, C["bagL"]); c.rect(x0 + 1, y0 + 1, pw - 2, ph - 2, C["bag"])
+        c.rect(x0, y0, pw, 5, C["bagD"]); c.rect(x0 + 1, y0 + 5, pw - 2, 1, C["bagDD"])
+        for x in range(x0 + 2, x0 + pw - 2, 2): c.px(x, y0 + ph - 2, C["stitch"])
+        for sx in (x0 + 4, x0 + pw - 5):
+            c.rect(sx, y0 - 6, 1, 13, C["strap"]); c.rect(sx - 1, y0 + 4, 3, 3, C["buckle"]); c.px(sx, y0 + 5, C["strap"])
+        # 별 패치 (보라 원 + 노란 별) · 달 패치 (남색 + 노란 초승달)
+        sxp, syp = cx - rx // 2, cy - ry // 2
+        c.oval(sxp, syp, 3, 3, C["patch"])
+        for dx, dy in ((0, -2), (-1, -1), (0, -1), (1, -1), (-2, 0), (-1, 0), (0, 0), (1, 0), (2, 0), (-1, 1), (1, 1)): c.px(sxp + dx, syp + dy, K["Y"])
+        mxp, myp = cx + rx // 2, cy - ry // 2 + 2
+        c.oval(mxp, myp, 3, 3, C["shorts"]); c.px(mxp - 1, myp - 1, K["Y"]); c.px(mxp - 1, myp, K["Y"]); c.px(mxp - 1, myp + 1, K["Y"]); c.px(mxp, myp + 2, K["Y"]); c.px(mxp, myp - 2, K["Y"])
+        # 수정 열쇠고리 (반짝)
+        kx = x0 + pw - 3
+        c.px(kx, y0 + 7, C["steelD"]); c.px(kx, y0 + 8, C["steelD"])
+        c.rect(kx - 1, y0 + 9, 3, 2, C["crystal"]); c.px(kx, y0 + 11, C["crystal"])
+        if tick % 2 == 0: c.px(kx - 1, y0 + 9, C["crystalL"])
 
 
 def boots(c, x, y, w):
@@ -135,7 +183,7 @@ def boots(c, x, y, w):
 
 
 def frame(row, col):
-    c = Cell(S)
+    c = Big(S)
     view = "front" if row == 0 or (row == 3 and col < 3) else "back" if row == 1 else "side"
     cast = row == 3
     step = 0 if cast else col
@@ -143,13 +191,13 @@ def frame(row, col):
     hy = 12 + dy
     ty = 28 + dy
     if view == "front":
-        round_bag(c, CX, 25 + dy, 16, 15, view, col)
+        round_bag(c, CX, 18 + dy, 26, 24, view, col)
         # 뒤로 풍성하게 흘러내린 머리 + 바깥으로 휘날리는 가닥
         wavy_hair(c, CX - 10, CX + 9, 18 + dy, 35 + dy, col)
         flyaway(c, CX - 11, 15 + dy, -1, 5); flyaway(c, CX + 10, 15 + dy, 1, 5)
         flyaway(c, CX - 7, 11 + dy, -1, 4); flyaway(c, CX + 6, 11 + dy, 1, 4)
     elif view == "side":
-        round_bag(c, CX - 8, 26 + dy, 11, 14, view, col)
+        round_bag(c, CX - 13, 19 + dy, 17, 23, view, col)
         wavy_hair(c, CX - 10, CX - 2, 18 + dy, 34 + dy, col)
         flyaway(c, CX - 10, 16 + dy, -1, 5)
     # 다리 (맨다리 · 끈 부츠)
@@ -187,12 +235,8 @@ def frame(row, col):
         c.px(CX, hy - 1, K["H"]); c.px(CX + 1, hy - 2, K["H"]); c.px(CX + 2, hy - 2, K["h"])
     elif view == "back":
         c.rect(CX - 7, ty, 14, 6, C["jacket"]); c.rect(CX - 10, ty + 1, 3, 4, C["jacket"]); c.rect(CX + 7, ty + 1, 3, 4, C["jacket"])
-        round_bag(c, CX, 26 + dy, 15, 14, view, col)
-        stamp(c, CX - 8, hy, HEAD_BACK)
-        # 배낭 위로 쏟아져 흘러내리는 긴 머리
-        wavy_hair(c, CX - 7, CX + 6, hy + 14, 33 + dy, col)
-        flyaway(c, CX - 8, hy + 4, -1, 6); flyaway(c, CX + 7, hy + 4, 1, 6)
-        flyaway(c, CX - 9, hy + 12, -1, 5); flyaway(c, CX + 8, hy + 12, 1, 5)
+        # 뒤에서는 거대한 배낭이 아이를 다 가림 (부츠만 보임)
+        round_bag(c, CX, 18 + dy, 26, 24, view, col)
     else:
         c.rect(CX - 4, ty, 8, 6, C["jacket"]); c.rect(CX - 4, ty - 1, 6, 2, C["jacketD"])
         c.rect(CX + 2, ty + 1, 2, 4, C["top"]); c.rect(CX - 3, ty, 1, 4, C["strap"])

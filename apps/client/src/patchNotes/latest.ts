@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.229",
+    date: "2026-10-29",
+    items: {
+      ko: ["차원의 순례자 배낭을 키보다 훨씬 큰 거대한 배낭으로 (입구 조임 끈·귀 같은 덮개·푹신한 주름·옆주머니) · 뒤돌면 배낭만 보임 (큰 앞주머니·별/달 패치·수정 열쇠고리) · 등장 포탈도 더 크게"],
+      en: ["The Dimensional Pilgrim's backpack is now huge, far taller than she is (drawstring top, ear-like flaps, squishy folds, side pockets) · from behind you only see the backpack (big front pocket, star and moon patches, crystal keychain) · her entrance portal is bigger too"],
+      ja: ["次元の巡礼者のリュックを背よりずっと大きな巨大リュックに (口の絞りひも・耳のようなフタ・ふかふかのしわ・横ポケット) · 後ろを向くとリュックだけが見える (大きな前ポケット・星と月のワッペン・水晶のキーホルダー) · 登場ポータルもさらに大きく"],
+    },
+  },
+  {
     version: "0.48.228",
     date: "2026-10-29",
     items: {

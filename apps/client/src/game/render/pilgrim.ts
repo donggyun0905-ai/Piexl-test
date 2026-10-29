@@ -27,19 +27,19 @@ export function drawPilgrim(ctx: Ctx, s: RunState, line: string | undefined): vo
   const y = PORTAL_Y + (STAND_Y - PORTAL_Y) * f;
   // 포탈: 걸어 나오는 동안 열려 있다가 닫힘 (아이 키보다 큰 문, 아이가 그 안에서 걸어 나옴)
   const open = f < 1 ? Math.min(1, (s.tick - npc.t0) / 20) : Math.max(0, 1 - (s.tick - npc.t0 - 110) / 30);
-  if (open > 0) drawPortal(ctx, x, PORTAL_Y - 20, open, s.tick);
+  if (open > 0) drawPortal(ctx, x, PORTAL_Y - 30, open, s.tick);
   const bob = f < 1 ? Math.round(Math.abs(Math.sin(s.tick * 0.3)) * 1) : Math.round(Math.sin(s.tick * 0.08) * 0.6);
   // 캐릭터 시트 (scripts/art/pilgrim_sprite.py, 나중에 히든 캐릭터로도 씀). 아직 못 불러왔으면 간단한 그림
   const pose = { faceX: 0, faceY: 1, moving: f < 1, casting: false, step: (s.tick >> 3) % 4 };
   if (!drawCharacter(ctx, "pilgrim", x, y - 6, 6, pose)) drawGirl(ctx, x, y - bob, s.tick, f < 1);
-  if (f >= 1 && line && s.tick - npc.t0 < 110 + 240) drawBubble(ctx, x, y - 50, line);
+  if (f >= 1 && line && s.tick - npc.t0 < 110 + 240) drawBubble(ctx, x, y - 76, line);
 }
 
-/** 차원 포탈 (가로 28 · 세로 40 반지름): 바깥 빛 · 검보라 속 · 소용돌이 고리 넷 · 테두리 룬 여덟 · 빨려 들어가는 별 가루 */
+/** 차원 포탈 (가로 42 · 세로 50 반지름, 거대한 배낭까지 들어가는 크기): 바깥 빛 · 검보라 속 · 소용돌이 고리 넷 · 테두리 룬 여덟 · 빨려 들어가는 별 가루 */
 function drawPortal(ctx: Ctx, x: number, y: number, open: number, tick: number): void {
-  const rx = 28 * open;
-  const ry = 40 * open;
-  additive(ctx, () => glow(ctx, x, y, 46 * open, "#8a5aff", 0.7 * open, 1));
+  const rx = 42 * open;
+  const ry = 50 * open;
+  additive(ctx, () => glow(ctx, x, y, 60 * open, "#8a5aff", 0.7 * open, 1));
   // 속: 가운데로 갈수록 진한 검보라 (별이 비침)
   const g = ctx.createRadialGradient(x, y, 0, x, y, ry);
   g.addColorStop(0, "rgba(8,2,20,0.95)");
@@ -141,7 +141,7 @@ export function drawHiddenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const y = snap(fx.y);
   if (fx.kind === "hdGate" || fx.kind === "hdWarp") {
     // 차원이동문·포탈건·테라포밍: 내 자리에 아이 키만 한 포탈이 열렸다 닫힘 (빨려 들어가는 빛)
-    drawPortal(ctx, x, y - 12, Math.min(1, f * 4, t * 3) * 0.75, fx.maxTicks - fx.ticks);
+    drawPortal(ctx, x, y - 12, Math.min(1, f * 4, t * 3) * 0.6, fx.maxTicks - fx.ticks);
     additive(ctx, () => shock(ctx, x, y - 12, fx.size * (0.4 + t), fx.kind === "hdWarp" ? "#3ad0ff" : "#c8a8ff", t, 3));
     return true;
   }
