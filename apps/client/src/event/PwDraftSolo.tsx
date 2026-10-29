@@ -11,7 +11,8 @@ const DONE_MS = 1500;
 interface Props {
   mode: PwMode;
   t: (key: TextKey) => string;
-  onDone: (picks: CharacterId[]) => void;
+  /** 고른 캐릭터들 · 밴된 캐릭터 */
+  onDone: (picks: CharacterId[], bans: CharacterId[]) => void;
   onBack: () => void;
 }
 
@@ -26,7 +27,7 @@ export function PwDraftSolo({ mode, t, onDone, onBack }: Props) {
   useDraftDrive(cur, act, (turn) => !mineTurn(turn));
   useEffect(() => {
     if (!draftDone(d)) return;
-    const id = window.setTimeout(() => onDone(d.picks as CharacterId[]), DONE_MS);
+    const id = window.setTimeout(() => onDone(d.picks as CharacterId[], d.bans.filter((b): b is CharacterId => !!b)), DONE_MS);
     return () => window.clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [d]);

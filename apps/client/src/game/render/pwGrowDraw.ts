@@ -4,6 +4,7 @@ import { drawEnemySprite } from "../sprites";
 
 type Ctx = CanvasRenderingContext2D;
 const T = TILE_SIZE;
+const HORN: Record<string, string> = { giantRed: "#ff4a3a", giantBlue: "#4a9aff", giantWhite: "#f4f4f8" };
 const color = (team: number, mine: number) => (team === 2 ? "#e0c060" : team === mine ? "#5ab0ff" : "#ff5a5a");
 
 export function drawGrowGround(ctx: Ctx, s: RunState): void {
@@ -71,6 +72,7 @@ export function drawGrowUnits(ctx: Ctx, s: RunState): void {
   const g = pv?.grow;
   if (!pv || !g) return;
   const mine = pv.seats[s.seat ?? 0]!.team;
+  drawGigaGround(ctx, s);
   const myFog = fogAt(pv.arena, s.player.x, s.player.y);
   for (const u of g.units) {
     const b = u.body;
@@ -105,6 +107,18 @@ export function drawGrowUnits(ctx: Ctx, s: RunState): void {
     ctx.fillRect(b.x - w / 2 - 1, b.y - b.r - 7, w + 2, 4);
     ctx.fillStyle = col;
     ctx.fillRect(b.x - w / 2, b.y - b.r - 6, Math.max(1, Math.round((w * b.hp) / b.maxHp)), 2);
+    // 기간토마키아 뿔 거인: 머리 위 뿔 둘 (붉은 · 푸른 · 흰)
+    const horn = HORN[u.kind];
+    if (horn) {
+      ctx.fillStyle = horn;
+      for (const side of [-1, 1]) {
+        ctx.beginPath();
+        ctx.moveTo(b.x + side * b.r * 0.35, b.y - b.r * 0.9);
+        ctx.lineTo(b.x + side * b.r * 0.75, b.y - b.r * 1.7);
+        ctx.lineTo(b.x + side * b.r * 0.6, b.y - b.r * 0.8);
+        ctx.fill();
+      }
+    }
     if (b.immune) {
       ctx.fillStyle = "#d8d8e8";
       ctx.fillRect(b.x - 2, b.y - b.r - 13, 5, 4);
@@ -134,4 +148,39 @@ export function drawWarFog(ctx: Ctx, s: RunState): void {
       ctx.fill();
     });
   });
+}
+
+/** 기간토마키아: 닫힌 상자 · 떨어진 배낭 · 임시 출구 */
+function drawGigaGround(ctx: Ctx, s: RunState): void {
+  const g = s.pvp?.grow;
+  if (!g?.loot) return;
+  for (const l of g.loot) {
+    if (l.chest) {
+      ctx.fillStyle = "#6a4422";
+      ctx.fillRect(l.x - 6, l.y - 5, 12, 9);
+      ctx.fillStyle = "#e0b040";
+      ctx.fillRect(l.x - 6, l.y - 2, 12, 2);
+      ctx.fillRect(l.x - 1, l.y - 3, 2, 4);
+    } else {
+      ctx.fillStyle = "#8a6a4a";
+      ctx.beginPath();
+      ctx.arc(l.x, l.y, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#c8a070";
+      ctx.fillRect(l.x - 2, l.y - 7, 4, 3);
+    }
+  }
+  for (const e of g.exits ?? []) {
+    const k = (s.tick % 60) / 60;
+    ctx.strokeStyle = "#6af0a0";
+    ctx.lineWidth = 2;
+    for (const r of [8, 13, 18]) {
+      ctx.globalAlpha = 1 - ((r / 18 + k) % 1) * 0.7;
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    ctx.lineWidth = 1;
+  }
 }

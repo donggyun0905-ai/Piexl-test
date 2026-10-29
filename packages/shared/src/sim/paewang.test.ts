@@ -85,8 +85,8 @@ describe("패왕전", () => {
       const hp = (s: RunState) => allPlayers(s).map((p) => Math.round(p.hp));
       expect(hp(a), mode).toEqual(hp(b));
       expect(a.pvp!.seats.map((x) => x.kills), mode).toEqual(b.pvp!.seats.map((x) => x.kills));
-      // 누군가는 피해를 입음 (서로 싸움)
-      expect(a.pvp!.seats.some((x) => (x.taken ?? 0) > 0), mode).toBe(true);
+      // 누군가는 피해를 입음 (서로 싸움) · 기간토마키아는 처음엔 AI가 파밍만 함
+      if (mode !== "giganto") expect(a.pvp!.seats.some((x) => (x.taken ?? 0) > 0), mode).toBe(true);
     }
   }, 120000);
 

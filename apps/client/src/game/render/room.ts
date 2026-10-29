@@ -6,20 +6,26 @@ import { drawRoomFeatures } from "../roomFeatures";
 import { C, type Snap } from "./palette";
 import { drawDeco, themeFor, type FloorTheme } from "./floorThemes";
 
-export function drawRoom(ctx: CanvasRenderingContext2D, s: RunState): void {
+/** 보이는 칸 범위 (화면 밖 칸은 그리지 않음: 큰 경기장) · view = [왼쪽 x, 위 y, 너비, 높이] (게임 픽셀) */
+type View = readonly [number, number, number, number];
+const span = (v: View | undefined): [number, number, number, number] =>
+  v ? [Math.max(0, Math.floor(v[0] / TILE_SIZE) - 1), Math.max(0, Math.floor(v[1] / TILE_SIZE) - 1), Math.min(ROOM_COLS, Math.ceil((v[0] + v[2]) / TILE_SIZE) + 1), Math.min(ROOM_ROWS, Math.ceil((v[1] + v[3]) / TILE_SIZE) + 1)] : [0, 0, ROOM_COLS, ROOM_ROWS];
+
+export function drawRoom(ctx: CanvasRenderingContext2D, s: RunState, view?: View): void {
   // 방 모양 (태초의 빛과 어둠 방은 상자 벽)
   // 층 테마: 그 층 보스에 어울리는 색·바닥 꾸밈
   const grid = roomGrid(s);
   const th = themeFor(s);
-  for (let row = 0; row < ROOM_ROWS; row++) {
-    for (let col = 0; col < ROOM_COLS; col++) {
+  const [c0, r0, c1, r1] = span(view);
+  for (let row = r0; row < r1; row++) {
+    for (let col = c0; col < c1; col++) {
       const wall = row === 0 || col === 0 || row === ROOM_ROWS - 1 || col === ROOM_COLS - 1;
       ctx.fillStyle = wall ? th.wall : (row + col) % 2 === 0 ? th.floorA : th.floorB;
       ctx.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
       if (!wall && (!grid || tileAt(grid, col, row) === TILE_FLOOR)) drawDeco(ctx, th, col, row, col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, s.floor * 31 + s.roomId);
     }
   }
-  if (grid) drawShapeTiles(ctx, grid, th);
+  if (grid) drawShapeTiles(ctx, grid, th, [Math.max(1, c0), Math.max(1, r0), Math.min(ROOM_COLS - 1, c1), Math.min(ROOM_ROWS - 1, r1)]);
 
   drawRoomFeatures(ctx, s);
 }
@@ -39,9 +45,9 @@ export function drawPickups(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
 }
 
 /** 방 안 벽·기둥·구덩이 (테두리 벽은 위에서 그림) */
-function drawShapeTiles(ctx: CanvasRenderingContext2D, g: Uint8Array, th: FloorTheme): void {
-  for (let row = 1; row < ROOM_ROWS - 1; row++) {
-    for (let col = 1; col < ROOM_COLS - 1; col++) {
+function drawShapeTiles(ctx: CanvasRenderingContext2D, g: Uint8Array, th: FloorTheme, [c0, r0, c1, r1]: readonly number[]): void {
+  for (let row = r0!; row < r1!; row++) {
+    for (let col = c0!; col < c1!; col++) {
       const t = tileAt(g, col, row);
       const x = col * TILE_SIZE;
       const y = row * TILE_SIZE;

@@ -1,7 +1,7 @@
 // 패왕전 성장 대결 상태 (쟁탈전 · 전쟁의 서막): 병사·포탑·보스 · 점령 · 사람마다 레벨·장비·증강·중첩 (계산은 pwGrow·pwLane·pwGear·pwContest)
 import type { EnemyState } from "./types";
 
-export type PwUnitKind = "minion" | "archer" | "tower" | "boss" | "jungle" | "elite" | "dragon" | "godeater";
+export type PwUnitKind = "minion" | "archer" | "tower" | "boss" | "jungle" | "elite" | "dragon" | "godeater" | "giantRed" | "giantBlue" | "giantWhite" | "goblin";
 
 /** 병사·포탑·보스·정글 몬스터 하나 (맞는 몸 body는 상대 편 s.enemies에 들어가 맞음, pvpWorld.assignFoes) */
 export interface PwUnit {
@@ -41,6 +41,20 @@ export interface PwGrowState {
   /** 전쟁의 서막: 체크포인트마다 가진 편(-1 없음)·편마다 점령도 · 정글 자리마다 다시 나올 틱 */
   points?: { owner: number; prog: Record<number, number> }[];
   campAt?: number[];
+  /** 기간토마키아: 바닥의 상자·떨어진 배낭 · 임시 출구 · 나간 자리 */
+  loot?: PwLoot[];
+  exits?: { x: number; y: number }[];
+  out?: number[];
+}
+
+/** 바닥 물건: 닫힌 상자(chest) 또는 쓰러진 사람이 떨군 배낭 · 든 돈과 물건 */
+export interface PwLoot {
+  id: number;
+  x: number;
+  y: number;
+  chest: boolean;
+  gold: number;
+  items: string[];
 }
 
 /** 사람마다 (s.player에 붙음) */
@@ -55,4 +69,8 @@ export interface PwGrowPlayer {
   pwStk?: Record<string, [number, number]>;
   pwFx?: Record<string, number>;
   pwDashCut?: number;
+  /** 기간토마키아: 배낭(장비·사용 아이템 u:·상점 물건 g:) · 금고 한 칸 · 제작 중(전설 id·끝 틱) */
+  pwBag?: string[];
+  pwVault?: string;
+  pwCraft?: { id: string; end: number };
 }

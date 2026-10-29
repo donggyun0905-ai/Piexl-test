@@ -19,7 +19,7 @@ import { addEffect } from "./util";
 /** 성장 대결 판인지 */
 export const isGrow = (s: RunState): boolean => {
   const r = s.pvp && PW_MODE[s.pvp.mode].rule;
-  return r === "contest" || r === "war";
+  return r === "contest" || r === "war" || r === "giganto";
 };
 
 /** 상점 입력 번호: 사기(목록 자리) · 팔기(장비 칸) · 증강 고르기(셋 중) */
@@ -32,6 +32,7 @@ export function homeOf(s: RunState, team: number): [number, number] {
 }
 
 export function atHome(s: RunState, i: number): boolean {
+  if (!PW_ARENAS[s.pvp!.arena].homes) return false;
   const p = allPlayers(s)[i]!;
   const [x, y] = homeOf(s, s.pvp!.seats[i]!.team);
   return (p.x - x) ** 2 + (p.y - y) ** 2 <= PW_GROW.homeR ** 2;

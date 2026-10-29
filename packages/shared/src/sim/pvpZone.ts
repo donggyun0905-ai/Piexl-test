@@ -33,6 +33,8 @@ export interface PwZone {
 }
 
 const MIN = 60 * TICK_RATE;
+/** 대결마다 자기장 (기간토마키아는 길고 천천히) */
+const tune = (s: RunState) => PW_MODE[s.pvp!.mode].zoneTune ?? { every: MIN, shrink: PW.zone.shrink, minR: PW.zone.minR };
 
 /** 단계 k가 끝났을 때의 원 (시드로 정해 늘 같음): 0단계는 경기장 전체, 그 뒤 앞 원 안에서 작아짐 */
 function circleAt(s: RunState, k: number): [number, number, number] {
@@ -40,7 +42,7 @@ function circleAt(s: RunState, k: number): [number, number, number] {
   let y = ROOM_CY;
   let r = Math.hypot(ROOM_WIDTH, ROOM_HEIGHT) / 2 + 8;
   for (let i = 1; i <= k; i++) {
-    const nr = Math.max(PW.zone.minR, r * PW.zone.shrink);
+    const nr = Math.max(tune(s).minR, r * tune(s).shrink);
     const rng = createRng(deriveSeed(s.seed, "pwZone", s.pvp!.round ?? 1, i));
     // 새 원은 앞 원 안에 (가운데가 앞 원 가운데에서 r - nr 안)
     const a = rng.nextFloat() * Math.PI * 2;
@@ -58,11 +60,12 @@ export function pvpZone(s: RunState): PwZone | undefined {
   const pv = s.pvp;
   if (!pv || !PW_MODE[pv.mode].zone || pv.practice) return undefined;
   const t = Math.max(0, s.tick - roundStart(s));
-  const phase = Math.floor(t / MIN);
+  const every = tune(s).every;
+  const phase = Math.floor(t / every);
   const [x0, y0, r0] = circleAt(s, phase);
   const [tx, ty, tr] = circleAt(s, phase + 1);
-  const into = t - phase * MIN;
-  const k = Math.max(0, Math.min(1, (into - (MIN - PW.zone.shrinkTicks)) / PW.zone.shrinkTicks));
+  const into = t - phase * every;
+  const k = Math.max(0, Math.min(1, (into - (every - PW.zone.shrinkTicks)) / PW.zone.shrinkTicks));
   return { x: x0 + (tx - x0) * k, y: y0 + (ty - y0) * k, r: r0 + (tr - r0) * k, tx, ty, tr, phase };
 }
 

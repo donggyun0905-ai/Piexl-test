@@ -104,6 +104,8 @@ export { pvpTimeLeft, pvpZone, type PwZone } from "./pvpZone";
 export { capCenter, inCapZone, isCapture, nearBuff } from "./pwCapture";
 export { BASE_R, canTakeCenter, towersLeft } from "./pwContest";
 export { canPoint } from "./pwWar";
+export { canCraft, GIGA_MENU, isGear, isGiga, nearExit, nearLoot } from "./pwGiga";
+export type { PwLoot } from "./pwGrowTypes";
 export { atHome, buyPlan, fullCost, GROW_MENU, homeOf, isGrow } from "./pwGrow";
 export { gearSum } from "./pwGearStat";
 export type { PwGrowState, PwUnit } from "./pwGrowTypes";

@@ -230,3 +230,48 @@
   color: #f2d040;
   font-weight: bold;
 }
+/* 기간토마키아: 미니맵·배낭·제작 */
+.pw-giga {
+  position: fixed;
+  right: 8px;
+  bottom: 64px;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  max-width: calc(100vw - 16px);
+  color: #fff;
+  font-size: 12px;
+  text-shadow: 0 1px 0 #000;
+}
+.pw-giga-map {
+  border: 1px solid #3a3444;
+  image-rendering: pixelated;
+}
+.pw-giga-side {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 300px;
+}
+.pw-giga-bag,
+.pw-giga-craft {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+.pw-giga-bag button {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+}
+.pw-giga-bag .vault {
+  border-color: #f2d040;
+}
+.pw-giga-craft button {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 4px;
+  font-size: 11px;
+}

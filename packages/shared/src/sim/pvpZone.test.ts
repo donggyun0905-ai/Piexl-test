@@ -9,7 +9,7 @@ import { EMPTY_INPUT } from "./types";
 describe("패왕전 시간 제한 · 자기장", () => {
   it("모드마다 시간 제한 (1대1 3분 · 3대3 5분 · 5대5 10분 · 토너먼트 7분 · 대난투 10분 · 데스매치 30분)", () => {
     expect([PW_MODE.duel, PW_MODE.trio, PW_MODE.squad, PW_MODE.tourney, PW_MODE.brawl, PW_MODE.gungame].map((m) => m.timeSec)).toEqual([180, 300, 600, 420, 600, 1800]);
-    expect(Object.entries(PW_MODE).filter(([, m]) => m.zone).map(([k]) => k)).toEqual(["squad", "brawl"]);
+    expect(Object.entries(PW_MODE).filter(([, m]) => m.zone).map(([k]) => k)).toEqual(["squad", "brawl", "giganto"]);
   });
 
   it("시간이 다 되면 체력 비율이 높은 편이 그 판을 이김", () => {

@@ -85,7 +85,7 @@ function objective(s: RunState, i: number, team: number): [number, number] {
 
 /** AI 입력 다듬기 (성장 대결) */
 export function growSteer(s: RunState, input: TickInput): TickInput {
-  if (!isGrow(s)) return input;
+  if (!isGrow(s) || !PW_ARENAS[s.pvp!.arena].homes) return input;
   const i = seatNo(s);
   const p = s.player;
   const team = s.pvp!.seats[i]!.team;

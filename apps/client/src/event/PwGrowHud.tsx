@@ -43,9 +43,11 @@ export function PwGrowHud({ run, me, lang, t, controls }: Props) {
           <i style={{ width: `${Math.min(100, ((p.pwXp ?? 0) / need) * 100)}%` }} />
         </span>
         <b className="pw-grow-gold">🪙 {goldOf(run, me)}</b>
-        <button type="button" onClick={() => setShop((v) => !v)}>
-          {t("pwShopOpen")}
-        </button>
+        {PW_ARENAS[pv.arena].homes && (
+          <button type="button" onClick={() => setShop((v) => !v)}>
+            {t("pwShopOpen")}
+          </button>
+        )}
         {pv.mode === "contest" && (
           <small>
             {t("pwContestTowers").replace("{a}", String(towersLeft(run, mine))).replace("{b}", String(towersLeft(run, 1 - mine)))} · {t("pwContestMid").replace("{who}", who)}

@@ -159,7 +159,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   ctx.setTransform(k, 0, 0, k, -camX * k, -camY * k);
   ctx.imageSmoothingEnabled = false;
 
-  drawRoom(ctx, s);
+  drawRoom(ctx, s, [camX, camY, ctx.canvas.width / k, ctx.canvas.height / k]);
   drawTerrain(ctx, s, snap);
   drawSwarmGround(ctx, s, snap);
   drawPwGround(ctx, s);

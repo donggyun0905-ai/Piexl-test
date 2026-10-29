@@ -27,6 +27,7 @@ import { updateZone, zoneSteer } from "./pvpZone";
 import { capInput, capSteer, capTick } from "./pwCapture";
 import { growInit, growMenu, growStats, isGrow } from "./pwGrow";
 import { growSteer } from "./pwGrowBot";
+import { gigaInit, gigaInput, gigaMenu, gigaSteer, isGiga } from "./pwGiga";
 import { growTick } from "./pwGrowTick";
 import { applyRoom } from "./rooms";
 import { stepPlayer } from "./run";
@@ -48,7 +49,8 @@ export function pwSeatCount(mode: PwMode): number {
 
 /** 판 만들기: 사람은 앞 자리부터 (팀 대결은 우리 편이 다 차면 상대 편으로), 나머지는 AI · null 자리도 AI (랭크전은 사람을 두 편에 나눔) */
 /** map: 고른 경기장 (없으면 그 대결의 경기장 5개 중 시드로 무작위, 랭크전은 늘 무작위) */
-export function createPvp(seed: number, mode: PwMode, humans: readonly (PwHuman | null)[], map?: PwArenaId): RunState {
+/** bans: 밴픽에서 막은 캐릭터 (AI 무작위에서 뺌, 기간토마키아) */
+export function createPvp(seed: number, mode: PwMode, humans: readonly (PwHuman | null)[], map?: PwArenaId, bans: readonly CharacterId[] = []): RunState {
   const def = PW_MODE[mode];
   // 연습장 초원은 어느 대결로도 씀
   const arenaId = map && (def.maps.includes(map) || map === "practice") ? map : createRng(deriveSeed(seed, "pwMap")).pick(def.maps);
@@ -56,7 +58,7 @@ export function createPvp(seed: number, mode: PwMode, humans: readonly (PwHuman 
   const n = pwSeatCount(mode);
   const size = def.allies + 1;
   const rng = createRng(deriveSeed(seed, "pwRoster"));
-  const chars = Array.from({ length: n }, (_, i): CharacterId => (mode === "gungame" ? PW_TIERS[0]! : (humans[i]?.characterId ?? rng.pick(CHARACTER_IDS))));
+  const chars = Array.from({ length: n }, (_, i): CharacterId => (mode === "gungame" ? PW_TIERS[0]! : (humans[i]?.characterId ?? rng.pick(CHARACTER_IDS.filter((c) => !bans.includes(c))))));
   const s = createParty(seed, chars.map((characterId) => ({ characterId, unlocks: [] })));
   s.map = { floor: 1, rooms: [{ id: 0, layer: 0, lane: 1, type: "start", exits: [-1, -1, -1], shape: PLAIN_SHAPE }], startId: 0, exitId: 0, layers: 1 };
   s.rooms = [{ visited: true, cleared: true, pickups: [], enemies: null }];
@@ -83,6 +85,7 @@ export function createPvp(seed: number, mode: PwMode, humans: readonly (PwHuman 
   useSeat(s, 0);
   makeProxies(s);
   if (isGrow(s)) growInit(s);
+  if (isGiga(s)) gigaInit(s);
   return s;
 }
 
@@ -111,7 +114,7 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
     // 수풀에 숨은 상대는 가까이 가야 보임 (자동 조준·유도탄·AI가 못 노림)
     markHidden(s);
     // 사람은 자동 공격 없이 직접 조준만 (AI는 그대로)
-    let input = seat.human ? { ...(inputs[i] ?? EMPTY_INPUT), autoAim: false } : pv.practice ? dummyInput(pv.practice, botInput(s)) : growSteer(s, capSteer(s, zoneSteer(s, botInput(s))));
+    let input = seat.human ? { ...(inputs[i] ?? EMPTY_INPUT), autoAim: false } : pv.practice ? dummyInput(pv.practice, botInput(s)) : gigaSteer(s, growSteer(s, capSteer(s, zoneSteer(s, botInput(s)))));
     // 기절: 아무것도 못 함 · 묶임: 못 움직임 · 느려짐: 반만
     if (seat.stun > 0) input = EMPTY_INPUT;
     else if (seat.root > 0) input = { ...input, moveX: 0, moveY: 0, dash: false };
@@ -120,7 +123,10 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
     // 점령전: 점프대 · 버프 자리
     input = capInput(s, input);
     // 성장 대결: 상점·증강 (작업대 입력과 따로)
-    if (input.menu && growMenu(s, input.menu)) input = { ...input, menu: 0 };
+    if (input.menu && (gigaMenu(s, input.menu) || growMenu(s, input.menu))) input = { ...input, menu: 0 };
+    // 기간토마키아: 제작 · 상자·배낭·출구
+    input = gigaInput(s, input);
+    if (!pv.seats[i]!.on) return;
     // 스킬 1~4 · 돌진 · 장판 · 소환한 것
     input = pwSkillTick(s, input);
     stepPlayer(s, input);

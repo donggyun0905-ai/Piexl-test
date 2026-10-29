@@ -2,7 +2,8 @@
 // 그 자리를 꺼내 놓을 때 s.enemies = 상대 쪽 그림자 적 목록 → 기존 캐릭터 공격 계산이 그대로 상대를 때림.
 // 틱 끝에 그림자 적이 받은 피해·기절·느려짐을 그 사람에게 옮김 (보호막·회피·무적은 damagePlayer가 처리)
 import { PW_CHAR } from "../paewangBalance";
-import { PW } from "../paewangDefs";
+import { PW, PW_MODE } from "../paewangDefs";
+import { PW_GIGA } from "../pwRules";
 import { damagePlayer, removeDead, updatePending } from "./combat";
 import { allPlayers, eachSeat, isAlive, seatNo, useSeat } from "./party";
 import { updateProjectiles } from "./projectiles";
@@ -15,6 +16,7 @@ import { fogAt, inBush } from "./paewangGrid";
 import { buffMul, pwHidden } from "./pwSkillHit";
 import { practiceSafe } from "./pvpPractice";
 import { recapTake } from "./pvpRecap";
+import { pvpZone } from "./pvpZone";
 import { gearHits } from "./pwGear";
 
 /** 경기장에 나와 살아 있는 자리인지 */
@@ -40,8 +42,19 @@ export function assignFoes(s: RunState): void {
     // 상대 쪽 사람 + 상대가 소환한 것 (부술 수 있음)
     const mins = (pv.mins ?? []).filter((m) => m.body && m.body.hp > 0 && m.t > 0 && pv.seats[m.seat]!.team !== team).map((m) => m.body!);
     // 성장 대결: 상대 편·중립 병사·포탑·보스
-    const units = (pv.grow?.units ?? []).filter((u) => u.team !== team && u.body.hp > 0).map((u) => u.body);
-    s.enemies = live.filter((e) => pv.seats[pv.proxies.indexOf(e)]!.team !== team).concat(mins, units);
+    // 중립(정글·거인·도깨비)은 가까이 있을 때만 (큰 맵에서 계산을 줄임)
+    const p = s.player;
+    // 기간토마키아 AI: 레벨이 되는 거인만 · 가까운 상대 캐릭터만 (한 판이 30분쯤 가게)
+    const giga = PW_MODE[pv.mode].rule === "giganto" && !pv.seats[i]!.human;
+    const near = (e: { x: number; y: number }, r: number) => (e.x - p.x) ** 2 + (e.y - p.y) ** 2 < r * r;
+    const units = (pv.grow?.units ?? []).filter((u) => u.team !== team && u.body.hp > 0 && (u.team !== 2 || (near(u.body, 500) && (!giga || (p.pwLv ?? 1) >= (PW_GIGA.botLv[u.kind] ?? 1))))).map((u) => u.body);
+    const calm = giga && (pvpZone(s)?.phase ?? 0) < PW_GIGA.botFightPhase + (i % 5);
+    s.enemies = live
+      .filter((e) => {
+        const j = pv.proxies.indexOf(e);
+        return pv.seats[j]!.team !== team && (!giga || (near(e, PW_GIGA.botSight) && (!calm || pv.seats[i]!.by === j)));
+      })
+      .concat(mins, units);
   });
 }
 

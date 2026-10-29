@@ -14,7 +14,7 @@ import type { RunState } from "./types";
 import { addEffect, makeEnemy } from "./util";
 
 /** 그림 (던전 몬스터 그림을 씀) */
-const LOOK: Record<PwUnitKind, string> = { minion: "paladin", archer: "spitter", tower: "tower", boss: "hulk", jungle: "charger", elite: "knight", dragon: "dragon", godeater: "godeater" };
+const LOOK: Record<PwUnitKind, string> = { minion: "paladin", archer: "spitter", tower: "tower", boss: "hulk", jungle: "charger", elite: "knight", dragon: "dragon", godeater: "godeater", giantRed: "hulk", giantBlue: "hulk", giantWhite: "hulk", goblin: "charger" };
 
 export function makeUnit(s: RunState, kind: PwUnitKind, team: number, x: number, y: number, mul = 1, lane = 0, wp = 0): PwUnit {
   const d = PW_UNIT[kind];
