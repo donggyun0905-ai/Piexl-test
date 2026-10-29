@@ -167,7 +167,7 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number 
   wanderer: { size: 48, footPad: 3 },
   silk: { size: 32, footPad: 2 },
   miner: { size: 64, footPad: 3 },
-  voyager: { size: 48, footPad: 3 }, zeus: { size: 48, footPad: 3 }, pilgrim: { size: 80, footPad: 3 }, crownKing: { size: 80, footPad: 3 }, fallenKing: { size: 80, footPad: 3 },
+  voyager: { size: 48, footPad: 3 }, zeus: { size: 48, footPad: 3 }, pilgrim: { size: 80, footPad: 3 }, crownKing: { size: 80, footPad: 3 }, fallenKing: { size: 96, footPad: 3 },
   // 변희가 변한 동물 (옆모습만, render/actors가 옆을 보게 그림)
   ...Object.fromEntries(["wolf", "bear", "eagle", "snake", "boar", "scorpion", "bat", "elephant", "spider", "phoenix"].flatMap((a) => [[`morph-${a}`, { size: 32, footPad: 2 }], [`morph-${a}-evo`, { size: 48, footPad: 3 }]])),
   abandoned: { size: 32, footPad: 2 },

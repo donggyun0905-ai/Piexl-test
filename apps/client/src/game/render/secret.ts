@@ -7,6 +7,7 @@ import { drawVoyagerFx } from "./voyagerFx";
 import { drawZeusAura, drawZeusFx, drawZeusGround, drawZeusShot } from "./zeus";
 import { drawPgAura, drawPgFx, drawPgGround, drawPgShot } from "./pgHero";
 import { drawKingFx } from "./kingFx";
+import { drawKingAura } from "./fallenKing";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -21,6 +22,7 @@ export function drawSecretAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap,
   drawVoyagerAura(ctx, s, alpha, snap, fateName);
   drawZeusAura(ctx, s, alpha, snap);
   drawPgAura(ctx, s, alpha, snap);
+  drawKingAura(ctx, s, alpha, snap);
 }
 export function drawSecretShot(ctx: Ctx, pr: ProjectileState, x: number, y: number, tick: number): boolean {
   return drawMinerShot(ctx, pr, x, y, tick) || drawVoyagerShot(ctx, pr, x, y, tick) || drawZeusShot(ctx, pr, x, y, tick) || drawPgShot(ctx, pr, x, y, tick);

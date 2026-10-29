@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.236",
+    date: "2026-10-29",
+    items: {
+      ko: ["몰락한 왕 그림 새로: 가시가 돋은 겹겹의 검은 판금 갑옷 · 가시 왕관과 그늘진 얼굴에 빛나는 푸른 눈 · 머리 위와 어깨·갑옷 마디마다 타오르는 푸른 불꽃 · 찢어진 검은 망토 · 검은 날에 붉게 빛나는 날 끝과 룬이 새겨진 거대한 츠바이핸더 (공격하면 땅에 내리꽂음) · 몸 둘레에 푸른 불빛과 불티"],
+      en: ["Fallen King redrawn: layered spiked black plate armor · a spiked crown over a shadowed face with glowing blue eyes · blue flames over his head, shoulders and every armor joint · a torn black cape · a giant zweihänder with a black blade, glowing red edges and runes (planted into the ground when he attacks) · blue glow and embers around him"],
+      ja: ["没落した王の絵を描き直し: 棘の生えた重なる黒い板金鎧 · 棘の王冠と影の顔に光る青い目 · 頭上と肩・鎧の継ぎ目ごとに燃える青い炎 · 破れた黒いマント · 黒い刃に赤く光る刃先とルーンの巨大なツヴァイヘンダー (攻撃すると地面に突き立てる) · 体の周りに青い光と火の粉"],
+    },
+  },
+  {
     version: "0.48.235",
     date: "2026-10-29",
     items: {

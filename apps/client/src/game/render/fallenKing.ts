@@ -1,8 +1,29 @@
 // 몰락한 왕 왼쪽 위 영혼 스택 창 (악의 사도 영혼 창과 같은 자리): 잘게 쪼개진 푸른 영혼 조각 그림 + 모은 수 + 늘어난 공격력·체력
 import { FALLEN_KING, type RunState } from "@pixel-rogue/shared";
 import { hudScale } from "./imugiAura";
+import { lerp, type Snap } from "./palette";
+import { additive, glow } from "./pwFxBits";
 
 type Ctx = CanvasRenderingContext2D;
+
+/** 몸 둘레 (플레이어 다음): 왕관·어깨에서 일렁이는 푸른 불빛 · 위로 날리는 푸른 불티 · 칼날의 붉은 빛 */
+export function drawKingAura(ctx: Ctx, s: RunState, a: number, snap: Snap): void {
+  const p = s.player;
+  if (p.characterId !== "fallenKing" || p.hp <= 0 || p.kingRoom !== undefined) return;
+  const x = snap(lerp(p.prevX, p.x, a));
+  const y = snap(lerp(p.prevY, p.y, a));
+  const f = 0.75 + 0.25 * Math.sin(s.tick * 0.23) * Math.sin(s.tick * 0.07);
+  additive(ctx, () => {
+    glow(ctx, x, y - 70, 16 * f, "#3ab8ff", 0.55 * f, 0.4);
+    for (const sx of [-1, 1]) glow(ctx, x + sx * 19, y - 58, 11 * f, "#3ab8ff", 0.45 * f);
+    glow(ctx, x - (p.faceX < 0 ? -1 : 1) * 26, y - 70, 14, "#ff2a3a", 0.25 + 0.1 * f);
+    for (let i = 0; i < 6; i++) {
+      const k = ((s.tick + i * 23) % 90) / 90;
+      const ex = x + Math.sin(i * 2.3 + s.tick * 0.03) * (14 + i * 2);
+      glow(ctx, ex, y - 50 - k * 50, 2.2 * (1 - k), i % 3 ? "#7ad8ff" : "#e8fbff", 1 - k);
+    }
+  });
+}
 
 /** 잘게 쪼개진 영혼 (조각 여섯이 반짝이며 흩어짐) */
 const BITS: readonly [number, number, number][] = [[1, -9, 2], [4, -10, 2], [6, -7, 2], [0, -5, 2], [3, -4, 3], [6, -3, 2]];

@@ -1,6 +1,6 @@
-# 거대한 왕 방향 시트 둘 (python3 scripts/art/king_sprite.py) → apps/client/public/sprites/crownKing.png · fallenKing.png
+# 거대한 왕 방향 시트 (python3 scripts/art/king_sprite.py) → apps/client/public/sprites/crownKing.png
 # crownKing: 바스러져가는 왕관으로 변신한 옛 제국의 왕 (금 테 두른 진홍·강철 갑옷 · 붉은 망토 · 금관 투구 · 연두색 영혼 빛)
-# fallenKing: 히든 캐릭터 몰락한 왕 (푸른색·검정 갑옷, 얼굴은 안 가림: 검은 머리·짙은 푸른 눈·하늘색 피부 · 갑옷 마디마다 푸른 불꽃이 일렁임)
+# (몰락한 왕 fallenKing은 scripts/art/fallen_king_sprite.py)
 # 둘 다 거인만 한 몸(80칸 시트, 발 여백 3) · 붉은 츠바이핸더(긴 손잡이·넓은 십자 날밑·리카소)를 어깨에 걸침, 공격 줄은 앞으로 내려 벰
 # 대검이 어깨 위로 크게 삐죽 나오게 픽셀을 굵게 (날 폭 4칸)
 from s2_common import Cell, hx, save_sheet, shade
@@ -15,12 +15,6 @@ PAL = {
         cloth=hx("#a01a2a"), clothD=hx("#6a0e1a"), cape=hx("#b8202e"), capeD=hx("#7a1020"),
         skin=None, hair=None, eye=None, visor=hx("#1a1420"), glow=hx("#8aff6a"), glowL=hx("#d8ffc0"),
         outline=hx("#2a1418"), crown=True,
-    ),
-    "fallenKing": dict(
-        plate=hx("#2a3a6a"), plateD=hx("#141a30"), plateL=hx("#4a6ab0"), trim=hx("#0a0c14"), trimD=hx("#05060a"),
-        cloth=hx("#1a2a5a"), clothD=hx("#0e1430"), cape=hx("#101830"), capeD=hx("#080c1a"),
-        skin=hx("#8ad0f0"), skinD=hx("#5aa0c8"), hair=hx("#0e0e16"), hairL=hx("#2a2a40"), eye=hx("#0a2a8a"), eyeL=hx("#3a6aff"),
-        visor=None, glow=hx("#3ab8ff"), glowL=hx("#c8f0ff"), outline=hx("#05060c"), crown=False,
     ),
 }
 BLADE = hx("#d8202a")
