@@ -40,6 +40,7 @@ import { silkTick } from "./silk";
 import { minerTick } from "./miner";
 import { voyagerTick } from "./voyager";
 import { zeusTick } from "./zeus";
+import { pilgrimTick } from "./pgHero";
 import type { RunState } from "./types";
 
 export { pwBasicTick } from "./pwBasic";
@@ -87,4 +88,5 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   pick: minerTick,
   fate: voyagerTick,
   thunder: zeusTick,
+  curio: pilgrimTick,
 };

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ALL_CHARACTER_IDS } from "../characters";
+import { CHARACTER_IDS } from "../characters";
 import { createSwarm } from "./swarm";
 import { characterWeapons } from "./loot";
 import { evoNova, evoSkill, type SwarmSkill } from "./swarmEvo";
@@ -9,8 +9,8 @@ import { makeEnemy } from "./util";
 const SHOTS: readonly SwarmSkill[] = ["barrage", "wave", "bounce", "lance", "fan", "boomerang"];
 
 describe("광야의 새벽 각성 기술", () => {
-  it("한 캐릭터의 무기끼리는 각성 기술이 겹치지 않음", () => {
-    for (const c of ALL_CHARACTER_IDS) {
+  it("한 캐릭터의 무기끼리는 각성 기술이 겹치지 않음 (히든 캐릭터는 광야의 새벽에 못 들어옴)", () => {
+    for (const c of CHARACTER_IDS) {
       const skills = characterWeapons(c).map((w) => evoSkill(w, c));
       expect(new Set(skills).size, c).toBe(skills.length);
     }
@@ -18,7 +18,7 @@ describe("광야의 새벽 각성 기술", () => {
 
   it("기술 16가지 모두 적에게 피해 (쏘는 기술은 탄이 나감)", () => {
     const seen = new Set<SwarmSkill>();
-    for (const c of ALL_CHARACTER_IDS) {
+    for (const c of CHARACTER_IDS) {
       for (const id of characterWeapons(c)) {
         const skill = evoSkill(id, c);
         if (seen.has(skill)) continue;

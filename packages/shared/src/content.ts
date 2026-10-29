@@ -47,9 +47,10 @@ import { SILK_WEAPONS, type SilkStyle } from "./weaponsSilk";
 import { MINER_WEAPONS, type PickStyle } from "./weaponsMiner";
 import { VOYAGER_WEAPONS } from "./weaponsVoyager";
 import { ZEUS_WEAPONS, type ThunderStyle } from "./weaponsZeus";
+import { PILGRIM_WEAPONS, type CurioStyle } from "./weaponsPilgrim";
 
 /** laser 기계공학자·medic 의사: 누르고 있는 동안 짧은 간격으로 틱 피해 · combo 격투가: 누를 때마다 콤보의 다음 기술 (combos) · chakram 베두인 · spear 장수 */
-export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder";
+export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio";
 export type { OrbitKind } from "./weaponsElemental";
 export type { LaserGear } from "./weaponsEngineer";
 export type { MedicGear } from "./weaponsDoctor";
@@ -92,6 +93,7 @@ export { SILK, type SilkStyle } from "./weaponsSilk";
 export { MINER, type PickMode, type PickStyle } from "./weaponsMiner";
 export { VOYAGER } from "./weaponsVoyager";
 export { ZEUS, type ThunderMode, type ThunderStyle } from "./weaponsZeus";
+export { PILGRIM, type CurioMode, type CurioStyle } from "./weaponsPilgrim";
 
 export interface WeaponDef {
   id: string;
@@ -197,6 +199,7 @@ export interface WeaponDef {
   silk?: SilkStyle;
   pick?: PickStyle;
   zeus?: ThunderStyle;
+  curio?: CurioStyle;
 }
 
 /**
@@ -251,6 +254,7 @@ export const WEAPONS = {
   ...MINER_WEAPONS,
   ...VOYAGER_WEAPONS,
   ...ZEUS_WEAPONS,
+  ...PILGRIM_WEAPONS,
 } as const satisfies Record<string, WeaponDef>;
 
 export type WeaponId = keyof typeof WEAPONS;

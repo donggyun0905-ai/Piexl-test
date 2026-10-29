@@ -31,6 +31,7 @@ import { resetSilk } from "./silk";
 import { resetMiner } from "./miner";
 import { resetVoyager } from "./voyager";
 import { resetZeus } from "./zeus";
+import { resetPilgrim } from "./pgHero";
 import { resetRen } from "./ren";
 import { resetSpirit } from "./spirit";
 import { resetAbandoned } from "./abandoned";
@@ -224,6 +225,7 @@ export function practiceReset(s: RunState): void {
   resetMiner(p);
   resetVoyager(p);
   resetZeus(p);
+  resetPilgrim(p);
   resetRen(p);
   resetSpirit(p);
   resetAbandoned(p);

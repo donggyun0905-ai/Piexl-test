@@ -27,9 +27,11 @@ export type OniFx = "oBolt" | "oFlame" | "oCoins" | "oFrost" | "oDark" | "oPilla
 /** 버려진 자들 특수기·조합 틀림 */
 export type TagFx = "tagDash" | "tagCut" | "tagMeteor" | "tagShove" | "tagFlash" | "tagMiss";
 /** 시즌 2 히든 (에테르 광부 · 운명의 여행자 · 제우스) */
+/** 차원의 순례자 */
+export type PilgrimFx = "pgSlash" | "pgFire" | "pgBonk" | "pgBeam" | "pgPush" | "pgRing" | "pgSand" | "pgBlast" | "pgFall" | "pgKey" | "pgBag" | "pgPlant" | "pgHeal";
 export type ZeusFx = "zsSky" | "zsArc" | "zsOverload" | "zsDescend" | "zsAegis" | "zsClap" | "zsSpear";
 export type VoyagerFx = "vyFlip" | "vyLoose" | "vyCrit" | "vyBeam" | "vyChain" | "vyRain" | "vyMeteor" | "vyBoulder" | "vyHorse" | "vyWind" | "vyShield" | "vySiren" | "vyTide" | "vyWhirl" | "vyBite" | "vyBolt" | "vyPig" | "vyIsland" | "vySun";
-export type SecretFx = VoyagerFx | ZeusFx | "mnSwing" | "mnCrack" | "mnErupt" | "mnRock" | "mnCave" | "mnBoom" | "mnShatter" | "mnFall" | "mnDig" | "mnBurst" | "mnPull" | "mnGem" | "mnPillar" | "mnCanary";
+export type SecretFx = VoyagerFx | ZeusFx | PilgrimFx | "mnSwing" | "mnCrack" | "mnErupt" | "mnRock" | "mnCave" | "mnBoom" | "mnShatter" | "mnFall" | "mnDig" | "mnBurst" | "mnPull" | "mnGem" | "mnPillar" | "mnCanary";
 /** 떠돌이 기습 쏨·맞음 · 파수꾼 반격 베기 (sim/origin) · 작업대 성공·실패·파괴 (sim/station) */
 /** 히든 아이템·순례자 (sim/hiddenPerks·hiddenUse·pilgrim) */
 export type HiddenFx = "hdDice" | "hdChest" | "hdCurse" | "hdFreeze" | "hdWarp" | "hdQuake" | "hdMirror" | "hdLeaf" | "hdAether" | "hdMeteor" | "hdScroll" | "hdGate" | "hdPortal" | "hdShow";

@@ -50,6 +50,8 @@ interface Seen {
   flips: number;
   /** 제우스 강림 중 */
   zsGod: boolean;
+  /** 차원의 순례자: 배낭에서 꺼낸 수집품 그림 수 */
+  bags: number;
 }
 
 /** 탄을 쏘는 느낌의 캐릭터 (나머지는 휘두르는 소리) */
@@ -93,6 +95,7 @@ function snapshot(s: RunState): Seen {
     caves: s.effects.filter((f) => f.kind === "mnCave").length,
     flips: s.player.vyFlips ?? 0,
     zsGod: (s.player.zsGod ?? 0) > 0,
+    bags: s.effects.filter((f) => f.kind === "pgBag").length,
   };
 }
 
@@ -168,6 +171,12 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
           fx.push("descend");
           onShake(8);
         }
+        const i = fx.indexOf("shot");
+        if (i >= 0) fx.splice(i, 1);
+      } else if (c === "pilgrim") {
+        // 차원의 순례자: 쓸 때 반짝 소리 · 배낭에서 꺼내면 바스락
+        if (now.attacks > seen.attacks) fx.push("twinkle");
+        if (now.bags > seen.bags) fx.push("rustle");
         const i = fx.indexOf("shot");
         if (i >= 0) fx.splice(i, 1);
       } else if (c === "voyager") {

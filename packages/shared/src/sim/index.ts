@@ -78,6 +78,8 @@ export { silkAmmo } from "./silk";
 export { caveNeed, minerOre } from "./miner";
 export { voyagerCharge, voyagerGlass } from "./voyager";
 export { zeusWrath } from "./zeus";
+export { pilgrimBook } from "./pgHero";
+export { PG_IDS } from "./pgBag";
 export { flameStacks } from "./flames";
 export { classMoveMul } from "./moveMul";
 export { DOLL_TINTS } from "./automata";

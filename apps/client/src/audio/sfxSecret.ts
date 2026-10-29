@@ -1,4 +1,4 @@
-// 시즌 2 히든 캐릭터 효과음 (sound의 효과음 표에 합쳐짐): 에테르 광부 · 운명의 여행자 · 제우스
+// 시즌 2 히든 캐릭터 효과음 (sound의 효과음 표에 합쳐짐): 에테르 광부 · 운명의 여행자 · 제우스 · 차원의 순례자
 import { noise, tone } from "./sound";
 
 export const SECRET_SOUNDS = {
@@ -32,5 +32,14 @@ export const SECRET_SOUNDS = {
     noise(1.2, 0.9, 900);
     tone({ type: "sawtooth", from: 90, to: 30, dur: 1.4, vol: 0.45 });
     for (const [i, f] of [392, 523, 659, 784].entries()) tone({ type: "triangle", from: f, to: f, dur: 0.8, vol: 0.08, delay: 0.3 + i * 0.1 });
+  },
+  // 차원의 순례자: 반짝 (높은 종소리 둘) · 바스락 (배낭을 뒤지는 짧은 잡음 + 꺼냈을 때 올라가는 음)
+  twinkle: () => {
+    tone({ type: "triangle", from: 1568, to: 1568, dur: 0.08, vol: 0.05 });
+    tone({ type: "triangle", from: 2093, to: 2093, dur: 0.1, vol: 0.04, delay: 0.05 });
+  },
+  rustle: () => {
+    noise(0.18, 0.12, 3200);
+    tone({ type: "sine", from: 660, to: 1320, dur: 0.15, vol: 0.06, delay: 0.2 });
   },
 };

@@ -45,6 +45,8 @@ export type Sfx =
   | "dice"
   | "zap"
   | "descend"
+  | "twinkle"
+  | "rustle"
   | SkillSfx;
 
 let ctx: AudioContext | null = null;

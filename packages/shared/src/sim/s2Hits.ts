@@ -12,6 +12,7 @@ import { lightBoltHit } from "./forgotten";
 import { minerShotHit } from "./miner";
 import { voyagerShotHit } from "./voyager";
 import { zeusShotHit } from "./zeusPower";
+import { pilgrimShotHit } from "./pgBag";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 
 export function s2Hit(s: RunState, pr: ProjectileState, e: EnemyState): void {
@@ -27,5 +28,6 @@ export function s2Hit(s: RunState, pr: ProjectileState, e: EnemyState): void {
   else if (pr.spirit === "mnShard" || pr.spirit === "mnCart" || pr.spirit === "mnPickaxe") minerShotHit(s, pr, e);
   else if (pr.spirit === "vyArrow" || pr.spirit === "vyMagic" || pr.spirit === "vyChain") voyagerShotHit(s, pr, e);
   else if (pr.spirit === "zsJavelin" || pr.spirit === "zsEagle" || pr.spirit === "zsOrb") zeusShotHit(s, pr, e);
+  else if (pr.spirit?.startsWith("pg")) pilgrimShotHit(s, pr, e);
   else if (pr.spirit === "eagleFeather" || pr.spirit === "venomSpit" || pr.spirit === "web" || pr.spirit === "phoenixFire" || pr.spirit === "batling") morphShotHit(s, pr, e);
 }

@@ -77,6 +77,14 @@ export interface ZeusEnemyState {
   zsShock?: number;
 }
 
+export interface PilgrimPlayerState {
+  /** 차원의 순례자: 수집 도감(들어 본 순례자 무기) · 땅에 놓인 것(깃발·태엽 폭탄·별·차원의 문) · 차원 도장 · 대시 뒤 첫 공격이 셈 */
+  pgBook?: string[];
+  pgMarks?: GroundMark[];
+  pgStamps?: number;
+  pgDash?: boolean;
+}
+
 /** 시즌 2 히든 캐릭터 상태 모음 (types에서 한 이름으로 씀) */
-export interface SecretPlayerState extends MinerPlayerState, VoyagerPlayerState, ZeusPlayerState {}
+export interface SecretPlayerState extends MinerPlayerState, VoyagerPlayerState, ZeusPlayerState, PilgrimPlayerState {}
 export interface SecretEnemyState extends MinerEnemyState, VoyagerEnemyState, ZeusEnemyState {}

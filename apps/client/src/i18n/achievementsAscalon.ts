@@ -11,6 +11,7 @@ export const ASCALON_ACHIEVEMENTS = {
   clearRemnant: n(["뒤를 조심해", "Watch Your Back", "背後に気をつけろ"], ["잔영으로 클리어", "Clear as Remnant", "残影でクリア"]),
   clearMiner: n(["노다지", "Mother Lode", "大当たりの鉱脈"], ["에테르 광부로 클리어", "Clear as Ether Miner", "エーテル鉱夫でクリア"]),
   clearVoyager: n(["귀향", "Homecoming", "帰郷"], ["운명의 여행자로 클리어", "Clear as Voyager of Fate", "運命の旅人でクリア"]),
+  clearPilgrim: n(["모든 차원의 수집가", "Collector of Every Dimension", "すべての次元のコレクター"], ["차원의 순례자로 클리어", "Clear as Dimensional Pilgrim", "次元の巡礼者でクリア"]),
   clearZeus: n(["신들의 왕", "King of the Gods", "神々の王"], ["제우스로 클리어", "Clear as Zeus", "ゼウスでクリア"]),
   clearWanderer: n(["칼 한 자루의 길", "Path of One Blade", "一刀の道"], ["방랑객으로 클리어", "Clear as Wanderer", "放浪者でクリア"]),
   clearSilk: n(["실 끝에 걸린 운명", "Fate on a Thread", "糸の先の運命"], ["영사로 클리어", "Clear as Silk", "影糸使いでクリア"]),
