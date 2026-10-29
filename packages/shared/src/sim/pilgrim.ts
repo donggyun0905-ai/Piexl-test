@@ -46,7 +46,7 @@ export function pilgrimTick(s: RunState): void {
   done.push(seat);
   if (!npc.shown) npc.shown = true;
   const rng = createRng(deriveSeed(s.seed, "pilgrimStock", s.floor, ...seatSalt(s)));
-  const pool = HIDDEN_STOCK.filter((x) => !(x.kind === "passive" && s.player.passives.includes(x.id as never)) && !(s.party && x.id === "dimensionGate"));
+  const pool = HIDDEN_STOCK.filter((x) => !(x.kind === "passive" && s.player.passives.includes(x.id as never)) && !(s.party && (x.id === "dimensionGate" || x.id === "portalGun")));
   const floor = PILGRIM_PRICE.perFloor * (depth(s) - 1);
   pickDistinct(rng, pool, R.stock).forEach((x, i) => {
     const price = (x.kind === "passive" ? PILGRIM_PRICE.passive : PILGRIM_PRICE.use) + floor;

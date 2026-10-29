@@ -16,6 +16,10 @@ export interface HiddenRunState {
   pilgrimNpc?: PilgrimState;
   /** 이번 판 순례자를 만난 횟수 (로비 전시장 누적용) */
   pilgrimMet?: number;
+  /** 포탈건이 기억한 방 */
+  portalMark?: { floor: number; room: number };
+  /** 테라포밍: 이 층 보스를 바꿈 */
+  terraBoss?: { floor: number; kind: string };
 }
 
 /** 이프리트의 발톱: 겹친 화상 수 */
@@ -28,4 +32,13 @@ export interface HiddenPlayerState {
   relics?: Record<string, number>;
   /** 떨어진 신의 파편: 얻은 힘 (0~9) */
   shardPick?: number;
+  /** 고르는 창이 열림 (저주받은 주사위 숫자 · 테라포밍 보스) */
+  hdPick?: "curse" | "terra";
+  /** 운명의 주사위 6이 나온 수 · 저주받은 주사위 보물 · 저주로 최대 체력 고정 */
+  fateSix?: number;
+  curseWin?: boolean;
+  curseHp?: number;
+  /** 블리자드 랜스: 다음에 날릴 수 있는 틱 · 날아가 있는 동안 (등 뒤 창 그림을 숨김) */
+  lanceAt?: number;
+  lanceOut?: number;
 }

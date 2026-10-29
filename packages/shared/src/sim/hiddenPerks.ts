@@ -7,6 +7,7 @@ import type { StatMod } from "../stats";
 import { blastAt, damageEnemy, healPlayer } from "./combat";
 import { recalcStats } from "./items";
 import { storms } from "./oni";
+import { stun } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
 
@@ -36,19 +37,27 @@ export function hiddenMods(s: RunState): StatMod[] {
   const mods: (StatMod | null)[] = [{ stat: "damage", mul: g.damage }, { stat: "attackSpeed", mul: g.speed }, null, null, { stat: "moveSpeed", add: g.move }, null, null, null, { stat: "luck", add: g.luck }, { stat: "range", add: g.range }];
   const m = mods[shard(s)];
   if (m) out.push(m);
+  // 운명의 주사위 6 · 저주받은 주사위 보물
+  const six = p.fateSix ?? 0;
+  if (six) out.push({ stat: "damage", add: K.fateSix.damage * six }, { stat: "attackSpeed", mul: 1 + K.fateSix.speed * six }, { stat: "maxHp", add: K.fateSix.hp * six });
+  const w = K.curseWin;
+  if (p.curseWin) out.push({ stat: "damage", add: w.damage }, { stat: "attackSpeed", mul: 1 + w.speed }, { stat: "maxHp", add: w.hp });
   return out;
 }
 
 /** 추가 기본 스탯으로 더해지는 것 (baseStats.extraOf): 은색 방어력 · 금색 치명타 · 화려한 치명타 피해 · 녹색 재생력 · 신의 파편 */
 export function hiddenExtras(p: PlayerState): Partial<ExtraStats> | null {
-  if (!p.relics && p.shardPick === undefined) return null;
+  if (!p.relics && p.shardPick === undefined && !p.fateSix && !p.curseWin) return null;
   const g = K.godShard;
+  const six = p.fateSix ?? 0;
+  const w = p.curseWin ? K.curseWin : null;
+  const f = K.fateSix;
   const pick = hasPerk(p, "godShard") ? (p.shardPick ?? -1) : -1;
   return {
-    defense: stacks(p, "relicSilver") * K.relicSilver.per + (pick === 2 ? g.defense : 0),
-    regen: stacks(p, "relicGreen") * K.relicGreen.per + (pick === 3 ? g.regen : 0),
-    critChance: stacks(p, "relicGold") * K.relicGold.per + (pick === 5 ? g.crit : 0),
-    critDamage: stacks(p, "relicPrism") * K.relicPrism.per + (pick === 6 ? g.critDmg : 0),
+    defense: stacks(p, "relicSilver") * K.relicSilver.per + (pick === 2 ? g.defense : 0) + f.defense * six + (w?.defense ?? 0),
+    regen: stacks(p, "relicGreen") * K.relicGreen.per + (pick === 3 ? g.regen : 0) + f.regen * six + (w?.regen ?? 0),
+    critChance: stacks(p, "relicGold") * K.relicGold.per + (pick === 5 ? g.crit : 0) + f.crit * six + (w?.crit ?? 0),
+    critDamage: stacks(p, "relicPrism") * K.relicPrism.per + (pick === 6 ? g.critDmg : 0) + (w?.critDmg ?? 0),
     sharpness: pick === 7 ? g.sharp : 0,
   };
 }
@@ -81,11 +90,38 @@ export function hiddenOnHit(s: RunState, e: EnemyState, dmg: number): void {
   if (hasPerk(p, "sylphQuiver") && (p.oStorms?.length ?? 0) < 4 && roll(s, "sylph", e.id) < K.sylphQuiver.chance) {
     (p.oStorms ??= []).push({ x: e.x, y: e.y, prevX: e.x, prevY: e.y, ticks: K.sylphQuiver.ticks, dmg: p.stats.damage * K.sylphQuiver.mul, cd: 0 });
   }
+  if (hasPerk(p, "blizzardLance") && s.tick >= (p.lanceAt ?? 0) && roll(s, "lance", e.id) < K.blizzardLance.chance) launchLances(s, e);
   if (hasPerk(p, "gnomeHammer") && e.hp > 0) {
     blastAt(s, e.x, e.y, K.gnomeHammer.r, dmg * K.gnomeHammer.mul, { exclude: e });
     addEffect(s, { kind: "hdQuake", x: e.x, y: e.y, dirX: 0, dirY: 0, size: K.gnomeHammer.r, maxTicks: 12 });
   }
   busy = false;
+}
+
+/** 블리자드 랜스: 다섯 창이 한 줄로 적에게 돌진했다가 돌아옴 */
+function launchLances(s: RunState, e: EnemyState): void {
+  const p = s.player;
+  const k = K.blizzardLance;
+  const d = Math.hypot(e.x - p.x, e.y - p.y) || 1;
+  const dx = (e.x - p.x) / d;
+  const dy = (e.y - p.y) / d;
+  const ticks = Math.ceil(Math.max(60, d + 20) / k.speed);
+  p.lanceAt = s.tick + k.cd;
+  p.lanceOut = s.tick + ticks * 2;
+  for (let i = 0; i < 5; i++) {
+    const x = p.x - dx * i * 7;
+    const y = p.y - 8 - dy * i * 7;
+    s.projectiles.push({ id: s.nextId++, fromPlayer: true, x, y, prevX: x, prevY: y, r: 3, vx: dx * k.speed, vy: dy * k.speed, damage: p.stats.damage * k.mul, ticksLeft: ticks, pierce: 99, hitIds: [], back: true, span: ticks, lance: true });
+  }
+}
+
+/** 얼음 창이 맞았을 때: 20%로 빙결 (작은 피해 + 경직) */
+export function lanceHit(s: RunState, e: EnemyState): void {
+  const k = K.blizzardLance;
+  if (e.hp <= 0 || roll(s, "freeze", e.id) >= k.freeze) return;
+  stun(e, k.freezeTicks);
+  e.hp -= s.player.stats.damage * k.freezeMul;
+  addEffect(s, { kind: "hdFreeze", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 6, maxTicks: k.freezeTicks });
 }
 
 /** 맞을 때: 아프로디테의 거울 (앞쪽으로 받은 피해 2배 빛 레이저) */

@@ -1,0 +1,55 @@
+/* 히든 아이템 고르는 창 (game/HiddenPicker): 저주받은 주사위 숫자 · 테라포밍 보스 */
+.hd-picker {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  z-index: 6;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(520px, 92vw);
+  max-height: 70vh;
+  overflow: auto;
+  padding: 12px 14px;
+  border: 2px solid #7a4ad8;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgb(26 16 48 / 0.97), rgb(12 8 22 / 0.97));
+  box-shadow: 0 0 24px rgb(160 100 255 / 0.3);
+  pointer-events: auto;
+  text-align: center;
+}
+.hd-picker b {
+  color: #e0ccff;
+}
+.hd-picker.curse {
+  border-color: #8a3aa8;
+  box-shadow: 0 0 24px rgb(255 58 90 / 0.3);
+}
+.hd-picker-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+.hd-picker-list button {
+  padding: 6px 10px;
+  border: 1px solid #5a4a8a;
+  border-radius: 6px;
+  background: #22183a;
+  color: #f0e8ff;
+  cursor: pointer;
+}
+.hd-picker-list button:hover {
+  border-color: #c8a8ff;
+  background: #32245a;
+}
+.hd-picker-list .hd-die {
+  width: 44px;
+  height: 44px;
+  font-size: 1.3em;
+  font-weight: bold;
+  border-color: #8a3aa8;
+  background: #2a1a30;
+  color: #ff5a7a;
+}

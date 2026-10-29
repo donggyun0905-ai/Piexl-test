@@ -44,4 +44,6 @@ export const STATION_TEXT = {
     en: "Each level adds +15% to the part's effect · failure drops one level (success 100 → 75 → 50 → 25 → 10%)",
     ja: "強化段階ごとにパーツ効果+15% · 失敗すると1段階下がる (成功率 100 → 75 → 50 → 25 → 10%)",
   },
+  hdPickCurse: { ko: "저주받은 주사위: 숫자 하나를 고르세요 (맞히면 큰 보상, 틀리면 저주)", en: "Cursed Dice: pick a number (hit it for a huge reward, miss it for a curse)", ja: "呪われたサイコロ: 数字を1つ選んで (当たれば大きな報酬、外れると呪い)" },
+  hdPickTerra: { ko: "테라포밍: 이 층의 보스를 고르세요", en: "Terraform: choose this floor's boss", ja: "テラフォーミング: この階のボスを選んで" },
 };

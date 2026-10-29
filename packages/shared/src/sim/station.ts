@@ -6,6 +6,7 @@ import { lastFloorOf } from "./hero";
 import { addPickup, CX, CY } from "./loot";
 import { tuneMods, tuneSwap, tuneUp } from "./trTune";
 import { hiddenMods } from "./hiddenPerks";
+import { hiddenPick } from "./hiddenDice";
 import type { StationKind } from "./stationTypes";
 import type { Pickup, RunState } from "./types";
 
@@ -45,6 +46,8 @@ export function stationMenu(s: RunState, code: number): void {
   const op = Math.floor(code / 4096);
   const a = Math.floor(code / 64) % 64;
   const b = code % 64;
+  // 히든 아이템 고르는 창 (저주받은 주사위 · 테라포밍)
+  if (op === 7 || op === 8) return hiddenPick(s, op, a);
   const kind = stationFor(s);
   const here = s.rooms[s.roomId]?.pickups.some((pk) => pk.kind === kind && (pk.owner === undefined || pk.owner === (s.seat ?? 0)));
   if (!kind || !here) return;

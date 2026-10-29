@@ -25,6 +25,12 @@ export const HIDDEN_PASSIVES = {
   aphroditeMirror: H("aphroditeMirror"),
   /** 떨어진 신의 파편: 얻을 때 열 가지 중 하나 (sim/hiddenPerks.shardOf) */
   godShard: H("godShard"),
+  /** 블리자드 랜스: 등 뒤 얼음 창 5개, 맞힐 때 30%로 한 줄 돌진 (20% 빙결) */
+  blizzardLance: H("blizzardLance"),
+  /** 떨어진 신의 날개: 이동 속도 + · 몸박치기에 안 맞음 */
+  fallenWings: H("fallenWings", [{ stat: "moveSpeed", add: 0.5 }]),
+  /** 애호의 피리: 로비 펫 모두가 같이 다님 (능력도 모두) */
+  petFlute: H("petFlute"),
 } as const satisfies Record<string, PassiveDef>;
 
 /** 히든 사용 아이템 (아이템 칸) */
@@ -35,6 +41,14 @@ export const HIDDEN_USES = {
   forbiddenScroll: { id: "forbiddenScroll", damage: 60, count: 14, radius: 30, fuse: 50, gap: 6 },
   /** 차원이동문: 이 층을 건너뛰고 다음 층 (마지막 층이면 클리어) */
   dimensionGate: { id: "dimensionGate" },
+  /** 포탈건: 처음 쓰면 이 방을 기억 (아이템은 남음), 다시 쓰면 그 방으로 (같은 층만, 쓰면 사라짐) */
+  portalGun: { id: "portalGun" },
+  /** 운명의 주사위: 1~6 (sim/hiddenDice) */
+  fateDice: { id: "fateDice" },
+  /** 저주받은 주사위: 숫자를 고르고 굴림 (맞으면 보물 상자, 틀리면 저주) */
+  cursedDice: { id: "cursedDice" },
+  /** 테라포밍: 이 층 보스를 고른 보스로 (최종 보스 제외) */
+  terraform: { id: "terraform" },
 } as const;
 
 /** 히든 상점에서만 나오는 사용 아이템 (보통 보상·상점 목록에서 뺌) */
@@ -42,7 +56,7 @@ export const HIDDEN_USE_IDS: readonly string[] = Object.keys(HIDDEN_USES);
 
 /** 히든 상점에 나오는 것 (만든 것만, 계획서 '히든 아이템' 차례) */
 export const HIDDEN_STOCK: readonly { kind: "passive" | "use"; id: string }[] = [
-  ...(["aetherBomb", "forbiddenScroll", "dimensionGate"] as const).map((id) => ({ kind: "use" as const, id })),
+  ...(["aetherBomb", "forbiddenScroll", "dimensionGate", "portalGun", "fateDice", "cursedDice", "terraform"] as const).map((id) => ({ kind: "use" as const, id })),
   ...(Object.keys(HIDDEN_PASSIVES) as (keyof typeof HIDDEN_PASSIVES)[]).map((id) => ({ kind: "passive" as const, id })),
 ];
 
@@ -67,6 +81,12 @@ export const HIDDEN_PERKS = {
   /** 거울: 확률 · 받은 피해 배율 · 레이저 길이·폭 */
   aphroditeMirror: { chance: 0.3, mul: 2, len: 160, width: 10 },
   /** 신의 파편 열 가지: 공격력 배율 · 공격 속도 배율 · 방어력 · 재생력 · 이동 속도 · 치명타 확률 · 치명타 피해 · 예리함 · 행운 · 사거리 */
+  /** 얼음 창: 확률 · 다음까지 틱 · 한 발 공격력 배율 · 빠르기 · 빙결 확률·피해·경직 틱 */
+  blizzardLance: { chance: 0.3, cd: 45, mul: 0.6, speed: 5, freeze: 0.2, freezeMul: 0.1, freezeTicks: 90 },
+  /** 운명의 주사위 6: 공격력·방어력·재생력 + · 공격 속도 배율 + · 체력 + · 치명타 + */
+  fateSix: { damage: 6, defense: 6, regen: 6, speed: 0.06, hp: 60, crit: 0.06 },
+  /** 저주받은 주사위 보물: 패시브 수 · 공격력·체력·방어력·재생력 + · 치명타·치명타 피해·공격 속도 + · 틀렸을 때 최대 체력 */
+  curseWin: { passives: 10, damage: 7, hp: 77, defense: 7, regen: 7, crit: 0.07, critDmg: 0.7, speed: 0.07, curseHp: 44 },
   godShard: { damage: 1.3, speed: 1.3, defense: 15, regen: 20, move: 0.5, crit: 0.5, critDmg: 1.5, sharp: 0.3, luck: 10, range: 100 },
 };
 

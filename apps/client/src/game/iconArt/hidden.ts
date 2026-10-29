@@ -54,6 +54,28 @@ export const HIDDEN_ART: Record<string, (g: Pen) => void> = {
   forbiddenScroll: (g) => {
     g.rect(3, 4, 10, 9, "#e8d8b0").rect(2, 3, 12, 2, "#8a3a2a").rect(2, 12, 12, 2, "#8a3a2a").disc(8, 8, 2, "#ff5a2a").px(8, 8, "#ffe0a0").line(5, 6, 6, 6, "#6a4a3a").line(10, 10, 11, 10, "#6a4a3a");
   },
+  blizzardLance: (g) => {
+    for (let i = 0; i < 3; i++) g.line(3 + i * 4, 14, 6 + i * 4, 2, "#9ad8ff").px(6 + i * 4, 2, "#ffffff");
+    g.rect(2, 13, 13, 2, "#4a7aa8");
+  },
+  fallenWings: (g) => {
+    g.line(7, 4, 2, 2, "#fff6d8").line(7, 6, 1, 6, "#fff6d8").line(7, 8, 2, 11, "#e8d8a8").line(9, 4, 14, 2, "#fff6d8").line(9, 6, 15, 6, "#fff6d8").line(9, 8, 14, 11, "#e8d8a8").rect(7, 4, 2, 7, "#ffd060");
+  },
+  petFlute: (g) => {
+    g.line(3, 12, 13, 3, "#c89a5a").line(4, 12, 13, 4, "#a8783a").px(6, 9, "#3a2a1a").px(8, 7, "#3a2a1a").px(10, 5, "#3a2a1a").px(13, 1, "#ff8ab8").px(14, 2, "#ff8ab8").px(1, 9, "#ffd8e8");
+  },
+  portalGun: (g) => {
+    g.rect(2, 7, 9, 4, "#e8e8f0").rect(10, 6, 3, 6, "#5a6272").disc(13, 9, 2, "#3ad0ff").rect(4, 11, 2, 3, "#5a6272").px(14, 9, "#ffffff");
+  },
+  fateDice: (g) => {
+    g.rect(3, 3, 10, 10, "#f2ecdc").rect(3, 12, 10, 1, "#c8c0a8").px(5, 5, "#e03a3a").px(8, 8, "#e03a3a").px(10, 10, "#e03a3a").px(10, 5, "#e03a3a").px(5, 10, "#e03a3a");
+  },
+  cursedDice: (g) => {
+    g.rect(3, 3, 10, 10, "#2a1a30").rect(3, 12, 10, 1, "#140a18").px(5, 5, "#ff3a5a").px(8, 8, "#ff3a5a").px(10, 10, "#ff3a5a").line(2, 2, 4, 4, "#8a3aa8").line(13, 2, 11, 4, "#8a3aa8").px(8, 1, "#ff3a5a");
+  },
+  terraform: (g) => {
+    g.disc(8, 8, 6, "#3a7ad0").rect(4, 5, 4, 3, "#5ab05a").rect(9, 9, 4, 3, "#c8a050").rect(6, 11, 3, 2, "#5ab05a").px(5, 4, "#ffffff");
+  },
   dimensionGate: (g) => {
     g.ring(8, 8, 6, "#8a5aff").ring(8, 8, 4, "#c8a8ff").disc(8, 8, 2, "#1a0a30").px(8, 8, W).px(2, 2, "#c8a8ff").px(13, 13, "#c8a8ff");
   },

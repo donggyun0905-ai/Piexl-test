@@ -76,9 +76,9 @@ describe("차원의 순례자 · 히든 아이템", () => {
   it("에테르 폭탄은 폭탄보다 세고 · 차원이동문은 다음 층으로", () => {
     const s = createRun(1, "warden");
     s.enemies = [enemy(1, s.player.x + 30, s.player.y, 500)];
-    hiddenUse(s, "aetherBomb");
+    hiddenUse(s, "aetherBomb", 0);
     expect(s.enemies[0]!.hp).toBeLessThanOrEqual(500 - 135);
-    hiddenUse(s, "dimensionGate");
+    hiddenUse(s, "dimensionGate", 0);
     expect(s.floor).toBe(2);
   });
 });

@@ -52,6 +52,7 @@ import { drawTerraAuraC } from "./terra2c";
 import { drawGreatSpirit, drawSpiritKin } from "./spirits";
 import { drawHaloHud } from "./forgottenHalo";
 import { drawPilgrim, drawRelicHud } from "./pilgrim";
+import { drawHiddenGear } from "./hiddenGear";
 import { drawOriginAura } from "./origin";
 import { drawRunPet } from "./runPet";
 import { drawOniUps, type OniUp } from "./oniUps";
@@ -225,6 +226,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawTerraAuraC(ctx, s, alpha, snap);
     drawTrackerAura(ctx, s, alpha, snap);
     drawOriginAura(ctx, s, alpha, snap);
+    drawHiddenGear(ctx, s, alpha, snap);
     drawForgottenAura(ctx, s, alpha, snap);
     drawWandererAura(ctx, s, alpha, snap);
     drawSilkAmmo(ctx, s, alpha, snap);

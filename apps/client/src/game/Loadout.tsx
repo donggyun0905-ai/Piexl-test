@@ -2,6 +2,7 @@ import { NovicePanel, type NoviceView } from "./NovicePanel";
 import { SkillButtons } from "./SkillButtons";
 import { PwSkillBar, type PwSkillView } from "./PwSkillBar";
 import { SellBar } from "./SellBar";
+import { HiddenPicker } from "./HiddenPicker";
 import { StationWindow } from "./StationWindow";
 import type { StationView } from "./stationView";
 import type { PassiveId, UseItemId, WeaponId } from "@pixel-rogue/shared";
@@ -27,6 +28,8 @@ export interface LoadoutView {
   sell?: number[];
   /** 작업대 창이 열려 있을 때 (아티팩터 제작대 · 추적자 튜닝소) */
   station?: StationView;
+  /** 히든 아이템 고르는 창 (저주받은 주사위 · 테라포밍) */
+  hdPick?: "curse" | "terra";
 }
 
 /** PC 사용 아이템 키 표시 (controls의 USE_KEYS와 같게) */
@@ -35,7 +38,7 @@ export interface LoadoutView {
 export function loadoutKey(v: LoadoutView): string {
   const n = v.novice ? `|${v.novice.lv},${v.novice.exp},${v.novice.points}` : "";
   const pw = v.pw ? `|${v.pw.cds.join(",")}|${v.pw.armed}|${v.pw.silenced}` : "";
-  return `${v.weaponId}|${v.slots.join(",")}|${v.passives.join(",")}${n}|${v.skills?.join(",") ?? ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}`;
+  return `${v.weaponId}|${v.slots.join(",")}|${v.passives.join(",")}${n}|${v.skills?.join(",") ?? ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}`;
 }
 
 interface Props {
@@ -82,6 +85,7 @@ export function Loadout({ view, lang, t, touchMode, controls }: Props) {
       {view.novice && <NovicePanel view={view.novice} t={t} controls={controls} />}
       {view.sell && <SellBar view={view} lang={lang} t={t} controls={controls} />}
       {view.station && <StationWindow view={view.station} lang={lang} t={t} controls={controls} />}
+      {view.hdPick && <HiddenPicker pick={view.hdPick} lang={lang} t={t} controls={controls} />}
       {view.skills && <SkillButtons skills={view.skills} t={t} controls={controls} />}
       {view.pw && <PwSkillBar view={view.pw} t={t} touchMode={touchMode} controls={controls} />}
       <span className="loadout-weapon">

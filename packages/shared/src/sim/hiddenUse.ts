@@ -1,13 +1,14 @@
-// 히든 사용 아이템 효과 (itemsHidden.HIDDEN_USES, sim/items.useSlot이 부름): 에테르 폭탄 · 대마법사의 금지된 주문서 · 차원이동문
+// 히든 사용 아이템 효과 (itemsHidden.HIDDEN_USES, sim/items.useSlot이 부름): 에테르 폭탄 · 대마법사의 금지된 주문서 · 차원이동문 · 둘째 묶음은 sim/hiddenDice
 import { HIDDEN_USES as U } from "../itemsHidden";
 import { createRng, deriveSeed } from "../rng";
 import { blastAt, removeDead } from "./combat";
 import { climb } from "./rooms";
+import { fateDice, portalGun } from "./hiddenDice";
 import type { RunState } from "./types";
 import { addEffect, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
 /** 히든 사용 아이템 하나 쓰기 (다른 아이템이면 아무 일 없음) */
-export function hiddenUse(s: RunState, item: string): void {
+export function hiddenUse(s: RunState, item: string, slot: number): void {
   const p = s.player;
   if (item === "aetherBomb") {
     const { damage, radius } = U.aetherBomb;
@@ -32,5 +33,9 @@ export function hiddenUse(s: RunState, item: string): void {
     // 이 층을 건너뜀 (마지막 층이면 클리어)
     addEffect(s, { kind: "hdGate", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 24, maxTicks: 40 });
     climb(s);
-  }
+  } else if (item === "portalGun") portalGun(s, slot);
+  else if (item === "fateDice") fateDice(s);
+  // 저주받은 주사위 · 테라포밍: 고르는 창을 엶 (hiddenDice.hiddenPick)
+  else if (item === "cursedDice") p.hdPick = "curse";
+  else if (item === "terraform") p.hdPick = "terra";
 }

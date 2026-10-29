@@ -175,8 +175,8 @@ export function updateEnemies(s: RunState): void {
         const rr = e.r + q.r;
         // 용 염옥(필살기) 중에는 몸에 닿아도 피해 없음 (안전한 칸이 몸 쪽에 떠도 갈 수 있게)
         if (e.ultAt !== undefined && e.ultSafe) return;
-        // 잔영 그림자: 몸에 닿는 피해 없음 (원거리 공격은 맞음)
-        if ((q.rmShade ?? 0) > 0) return;
+        // 잔영 그림자 · 떨어진 신의 날개: 몸에 닿는 피해 없음 (원거리 공격은 맞음)
+        if ((q.rmShade ?? 0) > 0 || q.passives.includes("fallenWings")) return;
         if (def.contactDamage > 0 && dist2(e, q) < rr * rr && e.id !== q.grabId && !e.air) damagePlayer(s, renMelee(s, def.contactDamage * tabooUp(s, "fangs")));
       },
       !!s.party,

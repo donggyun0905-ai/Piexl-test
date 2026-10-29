@@ -22,6 +22,7 @@ import { tabooDown, tabooN, tabooSum, tabooUp } from "./taboo";
 import type { EnemyState, RunState, TickInput } from "./types";
 import { ENEMIES } from "../content";
 import { meetPilgrim, pilgrimRoom } from "./pilgrim";
+import { terraBoss } from "./hiddenDice";
 import {
   DOOR_HALF,
   EXIT_X,
@@ -105,7 +106,7 @@ function enterRoom(s: RunState, roomId: number): void {
   s.pendingBlasts = [];
   s.hazards = [];
   // 층 보스에 맞는 지형 (진흙·용암·물·가시 함정)
-  s.terrain = makeTerrain(s, roomId);
+  s.terrain = makeTerrain(s, roomId, terraBoss(s));
   eachSeat(s, () => {
     s.roomDamaged = false;
     if (s.devices) s.devices = [];
@@ -127,7 +128,7 @@ function enterRoom(s: RunState, roomId: number): void {
             ? [spawnBoss(s, "plight"), spawnBoss(s, "pdark")]
             : s.hero && !s.lastBoss
               ? heroPair(heroBosses(s).map((b) => spawnBoss(s, b)))
-              : (endlessBosses(s) ?? [spawnBoss(s, s.lastBoss ?? bossForFloor(s.floor, s.seed))])
+              : (endlessBosses(s) ?? [spawnBoss(s, s.lastBoss ?? terraBoss(s) ?? bossForFloor(s.floor, s.seed))])
           : [];
     // 협동: 보물·상점·황금방·쉼터 회복은 사람마다
     eachSeat(s, () => {
@@ -221,6 +222,13 @@ export function goThrough(s: RunState, lane: number): void {
   s.rooms[s.roomId]!.enemies = s.enemies;
   placeParty(s, ROOM_MAX_Y - PLAYER_RADIUS - 10);
   enterRoom(s, next);
+}
+
+/** 포탈건: 이 층의 다른 방으로 바로 감 (아래쪽 가운데에서 시작) */
+export function warpRoom(s: RunState, roomId: number): void {
+  s.rooms[s.roomId]!.enemies = s.enemies;
+  placeParty(s, ROOM_MAX_Y - PLAYER_RADIUS - 10);
+  enterRoom(s, roomId);
 }
 
 /** 적을 다 잡았으면 방 정리 (보상은 사람마다) */

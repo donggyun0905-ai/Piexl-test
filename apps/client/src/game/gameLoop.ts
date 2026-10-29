@@ -181,6 +181,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       // 상점 휴지통에서 F로 판매 창을 열었을 때: 팔 수 있는 값 (무기 + 사용 아이템 2칸 + 패시브 순서, 0 = 못 팜)
       ...(run.prompt.kind === "trash" && run.prompt.confirm && !run.party ? { sell: sellCodes(p.passives.length).map((n) => sellPrice(run, n)) } : {}),
       ...(run.prompt.kind === "station" ? { station: stationView(run) } : {}),
+      ...(p.hdPick ? { hdPick: p.hdPick } : {}),
     };
     const lk = loadoutKey(view);
     if (lk !== shownLoadout) {

@@ -3,6 +3,7 @@
 import { pilgrimWalk, relicStacks, ROOM_CX, ROOM_CY, type EffectState, type RunState } from "@pixel-rogue/shared";
 import { RELIC_COLORS } from "../iconArt/hidden";
 import { hudScale } from "./imugiAura";
+import { drawHiddenFx2 } from "./hiddenGear";
 import { drawCharacter } from "../sprites";
 import type { Snap } from "./palette";
 import { additive, alpha, beam, glow, shock, sparks } from "./pwFxBits";
@@ -96,6 +97,7 @@ function drawBubble(ctx: Ctx, x: number, y: number, text: string): void {
 /** 히든 아이템 효과. 그렸으면 true */
 export function drawHiddenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   if (!fx.kind.startsWith("hd")) return false;
+  if (drawHiddenFx2(ctx, fx, snap)) return true;
   const t = fx.ticks / fx.maxTicks;
   const f = 1 - t;
   const x = snap(fx.x);

@@ -94,6 +94,8 @@ export interface OriginPlayerState {
 }
 /** 떠돌이 기습 탄: 1 = 특징 · 2 = 기습 패시브 (그리기용) · 패시브면 처음 맞힌 적 최대 체력 × hpCut만큼 더 */
 export interface OriginShotState {
+  /** 블리자드 랜스 창 (빙결 · 그리기) */
+  lance?: boolean;
   ambush?: number;
   hpCut?: number;
 }

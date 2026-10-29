@@ -54,7 +54,7 @@ export function recalcStats(s: RunState): void {
   p.mods = oniConvert(p, [...p.passives.flatMap((id): StatMod[] => [...PASSIVES[id].mods]), ...noviceMods(p), ...imugiMods(p), ...apostleMods(p), ...tabooMods(s), ...swarmMods(p), ...morphMods(p), ...eaterMods(p), ...automataMods(p), ...petMods(s), ...stationMods(s)]);
   p.stats = computeStats(baseStats(p.characterId, p.weaponId), p.mods);
   // 거너: 최대 체력 고정 (체력 아이템을 먹어도 그대로)
-  const fixed = (CHARACTERS[p.characterId] as CharacterDef).fixedHp;
+  const fixed = p.curseHp ?? (CHARACTERS[p.characterId] as CharacterDef).fixedHp;
   if (fixed) p.stats.maxHp = fixed;
   // 패왕전: 모두 최대 체력 ×10, AI는 모드 보정
   pvpStats(s);
@@ -296,5 +296,5 @@ function useSlot(s: RunState, slot: number, input: TickInput): void {
     const before = s.goldEarned;
     addGold(s, USE_ITEMS.moneyBag.gold);
     addEffect(s, { kind: "coinGet", x: p.x, y: p.y - 12, dirX: 0, dirY: 0, size: s.goldEarned - before, maxTicks: 45 });
-  } else hiddenUse(s, item);
+  } else hiddenUse(s, item, slot);
 }
