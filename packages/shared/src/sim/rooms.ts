@@ -21,6 +21,7 @@ import { eachSeat, partyExtraEnemies, partyHpMul, placeParty } from "./party";
 import { tabooDown, tabooN, tabooSum, tabooUp } from "./taboo";
 import type { EnemyState, RunState, TickInput } from "./types";
 import { ENEMIES } from "../content";
+import { meetPilgrim, pilgrimRoom } from "./pilgrim";
 import {
   DOOR_HALF,
   EXIT_X,
@@ -120,7 +121,7 @@ function enterRoom(s: RunState, roomId: number): void {
     st.enemies = s.arenaLv
       ? arenaEnemies(s, roomId)
       : info.type === "combat" || info.type === "elite"
-        ? spawnEnemies(s, roomId, info.type === "elite")
+        ? roomId === pilgrimRoom(s) ? [] : spawnEnemies(s, roomId, info.type === "elite")
         : info.type === "exit"
           ? s.lastBoss === "plight"
             ? [spawnBoss(s, "plight"), spawnBoss(s, "pdark")]
@@ -138,6 +139,8 @@ function enterRoom(s: RunState, roomId: number): void {
     });
     // 레이드 시간은 라스트 보스방에 처음 들어간 때부터
     if (big) s.raidStart = s.tick;
+    // 히든 상점: 빈 방에 차원의 순례자 (sim/pilgrim)
+    if (roomId === pilgrimRoom(s)) meetPilgrim(s, roomId);
   }
   s.enemies = st.enemies;
   st.cleared = s.enemies.length === 0;

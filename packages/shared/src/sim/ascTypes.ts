@@ -1,5 +1,6 @@
 // 아스칼론 시즌 2 캐릭터 상태 타입. 모두 선택 값 (예전 저장에는 없음)
 import type { StationPlayerState } from "./stationTypes";
+import type { HiddenEnemyState, HiddenPlayerState } from "./hiddenTypes";
 import type { SecretEnemyState, SecretPlayerState } from "./secretTypes";
 
 export interface AscPlayerState {
@@ -97,5 +98,5 @@ export interface OriginShotState {
   hpCut?: number;
 }
 
-export interface AscalonPlayerState extends StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState {}
-export interface AscalonEnemyState extends AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState {}
+export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState {}
+export interface AscalonEnemyState extends HiddenEnemyState, AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState {}

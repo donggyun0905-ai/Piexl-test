@@ -5,6 +5,7 @@ import { BENCH_OP, benchMods, benchUse } from "./afBench";
 import { lastFloorOf } from "./hero";
 import { addPickup, CX, CY } from "./loot";
 import { tuneMods, tuneSwap, tuneUp } from "./trTune";
+import { hiddenMods } from "./hiddenPerks";
 import type { StationKind } from "./stationTypes";
 import type { Pickup, RunState } from "./types";
 
@@ -52,8 +53,8 @@ export function stationMenu(s: RunState, code: number): void {
   if (kind === "tune" && op === TUNE_OP.up) tuneUp(s, op, a);
 }
 
-/** 작업대가 바꾼 능력치 (recalcStats) */
-export const stationMods = (s: RunState): StatMod[] => [...benchMods(s.player), ...tuneMods(s.player)];
+/** 작업대·히든 아이템이 바꾼 능력치 (recalcStats) */
+export const stationMods = (s: RunState): StatMod[] => [...benchMods(s.player), ...tuneMods(s.player), ...hiddenMods(s)];
 
 /** 작업대에 돈 내기: 상점 구매 기록에도 남김 (일일 도전 진행 기록 검사가 쓴 돈을 맞춰 봄) */
 export function stationPay(s: RunState, kind: StationKind, op: number, cost: number): boolean {

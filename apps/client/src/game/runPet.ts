@@ -5,6 +5,8 @@ import type { GameMode } from "./gameScreenProps";
 
 /** 새로 시작한 판이면 데리고 갈 펫을 붙임 (이어하기는 저장된 그대로) */
 export function withPet(run: RunState, mode: GameMode, arena: boolean): RunState {
+  // 히든 상점(차원의 순례자)은 혼자 하기·무한·협동만 (일일 도전·배틀·아레나 없음, sim/pilgrim)
+  if (run.tick === 0 && ((mode === "solo" && !arena) || mode === "coop")) run.pilgrim = true;
   if (run.tick > 0 || run.pet || arena) return run;
   if (mode !== "solo" && mode !== "practice" && mode !== "swarm") return run;
   const pet = equippedPet();

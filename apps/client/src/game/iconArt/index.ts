@@ -3,14 +3,15 @@ import { PASSIVES, type PassiveDef, type UseItemId } from "@pixel-rogue/shared";
 import { ICON_SIZE, CHAR_COLOR, W, Pen, type IconItem } from "./pen";
 import { PASSIVE_ART, passiveArt } from "./passives";
 import { weaponArt } from "./weapons";
+import { HIDDEN_ART, hiddenFrame } from "./hidden";
 import { customImage } from "../customArt";
 
 export { ICON_SIZE, type IconItem } from "./pen";
 
-const USE_COLORS: Record<UseItemId, string> = { potion: "#e0505e", bomb: "#4a4458", ward: "#6ec6e8", moneyBag: "#c89a4a", elixir: "#ff80c0", frost: "#c0f0ff" };
+const USE_COLORS: Record<string, string> & Record<"potion" | "bomb" | "ward" | "moneyBag" | "elixir" | "frost", string> = { potion: "#e0505e", bomb: "#4a4458", ward: "#6ec6e8", moneyBag: "#c89a4a", elixir: "#ff80c0", frost: "#c0f0ff" };
 
 function useArt(g: Pen, id: UseItemId): void {
-  const c = USE_COLORS[id];
+  const c = USE_COLORS[id] ?? "#8a5aff";
   if (id === "potion" || id === "elixir") {
     g.rect(5, 7, 6, 7, c).rect(4, 9, 8, 4, c).rect(7, 3, 2, 4, "#c8c8d8").rect(6, 2, 4, 1, W).px(6, 8, "#fff");
     if (id === "elixir") g.px(10, 11, "#fff").px(9, 10, "#fff");
@@ -32,6 +33,13 @@ function useArt(g: Pen, id: UseItemId): void {
 
 export function drawIcon(ctx: CanvasRenderingContext2D, item: IconItem): void {
   const g = new Pen(ctx);
+  // 히든 아이템: 보랏빛 차원 틀 (iconArt/hidden)
+  const hidden = item.kind !== "weapon" ? HIDDEN_ART[item.id] : undefined;
+  if (hidden) {
+    hiddenFrame(g);
+    hidden(g);
+    return;
+  }
   if (item.kind === "weapon") weaponArt(g, item.id);
   else if (item.kind === "use") useArt(g, item.id);
   else {

@@ -69,7 +69,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
   if (p.dashCooldown > 0) p.dashCooldown--;
   if (p.invulnTicks > 0) p.invulnTicks--;
   if (p.streakTicks > 0 && --p.streakTicks === 0) p.streak = 0;
-  tickOrigin(p);
+  tickOrigin(s);
 
   // 이동 방향 (조이스틱 중간 값 허용, 최대 길이 1). 끌려가는 중이면 끄는 쪽, 그물에 걸리면 멈춤
   let [mx, my] = netMove(s, ...lureMove(s, input.moveX / 100, input.moveY / 100));

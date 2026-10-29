@@ -15,6 +15,7 @@ import { xpOnly } from "./morphXp";
 import { spawnStation } from "./station";
 
 export { isStation, stationAt, stationMenu, stationMods } from "./station";
+export { hiddenUse } from "./hiddenUse";
 
 const PRICE = SHOP_PRICES.price;
 

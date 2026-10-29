@@ -2,6 +2,7 @@ export * from "./constants";
 export * from "./content";
 export * from "./combos";
 export * from "./items";
+export * from "./itemsHidden";
 export * from "./rng";
 export * from "./sim/index";
 export * from "./swarmDefs";

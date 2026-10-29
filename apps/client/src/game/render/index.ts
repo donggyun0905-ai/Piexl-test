@@ -51,6 +51,7 @@ import { drawTerraAuraB, drawTerraGroundB } from "./terra2b";
 import { drawTerraAuraC } from "./terra2c";
 import { drawGreatSpirit, drawSpiritKin } from "./spirits";
 import { drawHaloHud } from "./forgottenHalo";
+import { drawPilgrim, drawRelicHud } from "./pilgrim";
 import { drawOriginAura } from "./origin";
 import { drawRunPet } from "./runPet";
 import { drawOniUps, type OniUp } from "./oniUps";
@@ -75,6 +76,8 @@ export interface DrawOptions {
   showHitbox: boolean;
   /** 공격 사거리 원 */
   showRange: boolean;
+  /** 차원의 순례자 말풍선 (화면 언어) */
+  pilgrimLine?: string;
   /** 패왕전: 체력 줄 위 캐릭터 이름 (없으면 안 그림) */
   charName?: (id: string) => string;
   /** 게임 1픽셀이 실제 화면(기기) 몇 픽셀인지 (확대 전) */
@@ -184,6 +187,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawSecretGround(ctx, s, snap);
   });
   drawEnemies(ctx, s, alpha, snap);
+  drawPilgrim(ctx, s, opt.pilgrimLine);
   drawInkMarks(ctx, s, alpha, snap);
   drawClockMarks(ctx, s, snap);
   eachPerson(s, () => drawStarNodes(ctx, s, snap));
@@ -252,6 +256,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   // 화면에 붙는 글자 (카메라와 상관없이 왼쪽 위)
   drawComboHud(ctx, s, opt.pixelScale);
   drawHaloHud(ctx, s, opt.pixelScale);
+  drawRelicHud(ctx, s, opt.pixelScale);
   drawSoulHud(ctx, s, opt.pixelScale);
   drawEaterHud(ctx, s, opt.pixelScale);
   drawTagHud(ctx, s, opt.pixelScale, opt.tagName);

@@ -4,6 +4,7 @@ import { ABANDONED_SHOW_RULES } from "./abandonedShow";
 import { ARENA_RULES } from "./arena";
 import { ORIGIN_RULES } from "./origin";
 import { AF_BENCH_RULES } from "./afBench";
+import { PILGRIM_RULES } from "./pilgrim";
 import { BASE_STATS_RULES } from "./baseStats";
 import { BEAST_RULES } from "./beast";
 import { BEAST_ULTS_RULES } from "./beastUlts";
@@ -89,6 +90,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   ARENA_RULES,
   ORIGIN_RULES,
   AF_BENCH_RULES,
+  PILGRIM_RULES,
   BASE_STATS_RULES,
   BEAST_RULES,
   BEAST_ULTS_RULES,

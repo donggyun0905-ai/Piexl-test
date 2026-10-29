@@ -18,7 +18,7 @@ import { allPlayers, seatNo } from "./party";
 import { tabooDown, tabooMods } from "./taboo";
 import { addEffect, hasPerk } from "./util";
 import { charmed } from "./bossesTwo";
-import { clearShelf, EMPTY_HANDS, isStation, rerollShop, sellItem, stationAt, stationMenu, stationMods, trashAt } from "./shop";
+import { clearShelf, EMPTY_HANDS, hiddenUse, isStation, rerollShop, sellItem, stationAt, stationMenu, stationMods, trashAt } from "./shop";
 import { resetCombo } from "./brawl";
 import { resetGun } from "./gun";
 import { resetAbandoned } from "./abandoned";
@@ -296,5 +296,5 @@ function useSlot(s: RunState, slot: number, input: TickInput): void {
     const before = s.goldEarned;
     addGold(s, USE_ITEMS.moneyBag.gold);
     addEffect(s, { kind: "coinGet", x: p.x, y: p.y - 12, dirX: 0, dirY: 0, size: s.goldEarned - before, maxTicks: 45 });
-  }
+  } else hiddenUse(s, item);
 }

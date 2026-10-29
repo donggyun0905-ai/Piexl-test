@@ -6,6 +6,7 @@ import { petGold } from "./lobbyPet";
 import { BEDOUIN_PERKS } from "../itemsBedouin";
 import { PERKS } from "../perks";
 import { readyCounter } from "./origin";
+import { relicKill } from "./hiddenPerks";
 import { createRng, deriveSeed } from "../rng";
 import { ENEMIES } from "../content";
 import { SWARM } from "../swarmDefs";
@@ -168,7 +169,7 @@ export function damagePlayer(s: RunState, dmg: number): void {
   }
   addEffect(s, { kind: "hit", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 6, maxTicks: 10 });
   // 파수꾼 반격 준비 · 반격의 방패 충격파 (sim/origin)
-  readyCounter(s);
+  readyCounter(s, taken);
 }
 
 /** 범위 안 적 모두에게 피해 (밖으로 밀림). exclude: 제외할 적. 맞힌 적 수를 돌려줌 */
@@ -243,6 +244,7 @@ export function removeDead(s: RunState): void {
     // 보스가 부른 적(돈 없음)은 처치 수·쌓이는 힘(빛의 고리·잔영·경험치·먹은 영혼 등)에 넣지 않음
     const minion = e.noGold;
     if (!minion) s.kills++;
+    if (!minion) relicKill(s);
     hatchSlimes(s, e, alive);
     const p = s.player;
     if (s.party && !minion) p.kills = (p.kills ?? 0) + 1;

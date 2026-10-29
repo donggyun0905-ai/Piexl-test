@@ -2,6 +2,7 @@
 import { PERKS } from "../perks";
 import { ROOM_CX as CX, ROOM_CY as CY } from "../constants";
 import { WEAPON_IDS, WEAPONS, type CharacterId, type WeaponDef, type WeaponId, type WeaponKind } from "../content";
+import { HIDDEN_USE_IDS } from "../itemsHidden";
 import { HEAL_ITEMS, PASSIVE_IDS, PASSIVES, USE_ITEM_IDS, type PassiveDef, type PassiveId, type UseItemId } from "../items";
 import { createRng, deriveSeed, type Rng } from "../rng";
 import { itemAvailable } from "../achievements";
@@ -96,7 +97,7 @@ function poolOf(s: RunState, ownOnly: boolean): PassiveId[] {
 }
 
 export function usePool(s: RunState): UseItemId[] {
-  return USE_ITEM_IDS.filter((id) => itemAvailable("use", id, s.unlocks) && !(s.sudden && HEAL_ITEMS.has(`use:${id}`)));
+  return USE_ITEM_IDS.filter((id) => !HIDDEN_USE_IDS.includes(id) && itemAvailable("use", id, s.unlocks) && !(s.sudden && HEAL_ITEMS.has(`use:${id}`)));
 }
 
 /** 서로 다른 것 n개 고르기 */

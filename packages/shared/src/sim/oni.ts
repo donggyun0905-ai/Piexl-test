@@ -80,7 +80,7 @@ function zones(s: RunState): void {
 }
 
 /** 폭풍: 가까운 적을 천천히 따라가며 빠르게 벰 */
-function storms(s: RunState): void {
+export function storms(s: RunState): void {
   const p = s.player;
   if (!p.oStorms) return;
   const gale = hasPerk(p, "oniGale");

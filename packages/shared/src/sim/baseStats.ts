@@ -8,6 +8,7 @@ import { applyBleed, updateBleed } from "./gunExtras";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { WANDERER_PERKS } from "../itemsWanderer";
 import { addEffect, hasPerk, weaponOf } from "./util";
+import { hiddenExtras, hiddenOnHit } from "./hiddenPerks";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -22,7 +23,15 @@ const R = {
 export { R as BASE_STATS_RULES };
 
 /** 지금 캐릭터의 추가 기본 스탯 */
-export const extraOf = (p: PlayerState): ExtraStats => CHARACTERS[p.characterId] as unknown as ExtraStats;
+export function extraOf(p: PlayerState): ExtraStats {
+  const base = CHARACTERS[p.characterId] as unknown as ExtraStats;
+  // 히든 아이템(금기된 아티팩트·신의 파편)이 더한 몫
+  const add = hiddenExtras(p);
+  if (!add) return base;
+  const out = { ...base };
+  for (const k of Object.keys(add) as (keyof ExtraStats)[]) out[k] += add[k] ?? 0;
+  return out;
+}
 
 const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.seed, tag, s.tick, n)).nextFloat();
 
@@ -50,6 +59,7 @@ export const sharpBonus = (s: RunState, e: EnemyState) => ((e.sharpT ?? 0) > s.t
 export function onHitExtra(s: RunState, e: EnemyState, dmg: number): void {
   const ex = extraOf(s.player);
   if (dmg <= 0) return;
+  hiddenOnHit(s, e, dmg);
   if (ex.lifesteal > 0) healPlayer(s, dmg * ex.lifesteal);
   // 예리함 (방랑객 숫돌: 더 자주) · 터지면 칼빛 효과
   const sharp = ex.sharpness + (hasPerk(s.player, "wdHone") ? WANDERER_PERKS.wdHone.add : 0);

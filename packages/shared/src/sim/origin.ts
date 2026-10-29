@@ -6,6 +6,8 @@ import { PERKS } from "../perks";
 import { blastAt } from "./combat";
 import { addEffect, hasPerk } from "./util";
 import type { EnemyState, PlayerState, RunState } from "./types";
+import { hiddenHurt, hiddenTick } from "./hiddenPerks";
+import { pilgrimTick } from "./pilgrim";
 
 const R = {
   /** 떠돌이: 대시 뒤 이 틱 안의 첫 공격 · 배율 */
@@ -57,15 +59,19 @@ export function ambushHitFx(s: RunState, kind: number, x: number, y: number, dx:
 }
 
 /** 맞았을 때: 파수꾼·반격의 방패는 반격 준비 · 반격의 방패는 주변 적을 밀어내며 공격력만큼 피해 */
-export function readyCounter(s: RunState): void {
+export function readyCounter(s: RunState, taken: number): void {
   const p = s.player;
+  hiddenHurt(s, taken);
   const guard = hasPerk(p, "counterGuard");
   if (p.characterId === "warden" || guard) p.counterTicks = R.counterTicks;
   if (guard) blastAt(s, p.x, p.y, PERKS.counterGuard.radius, p.stats.damage * PERKS.counterGuard.damage, { push: PERKS.counterGuard.push });
 }
 
-/** 틱마다 준비 시간 줄이기 */
-export function tickOrigin(p: PlayerState): void {
+/** 틱마다 준비 시간 줄이기 · 히든 아이템 · 순례자 */
+export function tickOrigin(s: RunState): void {
+  const p = s.player;
+  hiddenTick(s);
+  pilgrimTick(s);
   if (p.ambushTicks > 0) p.ambushTicks--;
   if ((p.counterTicks ?? 0) > 0) p.counterTicks!--;
 }

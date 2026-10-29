@@ -84,6 +84,8 @@ export { DOLL_TINTS } from "./automata";
 export { artifacterGauge } from "./artifacter";
 export { AF_BENCH_RULES, BENCH_OP, benchCan, benchCost, benchLv, isHidden, isOwn } from "./afBench";
 export { menuCode, TUNE_OP } from "./station";
+export { pilgrimWalk } from "./pilgrim";
+export { relicStacks, RELICS } from "./hiddenPerks";
 export { tuneChance, tuneCost, tuneVal } from "./trTune";
 export type { StationKind, StationResult } from "./stationTypes";
 export { ARTIFACTER_HIDDEN } from "../itemsArtifacter";

@@ -20,6 +20,7 @@ import { ABANDONED_PASSIVES } from "./itemsAbandoned";
 import { TITAN_PASSIVES } from "./itemsTitan";
 import { ONI_PASSIVES } from "./itemsOni";
 import { S2_PASSIVES } from "./itemsSeason2";
+import { HIDDEN_PASSIVES, HIDDEN_USES } from "./itemsHidden";
 
 export interface PassiveDef {
   id: string;
@@ -181,6 +182,7 @@ export const PASSIVES = {
   ...TITAN_PASSIVES,
   ...ONI_PASSIVES,
   ...S2_PASSIVES,
+  ...HIDDEN_PASSIVES,
   // 업적으로 해금 (해금 전에는 나오지 않음)
   quickDraw: { id: "quickDraw", mods: [{ stat: "attackSpeed", mul: 1.2 }, { stat: "damage", mul: 0.9 }] },
   goldTooth: { id: "goldTooth", mods: [{ stat: "luck", add: 2 }] },
@@ -205,6 +207,8 @@ export const USE_ITEMS = {
   elixir: { id: "elixir", healRatio: 1 },
   /** 4초 동안 적·적 탄이 멈춤 */
   frost: { id: "frost", ticks: 240 },
+  // 히든 상점에서만 (itemsHidden)
+  ...HIDDEN_USES,
 } as const;
 
 export type UseItemId = keyof typeof USE_ITEMS;

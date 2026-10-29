@@ -18,7 +18,7 @@ import type { BedouinPlayerState } from "./bedouinTypes";
 import type { GeneralPlayerState } from "./generalTypes";
 import type { ImugiEnemyState, ImugiPlayerState } from "./imugiTypes";
 import type { ApostleEnemyState, ApostlePlayerState } from "./apostleTypes";
-import type { AbandonedPlayerState, DuckPlayerState, H2EnemyState, H2PlayerState, ElderPlayerState, FlyPlayerState, IdraPlayerState, MorphPlayerState, PetRunState, RenPlayerState, S2EnemyState, SpiritPlayerState, OniEnemyState, OniPlayerState, S2Spirit, ScribeEnemyState, ScribePlayerState, StarPlayerState, TcPlayerState, TitanPlayerState, AscalonPlayerState, AscalonEnemyState, StationKind, StationPrompt } from "./classTypes";
+import type { AbandonedPlayerState, DuckPlayerState, H2EnemyState, H2PlayerState, ElderPlayerState, FlyPlayerState, IdraPlayerState, MorphPlayerState, PetRunState, RenPlayerState, S2EnemyState, SpiritPlayerState, OniEnemyState, OniPlayerState, S2Spirit, ScribeEnemyState, ScribePlayerState, StarPlayerState, TcPlayerState, TitanPlayerState, AscalonPlayerState, AscalonEnemyState, StationKind, StationPrompt, HiddenRunState } from "./classTypes";
 import type { Seat } from "./party";
 import type { TabooSet } from "../taboo";
 export type { Device } from "./laserTypes";
@@ -79,7 +79,7 @@ export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, B
   hurt?: number;
 }
 
-/** 적 행동 단계. 보스는 volley(탄 쏘기)·summon(부르기)·blink(순간이동), 가디언은 swing(휘두르기)도 씀 */
+/** 적 행동 단계 (보스 volley 탄·summon 부르기·blink 순간이동, 가디언 swing 휘두르기) */
 export type ChargerPhase = "walk" | "windup" | "charge" | "volley" | "summon" | "blink" | "swing" | "act";
 
 export interface EnemyState extends Body, LaserEnemyState, OrbitEnemyState, BrawlEnemyState, MedicEnemyState, GunEnemyState, BossEnemyState, TdEnemyState, NinjaEnemyState, ImugiEnemyState, ApostleEnemyState, SwarmEnemyState, OniEnemyState, ScribeEnemyState, S2EnemyState, H2EnemyState, ChronoEnemyState, AscalonEnemyState, PwEnemyState {
@@ -200,7 +200,7 @@ export type Prompt = StationPrompt
   /** 상점 물건: F·버튼으로만 삼 (실수로 사지 않게) */
   | { kind: "buy"; pickupId: number; price: number }
   | { kind: "trash"; price: number; confirm: boolean } // 상점 휴지통 (confirm = 확인 대기)
-  /** 협동: 출구·계단에 모두 모이기를 기다림 · 쓰러진 친구 옆 (ready = 전투가 끝나 회복약으로 일으킬 수 있음) */
+  /** 협동: 출구·계단에 모두 모이기 기다림 · 쓰러진 친구 옆 (ready = 전투 끝, 회복약으로 일으킴) */
   | { kind: "gather"; have: number; need: number }
   | { kind: "revive"; ready: boolean };
 
@@ -221,7 +221,7 @@ export interface BuyLogEntry {
 /** 상태이상 피해 종류: 출혈 · 화상 · 독 · 저주(수양 부적) */
 export type DotKind = "bleed" | "burn" | "poison" | "curse" | "storm" | "rot" | "death" | "hellfire" | "shock" | "frost" | "tide" | "gold" | "radiance" | "voidbolt";
 
-export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, PetRunState, PwRunState, TerrainRunState {
+export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, PetRunState, PwRunState, TerrainRunState, HiddenRunState {
   seed: number;
   tick: number;
   player: PlayerState;
