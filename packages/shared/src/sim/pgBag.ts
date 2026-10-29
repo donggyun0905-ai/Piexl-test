@@ -3,6 +3,7 @@
 import { WEAPONS, type WeaponId } from "../content";
 import { PILGRIM_PERKS as K } from "../itemsPilgrim";
 import { createRng, deriveSeed } from "../rng";
+import type { StatMod } from "../stats";
 import { PILGRIM as P } from "../weaponsPilgrim";
 import { healPlayer } from "./combat";
 import { addPickup } from "./loot";
@@ -20,15 +21,21 @@ export const pgRnd = (s: RunState, ...tags: (string | number)[]) => createRng(de
 export const pilgrimBook = (p: PlayerState) => p.pgBook?.length ?? 0;
 
 /** 지금 든 순례자 무기를 도감에 적음 */
-export function recordBook(p: PlayerState): void {
+/** 든 무기를 도감에 남김 (새로 남기면 true → 능력치 다시 계산) */
+export function recordBook(p: PlayerState): boolean {
   const id = p.weaponId;
-  if (!weaponOf(p).curio) return;
+  if (!weaponOf(p).curio) return false;
   p.pgBook ??= [];
-  if (!p.pgBook.includes(id)) p.pgBook.push(id);
+  if (p.pgBook.includes(id)) return false;
+  p.pgBook.push(id);
+  return true;
 }
 
 /** 도감 공격력 배율 (수집 일지: 두 배로 오름) */
 export const bookMul = (p: PlayerState) => 1 + pilgrimBook(p) * P.bookDmg * (hasPerk(p, "pgJournal") ? K.pgJournal.mul : 1);
+
+/** 도감 공격력은 능력치에 바로 반영 (능력치 창에서 보이게, recalcStats) */
+export const pilgrimMods = (p: PlayerState): StatMod[] => (p.characterId === "pilgrim" && pilgrimBook(p) ? [{ stat: "damage", mul: bookMul(p) }] : []);
 
 /** 순례자가 맞힘: 보스(열쇠고리) · 처치하면 기념품·도장 */
 export function hitE(s: RunState, e: EnemyState, dmg: number, push = 0): void {

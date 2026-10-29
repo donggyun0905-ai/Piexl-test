@@ -1,11 +1,13 @@
 // 작업대 창에 보여 줄 값 (gameLoop가 만들어 LoadoutView.station으로 넘김): 아티팩터 제작대 · 추적자 튜닝소
-import { BENCH_OP, benchCan, benchCost, benchLv, isHidden, isOwn, TUNE, TUNE_SLOTS, tuneChance, tuneCost, type PassiveId, type RunState, type StationKind, type StationResult } from "@pixel-rogue/shared";
+import { BENCH_OP, benchCan, benchCost, benchLv, benchStats, isHidden, isOwn, TUNE, TUNE_SLOTS, tuneChance, tuneCost, type PassiveId, type RunState, type StationKind, type StationResult } from "@pixel-rogue/shared";
 
 export interface BenchItem {
   id: PassiveId;
   own: boolean;
   hidden: boolean;
   lv: number;
+  /** 강화로 바뀐 수치: [이름, 원래, 지금] */
+  stats: [string, number, number][];
   /** 기능마다 할 수 있는지 (up · swap · tune · fuse) */
   can: [boolean, boolean, boolean, boolean];
 }
@@ -39,7 +41,7 @@ export function stationView(run: RunState): StationView | undefined {
     const ops = [BENCH_OP.up, BENCH_OP.swap, BENCH_OP.tune, BENCH_OP.fuse] as const;
     return {
       ...base,
-      items: p.passives.map((id) => ({ id, own: isOwn(id), hidden: isHidden(id), lv: benchLv(p, id), can: ops.map((op) => benchCan(run, op, id)) as BenchItem["can"] })),
+      items: p.passives.map((id) => ({ id, own: isOwn(id), hidden: isHidden(id), lv: benchLv(p, id), stats: benchStats(p, id), can: ops.map((op) => benchCan(run, op, id)) as BenchItem["can"] })),
       costs: ops.map((op) => benchCost(run, op)) as StationView["costs"],
     };
   }

@@ -127,3 +127,77 @@
   margin: 4px 0 0;
   opacity: 0.85;
 }
+
+/* 전시장 기록집 창 (lobby/RecordBook) */
+.record-book {
+  width: min(560px, calc(100vw - 32px));
+  border: 2px solid #e0b040;
+  background: linear-gradient(180deg, #2a1a12, #160e0a);
+  color: #f4ead0;
+}
+.record-book h3 {
+  margin: 0;
+  color: #ffe8a0;
+  text-align: center;
+  font-size: 1.4em;
+  text-shadow: 0 0 10px rgb(255 208 64 / 0.5);
+}
+.record-sub {
+  margin: 4px 0 10px;
+  text-align: center;
+  font-size: 0.85em;
+  opacity: 0.75;
+}
+.record-row {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid #6a4a20;
+  border-radius: 8px;
+  background: rgb(0 0 0 / 0.25);
+}
+.record-row.locked {
+  opacity: 0.7;
+}
+.record-row.done {
+  border-color: #8ad070;
+  box-shadow: 0 0 10px rgb(138 208 112 / 0.35);
+}
+.record-row header {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.record-row header b {
+  color: #ffd56a;
+  font-size: 1.1em;
+}
+.record-row p {
+  margin: 4px 0;
+  font-size: 0.9em;
+  opacity: 0.85;
+}
+.record-goal {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 0.9em;
+}
+.record-goal strong {
+  color: #8ad070;
+}
+.record-bar {
+  height: 8px;
+  margin: 4px 0;
+  border-radius: 4px;
+  background: #2a1a10;
+  overflow: hidden;
+}
+.record-bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #5ab05a, #c8f080);
+}
+.record-reward {
+  opacity: 0.8;
+  line-height: 1.4;
+}

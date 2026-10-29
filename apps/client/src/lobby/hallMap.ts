@@ -30,6 +30,11 @@ export const EXHIBIT_SPOTS: readonly ExhibitSpot[] = [
   { id: "soulShard", x: 5 * TILE, y: 12.4 * TILE, hw: 10, hh: 10 },
 ];
 
+/** 가운데 기록집 (들어오자마자 보이는 책 받침대, F = 기록 보기) */
+export const BOOK = { x: HALL_W / 2, y: 12 * TILE };
+/** 가까이 가면 F로 기록 창이 열리는 것: 전시물 또는 기록집 */
+export type HallSpot = ExhibitId | "book";
+
 /** 아직 빈 받침대 (나중에 동상 등) */
 export const EMPTY_PLINTHS: readonly { x: number; y: number }[] = [
   { x: 24 * TILE, y: 12.4 * TILE },
@@ -50,12 +55,14 @@ export function canStandHall(x: number, y: number, r: number, shown: readonly Ex
     ...EXHIBIT_SPOTS.filter((e) => shown.includes(e.id)).map((e) => ({ x0: e.x - e.hw, y0: e.y - e.hh, x1: e.x + e.hw, y1: e.y })),
     ...[...EMPTY_PLINTHS, ...EXHIBIT_SPOTS.filter((e) => e.id === "soulShard")].map((p) => ({ x0: p.x - 10, y0: p.y - 8, x1: p.x + 10, y1: p.y })),
     ...PILLARS.map((p) => ({ x0: p.x - 6, y0: p.y - 6, x1: p.x + 6, y1: p.y })),
+    { x0: BOOK.x - 8, y0: BOOK.y - 6, x1: BOOK.x + 8, y1: BOOK.y },
   ];
   return !boxes.some((b) => x + r > b.x0 && x - r < b.x1 && y + r > b.y0 && y - r < b.y1);
 }
 
-/** 가까운 전시물 (이름표 안내) */
-export function nearExhibit(x: number, y: number, shown: readonly ExhibitId[]): ExhibitId | null {
+/** 가까운 전시물·기록집 (이름표 안내 · F) */
+export function nearExhibit(x: number, y: number, shown: readonly ExhibitId[]): HallSpot | null {
+  if (Math.hypot(x - BOOK.x, y - BOOK.y + 3) < 20) return "book";
   for (const e of EXHIBIT_SPOTS) {
     if (!shown.includes(e.id)) continue;
     const dx = Math.max(0, Math.abs(x - e.x) - e.hw);

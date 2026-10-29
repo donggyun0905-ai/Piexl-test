@@ -7,7 +7,8 @@ import { WEAPONS, type WeaponId } from "../content";
 import { PILGRIM_PERKS as K } from "../itemsPilgrim";
 import { PILGRIM as P, type CurioMode } from "../weaponsPilgrim";
 import { nearest } from "./brawlMoves";
-import { hitE, marksTick, PG_IDS, pgRnd, placeMark, recordBook, bookMul } from "./pgBag";
+import { hitE, marksTick, PG_IDS, pgRnd, placeMark, recordBook } from "./pgBag";
+import { recalcStats } from "./items";
 import { fan, inCircle, inCone, inLine, isBoss, shoot, stun } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, normalize, weaponOf } from "./util";
@@ -111,7 +112,7 @@ function use(s: RunState, mode: CurioMode, radius: number, dmg: number, range: n
 function attack(s: RunState): void {
   const p = s.player;
   const st = weaponOf(p).curio ?? { mode: "star", radius: 0 };
-  let dmg = p.stats.damage * bookMul(p);
+  let dmg = p.stats.damage;
   if (p.pgDash) {
     delete p.pgDash;
     dmg *= K.pgShortcut.mul;
@@ -129,7 +130,7 @@ function rummage(s: RunState): void {
     const id = others.splice(Math.floor(pgRnd(s, "bag", i) * others.length), 1)[0]!;
     const w = WEAPONS[id] as { curio?: { mode: CurioMode; radius: number }; range: number };
     if (!w.curio) continue;
-    use(s, w.curio.mode, w.curio.radius, p.stats.damage * bookMul(p) * mul, w.range);
+    use(s, w.curio.mode, w.curio.radius, p.stats.damage * mul, w.range);
     addEffect(s, { kind: "pgBag", x: p.x, y: p.y - 22, dirX: 0, dirY: 0, size: PG_IDS.indexOf(id), maxTicks: 30 });
   }
   if (n > 0 && hasPerk(p, "pgCampfire")) {
@@ -156,7 +157,7 @@ function boomerangs(s: RunState): void {
 export function pilgrimTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
   if (p.characterId !== "pilgrim") return;
-  recordBook(p);
+  if (recordBook(p)) recalcStats(s);
   marksTick(s);
   boomerangs(s);
   if (p.dashTicks > 0 && hasPerk(p, "pgShortcut")) p.pgDash = true;

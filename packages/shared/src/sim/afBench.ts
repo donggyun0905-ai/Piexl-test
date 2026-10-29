@@ -59,6 +59,19 @@ export function benchMods(p: PlayerState): StatMod[] {
   });
 }
 
+/** 강화로 바뀐 수치 (화면 표시): [이름, 원래, 지금] · 이름은 ARTIFACTER_PERKS 열쇠 또는 능력치 이름 */
+export function benchStats(p: PlayerState, id: string): [string, number, number][] {
+  const lv = benchLv(p, id);
+  if (!lv || !isOwn(id)) return [];
+  const perk = (ARTIFACTER_PERKS as Record<string, Record<string, number>>)[id] ?? {};
+  const out: [string, number, number][] = Object.keys(perk).map((k) => [k, perk[k]!, afv(p, id as keyof typeof ARTIFACTER_PERKS, k as never)]);
+  for (const m of PASSIVES[id as PassiveId].mods as readonly StatMod[]) {
+    if (m.add !== undefined) out.push([m.stat, m.add, m.add * (1 + R.boost * lv)]);
+    if (m.mul !== undefined) out.push([m.stat, m.mul, m.mul * (1 + (m.mul - 1) * R.boost * lv)]);
+  }
+  return out;
+}
+
 /** 값 (골드) */
 export function benchCost(s: RunState, op: number): number {
   const base = op === BENCH_OP.up ? R.upCost : op === BENCH_OP.fuse ? R.fuseCost : op === BENCH_OP.swap ? R.swapCost : R.tuneCost;
@@ -70,15 +83,15 @@ export function benchCan(s: RunState, op: number, id: string | undefined): boole
   const p = s.player;
   if (!id) return false;
   if (op === BENCH_OP.up) return isOwn(id) && benchLv(p, id) < R.maxLv;
-  if (op === BENCH_OP.swap) return isOwn(id) ? ownPool(p, false).length > 0 : !(PASSIVES[id as PassiveId] as PassiveDef).special && normalPool(s, id).length > 0;
+  if (op === BENCH_OP.swap) return isOwn(id) ? ownPool(p, false, id).length > 0 : !(PASSIVES[id as PassiveId] as PassiveDef).special && normalPool(s, id).length > 0;
   if (op === BENCH_OP.tune) return isOwn(id) && !isHidden(id) && ownPool(p, true).length > 0;
-  if (op === BENCH_OP.fuse) return !isOwn(id) && !(PASSIVES[id as PassiveId] as PassiveDef).special && OWN.some((o) => !p.passives.includes(o));
+  if (op === BENCH_OP.fuse) return !isOwn(id) && !(PASSIVES[id as PassiveId] as PassiveDef).special && ownPool(p, false).length + ownPool(p, true).length > 0;
   return false;
 }
 
-/** 아직 없는 자기 패시브 (hidden: 히든만 · 아니면 히든 빼고) */
-function ownPool(p: PlayerState, hidden: boolean): PassiveId[] {
-  return OWN.filter((id) => isHidden(id) === hidden && !p.passives.includes(id));
+/** 얻을 수 있는 자기 패시브 (hidden: 히든만 · 아니면 히든 빼고). 능력치만 올리는 것(빛나는 문신)은 여러 번 가질 수 있어 늘 들어감 */
+function ownPool(p: PlayerState, hidden: boolean, not?: string): PassiveId[] {
+  return OWN.filter((id) => isHidden(id) === hidden && id !== not && (!(PASSIVES[id] as PassiveDef).effect || !p.passives.includes(id)));
 }
 
 const normalPool = (s: RunState, not: string) => passivePool(s).filter((id) => !isOwn(id) && id !== not);
@@ -111,7 +124,7 @@ export function benchUse(s: RunState, op: number, i: number, j: number): void {
     if (ok) (p.benchLv ??= {})[id!] = benchLv(p, id!) + 1;
     result(s, op, ok ? 1 : 0, id);
   } else if (op === BENCH_OP.swap) {
-    const to = rng.pick(isOwn(id!) ? ownPool(p, false) : normalPool(s, id!));
+    const to = rng.pick(isOwn(id!) ? ownPool(p, false, id) : normalPool(s, id!));
     swapAt(i, to);
     result(s, op, 1, to);
   } else if (op === BENCH_OP.tune) {
@@ -128,7 +141,8 @@ export function benchUse(s: RunState, op: number, i: number, j: number): void {
   } else {
     // 일반 패시브 둘 → 자기 패시브 하나 (히든은 가끔)
     const hidden = ownPool(p, true);
-    const pool = hidden.length && rng.nextFloat() < R.fuseHidden ? hidden : ownPool(p, false);
+    const normal = ownPool(p, false);
+    const pool = hidden.length && (rng.nextFloat() < R.fuseHidden || !normal.length) ? hidden : normal;
     const to = pool.length ? rng.pick(pool) : undefined;
     if (!to) return;
     p.passives.splice(Math.max(i, j), 1);

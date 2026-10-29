@@ -7,6 +7,9 @@ import { itemDesc, itemName } from "../i18n/items";
 import { ItemIcon } from "./itemIcon";
 import type { StationView } from "./stationView";
 
+const fmt = (v: number) => String(Math.round(v * 100) / 100);
+const statKey = (k: string) => `bs${k[0]!.toUpperCase()}${k.slice(1)}` as TextKey;
+
 type Tab = "up" | "swap" | "tune";
 const TABS: { tab: Tab; label: TextKey; hint: TextKey }[] = [
   { tab: "up", label: "benchUp", hint: "benchUpHint" },
@@ -81,12 +84,21 @@ export function BenchPanel({ view, lang, t, send }: Props) {
               className={`bench-card ${it.own ? "own" : ""} ${it.hidden ? "hidden" : ""} ${sel.includes(i) ? "on" : ""}`}
               onClick={() => pick(i)}
             >
-              <ItemIcon item={{ kind: "passive", id: it.id }} size={28} />
+              <ItemIcon item={{ kind: "passive", id: it.id }} size={44} />
               <span>{itemName("passive", it.id, lang)}</span>
               <small>
                 {it.hidden ? t("benchHidden") : it.own ? t("benchOwn") : ""}
-                {it.lv > 0 ? ` +${it.lv}` : ""}
+                {it.lv > 0 ? ` ${t("benchLvTag").replace("{lv}", String(it.lv))}` : ""}
               </small>
+              {it.stats.length > 0 && (
+                <ul className="bench-stats">
+                  {it.stats.map(([k, a, b]) => (
+                    <li key={k}>
+                      {t(statKey(k))} {fmt(a)} → <b>{fmt(b)}</b>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </button>
           );
         })}

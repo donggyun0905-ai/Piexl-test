@@ -7,11 +7,12 @@
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: min(680px, 94vw);
-  max-height: 86vh;
+  gap: 12px;
+  width: min(1040px, 96vw);
+  max-height: 92vh;
   overflow: auto;
-  padding: 12px 14px;
+  padding: 18px 22px;
+  font-size: 1.2rem;
   border: 2px solid #4a5a7a;
   border-radius: 10px;
   background: linear-gradient(180deg, rgb(20 24 36 / 0.97), rgb(12 12 20 / 0.97));
@@ -28,7 +29,9 @@
   gap: 12px;
 }
 .station-head b {
-  font-size: 1.15em;
+  font-size: 1.5em;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 10px rgb(106 184 255 / 0.6);
   color: #c8ecff;
 }
 .station-window.tune .station-head b {
@@ -49,7 +52,9 @@
 }
 .bench-tabs button {
   flex: 1;
-  padding: 6px;
+  padding: 10px;
+  font-size: 1.05em;
+  font-weight: bold;
   border: 1px solid #3a4a6a;
   border-radius: 6px;
   background: #182030;
@@ -63,28 +68,42 @@
 }
 .bench-hint {
   margin: 0;
-  font-size: 0.82em;
-  opacity: 0.75;
+  font-size: 0.9em;
+  opacity: 0.8;
   line-height: 1.4;
 }
 .bench-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
-  gap: 6px;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
 }
 .bench-card {
   display: grid;
-  grid-template-columns: 28px 1fr;
+  grid-template-columns: 44px 1fr;
   grid-template-rows: auto auto;
-  column-gap: 6px;
+  column-gap: 10px;
   align-items: center;
-  padding: 5px 6px;
+  padding: 9px 10px;
   border: 1px solid #333a48;
   border-radius: 6px;
   background: #161a24;
   color: #dde;
   text-align: left;
-  font-size: 0.8em;
+  font-size: 0.92em;
+}
+.bench-stats {
+  grid-column: 1 / -1;
+  margin: 6px 0 0;
+  padding: 5px 7px;
+  list-style: none;
+  border-radius: 5px;
+  background: rgb(106 184 255 / 0.08);
+  color: #9cc8ef;
+  font-size: 0.85em;
+  line-height: 1.45;
+}
+.bench-stats b {
+  color: #ffd56a;
 }
 .bench-card > :first-child {
   grid-row: span 2;
@@ -113,7 +132,8 @@
   opacity: 0.35;
 }
 .bench-go {
-  padding: 9px;
+  padding: 14px;
+  font-size: 1.15em;
   border: 1px solid #6ab8ff;
   border-radius: 8px;
   background: linear-gradient(180deg, #2a5a8a, #1a3a5a);
@@ -143,7 +163,7 @@
 }
 .sniper-lv {
   fill: #8a96a8;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: bold;
 }
 .sniper-lv.on {
@@ -172,7 +192,21 @@
   background: #1c1a14;
   color: #eed;
   text-align: left;
-  font-size: 0.8em;
+  font-size: 0.92em;
+}
+.bench-stats {
+  grid-column: 1 / -1;
+  margin: 6px 0 0;
+  padding: 5px 7px;
+  list-style: none;
+  border-radius: 5px;
+  background: rgb(106 184 255 / 0.08);
+  color: #9cc8ef;
+  font-size: 0.85em;
+  line-height: 1.45;
+}
+.bench-stats b {
+  color: #ffd56a;
 }
 .tune-part small {
   color: #ab9;

@@ -7,7 +7,7 @@ import { drawLobby } from "./lobbyArt";
 import { canStand, LOBBY_H, LOBBY_W, nearMachine, START, WALL_TOP, type GameId } from "./lobbyMap";
 import { loadExhibits, type ExhibitId } from "./exhibits";
 import { drawHall } from "./hallArt";
-import { canStandHall, HALL_DOOR, HALL_H, HALL_START, HALL_W, LOBBY_BACK, LOBBY_DOOR, nearExhibit } from "./hallMap";
+import { canStandHall, HALL_DOOR, HALL_H, HALL_START, HALL_W, LOBBY_BACK, LOBBY_DOOR, nearExhibit, type HallSpot } from "./hallMap";
 import type { LobbyTheme } from "./lobbyThemes";
 
 const SPEED = 64;
@@ -23,15 +23,17 @@ interface Props {
   paused?: boolean;
   /** 전시장에 들어가고 나올 때 · 가까운 전시물이 바뀔 때 · 전시물 이름표 글자 */
   onRoom?: (hall: boolean) => void;
-  onExhibit?: (id: ExhibitId | null) => void;
+  onExhibit?: (id: HallSpot | null) => void;
+  /** 전시물·기록집 앞에서 F → 기록 창 */
+  onRead?: () => void;
   names?: Partial<Record<ExhibitId, string>>;
 }
 
-export function LobbyStage({ play, onGame, onNear, paused, onRoom, onExhibit, names }: Props) {
+export function LobbyStage({ play, onGame, onNear, paused, onRoom, onExhibit, onRead, names }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
-  const cb = useRef({ onGame, onNear, paused, onRoom, onExhibit, names });
+  const cb = useRef({ onGame, onNear, paused, onRoom, onExhibit, onRead, names });
   useEffect(() => {
-    cb.current = { onGame, onNear, paused, onRoom, onExhibit, names };
+    cb.current = { onGame, onNear, paused, onRoom, onExhibit, onRead, names };
   });
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export function LobbyStage({ play, onGame, onNear, paused, onRoom, onExhibit, na
     /** 지금 전시장 안인지 · 놓인 전시물 · 가까운 전시물 */
     let hall = false;
     let shown: ExhibitId[] = [];
-    let nearEx: ExhibitId | null = null;
+    let nearEx: HallSpot | null = null;
     const stand = (x: number, y: number) => (hall ? canStandHall(x, y, R, shown) : canStand(x, y, R));
     const go = (toHall: boolean) => {
       hall = toHall;
@@ -61,7 +63,10 @@ export function LobbyStage({ play, onGame, onNear, paused, onRoom, onExhibit, na
     const down = (e: KeyboardEvent) => {
       if (!play || cb.current.paused) return;
       keys.add(e.code);
-      if ((e.code === "KeyF" || e.code === "Space" || e.code === "Enter") && near) cb.current.onGame?.(near);
+      if (e.code === "KeyF" || e.code === "Space" || e.code === "Enter") {
+        if (near) cb.current.onGame?.(near);
+        else if (nearEx) cb.current.onRead?.();
+      }
     };
     const up = (e: KeyboardEvent) => keys.delete(e.code);
     const tap = (e: PointerEvent) => {

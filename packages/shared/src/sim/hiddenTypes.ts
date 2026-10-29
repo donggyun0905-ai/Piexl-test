@@ -3,6 +3,8 @@
 /** 방에 와 있는 차원의 순례자: 방 · 포탈에서 나온 틱 · 물건을 펼쳤는지 */
 export interface PilgrimState {
   room: number;
+  /** 만난 층 (다른 층의 같은 번호 방에 남아 보이지 않게) */
+  floor?: number;
   t0: number;
   shown: boolean;
   /** 물건을 펼쳐 준 자리 (협동은 사람마다) */

@@ -1,6 +1,6 @@
 // 차원의 순례자 (sim/pilgrim): 위쪽 벽 포탈에서 걸어 나오는 분홍빛 긴 머리 여자아이 · 몸보다 큰 둥근 배낭 · 도착하면 말풍선
 // 히든 아이템 효과 (hiddenPerks·hiddenUse) · 왼쪽 위 금기된 아티팩트 스택 창
-import { pilgrimWalk, relicStacks, ROOM_CX, ROOM_CY, type EffectState, type RunState } from "@pixel-rogue/shared";
+import { pilgrimHere, pilgrimWalk, relicStacks, ROOM_CX, ROOM_CY, type EffectState, type RunState } from "@pixel-rogue/shared";
 import { RELIC_COLORS } from "../iconArt/hidden";
 import { hudScale } from "./imugiAura";
 import { drawHiddenFx2 } from "./hiddenGear";
@@ -21,7 +21,7 @@ function rect(ctx: Ctx, c: string, x: number, y: number, w: number, h: number): 
 /** 순례자와 포탈 (방 안에 있을 때만). line = 말풍선 글자 */
 export function drawPilgrim(ctx: Ctx, s: RunState, line: string | undefined): void {
   const npc = s.pilgrimNpc;
-  if (!npc || npc.room !== s.roomId) return;
+  if (!npc || !pilgrimHere(s)) return;
   const f = pilgrimWalk(s);
   const x = ROOM_CX;
   const y = PORTAL_Y + (STAND_Y - PORTAL_Y) * f;

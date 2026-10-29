@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { checkProgress, decodeInputs, encodeInputs, summarize } from "../daily";
 import { TUNE_SLOTS } from "../trackerParts";
-import { afv, BENCH_OP, benchLv, isHidden, isOwn } from "./afBench";
+import { afv, BENCH_OP, benchLv, benchStats, isHidden, isOwn } from "./afBench";
 import { createRun } from "./run";
 import { spawnShop } from "./shop";
 import { menuCode, stationMenu, TUNE_OP } from "./station";
@@ -46,6 +46,21 @@ describe("작업대", () => {
     });
     expect(got).toContain(true);
     expect(got).toContain(false);
+  });
+
+  it("합치기: 효과 패시브를 다 가져도 빛나는 문신(여러 번 가짐)이 나옴 · 강화 수치 표시", () => {
+    for (let seed = 1; seed <= 6; seed++) {
+      const s = shop("artifacter");
+      s.seed = seed;
+      s.player.passives = ["whetstone", "sturdyHeart", "afFocus", "afWide", "afPush", "afDouble", "afCrafter", "afLucky", "afBlueprint", "afShield", "afSurge", "afTattoo"];
+      stationMenu(s, menuCode(BENCH_OP.fuse, 0, 1));
+      expect(s.player.passives).toHaveLength(11);
+      expect(isOwn(s.player.passives[0]!)).toBe(true);
+    }
+    const s = shop("artifacter");
+    s.player.passives = ["afFocus"];
+    s.player.benchLv = { afFocus: 1 };
+    expect(benchStats(s.player, "afFocus")).toEqual([["mul", 1.25, 1.375]]);
   });
 
   it("합치기: 일반 패시브 둘 → 자기 패시브 하나 · 교체: 자기 → 다른 자기, 일반 → 다른 일반", () => {

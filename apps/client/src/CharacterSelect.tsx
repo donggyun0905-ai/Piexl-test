@@ -14,6 +14,7 @@ import { TabooButton } from "./taboo/TabooButton";
 import { setRandomKit } from "./taboo/tabooStore";
 import { TEST_OPEN } from "./testFlags";
 import { HiddenCharList } from "./HiddenCharList";
+import { hallUnlocked } from "./lobby/exhibits";
 
 interface Props {
   t: (key: TextKey) => string;
@@ -82,7 +83,7 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
         {taboo && TEST_OPEN && <HiddenCharList t={t} name={NAME} onPick={(h) => pick(h)} />}
       </div>
       <div className="select-list">
-        {(showHidden ? ALL_CHARACTER_IDS : CHARACTER_IDS).map((id) => {
+        {(showHidden ? ALL_CHARACTER_IDS : [...CHARACTER_IDS, ...hallUnlocked()]).map((id) => {
           const s = baseStats(id, CHARACTERS[id].startWeapon);
           const worn = equippedSkin(id);
           const skins = wearable(id).length;

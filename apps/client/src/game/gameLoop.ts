@@ -1,5 +1,5 @@
 // 게임 진행: 고정 간격 계산 + 화면 주사율에 맞춘 그리기 + HUD 갱신 (React 밖에서 돌림)
-import { noteExhibits } from "../lobby/exhibits";
+import { noteExhibits, noteRecords } from "../lobby/exhibits";
 import { itemName } from "../i18n/items";
 import { fateParts } from "../i18n/items/voyagerAbilities";
 import { applyRoom, ARENA_LEVELS, inPlay, FLOOR_COUNT, HERO_FLOORS, LEGENDS, tabooPoints, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
@@ -169,6 +169,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       controls.setAutoAim(true);
       autoBack = false;
     }
+    noteRecords(run, { souls: p.apEaten ?? 0, pilgrims: run.pilgrimMet ?? 0 }, !!o.practice);
     const view = loadoutView(run, controls.arm.armed);
     const lk = loadoutKey(view);
     if (lk !== shownLoadout) {

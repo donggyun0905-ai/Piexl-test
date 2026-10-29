@@ -28,10 +28,13 @@ export function pilgrimRoom(s: RunState): number {
 
 /** 순례자 방에 처음 들어감 (rooms.enterRoom): 포탈이 열리고 걸어 나오기 시작 */
 export function meetPilgrim(s: RunState, roomId: number): void {
-  s.pilgrimNpc = { room: roomId, t0: s.tick, shown: false };
+  s.pilgrimNpc = { room: roomId, floor: s.floor, t0: s.tick, shown: false };
   s.pilgrimMet = (s.pilgrimMet ?? 0) + 1;
   addEffect(s, { kind: "hdPortal", x: CX, y: CY - 60, dirX: 0, dirY: 0, size: 18, maxTicks: R.walk });
 }
+
+/** 순례자가 지금 이 방에 있는지 (그리기도 씀) */
+export const pilgrimHere = (s: RunState) => !!s.pilgrimNpc && s.pilgrimNpc.room === s.roomId && (s.pilgrimNpc.floor ?? s.floor) === s.floor;
 
 /** 걸어오는 중인 자리 (그리기·도착 판정): 0~1 */
 export const pilgrimWalk = (s: RunState) => (s.pilgrimNpc ? Math.min(1, (s.tick - s.pilgrimNpc.t0) / R.walk) : 0);
@@ -39,7 +42,7 @@ export const pilgrimWalk = (s: RunState) => (s.pilgrimNpc ? Math.min(1, (s.tick 
 /** 틱마다 (origin.tickOrigin): 가운데에 오면 물건을 펼침 (협동은 사람마다 자기 것) */
 export function pilgrimTick(s: RunState): void {
   const npc = s.pilgrimNpc;
-  if (!npc || npc.room !== s.roomId || pilgrimWalk(s) < 1) return;
+  if (!npc || !pilgrimHere(s) || pilgrimWalk(s) < 1) return;
   const seat = s.seat ?? 0;
   const done = (npc.seats ??= []);
   if (done.includes(seat)) return;

@@ -1,7 +1,7 @@
 // 로비 전시장 그리기: 대리석 바닥·붉은 융단 · 위 벽(아치 창·보라 깃발·금 띠) · 아래 문(로비로) · 기둥 · 창에서 내려오는 빛
 // · 전시물(월계선 shipArt · 영혼 조각: 유리 덮개 안 떠 있는 연두색 빛 조각) · 빈 받침대 · 이름표. 로비 위 벽 전시장 문도 여기서
 import type { ExhibitId } from "./exhibits";
-import { EMPTY_PLINTHS, EXHIBIT_SPOTS, HALL_COLS, HALL_DOOR, HALL_H, HALL_ROWS, HALL_W, LOBBY_DOOR, PILLARS } from "./hallMap";
+import { BOOK, EMPTY_PLINTHS, EXHIBIT_SPOTS, HALL_COLS, HALL_DOOR, HALL_H, HALL_ROWS, HALL_W, LOBBY_DOOR, PILLARS } from "./hallMap";
 import { TILE, WALL_TOP } from "./lobbyMap";
 import { drawShip } from "./shipArt";
 
@@ -140,6 +140,28 @@ function soulShard(ctx: Ctx, x: number, y: number, t: number): void {
 }
 
 /** 이름표 (받침 앞 작은 금 판) */
+/** 가운데 기록집: 금 테 받침대 위 펼친 붉은 가죽 책, 책장 위로 빛 가루 */
+function recordBook(ctx: Ctx, x: number, y: number, t: number): void {
+  r(ctx, x - 4, y - 7, 8, 7, "#3a2a10");
+  r(ctx, x - 6, y - 2, 12, 2, "#e0b040");
+  r(ctx, x - 3, y - 7, 1, 5, "#5a4420");
+  r(ctx, x - 10, y - 13, 20, 6, "#8a1a2a");
+  r(ctx, x - 9, y - 14, 8, 6, "#f4ead0");
+  r(ctx, x + 1, y - 14, 8, 6, "#f4ead0");
+  r(ctx, x - 1, y - 14, 2, 7, "#5a0a18");
+  for (let i = 0; i < 3; i++) {
+    r(ctx, x - 8, y - 12 + i * 2, 6, 1, "#a89870");
+    r(ctx, x + 2, y - 12 + i * 2, 6, 1, "#a89870");
+  }
+  r(ctx, x - 10, y - 8, 20, 1, "#e0b040");
+  for (let i = 0; i < 4; i++) {
+    const k = (t * 0.6 + i / 4) % 1;
+    ctx.globalAlpha = 1 - k;
+    r(ctx, x - 6 + ((i * 5) % 12), y - 16 - k * 14, 1, 1, i % 2 ? "#ffe8a0" : "#c8a0ff");
+  }
+  ctx.globalAlpha = 1;
+}
+
 function plaque(ctx: Ctx, x: number, y: number, text: string): void {
   ctx.font = "bold 5px sans-serif";
   const w = Math.ceil(ctx.measureText(text).width) + 6;
@@ -169,6 +191,7 @@ export function drawHall(ctx: Ctx, t: number, shown: readonly ExhibitId[], names
         if (shown.includes(e.id) && names[e.id]) plaque(ctx, e.x, e.y + 2, names[e.id]!);
       },
     })),
+    { y: BOOK.y, draw: () => recordBook(ctx, BOOK.x, BOOK.y, t) },
     ...people,
   ];
   items.sort((a, b) => a.y - b.y);
