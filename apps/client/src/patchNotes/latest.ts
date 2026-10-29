@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.233",
+    date: "2026-10-29",
+    items: {
+      ko: [
+        "히든 아이템 넷 완성 (차원의 순례자 히든 상점에 나옴): 바스러져가는 왕관 — 그 방에서 한 번 거인만 한 옛 제국의 왕으로 변신 (붉은 츠바이핸더 · 체력 1000·공격력 100·방어력 30·재생력 50·치명타 50%·치명타 피해 300%·사거리 90, 능력치 창도 왕으로) · 대검 콤보: X자 두 번 베기 → 가로로 길어지는 검기 → 내리꽂으면 불꽃 선이 적에게 이어져 거대한 불기둥 · 방을 나가면 원래대로",
+        "순례자의 월계선: 무작위 히든 캐릭터가 동료로 와서 같이 싸움 · 거짓된 용사(패시브): 풋내기 동료 (레벨이 오르면 능력치를 무작위로 고름, 쓰러지면 다음 층에 다시) · 동료는 체력이 있고 가까이 가서 F = 내 회복약 먹이기",
+        "큐피트의 정령: 정령사의 대정령 열 중 하나가 곁에 와서 정령사처럼 몇 초마다 큰 기술",
+      ],
+      en: [
+        "Four hidden items finished (sold by the Dimensional Pilgrim): Crumbling Crown — once in that room, become a giant king of the old empire (red zweihänder · 1000 HP, 100 damage, 30 defense, 50 regen, 50% crit, 300% crit damage, 90 range; the stats window shows the king) · greatsword combo: two X slashes → a sword wave that widens → plant the blade and flame lines race to foes for giant fire pillars · back to normal when you leave the room",
+        "Pilgrim's Laurel Ark: a random hidden character joins you as an ally · False Hero (passive): a Novice ally (picks random stats on level-up; returns next floor if downed) · allies have HP — get close and press F to feed them your potion",
+        "Cupid's Spirit: one of the Spiritist's ten great spirits joins you and casts its big skill every few seconds",
+      ],
+      ja: [
+        "ヒドゥンアイテム4つ完成 (次元の巡礼者のヒドゥンショップ): 崩れゆく王冠 — その部屋で一度、巨人ほどの古き帝国の王に変身 (赤いツヴァイヘンダー · 体力1000・攻撃力100・防御力30・再生力50・クリティカル50%・クリティカルダメージ300%・射程90、ステータス画面も王に) · 大剣コンボ: X字の二連斬り → 横に伸びる剣気 → 突き立てると炎の線が敵へつながり巨大な火柱 · 部屋を出ると元どおり",
+        "巡礼者の月桂船: ランダムなヒドゥンキャラが仲間として一緒に戦う · 偽りの勇者 (パッシブ): 新米の仲間 (レベルアップで能力をランダムに選ぶ、倒れたら次の階でまた) · 仲間には体力があり、近づいてF = 自分の回復薬を飲ませる",
+        "キューピッドの精霊: 精霊使いの大精霊10体のうち1体がそばに来て、精霊使いのように数秒ごとに大技",
+      ],
+    },
+  },
+  {
     version: "0.48.232",
     date: "2026-10-29",
     items: {

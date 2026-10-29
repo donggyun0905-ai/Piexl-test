@@ -44,6 +44,7 @@ import { pilgrimTick } from "./pgHero";
 import type { RunState } from "./types";
 
 export { pwBasicTick } from "./pwBasic";
+export { kingTick } from "./kingBlade";
 
 type ClassTick = (s: RunState, want: boolean, speed: number) => void;
 

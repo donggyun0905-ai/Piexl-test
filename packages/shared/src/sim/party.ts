@@ -137,3 +137,11 @@ export function placeParty(s: RunState, y: number, resetDash = true): void {
     if (resetDash) p.dashTicks = 0;
   });
 }
+
+/** 협동: 옆에 쓰러진 친구 (없으면 null) */
+export function downedNear(s: RunState, reach: number): PlayerState | null {
+  // 패왕전은 살리기 없음
+  if (!s.party || s.pvp) return null;
+  const me = s.player;
+  return allPlayers(s).find((p) => p !== me && p.hp <= 0 && (p.x - me.x) ** 2 + (p.y - me.y) ** 2 <= reach * reach) ?? null;
+}

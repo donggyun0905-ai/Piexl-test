@@ -33,6 +33,8 @@ import { eachSeat } from "./party";
 import { addEffect, hasPerk, PLAYER_RADIUS } from "./util";
 import { TITAN } from "../weaponsTitan";
 import { extraTick } from "./baseStats";
+import { kingFall } from "./kingForm";
+import { allyFeed } from "./allies";
 
 // ───────── 시작 ─────────
 
@@ -149,6 +151,7 @@ export function stepSim(s: RunState, input: TickInput): void {
   stepPlayer(s, input);
   updateRoom(s, input);
   updateItems(s, input);
+  allyFeed(s, input);
   if (s.over) return;
   stepWorld(s);
   if (checkDeath(s)) s.over = true;
@@ -184,6 +187,7 @@ export function stepWorld(s: RunState): void {
 /** 체력이 0 이하면 (되살아나는 아이템이 있으면 버팀) 쓰러짐: true */
 export function checkDeath(s: RunState): boolean {
   const p = s.player;
+  if (kingFall(s)) return false;
   const dying = p.hp <= 0;
   if (p.hp <= 0 && !s.sudden && hasPerk(p, "secondWind")) {
     // 두 번째 숨: 한 번 되살아나고 아이템은 사라짐

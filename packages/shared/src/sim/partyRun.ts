@@ -2,6 +2,7 @@
 import { stepPvp } from "./pvp";
 import type { CharacterId } from "../content";
 import { updateItems } from "./items";
+import { allyFeed } from "./allies";
 import { allPlayers, eachSeat, isAlive, seatNo, seatOf, useSeat } from "./party";
 import { applyRoom, checkCleared, climb, goThrough, onStairs, startFloor, touchingExit } from "./rooms";
 import { checkDeath, createRun, newPlayer, stepPlayer, stepWorld } from "./run";
@@ -69,7 +70,14 @@ function tick(s: RunState, inputs: readonly TickInput[]): void {
   );
   partyRoom(s, inputOf);
   if (s.over) return;
-  eachSeat(s, (i) => updateItems(s, inputOf(i)), true);
+  eachSeat(
+    s,
+    (i) => {
+      updateItems(s, inputOf(i));
+      allyFeed(s, inputOf(i));
+    },
+    true,
+  );
   stepWorld(s);
   eachSeat(s, () => checkDeath(s), true);
   if (!allPlayers(s).some(isAlive)) s.over = true;

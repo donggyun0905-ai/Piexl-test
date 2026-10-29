@@ -6,6 +6,7 @@ import { drawVoyagerAura, drawVoyagerGround, drawVoyagerShot, type FateName } fr
 import { drawVoyagerFx } from "./voyagerFx";
 import { drawZeusAura, drawZeusFx, drawZeusGround, drawZeusShot } from "./zeus";
 import { drawPgAura, drawPgFx, drawPgGround, drawPgShot } from "./pgHero";
+import { drawKingFx } from "./kingFx";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -25,5 +26,5 @@ export function drawSecretShot(ctx: Ctx, pr: ProjectileState, x: number, y: numb
   return drawMinerShot(ctx, pr, x, y, tick) || drawVoyagerShot(ctx, pr, x, y, tick) || drawZeusShot(ctx, pr, x, y, tick) || drawPgShot(ctx, pr, x, y, tick);
 }
 export function drawSecretFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
-  return drawMinerFx(ctx, fx, snap) || drawVoyagerFx(ctx, fx, snap) || drawZeusFx(ctx, fx, snap) || drawPgFx(ctx, fx, snap);
+  return drawMinerFx(ctx, fx, snap) || drawVoyagerFx(ctx, fx, snap) || drawZeusFx(ctx, fx, snap) || drawPgFx(ctx, fx, snap) || drawKingFx(ctx, fx, snap);
 }

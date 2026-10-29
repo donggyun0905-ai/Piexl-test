@@ -4,6 +4,9 @@ import { createRng, deriveSeed } from "../rng";
 import { blastAt, removeDead } from "./combat";
 import { climb } from "./rooms";
 import { fateDice, portalGun } from "./hiddenDice";
+import { addAlly } from "./allies";
+import { kingStart } from "./kingForm";
+import { cupidStart } from "./spiritGreat";
 import type { RunState } from "./types";
 import { addEffect, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
@@ -38,9 +41,10 @@ export function hiddenUse(s: RunState, item: string, slot: number): void {
   // 저주받은 주사위 · 테라포밍: 고르는 창을 엶 (hiddenDice.hiddenPick)
   else if (item === "cursedDice") p.hdPick = "curse";
   else if (item === "terraform") p.hdPick = "terra";
-  // 바스러져가는 왕관: 변신은 아직 (써도 사라지지 않고 왕관 빛만)
+  // 바스러져가는 왕관: 이 방에서 옛 제국의 왕으로 (이미 변신 중이면 남겨 둠)
   else if (item === "crumblingCrown") {
-    p.useSlots[slot] = "crumblingCrown";
-    addEffect(s, { kind: "hdShow", x: p.x, y: p.y - 14, dirX: 0, dirY: 0, size: 20, maxTicks: 30 });
-  }
+    if (p.kingRoom !== undefined) p.useSlots[slot] = item;
+    else kingStart(s);
+  } else if (item === "laurelShip") addAlly(s, "laurel");
+  else if (item === "cupidSpirit") cupidStart(s);
 }

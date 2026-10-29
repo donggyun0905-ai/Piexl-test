@@ -2,6 +2,7 @@
 import type { Pen } from "./pen";
 
 import { HIDDEN_GRIDS, RELIC_PAL, RELIC_ROWS, type Grid } from "./hiddenGrids";
+import { HIDDEN_GRIDS2 } from "./hiddenGrids2";
 
 /** 글자 판 그림 (틀 안쪽 1칸부터) */
 function grid(g: Pen, { rows, pal }: Grid): void {
@@ -36,7 +37,7 @@ export const HIDDEN_ART: Record<string, (g: Pen) => void> = {
     relic(g, "#c060e0", "#80f0ff", "#6a2a8a");
     g.px(6, 6, "#ffe060").px(7, 7, "#60ff90").px(8, 7, "#60c8ff").px(9, 6, "#ff6080").px(7, 8, "#ffe060");
   },
-  ...Object.fromEntries(Object.entries(HIDDEN_GRIDS).map(([id, gr]) => [id, (g: Pen) => grid(g, gr)])),
+  ...Object.fromEntries(Object.entries({ ...HIDDEN_GRIDS, ...HIDDEN_GRIDS2 }).map(([id, gr]) => [id, (g: Pen) => grid(g, gr)])),
   // 저주받은 주사위: 위로 솟은 뿔 둘
   cursedDice: (g) => {
     grid(g, HIDDEN_GRIDS.cursedDice!);

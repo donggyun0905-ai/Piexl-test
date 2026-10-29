@@ -2,7 +2,7 @@
 import type { HIDDEN_PASSIVES } from "@pixel-rogue/shared";
 import type { Names } from "./names";
 
-type HiddenId = keyof typeof HIDDEN_PASSIVES;
+type HiddenId = Exclude<keyof typeof HIDDEN_PASSIVES, "falseHero">;
 
 export const HIDDEN_NAMES: Record<HiddenId, Names> = {
   relicRed: { ko: "아티팩터의 금기된 적색 아티팩트", en: "Artifacter's Forbidden Red Artifact", ja: "アーティファクターの禁じられた赤のアーティファクト" },
@@ -63,6 +63,5 @@ export const HIDDEN_USE_DESC = {
   portalGun: h("처음 쓰면 이 방을 기억 (아이템은 남음) · 다시 쓰면 그 방으로 돌아감 (같은 층, 쓰면 사라짐)", "First use marks this room (the item stays) · use again to return there (same floor; then it's gone)", "最初に使うとこの部屋を記憶 (アイテムは残る) · もう一度使うとその部屋へ戻る (同じ階、使うと消える)"),
   fateDice: h("머리 위 주사위가 굴러감 · 1 패시브 하나 뺏김 · 2 무기 바뀜 · 3 패시브 하나 · 4 체력 1 · 5 보상 꾸러미 · 6 공격력·방어력·재생력 6, 공격 속도 6%, 체력 60, 치명타 6%", "A die rolls overhead · 1 lose a passive · 2 weapon swaps · 3 gain a passive · 4 HP drops to 1 · 5 reward bundle · 6 +6 damage, defense and regen, +6% attack speed, +60 HP, +6% crit", "頭上でサイコロが転がる · 1 パッシブを一つ失う · 2 武器が変わる · 3 パッシブ一つ · 4 体力1 · 5 報酬の包み · 6 攻撃力・防御力・再生力6、攻撃速度6%、体力60、クリティカル6%"),
   cursedDice: h("숫자를 고르고 굴림 · 맞으면 화려한 보물 상자 (패시브 10 · 고르는 무기 · 아이템 2 · 큰 능력치) · 틀리면 저주 (몬스터·보스 소환 / 최대 체력 44 / 패시브 모두 없어짐 / 맨손 + 몬스터)", "Pick a number and roll · hit it for a dazzling treasure chest (10 passives, a weapon of choice, 2 items, big stats) · miss for a curse (monsters or a boss / max HP 44 / lose all passives / bare hands + monsters)", "数字を選んで振る · 当たれば華やかな宝箱 (パッシブ10 · 選べる武器 · アイテム2 · 大きな能力) · 外れると呪い (モンスター・ボス召喚 / 最大体力44 / パッシブ全消失 / 素手 + モンスター)"),
-  crumblingCrown: h("옛 제국 왕의 영혼이 깃든 왕관 · 얻으면 로비 전시장에 '영혼 조각'이 놓임 (변신은 다음 업데이트)", "A crown holding the soul of an old empire's king · obtaining it places a 'Soul Shard' in the lobby exhibition hall (transformation coming in a later update)", "古き帝国の王の魂が宿る王冠 · 手に入れるとロビーの展示場に「魂のかけら」が置かれる (変身は次のアップデート)"),
   terraform: h("이 층 보스와 맵을 고른 보스로 바꿈 (모든 층 보스, 최종 보스 제외 · 보스방에 들어가기 전에)", "Change this floor's boss and terrain to the boss you pick (any floor boss, not final bosses · before entering the boss room)", "この階のボスと地形を選んだボスに変える (全階のボス、最終ボス除く · ボス部屋に入る前に)"),
 };

@@ -9,6 +9,7 @@ import type { EnemyState, PlayerState, RunState } from "./types";
 import { WANDERER_PERKS } from "../itemsWanderer";
 import { addEffect, hasPerk, weaponOf } from "./util";
 import { hiddenExtras, hiddenOnHit } from "./hiddenPerks";
+import { kingExtras } from "./kingForm";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -24,7 +25,7 @@ export { R as BASE_STATS_RULES };
 
 /** 지금 캐릭터의 추가 기본 스탯 */
 export function extraOf(p: PlayerState): ExtraStats {
-  const base = CHARACTERS[p.characterId] as unknown as ExtraStats;
+  const base = kingExtras(p) ?? (CHARACTERS[p.characterId] as unknown as ExtraStats);
   // 히든 아이템(금기된 아티팩트·신의 파편)이 더한 몫
   const add = hiddenExtras(p);
   if (!add) return base;

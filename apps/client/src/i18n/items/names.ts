@@ -21,6 +21,7 @@ import { ABANDONED_PASSIVE_NAMES, ABANDONED_WEAPON_NAMES } from "./abandoned";
 import { TITAN_PASSIVE_NAMES, TITAN_WEAPON_NAMES } from "./titan";
 import { ONI_PASSIVE_NAMES, ONI_WEAPON_NAMES } from "./oni";
 import { HIDDEN_NAMES, HIDDEN_USE_DESC, HIDDEN_USE_NAMES } from "./hidden";
+import { HIDDEN2_NAMES, HIDDEN2_USE_DESC, HIDDEN2_USE_NAMES } from "./hidden2";
 
 export type Names = Record<Lang, string>;
 
@@ -197,6 +198,7 @@ export const PASSIVE_NAMES: Record<PassiveId, Names> = {
   ...TITAN_PASSIVE_NAMES,
   ...ONI_PASSIVE_NAMES,
   ...HIDDEN_NAMES,
+  ...HIDDEN2_NAMES,
 };
 
 export const USE_NAMES: Record<UseItemId, Names> = {
@@ -207,6 +209,7 @@ export const USE_NAMES: Record<UseItemId, Names> = {
   elixir: { ko: "영약", en: "Elixir", ja: "霊薬" },
   frost: { ko: "얼음 시계", en: "Frost Clock", ja: "氷の時計" },
   ...HIDDEN_USE_NAMES,
+  ...HIDDEN2_USE_NAMES,
 };
 
 /** 사용 아이템 설명. {값 이름:모양}은 USE_ITEMS의 지금 수치로 채움 (items/index.ts) */
@@ -230,4 +233,5 @@ export const USE_DESC: Record<UseItemId, Names> = {
     ja: `{ticks:sec}秒間 敵と敵の弾が止まる`,
   },
   ...HIDDEN_USE_DESC,
+  ...HIDDEN2_USE_DESC,
 };

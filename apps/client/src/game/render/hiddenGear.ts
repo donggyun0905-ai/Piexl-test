@@ -3,6 +3,7 @@
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
 import { additive, alpha, beam, glow, shock, sparks } from "./pwFxBits";
+import { drawAllies } from "./allies";
 
 type Ctx = CanvasRenderingContext2D;
 const ICE = "#9ad8ff";
@@ -20,6 +21,7 @@ function lance(ctx: Ctx, x: number, y: number, dx: number, dy: number, len: numb
 /** 몸 둘레 (플레이어 다음): 블리자드 랜스 · 떨어진 신의 날개 */
 export function drawHiddenGear(ctx: Ctx, s: RunState, a: number, snap: Snap): void {
   const p = s.player;
+  drawAllies(ctx, s, a, snap);
   if (p.hp <= 0) return;
   const x = snap(lerp(p.prevX, p.x, a));
   const y = snap(lerp(p.prevY, p.y, a));

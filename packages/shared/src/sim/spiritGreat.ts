@@ -20,7 +20,7 @@ export function harmonyMul(p: PlayerState): number {
 export const spiritTaken = (p: PlayerState) => (p.characterId === "spiritist" && weaponOf(p).great === "ironHide" ? P.ironTaken : 1);
 
 /** 대정령이 떠 있는 자리 (어깨 뒤 위) */
-export function greatSpot(p: PlayerState): { x: number; y: number } {
+export function greatSpot(p: { x: number; y: number; faceX: number }): { x: number; y: number } {
   return { x: p.x - (p.faceX < 0 ? -1 : 1) * 16, y: p.y - 20 };
 }
 
@@ -178,6 +178,32 @@ function cast(s: RunState, g: GreatSpirit): boolean {
       return true;
     }
   }
+}
+
+/** 큐피트의 정령 (히든 사용 아이템): 대정령 열 중 하나가 곁에 옴 (이미 있으면 다른 대정령으로) */
+export function cupidStart(s: RunState): void {
+  const p = s.player;
+  const all = Object.keys(GREAT_INDEX) as GreatSpirit[];
+  const pool = all.filter((g) => g !== p.cupid);
+  p.cupid = createRng(deriveSeed(s.seed, "cupid", s.tick)).pick(pool);
+  p.cpGreat = 60;
+  const at = greatSpot(p);
+  addEffect(s, { kind: "gsRune", x: at.x, y: at.y - 14, dirX: GREAT_INDEX[p.cupid], dirY: 0, size: 1, maxTicks: 40 });
+}
+
+/** 큐피트의 대정령 한 틱 (hiddenTick): 정령사처럼 몇 초마다 기술 (정령사는 자기 대정령과 따로 셈) */
+export function cupidTick(s: RunState): void {
+  const p = s.player;
+  if (!p.cupid) return;
+  if (!weaponOf(p).great) pendingTick(s);
+  if ((p.cpGreat ?? 0) > 0) {
+    p.cpGreat = (p.cpGreat ?? 0) - 1;
+    return;
+  }
+  if (!cast(s, p.cupid)) return;
+  const at = greatSpot(p);
+  addEffect(s, { kind: "gsRune", x: at.x, y: at.y - 14, dirX: GREAT_INDEX[p.cupid], dirY: 0, size: 1, maxTicks: 30 });
+  p.cpGreat = GREAT_SPIRITS[p.cupid].every;
 }
 
 /** 대정령 한 틱 (기다렸다가 적이 있으면 기술) */

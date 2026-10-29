@@ -31,6 +31,8 @@ export const HIDDEN_PASSIVES = {
   fallenWings: H("fallenWings", [{ stat: "moveSpeed", add: 0.5 }]),
   /** 애호의 피리: 로비 펫 모두가 같이 다님 (능력도 모두) */
   petFlute: H("petFlute"),
+  /** 거짓된 용사: 풋내기 AI 동료 (sim/allies, 쓰러지면 다음 층에 다시) */
+  falseHero: H("falseHero"),
 } as const satisfies Record<string, PassiveDef>;
 
 /** 히든 사용 아이템 (아이템 칸) */
@@ -49,8 +51,12 @@ export const HIDDEN_USES = {
   cursedDice: { id: "cursedDice" },
   /** 테라포밍: 이 층 보스를 고른 보스로 (최종 보스 제외) */
   terraform: { id: "terraform" },
-  /** 바스러져가는 왕관: 얻으면 로비 전시장에 영혼 조각 (변신은 만드는 순서 ③, 그때까지 써도 남음 · 히든 상점에는 아직 안 나옴) */
+  /** 바스러져가는 왕관: 그 방에서 한 번 옛 제국의 왕으로 변신 (sim/kingForm, 방을 나가면 풀림) · 얻으면 로비 전시장에 영혼 조각 */
   crumblingCrown: { id: "crumblingCrown" },
+  /** 순례자의 월계선: 무작위 히든 캐릭터 동료 (sim/allies) · 얻으면 로비 전시장에 월계선 */
+  laurelShip: { id: "laurelShip" },
+  /** 큐피트의 정령: 정령사 대정령 하나가 같이 다님 (sim/spiritGreat.cupidTick) */
+  cupidSpirit: { id: "cupidSpirit" },
 } as const;
 
 /** 히든 상점에서만 나오는 사용 아이템 (보통 보상·상점 목록에서 뺌) */
@@ -58,7 +64,7 @@ export const HIDDEN_USE_IDS: readonly string[] = Object.keys(HIDDEN_USES);
 
 /** 히든 상점에 나오는 것 (만든 것만, 계획서 '히든 아이템' 차례) */
 export const HIDDEN_STOCK: readonly { kind: "passive" | "use"; id: string }[] = [
-  ...(["aetherBomb", "forbiddenScroll", "dimensionGate", "portalGun", "fateDice", "cursedDice", "terraform"] as const).map((id) => ({ kind: "use" as const, id })),
+  ...(["aetherBomb", "forbiddenScroll", "dimensionGate", "portalGun", "fateDice", "cursedDice", "terraform", "crumblingCrown", "laurelShip", "cupidSpirit"] as const).map((id) => ({ kind: "use" as const, id })),
   ...(Object.keys(HIDDEN_PASSIVES) as (keyof typeof HIDDEN_PASSIVES)[]).map((id) => ({ kind: "passive" as const, id })),
 ];
 

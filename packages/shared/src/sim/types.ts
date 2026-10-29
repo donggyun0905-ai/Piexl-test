@@ -18,7 +18,7 @@ import type { BedouinPlayerState } from "./bedouinTypes";
 import type { GeneralPlayerState } from "./generalTypes";
 import type { ImugiEnemyState, ImugiPlayerState } from "./imugiTypes";
 import type { ApostleEnemyState, ApostlePlayerState } from "./apostleTypes";
-import type { AbandonedPlayerState, DuckPlayerState, H2EnemyState, H2PlayerState, ElderPlayerState, FlyPlayerState, IdraPlayerState, MorphPlayerState, PetRunState, RenPlayerState, S2EnemyState, SpiritPlayerState, OniEnemyState, OniPlayerState, S2Spirit, ScribeEnemyState, ScribePlayerState, StarPlayerState, TcPlayerState, TitanPlayerState, AscalonPlayerState, AscalonEnemyState, StationKind, StationPrompt, HiddenRunState } from "./classTypes";
+import type { AbandonedPlayerState, DuckPlayerState, H2EnemyState, H2PlayerState, ElderPlayerState, FlyPlayerState, IdraPlayerState, MorphPlayerState, PetRunState, RenPlayerState, S2EnemyState, SpiritPlayerState, OniEnemyState, OniPlayerState, S2Spirit, ScribeEnemyState, ScribePlayerState, StarPlayerState, TcPlayerState, TitanPlayerState, AscalonPlayerState, AscalonEnemyState, StationKind, HiddenRunState } from "./classTypes";
 import type { Seat } from "./party";
 import type { TabooSet } from "../taboo";
 export type { Device } from "./laserTypes";
@@ -190,19 +190,8 @@ export interface RoomState {
 }
 
 /** 화면에 띄울 안내 (상호작용 가능한 것) */
-export type Prompt = StationPrompt
-  | { kind: "none" }
-  /** 잠긴 출구 (lane = 출구 줄) */
-  | { kind: "flee"; lane: number; cost: number }
-  | { kind: "stairs" }
-  /** 바꾸기·고르기: 잠깐 서 있으면 가짐 (F·버튼은 바로) */
-  | { kind: "pick"; pickupId: number }
-  /** 상점 물건: F·버튼으로만 삼 (실수로 사지 않게) */
-  | { kind: "buy"; pickupId: number; price: number }
-  | { kind: "trash"; price: number; confirm: boolean } // 상점 휴지통 (confirm = 확인 대기)
-  /** 협동: 출구·계단에 모두 모이기 기다림 · 쓰러진 친구 옆 (ready = 전투 끝, 회복약으로 일으킴) */
-  | { kind: "gather"; have: number; need: number }
-  | { kind: "revive"; ready: boolean };
+import type { Prompt } from "./stationTypes";
+export type { Prompt };
 
 export interface FloorLogEntry {
   floor: number;

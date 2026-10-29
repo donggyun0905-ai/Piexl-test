@@ -6,6 +6,9 @@ import { createRng, deriveSeed } from "../rng";
 import type { StatMod } from "../stats";
 import { blastAt, damageEnemy, healPlayer } from "./combat";
 import { recalcStats } from "./items";
+import { addAlly, alliesTick } from "./allies";
+import { kingFormTick } from "./kingForm";
+import { cupidTick } from "./spiritGreat";
 import { storms } from "./oni";
 import { stun } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
@@ -149,6 +152,14 @@ export function hiddenTick(s: RunState): void {
     addEffect(s, { kind: "hdLeaf", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 12, maxTicks: 30 });
   }
   if (p.characterId !== "oni" && p.oStorms) storms(s);
+  // 거짓된 용사: 풋내기 동료가 없으면 (처음 얻음 · 쓰러진 뒤 다음 층) 부름
+  if (hasPerk(p, "falseHero") && p.heroFloor !== s.floor && !p.allies?.some((a) => a.kind === "hero")) {
+    p.heroFloor = s.floor;
+    addAlly(s, "hero");
+  }
+  alliesTick(s);
+  cupidTick(s);
+  kingFormTick(s);
 }
 
 /** 스택 창 (화면): 가진 아티팩트와 쌓인 수 */

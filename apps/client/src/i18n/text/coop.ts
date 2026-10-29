@@ -31,6 +31,8 @@ export const COOP_TEXT = {
     en: "You are down · your team's run still counts for you",
     ja: "倒れました · 仲間の結果があなたの記録にもなります",
   },
+  promptFeed: { ko: "F: 체력 먹이기 (내 회복약)", en: "F: Feed HP (your potion)", ja: "F: 体力を飲ませる (自分の回復薬)" },
+  promptFeedNone: { ko: "체력 먹이기: 회복약이 없어요", en: "Feed HP: you have no potion", ja: "体力を飲ませる: 回復薬がありません" },
   promptRevive: { ko: "회복약을 쓰면 친구를 일으킵니다", en: "Use a potion to revive your friend", ja: "回復薬を使うと仲間を起こせます" },
   promptReviveWait: { ko: "전투가 끝나면 회복약으로 일으킬 수 있어요", en: "You can revive with a potion once the fight is over", ja: "戦闘が終わると回復薬で起こせます" },
   coopRecord: { ko: "협동 {n}명", en: "Co-op ×{n}", ja: "協力 {n}人" },

@@ -15,7 +15,7 @@ import { mercGuard } from "./gunExtras";
 import { BEDOUIN } from "../weaponsBedouin";
 import { canDash, dashCooldownMul, rechargeDash, spendDash } from "./bedouin";
 import { imugiDash } from "./imugi";
-import { CLASS_TICKS, pwBasicTick } from "./classTicks";
+import { CLASS_TICKS, kingTick, pwBasicTick } from "./classTicks";
 import { abandonedTag, tagReachMul } from "./abandoned";
 import { titanParry } from "./titan";
 import { idraSwap } from "./idra";
@@ -162,7 +162,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
   const wantAttack = !charmed(p) && (input.autoAim ? autoInRange : input.attack);
   const speed = attackSpeedNow(p);
   // 직업 무기: 누르고 있는 동안(연속 공격·모으기·에너지파 게이지)도 매 틱 처리 (classTicks)
-  const classTick = pwBasicTick(s) ?? CLASS_TICKS[weaponOf(p).kind];
+  const classTick = pwBasicTick(s) ?? (p.kingRoom !== undefined ? kingTick : CLASS_TICKS[weaponOf(p).kind]);
   petTick(s);
   if (classTick) classTick(s, wantAttack, speed);
   else if (wantAttack && p.attackCooldown === 0) {

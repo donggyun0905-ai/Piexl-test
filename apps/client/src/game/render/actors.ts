@@ -122,7 +122,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     if (s.enemies.some((e) => e.kind === "soul" && e.aux === 1 && e.hp > 0)) ctx.globalAlpha = 0.12;
     // 베두인: 차크람을 던지면 _bare 그림
     // 오니 신인족: 긴 뿔의 날렵한 모습
-    const sheet = p.characterId === "oni" && (p.oGod ?? 0) > 0 ? "oni_god" : p.characterId === "slayer" && (p.slRage ?? 0) > 0 ? "slayer_rage" : sheetFor(p.characterId, p.lv, p.abM);
+    const sheet = p.kingRoom !== undefined ? "crownKing" : p.characterId === "oni" && (p.oGod ?? 0) > 0 ? "oni_god" : p.characterId === "slayer" && (p.slRage ?? 0) > 0 ? "slayer_rage" : sheetFor(p.characterId, p.lv, p.abM);
     // 베두인 무희의 춤: 대시하는 동안 몸이 한 바퀴 빙글 돎
     const twirl = p.characterId === "bedouin" && p.dashTicks > 0 && p.passives.includes("duneRush");
     if (twirl) {

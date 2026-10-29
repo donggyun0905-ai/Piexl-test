@@ -71,30 +71,33 @@ export function drawSpiritKin(ctx: Ctx, s: RunState, alpha: number, snap: Snap):
 /** 정령사의 대정령 (플레이어보다 먼저 = 몸 뒤에) */
 export function drawGreatSpirit(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const p = s.player;
-  if (p.hp <= 0 || p.characterId !== "spiritist") return;
+  if (p.hp <= 0) return;
   const at = { ...p, x: lerp(p.prevX, p.x, alpha), y: lerp(p.prevY, p.y, alpha) };
-  // 대정령: 어깨 뒤 위에서 천천히 떠오르내림, 발밑 빛
+  // 큐피트의 정령 (히든 아이템): 반대쪽 어깨 위
+  if (p.cupid) drawGreat(ctx, s, { ...at, faceX: -at.faceX }, p.cupid, snap);
+  if (p.characterId !== "spiritist") return;
   const great = (WEAPONS[p.weaponId] as WeaponDef).great;
-  if (great) {
-    const g = greatSpot(at);
-    const bob = Math.sin(s.tick * 0.06) * 2;
-    const glow = ctx.createRadialGradient(g.x, g.y + 6, 2, g.x, g.y + 6, 22);
-    glow.addColorStop(0, `${GREAT_GLOW[great]}66`);
-    glow.addColorStop(1, `${GREAT_GLOW[great]}00`);
-    ctx.fillStyle = glow;
-    ctx.fillRect(g.x - 24, g.y - 18, 48, 48);
-    const img = spiritImage(great);
-    if (img) {
-      const frame = Math.floor(s.tick / 20) % 2;
-      const flip = p.faceX < 0;
-      ctx.save();
-      ctx.globalAlpha = 0.92;
-      ctx.translate(snap(g.x), snap(g.y + bob));
-      if (flip) ctx.scale(-1, 1);
-      ctx.drawImage(img, frame * 48, 0, 48, 48, -24, -32, 48, 48);
-      ctx.restore();
-    }
-  }
+  if (great) drawGreat(ctx, s, at, great, snap);
+}
+
+/** 대정령 하나: 어깨 뒤 위에서 천천히 떠오르내림, 발밑 빛 */
+function drawGreat(ctx: Ctx, s: RunState, at: { x: number; y: number; faceX: number }, great: GreatSpirit, snap: Snap): void {
+  const g = greatSpot(at);
+  const bob = Math.sin(s.tick * 0.06) * 2;
+  const glow = ctx.createRadialGradient(g.x, g.y + 6, 2, g.x, g.y + 6, 22);
+  glow.addColorStop(0, `${GREAT_GLOW[great]}66`);
+  glow.addColorStop(1, `${GREAT_GLOW[great]}00`);
+  ctx.fillStyle = glow;
+  ctx.fillRect(g.x - 24, g.y - 18, 48, 48);
+  const img = spiritImage(great);
+  if (!img) return;
+  const frame = Math.floor(s.tick / 20) % 2;
+  ctx.save();
+  ctx.globalAlpha = 0.92;
+  ctx.translate(snap(g.x), snap(g.y + bob));
+  if (at.faceX < 0) ctx.scale(-1, 1);
+  ctx.drawImage(img, frame * 48, 0, 48, 48, -24, -32, 48, 48);
+  ctx.restore();
 }
 
 /** 효과: 거대 토목 · 정령 공격 줄 · 대정령 기술 */

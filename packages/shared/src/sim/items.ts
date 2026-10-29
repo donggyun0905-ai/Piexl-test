@@ -7,6 +7,7 @@ import { eaterMods } from "./eater";
 import { automataMods } from "./automata";
 import { petMods } from "./lobbyPet";
 import { pilgrimMods } from "./pgBag";
+import { kingStats } from "./kingForm";
 import { TIGER } from "../weaponsBeast";
 import { baseStats, CHARACTERS, type CharacterDef, type WeaponId } from "../content";
 import { PASSIVES, USE_ITEMS, type PassiveDef, type PassiveId, type UseItemId } from "../items";
@@ -14,8 +15,8 @@ import { computeStats, type StatMod } from "../stats";
 import { addGold, damageEnemy, healPlayer, removeDead } from "./combat";
 import { GOLDEN_GROUP, GOLDEN_PICKS } from "./loot";
 import { ARENA_USE_GROUP, arenaUsePick } from "./arena";
-import type { Pickup, PlayerState, RunState, TickInput } from "./types";
-import { allPlayers, seatNo } from "./party";
+import type { Pickup, RunState, TickInput } from "./types";
+import { downedNear, seatNo } from "./party";
 import { tabooDown, tabooMods } from "./taboo";
 import { addEffect, hasPerk } from "./util";
 import { charmed } from "./bossesTwo";
@@ -52,7 +53,7 @@ export function recalcStats(s: RunState): void {
   const oldMax = p.stats.maxHp;
   // 풋내기가 찍은 스탯·순례자 도감도 능력치 변화로 · 오니: 공격력·공격 속도·사거리 변화는 최대 체력·재생력·효과 범위로 (oniRules)
   p.mods = oniConvert(p, [...p.passives.flatMap((id): StatMod[] => [...PASSIVES[id].mods]), ...noviceMods(p), ...imugiMods(p), ...apostleMods(p), ...tabooMods(s), ...swarmMods(p), ...morphMods(p), ...eaterMods(p), ...automataMods(p), ...petMods(s), ...stationMods(s), ...pilgrimMods(p)]);
-  p.stats = computeStats(baseStats(p.characterId, p.weaponId), p.mods);
+  p.stats = kingStats(p) ?? computeStats(baseStats(p.characterId, p.weaponId), p.mods);
   // 거너: 최대 체력 고정 (체력 아이템을 먹어도 그대로)
   const fixed = p.curseHp ?? (CHARACTERS[p.characterId] as CharacterDef).fixedHp;
   if (fixed) p.stats.maxHp = fixed;
@@ -98,19 +99,6 @@ function touching(s: RunState, pk: Pickup, reach: number): boolean {
   return dx * dx + dy * dy <= r * r;
 }
 
-/** 협동: 옆에 쓰러진 친구 (없으면 null) */
-function downedNear(s: RunState): PlayerState | null {
-  // 패왕전은 살리기 없음
-  if (!s.party || s.pvp) return null;
-  const me = s.player;
-  const near = (p: PlayerState) => {
-    const dx = p.x - me.x;
-    const dy = p.y - me.y;
-    return dx * dx + dy * dy <= R.REVIVE_REACH * R.REVIVE_REACH;
-  };
-  return allPlayers(s).find((p) => p !== me && p.hp <= 0 && near(p)) ?? null;
-}
-
 /** 닿은 아이템 줍기·바꾸기, 사용 아이템 쓰기 */
 export function updateItems(s: RunState, input: TickInput): void {
   const p = s.player;
@@ -126,7 +114,7 @@ export function updateItems(s: RunState, input: TickInput): void {
   }
 
   const room = s.rooms[s.roomId]!;
-  if (s.prompt.kind === "none" && downedNear(s)) s.prompt = { kind: "revive", ready: room.cleared };
+  if (s.prompt.kind === "none" && downedNear(s, R.REVIVE_REACH)) s.prompt = { kind: "revive", ready: room.cleared };
   s.nearPickupId = 0;
   let nearest = Infinity;
   /** 이번 틱에 서 있는 바꾸기·고르기 아이템 (한 번에 하나) */
@@ -264,7 +252,7 @@ function useSlot(s: RunState, slot: number, input: TickInput): void {
   if (!item) return;
   p.useSlots[slot] = null;
   // 협동: 전투가 끝난 방에서 쓰러진 친구 옆이면 회복약으로 일으킴 (회복약 회복량만큼)
-  const down = (item === "potion" || item === "elixir") && s.rooms[s.roomId]!.cleared ? downedNear(s) : null;
+  const down = (item === "potion" || item === "elixir") && s.rooms[s.roomId]!.cleared ? downedNear(s, R.REVIVE_REACH) : null;
   if (down) {
     down.hp = Math.max(1, down.stats.maxHp * USE_ITEMS[item as "potion" | "elixir"].healRatio);
     down.invulnTicks = 120;
