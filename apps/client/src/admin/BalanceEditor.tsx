@@ -3,6 +3,7 @@
 import type { BalanceField, BalanceGroup, BalanceSet, BalanceValues } from "@pixel-rogue/shared";
 import { useState, type ReactNode } from "react";
 import { FIELD_HINT, fieldLabel, rowCategory, rowDesc, rowLabel } from "./labels";
+import { fieldDoc, rowDoc } from "./fieldDocs";
 
 interface Props {
   /** 수치 세트 (던전·타워 디펜스) */
@@ -19,6 +20,7 @@ export function BalanceEditor({ set, group, draft, saved, onChange }: Props) {
     <Cell
       grid={grid}
       label={grid ? fieldLabel(f.key, group.id) : undefined}
+      doc={grid ? fieldDoc(group.id, id, f.key) : undefined}
       // 값이 바깥에서 바뀌면 (저장·되돌리기·옮기기) 새로 그림
       key={`${f.key}:${draft[group.id]?.[id]?.[f.key] ?? ""}`}
       field={f}
@@ -79,13 +81,13 @@ function BalanceList({ set, group, cell }: { set: BalanceSet; group: BalanceGrou
   const rows = group.ids.filter((id) => {
     if (cat && rowCategory(group.id, id) !== cat) return false;
     if (!q) return true;
-    const text = `${id} ${rowLabel(group.id, id)} ${set.balanceFields(group, id).map((f) => `${f.key} ${fieldLabel(f.key, group.id)}`).join(" ")}`.toLowerCase();
+    const text = `${id} ${rowLabel(group.id, id)} ${rowDoc(group.id, id) ?? ""} ${set.balanceFields(group, id).map((f) => `${f.key} ${fieldLabel(f.key, group.id)} ${fieldDoc(group.id, id, f.key) ?? ""}`).join(" ")}`.toLowerCase();
     return text.includes(q);
   });
   return (
     <div className="admin-table-wrap">
       <div className="admin-filter">
-        <input value={query} placeholder="찾기 (이름·값 이름, 예: 미사일, chance)" onChange={(e) => setQuery(e.target.value)} />
+        <input value={query} placeholder="찾기 (한글 이름·설명·값 이름, 예: 미사일, 폭탄, 확률)" onChange={(e) => setQuery(e.target.value)} />
         {cats.length > 1 && (
           <select value={cat} onChange={(e) => setCat(e.target.value)}>
             <option value="">모든 분류 ({group.ids.length})</option>
@@ -100,7 +102,7 @@ function BalanceList({ set, group, cell }: { set: BalanceSet; group: BalanceGrou
       </div>
       {rows.slice(0, LIST_LIMIT).map((id) => {
         const fields = set.balanceFields(group, id);
-        const desc = rowDesc(group.id, id);
+        const desc = rowDesc(group.id, id) || rowDoc(group.id, id);
         return (
           <section key={id} className="admin-row">
             <h4>
@@ -124,6 +126,8 @@ interface CellProps {
   /** 목록 칸 (이름을 칸 위에) */
   grid?: boolean;
   label?: string;
+  /** 코드 주석에서 가져온 한국어 설명 */
+  doc?: string;
   /** 처음(코드에 적힌) 값 */
   base: number;
   /** 바꾼 값 (없으면 처음 값) */
@@ -133,7 +137,7 @@ interface CellProps {
   onChange: (v: number | undefined) => void;
 }
 
-export function Cell({ field, base, value, saved, onChange, grid, label }: CellProps) {
+export function Cell({ field, base, value, saved, onChange, grid, label, doc }: CellProps) {
   const shown = value ?? base;
   const [text, setText] = useState(String(shown));
 
@@ -149,7 +153,15 @@ export function Cell({ field, base, value, saved, onChange, grid, label }: CellP
   const Tag = grid ? "div" : "td";
   return (
     <Tag className={cls}>
-      {label && <span className="admin-cell-label" title={field.key}>{label}</span>}
+      {label && (
+        <span className="admin-cell-label" title={`${doc ?? label}\n(${field.key})`}>
+          <b>{doc ?? label}</b>
+          <small>
+            {doc ? `${label} · ` : ""}
+            <code>{field.key}</code>
+          </small>
+        </span>
+      )}
       <input
         inputMode="decimal"
         value={text}

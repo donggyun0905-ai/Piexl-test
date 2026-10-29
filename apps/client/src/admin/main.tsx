@@ -5,6 +5,7 @@ import { AdminApp } from "./AdminApp";
 import "../styles/base.css";
 import "../styles/admin.css";
 import "../styles/admin-pw.css";
+import "../styles/admin-docs.css";
 
 const root = document.getElementById("root");
 if (!root) throw new Error("#root 없음");

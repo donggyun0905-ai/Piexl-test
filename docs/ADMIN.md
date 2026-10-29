@@ -31,6 +31,8 @@
   - '적'·'보스' 탭: 적 표의 숫자 모두 + 기술 수치 (보스는 계산 파일의 BOSS_* 묶음: 용 브레스 빠르기·운석 반경 등, 적은 ENEMIES·MINIONS·CRITTERS·HAZARDS 묶음). 위쪽 '몬스터·보스 그림 고치기'는 도트 편집 페이지(`/pixel/`)의 몬스터 묶음 (고친 그림은 그 기기에서 바로 써 보고, PNG로 받아 저장소 `public/sprites/custom/`에 넣으면 모두에게)
   - '상태이상' 탭: 독·화상·출혈·부식·죽음·물/빙결·감전·기절/느림·예리함에 쓰이는 값만 모든 묶음에서 모아 보여 줌 (값 이름에 그 낱말이 있는 것). 바꾸면 원래 묶음의 값이 바뀜 (화상 지속·피해 간격은 '규칙'의 STATUS_RULES, 부식은 COMBAT_RULES.MELT_ADD)
   - '캐릭터'에는 모든 캐릭터 공통 추가 기본 스탯도 있음 (처음엔 0): 치명타 확률·치명타 피해(150%) · 방어력(받는 피해 100/(100+방어력)) · 피해 감소 · 회피 · 재생력(10초마다) · 흡혈 · 예리함(맞힐 때 확률로 적이 받는 피해 +25%·출혈) · 상태이상 강화 · 돈 획득. 값이 있으면 게임 능력치 창에도 보임 노란 칸 = 처음 값과 다름, ↺ = 처음 값으로. 칸에 마우스를 올리면 처음 값·범위
+- 값 설명 (0.48.235): 칸마다 굵은 글씨 = 한국어 설명, 작은 글씨 = 코드 속 이름. 설명은 공용 코드의 수치 바로 위 `/** 설명 */`(또는 같은 줄 `// 설명`)을 자동으로 모은 것 (`apps/client/balanceDocsPlugin.mjs`) → **새 수치를 넣을 때 위에 한국어 설명을 꼭 적기**. 한 설명이 여러 값을 `·`로 나눠 말하면 값마다 나눠 붙음. 탭마다 위에 무엇을 바꾸는 곳인지 (`admin/groupHelp`)
+- 패왕전 '사용 아이템 (패왕전 전용)' 탭 (0.48.235): 회복약·명약·폭탄·수호부 (`pwItems.PW_ITEMS`, 던전 '사용 아이템'과 따로)
 - 저장하면 새로 시작하는 판부터 적용 (진행 중인 판은 그대로. 화면은 앱을 열 때·판이 끝날 때 새 수치를 받음, 최대 30초 늦을 수 있음)
 - 바꾼 기록: 최근 30번. '되돌리기'로 그때 수치로 다시 저장
 - **위쪽 '던전 수치 / 타워 디펜스 수치'**: 타워 디펜스 수치는 따로 (주소 `/admin/?td`). 던전과 섞이지 않고 서버에도 따로 저장·기록 (`/api/balance?set=td`)
@@ -47,4 +49,4 @@
 
 - 공용: `packages/shared/src/balance.ts` (넣기·다듬기·지문·비교) · `balanceFields.ts` (바꿀 수 있는 값 목록과 범위. 새 묶음은 여기 추가) · `balanceAuto.ts` (표 안 숫자 자동 찾기·범위) · `balanceTables.ts` (규칙·아이템 효과 표 모음: 새 무기·아이템 파일은 여기 한 줄) · `sim/rulesRegistry.ts` (계산 파일의 수치 묶음 `*_RULES` 모음) · `tdBalanceFields.ts` (타워 디펜스 값 목록) · `tdDefs.ts` (타워 디펜스 수치 표) · `perks.ts` (효과 패시브·상점 가격 수치 표)
 - 서버: `apps/server/src/adminLogin.ts` (디스코드 코드 로그인) · `balanceApi.ts` (저장·지문별 수치·기록) · `clearStats.ts` (캐릭터별 클리어 시간 모으기)
-- 화면: `apps/client/src/balance.ts` (받기·판 시작 때 넣기, 일일·레이드·아레나 제출에 지문) · `apps/client/src/admin/` (관리자 페이지: `AdminApp` 위쪽·던전/타워 디펜스/패왕전 고르기 · `PwRolesEditor` 역할군 끌어 옮기기 · `pwLabels` 패왕전 값 이름 · `autoLabels` 자동 수치 이름·분류 · `BalanceAdmin` 수치 세트 하나 · `ClearStats` 캐릭터별 클리어 시간 표 · `TdPreview` 타워 디펜스 연습장) · `apps/client/admin/index.html`
+- 화면: `apps/client/src/balance.ts` (받기·판 시작 때 넣기, 일일·레이드·아레나 제출에 지문) · `apps/client/src/admin/` (관리자 페이지: `fieldDocs` 값 설명 찾기 · `groupHelp` 탭 설명 · `AdminApp` 위쪽·던전/타워 디펜스/패왕전 고르기 · `PwRolesEditor` 역할군 끌어 옮기기 · `pwLabels` 패왕전 값 이름 · `autoLabels` 자동 수치 이름·분류 · `BalanceAdmin` 수치 세트 하나 · `ClearStats` 캐릭터별 클리어 시간 표 · `TdPreview` 타워 디펜스 연습장) · `apps/client/admin/index.html`

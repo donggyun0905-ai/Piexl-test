@@ -7,6 +7,7 @@ import type { PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
 
 const R = {
+  /** 왕 능력치: 최대 체력 · 공격력 · 초당 공격 · 방어력 · 재생력 · 치명타 확률 · 치명타 피해 배율 · 이동 속도 · 사거리 · 탄 속도 */
   maxHp: 1000,
   damage: 100,
   attackSpeed: 1,

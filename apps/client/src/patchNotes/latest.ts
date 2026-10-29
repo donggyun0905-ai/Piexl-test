@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.235",
+    date: "2026-10-29",
+    items: {
+      ko: [
+        "패왕전 사용 아이템 수치를 던전과 따로 (폭탄 피해 20 · 회복약 · 명약 · 수호부)",
+        "관리자 페이지: 값마다 한국어 설명 (코드에 적힌 설명을 그대로 보여 줌, 영어 이름은 작게) · 탭마다 무엇을 바꾸는 곳인지 설명 · 칸을 카드로 크게 · 찾기에 설명도 · 패왕전 '사용 아이템' 탭 · 대결 방식 수치 · 히든 아이템·광야의 새벽·금기·로비 펫·추적자 부품·지형 수치도 바꿀 수 있게",
+      ],
+      en: [
+        "Paewang now has its own use-item values, separate from the dungeon (bomb damage 20 · potion · elixir · ward)",
+        "Admin page: a Korean description for every value (taken from the code comments; code names shown small) · a note on what each tab changes · bigger card cells · search covers descriptions · Paewang 'Use items' tab · match-mode values · hidden items, Dawn of the Wilds, taboos, lobby pets, tracker parts and terrain values are now editable",
+      ],
+      ja: [
+        "覇王戦の使用アイテムの数値をダンジョンと別に (爆弾ダメージ20 · 回復薬 · 霊薬 · 守護符)",
+        "管理者ページ: 値ごとに韓国語の説明 (コードの説明をそのまま表示、英語名は小さく) · タブごとに何を変える所かの説明 · セルをカードで大きく · 検索に説明も · 覇王戦「使用アイテム」タブ · 対戦方式の数値 · ヒドゥンアイテム・荒野の夜明け・禁忌・ロビーペット・追跡者パーツ・地形の数値も変更可能に",
+      ],
+    },
+  },
+  {
     version: "0.48.234",
     date: "2026-10-29",
     items: {

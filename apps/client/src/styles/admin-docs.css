@@ -1,0 +1,61 @@
+/* 관리자 페이지 보기 편하게 (값마다 한국어 설명 · 칸을 카드로 · 탭 설명) */
+.admin-group-help {
+  margin: 0 0 8px;
+  padding: 10px 14px;
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  background: rgb(255 255 255 / 0.04);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.admin-row {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.02);
+}
+.admin-row h4 {
+  font-size: 15px;
+}
+.admin-desc {
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px;
+}
+.admin-grid .admin-cell {
+  min-width: 0;
+  padding: 7px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgb(0 0 0 / 0.15);
+  gap: 4px;
+}
+.admin-cell-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: none;
+}
+.admin-cell-label b {
+  color: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.admin-cell-label small {
+  font-size: 10.5px;
+  opacity: 0.7;
+}
+.admin-cell-label code {
+  font-size: 10px;
+  opacity: 0.8;
+}
+.admin-grid .admin-cell input {
+  width: 100%;
+  font-size: 14px;
+}

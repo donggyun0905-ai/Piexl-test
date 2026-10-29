@@ -7,6 +7,7 @@ import { eaterMods } from "./eater";
 import { automataMods } from "./automata";
 import { petMods } from "./lobbyPet";
 import { secretMods } from "./secretMods";
+import { itemVal } from "../pwItems";
 import { kingStats } from "./kingForm";
 import { TIGER } from "../weaponsBeast";
 import { baseStats, CHARACTERS, type CharacterDef, type WeaponId } from "../content";
@@ -254,13 +255,13 @@ function useSlot(s: RunState, slot: number, input: TickInput): void {
   // 협동: 전투가 끝난 방에서 쓰러진 친구 옆이면 회복약으로 일으킴 (회복약 회복량만큼)
   const down = (item === "potion" || item === "elixir") && s.rooms[s.roomId]!.cleared ? downedNear(s, R.REVIVE_REACH) : null;
   if (down) {
-    down.hp = Math.max(1, down.stats.maxHp * USE_ITEMS[item as "potion" | "elixir"].healRatio);
+    down.hp = Math.max(1, down.stats.maxHp * itemVal(!!s.pvp, item as "potion" | "elixir").healRatio);
     down.invulnTicks = 120;
     addEffect(s, { kind: "burst", x: down.x, y: down.y, dirX: 0, dirY: 0, size: 14, maxTicks: 16 });
   } else if (item === "potion" || item === "elixir") {
     // 처방전(의사): 회복량 +30% · 의사는 넘친 만큼 보호막 (healPlayer) · 악의 사도는 회복 대신 그만큼 피해
     // 금기: 쓴 약
-    const amount = p.stats.maxHp * USE_ITEMS[item].healRatio * (hasPerk(p, "prescription") ? PRESCRIPTION_MUL : 1) * tabooDown(s, "bitterPotion");
+    const amount = p.stats.maxHp * itemVal(!!s.pvp, item).healRatio * (hasPerk(p, "prescription") ? PRESCRIPTION_MUL : 1) * tabooDown(s, "bitterPotion");
     if (p.characterId === "apostle") apostlePotion(s, amount);
     else if (p.characterId === "mukin") mukinPotion(s, amount);
     else healPlayer(s, amount);
@@ -269,7 +270,7 @@ function useSlot(s: RunState, slot: number, input: TickInput): void {
     if (s.pvp) throwIce(s, input);
     else s.freezeTicks = USE_ITEMS.frost.ticks;
   } else if (item === "bomb") {
-    const { damage, radius } = USE_ITEMS.bomb;
+    const { damage, radius } = itemVal(!!s.pvp, "bomb");
     for (const e of s.enemies) {
       const dx = e.x - p.x;
       const dy = e.y - p.y;
@@ -279,7 +280,7 @@ function useSlot(s: RunState, slot: number, input: TickInput): void {
     removeDead(s);
     addEffect(s, { kind: "burst", x: p.x, y: p.y, dirX: 0, dirY: 0, size: radius, maxTicks: 16 });
   } else if (item === "ward") {
-    p.shieldTicks = USE_ITEMS.ward.ticks;
+    p.shieldTicks = itemVal(!!s.pvp, "ward").ticks;
   } else if (item === "moneyBag") {
     const before = s.goldEarned;
     addGold(s, USE_ITEMS.moneyBag.gold);

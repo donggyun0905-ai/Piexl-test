@@ -9,6 +9,7 @@ import { GROUP_LABEL, SETS } from "./labels";
 import { PracticePreview } from "./PracticePreview";
 import { StatusView } from "./StatusView";
 import { TdPreview } from "./TdPreview";
+import { GROUP_HELP } from "./groupHelp";
 
 interface Props {
   server: ServerInfo;
@@ -109,6 +110,7 @@ export function BalanceAdmin({ server, kind, onLoggedOut }: Props) {
         <div className="admin-main">
           {group && (
             <>
+              {GROUP_HELP[group.id] && <p className="admin-group-help">{GROUP_HELP[group.id]}</p>}
               <p className="admin-hint">
                 노란 칸 = 처음 값과 다름 · 테두리 칸 = 아직 저장 안 함 · ↺ = 처음 값으로. 칸에 마우스를 올리면 처음 값·범위가 보입니다.
               </p>

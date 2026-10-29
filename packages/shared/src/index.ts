@@ -9,6 +9,7 @@ export * from "./swarmDefs";
 export * from "./swarmMaps";
 export * from "./paewangDefs";
 export * from "./paewangBalance";
+export * from "./pwItems";
 export * from "./pwRoles";
 export * from "./terrainDefs";
 export * from "./paewangMaps";

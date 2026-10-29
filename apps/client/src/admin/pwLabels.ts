@@ -3,7 +3,7 @@ import { TEXT } from "../i18n/text";
 
 const ko = (k: string) => (TEXT as Record<string, { ko: string } | undefined>)[k]?.ko ?? k;
 
-export const PW_GROUP_LABEL = { pwRoles: "역할군", pwChars: "캐릭터 능력치", pwSkills: "스킬", pwRules: "규칙" } as const;
+export const PW_GROUP_LABEL = { pwRoles: "역할군", pwChars: "캐릭터 능력치", pwSkills: "스킬", pwItems: "사용 아이템 (패왕전 전용)", pwRules: "규칙" } as const;
 
 const CHAR_FIELD: Record<string, string> = {
   hp: "체력 배율",
