@@ -29,4 +29,11 @@ export const CHARACTER_TEXT_SECRET = {
     ja: "ヒドゥン · 数多の次元を巡り武器・能力・品物を集めるコレクターの少女。次元の収集品の武器20（杖 · 剣 · 旗 · 傘 · 折り鶴 · ぜんまい爆弾 · 次元の扉など）· 持った武器は収集図鑑に残り1マスごとに攻撃力+2% · 5回目の攻撃ごとにリュックから図鑑の別の収集品を取り出して使う · 専用アイテム20",
   },
   curio: { ko: "수집품", en: "Curio", ja: "収集品" },
+  fallenKing: { ko: "몰락한 왕", en: "Fallen King", ja: "没落した王" },
+  fallenKingDesc: {
+    ko: "히든 · 악의 사도가 모은 영혼 10,000개로 다시 일어난 옛 제국의 왕. 푸른 불꽃이 일렁이는 검은 갑옷의 거인 · 무기는 붉은 츠바이핸더 하나: X자 두 번 베기 → 가로로 길어지는 검기 → 검을 내리꽂으면 푸른 불꽃 선이 적에게 이어져 거대한 불기둥 · 쓰러뜨린 적의 영혼이 잘게 쪼개져 몸으로 들어와 영혼 하나마다 공격력·체력 +",
+    en: "Hidden · The old empire's king, risen again from the 10,000 souls the Apostle gathered. A giant in black armor flickering with blue flame · one weapon, a red zweihänder: two X slashes → a sword wave that widens → plant the blade and blue flame lines race to foes for giant fire pillars · souls of the fallen shatter and flow into him, each adding damage and HP",
+    ja: "ヒドゥン · 悪の使徒が集めた魂10,000個で再び立ち上がった古き帝国の王。青い炎が揺らめく黒い鎧の巨人 · 武器は赤いツヴァイヘンダー一本: X字の二連斬り → 横に伸びる剣気 → 剣を突き立てると青い炎の線が敵へつながり巨大な火柱 · 倒した敵の魂が細かく砕けて体に入り、魂ひとつごとに攻撃力・体力+",
+  },
+  zwei: { ko: "대검", en: "Greatsword", ja: "大剣" },
 };

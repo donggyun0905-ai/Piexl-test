@@ -20,7 +20,7 @@ export interface HallRecords {
 
 /** 기록마다 채우면 열리는 히든 캐릭터 (전시물 · 기록 · 목표) */
 export const HALL_GOALS: readonly { ex: ExhibitId; rec: keyof HallRecords; need: number; char?: CharacterId }[] = [
-  { ex: "soulShard", rec: "souls", need: 10000 },
+  { ex: "soulShard", rec: "souls", need: 10000, char: "fallenKing" },
   { ex: "laurelShip", rec: "pilgrims", need: 10, char: "pilgrim" },
 ];
 

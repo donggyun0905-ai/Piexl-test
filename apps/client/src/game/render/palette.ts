@@ -63,6 +63,7 @@ export const C = {
   voyager: "#e8b040",
   zeus: "#8ac8ff",
   pilgrim: "#7ad0f0",
+  fallenKing: "#3ab8ff",
   abandoned: "#7aa070",
   titan: "#c87a3a",
   oni: "#d84a3a",

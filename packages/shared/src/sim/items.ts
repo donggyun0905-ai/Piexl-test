@@ -6,7 +6,7 @@ import { morphMods } from "./morphEvo";
 import { eaterMods } from "./eater";
 import { automataMods } from "./automata";
 import { petMods } from "./lobbyPet";
-import { pilgrimMods } from "./pgBag";
+import { secretMods } from "./secretMods";
 import { kingStats } from "./kingForm";
 import { TIGER } from "../weaponsBeast";
 import { baseStats, CHARACTERS, type CharacterDef, type WeaponId } from "../content";
@@ -51,8 +51,8 @@ export const PICKUP_HOLD_TICKS = 30;
 export function recalcStats(s: RunState): void {
   const p = s.player;
   const oldMax = p.stats.maxHp;
-  // 풋내기가 찍은 스탯·순례자 도감도 능력치 변화로 · 오니: 공격력·공격 속도·사거리 변화는 최대 체력·재생력·효과 범위로 (oniRules)
-  p.mods = oniConvert(p, [...p.passives.flatMap((id): StatMod[] => [...PASSIVES[id].mods]), ...noviceMods(p), ...imugiMods(p), ...apostleMods(p), ...tabooMods(s), ...swarmMods(p), ...morphMods(p), ...eaterMods(p), ...automataMods(p), ...petMods(s), ...stationMods(s), ...pilgrimMods(p)]);
+  // 풋내기가 찍은 스탯·순례자 도감·몰락한 왕 영혼도 능력치 변화로 · 오니: 공격력·공격 속도·사거리 변화는 최대 체력·재생력·효과 범위로 (oniRules)
+  p.mods = oniConvert(p, [...p.passives.flatMap((id): StatMod[] => [...PASSIVES[id].mods]), ...noviceMods(p), ...imugiMods(p), ...apostleMods(p), ...tabooMods(s), ...swarmMods(p), ...morphMods(p), ...eaterMods(p), ...automataMods(p), ...petMods(s), ...stationMods(s), ...secretMods(p)]);
   p.stats = kingStats(p) ?? computeStats(baseStats(p.characterId, p.weaponId), p.mods);
   // 거너: 최대 체력 고정 (체력 아이템을 먹어도 그대로)
   const fixed = p.curseHp ?? (CHARACTERS[p.characterId] as CharacterDef).fixedHp;

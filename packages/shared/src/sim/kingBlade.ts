@@ -2,9 +2,11 @@
 // 공격마다 한 단계: ① X자 첫 베기 ② X자 둘째 베기 ③ 가로로 점점 길어지는 검기 ④ 검을 내리꽂음 → 푸른(왕관은 붉은) 불꽃 선이 적에게 이어지고
 // 점화선처럼 타고 가 마지막에 적 자리에서 거대한 불기둥 (잠시 뒤 폭발 pendingBlasts)
 import { TICK_RATE } from "../constants";
+import { FALLEN_KING_PERKS as K } from "../itemsFallenKing";
+import { healPlayer } from "./combat";
 import { alive, inCircle, inCone, onSegment, strike } from "./s2Kit";
 import type { RunState } from "./types";
-import { addEffect } from "./util";
+import { addEffect, hasPerk } from "./util";
 
 const R = {
   /** 단계마다 공격력 배율: X자 베기 · 검기 · 내리꽂기 · 불기둥 */
@@ -27,7 +29,7 @@ const R = {
 export { R as KING_BLADE_RULES };
 
 /** 왕관 = 붉은빛 · 몰락한 왕 = 푸른빛 */
-export const kingTint = (s: RunState) => ((s.player.characterId as string) === "fallenKing" && s.player.kingRoom === undefined ? "#3ab8ff" : "#ff4a2a");
+export const kingTint = (s: RunState) => (s.player.characterId === "fallenKing" && s.player.kingRoom === undefined ? "#3ab8ff" : "#ff4a2a");
 
 /** 한 콤보 단계 (공격 간격마다) */
 export function kingBlade(s: RunState, speed: number): void {
@@ -39,7 +41,8 @@ export function kingBlade(s: RunState, speed: number): void {
   p.attackCount++;
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   if (step <= 1) {
-    for (const e of inCone(s, reach, R.arc)) strike(s, e, dmg * R.slash, 4);
+    const cross = hasPerk(p, "fkCross") ? K.fkCross.mul : 1;
+    for (const e of inCone(s, reach, R.arc)) strike(s, e, dmg * R.slash * cross, 4);
     addEffect(s, { kind: "kgSlash", x: p.x, y: p.y - 6, dirX: p.faceX, dirY: p.faceY, size: reach, width: step ? -1 : 1, maxTicks: 12, tint });
   } else if (step === 2) {
     const len = reach * R.waveLen;
@@ -52,11 +55,14 @@ export function kingBlade(s: RunState, speed: number): void {
     const near = alive(s)
       .filter((e) => (e.x - p.x) ** 2 + (e.y - p.y) ** 2 <= R.lineReach ** 2)
       .sort((a, b) => (a.x - p.x) ** 2 + (a.y - p.y) ** 2 - ((b.x - p.x) ** 2 + (b.y - p.y) ** 2) || a.id - b.id)
-      .slice(0, R.lines);
+      .slice(0, R.lines + (hasPerk(p, "fkLines") ? K.fkLines.add : 0));
+    const pyre = hasPerk(p, "fkPyre") ? K.fkPyre : { r: 1, mul: 1 };
+    const pr = R.pillarR * pyre.r;
+    if (near.length && hasPerk(p, "fkRequiem")) healPlayer(s, p.stats.maxHp * K.fkRequiem.heal * near.length);
     for (const e of near) {
       addEffect(s, { kind: "kgLine", x: p.x + p.faceX * 8, y: p.y, dirX: 0, dirY: 0, size: 3, toX: e.x, toY: e.y, maxTicks: R.burn, tint });
-      addEffect(s, { kind: "kgPillar", x: e.x, y: e.y, dirX: 0, dirY: R.burn, size: R.pillarR, maxTicks: R.burn + 30, tint });
-      s.pendingBlasts.push({ tick: s.tick + R.burn, x: e.x, y: e.y, radius: R.pillarR, damage: dmg * R.pillar });
+      addEffect(s, { kind: "kgPillar", x: e.x, y: e.y, dirX: 0, dirY: R.burn, size: pr, maxTicks: R.burn + 30, tint });
+      s.pendingBlasts.push({ tick: s.tick + R.burn, x: e.x, y: e.y, radius: pr, damage: dmg * R.pillar * pyre.mul });
     }
     p.attackCooldown = Math.round(p.attackCooldown * R.rest);
   }

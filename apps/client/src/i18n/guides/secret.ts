@@ -28,6 +28,12 @@ export const GUIDE_KO_SECRET = {
     "배낭 뒤지기: 다섯 번째 공격마다 배낭에서 도감의 다른 수집품을 꺼내 한 번 씀 (머리 위로 그 물건이 튀어나옴)",
     "전용 아이템 20: 배낭·부츠·돋보기·클로버·간식·배지 · 수집 일지 · 배낭 정리 · 두 겹 배낭 · 메아리 구슬 · 기념품 · 차원 도장 · 모닥불 · 별 가루 · 열쇠고리 · 그림엽서 · 텐트 · 지름길 · 행운 동전 · 세계수 잎",
   ],
+  fallenKing: [
+    "히든 · 악의 사도로 모은 영혼 10,000개로 다시 일어난 옛 제국의 왕 (로비 전시장 기록집) · 거인 · 체력 170 · 공격력 18",
+    "붉은 츠바이핸더 하나: X자 두 번 베기 → 가로로 점점 길어지는 검기 → 검을 내리꽂으면 푸른 불꽃 선이 가까운 적 다섯에게 이어지고, 불씨가 점화선처럼 타고 가 거대한 푸른 불기둥",
+    "영혼: 쓰러뜨린 적의 영혼이 잘게 쪼개져 빛줄기로 몸에 들어옴 · 영혼 하나마다 공격력 +0.012 · 체력 +0.05 (왼쪽 위 영혼 스택 창)",
+    "전용 아이템 10: 녹슨 제국 문장 · 푸른 불꽃 흉갑 · 왕의 손아귀 · 긴 칼날 · 영혼 수확 · 장작불 · 끝없는 점화선 · 십자 처형 · 왕의 위엄 · 진혼곡",
+  ],
 };
 export const GUIDE_EN_SECRET = {
   miner: [
@@ -58,6 +64,12 @@ export const GUIDE_EN_SECRET = {
     "Rummage: every 5th attack you pull another curio from your journal out of the pack and use it once (it pops out over your head)",
     "20 own items: backpack · boots · magnifier · clover · snacks · badge · journal · tidy pack · double pack · echo marble · souvenir · dimension stamp · campfire · stardust · keychain · postcards · tent · shortcut · lucky coin · world tree leaf",
   ],
+  fallenKing: [
+    "Hidden · The old empire's king, risen from 10,000 souls gathered as the Apostle (lobby hall record book) · giant · HP 170 · Attack 18",
+    "One red zweihänder: two X slashes → a sword wave that keeps widening → plant the blade and blue flame lines reach the five nearest foes; the fire runs along them like fuses into giant blue pillars",
+    "Souls: the souls of fallen foes shatter and stream into him · each soul +0.012 attack and +0.05 HP (soul stack window, top left)",
+    "10 own items: Rusted Imperial Crest · Blue Flame Breastplate · King's Grip · Long Edge · Soul Harvest · Funeral Pyre · Endless Fuses · Cross Execution · Royal Majesty · Requiem",
+  ],
 };
 export const GUIDE_JA_SECRET = {
   miner: [
@@ -87,5 +99,11 @@ export const GUIDE_JA_SECRET = {
     "収集図鑑：一度でも持った巡礼者の武器は図鑑に残り、1マスごとに攻撃力+2%（足元に図鑑のマス数）",
     "リュックあさり：5回目の攻撃ごとにリュックから図鑑の別の収集品を取り出して1回使う（頭上にその品が飛び出す）",
     "専用アイテム20：リュック・ブーツ・虫めがね・クローバー・おやつ・バッジ · 収集日誌 · リュックの整理 · 二重リュック · こだまのビー玉 · おみやげ · 次元スタンプ · たき火 · 星くず · キーホルダー · 絵はがき · テント · 近道 · 幸運のコイン · 世界樹の葉",
+  ],
+  fallenKing: [
+    "ヒドゥン · 悪の使徒で集めた魂10,000個で再び立ち上がった古き帝国の王 (ロビー展示場の記録集) · 巨人 · 体力170 · 攻撃力18",
+    "赤いツヴァイヘンダー一本：X字の二連斬り → 横に伸びていく剣気 → 剣を突き立てると青い炎の線が近くの敵5体へつながり、火が導火線のように走って巨大な青い火柱",
+    "魂：倒した敵の魂が細かく砕けて光の筋で体に入る · 魂ひとつごとに攻撃力+0.012 · 体力+0.05 (左上の魂スタック)",
+    "専用アイテム10：錆びた帝国の紋章 · 青い炎の胸甲 · 王の握力 · 長い刃 · 魂の収穫 · 薪の炎 · 果てなき導火線 · 十字の処刑 · 王の威厳 · 鎮魂歌",
   ],
 };

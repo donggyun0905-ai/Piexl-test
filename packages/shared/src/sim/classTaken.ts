@@ -2,6 +2,7 @@
 import { abandonedTaken } from "./abandoned";
 import { zeusHurt, zeusTaken } from "./zeusPower";
 import { pilgrimHurt, pilgrimTaken } from "./pgBag";
+import { fallenKingTaken } from "./fallenKing";
 import { elderTaken } from "./elder";
 import { spiritTaken } from "./spiritGreat";
 import { idraHurt, idraTaken } from "./idra";
@@ -27,7 +28,7 @@ import type { RunState } from "./types";
 export function classTaken(s: RunState, taken: number): number {
   const p = s.player;
   idraHurt(s);
-  return mukinTaken(p, taken * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p));
+  return mukinTaken(p, taken * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p));
 }
 
 /** 맞은 뒤 무적: 용 염옥·갓이터 패링 궁극기 동안은 없음 · 묵인은 아주 짧게 */

@@ -26,6 +26,7 @@ import { GEAR_DESC } from "./gears";
 import { MEDIC_DESC } from "./doctor";
 import { PASSIVE_NAMES, USE_DESC, USE_NAMES, WEAPON_NAMES, type Names } from "./names";
 import { STATION_DESC, STATION_NAME } from "./station";
+import { zweiDesc } from "./fallenKing";
 
 const STAT_LABEL: Record<StatKey, TextKey> = {
   maxHp: "statHp",
@@ -120,6 +121,7 @@ export function itemDesc(kind: ItemKind, id: string, lang: Lang, t: (k: TextKey)
       w.formation ? FORMATION_DESC[w.formation][lang] : "",
       w.kind === "earthwood" ? REN_DESC[lang] : "",
       w.great ? GREAT_DESC[w.great][lang] : "",
+      w.kind === "zwei" ? zweiDesc(lang) : "",
       w.plague ? PLAGUE_DESC[w.plague][lang] : "",
       w.combo5 ? scytheDesc(w.combo5, lang) : "",
       w.kind === "maw" ? MAW_DESC[lang] : "",

@@ -47,6 +47,9 @@ export type Sfx =
   | "descend"
   | "twinkle"
   | "rustle"
+  | "kgCleave"
+  | "kgPyre"
+  | "kgSoul"
   | SkillSfx;
 
 let ctx: AudioContext | null = null;

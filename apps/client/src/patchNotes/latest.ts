@@ -4,6 +4,21 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.234",
+    date: "2026-10-29",
+    items: {
+      ko: [
+        "히든 캐릭터 '몰락한 왕': 악의 사도로 영혼 10,000개를 모으면 해금 (로비 전시장 기록집에서 진행 확인) · 푸른 불꽃이 일렁이는 검은·푸른 갑옷의 거인, 붉은 츠바이핸더를 어깨에 걸침 · 콤보: X자 두 번 베기 → 가로로 길어지는 검기 → 검을 내리꽂으면 푸른 불꽃 선이 적에게 이어져 점화선처럼 타고 가 거대한 불기둥 · 쓰러뜨린 적의 영혼이 잘게 쪼개져 빛줄기로 들어와 공격력·체력 + (왼쪽 위 영혼 스택) · 전용 아이템 10",
+      ],
+      en: [
+        "Hidden character 'Fallen King': unlocked by gathering 10,000 souls as the Apostle (check progress in the lobby hall record book) · a giant in black and blue armor flickering with blue flame, a red zweihänder on his shoulder · combo: two X slashes → a widening sword wave → plant the blade and blue flame lines race to foes like fuses into giant fire pillars · souls of the fallen shatter and stream into him for damage and HP (soul stack, top left) · 10 own items",
+      ],
+      ja: [
+        "ヒドゥンキャラ「没落した王」: 悪の使徒で魂を10,000個集めると解放 (ロビー展示場の記録集で進み具合を確認) · 青い炎が揺らめく黒と青の鎧の巨人、赤いツヴァイヘンダーを肩に担ぐ · コンボ: X字の二連斬り → 横に伸びる剣気 → 剣を突き立てると青い炎の線が敵へつながり導火線のように走って巨大な火柱 · 倒した敵の魂が細かく砕けて光の筋で入り攻撃力・体力+ (左上の魂スタック) · 専用アイテム10",
+      ],
+    },
+  },
+  {
     version: "0.48.233",
     date: "2026-10-29",
     items: {

@@ -2,7 +2,7 @@
 import type { WeaponId } from "./content";
 
 /** 전용 무기·아이템을 가질 수 있는 캐릭터 (content.WeaponDef.exclusive · items.PassiveDef.exclusive) */
-export type ExclusiveId = "warden" | "drifter" | "mage" | "mystic" | "engineer" | "elementalist" | "brawler" | "doctor" | "gunner" | "beast" | "ninja" | "chronomancer" | "summoner" | "novice" | "bedouin" | "general" | "imugi" | "apostle" | "stargazer" | "duck" | "abandoned" | "titan" | "oni" | "scribe" | "idra" | "byeonhui" | "fly" | "elder" | "ren" | "spiritist" | "plague" | "slayer" | "eater" | "mukin" | "samyeol" | "automata" | "rider" | "bomber" | "artifacter" | "punk" | "tracker" | "forgotten" | "remnant" | "wanderer" | "silk" | "miner" | "voyager" | "zeus" | "pilgrim";
+export type { ExclusiveId } from "./characterIds";
 
 export interface CharacterDef extends Partial<ExtraStats> {
   id: string;
@@ -107,6 +107,8 @@ export const CHARACTERS = {
   /** 제우스 (히든, 시즌 2): 번개 무기 10 · 감전 · 천벌 게이지 → 제우스 강림 · 번개 걸음 (sim/zeus) */
   zeus: { id: "zeus", maxHp: 140, damage: 15, moveSpeed: 1.3, luck: 3, startWeapon: "zsBolt" },
   pilgrim: { id: "pilgrim", maxHp: 115, damage: 13, moveSpeed: 1.35, luck: 4, startWeapon: "pgStaff" },
+  /** 몰락한 왕 (히든, 전시장 영혼 10,000): 거인 · 츠바이핸더 하나 · 처치한 적의 영혼을 거둬 강해짐 (sim/fallenKing) */
+  fallenKing: { id: "fallenKing", maxHp: 170, damage: 18, moveSpeed: 1.05, luck: 0, startWeapon: "fkZwei" },
   /** 별지기 (히든, 무작위 10%): 별자리를 그려 빛줄기로 태움 (sim/star) */
   stargazer: { id: "stargazer", maxHp: 110, damage: 12, moveSpeed: 1.3, luck: 1, startWeapon: "starStaff" },
   /** 오리 (히든, 무작위 5%): 꽥 음파·새끼 오리 (sim/duck) */
@@ -138,7 +140,7 @@ for (const row of Object.values(CHARACTERS)) for (const [k, v] of Object.entries
 
 export type CharacterId = keyof typeof CHARACTERS;
 /** 숨은 캐릭터: 선택창·순위표·타워 디펜스에는 없고 무작위 캐릭터(10%)·연습장에서만 */
-export const HIDDEN_CHARACTERS: readonly CharacterId[] = ["stargazer", "duck", "scribe", "miner", "voyager", "zeus", "pilgrim"];
+export const HIDDEN_CHARACTERS: readonly CharacterId[] = ["stargazer", "duck", "scribe", "miner", "voyager", "zeus", "pilgrim", "fallenKing"];
 /** 보통 고를 수 있는 캐릭터 (숨은 캐릭터 빼고) · ALL_CHARACTER_IDS는 숨은 캐릭터까지 */
 export const ALL_CHARACTER_IDS = Object.keys(CHARACTERS) as CharacterId[];
 export const CHARACTER_IDS = ALL_CHARACTER_IDS.filter((id) => !HIDDEN_CHARACTERS.includes(id));

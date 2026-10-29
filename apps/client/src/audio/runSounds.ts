@@ -52,6 +52,10 @@ interface Seen {
   zsGod: boolean;
   /** 차원의 순례자: 배낭에서 꺼낸 수집품 그림 수 */
   bags: number;
+  /** 왕 대검 (왕관 변신·몰락한 왕): 휘두른 효과 수 · 내리꽂은 효과 수 · 들어온 영혼 */
+  kgSwings: number;
+  kgPlants: number;
+  kgSouls: number;
 }
 
 /** 탄을 쏘는 느낌의 캐릭터 (나머지는 휘두르는 소리) */
@@ -96,6 +100,9 @@ function snapshot(s: RunState): Seen {
     flips: s.player.vyFlips ?? 0,
     zsGod: (s.player.zsGod ?? 0) > 0,
     bags: s.effects.filter((f) => f.kind === "pgBag").length,
+    kgSwings: s.effects.filter((f) => f.kind === "kgSlash" || f.kind === "kgWave").length,
+    kgPlants: s.effects.filter((f) => f.kind === "kgPlant").length,
+    kgSouls: s.player.fkSouls ?? 0,
   };
 }
 
@@ -199,6 +206,14 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         // 잔영: 순간이동할 때마다 쉭 빨려 드는 소리, 베기는 짧은 쉭
         if (now.blinkCd > seen.blinkCd) fx.push("blink");
         if (now.attacks > seen.attacks && !fx.includes("swing")) fx.push("slice");
+      } else if (c === "fallenKing" || run.player.kingRoom !== undefined) {
+        // 왕 대검: 무거운 휘두름 · 내리꽂으면 불길이 솟는 소리 · 영혼이 들어오면 맑은 소리
+        if (now.kgSwings > seen.kgSwings) fx.push("kgCleave");
+        if (now.kgPlants > seen.kgPlants) {
+          fx.push("kgPyre");
+          onShake(3);
+        }
+        if (now.kgSouls > seen.kgSouls) fx.push("kgSoul");
       } else if (now.attacks > seen.attacks && !fx.includes("shot") && !fx.includes("swing")) fx.push(SHOOTERS.has(c) ? "shot" : "swing");
       if (c === "elementalist" && now.hits > 0 && now.hits !== seen.hits && now.tick - orbSound >= 15) {
         orbSound = now.tick;

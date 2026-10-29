@@ -42,4 +42,17 @@ export const SECRET_SOUNDS = {
     noise(0.18, 0.12, 3200);
     tone({ type: "sine", from: 660, to: 1320, dur: 0.15, vol: 0.06, delay: 0.2 });
   },
+  // 왕 대검: 무거운 쇳바람 · 땅에 꽂히는 쿵 + 불길 · 영혼 조각이 들어오는 맑은 소리
+  kgCleave: () => {
+    noise(0.22, 0.16, 700);
+    tone({ type: "sawtooth", from: 220, to: 70, dur: 0.2, vol: 0.12 });
+  },
+  kgPyre: () => {
+    tone({ type: "sine", from: 90, to: 35, dur: 0.4, vol: 0.4 });
+    noise(0.9, 0.35, 1400);
+    tone({ type: "triangle", from: 330, to: 660, dur: 0.6, vol: 0.06, delay: 0.5 });
+  },
+  kgSoul: () => {
+    tone({ type: "sine", from: 1320, to: 1760, dur: 0.08, vol: 0.03 });
+  },
 };

@@ -74,6 +74,8 @@ export interface HiddenPlayerState {
   /** 변신 전 체력 · 대검 콤보 단계 (0~3, 몰락한 왕도 씀) */
   kingHp?: number;
   kgStep?: number;
+  /** 몰락한 왕: 모은 영혼 수 */
+  fkSouls?: number;
   /** 금기된 아티팩트: 색마다 쌓인 처치 수 */
   relics?: Record<string, number>;
   /** 떨어진 신의 파편: 얻은 힘 (0~9) */

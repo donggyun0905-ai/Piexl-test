@@ -63,6 +63,7 @@ const DEMO_WEAPONS: Record<CharacterId, [WeaponId, WeaponId] | null> = {
   voyager: null,
   zeus: ["zsSky", "zsChain"],
   pilgrim: ["pgCrane", "pgGate"],
+  fallenKing: null,
   abandoned: ["twinPistols", "lastPromise"],
   titan: ["pistonFist", "anvilHammer"],
   oni: ["frostClub", "tideClub"],

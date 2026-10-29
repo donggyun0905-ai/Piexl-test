@@ -35,7 +35,7 @@ export const FACTIONS: readonly { id: FactionId; color: string; members: readonl
   { id: "terracore", color: "#e8a040", members: ["gunner", "engineer", "doctor", "chronomancer", "titan", "automata", "rider", "bomber", "artifacter", "punk"] },
   { id: "helios", color: "#c83a4a", members: ["apostle", "bedouin", "brawler", "ninja", "raven", "cain", "jade", "oni", "plague", "slayer", "eater", "mukin", "samyeol"] },
   { id: "virdia", color: "#4ac86a", members: ["beast", "summoner", "elementalist", "mystic", "imugi", "idra", "byeonhui", "fly", "elder", "ren", "spiritist"] },
-  { id: "akashic", color: "#b89aff", members: ["scribe", "duck", "stargazer", "miner", "voyager", "zeus", "pilgrim"] },
+  { id: "akashic", color: "#b89aff", members: ["scribe", "duck", "stargazer", "miner", "voyager", "zeus", "pilgrim", "fallenKing"] },
 ];
 
 /** 최종 보스 (도감 적 그림) · 시즌 */
