@@ -1,5 +1,5 @@
 // 히든 아이템 둘째 묶음 그림: 등 뒤에 떠 있는 블리자드 랜스 다섯 · 날아가는 얼음 창 · 몸 좌우에 떠 있는 떨어진 신의 날개
-// · 운명의/저주받은 주사위(머리 위에서 굴러가다 멈춤) · 화려한 보물 상자 · 저주 · 빙결 · 포탈 빛
+// · 운명의/저주받은 주사위(머리 위에서 굴러가다 멈춤) · 화려한 보물 상자 · 저주 · 빙결
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
 import { additive, alpha, beam, glow, shock, sparks } from "./pwFxBits";
@@ -75,11 +75,33 @@ export function drawLanceShot(ctx: Ctx, pr: ProjectileState, x: number, y: numbe
 /** 주사위 한 면 (n 점, cursed = 검붉은 주사위) */
 function die(ctx: Ctx, x: number, y: number, n: number, cursed: boolean, size = 12): void {
   const h = size / 2;
-  ctx.fillStyle = cursed ? "#2a1a30" : "#f2ecdc";
+  // 입체 주사위: 윗면 · 오른쪽 옆면 (깊이 3) · 앞면 · 테두리
+  const [front, top, side, edge] = cursed ? ["#2a1a30", "#4a2a5a", "#140a18", "#8a3aa8"] : ["#f2ecdc", "#fffaf0", "#c8c0a8", "#6a5a48"];
+  ctx.fillStyle = top;
+  ctx.beginPath();
+  ctx.moveTo(x - h, y - h);
+  ctx.lineTo(x - h + 3, y - h - 3);
+  ctx.lineTo(x + h + 3, y - h - 3);
+  ctx.lineTo(x + h, y - h);
+  ctx.fill();
+  ctx.fillStyle = side;
+  ctx.beginPath();
+  ctx.moveTo(x + h, y - h);
+  ctx.lineTo(x + h + 3, y - h - 3);
+  ctx.lineTo(x + h + 3, y + h - 3);
+  ctx.lineTo(x + h, y + h);
+  ctx.fill();
+  ctx.fillStyle = front;
   ctx.fillRect(x - h, y - h, size, size);
-  ctx.strokeStyle = cursed ? "#8a3aa8" : "#c8c0a8";
+  ctx.strokeStyle = edge;
   ctx.lineWidth = 1;
   ctx.strokeRect(x - h + 0.5, y - h + 0.5, size - 1, size - 1);
+  if (cursed) {
+    // 저주받은 주사위: 위로 솟은 뿔 둘
+    ctx.fillStyle = "#c8c0a8";
+    ctx.fillRect(x - h + 1, y - h - 5, 2, 3);
+    ctx.fillRect(x + h - 1, y - h - 6, 2, 3);
+  }
   const q = size / 4;
   const pips: Record<number, [number, number][]> = {
     1: [[0, 0]],
@@ -117,13 +139,32 @@ export function drawHiddenFx2(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       for (let i = 0; i < 6; i++) beam(ctx, x, y - 4, x + (i - 2.5) * 8, y - 40 - f * 20, 2, ["#ff6a6a", "#ffd040", "#6aff8a", "#6ac8ff", "#c86aff", "#ffffff"][i]!, t * open);
       sparks(ctx, x, y - 8, 18, 40, f, "#fff6c0", fx.x);
     });
+    // 상자: 나무 몸통 · 금 테두리 띠 셋 · 자물쇠 · 보석, 뚜껑은 위로 열림
+    ctx.fillStyle = "#5a3412";
+    ctx.fillRect(x - 10, y - 5, 20, 11);
     ctx.fillStyle = "#8a5a22";
     ctx.fillRect(x - 9, y - 4, 18, 9);
+    ctx.fillStyle = "#a87030";
+    for (let i = 0; i < 3; i++) ctx.fillRect(x - 8, y - 2 + i * 3, 16, 1);
     ctx.fillStyle = "#ffd040";
-    ctx.fillRect(x - 9, y - 4, 18, 2);
-    ctx.fillRect(x - 1, y - 2, 2, 4);
+    ctx.fillRect(x - 10, y - 5, 20, 2);
+    ctx.fillRect(x - 10, y - 5, 2, 11);
+    ctx.fillRect(x + 8, y - 5, 2, 11);
+    ctx.fillRect(x - 2, y - 2, 4, 5);
+    ctx.fillStyle = "#6a4a10";
+    ctx.fillRect(x - 1, y, 2, 2);
+    ctx.fillStyle = "#ff4a8a";
+    ctx.fillRect(x - 6, y + 2, 2, 2);
+    ctx.fillStyle = "#4ad0ff";
+    ctx.fillRect(x + 4, y + 2, 2, 2);
+    const ly = y - 5 - 7 * open;
+    ctx.fillStyle = "#5a3412";
+    ctx.fillRect(x - 10, ly - 4, 20, 5);
     ctx.fillStyle = "#c88a2a";
-    ctx.fillRect(x - 9, y - 4 - 6 * open, 18, 3);
+    ctx.fillRect(x - 9, ly - 3, 18, 3);
+    ctx.fillStyle = "#ffd040";
+    ctx.fillRect(x - 10, ly - 4, 20, 1);
+    ctx.fillRect(x - 2, ly - 3, 4, 3);
     return true;
   }
   if (fx.kind === "hdCurse") {
@@ -153,13 +194,6 @@ export function drawHiddenFx2(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
-    return true;
-  }
-  if (fx.kind === "hdWarp") {
-    additive(ctx, () => {
-      glow(ctx, x, y, fx.size * (0.5 + f * 0.6), "#3ad0ff", t, 1.2);
-      shock(ctx, x, y, fx.size * (0.2 + f), "#8a5aff", t, 3);
-    });
     return true;
   }
   return false;

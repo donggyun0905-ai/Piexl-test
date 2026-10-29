@@ -25,26 +25,63 @@ export function drawPilgrim(ctx: Ctx, s: RunState, line: string | undefined): vo
   const f = pilgrimWalk(s);
   const x = ROOM_CX;
   const y = PORTAL_Y + (STAND_Y - PORTAL_Y) * f;
-  // 포탈: 걸어 나오는 동안 열려 있다가 닫힘
-  const open = f < 1 ? 1 : Math.max(0, 1 - (s.tick - npc.t0 - 110) / 30);
-  if (open > 0) {
-    additive(ctx, () => {
-      glow(ctx, x, PORTAL_Y, 20 * open, "#8a5aff", 0.8 * open, 1);
-      for (let i = 0; i < 3; i++) {
-        ctx.strokeStyle = alpha(i % 2 ? "#c8a8ff" : "#6a3aff", 0.8 * open);
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        const a = s.tick * 0.12 + i * 2.1;
-        ctx.ellipse(x, PORTAL_Y, (12 - i * 3) * open, (16 - i * 3) * open, 0, a, a + Math.PI * 1.3);
-        ctx.stroke();
-      }
-    });
-  }
+  // 포탈: 걸어 나오는 동안 열려 있다가 닫힘 (아이 키보다 큰 문, 아이가 그 안에서 걸어 나옴)
+  const open = f < 1 ? Math.min(1, (s.tick - npc.t0) / 20) : Math.max(0, 1 - (s.tick - npc.t0 - 110) / 30);
+  if (open > 0) drawPortal(ctx, x, PORTAL_Y - 20, open, s.tick);
   const bob = f < 1 ? Math.round(Math.abs(Math.sin(s.tick * 0.3)) * 1) : Math.round(Math.sin(s.tick * 0.08) * 0.6);
   // 캐릭터 시트 (scripts/art/pilgrim_sprite.py, 나중에 히든 캐릭터로도 씀). 아직 못 불러왔으면 간단한 그림
   const pose = { faceX: 0, faceY: 1, moving: f < 1, casting: false, step: (s.tick >> 3) % 4 };
   if (!drawCharacter(ctx, "pilgrim", x, y - 6, 6, pose)) drawGirl(ctx, x, y - bob, s.tick, f < 1);
   if (f >= 1 && line && s.tick - npc.t0 < 110 + 240) drawBubble(ctx, x, y - 50, line);
+}
+
+/** 차원 포탈 (가로 28 · 세로 40 반지름): 바깥 빛 · 검보라 속 · 소용돌이 고리 넷 · 테두리 룬 여덟 · 빨려 들어가는 별 가루 */
+function drawPortal(ctx: Ctx, x: number, y: number, open: number, tick: number): void {
+  const rx = 28 * open;
+  const ry = 40 * open;
+  additive(ctx, () => glow(ctx, x, y, 46 * open, "#8a5aff", 0.7 * open, 1));
+  // 속: 가운데로 갈수록 진한 검보라 (별이 비침)
+  const g = ctx.createRadialGradient(x, y, 0, x, y, ry);
+  g.addColorStop(0, "rgba(8,2,20,0.95)");
+  g.addColorStop(0.6, "rgba(40,12,90,0.9)");
+  g.addColorStop(1, "rgba(120,70,255,0.5)");
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.ellipse(x, y, rx, ry, 0, 0, TAU);
+  ctx.fill();
+  for (let i = 0; i < 7; i++) {
+    const a = tick * 0.02 * (i % 2 ? 1 : -1) + i * 0.9;
+    const d = 0.25 + ((i * 0.37 + tick * 0.004) % 0.6);
+    rect(ctx, i % 3 ? "#c8b8ff" : "#ffffff", x + Math.cos(a) * rx * d, y + Math.sin(a) * ry * d, 1, 1);
+  }
+  additive(ctx, () => {
+    // 소용돌이 고리 넷 (안쪽일수록 빨리 돎)
+    for (let i = 0; i < 4; i++) {
+      const k = 1 - i * 0.2;
+      const a = tick * (0.06 + i * 0.03) * (i % 2 ? -1 : 1) + i * 1.7;
+      ctx.strokeStyle = alpha(["#e0d0ff", "#a070ff", "#6ad8ff", "#c060ff"][i]!, 0.85 * open);
+      ctx.lineWidth = i === 0 ? 2.5 : 1.5;
+      ctx.beginPath();
+      ctx.ellipse(x, y, rx * k, ry * k, 0, a, a + Math.PI * 1.4);
+      ctx.stroke();
+    }
+    // 테두리 룬 여덟 (반짝임)
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * TAU + tick * 0.01;
+      const px = x + Math.cos(a) * (rx + 4);
+      const py = y + Math.sin(a) * (ry + 4);
+      const on = (tick >> 3) % 8 === i;
+      rect(ctx, on ? "#ffffff" : "#c8a8ff", px - 1, py - 1, 2, 2);
+      if (on) glow(ctx, px, py, 6, "#c8a8ff", 0.8, 1);
+    }
+    // 둘레에서 빨려 들어가는 별 가루
+    for (let i = 0; i < 10; i++) {
+      const ph = ((tick + i * 13) % 40) / 40;
+      const a = i * 2.39 + tick * 0.01;
+      const d = 1.5 - ph;
+      rect(ctx, alpha("#e8d8ff", (1 - ph) * open), x + Math.cos(a) * rx * d, y + Math.sin(a) * ry * d, 1, 1);
+    }
+  });
 }
 
 /** 꼬마 + 커다란 배낭 (아래가 발) */
@@ -102,6 +139,12 @@ export function drawHiddenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const f = 1 - t;
   const x = snap(fx.x);
   const y = snap(fx.y);
+  if (fx.kind === "hdGate" || fx.kind === "hdWarp") {
+    // 차원이동문·포탈건·테라포밍: 내 자리에 아이 키만 한 포탈이 열렸다 닫힘 (빨려 들어가는 빛)
+    drawPortal(ctx, x, y - 12, Math.min(1, f * 4, t * 3) * 0.75, fx.maxTicks - fx.ticks);
+    additive(ctx, () => shock(ctx, x, y - 12, fx.size * (0.4 + t), fx.kind === "hdWarp" ? "#3ad0ff" : "#c8a8ff", t, 3));
+    return true;
+  }
   additive(ctx, () => {
     switch (fx.kind) {
       case "hdAether":
@@ -128,9 +171,8 @@ export function drawHiddenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       case "hdScroll":
         glow(ctx, x, y, 14 + f * 10, "#ff5a2a", t, 1.2);
         break;
-      case "hdGate":
       case "hdPortal":
-        glow(ctx, x, y, fx.size * (fx.kind === "hdGate" ? 0.5 + f : 1), "#8a5aff", fx.kind === "hdGate" ? t : 0.25, 1);
+        glow(ctx, x, y - 20, 50, "#8a5aff", 0.2, 1);
         break;
       case "hdShow":
         sparks(ctx, x, y, 16, fx.size, f, "#ffe8a0", fx.x);

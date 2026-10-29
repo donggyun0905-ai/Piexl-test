@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.226",
+    date: "2026-10-29",
+    items: {
+      ko: ["차원의 순례자를 더 귀엽게 다시 그림: 큰 머리·갸름한 얼굴 · 노란 별 핀 · 세일러 깃 블라우스와 주름치마 · 배낭은 덮개·버클 끈·별 패치 앞주머니·옆주머니·차원 수정 열쇠고리·랜턴·냄비, 위에 침낭과 지팡이·깃발·칼·지도", "포탈이 아이 키보다 크게 열림 (소용돌이 고리·테두리 룬·빨려 드는 별 가루) · 차원이동문·포탈건·테라포밍도 같은 포탈", "히든 아이템 아이콘을 모두 자세하게 다시 그림 · 머리 위 주사위는 입체로(저주받은 주사위는 뿔) · 보물 상자는 금 띠·자물쇠·보석"],
+      en: ["Redrew the Dimensional Pilgrim cuter: bigger head and a slimmer face, a yellow star pin, a sailor-collar blouse and pleated skirt, and a backpack with a flap, buckled straps, a star-patch pocket, side pockets, a dimension crystal keychain, a lantern and a pot, topped by a bedroll, staff, flag, sword and map", "Portals now open taller than she is (swirling rings, edge runes, star dust being pulled in) · Dimension Gate, Portal Gun and Terraform use the same portal", "Redrew every hidden item icon in more detail · the dice over your head are now 3D (the cursed one has horns) · the treasure chest has gold bands, a lock and gems"],
+      ja: ["次元の巡礼者をもっとかわいく描き直し: 大きな頭・すっきりした顔 · 黄色い星のピン · セーラーカラーのブラウスとプリーツスカート · リュックはフタ・バックル・星のワッペンの前ポケット・横ポケット・次元水晶のキーホルダー・ランタン・鍋、上に寝袋と杖・旗・剣・地図", "ポータルが少女の背より大きく開くように (渦の輪・縁のルーン・吸い込まれる星くず) · 次元移動門・ポータルガン・テラフォーミングも同じポータル", "ヒドゥンアイテムのアイコンをすべて細かく描き直し · 頭上のサイコロは立体に (呪われたサイコロは角つき) · 宝箱は金の帯・錠前・宝石つき"],
+    },
+  },
+  {
     version: "0.48.225",
     date: "2026-10-29",
     items: {
