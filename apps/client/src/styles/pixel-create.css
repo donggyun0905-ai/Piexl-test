@@ -1,0 +1,63 @@
+/* 도트 편집 창작 공간 창 (pixel/CreatePanel) */
+.px-create-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgb(0 0 0 / 0.6);
+}
+.px-create {
+  width: min(560px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  padding: 16px 18px;
+  border: 2px solid #c8a8ff;
+  border-radius: 10px;
+  background: #1c1828;
+  color: #eee;
+}
+.px-create h3 {
+  margin: 0 0 6px;
+}
+.px-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.px-create-form input[type="number"] {
+  width: 80px;
+}
+.px-create-sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.px-create-sizes button.active {
+  outline: 2px solid #ffd050;
+}
+.px-create-list {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.px-create-list li {
+  display: flex;
+  gap: 6px;
+}
+.px-create-list li > button:first-child {
+  flex: 1;
+  text-align: left;
+}
+.px-create-del {
+  color: #ff8a8a;
+}
+.px-make {
+  border-color: #c8a8ff;
+}

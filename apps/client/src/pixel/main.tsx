@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { PixelApp } from "./PixelApp";
 import "../styles/base.css";
 import "../styles/pixel.css";
+import "../styles/pixel-create.css";
 
 const root = document.getElementById("root");
 if (!root) throw new Error("#root 없음");

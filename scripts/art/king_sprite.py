@@ -79,11 +79,6 @@ def frame_for(name):
         else:
             c.rect(CX - 14, top + 16, 10, FOOT - top - 22, k["cape"])
         # 대검 (어깨에 걸침: 오른손 위 → 등 뒤 왼쪽 위로 삐죽) · 공격 줄은 앞쪽 아래로 휘두름
-        sword_back = not cast and view in ("front", "side")
-        if sword_back and view == "front":
-            zweihander(c, CX + 12, top + 26, CX - 30, top - 16, k)
-        elif sword_back:
-            zweihander(c, CX + 6, top + 24, CX - 30, top - 12, k)
         # 다리 (굵은 정강이 갑옷 · 쇠 장화)
         lift = (0, 2, 0, -2)[step]
         if view in ("front", "back"):
@@ -174,6 +169,13 @@ def frame_for(name):
                 # 목 보호대 (갑옷 깃)
                 c.rect(CX - 7, hy + 18, 14, 2, k["plateD"])
             flame(c, CX - 9, top + 12, col, k, 2); flame(c, CX + 9, top + 12, col + 2, k, 2)
+        # 걸을 때: 오른손에 쥔 대검을 오른쪽 어깨에 기댐 (몸 앞으로, 칼날이 어깨 위로 크게) · 옆은 앞쪽 어깨에 기대 뒤로
+        if not cast and view == "front":
+            zweihander(c, CX + 10, top + 36, CX + 36, top - 16, k)
+            c.rect(CX + 10, top + 26, 6, 5, k["plateD"]); c.rect(CX + 10, top + 26, 6, 1, k["trim"])
+        elif not cast and view == "side":
+            zweihander(c, CX + 10, top + 32, CX - 30, top - 12, k)
+            c.rect(CX + 6, top + 24, 6, 5, k["plateD"])
         shade(c)
         c.outline(k["outline"])
         return c

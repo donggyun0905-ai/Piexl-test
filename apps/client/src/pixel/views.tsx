@@ -51,8 +51,8 @@ export function CellView({ data, g, r, c, zoom, grid = false, guide, onStroke, p
     <canvas
       ref={ref}
       className={onStroke ? "px-edit" : "px-cell"}
-      width={g.cw * zoom}
-      height={g.ch * zoom}
+      width={Math.max(1, Math.round(g.cw * zoom))}
+      height={Math.max(1, Math.round(g.ch * zoom))}
       onPointerDown={(e) => {
         down.current = true;
         e.currentTarget.setPointerCapture(e.pointerId);
@@ -71,7 +71,8 @@ export function CellView({ data, g, r, c, zoom, grid = false, guide, onStroke, p
 /** 그림 전체 (눌러서 칸 고르기). 가로 width 픽셀 안에 맞춤 */
 export function SheetView({ data, g, width, sel, onPick, version }: { data: ImageData; g: Grid; width: number; sel: [number, number]; onPick: (r: number, c: number) => void; version: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
-  const zoom = Math.max(1, Math.floor(width / Math.max(data.width, data.height)));
+  const fit = width / Math.max(data.width, data.height);
+  const zoom = fit >= 1 ? Math.floor(fit) : fit;
   useEffect(() => {
     const ctx = ref.current?.getContext("2d");
     if (!ctx) return;
@@ -87,8 +88,8 @@ export function SheetView({ data, g, width, sel, onPick, version }: { data: Imag
     <canvas
       ref={ref}
       className="px-sheet"
-      width={data.width * zoom}
-      height={data.height * zoom}
+      width={Math.max(1, Math.round(data.width * zoom))}
+      height={Math.max(1, Math.round(data.height * zoom))}
       onClick={(e) => {
         const box = e.currentTarget.getBoundingClientRect();
         const r = Math.min(g.rows - 1, Math.floor(((e.clientY - box.top) / box.height) * (data.height / g.ch)));
@@ -107,5 +108,6 @@ export function Preview({ data, g, row, version }: { data: ImageData; g: Grid; r
     return () => window.clearInterval(id);
   }, []);
   const c = f % g.cols;
-  return <CellView data={data} g={g} r={row} c={c} zoom={Math.max(2, Math.floor(96 / Math.max(g.cw, g.ch)))} version={version} />;
+  const fit = 96 / Math.max(g.cw, g.ch);
+  return <CellView data={data} g={g} r={row} c={c} zoom={fit >= 2 ? Math.floor(fit) : fit} version={version} />;
 }

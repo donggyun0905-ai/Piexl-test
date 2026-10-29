@@ -20,9 +20,11 @@ interface Props {
   onUpload: (f: File | undefined) => void;
   onReset: () => void;
   onApply: (on: boolean) => void;
+  /** 창작 공간 창 열기 (개발용 화면에서만) */
+  onCreate?: () => void;
 }
 
-export function PixelTop({ t, bases, fx, assets, asset, draft, apply, onOpen, onBase, onDownload, onUpload, onReset, onApply }: Props) {
+export function PixelTop({ t, bases, fx, assets, asset, draft, apply, onOpen, onBase, onDownload, onUpload, onReset, onApply, onCreate }: Props) {
   const group = GROUPS.find((x) => x.id === asset.group)!;
   return (
     <>
@@ -53,6 +55,11 @@ export function PixelTop({ t, bases, fx, assets, asset, draft, apply, onOpen, on
           </label>
         ) : (
           <Picker assets={assets} current={asset} onOpen={onOpen} />
+        )}
+        {onCreate && (
+          <button type="button" className="px-make" onClick={onCreate}>
+            🎨 창작 공간 (새 그림)
+          </button>
         )}
         {draft && <span className="px-draft">{t("pxDrafting")}</span>}
         <button type="button" onClick={onDownload}>
@@ -87,7 +94,8 @@ export function PixelTop({ t, bases, fx, assets, asset, draft, apply, onOpen, on
         </>
       ) : (
         <p className="px-help">
-          <b>{group.label}</b>: {group.help}. 다 찍으면 'PNG 내려받기'로 받아 전달해 주세요 (넣을 자리: <code>{asset.place}</code>). {t("pxKeys")} · {t("pxKeys2")}
+          <b>{group.label}</b>: {group.help}. {asset.place ? <>다 찍으면 'PNG 내려받기'로 받아 전달해 주세요 (넣을 자리: <code>{asset.place}</code>). </> : "PNG 내려받기로 파일로 받을 수 있습니다. "}
+          {t("pxKeys")} · {t("pxKeys2")}
         </p>
       )}
     </>

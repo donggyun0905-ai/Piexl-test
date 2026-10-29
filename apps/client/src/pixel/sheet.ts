@@ -75,8 +75,10 @@ export function putCell(d: ImageData, g: Grid, r: number, c: number, px: readonl
 /** 그림에 쓰인 색 (많이 쓴 순서) */
 export function usedColors(d: ImageData, max = 40): string[] {
   const n = new Map<string, number>();
-  for (let y = 0; y < d.height; y++)
-    for (let x = 0; x < d.width; x++) {
+  // 큰 그림은 띄엄띄엄 세어 봄
+  const step = Math.max(1, Math.round(Math.sqrt((d.width * d.height) / 65536)));
+  for (let y = 0; y < d.height; y += step)
+    for (let x = 0; x < d.width; x += step) {
       const p = getPx(d, x, y);
       if (p) n.set(p, (n.get(p) ?? 0) + 1);
     }
@@ -104,12 +106,15 @@ export function download(d: ImageData, file: string): void {
 
 /** 칸 하나를 배율 z로 그리기 (투명은 체크무늬). guide: 가운데·발 기준선 [x, y] */
 export function drawCell(ctx: CanvasRenderingContext2D, d: ImageData, g: Grid, r: number, c: number, z: number, grid: boolean, guide?: readonly [number, number]): void {
-  for (let y = 0; y < g.ch; y++)
-    for (let x = 0; x < g.cw; x++) {
-      const p = getPx(d, c * g.cw + x, r * g.ch + y);
-      ctx.fillStyle = p ?? ((x + y) % 2 ? "#3a3648" : "#45415a");
-      ctx.fillRect(x * z, y * z, z, z);
+  // 투명 체크무늬 (큰 그림판은 한 칸을 여러 픽셀로 묶어서) → 그림을 한 번에 확대해 올림 (512·1024칸도 빠르게)
+  const k = Math.max(1, Math.round(Math.max(g.cw, g.ch) / 64));
+  for (let y = 0; y < g.ch; y += k)
+    for (let x = 0; x < g.cw; x += k) {
+      ctx.fillStyle = (x / k + y / k) % 2 ? "#3a3648" : "#45415a";
+      ctx.fillRect(x * z, y * z, k * z, k * z);
     }
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(toCanvas(d), c * g.cw, r * g.ch, g.cw, g.ch, 0, 0, g.cw * z, g.ch * z);
   if (!grid || z < 6) return;
   ctx.strokeStyle = "rgba(255,255,255,0.08)";
   ctx.lineWidth = 1;

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.237",
+    date: "2026-10-29",
+    items: {
+      ko: ["몰락한 왕·옛 제국의 왕(바스러져가는 왕관): 앞·옆에서 볼 때 붉은 대검을 오른손에 쥐고 어깨에 기대 몸 앞으로 보이게", "도트 편집 페이지(/pixel/) 창작 공간: 16·32·96·128·256·512·1024·2048칸 등 크기를 마음대로 정한 빈 그림판에 직접 그리기 · 칸 나누기(캐릭터 시트처럼 여러 장) · 이 기기에 자동 저장 · PNG 내려받기 · 큰 그림판은 더 굵은 붓과 확대·축소"],
+      en: ["Fallen King and the Old Empire King (Crumbling Crown): seen from the front or side, the red greatsword is now held in the right hand and rests on the shoulder in front of the body", "Pixel editor (/pixel/) Creative Space: draw on a blank canvas of any size (16, 32, 96, 128, 256, 512, 1024, 2048…) · split into frames like a character sheet · auto-saved on this device · download as PNG · bigger brushes and zoom for large canvases"],
+      ja: ["没落した王・古き帝国の王 (崩れゆく王冠): 前・横から見ると赤い大剣を右手に持ち肩に担いで体の前に見えるように", "ドット編集ページ (/pixel/) 創作スペース: 16・32・96・128・256・512・1024・2048など好きな大きさの白紙に直接描く · コマ分け (キャラシートのように複数枚) · この端末に自動保存 · PNGダウンロード · 大きな画面は太いブラシと拡大・縮小"],
+    },
+  },
+  {
     version: "0.48.236",
     date: "2026-10-29",
     items: {

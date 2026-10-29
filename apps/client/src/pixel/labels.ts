@@ -1,7 +1,8 @@
 // 도트 편집 개발용 글자 (한국어만): 그림 묶음 · 효과 · 탄 이름 (몬스터 이름은 i18n/enemies)
-export type GroupId = "char" | "skin" | "enemy" | "weapon" | "passive" | "use" | "fx" | "shot" | "tiger";
+export type GroupId = "create" | "char" | "skin" | "enemy" | "weapon" | "passive" | "use" | "fx" | "shot" | "tiger";
 
 export const GROUPS: { id: GroupId; label: string; help: string }[] = [
+  { id: "create", label: "🎨 창작 공간 (내 그림)", help: "크기를 마음대로 정한 내 그림판 (16~2048칸, 칸 나누기 가능). 이 기기에 자동 저장" },
   { id: "char", label: "캐릭터", help: "칸 32×32가 4줄×4칸: 줄은 앞·뒤·옆(오른쪽)·공격, 칸은 움직임 4장. 노란 선은 가운데·발 위치" },
   { id: "skin", label: "스킨", help: "캐릭터와 같은 규격. '(던진 뒤)'는 베두인이 차크람을 던져 손이 빈 모습" },
   { id: "enemy", label: "몬스터·보스", help: "오른쪽을 보는 모습, 움직임 칸이 가로로 (보통 2장). 왼쪽은 게임이 뒤집어 그림" },

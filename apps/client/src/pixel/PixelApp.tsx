@@ -18,11 +18,14 @@ import { cellPixels, copyData, download, loadImage, OUTLINE, putCell, usedColors
 import { TOOLS, ToolBar } from "./ToolBar";
 import type { Tool } from "./tools";
 import { useDrawing } from "./useDrawing";
+import { CreatePanel } from "./CreatePanel";
+import { creationAsset, isCreation, listCreations, saveCreation, type Creation } from "./create";
 import { CellView, Preview, SheetView } from "./views";
 
 const myParam = new URLSearchParams(window.location.search).get("my");
 const MY = myParam && myParam in CHARACTERS ? (myParam as CharacterId) : null;
 const FX = new URLSearchParams(window.location.search).has("fx");
+const CREATE = new URLSearchParams(window.location.search).has("create");
 
 export function PixelApp() {
   const { t } = useLang();
@@ -51,9 +54,15 @@ export function PixelApp() {
   return <Editor t={t} assets={assets} />;
 }
 
-function Editor({ t, assets: ASSETS }: { t: (k: TextKey) => string; assets: Asset[] }) {
+function Editor({ t, assets: BUILT }: { t: (k: TextKey) => string; assets: Asset[] }) {
   const [bases] = useState(() => (MY ? myBases(MY, ownedSkins(), t) : null));
-  const [asset, setAsset] = useState<Asset>(ASSETS[0]!);
+  // 창작 공간 (개발용 화면에서만): 만든 그림은 목록 맨 앞 묶음
+  const dev = !MY && !FX;
+  const [made, setMade] = useState<Creation[]>(() => (dev ? listCreations() : []));
+  const [creating, setCreating] = useState(dev && CREATE);
+  const [ASSETS] = useState(() => BUILT);
+  const allList = [...made.map(creationAsset), ...ASSETS];
+  const [asset, setAsset] = useState<Asset>(() => (dev && CREATE && made[0] ? creationAsset(made[0]) : ASSETS[0]!));
   /** 불러온 그림과 그 그림 이름 (고른 그림과 다르면 아직 불러오는 중) */
   const [loaded, setLoaded] = useState<{ id: string; data: ImageData } | null>(null);
   const data = loaded && loaded.id === asset.id ? loaded.data : null;
@@ -67,17 +76,19 @@ function Editor({ t, assets: ASSETS }: { t: (k: TextKey) => string; assets: Asse
   const [size, setSize] = useState(1);
   const [mirror, setMirror] = useState(false);
   const [scale, setScaleRaw] = useState(1);
-  const setScale = (v: number) => setScaleRaw(Math.max(0.3, Math.min(4, v)));
+  const setScale = (v: number) => setScaleRaw(Math.max(0.1, Math.min(32, v)));
   const [apply, setApply] = useState(applyDrafts);
   const past = useRef<ImageData[]>([]);
   const future = useRef<ImageData[]>([]);
   const [clip, setClip] = useState<(string | null)[] | null>(null);
   const g = data ? gridOf(asset, data) : null;
+  /** 붓 가장 굵게 (큰 그림판은 더 굵게) */
+  const maxBrush = g ? Math.max(6, Math.min(64, Math.round(Math.max(g.cw, g.ch) / 16))) : 6;
 
   const fetchArt = (a: Asset, fresh = false) => {
     past.current = [];
     future.current = [];
-    const d = fresh ? null : loadDraft(a.id);
+    const d = fresh || isCreation(a.id) ? null : loadDraft(a.id);
     (d ? loadImage(d) : a.load()).then((img) => {
       setLoaded({ id: a.id, data: img });
       setDraft(!!d);
@@ -89,28 +100,31 @@ function Editor({ t, assets: ASSETS }: { t: (k: TextKey) => string; assets: Asse
     setSel([0, 0]);
     fetchArt(a, fresh);
   };
-  useEffect(() => fetchArt(ASSETS[0]!), [ASSETS]);
+  const [first] = useState(asset);
+  useEffect(() => fetchArt(first), [first]);
 
   /** 바꾸기 전 기록 → 바꾸기 → 다시 그리기 · 초안 저장 */
   const change = (fn: (d: ImageData) => void, record = true) => {
     if (!data) return;
     if (record) {
       past.current.push(copyData(data));
-      if (past.current.length > 80) past.current.shift();
+      // 큰 그림은 되돌리기 기록을 적게 (모두 합쳐 약 64MB 안)
+      if (past.current.length > Math.max(8, Math.min(80, Math.floor(64e6 / (data.data.length || 1))))) past.current.shift();
       future.current = [];
     }
     fn(data);
     setVersion((v) => v + 1);
     setDraft(true);
-    saveDraft(asset.id, data);
+    store(data);
   };
+  const store = (d: ImageData) => (isCreation(asset.id) ? saveCreation(asset.id, d) : saveDraft(asset.id, d));
   const swap = (from: React.MutableRefObject<ImageData[]>, to: React.MutableRefObject<ImageData[]>) => {
     const prev = from.current.pop();
     if (!prev || !data) return;
     to.current.push(copyData(data));
     data.data.set(prev.data);
     setVersion((v) => v + 1);
-    saveDraft(asset.id, data);
+    store(data);
   };
   const undo = () => swap(past, future);
   const redo = () => swap(future, past);
@@ -130,7 +144,7 @@ function Editor({ t, assets: ASSETS }: { t: (k: TextKey) => string; assets: Asse
         redo();
       } else if (k === "m") setMirror((m) => !m);
       else if (k === "[") setSize(Math.max(1, size - 1));
-      else if (k === "]") setSize(Math.min(6, size + 1));
+      else if (k === "]") setSize(Math.min(maxBrush, size + 1));
       else if (k === "+" || k === "=") setScale(scale * 1.25);
       else if (k === "-") setScale(scale / 1.25);
       else {
@@ -150,7 +164,9 @@ function Editor({ t, assets: ASSETS }: { t: (k: TextKey) => string; assets: Asse
       () => alert(t("pxBadPng")),
     );
   };
-  const zoom = g ? Math.max(2, Math.round((448 / Math.max(g.cw, g.ch)) * scale)) : 1;
+  // 칸이 크면(창작 공간 512·1024 등) 한 픽셀이 화면 1칸보다 작게도 보임
+  const fit = g ? 448 / Math.max(g.cw, g.ch) : 1;
+  const zoom = fit >= 2 ? Math.max(2, Math.round(fit * scale)) : Math.max(0.05, fit * scale);
   const rowName = asset.rowKeys ? t(asset.rowKeys[sel[0]]!) : (asset.rowNames?.[sel[0]] ?? `${sel[0] + 1}`);
 
   return (
@@ -159,15 +175,16 @@ function Editor({ t, assets: ASSETS }: { t: (k: TextKey) => string; assets: Asse
         t={t}
         bases={bases}
         fx={FX}
-        assets={ASSETS}
+        assets={allList}
         asset={asset}
+        onCreate={dev ? () => setCreating(true) : undefined}
         draft={draft}
         apply={apply}
         onOpen={(a) => open(a)}
         onBase={(a) => replaceWith(a.load())}
         onDownload={() => data && download(data, asset.file)}
         onUpload={(f) => f && replaceWith(loadImage(URL.createObjectURL(f)))}
-        onReset={() => (removeDraft(asset.id), open(asset, true))}
+        onReset={() => (isCreation(asset.id) ? change((d) => d.data.fill(0)) : (removeDraft(asset.id), open(asset, true)))}
         onApply={(on) => (setApplyDrafts(on), setApply(on))}
       />
       {!data || !g ? (
@@ -193,7 +210,7 @@ function Editor({ t, assets: ASSETS }: { t: (k: TextKey) => string; assets: Asse
             </div>
           </section>
           <section className="px-center">
-            <ToolBar t={t} tool={tool} setTool={setTool} size={size} setSize={setSize} mirror={mirror} setMirror={setMirror} grid={grid} setGrid={setGrid} zoom={scale} setZoom={setScale} undo={undo} redo={redo} />
+            <ToolBar t={t} maxSize={maxBrush} tool={tool} setTool={setTool} size={size} setSize={setSize} mirror={mirror} setMirror={setMirror} grid={grid} setGrid={setGrid} zoom={scale} setZoom={setScale} undo={undo} redo={redo} />
             <div
               className="px-canvas-wrap"
               onWheel={(e) => {
@@ -207,9 +224,10 @@ function Editor({ t, assets: ASSETS }: { t: (k: TextKey) => string; assets: Asse
             </div>
             <ColorPanel color={color} used={usedColors(data)} t={t} onPick={setColor} />
           </section>
-          <Compare key={asset.group} title={t("pxCompare")} list={bases ?? ASSETS.filter((a) => a.group === asset.group)} sel={sel} onPick={(r, c) => setSel([r, c])} />
+          {asset.group !== "create" && <Compare key={asset.group} title={t("pxCompare")} list={bases ?? allList.filter((a) => a.group === asset.group)} sel={sel} onPick={(r, c) => setSel([r, c])} />}
         </div>
       )}
+      {creating && <CreatePanel onClose={() => setCreating(false)} onList={setMade} onOpen={(c) => (setCreating(false), open(creationAsset(c)))} />}
     </div>
   );
 }

@@ -16,6 +16,8 @@ export const TOOLS: [Tool, TextKey, string, string][] = [
 
 interface Props {
   t: (k: TextKey) => string;
+  /** 붓 가장 굵게 (큰 그림판은 더 굵게) */
+  maxSize?: number;
   tool: Tool;
   setTool: (t: Tool) => void;
   size: number;
@@ -30,7 +32,7 @@ interface Props {
   redo: () => void;
 }
 
-export function ToolBar({ t, tool, setTool, size, setSize, mirror, setMirror, grid, setGrid, zoom, setZoom, undo, redo }: Props) {
+export function ToolBar({ t, maxSize = 6, tool, setTool, size, setSize, mirror, setMirror, grid, setGrid, zoom, setZoom, undo, redo }: Props) {
   return (
     <div className="px-tools">
       {TOOLS.map(([id, label, key, icon]) => (
@@ -40,7 +42,7 @@ export function ToolBar({ t, tool, setTool, size, setSize, mirror, setMirror, gr
       ))}
       <label className="px-size">
         {t("pxBrush")}
-        <input type="range" min={1} max={6} value={size} onChange={(e) => setSize(Number(e.target.value))} />
+        <input type="range" min={1} max={maxSize} value={size} onChange={(e) => setSize(Number(e.target.value))} />
         <b>{size}</b>
       </label>
       <button type="button" className={mirror ? "active" : undefined} onClick={() => setMirror(!mirror)}>
