@@ -1,4 +1,4 @@
-// 차원의 순례자 (sim/pilgrim): 위쪽 벽 포탈에서 걸어 나오는 꼬마 · 키보다 큰 배낭(장비가 삐죽삐죽) · 도착하면 말풍선
+// 차원의 순례자 (sim/pilgrim): 위쪽 벽 포탈에서 걸어 나오는 분홍빛 긴 머리 여자아이 · 몸보다 큰 둥근 배낭 · 도착하면 말풍선
 // 히든 아이템 효과 (hiddenPerks·hiddenUse) · 왼쪽 위 금기된 아티팩트 스택 창
 import { pilgrimWalk, relicStacks, ROOM_CX, ROOM_CY, type EffectState, type RunState } from "@pixel-rogue/shared";
 import { RELIC_COLORS } from "../iconArt/hidden";

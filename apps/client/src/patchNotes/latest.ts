@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.228",
+    date: "2026-10-29",
+    items: {
+      ko: ["차원의 순례자 그림 새로: 허리까지 물결치는 분홍빛 긴 머리 · 파랑 눈 안 노란 십자 · 헐렁한 회녹색 후드 재킷·흰 티·남색 반바지·끈 부츠 · 몸보다 큰 둥글고 푹신한 배낭(귀 같은 덮개·옆주머니·수정 열쇠고리)을 두 손으로 꼭 쥠"],
+      en: ["New look for the Dimensional Pilgrim: long wavy pink hair down to her waist, blue eyes with a yellow cross, a baggy grey-green hoodie jacket, white tee, navy shorts and laced boots, gripping the straps of a round, squishy backpack bigger than she is (ear-like flaps, side pockets, crystal keychain)"],
+      ja: ["次元の巡礼者の新しい姿: 腰まで波打つピンクの長い髪 · 青い瞳に黄色い十字 · だぼっとした灰緑のパーカージャケット・白T・紺のショートパンツ・ひもブーツ · 体より大きな丸くてふかふかのリュック (耳のようなフタ・横ポケット・水晶のキーホルダー) の肩ひもを両手でぎゅっ"],
+    },
+  },
+  {
     version: "0.48.227",
     date: "2026-10-29",
     items: {
