@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.238",
+    date: "2026-10-29",
+    items: {
+      ko: ["몰락한 왕·옛 제국의 왕 뒷모습: 손잡이·날밑은 몸에 가려지고 어깨 위로 칼날만 보이게"],
+      en: ["Fallen King and the Old Empire King from behind: the hilt and guard are hidden by the body, only the blade shows over the shoulder"],
+      ja: ["没落した王・古き帝国の王の後ろ姿: 柄と鍔は体に隠れ、肩の上に刃だけが見えるように"],
+    },
+  },
+  {
     version: "0.48.237",
     date: "2026-10-29",
     items: {

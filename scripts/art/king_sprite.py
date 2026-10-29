@@ -78,6 +78,9 @@ def frame_for(name):
             for x in range(CX - 15, CX + 15, 4): c.rect(x, FOOT - 7, 2, 2, k["capeD"])
         else:
             c.rect(CX - 14, top + 16, 10, FOOT - top - 22, k["cape"])
+        if view == "back" and not cast:
+            # 뒤: 손잡이·날밑은 몸 앞쪽이라 가려지고, 어깨 위로 칼날만 보임 (몸보다 먼저 그림)
+            zweihander(c, CX - 6, top + 28, CX - 34, top - 16, k)
         # 대검 (어깨에 걸침: 오른손 위 → 등 뒤 왼쪽 위로 삐죽) · 공격 줄은 앞쪽 아래로 휘두름
         # 다리 (굵은 정강이 갑옷 · 쇠 장화)
         lift = (0, 2, 0, -2)[step]
@@ -128,7 +131,6 @@ def frame_for(name):
                 zweihander(c, CX + 4, top + 26, CX + 22 + g * 4, FOOT - 4 - g * 6, k)
         elif view == "back":
             c.rect(CX - 19, top + 19, 6, 13, k["plate"]); c.rect(CX + 13, top + 19, 6, 13, k["plate"])
-            zweihander(c, CX + 14, top + 30, CX - 28, top - 14, k)
         else:
             if cast:
                 c.rect(CX + 2, top + 20, 12, 5, k["plate"])

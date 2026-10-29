@@ -261,6 +261,9 @@ def frame(row, col):
     dy = 1 if step in (1, 3) else 0
     top = 20 + dy
     cape(c, view if view != "back" else "front", col, top + 18)
+    if view == "back":
+        # 뒤: 손잡이·날밑은 몸 앞쪽이라 가려지고, 어깨 위로 칼날만 보임 (몸보다 먼저 그림)
+        zwei(c, CX - 6, top + 40, CX - 44, top - 16, col)
     body(c, view, step, cast, col, top)
     head(c, view, col, top - 2)
     # 걸을 때: 오른손에 쥔 대검을 오른쪽 어깨에 기댐 (몸 앞으로, 붉은 칼날이 어깨 위로 크게 삐죽) · 옆은 앞쪽 어깨에 기대 뒤로
@@ -271,9 +274,6 @@ def frame(row, col):
     elif not cast and view == "side":
         zwei(c, CX + 14, top + 44, CX - 40, top - 16, col)
         c.rect(CX + 9, top + 36, 9, 7, K["a"]); c.rect(CX + 9, top + 36, 9, 1, K["L"])
-    if view == "back":
-        # 뒤: 망토 위로 등에 멘 대검
-        zwei(c, CX + 22, top + 52, CX - 40, top - 16, col)
     if cast and view == "front":
         # 들어 올림 → 내려침 → 땅에 내리꽂음 (손잡이를 두 손으로)
         hx_, hy_ = CX + 14, top + 30
