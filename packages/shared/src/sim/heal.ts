@@ -2,6 +2,7 @@
 // 의사 공격 회복(직접 피해의 일부)은 1초마다 상한이 있음
 import { roleHealMul } from "./pwMatchup";
 import { plagueCut } from "./pwPassive";
+import { growHealMul } from "./pwGearStat";
 import { seatNo } from "./party";
 import { recapHeal } from "./pvpRecap";
 import type { PlayerState, RunState } from "./types";
@@ -49,7 +50,7 @@ export function heal(s: RunState, amount: number): void {
   // 부식독 (베놈 독가스): 회복·재생 감소
   if ((p.corrode ?? 0) > 0) amount *= 1 - TERRAIN.corrodeCut;
   // 패왕전: 받는 피해를 줄인 만큼 회복도 줄임 (회복 캐릭터가 끝없이 버티지 않게)
-  if (s.pvp) amount *= PW.heal * roleHealMul(s) * plagueCut(s, p);
+  if (s.pvp) amount *= PW.heal * roleHealMul(s) * plagueCut(s, p) * growHealMul(p, s.tick);
   if (amount <= 0) return;
   const room = Math.max(0, p.stats.maxHp - p.hp);
   // 의사: 회복하면 초록 +, 보호막이 차면 파란 + (너무 자주 띄우지 않게)

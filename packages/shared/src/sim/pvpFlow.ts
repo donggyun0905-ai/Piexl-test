@@ -1,7 +1,9 @@
 // 패왕전 진행: 쓰러짐(처치·데스) · 토너먼트 다음 차례 · 데스매치 레벨·다시 나오기 · 숲 함정 · 승패 (떨어지는 물건은 pvpExtras)
 import { PW, PW_MODE, PW_TIERS } from "../paewangDefs";
-import { PW_CAP } from "../pwRules";
 import { capWinner } from "./pwCapture";
+import { contestWinner } from "./pwContest";
+import { gearSave } from "./pwGear";
+import { homeOf, isGrow, respawnTicks, reward } from "./pwGrow";
 import { PW_ARENAS } from "../paewangMaps";
 import { checkDeath } from "./run";
 import { damagePlayer } from "./combat";
@@ -73,6 +75,7 @@ export function settleDeaths(s: RunState): void {
     // 화면에 0으로 보이는 체력(0.5 미만)은 쓰러짐
     if (seat.on && lastStand(s)) return;
     if (seat.on && s.player.hp > 0 && s.player.hp < 0.5) s.player.hp = 0;
+    if (seat.on && s.player.hp <= 0 && isGrow(s) && gearSave(s, homeOf(s, seat.team))) return;
     if (!seat.on || s.player.hp > 0 || !checkDeath(s)) return;
     seat.on = false;
     seat.fell = true;
@@ -89,7 +92,8 @@ export function settleDeaths(s: RunState): void {
     if (k && seat.by !== i) k.kills++;
     if (i === 0 && pv.mode === "brawl") pv.place = pv.seats.filter((x, j) => j !== i && inPlay(s, j)).length + 1;
     // 점령전: 잠시 뒤 집에서 다시
-    if (PW_MODE[pv.mode].rule) seat.back = s.tick + PW_CAP.respawn;
+    if (PW_MODE[pv.mode].rule) seat.back = s.tick + respawnTicks(s);
+    if (isGrow(s)) reward(s, seat.by, "hero", s.player.x, s.player.y, seat.team, s.player.pwLv);
     else if (pv.mode === "gungame") {
       seat.back = s.tick + PW.respawn;
       if (k && seat.by !== undefined) levelUp(s, seat.by);
@@ -165,6 +169,7 @@ export function decide(s: RunState): void {
   }
   // 점령전: 점령도로만 정함
   if (PW_MODE[pv.mode].rule === "capture") pv.winner ??= capWinner(s);
+  else if (PW_MODE[pv.mode].rule === "contest") pv.winner ??= contestWinner(s);
   else if (pv.winner === undefined) lastTeam(s);
   if (pv.winner === undefined) return;
   s.over = true;

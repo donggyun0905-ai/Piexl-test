@@ -27,6 +27,7 @@ import { TouchButtons } from "./TouchButtons";
 import type { GameScreenProps } from "./gameScreenProps";
 import { loadTaboo, randomKitOn } from "../taboo/tabooStore";
 export type { GameMode } from "./gameScreenProps";
+const WithControls = ({ render, controls }: { render: NonNullable<GameScreenProps["withControls"]>; controls: () => Controls | null }) => render(controls);
 export function GameScreen(props: GameScreenProps) {
   const { mode, characterId, seedText, sudden = false, endless = false, arena = false, hero = false, lang, t, onExit } = props;
   const sandbox = mode === "practice" || mode === "tutorial";
@@ -277,8 +278,7 @@ export function GameScreen(props: GameScreenProps) {
           dashRef={dashRef}
         />
       )}
-      {tip && <PickupTip tip={tip} t={t} />}
-      <AchievementToast toasts={toasts} lang={lang} t={t} />
+      {tip && <PickupTip tip={tip} t={t} />}<AchievementToast toasts={toasts} lang={lang} t={t} />{props.withControls && <WithControls render={props.withControls} controls={getControls} />}
       {result && props.afterRun ? (
         props.afterRun
       ) : (

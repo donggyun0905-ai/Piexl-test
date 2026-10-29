@@ -8,6 +8,7 @@ import { allPlayers, seatNo } from "./party";
 import { inPlay } from "./pvpWorld";
 import { onSegment } from "./s2Kit";
 import { recapHeal } from "./pvpRecap";
+import { growSkillDmg, growSkillHeal } from "./pwGearStat";
 import { damageEnemy } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
@@ -41,7 +42,7 @@ export function castFx(s: RunState, def: PwSkillDef, x: number, y: number, dx: n
 /** 지금 자리의 버프 곱 (공격력·이동·공격 속도·받는 피해) */
 export const buffMul = (p: PlayerState, k: "dmg" | "move" | "rate" | "taken"): number => (p.pwBuffs ?? []).reduce((m, b) => m * (b[k] ?? 1), 1);
 /** 스킬 한 번 피해의 바탕 (캐릭터 보정 공격력 배율 포함) */
-export const skillPow = (p: PlayerState): number => PW.skillDmg * (PW_CHAR[p.characterId]?.dmg ?? 1) * (PW_CHAR[p.characterId]?.skill ?? 1);
+export const skillPow = (p: PlayerState): number => PW.skillDmg * (PW_CHAR[p.characterId]?.dmg ?? 1) * (PW_CHAR[p.characterId]?.skill ?? 1) * growSkillDmg(p);
 /** 투명(상대에게 안 보임) 버프 중인지 */
 export const pwHidden = (p: PlayerState): boolean => !!p.pwBuffs?.some((b) => b.hide);
 
@@ -111,7 +112,7 @@ export function resolveCast(s: RunState, def: PwSkillDef, c: PwCast): void {
   const reach = def.shape === "self" || def.shape === "cone" ? Math.max(def.radius, 30) : def.radius;
   if (def.heal)
     for (const q of alliesNear(s, c.x, c.y, reach)) {
-      const raw = q.stats.maxHp * def.heal * PW.heal * roleHealMul(s) * plagueCut(s, q);
+      const raw = q.stats.maxHp * def.heal * PW.heal * roleHealMul(s) * plagueCut(s, q) * growSkillHeal(s.player);
       const add = Math.min(q.stats.maxHp - q.hp, raw);
       q.hp += Math.max(0, add);
       // 의사 패시브: 넘친 회복은 보호막 (최대 체력 비율까지)

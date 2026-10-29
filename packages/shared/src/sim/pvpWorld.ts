@@ -15,6 +15,7 @@ import { inBush } from "./paewangGrid";
 import { buffMul, pwHidden } from "./pwSkillHit";
 import { practiceSafe } from "./pvpPractice";
 import { recapTake } from "./pvpRecap";
+import { gearHits } from "./pwGear";
 
 /** 경기장에 나와 살아 있는 자리인지 */
 export function inPlay(s: RunState, i: number): boolean {
@@ -38,7 +39,9 @@ export function assignFoes(s: RunState): void {
     const team = pv.seats[i]!.team;
     // 상대 쪽 사람 + 상대가 소환한 것 (부술 수 있음)
     const mins = (pv.mins ?? []).filter((m) => m.body && m.body.hp > 0 && m.t > 0 && pv.seats[m.seat]!.team !== team).map((m) => m.body!);
-    s.enemies = live.filter((e) => pv.seats[pv.proxies.indexOf(e)]!.team !== team).concat(mins);
+    // 성장 대결: 상대 편·중립 병사·포탑·보스
+    const units = (pv.grow?.units ?? []).filter((u) => u.team !== team && u.body.hp > 0).map((u) => u.body);
+    s.enemies = live.filter((e) => pv.seats[pv.proxies.indexOf(e)]!.team !== team).concat(mins, units);
   });
 }
 
@@ -142,5 +145,6 @@ function transfer(s: RunState, start: number[]): void {
     seat.root = Math.max(seat.root, Math.min(120, e.rootTicks ?? 0));
     e.stunTicks = e.slowTicks = e.rootTicks = e.fearTicks = 0;
   });
+  if (pv.grow && pv.hits) gearHits(s, pv.hits);
   pv.hits = undefined;
 }

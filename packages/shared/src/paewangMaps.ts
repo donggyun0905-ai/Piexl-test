@@ -5,6 +5,7 @@ import { NONE, type PwArenaDef, type Rect, type Spot } from "./paewangMapKit";
 import { BIG_ARENAS } from "./paewangMapsBig";
 import { SMALL_ARENAS } from "./paewangMapsSmall";
 import { CAPTURE_ARENAS } from "./paewangMapsCapture";
+import { GROW_ARENAS } from "./paewangMapsGrow";
 
 export type { PwArenaDef } from "./paewangMapKit";
 
@@ -128,7 +129,7 @@ const BASE_ARENAS = {
 } satisfies Record<string, PwArenaDef>;
 
 /** 모든 경기장 (처음 5개 + 작은·중간 + 큰 + 점령전) */
-const ALL_ARENAS = { ...BASE_ARENAS, ...SMALL_ARENAS, ...BIG_ARENAS, ...CAPTURE_ARENAS };
+const ALL_ARENAS = { ...BASE_ARENAS, ...SMALL_ARENAS, ...BIG_ARENAS, ...CAPTURE_ARENAS, ...GROW_ARENAS };
 export type PwArenaId = keyof typeof ALL_ARENAS;
 export const PW_ARENAS: Record<PwArenaId, PwArenaDef> = ALL_ARENAS;
 
@@ -141,4 +142,5 @@ export const PW_MAP_SETS = {
   brawl: ["field", "bLava", "bPonds", "bGrass", "bRuins"],
   gungame: ["manor", "gCastle", "gVolcano", "gVillage", "gPrison"],
   capture: ["cHall", "cCliff", "cRing"],
+  contest: ["gContest"],
 } as const satisfies Record<string, readonly PwArenaId[]>;

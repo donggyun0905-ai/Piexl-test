@@ -53,7 +53,7 @@ export function rechargeDash(p: PlayerState, cooldown: number): void {
 }
 
 /** 신기루 걸음: 대시 대기 시간 배율 */
-export const dashCooldownMul = (p: PlayerState) => (hasPerk(p, "mirageStep") ? K.mirageStep.cooldown : 1);
+export const dashCooldownMul = (p: PlayerState) => (hasPerk(p, "mirageStep") ? K.mirageStep.cooldown : 1) * (1 - (p.pwDashCut ?? 0));
 
 /** 피해 배율: 태양 전사는 모아 둔 대시 하나마다 +5% */
 function power(p: PlayerState): number {

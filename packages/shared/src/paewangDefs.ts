@@ -2,8 +2,8 @@
 import type { CharacterId } from "./characters";
 import { PW_MAP_SETS, type PwArenaId } from "./paewangMaps";
 
-export type PwMode = "duel" | "pair" | "trio" | "squad" | "tourney" | "brawl" | "gungame" | "capture";
-export const PW_MODES: readonly PwMode[] = ["duel", "pair", "trio", "squad", "tourney", "brawl", "gungame", "capture"];
+export type PwMode = "duel" | "pair" | "trio" | "squad" | "tourney" | "brawl" | "gungame" | "capture" | "contest";
+export const PW_MODES: readonly PwMode[] = ["duel", "pair", "trio", "squad", "tourney", "brawl", "gungame", "capture", "contest"];
 
 /** AI 보정: 체력 · 피해 · 공격 빠르기 · 조준 정확도(0~1) · 이동 빠르기 · 피하기(대시) 확률 */
 export interface PwDiff {
@@ -39,7 +39,7 @@ export interface PwModeDef {
   timeSec: number;
   zone?: boolean;
   /** 특별 규칙 (docs/PW_MODES.md): 점령전(점령도 100% 승리 · 쓰러지면 집에서 다시, sim/pwCapture) */
-  rule?: "capture";
+  rule?: "capture" | "contest" | "war";
 }
 
 export const PW_MODE: Record<PwMode, PwModeDef> = {
@@ -59,6 +59,8 @@ export const PW_MODE: Record<PwMode, PwModeDef> = {
   gungame: { maps: PW_MAP_SETS.gungame, rounds: 1, allies: 0, foes: 4, ffa: true, reward: 10000, diff: NORMAL, prep: false, timeSec: 1800 },
   /** 점령전: 5대5 · 점령 구역에 우리 편만 있으면 점령도가 오르고 100%면 승리 · 쓰러지면 집에서 다시 · 어려움 · 단판 */
   capture: { maps: PW_MAP_SETS.capture, rounds: 1, allies: 4, foes: 5, ffa: false, reward: 6000, diff: HARD, prep: true, timeSec: 480, rule: "capture" },
+  /** 쟁탈전: 5대5 · 레벨·돈·집 상점 · 병사·포탑 · 상대 포탑 둘을 부수고 가운데 점령 → 상대 집 보스를 잡고 집 점령하면 승리 · 단판 */
+  contest: { maps: PW_MAP_SETS.contest, rounds: 1, allies: 4, foes: 5, ffa: false, reward: 8000, diff: HARD, prep: true, timeSec: 1500, rule: "contest" },
 };
 
 /** 데스매치 레벨별 캐릭터: 1레벨이 가장 센 티어, 21레벨이 가장 약한 캐릭터 (관리자가 바꿔 가며 조정) */

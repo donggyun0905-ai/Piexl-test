@@ -10,6 +10,7 @@ import { WANDERER_PERKS } from "../itemsWanderer";
 import { addEffect, hasPerk, weaponOf } from "./util";
 import { hiddenExtras, hiddenOnHit } from "./hiddenPerks";
 import { kingExtras } from "./kingForm";
+import { growExtras } from "./pwGearStat";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -28,9 +29,11 @@ export function extraOf(p: PlayerState): ExtraStats {
   const base = kingExtras(p) ?? (CHARACTERS[p.characterId] as unknown as ExtraStats);
   // 히든 아이템(금기된 아티팩트·신의 파편)이 더한 몫
   const add = hiddenExtras(p);
-  if (!add) return base;
+  // 패왕전 성장 대결: 장비·증강·레벨 (sim/pwGearStat)
+  const grow = growExtras(p);
+  if (!add && !grow) return base;
   const out = { ...base };
-  for (const k of Object.keys(add) as (keyof ExtraStats)[]) out[k] += add[k] ?? 0;
+  for (const a of [add, grow]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
   return out;
 }
 

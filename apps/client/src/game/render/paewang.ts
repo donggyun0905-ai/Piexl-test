@@ -1,6 +1,7 @@
 // 패왕전 그리기: AI 캐릭터(상대·내 편) 몸·체력 줄·편 표시 · 휘두름 · AI 탄 · 바닥(2층 발판·가시 함정) · 수풀(위에 덮음)
 import { drawPwZone } from "./pwZone";
 import { drawCapChan, drawCapGround } from "./pwCapture";
+import { drawGrowGround, drawGrowUnits } from "./pwGrowDraw";
 import { allPlayers, inBush, PW, PW_ARENAS, TILE_SIZE, trapUp, type EnemyState, type ProjectileState, type PwAlly, type PwBrain, type RunState } from "@pixel-rogue/shared";
 import { drawBody } from "./actors";
 import { drawFoeCue, pwHead, pwIsAlly, pwShown, pwTint, setPwViewer } from "./pwLook";
@@ -97,6 +98,8 @@ export function drawPwGround(ctx: Ctx, s: RunState): void {
   }
   if (!s.pvp) return;
   drawCapGround(ctx, s);
+  drawGrowGround(ctx, s);
+  drawGrowUnits(ctx, s);
   drawPwZone(ctx, s);
   drawOrbs(ctx, s);
   allPlayers(s).forEach((p, i) => {

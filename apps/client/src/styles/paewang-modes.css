@@ -52,3 +52,133 @@
 .pw-cap .pwCapContest {
   color: #f2d040;
 }
+/* 성장 대결: 레벨·돈 줄 · 증강 고르기 · 집 상점 */
+.pw-grow {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  z-index: 3;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  max-width: 96vw;
+  font-size: 12px;
+  color: #fff;
+  text-shadow: 0 1px 0 #000;
+}
+.pw-grow-xp {
+  position: relative;
+  width: 80px;
+  height: 6px;
+  background: rgb(10 8 16 / 0.8);
+  border: 1px solid #3a3444;
+}
+.pw-grow-xp i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: #b48aff;
+}
+.pw-grow-gold {
+  color: #f2d040;
+}
+.pw-grow button {
+  padding: 2px 8px;
+  font-size: 11px;
+}
+.pw-grow small {
+  flex-basis: 100%;
+  text-align: center;
+  color: #d8d0e8;
+}
+.pw-aug {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  z-index: 6;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgb(20 16 32 / 0.94);
+  border: 1px solid #6a5aa0;
+}
+.pw-aug b {
+  color: #f2d040;
+  text-align: center;
+}
+.pw-shop {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 7;
+  transform: translate(-50%, -50%);
+  width: min(720px, calc(100vw - 32px));
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgb(18 14 28 / 0.96);
+  border: 1px solid #6a5aa0;
+  color: #eee;
+}
+.pw-shop header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pw-shop header .ghost {
+  margin-left: auto;
+}
+.pw-shop h4 {
+  margin: 8px 0 4px;
+  font-size: 12px;
+  color: #c8b8ff;
+}
+.pw-shop-gold {
+  color: #f2d040;
+}
+.pw-shop-away {
+  margin: 4px 0;
+  font-size: 12px;
+  color: #ff9a8a;
+}
+.pw-shop-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 4px;
+}
+.pw-shop-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  text-align: left;
+}
+.pw-shop-item span {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.pw-shop-item small {
+  font-size: 10px;
+  color: #b8b0c8;
+}
+.pw-shop-item .pw-shop-need {
+  color: #9ac8ff;
+}
+.pw-shop-item em {
+  font-style: normal;
+  color: #f2d040;
+}
+.pw-shop-mine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 30px;
+}

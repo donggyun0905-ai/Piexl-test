@@ -7,6 +7,7 @@ import { seatNo } from "./party";
 import { inPlay } from "./pvpWorld";
 import { castFx, resolveCast } from "./pwSkillHit";
 import { passiveCast } from "./pwPassive";
+import { growSkillCd } from "./pwGearStat";
 import type { RunState } from "./types";
 import { keepInRoom, makeEnemy, roomGrid } from "./util";
 
@@ -35,7 +36,7 @@ export function castSkill(s: RunState, k: number, input: TickInput): void {
   const p = s.player;
   const i = seatNo(s);
   const pv = s.pvp!;
-  (p.pwCd ??= [0, 0, 0, 0])[k] = Math.round(def.cd * 60);
+  (p.pwCd ??= [0, 0, 0, 0])[k] = Math.round(def.cd * 60 * growSkillCd(p));
   passiveCast(s);
   // 플라이 신기루(스킬 3): 다음 급습이 꼭 붉은 급습 (fly)
   if (p.characterId === "fly" && k === 2) p.pwRed = true;

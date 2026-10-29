@@ -19,8 +19,8 @@ interface Props {
 }
 
 const CELL = 2;
-const NAME: Record<PwMode, TextKey> = { duel: "pwDuel", pair: "pwPair", trio: "pwTrio", squad: "pwSquad", tourney: "pwTourney", brawl: "pwBrawl", gungame: "pwGungame", capture: "pwCapture" };
-const DESC: Record<PwMode, TextKey> = { duel: "pwDuelDesc", pair: "pwPairDesc", trio: "pwTrioDesc", squad: "pwSquadDesc", tourney: "pwTourneyDesc", brawl: "pwBrawlDesc", gungame: "pwGungameDesc", capture: "pwCaptureDesc" };
+const NAME: Record<PwMode, TextKey> = { duel: "pwDuel", pair: "pwPair", trio: "pwTrio", squad: "pwSquad", tourney: "pwTourney", brawl: "pwBrawl", gungame: "pwGungame", capture: "pwCapture", contest: "pwContest" };
+const DESC: Record<PwMode, TextKey> = { duel: "pwDuelDesc", pair: "pwPairDesc", trio: "pwTrioDesc", squad: "pwSquadDesc", tourney: "pwTourneyDesc", brawl: "pwBrawlDesc", gungame: "pwGungameDesc", capture: "pwCaptureDesc", contest: "pwContestDesc" };
 /** 미리 보기 바닥색: 숲·들판은 풀빛, 나머지는 흙빛 */
 const groundOf = (id: PwArenaId) => (id === "forest" || id.startsWith("q") || id.startsWith("b") || id === "field" ? "#3e5a30" : "#6a5a44");
 

@@ -15,7 +15,7 @@ interface Props {
   onBoard: () => void;
 }
 
-const GOAL: Record<string, TextKey> = { tourney: "pwGoalTourney", brawl: "pwGoalBrawl", gungame: "pwGoalGun", capture: "pwGoalCapture" };
+const GOAL: Record<string, TextKey> = { tourney: "pwGoalTourney", brawl: "pwGoalBrawl", gungame: "pwGoalGun", capture: "pwGoalCapture", contest: "pwGoalContest" };
 
 export function PwHud({ run, me, names, t, onBoard }: Props) {
   const pv = run.pvp!;

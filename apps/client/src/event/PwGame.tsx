@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { GameScreen } from "../game/GameScreen";
 import type { Lang, TextKey } from "../i18n";
 import { PwBoard, useBoard } from "./PwBoard";
+import { PwGrowHud } from "./PwGrowHud";
 import { PwHud } from "./PwHud";
 import type { PwMapPick } from "./PwMaps";
 import { PwResult } from "./PwResult";
@@ -58,6 +59,7 @@ export function PwGame({ mode, map, characterId, picks, loadout, lang, t, onExit
         }}
         onRunEnd={(end) => setChips(savePwResult(mode, end.won))}
         afterRun={ended ? <PwResult run={run} me={0} lang={lang} t={t} onExit={onExit} onRetry={onRetry} /> : undefined}
+        withControls={(controls) => !ended && <PwGrowHud run={run} me={0} lang={lang} t={t} controls={controls} />}
       />
       {!ended && <PwWatch run={run} me={0} t={t} />}
       {!ended && <PwHud run={run} me={0} t={t} onBoard={toggleBoard} />}

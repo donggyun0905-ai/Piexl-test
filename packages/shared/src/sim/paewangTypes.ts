@@ -5,6 +5,7 @@ import type { WeaponId } from "../content";
 import type { PwMode } from "../paewangDefs";
 import type { PwArenaId } from "../paewangMaps";
 import type { Body, EnemyState } from "./types";
+import type { PwGrowPlayer, PwGrowState } from "./pwGrowTypes";
 
 /** AI 캐릭터의 머리: 공격 방식·쿨타임·움직임 */
 export interface PwBrain {
@@ -158,7 +159,7 @@ export interface PvpSeat {
 }
 
 /** 패왕전 사람 자리 값 */
-export interface PwPlayerState {
+export interface PwPlayerState extends PwGrowPlayer {
   /** 이동 속도 강화 구슬 남은 틱 */
   pwFast?: number;
   /** 스킬 1~4 남은 대기 틱 */
@@ -257,6 +258,8 @@ export interface PvpState {
   practice?: PwPractice;
   /** 점령전: 편마다 점령도(0~100) · 버프 자리마다 다시 생기는 틱 (sim/pwCapture) */
   cap?: { prog: Record<number, number>; buffAt: number[] };
+  /** 성장 대결: 병사·포탑·보스·점령 (sim/pwGrow) */
+  grow?: PwGrowState;
 }
 
 export interface PwPractice {

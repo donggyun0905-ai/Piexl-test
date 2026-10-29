@@ -1,11 +1,11 @@
 // 패왕전 점령전 위쪽 막대: 우리 편·상대 편 점령도 (100%면 승리) · 지금 구역에 누가 있는지
-import { allPlayers, inCapZone, inPlay, PW_ARENAS, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, inCapZone, inPlay, isCapture, PW_ARENAS, type RunState } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 
 export function PwCapHud({ run, me, t }: { run: RunState; me: number; t: (k: TextKey) => string }) {
   const pv = run.pvp!;
   const a = PW_ARENAS[pv.arena];
-  if (!a.zone) return null;
+  if (!a.zone || !isCapture(run)) return null;
   const mine = pv.seats[me]!.team;
   const prog = pv.cap?.prog ?? {};
   const ours = prog[mine] ?? 0;

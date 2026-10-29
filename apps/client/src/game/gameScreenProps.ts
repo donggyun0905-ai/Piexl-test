@@ -3,6 +3,7 @@ import type { BalanceValues, CharacterId, RunState, TickInput } from "@pixel-rog
 import type { ReactNode } from "react";
 import type { Lang, TextKey } from "../i18n";
 import type { DrawOverlay } from "./render";
+import type { Controls } from "./controls";
 
 export type GameMode = "solo" | "daily" | "battle" | "practice" | "tutorial" | "coop" | "swarm" | "paewang";
 
@@ -41,6 +42,8 @@ export interface GameScreenProps {
   resultExtra?: ReactNode;
   /** 결과 창 대신 보여 줄 화면 (배틀 관전) */
   afterRun?: ReactNode;
+  /** 게임 위에 띄우는 창 (입력을 보내야 하는 패왕전 상점 등) */
+  withControls?: (controls: () => Controls | null) => ReactNode;
   /** HUD 시간 글자 (배틀 남은 시간) */
   timeText?: () => string;
   /** 바깥에서 판을 끝냄 (배틀 시간 끝) */

@@ -29,6 +29,10 @@ export interface PwArenaDef {
   buffs?: readonly Spot[];
   cliffs?: readonly Rect[];
   jumps?: readonly { pad: Rect; to: Spot }[];
+  /** 성장 대결 (sim/pwGrow·pwLane): 편마다 집(깃발, 부활·회복·상점) · 길마다 A 집 → B 집 지나는 곳 · 포탑(편 · 길 · 길에서 몇 번째, 0 = 앞) */
+  homes?: readonly [Spot, Spot];
+  lanes?: readonly (readonly Spot[])[];
+  towers?: readonly { team: 0 | 1; at: Spot; lane: number; order: number }[];
 }
 
 export const NONE: readonly never[] = [];
