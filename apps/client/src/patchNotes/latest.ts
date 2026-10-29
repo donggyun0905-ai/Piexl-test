@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.220",
+    date: "2026-10-29",
+    items: {
+      ko: ["무한 모드: 20층부터 나오던 AI 대결을 없애고, 17층부터 끝까지 라스트 보스 3종과 싸움 (층마다 계속 세짐)"],
+      en: ["Endless Mode: the AI duels from floor 20 are gone; from floor 17 on you keep fighting three last bosses (they keep getting stronger each floor)"],
+      ja: ["エンドレスモード: 20階からのAI対戦をなくし、17階から最後までラストボス3体と戦う (階ごとに強くなり続ける)"],
+    },
+  },
+  {
     version: "0.48.219",
     date: "2026-10-28",
     items: {

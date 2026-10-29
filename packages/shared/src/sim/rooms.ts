@@ -11,8 +11,7 @@ import { onRoomCleared, spawnBlessing, spawnGolden, spawnTreasure } from "./loot
 import { makeArena } from "./bossPrimeval";
 import { arenaBig, arenaEnemies, arenaMap, arenaNext, arenaPrimeval } from "./arena";
 import { spawnShop } from "./shop";
-import { endlessBosses, endlessEvent, endlessFighters, endlessPrimeval, endlessSize } from "./endless";
-import { PW_ARENAS } from "../paewangMaps";
+import { endlessBosses, endlessPrimeval, endlessSize } from "./endless";
 import { depth, heroBosses, heroNext, heroPair, lastFloorOf } from "./hero";
 import { SWARM } from "./minions";
 import { BAT_FLOCK, minionKinds } from "./critters";
@@ -90,13 +89,11 @@ function enterRoom(s: RunState, roomId: number): void {
   s.roomId = roomId;
   // 라스트 보스방은 아주 큼 (나머지는 보통 방)
   const exit = s.map.rooms[roomId]!.type === "exit";
-  // 무한 모드 11층부터: 보스방이 큰 방 (17층부터 그 2배) · 20층부터 AI 대결 경기장 (sim/endless)
+  // 무한 모드 11층부터: 보스방이 큰 방 (17층부터 그 2배, sim/endless)
   const grow = exit ? endlessSize(s) : null;
-  s.pw = exit ? endlessEvent(s, s.rooms[roomId]!.cleared) : undefined;
   const big = (s.lastBoss !== undefined && exit) || arenaBig(s, roomId) || !!grow;
-  const pwArena = s.pw ? PW_ARENAS[s.pw.arena] : null;
-  s.roomCols = pwArena?.cols ?? grow?.cols ?? (big ? BIG_COLS : undefined);
-  s.roomRows = pwArena?.rows ?? grow?.rows ?? (big ? BIG_ROWS : undefined);
+  s.roomCols = grow?.cols ?? (big ? BIG_COLS : undefined);
+  s.roomRows = grow?.rows ?? (big ? BIG_ROWS : undefined);
   applyRoom(s);
   // 태초의 빛과 어둠: 큰 방에 상자 벽 6개
   s.arena = big && (s.lastBoss === "plight" || arenaPrimeval(s, roomId) || (exit && endlessPrimeval(s))) ? makeArena(s) : undefined;
@@ -129,9 +126,7 @@ function enterRoom(s: RunState, roomId: number): void {
             ? [spawnBoss(s, "plight"), spawnBoss(s, "pdark")]
             : s.hero && !s.lastBoss
               ? heroPair(heroBosses(s).map((b) => spawnBoss(s, b)))
-              : s.pw
-                ? endlessFighters(s)
-                : (endlessBosses(s) ?? [spawnBoss(s, s.lastBoss ?? bossForFloor(s.floor, s.seed))])
+              : (endlessBosses(s) ?? [spawnBoss(s, s.lastBoss ?? bossForFloor(s.floor, s.seed))])
           : [];
     // 협동: 보물·상점·황금방·쉼터 회복은 사람마다
     eachSeat(s, () => {
@@ -146,8 +141,7 @@ function enterRoom(s: RunState, roomId: number): void {
   }
   s.enemies = st.enemies;
   st.cleared = s.enemies.length === 0;
-  // AI 대결은 경기장 자리에 놓음 (endlessFighters)
-  if ((info.type === "exit" || (s.arenaLv && info.type === "elite")) && !st.cleared && !s.pw) placeBossFight(s);
+  if ((info.type === "exit" || (s.arenaLv && info.type === "elite")) && !st.cleared) placeBossFight(s);
 }
 
 /** 보스방 입장: 어느 출구로 들어와도 플레이어는 아래쪽 가운데, 보스는 위쪽 가운데 같은 자리에서 시작 (들어오자마자 맞지 않게) */

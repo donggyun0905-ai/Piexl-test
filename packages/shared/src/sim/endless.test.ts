@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { TICK_RATE } from "../constants";
 import { ENEMIES, LAST_BOSSES } from "../content";
-import { PW_ARENAS } from "../paewangMaps";
 import { endlessPow } from "./endless";
 import { BIG_COLS, BIG_ROWS, goThrough, startFloor } from "./rooms";
 import { createRun, stepSim } from "./run";
@@ -18,7 +17,7 @@ function bossRoom(floor: number, seed = 3): RunState {
   return s;
 }
 
-const bosses = (s: RunState) => s.enemies.filter((e) => ENEMIES[e.kind].boss && !e.pw);
+const bosses = (s: RunState) => s.enemies.filter((e) => ENEMIES[e.kind].boss);
 const lastCount = (s: RunState) => s.enemies.filter((e) => (LAST_BOSSES as readonly string[]).includes(e.kind)).length;
 
 describe("무한 모드 보스방 단계", () => {
@@ -30,7 +29,7 @@ describe("무한 모드 보스방 단계", () => {
     expect([s.roomCols, s.roomRows]).toEqual([BIG_COLS, BIG_ROWS]);
   });
 
-  it("14~16층 라스트 보스 + 보스 (3마리) · 17~19층 라스트 보스 3종(2배 방)", () => {
+  it("14~16층 라스트 보스 + 보스 (3마리) · 17층부터 라스트 보스 3종(2배 방)", () => {
     for (const seed of [1, 2, 3, 4]) {
       const s = bossRoom(15, seed);
       expect(bosses(s), String(seed)).toHaveLength(3);
@@ -47,19 +46,13 @@ describe("무한 모드 보스방 단계", () => {
     expect(endlessPow(createRun(1, "warden"))).toBe(1);
   });
 
-  it("20층부터 내 능력치를 가진 AI 대결 · 다 쓰러뜨리면 보통 방으로 돌아와 계단", () => {
-    const s = bossRoom(20);
-    expect(s.pw).toBeDefined();
-    expect(s.roomCols).toBe(PW_ARENAS[s.pw!.arena].cols);
-    const foes = s.enemies.filter((e) => e.pw);
-    expect(foes.length).toBeGreaterThan(0);
-    expect(foes[0]!.maxHp).toBe(Math.round(s.player.stats.maxHp * s.pw!.same!));
-    // 상대를 쓰러뜨리면 대결이 끝남
-    for (const e of foes) e.hp = 0;
-    for (let i = 0; i < 3; i++) stepSim(s, EMPTY_INPUT);
-    expect(s.pw).toBeUndefined();
-    expect(s.roomCols).toBeUndefined();
-    expect(s.rooms[s.roomId]!.cleared).toBe(true);
+  it("17층부터 끝까지 라스트 보스 3종 (AI 대결 없음)", () => {
+    for (const floor of [20, 25, 40]) {
+      const s = bossRoom(floor);
+      expect(s.pw, String(floor)).toBeUndefined();
+      expect(lastCount(s), String(floor)).toBe(3);
+      expect([s.roomCols, s.roomRows]).toEqual([BIG_COLS * 2, BIG_ROWS * 2]);
+    }
   });
 
   it("라스트 보스 단계가 10초 동안 문제없이 · 같은 시드면 같은 결과", () => {

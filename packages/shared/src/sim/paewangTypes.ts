@@ -263,6 +263,4 @@ export interface PwRunState {
   pvp?: PvpState;
   /** 무한 모드 AI 대결 (적으로 나오는 AI, sim/endless·paewangUnits) */
   pw?: PwState;
-  /** 무한 모드: 이 층 보스방 AI 이벤트 (방을 나갔다 오면 다시 꺼냄) */
-  pwRoom?: PwState;
 }
