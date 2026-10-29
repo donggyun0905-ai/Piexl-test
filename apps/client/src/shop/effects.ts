@@ -18,6 +18,8 @@ export interface FxItem {
   dmg?: DmgStyle;
   /** 테마 세트 효과 (game/limited/themeFx) */
   theme?: FxThemeId;
+  /** 살 수 없고 보상으로만 얻음 (월드 워 리그 우승) */
+  reward?: "league";
 }
 
 export const FX_ITEMS: readonly FxItem[] = [
@@ -28,12 +30,14 @@ export const FX_ITEMS: readonly FxItem[] = [
   { id: "goldDmg", slot: "dmg", price: 15, sprites: [], dmg: "gold" },
   { id: "neonDmg", slot: "dmg", price: 15, sprites: [], dmg: "neon" },
   // 테마 세트 10개: 타격 · 대기 · 걸음 (앞 8세트는 데미지 스킨도). 세트 가격은 타격 20 · 대기 18 · 걸음 12 · 숫자 15
-  ...FX_THEMES.flatMap((th): FxItem[] => [
+  ...FX_THEMES.filter((th) => th.id !== "victory").flatMap((th): FxItem[] => [
     { id: `${th.id}Hit`, slot: "hit", price: 20, sprites: [], theme: th.id },
     { id: `${th.id}Idle`, slot: "idle", price: 18, sprites: [], theme: th.id },
     { id: `${th.id}Walk`, slot: "walk", price: 12, sprites: [], theme: th.id },
     ...(th.dmg ? [{ id: `${th.id}Dmg`, slot: "dmg" as const, price: 15, sprites: [], dmg: th.id, theme: th.id }] : []),
   ]),
+  // 월드 워 리그 우승 한정 '승리' 세트
+  ...(["hit", "idle", "walk", "dmg"] as const).map((slot): FxItem => ({ id: `victory${slot[0]!.toUpperCase()}${slot.slice(1)}`, slot, price: 0, sprites: [], theme: "victory", reward: "league", ...(slot === "dmg" ? { dmg: "victory" as const } : {}) })),
 ];
 export const FX_SLOTS: readonly FxSlot[] = ["hit", "idle", "walk", "dmg"];
 
@@ -59,12 +63,21 @@ export const equippedFx = (): Partial<Record<FxSlot, string>> => load().equipped
 /** 사기: 코인이 모자라거나 이미 있으면 false */
 export function buyFx(id: string): boolean {
   const item = FX_ITEMS.find((x) => x.id === id);
-  if (!item || ownedFx().includes(id) || !spendEventCoins(item.price)) return false;
+  if (!item || item.reward || ownedFx().includes(id) || !spendEventCoins(item.price)) return false;
   const s = load();
   s.owned.push(id);
   s.equipped[item.slot] = id;
   save(s);
   return true;
+}
+
+/** 보상으로 받음 (월드 워 리그 우승: 승리 세트 넷). 새로 받은 게 있으면 true */
+export function grantFx(reward: "league"): boolean {
+  const s = load();
+  const add = FX_ITEMS.filter((x) => x.reward === reward && !s.owned.includes(x.id)).map((x) => x.id);
+  s.owned.push(...add);
+  save(s);
+  return add.length > 0;
 }
 
 /** 장착 (null이면 그 칸 비우기) */

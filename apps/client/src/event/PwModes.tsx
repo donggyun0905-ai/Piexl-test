@@ -11,6 +11,8 @@ interface Props {
   onPick: (mode: PwMode) => void;
   /** 친구와 같이 하기 (협동 방) */
   onMulti: () => void;
+  /** 월드 워 리그 */
+  onLeague: () => void;
   onPractice: () => void;
   onBrowse: () => void;
   /** 랭크전 (모르는 사람과 점수 대결) */
@@ -66,7 +68,7 @@ export function ArenaPreview({ id }: { id: PwArenaId }) {
   return <canvas ref={ref} width={a.cols * CELL} height={a.rows * CELL} className="pw-preview" aria-hidden="true" />;
 }
 
-export function PwModes({ t, onPick, onMulti, onPractice, onBrowse, onRank, onBack }: Props) {
+export function PwModes({ t, onPick, onMulti, onLeague, onPractice, onBrowse, onRank, onBack }: Props) {
   return (
     <div className="td-maps pw-modes">
       <h2>{t("paewang")}</h2>
@@ -97,6 +99,10 @@ export function PwModes({ t, onPick, onMulti, onPractice, onBrowse, onRank, onBa
           );
         })}
       </div>
+      <button type="button" className="primary" onClick={onLeague}>
+        {t("pwLeagueOpen")}
+      </button>
+      <p className="hint">{t("pwLeagueDesc")}</p>
       <button type="button" className="primary" onClick={onMulti}>
         👥 {t("pwMulti")}
       </button>

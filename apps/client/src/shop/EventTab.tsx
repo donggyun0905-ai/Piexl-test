@@ -34,7 +34,11 @@ export function EventTab({ lang, t, onChange }: { lang: Lang; t: (k: TextKey) =>
                   <FxPreview item={x} />
                   <strong>{x.theme ? fxThemeName(x.theme, slot, lang) : t(`shopFx_${x.id}` as TextKey)}</strong>
                   <small>{x.theme ? fxThemeDesc(x.theme, slot, lang) : t(`shopFxDesc_${x.id}` as TextKey)}</small>
-                  {!have ? (
+                  {!have && x.reward ? (
+                    <button type="button" disabled>
+                      🏆 {t("pwLeagueOnly")}
+                    </button>
+                  ) : !have ? (
                     <button type="button" className="primary" disabled={coins < x.price} title={coins < x.price ? t("shopNoEcoin") : undefined} onClick={() => act(() => buyFx(x.id))}>
                       <EcoinIcon /> {x.price}
                     </button>

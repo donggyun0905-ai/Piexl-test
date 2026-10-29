@@ -15,6 +15,7 @@ export * from "./terrainDefs";
 export * from "./paewangMaps";
 export * from "./pwRules";
 export * from "./pwShop";
+export * from "./pwLeague";
 export * from "./pwKits";
 export * from "./pwDraft";
 export * from "./stats";

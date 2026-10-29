@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.243",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "패왕전 '월드 워 리그' (8팀 대회: 8강 → 4강 → 결승): 판마다 대결 유형을 고름 (5대5·토너먼트·전쟁의 서막·점령전), 두 팀 선택이 다르면 둘 중 무작위 · 다른 대결처럼 밴픽 → 준비방 → 대결",
+        "내 경기를 이기면 다른 팀 경기를 관전(AI끼리 진짜 대결)하거나 결과만 보고, 올라온 팀과 다음 경기 · 라운드마다 칩 6,000 · 12,000 · 우승 30,000",
+        "우승 보상: '승리' 한정 효과 세트 (금빛 훈장 별 타격 · 승리의 별 대기 · 금빛 별 걸음 · 훈장 숫자) — 상점 이벤트 탭에서 장착, 살 수는 없음 · 모든 캐릭터 '승리' 한정 스킨은 따로 준비 중",
+      ],
+      en: [
+        "Champion Clash 'World War League' (8 teams: quarterfinals → semifinals → final): pick a battle each match (5v5, Tournament, Prelude to War, Capture); if the two picks differ, one is chosen at random · draft → prep room → battle like every other mode",
+        "Win your match, then watch the other matches (real AI-vs-AI battles) or just check the result, and face whoever advances · 6,000 / 12,000 chips per round won, 30,000 for the title",
+        "Champion reward: the limited 'Victory' effect set (golden medal-star hits, rising victory stars, golden star steps, medal numbers) — equip it in the shop's Event tab, not for sale · limited 'Victory' skins for every character are being made separately",
+      ],
+      ja: [
+        "覇王戦「ワールドウォーリーグ」（8チーム: 準々決勝 → 準決勝 → 決勝）: 試合ごとに対決の種類を選ぶ（5対5・トーナメント・戦争の序幕・占領戦）、両チームの選択が違えばどちらかを無作為 · 他の対決と同じくバンピック → 準備部屋 → 対決",
+        "自分の試合に勝つと他チームの試合を観戦（AI同士の本物の対決）したり結果だけ見たりして、勝ち上がったチームと次の試合 · ラウンドごとにチップ 6,000 · 12,000 · 優勝 30,000",
+        "優勝報酬: 「勝利」限定エフェクトセット（金色の勲章の星の打撃・勝利の星の待機・金色の星の歩み・勲章数字）— ショップのイベントタブで装着、購入不可 · 全キャラの「勝利」限定スキンは別途準備中",
+      ],
+    },
+  },
+  {
     version: "0.48.242",
     date: "2026-10-30",
     items: {

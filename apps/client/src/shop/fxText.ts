@@ -16,6 +16,7 @@ const SET: Record<FxThemeId, L> = {
   shadow: { ko: "그림자", en: "Shadow", ja: "影" },
   rhythm: { ko: "리듬", en: "Rhythm", ja: "リズム" },
   forest: { ko: "숲", en: "Forest", ja: "森" },
+  victory: { ko: "승리", en: "Victory", ja: "勝利" },
 };
 
 const SLOT: Record<Slot, L> = {
@@ -76,6 +77,11 @@ const DESC: Record<FxThemeId, Record<Lang, [string, string, string, string]>> = 
     ko: ["맞히면 나뭇잎이 흩날림", "가만히 있으면 반딧불이 모여듦", "걸음마다 새싹이 돋음", ""],
     en: ["Leaves scatter on hit", "Fireflies gather while idle", "Sprouts grow with each step", ""],
     ja: ["当てると木の葉が舞う", "止まっていると蛍が集まる", "一歩ごとに新芽が出る", ""],
+  },
+  victory: {
+    ko: ["맞히면 금빛 훈장 별이 박히고 반짝임 (월드 워 리그 우승 한정)", "가만히 있으면 금빛 아래로 승리의 별이 떠오름 (한정)", "걸음마다 금빛 별 자국 (한정)", "금빛 훈장 숫자 · 치명타는 흰 별 (한정)"],
+    en: ["Golden medal stars and sparkles on hit (World War League champion only)", "Victory stars rise in a golden glow while idle (limited)", "Golden star prints with every step (limited)", "Golden medal numbers · crits are white stars (limited)"],
+    ja: ["当てると金色の勲章の星ときらめき（ワールドウォーリーグ優勝限定）", "止まっていると金色の光の下に勝利の星が昇る（限定）", "一歩ごとに金色の星の跡（限定）", "金色の勲章数字・クリティカルは白い星（限定）"],
   },
 };
 
