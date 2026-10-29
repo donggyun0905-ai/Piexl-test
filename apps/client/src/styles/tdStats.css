@@ -1,0 +1,82 @@
+/* 타워 디펜스: 떠 있는 타워 딜량·체력 창 (td/TdStats) */
+.td-stats {
+  position: fixed;
+  z-index: 30;
+  width: 210px;
+  background: rgb(14 12 24 / 0.86);
+  border: 1px solid rgb(154 184 255 / 0.45);
+  border-radius: 8px;
+  font-size: 11px;
+  color: #e8ecf4;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.4);
+  user-select: none;
+}
+.td-stats-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  cursor: move;
+  touch-action: none;
+  border-bottom: 1px solid rgb(154 184 255 / 0.25);
+  font-weight: bold;
+}
+.td-stats-head button {
+  min-height: 0;
+  padding: 0 6px;
+  font-size: 11px;
+}
+.td-stats-body {
+  max-height: 40vh;
+  overflow-y: auto;
+  padding: 4px 8px 6px;
+}
+.td-stats-empty {
+  margin: 4px 0;
+  opacity: 0.6;
+}
+.td-stats-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1px 6px;
+  margin: 4px 0;
+}
+.td-stats-row.broken {
+  opacity: 0.45;
+}
+.td-stats-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.td-stats-dmg {
+  color: #ffd860;
+  text-align: right;
+}
+.td-stats-bar {
+  position: relative;
+  grid-column: 1 / -1;
+  height: 4px;
+  background: rgb(255 255 255 / 0.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.td-stats-bar i {
+  display: block;
+  height: 100%;
+  background: #ffb040;
+}
+.td-stats-bar.hp {
+  height: 8px;
+}
+.td-stats-bar.hp i {
+  background: #5ad07a;
+}
+.td-stats-bar.hp b {
+  position: absolute;
+  inset: 0;
+  font-size: 7px;
+  line-height: 8px;
+  text-align: center;
+  font-weight: normal;
+}

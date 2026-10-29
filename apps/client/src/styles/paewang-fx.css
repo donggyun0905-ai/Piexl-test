@@ -209,3 +209,25 @@
   pointer-events: none;
   text-shadow: 0 2px 0 #000;
 }
+/* 패왕전 남은 시간 · 자기장 단계 */
+.pw-clock {
+  font-weight: bold;
+  font-size: 14px;
+  color: #e8f4ff;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.7);
+}
+.pw-clock small {
+  display: block;
+  font-size: 10px;
+  font-weight: normal;
+  color: #a8d8ff;
+}
+.pw-clock.low {
+  color: #ff8a8a;
+  animation: pw-clock-blink 1s steps(1) infinite;
+}
+@keyframes pw-clock-blink {
+  50% {
+    opacity: 0.55;
+  }
+}

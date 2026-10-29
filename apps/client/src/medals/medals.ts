@@ -40,7 +40,7 @@ export function loadMedals(): Record<string, Medal> {
 }
 
 /** 훈장 보이는 순서: 라스트 보스 → 무한 → 아레나 → 영웅의 길 → 타워 디펜스 */
-const ORDER: string[] = [...RAID_BOSSES, "endless", "arena", "hero", "td"];
+const ORDER: string[] = [...RAID_BOSSES, "endless", "arena", "hero", "td", "tdAbyss"];
 
 /** 이 캐릭터가 달 수 있는 훈장 (모든 캐릭터 공용 포함) */
 export function medalsOf(all: Record<string, Medal>, c: CharacterId): Medal[] {

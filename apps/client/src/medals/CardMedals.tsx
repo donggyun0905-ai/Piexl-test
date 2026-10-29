@@ -11,8 +11,8 @@ import { isMode, medalLook, type ModeKind } from "./modeMedals";
 import { loadMedals, loadSlots, medalId, medalsOf, saveSlots, type Medal } from "./medals";
 
 const BOSS_NAME: Record<string, TextKey> = { dragon: "bossDragon", godeater: "bossGodEater", plight: "bossPrimeval" };
-const MODE_NAME: Record<ModeKind, TextKey> = { endless: "endlessRun", arena: "arenaRun", hero: "heroRun", td: "tdRun" };
-const RECORD: Record<ModeKind, TextKey> = { endless: "medalRecEndless", arena: "medalRecArena", hero: "medalRecHero", td: "medalRecTd" };
+const MODE_NAME: Record<ModeKind, TextKey> = { endless: "endlessRun", arena: "arenaRun", hero: "heroRun", td: "tdRun", tdAbyss: "tdRun" };
+const RECORD: Record<ModeKind, TextKey> = { endless: "medalRecEndless", arena: "medalRecArena", hero: "medalRecHero", td: "medalRecTd", tdAbyss: "medalRecTdAbyss" };
 
 interface Props {
   t: (key: TextKey) => string;
@@ -25,7 +25,7 @@ export function CardMedals({ t, lang, character }: Props) {
   const [slots, setSlots] = useState(() => loadSlots(character));
   /** 열린 칸과 창 (정보 · 고르기) */
   const [open, setOpen] = useState<{ slot: number; mode: "info" | "choose" } | null>(null);
-  const name = (m: Medal) => (isMode(m.boss) ? t(MODE_NAME[m.boss]) + (m.boss === "td" ? ` · ${t("tdMap_sky")}` : "") : t(BOSS_NAME[m.boss] ?? "bossDragon"));
+  const name = (m: Medal) => (isMode(m.boss) ? t(MODE_NAME[m.boss]) + (m.boss === "td" ? ` · ${t("tdMap_sky")}` : m.boss === "tdAbyss" ? ` · ${t("tdMap_abyss")}` : "") : t(BOSS_NAME[m.boss] ?? "bossDragon"));
   const title = (m: Medal) => (isMode(m.boss) ? t("medalModeTitle").replace("{mode}", name(m)) : t("medalTitle").replace("{boss}", name(m)));
   /** 작은 줄: 모드는 기록, 보스는 시간 */
   const record = (m: Medal) => (isMode(m.boss) ? t(RECORD[m.boss]).replace("{n}", String(m.value ?? 0)) : raidTime(m.ticks));

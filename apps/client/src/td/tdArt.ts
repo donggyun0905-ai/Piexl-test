@@ -26,6 +26,7 @@ export const THEMES: Record<TdTheme, Theme> = {
   volcano: { ground: ["#3c2c2a", "#352624", "#43302c"], speck: "#5c3c32", path: "#5a4640", pathEdge: "#ff7a2a", pathSpeck: "#6e5650", edge: "#1c1010", edgeTop: "#3a1a14", flag: "#ffd040" },
   crystal: { ground: ["#2c2644", "#27223c", "#312a4a"], speck: "#4c4072", path: "#5c5680", pathEdge: "#9a8ae0", pathSpeck: "#6e68a0", edge: "#141026", edgeTop: "#2a2048", flag: "#4af0d0" },
   sky: { ground: ["#ece8f4", "#e2dcee", "#f2eef8"], speck: "#d0c8e2", path: "#d8bc6a", pathEdge: "#a07c32", pathSpeck: "#ead08a", edge: "#7ab8ea", edgeTop: "#ffffff", flag: "#7a5ad8" },
+  abyss: { ground: ["#16101e", "#120c1a", "#1a1424"], speck: "#3a1e3e", path: "#2e1a2e", pathEdge: "#ff3a6a", pathSpeck: "#4a2440", edge: "#08040c", edgeTop: "#2a0e24", flag: "#ff3a6a" },
 };
 
 const cache = new Map<string, HTMLCanvasElement>();
@@ -168,6 +169,11 @@ export function drawMapFx(ctx: CanvasRenderingContext2D, mapId: TdTheme, t: numb
         ctx.fillRect(bx - 1, by, 3, 1);
         ctx.fillRect(bx, by - 1, 1, 3);
       }
+    } else if (mapId === "abyss") {
+      // 균열에서 새어 나오는 붉은 기운 (아래에서 위로 흔들리며 올라감)
+      const y = MAP_H - ((MAP_H - by + t * (6 + (i % 3) * 3)) % MAP_H);
+      ctx.fillStyle = `rgba(${200 + (i % 3) * 25},40,${90 + (i % 4) * 30},${0.35 + 0.35 * Math.sin(t * 3 + i)})`;
+      ctx.fillRect(bx + Math.sin(t * 1.5 + i) * 5, y, 1, 2);
     } else if (mapId === "sky" && i < 6) {
       // 흘러가는 구름
       const x = ((bx + t * (4 + i)) % (MAP_W + 40)) - 20;
@@ -188,6 +194,11 @@ export function drawMapFx(ctx: CanvasRenderingContext2D, mapId: TdTheme, t: numb
       ctx.fillStyle = "rgba(255,240,200,0.35)";
       ctx.fillRect(x, by, 10, 1);
     }
+  }
+  // 심연: 화면 전체가 천천히 붉게 맥박침
+  if (mapId === "abyss") {
+    ctx.fillStyle = `rgba(160,20,60,${0.06 + 0.06 * Math.sin(t * 1.2)})`;
+    ctx.fillRect(0, 0, MAP_W, MAP_H);
   }
   // 용암 길 테두리가 숨 쉬듯 빛남
   if (mapId === "volcano") {

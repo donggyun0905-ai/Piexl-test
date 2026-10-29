@@ -49,6 +49,7 @@ export const SWARM_TEXT = {
   swarmEv_ring: { ko: "포위! 둘러싼 적을 모두 잡으세요 ({n} 남음 · {s}초)", en: "Surrounded! Defeat every encircling foe ({n} left · {s}s)", ja: "包囲！囲む敵をすべて倒せ（残り{n} · {s}秒）" },
   swarmEv_meteor: { ko: "메테오 비! 붉은 원을 피해 버티세요 ({s}초)", en: "Meteor shower! Dodge the red circles ({s}s)", ja: "メテオの雨！赤い円を避けて耐えろ（{s}秒）" },
   swarmEv_rescue: { ko: "아이가 도움을 청합니다! 화살표를 따라가 닿으세요 ({s}초)", en: "A child cries for help! Follow the arrow and reach them ({s}s)", ja: "子どもが助けを求めている！矢印を追って触れよう（{s}秒）" },
+  swarmEv_zone: { ko: "원 안에서 버티세요! ({s}초 · 원 밖 남은 시간 {n}초)", en: "Stay inside the circle! ({s}s · {n}s left outside)", ja: "円の中で耐えろ！（{s}秒 · 円の外の残り{n}秒）" },
   swarmEventWin: { ko: "이벤트 성공! 앞에 아이템 3개", en: "Event cleared! 3 items ahead of you", ja: "イベント成功！前にアイテム3つ" },
   swarmEventLose: { ko: "이벤트 실패…", en: "Event failed…", ja: "イベント失敗…" },
   swarmGold: { ko: "돈 +15", en: "+15 gold", ja: "お金 +15" },

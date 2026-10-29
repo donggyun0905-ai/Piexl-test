@@ -25,8 +25,8 @@ function runTicks(td: TdState, n: number): void {
 }
 
 describe("타워 디펜스", () => {
-  it("맵 7개: 길은 테두리에서 들어오고 길이가 있음", () => {
-    expect(TD_MAPS).toHaveLength(7);
+  it("맵 8개: 길은 테두리에서 들어오고 길이가 있음", () => {
+    expect(TD_MAPS).toHaveLength(8);
     for (const m of TD_MAPS) {
       const tiles = tdTiles(m);
       for (const p of m.paths) expect(tiles[p[0]![1]]![p[0]![0]]).toBe(TD_PATH);

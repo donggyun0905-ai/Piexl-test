@@ -1,8 +1,10 @@
 // 광야의 새벽 특수 이벤트 (2분마다 하나): 포위(적이 크게 원을 그려 몰려옴, 모두 잡으면 성공) · 메테오 비(10초 버티면 성공)
-// · 구출(어딘가 아이가 도와 달라고 외침, 제한 시간 안에 닿으면 성공). 성공하면 내 앞에 아이템 셋
+// · 구출(어딘가 아이가 도와 달라고 외침, 제한 시간 안에 닿으면 성공) · 원 안에서 버티기(내 자리에 원이 생기고 15초 동안 원 안에 있어야 함,
+// 원 밖이면 계속 아프고 모두 3초를 넘게 나가 있으면 실패). 성공하면 내 앞에 아이템 셋
 import { TICK_RATE } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { SWARM, type SwarmDropKind } from "../swarmDefs";
+import { damagePlayer } from "./combat";
 import { addShape } from "./hazards";
 import { minionKinds } from "./critters";
 import { swarmMinutes } from "./swarmSpawn";
@@ -10,7 +12,7 @@ import type { RunState } from "./types";
 import { DIR16, dist2, keepInRoom, makeEnemy, roomGrid, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
 const E = SWARM.events;
-const KINDS = ["ring", "meteor", "rescue"] as const;
+const KINDS = ["ring", "meteor", "rescue", "zone"] as const;
 const REWARDS: readonly SwarmDropKind[] = ["heal", "magnet", "bomb", "chest", "gold"];
 
 const clampX = (x: number) => Math.min(ROOM_MAX_X - 12, Math.max(ROOM_MIN_X + 12, x));
@@ -19,8 +21,8 @@ const clampY = (y: number) => Math.min(ROOM_MAX_Y - 12, Math.max(ROOM_MIN_Y + 12
 function start(s: RunState): void {
   const sw = s.swarm!;
   const rng = createRng(deriveSeed(s.seed, "swarmEvent", s.tick));
-  // 포위 · 메테오 · 구출을 차례로 (시드마다 시작이 다름)
-  const kind = KINDS[(Math.floor(s.tick / (E.every * TICK_RATE)) + (s.seed % 3)) % 3]!;
+  // 포위 · 메테오 · 구출 · 원 안에서 버티기를 차례로 (시드마다 시작이 다름)
+  const kind = KINDS[(Math.floor(s.tick / (E.every * TICK_RATE)) + (s.seed % KINDS.length)) % KINDS.length]!;
   const p = s.player;
   if (kind === "ring") {
     const ids: number[] = [];
@@ -35,6 +37,7 @@ function start(s: RunState): void {
     }
     sw.event = { kind, until: s.tick + E.ring.ticks, x: p.x, y: p.y, ids };
   } else if (kind === "meteor") sw.event = { kind, until: s.tick + E.meteor.ticks, x: p.x, y: p.y };
+  else if (kind === "zone") sw.event = { kind, until: s.tick + E.zone.ticks, x: clampX(p.x), y: clampY(p.y), r: E.zone.radius, out: 0 };
   else {
     const [dx, dy] = DIR16[rng.int(0, 15)]!;
     sw.event = { kind, until: s.tick + E.rescue.ticks, x: clampX(p.x + dx * E.rescue.dist), y: clampY(p.y + dy * E.rescue.dist) };
@@ -78,6 +81,15 @@ export function updateEvents(s: RunState): void {
       const x = clampX(p.x + (rng.nextFloat() * 2 - 1) * E.meteor.spread);
       const y = clampY(p.y + (rng.nextFloat() * 2 - 1) * E.meteor.spread);
       addShape(s, 50, { x, y, radius: E.meteor.radius, damage: E.meteor.damage * (1 + 0.1 * swarmMinutes(s)), fx: "meteor" });
+    }
+    if (s.tick >= ev.until) return finish(s, true);
+    return;
+  } else if (ev.kind === "zone") {
+    // 원 밖: 틈틈이 아프고 밖에 있던 시간이 쌓임
+    if (dist2(p, ev) > (ev.r ?? E.zone.radius) ** 2) {
+      ev.out = (ev.out ?? 0) + 1;
+      if (ev.out % E.zone.hurtEvery === 0) damagePlayer(s, E.zone.damage * (1 + 0.1 * swarmMinutes(s)));
+      if (ev.out >= E.zone.outMax) return finish(s, false);
     }
     if (s.tick >= ev.until) return finish(s, true);
     return;

@@ -68,7 +68,7 @@ export function buildSpawns(td: TdState): TdSpawn[] {
   let k = 0;
   for (const g of wave.groups) {
     // 일반 적 수 배율 (간격은 같은 시간 안에 들어가게 줄임)
-    const n = Math.max(1, Math.round(g.n * TD_RULES.minionCount));
+    const n = Math.max(1, Math.round(g.n * TD_RULES.minionCount * (map.countMul ?? 1)));
     const gap = (g.gap * g.n) / n;
     for (let i = 0; i < n; i++) list.push({ at: Math.round(g.at + i * gap), kind: g.kind, path: k++ % paths, hpMul: mul });
   }

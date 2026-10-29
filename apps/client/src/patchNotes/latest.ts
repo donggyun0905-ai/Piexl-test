@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.230",
+    date: "2026-10-29",
+    items: {
+      ko: [
+        "패왕전 시간 제한 (판마다): 1대1 3분 · 3대3 5분 · 5대5 10분 · 토너먼트 7분 · 대난투 10분 · 데스매치 30분 · 시간이 다 되면 남은 사람·체력 비율이 많은 편이 이김 · 화면 위에 남은 시간",
+        "5대5 · 대난투 자기장: 1분마다 줄어들고 다음 원이 점선으로 미리 보임 · 원 밖은 아프고 단계가 오를수록 더 아픔",
+        "불도롱뇽 패턴 다듬기: 벽에 막혀 멈춰 서지 않고 그 자리에서 잠수 · 돌진하다 벽에 부딪히면 불꽃 고리 + 비틀거림 · 새 패턴 용암 분출",
+        "타워 디펜스: 타워별 실시간 딜량·체력 창(끌어 옮기기) · 별 7개 맵 '심연의 균열' (역대 최고 난이도, 막아 내면 전용 훈장)",
+        "광야의 새벽 새 이벤트 '원 안에서 버티기' · 테스트용 히든 캐릭터는 버튼 하나 → 목록 창",
+      ],
+      en: [
+        "Paewang time limits (per round): 1v1 3 min · 3v3 5 min · 5v5 10 min · Tournament 7 min · Brawl 10 min · Deathmatch 30 min · when time runs out, the side with more fighters and more HP left wins · time shown at the top",
+        "Shrinking zone in 5v5 and Brawl: it shrinks every minute and the next circle is shown as a dotted line · outside the circle hurts, more each stage",
+        "Fire Salamander reworked: no longer stands still against walls, it dives on the spot · hitting a wall mid-charge bursts a fire ring and staggers it · new Lava Eruption pattern",
+        "Tower Defense: a draggable window with each tower's live damage and HP · new 7-star map 'Abyssal Rift' (the hardest ever, with its own medal)",
+        "New Dawn of the Wilds event 'Stay in the Circle' · test hidden characters now use one button that opens a list",
+      ],
+      ja: [
+        "覇王戦の時間制限（1戦ごと）: 1対1 3分 · 3対3 5分 · 5対5 10分 · トーナメント7分 · 大乱闘10分 · デスマッチ30分 · 時間切れなら残り人数・体力の多い側が勝ち · 画面上に残り時間",
+        "5対5 · 大乱闘に縮小ゾーン: 1分ごとに縮み、次の円が点線で見える · 円の外はダメージ、段階が上がるほど強く",
+        "炎のサンショウウオのパターン改善: 壁に止まらずその場で潜る · 突進中に壁にぶつかると炎の輪 + よろめき · 新パターン溶岩噴出",
+        "タワーディフェンス: タワーごとのリアルタイム与ダメージ・体力ウィンドウ（ドラッグ移動）· 星7マップ「深淵の裂け目」（史上最高難度、専用勲章）",
+        "荒野の夜明けに新イベント「円の中で耐えろ」 · テスト用の隠しキャラはボタン1つ → 一覧ウィンドウ",
+      ],
+    },
+  },
+  {
     version: "0.48.229",
     date: "2026-10-29",
     items: {

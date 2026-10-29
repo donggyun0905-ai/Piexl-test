@@ -69,4 +69,20 @@ describe("광야의 새벽", () => {
     };
     expect(go()).toBe(go());
   });
+  it("원 안에서 버티기: 원 안이면 성공, 원 밖에 오래 있으면 실패", () => {
+    for (const stay of [true, false]) {
+      const s = createSwarm(5, "warden");
+      const sw = s.swarm!;
+      s.enemies = [];
+      sw.nextEvent = 1e9;
+      const p = s.player;
+      sw.event = { kind: "zone", until: s.tick + SWARM.events.zone.ticks, x: p.x, y: p.y, r: SWARM.events.zone.radius, out: 0 };
+      if (!stay) p.x += SWARM.events.zone.radius + 20;
+      for (let i = 0; i < SWARM.events.zone.ticks + 5 && sw.event; i++) {
+        p.hp = p.stats.maxHp;
+        if (!stepSwarm(s, EMPTY_INPUT)) chooseSwarm(s, 0);
+      }
+      expect(sw.eventEnd?.ok).toBe(stay);
+    }
+  });
 });

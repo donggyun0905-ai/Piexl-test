@@ -19,5 +19,6 @@ export const MEDAL_TEXT = {
   medalRecArena: { ko: "Lv {n}", en: "Lv {n}", ja: "Lv {n}" },
   medalRecHero: { ko: "{n}단계", en: "Stage {n}", ja: "{n}段階" },
   medalRecTd: { ko: "남은 목숨 {n}/20", en: "{n}/20 lives left", ja: "残りライフ {n}/20" },
+  medalRecTdAbyss: { ko: "남은 목숨 {n}/10", en: "{n}/10 lives left", ja: "残りライフ {n}/10" },
   medalAll: { ko: "모든 캐릭터", en: "All characters", ja: "全キャラクター" },
 } satisfies Record<string, Record<Lang, string>>;

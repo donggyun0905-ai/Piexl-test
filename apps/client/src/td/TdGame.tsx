@@ -20,6 +20,7 @@ import {
   type TdState,
 } from "@pixel-rogue/shared";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { TdStats } from "./TdStats";
 import { play, startMusic, stopMusic, unlockAudio } from "../audio/sound";
 import type { Lang, TextKey } from "../i18n";
 import { useBackButton } from "../game/screenHooks";
@@ -224,6 +225,7 @@ export function TdGame({ mapId, lang, t, onRetry, onExit }: Props) {
           />
           {banner && <div className="td-banner">{banner}</div>}
         </div>
+        <TdStats td={td} t={t} />
         <aside className="td-side">
           {canStart && (
             <button type="button" className="td-start primary" onClick={() => (unlockAudio(), startRound(td), setHud((n) => n + 1))}>

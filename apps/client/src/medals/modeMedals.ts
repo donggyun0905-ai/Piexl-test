@@ -5,12 +5,12 @@ import type { RunSummaryData } from "../game/runSummary";
 import { tabooTier } from "../taboo/tabooStore";
 import { storeMedal, type Medal } from "./medals";
 
-export const MODE_KINDS = ["endless", "arena", "hero", "td"] as const;
+export const MODE_KINDS = ["endless", "arena", "hero", "td", "tdAbyss"] as const;
 export type ModeKind = (typeof MODE_KINDS)[number];
 export type MedalKind = LastBossKind | ModeKind;
 
-/** 훈장을 주는 타워 디펜스 맵 (별 5개) */
-export const TD_MEDAL_MAPS: readonly TdMapId[] = ["sky"];
+/** 훈장을 주는 타워 디펜스 맵 (별 5개 하늘 성채 · 별 7개 심연의 균열) */
+export const TD_MEDAL_MAPS: readonly TdMapId[] = ["sky", "abyss"];
 
 /** 모드마다 단계 1~6이 되는 기록 (첫 값 = 훈장을 받는 최소 기록) */
 const STEPS: Record<ModeKind, number[]> = {
@@ -18,6 +18,7 @@ const STEPS: Record<ModeKind, number[]> = {
   arena: [1, 4, 7, 10, 13, 15],
   hero: [1, 4, 7, 10, 12, HERO_FLOORS],
   td: [1, 3, 6, 11, 16, 20],
+  tdAbyss: [1, 2, 4, 6, 8, 10],
 };
 
 export const isMode = (k: string): k is ModeKind => (MODE_KINDS as readonly string[]).includes(k);
@@ -43,5 +44,7 @@ export function recordModeMedal(run: RunState, summary: RunSummaryData): boolean
 /** 타워 디펜스가 끝나면: 별 5개 맵을 막아 내면 남은 목숨으로 훈장 (모든 캐릭터 카드에 달 수 있음) */
 export function recordTdMedal(td: TdState): boolean {
   if (td.phase !== "won" || !TD_MEDAL_MAPS.includes(td.mapId) || td.lives < 1) return false;
-  return storeMedal({ boss: "td", character: "all", ticks: 0, date: today(), value: td.lives }, higher(td.lives));
+  // 별 7개 심연의 균열은 따로 더 높은 훈장
+  const boss: ModeKind = td.mapId === "abyss" ? "tdAbyss" : "td";
+  return storeMedal({ boss, character: "all", ticks: 0, date: today(), value: td.lives }, higher(td.lives));
 }

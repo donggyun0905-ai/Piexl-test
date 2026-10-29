@@ -32,7 +32,8 @@ function eventLine(run: RunState, t: (k: TextKey) => string): string {
   const ev = run.swarm!.event;
   if (!ev) return "";
   const sec = String(Math.max(0, Math.ceil((ev.until - run.tick) / TICK_RATE)));
-  const left = String(run.enemies.filter((e) => e.hp > 0 && ev.ids?.includes(e.id)).length);
+  // 원 안에서 버티기는 {n} = 원 밖에서 더 버틸 수 있는 초
+  const left = ev.kind === "zone" ? (Math.max(0, SWARM.events.zone.outMax - (ev.out ?? 0)) / TICK_RATE).toFixed(1) : String(run.enemies.filter((e) => e.hp > 0 && ev.ids?.includes(e.id)).length);
   return t(`swarmEv_${ev.kind}` as TextKey).replace("{s}", sec).replace("{n}", left);
 }
 

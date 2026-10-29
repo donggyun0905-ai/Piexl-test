@@ -131,4 +131,19 @@ describe("시즌 2 새 보스 · 지형", () => {
     stepSim(run, { ...EMPTY_INPUT, moveX: 100 });
     expect(moved).toBeCloseTo(p.x - x1, 3);
   });
+  it("불도롱뇽: 웅덩이로 가는 길이 막혀도 멈춰 서 있지 않고 그 자리에서 잠수", () => {
+    const run = withBoss("salamander");
+    const e = run.enemies[0]!;
+    // 갈 수 없는 곳(방 밖)을 웅덩이로 노림
+    Object.assign(e, { phase: "act", step: 0, auxX: -500, auxY: e.y, timer: 80, aux: 1e9 });
+    for (let i = 0; i < 100 && (e.step ?? 0) === 0; i++) stepSim(run, EMPTY_INPUT);
+    expect(e.step).toBeGreaterThan(0);
+  });
+
+  it("불도롱뇽: 네 가지 패턴을 돌아가며 씀 (용암 분출 포함)", () => {
+    const run = withBoss("salamander");
+    const r = play(run, 900);
+    expect(r.hazards).toBeGreaterThan(2);
+    expect(run.enemies[0]!.count).toBeGreaterThanOrEqual(4);
+  });
 });

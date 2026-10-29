@@ -1,11 +1,11 @@
-// 타워 디펜스 맵 7개 (지도 크기·길·꾸밈 종류). 길은 칸 [열, 행]을 가로·세로로 잇는 꺾은선, 마지막 점이 지킬 곳
+// 타워 디펜스 맵 8개 (지도 크기·길·꾸밈 종류, 마지막 심연의 균열은 별 7개로 가장 어려움). 길은 칸 [열, 행]을 가로·세로로 잇는 꺾은선, 마지막 점이 지킬 곳
 // 테두리 한 칸은 울타리(길이 들어오고 나가는 곳만 열림), 타워는 안쪽 빈 칸에만 세움
 
 /** 지도 크기 (칸) */
 export const TD_COLS = 20;
 export const TD_ROWS = 12;
 
-export type TdTheme = "meadow" | "desert" | "frost" | "swamp" | "volcano" | "crystal" | "sky";
+export type TdTheme = "meadow" | "desert" | "frost" | "swamp" | "volcano" | "crystal" | "sky" | "abyss";
 
 export interface TdMapDef {
   id: TdTheme;
@@ -15,6 +15,10 @@ export interface TdMapDef {
   hpMul: number;
   /** 꾸밈(나무·바위 등)이 놓이는 비율 (타워를 못 세우는 칸) */
   decor: number;
+  /** 일반 적 수 배율 · 시작 목숨 (없으면 TD_RULES) · 시작 돈 배율 */
+  countMul?: number;
+  lives?: number;
+  goldMul?: number;
 }
 
 export const TD_MAPS: readonly TdMapDef[] = [
@@ -48,6 +52,20 @@ export const TD_MAPS: readonly TdMapDef[] = [
   },
   // 하늘 성채: 위에서 내려와 성벽을 한 바퀴 돌고 가운데 제단으로
   { id: "sky", hpMul: 1.25, decor: 0.12, paths: [[[9, 0], [9, 2], [2, 2], [2, 10], [17, 10], [17, 2], [12, 2], [12, 7], [7, 7], [7, 5]]] },
+  // 심연의 균열 (별 7개): 세 갈래 길이 얽히며 가운데 균열로 모임 · 적 체력 2.4배 · 적 수 1.6배 · 목숨 10 · 시작 돈 80%
+  {
+    id: "abyss",
+    hpMul: 2.4,
+    decor: 0.16,
+    countMul: 1.6,
+    lives: 10,
+    goldMul: 0.8,
+    paths: [
+      [[0, 2], [5, 2], [5, 4], [2, 4], [2, 9], [7, 9], [7, 5], [10, 5]],
+      [[19, 2], [14, 2], [14, 4], [17, 4], [17, 9], [12, 9], [12, 6], [10, 6], [10, 5]],
+      [[9, 11], [9, 10], [16, 10], [16, 8], [11, 8], [11, 5], [10, 5]],
+    ],
+  },
 ];
 
 export type TdMapId = TdTheme;

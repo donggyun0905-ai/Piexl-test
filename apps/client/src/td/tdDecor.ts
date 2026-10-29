@@ -125,6 +125,20 @@ export function drawDecor(ctx: Ctx, theme: TdTheme, x: number, y: number, h: num
         rect(ctx, "#5aa04e", x + 6, y + 4, 4, 5);
         rect(ctx, "#ff9ac0", x + 7, y + 4, 2, 2);
       }
+      return;
+    case "abyss":
+      if (h < 0.5) {
+        // 작은 균열 (붉게 빛나는 틈)
+        rect(ctx, "#05020a", x + 3, y + 5, 10, 6);
+        rect(ctx, "#ff3a6a", x + 5, y + 7, 6, 1);
+        rect(ctx, "#ff8aa8", x + 7, y + 7, 2, 1);
+        rect(ctx, "#a01a40", x + 4, y + 8, 2, 1);
+      } else {
+        // 검은 뾰족 바위 + 보랏빛 눈
+        rock(ctx, x, y, "#1e1424", "#3a2a44");
+        rect(ctx, "#c060ff", x + 6, y + 8, 1, 1);
+        rect(ctx, "#c060ff", x + 9, y + 8, 1, 1);
+      }
   }
 }
 
@@ -175,5 +189,10 @@ export function drawEdge(ctx: Ctx, theme: TdTheme, th: Theme, x: number, y: numb
       rect(ctx, th.edgeTop, x + Math.floor(h * 6), y + 4, 10, 6);
       rect(ctx, th.edgeTop, x + 2, y + 7, 12, 5);
       rect(ctx, "#d8ecfa", x + 2, y + 11, 12, 1);
+      return;
+    case "abyss":
+      // 끝없는 어둠 가장자리 + 붉은 틈
+      rect(ctx, th.edgeTop, x, y + 2, 16, 10);
+      rect(ctx, "#ff3a6a", x + Math.floor(h * 12), y + 7, 3, 1);
   }
 }

@@ -35,23 +35,26 @@ export interface PwModeDef {
   diff: PwDiff;
   /** 준비방에서 무기·패시브·아이템을 고름 (데스매치는 모두 무작위) */
   prep: boolean;
+  /** 판마다 시간 제한(초): 다 되면 남은 사람·체력 비율로 승패 (sim/pvpZone) · 자기장(1분마다 줄어듦) */
+  timeSec: number;
+  zone?: boolean;
 }
 
 export const PW_MODE: Record<PwMode, PwModeDef> = {
   /** 1대1: 작은 경기장 · 쉬움 · 3판 2선승 */
-  duel: { maps: PW_MAP_SETS.duel, rounds: 3, allies: 0, foes: 1, ffa: false, reward: 1000, diff: EASY, prep: true },
+  duel: { maps: PW_MAP_SETS.duel, rounds: 3, allies: 0, foes: 1, ffa: false, reward: 1000, diff: EASY, prep: true, timeSec: 180 },
   /** 2대2: 중간 경기장 · 보통 · 3판 2선승 */
-  pair: { maps: PW_MAP_SETS.pair, rounds: 3, allies: 1, foes: 2, ffa: false, reward: 2000, diff: NORMAL, prep: true },
+  pair: { maps: PW_MAP_SETS.pair, rounds: 3, allies: 1, foes: 2, ffa: false, reward: 2000, diff: NORMAL, prep: true, timeSec: 240 },
   /** 3대3: 넓은 경기장 · 보통 · 3판 2선승 */
-  trio: { maps: PW_MAP_SETS.trio, rounds: 3, allies: 2, foes: 3, ffa: false, reward: 3000, diff: NORMAL, prep: true },
+  trio: { maps: PW_MAP_SETS.trio, rounds: 3, allies: 2, foes: 3, ffa: false, reward: 3000, diff: NORMAL, prep: true, timeSec: 300 },
   /** 5대5: 큰 경기장 · 어려움 · 3판 2선승 */
-  squad: { maps: PW_MAP_SETS.squad, rounds: 3, allies: 4, foes: 5, ffa: false, reward: 5000, diff: HARD, prep: true },
+  squad: { maps: PW_MAP_SETS.squad, rounds: 3, allies: 4, foes: 5, ffa: false, reward: 5000, diff: HARD, prep: true, timeSec: 600, zone: true },
   /** 토너먼트: 3명씩, 1대1로 차례로 (이긴 사람은 체력 그대로 다음 상대) · 보통 · 3판 2선승 */
-  tourney: { maps: PW_MAP_SETS.duel, rounds: 3, allies: 2, foes: 3, ffa: false, reward: 3000, diff: NORMAL, prep: true },
+  tourney: { maps: PW_MAP_SETS.duel, rounds: 3, allies: 2, foes: 3, ffa: false, reward: 3000, diff: NORMAL, prep: true, timeSec: 420 },
   /** 대난투: 20명이 큰 들판에서 · 아주 어려움 · 단판 */
-  brawl: { maps: PW_MAP_SETS.brawl, rounds: 1, allies: 0, foes: 19, ffa: true, reward: 20000, diff: BRUTAL, prep: true },
+  brawl: { maps: PW_MAP_SETS.brawl, rounds: 1, allies: 0, foes: 19, ffa: true, reward: 20000, diff: BRUTAL, prep: true, timeSec: 600, zone: true },
   /** 데스매치: 5명 · 처치할 때마다 다음 레벨(더 약한 캐릭터) · 21레벨에서 처치하면 승리 · 보통 · 단판 */
-  gungame: { maps: PW_MAP_SETS.gungame, rounds: 1, allies: 0, foes: 4, ffa: true, reward: 10000, diff: NORMAL, prep: false },
+  gungame: { maps: PW_MAP_SETS.gungame, rounds: 1, allies: 0, foes: 4, ffa: true, reward: 10000, diff: NORMAL, prep: false, timeSec: 1800 },
 };
 
 /** 데스매치 레벨별 캐릭터: 1레벨이 가장 센 티어, 21레벨이 가장 약한 캐릭터 (관리자가 바꿔 가며 조정) */
@@ -63,6 +66,8 @@ export const PW_TIERS: readonly CharacterId[] = [
 
 /** 패왕전 공통 수치 */
 export const PW = {
+  /** 자기장: 다음 원 반지름 배율 · 가장 작은 반지름 · 줄어드는 틱(1분 중 끝부분) · 원 밖 피해 간격 틱 · 최대 체력 비율 피해 · 단계마다 더하는 배율 */
+  zone: { shrink: 0.72, minR: 28, shrinkTicks: 1200, every: 30, dmg: 0.015, grow: 0.6 },
   /** 준비방: 고르는 캐릭터 전용 패시브 수 · 전투에 나가면 무작위로 받는 공용 패시브 수 · 사용 아이템 수 */
   passives: 5,
   randomPassives: 5,

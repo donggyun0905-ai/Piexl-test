@@ -47,7 +47,7 @@ export function drawSwarmGround(ctx: Ctx, s: RunState, snap: Snap): void {
   }
 }
 
-/** 맨 위: 구출할 아이(손 흔들기 + 말풍선) · 화면 밖이면 내 둘레에 화살표 · 포위 시작 자리 원 */
+/** 맨 위: 구출할 아이(손 흔들기 + 말풍선) · 화면 밖이면 내 둘레에 화살표 · 포위 시작 자리 원 · 버틸 원 */
 export function drawSwarmEvent(ctx: Ctx, s: RunState, snap: Snap): void {
   const ev = s.swarm?.event;
   if (!ev) return;
@@ -57,6 +57,31 @@ export function drawSwarmEvent(ctx: Ctx, s: RunState, snap: Snap): void {
     ctx.beginPath();
     ctx.arc(snap(ev.x), snap(ev.y), 30 + ((s.tick >> 1) % 20), 0, Math.PI * 2);
     ctx.stroke();
+    return;
+  }
+  if (ev.kind === "zone") {
+    // 버틸 원: 안쪽은 옅은 하늘색, 테두리는 깔끔한 두 줄 + 천천히 도는 점 (원 밖이면 붉게 깜빡임)
+    const x = snap(ev.x);
+    const y = snap(ev.y);
+    const r = ev.r ?? 70;
+    const out = (p.x - ev.x) ** 2 + (p.y - ev.y) ** 2 > r * r;
+    ctx.fillStyle = out ? `rgba(255, 80, 80, ${0.08 + 0.05 * ((s.tick >> 3) % 2)})` : "rgba(120, 200, 255, 0.08)";
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = out ? "rgba(255, 110, 110, 0.85)" : "rgba(160, 220, 255, 0.8)";
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
+    ctx.beginPath();
+    ctx.arc(x, y, r - 4, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+    for (let i = 0; i < 8; i++) {
+      const a = s.tick * 0.01 + (i * Math.PI) / 4;
+      ctx.fillRect(Math.round(x + Math.cos(a) * r) - 1, Math.round(y + Math.sin(a) * r) - 1, 2, 2);
+    }
     return;
   }
   if (ev.kind !== "rescue") return;

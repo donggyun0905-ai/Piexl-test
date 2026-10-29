@@ -13,6 +13,7 @@ import { CardMedals } from "./medals/CardMedals";
 import { TabooButton } from "./taboo/TabooButton";
 import { setRandomKit } from "./taboo/tabooStore";
 import { TEST_OPEN } from "./testFlags";
+import { HiddenCharList } from "./HiddenCharList";
 
 interface Props {
   t: (key: TextKey) => string;
@@ -78,13 +79,7 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
         </button>
         {taboo && <TabooButton t={t} lang={lang} />}
         {/* 테스트 중에만: 숨은 캐릭터를 바로 골라 써 보기 */}
-        {taboo &&
-          TEST_OPEN &&
-          HIDDEN_CHARACTERS.map((h) => (
-            <button key={h} type="button" className="secondary hidden-pick" onClick={() => pick(h)}>
-              ★ {t(NAME[h])} <small>{t("hiddenTest")}</small>
-            </button>
-          ))}
+        {taboo && TEST_OPEN && <HiddenCharList t={t} name={NAME} onPick={(h) => pick(h)} />}
       </div>
       <div className="select-list">
         {(showHidden ? ALL_CHARACTER_IDS : CHARACTER_IDS).map((id) => {

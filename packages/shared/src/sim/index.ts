@@ -99,6 +99,7 @@ export * from "./paewangTypes";
 export { pwCanStack, pwLoadoutOk, pwPassiveChoices, pwStackMax, pwWeapons } from "./paewangKit";
 export { inBush, onDeck } from "./paewangGrid";
 export { trapUp } from "./pvpFlow";
+export { pvpTimeLeft, pvpZone, type PwZone } from "./pvpZone";
 export { inPlay } from "./pvpWorld";
 export { buffMul, pwHidden } from "./pwSkillHit";
 export { canCast, skillDef } from "./pwSkill";

@@ -9,6 +9,7 @@ import { allPlayers, eachSeat, useSeat } from "./party";
 import { inPlay } from "./pvpWorld";
 import { nextRound, resetRound } from "./pvpRounds";
 import { recapEnv, recapReset } from "./pvpRecap";
+import { timeWinner } from "./pvpZone";
 import { clearSkills } from "./pwSkill";
 import type { RunState } from "./types";
 import { addEffect } from "./util";
@@ -154,7 +155,11 @@ export function decide(s: RunState): void {
     if (s.tick >= pv.resetAt) resetRound(s);
     return;
   }
-  if (pv.winner === undefined && pv.mode !== "gungame") {
+  // 시간 제한: 다 되면 남은 사람·체력 비율이 많은 편이 이 판을 이김 (데스매치는 레벨)
+  const late = pv.winner === undefined ? timeWinner(s) : undefined;
+  if (late !== undefined) {
+    if (pv.mode === "gungame" || !nextRound(s, late)) pv.winner = late;
+  } else if (pv.winner === undefined && pv.mode !== "gungame") {
     const alive = new Set(pv.seats.filter((x, j) => inPlay(s, j) || x.back !== undefined).map((x) => x.team));
     // 3판 2선승이면 다음 판으로 (시리즈를 이긴 편이 나오면 끝)
     const w = [...alive][0] ?? -1;

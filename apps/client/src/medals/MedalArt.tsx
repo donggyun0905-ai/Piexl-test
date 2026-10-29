@@ -15,6 +15,7 @@ const LOOK: Record<string, { ribbon: [string, string]; core: [string, string] }>
   arena: { ribbon: ["#e8e8f0", "#c03040"], core: ["#ff8a6a", "#3a0a10"] },
   hero: { ribbon: ["#2a8a4a", "#ffd040"], core: ["#a8f0a0", "#0a3018"] },
   td: { ribbon: ["#6a4a2a", "#8ad0ff"], core: ["#c0e0ff", "#1a2a40"] },
+  tdAbyss: { ribbon: ["#16101e", "#ff3a6a"], core: ["#ff6a9a", "#2a0414"] },
 };
 
 /** 8갈래 별 테두리 */

@@ -1,6 +1,8 @@
 // 화면 글자: 타워 디펜스 (혼자 하기 → 타워 디펜스: 맵 고르기 · 게임 화면 · 결과)
 export const TD_TEXT = {
   tdRun: { ko: "타워 디펜스", en: "Tower Defense", ja: "タワーディフェンス" },
+  tdStats: { ko: "타워 딜량 · 체력", en: "Tower damage · HP", ja: "タワー与ダメージ · 体力" },
+  tdStatsEmpty: { ko: "세운 타워가 없어요", en: "No towers yet", ja: "タワーがありません" },
   tdDesc: {
     ko: "캐릭터를 세워 길로 몰려오는 적·보스를 막기 · 20라운드",
     en: "Station your heroes to hold back the horde and bosses · 20 rounds",
@@ -14,13 +16,15 @@ export const TD_TEXT = {
   tdMap_volcano: { ko: "용암 화산", en: "Lava Volcano", ja: "溶岩火山" },
   tdMap_crystal: { ko: "수정 동굴", en: "Crystal Cave", ja: "水晶の洞窟" },
   tdMap_sky: { ko: "하늘 성채", en: "Sky Citadel", ja: "天空の城塞" },
+  tdMap_abyss: { ko: "심연의 균열", en: "Abyssal Rift", ja: "深淵の裂け目" },
   tdMapInfo_meadow: { ko: "S자로 굽은 한 길 · 처음 하기 좋음", en: "One winding S-shaped road · Great for starters", ja: "S字に曲がる一本道 · 初めてに最適" },
   tdMapInfo_desert: { ko: "위에서 내려오는 지그재그 협곡길", en: "A zigzag canyon trail from the north", ja: "北から下るジグザグの峡谷道" },
   tdMapInfo_frost: { ko: "호수 둘레를 돌아 가운데로 파고드는 소용돌이", en: "A spiral that circles the lake to its heart", ja: "湖をぐるりと回って中心へ向かう渦巻き" },
   tdMapInfo_swamp: { ko: "두 입구가 가운데서 합쳐짐 · 적이 나눠 옴", en: "Two entrances merge in the middle · Foes split up", ja: "2つの入口が中央で合流 · 敵が分かれて来る" },
   tdMapInfo_volcano: { ko: "용암 사이를 길게 구불구불", en: "A long, twisting trail between lava pools", ja: "溶岩の間を長くくねる道" },
   tdMapInfo_crystal: { ko: "두 길이 엇갈려 지나감 · 어려움", en: "Two crossing roads · Hard", ja: "2本の道が交差する · 難しい" },
-  tdMapInfo_sky: { ko: "성벽을 한 바퀴 돌아 제단으로 · 가장 어려움", en: "Around the ramparts to the altar · Hardest", ja: "城壁を一周して祭壇へ · 最も難しい" },
+  tdMapInfo_sky: { ko: "성벽을 한 바퀴 돌아 제단으로 · 어려움", en: "Around the ramparts to the altar · Hard", ja: "城壁を一周して祭壇へ · 難しい" },
+  tdMapInfo_abyss: { ko: "세 갈래 길이 얽히며 균열로 · 적 체력 2.4배 · 적 1.6배 · 목숨 10 · 역대 최고 난이도 (훈장)", en: "Three tangled trails into the rift · 2.4x enemy HP · 1.6x enemies · 10 lives · The hardest ever (medal)", ja: "3本の絡み合う道が裂け目へ · 敵体力2.4倍 · 敵1.6倍 · ライフ10 · 史上最高難度（勲章）" },
   tdBest: { ko: "최고 {n}라운드", en: "Best: round {n}", ja: "最高 {n}ラウンド" },
   tdClearedBest: { ko: "클리어 · 목숨 {n} 남김", en: "Cleared · {n} lives left", ja: "クリア · 残りライフ {n}" },
   tdNoRecord: { ko: "아직 기록 없음", en: "No record yet", ja: "まだ記録なし" },

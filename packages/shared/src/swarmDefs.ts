@@ -80,6 +80,8 @@ export const SWARM = {
     ring: { count: 36, radius: 170, ticks: 1800 },
     meteor: { ticks: 600, every: 14, spread: 150, damage: 14, radius: 36 },
     rescue: { dist: 260, ticks: 2400, touch: 14 },
+    /** 원 안에서 버티기: 반지름 · 버틸 틱 · 원 밖에서 버틸 수 있는 틱(넘으면 실패) · 원 밖이면 이 틱마다 피해 */
+    zone: { radius: 70, ticks: 900, outMax: 180, hurtEvery: 20, damage: 6 },
     rewards: 3,
   },
 } as const;

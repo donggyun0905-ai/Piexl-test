@@ -36,11 +36,14 @@ export type SwarmReward = { kind: "evo"; id: WeaponId; tick: number } | { kind: 
 
 /** 특수 이벤트: 포위(둘러싼 적 ids) · 메테오 비 · 구출(아이 자리) — until 틱까지, 성공하면 아이템 셋 */
 export interface SwarmEvent {
-  kind: "ring" | "meteor" | "rescue";
+  kind: "ring" | "meteor" | "rescue" | "zone";
   until: number;
   x: number;
   y: number;
   ids?: number[];
+  /** 원 안에서 버티기: 원 반지름 · 원 밖에 있던 틱 (다 차면 실패) */
+  r?: number;
+  out?: number;
 }
 
 export interface SwarmState {

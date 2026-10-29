@@ -1,5 +1,5 @@
 // 패왕전 위쪽 정보 (한 줄): 편 대결 점수(편 처치 수·남은 사람 점) 또는 대난투·데스매치 줄 · 내 처치/데스·준 피해·받은 피해 · 가까운 적 · 목표는 시작 카운트다운 때만 · 지켜보는 중 안내 · 점수판 버튼(Tab) · 처치 알림(PwFeed)
-import { allPlayers, inPlay, PW, PW_MODE, TICK_RATE, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, inPlay, PW, PW_MODE, pvpTimeLeft, pvpZone, TICK_RATE, type RunState } from "@pixel-rogue/shared";
 import { pwNearestFoe } from "../game/render/pwLook";
 import type { TextKey } from "../i18n";
 import { seatWho } from "./PwBoard";
@@ -59,6 +59,7 @@ export function PwHud({ run, me, names, t, onBoard }: Props) {
             {side(false)}
           </div>
         )}
+        <PwClock run={run} t={t} />
         <div className="pw-sub">
           <span className="pw-kd">
             {mine.kills}K / {mine.deaths}D
@@ -74,6 +75,22 @@ export function PwHud({ run, me, names, t, onBoard }: Props) {
       <PwFeed run={run} me={me} who={(i) => seatWho(run, i, names, t)} t={t} />
       <PwCount run={run} me={me} goal={t(GOAL[pv.mode] ?? "pwGoalTeam")} t={t} />
     </>
+  );
+}
+
+/** 남은 시간 (1분 아래면 붉게 깜빡) · 자기장 단계와 다음 줄어들기까지 초 */
+function PwClock({ run, t }: { run: RunState; t: (k: TextKey) => string }) {
+  if (run.pvp!.practice) return null;
+  const sec = pvpTimeLeft(run);
+  const z = pvpZone(run);
+  const mm = `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
+  const start = run.pvp!.readyAt ?? PW.ready;
+  const next = z ? 60 - (Math.max(0, Math.floor((run.tick - start) / TICK_RATE)) % 60) : 0;
+  return (
+    <div className={`pw-clock${sec <= 60 ? " low" : ""}`}>
+      ⏱ {mm}
+      {z && <small>{t("pwZone").replace("{n}", String(z.phase + 1)).replace("{s}", String(next))}</small>}
+    </div>
   );
 }
 

@@ -78,6 +78,8 @@ export function PwModes({ t, onPick, onMulti, onPractice, onBrowse, onRank, onBa
                 <small className="pw-reward">
                   🪙 {t("pwReward").replace("{n}", def.reward.toLocaleString())}
                   {wins > 0 && ` · ${t("pwWins").replace("{n}", String(wins))}`}
+                  {` · ⏱ ${t("pwTimeLimit").replace("{n}", String(def.timeSec / 60))}`}
+                  {def.zone && ` · ${t("pwZoneOn")}`}
                 </small>
               </span>
             </button>

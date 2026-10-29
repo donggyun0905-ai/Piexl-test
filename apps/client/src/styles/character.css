@@ -231,3 +231,23 @@
   background: rgb(242 230 204 / 0.85);
   padding: 2px 4px;
 }
+/* 테스트 중 히든 캐릭터 목록 창 */
+.hidden-list {
+  max-width: 520px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.hidden-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+  margin: 10px 0;
+}
+.hidden-list-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  min-height: 0;
+}
