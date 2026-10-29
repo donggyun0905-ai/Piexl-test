@@ -169,6 +169,7 @@ export function drawHiddenFx2(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     ctx.fillRect(x - 2, ly - 3, 4, 3);
     return true;
   }
+  if (fx.kind === "hdText") return true; // 글자는 render/curseText
   if (fx.kind === "hdCurse") {
     additive(ctx, () => {
       glow(ctx, x, y, fx.size * (0.4 + f), "#8a1a4a", t, 0.6);

@@ -28,6 +28,7 @@ export function createTd(seed: number, mapId: TdMapId): TdState {
   const run = createRun(seed, "warden");
   const idle = newPlayer("warden", -100, -100);
   run.player = idle;
+  run.fixedStats = true;
   run.map = { floor: 1, rooms: [{ id: 0, layer: 0, lane: 1, type: "start", exits: [-1, -1, -1], shape: PLAIN_SHAPE }], startId: 0, exitId: 0, layers: 1 };
   run.rooms = [{ visited: true, cleared: true, pickups: [], enemies: null }];
   run.roomId = 0;

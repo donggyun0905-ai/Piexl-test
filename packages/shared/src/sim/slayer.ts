@@ -13,11 +13,12 @@ import { addEffect, hasPerk, weaponOf } from "./util";
 const raging = (p: PlayerState) => (p.slRage ?? 0) > 0;
 
 /** 체력이 낮을수록 공격력 (체력 0에 가까우면 2배, 광전사 2.5배) · 피의 학살 +25% */
-function power(p: PlayerState): number {
+export function slayerDmgMul(p: PlayerState): number {
   const max = hasPerk(p, "slBerserk") ? K.slBerserk.max : S.lowHpMax;
   const low = 1 + (1 - Math.max(0, p.hp) / p.stats.maxHp) * (max - 1);
-  return p.stats.damage * low * (raging(p) ? S.rageDmg : 1);
+  return low * (raging(p) ? S.rageDmg : 1);
 }
+const power = (p: PlayerState) => p.stats.damage * slayerDmgMul(p);
 
 /** 맞힐 때마다: 게이지 · 피의 학살 흡혈 · 대학살 */
 export function slayerOnHit(s: RunState, e: EnemyState, dmg: number): void {
@@ -82,7 +83,7 @@ export function slayerTick(s: RunState, want: boolean, speed: number): void {
     if (c.i >= combo.length) {
       // 콤보가 끝나면 보통 공격 속도만큼 쉬고 다시 처음부터
       delete p.slCombo;
-      p.attackCooldown = Math.max(1, Math.round(TICK_RATE / (speed * rage)));
+      p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
     }
     return;
   }

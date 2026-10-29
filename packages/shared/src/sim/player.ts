@@ -25,7 +25,7 @@ import { TITAN } from "../weaponsTitan";
 import { beastSpeedMul } from "./pets";
 import { fireMedic } from "./medicWeapons";
 import { medicSpeedMul } from "./heal";
-import { classMoveMul } from "./moveMul";
+import { classMoveMul, classSpeedMul } from "./moveMul";
 import type { EnemyState, PlayerState, RunState, TickInput } from "./types";
 import { addEffect, shotDirs, DASH_COOLDOWN, DASH_SPEED_MUL, DASH_TICKS, dist2, hasPerk, keepInRoom, normalize, roomGrid, STILL_TICKS, weaponOf } from "./util";
 import { readAim } from "./tracker";
@@ -190,7 +190,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
 export function attackSpeedNow(p: PlayerState): number {
   const still = p.stillTicks >= STILL_TICKS && hasPerk(p, "overcharge") ? PERKS.overcharge.speed : 1;
   const haste = (p.hasteTicks ?? 0) > 0 ? HASTE_MUL : 1;
-  return p.stats.attackSpeed * (1 + PERKS.huntFrenzy.speed * p.streak) * still * haste * medicSpeedMul(p) * beastSpeedMul(p);
+  return p.stats.attackSpeed * (1 + PERKS.huntFrenzy.speed * p.streak) * still * haste * medicSpeedMul(p) * beastSpeedMul(p) * classSpeedMul(p);
 }
 
 function attack(s: RunState): void {

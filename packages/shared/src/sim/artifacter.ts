@@ -92,8 +92,7 @@ export function artifacterTick(s: RunState, want: boolean, speed: number): void 
   const p = s.player;
   if ((p.afSurge ?? 0) > 0) p.afSurge!--;
   if (!want || p.attackCooldown > 0) return;
-  const surge = (p.afSurge ?? 0) > 0 ? afv(p, "afSurge", "speed") : 1;
-  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / (speed * surge)));
+  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
   const t = nearest(s, p.stats.range * 1.2);
   if (t) {

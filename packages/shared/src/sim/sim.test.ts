@@ -6,6 +6,7 @@ import { EXIT_X } from "./util";
 import { WEAPONS } from "../content";
 import { RUNE_RULES } from "./rune";
 import { createRun, EMPTY_INPUT, stepSim, type EnemyState, type RunState, type TickInput } from "./index";
+import { recalcStats } from "./items";
 
 /** 시드로 만든 무작위 입력 기록 */
 function randomInputs(seed: number, ticks: number): TickInput[] {
@@ -247,6 +248,7 @@ describe("게임 계산", () => {
   it("마법사 마법탄(일반 공격 75%)은 맞은 자리에서 터져 주변 적에게 절반 피해", () => {
     const run = createRun(3, "mage");
     run.player.weaponId = "stormstaff";
+    recalcStats(run);
     const hit = enemy(1, run.player.x + 40, run.player.y);
     const near = enemy(2, run.player.x + 44, run.player.y + 12);
     const far = enemy(3, run.player.x - 60, run.player.y);

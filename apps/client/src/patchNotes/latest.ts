@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.239",
+    date: "2026-10-29",
+    items: {
+      ko: [
+        "저주받은 주사위가 틀리면 어떤 저주가 걸렸는지 머리 위에 붉은 글자 (몬스터·보스 소환 / 최대 체력 44 / 패시브 모두 사라짐 / 맨손 + 몬스터) · 떨어진 신의 파편은 얻은 힘을 금빛 글자로",
+        "능력치 창이 실제 계산과 늘 같게: 히든 아이템(신의 파편·금기된 아티팩트·운명/저주받은 주사위)·왕 변신이 더한 방어력·재생력·치명타·치명타 피해·예리함이 바로 보임 · 치명타는 실제 굴리는 값 그대로",
+        "공격할 때만 곱해져 능력치 창에 안 보이던 공격 속도 (아티팩터 회로 폭주·잊혀진 자 강림·이드라 모습·닌자 그림자 질주·순례자 세계수 잎·이터 광분·펑크 신경 가속·학살자 분노·제우스 강림)와 공격력 (이드라 모습·사계절·학살자 낮은 체력·분노)이 능력치 창에 실시간으로",
+        "안전망: 0.5초마다 능력치를 다시 계산해 쌓이는 힘·바뀐 상태가 늦게 들어가는 일이 없게",
+      ],
+      en: [
+        "When the Cursed Dice misses, red text over your head says which curse hit (monsters or a boss / max HP 44 / all passives lost / bare hands + monsters) · the Fallen God's Shard shows the power you got in gold text",
+        "The stats window now always matches the real numbers: defense, regen, crit, crit damage and sharpness from hidden items (God's Shard, Forbidden Artifacts, Dice of Fate/Cursed Dice) and the king form show right away · crit uses the exact values that are rolled",
+        "Attack speed that was only applied when attacking (Artifacter Surge, Forgotten descent, Idra forms, Ninja Shadow Rush, Pilgrim World Leaf, Eater Frenzy, Punk neural boost, Slayer rage, Zeus descent) and damage (Idra forms and seasons, Slayer low HP and rage) now show live in the stats window",
+        "Safety net: stats are recalculated every 0.5s so stacking powers and state changes never lag behind",
+      ],
+      ja: [
+        "呪われたサイコロが外れると、どの呪いかを頭上に赤い文字で (モンスター・ボス召喚 / 最大体力44 / パッシブ全消失 / 素手 + モンスター) · 堕ちた神の欠片は得た力を金色の文字で",
+        "ステータス画面が実際の計算と常に同じに: ヒドゥンアイテム (神の欠片・禁じられたアーティファクト・運命/呪われたサイコロ)・王の変身で増えた防御力・再生力・クリティカル・クリティカルダメージ・鋭さがすぐ表示 · クリティカルは実際に振る値そのまま",
+        "攻撃時だけ掛かっていてステータス画面に出なかった攻撃速度 (アーティファクターの回路暴走・忘れられた者の降臨・イドラの姿・忍者の影走り・巡礼者の世界樹の葉・イーターの狂乱・パンクの神経加速・殺戮者の怒り・ゼウスの降臨) と攻撃力 (イドラの姿・四季・殺戮者の低体力・怒り) がリアルタイムで表示",
+        "安全網: 0.5秒ごとに能力値を再計算し、積み上がる力や状態の変化が遅れて入ることがないように",
+      ],
+    },
+  },
+  {
     version: "0.48.238",
     date: "2026-10-29",
     items: {

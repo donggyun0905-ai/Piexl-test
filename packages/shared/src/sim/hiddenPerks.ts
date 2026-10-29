@@ -26,7 +26,11 @@ const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.see
 function shard(s: RunState): number {
   const p = s.player;
   if (!hasPerk(p, "godShard")) return -1;
-  p.shardPick ??= createRng(deriveSeed(s.seed, "godShard", s.tick)).int(0, 9);
+  if (p.shardPick === undefined) {
+    p.shardPick = createRng(deriveSeed(s.seed, "godShard", s.tick)).int(0, 9);
+    // 머리 위 글자: 얻은 신의 힘 (hdText 4~13)
+    addEffect(s, { kind: "hdText", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 4 + p.shardPick, maxTicks: 180 });
+  }
   return p.shardPick;
 }
 
@@ -162,6 +166,8 @@ export function hiddenTick(s: RunState): void {
   alliesTick(s);
   cupidTick(s);
   kingFormTick(s);
+  // 안전망: 0.5초마다 능력치를 다시 계산 (쌓이는 힘·바뀐 상태가 능력치에 늦게 들어가는 일이 없게)
+  if (s.tick % 30 === 0 && !s.fixedStats) recalcStats(s);
 }
 
 /** 스택 창 (화면): 가진 아티팩트와 쌓인 수 */

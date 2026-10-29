@@ -22,6 +22,8 @@ export interface HiddenRunState {
   pilgrimMet?: number;
   /** 포탈건이 기억한 방 */
   portalMark?: { floor: number; room: number };
+  /** 능력치를 직접 정하는 판 (타워 디펜스: 레벨·보정을 능력치에 곱함) → 0.5초 안전망 재계산을 하지 않음 */
+  fixedStats?: boolean;
   /** 테라포밍: 이 층 보스를 바꿈 */
   terraBoss?: { floor: number; kind: string };
 }

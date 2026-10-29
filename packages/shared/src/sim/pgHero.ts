@@ -162,8 +162,7 @@ export function pilgrimTick(s: RunState, want: boolean, speed: number): void {
   boomerangs(s);
   if (p.dashTicks > 0 && hasPerk(p, "pgShortcut")) p.pgDash = true;
   if (!want || p.attackCooldown > 0) return;
-  const leaf = hasPerk(p, "pgWorldLeaf") && (p.pgBook?.length ?? 0) >= K.pgWorldLeaf.need ? K.pgWorldLeaf.mul : 1;
-  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / (speed * leaf)));
+  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
   attack(s);
   if (hasPerk(p, "pgEcho") && pgRnd(s, "echo") < K.pgEcho.chance) attack(s);

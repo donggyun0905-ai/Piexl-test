@@ -101,6 +101,17 @@ export function noviceCrit(p: PlayerState): { chance: number; mul: number } {
   };
 }
 
+/** 지금 치명타 확률·배율 (rollCrit와 능력치 창이 같이 씀): 풋내기 스탯 · 사멸 20% · 이무기 용 · 병아리 펫 · 기본·히든 아이템 추가 스탯 */
+export function critNow(s: RunState): { chance: number; mul: number } {
+  const p = s.player;
+  const wake = imugiCrit(p);
+  const pet = petCrit(s);
+  const ex = s.pvp && p.characterId === "remnant" ? { ...extraOf(p), critDamage: PW_PASSIVE.remnantCrit } : extraOf(p);
+  // 사멸: 기본 치명타 20%
+  const base = p.characterId === "novice" ? noviceCrit(p) : p.characterId === "samyeol" ? { chance: SAMYEOL.critChance, mul: SAMYEOL.critMul } : wake > 0 ? { chance: wake, mul: IMUGI.critMul } : { chance: 0, mul: ex.critChance > 0 ? ex.critDamage : LOBBY_PETS.chick.critMul };
+  return { chance: base.chance + pet + ex.critChance, mul: base.mul };
+}
+
 /** 풋내기·이무기(용을 부른 뒤)가 주는 피해에 치명타 굴리기 (시드로만). 치명타면 배율을 곱한 피해, 아니면 그대로 */
 export function rollCrit(s: RunState, e: EnemyState, dmg: number): { dmg: number; crit: boolean } {
   const p = s.player;
@@ -116,9 +127,7 @@ export function rollCrit(s: RunState, e: EnemyState, dmg: number): { dmg: number
   if (p.rmSure && dmg > 0) return { dmg: dmg * Math.max(1.5, ex.critDamage), crit: true };
   if ((p.characterId !== "novice" && !tang && wake <= 0 && pet <= 0 && ex.critChance <= 0) || dmg <= 0) return { dmg, crit: false };
   p.critRolls = (p.critRolls ?? 0) + 1;
-  // 사멸: 기본 치명타 20%
-  const base = p.characterId === "novice" ? noviceCrit(p) : tang ? { chance: SAMYEOL.critChance, mul: SAMYEOL.critMul } : wake > 0 ? { chance: wake, mul: IMUGI.critMul } : { chance: 0, mul: ex.critChance > 0 ? ex.critDamage : LOBBY_PETS.chick.critMul };
-  const c = { chance: base.chance + pet + ex.critChance, mul: base.mul };
+  const c = critNow(s);
   const crit = createRng(deriveSeed(s.seed, "ncrit", e.id, p.critRolls)).nextFloat() < c.chance;
   return { dmg: crit ? dmg * c.mul : dmg, crit };
 }

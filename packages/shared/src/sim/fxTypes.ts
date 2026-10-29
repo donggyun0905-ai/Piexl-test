@@ -34,7 +34,7 @@ export type VoyagerFx = "vyFlip" | "vyLoose" | "vyCrit" | "vyBeam" | "vyChain" |
 export type SecretFx = VoyagerFx | ZeusFx | PilgrimFx | "mnSwing" | "mnCrack" | "mnErupt" | "mnRock" | "mnCave" | "mnBoom" | "mnShatter" | "mnFall" | "mnDig" | "mnBurst" | "mnPull" | "mnGem" | "mnPillar" | "mnCanary";
 /** 떠돌이 기습 쏨·맞음 · 파수꾼 반격 베기 (sim/origin) · 작업대 성공·실패·파괴 (sim/station) */
 /** 히든 아이템·순례자 (sim/hiddenPerks·hiddenUse·pilgrim) */
-export type HiddenFx = "hdDice" | "hdChest" | "hdCurse" | "hdFreeze" | "hdWarp" | "hdQuake" | "hdMirror" | "hdLeaf" | "hdAether" | "hdMeteor" | "hdScroll" | "hdGate" | "hdPortal" | "hdShow";
+export type HiddenFx = "hdDice" | "hdChest" | "hdCurse" | "hdFreeze" | "hdWarp" | "hdQuake" | "hdMirror" | "hdLeaf" | "hdAether" | "hdMeteor" | "hdScroll" | "hdGate" | "hdPortal" | "hdShow" | "hdText";
 /** 옛 제국의 왕(바스러져가는 왕관)·몰락한 왕 대검 (sim/kingBlade, tint = 붉은빛·푸른빛): X자 베기(dir, width ±1 = 사선 방향) · 길어지는 검기(toX·toY) · 내리꽂기 · 불꽃 선(toX·toY) · 불기둥 · 영혼 빛줄기(toX·toY) · 변신 */
 export type KingFx = "kgSlash" | "kgWave" | "kgPlant" | "kgLine" | "kgPillar" | "kgSoul" | "kgForm";
 export type OriginFx = "ogShot" | "ogHit" | "ogCounter" | "stOk" | "stFail" | "stBreak";

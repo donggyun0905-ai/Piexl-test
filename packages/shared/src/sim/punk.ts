@@ -208,7 +208,7 @@ export function punkTick(s: RunState, want: boolean, speed: number): void {
   emps(s);
   quickHack(s, want);
   if (!want || p.attackCooldown > 0) return;
-  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / (speed * (punkAccel(p) ? P.accelSpeed : 1))));
+  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
   attack(s, 1);
   if (punkAccel(p) && hasPerk(p, "cyEcho")) attack(s, K.cyEcho.mul);

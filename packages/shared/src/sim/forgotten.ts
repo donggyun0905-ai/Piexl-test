@@ -177,8 +177,7 @@ export function forgottenTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
   update(s);
   if (!want || p.attackCooldown > 0) return;
-  const fast = (p.fgGod ?? 0) > 0 ? F.godSpeed : 1;
-  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / (speed * fast)));
+  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
   cast(s);
 }

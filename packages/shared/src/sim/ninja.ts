@@ -26,8 +26,7 @@ export function ninjaTick(s: RunState, want: boolean, speed: number): void {
   updateShades(s);
   if ((p.kageTicks ?? 0) > 0) p.kageTicks = (p.kageTicks ?? 0) - 1;
   if (!want || p.attackCooldown > 0) return;
-  const rush = (p.kageTicks ?? 0) > 0 ? 1 + NINJA_PERKS.shadowRush.speed : 1;
-  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / (speed * rush)));
+  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
   const w = weaponOf(p);
   const dmg = p.stats.damage;

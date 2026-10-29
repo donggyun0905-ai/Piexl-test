@@ -28,6 +28,9 @@ import { splash } from "../audio/summerSound";
 import { roar } from "../audio/tigerSound";
 import { activeFx } from "../shop/effects";
 
+/** 머리 위 히든 글자 (효과 hdText 번호): 0~3 저주받은 주사위 저주 (sim/hiddenDice 순서) · 4~13 떨어진 신의 파편으로 얻은 힘 (sim/hiddenPerks 순서) */
+const HIDDEN_TEXT = ["curseSummon", "curseHp", "cursePassives", "curseBare", "shard0", "shard1", "shard2", "shard3", "shard4", "shard5", "shard6", "shard7", "shard8", "shard9"] as const;
+
 /** 한 번에 따라잡는 최대 틱 수 (탭을 오래 비웠다 돌아올 때 멈춤 방지) */
 const MAX_CATCH_UP = 10;
 /** 검은 잔영 대사 */
@@ -230,6 +233,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       showHitbox: controls.hitboxHeld || getSettings().showHitbox,
       showRange: getSettings().showRange,
       pilgrimLine: t("pilgrimHello"),
+      curseNames: HIDDEN_TEXT.map((k) => t(k)),
       ...(run.pvp && getSettings().showNames ? { charName: (id: string) => t(id as TextKey) } : {}),
       skillAim: controls.arm.armed,
       pixelScale: ctx.canvas.width / viewW(),

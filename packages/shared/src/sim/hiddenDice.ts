@@ -68,6 +68,8 @@ function cursedDice(s: RunState, pick: number): void {
   } else {
     addEffect(s, { kind: "hdCurse", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 36, maxTicks: 50 });
     const which = rng.int(0, 3);
+    // 머리 위 글자: 어떤 저주인지 (size = 저주 번호, 화면이 글자로)
+    addEffect(s, { kind: "hdText", x: p.x, y: p.y, dirX: 0, dirY: 0, size: which, maxTicks: 180 });
     if (which === 0) summon(s, rng);
     if (which === 1) p.curseHp = K.curseWin.curseHp;
     if (which === 2) p.passives = [];

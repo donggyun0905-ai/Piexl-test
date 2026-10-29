@@ -179,8 +179,7 @@ export function eaterTick(s: RunState, want: boolean, speed: number): void {
   const regen = eaterRegen(p);
   if (regen > 0 && s.tick % (TICK_RATE / 2) === 0 && p.hp > 0 && p.hp < p.stats.maxHp) healPlayer(s, regen / 10);
   if (!want || p.attackCooldown > 0 || p.s2Rush) return;
-  const frenzy = hasPerk(p, "eaFrenzy") ? Math.min(K.eaFrenzy.max, Math.floor((p.eaEaten ?? 0) / K.eaFrenzy.per) * K.eaFrenzy.speed) : 0;
-  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / (speed * (1 + frenzy))));
+  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
   mawMove(s, pick(s, p, p.attackCount));
   if (hasPerk(p, "eaEcho") && roll(s, "echo", p.attackCount) < K.eaEcho.chance) mawMove(s, pick(s, p, -p.attackCount));

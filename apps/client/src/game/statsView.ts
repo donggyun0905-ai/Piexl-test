@@ -1,5 +1,5 @@
 // 능력치 보기: 지금 내 수치 (패시브·무기 반영). 설정의 '능력치 보기'를 켰을 때만 화면에 표시
-import { artChance, attackSpeedNow, CHARACTERS, classMoveMul, type ExtraStats, eaterRegen, gunCrit, riderSpeedMul, IMUGI, SAMYEOL, imugiCrit, mukinDef, mukinRegen, noviceCrit, petCrit, petGold, petTaken, WEAPONS, type PlayerState, type RunState, type WeaponDef } from "@pixel-rogue/shared";
+import { artChance, attackSpeedNow, classDamageMul, classMoveMul, critNow, eaterRegen, extraOf, mukinDef, mukinRegen, petGold, petTaken, type PlayerState, riderSpeedMul, type RunState, type WeaponDef, WEAPONS } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 
 export interface StatRow {
@@ -9,22 +9,6 @@ export interface StatRow {
 
 const round = (v: number) => String(Math.round(v * 100) / 100);
 
-/** 지금 치명타 확률 · 피해 배율 (풋내기 스탯 · 이무기 용 부른 수 · 거너 총, 없으면 0%) */
-function critOf(p: PlayerState, w: WeaponDef): { chance: number; mul: number } {
-  const ex = CHARACTERS[p.characterId] as unknown as ExtraStats;
-  const c = baseCrit(p, w);
-  // 모든 캐릭터 공통 기본 치명타 (sim/baseStats)
-  return ex.critChance > 0 ? { chance: c.chance + ex.critChance, mul: c.chance > 0 ? c.mul : ex.critDamage } : c;
-}
-
-function baseCrit(p: PlayerState, w: WeaponDef): { chance: number; mul: number } {
-  if (p.characterId === "novice") return noviceCrit(p);
-  if (p.characterId === "imugi") return { chance: imugiCrit(p), mul: IMUGI.critMul };
-  if (w.kind === "gun") return gunCrit(p);
-  if (p.characterId === "samyeol") return { chance: SAMYEOL.critChance, mul: SAMYEOL.critMul };
-  return { chance: 0, mul: 1.5 };
-}
-
 /** 지금 걸린 배율이 붙으면 "1.8 (+20%)" (이동 속도·공격 속도·공격력) */
 function moveText(base: number, mul: number): string {
   const pct = Math.round((mul - 1) * 100);
@@ -33,7 +17,8 @@ function moveText(base: number, mul: number): string {
 
 /** 공통 추가 스탯: 값이 있을 때만 (방어력·재생력·흡혈 등) */
 function extraRows(p: PlayerState, t: (k: TextKey) => string): StatRow[] {
-  const ex = CHARACTERS[p.characterId] as unknown as ExtraStats;
+  // 캐릭터 기본 + 히든 아이템(신의 파편·아티팩트·주사위)·왕 변신이 더한 몫 (실제 계산과 같은 sim/baseStats.extraOf)
+  const ex = extraOf(p);
   const pct = (v: number) => `${Math.round(v * 100)}%`;
   const rows: [TextKey, number, string][] = [
     ["statArmor", ex.defense, round(ex.defense)],
@@ -53,11 +38,11 @@ export function statRows(run: RunState, t: (k: TextKey) => string): StatRow[] {
   const w: WeaponDef = WEAPONS[run.player.weaponId];
   // 지금 걸린 효과까지 (공격 속도 버프 · 라이더 빠르기 피해)
   const speedNow = attackSpeedNow(run.player);
-  const dmgMul = riderSpeedMul(run.player);
+  // 라이더 빠르기 · 이드라 모습 · 학살자 낮은 체력·분노 (실제 평타와 같은 배율)
+  const dmgMul = riderSpeedMul(run.player) * classDamageMul(run.player);
   const perSecond = s.damage * dmgMul * (w.shots ?? 1) * speedNow;
   // 병아리(로비 펫) 치명타 확률은 어느 캐릭터에나 더해짐
-  const base = critOf(run.player, w);
-  const crit = { chance: base.chance + petCrit(run), mul: base.mul };
+  const crit = critNow(run);
   return [
     { label: t("statHp"), value: run.sudden ? `${run.player.hp > 0 ? 1 : 0} / 1` : `${Math.ceil(run.player.hp)} / ${round(s.maxHp)}` },
     { label: t("statDamage"), value: moveText(s.damage, dmgMul) },

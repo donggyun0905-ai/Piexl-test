@@ -86,7 +86,7 @@ export function zeusTick(s: RunState, want: boolean, speed: number): void {
   powerTick(s);
   if (!want || p.attackCooldown > 0) return;
   // 제우스 강림 중에는 공격 두 배로 빠름
-  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / (speed * (p.zsGod ? Z.godSpeed : 1))));
+  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
   attack(s);
 }

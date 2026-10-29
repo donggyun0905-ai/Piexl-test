@@ -50,6 +50,7 @@ import { drawMorphGot, drawMorphWake } from "./morphWake";
 import { drawTerraAuraB, drawTerraGroundB } from "./terra2b";
 import { drawTerraAuraC } from "./terra2c";
 import { drawGreatSpirit, drawSpiritKin } from "./spirits";
+import { drawCurseText } from "./curseText";
 import { drawHaloHud } from "./forgottenHalo";
 import { drawPilgrim, drawRelicHud } from "./pilgrim";
 import { drawHiddenGear } from "./hiddenGear";
@@ -79,6 +80,8 @@ export interface DrawOptions {
   showRange: boolean;
   /** 차원의 순례자 말풍선 (화면 언어) */
   pilgrimLine?: string;
+  /** 머리 위 히든 글자 (화면 언어): 저주받은 주사위 저주 넷 · 신의 파편 힘 열 */
+  curseNames?: readonly string[];
   /** 패왕전: 체력 줄 위 캐릭터 이름 (없으면 안 그림) */
   charName?: (id: string) => string;
   /** 게임 1픽셀이 실제 화면(기기) 몇 픽셀인지 (확대 전) */
@@ -235,6 +238,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   });
   drawProjectiles(ctx, s, alpha, snap);
   drawEffects(ctx, s, alpha, snap);
+  drawCurseText(ctx, s, opt.curseNames, alpha, snap);
   drawPrimevalOverlay(ctx, s, alpha, snap);
   drawUltOverlay(ctx, s, snap);
   drawImugiOverlay(ctx, s);

@@ -14,6 +14,8 @@ const formOf = (p: PlayerState) => GAIA_FORMS[p.gForm ?? 0] ?? "bow";
 
 /** 사계로 오른 피해 배율 */
 const seasonMul = (p: PlayerState) => ((p.gSeason ?? 0) > 0 ? K.idFourSeasons.damage : 1);
+/** 지금 모습·사계절의 공격력 배율 (평타, 능력치 창도 씀) */
+export const idraDmgMul = (p: PlayerState) => I.form[formOf(p)].dmg * seasonMul(p);
 
 /** 방패 모습일 때 받는 피해 배율 (combat.damagePlayer) */
 export function idraTaken(p: PlayerState): number {
@@ -111,11 +113,10 @@ export function idraTick(s: RunState, want: boolean, speed: number): void {
     addEffect(s, { kind: "bloom", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 30, maxTicks: 40 });
   }
   if (!want || p.attackCooldown > 0) return;
-  const f = I.form[formOf(p)];
-  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / (speed * f.speed)));
+  p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
   p.gHits = (p.gHits ?? 0) + 1;
-  attack(s, p.stats.damage * f.dmg * seasonMul(p));
+  attack(s, p.stats.damage * idraDmgMul(p));
 }
 
 /** 연습장 등에서 다시 시작할 때 */
