@@ -49,6 +49,8 @@ export const HIDDEN_USES = {
   cursedDice: { id: "cursedDice" },
   /** 테라포밍: 이 층 보스를 고른 보스로 (최종 보스 제외) */
   terraform: { id: "terraform" },
+  /** 바스러져가는 왕관: 얻으면 로비 전시장에 영혼 조각 (변신은 만드는 순서 ③, 그때까지 써도 남음 · 히든 상점에는 아직 안 나옴) */
+  crumblingCrown: { id: "crumblingCrown" },
 } as const;
 
 /** 히든 상점에서만 나오는 사용 아이템 (보통 보상·상점 목록에서 뺌) */

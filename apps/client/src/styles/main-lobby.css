@@ -94,3 +94,36 @@
   margin: 0;
   color: var(--accent);
 }
+/* 전시장: 위 가운데 이름 · 전시물 가까이 가면 설명 상자 */
+.lobby-hall-title {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 4px 14px;
+  border-radius: 8px;
+  background: rgb(20 14 36 / 0.75);
+  border: 1px solid #e0b040;
+  color: #ffe8a0;
+  font-weight: bold;
+  pointer-events: none;
+}
+.lobby-exhibit {
+  position: absolute;
+  left: 50%;
+  bottom: 56px;
+  transform: translateX(-50%);
+  max-width: min(360px, calc(100vw - 32px));
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgb(20 14 36 / 0.85);
+  border: 1px solid #8ad070;
+  color: #e8f4ff;
+  font-size: 13px;
+  pointer-events: none;
+}
+.lobby-exhibit p {
+  margin: 4px 0 0;
+  opacity: 0.85;
+}

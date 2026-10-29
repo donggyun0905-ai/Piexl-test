@@ -1,4 +1,5 @@
 // 로비 그리기: 바닥·벽(테마 무늬) → 무대 조명 → 꾸밈·게임기·캐릭터들·펫·나(아래쪽일수록 앞) → 깃발·풍선·색종이
+import { drawHallDoor } from "./hallArt";
 import { DECOR, LOBBY_COLS, LOBBY_H, LOBBY_ROWS, LOBBY_W, MACHINES, MACHINE_H, MACHINE_W, TILE, WALL_TOP, type GameId, type Machine } from "./lobbyMap";
 import { drawDecor, ell, r } from "./lobbyItems";
 import { npcDrawers } from "./npcs";
@@ -200,6 +201,8 @@ export function drawLobby(ctx: Ctx, theme: LobbyTheme, t: number, near: GameId |
   drawFloorLights(ctx, t);
   const L = THEME_LOOK[theme];
   const items: { y: number; draw: () => void }[] = [
+    // 위 벽 가운데 전시장 문
+    { y: 0, draw: () => drawHallDoor(ctx, t) },
     ...DECOR.map((d, i) => ({ y: d.y, draw: () => drawDecor(ctx, L.decor[i % L.decor.length]!, d.x, d.y, t) })),
     ...MACHINES.map((m) => ({ y: m.y, draw: () => machine(ctx, m, t, near === m.game) })),
     ...npcDrawers(ctx, t),

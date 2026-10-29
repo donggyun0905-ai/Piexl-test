@@ -1,9 +1,13 @@
 // 로비 캔버스: 메인 화면 뒤 배경(천천히 훑어봄) · 직접 돌아다니기(파수꾼, WASD·방향키·누른 곳으로 걷기, 게임기 앞에서 F)
+// 위 벽 가운데 문으로 들어가면 전시장(hallMap·hallArt), 전시장 아래 문으로 나오면 로비
 import { useEffect, useRef } from "react";
 import { drawBody } from "../game/render/actors";
 import { lobbyTheme } from "../shop/wallet";
 import { drawLobby } from "./lobbyArt";
-import { canStand, LOBBY_H, LOBBY_W, nearMachine, START, type GameId } from "./lobbyMap";
+import { canStand, LOBBY_H, LOBBY_W, nearMachine, START, WALL_TOP, type GameId } from "./lobbyMap";
+import { loadExhibits, type ExhibitId } from "./exhibits";
+import { drawHall } from "./hallArt";
+import { canStandHall, HALL_DOOR, HALL_H, HALL_START, HALL_W, LOBBY_BACK, LOBBY_DOOR, nearExhibit } from "./hallMap";
 import type { LobbyTheme } from "./lobbyThemes";
 
 const SPEED = 64;
@@ -17,13 +21,17 @@ interface Props {
   onNear?: (g: GameId | null) => void;
   /** 미니 게임 창이 떠 있으면 멈춤 */
   paused?: boolean;
+  /** 전시장에 들어가고 나올 때 · 가까운 전시물이 바뀔 때 · 전시물 이름표 글자 */
+  onRoom?: (hall: boolean) => void;
+  onExhibit?: (id: ExhibitId | null) => void;
+  names?: Partial<Record<ExhibitId, string>>;
 }
 
-export function LobbyStage({ play, onGame, onNear, paused }: Props) {
+export function LobbyStage({ play, onGame, onNear, paused, onRoom, onExhibit, names }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
-  const cb = useRef({ onGame, onNear, paused });
+  const cb = useRef({ onGame, onNear, paused, onRoom, onExhibit, names });
   useEffect(() => {
-    cb.current = { onGame, onNear, paused };
+    cb.current = { onGame, onNear, paused, onRoom, onExhibit, names };
   });
 
   useEffect(() => {
@@ -33,6 +41,19 @@ export function LobbyStage({ play, onGame, onNear, paused }: Props) {
     const me = { x: START.x, y: START.y, fx: 0, fy: -1, moving: false, step: 0, tx: -1, ty: -1 };
     const keys = new Set<string>();
     let near: GameId | null = null;
+    /** 지금 전시장 안인지 · 놓인 전시물 · 가까운 전시물 */
+    let hall = false;
+    let shown: ExhibitId[] = [];
+    let nearEx: ExhibitId | null = null;
+    const stand = (x: number, y: number) => (hall ? canStandHall(x, y, R, shown) : canStand(x, y, R));
+    const go = (toHall: boolean) => {
+      hall = toHall;
+      shown = toHall ? (Object.keys(loadExhibits()) as ExhibitId[]) : [];
+      [me.x, me.y] = toHall ? [HALL_START.x, HALL_START.y] : [LOBBY_BACK.x, LOBBY_BACK.y];
+      me.tx = -1;
+      me.fy = toHall ? -1 : 1;
+      cb.current.onRoom?.(toHall);
+    };
     let last = performance.now();
     let raf = 0;
     const theme = lobbyTheme() as LobbyTheme;
@@ -72,9 +93,18 @@ export function LobbyStage({ play, onGame, onNear, paused }: Props) {
       view.h = ch / scale;
       if (play) {
         if (!cb.current.paused) move(dt);
-        view.x = clamp(me.x - view.w / 2, LOBBY_W - view.w);
-        view.y = clamp(me.y - view.h / 2, LOBBY_H - view.h);
-        const n = nearMachine(me.x, me.y)?.game ?? null;
+        // 로비 위 문 ↔ 전시장 아래 문
+        if (!hall && me.y <= WALL_TOP + 4 + R + 1 && Math.abs(me.x - LOBBY_DOOR.x) < LOBBY_DOOR.w / 2) go(true);
+        else if (hall && me.y >= HALL_H - 4 - R - 1 && Math.abs(me.x - HALL_DOOR.x) < HALL_DOOR.w / 2) go(false);
+        const [rw, rh] = hall ? [HALL_W, HALL_H] : [LOBBY_W, LOBBY_H];
+        view.x = clamp(me.x - view.w / 2, rw - view.w);
+        view.y = clamp(me.y - view.h / 2, rh - view.h);
+        const ex = hall ? nearExhibit(me.x, me.y, shown) : null;
+        if (ex !== nearEx) {
+          nearEx = ex;
+          cb.current.onExhibit?.(ex);
+        }
+        const n = hall ? null : (nearMachine(me.x, me.y)?.game ?? null);
         if (n !== near) {
           near = n;
           cb.current.onNear?.(n);
@@ -90,7 +120,8 @@ export function LobbyStage({ play, onGame, onNear, paused }: Props) {
       const people = play
         ? [{ y: me.y, draw: () => drawBody(ctx, "warden", Math.round(me.x), Math.round(me.y - R), R, { faceX: me.fx, faceY: me.fy, moving: me.moving, casting: false, step: me.step }, me.moving ? Math.floor(t * 8) : 0) }]
         : [];
-      drawLobby(ctx, theme, t, play ? near : null, people);
+      if (hall) drawHall(ctx, t, shown, cb.current.names ?? {}, people);
+      else drawLobby(ctx, theme, t, play ? near : null, people);
       raf = requestAnimationFrame(frame);
     };
 
@@ -115,8 +146,8 @@ export function LobbyStage({ play, onGame, onNear, paused }: Props) {
       me.step = Math.floor(performance.now() / 120);
       const nx = me.x + mx * SPEED * dt;
       const ny = me.y + my * SPEED * dt;
-      if (canStand(nx, me.y, R)) me.x = nx;
-      if (canStand(me.x, ny, R)) me.y = ny;
+      if (stand(nx, me.y)) me.x = nx;
+      if (stand(me.x, ny)) me.y = ny;
     };
 
     raf = requestAnimationFrame(frame);

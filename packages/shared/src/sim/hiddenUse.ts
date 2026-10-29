@@ -38,4 +38,9 @@ export function hiddenUse(s: RunState, item: string, slot: number): void {
   // 저주받은 주사위 · 테라포밍: 고르는 창을 엶 (hiddenDice.hiddenPick)
   else if (item === "cursedDice") p.hdPick = "curse";
   else if (item === "terraform") p.hdPick = "terra";
+  // 바스러져가는 왕관: 변신은 아직 (써도 사라지지 않고 왕관 빛만)
+  else if (item === "crumblingCrown") {
+    p.useSlots[slot] = "crumblingCrown";
+    addEffect(s, { kind: "hdShow", x: p.x, y: p.y - 14, dirX: 0, dirY: 0, size: 20, maxTicks: 30 });
+  }
 }

@@ -66,6 +66,10 @@ export const HIDDEN_GRIDS: Record<string, Grid> = {
     rows: [".....kkkk.....", "...kkoooOkk...", "..koogggooOk..", ".kooggGgoooOk.", ".kogggggsooOk.", "kooogggsssooOk", "koooogsssoooOk", "koooooossoogOk", "koggooooooggOk", ".kgggoooogggk.", ".kogggooggoOk.", "..koooooooOk..", "...kkoooOkk...", ".....kkkk....."],
     pal: { k: "#142a5a", o: "#3a7ad0", O: "#2a4a9a", g: "#5ab05a", G: "#a8f0a0", s: "#d8b060" },
   },
+  crumblingCrown: {
+    rows: ["..............", "..g...g...g...", ".gYg.gYg.gYg..", ".gYg.gYg.gYg..", ".gYYgYYYgYYg..", ".gYrYYgYYrYg..", ".gYYYYYYYYYg..", ".gRYYYvYYYRg..", ".gYYYYYYYYYg..", "..gYY.YYY.Yg..", "..ggg.gg..gg..", "....l....l....", "...l..l.....l.", ".............."],
+    pal: { g: "#6a4a10", Y: "#e0b030", r: "#ff3a3a", R: "#8a1a1a", v: "#8aff6a", l: "#b8ff8a" },
+  },
   dimensionGate: {
     rows: ["....kkkkkk....", "..kkSSSSSSkk..", ".kSSPppppPSSk.", ".kSPpvvvvpPSk.", "kSSPpvVVvpPSSk", "kSrPvVWWVvPrSk", "kSSPvVWWVvPSSk", "kSrPpvVVvpPrSk", "kSSPpvvvvpPSSk", "kSSPPppppPPSSk", "kSrPPPPPPPPrSk", "kSSSSSSSSSSSSk", "kDDDDDDDDDDDDk", "kkkkkkkkkkkkkk"],
     pal: { k: "#2a2a3a", S: "#8a8aa0", D: "#5a5a70", r: "#c8a8ff", P: "#8a5aff", p: "#6a3aff", v: "#3a1a8a", V: "#c060ff", W: "#ffffff" },

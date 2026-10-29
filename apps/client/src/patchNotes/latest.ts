@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.231",
+    date: "2026-10-29",
+    items: {
+      ko: ["로비 전시장: 로비 위 벽 가운데 금빛 아치 문으로 들어가면 라스트 보스방만 한 전시장 (대리석 바닥·붉은 융단·아치 창 빛·기둥) · 첫 전시물 영혼 조각(바스러져가는 왕관을 얻으면)·거대한 방주 월계선 · 가까이 가면 이름과 설명", "히든 아이템 '바스러져가는 왕관' 추가 (지금은 얻으면 전시장에 영혼 조각이 놓임, 변신은 다음 업데이트)"],
+      en: ["Lobby Exhibition Hall: walk through the golden arch at the top of the lobby into a hall as big as a last-boss room (marble floor, red carpet, window light, pillars) · first exhibits: the Soul Shard (from the Crumbling Crown) and the giant Laurel Ark · get close to see names and stories", "New hidden item 'Crumbling Crown' (for now, obtaining it places a Soul Shard in the hall; the transformation comes in a later update)"],
+      ja: ["ロビー展示場: ロビー上の壁の金のアーチ扉から、ラストボス部屋ほどの展示場へ (大理石の床・赤い絨毯・窓の光・柱) · 最初の展示物は魂のかけら (崩れゆく王冠を手に入れると)・巨大な方舟の月桂船 · 近づくと名前と説明", "ヒドゥンアイテム「崩れゆく王冠」を追加 (今は手に入れると展示場に魂のかけらが置かれる、変身は次のアップデート)"],
+    },
+  },
+  {
     version: "0.48.230",
     date: "2026-10-29",
     items: {
