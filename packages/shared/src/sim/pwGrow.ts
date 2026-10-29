@@ -23,13 +23,29 @@ export const isGrow = (s: RunState): boolean => {
 };
 
 /** 상점 입력 번호: 사기(목록 자리) · 팔기(장비 칸) · 증강 고르기(셋 중) */
-export const GROW_MENU = { buy: 1_000_000, sell: 1_100_000, aug: 1_200_000, tp: 1_300_000 };
+export const GROW_MENU = { buy: 1_000_000, sell: 1_100_000, aug: 1_200_000, tp: 1_300_000, recall: 1_600_000 };
 
 /** 편의 집 (픽셀) */
 export function homeOf(s: RunState, team: number): [number, number] {
   const h = PW_ARENAS[s.pvp!.arena].homes;
   return h ? spotXY(h[team === 1 ? 1 : 0]) : [0, 0];
 }
+
+/** 전쟁의 서막 포털: 집 앞(가운데 쪽으로 2.5칸) · F를 누르면 지도에서 체크포인트를 골라 순간이동 */
+export function portalOf(s: RunState, team: number): [number, number] {
+  const [x, y] = homeOf(s, team);
+  const a = PW_ARENAS[s.pvp!.arena];
+  const dx = (a.cols * 16) / 2 - x;
+  const dy = (a.rows * 16) / 2 - y;
+  const len = Math.hypot(dx, dy) || 1;
+  return [x + (dx / len) * 40, y + (dy / len) * 40];
+}
+export const nearPortal = (s: RunState, i: number): boolean => {
+  if (PW_MODE[s.pvp!.mode].rule !== "war") return false;
+  const p = allPlayers(s)[i]!;
+  const [x, y] = portalOf(s, s.pvp!.seats[i]!.team);
+  return (p.x - x) ** 2 + (p.y - y) ** 2 <= 22 * 22;
+};
 
 export function atHome(s: RunState, i: number): boolean {
   if (!PW_ARENAS[s.pvp!.arena].homes) return false;
@@ -47,6 +63,7 @@ export function growInit(s: RunState): void {
     const u = makeUnit(s, "tower", t.team, ...spotXY(t.at));
     u.order = t.order;
     u.lane = t.lane;
+    u.body.pwNoSkill = true;
     pv.grow.units.push(u);
   }
   if (PW_MODE[pv.mode].rule === "contest") for (const team of [0, 1]) pv.grow.units.push(makeUnit(s, "boss", team, ...homeOf(s, team)));
@@ -96,7 +113,8 @@ export function addXp(s: RunState, i: number, n: number): void {
     p.pwXp -= PW_GROW.xpBase + PW_GROW.xpPer * ((p.pwLv ?? 1) - 1);
     p.pwLv = (p.pwLv ?? 1) + 1;
     up = true;
-    if (PW_GROW.augLv.includes(p.pwLv)) offerAug(s, i);
+    // 증강은 쟁탈전에서만
+    if (PW_GROW.augLv.includes(p.pwLv) && PW_MODE[s.pvp!.mode].rule === "contest") offerAug(s, i);
   }
   if (up) {
     const old = p.stats.maxHp;
@@ -152,7 +170,11 @@ export function growMenu(s: RunState, code: number): boolean {
   if (!isGrow(s) || code < GROW_MENU.buy) return false;
   const p = s.player;
   const i = seatNo(s);
-  if (code >= GROW_MENU.tp) teleport(s, code - GROW_MENU.tp);
+  if (code >= GROW_MENU.recall) {
+    // 귀환 (R): 5초 뒤 집으로 · 다시 누르면 그만둠
+    if (p.pwRecall) p.pwRecall = undefined;
+    else if (inPlay(s, i) && !atHome(s, i) && PW_ARENAS[s.pvp!.arena].homes) p.pwRecall = { end: s.tick + PW_UNIT.recall, hp: p.hp };
+  } else if (code >= GROW_MENU.tp) teleport(s, code - GROW_MENU.tp);
   else if (code >= GROW_MENU.aug) pickAug(s, code - GROW_MENU.aug);
   else if (code >= GROW_MENU.sell) sell(s, code - GROW_MENU.sell);
   // 집에 있거나, 쓰러져 다시 나오기를 기다리는 동안
@@ -220,10 +242,18 @@ function sell(s: RunState, k: number): void {
   s.gold += Math.floor(fullCost(id) / 2);
 }
 
-/** 틱마다: 1초마다 1원 · 집에서 빠른 회복 */
+/** 틱마다: 1초마다 1원 · 집에서 빠른 회복 · 귀환 (피해를 입으면 끊김) */
 export function growEconomy(s: RunState): void {
   eachSeat(s, (i) => {
     const p = s.player;
+    const rc = p.pwRecall;
+    if (rc && (!inPlay(s, i) || p.hp < rc.hp - 0.5)) p.pwRecall = undefined;
+    else if (rc && s.tick >= rc.end) {
+      p.pwRecall = undefined;
+      [p.x, p.y] = homeOf(s, s.pvp!.seats[i]!.team);
+      [p.prevX, p.prevY] = [p.x, p.y];
+      addEffect(s, { kind: "burst", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 24, maxTicks: 20 });
+    } else if (rc) rc.hp = Math.max(rc.hp, p.hp);
     if (s.tick % TICK_RATE === 0) s.gold += 1;
     if (inPlay(s, i) && atHome(s, i) && p.hp < p.stats.maxHp) p.hp = Math.min(p.stats.maxHp, p.hp + (p.stats.maxHp * PW_GROW.homeHeal) / TICK_RATE);
   });

@@ -23,16 +23,23 @@ describe("패왕전 기간토마키아", () => {
     expect(s.pvp!.grow!.loot!.filter((l) => l.chest).length).toBeGreaterThan(PW_GIGA.chests - 10);
   });
 
-  it("상자 열기(F) → 돈·물건이 배낭에 · 금고는 죽어도 남음 · 나머지는 떨굼", () => {
+  it("상자 열기(F) → 돈은 바로, 물건은 창에서 골라 배낭에 · 가득이면 안 들어감 · 금고는 죽어도 남음 · 나머지는 떨굼", () => {
     const s = fresh();
     const p = s.player;
     const l = s.pvp!.grow!.loot![0]!;
     l.items = ["whetstone", "g:chips"];
+    l.gold = 50;
     [p.x, p.y] = [l.x, l.y];
     stepPvp(s, [{ ...EMPTY_INPUT, interact: true }]);
-    expect(p.pwBag).toEqual(["whetstone", "g:chips"]);
+    expect(s.gold).toBe(50);
+    expect(p.pwOpen).toBe(l.id);
+    expect(p.pwBag).toEqual([]);
+    gigaMenu(s, GIGA_MENU.take + 1);
+    gigaMenu(s, GIGA_MENU.take);
+    expect(p.pwBag).toEqual(["g:chips", "whetstone"]);
+    p.pwBag = ["g:chips", "whetstone"];
     expect(p.pwGear).toEqual(["whetstone"]);
-    gigaMenu(s, GIGA_MENU.vault + 1);
+    gigaMenu(s, GIGA_MENU.vault);
     expect(p.pwVault).toBe("g:chips");
     const before = s.pvp!.grow!.loot!.length;
     gigaDeath(s);

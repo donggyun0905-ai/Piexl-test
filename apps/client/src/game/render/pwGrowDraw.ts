@@ -1,5 +1,5 @@
 // 패왕전 성장 대결 그리기: 집(깃발 둘레 원) · 쟁탈전 가운데 점령지(가진 편 색) · 병사·포탑·보스(던전 몬스터 그림 + 편 고리 + 체력 줄) · 포탑·원거리 병사 공격 빛줄기
-import { BASE_R, capCenter, ENEMIES, fogAt, PW_ARENAS, PW_GROW, PW_WAR, spotXY, TILE_SIZE, type EnemyKind, type PwUnit, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, BASE_R, capCenter, ENEMIES, fogAt, portalOf, PW_ARENAS, PW_GIGA, PW_GROW, PW_UNIT, PW_WAR, spotXY, TILE_SIZE, type EnemyKind, type PwUnit, type RunState } from "@pixel-rogue/shared";
 import { drawEnemySprite } from "../sprites";
 import { drawTurret } from "./pwGrowTheme";
 
@@ -50,6 +50,46 @@ export function drawGrowGround(ctx: Ctx, s: RunState): void {
     }
     ctx.lineWidth = 1;
   });
+  // 전쟁의 서막 포털 (우리 집 앞): 초록 소용돌이
+  if (pv.mode === "war") {
+    const [x, y] = portalOf(s, mine);
+    for (let k = 0; k < 3; k++) {
+      ctx.strokeStyle = `rgba(106, 240, 160, ${0.9 - k * 0.25})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(x, y, 10 - k * 3, 5 - k * 1.5, (s.tick / 20) * (k % 2 ? -1 : 1), 0, Math.PI * 1.6);
+      ctx.stroke();
+    }
+    ctx.lineWidth = 1;
+  }
+  // 기간토마키아 제작 중: 망치질하듯 튀는 불꽃 + 금빛 막대
+  allPlayers(s).forEach((p) => {
+    const cr = p.pwCraft;
+    if (!cr) return;
+    const k = 1 - Math.max(0, cr.end - s.tick) / PW_GIGA.craftHold;
+    const hit = s.tick % 20 < 4;
+    ctx.fillStyle = hit ? "#fff0a0" : "#e8b030";
+    for (let n = 0; n < (hit ? 6 : 2); n++) {
+      const a2 = (n / 6) * Math.PI * 2 + s.tick / 7;
+      ctx.fillRect(p.x + Math.cos(a2) * (6 + (s.tick % 20)), p.y - 4 + Math.sin(a2) * 4 - (s.tick % 20) / 3, 2, 2);
+    }
+    ctx.fillStyle = "#0a0810";
+    ctx.fillRect(p.x - 11, p.y + 10, 22, 4);
+    ctx.fillStyle = "#f2d040";
+    ctx.fillRect(p.x - 10, p.y + 11, Math.round(20 * k), 2);
+  });
+  // 귀환 중: 발밑에서 오르는 파란 빛 + 남은 막대
+  allPlayers(s).forEach((p) => {
+    const rc = p.pwRecall;
+    if (!rc) return;
+    const k = 1 - Math.max(0, rc.end - s.tick) / PW_UNIT.recall;
+    ctx.fillStyle = `rgba(110, 190, 255, ${0.25 + 0.15 * Math.sin(s.tick / 5)})`;
+    ctx.fillRect(p.x - 8, p.y - 24 * k, 16, 24 * k + 6);
+    ctx.fillStyle = "#0a0810";
+    ctx.fillRect(p.x - 11, p.y + 10, 22, 4);
+    ctx.fillStyle = "#8ac8ff";
+    ctx.fillRect(p.x - 10, p.y + 11, Math.round(20 * k), 2);
+  });
   // 가운데 점령지
   if (a.zone?.rect) {
     const [c, r, w, h] = a.zone.rect;
@@ -68,7 +108,7 @@ export function drawGrowGround(ctx: Ctx, s: RunState): void {
 }
 
 /** 체력 줄 (포탑·보스는 크게) · 못 때리는 동안 자물쇠 표시 */
-function drawBar(ctx: Ctx, u: PwUnit, col: string): void {
+function drawBar(ctx: Ctx, u: PwUnit, col: string, tick = 0): void {
   const b = u.body;
   const top = b.y - (u.kind === "tower" ? 32 : b.r + 7);
   const w = u.kind === "tower" ? 30 : Math.max(12, b.r * 2);
@@ -76,6 +116,14 @@ function drawBar(ctx: Ctx, u: PwUnit, col: string): void {
   ctx.fillRect(b.x - w / 2 - 1, top, w + 2, 4);
   ctx.fillStyle = col;
   ctx.fillRect(b.x - w / 2, top + 1, Math.max(1, Math.round((w * b.hp) / b.maxHp)), 2);
+  // 정글·거인: 맞은 뒤 3초가 지나면 체력이 차오름 (흰 막대가 다 줄면 회복 시작)
+  if (u.team === 2 && u.hurtAt !== undefined) {
+    const left = Math.max(0, 1 - (tick - u.hurtAt) / PW_UNIT.calm);
+    if (left > 0) {
+      ctx.fillStyle = "#f4f4f8";
+      ctx.fillRect(b.x - w / 2, top - 2, Math.round(w * left), 1);
+    }
+  }
   if (b.immune) {
     ctx.fillStyle = "#d8d8e8";
     ctx.fillRect(b.x - 2, top - 6, 5, 4);
@@ -116,7 +164,7 @@ export function drawGrowUnits(ctx: Ctx, s: RunState): void {
     ctx.stroke();
     if (u.kind === "tower") {
       drawTurret(ctx, s, u);
-      drawBar(ctx, u, col);
+      drawBar(ctx, u, col, s.tick);
       continue;
     }
     const def = ENEMIES[u.look as EnemyKind];
@@ -125,7 +173,7 @@ export function drawGrowUnits(ctx: Ctx, s: RunState): void {
       ctx.fillStyle = col;
       ctx.fillRect(b.x - b.r, b.y - b.r, b.r * 2, b.r * 2);
     }
-    drawBar(ctx, u, col);
+    drawBar(ctx, u, col, s.tick);
     // 기간토마키아 뿔 거인: 머리 위 뿔 둘 (붉은 · 푸른 · 흰)
     const horn = HORN[u.kind];
     if (horn) {

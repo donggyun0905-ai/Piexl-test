@@ -63,7 +63,7 @@ export function PwHud({ run, me, names, t, onBoard }: Props) {
         <PwClock run={run} t={t} />
         <div className="pw-sub">
           <span className="pw-kd">
-            {mine.kills}K / {mine.deaths}D
+            {mine.kills}K / {mine.deaths}D / {mine.assists ?? 0}A
           </span>{" "}
           · {t("pwDealt")} <b className="pw-dealt">{Math.round(mine.dealt ?? 0)}</b> · {t("pwTaken")} <b className="pw-taken">{Math.round(mine.taken ?? 0)}</b>
         </div>

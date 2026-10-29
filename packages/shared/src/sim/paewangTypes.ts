@@ -48,6 +48,8 @@ export interface PwEnemyState {
   pw?: PwBrain;
   /** 마지막으로 때린 AI (처치를 그 AI에게. 없으면 나) */
   pwBy?: number;
+  /** 성장 대결 포탑: 스킬·소환한 것의 피해는 안 들어감 (기본 공격만) */
+  pwNoSkill?: boolean;
 }
 
 export interface PwShotState {
@@ -112,6 +114,8 @@ export interface PvpSeat {
   on: boolean;
   kills: number;
   deaths: number;
+  /** 도움(어시스트): 쓰러진 상대를 다시 나온 뒤 때린 적 있는 처치자 말고 같은 편 */
+  assists?: number;
   /** 마지막으로 나를 때린 자리 (쓰러지면 처치를 그 자리에) */
   by?: number;
   /** 데스매치 레벨 · 다시 나올 틱 */
@@ -152,6 +156,9 @@ export interface PvpSeat {
   /** 침묵(스킬 못 씀) 남은 틱 · 밀려나는 중 (틱마다 움직임 · 남은 틱) */
   silence?: number;
   push?: { vx: number; vy: number; t: number };
+  /** AI가 사람을 노릴 때 늦게 따라가는 조준점 (pvpBot.lagAim) */
+  aimLx?: number;
+  aimLy?: number;
   /** 점령전: 점프대로 뛰는 중(시작·끝 자리·지난 틱) · 마지막으로 내린 틱 · 버프 자리에서 버티는 중(자리 번호·끝 틱) */
   jump?: { fx: number; fy: number; tx: number; ty: number; t: number };
   landAt?: number;

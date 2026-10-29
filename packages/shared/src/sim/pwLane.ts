@@ -47,7 +47,7 @@ function nearest(s: RunState, u: PwUnit, within: number, unitsFirst: boolean): T
 /** 중립(정글) 몬스터: 때린 사람을 잠시 쫓음 (자리에서 너무 멀어지면 포기) */
 function jungleFoe(s: RunState, u: PwUnit, home: number): Target | null {
   const b = u.body;
-  if (u.lastHp !== undefined && b.hp < u.lastHp && b.lastHit !== undefined) [u.foe, u.foeUntil] = [b.lastHit, s.tick + 300];
+  if (u.lastHp !== undefined && b.hp < u.lastHp && b.lastHit !== undefined) [u.foe, u.foeUntil, u.hurtAt] = [b.lastHit, s.tick + 300, s.tick];
   u.lastHp = b.hp;
   if (u.foe === undefined || (u.foeUntil ?? 0) < s.tick || home > PW_UNIT.leash * 1.5 || !inPlay(s, u.foe)) {
     u.foe = undefined;
@@ -55,6 +55,14 @@ function jungleFoe(s: RunState, u: PwUnit, home: number): Target | null {
   }
   const p = allPlayers(s)[u.foe]!;
   return { x: p.x, y: p.y, r: p.r, seat: u.foe };
+}
+
+/** 정글·거인: 움직이는 범위 안에 캐릭터가 없으면 안 맞음 (멀리서 쏘아 잡지 못하게) · 3초 동안 안 맞으면 체력이 참 */
+function neutralGuard(s: RunState, u: PwUnit): void {
+  const b = u.body;
+  const r = PW_UNIT.leash * 1.5;
+  b.immune = !allPlayers(s).some((p, i) => inPlay(s, i) && (p.x - u.hx) ** 2 + (p.y - u.hy) ** 2 <= r * r);
+  if (s.tick - (u.hurtAt ?? -1e9) > PW_UNIT.calm && b.hp < b.maxHp) b.hp = Math.min(b.maxHp, b.hp + (b.maxHp * PW_UNIT.calmHeal) / 60);
 }
 
 /** 캐릭터 하나를 때림 (맞은 뒤 무적을 남기지 않음) */
@@ -135,6 +143,7 @@ export function laneTick(s: RunState): void {
     if (u.cd > 0) u.cd--;
     const d = PW_UNIT[u.kind];
     const home = Math.hypot(b.x - u.hx, b.y - u.hy);
+    if (u.team === 2) neutralGuard(s, u);
     const leash = PW_UNIT.leash;
     const t = u.team === 2 ? jungleFoe(s, u, home) : u.kind === "tower" ? nearest(s, u, d.range, true) : nearest(s, u, Math.max(PW_UNIT.aggro, d.range), u.kind !== "boss");
     const reach = t ? Math.hypot(t.x - b.x, t.y - b.y) - t.r - b.r : Infinity;
@@ -151,7 +160,7 @@ export function laneTick(s: RunState): void {
       u.wp = Math.max(0, Math.min(lane.length - 1, u.wp));
     } else if (d.speed > 0 && home > 2) step(u, u.hx, u.hy, d.speed * 1.5);
     // 정글: 집에 돌아와 쉬면 체력이 참
-    else if (u.team === 2 && !t) b.hp = Math.min(b.maxHp, b.hp + b.maxHp * 0.01);
+
   }
   // 같은 편 병사끼리 겹치지 않게 살짝 밀어냄
   const walkers = g.units.filter((u) => u.body.hp > 0 && (u.kind === "minion" || u.kind === "archer"));

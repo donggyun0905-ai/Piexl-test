@@ -22,7 +22,12 @@ export function growTick(s: RunState): void {
   }
   // 뒤 포탑은 같은 길 앞 포탑이 부서져야 맞음
   for (const u of g.units) {
-    if (u.kind === "tower" && u.order) u.body.immune = g.units.some((v) => v.kind === "tower" && v.team === u.team && v.lane === u.lane && (v.order ?? 0) < u.order! && v.body.hp > 0);
+    if (u.kind !== "tower") continue;
+    const back = !!u.order && g.units.some((v) => v.kind === "tower" && v.team === u.team && v.lane === u.lane && (v.order ?? 0) < u.order! && v.body.hp > 0);
+    // 포탑 사거리 안에 상대 병사가 있어야 맞음 (사거리 긴 캐릭터가 혼자 멀리서 부수지 못하게)
+    const r = PW_UNIT.tower.range + 16;
+    const escort = g.units.some((v) => (v.kind === "minion" || v.kind === "archer") && v.team !== u.team && v.body.hp > 0 && (v.body.x - u.hx) ** 2 + (v.body.y - u.hy) ** 2 <= r * r);
+    u.body.immune = back || !escort;
   }
   laneTick(s);
   gearTick(s);

@@ -115,7 +115,10 @@ export function botInput(s: RunState): TickInput {
     if ((heal && low) || (!heal && t && roll(s, i, `use${k}`) < 0.002)) useSlot = k + 1;
   });
   // 찾는 중: 자동 조준 없이 기억한 곳을 직접 조준해 때려 봄 (닿을 만큼 가까울 때)
-  const at = t ?? hunt;
+  // 사람을 노릴 때: 자동 조준 대신 조준점이 사람을 늦게 따라가고(반응 지연) 난이도만큼 흔들림 (AI끼리는 그대로)
+  const human = !!t && !!pv.seats[pv.proxies.indexOf(t)]?.human;
+  const lag = human ? lagAim(s, i, t!) : null;
+  const at = lag ?? t ?? hunt;
   const aimLen = at ? Math.min(30, Math.max(1, Math.round(Math.sqrt(dist2(p, at)) / 12))) : 1;
   const aim = (at && normalize(at.x - p.x, at.y - p.y)) || [p.faceX, p.faceY];
   const reach = p.stats.range + 12;
@@ -130,8 +133,19 @@ export function botInput(s: RunState): TickInput {
     useSlot,
     skill: t ? botSkill(s, i, Math.sqrt(dist2(p, t))) : 0,
     statPick: (p.points ?? 0) > 0 && s.tick % 30 === 0 ? 1 + Math.floor(roll(s, i, "stat") * 7) : 0,
-    autoAim: !hunt,
+    autoAim: !hunt && !human,
   };
+}
+
+/** 사람을 향한 늦은 조준점: 지난 조준점에서 사람 쪽으로 조금씩 (어려울수록 빠르게) + 난이도만큼 흔들림 */
+function lagAim(s: RunState, i: number, t: EnemyState): { x: number; y: number } {
+  const st = s.pvp!.seats[i]!;
+  const acc = PW_MODE[s.pvp!.mode].diff.aim;
+  const k = PW.aimFollow[0]! + PW.aimFollow[1]! * acc;
+  st.aimLx = st.aimLx === undefined ? t.x : st.aimLx + (t.x - st.aimLx) * k;
+  st.aimLy = st.aimLy === undefined ? t.y : st.aimLy + (t.y - st.aimLy) * k;
+  const wob = (1 - acc) * PW.aimWobble;
+  return { x: st.aimLx + (roll(s, i, "ax") - 0.5) * 2 * wob, y: st.aimLy + (roll(s, i, "ay") - 0.5) * 2 * wob };
 }
 
 /** AI 스킬: 가끔, 쓸 수 있고 상대가 닿는 스킬 하나 (없으면 0) */

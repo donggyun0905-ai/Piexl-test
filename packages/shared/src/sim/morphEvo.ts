@@ -45,6 +45,8 @@ export function morphMods(p: PlayerState): StatMod[] {
 
 /** 각성 방어력: 받는 피해 배율 */
 export const evoTaken = (p: PlayerState) => (morphEvolved(p) ? 1 - MORPH_EVO.def / 100 : 1);
+/** 패왕전 각성 방어력은 절반만 (각성하면 혼자 무쌍이 되지 않게) */
+export const evoTakenPvp = (p: PlayerState) => (morphEvolved(p) ? 1 - MORPH_EVO.def / 200 : 1);
 
 /** 불사조 열기 한 틱: 둘레 적에게 불꽃 겹치기 + 센 화상 */
 export function heatTick(s: RunState): void {

@@ -147,6 +147,9 @@ export const PW = {
   skillDmg: 8,
   skillDot: 0.15,
   minionSpeed: 1.1,
+  /** AI가 사람을 노릴 때 조준점이 따라가는 빠르기 (틱마다 거리 비율 = 앞 + 뒤 × 조준 정확도) · 흔들림 최대(px, 정확도가 낮을수록) */
+  aimFollow: [0.03, 0.07],
+  aimWobble: 40,
   /** AI가 틱마다 스킬을 써 볼 확률 */
   botSkill: 0.04,
   /** 거대한 평타 줄이기 (화면을 덮지 않게): 영사 실 길이 */

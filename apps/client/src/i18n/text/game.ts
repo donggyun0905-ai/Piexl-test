@@ -139,6 +139,7 @@ export const GAME_TEXT = {
   continueRun: { ko: "이어하기", en: "Continue", ja: "続きから" },
   tigerPower: { ko: "범의 기운!", en: "Tiger's Might!", ja: "虎の気！" },
   summerPower: { ko: "파도의 힘!", en: "Wave Power!", ja: "波の力！" },
+  victoryPower: { ko: "승리의 기운!", en: "Glory of Victory!", ja: "勝利の気！" },
   oniUpHp: { ko: "체력 UP!", en: "HP UP!", ja: "体力 UP!" },
   oniUpRegen: { ko: "재생력 UP!", en: "Regen UP!", ja: "再生力 UP!" },
   oniUpReach: { ko: "추가 공격 범위 UP!", en: "Extra-attack area UP!", ja: "追加攻撃範囲 UP!" },

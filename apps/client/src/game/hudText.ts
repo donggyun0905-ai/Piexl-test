@@ -1,5 +1,5 @@
 // HUD 글자: 시간, 상호작용 안내, 바닥 아이템 설명
-import { FLOOR_COUNT, HERO_FLOORS, isCapture, isGiga, nearBuff, nearExit, nearLoot, TICK_RATE, type RunState } from "@pixel-rogue/shared";
+import { FLOOR_COUNT, HERO_FLOORS, isCapture, isGiga, nearBuff, nearPortal, nearExit, nearLoot, TICK_RATE, type RunState } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { itemDesc, itemName } from "../i18n/items";
 
@@ -13,6 +13,8 @@ export function promptText(run: RunState, lang: Lang, t: (k: TextKey) => string)
   const pr = run.prompt;
   // 패왕전은 쓰러짐 안내를 위쪽(PwFeed)에서 따로 보여 줌
   if (run.party && run.player.hp <= 0) return run.pvp ? "" : t("coopDown");
+  // 전쟁의 서막 포털
+  if (run.pvp && nearPortal(run, run.seat ?? 0)) return t("pwPortalPrompt");
   // 기간토마키아: 출구 · 상자·배낭
   if (run.pvp && isGiga(run) && nearExit(run, run.player.x, run.player.y)) return t("pwGigaExit");
   if (run.pvp && isGiga(run) && nearLoot(run, run.player.x, run.player.y)) return t("pwGigaLoot");

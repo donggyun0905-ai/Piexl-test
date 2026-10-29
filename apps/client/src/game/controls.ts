@@ -54,7 +54,7 @@ export class Controls {
   private statQueued = 0;
   private skillQueued = 0;
   private sellQueued = 0;
-  private menuQueued = 0;
+  private menuQueue: number[] = []; // 누른 창 버튼들 (한 틱에 하나씩: 빠르게 여러 번 눌러도 빠지지 않게)
   skillKeys = false; // 숫자 키를 스킬로 씀 (추적자·패왕전)
   arm = new SkillArm();
   fineAim = false; // 누른 곳까지 거리를 잘게 (추적자 암습 저격: 조준경 가운데에 정확히 대야 맞음)
@@ -186,7 +186,7 @@ export class Controls {
   queueSkill(n: number): void { this.skillQueued = n; }
   /** 상점에서 장비 팔기 (판매 줄: 1·2 = 사용 아이템 칸, 3~ = 패시브 순서) · 작업대 창에서 누름 (sim/station.menuCode) */
   queueSell(n: number): void { this.sellQueued = n; }
-  queueMenu(code: number): void { this.menuQueued = code; }
+  queueMenu(code: number): void { this.menuQueue.push(code); }
   /** 상호작용을 한 번 누른 것으로 처리 (모바일 버튼) */
   queueInteract(): void { this.interactQueued = true; }
   queueDash(): void { this.dashQueued = true; }
@@ -265,8 +265,8 @@ export class Controls {
     const statPick = this.statQueued;
     const skill = this.skillQueued;
     if (skill) [aimX, aimY] = this.arm.take(aimX, aimY);
-    const sell = { ...(this.sellQueued ? { sell: this.sellQueued } : {}), ...(this.menuQueued ? { menu: this.menuQueued } : {}) };
-    this.sellQueued = this.menuQueued = 0;
+    const menu = this.menuQueue.shift() ?? 0, sell = { ...(this.sellQueued ? { sell: this.sellQueued } : {}), ...(menu ? { menu } : {}) };
+    this.sellQueued = 0;
     this.statQueued = 0;
     this.skillQueued = 0;
     this.dashQueued = false;

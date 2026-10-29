@@ -37,6 +37,8 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
     return (pv.mode === "gungame" ? B.lv - A.lv : 0) || B.kills - A.kills || A.deaths - B.deaths || a - b;
   });
   const rank = new Map(order.map((i, k) => [i, k + 1]));
+  // 막대 그래프 기준: 판 전체에서 가장 큰 값
+  const top = { dealt: Math.max(1, ...pv.seats.map((x) => x.dealt ?? 0)), taken: Math.max(1, ...pv.seats.map((x) => x.taken ?? 0)), healAll: Math.max(1, ...pv.seats.map((x) => x.healAll ?? 0)) };
   const teams = [...new Set(pv.seats.map((x) => x.team))];
   const mine = pv.seats[me]!.team;
   teams.sort((a, b) => (a === mine ? -1 : b === mine ? 1 : a - b));
@@ -56,6 +58,7 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
               <th>{t("pwWho")}</th>
               <th>K</th>
               <th>D</th>
+              <th>A</th>
               <th>{t("pwDealt")}</th>
               <th>{t("pwTaken")}</th>
               <th>{t("pwHealed")}</th>
@@ -79,9 +82,16 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
                   </td>
                   <td>{seat.kills}</td>
                   <td>{seat.deaths}</td>
-                  <td className="pw-dealt">{Math.round(seat.dealt ?? 0)}</td>
-                  <td className="pw-taken">{Math.round(seat.taken ?? 0)}</td>
-                  <td className="pw-healed">{Math.round(seat.healAll ?? 0)}</td>
+                  <td>{seat.assists ?? 0}</td>
+                  <td className="pw-dealt">
+                    <Bar v={seat.dealt ?? 0} max={top.dealt} />
+                  </td>
+                  <td className="pw-taken">
+                    <Bar v={seat.taken ?? 0} max={top.taken} />
+                  </td>
+                  <td className="pw-healed">
+                    <Bar v={seat.healAll ?? 0} max={top.healAll} />
+                  </td>
                   {pv.mode === "gungame" && <td>{seat.lv}</td>}
                   {grow && <td className="pw-lv">{p.pwLv ?? 1}</td>}
                   {grow && <td className="pw-gold">{earned(i).toLocaleString()}</td>}
@@ -116,6 +126,16 @@ export function PwBoard({ run, me, names, lang, t }: Props) {
       ))}
       {tip && <ItemTip pos={tip.pos} icon={tip.item} name={itemName(tip.item.kind, tip.item.id, lang)} desc={tip.grow ? gearLines(tip.item.id, t).join(" · ") : itemDesc(tip.item.kind, tip.item.id, lang, t)} />}
     </div>
+  );
+}
+
+/** 숫자 + 누운 막대 (판에서 가장 큰 값 기준) */
+function Bar({ v, max }: { v: number; max: number }) {
+  return (
+    <span className="pw-bar">
+      <i style={{ width: `${Math.round((v / max) * 100)}%` }} />
+      <b>{Math.round(v).toLocaleString()}</b>
+    </span>
   );
 }
 

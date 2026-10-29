@@ -57,7 +57,7 @@ export function PwFlow({ lang, setLang, t, onExit }: { lang: Lang; setLang: (l: 
         <button type="button" className="primary" onClick={() => setStep({ name: "gigaGame", saved })}>
           {t("pwGigaResume")}
         </button>
-        <button type="button" onClick={() => (clearGiga(), setStep({ name: "draft", mode: "giganto", map: null, key: 0 }))}>
+        <button type="button" onClick={() => (clearGiga(), setStep({ name: "select", mode: "giganto", map: null }))}>
           {t("pwGigaNew")}
         </button>
         <button type="button" className="ghost" onClick={modes}>
@@ -72,7 +72,7 @@ export function PwFlow({ lang, setLang, t, onExit }: { lang: Lang; setLang: (l: 
     return <PwPracticeGame key={step.key} characterId={step.characterId} lang={lang} t={t} onChange={() => setStep({ name: "practice", key: step.key })} onExit={modes} />;
   }
   /** 경기장을 정한 다음: 데스매치는 바로 대결, 편 대결·기간토마키아는 밴픽, 난투는 캐릭터 고르기 */
-  const afterMap = (mode: PwMode, map: PwMapPick): Step => (mode === "gungame" ? { name: "game", mode, map, characterId: "warden", key: 0 } : pwHasDraft(mode) || mode === "giganto" ? { name: "draft", mode, map, key: 0 } : { name: "select", mode, map });
+  const afterMap = (mode: PwMode, map: PwMapPick): Step => (mode === "gungame" ? { name: "game", mode, map, characterId: "warden", key: 0 } : pwHasDraft(mode) ? { name: "draft", mode, map, key: 0 } : { name: "select", mode, map });
   if (step.name === "maps") {
     const { mode } = step;
     return <PwMaps mode={mode} t={t} onBack={modes} onPick={(map) => setStep(afterMap(mode, map))} />;

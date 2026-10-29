@@ -159,14 +159,17 @@ function onIsland(a: PwArenaDef, x: number, y: number): boolean {
   return inRect(x, y, [c0, r0, c1 - c0, r1 - r0]);
 }
 
-/** 낭떠러지 쪽으로 걸어가려 하면 멈춤 */
+/** 낭떠러지 쪽으로 걸어가려 하면 옆(안 되면 뒤)으로 비켜 걸음 (멈춰 서 있지 않게) */
 function cliffGuard(s: RunState, input: TickInput): TickInput {
   const cl = arenaOf(s).cliffs;
-  if (!cl) return input;
+  if (!cl || (!input.moveX && !input.moveY)) return input;
   const p = s.player;
-  const nx = p.x + (input.moveX / 100) * 14;
-  const ny = p.y + (input.moveY / 100) * 14;
-  return cl.some((c) => inRect(nx, ny, c)) ? { ...input, moveX: 0, moveY: 0, dash: false } : input;
+  const fall = (mx: number, my: number) => cl.some((c) => inRect(p.x + (mx / 100) * 14, p.y + (my / 100) * 14, c));
+  if (!fall(input.moveX, input.moveY)) return input;
+  const side = seatNo(s) % 2 ? 1 : -1;
+  const tries: [number, number][] = [[-input.moveY * side, input.moveX * side], [input.moveY * side, -input.moveX * side], [-input.moveX, -input.moveY]];
+  const ok = tries.find(([mx, my]) => !fall(mx, my));
+  return ok ? { ...input, moveX: ok[0], moveY: ok[1], dash: false } : { ...input, moveX: 0, moveY: 0, dash: false };
 }
 
 /** AI 입력 다듬기: 상대가 안 보이면 버프 자리(홀수 자리 AI)·구역으로 · 버프 자리 옆이면 가만히 F */

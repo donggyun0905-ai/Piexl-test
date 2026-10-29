@@ -205,6 +205,16 @@ function drawSeats(ctx: Ctx, s: RunState, alpha: number, snap: Snap, charName?: 
     ctx.fillRect(x - w / 2, top, Math.max(hp > 0 ? 1 : 0, Math.round(w * hp)), 3);
     ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
     ctx.fillRect(x - w / 2, top, Math.round(w * hp), 1);
+    // 성장 대결: 체력 줄 왼쪽 검은 네모 안에 레벨 (우리 편·상대 편 모두)
+    if (p.pwLv !== undefined) {
+      ctx.fillStyle = "#0a0810";
+      ctx.fillRect(x - w / 2 - 9, top - 2, 8, 7);
+      ctx.font = "bold 6px monospace";
+      ctx.textAlign = "center";
+      ctx.fillStyle = p.pwLv >= 10 ? "#ffe07a" : "#ffffff";
+      ctx.fillText(String(p.pwLv), x - w / 2 - 5, top + 4);
+      ctx.textAlign = "start";
+    }
     const sh = Math.min(1, (p.shieldPts ?? 0) / (p.stats.maxHp * 0.35));
     if (sh > 0) {
       ctx.fillStyle = "#e8f4ff";

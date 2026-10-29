@@ -8,14 +8,14 @@ import { blastAt, damageEnemy, healPlayer, ignite } from "./combat";
 import { alive, fan, inCircle, inCone, inLine, poison, root, rushTick, shoot, startRush, stun, strike } from "./s2Kit";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, weaponOf } from "./util";
-import { evoSkill, evoTaken, heatTick, raidTick } from "./morphEvo";
+import { evoSkill, evoTaken, evoTakenPvp, heatTick, raidTick } from "./morphEvo";
 
 const animalOf = (p: PlayerState) => (p.characterId === "byeonhui" ? weaponOf(p).animal : undefined);
 
 /** 그 동물일 때 받는 피해 배율 (combat.damagePlayer) */
-export function morphTaken(p: PlayerState): number {
+export function morphTaken(p: PlayerState, pvp = false): number {
   const a = animalOf(p);
-  const evo = evoTaken(p);
+  const evo = pvp ? evoTakenPvp(p) : evoTaken(p);
   if (a === "bear" && hasPerk(p, "bearHide")) return K.bearHide.taken * evo;
   if (a === "scorpion" && hasPerk(p, "scorpShell")) return K.scorpShell.taken * evo;
   if (a === "elephant" && hasPerk(p, "eleHerd")) return K.eleHerd.taken * evo;

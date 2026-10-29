@@ -17,7 +17,8 @@ interface Props {
 export function PwWatch({ run, me, names, watching = false, t }: Props) {
   const pv = run.pvp!;
   const [pick, setPick] = useState<number>(-1);
-  const out = !run.over && (watching || (!inPlay(run, me) && pv.seats[me]!.back === undefined));
+  // 쓰러져 끝났을 때 · 다시 태어나기를 기다리는 동안 · 관전자
+  const out = !run.over && (watching || !inPlay(run, me));
   // 우리 편부터 · 살아 있는 사람만
   const mine = watching ? undefined : pv.seats[me]!.team;
   const live = pv.seats.map((_, i) => i).filter((i) => (watching || i !== me) && inPlay(run, i));

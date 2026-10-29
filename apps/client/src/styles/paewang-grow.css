@@ -1,0 +1,209 @@
+/* 성장 대결: 레벨·돈 줄 · 증강 고르기 · 집 상점 */
+.pw-grow {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  z-index: 3;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  max-width: 96vw;
+  font-size: 12px;
+  color: #fff;
+  text-shadow: 0 1px 0 #000;
+}
+.pw-grow-xp {
+  position: relative;
+  width: 80px;
+  height: 6px;
+  background: rgb(10 8 16 / 0.8);
+  border: 1px solid #3a3444;
+}
+.pw-grow-xp i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: #b48aff;
+}
+.pw-grow-gold {
+  color: #f2d040;
+}
+.pw-grow button {
+  padding: 2px 8px;
+  font-size: 11px;
+}
+.pw-grow small {
+  flex-basis: 100%;
+  text-align: center;
+  color: #d8d0e8;
+}
+.pw-aug {
+  position: fixed;
+  top: 22%;
+  left: 50%;
+  z-index: 6;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgb(14 10 24 / 0.92);
+  border: 2px solid #f2d040;
+  box-shadow: 0 0 24px rgb(242 208 64 / 0.35);
+}
+.pw-aug > b {
+  font-size: 20px;
+  color: #f2d040;
+  letter-spacing: 1px;
+}
+.pw-aug-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.pw-aug-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 168px;
+  min-height: 210px;
+  padding: 12px 10px;
+  border: 2px solid #6a5aa0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #2a2048 0%, #161028 100%);
+  color: #fff;
+  transition: transform 0.12s, border-color 0.12s;
+}
+.pw-aug-card:hover,
+.pw-aug-card:focus-visible {
+  transform: translateY(-6px);
+  border-color: #f2d040;
+  box-shadow: 0 6px 18px rgb(242 208 64 / 0.3);
+}
+.pw-aug-icon {
+  width: 96px;
+  height: 96px;
+  image-rendering: pixelated;
+  padding: 6px;
+  border-radius: 10px;
+  background: radial-gradient(circle, #3a2e60 0%, #1a1430 75%);
+}
+.pw-aug-card strong {
+  font-size: 18px;
+  color: #ffe07a;
+}
+.pw-aug-card small {
+  font-size: 13px;
+  line-height: 1.35;
+  color: #e0d8f0;
+}
+/* 월드 워 리그 대진표 */
+.pw-league-round h3 {
+  margin: 10px 0 4px;
+  color: #f2d040;
+}
+.pw-league-match {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  margin-bottom: 4px;
+  border: 1px solid #3a3444;
+  border-radius: 8px;
+}
+.pw-league-match.mine {
+  border-color: #5ab0ff;
+}
+.pw-league-match .won {
+  color: #f2d040;
+  font-weight: bold;
+}
+.pw-league-match .lost {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+.pw-league-match em {
+  font-style: normal;
+  color: #9a90b0;
+}
+.pw-league-pick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  flex-basis: 100%;
+  font-size: 12px;
+}
+.pw-league-champ {
+  padding: 8px;
+  border-radius: 8px;
+  background: rgb(40 32 60 / 0.8);
+  text-align: center;
+}
+.pw-league-champ.win {
+  color: #f2d040;
+  font-weight: bold;
+}
+/* 기간토마키아: 미니맵·배낭·제작 */
+.pw-giga {
+  position: fixed;
+  right: 8px;
+  bottom: 64px;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  max-width: calc(100vw - 16px);
+  color: #fff;
+  font-size: 12px;
+  text-shadow: 0 1px 0 #000;
+}
+.pw-giga-map {
+  border: 1px solid #3a3444;
+  image-rendering: pixelated;
+}
+.pw-giga-side {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 300px;
+}
+.pw-giga-bag,
+.pw-giga-craft {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+.pw-giga-bag button {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+}
+.pw-giga-bag .vault {
+  border-color: #f2d040;
+}
+.pw-giga-craft button {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 4px;
+  font-size: 11px;
+}
+.pw-board .pw-gold {
+  color: #f2d040;
+}
+.pw-board .pw-lv {
+  color: #c8b8ff;
+  font-weight: bold;
+}
+.pw-board .pw-gear .grow {
+  outline: 1px solid #f2d040;
+  border-radius: 3px;
+}

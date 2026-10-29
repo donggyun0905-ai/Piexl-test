@@ -28,6 +28,8 @@ export interface PwUnit {
   foe?: number;
   foeUntil?: number;
   lastHp?: number;
+  /** 사람에게 마지막으로 맞은 틱 (3초 지나면 회복, 화면에 흰 막대) */
+  hurtAt?: number;
 }
 
 export interface PwGrowState {
@@ -73,4 +75,8 @@ export interface PwGrowPlayer {
   pwBag?: string[];
   pwVault?: string;
   pwCraft?: { id: string; end: number };
+  /** 기간토마키아: 열어 둔 상자·배낭 (바닥 물건 id, 화면이 창을 띄움) */
+  pwOpen?: number;
+  /** 귀환 중: 끝 틱 · 시작 뒤 가장 높았던 체력 (이보다 떨어지면 끊김) */
+  pwRecall?: { end: number; hp: number };
 }

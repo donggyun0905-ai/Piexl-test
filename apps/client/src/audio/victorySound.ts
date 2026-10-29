@@ -1,5 +1,12 @@
 // 승리(월드 워 리그 우승 한정 스킨) 전용 음악: 작은북 행진 리듬 + 나팔 같은 네모파 가락 + 낮은 금관 (직접 만든 곡). 파일 없이 브라우저에서 만듦
-import { musicOut, noise, setMusicBeat, tone } from "./sound";
+import { musicOut, noise, setMusicBeat, sfxOn, tone } from "./sound";
+
+/** 강해질 때 짧은 팡파르 (도-미-솔-도 나팔 + 작은북) */
+export function fanfare(): void {
+  if (!sfxOn()) return;
+  [0, 4, 7, 12].forEach((n, i) => tone({ type: "square", from: 466 * 2 ** (n / 12), dur: i === 3 ? 0.32 : 0.1, vol: 0.07, delay: i * 0.09 }));
+  noise(0.12, 0.18, 3400);
+}
 
 /** 장조 음계 (도·레·미·파·솔·라·시 …) 반음 수 */
 const SCALE = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19];

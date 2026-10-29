@@ -12,7 +12,11 @@ const R = {
   KILL: 3,
   BOSS: 20,
   FULL: 100,
+  /** 패왕전: 상대 캐릭터 하나 쓰러뜨리면 (같은 처치를 한 번만 셈) */
+  PVP: 20,
 };
+/** 패왕전 처치 중복 막기: 같은 틱에 같은 상대를 여러 자리 목록에서 정리해도 한 번만 */
+const counted = new WeakMap<EnemyState, number>();
 export { R as MORPH_XP_RULES };
 
 /** 이 무기(동물) 전용 능력 */
@@ -40,8 +44,12 @@ export function morphKill(s: RunState, e: EnemyState): boolean {
   if (p.characterId !== "byeonhui" || !w.animal || e.kind === "dummy") return false;
   const left = animalPassives(w.id).filter((id) => !p.passives.includes(id));
   if (!left.length) return false;
+  if (s.pvp) {
+    if (counted.get(e) === s.tick) return false;
+    counted.set(e, s.tick);
+  }
   const xp = { ...p.mXp };
-  let v = (xp[w.animal] ?? 0) + (ENEMIES[e.kind].boss ? R.BOSS : R.KILL);
+  let v = (xp[w.animal] ?? 0) + (s.pvp ? R.PVP : ENEMIES[e.kind].boss ? R.BOSS : R.KILL);
   let gained = false;
   if (v >= R.FULL) {
     v -= R.FULL;

@@ -92,6 +92,12 @@ export class ThemeFx extends TigerFx {
     for (const [i, c] of t.colors.entries()) this.ringAt(x, y, 22 + i * 10, c);
     this.burst(t, t.hit.bits, x, y, 26, 2.4, 30);
     this.add({ kind: "text", x, y: y - 18, vx: 0, vy: -0.25, life: 60, size: 1, rot: 0, color: t.colors[0], text: this.hooks.powerText });
+    // 승리(한정 스킨): 범 풍류처럼 금빛 기둥 + 큰 고리 + 팡파르
+    if (t.id === "victory") {
+      this.add({ kind: "pillar", x, y, vx: 0, vy: 0, life: 40, size: 16, rot: 0, color: t.colors[0] });
+      this.ringAt(x, y, 46, t.colors[1]);
+      this.hooks.roar(true);
+    }
   }
 
   protected override muzzle(x: number, y: number, a: number): void {

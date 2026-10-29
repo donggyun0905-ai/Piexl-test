@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { GameScreen } from "../game/GameScreen";
 import type { Lang, TextKey } from "../i18n";
 import { PwBoard, useBoard } from "./PwBoard";
+import { StatsPanel } from "../game/GameHud";
+import { statRows } from "../game/statsView";
 import { PwGigaHud } from "./PwGigaHud";
 import { claimGoods, clearGiga, saveGiga } from "./pwGigaStore";
 import { PwGrowHud } from "./PwGrowHud";
@@ -93,9 +95,15 @@ export function PwGame({ mode, map, characterId, picks, loadout, lang, t, onExit
           )
         }
       />
-      {!ended && <PwWatch run={run} me={0} t={t} />}
+      {!ended && <PwWatch run={run} me={0} watching={watch} t={t} />}
       {!ended && <PwHud run={run} me={0} t={t} onBoard={toggleBoard} />}
       {board && <PwBoard run={run} me={0} lang={lang} t={t} />}
+      {/* Tab: 왼쪽에 내(보는 사람) 능력치 */}
+      {board && (
+        <div className="pw-stats-side">
+          <StatsPanel rows={statRows(run, t)} t={t} />
+        </div>
+      )}
     </>
   );
 }

@@ -52,7 +52,7 @@ export { R as COMBAT_RULES };
 
 export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: number, dirY: number, knock = true): void {
   // 차례가 아닌 천사장 탑: 맞지 않음
-  if (e.immune) return;
+  if (e.immune || (e.pwNoSkill && s.pvp?.src)) return;
   // 받아 넘기기 (갓이터·대검): 확률로 피해 없음
   const parry = ENEMIES[e.kind].parry;
   if (parry && dmg > 0) {

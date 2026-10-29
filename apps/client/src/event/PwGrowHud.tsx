@@ -1,9 +1,12 @@
 // 패왕전 성장 대결 화면 위 정보: 레벨·경험치 막대·돈·상점 버튼(B) · 쟁탈전 진행(포탑·가운데·집 점령) · 증강 고르기 · 상점 창
-import { allPlayers, atHome, GROW_MENU, isGrow, PW_ARENAS, PW_GROW, towersLeft, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, GROW_MENU, isGrow, nearPortal, PW_ARENAS, PW_GROW, towersLeft, type RunState } from "@pixel-rogue/shared";
 import { useEffect, useRef, useState } from "react";
 import type { Controls } from "../game/controls";
 import type { Lang, TextKey } from "../i18n";
 import { PwAugPick } from "./PwAugPick";
+import { PwMapView } from "./PwMapView";
+import { gearItem, gearLines, gearName } from "./pwGearView";
+import { ItemIcon } from "../game/itemIcon";
 import { PwShop } from "./PwShop";
 
 interface Props {
@@ -19,23 +22,34 @@ const goldOf = (run: RunState, me: number) => ((run.seat ?? 0) === me ? run.gold
 
 export function PwGrowHud({ run, me, lang, t, controls }: Props) {
   const [shop, setShop] = useState(false);
-  const open = useRef(false);
+  const [map, setMap] = useState(false);
+  const open = useRef({ shop: false, map: false, grow: false, portal: false });
+  const grow = isGrow(run) && !!PW_ARENAS[run.pvp!.arena].homes;
+  const portal = grow && nearPortal(run, me);
   useEffect(() => {
-    open.current = shop;
-  }, [shop]);
+    open.current = { shop, map, grow, portal };
+  }, [shop, map, grow, portal]);
   useEffect(() => {
-    // B: 열기·닫기 · Esc: 상점이 열려 있으면 상점만 닫음 (나가기 확인 창이 뜨지 않게, 먼저 받음)
+    // B 상점 · R 귀환 · F 포털 앞이면 큰 지도 · Esc: 열린 창만 닫음 (나가기 확인 창이 뜨지 않게, 먼저 받음)
     const key = (e: KeyboardEvent) => {
-      if (e.code === "KeyB" && !e.repeat) setShop((v) => !v);
-      if (e.code === "Escape" && open.current) {
+      const o = open.current;
+      if (!o.grow || e.repeat) return;
+      if (e.code === "KeyB") setShop((v) => !v);
+      if (e.code === "KeyR") {
+        e.stopImmediatePropagation();
+        controls()?.queueMenu(GROW_MENU.recall);
+      }
+      if (e.code === "KeyF" && o.portal) setMap(true);
+      if (e.code === "Escape" && (o.shop || o.map)) {
         e.stopImmediatePropagation();
         e.preventDefault();
         setShop(false);
+        setMap(false);
       }
     };
     window.addEventListener("keydown", key, true);
     return () => window.removeEventListener("keydown", key, true);
-  }, []);
+  }, [controls]);
   if (!isGrow(run)) return null;
   const p = allPlayers(run)[me]!;
   const lv = p.pwLv ?? 1;
@@ -72,17 +86,30 @@ export function PwGrowHud({ run, me, lang, t, controls }: Props) {
             {!!(g.base[0] || g.base[1]) && ` · ${t("pwContestBase").replace("{a}", pct(g.base[mine])).replace("{b}", pct(g.base[1 - mine]))}`}
           </small>
         )}
-        {/* 전쟁의 서막: 집에서 우리 체크포인트로 순간이동 */}
-        {pv.mode === "war" &&
-          atHome(run, me) &&
-          (PW_ARENAS[pv.arena].points ?? []).map((_, k) =>
-            g.points?.[k]?.owner === mine ? (
-              <button key={k} type="button" onClick={() => controls()?.queueMenu(GROW_MENU.tp + k)}>
-                ✦ {t("pwWarTp")} · {t(`pwLane${k}` as TextKey)}
-              </button>
-            ) : null,
-          )}
+        {p.pwRecall && <b className="pw-recall">⟲ {t("pwRecalling").replace("{n}", String(Math.ceil((p.pwRecall.end - run.tick) / 60)))}</b>}
       </div>
+      {grow && <PwMapView run={run} me={me} cell={2} t={t} />}
+      {/* 장비 창: 산 장비 6칸 (마우스를 올리면 능력치) */}
+      <div className={`pw-gearbar${grow ? "" : " hide"}`} aria-label={t("pwShopMine")}>
+        {Array.from({ length: PW_GROW.slots }, (_, k) => {
+          const id = p.pwGear?.[k];
+          return (
+            <span key={k} title={id ? `${gearName(id, lang)}\n${gearLines(id, t).join("\n")}` : ""}>
+              {id && <ItemIcon item={gearItem(id, lang)} size={28} />}
+            </span>
+          );
+        })}
+      </div>
+      {/* 전쟁의 서막 포털: 큰 지도에서 우리 체크포인트를 눌러 순간이동 */}
+      {map && (
+        <div className="pw-bigmap" role="dialog" aria-label={t("pwPortal")}>
+          <b>{t("pwPortalPick")}</b>
+          <PwMapView run={run} me={me} cell={6} t={t} className="pw-bigmap-canvas" onPoint={(k) => (controls()?.queueMenu(GROW_MENU.tp + k), setMap(false))} />
+          <button type="button" className="ghost" onClick={() => setMap(false)}>
+            {t("pwShopClose")}
+          </button>
+        </div>
+      )}
       {p.pwOffer && <PwAugPick offer={p.pwOffer} t={t} controls={controls} />}
       {shop && <PwShop run={run} me={me} lang={lang} t={t} controls={controls} onClose={() => setShop(false)} />}
     </>

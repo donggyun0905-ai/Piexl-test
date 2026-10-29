@@ -20,7 +20,7 @@ import { addEffect } from "./util";
 
 export const isGiga = (s: RunState): boolean => !!s.pvp && PW_MODE[s.pvp.mode].rule === "giganto";
 /** 입력 menu: 제작(전설 목록 자리) · 금고와 배낭 칸 바꾸기 */
-export const GIGA_MENU = { craft: 1_400_000, vault: 1_500_000 };
+export const GIGA_MENU = { craft: 1_400_000, vault: 1_500_000, take: 1_700_000, drop: 1_710_000, close: 1_720_000 };
 export const isGear = (id: string): boolean => !!pwGearDef(id);
 
 const USES = Object.keys(PW_SHOP_USES);
@@ -122,14 +122,25 @@ export function gigaInput(s: RunState, input: TickInput): TickInput {
   }
   const l = nearLoot(s, p.x, p.y);
   if (!l) return input;
+  // 열면 돈은 바로 · 물건은 창에서 골라 가져감 (사람) · AI는 넣을 수 있는 만큼 다
+  if (l.gold > 0) addEffect(s, { kind: "coinGet", x: l.x, y: l.y, dirX: 0, dirY: 0, size: l.gold, maxTicks: 30 });
   s.gold += l.gold;
   l.gold = 0;
-  l.items = l.items.filter((id) => !bagAdd(s, id));
+  l.chest = false;
+  if (s.pvp!.seats[i]!.human) p.pwOpen = l.id;
+  else {
+    l.items = l.items.filter((id) => !bagAdd(s, id));
+    syncGear(s);
+  }
   if (!l.items.length) g.loot = g.loot!.filter((x) => x !== l);
-  else l.chest = false;
-  addEffect(s, { kind: "coinGet", x: l.x, y: l.y, dirX: 0, dirY: 0, size: 1, maxTicks: 20 });
-  syncGear(s);
   return input;
+}
+
+/** 열어 둔 상자 (닿는 거리 안일 때만) */
+export function openLoot(s: RunState): PwLoot | undefined {
+  const p = s.player;
+  const l = p.pwOpen === undefined ? undefined : s.pvp?.grow?.loot?.find((x) => x.id === p.pwOpen);
+  return l && (l.x - p.x) ** 2 + (l.y - p.y) ** 2 <= (PW_GIGA.reach * 2) ** 2 ? l : undefined;
 }
 
 /** 제작할 수 있는지 (재료가 배낭에 다 있고 돈이 됨) */
@@ -164,7 +175,26 @@ function finishCraft(s: RunState): void {
 export function gigaMenu(s: RunState, code: number): boolean {
   if (!isGiga(s) || code < GIGA_MENU.craft) return false;
   const p = s.player;
-  if (code >= GIGA_MENU.vault) {
+  const g = s.pvp!.grow!;
+  if (code >= GIGA_MENU.close) p.pwOpen = undefined;
+  else if (code >= GIGA_MENU.drop) {
+    // 버리기: 발밑에 떨어진 배낭으로 (다른 사람도 주울 수 있음)
+    const k = code - GIGA_MENU.drop;
+    const id = k === 99 ? p.pwVault : p.pwBag?.[k];
+    if (!id) return true;
+    if (k === 99) p.pwVault = undefined;
+    else p.pwBag!.splice(k, 1);
+    g.loot!.push({ id: s.nextId++, x: p.x, y: p.y + 6, chest: false, gold: 0, items: [id] });
+    syncGear(s);
+  } else if (code >= GIGA_MENU.take) {
+    // 상자에서 하나 가져가기 (배낭이 가득이면 그대로)
+    const l = openLoot(s);
+    const id = l?.items[code - GIGA_MENU.take];
+    if (!l || !id || !bagAdd(s, id)) return true;
+    l.items.splice(code - GIGA_MENU.take, 1);
+    if (!l.items.length) g.loot = g.loot!.filter((x) => x !== l);
+    syncGear(s);
+  } else if (code >= GIGA_MENU.vault) {
     const k = code - GIGA_MENU.vault;
     const bag = (p.pwBag ??= []);
     const take = bag[k];

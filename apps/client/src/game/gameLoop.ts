@@ -26,6 +26,7 @@ import { SummerFx } from "./limited/summerFx";
 import { drawSummerOver, drawSummerUnder, summerResting } from "./limited/summerDraw";
 import { splash } from "../audio/summerSound";
 import { roar } from "../audio/tigerSound";
+import { fanfare } from "../audio/victorySound";
 import { activeFx } from "../shop/effects";
 
 /** 머리 위 히든 글자 (효과 hdText 번호): 0~3 저주받은 주사위 저주 (sim/hiddenDice 순서) · 4~13 떨어진 신의 파편으로 얻은 힘 (sim/hiddenPerks 순서) */
@@ -103,11 +104,12 @@ export function startGameLoop(o: LoopOptions): () => void {
   // 범 풍류: 한정 스킨이면 전부, 아니면 이벤트 상점에서 장착한 효과만 (울음소리는 한정 스킨만)
   const summer = wornLimited(run.player.characterId) === "summer";
   const fx = activeFx(wornLimited(run.player.characterId) ?? (wornVictory(run.player.characterId) ? "victory" : null));
-  const hooks = { powerText: t(summer ? "summerPower" : "tigerPower"), roar: fx.rest ? (summer ? splash : roar) : () => {}, on: fx };
+  const victory = !wornLimited(run.player.characterId) && wornVictory(run.player.characterId);
+  const hooks = { powerText: t(victory ? "victoryPower" : summer ? "summerPower" : "tigerPower"), roar: fx.rest ? (summer ? splash : roar) : () => {}, on: fx };
   const tiger = fx.hit || fx.idle || fx.walk ? (summer ? new SummerFx(hooks) : new TigerFx(hooks)) : null;
   // 이벤트 상점 테마 효과 (칸마다 다른 세트, 범 효과와 같이 씀)
   const th = fx.themes;
-  const theme = th.hit || th.idle || th.walk ? new ThemeFx({ ...hooks, roar: () => {}, on: { hit: !!th.hit, idle: !!th.idle, walk: !!th.walk, rest: false } }, th) : null;
+  const theme = th.hit || th.idle || th.walk ? new ThemeFx({ ...hooks, roar: victory ? fanfare : () => {}, on: { hit: !!th.hit, idle: !!th.idle, walk: !!th.walk, rest: false } }, th) : null;
   // 내 자리에서만 (관전으로 다른 사람을 볼 때는 내 스킨 효과를 그리지 않음). 손님은 상태를 처음 받을 때 자리가 정해짐
   let mySeat: number | undefined;
   // 패왕전에서 쓰러져 관전 중이면 내 스킨 효과(대기 장면 포함)를 아예 그리지 않음

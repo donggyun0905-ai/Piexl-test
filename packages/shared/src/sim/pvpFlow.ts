@@ -92,6 +92,11 @@ export function settleDeaths(s: RunState): void {
     addEffect(s, { kind: "burst", x: s.player.x, y: s.player.y, dirX: 0, dirY: 0, size: 16, maxTicks: 16 });
     const k = seat.by !== undefined ? pv.seats[seat.by] : undefined;
     if (k && seat.by !== i) k.kills++;
+    // 도움: 이번 목숨에 이 사람을 때린 다른 상대 (처치자 빼고, 자리마다 한 번)
+    for (const by of new Set((seat.recv ?? []).map((r) => r.by))) {
+      const a = pv.seats[by];
+      if (a && by !== seat.by && by !== i && a.team !== seat.team) a.assists = (a.assists ?? 0) + 1;
+    }
     if (i === 0 && (pv.mode === "brawl" || pv.mode === "giganto")) pv.place = pv.seats.filter((x, j) => j !== i && inPlay(s, j)).length + 1;
     // 점령전: 잠시 뒤 집에서 다시
     if (PW_MODE[pv.mode].rule === "giganto") gigaDeath(s);

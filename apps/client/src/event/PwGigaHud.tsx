@@ -1,6 +1,7 @@
 // 기간토마키아 화면 정보: 배낭 10칸(한 칸은 금고, 누르면 금고와 바꿈) · 돈 · 제작할 수 있는 전설 장비(누르면 3초 가만히) · 미니맵(자기장·출구·나)
-import { allPlayers, canCraft, GIGA_MENU, inPlay, isGiga, PW_ARENAS, PW_LEGEND, pvpZone, TILE_SIZE, useSeat as takeSeat, type RunState } from "@pixel-rogue/shared";
-import { useEffect, useRef } from "react";
+import { allPlayers, canCraft, GIGA_MENU, inPlay, isGiga, openLoot, PW_ARENAS, PW_LEGEND, pvpZone, TILE_SIZE, useSeat as takeSeat, type PwLoot, type RunState } from "@pixel-rogue/shared";
+import { useEffect, useRef, useState } from "react";
+import { GigaBag, GigaBox } from "./PwGigaWindows";
 import type { Controls } from "../game/controls";
 import { ItemIcon } from "../game/itemIcon";
 import type { Lang, TextKey } from "../i18n";
@@ -17,7 +18,7 @@ interface Props {
 
 const LEGENDS = Object.keys(PW_LEGEND);
 /** 배낭 물건 그림·이름: 장비(패시브 그림) · 사용 아이템 u: · 상점 물건 g: */
-function Item({ id, lang, t }: { id: string; lang: Lang; t: (k: TextKey) => string }) {
+export function Item({ id, lang, t }: { id: string; lang: Lang; t: (k: TextKey) => string }) {
   if (id.startsWith("g:")) return <span className="pw-giga-goods" title={t(`pwGoods_${id.slice(2)}` as TextKey)}>🎁</span>;
   const use = id.startsWith("u:");
   const key = use ? id.slice(2) : id;
@@ -62,53 +63,66 @@ function MiniMap({ run, me }: { run: RunState; me: number }) {
   return <canvas ref={ref} className="pw-giga-map" width={a.cols * k} height={a.rows * k} aria-hidden="true" />;
 }
 
-/** 제작할 수 있는 것·돈: 내 자리를 꺼내 놓고 셈 (보던 자리로 돌려놓음) */
-function mine(run: RunState, me: number): { craft: string[]; gold: number } {
+/** 내 자리 기준: 제작할 수 있는 것 · 돈 · 열어 둔 상자 (보던 자리로 돌려놓음) */
+export function gigaView(run: RunState, me: number): { craft: string[]; gold: number; open: PwLoot | undefined } {
   const back = run.seat ?? 0;
   takeSeat(run, me);
-  const out = { craft: LEGENDS.filter((id) => canCraft(run, id)), gold: run.gold };
+  const out = { craft: LEGENDS.filter((id) => canCraft(run, id)), gold: run.gold, open: openLoot(run) };
   takeSeat(run, back);
   return out;
 }
 
 export function PwGigaHud({ run, me, lang, t, controls }: Props) {
-  if (!isGiga(run)) return null;
+  const [bag, setBag] = useState(false);
+  const [boxShut, setBoxShut] = useState<number | null>(null);
+  const state = useRef({ bag: false, box: false });
+  const giga = isGiga(run);
+  const v = giga ? gigaView(run, me) : null;
+  const box = v?.open && v.open.id !== boxShut ? v.open : undefined;
+  useEffect(() => {
+    state.current = { bag, box: !!box };
+  }, [bag, box]);
+  useEffect(() => {
+    // B: 배낭 · Esc: 열린 상자·배낭 창만 닫음 (나가기 확인 창이 뜨지 않게 먼저 받음)
+    const key = (e: KeyboardEvent) => {
+      if (!giga || e.repeat) return;
+      if (e.code === "KeyB") setBag((x) => !x);
+      if (e.code === "Escape" && (state.current.bag || state.current.box)) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        setBag(false);
+        setBoxShut(run.player.pwOpen ?? null);
+        controls()?.queueMenu(GIGA_MENU.close);
+      }
+    };
+    window.addEventListener("keydown", key, true);
+    return () => window.removeEventListener("keydown", key, true);
+  }, [giga, controls, run]);
+  if (!giga || !v) return null;
   const p = allPlayers(run)[me]!;
   const send = (code: number) => controls()?.queueMenu(code);
-  const { craft, gold } = mine(run, me);
   const alive = run.pvp!.seats.filter((_, i) => inPlay(run, i)).length;
+  const full = (p.pwBag?.length ?? 0) >= 9;
   return (
-    <div className="pw-giga">
-      <MiniMap run={run} me={me} />
-      <div className="pw-giga-side">
-        <b>
-          🪙 {gold} · {t("pwAlive").replace("{n}", String(alive))}
-          {p.pwCraft && ` · ${t("pwGigaCrafting")}`}
-        </b>
-        <div className="pw-giga-bag">
-          <button type="button" className="vault" title={t("pwGigaVault")} onClick={() => send(GIGA_MENU.vault + (p.pwBag?.length ?? 0))}>
-            {p.pwVault ? <Item id={p.pwVault} lang={lang} t={t} /> : "🔒"}
-          </button>
-          {Array.from({ length: 9 }, (_, k) => {
-            const id = p.pwBag?.[k];
-            return (
-              <button key={k} type="button" disabled={!id} title={t("pwGigaToVault")} onClick={() => send(GIGA_MENU.vault + k)}>
-                {id && <Item id={id} lang={lang} t={t} />}
-              </button>
-            );
-          })}
-        </div>
-        {craft.length > 0 && (
-          <div className="pw-giga-craft">
-            <small>{t("pwGigaCraft")}</small>
-            {craft.map((id) => (
-              <button key={id} type="button" disabled={!!p.pwCraft} title={gearLines(id, t).join("\n")} onClick={() => send(GIGA_MENU.craft + LEGENDS.indexOf(id))}>
-                <ItemIcon item={gearItem(id, lang)} size={22} /> {PW_LEGEND[id]!.cost}
-              </button>
+    <>
+      <div className="pw-giga">
+        <MiniMap run={run} me={me} />
+        <div className="pw-giga-side">
+          <b>
+            🪙 {v.gold} · {t("pwAlive").replace("{n}", String(alive))}
+            {p.pwCraft && ` · ${t("pwGigaCrafting")}`}
+          </b>
+          <div className="pw-giga-bag" onClick={() => setBag(true)} title={t("pwGigaBagOpen")}>
+            <span className="vault">{p.pwVault ? <Item id={p.pwVault} lang={lang} t={t} /> : "🔒"}</span>
+            {Array.from({ length: 9 }, (_, k) => (
+              <span key={k}>{p.pwBag?.[k] && <Item id={p.pwBag[k]!} lang={lang} t={t} />}</span>
             ))}
           </div>
-        )}
+          <small>{t("pwGigaBagOpen")}</small>
+        </div>
       </div>
-    </div>
+      {box && <GigaBox loot={box} full={full} lang={lang} t={t} send={send} onClose={() => (setBoxShut(box.id), send(GIGA_MENU.close))} />}
+      {bag && <GigaBag p={p} craft={v.craft} gold={v.gold} lang={lang} t={t} send={send} onClose={() => setBag(false)} />}
+    </>
   );
 }
