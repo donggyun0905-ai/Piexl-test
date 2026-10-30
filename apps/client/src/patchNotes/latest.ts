@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.268",
+    date: "2026-10-31",
+    items: {
+      ko: ["시험: 마법사 그림을 새 설정 그림(금빛 긴 웨이브 머리·후광·흰 옷과 푸른 천·별 지팡이)의 도트로 바꿔 봄 (앞·뒤·옆·공격 대기 모습, 걷기는 한 장면)"],
+      en: ["Trial: the Mage sprite swapped to pixel art from new concept art (long golden wavy hair, halo, white robe with blue cloth, star staff) · front, back, side and casting poses (walking uses one frame)"],
+      ja: ["試験: 魔法使いの絵を新しい設定画（金色の長いウェーブ髪・光輪・白い服と青い布・星の杖）のドットに変更（前・後ろ・横・攻撃待機、歩きは1枚）"],
+    },
+  },
+  {
     version: "0.48.267",
     date: "2026-10-31",
     items: {
