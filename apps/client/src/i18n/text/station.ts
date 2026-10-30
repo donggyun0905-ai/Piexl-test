@@ -6,7 +6,7 @@ export const STATION_TEXT = {
   promptStation: { ko: "F: {name} 열기", en: "F: Open {name}", ja: "F: {name}を開く" },
   promptStationOpen: { ko: "F: {name} 닫기", en: "F: Close {name}", ja: "F: {name}を閉じる" },
   pilgrimHello: { ko: "안녕? 이것 좀 봐봐!", en: "Hi! Take a look at these!", ja: "こんにちは! これ見て見て!" },
-  stationClose: { ko: "닫기 (F)", en: "Close (F)", ja: "閉じる (F)" },
+  stationClose: { ko: "닫기 (F·Esc)", en: "Close (F/Esc)", ja: "閉じる (F・Esc)" },
   benchUp: { ko: "강화", en: "Enhance", ja: "強化" },
   benchSwap: { ko: "교체", en: "Swap", ja: "交換" },
   benchTune: { ko: "튜닝", en: "Tune", ja: "チューニング" },

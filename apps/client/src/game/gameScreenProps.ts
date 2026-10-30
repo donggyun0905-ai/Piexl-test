@@ -25,6 +25,8 @@ export interface GameScreenProps {
   hero?: boolean;
   /** 해금된 업적 (혼자 하기만, 다른 모드는 빈 목록) */
   unlocks: readonly string[];
+  /** 다른 창 안에 넣은 작은 연습장 (캐릭터 설명 큰 창): Esc·캐릭터 설명 버튼을 쓰지 않음 (바깥 창이 받음) */
+  embedded?: boolean;
   lang: Lang;
   t: (key: TextKey) => string;
   onExit: () => void;

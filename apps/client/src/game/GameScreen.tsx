@@ -52,7 +52,7 @@ export function GameScreen(props: GameScreenProps) {
   useLayoutEffect(() => {
     cb.current = props;
   });
-  const pvp = mode === "paewang" || !!props.initialRun?.pvp; // 패왕전: 화면 꽉 채움 (좌우 빈칸 없음) · 필요 없는 정보 숨김
+  const pvp = mode === "paewang" || !!props.initialRun?.pvp; // 패왕전: 화면 꽉 채움 · 필요 없는 정보 숨김
   const [scale, wide] = useFitScale(wrapRef, pvp);
   const dpr = window.devicePixelRatio || 1;
   const [overlay, setOverlay] = useState<Overlay>("none");
@@ -85,7 +85,7 @@ export function GameScreen(props: GameScreenProps) {
   }, [overlay]);
 
   // 모바일 뒤로가기 → 페이지를 나가지 않고 나가기 확인
-  const toggleExit = useCallback(() => setOverlay((o) => (o === "exit" ? "none" : "exit")), []);
+  const toggleExit = useCallback(() => setOverlay((o) => (o === "exit" || o === "info" ? "none" : "exit")), []);
   useBackButton(toggleExit);
 
   // 배틀 시간 끝: 바깥에서 판을 끝냄
@@ -110,15 +110,15 @@ export function GameScreen(props: GameScreenProps) {
     const start = cb.current;
     beginRun(start.balance);
     const run: RunState =
-      withPet(sandbox ? createPracticeRun(characterId) : (start.initialRun ?? createRun(parseSeed(seedText), characterId, start.unlocks, sudden, endless, arena, hero, mode === "solo" && !endless && !arena && !hero ? loadTaboo() : undefined, mode === "solo" && randomKitOn())), mode, !!arena);
+      withPet(sandbox ? (start.initialRun ?? createPracticeRun(characterId)) : (start.initialRun ?? createRun(parseSeed(seedText), characterId, start.unlocks, sudden, endless, arena, hero, mode === "solo" && !endless && !arena && !hero ? loadTaboo() : undefined, mode === "solo" && randomKitOn())), mode, !!arena);
     runRef.current = run;
-    // 개발 중에만: 브라우저 콘솔·자동 화면 확인에서 게임 상태를 볼 수 있게
+    // 개발 중에만: 콘솔에서 게임 상태 보기
     if (import.meta.env.DEV) (window as unknown as { pixelRogueRun: RunState }).pixelRogueRun = run;
     const controls: Controls = new Controls({
       zone,
       sticks: sticks as { moveBase: HTMLElement; moveKnob: HTMLElement; aimBase: HTMLElement; aimKnob: HTMLElement },
       playerScreenPos: () => playerScreenPos(canvas, run, controls.zoom, cameraFor(run, controls.zoom)),
-      onEscape: toggleExit, // 모든 모드에서 Esc = 나가기 확인 (확인 창에서 한 번 더 누르면 닫힘)
+      onEscape: () => (start.embedded ? undefined : run.prompt.kind === "station" && run.prompt.open ? controls.queueInteract() : toggleExit()), // Esc: 작업대 창 닫기 또는 나가기 확인
       onPause: () => {
         if (canPause) setOverlay((o) => (o === "pause" ? "none" : o === "none" ? "pause" : o));
       },
@@ -248,7 +248,7 @@ export function GameScreen(props: GameScreenProps) {
           height={Math.round(VIEW_HEIGHT * scale * dpr)}
           style={{ width: VIEW_WIDTH * wide * scale, height: VIEW_HEIGHT * scale }}
         />
-        {stats && !pvp && <StatsPanel rows={stats} character={characterId} lang={lang} t={t} />}
+        {stats && !pvp && <StatsPanel rows={stats} character={characterId} lang={lang} t={t} info={overlay === "info"} onInfo={props.embedded ? undefined : (on) => setOverlay(on ? "info" : "none")} run={() => runRef.current} />}
         {mode !== "practice" && mode !== "swarm" && mode !== "paewang" && (
           <canvas ref={miniRef} className="minimap" width={MINIMAP_WIDTH} height={MINIMAP_HEIGHT} aria-label={t("minimap")} />
         )}

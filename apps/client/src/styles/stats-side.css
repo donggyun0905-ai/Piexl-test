@@ -1,0 +1,182 @@
+/* 로그 왼쪽 칸 (GameHud.StatsPanel): 능력치 · 캐릭터 설명 버튼 · 버프 창. 칸 너비 --side = 맵 왼쪽 여백 (screenHooks가 정함) */
+.stats-panel {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+  width: max(150px, calc(var(--side, 170px) - 12px));
+  padding: 8px 10px;
+  border: 1px solid #3a3450;
+  border-radius: 6px;
+  background: rgb(12 10 20 / 0.82);
+  font-size: 12px;
+  line-height: 1.5;
+  pointer-events: none;
+}
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.stats-row span:last-child {
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+/* 화면 전체 입력 영역(.input-zone, z 1) 위라 누를 수 있음 */
+.stats-guide-btn {
+  pointer-events: auto;
+  padding: 5px 6px;
+  font-size: 12px;
+}
+.buff-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-top: 6px;
+  border-top: 1px solid #3a3450;
+}
+.buff-panel b {
+  color: #c8b8ff;
+}
+.buff-panel small {
+  color: var(--muted);
+}
+.buff-row {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 1px 4px 3px;
+  border-radius: 3px;
+  background: rgb(255 255 255 / 0.05);
+  font-size: 11px;
+}
+.buff-row em {
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+}
+.buff-row i {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  background: #7aff8a;
+}
+.buff-row.buff span {
+  color: #b8ffc0;
+}
+.buff-row.cd span {
+  color: #c8c0d8;
+}
+.buff-row.cd i {
+  background: #8a84a0;
+}
+@media (orientation: portrait) {
+  .stats-panel {
+    width: 130px;
+    font-size: 11px;
+  }
+}
+
+/* 캐릭터 설명 큰 창 (game/CharInfo): 왼쪽 설명·무기·전용 아이템 · 오른쪽 직접 움직이는 연습장 */
+.char-info {
+  position: fixed;
+  inset: 3vh 3vw;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 18px;
+  border: 2px solid #6a5aa0;
+  border-radius: 12px;
+  background: rgb(16 12 26 / 0.98);
+  box-shadow: 0 0 40px rgb(0 0 0 / 0.7);
+}
+.char-info header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 20px;
+}
+.char-info header small {
+  color: var(--muted);
+  font-size: 13px;
+}
+.char-info header button {
+  margin-left: auto;
+  padding: 6px 12px;
+  font-size: 14px;
+}
+.ci-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 16px;
+}
+.ci-left {
+  flex: 0 0 min(420px, 38%);
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.ci-left h4 {
+  margin: 12px 0 6px;
+  color: #c8b8ff;
+}
+.ci-guide {
+  margin: 0;
+  padding-left: 18px;
+  color: #e8e4f0;
+  line-height: 1.6;
+}
+.ci-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ci-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 8px;
+  text-align: left;
+  border: 1px solid #3a3450;
+  background: rgb(255 255 255 / 0.04);
+}
+.ci-item.on {
+  border-color: #f2d040;
+}
+.ci-item span {
+  display: flex;
+  flex-direction: column;
+}
+.ci-item small {
+  color: #c8c0d8;
+  font-size: 12px;
+}
+.ci-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.ci-right > small {
+  color: var(--muted);
+}
+.ci-practice {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  border: 2px solid #4a4658;
+  border-radius: 10px;
+  /* 안의 연습장 화면(fixed 창들)이 이 칸 안에 머물게 */
+  transform: translateZ(0);
+}
+/* 작은 연습장: 맵을 가리지 않게 능력치 칸·안내 줄은 숨김 */
+.ci-practice .stats-panel,
+.ci-practice .game-hint {
+  display: none;
+}

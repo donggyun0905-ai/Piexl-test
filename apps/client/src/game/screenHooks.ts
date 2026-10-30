@@ -8,14 +8,20 @@ function fitScale(w: number, h: number): number {
   return Math.max(0.5, Math.min(w / VIEW_WIDTH, h / VIEW_HEIGHT));
 }
 
-/** 감싼 칸 크기에 맞춰 배율 조정. fill(패왕전): 높이에 맞추고 남는 가로는 보이는 영역을 넓혀 채움 → [배율, 가로 넓힘] */
+/** 로그(넓은 PC 화면): 맵 좌우에 남겨 두는 칸 너비 (왼쪽 능력치·버프 창, 오른쪽 미니맵) */
+const SIDE = 180;
+
+/** 감싼 칸 크기에 맞춰 배율 조정. fill(패왕전): 높이에 맞추고 남는 가로는 보이는 영역을 넓혀 채움 → [배율, 가로 넓힘]
+ * 로그: 넓은 화면이면 좌우 칸(SIDE)을 빼고 맞춤 · 실제 남은 여백을 CSS --side로 (왼쪽 칸이 맵에 겹치지 않게) */
 export function useFitScale(wrapRef: RefObject<HTMLElement | null>, fill = false): [number, number] {
   const [fit, setFit] = useState<[number, number]>([1, 1]);
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
     const ro = new ResizeObserver(() => {
-      const scale = fitScale(wrap.clientWidth, wrap.clientHeight);
+      const side = !fill && wrap.clientWidth >= 900 ? SIDE : 0;
+      const scale = fitScale(wrap.clientWidth - side * 2, wrap.clientHeight);
+      wrap.style.setProperty("--side", `${Math.floor((wrap.clientWidth - VIEW_WIDTH * scale) / 2)}px`);
       const wide = fill ? Math.min(2.2, Math.max(1, wrap.clientWidth / scale / VIEW_WIDTH)) : 1;
       setViewWide(wide);
       setFit([scale, wide]);

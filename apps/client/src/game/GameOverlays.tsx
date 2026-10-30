@@ -8,7 +8,8 @@ import { RunSummary } from "./RunSummary";
 import type { RunSummaryData } from "./runSummary";
 
 /** 게임 위에 뜨는 창. 혼자 하기에서는 창이 떠 있는 동안 게임이 멈춤 */
-export type Overlay = "none" | "pause" | "exit";
+/** info: 로그 캐릭터 설명 큰 창 (GameHud.StatsPanel이 그림, 게임은 멈춤) */
+export type Overlay = "none" | "pause" | "exit" | "info";
 
 export interface Result {
   won: boolean;

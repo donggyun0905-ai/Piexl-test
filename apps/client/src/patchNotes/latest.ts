@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.254",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "로그 화면: 맵 좌우에 칸을 두고 맵은 그 사이를 꽉 채움 · 왼쪽 칸은 능력치 · '캐릭터 설명' 버튼 · 버프 창 (켜진 버프와 대기 시간·남은 초)",
+        "캐릭터 설명 큰 창 (버튼 또는 I): 게임이 멈추고 왼쪽에 설명·모든 무기·전용 아이템(누르면 들어 봄), 오른쪽에 직접 움직이는 작은 연습장 · Esc·I로 닫음",
+        "아티팩터 제작대·추적자 튜닝소 창: Esc로도 닫힘",
+        "기간토마키아: 폭탄 피해 45",
+      ],
+      en: [
+        "Dungeon screen: side columns next to the map, which now fills the space between · left column: stats, a 'Character guide' button and a buff panel (active buffs and cooldowns with seconds left)",
+        "Character guide window (button or I): pauses the game; the left shows the guide, every weapon and exclusive item (click to try), the right is a small practice room you control · close with Esc or I",
+        "Artifacter's workbench and Tracker's tuning shop windows now also close with Esc",
+        "Gigantomachia: bombs deal 45 damage",
+      ],
+      ja: [
+        "ローグ画面: マップの左右に欄を置き、マップはその間いっぱいに · 左欄は能力値・「キャラクター説明」ボタン・バフ欄（発動中のバフと待機時間・残り秒）",
+        "キャラクター説明の大きなウィンドウ（ボタンかI）: ゲームが止まり、左に説明・全武器・専用アイテム（押すと装備）、右に自分で動かす小さな練習場 · Esc・Iで閉じる",
+        "アーティファクターの作業台・追跡者のチューニング所ウィンドウ: Escでも閉じる",
+        "ギガントマキア: 爆弾ダメージ45",
+      ],
+    },
+  },
+  {
     version: "0.48.253",
     date: "2026-10-30",
     items: {

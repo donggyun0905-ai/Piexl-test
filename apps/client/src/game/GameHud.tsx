@@ -1,13 +1,16 @@
 // 게임 화면 위쪽 줄(일시정지 · 체력 · 정보 · 켜고 끄기 버튼)과 능력치 창 · 넓게 보는 대결의 확대·끌어 보기 설명(PanHint)
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import type { RefObject } from "react";
-import type { CharacterId } from "@pixel-rogue/shared";
+import { createPortal } from "react-dom";
+import type { CharacterId, RunState } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
-import { charGuide } from "../i18n/guides";
 import { setSettings, useSettings } from "../settings";
 import { resetPan, usePan } from "./cameraPan";
-import { CharKit } from "./CharKit";
+import { BuffPanel } from "./BuffPanel";
 import type { StatRow } from "./statsView";
+
+// 큰 창은 처음 열 때 불러옴 (안에 연습장 GameScreen이 있어 서로 부르는 고리를 피함)
+const CharInfo = lazy(() => import("./CharInfo"));
 
 interface Props {
   t: (key: TextKey) => string;
@@ -61,9 +64,17 @@ export function GameHud({ t, touchMode, autoAim, manualOnly, pvp, onPause, onAut
 }
 
 /** 능력치 창 (C 키) · 아래에 지금 캐릭터 설명 (처음부터 펼쳐져 있고 버튼으로 접음) · 무기·전용 아이템 목록 (올리면 설명) */
-export function StatsPanel({ rows, character, lang, t }: { rows: StatRow[]; character?: CharacterId; lang?: Lang; t?: (k: TextKey) => string }) {
-  const [open, setOpen] = useState(true);
-  const guide = character && lang ? charGuide(character, lang) : [];
+/** 로그 왼쪽 칸: 능력치 · '캐릭터 설명' 버튼(누르거나 I → 게임을 멈추고 큰 창 CharInfo) · 버프 창. 칸 너비는 화면 여백(--side)에 맞춤 (screenHooks) */
+export function StatsPanel({ rows, character, lang, t, info, onInfo, run }: { rows: StatRow[]; character?: CharacterId; lang?: Lang; t?: (k: TextKey) => string; info?: boolean; onInfo?: (on: boolean) => void; run?: () => RunState | null }) {
+  useEffect(() => {
+    if (!onInfo) return;
+    const key = (e: KeyboardEvent) => {
+      const el = e.target as HTMLElement | null;
+      if (e.code === "KeyI" && !e.repeat && el?.tagName !== "INPUT" && el?.tagName !== "TEXTAREA") onInfo(!info);
+    };
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, [info, onInfo]);
   return (
     <div className="stats-panel">
       {rows.map((r) => (
@@ -72,21 +83,23 @@ export function StatsPanel({ rows, character, lang, t }: { rows: StatRow[]; char
           <span>{r.value}</span>
         </div>
       ))}
-      {guide.length > 0 && t && (
-        <>
-          <button type="button" className="stats-guide-btn" onClick={() => setOpen(!open)}>
-            {t(open ? "charGuideHide" : "charGuideShow")}
-          </button>
-          {open && (
-            <ul className="stats-guide">
-              {guide.map((line) => (
-                <li key={line}>{line}</li>
-              ))}
-            </ul>
-          )}
-        </>
+      {character && lang && t && onInfo && (
+        <button type="button" className="stats-guide-btn" onClick={() => onInfo(true)}>
+          {t("ciOpen")}
+        </button>
       )}
-      {character && lang && t && <CharKit character={character} lang={lang} t={t} />}
+      {run && t && <BuffPanel run={run} t={t} />}
+      {info &&
+        character &&
+        lang &&
+        t &&
+        onInfo &&
+        createPortal(
+          <Suspense fallback={null}>
+            <CharInfo character={character} lang={lang} t={t} onClose={() => onInfo(false)} />
+          </Suspense>,
+          document.body,
+        )}
     </div>
   );
 }
