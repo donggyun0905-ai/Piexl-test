@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.280",
+    date: "2026-10-31",
+    items: {
+      ko: ["베두인이 차크람을 던지면 예전 그림으로 바뀌던 문제 고침 (새 그림 그대로)"],
+      en: ["Fixed the Bedouin switching back to the old art after throwing the chakram (keeps the new art)"],
+      ja: ["ベドウィンがチャクラムを投げると古い絵に戻る問題を修正（新しい絵のまま）"],
+    },
+  },
+  {
     version: "0.48.279",
     date: "2026-10-31",
     items: {

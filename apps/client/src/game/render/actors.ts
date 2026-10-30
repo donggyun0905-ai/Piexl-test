@@ -161,7 +161,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     if (!hideBody) drawAimMark(ctx, x, y, p.r, p.faceX, p.faceY);
     // 혼돈의 영혼이 있으면 몸이 흐림
     if (s.enemies.some((e) => e.kind === "soul" && e.aux === 1 && e.hp > 0)) ctx.globalAlpha = 0.12;
-    // 베두인: 차크람을 던지면 _bare 그림
+    // 베두인: 차크람을 던지면 _bare 그림 (새 그림 시트 v2는 빈손 그림이 아직 없어 그대로)
     // 오니 신인족: 긴 뿔의 날렵한 모습
     const sheet = p.kingRoom !== undefined ? "crownKing" : p.characterId === "oni" && (p.oGod ?? 0) > 0 ? "oni_god" : p.characterId === "slayer" && (p.slRage ?? 0) > 0 ? "slayer_rage" : p.characterId === "lux" && luxStage(p) > 0 ? `lux${luxStage(p) + 1}` : sheetFor(p.characterId, p.lv, p.abM);
     // 베두인 무희의 춤: 대시하는 동안 몸이 한 바퀴 빙글 돎
@@ -174,7 +174,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     }
     const club = WEAPONS[p.weaponId].kind === "club" ? p.weaponId : null;
     // 변희: 든 동물의 모습 (옆모습)
-    const body = morphSheet(p) ?? (p.ckHeld === false ? `${sheet}_bare` : sheet);
+    const body = morphSheet(p) ?? (p.ckHeld === false && !hasV2(sheet) ? `${sheet}_bare` : sheet);
     // 각성한 하늘 짐승이 공중 습격 중이면 몸이 보이지 않음
     if (shade) {
       ctx.globalAlpha = 0.4;
