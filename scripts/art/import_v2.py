@@ -17,11 +17,12 @@ BODY = 116
 # 원본 파일 → (가로 칸 수, 세로 칸 수, 시트에 놓을 줄)
 FILES = [("1", 4, 2, [0, 1]), ("2", 4, 2, [2, 3]), ("3", 4, 1, [4])]
 # 왼쪽 모습을 오른쪽 뒤집기로 (GPT 왼쪽 그림이 오른쪽을 봄)
-FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", "brawler"}
+FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", "brawler", "gunner", "ninja", "summoner", "chronomancer", "beast"}
 # 공격 줄 오른쪽·왼쪽에 쓸 원본 칸 (0~3, 끝에 f = 뒤집기): GPT가 칸 순서를 바꿔 그린 캐릭터만 (화면을 보고 정함)
 ATTACK_LR = {
     "warden": ("2", "3"), "drifter": ("2", "3"), "engineer": ("2", "3"), "elementalist": ("2", "3"),
     "mystic": ("3f", "3"), "brawler": ("3f", "3"),
+    "chronomancer": ("2", "3"), "beast": ("2", "3"), "doctor": ("2", "3"),
 }
 
 
