@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.265",
+    date: "2026-10-31",
+    items: {
+      ko: ["고해상도 그림 시범 2: 마법사를 손으로 찍은 몸 틀로 다시 그림 (더 귀여운 얼굴·큰 눈·볼 홍조·얼굴을 감싸는 옆머리 · 뒷모습 V자 머리끝과 리본 · 옆얼굴)"],
+      en: ["High-res art trial 2: the Mage redrawn on a hand-pixeled body template (cuter face, big eyes, blush, side locks framing the face · V-tipped hair and ribbon from behind · side profile)"],
+      ja: ["高解像度の試作2: 魔法使いを手打ちの体テンプレートで描き直し（よりかわいい顔・大きな瞳・頬の赤み・顔を包む横髪 · 後ろ姿のV字の毛先とリボン · 横顔）"],
+    },
+  },
+  {
     version: "0.48.264",
     date: "2026-10-30",
     items: {

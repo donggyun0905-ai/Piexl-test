@@ -47,6 +47,6 @@
 - 그림 파일을 **2배 촘촘하게** 그리고 게임에서는 원래 크기로 줄여 그림 (줄일 때 부드럽게)
   - 캐릭터: 64칸 시트(발 여백 4) → `game/sprites.ts` `CHARACTER_SHEETS`에 `src: 64` (게임 크기 32 그대로)
   - 몬스터·보스: 원래 칸의 2배 → `game/enemySprites.ts` `ENEMY_SRC`에 `이름: 2`. 보스는 4칸(걷기 2 · 공격 준비 · 공격)이면 공격 그림을 씀 (`render/actors`)
-- 생성기: `scripts/art/hd_common.py`(3단 명암·색에 맞춘 테두리·큰 눈·앞머리 결) · 시범 `hd_mage.py`(마법사) · `hd_hulk.py`(강철 거구)
+- 생성기: `scripts/art/hd_common.py`(3단 명암·색에 맞춘 테두리·큰 눈·앞머리 결) · 손으로 찍은 몸 틀 `hd_doll.py`(얼굴형·눈 표·귀·다리·구두, 캐릭터마다 머리·옷만 덧칠) · 시범 `hd_mage.py`(마법사) · `hd_hulk.py`(강철 거구)
 - 도트 편집 페이지는 그림 칸 크기에 맞춰 열림 (`pixel/assets`의 `sheetCell`)
 
