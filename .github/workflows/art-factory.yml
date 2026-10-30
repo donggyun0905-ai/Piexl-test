@@ -1,0 +1,79 @@
+# 그림 공장 (scripts/art/factory.py): 직접 눌러서만 실행 · 실행마다 환경 art-factory 승인(저장소 주인) 필요
+# 결과는 art-factory/{실행 번호} 브랜치에만 저장 (test·배포에 섞이지 않음) → Claude가 보여 주고 허락받은 뒤 게임에 넣음
+name: art-factory
+
+on:
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: "종류 (character 캐릭터 · skin 스킨 · effect 이펙트·소품)"
+        type: choice
+        options: [skin, character, effect]
+        default: skin
+      target:
+        description: "캐릭터 id (예: mage) 또는 이펙트 이름"
+        required: true
+      theme:
+        description: "스킨 테마 (xmas halloween school swim usa china japan newyear swap victory)"
+        required: false
+      desc:
+        description: "추가 설명 (캐릭터 모습·이펙트 모양 등, 영어 권장)"
+        required: false
+      variants:
+        description: "한 번에 만들 장 수 (1~4)"
+        default: "2"
+      quality:
+        description: "품질 (low · medium · high)"
+        type: choice
+        options: [medium, low, high]
+        default: medium
+      model:
+        description: "그림 모델 이름"
+        default: gpt-image-2
+
+permissions:
+  contents: write
+
+concurrency:
+  group: art-factory
+  cancel-in-progress: false
+
+jobs:
+  make:
+    runs-on: ubuntu-latest
+    environment: art-factory
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: 그림 만들기
+        working-directory: scripts/art
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          KIND: ${{ inputs.kind }}
+          TARGET: ${{ inputs.target }}
+          THEME: ${{ inputs.theme }}
+          DESC: ${{ inputs.desc }}
+          VARIANTS: ${{ inputs.variants }}
+          QUALITY: ${{ inputs.quality }}
+          MODEL: ${{ inputs.model }}
+          RUN_ID: ${{ github.run_number }}
+        run: python3 factory.py
+      - name: 결과 브랜치에 저장
+        env:
+          RUN: ${{ github.run_number }}
+          MSG: "${{ inputs.kind }} ${{ inputs.target }} ${{ inputs.theme }}"
+        run: |
+          git config user.name "art-factory"
+          git config user.email "art-factory@users.noreply.github.com"
+          git checkout -b "art-factory/$RUN"
+          git add scripts/art/factory
+          git commit -m "그림 공장 #$RUN: $MSG"
+          git push origin "art-factory/$RUN"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: art-${{ github.run_number }}
+          path: scripts/art/factory

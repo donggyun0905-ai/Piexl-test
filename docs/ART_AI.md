@@ -58,3 +58,16 @@ transparent background, consistent design in every frame
 - 테마 스킨 9 + 승리: `scripts/art/hd_skins.py {캐릭터}`가 자동으로 (흰 옷·푸른 천 → 테마 색, 머리 위 소품, 승리는 금빛 테두리) · 캐릭터마다 머리 자리 `HEAD`만 적으면 됨
   - 옷이 머리카락과 비슷한 색(흰 옷 + 금발 등)이면 옷 색은 조금만 바뀜 → 더 확실히 바꾸려면 그 스킨을 생성 AI로 (같은 캐릭터, 옷만 바꿔 달라고)
 - 한정 스킨(범 풍류·여름)은 생성 AI로 따로
+
+## 그림 공장 (OpenAI 그림 API · GitHub Actions)
+
+- 파일: `.github/workflows/art-factory.yml` · `scripts/art/factory.py` · 프롬프트 틀 `scripts/art/factory_prompts.py` (테마 10종 설명 포함)
+- **처음 한 번 (사용자)**: 저장소 Settings → Environments → `art-factory` 만들기 → ① Required reviewers에 본인 추가 ② Environment secrets에 `OPENAI_API_KEY` 넣기 (키는 채팅에 붙이지 않음)
+- **실행 규칙 (2026-10-31 사용자 지시)**
+  1. Claude가 무엇을 몇 장·어떤 품질로 만들지(예상 비용 포함) 먼저 채팅으로 묻고 허락받음
+  2. 허락받으면 Claude가 실행 → GitHub에서 사용자가 **승인** 눌러야 실제로 돌아감 (Actions 실행 화면의 Review deployments)
+  3. 결과는 `art-factory/{번호}` 브랜치에만 저장 (test·배포와 섞이지 않음)
+  4. Claude가 결과 그림을 **모두 채팅에 보여 줌** (원본 + 게임 크기 미리보기) → 사용자가 고른 것만 게임에 넣음 → 게임 화면도 보여 줌
+- 입력: 종류(character·skin·effect) · 대상(캐릭터 id·이펙트 이름) · 테마 · 추가 설명 · 장 수(1~4) · 품질(low·medium·high) · 모델 이름
+- 이펙트·소품은 한 장만 만들고 움직임(흔들림·회전·크기·빛)은 게임 코드로 붙임
+
