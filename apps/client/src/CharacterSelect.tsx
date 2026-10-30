@@ -80,7 +80,8 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
   const all = [...new Set<CharacterId>(showHidden || (taboo && TEST_OPEN) ? ALL_CHARACTER_IDS : [...CHARACTER_IDS, ...hallUnlocked()])];
   const q = find.trim().toLowerCase();
   const list = all.filter((c) => (!tab || factionOf(c) === tab) && (!q || t(c as TextKey).toLowerCase().includes(q)));
-  const tabs = SELECT_TABS.filter((x) => all.some((c) => factionOf(c) === x.id));
+  // 서고의 감시자(한정 캐릭터) 탭은 아직 비어 있어도 늘 보임
+  const tabs = SELECT_TABS.filter((x) => x.id === "archive" || all.some((c) => factionOf(c) === x.id));
   return (
     <div className="select-screen">
       <h2>{t("chooseCharacter")}</h2>
@@ -103,7 +104,7 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
         <input type="search" value={find} placeholder={t("csSearch")} onChange={(e) => setFind(e.target.value)} />
       </div>
       <div className="select-list">
-        {list.length === 0 && <p className="cs-empty">{t("csEmpty")}</p>}
+        {list.length === 0 && <p className="cs-empty">{t(tab === "archive" && !q ? "csArchiveSoon" : "csEmpty")}</p>}
         {list.map((id) => {
           const open = characterOpen(id);
           const card = cardOf(id);

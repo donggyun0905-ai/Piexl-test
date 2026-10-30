@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.259",
+    date: "2026-10-30",
+    items: {
+      ko: ["새 분류 '이방인' (세계의 틀을 벗어난 자들): 차원의 순례자 · 몰락한 왕 (스토리 진영·캐릭터 선택창 탭)", "새 분류 '서고의 감시자' (뽑기로 만나는 한정 캐릭터): 캐릭터 선택창 탭·스토리 진영 (곧 등장)"],
+      en: ["New group 'Outsiders' (those beyond the world's frame): the Dimensional Pilgrim and the Fallen King (story factions and a character-select tab)", "New group 'Archive Wardens' (limited characters from the gacha): character-select tab and story faction (coming soon)"],
+      ja: ["新しい分類「異邦人」（世界の枠を外れた者たち）: 次元の巡礼者 · 堕ちた王（ストーリーの陣営・キャラ選択タブ）", "新しい分類「書庫の監視者」（ガチャで出会える限定キャラ）: キャラ選択タブ・ストーリーの陣営（近日登場）"],
+    },
+  },
+  {
     version: "0.48.258",
     date: "2026-10-30",
     items: {

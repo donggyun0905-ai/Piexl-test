@@ -16,6 +16,8 @@
 .cs-tabs button.virdia { border-bottom-color: #4ac86a; }
 .cs-tabs button.helios { border-bottom-color: #c83a4a; }
 .cs-tabs button.akashic { border-bottom-color: #b89aff; }
+.cs-tabs button.outsider { border-bottom-color: #5ae0d0; }
+.cs-tabs button.archive { border-bottom-color: #ffb84a; }
 .cs-tabs button.on {
   color: #1a1622;
   background: #ffd860;

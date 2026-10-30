@@ -52,6 +52,24 @@ export const FACTION_TEXT: Record<FactionId, { name: L; tag: L; desc: L }> = {
       "世界の流れを記録する集団と未知の存在たち。戦争や凶獣をただ見守るだけ。",
     ),
   },
+  outsider: {
+    name: c("이방인", "Outsiders", "異邦人"),
+    tag: c("세계의 틀을 벗어난 자들", "Those beyond the world's frame", "世界の枠を外れた者たち"),
+    desc: c(
+      "어느 나라에도, 어느 기록에도 묶이지 않는 자들. 차원을 떠도는 순례자와 스러진 왕국의 왕이 이 세계를 스쳐 간다.",
+      "Bound to no nation and no record. A pilgrim who wanders between dimensions and the king of a fallen realm pass through this world.",
+      "どの国にも、どの記録にも縛られない者たち。次元をさまよう巡礼者と滅びた王国の王がこの世界を通り過ぎる。",
+    ),
+  },
+  archive: {
+    name: c("서고의 감시자", "Wardens of the Archive", "書庫の監視者"),
+    tag: c("한정 캐릭터", "Limited characters", "限定キャラクター"),
+    desc: c(
+      "아카식 레코드의 서고를 지키는 자들. 떨어진 신의 힘을 찬탈한 존재를 쫓아 모였다. (뽑기로 만날 수 있는 한정 캐릭터)",
+      "Guardians of the Akashic Records' archive, gathered to hunt whoever stole the fallen god's power. (Limited characters from the gacha)",
+      "アカシックレコードの書庫を守る者たち。堕ちた神の力を奪った存在を追って集った。（ガチャで出会える限定キャラクター）",
+    ),
+  },
 };
 
 export const BOSS_STORY: Record<StoryBossId, { name: L; desc: L }> = {
