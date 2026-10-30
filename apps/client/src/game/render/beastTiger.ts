@@ -1,6 +1,7 @@
 // 야수 덮치기 호랑이: 게이지 막대(발밑) · 변신하면 캐릭터 대신 거대한 호랑이
-// 그림은 public/sprites/beast_tiger.png (scripts/art/tiger_sprite.py: 걷기 4장 + 덮치기 1장), 불러오기 전에는 코드 그림
+// 그림은 새 4방향 시트 public/sprites/beasttiger.png (scripts/art/import_v2.py) → 없으면 옆모습 beast_tiger.png (tiger_sprite.py) → 코드 그림
 import { TIGER, type RunState } from "@pixel-rogue/shared";
+import { drawCharacter, hasV2, isCasting } from "../sprites";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -43,7 +44,8 @@ function tigerSheet(): HTMLImageElement | null {
 /** 거대한 호랑이: 걸으면 네 장면, 덮치는(대시) 동안은 몸을 쭉 뻗은 장면 · 발밑에 불꽃 기운 */
 function drawTiger(ctx: Ctx, s: RunState, x: number, y: number): void {
   const img = tigerSheet();
-  if (!img) return drawTigerCode(ctx, s, x, y);
+  const v2 = hasV2("beasttiger");
+  if (!img && !v2) return drawTigerCode(ctx, s, x, y);
   const p = s.player;
   const moving = p.x !== p.prevX || p.y !== p.prevY;
   const frame = p.dashTicks > 0 ? 4 : moving ? (s.tick >> 3) % 4 : 0;
@@ -61,6 +63,13 @@ function drawTiger(ctx: Ctx, s: RunState, x: number, y: number): void {
     ctx.fillRect(Math.round(x - 22 + ((i * 37) % 44)), Math.round(y + 2 - t * 22), 2, 2);
   }
   ctx.globalAlpha = 1;
+  // 새 백호: 앞·뒤·왼·오 · 걷기 · 공격 · 대시 자세
+  if (v2) {
+    const pose = { faceX: p.faceX, faceY: p.faceY, moving, casting: isCasting(s.tick, p.attackCount), step: s.tick >> 3, dash: p.dashTicks > 0 };
+    drawCharacter(ctx, "beasttiger", x, y, p.r, pose);
+    return;
+  }
+  if (!img) return;
   ctx.save();
   ctx.translate(x, y + 4);
   ctx.scale(face, 1);

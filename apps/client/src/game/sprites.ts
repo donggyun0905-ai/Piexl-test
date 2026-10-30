@@ -104,6 +104,8 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number;
   novice10: { size: 32, footPad: 2, src: 128, v2: true },
   novice15: { size: 32, footPad: 2, src: 128, v2: true },
   novice20: { size: 32, footPad: 2 },
+  // 야수 변신 백호 (render/beastTiger)
+  beasttiger: { size: 56, footPad: 3, src: 128, v2: true },
 };
 
 for (const name of Object.keys(CHARACTER_SHEETS)) {
