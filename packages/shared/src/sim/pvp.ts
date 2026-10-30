@@ -29,6 +29,7 @@ import { growInit, growMenu, growStats, isGrow } from "./pwGrow";
 import { growSteer } from "./pwGrowBot";
 import { gigaInit, gigaInput, gigaMenu, isGiga } from "./pwGiga";
 import { gigaSteer } from "./pwGigaBot";
+import { pingMenu } from "./pwPing";
 import { growTick } from "./pwGrowTick";
 import { applyRoom } from "./rooms";
 import { stepPlayer } from "./run";
@@ -114,7 +115,7 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
     // 쓰러져 기다리는 동안에도 상점은 씀 (성장 대결)
     if (!inPlay(s, i)) {
       const m = seat.human ? inputs[i]?.menu : 0;
-      if (m) growMenu(s, m);
+      if (m && !pingMenu(s, m)) growMenu(s, m);
       return;
     }
     // 수풀에 숨은 상대는 가까이 가야 보임 (자동 조준·유도탄·AI가 못 노림)
@@ -129,7 +130,7 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
     // 점령전: 점프대 · 버프 자리
     input = capInput(s, input);
     // 성장 대결: 상점·증강 (작업대 입력과 따로)
-    if (input.menu && (gigaMenu(s, input.menu) || growMenu(s, input.menu))) input = { ...input, menu: 0 };
+    if (input.menu && (pingMenu(s, input.menu) || gigaMenu(s, input.menu) || growMenu(s, input.menu))) input = { ...input, menu: 0 };
     // 기간토마키아: 제작 · 상자·배낭·출구
     input = gigaInput(s, input);
     if (!pv.seats[i]!.on) return;

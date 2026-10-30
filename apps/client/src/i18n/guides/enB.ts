@@ -39,7 +39,7 @@ export const GUIDE_EN_B: Partial<Record<CharacterId, readonly string[]>> = {
   ],
   abandoned: [
     "Basics: 100 HP · three kids who grew up together — P1 shield (green) · P2 gun (red) · P3 sword (blue)",
-    "Dash button = tag: the incoming kid takes your spot and the outgoing kid goes where they stood (0.5s invulnerable)",
+    "Dash button = tag: the incoming kid takes your spot and the outgoing kid goes where they stood (0.23s invulnerable on a correct tag)",
     "The two kids not in play fight beside you · with the gun kid out, auto-attack reaches far",
     "Follow the combo chart (top left) with attacks and tags to unleash a special per stage · a mistake restarts and forces P1 in",
     "Attack speed never increases from items",

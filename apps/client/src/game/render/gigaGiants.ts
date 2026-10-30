@@ -36,6 +36,9 @@ function tinted(sheet: string, u: PwUnit, tick: number, tint: string, alpha: num
 /** 거인 몸 (푸른·붉은은 캐릭터 그림으로, 흰 뿔·그림이 없으면 plain) · 뿔 · 기운 */
 export const isGiant = (u: PwUnit): boolean => !!LOOK[u.kind];
 
+/** 그림 머리 위 (체력 줄·난이도 표시 자리): 묵인·거인 모습은 키가 커서 더 위 */
+export const giantTop = (u: PwUnit): number => (LOOK[u.kind]?.sheet ? u.body.y - 38 * (u.body.r / 11) : u.body.y - u.body.r - 7);
+
 export function drawGiant(ctx: Ctx, s: RunState, u: PwUnit, plain: () => void): void {
   const look = LOOK[u.kind]!;
   const b = u.body;
@@ -96,7 +99,7 @@ export function drawGiantTag(ctx: Ctx, s: RunState, u: PwUnit): void {
   const my = s.player.pwLv ?? 1;
   const col = my >= need ? "#6af06a" : my >= need - 3 ? "#ffd860" : "#ff5a5a";
   const text = `${"★".repeat(look.stars)} Lv.${need}`;
-  const y = Math.round(b.y - b.r - 10);
+  const y = Math.round(giantTop(u) - 4);
   ctx.font = "bold 7px monospace";
   ctx.textAlign = "center";
   ctx.fillStyle = "rgba(10, 8, 16, 0.75)";

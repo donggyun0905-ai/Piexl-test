@@ -62,10 +62,23 @@ export interface PwGrowState {
   campAt?: number[];
   /** 전쟁의 서막: 마지막 큰 보스 처치 (화면 알림: 종류 · 잡은 편 · 틱) */
   news?: { kind: "dragon" | "godeater"; team: number; at: number };
+  /** 핑 (sim/pwPing): 같은 편에게만 보임 */
+  pings?: PwPing[];
   /** 기간토마키아: 바닥의 상자·떨어진 배낭 · 임시 출구 · 나간 자리 */
   loot?: PwLoot[];
   exits?: { x: number; y: number }[];
   out?: number[];
+}
+
+/** 핑 하나: 찍은 편·자리 · 곳 · 찍은 틱 · 종류(모여 · 위험 · 공격 · 큰 보스 잡자) · 큰 보스 종류 */
+export interface PwPing {
+  team: number;
+  seat: number;
+  x: number;
+  y: number;
+  at: number;
+  kind: "go" | "danger" | "attack" | "boss";
+  boss?: "dragon" | "godeater";
 }
 
 /** 바닥 물건: 닫힌 상자(chest) 또는 쓰러진 사람이 떨군 배낭 · 든 돈과 물건 */
@@ -101,6 +114,6 @@ export interface PwGrowPlayer {
   bkY?: number;
   bkN?: number;
   bkDir?: [number, number, number];
-  /** 귀환 중: 끝 틱 · 시작 뒤 가장 높았던 체력 (이보다 떨어지면 끊김) */
-  pwRecall?: { end: number; hp: number };
+  /** 귀환 중: 끝 틱 · 시작 뒤 가장 높았던 체력 (이보다 떨어지면 끊김) · 시작 자리 (움직이면 끊김) */
+  pwRecall?: { end: number; hp: number; x: number; y: number };
 }

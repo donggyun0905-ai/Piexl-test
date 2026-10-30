@@ -119,10 +119,11 @@ export const ABANDONED_WEAPONS = {
   lastPromise: W("lastPromise", "promise", 1.25, 2.5),
 } as const satisfies Record<string, WeaponDef>;
 
-/** 버려진 자들 수치: 탭 무적(틱)·탭 다시 쓰기까지(틱) */
+/** 버려진 자들 수치: 탭 무적(틱, 다시 쓰기까지보다 짧게 · 조합대로 맞게 눌렀을 때만) · 탭 다시 쓰기까지(틱) · 패왕전에서 순서를 틀리면 탭이 잠기는 틱 */
 export const ABANDONED = {
-  tagInvuln: 30,
+  tagInvuln: 14,
   tagCd: 18,
+  wrongLock: 45,
   /** 틀린 뒤 ✕를 보여 주는 틱 */
   missTicks: 50,
   /** 방패 치기 밀침 · 기절(틱) · 막기 틱·받는 피해 배율 · 돌진 거리 */

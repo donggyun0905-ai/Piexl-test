@@ -1,0 +1,261 @@
+/* 월드 워 리그: 대진표 화면 (LeagueBracket) · 내 다음 경기 칸 · 우승 팀 줄 */
+.pw-league {
+  width: min(1240px, 100%);
+}
+.pw-league-champ {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgb(40 32 60 / 0.8);
+  color: #f2d040;
+  font-weight: bold;
+}
+.pw-league-pick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+}
+.pw-league-pick button {
+  margin: 0;
+  padding: 6px 12px;
+}
+/* 내 다음 경기 */
+.pw-league-next {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  width: min(760px, 100%);
+  padding: 14px 18px;
+  border: 2px solid #5ab0ff;
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgb(40 70 140 / 0.45), rgb(20 16 34 / 0.9) 30%, rgb(20 16 34 / 0.9) 70%, rgb(140 40 50 / 0.45));
+  box-shadow: 0 0 18px rgb(90 176 255 / 0.25);
+}
+.pln-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+}
+.pln-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  max-width: 340px;
+}
+.pln-mid small {
+  color: #f2d040;
+  letter-spacing: 0.1em;
+}
+.pln-mid em {
+  font-size: 30px;
+  font-weight: 900;
+  font-style: italic;
+  color: #fff;
+  text-shadow: 0 0 10px #ff5a5a, 0 0 18px #5ab0ff;
+}
+/* 대진표: 7열 (왼쪽 16강·8강·4강 · 결승 · 오른쪽 4강·8강·16강) */
+.lb-wrap {
+  width: 100%;
+  overflow-x: auto;
+  padding: 8px 0 14px;
+}
+.lb {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(138px, 1fr)) minmax(170px, 1.2fr) repeat(3, minmax(138px, 1fr));
+  gap: 0 22px;
+  min-width: 1080px;
+  padding: 10px 16px;
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgb(242 208 64 / 0.12), transparent 45%),
+    linear-gradient(180deg, rgb(28 22 44 / 0.95), rgb(12 10 20 / 0.95));
+  border: 1px solid #3a3050;
+}
+.lb-col {
+  display: flex;
+  flex-direction: column;
+}
+.lb-col h4 {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: #c8b8ff;
+}
+.lb-col-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 10px;
+}
+.lb-pair {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 10px;
+  flex: 1;
+}
+/* 둘을 잇는 ']' 줄 (왼쪽은 오른쪽으로, 오른쪽은 왼쪽으로) */
+.lb-pair.two::after {
+  content: "";
+  position: absolute;
+  top: 25%;
+  bottom: 25%;
+  width: 11px;
+  border: 2px solid #4a4064;
+  pointer-events: none;
+}
+.lb-col.left .lb-pair.two::after {
+  right: -13px;
+  border-left: none;
+}
+.lb-col.right .lb-pair.two::after {
+  left: -13px;
+  border-right: none;
+}
+.lb-match {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px;
+  border-radius: 8px;
+  border: 1px solid #3a3450;
+  background: rgb(255 255 255 / 0.04);
+}
+/* 다음 열로 이어지는 짧은 줄 */
+.lb-col.left .lb-match::after,
+.lb-col.right .lb-match::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 11px;
+  border-top: 2px solid #4a4064;
+}
+.lb-col.left .lb-match::after {
+  right: -13px;
+}
+.lb-col.right .lb-match::after {
+  left: -13px;
+}
+.lb-pair.two .lb-match::after {
+  display: none;
+}
+.lb-match.mine {
+  border-color: #5ab0ff;
+  box-shadow: 0 0 10px rgb(90 176 255 / 0.35);
+}
+.lb-team {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 0 4px;
+  border-radius: 5px;
+  font-size: 12px;
+  line-height: 1.15;
+}
+.lb-team span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lb-team.mine span {
+  color: #8ad0ff;
+  font-weight: bold;
+}
+.lb-team.won {
+  background: linear-gradient(90deg, rgb(242 208 64 / 0.28), transparent);
+}
+.lb-team.won span {
+  color: #ffe07a;
+  font-weight: bold;
+}
+.lb-team b {
+  color: #ffe07a;
+}
+.lb-team.lost {
+  opacity: 0.4;
+  filter: grayscale(0.8);
+}
+.lb-team.lost span {
+  text-decoration: line-through;
+}
+.lb-team.tbd {
+  color: #6a6084;
+}
+.lb-tbd {
+  display: grid;
+  place-items: center;
+  flex: 0 0 26px !important;
+  height: 26px;
+  border: 1px dashed #4a4064;
+  border-radius: 6px;
+}
+.lb-mode {
+  text-align: center;
+  font-size: 10px;
+  color: #9a90b0;
+}
+.lb-act {
+  display: flex;
+  gap: 4px;
+}
+.lb-act button {
+  flex: 1;
+  margin: 0;
+  padding: 3px 4px;
+  font-size: 11px;
+}
+/* 가운데 결승 */
+.lb-col.center {
+  align-items: stretch;
+  justify-content: center;
+}
+.lb-col.center .lb-col-body {
+  flex: 0;
+}
+.lb-col.center h4 {
+  font-size: 18px;
+  color: #ffd860;
+  text-shadow: 0 0 8px rgb(255 216 96 / 0.6);
+}
+.lb-trophy {
+  text-align: center;
+  font-size: 54px;
+  filter: drop-shadow(0 0 12px rgb(255 216 96 / 0.7));
+  animation: lb-trophy 2.4s ease-in-out infinite;
+}
+@keyframes lb-trophy {
+  50% {
+    transform: translateY(-5px) scale(1.05);
+  }
+}
+.lb-match.final {
+  padding: 8px;
+  border: 2px solid #b48a30;
+  background: linear-gradient(180deg, rgb(242 208 64 / 0.12), rgb(20 16 34 / 0.9));
+  box-shadow: 0 0 16px rgb(242 208 64 / 0.3);
+}
+.lb-match.final .lb-team {
+  font-size: 14px;
+  min-height: 34px;
+}
+.team-emblem {
+  flex: 0 0 auto;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.6));
+}

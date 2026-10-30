@@ -10,6 +10,7 @@ import { onDeck, pwGrid } from "./paewangGrid";
 import { wallBetween } from "./layout";
 import { seatNo } from "./party";
 import { canCast, skillDef } from "./pwSkill";
+import { warSkip } from "./pwWarCalm";
 import { EMPTY_INPUT, type EnemyState, type RunState, type TickInput } from "./types";
 import { dist2, normalize, weaponOf } from "./util";
 
@@ -26,7 +27,7 @@ function target(s: RunState): EnemyState | null {
   let bd = Infinity;
   for (const e of s.enemies) {
     const d = dist2(p, e);
-    if (e.hp <= 0 || e.pwHid || d > sight * sight || (walls && wallBetween(walls, p.x, p.y, e.x, e.y))) continue;
+    if (e.hp <= 0 || e.pwHid || d > sight * sight || (walls && wallBetween(walls, p.x, p.y, e.x, e.y)) || warSkip(s, e, d)) continue;
     if (d < bd) {
       bd = d;
       best = e;
@@ -42,6 +43,9 @@ export function botInput(s: RunState): TickInput {
   const p = s.player;
   if (st.dashCd > 0) st.dashCd--;
   if (st.stuck > 0) st.stuck--;
+  // 맞은 때 (전쟁의 서막 10분 전: 맞아야 상대 캐릭터를 침)
+  if (p.hp < (st.lastHp ?? p.hp) - 0.5) st.hurtAt = s.tick;
+  st.lastHp = p.hp;
   const t = target(s);
   // 본 상대는 자리를 기억 · 안 보이면 기억한 곳을 잠시 찾음
   if (t) [st.seenX, st.seenY, st.seenT] = [t.x, t.y, PW.hunt];

@@ -143,6 +143,10 @@ export interface PvpSeat {
   roam?: { seat: number; until: number };
   /** 전쟁의 서막 AI: 마지막으로 귀환을 시작한 틱 (끊기면 한동안 걸어서 집 쪽으로) */
   rcAt?: number;
+  /** AI: 지난 틱 체력 · 마지막으로 맞은 틱 (10분 전엔 맞아야 상대를 침) · 마지막으로 핑 찍은 틱 */
+  lastHp?: number;
+  hurtAt?: number;
+  pingAt?: number;
   /** 이 판에 상대에게 준 피해 · 받은 피해 합 (점수판) */
   dealt?: number;
   taken?: number;

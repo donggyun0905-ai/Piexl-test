@@ -103,54 +103,6 @@
   line-height: 1.35;
   color: #e0d8f0;
 }
-/* 월드 워 리그 대진표 */
-.pw-league-round h3 {
-  margin: 10px 0 4px;
-  color: #f2d040;
-}
-.pw-league-match {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  margin-bottom: 4px;
-  border: 1px solid #3a3444;
-  border-radius: 8px;
-}
-.pw-league-match.mine {
-  border-color: #5ab0ff;
-}
-.pw-league-match .won {
-  color: #f2d040;
-  font-weight: bold;
-}
-.pw-league-match .lost {
-  opacity: 0.45;
-  text-decoration: line-through;
-}
-.pw-league-match em {
-  font-style: normal;
-  color: #9a90b0;
-}
-.pw-league-pick {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
-  flex-basis: 100%;
-  font-size: 12px;
-}
-.pw-league-champ {
-  padding: 8px;
-  border-radius: 8px;
-  background: rgb(40 32 60 / 0.8);
-  text-align: center;
-}
-.pw-league-champ.win {
-  color: #f2d040;
-  font-weight: bold;
-}
 /* 기간토마키아: 미니맵·배낭·제작 */
 .pw-giga {
   position: fixed;

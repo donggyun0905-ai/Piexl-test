@@ -179,7 +179,7 @@ export class Controls {
     this.zoom = Math.min(ZOOM_MAX, Math.max(this.opt.zoom.min, z));
   }
 
-  /** 사용 아이템 쓰기 (화면 버튼). slot: 1·2 */
+  /** 풋내기 스탯 · 사용 아이템 쓰기 (화면 버튼). slot: 1·2 */
   queueStat(k: number): void { this.statQueued = k; }
   queueUse(slot: number): void { this.useQueued = slot; }
   /** 스킬 쓰기 (화면 버튼). 1~4 */
@@ -187,14 +187,13 @@ export class Controls {
   /** 상점에서 장비 팔기 (판매 줄: 1·2 = 사용 아이템 칸, 3~ = 패시브 순서) · 작업대 창에서 누름 (sim/station.menuCode) */
   queueSell(n: number): void { this.sellQueued = n; }
   queueMenu(code: number): void { this.menuQueue.push(code); }
-  /** 상호작용을 한 번 누른 것으로 처리 (모바일 버튼) */
+  /** 상호작용을 한 번 누른 것으로 처리 (모바일 버튼) · 대시 */
   queueInteract(): void { this.interactQueued = true; }
   queueDash(): void { this.dashQueued = true; }
 
-  /** 마우스 위치 (화면 좌표). 마우스를 쓰지 않았으면 null */
-  get mouse(): { x: number; y: number } | null {
-    return this.mouseX === null ? null : { x: this.mouseX, y: this.mouseY };
-  }
+  /** 마우스가 가리키는 곳이 내 캐릭터에서 얼마나 떨어졌는지 (게임 좌표, 핑) · 마우스 위치 (화면 좌표, 안 썼으면 null) */
+  mouseOffset(): { dx: number; dy: number } | null { const p = this.opt.playerScreenPos(); return p && this.mouseX !== null ? { dx: (this.mouseX - p.x) / p.scale, dy: (this.mouseY - p.y) / p.scale } : null; }
+  get mouse(): { x: number; y: number } | null { return this.mouseX === null ? null : { x: this.mouseX, y: this.mouseY }; }
 
   releaseAll(): void {
     this.keys.clear();

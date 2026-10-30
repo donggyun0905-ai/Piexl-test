@@ -1,21 +1,24 @@
 import { describe, expect, it } from "vitest";
 import { PW_ARENAS } from "../paewangMaps";
 import { PW_WAR } from "../pwRules";
+import { PW } from "../paewangDefs";
 import { distanceField } from "./layout";
 import { fogAt, spotXY } from "./paewangGrid";
 import { allPlayers } from "./party";
 import { createPvp, stepPvp } from "./pvp";
 import { GROW_MENU, growMenu, homeOf } from "./pwGrow";
 import { warRole } from "./pwWarBot";
+import { makeUnit } from "./pwLane";
+import { pingCode } from "./pwPing";
 import { EMPTY_INPUT } from "./types";
 import { roomGrid } from "./util";
 
 describe("패왕전 전쟁의 서막", () => {
   const a = PW_ARENAS.gWar;
-  it("맵: 길 셋·편마다 포탑 여섯·체크포인트 셋·안개 넷 · 집·체크포인트·정글 자리에 걸어서 닿음 · 정글 자리는 안개 안", () => {
+  it("맵: 길 셋·편마다 포탑 여덟(위·아래 셋, 가운데 둘)·체크포인트 셋·안개 넷 · 집·체크포인트·정글 자리에 걸어서 닿음 · 정글 자리는 안개 안", () => {
     const s = createPvp(1, "war", [{ characterId: "warden" }], "gWar");
     expect(a.lanes).toHaveLength(3);
-    expect(s.pvp!.grow!.units.filter((u) => u.kind === "tower" && u.team === 0)).toHaveLength(6);
+    expect(s.pvp!.grow!.units.filter((u) => u.kind === "tower" && u.team === 0)).toHaveLength(8);
     const field = distanceField(roomGrid(s)!, ...homeOf(s, 0));
     const cell = ([c, r]: readonly number[]) => r! * a.cols + c!;
     for (const sp of [...(a.points ?? []).map((p) => p.at), ...(a.camps ?? []).map((c) => c.at), a.homes![1]]) expect(field[cell(sp)], String(sp)).toBeGreaterThanOrEqual(0);
@@ -74,4 +77,20 @@ describe("패왕전 전쟁의 서막", () => {
       if (warRole(s, i) === "bot" && s.pvp!.seats[i]!.on) expect(c > 60 || r > 60, `bot ${i} ${c},${r}`).toBe(true);
     });
   }, 60000);
+
+  it("핑: T 자리 → 모여 · 위험(Alt) · 큰 보스 둘레면 '잡겠습니다' 핑 · 같은 편만 따름", () => {
+    const s = createPvp(5, "war", [{ characterId: "warden" }], "gWar");
+    while (s.tick <= (s.pvp!.readyAt ?? PW.ready) + 2) stepPvp(s, [EMPTY_INPUT]);
+    const p = s.player;
+    stepPvp(s, [{ ...EMPTY_INPUT, menu: pingCode(p.x + 40, p.y, false) }]);
+    expect(s.pvp!.grow!.pings!.at(-1)).toMatchObject({ team: 0, kind: "go" });
+    for (let i = 0; i < 70; i++) stepPvp(s, [EMPTY_INPUT]);
+    stepPvp(s, [{ ...EMPTY_INPUT, menu: pingCode(p.x, p.y, true) }]);
+    expect(s.pvp!.grow!.pings!.at(-1)!.kind).toBe("danger");
+    const u = makeUnit(s, "dragon", 2, p.x + 100, p.y);
+    s.pvp!.grow!.units.push(u);
+    for (let i = 0; i < 70; i++) stepPvp(s, [EMPTY_INPUT]);
+    stepPvp(s, [{ ...EMPTY_INPUT, menu: pingCode(u.body.x + 8, u.body.y, false) }]);
+    expect(s.pvp!.grow!.pings!.at(-1)).toMatchObject({ kind: "boss", boss: "dragon" });
+  });
 });

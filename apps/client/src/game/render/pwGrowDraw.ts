@@ -3,7 +3,7 @@ import { drawGigaBuildings, drawGigaFloors } from "./gigaBuildings";
 import { allPlayers, BASE_R, capCenter, ENEMIES, fogAt, portalOf, PW_ARENAS, PW_GIGA, PW_GROW, PW_UNIT, PW_WAR, spotXY, TILE_SIZE, type EnemyKind, type PwUnit, type RunState } from "@pixel-rogue/shared";
 import { drawEnemySprite } from "../sprites";
 import { drawTurret } from "./pwGrowTheme";
-import { drawGiant, drawGiantSkill, drawGiantTag, isGiant } from "./gigaGiants";
+import { drawGiant, drawGiantSkill, drawGiantTag, giantTop, isGiant } from "./gigaGiants";
 
 type Ctx = CanvasRenderingContext2D;
 const T = TILE_SIZE;
@@ -79,18 +79,6 @@ export function drawGrowGround(ctx: Ctx, s: RunState): void {
     ctx.fillStyle = "#f2d040";
     ctx.fillRect(p.x - 10, p.y + 11, Math.round(20 * k), 2);
   });
-  // 귀환 중: 발밑에서 오르는 파란 빛 + 남은 막대
-  allPlayers(s).forEach((p) => {
-    const rc = p.pwRecall;
-    if (!rc) return;
-    const k = 1 - Math.max(0, rc.end - s.tick) / PW_UNIT.recall;
-    ctx.fillStyle = `rgba(110, 190, 255, ${0.25 + 0.15 * Math.sin(s.tick / 5)})`;
-    ctx.fillRect(p.x - 8, p.y - 24 * k, 16, 24 * k + 6);
-    ctx.fillStyle = "#0a0810";
-    ctx.fillRect(p.x - 11, p.y + 10, 22, 4);
-    ctx.fillStyle = "#8ac8ff";
-    ctx.fillRect(p.x - 10, p.y + 11, Math.round(20 * k), 2);
-  });
   // 가운데 점령지
   if (a.zone?.rect) {
     const [c, r, w, h] = a.zone.rect;
@@ -109,9 +97,9 @@ export function drawGrowGround(ctx: Ctx, s: RunState): void {
 }
 
 /** 체력 줄 (포탑·보스는 크게) · 못 때리는 동안 자물쇠 표시 */
-function drawBar(ctx: Ctx, u: PwUnit, col: string, tick = 0): void {
+function drawBar(ctx: Ctx, u: PwUnit, col: string, tick = 0, at?: number): void {
   const b = u.body;
-  const top = b.y - (u.kind === "tower" ? 32 : b.r + 7);
+  const top = at ?? b.y - (u.kind === "tower" ? 32 : b.r + 7);
   const w = u.kind === "tower" ? 30 : Math.max(12, b.r * 2);
   ctx.fillStyle = "#0a0810";
   ctx.fillRect(b.x - w / 2 - 1, top, w + 2, 4);
@@ -180,7 +168,7 @@ export function drawGrowUnits(ctx: Ctx, s: RunState): void {
     if (isGiant(u)) {
       drawGiantSkill(ctx, s, u);
       drawGiant(ctx, s, u, plain);
-      drawBar(ctx, u, col, s.tick);
+      drawBar(ctx, u, col, s.tick, giantTop(u));
       drawGiantTag(ctx, s, u);
       continue;
     }

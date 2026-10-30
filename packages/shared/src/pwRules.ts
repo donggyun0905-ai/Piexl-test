@@ -101,7 +101,15 @@ export const PW_WAR = {
   shopGold: 1400,
   /** AI 정글이 보스 몬스터(안개 지역 보스)를 잡으러 가는 레벨 */
   eliteLv: 6,
+  /** AI 큰 보스: 살아 있는 우리 편 레벨 합이 이만큼 되고 세 명 넘게 살아 있어야 핑을 찍고 모임 · 보스 둘레에 이만큼 모여야 침 */
+  bossLv: { dragon: 36, godeater: 46 } as Record<string, number>,
+  bossGather: 3,
+  /** 10분 전 AI: 상대 캐릭터는 먼저 때리지 않음 (맞았거나 이 거리 안: 근접은 사거리, 원거리는 사거리의 절반) · 맞은 뒤 이 틱 동안은 맞받아침 */
+  calmHurt: 3 * TICK_RATE,
 };
+
+/** 핑 (sim/pwPing): 보이는 틱 · 한 사람이 다시 찍는 간격 틱 · AI가 따라가는 거리 */
+export const PW_PING = { show: 5 * TICK_RATE, every: TICK_RATE, follow: 700, followTicks: 8 * TICK_RATE };
 
 /** 쟁탈전 (sim/pwContest): 가운데·상대 집 점령에 걸리는 초 */
 export const PW_CONTEST = { centerSec: 15, baseSec: 10 };

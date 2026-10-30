@@ -4,6 +4,45 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.258",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "전쟁의 서막: 위·아래 길 맨 앞에 포탑 하나씩 더 (같은 간격으로 길마다 셋)",
+        "귀환(R): 위로 치솟는 하늘색 빛기둥 효과 · 움직이면 끊김",
+        "핑: T = 마우스 자리에 핑 (큰 보스 둘레면 '○○를 잡겠습니다! 모여 주세요!', 상대 포탑·캐릭터 둘레면 '여기를 공격하자!', 그 밖에는 '여기로 모여!') · Alt+T = 위험 핑 · 같은 편 화면에 표시와 알림",
+        "전쟁의 서막 AI: 파멸의 용·갓이터는 우리 편이 충분히 셀 때만 정글·가운데가 '잡겠습니다' 핑을 찍고, 모두 보스 밖에서 모였다가 함께 잡음 · 사람이 찍은 핑도 따라감",
+        "전쟁의 서막 AI: 10분 전에는 병사를 잡아 돈을 모으는 데 집중 · 상대 캐릭터는 맞았거나 가까이(근접은 사거리, 원거리는 사거리의 절반) 왔을 때만 침",
+        "버려진 자들: 교대 무적은 조합대로 맞게 눌렀을 때만 짧게 (0.23초) · 패왕전에서 순서를 틀리면 무적 없이 잠깐 교대가 잠김 (대시를 꾹 눌러 계속 무적으로 버티지 못하게)",
+        "월드 워 리그: 사람이 없는 다른 팀 경기를 관전할 때 한 캐릭터만 초록 체력 줄로 보이던 문제",
+        "월드 워 리그: 16팀 대회 (16강 → 8강 → 4강 → 결승) · 왼쪽 8팀·오른쪽 8팀이 따로 올라가 결승 · 토너먼트 대진표 화면 · 팀 마크 16종 + 우리 팀 마크 · 위에 내 다음 경기 칸",
+        "월드 워 리그 우승 화면: 화면 전체에 빛살·불꽃·색종이와 '우승을 축하드립니다!'",
+      ],
+      en: [
+        "Prelude to War: one more turret at the front of the top and bottom lanes (three per lane, evenly spaced)",
+        "Recall (R): a sky-blue pillar of light rises up · moving cancels it",
+        "Pings: T pings at the cursor (near a big boss: 'Taking down the ○○! Gather up!', near an enemy turret or hero: 'Attack here!', otherwise 'Gather here!') · Alt+T = danger ping · shown and announced to your team",
+        "Prelude to War AI: the jungler or mid only pings the Dragon of Ruin / God Eater when the team is strong enough, then everyone gathers outside its reach and fights it together · AI also follows players' pings",
+        "Prelude to War AI: before 10 minutes they focus on farming minions for gold · they only fight enemy heroes when hit or when the hero comes close (melee: attack range, ranged: half the range)",
+        "The Abandoned: tag invulnerability only on a correct tag and shorter (0.23s) · in Paewang a wrong tag gives no invulnerability and briefly locks tagging (no more holding dash to stay invulnerable)",
+        "World War League: watching a match without players no longer shows one character with a green (player) HP bar",
+        "World War League: 16 teams (round of 16 → quarterfinals → semifinals → final) · the left and right halves each send one team to the final · tournament bracket screen · 16 team crests + your team's crest · a 'next match' panel on top",
+        "World War League champion screen: rays, fireworks and confetti fill the screen with 'Congratulations, Champions!'",
+      ],
+      ja: [
+        "戦争の序幕: 上・下の道のいちばん前にタレットを1つずつ追加（同じ間隔で道ごとに3つ）",
+        "帰還（R）: 上へ立ちのぼる空色の光の柱 · 動くと中断",
+        "ピン: T = マウスの位置にピン（大ボスの近くなら「○○を倒します！集まって！」、相手のタレット・キャラの近くなら「ここを攻撃しよう！」、それ以外は「ここに集まれ！」）· Alt+T = 危険ピン · 味方の画面に表示と通知",
+        "戦争の序幕AI: 破滅の竜・ゴッドイーターは味方が十分に強いときだけジャングル・ミッドが「倒します」ピンを打ち、全員ボスの外で集まってから一緒に倒す · プレイヤーのピンにも従う",
+        "戦争の序幕AI: 10分前は兵士を倒してお金を集めることに集中 · 相手キャラには攻撃されたか近く（近接は射程、遠距離は射程の半分）に来たときだけ攻撃",
+        "見捨てられた子たち: 交代の無敵は組み合わせ通りに押したときだけ短く（0.23秒）· 覇王戦で順番を間違えると無敵なしで少しの間交代がロック（ダッシュ長押しで無敵を続けられない）",
+        "ワールドウォーリーグ: プレイヤーのいない他チームの試合を観戦するとき、1キャラだけ緑の体力バーになる問題を修正",
+        "ワールドウォーリーグ: 16チームの大会（ベスト16 → 準々決勝 → 準決勝 → 決勝）· 左右8チームずつ勝ち上がって決勝 · トーナメント表の画面 · チームマーク16種 + 自チームのマーク · 上に次の試合の枠",
+        "ワールドウォーリーグ優勝画面: 画面いっぱいに光・花火・紙吹雪と「優勝おめでとうございます！」",
+      ],
+    },
+  },
+  {
     version: "0.48.257",
     date: "2026-10-30",
     items: {
@@ -39,78 +78,6 @@ export const NOTES: PatchNote[] = [
         "ギガントマキア: 続きからを廃止（途中で出るとそこで終了、金庫の品だけ受け取る）· 倒れた人のバッグはその場に落ち、誰でも拾える",
         "角の巨人: 白はそのまま · 青はムキンの姿 · 赤は巨人の姿で、色・角・オーラを装飾 · 頭上に星と推奨レベル（自分のレベルが上なら緑、少し足りないと黄、大きく足りないと赤）",
         "巨人の技（怒ったとき）: 白は岩投げ（落下地点に影）· 青は突進（予告の矢印）· 赤はレーザー（照準線）と叩きつけ（広い円）",
-      ],
-    },
-  },
-  {
-    version: "0.48.256",
-    date: "2026-10-30",
-    items: {
-      ko: [
-        "캐릭터 선택창(로그·기간토마키아 등 모두): 전체 · 아스칼론 · 테라코어 · 비르디아 · 헬리오스 · 아카식 레코드(테스트 전용 히든) 탭과 이름 검색",
-        "캐릭터 카드는 크게 그린 생김새 · 이름 · 스킨 이름 · 훈장 · 스킨 바꾸기만 · 카드를 누르면 설명·능력치·숙련도 창이 뜨고 '진행하기'로 시작 ('취소'·Esc로 닫음)",
-        "캐릭터 숙련도 (Lv.1~7): 그 캐릭터로 게임을 시작할 때마다 오름 · 레벨마다 카드 테두리가 열림 (나무 · 강철 · 청동 · 은빛 · 황금 · 비취 왕관 · 전설의 무지개)",
-        "스킨 바꾸기 창: 스킨 · 테두리 · 카드 꾸밈 탭 · 카드 꾸밈 5종(균열의 문 · 용의 비늘 · 서리 왕관 · 잿불 성채 · 별의 심연)은 시즌 3 레이드 보스 이벤트에서 얻을 수 있음 (테스트 중에는 모두 써 볼 수 있음)",
-        "로그: 라스트 보스방에 들어가면 체력이 가득 참",
-      ],
-      en: [
-        "Character select (Dungeon, Gigantomachia and more): tabs for All · Ascalon · Terracore · Virdia · Helios · Akashic Records (test-only hidden) and a name search",
-        "Character cards now show only a larger portrait, name, skin, medals and the skin button · click a card to see its guide, stats and mastery, then press 'Start' (close with 'Cancel' or Esc)",
-        "Character mastery (Lv.1–7): rises each time you start a game with that character · each level unlocks a card frame (Oak · Steel · Bronze · Silver · Golden · Jade Crown · Legendary Prism)",
-        "Skin window: Skin · Frame · Card design tabs · 5 card designs (Rift Gate · Dragon Scale · Frost Crown · Ember Keep · Star Abyss) can be earned in the Season 3 raid boss event (all open during testing)",
-        "Dungeon: entering the last boss room fully restores your HP",
-      ],
-      ja: [
-        "キャラクター選択（ローグ・ギガントマキアなどすべて）: すべて · アスカロン · テラコア · ヴィルディア · ヘリオス · アカシックレコード（テスト専用の隠し）タブと名前検索",
-        "キャラカードは大きな姿 · 名前 · スキン名 · 勲章 · スキン変更だけに · カードを押すと説明・能力値・熟練度の窓が開き「進む」で開始（「キャンセル」・Escで閉じる）",
-        "キャラ熟練度（Lv.1〜7）: そのキャラでゲームを始めるたびに上昇 · レベルごとにカードの枠が開く（木 · 鋼 · 青銅 · 銀 · 黄金 · 翡翠の冠 · 伝説の虹）",
-        "スキン変更の窓: スキン · 枠 · カードデザインのタブ · カードデザイン5種（亀裂の門 · 竜の鱗 · 霜の冠 · 残り火の城砦 · 星の深淵）はシーズン3のレイドボスイベントで手に入る（テスト中はすべて試せる）",
-        "ローグ: ラストボスの部屋に入ると体力が全回復",
-      ],
-    },
-  },
-  {
-    version: "0.48.255",
-    date: "2026-10-30",
-    items: {
-      ko: [
-        "기간토마키아 맵 1.5배 (348×204칸) · 거인·도깨비·상자도 늘림",
-        "기간토마키아 건물: 학교 2 · 아파트 4(2층, 층마다 방 여럿) · 집 8 · 문 앞에서 F로 들어가 실내 방으로 바뀜 (계단으로 위층) · 실내는 밖에서 안 보이고 상자가 더 좋음 · 건물 안은 문 자리로 자기장을 셈",
-        "기간토마키아 AI: 처음 1분 30초 뒤로는 보이는 상대와 싸우고 쫓음 · 체력이 낮거나 상대가 훨씬 세면 도망 · 건물에 들어가 파밍하고, 다 털었거나 자기장이 오면 나옴",
-      ],
-      en: [
-        "Gigantomachia map is 1.5× larger (348×204) · more giants, goblins and chests",
-        "Gigantomachia buildings: 2 schools · 4 apartments (2 floors with several rooms) · 8 houses · press F at a door to step into the interior (stairs lead upstairs) · interiors are hidden from outside and hold better chests · inside a building, the zone counts you at its door",
-        "Gigantomachia AI: after the first 1:30 they fight and chase rivals they see · flee when low or facing a much stronger rival · they loot buildings and leave once they're empty or the zone closes in",
-      ],
-      ja: [
-        "ギガントマキアのマップを1.5倍に（348×204マス）· 巨人・トッケビ・宝箱も増加",
-        "ギガントマキアの建物: 学校2 · マンション4（2階建て、各階に部屋がいくつか）· 家8 · ドアの前でFを押すと室内の部屋へ（階段で上の階）· 室内は外から見えず、宝箱がより良い · 建物の中はドアの位置で磁場を判定",
-        "ギガントマキアのAI: 最初の1分30秒の後は見えた相手と戦い追いかける · 体力が低い・相手がずっと強いと逃げる · 建物に入って漁り、空になったか磁場が来たら出る",
-      ],
-    },
-  },
-  {
-    version: "0.48.254",
-    date: "2026-10-30",
-    items: {
-      ko: [
-        "로그 화면: 맵 좌우에 칸을 두고 맵은 그 사이를 꽉 채움 · 왼쪽 칸은 능력치 · '캐릭터 설명' 버튼 · 버프 창 (켜진 버프와 대기 시간·남은 초)",
-        "캐릭터 설명 큰 창 (버튼 또는 I): 게임이 멈추고 왼쪽에 설명·모든 무기·전용 아이템(누르면 들어 봄), 오른쪽에 직접 움직이는 작은 연습장 · Esc·I로 닫음",
-        "아티팩터 제작대·추적자 튜닝소 창: Esc로도 닫힘",
-        "기간토마키아: 폭탄 피해 45",
-      ],
-      en: [
-        "Dungeon screen: side columns next to the map, which now fills the space between · left column: stats, a 'Character guide' button and a buff panel (active buffs and cooldowns with seconds left)",
-        "Character guide window (button or I): pauses the game; the left shows the guide, every weapon and exclusive item (click to try), the right is a small practice room you control · close with Esc or I",
-        "Artifacter's workbench and Tracker's tuning shop windows now also close with Esc",
-        "Gigantomachia: bombs deal 45 damage",
-      ],
-      ja: [
-        "ローグ画面: マップの左右に欄を置き、マップはその間いっぱいに · 左欄は能力値・「キャラクター説明」ボタン・バフ欄（発動中のバフと待機時間・残り秒）",
-        "キャラクター説明の大きなウィンドウ（ボタンかI）: ゲームが止まり、左に説明・全武器・専用アイテム（押すと装備）、右に自分で動かす小さな練習場 · Esc・Iで閉じる",
-        "アーティファクターの作業台・追跡者のチューニング所ウィンドウ: Escでも閉じる",
-        "ギガントマキア: 爆弾ダメージ45",
       ],
     },
   },

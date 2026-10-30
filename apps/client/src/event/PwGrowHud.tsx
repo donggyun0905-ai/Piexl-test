@@ -1,5 +1,5 @@
-// 패왕전 성장 대결 화면 위 정보: 레벨·경험치 막대·돈·상점 버튼(B) · 쟁탈전 진행(포탑·가운데·집 점령) · 증강 고르기 · 상점 창
-import { allPlayers, GROW_MENU, isGrow, nearPortal, PW_ARENAS, PW_GROW, towersLeft, type RunState } from "@pixel-rogue/shared";
+// 패왕전 성장 대결 화면 위 정보: 레벨·경험치 막대·돈·상점 버튼(B) · 쟁탈전 진행(포탑·가운데·집 점령) · 증강 고르기 · 상점 창 · 귀환(R) · 핑(T, Alt+T 위험)
+import { allPlayers, GROW_MENU, isGrow, nearPortal, pingCode, PW_ARENAS, PW_GROW, towersLeft, type RunState } from "@pixel-rogue/shared";
 import { useEffect, useRef, useState } from "react";
 import type { Controls } from "../game/controls";
 import type { Lang, TextKey } from "../i18n";
@@ -9,6 +9,7 @@ import { gearItem, gearLines, gearName } from "./pwGearView";
 import { ItemIcon } from "../game/itemIcon";
 import { PwShop } from "./PwShop";
 import { PwWarNews } from "./PwWarNews";
+import { PwPingFeed } from "./PwPingFeed";
 
 interface Props {
   run: RunState;
@@ -41,6 +42,14 @@ export function PwGrowHud({ run, me, lang, t, controls }: Props) {
         controls()?.queueMenu(GROW_MENU.recall);
       }
       if (e.code === "KeyF" && o.portal) setMap(true);
+      // 핑: T = 마우스 자리 (큰 보스·상대 둘레면 알아서 '잡자'·'공격') · Alt+T = 위험
+      if (e.code === "KeyT") {
+        e.preventDefault();
+        const c = controls();
+        const off = c?.mouseOffset();
+        const q = allPlayers(run)[me];
+        if (c && off && q) c.queueMenu(pingCode(q.x + off.dx, q.y + off.dy, e.altKey));
+      }
       if (e.code === "Escape" && (o.shop || o.map)) {
         e.stopImmediatePropagation();
         e.preventDefault();
@@ -50,7 +59,7 @@ export function PwGrowHud({ run, me, lang, t, controls }: Props) {
     };
     window.addEventListener("keydown", key, true);
     return () => window.removeEventListener("keydown", key, true);
-  }, [controls]);
+  }, [controls, me, run]);
   if (!isGrow(run)) return null;
   const p = allPlayers(run)[me]!;
   const lv = p.pwLv ?? 1;
@@ -88,6 +97,7 @@ export function PwGrowHud({ run, me, lang, t, controls }: Props) {
           </small>
         )}
         {pv.mode === "war" && <PwWarNews run={run} me={me} p={p} t={t} />}
+        <PwPingFeed run={run} me={me} t={t} />
         {p.pwRecall && <b className="pw-recall">⟲ {t("pwRecalling").replace("{n}", String(Math.ceil((p.pwRecall.end - run.tick) / 60)))}</b>}
       </div>
       {grow && <PwMapView run={run} me={me} cell={2} t={t} />}

@@ -170,3 +170,37 @@
   background: rgb(255 255 255 / 0.04);
 }
 .pw-gearbar.hide { display: none; }
+/* 핑 알림 (성장 대결 위쪽 줄) */
+.pw-ping-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  font-size: 13px;
+}
+.pw-ping-line {
+  padding: 1px 8px;
+  border-radius: 4px;
+  background: rgb(10 8 16 / 0.6);
+  animation: pw-ping-in 0.25s ease-out;
+}
+.pw-ping-line.go,
+.pw-ping-line.attack {
+  color: #9ad0ff;
+}
+.pw-ping-line.danger {
+  color: #ffb070;
+}
+.pw-ping-line.boss {
+  color: #ffe07a;
+  font-weight: bold;
+}
+.pw-ping-hint {
+  color: #8a84a0;
+}
+@keyframes pw-ping-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}

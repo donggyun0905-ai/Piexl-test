@@ -50,6 +50,8 @@ export interface AbandonedPlayerState {
   abStage?: number;
   abPos?: number;
   abMiss?: number;
+  /** 패왕전: 순서를 틀린 탭 뒤 이 틱까지 탭 잠김 */
+  abLock?: number;
   abDone?: boolean;
   abSeg?: number;
   /** 막기 남은 틱 · 셋이서 하나 남은 틱 */

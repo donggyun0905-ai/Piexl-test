@@ -2,6 +2,8 @@
 import { drawPwZone } from "./pwZone";
 import { drawCapChan, drawCapGround } from "./pwCapture";
 import { drawGrowGround, drawGrowUnits, drawWarFog } from "./pwGrowDraw";
+import { drawRecall } from "./pwRecallFx";
+import { drawPings } from "./pwPingFx";
 import { drawGrowTheme } from "./pwGrowTheme";
 import { allPlayers, inBush, PW, PW_ARENAS, TILE_SIZE, trapUp, type EnemyState, type ProjectileState, type PwAlly, type PwBrain, type RunState } from "@pixel-rogue/shared";
 import { drawBody } from "./actors";
@@ -142,6 +144,8 @@ export function drawPaewang(ctx: Ctx, s: RunState, alpha: number, snap: Snap, ch
   // 체력 줄·표시는 수풀·나무 위에 (소환한 것도)
   if (s.pvp) drawPwMinions(ctx, s, alpha, snap, (i) => pwTint(s, i));
   if (s.pvp) drawWarFog(ctx, s);
+  if (s.pvp) drawRecall(ctx, s);
+  if (s.pvp) drawPings(ctx, s);
   if (s.pvp) drawSeats(ctx, s, alpha, snap, charName);
 }
 
@@ -168,7 +172,8 @@ function leaf(ctx: Ctx, x: number, y: number, r: number, color: string): void {
 /** 패왕전 자리마다: 발밑 편 고리 · 그림 맨 위에 체력 줄(나는 초록 · 내 편 파랑 · 상대 빨강) · 데스매치 레벨 · 얼음 · 내 화살표 · 가까운 적 표시 */
 function drawSeats(ctx: Ctx, s: RunState, alpha: number, snap: Snap, charName?: (id: string) => string): void {
   const pv = s.pvp!;
-  const me = s.seat ?? 0;
+  // 사람이 없는 판(리그 다른 팀 경기 관전)은 '나'가 없음: 초록 줄·내 화살표 없이 모두 편 색 · 이름
+  const me = pv.seats.some((x) => x.human) ? (s.seat ?? 0) : -1;
   const ps = allPlayers(s);
   const at = (i: number) => {
     const p = ps[i]!;

@@ -181,7 +181,7 @@ export function growMenu(s: RunState, code: number): boolean {
   if (code >= GROW_MENU.recall) {
     // 귀환 (R): 5초 뒤 집으로 · 다시 누르면 그만둠
     if (p.pwRecall) p.pwRecall = undefined;
-    else if (inPlay(s, i) && !atHome(s, i) && PW_ARENAS[s.pvp!.arena].homes) p.pwRecall = { end: s.tick + PW_UNIT.recall, hp: p.hp };
+    else if (inPlay(s, i) && !atHome(s, i) && PW_ARENAS[s.pvp!.arena].homes) p.pwRecall = { end: s.tick + PW_UNIT.recall, hp: p.hp, x: p.x, y: p.y };
   } else if (code >= GROW_MENU.tp) teleport(s, code - GROW_MENU.tp);
   else if (code >= GROW_MENU.aug) pickAug(s, code - GROW_MENU.aug);
   else if (code >= GROW_MENU.sell) sell(s, code - GROW_MENU.sell);
@@ -255,7 +255,7 @@ export function growEconomy(s: RunState): void {
   eachSeat(s, (i) => {
     const p = s.player;
     const rc = p.pwRecall;
-    if (rc && (!inPlay(s, i) || p.hp < rc.hp - 0.5)) p.pwRecall = undefined;
+    if (rc && (!inPlay(s, i) || p.hp < rc.hp - 0.5 || (p.x - rc.x) ** 2 + (p.y - rc.y) ** 2 > 4)) p.pwRecall = undefined;
     else if (rc && s.tick >= rc.end) {
       p.pwRecall = undefined;
       [p.x, p.y] = homeOf(s, s.pvp!.seats[i]!.team);

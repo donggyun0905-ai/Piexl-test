@@ -2,7 +2,7 @@
 // 10분 전: 위·아래·가운데는 우리 맨 앞 병사 곁에서 병사를 잡으며 상대와 싸움, 병사 없이 상대 포탑 사거리엔 들어가지 않음 (병사가 있으면 포탑도 때림)
 //   가운데는 가끔 상대와 붙은 다른 길·정글을 도우러 감 · 정글은 큰 보스를 빼고 정글 몬스터를 돌며 잡고, 다 잡았으면 도우러 가거나 집에서 장보기
 // 모두: 체력이 낮거나 돈이 쌓이면 상대가 없는 곳에서 귀환 (가까이 상대가 있으면 먼저 집 쪽으로 물러남)
-// 10분 뒤: 나누지 않고 함께 싸우며 포탑 부수기 (원래 길 목표, pwGrowBot.objective) · 정글·가운데는 살아 있는 큰 보스를 노림. 무작위 없음
+// 10분 뒤: 나누지 않고 함께 싸우며 포탑 부수기 (원래 길 목표, pwGrowBot.objective) · 큰 보스는 셀 때 핑을 찍고 모여서 (pwWarCalm). 무작위 없음
 import { TICK_RATE } from "../constants";
 import { PW_ARENAS } from "../paewangMaps";
 import { PW_UNIT, PW_WAR } from "../pwRules";
@@ -11,6 +11,7 @@ import { allPlayers, seatNo } from "./party";
 import { inPlay } from "./pvpWorld";
 import { atHome, GROW_MENU, growMenu, homeOf } from "./pwGrow";
 import { laneMinutes } from "./pwLane";
+import { pingSteer } from "./pwWarCalm";
 import type { RunState, TickInput } from "./types";
 
 export type WarRole = "top" | "mid" | "bot" | "jungle";
@@ -111,13 +112,11 @@ export function warSteer(s: RunState, input: TickInput, walk: Walk, wantsShop: (
   if (!home && (p.hp < p.stats.maxHp * 0.35 || (s.gold >= PW_WAR.shopGold && wantsShop()))) return goHome(s, input, walk, team);
   // 병사 없이 상대 포탑 밑이면 물러남
   if (underTower(s, team)) return walk(s, { ...input, attack: false }, ...homeOf(s, team));
+  // 핑: 큰 보스는 셀 때만 정글·가운데가 핑을 찍고 모여서 · 사람 핑 따르기 (pwWarCalm)
+  const ping = pingSteer(s, input, walk, team, role === "jungle" || role === "mid");
+  if (ping) return ping;
   const early = warEarly(s);
-  if (!early) {
-    // 10분 뒤: 정글·가운데는 살아 있는 큰 보스부터 (체력이 넉넉할 때), 나머지는 원래 목표
-    const big = pv.grow!.units.find((u) => (u.kind === "dragon" || u.kind === "godeater") && u.body.hp > 0);
-    if ((role === "jungle" || role === "mid") && big && !input.attack && p.hp > p.stats.maxHp * 0.6) return walk(s, input, big.body.x, big.body.y);
-    return null;
-  }
+  if (!early) return null;
   // 돕는 중: 도울 사람이 쓰러졌거나 시간이 지나면 그만
   if (st.roam && (s.tick > st.roam.until || !inPlay(s, st.roam.seat))) st.roam = undefined;
   if (input.attack) return input;

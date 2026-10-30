@@ -82,4 +82,12 @@ export const PW_GROW_TEXT = {
   pwSt_skillDmg: l("스킬 피해 +{n}%", "Skill damage +{n}%", "スキルダメージ +{n}%"),
   pwSt_skillHeal: l("스킬 치유 +{n}%", "Skill healing +{n}%", "スキル回復 +{n}%"),
   pwSt_maxLv: l("최대 레벨 +{n}", "Max level +{n}", "最大レベル +{n}"),
+  pwPingHint: l("T: 핑 (마우스 자리) · Alt+T: 위험 핑", "T: ping (at cursor) · Alt+T: danger ping", "T: ピン（マウスの位置）· Alt+T: 危険ピン"),
+  pwPingMe: l("나", "Me", "自分"),
+  pwPing_go: l("여기로 모여!", "Gather here!", "ここに集まれ！"),
+  pwPing_attack: l("여기를 공격하자!", "Attack here!", "ここを攻撃しよう！"),
+  pwPing_danger: l("위험해요! 물러나요!", "Danger! Fall back!", "危険！下がって！"),
+  pwPingBoss: l("{boss}를 잡겠습니다! 모여 주세요!", "Taking down the {boss}! Gather up!", "{boss}を倒します！集まって！"),
+  pwBossDragon: l("파멸의 용", "Dragon of Ruin", "破滅の竜"),
+  pwBossGodeater: l("갓이터", "God Eater", "ゴッドイーター"),
 };

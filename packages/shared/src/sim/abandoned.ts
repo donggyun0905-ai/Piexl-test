@@ -1,4 +1,4 @@
-// 버려진 자들: 한 캐릭터 안의 세 아이(P1 방패 · P2 총 · P3 검). 대시 버튼 = 탭(다음 아이와 자리를 바꿔 교대, 짧은 무적)
+// 버려진 자들: 한 캐릭터 안의 세 아이(P1 방패 · P2 총 · P3 검). 대시 버튼 = 탭(다음 아이와 자리를 바꿔 교대, 조합대로 맞게 누르면 짧은 무적)
 // 나와 있지 않은 두 아이는 곁에서 따로 싸움(abandonedKids). 아이마다 자기 콤보 순번을 기억. 무기의 조합(3단계)대로 치고 탭하면 단계 끝(P3)에 두 아이가 특수기(abandonedShow)
 // 차례를 다 치면 탭을 기다리고, 탭을 잘못 누르면 조합·콤보가 모두 처음으로 돌아가고 P1로 강제 교대 (무적 없음). 공격 속도는 오르지 않음 (무기 값 그대로). 기술은 abandonedMoves, 무기 표는 weaponsAbandoned
 import { TICK_RATE } from "../constants";
@@ -61,9 +61,20 @@ const buff = (p: PlayerState) => ((p.abBuff ?? 0) > 0 ? K.threeAsOne.damage : 1)
 export function abandonedTag(s: RunState): number {
   const p = s.player;
   const from = p.abM ?? 0;
-  // 패왕전은 순서를 틀려도 처음으로 돌아가지 않음
-  if ((from === 2 ? !p.abDone : record(p, tagSet(p), -1) === "miss") && !s.pvp) {
+  // 패왕전: 틀린 탭 뒤 잠깐 탭이 잠김 (대시를 꾹 눌러 계속 교대하며 무적으로 버티지 못하게)
+  if (s.pvp && (p.abLock ?? 0) > s.tick) return 0;
+  const wrong = from === 2 ? !p.abDone : record(p, tagSet(p), -1) === "miss";
+  if (wrong && !s.pvp) {
     miss(s);
+    return 0;
+  }
+  // 패왕전은 순서를 틀려도 처음으로 돌아가지 않지만, 무적·교대 일격이 없고 탭이 잠김
+  if (wrong) {
+    p.abLock = s.tick + A.wrongLock;
+    swapKid(s, (from + 1) % 3);
+    p.abM = (from + 1) % 3;
+    p.abSeg = 0;
+    addEffect(s, { kind: "tagMiss", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 10, maxTicks: 20 });
     return 0;
   }
   if (from === 2) {

@@ -20,8 +20,8 @@ const CONTEST_A: Spot[] = [CONTEST_HOME, [7, 60], [11, 64], [7, 64], [11, 60]];
 const W = 90;
 const flip = ([c, r]: Spot): Spot => [r, c];
 const WAR_HOME: Spot = [6, 83];
-/** 길마다 A 쪽 포탑 (뒤, 앞) · 위 길은 왼쪽 줄, 아래 길은 아래 줄, 가운데는 대각선 */
-const WAR_A_TOWERS: Spot[][] = [[[6, 68], [6, 50]], [[20, 69], [32, 57]], [[21, 83], [39, 83]]];
+/** 길마다 A 쪽 포탑 (뒤 → 앞) · 위 길은 왼쪽 줄, 아래 길은 아래 줄(둘 다 18칸 간격으로 셋), 가운데는 대각선 둘 */
+const WAR_A_TOWERS: Spot[][] = [[[6, 68], [6, 50], [6, 32]], [[20, 69], [32, 57]], [[21, 83], [39, 83], [57, 83]]];
 const WAR_POINTS: Spot[] = [[6, 6], [44, 44], [83, 83]];
 const warLanes = WAR_A_TOWERS.map((ts, k) => [WAR_HOME, ...ts, WAR_POINTS[k]!, ...[...ts].reverse().map(flip), flip(WAR_HOME)]);
 // 안쪽 벽: 바깥 길과 안쪽을 가르는 낮은 담 (입구 여럿) + 정글 둘레 담(아래 pen) · 물가: 왼쪽 위 → 오른쪽 아래 띠 · 안개: 대각선 둘이 나눈 삼각형 넷
@@ -88,8 +88,8 @@ export const GROW_ARENAS = {
     homes: [WAR_HOME, flip(WAR_HOME)],
     lanes: warLanes,
     towers: WAR_A_TOWERS.flatMap((ts, lane) => ts.flatMap((at, k) => [
-      { team: 0 as const, at, lane, order: 1 - k },
-      { team: 1 as const, at: flip(at), lane, order: 1 - k },
+      { team: 0 as const, at, lane, order: ts.length - 1 - k },
+      { team: 1 as const, at: flip(at), lane, order: ts.length - 1 - k },
     ])),
     points: WAR_POINTS.map((at, lane) => ({ at, lane })),
     fogs: [FOG_TOP, FOG_BOTTOM, FOG_RIGHT, FOG_LEFT],
