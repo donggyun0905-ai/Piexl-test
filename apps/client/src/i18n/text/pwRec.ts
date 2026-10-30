@@ -1,0 +1,36 @@
+// 화면 글자: 패왕전 집 상점 역할군 추천 장비 이유 (pwRec_{역할}{번호}, 번호는 event/pwGearView PW_REC 자리)
+type L = { ko: string; en: string; ja: string };
+const l = (ko: string, en: string, ja: string): L => ({ ko, en, ja });
+
+export const PW_REC_TEXT = {
+  pwRec_warrior0: l("앞에서 버티는 전사에게: 체력·방어력에 맞을 때마다 얼음 창 반격과 빙결", "For a frontline warrior: HP and defense, and ice-lance counters and freezes when you're hit", "前で耐える戦士に: 体力・防御力に、被弾するたび氷の槍の反撃と凍結"),
+  pwRec_warrior1: l("오래 싸울수록 단단해짐: 맞을 때마다 방어력·재생력 중첩", "Gets tougher the longer you fight: stacking defense and regen when hit", "長く戦うほど硬くなる: 被弾ごとに防御力・再生力が累積"),
+  pwRec_warrior2: l("한 대에 여럿: 때린 자리에 늘 범위 공격 + 방어력·체력", "Hit many at once: every hit splashes the area, plus defense and HP", "一撃で複数: 攻撃した場所に常に範囲攻撃 + 防御力・体力"),
+  pwRec_warrior3: l("맞을수록 쌓이는 반격: 체력 +160 · 받은 피해를 모아 범위로 터뜨림", "Counter that builds as you're hit: +160 HP, stores damage taken and releases it as a blast", "被弾するほど溜まる反撃: 体力 +160 · 受けたダメージを溜めて範囲に放つ"),
+  pwRec_warrior4: l("맞을수록 최대 체력 중첩 + 체력 +80 (금기된 아티팩트)", "Max HP stacks as you're hit, plus +80 HP (forbidden artifact)", "被弾するほど最大体力が累積 + 体力 +80（禁じられたアーティファクト）"),
+  pwRec_warrior5: l("한 번 더 기회: 체력 75%로 부활 · 공격력·재생력", "One more chance: revive at 75% HP · damage and regen", "もう一度のチャンス: 体力75%で復活 · 攻撃力・再生力"),
+  pwRec_ranged0: l("원딜 핵심: 때릴수록 공격 속도 중첩 + 사거리", "The marksman core: stacking attack speed on hit, plus range", "遠距離の核: 攻撃するほど攻撃速度が累積 + 射程"),
+  pwRec_ranged1: l("멀리서 안전하게: 사거리·투사체 속도·대시 대기 감소, 쫓아가는 회오리", "Safe from afar: range, projectile speed, shorter dash cooldown and a chasing whirlwind", "遠くから安全に: 射程・弾速・ダッシュ待機減少、追いかける竜巻"),
+  pwRec_ranged2: l("거리 벌리기(카이팅): 맞은 적이 점점 느려짐 + 사거리·공격 속도", "Kiting: hit enemies keep slowing down, plus range and attack speed", "距離を取る（カイティング）: 当たった敵がだんだん遅くなる + 射程・攻撃速度"),
+  pwRec_ranged3: l("고르게 강해짐: 공격 속도·사거리·공격력 + 소환수 강화", "All-round boost: attack speed, range and damage, plus stronger summons", "バランスよく強化: 攻撃速度・射程・攻撃力 + 召喚獣強化"),
+  pwRec_ranged4: l("투사체 속도·사거리 + 죽을 피해를 버티고 집으로", "Projectile speed and range, plus survive lethal damage and teleport home", "弾速・射程 + 致命ダメージに耐えて拠点へ"),
+  pwRec_ranged5: l("치명타 한 방: 때릴수록 치명타 피해 중첩 (금기된 아티팩트)", "Big crits: crit damage stacks with every hit (forbidden artifact)", "クリティカルの一撃: 攻撃するほどクリティカルダメージが累積（禁じられたアーティファクト）"),
+  pwRec_mage0: l("스킬로 싸우는 마법사에게: 스킬 피해 +50% · 대시 대기 감소", "For skill-based mages: +50% skill damage · shorter dash cooldown", "スキルで戦う魔法使いに: スキルダメージ +50% · ダッシュ待機減少"),
+  pwRec_mage1: l("스킬 피해 + 빠른 이동으로 자리 잡기", "Skill damage plus fast movement to find your spot", "スキルダメージ + 素早い移動で位置取り"),
+  pwRec_mage2: l("평타도 아프게: 공격력 +% · 때릴수록 공격력 중첩", "Make basic attacks hurt too: damage %, stacking damage on hit", "通常攻撃も痛く: 攻撃力 +% · 攻撃するほど攻撃力が累積"),
+  pwRec_mage3: l("공격력·공격 속도·사거리·이동 속도를 고르게 + 맞을수록 빨라짐", "Damage, attack speed, range and move speed, plus faster the more you're hit", "攻撃力・攻撃速度・射程・移動速度をバランスよく + 被弾するほど速く"),
+  pwRec_mage4: l("살아남기: 죽을 피해를 체력 1로 버티고 집으로", "Stay alive: survive lethal damage at 1 HP and teleport home", "生き残る: 致命ダメージを体力1で耐えて拠点へ"),
+  pwRec_mage5: l("자리 잡기: 이동 속도 +30%, 안 맞는 동안 더 빨라짐", "Positioning: +30% move speed, even faster while you're not hit", "位置取り: 移動速度 +30%、被弾しない間さらに速く"),
+  pwRec_assassin0: l("치명타 암살: 때릴수록 치명타 확률 중첩", "Crit assassin: crit chance stacks with every hit", "クリティカル暗殺: 攻撃するほどクリティカル率が累積"),
+  pwRec_assassin1: l("치감(치유 감소) + 화상: 회복하는 상대·서포터를 잡을 때", "Healing cut + burn: for catching healers and supports", "回復減少 + 火傷: 回復する相手・サポーターを倒すとき"),
+  pwRec_assassin2: l("결정타: 체력이 낮을수록 공격력·공격 속도·이동 속도가 오름", "Finisher: lower HP means more damage, attack speed and move speed", "とどめ: 体力が低いほど攻撃力・攻撃速度・移動速度が上がる"),
+  pwRec_assassin3: l("때릴수록 공격력·방어력·재생력·공격 속도 중 하나씩 쌓임 + 치명타", "Each hit stacks damage, defense, regen or attack speed, plus crit", "攻撃するたび攻撃力・防御力・再生力・攻撃速度のどれかが累積 + クリティカル"),
+  pwRec_assassin4: l("들어가고 빠지기: 이동 속도·공격력·공격 속도", "Dive in and out: move speed, damage and attack speed", "入って抜ける: 移動速度・攻撃力・攻撃速度"),
+  pwRec_assassin5: l("빠르게 파고들기: 안 맞는 동안 이동 속도가 계속 오름", "Close in fast: move speed keeps rising while you're not hit", "素早く切り込む: 被弾しない間移動速度が上がり続ける"),
+  pwRec_support0: l("회복 서포터 필수: 스킬 치유 효과 +100% · 대시 대기 감소", "A must for healers: +100% skill healing · shorter dash cooldown", "回復サポーター必須: スキル回復効果 +100% · ダッシュ待機減少"),
+  pwRec_support1: l("오래 살아남기: 체력·재생력 + 1초마다 확률 회복", "Survive longer: HP and regen, plus a chance to heal every second", "長く生き残る: 体力・再生力 + 1秒ごとに確率で回復"),
+  pwRec_support2: l("상대 회복 막기: 주변 적 치유 -50% + 독, 체력", "Shut down enemy healing: nearby enemies heal 50% less and are poisoned, plus HP", "相手の回復を封じる: 周囲の敵の回復 -50% + 毒、体力"),
+  pwRec_support3: l("뒤에서 오래 버티기: 10초 안 맞으면 재생력 +80 (금기된 아티팩트)", "Last long in the back line: +80 regen after 10s without being hit (forbidden artifact)", "後ろで長く耐える: 10秒被弾しないと再生力 +80（禁じられたアーティファクト）"),
+  pwRec_support4: l("덤비는 적에게 반격: 맞으면 30%로 2배 레이저 + 체력", "Punish divers: 30% chance to fire a 2x laser when hit, plus HP", "飛び込む敵に反撃: 被弾時30%で2倍レーザー + 体力"),
+  pwRec_support5: l("한 번 더 살아남기: 체력 75%로 부활", "Survive once more: revive at 75% HP", "もう一度生き残る: 体力75%で復活"),
+} as const;

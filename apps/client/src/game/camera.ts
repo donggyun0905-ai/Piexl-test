@@ -25,7 +25,7 @@ export function cameraFor(s: RunState, zoom: number, alpha = 1): { x: number; y:
   return { x: clampTo(px - vw / 2, ROOM_WIDTH - vw), y: clampTo(py - vh / 2, ROOM_HEIGHT - vh) };
 }
 
-/** 확대 한도·처음 배율 (휠·두 손가락): 보통 1(방 전체) · 큰 패왕전 경기장(점령전·쟁탈전·전쟁의 서막·기간토마키아)은 위아래가 좁아 0.6까지 줄여 넓게, 처음부터 조금 줄여 둠 (끌어 보기도 이 대결만) */
+/** 확대 한도·처음 배율 (휠·두 손가락): 보통 1(방 전체) · 패왕전은 위아래가 좁아 0.6까지 줄여 넓게, 처음부터 조금 줄여 둠 (끌어 보기도 이 대결만) */
 export function zoomFor(s: RunState): { min: number; start: number } {
-  return s.pvp && ["capture", "contest", "war", "giganto"].includes(s.pvp.mode) ? { min: 0.6, start: 0.75 } : { min: 1, start: 1 };
+  return s.pvp ? { min: 0.6, start: 0.75 } : { min: 1, start: 1 };
 }

@@ -28,12 +28,18 @@ export const gearName = (id: string, lang: Lang): string => {
   return itemName(it.kind, it.id, lang).replace(/^\[[^\]]+\] /, "");
 };
 
-/** 역할군마다 추천 전설 장비 셋 (글자 키 pwRec_{역할}{번호} = 왜 좋은지) */
+/** 역할군마다 추천 전설 장비 (앞에서부터 셋을 보여 줌, 글자 키 pwRec_{역할}{번호} = 왜 좋은지) */
 export const PW_REC: Record<PwRoleId, readonly string[]> = {
-  warrior: ["blizzardLance", "relicSilver", "gnomeHammer"],
-  ranged: ["relicBlue", "sylphQuiver", "cupidSpirit"],
-  mage: ["forbiddenScroll", "dimensionGate", "relicRed"],
-  assassin: ["relicGold", "ifritClaw", "crumblingCrown"],
-  support: ["laurelShip", "dryadOrb", "cursedDice"],
+  warrior: ["blizzardLance", "relicSilver", "gnomeHammer", "aetherBomb", "relicWhite", "fallenWings"],
+  ranged: ["relicBlue", "sylphQuiver", "cupidSpirit", "falseHero", "terraform", "relicPrism"],
+  mage: ["forbiddenScroll", "dimensionGate", "relicRed", "godShard", "terraform", "portalGun"],
+  assassin: ["relicGold", "ifritClaw", "crumblingCrown", "fateDice", "godShard", "portalGun"],
+  support: ["laurelShip", "dryadOrb", "cursedDice", "relicGreen", "aphroditeMirror", "fallenWings"],
 };
-export const recFor = (c: CharacterId) => ({ role: pwRoleOf(c), ids: PW_REC[pwRoleOf(c)] });
+/** 추천 셋: 이미 가진 장비 · 금기된 아티팩트를 하나 가졌으면 다른 아티팩트도 빼고 앞에서부터 (k = 왜 좋은지 글자 번호) */
+export const recFor = (c: CharacterId, gear: readonly string[] = []) => {
+  const role = pwRoleOf(c);
+  const relic = gear.some((g) => PW_LEGEND[g]?.relic);
+  const list = PW_REC[role].map((id, k) => ({ id, k })).filter(({ id }) => !gear.includes(id) && !(relic && PW_LEGEND[id]?.relic));
+  return { role, list: list.slice(0, 3) };
+};

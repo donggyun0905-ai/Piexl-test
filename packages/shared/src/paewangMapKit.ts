@@ -103,3 +103,32 @@ export function carve(cols: number, rows: number, open: readonly Rect[]): Rect[]
   }
   return out;
 }
+
+/** 경기장을 k배로 (1대1·토너먼트 1.5배): 칸 수는 가운데 칸이 남게 홀수로 · 네모·자리는 가운데를 기준으로 늘림 (거울 맵은 그대로 거울) */
+export function scaleArena(a: PwArenaDef, k: number): PwArenaDef {
+  const odd = (n: number) => {
+    const m = Math.round(n * k);
+    return n % 2 && !(m % 2) ? m - 1 : m;
+  };
+  const cols = odd(a.cols);
+  const rows = odd(a.rows);
+  const [kx, ky] = [cols / a.cols, rows / a.rows];
+  // 길이는 전체 칸 수와 짝·홀을 맞춤 → 가운데에서 떨어진 거리를 대칭으로 반올림하면 거울 자리도 정확히 거울
+  const len = (n: number, s: number, all: number) => {
+    const m = Math.max(1, Math.round(n * s));
+    return (all - m) % 2 ? (n * s > m ? m + 1 : Math.max(1, m - 1)) : m;
+  };
+  const at = (c: number, w: number, nw: number, s: number, all: number) => {
+    const o = (c + w / 2) * s - all / 2;
+    return (all - nw) / 2 + Math.sign(o) * Math.round(Math.abs(o));
+  };
+  const rect = ([c, r, w, h]: Rect): Rect => {
+    const [nw, nh] = [len(w, kx, cols), len(h, ky, rows)];
+    return [at(c, w, nw, kx, cols), at(r, h, nh, ky, rows), nw, nh];
+  };
+  const spot = ([c, r]: Spot): Spot => [at(c, 1, 1, kx, cols), at(r, 1, 1, ky, rows)];
+  const out: Record<string, unknown> = { ...a, cols, rows };
+  for (const k2 of KEYS) if (a[k2]) out[k2] = a[k2]!.map(rect);
+  for (const k2 of ["teamA", "teamB", "spots"] as const) out[k2] = a[k2].map(spot);
+  return out as unknown as PwArenaDef;
+}

@@ -1,7 +1,7 @@
 // 패왕전 경기장 (계산은 sim/paewangGrid·paewangField): 처음 5개 + paewangMapsSmall·paewangMapsBig. 칸 좌표 [열, 행, 너비, 높이], 자리는 [열, 행]
 // 벽(walls)·나무와 바위(rocks)·물(ponds)은 막힘 · 수풀(bushes)은 숨는 곳 · 함정(traps) · 2층 발판(decks: 난간과 계단이 있는 높은 곳)
 
-import { NONE, type PwArenaDef, type Rect, type Spot } from "./paewangMapKit";
+import { NONE, scaleArena, type PwArenaDef, type Rect, type Spot } from "./paewangMapKit";
 import { BIG_ARENAS } from "./paewangMapsBig";
 import { SMALL_ARENAS } from "./paewangMapsSmall";
 import { CAPTURE_ARENAS } from "./paewangMapsCapture";
@@ -129,14 +129,19 @@ const BASE_ARENAS = {
   },
 } satisfies Record<string, PwArenaDef>;
 
+/** 1대1·토너먼트 경기장은 1.5배로 (그려 둔 틀은 작은 크기 그대로, 0.48.251) */
+const DUEL_SCALE = 1.5;
+const DUEL_IDS = ["small", "dLava", "dMarsh", "dGarden", "dSpike"] as const;
+
 /** 모든 경기장 (처음 5개 + 작은·중간 + 큰 + 점령전) */
 const ALL_ARENAS = { ...BASE_ARENAS, ...SMALL_ARENAS, ...BIG_ARENAS, ...CAPTURE_ARENAS, ...GROW_ARENAS, ...GIGA_ARENAS };
 export type PwArenaId = keyof typeof ALL_ARENAS;
-export const PW_ARENAS: Record<PwArenaId, PwArenaDef> = ALL_ARENAS;
+export const PW_ARENAS: Record<PwArenaId, PwArenaDef> = { ...ALL_ARENAS };
+for (const id of DUEL_IDS) PW_ARENAS[id] = scaleArena(ALL_ARENAS[id], DUEL_SCALE);
 
 /** 대결 유형마다 고를 수 있는 경기장 5개 (점령전은 3개) (맨 앞이 처음 경기장) */
 export const PW_MAP_SETS = {
-  duel: ["small", "dLava", "dMarsh", "dGarden", "dSpike"],
+  duel: DUEL_IDS,
   pair: ["pCross", "pLava", "pMaze", "pShore", "pMud"],
   trio: ["wide", "tFort", "tRiver", "tGrove", "tTemple"],
   squad: ["forest", "qVolcano", "qSwamp", "qCanyon", "qGarden"],

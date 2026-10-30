@@ -1,23 +1,8 @@
-// 화면 글자: 패왕전 성장 대결 장비 특수 효과 · 증강 · 역할군 추천 장비 이유 (나머지는 pwGrow)
+// 화면 글자: 패왕전 성장 대결 장비 특수 효과 · 증강 (추천 장비 이유는 pwRec, 나머지는 pwGrow)
 type L = { ko: string; en: string; ja: string };
 const l = (ko: string, en: string, ja: string): L => ({ ko, en, ja });
 
 export const PW_GROW_GEAR_TEXT = {
-  pwRec_warrior0: l("앞에서 버티는 전사에게: 체력·방어력에 맞을 때마다 얼음 창 반격과 빙결", "For a frontline warrior: HP and defense, and ice-lance counters and freezes when you're hit", "前で耐える戦士に: 体力・防御力に、被弾するたび氷の槍の反撃と凍結"),
-  pwRec_warrior1: l("오래 싸울수록 단단해짐: 맞을 때마다 방어력·재생력 중첩", "Gets tougher the longer you fight: stacking defense and regen when hit", "長く戦うほど硬くなる: 被弾ごとに防御力・再生力が累積"),
-  pwRec_warrior2: l("한 대에 여럿: 때린 자리에 늘 범위 공격 + 방어력·체력", "Hit many at once: every hit splashes the area, plus defense and HP", "一撃で複数: 攻撃した場所に常に範囲攻撃 + 防御力・体力"),
-  pwRec_ranged0: l("원딜 핵심: 때릴수록 공격 속도 중첩 + 사거리", "The marksman core: stacking attack speed on hit, plus range", "遠距離の核: 攻撃するほど攻撃速度が累積 + 射程"),
-  pwRec_ranged1: l("멀리서 안전하게: 사거리·투사체 속도·대시 대기 감소, 쫓아가는 회오리", "Safe from afar: range, projectile speed, shorter dash cooldown and a chasing whirlwind", "遠くから安全に: 射程・弾速・ダッシュ待機減少、追いかける竜巻"),
-  pwRec_ranged2: l("거리 벌리기(카이팅): 맞은 적이 점점 느려짐 + 사거리·공격 속도", "Kiting: hit enemies keep slowing down, plus range and attack speed", "距離を取る（カイティング）: 当たった敵がだんだん遅くなる + 射程・攻撃速度"),
-  pwRec_mage0: l("스킬로 싸우는 마법사에게: 스킬 피해 +50% · 대시 대기 감소", "For skill-based mages: +50% skill damage · shorter dash cooldown", "スキルで戦う魔法使いに: スキルダメージ +50% · ダッシュ待機減少"),
-  pwRec_mage1: l("스킬 피해 + 빠른 이동으로 자리 잡기", "Skill damage plus fast movement to find your spot", "スキルダメージ + 素早い移動で位置取り"),
-  pwRec_mage2: l("평타도 아프게: 공격력 +% · 때릴수록 공격력 중첩", "Make basic attacks hurt too: damage %, stacking damage on hit", "通常攻撃も痛く: 攻撃力 +% · 攻撃するほど攻撃力が累積"),
-  pwRec_assassin0: l("치명타 암살: 때릴수록 치명타 확률 중첩", "Crit assassin: crit chance stacks with every hit", "クリティカル暗殺: 攻撃するほどクリティカル率が累積"),
-  pwRec_assassin1: l("치감(치유 감소) + 화상: 회복하는 상대·서포터를 잡을 때", "Healing cut + burn: for catching healers and supports", "回復減少 + 火傷: 回復する相手・サポーターを倒すとき"),
-  pwRec_assassin2: l("결정타: 체력이 낮을수록 공격력·공격 속도·이동 속도가 오름", "Finisher: lower HP means more damage, attack speed and move speed", "とどめ: 体力が低いほど攻撃力・攻撃速度・移動速度が上がる"),
-  pwRec_support0: l("회복 서포터 필수: 스킬 치유 효과 +100% · 대시 대기 감소", "A must for healers: +100% skill healing · shorter dash cooldown", "回復サポーター必須: スキル回復効果 +100% · ダッシュ待機減少"),
-  pwRec_support1: l("오래 살아남기: 체력·재생력 + 1초마다 확률 회복", "Survive longer: HP and regen, plus a chance to heal every second", "長く生き残る: 体力・再生力 + 1秒ごとに確率で回復"),
-  pwRec_support2: l("상대 회복 막기: 주변 적 치유 -50% + 독, 체력", "Shut down enemy healing: nearby enemies heal 50% less and are poisoned, plus HP", "相手の回復を封じる: 周囲の敵の回復 -50% + 毒、体力"),
   pwFx_relicRed: l("때릴 때마다 공격력 +3% (최대 15%, 중첩)", "Each hit: damage +3% (up to 15%, stacking)", "攻撃するたび攻撃力 +3%（最大15%、累積）"),
   pwFx_relicBlue: l("때릴 때마다 공격 속도 +3% (최대 30%, 중첩)", "Each hit: attack speed +3% (up to 30%, stacking)", "攻撃するたび攻撃速度 +3%（最大30%、累積）"),
   pwFx_relicSilver: l("맞을 때마다 방어력·재생력 +5 (최대 20, 중첩)", "Each time you're hit: defense & regen +5 (up to 20, stacking)", "被弾するたび防御力・再生力 +5（最大20、累積）"),

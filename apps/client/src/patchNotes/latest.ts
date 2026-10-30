@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.251",
+    date: "2026-10-30",
+    items: {
+      ko: ["패왕전 1대1·토너먼트 경기장 1.5배로 넓게 (모양은 그대로)", "패왕전 모든 대결에서 화면 줄이기(0.75배로 시작, 0.6배까지)·끌어 보기", "집 상점 추천 장비: 역할군마다 후보 여섯 중 아직 안 가진 셋을 보여 줌 (산 장비·금기된 아티팩트를 이미 가졌으면 다른 아티팩트는 빠짐)"],
+      en: ["Champion Clash 1v1 and Tournament arenas are 1.5× larger (same layouts)", "Every Champion Clash mode now has the zoomed-out view (starts at 0.75×, down to 0.6×) and view dragging", "Home shop recommendations: three gear you don't own yet, picked from six per role (gear you bought — and other forbidden artifacts once you have one — drop out)"],
+      ja: ["覇王戦1対1・トーナメントの闘技場を1.5倍に（形はそのまま）", "覇王戦の全対戦で画面縮小（0.75倍で開始、0.6倍まで）・画面ドラッグ", "拠点ショップのおすすめ装備: 役割ごとの候補6つから、まだ持っていない3つを表示（買った装備・禁じられたアーティファクトを持っていれば他のアーティファクトは除外）"],
+    },
+  },
+  {
     version: "0.48.250",
     date: "2026-10-30",
     items: {
