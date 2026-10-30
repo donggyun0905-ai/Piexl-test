@@ -48,7 +48,7 @@ export function drawSprite(ctx: CanvasRenderingContext2D, name: string, x: numbe
 /** 방향 시트로 넣은 캐릭터 그림: 이름 → 한 칸 크기, 발 아래 여백 */
 /** src: 그림 파일의 한 칸 크기가 다를 때 (빛의 사도 성장 그림 2배 촘촘 · 몰락한 왕 96칸 → 보통 크기로 줄여 그림) */
 const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number; src?: number }>> = {
-  mage: { size: 32, footPad: 2, src: 64 },
+  mage: { size: 32, footPad: 2, src: 128 },
   drifter: { size: 32, footPad: 2 },
   warden: { size: 32, footPad: 2 },
   mystic: { size: 32, footPad: 2 },

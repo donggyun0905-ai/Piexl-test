@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.269",
+    date: "2026-10-31",
+    items: {
+      ko: ["마법사 그림 해상도를 4배(128칸)로 올림: 확대해서 봐도 눈·리본·지팡이 장식이 또렷함 · 바깥 테두리를 두껍게 해 바닥과 구분"],
+      en: ["Mage sprite resolution raised to 4× (128-px cells): eyes, ribbon and staff details stay sharp when zoomed · thicker outer outline to stand out from the floor"],
+      ja: ["魔法使いの絵の解像度を4倍（128マス）に: 拡大しても目・リボン・杖の飾りがくっきり · 外側の縁取りを太くして床と区別"],
+    },
+  },
+  {
     version: "0.48.268",
     date: "2026-10-31",
     items: {

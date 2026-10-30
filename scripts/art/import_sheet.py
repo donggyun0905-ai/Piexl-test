@@ -1,7 +1,7 @@
 # 그림 생성 AI 등으로 만든 큰 도트 그림을 게임 시트로 바꿈 (python3 scripts/art/import_sheet.py mage)
 # 원본 조각은 scripts/art/src/{이름}.png (검은 배경, 조각을 가로로 이어 붙임) · 조각 자리는 아래 SOURCES
 # 처리: 테두리에서 이어진 검은 배경만 투명하게(안쪽 어두운 테두리는 남김) → 몸 크기를 맞춰 줄임 → 반투명 가장자리 정리 →
-# 시트 전체를 같은 색 64개로 묶음(도트 느낌) → 64칸 4×4 시트(앞·뒤·옆 걷기, 공격)로 발 위치를 맞춰 배치
+# 시트 전체를 같은 색 96개로 묶음(도트 느낌) → 128칸 4×4 시트(앞·뒤·옆 걷기, 공격)로 발 위치를 맞춰 배치
 import os
 import sys
 from collections import deque
@@ -11,14 +11,15 @@ from PIL import Image, ImageEnhance, ImageFilter
 from s2_common import SPRITES
 
 HERE = os.path.dirname(__file__)
-CELL = 64
-FOOT = 61
+# 한 칸 128 (게임 32칸의 4배): 확대해서 볼 때도 세부가 남게 · 발 여백 8 (= 게임 2)
+CELL = 128
+FOOT = 122
 # 조각: 이름 → (x, 너비) · 높이는 원본 그림 높이 · rows: 시트 4줄(각 4칸)에 넣을 조각 이름
 SOURCES = {
     "mage": dict(
         parts={"front": (0, 108), "back": (108, 95), "left": (203, 88), "right": (291, 97), "idle": (388, 158)},
         rows=[["front"] * 4, ["back"] * 4, ["right"] * 4, ["idle", "idle", "idle", "right"]],
-        body=58,
+        body=116,
     ),
 }
 
@@ -79,13 +80,13 @@ def build(name):
     for r, row in enumerate(cfg["rows"]):
         for c, key in enumerate(row):
             p = small[key]
-            bob = 1 if r < 3 and c in (1, 3) else 0
+            bob = 2 if r < 3 and c in (1, 3) else 0
             sheet.alpha_composite(p, (c * CELL + (CELL - p.width) // 2, r * CELL + FOOT - p.height - bob))
-    # 시트 전체를 64색으로 (투명은 그대로)
+    # 시트 전체를 같은 색 묶음으로 (투명은 그대로)
     alpha = sheet.getchannel("A")
     q = sheet.convert("RGB").quantize(colors=96, method=Image.Quantize.MEDIANCUT).convert("RGBA")
     q.putalpha(alpha)
-    # 바깥 테두리 한 칸 (어두운 밤색) · 줄여도 몸이 바닥과 구분되게
+    # 바깥 테두리 두 칸 (어두운 밤색, 게임 반 칸) · 줄여도 몸이 바닥과 구분되게
     px = q.load()
     edge = []
     for y in range(q.height):
@@ -93,6 +94,8 @@ def build(name):
             if px[x, y][3]: continue
             if any(0 <= x + dx < q.width and 0 <= y + dy < q.height and px[x + dx, y + dy][3] and (x + dx) // CELL == x // CELL for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))): edge.append((x, y))
     for x, y in edge: px[x, y] = (46, 30, 34, 255)
+    edge2 = [(x, y) for y in range(q.height) for x in range(q.width) if not px[x, y][3] and any(0 <= x + dx < q.width and 0 <= y + dy < q.height and px[x + dx, y + dy] == (46, 30, 34, 255) and (x + dx) // CELL == x // CELL for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))]
+    for x, y in edge2: px[x, y] = (46, 30, 34, 200)
     q.save(os.path.join(SPRITES, f"{name}.png"), optimize=True)
     print(name, "ok")
 
