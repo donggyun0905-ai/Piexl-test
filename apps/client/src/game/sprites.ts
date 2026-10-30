@@ -49,13 +49,13 @@ export function drawSprite(ctx: CanvasRenderingContext2D, name: string, x: numbe
 /** src: 그림 파일의 한 칸 크기가 다를 때 (빛의 사도 성장 그림 2배 촘촘 · 몰락한 왕 96칸 → 보통 크기로 줄여 그림) */
 /** v2: 새 시트 4칸 × 5줄 (칸 = 앞·뒤·왼·오): 1줄 서기 · 2줄 공격 · 3줄 걷기(왼발) · 4줄 걷기(오른발) · 5줄 맞음·쓰러짐·대시 오른쪽·대시 왼쪽 (scripts/art/import_v2.py) */
 const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number; src?: number; v2?: true }>> = {
-  mage: { size: 32, footPad: 2, src: 128 },
-  drifter: { size: 32, footPad: 2 },
-  warden: { size: 32, footPad: 2, src: 128 },
-  mystic: { size: 32, footPad: 2 },
-  engineer: { size: 32, footPad: 2 },
-  elementalist: { size: 32, footPad: 2 },
-  brawler: { size: 32, footPad: 2 },
+  mage: { size: 32, footPad: 2, src: 128, v2: true },
+  drifter: { size: 32, footPad: 2, src: 128, v2: true },
+  warden: { size: 32, footPad: 2, src: 128, v2: true },
+  mystic: { size: 32, footPad: 2, src: 128, v2: true },
+  engineer: { size: 32, footPad: 2, src: 128, v2: true },
+  elementalist: { size: 32, footPad: 2, src: 128, v2: true },
+  brawler: { size: 32, footPad: 2, src: 128, v2: true },
   doctor: { size: 32, footPad: 2 },
   gunner: { size: 32, footPad: 2 },
   beast: { size: 32, footPad: 2 },

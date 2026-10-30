@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.274",
+    date: "2026-10-31",
+    items: {
+      ko: ["새 캐릭터 그림 7명: 파수꾼·마법사·떠돌이·음양사·기계공학자·원소술사·격투가 · 앞·뒤·왼·오 모습과 방향마다 공격 자세, 다리를 움직이는 걷기, 맞을 때 움찔·대시 때 돌진 자세·협동에서 쓰러진 모습"],
+      en: ["New art for 7 characters: Warden, Mage, Drifter, Talisman Master, Engineer, Elementalist, Brawler · front/back/left/right poses with an attack pose for each direction, walking with moving legs, a flinch when hit, a lunge while dashing and a downed pose in co-op"],
+      ja: ["7人のキャラクターを新しい絵に: 番人・魔法使い・流れ者・陰陽師・機械工学者・元素術師・格闘家 · 前・後ろ・左・右の姿と向きごとの攻撃ポーズ、足を動かす歩き、被弾時のひるみ・ダッシュ時の突進ポーズ・協力プレイで倒れた姿"],
+    },
+  },
+  {
     version: "0.48.273",
     date: "2026-10-31",
     items: {

@@ -16,6 +16,8 @@ DARK = 42
 BODY = 116
 # 원본 파일 → (가로 칸 수, 세로 칸 수, 시트에 놓을 줄)
 FILES = [("1", 4, 2, [0, 1]), ("2", 4, 2, [2, 3]), ("3", 4, 1, [4])]
+# 왼쪽 모습을 오른쪽 뒤집기로 (GPT 왼쪽 그림이 오른쪽을 봄)
+FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", "brawler"}
 
 
 def pieces(img, cols, rows):
@@ -61,6 +63,9 @@ def build(name):
         img = Image.open(os.path.join(HERE, "src", f"{name}-{tag}.png")).convert("RGBA")
         for r, line in zip(at, pieces(img, cols, rows)):
             for c, part in enumerate(line): grid[r, c] = part
+    # GPT가 '왼쪽' 칸도 오른쪽을 보게 그리는 일이 많음 → 서기·공격·걷기의 왼쪽은 오른쪽을 뒤집어 씀 (FLIP_LEFT에 없는 캐릭터는 그대로)
+    if name in FLIP_LEFT:
+        for r in range(4): grid[r, 2] = grid[r, 3].transpose(Image.FLIP_LEFT_RIGHT)
     base = BODY / grid[0, 0].height
     sheet = Image.new("RGBA", (CELL * 4, CELL * 5), (0, 0, 0, 0))
     for (r, c), p in grid.items():
