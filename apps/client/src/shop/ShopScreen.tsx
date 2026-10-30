@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { EventTab } from "./EventTab";
 import { GachaTab } from "./GachaTab";
+import { ArchiveTab } from "./ArchiveTab";
 import { LobbyTab } from "./LobbyTab";
 import { MissionTab } from "./MissionTab";
 import { SkinTab } from "./SkinTab";
@@ -10,11 +11,12 @@ import { coupons } from "./wallet";
 import { eventCoins } from "../event/eventCoins";
 import { EcoinIcon } from "../event/EcoinIcon";
 
-type Tab = "skins" | "lobby" | "gacha" | "event" | "missions";
+type Tab = "skins" | "lobby" | "gacha" | "archive" | "event" | "missions";
 const TABS: { id: Tab; label: TextKey }[] = [
   { id: "skins", label: "shopSkins" },
   { id: "lobby", label: "shopLobby" },
   { id: "gacha", label: "shopGacha" },
+  { id: "archive", label: "csArchive" },
   { id: "event", label: "shopEvent" },
   { id: "missions", label: "shopMissions" },
 ];
@@ -50,6 +52,7 @@ export function ShopScreen({ lang, t, onBack }: { lang: Lang; t: (k: TextKey) =>
       {tab === "skins" && <SkinTab t={t} onChange={refresh} />}
       {tab === "lobby" && <LobbyTab t={t} onChange={refresh} />}
       {tab === "gacha" && <GachaTab t={t} onChange={refresh} />}
+      {tab === "archive" && <ArchiveTab t={t} onChange={refresh} />}
       {tab === "event" && <EventTab lang={lang} t={t} onChange={refresh} />}
       {tab === "missions" && <MissionTab t={t} onChange={refresh} />}
       <button type="button" className="secondary" onClick={onBack}>

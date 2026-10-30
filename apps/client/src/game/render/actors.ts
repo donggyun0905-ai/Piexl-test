@@ -1,5 +1,6 @@
 // 적·플레이어 그리기 (공격 예고선은 telegraphs): 적(체력 줄·자동 조준 표시) · 플레이어(대시 잔상·방향·맞는 범위·보호막)
-import { DASH_TICKS, inBush, inPlay, ENEMIES, isAlive, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
+import { drawLuxFoe } from "./lux";
+import { DASH_TICKS, inBush, inPlay, ENEMIES, isAlive, luxStage, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
 import { breathe, footShadow, hitPop } from "./bodyMotion";
 import { drawCrate } from "./swarm";
 import { drawFighter } from "./paewang";
@@ -35,6 +36,8 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       drawFighter(ctx, s, e, alpha, snap);
       continue;
     }
+    // 빛의 사도: 떨어진 빛의 힘을 얻은 적 둘레 금빛
+    drawLuxFoe(ctx, e, x, y, s.tick);
     // 검은 잔영·거대한 짐승 셋 (땅속·하늘·솟기)
     if (drawUmbraActor(ctx, s, e, x, y) || drawDemigodActor(ctx, s, e, x, y) || drawSageActor(ctx, s, e, x, y) || drawStalker(ctx, s, e, x, y)) continue;
     // 하늘로 날아오른 보스: 그림자만
@@ -122,7 +125,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     if (s.enemies.some((e) => e.kind === "soul" && e.aux === 1 && e.hp > 0)) ctx.globalAlpha = 0.12;
     // 베두인: 차크람을 던지면 _bare 그림
     // 오니 신인족: 긴 뿔의 날렵한 모습
-    const sheet = p.kingRoom !== undefined ? "crownKing" : p.characterId === "oni" && (p.oGod ?? 0) > 0 ? "oni_god" : p.characterId === "slayer" && (p.slRage ?? 0) > 0 ? "slayer_rage" : sheetFor(p.characterId, p.lv, p.abM);
+    const sheet = p.kingRoom !== undefined ? "crownKing" : p.characterId === "oni" && (p.oGod ?? 0) > 0 ? "oni_god" : p.characterId === "slayer" && (p.slRage ?? 0) > 0 ? "slayer_rage" : p.characterId === "lux" && luxStage(p) > 0 ? `lux${luxStage(p) + 1}` : sheetFor(p.characterId, p.lv, p.abM);
     // 베두인 무희의 춤: 대시하는 동안 몸이 한 바퀴 빙글 돎
     const twirl = p.characterId === "bedouin" && p.dashTicks > 0 && p.passives.includes("duneRush");
     if (twirl) {
@@ -171,7 +174,8 @@ function drawPlayerHp(ctx: CanvasRenderingContext2D, p: PlayerState, x: number, 
   const w = 16;
   const r = Math.max(0, Math.min(1, p.hp / p.stats.maxHp));
   // 캐릭터 그림(32칸, 거인은 48칸, 발이 몸 아래)의 맨 위 바로 위
-  const top = y + p.r - (p.characterId === "titan" || p.characterId === "oni" || p.characterId === "mukin" || p.characterId === "slayer" || p.characterId === "rider" || morphEvolved(p) ? 46 : 31);
+  // 빛의 사도: 성장 단계마다 커지는 그림 (단계 2부터 머리 위 고리)
+  const top = y + p.r - (p.characterId === "lux" ? [33, 38, 46, 51][luxStage(p)]! : p.characterId === "titan" || p.characterId === "oni" || p.characterId === "mukin" || p.characterId === "slayer" || p.characterId === "rider" || morphEvolved(p) ? 46 : 31);
   ctx.fillStyle = "rgba(10,8,16,0.85)";
   ctx.fillRect(x - w / 2 - 1, top - 1, w + 2, 4);
   ctx.fillStyle = r > 0.5 ? "#6ad86a" : r > 0.25 ? "#f2c14e" : "#e0505a";

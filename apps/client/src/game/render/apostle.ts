@@ -1,6 +1,7 @@
 // 악의 사도 그리기: 일곱 죄의 장판(바닥) · 영혼 · 업화 걸린 적 · 떨어지는 뒤집힌 십자가 · 가면의 검은 오라 · 색욕 광선 · 황금 · 중력 · 잠 · 영혼 먹기 · 하늘색 불꽃
 import { hudScale } from "./imugiAura";
 import { drawKingHud } from "./fallenKing";
+import { drawLuxHud } from "./lux";
 import { APOSTLE, SIN_COLORS, soulAttack, type EffectState, type RunState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
 import { additive, beam, glow, shock, sparks } from "./pwFxBits";
@@ -197,6 +198,7 @@ export function drawApostleFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
 export function drawSoulHud(ctx: Ctx, s: RunState, scale: number): void {
   const p = s.player;
   if (p.characterId === "fallenKing") return drawKingHud(ctx, s, scale);
+  if (p.characterId === "lux") return drawLuxHud(ctx, s, scale);
   if (p.characterId !== "apostle") return;
   const n = p.apEaten ?? 0;
   // 화면이 커도 글자는 작게 (게임 배율의 절반쯤) · 살짝 투명하게

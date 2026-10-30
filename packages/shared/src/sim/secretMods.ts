@@ -2,6 +2,7 @@
 import type { StatMod } from "../stats";
 import { fallenKingMods } from "./fallenKing";
 import { pilgrimMods } from "./pgBag";
+import { luxMods } from "./lux";
 import type { PlayerState } from "./types";
 
-export const secretMods = (p: PlayerState): StatMod[] => [...pilgrimMods(p), ...fallenKingMods(p)];
+export const secretMods = (p: PlayerState): StatMod[] => [...pilgrimMods(p), ...fallenKingMods(p), ...luxMods(p)];

@@ -50,6 +50,9 @@ export type Sfx =
   | "kgCleave"
   | "kgPyre"
   | "kgSoul"
+  | "lxBlade"
+  | "lxCross"
+  | "lxShard"
   | SkillSfx;
 
 let ctx: AudioContext | null = null;

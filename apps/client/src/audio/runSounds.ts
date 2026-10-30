@@ -57,6 +57,9 @@ interface Seen {
   kgSwings: number;
   kgPlants: number;
   kgSouls: number;
+  /** 빛의 사도: '+' 빛의 검 효과 수 · 빛의 조각 수 */
+  lxCrosses: number;
+  lxShards: number;
 }
 
 /** 탄을 쏘는 느낌의 캐릭터 (나머지는 휘두르는 소리) */
@@ -104,6 +107,8 @@ function snapshot(s: RunState): Seen {
     kgSwings: s.effects.filter((f) => f.kind === "kgSlash" || f.kind === "kgWave").length,
     kgPlants: s.effects.filter((f) => f.kind === "kgPlant").length,
     kgSouls: s.player.fkSouls ?? 0,
+    lxCrosses: s.effects.filter((f) => f.kind === "lxCross").length,
+    lxShards: s.player.passives.filter((id) => id === "lxShard").length,
   };
 }
 
@@ -216,6 +221,11 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
           onShake(3);
         }
         if (now.kgSouls > seen.kgSouls) fx.push("kgSoul");
+      } else if (c === "lux") {
+        // 빛의 사도: 가벼운 빛 칼날 · '+' 빛의 검이 생기는 맑은 소리 · 빛의 조각을 얻는 오르는 소리
+        if (now.attacks > seen.attacks) fx.push("lxBlade");
+        if (now.lxCrosses > seen.lxCrosses) fx.push("lxCross");
+        if (now.lxShards > seen.lxShards) fx.push("lxShard");
       } else if (now.attacks > seen.attacks && !fx.includes("shot") && !fx.includes("swing")) fx.push(SHOOTERS.has(c) ? "shot" : "swing");
       if (c === "elementalist" && now.hits > 0 && now.hits !== seen.hits && now.tick - orbSound >= 15) {
         orbSound = now.tick;

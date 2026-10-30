@@ -22,6 +22,7 @@ import { tabooDown, tabooN, tabooSum, tabooUp } from "./taboo";
 import type { EnemyState, RunState, TickInput } from "./types";
 import { ENEMIES } from "../content";
 import { meetPilgrim, pilgrimRoom } from "./pilgrim";
+import { luxRoom } from "./luxFoes";
 import { terraBoss } from "./hiddenDice";
 import {
   DOOR_HALF,
@@ -122,7 +123,7 @@ function enterRoom(s: RunState, roomId: number): void {
     st.enemies = s.arenaLv
       ? arenaEnemies(s, roomId)
       : info.type === "combat" || info.type === "elite"
-        ? roomId === pilgrimRoom(s) ? [] : spawnEnemies(s, roomId, info.type === "elite")
+        ? roomId === pilgrimRoom(s) ? [] : luxRoom(s, roomId, spawnEnemies(s, roomId, info.type === "elite"))
         : info.type === "exit"
           ? s.lastBoss === "plight"
             ? [spawnBoss(s, "plight"), spawnBoss(s, "pdark")]

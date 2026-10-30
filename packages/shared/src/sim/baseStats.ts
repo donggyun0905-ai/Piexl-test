@@ -11,6 +11,7 @@ import { addEffect, hasPerk, weaponOf } from "./util";
 import { hiddenExtras, hiddenOnHit } from "./hiddenPerks";
 import { kingExtras } from "./kingForm";
 import { growExtras } from "./pwGearStat";
+import { luxExtras } from "./lux";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -31,9 +32,11 @@ export function extraOf(p: PlayerState): ExtraStats {
   const add = hiddenExtras(p);
   // 패왕전 성장 대결: 장비·증강·레벨 (sim/pwGearStat)
   const grow = growExtras(p);
-  if (!add && !grow) return base;
+  // 빛의 사도: 빛의 조각 몫 (sim/lux)
+  const lux = luxExtras(p);
+  if (!add && !grow && !lux) return base;
   const out = { ...base };
-  for (const a of [add, grow]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
+  for (const a of [add, grow, lux]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
   return out;
 }
 

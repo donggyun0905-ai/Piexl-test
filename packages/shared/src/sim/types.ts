@@ -1,4 +1,5 @@
 // 입력·상태 타입
+import type { LuxEnemyState, LuxPlayerState, LuxShotState } from "./luxTypes";
 import type { ArenaRunState, BossEnemyState, BossPlayerState, BossShotState, RaidRunState } from "./bossTypes";
 import type { BossKind, CharacterId, CharmKind, EnemyKind, WeaponId } from "../content";
 import type { PassiveId, UseItemId } from "../items";
@@ -36,7 +37,7 @@ export interface Body {
   prevY: number;
   r: number;
 }
-export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, BrawlPlayerState, MedicPlayerState, GunPlayerState, BeastPlayerState, BossPlayerState, NinjaPlayerState, ChronoPlayerState, SummonPlayerState, NovicePlayerState, BedouinPlayerState, GeneralPlayerState, ImugiPlayerState, ApostlePlayerState, StarPlayerState, DuckPlayerState, SwarmPlayerState, AbandonedPlayerState, TitanPlayerState, OniPlayerState, ScribePlayerState, IdraPlayerState, MorphPlayerState, FlyPlayerState, ElderPlayerState, RenPlayerState, SpiritPlayerState, H2PlayerState, TcPlayerState, AscalonPlayerState, PwPlayerState {
+export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, BrawlPlayerState, MedicPlayerState, GunPlayerState, BeastPlayerState, BossPlayerState, NinjaPlayerState, ChronoPlayerState, SummonPlayerState, NovicePlayerState, BedouinPlayerState, GeneralPlayerState, ImugiPlayerState, ApostlePlayerState, StarPlayerState, DuckPlayerState, SwarmPlayerState, AbandonedPlayerState, TitanPlayerState, OniPlayerState, ScribePlayerState, IdraPlayerState, MorphPlayerState, FlyPlayerState, ElderPlayerState, RenPlayerState, SpiritPlayerState, H2PlayerState, TcPlayerState, AscalonPlayerState, PwPlayerState, LuxPlayerState {
   characterId: CharacterId;
   weaponId: WeaponId;
   /** 가진 패시브 (같은 것 여러 개 가능) */
@@ -82,7 +83,7 @@ export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, B
 /** 적 행동 단계 (보스 volley 탄·summon 부르기·blink 순간이동, 가디언 swing 휘두르기) */
 export type ChargerPhase = "walk" | "windup" | "charge" | "volley" | "summon" | "blink" | "swing" | "act";
 
-export interface EnemyState extends Body, LaserEnemyState, OrbitEnemyState, BrawlEnemyState, MedicEnemyState, GunEnemyState, BossEnemyState, TdEnemyState, NinjaEnemyState, ImugiEnemyState, ApostleEnemyState, SwarmEnemyState, OniEnemyState, ScribeEnemyState, S2EnemyState, H2EnemyState, ChronoEnemyState, AscalonEnemyState, PwEnemyState {
+export interface EnemyState extends Body, LaserEnemyState, OrbitEnemyState, BrawlEnemyState, MedicEnemyState, GunEnemyState, BossEnemyState, TdEnemyState, NinjaEnemyState, ImugiEnemyState, ApostleEnemyState, SwarmEnemyState, OniEnemyState, ScribeEnemyState, S2EnemyState, H2EnemyState, ChronoEnemyState, AscalonEnemyState, PwEnemyState, LuxEnemyState {
   /** 이 자리에 붙어 있음 (연습장 허수아비: 밀려도 제자리, sim/enemies) */
   anchor?: [number, number];
   id: number;
@@ -123,7 +124,7 @@ export interface EnemyState extends Body, LaserEnemyState, OrbitEnemyState, Braw
   shield?: number;
 }
 
-export interface ProjectileState extends Body, GunShotState, BeastShotState, OrbitShotState, BossShotState, NinjaShotState, ChronoShotState, PwShotState {
+export interface ProjectileState extends Body, GunShotState, BeastShotState, OrbitShotState, BossShotState, NinjaShotState, ChronoShotState, PwShotState, LuxShotState {
   id: number;
   fromPlayer: boolean;
   vx: number;

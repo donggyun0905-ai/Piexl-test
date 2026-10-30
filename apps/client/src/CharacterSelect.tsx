@@ -1,4 +1,5 @@
-import { ALL_CHARACTER_IDS, CHARACTER_IDS, HIDDEN_CHARACTERS, type CharacterId } from "@pixel-rogue/shared";
+import { ALL_CHARACTER_IDS, CHARACTER_IDS, HIDDEN_CHARACTERS, LIMITED_CHARACTERS, type CharacterId } from "@pixel-rogue/shared";
+import { ownedLimited } from "./shop/limitedChars";
 import { useState } from "react";
 import { useLang, type TextKey } from "./i18n";
 import { characterOpen } from "./characterGoals";
@@ -27,6 +28,8 @@ interface Props {
   showHidden?: boolean;
   /** 연습·튜토리얼: 숙련도가 오르지 않음 */
   practice?: boolean;
+  /** 한정 캐릭터(서고의 감시자)를 빼고 보임: 패왕전·일일 도전 (기록이 남는 곳) */
+  noLimited?: boolean;
   /** seedText: 입력한 시드 (비우면 빈 글자) */
   onSelect: (id: CharacterId, seedText: string) => void;
   onBack: () => void;
@@ -49,7 +52,7 @@ function rollCharacter(withHidden: boolean): { id: CharacterId; hidden: boolean 
   const id = open[Math.floor(Math.random() * open.length)];
   return id ? { id, hidden: false } : null;
 }
-export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialSeed = "", taboo = false, showHidden = false, practice = false }: Props) {
+export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialSeed = "", taboo = false, showHidden = false, practice = false, noLimited = false }: Props) {
   const [seed, setSeed] = useState(initialSeed);
   const { lang } = useLang();
   /** 스킨 고르기 창을 연 캐릭터 */
@@ -77,7 +80,8 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
     onSelect(c, seed);
   };
   // 연습장은 숨은 캐릭터 전부 · 혼자 하기는 테스트 중에만 숨은 캐릭터 전부 (아카식 레코드 탭) · 그 밖에는 전시장에서 연 숨은 캐릭터
-  const all = [...new Set<CharacterId>(showHidden || (taboo && TEST_OPEN) ? ALL_CHARACTER_IDS : [...CHARACTER_IDS, ...hallUnlocked()])];
+  // 한정 캐릭터(서고의 감시자): 가졌으면 기록이 남지 않는 곳에서 마음껏 (패왕전·일일 도전은 빼고)
+  const all = [...new Set<CharacterId>(showHidden || (taboo && TEST_OPEN) ? ALL_CHARACTER_IDS : [...CHARACTER_IDS, ...hallUnlocked(), ...ownedLimited()])].filter((c) => !noLimited || !LIMITED_CHARACTERS.includes(c));
   const q = find.trim().toLowerCase();
   const list = all.filter((c) => (!tab || factionOf(c) === tab) && (!q || t(c as TextKey).toLowerCase().includes(q)));
   // 서고의 감시자(한정 캐릭터) 탭은 아직 비어 있어도 늘 보임

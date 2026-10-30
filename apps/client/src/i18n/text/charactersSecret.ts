@@ -36,4 +36,11 @@ export const CHARACTER_TEXT_SECRET = {
     ja: "ヒドゥン · 悪の使徒が集めた魂10,000個で再び立ち上がった古き帝国の王。青い炎が揺らめく黒い鎧の巨人 · 武器は赤いツヴァイヘンダー一本: X字の二連斬り → 横に伸びる剣気 → 剣を突き立てると青い炎の線が敵へつながり巨大な火柱 · 倒した敵の魂が細かく砕けて体に入り、魂ひとつごとに攻撃力・体力+",
   },
   zwei: { ko: "대검", en: "Greatsword", ja: "大剣" },
+  lux: { ko: "빛의 사도", en: "Apostle of Light", ja: "光の使徒" },
+  luxDesc: {
+    ko: "한정 · 서고의 감시자 · 떨어진 신의 사도. 모시던 신이 떨어지자 그 힘을 찬탈한 자를 처벌하려 아카식 레코드의 단원에 합류 · 빛의 검으로 빠르고 약한 빛의 칼날을 쏘고, 세 번째 공격마다 적 자리에 '+' 빛의 검이 여러 번 생김 · 층마다 나타나는 빛의 적을 쓰러뜨려 빛의 조각을 모으면 강해지고, 6개마다 몸이 커지며 더 빛남 · 예리함·치명타",
+    en: "Limited · Archive Warden · apostle of a fallen god. When her god fell, she joined the Akashic Records to punish whoever stole its power · the Blade of Light fires fast, light blades, and every third attack '+' light swords form again and again on foes · defeat the light-touched foes on each floor for Shards of Light; every 6 makes her grow and shine brighter · sharpness and crits",
+    ja: "限定 · 書庫の監視者 · 堕ちた神の使徒。仕えていた神が堕ちると、その力を奪った者を罰するためアカシックレコードの団員に加わる · 光の剣で速く軽い光の刃を放ち、3回目の攻撃ごとに敵の位置に「+」の光の剣が何度も生まれる · 階ごとに現れる光の敵を倒して光のかけらを集めると強くなり、6個ごとに体が大きくなりさらに輝く · 鋭さ・会心",
+  },
+  radiant: { ko: "빛의 검", en: "Light Blade", ja: "光の剣" },
 };

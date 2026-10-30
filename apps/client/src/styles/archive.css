@@ -1,0 +1,121 @@
+/* 상점 '서고의 감시자' 한정 캐릭터 뽑기 (ArchiveTab) · 결과 창 · 빛의 사도 캐릭터 카드 */
+.shop-archive {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.archive-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: min(720px, 100%);
+  padding: 16px 20px;
+  overflow: hidden;
+  border: 2px solid #ffb84a;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 22% 50%, rgb(255 180 60 / 0.35), transparent 40%),
+    repeating-conic-gradient(from 0deg at 22% 50%, rgb(255 220 120 / 0.08) 0 6deg, transparent 6deg 18deg),
+    linear-gradient(135deg, #14101c, #241a2c 60%, #120c16);
+  box-shadow: 0 0 22px rgb(255 160 40 / 0.3);
+}
+.archive-banner .limited-badge {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+}
+.archive-art {
+  flex: 0 0 auto;
+  filter: drop-shadow(0 0 14px rgb(255 190 80 / 0.7));
+}
+.archive-art .skin-preview,
+.archive-hit .skin-preview {
+  background: transparent;
+  border: none;
+}
+.archive-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.archive-text small {
+  color: #ffb84a;
+  letter-spacing: 0.1em;
+}
+.archive-text strong {
+  font-size: 26px;
+  color: #fff4d8;
+  text-shadow: 0 0 10px rgb(255 190 80 / 0.8);
+}
+.archive-text p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #e8dcc8;
+}
+.archive-owned {
+  color: #8aff9a;
+}
+.archive-result {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  background: rgb(8 6 14 / 0.9);
+  cursor: pointer;
+}
+.archive-result small {
+  color: rgb(255 255 255 / 0.5);
+}
+.archive-hit {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: lc-pop 0.9s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+}
+.archive-hit strong {
+  font-size: 34px;
+  color: #ffe8a0;
+  text-shadow: 0 0 16px rgb(255 180 60 / 0.9);
+}
+.archive-hit p,
+.archive-miss p {
+  margin: 0;
+  color: #fff2d8;
+}
+.archive-rays {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  z-index: -1;
+  width: 520px;
+  height: 520px;
+  transform: translate(-50%, -50%);
+  background: repeating-conic-gradient(rgb(255 200 90 / 0.18) 0 8deg, transparent 8deg 20deg);
+  border-radius: 50%;
+  animation: lc-spin 14s linear infinite;
+}
+/* 빛의 사도 캐릭터 카드: 검은 밤 · 금빛 '+' 빛 */
+.character-card.lux {
+  position: relative;
+  overflow: hidden;
+  border-color: #ffb84a;
+  background:
+    radial-gradient(circle at 50% 38%, rgb(255 190 80 / 0.35), transparent 45%),
+    radial-gradient(circle at 18% 22%, #ffe060 0 1px, transparent 2px),
+    radial-gradient(circle at 82% 30%, #fff8d8 0 1px, transparent 2px),
+    radial-gradient(circle at 70% 76%, #ff8a1a 0 1px, transparent 2px),
+    linear-gradient(180deg, #1a1420, #2a1e24 70%, #14101a);
+  box-shadow: inset 0 0 18px rgb(255 160 40 / 0.25);
+}
+.character-card.lux > strong {
+  color: #fff0c8;
+  text-shadow: 0 0 8px rgb(255 180 60 / 0.8);
+}

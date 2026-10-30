@@ -39,7 +39,7 @@ export const FACTIONS: readonly { id: FactionId; color: string; members: readonl
   /** 이방인: 세계의 틀을 벗어난 자들 */
   { id: "outsider", color: "#5ae0d0", members: ["pilgrim", "fallenKing"] },
   /** 서고의 감시자: 한정 캐릭터 (뽑기) */
-  { id: "archive", color: "#ffb84a", members: [] },
+  { id: "archive", color: "#ffb84a", members: ["lux"] },
 ];
 
 /** 최종 보스 (도감 적 그림) · 시즌 */

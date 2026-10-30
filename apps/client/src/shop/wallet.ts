@@ -86,6 +86,22 @@ export function grantVictorySkins(): boolean {
   return add.length > 0;
 }
 
+/** 쿠폰 쓰기 (서고의 감시자 뽑기 등) · 모자라면 false */
+export function spendCoupons(n: number): boolean {
+  if (coupons() < n) return false;
+  const w = load();
+  w.spent += n;
+  save(w);
+  return true;
+}
+
+/** 쿠폰 돌려받기 (뽑기에서 겹침) */
+export function refundCoupons(n: number): void {
+  const w = load();
+  w.refund += n;
+  save(w);
+}
+
 export function addMissionCoupons(n: number): void {
   const w = load();
   w.mission += n;

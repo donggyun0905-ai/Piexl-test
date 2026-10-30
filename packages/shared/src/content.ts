@@ -49,9 +49,10 @@ import { VOYAGER_WEAPONS } from "./weaponsVoyager";
 import { ZEUS_WEAPONS, type ThunderStyle } from "./weaponsZeus";
 import { PILGRIM_WEAPONS, type CurioStyle } from "./weaponsPilgrim";
 import { FALLEN_KING_WEAPONS } from "./weaponsFallenKing";
+import { LUX_WEAPONS } from "./weaponsLux";
 
 /** laser 기계공학자·medic 의사: 누르고 있는 동안 짧은 간격으로 틱 피해 · combo 격투가: 누를 때마다 콤보의 다음 기술 (combos) · chakram 베두인 · spear 장수 */
-export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio" | "zwei";
+export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio" | "zwei" | "radiant";
 export type { OrbitKind } from "./weaponsElemental";
 export type { LaserGear } from "./weaponsEngineer";
 export type { MedicGear } from "./weaponsDoctor";
@@ -96,6 +97,7 @@ export { VOYAGER } from "./weaponsVoyager";
 export { ZEUS, type ThunderMode, type ThunderStyle } from "./weaponsZeus";
 export { PILGRIM, type CurioMode, type CurioStyle } from "./weaponsPilgrim";
 export { FALLEN_KING } from "./weaponsFallenKing";
+export { LUX } from "./weaponsLux";
 
 export interface WeaponDef {
   id: string;
@@ -258,6 +260,7 @@ export const WEAPONS = {
   ...ZEUS_WEAPONS,
   ...PILGRIM_WEAPONS,
   ...FALLEN_KING_WEAPONS,
+  ...LUX_WEAPONS,
 } as const satisfies Record<string, WeaponDef>;
 
 export type WeaponId = keyof typeof WEAPONS;
@@ -279,4 +282,5 @@ export function baseStats(characterId: CharacterId, weaponId: WeaponId): Stats {
 }
 
 export * from "./characters";
+export * from "./limitedChars";
 export * from "./enemyDefs";

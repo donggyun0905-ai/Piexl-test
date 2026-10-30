@@ -33,6 +33,7 @@ import { resetVoyager } from "./voyager";
 import { resetZeus } from "./zeus";
 import { resetPilgrim } from "./pgHero";
 import { resetFallenKing } from "./fallenKing";
+import { resetLux } from "./lux";
 import { resetRen } from "./ren";
 import { resetSpirit } from "./spirit";
 import { resetAbandoned } from "./abandoned";
@@ -228,6 +229,7 @@ export function practiceReset(s: RunState): void {
   resetZeus(p);
   resetPilgrim(p);
   resetFallenKing(p);
+  resetLux(p);
   resetRen(p);
   resetSpirit(p);
   resetAbandoned(p);

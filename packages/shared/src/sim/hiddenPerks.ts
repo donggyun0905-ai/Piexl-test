@@ -9,6 +9,7 @@ import { recalcStats } from "./items";
 import { addAlly, alliesTick } from "./allies";
 import { kingFormTick } from "./kingForm";
 import { kingKill } from "./fallenKing";
+import { luxKill } from "./luxFoes";
 import { cupidTick } from "./spiritGreat";
 import { storms } from "./oni";
 import { stun } from "./s2Kit";
@@ -73,6 +74,7 @@ export function hiddenExtras(p: PlayerState): Partial<ExtraStats> | null {
 /** 처치할 때: 가진 아티팩트마다 한 칸 */
 export function relicKill(s: RunState, e: EnemyState): void {
   kingKill(s, e);
+  luxKill(s, e);
   const p = s.player;
   let recalc = false;
   for (const id of RELICS) {

@@ -117,3 +117,4 @@ export { canCast, skillDef } from "./pwSkill";
 
 export { spikeState, makeTerrain, terrainIdle } from "./terrain";
 export type { TerrainState } from "./terrainTypes";
+export { luxShards, luxStage } from "./lux";

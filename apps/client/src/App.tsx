@@ -238,6 +238,7 @@ export function App() {
       <CharacterSelect
         t={lang.t}
         showSeed={false}
+        noLimited
         onBack={() => setScreen({ name: "daily", mode: screen.start.mode })}
         onSelect={(characterId) => setScreen({ name: "dailyGame", start: screen.start, characterId })}
       />

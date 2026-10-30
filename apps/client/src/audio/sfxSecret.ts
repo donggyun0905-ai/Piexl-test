@@ -55,4 +55,15 @@ export const SECRET_SOUNDS = {
   kgSoul: () => {
     tone({ type: "sine", from: 1320, to: 1760, dur: 0.08, vol: 0.03 });
   },
+  // 빛의 사도: 가볍게 스치는 빛 · '+' 빛의 검이 생기는 맑은 종소리 · 빛의 조각 (위로 오르는 화음)
+  lxBlade: () => {
+    tone({ type: "triangle", from: 1600, to: 900, dur: 0.06, vol: 0.04 });
+  },
+  lxCross: () => {
+    tone({ type: "sine", from: 1760, to: 2093, dur: 0.12, vol: 0.05 });
+    tone({ type: "triangle", from: 2637, to: 2637, dur: 0.18, vol: 0.025, delay: 0.04 });
+  },
+  lxShard: () => {
+    for (const [i, f] of [523, 659, 784, 1047].entries()) tone({ type: "sine", from: f, to: f, dur: 0.22, vol: 0.06, delay: i * 0.07 });
+  },
 };
