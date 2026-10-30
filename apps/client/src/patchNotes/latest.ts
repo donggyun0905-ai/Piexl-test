@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.279",
+    date: "2026-10-31",
+    items: {
+      ko: ["좌우가 반대로 나오던 그림 고침: 소환술사 공격 · 풋내기 공격 · 버려진 자들(검 소년) 서기·걷기"],
+      en: ["Fixed mirrored poses: Summoner attack · Novice attack · The Abandoned (sword boy) standing and walking"],
+      ja: ["左右が逆になっていた絵を修正: 召喚術師の攻撃 · 見習いの攻撃 · 捨てられた者たち（剣の少年）の立ち・歩き"],
+    },
+  },
+  {
     version: "0.48.278",
     date: "2026-10-31",
     items: {
