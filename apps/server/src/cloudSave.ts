@@ -1,4 +1,4 @@
-// 상점 쪽 저장 백업 (쿠폰·스킨·이벤트 코인·효과·펫·칩·미션). 꾸밈 아이템이라 화면이 합친 값을 그대로 받음.
+// 상점 쪽 저장 백업 (쿠폰·스킨·이벤트 코인·효과·펫·칩·미션·숙련도·한정 캐릭터). 꾸밈 아이템이라 화면이 합친 값을 그대로 받음.
 // 차례 번호(rev)가 서버 것과 같을 때만 받고 +1 (다른 기기가 먼저 올렸으면 서버 값을 돌려줘 화면이 합쳐 다시 올림)
 // 저장은 받을 때만 (화면이 몇 초 모아 보냄)
 import { isPlayerId } from "@pixel-rogue/shared";
@@ -7,7 +7,7 @@ import { fail, json, readJson } from "./http";
 import { first } from "./sql";
 
 const MAX_BYTES = 64 * 1024;
-const KEYS = ["wallet", "eventCoins", "fxShop", "lobbyPets", "chips", "missions"];
+const KEYS = ["wallet", "eventCoins", "fxShop", "lobbyPets", "chips", "missions", "mastery", "archiveChars"];
 
 export const CLOUD_SCHEMA = [`CREATE TABLE IF NOT EXISTS cloud (id TEXT PRIMARY KEY, rev INTEGER NOT NULL, data TEXT NOT NULL, updated INTEGER NOT NULL)`];
 
