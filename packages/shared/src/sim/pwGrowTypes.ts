@@ -43,6 +43,8 @@ export interface PwGrowState {
   /** 전쟁의 서막: 체크포인트마다 가진 편(-1 없음)·편마다 점령도 · 정글 자리마다 다시 나올 틱 */
   points?: { owner: number; prog: Record<number, number> }[];
   campAt?: number[];
+  /** 전쟁의 서막: 마지막 큰 보스 처치 (화면 알림: 종류 · 잡은 편 · 틱) */
+  news?: { kind: "dragon" | "godeater"; team: number; at: number };
   /** 기간토마키아: 바닥의 상자·떨어진 배낭 · 임시 출구 · 나간 자리 */
   loot?: PwLoot[];
   exits?: { x: number; y: number }[];

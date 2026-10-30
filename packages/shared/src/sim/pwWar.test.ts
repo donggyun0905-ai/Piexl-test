@@ -6,6 +6,7 @@ import { fogAt, spotXY } from "./paewangGrid";
 import { allPlayers } from "./party";
 import { createPvp, stepPvp } from "./pvp";
 import { GROW_MENU, growMenu, homeOf } from "./pwGrow";
+import { warRole } from "./pwWarBot";
 import { EMPTY_INPUT } from "./types";
 import { roomGrid } from "./util";
 
@@ -30,6 +31,8 @@ describe("패왕전 전쟁의 서막", () => {
       for (let i = 0; i < (PW_WAR.pointSec + 1) * 60; i++) {
         [p.x, p.y] = pt;
         p.hp = p.stats.maxHp;
+        // 상대 AI가 걸어와 겹치지 않게 집에 묶어 둠
+        allPlayers(s).forEach((q, j) => s.pvp!.seats[j]!.team === 1 && ([q.x, q.y] = homeOf(s, 1)));
         stepPvp(s, [EMPTY_INPUT]);
       }
     };
@@ -43,10 +46,12 @@ describe("패왕전 전쟁의 서막", () => {
     expect(Math.hypot(p.x - pt[0], p.y - pt[1])).toBeLessThan(2);
   }, 30000);
 
-  it("정글·큰 보스가 나오고, AI끼리 한동안 돌려도 같은 시드는 같은 결과", () => {
+  it("정글이 나오고 (큰 보스는 늦게), AI끼리 한동안 돌려도 같은 시드는 같은 결과", () => {
     const first = createPvp(4, "war", [{ characterId: "warden", ai: true }], "gWar");
     for (let i = 0; i < 200; i++) stepPvp(first, [EMPTY_INPUT]);
-    expect(first.pvp!.grow!.units.filter((u) => u.team === 2).length).toBe(a.camps!.length);
+    // 큰 보스 둘은 10·15분부터
+    expect(first.pvp!.grow!.units.filter((u) => u.team === 2).length).toBe(a.camps!.length - 2);
+    expect(first.pvp!.grow!.units.some((u) => u.kind === "dragon" || u.kind === "godeater")).toBe(false);
     const play = () => {
       const s = createPvp(4, "war", [{ characterId: "warden", ai: true }], "gWar");
       for (let i = 0; i < 40 * 60; i++) stepPvp(s, [EMPTY_INPUT]);
@@ -54,5 +59,19 @@ describe("패왕전 전쟁의 서막", () => {
     };
     const s = play();
     expect(allPlayers(play()).map((p) => [p.x, p.pwXp])).toEqual(allPlayers(s).map((p) => [p.x, p.pwXp]));
+  }, 60000);
+
+  it("AI 역할: 편마다 위 1·가운데 1·아래 2·정글 1 · 2분이면 위·아래가 제 길에", () => {
+    const s = createPvp(7, "war", [{ characterId: "warden", ai: true }], "gWar");
+    for (const team of [0, 1]) {
+      const roles = s.pvp!.seats.map((x, i) => (x.team === team ? warRole(s, i) : "")).filter(Boolean).sort();
+      expect(roles).toEqual(["bot", "bot", "jungle", "mid", "top"]);
+    }
+    for (let i = 0; i < 2 * 60 * 60; i++) stepPvp(s, [EMPTY_INPUT]);
+    allPlayers(s).forEach((p, i) => {
+      const [c, r] = [p.x / 16, p.y / 16];
+      if (warRole(s, i) === "top" && s.pvp!.seats[i]!.on) expect(c < 22 || r < 22, `top ${i} ${c},${r}`).toBe(true);
+      if (warRole(s, i) === "bot" && s.pvp!.seats[i]!.on) expect(c > 60 || r > 60, `bot ${i} ${c},${r}`).toBe(true);
+    });
   }, 60000);
 });

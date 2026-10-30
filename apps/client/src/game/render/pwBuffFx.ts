@@ -28,7 +28,8 @@ function rise(ctx: Ctx, s: RunState, x: number, y: number, r: number, color: str
 }
 
 export function drawPwBuffs(ctx: Ctx, s: RunState, p: PlayerState, x: number, y: number): void {
-  const list = (p.pwBuffs ?? []).filter((b) => colorOf(b));
+  // 파멸의 용 영구 강화(keep)는 몸 둘레 빛을 그리지 않음 (끝나지 않아 늘 켜져 있게 됨)
+  const list = (p.pwBuffs ?? []).filter((b) => !b.keep && colorOf(b));
   list.forEach((b, i) => {
     const color = colorOf(b);
     // 끝나 가면 깜빡임

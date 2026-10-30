@@ -145,23 +145,31 @@ function pickAug(s: RunState, k: number): void {
   recalcStats(s);
 }
 
-/** 쓰러뜨린 것의 보상: 막타 친 자리는 돈·경험치, 그 근처 같은 편은 경험치 조금 (foeTeam = 쓰러진 쪽 편) */
+/** 돈 주기 (자리 i, 효과 표시) */
+function giveGold(s: RunState, i: number, n: number, x: number, y: number): void {
+  const back = seatNo(s);
+  useSeat(s, i);
+  s.gold += n;
+  s.goldEarned += n;
+  addEffect(s, { kind: "coinGet", x, y, dirX: 0, dirY: 0, size: n, maxTicks: 30 });
+  useSeat(s, back);
+}
+
+/** 쓰러뜨린 것의 보상: 막타 친 자리는 돈·경험치, 그 근처 같은 편은 경험치 조금 (쟁탈전 병사는 돈도 일부, foeTeam = 쓰러진 쪽 편) */
 export function reward(s: RunState, killer: number | undefined, kind: keyof typeof PW_GROW.gold, x: number, y: number, foeTeam: number, victimLv = 1): void {
   const pv = s.pvp!;
   const [last, near] = PW_GROW.xp[kind]!;
   const extra = kind === "hero" ? PW_GROW.heroPerLv * (victimLv - 1) : 0;
   const ok = (i: number) => pv.seats[i]!.team !== foeTeam;
   if (killer !== undefined && ok(killer)) {
-    const back = seatNo(s);
-    useSeat(s, killer);
-    s.gold += PW_GROW.gold[kind];
-    s.goldEarned += PW_GROW.gold[kind];
-    addEffect(s, { kind: "coinGet", x, y, dirX: 0, dirY: 0, size: PW_GROW.gold[kind], maxTicks: 30 });
-    useSeat(s, back);
+    giveGold(s, killer, PW_GROW.gold[kind], x, y);
     addXp(s, killer, last + extra);
   }
+  const share = kind === "minion" && PW_MODE[pv.mode].rule === "contest" ? Math.round(PW_GROW.gold.minion * PW_GROW.nearGold) : 0;
   allPlayers(s).forEach((p, i) => {
-    if (i !== killer && ok(i) && inPlay(s, i) && (p.x - x) ** 2 + (p.y - y) ** 2 <= PW_GROW.near ** 2) addXp(s, i, near + extra / 3);
+    if (i === killer || !ok(i) || !inPlay(s, i) || (p.x - x) ** 2 + (p.y - y) ** 2 > PW_GROW.near ** 2) return;
+    addXp(s, i, near + extra / 3);
+    if (share) giveGold(s, i, share, p.x, p.y);
   });
 }
 

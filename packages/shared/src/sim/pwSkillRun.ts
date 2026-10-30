@@ -26,7 +26,8 @@ export function pwSkillTick(s: RunState, input: TickInput): TickInput {
   // 버프: 시간 줄이기 · 재생 · 능력치가 바뀌면 다시 계산
   const before = statBuffs(s);
   for (const b of p.pwBuffs ?? []) {
-    b.t--;
+    // 파멸의 용 강화(keep)는 끝나지 않음
+    if (!b.keep) b.t--;
     if (b.regen) {
       const add = Math.max(0, Math.min(p.stats.maxHp - p.hp, (p.stats.maxHp * b.regen * PW.heal) / 60));
       p.hp += add;

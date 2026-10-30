@@ -28,11 +28,13 @@ export const PW_GROW = {
   perLv: { hp: 0.07, dmg: 0.05, rate: 0.012, def: 1 },
   /** 막타 · 가까이 있을 때(경험치 받는 범위 px) 받는 경험치: 병사 · 포탑 · 정글 몬스터 · 보스 · 상대 캐릭터(+ 상대 레벨마다) */
   near: 190,
-  xp: { minion: [32, 11], tower: [80, 40], jungle: [22, 8], boss: [160, 80], hero: [90, 30] } as Record<string, readonly [number, number]>,
+  xp: { minion: [32, 11], tower: [80, 40], jungle: [45, 15], boss: [160, 80], hero: [90, 30] } as Record<string, readonly [number, number]>,
   heroPerLv: 12,
   /** 막타 돈 (+ 1초마다 1원) · 시작 돈 */
-  gold: { minion: 22, tower: 160, jungle: 30, boss: 300, hero: 160 },
+  gold: { minion: 22, tower: 160, jungle: 40, boss: 300, hero: 160 },
   goldStart: 300,
+  /** 쟁탈전: 병사가 쓰러질 때 근처(near) 같은 편이 막타를 못 쳐도 받는 돈 비율 (한 줄 길이라 여럿이 같이 큼) */
+  nearGold: 0.4,
   /** 집: 반지름(px) · 1초마다 최대 체력 비율 회복 · 다시 태어나기 틱 = 바탕 + 레벨마다 */
   homeR: 64,
   homeHeal: 0.1,
@@ -54,7 +56,7 @@ export const PW_UNIT = {
   archer: { hp: 180, dmg: 12, every: 70, range: 80, speed: 0.55, r: 6 },
   tower: { hp: 1500, dmg: 30, every: 70, range: 112, speed: 0, r: 12 },
   boss: { hp: 3600, dmg: 36, every: 80, range: 70, speed: 0.5, r: 13 },
-  jungle: { hp: 520, dmg: 12, every: 60, range: 22, speed: 0.6, r: 8 },
+  jungle: { hp: 400, dmg: 7, every: 60, range: 22, speed: 0.6, r: 8 },
   /** 전쟁의 서막 안개 지역: 보스 몬스터 · 큰 보스 둘 */
   elite: { hp: 1600, dmg: 24, every: 70, range: 30, speed: 0.6, r: 11 },
   dragon: { hp: 5200, dmg: 40, every: 80, range: 60, speed: 0.5, r: 16 },
@@ -79,7 +81,7 @@ export const PW_UNIT = {
   recall: 5 * TICK_RATE,
 };
 
-/** 전쟁의 서막 (sim/pwWar): 체크포인트 점령 초·반지름(px) · 상대 집 점령 초 · 정글·큰 보스 다시 나오기 · 큰 보스 처치 팀 강화(남는 틱 · 파멸의 용 공격력·공격 속도 · 갓이터 받는 피해·재생) */
+/** 전쟁의 서막 (sim/pwWar): 체크포인트 점령 초·반지름(px) · 상대 집 점령 초 · 정글·큰 보스 다시 나오기 · 갓이터 강화 남는 틱 */
 export const PW_WAR = {
   pointSec: 6,
   pointR: 40,
@@ -87,8 +89,18 @@ export const PW_WAR = {
   campBack: 75 * TICK_RATE,
   bigBack: 180 * TICK_RATE,
   buffTicks: 150 * TICK_RATE,
-  dragon: { dmg: 1.2, rate: 1.1 },
-  godeater: { taken: 0.85, regen: 0.012 },
+  /** 처음 나오는 때 (판 시작 뒤 틱): 파멸의 용 10분 · 갓이터 15분 */
+  dragonAt: 10 * 60 * TICK_RATE,
+  godeaterAt: 15 * 60 * TICK_RATE,
+  /** 파멸의 용: 잡은 편 모두(쓰러져 있어도) 영구 강화 · 쓰러져도 남음 · 잡을 때마다 쌓임: 공격력 · 공격 속도 배율 · 최대 쌓임 */
+  dragon: { dmg: 1.08, rate: 1.05, max: 4 },
+  /** 갓이터: 잡은 편 중 살아 있는 사람만 buffTicks 동안 · 쓰러지면 사라짐: 공격력 · 받는 피해 · 1초마다 최대 체력 비율 재생 */
+  godeater: { dmg: 1.12, taken: 0.8, regen: 0.015 },
+  /** AI: 이 분까지는 길마다 나뉘어 성장(위 1·가운데 1·아래 2·정글 1), 뒤로는 함께 싸우며 포탑 부수기 · 이만큼 돈이 쌓이면 귀환해 장보기 */
+  splitMin: 10,
+  shopGold: 1400,
+  /** AI 정글이 보스 몬스터(안개 지역 보스)를 잡으러 가는 레벨 */
+  eliteLv: 6,
 };
 
 /** 쟁탈전 (sim/pwContest): 가운데·상대 집 점령에 걸리는 초 */

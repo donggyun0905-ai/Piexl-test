@@ -1,4 +1,4 @@
-// 패왕전 성장 대결 AI: 집에서 장보기(자리마다 정한 전설 장비 하나씩, 재료부터) · 체력이 낮으면 집으로 · 상대가 안 보이면 길을 따라 앞쪽 목표로
+// 패왕전 성장 대결 AI (전쟁의 서막 역할·귀환은 pwWarBot): 집에서 장보기(자리마다 정한 전설 장비 하나씩, 재료부터) · 체력이 낮으면 집으로 · 상대가 안 보이면 길을 따라 앞쪽 목표로
 // (상대 포탑 앞 것 → 쟁탈전 가운데 → 상대 집) · 무작위는 판 시드로만
 import { TILE_SIZE } from "../constants";
 import { PW_MODE } from "../paewangDefs";
@@ -12,6 +12,7 @@ import { capCenter } from "./pwCapture";
 import { spotXY } from "./paewangGrid";
 import { canPoint } from "./pwWar";
 import { atHome, buyPlan, GROW_MENU, growMenu, homeOf, isGrow } from "./pwGrow";
+import { warSteer } from "./pwWarBot";
 import type { RunState, TickInput } from "./types";
 
 /** 자리마다 차례로 사는 전설 장비 */
@@ -95,6 +96,11 @@ export function growSteer(s: RunState, input: TickInput): TickInput {
   const low = p.hp < p.stats.maxHp * 0.3;
   // 집에서 회복 중이면 거의 다 찰 때까지 머묾
   if (atHome(s, i) && p.hp < p.stats.maxHp * 0.9) return { ...input, moveX: 0, moveY: 0 };
+  // 전쟁의 서막: 역할(위·가운데·아래·정글)·귀환 (pwWarBot)
+  if (PW_MODE[s.pvp!.mode].rule === "war") {
+    const w = warSteer(s, input, walk, () => nextBuy(s, i) !== undefined);
+    if (w) return w;
+  }
   if (low) return walk(s, input, ...home);
   if (input.attack) return input;
   // 전쟁의 서막: 집에서 내 길 체크포인트로 순간이동

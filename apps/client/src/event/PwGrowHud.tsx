@@ -8,6 +8,7 @@ import { PwMapView } from "./PwMapView";
 import { gearItem, gearLines, gearName } from "./pwGearView";
 import { ItemIcon } from "../game/itemIcon";
 import { PwShop } from "./PwShop";
+import { PwWarNews } from "./PwWarNews";
 
 interface Props {
   run: RunState;
@@ -86,6 +87,7 @@ export function PwGrowHud({ run, me, lang, t, controls }: Props) {
             {!!(g.base[0] || g.base[1]) && ` · ${t("pwContestBase").replace("{a}", pct(g.base[mine])).replace("{b}", pct(g.base[1 - mine]))}`}
           </small>
         )}
+        {pv.mode === "war" && <PwWarNews run={run} me={me} p={p} t={t} />}
         {p.pwRecall && <b className="pw-recall">⟲ {t("pwRecalling").replace("{n}", String(Math.ceil((p.pwRecall.end - run.tick) / 60)))}</b>}
       </div>
       {grow && <PwMapView run={run} me={me} cell={2} t={t} />}

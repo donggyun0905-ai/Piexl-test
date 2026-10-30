@@ -4,7 +4,7 @@ import { PW_BASIC, PW_LEGEND, PW_SHOP_IDS } from "../pwShop";
 import { spotXY } from "./paewangGrid";
 import { allPlayers, useSeat } from "./party";
 import { createPvp, stepPvp } from "./pvp";
-import { addXp, buyPlan, GROW_MENU, growMenu, homeOf } from "./pwGrow";
+import { addXp, buyPlan, GROW_MENU, growMenu, homeOf, reward } from "./pwGrow";
 import { gearHits } from "./pwGear";
 import { EMPTY_INPUT } from "./types";
 import { PW_ARENAS } from "../paewangMaps";
@@ -16,6 +16,25 @@ import { contestTick, towersLeft } from "./pwContest";
 const fresh = () => createPvp(5, "contest", [{ characterId: "warden" }], "gContest");
 
 describe("패왕전 성장 대결 (쟁탈전)", () => {
+  it("병사 돈: 막타는 다, 근처 같은 편은 일부 (쟁탈전만)", () => {
+    const s = fresh();
+    const pv = s.pvp!;
+    const ally = pv.seats.findIndex((x, i) => i > 0 && x.team === pv.seats[0]!.team);
+    const far = pv.seats.findIndex((x, i) => i > 0 && i !== ally && x.team === pv.seats[0]!.team);
+    const ps = allPlayers(s);
+    [ps[ally]!.x, ps[ally]!.y] = [s.player.x + 20, s.player.y];
+    [ps[far]!.x, ps[far]!.y] = [s.player.x + PW_GROW.near * 3, s.player.y];
+    const gold = (i: number) => (useSeat(s, i), s.gold);
+    const before = [0, ally, far].map(gold);
+    useSeat(s, 0);
+    reward(s, 0, "minion", s.player.x, s.player.y, 1 - pv.seats[0]!.team);
+    const after = [0, ally, far].map(gold);
+    useSeat(s, 0);
+    expect(after[0]! - before[0]!).toBe(PW_GROW.gold.minion);
+    expect(after[1]! - before[1]!).toBe(Math.round(PW_GROW.gold.minion * PW_GROW.nearGold));
+    expect(after[2]).toBe(before[2]);
+  });
+
   it("가운데: 주인이 생긴 뒤로는 상대 포탑이 남아 있어도 다시 빼앗을 수 있음 · 주인만 있으면 상대 점령도가 줄어듦", () => {
     const s = fresh();
     const g = s.pvp!.grow!;

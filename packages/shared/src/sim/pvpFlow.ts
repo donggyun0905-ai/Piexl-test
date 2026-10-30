@@ -81,9 +81,11 @@ export function settleDeaths(s: RunState): void {
     if (!seat.on || s.player.hp > 0 || !checkDeath(s)) return;
     seat.on = false;
     seat.fell = true;
-    // 쓰러지면 스킬 장판·예고·소환·버프·돌진도 끝
+    // 쓰러지면 스킬 장판·예고·소환·버프·돌진도 끝 (파멸의 용 강화만 남음)
     clearSkills(s, i);
-    s.player.pwBuffs = s.player.pwDash = undefined;
+    const kept = s.player.pwBuffs?.filter((b) => b.keep);
+    s.player.pwBuffs = kept?.length ? kept : undefined;
+    s.player.pwDash = undefined;
     seat.silence = 0;
     seat.push = undefined;
     seat.deaths++;

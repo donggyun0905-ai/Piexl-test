@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.253",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "쟁탈전: 병사가 쓰러지면 막타를 못 친 근처 같은 편도 병사 돈의 40%를 받음 (한 줄 길이라 여럿이 같이 성장)",
+        "전쟁의 서막 큰 보스: 파멸의 용은 10분, 갓이터는 15분부터 나옴 · 파멸의 용 = 잡은 편 모두 공격력·공격 속도 영구 상승 (쓰러져도 남음, 4번까지 쌓임) · 갓이터 = 살아 있는 사람에게 2분 30초 공격력·받는 피해 감소·재생 (쓰러지면 끝) · 잡으면 화면 위 알림, 강화·나오기까지 남은 시간 표시",
+        "전쟁의 서막 정글: 몬스터 자리 8 → 14 (위·아래 안개에도) · 자리마다 담을 둘러 꾸밈 (네 방향 입구) · 정글 몬스터는 조금 약하게, 경험치·돈은 더",
+        "전쟁의 서막 AI: 편마다 위 1·가운데 1·아래 2·정글 1로 나뉘어 병사를 잡으며 상대와 싸움 (병사 없이 상대 포탑 밑엔 안 들어감) · 가운데는 가끔 다른 길·정글을 도우러 감 · 정글은 몬스터를 돌며 크고, 다 잡으면 돕거나 장보기 · 체력이 낮거나 돈이 쌓이면 상대 없는 곳에서 귀환 · 10분 뒤엔 함께 싸우며 포탑 부수기, 큰 보스도 노림",
+      ],
+      en: [
+        "Divine Contest: when a minion dies, nearby allies who didn't land the last hit also get 40% of its gold (one lane, so the team grows together)",
+        "Prelude to War bosses: the Dragon of Ruin appears at 10 minutes and the God Eater at 15 · Dragon = permanent damage & attack speed for the whole team (kept on death, stacks up to 4) · God Eater = 2:30 of damage, damage reduction and regen for everyone alive (lost on death) · a banner announces the kill, and your buffs and spawn timers are shown",
+        "Prelude to War jungle: camps go from 8 to 14 (also in the top and bottom fog) · each camp is walled in with four entrances · jungle monsters are a little weaker but give more XP and gold",
+        "Prelude to War AI: each team splits top 1 · mid 1 · bot 2 · jungle 1, farming minions and fighting rivals (no tower diving without minions) · mid sometimes roams to help another lane or the jungle · the jungler clears camps, then helps or goes shopping · bots recall somewhere safe when low or carrying lots of gold · after 10 minutes they group up to fight and push towers, and go for the big bosses",
+      ],
+      ja: [
+        "争奪戦: 兵士が倒れると、ラストヒットしなかった近くの味方も兵士のお金の40%をもらう（一本道なのでみんなで成長）",
+        "戦争の序幕の大ボス: 破滅の竜は10分、ゴッドイーターは15分から出現 · 破滅の竜 = 倒したチーム全員の攻撃力・攻撃速度が永続アップ（倒れても残る、4回まで累積）· ゴッドイーター = 生きている人に2分30秒、攻撃力・被ダメ減少・再生（倒れると終了）· 倒すと画面上に通知、強化・出現までの残り時間を表示",
+        "戦争の序幕のジャングル: モンスターの場所 8 → 14（上・下の霧にも）· 場所ごとに壁で囲んで装飾（四方に入口）· ジャングルモンスターは少し弱く、経験値・お金は多めに",
+        "戦争の序幕のAI: チームごとに上1・中央1・下2・ジャングル1に分かれ、兵士を倒しながら相手と戦う（兵士なしで相手の砲塔の下には入らない）· 中央は時々ほかのレーン・ジャングルを助けに行く · ジャングルはモンスターを回って成長し、狩り終えたら助けるか買い物 · 体力が低い・お金がたまったら相手のいない所で帰還 · 10分後は一緒に戦って砲塔を壊し、大ボスも狙う",
+      ],
+    },
+  },
+  {
     version: "0.48.252",
     date: "2026-10-30",
     items: {

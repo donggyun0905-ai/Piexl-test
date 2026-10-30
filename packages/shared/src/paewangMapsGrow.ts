@@ -24,7 +24,7 @@ const WAR_HOME: Spot = [6, 83];
 const WAR_A_TOWERS: Spot[][] = [[[6, 68], [6, 50]], [[20, 69], [32, 57]], [[21, 83], [39, 83]]];
 const WAR_POINTS: Spot[] = [[6, 6], [44, 44], [83, 83]];
 const warLanes = WAR_A_TOWERS.map((ts, k) => [WAR_HOME, ...ts, WAR_POINTS[k]!, ...[...ts].reverse().map(flip), flip(WAR_HOME)]);
-// 안쪽 벽: 바깥 길과 안쪽을 가르는 낮은 담 (입구 여럿) · 물가: 왼쪽 위 → 오른쪽 아래 띠 · 안개: 대각선 둘이 나눈 삼각형 넷
+// 안쪽 벽: 바깥 길과 안쪽을 가르는 낮은 담 (입구 여럿) + 정글 둘레 담(아래 pen) · 물가: 왼쪽 위 → 오른쪽 아래 띠 · 안개: 대각선 둘이 나눈 삼각형 넷
 const warWalls: Rect[] = [[11, 15, 1, 22], [11, 52, 1, 22], [78, 15, 1, 22], [78, 52, 1, 22]];
 warWalls.push(...warWalls.map(([c, r, w, h]): Rect => [r, c, h, w]));
 const warWater: Rect[] = [];
@@ -42,6 +42,21 @@ const FOG_LEFT = tri([18, 71], (r) => [12, Math.min(r - 5, W - 1 - r - 5)]);
 // 위(1) 아래(2) 오른쪽(3) 왼쪽(4): 아래는 위를 위아래로, 오른쪽은 왼쪽을 좌우로 뒤집음
 const FOG_BOTTOM = FOG_TOP.map(([c, r, w, h]): Rect => [c, W - 1 - r, w, h]);
 const FOG_RIGHT = FOG_LEFT.map(([c, r, w, h]): Rect => [W - c - w, r, w, h]);
+
+/** 정글 자리: 큰 보스 둘 · 보스 몬스터 둘 · 작은 정글 몬스터 (왼쪽 안개 = A 쪽, 오른쪽 = B 쪽은 좌우 거울, 위·아래 안개는 위아래 거울) */
+const WAR_CAMPS: { kind: "jungle" | "elite" | "dragon" | "godeater"; at: Spot }[] = [
+  { kind: "dragon", at: [44, 22] },
+  { kind: "godeater", at: [44, 67] },
+];
+for (const at of [[19, 44]] as Spot[]) WAR_CAMPS.push({ kind: "elite", at }, { kind: "elite", at: [W - 1 - at[0], at[1]] });
+for (const at of [[25, 36], [25, 52], [17, 28], [17, 61], [33, 44]] as Spot[]) WAR_CAMPS.push({ kind: "jungle", at }, { kind: "jungle", at: [W - 1 - at[0], at[1]] });
+for (const at of [[32, 18], [57, 18]] as Spot[]) WAR_CAMPS.push({ kind: "jungle", at }, { kind: "jungle", at: [at[0], W - 1 - at[1]] });
+/** 정글 둘레 담: 바람개비 모양 네 토막 (네 방향에 입구) · 큰 보스·보스 몬스터는 더 넓게 */
+const pen = ({ kind, at: [c, r] }: (typeof WAR_CAMPS)[number]): Rect[] => {
+  const k = kind === "jungle" ? 3 : 5;
+  return [[c - k, r - k, k, 1], [c + k, r - k, 1, k], [c + 1, r + k, k, 1], [c - k, r + 1, 1, k]];
+};
+warWalls.push(...WAR_CAMPS.flatMap(pen));
 
 export const GROW_ARENAS = {
   /** 쟁탈전: 신의 제단 */
@@ -78,15 +93,6 @@ export const GROW_ARENAS = {
     ])),
     points: WAR_POINTS.map((at, lane) => ({ at, lane })),
     fogs: [FOG_TOP, FOG_BOTTOM, FOG_RIGHT, FOG_LEFT],
-    camps: [
-      { kind: "dragon", at: [44, 22] },
-      { kind: "godeater", at: [44, 67] },
-      { kind: "elite", at: [70, 44] },
-      { kind: "elite", at: [19, 44] },
-      { kind: "jungle", at: [64, 36] },
-      { kind: "jungle", at: [64, 52] },
-      { kind: "jungle", at: [25, 36] },
-      { kind: "jungle", at: [25, 52] },
-    ],
+    camps: WAR_CAMPS,
   },
 } satisfies Record<string, PwArenaDef>;

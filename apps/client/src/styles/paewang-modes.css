@@ -88,6 +88,32 @@
 .pw-recall {
   color: #8ac8ff;
 }
+/* 전쟁의 서막 큰 보스 알림 · 우리 강화 줄 */
+.pw-war-news {
+  position: fixed;
+  top: 18%;
+  left: 50%;
+  z-index: 6;
+  transform: translateX(-50%);
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: rgb(14 10 22 / 0.85);
+  font-size: 16px;
+  font-weight: bold;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.pw-war-news.ours {
+  color: #ffe07a;
+  border: 2px solid #f2d040;
+}
+.pw-war-news.theirs {
+  color: #ff9a8a;
+  border: 2px solid #c04040;
+}
+.pw-war-buffs {
+  color: #ffd98a;
+}
 /* 점수판 막대 · Tab 능력치 · 장비 창 */
 .pw-bar {
   position: relative;

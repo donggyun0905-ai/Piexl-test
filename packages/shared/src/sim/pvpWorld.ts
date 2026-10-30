@@ -4,6 +4,7 @@
 import { PW_CHAR } from "../paewangBalance";
 import { PW, PW_MODE } from "../paewangDefs";
 import { PW_GIGA } from "../pwRules";
+import { warEarly, warRole } from "./pwWarBot";
 import { damagePlayer, removeDead, updatePending } from "./combat";
 import { allPlayers, eachSeat, isAlive, seatNo, useSeat } from "./party";
 import { updateProjectiles } from "./projectiles";
@@ -47,7 +48,9 @@ export function assignFoes(s: RunState): void {
     // 기간토마키아 AI: 레벨이 되는 거인만 · 가까운 상대 캐릭터만 (한 판이 30분쯤 가게)
     const giga = PW_MODE[pv.mode].rule === "giganto" && !pv.seats[i]!.human;
     const near = (e: { x: number; y: number }, r: number) => (e.x - p.x) ** 2 + (e.y - p.y) ** 2 < r * r;
-    const units = (pv.grow?.units ?? []).filter((u) => u.team !== team && u.body.hp > 0 && (u.team !== 2 || (near(u.body, 500) && (!giga || (p.pwLv ?? 1) >= (PW_GIGA.botLv[u.kind] ?? 1))))).map((u) => u.body);
+    // 전쟁의 서막 10분 전: 길에 선 AI(정글 빼고)는 자기를 쫓는 정글 몬스터만 (길을 벗어나 정글로 새지 않게)
+    const laner = PW_MODE[pv.mode].rule === "war" && !pv.seats[i]!.human && warEarly(s) && warRole(s, i) !== "jungle";
+    const units = (pv.grow?.units ?? []).filter((u) => u.team !== team && u.body.hp > 0 && (u.team !== 2 || (near(u.body, 500) && (!laner || u.foe === i) && (!giga || (p.pwLv ?? 1) >= (PW_GIGA.botLv[u.kind] ?? 1))))).map((u) => u.body);
     const calm = giga && (pvpZone(s)?.phase ?? 0) < PW_GIGA.botFightPhase + (i % 5);
     s.enemies = live
       .filter((e) => {

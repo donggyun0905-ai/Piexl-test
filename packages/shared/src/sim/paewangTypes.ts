@@ -139,6 +139,10 @@ export interface PvpSeat {
   seenX?: number;
   seenY?: number;
   seenT?: number;
+  /** 전쟁의 서막 AI: 다른 길·정글을 도우러 가는 중 (도울 자리 · 끝 틱) */
+  roam?: { seat: number; until: number };
+  /** 전쟁의 서막 AI: 마지막으로 귀환을 시작한 틱 (끊기면 한동안 걸어서 집 쪽으로) */
+  rcAt?: number;
   /** 이 판에 상대에게 준 피해 · 받은 피해 합 (점수판) */
   dealt?: number;
   taken?: number;
@@ -172,7 +176,7 @@ export interface PwPlayerState extends PwGrowPlayer {
   /** 스킬 1~4 남은 대기 틱 */
   pwCd?: number[];
   /** 걸린 버프 (스킬): 남은 틱과 효과 */
-  pwBuffs?: { t: number; dmg?: number; move?: number; rate?: number; taken?: number; regen?: number; hide?: boolean }[];
+  pwBuffs?: { t: number; dmg?: number; move?: number; rate?: number; taken?: number; regen?: number; hide?: boolean; keep?: "dragon" }[];
   /** 스킬 돌진 중: 방향 · 남은·전체 거리 · 속도 · 맞힌 상대 · 스킬 번호 · 지난 구간(여러 번 돌진) */
   pwDash?: { dx: number; dy: number; left: number; total: number; speed: number; hit: number[]; k: number; seg?: number };
   /** 능력치를 바꾸는 버프 수 (바뀌면 능력치를 다시 계산) */
