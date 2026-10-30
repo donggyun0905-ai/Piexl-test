@@ -8,11 +8,11 @@ export const PW_GROW_TEXT = {
   panHintTouch: l("✌ 오른쪽 두 손가락: 벌리고 좁혀 확대·축소, 같이 끌어 화면 옮기기", "✌ Two fingers on the right: pinch to zoom, drag together to move the view", "✌ 右側を2本指: 広げて縮めて拡大・縮小、一緒にドラッグで画面移動"),
   panBack: l("⌖ 내 캐릭터로", "⌖ Back to me", "⌖ 自分のキャラへ"),
   pwContestDesc: l(
-    "5대5. 신의 힘을 얻기 위한 싸움. 병사·포탑이 있는 한 줄 길 · 레벨 18·돈·집 상점 · 상대 포탑 둘을 부수고 가운데를 점령한 뒤, 상대 집 보스를 잡고 집을 점령하면 승리",
-    "5v5. A fight for divine power on a single lane with minions and towers · level up to 18, earn gold and shop at home · break both enemy towers and take the center, then slay the boss guarding their home and capture it to win",
-    "5対5。神の力を得るための戦い。兵士と砲塔がいる一本道 · レベル18・お金・拠点ショップ · 相手の砲塔2つを壊して中央を占領し、相手拠点のボスを倒して拠点を占領すれば勝利",
+    "5대5. 신의 힘을 얻기 위한 싸움. 병사·포탑이 있는 한 줄 길 · 레벨 18·돈·집 상점 · 상대 포탑 둘을 부수고 가운데를 점령한 뒤(가운데는 서로 계속 빼앗을 수 있음), 상대 집 보스를 잡고 집을 점령하면 승리",
+    "5v5. A fight for divine power on a single lane with minions and towers · level up to 18, earn gold and shop at home · break both enemy towers and take the center (it can be stolen back and forth), then slay the boss guarding their home and capture it to win",
+    "5対5。神の力を得るための戦い。兵士と砲塔がいる一本道 · レベル18・お金・拠点ショップ · 相手の砲塔2つを壊して中央を占領し（中央は何度でも奪い合える）、相手拠点のボスを倒して拠点を占領すれば勝利",
   ),
-  pwGoalContest: l("목표: 상대 포탑 둘 → 가운데 점령 → 상대 집 보스 → 집 점령", "Goal: both enemy towers → take the center → their home boss → capture their home", "目標: 相手の砲塔2つ → 中央占領 → 相手拠点のボス → 拠点占領"),
+  pwGoalContest: l("목표: 상대 포탑 둘 → 가운데 점령 (빼앗기면 되찾기) → 상대 집 보스 → 집 점령", "Goal: both enemy towers → take the center (retake it if stolen) → their home boss → capture their home", "目標: 相手の砲塔2つ → 中央占領（奪われたら奪い返す）→ 相手拠点のボス → 拠点占領"),
   pwMap_gContest: l("신의 제단", "Altar of the Gods", "神の祭壇"),
   pwWar: l("전쟁의 서막", "Prelude to War", "戦争の序幕"),
   pwWarDesc: l(

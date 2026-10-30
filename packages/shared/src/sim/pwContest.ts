@@ -1,4 +1,4 @@
-// 패왕전 쟁탈전 규칙 (docs/PW_MODES.md 1): 상대 포탑 둘을 다 부숴야 가운데 점령지를 점령할 수 있음 → 가운데를 가진 편은 병사가 강해지고 상대 집 보스를 때릴 수 있음
+// 패왕전 쟁탈전 규칙 (docs/PW_MODES.md 1): 상대 포탑 둘을 다 부숴야 가운데 점령지를 처음 점령할 수 있음 (그 뒤로는 서로 계속 빼앗음) → 가운데를 가진 편은 병사가 강해지고 상대 집 보스를 때릴 수 있음
 // 상대 집 보스를 잡으면 그 집 점령지를 점령할 수 있고, 점령하면 승리 · 시간이 다 되면 부순 포탑·가운데·보스로 점수
 import { TICK_RATE, TILE_SIZE } from "../constants";
 import { PW_ARENAS } from "../paewangMaps";
@@ -30,11 +30,14 @@ export function contestTick(s: RunState): void {
   const a = PW_ARENAS[pv.arena];
   // 집 보스: 상대가 가운데를 가져야 맞음
   for (const u of g.units) if (u.kind === "boss") u.body.immune = g.owner !== 1 - u.team;
+  // 가운데: 처음(주인 없음)은 상대 포탑 둘을 부숴야 점령 · 주인이 생긴 뒤로는 포탑과 상관없이 서로 계속 빼앗음 · 주인 편만 있으면 상대가 쌓던 점령도가 줄어듦
   const mid = present(s, (x, y) => inCapZone(a, x, y));
   if (mid.size === 1) {
     const team = [...mid][0]!;
-    if (team !== g.owner && canTakeCenter(s, team)) {
-      g.center[team] = (g.center[team] ?? 0) + 100 / (PW_CONTEST.centerSec * TICK_RATE);
+    const rate = 100 / (PW_CONTEST.centerSec * TICK_RATE);
+    if (team === g.owner) for (const k of [0, 1]) g.center[k] = Math.max(0, (g.center[k] ?? 0) - rate);
+    else if (g.owner !== undefined || canTakeCenter(s, team)) {
+      g.center[team] = (g.center[team] ?? 0) + rate;
       if (g.center[team]! >= 100) {
         g.owner = team;
         g.center = {};

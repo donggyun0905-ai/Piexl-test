@@ -1,8 +1,9 @@
 // 패왕전 집 상점 창 (쟁탈전 · 전쟁의 서막, B · Esc로 닫음): 맨 위 추천 장비(역할군마다 여섯 중 안 가진 셋) · 내 장비 팔기 · 사용 아이템 · 기본 장비 · 전설 장비
-// 전설 장비를 누르면 재료 창(PwShopDetail): 재료 하나씩 사거나 한 번에 완성 · 집에 있거나 쓰러져 기다리는 동안 살 수 있음
+// 전설 장비를 누르면 재료 창(PwShopDetail, body에 그려 보고 있는 화면 가운데): 재료 하나씩 사거나 한 번에 완성 · 집에 있거나 쓰러져 기다리는 동안 살 수 있음
 // 누른 것은 controls.queueMenu → 입력 menu → sim/pwGrow.growMenu
 import { atHome, buyPlan, fullCost, GROW_MENU, inPlay, PW_BASIC, PW_LEGEND, PW_SHOP_IDS, PW_SHOP_USES, useSeat as takeSeat, type RunState } from "@pixel-rogue/shared";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import type { Controls } from "../game/controls";
 import { ItemIcon } from "../game/itemIcon";
 import type { Lang, TextKey } from "../i18n";
@@ -95,7 +96,7 @@ export function PwShop({ run, me, lang, t, controls, onClose }: Props) {
         {t("pwShopLegend")} <small>· {t("pwShopRelic")}</small>
       </h4>
       <div className="pw-shop-list">{Object.keys(PW_LEGEND).map(card)}</div>
-      {detail && <PwShopDetail id={detail} view={v} lang={lang} t={t} onBuy={buy} onClose={() => setDetail(null)} />}
+      {detail && createPortal(<PwShopDetail id={detail} view={v} lang={lang} t={t} onBuy={buy} onClose={() => setDetail(null)} />, document.body)}
     </div>
   );
 }

@@ -68,7 +68,7 @@ function walk(s: RunState, input: TickInput, x: number, y: number): TickInput {
   return d ? { ...input, moveX: Math.round(d[0] * 100), moveY: Math.round(d[1] * 100) } : input;
 }
 
-/** 지금 갈 목표: 상대 포탑(내 길 앞 것부터, 전쟁의 서막은 자리마다 길을 나눔) → 점령할 수 있는 체크포인트 → 가운데(쟁탈전) → 상대 집 */
+/** 지금 갈 목표: 상대 포탑(내 길 앞 것부터, 전쟁의 서막은 자리마다 길을 나눔) → 점령할 수 있는 체크포인트 → 가운데(쟁탈전, 빼앗겼으면 맨 먼저) → 상대 집 */
 function objective(s: RunState, i: number, team: number): [number, number] {
   const pv = s.pvp!;
   const g = pv.grow!;
@@ -76,6 +76,8 @@ function objective(s: RunState, i: number, team: number): [number, number] {
   const lane = i % (a.lanes?.length ?? 1);
   const pt = a.points?.[lane];
   if (pt && g.points?.[lane]?.owner !== team && canPoint(s, team, lane)) return spotXY(pt.at);
+  // 쟁탈전: 가운데를 빼앗기면 포탑보다 먼저 되찾으러 감
+  if (PW_MODE[pv.mode].rule === "contest" && g.owner === 1 - team) return capCenter(a);
   const towers = g.units.filter((u) => u.kind === "tower" && u.team !== team && u.body.hp > 0);
   const tower = [...towers.filter((u) => u.lane === lane), ...towers].sort((x, y) => Number(y.lane === lane) - Number(x.lane === lane) || (x.order ?? 0) - (y.order ?? 0))[0];
   if (tower) return [tower.body.x, tower.body.y];

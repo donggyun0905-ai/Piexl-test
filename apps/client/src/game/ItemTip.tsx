@@ -1,5 +1,6 @@
 // 아이템 설명 말풍선 (바닥 아이템·장비 줄 패시브·연습장 도구가 같이 씀)
 import { useEffect, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { ItemIcon, type IconItem } from "./itemIcon";
 
 const TIP_HALF_WIDTH = 132;
@@ -41,8 +42,9 @@ interface Props {
   children?: ReactNode;
 }
 
+/** 말풍선은 body에 그림: 감싼 창이 transform·스크롤을 가지면 fixed가 그 창 안에 붙어 창이 커졌다 줄었다 흔들림 (패왕전 Tab 점수판) */
 export function ItemTip({ pos, icon, name, desc, children }: Props) {
-  return (
+  return createPortal(
     <div className={pos.below ? "item-tip below" : "item-tip"} style={{ left: pos.x, top: pos.y }}>
       <div className="item-tip-name">
         {icon && <ItemIcon item={icon} size={24} />}
@@ -50,6 +52,7 @@ export function ItemTip({ pos, icon, name, desc, children }: Props) {
       </div>
       <div>{desc}</div>
       {children}
-    </div>
+    </div>,
+    document.body,
   );
 }

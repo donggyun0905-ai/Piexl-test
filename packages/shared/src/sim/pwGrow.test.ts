@@ -7,10 +7,35 @@ import { createPvp, stepPvp } from "./pvp";
 import { addXp, buyPlan, GROW_MENU, growMenu, homeOf } from "./pwGrow";
 import { gearHits } from "./pwGear";
 import { EMPTY_INPUT } from "./types";
+import { PW_ARENAS } from "../paewangMaps";
+import { PW_CONTEST } from "../pwRules";
+import { TICK_RATE } from "../constants";
+import { capCenter } from "./pwCapture";
+import { contestTick, towersLeft } from "./pwContest";
 
 const fresh = () => createPvp(5, "contest", [{ characterId: "warden" }], "gContest");
 
 describe("패왕전 성장 대결 (쟁탈전)", () => {
+  it("가운데: 주인이 생긴 뒤로는 상대 포탑이 남아 있어도 다시 빼앗을 수 있음 · 주인만 있으면 상대 점령도가 줄어듦", () => {
+    const s = fresh();
+    const g = s.pvp!.grow!;
+    const [cx, cy] = capCenter(PW_ARENAS[s.pvp!.arena]);
+    allPlayers(s).forEach((p, i) => ([p.x, p.y] = i === 0 ? [cx, cy] : homeOf(s, s.pvp!.seats[i]!.team)));
+    const me = s.pvp!.seats[0]!.team;
+    g.owner = 1 - me;
+    expect(towersLeft(s, 1 - me)).toBe(2);
+    for (let t = 0; t < (PW_CONTEST.centerSec * TICK_RATE) / 2; t++) contestTick(s);
+    const half = g.center[me]!;
+    expect(half).toBeGreaterThan(40);
+    // 상대(주인)만 가운데에 → 내 점령도가 줄어듦
+    allPlayers(s).forEach((p, i) => ([p.x, p.y] = s.pvp!.seats[i]!.team === me ? homeOf(s, me) : [cx, cy]));
+    for (let t = 0; t < 60; t++) contestTick(s);
+    expect(g.center[me]).toBeLessThan(half - 5);
+    allPlayers(s).forEach((p, i) => ([p.x, p.y] = i === 0 ? [cx, cy] : homeOf(s, s.pvp!.seats[i]!.team)));
+    for (let t = 0; t < PW_CONTEST.centerSec * TICK_RATE; t++) contestTick(s);
+    expect(g.owner).toBe(me);
+  });
+
   it("시작: 모두 1레벨·처음 돈 · 편마다 포탑 둘 · 집 보스", () => {
     const s = fresh();
     for (const p of allPlayers(s)) expect(p.pwLv).toBe(1);
