@@ -22,7 +22,7 @@ SOURCES = {
         body=116,
     ),
     "warden": dict(
-        parts={"front": (20, 373), "back": (413, 344), "right": (777, 299), "idle": (1096, 545)},
+        parts={"front": (20, 386), "back": (426, 287), "right": (733, 309), "idle": (1062, 480)},
         rows=[["front"] * 4, ["back"] * 4, ["right"] * 4, ["idle", "idle", "idle", "right"]],
         body=116,
     ),

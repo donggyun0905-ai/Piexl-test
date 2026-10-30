@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.273",
+    date: "2026-10-31",
+    items: {
+      ko: ["파수꾼 그림을 진한 색·굵은 테두리 그림으로 바꿈: 은빛 판금 갑옷, 붉은 깃털 투구, 푸른 망토 · 어두운 바닥에서도 또렷하게 보임"],
+      en: ["Warden art swapped to a bolder version with rich colors and thick outlines: silver plate armor, red-plumed helmet, blue cape · stands out clearly on dark floors"],
+      ja: ["番人の絵を濃い色・太い縁取りの絵に変更: 銀のプレートアーマー、赤い羽根の兜、青いマント · 暗い床でもはっきり見える"],
+    },
+  },
+  {
     version: "0.48.272",
     date: "2026-10-31",
     items: {
