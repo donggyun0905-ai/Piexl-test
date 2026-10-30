@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.262",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "빛의 사도: 성장(빛의 조각 6개마다)하면 2배 촘촘한 그림으로 바뀜 · 큰 눈·빛나는 눈동자·볼 홍조·얼굴선을 감싸는 옆머리",
+        "빛의 사도: 턱을 짧고 둥글게 다시 그림",
+        "빛의 사도: 성장하는 순간 화면 가운데 띠에 빛의 사도 일러스트가 미끄러져 들어오는 연출",
+      ],
+      en: [
+        "Apostle of Light: after each growth (every 6 Shards) she uses a twice-as-detailed sprite · larger shining eyes · blush · side locks framing the face",
+        "Apostle of Light: shorter, rounder chin",
+        "Apostle of Light: on growth, a banner slides across the screen with her illustration",
+      ],
+      ja: [
+        "光の使徒: 成長（光のかけら6個ごと）すると2倍細かい絵に · 大きく輝く瞳・頬の赤み・顔まわりを包む横髪",
+        "光の使徒: あごを短く丸く描き直し",
+        "光の使徒: 成長の瞬間、画面中央の帯に光の使徒のイラストが滑り込む演出",
+      ],
+    },
+  },
+  {
     version: "0.48.261",
     date: "2026-10-30",
     items: {

@@ -9,10 +9,11 @@ K = dict(
     skin=hx("#fbe3d2"), skinD=hx("#e8bba4"), blush=hx("#f0a0a0"), eye=hx("#3a3446"), eyeL=hx("#ffffff"), iris=hx("#8a86a0"),
     cloth=hx("#1c1824"), clothM=hx("#2e2838"), clothL=hx("#4a4258"), belt=hx("#3a3446"), silver=hx("#d8dce8"),
     gold=hx("#ffc84a"), goldD=hx("#c8902a"), orange=hx("#ff8a1a"), yellow=hx("#ffe060"), core=hx("#fffbe8"),
-    outline=hx("#4e4262"),
+    outline=hx("#4e4262"), irisL=hx("#b4b0cc"), lash=hx("#141019"), mouth=hx("#d88a8a"),
 )
 
-STAGES = [("lux", 48, 30), ("lux2", 56, 35), ("lux3", 64, 40), ("lux4", 72, 45)]
+# 성장 단계(조각 6개부터)는 2배 촘촘한 그림 (칸 112·128·144 = 게임에서 56·64·72 크기로 줄여 그려 더 섬세하게, sprites.ts hd: 2)
+STAGES = [("lux", 48, 30, 1), ("lux2", 112, 70, 2), ("lux3", 128, 80, 2), ("lux4", 144, 90, 2)]
 
 
 def star(c, cx, cy, a):
@@ -67,14 +68,15 @@ def head(c, cx, top, hs, view, stage):
         c.oval(cx, cy, r, r, K["hair"]); c.oval(cx - r * 0.3, cy - r * 0.4, r * 0.35, r * 0.25, K["hairL"])
         return
     face_x = cx + (r * 0.25 if view == "side" else 0)
-    c.oval(cx, cy, r * 0.9, r, K["hair"])
-    # 얼굴: 아래 절반 + 갸름한 V자 턱 (볼에서 턱끝으로 곧게 좁아짐)
-    fw = r * (0.56 if view == "side" else 0.66)
-    for y in range(int(cy - r * 0.25), int(cy + r * 1.08) + 1):
-        k = (y - (cy - r * 0.25)) / (r * 1.33)
-        w = max(0.5, fw * (1 - max(0, k - 0.42) * 1.6))
+    c.oval(cx, cy, r * 0.92, r, K["hair"])
+    # 얼굴: 아래 절반 · 짧고 둥근 턱 (볼 아래에서 부드럽게 둥글게 모임)
+    fw = r * (0.58 if view == "side" else 0.7)
+    y0, y1 = cy - r * 0.25, cy + r * 0.86
+    for y in range(int(y0), int(y1) + 1):
+        t = max(0.0, ((y - y0) / (y1 - y0) - 0.5) / 0.5)
+        w = fw * (1 - 0.5 * (1 - (1 - min(1.0, t) ** 2) ** 0.5))
         c.rect(face_x - w, y, w * 2, 1, K["skin"])
-    c.px(face_x - fw + 1, cy + r * 0.4, K["blush"]); c.px(face_x + fw - 2, cy + r * 0.4, K["blush"])
+    c.px(face_x - fw + 1, cy + r * 0.38, K["blush"]); c.px(face_x + fw - 2, cy + r * 0.38, K["blush"])
     # 눈 자리 (크기에 맞춰 커짐)
     ey = round(cy + r * 0.1)
     ew = max(2, round(hs * 0.17))
@@ -86,7 +88,7 @@ def head(c, cx, top, hs, view, stage):
         c.rect(x, cy - r * 0.6, 1, bottom - (cy - r * 0.6) + 1, K["hair"])
     if view == "front":
         for side in (-1, 1):
-            x = cx + side * (r * 0.84)
+            x = cx + side * (r * 0.86)
             c.rect(x - (1 if side > 0 else 0), cy - r * 0.3, 2, r * 1.25, K["hair"])
             c.rect(x - side * 1 - (1 if side > 0 else 0), cy + r * 0.15, 1, r * 0.75, K["white"])
     else:
@@ -97,17 +99,20 @@ def head(c, cx, top, hs, view, stage):
     # 머리 윤기 (흰빛 띠)
     for i in range(-int(r * 0.5), int(r * 0.5)):
         c.px(cx + i, round(cy - r * 0.62 + abs(i) * 0.25), K["hairL"])
-    # 눈: 위 속눈썹(바깥 끝이 올라감) · 회보랏빛 눈동자(위는 짙게) · 흰 빛 · 아래 밝은 빛
-    eyes = (face_x - fw * 0.44, face_x + fw * 0.44) if view == "front" else (face_x + fw * 0.42,)
-    for i, ex in enumerate(eyes):
-        ex = round(ex) - ew // 2
-        out = -1 if (view == "front" and i == 0) else 1
-        c.rect(ex - 1, ey - 1, ew + 2, 1, K["eye"])
-        c.px(ex + (ew + 1 if out > 0 else -2), ey - 2, K["eye"])
-        c.rect(ex, ey, ew, eh, K["iris"])
-        c.rect(ex, ey, ew, max(1, eh // 2), K["eye"])
-        c.px(ex + (1 if out > 0 else ew - 2), ey, K["eyeL"])
-        if ew >= 3: c.px(ex + (ew - 1 if out > 0 else 0), ey + eh - 1, K["whiteD"])
+    if hs >= 30:
+        hd_face(c, cx, cy, r, face_x, fw, ey, view)
+    else:
+        # 눈: 위 속눈썹(바깥 끝이 올라감) · 회보랏빛 눈동자(위는 짙게) · 흰 빛 · 아래 밝은 빛
+        eyes = (face_x - fw * 0.44, face_x + fw * 0.44) if view == "front" else (face_x + fw * 0.42,)
+        for i, ex in enumerate(eyes):
+            ex = round(ex) - ew // 2
+            out = -1 if (view == "front" and i == 0) else 1
+            c.rect(ex - 1, ey - 1, ew + 2, 1, K["eye"])
+            c.px(ex + (ew + 1 if out > 0 else -2), ey - 2, K["eye"])
+            c.rect(ex, ey, ew, eh, K["iris"])
+            c.rect(ex, ey, ew, max(1, eh // 2), K["eye"])
+            c.px(ex + (1 if out > 0 else ew - 2), ey, K["eyeL"])
+            if ew >= 3: c.px(ex + (ew - 1 if out > 0 else 0), ey + eh - 1, K["whiteD"])
     # 귀걸이 (단계 1부터): 금 마름모가 늘어짐
     if stage >= 1 and view == "front":
         for side in (-1, 1):
@@ -115,8 +120,46 @@ def head(c, cx, top, hs, view, stage):
             c.px(x, ey + 2, K["goldD"]); c.px(x, ey + 3, K["gold"]); c.px(x - 1, ey + 4, K["gold"]); c.px(x + 1, ey + 4, K["gold"]); c.px(x, ey + 5, K["yellow"])
 
 
-def frame_for(size, H, stage):
-    FOOT = size - 3
+def hd_face(c, cx, cy, r, face_x, fw, ey, view):
+    """2배 촘촘한 얼굴 (성장 그림): 큰 눈(두꺼운 위 속눈썹·눈동자 색 층·빛 두 점) · 볼 홍조 · 작은 코·입 · 얼굴 옆을 가리는 옆머리"""
+    ew, eh = round(r * 0.42), round(r * 0.4)
+    front = view == "front"
+    eyes = (face_x - fw * 0.5, face_x + fw * 0.5) if front else (face_x + fw * 0.45,)
+    for i, ex in enumerate(eyes):
+        out = -1 if (front and i == 0) else 1
+        x0 = round(ex) - ew // 2
+        y0 = ey - eh // 4 + 1
+        c.rect(x0, y0, ew, eh, K["iris"])
+        c.rect(x0, y0 + eh - 2, ew, 2, K["irisL"])
+        c.rect(x0, y0, ew, max(2, eh // 4), K["eye"])
+        c.rect(x0 + ew // 2 - 1, y0 + eh // 3, 2, eh // 3, K["eye"])
+        # 위 속눈썹 (두껍게, 바깥 끝이 올라가며 삐침) · 아래 속눈썹 옅게
+        c.rect(x0 - 1, y0 - 1, ew + 2, 2, K["lash"])
+        tip = x0 + ew + 1 if out > 0 else x0 - 2
+        c.px(tip, y0 - 1, K["lash"]); c.px(tip + out, y0 - 2, K["lash"])
+        c.rect(x0 + 1, y0 + eh, ew - 2, 1, K["skinD"])
+        # 빛: 위 바깥 큰 점 · 아래 안쪽 작은 점
+        hx0 = x0 + 1 if out > 0 else x0 + ew - 3
+        c.rect(hx0, y0 + 2, 2, 2, K["eyeL"])
+        c.px(x0 + (ew - 2 if out > 0 else 1), y0 + eh - 2, K["eyeL"])
+        # 볼 홍조
+        c.rect(round(ex) - 2 + out, y0 + eh + 2, 4, 1, K["blush"])
+    nx = round(face_x + (0 if front else fw * 0.9))
+    c.px(nx, ey + round(r * 0.32), K["skinD"])
+    c.rect(nx - (1 if front else 2), ey + round(r * 0.55), 2, 1, K["mouth"])
+    if front:
+        # 옆머리가 얼굴 양옆을 덮어 갸름해 보이게 (안쪽에 흰 머리 한 줄)
+        for side in (-1, 1):
+            x = round(face_x + side * (fw - 1)) - (2 if side > 0 else 0)
+            for y in range(int(cy - r * 0.35), int(cy + r * 1.05)):
+                k = (y - (cy - r * 0.35)) / (r * 1.4)
+                w = 3 if k < 0.75 else 2
+                c.rect(x + (0 if side < 0 else 3 - w), y, w, 1, K["hair"])
+            c.rect(x + (2 if side < 0 else 0), cy + r * 0.2, 1, r * 0.7, K["white"])
+
+
+def frame_for(size, H, stage, hd=1):
+    FOOT = size - 3 * hd
     CX = size // 2
 
     def frame(row, col):
@@ -228,8 +271,8 @@ def frame_for(size, H, stage):
 
 
 def main():
-    for stage, (name, size, H) in enumerate(STAGES):
-        save_sheet(name, frame_for(size, H, stage), size=size)
+    for stage, (name, size, H, hd) in enumerate(STAGES):
+        save_sheet(name, frame_for(size, H, stage, hd), size=size)
 
 
 if __name__ == "__main__":

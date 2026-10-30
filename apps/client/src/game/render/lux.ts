@@ -2,6 +2,7 @@
 // 몸 둘레 빛(성장 단계마다 진해짐) · 은총의 옷자락 머리 위 빛의 검 날개 · 빛의 적 둘레 금빛 기운 · 왼쪽 위 빛의 조각 창 (조각 수 · 다음 성장까지)
 import { LUX, luxShards, luxStage, type EffectState, type EnemyState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { customImage } from "../customArt";
+import { drawLuxCutIn } from "./luxCutIn";
 import { hudScale } from "./imugiAura";
 import { lerp, type Snap } from "./palette";
 import { additive, glow } from "./pwFxBits";
@@ -234,4 +235,5 @@ export function drawLuxHud(ctx: Ctx, s: RunState, scale: number): void {
   ctx.strokeText(add, 16 + nw, 0);
   ctx.fillText(add, 16 + nw, 0);
   ctx.restore();
+  drawLuxCutIn(ctx, s, ctx.canvas.width / k, ctx.canvas.height / k);
 }
