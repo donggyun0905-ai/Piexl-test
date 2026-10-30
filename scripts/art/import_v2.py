@@ -18,6 +18,11 @@ BODY = 116
 FILES = [("1", 4, 2, [0, 1]), ("2", 4, 2, [2, 3]), ("3", 4, 1, [4])]
 # 왼쪽 모습을 오른쪽 뒤집기로 (GPT 왼쪽 그림이 오른쪽을 봄)
 FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", "brawler"}
+# 공격 줄 오른쪽·왼쪽에 쓸 원본 칸 (0~3, 끝에 f = 뒤집기): GPT가 칸 순서를 바꿔 그린 캐릭터만 (화면을 보고 정함)
+ATTACK_LR = {
+    "warden": ("2", "3"), "drifter": ("2", "3"), "engineer": ("2", "3"), "elementalist": ("2", "3"),
+    "mystic": ("3f", "3"), "brawler": ("3f", "3"),
+}
 
 
 def pieces(img, cols, rows):
@@ -43,11 +48,16 @@ def pieces(img, cols, rows):
             if len(pts) < 12: continue  # 먼지 같은 점
             cx = sum(p[0] for p in pts) / len(pts)
             cy = sum(p[1] for p in pts) / len(pts)
-            cells[min(rows - 1, int(cy * rows / h))][min(cols - 1, int(cx * cols / w))].extend(pts)
+            cells[min(rows - 1, int(cy * rows / h))][min(cols - 1, int(cx * cols / w))].append((cx, cy, pts))
     out = []
-    for row in cells:
+    ch = h / rows
+    for r, row in enumerate(cells):
         line = []
-        for pts in row:
+        for comps in row:
+            # 칸 위쪽 끝에 붙은 작은 조각(윗줄 발끝이 넘어온 것)은 버림
+            total = sum(len(c[2]) for c in comps)
+            keep = [c for c in comps if len(c[2]) > total * 0.04 or min(q[1] for q in c[2]) > r * ch + ch * 0.12]
+            pts = [q for c in keep for q in c[2]]
             x0, y0 = min(p[0] for p in pts), min(p[1] for p in pts)
             part = Image.new("RGBA", (max(p[0] for p in pts) - x0 + 1, max(p[1] for p in pts) - y0 + 1), (0, 0, 0, 0))
             pp = part.load()
@@ -64,8 +74,13 @@ def build(name):
         for r, line in zip(at, pieces(img, cols, rows)):
             for c, part in enumerate(line): grid[r, c] = part
     # GPT가 '왼쪽' 칸도 오른쪽을 보게 그리는 일이 많음 → 서기·공격·걷기의 왼쪽은 오른쪽을 뒤집어 씀 (FLIP_LEFT에 없는 캐릭터는 그대로)
+    raw = dict(grid)
     if name in FLIP_LEFT:
         for r in range(4): grid[r, 2] = grid[r, 3].transpose(Image.FLIP_LEFT_RIGHT)
+    if name in ATTACK_LR:
+        src = [raw[1, c] for c in range(4)]
+        pick = lambda k: src[int(k[0])].transpose(Image.FLIP_LEFT_RIGHT) if k.endswith("f") else src[int(k[0])]
+        grid[1, 3], grid[1, 2] = pick(ATTACK_LR[name][0]), pick(ATTACK_LR[name][1])
     base = BODY / grid[0, 0].height
     sheet = Image.new("RGBA", (CELL * 4, CELL * 5), (0, 0, 0, 0))
     for (r, c), p in grid.items():

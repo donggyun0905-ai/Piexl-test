@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.276",
+    date: "2026-10-31",
+    items: {
+      ko: ["새 그림 캐릭터의 왼쪽·오른쪽 공격 자세가 반대로 나오던 문제 고침 (파수꾼·떠돌이·음양사·기계공학자·원소술사·격투가) · 기계공학자가 레이저를 쏠 때 공격 자세 · 그림 칸 위에 붙어 나오던 작은 조각 지움"],
+      en: ["Fixed left/right attack poses being swapped on the new art (Warden, Drifter, Talisman Master, Engineer, Elementalist, Brawler) · Engineer now shows its attack pose while firing the laser · removed stray fragments at the top of some frames"],
+      ja: ["新しい絵のキャラの左右の攻撃ポーズが逆になる問題を修正（番人・流れ者・陰陽師・機械工学者・元素術師・格闘家）· 機械工学者がレーザーを撃つ間は攻撃ポーズ · 一部のコマ上部に出ていた小さなかけらを削除"],
+    },
+  },
+  {
     version: "0.48.275",
     date: "2026-10-31",
     items: {
