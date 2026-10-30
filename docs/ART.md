@@ -41,3 +41,12 @@
 ## 소리
 
 - 지금 소리·음악은 파일 없이 브라우저에서 만든 소리 (`apps/client/src/audio/sound.ts`). 직접 만든 소리로 바꾸려면 같은 이름(swing, shot, hit, kill, hurt, coin, pickup, buy, use, stairs, boss, bossDown, achievement, fall, clear) 단위로 바꾸면 됨
+
+## 고해상도 (2026-10-30 ~, 계획은 `docs/PLAN.md` 9장)
+
+- 그림 파일을 **2배 촘촘하게** 그리고 게임에서는 원래 크기로 줄여 그림 (줄일 때 부드럽게)
+  - 캐릭터: 64칸 시트(발 여백 4) → `game/sprites.ts` `CHARACTER_SHEETS`에 `src: 64` (게임 크기 32 그대로)
+  - 몬스터·보스: 원래 칸의 2배 → `game/enemySprites.ts` `ENEMY_SRC`에 `이름: 2`. 보스는 4칸(걷기 2 · 공격 준비 · 공격)이면 공격 그림을 씀 (`render/actors`)
+- 생성기: `scripts/art/hd_common.py`(3단 명암·색에 맞춘 테두리·큰 눈·앞머리 결) · 시범 `hd_mage.py`(마법사) · `hd_hulk.py`(강철 거구)
+- 도트 편집 페이지는 그림 칸 크기에 맞춰 열림 (`pixel/assets`의 `sheetCell`)
+

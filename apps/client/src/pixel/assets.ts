@@ -2,7 +2,7 @@
 import { CHARACTERS, PASSIVE_IDS, PASSIVES, USE_ITEM_IDS, WEAPON_IDS, WEAPONS, type CharacterId, type PassiveDef, type WeaponDef } from "@pixel-rogue/shared";
 import { artFile, CUSTOM_FILES, myFxKey } from "../game/customArt";
 import { PAW } from "../game/limited/tigerArt";
-import { bigSheet, ENEMY_SPRITES } from "../game/sprites";
+import { bigSheet, ENEMY_SPRITES, sheetCell } from "../game/sprites";
 import { itemName } from "../i18n/items";
 import { TEXT } from "../i18n/text";
 import type { TextKey } from "../i18n";
@@ -44,9 +44,10 @@ const sheet = (name: string, group: GroupId, label: string, dir: string): Asset 
   label,
   group,
   load: () => loadImage(`${BASE}sprites/${dir}${name}.png`),
-  grid: bigSheet(name) ? BIG_GRID : CHAR_GRID,
+  // 고해상도 그림(2배 촘촘)은 그 칸 크기로
+  grid: sheetCell(name) ? { ...CHAR_GRID, cw: sheetCell(name)!, ch: sheetCell(name)! } : bigSheet(name) ? BIG_GRID : CHAR_GRID,
   rowKeys: ["pxRowFront", "pxRowBack", "pxRowSide", "pxRowAttack"],
-  guide: bigSheet(name) ? [24, 45] : [16, 30],
+  guide: sheetCell(name) ? [sheetCell(name)! / 2, sheetCell(name)! - 2] : bigSheet(name) ? [24, 45] : [16, 30],
   file: name,
   place: `public/sprites/${dir}${name}.png`,
 });

@@ -13,7 +13,7 @@ import { drawUmbraActor } from "./umbra";
 import { drawDemigodActor } from "./demigod";
 import { drawSageActor } from "./sage";
 import { drawStalker } from "./stalkers";
-import { drawCharacter, drawEnemySprite, drawSprite, isCasting, sheetFor, type CharacterPose } from "../sprites";
+import { drawCharacter, drawEnemySprite, drawSprite, enemyFrames, isCasting, sheetFor, type CharacterPose } from "../sprites";
 import { C, CHARM_INK, lerp, type Snap } from "./palette";
 import { drawMinionDetail } from "./minions";
 import { drawBossStatus } from "./bossLook";
@@ -75,7 +75,10 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       ctx.scale(pose.sx, pose.sy);
       ctx.translate(-x, -y);
     }
-    const drawn = drawEnemySprite(ctx, look, x, y, Math.floor(s.tick / 12), e.dirX < 0, tint, (e.r / ENEMIES[e.kind].radius) * hitPop(e.hitFlash));
+    // 공격 그림이 있는 보스(4칸): 걷기 2 · 공격 준비 · 공격
+    const atk = pose && enemyFrames(look) >= 4;
+    const frame = atk && e.phase === "windup" ? 2 : atk && (pose.slash > 0 || e.phase !== "walk") ? 3 : Math.floor(s.tick / 12) % (atk ? 2 : 1e9);
+    const drawn = drawEnemySprite(ctx, look, x, y, frame, e.dirX < 0, tint, (e.r / ENEMIES[e.kind].radius) * hitPop(e.hitFlash));
     if (pose) {
       ctx.restore();
       if (drawn) drawSlash(ctx, x, y, e.r, pose);

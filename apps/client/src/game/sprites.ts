@@ -15,85 +15,8 @@ for (const name of SPRITE_FILES) {
   img.onload = () => images.set(name, img);
 }
 
-/** 몬스터 그림 (public/sprites/enemies/{종류}.png, 오른쪽을 봄, 움직임 칸을 가로로) */
-export const ENEMY_SPRITES: readonly string[] = [
-  "dummy", "crawler", "spitter", "mortar", "charger", "gnat", "guardian", "paladin", "tower", "soul", "ghost",
-  "hulk", "brood", "seer", "knight", "archer", "siren", "centaur", "plant", "reaper", "swordgod", "archangel", "toad", "salamander", "jelly", "captain",
-  "godeater", "ruinblade", "chaosblade", "plight", "pdark", "dragon", "umbra", "sandworm", "scorpion", "roc", "sandworm_dark", "scorpion_dark", "roc_dark", "demigod", "sage", "sage_cloud",
-  "slime", "runner", "bat", "beetle", "golem", "shaman", "eggsac", "wisp", "doppel", "venom", "landfish", "lurker",
-  // 서큐버스(무리 여왕)가 부른 졸개
-  "incubus",
-];
-const enemyImages = new Map<string, HTMLImageElement>();
-for (const name of ENEMY_SPRITES) {
-  const img = new Image();
-  img.src = draftSrc(`enemy:${name}`) ?? `${import.meta.env.BASE_URL}sprites/enemies/${name}.png`;
-  img.onload = () => enemyImages.set(name, img);
-}
+export * from "./enemySprites";
 
-/** 색을 입힌 그림 (맞음 흰색 · 기절 푸른빛 · 공격 준비 노란빛) */
-const tinted = new Map<string, HTMLCanvasElement>();
-function tintOf(name: string, img: HTMLImageElement, color: string, amount: number): HTMLCanvasElement {
-  const key = `${name}|${color}|${amount}`;
-  let cv = tinted.get(key);
-  if (!cv) {
-    cv = document.createElement("canvas");
-    cv.width = img.width;
-    cv.height = img.height;
-    const c = cv.getContext("2d")!;
-    c.drawImage(img, 0, 0);
-    c.globalCompositeOperation = "source-atop";
-    c.globalAlpha = amount;
-    c.fillStyle = color;
-    c.fillRect(0, 0, cv.width, cv.height);
-    tinted.set(key, cv);
-  }
-  return cv;
-}
-
-/** 몬스터 그림 모양만 한 가지 색으로 꽉 채운 그림 (테두리·명암 없음, 이무기의 기로 된 용) · 아직 못 불러왔으면 undefined */
-const shapes = new Map<string, HTMLCanvasElement>();
-export function shapeSprite(kind: string, color: string): HTMLCanvasElement | undefined {
-  const img = enemyImages.get(kind);
-  if (!img) return undefined;
-  const key = `${kind}|${color}`;
-  let cv = shapes.get(key);
-  if (!cv) {
-    cv = document.createElement("canvas");
-    cv.width = img.width;
-    cv.height = img.height;
-    const c = cv.getContext("2d")!;
-    c.drawImage(img, 0, 0);
-    c.globalCompositeOperation = "source-in";
-    c.fillStyle = color;
-    c.fillRect(0, 0, cv.width, cv.height);
-    shapes.set(key, cv);
-  }
-  return cv;
-}
-
-/** 몬스터 그림이 있으면 (x, y) 가운데로 그리고 true. tint: [색, 세기] · scale: 원래 크기보다 크거나 작을 때 (타워 디펜스 보스 등) */
-/** 몬스터 그림 한 칸 크기 (아직 못 불러왔으면 undefined) */
-export const enemyCell = (kind: string): number | undefined => enemyImages.get(kind)?.height;
-
-export function drawEnemySprite(ctx: CanvasRenderingContext2D, kind: string, x: number, y: number, frame: number, flip: boolean, tint?: readonly [string, number], scale = 1): boolean {
-  const img = enemyImages.get(kind);
-  if (!img) return false;
-  const cell = img.height;
-  const size = cell * scale;
-  const frames = Math.max(1, Math.floor(img.width / cell));
-  const src = tint ? tintOf(kind, img, tint[0], tint[1]) : img;
-  const left = Math.round(x - size / 2);
-  const top = Math.round(y - size / 2);
-  ctx.save();
-  if (flip) {
-    ctx.translate(left + size, top);
-    ctx.scale(-1, 1);
-  } else ctx.translate(left, top);
-  ctx.drawImage(src, (frame % frames) * cell, 0, cell, cell, 0, 0, size, size);
-  ctx.restore();
-  return true;
-}
 
 /**
  * 그림이 있으면 (x, y)를 가운데로 그리고 true. 없으면 false (도형으로 그리기).
@@ -125,7 +48,7 @@ export function drawSprite(ctx: CanvasRenderingContext2D, name: string, x: numbe
 /** 방향 시트로 넣은 캐릭터 그림: 이름 → 한 칸 크기, 발 아래 여백 */
 /** src: 그림 파일의 한 칸 크기가 다를 때 (빛의 사도 성장 그림 2배 촘촘 · 몰락한 왕 96칸 → 보통 크기로 줄여 그림) */
 const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number; src?: number }>> = {
-  mage: { size: 32, footPad: 2 },
+  mage: { size: 32, footPad: 2, src: 64 },
   drifter: { size: 32, footPad: 2 },
   warden: { size: 32, footPad: 2 },
   mystic: { size: 32, footPad: 2 },
@@ -205,6 +128,7 @@ const SKIN_SHEET = { size: 32, footPad: 2 };
 export const bigSheet = (name: string) => name.startsWith("titan") || name.startsWith("oni") || name.startsWith("mukin") || name.startsWith("slayer") || name.startsWith("rider") || name.startsWith("wanderer");
 /** 거인·오니 스킨은 큰 그림 */
 const TITAN_SKIN_SHEET = { size: 48, footPad: 3 };
+export const sheetCell = (name: string): number | undefined => CHARACTER_SHEETS[name]?.src ?? CHARACTER_SHEETS[name]?.size; // 그림 파일 한 칸 (편집기)
 const skinImages = new Map<string, HTMLImageElement | null>();
 export function skinImage(name: string): HTMLImageElement | undefined {
   if (!skinImages.has(name)) {

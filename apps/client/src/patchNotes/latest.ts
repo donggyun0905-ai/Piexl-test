@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.264",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "고해상도 그림 시범: 마법사(별빛 마법사)를 2배 촘촘한 그림으로 새로 그림 (큰 눈·결이 보이는 은빛 머리·명암·금 장식·수정 지팡이)",
+        "고해상도 그림 시범: 1층 보스 강철 거구를 2배 촘촘하게 새로 그림 (용광로 심장·성난 눈·어깨 가시·굴뚝 연기) · 걷기·공격 준비(주먹을 머리 위로)·내려찍기(불티) 그림",
+      ],
+      en: [
+        "High-res art trial: the Mage (Starlight Mage) redrawn at twice the detail (big eyes, strand-lit silver hair, shading, gold trim, crystal staff)",
+        "High-res art trial: floor 1 boss Iron Hulk redrawn at twice the detail (furnace heart, angry eyes, shoulder spikes, chimney smoke) · walk, wind-up (fists overhead) and slam (sparks) frames",
+      ],
+      ja: [
+        "高解像度の試作: 魔法使い（星光の魔法使い）を2倍細かい絵で描き直し（大きな瞳・毛筋の見える銀髪・陰影・金の飾り・水晶の杖）",
+        "高解像度の試作: 1階ボス鋼鉄の巨躯を2倍細かく描き直し（溶鉱炉の心臓・怒った目・肩の棘・煙突の煙）· 歩き・攻撃準備（拳を頭上に）・叩きつけ（火花）の絵",
+      ],
+    },
+  },
+  {
     version: "0.48.263",
     date: "2026-10-30",
     items: {
