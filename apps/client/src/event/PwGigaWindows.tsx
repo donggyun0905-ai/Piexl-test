@@ -82,15 +82,18 @@ export function GigaBag({ p, craft, gold, lang, t, send, onClose }: { p: PlayerS
           ✕
         </button>
       </header>
-      <div className="pw-gw-grid">
-        <div className="pw-gw-vault">
-          {p.pwVault ? <Cell id={p.pwVault} lang={lang} t={t} on={sel === 99} onClick={() => setSel(99)} /> : <span className="pw-gw-empty">🔒</span>}
-          <small>{t("pwGigaVault")}</small>
+      <div className="pw-gw-grid bag-grid">
+        <div className={`pw-gw-slot vault${sel === 99 ? " on" : ""}`} title={t("pwGigaVault")}>
+          <em className="pw-gw-tag">🔒 {t("pwGigaVaultTag")}</em>
+          {p.pwVault ? <Cell id={p.pwVault} lang={lang} t={t} on={sel === 99} onClick={() => setSel(99)} /> : <span className="pw-gw-empty" />}
         </div>
-        {Array.from({ length: 9 }, (_, k) =>
-          bag[k] ? <Cell key={k} id={bag[k]!} lang={lang} t={t} on={sel === k} onClick={(e) => (e.shiftKey ? send(GIGA_MENU.vault + k) : setSel(k))} /> : <span key={k} className="pw-gw-empty" />,
-        )}
+        {Array.from({ length: 9 }, (_, k) => (
+          <div key={k} className="pw-gw-slot">
+            {bag[k] ? <Cell id={bag[k]!} lang={lang} t={t} on={sel === k} onClick={(e) => (e.shiftKey ? send(GIGA_MENU.vault + k) : setSel(k))} /> : <span className="pw-gw-empty" />}
+          </div>
+        ))}
       </div>
+      <p className="pw-gw-note">{t("pwGigaVault")}</p>
       {it && id && (
         <div className="pw-gw-info">
           <b>{it.name}</b>

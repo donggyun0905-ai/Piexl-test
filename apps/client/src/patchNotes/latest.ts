@@ -4,6 +4,45 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.257",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "로그: 캐릭터 설명 창의 연습장에서 '능력치' 버튼을 눌러도 창이 닫히거나 게임이 멈춘 채로 남지 않음",
+        "로그: 맵 크기는 그대로, 오른쪽 칸의 미니맵(노선도)을 크게",
+        "로그: 장비 줄 맨 왼쪽 P 칸 · 마우스를 올리면 캐릭터 기본 능력 설명",
+        "로그: 파수꾼 분노(체력이 낮을수록 공격력)가 능력치 창 공격력에 바로 보임",
+        "기간토마키아 배낭 창: 금고 + 9칸을 같은 크기 5×2 칸으로 (이름이 밀리지 않게)",
+        "기간토마키아 AI: 벽에 막히면 비켜 가거나 돌아감 · 배낭이 가득 차면 상자 앞에 서 있지 않고 돌아다님 · 할 일이 없으면 먼 상자를 찾아감 (다섯에 하나는 버팀)",
+        "기간토마키아: 이어하기 없앰 (판 중간에 나가면 끝, 금고 물건만 받음) · 쓰러진 사람의 배낭은 그 자리에 떨어져 누구나 주울 수 있음",
+        "기간토마키아 뿔 거인: 흰 뿔은 그대로 · 푸른 뿔은 묵인 모습 · 붉은 뿔은 거인 모습으로 빛깔·뿔·기운을 꾸밈 · 머리 위에 별과 권장 레벨 (내 레벨이 넘으면 초록, 조금 모자라면 노랑, 많이 모자라면 빨강)",
+        "뿔 거인 기술 (때려서 화가 났을 때): 흰 뿔 돌 던지기(떨어질 자리 그림자) · 푸른 뿔 돌진(준비 화살) · 붉은 뿔 레이저(조준선)와 내려찍기(넓은 원)",
+      ],
+      en: [
+        "Dungeon: pressing 'Stats' in the guide window's practice room no longer closes the window or leaves the game paused",
+        "Dungeon: the map keeps its size; the minimap (route map) in the right column is now larger",
+        "Dungeon: a P slot at the far left of the loadout bar · hover to see the character's base ability",
+        "Dungeon: the Warden's Rage (more attack at lower HP) now shows live in the stats panel",
+        "Gigantomachia backpack: vault + 9 slots as an even 5×2 grid (names no longer shift)",
+        "Gigantomachia AI: steers around or backs off walls · with a full backpack it no longer stands at chests and roams instead · idle bots head for distant chests (one in five camps)",
+        "Gigantomachia: resume removed (leaving mid-match ends it; only vault goods are kept) · a fallen player's backpack drops on the spot for anyone to loot",
+        "Horned giants: white stays as is · blue looks like Mukin · red looks like the Titan, each with tinted bodies, horns and auras · stars and a recommended level above them (green if you're above it, yellow if close, red if far below)",
+        "Giant skills (once angered): white throws rocks (shadow where it lands) · blue charges (warning arrow) · red fires a laser (aim line) and slams the ground (wide circle)",
+      ],
+      ja: [
+        "ローグ: キャラ説明の窓の練習場で「能力値」ボタンを押しても窓が閉じたり、ゲームが止まったままにならない",
+        "ローグ: マップの大きさはそのまま、右側のミニマップ（ルート図）を大きく",
+        "ローグ: 装備欄のいちばん左にP枠 · マウスを乗せるとキャラの基本能力の説明",
+        "ローグ: 番人の怒り（体力が低いほど攻撃力）が能力値の攻撃力にすぐ反映",
+        "ギガントマキアのバッグ: 金庫 + 9枠を同じ大きさの5×2に（名前がずれない）",
+        "ギガントマキアのAI: 壁に詰まると避けるか回り込む · バッグがいっぱいなら宝箱の前に立ち止まらず歩き回る · することがないと遠くの宝箱へ（5人に1人は待ち伏せ）",
+        "ギガントマキア: 続きからを廃止（途中で出るとそこで終了、金庫の品だけ受け取る）· 倒れた人のバッグはその場に落ち、誰でも拾える",
+        "角の巨人: 白はそのまま · 青はムキンの姿 · 赤は巨人の姿で、色・角・オーラを装飾 · 頭上に星と推奨レベル（自分のレベルが上なら緑、少し足りないと黄、大きく足りないと赤）",
+        "巨人の技（怒ったとき）: 白は岩投げ（落下地点に影）· 青は突進（予告の矢印）· 赤はレーザー（照準線）と叩きつけ（広い円）",
+      ],
+    },
+  },
+  {
     version: "0.48.256",
     date: "2026-10-30",
     items: {

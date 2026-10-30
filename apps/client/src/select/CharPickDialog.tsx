@@ -8,9 +8,9 @@ import { SkinPreview } from "../shop/SkinPreview";
 import { parseSkin } from "../shop/skins";
 import { THEME_KEY } from "../shop/SkinTab";
 import { equippedSkin } from "../shop/wallet";
+import { CHAR_DESC } from "./charDesc";
 import { cardOf, frameOf, masteryLevel, MASTERY_AT, playsOf, toNext } from "../mastery/mastery";
 
-const DESC: Record<CharacterId, TextKey> = { warden: "wardenDesc", drifter: "drifterDesc", mage: "mageDesc", mystic: "mysticDesc", engineer: "engineerDesc", elementalist: "elementalistDesc", brawler: "brawlerDesc", doctor: "doctorDesc", gunner: "gunnerDesc", beast: "beastDesc", ninja: "ninjaDesc", chronomancer: "chronomancerDesc", summoner: "summonerDesc", novice: "noviceDesc", bedouin: "bedouinDesc", general: "generalDesc", imugi: "imugiDesc", apostle: "apostleDesc", stargazer: "stargazerDesc", duck: "duckDesc", abandoned: "abandonedDesc", titan: "titanDesc", oni: "oniDesc", scribe: "scribeDesc", idra: "idraDesc", byeonhui: "byeonhuiDesc", fly: "flyDesc", elder: "elderDesc", ren: "renDesc", spiritist: "spiritistDesc", plague: "plagueDesc", slayer: "slayerDesc", eater: "eaterDesc", mukin: "mukinDesc", samyeol: "samyeolDesc", automata: "automataDesc", rider: "riderDesc", bomber: "bomberDesc", artifacter: "artifacterDesc", punk: "punkDesc", tracker: "trackerDesc", forgotten: "forgottenDesc", remnant: "remnantDesc", wanderer: "wandererDesc", silk: "silkDesc", miner: "minerDesc", voyager: "voyagerDesc", zeus: "zeusDesc", pilgrim: "pilgrimDesc", fallenKing: "fallenKingDesc" };
 
 /** 입은 스킨 이름 (없으면 기본) */
 export function skinName(t: (k: TextKey) => string, c: CharacterId): string {
@@ -75,7 +75,7 @@ export function CharPickDialog({ t, lang, c, onGo, onClose }: Props) {
             <h2>{t(c as TextKey)}</h2>
             <small className="cs-skin">{skinName(t, c)}</small>
             <MasteryLine t={t} c={c} />
-            <p className="cs-pick-desc">{t(DESC[c])}</p>
+            <p className="cs-pick-desc">{t(CHAR_DESC[c])}</p>
             <h3>{t("csStats")}</h3>
             <dl className="cs-pick-stats">
               {stats.map(([k, v]) => (

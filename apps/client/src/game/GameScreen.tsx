@@ -17,7 +17,7 @@ import { formatTime } from "./hudText";
 import { Loadout, type LoadoutView } from "./Loadout";
 import { MINIMAP_HEIGHT, MINIMAP_WIDTH } from "./minimap";
 import { floorTipAt, PickupTip, type FloorTip } from "./PickupTip";
-import { GameHud, PanHint, StatsPanel } from "./GameHud";
+import { CharInfoHost, GameHud, PanHint, StatsPanel, WithControls } from "./GameHud";
 import { createShaker, useBackButton, useFitScale } from "./screenHooks";
 import { PracticePanel } from "./PracticePanel";
 import { createTutorial, type Tutorial, type TutorialStepId } from "./tutorial";
@@ -27,7 +27,6 @@ import { TouchButtons } from "./TouchButtons";
 import type { GameScreenProps } from "./gameScreenProps";
 import { loadTaboo, randomKitOn } from "../taboo/tabooStore";
 export type { GameMode } from "./gameScreenProps";
-const WithControls = ({ render, controls }: { render: NonNullable<GameScreenProps["withControls"]>; controls: () => Controls | null }) => render(controls);
 export function GameScreen(props: GameScreenProps) {
   const { mode, characterId, seedText, sudden = false, endless = false, arena = false, hero = false, lang, t, onExit } = props;
   const sandbox = mode === "practice" || mode === "tutorial";
@@ -248,7 +247,8 @@ export function GameScreen(props: GameScreenProps) {
           height={Math.round(VIEW_HEIGHT * scale * dpr)}
           style={{ width: VIEW_WIDTH * wide * scale, height: VIEW_HEIGHT * scale }}
         />
-        {stats && !pvp && <StatsPanel rows={stats} character={characterId} lang={lang} t={t} info={overlay === "info"} onInfo={props.embedded ? undefined : (on) => setOverlay(on ? "info" : "none")} run={() => runRef.current} />}
+        {stats && !pvp && <StatsPanel rows={stats} t={t} onInfo={props.embedded ? undefined : () => setOverlay("info")} run={() => runRef.current} />}
+        {!pvp && !props.embedded && <CharInfoHost character={characterId} lang={lang} t={t} open={overlay === "info"} onInfo={(on) => setOverlay((o) => (on ? (o === "none" ? "info" : o) : o === "info" ? "none" : o))} />}
         {mode !== "practice" && mode !== "swarm" && mode !== "paewang" && (
           <canvas ref={miniRef} className="minimap" width={MINIMAP_WIDTH} height={MINIMAP_HEIGHT} aria-label={t("minimap")} />
         )}
@@ -259,7 +259,7 @@ export function GameScreen(props: GameScreenProps) {
       {mode === "practice" && props.onPracticeCharacter && (
         <PracticePanel run={() => runRef.current} loadout={loadout} characterId={characterId} lang={lang} t={t} onCharacter={props.onPracticeCharacter} />
       )}
-      {loadout && <Loadout view={loadout} lang={lang} t={t} touchMode={touchMode} controls={() => controlsRef.current} />}
+      {loadout && <Loadout view={loadout} character={characterId} lang={lang} t={t} touchMode={touchMode} controls={() => controlsRef.current} />}
       {pvp ? <PanHint t={t} touchMode={touchMode} /> : <p className={`game-hint ${touchMode ? "touch" : ""}`}>{t(touchMode ? "hintRotate" : "hintPc")}</p>}
 
       {/* 터치·마우스 입력 영역 (화면 전체). 조이스틱은 드래그할 때만 보임 */}

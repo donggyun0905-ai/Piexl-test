@@ -1,5 +1,5 @@
 // 능력치 보기: 지금 내 수치 (패시브·무기 반영). 설정의 '능력치 보기'를 켰을 때만 화면에 표시
-import { artChance, attackSpeedNow, classDamageMul, classMoveMul, critNow, eaterRegen, extraOf, mukinDef, mukinRegen, petGold, petTaken, type PlayerState, riderSpeedMul, type RunState, type WeaponDef, WEAPONS } from "@pixel-rogue/shared";
+import { artChance, attackSpeedNow, classDamageMul, classMoveMul, critNow, eaterRegen, extraOf, mukinDef, mukinRegen, PERKS, petGold, petTaken, type PlayerState, riderSpeedMul, type RunState, type WeaponDef, WEAPONS } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 
 export interface StatRow {
@@ -39,7 +39,9 @@ export function statRows(run: RunState, t: (k: TextKey) => string): StatRow[] {
   // 지금 걸린 효과까지 (공격 속도 버프 · 라이더 빠르기 피해)
   const speedNow = attackSpeedNow(run.player);
   // 라이더 빠르기 · 이드라 모습 · 학살자 낮은 체력·분노 (실제 평타와 같은 배율)
-  const dmgMul = riderSpeedMul(run.player) * classDamageMul(run.player);
+  // 파수꾼 분노: 잃은 체력만큼 (sim/player attack과 같은 식)
+  const rage = run.player.passives.includes("rage") ? 1 + PERKS.rage.damage * (1 - Math.max(0, run.player.hp) / s.maxHp) : 1;
+  const dmgMul = riderSpeedMul(run.player) * classDamageMul(run.player) * rage;
   const perSecond = s.damage * dmgMul * (w.shots ?? 1) * speedNow;
   // 병아리(로비 펫) 치명타 확률은 어느 캐릭터에나 더해짐
   const crit = critNow(run);

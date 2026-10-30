@@ -3,10 +3,10 @@ import { drawGigaBuildings, drawGigaFloors } from "./gigaBuildings";
 import { allPlayers, BASE_R, capCenter, ENEMIES, fogAt, portalOf, PW_ARENAS, PW_GIGA, PW_GROW, PW_UNIT, PW_WAR, spotXY, TILE_SIZE, type EnemyKind, type PwUnit, type RunState } from "@pixel-rogue/shared";
 import { drawEnemySprite } from "../sprites";
 import { drawTurret } from "./pwGrowTheme";
+import { drawGiant, drawGiantSkill, drawGiantTag, isGiant } from "./gigaGiants";
 
 type Ctx = CanvasRenderingContext2D;
 const T = TILE_SIZE;
-const HORN: Record<string, string> = { giantRed: "#ff4a3a", giantBlue: "#4a9aff", giantWhite: "#f4f4f8" };
 const color = (team: number, mine: number) => (team === 2 ? "#e0c060" : team === mine ? "#5ab0ff" : "#ff5a5a");
 
 export function drawGrowGround(ctx: Ctx, s: RunState): void {
@@ -170,23 +170,22 @@ export function drawGrowUnits(ctx: Ctx, s: RunState): void {
     }
     const def = ENEMIES[u.look as EnemyKind];
     const tint: readonly [string, number] | undefined = b.hitFlash > 0 ? ["#ffffff", 0.7] : b.immune ? ["#8a8aa0", 0.35] : undefined;
-    if (!def || !drawEnemySprite(ctx, u.look, Math.round(b.x), Math.round(b.y), Math.floor(s.tick / 12), b.dirX < 0, tint, b.r / def.radius)) {
-      ctx.fillStyle = col;
-      ctx.fillRect(b.x - b.r, b.y - b.r, b.r * 2, b.r * 2);
-    }
-    drawBar(ctx, u, col, s.tick);
-    // 기간토마키아 뿔 거인: 머리 위 뿔 둘 (붉은 · 푸른 · 흰)
-    const horn = HORN[u.kind];
-    if (horn) {
-      ctx.fillStyle = horn;
-      for (const side of [-1, 1]) {
-        ctx.beginPath();
-        ctx.moveTo(b.x + side * b.r * 0.35, b.y - b.r * 0.9);
-        ctx.lineTo(b.x + side * b.r * 0.75, b.y - b.r * 1.7);
-        ctx.lineTo(b.x + side * b.r * 0.6, b.y - b.r * 0.8);
-        ctx.fill();
+    const plain = () => {
+      if (!def || !drawEnemySprite(ctx, u.look, Math.round(b.x), Math.round(b.y), Math.floor(s.tick / 12), b.dirX < 0, tint, b.r / def.radius)) {
+        ctx.fillStyle = col;
+        ctx.fillRect(b.x - b.r, b.y - b.r, b.r * 2, b.r * 2);
       }
+    };
+    // 기간토마키아 뿔 거인: 기술 예고 · 꾸민 몸 · 난이도 표시 (render/gigaGiants)
+    if (isGiant(u)) {
+      drawGiantSkill(ctx, s, u);
+      drawGiant(ctx, s, u, plain);
+      drawBar(ctx, u, col, s.tick);
+      drawGiantTag(ctx, s, u);
+      continue;
     }
+    plain();
+    drawBar(ctx, u, col, s.tick);
   }
 }
 

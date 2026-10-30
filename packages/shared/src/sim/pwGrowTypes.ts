@@ -30,6 +30,23 @@ export interface PwUnit {
   lastHp?: number;
   /** 사람에게 마지막으로 맞은 틱 (3초 지나면 회복, 화면에 흰 막대) */
   hurtAt?: number;
+  /** 기간토마키아 뿔 거인 기술 (sim/gigaGiants): 쓰는 중인 기술 · 다음 기술까지 틱 */
+  sk?: GiantSkill;
+  skCd?: number;
+}
+
+/** 거인 기술: 흰 뿔 돌 던지기 · 푸른 뿔 돌진 · 붉은 뿔 레이저 · 붉은 뿔 내려찍기. 시작 틱 · 터지는 틱 · 끝 틱 · 시작 자리 · 노리는 자리 */
+export interface GiantSkill {
+  k: "rock" | "charge" | "laser" | "quake";
+  at: number;
+  fire: number;
+  end: number;
+  x: number;
+  y: number;
+  tx: number;
+  ty: number;
+  /** 이미 맞은 자리 (돌진은 한 번씩만) */
+  hit?: number[];
 }
 
 export interface PwGrowState {
@@ -79,6 +96,11 @@ export interface PwGrowPlayer {
   pwCraft?: { id: string; end: number };
   /** 기간토마키아: 열어 둔 상자·배낭 (바닥 물건 id, 화면이 창을 띄움) */
   pwOpen?: number;
+  /** AI 벽 비켜 가기 (sim/botAvoid): 확인한 자리·틱 · 돌아가는 방향과 끝 틱 */
+  bkX?: number;
+  bkY?: number;
+  bkN?: number;
+  bkDir?: [number, number, number];
   /** 귀환 중: 끝 틱 · 시작 뒤 가장 높았던 체력 (이보다 떨어지면 끊김) */
   pwRecall?: { end: number; hp: number };
 }

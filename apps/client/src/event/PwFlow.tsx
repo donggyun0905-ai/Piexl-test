@@ -1,5 +1,5 @@
 // 이벤트 '패왕전' 화면 차례: 대결 고르기 → 경기장 고르기(무작위 가능) → 편 대결은 밴픽, 난투는 캐릭터 고르기 → 준비방 → 대결 (데스매치는 경기장만 고르고 바로 대결)
-import { PW_MODE, pwHasDraft, type CharacterId, type PwLoadout, type PwMode, type RankQueue, type RunState } from "@pixel-rogue/shared";
+import { PW_MODE, pwHasDraft, type CharacterId, type PwLoadout, type PwMode, type RankQueue } from "@pixel-rogue/shared";
 import { useState } from "react";
 import { CharacterSelect } from "../CharacterSelect";
 import { CoopScreen } from "../coop/CoopScreen";
@@ -12,7 +12,6 @@ import { PwBrowse } from "./PwBrowse";
 import { PwPracticeGame } from "./PwPractice";
 import { PwPrep } from "./PwPrep";
 import { PwLeague } from "./PwLeague";
-import { clearGiga, loadGiga } from "./pwGigaStore";
 
 type Step =
   | { name: "modes" }
@@ -20,8 +19,6 @@ type Step =
   /** 월드 워 리그 (8팀 대회) */
   | { name: "league" }
   /** 기간토마키아: 저장된 판 이어하기 · 이어하는 판 */
-  | { name: "gigaResume"; saved: RunState }
-  | { name: "gigaGame"; saved: RunState }
   | { name: "rank"; queue: RankQueue; key: number }
   | { name: "maps"; mode: PwMode }
   /** 연습장: 캐릭터 고르기 → 허수아비와 연습 */
@@ -44,28 +41,6 @@ export function PwFlow({ lang, setLang, t, onExit }: { lang: Lang; setLang: (l: 
   // 랭크전: 같은 방 구조로 빠른 매칭 (끝나면 다시 찾기 또는 나가기)
   if (step.name === "rank") return <CoopScreen key={step.key} pw rank={step.queue} lang={lang} setLang={setLang} t={t} onExit={modes} onAgain={() => setStep({ ...step, key: step.key + 1 })} />;
   if (step.name === "league") return <PwLeague lang={lang} t={t} onExit={modes} />;
-  if (step.name === "gigaGame") {
-    const c = step.saved.player.characterId;
-    return <PwGame mode="giganto" map={null} characterId={c} resume={step.saved} lang={lang} t={t} onExit={modes} />;
-  }
-  if (step.name === "gigaResume") {
-    const { saved } = step;
-    return (
-      <div className="td-maps">
-        <h2>{t("pwGiga")}</h2>
-        <p className="hint">{t("pwGigaSaved")}</p>
-        <button type="button" className="primary" onClick={() => setStep({ name: "gigaGame", saved })}>
-          {t("pwGigaResume")}
-        </button>
-        <button type="button" onClick={() => (clearGiga(), setStep({ name: "select", mode: "giganto", map: null }))}>
-          {t("pwGigaNew")}
-        </button>
-        <button type="button" className="ghost" onClick={modes}>
-          {t("back")}
-        </button>
-      </div>
-    );
-  }
   if (step.name === "browse") return <PwBrowse lang={lang} t={t} onBack={modes} onTry={(characterId) => setStep({ name: "practice", characterId, key: 1 })} />;
   if (step.name === "practice") {
     if (!step.characterId) return <CharacterSelect t={t} showSeed={false} practice onBack={modes} onSelect={(characterId) => setStep({ name: "practice", characterId, key: step.key + 1 })} />;
@@ -96,8 +71,7 @@ export function PwFlow({ lang, setLang, t, onExit }: { lang: Lang; setLang: (l: 
     return <PwGame key={step.key} mode={step.mode} map={step.map} characterId={step.characterId} picks={step.picks} bans={step.bans} loadout={step.loadout} lang={lang} t={t} onExit={modes} onRetry={() => setStep({ ...step, key: step.key + 1 })} />;
   }
   return <PwModes t={t} onBack={onExit} onMulti={() => setStep({ name: "multi" })} onLeague={() => setStep({ name: "league" })} onPractice={() => setStep({ name: "practice", key: 0 })} onBrowse={() => setStep({ name: "browse" })} onRank={(queue) => setStep({ name: "rank", queue, key: 0 })} onPick={(mode) => {
-        const saved = mode === "giganto" ? loadGiga() : null;
         // 경기장이 하나뿐인 대결(쟁탈전·전쟁의 서막·기간토마키아)은 경기장 고르기 없이
-        setStep(saved ? { name: "gigaResume", saved } : PW_MODE[mode].maps.length === 1 ? afterMap(mode, PW_MODE[mode].maps[0]!) : { name: "maps", mode });
+        setStep(PW_MODE[mode].maps.length === 1 ? afterMap(mode, PW_MODE[mode].maps[0]!) : { name: "maps", mode });
       }} />;
 }

@@ -75,13 +75,14 @@ function zoneBad(s: RunState, x: number, y: number): boolean {
 const press = (s: RunState, input: TickInput): TickInput => ({ ...input, moveX: 0, moveY: 0, interact: s.tick % 10 === seatNo(s) % 10 });
 
 /** AI 건물: 안에서는 상자를 찾아 걷고(칸막이를 돌아감), 다 털었거나 자기장이 오면 나감 · 밖에서는 가까운 털 것 남은 건물 문으로 (null = 다른 할 일) */
-export function roomSteer(s: RunState, input: TickInput, nearLootFar: boolean): TickInput | null {
+/** full: 배낭이 가득 차 더 담을 수 없음 (건물을 털지 않고 나감) */
+export function roomSteer(s: RunState, input: TickInput, nearLootFar: boolean, full = false): TickInput | null {
   const p = s.player;
   const a = PW_ARENAS[s.pvp!.arena];
   const k = buildingAt(s, p.x, p.y);
   const door = nearDoor(s, p.x, p.y);
   if (k >= 0) {
-    const out = lootIn(s, k) === 0 || zoneBad(s, p.x, p.y);
+    const out = full || lootIn(s, k) === 0 || zoneBad(s, p.x, p.y);
     if (!out) {
       const l = (s.pvp!.grow!.loot ?? []).filter((x) => buildingAt(s, x.x, x.y) === k).sort((x, y) => (x.x - p.x) ** 2 + (x.y - p.y) ** 2 - ((y.x - p.x) ** 2 + (y.y - p.y) ** 2))[0]!;
       return growWalk(s, input, l.x, l.y);
@@ -92,7 +93,7 @@ export function roomSteer(s: RunState, input: TickInput, nearLootFar: boolean): 
     const go = (a.portals ?? []).find((d) => d.b === k && (floor > 0 ? d.kind === "down" && floorOf(a, k, { x: spotXY(d.at)[0], y: spotXY(d.at)[1] }) === floor : d.kind === "out"));
     return go ? growWalk(s, input, ...spotXY(go.at)) : input;
   }
-  if (nearLootFar) return null;
+  if (nearLootFar || full) return null;
   // 밖: 털 것 남은 가까운 건물 (자기장 안, 300px 안)
   let best: Portal | undefined;
   let bd = 300 ** 2;

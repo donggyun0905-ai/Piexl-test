@@ -160,13 +160,23 @@ button.danger {
   position: absolute;
   top: 6px;
   right: 6px;
-  /* 노선도: 폭을 정하고 높이는 그 층 칸 수에 따라 */
-  width: clamp(54px, 6vw, 96px);
-  height: auto;
+  /* 노선도: 폭을 정하고 높이는 그 층 칸 수에 따라. 넓은 화면은 오른쪽 칸(--side)을 채울 만큼 크게 */
+  width: auto;
+  height: 80%;
+  max-width: calc(var(--side, 0px) - 24px);
+  object-fit: contain;
   image-rendering: pixelated;
   background: rgb(0 0 0 / 0.45);
-  padding: 3px;
+  padding: 4px;
+  border: 2px solid rgb(255 255 255 / 0.12);
   pointer-events: none;
+}
+@media (max-width: 899px) {
+  .minimap {
+    width: clamp(54px, 6vw, 96px);
+    height: auto;
+    max-width: none;
+  }
 }
 .prompt {
   position: absolute;
@@ -219,6 +229,8 @@ button.danger {
 @media (orientation: portrait) {
   .minimap {
     width: 48px;
+    height: auto;
+    max-width: none;
     opacity: 0.9;
   }
 }

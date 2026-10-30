@@ -14,7 +14,7 @@ import { eachSeat, seatNo } from "./party";
 import { inPlay } from "./pvpWorld";
 import { pvpZone } from "./pvpZone";
 import { makeUnit } from "./pwLane";
-import { buildingAt, gigaFlee, roomChests, roomSteer, useDoor } from "./pwGigaRooms";
+import { roomChests, useDoor } from "./pwGigaRooms";
 import type { PwLoot } from "./pwGrowTypes";
 import type { RunState, TickInput } from "./types";
 import { addEffect } from "./util";
@@ -253,32 +253,4 @@ export function gigaWinner(s: RunState): number | undefined {
   const alive = pv.seats.flatMap((x, i) => (inPlay(s, i) ? [x.team] : []));
   if (alive.length > 1) return undefined;
   return alive[0] ?? -1;
-}
-
-/** AI: 제작 중이면 가만히 · 약하면 도망 · 싸우는 중이 아니면 가까운 상자·배낭으로 가서 F (건물 안·가까운 건물은 pwGigaRooms) · 재료가 모이면 제작 */
-export function gigaSteer(s: RunState, input: TickInput): TickInput {
-  if (!isGiga(s)) return input;
-  const p = s.player;
-  if (p.pwCraft) return { ...input, moveX: 0, moveY: 0, attack: false };
-  const craft = LEGENDS.findIndex((id) => canCraft(s, id));
-  if (craft >= 0 && !input.attack) gigaMenu(s, GIGA_MENU.craft + craft);
-  const flee = gigaFlee(s, input);
-  if (flee) return flee;
-  if (input.attack) return input;
-  const near = nearLoot(s, p.x, p.y);
-  if (near) return { ...input, moveX: 0, moveY: 0, interact: s.tick % 10 === seatNo(s) % 10 };
-  const room = roomSteer(s, input, s.pvp!.grow!.loot!.some((l) => (l.x - p.x) ** 2 + (l.y - p.y) ** 2 < 160 ** 2 && buildingAt(s, l.x, l.y) < 0));
-  if (room) return room;
-  let best: PwLoot | undefined;
-  let bd = 320 ** 2;
-  for (const l of s.pvp!.grow!.loot!) {
-    if (buildingAt(s, l.x, l.y) >= 0) continue; // 건물 안 것은 문으로 (roomSteer)
-    const d = (l.x - p.x) ** 2 + (l.y - p.y) ** 2;
-    if (d < bd) [bd, best] = [d, l];
-  }
-  if (!best) return input;
-  const dx = best.x - p.x;
-  const dy = best.y - p.y;
-  const len = Math.hypot(dx, dy) || 1;
-  return { ...input, moveX: Math.round((dx / len) * 100), moveY: Math.round((dy / len) * 100) };
 }

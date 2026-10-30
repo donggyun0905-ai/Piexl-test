@@ -152,6 +152,14 @@ export const PW_GIGA = {
     giantWhite: { gold: 200, gear: 2, legend: 0, goods: 0.06 },
     goblin: { gold: 40, gear: 0, legend: 0, goods: 0.01 },
   } as Record<string, { gold: number; gear: number; legend: number; goods: number }>,
+  /** 뿔 거인 기술 (맞아서 화가 났을 때만): 간격 틱 · 쓰는 거리 · 준비 틱 · 피해 배율(거인 공격력의) · 범위
+   *  흰 뿔 돌 던지기(날아가는 틱) · 푸른 뿔 돌진(달리는 틱·빠르기) · 붉은 뿔 레이저(빛 틱·길이·굵기) · 붉은 뿔 내려찍기 */
+  skill: {
+    rock: { every: 4 * TICK_RATE, range: 150, wind: 12, fly: 36, mul: 1.1, r: 20 },
+    charge: { every: 5 * TICK_RATE, range: 170, wind: 30, dash: 20, speed: 6, mul: 1.4, r: 16 },
+    laser: { every: 6 * TICK_RATE, range: 230, wind: 45, beam: 14, len: 260, w: 10, mul: 1.6 },
+    quake: { every: 9 * TICK_RATE / 2, range: 70, wind: 36, mul: 1.2, r: 64 },
+  },
   /** 상점 물건 (배낭에 넣고 나가면 가져감) */
   goods: ["g:ticket", "g:ecoin", "g:chips", "g:skin", "g:fx"],
   /** 우승 칩 */

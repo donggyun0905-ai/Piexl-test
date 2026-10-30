@@ -8,6 +8,7 @@ import { distanceField } from "./layout";
 import { pwGrid, spotXY } from "./paewangGrid";
 import { zonePos } from "./pvpZone";
 import { buildingAt } from "./pwGigaRooms";
+import { giantSkill } from "./gigaGiants";
 import { EMPTY_INPUT } from "./types";
 
 const fresh = () => {
@@ -97,5 +98,24 @@ describe("패왕전 기간토마키아", () => {
     [p.x, p.y] = spotXY(out.at);
     gigaInput(s, { ...EMPTY_INPUT, interact: true });
     expect(buildingAt(s, p.x, p.y)).toBe(-1);
+  });
+});
+
+describe("뿔 거인 기술", () => {
+  it("흰 뿔 돌 던지기 · 푸른 뿔 돌진 · 붉은 뿔 내려찍기·레이저: 준비 뒤 맞은 사람에게 피해", () => {
+    const s = fresh();
+    const p = s.player;
+    for (const [kind, dist, k] of [["giantWhite", 100, "rock"], ["giantBlue", 100, "charge"], ["giantRed", 40, "quake"], ["giantRed", 150, "laser"]] as const) {
+      const u = s.pvp!.grow!.units.find((x) => x.kind === kind)!;
+      u.sk = undefined;
+      u.skCd = 0;
+      [p.x, p.y] = [u.body.x + dist, u.body.y];
+      const hits: number[] = [];
+      for (let t = 0; t < 120; t++) {
+        giantSkill(s, u, { x: p.x, y: p.y }, (_s, _i, dmg) => hits.push(dmg));
+        s.tick++;
+      }
+      expect(hits.length, k).toBeGreaterThan(0);
+    }
   });
 });
