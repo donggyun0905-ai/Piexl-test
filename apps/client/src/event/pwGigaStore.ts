@@ -6,7 +6,8 @@ import { addMissionCoupons, grantLimitedSkin } from "../shop/wallet";
 import { loadText, saveText } from "../storage";
 import { addEventCoins } from "./eventCoins";
 
-const KEY = "pwGigaSave";
+// 맵이 바뀌면 이름을 바꿔 예전 맵의 판은 읽지 않음 (0.48.255: 1.5배 + 건물)
+const KEY = "pwGigaSave2";
 
 /** 판 저장 (끝난 판은 지움) */
 export function saveGiga(run: RunState): void {
