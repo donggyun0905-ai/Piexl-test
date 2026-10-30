@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.255",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "기간토마키아 맵 1.5배 (348×204칸) · 거인·도깨비·상자도 늘림",
+        "기간토마키아 건물: 학교 2 · 아파트 4(2층, 층마다 방 여럿) · 집 8 · 문 앞에서 F로 들어가 실내 방으로 바뀜 (계단으로 위층) · 실내는 밖에서 안 보이고 상자가 더 좋음 · 건물 안은 문 자리로 자기장을 셈",
+        "기간토마키아 AI: 처음 1분 30초 뒤로는 보이는 상대와 싸우고 쫓음 · 체력이 낮거나 상대가 훨씬 세면 도망 · 건물에 들어가 파밍하고, 다 털었거나 자기장이 오면 나옴",
+      ],
+      en: [
+        "Gigantomachia map is 1.5× larger (348×204) · more giants, goblins and chests",
+        "Gigantomachia buildings: 2 schools · 4 apartments (2 floors with several rooms) · 8 houses · press F at a door to step into the interior (stairs lead upstairs) · interiors are hidden from outside and hold better chests · inside a building, the zone counts you at its door",
+        "Gigantomachia AI: after the first 1:30 they fight and chase rivals they see · flee when low or facing a much stronger rival · they loot buildings and leave once they're empty or the zone closes in",
+      ],
+      ja: [
+        "ギガントマキアのマップを1.5倍に（348×204マス）· 巨人・トッケビ・宝箱も増加",
+        "ギガントマキアの建物: 学校2 · マンション4（2階建て、各階に部屋がいくつか）· 家8 · ドアの前でFを押すと室内の部屋へ（階段で上の階）· 室内は外から見えず、宝箱がより良い · 建物の中はドアの位置で磁場を判定",
+        "ギガントマキアのAI: 最初の1分30秒の後は見えた相手と戦い追いかける · 体力が低い・相手がずっと強いと逃げる · 建物に入って漁り、空になったか磁場が来たら出る",
+      ],
+    },
+  },
+  {
     version: "0.48.254",
     date: "2026-10-30",
     items: {

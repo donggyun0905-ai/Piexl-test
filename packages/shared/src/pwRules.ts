@@ -125,15 +125,16 @@ export type PwAugId = keyof typeof PW_AUGS;
 
 /** 기간토마키아 (sim/pwGiga): 30명 생존 + 성장 · 나 + AI 29명 (서버 없이 화면에서만 계산) */
 export const PW_GIGA = {
-  /** 라스트 보스 방(29×17)의 가로·세로 8배 */
-  cols: 232,
-  rows: 136,
-  giants: { giantRed: 3, giantBlue: 5, giantWhite: 9 },
-  goblins: 36,
-  chests: 150,
+  /** 들판: 라스트 보스 방(29×17)의 가로·세로 12배 (0.48.255부터 1.5배) · 오른쪽 바깥 실내 구역 너비 (건물 안 방들, 담으로 막혀 문으로만 드나듦) */
+  cols: 348,
+  rows: 204,
+  inW: 66,
+  giants: { giantRed: 5, giantBlue: 9, giantWhite: 16 },
+  goblins: 60,
+  chests: 260,
   /** 배낭 칸 (그중 한 칸은 금고) */
   bag: 10,
-  /** 닿는 거리 (상자·떨어진 배낭·출구) · 제작하며 가만히 있는 틱 */
+  /** 닿는 거리 (상자·떨어진 배낭·출구·건물 문) · 제작하며 가만히 있는 틱 */
   reach: 22,
   craftHold: 3 * TICK_RATE,
   /** 자기장: 단계 길이 틱 · 다음 원 배율 · 가장 작은 반지름 */
@@ -142,6 +143,8 @@ export const PW_GIGA = {
   exitAt: [9 * 60 * TICK_RATE, 17 * 60 * TICK_RATE],
   /** 상자 하나: 돈 범위 · 조합 장비 확률 · 사용 아이템 확률 · 상점 물건 확률 */
   chest: { gold: [40, 160], gear: 0.55, use: 0.45, goods: 0.06 },
+  /** 건물 안 상자 (더 좋음): 돈 범위 · 조합 장비 확률 · 전설 장비 확률 · 사용 아이템 확률 · 상점 물건 확률 */
+  inChest: { gold: [100, 280], gear: 0.95, legend: 0.12, use: 0.6, goods: 0.12 },
   /** 뿔 거인 보상: 돈 · 장비 수 · 전설 장비 확률 · 상점 물건 확률 */
   drop: {
     giantRed: { gold: 900, gear: 4, legend: 0.6, goods: 0.5 },
@@ -154,11 +157,13 @@ export const PW_GIGA = {
   /** 우승 칩 */
   winChips: 50000,
   /** AI: 이 레벨이 되어야 그 거인을 노림 · 상대 캐릭터를 알아채는 거리(px) */
-  botLv: { giantRed: 12, giantBlue: 7, giantWhite: 3, goblin: 1 } as Record<string, number>,
+  botLv: { giantRed: 14, giantBlue: 9, giantWhite: 5, goblin: 1 } as Record<string, number>,
   botSight: 170,
-  /** AI는 자기장 단계가 이만큼 + (자리 % 5)가 되면 먼저 싸움 (그 전에는 맞았을 때만, 조금씩 늘어남) */
-  botFightPhase: 4,
+  /** AI: 판 시작 뒤 이 틱까지는 맞았을 때만 싸움 (먼저 흩어져 파밍) · 체력이 이 비율 아래이거나 상대가 이만큼 레벨이 높으면 도망 */
+  botCalm: 90 * TICK_RATE,
+  botFlee: 0.35,
+  botFleeLv: 3,
   /** 도깨비 다시 나오기: 간격 틱 · 한 번에 */
   goblinEvery: 45 * TICK_RATE,
-  goblinWave: 6,
+  goblinWave: 8,
 };

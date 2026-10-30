@@ -1,5 +1,5 @@
 // 기간토마키아 화면 정보: 배낭 10칸(한 칸은 금고, 누르면 금고와 바꿈) · 돈 · 제작할 수 있는 전설 장비(누르면 3초 가만히) · 미니맵(자기장·출구·나)
-import { allPlayers, canCraft, GIGA_MENU, inPlay, isGiga, openLoot, PW_ARENAS, PW_LEGEND, pvpZone, TILE_SIZE, useSeat as takeSeat, type PwLoot, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, canCraft, GIGA_MENU, inPlay, isGiga, openLoot, PW_ARENAS, PW_LEGEND, pvpZone, TILE_SIZE, useSeat as takeSeat, zonePos, type PwLoot, type RunState } from "@pixel-rogue/shared";
 import { useEffect, useRef, useState } from "react";
 import { GigaBag, GigaBox } from "./PwGigaWindows";
 import type { Controls } from "../game/controls";
@@ -32,13 +32,18 @@ export function Item({ id, lang, t }: { id: string; lang: Lang; t: (k: TextKey) 
 function MiniMap({ run, me }: { run: RunState; me: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const a = PW_ARENAS[run.pvp!.arena];
-  const k = 0.6;
+  const k = 0.45;
+  // 들판만 (오른쪽 실내 구역 빼고) · 건물 안이면 내 자리는 그 건물 문
+  const w = a.outCols ?? a.cols;
   useEffect(() => {
     const ctx = ref.current?.getContext("2d");
     if (!ctx) return;
     const px = (v: number) => (v / TILE_SIZE) * k;
     ctx.fillStyle = "rgba(20, 30, 20, 0.85)";
-    ctx.fillRect(0, 0, a.cols * k, a.rows * k);
+    ctx.fillRect(0, 0, w * k, a.rows * k);
+    // 건물 (들판에 선 네모)
+    ctx.fillStyle = "#8a7a6a";
+    for (const b of a.buildings ?? []) ctx.fillRect(b.out[0] * k, b.out[1] * k, b.out[2] * k, b.out[3] * k);
     const z = pvpZone(run);
     if (z) {
       ctx.strokeStyle = "#8ac8ff";
@@ -57,10 +62,11 @@ function MiniMap({ run, me }: { run: RunState; me: number }) {
       ctx.fillRect(px(e.x) - 3, px(e.y) - 3, 6, 6);
     }
     const p = allPlayers(run)[me]!;
+    const [mx, my] = zonePos(run, p.x, p.y);
     ctx.fillStyle = "#ffe040";
-    ctx.fillRect(px(p.x) - 2, px(p.y) - 2, 4, 4);
+    ctx.fillRect(px(mx) - 2, px(my) - 2, 4, 4);
   });
-  return <canvas ref={ref} className="pw-giga-map" width={a.cols * k} height={a.rows * k} aria-hidden="true" />;
+  return <canvas ref={ref} className="pw-giga-map" width={w * k} height={a.rows * k} aria-hidden="true" />;
 }
 
 /** 내 자리 기준: 제작할 수 있는 것 · 돈 · 열어 둔 상자 (보던 자리로 돌려놓음) */

@@ -1,4 +1,5 @@
 // 패왕전 성장 대결 그리기: 집(깃발 둘레 원) · 쟁탈전 가운데 점령지(가진 편 색) · 병사·포탑·보스(던전 몬스터 그림 + 편 고리 + 체력 줄) · 포탑·원거리 병사 공격 빛줄기
+import { drawGigaBuildings, drawGigaFloors } from "./gigaBuildings";
 import { allPlayers, BASE_R, capCenter, ENEMIES, fogAt, portalOf, PW_ARENAS, PW_GIGA, PW_GROW, PW_UNIT, PW_WAR, spotXY, TILE_SIZE, type EnemyKind, type PwUnit, type RunState } from "@pixel-rogue/shared";
 import { drawEnemySprite } from "../sprites";
 import { drawTurret } from "./pwGrowTheme";
@@ -215,6 +216,8 @@ export function drawWarFog(ctx: Ctx, s: RunState): void {
 function drawGigaGround(ctx: Ctx, s: RunState): void {
   const g = s.pvp?.grow;
   if (!g?.loot) return;
+  drawGigaFloors(ctx, s);
+  drawGigaBuildings(ctx, s);
   for (const l of g.loot) {
     if (l.chest) {
       ctx.fillStyle = "#6a4422";

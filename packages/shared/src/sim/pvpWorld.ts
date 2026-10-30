@@ -17,7 +17,6 @@ import { fogAt, inBush } from "./paewangGrid";
 import { buffMul, pwHidden } from "./pwSkillHit";
 import { practiceSafe } from "./pvpPractice";
 import { recapTake } from "./pvpRecap";
-import { pvpZone } from "./pvpZone";
 import { gearHits } from "./pwGear";
 
 /** 경기장에 나와 살아 있는 자리인지 */
@@ -45,13 +44,14 @@ export function assignFoes(s: RunState): void {
     // 성장 대결: 상대 편·중립 병사·포탑·보스
     // 중립(정글·거인·도깨비)은 가까이 있을 때만 (큰 맵에서 계산을 줄임)
     const p = s.player;
-    // 기간토마키아 AI: 레벨이 되는 거인만 · 가까운 상대 캐릭터만 (한 판이 30분쯤 가게)
+    // 기간토마키아 AI: 레벨이 되는 거인만 · 가까운 상대 캐릭터만
     const giga = PW_MODE[pv.mode].rule === "giganto" && !pv.seats[i]!.human;
     const near = (e: { x: number; y: number }, r: number) => (e.x - p.x) ** 2 + (e.y - p.y) ** 2 < r * r;
     // 전쟁의 서막 10분 전: 길에 선 AI(정글 빼고)는 자기를 쫓는 정글 몬스터만 (길을 벗어나 정글로 새지 않게)
     const laner = PW_MODE[pv.mode].rule === "war" && !pv.seats[i]!.human && warEarly(s) && warRole(s, i) !== "jungle";
     const units = (pv.grow?.units ?? []).filter((u) => u.team !== team && u.body.hp > 0 && (u.team !== 2 || (near(u.body, 500) && (!laner || u.foe === i) && (!giga || (p.pwLv ?? 1) >= (PW_GIGA.botLv[u.kind] ?? 1))))).map((u) => u.body);
-    const calm = giga && (pvpZone(s)?.phase ?? 0) < PW_GIGA.botFightPhase + (i % 5);
+    // 처음 botCalm 동안은 맞았을 때만 싸움 (먼저 흩어져 파밍), 그 뒤로는 보이는 상대와 싸움 (도망은 pwGiga.gigaSteer)
+    const calm = giga && s.tick - (pv.readyAt ?? 0) < PW_GIGA.botCalm;
     s.enemies = live
       .filter((e) => {
         const j = pv.proxies.indexOf(e);

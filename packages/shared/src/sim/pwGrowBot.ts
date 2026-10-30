@@ -60,7 +60,8 @@ export function botShop(s: RunState): void {
 
 const fields = new Map<string, Int16Array>();
 
-function walk(s: RunState, input: TickInput, x: number, y: number): TickInput {
+/** 길 찾아 걷기 (벽을 돌아감, 목표 칸마다 거리 지도를 기억) */
+export function growWalk(s: RunState, input: TickInput, x: number, y: number): TickInput {
   const id = s.pvp!.arena;
   const key = `${id}:${Math.floor(x / TILE_SIZE)},${Math.floor(y / TILE_SIZE)}`;
   let f = fields.get(key);
@@ -98,13 +99,13 @@ export function growSteer(s: RunState, input: TickInput): TickInput {
   if (atHome(s, i) && p.hp < p.stats.maxHp * 0.9) return { ...input, moveX: 0, moveY: 0 };
   // 전쟁의 서막: 역할(위·가운데·아래·정글)·귀환 (pwWarBot)
   if (PW_MODE[s.pvp!.mode].rule === "war") {
-    const w = warSteer(s, input, walk, () => nextBuy(s, i) !== undefined);
+    const w = warSteer(s, input, growWalk, () => nextBuy(s, i) !== undefined);
     if (w) return w;
   }
-  if (low) return walk(s, input, ...home);
+  if (low) return growWalk(s, input, ...home);
   if (input.attack) return input;
   // 전쟁의 서막: 집에서 내 길 체크포인트로 순간이동
   const lane = i % (PW_ARENAS[s.pvp!.arena].lanes?.length ?? 1);
   if (atHome(s, i) && s.pvp!.grow!.points?.[lane]?.owner === team) growMenu(s, GROW_MENU.tp + lane);
-  return walk(s, input, ...objective(s, i, team));
+  return growWalk(s, input, ...objective(s, i, team));
 }

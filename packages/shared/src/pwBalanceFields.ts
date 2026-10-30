@@ -26,7 +26,7 @@ function rowsOf(t: Obj): Obj {
 }
 
 /** 바꾸면 맵·화면 모양이 어긋나는 값 (기간토 맵 크기·배낭 칸·장비 칸) · 우승 칩은 규칙의 대결 방식 보상에서 */
-const FIXED = new Set(["cols", "rows", "winChips", "bag", "slots"]);
+const FIXED = new Set(["cols", "rows", "inW", "winChips", "bag", "slots"]);
 
 export const PW_BALANCE_GROUPS: readonly BalanceGroup[] = [
   { id: "pwRoles", table: table(PW_ROLE_TABLE), ids: [...CHARACTER_IDS], fields: [{ key: "role", min: 0, max: PW_ROLE_IDS.length - 1, int: true }] },
