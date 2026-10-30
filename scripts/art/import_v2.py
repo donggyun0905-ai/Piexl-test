@@ -17,12 +17,17 @@ BODY = 116
 # 원본 파일 → (가로 칸 수, 세로 칸 수, 시트에 놓을 줄)
 FILES = [("1", 4, 2, [0, 1]), ("2", 4, 2, [2, 3]), ("3", 4, 1, [4])]
 # 왼쪽 모습을 오른쪽 뒤집기로 (GPT 왼쪽 그림이 오른쪽을 봄)
-FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", "brawler", "gunner", "ninja", "summoner", "chronomancer", "beast"}
+FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", "brawler", "gunner", "ninja", "summoner", "chronomancer", "beast",
+             "bedouin", "imugi", "general", "novice", "apostle", "abandoned", "abandoned2", "abandoned3"}
+# 서기·걷기에서 오른쪽을 보는 원본 칸 (기본 3 = 넷째 칸, GPT가 셋째 칸에 오른쪽을 그린 캐릭터만)
+STAND_RIGHT = {"abandoned": 2, "abandoned2": 2}
 # 공격 줄 오른쪽·왼쪽에 쓸 원본 칸 (0~3, 끝에 f = 뒤집기): GPT가 칸 순서를 바꿔 그린 캐릭터만 (화면을 보고 정함)
 ATTACK_LR = {
     "warden": ("2", "3"), "drifter": ("2", "3"), "engineer": ("2", "3"), "elementalist": ("2", "3"),
     "mystic": ("3f", "3"), "brawler": ("3f", "3"),
     "chronomancer": ("2", "3"), "beast": ("2", "3"), "doctor": ("2", "3"),
+    "imugi": ("2", "3"), "general": ("2", "3"), "apostle": ("2", "3"), "abandoned": ("2", "3"), "abandoned3": ("2", "3"),
+    "bedouin": ("2", "2f"), "abandoned2": ("2", "2f"), "novice": ("2f", "2"),
 }
 
 
@@ -47,9 +52,17 @@ def pieces(img, cols, rows):
                             seen[ny * w + nx] = 1
                             q.append((nx, ny))
             if len(pts) < 12: continue  # 먼지 같은 점
-            cx = sum(p[0] for p in pts) / len(pts)
-            cy = sum(p[1] for p in pts) / len(pts)
-            cells[min(rows - 1, int(cy * rows / h))][min(cols - 1, int(cx * cols / w))].append((cx, cy, pts))
+            # 옆 자세와 무기 끝이 닿아 한 덩어리가 된 경우: 칸 경계에서 잘라 각자 칸으로
+            # (둘째로 많은 칸에도 20% 넘게 걸치면 두 자세로 봄 · 무기 끝만 넘어간 건 그대로)
+            cw = w / cols
+            split = {}
+            for q in pts: split.setdefault(min(cols - 1, int(q[0] / cw)), []).append(q)
+            sizes = sorted((len(g) for g in split.values()), reverse=True)
+            groups = list(split.values()) if len(sizes) > 1 and sizes[1] > len(pts) * 0.2 else [pts]
+            for g in groups:
+                cx = sum(p[0] for p in g) / len(g)
+                cy = sum(p[1] for p in g) / len(g)
+                cells[min(rows - 1, int(cy * rows / h))][min(cols - 1, int(cx * cols / w))].append((cx, cy, g))
     out = []
     ch = h / rows
     for r, row in enumerate(cells):
@@ -77,7 +90,8 @@ def build(name):
     # GPT가 '왼쪽' 칸도 오른쪽을 보게 그리는 일이 많음 → 서기·공격·걷기의 왼쪽은 오른쪽을 뒤집어 씀 (FLIP_LEFT에 없는 캐릭터는 그대로)
     raw = dict(grid)
     if name in FLIP_LEFT:
-        for r in range(4): grid[r, 2] = grid[r, 3].transpose(Image.FLIP_LEFT_RIGHT)
+        rc = STAND_RIGHT.get(name, 3)
+        for r in range(4): grid[r, 3], grid[r, 2] = raw[r, rc], raw[r, rc].transpose(Image.FLIP_LEFT_RIGHT)
     if name in ATTACK_LR:
         src = [raw[1, c] for c in range(4)]
         pick = lambda k: src[int(k[0])].transpose(Image.FLIP_LEFT_RIGHT) if k.endswith("f") else src[int(k[0])]

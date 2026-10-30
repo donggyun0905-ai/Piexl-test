@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.278",
+    date: "2026-10-31",
+    items: {
+      ko: ["새 캐릭터 그림 6명 추가: 풋내기·베두인·장수·이무기·악의 사도·버려진 자들(세 아이 모두) · 앞·뒤·왼·오 모습과 방향별 공격, 걷기, 맞음·쓰러짐·대시 자세"],
+      en: ["New art for 6 more characters: Novice, Bedouin, General, Imugi, Apostle of Malice, The Abandoned (all three kids) · front/back/left/right poses with directional attacks, walking, flinch, downed and dash poses"],
+      ja: ["新しいキャラ絵を6人追加: 見習い・ベドウィン・武将・イムギ・悪の使徒・捨てられた者たち（3人とも）· 前・後ろ・左・右の姿と向きごとの攻撃、歩き、ひるみ・ダウン・ダッシュのポーズ"],
+    },
+  },
+  {
     version: "0.48.277",
     date: "2026-10-31",
     items: {
