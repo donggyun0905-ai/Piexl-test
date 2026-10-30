@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.271",
+    date: "2026-10-31",
+    items: {
+      ko: ["보스 '공허의 눈'을 2배 촘촘한 그림으로: 흔들리는 촉수 · 공격 준비 때 눈을 가늘게 뜨며 둘레 구슬이 모이고, 공격 때 눈을 부릅뜨며 빛살"],
+      en: ["Boss 'Void Eye' redrawn at twice the detail: swaying tentacles · narrows its eye and gathers its orbs when winding up, then glares with rays of light when attacking"],
+      ja: ["ボス「虚空の目」を2倍細かい絵に: 揺れる触手 · 攻撃準備で目を細め周りの玉が集まり、攻撃で目を見開き光線"],
+    },
+  },
+  {
     version: "0.48.270",
     date: "2026-10-31",
     items: {

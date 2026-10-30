@@ -121,5 +121,7 @@ def knight(f):
 
 
 if __name__ == "__main__":
-    save_enemy("seer", seer, 80)
-    save_enemy("knight", knight, 84)
+    # 검은 기사는 시안만 (게임은 GPT 그림 예정) · python3 hd_boss_s1a.py knight 로 따로 만들 수 있음
+    import sys
+    if "knight" in sys.argv: save_enemy("knight", knight, 84)
+    else: save_enemy("seer", seer, 80)
