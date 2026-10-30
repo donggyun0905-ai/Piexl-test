@@ -13,7 +13,7 @@ import { drawUmbraActor } from "./umbra";
 import { drawDemigodActor } from "./demigod";
 import { drawSageActor } from "./sage";
 import { drawStalker } from "./stalkers";
-import { drawCharacter, drawEnemySprite, drawSprite, enemyFrames, isCasting, sheetFor, type CharacterPose } from "../sprites";
+import { drawCharacter, drawEnemySprite, drawSprite, enemyFrames, hasV2, isCasting, isHurt, sheetFor, type CharacterPose } from "../sprites";
 import { C, CHARM_INK, lerp, type Snap } from "./palette";
 import { drawMinionDetail } from "./minions";
 import { drawBossStatus } from "./bossLook";
@@ -109,6 +109,12 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
 function drawDown(ctx: CanvasRenderingContext2D, p: PlayerState, snap: Snap): void {
   const x = snap(p.x);
   const y = snap(p.y);
+  // 새 시트(v2)면 쓰러진 그림
+  const sheet = sheetFor(p.characterId, p.lv, p.abM);
+  if (hasV2(sheet)) {
+    drawCharacter(ctx, sheet, x, y, p.r, { faceX: 0, faceY: 1, moving: false, casting: false, step: 0, down: true });
+    return;
+  }
   ctx.globalAlpha = 0.45;
   ctx.fillStyle = C[p.characterId];
   ctx.fillRect(x - p.r - 1, y - 2, p.r * 2 + 2, 4);
@@ -134,7 +140,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
   const shade = (p.rmShade ?? 0) > 0;
   const blink = !shade && !s.pvp && p.invulnTicks > 0 && Math.floor(p.invulnTicks / 3) % 2 === 0;
   const moving = p.x !== p.prevX || p.y !== p.prevY;
-  const pose = { faceX: p.faceX, faceY: p.faceY, moving, casting: isCasting(s.tick, p.attackCount), step: Math.floor(s.tick / 8) };
+  const pose = { faceX: p.faceX, faceY: p.faceY, moving, casting: isCasting(s.tick, p.attackCount), step: Math.floor(s.tick / 8), hurt: isHurt(p.characterId, s.tick, p.hp), dash: p.dashTicks > 0 };
   if (p.dashTicks > 0) {
     // 대시 잔상 (반투명 몸)
     const gx = snap(p.prevX - p.dashDirX * 6);

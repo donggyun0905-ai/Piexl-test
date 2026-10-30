@@ -47,7 +47,8 @@ export function drawSprite(ctx: CanvasRenderingContext2D, name: string, x: numbe
 // 테두리가 잘리지 않게 칸 둘레에 여백을 둠
 /** 방향 시트로 넣은 캐릭터 그림: 이름 → 한 칸 크기, 발 아래 여백 */
 /** src: 그림 파일의 한 칸 크기가 다를 때 (빛의 사도 성장 그림 2배 촘촘 · 몰락한 왕 96칸 → 보통 크기로 줄여 그림) */
-const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number; src?: number }>> = {
+/** v2: 새 시트 4칸 × 5줄 (칸 = 앞·뒤·왼·오): 1줄 서기 · 2줄 공격 · 3줄 걷기(왼발) · 4줄 걷기(오른발) · 5줄 맞음·쓰러짐·대시 오른쪽·대시 왼쪽 (scripts/art/import_v2.py) */
+const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number; src?: number; v2?: true }>> = {
   mage: { size: 32, footPad: 2, src: 128 },
   drifter: { size: 32, footPad: 2 },
   warden: { size: 32, footPad: 2, src: 128 },
@@ -153,6 +154,22 @@ export function isCasting(tick: number, attackCount: number): boolean {
   return tick >= castFrom && tick < castFrom + CAST_TICKS;
 }
 
+const HURT_TICKS = 8; // 맞으면 몇 틱 동안 맞는 모습 (새 시트만)
+const hurtMemo = new Map<string, { hp: number; from: number }>();
+/** 체력이 줄어든 뒤 HURT_TICKS 동안 true (그리기 전용 기억, key: 사람마다 따로 · 협동) */
+export function isHurt(key: string, tick: number, hp: number): boolean {
+  const m = hurtMemo.get(key) ?? { hp, from: -99 };
+  if (hp < m.hp) m.from = tick;
+  m.hp = hp;
+  hurtMemo.set(key, m);
+  return tick >= m.from && tick < m.from + HURT_TICKS;
+}
+
+/** 새 시트(v2: 맞음·쓰러짐·대시 그림이 있음)인지 */
+export function hasV2(name: string): boolean {
+  return !!CHARACTER_SHEETS[name]?.v2 && images.has(name);
+}
+
 export interface CharacterPose {
   faceX: number;
   faceY: number;
@@ -161,6 +178,22 @@ export interface CharacterPose {
   casting: boolean;
   /** 걷기 장면 번호 */
   step: number;
+  /** 새 시트(v2)만: 막 맞음 · 쓰러짐 · 대시 중 */
+  hurt?: boolean;
+  down?: boolean;
+  dash?: boolean;
+}
+
+/** 새 시트(v2)의 [줄, 칸] · 걷기는 왼발 → 서기 → 오른발 → 서기 */
+function v2Cell(pose: CharacterPose): [number, number] {
+  if (pose.down) return [4, 1];
+  if (pose.hurt) return [4, 0];
+  if (pose.dash) return [4, pose.faceX < 0 ? 3 : 2];
+  const side = Math.abs(pose.faceX) > Math.abs(pose.faceY);
+  const dir = side ? (pose.faceX < 0 ? 2 : 3) : pose.faceY < 0 ? 1 : 0;
+  if (pose.casting) return [1, dir];
+  const walk = pose.moving ? pose.step % 4 : 1;
+  return [walk === 0 ? 2 : walk === 2 ? 3 : 0, dir];
 }
 
 /**
@@ -188,7 +221,8 @@ export function drawCharacter(ctx: CanvasRenderingContext2D, name: string, x: nu
   const ss = Math.round(img.width / 4); // 그림 한 칸 (4칸 시트: 2배·4배 촘촘한 그림·스킨도 자동)
   const side = Math.abs(pose.faceX) > Math.abs(pose.faceY);
   let [row, col, flip] = [0, 0, false];
-  if (pose.casting && pose.faceY > -0.5) {
+  if ("v2" in sheet && sheet.v2) [row, col] = v2Cell(pose);
+  else if (pose.casting && pose.faceY > -0.5) {
     // 앞을 보면 팔을 오른쪽으로 뻗은 1번째 칸, 옆이면 4번째 칸
     row = 3;
     col = side ? 3 : 0;

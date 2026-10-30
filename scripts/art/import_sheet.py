@@ -68,6 +68,25 @@ def shrink(img, scale):
     return out
 
 
+def finish(sheet):
+    """시트 전체를 같은 색 96개로 묶고 바깥 테두리 두 칸 (칸 경계는 넘지 않음)"""
+    # 시트 전체를 같은 색 묶음으로 (투명은 그대로)
+    alpha = sheet.getchannel("A")
+    q = sheet.convert("RGB").quantize(colors=96, method=Image.Quantize.MEDIANCUT).convert("RGBA")
+    q.putalpha(alpha)
+    # 바깥 테두리 두 칸 (어두운 밤색, 게임 반 칸) · 줄여도 몸이 바닥과 구분되게
+    px = q.load()
+    edge = []
+    for y in range(q.height):
+        for x in range(q.width):
+            if px[x, y][3]: continue
+            if any(0 <= x + dx < q.width and 0 <= y + dy < q.height and px[x + dx, y + dy][3] and (x + dx) // CELL == x // CELL for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))): edge.append((x, y))
+    for x, y in edge: px[x, y] = (46, 30, 34, 255)
+    edge2 = [(x, y) for y in range(q.height) for x in range(q.width) if not px[x, y][3] and any(0 <= x + dx < q.width and 0 <= y + dy < q.height and px[x + dx, y + dy] == (46, 30, 34, 255) and (x + dx) // CELL == x // CELL for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))]
+    for x, y in edge2: px[x, y] = (46, 30, 34, 200)
+    return q
+
+
 def build(name):
     cfg = SOURCES[name]
     src = Image.open(os.path.join(HERE, "src", f"{name}.png")).convert("RGBA")
@@ -87,20 +106,7 @@ def build(name):
             p = small[key]
             bob = 2 if r < 3 and c in (1, 3) else 0
             sheet.alpha_composite(p, (c * CELL + (CELL - p.width) // 2, r * CELL + FOOT - p.height - bob))
-    # 시트 전체를 같은 색 묶음으로 (투명은 그대로)
-    alpha = sheet.getchannel("A")
-    q = sheet.convert("RGB").quantize(colors=96, method=Image.Quantize.MEDIANCUT).convert("RGBA")
-    q.putalpha(alpha)
-    # 바깥 테두리 두 칸 (어두운 밤색, 게임 반 칸) · 줄여도 몸이 바닥과 구분되게
-    px = q.load()
-    edge = []
-    for y in range(q.height):
-        for x in range(q.width):
-            if px[x, y][3]: continue
-            if any(0 <= x + dx < q.width and 0 <= y + dy < q.height and px[x + dx, y + dy][3] and (x + dx) // CELL == x // CELL for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))): edge.append((x, y))
-    for x, y in edge: px[x, y] = (46, 30, 34, 255)
-    edge2 = [(x, y) for y in range(q.height) for x in range(q.width) if not px[x, y][3] and any(0 <= x + dx < q.width and 0 <= y + dy < q.height and px[x + dx, y + dy] == (46, 30, 34, 255) and (x + dx) // CELL == x // CELL for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))]
-    for x, y in edge2: px[x, y] = (46, 30, 34, 200)
+    q = finish(sheet)
     q.save(os.path.join(SPRITES, f"{name}.png"), optimize=True)
     print(name, "ok")
 
