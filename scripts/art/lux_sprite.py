@@ -67,14 +67,14 @@ def head(c, cx, top, hs, view, stage):
         c.oval(cx, cy, r, r, K["hair"]); c.oval(cx - r * 0.3, cy - r * 0.4, r * 0.35, r * 0.25, K["hairL"])
         return
     face_x = cx + (r * 0.25 if view == "side" else 0)
-    c.oval(cx, cy, r, r, K["hair"])
-    # 얼굴: 아래 절반 + 갸름한 턱
-    fw = r * (0.62 if view == "side" else 0.78)
-    for y in range(int(cy - r * 0.25), int(cy + r) + 1):
-        k = (y - (cy - r * 0.25)) / (r * 1.25)
-        w = fw * (1 - max(0, k - 0.55) * 1.4)
+    c.oval(cx, cy, r * 0.9, r, K["hair"])
+    # 얼굴: 아래 절반 + 갸름한 V자 턱 (볼에서 턱끝으로 곧게 좁아짐)
+    fw = r * (0.56 if view == "side" else 0.66)
+    for y in range(int(cy - r * 0.25), int(cy + r * 1.08) + 1):
+        k = (y - (cy - r * 0.25)) / (r * 1.33)
+        w = max(0.5, fw * (1 - max(0, k - 0.42) * 1.6))
         c.rect(face_x - w, y, w * 2, 1, K["skin"])
-    c.px(face_x - fw + 1, cy + r * 0.35, K["blush"]); c.px(face_x + fw - 2, cy + r * 0.35, K["blush"])
+    c.px(face_x - fw + 1, cy + r * 0.4, K["blush"]); c.px(face_x + fw - 2, cy + r * 0.4, K["blush"])
     # 눈 자리 (크기에 맞춰 커짐)
     ey = round(cy + r * 0.1)
     ew = max(2, round(hs * 0.17))
@@ -86,7 +86,7 @@ def head(c, cx, top, hs, view, stage):
         c.rect(x, cy - r * 0.6, 1, bottom - (cy - r * 0.6) + 1, K["hair"])
     if view == "front":
         for side in (-1, 1):
-            x = cx + side * (r * 0.92)
+            x = cx + side * (r * 0.84)
             c.rect(x - (1 if side > 0 else 0), cy - r * 0.3, 2, r * 1.25, K["hair"])
             c.rect(x - side * 1 - (1 if side > 0 else 0), cy + r * 0.15, 1, r * 0.75, K["white"])
     else:

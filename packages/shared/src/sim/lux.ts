@@ -1,12 +1,14 @@
 // 한정 캐릭터 빛의 사도 (lux, 서고의 감시자): 빛의 검으로 빠르고 약한 빛의 칼날을 쏨 · 몇 번째 공격마다 가까운 적들 자리에
 // '+' 모양 빛의 검이 여러 번 생겨 벰 (적마다 몇 번, 45°씩 엇갈림) · 빛의 조각(lxShard, 빛의 적이 떨굼, sim/luxFoes)으로 성장:
 // 조각마다 공격력·공격 속도(아이템 값) + 치명타·예리함 + 빛의 검 피해 · 6개마다 한 단계(0~3): 노리는 적 +1 · 검이 커짐 · 몸이 커짐(그림 lux~lux4)
+// 은총의 옷자락: 더 넓게 + 5개 더 · 꿰뚫는 빛: 생긴 자리에 붉은 빛의 검이 한 번 더
 import { TICK_RATE } from "../constants";
 import { LUX } from "../weaponsLux";
 import { LUX_PERKS as K } from "../itemsLux";
 import type { ExtraStats } from "../characters";
 import type { StatMod } from "../stats";
 import { alive, onSegment, strike } from "./s2Kit";
+import type { LuxCross } from "./luxTypes";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
 
@@ -32,7 +34,6 @@ export function luxMods(p: PlayerState): StatMod[] {
 function shoot(s: RunState): void {
   const p = s.player;
   const speed = p.stats.projectileSpeed;
-  const pierce = hasPerk(p, "lxPierce") ? K.lxPierce.add : 0;
   s.projectiles.push({
     id: s.nextId++,
     fromPlayer: true,
@@ -46,7 +47,6 @@ function shoot(s: RunState): void {
     damage: p.stats.damage,
     ticksLeft: Math.ceil(p.stats.range / speed),
     lx: luxStage(p) + 1,
-    ...(pierce > 0 ? { pierce, hitIds: [] } : {}),
   });
 }
 
@@ -54,8 +54,10 @@ function shoot(s: RunState): void {
 function summon(s: RunState): void {
   const p = s.player;
   const stage = luxStage(p);
+  const grace = hasPerk(p, "lxGrace");
+  const reach = LUX.reach * (grace ? K.lxGrace.reach : 1);
   const near = alive(s)
-    .filter((e) => (e.x - p.x) ** 2 + (e.y - p.y) ** 2 <= LUX.reach ** 2)
+    .filter((e) => (e.x - p.x) ** 2 + (e.y - p.y) ** 2 <= reach ** 2)
     .sort((a, b) => (a.x - p.x) ** 2 + (a.y - p.y) ** 2 - ((b.x - p.x) ** 2 + (b.y - p.y) ** 2) || a.id - b.id)
     .slice(0, LUX.targets + stage);
   const hits = LUX.hits + (hasPerk(p, "lxMore") ? K.lxMore.add : 0);
@@ -69,16 +71,25 @@ function summon(s: RunState): void {
       q.push({ at: s.tick + 2 + h * LUX.gap + i, x: e.x + off[0]!, y: e.y + off[1]!, rot: (h + i) % 2 === 1, arm, dmg });
     }
   });
+  // 은총의 옷자락: 노린 적들 둘레 넓게 5개 더 (돌아가며 비켜서)
+  if (grace && near.length) for (let j = 0; j < K.lxGrace.add; j++) {
+    const e = near[j % near.length]!;
+    const [dx, dy] = [((j * 13 + 5) % 25) - 12, ((j * 17 + 9) % 25) - 12];
+    q.push({ at: s.tick + 4 + j * 3, x: e.x + dx, y: e.y + dy, rot: j % 2 === 0, arm, dmg });
+  }
 }
 
 const D = Math.SQRT1_2;
 
 /** 예약한 빛의 검이 생겨 벰: '+'(또는 '×') 두 팔에 걸린 적 */
-function strikeCross(s: RunState, c: { x: number; y: number; rot: boolean; arm: number; dmg: number }): void {
+function strikeCross(s: RunState, c: LuxCross): void {
   const [ax, ay, bx, by] = c.rot ? [D, D, D, -D] : [1, 0, 0, 1];
   const hit = new Set([...onSegment(s, c.x - ax * c.arm, c.y - ay * c.arm, c.x + ax * c.arm, c.y + ay * c.arm, LUX.width), ...onSegment(s, c.x - bx * c.arm, c.y - by * c.arm, c.x + bx * c.arm, c.y + by * c.arm, LUX.width)]);
   for (const e of hit) strike(s, e, c.dmg);
-  addEffect(s, { kind: "lxCross", x: c.x, y: c.y, dirX: c.rot ? 1 : 0, dirY: luxStage(s.player), size: c.arm, maxTicks: 18 });
+  // dirX: 0 '+' · 1 '×' · 2·3 붉은 검
+  addEffect(s, { kind: "lxCross", x: c.x, y: c.y, dirX: (c.rot ? 1 : 0) + (c.red ? 2 : 0), dirY: luxStage(s.player), size: c.arm, maxTicks: 18 });
+  // 꿰뚫는 빛: 같은 자리에 붉은 빛의 검이 엇갈려 한 번 더
+  if (!c.red && hasPerk(s.player, "lxPierce")) (s.player.lxQ ??= []).push({ ...c, at: s.tick + K.lxPierce.delay, rot: !c.rot, dmg: c.dmg * K.lxPierce.mul, red: true });
 }
 
 /** 직업 무기 틱 (classTicks): 기다리는 빛의 검 · 누르면 빛의 칼날 · 몇 번째마다 빛의 검 생성 */

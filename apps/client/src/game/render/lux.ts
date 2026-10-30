@@ -1,6 +1,7 @@
 // 빛의 사도 그리기: 빛의 칼날 탄 · '+' 빛의 검(주황 굵은 테두리 → 노랑 → 흰 가운데, 주황이 더 많게) · 칼날 휘두름 · 빛의 조각 · 성장 빛 · 빛의 적 등장
-// 몸 둘레 빛(성장 단계마다 진해짐) · 빛의 적 둘레 금빛 기운 · 왼쪽 위 빛의 조각 창 (조각 수 · 다음 성장까지)
+// 몸 둘레 빛(성장 단계마다 진해짐) · 은총의 옷자락 머리 위 빛의 검 날개 · 빛의 적 둘레 금빛 기운 · 왼쪽 위 빛의 조각 창 (조각 수 · 다음 성장까지)
 import { LUX, luxShards, luxStage, type EffectState, type EnemyState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { customImage } from "../customArt";
 import { hudScale } from "./imugiAura";
 import { lerp, type Snap } from "./palette";
 import { additive, glow } from "./pwFxBits";
@@ -9,6 +10,7 @@ type Ctx = CanvasRenderingContext2D;
 const OR = "#ff8a1a";
 const YE = "#ffe060";
 const WH = "#fffbe8";
+const RD = "#e0283a";
 
 /** '+' 빛 한 개 (rot = 45° 돌림 '×'): 굵은 주황 테두리 · 노란 속 · 흰 가운데 · 끝이 뾰족한 네 갈래 */
 export function lightStar(ctx: Ctx, x: number, y: number, arm: number, rot: boolean, a: number): void {
@@ -46,6 +48,20 @@ export function lightStar(ctx: Ctx, x: number, y: number, arm: number, rot: bool
   ctx.restore();
 }
 
+/** 그려 주신 빛의 검 그림 (sprites/custom/fx_luxCross·붉은 것 fx_luxCrossRed, 64칸 · 가운데에서 끝까지 약 26칸). 못 불러오면 코드 그림 */
+export function lightSword(ctx: Ctx, x: number, y: number, arm: number, ang: number, a: number, red = false): void {
+  const img = customImage(red ? "fx:luxCrossRed" : "fx:luxCross");
+  if (!img) return lightStar(ctx, x, y, arm, ang !== 0, a);
+  const k = (arm * 1.18) / 26;
+  ctx.save();
+  ctx.translate(x, y);
+  if (ang) ctx.rotate(ang);
+  ctx.globalAlpha = a;
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(img, -32 * k, -32 * k, 64 * k, 64 * k);
+  ctx.restore();
+}
+
 /** 빛의 칼날 탄 (날아가는 쪽으로 가늘고 긴 빛) */
 export function drawLuxShot(ctx: Ctx, pr: ProjectileState, x: number, y: number): boolean {
   if (!pr.lx) return false;
@@ -78,13 +94,14 @@ export function drawLuxFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     // 빠르게 생겨(처음 15%) 반짝이다 사라짐 · 바닥 빛 · 흩어지는 불티
     const grow = Math.min(1, t / 0.15);
     const fade = t < 0.55 ? 1 : 1 - (t - 0.55) / 0.45;
-    additive(ctx, () => glow(ctx, x, y, fx.size * 1.6, OR, 0.55 * fade, 0.3));
-    lightStar(ctx, x, y, fx.size * (0.5 + 0.5 * grow) * (1 + 0.08 * Math.sin(t * 20)), fx.dirX === 1, fade);
+    const red = fx.dirX >= 2;
+    additive(ctx, () => glow(ctx, x, y, fx.size * 1.6, red ? RD : OR, 0.55 * fade, 0.3));
+    lightSword(ctx, x, y, fx.size * (0.5 + 0.5 * grow) * (1 + 0.08 * Math.sin(t * 20)), fx.dirX % 2 ? Math.PI / 4 : 0, fade, red);
     additive(ctx, () => {
       for (let i = 0; i < 6; i++) {
         const a = i * 1.047 + fx.x;
         const r = fx.size * (0.6 + t * 1.2);
-        glow(ctx, x + Math.cos(a) * r, y + Math.sin(a) * r, 2, i % 2 ? YE : OR, fade * 0.9);
+        glow(ctx, x + Math.cos(a) * r, y + Math.sin(a) * r, 2, i % 2 ? (red ? WH : YE) : red ? RD : OR, fade * 0.9);
       }
     });
     return true;
@@ -162,6 +179,12 @@ export function drawLuxAura(ctx: Ctx, s: RunState, a: number, snap: Snap): void 
       glow(ctx, x + Math.cos(ang) * (10 + st * 3), y - 4 - k * (top + 8), 1.6, i % 2 ? WH : YE, 1 - k);
     }
   });
+  // 은총의 옷자락: 머리 위 양쪽에 빛의 검 두 개가 날개처럼 (천천히 오르내림)
+  if (p.passives.includes("lxGrace")) for (const side of [-1, 1]) {
+    const bob = Math.sin(s.tick * 0.08 + side) * 1.5;
+    additive(ctx, () => glow(ctx, x + side * (10 + st * 2), y - top - 4 + bob, 7 + st, OR, 0.35 * f));
+    lightSword(ctx, x + side * (10 + st * 2), y - top - 4 + bob, 6 + st * 1.5, side * 0.45, 0.95);
+  }
   if (st >= 2) for (let i = 0; i < st - 1; i++) {
     const ang = s.tick * 0.04 + (i * Math.PI * 2) / (st - 1);
     lightStar(ctx, x + Math.cos(ang) * (14 + st * 2), y - top * 0.6 + Math.sin(ang) * 5, 3, i % 2 === 1, 0.85);

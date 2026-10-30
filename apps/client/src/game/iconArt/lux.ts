@@ -8,15 +8,16 @@ const WH = "#fffbe8";
 const BK = "#1a1622";
 const BK_L = "#3a3046";
 const SK = "#f4dcc8";
+const RD = "#d0202e";
 
 /** '+' 빛 (가운데 cx·cy, 팔 길이 a): 주황 테두리 · 노란 속 · 흰 가운데 */
-function star(g: Pen, cx: number, cy: number, a: number): void {
+function star(g: Pen, cx: number, cy: number, a: number, [o, y] = [OR, YE]): void {
   for (let i = -a; i <= a; i++) {
     const edge = Math.abs(i) >= a - 1;
     const w = Math.abs(i) <= 1 ? 2 : 1;
     for (let j = -w; j <= w; j++) {
-      g.px(cx + i, cy + j, edge || Math.abs(j) === w ? OR : YE);
-      g.px(cx + j, cy + i, edge || Math.abs(j) === w ? OR : YE);
+      g.px(cx + i, cy + j, edge || Math.abs(j) === w ? o : y);
+      g.px(cx + j, cy + i, edge || Math.abs(j) === w ? o : y);
     }
   }
   g.px(cx, cy, WH).px(cx + 1, cy, WH).px(cx, cy + 1, WH);
@@ -50,8 +51,10 @@ export const LX_PASSIVE_ART = {
     g.line(1, 14, 8, 8, OR_D).px(3, 12, YE).px(6, 10, YE);
   },
   lxGrace: (g: Pen) => {
-    // 검은 옷자락 · 빛 테두리
-    g.rect(4, 3, 8, 10, BK).line(4, 13, 2, 15, BK).line(11, 13, 13, 15, BK).line(4, 3, 4, 13, OR).line(11, 3, 11, 13, OR).rect(7, 3, 2, 10, SK).px(7, 9, YE).px(8, 9, YE);
+    // 검은 옷자락 · 위 양쪽 빛의 검 날개 둘
+    g.rect(5, 7, 6, 7, BK).line(5, 14, 4, 15, BK).line(10, 14, 11, 15, BK).line(5, 7, 5, 14, OR).line(10, 7, 10, 14, OR).rect(7, 7, 2, 7, SK);
+    star(g, 3, 4, 3);
+    star(g, 12, 4, 3);
   },
   lxMore: (g: Pen) => {
     star(g, 6, 6, 4);
@@ -65,7 +68,9 @@ export const LX_PASSIVE_ART = {
     star(g, 8, 8, 6);
   },
   lxPierce: (g: Pen) => {
-    g.rect(6, 3, 4, 10, BK_L).line(0, 8, 15, 8, YE).line(0, 7, 15, 7, OR).px(15, 8, WH).px(14, 7, WH);
+    // 빛의 검 위로 붉은(안쪽 흰) 빛의 검이 한 번 더
+    star(g, 6, 6, 4);
+    star(g, 10, 10, 4, [RD, WH]);
   },
   lxJudge: (g: Pen) => {
     star(g, 8, 8, 5);

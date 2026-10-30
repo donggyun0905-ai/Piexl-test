@@ -45,6 +45,25 @@ describe("빛의 사도", () => {
     expect(s.enemies[1]!.hp).toBeLessThan(hp);
   });
 
+  it("은총의 옷자락: 빛의 검 5개 더 · 꿰뚫는 빛: 붉은 빛의 검이 한 번 더", () => {
+    const count = (perk?: "lxGrace" | "lxPierce"): [number, number] => {
+      const s = lux();
+      if (perk) s.player.passives.push(perk);
+      const seen = new Set<object>();
+      for (let i = 0; i < 120; i++) {
+        stepSim(s, FIRE);
+        for (const f of s.effects) if (f.kind === "lxCross") seen.add(f);
+      }
+      const all = [...seen] as { dirX: number }[];
+      return [all.length, all.filter((f) => f.dirX >= 2).length];
+    };
+    const [base, red0] = count();
+    expect(red0).toBe(0);
+    expect(count("lxGrace")[0]).toBeGreaterThanOrEqual(base + 5);
+    const [, red] = count("lxPierce");
+    expect(red).toBeGreaterThanOrEqual(base - 2);
+  });
+
   it("빛의 조각: 치명타·예리함이 오르고 6개마다 성장 (최대 3단계)", () => {
     const s = lux(7);
     expect(luxShards(s.player)).toBe(7);

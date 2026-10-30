@@ -14,15 +14,15 @@ export const LUX_PASSIVES = {
   lxSwift: M("lxSwift", [{ stat: "attackSpeed", mul: 1.15 }]),
   /** 먼 빛: 사거리 +25 · 발사체 속도 +15% */
   lxReach: M("lxReach", [{ stat: "range", add: 25 }, { stat: "projectileSpeed", mul: 1.15 }]),
-  /** 은총의 옷자락: 최대 체력 +30 */
-  lxGrace: M("lxGrace", [{ stat: "maxHp", add: 30 }]),
+  /** 은총의 옷자락: 빛의 검이 더 넓은 곳에 · 한 번에 5개 더 (머리 위 빛의 검 날개 두 개) */
+  lxGrace: E("lxGrace"),
   /** 겹친 검날: 적마다 빛의 검 +1 */
   lxMore: E("lxMore"),
   /** 빠른 단죄: 빛의 검이 2번 공격마다 */
   lxQuick: E("lxQuick"),
   /** 넓은 십자: 빛의 검 크기 +40% */
   lxWide: E("lxWide"),
-  /** 꿰뚫는 빛: 빛의 칼날이 한 명 더 뚫음 */
+  /** 꿰뚫는 빛: 빛의 검이 생긴 자리에 붉은 빛의 검이 한 번 더 꿰뚫음 */
   lxPierce: E("lxPierce"),
   /** 단죄: 빛의 검 피해 +35% */
   lxJudge: E("lxJudge"),
@@ -36,7 +36,8 @@ export const LUX_PERKS = {
   lxMore: { add: 1 },
   lxQuick: { every: 2 },
   lxWide: { mul: 1.4 },
-  lxPierce: { add: 1 },
+  lxGrace: { reach: 1.5, add: 5 },
+  lxPierce: { delay: 8, mul: 0.8 },
   lxJudge: { mul: 1.35 },
   lxTattoo: { hp: 4, critDmg: 0.03 },
 };

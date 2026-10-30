@@ -1,12 +1,13 @@
 // 빛의 사도(sim/lux) 상태: 기다리는 '+' 빛의 검 · 빛의 적 표시 · 빛의 칼날 탄
 export interface LuxCross {
-  /** 생기는 틱 · 자리 · 45° 돌림 · 팔 길이 · 피해 */
+  /** 생기는 틱 · 자리 · 45° 돌림 · 팔 길이 · 피해 · 붉은 검(꿰뚫는 빛의 두 번째 검) */
   at: number;
   x: number;
   y: number;
   rot: boolean;
   arm: number;
   dmg: number;
+  red?: boolean;
 }
 
 export interface LuxPlayerState {

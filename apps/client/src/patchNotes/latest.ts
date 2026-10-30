@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.261",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "빛의 사도: '+' 빛의 검을 새로 그린 픽셀 그림으로 바꿈 · 얼굴을 더 갸름하게 (V자 턱)",
+        "은총의 옷자락: 최대 체력 +30 대신 → 빛의 검이 1.5배 넓은 곳까지 생기고 한 번에 5개 더 · 머리 위에 빛의 검 날개 두 개 (한 판에 하나)",
+        "꿰뚫는 빛: 칼날이 한 명 더 뚫음 대신 → 빛의 검이 생긴 자리에 붉은(안쪽 흰) 빛의 검이 엇갈려 한 번 더 꿰뚫음 (피해 ×0.8)",
+      ],
+      en: [
+        "Apostle of Light: '+' light swords now use new pixel art · slimmer face (V-shaped chin)",
+        "Hem of Grace: instead of +30 max HP → light swords form 1.5× farther and 5 more each time · two light-sword wings above her head (one per run)",
+        "Piercing Light: instead of piercing one more foe → a crimson (white-cored) light sword pierces again, crossed, where each light sword formed (damage ×0.8)",
+      ],
+      ja: [
+        "光の使徒: 「+」の光の剣を新しいドット絵に · 顔をよりほっそり（V字のあご）",
+        "恩寵の裾: 最大体力+30の代わりに → 光の剣が1.5倍広い範囲まで生まれ、1回につき5本多く · 頭上に光の剣の翼が2本（1回のプレイで1つ）",
+        "貫く光: 刃が1体多く貫く代わりに → 光の剣が生まれた場所に紅（内側は白）の光の剣が交差してもう一度貫く（ダメージ×0.8）",
+      ],
+    },
+  },
+  {
     version: "0.48.260",
     date: "2026-10-30",
     items: {

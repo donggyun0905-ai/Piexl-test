@@ -39,7 +39,16 @@ export const LX_EFFECTS = {
   lxMore: c("적마다 빛의 검 +{add}", "+{add} light sword per foe", "敵ごとに光の剣+{add}"),
   lxQuick: c("빛의 검이 {every}번 공격마다", "Light swords every {every} attacks", "光の剣が{every}回攻撃ごと"),
   lxWide: c("빛의 검 크기 ×{mul}", "Light sword size ×{mul}", "光の剣の大きさ×{mul}"),
-  lxPierce: c("빛의 칼날이 {add}명 더 뚫음", "Blades pierce {add} more foe", "光の刃が{add}体多く貫く"),
+  lxGrace: c(
+    "빛의 검이 ×{reach} 넓은 곳까지 생기고 한 번에 {add}개 더 · 머리 위에 빛의 검 날개 두 개",
+    "Light swords form ×{reach} farther and {add} more each time · two light-sword wings above your head",
+    "光の剣が×{reach}広い範囲に生まれ、1回につき{add}本多く · 頭上に光の剣の翼が2本",
+  ),
+  lxPierce: c(
+    "빛의 검이 생긴 자리에 붉은 빛의 검이 한 번 더 꿰뚫음 (피해 ×{mul})",
+    "A crimson light sword pierces again where each light sword formed (damage ×{mul})",
+    "光の剣が生まれた場所に紅の光の剣がもう一度貫く（ダメージ×{mul}）",
+  ),
   lxJudge: c("빛의 검 피해 ×{mul}", "Light sword damage ×{mul}", "光の剣ダメージ×{mul}"),
   lxTattoo: c("빛의 조각마다 최대 체력 +{hp} · 치명타 피해 +3%", "Per shard: +{hp} max HP · +3% crit damage", "かけらごとに最大体力+{hp} · 会心ダメージ+3%"),
 };
