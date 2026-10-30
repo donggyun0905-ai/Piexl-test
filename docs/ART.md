@@ -50,3 +50,4 @@
 - 생성기: `scripts/art/hd_common.py`(3단 명암·색에 맞춘 테두리·큰 눈·앞머리 결) · 손으로 찍은 몸 틀 `hd_doll.py`(얼굴형·눈 표·귀·다리·구두, 캐릭터마다 머리·옷만 덧칠) · 시범 `hd_mage.py`(마법사) · `hd_hulk.py`(강철 거구)
 - 도트 편집 페이지는 그림 칸 크기에 맞춰 열림 (`pixel/assets`의 `sheetCell`)
 - 바깥 그림 가져오기: `scripts/art/import_sheet.py {이름}` (원본 조각 `scripts/art/src/{이름}.png`, 검은 배경) → 배경 지우기·크기 맞추기·96색·테두리 → 128칸(게임의 4배) 시트, `sprites.ts`에 `src: 128`. 마법사는 0.48.268에 시험 적용, 0.48.269에 128칸으로 (손으로 찍은 틀 판은 `hd_mage.py`로 다시 만들 수 있음)
+- 생성 AI로 캐릭터 그림을 만드는 순서·프롬프트·체크 목록: `docs/ART_AI.md`
