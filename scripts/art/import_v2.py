@@ -18,7 +18,7 @@ BODY = 116
 FILES = [("1", 4, 2, [0, 1]), ("2", 4, 2, [2, 3]), ("3", 4, 1, [4])]
 # 왼쪽 모습을 오른쪽 뒤집기로 (GPT 왼쪽 그림이 오른쪽을 봄)
 FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", "brawler", "gunner", "ninja", "summoner", "chronomancer", "beast",
-             "bedouin", "imugi", "general", "novice", "apostle", "abandoned", "abandoned2", "abandoned3"}
+             "bedouin", "imugi", "general", "novice", "apostle", "abandoned", "abandoned2", "abandoned3", "novice10", "novice15"}
 # 서기·걷기에서 오른쪽을 보는 원본 칸 (기본 3 = 넷째 칸, GPT가 셋째 칸에 오른쪽을 그린 캐릭터만)
 STAND_RIGHT = {"abandoned": 2, "abandoned2": 2}
 # 서기·걷기에서 고른 칸이 왼쪽을 보는 캐릭터: 뒤집어서 오른쪽으로 (사용자 확인)
@@ -30,6 +30,7 @@ ATTACK_LR = {
     "chronomancer": ("2", "3"), "beast": ("2", "3"), "doctor": ("2", "3"),
     "imugi": ("2", "3"), "general": ("2", "3"), "apostle": ("2", "3"), "abandoned": ("2", "3"), "abandoned3": ("2", "3"),
     "bedouin": ("2", "2f"), "abandoned2": ("2", "2f"), "novice": ("2", "2f"), "summoner": ("3f", "3"),
+    "novice10": ("2", "2f"), "novice15": ("2", "2f"),
 }
 
 

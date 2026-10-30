@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.281",
+    date: "2026-10-31",
+    items: {
+      ko: ["풋내기 레벨별 옷을 새 그림으로: 5레벨 기본 옷 · 10레벨 가죽 · 15레벨 쇠사슬 (20레벨 판금은 준비 중)"],
+      en: ["Novice level outfits in the new art: Lv 5 basic clothes · Lv 10 leather · Lv 15 chainmail (Lv 20 plate coming soon)"],
+      ja: ["見習いのレベル別の服を新しい絵に: Lv5 基本の服 · Lv10 革 · Lv15 鎖帷子（Lv20 プレートは準備中）"],
+    },
+  },
+  {
     version: "0.48.280",
     date: "2026-10-31",
     items: {

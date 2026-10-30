@@ -100,9 +100,9 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number;
   abandoned3: { size: 32, footPad: 2, src: 128, v2: true },
   titan: { size: 48, footPad: 3 },
   oni: { size: 48, footPad: 3 },
-  novice5: { size: 32, footPad: 2 },
-  novice10: { size: 32, footPad: 2 },
-  novice15: { size: 32, footPad: 2 },
+  novice5: { size: 32, footPad: 2, src: 128, v2: true },
+  novice10: { size: 32, footPad: 2, src: 128, v2: true },
+  novice15: { size: 32, footPad: 2, src: 128, v2: true },
   novice20: { size: 32, footPad: 2 },
 };
 
