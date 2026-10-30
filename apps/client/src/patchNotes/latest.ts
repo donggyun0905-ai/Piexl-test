@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.275",
+    date: "2026-10-31",
+    items: {
+      ko: ["캐릭터 선택창·설명 창·스킨 미리보기의 캐릭터 그림을 화면 해상도로 또렷하게 그림 (새 그림이 흐릿하던 문제)"],
+      en: ["Character art in the selection screen, info window and skin previews is now drawn at screen resolution (new art no longer looks blurry)"],
+      ja: ["キャラクター選択画面・説明ウィンドウ・スキンプレビューのキャラ絵を画面解像度でくっきり描画（新しい絵がぼやける問題）"],
+    },
+  },
+  {
     version: "0.48.274",
     date: "2026-10-31",
     items: {
