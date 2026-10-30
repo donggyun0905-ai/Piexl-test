@@ -12,9 +12,9 @@ export const LUX_PASSIVES = {
   lxHalo: M("lxHalo", [{ stat: "damage", mul: 1.12 }]),
   /** 신속의 깃: 공격 속도 +15% */
   lxSwift: M("lxSwift", [{ stat: "attackSpeed", mul: 1.15 }]),
-  /** 먼 빛: 사거리 +25 · 발사체 속도 +15% */
-  lxReach: M("lxReach", [{ stat: "range", add: 25 }, { stat: "projectileSpeed", mul: 1.15 }]),
-  /** 은총의 옷자락: 빛의 검이 더 넓은 곳에 · 한 번에 5개 더 (머리 위 빛의 검 날개 두 개) */
+  /** 먼 빛: 사거리 +15 (빛의 검 생성 거리도 함께 늘어남) */
+  lxReach: M("lxReach", [{ stat: "range", add: 15 }]),
+  /** 은총의 옷자락: 빛의 검이 더 넓은 곳에 · 한 번에 5개 더 (몸 둘레에 떠다니는 빛의 검 넷) */
   lxGrace: E("lxGrace"),
   /** 겹친 검날: 적마다 빛의 검 +1 */
   lxMore: E("lxMore"),

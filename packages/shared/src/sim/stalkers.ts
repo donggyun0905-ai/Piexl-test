@@ -8,7 +8,8 @@ import { roomTerrain } from "./bossToad";
 import { depth } from "./hero";
 import { addShape } from "./hazards";
 import type { EnemyState, RunState } from "./types";
-import { DIR16, dist2, enemyShot, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, weaponOf } from "./util";
+import { bodyFits } from "./layout";
+import { DIR16, dist2, enemyShot, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid, weaponOf } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -103,6 +104,9 @@ function venom(s: RunState, e: EnemyState, go: Vec): void {
   if (gas.length > R.GAS_MAX) gas.shift();
 }
 
+/** 뛰어오른 땅 물고기: 하늘이라 벽·다른 적을 지나 내려앉을 자리까지 감 (enemies가 밀어내지 않음) */
+export const fishLeaping = (e: EnemyState) => e.kind === "landfish" && e.step === 2;
+
 /** 땅 물고기: step 0 땅속에서 따라옴 · 1 멈춰 깜빡임(솟구칠 예고) · 2 뛰어오름(맞출 수 있음) */
 function landfish(s: RunState, e: EnemyState): void {
   const st = e.step ?? 0;
@@ -126,19 +130,23 @@ function landfish(s: RunState, e: EnemyState): void {
     if (e.timer > 0) return;
     e.step = 1;
     e.timer = R.FISH_WARN;
-    addShape(s, R.FISH_WARN, { x: e.x, y: e.y, radius: R.FISH_R, damage: R.FISH_DMG + depth(s), fx: "pillar" });
+    addShape(s, R.FISH_WARN, { x: e.x, y: e.y, radius: R.FISH_R, damage: R.FISH_DMG + depth(s), fx: "pillar", owner: e.id });
   } else if (st === 1) {
     if (e.timer > 0) return;
     // 솟구침 → 다른 자리로 뛰어 듦 (그 자리도 표시되고 떨어지면 터짐)
-    const k = DIR16[(e.count * 7 + e.id * 3) % 16]!;
+    // 내려앉을 자리: 16방향 중 벽·기둥·구덩이가 아닌 첫 자리 (없으면 내 자리)
+    const g = roomGrid(s);
+    const k0 = (e.count * 7 + e.id * 3) % 16;
     e.count++;
-    e.auxX = clampX(s.player.x + k[0] * R.FISH_LEAP);
-    e.auxY = clampY(s.player.y + k[1] * R.FISH_LEAP);
+    const spot = DIR16.map((_, i) => DIR16[(k0 + i) % 16]!)
+      .map((k) => [clampX(s.player.x + k[0] * R.FISH_LEAP), clampY(s.player.y + k[1] * R.FISH_LEAP)] as const)
+      .find(([x, y]) => !g || bodyFits(g, x, y, e.r));
+    [e.auxX, e.auxY] = spot ?? [s.player.x, s.player.y];
     e.dirX = Math.sign(e.auxX - e.x) || 1;
     e.step = 2;
     e.timer = R.FISH_JUMP;
     e.air = e.immune = false;
-    addShape(s, R.FISH_JUMP, { x: e.auxX, y: e.auxY, radius: R.FISH_R, damage: R.FISH_DMG + depth(s), fx: "pillar" });
+    addShape(s, R.FISH_JUMP, { x: e.auxX, y: e.auxY, radius: R.FISH_R, damage: R.FISH_DMG + depth(s), fx: "pillar", owner: e.id });
   } else {
     const left = Math.max(1, e.timer + 1);
     e.x += ((e.auxX ?? e.x) - e.x) / left;

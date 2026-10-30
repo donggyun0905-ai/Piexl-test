@@ -10,9 +10,9 @@ export const LX_WEAPON_NAMES = {
 
 /** 빛의 검 설명 (무기 설명 줄) */
 const RADIANT_DESC: Names = c(
-  "빠르고 약한 빛의 칼날을 쏨 · 세 번째 공격마다 가까운 적들 자리에 '+' 모양 빛의 검이 여러 번 생겨 벰",
-  "Fires fast, light blades of light · every third attack, '+'-shaped light swords form again and again on nearby foes",
-  "速くて軽い光の刃を放つ · 3回目の攻撃ごとに近くの敵の位置に「+」形の光の剣が何度も生まれて斬る",
+  "빠른 평타: 사거리 안 가장 가까운 적 자리에 작은 '+' 빛이 생겨 벰 · 세 번째 공격마다 더 넓은 곳의 적들 자리에 '+' 모양 빛의 검이 여러 번 생겨 벰",
+  "Fast strikes: a small '+' of light forms on the nearest foe in range · every third attack, '+'-shaped light swords form again and again on foes in a wider area",
+  "速い通常攻撃: 射程内で一番近い敵の位置に小さな「+」の光が生まれて斬る · 3回目の攻撃ごとにより広い範囲の敵の位置に「+」形の光の剣が何度も生まれて斬る",
 );
 export const radiantDesc = (lang: Lang) => RADIANT_DESC[lang];
 
@@ -40,9 +40,9 @@ export const LX_EFFECTS = {
   lxQuick: c("빛의 검이 {every}번 공격마다", "Light swords every {every} attacks", "光の剣が{every}回攻撃ごと"),
   lxWide: c("빛의 검 크기 ×{mul}", "Light sword size ×{mul}", "光の剣の大きさ×{mul}"),
   lxGrace: c(
-    "빛의 검이 ×{reach} 넓은 곳까지 생기고 한 번에 {add}개 더 · 머리 위에 빛의 검 날개 두 개",
-    "Light swords form ×{reach} farther and {add} more each time · two light-sword wings above your head",
-    "光の剣が×{reach}広い範囲に生まれ、1回につき{add}本多く · 頭上に光の剣の翼が2本",
+    "빛의 검이 ×{reach} 넓은 곳까지 생기고 한 번에 {add}개 더 · 몸 둘레에 빛의 검 넷이 떠다님",
+    "Light swords form ×{reach} farther and {add} more each time · four light swords float around you",
+    "光の剣が×{reach}広い範囲に生まれ、1回につき{add}本多く · 体のまわりに光の剣が4本漂う",
   ),
   lxPierce: c(
     "빛의 검이 생긴 자리에 붉은 빛의 검이 한 번 더 꿰뚫음 (피해 ×{mul})",

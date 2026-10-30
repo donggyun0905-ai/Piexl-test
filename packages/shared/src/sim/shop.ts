@@ -42,7 +42,7 @@ export function spawnShop(s: RunState, roomId: number): void {
   // 아티팩터 제작대 · 추적자 튜닝소 (sim/station)
   if (spawnStation(s, roomId)) return;
   const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "shop", ...seatSalt(s)));
-  const use = rng.pick(usePool(s));
+  const use = rng.pick(usePool(s, true));
   addPickup(s, roomId, "passive", rng.pick(passivePool(s)), CX + SHOP_X.passive, shopY(), 0, shopPrice(s, PRICE.passive));
   const w = weaponSlot(s, rng);
   if (!shelfGone(s, "weapon")) addPickup(s, roomId, w.kind, w.id, CX + SHOP_X.weapon, shopY(), 0, shopPrice(s, PRICE[w.kind]));
@@ -127,7 +127,7 @@ export function rerollShop(s: RunState, reroll: Pickup): void {
       pk.itemId = pickNew(weaponPool(s), pk.itemId);
       pk.price = shopPrice(s, PRICE.weapon);
     } else if (pk.kind === "use") {
-      const id = pickNew(usePool(s), pk.itemId);
+      const id = pickNew(usePool(s, true), pk.itemId);
       pk.itemId = id;
       pk.price = shopPrice(s, useBase(id));
     } else continue;
@@ -143,7 +143,7 @@ export function rerollShop(s: RunState, reroll: Pickup): void {
       addPickup(s, s.roomId, w.kind, w.id, CX + SHOP_X.weapon, shopY(), 0, shopPrice(s, PRICE[w.kind]));
     }
     if (empty(SHOP_X.use) && !shelfGone(s, "use")) {
-      const use = rng.pick(usePool(s));
+      const use = rng.pick(usePool(s, true));
       addPickup(s, s.roomId, "use", use, CX + SHOP_X.use, shopY(), 0, shopPrice(s, useBase(use)));
     }
     // 회복약 자리도 산 뒤 새로고침하면 다시 채움

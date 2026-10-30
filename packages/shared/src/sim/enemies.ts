@@ -9,7 +9,7 @@ import { updateBlade } from "./bossBlades";
 import { updateGhost } from "./bossPrimeval";
 import { addHazard, addShape } from "./hazards";
 import { updateCritter } from "./critters";
-import { updateStalker } from "./stalkers";
+import { fishLeaping, updateStalker } from "./stalkers";
 import { guardSpot, updateGnat, updateGuardian } from "./minions";
 import { domainSlow } from "./talisman";
 import type { EnemyState, RunState } from "./types";
@@ -165,7 +165,7 @@ export function updateEnemies(s: RunState): void {
       e.x = x0;
       e.y = y0;
     }
-    keepInRoom(e, g);
+    if (!fishLeaping(e)) keepInRoom(e, g);
 
     // 몸에 닿으면 피해 (붙잡힌 적은 제외, 협동은 닿은 사람 모두)
     eachSeat(
@@ -193,7 +193,7 @@ export function updateEnemies(s: RunState): void {
       const a = list[i]!;
       const b = list[j]!;
       // 하늘·땅속에 있는 적은 밀지 않음
-      if (a.air || b.air) continue;
+      if (a.air || b.air || fishLeaping(a) || fishLeaping(b)) continue;
       const dx = b.x - a.x;
       const dy = b.y - a.y;
       const rr = a.r + b.r;

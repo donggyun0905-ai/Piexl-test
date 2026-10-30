@@ -123,8 +123,8 @@ export function drawSprite(ctx: CanvasRenderingContext2D, name: string, x: numbe
 // 한 칸 크기 정사각형, 4줄 × 4칸: 1줄 앞(아래), 2줄 뒤(위), 3줄 옆(오른쪽, 왼쪽은 뒤집음), 4줄 마법 쓰기
 // 테두리가 잘리지 않게 칸 둘레에 여백을 둠
 /** 방향 시트로 넣은 캐릭터 그림: 이름 → 한 칸 크기, 발 아래 여백 */
-/** hd: 그림이 몇 배 촘촘한지 (빛의 사도 성장 그림 2 → 칸 크기로 줄여 그려 더 섬세) */
-const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number; hd?: number }>> = {
+/** src: 그림 파일의 한 칸 크기가 다를 때 (빛의 사도 성장 그림 2배 촘촘 · 몰락한 왕 96칸 → 보통 크기로 줄여 그림) */
+const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number; src?: number }>> = {
   mage: { size: 32, footPad: 2 },
   drifter: { size: 32, footPad: 2 },
   warden: { size: 32, footPad: 2 },
@@ -168,7 +168,7 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number;
   wanderer: { size: 48, footPad: 3 },
   silk: { size: 32, footPad: 2 },
   miner: { size: 64, footPad: 3 },
-  voyager: { size: 48, footPad: 3 }, zeus: { size: 48, footPad: 3 }, pilgrim: { size: 80, footPad: 3 }, crownKing: { size: 80, footPad: 3 }, fallenKing: { size: 96, footPad: 3 }, lux: { size: 48, footPad: 3 }, lux2: { size: 56, footPad: 3, hd: 2 }, lux3: { size: 64, footPad: 3, hd: 2 }, lux4: { size: 72, footPad: 3, hd: 2 },
+  voyager: { size: 48, footPad: 3 }, zeus: { size: 48, footPad: 3 }, pilgrim: { size: 80, footPad: 3 }, crownKing: { size: 80, footPad: 3 }, fallenKing: { size: 50, footPad: 2, src: 96 }, lux: { size: 48, footPad: 3 }, lux2: { size: 56, footPad: 3, src: 112 }, lux3: { size: 64, footPad: 3, src: 128 }, lux4: { size: 72, footPad: 3, src: 144 },
   // 변희가 변한 동물 (옆모습만, render/actors가 옆을 보게 그림)
   ...Object.fromEntries(["wolf", "bear", "eagle", "snake", "boar", "scorpion", "bat", "elephant", "spider", "phoenix"].flatMap((a) => [[`morph-${a}`, { size: 32, footPad: 2 }], [`morph-${a}-evo`, { size: 48, footPad: 3 }]])),
   abandoned: { size: 32, footPad: 2 },
@@ -261,11 +261,9 @@ export function drawCharacter(ctx: CanvasRenderingContext2D, name: string, x: nu
   const img = sheet && name.includes("_") ? skinImage(name) : images.get(name);
   if (!sheet || !img) return false;
   const { size, footPad } = sheet;
-  const ss = size * ((sheet as { hd?: number }).hd ?? 1);
+  const ss = (sheet as { src?: number }).src ?? size;
   const side = Math.abs(pose.faceX) > Math.abs(pose.faceY);
-  let row: number;
-  let col: number;
-  let flip = false;
+  let [row, col, flip] = [0, 0, false];
   if (pose.casting && pose.faceY > -0.5) {
     // 앞을 보면 팔을 오른쪽으로 뻗은 1번째 칸, 옆이면 4번째 칸
     row = 3;
@@ -278,9 +276,9 @@ export function drawCharacter(ctx: CanvasRenderingContext2D, name: string, x: nu
   }
   const left = Math.round(x - size / 2);
   const top = Math.round(y + r + 1 + footPad - size);
-  const sx = col * ss;
-  const sy = row * ss;
+  const [sx, sy] = [col * ss, row * ss];
   const blit = (from: HTMLImageElement, y0: number) => {
+    ctx.imageSmoothingEnabled = ss > size; // 줄여 그리는 촘촘한 그림은 부드럽게
     if (flip) {
       ctx.save();
       ctx.translate(left + size, top);
@@ -296,5 +294,6 @@ export function drawCharacter(ctx: CanvasRenderingContext2D, name: string, x: nu
   if (clubImg) blit(clubImg, sy);
   blit(img, sy);
   if (clubImg) blit(clubImg, sy + size * 4);
+  ctx.imageSmoothingEnabled = false;
   return true;
 }

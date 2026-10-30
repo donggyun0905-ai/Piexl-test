@@ -13,14 +13,15 @@ export function drawKingAura(ctx: Ctx, s: RunState, a: number, snap: Snap): void
   const x = snap(lerp(p.prevX, p.x, a));
   const y = snap(lerp(p.prevY, p.y, a));
   const f = 0.75 + 0.25 * Math.sin(s.tick * 0.23) * Math.sin(s.tick * 0.07);
+  // 그림을 보통 크기(96칸 → 50)로 줄여 그려 자리도 그만큼 (sprites.ts fallenKing src)
   additive(ctx, () => {
-    glow(ctx, x, y - 70, 16 * f, "#3ab8ff", 0.55 * f, 0.4);
-    for (const sx of [-1, 1]) glow(ctx, x + sx * 19, y - 58, 11 * f, "#3ab8ff", 0.45 * f);
-    glow(ctx, x - (p.faceX < 0 ? -1 : 1) * 26, y - 70, 14, "#ff2a3a", 0.25 + 0.1 * f);
+    glow(ctx, x, y - 36, 9 * f, "#3ab8ff", 0.55 * f, 0.4);
+    for (const sx of [-1, 1]) glow(ctx, x + sx * 10, y - 30, 6 * f, "#3ab8ff", 0.45 * f);
+    glow(ctx, x - (p.faceX < 0 ? -1 : 1) * 14, y - 36, 8, "#ff2a3a", 0.25 + 0.1 * f);
     for (let i = 0; i < 6; i++) {
       const k = ((s.tick + i * 23) % 90) / 90;
-      const ex = x + Math.sin(i * 2.3 + s.tick * 0.03) * (14 + i * 2);
-      glow(ctx, ex, y - 50 - k * 50, 2.2 * (1 - k), i % 3 ? "#7ad8ff" : "#e8fbff", 1 - k);
+      const ex = x + Math.sin(i * 2.3 + s.tick * 0.03) * (8 + i);
+      glow(ctx, ex, y - 26 - k * 28, 1.6 * (1 - k), i % 3 ? "#7ad8ff" : "#e8fbff", 1 - k);
     }
   });
 }

@@ -172,10 +172,10 @@ export function updateItems(s: RunState, input: TickInput): void {
     }
     // 빈 칸에 들어가는 사용 아이템은 닿으면 바로. 꽉 찬 칸 바꾸기는 잠깐 서 있으면 가짐
     // (F·버튼을 누르면 바로). 무기 바꾸기·층 보상은 서 있기로는 가지지 않음 (F·버튼, 층 보상은 클릭도)
-    // (레이드 아레나 보상 아이템은 지나가다 줍지 않게 F·버튼으로만)
+    // (레이드 아레나 보상은 F·버튼으로만 · 돈 주머니는 칸이 차도 바로 돈)
     // 금봉을 든 오니는 다른 무기를 못 잡음
     if (pk.kind === "weapon" && goldLocked(p)) continue;
-    const instant = pk.kind === "use" && p.useSlots.includes(null) && pk.group !== ARENA_USE_GROUP;
+    const instant = pk.kind === "use" && (p.useSlots.includes(null) || pk.itemId === "moneyBag") && pk.group !== ARENA_USE_GROUP;
     if (!instant) {
       if (s.prompt.kind === "none") s.prompt = { kind: "pick", pickupId: pk.id };
       const pressed = input.interact && s.prompt.kind === "pick" && s.prompt.pickupId === pk.id;
@@ -214,6 +214,9 @@ function take(s: RunState, pk: Pickup): void {
     pk.armed = false;
     // 빈손(휴지통에 버린 뒤)이었으면 내려놓을 것이 없음
     if (old === EMPTY_HANDS && p.characterId !== "novice") remove((x) => x.id === pk.id);
+  } else if (pk.kind === "use" && pk.itemId === "moneyBag" && pk.group !== ARENA_USE_GROUP) {
+    remove((x) => x.id === pk.id);
+    bagGold(s);
   } else if (pk.kind === "use") {
     const item = pk.itemId as UseItemId;
     const empty = p.useSlots.indexOf(null);
@@ -283,9 +286,13 @@ function useSlot(s: RunState, slot: number, input: TickInput): void {
     addEffect(s, { kind: "burst", x: p.x, y: p.y, dirX: 0, dirY: 0, size: radius, maxTicks: 16 });
   } else if (item === "ward") {
     p.shieldTicks = itemVal(!!s.pvp, "ward").ticks;
-  } else if (item === "moneyBag") {
-    const before = s.goldEarned;
-    addGold(s, USE_ITEMS.moneyBag.gold);
-    addEffect(s, { kind: "coinGet", x: p.x, y: p.y - 12, dirX: 0, dirY: 0, size: s.goldEarned - before, maxTicks: 45 });
-  } else hiddenUse(s, item, slot);
+  } else if (item === "moneyBag") bagGold(s);
+  else hiddenUse(s, item, slot);
+}
+
+/** 돈 주머니 (쓰거나 주울 때) */
+function bagGold(s: RunState): void {
+  const g = s.goldEarned;
+  addGold(s, USE_ITEMS.moneyBag.gold);
+  addEffect(s, { kind: "coinGet", x: s.player.x, y: s.player.y - 12, dirX: 0, dirY: 0, size: s.goldEarned - g, maxTicks: 45 });
 }

@@ -4,6 +4,45 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.263",
+    date: "2026-10-30",
+    items: {
+      ko: [
+        "돈 주머니: 사용 아이템 칸이 꽉 차도 닿으면 바로 돈이 됨 · 상점에서는 더 이상 팔지 않음",
+        "몬스터가 더 많이 나옴 (방이 커진 만큼) · 주황 방(강한 적 방): 몬스터 +4·체력 더 높음 · 가장 센 몬스터 2마리 이상이 정예(붉은 기운·체력 2.5배·더 큼)",
+        "영약이 회복약보다 드물게 나옴 · 사용 아이템 칸에 마우스를 올리면 효과 설명",
+        "빛의 사도: 평타가 발사체 대신 사거리(45) 안 가장 가까운 적 자리에 작은 '+' 빛이 생겨 벰 · 세 번째 공격의 빛의 검(그림)은 사거리 2.5배 안 · 은총의 옷자락: 더 큰 빛의 검 넷이 몸 둘레를 떠다님 · 먼 빛: 사거리 +15",
+        "몰락한 왕: 보통 캐릭터 크기로 (대검은 비율대로 크게)",
+        "보스: 공격할 때 몸을 젖히고 내지르는 공격 동작과 베기 궤적",
+        "괴력난신 10% 원기옥: 대시해야 하는 순간 화면이 붉게 점멸",
+        "땅 물고기: 뛰어오른 동안 벽·장애물을 지나 내려앉을 자리까지 감 · 내려앉을 자리는 갈 수 있는 땅만 · 그 전에 쓰러뜨리면 공격 표시도 사라짐",
+        "관리자 연습장: 숨은·한정 캐릭터도 고를 수 있음",
+      ],
+      en: [
+        "Money Bag: picked up and turned into gold instantly even with full item slots · no longer sold in shops",
+        "More monsters per room (rooms are bigger) · orange (elite) rooms: +4 monsters, more HP · the 2+ strongest become champions (red aura, 2.5× HP, larger)",
+        "Elixirs are rarer than potions · hover a use-item slot to see its effect",
+        "Apostle of Light: basic attacks now form a small '+' of light on the nearest foe within range (45) instead of firing · third-attack light swords reach 2.5× range · Hem of Grace: four larger light swords float around her · Distant Light: +15 range",
+        "Fallen King: normal character size (the greatsword stays big in proportion)",
+        "Bosses: lean-back and lunge attack motions with slash trails",
+        "Demigod 10% spirit bomb: the screen flashes red at the moment to dash",
+        "Land Fish: while leaping it passes over walls and obstacles to its landing spot · lands only on walkable ground · killing it first cancels the attack marker",
+        "Admin practice: hidden and limited characters can be picked",
+      ],
+      ja: [
+        "お金袋: アイテム枠がいっぱいでも触れるとすぐお金に · ショップでは売らなくなった",
+        "モンスターが増えた（部屋が広くなった分）· オレンジの部屋（強敵部屋）: モンスター+4・体力アップ · 最も強い2体以上が精鋭（赤いオーラ・体力2.5倍・大きい）",
+        "霊薬が回復薬より出にくく · 使用アイテム枠にマウスを乗せると効果説明",
+        "光の使徒: 通常攻撃は弾の代わりに射程(45)内の一番近い敵の位置に小さな「+」の光が生まれて斬る · 3回目の攻撃の光の剣は射程2.5倍内 · 恩寵の裾: 大きな光の剣4本が体のまわりを漂う · 遠い光: 射程+15",
+        "堕ちた王: 普通のキャラの大きさに（大剣は比率通り大きく）",
+        "ボス: 攻撃時に身を反らして突き出す動作と斬撃の軌跡",
+        "怪力乱神10%の元気玉: ダッシュすべき瞬間に画面が赤く点滅",
+        "地の魚: 跳んでいる間は壁や障害物を越えて着地点まで行く · 着地点は歩ける地面だけ · その前に倒すと攻撃表示も消える",
+        "管理者の練習場: 隠し・限定キャラも選べる",
+      ],
+    },
+  },
+  {
     version: "0.48.262",
     date: "2026-10-30",
     items: {
@@ -43,48 +82,6 @@ export const NOTES: PatchNote[] = [
         "恩寵の裾: 最大体力+30の代わりに → 光の剣が1.5倍広い範囲まで生まれ、1回につき5本多く · 頭上に光の剣の翼が2本（1回のプレイで1つ）",
         "貫く光: 刃が1体多く貫く代わりに → 光の剣が生まれた場所に紅（内側は白）の光の剣が交差してもう一度貫く（ダメージ×0.8）",
       ],
-    },
-  },
-  {
-    version: "0.48.260",
-    date: "2026-10-30",
-    items: {
-      ko: [
-        "새 한정 캐릭터 '빛의 사도' (서고의 감시자): 떨어진 신의 사도 · 검은 긴 머리(안쪽은 흰 머리)·검은 옷·맨발 · 체력 100 · 공격력 8 · 치명타 12%·예리함 12%",
-        "빛의 검: 빠르고 약한 빛의 칼날을 쏨 · 세 번째 공격마다 가까운 적들 자리에 '+' 빛의 검(주황 테두리·노란 속·흰 가운데)이 두 번씩 엇갈려 생겨 벰",
-        "빛의 적: 빛의 사도로 하면 층마다 전투방 셋에 떨어진 빛의 힘을 얻은 적이 나옴 (빛을 두른 강한 몬스터 · 빛을 얻은 보스 · 빛을 훔친 그림자와 1대1) · 쓰러뜨리면 빛의 조각",
-        "빛의 조각: 공격력·공격 속도·치명타·예리함·빛의 검 피해가 오름 · 6개마다 몸이 커지고 더 아름답게 빛남 (그림 4단계: 귀걸이 → 머리 위 금빛 고리·금테 → 둘레에 떠다니는 빛) · 왼쪽 위 빛의 조각 창",
-        "전용 아이템 10 (빛의 고리 · 신속의 깃 · 먼 빛 · 은총의 옷자락 · 겹친 검날 · 빠른 단죄 · 넓은 십자 · 꿰뚫는 빛 · 단죄 · 빛의 문신) · 업적 '빛의 단죄'",
-        "상점 '서고의 감시자' 탭: 한정 캐릭터 전용 뽑기 (한 번 10장 · 11번 90장 · 3% · 60번째 확정 · 못 뽑으면 쿠폰 1장, 겹치면 30장 돌려받음) · 테스트 중에는 모두 열림",
-        "한정 캐릭터는 패왕전·랭크·일일 도전에는 나오지 않고, 가지면 로그·광야의 새벽 등에서 마음껏 고를 수 있음 (캐릭터 선택창 '서고의 감시자' 탭)",
-      ],
-      en: [
-        "New limited character 'Apostle of Light' (Archive Warden): apostle of a fallen god · long black hair with white underneath · black outfit · barefoot · HP 100 · Attack 8 · Crit 12% · Sharpness 12%",
-        "Blade of Light: fires fast, light blades · every third attack, '+' light swords (orange edge, yellow body, white core) form twice, offset, on nearby foes",
-        "Light foes: as the Apostle, three combat rooms per floor hold foes touched by fallen light (a glowing monster · a light-fed boss · a 1-on-1 with the shadow that stole the light) · defeat them for Shards of Light",
-        "Shards of Light raise attack, attack speed, crit, sharpness and light sword damage · every 6 she grows and shines more beautifully (4 sprite stages: earrings → golden halo and trim → floating lights) · shard window at the top left",
-        "10 own items (Halo of Light · Feather of Haste · Distant Light · Hem of Grace · Layered Blades · Swift Judgment · Wide Cross · Piercing Light · Condemnation · Tattoo of Light) · achievement 'Judgment of Light'",
-        "Shop 'Archive Wardens' tab: limited-character gacha (10 per pull · 90 for 11 · 3% · guaranteed by pull 60 · a miss refunds 1 coupon, a duplicate 30) · everything is open during testing",
-        "Limited characters can't enter Paewang, ranked or daily, but once owned they're free to use in the dungeon, Dawn of the Wilds and more (the 'Archive Wardens' tab in character select)",
-      ],
-      ja: [
-        "新しい限定キャラ「光の使徒」（書庫の監視者）: 堕ちた神の使徒 · 黒い長髪（内側は白髪）· 黒い服 · 裸足 · 体力100 · 攻撃力8 · 会心12% · 鋭さ12%",
-        "光の剣: 速く軽い光の刃を放つ · 3回目の攻撃ごとに近くの敵の位置に「+」の光の剣（オレンジの縁・黄色の中・白い中心）が2回ずつずれて生まれて斬る",
-        "光の敵: 光の使徒で遊ぶと階ごとに戦闘部屋3つに堕ちた光の力を得た敵が出る（光をまとった強い魔物 · 光を得たボス · 光を盗んだ影と1対1）· 倒すと光のかけら",
-        "光のかけら: 攻撃力・攻撃速度・会心・鋭さ・光の剣ダメージが上がる · 6個ごとに体が大きくなり、さらに美しく輝く（絵4段階: 耳飾り → 頭上の金の輪・金の縁 → 周りに漂う光）· 左上に光のかけら表示",
-        "専用アイテム10（光の輪 · 迅速の羽 · 遠い光 · 恩寵の裾 · 重なる刃 · 速やかな断罪 · 広い十字 · 貫く光 · 断罪 · 光の紋）· 実績「光の断罪」",
-        "ショップ「書庫の監視者」タブ: 限定キャラ専用ガチャ（1回10枚 · 11回90枚 · 3% · 60回目で確定 · 外れはクーポン1枚、重複は30枚返却）· テスト中はすべて開放",
-        "限定キャラは覇王戦・ランク・デイリーには出られず、手に入れればローグ・荒野の夜明けなどで自由に選べる（キャラ選択の「書庫の監視者」タブ）",
-      ],
-    },
-  },
-  {
-    version: "0.48.259",
-    date: "2026-10-30",
-    items: {
-      ko: ["새 분류 '이방인' (세계의 틀을 벗어난 자들): 차원의 순례자 · 몰락한 왕 (스토리 진영·캐릭터 선택창 탭)", "새 분류 '서고의 감시자' (뽑기로 만나는 한정 캐릭터): 캐릭터 선택창 탭·스토리 진영 (곧 등장)"],
-      en: ["New group 'Outsiders' (those beyond the world's frame): the Dimensional Pilgrim and the Fallen King (story factions and a character-select tab)", "New group 'Archive Wardens' (limited characters from the gacha): character-select tab and story faction (coming soon)"],
-      ja: ["新しい分類「異邦人」（世界の枠を外れた者たち）: 次元の巡礼者 · 堕ちた王（ストーリーの陣営・キャラ選択タブ）", "新しい分類「書庫の監視者」（ガチャで出会える限定キャラ）: キャラ選択タブ・ストーリーの陣営（近日登場）"],
     },
   },
 ];

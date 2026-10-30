@@ -1,5 +1,5 @@
 // 시즌 2 라스트 보스 괴력난신 그리기: 동작마다 그림 칸(걷기·주먹·두 손 들기) · 50% 필살기 붉은 주먹 기운 · 기 주먹 난사 노란 기운
-// 10% 원기옥: 머리 위에서 커지는 거대한 기 구슬 · 맵 전체 노란 깜박임 세 번(다음 박자에 대시) · 기 주먹 탄
+// 10% 원기옥: 머리 위에서 커지는 거대한 기 구슬 · 맵 전체 노란 깜박임 세 번 → 대시할 순간 붉은 점멸 · 기 주먹 탄
 import { SPIRIT_BLINK, SPIRIT_CHARGE, spiritBlink, spiritSlam, type EnemyState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { additive, beam, glow as softGlow, glowStroke, shock } from "./pwFxBits";
 import { drawEnemySprite } from "../sprites";
@@ -91,7 +91,7 @@ export function drawDemigodActor(ctx: CanvasRenderingContext2D, s: RunState, e: 
   return true;
 }
 
-/** 원기옥 깜박임: 맵 전체가 노랗게 세 번 → 다음 박자에 내리꽂음(하얗게) */
+/** 원기옥 깜박임: 맵 전체가 노랗게 세 번 → 대시할 순간 붉게 점멸 → 내리꽂음(하얗게) */
 export function drawDemigodAir(ctx: CanvasRenderingContext2D, s: RunState): void {
   const e = s.enemies.find((o) => o.kind === "demigod" && o.gUlt === 3 && o.ultAt !== undefined);
   if (!e) return;
@@ -102,7 +102,10 @@ export function drawDemigodAir(ctx: CanvasRenderingContext2D, s: RunState): void
       const at = spiritBlink(k) + j * SPIRIT_BLINK;
       if (t >= at && t < at + FLASH) color = "rgba(255, 220, 40, 0.35)";
     }
-    if (t >= spiritSlam(k) && t < spiritSlam(k) + FLASH) color = "rgba(255, 255, 230, 0.6)";
+    // 대시할 때 (내리꽂기 5틱 전 ~ 그 순간): 붉게 점멸 · 내리꽂은 뒤 하얗게
+    const slam = spiritSlam(k);
+    if (t >= slam - 5 && t <= slam) color = t % 2 === 0 ? "rgba(255, 30, 40, 0.5)" : "rgba(255, 60, 60, 0.25)";
+    else if (t > slam && t < slam + FLASH) color = "rgba(255, 255, 230, 0.6)";
   }
   if (!color) return;
   ctx.save();

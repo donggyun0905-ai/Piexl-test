@@ -30,7 +30,7 @@ describe("빛의 사도", () => {
     expect(Object.keys(LUX_PASSIVES)).toHaveLength(11);
   });
 
-  it("빛의 칼날을 쏘고, 세 번째 공격마다 적 자리에 '+' 빛의 검이 여러 번 생겨 벰", () => {
+  it("평타는 사거리 안 적 자리에 작은 빛, 세 번째 공격마다 적 자리에 '+' 빛의 검이 여러 번 생겨 벰", () => {
     const s = lux();
     const hp = s.enemies[1]!.hp;
     const seen = new Set<object>();
@@ -39,7 +39,8 @@ describe("빛의 사도", () => {
       for (const f of s.effects) if (f.kind === "lxCross") seen.add(f);
     }
     const crosses = seen.size;
-    expect(s.projectiles.some((p) => p.lx)).toBe(true);
+    expect(s.projectiles.length).toBe(0);
+    expect([...seen].some((f) => (f as { dirX: number }).dirX >= 4)).toBe(true);
     expect(crosses).toBeGreaterThanOrEqual(4);
     // 멀리 있는 둘째 적도 빛의 검에 맞음
     expect(s.enemies[1]!.hp).toBeLessThan(hp);
@@ -55,7 +56,7 @@ describe("빛의 사도", () => {
         for (const f of s.effects) if (f.kind === "lxCross") seen.add(f);
       }
       const all = [...seen] as { dirX: number }[];
-      return [all.length, all.filter((f) => f.dirX >= 2).length];
+      return [all.filter((f) => f.dirX < 4).length, all.filter((f) => f.dirX === 2 || f.dirX === 3).length];
     };
     const [base, red0] = count();
     expect(red0).toBe(0);

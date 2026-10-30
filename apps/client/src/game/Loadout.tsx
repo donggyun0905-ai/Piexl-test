@@ -53,7 +53,7 @@ interface Props {
 }
 
 /** 설명 창: 무기 또는 패시브 · 위치 (아이콘 위쪽 가운데) */
-type TipItem = { kind: "weapon"; id: WeaponId } | { kind: "passive"; id: PassiveId } | { kind: "base"; id: "base" };
+type TipItem = { kind: "weapon"; id: WeaponId } | { kind: "passive"; id: PassiveId } | { kind: "use"; id: UseItemId } | { kind: "base"; id: "base" };
 type LoadoutTip = TipPos & TipItem;
 
 function tipAt(item: TipItem, el: HTMLElement): LoadoutTip {
@@ -74,8 +74,8 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
   // 모바일: 다른 곳을 누르면 닫기
   useCloseOutside(!!tip && touchMode, ".loadout-passive, .loadout-weapon-icon, .pw-skill-passive", setTip);
 
-  // 가진 무기·패시브가 바뀌어 없어지면 닫기
-  const shown = tip && (tip.kind === "base" || (tip.kind === "weapon" ? tip.id === view.weaponId : counts.has(tip.id))) ? tip : null;
+  // 가진 무기·사용 아이템·패시브가 바뀌어 없어지면 닫기
+  const shown = tip && (tip.kind === "base" || (tip.kind === "weapon" ? tip.id === view.weaponId : tip.kind === "use" ? view.slots.includes(tip.id) : counts.has(tip.id))) ? tip : null;
   const isOn = (item: TipItem) => shown?.kind === item.kind && shown.id === item.id;
   /** PC는 올리면, 모바일은 누르면 설명 */
   const tipProps = (item: TipItem) => ({
@@ -114,6 +114,8 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
               className={`slot ${id ? "filled" : ""}`}
               disabled={!id}
               onClick={() => controls()?.queueUse(i + 1)}
+              onMouseEnter={(e) => id && setTip(tipAt({ kind: "use", id }, e.currentTarget))}
+              onMouseLeave={() => setTip(null)}
             >
               <kbd>{keyLabel(useKeys[i] ?? "")}</kbd> {id && <ItemIcon item={{ kind: "use", id }} size={20} />} {id ? itemName("use", id, lang) : t("empty")}
             </button>
@@ -140,7 +142,7 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
       {shown && shown.kind !== "base" && (
         <ItemTip
           pos={shown}
-          icon={shown.kind === "weapon" ? { kind: "weapon", id: shown.id } : { kind: "passive", id: shown.id }}
+          icon={shown.kind === "weapon" ? { kind: "weapon", id: shown.id } : shown.kind === "use" ? { kind: "use", id: shown.id } : { kind: "passive", id: shown.id }}
           name={<>{itemName(shown.kind, shown.id, lang)}{shown.kind === "passive" && (counts.get(shown.id) ?? 1) > 1 && ` ×${counts.get(shown.id)}`}</>}
           desc={itemDesc(shown.kind, shown.id, lang, t)}
         />

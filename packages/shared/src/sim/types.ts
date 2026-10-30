@@ -1,5 +1,5 @@
 // 입력·상태 타입
-import type { LuxEnemyState, LuxPlayerState, LuxShotState } from "./luxTypes";
+import type { LuxEnemyState, LuxPlayerState } from "./luxTypes";
 import type { ArenaRunState, BossEnemyState, BossPlayerState, BossShotState, RaidRunState } from "./bossTypes";
 import type { BossKind, CharacterId, CharmKind, EnemyKind, WeaponId } from "../content";
 import type { PassiveId, UseItemId } from "../items";
@@ -124,7 +124,7 @@ export interface EnemyState extends Body, LaserEnemyState, OrbitEnemyState, Braw
   shield?: number;
 }
 
-export interface ProjectileState extends Body, GunShotState, BeastShotState, OrbitShotState, BossShotState, NinjaShotState, ChronoShotState, PwShotState, LuxShotState {
+export interface ProjectileState extends Body, GunShotState, BeastShotState, OrbitShotState, BossShotState, NinjaShotState, ChronoShotState, PwShotState {
   id: number;
   fromPlayer: boolean;
   vx: number;

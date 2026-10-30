@@ -96,9 +96,12 @@ function poolOf(s: RunState, ownOnly: boolean): PassiveId[] {
   });
 }
 
-export function usePool(s: RunState): UseItemId[] {
-  return USE_ITEM_IDS.filter((id) => !HIDDEN_USE_IDS.includes(id) && itemAvailable("use", id, s.unlocks) && !(s.sudden && HEAL_ITEMS.has(`use:${id}`)));
+export function usePool(s: RunState, shop = false): UseItemId[] {
+  const ids = USE_ITEM_IDS.filter((id) => !HIDDEN_USE_IDS.includes(id) && itemAvailable("use", id, s.unlocks) && !(s.sudden && HEAL_ITEMS.has(`use:${id}`)) && !(shop && id === "moneyBag"));
+  // 나오는 몫: 영약 1 · 회복약 3 · 나머지 2 (영약이 회복약보다 드묾)
+  return ids.flatMap((id) => Array<UseItemId>(USE_SHARE[id] ?? 2).fill(id));
 }
+const USE_SHARE: Partial<Record<UseItemId, number>> = { elixir: 1, potion: 3 };
 
 /** 서로 다른 것 n개 고르기 */
 export function pickDistinct<T>(rng: Rng, pool: readonly T[], n: number): T[] {

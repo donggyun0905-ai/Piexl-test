@@ -52,6 +52,8 @@ export function updateHazards(s: RunState): void {
   const list = s.hazards;
   if (!list || list.length === 0) return;
   s.hazards = list.filter((h) => {
+    // 만든 적이 쓰러졌으면 공격도 멈춤
+    if (h.owner !== undefined && !s.enemies.some((e) => e.id === h.owner && e.hp > 0)) return false;
     if (s.tick < h.tick) return true;
     // 심판: 검정이면 움직인 사람이, 붉은색이면 가만히 있던 사람이 맞음
     // 협동: 범위 안 사람 모두

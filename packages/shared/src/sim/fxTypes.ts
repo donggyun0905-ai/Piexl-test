@@ -79,6 +79,8 @@ export interface EffectState {
 export interface Hazard {
   /** 그리기용: 만든 적 종류 (박격포 등) */
   from?: string;
+  /** 만든 적 id: 터지기 전에 그 적이 쓰러지면 사라짐 (땅 물고기 착지) */
+  owner?: number;
   /** 터지는 틱 */
   tick: number;
   /** 표시가 뜬 틱 (그리기용) */

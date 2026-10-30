@@ -47,7 +47,7 @@ const R = {
   /** 보스가 여럿일 때 사이 거리 */
   BOSS_SPREAD: 64,
   /** 한 방 졸개 최대 수 (무한 모드 깊은 층) */
-  MAX_ENEMIES: 12,
+  MAX_ENEMIES: 16,
 };
 export { R as ROOMS_RULES };
 
@@ -170,13 +170,12 @@ function placeBossFight(s: RunState): void {
 export function spawnEnemies(s: RunState, roomId: number, elite: boolean): EnemyState[] {
   const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "enemies"));
   const d = depth(s);
-  const base = Math.min(R.MAX_ENEMIES, 2 + Math.floor(d / 2) + rng.int(0, 2) + (elite ? 2 : 0));
-  // 협동: 사람이 많으면 일반 적이 조금 더, 체력도 조금 더
-  // 금기: 무리 지어 (전투방 +1) · 정예 (강한 적 방 +2)
+  const base = Math.min(R.MAX_ENEMIES, 3 + Math.floor(d * 0.7) + rng.int(0, 2) + (elite ? 4 : 0));
+  // 협동: 사람이 많으면 일반 적이 조금 더, 체력도 조금 더 · 금기: 무리 지어 (전투방 +1) · 정예 (강한 적 방 +2)
   const count = base + partyExtraEnemies(s, base) + tabooSum(s, "horde") + (elite ? tabooSum(s, "eliteMore") : 0);
   // 층마다 나오는 졸개 (타워 디펜스 적 8종 포함, critters.minionKinds)
   const kinds = [...minionKinds(d), ...stalkerKinds(d)];
-  const hpMul = (1 + 0.15 * (d - 1)) * (elite ? 1.5 : 1) * partyHpMul(s) * tabooUp(s, "fleshHp");
+  const hpMul = (1 + 0.15 * (d - 1)) * (elite ? 1.7 : 1) * partyHpMul(s) * tabooUp(s, "fleshHp");
   const out: EnemyState[] = [];
   const g = shapeGrid(s.map.rooms[roomId]!.shape);
   for (let i = 0; i < count; i++) {
@@ -205,6 +204,8 @@ export function spawnEnemies(s: RunState, roomId: number, elite: boolean): Enemy
       out.push(e);
     }
   }
+  // 강한 적 방: 가장 센 둘(깊어질수록 더)이 정예 (체력 ×2.5 · 몸 ×1.25)
+  if (elite) for (const e of [...out].sort((a, b) => b.maxHp - a.maxHp || a.id - b.id).slice(0, 2 + Math.floor(d / 4))) Object.assign(e, { hp: Math.round(e.maxHp * 2.5), maxHp: Math.round(e.maxHp * 2.5), r: Math.round(e.r * 1.25), champ: true });
   return out;
 }
 

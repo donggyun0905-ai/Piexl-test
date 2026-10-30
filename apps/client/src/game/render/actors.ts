@@ -1,5 +1,7 @@
 // 적·플레이어 그리기 (공격 예고선은 telegraphs): 적(체력 줄·자동 조준 표시) · 플레이어(대시 잔상·방향·맞는 범위·보호막)
 import { drawLuxFoe } from "./lux";
+import { additive, glow } from "./pwFxBits";
+import { drawSlash, enemyPose } from "./enemyPose";
 import { DASH_TICKS, inBush, inPlay, ENEMIES, isAlive, luxStage, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
 import { breathe, footShadow, hitPop } from "./bodyMotion";
 import { drawCrate } from "./swarm";
@@ -38,6 +40,17 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
     }
     // 빛의 사도: 떨어진 빛의 힘을 얻은 적 둘레 금빛
     drawLuxFoe(ctx, e, x, y, s.tick);
+    // 주황 방 정예: 붉은 기운 · 머리 위 붉은 표식
+    if (e.champ) {
+      const f = 0.7 + 0.3 * Math.sin(s.tick * 0.12 + e.id);
+      additive(ctx, () => glow(ctx, x, y, e.r * 2.2, "#ff4a2a", 0.4 * f, 0.25));
+      ctx.fillStyle = "#ff5a3a";
+      ctx.beginPath();
+      ctx.moveTo(x, y - e.r - 4);
+      ctx.lineTo(x - 3, y - e.r - 9);
+      ctx.lineTo(x + 3, y - e.r - 9);
+      ctx.fill();
+    }
     // 검은 잔영·거대한 짐승 셋 (땅속·하늘·솟기)
     if (drawUmbraActor(ctx, s, e, x, y) || drawDemigodActor(ctx, s, e, x, y) || drawSageActor(ctx, s, e, x, y) || drawStalker(ctx, s, e, x, y)) continue;
     // 하늘로 날아오른 보스: 그림자만
@@ -53,7 +66,21 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
     const tint: readonly [string, number] | undefined = e.hitFlash > 0 ? [C.hit, 1] : stunned ? [C.frozen, 0.5] : flashing ? [C.windup, 0.55] : undefined;
     const look = brood && e.kind === "crawler" && e.noGold ? "incubus" : e.kind;
     footShadow(ctx, x, y, e.r);
-    if (drawEnemySprite(ctx, look, x, y, Math.floor(s.tick / 12), e.dirX < 0, tint, (e.r / ENEMIES[e.kind].radius) * hitPop(e.hitFlash))) {
+    // 보스: 공격 동작 (몸을 젖히고 내지르고 비틂 · 베기 궤적, render/enemyPose)
+    const pose = ENEMIES[e.kind].boss ? enemyPose(s, e) : undefined;
+    if (pose) {
+      ctx.save();
+      ctx.translate(x + pose.ox, y + pose.oy);
+      ctx.rotate(pose.rot);
+      ctx.scale(pose.sx, pose.sy);
+      ctx.translate(-x, -y);
+    }
+    const drawn = drawEnemySprite(ctx, look, x, y, Math.floor(s.tick / 12), e.dirX < 0, tint, (e.r / ENEMIES[e.kind].radius) * hitPop(e.hitFlash));
+    if (pose) {
+      ctx.restore();
+      if (drawn) drawSlash(ctx, x, y, e.r, pose);
+    }
+    if (drawn) {
       drawBossStatus(ctx, e, x, y);
     } else {
       ctx.fillStyle = C.enemyEdge;
@@ -175,7 +202,7 @@ function drawPlayerHp(ctx: CanvasRenderingContext2D, p: PlayerState, x: number, 
   const r = Math.max(0, Math.min(1, p.hp / p.stats.maxHp));
   // 캐릭터 그림(32칸, 거인은 48칸, 발이 몸 아래)의 맨 위 바로 위
   // 빛의 사도: 성장 단계마다 커지는 그림 (단계 2부터 머리 위 고리)
-  const top = y + p.r - (p.characterId === "lux" ? [33, 38, 46, 51][luxStage(p)]! : p.characterId === "titan" || p.characterId === "oni" || p.characterId === "mukin" || p.characterId === "slayer" || p.characterId === "rider" || morphEvolved(p) ? 46 : 31);
+  const top = y + p.r - (p.characterId === "lux" ? [33, 38, 46, 51][luxStage(p)]! : p.characterId === "titan" || p.characterId === "oni" || p.characterId === "mukin" || p.characterId === "slayer" || p.characterId === "rider" || p.characterId === "fallenKing" || morphEvolved(p) ? 46 : 31);
   ctx.fillStyle = "rgba(10,8,16,0.85)";
   ctx.fillRect(x - w / 2 - 1, top - 1, w + 2, 4);
   ctx.fillStyle = r > 0.5 ? "#6ad86a" : r > 0.25 ? "#f2c14e" : "#e0505a";

@@ -1,4 +1,4 @@
-// 한정 캐릭터 빛의 사도 (lux, 서고의 감시자): 빛의 검으로 빠르고 약한 빛의 칼날을 쏨 · 몇 번째 공격마다 가까운 적들 자리에
+// 한정 캐릭터 빛의 사도 (lux, 서고의 감시자): 평타는 사거리 안 가까운 적 자리에 작은 빛의 검 · 몇 번째 공격마다 (사거리 ×LUX.reach 안) 가까운 적들 자리에
 // '+' 모양 빛의 검이 여러 번 생겨 벰 (적마다 몇 번, 45°씩 엇갈림) · 빛의 조각(lxShard, 빛의 적이 떨굼, sim/luxFoes)으로 성장:
 // 조각마다 공격력·공격 속도(아이템 값) + 치명타·예리함 + 빛의 검 피해 · 6개마다 한 단계(0~3): 노리는 적 +1 · 검이 커짐 · 몸이 커짐(그림 lux~lux4)
 // 은총의 옷자락: 더 넓게 + 5개 더 · 꿰뚫는 빛: 생긴 자리에 붉은 빛의 검이 한 번 더
@@ -30,24 +30,19 @@ export function luxMods(p: PlayerState): StatMod[] {
   return isLux(p) && hasPerk(p, "lxTattoo") ? [{ stat: "maxHp", add: luxShards(p) * K.lxTattoo.hp }] : [];
 }
 
-/** 빛의 칼날 한 발 (바라보는 쪽으로 곧게) */
-function shoot(s: RunState): void {
+/** 평타: 사거리 안 가장 가까운 적 자리에 작은 빛의 검 (없으면 헛휘두름) */
+function stab(s: RunState): void {
   const p = s.player;
-  const speed = p.stats.projectileSpeed;
-  s.projectiles.push({
-    id: s.nextId++,
-    fromPlayer: true,
-    x: p.x + p.faceX * (p.r + 2),
-    y: p.y + p.faceY * (p.r + 2),
-    prevX: p.x,
-    prevY: p.y,
-    r: 3,
-    vx: p.faceX * speed,
-    vy: p.faceY * speed,
-    damage: p.stats.damage,
-    ticksLeft: Math.ceil(p.stats.range / speed),
-    lx: luxStage(p) + 1,
-  });
+  const e = nearIn(s, p.stats.range)[0];
+  if (!e) return;
+  (p.lxQ ??= []).push({ at: s.tick + 1, x: e.x, y: e.y, rot: p.attackCount % 2 === 1, arm: LUX.stab, dmg: p.stats.damage, plain: true });
+}
+
+/** 거리 안의 산 적 (가까운 순) */
+function nearIn(s: RunState, reach: number) {
+  const p = s.player;
+  const d2 = (e: { x: number; y: number }) => (e.x - p.x) ** 2 + (e.y - p.y) ** 2;
+  return alive(s).filter((e) => d2(e) <= (reach + e.r) ** 2).sort((a, b) => d2(a) - d2(b) || a.id - b.id);
 }
 
 /** 빛의 검 생성: 가까운 적들 자리에 '+' 빛의 검을 적마다 몇 번 (사이 틱을 두고 엇갈려) 예약 */
@@ -55,11 +50,7 @@ function summon(s: RunState): void {
   const p = s.player;
   const stage = luxStage(p);
   const grace = hasPerk(p, "lxGrace");
-  const reach = LUX.reach * (grace ? K.lxGrace.reach : 1);
-  const near = alive(s)
-    .filter((e) => (e.x - p.x) ** 2 + (e.y - p.y) ** 2 <= reach ** 2)
-    .sort((a, b) => (a.x - p.x) ** 2 + (a.y - p.y) ** 2 - ((b.x - p.x) ** 2 + (b.y - p.y) ** 2) || a.id - b.id)
-    .slice(0, LUX.targets + stage);
+  const near = nearIn(s, p.stats.range * LUX.reach * (grace ? K.lxGrace.reach : 1)).slice(0, LUX.targets + stage);
   const hits = LUX.hits + (hasPerk(p, "lxMore") ? K.lxMore.add : 0);
   const arm = LUX.arm * (1 + 0.15 * stage) * (hasPerk(p, "lxWide") ? K.lxWide.mul : 1);
   const dmg = p.stats.damage * LUX.cross * (1 + luxShards(p) * LUX.perShard) * (hasPerk(p, "lxJudge") ? K.lxJudge.mul : 1);
@@ -86,10 +77,10 @@ function strikeCross(s: RunState, c: LuxCross): void {
   const [ax, ay, bx, by] = c.rot ? [D, D, D, -D] : [1, 0, 0, 1];
   const hit = new Set([...onSegment(s, c.x - ax * c.arm, c.y - ay * c.arm, c.x + ax * c.arm, c.y + ay * c.arm, LUX.width), ...onSegment(s, c.x - bx * c.arm, c.y - by * c.arm, c.x + bx * c.arm, c.y + by * c.arm, LUX.width)]);
   for (const e of hit) strike(s, e, c.dmg);
-  // dirX: 0 '+' · 1 '×' · 2·3 붉은 검
-  addEffect(s, { kind: "lxCross", x: c.x, y: c.y, dirX: (c.rot ? 1 : 0) + (c.red ? 2 : 0), dirY: luxStage(s.player), size: c.arm, maxTicks: 18 });
+  // dirX: 0 '+' · 1 '×' · 2·3 붉은 검 · 4·5 평타 검(코드 그림)
+  addEffect(s, { kind: "lxCross", x: c.x, y: c.y, dirX: (c.rot ? 1 : 0) + (c.red ? 2 : c.plain ? 4 : 0), dirY: luxStage(s.player), size: c.arm, maxTicks: c.plain ? 12 : 18 });
   // 꿰뚫는 빛: 같은 자리에 붉은 빛의 검이 엇갈려 한 번 더
-  if (!c.red && hasPerk(s.player, "lxPierce")) (s.player.lxQ ??= []).push({ ...c, at: s.tick + K.lxPierce.delay, rot: !c.rot, dmg: c.dmg * K.lxPierce.mul, red: true });
+  if (!c.red && !c.plain && hasPerk(s.player, "lxPierce")) (s.player.lxQ ??= []).push({ ...c, at: s.tick + K.lxPierce.delay, rot: !c.rot, dmg: c.dmg * K.lxPierce.mul, red: true });
 }
 
 /** 직업 무기 틱 (classTicks): 기다리는 빛의 검 · 누르면 빛의 칼날 · 몇 번째마다 빛의 검 생성 */
@@ -109,7 +100,7 @@ export function luxTick(s: RunState, want: boolean, speed: number): void {
   if (!want || p.attackCooldown > 0) return;
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
-  shoot(s);
+  stab(s);
   addEffect(s, { kind: "lxSwing", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: 12, maxTicks: 6 });
   if (p.attackCount % (hasPerk(p, "lxQuick") ? K.lxQuick.every : LUX.every) === 0) summon(s);
 }
