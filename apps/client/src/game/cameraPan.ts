@@ -1,4 +1,4 @@
-// 화면 끌어 보기 (넓게 보는 대결: 쟁탈전·전쟁의 서막·기간토마키아, camera zoomFor)
+// 화면 끌어 보기 (넓게 보는 대결: 점령전·쟁탈전·전쟁의 서막·기간토마키아, camera zoomFor)
 // PC: 휠 버튼 누른 채 끌기 · 휠 버튼 한 번 누르기 = 내 캐릭터로 / 모바일: 오른쪽 두 손가락 끌기 (touchSticks) · 화면 버튼 '내 캐릭터로' (GameHud PanHint)
 import { useSyncExternalStore } from "react";
 

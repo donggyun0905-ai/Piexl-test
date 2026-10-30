@@ -94,7 +94,7 @@ export function StatsPanel({ rows, character, lang, t }: { rows: StatRow[]; char
 /** 확대·끌어 보기 설명이 보이는 시간 (ms) */
 const HINT_MS = 15000;
 
-/** 넓게 보는 대결(쟁탈전·전쟁의 서막·기간토마키아) 왼쪽 아래: 판 시작 뒤 잠깐 확대·끌어 보기 설명 · 화면을 옮겼으면 '내 캐릭터로' 버튼 */
+/** 넓게 보는 대결(점령전·쟁탈전·전쟁의 서막·기간토마키아) 왼쪽 아래: 판 시작 뒤 잠깐 확대·끌어 보기 설명 · 화면을 옮겼으면 '내 캐릭터로' 버튼 */
 export function PanHint({ t, touchMode }: { t: (k: TextKey) => string; touchMode: boolean }) {
   const [on, panned] = usePan();
   const [hint, setHint] = useState(true);

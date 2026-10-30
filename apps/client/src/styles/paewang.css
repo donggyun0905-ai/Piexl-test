@@ -128,9 +128,14 @@
   border-radius: 8px;
   background: rgb(14 12 20 / 0.92);
 }
+/* 결과 창: 점수판(두 편 표가 나란히)이 가로로 스크롤되지 않게 넓게 */
+.modal.pw-result {
+  width: min(1100px, 96vw);
+}
 .pw-result .pw-board {
   position: static;
   transform: none;
+  max-width: none;
   max-height: 40vh;
   margin: 8px 0;
   background: transparent;

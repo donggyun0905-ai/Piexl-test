@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.250",
+    date: "2026-10-30",
+    items: {
+      ko: ["점령전도 화면 줄이기(0.75배로 시작, 0.6배까지)·끌어 보기 · 패왕전 결과 창을 가로로 넓혀 점수판이 옆으로 스크롤되지 않게"],
+      en: ["Capture also gets the zoomed-out view (starts at 0.75×, down to 0.6×) and view dragging · the Champion Clash result window is wider so the scoreboard no longer scrolls sideways"],
+      ja: ["占領戦も画面縮小（0.75倍で開始、0.6倍まで）・画面ドラッグ · 覇王戦の結果ウィンドウを横に広げ、スコアボードが横スクロールしないように"],
+    },
+  },
+  {
     version: "0.48.249",
     date: "2026-10-30",
     items: {
