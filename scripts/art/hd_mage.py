@@ -2,7 +2,7 @@
 # 손으로 찍은 몸 틀(hd_doll) 위에 덧칠: 라벤더 그늘의 은빛 긴 머리 · 금 이마띠와 하늘빛 보석 · 초승달 핀 · 남색 로브(금 테·별 무늬·금 허리띠)
 # 흰 어깨 망토 · 흰 높은 깃과 보석 브로치 · 검은 스타킹·남색 구두 · 수정 지팡이 · 공격 줄은 지팡이를 들어 별빛을 모음
 from hd_common import mix, outline, save, tones
-from hd_doll import CX, Cell, bangs, face, face_side, hair_cap, hx, legs
+from hd_doll import CX, Cell, bangs, clump_hair, face, face_side, hair_cap, hx, legs
 
 K = dict(
     skin=hx("#fce6d6"), iris=hx("#7a68e8"),
@@ -92,7 +92,7 @@ def circlet(c, dy):
         c.px(x, 10 + dy + e, tb); c.px(x, 11 + dy + e, td)
     for x, y in ((CX - 1, 9), (CX, 9), (CX - 2, 10), (CX + 1, 10), (CX - 1, 11), (CX, 11)): c.px(x, y + dy, K["gem"])
     c.px(CX - 1, 10 + dy, hx("#ffffff")); c.px(CX, 10 + dy, mix(K["gem"], hx("#ffffff"), 0.5))
-    for x, y in ((CX - 12, 5), (CX - 13, 6), (CX - 13, 7), (CX - 12, 8)): c.px(x, y + dy, tl)
+    for x, y in ((CX - 12, 7), (CX - 13, 8), (CX - 13, 9), (CX - 12, 10)): c.px(x, y + dy, tl)
 
 
 def staff(c, x, y0, y1):
@@ -121,7 +121,7 @@ def front(col, cast):
     robe(c, dy, sway)
     arms(c, dy, cast)
     face(c, K, dy)
-    hair_cap(c, K, 4, dy)
+    hair_cap(c, K, 6, dy)
     bangs(c, K, TIPS, 12, dy)
     side_locks(c, 13 + dy, 41 + dy)
     circlet(c, dy)
@@ -142,12 +142,16 @@ def back(col):
     robe(c, dy, sway)
     arms(c, dy, False)
     cape(c, dy)
-    hair_cap(c, K, 4, dy)
-    back_hair(c, 10 + dy, 51 + dy, 21, 42, sway, 8)
+    hair_cap(c, K, 6, dy)
+    # 아래층(길게) → 위층(어깨까지, 바깥으로 살짝 뻗침) · 머리 위 윤기 고리
+    clump_hair(c, K, 20, 43, 14 + dy, [46, 49, 51, 50, 51, 49, 47], sway)
+    clump_hair(c, K, 18, 45, 8 + dy, [30, 33, 31, 34, 32, 33, 30], sway, shine=12 + dy)
     tl, tb, td = tones(K["trim"])
-    for x in range(19, 45): c.px(x, 11 + dy, tb)
-    # 뒤통수 리본 (금빛 매듭)
-    for x, y in ((29, 13), (30, 14), (33, 14), (34, 13), (31, 14), (32, 14)): c.px(x, y + dy, tb)
+    for x in range(19, 45): c.px(x, 11 + dy + (1 if abs(x - CX) > 10 else 0), tb)
+    # 뒤통수 금빛 리본: 매듭 · 양쪽 고리 · 늘어진 꼬리 둘
+    for x, y, col in ((31, 16, tl), (32, 16, tb), (31, 17, td), (32, 17, td), (28, 15, tb), (29, 15, tb), (29, 16, td), (30, 16, tb),
+                      (34, 15, tb), (35, 15, tb), (33, 16, tb), (34, 16, td), (30, 18, tb), (30, 19, td), (29, 20, tb), (33, 18, tb), (33, 19, td), (34, 20, tb)):
+        c.px(x, y + dy, col)
     staff(c, 46, 12 + dy, 60)
     outline(c)
     return c
@@ -160,7 +164,7 @@ def side(col, cast):
     dy = 1 if step in (1, 3) else 0
     sway = (0, 1, 0, -1)[col]
     if not cast: staff(c, CX - 3, 12 + dy, 60)
-    back_hair(c, 14 + dy, 49 + dy, 19, 33, -1 - abs(sway))
+    clump_hair(c, K, 17, 33, 14 + dy, [44, 48, 50, 47], -1 - abs(sway))
     cape(c, dy)
     st = (0, 3, 0, -3)[step]
     for i, dx in enumerate((-st, st)):
@@ -180,13 +184,23 @@ def side(col, cast):
     hx0, hy0 = (CX + 12, 30 + dy) if reach else (CX + swing, 45 + dy)
     for x in range(hx0, hx0 + 3):
         for y in range(hy0, hy0 + 3): c.px(x, y, K["skin"])
-    hair_cap(c, K, 4, dy)
+    hair_cap(c, K, 6, dy)
+    # 옆모습: 이마 앞으로 튀어나온 머리는 잘라 이마선을 따라가게
+    hcols = {K["hair"], K["hairL"], K["hairD"]}
+    for (x, y), v in list(c.p.items()):
+        if v in hcols and y >= 11 + dy and x > CX + 9 - max(0, 13 + dy - y): del c.p[(x, y)]
     face_side(c, K, dy)
     # 머리 뒤쪽(왼쪽 반)은 머리카락 · 앞머리는 이마 위
     hb, hd = K["hair"], K["hairD"]
     for y in range(12 + dy, 30 + dy):
         for x in range(CX - 15, CX - 1 - max(0, (y - 26 - dy))): c.px(x, y, hd if x < CX - 13 else hb)
+    clump_hair(c, K, CX - 16, CX - 2, 8 + dy, [28, 31, 29], 0, shine=12 + dy)
     bangs(c, K, [(CX - 3, 3, 16), (CX, 3, 17), (CX + 3, 3, 16), (CX + 6, 2, 14)], 12, dy)
+    # 귀 앞으로 내려오는 옆머리 한 갈래
+    hl, hb_, hd_ = K["hairL"], K["hair"], K["hairD"]
+    for y in range(15 + dy, 37 + dy):
+        w = 3 if y < 33 + dy else 2
+        for i in range(w): c.px(CX - 3 + i + (1 if y > 30 + dy else 0), y, hl if i == 0 and y < 20 + dy else hd_ if i == w - 1 else hb_)
     tl, tb, td = tones(K["trim"])
     for x in range(CX - 14, CX + 9): c.px(x, 10 + dy, tb); c.px(x, 11 + dy, td)
     c.px(CX + 7, 10 + dy, K["gem"]); c.px(CX + 7, 11 + dy, K["gem"])

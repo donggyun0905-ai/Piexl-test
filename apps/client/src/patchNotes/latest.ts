@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.267",
+    date: "2026-10-31",
+    items: {
+      ko: ["고해상도 몸 틀 (마법사): 머리 높이를 조금 낮춤 · 뒷모습 긴 머리를 결 묶음 두 층(길이가 다른 뾰족한 끝·윤기 고리)으로 · 뒤통수 금빛 리본(고리와 꼬리) · 옆모습 머리가 이마선을 따라가고 귀 앞 옆머리 · 옆얼굴 홍조·입 자리 고침"],
+      en: ["High-res body template (Mage): slightly shorter head · back hair as two layers of strand clumps (pointed tips of varied length, shine ring) · gold ribbon with loops and tails · side-view hair follows the forehead with a lock in front of the ear · fixed side-face blush and mouth"],
+      ja: ["高解像度の体テンプレート（魔法使い）: 頭の高さを少し低く · 後ろ髪を毛束2層に（長さの違う尖った毛先・天使の輪）· 後頭部の金のリボン（輪と垂れ）· 横向きの髪が額の線に沿い、耳の前に横髪 · 横顔の頬の赤み・口の位置を修正"],
+    },
+  },
+  {
     version: "0.48.266",
     date: "2026-10-31",
     items: {

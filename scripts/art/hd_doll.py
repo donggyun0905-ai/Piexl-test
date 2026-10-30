@@ -115,5 +115,32 @@ def face_side(c, k, dy=0, x0=CX - 3):
     for j in range(6, 10): c.px(x0 + 1, FACE_TOP + j + dy, p["s"] if j < 9 else p["r"])
     stamp(c, x0 + 5, EYE_Y + dy, [row[2:] for row in EYE], p)
     soft = tuple(round(p["S"][i] * 0.55 + p["b"][i] * 0.45) for i in range(3)) + (255,)
-    for i in range(3): c.px(x0 + 6 + i, EYE_Y + 10 + dy, soft)
-    c.px(x0 + 9, EYE_Y + 12 + dy, p["m"])
+    for i in range(3): c.px(x0 + 5 + i, EYE_Y + 8 + dy, soft)
+    c.px(x0 + 8, EYE_Y + 10 + dy, p["m"])
+
+
+def clump_hair(c, k, x0, x1, y0, ends, sway=0, shine=None):
+    """결 묶음으로 나뉜 긴 머리 (뒷모습·옆모습): 묶음마다 밝은 왼쪽·짙은 오른쪽·끝이 뾰족 · 묶음마다 길이가 다름
+    ends: 묶음마다 끝 y (왼쪽부터, 너비는 고르게 나눔) · shine: 윤기 고리 y (천사 고리처럼 휘는 밝은 띠)"""
+    l, b, d = k["hairL"], k["hair"], k["hairD"]
+    x_ = k.get("hairX", d)
+    n = len(ends)
+    w = (x1 - x0 + 1) / n
+    for i, end in enumerate(ends):
+        a = x0 + round(i * w)
+        z = x0 + round((i + 1) * w) - 1
+        for x in range(a, z + 1):
+            u = (x - a) / max(1, z - a)
+            # 끝으로 갈수록 가운데로 모여 뾰족
+            stop = end - round(abs(u - 0.5) * 2 * min(4, (z - a) / 2 + 1))
+            for y in range(y0, stop + 1):
+                kk = (y - y0) / max(1, end - y0)
+                s = round(sway * kk)
+                col = l if u < 0.25 and kk < 0.5 else x_ if u > 0.8 and kk > 0.6 else d if u > 0.75 else b
+                c.px(x + s, y, col)
+    if shine is not None:
+        for x in range(x0 + 2, x1 - 1):
+            t = (x - (x0 + x1) / 2) / ((x1 - x0) / 2)
+            yy = shine + round(t * t * 3)
+            c.px(x, yy, l)
+            if abs(t) < 0.6: c.px(x, yy + 1, l)
