@@ -185,7 +185,7 @@ export function drawCharacter(ctx: CanvasRenderingContext2D, name: string, x: nu
   const img = sheet && name.includes("_") ? skinImage(name) : images.get(name);
   if (!sheet || !img) return false;
   const { size, footPad } = sheet;
-  const ss = (sheet as { src?: number }).src ?? size;
+  const ss = Math.round(img.width / 4); // 그림 한 칸 (4칸 시트: 2배·4배 촘촘한 그림·스킨도 자동)
   const side = Math.abs(pose.faceX) > Math.abs(pose.faceY);
   let [row, col, flip] = [0, 0, false];
   if (pose.casting && pose.faceY > -0.5) {

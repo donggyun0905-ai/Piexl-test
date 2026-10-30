@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.270",
+    date: "2026-10-31",
+    items: {
+      ko: ["마법사 스킨 10종을 새 그림에 맞춰 다시 만듦: 크리스마스(산타 모자)·할로윈(마녀 모자)·학교(학사모)·수영복(꽃)·미국(카우보이 모자)·중국(쪽머리 장식)·일본(꽃 비녀)·설날(댕기)·색 바꾸기(은빛 머리)·승리(금빛 테두리·월계관) · 옷의 푸른 천이 테마 색으로"],
+      en: ["All 10 Mage skins rebuilt on the new art: Christmas (santa hat), Halloween (witch hat), School (mortarboard), Swim (flower), USA (cowboy hat), China (hair buns), Japan (flower hairpin), New Year (ribbon), Swap (silver hair), Victory (gold outline, laurel) · the blue cloth takes the theme color"],
+      ja: ["魔法使いのスキン10種を新しい絵に合わせて作り直し: クリスマス（サンタ帽）・ハロウィン（魔女帽）・学校（角帽）・水着（花）・アメリカ（カウボーイハット）・中国（お団子飾り）・日本（花かんざし）・お正月（リボン）・色替え（銀髪）・勝利（金の縁取り・月桂冠）· 服の青い布がテーマ色に"],
+    },
+  },
+  {
     version: "0.48.269",
     date: "2026-10-31",
     items: {
