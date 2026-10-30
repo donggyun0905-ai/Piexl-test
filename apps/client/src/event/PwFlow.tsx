@@ -68,7 +68,7 @@ export function PwFlow({ lang, setLang, t, onExit }: { lang: Lang; setLang: (l: 
   }
   if (step.name === "browse") return <PwBrowse lang={lang} t={t} onBack={modes} onTry={(characterId) => setStep({ name: "practice", characterId, key: 1 })} />;
   if (step.name === "practice") {
-    if (!step.characterId) return <CharacterSelect t={t} showSeed={false} onBack={modes} onSelect={(characterId) => setStep({ name: "practice", characterId, key: step.key + 1 })} />;
+    if (!step.characterId) return <CharacterSelect t={t} showSeed={false} practice onBack={modes} onSelect={(characterId) => setStep({ name: "practice", characterId, key: step.key + 1 })} />;
     return <PwPracticeGame key={step.key} characterId={step.characterId} lang={lang} t={t} onChange={() => setStep({ name: "practice", key: step.key })} onExit={modes} />;
   }
   /** 경기장을 정한 다음: 데스매치는 바로 대결, 편 대결·기간토마키아는 밴픽, 난투는 캐릭터 고르기 */

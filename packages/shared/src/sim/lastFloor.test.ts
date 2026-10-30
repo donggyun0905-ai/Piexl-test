@@ -50,6 +50,17 @@ describe("라스트 보스 층 (7층)", () => {
     expect(run.over).toBe(true);
   });
 
+  it("라스트 보스방에 처음 들어가면 체력 가득", () => {
+    const run = createRun(5, "warden");
+    continueToLastFloor(run, "dragon");
+    nextRoom(run);
+    nextRoom(run);
+    run.player.hp = 10;
+    nextRoom(run);
+    expect(run.map.rooms[run.roomId]!.type).toBe("exit");
+    expect(run.player.hp).toBe(run.player.stats.maxHp);
+  });
+
   it("레이드 시간: 보스방에 처음 들어간 때부터 보스를 다 잡기까지 (명예의 전당)", () => {
     const run = createRun(5, "warden");
     continueToLastFloor(run, "godeater");

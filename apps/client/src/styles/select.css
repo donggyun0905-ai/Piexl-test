@@ -1,0 +1,200 @@
+/* 캐릭터 선택창: 진영 탭·검색 · 간단 카드(생김새·이름·스킨·훈장·숙련도) · 누르면 뜨는 설명 창 */
+.cs-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  width: min(980px, 100%);
+}
+.cs-tabs button {
+  margin: 0;
+  padding: 6px 14px;
+  border-bottom-width: 3px;
+}
+.cs-tabs button.ascalon { border-bottom-color: #4a8aff; }
+.cs-tabs button.terracore { border-bottom-color: #e8a040; }
+.cs-tabs button.virdia { border-bottom-color: #4ac86a; }
+.cs-tabs button.helios { border-bottom-color: #c83a4a; }
+.cs-tabs button.akashic { border-bottom-color: #b89aff; }
+.cs-tabs button.on {
+  color: #1a1622;
+  background: #ffd860;
+}
+.cs-tabs button.on small {
+  color: #4a3a60;
+}
+.cs-tabs input {
+  flex: 1;
+  min-width: 140px;
+  max-width: 260px;
+  padding: 6px 10px;
+}
+.cs-empty {
+  color: var(--muted);
+}
+.cs-frame {
+  position: relative;
+  flex: 1;
+  display: flex;
+  border-radius: 6px;
+}
+.cs-frame > .character-card {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  margin: 0;
+}
+.character-card > strong {
+  font-size: 17px;
+}
+.cs-skin {
+  color: var(--muted);
+  font-size: 12px;
+}
+.character-card .character-lock {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+/* 숙련도 배지 (카드 왼쪽 위) */
+.cs-lv-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 1px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 9px;
+  color: #1a1622;
+  background: #c8b8a0;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.5);
+}
+.lv-2 { --lv: #a8b4c4; }
+.lv-3 { --lv: #d89050; }
+.lv-4 { --lv: #e8f0ff; }
+.lv-5 { --lv: #ffd860; }
+.lv-6 { --lv: #6ae8b0; }
+.lv-7 { --lv: #ff9ae8; }
+.cs-lv-badge[class*="lv-"] {
+  background: var(--lv, #c8a070);
+}
+.cs-lv-badge.lv-7 {
+  background: linear-gradient(90deg, #ff8a8a, #ffd860, #8affb0, #8ab8ff, #e08aff);
+}
+/* 고른 캐릭터 창 */
+.cs-pick {
+  width: min(640px, 100%);
+}
+.cs-pick-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: flex-start;
+}
+.cs-pick-main > .cs-frame {
+  flex: 0 0 auto;
+}
+.cs-pick-look {
+  display: grid;
+  place-items: center;
+  width: 196px;
+  height: 196px;
+  padding: 0;
+  border: 2px solid var(--line);
+  background: var(--panel);
+}
+.cs-pick-info {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cs-pick-info h2 {
+  margin: 0;
+}
+.cs-pick-info h3 {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: var(--accent);
+}
+.cs-pick-desc {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.cs-pick-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 18px;
+  margin: 0;
+  font-size: 14px;
+}
+.cs-pick-stats div {
+  display: flex;
+  justify-content: space-between;
+}
+.cs-pick-stats dt {
+  color: var(--muted);
+}
+.cs-pick-stats dd {
+  margin: 0;
+  font-weight: bold;
+}
+.cs-pick-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+.cs-pick-actions button {
+  margin: 0;
+  min-width: 110px;
+}
+/* 숙련도 줄 */
+.cs-mastery-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  font-size: 13px;
+}
+.cs-mastery-line b {
+  color: var(--lv, #c8a070);
+}
+.cs-bar {
+  flex: 1;
+  min-width: 80px;
+  height: 7px;
+  border-radius: 4px;
+  background: rgb(255 255 255 / 0.1);
+  overflow: hidden;
+}
+.cs-bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #c8a070, var(--lv, #ffd860));
+}
+.cs-mastery-line small {
+  width: 100%;
+  color: var(--muted);
+}
+/* 훈장은 카드 오른쪽에 세로 한 줄 (생김새를 가리지 않게) */
+.cs-frame .card-medals {
+  top: 10px;
+  right: 8px;
+  grid-template-columns: 28px;
+}
+.cs-frame .medal-slot {
+  width: 28px;
+  height: 30px;
+}
+.skin-chooser .cs-tabs {
+  justify-content: flex-start;
+  margin-bottom: 8px;
+}
+/* 카드 안 생김새는 바탕 없이 (카드 꾸밈·히든 카드 그림이 보이게) */
+.cs-frame .skin-preview {
+  background: transparent;
+  border: none;
+}

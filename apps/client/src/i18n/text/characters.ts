@@ -96,8 +96,6 @@ export const CHARACTER_TEXT = {
     en: "Hidden character · Quack shockwaves hit and push back every foe in front; every 4th is a Big Quack all around (stuns) · Ducklings follow in a line, block enemy shots, and quack along · Very sturdy",
     ja: "隠しキャラ · ガーガー音波で前方の敵をまとめて押し返して攻撃、4回ごとに周り全体へ大ガーガー（気絶） · 子アヒルが一列について来て敵の弾を防ぎ、一緒にガーガー · とても頑丈",
   },
-  hiddenTest: { ko: "히든 · 테스트", en: "Hidden · test", ja: "隠し · テスト" },
-  hiddenList: { ko: "히든 캐릭터", en: "Hidden characters", ja: "隠しキャラクター" },
   hiddenFound: { ko: "★ 히든 캐릭터 등장! ★", en: "★ Hidden character appeared! ★", ja: "★ 隠しキャラ登場！ ★" },
   novice: { ko: "풋내기", en: "Novice", ja: "見習い" },
   noviceDesc: {

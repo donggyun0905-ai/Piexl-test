@@ -7,7 +7,7 @@ import { getPlayerId } from "./player";
 import { SERVER_URL } from "./serverStatus";
 import { loadText, saveText, watchSaves } from "./storage";
 
-export const CLOUD_KEYS = ["wallet", "eventCoins", "fxShop", "lobbyPets", "chips", "missions"] as const;
+export const CLOUD_KEYS = ["wallet", "eventCoins", "fxShop", "lobbyPets", "chips", "missions", "mastery"] as const;
 const UPLOAD_MS = 4000;
 
 type Blob = Record<string, Json>;

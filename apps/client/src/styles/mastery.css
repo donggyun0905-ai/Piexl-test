@@ -1,0 +1,203 @@
+/* 숙련도 테두리 (Lv.1~7): 카드 둘레(.cs-frame > 카드) + 모서리 장식(::before · ::after). 스킨 바꾸기 창에서 고름 */
+.cs-frame::before,
+.cs-frame::after {
+  content: none;
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+}
+/* 1 나무: 갈색 두 줄 + 모서리 못 */
+.frame-1 > .character-card {
+  border: 3px solid #8a5a32;
+  box-shadow: inset 0 0 0 2px #4a2e18;
+}
+.frame-1::before {
+  content: "";
+  inset: 4px;
+  background:
+    radial-gradient(circle at 4px 4px, #c89058 2px, transparent 3px),
+    radial-gradient(circle at calc(100% - 4px) 4px, #c89058 2px, transparent 3px),
+    radial-gradient(circle at 4px calc(100% - 4px), #c89058 2px, transparent 3px),
+    radial-gradient(circle at calc(100% - 4px) calc(100% - 4px), #c89058 2px, transparent 3px);
+}
+/* 2 강철: 회색 판 + 리벳 줄 */
+.frame-2 > .character-card {
+  border: 3px solid #9aa4b0;
+  box-shadow: inset 0 0 0 2px #3a4048, 0 0 0 1px #2a2e34;
+}
+.frame-2::before {
+  content: "";
+  inset: 3px;
+  border: 2px dotted rgb(220 228 240 / 0.55);
+  border-radius: 3px;
+}
+/* 3 청동: 두꺼운 구릿빛 + 모서리 삼각 장식 */
+.frame-3 > .character-card {
+  border: 4px double #d08840;
+  box-shadow: inset 0 0 10px rgb(208 136 64 / 0.25), 0 0 6px rgb(208 136 64 / 0.35);
+}
+.frame-3::before {
+  content: "";
+  inset: -2px;
+  background:
+    linear-gradient(135deg, #e8a860 10px, transparent 10px) top left,
+    linear-gradient(225deg, #e8a860 10px, transparent 10px) top right,
+    linear-gradient(45deg, #e8a860 10px, transparent 10px) bottom left,
+    linear-gradient(315deg, #e8a860 10px, transparent 10px) bottom right;
+  background-size: 50% 50%;
+  background-repeat: no-repeat;
+}
+/* 4 은빛: 밝은 은 테 + 은은한 빛 + 위아래 장식 */
+.frame-4 > .character-card {
+  border: 3px solid #e8f0ff;
+  box-shadow: inset 0 0 0 2px #7888a8, 0 0 10px rgb(200 220 255 / 0.45);
+}
+.frame-4::before {
+  content: "◆";
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  color: #f4f8ff;
+  text-shadow: 0 0 6px #b8d0ff;
+}
+.frame-4::after {
+  content: "◆";
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  color: #f4f8ff;
+  text-shadow: 0 0 6px #b8d0ff;
+}
+/* 5 황금: 금 테 + 반짝이는 빛 + 위 왕관 */
+.frame-5 > .character-card {
+  border: 4px solid #ffd860;
+  box-shadow: inset 0 0 0 2px #8a5a10, 0 0 14px rgb(255 216 96 / 0.55);
+  animation: frame-gold 2.4s ease-in-out infinite;
+}
+.frame-5::before {
+  content: "♛";
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 22px;
+  color: #ffd860;
+  text-shadow: 0 0 8px #ffb030, 0 2px 0 #8a5a10;
+}
+.frame-5::after {
+  content: "";
+  inset: -4px;
+  border-radius: 6px;
+  background:
+    radial-gradient(circle at 0 0, #fff4c0 3px, #ffd860 5px, transparent 7px),
+    radial-gradient(circle at 100% 0, #fff4c0 3px, #ffd860 5px, transparent 7px),
+    radial-gradient(circle at 0 100%, #fff4c0 3px, #ffd860 5px, transparent 7px),
+    radial-gradient(circle at 100% 100%, #fff4c0 3px, #ffd860 5px, transparent 7px);
+}
+@keyframes frame-gold {
+  50% {
+    box-shadow: inset 0 0 0 2px #8a5a10, 0 0 22px rgb(255 216 96 / 0.8);
+  }
+}
+/* 6 비취 왕관: 비취·보라 두 겹 + 숨 쉬는 빛 + 날개 */
+.frame-6 > .character-card {
+  border: 4px solid #4ad9a0;
+  box-shadow: inset 0 0 0 3px #6a3aa8, inset 0 0 18px rgb(74 217 160 / 0.3), 0 0 16px rgb(74 217 160 / 0.6);
+  animation: frame-jade 2s ease-in-out infinite;
+}
+.frame-6::before {
+  content: "❖";
+  top: -17px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: #6ae8b0;
+  text-shadow: 0 0 10px #4ad9a0, 0 0 3px #fff;
+}
+.frame-6::after {
+  content: "";
+  inset: -8px;
+  border-radius: 10px;
+  border: 2px solid rgb(106 232 176 / 0.45);
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+@keyframes frame-jade {
+  50% {
+    box-shadow: inset 0 0 0 3px #8a4ad8, inset 0 0 24px rgb(74 217 160 / 0.45), 0 0 26px rgb(106 232 176 / 0.85);
+  }
+}
+/* 7 전설의 무지개: 돌아가는 무지개 테 + 별 */
+.frame-7 > .character-card {
+  border: 4px solid transparent;
+  background-clip: padding-box;
+  box-shadow: 0 0 20px rgb(255 160 230 / 0.6);
+}
+.frame-7::before {
+  content: "";
+  inset: 0;
+  z-index: 0;
+  border-radius: 4px;
+  padding: 4px;
+  background: linear-gradient(90deg, #ff6a6a, #ffd860, #6aff9a, #6ac8ff, #c86aff, #ff6a6a);
+  background-size: 300% 100%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: frame-prism 3s linear infinite;
+  z-index: 2;
+}
+.frame-7::after {
+  content: "✦ ✦ ✦";
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  color: #fff;
+  text-shadow: 0 0 6px #ff9ae8, 0 0 12px #8ab8ff;
+  animation: frame-twinkle 1.6s ease-in-out infinite;
+}
+@keyframes frame-prism {
+  to {
+    background-position: 300% 0;
+  }
+}
+@keyframes frame-twinkle {
+  50% {
+    opacity: 0.55;
+  }
+}
+/* 스킨 바꾸기 창: 테두리·카드 꾸밈 견본 */
+.mastery-sample {
+  flex: 0 0 auto;
+  display: inline-flex;
+  margin: 12px 4px 4px;
+}
+.mastery-sample > .character-card {
+  width: 84px;
+  height: 84px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  background-color: var(--panel);
+}
+.mastery-sample.big > .character-card {
+  width: 120px;
+  height: 120px;
+}
+.chooser-section h3 {
+  margin: 14px 0 8px;
+  font-size: 15px;
+  color: var(--accent);
+}
+.chooser-section > p {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.skin-choice.lockedChoice {
+  opacity: 0.5;
+}

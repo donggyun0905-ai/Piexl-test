@@ -1,0 +1,96 @@
+/* 캐릭터 선택 카드 꾸밈 5종 (시즌 3 레이드 보스 이벤트 보상). 히든 캐릭터 카드 그림보다 앞섬 */
+.cs-frame > .character-card[class*="card-skin-"]::before,
+.cs-frame > .character-card[class*="card-skin-"]::after {
+  content: none;
+}
+.cs-frame > .character-card[class*="card-skin-"] {
+  overflow: hidden;
+  color: #fff;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.8);
+}
+.cs-frame > .character-card[class*="card-skin-"] .cs-skin {
+  color: rgb(255 255 255 / 0.75);
+}
+/* 균열의 문: 보라 어둠 가운데로 갈라진 빛 */
+.cs-frame > .character-card.card-skin-riftGate {
+  border-color: #b06aff;
+  background:
+    linear-gradient(100deg, transparent 47%, rgb(240 200 255 / 0.9) 49.5%, #fff 50%, rgb(240 200 255 / 0.9) 50.5%, transparent 53%),
+    radial-gradient(ellipse 30% 60% at 50% 45%, rgb(200 120 255 / 0.55), transparent 70%),
+    radial-gradient(circle at 20% 80%, rgb(120 60 200 / 0.4), transparent 40%),
+    linear-gradient(180deg, #1a0a2e, #2e1048 60%, #120620);
+  animation: card-rift 2.6s ease-in-out infinite;
+}
+@keyframes card-rift {
+  50% {
+    box-shadow: inset 0 0 26px rgb(200 120 255 / 0.55);
+  }
+}
+/* 용의 비늘: 붉은 비늘 무늬 위로 금빛이 흐름 */
+.cs-frame > .character-card.card-skin-dragonScale {
+  border-color: #e8a040;
+  background:
+    linear-gradient(110deg, transparent 30%, rgb(255 216 120 / 0.35) 45%, transparent 60%),
+    radial-gradient(circle at 50% 0, transparent 8px, #c8402a 9px, #6a1a10 13px, transparent 14px),
+    linear-gradient(180deg, #3a0c08, #1e0604);
+  background-size: 300% 100%, 18px 13px, 100% 100%;
+  animation: card-scale 3.5s linear infinite;
+}
+@keyframes card-scale {
+  from {
+    background-position: 100% 0, 0 0, 0 0;
+  }
+  to {
+    background-position: -200% 0, 0 0, 0 0;
+  }
+}
+/* 서리 왕관: 얼음빛 하늘에 눈송이가 내림 */
+.cs-frame > .character-card.card-skin-frostCrown {
+  border-color: #b8e8ff;
+  background:
+    radial-gradient(circle, #fff 1px, transparent 2px),
+    radial-gradient(circle, rgb(220 245 255 / 0.8) 1.5px, transparent 2.5px),
+    linear-gradient(160deg, transparent 60%, rgb(255 255 255 / 0.18) 61%, transparent 70%),
+    linear-gradient(180deg, #4a8ac8, #1a3a6a 55%, #0e2040);
+  background-size: 34px 34px, 52px 52px, 100% 100%, 100% 100%;
+  animation: card-snow 6s linear infinite;
+}
+@keyframes card-snow {
+  to {
+    background-position: 10px 34px, -12px 52px, 0 0, 0 0;
+  }
+}
+/* 잿불 성채: 검은 돌담과 아래에서 올라오는 불빛·불티 */
+.cs-frame > .character-card.card-skin-emberKeep {
+  border-color: #ff7a30;
+  background:
+    radial-gradient(circle, #ffd060 1px, transparent 2px),
+    radial-gradient(ellipse 80% 45% at 50% 105%, rgb(255 110 30 / 0.75), transparent 70%),
+    repeating-linear-gradient(0deg, transparent 0 15px, rgb(0 0 0 / 0.55) 15px 17px),
+    repeating-linear-gradient(90deg, transparent 0 30px, rgb(0 0 0 / 0.45) 30px 32px),
+    linear-gradient(180deg, #2a2226, #3a2a24);
+  background-size: 40px 40px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  animation: card-ember 3s linear infinite;
+}
+@keyframes card-ember {
+  to {
+    background-position: 6px -40px, 0 0, 0 0, 0 0, 0 0;
+  }
+}
+/* 별의 심연: 깊은 남색 소용돌이와 흘러가는 별 */
+.cs-frame > .character-card.card-skin-starAbyss {
+  border-color: #8ab8ff;
+  background:
+    radial-gradient(circle, #fff 1px, transparent 1.5px),
+    radial-gradient(circle, #ffe8a8 1px, transparent 2px),
+    radial-gradient(circle at 50% 45%, rgb(138 184 255 / 0.4), transparent 25%),
+    repeating-radial-gradient(circle at 50% 45%, rgb(80 60 180 / 0.25) 0 6px, transparent 6px 14px),
+    linear-gradient(180deg, #0a0a24, #18104a 60%, #06061a);
+  background-size: 26px 26px, 60px 60px, 100% 100%, 100% 100%, 100% 100%;
+  animation: card-stars 8s linear infinite;
+}
+@keyframes card-stars {
+  to {
+    background-position: 26px 0, -60px 0, 0 0, 0 0, 0 0;
+  }
+}

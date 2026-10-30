@@ -19,16 +19,16 @@
   width: 100%;
 }
 .character-card {
-  width: min(240px, 100%);
+  width: min(220px, 100%);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  text-align: left;
-  padding: 14px;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  padding: 14px 12px 12px;
 }
 .character-item {
-  width: min(240px, 100%);
+  width: min(220px, 100%);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -38,13 +38,13 @@
   flex: 1;
 }
 .character-look {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-}
-.character-look small {
-  color: var(--muted);
-  font-size: 12px;
+  display: grid;
+  place-items: center;
+  width: 128px;
+  height: 128px;
+  margin-bottom: 4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(255 255 255 / 0.08), transparent 70%);
 }
 .skin-switch {
   font-size: 13px;
@@ -53,17 +53,6 @@
 .character-desc {
   font-size: 13px;
   color: var(--muted);
-}
-.character-card dl {
-  display: grid;
-  grid-template-columns: auto auto;
-  gap: 2px 12px;
-  margin: 0;
-  font-size: 13px;
-}
-.character-card dd {
-  margin: 0;
-  text-align: right;
 }
 .character-card.locked {
   opacity: 0.55;
@@ -130,11 +119,6 @@
     opacity: 1;
     transform: scale(1);
   }
-}
-/* 테스트 중 숨은 캐릭터 바로 고르기 */
-.hidden-pick {
-  padding: 8px 14px;
-  border-color: rgba(154, 184, 255, 0.6);
 }
 /* 히든 캐릭터 카드: 오리 = 해안가(바다·모래·오리), 별지기 = 별이 가득한 밤하늘 */
 .character-card.duck {
@@ -230,24 +214,4 @@
   color: #2a1e3a;
   background: rgb(242 230 204 / 0.85);
   padding: 2px 4px;
-}
-/* 테스트 중 히든 캐릭터 목록 창 */
-.hidden-list {
-  max-width: 520px;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-.hidden-list-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 8px;
-  margin: 10px 0;
-}
-.hidden-list-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 4px;
-  min-height: 0;
 }

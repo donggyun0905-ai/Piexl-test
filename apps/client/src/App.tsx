@@ -192,6 +192,7 @@ export function App() {
       <CharacterSelect
         t={lang.t}
         showSeed={false}
+        practice
         onBack={toTitle}
         onSelect={(characterId) => setScreen({ name: "tutorial", characterId })}
       />
@@ -203,6 +204,7 @@ export function App() {
         t={lang.t}
         showSeed={false}
         showHidden
+        practice
         onBack={toTitle}
         onSelect={(characterId) => setScreen({ name: "practice", characterId, runKey: 0 })}
       />

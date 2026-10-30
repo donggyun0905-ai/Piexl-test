@@ -1,20 +1,20 @@
-import { ALL_CHARACTER_IDS, baseStats, CHARACTER_IDS, CHARACTERS, HIDDEN_CHARACTERS, type CharacterId } from "@pixel-rogue/shared";
+import { ALL_CHARACTER_IDS, CHARACTER_IDS, HIDDEN_CHARACTERS, type CharacterId } from "@pixel-rogue/shared";
 import { useState } from "react";
 import { useLang, type TextKey } from "./i18n";
-import { achievementName } from "./i18n/achievements";
-import { CHARACTER_GOALS, characterOpen } from "./characterGoals";
+import { characterOpen } from "./characterGoals";
 import { cleanSeed } from "./records";
 import { SkinPreview } from "./shop/SkinPreview";
-import { SkinChooser, wearable } from "./shop/SkinChooser";
-import { parseSkin } from "./shop/skins";
-import { THEME_KEY } from "./shop/SkinTab";
+import { SkinChooser } from "./shop/SkinChooser";
 import { equippedSkin } from "./shop/wallet";
 import { CardMedals } from "./medals/CardMedals";
 import { TabooButton } from "./taboo/TabooButton";
 import { setRandomKit } from "./taboo/tabooStore";
 import { TEST_OPEN } from "./testFlags";
-import { HiddenCharList } from "./HiddenCharList";
 import { hallUnlocked } from "./lobby/exhibits";
+import { CharPickDialog, skinName } from "./select/CharPickDialog";
+import { factionOf, SELECT_TABS } from "./select/factions";
+import type { FactionId } from "./story/storyData";
+import { addPlay, cardOf, frameOf, masteryLevel, playsOf } from "./mastery/mastery";
 
 interface Props {
   t: (key: TextKey) => string;
@@ -25,6 +25,8 @@ interface Props {
   taboo?: boolean;
   /** 숨은 캐릭터도 목록에 보임 (연습장) */
   showHidden?: boolean;
+  /** 연습·튜토리얼: 숙련도가 오르지 않음 */
+  practice?: boolean;
   /** seedText: 입력한 시드 (비우면 빈 글자) */
   onSelect: (id: CharacterId, seedText: string) => void;
   onBack: () => void;
@@ -47,14 +49,16 @@ function rollCharacter(withHidden: boolean): { id: CharacterId; hidden: boolean 
   const id = open[Math.floor(Math.random() * open.length)];
   return id ? { id, hidden: false } : null;
 }
-const NAME: Record<CharacterId, TextKey> = { warden: "warden", drifter: "drifter", mage: "mage", mystic: "mystic", engineer: "engineer", elementalist: "elementalist", brawler: "brawler", doctor: "doctor", gunner: "gunner", beast: "beast", ninja: "ninja", chronomancer: "chronomancer", summoner: "summoner", novice: "novice", bedouin: "bedouin", general: "general", imugi: "imugi", apostle: "apostle", stargazer: "stargazer", duck: "duck", abandoned: "abandoned", titan: "titan", oni: "oni", scribe: "scribe", idra: "idra", byeonhui: "byeonhui", fly: "fly", elder: "elder", ren: "ren", spiritist: "spiritist", plague: "plague", slayer: "slayer", eater: "eater", mukin: "mukin", samyeol: "samyeol", automata: "automata", rider: "rider", bomber: "bomber", artifacter: "artifacter", punk: "punk", tracker: "tracker", forgotten: "forgotten", remnant: "remnant", wanderer: "wanderer", silk: "silk", miner: "miner", voyager: "voyager", zeus: "zeus", pilgrim: "pilgrim", fallenKing: "fallenKing" };
-const DESC: Record<CharacterId, TextKey> = { warden: "wardenDesc", drifter: "drifterDesc", mage: "mageDesc", mystic: "mysticDesc", engineer: "engineerDesc", elementalist: "elementalistDesc", brawler: "brawlerDesc", doctor: "doctorDesc", gunner: "gunnerDesc", beast: "beastDesc", ninja: "ninjaDesc", chronomancer: "chronomancerDesc", summoner: "summonerDesc", novice: "noviceDesc", bedouin: "bedouinDesc", general: "generalDesc", imugi: "imugiDesc", apostle: "apostleDesc", stargazer: "stargazerDesc", duck: "duckDesc", abandoned: "abandonedDesc", titan: "titanDesc", oni: "oniDesc", scribe: "scribeDesc", idra: "idraDesc", byeonhui: "byeonhuiDesc", fly: "flyDesc", elder: "elderDesc", ren: "renDesc", spiritist: "spiritistDesc", plague: "plagueDesc", slayer: "slayerDesc", eater: "eaterDesc", mukin: "mukinDesc", samyeol: "samyeolDesc", automata: "automataDesc", rider: "riderDesc", bomber: "bomberDesc", artifacter: "artifacterDesc", punk: "punkDesc", tracker: "trackerDesc", forgotten: "forgottenDesc", remnant: "remnantDesc", wanderer: "wandererDesc", silk: "silkDesc", miner: "minerDesc", voyager: "voyagerDesc", zeus: "zeusDesc", pilgrim: "pilgrimDesc", fallenKing: "fallenKingDesc" };
-
-export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialSeed = "", taboo = false, showHidden = false }: Props) {
+export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialSeed = "", taboo = false, showHidden = false, practice = false }: Props) {
   const [seed, setSeed] = useState(initialSeed);
   const { lang } = useLang();
   /** 스킨 고르기 창을 연 캐릭터 */
   const [choosing, setChoosing] = useState<CharacterId | null>(null);
+  /** 눌러서 설명 창을 연 캐릭터 */
+  const [picking, setPicking] = useState<CharacterId | null>(null);
+  /** 진영 탭 (null = 전체) · 검색 */
+  const [tab, setTab] = useState<FactionId | null>(null);
+  const [find, setFind] = useState("");
   /** 숨은 캐릭터가 나왔을 때 잠깐 보여 주는 글 */
   const [hidden, setHidden] = useState<CharacterId | null>(null);
   /** 열린 캐릭터 중 하나를 무작위로. 혼자 하기면 낮은 확률로 숨은 캐릭터 (잠깐 등장 화면 뒤 시작) */
@@ -69,8 +73,14 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
   /** random: 무작위로 골랐으면 시작 장비도 무작위 */
   const pick = (c: CharacterId, random = false) => {
     setRandomKit(random);
+    if (!practice) addPlay(c);
     onSelect(c, seed);
   };
+  // 연습장은 숨은 캐릭터 전부 · 혼자 하기는 테스트 중에만 숨은 캐릭터 전부 (아카식 레코드 탭) · 그 밖에는 전시장에서 연 숨은 캐릭터
+  const all = [...new Set<CharacterId>(showHidden || (taboo && TEST_OPEN) ? ALL_CHARACTER_IDS : [...CHARACTER_IDS, ...hallUnlocked()])];
+  const q = find.trim().toLowerCase();
+  const list = all.filter((c) => (!tab || factionOf(c) === tab) && (!q || t(c as TextKey).toLowerCase().includes(q)));
+  const tabs = SELECT_TABS.filter((x) => all.some((c) => factionOf(c) === x.id));
   return (
     <div className="select-screen">
       <h2>{t("chooseCharacter")}</h2>
@@ -79,43 +89,40 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
           🎲 {t("randomCharacter")}
         </button>
         {taboo && <TabooButton t={t} lang={lang} />}
-        {/* 테스트 중에만: 숨은 캐릭터를 바로 골라 써 보기 */}
-        {taboo && TEST_OPEN && <HiddenCharList t={t} name={NAME} onPick={(h) => pick(h)} />}
+      </div>
+      <div className="cs-tabs">
+        <button type="button" className={!tab ? "on" : ""} onClick={() => setTab(null)}>
+          {t("csAll")}
+        </button>
+        {tabs.map((x) => (
+          <button key={x.id} type="button" className={`${x.id}${tab === x.id ? " on" : ""}`} onClick={() => setTab(x.id)}>
+            {t(x.label)}
+            {x.id === "akashic" && TEST_OPEN && <small>{t("csAkashicTest")}</small>}
+          </button>
+        ))}
+        <input type="search" value={find} placeholder={t("csSearch")} onChange={(e) => setFind(e.target.value)} />
       </div>
       <div className="select-list">
-        {(showHidden ? ALL_CHARACTER_IDS : [...CHARACTER_IDS, ...hallUnlocked()]).map((id) => {
-          const s = baseStats(id, CHARACTERS[id].startWeapon);
-          const worn = equippedSkin(id);
-          const skins = wearable(id).length;
+        {list.length === 0 && <p className="cs-empty">{t("csEmpty")}</p>}
+        {list.map((id) => {
           const open = characterOpen(id);
-          const goal = CHARACTER_GOALS[id];
+          const card = cardOf(id);
+          const lv = masteryLevel(playsOf(id));
           return (
             <div key={id} className="character-item">
-              <button type="button" className={`character-card ${id}${open ? "" : " locked"}`} disabled={!open} onClick={() => pick(id)}>
-                <span className="character-look">
-                  <SkinPreview sheet={worn ?? id} size={64} />
-                  <small>{worn ? t(THEME_KEY[parseSkin(worn).theme]) : t("shopDefault")}</small>
-                </span>
-                <strong>
-                  {t(NAME[id])}
-                </strong>
-                <span className="character-desc">{t(DESC[id])}</span>
-                {!open && goal && <span className="character-lock">🔒 {t("charGoalLock").replace("{name}", achievementName(goal, lang))}</span>}
-                <dl>
-                  <dt>{t("statHp")}</dt>
-                  <dd>{s.maxHp}</dd>
-                  <dt>{t("statDamage")}</dt>
-                  <dd>{Math.round(s.damage)}</dd>
-                  <dt>{t("statAttackSpeed")}</dt>
-                  <dd>{Math.round(s.attackSpeed * 100) / 100}</dd>
-                  <dt>{t("statRange")}</dt>
-                  <dd>{s.range}</dd>
-                  <dt>{t("statMoveSpeed")}</dt>
-                  <dd>{Math.round(s.moveSpeed * 100) / 100}</dd>
-                </dl>
-              </button>
-              {open && <CardMedals t={t} lang={lang} character={id} />}
-              <button type="button" className="secondary skin-switch" disabled={skins < 2} title={skins < 2 ? t("skinSwitchNone") : undefined} onClick={() => setChoosing(id)}>
+              <div className={`cs-frame frame-${frameOf(id)}`}>
+                <button type="button" className={`character-card ${id}${card ? ` card-skin-${card}` : ""}${open ? "" : " locked"}`} onClick={() => setPicking(id)}>
+                  <span className="character-look">
+                    <SkinPreview sheet={equippedSkin(id) ?? id} size={112} />
+                  </span>
+                  <strong>{t(id as TextKey)}</strong>
+                  <small className="cs-skin">{skinName(t, id)}</small>
+                  {lv > 0 && <span className={`cs-lv-badge lv-${lv}`}>Lv.{lv}</span>}
+                  {!open && <span className="character-lock">🔒</span>}
+                </button>
+                {open && <CardMedals t={t} lang={lang} character={id} />}
+              </div>
+              <button type="button" className="secondary skin-switch" onClick={() => setChoosing(id)}>
                 👕 {t("skinSwitch")}
               </button>
             </div>
@@ -142,9 +149,10 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
         <div className="hidden-found" role="status">
           <strong>{t("hiddenFound")}</strong>
           <SkinPreview sheet={hidden} size={96} />
-          <span>{t(NAME[hidden])}</span>
+          <span>{t(hidden as TextKey)}</span>
         </div>
       )}
+      {picking && <CharPickDialog t={t} lang={lang} c={picking} onClose={() => setPicking(null)} onGo={() => pick(picking)} />}
       {choosing && <SkinChooser char={choosing} t={t} onClose={() => setChoosing(null)} />}
     </div>
   );
