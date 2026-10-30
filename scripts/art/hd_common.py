@@ -112,3 +112,37 @@ def face_front(c, cx, cy, rx, ry, skin):
 
 def save(name, frame):
     save_sheet(name, frame, size=S)
+
+
+def save_enemy(name, frame, size, frames=4):
+    """몬스터·보스 그림: frame(f) → Cell 을 가로로 이어 sprites/enemies/{name}.png 로 (2배 그림이면 enemySprites.ts ENEMY_SRC에 등록)"""
+    import os
+    from PIL import Image
+    from s2_common import SPRITES
+    img = Image.new("RGBA", (size * frames, size), (0, 0, 0, 0))
+    for f in range(frames):
+        for (x, y), col in frame(f).p.items():
+            if 0 <= x < size and 0 <= y < size: img.putpixel((f * size + x, y), col)
+    img.save(os.path.join(SPRITES, "enemies", f"{name}.png"), optimize=True)
+    print(name, "ok")
+
+
+def poly(c, pts, col):
+    """다각형 채우기 (짝수-홀수 규칙)"""
+    ys = [p[1] for p in pts]
+    for y in range(int(min(ys)), int(max(ys)) + 1):
+        xs = []
+        for i in range(len(pts)):
+            (x0, y0), (x1, y1) = pts[i], pts[(i + 1) % len(pts)]
+            if (y0 <= y < y1) or (y1 <= y < y0): xs.append(x0 + (y - y0) * (x1 - x0) / (y1 - y0))
+        xs.sort()
+        for a, b in zip(xs[::2], xs[1::2]):
+            for x in range(int(round(a)), int(round(b)) + 1): c.px(x, y, col)
+
+
+def thick_line(c, x0, y0, x1, y1, w, col):
+    n = int(max(abs(x1 - x0), abs(y1 - y0), 1))
+    for i in range(n + 1):
+        x, y = x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n
+        for dx in range(-(w // 2), w - w // 2):
+            for dy in range(-(w // 2), w - w // 2): c.px(x + dx, y + dy, col)
