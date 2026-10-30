@@ -50,7 +50,7 @@ export function drawSprite(ctx: CanvasRenderingContext2D, name: string, x: numbe
 const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number; src?: number }>> = {
   mage: { size: 32, footPad: 2, src: 128 },
   drifter: { size: 32, footPad: 2 },
-  warden: { size: 32, footPad: 2 },
+  warden: { size: 32, footPad: 2, src: 128 },
   mystic: { size: 32, footPad: 2 },
   engineer: { size: 32, footPad: 2 },
   elementalist: { size: 32, footPad: 2 },

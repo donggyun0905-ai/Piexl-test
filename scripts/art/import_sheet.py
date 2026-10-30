@@ -21,6 +21,11 @@ SOURCES = {
         rows=[["front"] * 4, ["back"] * 4, ["right"] * 4, ["idle", "idle", "idle", "right"]],
         body=116,
     ),
+    "warden": dict(
+        parts={"front": (20, 373), "back": (413, 344), "right": (777, 299), "idle": (1096, 545)},
+        rows=[["front"] * 4, ["back"] * 4, ["right"] * 4, ["idle", "idle", "idle", "right"]],
+        body=116,
+    ),
 }
 
 
