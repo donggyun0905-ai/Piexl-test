@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.266",
+    date: "2026-10-31",
+    items: {
+      ko: ["고해상도 몸 틀 다듬기 (마법사): 게임 크기에서도 또렷한 둥근 큰 눈·진한 테두리·덩어리 홍조 · 둥글고 볼륨 있는 머리(결 묶음·왼쪽 위 윤기) · 좁은 어깨와 들어간 허리 · 옆모습 걷기에서 두 다리가 엇갈리고 팔이 흔들림"],
+      en: ["High-res body template polish (Mage): big round eyes, darker outlines and solid blush that stay clear at game size · rounder, fuller hair (strand clumps, top-left shine) · narrower shoulders and waist · side walk with crossing legs and swinging arm"],
+      ja: ["高解像度の体テンプレート調整（魔法使い）: ゲームの大きさでもはっきりした丸く大きな瞳・濃い縁取り・まとまった頬の赤み · 丸くボリュームのある髪（毛束・左上のつや）· 細い肩とくびれ · 横向きの歩きで両脚が交差し腕が揺れる"],
+    },
+  },
+  {
     version: "0.48.265",
     date: "2026-10-31",
     items: {

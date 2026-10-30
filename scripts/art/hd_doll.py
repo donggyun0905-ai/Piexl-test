@@ -7,21 +7,22 @@ S = 64
 CX = 32  # 얼굴 가운데 (31과 32 사이)
 
 # 얼굴 (앞): 위에서부터 줄마다 반폭 (가운데 CX 기준 [CX-h, CX+h-1]) · 넓은 볼, 짧고 둥근 턱
-FACE_HALF = [9, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 10, 10, 9, 8, 7, 5, 3]
+FACE_HALF = [9, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 10, 10, 10, 9, 8, 7, 5, 3]
 FACE_TOP = 13
 
 # 오른눈 (바깥이 오른쪽) 8×8 · 왼눈은 좌우를 뒤집어 씀
 EYE = [
-    "......k.",
-    ".kkkkkkk",
+    "......kk",
+    "..kkkkk.",
     ".kIIIIIk",
-    ".IwwIIi.",
-    ".IwwiIi.",
-    ".iiiiji.",
-    ".ijjjjj.",
+    ".IwwIiIi",
+    ".Iwwiiii",
+    ".iiiiiji",
+    ".iijjjji",
+    "..jjjjj.",
     "..ssss..",
 ]
-EYE_Y = 19
+EYE_Y = 18
 EYE_X = (23, 33)  # 왼눈·오른눈 왼쪽 끝
 
 
@@ -53,27 +54,29 @@ def face(c, k, dy=0):
         for j in range(6, 10): c.px(sx, FACE_TOP + j + dy, p["s"] if j < 9 else p["r"])
     stamp(c, EYE_X[0], EYE_Y + dy, EYE, p, flip=True)
     stamp(c, EYE_X[1], EYE_Y + dy, EYE, p)
-    # 홍조: 눈 아래 볼에 옅은 분홍 두 줄
-    soft = tuple(round(p["S"][i] * 0.55 + p["b"][i] * 0.45) for i in range(3)) + (255,)
-    for ex in (EYE_X[0] + 1, EYE_X[1] + 3):
-        for i in range(4): c.px(ex + i, EYE_Y + 9 + dy, soft)
-        for i in range(1, 3): c.px(ex + i, EYE_Y + 9 + dy, p["b"])
-    c.px(CX, EYE_Y + 8 + dy, p["s"])
-    c.px(CX - 1, EYE_Y + 11 + dy, p["m"]); c.px(CX, EYE_Y + 11 + dy, p["m"]); c.px(CX + 1, EYE_Y + 10 + dy, p["r"])
+    # 홍조: 눈 아래 볼에 옅은 분홍 덩어리 (줄여도 남게 2줄)
+    soft = tuple(round(p["S"][i] * 0.5 + p["b"][i] * 0.5) for i in range(3)) + (255,)
+    for ex in (EYE_X[0], EYE_X[1] + 4):
+        for i in range(4):
+            c.px(ex + i, EYE_Y + 10 + dy, soft); c.px(ex + i, EYE_Y + 11 + dy, soft if 0 < i < 3 else p["S"])
+    c.px(CX, EYE_Y + 9 + dy, p["s"])
+    c.px(CX - 1, EYE_Y + 12 + dy, p["m"]); c.px(CX, EYE_Y + 12 + dy, p["m"])
 
 
 def hair_cap(c, k, top, dy=0):
-    """머리 덮개 (앞): 둥근 머리통 · 정수리 윤기 띠 · 바깥쪽 그늘"""
+    """머리 덮개 (앞): 둥글고 볼륨 있는 머리통 · 정수리에서 양옆으로 갈라지는 결 묶음 · 왼쪽 위 윤기 · 바깥쪽 그늘"""
     l, b, d = k["hairL"], k["hair"], k["hairD"]
-    half = [6, 9, 11, 12, 13, 14, 14, 15, 15, 15, 15, 15]
+    half = [5, 8, 10, 12, 13, 14, 14, 15, 15, 16, 16, 16]
     for j, h in enumerate(half):
         y = top + j + dy
         for x in range(CX - h, CX + h):
-            c.px(x, y, d if x >= CX + h - 3 or x < CX - h + 1 else b)
-    # 윤기: 정수리를 따라 휘는 밝은 띠
-    for x in range(CX - 9, CX + 7):
-        yy = top + 3 + dy + abs(x - CX + 1) // 4
-        c.px(x, yy, l if abs(x - CX + 1) < 7 else b)
+            u = x - CX + 0.5
+            clump = j > 2 and int(abs(u) + j * 0.6) % 5 == 0
+            c.px(x, y, d if x >= CX + h - 3 or x < CX - h + 1 or clump else b)
+    # 윤기: 왼쪽 위에 휘는 밝은 띠 (빛이 왼쪽 위에서)
+    for x in range(CX - 10, CX + 3):
+        yy = top + 3 + dy + abs(x - CX + 4) // 3
+        c.px(x, yy, l); c.px(x + 1, yy + 1, l if abs(x - CX + 4) < 4 else b)
 
 
 def bangs(c, k, tips, top, dy=0):
@@ -112,5 +115,5 @@ def face_side(c, k, dy=0, x0=CX - 3):
     for j in range(6, 10): c.px(x0 + 1, FACE_TOP + j + dy, p["s"] if j < 9 else p["r"])
     stamp(c, x0 + 5, EYE_Y + dy, [row[2:] for row in EYE], p)
     soft = tuple(round(p["S"][i] * 0.55 + p["b"][i] * 0.45) for i in range(3)) + (255,)
-    for i in range(3): c.px(x0 + 6 + i, EYE_Y + 9 + dy, soft if i != 1 else p["b"])
-    c.px(x0 + 9, EYE_Y + 11 + dy, p["m"])
+    for i in range(3): c.px(x0 + 6 + i, EYE_Y + 10 + dy, soft)
+    c.px(x0 + 9, EYE_Y + 12 + dy, p["m"])

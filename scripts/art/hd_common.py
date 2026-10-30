@@ -62,7 +62,7 @@ def outline(c, base=OUT, keep=()):
         for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
             q = (x + dx, y + dy)
             if q in c.p or not (0 <= q[0] < c.size and 0 <= q[1] < c.size): continue
-            add.setdefault(q, mix(tuple(round(v * 0.35) for v in col[:3]) + (255,), base, 0.55))
+            add.setdefault(q, mix(tuple(round(v * 0.3) for v in col[:3]) + (255,), base, 0.7))
     c.p.update(add)
 
 

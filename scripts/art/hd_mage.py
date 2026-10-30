@@ -43,14 +43,15 @@ def robe(c, dy, sway):
     l, b, d = tones(K["robe"], 0.18)
     tl, tb, td = tones(K["trim"])
     for y in range(33 + dy, 55):
-        t = (y - 33 - dy) / 22
-        h = 7 + max(0, t - 0.4) * 9
-        s = round(sway * max(0, t - 0.5))
+        # 좁은 어깨 → 살짝 들어간 허리(금 허리띠) → 아래로 퍼지는 치마
+        yy = y - 33 - dy
+        h = 6.5 - min(yy, 8) * 0.12 if yy <= 9 else 5.5 + (yy - 9) / 13 * 6.5
+        s = round(sway * max(0, (yy - 11) / 11))
         for x in range(int(CX - h) + s, int(CX + h) + s):
             u = (x - (CX - h) - s) / (2 * h)
             c.px(x, y, (tb if y == 53 else td) if y >= 53 else l if u < 0.12 else d if u > 0.8 else b)
         if y < 53: c.px(CX - 1 + s, y, tb); c.px(CX + s, y, td)
-    for x in range(CX - 8, CX + 8): c.px(x, 41 + dy, tb); c.px(x, 42 + dy, td if x % 3 else tl)
+    for x in range(CX - 6, CX + 6): c.px(x, 41 + dy, tb); c.px(x, 42 + dy, td if x % 3 else tl)
     for dx, yy in ((-5, 46), (4, 49), (-3, 51), (6, 45)): c.px(CX + dx, yy + dy, K["star"])
 
 
@@ -63,10 +64,10 @@ def arms(c, dy, raise_):
         top = 34 + dy - (8 if up else 0)
         for j in range(11):
             w = 3 + j // 4
-            x0 = CX + (8 if side > 0 else -8 - w) + (2 if up else 0)
+            x0 = CX + (6 if side > 0 else -6 - w) + (j // 5) * side + (2 if up else 0)
             for x in range(x0, x0 + w): c.px(x, top + j, l if x == x0 and side < 0 else d if x == x0 + w - 1 else b)
         hy = top + (-2 if up else 11)
-        hx0 = CX + (11 if side > 0 else -13) + (2 if up else 0)
+        hx0 = CX + (9 if side > 0 else -12) + (2 if up else 0)
         for x in range(hx0, hx0 + 3):
             for y in range(hy, hy + 3): c.px(x, y, mix(sk, hx("#e8b8a0"), 0.3) if y == hy + 2 else sk)
     cl, cb, cd = tones(K["cape"], 0.1, 0.82)
@@ -161,18 +162,22 @@ def side(col, cast):
     if not cast: staff(c, CX - 3, 12 + dy, 60)
     back_hair(c, 14 + dy, 49 + dy, 19, 33, -1 - abs(sway))
     cape(c, dy)
-    st = (0, 2, 0, -2)[step]
-    for i, dx in enumerate((st, -st)):
-        for y in range(54 + dy, 58):
-            for x in range(30 + dx, 34 + dx): c.px(x, y, mix(K["legs"], hx("#000000"), 0.3 * i))
-        for y in range(58, 61):
-            for x in range(30 + dx, 36 + dx): c.px(x, y, K["shoe"])
+    st = (0, 3, 0, -3)[step]
+    for i, dx in enumerate((-st, st)):
+        dark = mix(K["legs"], hx("#000000"), 0.35) if i == 0 else K["legs"]
+        lift = 1 if (step == 1 and i == 1) or (step == 3 and i == 0) else 0
+        for y in range(53 + dy, 58 - lift):
+            for x in range(30 + dx + (1 if y > 55 else 0) * (1 if dx > 0 else 0), 33 + dx): c.px(x, y, dark)
+        for y in range(58 - lift, 61 - lift):
+            for x in range(30 + dx, 36 + dx): c.px(x, y, mix(K["shoe"], hx("#000000"), 0.3) if i == 0 else K["shoe"])
     robe(c, dy, -abs(sway))
     l, b, d = tones(K["robe"], 0.18)
     reach = cast
+    swing = (0, 2, 0, -2)[step]
     for j in range(11):
-        for x in range(CX - 1, CX + 3 + j // 4): c.px(x + (j if reach else 0), 34 + dy + j - (6 if reach else 0), d if x == CX + 2 + j // 4 else b)
-    hx0, hy0 = (CX + 12, 30 + dy) if reach else (CX, 45 + dy)
+        off = j if reach else round(swing * j / 10)
+        for x in range(CX - 1, CX + 3 + j // 4): c.px(x + off, 34 + dy + j - (6 if reach else 0), d if x == CX + 2 + j // 4 else b)
+    hx0, hy0 = (CX + 12, 30 + dy) if reach else (CX + swing, 45 + dy)
     for x in range(hx0, hx0 + 3):
         for y in range(hy0, hy0 + 3): c.px(x, y, K["skin"])
     hair_cap(c, K, 4, dy)
