@@ -62,10 +62,12 @@ export const BIG_ROWS = 17;
 
 /** 이 판의 지금 방 크기로 맞춤 (게임 계산·그리기 전에) */
 export function applyRoom(s: RunState): void {
+  // 로그 던전 방은 옆·아래 벽이 얇음 (패왕전·광야의 새벽·타워 디펜스 경기장은 그대로)
+  const thin = !s.pvp && !s.pw && !s.swarm && !s.fixedStats;
   // 협동 3~5명: 보통 방 대신 큰 방 (방 모양 틀·출구는 가운데로)
-  if (s.big && s.roomCols === undefined) setRoomSize(COOP_ROOM.cols, COOP_ROOM.rows, true);
-  else if (s.roomCols === undefined) setRoomSize();
-  else setRoomSize(s.roomCols, s.roomRows, false);
+  if (s.big && s.roomCols === undefined) setRoomSize(COOP_ROOM.cols, COOP_ROOM.rows, true, thin);
+  else if (s.roomCols === undefined) setRoomSize(undefined, undefined, true, thin);
+  else setRoomSize(s.roomCols, s.roomRows, false, thin);
 }
 
 /** 6층을 깬 뒤 라스트 보스에 도전: 7층(시작 방 → 황금방 → 상점 → 큰 보스방)으로 */
@@ -84,6 +86,7 @@ export function startFloor(s: RunState, floor: number): void {
   s.projectiles = [];
   s.prompt = { kind: "none" };
   s.floorLog.push({ floor, tick: s.tick, hp: Math.ceil(s.player.hp), gold: s.gold });
+  applyRoom(s); // 방 크기(얇은 벽)를 이 판 기준으로 먼저 (다른 판이 남긴 크기로 자리를 정하지 않게)
   placeParty(s, ROOM_MAX_Y - PLAYER_RADIUS - 10, false);
   enterRoom(s, s.map.startId);
 }

@@ -1,6 +1,6 @@
 // 방 그리기: 바닥·테두리 벽 · 방 모양(벽·기둥·구덩이) · 바닥 아이템·가격 · 위험 표시
 import { drawHazards } from "./bossFx";
-import { mine, PICKUP_HOLD_TICKS, ROOM_COLS, ROOM_ROWS, roomGrid, TILE_FLOOR, TILE_PILLAR, TILE_PIT, TILE_SIZE, TILE_WALL, tileAt, type RunState } from "@pixel-rogue/shared";
+import { mine, PICKUP_HOLD_TICKS, ROOM_COLS, ROOM_ROWS, roomGrid, THIN_WALLS, TILE_FLOOR, TILE_PILLAR, TILE_PIT, TILE_SIZE, TILE_WALL, tileAt, WALL_THIN, type RunState } from "@pixel-rogue/shared";
 import { drawPickup } from "../drawPickup";
 import { drawRoomFeatures } from "../roomFeatures";
 import { C, type Snap } from "./palette";
@@ -19,25 +19,15 @@ export function drawRoom(ctx: CanvasRenderingContext2D, s: RunState, view?: View
   const [c0, r0, c1, r1] = span(view);
   for (let row = r0; row < r1; row++) {
     for (let col = c0; col < c1; col++) {
-      const wall = row === 0 || col === 0 || row === ROOM_ROWS - 1 || col === ROOM_COLS - 1;
+      const side = col === 0 || col === ROOM_COLS - 1 || row === ROOM_ROWS - 1;
+      // 로그 던전 방: 위쪽 벽(출구)만 두껍고, 옆·아래 테두리 칸은 바닥 + 바깥 끝에 얇은 벽
+      const wall = row === 0 || (side && !THIN_WALLS);
       const x = col * TILE_SIZE;
       const y = row * TILE_SIZE;
-      // 옆·아래 테두리: 바깥은 비우고 안쪽에 얇은 벽만 (출구가 있는 위쪽 벽만 두껍게)
-      if (wall && row > 0) {
-        drawThinWall(ctx, th, x, y, col === 0, col === ROOM_COLS - 1, row === ROOM_ROWS - 1);
-        continue;
-      }
-      // 위쪽 벽의 양 끝: 옆 벽 바깥으로 튀어나오지 않게 안쪽 THIN 폭만
-      if (row === 0 && (col === 0 || col === ROOM_COLS - 1)) {
-        ctx.fillStyle = VOID;
-        ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-        ctx.fillStyle = th.wall;
-        ctx.fillRect(col === 0 ? x + TILE_SIZE - THIN : x, y, THIN, TILE_SIZE);
-        continue;
-      }
       ctx.fillStyle = wall ? th.wall : (row + col) % 2 === 0 ? th.floorA : th.floorB;
       ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
       if (!wall && (!grid || tileAt(grid, col, row) === TILE_FLOOR)) drawDeco(ctx, th, col, row, x, y, TILE_SIZE, s.floor * 31 + s.roomId);
+      if (side && THIN_WALLS && row > 0) drawThinWall(ctx, th, x, y, col === 0, col === ROOM_COLS - 1, row === ROOM_ROWS - 1);
     }
   }
   if (grid) drawShapeTiles(ctx, grid, th, [Math.max(1, c0), Math.max(1, r0), Math.min(ROOM_COLS - 1, c1), Math.min(ROOM_ROWS - 1, r1)]);
@@ -45,23 +35,18 @@ export function drawRoom(ctx: CanvasRenderingContext2D, s: RunState, view?: View
   drawRoomFeatures(ctx, s);
 }
 
-/** 옆·아래 테두리 벽 두께 (게임 픽셀, 칸은 16) · 바깥 빈 곳 색 */
-const THIN = 5;
-const VOID = "#0b0a10";
-
-/** 옆·아래 테두리 칸: 바깥은 빈 곳, 방 쪽 가장자리에 얇은 벽 + 안쪽 밝은 선 (움직일 수 있는 범위는 그대로) */
+/** 옆·아래 테두리 칸의 바깥 끝에 얇은 벽 (두께 WALL_THIN) + 방 쪽 밝은 선 */
 function drawThinWall(ctx: CanvasRenderingContext2D, th: FloorTheme, x: number, y: number, left: boolean, right: boolean, bottom: boolean): void {
-  ctx.fillStyle = VOID;
-  ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+  const T = WALL_THIN;
   const strip = (sx: number, sy: number, w: number, h: number, lx: number, ly: number, lw: number, lh: number) => {
     ctx.fillStyle = th.wall;
     ctx.fillRect(sx, sy, w, h);
     ctx.fillStyle = th.wallTop;
     ctx.fillRect(lx, ly, lw, lh);
   };
-  if (left) strip(x + TILE_SIZE - THIN, y, THIN, bottom ? THIN : TILE_SIZE, x + TILE_SIZE - 1, y, 1, bottom ? THIN : TILE_SIZE);
-  if (right) strip(x, y, THIN, bottom ? THIN : TILE_SIZE, x, y, 1, bottom ? THIN : TILE_SIZE);
-  if (bottom) strip(left ? x + TILE_SIZE - THIN : x, y, left || right ? THIN : TILE_SIZE, THIN, left ? x + TILE_SIZE - THIN : x, y, left || right ? THIN : TILE_SIZE, 1);
+  if (left) strip(x, y, T, TILE_SIZE, x + T - 1, y, 1, bottom ? TILE_SIZE - T : TILE_SIZE);
+  if (right) strip(x + TILE_SIZE - T, y, T, TILE_SIZE, x + TILE_SIZE - T, y, 1, bottom ? TILE_SIZE - T : TILE_SIZE);
+  if (bottom) strip(x, y + TILE_SIZE - T, TILE_SIZE, T, left ? x + T - 1 : x, y + TILE_SIZE - T, left || right ? TILE_SIZE - T + 1 : TILE_SIZE, 1);
 }
 
 /** 바닥 아이템·가격: 지형(진흙·용암·물·가시·독가스) 위에 그려서 가려지지 않게 */

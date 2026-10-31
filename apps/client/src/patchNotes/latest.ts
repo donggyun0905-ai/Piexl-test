@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.304",
+    date: "2026-10-31",
+    items: {
+      ko: ["로그 방이 옆·아래로 넓어짐: 옆·아래 벽은 얇게 맨 끝으로 가고 그 자리까지 걸어 다닐 수 있음 (출구가 있는 위쪽 벽은 그대로)"],
+      en: ["Roguelike rooms are wider: the side and bottom walls are thin and sit at the very edge, and you can walk right up to them (the top wall with the exits is unchanged)"],
+      ja: ["ローグの部屋が横・下に広く: 横・下の壁は薄く端に移り、そこまで歩ける（出口のある上の壁はそのまま）"],
+    },
+  },
+  {
     version: "0.48.303",
     date: "2026-10-31",
     items: {

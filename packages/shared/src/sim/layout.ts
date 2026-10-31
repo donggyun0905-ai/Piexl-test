@@ -1,7 +1,7 @@
 // 방 모양: 전투방·강한 적 방 안에 벽·기둥·구덩이를 놓음.
 // 손으로 만든 틀 중에서 시드로 고르고 좌우를 뒤집어 씀 (같은 시드면 화면·서버에서 같은 방).
 // 벽·기둥: 몸과 탄을 모두 막음 · 구덩이: 몸만 막고 탄은 넘어감
-import { ROOM_COLS, ROOM_ROWS, SHAPE_DX, SHAPE_DY, TILE_SIZE } from "../constants";
+import { ROOM_COLS, ROOM_ROWS, SHAPE_DX, SHAPE_DY, THIN_WALLS, TILE_SIZE } from "../constants";
 import type { Rng } from "../rng";
 import { BOSS_SHAPES, ROOM_SHAPES } from "./roomShapes";
 import type { Body } from "./types";
@@ -36,7 +36,7 @@ const cache = new Map<number, TileGrid>();
 
 export function shapeGrid(shape: RoomShape): TileGrid | null {
   if (shape.id < 0) return null;
-  const key = (shape.id * 2 + (shape.flip ? 1 : 0)) * 2 + (SHAPE_DX > 0 ? 1 : 0);
+  const key = ((shape.id * 2 + (shape.flip ? 1 : 0)) * 2 + (SHAPE_DX > 0 ? 1 : 0)) * 2 + (THIN_WALLS ? 1 : 0);
   const hit = cache.get(key);
   if (hit) return hit;
   // 1000부터는 새 보스방 틀
@@ -44,7 +44,8 @@ export function shapeGrid(shape: RoomShape): TileGrid | null {
   const g = new Uint8Array(ROOM_COLS * ROOM_ROWS);
   for (let row = 0; row < ROOM_ROWS; row++) {
     for (let col = 0; col < ROOM_COLS; col++) {
-      const border = row === 0 || col === 0 || row === ROOM_ROWS - 1 || col === ROOM_COLS - 1;
+      // 얇은 벽 방은 위쪽 줄만 벽 (옆·아래 테두리 칸은 걸어 다닐 수 있음, 바깥 끝은 ROOM_MIN/MAX로 막음)
+      const border = row === 0 || (!THIN_WALLS && (col === 0 || row === ROOM_ROWS - 1 || col === ROOM_COLS - 1));
       if (border) {
         g[row * ROOM_COLS + col] = TILE_WALL;
         continue;

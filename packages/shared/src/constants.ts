@@ -1,5 +1,5 @@
 /** 게임 버전 (패치 노트 맨 위 버전과 같게 유지) */
-export const GAME_VERSION = "0.48.303";
+export const GAME_VERSION = "0.48.304";
 
 /** 한 칸(타일) 크기, 픽셀 */
 export const TILE_SIZE = 16;
@@ -20,11 +20,15 @@ export let ROOM_COLS = BASE_ROOM_COLS;
 export let ROOM_ROWS = BASE_ROOM_ROWS;
 export let ROOM_WIDTH = ROOM_COLS * TILE_SIZE;
 export let ROOM_HEIGHT = ROOM_ROWS * TILE_SIZE;
-/** 벽 안쪽 범위 (테두리 한 칸은 벽) */
-export const ROOM_MIN_X = TILE_SIZE;
+/** 로그 던전 방의 옆·아래 테두리 벽 두께 (게임 픽셀). 위쪽 벽(출구)만 한 칸(16) 두께 */
+export const WALL_THIN = 5;
+/** 벽 안쪽 범위 (보통은 테두리 한 칸이 벽 · 로그 던전 방은 옆·아래 벽이 얇아 그만큼 넓음, setRoomSize thin) */
+export let ROOM_MIN_X = TILE_SIZE;
 export const ROOM_MIN_Y = TILE_SIZE;
 export let ROOM_MAX_X = (ROOM_COLS - 1) * TILE_SIZE;
 export let ROOM_MAX_Y = (ROOM_ROWS - 1) * TILE_SIZE;
+/** 옆·아래 벽이 얇은 방인지 (로그 던전) */
+export let THIN_WALLS = false;
 /** 방 가운데 */
 export let ROOM_CX = ROOM_WIDTH / 2;
 export let ROOM_CY = ROOM_HEIGHT / 2;
@@ -37,10 +41,13 @@ export let SHAPE_DY = 0;
 /** 위쪽 벽 출구의 가로 가운데 (줄 0 왼쪽 · 1 가운데 · 2 오른쪽). 방 모양 틀의 칸 3·7·11 */
 export let EXIT_X: readonly number[] = [3.5 * TILE_SIZE, 7.5 * TILE_SIZE, 11.5 * TILE_SIZE];
 
-/** center: 방 모양 틀·출구를 가운데로 (보통 방·협동 큰 방) */
-export function setRoomSize(cols = BASE_ROOM_COLS, rows = BASE_ROOM_ROWS, center = true): void {
+/** center: 방 모양 틀·출구를 가운데로 (보통 방·협동 큰 방) · thin: 옆·아래 벽이 얇은 로그 던전 방 */
+export function setRoomSize(cols = BASE_ROOM_COLS, rows = BASE_ROOM_ROWS, center = true, thin = false): void {
   const dx = center ? Math.floor((cols - SHAPE_COLS) / 2) : 0;
-  if (cols === ROOM_COLS && rows === ROOM_ROWS && dx === SHAPE_DX) return;
+  if (cols === ROOM_COLS && rows === ROOM_ROWS && dx === SHAPE_DX && thin === THIN_WALLS) return;
+  THIN_WALLS = thin;
+  const edge = thin ? WALL_THIN : TILE_SIZE;
+  ROOM_MIN_X = edge;
   SHAPE_DX = dx;
   SHAPE_DY = center ? Math.floor((rows - SHAPE_ROWS) / 2) : 0;
   EXIT_X = [3.5, 7.5, 11.5].map((c) => (c + dx) * TILE_SIZE);
@@ -48,8 +55,8 @@ export function setRoomSize(cols = BASE_ROOM_COLS, rows = BASE_ROOM_ROWS, center
   ROOM_ROWS = rows;
   ROOM_WIDTH = cols * TILE_SIZE;
   ROOM_HEIGHT = rows * TILE_SIZE;
-  ROOM_MAX_X = (cols - 1) * TILE_SIZE;
-  ROOM_MAX_Y = (rows - 1) * TILE_SIZE;
+  ROOM_MAX_X = cols * TILE_SIZE - edge;
+  ROOM_MAX_Y = rows * TILE_SIZE - edge;
   ROOM_CX = ROOM_WIDTH / 2;
   ROOM_CY = ROOM_HEIGHT / 2;
 }

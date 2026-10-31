@@ -1,4 +1,4 @@
-import { ROOM_CX, ROOM_CY } from "../constants";
+import { ROOM_CX, ROOM_CY, WALL_THIN } from "../constants";
 import { describe, expect, it } from "vitest";
 import { createRng } from "../rng";
 import { FLOOR_COUNT, generateFloor, LANES, middleLayersFor } from "./floor";
@@ -190,7 +190,8 @@ describe("게임 계산", () => {
   it("벽 밖으로 나가지 않음 (문이 없는 모서리)", () => {
     const run = createRun(1, "drifter");
     play(run, Array(600).fill({ ...EMPTY_INPUT, moveX: -100, moveY: -100 }));
-    expect(run.player.x).toBe(16 + run.player.r);
+    // 옆 벽은 얇음 (WALL_THIN), 위쪽 벽(출구)은 한 칸
+    expect(run.player.x).toBe(WALL_THIN + run.player.r);
     expect(run.player.y).toBe(16 + run.player.r);
   });
 
