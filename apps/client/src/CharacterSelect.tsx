@@ -118,7 +118,7 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
               <div className={`cs-frame frame-${frameOf(id)}`}>
                 <button type="button" className={`character-card ${id}${card ? ` card-skin-${card}` : ""}${open ? "" : " locked"}`} onClick={() => setPicking(id)}>
                   <span className="character-look">
-                    <SkinPreview sheet={equippedSkin(id) ?? id} size={112} />
+                    <SkinPreview sheet={equippedSkin(id) ?? id} size={112} still />
                   </span>
                   <strong>{t(id as TextKey)}</strong>
                   <small className="cs-skin">{skinName(t, id)}</small>
@@ -153,7 +153,7 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
       {hidden && (
         <div className="hidden-found" role="status">
           <strong>{t("hiddenFound")}</strong>
-          <SkinPreview sheet={hidden} size={96} />
+          <SkinPreview sheet={hidden} size={96} still />
           <span>{t(hidden as TextKey)}</span>
         </div>
       )}

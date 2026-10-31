@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.297",
+    date: "2026-10-31",
+    items: {
+      ko: ["캐릭터 선택창의 캐릭터 그림이 걷지 않고 앞을 보고 선 모습으로 (선택 카드·설명 창)"],
+      en: ["Character select: portraits now stand still facing forward instead of walking (cards and the info window)"],
+      ja: ["キャラ選択画面のキャラ絵が歩かず、前を向いて立つ姿に（選択カード・説明ウィンドウ）"],
+    },
+  },
+  {
     version: "0.48.296",
     date: "2026-10-31",
     items: {

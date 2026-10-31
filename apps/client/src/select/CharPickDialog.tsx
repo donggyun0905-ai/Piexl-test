@@ -68,7 +68,7 @@ export function CharPickDialog({ t, lang, c, onGo, onClose }: Props) {
         <div className="cs-pick-main">
           <div className={`cs-frame frame-${frameOf(c)}`}>
             <span className={`character-card cs-pick-look ${c}${card ? ` card-skin-${card}` : ""}`}>
-              <SkinPreview sheet={equippedSkin(c) ?? c} size={160} />
+              <SkinPreview sheet={equippedSkin(c) ?? c} size={160} still />
             </span>
           </div>
           <div className="cs-pick-info">
