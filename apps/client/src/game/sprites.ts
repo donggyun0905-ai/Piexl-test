@@ -49,7 +49,7 @@ export function drawSprite(ctx: CanvasRenderingContext2D, name: string, x: numbe
 /** src: 그림 파일의 한 칸 크기가 다를 때 (빛의 사도 성장 그림 2배 촘촘 · 몰락한 왕 96칸 → 보통 크기로 줄여 그림) */
 /** v2: 새 시트 4칸 × 5줄 (칸 = 앞·뒤·왼·오): 1줄 서기 · 2줄 공격 · 3줄 걷기(왼발) · 4줄 걷기(오른발) · 5줄 맞음·쓰러짐·대시 오른쪽·대시 왼쪽 (scripts/art/import_v2.py) */
 /** 변희 동물 중 새 4방향 그림(v2)이 들어온 것 */
-const NEW_ANIMALS = ["eagle", "snake", "boar", "scorpion"];
+const NEW_ANIMALS = ["eagle", "snake", "boar", "scorpion", "bear", "wolf"];
 const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number; src?: number; v2?: true }>> = {
   mage: { size: 32, footPad: 2, src: 128, v2: true },
   drifter: { size: 32, footPad: 2, src: 128, v2: true },
@@ -73,7 +73,7 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number;
   duck: { size: 32, footPad: 2 },
   scribe: { size: 32, footPad: 2 },
   idra: { size: 32, footPad: 2, src: 128, v2: true },
-  byeonhui: { size: 32, footPad: 2 },
+  byeonhui: { size: 32, footPad: 2, src: 128, v2: true },
   fly: { size: 32, footPad: 2 },
   elder: { size: 32, footPad: 2 },
   ren: { size: 32, footPad: 2 },

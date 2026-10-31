@@ -19,7 +19,8 @@ FILES = [("1", 4, 2, [0, 1]), ("2", 4, 2, [2, 3]), ("3", 4, 1, [4])]
 # 왼쪽 모습을 오른쪽 뒤집기로 (GPT 왼쪽 그림이 오른쪽을 봄)
 FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", "brawler", "gunner", "ninja", "summoner", "chronomancer", "beast",
              "bedouin", "imugi", "general", "novice", "apostle", "abandoned", "abandoned2", "abandoned3", "novice10", "novice15", "beasttiger",
-             "titan", "oni", "oni_god", "idra", "morph-snake", "morph-eagle", "morph-boar", "morph-scorpion"}
+             "titan", "oni", "oni_god", "idra", "morph-snake", "morph-eagle", "morph-boar", "morph-scorpion",
+             "morph-bear", "morph-wolf", "byeonhui"}
 # 서기·걷기에서 오른쪽을 보는 원본 칸 (기본 3 = 넷째 칸, GPT가 셋째 칸에 오른쪽을 그린 캐릭터만)
 STAND_RIGHT = {"abandoned": 2, "abandoned2": 2}
 # 서기·걷기에서 고른 칸이 왼쪽을 보는 캐릭터: 뒤집어서 오른쪽으로 (사용자 확인)
@@ -32,7 +33,10 @@ ATTACK_LR = {
     "imugi": ("2", "3"), "general": ("2", "3"), "apostle": ("2", "3"), "abandoned": ("2", "3"), "abandoned3": ("2", "3"),
     "bedouin": ("2", "2f"), "abandoned2": ("2", "2f"), "novice": ("2", "2f"), "summoner": ("3f", "3"),
     "novice10": ("2", "2f"), "novice15": ("2", "2f"), "morph-eagle": ("3f", "3"),
+    "morph-wolf": ("3f", "3"), "morph-bear": ("3f", "3"),
 }
+# 대시 오른쪽·왼쪽 칸이 바뀌어 그려진 캐릭터 (5줄 셋째·넷째 칸 바꿈)
+DASH_SWAP = {"morph-bear"}
 
 
 def pieces(img, cols, rows):
@@ -102,6 +106,8 @@ def build(name):
         src = [raw[1, c] for c in range(4)]
         pick = lambda k: src[int(k[0])].transpose(Image.FLIP_LEFT_RIGHT) if k.endswith("f") else src[int(k[0])]
         grid[1, 3], grid[1, 2] = pick(ATTACK_LR[name][0]), pick(ATTACK_LR[name][1])
+    if name in DASH_SWAP:
+        grid[4, 2], grid[4, 3] = grid[4, 3], grid[4, 2]
     base = BODY / grid[0, 0].height
     sheet = Image.new("RGBA", (CELL * 4, CELL * 5), (0, 0, 0, 0))
     for (r, c), p in grid.items():
