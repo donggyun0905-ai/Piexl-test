@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.305",
+    date: "2026-10-31",
+    items: {
+      ko: ["새 캐릭터 그림 23개: 장로·렌·정령사·플라이 · 역병의사·학살자(피의 학살 모습 포함)·이터·묵인·사멸 · 오토마타·라이더·붐버·아티팩터·펑크 · 추적자·잊혀진 자·잔영·방랑객·영사 · 에테르 광부·운명의 여행자·제우스 · 앞·뒤·왼·오 모습과 공격·걷기·맞음·쓰러짐·대시 자세"],
+      en: ["23 new character sheets: Elder, Ren, Spiritist, Fly · Plague Doctor, Slayer (including Blood Frenzy), Eater, Mukin, Samyeol · Automata, Rider, Bomber, Artifacter, Punk · Tracker, The Forgotten, Remnant, Wanderer, Silk · Aether Miner, Voyager of Fate, Zeus · front/back/left/right with attack, walk, flinch, downed and dash poses"],
+      ja: ["新しいキャラ絵23種: 長老・レン・精霊使い・フライ · 疫病医・殺戮者（血の殺戮の姿を含む）・イーター・黙人・死滅 · オートマタ・ライダー・ボマー・アーティファクター・パンク · 追跡者・忘れられし者・残影・放浪者・影糸 · エーテル鉱夫・運命の旅人・ゼウス · 前・後ろ・左・右と攻撃・歩き・ひるみ・ダウン・ダッシュのポーズ"],
+    },
+  },
+  {
     version: "0.48.304",
     date: "2026-10-31",
     items: {
