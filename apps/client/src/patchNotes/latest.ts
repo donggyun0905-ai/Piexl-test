@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.299",
+    date: "2026-10-31",
+    items: {
+      ko: ["관리자 페이지 상태이상 탭을 게임의 상태이상 14종(출혈·화상·독·저주·폭풍·부식·죽음·지옥불·감전·서리·물결·황금·광휘·공허탄) + 기절·느림으로 나눔 · 아이콘 · 엉뚱한 값이 섞이던 것 고침"],
+      en: ["Admin status tab now follows the game's 14 status effects (bleed, burn, poison, curse, storm, rot, death, hellfire, shock, frost, tide, gold, radiance, void bolt) plus stun/slow, with icons; unrelated values no longer slip in"],
+      ja: ["管理ページの状態異常タブをゲームの14種（出血・火傷・毒・呪い・嵐・腐食・死・地獄火・感電・霜・波・黄金・光輝・虚空弾）＋気絶・鈍足に分け、アイコン付きに · 関係ない値が混ざるのを修正"],
+    },
+  },
+  {
     version: "0.48.298",
     date: "2026-10-31",
     items: {
