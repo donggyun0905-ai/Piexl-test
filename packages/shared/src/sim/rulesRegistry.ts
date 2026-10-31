@@ -58,6 +58,7 @@ import { GUN_EXTRAS_RULES } from "./gunExtras";
 import { HAZARDS_RULES } from "./hazards";
 import { HEAL_RULES } from "./heal";
 import { HERO_RULES } from "./hero";
+import { ENDLESS_RULES } from "./endless";
 import { ITEMS_RULES } from "./items";
 import { LASER_RULES } from "./laser";
 import { LASER_GEAR_RULES } from "./laserGear";
@@ -147,6 +148,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   HAZARDS_RULES,
   HEAL_RULES,
   HERO_RULES,
+  ENDLESS_RULES,
   ITEMS_RULES,
   LASER_RULES,
   LASER_GEAR_RULES,

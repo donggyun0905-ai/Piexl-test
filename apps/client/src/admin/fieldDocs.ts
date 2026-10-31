@@ -25,7 +25,8 @@ export function fieldDoc(group: BalanceGroupId, id: string, key: string): string
   if (group === "pwUnits") return up(DOCS.PW_UNIT, id === "etc" ? key : `${id}.${key}`);
   if (id.startsWith("aug_")) return up(DOCS.PW_AUGS, `${id.slice(4)}.${key}`);
   if (id.startsWith("fx_")) return up(DOCS.PW_GEAR_FX, id.slice(3)) ?? INDEX[`${id.slice(3)}.${key}`];
-  if (group === "characters") return DOCS.CHARACTERS?.[id];
+  // 캐릭터: 표 줄의 설명(근접 중심 등)은 항목 설명으로만 (칸마다 붙이지 않음)
+  if (group === "characters") return undefined;
   return INDEX[`${id}.${key}`] ?? (group === "effects" || group === "useItems" ? INDEX[id] : undefined);
 }
 

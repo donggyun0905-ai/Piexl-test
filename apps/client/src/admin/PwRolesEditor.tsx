@@ -2,6 +2,7 @@
 import { CHARACTER_IDS, PW_ROLE_IDS, type BalanceSet, type BalanceValues } from "@pixel-rogue/shared";
 import { useState } from "react";
 import { TEXT } from "../i18n/text";
+import { AdminThumb } from "./AdminThumb";
 
 const ROLE_NAME: Record<string, string> = { warrior: "전사", ranged: "원딜", mage: "마법사", assassin: "암살자", support: "서포터" };
 const ko = (k: string) => (TEXT as Record<string, { ko: string } | undefined>)[k]?.ko ?? k;
@@ -50,6 +51,7 @@ export function PwRolesEditor({ set, draft, saved, onChange }: Props) {
                   setPick(pick === c ? null : c);
                 }}
               >
+                <AdminThumb group="pwRoles" id={c} size={24} />
                 {ko(c)}
               </button>
             ))}

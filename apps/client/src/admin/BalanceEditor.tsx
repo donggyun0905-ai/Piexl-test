@@ -4,6 +4,7 @@ import type { BalanceField, BalanceGroup, BalanceSet, BalanceValues } from "@pix
 import { useState, type ReactNode } from "react";
 import { FIELD_HINT, fieldLabel, rowCategory, rowDesc, rowLabel } from "./labels";
 import { fieldDoc, rowDoc } from "./fieldDocs";
+import { AdminThumb } from "./AdminThumb";
 
 interface Props {
   /** 수치 세트 (던전·타워 디펜스) */
@@ -51,6 +52,7 @@ export function BalanceEditor({ set, group, draft, saved, onChange }: Props) {
             return (
               <tr key={id}>
                 <th>
+                  <AdminThumb group={group.id} id={id} size={32} />
                   {rowLabel(group.id, id)}
                   <small>{id}</small>
                 </th>
@@ -106,6 +108,7 @@ function BalanceList({ set, group, cell }: { set: BalanceSet; group: BalanceGrou
         return (
           <section key={id} className="admin-row">
             <h4>
+              <AdminThumb group={group.id} id={id} size={40} />
               {rowLabel(group.id, id)} <small>{id}</small>
             </h4>
             {desc && <p className="admin-desc">{desc}</p>}

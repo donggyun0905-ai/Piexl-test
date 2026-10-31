@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.298",
+    date: "2026-10-31",
+    items: {
+      ko: ["관리자 페이지: 항목마다 그림 (캐릭터·무기·패시브·아이템·적·보스, 규칙 표는 그 캐릭터) · 역할군·클리어 시간 표에도 캐릭터 그림 · 무한 모드 수치(보스 단계·세지는 정도) 추가 · 캐릭터 칸 제목이 모두 '근접 중심'처럼 나오던 것 고침"],
+      en: ["Admin page: pictures for every entry (characters, weapons, passives, items, enemies, bosses; rule tables show their character) · character pictures in the role and clear-time tables · Endless mode values added (boss stages, scaling) · fixed character fields all showing the row description as their title"],
+      ja: ["管理ページ: 項目ごとに絵（キャラ・武器・パッシブ・アイテム・敵・ボス、ルール表はそのキャラ）· 役割・クリア時間の表にもキャラの絵 · エンドレスモードの数値（ボス段階・強くなる度合い）を追加 · キャラ欄のタイトルがすべて行の説明になっていたのを修正"],
+    },
+  },
+  {
     version: "0.48.297",
     date: "2026-10-31",
     items: {

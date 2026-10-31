@@ -270,3 +270,19 @@ body,
 .admin-clears td strong {
   color: var(--accent);
 }
+
+/* 항목 그림 (캐릭터·무기·아이템·적·보스) */
+.admin-thumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  margin-right: 6px;
+  background: rgb(0 0 0 / 0.3);
+  border-radius: 4px;
+  image-rendering: pixelated;
+}
+.admin-thumb canvas {
+  width: 100%;
+  height: 100%;
+}

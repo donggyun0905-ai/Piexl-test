@@ -31,15 +31,24 @@ const SYSTEM: [RegExp, string][] = [
   [/^(CRITTERS|TD)/, "타워 디펜스 적"],
   [/^MINIONS/, "날벌레·가디언"],
   [/^(ENEMIES|HAZARDS)/, "적 공통"],
+  [/^ENDLESS/, "무한 모드"],
   [/^(COMBAT|PROJECTILES|PLAYER|ITEMS|LOOT|ROOMS|UTIL|PARTY|HERO|ARENA)/, "게임 공통"],
 ];
 
-/** 규칙 표 하나의 분류 (캐릭터 이름 또는 분류 이름) */
-export function ruleCategory(name: string): string {
+/** 규칙 표가 어느 캐릭터 것인지 (캐릭터 id, 아니면 undefined) */
+export function ruleCharId(name: string): string | undefined {
   const base = name.replace(/_RULES$/, "");
   const head = base.split("_")[0]!.toLowerCase();
-  if (ko(head) && ko(`${head}Desc`)) return ko(head)!;
-  for (const [re, id] of PREFIX) if (re.test(base)) return ko(id) ?? id;
+  if (ko(head) && ko(`${head}Desc`)) return head;
+  for (const [re, id] of PREFIX) if (re.test(base)) return id;
+  return undefined;
+}
+
+/** 규칙 표 하나의 분류 (캐릭터 이름 또는 분류 이름) */
+export function ruleCategory(name: string): string {
+  const id = ruleCharId(name);
+  if (id) return ko(id) ?? id;
+  const base = name.replace(/_RULES$/, "");
   for (const [re, label] of SYSTEM) if (re.test(base)) return label;
   return "기타";
 }

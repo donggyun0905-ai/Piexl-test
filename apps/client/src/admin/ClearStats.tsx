@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { formatTime } from "../game/hudText";
 import { TEXT } from "../i18n/text";
 import { adminApi, errorText, type ClearRow, type ServerInfo } from "./adminApi";
+import { AdminThumb } from "./AdminThumb";
 
 /** 영웅의 길 기록 칸 이름 앞머리 (서버 clearStats) */
 const HERO = "hero:";
@@ -26,7 +27,10 @@ function ClearTable({ rows, name }: { rows: ClearRow[]; name: (c: string) => str
           .sort((a, b) => avg(a) - avg(b))
           .map((r) => (
             <tr key={r.character}>
-              <td>{name(r.character)}</td>
+              <td>
+                <AdminThumb group="characters" id={r.character} size={28} />
+                {name(r.character)}
+              </td>
               <td>
                 <strong>{formatTime(avg(r))}</strong>
               </td>
