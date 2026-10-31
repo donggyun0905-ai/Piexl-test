@@ -1,4 +1,6 @@
 // 직업마다 받는 피해 배율 · 맞았을 때 반응 (combat.damagePlayer에서 한 번에)
+import { afflict, foeTakenMul } from "./foeStatus";
+import type { EnemyKind } from "../content";
 import { abandonedTaken } from "./abandoned";
 import { zeusHurt, zeusTaken } from "./zeusPower";
 import { pilgrimHurt, pilgrimTaken } from "./pgBag";
@@ -28,11 +30,12 @@ import type { RunState } from "./types";
 export function classTaken(s: RunState, taken: number): number {
   const p = s.player;
   idraHurt(s);
-  return mukinTaken(p, taken * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p, !!s.pvp) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p));
+  return mukinTaken(p, taken * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p, !!s.pvp) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p) * foeTakenMul(p));
 }
 
-/** 맞은 뒤 무적: 용 염옥·갓이터 패링 궁극기 동안은 없음 · 묵인은 아주 짧게 */
-export function afterHurt(s: RunState): void {
+/** 맞은 뒤 무적: 용 염옥·갓이터 패링 궁극기 동안은 없음 · 묵인은 아주 짧게 · 때린 적의 상태이상 (foeStatus) */
+export function afterHurt(s: RunState, from?: EnemyKind): void {
+  afflict(s, from);
   if (s.enemies.some((e) => e.ultAt !== undefined && (e.kind === "dragon" || e.kind === "godeater"))) s.player.invulnTicks = 0;
   mukinHurt(s);
   forgottenHurt(s);

@@ -41,7 +41,7 @@ describe("일일 도전 공용", () => {
     for (let i = 0; i < 60; i++) stepSim(run, EMPTY_INPUT);
     const s = summarize(run);
     expect(checkProgress(5, { ...s, floor: 2, score: s.score + 500 })).toBe("floorLog");
-    expect(checkProgress(5, { ...s, goldSpent: 10 })).toBe("gold");
+    expect(checkProgress(5, { ...s, goldSpent: 60 })).toBe("gold");
     expect(checkProgress(5, { ...s, goldEarned: 20, goldSpent: 10, buys: [{ floor: 1, roomId: 0, kind: "use", itemId: "potion", price: 10 }] })).toBe(
       "buy",
     );

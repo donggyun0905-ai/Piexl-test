@@ -86,7 +86,7 @@ export function updateGuardian(s: RunState, e: EnemyState, toP: readonly [number
     const dx = p.x - e.x;
     const dy = p.y - e.y;
     const d = Math.sqrt(dx * dx + dy * dy);
-    if (d <= GUARD_REACH + p.r && (d < e.r + p.r || (dx * e.dirX + dy * e.dirY) / d >= GUARD_ARC) && p.dashTicks === 0) damagePlayer(s, renMelee(s, R.GUARD_DAMAGE));
+    if (d <= GUARD_REACH + p.r && (d < e.r + p.r || (dx * e.dirX + dy * e.dirY) / d >= GUARD_ARC) && p.dashTicks === 0) damagePlayer(s, renMelee(s, R.GUARD_DAMAGE), "guardian");
     addEffect(s, { kind: "cleave", x: e.x, y: e.y, dirX: e.dirX, dirY: e.dirY, size: GUARD_REACH, maxTicks: 10 });
     e.phase = "walk";
     e.timer = 90;

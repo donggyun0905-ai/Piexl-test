@@ -2,6 +2,7 @@
 import type { LuxEnemyState, LuxPlayerState } from "./luxTypes";
 import type { ArenaRunState, BossEnemyState, BossPlayerState, BossShotState, RaidRunState } from "./bossTypes";
 import type { BossKind, CharacterId, CharmKind, EnemyKind, WeaponId } from "../content";
+import type { FoeStatusPlayerState } from "./foeStatus";
 import type { PassiveId, UseItemId } from "../items";
 import type { StatMod, Stats } from "../stats";
 import type { FloorMap } from "./floor";
@@ -37,7 +38,7 @@ export interface Body {
   prevY: number;
   r: number;
 }
-export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, BrawlPlayerState, MedicPlayerState, GunPlayerState, BeastPlayerState, BossPlayerState, NinjaPlayerState, ChronoPlayerState, SummonPlayerState, NovicePlayerState, BedouinPlayerState, GeneralPlayerState, ImugiPlayerState, ApostlePlayerState, StarPlayerState, DuckPlayerState, SwarmPlayerState, AbandonedPlayerState, TitanPlayerState, OniPlayerState, ScribePlayerState, IdraPlayerState, MorphPlayerState, FlyPlayerState, ElderPlayerState, RenPlayerState, SpiritPlayerState, H2PlayerState, TcPlayerState, AscalonPlayerState, PwPlayerState, LuxPlayerState {
+export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, BrawlPlayerState, MedicPlayerState, GunPlayerState, BeastPlayerState, BossPlayerState, NinjaPlayerState, ChronoPlayerState, SummonPlayerState, NovicePlayerState, BedouinPlayerState, GeneralPlayerState, ImugiPlayerState, ApostlePlayerState, StarPlayerState, DuckPlayerState, SwarmPlayerState, AbandonedPlayerState, TitanPlayerState, OniPlayerState, ScribePlayerState, IdraPlayerState, MorphPlayerState, FlyPlayerState, ElderPlayerState, RenPlayerState, SpiritPlayerState, H2PlayerState, TcPlayerState, AscalonPlayerState, PwPlayerState, LuxPlayerState, FoeStatusPlayerState {
   characterId: CharacterId;
   weaponId: WeaponId;
   /** 가진 패시브 (같은 것 여러 개 가능) */
@@ -137,6 +138,8 @@ export interface ProjectileState extends Body, GunShotState, BeastShotState, Orb
   pierce?: number;
   hitIds?: number[];
   bounces?: number; // 벽에 맞으면 튕길 수 있는 남은 횟수
+  /** 쏜 적 종류 (맞으면 그 적의 상태이상, sim/foeStatus) */
+  by?: EnemyKind;
   /** 가까운 적 쪽으로 휘어짐 · seek = 유도 미사일 (멀리 있는 적도 늘 쫓아감, 더 세게 꺾임) */
   homing?: boolean;
   seek?: boolean;

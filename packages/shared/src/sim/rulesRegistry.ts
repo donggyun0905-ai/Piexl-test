@@ -82,6 +82,7 @@ import { ROOMS_RULES } from "./rooms";
 import { SHADES_RULES } from "./shades";
 import { SUMMONS_RULES } from "./summons";
 import { STATUS_RULES } from "./status";
+import { FOE_STATUS_RULES } from "./foeStatus";
 import { TALISMAN_RULES } from "./talisman";
 import { TD_RULES } from "./td";
 import { TD_WAVES_RULES } from "./tdWaves";
@@ -172,6 +173,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   SHADES_RULES,
   SUMMONS_RULES,
   STATUS_RULES,
+  FOE_STATUS_RULES,
   TALISMAN_RULES,
   TD_RULES,
   TD_WAVES_RULES,

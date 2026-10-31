@@ -99,7 +99,7 @@ export function startGameLoop(o: LoopOptions): () => void {
   let cdMax = 1;
   const damage = new DamageTracker();
   // 패왕전: 회복·보호막·받은 피해·상태이상·버프 글자
-  const pwInfo = run.pvp ? new PwInfoNumbers(t) : null;
+  const pwInfo = new PwInfoNumbers(t);
   // 한정 스킨(범 풍류) 효과: 입었을 때만
   // 범 풍류: 한정 스킨이면 전부, 아니면 이벤트 상점에서 장착한 효과만 (울음소리는 한정 스킨만)
   const summer = wornLimited(run.player.characterId) === "summer";
@@ -214,7 +214,7 @@ export function startGameLoop(o: LoopOptions): () => void {
         break;
       }
       damage.observe(run);
-      pwInfo?.observe(run, mySeat ?? run.seat ?? 0);
+      pwInfo.observe(run, mySeat ?? run.seat ?? 0);
       if (onMe()) tiger?.observe(run);
       if (onMe()) theme?.observe(run);
       if (o.practice && run.over) {
@@ -259,7 +259,7 @@ export function startGameLoop(o: LoopOptions): () => void {
         if (tiger && onMe()) over(c, tiger, run, acc / TICK_MS, snap, run.tick);
         if (theme && onMe()) drawThemeOver(c, theme, run, acc / TICK_MS, snap);
         if (getSettings().showDamage) damage.draw(c, run.tick, snap);
-        if (getSettings().showDamage) pwInfo?.draw(c, run, snap);
+        if (getSettings().showDamage) pwInfo.draw(c, run, snap);
         damage.drawDummy(c, run, dummyLabels, snap);
       },
       modeOverlay: o.overlay,

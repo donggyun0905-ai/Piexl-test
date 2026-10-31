@@ -4,6 +4,7 @@
 // - 게임 결과에 영향을 주는 계산에는 Math.sin·cos·atan2·pow 등을 쓰지 않음 (사칙연산·sqrt만)
 //
 // 파일: types(입력·상태) · util(수치·도우미) · run(시작·한 틱 진행) · floor(층 지도) · rooms(방 이동·문·계단) · items(아이템 줍기·바꾸기·사용) · player · enemies · projectiles · combat(피해) · laser·laserGear(기계공학자 레이저·장치)
+import { START_GOLD } from "./loot";
 import { PERKS } from "../perks";
 import { petRevive } from "./lobbyPet";
 import { artifacterRevive } from "./artifacter";
@@ -98,7 +99,7 @@ export function createRun(seed: number, characterId: CharacterId, unlocks: reado
     holdTicks: 0,
     kills: 0,
     bossKills: 0,
-    gold: 0,
+    gold: arena ? 0 : START_GOLD(),
     goldEarned: 0,
     goldSpent: 0,
     purchases: 0,

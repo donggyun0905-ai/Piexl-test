@@ -1,4 +1,5 @@
-// 패왕전 화면 정보 (계산과 상관없음): 틱마다 모든 자리를 보고 바뀐 것을 머리 위에 띄움
+// 패왕전·로그 화면 정보 (계산과 상관없음): 틱마다 모든 자리를 보고 바뀐 것을 머리 위에 띄움
+// 로그(패왕전 아님): 내가 받은 피해는 상태이상 피해도 모두 빨강 −숫자 하나로 · 적이 건 상태이상 이름(독·치유감소·출혈 등)
 // 회복 초록 +숫자 · 보호막 파랑 +숫자 · 내가 받은 피해 빨강 −숫자 · 상태이상 글자(기절·둔화·속박·침묵) · 버프 글자(공격력↑·피해 감소·속도↑·재생) · 풋내기 버팀
 import { allPlayers, type RunState } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
@@ -30,6 +31,21 @@ interface Seen {
   stand: boolean;
 }
 
+/** 로그 상태이상 [PlayerState 값, 글자, 색] (글자만 색, 피해 숫자는 늘 빨강) */
+const RUN_STATUS: readonly [string, TextKey, string][] = [
+  ["poison", "dbPoison", "#8aff6a"],
+  ["corrode", "dbHealCut", "#c88aff"],
+  ["dbBleed", "dbBleed", "#ff7a7a"],
+  ["dbRot", "dbRot", "#b8e04a"],
+  ["dbCurse", "dbCurse", "#b06aff"],
+  ["dbFear", "dbFear", "#c890ff"],
+  ["dbStun", "dbStun", "#ffe070"],
+  ["dbRoot", "dbRoot", "#c8c8d0"],
+  ["dbSlow", "dbSlow", "#8ad8ff"],
+  ["venomTicks", "dbVenom", "#8aff6a"],
+  ["doomTicks", "dbDoom", "#a080c0"],
+];
+
 const STATUS: readonly { key: "stun" | "slow" | "root" | "silence"; text: TextKey; color: string }[] = [
   { key: "stun", text: "pwInfoStun", color: "#ffe070" },
   { key: "slow", text: "pwInfoSlow", color: "#8ad8ff" },
@@ -39,6 +55,7 @@ const STATUS: readonly { key: "stun" | "slow" | "root" | "silence"; text: TextKe
 
 export class PwInfoNumbers {
   private seen: Seen[] = [];
+  private runSeen: Record<string, number>[] = [];
   private pops: Pop[] = [];
 
   constructor(private readonly t: (k: TextKey) => string) {}
@@ -57,7 +74,7 @@ export class PwInfoNumbers {
   /** 틱마다 (me = 내 자리, 받은 피해는 나만) */
   observe(s: RunState, me: number): void {
     const pv = s.pvp;
-    if (!pv) return;
+    if (!pv) return this.observeRun(s, me);
     allPlayers(s).forEach((p, i) => {
       const seat = pv.seats[i]!;
       const now: Seen = { hp: p.hp, shield: p.shieldPts ?? 0, stun: seat.stun, slow: seat.slow, root: seat.root, silence: seat.silence ?? 0, buffs: p.pwBuffs?.length ?? 0, stand: (p.pwStand ?? 0) > 0 };
@@ -80,8 +97,22 @@ export class PwInfoNumbers {
     this.pops = this.pops.filter((p) => s.tick - p.born < LIFE);
   }
 
+  /** 로그·협동: 내 피해 빨강 −숫자 · 새로 걸린 상태이상 이름 (모든 자리) */
+  private observeRun(s: RunState, me: number): void {
+    allPlayers(s).forEach((p, i) => {
+      const now: Record<string, number> = { hp: p.hp };
+      for (const [f] of RUN_STATUS) now[f] = ((p as unknown as Record<string, number | undefined>)[f] ?? 0) > 0 ? 1 : 0;
+      const was = this.runSeen[i];
+      this.runSeen[i] = now;
+      if (!was) return;
+      if (i === me && now.hp! - was.hp! <= -0.5) this.add(s, i, "−", "#ff5a5a", was.hp! - now.hp!);
+      for (const [f, key, color] of RUN_STATUS) if (now[f] && !was[f]) this.add(s, i, this.t(key), color);
+    });
+    this.pops = this.pops.filter((p) => s.tick - p.born < LIFE);
+  }
+
   draw(ctx: CanvasRenderingContext2D, s: RunState, snap: Snap): void {
-    if (!s.pvp || this.pops.length === 0) return;
+    if (this.pops.length === 0) return;
     const ps = allPlayers(s);
     ctx.textAlign = "center";
     ctx.textBaseline = "bottom";

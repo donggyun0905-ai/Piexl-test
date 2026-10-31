@@ -1,4 +1,5 @@
 // 효과(그리기 전용)·위험 표시·잠시 뒤 폭발 타입
+import type { EnemyKind } from "../content";
 
 /**
  * 의사 효과: slash 메스 교차 베기 · cut 베인 자국 · tube 수혈 튜브 · ecg 제세동기 심전도 · zap 전기 불꽃 · pole 링거 폴대 회전
@@ -79,6 +80,8 @@ export interface EffectState {
 export interface Hazard {
   /** 그리기용: 만든 적 종류 (박격포 등) */
   from?: string;
+  /** 공격한 적 종류 (맞으면 그 적의 상태이상, sim/foeStatus) */
+  by?: EnemyKind;
   /** 만든 적 id: 터지기 전에 그 적이 쓰러지면 사라짐 (땅 물고기 착지) */
   owner?: number;
   /** 터지는 틱 */

@@ -55,12 +55,12 @@ describe("상점 휴지통", () => {
 });
 
 describe("돈주머니", () => {
-  it("쓰면 돈 + 50", () => {
+  it("쓰면 돈 + 25", () => {
     const run = createRun(5, "warden");
     run.player.useSlots[0] = "moneyBag";
     const gold = run.gold;
     stepSim(run, { ...EMPTY_INPUT, useSlot: 1 });
-    expect(run.gold).toBe(gold + 50);
+    expect(run.gold).toBe(gold + 25);
     expect(run.player.useSlots[0]).toBe(null);
   });
 });

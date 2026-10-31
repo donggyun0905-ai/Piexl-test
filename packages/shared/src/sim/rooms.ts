@@ -46,8 +46,8 @@ const R = {
   BOSS_ENTRY_DELAY: 90,
   /** 보스가 여럿일 때 사이 거리 */
   BOSS_SPREAD: 64,
-  /** 한 방 졸개 최대 수 (무한 모드 깊은 층) */
-  MAX_ENEMIES: 16,
+  /** 한 방 졸개: 기본 수 + 층 × 값 · 최대 수 · 층마다 체력 비율 */
+  BASE_ENEMIES: 5, PER_FLOOR: 1, MAX_ENEMIES: 18, HP_PER_FLOOR: 0.2,
 };
 export { R as ROOMS_RULES };
 
@@ -149,7 +149,8 @@ function enterRoom(s: RunState, roomId: number): void {
     // 히든 상점: 빈 방에 차원의 순례자 (sim/pilgrim)
     if (roomId === pilgrimRoom(s)) meetPilgrim(s, roomId);
   }
-  s.enemies = st.enemies;
+  // 방 안에서는 s.enemies만 (같은 배열을 나눠 쓰면 JSON으로 옮긴 뒤 달라짐)
+  [s.enemies, st.enemies] = [st.enemies, []];
   st.cleared = s.enemies.length === 0;
   if ((info.type === "exit" || (s.arenaLv && info.type === "elite")) && !st.cleared) placeBossFight(s);
 }
@@ -159,7 +160,6 @@ function placeBossFight(s: RunState): void {
   placeParty(s, ROOM_MAX_Y - PLAYER_RADIUS - 16);
   // 다시 들어온 경우: 불러낸 졸개는 치우고 보스는 처음 자리·걷기 상태로
   s.enemies = s.enemies.filter((e) => !e.noGold);
-  s.rooms[s.roomId]!.enemies = s.enemies;
   s.enemies.forEach((e, i) => {
     // 보스가 여럿이면 (태초의 빛과 어둠 · 레이드 아레나) 나란히
     e.x = e.prevX = CX + (i - (s.enemies.length - 1) / 2) * R.BOSS_SPREAD;
@@ -173,12 +173,12 @@ function placeBossFight(s: RunState): void {
 export function spawnEnemies(s: RunState, roomId: number, elite: boolean): EnemyState[] {
   const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "enemies"));
   const d = depth(s);
-  const base = Math.min(R.MAX_ENEMIES, 3 + Math.floor(d * 0.7) + rng.int(0, 2) + (elite ? 4 : 0));
+  const base = Math.min(R.MAX_ENEMIES, R.BASE_ENEMIES + Math.floor(d * R.PER_FLOOR) + rng.int(0, 2) + (elite ? 4 : 0));
   // 협동: 사람이 많으면 일반 적이 조금 더, 체력도 조금 더 · 금기: 무리 지어 (전투방 +1) · 정예 (강한 적 방 +2)
   const count = base + partyExtraEnemies(s, base) + tabooSum(s, "horde") + (elite ? tabooSum(s, "eliteMore") : 0);
   // 층마다 나오는 졸개 (타워 디펜스 적 8종 포함, critters.minionKinds)
   const kinds = [...minionKinds(d), ...stalkerKinds(d)];
-  const hpMul = (1 + 0.15 * (d - 1)) * (elite ? 1.7 : 1) * partyHpMul(s) * tabooUp(s, "fleshHp");
+  const hpMul = (1 + R.HP_PER_FLOOR * (d - 1)) * (elite ? 1.7 : 1) * partyHpMul(s) * tabooUp(s, "fleshHp");
   const out: EnemyState[] = [];
   const g = shapeGrid(s.map.rooms[roomId]!.shape);
   for (let i = 0; i < count; i++) {

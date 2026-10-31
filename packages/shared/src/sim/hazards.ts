@@ -63,8 +63,8 @@ export function updateHazards(s: RunState): void {
         const p = s.player;
         const hit = h.still ? (h.still === "black") === p.stillTicks < R.STILL_JUDGE : inHazard(h, p.x, p.y, p.r);
         if (hit && h.damage > 0) {
-          if (h.noDodge) throughDash(s, () => damagePlayer(s, h.damage));
-          else damagePlayer(s, h.damage);
+          if (h.noDodge) throughDash(s, () => damagePlayer(s, h.damage, h.by));
+          else damagePlayer(s, h.damage, h.by);
         }
       },
       !!s.party,

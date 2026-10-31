@@ -9,6 +9,7 @@ import { depth } from "./hero";
 import { shapeGrid, tileAt, TILE_FLOOR } from "./layout";
 import { eachSeat } from "./party";
 import { statusImmune } from "./remnant";
+import { tickFoeStatus } from "./foeStatus";
 import type { TerrainRect, TerrainState } from "./terrainTypes";
 import type { RunState } from "./types";
 
@@ -67,9 +68,11 @@ export const terrainIdle = (s: RunState): boolean => !s.pvp && !!s.rooms[s.roomI
 
 /** 틱마다 (플레이어가 움직인 뒤): 진흙·물에서 느려짐 · 용암 · 가시 · 감전된 물 */
 export function updateTerrain(s: RunState): void {
-  // 부식독·독은 방을 나가도·방을 정리해도 끝까지 (독은 0.5초마다 피해)
+  // 치유감소·독·적이 건 상태이상(foeStatus)은 방을 나가도·방을 정리해도 끝까지 (독은 0.5초마다 피해)
   eachSeat(s, () => {
     const p = s.player;
+    const hurt = tickFoeStatus(p, depth(s));
+    if (hurt > 0) damagePlayer(s, hurt);
     if ((p.corrode ?? 0) > 0) p.corrode = (p.corrode ?? 0) - 1;
     if ((p.poison ?? 0) > 0) {
       p.poison = (p.poison ?? 0) - 1;
@@ -100,7 +103,7 @@ export function updateTerrain(s: RunState): void {
       }
       if (s.tick % TERRAIN.lavaEvery === 0 && at(t.lava)) damagePlayer(s, TERRAIN.lavaDamage + d);
       if ((t.shock ?? 0) > 0 && s.tick >= (t.shockAt ?? 0) && s.tick % TERRAIN.shockEvery === 0 && at(t.water)) damagePlayer(s, TERRAIN.shockDamage + d);
-      // 독가스를 밟으면: 부식독 + 독 상태이상 3초 (밟고 있는 동안 계속 새로)
+      // 독가스를 밟으면: 치유감소 + 독 상태이상 3초 (밟고 있는 동안 계속 새로)
       if (t.gas?.some((g) => (p.x - g.x) ** 2 + (p.y - g.y) ** 2 < g.r * g.r)) {
         p.corrode = TERRAIN.corrodeTicks;
         if (!statusImmune(p)) p.poison = Math.max(p.poison ?? 0, TERRAIN.poisonTicks);

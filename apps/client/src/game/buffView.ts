@@ -1,10 +1,21 @@
-// 로그 버프 창에 보여 줄 값 (BuffPanel): 캐릭터·아이템의 '남은 틱' 상태 중 버프(좋은 효과)와 다시 쓰기까지(대기) · 막대 길이는 처음 본 값(가장 큰 값) 기준
+// 로그 버프 창에 보여 줄 값 (BuffPanel): 캐릭터·아이템의 '남은 틱' 상태 중 버프(좋은 효과)·적이 건 상태이상(빨강)·다시 쓰기까지(대기) · 막대 길이는 처음 본 값(가장 큰 값) 기준
 import type { PlayerState } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 
-type Kind = "buff" | "cd";
-/** [상태 이름, 글자 키, 버프/대기] */
+type Kind = "buff" | "debuff" | "cd";
+/** [상태 이름, 글자 키, 버프/상태이상/대기] */
 const TABLE: readonly [string, TextKey, Kind][] = [
+  ["poison", "dbPoison", "debuff"],
+  ["corrode", "dbHealCut", "debuff"],
+  ["dbBleed", "dbBleed", "debuff"],
+  ["dbRot", "dbRot", "debuff"],
+  ["dbCurse", "dbCurse", "debuff"],
+  ["dbFear", "dbFear", "debuff"],
+  ["dbStun", "dbStun", "debuff"],
+  ["dbRoot", "dbRoot", "debuff"],
+  ["dbSlow", "dbSlow", "debuff"],
+  ["venomTicks", "dbVenom", "debuff"],
+  ["doomTicks", "dbDoom", "debuff"],
   ["shieldTicks", "bfShield", "buff"],
   ["hasteTicks", "bfHaste", "buff"],
   ["streakTicks", "bfStreak", "buff"],

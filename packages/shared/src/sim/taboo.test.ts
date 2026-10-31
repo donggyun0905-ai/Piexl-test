@@ -41,7 +41,7 @@ describe("금기의 서", () => {
     }
     expect(a.player.stats.maxHp - a.player.hp).toBeCloseTo(10);
     expect(b.player.stats.maxHp - b.player.hp).toBeCloseTo(13);
-    expect(b.gold).toBe(4);
+    expect(b.goldEarned).toBe(4);
     const pr = enemyShot(b, 0, 0, 1, 0, 2, 1);
     expect(pr.vx).toBeCloseTo(2.3);
   });

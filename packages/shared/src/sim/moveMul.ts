@@ -15,3 +15,4 @@ export { classDamageMul, classSpeedMul } from "./classSpeed";
 export function classMoveMul(p: PlayerState, tick: number): number {
   return orbitMoveMul(p) * brawlMoveMul(p) * medicMoveMul(p) * gunMoveMul(p, tick) * flyMoveMul(p) * slayerMoveMul(p) * riderMoveMul(p) * punkMoveMul(p) * voyagerMoveMul(p) * ((p.pwFast ?? 0) > 0 ? PW.orbMove : 1);
 }
+export { foeHeld, foeMoveMul, foeNoAttack } from "./foeStatus";

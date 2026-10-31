@@ -81,7 +81,7 @@ export interface SageState {
 }
 
 export interface BossPlayerState {
-  /** 부식독 남은 틱 (베놈 독가스): 모든 회복·재생 감소 (sim/heal) */
+  /** 치유감소 남은 틱 (베놈 독가스): 모든 회복·재생 감소 (sim/heal) */
   corrode?: number;
   /** 독 남은 틱 (베놈 독가스를 밟음): 0.5초마다 독 피해, 가스를 나가도 남음 (sim/terrain) */
   poison?: number;

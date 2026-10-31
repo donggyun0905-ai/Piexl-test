@@ -5,6 +5,7 @@ import { HEAL_ITEMS } from "./items";
 import { PERKS } from "./perks";
 import { createRun, stepSim } from "./sim/run";
 import { FLOOR_COUNT, generateFloor, MAX_LAYERS } from "./sim/floor";
+import { KILL_GOLD, ROOM_GOLD_MAX, START_GOLD } from "./sim/loot";
 import type { RunState, TickInput } from "./sim/types";
 import { TICK_RATE } from "./constants";
 
@@ -211,13 +212,13 @@ export function checkProgress(seed: number, r: RunSummary, sudden = false): stri
   for (let i = 1; i < r.floorLog.length; i++) {
     if (r.floorLog[i]!.tick - r.floorLog[i - 1]!.tick < 10 * TICK_RATE) return "tooFast";
   }
-  // 돈: 쓴 돈 ≤ 번 돈, 번 돈은 처치·방 정리로 얻을 수 있는 만큼까지
-  if (r.goldSpent > r.goldEarned) return "gold";
+  // 돈: 쓴 돈 ≤ 번 돈 + 처음 자금, 번 돈은 처치·방 정리로 얻을 수 있는 만큼까지
+  if (r.goldSpent > r.goldEarned + START_GOLD()) return "gold";
   // 적이 주는 돈은 관리자 페이지에서 바뀔 수 있으니 지금 표에서 가장 큰 값으로
   const golds = Object.values(ENEMIES);
   const minionGold = Math.max(...golds.filter((e) => !e.boss).map((e) => e.gold));
   const bossGold = Math.max(...golds.filter((e) => e.boss).map((e) => e.gold));
-  const maxGold = (r.kills * minionGold + r.bossKills * bossGold + r.floor * MAX_LAYERS * 20) * Math.max(1, PERKS.goldPouch.gold);
+  const maxGold = ((r.kills * minionGold + r.bossKills * bossGold) * KILL_GOLD() + r.floor * MAX_LAYERS * Math.max(20, ROOM_GOLD_MAX() * 3)) * Math.max(1, PERKS.goldPouch.gold);
   if (r.goldEarned > maxGold) return "gold";
   // 산 물건: 그 층 상점방에서, 해금 없이 나오는 물건, 쓴 돈 합계가 맞음
   let spent = 0;

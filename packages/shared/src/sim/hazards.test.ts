@@ -50,7 +50,7 @@ describe("공통 아이템", () => {
   it("돈 주머니: 얻는 돈 +50%", () => {
     const s = withPerk("goldPouch");
     addGold(s, 10);
-    expect(s.gold).toBe(15);
+    expect(s.goldEarned).toBe(15);
   });
 
   it("회피 망토: 대시 대기 시간 감소", () => {

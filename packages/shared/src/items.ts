@@ -201,7 +201,7 @@ export const USE_ITEMS = {
   /** 3초 동안 피해를 받지 않음 */
   ward: { id: "ward", ticks: 180 },
   /** 돈주머니: 쓰면 돈 + 50 */
-  moneyBag: { id: "moneyBag", gold: 50 },
+  moneyBag: { id: "moneyBag", gold: 25 },
   // 업적으로 해금
   /** 체력 모두 회복 */
   elixir: { id: "elixir", healRatio: 1 },

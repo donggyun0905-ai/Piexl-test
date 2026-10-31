@@ -27,7 +27,7 @@ describe("로비 펫", () => {
     const g = createRun(3, "warden");
     g.pet = "turtle";
     addGold(g, 10);
-    expect(g.gold).toBe(12);
+    expect(g.goldEarned).toBe(12);
     const b = createRun(3, "warden");
     const speed = b.player.stats.moveSpeed;
     b.pet = "bunny";

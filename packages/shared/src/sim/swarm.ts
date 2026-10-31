@@ -30,6 +30,7 @@ export function createSwarm(seed: number, c: CharacterId, map: SwarmMapId = "pla
   s.roomCols = SWARM.cols;
   s.roomRows = SWARM.rows;
   s.enemies = [];
+  s.gold = 0;
   s.swarm = { map, level, lv: 1, xp: 0, weapons: [], passives: [], gems: [], drops: [], choices: null, pending: 0, picks: 0, spawnAcc: 0, bosses: 0, finalId: 0, kills: 0 };
   applyRoom(s);
   const p = s.player;

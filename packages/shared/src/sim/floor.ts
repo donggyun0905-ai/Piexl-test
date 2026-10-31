@@ -12,7 +12,7 @@ export const LAST_FLOOR = 7;
 /** 한 칸에 놓일 수 있는 방 줄 수 (왼쪽·가운데·오른쪽) */
 export const LANES = 3;
 /** 한 층의 최대 칸 수 (시작 방·보스방 포함) */
-export const MAX_LAYERS = 13;
+export const MAX_LAYERS = 12;
 
 /** exit = 보스방 (보스를 잡으면 계단이 열림) · elite = 강한 적 (보상이 많음) · rest = 쉼터 (체력 회복) · golden = 황금방 (라스트 보스 층: 돈 300 + 아이템 3개 고르기) */
 export type RoomType = "start" | "combat" | "elite" | "rest" | "treasure" | "shop" | "exit" | "golden";
@@ -39,7 +39,7 @@ export interface FloorMap {
   layers: number;
 }
 
-/** 시작 방과 보스방 사이의 칸 수: 1층 7칸, 한 층마다 1칸씩, 최대 11칸 (2026-10-31 3칸씩 늘림) */
+/** 시작 방과 보스방 사이의 칸 수: 1층 7칸, 한 층마다 1칸씩, 최대 10칸 (2026-10-31 3칸씩 늘림 → 최대 10칸) */
 export function middleLayersFor(floor: number): number {
   return Math.min(6 + floor, MAX_LAYERS - 2);
 }

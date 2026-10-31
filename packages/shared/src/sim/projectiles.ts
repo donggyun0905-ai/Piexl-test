@@ -125,7 +125,7 @@ export function updateProjectiles(s: RunState, frozen = false): void {
         else {
           const open = p.invulnTicks <= 0 && p.shieldTicks <= 0;
           if (pr.doom) throughDash(s, () => damagePlayer(s, pr.damage));
-          else damagePlayer(s, pr.damage);
+          else damagePlayer(s, pr.damage, pr.by);
           if (pr.doom && open) doomPlayer(s);
           // 세이렌 음표: 사라지지 않고 끌려감 · 갓이터 구슬: 사라지지 않음
           if (pr.net) netPlayer(s, pr.id);

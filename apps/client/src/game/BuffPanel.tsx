@@ -1,4 +1,4 @@
-// 로그 왼쪽 칸 맨 아래 버프 창: 지금 켜진 버프(초록)·다시 쓰기까지 대기(회색)와 남은 초·막대 (buffView, 0.2초마다 새로)
+// 로그 왼쪽 칸 맨 아래 버프 창: 지금 켜진 버프(초록)·걸린 상태이상(빨강)·다시 쓰기까지 대기(회색)와 남은 초·막대 (buffView, 0.2초마다 새로)
 import type { RunState } from "@pixel-rogue/shared";
 import { useEffect, useRef, useState } from "react";
 import type { TextKey } from "../i18n";

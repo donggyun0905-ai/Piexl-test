@@ -74,6 +74,7 @@ export function createPvp(seed: number, mode: PwMode, humans: readonly (PwHuman 
     const on = mode !== "tourney" || i % size === 0;
     return { team, human: !!humans[i] && !humans[i]!.ai, on, kills: 0, deaths: 0, lv: 1, stun: 0, slow: 0, root: 0, side: i % 2 ? 1 : -1, sideT: 60, stuck: 0, goalX: 0, goalY: 0, dashCd: 0 };
   });
+  s.gold = 0;
   s.pvp = { mode, arena: arenaId, seats, proxies: [] };
   s.terrain = arenaTerrain(arena);
   applyRoom(s);

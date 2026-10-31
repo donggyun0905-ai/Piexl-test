@@ -7,7 +7,9 @@ import { HEAL_ITEMS, PASSIVE_IDS, PASSIVES, USE_ITEM_IDS, type PassiveDef, type 
 import { createRng, deriveSeed, type Rng } from "../rng";
 import { itemAvailable } from "../achievements";
 import { addGold, healPlayer } from "./combat";
-import type { Pickup, PickupKind, RunState } from "./types";
+import type { EnemyState, Pickup, PickupKind, RunState } from "./types";
+import { ENEMIES } from "../content";
+import { depth } from "./hero";
 import { addEffect, hasPerk } from "./util";
 import { seatNo } from "./party";
 import { tabooN } from "./taboo";
@@ -18,8 +20,29 @@ import { goldLocked, oniWeaponOk } from "./oniRules";
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
   GOLDEN_GOLD: 300,
+  /** 처음 자금 (레이드 아레나 빼고) */
+  START_GOLD: 50,
+  /** 전투방을 정리하면 받는 돈: 1~2층 · 3~4층 · 5층부터 */
+  ROOM_GOLD_1: 3,
+  ROOM_GOLD_3: 5,
+  ROOM_GOLD_5: 7,
+  /** 강한 적 방(주황)을 정리하면 받는 돈: 1~2층 · 3~4층 · 5층부터 */
+  ELITE_GOLD_1: 5,
+  ELITE_GOLD_3: 7,
+  ELITE_GOLD_5: 10,
+  /** 던전에서 적을 잡으면 받는 돈 배율 (0 = 없음, 2026-10-31부터 방을 정리할 때만 받음) */
+  KILL_GOLD: 0,
 };
 export { R as LOOT_RULES };
+export const START_GOLD = () => R.START_GOLD;
+export const KILL_GOLD = () => R.KILL_GOLD;
+/** 방 하나를 정리해 받는 가장 큰 돈 (진행 기록 검사) */
+export const ROOM_GOLD_MAX = () => Math.max(R.ROOM_GOLD_1, R.ROOM_GOLD_3, R.ROOM_GOLD_5, R.ELITE_GOLD_1, R.ELITE_GOLD_3, R.ELITE_GOLD_5);
+
+/** 적을 잡으면 받는 돈: 던전은 없음 (방을 정리할 때 받음) · 광야·패왕전·레이드 아레나·정해진 현상금은 그대로 */
+export function killGold(s: RunState, e: EnemyState): number {
+  return e.bounty ?? Math.round(ENEMIES[e.kind].gold * (s.swarm || s.pvp || s.arenaLv ? 1 : R.KILL_GOLD));
+}
 
 /** 방 가운데 (지금 방 크기를 따름) */
 export { ROOM_CX as CX, ROOM_CY as CY } from "../constants";
@@ -127,7 +150,7 @@ export function spawnTreasure(s: RunState, roomId: number): void {
   if (tabooN(s, "poorTreasure") === 0) addPickup(s, roomId, "use", use, CX + 20, CY);
 }
 
-/** 방을 처음 정리했을 때: 전투방은 돈 + 확률로 사용 아이템 (강한 적 방은 돈 2배 + 사용 아이템 꼭), 보스방은 층 보상(패시브 3개 중 1개) */
+/** 방을 처음 정리했을 때: 전투방은 돈(층마다 정해짐, LOOT_RULES) + 확률로 사용 아이템 (강한 적 방은 돈 더 + 사용 아이템 꼭), 보스방은 층 보상(패시브 3개 중 1개) */
 export function onRoomCleared(s: RunState, roomId: number): void {
   const type = s.map.rooms[roomId]!.type;
   const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "clear", ...seatSalt(s)));
@@ -143,7 +166,8 @@ export function onRoomCleared(s: RunState, roomId: number): void {
     const chance = Math.min(0.9, 0.3 + 0.1 * s.player.stats.luck);
     // 금기: 마른 보상 (사용 아이템이 나오지 않음)
     if ((rng.nextFloat() < chance || elite) && tabooN(s, "noUseDrop") === 0) addPickup(s, roomId, "use", rng.pick(usePool(s)), CX, CY);
-    const coins = (rng.int(2, 5) + Math.floor(s.player.stats.luck)) * (elite ? 2 : 1);
+    const tier = Math.min(2, Math.max(0, Math.floor((depth(s) - 1) / 2)));
+    const coins = elite ? [R.ELITE_GOLD_1, R.ELITE_GOLD_3, R.ELITE_GOLD_5][tier]! : [R.ROOM_GOLD_1, R.ROOM_GOLD_3, R.ROOM_GOLD_5][tier]!;
     // 돈은 바닥에 두지 않고 바로 얻음 (그 자리에 얻는 효과만)
     const before = s.goldEarned;
     addGold(s, coins);

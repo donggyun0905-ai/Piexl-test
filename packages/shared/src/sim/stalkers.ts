@@ -75,7 +75,7 @@ function doppel(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
     e.y += m[1] * sp * dir;
     if (e.timer <= 0) {
       e.timer = R.DOP_SHOT_GAP;
-      enemyShot(s, e.x, e.y, toP[0], toP[1], R.DOP_SHOT_SPEED, R.DOP_SHOT_DMG + depth(s));
+      enemyShot(s, e.x, e.y, toP[0], toP[1], R.DOP_SHOT_SPEED, R.DOP_SHOT_DMG + depth(s)).by = "doppel";
     }
     return;
   }
@@ -83,7 +83,7 @@ function doppel(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
   e.x += go[0] * sp;
   e.y += go[1] * sp;
   if (e.timer <= 0 && d2 < (R.DOP_SLASH_R + 6) ** 2) {
-    addShape(s, R.DOP_SLASH_WARN, { x: e.x, y: e.y, radius: R.DOP_SLASH_R, damage: R.DOP_SLASH_DMG + depth(s), dirX: toP[0], dirY: toP[1], arc: 0.3, fx: "bslash" });
+    addShape(s, R.DOP_SLASH_WARN, { x: e.x, y: e.y, radius: R.DOP_SLASH_R, damage: R.DOP_SLASH_DMG + depth(s), dirX: toP[0], dirY: toP[1], arc: 0.3, fx: "bslash", by: "doppel" });
     e.phase = "windup";
     e.timer = R.DOP_SLASH_WARN;
   }
@@ -130,7 +130,7 @@ function landfish(s: RunState, e: EnemyState): void {
     if (e.timer > 0) return;
     e.step = 1;
     e.timer = R.FISH_WARN;
-    addShape(s, R.FISH_WARN, { x: e.x, y: e.y, radius: R.FISH_R, damage: R.FISH_DMG + depth(s), fx: "pillar", owner: e.id });
+    addShape(s, R.FISH_WARN, { x: e.x, y: e.y, radius: R.FISH_R, damage: R.FISH_DMG + depth(s), fx: "pillar", owner: e.id, by: "landfish" });
   } else if (st === 1) {
     if (e.timer > 0) return;
     // 솟구침 → 다른 자리로 뛰어 듦 (그 자리도 표시되고 떨어지면 터짐)
@@ -146,7 +146,7 @@ function landfish(s: RunState, e: EnemyState): void {
     e.step = 2;
     e.timer = R.FISH_JUMP;
     e.air = e.immune = false;
-    addShape(s, R.FISH_JUMP, { x: e.auxX, y: e.auxY, radius: R.FISH_R, damage: R.FISH_DMG + depth(s), fx: "pillar", owner: e.id });
+    addShape(s, R.FISH_JUMP, { x: e.auxX, y: e.auxY, radius: R.FISH_R, damage: R.FISH_DMG + depth(s), fx: "pillar", owner: e.id, by: "landfish" });
   } else {
     const left = Math.max(1, e.timer + 1);
     e.x += ((e.auxX ?? e.x) - e.x) / left;
@@ -189,7 +189,7 @@ function lurker(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
     return;
   }
   if (e.timer > 0) return;
-  addShape(s, R.LURK_WARN, { x: e.x, y: e.y, radius: R.LURK_R, damage: R.LURK_DMG + 3 * depth(s), dirX: toP[0], dirY: toP[1], arc: 0.2, fx: "bslash" });
+  addShape(s, R.LURK_WARN, { x: e.x, y: e.y, radius: R.LURK_R, damage: R.LURK_DMG + 3 * depth(s), dirX: toP[0], dirY: toP[1], arc: 0.2, fx: "bslash", by: "lurker" });
   e.phase = "windup";
   e.timer = R.LURK_WARN;
 }

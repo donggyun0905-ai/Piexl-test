@@ -1,4 +1,5 @@
 // 피해 주고받기·처치
+import { killGold } from "./loot";
 import { endlessPow } from "./endless";
 import { inkTaken, scribeKill } from "./scribe";
 import { minerKill } from "./minerGround";
@@ -8,7 +9,7 @@ import { PERKS } from "../perks";
 import { readyCounter } from "./origin";
 import { relicKill } from "./hiddenPerks";
 import { createRng, deriveSeed } from "../rng";
-import { ENEMIES } from "../content";
+import { ENEMIES, type EnemyKind } from "../content";
 import { SWARM } from "../swarmDefs";
 import { titanHurt, titanParried } from "./titan";
 import { logHit } from "./pvpRecap";
@@ -98,7 +99,7 @@ export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: numbe
   addEffect(s, { kind: "hit", x: e.x, y: e.y, dirX, dirY, size: roll.crit ? 8 : 4, maxTicks: roll.crit ? 10 : 6 });
 }
 
-export function damagePlayer(s: RunState, dmg: number): void {
+export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
   const p = s.player;
   // 대시 중·맞은 뒤 무적·보호막이면 피해 없음
   if (p.dashTicks > 0 || p.invulnTicks > 0 || p.shieldTicks > 0) return;
@@ -161,7 +162,7 @@ export function damagePlayer(s: RunState, dmg: number): void {
   }
   // 결계: 맞은 뒤 3초 무적
   if (hasPerk(p, "barrier")) p.invulnTicks = R.BARRIER_TICKS;
-  afterHurt(s);
+  afterHurt(s, from);
   // 야성의 포효: 둘레 적을 밀어내며 피해, 3초 동안 고양이 피해 증가
   if (hasPerk(p, "wildRoar")) {
     p.roarTicks = R.ROAR_TICKS;
@@ -224,7 +225,7 @@ export function updatePending(s: RunState): void {
 /** 쓰러진 적 정리: 처치 수·돈. 보스가 쓰러지면 보스가 부른 적도 같이 사라짐 (불려 나온 보스가 쓰러질 때는 아님) */
 export function removeDead(s: RunState): void {
   if (!s.enemies.some((e) => e.hp <= 0)) return;
-  // 라스트 보스는 궁극기를 쓰기 전에는 쓰러지지 않음 (한 번에 큰 피해로 체력 10%를 건너뛰어도 체력 1로 남아 다음 틱에 궁극기)
+  // 라스트 보스는 궁극기를 쓰기 전에는 쓰러지지 않음 (체력 1로 남아 다음 틱에 궁극기)
   for (const e of s.enemies) if (e.hp <= 0 && !e.ultDone && ultBoss(e)) e.hp = 1;
   const bossDown = s.enemies.some((e) => e.hp <= 0 && ENEMIES[e.kind].boss && !e.noGold);
   const alive: EnemyState[] = [];
@@ -269,7 +270,7 @@ export function removeDead(s: RunState): void {
       s.bossKills++;
       if (!s.roomDamaged) s.flawlessBosses++;
     }
-    if (!e.noGold) addGold(s, e.bounty ?? ENEMIES[e.kind].gold);
+    if (!e.noGold) addGold(s, killGold(s, e));
     if (minion) continue;
     gainExp(s, e);
     if (morphKill(s, e)) recalcStats(s);

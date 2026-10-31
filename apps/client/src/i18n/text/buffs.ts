@@ -3,8 +3,19 @@ type L = { ko: string; en: string; ja: string };
 const l = (ko: string, en: string, ja: string): L => ({ ko, en, ja });
 
 export const BUFF_TEXT = {
-  bfTitle: l("버프 · 대기", "Buffs · Cooldowns", "バフ · 待機"),
+  bfTitle: l("버프 · 상태이상 · 대기", "Buffs · Debuffs · Cooldowns", "バフ · 状態異常 · 待機"),
   bfNone: l("켜진 버프 없음", "No active buffs", "バフなし"),
+  dbPoison: l("독", "Poison", "毒"),
+  dbHealCut: l("치유감소", "Healing cut", "回復減少"),
+  dbBleed: l("출혈", "Bleed", "出血"),
+  dbRot: l("부식 (받는 피해↑)", "Corrosion (dmg taken↑)", "腐食（被ダメ↑）"),
+  dbCurse: l("저주 (끝나면 터짐)", "Curse (bursts at end)", "呪い（終わると爆発）"),
+  dbFear: l("공포 (공격 못 함)", "Fear (can't attack)", "恐怖（攻撃不可）"),
+  dbStun: l("기절", "Stun", "気絶"),
+  dbRoot: l("속박 (못 움직임)", "Root (can't move)", "拘束（移動不可）"),
+  dbSlow: l("느림", "Slow", "鈍足"),
+  dbVenom: l("전갈 독", "Scorpion venom", "サソリ毒"),
+  dbDoom: l("죽음", "Doom", "死"),
   bfShield: l("보호막", "Shield", "バリア"),
   bfHaste: l("공격 속도 증가", "Attack speed up", "攻撃速度アップ"),
   bfStreak: l("사냥의 흥분", "Hunter's thrill", "狩りの興奮"),

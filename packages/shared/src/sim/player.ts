@@ -25,7 +25,7 @@ import { TITAN } from "../weaponsTitan";
 import { beastSpeedMul } from "./pets";
 import { fireMedic } from "./medicWeapons";
 import { medicSpeedMul } from "./heal";
-import { classMoveMul, classSpeedMul } from "./moveMul";
+import { classMoveMul, classSpeedMul, foeHeld, foeMoveMul, foeNoAttack } from "./moveMul";
 import type { EnemyState, PlayerState, RunState, TickInput } from "./types";
 import { addEffect, shotDirs, DASH_COOLDOWN, DASH_SPEED_MUL, DASH_TICKS, dist2, hasPerk, keepInRoom, normalize, roomGrid, STILL_TICKS, weaponOf } from "./util";
 import { readAim } from "./tracker";
@@ -114,7 +114,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
   // 금기: 느린 숨 (대시 재사용 시간 증가)
   const cool = Math.round(dashCooldown(p) * tabooUp(s, "slowDash"));
   rechargeDash(p, cool);
-  if (input.dash && !guarded && p.dashTicks === 0 && canDash(p)) {
+  if (input.dash && !guarded && p.dashTicks === 0 && canDash(p) && !foeHeld(p)) {
     const d = normalize(mx, my) ?? [p.faceX, p.faceY];
     p.dashDirX = d[0];
     p.dashDirY = d[1];
@@ -133,11 +133,11 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
     p.y += p.dashDirY * sp;
   } else {
     // 결벽증·의사 가운: 맞은 뒤 잠깐 빨라짐 · 속도는 곧 힘: 콤보를 이어 갈수록 빨라짐 · 버티기·모으기 중에는 못 움직임
-    const ms = (p.rootTicks ?? 0) > 0 ? 0 : p.stats.moveSpeed * classMoveMul(p, s.tick);
+    const ms = (p.rootTicks ?? 0) > 0 ? 0 : p.stats.moveSpeed * classMoveMul(p, s.tick) * foeMoveMul(p);
     // 베두인: 차크람을 던져 손이 비면 빨라짐
     const empty = p.ckHeld === false && p.characterId === "bedouin" ? BEDOUIN.emptySpeed : 0;
-    p.x += mx * (ms + empty);
-    p.y += my * (ms + empty);
+    p.x += mx * (ms + empty * foeMoveMul(p));
+    p.y += my * (ms + empty * foeMoveMul(p));
   }
   keepInRoom(p, roomGrid(s));
   // 돌진 베기: 대시로 지나간 적에게 공격력 1.5배 피해 (한 대시에 한 번씩)
@@ -159,7 +159,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
 
   // 자동 공격: 누르지 않아도 사거리 안에 적이 있으면 공격. 수동: 누르고 있으면 공격
   // 세이렌에게 홀린 동안은 공격하지 못함
-  const wantAttack = !charmed(p) && (input.autoAim ? autoInRange : input.attack);
+  const wantAttack = !charmed(p) && !foeNoAttack(p) && (input.autoAim ? autoInRange : input.attack);
   const speed = attackSpeedNow(p);
   // 직업 무기: 누르고 있는 동안(연속 공격·모으기·에너지파 게이지)도 매 틱 처리 (classTicks)
   const classTick = pwBasicTick(s) ?? (p.kingRoom !== undefined ? kingTick : CLASS_TICKS[weaponOf(p).kind]);

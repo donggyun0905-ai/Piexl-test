@@ -34,6 +34,8 @@ export const STATUS_INFO: readonly StatusInfo[] = [
   { kind: "gold", label: "황금", type: "한 방 추가", desc: "가진 돈에 비례한 피해 (돈을 조금 씀)", users: ["oni"], words: [], paths: ["rules/ONI/gold"] },
   { kind: "radiance", label: "광휘", type: "한 방 추가", desc: "빛 피해 · 밀치기 (잊혀진 자는 걸린 동안 1초마다)", users: ["forgotten", "oni", "imugi", "mystic", "elementalist", "elder"], more: "보스 대천사", words: ["radiance", "radiant", "holy"], paths: ["rules/ONI/genesis"] },
   { kind: "voidbolt", label: "공허탄", type: "한 방 추가", desc: "큰 한 방 피해 + 부채꼴로 퍼짐", users: ["oni", "scribe"], words: ["void", "voidbolt"], paths: ["rules/ONI/black"] },
+  { label: "치유감소", type: "약화", desc: "걸린 동안 모든 회복·재생 감소 (로그 40%)", users: [], more: "로그 적 베놈 독가스 · 패왕전 회복 감소 기술", words: ["anti", "healcut"] },
+  { label: "적이 거는 상태이상 (로그)", type: "플레이어가 받음", desc: "땅 물고기 출혈 · 슬라임 부식(받는 피해↑) · 도플갱어 저주(끝나면 터짐) · 그림자 공포(공격 못 함) · 가디언 기절 · 성기사 속박 · 돌진 멧돼지 느림 · 베놈 독+치유감소", users: [], words: [], paths: ["rules/FOE_STATUS_RULES"] },
   { label: "기절·속박·느림·공포", type: "피해 없음", desc: "기절 = 머리 위 도는 별 · 느림 = 발밑 노란 물결 · 속박 = 몸을 감는 붕대 · 공포 = 머리 위 해골과 식은땀", users: ["general", "titan", "abandoned", "elder", "scribe", "pilgrim", "zeus", "mage", "chronomancer", "ren", "apostle", "brawler", "doctor", "stargazer"], more: "진흙·물 지형(느림)", words: ["stun", "root", "slow", "fear", "bind", "sluggish"] },
 ];
 
