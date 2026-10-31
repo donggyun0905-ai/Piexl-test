@@ -49,7 +49,7 @@ export function SeedLine({ seedText, t }: { seedText: string; t: (key: TextKey) 
     const url = shareUrl(seedText);
     try {
       if (navigator.share && window.matchMedia("(pointer: coarse)").matches) {
-        await navigator.share({ title: "pixel-rogue", text: `${t("seed")} ${seedText}`, url });
+        await navigator.share({ title: "Pixel Toybox", text: `${t("seed")} ${seedText}`, url });
         return;
       }
       await navigator.clipboard.writeText(url);

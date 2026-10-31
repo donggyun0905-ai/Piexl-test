@@ -61,7 +61,7 @@ export function BattleLobby({ lang, setLang, t, room, you, serverNow, chat, onCh
   };
   const share = async () => {
     try {
-      await navigator.share({ title: "pixel-rogue", text: t("inviteText"), url: inviteUrl(room.code, coop) });
+      await navigator.share({ title: "Pixel Toybox", text: t("inviteText"), url: inviteUrl(room.code, coop) });
     } catch {
       // 공유 창을 닫은 경우 등
     }

@@ -43,7 +43,7 @@ export const BATTLE_TEXT = {
   shareLink: { ko: "공유", en: "Share", ja: "共有" },
   copyLink: { ko: "링크 복사", en: "Copy link", ja: "リンクをコピー" },
   inviteHint: { ko: "링크를 받은 친구는 누르기만 하면 이 방으로 들어와요", en: "Friends who open the link join this room right away", ja: "リンクを開いた友達はそのままこの部屋に入れます" },
-  inviteText: { ko: "pixel-rogue 같이 해요!", en: "Join my pixel-rogue room!", ja: "pixel-rogue 一緒に遊ぼう！" },
+  inviteText: { ko: "Pixel Toybox 같이 해요!", en: "Join my Pixel Toybox room!", ja: "Pixel Toybox 一緒に遊ぼう！" },
   inviteFriends: { ko: "친구 초대하기", en: "Invite friends", ja: "友達を招待" },
   matchFound: { ko: "곧 시작해요", en: "Starting soon", ja: "まもなく開始" },
   players: { ko: "참가자", en: "Players", ja: "参加者" },

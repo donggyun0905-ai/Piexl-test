@@ -38,7 +38,7 @@ export function AdminApp() {
   return (
     <div className={`admin admin-${kind}`}>
       <header className="admin-top">
-        <h1>pixel-rogue 관리자</h1>
+        <h1>Pixel Toybox 관리자</h1>
         <span className="admin-server">{server.label}</span>
         <span className="admin-kinds">
           <button type="button" className={!clears && kind === "dungeon" ? "active" : undefined} onClick={() => (setKind("dungeon"), setClears(false))}>

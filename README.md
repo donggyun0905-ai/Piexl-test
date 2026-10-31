@@ -1,4 +1,4 @@
-# WebPixelRogue (가칭 pixel-rogue)
+# Pixel Toybox (주소·서버 이름은 pixel-rogue)
 
 픽셀 그래픽 탑뷰 실시간 액션 로그라이크 웹게임. 계획은 [docs/PLAN.md](docs/PLAN.md), 개발일지는 [docs/devlog/](docs/devlog/) (월별).
 

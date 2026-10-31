@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.294",
+    date: "2026-10-31",
+    items: {
+      ko: ["게임 이름을 'Pixel Toybox'로 바꿈 (메인 화면·브라우저 탭·홈 화면 앱 이름·초대 글·관리자·도트 편집 페이지)"],
+      en: ["The game is now called 'Pixel Toybox' (title screen, browser tab, home-screen app name, invite text, admin and pixel editor pages)"],
+      ja: ["ゲーム名を「Pixel Toybox」に変更（タイトル画面・ブラウザのタブ・ホーム画面のアプリ名・招待文・管理・ドット編集ページ）"],
+    },
+  },
+  {
     version: "0.48.293",
     date: "2026-10-31",
     items: {

@@ -19,7 +19,7 @@
 | 검사 | 타입 검사(tsc), 린트(oxlint), 테스트(vitest). 서버 로컬 실행은 `wrangler dev` |
 
 - 기존 주소: 화면 https://puzzle-battle.pages.dev · 서버 https://puzzle-battle.numgame.workers.dev (Workers 하위 도메인 `numgame`)
-- 이 게임 이름(가칭): `pixel-rogue` → `pixel-rogue.pages.dev`, `pixel-rogue.numgame.workers.dev` (puzzle-battle과 겹치지 않게)
+- 게임 이름(화면): **Pixel Toybox** (2026-10-31 결정) · 주소·서버 이름은 그대로 `pixel-rogue` → `pixel-rogue.pages.dev`, `pixel-rogue.numgame.workers.dev` (puzzle-battle과 겹치지 않게)
 - **무료 한도는 계정 전체가 같이 씀** (puzzle-battle과 나눠 씀. 매일 오전 9시 초기화): Durable Objects 요청 하루 10만 건, 실행 시간 하루 13,000 GB-s, 저장 쓰기 하루 10만 행
 - 비용 줄이는 원칙 (puzzle-battle에서 쓴 방식):
   - 서버가 계속 시계를 돌리지 않는다. 끝나는 시각만 정하고 알람 한 번, 나머지는 시드로 화면·서버가 똑같이 계산

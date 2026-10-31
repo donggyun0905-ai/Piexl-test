@@ -70,7 +70,7 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
       <InstallButton t={t} />
       <main className="title-screen">
         <div className="menu-card">
-          <h1 className="title-logo">pixel-rogue</h1>
+          <h1 className="title-logo">Pixel Toybox</h1>
           <p className="title-subtitle">{t("menuSubtitle")}</p>
           {best && (
             <p className="title-best">
