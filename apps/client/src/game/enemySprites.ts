@@ -60,7 +60,7 @@ export function shapeSprite(kind: string, color: string): HTMLCanvasElement | un
 }
 
 /** 2배 촘촘하게 다시 그린 몬스터 (그림 칸 ÷ 이 값 = 게임 크기) */
-export const ENEMY_SRC: Readonly<Record<string, number>> = { hulk: 2, seer: 2 };
+export const ENEMY_SRC: Readonly<Record<string, number>> = { hulk: 2, seer: 2, tower: 2 };
 
 /** 몬스터 그림 한 칸 크기 (게임 크기, 아직 못 불러왔으면 undefined) */
 export const enemyCell = (kind: string): number | undefined => {

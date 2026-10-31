@@ -38,10 +38,21 @@ export function drawBossStatus(ctx: CanvasRenderingContext2D, e: EnemyState, x: 
     ctx.stroke();
   };
   switch (e.kind) {
-    case "tower":
-      // 차례인 탑은 금빛 고리, 아닌 탑은 흐린 방패 고리
+    case "tower": {
+      // 차례인 탑은 금빛 고리 + 수정에서 하늘로 솟는 빛기둥, 아닌 탑은 흐린 방패 고리
       ring(r + 3, e.immune ? "rgba(160, 170, 200, 0.7)" : "rgba(255, 230, 140, 0.9)", 1);
+      if (!e.immune) {
+        const top = y - r * 1.6;
+        const g = ctx.createLinearGradient(0, top - 36, 0, top);
+        g.addColorStop(0, "rgba(255, 240, 170, 0)");
+        g.addColorStop(1, "rgba(255, 240, 170, 0.55)");
+        ctx.fillStyle = g;
+        ctx.fillRect(x - 2.5, top - 36, 5, 36);
+        ctx.fillStyle = "rgba(255, 255, 235, 0.8)";
+        ctx.fillRect(x - 0.5, top - 30, 1, 30);
+      }
       break;
+    }
     case "dragon":
       if (e.immune) ring(r + 6, "rgba(255, 140, 40, 0.9)", 2);
       break;

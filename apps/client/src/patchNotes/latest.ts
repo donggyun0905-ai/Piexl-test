@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.302",
+    date: "2026-10-31",
+    items: {
+      ko: ["천사장의 탑을 새로 그림: 계단 대리석 받침 · 금테 기둥 · 빛나는 아치 창 · 날개 장식 · 금빛 첨탑 · 떠 있는 빛 수정 (2배 촘촘) · 지금 부술 수 있는 탑은 하늘로 솟는 빛기둥"],
+      en: ["The Archangel's towers are redrawn: stepped marble base, gold-banded column, glowing arched window, wing ornaments, golden spire and a floating light crystal (double detail) · the tower you can break now sends a pillar of light into the sky"],
+      ja: ["大天使の塔を描き直し: 段の大理石台座 · 金縁の柱 · 光るアーチ窓 · 翼の飾り · 金の尖塔 · 浮かぶ光の水晶（2倍の細かさ）· 今壊せる塔は空へ伸びる光の柱"],
+    },
+  },
+  {
     version: "0.48.301",
     date: "2026-10-31",
     items: {
