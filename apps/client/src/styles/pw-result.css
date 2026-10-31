@@ -1,0 +1,67 @@
+/* 패왕전 결과 창: 넓게 보는 화면에 맞춰 크게 (글자·점수판·장비 그림 · 2026-10-31) */
+.game-overlay .modal.pw-result {
+  width: min(1400px, 98vw);
+  max-height: 96vh;
+  padding: 20px 26px;
+  font-size: 18px;
+}
+.pw-result h2 {
+  font-size: 40px;
+  margin: 4px 0 8px;
+}
+.pw-result .pw-chips,
+.pw-result .result-line {
+  font-size: 20px;
+}
+.pw-result .pw-board {
+  max-height: 62vh;
+  gap: 14px;
+}
+.pw-result .pw-board table {
+  font-size: 16px;
+}
+.pw-result .pw-board caption {
+  font-size: 18px;
+  padding: 4px;
+}
+.pw-result .pw-board th,
+.pw-result .pw-board td {
+  padding: 5px 10px;
+}
+.pw-result .pw-bar {
+  min-width: 110px;
+  height: 20px;
+}
+.pw-result .pw-bar b {
+  font-size: 14px;
+  line-height: 20px;
+}
+.pw-result .pw-gear {
+  max-width: 420px;
+  gap: 3px;
+}
+.pw-result .pw-gear canvas,
+.pw-result .pw-gear img {
+  /* 그림 크기는 글자 안에 정해져 있어 덮어씀 */
+  width: 28px !important;
+  height: 28px !important;
+}
+.pw-result .pw-gear i {
+  font-size: 12px;
+}
+.pw-result .modal-actions button {
+  font-size: 18px;
+  padding: 10px 14px;
+}
+@media (max-width: 700px) {
+  .game-overlay .modal.pw-result {
+    font-size: 14px;
+    padding: 12px;
+  }
+  .pw-result h2 {
+    font-size: 26px;
+  }
+  .pw-result .pw-board table {
+    font-size: 12px;
+  }
+}

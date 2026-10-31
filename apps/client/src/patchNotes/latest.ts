@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.308",
+    date: "2026-10-31",
+    items: {
+      ko: ["패왕전: 화면을 줄여 볼 때 캐릭터·몬스터 그림이 흐릿하던 것 고침 (미리 줄인 선명한 그림으로) · 결과 창을 넓어진 화면에 맞게 크게 (글자·점수판·장비 그림) · 대시 대기 감소 아이템(회피 망토 등 5개) 40% → 10%, 합계 한도 40% → 20%"],
+      en: ["Champion Clash: characters and monsters no longer look blurry when zoomed out (uses pre-shrunk crisp images) · the result window is bigger to match the wider view (text, scoreboard, item icons) · dash-cooldown items (Dodge Cloak and 4 more) 40% → 10%, total cap 40% → 20%"],
+      ja: ["覇王戦: 画面を縮小したときキャラ・モンスターの絵がぼやけていたのを修正（あらかじめ縮小した鮮明な絵を使用） · 結果ウィンドウを広くなった画面に合わせて大きく（文字・スコア表・装備アイコン） · ダッシュ待機短縮アイテム（回避のマントなど5種）40% → 10%、合計上限40% → 20%"],
+    },
+  },
+  {
     version: "0.48.307",
     date: "2026-10-31",
     items: {

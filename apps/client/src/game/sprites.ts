@@ -1,5 +1,6 @@
 // 그림 교체 준비: public/sprites/ 에 PNG를 넣고 아래 목록에 이름을 적으면 도형 대신 그 그림을 그림.
 // 목록에 없거나 아직 못 불러온 그림은 지금처럼 도형으로 그림. 규격은 docs/ART.md
+import { mipFor, screenScale } from "./mipmap";
 import type { CharacterId } from "@pixel-rogue/shared";
 import { equippedSkin } from "../shop/wallet";
 import { draftSrc, mySkinSrc } from "./customArt";
@@ -242,16 +243,17 @@ export function drawCharacter(ctx: CanvasRenderingContext2D, name: string, x: nu
   const left = Math.round(x - size / 2);
   const top = Math.round(y + r + 1 + footPad - size);
   const [sx, sy] = [col * ss, row * ss];
-  const blit = (from: HTMLImageElement, y0: number) => {
-    ctx.imageSmoothingEnabled = ss > size; // 줄여 그리는 촘촘한 그림은 부드럽게
+  const blit = (img0: HTMLImageElement, y0: number) => {
+    ctx.imageSmoothingEnabled = ss > size; // 줄여 그리는 촘촘한 그림은 부드럽게 (많이 줄이면 미리 줄인 그림, mipmap)
+    const [from, m] = ss > size ? mipFor(img0, ss / (size * screenScale(ctx))) : [img0, 1];
     if (flip) {
       ctx.save();
       ctx.translate(left + size, top);
       ctx.scale(-1, 1);
-      ctx.drawImage(from, sx, y0, ss, ss, 0, 0, size, size);
+      ctx.drawImage(from, sx * m, y0 * m, ss * m, ss * m, 0, 0, size, size);
       ctx.restore();
     } else {
-      ctx.drawImage(from, sx, y0, ss, ss, left, top, size, size);
+      ctx.drawImage(from, sx * m, y0 * m, ss * m, ss * m, left, top, size, size);
     }
   };
   // 오니: 무기마다 다른 방망이를 몸 뒤·앞 두 겹으로 (같은 칸 자리)

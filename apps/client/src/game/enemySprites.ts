@@ -1,5 +1,6 @@
 // 몬스터 그림 (public/sprites/enemies/{종류}.png, 오른쪽을 봄, 움직임 칸을 가로로): 불러오기 · 색 입히기 · 모양 그림 · 그리기
 // ENEMY_SRC: 2배 촘촘한 그림 (칸이 두 배 · 게임에서는 원래 크기로 줄여 그림, 4칸 = 걷기 2 · 공격 준비 · 공격)
+import { mipFor, screenScale } from "./mipmap";
 import { draftSrc } from "./customArt";
 
 /** 몬스터 그림 (public/sprites/enemies/{종류}.png, 오른쪽을 봄, 움직임 칸을 가로로) */
@@ -90,7 +91,9 @@ export function drawEnemySprite(ctx: CanvasRenderingContext2D, kind: string, x: 
     ctx.scale(-1, 1);
   } else ctx.translate(left, top);
   ctx.imageSmoothingEnabled = hd > 1 || scale < 1;
-  ctx.drawImage(src, (frame % frames) * cell, 0, cell, cell, 0, 0, size, size);
+  // 많이 줄여 그리면 미리 줄인 그림 (흐려지지 않게, mipmap)
+  const [from, m] = mipFor(src, cell / (size * screenScale(ctx)));
+  ctx.drawImage(from, (frame % frames) * cell * m, 0, cell * m, cell * m, 0, 0, size, size);
   ctx.restore();
   return true;
 }

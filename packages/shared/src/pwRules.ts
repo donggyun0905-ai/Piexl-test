@@ -42,7 +42,7 @@ export const PW_GROW = {
   respawnPerLv: 1.2 * TICK_RATE,
   /** 장비 칸 수 · 대시 대기 줄임 최대 · 장비 이동 속도 더하기 최대 */
   slots: 6,
-  dashCutMax: 0.4,
+  dashCutMax: 0.2,
   moveMax: 0.5,
   /** 증강을 고르는 레벨 */
   augLv: [3, 7, 11, 15],
