@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.285",
+    date: "2026-10-31",
+    items: {
+      ko: ["좌우가 반대로 나오던 그림 고침: 변희 서기·걷기·공격 · 곰 대시"],
+      en: ["Fixed mirrored poses: Byeonhui standing, walking and attack · bear dash"],
+      ja: ["左右が逆になっていた絵を修正: ビョンヒの立ち・歩き・攻撃 · 熊のダッシュ"],
+    },
+  },
+  {
     version: "0.48.284",
     date: "2026-10-31",
     items: {
