@@ -7,14 +7,14 @@ import { CARD_SKINS, cardOf, frameOf, masteryLevel, MASTERY_AT, MASTERY_MAX, own
 import { MasteryLine } from "../select/CharPickDialog";
 import { TEST_OPEN } from "../testFlags";
 import { SkinPreview } from "./SkinPreview";
-import { LIMITED_THEMES, MY_THEME, VICTORY_THEME, parseSkin, SKIN_THEMES, skinId } from "./skins";
+import { LIMITED_THEMES, MY_THEME, VICTORY_THEME, parseSkin, skinId } from "./skins";
 import { THEME_KEY } from "./SkinTab";
 import { equippedSkin, equipSkin, ownedSkins } from "./wallet";
 
 /** 이 캐릭터가 입을 수 있는 스킨 (기본 = null, 나만의 스킨 → 한정 → 상점 순서) */
 export function wearable(c: CharacterId): (string | null)[] {
   const owned = ownedSkins();
-  return [null, ...[MY_THEME, ...LIMITED_THEMES, VICTORY_THEME, ...SKIN_THEMES].map((th) => skinId(c, th)).filter((id) => owned.includes(id))];
+  return [null, ...[MY_THEME, ...LIMITED_THEMES, VICTORY_THEME].map((th) => skinId(c, th)).filter((id) => owned.includes(id))];
 }
 
 const TABS = [

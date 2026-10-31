@@ -1,4 +1,4 @@
-// 화면 글자: 상점 (스킨 사기 · 뽑기 · 일일 미션 · 만능 쿠폰)
+// 화면 글자: 상점 (스킨 입기 · 뽑기 · 일일 미션 · 만능 쿠폰)
 export const SHOP_TEXT = {
   shop: { ko: "상점", en: "Shop", ja: "ショップ" },
   shopCoupons: { ko: "만능 쿠폰", en: "Coupons", ja: "万能クーポン" },
@@ -19,11 +19,10 @@ export const SHOP_TEXT = {
   shopFlipAll: { ko: "모두 뒤집기", en: "Flip all", ja: "全部めくる" },
   shopGachaBonus: { ko: "덤", en: "Bonus", ja: "おまけ" },
   shopGachaNote: {
-    ko: "한정 테마 1% · 상점 스킨 44% · 쿠폰 1~5장 55%. 이미 가진 스킨이면 쿠폰 {n}장, 이미 가진 한정 테마면 {m}장을 돌려받습니다",
-    en: "Limited theme 1% · shop skin 44% · 1–5 coupons 55%. Owned skins give back {n} coupons, an owned limited theme gives back {m}",
-    ja: "限定テーマ1%・ショップスキン44%・クーポン1〜5枚55%。所持スキンならクーポン{n}枚、所持済み限定テーマなら{m}枚が戻ります",
+    ko: "한정 테마 1% · 이벤트 코인 1~3개 22% · 쿠폰 1~5장 77%. 이미 가진 한정 테마가 나오면 쿠폰 {m}장을 돌려받습니다",
+    en: "Limited theme 1% · 1–3 event coins 22% · 1–5 coupons 77%. An owned limited theme gives back {m} coupons",
+    ja: "限定テーマ1%・イベントコイン1〜3枚22%・クーポン1〜5枚77%。所持済み限定テーマなら{m}枚が戻ります",
   },
-  shopNew: { ko: "새로 얻음!", en: "New!", ja: "新しく入手！" },
   shopDup: { ko: "이미 있음 (+{n})", en: "Owned (+{n})", ja: "所持済み（+{n}）" },
   shopHowTo: {
     ko: "쿠폰은 업적을 달성하거나 일일 미션을 하면 받습니다",
@@ -41,7 +40,6 @@ export const SHOP_TEXT = {
   missionDaily: { ko: "일일 도전 {n}판 하기", en: "Play {n} Daily Challenge", ja: "デイリーチャレンジを{n}回" },
   missionTd: { ko: "타워 디펜스 {n}라운드까지 가기", en: "Reach round {n} in Tower Defense", ja: "タワーディフェンスで{n}ラウンドまで" },
   missionRuns: { ko: "아무 모드나 {n}판 하기", en: "Play {n} games in any mode", ja: "どのモードでも{n}回遊ぶ" },
-  skinSwim: { ko: "수영복", en: "Swimsuit", ja: "水着" },
   skinXmas: { ko: "크리스마스", en: "Christmas", ja: "クリスマス" },
   skinHalloween: { ko: "할로윈", en: "Halloween", ja: "ハロウィン" },
   skinSchool: { ko: "학교", en: "School", ja: "学校" },
@@ -73,11 +71,10 @@ export const SHOP_TEXT = {
   shopLimitedLock: { ko: "뽑기 한정", en: "Gacha only", ja: "ガチャ限定" },
   shopAllChars: { ko: "해당 캐릭터 모두에게!", en: "For all its characters!", ja: "対象キャラ全員に！" },
   shopCouponPrize: { ko: "쿠폰 +{n}", en: "Coupons +{n}", ja: "クーポン +{n}" },
-  skinSwap: { ko: "성별 바꾸기", en: "Gender Swap", ja: "性別チェンジ" },
   shopEvent: { ko: "이벤트", en: "Event", ja: "イベント" },
   shopEcoins: { ko: "이벤트 코인", en: "Event coins", ja: "イベントコイン" },
   shopEcoinPrize: { ko: "이벤트 코인 +{n}", en: "Event coins +{n}", ja: "イベントコイン +{n}" },
-  shopEcoinHow: { ko: "광야의 새벽 맵·난이도를 깨거나, 뽑기에서 이미 가진 스킨이 나오면 가끔 받습니다", en: "Earn them by clearing Dawn of the Wilds maps and difficulties, or sometimes from duplicate gacha skins", ja: "荒野の夜明けのマップ・難易度をクリアするか、ガチャで持っているスキンが出たときにたまにもらえます" },
+  shopEcoinHow: { ko: "광야의 새벽 맵·난이도를 깨거나, 뽑기에서 받습니다", en: "Earn them by clearing Dawn of the Wilds maps and difficulties, or from the gacha", ja: "荒野の夜明けのマップ・難易度をクリアするか、ガチャでもらえます" },
   shopNoEcoin: { ko: "이벤트 코인이 모자랍니다", en: "Not enough event coins", ja: "イベントコインが足りません" },
   shopFxOn: { ko: "장착", en: "Equip", ja: "装着" },
   shopFxOff: { ko: "장착 중 (빼기)", en: "Equipped (remove)", ja: "装着中（外す）" },

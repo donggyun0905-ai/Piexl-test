@@ -4,7 +4,7 @@ import { loadAchievements } from "../records";
 import { onCloudApplied } from "../cloudSave";
 import { loadText, saveText } from "../storage";
 import { addEventCoins } from "../event/eventCoins";
-import { GACHA_ECOIN_ODDS, GACHA_ECOINS, GACHA_COUPONS, GACHA_LIMITED_ODDS, GACHA_ONLY, GACHA_REFUND, GACHA_SKIN_ODDS, LIMITED_REFUND, LIMITED_THEMES, limitedSkins, MY_SKIN_PRICE, MY_THEME, VICTORY_SKINS, SHOP_SKINS, SKIN_PRICE, ALL_SKINS, CHARACTER_IDS, mySkinId, TEST_ALL_SKINS, type LimitedTheme } from "./skins";
+import { GACHA_ECOIN_ODDS, GACHA_ECOINS, GACHA_COUPONS, GACHA_LIMITED_ODDS, GACHA_ONLY, isKnownSkin, LIMITED_REFUND, LIMITED_THEMES, limitedSkins, MY_SKIN_PRICE, MY_THEME, VICTORY_SKINS, ALL_SKINS, CHARACTER_IDS, mySkinId, TEST_ALL_SKINS, type LimitedTheme } from "./skins";
 
 /** 업적 하나에 받는 쿠폰 (어려운 종류일수록 많이) */
 export const ACHIEVEMENT_COUPONS: Record<AchievementCategory, number> = {
@@ -41,7 +41,9 @@ function load(): Wallet {
   if (cache) return structuredClone(cache);
   try {
     const w = JSON.parse(loadText("wallet") ?? "{}") as Partial<Wallet>;
-    cache = { spent: w.spent ?? 0, mission: w.mission ?? 0, refund: w.refund ?? 0, owned: w.owned ?? [], equipped: w.equipped ?? {}, lobbyOwned: w.lobbyOwned ?? [], lobby: w.lobby };
+    // 없앤 스킨(상점 테마 9종·5명 밖의 승리)은 가진 목록·입은 것에서 뺌
+    const equipped = Object.fromEntries(Object.entries(w.equipped ?? {}).filter(([, id]) => isKnownSkin(id)));
+    cache = { spent: w.spent ?? 0, mission: w.mission ?? 0, refund: w.refund ?? 0, owned: (w.owned ?? []).filter(isKnownSkin), equipped, lobbyOwned: w.lobbyOwned ?? [], lobby: w.lobby };
   } catch {
     cache = { spent: 0, mission: 0, refund: 0, owned: [], equipped: {}, lobbyOwned: [] };
   }
@@ -77,7 +79,7 @@ export function grantLimitedSkin(): string | null {
   return theme ?? null;
 }
 
-/** 월드 워 리그 우승: 모든 캐릭터 '승리' 한정 스킨. 새로 받은 게 있으면 true */
+/** 월드 워 리그 우승: '승리' 한정 스킨 (5명). 새로 받은 게 있으면 true */
 export function grantVictorySkins(): boolean {
   const w = load();
   const add = VICTORY_SKINS.filter((id) => !w.owned.includes(id));
@@ -108,11 +110,11 @@ export function addMissionCoupons(n: number): void {
   save(w);
 }
 
-/** 바로 사기 (뽑기 전용 스킨은 못 삼). 성공하면 true */
+/** 바로 사기 (나만의 스킨 칸만). 성공하면 true */
 export function buySkin(id: string): boolean {
   const w = load();
-  const price = id.endsWith(`_${MY_THEME}`) ? MY_SKIN_PRICE : SKIN_PRICE;
-  if (ownedSkins().includes(id) || GACHA_ONLY.includes(id) || coupons() < price) return false;
+  const price = MY_SKIN_PRICE;
+  if (!id.endsWith(`_${MY_THEME}`) || ownedSkins().includes(id) || GACHA_ONLY.includes(id) || coupons() < price) return false;
   w.spent += price;
   w.owned.push(id);
   save(w);
@@ -127,8 +129,8 @@ export function equipSkin(c: CharacterId, id: string | null): void {
   save(w);
 }
 
-/** 뽑기 결과 하나: 상점 스킨 · 한정 테마(모든 캐릭터) · 쿠폰. dup이면 이미 있어서 refund장을 돌려받음 */
-export type GachaPrize = { kind: "skin"; id: string; dup: boolean; refund: number } | { kind: "limited"; theme: LimitedTheme; dup: boolean; refund: number } | { kind: "coupon"; n: number } | { kind: "ecoin"; n: number };
+/** 뽑기 결과 하나: 한정 테마(모든 캐릭터) · 이벤트 코인 · 쿠폰. dup이면 이미 있어서 refund장을 돌려받음 */
+export type GachaPrize = { kind: "limited"; theme: LimitedTheme; dup: boolean; refund: number } | { kind: "coupon"; n: number } | { kind: "ecoin"; n: number };
 
 /** 뽑기 n번 (꾸밈이라 브라우저 랜덤을 씀, 게임 결과와 상관없음) */
 export function gacha(n: number, price: number): GachaPrize[] | null {
@@ -146,20 +148,12 @@ export function gacha(n: number, price: number): GachaPrize[] | null {
       return { kind: "limited", theme, dup, refund: dup ? LIMITED_REFUND : 0 };
     }
     r -= GACHA_LIMITED_ODDS;
-    if (r < GACHA_SKIN_ODDS) {
-      const id = SHOP_SKINS[Math.floor(Math.random() * SHOP_SKINS.length)]!;
-      const dup = w.owned.includes(id);
-      // 꽝(이미 가진 스킨): 반은 쿠폰 대신 이벤트 코인
-      if (dup && Math.random() < GACHA_ECOIN_ODDS) {
-        const n = GACHA_ECOINS[0] + Math.floor(Math.random() * (GACHA_ECOINS[1] - GACHA_ECOINS[0] + 1));
-        addEventCoins(n);
-        return { kind: "ecoin", n };
-      }
-      if (dup) w.refund += GACHA_REFUND;
-      else w.owned.push(id);
-      return { kind: "skin", id, dup, refund: dup ? GACHA_REFUND : 0 };
+    if (r < GACHA_ECOIN_ODDS) {
+      const n = GACHA_ECOINS[0] + Math.floor(Math.random() * (GACHA_ECOINS[1] - GACHA_ECOINS[0] + 1));
+      addEventCoins(n);
+      return { kind: "ecoin", n };
     }
-    r -= GACHA_SKIN_ODDS;
+    r -= GACHA_ECOIN_ODDS;
     let got = GACHA_COUPONS[GACHA_COUPONS.length - 1]![0];
     for (const [k, p] of GACHA_COUPONS) {
       if (r < p) {

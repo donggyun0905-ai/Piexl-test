@@ -1,22 +1,13 @@
-// 상점 스킨 탭: 캐릭터를 고르면 기본 + 테마 9개, 사기 · 입기
+// 상점 스킨 탭: 캐릭터를 고르면 기본 + 나만의 스킨 + 한정 스킨(뽑기 한정 · 승리 5명), 입기
 import type { CharacterId } from "@pixel-rogue/shared";
 import { useState } from "react";
 import type { TextKey } from "../i18n";
 import { MySkinCard } from "./MySkinCard";
 import { SkinPreview } from "./SkinPreview";
-import { CHARACTER_IDS, hasLimited, LIMITED_THEMES, SKIN_PRICE, SKIN_THEMES, skinId, VICTORY_THEME, type SkinTheme } from "./skins";
-import { buySkin, coupons, equippedSkin, equipSkin, ownedSkins } from "./wallet";
+import { CHARACTER_IDS, hasLimited, LIMITED_THEMES, skinId, VICTORY_CHARS, VICTORY_THEME, type SkinTheme } from "./skins";
+import { equippedSkin, equipSkin, ownedSkins } from "./wallet";
 
 export const THEME_KEY: Record<SkinTheme, TextKey> = {
-  swim: "skinSwim",
-  xmas: "skinXmas",
-  halloween: "skinHalloween",
-  school: "skinSchool",
-  newyear: "skinNewyear",
-  japan: "skinJapan",
-  china: "skinChina",
-  usa: "skinUsa",
-  swap: "skinSwap",
   tiger: "skinTiger",
   summer: "skinSummer",
   victory: "skinVictory",
@@ -36,8 +27,7 @@ export function SkinTab({ t, onChange }: { t: (k: TextKey) => string; onChange: 
   const cards: { id: string | null; label: string; limited?: boolean; reward?: boolean }[] = [
     { id: null, label: t("shopDefault") },
     ...LIMITED_THEMES.filter((th) => hasLimited(th, char)).map((th) => ({ id: skinId(char, th), label: t(THEME_KEY[th]), limited: true })),
-    { id: skinId(char, VICTORY_THEME), label: t("skinVictory"), limited: true, reward: true },
-    ...SKIN_THEMES.map((th) => ({ id: skinId(char, th), label: t(THEME_KEY[th]) })),
+    ...(VICTORY_CHARS.includes(char) ? [{ id: skinId(char, VICTORY_THEME), label: t("skinVictory"), limited: true, reward: true }] : []),
   ];
   return (
     <div className="shop-skins">
@@ -64,12 +54,8 @@ export function SkinTab({ t, onChange }: { t: (k: TextKey) => string; onChange: 
                 <button type="button" className="secondary" onClick={() => act(() => equipSkin(char, id))}>
                   {t("shopEquip")}
                 </button>
-              ) : limited ? (
-                <span className="skin-tag">{t(reward ? "pwLeagueOnly" : "shopLimitedLock")}</span>
               ) : (
-                <button type="button" className="primary" disabled={coupons() < SKIN_PRICE} title={coupons() < SKIN_PRICE ? t("shopNoCoupon") : undefined} onClick={() => act(() => buySkin(id!))}>
-                  {t("shopBuy")} · 🎟 {SKIN_PRICE}
-                </button>
+                <span className="skin-tag">{t(reward ? "pwLeagueOnly" : "shopLimitedLock")}</span>
               )}
             </div>
           );

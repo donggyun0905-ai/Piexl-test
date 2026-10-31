@@ -4,7 +4,6 @@ import type { TextKey } from "../i18n";
 import { drawLobby } from "../lobby/lobbyArt";
 import { LOBBY_H, LOBBY_W } from "../lobby/lobbyMap";
 import { LOBBY_PRICE, LOBBY_THEMES, type LobbyTheme } from "../lobby/lobbyThemes";
-import { THEME_KEY } from "./SkinTab";
 import { buyLobby, coupons, lobbyOwned, lobbyTheme, setLobbyTheme } from "./wallet";
 
 function LobbyPreview({ theme }: { theme: LobbyTheme }) {
@@ -24,7 +23,9 @@ function LobbyPreview({ theme }: { theme: LobbyTheme }) {
   return <canvas ref={ref} width={LOBBY_W} height={LOBBY_H} className="lobby-preview" aria-hidden="true" />;
 }
 
-const name = (th: LobbyTheme, t: (k: TextKey) => string) => (th === "arcade" ? t("lobbyArcade") : th === "swim" ? t("lobbyBeach") : t(THEME_KEY[th]));
+/** 로비 테마 이름 */
+const LOBBY_KEY: Record<LobbyTheme, TextKey> = { arcade: "lobbyArcade", swim: "lobbyBeach", xmas: "skinXmas", halloween: "skinHalloween", school: "skinSchool", newyear: "skinNewyear", japan: "skinJapan", china: "skinChina", usa: "skinUsa" };
+const name = (th: LobbyTheme, t: (k: TextKey) => string) => t(LOBBY_KEY[th]);
 
 export function LobbyTab({ t, onChange }: { t: (k: TextKey) => string; onChange: () => void }) {
   const [, redraw] = useState(0);

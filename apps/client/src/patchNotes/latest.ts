@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.293",
+    date: "2026-10-31",
+    items: {
+      ko: ["스킨 정리: 상점 테마 스킨 9종(수영복·크리스마스·할로윈·학교·새해·일본풍·중국풍·미국풍·성별 바꾸기)을 없애고 한정 스킨만 남김 · 리그 우승 '승리' 스킨은 장수·파수꾼·거너·추적자·잊혀진 자 5명만 · 뽑기는 한정 테마 1% · 이벤트 코인 22% · 쿠폰 77% · 나만의 스킨은 그대로"],
+      en: ["Skin cleanup: the 9 shop theme skins (Swimsuit, Christmas, Halloween, School, New Year, Japanese, Chinese, American, Gender Swap) are gone; only limited skins remain · the league 'Victory' skin is now for 5 characters (General, Warden, Gunner, Tracker, The Forgotten) · gacha: limited theme 1%, event coins 22%, coupons 77% · My Own Skin is unchanged"],
+      ja: ["スキン整理: ショップのテーマスキン9種（水着・クリスマス・ハロウィン・学校・お正月・和風・中華風・アメリカ風・性別チェンジ）を廃止し限定スキンのみに · リーグ優勝「勝利」スキンは武将・番人・ガンナー・追跡者・忘れられし者の5人のみ · ガチャは限定テーマ1%・イベントコイン22%・クーポン77% · マイスキンはそのまま"],
+    },
+  },
+  {
     version: "0.48.292",
     date: "2026-10-31",
     items: {

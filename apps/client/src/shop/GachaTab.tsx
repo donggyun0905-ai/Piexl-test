@@ -5,7 +5,7 @@ import type { TextKey } from "../i18n";
 import { GachaReveal } from "./GachaReveal";
 import { SkinPreview } from "./SkinPreview";
 import { THEME_KEY } from "./SkinTab";
-import { ALL_SKINS, GACHA10_PRICE, GACHA_PRICE, GACHA_REFUND, LIMITED_REFUND, LIMITED_THEMES, skinId, type LimitedTheme } from "./skins";
+import { ALL_SKINS, GACHA10_PRICE, GACHA_PRICE, LIMITED_REFUND, LIMITED_THEMES, skinId, type LimitedTheme } from "./skins";
 import { coupons, gacha, ownedSkins, type GachaPrize } from "./wallet";
 
 /** 배너에 보여 줄 캐릭터 (테마마다) */
@@ -45,7 +45,7 @@ export function GachaTab({ t, onChange }: { t: (k: TextKey) => string; onChange:
           {t("shopGacha10")} · 🎟 {GACHA10_PRICE}
         </button>
       </div>
-      <p className="shop-note">{t("shopGachaNote").replace("{n}", String(GACHA_REFUND)).replace("{m}", String(LIMITED_REFUND))}</p>
+      <p className="shop-note">{t("shopGachaNote").replace("{m}", String(LIMITED_REFUND))}</p>
       {result.length > 0 && <GachaReveal key={pulls} prizes={result} t={t} onClose={() => setResult([])} />}
     </div>
   );
