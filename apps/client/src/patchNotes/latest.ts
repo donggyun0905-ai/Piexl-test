@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.291",
+    date: "2026-10-31",
+    items: {
+      ko: ["좌우가 반대로 나오던 그림 고침: 변희 봉황 공격 · 각성 거미 공격"],
+      en: ["Fixed mirrored poses: Byeonhui phoenix attack · awakened spider attack"],
+      ja: ["左右が逆になっていた絵を修正: ビョンヒの鳳凰の攻撃 · 覚醒した蜘蛛の攻撃"],
+    },
+  },
+  {
     version: "0.48.290",
     date: "2026-10-31",
     items: {
