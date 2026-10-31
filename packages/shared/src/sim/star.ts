@@ -7,6 +7,7 @@ import { createRng, deriveSeed } from "../rng";
 import { damageEnemy, healPlayer, ignite } from "./combat";
 import type { StarNode } from "./starTypes";
 import type { EnemyState, PlayerState, RunState } from "./types";
+import { statusHit } from "./statusHit";
 import { addEffect, dist2, hasPerk, segDist2, weaponOf } from "./util";
 
 const styleOf = (p: PlayerState): StarStyle => weaponOf(p).star ?? "plain";
@@ -130,7 +131,9 @@ function lineTick(s: RunState): void {
     const w = e.r + STAR.lineW;
     const n = links.filter(([a, b]) => segDist2(e, a, b) <= w * w).length;
     if (n === 0) continue;
-    damageEnemy(s, e, dmg * n, 0, 0);
+    // 서리 별: 빛줄기 피해가 서리 피해 (서리 색 숫자)
+    if (st === "frost") statusHit(s, e, "frost", dmg * n);
+    else damageEnemy(s, e, dmg * n, 0, 0);
     if (st === "frost") e.slowTicks = Math.max(e.slowTicks ?? 0, STAR.frostSlow);
     if (st === "sun") ignite(e, p.stats.damage * STAR.sunBurn);
   }

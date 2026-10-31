@@ -6,6 +6,7 @@ import { createRng, deriveSeed } from "../rng";
 import { blastAt, damageEnemy, healPlayer, ignite } from "./combat";
 import { seatNo } from "./party";
 import type { EnemyState, ProjectileState, RunState } from "./types";
+import { statusHit } from "./statusHit";
 import { addEffect, dist2, hasPerk, keepInRoom, markDot, normalize, roomGrid } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -26,6 +27,9 @@ const R = {
   BLAZE_BURN: 0.5,
   /** 얼음: 경직 틱 (1.5초, 보스는 절반) */
   FROST_STUN: 90,
+  /** 얼음·빛: 추가 효과가 터질 때 서리·광휘 피해 (부적 피해 배율) */
+  FROST_HIT: 0.5,
+  RADIANT_HIT: 0.5,
   /** 벚꽃: 폭발 범위·피해 비율 */
   BLOOM_RADIUS: 32,
   BLOOM_MUL: 1.5,
@@ -164,14 +168,20 @@ export function charmHit(s: RunState, pr: ProjectileState, e: EnemyState, dx: nu
   if (kind === "blaze") ignite(e, pr.damage * R.BLAZE_BURN);
   if (!fire) return;
   if (kind === "smite") smite(s, e, pr.damage);
-  else if (kind === "spark") damageEnemy(s, e, pr.damage, dx, dy);
+  else if (kind === "spark") statusHit(s, e, "shock", pr.damage, dx, dy);
   else if (kind === "blaze") blastAt(s, e.x, e.y, R.BLAZE_BLAST, pr.damage * mul * 0.5, { exclude: e });
-  else if (kind === "frost") e.stunTicks = ENEMIES[e.kind].boss ? R.FROST_STUN / 2 : R.FROST_STUN;
+  else if (kind === "frost") {
+    statusHit(s, e, "frost", pr.damage * R.FROST_HIT, dx, dy);
+    e.stunTicks = ENEMIES[e.kind].boss ? R.FROST_STUN / 2 : R.FROST_STUN;
+  }
   else if (kind === "bloom") blastAt(s, pr.x, pr.y, R.BLOOM_RADIUS, pr.damage * R.BLOOM_MUL, { bloom: true });
-  else if (kind === "radiant" && !ENEMIES[e.kind].boss) {
-    e.x += dx * R.RADIANT_PUSH;
-    e.y += dy * R.RADIANT_PUSH;
-    keepInRoom(e, roomGrid(s));
+  else if (kind === "radiant") {
+    statusHit(s, e, "radiance", pr.damage * R.RADIANT_HIT, dx, dy);
+    if (!ENEMIES[e.kind].boss) {
+      e.x += dx * R.RADIANT_PUSH;
+      e.y += dy * R.RADIANT_PUSH;
+      keepInRoom(e, roomGrid(s));
+    }
   } else if (kind === "shade") shadeMissiles(s, out, pr.damage);
   else if (kind === "quake") p.hasteTicks = R.HASTE_TICKS;
   triggered(s, e);

@@ -1,7 +1,7 @@
 // 마법사 마법 문양: 지금 무기 공격은 매직 미사일 같은 일반 공격(약하게), 공격할 때마다 발밑 마법진에 한 획씩 새겨지고
 // 다 새겨지면 무기에 맞는 큰 마법이 가까운 적에게 떨어짐 (불꽃 폭발·번개·얼음·혜성·별비·그림자·공허 등)
 import { ENEMIES, type WeaponId } from "../content";
-import { blastAt, ignite } from "./combat";
+import { blastAt, dotDamage, ignite } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, normalize, weaponOf } from "./util";
 
@@ -20,6 +20,8 @@ const R = {
   STUN: 40,
   BOLTS: 3,
   PULL: 18,
+  /** 서리 주문: 맞은 적에게 서리 피해 (공격력 배율) */
+  CHILL_DMG: 0.3,
 };
 export { R as RUNE_RULES };
 
@@ -121,6 +123,7 @@ function cast(s: RunState, dmg: number): void {
   blastAt(s, at.x, at.y, sp.r, dmg * sp.mul, { still: true });
   for (const e of hit) {
     if (sp.kind === "nova" || sp.kind === "comet") ignite(e, dmg * R.BURN);
+    if (sp.kind === "frost") dotDamage(s, e, "frost", dmg * R.CHILL_DMG);
     if (sp.kind === "frost" && !ENEMIES[e.kind].boss) e.slowTicks = Math.max(e.slowTicks ?? 0, R.CHILL);
   }
   fx(at.x, at.y, sp.r);

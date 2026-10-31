@@ -5,7 +5,7 @@ import { ENEMIES } from "../content";
 import { blastAt, COMBAT_RULES } from "./combat";
 import { blocksShot } from "./layout";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { addEffect, hasPerk, keepInRoom, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid, weaponOf } from "./util";
+import { addEffect, hasPerk, keepInRoom, markDot, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid, weaponOf } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -147,7 +147,10 @@ export function beamHit(s: RunState, e: EnemyState, dmg: number, ticks: number):
   const p = s.player;
   if (e.immune) return;
   if ((e.stunTicks ?? 0) > 0) dmg *= R.STUN_MUL;
-  e.hp -= dmg * (1 + COMBAT_RULES.MELT_ADD * (e.melt ?? 0));
+  // 장갑 용해로 더 들어간 몫은 부식 피해 (부식 색 숫자)
+  const melt = dmg * COMBAT_RULES.MELT_ADD * (e.melt ?? 0);
+  e.hp -= dmg + melt;
+  markDot(s, e, "rot", melt);
   e.hitFlash = Math.max(e.hitFlash, 2);
   if (hasPerk(p, "armorMelt")) e.melt = Math.min(R.MELT_MAX, (e.melt ?? 0) + 1);
   if (hasPerk(p, "heatBuildup")) {

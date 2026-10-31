@@ -19,7 +19,7 @@ export function zap(s: RunState, e: EnemyState, dmg: number): void {
   if (e.hp <= 0) return;
   let d = dmg * (1 + (e.zsShock ?? 0) * Z.shockTaken);
   if (isBoss(e) && hasPerk(p, "zsGiant")) d *= K.zsGiant.mul;
-  strike(s, e, d);
+  strike(s, e, d, 0, "shock");
   e.zsShock = Math.min(Z.shockMax, (e.zsShock ?? 0) + 1);
   if (!p.zsGod) p.zsWrath = (p.zsWrath ?? 0) + (hasPerk(p, "zsWrath") ? K.zsWrath.mul : 1);
   if (e.zsShock >= Z.shockMax && hasPerk(p, "zsOverload")) {

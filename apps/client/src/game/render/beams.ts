@@ -48,13 +48,7 @@ export function drawDevices(ctx: CanvasRenderingContext2D, s: RunState, snap: Sn
       ctx.fillRect(x, top, 1, 1);
     }
   }
-  for (const e of s.enemies) {
-    if ((e.stunTicks ?? 0) <= 0) continue;
-    // 기절: 머리 위에 도는 별 두 개
-    const a = s.tick * 0.2;
-    ctx.fillStyle = "#ffe070";
-    for (const k of [0, Math.PI]) ctx.fillRect(snap(e.x + Math.cos(a + k) * e.r), snap(e.y - e.r - 3 + Math.sin(a + k)), 1, 1);
-  }
+  // 기절 별은 모든 적 공통으로 render/statusMarks
 }
 
 /** 플레이어 둘레: 거울 드론, 보호막 고리, 리액터 게이지 (플레이어 위에 그림) */

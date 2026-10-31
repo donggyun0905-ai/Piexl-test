@@ -27,16 +27,7 @@ export function drawKiShot(ctx: CanvasRenderingContext2D, pr: ProjectileState, x
 export function drawBrawl(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   const p = s.player;
   const w: WeaponDef = WEAPONS[p.weaponId];
-  // 도망가는 적: 머리 위 느낌표
-  for (const e of s.enemies) {
-    const ex = snap(lerp(e.prevX, e.x, alpha));
-    const ey = snap(lerp(e.prevY, e.y, alpha));
-    if ((e.fearTicks ?? 0) > 0) {
-      ctx.fillStyle = "#ffe070";
-      ctx.fillRect(ex - 0.5, ey - e.r - 8, 1, 3);
-      ctx.fillRect(ex - 0.5, ey - e.r - 4, 1, 1);
-    }
-  }
+  // 도망가는 적(공포) 표시는 모든 적 공통으로 render/statusMarks
   if (w.kind !== "combo" || s.over) return;
   const x = snap(lerp(p.prevX, p.x, alpha));
   const y = snap(lerp(p.prevY, p.y, alpha));

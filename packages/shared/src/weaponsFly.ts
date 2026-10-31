@@ -49,6 +49,8 @@ export const FLY = {
   /** 번개 수·배율 · 서리 느려짐·멈춤 · 흡혈 비율 · 신기루 지연·반경·배율 · 그림자 분신 지연·배율 · 독 */
   bolts: 3,
   boltMul: 0.6,
+  /** 서리 발톱 서리 피해 (공격력 배율) */
+  frostMul: 0.3,
   frostSlow: 60,
   frostStun: 15,
   leech: 0.08,

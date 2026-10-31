@@ -26,6 +26,7 @@ function onSwoopHit(s: RunState, e: EnemyState, dmg: number): void {
   if (style === "twin") strike(s, e, dmg);
   else if (style === "venom") poison(e, dmg * F.venom, F.venomTicks);
   else if (style === "frost") {
+    strike(s, e, dmg * F.frostMul, 0, "frost");
     if (e.kind !== "dummy") e.slowTicks = Math.max(e.slowTicks ?? 0, F.frostSlow);
     stun(e, F.frostStun);
   } else if (style === "blood") healPlayer(s, dmg * F.leech);
@@ -44,7 +45,7 @@ function finish(s: RunState, dmg: number, from: { x: number; y: number }): void 
   else if (style === "thunder") {
     let at = { x: p.x, y: p.y - 4 };
     for (const e of alive(s).sort((a, b) => dist2(a, p) - dist2(b, p) || a.id - b.id).slice(0, F.bolts)) {
-      strike(s, e, dmg * F.boltMul);
+      strike(s, e, dmg * F.boltMul, 0, "shock");
       addEffect(s, { kind: "bolt", x: at.x, y: at.y, dirX: 0, dirY: 0, size: 2, maxTicks: 10, toX: e.x, toY: e.y, width: 2 });
       at = e;
     }

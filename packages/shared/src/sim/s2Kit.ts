@@ -1,8 +1,9 @@
 // 시즌 2 캐릭터 공용 도우미: 살아 있는 적 · 부채꼴·선·원 안의 적 · 맞히기 · 멈추기 · 탄 쏘기
 import { ENEMIES } from "../enemyDefs";
 import { damageEnemy } from "./combat";
+import { statusHit } from "./statusHit";
 import type { S2Rush } from "./s2Types";
-import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
+import type { DotKind, EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, normalize, roomGrid } from "./util";
 
 /** 맞힐 수 있는 적 (상자·차례 아닌 탑 빼고) */
@@ -38,11 +39,12 @@ export function inCircle(s: RunState, x: number, y: number, r: number): EnemySta
   return alive(s).filter((e) => dist2(e, { x, y }) <= (r + e.r) ** 2);
 }
 
-/** 나에게서 밀어내는 쪽으로 맞힘 (push: 더 밀침, 보스는 안 밀림) */
-export function strike(s: RunState, e: EnemyState, dmg: number, push = 0): void {
+/** 나에게서 밀어내는 쪽으로 맞힘 (push: 더 밀침, 보스는 안 밀림 · kind: 상태이상 기술이면 그 색 피해 숫자) */
+export function strike(s: RunState, e: EnemyState, dmg: number, push = 0, kind?: DotKind): void {
   const p = s.player;
   const d = normalize(e.x - p.x, e.y - p.y) ?? [p.faceX, p.faceY];
-  damageEnemy(s, e, dmg, d[0], d[1]);
+  if (kind) statusHit(s, e, kind, dmg, d[0], d[1]);
+  else damageEnemy(s, e, dmg, d[0], d[1]);
   if (push > 0 && !isBoss(e)) {
     e.x += d[0] * push;
     e.y += d[1] * push;

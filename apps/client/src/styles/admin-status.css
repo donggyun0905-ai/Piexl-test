@@ -1,0 +1,54 @@
+/* 관리자: 항목 그림(AdminThumb) · 상태이상 정리본(StatusView) */
+/* 항목 그림 (캐릭터·무기·아이템·적·보스) */
+.admin-thumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  margin-right: 6px;
+  background: rgb(0 0 0 / 0.3);
+  border-radius: 4px;
+  image-rendering: pixelated;
+}
+.admin-thumb canvas {
+  width: 100%;
+  height: 100%;
+}
+.admin-dot-icon {
+  width: 15px;
+  height: 15px;
+  margin-right: 4px;
+  vertical-align: -2px;
+  image-rendering: pixelated;
+}
+.admin-dot-icon.big {
+  width: 22px;
+  height: 22px;
+}
+.admin-dot-sample {
+  font-size: 16px;
+  /* 죽음(검은 숫자)도 보이게 둘레를 밝게 */
+  text-shadow: 0 0 2px #fff, 1px 1px 0 #000;
+}
+.admin-status-line {
+  cursor: pointer;
+}
+.admin-status-line:hover {
+  background: rgb(255 255 255 / 0.05);
+}
+.admin-status-table td {
+  vertical-align: middle;
+}
+.admin-status-users {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin: 4px 0;
+}
+.admin-status-users .admin-thumb {
+  margin-right: 0;
+}
+.admin-status-table small {
+  display: block;
+  color: var(--muted);
+}

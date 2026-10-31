@@ -6,7 +6,8 @@ import { createRng, deriveSeed } from "../rng";
 import { SCRIBE_PERKS as K } from "../itemsScribe";
 import { SCRIBE as S, type ScribeWord } from "../weaponsScribe";
 import { blastAt, damageEnemy, healPlayer, ignite } from "./combat";
-import type { EnemyState, PlayerState, RunState } from "./types";
+import type { DotKind, EnemyState, PlayerState, RunState } from "./types";
+import { statusHit } from "./statusHit";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
 import { raiseShield } from "./imugiMods";
 
@@ -25,11 +26,12 @@ export function scribeKill(s: RunState, e: EnemyState): void {
 
 const alive = (s: RunState) => s.enemies.filter((e) => e.hp > 0 && !e.svBox && !e.immune);
 
-/** 글자 맞힘: 피해 + 검열이면 잠깐 멈춤 */
-function hit(s: RunState, e: EnemyState, dmg: number): void {
+/** 글자 맞힘: 피해 + 검열이면 잠깐 멈춤 (kind: 상태이상 글자면 그 색 피해 숫자) */
+function hit(s: RunState, e: EnemyState, dmg: number, kind?: DotKind): void {
   const p = s.player;
   const d = normalize(e.x - p.x, e.y - p.y) ?? [p.faceX, p.faceY];
-  damageEnemy(s, e, dmg, d[0], d[1]);
+  if (kind) statusHit(s, e, kind, dmg, d[0], d[1]);
+  else damageEnemy(s, e, dmg, d[0], d[1]);
   if (hasPerk(p, "censor") && !ENEMIES[e.kind].boss) e.stunTicks = Math.max(e.stunTicks ?? 0, K.censor.stun);
 }
 
@@ -71,7 +73,7 @@ function write(s: RunState, word: ScribeWord, power: number): void {
       break;
     case "seal":
       for (const e of around(s, p.x, p.y, S.sealR)) {
-        hit(s, e, dmg * 0.6);
+        hit(s, e, dmg * 0.6, "curse");
         if (e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? S.sealStun / 2 : S.sealStun);
       }
       addEffect(s, { kind: "ring", x: p.x, y: p.y, dirX: 0, dirY: 0, size: S.sealR, maxTicks: 20, width: 2 });
@@ -81,7 +83,7 @@ function write(s: RunState, word: ScribeWord, power: number): void {
       const list = alive(s).sort((a, b) => (b.ink ?? 0) - (a.ink ?? 0) || dist2(a, p) - dist2(b, p) || a.id - b.id).slice(0, S.boltChain);
       let from = { x: p.x, y: p.y - 6 };
       for (const e of list) {
-        hit(s, e, dmg * 0.8);
+        hit(s, e, dmg * 0.8, "shock");
         addEffect(s, { kind: "bolt", x: from.x, y: from.y, dirX: 0, dirY: 0, size: 2, maxTicks: 10, toX: e.x, toY: e.y, width: 2 });
         from = e;
       }
@@ -89,14 +91,14 @@ function write(s: RunState, word: ScribeWord, power: number): void {
     }
     case "frost":
       for (const e of around(s, p.x, p.y, S.frostR)) {
-        hit(s, e, dmg * 0.8);
+        hit(s, e, dmg * 0.8, "frost");
         if (e.kind !== "dummy" && !ENEMIES[e.kind].boss) e.stunTicks = Math.max(e.stunTicks ?? 0, S.frostStun);
       }
       addEffect(s, { kind: "oFrost", x: p.x, y: p.y, dirX: 0, dirY: 0, size: S.frostR, maxTicks: 24, tint: "#8ad8ff" });
       break;
     case "flame":
       for (const e of around(s, at.x, at.y, S.flameR)) {
-        hit(s, e, dmg * 0.6);
+        hit(s, e, dmg * 0.6, "burn");
         ignite(e, dmg);
       }
       addEffect(s, { kind: "oFlame", x: at.x, y: at.y, dirX: 0, dirY: -1, size: S.flameR, width: -1, maxTicks: 22 });
@@ -126,7 +128,7 @@ function write(s: RunState, word: ScribeWord, power: number): void {
       // 가장 체력이 적은 적 하나를 크게
       const e = alive(s).filter((x) => dist2(x, p) < (p.stats.range * 1.6) ** 2).sort((a, b) => a.hp - b.hp || a.id - b.id)[0];
       if (e) {
-        hit(s, e, dmg * S.voidMul);
+        hit(s, e, dmg * S.voidMul, "voidbolt");
         addEffect(s, { kind: "burst", x: e.x, y: e.y, dirX: 0, dirY: 0, size: 18, maxTicks: 18 });
       }
       break;

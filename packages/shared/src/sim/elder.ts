@@ -39,14 +39,14 @@ function pulse(s: RunState, g: ElderSeal, last: boolean): void {
       return;
     case "walls":
       for (const e of list) {
-        strike(s, e, g.dmg);
+        strike(s, e, g.dmg, 0, "frost");
         stun(e, f.stun ?? 0);
       }
       addEffect(s, { kind: "elWalls", ...fx, size: g.r, maxTicks: 18 });
       return;
     case "pit":
       for (const e of list) {
-        strike(s, e, g.dmg);
+        strike(s, e, g.dmg, 0, "frost");
         stun(e, f.stun ?? 0);
       }
       return;
@@ -65,26 +65,26 @@ function pulse(s: RunState, g: ElderSeal, last: boolean): void {
     case "thunder": {
       const e = list.sort((a, b) => dist2(a, g) - dist2(b, g) || a.id - b.id)[0];
       if (!e) return;
-      strike(s, e, g.dmg);
+      strike(s, e, g.dmg, 0, "shock");
       addEffect(s, { kind: "bolt", x: e.x, y: e.y - 40, dirX: 0, dirY: 0, size: 2, maxTicks: 10, toX: e.x, toY: e.y, width: 2 });
       return;
     }
     case "frost":
       for (const e of list) {
-        strike(s, e, g.dmg);
+        strike(s, e, g.dmg, 0, "frost");
         stun(e, f.stun ?? 0);
       }
       addEffect(s, { kind: "oFrost", ...fx, size: g.r, maxTicks: 24, tint: "#8ad8ff" });
       return;
     case "wind":
-      for (const e of list) strike(s, e, g.dmg);
+      for (const e of list) strike(s, e, g.dmg, 0, "storm");
       return;
     case "fist":
       for (const e of list) strike(s, e, g.dmg, f.push);
       addEffect(s, { kind: "elFist", ...fx, size: g.r, maxTicks: 18 });
       return;
     case "heaven":
-      for (const e of list) strike(s, e, g.dmg);
+      for (const e of list) strike(s, e, g.dmg, 0, "radiance");
       addEffect(s, { kind: "elPillar", ...fx, size: g.r * 0.5, maxTicks: 14, tint: "#fff4c0" });
       if (last) {
         blastAt(s, g.x, g.y, g.r * 1.2, g.dmg * L.heavenFinal, { still: true });

@@ -4,6 +4,7 @@ import { IMUGI_PERKS as K } from "../itemsImugi";
 import { IMUGI, DRAGON_COLORS, type DragonArt } from "../weaponsImugi";
 import { blastAt, damageEnemy, dotDamage } from "./combat";
 import type { EnemyState, RunState } from "./types";
+import { statusHit } from "./statusHit";
 import { addEffect, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
 import { createRng, deriveSeed } from "../rng";
 import { raiseShield } from "./imugiMods";
@@ -41,7 +42,7 @@ export function dragonArt(s: RunState, e: EnemyState, art: DragonArt, dmg: numbe
         const rr = IMUGI.holy.radius + o.r;
         if ((o.x - e.x) ** 2 + (o.y - e.y) ** 2 > rr * rr) continue;
         const d = normalize(o.x - p.x, o.y - p.y) ?? [p.faceX, p.faceY];
-        damageEnemy(s, o, dmg * IMUGI.holy.mul, d[0], d[1]);
+        statusHit(s, o, "radiance", dmg * IMUGI.holy.mul, d[0], d[1]);
         if (!ENEMIES[o.kind].boss) {
           o.x += d[0] * IMUGI.holy.push;
           o.y += d[1] * IMUGI.holy.push;

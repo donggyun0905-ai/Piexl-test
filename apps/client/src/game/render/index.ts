@@ -7,6 +7,7 @@ import { drawTelegraphs } from "./telegraphs";
 import { drawDevices, drawEngineerGear } from "./beams";
 import { drawOrbitField, drawOrbs } from "./orbs";
 import { drawBrawl } from "./brawl";
+import { drawStatusAir, drawStatusGround } from "./statusMarks";
 import { drawGunner } from "./guns";
 import { drawPets } from "./pets";
 import { drawBeastTiger, isTiger } from "./beastTiger";
@@ -190,7 +191,9 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawWandererGround(ctx, s, snap);
     drawSecretGround(ctx, s, snap);
   });
+  drawStatusGround(ctx, s, alpha, snap);
   drawEnemies(ctx, s, alpha, snap);
+  drawStatusAir(ctx, s, alpha, snap);
   drawPilgrim(ctx, s, opt.pilgrimLine);
   drawInkMarks(ctx, s, alpha, snap);
   drawClockMarks(ctx, s, snap);
