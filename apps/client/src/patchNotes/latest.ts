@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.303",
+    date: "2026-10-31",
+    items: {
+      ko: ["방 테두리 벽: 출구가 있는 위쪽 벽만 두껍게, 옆·아래 벽은 얇게 (움직일 수 있는 범위는 그대로)"],
+      en: ["Room border walls: only the top wall with the exits stays thick; side and bottom walls are now thin (the walkable area is unchanged)"],
+      ja: ["部屋の外壁: 出口のある上の壁だけ厚く、横・下の壁は薄く（動ける範囲はそのまま）"],
+    },
+  },
+  {
     version: "0.48.302",
     date: "2026-10-31",
     items: {
