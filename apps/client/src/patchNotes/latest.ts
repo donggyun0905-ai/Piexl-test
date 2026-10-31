@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.289",
+    date: "2026-10-31",
+    items: {
+      ko: ["새 캐릭터 그림: 변희 각성 동물 10종 (불꽃 곰·암흑 멧돼지·결정 거미·백금 독수리·보랏빛 코브라·불꽃 갑주 봉황·어둠의 박쥐 드래곤·황금 갑주 코끼리·황금 전갈·푸른 불꽃 늑대) · 앞·뒤·왼·오 모습과 공격·걷기·맞음·쓰러짐·대시 자세"],
+      en: ["New art: Byeonhui's 10 awakened forms (flame bear, dark boar, crystal spider, platinum eagle, violet cobra, flame-armored phoenix, dark bat dragon, golden-armored elephant, golden scorpion, blue-flame wolf) · front/back/left/right with attack, walk, flinch, downed and dash poses"],
+      ja: ["新しいキャラ絵: ビョンヒの覚醒動物10種（炎の熊・闇の猪・結晶の蜘蛛・白金の鷲・紫のコブラ・炎鎧の鳳凰・闇のコウモリドラゴン・黄金鎧の象・黄金の蠍・青い炎の狼）· 前・後ろ・左・右と攻撃・歩き・ひるみ・ダウン・ダッシュのポーズ"],
+    },
+  },
+  {
     version: "0.48.288",
     date: "2026-10-31",
     items: {

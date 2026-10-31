@@ -48,8 +48,6 @@ export function drawSprite(ctx: CanvasRenderingContext2D, name: string, x: numbe
 /** 방향 시트로 넣은 캐릭터 그림: 이름 → 한 칸 크기, 발 아래 여백 */
 /** src: 그림 파일의 한 칸 크기가 다를 때 (빛의 사도 성장 그림 2배 촘촘 · 몰락한 왕 96칸 → 보통 크기로 줄여 그림) */
 /** v2: 새 시트 4칸 × 5줄 (칸 = 앞·뒤·왼·오): 1줄 서기 · 2줄 공격 · 3줄 걷기(왼발) · 4줄 걷기(오른발) · 5줄 맞음·쓰러짐·대시 오른쪽·대시 왼쪽 (scripts/art/import_v2.py) */
-/** 변희 동물 중 새 4방향 그림(v2)이 들어온 것 */
-const NEW_ANIMALS = ["eagle", "snake", "boar", "scorpion", "bear", "wolf", "spider", "phoenix", "elephant", "bat"];
 const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number; src?: number; v2?: true }>> = {
   mage: { size: 32, footPad: 2, src: 128, v2: true },
   drifter: { size: 32, footPad: 2, src: 128, v2: true },
@@ -96,7 +94,7 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number;
   miner: { size: 64, footPad: 3 },
   voyager: { size: 48, footPad: 3 }, zeus: { size: 48, footPad: 3 }, pilgrim: { size: 80, footPad: 3 }, crownKing: { size: 80, footPad: 3 }, fallenKing: { size: 50, footPad: 2, src: 96 }, lux: { size: 48, footPad: 3 }, lux2: { size: 56, footPad: 3, src: 112 }, lux3: { size: 64, footPad: 3, src: 128 }, lux4: { size: 72, footPad: 3, src: 144 },
   // 변희가 변한 동물 (옆모습만, render/actors가 옆을 보게 그림)
-  ...Object.fromEntries(["wolf", "bear", "eagle", "snake", "boar", "scorpion", "bat", "elephant", "spider", "phoenix"].flatMap((a) => [[`morph-${a}`, { size: 32, footPad: 2, ...(NEW_ANIMALS.includes(a) ? { src: 128, v2: true as const } : {}) }], [`morph-${a}-evo`, { size: 48, footPad: 3 }]])),
+  ...Object.fromEntries(["wolf", "bear", "eagle", "snake", "boar", "scorpion", "bat", "elephant", "spider", "phoenix"].flatMap((a) => [[`morph-${a}`, { size: 32, footPad: 2, src: 128, v2: true as const }], [`morph-${a}-evo`, { size: 48, footPad: 3, src: 128, v2: true as const }]])),
   abandoned: { size: 32, footPad: 2, src: 128, v2: true },
   abandoned2: { size: 32, footPad: 2, src: 128, v2: true },
   abandoned3: { size: 32, footPad: 2, src: 128, v2: true },

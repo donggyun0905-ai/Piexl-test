@@ -20,7 +20,7 @@ FILES = [("1", 4, 2, [0, 1]), ("2", 4, 2, [2, 3]), ("3", 4, 1, [4])]
 FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", "brawler", "gunner", "ninja", "summoner", "chronomancer", "beast",
              "bedouin", "imugi", "general", "novice", "apostle", "abandoned", "abandoned2", "abandoned3", "novice10", "novice15", "beasttiger",
              "titan", "oni", "oni_god", "idra", "morph-snake", "morph-eagle", "morph-boar", "morph-scorpion",
-             "morph-bear", "morph-wolf", "byeonhui"}
+             "morph-bear", "morph-wolf", "byeonhui", "morph-eagle-evo"}
 # 서기·걷기에서 오른쪽을 보는 원본 칸 (기본 3 = 넷째 칸, GPT가 셋째 칸에 오른쪽을 그린 캐릭터만)
 STAND_RIGHT = {"abandoned": 2, "abandoned2": 2}
 # 서기·걷기에서 고른 칸이 왼쪽을 보는 캐릭터: 뒤집어서 오른쪽으로 (사용자 확인)
@@ -34,9 +34,27 @@ ATTACK_LR = {
     "bedouin": ("2", "2f"), "abandoned2": ("2", "2f"), "novice": ("2", "2f"), "summoner": ("3f", "3"),
     "novice10": ("2", "2f"), "novice15": ("2", "2f"), "morph-eagle": ("3f", "3"),
     "morph-wolf": ("3f", "3"), "morph-bear": ("3f", "3"), "morph-phoenix": ("3", "3f"),
+    # 각성 동물: 공격 줄 왼·오 칸이 바뀌어 있음
+    **{f"morph-{a}-evo": ("2", "3") for a in ("bear", "boar", "eagle", "snake", "phoenix", "bat")},
 }
 # 대시 오른쪽 칸이 왼쪽을 보는 캐릭터: 그 칸을 뒤집어 오른쪽으로, 원래 그림은 왼쪽으로 (사용자 확인)
 DASH_FLIP = {"morph-bear"}
+
+
+def cut(pts, cw, cols):
+    """붙은 두 자세를 칸 경계 둘레(±30%)에서 점이 가장 적은 세로줄로 나눔 (날개 끝이 옆 칸에 잘려 붙지 않게)"""
+    hist = {}
+    for x, _ in pts: hist[x] = hist.get(x, 0) + 1
+    lo, hi = min(hist), max(hist)
+    cuts = []
+    for k in range(1, cols):
+        b = k * cw
+        if not lo < b < hi: continue
+        xs = range(max(lo, int(b - cw * 0.3)), min(hi, int(b + cw * 0.3)) + 1)
+        cuts.append(min(xs, key=lambda x: (hist.get(x, 0), abs(x - b))))
+    groups = {}
+    for q in pts: groups.setdefault(sum(q[0] >= c for c in cuts), []).append(q)
+    return list(groups.values())
 
 
 def pieces(img, cols, rows):
@@ -66,7 +84,7 @@ def pieces(img, cols, rows):
             split = {}
             for q in pts: split.setdefault(min(cols - 1, int(q[0] / cw)), []).append(q)
             sizes = sorted((len(g) for g in split.values()), reverse=True)
-            groups = list(split.values()) if len(sizes) > 1 and sizes[1] > len(pts) * 0.2 else [pts]
+            groups = cut(pts, cw, cols) if len(sizes) > 1 and sizes[1] > len(pts) * 0.2 else [pts]
             for g in groups:
                 cx = sum(p[0] for p in g) / len(g)
                 cy = sum(p[1] for p in g) / len(g)
