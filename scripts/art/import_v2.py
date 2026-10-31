@@ -33,7 +33,7 @@ ATTACK_LR = {
     "imugi": ("2", "3"), "general": ("2", "3"), "apostle": ("2", "3"), "abandoned": ("2", "3"), "abandoned3": ("2", "3"),
     "bedouin": ("2", "2f"), "abandoned2": ("2", "2f"), "novice": ("2", "2f"), "summoner": ("3f", "3"),
     "novice10": ("2", "2f"), "novice15": ("2", "2f"), "morph-eagle": ("3f", "3"),
-    "morph-wolf": ("3f", "3"), "morph-bear": ("3f", "3"),
+    "morph-wolf": ("3f", "3"), "morph-bear": ("3f", "3"), "morph-phoenix": ("3", "3f"),
 }
 # 대시 오른쪽 칸이 왼쪽을 보는 캐릭터: 그 칸을 뒤집어 오른쪽으로, 원래 그림은 왼쪽으로 (사용자 확인)
 DASH_FLIP = {"morph-bear"}
