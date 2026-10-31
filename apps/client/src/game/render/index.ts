@@ -189,7 +189,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawForgottenBack(ctx, s, alpha, snap);
     drawRemnantEchoes(ctx, s, snap);
     drawWandererGround(ctx, s, snap);
-    drawSecretGround(ctx, s, snap);
+    drawSecretGround(ctx, s, alpha, snap);
   });
   drawStatusGround(ctx, s, alpha, snap);
   drawEnemies(ctx, s, alpha, snap);

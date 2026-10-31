@@ -162,18 +162,38 @@ export function drawLuxAura(ctx: Ctx, s: RunState, a: number, snap: Snap): void 
       glow(ctx, x + Math.cos(ang) * (10 + st * 3), y - 4 - k * (top + 8), 1.6, i % 2 ? WH : YE, 1 - k);
     }
   });
-  // 은총의 옷자락: 빛의 검 넷이 몸 둘레를 천천히 돌며 둥둥 떠다님 (각자 오르내리고 빙글 돎)
-  if (p.passives.includes("lxGrace")) for (let i = 0; i < 4; i++) {
-    const ang = s.tick * 0.025 + (i * Math.PI) / 2;
-    const gx = x + Math.cos(ang) * (20 + st * 3);
-    const gy = y - top * 0.55 + Math.sin(ang) * 7 + Math.sin(s.tick * 0.07 + i * 1.7) * 3;
-    additive(ctx, () => glow(ctx, gx, gy, 9 + st, OR, 0.3 * f));
-    lightSword(ctx, gx, gy, 9 + st * 1.5, Math.sin(s.tick * 0.03 + i) * 0.5, 0.95);
-  }
+  drawGrace(ctx, s, x, y, false);
   if (st >= 2) for (let i = 0; i < st - 1; i++) {
     const ang = s.tick * 0.04 + (i * Math.PI * 2) / (st - 1);
     lightStar(ctx, x + Math.cos(ang) * (14 + st * 2), y - top * 0.6 + Math.sin(ang) * 5, 3, i % 2 === 1, 0.85);
   }
+}
+
+/** 은총의 옷자락: 빛의 검 넷이 몸 둘레를 천천히 돌며 둥둥 떠다님 (각자 오르내리고 빙글 돎)
+ * 궤도 뒤쪽(위로 올라간 쪽)을 도는 검은 캐릭터보다 먼저·흐리고 작게 그려 몸 뒤로 숨었다가 앞으로 나옴 */
+function drawGrace(ctx: Ctx, s: RunState, x: number, y: number, back: boolean): void {
+  const p = s.player;
+  if (!p.passives.includes("lxGrace")) return;
+  const st = luxStage(p);
+  const top = 22 + st * 6;
+  const f = 0.8 + 0.2 * Math.sin(s.tick * 0.12);
+  for (let i = 0; i < 4; i++) {
+    const ang = s.tick * 0.025 + (i * Math.PI) / 2;
+    const depth = Math.sin(ang);
+    if (depth < 0 !== back) continue;
+    const k = back ? 0.75 : 1;
+    const gx = x + Math.cos(ang) * (20 + st * 3);
+    const gy = y - top * 0.55 + depth * 7 + Math.sin(s.tick * 0.07 + i * 1.7) * 3;
+    additive(ctx, () => glow(ctx, gx, gy, (9 + st) * k, OR, 0.3 * f * k));
+    lightSword(ctx, gx, gy, (9 + st * 1.5) * k, Math.sin(s.tick * 0.03 + i) * 0.5, back ? 0.55 : 0.95);
+  }
+}
+
+/** 은총의 옷자락 뒤쪽 검 (캐릭터보다 먼저, render/secret의 바닥 차례) */
+export function drawLuxBack(ctx: Ctx, s: RunState, a: number, snap: Snap): void {
+  const p = s.player;
+  if (p.characterId !== "lux" || p.hp <= 0) return;
+  drawGrace(ctx, s, snap(lerp(p.prevX, p.x, a)), snap(lerp(p.prevY, p.y, a)), true);
 }
 
 /** 빛의 적 둘레 금빛 기운 · 그림자(1대1)는 금빛 테 (적 그리기 다음) */

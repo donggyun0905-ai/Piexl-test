@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.301",
+    date: "2026-10-31",
+    items: {
+      ko: ["빛의 사도 '은총의 옷자락': 몸 둘레를 도는 빛의 검이 뒤쪽을 지날 때는 캐릭터 뒤로 숨었다가(흐리고 작게) 앞으로 다시 나옴"],
+      en: ["Apostle of Light 'Hem of Grace': the orbiting light swords now pass behind the character (dimmer and smaller) before coming back in front"],
+      ja: ["光の使徒「恩寵の裾」: 体の周りを回る光の剣が後ろを通るときはキャラの後ろに隠れ（薄く小さく）、また前に出てくる"],
+    },
+  },
+  {
     version: "0.48.300",
     date: "2026-10-31",
     items: {

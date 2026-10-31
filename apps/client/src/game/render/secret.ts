@@ -8,11 +8,12 @@ import { drawZeusAura, drawZeusFx, drawZeusGround, drawZeusShot } from "./zeus";
 import { drawPgAura, drawPgFx, drawPgGround, drawPgShot } from "./pgHero";
 import { drawKingFx } from "./kingFx";
 import { drawKingAura } from "./fallenKing";
-import { drawLuxAura, drawLuxFx } from "./lux";
+import { drawLuxAura, drawLuxBack, drawLuxFx } from "./lux";
 
 type Ctx = CanvasRenderingContext2D;
 
-export function drawSecretGround(ctx: Ctx, s: RunState, snap: Snap): void {
+export function drawSecretGround(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
+  drawLuxBack(ctx, s, alpha, snap);
   drawMinerGround(ctx, s, snap);
   drawVoyagerGround(ctx, s, snap);
   drawZeusGround(ctx, s, snap);
