@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.296",
+    date: "2026-10-31",
+    items: {
+      ko: ["로그 층의 방 칸마다 방이 늘 3개 (왼쪽·가운데·오른쪽)"],
+      en: ["Every row of rooms on a roguelike floor now always has 3 rooms (left, middle, right)"],
+      ja: ["ローグの各階、部屋の列はいつも3部屋（左・中・右）"],
+    },
+  },
+  {
     version: "0.48.295",
     date: "2026-10-31",
     items: {

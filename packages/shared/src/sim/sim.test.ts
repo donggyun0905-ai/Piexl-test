@@ -100,12 +100,8 @@ describe("층 지도", () => {
         expect(map.rooms.filter((r) => r.type === "treasure")).toHaveLength(1);
         expect(map.rooms.filter((r) => r.type === "shop")).toHaveLength(1);
         expect(map.rooms.filter((r) => r.type === "rest")).toHaveLength(1);
-        // 시작·보스 사이 칸은 방이 2~3개
-        for (let l = 1; l <= middleLayersFor(f); l++) {
-          const n = map.rooms.filter((r) => r.layer === l).length;
-          expect(n).toBeGreaterThanOrEqual(2);
-          expect(n).toBeLessThanOrEqual(3);
-        }
+        // 시작·보스 사이 칸은 방이 늘 3개
+        for (let l = 1; l <= middleLayersFor(f); l++) expect(map.rooms.filter((r) => r.layer === l).length).toBe(3);
       }
     }
   });

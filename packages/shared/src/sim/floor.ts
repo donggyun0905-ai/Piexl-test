@@ -1,6 +1,6 @@
 // 층 지도 만들기. 같은 시드 + 같은 층 번호면 항상 같은 지도.
 // 한 층은 갈림길: 아래(시작 방)에서 위(보스방)로 칸(layer)을 하나씩 올라감.
-// 칸마다 방이 2~3개 있고, 방을 정리하면 위쪽 벽의 출구로 다음 칸의 가까운 방 중 하나를 골라 감. 되돌아가지 않음
+// 칸마다 방이 3개 있고 (2026-10-31부터 늘 3개), 방을 정리하면 위쪽 벽의 출구로 다음 칸의 가까운 방 중 하나를 골라 감. 되돌아가지 않음
 import { createRng, deriveSeed } from "../rng";
 import { bossForFloor } from "../enemyDefs";
 import { PLAIN_SHAPE, pickShape, type RoomShape } from "./layout";
@@ -44,13 +44,6 @@ export function middleLayersFor(floor: number): number {
   return Math.min(6 + floor, MAX_LAYERS - 2);
 }
 
-/** 방이 2개인 칸의 줄 고르기 (어떤 조합이든 앞뒤 칸과 항상 이어짐) */
-const PAIRS: readonly (readonly number[])[] = [
-  [0, 2],
-  [0, 1],
-  [1, 2],
-];
-
 export function generateFloor(seed: number, floor: number): FloorMap {
   const rng = createRng(deriveSeed(seed, "floor", floor, "map"));
   const middle = middleLayersFor(floor);
@@ -62,10 +55,7 @@ export function generateFloor(seed: number, floor: number): FloorMap {
   };
   const byLayer: RoomInfo[][] = [[add(0, 1)]];
   byLayer[0]![0]!.type = "start";
-  for (let l = 1; l <= middle; l++) {
-    const lanes = rng.nextFloat() < 0.5 ? [0, 1, 2] : rng.pick(PAIRS);
-    byLayer.push(lanes.map((lane) => add(l, lane)));
-  }
+  for (let l = 1; l <= middle; l++) byLayer.push([0, 1, 2].map((lane) => add(l, lane)));
   const exit = add(middle + 1, 1);
   exit.type = "exit";
   byLayer.push([exit]);
