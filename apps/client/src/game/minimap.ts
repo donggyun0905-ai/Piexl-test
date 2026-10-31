@@ -89,10 +89,20 @@ export function drawRoute(ctx: CanvasRenderingContext2D, map: FloorMap, visited?
   }
 }
 
-/** 게임 중 노선도 (캔버스 높이를 이 층 칸 수에 맞춤) */
+/** 게임 중 노선도 창 크기: 칸 10개 층 크기로 고정 (칸이 더 많은 층은 창을 키우지 않고 안에서 줄여 그림) */
+const BOX_LAYERS = 10;
+/** 줄여 그려도 뭉개지지 않게 창 캔버스를 4배 촘촘하게 */
+const BOX_RES = 4;
+export const MINIMAP_BOX_W = MINIMAP_WIDTH * BOX_RES;
+export const MINIMAP_BOX_H = routeHeight(BOX_LAYERS) * BOX_RES;
+
+/** 게임 중 노선도 (창 가운데에, 넘치면 줄여서) */
 export function drawMinimap(ctx: CanvasRenderingContext2D, s: RunState): void {
   const h = routeHeight(s.map.layers);
-  if (ctx.canvas.height !== h) ctx.canvas.height = h;
+  const k = BOX_RES * Math.min(1, routeHeight(BOX_LAYERS) / h);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  ctx.setTransform(k, 0, 0, k, (ctx.canvas.width - MINIMAP_WIDTH * k) / 2, (ctx.canvas.height - h * k) / 2);
   drawRoute(ctx, s.map, (id) => s.rooms[id]?.visited === true, s.roomId);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
 }

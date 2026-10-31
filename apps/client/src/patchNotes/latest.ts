@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.295",
+    date: "2026-10-31",
+    items: {
+      ko: ["로그 층마다 방 칸을 3줄씩 늘림 (1층 7칸 → 6층 11칸, 시작 방·보스방 빼고) · 노선도 창은 화면 높이 가운데에, 크기는 그대로 두고 칸이 많은 층은 안에서 작게 그림"],
+      en: ["Each roguelike floor now has 3 more rows of rooms (7 on floor 1 up to 11 on floor 6, not counting start and boss rooms) · the route map is centered vertically and keeps its size; floors with more rows are drawn smaller inside it"],
+      ja: ["ローグの各階の部屋を3列ずつ追加（1階7列〜6階11列、スタート部屋・ボス部屋を除く）· ルートマップは画面の高さ中央に、大きさはそのままで列の多い階は中で小さく表示"],
+    },
+  },
+  {
     version: "0.48.294",
     date: "2026-10-31",
     items: {

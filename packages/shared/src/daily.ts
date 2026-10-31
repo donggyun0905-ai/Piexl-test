@@ -4,7 +4,7 @@ import { CHARACTER_IDS, ENEMIES, type CharacterId } from "./content";
 import { HEAL_ITEMS } from "./items";
 import { PERKS } from "./perks";
 import { createRun, stepSim } from "./sim/run";
-import { FLOOR_COUNT, generateFloor } from "./sim/floor";
+import { FLOOR_COUNT, generateFloor, MAX_LAYERS } from "./sim/floor";
 import type { RunState, TickInput } from "./sim/types";
 import { TICK_RATE } from "./constants";
 
@@ -217,7 +217,7 @@ export function checkProgress(seed: number, r: RunSummary, sudden = false): stri
   const golds = Object.values(ENEMIES);
   const minionGold = Math.max(...golds.filter((e) => !e.boss).map((e) => e.gold));
   const bossGold = Math.max(...golds.filter((e) => e.boss).map((e) => e.gold));
-  const maxGold = (r.kills * minionGold + r.bossKills * bossGold + r.floor * 12 * 20) * Math.max(1, PERKS.goldPouch.gold);
+  const maxGold = (r.kills * minionGold + r.bossKills * bossGold + r.floor * MAX_LAYERS * 20) * Math.max(1, PERKS.goldPouch.gold);
   if (r.goldEarned > maxGold) return "gold";
   // 산 물건: 그 층 상점방에서, 해금 없이 나오는 물건, 쓴 돈 합계가 맞음
   let spent = 0;

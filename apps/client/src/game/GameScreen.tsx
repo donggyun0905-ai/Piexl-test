@@ -15,7 +15,7 @@ import { getSettings, setSettings } from "../settings";
 import { GameOverlays, type Overlay, type Result } from "./GameOverlays";
 import { formatTime } from "./hudText";
 import { Loadout, type LoadoutView } from "./Loadout";
-import { MINIMAP_HEIGHT, MINIMAP_WIDTH } from "./minimap";
+import { MINIMAP_BOX_H, MINIMAP_BOX_W } from "./minimap";
 import { floorTipAt, PickupTip, type FloorTip } from "./PickupTip";
 import { CharInfoHost, GameHud, PanHint, StatsPanel, WithControls } from "./GameHud";
 import { createShaker, useBackButton, useFitScale } from "./screenHooks";
@@ -250,7 +250,7 @@ export function GameScreen(props: GameScreenProps) {
         {stats && !pvp && <StatsPanel rows={stats} t={t} onInfo={props.embedded ? undefined : () => setOverlay("info")} run={() => runRef.current} />}
         {!pvp && !props.embedded && <CharInfoHost character={characterId} lang={lang} t={t} open={overlay === "info"} onInfo={(on) => setOverlay((o) => (on ? (o === "none" ? "info" : o) : o === "info" ? "none" : o))} />}
         {mode !== "practice" && mode !== "swarm" && mode !== "paewang" && (
-          <canvas ref={miniRef} className="minimap" width={MINIMAP_WIDTH} height={MINIMAP_HEIGHT} aria-label={t("minimap")} />
+          <canvas ref={miniRef} className="minimap" width={MINIMAP_BOX_W} height={MINIMAP_BOX_H} aria-label={t("minimap")} />
         )}
         {prompt.text && (!touchMode || !prompt.interact) && (
           <div className="prompt">{prompt.interact ? `F · ${prompt.text}` : prompt.text}</div>

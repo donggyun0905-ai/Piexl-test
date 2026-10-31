@@ -158,9 +158,11 @@ button.danger {
 }
 .minimap {
   position: absolute;
-  top: 6px;
+  /* 높이 가운데 */
+  top: 50%;
+  transform: translateY(-50%);
   right: 6px;
-  /* 노선도: 폭을 정하고 높이는 그 층 칸 수에 따라. 넓은 화면은 오른쪽 칸(--side)을 채울 만큼 크게 */
+  /* 노선도: 창 크기는 그대로, 칸이 많은 층은 그 안에서 작게 줄여 그림. 넓은 화면은 오른쪽 칸(--side)을 채울 만큼 */
   width: auto;
   height: 80%;
   max-width: calc(var(--side, 0px) - 24px);

@@ -129,7 +129,7 @@ describe("일일 도전 기록은 그 판의 수치로 확인", () => {
     const start = await call(s.ctx, "/api/daily/start", { player });
     applyBalance(values);
     const run = createRun(parseSeed(String(start.body.seedText)), "warden");
-    const rng = createRng(7);
+    const rng = createRng(1);
     const inputs: TickInput[] = [];
     let cur = EMPTY_INPUT;
     while (!run.over && run.tick < 3600) {
