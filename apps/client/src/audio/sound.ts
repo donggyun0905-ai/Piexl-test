@@ -1,6 +1,7 @@
 // 효과음·음악: 파일 없이 브라우저에서 바로 만든 소리 (저작권 걱정 없음). 그림처럼 나중에 직접 만든 소리로 바꿀 수 있음
 import { getSettings } from "../settings";
 import { ASCALON_SOUNDS } from "./sfxAscalon";
+import { CORE_SOUNDS } from "./sfxCore";
 import { SECRET_SOUNDS } from "./sfxSecret";
 import { SKILL_SOUNDS, type SkillSfx } from "./sfxSkills";
 
@@ -70,7 +71,11 @@ export function unlockAudio(): void {
   ctx = new AC();
   sfxGain = ctx.createGain();
   musicGain = ctx.createGain();
-  sfxGain.connect(ctx.destination);
+  // 효과음은 압축기를 거쳐 겹쳐도 깨지지 않고 묵직하게 (sfxCore)
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.value = -16;
+  comp.ratio.value = 4;
+  sfxGain.connect(comp).connect(ctx.destination);
   musicGain.connect(ctx.destination);
   applyVolume();
 }
@@ -153,51 +158,12 @@ const SOUNDS: Record<Sfx, () => void> = {
   ...ASCALON_SOUNDS,
   ...SECRET_SOUNDS,
   ...SKILL_SOUNDS,
+  ...CORE_SOUNDS,
   blink: () => {
     tone({ type: "sine", from: 900, to: 120, dur: 0.12, vol: 0.12 });
     noise(0.1, 0.2, 1800);
     tone({ type: "triangle", from: 2400, to: 2300, dur: 0.1, vol: 0.06, delay: 0.08 });
   },
-  swing: () => noise(0.07, 0.15, 3000),
-  shot: () => tone({ type: "square", from: 880, to: 440, dur: 0.06, vol: 0.12 }),
-  hit: () => tone({ type: "square", from: 220, to: 110, dur: 0.05, vol: 0.15 }),
-  kill: () => {
-    noise(0.12, 0.25, 900);
-    tone({ type: "square", from: 330, to: 80, dur: 0.12, vol: 0.12 });
-  },
-  hurt: () => {
-    noise(0.15, 0.35, 600);
-    tone({ type: "sawtooth", from: 200, to: 60, dur: 0.2, vol: 0.2 });
-  },
-  coin: () => {
-    tone({ type: "square", from: 988, dur: 0.06, vol: 0.12 });
-    tone({ type: "square", from: 1319, dur: 0.12, vol: 0.12, delay: 0.06 });
-  },
-  pickup: () => {
-    tone({ type: "triangle", from: 523, dur: 0.08, vol: 0.25 });
-    tone({ type: "triangle", from: 784, dur: 0.12, vol: 0.25, delay: 0.08 });
-  },
-  buy: () => {
-    tone({ type: "square", from: 659, dur: 0.07, vol: 0.12 });
-    tone({ type: "square", from: 880, dur: 0.07, vol: 0.12, delay: 0.07 });
-    tone({ type: "square", from: 1175, dur: 0.12, vol: 0.12, delay: 0.14 });
-  },
-  use: () => tone({ type: "triangle", from: 400, to: 900, dur: 0.18, vol: 0.25 }),
-  stairs: () => {
-    for (let i = 0; i < 4; i++) tone({ type: "triangle", from: 523 - i * 60, dur: 0.1, vol: 0.25, delay: i * 0.09 });
-  },
-  boss: () => {
-    tone({ type: "sawtooth", from: 110, dur: 0.6, vol: 0.2 });
-    tone({ type: "sawtooth", from: 116, dur: 0.6, vol: 0.2 });
-  },
-  bossDown: () => {
-    noise(0.6, 0.4, 500);
-    for (let i = 0; i < 5; i++) tone({ type: "square", from: 392 + i * 98, dur: 0.12, vol: 0.12, delay: 0.1 + i * 0.08 });
-  },
-  achievement: () => {
-    [523, 659, 784, 1047].forEach((f, i) => tone({ type: "square", from: f, dur: 0.12, vol: 0.1, delay: i * 0.08 }));
-  },
-  fall: () => tone({ type: "triangle", from: 440, to: 55, dur: 0.9, vol: 0.3 }),
   // 받아 넘김: 맑게 울리는 "띠링!"
   parry: () => {
     tone({ type: "sine", from: 1568, dur: 0.12, vol: 0.35 });
@@ -213,9 +179,6 @@ const SOUNDS: Record<Sfx, () => void> = {
   guard3: () => {
     noise(0.35, 0.5, 700);
     tone({ type: "sine", from: 140, to: 40, dur: 0.35, vol: 0.5 });
-  },
-  clear: () => {
-    [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone({ type: "square", from: f, dur: 0.16, vol: 0.12, delay: i * 0.12 }));
   },
 };
 

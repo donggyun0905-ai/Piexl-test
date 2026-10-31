@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.309",
+    date: "2026-10-31",
+    items: {
+      ko: ["보스 말고 일반 몬스터 20종 그림을 2배 촘촘하게: 생김새·색은 그대로, 윤곽의 계단을 매끈하게 · 테두리 안쪽에 빛과 그림자로 도톰하게", "기본 효과음을 더 웅장하고 또렷하게: 맞힘·처치·맞음·휘두르기·쏘기·돈·줍기·사기·사용·계단·보스 등장·보스 쓰러짐·업적·쓰러짐·클리어 (낮은 울림·메아리·화음, 겹쳐도 깨지지 않게)"],
+      en: ["20 regular (non-boss) monsters now at 2× detail: same look and colors, smoother outlines, inner light and shadow for a rounder feel", "Core sound effects are fuller and clearer: hit, kill, hurt, swing, shot, coin, pickup, buy, use, stairs, boss intro, boss down, achievement, fall, clear (low body, echo, chords; no clipping when layered)"],
+      ja: ["ボス以外の通常モンスター20種の絵を2倍の細かさに: 見た目・色はそのまま、輪郭の段差をなめらかに・縁の内側に光と影で立体感", "基本効果音をより重厚で明瞭に: ヒット・撃破・被弾・振り・射撃・お金・拾う・購入・使用・階段・ボス登場・ボス撃破・実績・ダウン・クリア（低い響き・残響・和音、重なっても割れない）"],
+    },
+  },
+  {
     version: "0.48.308",
     date: "2026-10-31",
     items: {
