@@ -41,14 +41,15 @@ ATTACK_LR = {
     "bedouin": ("2", "2f"), "abandoned2": ("2", "2f"), "novice": ("2", "2f"), "summoner": ("3f", "3"),
     "novice10": ("2", "2f"), "novice15": ("2", "2f"), "morph-eagle": ("3f", "3"),
     "morph-wolf": ("3f", "3"), "morph-bear": ("3f", "3"),
-    **{n: ("3f", "3") for n in ("ren", "mukin", "spiritist", "elder", "remnant")}, "morph-phoenix": ("3f", "3"), "morph-spider-evo": ("3f", "3"),
+    **{n: ("3f", "3") for n in ("ren", "spiritist", "elder")}, "morph-phoenix": ("3f", "3"), "morph-spider-evo": ("3f", "3"),
     # 각성 동물: 공격 줄 왼·오 칸이 바뀌어 있음
     **{f"morph-{a}-evo": ("2", "3") for a in ("bear", "boar", "eagle", "snake", "phoenix", "bat")},
 }
 # 대시 오른쪽 칸이 왼쪽을 보는 캐릭터: 그 칸을 뒤집어 오른쪽으로, 원래 그림은 왼쪽으로 (사용자 확인)
 DASH_FLIP = {"morph-bear"}
 # 다 맞춘 뒤에도 왼·오가 반대인 줄: 그 줄의 왼쪽·오른쪽 칸을 서로 바꿈 (1 공격 · 2 걷기 왼발 · 3 걷기 오른발, 오른쪽 그림 확인 2026-10-31)
-ROW_SWAP = {"morph-snake": (1, 3), "morph-bat": (1, 3), "morph-boar-evo": (3,), "morph-snake-evo": (3,), "morph-wolf-evo": (1,), **{n: (4,) for n in ("samyeol", "silk", "voyager", "forgotten", "remnant", "tracker", "punk", "miner", "elder")}}
+ROW_SWAP = {"morph-snake": (1, 3), "morph-bat": (1, 3), "morph-boar-evo": (3,), "morph-snake-evo": (3,), "morph-wolf-evo": (1,), **{n: (4,) for n in ("samyeol", "silk", "voyager", "forgotten", "remnant", "tracker", "punk", "miner",
+                                       "rider", "mukin", "wanderer", "bomber", "artifacter", "automata", "eater", "zeus", "slayer", "slayer_rage")}}
 # 왼·오 칸이 둘 다 왼쪽을 보는 줄: 오른쪽은 왼쪽을 뒤집어 씀
 ROW_MIRROR = {"morph-spider": (2, 3)}
 

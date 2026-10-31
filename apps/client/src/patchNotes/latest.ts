@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.306",
+    date: "2026-10-31",
+    items: {
+      ko: ["좌우가 반대로 나오던 그림 고침: 대시 — 라이더·묵인·방랑객·붐버·아티팩터·오토마타·이터·장로·제우스·학살자(피의 학살 포함) · 공격 — 묵인·잔영"],
+      en: ["Fixed mirrored poses: dash — Rider, Mukin, Wanderer, Bomber, Artifacter, Automata, Eater, Elder, Zeus, Slayer (incl. Blood Frenzy) · attack — Mukin, Remnant"],
+      ja: ["左右が逆になっていた絵を修正: ダッシュ — ライダー・黙人・放浪者・ボマー・アーティファクター・オートマタ・イーター・長老・ゼウス・殺戮者（血の殺戮を含む）· 攻撃 — 黙人・残影"],
+    },
+  },
+  {
     version: "0.48.305",
     date: "2026-10-31",
     items: {
