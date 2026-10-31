@@ -12,6 +12,10 @@ from import_sheet import CELL, FOOT, HERE, finish, shrink
 from s2_common import SPRITES
 
 DARK = 42
+# 어두운 옷 캐릭터: 배경(완전한 검정)만 지우게 기준을 낮춤
+DARK_BY = {"plague": 12}
+# 연기가 넓게 퍼진 캐릭터: 칸보다 넓으면 줄이지 않고 몸 둘레만 남김
+CROP_WIDE = {"plague"}
 # 앞모습(서기) 키 = 116칸, 다른 자세도 같은 배율 (칸에 안 들어가면 그 자세만 더 줄임)
 BODY = 116
 # 원본 파일 → (가로 칸 수, 세로 칸 수, 시트에 놓을 줄)
@@ -45,6 +49,16 @@ ROW_SWAP = {"morph-snake": (1, 3), "morph-bat": (1, 3), "morph-boar-evo": (3,), 
 ROW_MIRROR = {"morph-spider": (2, 3)}
 
 
+def crop_wide(p, width):
+    """칸보다 넓은 자세: 줄이지 않고 몸(점이 많은 곳) 가운데로 칸 폭만 남김 (퍼진 연기만 잘림)"""
+    if p.width <= width: return p
+    a = p.getchannel("A").load()
+    cols = [sum(1 for y in range(p.height) if a[x, y]) for x in range(p.width)]
+    w = int(width)
+    best = max(range(p.width - w + 1), key=lambda x0: sum(cols[x0:x0 + w])) if w < 400 else 0
+    return p.crop((best, 0, best + w, p.height))
+
+
 def cut(pts, cw, cols):
     """붙은 두 자세를 칸 경계 둘레(±30%)에서 점이 가장 적은 세로줄로 나눔 (날개 끝이 옆 칸에 잘려 붙지 않게)"""
     hist = {}
@@ -61,7 +75,7 @@ def cut(pts, cw, cols):
     return list(groups.values())
 
 
-def pieces(img, cols, rows):
+def pieces(img, cols, rows, dark=DARK):
     """어두운 배경이 아닌 칸을 8방향으로 이은 덩어리 → 가운데가 놓인 칸(cols×rows)에 모음"""
     w, h = img.size
     px = img.load()
@@ -69,7 +83,7 @@ def pieces(img, cols, rows):
     cells = [[[] for _ in range(cols)] for _ in range(rows)]
     for y0 in range(h):
         for x0 in range(w):
-            if seen[y0 * w + x0] or max(px[x0, y0][:3]) <= DARK: continue
+            if seen[y0 * w + x0] or max(px[x0, y0][:3]) <= dark: continue
             seen[y0 * w + x0] = 1
             q, pts = deque([(x0, y0)]), []
             while q:
@@ -78,7 +92,7 @@ def pieces(img, cols, rows):
                 for dx in (-1, 0, 1):
                     for dy in (-1, 0, 1):
                         nx, ny = x + dx, y + dy
-                        if 0 <= nx < w and 0 <= ny < h and not seen[ny * w + nx] and max(px[nx, ny][:3]) > DARK:
+                        if 0 <= nx < w and 0 <= ny < h and not seen[ny * w + nx] and max(px[nx, ny][:3]) > dark:
                             seen[ny * w + nx] = 1
                             q.append((nx, ny))
             if len(pts) < 12: continue  # 먼지 같은 점
@@ -115,7 +129,7 @@ def build(name):
     grid = {}
     for tag, cols, rows, at in FILES:
         img = Image.open(os.path.join(HERE, "src", f"{name}-{tag}.png")).convert("RGBA")
-        for r, line in zip(at, pieces(img, cols, rows)):
+        for r, line in zip(at, pieces(img, cols, rows, DARK_BY.get(name, DARK))):
             for c, part in enumerate(line): grid[r, c] = part
     # GPT가 '왼쪽' 칸도 오른쪽을 보게 그리는 일이 많음 → 서기·공격·걷기의 왼쪽은 오른쪽을 뒤집어 씀 (FLIP_LEFT에 없는 캐릭터는 그대로)
     raw = dict(grid)
@@ -137,6 +151,7 @@ def build(name):
     base = BODY / grid[0, 0].height
     sheet = Image.new("RGBA", (CELL * 4, CELL * 5), (0, 0, 0, 0))
     for (r, c), p in grid.items():
+        if name in CROP_WIDE: p = crop_wide(p, (CELL - 2) / min(base, (FOOT - 1) / p.height))
         p = shrink(p, min(base, (CELL - 2) / p.width, (FOOT - 1) / p.height))
         sheet.alpha_composite(p, (c * CELL + (CELL - p.width) // 2, r * CELL + FOOT - p.height))
     # 스킨처럼 쓰는 그림(이름에 _ : 각성 오니 oni_god 등)은 skins 폴더에

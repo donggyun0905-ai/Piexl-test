@@ -76,7 +76,7 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number;
   elder: { size: 32, footPad: 2 },
   ren: { size: 32, footPad: 2 },
   spiritist: { size: 32, footPad: 2 },
-  plague: { size: 32, footPad: 2 },
+  plague: { size: 32, footPad: 2, src: 128, v2: true },
   slayer: { size: 48, footPad: 3 },
   eater: { size: 32, footPad: 2 },
   mukin: { size: 48, footPad: 3 },

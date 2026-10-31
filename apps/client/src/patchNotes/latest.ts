@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.292",
+    date: "2026-10-31",
+    items: {
+      ko: ["새 캐릭터 그림(시험): 역병의사 · 앞·뒤·왼·오 모습과 공격·걷기·맞음·쓰러짐·대시 자세"],
+      en: ["New art (trial): Plague Doctor · front/back/left/right with attack, walk, flinch, downed and dash poses"],
+      ja: ["新しいキャラ絵（試験）: 疫病医 · 前・後ろ・左・右と攻撃・歩き・ひるみ・ダウン・ダッシュのポーズ"],
+    },
+  },
+  {
     version: "0.48.291",
     date: "2026-10-31",
     items: {
