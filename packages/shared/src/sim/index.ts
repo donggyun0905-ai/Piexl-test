@@ -24,7 +24,7 @@ export { BOSS_WORM_RULES, wormBody } from "./bossWorm";
 export { WORM_PIT_R, WORM_POOL_R } from "./wormUlt";
 export { SAGE_DISMOUNT } from "./bossSage";
 export { SAGE_MAX_SAFE, SAGE_MAX_WARN, SAGE_SWEEP } from "./sageStaff";
-export { SPIRIT_BLINK, SPIRIT_CHARGE, spiritBlink, spiritSlam } from "./demigodUlts";
+export { SPIRIT_BLINK, SPIRIT_CHARGE, spiritBlink, spiritSlam, ultMarks } from "./demigodUlts";
 export { BOSS_ROC_RULES } from "./bossRoc";
 export { cageRect, PARRY_TICKS } from "./bossCage";
 export { HELL_CHARGE, HELL_COLS, HELL_ROWS, HELL_SHOW, HELL_WAVES, hellCell } from "./bossUlts";

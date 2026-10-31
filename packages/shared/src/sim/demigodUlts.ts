@@ -5,7 +5,7 @@
 import { ROOM_CX, ROOM_CY } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { hitDamage } from "./bossKit";
-import { ultReady } from "./bossUlts";
+import { ultHp, ultReady } from "./bossUlts";
 import { throughDash } from "./bossGrip";
 import { comboTick, startCombo } from "./bossDemigod";
 import { damagePlayer } from "./combat";
@@ -15,6 +15,9 @@ import { addEffect, keepInRoom, normalize } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
+  /** 필살기 1·2를 쓰는 체력 비율 (필살기 3은 라스트 보스 공통 ULT_HP) */
+  ULT1_HP: 0.7,
+  ULT2_HP: 0.5,
   /** 70%: 뒤로 나타나는 거리 · 콤보 시작까지 · 범위 배율 · 타 수 */
   BEHIND: 28,
   BEHIND_DELAY: 24,
@@ -65,12 +68,20 @@ function end(e: EnemyState): void {
   e.timer = 40;
 }
 
+/** 체력 ULT_HP 아래에서 필살기를 한 번 쓰는 라스트 보스 (ultReady를 부르는 보스) */
+const ULT_BOSSES = ["dragon", "godeater", "plight", "pdark", "sandworm", "scorpion", "roc", "sage"];
+/** 보스 체력바에 표시할 필살기 체력 비율 (높은 것부터) · 필살기가 없으면 빈 목록 */
+export function ultMarks(kind: string): number[] {
+  if (kind === "demigod") return [R.ULT1_HP, R.ULT2_HP, ultHp()];
+  return ULT_BOSSES.includes(kind) ? [ultHp()] : [];
+}
+
 /** 필살기를 시작하거나 이어 감. 필살기 중이면 true */
 export function demigodUlt(s: RunState, e: EnemyState, toP: readonly [number, number]): boolean {
   if (e.ultAt === undefined) {
     const done = e.gDone ?? 0;
-    if (!(done & 1) && e.hp < e.maxHp * 0.7) start(s, e, 1);
-    else if (!(done & 2) && e.hp < e.maxHp * 0.5) start(s, e, 2);
+    if (!(done & 1) && e.hp < e.maxHp * R.ULT1_HP) start(s, e, 1);
+    else if (!(done & 2) && e.hp < e.maxHp * R.ULT2_HP) start(s, e, 2);
     else if (ultReady(e)) start(s, e, 3);
     else return false;
   }

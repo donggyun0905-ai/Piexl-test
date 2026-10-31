@@ -31,6 +31,9 @@ export const HELL_ROWS = 4;
 export const HELL_CHARGE = 120;
 export const HELL_SHOW = 40;
 export const HELL_WAVES = 7;
+/** 궁극기를 쓰는 체력 비율 (보스 체력바 표시용) */
+export const ultHp = (): number => R.ULT_HP;
+
 /** 체력 10% 아래로 처음 내려갔으면 true (한 번만) */
 export function ultReady(e: EnemyState): boolean {
   if (e.ultDone || e.hp <= 0 || e.hp >= e.maxHp * R.ULT_HP) return false;

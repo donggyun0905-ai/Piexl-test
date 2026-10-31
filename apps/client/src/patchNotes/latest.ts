@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.286",
+    date: "2026-10-31",
+    items: {
+      ko: ["보스 체력 막대 아래에 남은 체력 % 표시 · 필살기를 쓰는 체력 자리에 금빛 표식과 % (라스트 보스 10% · 괴력난신 70%·50%·10%) · 표식에 가까워지면 깜박이고, 지나가면 흐려짐"],
+      en: ["Boss HP bar now shows the remaining HP % below it · gold markers with % at the HP where the boss uses its ultimate (last bosses 10% · Demigod of Wild Might 70%, 50%, 10%) · markers blink as you get close and dim once passed"],
+      ja: ["ボスの体力バーの下に残り体力%を表示 · 必殺技を使う体力の位置に金色の印と%（ラストボス10% · 怪力乱神70%・50%・10%）· 近づくと点滅し、過ぎると暗くなる"],
+    },
+  },
+  {
     version: "0.48.285",
     date: "2026-10-31",
     items: {

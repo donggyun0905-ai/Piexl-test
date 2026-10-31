@@ -1,5 +1,6 @@
 // 투사체 · 효과(휘두르기·맞음·폭발) · 보스 체력 막대 · 모바일 조준점
 import { drawUmbraBar } from "./umbra";
+import { drawBossBarMarks } from "./bossBarMarks";
 import { allPlayers, ENEMIES, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { drawLaserFx } from "./beams";
 import { drawOrbitFx, drawOrbShot } from "./orbs";
@@ -167,4 +168,5 @@ export function drawBossBar(ctx: CanvasRenderingContext2D, s: RunState): void {
   ctx.fillRect(bx - 2, by - 2, bw + 4, bh + 4);
   ctx.fillStyle = C.bossCore;
   ctx.fillRect(bx, by, Math.round((bw * Math.max(0, boss.hp)) / boss.maxHp), bh);
+  drawBossBarMarks(ctx, boss, s.tick, bx, by, bw, bh);
 }
