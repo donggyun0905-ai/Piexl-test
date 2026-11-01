@@ -1,7 +1,7 @@
 // 단련의 방 (4층부터 층마다 하나): 기구 셋(샌드백·랫풀다운·벤치 프레스) 중 하나만 골라 F → 미니게임(화면) → 점수(최대 1000)로 강화 포인트(최대 10)
 // 포인트로 능력치·무기·가진 패시브를 한 단계씩 강화 (언제든 다시 F로 창을 열어 남은 포인트를 씀). 창에서 누른 것은 입력 menu로 와서 같은 결과 (기록·협동)
 import type { ExtraStats } from "../characters";
-import { PASSIVES, type PassiveDef } from "../items";
+import { PASSIVES, type PassiveDef, type PassiveId } from "../items";
 import type { StatMod } from "../stats";
 import { recalcStats } from "./items";
 import { addPickup, CX, CY } from "./loot";
@@ -32,7 +32,7 @@ const R = {
   dodge: 0.02,
   /** 무기 숙련: 공격력·공격 속도 각각 % */
   weapon: 0.03,
-  /** 패시브 강화: 능력치가 붙은 패시브는 그 몫의 이 배만큼 더 · 효과만 있는 패시브는 공격력 % */
+  /** 패시브 강화: 능력치가 붙은 패시브는 그 좋은 몫의 이 배만큼 더 (깎는 몫은 그대로) · 좋은 몫이 없는 패시브는 공격력 % */
   passiveBoost: 0.5,
   passivePlain: 0.03,
 };
@@ -90,6 +90,17 @@ export function gymMenu(s: RunState, op: number, a: number, b: number): void {
 /** 한 단계마다 오르는 몫 (화면 설명·계산) */
 export const gymStep = (k: GymStat) => R[k];
 
+/** 패시브 한 단계마다 오르는 몫 (화면 설명·계산): 그 패시브의 좋은 능력치 몫 × passiveBoost (깎는 몫은 키우지 않음) · 좋은 몫이 없으면 공격력 passivePlain */
+export function gymPassiveStep(id: PassiveId): StatMod[] {
+  const mods = ((PASSIVES[id] as PassiveDef).mods ?? []) as readonly StatMod[];
+  const out: StatMod[] = [];
+  for (const m of mods) {
+    if ((m.add ?? 0) > 0) out.push({ stat: m.stat, add: m.add! * R.passiveBoost });
+    if ((m.mul ?? 1) > 1) out.push({ stat: m.stat, mul: 1 + (m.mul! - 1) * R.passiveBoost });
+  }
+  return out.length ? out : [{ stat: "damage", mul: 1 + R.passivePlain }];
+}
+
 /** 강화한 능력치 (recalcStats, sim/station.stationMods) */
 export function gymMods(p: PlayerState): StatMod[] {
   if (!p.gym) return [];
@@ -105,9 +116,7 @@ export function gymMods(p: PlayerState): StatMod[] {
   for (const id of gymPassives(p)) {
     const lv = L(`p:${id}`);
     if (!lv) continue;
-    const mods = ((PASSIVES[id] as PassiveDef).mods ?? []) as readonly StatMod[];
-    if (!mods.length) out.push({ stat: "damage", mul: 1 + R.passivePlain * lv });
-    for (const m of mods) out.push({ stat: m.stat, ...(m.add !== undefined ? { add: m.add * R.passiveBoost * lv } : {}), ...(m.mul !== undefined ? { mul: 1 + (m.mul - 1) * R.passiveBoost * lv } : {}) });
+    for (const m of gymPassiveStep(id)) out.push({ stat: m.stat, ...(m.add !== undefined ? { add: m.add * lv } : {}), ...(m.mul !== undefined ? { mul: 1 + (m.mul - 1) * lv } : {}) });
   }
   return out;
 }

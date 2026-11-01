@@ -1,14 +1,13 @@
 // 단련의 방 창 (기구 앞에서 F, game/StationWindow): 아직 이 방 기구를 안 썼으면 그 기구 미니게임 → 끝나면 점수로 포인트 → 강화 목록
 // 강화 목록: 능력치·무기 숙련·가진 패시브마다 단계 · 단계당 오르는 몫 · 지금까지 오른 몫 · '+' (남은 포인트 사용). 누른 것은 입력 menu (sim/gym)
-import { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymStep, menuCode, PASSIVES, type GymStat, type PassiveDef } from "@pixel-rogue/shared";
+import { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymStep, menuCode, type GymStat } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../../i18n";
-import { itemName } from "../../i18n/items";
 import { GYM_DEVICE } from "../../i18n/items/station";
-import { ItemIcon } from "../itemIcon";
 import type { StationView } from "../stationView";
 import { useState } from "react";
 import { play } from "../../audio/sound";
 import { BenchPress } from "./BenchPress";
+import { GymPassiveRow } from "./GymPassiveRow";
 import { useGymPause } from "./gymKit";
 import { LatPull } from "./LatPull";
 import { Sandbag } from "./Sandbag";
@@ -66,24 +65,9 @@ export function GymPanel({ gym, lang, t, send }: { gym: Gym; lang: Lang; t: (k: 
             </div>
           );
         })}
-        {gym.passives.map((id, i) => {
-          const lv = gym.lv[`p:${id}`] ?? 0;
-          const hasMods = (((PASSIVES[id] as PassiveDef).mods ?? []) as readonly unknown[]).length > 0;
-          const per = hasMods ? t("gymPassiveMods").replace("{n}", String(Math.round(GYM_RULES.passiveBoost * 100))) : t("gymPassivePlain").replace("{n}", String(Math.round(GYM_RULES.passivePlain * 100)));
-          return (
-            <div key={id} className="gym-row passive">
-              <span className="gym-name">
-                <ItemIcon item={{ kind: "passive", id }} size={18} /> {itemName("passive", id, lang)}
-              </span>
-              <small>
-                Lv {lv}/{max} · {per}
-              </small>
-              <button type="button" disabled={gym.pts <= 0 || lv >= max} onClick={() => up(32 + i)}>
-                +
-              </button>
-            </div>
-          );
-        })}
+        {gym.passives.map((id, i) => (
+          <GymPassiveRow key={id} id={id} lv={gym.lv[`p:${id}`] ?? 0} max={max} canUp={gym.pts > 0} lang={lang} t={t} onUp={() => up(32 + i)} />
+        ))}
       </div>
     </div>
   );

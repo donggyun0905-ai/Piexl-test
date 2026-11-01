@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.326",
+    date: "2026-11-01",
+    items: {
+      ko: [
+        "단련의 방 패시브 강화: '능력치 몫 +50%' 대신 오르는 능력치마다 단계당 값과 지금 오른 값을 자세히 보여 줌 (예: 최대 체력 · 단계당 +20 · 지금 +60)",
+        "단련의 방 패시브 강화가 깎는 몫(무거운 갑옷 이동 속도 − 등)까지 키우던 것 고침 → 좋은 몫만 커짐 · 좋은 몫이 없는 패시브는 공격력이 오름",
+      ],
+      en: [
+        "Training Room passive upgrades: instead of 'stat bonus +50%', each boosted stat now shows its per-level and current amount (e.g. Max HP · per level +20 · now +60)",
+        "Fixed Training Room passive upgrades also growing penalties (e.g. Heavy Plate's − move speed) → only the good parts grow · passives with no good stat raise damage",
+      ],
+      ja: [
+        "鍛錬の部屋のパッシブ強化: 「能力値分+50%」の代わりに、上がる能力値ごとに1段階の値と現在の上昇値を詳しく表示（例: 最大体力 · 1段階+20 · 現在+60）",
+        "鍛錬の部屋のパッシブ強化がマイナス分（重い鎧の移動速度−など）まで大きくしていたのを修正 → 良い分だけ増える · 良い分のないパッシブは攻撃力が上がる",
+      ],
+    },
+  },
+  {
     version: "0.48.325",
     date: "2026-11-01",
     items: {

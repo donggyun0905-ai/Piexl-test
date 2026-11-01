@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { generateFloor } from "./floor";
-import { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymUsed } from "./gym";
+import { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymPassiveStep, gymUsed } from "./gym";
 import { goThrough, startFloor } from "./rooms";
 import { menuCode } from "./station";
 import { createRun, stepSim } from "./run";
@@ -71,4 +71,10 @@ describe("단련의 방", () => {
     }
     expect(total).toBe(30);
   });
+
+  it("패시브 강화는 좋은 몫만 키움 (무거운 갑옷: 체력만 오르고 이동 속도 −는 그대로) · 능력치 없는 패시브는 공격력", () => {
+    expect(gymPassiveStep("heavyPlate")).toEqual([{ stat: "maxHp", add: 40 * GYM_RULES.passiveBoost }]);
+    expect(gymPassiveStep("ricochet")).toEqual([{ stat: "damage", mul: 1 + GYM_RULES.passivePlain }]);
+  });
 });
+

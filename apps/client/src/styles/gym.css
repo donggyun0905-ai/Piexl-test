@@ -100,3 +100,14 @@
     grid-template-columns: 1fr;
   }
 }
+.gym-pinfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.gym-row.passive button {
+  grid-row: 1;
+}
+.gym-pinfo .gym-note {
+  color: #b8a8e0;
+}
