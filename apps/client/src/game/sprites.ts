@@ -80,7 +80,7 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number;
   plague: { size: 32, footPad: 2, src: 128, v2: true },
   slayer: { size: 32, footPad: 2, src: 128, v2: true },
   eater: { size: 32, footPad: 2, src: 128, v2: true },
-  mukin: { size: 48, footPad: 3, src: 128, v2: true },
+  mukin: { size: 32, footPad: 2, src: 128, v2: true },
   samyeol: { size: 32, footPad: 2, src: 128, v2: true },
   automata: { size: 32, footPad: 2, src: 128, v2: true },
   rider: { size: 32, footPad: 2, src: 128, v2: true },
@@ -94,14 +94,14 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number;
   silk: { size: 32, footPad: 2, src: 128, v2: true },
   // 히든 캐릭터도 일반 캐릭터와 같은 크기 (2026-10-31) · 빛의 사도는 칸에 여백이 많아 키를 맞춘 크기(성장 모습은 단계마다 커짐) · 차원의 순례자는 소녀 키를 일반 캐릭터에 맞춤 (큰 가방은 그만큼 같이 커서 칸이 큼)
   miner: { size: 32, footPad: 2, src: 128, v2: true },
-  voyager: { size: 32, footPad: 2, src: 128, v2: true }, zeus: { size: 32, footPad: 2, src: 128, v2: true }, pilgrim: { size: 40, footPad: 2, src: 128, v2: true }, crownKing: { size: 80, footPad: 3, src: 128, v2: true }, fallenKing: { size: 32, footPad: 2, src: 128, v2: true }, lux: { size: 44, footPad: 2, src: 128, v2: true }, lux2: { size: 51, footPad: 2, src: 128, v2: true }, lux3: { size: 58, footPad: 3, src: 128, v2: true }, lux4: { size: 65, footPad: 3, src: 128, v2: true },
+  voyager: { size: 32, footPad: 2, src: 128, v2: true }, zeus: { size: 32, footPad: 2, src: 128, v2: true }, pilgrim: { size: 32, footPad: 2, src: 128, v2: true }, crownKing: { size: 80, footPad: 3, src: 128, v2: true }, fallenKing: { size: 32, footPad: 2, src: 128, v2: true }, lux: { size: 32, footPad: 2, src: 128, v2: true }, lux2: { size: 32, footPad: 2, src: 128, v2: true }, lux3: { size: 32, footPad: 2, src: 128, v2: true }, lux4: { size: 32, footPad: 2, src: 128, v2: true },
   // 변희가 변한 동물 (옆모습만, render/actors가 옆을 보게 그림)
   ...Object.fromEntries(["wolf", "bear", "eagle", "snake", "boar", "scorpion", "bat", "elephant", "spider", "phoenix"].flatMap((a) => [[`morph-${a}`, { size: 32, footPad: 2, src: 128, v2: true as const }], [`morph-${a}-evo`, { size: 48, footPad: 3, src: 128, v2: true as const }]])),
   abandoned: { size: 32, footPad: 2, src: 128, v2: true },
   abandoned2: { size: 32, footPad: 2, src: 128, v2: true },
   abandoned3: { size: 32, footPad: 2, src: 128, v2: true },
-  titan: { size: 48, footPad: 3, src: 128, v2: true },
-  oni: { size: 48, footPad: 3, src: 128, v2: true },
+  titan: { size: 32, footPad: 2, src: 128, v2: true },
+  oni: { size: 32, footPad: 2, src: 128, v2: true },
   // 각성 오니 (스킨 폴더 그림 skins/oni_god.png)
   oni_god: { size: 48, footPad: 3, src: 128, v2: true },
   // 학살자 피의 학살 모습 (skins/slayer_rage.png)
@@ -134,11 +134,10 @@ export function sheetFor(id: string, lv = 1, member = 0): string {
 
 /** 스킨 그림 (public/sprites/skins/): 처음 쓸 때 불러옴 (다 불러오기 전에는 기본 그림) */
 const SKIN_SHEET = { size: 32, footPad: 2 };
-/** 거인·오니(큰 방망이)·방랑객(긴 카타나) 그림은 48칸 */
-/** 일부러 크게 그리는 캐릭터 (거인·오니·묵인) 스킨은 큰 칸 · 학살자·라이더·방랑객은 2026-11-01부터 보통 크기 */
+/** 그림 파일이 48칸인 스킨 (거인·오니·묵인) */
 export const bigSheet = (name: string) => name.startsWith("titan") || name.startsWith("oni") || name.startsWith("mukin");
-/** 거인·오니 스킨은 큰 그림 */
-const TITAN_SKIN_SHEET = { size: 48, footPad: 3 };
+/** 거인·오니·묵인 스킨도 게임에서는 파수꾼과 같은 크기 (2026-11-01) */
+const TITAN_SKIN_SHEET = { size: 32, footPad: 2 };
 export const sheetCell = (name: string): number | undefined => CHARACTER_SHEETS[name]?.src ?? CHARACTER_SHEETS[name]?.size; // 그림 파일 한 칸 (편집기)
 const skinImages = new Map<string, HTMLImageElement | null>();
 export function skinImage(name: string): HTMLImageElement | undefined {

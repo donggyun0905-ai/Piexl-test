@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.332",
+    date: "2026-11-01",
+    items: {
+      ko: ["캐릭터 크기를 모두 파수꾼과 같게: 빛의 사도(모든 단계) · 차원의 순례자 · 거인 · 오니 · 묵인 (거인·오니·묵인 스킨 포함) · 큰 변신 모습(각성 오니·피의 학살·호랑이·각성 동물·왕관의 왕)은 그대로"],
+      en: ["All characters now match the Warden's size: Apostle of Light (every stage) · Dimensional Pilgrim · Titan · Oni · Mukin (including their skins) · big transformations (awakened Oni, Blood Slaughter, tiger, awakened animals, Crowned King) stay big"],
+      ja: ["キャラの大きさを全員番人と同じに: 光の使徒（全段階）· 次元の巡礼者 · 巨人 · 鬼 · 黙忍（巨人・鬼・黙忍のスキンも）· 大きな変身（覚醒鬼・血の虐殺・虎・覚醒動物・王冠の王）はそのまま"],
+    },
+  },
+  {
     version: "0.48.331",
     date: "2026-11-01",
     items: {

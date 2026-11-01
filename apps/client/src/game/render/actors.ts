@@ -211,9 +211,8 @@ function morphPose(p: PlayerState, pose: CharacterPose): CharacterPose {
 function drawPlayerHp(ctx: CanvasRenderingContext2D, p: PlayerState, x: number, y: number, tick: number): void {
   const w = 16;
   const r = Math.max(0, Math.min(1, p.hp / p.stats.maxHp));
-  // 캐릭터 그림(32칸, 거인은 48칸, 발이 몸 아래)의 맨 위 바로 위
-  // 빛의 사도: 성장 단계마다 커지는 그림 (단계 2부터 머리 위 고리)
-  const top = y + p.r - (p.characterId === "lux" ? [30, 35, 42, 46][luxStage(p)]! : p.characterId === "titan" || p.characterId === "oni" || p.characterId === "mukin" || (p.characterId === "slayer" && (p.slRage ?? 0) > 0) || morphEvolved(p) ? 46 : 31);
+  // 캐릭터 그림(모두 파수꾼과 같은 32칸, 발이 몸 아래)의 맨 위 바로 위 · 큰 변신 모습(각성 오니·피의 학살·각성 동물)은 48칸
+  const top = y + p.r - ((p.characterId === "oni" && (p.oGod ?? 0) > 0) || (p.characterId === "slayer" && (p.slRage ?? 0) > 0) || morphEvolved(p) ? 46 : 31);
   ctx.fillStyle = "rgba(10,8,16,0.85)";
   ctx.fillRect(x - w / 2 - 1, top - 1, w + 2, 4);
   ctx.fillStyle = r > 0.5 ? "#6ad86a" : r > 0.25 ? "#f2c14e" : "#e0505a";

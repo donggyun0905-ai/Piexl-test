@@ -152,7 +152,7 @@ export function drawLuxAura(ctx: Ctx, s: RunState, a: number, snap: Snap): void 
   const x = snap(lerp(p.prevX, p.x, a));
   const y = snap(lerp(p.prevY, p.y, a));
   const f = 0.8 + 0.2 * Math.sin(s.tick * 0.12);
-  const top = 22 + st * 6;
+  const top = 26; // 몸 높이 (모든 단계가 파수꾼과 같은 크기)
   additive(ctx, () => {
     glow(ctx, x, y - 8, 12 + st * 6, OR, (0.12 + st * 0.08) * f);
     glow(ctx, x, y - top * 0.42, 2.5 + st, YE, 0.6 * f, 0.5);
@@ -175,7 +175,7 @@ function drawGrace(ctx: Ctx, s: RunState, x: number, y: number, back: boolean): 
   const p = s.player;
   if (!p.passives.includes("lxGrace")) return;
   const st = luxStage(p);
-  const top = 22 + st * 6;
+  const top = 26; // 몸 높이 (모든 단계가 파수꾼과 같은 크기)
   const f = 0.8 + 0.2 * Math.sin(s.tick * 0.12);
   for (let i = 0; i < 4; i++) {
     const ang = s.tick * 0.025 + (i * Math.PI) / 2;

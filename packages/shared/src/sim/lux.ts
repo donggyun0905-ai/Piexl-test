@@ -1,6 +1,6 @@
 // 한정 캐릭터 빛의 사도 (lux, 서고의 감시자): 평타는 사거리 안 가까운 적 자리에 작은 빛의 검 · 몇 번째 공격마다 (사거리 ×LUX.reach 안) 가까운 적들 자리에
 // '+' 모양 빛의 검이 여러 번 생겨 벰 (적마다 몇 번, 45°씩 엇갈림) · 빛의 조각(lxShard, 빛의 적이 떨굼, sim/luxFoes)으로 성장:
-// 조각마다 공격력·공격 속도(아이템 값) + 치명타·예리함 + 빛의 검 피해 · 6개마다 한 단계(0~3): 노리는 적 +1 · 검이 커짐 · 몸이 커짐(그림 lux~lux4)
+// 조각마다 공격력·공격 속도(아이템 값) + 치명타·예리함 + 빛의 검 피해 · 6개마다 한 단계(0~3): 노리는 적 +1 · 검이 커짐 · 모습이 바뀜(그림 lux~lux4, 크기는 파수꾼과 같음)
 // 은총의 옷자락: 더 넓게 + 5개 더 · 꿰뚫는 빛: 생긴 자리에 붉은 빛의 검이 한 번 더
 import { TICK_RATE } from "../constants";
 import { LUX } from "../weaponsLux";
@@ -86,7 +86,7 @@ function strikeCross(s: RunState, c: LuxCross): void {
 /** 직업 무기 틱 (classTicks): 기다리는 빛의 검 · 누르면 빛의 칼날 · 몇 번째마다 빛의 검 생성 */
 export function luxTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
-  // 조각 6개마다 성장: 빛이 터지며 몸이 커짐
+  // 조각 6개마다 성장: 빛이 터지며 모습이 바뀜
   const stage = luxStage(p);
   if (stage > (p.lxStage ?? 0)) addEffect(s, { kind: "lxGrow", x: p.x, y: p.y, dirX: 0, dirY: stage, size: 40, maxTicks: 50, follow: true });
   p.lxStage = stage;
