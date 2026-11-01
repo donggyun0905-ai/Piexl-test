@@ -104,6 +104,12 @@ function venom(s: RunState, e: EnemyState, go: Vec): void {
   if (gas.length > R.GAS_MAX) gas.shift();
 }
 
+/** 땅 물고기가 실제로 솟구치거나 땅에 닿는 순간: 띄워 둔 예고를 지우고 지금 자리에서 터짐 (밀리거나 기절해도 때가 어긋나지 않게) */
+function fishHit(s: RunState, e: EnemyState): void {
+  s.hazards = s.hazards?.filter((h) => !(h.owner === e.id && h.hold));
+  addShape(s, 0, { x: e.x, y: e.y, radius: R.FISH_R, damage: R.FISH_DMG + depth(s), fx: "pillar", by: "landfish" });
+}
+
 /** 뛰어오른 땅 물고기: 하늘이라 벽·다른 적을 지나 내려앉을 자리까지 감 (enemies가 밀어내지 않음) */
 export const fishLeaping = (e: EnemyState) => e.kind === "landfish" && e.step === 2;
 
@@ -130,9 +136,10 @@ function landfish(s: RunState, e: EnemyState): void {
     if (e.timer > 0) return;
     e.step = 1;
     e.timer = R.FISH_WARN;
-    addShape(s, R.FISH_WARN, { x: e.x, y: e.y, radius: R.FISH_R, damage: R.FISH_DMG + depth(s), fx: "pillar", owner: e.id, by: "landfish" });
+    addShape(s, R.FISH_WARN, { x: e.x, y: e.y, radius: R.FISH_R, damage: 0, fx: "pillar", owner: e.id, hold: true });
   } else if (st === 1) {
     if (e.timer > 0) return;
+    fishHit(s, e);
     // 솟구침 → 다른 자리로 뛰어 듦 (그 자리도 표시되고 떨어지면 터짐)
     // 내려앉을 자리: 16방향 중 벽·기둥·구덩이가 아닌 첫 자리 (없으면 내 자리)
     const g = roomGrid(s);
@@ -146,12 +153,13 @@ function landfish(s: RunState, e: EnemyState): void {
     e.step = 2;
     e.timer = R.FISH_JUMP;
     e.air = e.immune = false;
-    addShape(s, R.FISH_JUMP, { x: e.auxX, y: e.auxY, radius: R.FISH_R, damage: R.FISH_DMG + depth(s), fx: "pillar", owner: e.id, by: "landfish" });
+    addShape(s, R.FISH_JUMP, { x: e.auxX, y: e.auxY, radius: R.FISH_R, damage: 0, fx: "pillar", owner: e.id, hold: true });
   } else {
     const left = Math.max(1, e.timer + 1);
     e.x += ((e.auxX ?? e.x) - e.x) / left;
     e.y += ((e.auxY ?? e.y) - e.y) / left;
     if (e.timer > 0) return;
+    fishHit(s, e);
     e.step = 0;
     e.air = e.immune = true;
     e.timer = R.FISH_UNDER;

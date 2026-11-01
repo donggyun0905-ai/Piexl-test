@@ -85,16 +85,18 @@ export function drawEnemySprite(ctx: CanvasRenderingContext2D, kind: string, x: 
   const size = (cell * scale) / hd;
   const frames = Math.max(1, Math.floor(img.width / cell));
   const src = tint ? tintOf(kind, img, tint[0], tint[1]) : img;
-  const left = Math.round(x - size / 2);
-  const top = Math.round(y - size / 2);
+  // 화면 픽셀에 맞춰 놓음 (반 픽셀에 걸치면 흐려짐)
+  const k = screenScale(ctx);
+  const left = Math.round((x - size / 2) * k) / k;
+  const top = Math.round((y - size / 2) * k) / k;
   ctx.save();
   if (flip) {
     ctx.translate(left + size, top);
     ctx.scale(-1, 1);
   } else ctx.translate(left, top);
-  ctx.imageSmoothingEnabled = hd > 1 || scale < 1;
-  // 많이 줄여 그리면 미리 줄인 그림 (흐려지지 않게, mipmap)
-  const [from, m] = mipFor(src, cell / (size * screenScale(ctx)));
+  // 줄여 그리면 화면 크기에 딱 맞춘 그림(mipmap)을 거의 1:1로 · 키워 그리면 또렷한 픽셀 그대로 (부드럽게는 아주 조금 줄일 때만)
+  const [from, m] = mipFor(src, cell / (size * k));
+  ctx.imageSmoothingEnabled = m === 1 && cell > size * k;
   ctx.drawImage(from, (frame % frames) * cell * m, 0, cell * m, cell * m, 0, 0, size, size);
   ctx.restore();
   return true;

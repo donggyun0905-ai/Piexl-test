@@ -42,7 +42,7 @@ function danger(s: RunState, a: AllyState): Vec | null {
   let vx = 0;
   let vy = 0;
   for (const h of s.hazards ?? []) {
-    if (h.damage <= 0 || h.tick < s.tick || !inHazard(h, a.x, a.y, R.r + 3)) continue;
+    if ((h.damage <= 0 && !h.hold) || (h.tick < s.tick && !h.hold) || !inHazard(h, a.x, a.y, R.r + 3)) continue;
     const away = normalize(a.x - h.x, a.y - h.y) ?? [1, 0];
     vx += away[0] * 2;
     vy += away[1] * 2;

@@ -82,6 +82,8 @@ export interface Hazard {
   from?: string;
   /** 공격한 적 종류 (맞으면 그 적의 상태이상, sim/foeStatus) */
   by?: EnemyKind;
+  /** 예고만: 때가 되어도 터지지 않고 만든 적이 지울 때까지 남음 (땅 물고기, 최대 5초) */
+  hold?: boolean;
   /** 만든 적 id: 터지기 전에 그 적이 쓰러지면 사라짐 (땅 물고기 착지) */
   owner?: number;
   /** 터지는 틱 */

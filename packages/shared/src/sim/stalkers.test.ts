@@ -94,6 +94,27 @@ describe("시즌 2 새 몬스터", () => {
     expect(hazards).toBeGreaterThan(0);
   });
 
+  it("땅 물고기: 기절해 늦어지면 예고만 남고, 실제로 땅에 닿을 때 그 자리에서 터짐", () => {
+    const run = withOne("landfish");
+    // 뛰어오르기 시작할 때까지
+    play(run, 400, () => {});
+    const e = run.enemies[0]!;
+    while (e.step !== 2) play(run, 1);
+    const warn = run.hazards!.find((h) => h.owner === e.id && h.hold)!;
+    expect(warn.damage).toBe(0);
+    // 오래 기절: 예고 때가 지나도 터지지 않음
+    e.stunTicks = 160;
+    play(run, 140);
+    expect(run.hazards!.some((h) => h.damage > 0 && h.by === "landfish")).toBe(false);
+    expect(run.hazards!.some((h) => h.owner === e.id && h.hold)).toBe(true);
+    // 기절이 풀리고 땅에 닿으면 그 자리에서 터짐 (예고는 사라짐)
+    let hit = false;
+    play(run, 200, () => {
+      if (run.effects.some((f) => f.kind === "pillar")) hit = true;
+    });
+    expect(hit).toBe(true);
+  });
+
   it("그림자: 등 뒤로 돌아가 큰 한 방", () => {
     const run = withOne("lurker");
     run.player.faceX = 1;

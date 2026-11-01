@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.312",
+    date: "2026-11-01",
+    items: {
+      ko: ["땅 물고기: 밀리거나 기절해도 예고 표시는 남아 있고, 물고기가 실제로 솟구치거나 땅에 닿는 순간 그 자리에서 터짐 (때가 어긋나지 않음)", "패왕전 등 화면을 줄여 볼 때 캐릭터·몬스터를 더 또렷하게: 화면 크기에 딱 맞춰 미리 줄이고 살짝 선명하게 다듬은 그림을 화면 픽셀에 맞춰 그림"],
+      en: ["Land Fish: even when knocked back or stunned, the warning stays and it only explodes where the fish actually bursts out or lands (no more mismatched timing)", "Characters and monsters look sharper when zoomed out (e.g. Champion Clash): pre-shrunk to the exact on-screen size, lightly sharpened and aligned to screen pixels"],
+      ja: ["土ザカナ: 押されたり気絶しても予告は残り、魚が実際に飛び出す・着地した瞬間にその場所で爆発（タイミングがずれない）", "覇王戦など縮小表示でキャラ・モンスターをよりくっきり: 画面サイズにぴったり合わせて事前に縮小し、軽く鮮明化して画面ピクセルに合わせて描画"],
+    },
+  },
+  {
     version: "0.48.311",
     date: "2026-11-01",
     items: {

@@ -241,12 +241,15 @@ export function drawCharacter(ctx: CanvasRenderingContext2D, name: string, x: nu
     col = pose.moving ? pose.step % 4 : 0;
     flip = side && pose.faceX < 0;
   }
-  const left = Math.round(x - size / 2);
-  const top = Math.round(y + r + 1 + footPad - size);
+  // 화면 픽셀에 맞춰 놓음 (반 픽셀에 걸치면 흐려짐)
+  const k = screenScale(ctx);
+  const left = Math.round((x - size / 2) * k) / k;
+  const top = Math.round((y + r + 1 + footPad - size) * k) / k;
   const [sx, sy] = [col * ss, row * ss];
   const blit = (img0: HTMLImageElement, y0: number) => {
-    ctx.imageSmoothingEnabled = ss > size; // 줄여 그리는 촘촘한 그림은 부드럽게 (많이 줄이면 미리 줄인 그림, mipmap)
-    const [from, m] = ss > size ? mipFor(img0, ss / (size * screenScale(ctx))) : [img0, 1];
+    // 줄여 그리는 촘촘한 그림은 화면 크기에 딱 맞춘 그림(mipmap)을 거의 1:1로 → 흐리지 않게 또렷한 픽셀로
+    const [from, m] = ss > size ? mipFor(img0, ss / (size * k)) : [img0, 1];
+    ctx.imageSmoothingEnabled = m === 1 && ss > size * k;
     if (flip) {
       ctx.save();
       ctx.translate(left + size, top);
