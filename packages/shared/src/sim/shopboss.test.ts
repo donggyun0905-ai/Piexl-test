@@ -1,3 +1,4 @@
+import { killGold } from "./loot";
 import { ROOM_CX, ROOM_CY } from "../constants";
 import { describe, expect, it } from "vitest";
 import { BOSS_TIERS, bossForFloor, ENEMIES } from "../content";
@@ -20,14 +21,22 @@ describe("층 구성", () => {
 });
 
 describe("돈·상점", () => {
-  it("처음 자금 50 · 던전에서는 적을 잡아도 돈이 없음 (방을 정리할 때 받음)", () => {
+  it("처음 자금 50 · 던전에서는 몬스터 하나에 1 (정예 10 · 날벌레 무리는 다 잡아야 1)", () => {
     const run = createRun(3, "drifter");
     expect(run.gold).toBe(50);
     run.enemies = [{ ...base(run), hp: 1 }];
     stepSim(run, { ...EMPTY_INPUT, aimX: 1000, attack: true });
     for (let i = 0; i < 30; i++) stepSim(run, EMPTY_INPUT);
     expect(run.kills).toBe(1);
-    expect(run.goldEarned).toBe(0);
+    expect(run.goldEarned).toBe(1);
+    const champ = { ...base(run), champ: true, champK: 2 };
+    const a = { ...base(run), flock: 77 };
+    const b = { ...base(run), id: a.id + 1, flock: 77 };
+    run.enemies = [a, b];
+    expect(killGold(run, champ)).toBe(10);
+    expect(killGold(run, a)).toBe(0);
+    b.hp = 0;
+    expect(killGold(run, a)).toBe(1);
   });
 
   it("상점 물건은 서 있기로는 안 사지고, F로 사면 돈이 줄고 가짐. 돈이 모자라면 못 삼", () => {
@@ -146,7 +155,7 @@ describe("보스", () => {
       stepSim(run, EMPTY_INPUT);
       stepSim(run, EMPTY_INPUT);
       expect(run.bossKills).toBe(1);
-      expect(run.gold).toBe(gold);
+      expect(run.gold).toBeGreaterThan(gold);
       expect(run.rooms[exit.id]!.cleared).toBe(true);
       expect(run.rooms[exit.id]!.pickups.filter((x) => x.kind === "passive")).toHaveLength(3);
     }

@@ -33,6 +33,7 @@ interface Seen {
 
 /** 로그 상태이상 [PlayerState 값, 글자, 색] (글자만 색, 피해 숫자는 늘 빨강) */
 const RUN_STATUS: readonly [string, TextKey, string][] = [
+  ["lureTicks", "dbCharm", "#ff7ad8"],
   ["poison", "dbPoison", "#8aff6a"],
   ["corrode", "dbHealCut", "#c88aff"],
   ["dbBleed", "dbBleed", "#ff7a7a"],
@@ -101,7 +102,7 @@ export class PwInfoNumbers {
   private observeRun(s: RunState, me: number): void {
     allPlayers(s).forEach((p, i) => {
       const now: Record<string, number> = { hp: p.hp };
-      for (const [f] of RUN_STATUS) now[f] = ((p as unknown as Record<string, number | undefined>)[f] ?? 0) > 0 ? 1 : 0;
+      for (const [f] of RUN_STATUS) now[f] = ((p as unknown as Record<string, number | undefined>)[f] ?? 0) > 0 && !(f === "lureTicks" && p.lureId !== undefined) ? 1 : 0;
       const was = this.runSeen[i];
       this.runSeen[i] = now;
       if (!was) return;

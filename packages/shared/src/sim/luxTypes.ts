@@ -23,4 +23,7 @@ export interface LuxEnemyState {
   luxDuel?: boolean;
   /** 강한 적 방(주황 방)의 정예: 크고 단단함 (sim/rooms.spawnEnemies) */
   champ?: boolean;
+  /** 정예가 될 때 곱한 체력 배율 (정예가 풀리면 나눔, sim/elite) · 같이 나온 무리(날벌레·박쥐) 번호: 무리를 다 잡아야 돈 */
+  champK?: number;
+  flock?: number;
 }

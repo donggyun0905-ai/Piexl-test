@@ -3,6 +3,7 @@
 // 베놈(독잠자리: 이리저리 날며 방 곳곳에 독가스 · 가스 안에 있으면 부식독 = 모든 회복·재생 40% 감소, sim/terrain)
 // 땅 물고기(땅속에서 나를 따라오는 원 → 멈춰 깜빡이다 솟구침 → 다른 자리로 뛰어 들어가며 그 자리도 터짐)
 // 그림자(희미하게 비치며 내 등 뒤로 돌아가 큰 한 방)
+import { fishDmgMul } from "./elite";
 import { ENEMIES } from "../content";
 import { roomTerrain } from "./bossToad";
 import { depth } from "./hero";
@@ -107,7 +108,7 @@ function venom(s: RunState, e: EnemyState, go: Vec): void {
 /** 땅 물고기가 실제로 솟구치거나 땅에 닿는 순간: 띄워 둔 예고를 지우고 지금 자리에서 터짐 (밀리거나 기절해도 때가 어긋나지 않게) */
 function fishHit(s: RunState, e: EnemyState): void {
   s.hazards = s.hazards?.filter((h) => !(h.owner === e.id && h.hold));
-  addShape(s, 0, { x: e.x, y: e.y, radius: R.FISH_R, damage: R.FISH_DMG + depth(s), fx: "pillar", by: "landfish" });
+  addShape(s, 0, { x: e.x, y: e.y, radius: R.FISH_R, damage: (R.FISH_DMG + depth(s)) * fishDmgMul(e), fx: "pillar", by: "landfish" });
 }
 
 /** 뛰어오른 땅 물고기: 하늘이라 벽·다른 적을 지나 내려앉을 자리까지 감 (enemies가 밀어내지 않음) */

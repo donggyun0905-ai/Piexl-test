@@ -30,7 +30,7 @@ const SYSTEM: [RegExp, string][] = [
   [/^BOSS/, "보스"],
   [/^(CRITTERS|TD)/, "타워 디펜스 적"],
   [/^MINIONS/, "날벌레·가디언"],
-  [/^(ENEMIES|HAZARDS|FOE_STATUS)/, "적 공통"],
+  [/^(ENEMIES|HAZARDS|FOE_STATUS|ELITE)/, "적 공통"],
   [/^ENDLESS/, "무한 모드"],
   [/^(COMBAT|PROJECTILES|PLAYER|ITEMS|LOOT|ROOMS|UTIL|PARTY|HERO|ARENA)/, "게임 공통"],
 ];

@@ -1,6 +1,5 @@
 import {
   applyBalance,
-  BALANCE_GROUPS,
   CHARACTERS,
   createRng,
   createRun,
@@ -119,9 +118,8 @@ describe("일일 도전 기록은 그 판의 수치로 확인", () => {
   it("수치 지문을 함께 내면 그 수치로 다시 돌림", async () => {
     const s = setup();
     const session = await login(s);
-    // 적을 잡으면 돈을 크게 (던전은 처음엔 처치 돈 없음): 처음 값으로 검사하면 '돈이 너무 많음'
-    const minions = BALANCE_GROUPS.find((g) => g.id === "enemies")!.ids;
-    const values = { enemies: Object.fromEntries(minions.map((id) => [id, { gold: 999 }])), rules: { LOOT_RULES: { KILL_GOLD: 1 } } };
+    // 적을 잡으면 받는 돈을 크게: 처음 값으로 검사하면 '돈이 너무 많음'
+    const values = { rules: { LOOT_RULES: { gold: 999 } } };
     const hash = String((await authed(s.ctx, "/api/admin/balance", session, { values })).body.hash);
     // 시드를 고정 (처치가 나오는 시드)
     s.ctx.dailySalt = btoa("pixel-rogue-balance-test-salt-01");

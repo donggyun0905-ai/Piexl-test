@@ -81,7 +81,7 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   /** 베놈: 독잠자리. 이리저리 날며 독가스를 퍼뜨림 (부식독: 회복·재생 40% 감소) */
   venom: { kind: "venom", hp: 34, radius: 5, speed: 0.6, contactDamage: 7, gold: 2 },
   /** 땅 물고기: 땅속에서 따라오다 솟구쳐 다른 자리로 뛰어듦 (뛰어오른 동안만 맞음) */
-  landfish: { kind: "landfish", hp: 52, radius: 6, speed: 0.75, contactDamage: 9, gold: 2 },
+  landfish: { kind: "landfish", hp: 30, radius: 6, speed: 0.75, contactDamage: 9, gold: 2 },
   /** 그림자: 희미하게 비치며 등 뒤로 돌아가 큰 한 방 */
   lurker: { kind: "lurker", hp: 30, radius: 5, speed: 0.7, contactDamage: 5, gold: 3 },
   /** 보스: 다가오다 돌진, 멈출 때 사방으로 탄 */

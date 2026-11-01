@@ -46,6 +46,7 @@ export function drawStatusGround(ctx: CanvasRenderingContext2D, s: RunState, alp
 
 const STAR = ["..Y..", ".YWY.", "YWWWY", ".YWY.", "..Y.."];
 const SKULL = [".PPP.", "PkPkP", "PPPPP", ".PkP."];
+const HEART = [".H.H.", "HWHHH", "HHHHH", ".HHH.", "..H.."];
 
 function pixels(ctx: CanvasRenderingContext2D, rows: readonly string[], x: number, y: number, colors: Record<string, string>): void {
   ctx.fillStyle = "#1a1622";
@@ -124,6 +125,21 @@ function playerOnly(ctx: CanvasRenderingContext2D, p: PlayerState, tick: number,
       const k = (tick + i * 11) % 30;
       ctx.fillRect(snap(x - 4 + i * 4), snap(y + p.r - 2 + k / 6), 1, 1);
     }
+  }
+  // 매혹(세이렌 음표): 머리 위로 분홍 하트가 떠오르고 몸에 분홍 빛
+  if ((p.lureTicks ?? 0) > 0 && p.lureId === undefined) {
+    ctx.globalAlpha = 0.25 + 0.15 * Math.sin(tick * 0.3);
+    ctx.fillStyle = "#ff7ad8";
+    ctx.beginPath();
+    ctx.ellipse(x, y, p.r + 2, p.r + 3, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    for (let i = 0; i < 2; i++) {
+      const k = (tick + i * 20) % 40;
+      ctx.globalAlpha = 1 - k / 40;
+      pixels(ctx, HEART, snap(x - 5 + i * 6), snap(y - p.r - 6 - k / 4), { H: "#ff6ac8", W: "#ffe0f4" });
+    }
+    ctx.globalAlpha = 1;
   }
   if ((p.dbCurse ?? 0) > 0) {
     const fast = (p.dbCurse ?? 0) < 60;

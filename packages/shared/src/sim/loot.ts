@@ -30,18 +30,26 @@ const R = {
   ELITE_GOLD_1: 5,
   ELITE_GOLD_3: 7,
   ELITE_GOLD_5: 10,
-  /** 던전에서 적을 잡으면 받는 돈 배율 (0 = 없음, 2026-10-31부터 방을 정리할 때만 받음) */
-  KILL_GOLD: 0,
+  /** 던전에서 몬스터 하나를 잡으면 받는 돈 (날벌레·박쥐 무리는 무리를 다 잡아야 한 번) */
+  gold: 1,
+  /** 던전에서 정예(주황 방의 큰 몬스터)를 잡으면 받는 돈 */
+  CHAMP_GOLD: 10,
 };
 export { R as LOOT_RULES };
 export const START_GOLD = () => R.START_GOLD;
-export const KILL_GOLD = () => R.KILL_GOLD;
+/** 몬스터 하나로 받는 가장 큰 돈 (진행 기록 검사) */
+export const KILL_GOLD = () => Math.max(R.gold, R.CHAMP_GOLD);
 /** 방 하나를 정리해 받는 가장 큰 돈 (진행 기록 검사) */
 export const ROOM_GOLD_MAX = () => Math.max(R.ROOM_GOLD_1, R.ROOM_GOLD_3, R.ROOM_GOLD_5, R.ELITE_GOLD_1, R.ELITE_GOLD_3, R.ELITE_GOLD_5);
 
-/** 적을 잡으면 받는 돈: 던전은 없음 (방을 정리할 때 받음) · 광야·패왕전·레이드 아레나·정해진 현상금은 그대로 */
+/** 적을 잡으면 받는 돈: 던전은 하나에 gold (정예 CHAMP_GOLD · 날벌레·박쥐 무리는 마지막 하나를 잡을 때만) · 광야·패왕전·레이드 아레나·정해진 현상금은 적 표의 돈 */
 export function killGold(s: RunState, e: EnemyState): number {
-  return e.bounty ?? Math.round(ENEMIES[e.kind].gold * (s.swarm || s.pvp || s.arenaLv ? 1 : R.KILL_GOLD));
+  if (e.bounty !== undefined) return e.bounty;
+  if (s.swarm || s.pvp || s.arenaLv) return ENEMIES[e.kind].gold;
+  // 정예였던 몬스터 (정예가 풀린 뒤 잡아도)
+  if (e.champ || e.champK) return R.CHAMP_GOLD;
+  if (e.flock !== undefined && s.enemies.some((o) => o !== e && o.flock === e.flock && o.hp > 0)) return 0;
+  return R.gold;
 }
 
 /** 방 가운데 (지금 방 크기를 따름) */

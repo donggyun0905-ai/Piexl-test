@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.318",
+    date: "2026-11-01",
+    items: {
+      ko: [
+        "돈: 몬스터 하나 잡을 때마다 +1 (날벌레·박쥐 무리는 무리를 다 잡아야 +1) · 정예(주황 방의 큰 몬스터)는 +10",
+        "정예: 방에 정예만 남으면 정예가 풀려 보통 몬스터로 (남은 체력 비율 그대로) · 층마다 오르는 정예 체력을 낮춤 · 대신 정예는 조금 빠르고 공격 주기가 빠름 · 정예 수치는 관리자 페이지에서",
+        "땅 물고기 체력 크게 낮춤 · 땅 물고기 정예는 체력은 조금만, 솟구침·착지 피해는 크게",
+        "세이렌 음표의 매혹이 보이게: 왼쪽 버프 칸 · 머리 위 '매혹' 글자 · 분홍 빛과 떠오르는 하트",
+      ],
+      en: [
+        "Gold: +1 per monster killed (gnat and bat swarms give +1 once the whole swarm is down) · elites (big monsters in orange rooms) give +10",
+        "Elites: when only elites are left in a room they lose elite status and become normal (keeping their HP ratio) · elite HP grows less per floor · elites now move a bit faster and attack more often · elite values are in the admin page",
+        "Land Fish HP greatly lowered · elite Land Fish get only a little more HP but much stronger burst and landing hits",
+        "Siren's Charm is now visible: left buff panel · 'Charm' overhead · pink glow and rising hearts",
+      ],
+      ja: [
+        "お金: モンスターを1体倒すごとに+1（羽虫・コウモリの群れは群れを全部倒すと+1）· 精鋭（オレンジ部屋の大きいモンスター）は+10",
+        "精鋭: 部屋に精鋭だけが残ると精鋭が解けて普通のモンスターに（残り体力の割合はそのまま）· 階ごとの精鋭の体力の伸びを低く · 代わりに精鋭は少し速く攻撃間隔が短い · 精鋭の数値は管理者ページで",
+        "土ザカナの体力を大きく下げる · 精鋭の土ザカナは体力は少しだけ、飛び出し・着地のダメージは大きく",
+        "セイレーンの音符の魅了が見えるように: 左のバフ欄 · 頭上の「魅了」· ピンクの光と浮かぶハート",
+      ],
+    },
+  },
+  {
     version: "0.48.317",
     date: "2026-11-01",
     items: {

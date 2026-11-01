@@ -1,4 +1,5 @@
 // 적 행동
+import { champFade, champMove } from "./elite";
 import { ENEMIES } from "../content";
 import { renMelee } from "./ren";
 import { depth } from "./hero";
@@ -151,6 +152,7 @@ export function updateEnemies(s: RunState): void {
       updateBoss(s, e, toP, go, spawned);
     }
     domainSlow(s, e, x0, y0);
+    champMove(s, e, x0, y0);
     // 금기: 서두르는 발 (움직인 거리 늘림) · 성급한 손 (공격 준비가 빨리 줄어듦)
     if (s.taboo) {
       const haste = tabooUp(s, "haste");
@@ -217,4 +219,5 @@ export function updateEnemies(s: RunState): void {
   }
 
   removeDead(s);
+  champFade(s);
 }

@@ -6,6 +6,7 @@ export const BUFF_TEXT = {
   bfTitle: l("버프 · 상태이상 · 대기", "Buffs · Debuffs · Cooldowns", "バフ · 状態異常 · 待機"),
   bfNone: l("켜진 버프 없음", "No active buffs", "バフなし"),
   bfEvo: l("각성", "Awakened", "覚醒"),
+  dbCharm: l("매혹 (공격 못 함·끌려감)", "Charm (can't attack, pulled)", "魅了（攻撃不可・引き寄せ）"),
   dbPoison: l("독", "Poison", "毒"),
   dbHealCut: l("치유감소", "Healing cut", "回復減少"),
   dbBleed: l("출혈", "Bleed", "出血"),

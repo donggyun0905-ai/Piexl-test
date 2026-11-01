@@ -1,4 +1,5 @@
 // 방·층 이동: 방 들어가기(적 배치), 출구 잠김·억지로 나가기, 쉼터, 계단
+import { eliteRoomHp, makeChamps } from "./elite";
 import { PERKS } from "../perks";
 import { COOP_ROOM, ROOM_CX as CX, ROOM_CY as CY, setRoomSize } from "../constants";
 import { bossForFloor, type BossKind } from "../content";
@@ -55,7 +56,6 @@ export { R as ROOMS_RULES };
 const BOSS_START_Y = ROOM_MIN_Y + 20;
 /** 쉼터에 처음 들어가면 회복하는 체력 (최대 체력 비율) */
 export const REST_HEAL = 0.3;
-
 /** 라스트 보스방 크기 (칸 수, 보통 방 21×13보다 큼 · 화면이 플레이어를 따라감) */
 export const BIG_COLS = 29;
 export const BIG_ROWS = 17;
@@ -178,7 +178,7 @@ export function spawnEnemies(s: RunState, roomId: number, elite: boolean): Enemy
   const count = base + partyExtraEnemies(s, base) + tabooSum(s, "horde") + (elite ? tabooSum(s, "eliteMore") : 0);
   // 층마다 나오는 졸개 (타워 디펜스 적 8종 포함, critters.minionKinds)
   const kinds = [...minionKinds(d), ...stalkerKinds(d)];
-  const hpMul = (1 + R.HP_PER_FLOOR * (d - 1)) * (elite ? 1.7 : 1) * partyHpMul(s) * tabooUp(s, "fleshHp");
+  const hpMul = (1 + R.HP_PER_FLOOR * (d - 1)) * (elite ? eliteRoomHp() : 1) * partyHpMul(s) * tabooUp(s, "fleshHp");
   const out: EnemyState[] = [];
   const g = shapeGrid(s.map.rooms[roomId]!.shape);
   for (let i = 0; i < count; i++) {
@@ -199,16 +199,16 @@ export function spawnEnemies(s: RunState, roomId: number, elite: boolean): Enemy
       if (dx * dx + dy * dy > 64 * 64 && (!g || bodyFits(g, x, y, r))) break;
     }
     const timer = rng.int(30, 90);
+    const flock = kind === "gnat" || kind === "bat" ? s.nextId : undefined;
     for (const [ox, oy] of kind === "gnat" ? SWARM : kind === "bat" ? BAT_FLOCK : [[0, 0] as const]) {
       // 퍼진 자리가 벽·기둥·구덩이·방 밖이면 무리 가운데에서 나옴
       const ok = x + ox > ROOM_MIN_X + r && x + ox < ROOM_MAX_X - r && y + oy > ROOM_MIN_Y + r && y + oy < ROOM_MAX_Y - r && (!g || bodyFits(g, x + ox, y + oy, r));
-      const e = makeEnemy(s, kind, ok ? x + ox : x, ok ? y + oy : y, hpMul, timer);
+      const e = Object.assign(makeEnemy(s, kind, ok ? x + ox : x, ok ? y + oy : y, hpMul, timer), flock ? { flock } : {});
       keepInRoom(e, g);
       out.push(e);
     }
   }
-  // 강한 적 방: 가장 센 둘(깊어질수록 더)이 정예 (체력 ×2.5 · 몸 ×1.25)
-  if (elite) for (const e of [...out].sort((a, b) => b.maxHp - a.maxHp || a.id - b.id).slice(0, 2 + Math.floor(d / 4))) Object.assign(e, { hp: Math.round(e.maxHp * 2.5), maxHp: Math.round(e.maxHp * 2.5), r: Math.round(e.r * 1.25), champ: true });
+  if (elite) makeChamps(out, d); // 강한 적 방: 가장 센 몇 마리가 정예 (sim/elite)
   return out;
 }
 
