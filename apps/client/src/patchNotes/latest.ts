@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.311",
+    date: "2026-11-01",
+    items: {
+      ko: ["차원의 순례자가 너무 작아진 것 고침: 소녀 키를 일반 캐릭터에 맞추고 큰 가방은 그만큼 같이 커짐 · 빛의 사도도 키를 일반 캐릭터에 맞춤 (성장 모습은 단계마다 커짐)"],
+      en: ["Fixed the Dimension Pilgrim being too small: the girl now matches regular character height and her big backpack scales with her · Lux also matches regular height (growth forms still grow each stage)"],
+      ja: ["次元の巡礼者が小さくなりすぎたのを修正: 少女の背を通常キャラに合わせ、大きなかばんも一緒に大きく · 光の使徒も背を通常キャラに合わせる（成長した姿は段階ごとに大きく）"],
+    },
+  },
+  {
     version: "0.48.310",
     date: "2026-10-31",
     items: {
