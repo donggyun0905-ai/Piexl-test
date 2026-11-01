@@ -32,7 +32,7 @@ const V = {
   GALAXY_MAX: 100,
   BANG_R: 50,
   BANG_MUL: 10,
-  /** 웨폰 마스터: 날아가는 검 수 (나머지는 몸 둘레를 지킴) */
+  /** 웨폰 마스터: 차례(불·물·번개·땅·풀) 중 앞의 몇 원소가 날아가는 검인지 (나머지는 몸 둘레를 지킴) */
   BLADE_FLY: 3,
 };
 export { V as ORBIT_RULES };
@@ -119,12 +119,16 @@ export function orbBodies(p: PlayerState, cx: number, cy: number, tick: number):
       ring(n, R, dir, 4, 0, (i) => PLANETS[i % PLANETS.length]!);
       break;
     case "blades": {
-      // 웨폰 마스터: 앞의 검 셋(불·물·번개)은 몸 위에 떠 있다가 적에게 날아가 때림.
-      // 나머지 검(땅·풀)은 날아가지 않고 몸 둘레를 빠르게 돌며 탄을 막고 붙은 적을 벰
-      const fly = Math.min(n, V.BLADE_FLY);
-      ring(fly, R, [0, -1], 5, 0, (i) => BLADE_TAGS[i % BLADE_TAGS.length]!, true);
+      // 웨폰 마스터: 검은 불→물→번개→땅→풀 차례로 늘어남 (천지창조로 6번째부터 다시 불부터).
+      // 날아가는 원소(앞의 BLADE_FLY개: 불·물·번개)는 몸 위에 떠 있다가 적에게 날아가 때리고,
+      // 나머지(땅·풀)는 날아가지 않고 몸 둘레를 빠르게 돌며 탄을 막고 붙은 적을 벰
+      const tags = Array.from({ length: n }, (_, i) => BLADE_TAGS[i % BLADE_TAGS.length]!);
+      const flies = (t: Element) => BLADE_TAGS.indexOf(t) < V.BLADE_FLY;
+      const fly = tags.filter(flies);
+      const guard = tags.filter((t) => !flies(t));
+      ring(fly.length, R, [0, -1], 5, 0, (i) => fly[i]!, true);
       const d2 = mulV(dir, dir);
-      ring(n - fly, R + 8, mulV(d2, d2), 5, 1, (i) => BLADE_TAGS[(fly + i) % BLADE_TAGS.length]!);
+      ring(guard.length, R + 8, mulV(d2, d2), 5, 1, (i) => guard[i]!);
       for (const b of out) if (b.ring === 1) b.striker = false;
       break;
     }

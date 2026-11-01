@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.327",
+    date: "2026-11-01",
+    items: {
+      ko: ["원소술사 웨폰 마스터: 검이 불→물→번개→땅→풀 차례로 늘어남 (천지창조로 6번째부터 다시 불부터) · 날아가는 원소(불·물·번개)면 날아다니는 검이, 땅·풀이면 몸 둘레 검이 하나 늘어남 (전에는 늘어난 검이 모두 몸 둘레만 돌았음)"],
+      en: ["Elementalist Blade Lord: blades now grow in order fire → water → thunder → earth → grass (Genesis adds from fire again at the 6th) · flying elements (fire, water, thunder) add a flying blade, earth and grass add a guarding blade (extra blades used to only circle the body)"],
+      ja: ["元素術師ウェポンマスター: 剣が火→水→雷→土→草の順に増える（天地創造で6本目からまた火から）· 飛ぶ元素（火・水・雷）なら飛び回る剣、土・草なら体の周りの剣が1本増える（以前は増えた剣が全部体の周りを回るだけだった）"],
+    },
+  },
+  {
     version: "0.48.326",
     date: "2026-11-01",
     items: {

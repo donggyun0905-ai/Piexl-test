@@ -108,6 +108,14 @@ describe("원소술사 새 효과", () => {
     expect(s.pendingBlasts[0]).toMatchObject({ x: 120, y: 72 });
   });
 
+  it("웨폰 마스터: 검은 불·물·번개·땅·풀 차례로 늘어남 (7개 = 날아가는 불·물·번개·불·물 + 지키는 땅·풀)", () => {
+    const s = elem("bladelord");
+    s.player.passives.push("genesis", "genesis");
+    const b = orbBodies(s.player, 120, 72, 0);
+    expect(b.filter((x) => x.striker).map((x) => x.tag)).toEqual(["fire", "water", "thunder", "fire", "water"]);
+    expect(b.filter((x) => x.striker === false).map((x) => x.tag)).toEqual(["earth", "grass"]);
+  });
+
   it("웨폰 마스터 검 끝: 날아가는 검 셋, 지키는 검 둘", () => {
     const b = orbBodies(elem("bladelord").player, 120, 72, 0);
     expect(b.filter((x) => x.striker)).toHaveLength(3);
