@@ -202,6 +202,8 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   drawPrimeval(ctx, s, snap);
   eachPerson(s, () => drawGreatSpirit(ctx, s, alpha, snap));
   eachPerson(s, (me) => {
+    // 새끼 오리는 오리 뒤에 (오리를 가리지 않게)
+    drawDucklings(ctx, s, alpha, snap);
     drawPlayer(ctx, s, alpha, snap, me && opt.showHitbox, isTiger(s) || (me && (opt.hidePlayer?.() ?? false)));
     drawEngineerGear(ctx, s, alpha, snap);
     drawOrbs(ctx, s, alpha, snap);
@@ -215,7 +217,6 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
     drawIdra(ctx, s, alpha, snap);
     drawSpiritKin(ctx, s, alpha, snap);
     drawRunPet(ctx, s, alpha, snap);
-    drawDucklings(ctx, s, alpha, snap);
     drawNinja(ctx, s, alpha, snap);
     drawChrono(ctx, s, snap);
     drawSummons(ctx, s, alpha, snap);

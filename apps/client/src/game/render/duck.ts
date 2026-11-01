@@ -2,37 +2,64 @@
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
 import { additive, glow, shock } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
+import { customImage } from "../customArt";
 
 const YEL = "#ffd84a";
 const BILL = "#ff9a2a";
 const EYE = "#3a3446";
 const WAVE = "155, 216, 255";
 
-/** 새끼 오리들 (플레이어 다음): 옆에서 본 몸·머리·부리, 걸으면 뒤뚱거림 · 탄을 막은 직후엔 하얗게 */
+/** 그려 주신 새끼 오리 그림 (sprites/custom/fx_duckling, 48칸 4×2: 위 서기 · 아래 꽥, 칸 = 앞·뒤·왼·오) → 게임에서는 10칸으로 (예전 도트 새끼 오리와 비슷한 크기) */
+const CHICK = 48;
+const CHICK_DRAW = 10;
+
+/** 새끼 오리들 (플레이어보다 먼저 = 오리 뒤): 걷는 쪽을 봄(가만히 있으면 앞) · 꽥 할 때 꽥 그림 · 걸으면 뒤뚱 · 탄을 막은 직후엔 하얗게 */
 export function drawDucklings(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   if (s.over) return;
+  const img = customImage("fx:duckling");
   for (const [i, d] of (s.player.ducklings ?? []).entries()) {
     const x = snap(lerp(d.prevX, d.x, alpha));
     const y = snap(lerp(d.prevY, d.y, alpha));
-    const moving = d.x !== d.prevX || d.y !== d.prevY;
+    const mx = d.x - d.prevX;
+    const my = d.y - d.prevY;
+    const moving = mx !== 0 || my !== 0;
     const bob = moving && ((s.tick >> 3) + i) % 2 === 0 ? 1 : 0;
+    if (!img) {
+      drawChickCode(ctx, x, y, d.face, bob, d.cd > 50);
+      continue;
+    }
+    // 꽥: 이 오리 자리에서 막 나온 음파 (ducklings.quackChicks가 남김) → 그 쪽을 보고 꽥 그림
+    const q = s.effects.find((fx) => fx.kind === "quack" && fx.width === 0.5 && Math.abs(fx.x - d.x) < 6 && Math.abs(fx.y - d.y) < 6);
+    const [dx, dy] = q ? [q.dirX, q.dirY] : moving ? [mx, my] : [0, 1];
+    const col = Math.abs(dy) > Math.abs(dx) ? (dy > 0 ? 0 : 1) : dx < 0 ? 2 : 3;
     ctx.save();
-    ctx.translate(x, y);
-    ctx.scale(d.face, 1);
     ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
-    ctx.fillRect(-3, 2, 6, 1);
-    ctx.fillStyle = d.cd > 50 ? "#ffffff" : YEL;
-    ctx.fillRect(-3, -1 - bob, 5, 3);
-    ctx.fillRect(-4, -2 - bob, 1, 1);
-    ctx.fillRect(0, -4 - bob, 3, 3);
-    ctx.fillStyle = BILL;
-    ctx.fillRect(3, -3 - bob, 2, 1);
-    ctx.fillRect(-1 + bob, 2, 1, 1);
-    ctx.fillRect(1 - bob, 2, 1, 1);
-    ctx.fillStyle = EYE;
-    ctx.fillRect(2, -4 - bob, 1, 1);
+    ctx.fillRect(x - 3, y + 2, 6, 1);
+    if (d.cd > 50) ctx.filter = "brightness(2.2)";
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(img, col * CHICK, q ? CHICK : 0, CHICK, CHICK, x - CHICK_DRAW / 2, y + 3 - CHICK_DRAW - bob, CHICK_DRAW, CHICK_DRAW);
     ctx.restore();
   }
+}
+
+/** 그림을 못 불러왔을 때: 옆에서 본 작은 도트 오리 */
+function drawChickCode(ctx: CanvasRenderingContext2D, x: number, y: number, face: number, bob: number, white: boolean): void {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(face, 1);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+  ctx.fillRect(-3, 2, 6, 1);
+  ctx.fillStyle = white ? "#ffffff" : YEL;
+  ctx.fillRect(-3, -1 - bob, 5, 3);
+  ctx.fillRect(-4, -2 - bob, 1, 1);
+  ctx.fillRect(0, -4 - bob, 3, 3);
+  ctx.fillStyle = BILL;
+  ctx.fillRect(3, -3 - bob, 2, 1);
+  ctx.fillRect(-1 + bob, 2, 1, 1);
+  ctx.fillRect(1 - bob, 2, 1, 1);
+  ctx.fillStyle = EYE;
+  ctx.fillRect(2, -4 - bob, 1, 1);
+  ctx.restore();
 }
 
 /** 깃털·거품이면 그리고 true */
