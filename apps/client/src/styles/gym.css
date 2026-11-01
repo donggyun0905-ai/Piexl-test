@@ -111,3 +111,6 @@
 .gym-pinfo .gym-note {
   color: #b8a8e0;
 }
+.gym-row.off {
+  opacity: 0.5;
+}

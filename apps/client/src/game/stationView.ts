@@ -1,5 +1,5 @@
 // 작업대 창에 보여 줄 값 (gameLoop가 만들어 LoadoutView.station으로 넘김): 아티팩터 제작대 · 추적자 튜닝소
-import { gymPassives, gymUsed, BENCH_OP, benchCan, benchCost, benchLv, benchStats, isHidden, isOwn, TUNE, TUNE_SLOTS, tuneChance, tuneCost, type PassiveId, type RunState, type StationKind, type StationResult } from "@pixel-rogue/shared";
+import { GYM_OFF, GYM_STATS, gymBlocked, gymPassives, gymUsed, BENCH_OP, benchCan, benchCost, benchLv, benchStats, isHidden, isOwn, TUNE, TUNE_SLOTS, tuneChance, tuneCost, type PassiveId, type RunState, type StationKind, type StationResult } from "@pixel-rogue/shared";
 
 export interface BenchItem {
   id: PassiveId;
@@ -31,7 +31,7 @@ export interface StationView {
   slots?: TuneSlotView[];
   last?: StationResult;
   /** 단련의 방: 기구 번호 · 이 방 기구를 썼는지 · 남은 포인트 · 마지막 미니게임 결과 · 항목마다 단계 · 가진 패시브 */
-  gym?: { device: number; used: boolean; pts: number; last?: { device: number; score: number; pts: number }; lv: Record<string, number>; passives: PassiveId[] };
+  gym?: { device: number; used: boolean; pts: number; blocked: string[]; oni: boolean; last?: { device: number; score: number; pts: number }; lv: Record<string, number>; passives: PassiveId[] };
 }
 
 export function stationView(run: RunState): StationView | undefined {
@@ -41,7 +41,7 @@ export function stationView(run: RunState): StationView | undefined {
   const base = { kind: pr.station, gold: run.gold, ...(p.stLast ? { last: p.stLast } : {}) };
   if (pr.station === "gym") {
     const g = p.gym;
-    return { ...base, gym: { device: pr.device ?? 0, used: gymUsed(run), pts: g?.pts ?? 0, ...(g?.last ? { last: g.last } : {}), lv: { ...(g?.lv ?? {}) }, passives: gymPassives(p) } };
+    return { ...base, gym: { device: pr.device ?? 0, used: gymUsed(run), pts: g?.pts ?? 0, blocked: GYM_STATS.filter((k) => !GYM_OFF.includes(k) && gymBlocked(p, k)), oni: p.characterId === "oni", ...(g?.last ? { last: g.last } : {}), lv: { ...(g?.lv ?? {}) }, passives: gymPassives(p) } };
   }
   if (pr.station === "bench") {
     const ops = [BENCH_OP.up, BENCH_OP.swap, BENCH_OP.tune, BENCH_OP.fuse] as const;

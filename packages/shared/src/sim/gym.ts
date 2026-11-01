@@ -47,6 +47,19 @@ export const GYM_OFF: readonly GymStat[] = ["lifesteal"];
 export const GYM_OP = { result: 9, up: 10 } as const;
 const PASSIVE_AT = 32;
 
+/** 이 캐릭터에게는 효과가 없어 막은 능력치 (2026-11-01 전체 캐릭터 점검):
+ *  최대 체력 고정(거너·잔영·저주받은 주사위 체력) · 공격 간격이 무기에 고정(버려진 자들·잔영)이거나 차크람이 돌아와야 다시 던짐(베두인) ·
+ *  주 공격이 치명타를 굴리지 않음(기계공학자 광선·의사) */
+const NO_EFFECT: Partial<Record<string, readonly GymStat[]>> = {
+  gunner: ["maxHp"],
+  remnant: ["maxHp", "attackSpeed"],
+  abandoned: ["attackSpeed"],
+  bedouin: ["attackSpeed"],
+  engineer: ["critChance", "critDamage"],
+  doctor: ["critChance", "critDamage"],
+};
+export const gymBlocked = (p: PlayerState, k: GymStat): boolean => GYM_OFF.includes(k) || !!NO_EFFECT[p.characterId]?.includes(k) || (k === "maxHp" && p.curseHp !== undefined);
+
 export const gymFloor = (floor: number) => floor >= R.FROM_FLOOR;
 const roomKey = (s: RunState) => s.floor * 1000 + s.roomId;
 /** 이 방의 기구를 이미 썼는지 (셋 중 하나만) */
@@ -80,7 +93,7 @@ export function gymMenu(s: RunState, op: number, a: number, b: number): void {
     const id = gymPassives(p)[a - PASSIVE_AT];
     return id ? `p:${id}` : undefined;
   })();
-  if (!key || gymLv(p, key) >= R.MAX_LV || GYM_OFF.includes(key as GymStat)) return;
+  if (!key || gymLv(p, key) >= R.MAX_LV || (a < PASSIVE_AT && gymBlocked(p, key as GymStat))) return;
   p.gym.lv[key] = gymLv(p, key) + 1;
   p.gym.pts--;
   recalcStats(s);

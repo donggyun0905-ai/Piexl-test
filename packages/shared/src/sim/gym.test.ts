@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { generateFloor } from "./floor";
-import { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymPassiveStep, gymUsed } from "./gym";
+import { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymBlocked, gymPassiveStep, gymUsed } from "./gym";
 import { goThrough, startFloor } from "./rooms";
 import { menuCode } from "./station";
 import { createRun, stepSim } from "./run";
@@ -75,6 +75,17 @@ describe("단련의 방", () => {
   it("패시브 강화는 좋은 몫만 키움 (무거운 갑옷: 체력만 오르고 이동 속도 −는 그대로) · 능력치 없는 패시브는 공격력", () => {
     expect(gymPassiveStep("heavyPlate")).toEqual([{ stat: "maxHp", add: 40 * GYM_RULES.passiveBoost }]);
     expect(gymPassiveStep("ricochet")).toEqual([{ stat: "damage", mul: 1 + GYM_RULES.passivePlain }]);
+  });
+
+  it("효과가 없는 캐릭터는 막음: 거너 최대 체력(고정) · 버려진 자들 공격 속도(무기 고정) · 기계공학자 치명타(광선은 치명타 없음)", () => {
+    for (const [c, k] of [["gunner", "maxHp"], ["abandoned", "attackSpeed"], ["engineer", "critChance"]] as const) {
+      const s = createRun(5, c);
+      s.player.gym = { pts: 3, lv: {}, rooms: [] };
+      expect(gymBlocked(s.player, k)).toBe(true);
+      menu(s, menuCode(GYM_OP.up, GYM_STATS.indexOf(k)));
+      expect(s.player.gym.pts).toBe(3);
+      expect(gymBlocked(s.player, "damage")).toBe(false);
+    }
   });
 });
 

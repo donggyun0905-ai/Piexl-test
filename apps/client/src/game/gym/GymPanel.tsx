@@ -53,13 +53,17 @@ export function GymPanel({ gym, lang, t, send }: { gym: Gym; lang: Lang; t: (k: 
         {GYM_STATS.map((k, i) => {
           if (GYM_OFF.includes(k)) return null;
           const lv = gym.lv[k] ?? 0;
+          const off = gym.blocked.includes(k);
+          // 오니: 공격력·공격 속도·사거리(무기 숙련 포함)는 최대 체력·재생력·효과 범위로 바뀌어 오름
+          const oni = gym.oni && (k === "damage" || k === "attackSpeed" || k === "range" || k === "weapon");
           return (
-            <div key={k} className="gym-row">
+            <div key={k} className={`gym-row${off ? " off" : ""}`}>
               <span className="gym-name">{t(`gymStat_${k}` as TextKey)}</span>
               <small>
-                Lv {lv}/{max} · {t("gymPer")} {fmt(k, gymStep(k))} · {t("gymNow")} {fmt(k, gymStep(k) * lv)}
+                {off ? t("gymNoEffect") : `Lv ${lv}/${max} · ${t("gymPer")} ${fmt(k, gymStep(k))} · ${t("gymNow")} ${fmt(k, gymStep(k) * lv)}`}
+                {oni && ` · ${t("gymOni")}`}
               </small>
-              <button type="button" disabled={gym.pts <= 0 || lv >= max} onClick={() => up(i)}>
+              <button type="button" disabled={off || gym.pts <= 0 || lv >= max} onClick={() => up(i)}>
                 +
               </button>
             </div>

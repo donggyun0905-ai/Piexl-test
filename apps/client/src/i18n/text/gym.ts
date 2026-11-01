@@ -17,6 +17,8 @@ export const GYM_TEXT = {
   gymNow: l("지금", "now", "現在"),
   gymPassivePlainNote: l("능력치가 없는 효과 패시브라 대신 공격력이 오름 (효과는 그대로)", "Effect-only passive, so damage goes up instead (the effect itself stays the same)", "能力値のない効果パッシブなので代わりに攻撃力が上がる（効果はそのまま）"),
   gymPassiveBadNote: l("깎는 몫(체력·이동 속도 등 −)은 커지지 않고 그대로", "Penalties (− HP, move speed, etc.) don't grow", "マイナス分（体力・移動速度など）は増えずそのまま"),
+  gymNoEffect: l("이 캐릭터에게는 효과가 없어 막아 둠", "No effect on this character, so it's locked", "このキャラには効果がないので封印"),
+  gymOni: l("오니는 공격력→최대 체력 · 공격 속도→재생력 · 사거리→효과 범위로 바뀌어 오름", "Oni converts damage → max HP · attack speed → regen · range → effect area", "鬼は攻撃力→最大体力・攻撃速度→再生力・射程→効果範囲に変わって上がる"),
   gymStat_projectileSpeed: l("탄 속도", "Projectile speed", "弾速"),
   gymStat_damage: l("공격력", "Damage", "攻撃力"),
   gymStat_maxHp: l("최대 체력", "Max HP", "最大体力"),

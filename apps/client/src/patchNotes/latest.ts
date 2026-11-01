@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.328",
+    date: "2026-11-01",
+    items: {
+      ko: [
+        "단련의 방: 캐릭터에게 효과가 없는 능력치는 막음 (흐리게 '효과 없음') — 거너·잔영 최대 체력(고정) · 잔영·버려진 자들·베두인 공격 속도 · 기계공학자·의사 치명타 확률·피해 · 저주받은 주사위로 체력이 고정되면 최대 체력",
+        "오니는 공격력·공격 속도·사거리·무기 숙련 줄에 '최대 체력·재생력·효과 범위로 바뀌어 오름' 안내",
+      ],
+      en: [
+        "Training Room: stats with no effect on your character are locked (greyed 'no effect') — Gunner/Remnant max HP (fixed) · Remnant/Abandoned/Bedouin attack speed · Engineer/Doctor crit chance & damage · max HP when fixed by the Cursed Die",
+        "Oni's damage, attack speed, range and weapon mastery rows now note they convert into max HP, regen and effect area",
+      ],
+      ja: [
+        "鍛錬の部屋: キャラに効果のない能力値は封印（薄く「効果なし」）— ガンナー・残影の最大体力（固定）· 残影・捨てられた者たち・ベドウィンの攻撃速度 · 機械工学者・医者のクリティカル率・ダメージ · 呪われたサイコロで体力が固定された時の最大体力",
+        "鬼は攻撃力・攻撃速度・射程・武器熟練の行に「最大体力・再生力・効果範囲に変わって上がる」案内",
+      ],
+    },
+  },
+  {
     version: "0.48.327",
     date: "2026-11-01",
     items: {
