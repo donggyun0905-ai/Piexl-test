@@ -7,9 +7,9 @@ export const NOTES: PatchNote[] = [
     version: "0.48.334",
     date: "2026-11-01",
     items: {
-      ko: ["라스트 보스 멸망의 용 새 그림 (시험): 위에서 본 모습 → 옆모습 · 걷기 2 · 숨 들이켜기 · 불길"],
-      en: ["New Dragon of Ruin art (trial): top-down → side view · two walk frames · inhaling · fire breath"],
-      ja: ["ラストボス滅びの竜の新しい絵（試験）: 上から見た姿 → 横向き · 歩き2 · 息を吸う · 炎"],
+      ko: ["라스트 보스 멸망의 용 새 그림 (시험): 위에서 본 모습 → 옆모습 · 걷기 2 · 숨 들이켜기 · 불길 · 몸통이 맞는 범위 가운데에"],
+      en: ["New Dragon of Ruin art (trial): top-down → side view · two walk frames · inhaling · fire breath · torso centered on its hitbox"],
+      ja: ["ラストボス滅びの竜の新しい絵（試験）: 上から見た姿 → 横向き · 歩き2 · 息を吸う · 炎 · 胴体が当たり判定の中央に"],
     },
   },
   {
