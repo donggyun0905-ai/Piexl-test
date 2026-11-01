@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.323",
+    date: "2026-11-01",
+    items: {
+      ko: ["라스트 보스방에 처음 들어가면 체력 가득: 7층뿐 아니라 무한 모드(11층부터 큰 보스방)·영웅의 길 라스트 보스방에서도 되게 고침"],
+      en: ["Full heal on first entering a last-boss room now also works in Endless mode (big boss rooms from floor 11) and Hero's Road, not just floor 7"],
+      ja: ["ラストボス部屋に初めて入ると体力全快: 7階だけでなく無限モード（11階からの大きなボス部屋）・英雄の道のラストボス部屋でも効くよう修正"],
+    },
+  },
+  {
     version: "0.48.322",
     date: "2026-11-01",
     items: {

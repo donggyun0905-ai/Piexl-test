@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { ROOM_COLS, ROOM_CX, ROOM_CY } from "../constants";
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
-import { continueToLastFloor } from "./rooms";
+import { continueToLastFloor, goThrough, startFloor } from "./rooms";
 import { updateWaves } from "./bossWaves";
 import { createPracticeRun, practiceClearEnemies, practiceSpawn } from "./practice";
 import { DASH_COOLDOWN, EXIT_X, makeEnemy } from "./util";
@@ -58,6 +58,19 @@ describe("라스트 보스 층 (7층)", () => {
     run.player.hp = 10;
     nextRoom(run);
     expect(run.map.rooms[run.roomId]!.type).toBe("exit");
+    expect(run.player.hp).toBe(run.player.stats.maxHp);
+  });
+
+  it("무한 모드 11층부터 큰 보스방에 처음 들어가도 체력 가득", () => {
+    const run = createRun(5, "warden", [], false, true);
+    startFloor(run, 11);
+    const exit = run.map.rooms[run.map.exitId]!;
+    const from = run.map.rooms.find((r) => r.exits.includes(exit.id))!;
+    run.roomId = from.id;
+    run.rooms[from.id]!.cleared = true;
+    run.player.hp = 10;
+    goThrough(run, from.exits.indexOf(exit.id));
+    expect(run.roomId).toBe(exit.id);
     expect(run.player.hp).toBe(run.player.stats.maxHp);
   });
 
