@@ -14,6 +14,9 @@ from s2_common import SPRITES
 DARK = 42
 # 어두운 옷 캐릭터: 배경(완전한 검정)만 지우게 기준을 낮춤
 DARK_BY = {"plague": 12}
+# 검은 머리·옷이 많은 캐릭터: 바깥 테두리에서 이어진 거의 완전한 검정(밝기 FLOOD 이하)만 배경으로 지움 (몸 안 검은 머리가 지워지지 않게)
+FLOOD_BG = {"wanderer"}
+FLOOD = 8
 # 연기가 넓게 퍼진 캐릭터: 칸보다 넓으면 줄이지 않고 몸 둘레만 남김
 CROP_WIDE = {"plague"}
 # 앞모습(서기) 키 = 116칸, 다른 자세도 같은 배율 (칸에 안 들어가면 그 자세만 더 줄임)
@@ -45,6 +48,8 @@ ATTACK_LR = {
     # 각성 동물: 공격 줄 왼·오 칸이 바뀌어 있음
     **{f"morph-{a}-evo": ("2", "3") for a in ("bear", "boar", "eagle", "snake", "phoenix", "bat")},
 }
+# 원본에 뒷모습 공격이 없는 캐릭터 (둘째 칸이 앞모습·옆 칸 조각과 겹침): 뒷모습 공격 칸에 뒷모습 서기를 씀
+BACK_ATTACK_STAND = {"mystic"}
 # 대시 오른쪽 칸이 왼쪽을 보는 캐릭터: 그 칸을 뒤집어 오른쪽으로, 원래 그림은 왼쪽으로 (사용자 확인)
 DASH_FLIP = {"morph-bear"}
 # 다 맞춘 뒤에도 왼·오가 반대인 줄: 그 줄의 왼쪽·오른쪽 칸을 서로 바꿈 (1 공격 · 2 걷기 왼발 · 3 걷기 오른발, 오른쪽 그림 확인 2026-10-31)
@@ -80,15 +85,33 @@ def cut(pts, cw, cols):
     return list(groups.values())
 
 
-def pieces(img, cols, rows, dark=DARK):
-    """어두운 배경이 아닌 칸을 8방향으로 이은 덩어리 → 가운데가 놓인 칸(cols×rows)에 모음"""
+def flood_bg(img):
+    """바깥 테두리에서 4방향으로 이어진 거의 완전한 검정 = 배경 (1이면 배경)"""
+    w, h = img.size
+    px = img.load()
+    bg = bytearray(w * h)
+    q = deque((x, y) for x in range(w) for y in (0, h - 1)) + deque((x, y) for y in range(h) for x in (0, w - 1))
+    while q:
+        x, y = q.popleft()
+        if bg[y * w + x] or max(px[x, y][:3]) > FLOOD: continue
+        bg[y * w + x] = 1
+        for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+            if 0 <= nx < w and 0 <= ny < h and not bg[ny * w + nx]: q.append((nx, ny))
+    return bg
+
+
+def pieces(img, cols, rows, dark=DARK, flood=False):
+    """어두운 배경이 아닌 칸을 8방향으로 이은 덩어리 → 가운데가 놓인 칸(cols×rows)에 모음 (flood: 테두리에서 이어진 검정만 배경)"""
     w, h = img.size
     px = img.load()
     seen = bytearray(w * h)
+    if flood:
+        bg = flood_bg(img)
+        seen = bytearray(bg)
     cells = [[[] for _ in range(cols)] for _ in range(rows)]
     for y0 in range(h):
         for x0 in range(w):
-            if seen[y0 * w + x0] or max(px[x0, y0][:3]) <= dark: continue
+            if seen[y0 * w + x0] or (not flood and max(px[x0, y0][:3]) <= dark): continue
             seen[y0 * w + x0] = 1
             q, pts = deque([(x0, y0)]), []
             while q:
@@ -97,7 +120,7 @@ def pieces(img, cols, rows, dark=DARK):
                 for dx in (-1, 0, 1):
                     for dy in (-1, 0, 1):
                         nx, ny = x + dx, y + dy
-                        if 0 <= nx < w and 0 <= ny < h and not seen[ny * w + nx] and max(px[nx, ny][:3]) > dark:
+                        if 0 <= nx < w and 0 <= ny < h and not seen[ny * w + nx] and (flood or max(px[nx, ny][:3]) > dark):
                             seen[ny * w + nx] = 1
                             q.append((nx, ny))
             if len(pts) < 12: continue  # 먼지 같은 점
@@ -134,7 +157,7 @@ def build(name):
     grid = {}
     for tag, cols, rows, at in FILES:
         img = Image.open(os.path.join(HERE, "src", f"{name}-{tag}.png")).convert("RGBA")
-        for r, line in zip(at, pieces(img, cols, rows, DARK_BY.get(name, DARK))):
+        for r, line in zip(at, pieces(img, cols, rows, DARK_BY.get(name, DARK), name in FLOOD_BG)):
             for c, part in enumerate(line): grid[r, c] = part
     # GPT가 '왼쪽' 칸도 오른쪽을 보게 그리는 일이 많음 → 서기·공격·걷기의 왼쪽은 오른쪽을 뒤집어 씀 (FLIP_LEFT에 없는 캐릭터는 그대로)
     raw = dict(grid)
@@ -151,6 +174,8 @@ def build(name):
         grid[r, 3] = grid[r, 2].transpose(Image.FLIP_LEFT_RIGHT)
     for r in ROW_SWAP.get(name, ()):
         grid[r, 2], grid[r, 3] = grid[r, 3], grid[r, 2]
+    if name in BACK_ATTACK_STAND:
+        grid[1, 1] = raw[0, 1]
     if name in DASH_FLIP:
         grid[4, 2], grid[4, 3] = raw[4, 3].transpose(Image.FLIP_LEFT_RIGHT), raw[4, 3]
     base = BODY / grid[0, 0].height

@@ -1,5 +1,5 @@
 // 방랑객 그리기: 무심의 원(바닥의 하늘색 원·도는 칼 눈금, 서 있으면 차오름) · 천검란 게이지 · 초승달 검기 · 칼날 폭풍(초승달 검기 소용돌이)
-// 효과: 베기 · 발도 한 줄 · 적 몸의 바늘 같은 일직선 칼선 · 원 대시 · 방 전체 초승달 검기 · 예리함(새 칼빛: 번쩍이는 십자 빛 + 붉은 방울)
+// 달빛 일섬: 곧 베일 적에 칼자국·차오르는 초승달 · 효과: 베기 · 발도 한 줄 · 적 몸의 바늘 같은 일직선 칼선 · 원 대시 · 방 전체 초승달 검기 · 예리함(새 칼빛: 번쩍이는 십자 빛 + 붉은 방울)
 import { WANDERER, wandererGauge, zoneRadius, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { glowEdge } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
@@ -59,10 +59,52 @@ export function drawWandererGround(ctx: Ctx, s: RunState, snap: Snap): void {
   ctx.globalAlpha = 1;
 }
 
+/** 달빛 일섬: 곧 베일 적 몸에 달빛 칼자국(점점 밝아짐) + 머리 위 초승달이 차오름 · 베이기 직전 하얗게 번쩍 (늦게 들어가는 피해를 알 수 있게) */
+function drawMoonMarks(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
+  const list = s.player.wdMoon;
+  if (!list?.length) return;
+  for (const m of list) {
+    const k = Math.max(0, Math.min(1, 1 - m.t / WANDERER.moonDelay));
+    const flash = m.t <= 12;
+    for (const e of s.enemies) {
+      if (e.hp <= 0 || !m.ids.includes(e.id)) continue;
+      const x = snap(lerp(e.prevX, e.x, alpha));
+      const y = snap(lerp(e.prevY, e.y, alpha));
+      const r = e.r + 3;
+      // 몸을 가로지르는 칼자국: 처음엔 옅은 하늘빛, 갈수록 진하고 굵게
+      ctx.globalAlpha = 0.35 + 0.65 * k;
+      line(ctx, x - r, y + r * 0.6, x + r, y - r * 0.6, flash ? "#ffffff" : SKY, flash ? 2.5 : 1 + k);
+      line(ctx, x - r * 0.7, y + r * 0.42, x + r * 0.7, y - r * 0.42, "#ffffff", 0.6);
+      // 머리 위 초승달 (남은 시간만큼 차오름)
+      const hy = y - e.r - 8;
+      ctx.globalAlpha = 0.45;
+      arc(ctx, x, hy, 4, 0, TAU, "#2a3450", 1.5);
+      ctx.globalAlpha = 1;
+      arc(ctx, x, hy, 4, -Math.PI / 2, -Math.PI / 2 + TAU * k, flash && s.tick % 4 < 2 ? "#ffffff" : SKY, 1.5);
+      ctx.fillStyle = "#fff8d8";
+      ctx.beginPath();
+      ctx.arc(x - 1, hy, 2, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = "#2a3450";
+      ctx.beginPath();
+      ctx.arc(x, hy - 0.6, 1.6, 0, TAU);
+      ctx.fill();
+      if (flash) {
+        ctx.globalAlpha = 1 - m.t / 12;
+        line(ctx, x - r * 1.6, y, x + r * 1.6, y, "#ffffff", 1);
+        line(ctx, x, y - r * 1.6, x, y + r * 1.6, SKY, 1);
+      }
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
 /** 천검란 게이지 (발밑 붉은 막대, 가득이면 깜빡임) */
 export function drawWandererAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const p = s.player;
-  if (p.characterId !== "wanderer" || p.weaponId !== "wdTempest") return;
+  if (p.characterId !== "wanderer") return;
+  drawMoonMarks(ctx, s, alpha, snap);
+  if (p.weaponId !== "wdTempest") return;
   const x = snap(lerp(p.prevX, p.x, alpha));
   const y = snap(lerp(p.prevY, p.y, alpha));
   const k = wandererGauge(p);

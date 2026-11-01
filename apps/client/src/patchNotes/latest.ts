@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.315",
+    date: "2026-11-01",
+    items: {
+      ko: ["방랑객: 공격할 때 검은 머리(상투)가 사라지던 그림 고침 · 달빛 일섬에 베인 적은 몸에 달빛 칼자국과 머리 위 초승달이 차오르고, 베이는 순간 하얗게 번쩍임 (늦게 들어가는 피해가 보이게)", "음양사: 뒷모습 공격 때 두 모습이 겹쳐 나오던 것 고침", "학살자·라이더·방랑객 크기를 파수꾼과 같게 (학살자 피의 학살 변신은 그대로 큼)"],
+      en: ["Wanderer: fixed the black hair (topknot) vanishing during attacks · foes hit by Moonlit Flash now show a moonlight slash and a filling crescent overhead, flashing white when the cut lands (so the delayed damage is visible)", "Onmyoji: fixed two figures overlapping in the back-facing attack", "Slayer, Rider and Wanderer are now the same size as the Warden (Slayer's Blood Frenzy form stays large)"],
+      ja: ["放浪者: 攻撃時に黒髪（髷）が消えていた絵を修正 · 月光一閃で斬られた敵は体に月光の斬り跡と頭上の三日月が満ちていき、斬られる瞬間に白く光る（遅れて入るダメージが見えるように）", "陰陽師: 後ろ向き攻撃で二つの姿が重なって出ていたのを修正", "虐殺者・ライダー・放浪者の大きさを番人と同じに（虐殺者の変身は大きいまま）"],
+    },
+  },
+  {
     version: "0.48.314",
     date: "2026-11-01",
     items: {
