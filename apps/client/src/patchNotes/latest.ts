@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.320",
+    date: "2026-11-01",
+    items: {
+      ko: [
+        "새 방 '단련의 방': 4층부터 층마다 꼭 1개 · 샌드백·랫풀다운·벤치 프레스 중 하나만 F로 사용 (방마다 한 번)",
+        "샌드백: 화살표 방향을 때맞춰 · 랫풀다운: 공이 가운데 칸에 있을 때 패드 · 벤치 프레스: 패드를 계속 눌러 바벨 버티기 · 갈수록 빨라짐",
+        "점수(최대 1000) 100점마다 단련 포인트 1 (최대 10) → 능력치·무기 숙련·가진 패시브를 눌러 강화 (단계당 오르는 몫·지금 오른 몫 표시, 능력치 창 바로 반영)",
+        "가디언 정예: 체력 조금 늘고 공격 주기 더 빠름 · 거인 정예: 체력은 그대로, 내려치기 범위 1.5배",
+      ],
+      en: [
+        "New room 'Training Room': exactly one per floor from floor 4 · use one of Sandbag, Lat Pulldown or Bench Press with F (once per room)",
+        "Sandbag: hit the arrow direction in time · Lat Pulldown: press the pad while a ball is in the middle zone · Bench Press: keep tapping the pad to hold the bar · they speed up over time",
+        "Every 100 score (max 1000) gives 1 training point (max 10) → click to upgrade stats, weapon mastery or owned passives (per-level and current amounts shown, stats panel updates instantly)",
+        "Elite Guardian: a little more HP and attacks more often · Elite Golem: no extra HP, slam radius 1.5×",
+      ],
+      ja: [
+        "新しい部屋「鍛錬の部屋」: 4階から各階に必ず1つ · サンドバッグ・ラットプルダウン・ベンチプレスのどれか1つだけFで使用（部屋ごとに1回）",
+        "サンドバッグ: 矢印の方向をタイミングよく · ラットプルダウン: ボールが中央の枠にある時にパッド · ベンチプレス: パッドを押し続けてバーベルを支える · だんだん速くなる",
+        "スコア（最大1000）100点ごとに鍛錬ポイント1（最大10）→ 能力値・武器熟練・持っているパッシブを押して強化（1段階の上昇量・現在の上昇量を表示、能力値画面にすぐ反映）",
+        "ガーディアン精鋭: 体力少し増え攻撃間隔がより短い · 巨人精鋭: 体力はそのまま、叩きつけ範囲1.5倍",
+      ],
+    },
+  },
+  {
     version: "0.48.319",
     date: "2026-11-01",
     items: {

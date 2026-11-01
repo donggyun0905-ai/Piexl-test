@@ -85,6 +85,7 @@ import { STATUS_RULES } from "./status";
 import { FOE_STATUS_RULES } from "./foeStatus";
 import { ALLY_MOVE_RULES } from "./allyMove";
 import { ELITE_RULES } from "./elite";
+import { GYM_RULES } from "./gym";
 import { TALISMAN_RULES } from "./talisman";
 import { TD_RULES } from "./td";
 import { TD_WAVES_RULES } from "./tdWaves";
@@ -178,6 +179,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   FOE_STATUS_RULES,
   ALLY_MOVE_RULES,
   ELITE_RULES,
+  GYM_RULES,
   TALISMAN_RULES,
   TD_RULES,
   TD_WAVES_RULES,

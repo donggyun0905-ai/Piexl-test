@@ -8,7 +8,7 @@ import { FLOOR_COUNT, generateFloor, LANES, LAST_FLOOR, lastFloorMap } from "./f
 import { spawnBoss } from "./bosses";
 import { makeTerrain } from "./terrain";
 import { healPlayer } from "./combat";
-import { onRoomCleared, spawnBlessing, spawnGolden, spawnTreasure } from "./loot";
+import { onRoomCleared, spawnBlessing, spawnGolden, spawnGym, spawnTreasure } from "./loot";
 import { makeArena } from "./bossPrimeval";
 import { arenaBig, arenaEnemies, arenaMap, arenaNext, arenaPrimeval } from "./arena";
 import { spawnShop } from "./shop";
@@ -57,8 +57,7 @@ const BOSS_START_Y = ROOM_MIN_Y + 20;
 /** 쉼터에 처음 들어가면 회복하는 체력 (최대 체력 비율) */
 export const REST_HEAL = 0.3;
 /** 라스트 보스방 크기 (칸 수, 보통 방 21×13보다 큼 · 화면이 플레이어를 따라감) */
-export const BIG_COLS = 29;
-export const BIG_ROWS = 17;
+export const BIG_COLS = 29, BIG_ROWS = 17;
 
 /** 이 판의 지금 방 크기로 맞춤 (게임 계산·그리기 전에) */
 export function applyRoom(s: RunState): void {
@@ -134,9 +133,10 @@ function enterRoom(s: RunState, roomId: number): void {
               ? heroPair(heroBosses(s).map((b) => spawnBoss(s, b)))
               : (endlessBosses(s) ?? [spawnBoss(s, s.lastBoss ?? terraBoss(s) ?? bossForFloor(s.floor, s.seed))])
           : [];
-    // 협동: 보물·상점·황금방·쉼터 회복은 사람마다
+    // 협동: 보물·상점·황금방·쉼터 회복·단련 기구는 사람마다
     eachSeat(s, () => {
       if (info.type === "treasure") spawnTreasure(s, roomId);
+      else if (info.type === "gym") spawnGym(s, roomId);
       if (info.type === "shop") spawnShop(s, roomId);
       if (info.type === "golden") spawnGolden(s, roomId);
       if (info.type === "start" && s.lastBoss && s.floor === lastFloorOf(s)) spawnBlessing(s, roomId);

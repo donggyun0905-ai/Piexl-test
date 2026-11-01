@@ -1,6 +1,6 @@
 // 방 그리기: 바닥·테두리 벽 · 방 모양(벽·기둥·구덩이) · 바닥 아이템·가격 · 위험 표시
 import { drawHazards } from "./bossFx";
-import { mine, PICKUP_HOLD_TICKS, ROOM_COLS, ROOM_ROWS, roomGrid, THIN_WALLS, TILE_FLOOR, TILE_PILLAR, TILE_PIT, TILE_SIZE, TILE_WALL, tileAt, WALL_THIN, type RunState } from "@pixel-rogue/shared";
+import { gymUsed, mine, PICKUP_HOLD_TICKS, ROOM_COLS, ROOM_ROWS, roomGrid, THIN_WALLS, TILE_FLOOR, TILE_PILLAR, TILE_PIT, TILE_SIZE, TILE_WALL, tileAt, WALL_THIN, type RunState } from "@pixel-rogue/shared";
 import { drawPickup } from "../drawPickup";
 import { drawRoomFeatures } from "../roomFeatures";
 import { C, type Snap } from "./palette";
@@ -55,7 +55,7 @@ export function drawPickups(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
     // 협동: 다른 사람 아이템은 보이지 않음
     if (!mine(s, pk)) continue;
     const hold = pk.id === s.holdPickupId ? s.holdTicks / PICKUP_HOLD_TICKS : 0;
-    drawPickup(ctx, pk, s.tick, pk.id === s.nearPickupId, hold);
+    drawPickup(ctx, pk, s.tick, pk.id === s.nearPickupId, hold, pk.kind === "gym" && !gymUsed(s));
     if (pk.price > 0 && pk.kind !== "coin" && pk.kind !== "trash") drawPrice(ctx, pk.x, pk.y + 14, pk.price, s.gold >= pk.price);
   }
 

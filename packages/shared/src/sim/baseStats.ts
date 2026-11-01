@@ -1,6 +1,7 @@
 // 모든 캐릭터 공통 추가 기본 스탯 (캐릭터 표 CHARACTERS에 있음, 관리자 '캐릭터'에서 캐릭터마다 바꿈. 처음 값은 지금 게임과 같게 0 · 치명타 피해 150%)
 // 치명타 확률·치명타 피해 · 방어력(받는 피해 100/(100+방어력)) · 피해 감소(%) · 회피(확률) · 재생력(10초마다 회복) · 흡혈(준 피해의 %)
 // 예리함(맞힐 때 확률로 적 방어 -25%(받는 피해 +25%) + 출혈) · 상태이상 강화(상태이상 피해 +%) · 돈 획득(+%)
+import { gymExtras } from "./gym";
 import { CHARACTERS, type ExtraStats } from "../characters";
 import { createRng, deriveSeed } from "../rng";
 import { healPlayer } from "./combat";
@@ -34,9 +35,11 @@ export function extraOf(p: PlayerState): ExtraStats {
   const grow = growExtras(p);
   // 빛의 사도: 빛의 조각 몫 (sim/lux)
   const lux = luxExtras(p);
-  if (!add && !grow && !lux) return base;
+  // 단련의 방 강화 (sim/gym)
+  const gym = gymExtras(p);
+  if (!add && !grow && !lux && !gym) return base;
   const out = { ...base };
-  for (const a of [add, grow, lux]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
+  for (const a of [add, grow, lux, gym]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
   return out;
 }
 

@@ -1,14 +1,16 @@
 import { BIG_COIN, type Pickup } from "@pixel-rogue/shared";
+import { drawGym } from "./render/gymDraw";
 import { iconCanvas, type IconItem } from "./iconArt";
 import { drawStation } from "./drawStation";
 
 /** 바닥 아이템 (임시 그림). hold: 서 있어서 가지기까지 찬 정도 (0~1) */
-export function drawPickup(ctx: CanvasRenderingContext2D, pk: Pickup, tick: number, near: boolean, hold: number): void {
+/** gymReady: 단련의 방 기구를 아직 쓸 수 있음 (빛 고리) */
+export function drawPickup(ctx: CanvasRenderingContext2D, pk: Pickup, tick: number, near: boolean, hold: number, gymReady = false): void {
   const bob = Math.round(Math.sin((tick + pk.id * 7) / 12) * 1);
   const x = Math.round(pk.x);
   const y = Math.round(pk.y) + bob;
   ctx.globalAlpha = pk.armed ? 1 : 0.55;
-  if (near && pk.kind !== "bench" && pk.kind !== "tune") {
+  if (near && pk.kind !== "bench" && pk.kind !== "tune" && pk.kind !== "gym") {
     ctx.strokeStyle = "rgba(255,255,255,0.7)";
     ctx.lineWidth = 1;
     ctx.strokeRect(x - 7.5, y - 7.5, 15, 15);
@@ -27,6 +29,11 @@ export function drawPickup(ctx: CanvasRenderingContext2D, pk: Pickup, tick: numb
   if (pk.kind === "trash") {
     drawTrash(ctx, x, Math.round(pk.y), pk.itemId === "1");
     ctx.globalAlpha = 1;
+    return;
+  }
+  if (pk.kind === "gym") {
+    ctx.globalAlpha = 1;
+    drawGym(ctx, pk.group, x, Math.round(pk.y), tick, pk.itemId === "1", gymReady);
     return;
   }
   if (pk.kind === "bench" || pk.kind === "tune") {

@@ -1,0 +1,102 @@
+/* 단련의 방 창 (game/gym): 미니게임 큰 화면·패드 버튼 · 강화 목록 */
+.station-window.gym {
+  width: min(760px, 96vw);
+  border-color: #8a5ad8;
+}
+.gym-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.gym-how {
+  margin: 0;
+  font-size: 15px;
+  color: #d8d0f0;
+}
+.gym-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.gym-game canvas {
+  width: min(640px, 90vw);
+  aspect-ratio: auto;
+  border-radius: 10px;
+  background: radial-gradient(circle at 50% 40%, #2a2440, #120e1c);
+  border: 2px solid #3a3450;
+}
+.gym-pads {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.gym-pads.arrows button {
+  width: 64px;
+  height: 64px;
+  font-size: 26px;
+}
+.gym-pad {
+  width: 96px;
+  height: 96px;
+  border-radius: 50% !important;
+  font-size: 40px;
+  border: 3px solid #ffd84a !important;
+  color: #ffd84a;
+  background: radial-gradient(circle, #4a3a20, #1a1420) !important;
+}
+.gym-pad:active,
+.gym-pads.arrows button:active {
+  transform: scale(0.92);
+}
+.gym-result {
+  margin: 0;
+  font-size: 18px;
+  color: #ffd84a;
+}
+.gym-pts {
+  margin: 0;
+  font-weight: bold;
+  color: #9be89b;
+}
+.gym-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+.gym-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2px 8px;
+  padding: 6px 10px;
+  border: 1px solid #3a3450;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 0.04);
+}
+.gym-row small {
+  grid-column: 1;
+  font-size: 12px;
+  color: var(--muted);
+}
+.gym-row button {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  width: 40px;
+  height: 40px;
+  font-size: 22px;
+}
+.gym-row.passive {
+  border-color: #5a4a8a;
+}
+.gym-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 15px;
+}
+@media (max-width: 700px) {
+  .gym-list {
+    grid-template-columns: 1fr;
+  }
+}

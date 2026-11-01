@@ -2,6 +2,7 @@
 // 누른 것은 controls.queueMenu → 입력 menu → sim/station (기록·협동에서도 같은 결과)
 import type { Lang, TextKey } from "../i18n";
 import { BenchPanel } from "./BenchPanel";
+import { GymPanel } from "./gym/GymPanel";
 import type { Controls } from "./controls";
 import { StationResultFx } from "./StationResultFx";
 import type { StationView } from "./stationView";
@@ -17,6 +18,18 @@ interface Props {
 export function StationWindow({ view, lang, t, controls }: Props) {
   const send = (code: number) => controls()?.queueMenu(code);
   const bench = view.kind === "bench";
+  // 단련의 방: 미니게임·강화 (game/gym)
+  if (view.gym) {
+    return (
+      <div className="station-window gym" role="dialog" aria-label={t("gymTitle")}>
+        <header className="station-head">
+          <b>{t("gymTitle")}</b>
+          <small>{t("stationClose")}</small>
+        </header>
+        <GymPanel gym={view.gym} lang={lang} t={t} send={send} />
+      </div>
+    );
+  }
   return (
     <div className={`station-window ${view.kind}`} role="dialog" aria-label={t(bench ? "benchTitle" : "tuneTitle")}>
       <header className="station-head">

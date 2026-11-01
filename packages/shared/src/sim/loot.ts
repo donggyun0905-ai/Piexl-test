@@ -40,6 +40,8 @@ const R = {
   MAX_GOLD: 999,
 };
 export { R as LOOT_RULES };
+// 단련의 방 기구 놓기 (sim/gym, rooms가 여기서 가져감)
+export { spawnGym } from "./gym";
 export const START_GOLD = () => R.START_GOLD;
 /** 몬스터 하나로 받는 가장 큰 돈 (진행 기록 검사) */
 export const KILL_GOLD = () => Math.max(R.gold, R.CHAMP_GOLD);

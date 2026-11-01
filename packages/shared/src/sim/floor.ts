@@ -5,6 +5,7 @@ import { createRng, deriveSeed } from "../rng";
 import { bossForFloor } from "../enemyDefs";
 import { PLAIN_SHAPE, pickShape, type RoomShape } from "./layout";
 import { BOSS_SHAPE_KINDS } from "./roomShapes";
+import { gymFloor } from "./gym";
 
 export const FLOOR_COUNT = 6;
 /** 6층을 깬 뒤 도전하는 라스트 보스 층 */
@@ -14,8 +15,8 @@ export const LANES = 3;
 /** 한 층의 최대 칸 수 (시작 방·보스방 포함) */
 export const MAX_LAYERS = 12;
 
-/** exit = 보스방 (보스를 잡으면 계단이 열림) · elite = 강한 적 (보상이 많음) · rest = 쉼터 (체력 회복) · golden = 황금방 (라스트 보스 층: 돈 300 + 아이템 3개 고르기) */
-export type RoomType = "start" | "combat" | "elite" | "rest" | "treasure" | "shop" | "exit" | "golden";
+/** exit = 보스방 (보스를 잡으면 계단이 열림) · elite = 강한 적 (보상이 많음) · rest = 쉼터 (체력 회복) · golden = 황금방 (라스트 보스 층: 돈 300 + 아이템 3개 고르기) · gym = 단련의 방 (4층부터, sim/gym) */
+export type RoomType = "start" | "combat" | "elite" | "rest" | "treasure" | "shop" | "exit" | "golden" | "gym";
 
 export interface RoomInfo {
   id: number;
@@ -76,6 +77,8 @@ export function generateFloor(seed: number, floor: number): FloorMap {
   setType(rng.int(1, half), "treasure");
   setType(rng.int(half + 1, middle), "shop");
   setType(middle, "rest");
+  // 단련의 방 (sim/gym): 4층부터 층마다 하나, 가운데 칸 어딘가
+  if (gymFloor(floor)) setType(rng.int(2, Math.max(2, middle - 1)), "gym");
   for (let l = 2; l <= middle; l++) {
     // 전투방이 하나는 남도록
     if (byLayer[l]!.filter((r) => r.type === "combat").length >= 2 && rng.nextFloat() < 0.5) setType(l, "elite");

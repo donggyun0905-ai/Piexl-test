@@ -1,6 +1,7 @@
 // 타워 디펜스에서 처음 나온 적 8종의 던전 행동 (enemies에서 부름) · 층마다 나오는 졸개 목록
 // 슬라임(통통 뛰어옴) · 도마뱀(빠름) · 박쥐(셋이 떼로, 흔들리며) · 딱정벌레(등껍질 방패) · 바위 골렘(느리고 땅 찍기)
 // 주술사(거리를 두고 주변 적 회복) · 알주머니(터지면 작은 슬라임 셋) · 도깨비불(가끔 플레이어 쪽으로 순간이동)
+import { golemSlamMul } from "./elite";
 import { ENEMIES, type MinionKind } from "../content";
 import { addShape } from "./hazards";
 import type { EnemyState, RunState } from "./types";
@@ -74,7 +75,7 @@ export function updateCritter(s: RunState, e: EnemyState, toP: Vec, go: Vec): bo
       step(go);
       if (--e.timer <= 0) {
         e.timer = R.SLAM_GAP;
-        addShape(s, R.SLAM_WARN, { x: e.x, y: e.y, radius: R.SLAM_R, damage: R.SLAM_DMG, fx: "pillar" });
+        addShape(s, R.SLAM_WARN, { x: e.x, y: e.y, radius: R.SLAM_R * golemSlamMul(e), damage: R.SLAM_DMG, fx: "pillar" });
       }
       return true;
     case "shaman": {

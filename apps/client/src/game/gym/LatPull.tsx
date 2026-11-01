@@ -1,0 +1,104 @@
+// 랫풀다운 미니게임: 긴 게이지 가운데 색칠된 칸 · 왼쪽·오른쪽 끝에서 공이 번갈아 가운데로 굴러옴 → 공이 색칠된 칸 안에 있을 때 아래 동그란 패드(Space·F·클릭)를 누르면 펑! (터지는 효과)
+// 칸 밖에서 누르거나 공이 반대쪽 끝까지 가 버리면 실수, 실수 3번이면 끝 · 터뜨릴수록 공이 빨라짐 · 하나에 25점 (1000점까지)
+import { useRef, useState } from "react";
+import type { TextKey } from "../../i18n";
+import { drawBursts, label, MAX_SCORE, useFrame, useGymKeys, type Burst } from "./gymKit";
+
+const W = 420;
+const H = 220;
+const GX0 = 30;
+const GX1 = W - 30;
+const GY = 110;
+const ZONE = 70;
+
+interface Ball {
+  x: number;
+  dir: 1 | -1;
+}
+
+export function LatPull({ onDone, t }: { onDone: (score: number) => void; t: (k: TextKey) => string }) {
+  const canvas = useRef<HTMLCanvasElement>(null);
+  const st = useRef({ balls: [] as Ball[], score: 0, miss: 0, pops: 0, spawn: 0.4, side: 1 as 1 | -1, bursts: [] as Burst[], over: false, flash: 0 });
+  const [, redraw] = useState(0);
+  const speed = () => 120 + st.current.pops * 6;
+  const inZone = (x: number) => Math.abs(x - W / 2) <= ZONE / 2;
+
+  const end = () => {
+    const s = st.current;
+    s.over = true;
+    redraw((n) => n + 1);
+    setTimeout(() => onDone(s.score), 700);
+  };
+  const miss = () => {
+    const s = st.current;
+    s.miss++;
+    s.flash = 0.25;
+    if (s.miss >= 3) end();
+  };
+  const press = () => {
+    const s = st.current;
+    if (s.over) return;
+    const hit = s.balls.filter((b) => inZone(b.x)).sort((a, b) => Math.abs(a.x - W / 2) - Math.abs(b.x - W / 2))[0];
+    if (!hit) return miss();
+    s.balls = s.balls.filter((b) => b !== hit);
+    s.pops++;
+    s.score = Math.min(MAX_SCORE, s.score + 25);
+    s.bursts.push({ x: hit.x, y: GY, age: 0, color: "#5ad8ff" });
+    if (s.score >= MAX_SCORE) end();
+  };
+  useGymKeys((code) => (code === "Space" || code === "KeyF" || code === "Enter") && press());
+
+  useFrame((dt) => {
+    const s = st.current;
+    const ctx = canvas.current?.getContext("2d");
+    if (!ctx) return;
+    if (!s.over) {
+      s.spawn -= dt;
+      if (s.spawn <= 0) {
+        s.balls.push({ x: s.side > 0 ? GX0 : GX1, dir: s.side });
+        s.side = s.side > 0 ? -1 : 1;
+        s.spawn = Math.max(0.45, 1.4 - s.pops * 0.03);
+      }
+      const moved = s.balls.map((b) => ({ ...b, x: b.x + b.dir * speed() * dt }));
+      const out = moved.filter((b) => b.x < GX0 - 2 || b.x > GX1 + 2);
+      s.balls = moved.filter((b) => !out.includes(b));
+      out.forEach(() => miss());
+    }
+    s.flash = Math.max(0, s.flash - dt);
+    ctx.clearRect(0, 0, W, H);
+    // 게이지 · 색칠된 칸
+    ctx.fillStyle = s.flash ? "#5a1a24" : "#22202e";
+    ctx.fillRect(GX0, GY - 14, GX1 - GX0, 28);
+    ctx.fillStyle = "#3a8a4a";
+    ctx.fillRect(W / 2 - ZONE / 2, GY - 14, ZONE, 28);
+    ctx.fillStyle = "#7ae88a";
+    ctx.fillRect(W / 2 - ZONE / 2, GY - 14, ZONE, 3);
+    ctx.strokeStyle = "#8a84a0";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(GX0, GY - 14, GX1 - GX0, 28);
+    // 공
+    for (const b of s.balls) {
+      ctx.fillStyle = inZone(b.x) ? "#fff27a" : "#e8e4f0";
+      ctx.beginPath();
+      ctx.arc(b.x, GY, 11, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(b.x - 5, GY - 6, 3, 3);
+    }
+    s.bursts = drawBursts(ctx, s.bursts, dt);
+    label(ctx, `${s.score}`, 60, 40, 28, "#ffd84a");
+    label(ctx, "✕".repeat(s.miss) + "·".repeat(3 - s.miss), W - 60, 40, 24, "#ff7a7a");
+    if (s.over) label(ctx, t("gymEnd"), W / 2, 190, 40, "#ffffff");
+  });
+
+  return (
+    <div className="gym-game">
+      <canvas ref={canvas} width={W} height={H} />
+      <div className="gym-pads">
+        <button type="button" className="gym-pad" onPointerDown={press} aria-label={t("gymPad")}>
+          ●
+        </button>
+      </div>
+    </div>
+  );
+}

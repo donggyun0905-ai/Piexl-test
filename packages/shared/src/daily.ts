@@ -225,7 +225,7 @@ export function checkProgress(seed: number, r: RunSummary, sudden = false): stri
     const map = maps.get(b.floor) ?? generateFloor(seed, b.floor);
     maps.set(b.floor, map);
     if (map.rooms[b.roomId]?.type !== "shop") return "buy";
-    if (b.kind === "coin" || b.kind === "trash") return "buy";
+    if (b.kind === "coin" || b.kind === "trash" || b.kind === "gym") return "buy";
     // 작업대(아티팩터 제작대·추적자 튜닝소)에 쓴 돈은 물건이 아니라 itemId = 기능 번호
     if (b.kind !== "reroll" && b.kind !== "bench" && b.kind !== "tune" && !itemAvailable(b.kind, b.itemId, [])) return "buy";
     if (sudden && HEAL_ITEMS.has(`${b.kind}:${b.itemId}`)) return "buy";

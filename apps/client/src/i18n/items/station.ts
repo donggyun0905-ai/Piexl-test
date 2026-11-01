@@ -3,12 +3,25 @@ import type { TunePartFx } from "@pixel-rogue/shared";
 import type { Lang } from "../index";
 import type { Names } from "./names";
 
-export const STATION_NAME: Record<"bench" | "tune", Names> = {
+export const STATION_NAME: Record<"bench" | "tune" | "gym", Names> = {
   bench: { ko: "거대한 제작대", en: "Grand Workbench", ja: "巨大な作業台" },
+  gym: { ko: "단련 기구", en: "Training Equipment", ja: "鍛錬器具" },
   tune: { ko: "튜닝소", en: "Tuning Bay", ja: "チューニング工房" },
 };
 
-export const STATION_DESC: Record<"bench" | "tune", Names> = {
+/** 단련의 방 기구 셋 (sim/gym 기구 번호 차례) */
+export const GYM_DEVICE: Names[] = [
+  { ko: "샌드백", en: "Sandbag", ja: "サンドバッグ" },
+  { ko: "랫풀다운", en: "Lat Pulldown", ja: "ラットプルダウン" },
+  { ko: "벤치 프레스", en: "Bench Press", ja: "ベンチプレス" },
+];
+
+export const STATION_DESC: Record<"bench" | "tune" | "gym", Names> = {
+  gym: {
+    ko: "F를 눌러 운동(미니게임) · 셋 중 하나만 · 점수만큼 강화 포인트를 얻어 능력치·무기·패시브 강화",
+    en: "Press F to train (minigame) · only one of the three · earn upgrade points to boost stats, weapon and passives",
+    ja: "Fで運動（ミニゲーム）· 3つのうち1つだけ · 点数に応じた強化ポイントで能力値・武器・パッシブを強化",
+  },
   bench: {
     ko: "F를 눌러 제작대에 들어가면 패시브 강화 · 교체 · 튜닝",
     en: "Press F to use the workbench: enhance, swap or tune passives",

@@ -19,6 +19,7 @@ export const SUMMARY_TEXT = {
   sumRoomCombat: { ko: "전투방", en: "battle room", ja: "戦闘部屋" },
   sumRoomElite: { ko: "강한 적 방", en: "elite room", ja: "強敵部屋" },
   sumRoomRest: { ko: "쉼터", en: "rest room", ja: "休憩所" },
+  sumRoomGym: { ko: "단련의 방", en: "training room", ja: "鍛錬の部屋" },
   sumRoomTreasure: { ko: "보물방", en: "treasure room", ja: "宝部屋" },
   sumRoomShop: { ko: "상점", en: "shop", ja: "ショップ" },
   sumRoomExit: { ko: "보스방", en: "boss room", ja: "ボス部屋" },
