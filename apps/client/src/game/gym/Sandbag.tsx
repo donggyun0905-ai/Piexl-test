@@ -1,5 +1,6 @@
-// 샌드백 미니게임: 가운데 화살표(위·아래·왼쪽·오른쪽)가 뜨고 바깥 고리가 줄어드는 동안 같은 방향 키(화살표·WASD 또는 화면 버튼)를 누르면 퍽! (터지는 효과)
+// 샌드백 미니게임: 가운데 화살표(↑↓←→, 바로 앞 두 번과 다른 방향)가 뜨고 바깥 고리가 줄어드는 동안 같은 방향 키(화살표·WASD 또는 화면 버튼)를 누르면 퍽! (터지는 효과)
 // 시간 제한은 없고 맞힐수록 고리가 빨리 줄어듦 · 틀리거나 늦으면 실수, 실수 3번이면 끝 · 한 번에 25점 (1000점까지)
+import { createRng } from "@pixel-rogue/shared";
 import { useRef, useState } from "react";
 import type { TextKey } from "../../i18n";
 import { drawBursts, label, MAX_SCORE, useFrame, useGymKeys, type Burst } from "./gymKit";
@@ -7,20 +8,24 @@ import { drawBursts, label, MAX_SCORE, useFrame, useGymKeys, type Burst } from "
 const DIRS = ["up", "down", "left", "right"] as const;
 type Dir = (typeof DIRS)[number];
 const KEYS: Record<string, Dir> = { ArrowUp: "up", KeyW: "up", ArrowDown: "down", KeyS: "down", ArrowLeft: "left", KeyA: "left", ArrowRight: "right", KeyD: "right" };
-const ARROW: Record<Dir, string> = { up: "▲", down: "▼", left: "◀", right: "▶" };
+const ARROW: Record<Dir, string> = { up: "↑", down: "↓", left: "←", right: "→" };
 const W = 420;
 const H = 260;
 
 export function Sandbag({ onDone, t }: { onDone: (score: number) => void; t: (k: TextKey) => string }) {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const st = useRef({ dir: "up" as Dir, left: 1.2, full: 1.2, score: 0, miss: 0, hits: 0, bursts: [] as Burst[], shake: 0, over: false, n: 0 });
+  const st = useRef({ dir: "up" as Dir, prev: "up" as Dir, left: 1.1, full: 1.1, score: 0, miss: 0, hits: 0, bursts: [] as Burst[], shake: 0, over: false });
   const [, redraw] = useState(0);
+  // 방향만 정함 (점수 계산과 상관없는 화면 놀이라 시각으로 시드)
+  const [rng] = useState(() => createRng(Date.now() >>> 0));
 
   const next = () => {
     const s = st.current;
-    s.n++;
-    s.dir = DIRS[(s.n * 7 + s.hits * 3 + s.miss) % 4]!;
-    s.full = Math.max(0.38, 1.2 - s.hits * 0.025);
+    // 바로 앞·그 앞과 다른 방향만 (같은 것 반복·두 개 번갈아 반복이 안 나오게)
+    const pick = DIRS.filter((d) => d !== s.dir && d !== s.prev);
+    s.prev = s.dir;
+    s.dir = pick[Math.floor(rng.nextFloat() * pick.length)]!;
+    s.full = Math.max(0.3, 1.1 - s.hits * 0.032);
     s.left = s.full;
   };
   const miss = () => {

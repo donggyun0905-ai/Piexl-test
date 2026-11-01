@@ -14,7 +14,7 @@ import { baseStats, CHARACTERS, type CharacterDef, type WeaponId } from "../cont
 import { PASSIVES, USE_ITEMS, type PassiveDef, type PassiveId, type UseItemId } from "../items";
 import { computeStats, type StatMod } from "../stats";
 import { addGold, damageEnemy, healPlayer, removeDead } from "./combat";
-import { GOLDEN_GROUP, GOLDEN_PICKS } from "./loot";
+import { GOLDEN_GROUP, GOLDEN_PICKS } from "./golden";
 import { ARENA_USE_GROUP, arenaUsePick } from "./arena";
 import type { Pickup, RunState, TickInput } from "./types";
 import { downedNear, seatNo } from "./party";

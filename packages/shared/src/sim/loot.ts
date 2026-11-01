@@ -41,8 +41,9 @@ const R = {
   MAX_GOLD: 999,
 };
 export { R as LOOT_RULES };
-// 단련의 방 기구 놓기 (sim/gym, rooms가 여기서 가져감)
+// 단련의 방 기구·여신의 선물 놓기 (sim/gym·golden, rooms가 여기서 가져감)
 export { spawnGym } from "./gym";
+export { spawnGolden } from "./golden";
 export const START_GOLD = () => R.START_GOLD;
 /** 몬스터 하나로 받는 가장 큰 돈 (진행 기록 검사) */
 export const KILL_GOLD = () => Math.max(R.gold, R.CHAMP_GOLD);
@@ -206,17 +207,13 @@ export function onRoomCleared(s: RunState, roomId: number): void {
   }
 }
 
-/** 여신의 선물 (방 종류 golden): 아이템 9개를 공짜로 늘어놓고 그중 3개만 가질 수 있음 (다 고르면 나머지는 사라짐) */
-export const GOLDEN_GROUP = 900;
-export const GOLDEN_PICKS = 3;
-
 /** 라스트 보스 층 시작 방: 여신상 앞에 여신의 축복 하나 */
 export function spawnBlessing(s: RunState, roomId: number): void {
   addPickup(s, roomId, "passive", "goddessBlessing", CX, CY + 12, 0);
 }
 
 /** 금봉: 보물방·여신의 선물에 들어오면 체력 가득 + 돈 (금빛 효과). 금봉이면 true */
-function goldClubBonus(s: RunState): boolean {
+export function goldClubBonus(s: RunState): boolean {
   const p = s.player;
   if (!goldLocked(p)) return false;
   p.hp = p.stats.maxHp;
@@ -226,22 +223,4 @@ function goldClubBonus(s: RunState): boolean {
   addEffect(s, { kind: "oCoins", x: p.x, y: p.y, dirX: 0, dirY: -1, size: 40, width: -1, maxTicks: 30 });
   addEffect(s, { kind: "plus", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 14, maxTicks: 30 });
   return true;
-}
-
-export function spawnGolden(s: RunState, roomId: number): void {
-  const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "golden", ...seatSalt(s)));
-  let pool = [...passivePool(s)];
-  // 금봉: 여신의 선물에 들어오면 체력 가득 + 돈, 진열은 패시브 6개 + 사용 아이템 3개 (사용 아이템은 따로 가짐)
-  const gold = goldClubBonus(s);
-  for (let i = 0; i < 9 && pool.length > 0; i++) {
-    const at: [number, number] = [CX - 40 + (i % 3) * 40, CY - 36 + Math.floor(i / 3) * 24];
-    if (gold && i >= 6) {
-      addPickup(s, roomId, "use", rng.pick(usePool(s)), at[0], at[1], 0);
-      continue;
-    }
-    const id = pool[rng.int(0, pool.length - 1)]!;
-    pool = pool.filter((x) => x !== id);
-    addPickup(s, roomId, "passive", id, at[0], at[1], GOLDEN_GROUP);
-  }
-  s.goldenPicks = 0;
 }

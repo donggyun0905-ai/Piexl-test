@@ -1,5 +1,6 @@
 // 연습장 방 시험: 지금 방을 상점·천상의 상점·여신의 선물·보물방·단련의 방·쉼터로 바꿔 봄 (다시 누르면 새로 놓음, 기록·업적 없음)
-import { LOOT_RULES, spawnGolden, spawnTreasure } from "./loot";
+import { LOOT_RULES, spawnTreasure } from "./loot";
+import { spawnGolden } from "./golden";
 import { spawnGym } from "./gym";
 import { spawnShop } from "./shop";
 import { healPlayer } from "./combat";

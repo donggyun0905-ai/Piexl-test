@@ -7,13 +7,13 @@ import { drawBursts, label, MAX_SCORE, useFrame, useGymKeys, type Burst } from "
 const W = 420;
 const H = 260;
 /** 누를 때마다 차는 힘 · 처음 빠지는 힘(초당) · 1초마다 더 빨리 빠지는 몫 */
-const PUSH = 7;
-const DRAIN = 16;
-const DRAIN_UP = 1.1;
+const PUSH = 6;
+const DRAIN = 20;
+const DRAIN_UP = 1.7;
 
 export function BenchPress({ onDone, t }: { onDone: (score: number) => void; t: (k: TextKey) => string }) {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const st = useRef({ force: 70, time: 0, over: false, drop: 0, bursts: [] as Burst[] });
+  const st = useRef({ force: 60, time: 0, over: false, drop: 0, bursts: [] as Burst[] });
   const [, redraw] = useState(0);
   const score = () => Math.min(MAX_SCORE, Math.floor(st.current.time * 25));
 
