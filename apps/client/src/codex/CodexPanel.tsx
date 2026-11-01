@@ -18,7 +18,8 @@ const TABS: [Tab, TextKey][] = [
   ["use", "codexUses"],
 ];
 const isBoss = (k: string) => !!ENEMIES[k as EnemyKind]?.boss || k === "ruinblade" || k === "chaosblade";
-const ENEMY_LIST = ENEMY_SPRITES.filter((k) => k !== "dummy");
+// 그림만 있는 것(되살린 검은 모습 `*_dark`·제천대성 근두운)은 도감에서 빼고 원래 몬스터·보스만
+const ENEMY_LIST = ENEMY_SPRITES.filter((k) => k !== "dummy" && !k.endsWith("_dark") && k !== "sage_cloud");
 
 /** 무기·패시브의 전용 캐릭터 (공용이면 undefined) */
 const ownerOf = (tab: Tab, id: string): CharacterId | undefined =>

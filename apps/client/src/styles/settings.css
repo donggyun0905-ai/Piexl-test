@@ -5,6 +5,10 @@
   gap: 10px;
   margin: 8px 0 12px;
   text-align: left;
+  /* 창보다 길면 목록만 넘겨 봄 (아래 줄이 잘리지 않게) */
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 .setting-row {
   display: flex;
@@ -83,7 +87,15 @@
 /* 스킬 키 바꾸기: 키를 기다리는 칸은 밝게 */
 .skill-key-set {
   display: flex;
+  flex: none !important;
   gap: 4px;
+}
+/* 버튼 글자가 세로로 끊기지 않게 · 칸이 좁으면 버튼 줄이 이름 아래로 내려감 */
+.skill-key-set button {
+  white-space: nowrap;
+}
+.setting-row:has(.skill-key-set) {
+  flex-wrap: wrap;
 }
 .skill-key-set button.on {
   border-color: var(--accent);

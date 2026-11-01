@@ -84,10 +84,16 @@
   width: min(380px, 100%);
   text-align: center;
 }
+.chooser {
+  max-height: 92vh;
+}
+/* 목록이 창보다 길면 목록만 넘겨 봄 (낮은 화면에서 '닫기'가 창 밖으로 나가지 않게) */
 .choices {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-height: 0;
+  overflow-y: auto;
 }
 .choice-row {
   width: 100%;
@@ -123,4 +129,10 @@
 .choice-text small {
   margin-left: 0;
   font-size: 12px;
+}
+/* 낮은 화면: 혼자 하기 목록을 조금 촘촘하게 */
+@media (max-height: 760px) {
+  .choice-row {
+    padding: 7px 10px;
+  }
 }

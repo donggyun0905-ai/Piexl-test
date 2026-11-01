@@ -91,7 +91,7 @@ export function PwModes({ t, onPick, onMulti, onLeague, onPractice, onBrowse, on
                 <small className="pw-reward">
                   🪙 {t("pwReward").replace("{n}", def.reward.toLocaleString())}
                   {wins > 0 && ` · ${t("pwWins").replace("{n}", String(wins))}`}
-                  {` · ⏱ ${t("pwTimeLimit").replace("{n}", String(def.timeSec / 60))}`}
+                  {` · ⏱ ${t("pwTimeLimit").replace("{n}", String(Math.round(def.timeSec / 60)))}`}
                   {def.zone && ` · ${t("pwZoneOn")}`}
                 </small>
               </span>

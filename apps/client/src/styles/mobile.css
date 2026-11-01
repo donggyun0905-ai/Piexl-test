@@ -65,3 +65,34 @@
     text-align: center;
   }
 }
+/* 휴대폰 메인: 로비 버튼이 메뉴(상점 등)에 겹치지 않게 위쪽 가운데 (앱 설치·설정 사이)로 */
+@media (max-width: 700px) {
+  .lobby-button {
+    left: 50%;
+    bottom: auto;
+    top: max(12px, env(safe-area-inset-top));
+    transform: translateX(-50%);
+    padding: 6px 12px;
+  }
+}
+/* 휴대폰 세로 게임 화면: 능력치 칸이 맵 절반을 가리지 않게 숫자 줄은 감추고 (가로로 돌리면 다시 보임) 설명 버튼·버프 칸만 작게
+   · '가로로 돌리면' 안내는 오른쪽 아래 버튼(대시·스킬)과 겹치지 않게 왼쪽 절반에만 */
+@media (orientation: portrait) and (max-width: 700px) {
+  .stats-panel {
+    width: auto;
+    max-width: 46vw;
+    padding: 4px 6px;
+    font-size: 10px;
+    background: rgb(12 10 20 / 0.7);
+  }
+  .stats-panel .stats-row {
+    display: none;
+  }
+  .game-hint.touch {
+    max-width: 52vw;
+    margin-right: auto;
+    padding: 6px 10px;
+    font-size: 11px;
+    text-align: left;
+  }
+}
