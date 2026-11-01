@@ -254,3 +254,27 @@
   align-items: center;
   gap: 6px;
 }
+.practice-rooms {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 4px;
+  padding: 4px 0;
+}
+.practice-room {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  font-size: 12px;
+  text-align: left;
+}
+.practice-room i {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border: 2px solid;
+}
+.practice-room.off {
+  grid-column: 1 / -1;
+  justify-content: center;
+}

@@ -1,5 +1,5 @@
 /** 게임 버전 (패치 노트 맨 위 버전과 같게 유지) */
-export const GAME_VERSION = "0.48.320";
+export const GAME_VERSION = "0.48.321";
 
 /** 한 칸(타일) 크기, 픽셀 */
 export const TILE_SIZE = 16;
@@ -68,5 +68,5 @@ setRoomSize();
 export const TICK_RATE = 60;
 export const TICK_MS = 1000 / TICK_RATE;
 
-/** 이 값 이상 동전은 큰 동전 (크게 그리고 닿는 거리도 넓음, 황금방 300원) */
+/** 이 값 이상 동전은 큰 동전 (크게 그리고 닿는 거리도 넓음) */
 export const BIG_COIN = 100;

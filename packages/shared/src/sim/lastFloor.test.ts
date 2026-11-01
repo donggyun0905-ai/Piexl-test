@@ -19,7 +19,7 @@ function nextRoom(run: RunState): void {
 }
 
 describe("라스트 보스 층 (7층)", () => {
-  it("6층을 깬 뒤 도전하면 7층: 시작 방 → 황금방 → 상점 → 아주 큰 보스방, 고른 보스가 나옴", () => {
+  it("6층을 깬 뒤 도전하면 7층: 시작 방 → 여신의 선물 → 천상의 상점 → 아주 큰 보스방, 고른 보스가 나옴", () => {
     const run = createRun(5, "warden");
     run.won = true;
     run.over = true;
@@ -105,12 +105,12 @@ describe("라스트 보스 층 (7층)", () => {
     expect(run.over).toBe(true);
   });
 
-  it("황금방: 돈 300 + 공짜 아이템 9개 중 3개만 가질 수 있음", () => {
+  it("여신의 선물: 돈 없이 공짜 아이템 9개 중 3개만 가질 수 있음", () => {
     const run = createRun(5, "warden");
     continueToLastFloor(run, "dragon");
     nextRoom(run);
     const room = run.rooms[run.roomId]!;
-    expect(room.pickups.find((p) => p.kind === "coin")!.price).toBe(300);
+    expect(room.pickups.some((p) => p.kind === "coin")).toBe(false);
     expect(room.pickups.filter((p) => p.kind === "passive")).toHaveLength(9);
     const before = run.player.passives.length;
     for (let k = 0; k < 3; k++) {

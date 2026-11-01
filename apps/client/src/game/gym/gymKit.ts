@@ -1,4 +1,4 @@
-// 단련의 방 미니게임 공용: 매 프레임 돌리기 · 미니게임 중 게임 조작 키 막기(화살표·WASD·Space·F) · 터지는 조각 효과 · 점수 한도
+// 단련의 방 미니게임 공용: 매 프레임 돌리기 · 미니게임 중 게임 조작 키 막기(화살표·WASD·Space·F)·게임 시간 멈춤 표시 · 터지는 조각 효과 · 점수 한도
 import { useEffect, useLayoutEffect, useRef } from "react";
 
 /** 점수 한도 (sim/gym: 100점마다 포인트 1, 최대 10) */
@@ -22,6 +22,19 @@ export function useFrame(fn: (dt: number, t: number) => void, on = true): void {
     };
     id = requestAnimationFrame(step);
     return () => cancelAnimationFrame(id);
+  }, [on]);
+}
+
+/** 미니게임 중인지 (혼자 하는 판은 그동안 게임 시간이 멈춤, GameScreen paused) · 끝나 결과를 보내면 바로 풂 (결과 입력이 처리되게) */
+let playing = 0;
+export const gymPlaying = () => playing > 0;
+export function useGymPause(on: boolean): void {
+  useEffect(() => {
+    if (!on) return;
+    playing++;
+    return () => {
+      playing--;
+    };
   }, [on]);
 }
 

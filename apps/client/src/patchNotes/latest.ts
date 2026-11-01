@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.321",
+    date: "2026-11-01",
+    items: {
+      ko: [
+        "몬스터 처치 돈: 이제 40% 확률로만 나옴 (정예는 그대로 늘 나옴) · 라스트 보스 층에서는 돈이 나오지 않음",
+        "라스트 보스 층 '황금방' → '여신의 선물' (돈 300 없앰, 아이템 9개 중 3개 고르기는 그대로) · 상점 → '천상의 상점' · 두 방 모두 하얀 대리석 방·여신 표시·하얀 기둥으로 꾸밈 (지도에도 하얀 칸)",
+        "단련의 방 랫풀다운: 공이 한 번에 1~2개, 왼쪽·오른쪽 무작위로 나오고 더 빨라짐",
+        "단련의 방 미니게임을 하는 동안 게임 시간이 멈춤 (혼자 하는 판)",
+        "연습장 '방' 탭: 상점·천상의 상점·여신의 선물·보물방·단련의 방·쉼터를 바로 시험 (단련의 방은 몇 번이고 다시)",
+      ],
+      en: [
+        "Monster gold: now drops only 40% of the time (elites still always drop) · no gold on the last-boss floor",
+        "Last-boss floor 'Golden Room' → 'Goddess's Gift' (300 gold removed, still pick 3 of 9 items) · shop → 'Celestial Shop' · both rooms decorated in white marble with the goddess mark and white pillars (white on the map too)",
+        "Training Room Lat Pulldown: 1-2 balls at a time from random sides, and faster",
+        "Game time is paused while playing a Training Room minigame (solo runs)",
+        "Practice 'Rooms' tab: try the shop, Celestial Shop, Goddess's Gift, treasure room, Training Room and rest room instantly (training gear reusable)",
+      ],
+      ja: [
+        "モンスター討伐のお金: 40%の確率でのみ出る（精鋭は今まで通り必ず出る）· ラストボスの階ではお金が出ない",
+        "ラストボスの階「黄金部屋」→「女神の贈り物」（お金300を削除、アイテム9個から3個選ぶのはそのまま）· ショップ →「天上のショップ」· どちらも白い大理石の部屋・女神の印・白い柱で飾り付け（地図でも白いマス）",
+        "鍛錬の部屋ラットプルダウン: ボールが一度に1〜2個、左右ランダムに出てより速く",
+        "鍛錬の部屋のミニゲーム中はゲーム時間が止まる（ソロ）",
+        "練習場「部屋」タブ: ショップ・天上のショップ・女神の贈り物・宝部屋・鍛錬の部屋・休憩所をすぐ試せる（鍛錬の器具は何度でも）",
+      ],
+    },
+  },
+  {
     version: "0.48.320",
     date: "2026-11-01",
     items: {

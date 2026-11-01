@@ -14,7 +14,7 @@ export const ONI_WEAPONS = {
   frostClub: W("frostClub", "frost"),
   /** 홍련신주: 업화가 터져 퍼짐 */
   lotusClub: W("lotusClub", "lotus"),
-  /** 금봉: 가진 돈으로 때림 (상점 못 씀 · 다른 무기 못 잡음 · 황금방 보너스) */
+  /** 금봉: 가진 돈으로 때림 (상점 못 씀 · 다른 무기 못 잡음 · 여신의 선물 보너스) */
   goldClub: W("goldClub", "gold"),
   /** 야마타의 그림자: 어둠 + 죽음 상태이상 */
   yamataClub: W("yamataClub", "yamata"),

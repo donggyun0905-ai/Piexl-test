@@ -29,7 +29,7 @@ export interface PassiveDef {
   exclusive?: CharacterId;
   /** 능력치가 아니라 공격 방식을 바꾸는 아이템 (한 판에 하나씩만 얻을 수 있음). 효과는 sim에서 처리 */
   effect?: true;
-  /** 정해진 자리에서만 나옴 (보상·상점·황금방에는 나오지 않음) */
+  /** 정해진 자리에서만 나옴 (보상·상점·여신의 선물에는 나오지 않음) */
   special?: true;
   /** 이 무기를 들었을 때만 나옴 (오니 무기 전용 아이템) */
   forWeapon?: string;

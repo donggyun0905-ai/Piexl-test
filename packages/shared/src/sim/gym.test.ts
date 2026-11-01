@@ -48,4 +48,23 @@ describe("단련의 방", () => {
     menu(s, menuCode(GYM_OP.up, 32));
     expect(s.player.gym!.lv[`p:${s.player.passives[0]}`]).toBe(1);
   });
+
+  it("4·5·6층 단련의 방마다 다시 포인트 (바로 다 써도 다음 층에서 또 받음, 3층 합 30)", () => {
+    const s = createRun(5, "warden");
+    let total = 0;
+    for (const f of [4, 5, 6]) {
+      startFloor(s, f);
+      const gym = s.map.rooms.find((r) => r.type === "gym")!;
+      const from = s.map.rooms.find((r) => r.exits.includes(gym.id))!;
+      s.roomId = from.id;
+      s.rooms[from.id]!.cleared = true;
+      goThrough(s, from.exits.indexOf(gym.id));
+      expect(gymUsed(s)).toBe(false);
+      menu(s, menuCode(GYM_OP.result, f % 3, 1000 / 20));
+      total += s.player.gym!.pts;
+      for (let i = 0; i < 10; i++) menu(s, menuCode(GYM_OP.up, (f + i) % GYM_STATS.length));
+      expect(s.player.gym!.pts).toBe(0);
+    }
+    expect(total).toBe(30);
+  });
 });

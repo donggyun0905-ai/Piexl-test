@@ -15,7 +15,7 @@ export const LANES = 3;
 /** 한 층의 최대 칸 수 (시작 방·보스방 포함) */
 export const MAX_LAYERS = 12;
 
-/** exit = 보스방 (보스를 잡으면 계단이 열림) · elite = 강한 적 (보상이 많음) · rest = 쉼터 (체력 회복) · golden = 황금방 (라스트 보스 층: 돈 300 + 아이템 3개 고르기) · gym = 단련의 방 (4층부터, sim/gym) */
+/** exit = 보스방 (보스를 잡으면 계단이 열림) · elite = 강한 적 (보상이 많음) · rest = 쉼터 (체력 회복) · golden = 여신의 선물 (라스트 보스 층: 아이템 9개 중 3개 고르기) · gym = 단련의 방 (4층부터, sim/gym) */
 export type RoomType = "start" | "combat" | "elite" | "rest" | "treasure" | "shop" | "exit" | "golden" | "gym";
 
 export interface RoomInfo {
@@ -29,6 +29,8 @@ export interface RoomInfo {
   exits: number[];
   /** 방 안 모양 (전투방·강한 적 방만, 나머지는 네모) */
   shape: RoomShape;
+  /** 천상의 상점 (라스트 보스 층 상점: 하얀 방·여신 표시로 꾸밈, 그리기 전용) */
+  heaven?: boolean;
 }
 
 export interface FloorMap {
@@ -95,9 +97,9 @@ export function generateFloor(seed: number, floor: number): FloorMap {
   return { floor, rooms, startId: 0, exitId: exit.id, layers: byLayer.length };
 }
 
-/** 라스트 보스 층: 시작 방 → 황금방 → 상점 → (아주 큰) 보스방, 한 줄로 */
+/** 라스트 보스 층: 시작 방 → 여신의 선물 → 천상의 상점 → (아주 큰) 보스방, 한 줄로 */
 export function lastFloorMap(): FloorMap {
   const types: RoomType[] = ["start", "golden", "shop", "exit"];
-  const rooms: RoomInfo[] = types.map((type, i) => ({ id: i, layer: i, lane: 1, type, exits: [-1, i + 1 < types.length ? i + 1 : -1, -1], shape: PLAIN_SHAPE }));
+  const rooms: RoomInfo[] = types.map((type, i) => ({ id: i, layer: i, lane: 1, type, exits: [-1, i + 1 < types.length ? i + 1 : -1, -1], shape: PLAIN_SHAPE, ...(type === "shop" ? { heaven: true } : {}) }));
   return { floor: LAST_FLOOR, rooms, startId: 0, exitId: types.length - 1, layers: types.length };
 }

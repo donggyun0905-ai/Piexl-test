@@ -29,6 +29,7 @@ export { BOSS_ROC_RULES } from "./bossRoc";
 export { cageRect, PARRY_TICKS } from "./bossCage";
 export { HELL_CHARGE, HELL_COLS, HELL_ROWS, HELL_SHOW, HELL_WAVES, hellCell } from "./bossUlts";
 export * from "./practice";
+export * from "./practiceRoom";
 export { characterWeapons } from "./loot";
 export { ROOM_SHAPES, shapeGrid, tileAt, TILE_FLOOR, TILE_PILLAR, TILE_PIT, TILE_WALL, type RoomShape, type TileGrid } from "./layout";
 export { ARENA_LEVELS, arenaCleared } from "./arena";

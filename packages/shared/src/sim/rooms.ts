@@ -69,7 +69,7 @@ export function applyRoom(s: RunState): void {
   else setRoomSize(s.roomCols, s.roomRows, false, thin);
 }
 
-/** 6층을 깬 뒤 라스트 보스에 도전: 7층(시작 방 → 황금방 → 상점 → 큰 보스방)으로 */
+/** 6층을 깬 뒤 라스트 보스에 도전: 7층(시작 방 → 여신의 선물 → 천상의 상점 → 큰 보스방)으로 */
 export function continueToLastFloor(s: RunState, boss: BossKind): void {
   s.lastBoss = boss;
   s.over = false;
@@ -133,7 +133,7 @@ function enterRoom(s: RunState, roomId: number): void {
               ? heroPair(heroBosses(s).map((b) => spawnBoss(s, b)))
               : (endlessBosses(s) ?? [spawnBoss(s, s.lastBoss ?? terraBoss(s) ?? bossForFloor(s.floor, s.seed))])
           : [];
-    // 협동: 보물·상점·황금방·쉼터 회복·단련 기구는 사람마다
+    // 협동: 보물·상점·여신의 선물·쉼터 회복·단련 기구는 사람마다
     eachSeat(s, () => {
       if (info.type === "treasure") spawnTreasure(s, roomId);
       else if (info.type === "gym") spawnGym(s, roomId);

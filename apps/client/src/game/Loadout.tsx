@@ -4,6 +4,7 @@ import { PwSkillBar, type PwSkillView } from "./PwSkillBar";
 import { SellBar } from "./SellBar";
 import { HiddenPicker } from "./HiddenPicker";
 import { StationWindow } from "./StationWindow";
+export { gymPlaying } from "./gym/gymKit";
 import type { StationView } from "./stationView";
 import type { CharacterId, PassiveId, UseItemId, WeaponId } from "@pixel-rogue/shared";
 import { CHAR_DESC } from "../select/charDesc";

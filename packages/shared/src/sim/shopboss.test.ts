@@ -4,6 +4,7 @@ import { BOSS_TIERS, bossForFloor, ENEMIES } from "../content";
 import { generateFloor } from "./floor";
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
 import { spawnShop } from "./shop";
+import { LOOT_RULES } from "./loot";
 import { startFloor } from "./rooms";
 import { EXIT_X } from "./util";
 
@@ -20,7 +21,9 @@ describe("층 구성", () => {
 });
 
 describe("돈·상점", () => {
-  it("처음 자금 50 · 던전에서는 몬스터 하나에 1 (정예 10 · 날벌레 무리는 다 잡아야 1)", () => {
+  it("처음 자금 50 · 던전에서는 몬스터 하나에 1 (확률 · 정예 10 · 날벌레 무리는 다 잡아야 1)", () => {
+    const chance = LOOT_RULES.GOLD_CHANCE;
+    LOOT_RULES.GOLD_CHANCE = 1;
     const run = createRun(3, "drifter");
     expect(run.gold).toBe(50);
     run.enemies = [{ ...base(run), hp: 1 }];
@@ -28,6 +31,7 @@ describe("돈·상점", () => {
     for (let i = 0; i < 30; i++) stepSim(run, EMPTY_INPUT);
     expect(run.kills).toBe(1);
     expect(run.goldEarned).toBe(1);
+    LOOT_RULES.GOLD_CHANCE = chance;
   });
 
   it("상점 물건은 서 있기로는 안 사지고, F로 사면 돈이 줄고 가짐. 돈이 모자라면 못 삼", () => {

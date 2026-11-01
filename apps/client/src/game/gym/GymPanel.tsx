@@ -6,7 +6,9 @@ import { itemName } from "../../i18n/items";
 import { GYM_DEVICE } from "../../i18n/items/station";
 import { ItemIcon } from "../itemIcon";
 import type { StationView } from "../stationView";
+import { useState } from "react";
 import { BenchPress } from "./BenchPress";
+import { useGymPause } from "./gymKit";
 import { LatPull } from "./LatPull";
 import { Sandbag } from "./Sandbag";
 
@@ -16,7 +18,13 @@ const PCT: readonly GymStat[] = ["damage", "attackSpeed", "moveSpeed", "range", 
 const fmt = (k: GymStat, v: number) => (PCT.includes(k) ? `+${Math.round(v * 1000) / 10}%` : `+${Math.round(v * 10) / 10}`);
 
 export function GymPanel({ gym, lang, t, send }: { gym: Gym; lang: Lang; t: (k: TextKey) => string; send: (code: number) => void }) {
-  const done = (score: number) => send(menuCode(GYM_OP.result, gym.device, Math.round(Math.min(1000, score) / 20)));
+  const [sent, setSent] = useState(false);
+  // 미니게임 동안 게임 시간 멈춤 (혼자 하는 판)
+  useGymPause(!gym.used && !sent);
+  const done = (score: number) => {
+    setSent(true);
+    send(menuCode(GYM_OP.result, gym.device, Math.round(Math.min(1000, score) / 20)));
+  };
   if (!gym.used) {
     const Game = [Sandbag, LatPull, BenchPress][gym.device] ?? Sandbag;
     return (

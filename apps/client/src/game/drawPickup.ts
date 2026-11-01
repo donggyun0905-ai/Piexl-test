@@ -146,7 +146,7 @@ export function drawCoinFx(ctx: CanvasRenderingContext2D, x: number, y: number, 
   ctx.globalAlpha = 1;
 }
 
-/** 큰 동전 (황금방 300원): 지름 26의 금화 · 톱니 테두리 · 가운데 별 무늬 · 빛나는 줄 · 위에 금액 */
+/** 큰 동전 (100원 이상): 지름 26의 금화 · 톱니 테두리 · 가운데 별 무늬 · 빛나는 줄 · 위에 금액 */
 function drawBigCoin(ctx: CanvasRenderingContext2D, x: number, y: number, tick: number, price: number): void {
   ctx.globalAlpha = 1;
   // 바닥 그림자 · 반짝이는 빛 고리

@@ -130,7 +130,7 @@ export function updateItems(s: RunState, input: TickInput): void {
       s.nearPickupId = pk.id;
     }
     if (pk.kind === "coin") {
-      // 큰 동전(100원 이상, 황금방 300원)은 크게 그려서 닿는 거리도 넓음
+      // 큰 동전(100원 이상)은 크게 그려서 닿는 거리도 넓음
       if (touching(s, pk, pk.price >= BIG_COIN ? R.TOUCH + 8 : R.TOUCH)) {
         addGold(s, pk.price);
         room.pickups = room.pickups.filter((x) => x.id !== pk.id);
@@ -237,7 +237,7 @@ function take(s: RunState, pk: Pickup): void {
     p.passives.push(pk.itemId as PassiveId);
     recalcStats(s);
     if (pk.group === GOLDEN_GROUP) {
-      // 황금방: 3개까지 고르면 나머지는 사라짐
+      // 여신의 선물: 3개까지 고르면 나머지는 사라짐
       s.goldenPicks = (s.goldenPicks ?? 0) + 1;
       remove((x) => x.id === pk.id || ((s.goldenPicks ?? 0) >= GOLDEN_PICKS && x.group === GOLDEN_GROUP));
     } else {

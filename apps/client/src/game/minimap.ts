@@ -1,4 +1,4 @@
-import { LANES, MAX_LAYERS, type FloorMap, type RoomType, type RunState } from "@pixel-rogue/shared";
+import { LANES, MAX_LAYERS, type FloorMap, type RoomInfo, type RoomType, type RunState } from "@pixel-rogue/shared";
 
 // ───────── 노선도 (층 갈림길 지도) ─────────
 // 아래 시작 방 → 위 보스방. 방 종류는 처음부터 다 보이고, 지나온 길은 밝게
@@ -12,8 +12,8 @@ export const ROOM_COLORS: Record<RoomType, string> = {
   shop: "#7ed67e",
   /** 보스방 (계단) */
   exit: "#e05a5a",
-  /** 황금방 (라스트 보스 층) */
-  golden: "#ffd84a",
+  /** 여신의 선물 (라스트 보스 층, 하얀 방) */
+  golden: "#f6f4ff",
   /** 단련의 방 (4층부터) */
   gym: "#c86aff",
 };
@@ -27,7 +27,7 @@ export const ROOM_GLYPHS: Record<RoomType, readonly string[]> = {
   treasure: [".###.", "#####", "#.#.#", "#####", "#####"],
   shop: [".###.", "#.#.#", ".###.", "#.#.#", ".###."],
   exit: ["#.#.#", "#####", "#####", "#...#", "#####"],
-  golden: ["#.#.#", ".###.", "#####", ".###.", "#.#.#"],
+  golden: ["##.##", ".#.#.", "#####", "#.#.#", "#####"],
   gym: ["#...#", "##.##", "#####", "##.##", "#...#"],
 };
 
@@ -36,6 +36,12 @@ export function drawGlyph(ctx: CanvasRenderingContext2D, type: RoomType, x: numb
   ROOM_GLYPHS[type].forEach((row, j) => {
     for (let i = 0; i < row.length; i++) if (row[i] === "#") ctx.fillRect(x + i * px, y + j * px, px, px);
   });
+}
+
+/** 방 칸 색·글자색: 천상의 방(여신의 선물·천상의 상점)은 하얀 바탕에 금빛 표시 */
+export function roomLook(r: Pick<RoomInfo, "type" | "heaven">): { color: string; ink: string } {
+  if (r.heaven) return { color: "#f6f4ff", ink: "#c89a2a" };
+  return { color: ROOM_COLORS[r.type], ink: r.type === "golden" ? "#c89a2a" : "#1a1622" };
 }
 
 const NODE_W = 9;
@@ -81,9 +87,10 @@ export function drawRoute(ctx: CanvasRenderingContext2D, map: FloorMap, visited?
   for (const r of map.rooms) {
     const { x, y } = routeNodePos(map, r.layer, r.lane);
     ctx.globalAlpha = lit(r.id) || r.id === current ? 1 : 0.5;
-    ctx.fillStyle = ROOM_COLORS[r.type];
+    const look = roomLook(r);
+    ctx.fillStyle = look.color;
     ctx.fillRect(x, y, NODE_W, NODE_H);
-    drawGlyph(ctx, r.type, x + 2, y + 1, "#1a1622");
+    drawGlyph(ctx, r.type, x + 2, y + 1, look.ink);
     ctx.globalAlpha = 1;
     if (r.id === current) {
       ctx.strokeStyle = "#ffffff";

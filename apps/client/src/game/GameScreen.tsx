@@ -14,7 +14,7 @@ import { play } from "../audio/sound";
 import { getSettings, setSettings } from "../settings";
 import { GameOverlays, type Overlay, type Result } from "./GameOverlays";
 import { formatTime } from "./hudText";
-import { Loadout, type LoadoutView } from "./Loadout";
+import { gymPlaying, Loadout, type LoadoutView } from "./Loadout";
 import { MINIMAP_BOX_H, MINIMAP_BOX_W } from "./minimap";
 import { floorTipAt, PickupTip, type FloorTip } from "./PickupTip";
 import { CharInfoHost, GameHud, PanHint, StatsPanel, WithControls } from "./GameHud";
@@ -79,7 +79,6 @@ export function GameScreen(props: GameScreenProps) {
     // 창이 뜨면 누르던 입력을 놓음 (공격이 계속 안 나가게)
     if (overlay !== "none") controlsRef.current?.releaseAll();
   }, [overlay]);
-
   // 모바일 뒤로가기 → 나가기 확인
   const toggleExit = useCallback(() => setOverlay((o) => (o === "exit" || o === "info" ? "none" : "exit")), []);
   useBackButton(toggleExit);
@@ -158,7 +157,7 @@ export function GameScreen(props: GameScreenProps) {
       info: infoRef.current,
       dashButton: () => dashRef.current,
       practice: sandbox,
-      paused: () => canPause && overlayRef.current !== "none",
+      paused: () => canPause && (overlayRef.current !== "none" || gymPlaying()),
       setPrompt,
       setLoadout,
       setStats,
@@ -169,7 +168,7 @@ export function GameScreen(props: GameScreenProps) {
         if (!sandbox) tracker.advance();
         if (tutorial?.update()) {
           setTutorialStep(tutorial.step);
-          // 단계가 바뀌며 바닥 아이템이 치워질 수 있으니 떠 있던 설명은 닫음
+          // 단계가 바뀌면 떠 있던 설명은 닫음
           setTip(null);
           if (tutorial.step === "end") markTutorialDone();
         }

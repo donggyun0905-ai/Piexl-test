@@ -23,7 +23,7 @@ export const SUMMARY_TEXT = {
   sumRoomTreasure: { ko: "보물방", en: "treasure room", ja: "宝部屋" },
   sumRoomShop: { ko: "상점", en: "shop", ja: "ショップ" },
   sumRoomExit: { ko: "보스방", en: "boss room", ja: "ボス部屋" },
-  sumRoomGolden: { ko: "황금방", en: "golden room", ja: "黄金部屋" },
+  sumRoomGolden: { ko: "여신의 선물", en: "Goddess's Gift", ja: "女神の贈り物" },
   codex: { ko: "도감", en: "Codex", ja: "図鑑" },
   codexEnemies: { ko: "적", en: "Foes", ja: "敵" },
   codexBosses: { ko: "보스", en: "Bosses", ja: "ボス" },

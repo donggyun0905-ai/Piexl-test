@@ -56,7 +56,7 @@ export const GUIDE_EN_B: Partial<Record<CharacterId, readonly string[]>> = {
     "Stat changes: 1 damage → 5 max HP · 1% attack speed → 1 regen (heals that much every 5s) · range → extra-attack area ('UP!' over your head)",
     "25 swings grant 30s of Shinin form: a sleek look with long horns · +45% damage · +50% max HP · 100% extra attacks",
     "Six clubs (Thunder Cudgel, Frostfang Club, Crimson Lotus Pillar, Shadow of Eight Heads, Wind God's Call, Dragon Tide Club) each have three exclusive items that appear only while you hold that club (more often with high luck)",
-    "Golden Club: strikes with your gold · no shops or other weapons · entering treasure or golden rooms gives a full heal + gold",
+    "Golden Club: strikes with your gold · no shops or other weapons · entering treasure rooms or the Goddess's Gift gives a full heal + gold",
     "??? : a netherworld weapon unlocked with 400 max HP after reviving once · ??? : an azure weapon unlocked with 60 regen after reviving once",
   ],
   stargazer: [

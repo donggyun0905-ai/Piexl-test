@@ -11,7 +11,7 @@ import { petGold } from "./lobbyPet";
 import { goldMul } from "./baseStats";
 import type { EnemyState, Pickup, PickupKind, RunState } from "./types";
 import { ENEMIES } from "../content";
-import { depth } from "./hero";
+import { depth, lastFloorOf } from "./hero";
 import { addEffect, hasPerk } from "./util";
 import { seatNo } from "./party";
 import { tabooDown, tabooN } from "./taboo";
@@ -21,7 +21,6 @@ import { goldLocked, oniWeaponOk } from "./oniRules";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
-  GOLDEN_GOLD: 300,
   /** 처음 자금 (레이드 아레나 빼고) */
   START_GOLD: 50,
   /** 전투방을 정리하면 받는 돈: 1~2층 · 3~4층 · 5층부터 */
@@ -34,6 +33,8 @@ const R = {
   ELITE_GOLD_5: 10,
   /** 던전에서 몬스터 하나를 잡으면 받는 돈 (날벌레·박쥐 무리는 무리를 다 잡아야 한 번) */
   gold: 1,
+  /** 던전 몬스터를 잡았을 때 돈이 나올 확률 (정예·보스는 늘 나옴) */
+  GOLD_CHANCE: 0.4,
   /** 던전에서 정예(주황 방의 큰 몬스터)를 잡으면 받는 돈 */
   CHAMP_GOLD: 10,
   /** 가질 수 있는 가장 많은 돈 (패왕전 빼고, 넘으면 더 쌓이지 않음) */
@@ -48,7 +49,7 @@ export const KILL_GOLD = () => Math.max(R.gold, R.CHAMP_GOLD);
 /** 방 하나를 정리해 받는 가장 큰 돈 (진행 기록 검사) */
 export const ROOM_GOLD_MAX = () => Math.max(R.ROOM_GOLD_1, R.ROOM_GOLD_3, R.ROOM_GOLD_5, R.ELITE_GOLD_1, R.ELITE_GOLD_3, R.ELITE_GOLD_5);
 
-/** 돈 얻기: 돈 주머니 +50% · 황금 거북(로비 펫) · 기본 스탯 · 금기 가난 → 가질 수 있는 한도(MAX_GOLD)까지만 (넘친 만큼은 번 돈에도 넣지 않음) */
+/** 돈 얻기: 돈 주머니·로비 펫·기본 스탯·금기 가난 → 한도(MAX_GOLD)까지만 (넘친 만큼은 번 돈에도 안 넣음) */
 export function addGold(s: RunState, amount: number): void {
   if (hasPerk(s.player, "goldPouch")) amount = Math.round(amount * PERKS.goldPouch.gold);
   amount = Math.round(amount * petGold(s) * goldMul(s.player));
@@ -58,14 +59,16 @@ export function addGold(s: RunState, amount: number): void {
   s.goldEarned += amount;
 }
 
-/** 적을 잡으면 받는 돈: 던전은 하나에 gold (정예 CHAMP_GOLD · 날벌레·박쥐 무리는 마지막 하나를 잡을 때만) · 광야·패왕전·레이드 아레나·정해진 현상금은 적 표의 돈 */
+/** 적을 잡으면 받는 돈: 던전은 확률로 gold (보스는 늘 · 정예 CHAMP_GOLD · 무리는 마지막 하나만 · 라스트 보스 층 0) · 광야·패왕전·아레나·현상금은 적 표의 돈 */
 export function killGold(s: RunState, e: EnemyState): number {
   if (e.bounty !== undefined) return e.bounty;
   if (s.swarm || s.pvp || s.arenaLv) return ENEMIES[e.kind].gold;
+  if (s.lastBoss && s.floor === lastFloorOf(s)) return 0;
   // 정예였던 몬스터 (정예가 풀린 뒤 잡아도)
   if (e.champ || e.champK) return R.CHAMP_GOLD;
   if (e.flock !== undefined && s.enemies.some((o) => o !== e && o.flock === e.flock && o.hp > 0)) return 0;
-  return R.gold;
+  if (ENEMIES[e.kind].boss) return R.gold;
+  return createRng(deriveSeed(s.seed, "killGold", s.floor, s.roomId, e.id)).nextFloat() < R.GOLD_CHANCE ? R.gold : 0;
 }
 
 /** 방 가운데 (지금 방 크기를 따름) */
@@ -203,7 +206,7 @@ export function onRoomCleared(s: RunState, roomId: number): void {
   }
 }
 
-/** 황금방: 아이템 9개를 공짜로 늘어놓고 그중 3개만 가질 수 있음 (다 고르면 나머지는 사라짐) + 돈 300 */
+/** 여신의 선물 (방 종류 golden): 아이템 9개를 공짜로 늘어놓고 그중 3개만 가질 수 있음 (다 고르면 나머지는 사라짐) */
 export const GOLDEN_GROUP = 900;
 export const GOLDEN_PICKS = 3;
 
@@ -212,7 +215,7 @@ export function spawnBlessing(s: RunState, roomId: number): void {
   addPickup(s, roomId, "passive", "goddessBlessing", CX, CY + 12, 0);
 }
 
-/** 금봉: 보물방·황금방에 들어오면 체력 가득 + 돈 (금빛 효과). 금봉이면 true */
+/** 금봉: 보물방·여신의 선물에 들어오면 체력 가득 + 돈 (금빛 효과). 금봉이면 true */
 function goldClubBonus(s: RunState): boolean {
   const p = s.player;
   if (!goldLocked(p)) return false;
@@ -228,7 +231,7 @@ function goldClubBonus(s: RunState): boolean {
 export function spawnGolden(s: RunState, roomId: number): void {
   const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "golden", ...seatSalt(s)));
   let pool = [...passivePool(s)];
-  // 금봉: 황금방에 들어오면 체력 가득 + 돈, 진열은 패시브 6개 + 사용 아이템 3개 (사용 아이템은 따로 가짐)
+  // 금봉: 여신의 선물에 들어오면 체력 가득 + 돈, 진열은 패시브 6개 + 사용 아이템 3개 (사용 아이템은 따로 가짐)
   const gold = goldClubBonus(s);
   for (let i = 0; i < 9 && pool.length > 0; i++) {
     const at: [number, number] = [CX - 40 + (i % 3) * 40, CY - 36 + Math.floor(i / 3) * 24];
@@ -240,6 +243,5 @@ export function spawnGolden(s: RunState, roomId: number): void {
     pool = pool.filter((x) => x !== id);
     addPickup(s, roomId, "passive", id, at[0], at[1], GOLDEN_GROUP);
   }
-  addPickup(s, roomId, "coin", "coin", CX - 80, CY - 12, 0, R.GOLDEN_GOLD);
   s.goldenPicks = 0;
 }

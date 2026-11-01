@@ -25,7 +25,7 @@ function steps(run: RunState, n: number, watch?: (r: RunState) => void): void {
   }
 }
 
-/** 보스방까지 걸어감 (시작 방 → 황금방 → 상점 → 보스방) */
+/** 보스방까지 걸어감 (시작 방 → 여신의 선물 → 천상의 상점 → 보스방) */
 function toBossRoom(run: RunState): void {
   for (let k = 0; k < 3; k++) {
     const from = run.roomId;

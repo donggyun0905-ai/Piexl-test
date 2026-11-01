@@ -1,6 +1,7 @@
-// 방 바닥에 그리는 것: 들어온 입구 · 출구(다음 방 종류 표시) · 계단 · 상점 깔개 · 보물 상자 · 쉼터 샘 · 라스트 보스 층 여신상 (임시 그림)
+// 방 바닥에 그리는 것: 들어온 입구 · 출구(다음 방 종류 표시) · 계단 · 상점 깔개 · 천상의 방(render/heavenDraw) · 보물 상자 · 쉼터 샘 · 라스트 보스 층 여신상 (임시 그림)
 import { EXIT_X, ROOM_COLS, ROOM_HEIGHT, ROOM_ROWS, ROOM_WIDTH, TILE_SIZE, type RunState } from "@pixel-rogue/shared";
-import { drawGlyph, ROOM_COLORS } from "./minimap";
+import { drawGlyph, roomLook } from "./minimap";
+import { drawHeavenRoom } from "./render/heavenDraw";
 
 const C = {
   doorOpen: "#1c1926",
@@ -67,14 +68,16 @@ export function drawRoomFeatures(ctx: CanvasRenderingContext2D, s: RunState): vo
       ctx.fillStyle = C.doorLocked;
       for (let i = 0; i < 3; i++) ctx.fillRect(x + 1, y + 2 + i * 5, TILE_SIZE - 2, 2);
     }
-    const type = s.map.rooms[next]!.type;
+    const nextRoom = s.map.rooms[next]!;
+    const type = nextRoom.type;
+    const look = roomLook(nextRoom);
     const bx = x + 4;
     const by = TILE_SIZE + 2;
     ctx.fillStyle = "#141018";
     ctx.fillRect(bx - 1, by - 1, 9, 9);
-    ctx.fillStyle = ROOM_COLORS[type];
+    ctx.fillStyle = look.color;
     ctx.fillRect(bx, by, 7, 7);
-    drawGlyph(ctx, type, bx + 1, by + 1, "#1a1622");
+    drawGlyph(ctx, type, bx + 1, by + 1, look.ink);
   });
   const cx = ROOM_WIDTH / 2;
   const cy = ROOM_HEIGHT / 2;
@@ -85,6 +88,8 @@ export function drawRoomFeatures(ctx: CanvasRenderingContext2D, s: RunState): vo
     ctx.fillStyle = C.stairsStep;
     for (let i = 0; i < 4; i++) ctx.fillRect(cx - 7 + i * 2, cy - 6 + i * 3, 14 - i * 4, 2);
     ctx.globalAlpha = 1;
+  } else if (room.heaven || room.type === "golden") {
+    drawHeavenRoom(ctx, s, cx, cy, room.type === "golden");
   } else if (room.type === "shop") {
     ctx.fillStyle = C.shopEdge;
     ctx.fillRect(cx - 56, cy - 22, 112, 30);

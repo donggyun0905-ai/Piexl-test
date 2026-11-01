@@ -272,7 +272,7 @@ export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, Pe
   /** 지금 방 크기 (칸 수, 없으면 보통 방). 라스트 보스방은 큼 */
   roomCols?: number;
   roomRows?: number;
-  /** 황금방에서 가진 아이템 수 */
+  /** 여신의 선물에서 가진 아이템 수 */
   goldenPicks?: number;
   /** 태초의 빛과 어둠 방의 상자 벽 자리 (칸 [열, 행] 쌍, 그 방에 있을 때만) */
   arena?: number[];

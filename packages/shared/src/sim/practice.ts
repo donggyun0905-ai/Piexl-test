@@ -49,6 +49,7 @@ import { applyRoom, BIG_COLS, BIG_ROWS } from "./rooms";
 import { makeArena } from "./bossPrimeval";
 import { bossHpMul } from "./bosses";
 import { depth } from "./hero";
+import { practiceRoomOff } from "./practiceRoom";
 
 export type PracticeItem =
   | { kind: "weapon"; id: WeaponId }
@@ -250,7 +251,8 @@ export function practiceReset(s: RunState): void {
   p.mods = [];
   recalcStats(s);
   p.hp = p.stats.maxHp;
-  s.rooms[s.roomId]!.pickups = [];
+  practiceRoomOff(s);
+  p.gym = undefined;
   s.kills = 0;
   s.gold = 0;
   p.x = p.prevX = ROOM_WIDTH / 2;

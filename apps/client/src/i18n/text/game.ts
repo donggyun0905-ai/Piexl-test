@@ -99,9 +99,9 @@ export const GAME_TEXT = {
   bossDark: { ko: "태초의 어둠", en: "Primeval Dark", ja: "太初の闇" },
   challengeTitle: { ko: "최강자에게 도전하시겠습니까?", en: "Will you challenge the strongest?", ja: "最強の者に挑みますか？" },
   challengeDesc: {
-    ko: "클리어 기록은 저장되었습니다. 라스트 보스를 고르면 7층(황금방 · 상점 · 아주 큰 보스방)으로 이어집니다",
-    en: "Your clear has been recorded. Pick a final boss to continue to floor 7 (golden room · shop · huge boss room)",
-    ja: "クリア記録は保存されました。ラストボスを選ぶと7階（黄金部屋 · ショップ · とても大きなボス部屋）へ続きます",
+    ko: "클리어 기록은 저장되었습니다. 라스트 보스를 고르면 7층(여신의 선물 · 천상의 상점 · 아주 큰 보스방)으로 이어집니다",
+    en: "Your clear has been recorded. Pick a final boss to continue to floor 7 (Goddess's Gift · Celestial Shop · huge boss room)",
+    ja: "クリア記録は保存されました。ラストボスを選ぶと7階（女神の贈り物 · 天上のショップ · とても大きなボス部屋）へ続きます",
   },
   lastFloorTag: { ko: "최강자", en: "Final", ja: "最強" },
   promptStairs: { ko: "다음 층으로", en: "Go down", ja: "次の階へ" },
