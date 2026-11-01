@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.325",
+    date: "2026-11-01",
+    items: {
+      ko: ["단련의 방 샌드백을 조금 느리게 (처음 1.2초, 가장 빠를 때 0.36초)"],
+      en: ["Training Room Sandbag slightly slower (1.2s at first, 0.36s at fastest)"],
+      ja: ["鍛錬の部屋のサンドバッグを少し遅く（最初1.2秒、最速0.36秒）"],
+    },
+  },
+  {
     version: "0.48.324",
     date: "2026-11-01",
     items: {

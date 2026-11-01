@@ -15,7 +15,7 @@ const H = 260;
 
 export function Sandbag({ onDone, t }: { onDone: (score: number) => void; t: (k: TextKey) => string }) {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const st = useRef({ dir: "up" as Dir, prev: "up" as Dir, left: 1.1, full: 1.1, score: 0, miss: 0, hits: 0, bursts: [] as Burst[], shake: 0, over: false });
+  const st = useRef({ dir: "up" as Dir, prev: "up" as Dir, left: 1.2, full: 1.2, score: 0, miss: 0, hits: 0, bursts: [] as Burst[], shake: 0, over: false });
   const [, redraw] = useState(0);
   // 방향만 정함 (점수 계산과 상관없는 화면 놀이라 시각으로 시드)
   const [rng] = useState(() => createRng(Date.now() >>> 0));
@@ -26,7 +26,7 @@ export function Sandbag({ onDone, t }: { onDone: (score: number) => void; t: (k:
     const pick = DIRS.filter((d) => d !== s.dir && d !== s.prev);
     s.prev = s.dir;
     s.dir = pick[Math.floor(rng.nextFloat() * pick.length)]!;
-    s.full = Math.max(0.3, 1.1 - s.hits * 0.032);
+    s.full = Math.max(0.36, 1.2 - s.hits * 0.027);
     s.left = s.full;
   };
   const miss = () => {
