@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.329",
+    date: "2026-11-01",
+    items: {
+      ko: ["히든 상점(차원의 순례자)이 1층에는 나오지 않음 (돈이 없어 살 수 없던 것) · 2층부터 층마다 8%"],
+      en: ["The hidden shop (Dimensional Pilgrim) no longer appears on floor 1 (you couldn't afford anything) · 8% per floor from floor 2"],
+      ja: ["隠しショップ（次元の巡礼者）が1階には出なくなった（お金がなく買えなかった）· 2階から各階8%"],
+    },
+  },
+  {
     version: "0.48.328",
     date: "2026-11-01",
     items: {

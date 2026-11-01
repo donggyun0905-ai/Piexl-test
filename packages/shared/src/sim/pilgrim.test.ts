@@ -16,7 +16,7 @@ function withPilgrim(): RunState {
   for (let seed = 1; seed < 400; seed++) {
     const s = createRun(seed, "warden");
     s.pilgrim = true;
-    startFloor(s, 1);
+    startFloor(s, 2);
     if (pilgrimRoom(s) >= 0) return s;
   }
   throw new Error("없음");
@@ -29,6 +29,9 @@ describe("차원의 순례자 · 히든 아이템", () => {
       const s = createRun(seed, "warden");
       expect(pilgrimRoom(s)).toBe(-1);
       s.pilgrim = true;
+      // 1층에는 안 나옴 (돈이 없어 못 삼)
+      expect(pilgrimRoom(s)).toBe(-1);
+      startFloor(s, 2);
       if (pilgrimRoom(s) >= 0) n++;
     }
     expect(n).toBeGreaterThan(15);

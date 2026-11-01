@@ -8,8 +8,9 @@ import type { RunState } from "./types";
 import { addEffect } from "./util";
 
 const R = {
-  /** 층마다 나올 확률 */
+  /** 층마다 나올 확률 (층마다 따로 굴림, 한 번 나와도 다음 층에 또 나올 수 있음) · 이 층부터 (1층은 돈이 없어 못 삼) */
   chance: 0.08,
+  fromFloor: 2,
   /** 포탈에서 가운데까지 걸어오는 틱 · 진열 수 · 진열 간격 */
   walk: 110,
   stock: 3,
@@ -19,7 +20,7 @@ export { R as PILGRIM_RULES };
 
 /** 이 층에서 순례자가 기다리는 방 (없으면 -1) */
 export function pilgrimRoom(s: RunState): number {
-  if (!s.pilgrim || s.lastBoss || s.arenaLv || s.sudden) return -1;
+  if (!s.pilgrim || s.lastBoss || s.arenaLv || s.sudden || s.floor < R.fromFloor) return -1;
   const rng = createRng(deriveSeed(s.seed, "pilgrim", s.floor));
   if (rng.nextFloat() >= R.chance) return -1;
   const rooms = s.map.rooms.filter((r) => r.type === "combat");
