@@ -66,7 +66,7 @@ export function GameHud({ t, touchMode, autoAim, manualOnly, pvp, onPause, onAut
 }
 
 /** 로그 왼쪽 칸: 능력치 · '캐릭터 설명' 버튼(누르면 게임을 멈추고 큰 창 CharInfoHost) · 버프 창. 칸 너비는 화면 여백(--side)에 맞춤 (screenHooks) */
-export function StatsPanel({ rows, t, onInfo, run }: { rows: StatRow[]; t?: (k: TextKey) => string; onInfo?: () => void; run?: () => RunState | null }) {
+export function StatsPanel({ rows, t, lang, onInfo, run }: { rows: StatRow[]; t?: (k: TextKey) => string; lang?: Lang; onInfo?: () => void; run?: () => RunState | null }) {
   return (
     <div className="stats-panel">
       {rows.map((r) => (
@@ -80,7 +80,7 @@ export function StatsPanel({ rows, t, onInfo, run }: { rows: StatRow[]; t?: (k: 
           {t("ciOpen")}
         </button>
       )}
-      {run && t && <BuffPanel run={run} t={t} />}
+      {run && t && <BuffPanel run={run} t={t} lang={lang ?? "ko"} />}
     </div>
   );
 }

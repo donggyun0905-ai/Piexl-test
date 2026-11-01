@@ -2,6 +2,7 @@
 import { ENEMIES } from "../content";
 import { renMelee } from "./ren";
 import { depth } from "./hero";
+import { touchFoe } from "./foeStatus";
 import { damagePlayer, removeDead } from "./combat";
 import { updateBoss } from "./bosses";
 import { ultBusy } from "./bossKit";
@@ -180,7 +181,7 @@ export function updateEnemies(s: RunState): void {
         if (e.ultAt !== undefined && e.ultSafe) return;
         // 잔영 그림자 · 떨어진 신의 날개: 몸에 닿는 피해 없음 (원거리 공격은 맞음)
         if ((q.rmShade ?? 0) > 0 || q.passives.includes("fallenWings")) return;
-        if (def.contactDamage > 0 && dist2(e, q) < rr * rr && e.id !== q.grabId && !e.air) damagePlayer(s, renMelee(s, def.contactDamage * tabooUp(s, "fangs") * (def.boss ? 1 : 1 + R.CONTACT_PER_FLOOR * (depth(s) - 1))), e.kind);
+        if (def.contactDamage > 0 && dist2(e, q) < rr * rr && e.id !== q.grabId && !e.air) damagePlayer(s, renMelee(s, def.contactDamage * tabooUp(s, "fangs") * (def.boss ? 1 : 1 + R.CONTACT_PER_FLOOR * (depth(s) - 1))), touchFoe(e));
       },
       !!s.party,
     );

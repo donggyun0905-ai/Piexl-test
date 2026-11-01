@@ -247,7 +247,7 @@ export function GameScreen(props: GameScreenProps) {
           height={Math.round(VIEW_HEIGHT * scale * dpr)}
           style={{ width: VIEW_WIDTH * wide * scale, height: VIEW_HEIGHT * scale }}
         />
-        {stats && !pvp && <StatsPanel rows={stats} t={t} onInfo={props.embedded ? undefined : () => setOverlay("info")} run={() => runRef.current} />}
+        {stats && !pvp && <StatsPanel rows={stats} t={t} lang={lang} onInfo={props.embedded ? undefined : () => setOverlay("info")} run={() => runRef.current} />}
         {!pvp && !props.embedded && <CharInfoHost character={characterId} lang={lang} t={t} open={overlay === "info"} onInfo={(on) => setOverlay((o) => (on ? (o === "none" ? "info" : o) : o === "info" ? "none" : o))} />}
         {mode !== "practice" && mode !== "swarm" && mode !== "paewang" && (
           <canvas ref={miniRef} className="minimap" width={MINIMAP_BOX_W} height={MINIMAP_BOX_H} aria-label={t("minimap")} />

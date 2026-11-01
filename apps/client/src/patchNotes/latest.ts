@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.314",
+    date: "2026-11-01",
+    items: {
+      ko: ["방패 가디언은 돌진·휘두르기에 맞을 때만 기절, 성기사는 빛기둥에 맞을 때만 속박 (몸에 닿기만 해서는 걸리지 않아 계속 묶이지 않음)", "변희: 각성한 동물이 왼쪽 버프 칸에 보랏빛으로 뜸 (다른 동물을 들어도 남음) · 마우스를 올리면 그 각성 능력 설명"],
+      en: ["Shield Guardians only Stun with their charge and swing, and Paladins only Root with pillars of light (just touching them no longer chains you in place)", "Byeonhui: awakened animals now show in purple in the left buff panel (kept when you switch animals) · hover to see the awakened ability"],
+      ja: ["盾のガーディアンは突進・振りに当たったときだけ気絶、聖騎士は光の柱に当たったときだけ拘束（体に触れただけではかからず、ずっと止められない）", "ビョンヒ: 覚醒した動物が左のバフ欄に紫で表示（他の動物に持ち替えても残る）· マウスを乗せるとその覚醒能力の説明"],
+    },
+  },
+  {
     version: "0.48.313",
     date: "2026-11-01",
     items: {

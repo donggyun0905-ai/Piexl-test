@@ -5,6 +5,7 @@ const l = (ko: string, en: string, ja: string): L => ({ ko, en, ja });
 export const BUFF_TEXT = {
   bfTitle: l("버프 · 상태이상 · 대기", "Buffs · Debuffs · Cooldowns", "バフ · 状態異常 · 待機"),
   bfNone: l("켜진 버프 없음", "No active buffs", "バフなし"),
+  bfEvo: l("각성", "Awakened", "覚醒"),
   dbPoison: l("독", "Poison", "毒"),
   dbHealCut: l("치유감소", "Healing cut", "回復減少"),
   dbBleed: l("출혈", "Bleed", "出血"),

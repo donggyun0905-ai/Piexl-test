@@ -186,3 +186,28 @@
 .buff-row.debuff i {
   background: #ff5a5a;
 }
+/* 변희 각성한 동물: 보랏빛 줄 · 마우스를 올리면 오른쪽에 각성 능력 설명 (칸 전체는 눌리지 않아도 이 줄은 호버됨) */
+.buff-row.evo {
+  pointer-events: auto;
+  cursor: help;
+  background: rgb(176 110 255 / 0.14);
+}
+.buff-row.evo span {
+  color: #d8b8ff;
+}
+.buff-row.evo:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: calc(100% + 8px);
+  top: -4px;
+  z-index: 5;
+  width: 240px;
+  padding: 6px 8px;
+  border: 1px solid #6a5aa0;
+  border-radius: 6px;
+  background: rgb(16 12 26 / 0.97);
+  color: #f0e8ff;
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: normal;
+}

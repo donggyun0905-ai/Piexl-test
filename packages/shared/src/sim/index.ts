@@ -61,7 +61,7 @@ export type { ElderSeal, S2Rush } from "./s2Types";
 export { guardSpots } from "./ren";
 export { SPIRIT_TINT, spiritSpot } from "./spirit";
 export { GREAT_INDEX, greatSpot } from "./spiritGreat";
-export { MORPH_EVO, morphEvolved } from "./morphEvo";
+export { MORPH_EVO, morphEvolved, evolvedAnimals } from "./morphEvo";
 export { stageTokens } from "./abandoned";
 export { eaterRegen, eaterRegenCap } from "./eater";
 export { mukinDef, mukinRegen } from "./mukin";

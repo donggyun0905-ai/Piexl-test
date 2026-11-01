@@ -51,6 +51,10 @@ const BY_FOE: Partial<Record<EnemyKind, [Field, keyof typeof R]>> = {
   charger: ["dbSlow", "SLOW_TICKS"],
 };
 
+/** 몸에 닿았을 때 상태이상을 거는 적 (가디언은 돌진 중일 때만 기절 · 성기사는 빛기둥만 속박, 몸에 닿으면 없음) */
+export const touchFoe = (e: { kind: EnemyKind; phase: string }): EnemyKind | undefined =>
+  e.kind === "paladin" || (e.kind === "guardian" && e.phase !== "charge") ? undefined : e.kind;
+
 /** 맞은 뒤 (combat.damagePlayer 끝): 때린 적에 맞는 상태이상 (저주는 걸려 있으면 시간을 늘리지 않음 → 꼭 터짐) */
 export function afflict(s: RunState, from: EnemyKind | undefined): void {
   const p = s.player;

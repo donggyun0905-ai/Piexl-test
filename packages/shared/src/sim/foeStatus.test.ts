@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { damagePlayer } from "./combat";
-import { FOE_STATUS_RULES as R, foeMoveMul, tickFoeStatus } from "./foeStatus";
+import { FOE_STATUS_RULES as R, foeMoveMul, tickFoeStatus, touchFoe } from "./foeStatus";
 import { createRun, EMPTY_INPUT, stepSim } from "./index";
 
 function run() {
@@ -17,6 +17,13 @@ describe("적이 플레이어에게 거는 상태이상", () => {
       damagePlayer(s, 5, kind);
       expect(s.player[field] ?? 0, kind).toBeGreaterThan(0);
     }
+  });
+
+  it("가디언은 돌진 중에 닿을 때만 · 성기사는 몸에 닿아서는 걸지 않음 (빛기둥·휘두르기만)", () => {
+    expect(touchFoe({ kind: "guardian", phase: "walk" })).toBeUndefined();
+    expect(touchFoe({ kind: "guardian", phase: "charge" })).toBe("guardian");
+    expect(touchFoe({ kind: "paladin", phase: "walk" })).toBeUndefined();
+    expect(touchFoe({ kind: "slime", phase: "walk" })).toBe("slime");
   });
 
   it("무적이면(맞지 않으면) 걸리지 않음", () => {
