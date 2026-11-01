@@ -13,7 +13,7 @@ export function drawKingAura(ctx: Ctx, s: RunState, a: number, snap: Snap): void
   const x = snap(lerp(p.prevX, p.x, a));
   const y = snap(lerp(p.prevY, p.y, a));
   const f = 0.75 + 0.25 * Math.sin(s.tick * 0.23) * Math.sin(s.tick * 0.07);
-  // 그림을 보통 크기(96칸 → 50)로 줄여 그려 자리도 그만큼 (sprites.ts fallenKing src)
+  // 그림 시트 v2 (128칸 → 32, sprites.ts fallenKing)
   additive(ctx, () => {
     glow(ctx, x, y - 36, 9 * f, "#3ab8ff", 0.55 * f, 0.4);
     for (const sx of [-1, 1]) glow(ctx, x + sx * 10, y - 30, 6 * f, "#3ab8ff", 0.45 * f);

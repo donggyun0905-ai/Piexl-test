@@ -15,10 +15,12 @@ DARK = 42
 # 어두운 옷 캐릭터: 배경(완전한 검정)만 지우게 기준을 낮춤
 DARK_BY = {"plague": 12}
 # 검은 머리·옷이 많은 캐릭터: 바깥 테두리에서 이어진 거의 완전한 검정(밝기 FLOOD 이하)만 배경으로 지움 (몸 안 검은 머리가 지워지지 않게)
-FLOOD_BG = {"wanderer", "eater", "slayer", "slayer_rage", "summoner", "mukin", "plague", "ren", "tracker", "remnant"}
+FLOOD_BG = {"duck", "fallenKing", "lux", "lux2", "lux3", "lux4", "wanderer", "eater", "slayer", "slayer_rage", "summoner", "mukin", "plague", "ren", "tracker", "remnant"}
 FLOOD = 8
 PURE = 3
 POCKET = 300
+# 곁에 그린 작은 것을 빼고 본체만 남길 캐릭터 (only_main·trim_sides) · 지금은 없음: 오리는 새끼 오리째 원본 그대로 (2026-11-01 사용자)
+BIGGEST: set = set()
 # 연기가 넓게 퍼진 캐릭터: 칸보다 넓으면 줄이지 않고 몸 둘레만 남김
 CROP_WIDE = {"plague"}
 # 앞모습(서기) 키 = 116칸, 다른 자세도 같은 배율 (칸에 안 들어가면 그 자세만 더 줄임)
@@ -32,7 +34,9 @@ FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", 
              "morph-bear", "morph-wolf", "byeonhui", "morph-eagle-evo",
              # 시즌 2·히든 21명 + 학살자 피의 학살 (2026-10-31)
              "rider", "ren", "mukin", "wanderer", "bomber", "samyeol", "artifacter", "miner", "plague", "silk", "automata", "voyager",
-             "eater", "forgotten", "remnant", "elder", "spiritist", "zeus", "tracker", "punk", "fly", "slayer", "slayer_rage"}
+             "eater", "forgotten", "remnant", "elder", "spiritist", "zeus", "tracker", "punk", "fly", "slayer", "slayer_rage",
+             # 히든·한정 마지막 6명 (2026-11-01)
+             "stargazer", "scribe", "duck", "pilgrim", "crownKing", "fallenKing", "lux", "lux2", "lux3", "lux4"}
 # 서기·걷기에서 오른쪽을 보는 원본 칸 (기본 3 = 넷째 칸, GPT가 셋째 칸에 오른쪽을 그린 캐릭터만)
 STAND_RIGHT = {"abandoned": 2, "abandoned2": 2}
 # 서기·걷기에서 고른 칸이 왼쪽을 보는 캐릭터: 뒤집어서 오른쪽으로 (사용자 확인)
@@ -69,6 +73,57 @@ def crop_wide(p, width):
     w = int(width)
     best = max(range(p.width - w + 1), key=lambda x0: sum(cols[x0:x0 + w])) if w < 400 else 0
     return p.crop((best, 0, best + w, p.height))
+
+
+def only_main(part, r=12):
+    """본체만 남김: 모양을 r칸 깎았다 다시 불려(가는 이음새가 끊김) 가장 큰 덩어리를 고르고, 그 둘레의 원래 점만 남김
+    (새끼 오리처럼 그림자·테두리로 살짝 붙은 작은 것이 떨어짐)"""
+    from PIL import ImageFilter
+    alpha = part.getchannel("A").point(lambda v: 255 if v else 0)
+    opened = alpha.filter(ImageFilter.MinFilter(2 * r + 1)).filter(ImageFilter.MaxFilter(2 * r + 1))
+    w, h = part.size
+    op = opened.load()
+    seen = bytearray(w * h)
+    best = []
+    for y0 in range(h):
+        for x0 in range(w):
+            if seen[y0 * w + x0] or not op[x0, y0]: continue
+            seen[y0 * w + x0] = 1
+            q, pts = deque([(x0, y0)]), []
+            while q:
+                x, y = q.popleft()
+                pts.append((x, y))
+                for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                    if 0 <= nx < w and 0 <= ny < h and not seen[ny * w + nx] and op[nx, ny]:
+                        seen[ny * w + nx] = 1
+                        q.append((nx, ny))
+            if len(pts) > len(best): best = pts
+    if not best: return part
+    keep = Image.new("L", (w, h), 0)
+    kp = keep.load()
+    for x, y in best: kp[x, y] = 255
+    keep = keep.filter(ImageFilter.MaxFilter(2 * r + 3))
+    out = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    out.paste(part, (0, 0), keep)
+    return out.crop(out.getbbox())
+
+
+def trim_sides(part, low=0.58, wide=0.1):
+    """옆 끝에 붙은 키 작은 것(몸에 겹쳐 선 새끼 오리): 양 끝에서 안쪽으로, 그 세로줄의 맨 위 점이 키의 low보다 아래인 줄이
+    폭의 wide 넘게 이어지면 잘라 냄 (발끝처럼 좁은 건 그대로)"""
+    w, h = part.size
+    a = part.getchannel("A").load()
+    top = [next((y for y in range(h) if a[x, y]), h) for x in range(w)]
+    short = [t > h * low for t in top]
+    x0, x1 = 0, w
+    run = 0
+    while run < w and short[run]: run += 1
+    if run > w * wide: x0 = run
+    run = 0
+    while run < w and short[w - 1 - run]: run += 1
+    if run > w * wide: x1 = w - run
+    out = part.crop((x0, 0, x1, h))
+    return out.crop(out.getbbox())
 
 
 def cut(pts, cw, cols):
@@ -117,7 +172,7 @@ def flood_bg(img):
     return bg
 
 
-def pieces(img, cols, rows, dark=DARK, flood=False):
+def pieces(img, cols, rows, dark=DARK, flood=False, biggest=False):
     """어두운 배경이 아닌 칸을 8방향으로 이은 덩어리 → 가운데가 놓인 칸(cols×rows)에 모음 (flood: 테두리에서 이어진 검정만 배경)"""
     w, h = img.size
     px = img.load()
@@ -160,6 +215,7 @@ def pieces(img, cols, rows, dark=DARK, flood=False):
             # 칸 위쪽 끝에 붙은 작은 조각(윗줄 발끝이 넘어온 것)은 버림
             total = sum(len(c[2]) for c in comps)
             keep = [c for c in comps if len(c[2]) > total * 0.04 or min(q[1] for q in c[2]) > r * ch + ch * 0.12]
+            if biggest: keep = [max(keep, key=lambda c: len(c[2]))]
             pts = [q for c in keep for q in c[2]]
             x0, y0 = min(p[0] for p in pts), min(p[1] for p in pts)
             part = Image.new("RGBA", (max(p[0] for p in pts) - x0 + 1, max(p[1] for p in pts) - y0 + 1), (0, 0, 0, 0))
@@ -174,8 +230,8 @@ def build(name):
     grid = {}
     for tag, cols, rows, at in FILES:
         img = Image.open(os.path.join(HERE, "src", f"{name}-{tag}.png")).convert("RGBA")
-        for r, line in zip(at, pieces(img, cols, rows, DARK_BY.get(name, DARK), name in FLOOD_BG)):
-            for c, part in enumerate(line): grid[r, c] = part
+        for r, line in zip(at, pieces(img, cols, rows, DARK_BY.get(name, DARK), name in FLOOD_BG, name in BIGGEST)):
+            for c, part in enumerate(line): grid[r, c] = trim_sides(only_main(part)) if name in BIGGEST else part
     # GPT가 '왼쪽' 칸도 오른쪽을 보게 그리는 일이 많음 → 서기·공격·걷기의 왼쪽은 오른쪽을 뒤집어 씀 (FLIP_LEFT에 없는 캐릭터는 그대로)
     raw = dict(grid)
     if name in FLIP_LEFT:

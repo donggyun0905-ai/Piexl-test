@@ -68,9 +68,9 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number;
   general: { size: 32, footPad: 2, src: 128, v2: true },
   imugi: { size: 32, footPad: 2, src: 128, v2: true },
   apostle: { size: 32, footPad: 2, src: 128, v2: true },
-  stargazer: { size: 32, footPad: 2 },
-  duck: { size: 32, footPad: 2 },
-  scribe: { size: 32, footPad: 2 },
+  stargazer: { size: 32, footPad: 2, src: 128, v2: true },
+  duck: { size: 32, footPad: 2, src: 128, v2: true },
+  scribe: { size: 32, footPad: 2, src: 128, v2: true },
   idra: { size: 32, footPad: 2, src: 128, v2: true },
   byeonhui: { size: 32, footPad: 2, src: 128, v2: true },
   fly: { size: 32, footPad: 2, src: 128, v2: true },
@@ -94,7 +94,7 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number;
   silk: { size: 32, footPad: 2, src: 128, v2: true },
   // 히든 캐릭터도 일반 캐릭터와 같은 크기 (2026-10-31) · 빛의 사도는 칸에 여백이 많아 키를 맞춘 크기(성장 모습은 단계마다 커짐) · 차원의 순례자는 소녀 키를 일반 캐릭터에 맞춤 (큰 가방은 그만큼 같이 커서 칸이 큼)
   miner: { size: 32, footPad: 2, src: 128, v2: true },
-  voyager: { size: 32, footPad: 2, src: 128, v2: true }, zeus: { size: 32, footPad: 2, src: 128, v2: true }, pilgrim: { size: 64, footPad: 2, src: 80 }, crownKing: { size: 80, footPad: 3 }, fallenKing: { size: 32, footPad: 2, src: 96 }, lux: { size: 44, footPad: 2, src: 48 }, lux2: { size: 51, footPad: 2, src: 112 }, lux3: { size: 58, footPad: 3, src: 128 }, lux4: { size: 65, footPad: 3, src: 144 },
+  voyager: { size: 32, footPad: 2, src: 128, v2: true }, zeus: { size: 32, footPad: 2, src: 128, v2: true }, pilgrim: { size: 40, footPad: 2, src: 128, v2: true }, crownKing: { size: 80, footPad: 3, src: 128, v2: true }, fallenKing: { size: 32, footPad: 2, src: 128, v2: true }, lux: { size: 44, footPad: 2, src: 128, v2: true }, lux2: { size: 51, footPad: 2, src: 128, v2: true }, lux3: { size: 58, footPad: 3, src: 128, v2: true }, lux4: { size: 65, footPad: 3, src: 128, v2: true },
   // 변희가 변한 동물 (옆모습만, render/actors가 옆을 보게 그림)
   ...Object.fromEntries(["wolf", "bear", "eagle", "snake", "boar", "scorpion", "bat", "elephant", "spider", "phoenix"].flatMap((a) => [[`morph-${a}`, { size: 32, footPad: 2, src: 128, v2: true as const }], [`morph-${a}-evo`, { size: 48, footPad: 3, src: 128, v2: true as const }]])),
   abandoned: { size: 32, footPad: 2, src: 128, v2: true },

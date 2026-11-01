@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.330",
+    date: "2026-11-01",
+    items: {
+      ko: ["새 그림: 별지기 · 서기관 · 오리 · 차원의 순례자 · 몰락한 왕 · 왕관의 왕(변신) · 빛의 사도 기본·2·3·4단계 (서기·걷기·공격·맞음·쓰러짐·대시) → 모든 캐릭터 기본 모습 새 그림 완료"],
+      en: ["New art: Stargazer · Scribe · Duck · Dimensional Pilgrim · Fallen King · Crowned King (transform) · Apostle of Light base and stages 2-4 (idle, walk, attack, hit, down, dash) → every character's base look is now redrawn"],
+      ja: ["新しい絵: 星読み · 書記官 · アヒル· 次元の巡礼者 · 堕ちた王 · 王冠の王（変身）· 光の使徒 基本・2・3・4段階（待機・歩き・攻撃・被弾・ダウン・ダッシュ）→ 全キャラの基本の姿が新しい絵に"],
+    },
+  },
+  {
     version: "0.48.329",
     date: "2026-11-01",
     items: {
