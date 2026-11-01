@@ -75,3 +75,27 @@ export function drawBossStatus(ctx: CanvasRenderingContext2D, e: EnemyState, x: 
       break;
   }
 }
+
+/** 그림이 맞는 범위보다 훨씬 큰 보스 (날개·꼬리는 맞지 않음): 맞는 범위 자리에 은은한 빛 원 + 점선 = 때릴 곳 (그림 위에 옅게) */
+const HIT_SPOT: Readonly<Record<string, string>> = { dragon: "255, 150, 60" };
+
+export function drawHitSpot(ctx: CanvasRenderingContext2D, tick: number, e: EnemyState, x: number, y: number): void {
+  const rgb = HIT_SPOT[e.kind];
+  if (!rgb || e.hp <= 0) return;
+  const pulse = 0.5 + 0.5 * Math.sin(tick * 0.08);
+  const g = ctx.createRadialGradient(x, y, e.r * 0.2, x, y, e.r);
+  g.addColorStop(0, `rgba(${rgb}, 0)`);
+  g.addColorStop(0.7, `rgba(${rgb}, ${0.1 + 0.08 * pulse})`);
+  g.addColorStop(1, `rgba(${rgb}, 0)`);
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(x, y, e.r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = `rgba(${rgb}, ${0.6 + 0.3 * pulse})`;
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 3]);
+  ctx.beginPath();
+  ctx.arc(x, y, e.r, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}

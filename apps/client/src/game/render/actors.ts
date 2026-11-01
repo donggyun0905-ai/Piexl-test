@@ -16,7 +16,7 @@ import { drawStalker } from "./stalkers";
 import { drawCharacter, drawEnemySprite, drawSprite, enemyFrames, hasV2, isCasting, isHurt, sheetFor, type CharacterPose } from "../sprites";
 import { C, CHARM_INK, lerp, type Snap } from "./palette";
 import { drawMinionDetail } from "./minions";
-import { drawBossStatus } from "./bossLook";
+import { drawBossStatus, drawHitSpot } from "./bossLook";
 import { drawParryCd } from "./titan";
 import { drawTagCue } from "./tagCue";
 import { drawSlayerGauge } from "./slayer";
@@ -84,6 +84,7 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       if (drawn) drawSlash(ctx, x, y, e.r, pose);
     }
     if (drawn) {
+      drawHitSpot(ctx, s.tick, e, x, y);
       drawBossStatus(ctx, e, x, y);
     } else {
       ctx.fillStyle = C.enemyEdge;

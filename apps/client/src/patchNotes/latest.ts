@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.335",
+    date: "2026-11-01",
+    items: {
+      ko: ["멸망의 용: 맞는 범위(몸통)에 은은한 주황 빛 원과 점선 표시 — 날개·꼬리는 맞지 않으니 표시된 곳을 때리면 됨"],
+      en: ["Dragon of Ruin: a soft orange glow and dashed ring now mark its hitbox (torso) — wings and tail can't be hit, so aim inside the ring"],
+      ja: ["滅びの竜: 当たり判定（胴体）にほのかなオレンジの光と点線の輪 — 翼・尾には当たらないので輪の中を狙えばいい"],
+    },
+  },
+  {
     version: "0.48.334",
     date: "2026-11-01",
     items: {
