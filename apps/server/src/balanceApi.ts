@@ -4,6 +4,7 @@
 import { clearRows } from "./clearStats";
 import { DEFAULT_BALANCE_HASH, DUNGEON_BALANCE, PW_BALANCE, TD_BALANCE, type BalanceSet, type BalanceValues } from "@pixel-rogue/shared";
 import { handleLogin, isAdmin } from "./adminLogin";
+import { handleTierAdmin } from "./tierApi";
 import type { HubContext } from "./hub";
 import { fail, json, readJson } from "./http";
 import { first } from "./sql";
@@ -86,6 +87,8 @@ export async function handleAdmin(ctx: HubContext, action: string, request: Requ
     return json({ ok: true, ...saveBalance(ctx, store, body.values, typeof body.note === "string" ? body.note : "") });
   }
   if (action === "clears" && request.method === "GET") return json({ ok: true, rows: clearRows(ctx) });
+  const tier = await handleTierAdmin(ctx, action, request);
+  if (tier) return tier;
   if (action === "history" && request.method === "GET") {
     const rows = ctx.sql.exec(`SELECT at, hash, note FROM ${store.log} ORDER BY at DESC, rowid DESC LIMIT ?`, LOG_SIZE).toArray();
     return json({ ok: true, entries: rows });

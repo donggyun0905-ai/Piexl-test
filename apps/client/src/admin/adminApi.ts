@@ -94,6 +94,11 @@ export const adminApi = {
   version: (s: ServerInfo, kind: SetKind, hash: string) => call<BalanceRes>(s, `/api/balance${q(kind, `v=${encodeURIComponent(hash)}`)}`, undefined, false),
   save: (s: ServerInfo, kind: SetKind, values: BalanceValues, note: string) => call<BalanceRes>(s, `/api/admin/balance${q(kind)}`, { values, note }),
   clears: (s: ServerInfo) => call<{ rows: ClearRow[] }>(s, "/api/admin/clears"),
+  /** 티어표 (관리자 저장 → 아카이브 티어표) · 티어 플레잉 기록 (캐릭터마다 하나) */
+  tierSave: (s: ServerInfo, tiers: unknown) => call<{ ok: true }>(s, "/api/admin/tier", { tiers }),
+  tierPublic: (s: ServerInfo) => call<{ tiers: unknown }>(s, "/api/tier", undefined, false),
+  tierPlays: (s: ServerInfo) => call<{ records: unknown[] }>(s, "/api/admin/tierplay"),
+  tierPlaySave: (s: ServerInfo, character: string, record: unknown) => call<{ ok: true }>(s, "/api/admin/tierplay", { character, record }),
   history: (s: ServerInfo, kind: SetKind) => call<{ entries: LogEntry[] }>(s, `/api/admin/history${q(kind)}`),
 };
 

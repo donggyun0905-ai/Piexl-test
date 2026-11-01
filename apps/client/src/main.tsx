@@ -1,4 +1,4 @@
-import { StrictMode, Suspense } from "react";
+import { lazy, StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
 import { unlockAudio } from "./audio/sound";
@@ -26,10 +26,13 @@ void syncProfile();
 void syncCloud();
 // 게임 수치 (관리자 페이지에서 바꾼 값). 못 받으면 마지막으로 받은 값으로
 void refreshBalance();
+// 관리자 티어 플레잉 (/?tierplay): 캐릭터를 차례로 한 판씩 해 보고 기록 (관리자 페이지 '티어 플레잉'의 플레이하기)
+const TierPlay = lazy(() => import("./tierplay/TierPlay").then((m) => ({ default: m.TierPlay })));
+const tierPlay = new URLSearchParams(location.search).has("tierplay");
 createRoot(root).render(
   <StrictMode>
     <Suspense fallback={null}>
-      <App />
+      {tierPlay ? <TierPlay /> : <App />}
     </Suspense>
   </StrictMode>,
 );

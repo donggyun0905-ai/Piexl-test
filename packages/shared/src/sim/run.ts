@@ -217,6 +217,12 @@ export function checkDeath(s: RunState): boolean {
   slayerSave(s);
   if (p.hp <= 0) petRevive(s);
   artifacterRevive(s);
+  // 관리자 티어 플레잉: 로그(1~6층)에서는 쓰러져도 체력 가득으로 되살아나고 횟수만 셈 (라스트 보스는 쓰러지면 끝)
+  if (p.hp <= 0 && s.tierPlay && !s.lastBoss) {
+    s.tierPlay.deaths++;
+    p.hp = p.stats.maxHp;
+    p.invulnTicks = 120;
+  }
   if (p.hp > 0) {
     // 한 번 되살아남 (오니 무기 조건)
     if (dying) p.revived = true;

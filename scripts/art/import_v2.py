@@ -15,8 +15,10 @@ DARK = 42
 # 어두운 옷 캐릭터: 배경(완전한 검정)만 지우게 기준을 낮춤
 DARK_BY = {"plague": 12}
 # 검은 머리·옷이 많은 캐릭터: 바깥 테두리에서 이어진 거의 완전한 검정(밝기 FLOOD 이하)만 배경으로 지움 (몸 안 검은 머리가 지워지지 않게)
-FLOOD_BG = {"wanderer"}
+FLOOD_BG = {"wanderer", "eater", "slayer", "slayer_rage", "summoner", "mukin", "plague", "ren", "tracker", "remnant"}
 FLOOD = 8
+PURE = 3
+POCKET = 300
 # 연기가 넓게 퍼진 캐릭터: 칸보다 넓으면 줄이지 않고 몸 둘레만 남김
 CROP_WIDE = {"plague"}
 # 앞모습(서기) 키 = 116칸, 다른 자세도 같은 배율 (칸에 안 들어가면 그 자세만 더 줄임)
@@ -97,6 +99,21 @@ def flood_bg(img):
         bg[y * w + x] = 1
         for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
             if 0 <= nx < w and 0 <= ny < h and not bg[ny * w + nx]: q.append((nx, ny))
+    # 몸에 갇힌 배경 (팔·무기 사이): 완전한 검정(밝기 PURE 이하)이 넓게(POCKET칸 이상) 뭉친 곳도 배경
+    for y0 in range(h):
+        for x0 in range(w):
+            if bg[y0 * w + x0] or max(px[x0, y0][:3]) > PURE: continue
+            q, pts = deque([(x0, y0)]), [(x0, y0)]
+            bg[y0 * w + x0] = 2
+            while q:
+                x, y = q.popleft()
+                for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                    if 0 <= nx < w and 0 <= ny < h and not bg[ny * w + nx] and max(px[nx, ny][:3]) <= PURE:
+                        bg[ny * w + nx] = 2
+                        q.append((nx, ny))
+                        pts.append((nx, ny))
+            keep = 1 if len(pts) >= POCKET else 0
+            for x, y in pts: bg[y * w + x] = keep
     return bg
 
 

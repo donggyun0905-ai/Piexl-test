@@ -10,6 +10,7 @@ import { CLOUD_SCHEMA, handleCloud } from "./cloudSave";
 import { handleRaid } from "./raidApi";
 import { handleArena } from "./arenaApi";
 import { CLEAR_SCHEMA, handleClear } from "./clearStats";
+import { handleTier, TIER_SCHEMA } from "./tierApi";
 import { handleRank, handleRankApply, RANK_SCHEMA } from "./rankApi";
 import { REPLAY_SCHEMA, runReplayChunk } from "./replayQueue";
 import { first, type SqlLike } from "./sql";
@@ -62,6 +63,7 @@ const SCHEMA = [
   ...BALANCE_SCHEMA,
   // 캐릭터별 클리어 시간 (횟수·합계·가장 빠른 시간)
   ...CLEAR_SCHEMA,
+  ...TIER_SCHEMA,
   // 패왕전 랭크전 점수
   ...RANK_SCHEMA,
   // 상점 쪽 저장 백업
@@ -114,6 +116,7 @@ export async function routeHub(ctx: HubContext, request: Request): Promise<Respo
   if (path.startsWith("/api/arena/")) return handleArena(ctx, path.slice("/api/arena/".length), request);
   if (path === "/api/balance" && request.method === "GET") return handleBalance(ctx, request);
   if (path === "/api/stats/clear") return handleClear(ctx, request);
+  if (path === "/api/tier" && request.method === "GET") return handleTier(ctx);
   if (path.startsWith("/api/admin/")) return handleAdmin(ctx, path.slice("/api/admin/".length), request);
   if (path.startsWith("/api/match/")) return handleMatch(ctx, path.slice("/api/match/".length), request);
   if (path.startsWith("/api/rank/")) return handleRank(ctx, path.slice("/api/rank/".length), request);

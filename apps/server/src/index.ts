@@ -95,7 +95,8 @@ export default {
       const seconds = url.searchParams.has("v") ? VERSION_CACHE_SECONDS : BOARD_CACHE_SECONDS;
       return withHeaders(await cachedBoard(request, env, seconds), cors);
     }
-    if (["/api/daily/board", "/api/raid/board", "/api/arena/board", "/api/rank/board"].includes(url.pathname) && request.method === "GET") {
+    // 순위표·관리자 티어표는 잠깐 저장해 둔 값을 줌 (Durable Object 요청 줄이기)
+    if (["/api/daily/board", "/api/raid/board", "/api/arena/board", "/api/rank/board", "/api/tier"].includes(url.pathname) && request.method === "GET") {
       return withHeaders(await cachedBoard(request, env), cors);
     }
     // 배틀 방 웹소켓: /battle/<코드>?mode=quick|private

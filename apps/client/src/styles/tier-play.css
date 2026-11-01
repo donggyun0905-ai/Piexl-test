@@ -1,0 +1,173 @@
+/* 관리자 티어 플레잉: 관리자 페이지 티어표(끌어 놓기)·기록 표 · 게임 쪽 차례 화면(/?tierplay)·끝난 뒤 별점 창 */
+.tier-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+}
+.tier-admin-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.tier-play-btn {
+  padding: 8px 14px;
+  border: 2px solid #f2c14e;
+  border-radius: 6px;
+  color: #f2c14e;
+  font-weight: bold;
+  text-decoration: none;
+}
+.tier-msg {
+  color: #9be89b;
+}
+.tier-admin-row {
+  display: flex;
+  min-height: 64px;
+  border: 1px solid #3a3450;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 0.03);
+}
+.tier-admin-row > b {
+  flex: none;
+  width: 110px;
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  border-radius: 6px 0 0 6px;
+  color: #140f1c;
+  text-align: center;
+}
+.tier-admin-row.pool > b {
+  background: #3a3450;
+  color: #e8e4f0;
+  font-size: 12px;
+}
+.tier-admin-faces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px;
+  flex: 1;
+}
+.tier-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 58px;
+  cursor: grab;
+  border-radius: 4px;
+}
+.tier-face:hover {
+  background: rgb(255 255 255 / 0.08);
+}
+.tier-face small {
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 58px;
+}
+.tier-records td.note {
+  max-width: 260px;
+  white-space: pre-wrap;
+  font-size: 12px;
+}
+.tier-records tr.empty td {
+  opacity: 0.45;
+}
+.tier-stars {
+  display: inline-flex;
+  gap: 1px;
+}
+.tier-stars button {
+  padding: 0 1px;
+  border: none;
+  background: none;
+  color: #4a4458;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.tier-stars button.on {
+  color: #ffd040;
+}
+.tier-stars button:disabled {
+  cursor: default;
+  font-size: 13px;
+}
+
+/* 게임 쪽 차례 화면 */
+.tier-play {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.tier-next {
+  align-self: flex-start;
+  font-size: 18px;
+  padding: 10px 18px;
+}
+.tier-play-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tier-play-list button.done {
+  border-color: #5ac85a;
+  color: #9be89b;
+}
+.tier-play-list button.next {
+  border-color: #f2c14e;
+}
+.tier-warn {
+  color: #ff9a6a;
+}
+.tier-back {
+  color: var(--accent);
+}
+
+/* 끝난 뒤 별점 창 */
+.game-overlay .modal.tier-rate {
+  width: min(460px, 96vw);
+  text-align: left;
+  gap: 8px;
+}
+.tier-auto {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 12px;
+  margin: 0;
+}
+.tier-auto dt {
+  color: var(--muted);
+}
+.tier-auto dd {
+  margin: 0;
+  font-weight: bold;
+}
+.tier-star-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.tier-note {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+.tier-note textarea {
+  min-height: 56px;
+  resize: vertical;
+}
+.tier-records th,
+.tier-records td {
+  padding: 4px 10px;
+  border-bottom: 1px solid #2c2838;
+  text-align: left;
+  white-space: nowrap;
+}

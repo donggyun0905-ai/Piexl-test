@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { tierReason } from "../i18n/tier";
 import { StoryFace } from "../story/StoryFace";
-import { TIERS, tierChars, type TierId, type TierView } from "./tierData";
+import { tierChars, type TierId, type TierView } from "./tierData";
+import { useLiveTiers } from "./tierLive";
 import { TierPreview } from "./TierPreview";
 
 const TIER_LABEL: Record<TierId, TextKey> = { god: "tierGod", meal: "tierMeal", mid: "tierMid", meh: "tierMeh", trash: "tierTrash" };
@@ -23,6 +24,8 @@ interface Props {
 export function TierScreen({ lang, t, onBack }: Props) {
   const [view, setView] = useState<TierView>("all");
   const [picked, setPicked] = useState<CharacterId | null>(null);
+  // 관리자가 저장한 티어표 (없으면 기본 표)
+  const tiers = useLiveTiers();
   const previewRef = useRef<HTMLElement>(null);
   // 고르면 아래 미리보기가 보이게 내려감
   useEffect(() => {
@@ -43,7 +46,7 @@ export function TierScreen({ lang, t, onBack }: Props) {
         ))}
       </nav>
       <div className="tier-table">
-        {TIERS.map((tier) => {
+        {tiers.map((tier) => {
           const chars = tierChars(tier.chars, view);
           if (!chars.length) return null;
           return (

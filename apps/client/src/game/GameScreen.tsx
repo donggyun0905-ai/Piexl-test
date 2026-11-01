@@ -46,7 +46,7 @@ export function GameScreen(props: GameScreenProps) {
   const controlsRef = useRef<Controls | null>(null);
   const getControls = useCallback(() => controlsRef.current, []);
   const runRef = useRef<RunState | null>(null);
-  // 콜백은 바뀌어도 게임을 다시 시작하지 않게 ref로
+  // 콜백이 바뀌어도 다시 시작 안 하게 ref로
   const cb = useRef(props);
   useLayoutEffect(() => {
     cb.current = props;
@@ -63,9 +63,7 @@ export function GameScreen(props: GameScreenProps) {
   const [canChallenge, setCanChallenge] = useState(false);
   const challenge = (boss: LastBossKind) => {
     if (!runRef.current) return;
-    continueToLastFloor(runRef.current, boss);
-    setCanChallenge(false);
-    setResult(null);
+    continueToLastFloor(runRef.current, boss); setCanChallenge(false); setResult(null);
   };
   /** 안내 글: 상호작용(F·버튼)이거나 가까운 아이템 설명 */
   const [prompt, setPrompt] = useState<{ text: string; interact: boolean }>({ text: "", interact: false });
@@ -76,14 +74,13 @@ export function GameScreen(props: GameScreenProps) {
   const [tutorialStep, setTutorialStep] = useState<TutorialStepId | null>(null);
   const [stats, setStats] = useState<StatRow[] | null>(null);
   const [toasts, setToasts] = useState<{ key: number; id: string }[]>([]);
-
   useEffect(() => {
     overlayRef.current = overlay;
-    // 창이 뜨면 누르고 있던 입력을 놓은 것으로 처리 (공격이 계속 나가지 않게)
+    // 창이 뜨면 누르던 입력을 놓음 (공격이 계속 안 나가게)
     if (overlay !== "none") controlsRef.current?.releaseAll();
   }, [overlay]);
 
-  // 모바일 뒤로가기 → 페이지를 나가지 않고 나가기 확인
+  // 모바일 뒤로가기 → 나가기 확인
   const toggleExit = useCallback(() => setOverlay((o) => (o === "exit" || o === "info" ? "none" : "exit")), []);
   useBackButton(toggleExit);
 
@@ -111,7 +108,7 @@ export function GameScreen(props: GameScreenProps) {
     const run: RunState =
       withPet(sandbox ? (start.initialRun ?? createPracticeRun(characterId)) : (start.initialRun ?? createRun(parseSeed(seedText), characterId, start.unlocks, sudden, endless, arena, hero, mode === "solo" && !endless && !arena && !hero ? loadTaboo() : undefined, mode === "solo" && randomKitOn())), mode, !!arena);
     runRef.current = run;
-    // 개발 중에만: 콘솔에서 게임 상태 보기
+    // 개발 중: 콘솔에서 게임 상태
     if (import.meta.env.DEV) (window as unknown as { pixelRogueRun: RunState }).pixelRogueRun = run;
     const controls: Controls = new Controls({
       zone,
@@ -132,14 +129,14 @@ export function GameScreen(props: GameScreenProps) {
     });
     controlsRef.current = controls;
 
-    // 맞으면 화면이 잠깐 흔들림 (설정에서 끌 수 있음)
+    // 맞으면 화면 흔들림 (설정에서 끔)
     const shake = createShaker(canvas);
     const sounds = createRunSounds(run, (power) => {
       if (getSettings().shake) shake(power);
     });
 
     let toastKey = 0;
-    const tracker = createRunTracker(mode === "solo", seedText, run, (id) => {
+    const tracker = createRunTracker(mode === "solo" && !run.tierPlay, seedText, run, (id) => {
       play("achievement");
       const key = ++toastKey;
       setToasts((list) => [...list, { key, id }]);
@@ -181,17 +178,20 @@ export function GameScreen(props: GameScreenProps) {
       },
       onOver: (r, dmg) => {
         setResult(tracker.finish(dmg));
-        setCanChallenge(mode === "solo" && r.won && r.floor === FLOOR_COUNT && !r.endless && !r.hero && !r.lastBoss);
+        const can = mode === "solo" && r.won && r.floor === FLOOR_COUNT && !r.endless && !r.hero && !r.lastBoss;
+        const auto = can ? cb.current.autoLastBoss?.() : undefined;
+        if (auto) challenge(auto);
+        else setCanChallenge(can);
         cb.current.onRunEnd?.(r);
       },
     });
 
-    // 마우스를 아이템 위에 올리면 그 아이템 위에 이름·설명
+    // 아이템에 마우스를 올리면 이름·설명
     const onMove = (e: MouseEvent) => {
       setTip(floorTipAt(run, canvas, controls.zoom, e.clientX, e.clientY, lang, t));
     };
     window.addEventListener("mousemove", onMove);
-    // 탭을 닫거나 다른 앱으로 갈 때도 저장
+    // 탭을 닫거나 앱을 바꿔도 저장
     const onHide = () => {
       if (document.visibilityState === "hidden") save();
     };

@@ -1,5 +1,5 @@
 // 게임 화면에 넘기는 값 (모드별 콜백)
-import type { BalanceValues, CharacterId, RunState, TickInput } from "@pixel-rogue/shared";
+import type { BalanceValues, CharacterId, LastBossKind, RunState, TickInput } from "@pixel-rogue/shared";
 import type { ReactNode } from "react";
 import type { Lang, TextKey } from "../i18n";
 import type { DrawOverlay } from "./render";
@@ -44,6 +44,8 @@ export interface GameScreenProps {
   resultExtra?: ReactNode;
   /** 결과 창 대신 보여 줄 화면 (배틀 관전) */
   afterRun?: ReactNode;
+  /** 관리자 티어 플레잉: 6층을 깨면 이 보스로 바로 라스트 보스 도전 (고르는 창 없이) */
+  autoLastBoss?: () => LastBossKind;
   /** 게임 위에 띄우는 창 (입력을 보내야 하는 패왕전 상점 등) */
   withControls?: (controls: () => Controls | null) => ReactNode;
   /** HUD 시간 글자 (배틀 남은 시간) */

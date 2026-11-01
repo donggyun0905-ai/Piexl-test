@@ -266,6 +266,8 @@ export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, Pe
   hero?: boolean;
   /** 6층을 깬 뒤 도전한 라스트 보스 (7층) */
   lastBoss?: BossKind;
+  /** 관리자 티어 플레잉 판: 로그에서 쓰러진 횟수 (쓰러지면 되살아남, sim/run.checkDeath) · 로그를 깬 틱 */
+  tierPlay?: { deaths: number; clearTick?: number };
   /** 지금 방 크기 (칸 수, 없으면 보통 방). 라스트 보스방은 큼 */
   roomCols?: number;
   roomRows?: number;

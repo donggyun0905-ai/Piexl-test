@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { homeServer, logout, session, type ServerInfo, type SetKind } from "./adminApi";
 import { BalanceAdmin } from "./BalanceAdmin";
 import { ClearStats } from "./ClearStats";
+import { TierAdmin } from "./TierAdmin";
 import { Login } from "./Login";
 
 function kindFromUrl(): SetKind {
@@ -19,8 +20,9 @@ export function AdminApp() {
   // 이 주소의 서버만 다룸 (라이브는 pixel-rogue.pages.dev/admin/, 디벨롭은 develop…, 테스트는 test…)
   const [server] = useState<ServerInfo>(homeServer);
   const [kind, setKind] = useState<SetKind>(kindFromUrl);
-  /** 수치 대신 캐릭터별 클리어 시간 보기 */
+  /** 수치 대신 캐릭터별 클리어 시간 보기 · 티어 플레잉 (티어표·캐릭터 차례로 해 본 기록) */
   const [clears, setClears] = useState(false);
+  const [tier, setTier] = useState(false);
   /** 로그인·로그아웃하면 늘려서 다시 확인 */
   const [reload, setReload] = useState(0);
   const loggedIn = reload >= 0 && session(server) !== "";
@@ -41,17 +43,20 @@ export function AdminApp() {
         <h1>Pixel Toybox 관리자</h1>
         <span className="admin-server">{server.label}</span>
         <span className="admin-kinds">
-          <button type="button" className={!clears && kind === "dungeon" ? "active" : undefined} onClick={() => (setKind("dungeon"), setClears(false))}>
+          <button type="button" className={!clears && !tier && kind === "dungeon" ? "active" : undefined} onClick={() => (setKind("dungeon"), setClears(false), setTier(false))}>
             던전 수치
           </button>
-          <button type="button" className={!clears && kind === "td" ? "active" : undefined} onClick={() => (setKind("td"), setClears(false))}>
+          <button type="button" className={!clears && !tier && kind === "td" ? "active" : undefined} onClick={() => (setKind("td"), setClears(false), setTier(false))}>
             타워 디펜스 수치
           </button>
-          <button type="button" className={!clears && kind === "pw" ? "active" : undefined} onClick={() => (setKind("pw"), setClears(false))}>
+          <button type="button" className={!clears && !tier && kind === "pw" ? "active" : undefined} onClick={() => (setKind("pw"), setClears(false), setTier(false))}>
             패왕전 수치
           </button>
-          <button type="button" className={clears ? "active" : undefined} onClick={() => setClears(true)}>
+          <button type="button" className={clears ? "active" : undefined} onClick={() => (setClears(true), setTier(false))}>
             클리어 시간
+          </button>
+          <button type="button" className={tier ? "active" : undefined} onClick={() => (setTier(true), setClears(false))}>
+            티어 플레잉
           </button>
         </span>
         {/* 몬스터·보스 그림(도트) 고치기: 도트 편집 페이지의 몬스터 묶음 */}
@@ -71,11 +76,12 @@ export function AdminApp() {
           </button>
         )}
       </header>
-      {!clears && kind === "td" && <p className="admin-hint">타워 디펜스에만 쓰는 수치입니다. 여기서 바꿔도 던전(혼자 하기·일일 도전·배틀)에는 영향이 없습니다.</p>}
-      {!clears && kind === "pw" && <p className="admin-hint">패왕전에만 쓰는 수치입니다 (역할군·캐릭터 능력치 배율·스킬·규칙). 여기서 바꿔도 던전·타워 디펜스에는 영향이 없습니다.</p>}
+      {!clears && !tier && kind === "td" && <p className="admin-hint">타워 디펜스에만 쓰는 수치입니다. 여기서 바꿔도 던전(혼자 하기·일일 도전·배틀)에는 영향이 없습니다.</p>}
+      {!clears && !tier && kind === "pw" && <p className="admin-hint">패왕전에만 쓰는 수치입니다 (역할군·캐릭터 능력치 배율·스킬·규칙). 여기서 바꿔도 던전·타워 디펜스에는 영향이 없습니다.</p>}
       {!loggedIn && <Login server={server} onDone={again} />}
       {loggedIn && clears && <ClearStats server={server} />}
-      {loggedIn && !clears && <BalanceAdmin key={`${kind}:${reload}`} server={server} kind={kind} onLoggedOut={again} />}
+      {loggedIn && tier && <TierAdmin server={server} />}
+      {loggedIn && !clears && !tier && <BalanceAdmin key={`${kind}:${reload}`} server={server} kind={kind} onLoggedOut={again} />}
     </div>
   );
 }

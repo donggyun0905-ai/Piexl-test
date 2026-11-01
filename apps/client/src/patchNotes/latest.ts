@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.316",
+    date: "2026-11-01",
+    items: {
+      ko: ["캐릭터 그림에서 검은 머리·옷·몸이 지워져 비어 보이던 것 고침: 이터·학살자(피의 학살 포함)·소환술사·묵인·역병의사·렌·추적자·잔영", "아카이브 티어표가 관리자가 정한 최신 표로 바뀜"],
+      en: ["Fixed black hair, clothes and bodies that had been erased from character art: Eater, Slayer (incl. Blood Frenzy), Summoner, Mukin, Plague Doctor, Ren, Tracker, Remnant", "The Archive tier list now shows the latest list set by the admins"],
+      ja: ["キャラ絵で黒い髪・服・体が消えて透けていたのを修正: イーター・虐殺者（変身を含む）・召喚術師・黙忍・疫病医・レン・追跡者・残影", "アーカイブのティア表が管理者の決めた最新の表に"],
+    },
+  },
+  {
     version: "0.48.315",
     date: "2026-11-01",
     items: {
