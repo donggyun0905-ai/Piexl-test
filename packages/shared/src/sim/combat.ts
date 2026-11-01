@@ -3,7 +3,6 @@ import { killGold } from "./loot";
 import { endlessPow } from "./endless";
 import { inkTaken, scribeKill } from "./scribe";
 import { minerKill } from "./minerGround";
-import { petGold } from "./lobbyPet";
 import { BEDOUIN_PERKS } from "../itemsBedouin";
 import { PERKS } from "../perks";
 import { readyCounter } from "./origin";
@@ -15,7 +14,10 @@ import { titanHurt, titanParried } from "./titan";
 import { logHit } from "./pvpRecap";
 import { roleDmgMul } from "./pwMatchup";
 import { afterHurt, classTaken } from "./classTaken";
-import { dodged, extraTaken, goldMul, onHitExtra, sharpBonus } from "./baseStats";
+import { dodged, extraTaken, onHitExtra, sharpBonus } from "./baseStats";
+// 돈 얻기는 sim/loot (가질 수 있는 돈 한도)
+import { addGold } from "./loot";
+export { addGold };
 import { tickDots } from "./status";
 export { dotDamage, ignite } from "./status";
 import { swarmLucky } from "./swarmRules";
@@ -282,15 +284,4 @@ export function removeDead(s: RunState): void {
     if (hasPerk(s.player, "chainBurst")) blastAt(s, f.x, f.y, PERKS.chainBurst.radius, s.player.stats.damage * PERKS.chainBurst.damage);
   }
   useSeat(s, back);
-}
-
-export function addGold(s: RunState, amount: number): void {
-  // 돈 주머니: 얻는 돈 +50%
-  if (hasPerk(s.player, "goldPouch")) amount = Math.round(amount * PERKS.goldPouch.gold);
-  // 황금 거북(로비 펫)
-  amount = Math.round(amount * petGold(s) * goldMul(s.player));
-  // 금기: 가난
-  if (s.taboo) amount = Math.round(amount * tabooDown(s, "poverty"));
-  s.gold += amount;
-  s.goldEarned += amount;
 }

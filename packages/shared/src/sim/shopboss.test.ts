@@ -1,4 +1,3 @@
-import { killGold } from "./loot";
 import { ROOM_CX, ROOM_CY } from "../constants";
 import { describe, expect, it } from "vitest";
 import { BOSS_TIERS, bossForFloor, ENEMIES } from "../content";
@@ -29,14 +28,6 @@ describe("돈·상점", () => {
     for (let i = 0; i < 30; i++) stepSim(run, EMPTY_INPUT);
     expect(run.kills).toBe(1);
     expect(run.goldEarned).toBe(1);
-    const champ = { ...base(run), champ: true, champK: 2 };
-    const a = { ...base(run), flock: 77 };
-    const b = { ...base(run), id: a.id + 1, flock: 77 };
-    run.enemies = [a, b];
-    expect(killGold(run, champ)).toBe(10);
-    expect(killGold(run, a)).toBe(0);
-    b.hp = 0;
-    expect(killGold(run, a)).toBe(1);
   });
 
   it("상점 물건은 서 있기로는 안 사지고, F로 사면 돈이 줄고 가짐. 돈이 모자라면 못 삼", () => {

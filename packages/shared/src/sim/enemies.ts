@@ -31,7 +31,7 @@ const R = {
   PALADIN_DMG: 12,
   /** 둔화된 적의 이동 배율 */
   SLOW_MUL: 0.6,
-  /** 몸에 닿는 피해: 층마다 늘어나는 비율 (보스 빼고) */
+  /** 몸에 닿는 피해: 층마다 늘어나는 비율 (보스·보스가 부른 졸개 빼고) */
   CONTACT_PER_FLOOR: 0.08,
 };
 export { R as ENEMIES_RULES };
@@ -183,7 +183,7 @@ export function updateEnemies(s: RunState): void {
         if (e.ultAt !== undefined && e.ultSafe) return;
         // 잔영 그림자 · 떨어진 신의 날개: 몸에 닿는 피해 없음 (원거리 공격은 맞음)
         if ((q.rmShade ?? 0) > 0 || q.passives.includes("fallenWings")) return;
-        if (def.contactDamage > 0 && dist2(e, q) < rr * rr && e.id !== q.grabId && !e.air) damagePlayer(s, renMelee(s, def.contactDamage * tabooUp(s, "fangs") * (def.boss ? 1 : 1 + R.CONTACT_PER_FLOOR * (depth(s) - 1))), touchFoe(e));
+        if (def.contactDamage > 0 && dist2(e, q) < rr * rr && e.id !== q.grabId && !e.air) damagePlayer(s, renMelee(s, def.contactDamage * tabooUp(s, "fangs") * (def.boss || e.noGold ? 1 : 1 + R.CONTACT_PER_FLOOR * (depth(s) - 1))), touchFoe(e));
       },
       !!s.party,
     );

@@ -6,13 +6,15 @@ import { HIDDEN_USE_IDS } from "../itemsHidden";
 import { HEAL_ITEMS, PASSIVE_IDS, PASSIVES, USE_ITEM_IDS, type PassiveDef, type PassiveId, type UseItemId } from "../items";
 import { createRng, deriveSeed, type Rng } from "../rng";
 import { itemAvailable } from "../achievements";
-import { addGold, healPlayer } from "./combat";
+import { healPlayer } from "./combat";
+import { petGold } from "./lobbyPet";
+import { goldMul } from "./baseStats";
 import type { EnemyState, Pickup, PickupKind, RunState } from "./types";
 import { ENEMIES } from "../content";
 import { depth } from "./hero";
 import { addEffect, hasPerk } from "./util";
 import { seatNo } from "./party";
-import { tabooN } from "./taboo";
+import { tabooDown, tabooN } from "./taboo";
 import { ONI } from "../weaponsOni";
 import { xpOnly } from "./morphXp";
 import { goldLocked, oniWeaponOk } from "./oniRules";
@@ -34,6 +36,8 @@ const R = {
   gold: 1,
   /** 던전에서 정예(주황 방의 큰 몬스터)를 잡으면 받는 돈 */
   CHAMP_GOLD: 10,
+  /** 가질 수 있는 가장 많은 돈 (패왕전 빼고, 넘으면 더 쌓이지 않음) */
+  MAX_GOLD: 999,
 };
 export { R as LOOT_RULES };
 export const START_GOLD = () => R.START_GOLD;
@@ -41,6 +45,16 @@ export const START_GOLD = () => R.START_GOLD;
 export const KILL_GOLD = () => Math.max(R.gold, R.CHAMP_GOLD);
 /** 방 하나를 정리해 받는 가장 큰 돈 (진행 기록 검사) */
 export const ROOM_GOLD_MAX = () => Math.max(R.ROOM_GOLD_1, R.ROOM_GOLD_3, R.ROOM_GOLD_5, R.ELITE_GOLD_1, R.ELITE_GOLD_3, R.ELITE_GOLD_5);
+
+/** 돈 얻기: 돈 주머니 +50% · 황금 거북(로비 펫) · 기본 스탯 · 금기 가난 → 가질 수 있는 한도(MAX_GOLD)까지만 (넘친 만큼은 번 돈에도 넣지 않음) */
+export function addGold(s: RunState, amount: number): void {
+  if (hasPerk(s.player, "goldPouch")) amount = Math.round(amount * PERKS.goldPouch.gold);
+  amount = Math.round(amount * petGold(s) * goldMul(s.player));
+  if (s.taboo) amount = Math.round(amount * tabooDown(s, "poverty"));
+  if (!s.pvp) amount = Math.max(0, Math.min(amount, R.MAX_GOLD - s.gold));
+  s.gold += amount;
+  s.goldEarned += amount;
+}
 
 /** 적을 잡으면 받는 돈: 던전은 하나에 gold (정예 CHAMP_GOLD · 날벌레·박쥐 무리는 마지막 하나를 잡을 때만) · 광야·패왕전·레이드 아레나·정해진 현상금은 적 표의 돈 */
 export function killGold(s: RunState, e: EnemyState): number {
