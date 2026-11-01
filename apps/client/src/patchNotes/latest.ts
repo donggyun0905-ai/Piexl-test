@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.317",
+    date: "2026-11-01",
+    items: {
+      ko: ["관리자 티어 플레잉: 티어표 '초기화' 버튼 (모든 캐릭터를 '아직 안 놓음'으로 빼고 처음부터 매기기)"],
+      en: ["Admin tier play: a 'Reset' button for the tier list (moves every character back to 'not placed' to rank from scratch)"],
+      ja: ["管理者ティアプレイ: ティア表の「初期化」ボタン（全キャラを「未配置」に戻して最初から付け直し）"],
+    },
+  },
+  {
     version: "0.48.316",
     date: "2026-11-01",
     items: {

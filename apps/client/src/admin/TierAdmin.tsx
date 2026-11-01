@@ -79,6 +79,9 @@ export function TierAdmin({ server }: { server: ServerInfo }) {
         <button type="button" onClick={() => (setRows(defaultTiers()), setMsg("기본 표로 되돌렸어요 (아직 저장 전)"))}>
           기본 표로
         </button>
+        <button type="button" onClick={() => window.confirm("모든 캐릭터를 '아직 안 놓음'으로 뺄까요? (저장 전까지는 바뀌지 않아요)") && (setRows((rs) => rs.map((r) => ({ ...r, chars: [] }))), setMsg("초기화했어요: 모든 캐릭터가 '아직 안 놓음'에 있어요 (아직 저장 전)"))}>
+          초기화 (모두 빼기)
+        </button>
         <button type="button" className="primary" onClick={() => void save()}>
           티어표 저장 (아카이브에 반영)
         </button>
