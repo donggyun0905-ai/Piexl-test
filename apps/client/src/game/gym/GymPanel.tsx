@@ -1,12 +1,13 @@
 // 단련의 방 창 (기구 앞에서 F, game/StationWindow): 아직 이 방 기구를 안 썼으면 그 기구 미니게임 → 끝나면 점수로 포인트 → 강화 목록
 // 강화 목록: 능력치·무기 숙련·가진 패시브마다 단계 · 단계당 오르는 몫 · 지금까지 오른 몫 · '+' (남은 포인트 사용). 누른 것은 입력 menu (sim/gym)
-import { GYM_OP, GYM_RULES, GYM_STATS, gymStep, menuCode, PASSIVES, type GymStat, type PassiveDef } from "@pixel-rogue/shared";
+import { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymStep, menuCode, PASSIVES, type GymStat, type PassiveDef } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../../i18n";
 import { itemName } from "../../i18n/items";
 import { GYM_DEVICE } from "../../i18n/items/station";
 import { ItemIcon } from "../itemIcon";
 import type { StationView } from "../stationView";
 import { useState } from "react";
+import { play } from "../../audio/sound";
 import { BenchPress } from "./BenchPress";
 import { useGymPause } from "./gymKit";
 import { LatPull } from "./LatPull";
@@ -36,7 +37,10 @@ export function GymPanel({ gym, lang, t, send }: { gym: Gym; lang: Lang; t: (k: 
       </div>
     );
   }
-  const up = (a: number) => send(menuCode(GYM_OP.up, a));
+  const up = (a: number) => {
+    play("gymUp");
+    send(menuCode(GYM_OP.up, a));
+  };
   const max = GYM_RULES.MAX_LV;
   return (
     <div className="gym-panel">
@@ -48,6 +52,7 @@ export function GymPanel({ gym, lang, t, send }: { gym: Gym; lang: Lang; t: (k: 
       <p className="gym-pts">{t("gymPts").replace("{n}", String(gym.pts))}</p>
       <div className="gym-list">
         {GYM_STATS.map((k, i) => {
+          if (GYM_OFF.includes(k)) return null;
           const lv = gym.lv[k] ?? 0;
           return (
             <div key={k} className="gym-row">

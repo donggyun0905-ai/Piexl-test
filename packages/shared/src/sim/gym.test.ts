@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { generateFloor } from "./floor";
-import { GYM_OP, GYM_RULES, GYM_STATS, gymUsed } from "./gym";
+import { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymUsed } from "./gym";
 import { goThrough, startFloor } from "./rooms";
 import { menuCode } from "./station";
 import { createRun, stepSim } from "./run";
@@ -40,6 +40,9 @@ describe("단련의 방", () => {
     menu(s, menuCode(GYM_OP.up, GYM_STATS.indexOf("damage")));
     menu(s, menuCode(GYM_OP.up, GYM_STATS.indexOf("damage")));
     menu(s, menuCode(GYM_OP.up, GYM_STATS.indexOf("maxHp")));
+    // 흡혈은 목록에서 뺌 (눌러도 안 오름)
+    menu(s, menuCode(GYM_OP.up, GYM_STATS.indexOf("lifesteal")));
+    expect(s.player.gym!.lv.lifesteal).toBeUndefined();
     expect(s.player.gym!.pts).toBe(4);
     expect(s.player.stats.damage).toBeCloseTo(dmg * (1 + 2 * GYM_RULES.damage));
     expect(s.player.stats.maxHp).toBe(hp + GYM_RULES.maxHp);
@@ -62,7 +65,8 @@ describe("단련의 방", () => {
       expect(gymUsed(s)).toBe(false);
       menu(s, menuCode(GYM_OP.result, f % 3, 1000 / 20));
       total += s.player.gym!.pts;
-      for (let i = 0; i < 10; i++) menu(s, menuCode(GYM_OP.up, (f + i) % GYM_STATS.length));
+      const on = GYM_STATS.map((_, i) => i).filter((i) => !GYM_OFF.includes(GYM_STATS[i]!));
+      for (let i = 0; i < 10; i++) menu(s, menuCode(GYM_OP.up, on[(f + i) % on.length]!));
       expect(s.player.gym!.pts).toBe(0);
     }
     expect(total).toBe(30);

@@ -1,6 +1,7 @@
 // 벤치 프레스 미니게임: 무거운 바벨을 든 두 팔 · 아래 동그란 패드(Space·F·클릭)를 계속 눌러 힘 게이지를 유지 → 바벨이 버팀
 // 시간이 지날수록 힘이 빨리 빠져 더 많이 눌러야 함 · 힘이 다 빠지면 바벨을 안전바에 내려놓고 끝 · 버틴 1초마다 25점 (40초 = 1000점)
 import { useRef, useState } from "react";
+import { play } from "../../audio/sound";
 import type { TextKey } from "../../i18n";
 import { drawBursts, label, MAX_SCORE, useFrame, useGymKeys, type Burst } from "./gymKit";
 
@@ -20,8 +21,13 @@ export function BenchPress({ onDone, t }: { onDone: (score: number) => void; t: 
   const press = () => {
     const s = st.current;
     if (s.over) return;
+    const was = s.force;
     s.force = Math.min(100, s.force + PUSH);
-    if (s.force >= 100) s.bursts.push({ x: W / 2, y: 70, age: 0, color: "#ffd84a" });
+    play("gymPush");
+    if (s.force >= 100 && was < 100) {
+      s.bursts.push({ x: W / 2, y: 70, age: 0, color: "#ffd84a" });
+      play("gymFull");
+    }
   };
   useGymKeys((code) => (code === "Space" || code === "KeyF" || code === "Enter") && press());
 
@@ -35,6 +41,8 @@ export function BenchPress({ onDone, t }: { onDone: (score: number) => void; t: 
       if (s.force <= 0 || score() >= MAX_SCORE) {
         s.force = Math.max(0, s.force);
         s.over = true;
+        play(score() >= MAX_SCORE ? "gymEnd" : "gymMiss");
+        setTimeout(() => play("gymRack"), 600);
         redraw((n) => n + 1);
         setTimeout(() => onDone(score()), 1100);
       }

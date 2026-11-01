@@ -2,6 +2,7 @@
 // 시간 제한은 없고 맞힐수록 고리가 빨리 줄어듦 · 틀리거나 늦으면 실수, 실수 3번이면 끝 · 한 번에 25점 (1000점까지)
 import { createRng } from "@pixel-rogue/shared";
 import { useRef, useState } from "react";
+import { play } from "../../audio/sound";
 import type { TextKey } from "../../i18n";
 import { drawBursts, label, MAX_SCORE, useFrame, useGymKeys, type Burst } from "./gymKit";
 
@@ -32,7 +33,9 @@ export function Sandbag({ onDone, t }: { onDone: (score: number) => void; t: (k:
     const s = st.current;
     s.miss++;
     s.shake = 0.25;
+    play("gymMiss");
     if (s.miss >= 3) {
+      play("gymEnd");
       s.over = true;
       redraw((n) => n + 1);
       setTimeout(() => onDone(s.score), 700);
@@ -43,10 +46,12 @@ export function Sandbag({ onDone, t }: { onDone: (score: number) => void; t: (k:
     if (s.over) return;
     if (d !== s.dir) return miss();
     s.hits++;
+    play("gymPunch");
     s.score = Math.min(MAX_SCORE, s.score + 25);
     s.bursts.push({ x: W / 2, y: H / 2, age: 0, color: "#ffb03a" });
     s.shake = 0.12;
     if (s.score >= MAX_SCORE) {
+      play("gymEnd");
       s.over = true;
       setTimeout(() => onDone(s.score), 700);
       return;

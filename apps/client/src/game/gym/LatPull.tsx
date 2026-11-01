@@ -2,6 +2,7 @@
 // 칸 밖에서 누르거나 공이 반대쪽 끝까지 가 버리면 실수, 실수 3번이면 끝 · 터뜨릴수록 공이 빨라지고 둘씩 자주 나옴 · 하나에 25점 (1000점까지)
 import { createRng } from "@pixel-rogue/shared";
 import { useRef, useState } from "react";
+import { play } from "../../audio/sound";
 import type { TextKey } from "../../i18n";
 import { drawBursts, label, MAX_SCORE, useFrame, useGymKeys, type Burst } from "./gymKit";
 
@@ -29,6 +30,7 @@ export function LatPull({ onDone, t }: { onDone: (score: number) => void; t: (k:
   const end = () => {
     const s = st.current;
     s.over = true;
+    play("gymEnd");
     redraw((n) => n + 1);
     setTimeout(() => onDone(s.score), 700);
   };
@@ -36,6 +38,7 @@ export function LatPull({ onDone, t }: { onDone: (score: number) => void; t: (k:
     const s = st.current;
     s.miss++;
     s.flash = 0.25;
+    play("gymMiss");
     if (s.miss >= 3) end();
   };
   const press = () => {
@@ -45,6 +48,7 @@ export function LatPull({ onDone, t }: { onDone: (score: number) => void; t: (k:
     if (!hit) return miss();
     s.balls = s.balls.filter((b) => b !== hit);
     s.pops++;
+    play("gymPop");
     s.score = Math.min(MAX_SCORE, s.score + 25);
     s.bursts.push({ x: hit.x, y: GY, age: 0, color: "#5ad8ff" });
     if (s.score >= MAX_SCORE) end();

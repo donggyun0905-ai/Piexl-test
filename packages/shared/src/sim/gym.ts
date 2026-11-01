@@ -23,7 +23,7 @@ const R = {
   moveSpeed: 0.03,
   range: 0.05,
   luck: 1,
-  /** 치명타 확률 · 치명타 피해 · 방어력 · 재생력 · 흡혈 · 회피 */
+  /** 치명타 확률 · 치명타 피해 · 방어력 · 재생력 · 흡혈(목록에서 뺌, GYM_OFF) · 회피 */
   critChance: 0.03,
   critDamage: 0.1,
   defense: 4,
@@ -41,6 +41,8 @@ export { R as GYM_RULES };
 /** 강화할 수 있는 능력치 (화면 차례 = 입력 번호) · 패시브는 32 + 가진 패시브 차례 */
 export const GYM_STATS = ["damage", "maxHp", "attackSpeed", "moveSpeed", "range", "luck", "critChance", "critDamage", "defense", "regen", "lifesteal", "dodge", "weapon"] as const;
 export type GymStat = (typeof GYM_STATS)[number];
+/** 강화 목록에서 뺀 능력치 (입력 번호가 바뀌지 않게 자리는 남김 · 2026-11-01 흡혈 뺌) */
+export const GYM_OFF: readonly GymStat[] = ["lifesteal"];
 /** 입력 menu 기능 번호: 미니게임 결과 (a = 기구, b = 점수 ÷ 20) · 강화 (a = 항목) */
 export const GYM_OP = { result: 9, up: 10 } as const;
 const PASSIVE_AT = 32;
@@ -78,7 +80,7 @@ export function gymMenu(s: RunState, op: number, a: number, b: number): void {
     const id = gymPassives(p)[a - PASSIVE_AT];
     return id ? `p:${id}` : undefined;
   })();
-  if (!key || gymLv(p, key) >= R.MAX_LV) return;
+  if (!key || gymLv(p, key) >= R.MAX_LV || GYM_OFF.includes(key as GymStat)) return;
   p.gym.lv[key] = gymLv(p, key) + 1;
   p.gym.pts--;
   recalcStats(s);

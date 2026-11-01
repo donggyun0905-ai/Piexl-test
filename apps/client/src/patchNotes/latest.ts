@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.324",
+    date: "2026-11-01",
+    items: {
+      ko: ["단련의 방 효과음: 샌드백 퍽 · 랫풀다운 공 터짐 · 벤치 프레스 밀기·힘 가득·바벨 내려놓기 · 실수 · 미니게임 끝 · 강화", "단련의 방 강화 목록에서 흡혈을 뺌"],
+      en: ["Training Room sound effects: sandbag punches · Lat Pulldown ball pops · Bench Press pushes, full strength and racking the bar · misses · minigame end · upgrades", "Lifesteal removed from the Training Room upgrade list"],
+      ja: ["鍛錬の部屋の効果音: サンドバッグを打つ音 · ラットプルダウンのボールが割れる音 · ベンチプレスの押す音・力満タン・バーベルを置く音 · ミス · ミニゲーム終了 · 強化", "鍛錬の部屋の強化リストから吸血を外した"],
+    },
+  },
+  {
     version: "0.48.323",
     date: "2026-11-01",
     items: {
