@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.333",
+    date: "2026-11-01",
+    items: {
+      ko: ["보스 무리 여왕 새 그림 (시험): 걷기 2 · 마력 구슬 모으기 · 마탄 쏘기"],
+      en: ["New Brood Queen boss art (trial): two walk frames · gathering an orb · firing"],
+      ja: ["ボス群れの女王の新しい絵（試験）: 歩き2 · 魔力の玉を溜める · 魔弾を撃つ"],
+    },
+  },
+  {
     version: "0.48.332",
     date: "2026-11-01",
     items: {
