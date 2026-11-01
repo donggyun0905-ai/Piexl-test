@@ -38,7 +38,7 @@ export const HIDDEN_PASSIVES = {
 /** 히든 사용 아이템 (아이템 칸) */
 export const HIDDEN_USES = {
   /** 에테르 폭탄: 폭탄 피해 3배 · 범위 1.6배 */
-  aetherBomb: { id: "aetherBomb", damage: 135, radius: 70 },
+  aetherBomb: { id: "aetherBomb", damage: 135, radius: 92 },
   /** 대마법사의 금지된 주문서: 방 곳곳에 메테오 (한 발 피해 · 발 수 · 범위 · 떨어지기까지 틱 · 발 사이 틱) */
   forbiddenScroll: { id: "forbiddenScroll", damage: 60, count: 14, radius: 30, fuse: 50, gap: 6 },
   /** 차원이동문: 이 층을 건너뛰고 다음 층 (마지막 층이면 클리어) */

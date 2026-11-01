@@ -48,6 +48,7 @@ import { drawTerraAura, drawTerraGround } from "./terra2";
 import { drawClockMarks, drawRuneGround } from "./rune";
 import { drawMorphGround } from "./morphFx";
 import { drawMorphGot, drawMorphWake } from "./morphWake";
+import { drawZoneEdge } from "./zoneEdge";
 import { drawTerraAuraB, drawTerraGroundB } from "./terra2b";
 import { drawTerraAuraC } from "./terra2c";
 import { drawGreatSpirit, drawSpiritKin } from "./spirits";
@@ -261,6 +262,7 @@ export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawO
   drawUmbraTalk(ctx, s, opt.pixelScale, opt.umbraLine);
   drawSageBanner(ctx, s, opt.pixelScale, opt.sageText);
   drawMorphWake(ctx, s);
+  drawZoneEdge(ctx, s);
   if (opt.showReticle && !s.over) drawReticleFor(ctx, s, alpha, snap);
   // 화면에 붙는 글자 (카메라와 상관없이 왼쪽 위)
   drawComboHud(ctx, s, opt.pixelScale);

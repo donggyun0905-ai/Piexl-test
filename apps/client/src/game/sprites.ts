@@ -92,8 +92,9 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number;
   remnant: { size: 32, footPad: 2, src: 128, v2: true },
   wanderer: { size: 48, footPad: 3, src: 128, v2: true },
   silk: { size: 32, footPad: 2, src: 128, v2: true },
-  miner: { size: 64, footPad: 3, src: 128, v2: true },
-  voyager: { size: 48, footPad: 3, src: 128, v2: true }, zeus: { size: 48, footPad: 3, src: 128, v2: true }, pilgrim: { size: 80, footPad: 3 }, crownKing: { size: 80, footPad: 3 }, fallenKing: { size: 50, footPad: 2, src: 96 }, lux: { size: 48, footPad: 3 }, lux2: { size: 56, footPad: 3, src: 112 }, lux3: { size: 64, footPad: 3, src: 128 }, lux4: { size: 72, footPad: 3, src: 144 },
+  // 히든 캐릭터도 일반 캐릭터와 같은 크기 (2026-10-31) · 빛의 사도 성장 모습만 단계마다 조금씩 커짐
+  miner: { size: 32, footPad: 2, src: 128, v2: true },
+  voyager: { size: 32, footPad: 2, src: 128, v2: true }, zeus: { size: 32, footPad: 2, src: 128, v2: true }, pilgrim: { size: 32, footPad: 2, src: 80 }, crownKing: { size: 80, footPad: 3 }, fallenKing: { size: 32, footPad: 2, src: 96 }, lux: { size: 32, footPad: 2, src: 48 }, lux2: { size: 36, footPad: 2, src: 112 }, lux3: { size: 40, footPad: 2, src: 128 }, lux4: { size: 44, footPad: 3, src: 144 },
   // 변희가 변한 동물 (옆모습만, render/actors가 옆을 보게 그림)
   ...Object.fromEntries(["wolf", "bear", "eagle", "snake", "boar", "scorpion", "bat", "elephant", "spider", "phoenix"].flatMap((a) => [[`morph-${a}`, { size: 32, footPad: 2, src: 128, v2: true as const }], [`morph-${a}-evo`, { size: 48, footPad: 3, src: 128, v2: true as const }]])),
   abandoned: { size: 32, footPad: 2, src: 128, v2: true },

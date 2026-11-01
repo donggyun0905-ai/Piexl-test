@@ -17,6 +17,8 @@ export interface StatusInfo {
   words: string[];
   /** 낱말로 못 찾는 값: "묶음/항목/값 앞부분" */
   paths?: string[];
+  /** 낱말이 맞아도 빼는 값 ("묶음/항목/값 앞부분") */
+  not?: string[];
 }
 
 export const STATUS_INFO: readonly StatusInfo[] = [
@@ -25,7 +27,7 @@ export const STATUS_INFO: readonly StatusInfo[] = [
   { kind: "poison", label: "독", type: "지속 피해", desc: "걸린 동안 0.5초마다 피해 (세기·시간은 캐릭터마다)", users: ["samyeol", "plague", "fly", "imugi", "byeonhui", "spiritist", "remnant", "idra", "elementalist", "doctor", "ninja"], more: "무기 '전갈 침'·'환영 송곳니' · 아이템 '가시덤불' · 독 지형 · 보스 독", words: ["poison", "venom", "toxic", "gas", "sting"] },
   { kind: "curse", label: "저주", type: "쌓아서 터뜨림", desc: "봉인이 쌓이면 한꺼번에 피해 · 오니 야마타 추가 공격", users: ["mystic", "oni", "scribe"], more: "아이템 '저주받은 승리'", words: ["curse", "hex", "seal"], paths: ["rules/ONI/yamata"] },
   { kind: "storm", label: "폭풍", type: "한 방 추가", desc: "일정 간격으로 베거나 몰아치는 피해", users: ["imugi", "zeus", "mage", "oni", "elder"], more: "광야의 새벽 기술", words: ["storm", "gale"] },
-  { kind: "rot", label: "부식", type: "약화", desc: "쌓일수록 받는 피해 증가 (중첩당 +2%) · 더 들어간 몫이 부식 피해", users: ["plague", "apostle", "rider", "ren", "elementalist", "engineer"], more: "부식 지형 · 아이템 '역병 녹'", words: ["rot", "melt", "corrode", "corro", "acid", "decay"] },
+  { kind: "rot", label: "부식", type: "약화", desc: "쌓일수록 받는 피해 증가 (중첩당 +2%) · 더 들어간 몫이 부식 피해", users: ["plague", "apostle", "rider", "ren", "elementalist", "engineer"], more: "부식 지형 · 아이템 '역병 녹'", words: ["rot", "melt", "corrode", "corro", "acid", "decay"], not: ["rules/TERRAIN/corrode"] },
   { kind: "death", label: "죽음", type: "쌓아서 터뜨림", desc: "시간이 끝나거나 쌓이면 큰 피해 (캐릭터마다)", users: ["samyeol", "plague", "oni", "apostle", "slayer", "mystic"], more: "무기 '영혼 송곳' · 금기 '죽음의 폭발' · 보스 움켜쥠", words: ["death", "doom", "reap"] },
   { kind: "hellfire", label: "지옥불", type: "지속 피해", desc: "악의 사도 '이단' 확률로 걸리고 0.5초마다 피해", users: ["apostle"], words: ["hellfire", "heresy"] },
   { kind: "shock", label: "감전", type: "한 방 추가", desc: "번개 추가 공격·번개 진 피해 (제우스는 감전이 쌓일수록 더 아픔)", users: ["oni", "elder", "zeus", "elementalist", "scribe", "fly", "mystic"], more: "감전 지형 · 보스 번개 해파리", words: ["shock", "lightning", "thunder", "zap", "volt", "spark"] },
@@ -34,7 +36,7 @@ export const STATUS_INFO: readonly StatusInfo[] = [
   { kind: "gold", label: "황금", type: "한 방 추가", desc: "가진 돈에 비례한 피해 (돈을 조금 씀)", users: ["oni"], words: [], paths: ["rules/ONI/gold"] },
   { kind: "radiance", label: "광휘", type: "한 방 추가", desc: "빛 피해 · 밀치기 (잊혀진 자는 걸린 동안 1초마다)", users: ["forgotten", "oni", "imugi", "mystic", "elementalist", "elder"], more: "보스 대천사", words: ["radiance", "radiant", "holy"], paths: ["rules/ONI/genesis"] },
   { kind: "voidbolt", label: "공허탄", type: "한 방 추가", desc: "큰 한 방 피해 + 부채꼴로 퍼짐", users: ["oni", "scribe"], words: ["void", "voidbolt"], paths: ["rules/ONI/black"] },
-  { label: "치유감소", type: "약화", desc: "걸린 동안 모든 회복·재생 감소 (로그 40%)", users: [], more: "로그 적 베놈 독가스 · 패왕전 회복 감소 기술", words: ["anti", "healcut"] },
+  { label: "치유감소", type: "약화", desc: "걸린 동안 모든 회복·재생 감소 (로그 40%, 지속 6초)", users: [], more: "로그 적 베놈(잠자리) 독가스 · 패왕전 회복 감소 기술", words: ["anti", "healcut"], paths: ["rules/TERRAIN/corrode"] },
   { label: "적이 거는 상태이상 (로그)", type: "플레이어가 받음", desc: "땅 물고기 출혈 · 슬라임 부식(받는 피해↑) · 도플갱어 저주(끝나면 터짐) · 그림자 공포(공격 못 함) · 가디언 기절 · 성기사 속박 · 돌진 멧돼지 느림 · 베놈 독+치유감소", users: [], words: [], paths: ["rules/FOE_STATUS_RULES"] },
   { label: "기절·속박·느림·공포", type: "피해 없음", desc: "기절 = 머리 위 도는 별 · 느림 = 발밑 노란 물결 · 속박 = 몸을 감는 붕대 · 공포 = 머리 위 해골과 식은땀", users: ["general", "titan", "abandoned", "elder", "scribe", "pilgrim", "zeus", "mage", "chronomancer", "ren", "apostle", "brawler", "doctor", "stargazer"], more: "진흙·물 지형(느림)", words: ["stun", "root", "slow", "fear", "bind", "sluggish"] },
 ];
@@ -44,4 +46,5 @@ export const keyWords = (key: string) => key.replace(/([a-z])([A-Z])/g, "$1_$2")
 
 /** 이 값이 그 상태이상 값인지 */
 export const isStatusValue = (info: StatusInfo, group: string, id: string, key: string) =>
-  keyWords(key).some((w) => info.words.includes(w)) || !!info.paths?.some((p) => `${group}/${id}/${key}`.startsWith(p));
+  !info.not?.some((p) => `${group}/${id}/${key}`.startsWith(p)) &&
+  (keyWords(key).some((w) => info.words.includes(w)) || !!info.paths?.some((p) => `${group}/${id}/${key}`.startsWith(p)));

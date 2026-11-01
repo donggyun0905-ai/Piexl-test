@@ -66,6 +66,8 @@ export interface HiddenPlayerState {
   /** 동료 · 거짓된 용사를 부른 층 (쓰러지면 다음 층에 다시) */
   allies?: AllyState[];
   heroFloor?: number;
+  /** 쓰러진 거짓된 용사의 레벨·능력치 (다음 층에 다시 올 때 이어서) */
+  heroKeep?: { lv: number; exp: number; dmg: number; maxHp: number; rate: number; range: number };
   /** 동료가 서 있는 층·방 (층 × 1000 + 방) */
   allyAt?: number;
   /** 큐피트의 정령: 같이 다니는 대정령 · 기술 대기 틱 */

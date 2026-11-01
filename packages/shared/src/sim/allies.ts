@@ -8,7 +8,8 @@ import { createRng, deriveSeed } from "../rng";
 import { damageEnemy } from "./combat";
 import type { AllyState } from "./hiddenTypes";
 import type { RunState, TickInput } from "./types";
-import { addEffect, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { addEffect, keepInRoom, normalize, roomGrid } from "./util";
+import { allyGoal, allyStep, allyTerrain } from "./allyMove";
 
 const R = {
   /** 월계선 동료: 체력 배율 · 전용 패시브 하나마다 공격력 + */
@@ -69,6 +70,8 @@ export function addAlly(s: RunState, kind: AllyState["kind"]): void {
     moving: false,
     perks,
     ...(kind === "hero" ? { lv: 1, exp: 0, seenKills: s.kills } : {}),
+    // 쓰러졌던 거짓된 용사: 쓰러지기 전 레벨·능력치 그대로 (체력은 가득)
+    ...(kind === "hero" && p.heroKeep ? { ...p.heroKeep, hp: p.heroKeep.maxHp } : {}),
   });
   addEffect(s, { kind: "hdPortal", x: p.x - 14, y: p.y - 4, dirX: 0, dirY: 0, size: 14, maxTicks: 40 });
 }
@@ -77,8 +80,10 @@ export function addAlly(s: RunState, kind: AllyState["kind"]): void {
 export function allyFollow(s: RunState): void {
   const p = s.player;
   (p.allies ?? []).forEach((a, i) => {
-    a.x = a.prevX = p.x + (i % 2 ? 14 : -14);
-    a.y = a.prevY = p.y + 6;
+    const b = { x: p.x + (i % 2 ? 14 : -14), y: p.y + 6, prevX: 0, prevY: 0, r: R.r };
+    keepInRoom(b, roomGrid(s));
+    a.x = a.prevX = b.x;
+    a.y = a.prevY = b.y;
   });
 }
 
@@ -99,29 +104,26 @@ export function alliesTick(s: RunState): void {
     if (a.cd > 0) a.cd--;
     heroLevel(s, a);
     const e = nearestEnemy(s, a);
-    let tx = p.x - p.faceX * R.follow;
-    let ty = p.y - p.faceY * R.follow;
+    // 목표 자리 (sim/allyMove): 적과 알맞은 거리 · 다쳤으면 내 뒤 · 위험(터질 표시·적 탄·적 몸)은 먼저 피함 · 벽·기둥에 막힘
+    const [tx, ty] = allyGoal(s, a, e, [p.x - p.faceX * R.follow, p.y - p.faceY * R.follow], a.range >= R.shootRange);
     if (e) {
-      const d = Math.hypot(e.x - a.x, e.y - a.y);
-      const want = a.range >= R.shootRange ? a.range * 0.7 : e.r + 4;
       const dir = normalize(e.x - a.x, e.y - a.y) ?? [1, 0];
-      [tx, ty] = d > want ? [e.x, e.y] : [a.x, a.y];
       a.faceX = dir[0];
       a.faceY = dir[1];
-      if (d <= a.range + e.r && a.cd <= 0) attack(s, a, e);
+      if (Math.hypot(e.x - a.x, e.y - a.y) <= a.range + e.r && a.cd <= 0) attack(s, a, e);
     }
-    const mv = normalize(tx - a.x, ty - a.y);
-    const far = Math.hypot(tx - a.x, ty - a.y) > 6;
-    a.moving = !!mv && far;
-    if (mv && far) {
-      a.x = Math.max(ROOM_MIN_X + R.r, Math.min(ROOM_MAX_X - R.r, a.x + mv[0] * a.speed));
-      a.y = Math.max(ROOM_MIN_Y + R.r, Math.min(ROOM_MAX_Y - R.r, a.y + mv[1] * a.speed));
-      if (!e) [a.faceX, a.faceY] = mv;
-    }
+    const x0 = a.x;
+    const y0 = a.y;
+    allyStep(s, a, tx, ty);
+    if (!e && a.moving) [a.faceX, a.faceY] = normalize(a.x - x0, a.y - y0) ?? [a.faceX, a.faceY];
+    allyTerrain(s, a);
     hurt(s, a);
   }
-  // 쓰러진 동료는 빛이 되어 사라짐
-  for (const a of p.allies.filter((x) => x.hp <= 0)) addEffect(s, { kind: "burst", x: a.x, y: a.y, dirX: 0, dirY: 0, size: 12, maxTicks: 20 });
+  // 쓰러진 동료는 빛이 되어 사라짐 · 거짓된 용사는 레벨·능력치를 기억 (다음 층에 그대로 다시 옴)
+  for (const a of p.allies.filter((x) => x.hp <= 0)) {
+    addEffect(s, { kind: "burst", x: a.x, y: a.y, dirX: 0, dirY: 0, size: 12, maxTicks: 20 });
+    if (a.kind === "hero") p.heroKeep = { lv: a.lv ?? 1, exp: a.exp ?? 0, dmg: a.dmg, maxHp: a.maxHp, rate: a.rate, range: a.range };
+  }
   p.allies = p.allies.filter((x) => x.hp > 0);
 }
 

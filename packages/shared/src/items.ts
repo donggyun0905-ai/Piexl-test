@@ -197,7 +197,7 @@ export const USE_ITEMS = {
   /** 최대 체력의 35% 회복 */
   potion: { id: "potion", healRatio: 0.35 },
   /** 주변 적에게 큰 피해 */
-  bomb: { id: "bomb", damage: 45, radius: 44 },
+  bomb: { id: "bomb", damage: 45, radius: 64 },
   /** 3초 동안 피해를 받지 않음 */
   ward: { id: "ward", ticks: 180 },
   /** 돈주머니: 쓰면 돈 + 50 */
