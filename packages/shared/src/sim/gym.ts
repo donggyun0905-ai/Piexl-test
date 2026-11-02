@@ -4,6 +4,7 @@ import type { ExtraStats } from "../characters";
 import { PASSIVES, type PassiveDef, type PassiveId } from "../items";
 import type { StatMod } from "../stats";
 import { recalcStats } from "./items";
+import { fxKeys } from "./gymPerks";
 import { addPickup, CX, CY } from "./loot";
 import type { PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
@@ -32,9 +33,8 @@ const R = {
   dodge: 0.02,
   /** 무기 숙련: 공격력·공격 속도 각각 % */
   weapon: 0.03,
-  /** 패시브 강화: 능력치가 붙은 패시브는 그 좋은 몫의 이 배만큼 더 (깎는 몫은 그대로) · 좋은 몫이 없는 패시브는 공격력 % */
+  /** 패시브 강화: 능력치가 붙은 패시브는 그 좋은 몫의 이 배만큼 더 (깎는 몫은 그대로) · 효과 수치는 sim/gymPerks의 GYM_FX_RULES */
   passiveBoost: 0.5,
-  passivePlain: 0.03,
 };
 export { R as GYM_RULES };
 
@@ -64,8 +64,8 @@ export const gymFloor = (floor: number) => floor >= R.FROM_FLOOR;
 const roomKey = (s: RunState) => s.floor * 1000 + s.roomId;
 /** 이 방의 기구를 이미 썼는지 (셋 중 하나만) */
 export const gymUsed = (s: RunState) => !!s.player.gym?.rooms.includes(roomKey(s));
-/** 가진 패시브 (같은 것은 하나로) */
-export const gymPassives = (p: PlayerState) => [...new Set(p.passives)];
+/** 단련할 수 있는 가진 패시브 (같은 것은 하나로): 좋은 능력치 몫이 있거나 올릴 효과 수치가 있는 것만 (sim/gymPerks) */
+export const gymPassives = (p: PlayerState) => [...new Set(p.passives)].filter((id) => gymPassiveStep(id).length > 0 || fxKeys(id).length > 0);
 export const gymLv = (p: PlayerState, key: string) => p.gym?.lv[key] ?? 0;
 const ensure = (p: PlayerState) => (p.gym ??= { pts: 0, lv: {}, rooms: [] });
 
@@ -103,7 +103,7 @@ export function gymMenu(s: RunState, op: number, a: number, b: number): void {
 /** 한 단계마다 오르는 몫 (화면 설명·계산) */
 export const gymStep = (k: GymStat) => R[k];
 
-/** 패시브 한 단계마다 오르는 몫 (화면 설명·계산): 그 패시브의 좋은 능력치 몫 × passiveBoost (깎는 몫은 키우지 않음) · 좋은 몫이 없으면 공격력 passivePlain */
+/** 패시브 한 단계마다 오르는 능력치 몫 (화면 설명·계산): 그 패시브의 좋은 능력치 몫 × passiveBoost (깎는 몫은 키우지 않음) · 없으면 빈 목록 */
 export function gymPassiveStep(id: PassiveId): StatMod[] {
   const mods = ((PASSIVES[id] as PassiveDef).mods ?? []) as readonly StatMod[];
   const out: StatMod[] = [];
@@ -111,7 +111,7 @@ export function gymPassiveStep(id: PassiveId): StatMod[] {
     if ((m.add ?? 0) > 0) out.push({ stat: m.stat, add: m.add! * R.passiveBoost });
     if ((m.mul ?? 1) > 1) out.push({ stat: m.stat, mul: 1 + (m.mul! - 1) * R.passiveBoost });
   }
-  return out.length ? out : [{ stat: "damage", mul: 1 + R.passivePlain }];
+  return out;
 }
 
 /** 강화한 능력치 (recalcStats, sim/station.stationMods) */

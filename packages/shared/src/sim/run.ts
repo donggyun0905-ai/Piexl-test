@@ -36,6 +36,7 @@ import { TITAN } from "../weaponsTitan";
 import { extraTick } from "./baseStats";
 import { kingFall } from "./kingForm";
 import { allyFeed } from "./allies";
+import { withGymFx } from "./gymPerks";
 
 // ───────── 시작 ─────────
 
@@ -131,8 +132,12 @@ export function createRun(seed: number, characterId: CharacterId, unlocks: reado
 
 // ───────── 한 틱 진행 ─────────
 
-/** 한 틱 진행 (상태를 직접 바꿈) */
+/** 한 틱 진행 (상태를 직접 바꿈) · 단련의 방에서 강화한 패시브 효과 수치가 이 틱 동안 그 사람에게 적용 (sim/gymPerks) */
 export function stepSim(s: RunState, input: TickInput): void {
+  withGymFx(s, () => stepOnce(s, input));
+}
+
+function stepOnce(s: RunState, input: TickInput): void {
   if (s.over) return;
   applyRoom(s);
   s.tick++;

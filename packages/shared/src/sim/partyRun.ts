@@ -9,6 +9,7 @@ import { checkDeath, createRun, newPlayer, stepPlayer, stepWorld } from "./run";
 import { EMPTY_INPUT, type RunState, type TickInput } from "./types";
 import { FLEE_COST } from "./util";
 import { tabooSum } from "./taboo";
+import { withGymFx } from "./gymPerks";
 
 export interface PartyMember {
   characterId: CharacterId;
@@ -48,7 +49,8 @@ export function stepParty(s: RunState, inputs: readonly TickInput[]): void {
   applyRoom(s);
   const view = seatNo(s);
   useSeat(s, 0);
-  tick(s, inputs);
+  // 단련의 방 효과 강화는 자리마다 (s.player가 바뀌면 그 사람 단계로, sim/gymPerks)
+  withGymFx(s, () => tick(s, inputs));
   useSeat(s, view);
 }
 

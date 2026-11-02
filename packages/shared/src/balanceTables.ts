@@ -103,6 +103,7 @@ import * as weaponsFallenKing from "./weaponsFallenKing";
 import * as perks from "./perks";
 import * as combos from "./combos";
 import { SIM_RULES } from "./sim/rulesRegistry";
+import { gymFxRow } from "./sim/gymPerks";
 
 const MODULES: Record<string, unknown>[] = [itemsAbandoned, itemsApostle, itemsArtifacter, itemsAutomata, itemsBeast, itemsBedouin, itemsBomber, itemsBrawler, itemsChrono, itemsDoctor, itemsDuck, itemsEater, itemsElder, itemsElemental, itemsFly, itemsGeneral, itemsGunner, itemsIdra, itemsImugi, itemsMorph, itemsMukin, itemsNinja, itemsOni, itemsPlague, itemsPunk, itemsRen, itemsRider, itemsSamyeol, itemsScribe, itemsSeason2, itemsSlayer, itemsSpirit, itemsStar, itemsSummon, itemsTitan, itemsTracker, itemsForgotten, itemsRemnant, itemsWanderer, itemsSilk, weaponsAbandoned, weaponsApostle, weaponsArtifacter, weaponsAutomata, weaponsBase, weaponsBeast, weaponsBedouin, weaponsBomber, weaponsBrawler, weaponsChrono, weaponsDoctor, weaponsDuck, weaponsEater, weaponsElder, weaponsElemental, weaponsEngineer, weaponsFly, weaponsGeneral, weaponsGunner, weaponsIdra, weaponsImugi, weaponsMorph, weaponsMukin, weaponsMystic, weaponsNinja, weaponsOni, weaponsPlague, weaponsPunk, weaponsRen, weaponsRider, weaponsSamyeol, weaponsScribe, weaponsSlayer, weaponsSpirit, weaponsStar, weaponsSummon, weaponsTitan, weaponsTracker, weaponsForgotten, weaponsRemnant, weaponsWanderer, weaponsSilk, itemsMiner, weaponsMiner, itemsVoyager, weaponsVoyager, itemsZeus, weaponsZeus, itemsPilgrim, itemsFallenKing, weaponsFallenKing, itemsLux, weaponsLux, itemsHidden, swarmDefs, taboo, petDefs, trackerParts, terrainDefs, weaponsPilgrim, perks, combos];
 
@@ -124,7 +125,8 @@ function collect(): { rules: Record<string, unknown>; effects: Record<string, un
     for (const [name, v] of Object.entries(mod)) {
       if (!/^[A-Z][A-Z0-9_]*$/.test(name) || SKIP.test(name) || typeof v !== "object" || v === null || Array.isArray(v) || !hasNumber(v)) continue;
       // 아이템 효과 표는 아이템 하나씩 (같은 객체를 그대로 가리켜 바꾸면 바로 게임에 들어감)
-      if (/PERKS$/.test(name)) for (const [id, row] of Object.entries(v)) effects[id] = row;
+      // 단련의 방에서 강화한 효과 수치는 그 사람에게만 높게 읽힘 (sim/gymPerks)
+      if (/PERKS$/.test(name)) for (const [id, row] of Object.entries(v)) effects[id] = (v as Record<string, unknown>)[id] = typeof row === "object" && row ? gymFxRow(id, row) : row;
       else rules[name] = v;
     }
   }

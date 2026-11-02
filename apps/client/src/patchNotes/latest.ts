@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.338",
+    date: "2026-11-02",
+    items: {
+      ko: [
+        "단련의 방 효과 패시브: 공격력 대신 그 패시브의 효과 수치가 단계마다 10%씩 좋아짐 — 범위·피해·확률·회복·개수는 커지고, 재사용 대기·간격·지연·비용·받는 피해는 작아짐 (지속 시간·최대치·조건 수치는 그대로)",
+        "단련 창에 효과 수치마다 '원래 → 지금 · 단계당 %'를 보여 줌 · 올릴 효과 수치가 없는 패시브는 단련 목록에 나오지 않음",
+      ],
+      en: [
+        "Training Room effect passives: instead of damage, the passive's own effect numbers improve 10% per level — range, damage, chance, healing and counts go up; cooldown, interval, delay, cost and damage taken go down (durations, caps and conditions stay)",
+        "The training window shows each effect number as 'base → now · per level %' · passives with nothing to improve no longer appear in the list",
+      ],
+      ja: [
+        "鍛錬の部屋の効果パッシブ: 攻撃力の代わりにそのパッシブの効果の数値が1段階ごとに10%良くなる — 範囲・ダメージ・確率・回復・数は大きく、クールタイム・間隔・遅延・コスト・被ダメージは小さく（持続・上限・条件の数値はそのまま）",
+        "鍛錬の画面に効果の数値ごとに「元 → 現在 · 1段階%」を表示 · 上げられる数値がないパッシブは鍛錬リストに出ない",
+      ],
+    },
+  },
+  {
     version: "0.48.337",
     date: "2026-11-02",
     items: {
