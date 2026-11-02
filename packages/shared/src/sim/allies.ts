@@ -131,7 +131,7 @@ function nearestEnemy(s: RunState, a: AllyState) {
   let best = null;
   let bd = R.sight * R.sight;
   for (const e of s.enemies) {
-    if (e.hp <= 0 || e.kind === "dummy") continue;
+    if (e.hp <= 0 || e.immune || e.kind === "dummy") continue;
     const d = (e.x - a.x) ** 2 + (e.y - a.y) ** 2;
     if (d < bd) [best, bd] = [e, d];
   }

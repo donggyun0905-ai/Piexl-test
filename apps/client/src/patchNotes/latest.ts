@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.337",
+    date: "2026-11-02",
+    items: {
+      ko: ["맞지 않는 상태의 적(검은 잔영처럼 지켜보기만 하는 보스, 땅속·하늘에 있는 보스 등)을 캐릭터 공격이 노리던 것 고침: 격투가·원소술사 검·야수·악의 사도·기계공학자 연쇄·오니·오리 새끼·거너 드론·유도 탄·동료·고양이 펫 등이 맞을 수 있는 적만 노림"],
+      en: ["Fixed attacks targeting enemies that can't be hit (like the watching Black Remnant, or bosses underground or in the sky): Brawler, Elementalist blades, Beast, Apostle, Engineer chains, Oni, ducklings, Gunner drones, homing shots, allies and cat pets now only aim at hittable enemies"],
+      ja: ["当たらない状態の敵（見ているだけの黒い残影、地中・空中のボスなど）をキャラの攻撃が狙っていたのを修正: 格闘家・元素術師の剣・野獣・悪の使徒・機械工学者の連鎖・鬼・子アヒル・ガンナーのドローン・誘導弾・仲間・猫ペットなどが当たる敵だけを狙う"],
+    },
+  },
+  {
     version: "0.48.336",
     date: "2026-11-02",
     items: {

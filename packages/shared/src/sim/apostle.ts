@@ -65,7 +65,7 @@ function nearest(s: RunState, range: number): EnemyState | null {
   let best: EnemyState | null = null;
   let bd = Infinity;
   for (const e of s.enemies) {
-    if (e.hp <= 0) continue;
+    if (e.hp <= 0 || e.immune) continue;
     const d = dist2(e, p);
     if (d <= (range + e.r) ** 2 && d < bd) {
       bd = d;

@@ -103,7 +103,7 @@ function nearest(s: RunState, x: number, y: number, range: number): EnemyState |
   const at = { x, y, prevX: x, prevY: y, r: 0 };
   let best: EnemyState | null = null;
   for (const e of s.enemies) {
-    if (e.hp <= 0 || dist2(e, at) > range * range) continue;
+    if (e.hp <= 0 || e.immune || dist2(e, at) > range * range) continue;
     if (!best || dist2(e, at) < dist2(best, at)) best = e;
   }
   return best;

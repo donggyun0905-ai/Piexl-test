@@ -62,7 +62,7 @@ export function pickTarget(s: RunState, b: OrbBody): EnemyState | null {
   let best: EnemyState | null = null;
   let bestD = Infinity;
   for (const e of s.enemies) {
-    if (e.hp <= 0) continue;
+    if (e.hp <= 0 || e.immune) continue;
     const reach = p.stats.range + e.r;
     const near = (e.x - b.x) * (e.x - b.x) + (e.y - b.y) * (e.y - b.y);
     if (dist2(e, p) <= reach * reach && near < bestD) {
@@ -127,7 +127,7 @@ function nextTarget(s: RunState, x: number, y: number, skip?: number): EnemyStat
   let best: EnemyState | null = null;
   let bestD = Infinity;
   for (const e of s.enemies) {
-    if (e.hp <= 0 || dist2(e, p) > (reach + e.r) ** 2) continue;
+    if (e.hp <= 0 || e.immune || dist2(e, p) > (reach + e.r) ** 2) continue;
     const d = (e.x - x) ** 2 + (e.y - y) ** 2 + (e.id === skip ? 1e6 : 0);
     if (d < bestD) {
       bestD = d;

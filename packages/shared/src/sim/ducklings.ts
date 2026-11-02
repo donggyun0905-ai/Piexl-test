@@ -82,7 +82,7 @@ export function echoQuack(s: RunState, dmg: number): void {
   for (const d of p.ducklings ?? []) {
     let best: EnemyState | null = null;
     for (const e of s.enemies) {
-      if (e.hp <= 0 || dist2(e, d) > (range + e.r) ** 2) continue;
+      if (e.hp <= 0 || e.immune || dist2(e, d) > (range + e.r) ** 2) continue;
       if (!best || dist2(e, d) < dist2(best, d)) best = e;
     }
     if (!best) continue;

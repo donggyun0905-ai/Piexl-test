@@ -90,7 +90,7 @@ export function storms(s: RunState): void {
     st.prevY = st.y;
     st.ticks--;
     let best: EnemyState | null = null;
-    for (const e of s.enemies) if (e.hp > 0 && (!best || dist2(e, st) < dist2(best, st))) best = e;
+    for (const e of s.enemies) if (e.hp > 0 && !e.immune && (!best || dist2(e, st) < dist2(best, st))) best = e;
     if (best) {
       const d = normalize(best.x - st.x, best.y - st.y);
       const sp = ONI.wind.speed * (gale ? K.oniGale.speed : 1);

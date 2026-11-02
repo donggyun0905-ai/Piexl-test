@@ -86,7 +86,7 @@ function gravitySlam(s: RunState, dmg: number): void {
   const p = s.player;
   for (const e of s.enemies) {
     const rr = p.stats.range + e.r;
-    if (e.hp <= 0 || dist2(e, p) > rr * rr) continue;
+    if (e.hp <= 0 || e.immune || dist2(e, p) > rr * rr) continue;
     damageEnemy(s, e, dmg, 0, 0);
     weaponDot(s, e, "curse", dmg);
     if (e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, ENEMIES[e.kind].boss ? R.GRAVITY_STUN / 2 : R.GRAVITY_STUN);
@@ -106,7 +106,7 @@ function grab(s: RunState): void {
   let any = false;
   for (const e of s.enemies) {
     const rr = p.stats.range + e.r;
-    if (e.hp <= 0 || dist2(e, p) > rr * rr) continue;
+    if (e.hp <= 0 || e.immune || dist2(e, p) > rr * rr) continue;
     any = true;
     if (ENEMIES[e.kind].boss || e.kind === "dummy") continue;
     if (!best || dist2(e, p) < dist2(best, p)) best = e;

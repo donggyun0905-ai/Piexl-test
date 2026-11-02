@@ -189,7 +189,7 @@ export function nearestOthers(s: RunState, x: number, y: number, reach: number, 
   return s.enemies
     .map((e, i) => ({ e, i, d: Math.sqrt((e.x - x) * (e.x - x) + (e.y - y) * (e.y - y)) }))
     .filter(({ e, d }) => {
-      if (e.hp <= 0 || exclude.includes(e) || d > reach + e.r) return false;
+      if (e.hp <= 0 || e.immune || exclude.includes(e) || d > reach + e.r) return false;
       const dir = normalize(e.x - x, e.y - y);
       return !dir || wallDistance(s, x, y, dir[0], dir[1], d) >= d - e.r;
     })

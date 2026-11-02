@@ -51,7 +51,7 @@ function nearest(s: RunState, x: number, y: number): EnemyState | null {
   let best: EnemyState | null = null;
   let bestD = Infinity;
   for (const e of s.enemies) {
-    if (e.hp <= 0 || e.pwHid || dist2(e, p) > R.SEEK * R.SEEK) continue;
+    if (e.hp <= 0 || e.immune || e.pwHid || dist2(e, p) > R.SEEK * R.SEEK) continue;
     const d = (e.x - x) * (e.x - x) + (e.y - y) * (e.y - y);
     if (d < bestD) {
       bestD = d;
