@@ -5,7 +5,7 @@ type Guide = Partial<Record<CharacterId, readonly string[]>>;
 
 export const GUIDE_KO_ASC: Guide = {
   tracker: [
-    "아스칼론 · 추적자 · 조용히 노리는 여자 저격수 · 체력 90 · 조금 빠름",
+    "아스칼론 · 추적자 · 조용히 노리는 여자 저격수 · 체력 45 · 조금 빠름",
     "저격총 하나: 멀리 꿰뚫는 한 발. 스킬 셋은 PC 1·2·3 키, 모바일은 오른쪽 스킬 버튼",
     "1 암습 저격(대기 10초): 무적이 되고 화면이 까매지며 조준 원만 보임. 10초 안에 10발 (한 발 공격력 200%, 조준 원 안의 적). 모바일·자동 조준은 가까운 적을 노림",
     "2 강력한 한방(대기 60초): 1.5초 모으는 동안 앞에 적 탄을 막는 빛 벽 (무적은 아님) → 방을 꿰뚫는 한 줄 (공격력 1000% + 최대 체력 20%, 보스는 그 1/5)",
@@ -19,7 +19,7 @@ export const GUIDE_KO_ASC: Guide = {
     "전용 아이템 10: 잊힌 기억 · 신의 잔향 · 빛기둥 강화 · 늘어나는 기둥 · 신의 가호 · 광휘 · 성흔 · 빛의 박동 · 깨어남 · 잔광",
   ],
   remnant: [
-    "아스칼론 · 잔영 · 그림자 속을 움직이는 남자 암살자 · 체력 90 · 빠름 · 치명타 45% · 치명타 피해 250% · 모든 상태이상 면역",
+    "아스칼론 · 잔영 · 그림자 속을 움직이는 남자 암살자 · 체력 45 · 빠름 · 치명타 45% · 치명타 피해 250% · 모든 상태이상 면역",
     "그림자 단검 10: 잔영 단검 · 쌍단검 · 그림자 발톱 · 스틸레토 · 그림자 투척 · 회전 칼날 · 섬영 · 그림자 낫 · 독니 · 월식",
     "짧은 단검 내려찍기. 대시로 적 공격을 피하면(안 피했으면 맞았을 공격) 1.5초 슬로우모션: 적과 적 탄만 느려지고 화면이 어두워짐. 그 안에 직접 클릭(휴대폰은 화면을 새로 터치)하면 확정 치명타 3연속 큰 베기 (여러 적, 마지막은 몸 둘레 모두) → 슬로우모션 끝",
     "전용 아이템 10: 그림자 걸음 · 등 뒤의 칼 · 처형 · 겹친 칼 · 사라짐 · 피의 칼날 · 그림자 손놀림 · 소리 없는 발 · 연쇄 처형 · 그림자 장막",
@@ -35,7 +35,7 @@ export const GUIDE_KO_ASC: Guide = {
 
 export const GUIDE_EN_ASC: Guide = {
   tracker: [
-    "Ascalon · Tracker · a quiet female sniper · HP 90 · a bit fast",
+    "Ascalon · Tracker · a quiet female sniper · HP 45 · a bit fast",
     "One sniper rifle: a long piercing shot. Three skills on keys 1·2·3 (PC) or the skill buttons (mobile)",
     "1 Ambush Snipe (10s cooldown): invulnerable, the screen goes black except the scope circle. 10 shots within 10s (200% each, foes inside the circle). Mobile/auto-aim targets the nearest foe",
     "2 Power Shot (60s cooldown): charge 1.5s behind a light wall that blocks enemy shots (not invulnerable) → a line through the room (1000% + 20% max HP, 1/5 of that on bosses)",
@@ -49,7 +49,7 @@ export const GUIDE_EN_ASC: Guide = {
     "10 exclusive items: Forgotten Memory · Echo of the Gods · Brighter Pillars · More Pillars · Divine Ward · Radiance · Stigma · Pulse of Light · Awakening · Afterglow",
   ],
   remnant: [
-    "Ascalon · Remnant · a male assassin who moves through shadows · HP 90 · fast · 45% crit · 250% crit damage · immune to all status effects",
+    "Ascalon · Remnant · a male assassin who moves through shadows · HP 45 · fast · 45% crit · 250% crit damage · immune to all status effects",
     "10 shadow daggers: Afterimage Dagger · Twin Daggers · Shadow Claws · Stiletto · Shadow Throw · Spinning Blades · Flash Shadow · Shadow Sickle · Venom Fang · Eclipse",
     "Short dagger stab. Dash through an enemy attack that would have hit you for 1.5s of slow motion: only foes and their shots slow down and the screen darkens. Click yourself in that window (new tap on phones) for 3 big sure-crit slashes (many foes, the last one all around) → slow motion ends",
     "10 exclusive items: Shadow Step · Knife in the Back · Execution · Layered Blades · Vanish · Bloody Edge · Shadow Hands · Silent Feet · Chain Execution · Shadow Veil",
@@ -65,7 +65,7 @@ export const GUIDE_EN_ASC: Guide = {
 
 export const GUIDE_JA_ASC: Guide = {
   tracker: [
-    "アスカロン · 追跡者 · 静かに狙う女性狙撃手 · 体力90 · やや速い",
+    "アスカロン · 追跡者 · 静かに狙う女性狙撃手 · 体力45 · やや速い",
     "狙撃銃ひとつ：遠くまで貫く一発。スキル3つはPCの1·2·3キー、モバイルは右のスキルボタン",
     "1 暗襲狙撃（待ち10秒）：無敵になり画面が暗転、照準円だけが見える。10秒以内に10発（1発200%、照準円内の敵）。モバイル・自動照準は近い敵を狙う",
     "2 強力な一撃（待ち60秒）：1.5秒溜める間、前に敵弾を防ぐ光の壁（無敵ではない）→ 部屋を貫く一直線（1000%＋最大体力20%、ボスはその1/5）",
@@ -79,7 +79,7 @@ export const GUIDE_JA_ASC: Guide = {
     "専用アイテム10：忘れられた記憶 · 神の残響 · 光柱強化 · 増える光柱 · 神の加護 · 光輝 · 聖痕 · 光の鼓動 · 目覚め · 残光",
   ],
   remnant: [
-    "アスカロン · 残影 · 影の中を動く男の暗殺者 · 体力90 · 速い · クリティカル45% · クリティカルダメージ250% · すべての状態異常に免疫",
+    "アスカロン · 残影 · 影の中を動く男の暗殺者 · 体力45 · 速い · クリティカル45% · クリティカルダメージ250% · すべての状態異常に免疫",
     "影の短剣10：残影の短剣 · 双短剣 · 影の爪 · スティレット · 影の投擲 · 回転刃 · 閃影 · 影の鎌 · 毒牙 · 月蝕",
     "短い短剣の突き下ろし。当たるはずの敵の攻撃をダッシュで避けると1.5秒スローモーション：敵と敵の弾だけ遅くなり画面が暗くなる。その間に自分でクリック（スマホは画面を新しくタッチ）すると確定会心の大きな3連斬り（複数の敵、最後は全周）→ スローモーション終了",
     "専用アイテム10：影歩き · 背中の刃 · 処刑 · 重なる刃 · 消失 · 血の刃 · 影の手さばき · 音なき足 · 連鎖処刑 · 影の帳",

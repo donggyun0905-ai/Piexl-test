@@ -30,10 +30,10 @@ function dodge(s: RunState): void {
 }
 
 describe("잔영", () => {
-  it("기본: 치명타 45% · 치명타 피해 250% · 체력 45 고정 · 짧은 내려찍기", () => {
+  it("기본: 치명타 45% · 치명타 피해 250% · 체력 45(체력 아이템으로 늘어남) · 짧은 내려찍기", () => {
     expect(CHARACTERS.remnant).toMatchObject({ critChance: 0.45, critDamage: 2.5 });
     const s = remnant("rmDagger", "sturdyHeart");
-    expect(s.player.stats.maxHp).toBe(45);
+    expect(s.player.stats.maxHp).toBeGreaterThan(45);
     stepSim(s, FIRE);
     expect(lost(s)).toBeGreaterThan(0);
     const far = remnant();

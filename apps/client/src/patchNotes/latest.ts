@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.350",
+    date: "2026-11-02",
+    items: {
+      ko: ["잔영: 체력 45 고정을 없앰 (체력 아이템·단련의 방으로 최대 체력이 늘어남, 시작 체력은 45 그대로)"],
+      en: ["Remnant: HP is no longer locked at 45 (HP items and the Training Room now raise max HP; starts at 45)"],
+      ja: ["残影：体力45固定を廃止（体力アイテム・鍛錬の部屋で最大体力が増える。開始体力は45のまま）"],
+    },
+  },
+  {
     version: "0.48.349",
     date: "2026-11-02",
     items: {

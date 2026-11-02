@@ -30,7 +30,7 @@ export const TIER_EN: Partial<Record<CharacterId, string>> = {
   eater: "Ten shadow attacks that are wide and strong but slow and random. Regen grows with every meal, so late-game sustain is good",
   drifter: "Long-range crossbow and fast feet. Solid basics but no special big hit",
   beast: "The cat pet scratches on its own and you move fast. A bug fix is planned, so re-check after the fix",
-  remnant: "Dash-dodge into slow motion, then click for 3 sure-crit slashes + 45% crit / 250% crit damage, immune to status effects. But HP is fixed at 45, risky against the last boss",
+  remnant: "Dash-dodge into slow motion, then click for 3 sure-crit slashes + 45% crit / 250% crit damage, immune to status effects. But low HP (45) makes the last boss risky",
   warden: "120 HP and a wide greatblade. A great first character, but falls behind others later",
   elementalist: "Orbiting spheres hit enemies safely, but damage is low and varies a lot by weapon",
   brawler: "High starting damage and HP, but combos must keep landing, so it's hard. Top of the meh tier",

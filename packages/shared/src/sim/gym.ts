@@ -48,11 +48,11 @@ export const GYM_OP = { result: 9, up: 10 } as const;
 const PASSIVE_AT = 32;
 
 /** 이 캐릭터에게는 효과가 없어 막은 능력치 (2026-11-01 전체 캐릭터 점검):
- *  최대 체력 고정(거너·잔영·저주받은 주사위 체력) · 공격 간격이 무기에 고정(버려진 자들·잔영)이거나 차크람이 돌아와야 다시 던짐(베두인) ·
+ *  최대 체력 고정(거너·저주받은 주사위 체력) · 공격 간격이 무기에 고정(버려진 자들·잔영)이거나 차크람이 돌아와야 다시 던짐(베두인) ·
  *  주 공격이 치명타를 굴리지 않음(기계공학자 광선·의사) */
 const NO_EFFECT: Partial<Record<string, readonly GymStat[]>> = {
   gunner: ["maxHp"],
-  remnant: ["maxHp", "attackSpeed"],
+  remnant: ["attackSpeed"],
   abandoned: ["attackSpeed"],
   bedouin: ["attackSpeed"],
   engineer: ["critChance", "critDamage"],
