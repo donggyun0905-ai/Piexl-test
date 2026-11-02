@@ -48,7 +48,11 @@ export function practiceRoom(s: RunState, kind: PracticeRoom): void {
     s.crack = { floor: s.floor, room: s.roomId, side: 0, pos: ROOM_CY, kind: SECRET_KINDS[n]! };
   } else if (kind === "trial") {
     // 비석을 다시 쓸 수 있게 (진행 중인 시련도 치움)
-    if (s.player.trial) s.player.trial.rooms = [];
+    if (s.player.trial) {
+      s.player.trial.rooms = [];
+      // 연습장은 한 판 합계 1000점 제한도 다시
+      delete s.player.trial.total;
+    }
     s.trialRun = undefined;
     s.enemies = [];
     spawnTrial(s, s.roomId);

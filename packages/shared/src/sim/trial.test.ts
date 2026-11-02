@@ -107,4 +107,18 @@ describe("시련의 방", () => {
     expect(s.over).toBe(false);
     expect(s.player.hp).toBe(s.player.stats.maxHp);
   });
+
+  it("한 판 합계 1000점: 이미 300점이면 이번 시련은 최대 700점 · 1000점을 채우면 시련의 방이 더 안 나옴", () => {
+    const s = inTrial();
+    s.player.trial = { rooms: [], total: 300 };
+    startTrial(s, 3);
+    for (let k = 0; k < 4000 && s.trialRun; k++) {
+      s.enemies.forEach((e) => (e.hp = 0));
+      stepSim(s, EMPTY_INPUT);
+    }
+    expect(s.player.trial.last!.score).toBe(700);
+    expect(s.player.trial.total).toBe(1000);
+    startFloor(s, 5);
+    expect(s.map.rooms.some((r) => r.type === "trial")).toBe(false);
+  });
 });

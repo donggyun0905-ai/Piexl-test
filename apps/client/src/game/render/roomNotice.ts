@@ -1,6 +1,6 @@
 // 특별한 방 결과 알림 (화면 가운데 위, 3초): 시련 시작(어떤 시련인지) · 시련 거절 벌칙(무엇을 빼앗겼는지) · 시련 결과 점수
 // · 보상 상자에서 받은 것 · 야바위 당첨/꽝(깎인 능력치). 글자는 화면 언어 (text: 키 → 글자, 없는 키면 키 그대로)
-import type { RunState } from "@pixel-rogue/shared";
+import { trialCap, type RunState } from "@pixel-rogue/shared";
 
 type Ctx = CanvasRenderingContext2D;
 const SHOW = 180;
@@ -13,7 +13,12 @@ function notice(s: RunState, text: (key: string) => string, name: (kind: "passiv
   if (last && s.tick - last.tick < SHOW) {
     if (last.penalty) out.push({ head: text("noticeTrialNo"), sub: text(`trialPen_${last.penalty}`), color: "#ff8a8a", at: last.tick });
     else if (last.score !== undefined) out.push({ head: text("trialResult").replace("{n}", String(last.score)), sub: text("noticeChests"), color: "#ffd84a", at: last.tick });
-    else if (last.kind) out.push({ head: text(`trialKind_${last.kind}`), sub: text(`trialKindHint_${last.kind === 4 ? 4 : 1}`), color: "#ffd0d0", at: last.tick });
+    else if (last.kind) {
+      // 이 판에 남은 최대 점수 (판 전체 1000점까지)
+      const cap = s.trialRun ? trialCap(p) : 1000;
+      const sub = `${text(`trialKindHint_${last.kind === 4 ? 4 : 1}`)}${cap < 1000 ? ` · ${text("noticeTrialCap").replace("{n}", String(cap))}` : ""}`;
+      out.push({ head: text(`trialKind_${last.kind}`), sub, color: "#ffd0d0", at: last.tick });
+    }
   }
   const got = p.trial?.got;
   if (got && s.tick - got.tick < SHOW) {

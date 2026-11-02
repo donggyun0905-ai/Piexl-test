@@ -5,7 +5,7 @@ import type { TextKey } from "../../i18n";
 import { ALTAR_LOOK } from "../render/altarLook";
 
 interface Props {
-  altar: { id: AltarId; passives: number };
+  altar: { id: AltarId; passives: number; augTaken: boolean };
   t: (key: TextKey) => string;
   send: (code: number) => void;
 }
@@ -18,7 +18,7 @@ export function AltarPanel({ altar, t, send }: Props) {
   const hit = id === "unknown" ? t("altarHit_unknown") : `${t(`altarHit_${id}` as TextKey)} ${t("altarOrPassives")}`;
   const cards: { head: TextKey; body: string; off?: boolean }[] = [
     { head: "altarCardTrade", body: t(`altarTrade_${id}` as TextKey) },
-    { head: "altarCardAug", body: altar.passives >= ALTAR_AUG_MIN ? t("altarAugDesc").replace("{a}", skill(a)).replace("{b}", skill(b)) : t("altarAugNone"), off: altar.passives < ALTAR_AUG_MIN },
+    { head: "altarCardAug", body: altar.augTaken ? t("altarAugOnce") : altar.passives >= ALTAR_AUG_MIN ? t("altarAugDesc").replace("{a}", skill(a)).replace("{b}", skill(b)) : t("altarAugNone"), off: altar.augTaken || altar.passives < ALTAR_AUG_MIN },
     { head: "altarCardIgnore", body: t("altarIgnoreDesc").replace("{a}", hit) },
   ];
   return (

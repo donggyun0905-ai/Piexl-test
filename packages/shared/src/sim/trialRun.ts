@@ -12,7 +12,7 @@ import { bodyFits } from "./layout";
 import { stalkerKinds } from "./stalkers";
 import { spillRewards } from "./trialRewards";
 import type { TrialKind } from "./trialTypes";
-import type { EnemyState, RunState } from "./types";
+import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, keepInRoom, makeEnemy, roomGrid } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -39,6 +39,15 @@ const R = {
 export { R as TRIAL_RUN_RULES };
 
 const MAX_SCORE = 1000;
+/** 이 판에 시련으로 더 얻을 수 있는 점수 (판 전체 합계 1000점까지: 3층 300점 → 다음 시련은 최대 700점) */
+export const trialCap = (p: PlayerState): number => Math.max(0, MAX_SCORE - (p.trial?.total ?? 0));
+/** 판 전체 1000점을 다 채웠는지 */
+export const trialDone = (p: PlayerState): boolean => trialCap(p) <= 0;
+
+/** 층 시작 (rooms.startFloor): 모두 1000점을 채웠으면 시련의 방 대신 전투방 */
+export function skipTrials(s: RunState): void {
+  if ((s.party?.map((x) => x.player) ?? [s.player]).every(trialDone)) for (const r of s.map.rooms) if (r.type === "trial") r.type = "combat";
+}
 
 /** 시련 시작 (방이 잠기고, 체력 1 시련은 체력을 1로) */
 export function startTrial(s: RunState, kind: TrialKind): void {
@@ -96,9 +105,13 @@ function nextBoss(s: RunState): void {
 /** 끝없는 시련의 적 체력 배율: 700점까지는 조금씩, 그 뒤로 아주 가파르게 */
 export const endlessHp = (score: number) => 1 + R.HP_PER_100 * (score / 100) + R.HP_LATE * Math.max(0, (score - 700) / 300) ** 2;
 
-function finish(s: RunState, score: number): void {
+function finish(s: RunState, raw: number): void {
   const run = s.trialRun!;
   const p = s.player;
+  // 판 전체 1000점까지만 (넘는 몫은 버림)
+  const score = Math.min(raw, trialCap(p));
+  const t = (p.trial ??= { rooms: [] });
+  t.total = (t.total ?? 0) + score;
   s.trialRun = undefined;
   if (run.kind === 2 || run.kind === 4) p.hp = Math.max(p.hp, Math.min(p.stats.maxHp, run.hp));
   if (run.kind === 4) s.enemies = [];
@@ -121,9 +134,10 @@ export function trialTick(s: RunState): void {
   if (run.kind === 2 && p.hp > 1) p.hp = 1;
   if (run.t > 0) run.t--;
   if (run.kind === 4) {
-    run.score = Math.min(MAX_SCORE, (s.kills - run.kills + (run.got ?? 0)) * R.KILL_SCORE);
-    // 쓰러져도 죽지 않음: 그때 점수로 끝
-    if (p.hp <= 0 || run.score >= MAX_SCORE) return finish(s, run.score);
+    const cap = trialCap(p);
+    run.score = Math.min(cap, (s.kills - run.kills + (run.got ?? 0)) * R.KILL_SCORE);
+    // 쓰러져도 죽지 않음: 그때 점수로 끝 (이 판에 남은 최대 점수를 채워도 끝)
+    if (p.hp <= 0 || run.score >= cap) return finish(s, run.score);
     if (run.t <= 0 && s.enemies.length < R.MAX_ALIVE) {
       const out = spawnMinions(s, R.SPAWN_N + Math.floor(run.score / 250), endlessHp(run.score), s.tick);
       if (run.score >= R.CHAMP_FROM) makeChamps(out, depth(s));

@@ -101,4 +101,17 @@ describe("제단의 방", () => {
     menu(one, menuCode(ALTAR_OP, 1));
     expect(altarUsed(one)).toBe(false);
   });
+
+  it("카드 2(증강)는 한 판에 한 번만 · 1·3은 여러 번", () => {
+    const s = inAltar(7);
+    menu(s, menuCode(ALTAR_OP, 1));
+    expect(s.player.augments).toHaveLength(1);
+    s.player.altar!.rooms = [];
+    s.player.passives.push("whetstone", "lightGloves");
+    menu(s, menuCode(ALTAR_OP, 1));
+    expect(altarUsed(s)).toBe(false);
+    menu(s, menuCode(ALTAR_OP, 0));
+    expect(altarUsed(s)).toBe(true);
+    expect(s.player.augments).toHaveLength(1);
+  });
 });

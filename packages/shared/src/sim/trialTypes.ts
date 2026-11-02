@@ -7,6 +7,8 @@ export interface TrialPlayerState {
   trial?: {
     /** 비석을 쓴 방 (층 × 1000 + 방) */
     rooms: number[];
+    /** 이 판에 시련으로 얻은 점수 합계 (1000점이면 시련의 방이 더 나오지 않음) */
+    total?: number;
     /** 거절 벌칙: 이 층 동안 암흑 · 이 층 동안 체력 1 (층 번호) */
     dark?: number;
     hp1?: number;

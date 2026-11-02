@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.353",
+    date: "2026-11-02",
+    items: {
+      ko: [
+        "시련의 방: 한 판의 시련 점수는 합쳐서 최대 1000점 (예: 3층에서 300점이면 다음 시련은 최대 700점) · 1000점을 채우면 시련의 방이 더 나오지 않음",
+        "제단의 방: '증강' 카드는 한 판에 한 번만 (이미 새겼으면 비활성) · '거래'·'무시'는 여러 번 가능",
+      ],
+      en: [
+        "Trial Room: trial scores add up to at most 1000 per run (e.g. 300 on floor 3 caps the next trial at 700) · after 1000, no more trial rooms appear",
+        "Altar Room: the 'Augment' card can be taken only once per run (disabled afterwards) · 'Bargain' and 'Ignore' can be chosen any number of times",
+      ],
+      ja: [
+        "試練の部屋：1ランの試練の点数は合計最大1000点（例：3階で300点なら次の試練は最大700点）· 1000点に達すると試練の部屋はもう出ない",
+        "祭壇の部屋：「増強」カードは1ランで1回だけ（刻んだ後は無効）·「取引」「無視」は何度でも可",
+      ],
+    },
+  },
+  {
     version: "0.48.352",
     date: "2026-11-02",
     items: {

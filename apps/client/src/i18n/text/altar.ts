@@ -10,6 +10,7 @@ export const ALTAR_TEXT = {
   altarCardIgnore: l("무시하고 지나간다", "Ignore and pass", "無視して通る"),
   altarAugDesc: l("패시브 하나(무작위)에 증강 기술 「{a}」·「{b}」을 새기고, 다른 패시브 둘을 바침 (이미 증강이 새겨진 패시브는 바치지 않음)", "Engrave the augments \"{a}\" and \"{b}\" on one random passive and offer 2 others (passives already engraved are never taken)", "ランダムなパッシブ1つに増強技「{a}」「{b}」を刻み、他のパッシブ2つを捧げる（増強が刻まれたパッシブは捧げない）"),
   augEngraved: l("새겨진 증강 기술 (제단에서 빼앗기지 않음)", "Engraved augments (never taken by altars)", "刻まれた増強技（祭壇で奪われない）"),
+  altarAugOnce: l("증강은 한 판에 한 번만 새길 수 있음 (이미 새김)", "Augments can be engraved only once per run (already done)", "増強は1回のランで1度だけ（刻み済み）"),
   altarAugNone: l("패시브가 둘 이상 있어야 고를 수 있음", "Needs at least two passives", "パッシブが2つ以上必要"),
   altarIgnoreDesc: l("30% 확률로 성좌가 노하여 {a}", "30% chance the constellation takes offense: {a}", "30%の確率で星座が怒り、{a}"),
   altarOrPassives: l("또는 무작위 패시브 둘을 가져감", "or takes 2 random passives", "またはランダムなパッシブ2つを奪う"),

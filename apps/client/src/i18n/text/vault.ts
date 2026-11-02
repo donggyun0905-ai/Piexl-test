@@ -25,6 +25,7 @@ export const VAULT_TEXT = {
   gambleWin: { ko: "당첨! 보상이 쏟아짐", en: "Winner! Rewards pour out", ja: "当たり! 報酬があふれ出る" },
   noticeTrialNo: { ko: "시련을 거절했다 — 비석이 빼앗아 간 것", en: "Trial refused — the monolith took", ja: "試練を拒んだ — 石碑が奪ったもの" },
   noticeChests: { ko: "비석에서 보상 상자가 쏟아졌다", en: "Reward chests spill from the monolith", ja: "石碑から報酬箱があふれ出た" },
+  noticeTrialCap: { ko: "이번 시련 최대 {n}점 (한 판 합계 1000점)", en: "Up to {n} pts this trial (1000 per run)", ja: "今回の試練は最大{n}点（1ランで合計1000点）" },
   noticeGot: { ko: "상자에서 얻음", en: "From the chest", ja: "箱から入手" },
   noticeGambleLose: { ko: "꽝! 깎인 능력치", en: "Miss! Stats lowered", ja: "ハズレ！下がった能力値" },
   gambleLose: { ko: "꽝… 능력치 둘이 깎였음", en: "Miss… two stats dropped", ja: "ハズレ… 能力値が2つ下がった" },

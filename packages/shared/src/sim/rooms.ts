@@ -2,7 +2,7 @@
 import { eliteRoomHp, makeChamps } from "./elite";
 import { PERKS } from "../perks";
 import { COOP_ROOM, ROOM_CX as CX, ROOM_CY as CY, setRoomSize } from "../constants";
-import { bossForFloor, type BossKind } from "../content";
+import { bossForFloor, ENEMIES, type BossKind } from "../content";
 import { createRng, deriveSeed } from "../rng";
 import { FLOOR_COUNT, generateFloor, LANES, LAST_FLOOR, lastFloorMap } from "./floor";
 import { spawnBoss } from "./bosses";
@@ -22,23 +22,11 @@ import { bodyFits, shapeGrid } from "./layout";
 import { eachSeat, partyExtraEnemies, partyHpMul, placeParty } from "./party";
 import { tabooDown, tabooN, tabooSum, tabooUp } from "./taboo";
 import type { EnemyState, RunState, TickInput } from "./types";
-import { ENEMIES } from "../content";
 import { meetPilgrim, pilgrimRoom } from "./pilgrim";
 import { luxRoom } from "./luxFoes";
+import { skipTrials } from "./trialRun";
 import { terraBoss } from "./hiddenDice";
-import {
-  DOOR_HALF,
-  EXIT_X,
-  FLEE_COST,
-  hasPerk,
-  keepInRoom,
-  makeEnemy,
-  PLAYER_RADIUS,
-  ROOM_MAX_X,
-  ROOM_MAX_Y,
-  ROOM_MIN_X,
-  ROOM_MIN_Y,
-} from "./util";
+import { DOOR_HALF, EXIT_X, FLEE_COST, hasPerk, keepInRoom, makeEnemy, PLAYER_RADIUS, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -81,6 +69,7 @@ export function startFloor(s: RunState, floor: number): void {
   s.floor = floor;
   s.map = s.arenaLv ? arenaMap(s) : s.lastBoss && floor === lastFloorOf(s) ? lastFloorMap(devilPact(s)) : generateFloor(s.seed, floor, s.customRooms);
   s.rooms = s.map.rooms.map(() => ({ visited: false, cleared: false, pickups: [], enemies: null }));
+  skipTrials(s);
   s.enemies = [];
   s.projectiles = [];
   s.prompt = { kind: "none" };
@@ -174,7 +163,7 @@ export function spawnEnemies(s: RunState, roomId: number, elite: boolean): Enemy
   const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "enemies"));
   const d = depth(s);
   const base = Math.min(R.MAX_ENEMIES, R.BASE_ENEMIES + Math.floor(d * R.PER_FLOOR) + rng.int(0, 2) + (elite ? 4 : 0));
-  // 협동: 사람이 많으면 일반 적이 조금 더, 체력도 조금 더 · 금기: 무리 지어 (전투방 +1) · 정예 (강한 적 방 +2)
+  // 협동: 사람이 많으면 적·체력 조금 더 · 금기: 무리 지어 (전투방 +1) · 정예 (강한 적 방 +2)
   const count = base + partyExtraEnemies(s, base) + tabooSum(s, "horde") + (elite ? tabooSum(s, "eliteMore") : 0);
   // 층마다 나오는 졸개 (타워 디펜스 적 8종 포함, critters.minionKinds)
   const kinds = [...minionKinds(d), ...stalkerKinds(d)];
@@ -190,7 +179,7 @@ export function spawnEnemies(s: RunState, roomId: number, elite: boolean): Enemy
     const r = ENEMIES[kind].radius;
     let x = 0;
     let y = 0;
-    // 들어온 자리와 너무 가까운 곳, 벽·기둥·구덩이 위에는 나오지 않게 (정해진 횟수만 시도)
+    // 들어온 자리 가까이·벽·기둥·구덩이 위는 피함 (정해진 횟수만 시도)
     for (let tries = 0; tries < 40; tries++) {
       x = rng.int(ROOM_MIN_X + 10, ROOM_MAX_X - 10);
       y = rng.int(ROOM_MIN_Y + 10, ROOM_MAX_Y - 10);
@@ -282,7 +271,7 @@ export function updateRoom(s: RunState, input: TickInput): void {
       if (pushing || p.dashTicks > 0) goThrough(s, lane);
       return;
     }
-    // 잠긴 출구: 지금 체력에서 최대 체력의 20%를 내고 나갈 수 있음 (체력이 모자라면 불가). 서든데스는 불가
+    // 잠긴 출구: 최대 체력의 20%를 내고 나감 (모자라면 불가, 서든데스는 불가)
     if (s.sudden || s.arenaLv || roomLocked(s)) return;
     const cost = Math.ceil(p.stats.maxHp * (FLEE_COST + tabooSum(s, "fleeCost")));
     s.prompt = { kind: "flee", lane, cost };

@@ -1,6 +1,6 @@
 // 제단의 방 (3층부터 층마다 하나, 푸른 바다 같은 방): 성좌 하나(시드)가 방을 감쌀 만큼 크게 떠 있음 · 성좌 앞 F → 긴 카드 셋
 // 카드 1 거래 · 카드 2 패시브 둘을 바치고 남은 패시브 하나에 증강 기술 둘(광야의 새벽 각성 기술, 패시브 둘 이상일 때) · 카드 3 무시(30%로 벌칙)
-// 증강이 새겨진 패시브는 다시 제단에 와도 빼앗기지 않음
+// 증강이 새겨진 패시브는 다시 제단에 와도 빼앗기지 않음 · 카드 2(증강)는 한 판에 한 번만 (1·3은 여러 번)
 // 고르기 전에는 방을 나갈 수 없음 (잠긴 출구도 못 지남). 수치는 altarDefs
 import { ALTAR, ALTAR_IDS, ALTARS, type AltarId, type AltarTrade } from "../altarDefs";
 import type { PassiveId } from "../items";
@@ -50,6 +50,8 @@ function trade(s: RunState, list: readonly AltarTrade[]): void {
 export const augmented = (p: PlayerState, id: PassiveId): boolean => !!p.augments?.some((a) => a.passive === id);
 /** 카드 2(증강)를 고를 수 있는 패시브 수 */
 export const ALTAR_AUG_MIN = 2;
+/** 카드 2(증강)는 한 판에 한 번만 (제단 증강은 기술 둘 · 경매 증강은 하나라 따로 셈) */
+export const altarAugTaken = (p: PlayerState): boolean => !!p.altar?.got?.some((g) => g.card === 1) || !!p.augments?.some((a) => a.skills.length >= 2);
 
 /** 패시브 n개를 빼앗음 (증강이 새겨진 것·keep은 빼고, 빼앗은 것 목록) */
 function takePassives(p: PlayerState, rng: Rng, n: number, keep?: PassiveId): PassiveId[] {
@@ -71,7 +73,7 @@ export function altarMenu(s: RunState, card: number): void {
   const def = ALTARS[id];
   const rng = createRng(deriveSeed(s.seed, "altarPick", s.floor, s.roomId, card, p.characterId));
   // 증강은 패시브가 둘은 있어야 고를 수 있음
-  if (card === 1 && p.passives.length < ALTAR_AUG_MIN) return;
+  if (card === 1 && (p.passives.length < ALTAR_AUG_MIN || altarAugTaken(p))) return;
   const a = (p.altar ??= { rooms: [] });
   a.rooms.push(roomKey(s));
   a.last = { id, card, tick: s.tick };
