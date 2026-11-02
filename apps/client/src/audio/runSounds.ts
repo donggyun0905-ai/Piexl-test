@@ -37,7 +37,8 @@ interface Seen {
   /** 잊혀진 자: 신족 */
   god: boolean;
   /** 잔영: 순간이동 남은 대기 */
-  blinkCd: number;
+  rmDodges: number;
+  rmCuts: number;
   /** 예리함 칼빛 · 천검란 (화면에 있는 효과 수) */
   sharps: number;
   cuts: number;
@@ -94,7 +95,8 @@ function snapshot(s: RunState): Seen {
     ambush: s.player.trAmbush ? (s.player.trShot ?? 0) : 0,
     charging: (s.player.trCharge ?? 0) > 0,
     god: (s.player.fgGod ?? 0) > 0,
-    blinkCd: s.player.rmBlink ?? 0,
+    rmDodges: s.player.rmDodges ?? 0,
+    rmCuts: s.effects.filter((f) => f.kind === "rmFlurry" && f.ticks >= f.maxTicks - 1).length,
     sharps: s.effects.filter((f) => f.kind === "wdSharp").length,
     cuts: s.effects.filter((f) => f.kind === "wdCut" && f.ticks >= f.maxTicks - 1).length,
     storms: s.effects.filter((f) => f.kind === "wdTempest").length,
@@ -210,9 +212,12 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         const i = fx.indexOf("swing");
         if (i >= 0) fx.splice(i, 1);
       } else if (c === "remnant") {
-        // 잔영: 순간이동할 때마다 쉭 빨려 드는 소리, 베기는 짧은 쉭
-        if (now.blinkCd > seen.blinkCd) fx.push("blink");
-        if (now.attacks > seen.attacks && !fx.includes("swing")) fx.push("slice");
+        // 잔영: 회피 성공(슬로우모션)은 쉭 빨려 드는 소리, 연속 베기는 칼 소리 + 흔들림, 내려찍기는 짧은 쉭
+        if (now.rmDodges > seen.rmDodges) fx.push("blink");
+        if (now.rmCuts > 0) {
+          fx.push("katana");
+          onShake(3);
+        } else if (now.attacks > seen.attacks && !fx.includes("swing")) fx.push("slice");
       } else if (c === "fallenKing" || run.player.kingRoom !== undefined) {
         // 왕 대검: 무거운 휘두름 · 내리꽂으면 불길이 솟는 소리 · 영혼이 들어오면 맑은 소리
         if (now.kgSwings > seen.kgSwings) fx.push("kgCleave");

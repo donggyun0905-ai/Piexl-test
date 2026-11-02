@@ -4,7 +4,8 @@ import { createRng } from "@pixel-rogue/shared";
 import { useRef, useState } from "react";
 import { play } from "../../audio/sound";
 import type { TextKey } from "../../i18n";
-import { drawBursts, label, MAX_SCORE, useFrame, useGymKeys, type Burst } from "./gymKit";
+import { drawArm } from "./gymArm";
+import { drawBursts, label, MAX_SCORE, useFrame, useGymBeat, useGymKeys, type Burst } from "./gymKit";
 
 const DIRS = ["up", "down", "left", "right"] as const;
 type Dir = (typeof DIRS)[number];
@@ -58,6 +59,7 @@ export function Sandbag({ onDone, t }: { onDone: (score: number) => void; t: (k:
     }
     next();
   };
+  useGymBeat(() => st.current.over, () => 1.2 / st.current.full);
   useGymKeys((code) => KEYS[code] && press(KEYS[code]));
 
   useFrame((dt) => {
@@ -89,6 +91,9 @@ export function Sandbag({ onDone, t }: { onDone: (score: number) => void; t: (k:
       ctx.stroke();
       label(ctx, ARROW[s.dir], W / 2, H / 2 + 22, 64, "#ffffff");
     }
+    // 양팔 주먹 (맞힌 직후엔 뻗음, 1000점에 가까울수록 굵고 핏줄)
+    const reach = s.shake > 0.05 ? 1 : 0.55;
+    for (const side of [-1, 1]) drawArm(ctx, W / 2 + side * 170, H + 10, W / 2 + side * (56 + 70 * (1 - reach)), H / 2 + 50 - 40 * reach, s.score / MAX_SCORE, true);
     s.bursts = drawBursts(ctx, s.bursts, dt);
     label(ctx, `${s.score}`, 60, 40, 28, "#ffd84a");
     label(ctx, "✕".repeat(s.miss) + "·".repeat(3 - s.miss), W - 60, 40, 24, "#ff7a7a");

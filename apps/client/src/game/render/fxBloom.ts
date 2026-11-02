@@ -37,7 +37,7 @@ const B: Partial<Record<string, Bloom>> = {
   mgSpell: ["#d9a6ff", 1, true], chCollapse: ["#8ad0ff", 1, true],
   trSnipe: ["#ff5a4a", 0.5], trBeam: ["#ff5a4a", 0.5], trSkill: ["#ff5a4a", 0.9],
   fgCross: ["#fff4c0", 0.9], fgFlash: ["#ffffff", 1], fgBeam: ["#fff4c0", 0.5], fgNova: ["#fff4c0", 1, true], fgSlash: ["#fff4c0", 0.7], fgPillar: ["#fff4c0", 0.9], fgAwaken: ["#ffe8a0", 1, true],
-  rmSlash: ["#8a8ac8", 0.7], rmVanish: ["#8a8ac8", 1], rmAppear: ["#a8a8ff", 1, true], rmEcho: ["#8a8ac8", 0.8],
+  rmStab: ["#8a6aff", 0.6], rmDodge: ["#8a6aff", 1], rmFlurry: ["#8a6aff", 0.8], rmEclipse: ["#ffe9a8", 1, true],
   wdSlash: ["#c8e8ff", 0.7], wdIai: ["#e8f4ff", 0.6], wdCut: ["#c8e8ff", 0.7], wdPull: ["#c8e8ff", 0.9], wdTempest: ["#c8e8ff", 1, true], wdSharp: ["#e8f4ff", 0.8],
   skLine: ["#f0f0ff", 0.4], skRend: ["#ff3a4a", 0.9, true], skBleed: ["#ff3a4a", 1, true], skReload: ["#f0f0ff", 1],
   // 이무기 · 악의 사도 · 오리

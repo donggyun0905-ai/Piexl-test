@@ -28,6 +28,9 @@ interface FloatNumber {
   born: number;
   /** 보통 · 치명타 · 상태이상 종류 */
   kind: NumKind;
+  /** 흩뿌려질 자리 (뜰 때 정함, 같은 적 숫자끼리 겹치지 않게 방향·거리를 돌려 가며) */
+  ox: number;
+  oy: number;
 }
 
 export type NumKind = "hit" | "crit" | DotKind;
@@ -51,6 +54,8 @@ export class DamageTracker {
   private dots = new Map<number, number>();
   private where = "";
   private numbers: FloatNumber[] = [];
+  /** 지금까지 띄운 숫자 수 (흩뿌리는 방향을 조금씩 바꿈) */
+  private spawned = 0;
   private dummy = { total: 0, hits: 0, last: 0, first: 0, lastTick: -Infinity };
   /** 한 판 요약: 종류별 준 피해 합 · 가장 센 한 방 (허수아비 제외) */
   readonly dealt: Partial<Record<NumKind, number>> = {};
@@ -110,8 +115,11 @@ export class DamageTracker {
     const recent = this.numbers.find((n) => n.enemyId === id && n.kind === kind && s.tick - n.born < MERGE_TICKS);
     if (recent) recent.amount += amount;
     else {
-      const dx = kind === "hit" || kind === "crit" ? 0 : 6;
-      this.numbers.push({ enemyId: id, x: x + dx, y, amount, born: s.tick, kind });
+      // 이 적에게 아직 떠 있는 숫자 수만큼 황금각으로 돌려 사방으로 흩뿌림 (멀리·높이도 조금씩 다르게)
+      const slot = this.numbers.filter((n) => n.enemyId === id && s.tick - n.born < LIFE).length + (this.spawned++ % 3);
+      const ang = slot * 2.4 + id;
+      const far = 7 + (slot % 3) * 5;
+      this.numbers.push({ enemyId: id, x, y, amount, born: s.tick, kind, ox: Math.cos(ang) * far, oy: -Math.abs(Math.sin(ang)) * far * 0.7 - (slot % 4) * 3 });
       if (this.numbers.length > MAX_NUMBERS) this.numbers.shift();
     }
     if (!isDummy) {
@@ -177,11 +185,10 @@ export class DamageTracker {
     for (const n of this.numbers) {
       const age = (tick - n.born) / LIFE;
       const text = formatDamage(n.amount);
-      // 빨리 솟았다 천천히 멈춤 · 맞을 때마다 좌우로 번갈아 살짝 비껴 남 (겹쳐도 읽히게)
-      const ease = 1 - (1 - Math.min(1, age)) ** 3;
-      const side = (n.enemyId + n.born) % 2 ? 1 : -1;
-      const x = snap(n.x + side * 5 * ease);
-      const y = snap(n.y - 2 - RISE * 1.3 * ease);
+      // 빨리 튀어 나갔다 천천히 멈춤 · 숫자마다 정해 둔 방향으로 흩뿌려지며 위로 솟음 (겹쳐도 읽히게)
+      const ease = 1 - (1 - Math.min(1, age * 1.6)) ** 3;
+      const x = snap(n.x + n.ox * ease);
+      const y = snap(n.y - 2 + n.oy * ease - RISE * age);
       ctx.globalAlpha = Math.min(1, 2 - age * 2);
       if (this.style && (n.kind === "hit" || n.kind === "crit")) {
         if (this.style === "tiger") drawTigerNumber(ctx, text, x, y, tick - n.born, n.kind === "crit");

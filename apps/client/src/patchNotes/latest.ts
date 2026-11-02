@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.343",
+    date: "2026-11-02",
+    items: {
+      ko: [
+        "잔영 리메이크: 기본 공격은 짧은 단검 내려찍기 · 기본 치명타 45% · 순간이동·그림자·분신·뒤치기는 없앰",
+        "잔영: 대시로 적 공격을 피하면(안 피했으면 맞았을 공격) 1.5초 슬로우모션 (적·적 탄만 느려지고 화면이 어두워짐) · 그 안에 직접 클릭(휴대폰은 화면을 새로 터치)하면 확정 치명타 3연속 큰 베기 (여러 적, 마지막은 몸 둘레 모두) → 슬로우모션 끝",
+        "잔영 무기 10·전용 아이템 10을 새 방식에 맞게 다시 만듦 (섬영 2.5초·5연속, 회전 칼날 모두 몸 둘레, 월식 검은 달 터짐 등) · 효과를 새로 그림 (빛나는 초승달 검격·충격파·불똥)",
+        "피해 숫자가 한 자리에 겹치지 않고 사방으로 흩뿌려지며 뜸",
+        "단련의 방: 점수가 1000에 가까울수록 팔이 굵어지고 핏줄이 보임 (샌드백·랫풀다운에도 팔) · 미니게임 시작 호루라기와 운동 박자 소리 (맞힐수록 빨라짐)",
+      ],
+      en: [
+        "Remnant remake: basic attack is now a short dagger stab · base crit 45% · blink, shadow, decoy and backstab removed",
+        "Remnant: dash through an enemy attack that would have hit you for 1.5s of slow motion (only foes and their shots slow down, the screen darkens) · click yourself in it (new tap on phones) for 3 big sure-crit slashes (many foes, the last one all around) → slow motion ends",
+        "Remnant's 10 weapons and 10 items reworked for the new style (Flash Shadow 2.5s and 5 slashes, Spinning Blades all around, Eclipse black-moon burst, etc.) · new effects (glowing crescent slashes, shockwaves, sparks)",
+        "Damage numbers now scatter outward instead of stacking on one spot",
+        "Training room: arms grow thicker with visible veins as your score nears 1000 (arms added to Sandbag and Lat Pulldown too) · minigame start whistle and workout beat (speeds up as you hit)",
+      ],
+      ja: [
+        "残影リメイク: 通常攻撃は短い短剣の突き下ろし · 基本クリティカル45% · 瞬間移動・影・分身・背後斬りはなくした",
+        "残影: 当たるはずの敵の攻撃をダッシュで避けると1.5秒スローモーション（敵と敵の弾だけ遅くなり画面が暗くなる）· その間に自分でクリック（スマホは画面を新しくタッチ）すると確定会心の大きな3連斬り（複数の敵、最後は全周）→ スローモーション終了",
+        "残影の武器10・専用アイテム10を新しい方式に合わせて作り直し（閃影は2.5秒・5連、回転刃はすべて全周、月蝕は黒い月が弾けるなど）· エフェクトを新しく（光る三日月の斬撃・衝撃波・火花）",
+        "ダメージ数字が一か所に重ならず四方に散らばって出る",
+        "鍛錬の部屋: スコアが1000に近づくほど腕が太くなり血管が見える（サンドバッグ・ラットプルダウンにも腕）· ミニゲーム開始のホイッスルとトレーニングのリズム音（当てるほど速くなる）",
+      ],
+    },
+  },
+  {
     version: "0.48.342",
     date: "2026-11-02",
     items: {

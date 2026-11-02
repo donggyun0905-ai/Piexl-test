@@ -4,7 +4,8 @@ import { createRng } from "@pixel-rogue/shared";
 import { useRef, useState } from "react";
 import { play } from "../../audio/sound";
 import type { TextKey } from "../../i18n";
-import { drawBursts, label, MAX_SCORE, useFrame, useGymKeys, type Burst } from "./gymKit";
+import { drawArm } from "./gymArm";
+import { drawBursts, label, MAX_SCORE, useFrame, useGymBeat, useGymKeys, type Burst } from "./gymKit";
 
 const W = 420;
 const H = 220;
@@ -53,6 +54,7 @@ export function LatPull({ onDone, t }: { onDone: (score: number) => void; t: (k:
     s.bursts.push({ x: hit.x, y: GY, age: 0, color: "#5ad8ff" });
     if (s.score >= MAX_SCORE) end();
   };
+  useGymBeat(() => st.current.over, () => 1 + st.current.pops * 0.02);
   useGymKeys((code) => (code === "Space" || code === "KeyF" || code === "Enter") && press());
 
   useFrame((dt) => {
@@ -80,6 +82,8 @@ export function LatPull({ onDone, t }: { onDone: (score: number) => void; t: (k:
     }
     s.flash = Math.max(0, s.flash - dt);
     ctx.clearRect(0, 0, W, H);
+    // 손잡이를 당기는 양팔 (터뜨린 직후 살짝 당김, 1000점에 가까울수록 굵고 핏줄)
+    for (const side of [-1, 1]) drawArm(ctx, W / 2 + side * 110, H + 6, W / 2 + side * 90, GY + 18 + (s.bursts.length ? 8 : 0), s.score / MAX_SCORE, true);
     // 게이지 · 색칠된 칸
     ctx.fillStyle = s.flash ? "#5a1a24" : "#22202e";
     ctx.fillRect(GX0, GY - 14, GX1 - GX0, 28);

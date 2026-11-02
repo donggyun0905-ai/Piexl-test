@@ -1,5 +1,6 @@
-// 단련의 방 미니게임 공용: 매 프레임 돌리기 · 미니게임 중 게임 조작 키 막기(화살표·WASD·Space·F)·게임 시간 멈춤 표시 · 터지는 조각 효과 · 점수 한도
+// 단련의 방 미니게임 공용: 시작 호루라기·운동 박자 · 매 프레임 돌리기 · 미니게임 중 게임 조작 키 막기(화살표·WASD·Space·F)·게임 시간 멈춤 표시 · 터지는 조각 효과 · 점수 한도
 import { useEffect, useLayoutEffect, useRef } from "react";
+import { play } from "../../audio/sound";
 
 /** 점수 한도 (sim/gym: 100점마다 포인트 1, 최대 10) */
 export const MAX_SCORE = 1000;
@@ -23,6 +24,25 @@ export function useFrame(fn: (dt: number, t: number) => void, on = true): void {
     id = requestAnimationFrame(step);
     return () => cancelAnimationFrame(id);
   }, [on]);
+}
+
+/** 시작할 때 호루라기, 끝날 때까지 운동 박자 (speed(): 지금 빠르기 배율, 1이 보통 · 0.5초에 한 번) */
+export function useGymBeat(over: () => boolean, speed: () => number = () => 1): void {
+  const ref = useRef({ over, speed });
+  useLayoutEffect(() => {
+    ref.current = { over, speed };
+  });
+  useEffect(() => {
+    play("gymStart");
+    let id = 0;
+    const beat = () => {
+      if (ref.current.over()) return;
+      play("gymBeat");
+      id = window.setTimeout(beat, 500 / Math.max(0.5, ref.current.speed()));
+    };
+    id = window.setTimeout(beat, 600);
+    return () => clearTimeout(id);
+  }, []);
 }
 
 /** 미니게임 중인지 (혼자 하는 판은 그동안 게임 시간이 멈춤, GameScreen paused) · 끝나 결과를 보내면 바로 풂 (결과 입력이 처리되게) */

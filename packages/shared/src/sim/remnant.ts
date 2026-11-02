@@ -1,17 +1,19 @@
-// 잔영(아스칼론, 시즌 2): 그림자 속 암살자. 아주 빠른 단검 공격 · 모든 상태이상 면역 · 치명타 25%/250%(characters)
-// 노리는 적이 칼끝에서 멀면 그 적 등 뒤 조금 떨어진 곳으로 순간이동해 그림자(투명·몸 부딪힘 피해 없음)가 되고, 떠난 자리에는 분신이 남아 적을 끌어모음(어그로)
-// 그림자에서 다음 공격은 등 뒤로 바짝 붙어 치는 뒤치기 (크게 아프고 반드시 치명타, 그림자가 풀림) · 공격 속도는 무기 그대로 (오르지 않음) · 분신은 1.5초 뒤 그 자리에서 한 번 벰
+// 잔영(아스칼론, 시즌 2): 그림자 속 암살자. 짧은 단검 내려찍기 · 모든 상태이상 면역 · 치명타 45%/250%(characters)
+// 대시(무적) 중에 적 공격이 닿으면(대시가 아니었으면 맞았을 공격) 회피 성공 → 슬로우모션(적·적 탄만 느려짐)
+// 슬로우모션 안에 직접 클릭하면(자동 공격과 따로, 입력 skill) 확정 치명타 연속 베기(큰 검격, 여러 적) → 끝나면 슬로우모션 끝
 // 수치는 weaponsRemnant.REMNANT, 아이템은 itemsRemnant
 import { TICK_RATE } from "../constants";
 import { REMNANT_PERKS as K } from "../itemsRemnant";
 import { REMNANT as R, type PhantomStyle } from "../weaponsRemnant";
 import { nearest } from "./brawlMoves";
+import { healPlayer } from "./combat";
 import { applyBleed, updateBleed } from "./gunExtras";
-import { inCircle, inCone, poison, shoot, strike } from "./s2Kit";
+import { inCircle, inCone, poison, shoot, strike, stun } from "./s2Kit";
+import { restoreShots, slowShots } from "./slowShots";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
 
-const styleOf = (p: PlayerState): PhantomStyle => weaponOf(p).phantom ?? { reach: 26, arc: 0.3, hits: 1, blinkGap: 45, backMul: 1.5 };
+const styleOf = (p: PlayerState): PhantomStyle => weaponOf(p).phantom ?? { reach: 20, arc: 0.4, slow: 90, flurryMul: 1.6, flurryReach: 46 };
 const isRemnant = (p: PlayerState) => p.characterId === "remnant";
 
 /** 상태이상 면역 (앞으로 나올 상태이상도 이것으로 막음) */
@@ -25,137 +27,116 @@ function cleanse(p: PlayerState): void {
   p.blindTicks = 0;
 }
 
-/** 순간이동 대기 */
-const blinkGap = (p: PlayerState) => Math.round(styleOf(p).blinkGap * (hasPerk(p, "rmStep") ? K.rmStep.cd : 1));
+/** 슬로우모션 중: 적이 이번 틱을 쉬는지 (punk.timeSlowed가 같이 봄) */
+export function remnantSlowed(s: RunState, boss: boolean): boolean {
+  if (!isRemnant(s.player) || (s.player.rmSlow ?? 0) <= 0) return false;
+  return s.tick % (boss ? R.bossEvery : R.slowEvery) !== 0;
+}
 
-/** 적 뒤로 순간이동: 떠난 자리에 분신(적이 쫓음), 나는 적 등 뒤 조금 떨어진 곳에서 그림자(투명·몸 부딪힘 피해 없음)가 됨 */
-function blink(s: RunState, e: EnemyState): void {
+/** 대시 중에 적 공격이 닿음 (combat.damagePlayer가 부름, 지형·상태이상 피해는 빼고): 회피 성공 → 슬로우모션 */
+export function remnantDodge(s: RunState): void {
   const p = s.player;
-  const d = normalize(e.x - p.x, e.y - p.y) ?? [p.faceX, p.faceY];
-  leaveEcho(s, p.x, p.y);
-  addEffect(s, { kind: "rmVanish", x: p.x, y: p.y, dirX: d[0], dirY: d[1], size: 8, maxTicks: 14 });
-  moveTo(s, e.x + d[0] * (e.r + p.r + R.blinkBack), e.y + d[1] * (e.r + p.r + R.blinkBack));
-  p.faceX = -d[0];
-  p.faceY = -d[1];
-  p.rmBlink = blinkGap(p);
-  p.rmShade = R.shadeTicks;
+  if (!isRemnant(p) || s.pvp || s.pw || (p.rmSlow ?? 0) > 0 || p.rmFlurry) return;
+  p.rmSlow = styleOf(p).slow + (hasPerk(p, "rmStep") ? K.rmStep.ticks : 0);
+  p.rmDodges = (p.rmDodges ?? 0) + 1;
+  if (hasPerk(p, "rmVanish")) healPlayer(s, K.rmVanish.heal);
+  if (hasPerk(p, "rmShroud")) for (const e of inCircle(s, p.x, p.y, K.rmShroud.reach)) stun(e, K.rmShroud.ticks);
+  addEffect(s, { kind: "rmDodge", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: 30, maxTicks: 24, follow: true });
 }
 
-function moveTo(s: RunState, x: number, y: number): void {
+/** 슬로우모션 끝: 적 탄을 원래 빠르기로 */
+function endSlow(s: RunState): void {
   const p = s.player;
-  p.x = x;
-  p.y = y;
-  keepInRoom(p, roomGrid(s));
-  p.prevX = p.x;
-  p.prevY = p.y;
+  restoreShots(s, p.rmFrozen, R.shotSlow);
+  p.rmSlow = 0;
+  delete p.rmFrozen;
+  delete p.rmFlurry;
 }
 
-/** 그림자에서 나와 뒤치기: 노리는 적 등 뒤로 바짝 붙어 크게 벰 (그림자가 풀림) */
-function ambush(s: RunState, e: EnemyState): void {
-  const p = s.player;
-  const d = normalize(p.x - e.x, p.y - e.y) ?? [-p.faceX, -p.faceY];
-  moveTo(s, e.x + d[0] * (e.r + p.r + 2), e.y + d[1] * (e.r + p.r + 2));
-  p.faceX = -d[0];
-  p.faceY = -d[1];
-  p.rmShade = 0;
-  p.rmBack = R.backWindow;
-  if (hasPerk(p, "rmVanish")) p.invulnTicks = Math.max(p.invulnTicks, K.rmVanish.ticks);
-  addEffect(s, { kind: "rmAppear", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: 10, maxTicks: 14 });
-}
-
-/** 적 움직임을 계산하는 동안 분신 자리를 플레이어 자리로 보여 줌 (분신에게 어그로: 쫓기·공격·기술 모두 분신 쪽). 그동안 받는 피해는 없음 */
-export function withDecoy(s: RunState, fn: () => void): void {
-  const d = remnantDecoy(s);
-  if (!d) return fn();
-  const p = s.player;
-  const keep = { x: p.x, y: p.y, prevX: p.prevX, prevY: p.prevY, invulnTicks: p.invulnTicks };
-  p.x = p.prevX = d.x;
-  p.y = p.prevY = d.y;
-  p.invulnTicks = Math.max(p.invulnTicks, 2);
-  fn();
-  Object.assign(p, keep);
-}
-
-/** 분신: 적이 쫓는 자리 (가장 최근에 남긴 분신, 없으면 없음) */
-export function remnantDecoy(s: RunState): { x: number; y: number } | undefined {
-  const p = s.player;
-  return isRemnant(p) && !s.party ? p.rmEchoes?.[p.rmEchoes.length - 1] : undefined;
-}
-
-function leaveEcho(s: RunState, x: number, y: number): void {
-  const p = s.player;
-  (p.rmEchoes ??= []).push({ x, y, t: R.echoDelay, dmg: p.stats.damage * R.echoMul });
-}
-
-/** 등 뒤에서 쳤는지: 순간이동 바로 뒤이거나, 적이 가는 쪽의 반대편에서 침 */
-function fromBehind(p: PlayerState, e: EnemyState): boolean {
-  if ((p.rmBack ?? 0) > 0) return true;
-  return e.dirX * (p.x - e.x) + e.dirY * (p.y - e.y) < 0;
-}
-
-function cut(s: RunState, e: EnemyState, dmg: number, shade = false): void {
+function cut(s: RunState, e: EnemyState, dmg: number, sure: boolean): void {
   const p = s.player;
   const st = styleOf(p);
   let d = dmg;
-  if (fromBehind(p, e)) d *= st.backMul + (hasPerk(p, "rmBackstab") ? K.rmBackstab.add : 0);
-  if (shade) {
-    d *= R.shadeMul;
-    p.rmSure = true;
-  }
   if (hasPerk(p, "rmExecute") && e.hp <= e.maxHp * K.rmExecute.hp) d *= K.rmExecute.mul;
+  if (sure) p.rmSure = true;
   strike(s, e, d);
   delete p.rmSure;
   if (st.venom) poison(e, dmg * st.venom, R.venomTicks);
   if (hasPerk(p, "rmBlood") && e.hp > 0) applyBleed(e);
 }
 
-/** 한 번 공격: 노리는 적 쪽으로 돌아 베기 (멀면 그 적 뒤로 순간이동) */
-function slash(s: RunState): void {
+/** 노리는 적 쪽으로 돌기 */
+function faceTarget(s: RunState, range: number): EnemyState | null {
   const p = s.player;
-  const st = styleOf(p);
-  const target = nearest(s, p.stats.range);
-  const shade = (p.rmShade ?? 0) > 0 && !!target;
-  if (target && shade) ambush(s, target);
-  else if (target) {
-    const far = Math.hypot(target.x - p.x, target.y - p.y) > st.reach + target.r;
-    // 멀면 순간이동해 그림자가 됨 (이번 공격은 쉬고, 다음 공격이 뒤치기)
-    if (far && (p.rmBlink ?? 0) <= 0) return blink(s, target);
-    const d = normalize(target.x - p.x, target.y - p.y);
-    if (d) [p.faceX, p.faceY] = d;
-  }
-  for (let h = 0; h < st.hits; h++) for (const e of inCone(s, st.reach, st.arc)) cut(s, e, p.stats.damage, shade);
-  addEffect(s, { kind: "rmSlash", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: st.reach, maxTicks: 8, width: st.arc <= -1 ? 0 : st.hits });
-  if (st.throws) for (let i = 0; i < st.throws; i++) shoot(s, (i - (st.throws - 1) / 2) * R.throwSpread, { damage: p.stats.damage * 0.6, spirit: "rmKnife", r: R.throwR, range: p.stats.range });
+  const e = nearest(s, range);
+  const d = e && normalize(e.x - p.x, e.y - p.y);
+  if (d) [p.faceX, p.faceY] = d;
+  return e;
 }
 
-/** 틱마다: 상태이상 걷기 · 대기 · 잔영 · 대시 순간이동 · 연쇄 암살 */
+/** 기본 공격: 단검 내려찍기 (짧음) */
+function stab(s: RunState): void {
+  const p = s.player;
+  const st = styleOf(p);
+  faceTarget(s, p.stats.range);
+  const hits = st.hits ?? 1;
+  for (let h = 0; h < hits; h++) for (const e of inCone(s, st.reach, st.arc)) cut(s, e, p.stats.damage, false);
+  addEffect(s, { kind: "rmStab", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: st.reach, maxTicks: 10, width: hits });
+  if (st.throws) for (let i = 0; i < st.throws; i++) shoot(s, (i - (st.throws - 1) / 2) * R.throwSpread, { damage: p.stats.damage * R.throwMul, spirit: "rmKnife", r: R.throwR, range: p.stats.range });
+}
+
+/** 연속 베기 한 번: 큰 검격 (확정 치명타, 마지막은 몸 둘레 모두) · 베기마다 노리는 적 쪽으로 조금 내디딤 */
+function flurryCut(s: RunState, i: number, n: number): void {
+  const p = s.player;
+  const st = styleOf(p);
+  const e = faceTarget(s, st.flurryReach * 2);
+  if (e && Math.hypot(e.x - p.x, e.y - p.y) > e.r + p.r + R.cutStep) {
+    p.x += p.faceX * R.cutStep;
+    p.y += p.faceY * R.cutStep;
+    keepInRoom(p, roomGrid(s));
+    p.prevX = p.x;
+    p.prevY = p.y;
+  }
+  const last = i === n - 1;
+  const round = st.spin || last;
+  const reach = st.flurryReach * (last ? 1.15 : 1);
+  const mul = st.flurryMul + (hasPerk(p, "rmBackstab") ? K.rmBackstab.add : 0);
+  const kills = s.kills;
+  for (const t of round ? inCircle(s, p.x, p.y, reach) : inCone(s, reach, -0.3)) cut(s, t, p.stats.damage * mul, true);
+  if (hasPerk(p, "rmFrenzy") && s.kills > kills) p.dashCooldown = 0;
+  addEffect(s, { kind: "rmFlurry", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, maxTicks: 14, width: round ? 0 : i % 2 ? -1 : 1 });
+  if (last && st.burst) {
+    const r = st.flurryReach * st.burst;
+    for (const t of inCircle(s, p.x, p.y, r)) cut(s, t, p.stats.damage * st.flurryMul, true);
+    addEffect(s, { kind: "rmEclipse", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, maxTicks: 22 });
+  }
+}
+
+/** 틱마다: 상태이상 걷기 · 슬로우모션(적 탄 느리게, 클릭하면 연속 베기) */
 function update(s: RunState): void {
   const p = s.player;
   cleanse(p);
-  // 그림자: 투명·몸 부딪힘 피해 없음 (원거리 공격은 맞음, 공격하면 풀림)
-  if ((p.rmShade ?? 0) > 0) p.rmShade = (p.rmShade ?? 0) - 1;
   if (hasPerk(p, "rmBlood")) updateBleed(s);
-  if ((p.rmBlink ?? 0) > 0) p.rmBlink = (p.rmBlink ?? 0) - 1;
-  if ((p.rmBack ?? 0) > 0) p.rmBack = (p.rmBack ?? 0) - 1;
-  const fresh = s.kills - (p.rmSeen ?? s.kills);
-  p.rmSeen = s.kills;
-  if (fresh > 0 && hasPerk(p, "rmFrenzy")) p.rmBlink = 0;
-  if (p.dashTicks > 0 && !p.rmDash && hasPerk(p, "rmShroud")) {
-    const e = nearest(s, K.rmShroud.reach);
-    if (e) blink(s, e);
+  const click = (p.trKey ?? 0) > 0 && !s.pvp && !s.pw;
+  if (p.rmFlurry) {
+    p.invulnTicks = Math.max(p.invulnTicks, 2);
+    p.rmFrozen = slowShots(s, p.rmFrozen, R.shotSlow);
+    if (--p.rmFlurry.t > 0) return;
+    flurryCut(s, p.rmFlurry.i, p.rmFlurry.n);
+    p.rmFlurry.i++;
+    p.rmFlurry.t = R.cutGap;
+    if (p.rmFlurry.i >= p.rmFlurry.n) endSlow(s);
+    return;
   }
-  p.rmDash = p.dashTicks > 0;
-  if (p.rmEchoes?.length) {
-    const st = styleOf(p);
-    for (const echo of p.rmEchoes) {
-      if (--echo.t > 0) continue;
-      const r = R.echoR * (st.burst ?? 1);
-      const times = hasPerk(p, "rmEcho") ? K.rmEcho.n : 1;
-      for (let i = 0; i < times; i++) for (const e of inCircle(s, echo.x, echo.y, r)) strike(s, e, echo.dmg * (st.burst ? st.burst * 1.5 : 1));
-      addEffect(s, { kind: "rmEcho", x: echo.x, y: echo.y, dirX: 0, dirY: 0, size: r, maxTicks: 14, width: st.burst ? 1 : 0 });
-    }
-    p.rmEchoes = p.rmEchoes.filter((e) => e.t > 0);
+  if ((p.rmSlow ?? 0) <= 0) return;
+  p.rmFrozen = slowShots(s, p.rmFrozen, R.shotSlow);
+  if (click) {
+    const n = (styleOf(p).cuts ?? 3) + (hasPerk(p, "rmEcho") ? K.rmEcho.n : 0);
+    p.rmFlurry = { i: 0, n, t: 1 };
+    p.invulnTicks = Math.max(p.invulnTicks, n * R.cutGap + R.cutGuard);
+    return;
   }
+  if (--p.rmSlow! <= 0) endSlow(s);
 }
 
 /** 틱마다 (그림자 단검을 들었을 때 player에서) */
@@ -163,14 +144,14 @@ export function remnantTick(s: RunState, want: boolean, _speed: number): void {
   const p = s.player;
   if (!isRemnant(p)) return;
   update(s);
-  if (!want || p.attackCooldown > 0) return;
+  if (!want || p.attackCooldown > 0 || p.rmFlurry) return;
   // 공격 속도는 무기 그대로 (아이템·버프로 오르지 않음)
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / weaponOf(p).attackSpeed));
   p.attackCount++;
-  slash(s);
+  stab(s);
 }
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetRemnant(p: PlayerState): void {
-  for (const k of ["rmBlink", "rmBack", "rmEchoes", "rmDash", "rmSeen", "rmShade"] as const) delete p[k];
+  for (const k of ["rmSlow", "rmFrozen", "rmFlurry", "rmDodges"] as const) delete p[k];
 }

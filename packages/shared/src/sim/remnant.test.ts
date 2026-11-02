@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { CHARACTERS } from "../characters";
 import { WEAPONS, type WeaponId } from "../content";
 import { REMNANT_PERKS as K } from "../itemsRemnant";
-import { REMNANT as R } from "../weaponsRemnant";
+import { REMNANT_WEAPONS } from "../weaponsRemnant";
+import { damagePlayer, envDamage } from "./combat";
 import { createRun, stepSim, type RunState } from "./index";
 import { recalcStats } from "./items";
 import { enemy, FIRE } from "./perkTestUtil";
@@ -14,76 +15,85 @@ function remnant(weapon: WeaponId = "rmDagger", ...perks: string[]): RunState {
   recalcStats(s);
   s.player.x = s.player.prevX = 50;
   s.player.y = s.player.prevY = 72;
-  s.enemies = [{ ...enemy(1, 120, 72, 99999), rootTicks: 99999 }];
+  s.enemies = [{ ...enemy(1, 64, 72, 99999), rootTicks: 99999 }];
   return s;
 }
 const lost = (s: RunState) => s.enemies.reduce((sum, e) => sum + e.maxHp - e.hp, 0);
 const IDLE = { ...FIRE, attack: false };
+const CLICK = { ...IDLE, skill: 1 };
+
+/** 대시 중에 적 공격이 닿음 → 회피 성공 */
+function dodge(s: RunState): void {
+  s.player.dashTicks = 5;
+  damagePlayer(s, 10);
+  s.player.dashTicks = 0;
+}
 
 describe("잔영", () => {
-  it("기본: 치명타 25% · 치명타 피해 250% · 체력 45 고정 (체력 아이템으로 안 늘어남)", () => {
-    expect(CHARACTERS.remnant).toMatchObject({ critChance: 0.25, critDamage: 2.5 });
+  it("기본: 치명타 45% · 치명타 피해 250% · 체력 45 고정 · 짧은 내려찍기", () => {
+    expect(CHARACTERS.remnant).toMatchObject({ critChance: 0.45, critDamage: 2.5 });
     const s = remnant("rmDagger", "sturdyHeart");
     expect(s.player.stats.maxHp).toBe(45);
-  });
-
-  it("그림자: 적 몸에 부딪혀도 피해 없음", () => {
-    const s = remnant();
-    s.player.rmShade = 30;
-    s.enemies[0]!.x = s.player.x;
-    s.enemies[0]!.y = s.player.y;
-    const hp = s.player.hp;
-    stepSim(s, IDLE);
-    expect(s.player.hp).toBe(hp);
-    s.player.rmShade = 0;
-    stepSim(s, IDLE);
-    expect(s.player.hp).toBeLessThan(hp);
-  });
-
-  it("멀리 있는 적 등 뒤 떨어진 곳으로 순간이동해 그림자(몸 부딪힘 무효) · 떠난 자리에 분신 · 다음 공격은 뒤치기로 크게 벰", () => {
-    const s = remnant();
     stepSim(s, FIRE);
-    const e = s.enemies[0]!;
-    expect(s.player.x).toBeGreaterThan(e.x + e.r + R.blinkBack);
-    expect(s.player.rmEchoes?.length).toBe(1);
-    expect(s.player.rmShade).toBeGreaterThan(0);
-    expect(s.player.invulnTicks).toBe(0);
-    expect(s.player.rmBlink).toBeGreaterThan(0);
-    for (let i = 0; i < 30 && (s.player.rmShade ?? 0) > 0; i++) stepSim(s, FIRE);
-    expect(s.player.rmShade).toBe(0);
-    expect(lost(s)).toBeGreaterThan(s.player.stats.damage * R.shadeMul);
+    expect(lost(s)).toBeGreaterThan(0);
+    const far = remnant();
+    far.enemies[0]!.x = 110;
+    for (let i = 0; i < 30; i++) stepSim(far, FIRE);
+    expect(lost(far)).toBe(0);
   });
 
-  it("분신이 있는 동안 적은 분신을 쫓음 (어그로)", () => {
+  it("대시로 적 공격을 피하면 슬로우모션 (지형 피해·대시가 아닐 때는 아님)", () => {
     const s = remnant();
-    const e = s.enemies[0]!;
-    e.rootTicks = 0;
-    stepSim(s, FIRE);
-    const decoy = s.player.rmEchoes![0]!;
-    const d0 = Math.hypot(e.x - decoy.x, e.y - decoy.y);
-    for (let i = 0; i < 20; i++) stepSim(s, IDLE);
-    expect(Math.hypot(e.x - decoy.x, e.y - decoy.y)).toBeLessThan(d0);
+    s.player.dashTicks = 5;
+    envDamage(s, 10);
+    expect(s.player.rmSlow ?? 0).toBe(0);
+    dodge(s);
+    expect(s.player.rmSlow).toBe(REMNANT_WEAPONS.rmDagger.phantom.slow);
+    expect(s.player.hp).toBe(s.player.stats.maxHp);
+    // 클릭하지 않으면 1.5초 뒤 끝남
+    for (let i = 0; i < 95; i++) stepSim(s, IDLE);
+    expect(s.player.rmSlow ?? 0).toBe(0);
   });
 
-  for (const w of ["rmDagger", "rmTwin", "rmClaw", "rmStiletto", "rmKunai", "rmSpin", "rmFlash", "rmReaper", "rmFang", "rmEclipse"] as WeaponId[]) {
-    it(`무기 ${w}: 적에게 피해`, () => {
-      const s = remnant(w);
-      for (let i = 0; i < 60; i++) stepSim(s, FIRE);
-      expect(lost(s)).toBeGreaterThan(0);
-    });
-  }
+  it("슬로우모션 중 적과 적 탄이 느려지고, 끝나면 원래 빠르기로", () => {
+    const s = remnant();
+    s.enemies = [];
+    s.projectiles.push({ id: 99, x: 100, y: 72, vx: -2, vy: 0, r: 2, damage: 1, ticksLeft: 200, fromPlayer: false } as never);
+    dodge(s);
+    stepSim(s, IDLE);
+    expect(Math.abs(s.projectiles[0]!.vx)).toBeLessThan(1);
+    for (let i = 0; i < 95; i++) stepSim(s, IDLE);
+    expect(Math.abs(s.projectiles[0]?.vx ?? -2)).toBeCloseTo(2);
+  });
 
-  it("뒤에서 치면 더 아픔 (순간이동 직후)", () => {
-    const a = remnant("rmStiletto");
-    a.enemies[0]!.x = 70;
-    a.player.rmBack = R.backWindow;
-    a.enemies[0]!.dirX = 1;
-    const b = remnant("rmStiletto");
-    b.enemies[0]!.x = 70;
-    b.enemies[0]!.dirX = -1;
-    stepSim(a, FIRE);
-    stepSim(b, FIRE);
-    expect(lost(a)).toBeGreaterThan(lost(b));
+  it("슬로우모션 중 클릭하면 확정 치명타 3연속 큰 베기 (여러 적) → 슬로우모션 끝", () => {
+    const s = remnant();
+    s.enemies = [enemy(1, 80, 72, 99999), enemy(2, 50, 100, 99999), enemy(3, 30, 60, 99999)].map((e) => ({ ...e, rootTicks: 99999 }));
+    dodge(s);
+    const crits = s.crits ?? 0;
+    stepSim(s, CLICK);
+    for (let i = 0; i < 30; i++) stepSim(s, IDLE);
+    expect(s.enemies.every((e) => e.hp < e.maxHp)).toBe(true);
+    expect((s.crits ?? 0) - crits).toBeGreaterThanOrEqual(3);
+    expect(s.player.rmSlow ?? 0).toBe(0);
+    expect(s.player.rmFlurry).toBeUndefined();
+  });
+
+  it("슬로우모션이 아닐 때 클릭은 아무것도 아님", () => {
+    const s = remnant();
+    s.enemies[0]!.x = 120;
+    for (let i = 0; i < 20; i++) stepSim(s, CLICK);
+    expect(s.player.rmFlurry).toBeUndefined();
+    expect(lost(s)).toBe(0);
+  });
+
+  it("섬영: 다섯 번 베기 · 겹친 칼: 한 번 더 · 사라짐: 회피하면 회복", () => {
+    const s = remnant("rmFlash", "rmEcho", "rmVanish");
+    s.player.hp = 20;
+    dodge(s);
+    expect(s.player.hp).toBe(20 + K.rmVanish.heal);
+    stepSim(s, CLICK);
+    expect(s.player.rmFlurry?.n).toBe(6);
   });
 
   it("상태이상 면역: 어둠·거울·깜깜함이 바로 사라짐", () => {
@@ -97,38 +107,22 @@ describe("잔영", () => {
     expect(s.player.blindTicks).toBe(0);
   });
 
-  it("사라짐: 뒤치기 뒤 무적 · 그림자 숨기: 대시로 순간이동", () => {
-    const s = remnant("rmDagger", "rmVanish", "rmShroud");
-    s.player.dashTicks = 5;
-    stepSim(s, IDLE);
-    expect(s.player.x).toBeGreaterThan(110);
-    for (let i = 0; i < 30 && (s.player.rmShade ?? 0) > 0; i++) stepSim(s, FIRE);
-    expect(s.player.invulnTicks).toBeGreaterThan(K.rmVanish.ticks - 5);
+  it("공격 속도는 무기 그대로 (아이템으로 안 오름)", () => {
+    const a = remnant();
+    a.player.stats.attackSpeed *= 3;
+    stepSim(a, FIRE);
+    expect(a.player.attackCooldown).toBe(Math.round(60 / (WEAPONS.rmDagger as { attackSpeed: number }).attackSpeed));
   });
 
   it("같은 시드면 같은 결과", () => {
     const run = () => {
       const s = remnant("rmEclipse", "rmEcho", "rmBlood");
-      for (let i = 0; i < 200; i++) stepSim(s, FIRE);
+      for (let i = 0; i < 200; i++) {
+        if (i % 50 === 10) dodge(s);
+        stepSim(s, i % 50 === 20 ? { ...FIRE, skill: 1 } : FIRE);
+      }
       return [lost(s), s.player.x];
     };
     expect(run()).toEqual(run());
-  });
-
-  it("공격 속도는 무기 그대로 (아이템으로 안 오름) · 그림자에서 친 뒤치기는 반드시 치명타", () => {
-    const a = remnant();
-    a.enemies[0]!.x = 70;
-    a.player.stats.attackSpeed *= 3;
-    stepSim(a, FIRE);
-    expect(a.player.attackCooldown).toBe(Math.round(60 / (WEAPONS.rmDagger as { attackSpeed: number }).attackSpeed));
-    let crit = 0;
-    for (let k = 0; k < 6; k++) {
-      const s = remnant();
-      stepSim(s, FIRE);
-      const before = s.crits ?? 0;
-      for (let i = 0; i < 30 && (s.player.rmShade ?? 0) > 0; i++) stepSim(s, FIRE);
-      if ((s.crits ?? 0) > before) crit++;
-    }
-    expect(crit).toBe(6);
   });
 });

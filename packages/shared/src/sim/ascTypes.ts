@@ -41,15 +41,12 @@ export interface ForgottenEnemyState {
 }
 
 export interface RemnantPlayerState {
-  /** 잔영: 순간이동 남은 대기 · 뒤에서 친 것으로 세는 남은 틱 · 남긴 잔영(자리·남은 틱·피해) · 지난 틱 대시 · 지난 틱까지 본 처치 수 */
-  rmBlink?: number;
-  rmBack?: number;
-  rmEchoes?: { x: number; y: number; t: number; dmg: number }[];
-  rmDash?: boolean;
-  rmSeen?: number;
-  /** 그림자 상태 남은 틱 (투명·무적, 다음 공격이 뒤치기) */
-  rmShade?: number;
-  /** 그림자에서 친 뒤치기: 이번 피해는 반드시 치명타 (novice.rollCrit) */
+  /** 잔영: 회피 슬로우모션 남은 틱 · 느리게 한 적 탄 번호 · 연속 베기(몇 번째·모두 몇 번·다음 베기까지 틱) · 회피 성공 수 */
+  rmSlow?: number;
+  rmFrozen?: number[];
+  rmFlurry?: { i: number; n: number; t: number };
+  rmDodges?: number;
+  /** 연속 베기: 이번 피해는 반드시 치명타 (novice.rollCrit) */
   rmSure?: boolean;
 }
 

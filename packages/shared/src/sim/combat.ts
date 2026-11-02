@@ -1,4 +1,5 @@
 // 피해 주고받기·처치
+import { remnantDodge } from "./remnant";
 import { killGold } from "./loot";
 import { endlessPow } from "./endless";
 import { inkTaken, scribeKill } from "./scribe";
@@ -101,9 +102,18 @@ export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: numbe
   addEffect(s, { kind: "hit", x: e.x, y: e.y, dirX, dirY, size: roll.crit ? 8 : 4, maxTicks: roll.crit ? 10 : 6 });
 }
 
+let envHit = false;
+/** 지형·상태이상 피해 (잔영 회피로 안 셈) */
+export function envDamage(s: RunState, dmg: number): void {
+  envHit = true;
+  damagePlayer(s, dmg);
+  envHit = false;
+}
+
 export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
   const p = s.player;
-  // 대시 중·맞은 뒤 무적·보호막이면 피해 없음
+  // 대시 중·무적·보호막이면 피해 없음 (잔영: 대시로 피하면 슬로우모션)
+  if (p.dashTicks > 0 && !envHit) remnantDodge(s);
   if (p.dashTicks > 0 || p.invulnTicks > 0 || p.shieldTicks > 0) return;
   // 거인 패링: 피해 없이 그대로 에너지로 · 회피
   if (titanParried(s, dmg) || dodged(s)) return;

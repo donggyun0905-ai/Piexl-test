@@ -1,6 +1,8 @@
 // 펑크(테라코어, 시즌 2): 네온과 크롬으로 몸을 바꾼 여자. 사이버 무기 10 + 몸에 심는 능력(전용 아이템) 10
 // 신경 가속: 맞힐 때마다 게이지가 차고, 가득 차면 다음 대시에 켜짐 → 둘레의 시간이 느려지고(적·적 탄) 내 공격이 빨라지며 잔상이 남음
 // 수치는 weaponsPunk.PUNK, 아이템은 itemsPunk
+import { restoreShots, slowShots } from "./slowShots";
+import { remnantSlowed } from "./remnant";
 import { PW_PASSIVE } from "../paewangPassive";
 import { TICK_RATE } from "../constants";
 import { PUNK_PERKS as K } from "../itemsPunk";
@@ -137,8 +139,9 @@ export function punkMoveMul(p: PlayerState): number {
   return P.baseMove * (punkAccel(p) ? P.accelMove : 1);
 }
 
-/** 신경 가속 중: 적이 이번 틱을 쉬는지 (일반 적은 네 틱 중 세 틱, 보스는 두 틱 중 한 틱 쉼) */
+/** 신경 가속 중(·잔영 회피 슬로우모션 중): 적이 이번 틱을 쉬는지 (일반 적은 네 틱 중 세 틱, 보스는 두 틱 중 한 틱 쉼) */
 export function timeSlowed(s: RunState, boss: boolean): boolean {
+  if (remnantSlowed(s, boss)) return true;
   if (!punkAccel(s.player)) return false;
   return s.tick % (boss ? P.bossEvery : P.slowEvery) !== 0;
 }
@@ -160,24 +163,13 @@ function accel(s: RunState): void {
   p.cyAccel!--;
   // 무적 (패왕전은 무적 대신 둘레 상대가 느려짐, pwPassive)
   if (!s.pvp) p.invulnTicks = Math.max(p.invulnTicks, 2);
-  const frozen = new Set(p.cyFrozen ?? []);
-  for (const pr of s.projectiles) {
-    if (pr.fromPlayer || frozen.has(pr.id)) continue;
-    pr.vx *= P.shotSlow;
-    pr.vy *= P.shotSlow;
-    pr.ticksLeft = Math.ceil(pr.ticksLeft / P.shotSlow);
-    frozen.add(pr.id);
-  }
+  const frozen = slowShots(s, p.cyFrozen, P.shotSlow);
   if (s.tick % 3 === 0) p.cyTrail = [...(p.cyTrail ?? []), { x: p.x, y: p.y }].slice(-6);
   if (p.cyAccel! > 0) {
-    p.cyFrozen = [...frozen];
+    p.cyFrozen = frozen;
     return;
   }
-  for (const pr of s.projectiles) if (frozen.has(pr.id)) {
-    pr.vx /= P.shotSlow;
-    pr.vy /= P.shotSlow;
-    pr.ticksLeft = Math.ceil(pr.ticksLeft * P.shotSlow);
-  }
+  restoreShots(s, frozen, P.shotSlow);
   delete p.cyFrozen;
   delete p.cyTrail;
 }

@@ -19,10 +19,10 @@ export const GUIDE_KO_ASC: Guide = {
     "전용 아이템 10: 잊힌 기억 · 신의 잔향 · 빛기둥 강화 · 늘어나는 기둥 · 신의 가호 · 광휘 · 성흔 · 빛의 박동 · 깨어남 · 잔광",
   ],
   remnant: [
-    "아스칼론 · 잔영 · 그림자 속을 움직이는 남자 암살자 · 체력 90 · 빠름 · 치명타 25% · 치명타 피해 250% · 모든 상태이상 면역",
+    "아스칼론 · 잔영 · 그림자 속을 움직이는 남자 암살자 · 체력 90 · 빠름 · 치명타 45% · 치명타 피해 250% · 모든 상태이상 면역",
     "그림자 단검 10: 잔영 단검 · 쌍단검 · 그림자 발톱 · 스틸레토 · 그림자 투척 · 회전 칼날 · 섬영 · 그림자 낫 · 독니 · 월식",
-    "아주 빠르게 벰. 노리는 적이 칼끝에서 멀면 그 적 뒤로 순간이동해 등 뒤를 벰 (뒤에서 치면 1.5배, 스틸레토는 2.5배). 떠난 자리에는 잔영이 남아 0.3초 뒤 한 번 더 벰",
-    "전용 아이템 10: 그림자 걸음 · 등 뒤의 칼 · 처형 · 겹친 잔영 · 사라짐 · 피의 칼날 · 그림자 손놀림 · 소리 없는 발 · 연쇄 암살 · 그림자 숨기",
+    "짧은 단검 내려찍기. 대시로 적 공격을 피하면(안 피했으면 맞았을 공격) 1.5초 슬로우모션: 적과 적 탄만 느려지고 화면이 어두워짐. 그 안에 직접 클릭(휴대폰은 화면을 새로 터치)하면 확정 치명타 3연속 큰 베기 (여러 적, 마지막은 몸 둘레 모두) → 슬로우모션 끝",
+    "전용 아이템 10: 그림자 걸음 · 등 뒤의 칼 · 처형 · 겹친 칼 · 사라짐 · 피의 칼날 · 그림자 손놀림 · 소리 없는 발 · 연쇄 처형 · 그림자 장막",
   ],
   wanderer: [
     "아스칼론 · 방랑객 · 카타나 한 자루로 떠도는 남자 무사 · 체력 105 · 기본 예리함 25% (맞히면 확률로 방어 -25% + 출혈, 터지면 칼빛과 쇳소리)",
@@ -49,10 +49,10 @@ export const GUIDE_EN_ASC: Guide = {
     "10 exclusive items: Forgotten Memory · Echo of the Gods · Brighter Pillars · More Pillars · Divine Ward · Radiance · Stigma · Pulse of Light · Awakening · Afterglow",
   ],
   remnant: [
-    "Ascalon · Remnant · a male assassin who moves through shadows · HP 90 · fast · 25% crit · 250% crit damage · immune to all status effects",
+    "Ascalon · Remnant · a male assassin who moves through shadows · HP 90 · fast · 45% crit · 250% crit damage · immune to all status effects",
     "10 shadow daggers: Afterimage Dagger · Twin Daggers · Shadow Claws · Stiletto · Shadow Throw · Spinning Blades · Flash Shadow · Shadow Sickle · Venom Fang · Eclipse",
-    "Very fast cuts. If the target is out of reach he blinks behind it and stabs its back (×1.5 from behind, Stiletto ×2.5). An afterimage stays where he left and cuts once more 0.3s later",
-    "10 exclusive items: Shadow Step · Knife in the Back · Execution · Double Afterimage · Vanish · Bloody Edge · Shadow Hands · Silent Feet · Chain Assassination · Shadow Shroud",
+    "Short dagger stab. Dash through an enemy attack that would have hit you for 1.5s of slow motion: only foes and their shots slow down and the screen darkens. Click yourself in that window (new tap on phones) for 3 big sure-crit slashes (many foes, the last one all around) → slow motion ends",
+    "10 exclusive items: Shadow Step · Knife in the Back · Execution · Layered Blades · Vanish · Bloody Edge · Shadow Hands · Silent Feet · Chain Execution · Shadow Veil",
   ],
   wanderer: [
     "Ascalon · Wanderer · a swordsman who roams with a single katana · HP 105 · base Sharpness 25% (hits may cut defense by 25% and cause bleeding, with a flash and a ring of steel)",
@@ -79,10 +79,10 @@ export const GUIDE_JA_ASC: Guide = {
     "専用アイテム10：忘れられた記憶 · 神の残響 · 光柱強化 · 増える光柱 · 神の加護 · 光輝 · 聖痕 · 光の鼓動 · 目覚め · 残光",
   ],
   remnant: [
-    "アスカロン · 残影 · 影の中を動く男の暗殺者 · 体力90 · 速い · クリティカル25% · クリティカルダメージ250% · すべての状態異常に免疫",
+    "アスカロン · 残影 · 影の中を動く男の暗殺者 · 体力90 · 速い · クリティカル45% · クリティカルダメージ250% · すべての状態異常に免疫",
     "影の短剣10：残影の短剣 · 双短剣 · 影の爪 · スティレット · 影の投擲 · 回転刃 · 閃影 · 影の鎌 · 毒牙 · 月蝕",
-    "とても速く斬る。狙う敵が刃先から遠いとその敵の背後へ瞬間移動して背中を斬る（背後から1.5倍、スティレットは2.5倍）。去った場所に残影が残り0.3秒後にもう一度斬る",
-    "専用アイテム10：影歩き · 背中の刃 · 処刑 · 重なる残影 · 消失 · 血の刃 · 影の手さばき · 音なき足 · 連鎖暗殺 · 影隠れ",
+    "短い短剣の突き下ろし。当たるはずの敵の攻撃をダッシュで避けると1.5秒スローモーション：敵と敵の弾だけ遅くなり画面が暗くなる。その間に自分でクリック（スマホは画面を新しくタッチ）すると確定会心の大きな3連斬り（複数の敵、最後は全周）→ スローモーション終了",
+    "専用アイテム10：影歩き · 背中の刃 · 処刑 · 重なる刃 · 消失 · 血の刃 · 影の手さばき · 音なき足 · 連鎖処刑 · 影の帳",
   ],
   wanderer: [
     "アスカロン · 放浪者 · 刀一振りで流れ歩く男の剣士 · 体力105 · 基本の鋭さ25%（当てると確率で防御-25%＋出血、発動すると刃の光と金属音）",

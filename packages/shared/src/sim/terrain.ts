@@ -5,7 +5,7 @@ import { tileRuns } from "../customMaps";
 import { bossForFloor, type BossKind } from "../content";
 import { createRng, deriveSeed } from "../rng";
 import { TERRAIN, TERRAIN_BY_BOSS, type TerrainKind } from "../terrainDefs";
-import { damagePlayer } from "./combat";
+import { envDamage } from "./combat";
 import { depth } from "./hero";
 import { shapeGrid, tileAt, TILE_FLOOR } from "./layout";
 import { eachSeat } from "./party";
@@ -81,11 +81,11 @@ export function updateTerrain(s: RunState): void {
   eachSeat(s, () => {
     const p = s.player;
     const hurt = tickFoeStatus(p, depth(s));
-    if (hurt > 0) damagePlayer(s, hurt);
+    if (hurt > 0) envDamage(s, hurt);
     if ((p.corrode ?? 0) > 0) p.corrode = (p.corrode ?? 0) - 1;
     if ((p.poison ?? 0) > 0) {
       p.poison = (p.poison ?? 0) - 1;
-      if (p.poison % TERRAIN.gasEvery === 0) damagePlayer(s, TERRAIN.gasDamage + Math.floor(depth(s) / 2));
+      if (p.poison % TERRAIN.gasEvery === 0) envDamage(s, TERRAIN.gasDamage + Math.floor(depth(s) / 2));
     }
   }, !!s.party);
   const t = s.terrain;
@@ -110,15 +110,15 @@ export function updateTerrain(s: RunState): void {
           p.y = p.prevY + (p.y - p.prevY) * slow;
         }
       }
-      if (s.tick % TERRAIN.lavaEvery === 0 && at(t.lava)) damagePlayer(s, TERRAIN.lavaDamage + d);
-      if ((t.shock ?? 0) > 0 && s.tick >= (t.shockAt ?? 0) && s.tick % TERRAIN.shockEvery === 0 && at(t.water)) damagePlayer(s, TERRAIN.shockDamage + d);
+      if (s.tick % TERRAIN.lavaEvery === 0 && at(t.lava)) envDamage(s, TERRAIN.lavaDamage + d);
+      if ((t.shock ?? 0) > 0 && s.tick >= (t.shockAt ?? 0) && s.tick % TERRAIN.shockEvery === 0 && at(t.water)) envDamage(s, TERRAIN.shockDamage + d);
       // 독가스를 밟으면: 치유감소 + 독 상태이상 3초 (밟고 있는 동안 계속 새로)
       if (t.gas?.some((g) => (p.x - g.x) ** 2 + (p.y - g.y) ** 2 < g.r * g.r)) {
         p.corrode = TERRAIN.corrodeTicks;
         if (!statusImmune(p)) p.poison = Math.max(p.poison ?? 0, TERRAIN.poisonTicks);
       }
       t.spikes.forEach((r, i) => {
-        if (spikeState(s.tick, i) === 2 && (s.tick + i * 37) % 15 === 0 && inRect(p.x, p.y, r)) damagePlayer(s, TERRAIN.spikeDamage + d);
+        if (spikeState(s.tick, i) === 2 && (s.tick + i * 37) % 15 === 0 && inRect(p.x, p.y, r)) envDamage(s, TERRAIN.spikeDamage + d);
       });
     },
     !!s.party,

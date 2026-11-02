@@ -77,6 +77,7 @@ export function startGameLoop(o: LoopOptions): () => void {
   // 추적자는 숫자 1·2·3이 스킬 (아이템은 Q·E)
   // 패왕전은 숫자 1~4가 스킬 (조준 모드)
   controls.skillKeys = run.player.characterId === "tracker" || !!run.pvp;
+  controls.clickSkill = run.player.characterId === "remnant" && !run.pvp && !run.pw;
   controls.arm.on = !!run.pvp;
   // 패왕전은 자동 공격 없이 직접 조준만
   if (run.pvp) {

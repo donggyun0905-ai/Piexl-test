@@ -55,6 +55,7 @@ export class Controls {
   private sellQueued = 0;
   private menuQueue: number[] = []; // 누른 창 버튼들 (한 틱에 하나씩: 빠르게 여러 번 눌러도 빠지지 않게)
   skillKeys = false; // 숫자 키를 스킬로 씀 (추적자·패왕전)
+  clickSkill = false; // 직접 누름(좌클릭·새 터치)을 스킬 1로도 보냄 (잔영 슬로우모션 연속 베기, 자동 공격과 따로)
   arm = new SkillArm();
   fineAim = false; // 누른 곳까지 거리를 잘게 (추적자 암습 저격: 조준경 가운데에 정확히 대야 맞음)
   /** 클릭·탭으로 고른 층 보상·미니맵 방 */
@@ -159,12 +160,12 @@ export class Controls {
       if (e.button === 0) {
         const c = opt.clickTarget(e.clientX, e.clientY);
         if (c) this.clickQueued = c;
-        else if (!(this.skillQueued = this.arm.fire())) this.mouseAttack = true;
+        else if (!(this.skillQueued = this.arm.fire())) [this.mouseAttack, this.skillQueued] = [true, this.clickSkill ? 1 : 0];
       }
       if (e.button === 2 && !this.arm.cancel()) this.dashQueued = this.dashHeld = true;
       if (e.button === 1) e.preventDefault(); // 휠 버튼 자동 스크롤 막기
     });
-    on(zone, "pointerdown", (e) => this.touch.down(e));
+    on(zone, "pointerdown", (e) => void ((this.skillQueued ||= this.clickSkill && e.pointerType === "touch" ? 1 : 0), this.touch.down(e)));
     on(zone, "pointermove", (e) => this.touch.moveTo(e));
     on(zone, "pointerup", (e) => this.touch.up(e));
     on(zone, "pointercancel", (e) => this.touch.up(e));

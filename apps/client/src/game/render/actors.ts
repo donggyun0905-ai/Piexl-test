@@ -137,8 +137,8 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
   if (s.party && !isAlive(p)) return drawDown(ctx, p, snap);
   const px = lerp(p.prevX, p.x, alpha);
   const py = lerp(p.prevY, p.y, alpha);
-  // 잔영 그림자: 깜빡이지 않고 어두운 반투명 몸
-  const shade = (p.rmShade ?? 0) > 0;
+  // 잔영 연속 베기 중: 무적이지만 깜빡이지 않고 어두운 그림자 몸
+  const shade = !!p.rmFlurry;
   const blink = !shade && !s.pvp && p.invulnTicks > 0 && Math.floor(p.invulnTicks / 3) % 2 === 0;
   const moving = p.x !== p.prevX || p.y !== p.prevY;
   // 기계공학자 레이저는 공격 횟수가 늘지 않음 → 몸에서 나가는 레이저가 있으면 공격 자세
@@ -178,7 +178,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     const body = morphSheet(p) ?? (p.ckHeld === false && !hasV2(sheet) ? `${sheet}_bare` : sheet);
     // 각성한 하늘 짐승이 공중 습격 중이면 몸이 보이지 않음
     if (shade) {
-      ctx.globalAlpha = 0.4;
+      ctx.globalAlpha = 0.75;
       ctx.filter = "brightness(0.15) sepia(1) hue-rotate(220deg) saturate(2)";
     }
     const look = [p.characterId, x, y, p.r, morphPose(p, pose), moving ? Math.floor(s.tick / 8) : 0, body, club] as const;

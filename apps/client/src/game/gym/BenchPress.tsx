@@ -3,7 +3,8 @@
 import { useRef, useState } from "react";
 import { play } from "../../audio/sound";
 import type { TextKey } from "../../i18n";
-import { drawBursts, label, MAX_SCORE, useFrame, useGymKeys, type Burst } from "./gymKit";
+import { drawArm } from "./gymArm";
+import { drawBursts, label, MAX_SCORE, useFrame, useGymBeat, useGymKeys, type Burst } from "./gymKit";
 
 const W = 420;
 const H = 260;
@@ -29,6 +30,7 @@ export function BenchPress({ onDone, t }: { onDone: (score: number) => void; t: 
       play("gymFull");
     }
   };
+  useGymBeat(() => st.current.over);
   useGymKeys((code) => (code === "Space" || code === "KeyF" || code === "Enter") && press());
 
   useFrame((dt) => {
@@ -60,13 +62,8 @@ export function BenchPress({ onDone, t }: { onDone: (score: number) => void; t: 
     // 바벨 높이: 힘이 많을수록 위 · 끝나면 안전바(150)로 내려감
     const up = 60 + (1 - s.force / 100) * 70;
     const by = s.over ? up + (144 - up) * s.drop : up;
-    // 팔 (바벨까지)
-    ctx.fillStyle = "#e8b890";
-    ctx.fillRect(150, by + 6, 16, 200 - by);
-    ctx.fillRect(W - 166, by + 6, 16, 200 - by);
-    ctx.fillStyle = "#c89870";
-    ctx.fillRect(160, by + 6, 6, 200 - by);
-    ctx.fillRect(W - 160, by + 6, 6, 200 - by);
+    // 팔 (바벨까지, 1000점에 가까울수록 굵고 핏줄)
+    for (const x of [158, W - 158]) drawArm(ctx, x, 206, x, by + 6, score() / MAX_SCORE);
     // 바벨 · 원판 (힘이 적으면 흔들림)
     const wob = !s.over && s.force < 30 ? Math.sin(s.time * 40) * 2 : 0;
     ctx.fillStyle = "#d8d8e8";

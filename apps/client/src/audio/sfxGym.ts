@@ -1,7 +1,18 @@
-// 단련의 방 미니게임 효과음 (sound의 효과음 표에 합쳐짐): 샌드백 퍽 · 공 터짐 · 바벨 밀기·내려놓기 · 실수 · 끝 · 강화
+// 단련의 방 미니게임 효과음 (sound의 효과음 표에 합쳐짐): 시작 호루라기 · 운동 박자 · 샌드백 퍽 · 공 터짐 · 바벨 밀기·내려놓기 · 실수 · 끝 · 강화
 import { noise, tone } from "./sound";
 
 export const GYM_SOUNDS = {
+  // 미니게임 시작: 호루라기 "삐익-"
+  gymStart: () => {
+    tone({ type: "square", from: 2100, to: 2300, dur: 0.12, vol: 0.08 });
+    tone({ type: "square", from: 2300, dur: 0.3, vol: 0.09, delay: 0.14 });
+    noise(0.1, 0.05, 7000);
+  },
+  // 운동 박자: 낮은 북 "둥" (gymKit.useGymBeat가 일정하게 침, 맞힐수록 빨라짐)
+  gymBeat: () => {
+    tone({ type: "sine", from: 120, to: 45, dur: 0.14, vol: 0.35 });
+    noise(0.02, 0.06, 4000);
+  },
   // 샌드백 맞힘: 가죽 자루를 치는 묵직한 "퍽" + 쇠사슬 찰랑
   gymPunch: () => {
     noise(0.07, 0.45, 1800);

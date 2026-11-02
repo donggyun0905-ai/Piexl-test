@@ -94,8 +94,8 @@ export const CHARACTERS = {
   tracker: { id: "tracker", maxHp: 90, damage: 13, moveSpeed: 1.3, luck: 0, startWeapon: "trSniper" },
   /** 잊혀진 자 (아스칼론): 옛 신의 후손 반신 · 빛 무기 10 · 처치로 빛의 고리를 채워 신족(공속 2배 + 빛기둥) · 재생력 20 · 빠름 · 회피 20% (sim/forgotten) */
   forgotten: { id: "forgotten", maxHp: 85, damage: 12, moveSpeed: 1.5, luck: 1, startWeapon: "fgGrace", regen: 20, dodge: 0.2 },
-  /** 잔영 (아스칼론): 그림자 속 암살자 · 아주 빠른 단검 · 적 뒤로 순간이동 · 상태이상 면역 · 치명타 25%·치명타 피해 250% (sim/remnant) */
-  remnant: { id: "remnant", maxHp: 45, fixedHp: 45, damage: 9, moveSpeed: 1.45, luck: 1, startWeapon: "rmDagger", critChance: 0.25, critDamage: 2.5 },
+  /** 잔영 (아스칼론): 그림자 속 암살자 · 짧은 단검 내려찍기 · 대시 회피 슬로우모션·클릭 연속 베기 · 상태이상 면역 · 치명타 45%·치명타 피해 250% (sim/remnant) */
+  remnant: { id: "remnant", maxHp: 45, fixedHp: 45, damage: 9, moveSpeed: 1.45, luck: 1, startWeapon: "rmDagger", critChance: 0.45, critDamage: 2.5 },
   /** 방랑객 (아스칼론): 카타나를 든 떠돌이 무사 · 카타나 10 · 기본 예리함 25% (sim/wanderer) */
   wanderer: { id: "wanderer", maxHp: 105, damage: 13, moveSpeed: 1.3, luck: 0, startWeapon: "wdKatana", sharpness: 0.25 },
   /** 영사 (아스칼론): 실을 다루는 여자 · 실 100가닥 장전 · 아주 빠른 실 · 얽힘 5면 찢기 · 30가닥마다 실 연사 (sim/silk) */

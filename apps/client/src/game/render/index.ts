@@ -66,7 +66,7 @@ import { drawSkillAim } from "./pwAim";
 import { themeFor } from "./floorThemes";
 import { drawAmbushOverlay, drawTrackerAura } from "./tracker";
 import { drawForgottenAura, drawForgottenBack } from "./forgotten";
-import { drawRemnantEchoes } from "./remnant";
+import { drawRemnantAura, drawRemnantSlowmo } from "./remnant";
 import { drawWandererAura, drawWandererGround } from "./wanderer";
 import { drawSilkAmmo, drawSilkStacks } from "./silk";
 import { drawSecretAura, drawSecretGround } from "./secret";
@@ -193,7 +193,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
     drawRuneGround(ctx, s, snap);
     drawMorphGround(ctx, s, snap);
     drawForgottenBack(ctx, s, alpha, snap);
-    drawRemnantEchoes(ctx, s, snap);
+    drawRemnantAura(ctx, s, snap);
     drawWandererGround(ctx, s, snap);
     drawSecretGround(ctx, s, alpha, snap);
   });
@@ -269,6 +269,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
   drawSageBanner(ctx, s, opt.pixelScale, opt.sageText);
   drawMorphWake(ctx, s);
   drawZoneEdge(ctx, s);
+  drawRemnantSlowmo(ctx, s, opt.pixelScale);
   if (opt.showReticle && !s.over) drawReticleFor(ctx, s, alpha, snap);
   // 화면에 붙는 글자 (카메라와 상관없이 왼쪽 위)
   drawComboHud(ctx, s, opt.pixelScale);

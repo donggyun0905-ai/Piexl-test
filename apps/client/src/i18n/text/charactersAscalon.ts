@@ -16,10 +16,11 @@ export const CHARACTER_TEXT_ASCALON = {
   light: { ko: "빛", en: "Light", ja: "光" },
   remnant: { ko: "잔영", en: "Remnant", ja: "残影" },
   remnantDesc: {
-    ko: "암살 · 아스칼론. 그림자 속에서 움직이는 남자 암살자. 아주 빠른 단검 공격 · 멀리 있는 적 뒤로 순간이동해 등 뒤를 벰 · 떠난 자리에 잔영이 남아 한 번 더 벰 · 모든 상태이상 면역 · 치명타 25% · 치명타 피해 250% · 체력 45 고정(체력 아이템으로 늘지 않음) · 무기 10 · 전용 아이템 10 · 순간이동하면 떠난 자리의 분신이 적을 끌어모으고, 나는 그림자(몸 부딪힘 피해 없음 · 원거리 공격은 맞음)로 숨었다가 뒤치기로 크게 벰(반드시 치명타) · 공격 속도는 무기 그대로 (오르지 않음)",
-    en: "Assassin · Ascalon. A man who moves through the shadows. Very fast dagger cuts · blinks behind far foes to stab their backs · leaves an afterimage that cuts once more · immune to all status effects · 25% crit · 250% crit damage · HP fixed at 45 (HP items don't raise it) · 10 weapons · 10 own items · when blinking, a decoy left behind draws enemies while you hide as a shadow (no contact damage · ranged attacks still hit) and strike a heavy backstab (always critical) · attack speed stays at the weapon's (can't be raised)",
-    ja: "暗殺 · アスカロン。影の中を動く男の暗殺者。とても速い短剣攻撃 · 遠い敵の背後へ瞬間移動して背中を斬る · 去った場所に残影が残りもう一度斬る · すべての状態異常に免疫 · クリティカル25% · クリティカルダメージ250% · 体力45固定（体力アイテムで増えない）· 武器10 · 専用アイテム10 · 瞬間移動すると残した分身が敵を引きつけ、自分は影（接触ダメージ無効 · 遠距離攻撃は当たる）に潜んで背後から大きく斬る（必ず会心）· 攻撃速度は武器のまま（上がらない）",
+    ko: "암살 · 아스칼론. 그림자 속에서 움직이는 남자 암살자. 짧은 단검 내려찍기 · 치명타 45% · 치명타 피해 250% · 대시로 적 공격을 피하면(안 피했으면 맞았을 공격) 1.5초 슬로우모션(적·적 탄만 느려짐) · 그 안에 직접 클릭하면 확정 치명타 3연속 큰 베기(여러 적) · 모든 상태이상 면역 · 체력 45 고정(체력 아이템으로 늘지 않음) · 무기 10 · 전용 아이템 10 · 공격 속도는 무기 그대로 (오르지 않음)",
+    en: "Assassin · Ascalon. A man who moves through the shadows. Short dagger stab · 45% crit · 250% crit damage · dash through an attack that would have hit you to get 1.5s of slow motion (only foes and their shots slow down) · click yourself during it for 3 big sure-crit slashes that hit many foes · immune to all status effects · HP fixed at 45 (HP items don't raise it) · 10 weapons · 10 own items · attack speed stays at the weapon's (can't be raised)",
+    ja: "暗殺 · アスカロン。影の中を動く男の暗殺者。短い短剣の突き下ろし · クリティカル45% · クリティカルダメージ250% · 当たるはずの攻撃をダッシュで避けると1.5秒スローモーション（敵と敵の弾だけ遅くなる）· その間に自分でクリックすると確定会心の大きな3連斬り（複数の敵）· すべての状態異常に免疫 · 体力45固定（体力アイテムで増えない）· 武器10 · 専用アイテム10 · 攻撃速度は武器のまま（上がらない）",
   },
+
   phantom: { ko: "그림자 단검", en: "Shadow Dagger", ja: "影の短剣" },
   wanderer: { ko: "방랑객", en: "Wanderer", ja: "放浪者" },
   wandererDesc: {
