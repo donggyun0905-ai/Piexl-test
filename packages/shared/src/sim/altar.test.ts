@@ -82,4 +82,20 @@ describe("제단의 방", () => {
     for (let i = 0; i < 400; i++) stepSim(s, EMPTY_INPUT);
     expect(s.enemies[0]!.hp).toBeLessThan(99999);
   });
+
+  it("증강이 새겨진 패시브는 다시 와도 빼앗기지 않음 · 패시브가 둘 미만이면 카드 2를 못 고름", () => {
+    const s = inAltar(7);
+    s.player.augments = [{ passive: "ironSkin", skills: ["nova", "frost"] }];
+    for (let k = 0; k < 3; k++) {
+      // 같은 제단을 다시 쓰게 (방 기록 지움)
+      (s.player.altar ??= { rooms: [] }).rooms = [];
+      s.player.passives.push("whetstone", "lightGloves");
+      menu(s, menuCode(ALTAR_OP, k === 0 ? 1 : 2));
+      expect(s.player.passives).toContain("ironSkin");
+    }
+    const one = inAltar(8);
+    one.player.passives = ["whetstone"];
+    menu(one, menuCode(ALTAR_OP, 1));
+    expect(altarUsed(one)).toBe(false);
+  });
 });

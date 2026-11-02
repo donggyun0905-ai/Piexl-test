@@ -1,5 +1,6 @@
 // 제단의 방 (3층부터 층마다 하나, 푸른 바다 같은 방): 성좌 하나(시드)가 방을 감쌀 만큼 크게 떠 있음 · 성좌 앞 F → 긴 카드 셋
-// 카드 1 거래 · 카드 2 패시브 둘을 바치고 남은 패시브 하나에 증강 기술 둘(광야의 새벽 각성 기술) · 카드 3 무시(30%로 벌칙)
+// 카드 1 거래 · 카드 2 패시브 둘을 바치고 남은 패시브 하나에 증강 기술 둘(광야의 새벽 각성 기술, 패시브 둘 이상일 때) · 카드 3 무시(30%로 벌칙)
+// 증강이 새겨진 패시브는 다시 제단에 와도 빼앗기지 않음
 // 고르기 전에는 방을 나갈 수 없음 (잠긴 출구도 못 지남). 수치는 altarDefs
 import { ALTAR, ALTAR_IDS, ALTARS, type AltarId, type AltarTrade } from "../altarDefs";
 import type { PassiveId } from "../items";
@@ -45,10 +46,20 @@ function trade(s: RunState, list: readonly AltarTrade[]): void {
   recalcStats(s);
 }
 
-/** 패시브 n개를 빼앗음 (빼앗은 것 목록) */
-function takePassives(p: PlayerState, rng: Rng, n: number): PassiveId[] {
+/** 증강 기술이 새겨진 패시브 (제단·경매) — 다시 제단에 와도 빼앗기지 않음 */
+export const augmented = (p: PlayerState, id: PassiveId): boolean => !!p.augments?.some((a) => a.passive === id);
+/** 카드 2(증강)를 고를 수 있는 패시브 수 */
+export const ALTAR_AUG_MIN = 2;
+
+/** 패시브 n개를 빼앗음 (증강이 새겨진 것·keep은 빼고, 빼앗은 것 목록) */
+function takePassives(p: PlayerState, rng: Rng, n: number, keep?: PassiveId): PassiveId[] {
   const out: PassiveId[] = [];
-  for (let i = 0; i < n && p.passives.length > 0; i++) out.push(...p.passives.splice(rng.int(0, p.passives.length - 1), 1));
+  for (let i = 0; i < n; i++) {
+    const can = p.passives.map((id, k) => [id, k] as const).filter(([id]) => id !== keep && !augmented(p, id));
+    if (can.length === 0) break;
+    const [, k] = can[rng.int(0, can.length - 1)]!;
+    out.push(...p.passives.splice(k, 1));
+  }
   return out;
 }
 
@@ -59,8 +70,8 @@ export function altarMenu(s: RunState, card: number): void {
   const id = altarOf(s);
   const def = ALTARS[id];
   const rng = createRng(deriveSeed(s.seed, "altarPick", s.floor, s.roomId, card, p.characterId));
-  // 증강은 패시브가 하나는 있어야 고를 수 있음
-  if (card === 1 && p.passives.length === 0) return;
+  // 증강은 패시브가 둘은 있어야 고를 수 있음
+  if (card === 1 && p.passives.length < ALTAR_AUG_MIN) return;
   const a = (p.altar ??= { rooms: [] });
   a.rooms.push(roomKey(s));
   a.last = { id, card, tick: s.tick };
@@ -72,8 +83,10 @@ export function altarMenu(s: RunState, card: number): void {
     }
     trade(s, [...def.give, ...def.take]);
   } else if (card === 1) {
-    takePassives(p, rng, Math.min(ALTAR.takePassives, p.passives.length - 1));
-    const keep = p.passives[rng.int(0, p.passives.length - 1)]!;
+    // 새길 패시브(아직 증강이 없는 것 먼저)를 정하고, 나머지 중 증강 없는 것을 바침
+    const fresh = p.passives.filter((x) => !augmented(p, x));
+    const keep = (fresh.length > 0 ? fresh : p.passives)[rng.int(0, (fresh.length > 0 ? fresh : p.passives).length - 1)]!;
+    takePassives(p, rng, ALTAR.takePassives, keep);
     (p.augments ??= []).push({ passive: keep, skills: [...def.skills] });
     recalcStats(s);
   } else if (rng.nextFloat() < ALTAR.ignoreChance) {

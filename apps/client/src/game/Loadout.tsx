@@ -20,6 +20,8 @@ export interface LoadoutView {
   weaponId: WeaponId;
   slots: (UseItemId | null)[];
   passives: PassiveId[];
+  /** 증강 기술이 새겨진 패시브 */
+  augs?: { passive: PassiveId; skills: string[] }[];
   /** 풋내기 레벨·경험치·스탯 포인트 */
   novice?: NoviceView;
   /** 스킬이 있는 캐릭터(추적자): 스킬마다 남은 대기 0~1 */
@@ -40,7 +42,7 @@ export interface LoadoutView {
 export function loadoutKey(v: LoadoutView): string {
   const n = v.novice ? `|${v.novice.lv},${v.novice.exp},${v.novice.points}` : "";
   const pw = v.pw ? `|${v.pw.cds.join(",")}|${v.pw.armed}|${v.pw.silenced}` : "";
-  return `${v.weaponId}|${v.slots.join(",")}|${v.passives.join(",")}${n}|${v.skills?.join(",") ?? ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}`;
+  return `${v.weaponId}|${v.slots.join(",")}|${v.passives.join(",")}|${v.augs?.map((a) => a.passive + a.skills.join("+")).join(",") ?? ""}${n}|${v.skills?.join(",") ?? ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}`;
 }
 
 interface Props {
@@ -69,6 +71,8 @@ const BASE: TipItem = { kind: "base", id: "base" };
 export function Loadout({ view, character, lang, t, touchMode, controls }: Props) {
   const counts = new Map<PassiveId, number>();
   for (const id of view.passives) counts.set(id, (counts.get(id) ?? 0) + 1);
+  /** 이 패시브에 새겨진 증강 기술 (제단·경매) */
+  const augOf = (id: PassiveId) => (view.augs ?? []).filter((a) => a.passive === id).flatMap((a) => a.skills);
   const [tip, setTip] = useState<LoadoutTip | null>(null);
   const useKeys = useSettings().useKeys;
 
@@ -135,6 +139,7 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
             >
               <ItemIcon item={{ kind: "passive", id }} size={22} />
               {n > 1 && <b>×{n}</b>}
+              {augOf(id).length > 0 && <i className="loadout-aug">✦</i>}
             </span>
           ))}
         </span>
@@ -146,7 +151,13 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
           icon={shown.kind === "weapon" ? { kind: "weapon", id: shown.id } : shown.kind === "use" ? { kind: "use", id: shown.id } : { kind: "passive", id: shown.id }}
           name={<>{itemName(shown.kind, shown.id, lang)}{shown.kind === "passive" && (counts.get(shown.id) ?? 1) > 1 && ` ×${counts.get(shown.id)}`}</>}
           desc={itemDesc(shown.kind, shown.id, lang, t)}
-        />
+        >
+          {shown.kind === "passive" && augOf(shown.id).length > 0 && (
+            <div className="item-tip-aug">
+              ✦ {t("augEngraved")}: {augOf(shown.id).map((k) => t(`swarmSkill_${k}` as TextKey)).join(" · ")}
+            </div>
+          )}
+        </ItemTip>
       )}
     </div>
   );

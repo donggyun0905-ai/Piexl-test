@@ -108,7 +108,7 @@ export function startGameLoop(o: LoopOptions): () => void {
   const victory = !wornLimited(run.player.characterId) && wornVictory(run.player.characterId);
   const hooks = { powerText: t(victory ? "victoryPower" : summer ? "summerPower" : "tigerPower"), roar: fx.rest ? (summer ? splash : roar) : () => {}, on: fx };
   const tiger = fx.hit || fx.idle || fx.walk ? (summer ? new SummerFx(hooks) : new TigerFx(hooks)) : null;
-  // 이벤트 상점 테마 효과 (칸마다 다른 세트, 범 효과와 같이 씀)
+  // 이벤트 상점 테마 효과 (칸마다 다른 세트)
   const th = fx.themes;
   const theme = th.hit || th.idle || th.walk ? new ThemeFx({ ...hooks, roar: victory ? fanfare : () => {}, on: { hit: !!th.hit, idle: !!th.idle, walk: !!th.walk, rest: false } }, th) : null;
   // 내 자리에서만 (관전으로 다른 사람을 볼 때는 내 스킨 효과를 그리지 않음). 손님은 상태를 처음 받을 때 자리가 정해짐
@@ -250,6 +250,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       umbraLine: (i) => t(UMBRA_LINES[i] ?? "umbraSay0"),
       sageText: t("sageMaxStaff"),
       trialText: (k) => t(k as TextKey),
+      useName: (id) => itemName("use", id as never, lang),
       bossName: (k) => t(k === "dragon" ? "bossDragon" : k === "godeater" ? "bossGodEater" : "bossPrimeval"),
       hidePlayer: tiger ? () => onMe() && resting(tiger) : undefined,
       under: tiger || theme ? (c, snap) => {

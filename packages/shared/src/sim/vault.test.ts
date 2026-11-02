@@ -6,7 +6,9 @@ import { auctionHere } from "./auction";
 import { extraOf } from "./baseStats";
 import { devilPact } from "./devil";
 import { devilMul } from "./devilPerks";
-import { cupState, GAMBLE_OP, gambleDone, gambleNow } from "./gamble";
+import { cupState, cupY, GAMBLE_OP, gambleDone, gambleNow, TABLE as GAMBLE_TABLE } from "./gamble";
+import { CX } from "./loot";
+import { openChest } from "./trialRewards";
 import { enemy } from "./perkTestUtil";
 import { practiceRoom } from "./practiceRoom";
 import { continueToLastFloor, startFloor } from "./rooms";
@@ -138,6 +140,7 @@ describe("도박꾼의 방", () => {
     menu(s, menuCode(GAMBLE_OP, ((slot + 1) % 3) + 1));
     expect(g.win).toBe(false);
     expect(s.player.boons?.mods.filter((m) => m.mul === 1 - GAMBLE.down)).toHaveLength(GAMBLE.lose);
+    expect(s.player.gamble?.lost).toHaveLength(GAMBLE.lose);
   });
 });
 
@@ -189,6 +192,17 @@ describe("경매장 의자", () => {
   });
 });
 
+describe("도박꾼 탁자", () => {
+  it("탁자는 지나갈 수 없음 · 꽝이면 깎인 능력치를 기록", () => {
+    const s = inRoom("gamble");
+    s.player.x = CX;
+    s.player.y = cupY() + 10;
+    step(s);
+    const y = s.player.y;
+    expect(y <= cupY() - GAMBLE_TABLE.up || y >= cupY() + GAMBLE_TABLE.down).toBe(true);
+  });
+});
+
 describe("시련 1000점", () => {
   it("비밀의 방 고르기 상자 (히든 상점 포함)", () => {
     const s = createRun(3, "warden");
@@ -199,5 +213,13 @@ describe("시련 1000점", () => {
     expect(chestOptions("sr")).toEqual(["devil", "gamble", "auction", "hidden"]);
     spillRewards(s, 900);
     expect(s.rooms[s.roomId]!.pickups.filter((p) => p.itemId === "sr")).toHaveLength(1);
+    // 골라 들어간 비밀의 방에서 나오는 문은 이 방으로 돌아옴 (남은 상자를 잃지 않게)
+    const home = s.roomId;
+    const left = s.rooms[home]!.pickups.length;
+    (s.player.trial ??= { rooms: [] }).open = chest!.id;
+    openChest(s, null, false, 0);
+    expect(s.roomId).not.toBe(home);
+    expect(s.map.rooms[s.roomId]!.exits).toEqual([-1, home, -1]);
+    expect(s.rooms[home]!.pickups).toHaveLength(left - 1);
   });
 });

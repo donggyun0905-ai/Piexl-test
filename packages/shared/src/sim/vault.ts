@@ -1,13 +1,13 @@
 // 비밀의 방 (히든 상점이 나오는 판: 혼자 하기·무한·협동): 일반 전투방에 처음 들어갈 때 5%로 옆·아래 벽 어딘가에 금 간 곳
 // 몸이 닿으면 벽이 무너지며(효과·소리) 문이 열리고, 문으로 들어가면 악마의 방·도박꾼의 방·경매장 중 하나 (같은 확률)
 // 비밀의 방은 층 지도 끝에 붙는 옆방 (노선도에는 안 보임) · 출구는 원래 방의 출구와 같음 (출구가 없는 방이면 원래 방으로 돌아가는 문)
-// 시련 1000점 보상 상자로도 골라 들어감 (openVault, 히든 상점 포함)
+// 시련 1000점 보상 상자로도 골라 들어감 (openVault, 히든 상점 포함) · 그때는 나오면 시련의 방으로 돌아옴 (남은 상자를 잃지 않게)
 import { SECRET_KINDS, SECRET_WALL, type SecretPick } from "../secretDefs";
 import { createRng, deriveSeed } from "../rng";
 import { auctionTick, spawnAuction } from "./auction";
 import { devilRoomTick, spawnDevil } from "./devil";
 import { devilTick } from "./devilPerks";
-import { spawnGamble } from "./gamble";
+import { gambleTableBlock, spawnGamble } from "./gamble";
 import { bodyFits, PLAIN_SHAPE, shapeGrid } from "./layout";
 import { meetPilgrim, pilgrimRoom } from "./pilgrim";
 import { warpRoom } from "./rooms";
@@ -52,12 +52,12 @@ export function rollCrack(s: RunState, roomId: number): void {
   }
 }
 
-/** 비밀의 방으로: 지도 끝에 옆방을 붙이고 들어감 (협동은 다 같이) */
-export function openVault(s: RunState, kind: SecretPick): number {
+/** 비밀의 방으로: 지도 끝에 옆방을 붙이고 들어감 (협동은 다 같이) · back: 출구가 원래 방으로 돌아가는 문 하나 (시련 보상 상자로 들어간 경우) */
+export function openVault(s: RunState, kind: SecretPick, back = false): number {
   const from = s.map.rooms[s.roomId]!;
   const id = s.map.rooms.length;
   const type: RoomType = kind;
-  const exits = from.exits.some((x) => x >= 0) ? [...from.exits] : [-1, from.id, -1];
+  const exits = !back && from.exits.some((x) => x >= 0) ? [...from.exits] : [-1, from.id, -1];
   s.map.rooms.push({ id, layer: -1, lane: 1, type, exits, shape: PLAIN_SHAPE });
   s.rooms.push({ visited: false, cleared: false, pickups: [], enemies: null });
   warpRoom(s, id);
@@ -78,6 +78,7 @@ export function vaultTick(s: RunState): void {
   devilTick(s);
   devilRoomTick(s);
   auctionTick(s);
+  gambleTableBlock(s);
   const c = crackHere(s);
   const p = s.player;
   if (!c || p.hp <= 0) return;

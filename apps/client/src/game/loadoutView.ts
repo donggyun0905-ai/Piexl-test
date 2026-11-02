@@ -11,6 +11,8 @@ export function loadoutView(run: RunState, armed: Parameters<typeof pwSkillView>
     weaponId: p.weaponId,
     slots: [...p.useSlots],
     passives: [...p.passives],
+    // 제단·경매로 증강 기술이 새겨진 패시브 (칸에 ✦ · 설명에 기술 이름)
+    ...(p.augments?.length ? { augs: p.augments.map((a) => ({ passive: a.passive, skills: [...a.skills] })) } : {}),
     ...(p.characterId === "novice" && !run.pvp ? { novice: { lv: p.lv ?? 1, exp: p.exp ?? 0, need: expToNext(p.lv ?? 1), points: p.points ?? 0 } } : {}),
     // 추적자 스킬 대기 (5% 단위로만 바뀌게)
     ...(p.characterId === "tracker" ? { skills: trackerSkills(p).map((v) => Math.ceil(v * 20) / 20) } : {}),

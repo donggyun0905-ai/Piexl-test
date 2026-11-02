@@ -3,6 +3,7 @@ import { applyRoom, useSeat, withGymFx, type RunState, type TagSpecialKind } fro
 import { cameraFor } from "../camera";
 import { drawRangeRing } from "../rangeRing";
 import { drawEnemies, drawPlayer } from "./actors";
+import { drawSeatFront } from "./auctionArt";
 import { drawTelegraphs } from "./telegraphs";
 import { drawDevices, drawEngineerGear } from "./beams";
 import { drawOrbitField, drawOrbs } from "./orbs";
@@ -68,6 +69,7 @@ import { drawAmbushOverlay, drawTrackerAura } from "./tracker";
 import { drawForgottenAura, drawForgottenBack } from "./forgotten";
 import { drawRemnantAura, drawRemnantSlowmo } from "./remnant";
 import { drawTrialEdge } from "./trialFx";
+import { drawRoomNotice } from "./roomNotice";
 import { drawAugments } from "./altarDraw";
 import { drawDevilAura, drawVaultOverlay } from "./vaultFx";
 import { drawWandererAura, drawWandererGround } from "./wanderer";
@@ -103,6 +105,8 @@ export interface DrawOptions {
   sageText?: string;
   /** 시련의 방 글자 (키 → 번역) */
   trialText?: (key: string) => string;
+  /** 사용 아이템 이름 (보상 상자 알림) */
+  useName?: (id: string) => string;
   /** 장수 필살기 이름 (generalLegends.LEGENDS 순번) */
   legendName?: (i: number) => string;
   /** 운명의 여행자 운명 이름 (버프 0 · 기술 1 · 능력 2, 칸 번호) */
@@ -217,6 +221,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
     // 새끼 오리는 오리 뒤에 (오리를 가리지 않게)
     drawDucklings(ctx, s, alpha, snap);
     drawPlayer(ctx, s, alpha, snap, me && opt.showHitbox, isTiger(s) || (me && (opt.hidePlayer?.() ?? false)));
+    drawSeatFront(ctx, s);
     drawEngineerGear(ctx, s, alpha, snap);
     drawOrbs(ctx, s, alpha, snap);
     drawBrawl(ctx, s, alpha, snap);
@@ -279,6 +284,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
   drawZoneEdge(ctx, s);
   drawRemnantSlowmo(ctx, s, opt.pixelScale);
   drawTrialEdge(ctx, s, opt.pixelScale, opt.trialText);
+  drawRoomNotice(ctx, s, opt.pixelScale, opt.trialText, (k, id) => (k === "passive" ? opt.passiveName?.(id) : opt.useName?.(id)) ?? id);
   if (opt.showReticle && !s.over) drawReticleFor(ctx, s, alpha, snap);
   // 화면에 붙는 글자 (카메라와 상관없이 왼쪽 위)
   drawComboHud(ctx, s, opt.pixelScale);

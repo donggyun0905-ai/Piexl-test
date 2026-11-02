@@ -88,7 +88,9 @@ export function openChest(s: RunState, pk: Pickup | null, interact: boolean, cho
   const chest = pk ?? room.pickups.find((x) => x.id === t.open && x.kind === "boon");
   if (!chest) return;
   const code = chest.itemId;
-  const done = () => {
+  // got: 받은 것 (화면 알림) — "rs:능력치" · "ps:능력치" · "pp:패시브" · "pu:사용 아이템" · "rv"
+  const done = (got?: string) => {
+    if (got) t.got = { code: got, tick: s.tick };
     room.pickups = room.pickups.filter((x) => x.id !== chest.id);
     t.open = undefined;
     addEffect(s, { kind: "trOpen", x: chest.x, y: chest.y, dirX: 0, dirY: 0, size: 14, maxTicks: 24 });
@@ -98,7 +100,8 @@ export function openChest(s: RunState, pk: Pickup | null, interact: boolean, cho
     if (!opt) return;
     if (code === "sr") {
       done();
-      openVault(s, opt as SecretPick);
+      // 나오면 이 시련의 방으로 돌아옴 (남은 보상 상자를 잃지 않게)
+      openVault(s, opt as SecretPick, true);
       return;
     }
     if (code === "ps") boonStat(s, opt as BoonStat);
@@ -106,14 +109,14 @@ export function openChest(s: RunState, pk: Pickup | null, interact: boolean, cho
       p.passives.push(opt as PassiveId);
       recalcStats(s);
     } else giveUse(s, opt as UseItemId, chest);
-    return done();
+    return done(`${code.slice(0, 2)}:${opt}`);
   }
   if (s.prompt.kind !== "none") return;
   const pick = chestOptions(code).length > 0;
   if (interact && !pick) {
     if (code === "rv") t.revive = (t.revive ?? 0) + 1;
     else boonStat(s, code.slice(3) as BoonStat);
-    return done();
+    return done(code);
   }
   if (interact) t.open = t.open === chest.id ? undefined : chest.id;
   s.prompt = { kind: "station", station: "boon", open: t.open === chest.id };

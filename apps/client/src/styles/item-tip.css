@@ -20,6 +20,10 @@
   font-weight: bold;
   color: var(--accent);
 }
+.item-tip-aug {
+  margin-top: 3px;
+  color: #7adcff;
+}
 .item-tip-hint {
   margin-top: 3px;
   color: var(--muted);

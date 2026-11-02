@@ -1,6 +1,6 @@
 // 제단의 방 창: 성좌 이름 + 세로로 긴 카드 셋 (거래 · 증강 · 무시). 누른 것은 입력 menu → sim/altar
 // 카드 색·무늬는 성좌마다 (ALTAR_LOOK 색 · 모양은 styles/altar.css)
-import { ALTAR_OP, ALTARS, menuCode, type AltarId } from "@pixel-rogue/shared";
+import { ALTAR_AUG_MIN, ALTAR_OP, ALTARS, menuCode, type AltarId } from "@pixel-rogue/shared";
 import type { TextKey } from "../../i18n";
 import { ALTAR_LOOK } from "../render/altarLook";
 
@@ -18,7 +18,7 @@ export function AltarPanel({ altar, t, send }: Props) {
   const hit = id === "unknown" ? t("altarHit_unknown") : `${t(`altarHit_${id}` as TextKey)} ${t("altarOrPassives")}`;
   const cards: { head: TextKey; body: string; off?: boolean }[] = [
     { head: "altarCardTrade", body: t(`altarTrade_${id}` as TextKey) },
-    { head: "altarCardAug", body: altar.passives > 0 ? t("altarAugDesc").replace("{a}", skill(a)).replace("{b}", skill(b)) : t("altarAugNone"), off: altar.passives === 0 },
+    { head: "altarCardAug", body: altar.passives >= ALTAR_AUG_MIN ? t("altarAugDesc").replace("{a}", skill(a)).replace("{b}", skill(b)) : t("altarAugNone"), off: altar.passives < ALTAR_AUG_MIN },
     { head: "altarCardIgnore", body: t("altarIgnoreDesc").replace("{a}", hit) },
   ];
   return (

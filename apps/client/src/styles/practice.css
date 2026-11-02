@@ -238,6 +238,15 @@
   cursor: help;
   outline: 1px solid transparent;
 }
+.loadout-passive .loadout-aug {
+  position: absolute;
+  top: -4px;
+  left: -3px;
+  color: #7adcff;
+  font-style: normal;
+  font-size: 11px;
+  text-shadow: 0 0 3px #000;
+}
 .loadout-weapon-icon:hover,
 .loadout-weapon-icon.on,
 .loadout-passive:hover,

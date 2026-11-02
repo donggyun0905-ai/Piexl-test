@@ -36,7 +36,7 @@ export interface AuctionState {
 export interface VaultPlayerState {
   /** 악마의 방: 거래했는지 (7층에서 여신의 선물·천상의 상점 대신 단순 상점) · 마지막 거래 (화면 안내) */
   devil?: { pact?: boolean; last?: { id: DevilId; ok: boolean; tick: number } };
-  /** 도박꾼의 방: 쓴 방 · 지금 판 (시작 틱 · 당첨 상자 · 섞는 순서 · 고른 자리 · 당첨) */
-  gamble?: { rooms: number[]; room?: number; at?: number; prize?: number; swaps?: number[]; pick?: number; win?: boolean };
+  /** 도박꾼의 방: 쓴 방 · 지금 판 (시작 틱 · 당첨 상자 · 섞는 순서 · 고른 자리 · 당첨 · 꽝이면 깎인 능력치) */
+  gamble?: { rooms: number[]; room?: number; at?: number; prize?: number; swaps?: number[]; pick?: number; win?: boolean; lost?: string[]; pickAt?: number };
   auction?: AuctionState;
 }

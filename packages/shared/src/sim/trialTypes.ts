@@ -12,6 +12,8 @@ export interface TrialPlayerState {
     hp1?: number;
     /** 보상: 체력 가득 되살아남 남은 수 */
     revive?: number;
+    /** 마지막으로 연 보상 상자에서 받은 것 (화면 알림: "rs:능력치" · "ps:능력치" · "pp:패시브" · "pu:사용 아이템" · "rv") */
+    got?: { code: string; tick: number };
     /** 고르는 창을 연 보상 상자 (pickup id) */
     open?: number;
     /** 마지막 결과: 거절 벌칙 번호(1~10) 또는 시련 결과 점수 (화면 안내) */

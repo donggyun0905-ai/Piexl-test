@@ -1,7 +1,7 @@
 // 경매장 사용자 그림 (render/propArt): 금빛 아치 무대 · 상품 받침(빈 · ??? 천 · 증강 보석) · 손님 의자 뒷모습 · 내 왕좌 · 진행자 4자세 · 값 팻말
 // 각 함수는 그림을 그렸으면 true (아직 못 불러왔으면 false → render/auctionDraw의 코드 그림). 빛·글자·번호표 같은 효과는 auctionDraw가 그대로 그림
-import { goingStage, ROOM_MIN_Y, type AuctionState, type RunState } from "@pixel-rogue/shared";
-import { drawProp } from "./propArt";
+import { goingStage, mine, ROOM_MIN_Y, type AuctionState, type RunState } from "@pixel-rogue/shared";
+import { drawProp, propReady } from "./propArt";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -14,8 +14,15 @@ export const lotArt = (ctx: Ctx, x: number, y: number, frame: number, alpha: num
 /** 손님 의자 뒷모습 (그림자 손님 위에 그려 머리만 보임) */
 export const chairArt = (ctx: Ctx, x: number, y: number): boolean => drawProp(ctx, "guestChair", 0, x, y + 9, { h: 18 });
 
-/** 내 왕좌: 빈 의자는 앞모습, 앉으면 등받이 (그 앞에 캐릭터) */
-export const throneArt = (ctx: Ctx, x: number, y: number, sat: boolean): boolean => drawProp(ctx, "throne", sat ? 1 : 0, x, y + 8, { h: 32 });
+/** 내 왕좌: 빈 의자는 앞모습 · 앉으면 캐릭터를 그린 뒤 등받이를 그 위에 (drawSeatFront, 뒤에서 본 모습이라 머리만 보임) */
+export const throneArt = (ctx: Ctx, x: number, y: number, sat: boolean): boolean => (sat ? propReady("throne") : drawProp(ctx, "throne", 0, x, y + 8, { h: 32 }));
+
+/** 앉아 있으면 캐릭터 위에 왕좌 등받이 (render/index가 캐릭터 다음에 부름) */
+export function drawSeatFront(ctx: Ctx, s: RunState): void {
+  if (s.map.rooms[s.roomId]?.type !== "auction") return;
+  const seat = s.rooms[s.roomId]?.pickups.find((pk) => pk.kind === "auction" && pk.itemId === "1" && mine(s, pk));
+  if (seat) drawProp(ctx, "throne", 1, Math.round(seat.x), Math.round(seat.y) + 8, { h: 28 });
+}
 
 /** 진행자: 0 서 있음 · 2 망치를 듦(둘!) · 3 내리침(셋!) · 값 팻말을 옆에 세움 (팻말 판 가운데를 돌려줌 → 값 글자) */
 export function hostArt(ctx: Ctx, s: RunState, a: AuctionState | null, x: number, y: number): { x: number; y: number } | null {

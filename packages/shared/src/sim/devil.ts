@@ -11,7 +11,7 @@ import { addEffect, ROOM_MIN_Y } from "./util";
 
 /** 사탄의 석상 자리 (방 위쪽 가운데) · 거래 물건 줄 */
 export const statueY = () => ROOM_MIN_Y + 46;
-export const offerY = () => statueY() + 62;
+export const offerY = () => statueY() + 68;
 const OFFER_GAP = 46;
 
 /** 거래 조건: 바치는 최대 체력 */

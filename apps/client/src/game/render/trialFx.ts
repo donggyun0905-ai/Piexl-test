@@ -92,17 +92,12 @@ export function drawTrialFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   }
 }
 
-/** 시련 중: 화면 가장자리가 핏빛으로 맥박 (끝없는 시련은 점수가 오를수록 진하게) · 위쪽 가운데 점수판 · 끝난 결과·거절 벌칙 안내 (3초) */
+/** 시련 중: 화면 가장자리가 핏빛으로 맥박 (끝없는 시련은 점수가 오를수록 진하게) · 위쪽 가운데 점수판 (결과·벌칙 알림은 render/roomNotice) */
 export function drawTrialEdge(ctx: Ctx, s: RunState, scale: number, text?: (key: string) => string): void {
   const run = s.trialRun;
-  const last = s.player.trial?.last;
   // 제단의 방: 카드를 고른 결과 (3초)
   const al = s.player.altar?.last;
   if (text && al && s.tick - al.tick < 180) banner(ctx, scale, text(al.hit ? "altarResultHit" : `altarResult_${al.card}`), al.hit ? text(`altarHit_${al.id}`) : "", al.hit ? "#ff8a8a" : "#bfe8ff");
-  if (text && last && !run && s.tick - last.tick < 180) {
-    const line = last.penalty ? text(`trialPen_${last.penalty}`) : last.score !== undefined ? text("trialResult").replace("{n}", String(last.score)) : "";
-    if (line) banner(ctx, scale, line, "", last.penalty ? "#ff8a8a" : GOLD);
-  }
   if (!run || run.room !== s.roomId) return;
   if (text) {
     const sub = run.kind === 4 ? text("trialScore").replace("{n}", String(run.score)) : (run.kind === 3 ? text("trialBoss") : text("trialWave")).replace("{n}", String(run.left + (s.enemies.length > 0 ? 1 : 0)));

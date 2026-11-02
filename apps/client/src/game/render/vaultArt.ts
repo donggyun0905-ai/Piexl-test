@@ -12,13 +12,13 @@ export function crackArt(ctx: Ctx, x: number, y: number, stage: number, t: numbe
   return drawProp(ctx, "crack", stage, x, y, { h: 32, center: true, add: true, alpha: a });
 }
 
-/** 악마의 석상 (받침 밑동 = y + 30) · 붉은 눈과 가슴 보석이 깜빡임 */
+/** 악마의 석상 (받침 밑동 = y + 20, 앞의 거래 물건을 가리지 않게) · 붉은 눈과 가슴 보석이 깜빡임 */
 export function statueArt(ctx: Ctx, cx: number, y: number, t: number): boolean {
-  if (!drawProp(ctx, "devilStatue", 0, cx, y + 32, { h: 80 })) return false;
+  if (!drawProp(ctx, "devilStatue", 0, cx, y + 20, { h: 64 })) return false;
   const blink = Math.sin(t / 40) > -0.9 ? 1 : 0.2;
   additive(ctx, () => {
-    glow(ctx, cx, y - 14, 7, "#ff2030", (0.6 + 0.3 * Math.sin(t / 9)) * blink, 0.5);
-    for (const d of [-1, 1]) glow(ctx, cx + d * 3, y - 31, 3, "#ff3040", 0.8 * blink, 0.4);
+    glow(ctx, cx, y - 12, 6, "#ff2030", (0.6 + 0.3 * Math.sin(t / 9)) * blink, 0.5);
+    for (const d of [-1, 1]) glow(ctx, cx + d * 2.5, y - 26, 2.5, "#ff3040", 0.8 * blink, 0.4);
   });
   return true;
 }
@@ -29,7 +29,7 @@ export function offerArt(ctx: Ctx, x: number, y: number): number | null {
 }
 
 /** 탁자 너비 · 펠트 가운데가 컵 줄에 오도록 */
-const TABLE_W = 104;
+const TABLE_W = 80;
 
 /** 도박꾼(표정: 0 기다림 · 1 섞는 손 · 2 당첨에 놀람 · 3 꽝에 웃음, 탁자 뒤) · 녹색 펠트 탁자 · 컵 셋 */
 export function gambleArt(ctx: Ctx, s: RunState, cx: number): boolean {
@@ -38,8 +38,8 @@ export function gambleArt(ctx: Ctx, s: RunState, cx: number): boolean {
   const g = gambleNow(s);
   const busy = !!g && g.pick === undefined && s.tick < gambleDone(g);
   const face = busy ? 1 : g?.win !== undefined && s.tick - gambleDone(g) < 400 ? (g.win ? 2 : 3) : 0;
-  drawProp(ctx, "gambler", face, cx + (busy ? Math.sin(s.tick / 3) * 1.5 : 0), y - 22, { h: 32 });
-  drawProp(ctx, "gambleTable", 0, cx, y + 62, { w: TABLE_W });
+  drawProp(ctx, "gambler", face, cx + (busy ? Math.sin(s.tick / 3) * 1.5 : 0), y - 14, { h: 28 });
+  drawProp(ctx, "gambleTable", 0, cx, y + 48, { w: TABLE_W });
   const st = g ? cupState(g, s.tick) : { slots: [0, 1, 2], pair: null, f: 0, show: false };
   const picked = g?.pick !== undefined;
   for (let cup = 0; cup < 3; cup++) {
@@ -56,7 +56,7 @@ export function gambleArt(ctx: Ctx, s: RunState, cx: number): boolean {
     // 들림: 처음에 당첨 컵을 보여 줄 때 · 고른 뒤 고른 컵과 당첨 컵
     const lifted = (st.show && prize && s.tick - (g?.at ?? 0) > 8 && s.tick - (g?.at ?? 0) < 46) || (picked && (st.slots[cup] === g!.pick || prize));
     if (lifted && prize) additive(ctx, () => glow(ctx, x, y + 4, 10, "#ffd040", 0.8, 0.5));
-    drawProp(ctx, "cups", lifted ? (prize ? 2 : 1) : 0, x, y + 8 + dy, { h: 26 });
+    drawProp(ctx, "cups", lifted ? (prize ? 2 : 1) : 0, x, y + 6 + dy, { h: 20 });
   }
   return true;
 }
