@@ -6,6 +6,7 @@ import { bossForFloor } from "../enemyDefs";
 import { PLAIN_SHAPE, pickShape, type RoomShape } from "./layout";
 import { BOSS_SHAPE_KINDS } from "./roomShapes";
 import { gymFloor } from "./gym";
+import { setTrial, trialFloor } from "./specialRooms";
 
 export const FLOOR_COUNT = 6;
 /** 6층을 깬 뒤 도전하는 라스트 보스 층 */
@@ -15,8 +16,8 @@ export const LANES = 3;
 /** 한 층의 최대 칸 수 (시작 방·보스방 포함) */
 export const MAX_LAYERS = 12;
 
-/** exit = 보스방 (보스를 잡으면 계단이 열림) · elite = 강한 적 (보상이 많음) · rest = 쉼터 (체력 회복) · golden = 여신의 선물 (라스트 보스 층: 아이템 9개 중 3개 고르기) · gym = 단련의 방 (4층부터, sim/gym) */
-export type RoomType = "start" | "combat" | "elite" | "rest" | "treasure" | "shop" | "exit" | "golden" | "gym";
+/** exit = 보스방 (보스를 잡으면 계단이 열림) · elite = 강한 적 (보상이 많음) · rest = 쉼터 (체력 회복) · golden = 여신의 선물 (라스트 보스 층: 아이템 9개 중 3개 고르기) · gym = 단련의 방 (4층부터, sim/gym) · trial = 시련의 방 (4층부터, sim/trial) */
+export type RoomType = "start" | "combat" | "elite" | "rest" | "treasure" | "shop" | "exit" | "golden" | "gym" | "trial";
 
 export interface RoomInfo {
   id: number;
@@ -86,6 +87,9 @@ export function generateFloor(seed: number, floor: number, custom: readonly (rea
     // 전투방이 하나는 남도록
     if (byLayer[l]!.filter((r) => r.type === "combat").length >= 2 && rng.nextFloat() < 0.5) setType(l, "elite");
   }
+
+  // 시련의 방 (sim/trial): 4층부터 층마다 하나 (지도 모양·다른 방 종류는 그대로, 따로 시드)
+  if (trialFloor(floor)) setTrial(byLayer, createRng(deriveSeed(seed, "floor", floor, "trialRoom")), middle);
 
   // 방 모양: 방마다 따로 시드를 써서 지도 모양·방 종류에는 영향 없음
   for (const r of rooms) {

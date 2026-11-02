@@ -249,6 +249,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       oniUp: (k) => t(k === "hp" ? "oniUpHp" : k === "regen" ? "oniUpRegen" : "oniUpReach"),
       umbraLine: (i) => t(UMBRA_LINES[i] ?? "umbraSay0"),
       sageText: t("sageMaxStaff"),
+      trialText: (k) => t(k as TextKey),
       bossName: (k) => t(k === "dragon" ? "bossDragon" : k === "godeater" ? "bossGodEater" : "bossPrimeval"),
       hidePlayer: tiger ? () => onMe() && resting(tiger) : undefined,
       under: tiger || theme ? (c, snap) => {

@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.344",
+    date: "2026-11-02",
+    items: {
+      ko: [
+        "새 방 '시련의 방' (4층부터 층마다 하나, 새빨간 방): 가운데 거대한 비석에서 F → 시련을 시작하겠습니까? YES/NO",
+        "NO: 비석이 하나를 빼앗음 (최대 체력 20% · 공격력 3 · 공격 속도 10% · 사거리 6 · 무기 · 패시브 1 · 사용 아이템 2 · 이번 층 암흑 · 이번 층 체력 1 · 이동 속도 0.3 중 하나)",
+        "YES: 시련 하나 (암흑 속 무리 10% · 체력 1로 무리 5% · 보스 셋 20% · 끝없는 무리 65%). 앞의 셋은 이기면 1000점, 쓰러지면 끝 · 끝없는 무리는 처치마다 점수, 쓰러져도 죽지 않음 (700점부터 매우 어려워짐)",
+        "점수 100점마다 보상이 커지고, 비석에서 상자가 쏟아짐 (능력치 10% · 고르는 능력치·패시브·사용 아이템 · 무작위 패시브 · 900점부터 체력 가득 되살아남 1회). 상자는 다가가 F",
+        "비석이 깨어나는 웅장한 소리·붉고 검은 효과, 시련 중에는 웅장한 시련 곡 · 연습장 '방' 탭에서 시련의 방을 불러 시험 가능",
+      ],
+      en: [
+        "New room 'Trial Room' (one per floor from floor 4, blood-red): press F at the giant monolith → Will you begin the trial? YES/NO",
+        "NO: the monolith takes one thing (20% max HP · 3 damage · 10% attack speed · 6 range · your weapon · 1 passive · 2 items · darkness for this floor · 1 HP for this floor · 0.3 move speed)",
+        "YES: one trial (horde in darkness 10% · horde at 1 HP 5% · three bosses 20% · endless horde 65%). The first three give 1000 points if you win and end the run if you fall · the endless horde scores per kill and falling won't kill you (very hard past 700)",
+        "Rewards grow every 100 points and pour out of the monolith as chests (stat +10% · stat/passive/item of your choice · random passives · a full-HP revive from 900). Walk up and press F",
+        "Grand sound and red-black effects as the monolith wakes, a grand trial theme during the trial · try it from the practice 'Rooms' tab",
+      ],
+      ja: [
+        "新しい部屋「試練の部屋」（4階から各階に一つ、真っ赤な部屋）：中央の巨大な石碑でF → 試練を始めますか？ YES/NO",
+        "NO：石碑が一つ奪う（最大体力20% · 攻撃力3 · 攻撃速度10% · 射程6 · 武器 · パッシブ1 · 使用アイテム2 · この階は暗黒 · この階は体力1 · 移動速度0.3のどれか）",
+        "YES：試練一つ（暗黒の群れ10% · 体力1の群れ5% · ボス三体20% · 果てなき群れ65%）。前の三つは勝てば1000点、倒れたら終わり · 果てなき群れは倒すごとに点数、倒れても死なない（700点から非常に難しい）",
+        "100点ごとに報酬が大きくなり、石碑から箱があふれ出る（能力値10% · 選べる能力値・パッシブ・使用アイテム · ランダムパッシブ · 900点から体力満タン復活1回）。近づいてF",
+        "石碑が目覚める荘厳な音と赤黒いエフェクト、試練中は荘厳な試練曲 · 練習場「部屋」タブで呼び出して試せる",
+      ],
+    },
+  },
+  {
     version: "0.48.343",
     date: "2026-11-02",
     items: {
@@ -85,60 +112,6 @@ export const NOTES: PatchNote[] = [
         "鍛錬の部屋の効果強化を点検: 333個のパッシブ全部で効果の数値が実際に上がるのを確認 · ×1.4のような倍率は1を超える分だけ伸びる（10段階で×1.4 → ×1.8）· 召喚術師の絆の盾が逆に弱くなっていたのを修正",
         "鍛錬した効果が画面（爆発・範囲の輪など）と能力値画面でも上がった大きさで見える",
       ],
-    },
-  },
-  {
-    version: "0.48.338",
-    date: "2026-11-02",
-    items: {
-      ko: [
-        "단련의 방 효과 패시브: 공격력 대신 그 패시브의 효과 수치가 단계마다 10%씩 좋아짐 — 범위·피해·확률·회복·개수는 커지고, 재사용 대기·간격·지연·비용·받는 피해는 작아짐 (지속 시간·최대치·조건 수치는 그대로)",
-        "단련 창에 효과 수치마다 '원래 → 지금 · 단계당 %'를 보여 줌 · 올릴 효과 수치가 없는 패시브는 단련 목록에 나오지 않음",
-      ],
-      en: [
-        "Training Room effect passives: instead of damage, the passive's own effect numbers improve 10% per level — range, damage, chance, healing and counts go up; cooldown, interval, delay, cost and damage taken go down (durations, caps and conditions stay)",
-        "The training window shows each effect number as 'base → now · per level %' · passives with nothing to improve no longer appear in the list",
-      ],
-      ja: [
-        "鍛錬の部屋の効果パッシブ: 攻撃力の代わりにそのパッシブの効果の数値が1段階ごとに10%良くなる — 範囲・ダメージ・確率・回復・数は大きく、クールタイム・間隔・遅延・コスト・被ダメージは小さく（持続・上限・条件の数値はそのまま）",
-        "鍛錬の画面に効果の数値ごとに「元 → 現在 · 1段階%」を表示 · 上げられる数値がないパッシブは鍛錬リストに出ない",
-      ],
-    },
-  },
-  {
-    version: "0.48.337",
-    date: "2026-11-02",
-    items: {
-      ko: ["맞지 않는 상태의 적(검은 잔영처럼 지켜보기만 하는 보스, 땅속·하늘에 있는 보스 등)을 캐릭터 공격이 노리던 것 고침: 격투가·원소술사 검·야수·악의 사도·기계공학자 연쇄·오니·오리 새끼·거너 드론·유도 탄·동료·고양이 펫 등이 맞을 수 있는 적만 노림"],
-      en: ["Fixed attacks targeting enemies that can't be hit (like the watching Black Remnant, or bosses underground or in the sky): Brawler, Elementalist blades, Beast, Apostle, Engineer chains, Oni, ducklings, Gunner drones, homing shots, allies and cat pets now only aim at hittable enemies"],
-      ja: ["当たらない状態の敵（見ているだけの黒い残影、地中・空中のボスなど）をキャラの攻撃が狙っていたのを修正: 格闘家・元素術師の剣・野獣・悪の使徒・機械工学者の連鎖・鬼・子アヒル・ガンナーのドローン・誘導弾・仲間・猫ペットなどが当たる敵だけを狙う"],
-    },
-  },
-  {
-    version: "0.48.336",
-    date: "2026-11-02",
-    items: {
-      ko: ["멸망의 용 때릴 곳 표시를 더 옅게 (그림을 덜 가림)"],
-      en: ["Dragon of Ruin hit marker made fainter (covers the art less)"],
-      ja: ["滅びの竜の狙う場所の表示をより薄く（絵を隠しにくく）"],
-    },
-  },
-  {
-    version: "0.48.335",
-    date: "2026-11-01",
-    items: {
-      ko: ["멸망의 용: 맞는 범위(몸통)에 은은한 주황 빛 원과 점선 표시 — 날개·꼬리는 맞지 않으니 표시된 곳을 때리면 됨"],
-      en: ["Dragon of Ruin: a soft orange glow and dashed ring now mark its hitbox (torso) — wings and tail can't be hit, so aim inside the ring"],
-      ja: ["滅びの竜: 当たり判定（胴体）にほのかなオレンジの光と点線の輪 — 翼・尾には当たらないので輪の中を狙えばいい"],
-    },
-  },
-  {
-    version: "0.48.334",
-    date: "2026-11-01",
-    items: {
-      ko: ["라스트 보스 멸망의 용 새 그림 (시험): 위에서 본 모습 → 옆모습 · 걷기 2 · 숨 들이켜기 · 불길 · 몸통이 맞는 범위 가운데에"],
-      en: ["New Dragon of Ruin art (trial): top-down → side view · two walk frames · inhaling · fire breath · torso centered on its hitbox"],
-      ja: ["ラストボス滅びの竜の新しい絵（試験）: 上から見た姿 → 横向き · 歩き2 · 息を吸う · 炎 · 胴体が当たり判定の中央に"],
     },
   },
 ];

@@ -36,6 +36,9 @@ import { extraTick } from "./baseStats";
 import { kingFall } from "./kingForm";
 import { allyFeed } from "./allies";
 import { withGymFx } from "./gymPerks";
+import { trialCurseTick } from "./trial";
+import { trialTick } from "./trialRun";
+import { trialRevive } from "./trialRewards";
 
 // ───────── 시작 ─────────
 
@@ -187,6 +190,9 @@ export function stepWorld(s: RunState): void {
   eachSeat(s, () => updateCharms(s));
   updateDelayed(s);
   updateEffects(s);
+  // 시련의 방: 진행 · 거절 벌칙 (쓰러짐 판정 전)
+  eachSeat(s, () => trialCurseTick(s));
+  trialTick(s);
 }
 
 /** 체력이 0 이하면 (되살아나는 아이템이 있으면 버팀) 쓰러짐: true */
@@ -220,6 +226,7 @@ export function checkDeath(s: RunState): boolean {
   // 불사조(로비 펫): 한 판에 한 번
   slayerSave(s);
   if (p.hp <= 0) petRevive(s);
+  trialRevive(s);
   artifacterRevive(s);
   // 관리자 티어 플레잉: 로그(1~6층)에서는 쓰러져도 체력 가득으로 되살아나고 횟수만 셈 (라스트 보스는 쓰러지면 끝)
   if (p.hp <= 0 && s.tierPlay && !s.lastBoss) {

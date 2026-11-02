@@ -37,6 +37,8 @@ const T = (floorA: string, floorB: string, wall: string, wallTop: string, pillar
 
 const BASE: FloorTheme = { ...C, deco: [], density: 0 };
 /** 천상의 방 (여신의 선물·천상의 상점): 하얀 대리석 바닥 · 연보라 벽 · 금빛 별·하얀 깃털 */
+/** 시련의 방: 새빨간 바닥 · 핏빛 벽 · 붉은 금·불씨 */
+const TRIAL = T("#3a0e14", "#320c12", "#5a141c", "#ff3a3a", "#4a1018", "#7a2028", "#140408", "#ff2a3a", [["crack", "#ff2a3a"], ["ember", "#ff7a3a"]], 0.14);
 const HEAVEN = T("#f1eff8", "#e7e3f2", "#b4aed0", "#fff2c8", "#e4e0f0", "#fffaf0", "#c8c2dc", "#f0d890", [["feather", "#ffffff"], ["star", "#e8c25a"]], 0.16);
 
 /** 보스 → 테마 */
@@ -106,6 +108,7 @@ export function themeFor(s: RunState): FloorTheme {
   if (s.tdShared) return BASE;
   const room = s.map?.rooms[s.roomId];
   if (room && (room.heaven || room.type === "golden")) return HEAVEN;
+  if (room?.type === "trial") return TRIAL;
   if (s.swarm) return THEMES[SWARM_THEME[(s.swarm.map ?? "plains") as keyof typeof SWARM_THEME] ?? SWARM_THEME.plains]!;
   const pa = s.pvp?.arena ?? s.pw?.arena;
   if (pa) return THEMES[PW_THEME[pa]]!;

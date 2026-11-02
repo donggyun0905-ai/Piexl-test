@@ -4,7 +4,7 @@ import { customMaps, PRACTICE_ROOMS, type PracticeRoom } from "@pixel-rogue/shar
 import type { TextKey } from "../../i18n";
 import { roomLook } from "../minimap";
 
-const NAME: Record<PracticeRoom, TextKey> = { shop: "sumRoomShop", heaven: "roomHeaven", golden: "sumRoomGolden", treasure: "sumRoomTreasure", gym: "sumRoomGym", rest: "sumRoomRest" };
+const NAME: Record<PracticeRoom, TextKey> = { shop: "sumRoomShop", heaven: "roomHeaven", golden: "sumRoomGolden", treasure: "sumRoomTreasure", gym: "sumRoomGym", trial: "sumRoomTrial", rest: "sumRoomRest" };
 
 interface Props {
   t: (key: TextKey) => string;

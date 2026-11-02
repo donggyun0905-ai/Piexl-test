@@ -16,6 +16,8 @@ export const ROOM_COLORS: Record<RoomType, string> = {
   golden: "#f6f4ff",
   /** 단련의 방 (4층부터) */
   gym: "#c86aff",
+  /** 시련의 방 (4층부터, 새빨간 방) */
+  trial: "#ff2a3a",
 };
 
 /** 방 종류 표시 (5×5 점 그림, # = 칠함) */
@@ -29,6 +31,7 @@ export const ROOM_GLYPHS: Record<RoomType, readonly string[]> = {
   exit: ["#.#.#", "#####", "#####", "#...#", "#####"],
   golden: ["##.##", ".#.#.", "#####", "#.#.#", "#####"],
   gym: ["#...#", "##.##", "#####", "##.##", "#...#"],
+  trial: [".###.", ".#.#.", ".###.", ".#.#.", "#####"],
 };
 
 export function drawGlyph(ctx: CanvasRenderingContext2D, type: RoomType, x: number, y: number, color: string, px = 1): void {

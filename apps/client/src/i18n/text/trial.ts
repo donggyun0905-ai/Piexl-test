@@ -1,0 +1,37 @@
+// 화면 글자: 시련의 방 (비석 창 · 거절 벌칙 · 시련 종류 · 점수판 · 보상 상자 창)
+type L = { ko: string; en: string; ja: string };
+const l = (ko: string, en: string, ja: string): L => ({ ko, en, ja });
+
+export const TRIAL_TEXT = {
+  trialTitle: l("시련의 비석", "Monolith of Trials", "試練の石碑"),
+  trialAsk: l("시련을 시작하겠습니까?", "Will you begin the trial?", "試練を始めますか？"),
+  trialAskHint: l("거절하면 비석이 무언가를 빼앗아 갑니다. 도전하면 무엇이 기다릴지 모릅니다", "Refuse and the monolith takes something from you. Accept and anything may await", "断れば石碑が何かを奪っていきます。挑めば何が待つかわかりません"),
+  trialYes: l("YES", "YES", "YES"),
+  trialNo: l("NO", "NO", "NO"),
+  trialUsed: l("비석이 잠들었습니다", "The monolith sleeps", "石碑は眠りについた"),
+  trialPen_1: l("최대 체력 20%를 빼앗겼다", "Lost 20% max HP", "最大体力20%を奪われた"),
+  trialPen_2: l("공격력 3을 빼앗겼다", "Lost 3 damage", "攻撃力3を奪われた"),
+  trialPen_3: l("공격 속도 10%를 빼앗겼다", "Lost 10% attack speed", "攻撃速度10%を奪われた"),
+  trialPen_4: l("사거리 6을 빼앗겼다", "Lost 6 range", "射程6を奪われた"),
+  trialPen_5: l("무기를 압수당했다", "Your weapon was confiscated", "武器を没収された"),
+  trialPen_6: l("패시브 하나를 압수당했다", "A passive was confiscated", "パッシブを一つ没収された"),
+  trialPen_7: l("사용 아이템 둘을 압수당했다", "Two items were confiscated", "使用アイテムを二つ没収された"),
+  trialPen_8: l("이번 층은 암흑 속에서", "Darkness for the rest of this floor", "この階は暗黒の中で"),
+  trialPen_9: l("이번 층은 체력 1로", "1 HP for the rest of this floor", "この階は体力1で"),
+  trialPen_10: l("이동 속도 0.3을 빼앗겼다", "Lost 0.3 move speed", "移動速度0.3を奪われた"),
+  trialKind_1: l("시련: 암흑 속의 무리", "Trial: Horde in Darkness", "試練：暗黒の群れ"),
+  trialKind_2: l("시련: 체력 1의 무리", "Trial: Horde at 1 HP", "試練：体力1の群れ"),
+  trialKind_3: l("시련: 세 보스", "Trial: Three Bosses", "試練：三体のボス"),
+  trialKind_4: l("시련: 끝없는 무리", "Trial: Endless Horde", "試練：果てなき群れ"),
+  trialKindHint_1: l("다 쓰러뜨리면 1000점 · 쓰러지면 끝", "Defeat them all for 1000 points · falling ends the run", "全滅で1000点 · 倒れたら終わり"),
+  trialKindHint_4: l("쓰러뜨릴수록 점수 · 쓰러져도 죽지 않음", "Score per kill · falling won't kill you", "倒すほど点数 · 倒れても死なない"),
+  trialScore: l("점수 {n}", "Score {n}", "点数 {n}"),
+  trialWave: l("남은 물결 {n}", "Waves left {n}", "残り {n} 波"),
+  trialBoss: l("남은 보스 {n}", "Bosses left {n}", "残りボス {n}"),
+  trialResult: l("시련 끝 · {n}점", "Trial over · {n} points", "試練終了 · {n}点"),
+  trialChestStat: l("원하는 능력치 하나를 10% 올림", "Raise one stat of your choice by 10%", "好きな能力値を一つ10%上げる"),
+  trialChestPassive: l("패시브 하나를 고름", "Pick one passive", "パッシブを一つ選ぶ"),
+  trialChestUse: l("사용 아이템 하나를 고름", "Pick one item", "使用アイテムを一つ選ぶ"),
+  trialChestRevive: l("체력 가득 되살아남 1회", "One full-HP revive", "体力満タン復活1回"),
+  trialChestRandom: l("능력치 10% ({name})", "Stat +10% ({name})", "能力値10%（{name}）"),
+};

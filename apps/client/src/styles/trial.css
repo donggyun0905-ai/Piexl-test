@@ -1,0 +1,90 @@
+/* 시련의 방 창 (game/trial/TrialPanel): 비석 YES/NO는 어둡고 붉게 · 보상 상자 고르기는 금빛 카드 */
+.station-window.trial {
+  width: min(560px, 94vw);
+  border-color: #ff2a3a;
+  background: radial-gradient(circle at 50% 0%, rgba(120, 10, 20, 0.95), rgba(14, 4, 8, 0.97) 70%);
+  box-shadow: 0 0 40px rgba(255, 40, 60, 0.45), inset 0 0 30px rgba(0, 0, 0, 0.8);
+  text-align: center;
+}
+.trial-ask {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+.trial-ask-title {
+  font-size: 1.8rem;
+  letter-spacing: 0.08em;
+  color: #ffd0d0;
+  text-shadow: 0 0 12px #ff2a3a, 0 0 2px #000;
+  animation: trial-breathe 2.4s ease-in-out infinite;
+}
+.trial-ask p {
+  margin: 0;
+  color: #e8b8b8;
+}
+.trial-ask-buttons {
+  display: flex;
+  gap: 24px;
+}
+.trial-ask-buttons button {
+  min-width: 130px;
+  padding: 12px 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  border-radius: 6px;
+}
+.trial-yes {
+  color: #fff;
+  background: linear-gradient(#c8102a, #6a0614);
+  border: 2px solid #ff6a6a;
+  box-shadow: 0 0 16px rgba(255, 40, 60, 0.6);
+}
+.trial-no {
+  color: #c8b8c0;
+  background: #1a1018;
+  border: 2px solid #5a3a48;
+}
+.trial-ask small {
+  opacity: 0.7;
+}
+@keyframes trial-breathe {
+  50% {
+    text-shadow: 0 0 24px #ff2a3a, 0 0 2px #000;
+  }
+}
+.station-window.trial-chest {
+  width: min(720px, 96vw);
+  border-color: #ffcc3a;
+  background: rgba(30, 20, 8, 0.96);
+  box-shadow: 0 0 30px rgba(255, 204, 58, 0.35);
+}
+.trial-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+}
+.trial-option {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  text-align: left;
+  border: 2px solid #8a6a2a;
+  background: linear-gradient(#3a2a10, #22180a);
+  border-radius: 6px;
+}
+.trial-option:hover {
+  border-color: #ffcc3a;
+  box-shadow: 0 0 12px rgba(255, 204, 58, 0.5);
+}
+.trial-option span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.trial-option small {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}

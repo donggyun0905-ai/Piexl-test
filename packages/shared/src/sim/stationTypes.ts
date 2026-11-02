@@ -1,7 +1,7 @@
-// 상점 대신 나오는 작업대 상태 (sim/station): 아티팩터 제작대 · 추적자 튜닝소 · 단련의 방 기구 (sim/gym)
+// 상점 대신 나오는 작업대 상태 (sim/station): 아티팩터 제작대 · 추적자 튜닝소 · 단련의 방 기구 (sim/gym) · 시련의 방 비석·보상 상자 (sim/trial)
 
 /** 작업대 종류 (바닥에 놓이는 물건 이름) */
-export type StationKind = "bench" | "tune" | "gym";
+export type StationKind = "bench" | "tune" | "gym" | "trial" | "boon";
 
 /** 작업대 앞에서 F: 창 열기·닫기 */
 export type StationPrompt = { kind: "station"; station: StationKind; open: boolean; device?: number };

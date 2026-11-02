@@ -8,7 +8,8 @@ import { FLOOR_COUNT, generateFloor, LANES, LAST_FLOOR, lastFloorMap } from "./f
 import { spawnBoss } from "./bosses";
 import { makeTerrain } from "./terrain";
 import { healPlayer } from "./combat";
-import { onRoomCleared, spawnBlessing, spawnGolden, spawnGym, spawnTreasure } from "./loot";
+import { onRoomCleared, spawnBlessing, spawnGolden, spawnTreasure } from "./loot";
+import { spawnSpecialRoom, trialBusy } from "./specialRooms";
 import { makeArena } from "./bossPrimeval";
 import { arenaBig, arenaEnemies, arenaMap, arenaNext, arenaPrimeval } from "./arena";
 import { spawnShop } from "./shop";
@@ -51,7 +52,6 @@ const R = {
   BASE_ENEMIES: 5, PER_FLOOR: 1, MAX_ENEMIES: 18, HP_PER_FLOOR: 0.2,
 };
 export { R as ROOMS_RULES };
-
 /** 보스 시작 자리 (방 위쪽 가운데) */
 const BOSS_START_Y = ROOM_MIN_Y + 20;
 /** 쉼터에 처음 들어가면 회복하는 체력 (최대 체력 비율) */
@@ -133,10 +133,10 @@ function enterRoom(s: RunState, roomId: number): void {
               ? heroPair(heroBosses(s).map((b) => spawnBoss(s, b)))
               : (endlessBosses(s) ?? [spawnBoss(s, s.lastBoss ?? terraBoss(s) ?? bossForFloor(s.floor, s.seed))])
           : [];
-    // 협동: 보물·상점·여신의 선물·쉼터 회복·단련 기구는 사람마다
+    // 협동: 방 물건·쉼터 회복은 사람마다
     eachSeat(s, () => {
       if (info.type === "treasure") spawnTreasure(s, roomId);
-      else if (info.type === "gym") spawnGym(s, roomId);
+      else spawnSpecialRoom(s, info.type, roomId);
       if (info.type === "shop") spawnShop(s, roomId);
       if (info.type === "golden") spawnGolden(s, roomId);
       if (info.type === "start" && s.lastBoss && s.floor === lastFloorOf(s)) spawnBlessing(s, roomId);
@@ -155,7 +155,7 @@ function enterRoom(s: RunState, roomId: number): void {
   if ((info.type === "exit" || (s.arenaLv && info.type === "elite")) && !st.cleared) placeBossFight(s);
 }
 
-/** 보스방 입장: 어느 출구로 들어와도 플레이어는 아래쪽 가운데, 보스는 위쪽 가운데 같은 자리에서 시작 (들어오자마자 맞지 않게) */
+/** 보스방 입장: 플레이어는 아래쪽 가운데, 보스는 위쪽 가운데에서 시작 (들어오자마자 맞지 않게) */
 function placeBossFight(s: RunState): void {
   placeParty(s, ROOM_MAX_Y - PLAYER_RADIUS - 16);
   // 다시 들어온 경우: 불러낸 졸개는 치우고 보스는 처음 자리·걷기 상태로
@@ -241,7 +241,7 @@ export function warpRoom(s: RunState, roomId: number): void {
 /** 적을 다 잡았으면 방 정리 (보상은 사람마다) */
 export function checkCleared(s: RunState): void {
   const st = s.rooms[s.roomId]!;
-  if (!st.cleared && s.enemies.length === 0) {
+  if (!st.cleared && s.enemies.length === 0 && !trialBusy(s)) {
     st.cleared = true;
     eachSeat(s, () => onRoomCleared(s, s.roomId));
     if (s.lastBoss && s.raidStart !== undefined && s.map.rooms[s.roomId]!.type === "exit") s.raidTicks = s.tick - s.raidStart;

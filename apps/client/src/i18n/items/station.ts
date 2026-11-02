@@ -3,7 +3,9 @@ import type { TunePartFx } from "@pixel-rogue/shared";
 import type { Lang } from "../index";
 import type { Names } from "./names";
 
-export const STATION_NAME: Record<"bench" | "tune" | "gym", Names> = {
+export const STATION_NAME: Record<"bench" | "tune" | "gym" | "trial" | "boon", Names> = {
+  trial: { ko: "시련의 비석", en: "Monolith of Trials", ja: "試練の石碑" },
+  boon: { ko: "시련의 보상 상자", en: "Trial Reward Chest", ja: "試練の報酬箱" },
   bench: { ko: "거대한 제작대", en: "Grand Workbench", ja: "巨大な作業台" },
   gym: { ko: "단련 기구", en: "Training Equipment", ja: "鍛錬器具" },
   tune: { ko: "튜닝소", en: "Tuning Bay", ja: "チューニング工房" },
@@ -16,7 +18,17 @@ export const GYM_DEVICE: Names[] = [
   { ko: "벤치 프레스", en: "Bench Press", ja: "ベンチプレス" },
 ];
 
-export const STATION_DESC: Record<"bench" | "tune" | "gym", Names> = {
+export const STATION_DESC: Record<"bench" | "tune" | "gym" | "trial" | "boon", Names> = {
+  trial: {
+    ko: "F를 눌러 시련에 도전할지 고름 · 거절하면 무언가를 빼앗김 · 도전하면 시련을 이겨 낸 만큼 보상이 쏟아짐",
+    en: "Press F to choose whether to face the trial · refusing costs you something · the better you do, the more rewards pour out",
+    ja: "Fで試練に挑むか選ぶ · 断ると何かを奪われる · 挑めば乗り越えた分だけ報酬があふれ出る",
+  },
+  boon: {
+    ko: "F를 눌러 열기 · 바로 받거나 창에서 하나를 고름",
+    en: "Press F to open · take it at once or pick one in the window",
+    ja: "Fで開ける · すぐ受け取るか窓で一つ選ぶ",
+  },
   gym: {
     ko: "F를 눌러 운동(미니게임) · 셋 중 하나만 · 점수만큼 강화 포인트를 얻어 능력치·무기·패시브 강화",
     en: "Press F to train (minigame) · only one of the three · earn upgrade points to boost stats, weapon and passives",

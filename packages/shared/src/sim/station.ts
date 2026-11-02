@@ -8,6 +8,8 @@ import { tuneMods, tuneSwap, tuneUp } from "./trTune";
 import { hiddenMods } from "./hiddenPerks";
 import { hiddenPick } from "./hiddenDice";
 import { GYM_OP, gymMenu, gymMods } from "./gym";
+import { boonMods } from "./boons";
+import { TRIAL_OP, trialAt, trialMenu } from "./trial";
 import type { StationKind } from "./stationTypes";
 import type { Pickup, RunState } from "./types";
 
@@ -33,11 +35,12 @@ export function spawnStation(s: RunState, roomId: number): boolean {
   return true;
 }
 
-export const isStation = (pk: Pickup) => pk.kind === "bench" || pk.kind === "tune" || pk.kind === "gym";
+export const isStation = (pk: Pickup) => pk.kind === "bench" || pk.kind === "tune" || pk.kind === "gym" || pk.kind === "trial" || pk.kind === "boon";
 
 /** 작업대 앞: F = 창 열기·닫기 (itemId "1" = 열림) */
 export function stationAt(s: RunState, pk: Pickup, interact: boolean): void {
   if (s.prompt.kind !== "none" || !isStation(pk)) return;
+  if (pk.kind === "trial" || pk.kind === "boon") return trialAt(s, pk, interact);
   if (interact) pk.itemId = pk.itemId === "1" ? "0" : "1";
   s.prompt = { kind: "station", station: pk.kind as StationKind, open: pk.itemId === "1", ...(pk.kind === "gym" ? { device: pk.group } : {}) };
 }
@@ -51,6 +54,8 @@ export function stationMenu(s: RunState, code: number): void {
   if (op === 7 || op === 8) return hiddenPick(s, op, a);
   // 단련의 방 (sim/gym): 미니게임 결과 · 강화
   if (op === GYM_OP.result || op === GYM_OP.up) return gymMenu(s, op, a, b);
+  // 시련의 방 (sim/trial): 비석 대답 · 보상 상자 고르기
+  if (op === TRIAL_OP.answer || op === TRIAL_OP.chest) return trialMenu(s, op, a);
   const kind = stationFor(s);
   const here = s.rooms[s.roomId]?.pickups.some((pk) => pk.kind === kind && (pk.owner === undefined || pk.owner === (s.seat ?? 0)));
   if (!kind || !here) return;
@@ -60,7 +65,7 @@ export function stationMenu(s: RunState, code: number): void {
 }
 
 /** 작업대·히든 아이템이 바꾼 능력치 (recalcStats) */
-export const stationMods = (s: RunState): StatMod[] => [...benchMods(s.player), ...tuneMods(s.player), ...hiddenMods(s), ...gymMods(s.player)];
+export const stationMods = (s: RunState): StatMod[] => [...benchMods(s.player), ...tuneMods(s.player), ...hiddenMods(s), ...gymMods(s.player), ...boonMods(s.player)];
 
 /** 작업대에 돈 내기: 상점 구매 기록에도 남김 (일일 도전 진행 기록 검사가 쓴 돈을 맞춰 봄) */
 export function stationPay(s: RunState, kind: StationKind, op: number, cost: number): boolean {

@@ -5,6 +5,7 @@ import { wornLimited, wornVictory } from "../game/limited/limited";
 import { setVictoryMusic } from "./victorySound";
 import { skillSounds } from "./sfxSkills";
 import { play, setMusicBoss, startMusic, stopMusic, type Sfx } from "./sound";
+import { setTrialMusic } from "./trialSound";
 import { setTigerMusic } from "./tigerSound";
 import { setSummerMusic } from "./summerSound";
 
@@ -39,6 +40,9 @@ interface Seen {
   /** 잔영: 순간이동 남은 대기 */
   rmDodges: number;
   rmCuts: number;
+  /** 시련의 방: 이번 틱에 새로 생긴 효과 종류 · 시련 중 */
+  trFx: string;
+  trial: boolean;
   /** 예리함 칼빛 · 천검란 (화면에 있는 효과 수) */
   sharps: number;
   cuts: number;
@@ -97,6 +101,8 @@ function snapshot(s: RunState): Seen {
     god: (s.player.fgGod ?? 0) > 0,
     rmDodges: s.player.rmDodges ?? 0,
     rmCuts: s.effects.filter((f) => f.kind === "rmFlurry" && f.ticks >= f.maxTicks - 1).length,
+    trFx: [...new Set(s.effects.filter((f) => f.kind.startsWith("tr") && f.ticks >= f.maxTicks - 1).map((f) => f.kind))].join(","),
+    trial: !!s.trialRun && s.trialRun.room === s.roomId,
     sharps: s.effects.filter((f) => f.kind === "wdSharp").length,
     cuts: s.effects.filter((f) => f.kind === "wdCut" && f.ticks >= f.maxTicks - 1).length,
     storms: s.effects.filter((f) => f.kind === "wdTempest").length,
@@ -251,6 +257,9 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         setMusicBoss(true);
       }
       if (!now.boss && seen.boss) setMusicBoss(false);
+      // 시련의 방: 비석이 깨어남·벌칙·상자 쏟아짐·열림 소리 · 시련 중 웅장한 곡
+      for (const [k, sfx] of [["trWake", "trialWake"], ["trCurse", "trialCurse"], ["trChest", "trialSpill"], ["trOpen", "trialOpen"]] as const) if (now.trFx.includes(k)) fx.push(sfx);
+      if (now.trial !== seen.trial) setTrialMusic(now.trial);
       if (now.over && !seen.over) {
         fx.push(run.won ? "clear" : "fall");
         stopMusic();
@@ -260,6 +269,7 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
     },
     dispose(): void {
       stopMusic();
+      setTrialMusic(false);
       setTigerMusic(false);
     },
   };

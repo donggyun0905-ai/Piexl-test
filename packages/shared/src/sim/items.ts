@@ -138,10 +138,10 @@ export function updateItems(s: RunState, input: TickInput): void {
       }
       continue;
     }
-    if (!touching(s, pk, R.TOUCH)) {
-      // 한 번 떨어지면 다시 주울 수 있음 (무기·사용 아이템을 번갈아 써 보고 고를 수 있게)
+    if (!touching(s, pk, pk.kind === "trial" ? R.TOUCH + 24 : R.TOUCH)) {
+      // 한 번 떨어지면 다시 주울 수 있음 (무기·사용 아이템을 번갈아 써 보게)
       pk.armed = true;
-      if (pk.kind === "trash" || isStation(pk)) pk.itemId = "0";
+      if (pk.kind === "trash" || (isStation(pk) && pk.kind !== "boon")) pk.itemId = "0";
       continue;
     }
     if (pk.kind === "trash" || isStation(pk)) {
@@ -171,7 +171,7 @@ export function updateItems(s: RunState, input: TickInput): void {
       continue;
     }
     // 빈 칸에 들어가는 사용 아이템은 닿으면 바로. 꽉 찬 칸 바꾸기는 잠깐 서 있으면 가짐
-    // (F·버튼을 누르면 바로). 무기 바꾸기·층 보상은 서 있기로는 가지지 않음 (F·버튼, 층 보상은 클릭도)
+    // (F·버튼은 바로). 무기 바꾸기·층 보상은 서 있기로는 안 가짐 (F·버튼, 층 보상은 클릭도)
     // (레이드 아레나 보상은 F·버튼으로만 · 돈 주머니는 칸이 차도 바로 돈)
     // 금봉을 든 오니는 다른 무기를 못 잡음
     if (pk.kind === "weapon" && goldLocked(p)) continue;
@@ -262,7 +262,7 @@ function useSlot(s: RunState, slot: number, input: TickInput): void {
     down.invulnTicks = 120;
     addEffect(s, { kind: "burst", x: down.x, y: down.y, dirX: 0, dirY: 0, size: 14, maxTicks: 16 });
   } else if (item === "potion" || item === "elixir") {
-    // 처방전(의사): 회복량 +30% · 의사는 넘친 만큼 보호막 (healPlayer) · 악의 사도는 회복 대신 그만큼 피해
+    // 처방전(의사): 회복량 +30% · 의사는 넘친 만큼 보호막 · 악의 사도는 회복 대신 그만큼 피해
     // 금기: 쓴 약
     const amount = p.stats.maxHp * itemVal(!!s.pvp, item).healRatio * (hasPerk(p, "prescription") ? PRESCRIPTION_MUL : 1) * tabooDown(s, "bitterPotion");
     if (p.characterId === "apostle") apostlePotion(s, amount);

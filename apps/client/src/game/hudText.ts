@@ -48,6 +48,6 @@ export function promptText(run: RunState, lang: Lang, t: (k: TextKey) => string)
 export function pickupText(run: RunState, lang: Lang, t: (k: TextKey) => string): string {
   const pk = run.rooms[run.roomId]?.pickups.find((x) => x.id === run.nearPickupId);
   if (!pk || pk.kind === "coin") return "";
-  if (pk.price > 0 && pk.kind !== "trash" && pk.kind !== "bench" && pk.kind !== "tune" && pk.kind !== "gym") return `${itemName(pk.kind, pk.itemId, lang)} (${pk.price}G) — ${itemDesc(pk.kind, pk.itemId, lang, t)}`;
+  if (pk.price > 0 && pk.kind !== "trash" && pk.kind !== "bench" && pk.kind !== "tune" && pk.kind !== "gym" && pk.kind !== "boon") return `${itemName(pk.kind, pk.itemId, lang)} (${pk.price}G) — ${itemDesc(pk.kind, pk.itemId, lang, t)}`;
   return `${itemName(pk.kind, pk.itemId, lang)} — ${itemDesc(pk.kind, pk.itemId, lang, t)}`;
 }

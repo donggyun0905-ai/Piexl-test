@@ -67,6 +67,7 @@ import { themeFor } from "./floorThemes";
 import { drawAmbushOverlay, drawTrackerAura } from "./tracker";
 import { drawForgottenAura, drawForgottenBack } from "./forgotten";
 import { drawRemnantAura, drawRemnantSlowmo } from "./remnant";
+import { drawTrialEdge } from "./trialFx";
 import { drawWandererAura, drawWandererGround } from "./wanderer";
 import { drawSilkAmmo, drawSilkStacks } from "./silk";
 import { drawSecretAura, drawSecretGround } from "./secret";
@@ -98,6 +99,8 @@ export interface DrawOptions {
   umbraLine?: (i: number) => string;
   /** 제천대성 즉사기 문구 */
   sageText?: string;
+  /** 시련의 방 글자 (키 → 번역) */
+  trialText?: (key: string) => string;
   /** 장수 필살기 이름 (generalLegends.LEGENDS 순번) */
   legendName?: (i: number) => string;
   /** 운명의 여행자 운명 이름 (버프 0 · 기술 1 · 능력 2, 칸 번호) */
@@ -270,6 +273,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
   drawMorphWake(ctx, s);
   drawZoneEdge(ctx, s);
   drawRemnantSlowmo(ctx, s, opt.pixelScale);
+  drawTrialEdge(ctx, s, opt.pixelScale, opt.trialText);
   if (opt.showReticle && !s.over) drawReticleFor(ctx, s, alpha, snap);
   // 화면에 붙는 글자 (카메라와 상관없이 왼쪽 위)
   drawComboHud(ctx, s, opt.pixelScale);

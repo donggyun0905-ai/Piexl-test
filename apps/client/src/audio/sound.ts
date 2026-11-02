@@ -5,6 +5,7 @@ import { CORE_SOUNDS } from "./sfxCore";
 import { SECRET_SOUNDS } from "./sfxSecret";
 import { SKILL_SOUNDS, type SkillSfx } from "./sfxSkills";
 import { GYM_SOUNDS, type GymSfx } from "./sfxGym";
+import { TRIAL_SOUNDS, type TrialSfx } from "./trialSound";
 
 export type Sfx =
   | "swing"
@@ -56,7 +57,8 @@ export type Sfx =
   | "lxCross"
   | "lxShard"
   | SkillSfx
-  | GymSfx;
+  | GymSfx
+  | TrialSfx;
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;
@@ -162,6 +164,7 @@ const SOUNDS: Record<Sfx, () => void> = {
   ...SKILL_SOUNDS,
   ...CORE_SOUNDS,
   ...GYM_SOUNDS,
+  ...TRIAL_SOUNDS,
   blink: () => {
     tone({ type: "sine", from: 900, to: 120, dur: 0.12, vol: 0.12 });
     noise(0.1, 0.2, 1800);
@@ -206,6 +209,9 @@ let musicRoot = 110;
 let bossMode = false;
 /** 다른 곡 (한정 스킨 전용 음악 등): 한 박마다 부름, 박 길이(ms). 없으면 기본 곡 */
 let customBeat: { beat: (step: number, boss: boolean) => void; ms: number } | null = null;
+
+/** 지금 다른 곡 (시련 곡이 잠깐 바꿨다 되돌릴 때) */
+export const musicBeat = () => customBeat;
 
 export function setMusicBeat(b: typeof customBeat): void {
   if (b === customBeat) return;

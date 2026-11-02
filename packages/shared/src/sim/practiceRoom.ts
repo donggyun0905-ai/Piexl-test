@@ -1,13 +1,14 @@
-// 연습장 방 시험: 지금 방을 상점·천상의 상점·여신의 선물·보물방·단련의 방·쉼터로 바꿔 봄 (다시 누르면 새로 놓음, 기록·업적 없음)
+// 연습장 방 시험: 지금 방을 상점·천상의 상점·여신의 선물·보물방·단련의 방·시련의 방·쉼터로 바꿔 봄 (다시 누르면 새로 놓음, 기록·업적 없음)
 import { LOOT_RULES, spawnTreasure } from "./loot";
 import { spawnGolden } from "./golden";
 import { spawnGym } from "./gym";
+import { spawnTrial } from "./trial";
 import { spawnShop } from "./shop";
 import { healPlayer } from "./combat";
 import type { RunState } from "./types";
 
 /** 시험할 수 있는 방 (heaven = 천상의 상점 · golden = 여신의 선물) */
-export const PRACTICE_ROOMS = ["shop", "heaven", "golden", "treasure", "gym", "rest"] as const;
+export const PRACTICE_ROOMS = ["shop", "heaven", "golden", "treasure", "gym", "trial", "rest"] as const;
 export type PracticeRoom = (typeof PRACTICE_ROOMS)[number];
 
 /** 지금 방을 그 방으로: 바닥 물건을 새로 놓음 (상점은 돈을 한도까지 채워 줌 · 단련의 방은 기구를 다시 쓸 수 있음) */
@@ -26,6 +27,12 @@ export function practiceRoom(s: RunState, kind: PracticeRoom): void {
   else if (kind === "gym") {
     if (s.player.gym) s.player.gym.rooms = [];
     spawnGym(s, s.roomId);
+  } else if (kind === "trial") {
+    // 비석을 다시 쓸 수 있게 (진행 중인 시련도 치움)
+    if (s.player.trial) s.player.trial.rooms = [];
+    s.trialRun = undefined;
+    s.enemies = [];
+    spawnTrial(s, s.roomId);
   } else healPlayer(s, s.player.stats.maxHp);
 }
 
@@ -36,6 +43,7 @@ export function practiceRoomOff(s: RunState): void {
   if (!info || !st) return;
   info.type = "start";
   delete info.heaven;
+  s.trialRun = undefined;
   st.pickups = [];
   s.prompt = { kind: "none" };
 }
