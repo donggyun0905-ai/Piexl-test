@@ -81,7 +81,17 @@ function drawLineHazard(ctx: CanvasRenderingContext2D, h: Hazard, x: number, y: 
     ctx.lineCap = "butt";
     return;
   }
-  if (h.from === "skelarcher") {
+  if (h.from === "chainward") {
+    // 쇠사슬 간수: 사슬이 날아갈 길 (고리 무늬가 끝까지 차오름)
+    ctx.strokeStyle = `rgba(200, 200, 215, ${0.25 + 0.5 * f})`;
+    ctx.lineWidth = w * 2;
+    ctx.setLineDash([3, 2]);
+    line(ctx, x, y, x + (tx - x) * f, y + (ty - y) * f);
+    ctx.setLineDash([]);
+    ctx.strokeStyle = "rgba(255, 90, 90, 0.6)";
+    ctx.lineWidth = 1;
+    line(ctx, x, y, tx, ty);
+  } else if (h.from === "skelarcher") {
     // 스켈레톤 궁병: 굳은 얇은 선이 깜빡임 → 화살
     ctx.strokeStyle = Math.floor(tick / 3) % 2 === 0 ? "rgba(255, 240, 200, 0.95)" : "rgba(255, 60, 60, 0.9)";
     ctx.lineWidth = 1;

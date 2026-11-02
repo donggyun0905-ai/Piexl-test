@@ -8,7 +8,7 @@ export const ENEMY_SPRITES: readonly string[] = [
   "dummy", "crawler", "spitter", "mortar", "charger", "gnat", "guardian", "paladin", "tower", "soul", "ghost",
   "hulk", "brood", "seer", "knight", "archer", "siren", "centaur", "plant", "reaper", "swordgod", "archangel", "toad", "salamander", "jelly", "captain",
   "godeater", "ruinblade", "chaosblade", "plight", "pdark", "dragon", "umbra", "sandworm", "scorpion", "roc", "sandworm_dark", "scorpion_dark", "roc_dark", "demigod", "sage", "sage_cloud",
-  "slime", "runner", "bat", "beetle", "golem", "shaman", "eggsac", "wisp", "doppel", "venom", "landfish", "lurker", "bombbug", "skelarcher",
+  "slime", "runner", "bat", "beetle", "golem", "shaman", "eggsac", "wisp", "doppel", "venom", "landfish", "lurker", "bombbug", "skelarcher", "chainward", "highorc",
   // 서큐버스(무리 여왕)가 부른 졸개
   "incubus",
 ];
@@ -62,7 +62,7 @@ export function shapeSprite(kind: string, color: string): HTMLCanvasElement | un
 
 /** 2배 촘촘하게 다시 그린 몬스터 (그림 칸 ÷ 이 값 = 게임 크기) */
 /** 일반 몬스터 20종은 2배 (원래 그림 그대로 촘촘하게, scripts/art/hd_monsters_2x, 2026-10-31) */
-const HD2 = "crawler spitter mortar charger gnat guardian paladin slime runner bat beetle golem shaman eggsac wisp venom landfish lurker soul doppel bombbug skelarcher".split(" ");
+const HD2 = "crawler spitter mortar charger gnat guardian paladin slime runner bat beetle golem shaman eggsac wisp venom landfish lurker soul doppel bombbug skelarcher chainward highorc".split(" ");
 export const ENEMY_SRC: Readonly<Record<string, number>> = { hulk: 2, seer: 2, tower: 2, brood: 4, dragon: 4, ...Object.fromEntries(HD2.map((k) => [k, 2])) };
 
 /** 몬스터 그림 한 칸 크기 (게임 크기, 아직 못 불러왔으면 undefined) */

@@ -218,10 +218,10 @@ export function updateStalker(s: RunState, e: EnemyState, toP: Vec, go: Vec): bo
 /** 이 층(세기 depth)에 더 나오는 새 몬스터 (던전 방만, 광야·타워 디펜스 제외) */
 export function stalkerKinds(d: number): (StalkerKind | NewFoeKind)[] {
   if (d < 2) return [];
-  // 시즌 3 새 몬스터 (sim/newFoes): 2층부터
+  // 시즌 3 새 몬스터 (sim/newFoes): 폭발풍뎅이·궁병 2층부터 · 쇠사슬 간수·하이오크 3층부터
   if (d < 3) return ["venom", "landfish", "bombbug", "skelarcher"];
-  return ["venom", "landfish", "doppel", "lurker", "bombbug", "skelarcher"];
+  return ["venom", "landfish", "doppel", "lurker", "bombbug", "skelarcher", "chainward", "highorc"];
 }
 
 /** 한 방에 최대 몇 마리 */
-export const STALKER_MAX: Record<string, number> = { doppel: 1, lurker: 2, venom: 2, landfish: 2, bombbug: 3, skelarcher: 2 };
+export const STALKER_MAX: Record<string, number> = { doppel: 1, lurker: 2, venom: 2, landfish: 2, bombbug: 3, skelarcher: 2, chainward: 1, highorc: 2 };

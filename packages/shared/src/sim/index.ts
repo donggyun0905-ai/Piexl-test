@@ -135,4 +135,4 @@ export { canCast, skillDef } from "./pwSkill";
 export { spikeState, makeTerrain, terrainIdle } from "./terrain";
 export type { TerrainState } from "./terrainTypes";
 export { luxShards, luxStage } from "./lux";
-export { archerAim, bugFuse, NEW_FOES_RULES } from "./newFoes";
+export { archerAim, bugFuse, NEW_FOES_RULES, orcRage } from "./newFoes";

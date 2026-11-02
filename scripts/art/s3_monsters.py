@@ -1,8 +1,10 @@
 # 시즌 3 새 몬스터 그림 (python3 scripts/art/s3_monsters.py)
-# 1배 원본 → scripts/art/src/monsters_1x/{bombbug,skelarcher}.png → hd_monsters_2x와 같은 2배 다듬기 → sprites/enemies/
+# 1배 원본 → scripts/art/src/monsters_1x/{bombbug,skelarcher,chainward,highorc}.png → hd_monsters_2x와 같은 2배 다듬기 → sprites/enemies/
 # 규격(docs/ART.md): 움직임 칸 2장을 가로로, 오른쪽을 봄, 몸 크기 + 6~8
 # 폭발풍뎅이: 붉은 등껍질 · 노란 불씨 무늬 · 등에 심지 불꽃 (2칸: 다리 · 불꽃 흔들림)
 # 스켈레톤 궁병: 뼈 몸 · 검은 눈 구멍 · 낡은 활과 화살 (2칸: 걸음)
+# 쇠사슬 간수: 회색 투구·갑옷 · 붉은 눈 · 손에 감은 쇠사슬과 갈고리 (2칸: 걸음·사슬 흔들림)
+# 하이오크: 큰 초록 몸 · 엄니 · 가죽 갑옷 · 큰 양날 도끼 (2칸: 걸음)
 import os
 
 from PIL import Image
@@ -57,6 +59,52 @@ def skelarcher(f):
     return c
 
 
+def chainward(f):
+    c = Cell(22)
+    steel, dark, skin, chain, eye = hx("#8a8a98"), hx("#4a4a58"), hx("#b08a6a"), hx("#c8c8d8"), hx("#ff4040")
+    # 다리
+    c.rect(8, 16, 2, 4 - f, dark); c.rect(12, 16, 2, 3 + f, dark)
+    # 몸 갑옷 · 허리띠
+    c.rect(7, 9, 8, 7, steel)
+    c.rect(7, 13, 8, 1, dark)
+    # 투구 (눈구멍 줄)
+    c.oval(11, 6, 4, 4, steel)
+    c.rect(8, 6, 7, 1, dark)
+    c.px(12, 6, eye); c.px(14, 6, eye)
+    # 팔과 쇠사슬 (앞으로 늘어뜨림) · 갈고리
+    c.rect(15, 10, 2, 4, skin)
+    for i in range(5):
+        c.px(17 + (i % 2), 11 + i + (f if i > 2 else 0), chain)
+    c.line(18, 16 + f, 20, 17 + f, chain); c.px(20, 16 + f, chain)
+    c.outline(hx("#18181e"))
+    return c
+
+
+def highorc(f):
+    c = Cell(26)
+    skin, dark, leather, tusk, blade, haft = hx("#4a7a3a"), hx("#2a4a22"), hx("#6a4a2a"), hx("#f0e8c8"), hx("#c8ccd8"), hx("#5a3a1a")
+    # 다리
+    c.rect(8, 19, 3, 5 - f, dark); c.rect(14, 19, 3, 4 + f, dark)
+    # 큰 몸 · 가죽 갑옷
+    c.oval(12, 14, 7, 6, skin)
+    c.rect(7, 14, 11, 5, leather)
+    c.rect(7, 16, 11, 1, dark)
+    # 머리 · 엄니 · 눈
+    c.oval(13, 7, 4, 4, skin)
+    c.px(15, 6, hx("#ffd040")); c.px(12, 6, hx("#ffd040"))
+    c.px(12, 10, tusk); c.px(15, 10, tusk); c.px(15, 9, tusk)
+    # 도끼 자루 · 양날
+    c.line(19, 4, 19, 20, haft)
+    for y in range(1, 11):
+        for x in range(19, 26):
+            if x - 19 <= 6 - abs(y - 5) * 0.9: c.px(x, y, blade)
+    c.line(20, 5, 24, 5, hx("#e8ecf8"))
+    # 도끼를 쥔 팔
+    c.rect(17, 11, 3, 3, skin)
+    c.outline(hx("#14200e"))
+    return c
+
+
 def save(name, frames, size):
     img = Image.new("RGBA", (size * len(frames), size), (0, 0, 0, 0))
     for k, fr in enumerate(frames):
@@ -70,3 +118,5 @@ def save(name, frames, size):
 if __name__ == "__main__":
     save("bombbug", [bombbug(0), bombbug(1)], 18)
     save("skelarcher", [skelarcher(0), skelarcher(1)], 20)
+    save("chainward", [chainward(0), chainward(1)], 22)
+    save("highorc", [highorc(0), highorc(1)], 26)

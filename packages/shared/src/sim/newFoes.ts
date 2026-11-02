@@ -2,11 +2,14 @@
 // 폭발풍뎅이: 들어오자마자 빠르게 달려와 몸에 달라붙음(닿아도 피해 없음) → 1.5초 뒤 폭발. 대시하면 떨어져 나가 그 자리에서 터짐
 //   (못 피하면 큰 피해 + 화상, foeStatus) · 터지기 전에 잡으면 안 터짐
 // 스켈레톤 궁병: 멀리서 얇은 일직선으로 나를 겨눔(따라옴) → 선이 굳어 깜빡임 → 매우 빠른 화살이 그 선을 따라 (큰 피해)
+// 쇠사슬 간수(3층부터): 사슬이 날아갈 길이 미리 보임 → 사슬에 맞으면 피해 + 간수 쪽으로 끌려감 (대시로 피함)
+// 하이오크(3층부터): 다가와 큰 도끼를 반원으로 휘두름 · 체력이 적을수록 빨라지고 세짐
 import { ENEMIES } from "../content";
 import { depth } from "./hero";
-import { addShape } from "./hazards";
+import { addShape, inHazard } from "./hazards";
+import { damagePlayer } from "./combat";
 import type { EnemyState, RunState } from "./types";
-import { dist2 } from "./util";
+import { addEffect, dist2 } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -22,6 +25,22 @@ const R = {
   ARCH_LEN: 320,
   ARCH_WIDTH: 3,
   ARCH_DMG: 22,
+  /** 쇠사슬 간수: 거리 두기 · 쉬는 틱 · 사슬 길 예고 틱 · 사슬 길이 · 굵기(반) · 피해(+층 세기 × 2) · 끌려가는 틱 */
+  JAIL_KEEP: 85,
+  JAIL_REST: 170,
+  JAIL_WARN: 40,
+  JAIL_LEN: 170,
+  JAIL_WIDTH: 4,
+  JAIL_DMG: 10,
+  JAIL_PULL: 40,
+  /** 하이오크: 휘두르기 시작 거리 · 예고 틱 · 범위 · 피해(+층 세기 × 3) · 쉬는 틱 · 체력이 0에 가까울 때 더하는 이동 속도·공격력 배율 */
+  ORC_REACH: 30,
+  ORC_WARN: 30,
+  ORC_R: 34,
+  ORC_DMG: 18,
+  ORC_REST: 70,
+  ORC_SPEED_UP: 1.2,
+  ORC_DMG_UP: 1.5,
 };
 export { R as NEW_FOES_RULES };
 
@@ -98,10 +117,73 @@ function skelarcher(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
 export const archerAim = (e: EnemyState): 0 | 1 | undefined => (e.kind === "skelarcher" && e.phase === "windup" ? (e.step === 1 ? 1 : 0) : undefined);
 export const ARCHER_LEN = () => R.ARCH_LEN;
 
+/** 쇠사슬 간수: phase walk 거리 두기 · windup 사슬 길 예고(굳음) → 맞으면 끌어당김 */
+function chainward(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
+  const p = s.player;
+  e.timer--;
+  if (e.phase === "windup") {
+    if (e.timer > 0) return;
+    // 예고를 지우고 그 길로 사슬 (대시·무적이면 빗나감)
+    const h = s.hazards?.find((z) => z.owner === e.id && z.hold);
+    s.hazards = s.hazards?.filter((z) => z !== h);
+    if (h) {
+      addEffect(s, { kind: "gleam", x: h.x, y: h.y, toX: h.toX, toY: h.toY, dirX: 0, dirY: 0, size: 4, width: R.JAIL_WIDTH, maxTicks: 12, foe: true });
+      if (inHazard(h, p.x, p.y, p.r) && p.dashTicks <= 0 && p.invulnTicks <= 0 && p.shieldTicks <= 0) {
+        damagePlayer(s, R.JAIL_DMG + 2 * depth(s), "chainward");
+        p.lureTicks = R.JAIL_PULL;
+        p.lureId = e.id;
+      }
+    }
+    e.phase = "walk";
+    e.timer = R.JAIL_REST;
+    return;
+  }
+  const sp = ENEMIES.chainward.speed;
+  const d2 = dist2(e, p);
+  const dir = d2 > R.JAIL_KEEP ** 2 ? 1 : d2 < (R.JAIL_KEEP - 25) ** 2 ? -1 : 0;
+  const m = dir > 0 ? go : toP;
+  e.x += m[0] * sp * dir;
+  e.y += m[1] * sp * dir;
+  e.dirX = toP[0];
+  e.dirY = toP[1];
+  if (e.timer > 0 || d2 > (R.JAIL_LEN - 10) ** 2) return;
+  e.phase = "windup";
+  e.timer = R.JAIL_WARN;
+  addShape(s, R.JAIL_WARN, { x: e.x, y: e.y, toX: e.x + toP[0] * R.JAIL_LEN, toY: e.y + toP[1] * R.JAIL_LEN, width: R.JAIL_WIDTH, radius: 0, damage: 0, from: "chainward", owner: e.id, hold: true });
+}
+
+/** 하이오크 분노 (0 = 체력 가득 ~ 1 = 거의 쓰러짐) */
+export const orcRage = (e: EnemyState): number => (e.kind === "highorc" ? Math.max(0, Math.min(1, 1 - e.hp / Math.max(1, e.maxHp))) : 0);
+
+/** 하이오크: phase walk 다가옴 · windup 도끼 휘두르기 예고(반원) */
+function highorc(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
+  const rage = orcRage(e);
+  e.timer--;
+  if (e.phase === "windup") {
+    if (e.timer > 0) return;
+    e.phase = "walk";
+    e.timer = Math.round(R.ORC_REST * (1 - 0.4 * rage));
+    return;
+  }
+  const sp = ENEMIES.highorc.speed * (1 + R.ORC_SPEED_UP * rage);
+  e.x += go[0] * sp;
+  e.y += go[1] * sp;
+  e.dirX = toP[0];
+  e.dirY = toP[1];
+  if (e.timer > 0 || dist2(e, s.player) > R.ORC_REACH ** 2) return;
+  const warn = Math.round(R.ORC_WARN * (1 - 0.3 * rage));
+  const dmg = (R.ORC_DMG + 3 * depth(s)) * (1 + R.ORC_DMG_UP * rage);
+  addShape(s, warn, { x: e.x, y: e.y, radius: R.ORC_R, damage: Math.round(dmg), dirX: toP[0], dirY: toP[1], arc: 0, fx: "bslash", by: "highorc", owner: e.id });
+  e.phase = "windup";
+  e.timer = warn;
+}
+
 /** 새 몬스터면 움직이고 true */
 export function updateNewFoe(s: RunState, e: EnemyState, toP: Vec, go: Vec): boolean {
   if (e.kind === "bombbug") bombbug(s, e, go);
   else if (e.kind === "skelarcher") skelarcher(s, e, toP, go);
+  else if (e.kind === "chainward") chainward(s, e, toP, go);
+  else if (e.kind === "highorc") highorc(s, e, toP, go);
   else return false;
   return true;
 }

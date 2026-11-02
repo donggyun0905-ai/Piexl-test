@@ -134,6 +134,8 @@ export const C = {
   lurker: "#1a1a24",
   bombbug: "#c84a2a",
   skelarcher: "#e8e0c8",
+  chainward: "#6a6a78",
+  highorc: "#4a7a3a",
   bossCore: "#ff5d5d",
   enemyEdge: "#141018",
   hit: "#ffffff",

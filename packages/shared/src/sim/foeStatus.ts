@@ -54,6 +54,7 @@ const BY_FOE: Partial<Record<EnemyKind, [Field, keyof typeof R]>> = {
   paladin: ["dbRoot", "ROOT_TICKS"],
   charger: ["dbSlow", "SLOW_TICKS"],
   bombbug: ["dbBurn", "BURN_TICKS"],
+  highorc: ["dbBleed", "BLEED_TICKS"],
 };
 
 /** 몸에 닿았을 때 상태이상을 거는 적 (가디언은 돌진 중일 때만 기절 · 성기사는 빛기둥만 속박, 몸에 닿으면 없음) */

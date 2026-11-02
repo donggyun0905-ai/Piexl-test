@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
 import "../balanceTables";
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
-import { NEW_FOES_RULES as R } from "./newFoes";
+import { NEW_FOES_RULES as R, orcRage } from "./newFoes";
+import { stalkerKinds } from "./stalkers";
 import { makeEnemy } from "./util";
 
 /** 싸우는 방에 새 몬스터 하나 (플레이어 체력 넉넉히) */
-function withOne(kind: "bombbug" | "skelarcher", dx = 40, dy = -30): RunState {
+function withOne(kind: "bombbug" | "skelarcher" | "chainward" | "highorc", dx = 40, dy = -30): RunState {
   const run = createRun(4, "warden");
   run.player.hp = run.player.stats.maxHp;
   run.player.invulnTicks = 0;
@@ -52,5 +53,40 @@ describe("시즌 3 새 몬스터", () => {
     for (let i = 0; i < R.ARCH_AIM + 2; i++) stepSim(miss, EMPTY_INPUT);
     for (let i = 0; i < R.ARCH_LOCK + 5; i++) stepSim(miss, { ...EMPTY_INPUT, moveX: 100 });
     expect(miss.player.hp).toBe(hp0);
+  });
+
+  it("쇠사슬 간수: 사슬에 맞으면 피해 + 끌려감, 길에서 비키면 안 맞음", () => {
+    const hit = withOne("chainward", 0, -70);
+    const hp0 = hit.player.hp;
+    for (let i = 0; i < R.JAIL_WARN + 3; i++) stepSim(hit, EMPTY_INPUT);
+    expect(hit.player.hp).toBeLessThan(hp0);
+    expect(hit.player.lureId).toBe(hit.enemies[0]!.id);
+
+    const miss = withOne("chainward", 0, -70);
+    for (let i = 0; i < R.JAIL_WARN + 3; i++) stepSim(miss, { ...EMPTY_INPUT, moveX: 100 });
+    expect(miss.player.hp).toBe(hp0);
+    expect(miss.player.lureTicks ?? 0).toBe(0);
+  });
+
+  it("하이오크: 체력이 적을수록 분노가 커지고 도끼가 세짐", () => {
+    const a = withOne("highorc", 20, 0);
+    const b = withOne("highorc", 20, 0);
+    b.enemies[0]!.hp = 1;
+    expect(orcRage(a.enemies[0]!)).toBe(0);
+    expect(orcRage(b.enemies[0]!)).toBeGreaterThan(0.9);
+    const hit = (r: RunState) => {
+      const hp0 = r.player.hp;
+      for (let i = 0; i < R.ORC_WARN + 5; i++) stepSim(r, EMPTY_INPUT);
+      return hp0 - r.player.hp;
+    };
+    const weak = hit(a);
+    expect(weak).toBeGreaterThan(0);
+    expect(hit(b)).toBeGreaterThan(weak);
+  });
+
+  it("쇠사슬 간수·하이오크는 3층부터", () => {
+    expect(stalkerKinds(2)).not.toContain("highorc");
+    expect(stalkerKinds(3)).toContain("chainward");
+    expect(stalkerKinds(3)).toContain("highorc");
   });
 });

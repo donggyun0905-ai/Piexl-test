@@ -4,8 +4,8 @@ import { createRng, deriveSeed } from "./rng";
 export type MinionKind = "crawler" | "spitter" | "charger" | "mortar" | "gnat" | "guardian" | "paladin" | "tower" | "ruinblade" | "chaosblade" | "soul" | "ghost" | StalkerKind | NewFoeKind | TdMinionKind;
 /** 시즌 2 새 몬스터 (sim/stalkers): 도플갱어 · 베놈 · 땅 물고기 · 그림자 */
 export type StalkerKind = "doppel" | "venom" | "landfish" | "lurker";
-/** 시즌 3 새 몬스터 (sim/newFoes): 폭발풍뎅이 · 스켈레톤 궁병 */
-export type NewFoeKind = "bombbug" | "skelarcher";
+/** 시즌 3 새 몬스터 (sim/newFoes): 폭발풍뎅이 · 스켈레톤 궁병 · 쇠사슬 간수 · 하이오크 */
+export type NewFoeKind = "bombbug" | "skelarcher" | "chainward" | "highorc";
 /** 타워 디펜스에만 나오는 적 (sim/tdWaves) */
 export type TdMinionKind = "slime" | "runner" | "bat" | "beetle" | "golem" | "shaman" | "eggsac" | "wisp";
 /** 보스: 1·2층(1단계) 강철 거구·검은 기사·얍삽한 활잡이·두꺼비 왕·불도롱뇽 · 3·4층(2단계) 무리 여왕·세이렌·켄타우로스·하드플랜트·번개 해파리 · 5·6층(3단계) 공허의 눈·데스·검신·천사장·유령선 선장 */
@@ -91,6 +91,10 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   bombbug: { kind: "bombbug", hp: 26, radius: 5, speed: 1.35, contactDamage: 0, gold: 2 },
   /** 스켈레톤 궁병: 얇은 선으로 겨눔 → 깜빡이면 매우 빠른 화살 (큰 피해) */
   skelarcher: { kind: "skelarcher", hp: 40, radius: 6, speed: 0.5, contactDamage: 6, gold: 3 },
+  /** 쇠사슬 간수: 사슬 길 예고 → 맞으면 피해 + 끌어당김 */
+  chainward: { kind: "chainward", hp: 70, radius: 7, speed: 0.45, contactDamage: 8, gold: 3 },
+  /** 하이오크: 큰 도끼 반원 휘두르기 · 체력이 적을수록 빠르고 셈 */
+  highorc: { kind: "highorc", hp: 110, radius: 8, speed: 0.5, contactDamage: 8, gold: 4 },
   /** 보스: 다가오다 돌진, 멈출 때 사방으로 탄 */
   hulk: { kind: "hulk", hp: 420, radius: 11, speed: 0.45, contactDamage: 16, gold: 20, boss: true },
   /** 보스: 거리를 두고 기는 적을 부르고 부채꼴로 탄 */

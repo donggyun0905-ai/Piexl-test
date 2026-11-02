@@ -4,6 +4,21 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.356",
+    date: "2026-11-02",
+    items: {
+      ko: [
+        "새 몬스터(3층부터): 쇠사슬 간수(사슬이 날아갈 길이 먼저 보이고, 맞으면 피해 + 간수 쪽으로 끌려감 · 대시나 길 밖으로 피함) · 하이오크(큰 도끼 반원 휘두르기·맞으면 출혈, 체력이 적을수록 빨라지고 세짐 · 붉은 기운)",
+      ],
+      en: [
+        "New monsters (from floor 3): Chain Warden (its chain's path shows first; a hit deals damage and drags you toward it · dash or step off the path) · High Orc (half-circle great-axe swings that cause Bleed; the lower its HP, the faster and stronger it gets · red aura)",
+      ],
+      ja: [
+        "新モンスター（3階から）：鎖の看守（鎖の飛ぶ道が先に見え、当たるとダメージ + 看守の方へ引き寄せられる · ダッシュか道の外へ避ける）· ハイオーク（大斧の半円振り・当たると出血、体力が少ないほど速く強くなる · 赤いオーラ）",
+      ],
+    },
+  },
+  {
     version: "0.48.355",
     date: "2026-11-02",
     items: {

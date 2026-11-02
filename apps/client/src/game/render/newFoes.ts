@@ -1,6 +1,7 @@
-// 시즌 3 새 몬스터 표시 (sim/newFoes, 몸 그림은 보통 몬스터 그림): 폭발풍뎅이 터질 범위(점점 빨리 깜빡임) · 스켈레톤 궁병 조준선(따라오는 얇은 선)
+// 시즌 3 새 몬스터 표시 (sim/newFoes, 몸 그림은 보통 몬스터 그림): 폭발풍뎅이 터질 범위(점점 빨리 깜빡임) · 스켈레톤 궁병 조준선(따라오는 얇은 선) · 하이오크 분노 기운
+// 쇠사슬 간수 사슬 길은 위험 표시(render/bossFx, from "chainward")
 // 궁병 선이 굳어 깜빡이는 것은 위험 표시(render/bossFx, from "skelarcher")
-import { archerAim, bugFuse, NEW_FOES_RULES as R, type EnemyState, type RunState } from "@pixel-rogue/shared";
+import { archerAim, bugFuse, NEW_FOES_RULES as R, orcRage, type EnemyState, type RunState } from "@pixel-rogue/shared";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -22,6 +23,14 @@ export function drawNewFoeMark(ctx: Ctx, s: RunState, e: EnemyState, x: number, 
       ctx.fillStyle = "#fff2a0";
       ctx.fillRect(Math.round(x) - 1, Math.round(y - e.r - 4), 2, 2);
     }
+  }
+  const rage = orcRage(e);
+  if (rage > 0.05) {
+    // 하이오크 분노: 체력이 적을수록 붉은 기운이 커지고 일렁임
+    ctx.fillStyle = `rgba(255, 40, 30, ${0.12 + 0.3 * rage + 0.06 * Math.sin(s.tick / 5)})`;
+    ctx.beginPath();
+    ctx.arc(x, y, e.r + 2 + 4 * rage, 0, Math.PI * 2);
+    ctx.fill();
   }
   if (archerAim(e) === 0) {
     // 겨누는 중: 나를 따라오는 얇은 붉은 선

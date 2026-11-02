@@ -80,6 +80,8 @@ export const ENEMY_NAMES: Partial<Record<EnemyKind, TextKey>> = {
   lurker: "enemyLurker",
   bombbug: "enemyBombbug",
   skelarcher: "enemySkelarcher",
+  chainward: "enemyChainward",
+  highorc: "enemyHighorc",
   toad: "bossToad",
   salamander: "bossSalamander",
   jelly: "bossJelly",
@@ -103,7 +105,7 @@ export const ENEMY_NAMES: Partial<Record<EnemyKind, TextKey>> = {
   sage: "bossSage",
 };
 
-const MINIONS: EnemyKind[] = ["crawler", "spitter", "charger", "mortar", "gnat", "guardian", "paladin", "slime", "runner", "bat", "beetle", "golem", "shaman", "eggsac", "wisp", "doppel", "venom", "landfish", "lurker", "bombbug", "skelarcher"];
+const MINIONS: EnemyKind[] = ["crawler", "spitter", "charger", "mortar", "gnat", "guardian", "paladin", "slime", "runner", "bat", "beetle", "golem", "shaman", "eggsac", "wisp", "doppel", "venom", "landfish", "lurker", "bombbug", "skelarcher", "chainward", "highorc"];
 
 /** 적 묶음: 졸개 · 1~3단계 보스 (나오는 층) · 라스트 보스. floor = 그 묶음을 부를 때 맞추면 좋은 세기 */
 export const ENEMY_GROUPS: (Group<EnemyKind> & { floor: number })[] = [

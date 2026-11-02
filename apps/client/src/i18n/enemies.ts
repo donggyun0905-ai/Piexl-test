@@ -42,6 +42,8 @@ const NAMES: Record<string, Names> = {
   lurker: n("그림자", "Shadow", "影"),
   bombbug: n("폭발풍뎅이", "Blast Beetle", "爆発コガネ"),
   skelarcher: n("스켈레톤 궁병", "Skeleton Archer", "スケルトン弓兵"),
+  chainward: n("쇠사슬 간수", "Chain Warden", "鎖の看守"),
+  highorc: n("하이오크", "High Orc", "ハイオーク"),
   incubus: n("인큐버스", "Incubus", "インキュバス"),
   ruinblade: n("파괴의 검", "Blade of Ruin", "破壊の剣"),
   chaosblade: n("혼돈의 검", "Blade of Chaos", "混沌の剣"),
