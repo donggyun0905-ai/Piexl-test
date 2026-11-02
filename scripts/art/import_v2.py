@@ -29,7 +29,7 @@ BODY = 116
 FILES = [("1", 4, 2, [0, 1]), ("2", 4, 2, [2, 3]), ("3", 4, 1, [4])]
 # 왼쪽 모습을 오른쪽 뒤집기로 (GPT 왼쪽 그림이 오른쪽을 봄)
 FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", "brawler", "gunner", "ninja", "summoner", "chronomancer", "beast",
-             "bedouin", "imugi", "general", "novice", "apostle", "abandoned", "abandoned2", "abandoned3", "novice10", "novice15", "beasttiger",
+             "bedouin", "imugi", "general", "novice", "apostle", "abandoned", "abandoned2", "abandoned3", "novice10", "novice15", "novice20", "beasttiger",
              "titan", "oni", "oni_god", "idra", "morph-snake", "morph-eagle", "morph-boar", "morph-scorpion",
              "morph-bear", "morph-wolf", "byeonhui", "morph-eagle-evo",
              # 시즌 2·히든 21명 + 학살자 피의 학살 (2026-10-31)
@@ -48,7 +48,7 @@ ATTACK_LR = {
     "chronomancer": ("2", "3"), "beast": ("2", "3"), "doctor": ("2", "3"),
     "imugi": ("2", "3"), "general": ("2", "3"), "apostle": ("2", "3"), "abandoned": ("2", "3"), "abandoned3": ("2", "3"),
     "bedouin": ("2", "2f"), "abandoned2": ("2", "2f"), "novice": ("2", "2f"), "summoner": ("3f", "3"),
-    "novice10": ("2", "2f"), "novice15": ("2", "2f"), "morph-eagle": ("3f", "3"),
+    "novice10": ("2", "2f"), "novice15": ("2", "2f"), "novice20": ("2", "2f"), "morph-eagle": ("3f", "3"),
     "morph-wolf": ("3f", "3"), "morph-bear": ("3f", "3"),
     **{n: ("3f", "3") for n in ("ren", "spiritist", "elder")}, "morph-phoenix": ("3f", "3"), "morph-spider-evo": ("3f", "3"),
     # 각성 동물: 공격 줄 왼·오 칸이 바뀌어 있음

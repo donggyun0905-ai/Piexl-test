@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.341",
+    date: "2026-11-02",
+    items: {
+      ko: ["풋내기 20레벨 판금 옷을 새 그림으로 (빠져 있던 것)"],
+      en: ["Novice Lv 20 plate outfit now uses the new art (it was missing)"],
+      ja: ["見習いのLv20プレートの服を新しい絵に（抜けていたもの）"],
+    },
+  },
+  {
     version: "0.48.340",
     date: "2026-11-02",
     items: {
