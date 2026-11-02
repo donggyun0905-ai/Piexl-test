@@ -14,6 +14,7 @@ import { hiddenExtras, hiddenOnHit } from "./hiddenPerks";
 import { kingExtras } from "./kingForm";
 import { growExtras } from "./pwGearStat";
 import { luxExtras } from "./lux";
+import { devilExtras } from "./devilPerks";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -40,9 +41,11 @@ export function extraOf(p: PlayerState): ExtraStats {
   const gym = gymExtras(p);
   // 시련의 방 등에서 받은 몫 (sim/boons)
   const boon = boonExtras(p);
-  if (!add && !grow && !lux && !gym && !boon) return base;
+  // 악마의 거래 (sim/devilPerks)
+  const devil = devilExtras(p);
+  if (!add && !grow && !lux && !gym && !boon && !devil) return base;
   const out = { ...base };
-  for (const a of [add, grow, lux, gym, boon]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
+  for (const a of [add, grow, lux, gym, boon, devil]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
   return out;
 }
 

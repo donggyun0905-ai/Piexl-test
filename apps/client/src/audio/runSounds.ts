@@ -8,6 +8,7 @@ import { play, setMusicBoss, startMusic, stopMusic, type Sfx } from "./sound";
 import { TRIAL_MUSIC } from "./trialSound";
 import { setRoomMusic } from "./roomMusic";
 import { altarMusic } from "./altarSound";
+import { vaultCues, vaultMusic, vaultSeen, type VaultSeen } from "./vaultSound";
 import { setTigerMusic } from "./tigerSound";
 import { setSummerMusic } from "./summerSound";
 
@@ -47,6 +48,7 @@ interface Seen {
   /** 방 곡: 시련 · 제단 성좌 (없으면 빈칸) */
   music: string;
   alFx: number;
+  vault: VaultSeen;
   /** 예리함 칼빛 · 천검란 (화면에 있는 효과 수) */
   sharps: number;
   cuts: number;
@@ -106,7 +108,8 @@ function snapshot(s: RunState): Seen {
     rmDodges: s.player.rmDodges ?? 0,
     rmCuts: s.effects.filter((f) => f.kind === "rmFlurry" && f.ticks >= f.maxTicks - 1).length,
     trFx: [...new Set(s.effects.filter((f) => f.kind.startsWith("tr") && f.ticks >= f.maxTicks - 1).map((f) => f.kind))].join(","),
-    music: s.trialRun && s.trialRun.room === s.roomId ? "trial" : s.map.rooms[s.roomId]?.type === "altar" ? altarOf(s) : "",
+    music: s.trialRun && s.trialRun.room === s.roomId ? "trial" : s.map.rooms[s.roomId]?.type === "altar" ? altarOf(s) : vaultMusic(s.map.rooms[s.roomId]?.type ?? "") ? s.map.rooms[s.roomId]!.type : "",
+    vault: vaultSeen(s),
     alFx: s.effects.some((f) => f.kind === "alChoose" && f.ticks >= f.maxTicks - 1) ? (s.player.altar?.last?.hit ? 2 : 1) : 0,
     sharps: s.effects.filter((f) => f.kind === "wdSharp").length,
     cuts: s.effects.filter((f) => f.kind === "wdCut" && f.ticks >= f.maxTicks - 1).length,
@@ -265,10 +268,11 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
       // 시련의 방: 비석이 깨어남·벌칙·상자 쏟아짐·열림 소리 · 시련 중 웅장한 곡
       for (const [k, sfx] of [["trWake", "trialWake"], ["trCurse", "trialCurse"], ["trChest", "trialSpill"], ["trOpen", "trialOpen"]] as const) if (now.trFx.includes(k)) fx.push(sfx);
       if (now.music !== seen.music) {
-        setRoomMusic(now.music === "trial" ? TRIAL_MUSIC : now.music ? altarMusic(now.music as AltarId) : null);
-        if (now.music && now.music !== "trial") fx.push("altarAppear");
+        setRoomMusic(now.music === "trial" ? TRIAL_MUSIC : (vaultMusic(now.music) ?? (now.music ? altarMusic(now.music as AltarId) : null)));
+        if (now.music && now.music !== "trial" && !vaultMusic(now.music)) fx.push("altarAppear");
       }
       if (now.alFx) fx.push(now.alFx === 2 ? "altarWrath" : "altarChoose");
+      fx.push(...vaultCues(now.vault, seen.vault)); // 비밀의 방 (audio/vaultSound)
       if (now.over && !seen.over) {
         fx.push(run.won ? "clear" : "fall");
         stopMusic();

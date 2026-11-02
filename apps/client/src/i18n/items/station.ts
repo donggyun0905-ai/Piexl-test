@@ -3,7 +3,9 @@ import type { TunePartFx } from "@pixel-rogue/shared";
 import type { Lang } from "../index";
 import type { Names } from "./names";
 
-export const STATION_NAME: Record<"bench" | "tune" | "gym" | "trial" | "boon" | "altar", Names> = {
+export const STATION_NAME: Record<"bench" | "tune" | "gym" | "trial" | "boon" | "altar" | "gambler" | "auction", Names> = {
+  gambler: { ko: "도박꾼", en: "Gambler", ja: "ギャンブラー" },
+  auction: { ko: "경매 진행자", en: "Auctioneer", ja: "オークショニア" },
   altar: { ko: "성좌의 제단", en: "Constellation Altar", ja: "星座の祭壇" },
   trial: { ko: "시련의 비석", en: "Monolith of Trials", ja: "試練の石碑" },
   boon: { ko: "시련의 보상 상자", en: "Trial Reward Chest", ja: "試練の報酬箱" },
@@ -19,7 +21,18 @@ export const GYM_DEVICE: Names[] = [
   { ko: "벤치 프레스", en: "Bench Press", ja: "ベンチプレス" },
 ];
 
-export const STATION_DESC: Record<"bench" | "tune" | "gym" | "trial" | "boon" | "altar", Names> = {
+export const STATION_DESC: Record<"bench" | "tune" | "gym" | "trial" | "boon" | "altar" | "gambler" | "auction" | "devil", Names> = {
+  devil: { ko: "거래 조건: 최대 체력 {cost} · F로 거래", en: "Price: {cost} max HP · press F to deal", ja: "取引条件: 最大体力{cost} · Fで取引" },
+  gambler: {
+    ko: "F를 눌러 야바위 · 당첨 상자를 잘 따라가 맞히면 패시브 5 · 300원 · 원하는 능력치 2장, 틀리면 무작위 능력치 둘 -10% (한 번만)",
+    en: "Press F for the shell game · follow the winning box: 5 passives · 300 gold · 2 stat picks; miss and two random stats drop 10% (once)",
+    ja: "Fでシェルゲーム · 当たりの箱を追って当てればパッシブ5 · 300ゴールド · 好きな能力値2枚、外すとランダムな能力値2つ-10% (1回のみ)",
+  },
+  auction: {
+    ko: "F를 눌러 경매 창 · 그림자 손님보다 높게 부르면 낙찰 (4번째 상품부터는 ???)",
+    en: "Press F for the auction · outbid the shadow guests to win (lots 4+ are hidden ???)",
+    ja: "Fでオークション · 影の客より高く入札すれば落札 (4番目の品から???)",
+  },
   altar: {
     ko: "F를 눌러 성좌와 마주함 · 카드 셋 중 하나를 골라야 방을 나갈 수 있음",
     en: "Press F to face the constellation · you must pick one of three cards to leave",

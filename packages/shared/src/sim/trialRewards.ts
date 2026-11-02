@@ -1,4 +1,5 @@
 // 시련 보상: 점수 구간(100점마다)의 보상이 비석에서 상자로 쏟아짐 (상자 하나에 보상 하나, 많아 보이게 따로따로)
+// 1000점이면 비밀의 방 고르기 상자 "sr" (악마의 방·도박꾼의 방·경매장·히든 상점 중 골라 바로 들어감, sim/vault)
 // 상자 itemId: "rs:능력치" 무작위 능력치 10% · "ps" 원하는 능력치 10%(창) · "pp:a,b,c" 패시브 셋 중 하나(창) · "pu:a,b,c" 사용 아이템 셋 중 하나(창) · "rv" 체력 가득 되살아남 1회
 // 무작위 패시브는 보통 패시브로 바닥에 놓임. 다가가 F로 열기
 import type { PassiveId, UseItemId } from "../items";
@@ -8,6 +9,8 @@ import { recalcStats } from "./items";
 import { addPickup, CX, CY, passivePool, pickDistinct, seatSalt, usePool } from "./loot";
 import type { Pickup, RunState } from "./types";
 import { addEffect } from "./util";
+import { SECRET_PICKS, type SecretPick } from "../secretDefs";
+import { openVault } from "./vault";
 
 /** 보상 능력치 (화면 차례 = 고르는 번호): 공격력·최대 체력·공격 속도·이동 속도·사거리는 10%, 치명타 확률은 +10% */
 export const BOON_STATS = ["damage", "maxHp", "attackSpeed", "moveSpeed", "range", "critChance"] as const;
@@ -49,6 +52,7 @@ export function spillRewards(s: RunState, score: number): void {
   for (let i = 0; i < pp; i++) codes.push(`pp:${pickDistinct(rng, passivePool(s), 3).join(",")}`);
   for (let i = 0; i < pu; i++) codes.push(`pu:${pickDistinct(rng, usePool(s), 3).join(",")}`);
   for (let i = 0; i < rv; i++) codes.push("rv");
+  if (score >= 1000) codes.push("sr");
   const passives = pickDistinct(rng, passivePool(s), rp);
   const all = codes.length + passives.length;
   const at = (i: number): [number, number] => {
@@ -72,6 +76,7 @@ export function spillRewards(s: RunState, score: number): void {
 /** 고르는 상자의 고를 것 (창 차례) */
 export function chestOptions(code: string): string[] {
   if (code === "ps") return [...BOON_STATS];
+  if (code === "sr") return [...SECRET_PICKS];
   return code.startsWith("pp:") || code.startsWith("pu:") ? code.slice(3).split(",") : [];
 }
 
@@ -91,6 +96,11 @@ export function openChest(s: RunState, pk: Pickup | null, interact: boolean, cho
   if (choice >= 0) {
     const opt = chestOptions(code)[choice];
     if (!opt) return;
+    if (code === "sr") {
+      done();
+      openVault(s, opt as SecretPick);
+      return;
+    }
     if (code === "ps") boonStat(s, opt as BoonStat);
     else if (code.startsWith("pp:")) {
       p.passives.push(opt as PassiveId);

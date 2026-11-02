@@ -4,6 +4,7 @@ import type { Names } from "./names";
 import { DOCTOR_EFFECT_DESC } from "./doctor";
 import { ORIGIN_EFFECT_DESC } from "./origin";
 import { HIDDEN_DESC } from "./hidden";
+import { DEVIL_DESC } from "./devil";
 import { HIDDEN2_DESC } from "./hidden2";
 
 /** 공격 방식을 바꾸는 패시브 설명. {값 이름:모양}은 PERKS의 지금 수치로 채움 (관리자 페이지에서 바뀔 수 있음, items/index.ts) */
@@ -11,6 +12,7 @@ export const EFFECT_DESC: Partial<Record<PassiveId, Names>> = {
   ...DOCTOR_EFFECT_DESC,
   ...ORIGIN_EFFECT_DESC,
   ...HIDDEN_DESC,
+  ...DEVIL_DESC,
   ...HIDDEN2_DESC,
   secondWind: { ko: "쓰러질 때 한 번, 체력 {hp:pct}%로 되살아남 (쓰면 사라짐)", en: "Once, when you would die, revive with {hp:pct}% health (used up)", ja: "倒れる時に1度だけ体力{hp:pct}%で復活（使うと消える）" },
   regenCharm: { ko: "방을 정리할 때마다 최대 체력의 {heal:pct}% 회복", en: "Heal {heal:pct}% of max health each time you clear a room", ja: "部屋を片付けるたびに最大体力の{heal:pct}%回復" },

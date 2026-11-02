@@ -4,6 +4,8 @@ import { drawGlyph, roomLook } from "./minimap";
 import { drawHeavenRoom } from "./render/heavenDraw";
 import { drawTrialRoom } from "./render/trialDraw";
 import { drawAltarRoom } from "./render/altarDraw";
+import { drawCrack, drawDevilRoom, drawGambleTable } from "./render/vaultDraw";
+import { drawAuctionHall } from "./render/auctionDraw";
 
 const C = {
   doorOpen: "#1c1926",
@@ -50,6 +52,7 @@ export function drawRoomFeatures(ctx: CanvasRenderingContext2D, s: RunState): vo
   const room = s.map.rooms[s.roomId];
   if (!room) return;
   const cleared = s.rooms[s.roomId]?.cleared ?? false;
+  drawCrack(ctx, s);
   // 아래쪽 벽 입구: 들어온 길은 닫힘
   if (room.layer > 0) {
     const x = Math.floor(ROOM_COLS / 2) * TILE_SIZE;
@@ -96,6 +99,12 @@ export function drawRoomFeatures(ctx: CanvasRenderingContext2D, s: RunState): vo
     drawTrialRoom(ctx, s, cx, cy);
   } else if (room.type === "altar") {
     drawAltarRoom(ctx, s, cx, cy);
+  } else if (room.type === "devil") {
+    drawDevilRoom(ctx, s, cx);
+  } else if (room.type === "gamble") {
+    drawGambleTable(ctx, s, cx);
+  } else if (room.type === "auction") {
+    drawAuctionHall(ctx, s, cx, cy);
   } else if (room.type === "shop") {
     ctx.fillStyle = C.shopEdge;
     ctx.fillRect(cx - 56, cy - 22, 112, 30);

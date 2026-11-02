@@ -9,6 +9,7 @@ import type { StationView } from "./stationView";
 import { TunePanel } from "./TunePanel";
 import { TrialPanel } from "./trial/TrialPanel";
 import { AltarPanel } from "./altar/AltarPanel";
+import { AuctionPanel, GamblePanel } from "./vault/VaultPanels";
 
 interface Props {
   view: StationView;
@@ -24,6 +25,9 @@ export function StationWindow({ view, lang, t, controls }: Props) {
   if (view.trial || view.chest) return <TrialPanel view={view} lang={lang} t={t} send={send} />;
   // 제단의 방: 성좌의 카드 셋 (game/altar)
   if (view.altar) return <AltarPanel altar={view.altar} t={t} send={send} />;
+  // 비밀의 방: 야바위 · 경매 (game/vault)
+  if (view.gamble) return <GamblePanel gamble={view.gamble} t={t} send={send} />;
+  if (view.auction) return <AuctionPanel view={view.auction} gold={view.gold} lang={lang} t={t} send={send} />;
   // 단련의 방: 미니게임·강화 (game/gym)
   if (view.gym) {
     return (

@@ -4,137 +4,35 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
-    version: "0.48.345",
+    version: "0.48.346",
     date: "2026-11-02",
     items: {
       ko: [
-        "새 방 '제단의 방' (3층부터 층마다 하나, 푸른 바다 같은 방): 성좌 여덟 중 하나가 방을 감쌀 만큼 크게 떠 있고, 방 색·떠도는 것·음악이 성좌마다 다름",
-        "성좌: 바다(흰수염고래) · 화산(용암 거북) · 하늘(천둥 매) · 바람(세실리아) · 빛과 어둠(시온) · 그린우드(실베스타) · 일곱 갈래의 마녀(세티아) · 알 수 없는 성좌(???)",
-        "제단 앞 F → 긴 카드 셋: 거래(성좌마다 주고 받는 능력치) · 증강(무작위 패시브 둘을 바치고 남은 패시브 하나에 광야의 새벽 각성 기술 둘을 새김, 그 패시브를 가진 동안 늘 발동) · 무시(30%로 성좌가 노해 능력치나 패시브 둘을 가져감)",
-        "카드를 고르기 전에는 방을 나갈 수 없음 (잠긴 출구도 못 지남) · 연습장 '방' 탭에서 제단의 방 시험 가능",
+        "비밀의 방: 히든 상점이 나오는 판(혼자 하기·협동)에서 일반 전투방에 처음 들어가면 5% 확률로 벽 어딘가에 금 간 곳이 생김. 몸이 닿으면 벽이 무너지며(소리·효과) 문이 열리고, 들어가면 악마의 방·도박꾼의 방·암흑가 경매장 중 하나 (같은 확률). 비밀의 방 출구는 원래 방 출구와 같음",
+        "악마의 방: 텅 빈 암흑 속 사탄의 석상 앞에 거래 셋 (F로 거래, 최대 체력을 바침) · 악마의 피(공격력 +6·+30%·방어력 +20, 30) · 사탄의 가면(가까운 적 다섯에게 죽음의 오라, 45) · 붉은 반점(방어력 +30, 공격력 패시브마다 +5, 45) · 누군가의 절규(공격 속도 +30%·모든 공격 범위 피해 50%, 30) · 뒤집어진 십자가(보스 피해 +66%, 40) · 그림 리퍼(적 방어력 -30, 35). 오라·낫 효과",
+        "악마와 한 번이라도 거래하면 7층(라스트 보스 층)은 여신의 축복을 받은 뒤 여신의 선물·천상의 상점 없이 단순 상점(산 자리는 새로고침해도 다시 안 채움) → 바로 라스트 보스",
+        "도박꾼의 방: 상자 셋 야바위 (당첨 상자를 보여 준 뒤 섞음, 한 번만) · 맞히면 패시브 5 + 300원 + 원하는 능력치 10% 2장 · 틀리면 무작위 능력치 둘 -10%",
+        "암흑가 경매장: 무대 위 상품 5개(4번째부터 ???) · 그림자 손님들과 값을 겨룸 (손님은 상품의 숨은 값어치까지만 부름) · 진행자가 값 팻말을 들고 하나·둘·셋 → 망치로 낙찰 · 돈이 날아가는 효과·띠링 소리 · 상품은 패시브 또는 증강 기술(가진 패시브에 골라 붙임)",
+        "시련 1000점 보상에 '비밀의 방 고르기' 상자 추가: 악마의 방·도박꾼의 방·경매장·히든 상점 중 골라 바로 들어감",
+        "방마다 곡(악마·도박꾼·경매장) · 연습장 '방' 탭에서 악마의 방·도박꾼의 방·경매장·금 간 벽을 불러 시험 가능",
       ],
       en: [
-        "New room 'Altar Room' (one per floor from floor 3, sea-blue): one of eight constellations looms large enough to wrap the room, with its own colors, drifting motes and music",
-        "Constellations: Sea (Blue Whale) · Volcano (Lava Tortoise) · Sky (Thunder Hawk) · Wind (Cecilia) · Light and Dark (Sion) · Greenwood (Sylvester) · Witch of the Seven Paths (Setia) · Unknown (???)",
-        "Press F at the altar → three tall cards: Bargain (a stat trade per constellation) · Augment (offer 2 random passives; the remaining one gains 2 Dawn of the Wilds awakened skills that fire while you hold it) · Ignore (30% chance the constellation takes stats or 2 passives)",
-        "You can't leave until you choose (locked exits too) · try it from the practice 'Rooms' tab",
+        "Secret rooms: in runs where the hidden shop can appear (solo · co-op), entering a normal combat room for the first time has a 5% chance to reveal a cracked wall. Touch it to bring it down (sound · effect) and open a door to the Devil's Room, the Gambler's Room or the Underworld Auction (equal odds). A secret room's exits match the original room's",
+        "Devil's Room: three deals before a statue of Satan in empty darkness (press F, pay with max HP) · Devil's Blood (+6 · +30% damage, +20 defense; 30) · Mask of Satan (death aura on the 5 nearest foes; 45) · Crimson Spots (+30 defense, +5 per damage passive; 45) · Someone's Scream (+30% attack speed, every hit splashes for 50%; 30) · Inverted Cross (+66% damage to bosses; 40) · Grim Reaper (-30 enemy defense; 35). With auras and a scythe",
+        "Make any deal and floor 7 (the last boss floor) skips the Goddess's Gift and the Celestial Shop after the blessing: a plain shop (bought slots don't refill on refresh) → straight to the last boss",
+        "Gambler's Room: a three-box shell game (the winning box is shown, then shuffled; once only) · win: 5 passives + 300 gold + two +10% stat picks · miss: two random stats -10%",
+        "Underworld Auction: 5 lots on stage (from the 4th they are ???) · bid against shadow guests (they only go up to each lot's hidden worth) · the auctioneer raises a price sign, counts going-going-gone and drops the gavel · flying money and a chime · lots are passives or augments (graft onto a passive you choose)",
+        "The 1000-point trial reward adds a 'choose a secret room' chest: enter the Devil's Room, Gambler's Room, Auction or Hidden Shop right away",
+        "Music for each secret room · try the Devil's Room, Gambler's Room, Auction and cracked wall from the practice 'Rooms' tab",
       ],
       ja: [
-        "新しい部屋「祭壇の部屋」（3階から各階に一つ、海のような青い部屋）：8つの星座のどれかが部屋を包むほど大きく浮かび、部屋の色・漂うもの・音楽が星座ごとに違う",
-        "星座：海（シロナガスクジラ）· 火山（溶岩亀）· 空（雷鷹）· 風（セシリア）· 光と闇（シオン）· グリーンウッド（シルベスタ）· 七筋の魔女（セティア）· 知られざる星座（???）",
-        "祭壇の前でF → 縦長のカード3枚：取引（星座ごとの能力値の交換）· 増強（ランダムなパッシブ2つを捧げ、残ったパッシブ1つに荒野の夜明けの覚醒技2つを刻む。そのパッシブを持つ間ずっと発動）· 無視（30%で星座が怒り能力値かパッシブ2つを奪う）",
-        "カードを選ぶまで部屋を出られない（鍵のかかった出口も通れない）· 練習場「部屋」タブで試せる",
-      ],
-    },
-  },
-  {
-    version: "0.48.344",
-    date: "2026-11-02",
-    items: {
-      ko: [
-        "새 방 '시련의 방' (4층부터 층마다 하나, 새빨간 방): 가운데 거대한 비석에서 F → 시련을 시작하겠습니까? YES/NO",
-        "NO: 비석이 하나를 빼앗음 (최대 체력 20% · 공격력 3 · 공격 속도 10% · 사거리 6 · 무기 · 패시브 1 · 사용 아이템 2 · 이번 층 암흑 · 이번 층 체력 1 · 이동 속도 0.3 중 하나)",
-        "YES: 시련 하나 (암흑 속 무리 10% · 체력 1로 무리 5% · 보스 셋 20% · 끝없는 무리 65%). 앞의 셋은 이기면 1000점, 쓰러지면 끝 · 끝없는 무리는 처치마다 점수, 쓰러져도 죽지 않음 (700점부터 매우 어려워짐)",
-        "점수 100점마다 보상이 커지고, 비석에서 상자가 쏟아짐 (능력치 10% · 고르는 능력치·패시브·사용 아이템 · 무작위 패시브 · 900점부터 체력 가득 되살아남 1회). 상자는 다가가 F",
-        "비석이 깨어나는 웅장한 소리·붉고 검은 효과, 시련 중에는 웅장한 시련 곡 · 연습장 '방' 탭에서 시련의 방을 불러 시험 가능",
-      ],
-      en: [
-        "New room 'Trial Room' (one per floor from floor 4, blood-red): press F at the giant monolith → Will you begin the trial? YES/NO",
-        "NO: the monolith takes one thing (20% max HP · 3 damage · 10% attack speed · 6 range · your weapon · 1 passive · 2 items · darkness for this floor · 1 HP for this floor · 0.3 move speed)",
-        "YES: one trial (horde in darkness 10% · horde at 1 HP 5% · three bosses 20% · endless horde 65%). The first three give 1000 points if you win and end the run if you fall · the endless horde scores per kill and falling won't kill you (very hard past 700)",
-        "Rewards grow every 100 points and pour out of the monolith as chests (stat +10% · stat/passive/item of your choice · random passives · a full-HP revive from 900). Walk up and press F",
-        "Grand sound and red-black effects as the monolith wakes, a grand trial theme during the trial · try it from the practice 'Rooms' tab",
-      ],
-      ja: [
-        "新しい部屋「試練の部屋」（4階から各階に一つ、真っ赤な部屋）：中央の巨大な石碑でF → 試練を始めますか？ YES/NO",
-        "NO：石碑が一つ奪う（最大体力20% · 攻撃力3 · 攻撃速度10% · 射程6 · 武器 · パッシブ1 · 使用アイテム2 · この階は暗黒 · この階は体力1 · 移動速度0.3のどれか）",
-        "YES：試練一つ（暗黒の群れ10% · 体力1の群れ5% · ボス三体20% · 果てなき群れ65%）。前の三つは勝てば1000点、倒れたら終わり · 果てなき群れは倒すごとに点数、倒れても死なない（700点から非常に難しい）",
-        "100点ごとに報酬が大きくなり、石碑から箱があふれ出る（能力値10% · 選べる能力値・パッシブ・使用アイテム · ランダムパッシブ · 900点から体力満タン復活1回）。近づいてF",
-        "石碑が目覚める荘厳な音と赤黒いエフェクト、試練中は荘厳な試練曲 · 練習場「部屋」タブで呼び出して試せる",
-      ],
-    },
-  },
-  {
-    version: "0.48.343",
-    date: "2026-11-02",
-    items: {
-      ko: [
-        "잔영 리메이크: 기본 공격은 짧은 단검 내려찍기 · 기본 치명타 45% · 순간이동·그림자·분신·뒤치기는 없앰",
-        "잔영: 대시로 적 공격을 피하면(안 피했으면 맞았을 공격) 1.5초 슬로우모션 (적·적 탄만 느려지고 화면이 어두워짐) · 그 안에 직접 클릭(휴대폰은 화면을 새로 터치)하면 확정 치명타 3연속 큰 베기 (여러 적, 마지막은 몸 둘레 모두) → 슬로우모션 끝",
-        "잔영 무기 10·전용 아이템 10을 새 방식에 맞게 다시 만듦 (섬영 2.5초·5연속, 회전 칼날 모두 몸 둘레, 월식 검은 달 터짐 등) · 효과를 새로 그림 (빛나는 초승달 검격·충격파·불똥)",
-        "피해 숫자가 한 자리에 겹치지 않고 사방으로 흩뿌려지며 뜸",
-        "단련의 방: 점수가 1000에 가까울수록 팔이 굵어지고 핏줄이 보임 (샌드백·랫풀다운에도 팔) · 미니게임 시작 호루라기와 운동 박자 소리 (맞힐수록 빨라짐)",
-      ],
-      en: [
-        "Remnant remake: basic attack is now a short dagger stab · base crit 45% · blink, shadow, decoy and backstab removed",
-        "Remnant: dash through an enemy attack that would have hit you for 1.5s of slow motion (only foes and their shots slow down, the screen darkens) · click yourself in it (new tap on phones) for 3 big sure-crit slashes (many foes, the last one all around) → slow motion ends",
-        "Remnant's 10 weapons and 10 items reworked for the new style (Flash Shadow 2.5s and 5 slashes, Spinning Blades all around, Eclipse black-moon burst, etc.) · new effects (glowing crescent slashes, shockwaves, sparks)",
-        "Damage numbers now scatter outward instead of stacking on one spot",
-        "Training room: arms grow thicker with visible veins as your score nears 1000 (arms added to Sandbag and Lat Pulldown too) · minigame start whistle and workout beat (speeds up as you hit)",
-      ],
-      ja: [
-        "残影リメイク: 通常攻撃は短い短剣の突き下ろし · 基本クリティカル45% · 瞬間移動・影・分身・背後斬りはなくした",
-        "残影: 当たるはずの敵の攻撃をダッシュで避けると1.5秒スローモーション（敵と敵の弾だけ遅くなり画面が暗くなる）· その間に自分でクリック（スマホは画面を新しくタッチ）すると確定会心の大きな3連斬り（複数の敵、最後は全周）→ スローモーション終了",
-        "残影の武器10・専用アイテム10を新しい方式に合わせて作り直し（閃影は2.5秒・5連、回転刃はすべて全周、月蝕は黒い月が弾けるなど）· エフェクトを新しく（光る三日月の斬撃・衝撃波・火花）",
-        "ダメージ数字が一か所に重ならず四方に散らばって出る",
-        "鍛錬の部屋: スコアが1000に近づくほど腕が太くなり血管が見える（サンドバッグ・ラットプルダウンにも腕）· ミニゲーム開始のホイッスルとトレーニングのリズム音（当てるほど速くなる）",
-      ],
-    },
-  },
-  {
-    version: "0.48.342",
-    date: "2026-11-02",
-    items: {
-      ko: [
-        "관리자 '맵 만들기': 칸을 드래그로 칠해 던전 방 모양·광야의 새벽 맵·타워 디펜스 맵을 직접 만들고 서버에 저장 (벽·기둥·깊은 물·얕은 물·진흙·용암·가시 함정·미사일 타워·길·지킬 곳)",
-        "만든 던전 방 모양은 혼자 하기(아레나·영웅의 길 빼고)의 전투방·강한 적 방에 섞여 나오고, 연습장 '방' 탭에서 바로 바꿔 볼 수 있음 (그 판은 레이드 기록 제외)",
-        "만든 광야의 새벽·타워 디펜스 맵은 각 맵 고르기 화면에 나옴",
-      ],
-      en: [
-        "Admin 'Map Maker': paint tiles by dragging to build dungeon room layouts, Dawn of the Wilds maps and Tower Defense maps, saved to the server (walls, pillars, deep water, shallow water, mud, lava, spike traps, missile towers, paths, goal)",
-        "Custom room layouts mix into combat and elite rooms in solo runs (not Arena or Hero's Path) and can be tried in the practice 'Rooms' tab (such runs are not sent as raid records)",
-        "Custom Dawn of the Wilds and Tower Defense maps appear on their map select screens",
-      ],
-      ja: [
-        "管理者「マップ作り」: マスをドラッグで塗ってダンジョンの部屋の形・荒野の夜明けのマップ・タワーディフェンスのマップを作りサーバーに保存（壁・柱・深い水・浅い水・泥・溶岩・トゲ罠・ミサイル塔・道・守る場所）",
-        "作った部屋の形はひとりで遊ぶ（アリーナ・英雄の道を除く）の戦闘部屋・強敵部屋に混ざって出て、練習場の「部屋」タブですぐ試せる（そのランはレイド記録の対象外）",
-        "作った荒野の夜明け・タワーディフェンスのマップはそれぞれのマップ選択画面に出る",
-      ],
-    },
-  },
-  {
-    version: "0.48.341",
-    date: "2026-11-02",
-    items: {
-      ko: ["풋내기 20레벨 판금 옷을 새 그림으로 (빠져 있던 것)"],
-      en: ["Novice Lv 20 plate outfit now uses the new art (it was missing)"],
-      ja: ["見習いのLv20プレートの服を新しい絵に（抜けていたもの）"],
-    },
-  },
-  {
-    version: "0.48.340",
-    date: "2026-11-02",
-    items: {
-      ko: ["풋내기: 레벨업 때 능력치 버튼이 게임 화면 위에 떠서 나옴 (게임 화면이 작아지지 않음)"],
-      en: ["Novice: on level up, the stat buttons now float over the game view (the game view no longer shrinks)"],
-      ja: ["新米: レベルアップ時の能力値ボタンがゲーム画面の上に浮かんで出る（ゲーム画面が小さくならない）"],
-    },
-  },
-  {
-    version: "0.48.339",
-    date: "2026-11-02",
-    items: {
-      ko: [
-        "단련의 방 효과 강화 점검: 333개 패시브 모두 효과 수치가 실제로 오르는 것 확인 · 1.4배 같은 배율은 1을 넘는 몫만 키움 (10단계 1.4배 → 1.8배) · 소환술사 유대의 방패가 거꾸로 약해지던 것 고침",
-        "단련한 효과가 화면(폭발·범위 원 등)과 능력치 창에도 오른 크기로 보임",
-      ],
-      en: [
-        "Training Room effect check: all 333 passives verified to actually improve · multipliers like ×1.4 now grow only the part above 1 (×1.4 → ×1.8 at level 10) · fixed Summoner's Bond Shield getting weaker instead of stronger",
-        "Upgraded effects now also show at their boosted size on screen (blast and area rings, etc.) and in the stats panel",
-      ],
-      ja: [
-        "鍛錬の部屋の効果強化を点検: 333個のパッシブ全部で効果の数値が実際に上がるのを確認 · ×1.4のような倍率は1を超える分だけ伸びる（10段階で×1.4 → ×1.8）· 召喚術師の絆の盾が逆に弱くなっていたのを修正",
-        "鍛錬した効果が画面（爆発・範囲の輪など）と能力値画面でも上がった大きさで見える",
+        "秘密の部屋：ヒドゥンショップが出るラン（ソロ · 協力）で、普通の戦闘部屋に初めて入ると5%で壁のどこかにひびが入る。体が触れると壁が崩れ（音 · 効果）扉が開き、入ると悪魔の部屋 · ギャンブラーの部屋 · 闇街オークションのどれか（同じ確率）。秘密の部屋の出口は元の部屋の出口と同じ",
+        "悪魔の部屋：何もない暗闇でサタンの石像の前に取引3つ（Fで取引、最大体力を捧げる）· 悪魔の血（攻撃力+6 · +30% · 防御力+20、30）· サタンの仮面（近くの敵5体に死のオーラ、45）· 赤い斑点（防御力+30、攻撃力パッシブごとに+5、45）· 誰かの絶叫（攻撃速度+30% · すべての攻撃に範囲ダメージ50%、30）· 逆さ十字（ボスへのダメージ+66%、40）· グリムリーパー（敵の防御力-30、35）。オーラ · 鎌の効果",
+        "悪魔と一度でも取引すると7階（ラストボス階）は女神の祝福の後、女神の贈り物 · 天上のショップなしで普通のショップ（買った枠は入れ替えても補充されない）→ すぐラストボス",
+        "ギャンブラーの部屋：箱3つのシェルゲーム（当たりの箱を見せてから混ぜる、1回のみ）· 当てればパッシブ5 + 300ゴールド + 好きな能力値10% 2枚 · 外すとランダムな能力値2つ-10%",
+        "闇街オークション：舞台の品物5個（4番目から???）· 影の客と競り合う（客は品物の隠れた価値までしか入札しない）· 司会者が価格の札を掲げ、1 · 2 · 3でハンマーを打って落札 · お金が舞う効果 · チャイムの音 · 品物はパッシブか増強技（持っているパッシブを選んで付ける）",
+        "試練1000点の報酬に「秘密の部屋を選ぶ」箱を追加：悪魔の部屋 · ギャンブラーの部屋 · オークション · ヒドゥンショップから選んですぐ入る",
+        "秘密の部屋ごとの曲 · 練習場「部屋」タブで悪魔の部屋 · ギャンブラーの部屋 · オークション · ひびの入った壁を試せる",
       ],
     },
   },

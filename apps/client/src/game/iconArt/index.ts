@@ -36,7 +36,7 @@ export function drawIcon(ctx: CanvasRenderingContext2D, item: IconItem): void {
   // 히든 아이템: 보랏빛 차원 틀 (iconArt/hidden)
   const hidden = item.kind !== "weapon" ? HIDDEN_ART[item.id] : undefined;
   if (hidden) {
-    hiddenFrame(g);
+    hiddenFrame(g, item.id);
     hidden(g);
     return;
   }

@@ -141,7 +141,7 @@ export function updateItems(s: RunState, input: TickInput): void {
     if (!touching(s, pk, R.TOUCH + bigReach(pk))) {
       // 한 번 떨어지면 다시 주울 수 있음 (무기·사용 아이템을 번갈아 써 보게)
       pk.armed = true;
-      if (pk.kind === "trash" || (isStation(pk) && pk.kind !== "boon")) pk.itemId = "0";
+      if (pk.kind === "trash" || (isStation(pk) && pk.kind !== "boon" && pk.kind !== "devil")) pk.itemId = "0";
       continue;
     }
     if (pk.kind === "trash" || isStation(pk)) {

@@ -22,7 +22,7 @@ export const ALTAR_SOUNDS = {
 export type AltarSfx = keyof typeof ALTAR_SOUNDS;
 
 /** 곡 한 벌: 박 길이(ms) · 으뜸음(Hz) · 음계(반음) · 가락 차례 · 가락 소리 · 북 박자 · 긴 화음 소리 · 살짝 어긋남(으스스) */
-interface Song {
+export interface Song {
   ms: number;
   root: number;
   scale: readonly number[];
@@ -47,7 +47,7 @@ const SONGS: Record<AltarId, Song> = {
 /** 음계 n번째 음 (넘치면 한 옥타브 위) */
 const note = (song: Song, n: number) => song.root * 2 ** ((Math.floor(n / song.scale.length) * 12 + song.scale[n % song.scale.length]!) / 12);
 
-function beatOf(song: Song) {
+export function beatOf(song: Song) {
   return (step: number): void => {
     const out = musicOut();
     if (!out) return;

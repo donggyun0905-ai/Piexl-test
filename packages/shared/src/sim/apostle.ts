@@ -139,7 +139,7 @@ function eatSoul(s: RunState, x: number, y: number, light?: boolean): void {
 }
 
 /** 사탄의 가면: 오라가 다 올라오면 죽음 (최대 체력의 5%, 보스는 1/5의 5% + 공격력 10%) */
-function doomTick(s: RunState): void {
+export function doomTick(s: RunState): void {
   const p = s.player;
   if (!p.apDooms?.length) return;
   for (const d of p.apDooms) {

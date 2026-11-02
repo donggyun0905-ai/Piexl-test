@@ -1,0 +1,146 @@
+/* 비밀의 방 창 (game/vault/VaultPanels): 야바위(초록 융단·금테) · 경매(검붉은 융단·금빛). 방 그림(상자·무대)이 보이게 화면 아래쪽에 띄움 */
+.station-window.vault-gamble,
+.station-window.vault-auction {
+  top: auto;
+  bottom: 3vh;
+  transform: translateX(-50%);
+  width: min(720px, 96vw);
+  max-height: 52vh;
+  border-color: #e8c25a;
+  text-align: center;
+}
+.station-window.vault-gamble {
+  background: radial-gradient(circle at 50% 0%, #1e6a3a, #0a1a10 80%);
+  box-shadow: 0 0 30px rgba(232, 194, 90, 0.35);
+}
+.station-window.vault-auction {
+  background: radial-gradient(circle at 50% 0%, #5a1420, #12040a 80%);
+  box-shadow: 0 0 30px rgba(192, 24, 40, 0.45);
+}
+.vault-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.vault-body p {
+  margin: 0;
+}
+.vault-go {
+  padding: 8px 26px;
+  font-weight: bold;
+  color: #1a1008;
+  background: linear-gradient(#ffe08a, #e8a83a);
+  border: 2px solid #fff2c0;
+  border-radius: 6px;
+}
+.vault-go:disabled {
+  opacity: 0.45;
+}
+.vault-cups {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+.vault-cup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px;
+  font-weight: bold;
+  color: #fff6c0;
+  background: #6a3a18;
+  border: 2px solid #e8c25a;
+  border-radius: 8px;
+}
+.vault-cup span {
+  font-size: 1.8rem;
+  color: #e8c25a;
+}
+.vault-cup:hover {
+  background: #8a5228;
+}
+.vault-result {
+  margin: 6px 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.vault-result.win {
+  color: #ffd040;
+  text-shadow: 0 0 12px #ffd040;
+}
+.vault-result.lose {
+  color: #b0a0c0;
+}
+.auction-lots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.auction-lot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  min-height: 44px;
+  padding: 4px;
+  background: #1a0a10;
+  border: 1px solid #6a3a28;
+  border-radius: 6px;
+}
+.auction-lot i {
+  font-style: normal;
+  font-size: 1.4rem;
+  color: #c8a8ff;
+}
+.auction-lot small {
+  font-size: 0.75rem;
+}
+.auction-lot.now {
+  border-color: #ffd040;
+  box-shadow: 0 0 10px #ffd040;
+}
+.auction-lot.won1 {
+  border-color: #7aff9a;
+}
+.auction-lot.won2 {
+  opacity: 0.5;
+}
+.auction-now {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.auction-now small {
+  opacity: 0.8;
+}
+.auction-price strong {
+  font-size: 1.6rem;
+  color: #fff6c0;
+}
+.auction-price.lead1 strong {
+  color: #7aff9a;
+}
+.auction-price.lead2 strong {
+  color: #ff6a7a;
+}
+.auction-price em {
+  color: #ff8a5a;
+  font-weight: bold;
+}
+.auction-buttons,
+.auction-graft {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.auction-graft button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 110px;
+}

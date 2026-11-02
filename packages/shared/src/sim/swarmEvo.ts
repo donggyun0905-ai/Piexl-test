@@ -13,7 +13,7 @@ import { addEffect, dist2, normalize } from "./util";
 
 export type SwarmSkill = "storm" | "comet" | "frost" | "blades" | "barrage" | "nova" | SwarmSkill2;
 /** 기술 16가지 (비슷한 것끼리 떨어지게 섞은 순서) */
-const SKILLS: readonly SwarmSkill[] = ["wave", "storm", "bounce", "frost", "lance", "comet", "cleave", "blades", "curse", "fan", "chain", "barrage", "vortex", "pillar", "boomerang", "nova"];
+export const SKILLS: readonly SwarmSkill[] = ["wave", "storm", "bounce", "frost", "lance", "comet", "cleave", "blades", "curse", "fan", "chain", "barrage", "vortex", "pillar", "boomerang", "nova"];
 const K = SWARM.skills;
 
 /** 무기마다 정해진 각성 기술: 그 캐릭터가 쓸 수 있는 무기 순서대로 (캐릭터마다 시작 자리를 달리해), 한 캐릭터 안에서는 겹치지 않음 */

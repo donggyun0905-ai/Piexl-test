@@ -47,6 +47,12 @@ const TRIAL = T("#3a0e14", "#320c12", "#5a141c", "#ff3a3a", "#4a1018", "#7a2028"
 const ALTAR_THEME = Object.fromEntries(
   Object.entries(ALTAR_LOOK).map(([id, L]) => [id, T(mixHex("#0e3a5a", L.deep), mixHex("#0a2e4a", L.deep), L.deep, L.main, mixHex("#1a4a6a", L.deep), L.glow, "#04121e", L.main, [["bubble", L.glow], ["star", L.main]], 0.12)]),
 ) as Record<AltarId, FloorTheme>;
+/** 비밀의 방: 악마(새까만 바닥·핏빛 금) · 도박꾼(어두운 나무 바닥·초록 벽) · 경매장(검붉은 융단·금빛 벽) */
+const VAULT = {
+  devil: T("#08060a", "#0a070c", "#1a0c10", "#c01828", "#0e0a10", "#3a0c14", "#020102", "#c01828", [["crack", "#5a0c14"], ["ember", "#ff5a3a"]], 0.06),
+  gamble: T("#2a1e14", "#261a12", "#1e4a2a", "#e8c25a", "#3a2a1a", "#2e6a3a", "#0e0a06", "#e8c25a", [["star", "#e8c25a"]], 0.04),
+  auction: T("#2a0c12", "#240a10", "#3a1a10", "#e8c25a", "#3a1218", "#6a1a24", "#0e0406", "#e8c25a", [["petal", "#7a1a24"]], 0.05),
+} as const;
 const HEAVEN = T("#f1eff8", "#e7e3f2", "#b4aed0", "#fff2c8", "#e4e0f0", "#fffaf0", "#c8c2dc", "#f0d890", [["feather", "#ffffff"], ["star", "#e8c25a"]], 0.16);
 
 /** 보스 → 테마 */
@@ -117,6 +123,7 @@ export function themeFor(s: RunState): FloorTheme {
   const room = s.map?.rooms[s.roomId];
   if (room && (room.heaven || room.type === "golden")) return HEAVEN;
   if (room?.type === "trial") return TRIAL;
+  if (room?.type === "devil" || room?.type === "gamble" || room?.type === "auction") return VAULT[room.type];
   if (room?.type === "altar") return ALTAR_THEME[altarOf(s)];
   if (s.swarm) return THEMES[SWARM_THEME[(s.swarm.map ?? "plains") as keyof typeof SWARM_THEME] ?? SWARM_THEME.plains]!;
   const pa = s.pvp?.arena ?? s.pw?.arena;

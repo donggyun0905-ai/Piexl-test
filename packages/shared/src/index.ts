@@ -38,3 +38,5 @@ export * from "./voyagerFates";
 export * from "./customMaps";
 export * from "./customMapUse";
 export * from "./altarDefs";
+export * from "./secretDefs";
+export * from "./itemsDevil";

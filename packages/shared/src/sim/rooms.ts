@@ -12,7 +12,7 @@ import { onRoomCleared, spawnBlessing, spawnGolden, spawnTreasure } from "./loot
 import { roomLocked, spawnSpecialRoom } from "./specialRooms";
 import { makeArena } from "./bossPrimeval";
 import { arenaBig, arenaEnemies, arenaMap, arenaNext, arenaPrimeval } from "./arena";
-import { spawnShop } from "./shop";
+import { devilPact, spawnShop } from "./shop";
 import { endlessBosses, endlessPrimeval, endlessSize } from "./endless";
 import { depth, heroBosses, heroNext, heroPair, lastFloorOf } from "./hero";
 import { SWARM } from "./minions";
@@ -69,7 +69,7 @@ export function applyRoom(s: RunState): void {
   else setRoomSize(s.roomCols, s.roomRows, false, thin);
 }
 
-/** 6층을 깬 뒤 라스트 보스에 도전: 7층(시작 방 → 여신의 선물 → 천상의 상점 → 큰 보스방)으로 */
+/** 6층을 깬 뒤 라스트 보스에 도전: 7층으로 (지도는 floor.lastFloorMap) */
 export function continueToLastFloor(s: RunState, boss: BossKind): void {
   s.lastBoss = boss;
   s.over = false;
@@ -79,7 +79,7 @@ export function continueToLastFloor(s: RunState, boss: BossKind): void {
 /** 층 시작: 지도 만들고 시작 방으로 */
 export function startFloor(s: RunState, floor: number): void {
   s.floor = floor;
-  s.map = s.arenaLv ? arenaMap(s) : s.lastBoss && floor === lastFloorOf(s) ? lastFloorMap() : generateFloor(s.seed, floor, s.customRooms);
+  s.map = s.arenaLv ? arenaMap(s) : s.lastBoss && floor === lastFloorOf(s) ? lastFloorMap(devilPact(s)) : generateFloor(s.seed, floor, s.customRooms);
   s.rooms = s.map.rooms.map(() => ({ visited: false, cleared: false, pickups: [], enemies: null }));
   s.enemies = [];
   s.projectiles = [];

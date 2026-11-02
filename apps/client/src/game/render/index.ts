@@ -69,6 +69,7 @@ import { drawForgottenAura, drawForgottenBack } from "./forgotten";
 import { drawRemnantAura, drawRemnantSlowmo } from "./remnant";
 import { drawTrialEdge } from "./trialFx";
 import { drawAugments } from "./altarDraw";
+import { drawDevilAura, drawVaultOverlay } from "./vaultFx";
 import { drawWandererAura, drawWandererGround } from "./wanderer";
 import { drawSilkAmmo, drawSilkStacks } from "./silk";
 import { drawSecretAura, drawSecretGround } from "./secret";
@@ -199,6 +200,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
     drawForgottenBack(ctx, s, alpha, snap);
     drawRemnantAura(ctx, s, snap);
     drawAugments(ctx, s, snap);
+    drawDevilAura(ctx, s, snap);
     drawWandererGround(ctx, s, snap);
     drawSecretGround(ctx, s, alpha, snap);
   });
@@ -255,6 +257,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
   drawEffects(ctx, s, alpha, snap);
   drawCurseText(ctx, s, opt.curseNames, alpha, snap);
   drawPrimevalOverlay(ctx, s, alpha, snap);
+  drawVaultOverlay(ctx, s);
   drawUltOverlay(ctx, s, snap);
   drawImugiOverlay(ctx, s);
   drawBeastAir(ctx, s);

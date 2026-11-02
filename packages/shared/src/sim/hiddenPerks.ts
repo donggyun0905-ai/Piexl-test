@@ -15,6 +15,7 @@ import { storms } from "./oni";
 import { stun } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+import { devilOnHit } from "./devilPerks";
 
 /** 아티팩트 색 (스택 창 차례) */
 export const RELICS = ["relicRed", "relicBlue", "relicSilver", "relicGold", "relicPrism", "relicWhite", "relicGreen"] as const;
@@ -106,6 +107,7 @@ export function hiddenOnHit(s: RunState, e: EnemyState, dmg: number): void {
     blastAt(s, e.x, e.y, K.gnomeHammer.r, dmg * K.gnomeHammer.mul, { exclude: e });
     addEffect(s, { kind: "hdQuake", x: e.x, y: e.y, dirX: 0, dirY: 0, size: K.gnomeHammer.r, maxTicks: 12 });
   }
+  devilOnHit(s, e, dmg);
   busy = false;
 }
 

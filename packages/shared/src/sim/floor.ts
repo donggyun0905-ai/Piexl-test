@@ -17,8 +17,8 @@ export const LANES = 3;
 /** 한 층의 최대 칸 수 (시작 방·보스방 포함) */
 export const MAX_LAYERS = 12;
 
-/** exit = 보스방 (보스를 잡으면 계단이 열림) · elite = 강한 적 (보상이 많음) · rest = 쉼터 (체력 회복) · golden = 여신의 선물 (라스트 보스 층: 아이템 9개 중 3개 고르기) · gym = 단련의 방 (4층부터, sim/gym) · trial = 시련의 방 (4층부터, sim/trial) · altar = 제단의 방 (3층부터, sim/altar) */
-export type RoomType = "start" | "combat" | "elite" | "rest" | "treasure" | "shop" | "exit" | "golden" | "gym" | "trial" | "altar";
+/** exit = 보스방 (보스를 잡으면 계단이 열림) · elite = 강한 적 (보상이 많음) · rest = 쉼터 (체력 회복) · golden = 여신의 선물 (라스트 보스 층: 아이템 9개 중 3개 고르기) · gym = 단련의 방 (4층부터, sim/gym) · trial = 시련의 방 (4층부터, sim/trial) · altar = 제단의 방 (3층부터, sim/altar) · devil·gamble·auction = 비밀의 방 · hidden = 시련 보상으로 들어간 히든 상점 (sim/vault, 지도 끝 옆방) */
+export type RoomType = "start" | "combat" | "elite" | "rest" | "treasure" | "shop" | "exit" | "golden" | "gym" | "trial" | "altar" | "devil" | "gamble" | "auction" | "hidden";
 
 export interface RoomInfo {
   id: number;
@@ -105,9 +105,9 @@ export function generateFloor(seed: number, floor: number, custom: readonly (rea
   return { floor, rooms, startId: 0, exitId: exit.id, layers: byLayer.length };
 }
 
-/** 라스트 보스 층: 시작 방 → 여신의 선물 → 천상의 상점 → (아주 큰) 보스방, 한 줄로 */
-export function lastFloorMap(): FloorMap {
-  const types: RoomType[] = ["start", "golden", "shop", "exit"];
-  const rooms: RoomInfo[] = types.map((type, i) => ({ id: i, layer: i, lane: 1, type, exits: [-1, i + 1 < types.length ? i + 1 : -1, -1], shape: PLAIN_SHAPE, ...(type === "shop" ? { heaven: true } : {}) }));
+/** 라스트 보스 층: 시작 방 → 여신의 선물 → 천상의 상점 → (아주 큰) 보스방, 한 줄로. 악마와 거래했으면(pact) 시작 방 → 단순 상점 → 보스방 */
+export function lastFloorMap(pact = false): FloorMap {
+  const types: RoomType[] = pact ? ["start", "shop", "exit"] : ["start", "golden", "shop", "exit"];
+  const rooms: RoomInfo[] = types.map((type, i) => ({ id: i, layer: i, lane: 1, type, exits: [-1, i + 1 < types.length ? i + 1 : -1, -1], shape: PLAIN_SHAPE, ...(type === "shop" && !pact ? { heaven: true } : {}) }));
   return { floor: LAST_FLOOR, rooms, startId: 0, exitId: types.length - 1, layers: types.length };
 }

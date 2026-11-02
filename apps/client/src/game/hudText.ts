@@ -1,6 +1,6 @@
 // HUD 글자: 시간, 상호작용 안내, 바닥 아이템 설명
 import { GYM_DEVICE } from "../i18n/items/station";
-import { FLOOR_COUNT, HERO_FLOORS, isCapture, isGiga, nearBuff, nearDoor, nearPortal, nearExit, nearLoot, TICK_RATE, type RunState } from "@pixel-rogue/shared";
+import { devilCost, type DevilId, FLOOR_COUNT, HERO_FLOORS, isCapture, isGiga, nearBuff, nearDoor, nearPortal, nearExit, nearLoot, TICK_RATE, type RunState } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { itemDesc, itemName } from "../i18n/items";
 
@@ -36,6 +36,11 @@ export function promptText(run: RunState, lang: Lang, t: (k: TextKey) => string)
     if (!pk) return "";
     const head = run.gold >= pr.price ? t("promptBuy") : t("promptNoGold");
     return `${head.replace("{price}", String(pr.price))}: ${itemName(pk.kind, pk.itemId, lang)} — ${itemDesc(pk.kind, pk.itemId, lang, t)}`;
+  }
+  if (pr.kind === "station" && pr.station === "devil") {
+    const pk = run.rooms[run.roomId]?.pickups.find((x) => x.id === run.nearPickupId && x.kind === "devil");
+    const no = run.player.devil?.last && !run.player.devil.last.ok && run.tick - run.player.devil.last.tick < 90;
+    return no ? t("promptDevilNo") : pk ? t("promptDevil").replace("{name}", itemName("passive", pk.itemId, lang)).replace("{cost}", String(devilCost(pk.itemId as DevilId))) : "";
   }
   if (pr.kind === "station") return t(pr.open ? "promptStationOpen" : "promptStation").replace("{name}", pr.station === "gym" ? GYM_DEVICE[pr.device ?? 0]![lang] : itemName(pr.station, "", lang));
   if (pr.kind === "trash") return t(pr.confirm ? "promptTrashSure" : "promptTrash").replace("{price}", String(pr.price));

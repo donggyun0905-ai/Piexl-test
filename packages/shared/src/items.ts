@@ -21,6 +21,7 @@ import { TITAN_PASSIVES } from "./itemsTitan";
 import { ONI_PASSIVES } from "./itemsOni";
 import { S2_PASSIVES } from "./itemsSeason2";
 import { HIDDEN_PASSIVES, HIDDEN_USES } from "./itemsHidden";
+import { DEVIL_PASSIVES } from "./itemsDevil";
 
 export interface PassiveDef {
   id: string;
@@ -183,6 +184,7 @@ export const PASSIVES = {
   ...ONI_PASSIVES,
   ...S2_PASSIVES,
   ...HIDDEN_PASSIVES,
+  ...DEVIL_PASSIVES,
   // 업적으로 해금 (해금 전에는 나오지 않음)
   quickDraw: { id: "quickDraw", mods: [{ stat: "attackSpeed", mul: 1.2 }, { stat: "damage", mul: 0.9 }] },
   goldTooth: { id: "goldTooth", mods: [{ stat: "luck", add: 2 }] },

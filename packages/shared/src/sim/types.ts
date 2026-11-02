@@ -4,8 +4,7 @@ import type { ArenaRunState, BossEnemyState, BossPlayerState, BossShotState, Rai
 import type { BossKind, CharacterId, CharmKind, EnemyKind, WeaponId } from "../content";
 import type { FoeStatusPlayerState } from "./foeStatus";
 import type { GymPlayerState } from "./gym";
-import type { TrialRunState } from "./trialTypes";
-import type { RoomPlayerState } from "./roomTypes";
+import type { RoomPlayerState, RoomRunState } from "./roomTypes";
 import type { PassiveId, UseItemId } from "../items";
 import type { StatMod, Stats } from "../stats";
 import type { FloorMap } from "./floor";
@@ -217,7 +216,7 @@ export interface BuyLogEntry {
 /** 상태이상 피해 종류: 출혈 · 화상 · 독 · 저주(수양 부적) */
 export type DotKind = "bleed" | "burn" | "poison" | "curse" | "storm" | "rot" | "death" | "hellfire" | "shock" | "frost" | "tide" | "gold" | "radiance" | "voidbolt";
 
-export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, PetRunState, PwRunState, TerrainRunState, HiddenRunState, TrialRunState {
+export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, PetRunState, PwRunState, TerrainRunState, HiddenRunState, RoomRunState {
   seed: number;
   tick: number;
   player: PlayerState;

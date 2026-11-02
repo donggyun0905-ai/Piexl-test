@@ -63,8 +63,8 @@ describe("시련의 방", () => {
     for (let i = 0; i < 80 && s.trialRun; i++) stepSim(s, EMPTY_INPUT);
     expect(s.trialRun).toBeUndefined();
     expect(s.player.trial!.last!.score).toBe(1000);
-    // 1000점: 원하는 능력치 3 · 고르는 패시브 3 · 고르는 사용 아이템 2 · 되살아남 1 (상자 9)
-    expect(s.rooms[s.roomId]!.pickups.filter((p) => p.kind === "boon")).toHaveLength(9);
+    // 1000점: 원하는 능력치 3 · 고르는 패시브 3 · 고르는 사용 아이템 2 · 되살아남 1 · 비밀의 방 고르기 1 (상자 10)
+    expect(s.rooms[s.roomId]!.pickups.filter((p) => p.kind === "boon")).toHaveLength(10);
   });
 
   it("끝없는 시련: 처치마다 점수 · 쓰러져도 죽지 않고 그 점수로 끝", () => {

@@ -13,6 +13,8 @@ import { depth, lastFloorOf } from "./hero";
 import { tabooN, tabooUp } from "./taboo";
 import { xpOnly } from "./morphXp";
 import { spawnStation } from "./station";
+import { devilPact } from "./devil";
+export { devilPact };
 
 export { bigReach, isStation, stationAt, stationMenu, stationMods } from "./station";
 export { hiddenUse } from "./hiddenUse";
@@ -134,7 +136,7 @@ export function rerollShop(s: RunState, reroll: Pickup): void {
     addEffect(s, { kind: "hit", x: pk.x, y: pk.y, dirX: 0, dirY: 0, size: 5, maxTicks: 8 });
   }
   // 라스트 보스 층 상점: 산 자리도 새로 채움
-  if (s.floor === lastFloorOf(s)) {
+  if (s.floor === lastFloorOf(s) && !devilPact(s)) {
     const room = s.rooms[s.roomId]!;
     const empty = (dx: number) => !room.pickups.some((pk) => pk.price > 0 && pk.y === shopY() && pk.x === CX + dx);
     if (empty(SHOP_X.passive)) addPickup(s, s.roomId, "passive", rng.pick(passivePool(s)), CX + SHOP_X.passive, shopY(), 0, shopPrice(s, PRICE.passive));

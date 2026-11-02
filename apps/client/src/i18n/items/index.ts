@@ -1,5 +1,5 @@
 // 아이템 이름·설명. 패시브·무기 설명은 수치에서 자동으로 만듦 (이름은 names.ts, 효과 설명은 effects.ts)
-import { PASSIVES, PERKS, USE_ITEMS, WEAPONS, type PassiveDef, type PassiveId, type StatKey, type UseItemId, type WeaponDef, type WeaponId } from "@pixel-rogue/shared";
+import { devilCost, PASSIVES, type DevilId, PERKS, USE_ITEMS, WEAPONS, type PassiveDef, type PassiveId, type StatKey, type UseItemId, type WeaponDef, type WeaponId } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../index";
 import { CHARM_DESC } from "./charms";
 import { EFFECT_DESC } from "./effects";
@@ -56,7 +56,7 @@ function fill(text: string, row: Record<string, unknown> | undefined): string {
   });
 }
 
-type ItemKind = "weapon" | "use" | "passive" | "coin" | "reroll" | "trash" | "bench" | "tune" | "gym" | "trial" | "boon" | "altar";
+type ItemKind = "weapon" | "use" | "passive" | "coin" | "reroll" | "trash" | "bench" | "tune" | "gym" | "trial" | "boon" | "altar" | "devil" | "gambler" | "auction";
 
 const COIN_NAME: Names = { ko: "돈", en: "Gold", ja: "ゴールド" };
 const REROLL_NAME: Names = { ko: "새로고침", en: "Refresh", ja: "入れ替え" };
@@ -77,7 +77,8 @@ export function itemName(kind: ItemKind, id: string, lang: Lang): string {
   if (kind === "coin") return COIN_NAME[lang];
   if (kind === "reroll") return REROLL_NAME[lang];
   if (kind === "trash") return TRASH_NAME[lang];
-  if (kind === "bench" || kind === "tune" || kind === "gym" || kind === "trial" || kind === "boon" || kind === "altar") return STATION_NAME[kind][lang];
+  if (kind === "bench" || kind === "tune" || kind === "gym" || kind === "trial" || kind === "boon" || kind === "altar" || kind === "gambler" || kind === "auction") return STATION_NAME[kind][lang];
+  if (kind === "devil") kind = "passive"; // 악마의 거래는 패시브 이름
   const table = kind === "weapon" ? WEAPON_NAMES : kind === "use" ? USE_NAMES : PASSIVE_NAMES;
   return (table as Record<string, Names>)[id]?.[lang] ?? id;
 }
@@ -86,7 +87,8 @@ export function itemDesc(kind: ItemKind, id: string, lang: Lang, t: (k: TextKey)
   if (kind === "coin") return "";
   if (kind === "reroll") return REROLL_DESC[lang];
   if (kind === "trash") return TRASH_DESC[lang];
-  if (kind === "bench" || kind === "tune" || kind === "gym" || kind === "trial" || kind === "boon" || kind === "altar") return STATION_DESC[kind][lang];
+  if (kind === "bench" || kind === "tune" || kind === "gym" || kind === "trial" || kind === "boon" || kind === "altar" || kind === "gambler" || kind === "auction") return STATION_DESC[kind][lang];
+  if (kind === "devil") return `${itemDesc("passive", id, lang, t)} · ${STATION_DESC.devil[lang].replace("{cost}", String(devilCost(id as DevilId)))}`;
   if (kind === "use") return fill(USE_DESC[id as UseItemId][lang], USE_ITEMS[id as UseItemId]);
   if (kind === "weapon") {
     const w: WeaponDef = WEAPONS[id as WeaponId];

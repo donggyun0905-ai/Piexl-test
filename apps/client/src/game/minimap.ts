@@ -20,6 +20,11 @@ export const ROOM_COLORS: Record<RoomType, string> = {
   trial: "#ff2a3a",
   /** 제단의 방 (3층부터, 푸른 바다) */
   altar: "#3ab8ff",
+  /** 비밀의 방 (금 간 벽 너머, 노선도에는 안 그림): 악마 · 도박꾼 · 경매장 · 히든 상점 */
+  devil: "#7a1020",
+  gamble: "#2e9a5a",
+  auction: "#b88a2a",
+  hidden: "#8a6ad8",
 };
 
 /** 방 종류 표시 (5×5 점 그림, # = 칠함) */
@@ -35,6 +40,10 @@ export const ROOM_GLYPHS: Record<RoomType, readonly string[]> = {
   gym: ["#...#", "##.##", "#####", "##.##", "#...#"],
   trial: [".###.", ".#.#.", ".###.", ".#.#.", "#####"],
   altar: ["#.#.#", ".###.", "##.##", ".###.", "#.#.#"],
+  devil: ["#...#", "##.##", ".###.", ".#.#.", ".###."],
+  gamble: ["#.#.#", ".....", "#####", "#.#.#", "#####"],
+  auction: ["####.", "####.", ".##..", "..#..", ".###."],
+  hidden: [".###.", "#...#", "..##.", ".....", "..#.."],
 };
 
 export function drawGlyph(ctx: CanvasRenderingContext2D, type: RoomType, x: number, y: number, color: string, px = 1): void {
@@ -76,7 +85,9 @@ export const ROUTE_NODE_H = NODE_H;
 export function drawRoute(ctx: CanvasRenderingContext2D, map: FloorMap, visited?: (id: number) => boolean, current = -1): void {
   const lit = (id: number) => !visited || visited(id);
   // 길 (지나온 길은 밝게)
-  for (const r of map.rooms) {
+  // 비밀의 방(layer -1)은 노선도에 없음
+  const rooms = map.rooms.filter((r) => r.layer >= 0);
+  for (const r of rooms) {
     const a = routeNodePos(map, r.layer, r.lane);
     for (const n of r.exits) {
       if (n < 0) continue;
@@ -90,7 +101,7 @@ export function drawRoute(ctx: CanvasRenderingContext2D, map: FloorMap, visited?
       ctx.stroke();
     }
   }
-  for (const r of map.rooms) {
+  for (const r of rooms) {
     const { x, y } = routeNodePos(map, r.layer, r.lane);
     ctx.globalAlpha = lit(r.id) || r.id === current ? 1 : 0.5;
     const look = roomLook(r);

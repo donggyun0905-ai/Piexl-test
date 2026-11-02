@@ -38,8 +38,8 @@ export function TrialPanel({ view, lang, t, send }: Props) {
     );
   }
   const chest = view.chest!;
-  const kind = chest.code === "ps" ? "stat" : chest.code.startsWith("pp:") ? "passive" : "use";
-  const head = kind === "stat" ? "trialChestStat" : kind === "passive" ? "trialChestPassive" : "trialChestUse";
+  const kind = chest.code === "ps" ? "stat" : chest.code === "sr" ? "room" : chest.code.startsWith("pp:") ? "passive" : "use";
+  const head = kind === "stat" ? "trialChestStat" : kind === "room" ? "vaultChestRoom" : kind === "passive" ? "trialChestPassive" : "trialChestUse";
   return (
     <div className="station-window trial-chest" role="dialog" aria-label={t(head)}>
       <header className="station-head">
@@ -51,6 +51,11 @@ export function TrialPanel({ view, lang, t, send }: Props) {
           <button key={`${id}${i}`} type="button" className="trial-option" onClick={() => send(menuCode(TRIAL_OP.chest, i))}>
             {kind === "stat" ? (
               <b>{t(`gymStat_${id}` as TextKey)} +10%</b>
+            ) : kind === "room" ? (
+              <span>
+                <b>{t(`vaultRoom_${id}` as TextKey)}</b>
+                <small>{t(`vaultRoomDesc_${id}` as TextKey)}</small>
+              </span>
             ) : (
               <>
                 <ItemIcon item={{ kind, id } as IconItem} size={40} />

@@ -4,7 +4,6 @@ import { killGold } from "./loot";
 import { endlessPow } from "./endless";
 import { inkTaken, scribeKill } from "./scribe";
 import { minerKill } from "./minerGround";
-import { BEDOUIN_PERKS } from "../itemsBedouin";
 import { PERKS } from "../perks";
 import { readyCounter } from "./origin";
 import { relicKill } from "./hiddenPerks";
@@ -37,6 +36,7 @@ import { recalcStats } from "./items";
 import { trackerGuard, trackerTaken } from "./tracker";
 import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, KNOCKBACK, keepInRoom, markCrit, normalize, roomGrid, RUSH_TICKS, STILL_TICKS } from "./util";
 import { raiseShield } from "./imugiMods";
+import { devilMul } from "./devilPerks";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -77,8 +77,8 @@ export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: numbe
   const roll = rollCrit(s, e, dmg);
   dmg = roll.dmg;
   if (roll.crit) markCrit(s, e);
-  // 풍뎅이 부적(베두인): 보스에게 피해 +30%
-  if (ENEMIES[e.kind].boss && hasPerk(s.player, "scarabCharm")) dmg *= BEDOUIN_PERKS.scarabCharm.boss;
+  // 풍뎅이 부적(베두인) · 악마의 거래 (sim/devilPerks)
+  dmg *= devilMul(s, e);
   // 탐식(악의 사도)·예리함: 방어력이 깎인 적은 더 아픔 · 각주(서기관): 기록이 새겨진 적은 더 아픔
   dmg *= (1 + (e.apDef ?? 0) + inkTaken(s.player, e) + sharpBonus(s, e)) * trackerTaken(e);
   let hurt = (e.melt ? dmg * (1 + R.MELT_ADD * e.melt) : dmg) * roleDmgMul(s, e); // 패왕전 역할 상성

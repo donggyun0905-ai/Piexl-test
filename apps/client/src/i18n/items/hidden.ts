@@ -1,10 +1,13 @@
 // 히든 아이템 이름·설명 (차원의 순례자 히든 상점, itemsHidden). 설명 앞에 [히든] 표시
-import type { HIDDEN_PASSIVES } from "@pixel-rogue/shared";
+import type { DevilId, HIDDEN_PASSIVES } from "@pixel-rogue/shared";
 import type { Names } from "./names";
+import { DEVIL_NAMES } from "./devil";
 
 type HiddenId = Exclude<keyof typeof HIDDEN_PASSIVES, "falseHero">;
 
-export const HIDDEN_NAMES: Record<HiddenId, Names> = {
+/** 악마의 거래 이름도 같이 (i18n/items/devil) */
+export const HIDDEN_NAMES: Record<HiddenId | DevilId, Names> = {
+  ...DEVIL_NAMES,
   relicRed: { ko: "아티팩터의 금기된 적색 아티팩트", en: "Artifacter's Forbidden Red Artifact", ja: "アーティファクターの禁じられた赤のアーティファクト" },
   relicBlue: { ko: "아티팩터의 금기된 청색 아티팩트", en: "Artifacter's Forbidden Blue Artifact", ja: "アーティファクターの禁じられた青のアーティファクト" },
   relicSilver: { ko: "아티팩터의 금기된 은색 아티팩트", en: "Artifacter's Forbidden Silver Artifact", ja: "アーティファクターの禁じられた銀のアーティファクト" },

@@ -3,6 +3,7 @@ import type { Pen } from "./pen";
 
 import { HIDDEN_GRIDS, RELIC_PAL, RELIC_ROWS, type Grid } from "./hiddenGrids";
 import { HIDDEN_GRIDS2 } from "./hiddenGrids2";
+import { DEVIL_GRIDS } from "./devilGrids";
 
 /** 글자 판 그림 (틀 안쪽 1칸부터) */
 function grid(g: Pen, { rows, pal }: Grid): void {
@@ -37,7 +38,7 @@ export const HIDDEN_ART: Record<string, (g: Pen) => void> = {
     relic(g, "#c060e0", "#80f0ff", "#6a2a8a");
     g.px(6, 6, "#ffe060").px(7, 7, "#60ff90").px(8, 7, "#60c8ff").px(9, 6, "#ff6080").px(7, 8, "#ffe060");
   },
-  ...Object.fromEntries(Object.entries({ ...HIDDEN_GRIDS, ...HIDDEN_GRIDS2 }).map(([id, gr]) => [id, (g: Pen) => grid(g, gr)])),
+  ...Object.fromEntries(Object.entries({ ...HIDDEN_GRIDS, ...HIDDEN_GRIDS2, ...DEVIL_GRIDS }).map(([id, gr]) => [id, (g: Pen) => grid(g, gr)])),
   // 저주받은 주사위: 위로 솟은 뿔 둘
   cursedDice: (g) => {
     grid(g, HIDDEN_GRIDS.cursedDice!);
@@ -45,7 +46,8 @@ export const HIDDEN_ART: Record<string, (g: Pen) => void> = {
   },
 };
 
-/** 히든 아이템 틀 (보랏빛 차원 테두리) */
-export function hiddenFrame(g: Pen): void {
-  g.rect(0, 0, 16, 16, "#7a4ad8").rect(1, 1, 14, 14, "#1a1030").px(0, 0, "#d8b8ff").px(15, 15, "#d8b8ff");
+/** 히든 아이템 틀 (보랏빛 차원 테두리 · 악마의 거래는 핏빛) */
+export function hiddenFrame(g: Pen, id = ""): void {
+  const devil = id.startsWith("devil");
+  g.rect(0, 0, 16, 16, devil ? "#a01020" : "#7a4ad8").rect(1, 1, 14, 14, devil ? "#140408" : "#1a1030").px(0, 0, devil ? "#ff6a7a" : "#d8b8ff").px(15, 15, devil ? "#ff6a7a" : "#d8b8ff");
 }
