@@ -1,7 +1,8 @@
-// 시련의 방 그림: 새빨간 방 꾸밈(바닥 의식 원·핏빛 금·양옆 붉은 화로) · 가운데 거대한 비석(검은 현무암·붉게 빛나는 문자·떠도는 조각·어두운 기운) · 보상 상자
+// 시련의 방 그림 (비석·상자는 사용자 그림 render/propArt, 없으면 코드 그림): 새빨간 방 꾸밈(바닥 의식 원·핏빛 금·양옆 붉은 화로) · 가운데 거대한 비석(검은 현무암·붉게 빛나는 문자·떠도는 조각·어두운 기운) · 보상 상자
 // 바닥·벽 색은 render/floorThemes의 TRIAL 테마 · 비석이 깨어나는·보상이 쏟아지는 효과는 render/trialFx
 import { STONE_Y, type Pickup, type RunState } from "@pixel-rogue/shared";
 import { additive, alpha, glow, rnd, rune } from "./pwFxBits";
+import { drawProp } from "./propArt";
 
 type Ctx = CanvasRenderingContext2D;
 const RED = "#ff2a3a";
@@ -63,32 +64,23 @@ export function drawTrialStone(ctx: Ctx, x: number, y: number, t: number, awake:
   ctx.ellipse(x, y, 30, 8, 0, 0, Math.PI * 2);
   ctx.fill();
   additive(ctx, () => glow(ctx, x, y - H * 0.45, 46, RED, (awake ? 0.7 : 0.35) * breath, awake ? 0.8 : 0.3));
-  // 몸: 위가 좁은 사다리꼴 + 뾰족한 머리
-  ctx.beginPath();
-  ctx.moveTo(x - 16, y);
-  ctx.lineTo(x - 11, top + 10);
-  ctx.lineTo(x, top);
-  ctx.lineTo(x + 11, top + 10);
-  ctx.lineTo(x + 16, y);
-  ctx.closePath();
-  const g = ctx.createLinearGradient(x - 16, 0, x + 16, 0);
-  g.addColorStop(0, "#2e1c24");
-  g.addColorStop(0.45, BASALT);
-  g.addColorStop(1, "#0a0608");
-  ctx.fillStyle = g;
-  ctx.fill();
-  ctx.strokeStyle = alpha(RED, 0.5 * breath + 0.2);
-  ctx.lineWidth = 1;
-  ctx.stroke();
-  // 빛나는 문자 (세로 줄)
-  for (let i = 0; i < 7; i++) {
-    const gy = top + 14 + i * 6.5;
-    const on = asleep ? 0.2 : Math.max(0.25, Math.sin(t / 9 - i * 0.7)) * breath;
-    ctx.fillStyle = alpha(i % 3 === 0 ? EMBER : RED, on);
-    const w = 3 + Math.round(rnd(i, 3) * 4);
-    ctx.fillRect(Math.round(x - w / 2), Math.round(gy), w, 2);
-    if (i % 2) ctx.fillRect(Math.round(x - 1), Math.round(gy - 2), 2, 6);
-  }
+  // 몸: 그림(sprites/props/trialStone, 잠듦 · 빛나는 룬)이 있으면 그것을 (깨어난 모습은 숨 쉬듯 겹침), 없으면 코드 그림
+  const art = drawProp(ctx, "trialStone", 0, x, y + 2, { h: H + 4 });
+  if (art && !asleep) drawProp(ctx, "trialStone", 1, x, y + 2, { h: H + 4, alpha: Math.min(1, 0.35 + 0.65 * breath) });
+  if (!art) stoneBody(ctx, x, y, top, breath);
+  // 빛나는 문자 (세로 줄, 오르내리며 깜빡임 · 붉은 돌 그림 위에서는 더하기로 빛남)
+  const glyphs = () => {
+    for (let i = 0; i < 7; i++) {
+      const gy = top + 14 + i * 6.5;
+      const on = asleep ? 0.2 : Math.max(0.25, Math.sin(t / 9 - i * 0.7)) * breath;
+      ctx.fillStyle = alpha(i % 3 === 0 ? EMBER : RED, on);
+      const w = 3 + Math.round(rnd(i, 3) * 4);
+      ctx.fillRect(Math.round(x - w / 2), Math.round(gy), w, 2);
+      if (i % 2) ctx.fillRect(Math.round(x - 1), Math.round(gy - 2), 2, 6);
+    }
+  };
+  if (art) additive(ctx, glyphs);
+  else glyphs();
   // 갈라진 금 (빛이 새어 나옴)
   ctx.strokeStyle = alpha(EMBER, 0.7 * breath);
   ctx.beginPath();
@@ -115,6 +107,14 @@ export function drawTrialChest(ctx: Ctx, pk: Pickup, x: number, y: number, t: nu
   const c = pk.itemId === "rv" ? "#f4f0ff" : pk.itemId.startsWith("rs:") ? RED : "#ffcc3a";
   const bob = Math.round(Math.sin(t / 10 + pk.id) * 1.5);
   additive(ctx, () => glow(ctx, x, y - 4 + bob, 16, c, 0.55 + 0.2 * Math.sin(t / 8 + pk.id), 0.5));
+  // 그림(sprites/props/trialChest 닫힌 상자)이 있으면 그것을
+  if (drawProp(ctx, "trialChest", 0, x, y + 3 + bob, { h: 15 })) {
+    if ((t + pk.id * 5) % 40 < 6) {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(x + 5, y - 12 + bob, 1, 1);
+    }
+    return;
+  }
   ctx.fillStyle = "#3a2410";
   ctx.fillRect(x - 7, y - 8 + bob, 14, 10);
   ctx.fillStyle = c;
@@ -123,4 +123,24 @@ export function drawTrialChest(ctx: Ctx, pk: Pickup, x: number, y: number, t: nu
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(x - 1, y - 4 + bob, 2, 2);
   if ((t + pk.id * 5) % 40 < 6) ctx.fillRect(x + 4, y - 11 + bob, 1, 1);
+}
+
+/** 그림이 아직 없을 때: 검은 현무암 비석 (위가 좁은 사다리꼴 + 뾰족한 머리) */
+function stoneBody(ctx: Ctx, x: number, y: number, top: number, breath: number): void {
+  ctx.beginPath();
+  ctx.moveTo(x - 16, y);
+  ctx.lineTo(x - 11, top + 10);
+  ctx.lineTo(x, top);
+  ctx.lineTo(x + 11, top + 10);
+  ctx.lineTo(x + 16, y);
+  ctx.closePath();
+  const g = ctx.createLinearGradient(x - 16, 0, x + 16, 0);
+  g.addColorStop(0, "#2e1c24");
+  g.addColorStop(0.45, BASALT);
+  g.addColorStop(1, "#0a0608");
+  ctx.fillStyle = g;
+  ctx.fill();
+  ctx.strokeStyle = alpha(RED, 0.5 * breath + 0.2);
+  ctx.lineWidth = 1;
+  ctx.stroke();
 }

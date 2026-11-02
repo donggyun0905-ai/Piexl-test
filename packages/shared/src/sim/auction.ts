@@ -15,9 +15,11 @@ import { addEffect, ROOM_MIN_Y } from "./util";
 
 /** 입력 menu 기능 번호: 경매 (a = 0 시작 · 1 입찰 · 2 포기 · 10 + n = 증강을 n번째 패시브에 붙임) */
 export const AUCTION_OP = 15;
-/** 진행자 자리 · 상품 줄 · 상품 사이 · 낙찰 뒤 다음 상품까지 틱 · 그림자 손님 자리 수 */
+/** 진행자 자리(높이) · 상품 줄 · 상품 사이 · 낙찰 뒤 다음 상품까지 틱 · 그림자 손님 자리 수 */
 export const hostY = () => ROOM_MIN_Y + 30;
-export const lotY = () => ROOM_MIN_Y + 22;
+/** 진행자는 무대 오른쪽 옆 (상품을 가리지 않게) */
+export const HOST_DX = 100;
+export const lotY = () => ROOM_MIN_Y + 40;
 export const LOT_GAP = 30;
 export const SHADOW_SEATS = 14;
 /** 내 의자 (맨 앞줄 가운데, 바닥 물건 kind "auction") */
@@ -85,10 +87,10 @@ function sell(s: RunState, a: AuctionState): void {
   const p = s.player;
   lot.price = a.price;
   lot.won = a.lead === 1 ? 1 : 2;
-  addEffect(s, { kind: "srSold", x: CX, y: hostY(), dirX: lot.won, dirY: 0, size: 40, maxTicks: 50 });
+  addEffect(s, { kind: "srSold", x: CX + HOST_DX, y: hostY(), dirX: lot.won, dirY: 0, size: 40, maxTicks: 50 });
   if (lot.won === 1) {
     s.gold -= Math.min(s.gold, a.price);
-    addEffect(s, { kind: "srMoney", x: p.x, y: p.y, toX: CX, toY: hostY(), dirX: 0, dirY: 0, size: Math.min(24, 6 + a.price / 20), maxTicks: 50 });
+    addEffect(s, { kind: "srMoney", x: p.x, y: p.y, toX: CX + HOST_DX, toY: hostY(), dirX: 0, dirY: 0, size: Math.min(24, 6 + a.price / 20), maxTicks: 50 });
     if (lot.kind === "passive") {
       p.passives.push(lot.id as PassiveId);
       recalcStats(s);
@@ -150,7 +152,7 @@ export function auctionTick(s: RunState): void {
     a.bids++;
     a.t = s.tick;
     a.who = createRng(deriveSeed(s.seed, "auctionWho", s.floor, s.roomId, a.lot, a.bids)).int(0, SHADOW_SEATS - 1);
-    addEffect(s, { kind: "srBid", x: CX, y: hostY(), dirX: a.who, dirY: 0, size: a.price, maxTicks: 30 });
+    addEffect(s, { kind: "srBid", x: CX + HOST_DX, y: hostY(), dirX: a.who, dirY: 0, size: a.price, maxTicks: 30 });
     return;
   }
   if (s.tick - a.t >= AUCTION.going * 3) {

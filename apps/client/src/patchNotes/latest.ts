@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.348",
+    date: "2026-11-02",
+    items: {
+      ko: [
+        "새 방 그림: 시련의 비석·보상 상자 · 제단·성좌 8 · 금 간 벽 · 악마의 석상·거래 제단 · 도박꾼(표정 4)·야바위 탁자·컵 · 경매장 무대·상품 받침·진행자(자세)·값 팻말·손님 의자·내 왕좌 (빛·문자·촛불 효과는 그대로)",
+        "암흑가 경매장: 진행자가 무대 오른쪽 옆으로 (상품을 가리지 않음)",
+        "도박꾼의 방: 상자를 두 배 빠르게 섞음 (눈으로 따라갈 수 없음, 당첨 확률 1/3)",
+        "연습장 '방' 탭: 누를 때마다 성좌·악마의 거래·경매 상품 등이 새로 무작위로 나옴",
+      ],
+      en: [
+        "New room art: trial monolith and reward chests · altar and 8 constellations · cracked wall · devil statue and deal altars · gambler (4 expressions), shell-game table and cups · auction stage, lot stands, auctioneer poses, price paddle, guest chairs and your throne (glows, runes and candles kept)",
+        "Underworld Auction: the auctioneer now stands to the right of the stage (no longer blocking the lots)",
+        "Gambler's Room: the cups shuffle twice as fast (too fast to follow — a 1-in-3 chance)",
+        "Practice 'Rooms' tab: every press rolls a new constellation, devil deals, auction lots and so on",
+      ],
+      ja: [
+        "新しい部屋の絵：試練の石碑・報酬箱 · 祭壇・星座8 · ひびの入った壁 · 悪魔の石像・取引の祭壇 · ギャンブラー（表情4）・シェルゲームのテーブル・カップ · オークションの舞台・品物の台・司会者（ポーズ）・価格の札・客の椅子・自分の玉座（光・文字・ろうそくの効果はそのまま）",
+        "闇街オークション：司会者が舞台の右横に（品物を隠さない）",
+        "ギャンブラーの部屋：カップを2倍速く混ぜる（目で追えない、当たり確率1/3）",
+        "練習場「部屋」タブ：押すたびに星座・悪魔の取引・オークションの品などが新しくランダムに出る",
+      ],
+    },
+  },
+  {
     version: "0.48.347",
     date: "2026-11-02",
     items: {

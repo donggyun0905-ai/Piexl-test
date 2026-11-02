@@ -39,7 +39,7 @@ export { ALTAR_OP, ALTAR_Y, altarOf, altarPending, altarUsed } from "./altar";
 export { crackHere, crackSpot } from "./vault";
 export { devilCost, devilPact, offerY, statueY } from "./devil";
 export { CUP_GAP, CUP_PAIRS, cupState, cupY, GAMBLE_OP, gambleDone, gamblerY, gambleNow, gambleUsed } from "./gamble";
-export { AUCTION_OP, auctionHere, goingStage, hostY, LOT_GAP, lotHidden, lotY, mySeatY, nextBid, SHADOW_SEATS } from "./auction";
+export { AUCTION_OP, auctionHere, goingStage, HOST_DX, hostY, LOT_GAP, lotHidden, lotY, mySeatY, nextBid, SHADOW_SEATS } from "./auction";
 export type { AuctionLot, AuctionState } from "./vaultTypes";
 export { runSkill } from "./swarmEvo";
 export * from "./customRooms";

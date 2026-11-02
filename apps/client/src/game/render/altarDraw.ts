@@ -8,6 +8,10 @@ import { ALTAR_LOOK } from "./altarLook";
 import { drawBlades } from "./swarm";
 import { additive, alpha, beam, easeOut, glow, rnd, rune, shock, sparks } from "./pwFxBits";
 import type { Snap } from "./palette";
+import { drawProp, type PropName } from "./propArt";
+
+/** 성좌 그림 (사용자 그림 sprites/props/star*, 없으면 코드 그림 FIGURE) */
+const STAR_ART: Record<AltarId, PropName> = { whale: "starWhale", turtle: "starTurtle", hawk: "starHawk", wind: "starWind", sion: "starSion", sylvester: "starSylvester", witch: "starWitch", unknown: "starUnknown" };
 
 type Ctx = CanvasRenderingContext2D;
 const FIGURE: Record<AltarId, (ctx: Ctx, cx: number, cy: number, W: number, t: number) => void> = {
@@ -65,16 +69,17 @@ export function drawAltarRoom(ctx: Ctx, s: RunState, cx: number, cy: number): vo
     ctx.stroke();
   }
   additive(ctx, () => rune(ctx, cx, ALTAR_Y + 30, 46, L.main, altarUsed(s) ? 0.3 : 0.7, t * 0.006));
-  // 거대한 성좌 (반투명, 방 위쪽 절반을 감쌈)
-  ctx.save();
-  ctx.globalAlpha = altarUsed(s) ? 0.55 : 0.9;
-  // 방을 감쌀 만큼 크게 (가운데 기준 1.35배)
+  // 거대한 성좌 (반투명, 방 위쪽 절반을 감쌈) · 그림은 더하기로 (검은 바탕이 사라짐), 별이 반짝이듯 밝기가 숨 쉼
   const fy = cy - 4;
-  ctx.translate(cx, fy);
-  ctx.scale(1.35, 1.35);
-  ctx.translate(-cx, -fy);
-  FIGURE[id](ctx, cx, fy, ROOM_WIDTH, t);
-  ctx.restore();
+  const used = altarUsed(s);
+  const twinkle = 0.85 + 0.15 * Math.sin(t / 25);
+  if (drawProp(ctx, STAR_ART[id], 0, cx, fy - 6 + Math.sin(t / 60) * 2, { w: ROOM_WIDTH * 0.92, center: true, add: true, alpha: (used ? 0.25 : 0.45) * twinkle })) {
+    // 그림 위에 별 반짝임 몇 개
+    for (let i = 0; i < 10; i++) {
+      const on = Math.max(0, Math.sin(t / 12 + i * 2.3));
+      if (on > 0.6) additive(ctx, () => glow(ctx, cx + (rnd(i, 7) - 0.5) * ROOM_WIDTH * 0.8, fy + (rnd(i, 9) - 0.5) * 120, 4, L.glow, on * 0.8, 0.4));
+    }
+  } else figure(ctx, id, cx, fy, used, t);
   // 떠도는 것: 아래에서 위로 (바람은 옆으로)
   for (let i = 0; i < 26; i++) {
     const f = ((t * (0.4 + rnd(i, 1) * 0.5) + i * 53) % 240) / 240;
@@ -84,6 +89,17 @@ export function drawAltarRoom(ctx: Ctx, s: RunState, cx: number, cy: number): vo
   }
 }
 
+/** 그림이 아직 없을 때: 코드로 그린 성좌 (가운데 기준 1.35배) */
+function figure(ctx: Ctx, id: AltarId, cx: number, fy: number, used: boolean, t: number): void {
+  ctx.save();
+  ctx.globalAlpha = used ? 0.55 : 0.9;
+  ctx.translate(cx, fy);
+  ctx.scale(1.35, 1.35);
+  ctx.translate(-cx, -fy);
+  FIGURE[id](ctx, cx, fy, ROOM_WIDTH, t);
+  ctx.restore();
+}
+
 /** 제단: 빛나는 돌 받침 + 성좌 문양 (다 고르면 빛이 꺼짐) */
 export function drawAltarStand(ctx: Ctx, s: RunState, pk: Pickup, x: number, y: number): void {
   const id = altarOf(s);
@@ -91,6 +107,11 @@ export function drawAltarStand(ctx: Ctx, s: RunState, pk: Pickup, x: number, y: 
   const on = !altarUsed(s);
   const t = s.tick;
   if (on) additive(ctx, () => glow(ctx, x, y - 10, 30, L.main, 0.6 + 0.2 * Math.sin(t / 12), 0.6));
+  // 그림(sprites/props/altarStand, 별빛 구슬이 도는 제단)이 있으면 그것을 (구슬이 살짝 떠오름)
+  if (drawProp(ctx, "altarStand", 0, x, y + 4, { h: 40, alpha: on ? 1 : 0.7 })) {
+    if (on && pk.itemId !== "1") additive(ctx, () => beam(ctx, x, y - 30, x, y - 70 - Math.sin(t / 10) * 4, 3, L.main, 0.5));
+    return;
+  }
   ctx.fillStyle = "#1a2030";
   ctx.fillRect(x - 16, y - 4, 32, 6);
   ctx.fillStyle = "#2a3448";

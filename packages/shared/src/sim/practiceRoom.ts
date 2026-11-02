@@ -1,4 +1,4 @@
-// 연습장 방 시험: 지금 방을 상점·천상의 상점·여신의 선물·보물방·단련의 방·시련의 방·제단의 방·비밀의 방 셋(악마·도박꾼·경매장)·금 간 벽·쉼터로 바꿔 봄 (다시 누르면 새로 놓음, 기록·업적 없음)
+// 연습장 방 시험 (누를 때마다 새 무작위): 지금 방을 상점·천상의 상점·여신의 선물·보물방·단련의 방·시련의 방·제단의 방·비밀의 방 셋(악마·도박꾼·경매장)·금 간 벽·쉼터로 바꿔 봄 (다시 누르면 새로 놓음, 기록·업적 없음)
 import { LOOT_RULES, spawnTreasure } from "./loot";
 import { spawnGolden } from "./golden";
 import { spawnGym } from "./gym";
@@ -9,6 +9,7 @@ import { healPlayer } from "./combat";
 import { spawnVault } from "./vault";
 import { SECRET_KINDS } from "../secretDefs";
 import { ROOM_CY } from "../constants";
+import { deriveSeed } from "../rng";
 import type { RunState } from "./types";
 
 /** 시험할 수 있는 방 (heaven = 천상의 상점 · golden = 여신의 선물) */
@@ -21,6 +22,8 @@ export function practiceRoom(s: RunState, kind: PracticeRoom): void {
   const st = s.rooms[s.roomId];
   if (!info || !st) return;
   practiceRoomOff(s);
+  // 누를 때마다 새 시드: 성좌·악마의 거래·경매 상품·야바위·시련이 매번 무작위 (실제 판은 층·방마다 따로 시드라 원래 방마다 다름)
+  s.seed = deriveSeed(s.seed, "practiceRoom", kind);
   info.type = kind === "heaven" ? "shop" : kind === "crack" ? "start" : kind;
   if (kind === "heaven") info.heaven = true;
   if (kind === "shop" || kind === "heaven") {

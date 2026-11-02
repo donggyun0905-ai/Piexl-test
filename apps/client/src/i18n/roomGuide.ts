@@ -66,7 +66,7 @@ function guide(kind: PracticeRoom, lang: Lang): L[] {
       return [
         ["비밀의 방 · 방마다 한 판 · 도박꾼 앞 F → 시작", "Secret room · one game per room · F at the gambler to start", "秘密の部屋 · 部屋ごとに1回 · ギャンブラーの前でF → 開始"],
         [`당첨 상자를 잠깐 보여 준 뒤 덮고 ${GAMBLE.swaps}번 섞음 → 왼쪽·가운데·오른쪽 중 고름`, `Shows the prize cup, covers it and shuffles ${GAMBLE.swaps} times → pick left, middle or right`, `当たりを少し見せて伏せ、${GAMBLE.swaps}回混ぜる → 左・中・右から選ぶ`],
-        ["눈으로 따라가면 맞힐 수 있음 · 그냥 찍으면 당첨 33.3%", "Follow it with your eyes to win · a blind guess wins 33.3%", "目で追えば当てられる · 当てずっぽうなら当たり33.3%"],
+        ["눈으로 따라갈 수 없을 만큼 빨리 섞임 → 당첨 확률 33.3%", "Shuffled too fast to follow → 33.3% to win", "目で追えないほど速く混ざる → 当たり33.3%"],
         [`당첨: 패시브 ${GAMBLE.passives}개 + ${GAMBLE.gold}원 + 원하는 능력치 10% 상자 ${GAMBLE.picks}개`, `Win: ${GAMBLE.passives} passives + ${GAMBLE.gold} gold + ${GAMBLE.picks} chosen-stat +10% chests`, `当たり: パッシブ${GAMBLE.passives}個 + ${GAMBLE.gold}G + 好きな能力値10%箱${GAMBLE.picks}個`],
         [`꽝: 공격력·최대 체력·공격 속도·이동 속도·사거리 중 무작위 ${GAMBLE.lose}개가 ${pct(GAMBLE.down)}%씩 깎임`, `Miss: ${GAMBLE.lose} random stats (damage, max HP, attack speed, move speed, range) drop ${pct(GAMBLE.down)}% each`, `ハズレ: 攻撃力・最大体力・攻撃速度・移動速度・射程からランダム${GAMBLE.lose}つが${pct(GAMBLE.down)}%ずつ減る`],
         ["시작하지 않고 나가면 아무 일 없음", "Leaving without playing does nothing", "始めずに出れば何もない"],

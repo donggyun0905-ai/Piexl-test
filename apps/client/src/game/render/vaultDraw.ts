@@ -1,8 +1,9 @@
 // 비밀의 방 그림 (sim/vault·devil·gamble): 금 간 벽(금 → 무너짐 → 어두운 문) · 악마의 방(바닥 마법진·촛불·사탄의 석상·거래 받침)
-// · 도박꾼의 방(초록 탁자·상자 셋이 섞임·도박꾼). 경매장은 render/auctionDraw, 효과는 render/vaultFx
+// · 도박꾼의 방(초록 탁자·상자 셋이 섞임·도박꾼). 사용자 그림이 있으면 render/vaultArt가 그 자리를 그림. 경매장은 render/auctionDraw, 효과는 render/vaultFx
 import { crackHere, crackSpot, cupState, CUP_GAP, cupY, devilCost, gambleDone, gambleNow, gamblerY, offerY, SECRET_WALL, statueY, type DevilId, type Pickup, type RunState } from "@pixel-rogue/shared";
 import { iconCanvas, type IconItem } from "../iconArt";
 import { additive, alpha, glow, rnd } from "./pwFxBits";
+import { crackArt, gambleArt, gamblerArt, offerArt, statueArt } from "./vaultArt";
 
 type Ctx = CanvasRenderingContext2D;
 const BLOOD = "#c01828";
@@ -17,6 +18,10 @@ export function drawCrack(ctx: Ctx, s: RunState): void {
   // 벽을 따라 (u) · 방 안쪽으로 (v)
   const at = (u: number, v: number): [number, number] => (side === 0 ? [x + v, y + u] : side === 1 ? [x - v, y + u] : [x + u, y - v]);
   const f = c.broke === undefined ? 0 : Math.min(1, (s.tick - c.broke) / SECRET_WALL.crumble);
+  if (crackArt(ctx, ...at(0, 10), c.broke === undefined ? 0 : f < 1 ? 1 : 2, s.tick)) {
+    if (f >= 1) additive(ctx, () => glow(ctx, ...at(0, 6), 14, "#a070ff", 0.35 + 0.15 * Math.sin(s.tick / 10)));
+    return;
+  }
   if (f < 1) {
     // 금: 가운데에서 뻗는 들쭉날쭉한 줄 (무너질수록 벌어짐)
     // 밝은 깨진 면 위에 검은 금 (벽을 따라 크게 퍼짐)
@@ -79,6 +84,7 @@ export function drawDevilRoom(ctx: Ctx, s: RunState, cx: number): void {
 export function drawDevilStatue(ctx: Ctx, s: RunState, cx: number): void {
   const t = s.tick;
   const y = statueY();
+  if (statueArt(ctx, cx, y, t)) return candles(ctx, cx, y, t);
   // 날개
   ctx.fillStyle = "#1a1418";
   for (const d of [-1, 1]) {
@@ -114,6 +120,13 @@ export function drawDevilStatue(ctx: Ctx, s: RunState, cx: number): void {
   const blink = Math.sin(t / 40) > -0.9 ? 1 : 0.2;
   additive(ctx, () => {
     for (const d of [-1, 1]) glow(ctx, cx + d * 3, y - 10, 5, BLOOD, 0.9 * blink, 0.4);
+  });
+  candles(ctx, cx, y, t);
+}
+
+/** 석상 앞 촛불 넷 */
+function candles(ctx: Ctx, cx: number, y: number, t: number): void {
+  additive(ctx, () => {
     for (const d of [-1, 1, -2, 2]) {
       const fx = cx + d * 28;
       const fy = y + 40 + Math.abs(d) * 6;
@@ -131,29 +144,33 @@ export function drawDevilOffer(ctx: Ctx, s: RunState, pk: Pickup, near: boolean)
   const x = Math.round(pk.x);
   const y = offerY();
   const bob = Math.round(Math.sin((s.tick + pk.id * 9) / 14) * 2);
-  additive(ctx, () => glow(ctx, x, y - 6 + bob, near ? 16 : 11, BLOOD, near ? 0.7 : 0.45, 0.3));
-  ctx.fillStyle = "#140c10";
-  ctx.fillRect(x - 9, y + 4, 18, 6);
-  ctx.fillStyle = alpha(BLOOD, 0.9);
-  ctx.fillRect(x - 9, y + 4, 18, 1);
-  ctx.drawImage(iconCanvas({ kind: "passive", id: pk.itemId } as IconItem), x - 8, y - 14 + bob);
+  const top = offerArt(ctx, x, y);
+  additive(ctx, () => glow(ctx, x, (top ?? y) - 6 + bob, near ? 16 : 11, BLOOD, near ? 0.7 : 0.45, 0.3));
+  if (top === null) {
+    ctx.fillStyle = "#140c10";
+    ctx.fillRect(x - 9, y + 4, 18, 6);
+    ctx.fillStyle = alpha(BLOOD, 0.9);
+    ctx.fillRect(x - 9, y + 4, 18, 1);
+  }
+  ctx.drawImage(iconCanvas({ kind: "passive", id: pk.itemId } as IconItem), x - 8, (top ?? y) - 14 + bob);
   ctx.font = "bold 7px sans-serif";
   ctx.textAlign = "center";
   ctx.fillStyle = "#ff6a7a";
-  ctx.fillText(`♥-${devilCost(pk.itemId as DevilId)}`, x, y + 18);
+  ctx.fillText(`♥-${devilCost(pk.itemId as DevilId)}`, x, y + (top === null ? 18 : 22));
   ctx.textAlign = "start";
 }
 
 /** 도박꾼의 방: 초록 탁자 · 상자 셋 (보여 줄 때는 당첨 상자 아래 금화, 섞을 때는 두 상자가 엇갈려 지나감, 고른 뒤 열림) */
 export function drawGambleTable(ctx: Ctx, s: RunState, cx: number): void {
   const y = cupY();
+  const g = gambleNow(s);
+  if (gambleArt(ctx, s, cx)) return cupNumbers(ctx, s, cx, y);
   ctx.fillStyle = "#3a2410";
   ctx.fillRect(cx - 62, y - 10, 124, 26);
   ctx.fillStyle = "#1e6a3a";
   ctx.fillRect(cx - 60, y - 8, 120, 20);
   ctx.strokeStyle = alpha("#e8c25a", 0.6);
   ctx.strokeRect(cx - 57.5, y - 5.5, 115, 15);
-  const g = gambleNow(s);
   const st = g ? cupState(g, s.tick) : { slots: [0, 1, 2], pair: null, f: 0, show: false };
   const picked = g?.pick !== undefined;
   for (let cup = 0; cup < 3; cup++) {
@@ -183,7 +200,12 @@ export function drawGambleTable(ctx: Ctx, s: RunState, cx: number): void {
     ctx.fillStyle = "#e8c25a";
     ctx.fillRect(Math.round(x - 1), Math.round(y - 10 + dy - lift), 2, 15);
   }
-  // 다 섞이면 자리 번호 (창에서 고름)
+  cupNumbers(ctx, s, cx, y);
+}
+
+/** 다 섞이면 자리 번호 (창에서 고름) */
+function cupNumbers(ctx: Ctx, s: RunState, cx: number, y: number): void {
+  const g = gambleNow(s);
   if (g && g.pick === undefined && s.tick >= gambleDone(g)) {
     ctx.font = "bold 8px sans-serif";
     ctx.textAlign = "center";
@@ -195,6 +217,7 @@ export function drawGambleTable(ctx: Ctx, s: RunState, cx: number): void {
 
 /** 도박꾼: 중절모 · 시가 · 손에 카드 (판을 시작하면 손을 흔듦) */
 export function drawGambler(ctx: Ctx, s: RunState, x: number): void {
+  if (gamblerArt()) return;
   const y = gamblerY();
   const g = gambleNow(s);
   const busy = g && g.pick === undefined && s.tick < gambleDone(g);
