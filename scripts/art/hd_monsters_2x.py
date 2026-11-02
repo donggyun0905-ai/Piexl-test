@@ -10,7 +10,7 @@ from PIL import Image
 HERE = os.path.dirname(__file__)
 SRC = os.path.join(HERE, "src", "monsters_1x")
 OUT = os.path.join(HERE, "../../apps/client/public/sprites/enemies")
-NAMES = "crawler spitter mortar charger gnat guardian paladin slime runner bat beetle golem shaman eggsac wisp venom landfish lurker soul doppel bombbug skelarcher chainward highorc".split()
+NAMES = "crawler spitter mortar charger gnat guardian paladin slime runner bat beetle golem shaman eggsac wisp venom landfish lurker soul doppel bombbug skelarcher chainward".split()
 
 
 def scale2x(img):

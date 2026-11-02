@@ -34,9 +34,9 @@ const R = {
   JAIL_DMG: 10,
   JAIL_PULL: 40,
   /** 하이오크: 휘두르기 시작 거리 · 예고 틱 · 범위 · 피해(+층 세기 × 3) · 쉬는 틱 · 체력이 0에 가까울 때 더하는 이동 속도·공격력 배율 */
-  ORC_REACH: 30,
+  ORC_REACH: 36,
   ORC_WARN: 30,
-  ORC_R: 34,
+  ORC_R: 40,
   ORC_DMG: 18,
   ORC_REST: 70,
   ORC_SPEED_UP: 1.2,

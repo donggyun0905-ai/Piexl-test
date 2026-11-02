@@ -4,7 +4,7 @@
 # 폭발풍뎅이: 붉은 등껍질 · 노란 불씨 무늬 · 등에 심지 불꽃 (2칸: 다리 · 불꽃 흔들림)
 # 스켈레톤 궁병: 뼈 몸 · 검은 눈 구멍 · 낡은 활과 화살 (2칸: 걸음)
 # 쇠사슬 간수: 회색 투구·갑옷 · 붉은 눈 · 손에 감은 쇠사슬과 갈고리 (2칸: 걸음·사슬 흔들림)
-# 하이오크: 큰 초록 몸 · 엄니 · 가죽 갑옷 · 큰 양날 도끼 (2칸: 걸음)
+# 하이오크는 큰 도트 그림 scripts/art/highorc_sprite.py (아래 highorc는 처음 쓰던 작은 그림, 쓰지 않음)
 import os
 
 from PIL import Image
@@ -119,4 +119,3 @@ if __name__ == "__main__":
     save("bombbug", [bombbug(0), bombbug(1)], 18)
     save("skelarcher", [skelarcher(0), skelarcher(1)], 20)
     save("chainward", [chainward(0), chainward(1)], 22)
-    save("highorc", [highorc(0), highorc(1)], 26)

@@ -79,7 +79,9 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
     }
     // 공격 그림이 있는 보스(4칸): 걷기 2 · 공격 준비 · 공격
     const atk = pose && enemyFrames(look) >= 4;
-    const frame = atk && e.phase === "windup" ? 2 : atk && (pose.slash > 0 || e.phase !== "walk") ? 3 : Math.floor(s.tick / 12) % (atk ? 2 : 1e9);
+    // 하이오크: 걷기 2 · 휘두르기 · 정면(멈춤)
+    const orc = e.kind === "highorc" ? (e.phase === "windup" ? 2 : stunned ? 3 : Math.floor(s.tick / 12) % 2) : -1;
+    const frame = orc >= 0 ? orc : atk && e.phase === "windup" ? 2 : atk && (pose.slash > 0 || e.phase !== "walk") ? 3 : Math.floor(s.tick / 12) % (atk ? 2 : 1e9);
     const drawn = drawEnemySprite(ctx, look, x, y, frame, e.dirX < 0, tint, (e.r / ENEMIES[e.kind].radius) * hitPop(e.hitFlash));
     if (pose) {
       ctx.restore();

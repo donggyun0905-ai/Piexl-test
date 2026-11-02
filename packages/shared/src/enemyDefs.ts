@@ -94,7 +94,7 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   /** 쇠사슬 간수: 사슬 길 예고 → 맞으면 피해 + 끌어당김 */
   chainward: { kind: "chainward", hp: 70, radius: 7, speed: 0.45, contactDamage: 8, gold: 3 },
   /** 하이오크: 큰 도끼 반원 휘두르기 · 체력이 적을수록 빠르고 셈 */
-  highorc: { kind: "highorc", hp: 110, radius: 8, speed: 0.5, contactDamage: 8, gold: 4 },
+  highorc: { kind: "highorc", hp: 110, radius: 12, speed: 0.5, contactDamage: 8, gold: 4 },
   /** 보스: 다가오다 돌진, 멈출 때 사방으로 탄 */
   hulk: { kind: "hulk", hp: 420, radius: 11, speed: 0.45, contactDamage: 16, gold: 20, boss: true },
   /** 보스: 거리를 두고 기는 적을 부르고 부채꼴로 탄 */

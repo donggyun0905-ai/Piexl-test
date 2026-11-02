@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.357",
+    date: "2026-11-02",
+    items: {
+      ko: ["하이오크 새 그림: 붉은 피부·털 달린 가시 갑옷·큰 도끼의 큰 도트 (걷기 · 도끼 휘두르기 · 정면) · 몸이 커지고 도끼 범위도 넓어짐"],
+      en: ["High Orc redrawn: big pixel art with red skin, spiked fur armor and a great axe (walk · axe swing · front) · bigger body and wider axe reach"],
+      ja: ["ハイオークの新しい絵：赤い肌・毛皮付きトゲ鎧・大斧の大きなドット（歩き · 大斧振り · 正面）· 体が大きくなり斧の範囲も広く"],
+    },
+  },
+  {
     version: "0.48.356",
     date: "2026-11-02",
     items: {
