@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.336",
+    date: "2026-11-02",
+    items: {
+      ko: ["멸망의 용 때릴 곳 표시를 더 옅게 (그림을 덜 가림)"],
+      en: ["Dragon of Ruin hit marker made fainter (covers the art less)"],
+      ja: ["滅びの竜の狙う場所の表示をより薄く（絵を隠しにくく）"],
+    },
+  },
+  {
     version: "0.48.335",
     date: "2026-11-01",
     items: {

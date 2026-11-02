@@ -85,14 +85,14 @@ export function drawHitSpot(ctx: CanvasRenderingContext2D, tick: number, e: Enem
   const pulse = 0.5 + 0.5 * Math.sin(tick * 0.08);
   const g = ctx.createRadialGradient(x, y, e.r * 0.2, x, y, e.r);
   g.addColorStop(0, `rgba(${rgb}, 0)`);
-  g.addColorStop(0.7, `rgba(${rgb}, ${0.1 + 0.08 * pulse})`);
+  g.addColorStop(0.7, `rgba(${rgb}, ${0.06 + 0.06 * pulse})`);
   g.addColorStop(1, `rgba(${rgb}, 0)`);
   ctx.fillStyle = g;
   ctx.beginPath();
   ctx.arc(x, y, e.r, 0, Math.PI * 2);
   ctx.fill();
-  ctx.strokeStyle = `rgba(${rgb}, ${0.6 + 0.3 * pulse})`;
-  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = `rgba(${rgb}, ${0.35 + 0.25 * pulse})`;
+  ctx.lineWidth = 1;
   ctx.setLineDash([4, 3]);
   ctx.beginPath();
   ctx.arc(x, y, e.r, 0, Math.PI * 2);
