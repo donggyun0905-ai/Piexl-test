@@ -261,3 +261,16 @@
 .rg-retry {
   margin-top: 10px;
 }
+/* 방에서 얻은 것 (제단·증강·능력치 등): 금빛 줄 · 나쁜 것은 붉게 */
+.buff-row.evo.room {
+  background: rgb(255 210 90 / 0.12);
+}
+.buff-row.evo.room span {
+  color: #ffe08a;
+}
+.buff-row.evo.room.bad {
+  background: rgb(255 90 90 / 0.12);
+}
+.buff-row.evo.room.bad span {
+  color: #ffb0b0;
+}

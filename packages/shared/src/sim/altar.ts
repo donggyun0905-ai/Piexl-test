@@ -16,8 +16,8 @@ import { addEffect, ROOM_MIN_Y } from "./util";
 export const ALTAR_OP = 13;
 
 export interface AltarPlayerState {
-  /** 쓴 제단 (층 × 1000 + 방) · 마지막 결과 (화면 안내) */
-  altar?: { rooms: number[]; last?: { id: AltarId; card: number; hit?: number; tick: number } };
+  /** 쓴 제단 (층 × 1000 + 방) · 마지막 결과 (화면 안내) · 고른 카드 기록 (버프 창) */
+  altar?: { rooms: number[]; last?: { id: AltarId; card: number; hit?: number; tick: number }; got?: { id: AltarId; card: number; hit?: number }[] };
   /** 증강: 붙은 패시브 · 기술 둘 (그 패시브를 가진 동안 늘 씀) */
   augments?: { passive: PassiveId; skills: SwarmSkill[] }[];
   /** 증강 기술 '블랙홀' (던전, 광야의 새벽은 판에 있음) */
@@ -99,6 +99,7 @@ export function altarMenu(s: RunState, card: number): void {
       recalcStats(s);
     }
   }
+  (a.got ??= []).push({ id, card, ...(a.last.hit ? { hit: a.last.hit } : {}) });
   addEffect(s, { kind: "alChoose", x: CX, y: ALTAR_Y, dirX: ALTAR_IDS.indexOf(id), dirY: 0, size: 80, maxTicks: 60, width: card });
 }
 

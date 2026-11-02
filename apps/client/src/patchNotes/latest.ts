@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.351",
+    date: "2026-11-02",
+    items: {
+      ko: ["버프 창에 '방에서 얻은 것' (금빛 줄, 마우스를 올리면 설명): 제단에서 고른 카드(성좌·거래 내용·벌칙) · ✦ 증강 기술이 새겨진 패시브(기술 이름·효과) · 방에서 바뀐 능력치 합계(시련·제단·도박꾼·악마) · 상태이상 면역 · 되살아남 · 악마와 거래 · 이번 층 시련 저주"],
+      en: ["Buff panel now lists 'From rooms' (gold rows, hover for details): altar cards chosen (constellation, bargain, penalty) · ✦ passives with engraved augments (skill names and effects) · total stat changes from rooms (trial, altar, gambler, devil) · status immunity · revives · devil's pact · this floor's trial curse"],
+      ja: ["バフ欄に「部屋で得たもの」（金色の行、マウスを乗せると説明）：祭壇で選んだカード（星座・取引内容・罰）· ✦ 増強技が刻まれたパッシブ（技名・効果）· 部屋で変わった能力値の合計（試練・祭壇・ギャンブラー・悪魔）· 状態異常無効 · 復活 · 悪魔との取引 · この階の試練の呪い"],
+    },
+  },
+  {
     version: "0.48.350",
     date: "2026-11-02",
     items: {
