@@ -4,7 +4,11 @@ import { customMaps, PRACTICE_ROOMS, type PracticeRoom } from "@pixel-rogue/shar
 import type { TextKey } from "../../i18n";
 import { roomLook } from "../minimap";
 
-const NAME: Record<PracticeRoom, TextKey> = { shop: "sumRoomShop", heaven: "roomHeaven", golden: "sumRoomGolden", treasure: "sumRoomTreasure", gym: "sumRoomGym", trial: "sumRoomTrial", altar: "sumRoomAltar", devil: "sumRoomDevil", gamble: "sumRoomGamble", auction: "sumRoomAuction", crack: "sumRoomCrack", rest: "sumRoomRest" };
+/** 방 이름 글자 (방 설명 창 RoomGuide도 씀) */
+export const ROOM_NAME: Record<PracticeRoom, TextKey> = { shop: "sumRoomShop", heaven: "roomHeaven", golden: "sumRoomGolden", treasure: "sumRoomTreasure", gym: "sumRoomGym", trial: "sumRoomTrial", altar: "sumRoomAltar", devil: "sumRoomDevil", gamble: "sumRoomGamble", auction: "sumRoomAuction", crack: "sumRoomCrack", rest: "sumRoomRest" };
+
+/** 방 색 (미니맵과 같음) */
+export const practiceRoomLook = (k: PracticeRoom) => roomLook({ type: k === "heaven" ? "shop" : k === "crack" ? "combat" : k, ...(k === "heaven" ? { heaven: true } : {}) });
 
 interface Props {
   t: (key: TextKey) => string;
@@ -17,11 +21,11 @@ export function PracticeRooms({ t, onRoom, onShape }: Props) {
   return (
     <div className="practice-rooms">
       {PRACTICE_ROOMS.map((k) => {
-        const look = roomLook({ type: k === "heaven" ? "shop" : k === "crack" ? "combat" : k, ...(k === "heaven" ? { heaven: true } : {}) });
+        const look = practiceRoomLook(k);
         return (
           <button key={k} type="button" className="practice-room" onClick={() => onRoom(k)}>
             <i style={{ background: look.color, borderColor: look.ink }} />
-            {t(NAME[k])}
+            {t(ROOM_NAME[k])}
           </button>
         );
       })}

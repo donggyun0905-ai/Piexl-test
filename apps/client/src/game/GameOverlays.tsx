@@ -9,7 +9,9 @@ import type { RunSummaryData } from "./runSummary";
 
 /** 게임 위에 뜨는 창. 혼자 하기에서는 창이 떠 있는 동안 게임이 멈춤 */
 /** info: 로그 캐릭터 설명 큰 창 (GameHud.StatsPanel이 그림, 게임은 멈춤) */
-export type Overlay = "none" | "pause" | "exit" | "info";
+export type Overlay = "none" | "pause" | "exit" | "info" | "rooms";
+/** 설명 큰 창 (캐릭터 설명 · 방 설명) */
+export const isInfo = (o: Overlay) => o === "info" || o === "rooms";
 
 export interface Result {
   won: boolean;

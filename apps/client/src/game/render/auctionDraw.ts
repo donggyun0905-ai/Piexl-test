@@ -1,6 +1,6 @@
 // 경매장 '암흑가' 그림 (sim/auction): 붉은 융단 무대 · 상품 받침 다섯(4번째부터 ??? 천) · 의자 두 줄에 그림자 손님(부를 때 번호표를 듦)
-// · 진행자(값이 적힌 팻말을 들고, 낙찰 때 망치) · 하나·둘·셋 표시. 효과(돈 날림·띠링)는 render/vaultFx
-import { AUCTION, auctionHere, goingStage, hostY, LOT_GAP, lotHidden, lotY, SHADOW_SEATS, type RunState } from "@pixel-rogue/shared";
+// · 진행자(값이 적힌 팻말을 들고, 낙찰 때 망치) · 하나·둘·셋 표시 · 맨 앞줄 가운데 내 의자(F로 앉음). 효과(돈 날림·띠링)는 render/vaultFx
+import { AUCTION, auctionHere, goingStage, hostY, LOT_GAP, lotHidden, lotY, SHADOW_SEATS, type Pickup, type RunState } from "@pixel-rogue/shared";
 import { iconCanvas, type IconItem } from "../iconArt";
 import { additive, alpha, glow } from "./pwFxBits";
 
@@ -12,7 +12,7 @@ export function seatPos(i: number, cx: number, cy: number): { x: number; y: numb
   const row = i % 2;
   const col = Math.floor(i / 2);
   const cols = Math.ceil(SHADOW_SEATS / 2);
-  return { x: cx + (col - (cols - 1) / 2) * 30 + (row ? 15 : 0), y: cy + 28 + row * 30 };
+  return { x: cx + (col - (cols - 1) / 2) * 30 + (row ? 15 : 0), y: cy + 36 + row * 30 };
 }
 
 export function drawAuctionHall(ctx: Ctx, s: RunState, cx: number, cy: number): void {
@@ -96,10 +96,38 @@ export function drawAuctionHall(ctx: Ctx, s: RunState, cx: number, cy: number): 
       ctx.fillText(String(i + 1), p.x + 4, p.y - 28);
     }
   }
+  drawAuctioneer(ctx, s, cx);
+}
+
+/** 내 의자: 붉은 벨벳 안락의자 · 금테 (가까이 가면 금빛, 앉으면 등받이만 보임) */
+export function drawMySeat(ctx: Ctx, s: RunState, pk: Pickup, near: boolean): void {
+  const x = Math.round(pk.x);
+  const y = Math.round(pk.y);
+  const sat = pk.itemId === "1";
+  if (near && !sat) additive(ctx, () => glow(ctx, x, y, 16, GOLD, 0.45 + 0.15 * Math.sin(s.tick / 10), 0.5));
+  // 등받이 · 팔걸이 · 방석
+  ctx.fillStyle = "#5a0e1a";
+  ctx.fillRect(x - 9, y - 14, 18, 12);
+  ctx.fillStyle = "#8a1a2a";
+  ctx.fillRect(x - 7, y - 12, 14, 9);
+  ctx.fillStyle = GOLD;
+  ctx.fillRect(x - 10, y - 15, 20, 1);
+  if (sat) return;
+  ctx.fillStyle = "#5a0e1a";
+  ctx.fillRect(x - 11, y - 4, 4, 10);
+  ctx.fillRect(x + 7, y - 4, 4, 10);
+  ctx.fillStyle = "#a82436";
+  ctx.fillRect(x - 7, y - 3, 14, 6);
+  ctx.fillStyle = GOLD;
+  ctx.fillRect(x - 11, y - 4, 4, 1);
+  ctx.fillRect(x + 7, y - 4, 4, 1);
+  ctx.fillStyle = "#2a1008";
+  ctx.fillRect(x - 9, y + 6, 2, 3);
+  ctx.fillRect(x + 7, y + 6, 2, 3);
 }
 
 /** 진행자: 연미복 · 값 팻말 (앞선 사람 색) · 하나·둘·셋 · 낙찰 때 망치를 내리침 */
-export function drawAuctioneer(ctx: Ctx, s: RunState, x: number): void {
+function drawAuctioneer(ctx: Ctx, s: RunState, x: number): void {
   const a = auctionHere(s);
   const y = hostY() + 32;
   const t = s.tick;

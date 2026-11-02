@@ -257,6 +257,7 @@ export function removeDead(s: RunState): void {
     // 보스가 부른 적(돈 없음)은 처치 수·쌓이는 힘(빛의 고리·잔영·경험치·먹은 영혼 등)에 넣지 않음
     const minion = e.noGold;
     if (!minion) s.kills++;
+    else if (s.trialRun) s.trialRun.got = (s.trialRun.got ?? 0) + 1;
     if (!minion) relicKill(s, e);
     hatchSlimes(s, e, alive);
     const p = s.player;

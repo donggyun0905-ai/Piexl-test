@@ -31,6 +31,8 @@ export interface TrialRunState {
     /** 시작 때 체력 (체력 1 시련·끝없는 시련이 끝나면 되돌림) · 시작 때까지 처치 수 (점수) */
     hp: number;
     kills: number;
+    /** 시련 몬스터를 잡은 수 (시련 몬스터는 돈 없는 적이라 처치 수 kills에 안 들어감, combat이 셈) */
+    got?: number;
     /** 시작한 틱 (화면 연출) */
     at: number;
   };

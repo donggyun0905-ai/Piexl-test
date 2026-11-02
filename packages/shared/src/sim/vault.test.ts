@@ -172,6 +172,23 @@ describe("경매장", () => {
   });
 });
 
+describe("경매장 의자", () => {
+  it("의자에서 F로 앉으면 경매가 시작되고 움직여도 의자에 붙어 있음 · 다시 F면 일어남", () => {
+    const s = inRoom("auction");
+    const seat = s.rooms[s.roomId]!.pickups.find((p) => p.kind === "auction")!;
+    s.player.x = seat.x;
+    s.player.y = seat.y;
+    step(s);
+    stepSim(s, { ...EMPTY_INPUT, interact: true });
+    expect(seat.itemId).toBe("1");
+    expect(auctionHere(s)!.lot).toBe(0);
+    step(s, 20, { ...EMPTY_INPUT, moveX: 100 });
+    expect(s.player.x).toBe(seat.x);
+    stepSim(s, { ...EMPTY_INPUT, interact: true });
+    expect(seat.itemId).toBe("0");
+  });
+});
+
 describe("시련 1000점", () => {
   it("비밀의 방 고르기 상자 (히든 상점 포함)", () => {
     const s = createRun(3, "warden");

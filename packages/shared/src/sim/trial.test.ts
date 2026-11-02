@@ -73,7 +73,12 @@ describe("시련의 방", () => {
     startTrial(s, 4);
     for (let i = 0; i < 70; i++) stepSim(s, EMPTY_INPUT);
     expect(s.enemies.length).toBeGreaterThan(0);
-    s.kills += 25;
+    // 시련 몬스터는 돈 없는 적이라 처치 수(kills)에는 안 들어가도 점수는 오름
+    const n = s.enemies.length;
+    s.enemies.forEach((e) => (e.hp = 0));
+    stepSim(s, EMPTY_INPUT);
+    expect(s.trialRun!.score).toBe(n * 10);
+    s.trialRun!.got = 25;
     s.player.hp = -5;
     s.player.invulnTicks = 0;
     stepSim(s, EMPTY_INPUT);

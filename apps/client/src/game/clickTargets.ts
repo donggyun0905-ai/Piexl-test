@@ -11,13 +11,19 @@ export interface ClickTarget {
   pickChoice: number;
 }
 
-/** 화면 좌표 아래의 바닥 아이템 (돈 제외) */
-export function pickupAt(run: RunState, canvas: HTMLCanvasElement, zoom: number, x: number, y: number): Pickup | null {
+/** 화면 좌표 → 게임 좌표 (캔버스 밖이면 null) */
+export function worldAt(run: RunState, canvas: HTMLCanvasElement, zoom: number, x: number, y: number): { x: number; y: number } | null {
   const rect = canvas.getBoundingClientRect();
   if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) return null;
   const cam = cameraFor(run, zoom);
-  const wx = cam.x + ((x - rect.left) / rect.width) * (viewW() / zoom);
-  const wy = cam.y + ((y - rect.top) / rect.height) * (viewH() / zoom);
+  return { x: cam.x + ((x - rect.left) / rect.width) * (viewW() / zoom), y: cam.y + ((y - rect.top) / rect.height) * (viewH() / zoom) };
+}
+
+/** 화면 좌표 아래의 바닥 아이템 (돈 제외) */
+export function pickupAt(run: RunState, canvas: HTMLCanvasElement, zoom: number, x: number, y: number): Pickup | null {
+  const w = worldAt(run, canvas, zoom, x, y);
+  if (!w) return null;
+  const { x: wx, y: wy } = w;
   let best: Pickup | null = null;
   let bestD = PICK_RADIUS * PICK_RADIUS;
   for (const pk of run.rooms[run.roomId]?.pickups ?? []) {
@@ -32,7 +38,7 @@ export function pickupAt(run: RunState, canvas: HTMLCanvasElement, zoom: number,
 }
 
 /** 바닥 아이템의 화면 좌표 (위쪽 끝, 설명 상자를 붙일 자리) */
-export function pickupScreenPos(run: RunState, canvas: HTMLCanvasElement, zoom: number, pk: Pickup): { x: number; y: number } {
+export function pickupScreenPos(run: RunState, canvas: HTMLCanvasElement, zoom: number, pk: { x: number; y: number }): { x: number; y: number } {
   const rect = canvas.getBoundingClientRect();
   const cam = cameraFor(run, zoom);
   return {

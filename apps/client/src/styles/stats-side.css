@@ -211,3 +211,53 @@
   line-height: 1.45;
   white-space: normal;
 }
+/* 방 설명 큰 창 (RoomGuide): 방 고르는 단추 · 시련 보상 표 */
+.rg-rooms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+.rg-room {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border: 1px solid #3a3450;
+  background: rgb(255 255 255 / 0.04);
+  font-size: 13px;
+}
+.rg-room i {
+  width: 10px;
+  height: 10px;
+  border: 2px solid;
+  border-radius: 2px;
+}
+.rg-room.on {
+  border-color: #f2d040;
+  color: #fff3b0;
+}
+.rg-table {
+  margin-top: 10px;
+  border-collapse: collapse;
+  font-size: 12px;
+  color: #e8e4f0;
+}
+.rg-table caption {
+  text-align: left;
+  color: #c8b8ff;
+  margin-bottom: 4px;
+}
+.rg-table th,
+.rg-table td {
+  border: 1px solid #3a3450;
+  padding: 2px 5px;
+  text-align: center;
+}
+.rg-table th {
+  color: #c8c0d8;
+  font-weight: normal;
+}
+.rg-retry {
+  margin-top: 10px;
+}

@@ -1,13 +1,13 @@
 // 경매장 '암흑가' (비밀의 방, sim/vault): 대강당 무대 위 상품 5개(4번째부터 ???) · 진행자 · 의자에 그림자 손님들
 // 상품마다 숨은 값어치(플레이어는 모름)가 있고, 그림자 손님은 그 값을 넘겨 부르지 않음
-// 진행자 앞 F → 창: 시작 · 입찰(+10) · 포기. 아무도 더 부르지 않으면 하나·둘·셋 → 낙찰 (내가 앞서면 돈을 내고 받음)
+// 맨 앞줄 가운데 손님 의자에 F로 앉으면 경매 시작·창 (입찰(+10) · 포기). 다시 F(Esc)면 일어남. 아무도 더 부르지 않으면 하나·둘·셋 → 낙찰 (내가 앞서면 돈을 내고 받음)
 // 상품: 무작위 패시브 또는 증강 기술 하나 (광야의 새벽 각성 기술, 낙찰받으면 가진 패시브 중 골라 붙임)
 import type { PassiveId } from "../items";
 import { AUCTION } from "../secretDefs";
 import { createRng, deriveSeed } from "../rng";
 import { depth } from "./hero";
 import { recalcStats } from "./items";
-import { addPickup, CX, passivePool, pickDistinct, seatSalt } from "./loot";
+import { addPickup, CX, CY, passivePool, pickDistinct, seatSalt } from "./loot";
 import { SKILLS, type SwarmSkill } from "./swarmEvo";
 import type { Pickup, RunState } from "./types";
 import type { AuctionState } from "./vaultTypes";
@@ -20,6 +20,8 @@ export const hostY = () => ROOM_MIN_Y + 30;
 export const lotY = () => ROOM_MIN_Y + 22;
 export const LOT_GAP = 30;
 export const SHADOW_SEATS = 14;
+/** 내 의자 (맨 앞줄 가운데, 바닥 물건 kind "auction") */
+export const mySeatY = () => CY + 6;
 const PAUSE = 60;
 
 const roomKey = (s: RunState) => s.floor * 1000 + s.roomId;
@@ -37,7 +39,7 @@ const wait = (s: RunState, a: AuctionState) => createRng(deriveSeed(s.seed, "auc
 
 /** 방에 처음 들어가면: 진행자 · 상품 다섯 (값어치는 층이 깊을수록 큼) */
 export function spawnAuction(s: RunState, roomId: number): void {
-  addPickup(s, roomId, "auction", "0", CX, hostY() + 40, 0);
+  addPickup(s, roomId, "auction", "0", CX, mySeatY(), 0);
   const rng = createRng(deriveSeed(s.seed, "auction", s.floor, roomId, ...seatSalt(s)));
   const passives = pickDistinct(rng, passivePool(s), AUCTION.lots);
   const lots = Array.from({ length: AUCTION.lots }, (_, i) => {
@@ -48,11 +50,22 @@ export function spawnAuction(s: RunState, roomId: number): void {
   s.player.auction = { room: s.floor * 1000 + roomId, lots, lot: -1, price: 0, lead: 0, who: 0, t: 0, next: 0, bids: 0 };
 }
 
-/** 진행자 앞 (station.stationAt): F = 창 열기·닫기 */
+/** 내 의자 앞 (station.stationAt): F = 앉기(처음이면 경매 시작)·일어나기. 앉아 있는 동안 창이 열림 (itemId "1" = 앉음) */
 export function auctionAt(s: RunState, pk: Pickup, interact: boolean): void {
-  if (s.prompt.kind !== "none" || !auctionHere(s)) return;
+  const a = auctionHere(s);
+  if (s.prompt.kind !== "none" || !a) return;
   if (interact) pk.itemId = pk.itemId === "1" ? "0" : "1";
+  if (interact && pk.itemId === "1" && a.lot < 0) startLot(s, a, 0, s.tick + 30);
   s.prompt = { kind: "station", station: "auction", open: pk.itemId === "1" };
+}
+
+/** 앉아 있으면 의자에 붙어 있음 (걸음·대시를 해도 틱 끝에 의자로, vaultTick은 움직임 다음) */
+function stayOnSeat(s: RunState): void {
+  const seat = s.rooms[s.roomId]?.pickups.find((pk) => pk.kind === "auction" && pk.itemId === "1");
+  if (!seat) return;
+  const p = s.player;
+  p.x = seat.x;
+  p.y = seat.y - 2;
 }
 
 function startLot(s: RunState, a: AuctionState, i: number, at: number): void {
@@ -122,6 +135,7 @@ export function auctionMenu(s: RunState, n: number): void {
 /** 틱마다 (사람마다): 그림자 손님이 부름 · 하나·둘·셋 → 낙찰 */
 export function auctionTick(s: RunState): void {
   const a = auctionHere(s);
+  if (a && s.map.rooms[s.roomId]?.type === "auction") stayOnSeat(s);
   if (!a || a.lot < 0 || a.lot >= a.lots.length || s.map.rooms[s.roomId]?.type !== "auction") return;
   if (a.graft !== undefined) {
     a.t = s.tick + PAUSE;

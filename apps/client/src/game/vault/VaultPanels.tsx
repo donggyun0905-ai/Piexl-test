@@ -1,6 +1,7 @@
 // 비밀의 방 창: 도박꾼 야바위(시작 · 왼쪽/가운데/오른쪽 고르기 · 결과) · 경매(상품 줄 · 지금 값·앞선 사람·하나둘셋 · 입찰/포기 · 증강 붙일 패시브)
 // 누른 것은 입력 menu → sim/gamble·auction (기록·다시 돌리기에서도 같은 결과). 모양은 styles/vault.css
 import { AUCTION, AUCTION_OP, GAMBLE, GAMBLE_OP, goingStage, lotHidden, menuCode, nextBid, type AuctionState, type PassiveId } from "@pixel-rogue/shared";
+import { lotDesc, lotItem, lotName } from "./auctionText";
 import type { Lang, TextKey } from "../../i18n";
 import { itemDesc, itemName } from "../../i18n/items";
 import { ItemIcon, type IconItem } from "../itemIcon";
@@ -52,21 +53,11 @@ interface AuctionProps {
   send: (code: number) => void;
 }
 
-const lotItem = (a: AuctionState, i: number): IconItem | null => (lotHidden(a, i) || a.lots[i]!.kind !== "passive" ? null : ({ kind: "passive", id: a.lots[i]!.id } as IconItem));
-
 export function AuctionPanel({ view, gold, lang, t, send }: AuctionProps) {
   const { a, tick } = view;
   const lot = a.lot >= 0 ? a.lots[a.lot] : undefined;
-  const name = (i: number) => {
-    const l = a.lots[i]!;
-    if (lotHidden(a, i)) return "???";
-    return l.kind === "passive" ? itemName("passive", l.id, lang) : `${t("auctionAug")} · ${t(`swarmSkill_${l.id}` as TextKey)}`;
-  };
-  const desc = (i: number) => {
-    const l = a.lots[i]!;
-    if (lotHidden(a, i)) return t("auctionHiddenDesc");
-    return l.kind === "passive" ? itemDesc("passive", l.id, lang, t) : t("auctionAugDesc");
-  };
+  const name = (i: number) => lotName(a, i, lang, t);
+  const desc = (i: number) => lotDesc(a, i, lang, t);
   const stage = lot ? goingStage(a, tick) : 0;
   const can = !!lot && a.lead !== 1 && tick >= a.t && gold >= nextBid(a) && a.graft === undefined;
   return (

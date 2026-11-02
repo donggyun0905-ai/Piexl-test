@@ -1,4 +1,4 @@
-// 화면 글자: 로그 버프 창(BuffPanel) · 캐릭터 설명 큰 창(CharInfo)
+// 화면 글자: 로그 버프 창(BuffPanel) · 캐릭터 설명 큰 창(CharInfo) · 방 설명 큰 창(RoomGuide)
 type L = { ko: string; en: string; ja: string };
 const l = (ko: string, en: string, ja: string): L => ({ ko, en, ja });
 
@@ -49,4 +49,17 @@ export const BUFF_TEXT = {
   ciWeapons: l("무기 (누르면 연습장에서 들어 봄)", "Weapons (click to try in practice)", "武器（押すと練習場で装備）"),
   ciPassives: l("전용 아이템 (누르면 연습장에서 얻음)", "Exclusive items (click to get in practice)", "専用アイテム（押すと練習場で入手）"),
   ciPractice: l("연습장: 직접 움직이고 허수아비를 때려 보세요", "Practice: move and hit the dummy yourself", "練習場: 自分で動いてカカシを叩いてみよう"),
+  rgOpen: l("🚪 방 설명 (O)", "🚪 Room guide (O)", "🚪 部屋の説明 (O)"),
+  rgTitle: l("방 설명", "Room guide", "部屋の説明"),
+  rgClose: l("닫기 (Esc · O)", "Close (Esc / O)", "閉じる (Esc・O)"),
+  rgPick: l("방을 누르면 설명이 나오고, 오른쪽 연습장이 그 방으로 바뀌어 직접 해 볼 수 있어요", "Pick a room to read about it — the practice room on the right turns into it so you can try it", "部屋を押すと説明が出て、右の練習場がその部屋になり実際に試せます"),
+  rgRetry: l("↻ 연습장에서 다시 놓기", "↻ Reset it in practice", "↻ 練習場でもう一度置く"),
+  rgReward: l("시련 점수별 보상 상자", "Trial rewards by score", "試練の点数別報酬箱"),
+  rgScore: l("점수", "Score", "点数"),
+  rgColRs: l("무작위 능력치", "Random stat", "ランダム能力値"),
+  rgColPs: l("원하는 능력치", "Chosen stat", "好きな能力値"),
+  rgColRp: l("무작위 패시브", "Random passive", "ランダムパッシブ"),
+  rgColPp: l("고르는 패시브", "Pick passive", "選ぶパッシブ"),
+  rgColPu: l("고르는 사용 아이템", "Pick item", "選ぶ使用アイテム"),
+  rgColRv: l("되살아남", "Revive", "復活"),
 } as const;

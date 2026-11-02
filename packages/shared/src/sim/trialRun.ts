@@ -43,7 +43,7 @@ const MAX_SCORE = 1000;
 /** 시련 시작 (방이 잠기고, 체력 1 시련은 체력을 1로) */
 export function startTrial(s: RunState, kind: TrialKind): void {
   const p = s.player;
-  s.trialRun = { kind, room: s.roomId, score: 0, left: kind === 3 ? 3 : kind === 4 ? 0 : R.WAVES, t: 60, hp: p.hp, kills: s.kills, at: s.tick };
+  s.trialRun = { kind, room: s.roomId, score: 0, left: kind === 3 ? 3 : kind === 4 ? 0 : R.WAVES, t: 60, hp: p.hp, kills: s.kills, got: 0, at: s.tick };
   s.rooms[s.roomId]!.cleared = false;
   if (kind === 2) p.hp = 1;
   (p.trial ??= { rooms: [] }).last = { kind, tick: s.tick };
@@ -121,7 +121,7 @@ export function trialTick(s: RunState): void {
   if (run.kind === 2 && p.hp > 1) p.hp = 1;
   if (run.t > 0) run.t--;
   if (run.kind === 4) {
-    run.score = Math.min(MAX_SCORE, (s.kills - run.kills) * R.KILL_SCORE);
+    run.score = Math.min(MAX_SCORE, (s.kills - run.kills + (run.got ?? 0)) * R.KILL_SCORE);
     // 쓰러져도 죽지 않음: 그때 점수로 끝
     if (p.hp <= 0 || run.score >= MAX_SCORE) return finish(s, run.score);
     if (run.t <= 0 && s.enemies.length < R.MAX_ALIVE) {

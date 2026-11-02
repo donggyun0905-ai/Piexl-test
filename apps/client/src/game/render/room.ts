@@ -4,7 +4,7 @@ import { gymUsed, trialUsed, mine, PICKUP_HOLD_TICKS, ROOM_COLS, ROOM_ROWS, room
 import { drawPickup } from "../drawPickup";
 import { drawAltarStand } from "./altarDraw";
 import { drawDevilOffer, drawGambler } from "./vaultDraw";
-import { drawAuctioneer } from "./auctionDraw";
+import { drawMySeat } from "./auctionDraw";
 import { drawRoomFeatures } from "../roomFeatures";
 import { C, type Snap } from "./palette";
 import { drawDeco, themeFor, type FloorTheme } from "./floorThemes";
@@ -62,10 +62,11 @@ export function drawPickups(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       drawAltarStand(ctx, s, pk, Math.round(pk.x), Math.round(pk.y));
       continue;
     }
-    // 비밀의 방: 악마의 거래 · 도박꾼 · 경매 진행자 (render/vaultDraw·auctionDraw)
+    // 비밀의 방: 악마의 거래 · 도박꾼 · 경매장 내 의자 (render/vaultDraw·auctionDraw)
     if (pk.kind === "devil" || pk.kind === "gambler" || pk.kind === "auction") {
       if (pk.kind === "devil") drawDevilOffer(ctx, s, pk, pk.id === s.nearPickupId);
-      else (pk.kind === "gambler" ? drawGambler : drawAuctioneer)(ctx, s, Math.round(pk.x));
+      else if (pk.kind === "auction") drawMySeat(ctx, s, pk, pk.id === s.nearPickupId);
+      else drawGambler(ctx, s, Math.round(pk.x));
       continue;
     }
     drawPickup(ctx, pk, s.tick, pk.id === s.nearPickupId, hold, (pk.kind === "gym" && !gymUsed(s)) || (pk.kind === "trial" && (!trialUsed(s) || !!s.trialRun)));

@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.347",
+    date: "2026-11-02",
+    items: {
+      ko: [
+        "시련의 방 '끝없는 무리' 점수가 오르지 않던 문제 고침 (시련 몬스터를 잡아도 점수에 안 들어갔음, 연습장·실제 판 모두)",
+        "로그 왼쪽 칸 '캐릭터 설명' 아래에 '방 설명'(O) 버튼: 방마다 나오는 곳·하는 일·확률·실패하면·그냥 나가면을 자세히 보여 주고, 오른쪽 작은 연습장이 그 방으로 바뀌어 직접 해 볼 수 있음 (시련은 점수별 보상 표)",
+        "암흑가 경매장: 맨 앞줄 가운데에 내 자리(붉은 의자)가 생김 · F로 앉으면 경매 시작, 다시 F(Esc)로 일어남 (진행자는 무대 위에)",
+        "암흑가 경매장: 무대 위 상품에 마우스를 올리면 앉지 않아도 설명이 보임",
+      ],
+      en: [
+        "Fixed the Trial Room's 'Endless Horde' score not going up (trial monster kills weren't counted, in practice and real runs)",
+        "New 'Room guide' (O) button under 'Character guide' in the left panel: where each room appears, what it does, its odds and what happens if you fail or just leave — the small practice room on the right turns into that room so you can try it (the trial shows rewards by score)",
+        "Underworld Auction: your own seat (a red chair) in the middle of the front row · press F to sit and start the auction, F (Esc) again to stand (the auctioneer stays on stage)",
+        "Underworld Auction: hover the lots on stage to read them without sitting down",
+      ],
+      ja: [
+        "試練の部屋「果てなき群れ」の点数が上がらない問題を修正（試練のモンスターを倒しても点数に入らなかった、練習場・実際のランとも）",
+        "ログ左の「キャラクター説明」の下に「部屋の説明」(O)ボタン：部屋ごとの出現場所・内容・確率・失敗したら・そのまま出たらを詳しく表示し、右の小さな練習場がその部屋になって実際に試せる（試練は点数別の報酬表）",
+        "闇街オークション：最前列中央に自分の席（赤い椅子）· Fで座るとオークション開始、もう一度F(Esc)で立つ（司会者は舞台の上）",
+        "闇街オークション：舞台の品物にマウスを乗せると座らなくても説明が見える",
+      ],
+    },
+  },
+  {
     version: "0.48.346",
     date: "2026-11-02",
     items: {

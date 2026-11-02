@@ -10,9 +10,11 @@ import { BuffPanel } from "./BuffPanel";
 import type { StatRow } from "./statsView";
 import type { Controls } from "./controls";
 import type { GameScreenProps } from "./gameScreenProps";
+import { isInfo, type Overlay } from "./GameOverlays";
 
 // 큰 창은 처음 열 때 불러옴 (안에 연습장 GameScreen이 있어 서로 부르는 고리를 피함)
 const CharInfo = lazy(() => import("./CharInfo"));
+const RoomGuide = lazy(() => import("./RoomGuide"));
 
 interface Props {
   t: (key: TextKey) => string;
@@ -65,8 +67,11 @@ export function GameHud({ t, touchMode, autoAim, manualOnly, pvp, onPause, onAut
   );
 }
 
-/** 로그 왼쪽 칸: 능력치 · '캐릭터 설명' 버튼(누르면 게임을 멈추고 큰 창 CharInfoHost) · 버프 창. 칸 너비는 화면 여백(--side)에 맞춤 (screenHooks) */
-export function StatsPanel({ rows, t, lang, onInfo, run }: { rows: StatRow[]; t?: (k: TextKey) => string; lang?: Lang; onInfo?: () => void; run?: () => RunState | null }) {
+/** 큰 설명 창 종류: 캐릭터 설명 · 방 설명 */
+export type InfoKind = "info" | "rooms";
+
+/** 로그 왼쪽 칸: 능력치 · '캐릭터 설명'·'방 설명' 버튼(누르면 게임을 멈추고 큰 창 CharInfoHost) · 버프 창. 칸 너비는 화면 여백(--side)에 맞춤 (screenHooks) */
+export function StatsPanel({ rows, t, lang, onInfo, run }: { rows: StatRow[]; t?: (k: TextKey) => string; lang?: Lang; onInfo?: (k: InfoKind) => void; run?: () => RunState | null }) {
   return (
     <div className="stats-panel">
       {rows.map((r) => (
@@ -76,29 +81,39 @@ export function StatsPanel({ rows, t, lang, onInfo, run }: { rows: StatRow[]; t?
         </div>
       ))}
       {t && onInfo && (
-        <button type="button" className="stats-guide-btn" onClick={onInfo}>
-          {t("ciOpen")}
-        </button>
+        <>
+          <button type="button" className="stats-guide-btn" onClick={() => onInfo("info")}>
+            {t("ciOpen")}
+          </button>
+          <button type="button" className="stats-guide-btn" onClick={() => onInfo("rooms")}>
+            {t("rgOpen")}
+          </button>
+        </>
       )}
       {run && t && <BuffPanel run={run} t={t} lang={lang ?? "ko"} />}
     </div>
   );
 }
 
-/** 캐릭터 설명 큰 창 (I 키로 열고 닫음). 능력치 칸과 따로 있어 연습장에서 능력치를 꺼도 창·일시정지가 꼬이지 않음 */
-export function CharInfoHost({ character, lang, t, open, onInfo }: { character: CharacterId; lang: Lang; t: (k: TextKey) => string; open: boolean; onInfo: (on: boolean) => void }) {
+/** 설명 창을 열거나(k) 닫음(null): 일시정지·나가기 창이 떠 있으면 그대로 */
+export const infoNext = (o: Overlay, k: InfoKind | null): Overlay => (k ? (o === "none" || isInfo(o) ? k : o) : isInfo(o) ? "none" : o);
+
+/** 캐릭터 설명(I)·방 설명(O) 큰 창. 능력치 칸과 따로 있어 연습장에서 능력치를 꺼도 창·일시정지가 꼬이지 않음 */
+export function CharInfoHost({ character, lang, t, open, onInfo }: { character: CharacterId; lang: Lang; t: (k: TextKey) => string; open: Overlay; onInfo: (k: InfoKind | null) => void }) {
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       const el = e.target as HTMLElement | null;
-      if (e.code === "KeyI" && !e.repeat && el?.tagName !== "INPUT" && el?.tagName !== "TEXTAREA") onInfo(!open);
+      const k: InfoKind | null = e.code === "KeyI" ? "info" : e.code === "KeyO" ? "rooms" : null;
+      if (k && !e.repeat && el?.tagName !== "INPUT" && el?.tagName !== "TEXTAREA") onInfo(open === k ? null : k);
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   }, [open, onInfo]);
-  if (!open) return null;
+  if (!isInfo(open)) return null;
+  const Big = open === "rooms" ? RoomGuide : CharInfo;
   return createPortal(
     <Suspense fallback={null}>
-      <CharInfo character={character} lang={lang} t={t} onClose={() => onInfo(false)} />
+      <Big character={character} lang={lang} t={t} onClose={() => onInfo(null)} />
     </Suspense>,
     document.body,
   );

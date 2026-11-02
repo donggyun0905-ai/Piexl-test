@@ -12,12 +12,12 @@ import { createRunTracker, withPet } from "./runTracker";
 import { createRunSounds } from "../audio/runSounds";
 import { play } from "../audio/sound";
 import { getSettings, setSettings } from "../settings";
-import { GameOverlays, type Overlay, type Result } from "./GameOverlays";
+import { GameOverlays, isInfo, type Overlay, type Result } from "./GameOverlays";
 import { formatTime } from "./hudText";
 import { gymPlaying, Loadout, type LoadoutView } from "./Loadout";
 import { MINIMAP_BOX_H, MINIMAP_BOX_W } from "./minimap";
 import { floorTipAt, PickupTip, type FloorTip } from "./PickupTip";
-import { CharInfoHost, GameHud, PanHint, StatsPanel, WithControls } from "./GameHud";
+import { CharInfoHost, GameHud, infoNext, PanHint, StatsPanel, WithControls } from "./GameHud";
 import { createShaker, useBackButton, useFitScale } from "./screenHooks";
 import { PracticePanel } from "./PracticePanel";
 import { createTutorial, type Tutorial, type TutorialStepId } from "./tutorial";
@@ -80,7 +80,7 @@ export function GameScreen(props: GameScreenProps) {
     if (overlay !== "none") controlsRef.current?.releaseAll();
   }, [overlay]);
   // 모바일 뒤로가기 → 나가기 확인
-  const toggleExit = useCallback(() => setOverlay((o) => (o === "exit" || o === "info" ? "none" : "exit")), []);
+  const toggleExit = useCallback(() => setOverlay((o) => (o === "exit" || isInfo(o) ? "none" : "exit")), []);
   useBackButton(toggleExit);
 
   // 배틀 시간 끝: 바깥에서 판을 끝냄
@@ -246,8 +246,8 @@ export function GameScreen(props: GameScreenProps) {
           height={Math.round(VIEW_HEIGHT * scale * dpr)}
           style={{ width: VIEW_WIDTH * wide * scale, height: VIEW_HEIGHT * scale }}
         />
-        {stats && !pvp && <StatsPanel rows={stats} t={t} lang={lang} onInfo={props.embedded ? undefined : () => setOverlay("info")} run={() => runRef.current} />}
-        {!pvp && !props.embedded && <CharInfoHost character={characterId} lang={lang} t={t} open={overlay === "info"} onInfo={(on) => setOverlay((o) => (on ? (o === "none" ? "info" : o) : o === "info" ? "none" : o))} />}
+        {stats && !pvp && <StatsPanel rows={stats} t={t} lang={lang} onInfo={props.embedded ? undefined : setOverlay} run={() => runRef.current} />}
+        {!pvp && !props.embedded && <CharInfoHost character={characterId} lang={lang} t={t} open={overlay} onInfo={(k) => setOverlay((o) => infoNext(o, k))} />}
         {mode !== "practice" && mode !== "swarm" && mode !== "paewang" && (
           <canvas ref={miniRef} className="minimap" width={MINIMAP_BOX_W} height={MINIMAP_BOX_H} aria-label={t("minimap")} />
         )}

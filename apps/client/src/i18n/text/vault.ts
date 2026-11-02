@@ -31,6 +31,7 @@ export const VAULT_TEXT = {
     ja: "品物{n}個 · {h}番目から??? · 影の客より高く入札すれば落札 (客は品物の隠れた価値までしか入札しない) · 誰も入札しなければ、1、2、3!",
   },
   auctionStart: { ko: "경매 시작", en: "Start the auction", ja: "オークション開始" },
+  auctionSitHint: { ko: "맨 앞줄 가운데 내 자리에서 F로 앉으면 경매 시작", en: "Sit in your front-row seat (F) to start the auction", ja: "最前列中央の自分の席でFで座るとオークション開始" },
   auctionEnd: { ko: "오늘 경매는 모두 끝났습니다", en: "That concludes tonight's auction", ja: "本日のオークションはすべて終了です" },
   auctionAug: { ko: "증강 기술", en: "Augment", ja: "増強技" },
   auctionAugDesc: { ko: "낙찰받으면 가진 패시브 하나를 골라 붙임 · 그 패시브를 가진 동안 늘 발동", en: "When won, graft it onto one of your passives · always active while you hold it", ja: "落札したら持っているパッシブを1つ選んで付ける · そのパッシブを持つ間は常に発動" },
