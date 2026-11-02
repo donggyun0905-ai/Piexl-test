@@ -5,7 +5,7 @@ import type { CharacterId, WeaponId } from "../content";
 import type { PassiveId } from "../items";
 import { createRng, deriveSeed } from "../rng";
 import { TD_RULES, TD_TOWERS, tdLevelCost, tdPassivePool } from "../tdDefs";
-import { TD_GROUND, TD_MAPS, tdTiles } from "../tdMaps";
+import { TD_GROUND, tdMapDef, tdTiles, type TdMapDef, type TdMapId } from "../tdMaps";
 import { removeDead, updatePending } from "./combat";
 import { equipWeapon, recalcStats } from "./items";
 import { updateLaserGear } from "./laserGear";
@@ -43,13 +43,14 @@ function towerInput(s: RunState): TickInput {
   return { ...EMPTY_INPUT, aimX: (dx / d) * 100 * steps, aimY: (dy / d) * 100 * steps, attack: true };
 }
 
-const tilesCache = new Map<string, number[][]>();
+const tilesCache = new WeakMap<TdMapDef, number[][]>();
 /** 맵의 칸 배열 (한 번 만들어 둠) */
 export function mapTiles(mapId: string): number[][] {
-  let t = tilesCache.get(mapId);
+  const def = tdMapDef(mapId as TdMapId);
+  let t = tilesCache.get(def);
   if (!t) {
-    t = tdTiles(TD_MAPS.find((m) => m.id === mapId) ?? TD_MAPS[0]!);
-    tilesCache.set(mapId, t);
+    t = tdTiles(def);
+    tilesCache.set(def, t);
   }
   return t;
 }

@@ -79,7 +79,7 @@ export function continueToLastFloor(s: RunState, boss: BossKind): void {
 /** 층 시작: 지도 만들고 시작 방으로 */
 export function startFloor(s: RunState, floor: number): void {
   s.floor = floor;
-  s.map = s.arenaLv ? arenaMap(s) : s.lastBoss && floor === lastFloorOf(s) ? lastFloorMap() : generateFloor(s.seed, floor);
+  s.map = s.arenaLv ? arenaMap(s) : s.lastBoss && floor === lastFloorOf(s) ? lastFloorMap() : generateFloor(s.seed, floor, s.customRooms);
   s.rooms = s.map.rooms.map(() => ({ visited: false, cleared: false, pickups: [], enemies: null }));
   s.enemies = [];
   s.projectiles = [];

@@ -1,0 +1,34 @@
+/* 맵 만들기: 왼쪽 맵 목록 · 오른쪽 그리기 판 */
+.admin-map-body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 12px;
+}
+.admin-map-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.admin-map-list button {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 4px;
+}
+.admin-map-canvas {
+  touch-action: none;
+  cursor: crosshair;
+  border: 2px solid var(--line);
+  max-width: 100%;
+}
+.admin-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  border: 1px solid #000;
+}
+@media (max-width: 900px) {
+  .admin-map-body {
+    grid-template-columns: 1fr;
+  }
+}

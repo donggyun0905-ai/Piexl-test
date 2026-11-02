@@ -1,8 +1,10 @@
 // 광야의 새벽 맵 5개 · 난이도 3단계 (계산은 sim/swarmTerrain). 들판 크기는 SWARM.cols × rows (64 × 40칸)
 // 칸 좌표 [열, 행, 너비, 높이]. 가운데(32, 20) 둘레는 비워 둠 (시작 자리)
 
-export type SwarmMapId = "plains" | "ruins" | "fort" | "swamp" | "volcano";
-export const SWARM_MAP_IDS: readonly SwarmMapId[] = ["plains", "ruins", "fort", "swamp", "volcano"];
+export type BuiltinSwarmMap = "plains" | "ruins" | "fort" | "swamp" | "volcano";
+/** 기본 맵 5개 · 관리자가 만든 맵은 "c-이름표" (customMapUse) */
+export type SwarmMapId = BuiltinSwarmMap | `c-${string}`;
+export const SWARM_MAP_IDS: readonly BuiltinSwarmMap[] = ["plains", "ruins", "fort", "swamp", "volcano"];
 
 type Rect = readonly [number, number, number, number];
 
@@ -23,7 +25,7 @@ export interface SwarmMapDef {
 
 const NONE: readonly never[] = [];
 
-export const SWARM_MAPS: Record<SwarmMapId, SwarmMapDef> = {
+export const SWARM_MAPS: Record<BuiltinSwarmMap, SwarmMapDef> = {
   /** 탁 트인 들판 */
   plains: { walls: NONE, rocks: NONE, ponds: NONE, towers: NONE, mud: NONE, lava: NONE, power: 1, coinMul: 1 },
   /** 폐허 도시: 무너진 건물 사이 좁은 골목 */
@@ -72,6 +74,12 @@ export const SWARM_MAPS: Record<SwarmMapId, SwarmMapDef> = {
   },
 };
 
+/** 관리자가 만든 광야의 새벽 맵 (이름표 → 맵 · 이름) */
+export const CUSTOM_SWARM = new Map<string, { def: SwarmMapDef; name: string }>();
+
+/** 맵 찾기 (모르는 맵은 들판) */
+export const swarmMapDef = (id: SwarmMapId | undefined): SwarmMapDef => SWARM_MAPS[id as BuiltinSwarmMap] ?? CUSTOM_SWARM.get(id ?? "")?.def ?? SWARM_MAPS.plains;
+
 /** 난이도: 보통 · 어려움 · 지옥 (적 체력·나오는 수·받는 피해 배율 · 처음 깨면 이벤트 코인, 다시 깨면 repeat) */
 export const SWARM_LEVELS = [
   { hp: 1, spawn: 1, taken: 1, coins: 5, repeat: 1 },
@@ -82,7 +90,7 @@ export const SWARM_LEVELS = [
 /** 깼을 때 받는 이벤트 코인 (처음이면 coins, 다시면 repeat, 맵 배율) */
 export const swarmCoins = (map: SwarmMapId, level: number, first: boolean) => {
   const l = SWARM_LEVELS[level] ?? SWARM_LEVELS[0];
-  return Math.round((first ? l.coins : l.repeat) * SWARM_MAPS[map].coinMul);
+  return Math.round((first ? l.coins : l.repeat) * swarmMapDef(map).coinMul);
 };
 
 /** 타워: 쏘는 간격(틱) · 사거리 · 피해(1분마다 +15%) · 폭발 범위 · 탄 빠르기 · 진흙 속 빠르기 배율 · 용암 피해(0.5초마다) */

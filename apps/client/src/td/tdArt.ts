@@ -1,5 +1,5 @@
 // 타워 디펜스 맵 그림: 테마마다 땅·길·울타리 색과 꾸밈. 한 번 그려 둔 그림(캔버스)을 매 프레임 붙이고, 움직이는 것(용암 빛·눈·반딧불 등)만 따로
-import { TD_COLS, TD_DECOR, TD_EDGE, TD_MAPS, TD_PATH, TD_ROWS, TILE_SIZE, mapTiles, tileHash, type TdTheme } from "@pixel-rogue/shared";
+import { TD_COLS, TD_DECOR, TD_EDGE, TD_MAPS, TD_PATH, TD_ROWS, TILE_SIZE, mapTiles, tdMapDef, tdThemeOf, tileHash, type TdMapDef, type TdMapId, type TdTheme } from "@pixel-rogue/shared";
 import { drawDecor, drawEdge } from "./tdDecor";
 
 const T = TILE_SIZE;
@@ -29,23 +29,25 @@ export const THEMES: Record<TdTheme, Theme> = {
   abyss: { ground: ["#16101e", "#120c1a", "#1a1424"], speck: "#3a1e3e", path: "#2e1a2e", pathEdge: "#ff3a6a", pathSpeck: "#4a2440", edge: "#08040c", edgeTop: "#2a0e24", flag: "#ff3a6a" },
 };
 
-const cache = new Map<string, HTMLCanvasElement>();
+/** 맵 모양마다 (관리자가 맵을 다시 저장하면 새로 그림) */
+const cache = new WeakMap<TdMapDef, HTMLCanvasElement>();
 
 /** 맵 바탕 그림 (테두리·땅·길·꾸밈·입구·지킬 곳) */
-export function mapCanvas(mapId: TdTheme): HTMLCanvasElement {
-  const hit = cache.get(mapId);
+export function mapCanvas(mapId: TdMapId): HTMLCanvasElement {
+  const hit = cache.get(tdMapDef(mapId));
   if (hit) return hit;
   const c = document.createElement("canvas");
   c.width = MAP_W;
   c.height = MAP_H;
   const ctx = c.getContext("2d")!;
   paintMap(ctx, mapId);
-  cache.set(mapId, c);
+  cache.set(tdMapDef(mapId), c);
   return c;
 }
 
-export function paintMap(ctx: CanvasRenderingContext2D, mapId: TdTheme): void {
-  const th = THEMES[mapId];
+export function paintMap(ctx: CanvasRenderingContext2D, mapId: TdMapId): void {
+  const theme = tdThemeOf(mapId);
+  const th = THEMES[theme];
   const tiles = mapTiles(mapId);
   const salt = TD_MAPS.findIndex((m) => m.id === mapId) + 11;
   const at = (c: number, r: number) => tiles[r]?.[c];
@@ -73,11 +75,11 @@ export function paintMap(ctx: CanvasRenderingContext2D, mapId: TdTheme): void {
   for (let r = 0; r < TD_ROWS; r++) {
     for (let c = 0; c < TD_COLS; c++) {
       const v = at(c, r);
-      if (v === TD_EDGE) drawEdge(ctx, mapId, th, c * T, r * T, tileHash(c, r, salt + 3));
-      else if (v === TD_DECOR) drawDecor(ctx, mapId, c * T, r * T, tileHash(c, r, salt + 5));
+      if (v === TD_EDGE) drawEdge(ctx, theme, th, c * T, r * T, tileHash(c, r, salt + 3));
+      else if (v === TD_DECOR) drawDecor(ctx, theme, c * T, r * T, tileHash(c, r, salt + 5));
     }
   }
-  const def = TD_MAPS.find((m) => m.id === mapId)!;
+  const def = tdMapDef(mapId);
   for (const path of def.paths) paintGate(ctx, path[0]!);
   paintHome(ctx, th, def.paths[0]![def.paths[0]!.length - 1]!);
 }
@@ -138,7 +140,8 @@ function paintHome(ctx: CanvasRenderingContext2D, th: Theme, [c, r]: readonly [n
 }
 
 /** 움직이는 꾸밈 (t = 초) */
-export function drawMapFx(ctx: CanvasRenderingContext2D, mapId: TdTheme, t: number): void {
+export function drawMapFx(ctx: CanvasRenderingContext2D, id: TdMapId, t: number): void {
+  const mapId = tdThemeOf(id);
   const n = 18;
   for (let i = 0; i < n; i++) {
     const a = i * 12.9898;

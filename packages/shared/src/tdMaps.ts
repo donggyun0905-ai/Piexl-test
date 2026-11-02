@@ -8,7 +8,13 @@ export const TD_ROWS = 12;
 export type TdTheme = "meadow" | "desert" | "frost" | "swamp" | "volcano" | "crystal" | "sky" | "abyss";
 
 export interface TdMapDef {
-  id: TdTheme;
+  /** 기본 맵은 테마 이름 · 관리자가 만든 맵은 "c-이름표" */
+  id: TdMapId;
+  /** 그림 테마 (없으면 id) · 화면에 보이는 이름 (관리자가 만든 맵) */
+  theme?: TdTheme;
+  name?: string;
+  /** 타워를 못 세우는 칸 [열, 행] (관리자가 만든 맵의 바위·물) */
+  blocks?: readonly (readonly [number, number])[];
   /** 길 (여러 개면 적이 차례로 나눠 옴). 점은 [열, 행] */
   paths: readonly (readonly (readonly [number, number])[])[];
   /** 적 체력 배율 (어려운 맵일수록 큼) */
@@ -68,7 +74,14 @@ export const TD_MAPS: readonly TdMapDef[] = [
   },
 ];
 
-export type TdMapId = TdTheme;
+export type TdMapId = TdTheme | `c-${string}`;
+
+/** 관리자가 만든 타워 디펜스 맵 (customMapUse가 채움) */
+export const CUSTOM_TD: TdMapDef[] = [];
+
+/** 맵 찾기 (모르는 맵은 첫 맵) · 그림 테마 */
+export const tdMapDef = (id: TdMapId): TdMapDef => TD_MAPS.find((m) => m.id === id) ?? CUSTOM_TD.find((m) => m.id === id) ?? TD_MAPS[0]!;
+export const tdThemeOf = (id: TdMapId): TdTheme => tdMapDef(id).theme ?? (tdMapDef(id).id as TdTheme);
 
 /** 칸 종류: 0 빈 땅(타워 가능) · 1 길 · 2 꾸밈 · 3 울타리(테두리) */
 export const TD_GROUND: number = 0;
@@ -96,6 +109,7 @@ export function tdTiles(map: TdMapDef): number[][] {
       for (let k = 0; k <= n; k++) tiles[r0 + Math.sign(r1 - r0) * k]![c0 + Math.sign(c1 - c0) * k] = TD_PATH;
     }
   }
+  for (const [c, r] of map.blocks ?? []) if (tiles[r]?.[c] === TD_GROUND) tiles[r]![c] = TD_DECOR;
   const salt = TD_MAPS.indexOf(map) + 1;
   for (let r = 1; r < TD_ROWS - 1; r++) {
     for (let c = 1; c < TD_COLS - 1; c++) {

@@ -1,5 +1,5 @@
-// 광야의 새벽 맵 고르기: 맵 5개 미리 보기 · 난이도 3단계(보통·어려움·지옥) · 깬 표시 · 받는 이벤트 코인
-import { SWARM, SWARM_LEVELS, SWARM_MAP_IDS, SWARM_MAPS, swarmCoins, type SwarmMapId } from "@pixel-rogue/shared";
+// 광야의 새벽 맵 고르기: 맵 5개(+ 관리자가 만든 맵) 미리 보기 · 난이도 3단계(보통·어려움·지옥) · 깬 표시 · 받는 이벤트 코인
+import { CUSTOM_SWARM, SWARM, SWARM_LEVELS, SWARM_MAP_IDS, swarmCoins, swarmMapDef, type SwarmMapId } from "@pixel-rogue/shared";
 import { useEffect, useRef, useState } from "react";
 import type { TextKey } from "../i18n";
 import { eventCoins, isCleared } from "./eventCoins";
@@ -14,16 +14,16 @@ interface Props {
 /** 미리 보기 한 칸 크기 (px) */
 const CELL = 3;
 /** 맵마다 바닥 색 */
-const GROUND: Record<SwarmMapId, string> = { plains: "#4a6a34", ruins: "#5a5650", fort: "#5e5a3e", swamp: "#34503e", volcano: "#4a2e28" };
-const STARS: Record<SwarmMapId, number> = { plains: 1, ruins: 2, fort: 3, swamp: 4, volcano: 5 };
+const GROUND: Partial<Record<SwarmMapId, string>> = { plains: "#4a6a34", ruins: "#5a5650", fort: "#5e5a3e", swamp: "#34503e", volcano: "#4a2e28" };
+const STARS: Partial<Record<SwarmMapId, number>> = { plains: 1, ruins: 2, fort: 3, swamp: 4, volcano: 5 };
 
 function MapPreview({ id }: { id: SwarmMapId }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const ctx = ref.current?.getContext("2d");
     if (!ctx) return;
-    const m = SWARM_MAPS[id];
-    ctx.fillStyle = GROUND[id];
+    const m = swarmMapDef(id);
+    ctx.fillStyle = GROUND[id] ?? GROUND.plains!;
     ctx.fillRect(0, 0, SWARM.cols * CELL, SWARM.rows * CELL);
     const rects = (list: readonly (readonly number[])[], color: string) => {
       ctx.fillStyle = color;
@@ -53,14 +53,14 @@ export function SwarmMaps({ t, onPick, onBack }: Props) {
         {t("swarmMapHint")} · <EcoinIcon /> {eventCoins()}
       </p>
       <div className="td-map-list">
-        {SWARM_MAP_IDS.map((id) => (
+        {[...SWARM_MAP_IDS, ...[...CUSTOM_SWARM.keys()].map((k) => k as SwarmMapId)].map((id) => (
           <button key={id} type="button" className={`td-map-card${map === id ? " picked" : ""}`} onClick={() => setMap(id)}>
             <MapPreview id={id} />
             <span className="td-map-text">
               <strong>
-                {t(`swarmMap_${id}` as TextKey)} <span className="td-stars">{"★".repeat(STARS[id])}</span>
+                {CUSTOM_SWARM.get(id)?.name ?? t(`swarmMap_${id}` as TextKey)} <span className="td-stars">{"★".repeat(STARS[id] ?? 1)}</span>
               </strong>
-              <small>{t(`swarmMapInfo_${id}` as TextKey)}</small>
+              <small>{t(CUSTOM_SWARM.has(id) ? "customMapInfo" : (`swarmMapInfo_${id}` as TextKey))}</small>
               <small className="swarm-cleared">{SWARM_LEVELS.map((_, lv) => (isCleared(id, lv) ? "✔" : "·")).join(" ")}</small>
             </span>
           </button>

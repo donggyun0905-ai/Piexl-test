@@ -1,5 +1,6 @@
 // 연습장 방 시험: 상점·천상의 상점·여신의 선물·보물방·단련의 방·쉼터로 지금 방을 바꿈 (sim/practiceRoom) · 보통 방으로 되돌리기
-import { PRACTICE_ROOMS, type PracticeRoom } from "@pixel-rogue/shared";
+// 관리자가 만든 방 모양으로 바꿔 보기 (sim/customRooms practiceShape)
+import { customMaps, PRACTICE_ROOMS, type PracticeRoom } from "@pixel-rogue/shared";
 import type { TextKey } from "../../i18n";
 import { roomLook } from "../minimap";
 
@@ -8,9 +9,11 @@ const NAME: Record<PracticeRoom, TextKey> = { shop: "sumRoomShop", heaven: "room
 interface Props {
   t: (key: TextKey) => string;
   onRoom: (kind: PracticeRoom | null) => void;
+  onShape: (rows: readonly string[] | null) => void;
 }
 
-export function PracticeRooms({ t, onRoom }: Props) {
+export function PracticeRooms({ t, onRoom, onShape }: Props) {
+  const shapes = customMaps("room");
   return (
     <div className="practice-rooms">
       {PRACTICE_ROOMS.map((k) => {
@@ -25,6 +28,17 @@ export function PracticeRooms({ t, onRoom }: Props) {
       <button type="button" className="practice-room off" onClick={() => onRoom(null)}>
         {t("practiceRoomOff")}
       </button>
+      {shapes.length > 0 && <small className="practice-shapes">{t("practiceShapes")}</small>}
+      {shapes.map((m) => (
+        <button key={m.id} type="button" className="practice-room" onClick={() => onShape(m.tiles)}>
+          {m.name}
+        </button>
+      ))}
+      {shapes.length > 0 && (
+        <button type="button" className="practice-room off" onClick={() => onShape(null)}>
+          {t("practiceShapeOff")}
+        </button>
+      )}
     </div>
   );
 }

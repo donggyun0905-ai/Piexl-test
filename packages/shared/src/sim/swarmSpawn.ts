@@ -3,7 +3,7 @@ import { TICK_RATE } from "../constants";
 import { BOSS_TIERS, ENEMIES, type EnemyKind } from "../enemyDefs";
 import { createRng, deriveSeed, type Rng } from "../rng";
 import { SWARM } from "../swarmDefs";
-import { SWARM_LEVELS, SWARM_MAPS } from "../swarmMaps";
+import { SWARM_LEVELS, swarmMapDef } from "../swarmMaps";
 import { bossHpMul } from "./bosses";
 import { BAT_FLOCK, minionKinds } from "./critters";
 import type { EnemyState, RunState } from "./types";
@@ -12,7 +12,7 @@ import { DIR16, dist2, keepInRoom, makeEnemy, roomGrid, ROOM_MAX_X, ROOM_MAX_Y, 
 /** 맵·난이도 세기: 체력 배율 · 나오는 수 배율 · 받는 피해 배율 */
 export function swarmPower(s: RunState): { hp: number; spawn: number; taken: number } {
   const sw = s.swarm;
-  const map = SWARM_MAPS[sw?.map ?? "plains"];
+  const map = swarmMapDef(sw?.map);
   const lv = SWARM_LEVELS[sw?.level ?? 0] ?? SWARM_LEVELS[0];
   // 클리어 뒤 계속하면 1분마다 더 세짐
   const more = sw?.endless ? 1 + SWARM.endlessHpPerMin * Math.max(0, swarmMinutes(s) - SWARM.bossSec[SWARM.bossSec.length - 1]! / 60) : 1;

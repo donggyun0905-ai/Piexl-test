@@ -2,7 +2,7 @@
 // 판(RunState) 하나에 적·탄을 담고 기존 게임 계산을 그대로 씀. 시드로만 정해짐 (같은 시드·같은 조작이면 같은 결과)
 // 파일: tdTypes(상태) · tdTowers(타워·레벨·공격) · tdWaves(적·길·보스 기술) · tdDefs·tdMaps(수치·맵)
 import { TD_ROUNDS, TD_RULES, tdRoundGold } from "../tdDefs";
-import { TD_COLS, TD_MAPS, TD_ROWS, type TdMapId } from "../tdMaps";
+import { TD_COLS, TD_ROWS, tdMapDef, type TdMapId } from "../tdMaps";
 import { updateDelayed } from "./combat";
 import { updateBleed } from "./gunExtras";
 import { decaySlow } from "./laserGear";
@@ -37,7 +37,7 @@ export function createTd(seed: number, mapId: TdMapId): TdState {
   run.enemies = [];
   run.projectiles = [];
   run.devices = [];
-  const def = TD_MAPS.find((m) => m.id === mapId);
+  const def = tdMapDef(mapId);
   run.gold = Math.round(TD_RULES.startGold * (def?.goldMul ?? 1));
   run.goldEarned = 0;
   const worldFx: EffectState[] = [];

@@ -278,3 +278,8 @@
   grid-column: 1 / -1;
   justify-content: center;
 }
+.practice-shapes {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  opacity: 0.8;
+}

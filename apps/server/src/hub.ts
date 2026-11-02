@@ -2,6 +2,7 @@
 // 저장은 값이 바뀔 때만 (닉네임을 바꾸거나 해금이 늘 때, 내 최고 기록이 오를 때)
 import { postWebhook, type AdminState } from "./adminLogin";
 import { BALANCE_SCHEMA, handleAdmin, handleBalance } from "./balanceApi";
+import { handleMaps } from "./mapsApi";
 import { handleDaily } from "./dailyApi";
 import { fail } from "./http";
 import { handleMatch, type MatchState } from "./match";
@@ -115,6 +116,7 @@ export async function routeHub(ctx: HubContext, request: Request): Promise<Respo
   if (path.startsWith("/api/raid/")) return handleRaid(ctx, path.slice("/api/raid/".length), request);
   if (path.startsWith("/api/arena/")) return handleArena(ctx, path.slice("/api/arena/".length), request);
   if (path === "/api/balance" && request.method === "GET") return handleBalance(ctx, request);
+  if (path === "/api/maps" && request.method === "GET") return handleMaps(ctx);
   if (path === "/api/stats/clear") return handleClear(ctx, request);
   if (path === "/api/tier" && request.method === "GET") return handleTier(ctx);
   if (path.startsWith("/api/admin/")) return handleAdmin(ctx, path.slice("/api/admin/".length), request);

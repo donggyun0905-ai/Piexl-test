@@ -30,6 +30,7 @@ export const SWARM_TEXT = {
   swarmMap_swamp: { ko: "독 늪", en: "Poison Swamp", ja: "毒の沼" },
   swarmMap_volcano: { ko: "화산 지대", en: "Volcanic Wastes", ja: "火山地帯" },
   swarmMapInfo_plains: { ko: "막는 것 없는 넓은 들판", en: "Wide fields with nothing in the way", ja: "さえぎる物のない広い草原" },
+  customMapInfo: { ko: "관리자가 직접 만든 맵", en: "A map made by the admins", ja: "管理者が作ったマップ" },
   swarmMapInfo_ruins: { ko: "무너진 건물 사이 좁은 골목. 몰리면 위험", en: "Narrow alleys between ruins. Don't get cornered", ja: "崩れた建物の間の狭い路地。追い込まれると危険" },
   swarmMapInfo_fort: { ko: "돌벽과 나를 돕는 미사일 타워 넷. 적이 더 셈", en: "Stone walls and four missile towers that help you. Tougher foes", ja: "石壁と味方のミサイル塔4基。敵が強め" },
   swarmMapInfo_swamp: { ko: "물웅덩이가 길을 막고 진흙에선 느려짐", en: "Ponds block the way and mud slows you", ja: "水たまりが道をふさぎ、泥で遅くなる" },

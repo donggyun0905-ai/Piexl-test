@@ -1,6 +1,7 @@
 // 던전 지형: 층 보스에 맞게 전투방·강한 적 방·보스방에 진흙(느려짐) · 용암(데임) · 얕은 물(조금 느려짐, 감전되면 데임) · 가시 함정(주기적으로 솟음).
 // 방에 들어갈 때 층·방 번호 시드로 정함 (화면·서버 같음). 사람만 영향 (적은 그대로). 수치는 terrainDefs
-import { TILE_SIZE, ROOM_COLS, ROOM_ROWS } from "../constants";
+import { TILE_SIZE, ROOM_COLS, ROOM_ROWS, SHAPE_DX, SHAPE_DY } from "../constants";
+import { tileRuns } from "../customMaps";
 import { bossForFloor, type BossKind } from "../content";
 import { createRng, deriveSeed } from "../rng";
 import { TERRAIN, TERRAIN_BY_BOSS, type TerrainKind } from "../terrainDefs";
@@ -26,6 +27,7 @@ export const inRect = (x: number, y: number, [rx, ry, w, h]: readonly number[]):
 export function makeTerrain(s: RunState, roomId: number, boss?: BossKind): TerrainState | undefined {
   const info = s.map.rooms[roomId];
   if (!info || !terrainRun(s) || !["combat", "elite", "exit"].includes(info.type)) return undefined;
+  if (info.shape.rows) return terrainFromRows(roomId, info.shape.rows);
   const kind = boss ?? bossForFloor(s.floor, s.seed);
   const plan = TERRAIN_BY_BOSS[kind];
   if (!plan) return undefined;
@@ -54,6 +56,13 @@ export function makeTerrain(s: RunState, roomId: number, boss?: BossKind): Terra
     }
   }
   return t;
+}
+
+/** 관리자가 만든 방 틀의 지형 칸 (w 얕은 물 · m 진흙 · l 용암 · x 가시 함정). 틀은 방 안쪽(테두리 다음 칸)부터, 큰 방이면 가운데로 밀림 */
+export function terrainFromRows(roomId: number, rows: readonly string[]): TerrainState {
+  const px = (ch: string): TerrainRect[] =>
+    tileRuns(rows, ch).map(([c, r, w, h]) => [(c + 1 + SHAPE_DX) * TILE_SIZE, (r + 1 + SHAPE_DY) * TILE_SIZE, w * TILE_SIZE, h * TILE_SIZE]);
+  return { room: roomId, mud: px("m"), lava: px("l"), water: px("w"), spikes: px("x") };
 }
 
 /** 가시 함정 상태: 0 들어감 · 1 예고(솟기 직전) · 2 솟음. 함정마다 때가 조금씩 다름 */

@@ -16,31 +16,35 @@ export const TILE_PIT = 3;
 const CODE: Record<string, number> = { ".": TILE_FLOOR, "#": TILE_WALL, o: TILE_PILLAR, "~": TILE_PIT };
 
 export interface RoomShape {
-  /** ROOM_SHAPES 번호 (-1이면 네모 방) */
+  /** ROOM_SHAPES 번호 (-1이면 네모 방 · -2면 관리자가 만든 방, rows에 틀) */
   id: number;
   /** 좌우 뒤집기 */
   flip: boolean;
+  /** 관리자가 만든 방 틀 (13×7, customMaps) */
+  rows?: readonly string[];
 }
 
 export const PLAIN_SHAPE: RoomShape = { id: -1, flip: false };
 
-/** 방 모양 고르기 */
-export function pickShape(rng: Rng): RoomShape {
-  return { id: rng.int(0, ROOM_SHAPES.length - 1), flip: rng.nextFloat() < 0.5 };
+/** 방 모양 고르기 (custom: 관리자가 만든 방 틀도 같이 고름 · 없으면 예전과 같은 결과) */
+export function pickShape(rng: Rng, custom: readonly (readonly string[])[] = []): RoomShape {
+  const id = rng.int(0, ROOM_SHAPES.length - 1 + custom.length);
+  const flip = rng.nextFloat() < 0.5;
+  return id < ROOM_SHAPES.length ? { id, flip } : { id: -2, flip: false, rows: custom[id - ROOM_SHAPES.length] };
 }
 
 /** 칸 배열 (ROOM_COLS × ROOM_ROWS, 테두리는 벽). 네모 방은 null */
 export type TileGrid = Uint8Array;
 
-const cache = new Map<number, TileGrid>();
+const cache = new Map<string, TileGrid>();
 
 export function shapeGrid(shape: RoomShape): TileGrid | null {
-  if (shape.id < 0) return null;
-  const key = ((shape.id * 2 + (shape.flip ? 1 : 0)) * 2 + (SHAPE_DX > 0 ? 1 : 0)) * 2 + (THIN_WALLS ? 1 : 0);
+  if (shape.id < 0 && !shape.rows) return null;
+  const key = `${shape.rows ? shape.rows.join("/") : shape.id}:${shape.flip ? 1 : 0}:${SHAPE_DX > 0 ? 1 : 0}:${THIN_WALLS ? 1 : 0}`;
   const hit = cache.get(key);
   if (hit) return hit;
   // 1000부터는 새 보스방 틀
-  const rows = (shape.id >= 1000 ? BOSS_SHAPES[shape.id - 1000] : ROOM_SHAPES[shape.id])!;
+  const rows = (shape.rows ?? (shape.id >= 1000 ? BOSS_SHAPES[shape.id - 1000] : ROOM_SHAPES[shape.id]))!;
   const g = new Uint8Array(ROOM_COLS * ROOM_ROWS);
   for (let row = 0; row < ROOM_ROWS; row++) {
     for (let col = 0; col < ROOM_COLS; col++) {

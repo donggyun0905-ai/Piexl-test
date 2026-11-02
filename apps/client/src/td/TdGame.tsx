@@ -16,6 +16,7 @@ import {
   towerAt,
   upgradeTower,
   type CharacterId,
+  tdThemeOf,
   type TdMapId,
   type TdState,
 } from "@pixel-rogue/shared";
@@ -194,7 +195,7 @@ export function TdGame({ mapId, lang, t, onRetry, onExit }: Props) {
       : t("tdStart");
 
   return (
-    <div className={`td-game theme-${mapId}`}>
+    <div className={`td-game theme-${tdThemeOf(mapId)}`}>
       <header className="td-hud">
         <span className="td-round">
           {t("tdRound")} <b>{Math.max(1, td.round)}</b>/{TD_ROUNDS}

@@ -9,6 +9,8 @@ export const PRACTICE_TEXT = {
   practiceEnemies: { ko: "적 부르기", en: "Enemies", ja: "敵を呼ぶ" },
   practiceRooms: { ko: "방", en: "Rooms", ja: "部屋" },
   practiceRoomOff: { ko: "보통 방으로", en: "Back to normal", ja: "普通の部屋に" },
+  practiceShapes: { ko: "직접 만든 방 모양", en: "Custom room layouts", ja: "自作の部屋の形" },
+  practiceShapeOff: { ko: "네모 방으로", en: "Plain room", ja: "四角い部屋に" },
   practiceRoomHint: {
     ko: "누르면 지금 방이 그 방으로 바뀌고 물건이 새로 놓입니다 (다시 누르면 새로 놓기). 상점은 돈을 한도까지 채워 주고, 단련의 방 기구는 몇 번이고 다시 쓸 수 있습니다.",
     en: "Click to turn this room into that room with fresh items (click again to refill). Shops fill your gold to the cap, and training gear can be reused.",

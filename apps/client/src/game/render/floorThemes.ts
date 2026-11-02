@@ -106,7 +106,7 @@ export function themeFor(s: RunState): FloorTheme {
   if (s.tdShared) return BASE;
   const room = s.map?.rooms[s.roomId];
   if (room && (room.heaven || room.type === "golden")) return HEAVEN;
-  if (s.swarm) return THEMES[SWARM_THEME[s.swarm.map ?? "plains"]]!;
+  if (s.swarm) return THEMES[SWARM_THEME[(s.swarm.map ?? "plains") as keyof typeof SWARM_THEME] ?? SWARM_THEME.plains]!;
   const pa = s.pvp?.arena ?? s.pw?.arena;
   if (pa) return THEMES[PW_THEME[pa]]!;
   let boss: string | undefined;

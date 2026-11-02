@@ -19,4 +19,6 @@ export interface TerrainState {
 export interface TerrainRunState {
   /** 지금 방의 지형 (없으면 지형 없음) */
   terrain?: TerrainState;
+  /** 관리자가 만든 방 틀 (혼자 하기 판을 시작할 때 넣음, customMaps · 이어하기에도 저장) */
+  customRooms?: string[][];
 }

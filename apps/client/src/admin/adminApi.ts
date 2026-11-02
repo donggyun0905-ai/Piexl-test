@@ -1,5 +1,5 @@
 // 관리자 페이지의 서버 요청. 서버(라이브·디벨롭·테스트)마다 따로 로그인 (로그인 값은 이 브라우저에만 12시간)
-import type { BalanceValues } from "@pixel-rogue/shared";
+import type { BalanceValues, CustomMap } from "@pixel-rogue/shared";
 import { SERVER_URL } from "../serverStatus";
 import { loadText, saveText } from "../storage";
 
@@ -99,6 +99,9 @@ export const adminApi = {
   tierPublic: (s: ServerInfo) => call<{ tiers: unknown }>(s, "/api/tier", undefined, false),
   tierPlays: (s: ServerInfo) => call<{ records: unknown[] }>(s, "/api/admin/tierplay"),
   tierPlaySave: (s: ServerInfo, character: string, record: unknown) => call<{ ok: true }>(s, "/api/admin/tierplay", { character, record }),
+  /** 직접 만든 맵: 받기 · 모두 저장 */
+  maps: (s: ServerInfo) => call<{ maps: CustomMap[] }>(s, "/api/admin/maps"),
+  saveMaps: (s: ServerInfo, maps: CustomMap[]) => call<{ maps: CustomMap[] }>(s, "/api/admin/maps", { maps }),
   history: (s: ServerInfo, kind: SetKind) => call<{ entries: LogEntry[] }>(s, `/api/admin/history${q(kind)}`),
 };
 

@@ -1,5 +1,5 @@
 // 광야의 새벽 맵 땅·이벤트 그리기: 진흙·용암(바닥 위) · 돕는 미사일 타워 · 구출할 아이와 화살표 · 포위 표시
-import { SWARM_MAPS, TILE_SIZE, type RunState } from "@pixel-rogue/shared";
+import { swarmMapDef, TILE_SIZE, type RunState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -27,7 +27,7 @@ function patches(ctx: Ctx, list: readonly Rect[], base: string, dot: string, tic
 export function drawSwarmGround(ctx: Ctx, s: RunState, snap: Snap): void {
   const sw = s.swarm;
   if (!sw) return;
-  const def = SWARM_MAPS[sw.map ?? "plains"];
+  const def = swarmMapDef(sw.map);
   patches(ctx, def.mud, "rgba(90, 64, 34, 0.75)", "rgba(150, 120, 70, 0.8)", s.tick, false);
   patches(ctx, def.lava, "rgba(200, 70, 20, 0.85)", "#ffd060", s.tick, true);
   for (const tw of sw.towers ?? []) {

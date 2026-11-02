@@ -1,5 +1,5 @@
 // 로비 펫을 판에 데려가기: 혼자 하기(아레나 빼고)·연습장·광야의 새벽에서만 (일일 도전·레이드 순위·아레나·배틀·협동은 공정하게 펫 없이)
-import { recalcStats, type RunState } from "@pixel-rogue/shared";
+import { recalcStats, useCustomRooms, type RunState } from "@pixel-rogue/shared";
 import { equippedPet } from "../lobby/petStore";
 import type { GameMode } from "./gameScreenProps";
 
@@ -7,6 +7,8 @@ import type { GameMode } from "./gameScreenProps";
 export function withPet(run: RunState, mode: GameMode, arena: boolean): RunState {
   // 히든 상점(차원의 순례자)은 혼자 하기·무한·협동만 (일일 도전·배틀·아레나 없음, sim/pilgrim)
   if (run.tick === 0 && ((mode === "solo" && !arena) || mode === "coop")) run.pilgrim = true;
+  // 관리자가 만든 방 틀: 혼자 하기(아레나·영웅의 길 빼고)만 (일일 도전·레이드·배틀·협동은 모두 같은 방)
+  if (mode === "solo" && !arena && !run.hero) useCustomRooms(run);
   if (run.tick > 0 || run.pet || arena) return run;
   if (mode !== "solo" && mode !== "practice" && mode !== "swarm") return run;
   const pet = equippedPet();

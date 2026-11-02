@@ -1,6 +1,6 @@
 // 광야의 새벽 맵 땅: 나를 돕는 미사일 타워(가까운 적에게 유도 미사일) · 진흙(느려짐) · 용암(데임). 맵 정의는 swarmMaps
 import { TICK_RATE, TILE_SIZE } from "../constants";
-import { SWARM_MAPS, SWARM_TERRAIN as T } from "../swarmMaps";
+import { swarmMapDef, SWARM_TERRAIN as T } from "../swarmMaps";
 import { damagePlayer } from "./combat";
 import { swarmMinutes } from "./swarmSpawn";
 import type { EnemyState, RunState } from "./types";
@@ -12,14 +12,14 @@ const inRect = (x: number, y: number, [c, r, w, h]: readonly [number, number, nu
 /** 맵을 처음 놓을 때: 타워 자리 */
 export function placeTowers(s: RunState): void {
   const sw = s.swarm!;
-  const def = SWARM_MAPS[sw.map ?? "plains"];
+  const def = swarmMapDef(sw.map);
   if (def.towers.length) sw.towers = def.towers.map(([c, r], i) => ({ x: (c + 0.5) * TILE_SIZE, y: (r + 0.5) * TILE_SIZE, cd: 20 + i * 11 }));
 }
 
 /** 틱마다: 타워 쏘기 · 진흙에서 느려짐 · 용암에서 데임 */
 export function updateTerrain(s: RunState): void {
   const sw = s.swarm!;
-  const def = SWARM_MAPS[sw.map ?? "plains"];
+  const def = swarmMapDef(sw.map);
   for (const tw of sw.towers ?? []) {
     if (--tw.cd > 0) continue;
     let best: EnemyState | null = null;

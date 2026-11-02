@@ -4,7 +4,7 @@ import { TILE_SIZE } from "../constants";
 import { BOSS_TIERS, ENEMIES, LAST_BOSSES, type EnemyKind } from "../content";
 import { createRng, deriveSeed } from "../rng";
 import { TD_BOSSES, TD_RULES, TD_WAVES, tdHpMul, tdUnit } from "../tdDefs";
-import { TD_MAPS } from "../tdMaps";
+import { tdMapDef, type TdMapDef, type TdMapId } from "../tdMaps";
 import { tileCenter } from "./tdTowers";
 import type { TdSpawn, TdState } from "./tdTypes";
 import type { EnemyState } from "./types";
@@ -26,11 +26,11 @@ interface PathLine {
   len: number;
 }
 
-const pathCache = new Map<string, PathLine[]>();
+const pathCache = new WeakMap<TdMapDef, PathLine[]>();
 export function mapPaths(mapId: string): PathLine[] {
-  let list = pathCache.get(mapId);
+  const def = tdMapDef(mapId as TdMapId);
+  let list = pathCache.get(def);
   if (list) return list;
-  const def = TD_MAPS.find((m) => m.id === mapId) ?? TD_MAPS[0]!;
   list = def.paths.map((path) => {
     const pts = path.map(([c, r]): [number, number] => [tileCenter(c), tileCenter(r)]);
     // 들어오는 곳은 지도 바깥 끝에서 시작
@@ -41,7 +41,7 @@ export function mapPaths(mapId: string): PathLine[] {
     for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1]! + Math.abs(pts[i]![0] - pts[i - 1]![0]) + Math.abs(pts[i]![1] - pts[i - 1]![1]));
     return { pts, cum, len: cum[cum.length - 1]! };
   });
-  pathCache.set(mapId, list);
+  pathCache.set(def, list);
   return list;
 }
 
@@ -61,7 +61,7 @@ export function pathPoint(line: PathLine, d: number): [number, number, number, n
 /** 라운드 시작: 이번 라운드에 나올 적 목록 */
 export function buildSpawns(td: TdState): TdSpawn[] {
   const wave = TD_WAVES[td.round - 1]!;
-  const map = TD_MAPS.find((m) => m.id === td.mapId) ?? TD_MAPS[0]!;
+  const map = tdMapDef(td.mapId);
   const paths = map.paths.length;
   const mul = tdHpMul(td.round) * map.hpMul;
   const list: TdSpawn[] = [];
@@ -122,7 +122,7 @@ export function spawnTd(td: TdState, kind: EnemyKind, path: number, hpMul: numbe
 export function spawnFinal(td: TdState): void {
   const kind = td.finals.shift();
   if (!kind) return;
-  const map = TD_MAPS.find((m) => m.id === td.mapId) ?? TD_MAPS[0]!;
+  const map = tdMapDef(td.mapId);
   const kinds: EnemyKind[] = kind === "plight" ? ["plight", "pdark"] : [kind as EnemyKind];
   const first = kinds.map((k, i) => spawnTd(td, k, i % map.paths.length, map.hpMul, -i * 20))[0];
   if (first) finalQuake(td, first.x, first.y);

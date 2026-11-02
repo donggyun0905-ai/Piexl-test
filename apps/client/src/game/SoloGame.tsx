@@ -25,7 +25,7 @@ export function SoloGame(props: Props) {
     <GameScreen
       mode="solo"
       {...props}
-      onRunEnd={(run) => setRaid(!run.pet && (raidCleared(run) || (run.arenaLv !== undefined && arenaCleared(run) > 0)) ? run : null)}
+      onRunEnd={(run) => setRaid(!run.pet && !run.customRooms && (raidCleared(run) || (run.arenaLv !== undefined && arenaCleared(run) > 0)) ? run : null)}
       resultExtra={raid && <RaidSubmit run={raid} seedText={props.seedText} t={props.t} />}
     />
   );

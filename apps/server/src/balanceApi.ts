@@ -8,6 +8,7 @@ import { handleTierAdmin } from "./tierApi";
 import type { HubContext } from "./hub";
 import { fail, json, readJson } from "./http";
 import { first } from "./sql";
+import { handleAdminMaps } from "./mapsApi";
 
 /** 수치 세트 하나를 저장하는 곳: 지문별 수치 표 · 바꾼 기록 표 · 지금 지문(meta 키) */
 interface Store {
@@ -86,6 +87,7 @@ export async function handleAdmin(ctx: HubContext, action: string, request: Requ
     if (!body || typeof body.values !== "object") return fail("bad_request");
     return json({ ok: true, ...saveBalance(ctx, store, body.values, typeof body.note === "string" ? body.note : "") });
   }
+  if (action === "maps") return handleAdminMaps(ctx, request);
   if (action === "clears" && request.method === "GET") return json({ ok: true, rows: clearRows(ctx) });
   const tier = await handleTierAdmin(ctx, action, request);
   if (tier) return tier;

@@ -1,5 +1,5 @@
-// 타워 디펜스 맵 고르기: 맵 8개 미리 보기 · 난이도 · 내 최고 기록
-import { TD_MAPS, type CharacterId, type TdMapId } from "@pixel-rogue/shared";
+// 타워 디펜스 맵 고르기: 맵 8개(+ 관리자가 만든 맵) 미리 보기 · 난이도 · 내 최고 기록
+import { CUSTOM_TD, TD_MAPS, tdThemeOf, type CharacterId, type TdMapId } from "@pixel-rogue/shared";
 import { useEffect, useRef } from "react";
 import type { TextKey } from "../i18n";
 import { drawBody } from "../game/render/actors";
@@ -48,16 +48,16 @@ export function TdScreen({ t, onPick, onBack }: Props) {
       <p className="hint">{t("tdHowTo")}</p>
       <h3>{t("tdChooseMap")}</h3>
       <div className="td-map-list">
-        {TD_MAPS.map((m, i) => {
+        {[...TD_MAPS, ...CUSTOM_TD].map((m, i) => {
           const b = best[m.id];
           return (
-            <button key={m.id} type="button" className={`td-map-card ${m.id}`} onClick={() => onPick(m.id)}>
+            <button key={m.id} type="button" className={`td-map-card ${tdThemeOf(m.id)}`} onClick={() => onPick(m.id)}>
               <MapPreview mapId={m.id} />
               <span className="td-map-text">
                 <strong>
-                  {t(`tdMap_${m.id}` as TextKey)} <span className="td-stars">{"★".repeat(STARS[i] ?? 1)}</span>
+                  {m.name ?? t(`tdMap_${m.id}` as TextKey)} <span className="td-stars">{"★".repeat(STARS[i] ?? 1)}</span>
                 </strong>
-                <small>{t(`tdMapInfo_${m.id}` as TextKey)}</small>
+                <small>{t(m.name ? "customMapInfo" : (`tdMapInfo_${m.id}` as TextKey))}</small>
                 <small className={b?.won ? "td-best won" : "td-best"}>
                   {b ? (b.won ? t("tdClearedBest").replace("{n}", String(b.lives)) : t("tdBest").replace("{n}", String(b.round))) : t("tdNoRecord")}
                 </small>

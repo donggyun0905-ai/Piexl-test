@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { App } from "./App";
 import { unlockAudio } from "./audio/sound";
 import { refreshBalance } from "./balance";
+import { refreshCustomMaps } from "./customMapsClient";
 import { syncCloud } from "./cloudSave";
 import { setupInstall } from "./install";
 import { syncProfile } from "./player";
@@ -26,6 +27,8 @@ void syncProfile();
 void syncCloud();
 // 게임 수치 (관리자 페이지에서 바꾼 값). 못 받으면 마지막으로 받은 값으로
 void refreshBalance();
+// 관리자가 만든 맵 (던전 방 모양·광야의 새벽·타워 디펜스)
+void refreshCustomMaps();
 // 관리자 티어 플레잉 (/?tierplay): 캐릭터를 차례로 한 판씩 해 보고 기록 (관리자 페이지 '티어 플레잉'의 플레이하기)
 const TierPlay = lazy(() => import("./tierplay/TierPlay").then((m) => ({ default: m.TierPlay })));
 const tierPlay = new URLSearchParams(location.search).has("tierplay");

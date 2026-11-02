@@ -47,7 +47,8 @@ export function middleLayersFor(floor: number): number {
   return Math.min(6 + floor, MAX_LAYERS - 2);
 }
 
-export function generateFloor(seed: number, floor: number): FloorMap {
+/** custom: 관리자가 만든 방 틀 (혼자 하기만, run.customRooms) */
+export function generateFloor(seed: number, floor: number, custom: readonly (readonly string[])[] = []): FloorMap {
   const rng = createRng(deriveSeed(seed, "floor", floor, "map"));
   const middle = middleLayersFor(floor);
   const rooms: RoomInfo[] = [];
@@ -88,7 +89,7 @@ export function generateFloor(seed: number, floor: number): FloorMap {
 
   // 방 모양: 방마다 따로 시드를 써서 지도 모양·방 종류에는 영향 없음
   for (const r of rooms) {
-    if (r.type === "combat" || r.type === "elite") r.shape = pickShape(createRng(deriveSeed(seed, "floor", floor, "room", r.id, "shape")));
+    if (r.type === "combat" || r.type === "elite") r.shape = pickShape(createRng(deriveSeed(seed, "floor", floor, "room", r.id, "shape")), custom);
     // 시즌 2 새 보스방은 그 보스에 맞는 벽 배치
     const bossShape = BOSS_SHAPE_KINDS.indexOf(bossForFloor(floor, seed) as (typeof BOSS_SHAPE_KINDS)[number]);
     if (r.type === "exit" && floor <= 6 && bossShape >= 0) r.shape = { id: 1000 + bossShape, flip: false };
