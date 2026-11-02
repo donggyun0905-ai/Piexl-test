@@ -25,7 +25,7 @@ export const ALTAR_TEXT = {
   altar_sylvester: l("그린우드의 성좌 · 실베스타", "Constellation of Greenwood · Sylvester", "グリーンウッドの星座 · シルベスタ"),
   altar_witch: l("일곱 갈래의 마녀 · 세티아", "Witch of the Seven Paths · Setia", "七筋の魔女 · セティア"),
   altar_unknown: l("알 수 없는 성좌 · ???", "Unknown Constellation · ???", "知られざる星座 · ???"),
-  altarTrade_whale: l("최대 체력 +20 · 재생력 -20", "Max HP +20 · Regen -20", "最大体力+20 · 再生力-20"),
+  altarTrade_whale: l("재생력 +20 · 최대 체력 -20", "Regen +20 · Max HP -20", "再生力+20 · 最大体力-20"),
   altarTrade_turtle: l("방어력 +20 · 공격력 -20%", "Defense +20 · Damage -20%", "防御力+20 · 攻撃力-20%"),
   altarTrade_hawk: l("공격 속도 +15% · 치명타 확률 -15%", "Attack speed +15% · Crit chance -15%", "攻撃速度+15% · クリティカル率-15%"),
   altarTrade_wind: l("예리함 +20% (평소 공격에 확률로 예리함) · 이동 속도 -0.3", "Sharpness +20% (attacks may sharpen) · Move speed -0.3", "鋭さ+20%（通常攻撃に確率で鋭さ）· 移動速度-0.3"),

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.352",
+    date: "2026-11-02",
+    items: {
+      ko: ["제단의 방 흰수염고래 거래가 뒤바뀌어 있던 것 고침: 재생력 +20을 주고 최대 체력 20을 가져감"],
+      en: ["Fixed the Blue Whale altar bargain being reversed: it now gives +20 regen and takes 20 max HP"],
+      ja: ["祭壇の部屋のシロナガスクジラの取引が逆になっていたのを修正：再生力+20を与え最大体力20を奪う"],
+    },
+  },
+  {
     version: "0.48.351",
     date: "2026-11-02",
     items: {

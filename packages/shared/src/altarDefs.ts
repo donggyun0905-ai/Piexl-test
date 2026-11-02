@@ -21,8 +21,8 @@ export interface AltarDef {
 }
 
 export const ALTARS: Record<AltarId, AltarDef> = {
-  /** 바다의 성좌 흰수염고래: 최대 체력 +20 · 재생력 -20 */
-  whale: { give: [{ stat: "maxHp", add: 20 }], take: [{ stat: "regen", add: -20 }], skills: ["nova", "frost"] },
+  /** 바다의 성좌 흰수염고래: 재생력 +20 · 최대 체력 -20 */
+  whale: { give: [{ stat: "regen", add: 20 }], take: [{ stat: "maxHp", add: -20 }], skills: ["nova", "frost"] },
   /** 화산의 성좌 용암 거북: 방어력 +20 · 공격력 -20% */
   turtle: { give: [{ stat: "defense", add: 20 }], take: [{ stat: "damage", mul: 0.8 }], skills: ["cleave", "comet"] },
   /** 하늘의 성좌 천둥 매: 공격 속도 +15% · 치명타 확률 -15% */
