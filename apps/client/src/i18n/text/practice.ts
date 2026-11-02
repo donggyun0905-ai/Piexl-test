@@ -69,6 +69,8 @@ export const PRACTICE_TEXT = {
   enemyVenom: { ko: "베놈", en: "Venom", ja: "ヴェノム" },
   enemyLandfish: { ko: "땅 물고기", en: "Land Fish", ja: "土ザカナ" },
   enemyLurker: { ko: "그림자", en: "Shadow", ja: "影" },
+  enemyBombbug: { ko: "폭발풍뎅이", en: "Blast Beetle", ja: "爆発コガネ" },
+  enemySkelarcher: { ko: "스켈레톤 궁병", en: "Skeleton Archer", ja: "スケルトン弓兵" },
   enemyCrawler: { ko: "기는 적", en: "Crawler", ja: "這う敵" },
   enemySpitter: { ko: "탄 쏘는 적", en: "Spitter", ja: "弾を吐く敵" },
   enemyCharger: { ko: "돌진하는 적", en: "Charger", ja: "突進する敵" },

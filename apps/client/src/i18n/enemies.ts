@@ -40,6 +40,8 @@ const NAMES: Record<string, Names> = {
   venom: n("베놈", "Venom", "ヴェノム"),
   landfish: n("땅 물고기", "Land Fish", "土ザカナ"),
   lurker: n("그림자", "Shadow", "影"),
+  bombbug: n("폭발풍뎅이", "Blast Beetle", "爆発コガネ"),
+  skelarcher: n("스켈레톤 궁병", "Skeleton Archer", "スケルトン弓兵"),
   incubus: n("인큐버스", "Incubus", "インキュバス"),
   ruinblade: n("파괴의 검", "Blade of Ruin", "破壊の剣"),
   chaosblade: n("혼돈의 검", "Blade of Chaos", "混沌の剣"),

@@ -1,4 +1,4 @@
-// 시련 진행: 1 암흑 속 몬스터 무리 · 2 체력 1로 몬스터 무리 · 3 보스 셋(하나씩) · 4 끝없는 몬스터(처치마다 점수, 최대 1000)
+// 시련 진행: 1 암흑 속 몬스터 무리 · 2 체력 1로 몬스터 무리 · 3 보스 다섯(한꺼번에, 사용 아이템 금지) · 4 끝없는 몬스터(처치마다 점수, 최대 1000)
 // 1·2·3은 이기면 바로 1000점 (쓰러지면 진짜 끝) · 4는 쓰러져도 죽지 않고 그때 점수로 끝남 (체력은 시작 때로)
 // 끝나면 점수에 맞는 보상 상자가 비석에서 쏟아짐 (sim/trialRewards). 방을 나가면 시련은 사라짐
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
@@ -7,6 +7,7 @@ import { createRng, deriveSeed } from "../rng";
 import { spawnBoss } from "./bosses";
 import { minionKinds } from "./critters";
 import { makeChamps } from "./elite";
+import { CX, pickDistinct } from "./loot";
 import { depth } from "./hero";
 import { bodyFits } from "./layout";
 import { stalkerKinds } from "./stalkers";
@@ -18,11 +19,12 @@ import { addEffect, keepInRoom, makeEnemy, roomGrid } from "./util";
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
   /** 무리: 물결 수 · 한 물결 적 수(층 세기마다 더함) · 체력 배율 */
-  WAVES: 3,
-  WAVE_BASE: 8,
-  WAVE_PER_DEPTH: 1,
+  WAVES: 5,
+  WAVE_BASE: 12,
+  WAVE_PER_DEPTH: 2,
   WAVE_HP: 1.3,
-  /** 보스 셋: 보스 체력 배율 */
+  /** 보스 시련: 한꺼번에 나오는 보스 수 · 보스 체력 배율 */
+  BOSSES: 5,
   BOSS_HP: 0.7,
   /** 끝없는: 처치 하나에 점수 · 나오는 간격(틱, 점수가 오를수록 줄어듦) · 한 번에 나오는 수 · 한꺼번에 있을 수 있는 적 */
   KILL_SCORE: 10,
@@ -52,7 +54,7 @@ export function skipTrials(s: RunState): void {
 /** 시련 시작 (방이 잠기고, 체력 1 시련은 체력을 1로) */
 export function startTrial(s: RunState, kind: TrialKind): void {
   const p = s.player;
-  s.trialRun = { kind, room: s.roomId, score: 0, left: kind === 3 ? 3 : kind === 4 ? 0 : R.WAVES, t: 60, hp: p.hp, kills: s.kills, got: 0, at: s.tick };
+  s.trialRun = { kind, room: s.roomId, score: 0, left: kind === 3 ? 1 : kind === 4 ? 0 : R.WAVES, t: 60, hp: p.hp, kills: s.kills, got: 0, at: s.tick };
   s.rooms[s.roomId]!.cleared = false;
   if (kind === 2) p.hp = 1;
   (p.trial ??= { rooms: [] }).last = { kind, tick: s.tick };
@@ -90,17 +92,26 @@ function spawnMinions(s: RunState, n: number, hpMul: number, salt: number): Enem
   return out;
 }
 
-/** 시련용 보스 (지금 층까지의 보스 중 시드로) */
-function nextBoss(s: RunState): void {
+/** 시련용 보스 다섯 (지금 층까지의 보스 중 시드로 서로 다르게, 위쪽에 나란히 한꺼번에) */
+function spawnBosses(s: RunState): void {
   const tiers = BOSS_TIERS.slice(0, Math.min(BOSS_TIERS.length, Math.floor((s.floor - 1) / 2) + 1)).flat();
-  const rng = createRng(deriveSeed(s.seed, "trialBoss", s.floor, s.roomId, s.trialRun!.left));
-  const kind = rng.pick(tiers) as BossKind;
-  const b = spawnBoss(s, kind);
-  b.hp = b.maxHp = Math.round(b.maxHp * R.BOSS_HP);
-  b.noGold = true;
-  s.enemies.push(b);
-  addEffect(s, { kind: "trSpawn", x: b.x, y: b.y, dirX: 0, dirY: 0, size: 30, maxTicks: 30 });
+  const rng = createRng(deriveSeed(s.seed, "trialBoss", s.floor, s.roomId));
+  const kinds = pickDistinct(rng, tiers, R.BOSSES) as BossKind[];
+  while (kinds.length < R.BOSSES) kinds.push(rng.pick(tiers) as BossKind);
+  kinds.forEach((kind, i) => {
+    const b = spawnBoss(s, kind);
+    b.x = b.prevX = CX + (i - (kinds.length - 1) / 2) * ((ROOM_MAX_X - ROOM_MIN_X - 40) / kinds.length);
+    b.y = b.prevY = ROOM_MIN_Y + 20 + (i % 2) * 24;
+    b.hp = b.maxHp = Math.round(b.maxHp * R.BOSS_HP);
+    b.noGold = true;
+    keepInRoom(b, roomGrid(s));
+    s.enemies.push(b);
+    addEffect(s, { kind: "trSpawn", x: b.x, y: b.y, dirX: 0, dirY: 0, size: 30, maxTicks: 30 });
+  });
 }
+
+/** 보스 시련 중에는 사용 아이템을 못 씀 */
+export const trialNoItems = (s: RunState): boolean => s.trialRun?.kind === 3 && s.trialRun.room === s.roomId;
 
 /** 끝없는 시련의 적 체력 배율: 700점까지는 조금씩, 그 뒤로 아주 가파르게 */
 export const endlessHp = (score: number) => 1 + R.HP_PER_100 * (score / 100) + R.HP_LATE * Math.max(0, (score - 700) / 300) ** 2;
@@ -149,6 +160,6 @@ export function trialTick(s: RunState): void {
   if (run.left <= 0) return finish(s, MAX_SCORE);
   run.left--;
   run.t = 50;
-  if (run.kind === 3) nextBoss(s);
+  if (run.kind === 3) spawnBosses(s);
   else spawnMinions(s, R.WAVE_BASE + R.WAVE_PER_DEPTH * depth(s), R.WAVE_HP, run.left);
 }

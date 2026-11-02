@@ -132,6 +132,8 @@ export const C = {
   venom: "#7ac83a",
   landfish: "#8a6a3a",
   lurker: "#1a1a24",
+  bombbug: "#c84a2a",
+  skelarcher: "#e8e0c8",
   bossCore: "#ff5d5d",
   enemyEdge: "#141018",
   hit: "#ffffff",

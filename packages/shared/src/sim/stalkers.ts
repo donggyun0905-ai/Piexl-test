@@ -5,6 +5,8 @@
 // 그림자(희미하게 비치며 내 등 뒤로 돌아가 큰 한 방)
 import { fishDmgMul } from "./elite";
 import { ENEMIES } from "../content";
+import type { NewFoeKind, StalkerKind } from "../enemyDefs";
+import { updateNewFoe } from "./newFoes";
 import { roomTerrain } from "./bossToad";
 import { depth } from "./hero";
 import { addShape } from "./hazards";
@@ -209,16 +211,17 @@ export function updateStalker(s: RunState, e: EnemyState, toP: Vec, go: Vec): bo
   else if (e.kind === "venom") venom(s, e, go);
   else if (e.kind === "landfish") landfish(s, e);
   else if (e.kind === "lurker") lurker(s, e, toP, go);
-  else return false;
+  else return updateNewFoe(s, e, toP, go);
   return true;
 }
 
 /** 이 층(세기 depth)에 더 나오는 새 몬스터 (던전 방만, 광야·타워 디펜스 제외) */
-export function stalkerKinds(d: number): ("doppel" | "venom" | "landfish" | "lurker")[] {
+export function stalkerKinds(d: number): (StalkerKind | NewFoeKind)[] {
   if (d < 2) return [];
-  if (d < 3) return ["venom", "landfish"];
-  return ["venom", "landfish", "doppel", "lurker"];
+  // 시즌 3 새 몬스터 (sim/newFoes): 2층부터
+  if (d < 3) return ["venom", "landfish", "bombbug", "skelarcher"];
+  return ["venom", "landfish", "doppel", "lurker", "bombbug", "skelarcher"];
 }
 
 /** 한 방에 최대 몇 마리 */
-export const STALKER_MAX: Record<string, number> = { doppel: 1, lurker: 2, venom: 2, landfish: 2 };
+export const STALKER_MAX: Record<string, number> = { doppel: 1, lurker: 2, venom: 2, landfish: 2, bombbug: 3, skelarcher: 2 };

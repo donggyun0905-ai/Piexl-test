@@ -1,6 +1,6 @@
 // 시련의 방 효과: 비석이 깨어남(붉고 검은 충격파 + 하늘로 솟는 빛기둥 + 불똥) · 거절 벌칙(검붉은 사슬이 몸을 감음) · 보상 상자가 비석에서 날아가 떨어짐
 // · 상자 열림(금빛 터짐) · 시련 적이 나타남(붉은 소환 원) · 시련 중 화면 가장자리 핏빛 맥박 (render/index가 부름)
-import type { EffectState, RunState } from "@pixel-rogue/shared";
+import { ENEMIES, type EffectState, type RunState } from "@pixel-rogue/shared";
 import { additive, alpha, beam, easeOut, glow, rune, shock, sparks } from "./pwFxBits";
 import type { Snap } from "./palette";
 
@@ -100,7 +100,7 @@ export function drawTrialEdge(ctx: Ctx, s: RunState, scale: number, text?: (key:
   if (text && al && s.tick - al.tick < 180) banner(ctx, scale, text(al.hit ? "altarResultHit" : `altarResult_${al.card}`), al.hit ? text(`altarHit_${al.id}`) : "", al.hit ? "#ff8a8a" : "#bfe8ff");
   if (!run || run.room !== s.roomId) return;
   if (text) {
-    const sub = run.kind === 4 ? text("trialScore").replace("{n}", String(run.score)) : (run.kind === 3 ? text("trialBoss") : text("trialWave")).replace("{n}", String(run.left + (s.enemies.length > 0 ? 1 : 0)));
+    const sub = run.kind === 4 ? text("trialScore").replace("{n}", String(run.score)) : run.kind === 3 ? text("trialBoss").replace("{n}", String(s.enemies.filter((e) => ENEMIES[e.kind].boss).length)) : text("trialWave").replace("{n}", String(run.left + (s.enemies.length > 0 ? 1 : 0)));
     banner(ctx, scale, text(`trialKind_${run.kind}`), sub, "#ffd0d0");
   }
   const W = ctx.canvas.width;

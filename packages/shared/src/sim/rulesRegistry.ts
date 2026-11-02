@@ -47,6 +47,7 @@ import { MORPH_XP_RULES } from "./morphXp";
 import { COMBAT_RULES } from "./combat";
 import { CRITTERS_RULES } from "./critters";
 import { STALKERS_RULES } from "./stalkers";
+import { NEW_FOES_RULES } from "./newFoes";
 import { BOSS_TOAD_RULES } from "./bossToad";
 import { BOSS_SALAMANDER_RULES } from "./bossSalamander";
 import { BOSS_JELLY_RULES } from "./bossJelly";
@@ -89,6 +90,7 @@ import { GYM_RULES } from "./gym";
 import { GYM_FX_RULES } from "./gymPerks";
 import { TRIAL_RULES } from "./trial";
 import { TRIAL_RUN_RULES } from "./trialRun";
+import { TRIAL_FOE_RULES } from "./trialFoes";
 import { TALISMAN_RULES } from "./talisman";
 import { TD_RULES } from "./td";
 import { TD_WAVES_RULES } from "./tdWaves";
@@ -144,6 +146,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   COMBAT_RULES,
   CRITTERS_RULES,
   STALKERS_RULES,
+  NEW_FOES_RULES,
   BOSS_TOAD_RULES,
   BOSS_SALAMANDER_RULES,
   BOSS_JELLY_RULES,
@@ -185,6 +188,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   GYM_RULES,
   TRIAL_RULES,
   TRIAL_RUN_RULES,
+  TRIAL_FOE_RULES,
   GYM_FX_RULES,
   TALISMAN_RULES,
   TD_RULES,

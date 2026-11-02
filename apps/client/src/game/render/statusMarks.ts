@@ -119,6 +119,14 @@ function playerOnly(ctx: CanvasRenderingContext2D, p: PlayerState, tick: number,
       ctx.fillRect(snap(x - 3 + i * 6), snap(y - p.r + k / 3), 1, 2);
     }
   }
+  if ((p.dbBurn ?? 0) > 0) {
+    // 화상: 몸 위로 불똥이 튀어 오름
+    for (let i = 0; i < 3; i++) {
+      const k = (tick + i * 9) % 27;
+      ctx.fillStyle = i % 2 ? "#ffb040" : "#ff5a2a";
+      ctx.fillRect(snap(x - 4 + i * 4), snap(y - k / 3), 1, 2);
+    }
+  }
   if ((p.dbRot ?? 0) > 0) {
     ctx.fillStyle = "rgba(184, 224, 74, 0.9)";
     for (let i = 0; i < 3; i++) {

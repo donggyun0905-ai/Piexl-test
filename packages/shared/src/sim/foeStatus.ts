@@ -1,4 +1,4 @@
-// 로그 적이 플레이어에게 거는 상태이상 (때린 적 종류로, 맞았을 때만): 땅 물고기 출혈 · 슬라임 부식 · 도플갱어 저주 · 그림자 공포 · 가디언 기절 · 성기사 속박 · 돌진 멧돼지 느림
+// 로그 적이 플레이어에게 거는 상태이상 (때린 적 종류로, 맞았을 때만): 폭발풍뎅이 화상 · 땅 물고기 출혈 · 슬라임 부식 · 도플갱어 저주 · 그림자 공포 · 가디언 기절 · 성기사 속박 · 돌진 멧돼지 느림
 // 베놈 독가스의 독·치유감소는 sim/terrain (p.poison·p.corrode). 남은 틱은 PlayerState의 db* 값 (화면 버프 창·머리 위 글자). 패왕전은 걸지 않음
 import type { EnemyKind } from "../content";
 import { statusImmune } from "./remnant";
@@ -24,7 +24,10 @@ const R = {
   /** 느림: 지속 틱 (2초) · 이동 속도 배율 */
   SLOW_TICKS: 120,
   SLOW_MUL: 0.6,
-  /** 출혈 피해 간격 (0.5초) */
+  /** 화상(폭발풍뎅이): 지속 틱 (4초) · 0.5초마다 피해 (+층 수 절반) */
+  BURN_TICKS: 240,
+  BURN_DMG: 3,
+  /** 출혈·화상 피해 간격 (0.5초) */
   BLEED_EVERY: 30,
 };
 export { R as FOE_STATUS_RULES };
@@ -38,6 +41,7 @@ export interface FoeStatusPlayerState {
   dbStun?: number;
   dbRoot?: number;
   dbSlow?: number;
+  dbBurn?: number;
 }
 
 type Field = keyof FoeStatusPlayerState;
@@ -49,6 +53,7 @@ const BY_FOE: Partial<Record<EnemyKind, [Field, keyof typeof R]>> = {
   guardian: ["dbStun", "STUN_TICKS"],
   paladin: ["dbRoot", "ROOT_TICKS"],
   charger: ["dbSlow", "SLOW_TICKS"],
+  bombbug: ["dbBurn", "BURN_TICKS"],
 };
 
 /** 몸에 닿았을 때 상태이상을 거는 적 (가디언은 돌진 중일 때만 기절 · 성기사는 빛기둥만 속박, 몸에 닿으면 없음) */
@@ -68,11 +73,12 @@ export function afflict(s: RunState, from: EnemyKind | undefined): void {
 /** 틱마다 (자리마다, terrain에서): 시간 줄이기 → 이번 틱에 받을 피해 (출혈 0.5초마다 · 저주가 끝나는 틱) */
 export function tickFoeStatus(p: PlayerState, depth: number): number {
   let dmg = 0;
-  for (const f of ["dbBleed", "dbRot", "dbCurse", "dbFear", "dbStun", "dbRoot", "dbSlow"] as const) {
+  for (const f of ["dbBleed", "dbRot", "dbCurse", "dbFear", "dbStun", "dbRoot", "dbSlow", "dbBurn"] as const) {
     const v = p[f] ?? 0;
     if (v <= 0) continue;
     p[f] = v - 1;
     if (f === "dbBleed" && (v - 1) % R.BLEED_EVERY === 0) dmg += R.BLEED_DMG + Math.floor(depth / 2);
+    if (f === "dbBurn" && (v - 1) % R.BLEED_EVERY === 0) dmg += R.BURN_DMG + Math.floor(depth / 2);
     if (f === "dbCurse" && v === 1) dmg += R.CURSE_DMG + depth;
   }
   return dmg;

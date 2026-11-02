@@ -1,5 +1,5 @@
 // 방 설명 창 글: 시련의 방 · 제단의 방 (나머지 방은 roomGuide). 수치는 게임 계산 값에서 바로 가져옴
-import { ALTAR, ALTAR_IDS, TRIAL_RULES as R, TRIAL_RUN_RULES } from "@pixel-rogue/shared";
+import { ALTAR, ALTAR_IDS, TRIAL_FOE_RULES as F, TRIAL_RULES as R, TRIAL_RUN_RULES as RR } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "./index";
 
 export type L = [string, string, string];
@@ -14,7 +14,9 @@ function trial(t: (k: TextKey) => string): L[] {
     [`나오는 곳: ${R.FROM_FLOOR}층부터 층마다 하나 (새빨간 방) · 비석 앞 F → 시작? YES / NO`, `Where: one per floor from floor ${R.FROM_FLOOR} (crimson room) · F at the monolith → YES / NO`, `出現: ${R.FROM_FLOOR}階から各階に1つ (真っ赤な部屋) · 石碑の前でF → YES / NO`],
     [`YES → 시련 넷 중 하나: ${w}`, `YES → one of four trials: ${w}`, `YES → 試練4つのどれか: ${w}`],
     ["무리·보스 시련: 다 이기면 1000점 · 쓰러지면 진짜 죽음", "Horde / boss trials: win them all for 1000 pts · falling is a real death", "群れ・ボスの試練: 全部勝てば1000点 · 倒れたら本当に死ぬ"],
-    [`끝없는 무리: 처치 하나에 ${TRIAL_RUN_RULES.KILL_SCORE}점 (최대 1000) · 쓰러져도 죽지 않고 그때 점수로 끝 (체력은 시작 때로)`, `Endless horde: ${TRIAL_RUN_RULES.KILL_SCORE} pts per kill (max 1000) · falling doesn't kill you, it ends with that score (HP restored)`, `果てなき群れ: 1体${TRIAL_RUN_RULES.KILL_SCORE}点 (最大1000) · 倒れても死なずその点数で終了 (体力は開始時に戻る)`],
+    [`무리 ${RR.WAVES}물결 · 보스 ${RR.BOSSES}마리 한꺼번에 (사용 아이템 금지)`, `Horde: ${RR.WAVES} waves · Bosses: ${RR.BOSSES} at once (items sealed)`, `群れ ${RR.WAVES}波 · ボス${RR.BOSSES}体同時 (使用アイテム禁止)`],
+    [`시련 뒤 몬스터 강화: 얻은 점수 비율만큼 (${F.CAP}점에 체력 +${pct(F.HP)}% · 피해 +${pct(F.DMG)}%, 그 위로는 그대로)`, `Monsters grow after trials by your score (at ${F.CAP} pts: HP +${pct(F.HP)}% · damage +${pct(F.DMG)}%, no more beyond)`, `試練後モンスター強化: 得た点数の割合で (${F.CAP}点で体力 +${pct(F.HP)}% · ダメージ +${pct(F.DMG)}%、それ以上は同じ)`],
+    [`끝없는 무리: 처치 하나에 ${RR.KILL_SCORE}점 (최대 1000) · 쓰러져도 죽지 않고 그때 점수로 끝 (체력은 시작 때로)`, `Endless horde: ${RR.KILL_SCORE} pts per kill (max 1000) · falling doesn't kill you, it ends with that score (HP restored)`, `果てなき群れ: 1体${RR.KILL_SCORE}点 (最大1000) · 倒れても死なずその点数で終了 (体力は開始時に戻る)`],
     ["100점마다 보상 상자 (아래 표) · 1000점이면 비밀의 방 고르기 상자도 · 시련 중 방을 나가면 시련은 사라짐 (보상 없음)", "Reward chests every 100 pts (table below) · 1000 pts also gives a secret-room chest · leaving mid-trial ends it (no reward)", "100点ごとに報酬箱 (下の表) · 1000点なら秘密の部屋を選ぶ箱も · 試練中に部屋を出ると試練は消える (報酬なし)"],
     [`NO → 벌칙 하나 (할 수 있는 것 중 같은 확률): ${pens}`, `NO → one penalty (equal odds among possible ones): ${pens}`, `NO → 罰1つ (可能なものから同じ確率): ${pens}`],
     ["한 판의 시련 점수는 합쳐서 최대 1000점 (예: 3층 300점 → 다음 시련은 최대 700점) · 1000점을 채우면 시련의 방이 더 나오지 않음", "Trial scores add up to at most 1000 per run (e.g. 300 on floor 3 → the next trial is capped at 700) · after 1000, no more trial rooms appear", "1ランの試練の点数は合計最大1000点（例：3階で300点 → 次の試練は最大700点）· 1000点に達すると試練の部屋はもう出ない"],

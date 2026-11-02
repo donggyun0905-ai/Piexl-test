@@ -43,6 +43,7 @@ const RUN_STATUS: readonly [string, TextKey, string][] = [
   ["dbStun", "dbStun", "#ffe070"],
   ["dbRoot", "dbRoot", "#c8c8d0"],
   ["dbSlow", "dbSlow", "#8ad8ff"],
+  ["dbBurn", "dbBurn", "#ff8a3a"],
   ["venomTicks", "dbVenom", "#8aff6a"],
   ["doomTicks", "dbDoom", "#a080c0"],
 ];

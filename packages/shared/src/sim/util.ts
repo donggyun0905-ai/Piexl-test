@@ -6,6 +6,7 @@ import { arenaGrid } from "./bossPrimeval";
 import { swarmGrid } from "./swarmGrid";
 import { pwGrid } from "./paewangGrid";
 import { tabooUp } from "./taboo";
+import { trialFoeHp } from "./trialFoes";
 import type { Body, DotKind, EffectState, EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -131,7 +132,8 @@ export function enemyShot(s: RunState, x: number, y: number, dx: number, dy: num
 /** 적 하나 만들기 (체력 배율 적용) */
 export function makeEnemy(s: RunState, kind: EnemyKind, x: number, y: number, hpMul: number, timer: number): EnemyState {
   const def = ENEMIES[kind];
-  const hp = Math.round(def.hp * hpMul);
+  // 시련 점수만큼 적이 세짐 (sim/trialFoes)
+  const hp = Math.round(def.hp * hpMul * trialFoeHp(s.player));
   return {
     id: s.nextId++,
     kind,

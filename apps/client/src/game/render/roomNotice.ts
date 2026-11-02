@@ -1,9 +1,15 @@
 // 특별한 방 결과 알림 (화면 가운데 위, 3초): 시련 시작(어떤 시련인지) · 시련 거절 벌칙(무엇을 빼앗겼는지) · 시련 결과 점수
 // · 보상 상자에서 받은 것 · 야바위 당첨/꽝(깎인 능력치). 글자는 화면 언어 (text: 키 → 글자, 없는 키면 키 그대로)
-import { trialCap, type RunState } from "@pixel-rogue/shared";
+import { TRIAL_FOE_RULES as F, trialCap, type RunState } from "@pixel-rogue/shared";
 
 type Ctx = CanvasRenderingContext2D;
 const SHOW = 180;
+
+/** 시련 점수만큼 세진 적 (sim/trialFoes) */
+function foesUp(total: number, text: (key: string) => string): string {
+  const k = Math.min(total, F.CAP) / F.CAP;
+  return text("trialFoesUp").replace("{hp}", String(Math.round(F.HP * k * 100))).replace("{dmg}", String(Math.round(F.DMG * k * 100)));
+}
 
 /** 이 틱에 보일 알림 (가장 최근 것 하나) */
 function notice(s: RunState, text: (key: string) => string, name: (kind: "passive" | "use", id: string) => string): { head: string; sub: string; color: string; at: number } | null {
@@ -12,11 +18,11 @@ function notice(s: RunState, text: (key: string) => string, name: (kind: "passiv
   const last = p.trial?.last;
   if (last && s.tick - last.tick < SHOW) {
     if (last.penalty) out.push({ head: text("noticeTrialNo"), sub: text(`trialPen_${last.penalty}`), color: "#ff8a8a", at: last.tick });
-    else if (last.score !== undefined) out.push({ head: text("trialResult").replace("{n}", String(last.score)), sub: text("noticeChests"), color: "#ffd84a", at: last.tick });
+    else if (last.score !== undefined) out.push({ head: text("trialResult").replace("{n}", String(last.score)), sub: `${text("noticeChests")} · ${foesUp(p.trial?.total ?? 0, text)}`, color: "#ffd84a", at: last.tick });
     else if (last.kind) {
       // 이 판에 남은 최대 점수 (판 전체 1000점까지)
       const cap = s.trialRun ? trialCap(p) : 1000;
-      const sub = `${text(`trialKindHint_${last.kind === 4 ? 4 : 1}`)}${cap < 1000 ? ` · ${text("noticeTrialCap").replace("{n}", String(cap))}` : ""}`;
+      const sub = `${text(`trialKindHint_${last.kind === 4 || last.kind === 3 ? last.kind : 1}`)}${cap < 1000 ? ` · ${text("noticeTrialCap").replace("{n}", String(cap))}` : ""}`;
       out.push({ head: text(`trialKind_${last.kind}`), sub, color: "#ffd0d0", at: last.tick });
     }
   }

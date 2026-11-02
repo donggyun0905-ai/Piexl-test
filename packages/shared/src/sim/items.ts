@@ -21,6 +21,7 @@ import { downedNear, seatNo } from "./party";
 import { tabooDown, tabooMods } from "./taboo";
 import { addEffect, hasPerk } from "./util";
 import { charmed } from "./bossesTwo";
+import { trialNoItems } from "./trialRun";
 import { bigReach, clearShelf, EMPTY_HANDS, hiddenUse, isStation, rerollShop, sellItem, stationAt, stationMenu, stationMods, trashAt } from "./shop";
 import { resetCombo } from "./brawl";
 import { resetGun } from "./gun";
@@ -34,18 +35,18 @@ import { goldLocked, noUseItems, oniConvert } from "./oniRules";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
-  /** 닿았다고 보는 거리 (플레이어 반지름에 더함) */
+  /** 닿았다고 보는 거리 (플레이어 반지름 +) */
   TOUCH: 9,
-  /** 설명을 띄우는 거리 */
+  /** 설명 띄우는 거리 */
   NEAR: 16,
-  /** 협동: 쓰러진 친구에게 닿는 거리 */
+  /** 협동: 쓰러진 친구 닿는 거리 */
   REVIVE_REACH: 16,
 };
 export { R as ITEMS_RULES };
 
 /** 처방전(의사): 포션·회복 아이템 회복량 배율 */
 export const PRESCRIPTION_MUL = 1.5;
-/** 바꾸기·고르기는 이만큼 서 있으면 가짐 (0.5초). 지나가다 실수로 바뀌지 않게 */
+/** 바꾸기·고르기는 이만큼 서 있으면 가짐 (0.5초) */
 export const PICKUP_HOLD_TICKS = 30;
 
 /** 무기·패시브가 바뀌면 능력치 다시 계산. 최대 체력이 늘면 그만큼 체력도 늘어남 */
@@ -104,8 +105,8 @@ function touching(s: RunState, pk: Pickup, reach: number): boolean {
 export function updateItems(s: RunState, input: TickInput): void {
   const p = s.player;
   if (p.shieldTicks > 0) p.shieldTicks--;
-  // 세이렌에게 홀린 동안은 물약 등 사용 아이템을 못 씀
-  if (input.useSlot > 0 && !charmed(s.player)) useSlot(s, input.useSlot - 1, input);
+  // 세이렌 홀림·보스 시련 중엔 사용 아이템 못 씀
+  if (input.useSlot > 0 && !charmed(s.player) && !trialNoItems(s)) useSlot(s, input.useSlot - 1, input);
   if (input.statPick > 0) spendStat(s, input.statPick);
   if (input.sell) sellItem(s, input.sell);
   if (input.menu) stationMenu(s, input.menu);

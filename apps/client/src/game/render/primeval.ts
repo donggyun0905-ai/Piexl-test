@@ -103,8 +103,10 @@ export function drawPrimevalOverlay(ctx: CanvasRenderingContext2D, s: RunState, 
   const dark = s.enemies.some((e) => e.kind === "pdark" && (e.veil ?? 0) > 0) || (p.blindTicks ?? 0) > 0;
   if (dark) {
     const stacks = p.darkStacks ?? 0;
-    const r = Math.max(14, p.stats.range * (1 - stacks / (DARK_DEATH + 1)));
-    ctx.fillStyle = `rgba(0, 0, 0, ${Math.min(0.97, 0.82 + stacks * 0.03)})`;
+    // 암흑 속의 무리 시련: 내 몸 둘레만 남기고 완전히 깜깜 (고립)
+    const pitch = s.trialRun?.kind === 1 && s.trialRun.room === s.roomId;
+    const r = pitch ? p.r + 7 : Math.max(14, p.stats.range * (1 - stacks / (DARK_DEATH + 1)));
+    ctx.fillStyle = pitch ? "#000" : `rgba(0, 0, 0, ${Math.min(0.97, 0.82 + stacks * 0.03)})`;
     ctx.beginPath();
     ctx.rect(0, 0, ROOM_WIDTH, ROOM_HEIGHT);
     ctx.arc(x, y, r, 0, TAU, true);

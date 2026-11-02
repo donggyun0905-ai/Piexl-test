@@ -81,7 +81,12 @@ function drawLineHazard(ctx: CanvasRenderingContext2D, h: Hazard, x: number, y: 
     ctx.lineCap = "butt";
     return;
   }
-  if (h.fx === "gleam" || h.fx === "rgleam") {
+  if (h.from === "skelarcher") {
+    // 스켈레톤 궁병: 굳은 얇은 선이 깜빡임 → 화살
+    ctx.strokeStyle = Math.floor(tick / 3) % 2 === 0 ? "rgba(255, 240, 200, 0.95)" : "rgba(255, 60, 60, 0.9)";
+    ctx.lineWidth = 1;
+    line(ctx, x, y, tx, ty);
+  } else if (h.fx === "gleam" || h.fx === "rgleam") {
     // 검기: 희미한 선이 점점 밝아지고 선을 따라 빛이 반짝임 (붉은 검기는 먼저 터짐)
     const red = h.fx === "rgleam";
     ctx.strokeStyle = red ? `rgba(255, 90, 90, ${0.2 + 0.4 * f})` : `rgba(200, 220, 255, ${0.15 + 0.35 * f})`;

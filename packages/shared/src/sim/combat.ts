@@ -2,6 +2,7 @@
 import { remnantDodge } from "./remnant";
 import { killGold } from "./loot";
 import { endlessPow } from "./endless";
+import { trialFoeDmg } from "./trialFoes";
 import { inkTaken, scribeKill } from "./scribe";
 import { minerKill } from "./minerGround";
 import { PERKS } from "../perks";
@@ -124,9 +125,9 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
     addEffect(s, { kind: "hit", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 6, maxTicks: 10 });
     return;
   }
-  // 금기: 취약 (받는 피해 증가) · 광야의 새벽은 적이 많아 받는 피해를 줄임
-  // 무한 모드 7층부터: 보스방을 깰 때마다 적이 세짐
-  dmg *= endlessPow(s) * tabooUp(s, "frail") * (s.swarm ? SWARM.taken * (SWARM_LEVELS[s.swarm.level ?? 0]?.taken ?? 1) : 1);
+  // 금기 취약 · 광야의 새벽은 받는 피해 줄임
+  // 무한 모드 7층부터 보스방마다·시련 점수만큼(trialFoes) 세짐
+  dmg *= endlessPow(s) * trialFoeDmg(p) * tabooUp(s, "frail") * (s.swarm ? SWARM.taken * (SWARM_LEVELS[s.swarm.level ?? 0]?.taken ?? 1) : 1);
   // 방패 자세: 가만히 서 있으면 받는 피해 절반
   let taken = hasPerk(p, "bulwarkStance") && p.stillTicks >= STILL_TICKS ? dmg * PERKS.bulwarkStance.taken : dmg;
   // 버티기(가라테): 받는 피해 절반, 받은 만큼 모아 되받아침

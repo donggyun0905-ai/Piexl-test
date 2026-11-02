@@ -29,7 +29,7 @@ function play(run: RunState, n: number, each?: (i: number) => void): void {
 describe("시즌 2 새 몬스터", () => {
   it("2층부터 베놈·땅 물고기, 3층부터 도플갱어·그림자", () => {
     expect(stalkerKinds(1)).toEqual([]);
-    expect(stalkerKinds(2)).toEqual(["venom", "landfish"]);
+    expect(stalkerKinds(2)).toEqual(["venom", "landfish", "bombbug", "skelarcher"]);
     expect(stalkerKinds(4)).toContain("doppel");
     expect(stalkerKinds(4)).toContain("lurker");
   });

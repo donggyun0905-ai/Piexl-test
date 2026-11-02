@@ -1,9 +1,11 @@
 // 적 정의 (졸개·보스·허수아비 수치, 층마다 보스). content에서 다시 내보냄
 import { createRng, deriveSeed } from "./rng";
 
-export type MinionKind = "crawler" | "spitter" | "charger" | "mortar" | "gnat" | "guardian" | "paladin" | "tower" | "ruinblade" | "chaosblade" | "soul" | "ghost" | StalkerKind | TdMinionKind;
+export type MinionKind = "crawler" | "spitter" | "charger" | "mortar" | "gnat" | "guardian" | "paladin" | "tower" | "ruinblade" | "chaosblade" | "soul" | "ghost" | StalkerKind | NewFoeKind | TdMinionKind;
 /** 시즌 2 새 몬스터 (sim/stalkers): 도플갱어 · 베놈 · 땅 물고기 · 그림자 */
 export type StalkerKind = "doppel" | "venom" | "landfish" | "lurker";
+/** 시즌 3 새 몬스터 (sim/newFoes): 폭발풍뎅이 · 스켈레톤 궁병 */
+export type NewFoeKind = "bombbug" | "skelarcher";
 /** 타워 디펜스에만 나오는 적 (sim/tdWaves) */
 export type TdMinionKind = "slime" | "runner" | "bat" | "beetle" | "golem" | "shaman" | "eggsac" | "wisp";
 /** 보스: 1·2층(1단계) 강철 거구·검은 기사·얍삽한 활잡이·두꺼비 왕·불도롱뇽 · 3·4층(2단계) 무리 여왕·세이렌·켄타우로스·하드플랜트·번개 해파리 · 5·6층(3단계) 공허의 눈·데스·검신·천사장·유령선 선장 */
@@ -84,6 +86,11 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   landfish: { kind: "landfish", hp: 30, radius: 6, speed: 0.75, contactDamage: 9, gold: 2 },
   /** 그림자: 희미하게 비치며 등 뒤로 돌아가 큰 한 방 */
   lurker: { kind: "lurker", hp: 30, radius: 5, speed: 0.7, contactDamage: 5, gold: 3 },
+  // 시즌 3 새 몬스터 (sim/newFoes)
+  /** 폭발풍뎅이: 빠르게 달려와 달라붙음(닿아도 피해 없음) → 1.5초 뒤 폭발 + 화상. 대시로 떼어 냄 */
+  bombbug: { kind: "bombbug", hp: 26, radius: 5, speed: 1.35, contactDamage: 0, gold: 2 },
+  /** 스켈레톤 궁병: 얇은 선으로 겨눔 → 깜빡이면 매우 빠른 화살 (큰 피해) */
+  skelarcher: { kind: "skelarcher", hp: 40, radius: 6, speed: 0.5, contactDamage: 6, gold: 3 },
   /** 보스: 다가오다 돌진, 멈출 때 사방으로 탄 */
   hulk: { kind: "hulk", hp: 420, radius: 11, speed: 0.45, contactDamage: 16, gold: 20, boss: true },
   /** 보스: 거리를 두고 기는 적을 부르고 부채꼴로 탄 */

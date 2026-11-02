@@ -16,6 +16,7 @@ export const BUFF_TEXT = {
   dbStun: l("기절", "Stun", "気絶"),
   dbRoot: l("속박 (못 움직임)", "Root (can't move)", "拘束（移動不可）"),
   dbSlow: l("느림", "Slow", "鈍足"),
+  dbBurn: l("화상", "Burn", "火傷"),
   dbVenom: l("전갈 독", "Scorpion venom", "サソリ毒"),
   dbDoom: l("죽음", "Doom", "死"),
   bfShield: l("보호막", "Shield", "バリア"),

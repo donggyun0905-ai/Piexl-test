@@ -15,6 +15,7 @@ const TABLE: readonly [string, TextKey, Kind][] = [
   ["dbStun", "dbStun", "debuff"],
   ["dbRoot", "dbRoot", "debuff"],
   ["dbSlow", "dbSlow", "debuff"],
+  ["dbBurn", "dbBurn", "debuff"],
   ["venomTicks", "dbVenom", "debuff"],
   ["doomTicks", "dbDoom", "debuff"],
   ["shieldTicks", "bfShield", "buff"],

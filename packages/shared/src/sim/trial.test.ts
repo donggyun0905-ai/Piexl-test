@@ -6,6 +6,9 @@ import { menuCode } from "./station";
 import { createRun, stepSim } from "./run";
 import { TRIAL_OP, trialBusy, trialUsed } from "./trial";
 import { startTrial } from "./trialRun";
+import { TRIAL_FOE_RULES } from "./trialFoes";
+import { makeEnemy } from "./util";
+import { ENEMIES } from "../content";
 import { chestOptions, spillRewards, trialRewardRow } from "./trialRewards";
 import { EMPTY_INPUT, type RunState } from "./types";
 
@@ -54,17 +57,31 @@ describe("시련의 방", () => {
     const s = inTrial();
     startTrial(s, 3);
     expect(trialBusy(s)).toBe(true);
-    for (let round = 0; round < 3; round++) {
-      for (let i = 0; i < 80 && s.enemies.length === 0; i++) stepSim(s, EMPTY_INPUT);
-      expect(s.rooms[s.roomId]!.cleared).toBe(false);
-      s.enemies.forEach((e) => (e.hp = 0));
-      s.enemies = [];
-    }
+    // 보스 다섯이 한꺼번에 · 사용 아이템 금지
+    for (let i = 0; i < 80 && s.enemies.length === 0; i++) stepSim(s, EMPTY_INPUT);
+    expect(s.enemies.filter((e) => ENEMIES[e.kind].boss)).toHaveLength(5);
+    expect(s.rooms[s.roomId]!.cleared).toBe(false);
+    s.player.useSlots[0] = "potion";
+    stepSim(s, { ...EMPTY_INPUT, useSlot: 1 });
+    expect(s.player.useSlots[0]).toBe("potion");
+    s.enemies.forEach((e) => (e.hp = 0));
+    s.enemies = [];
     for (let i = 0; i < 80 && s.trialRun; i++) stepSim(s, EMPTY_INPUT);
     expect(s.trialRun).toBeUndefined();
     expect(s.player.trial!.last!.score).toBe(1000);
     // 1000점: 원하는 능력치 3 · 고르는 패시브 3 · 고르는 사용 아이템 2 · 되살아남 1 · 비밀의 방 고르기 1 (상자 10)
     expect(s.rooms[s.roomId]!.pickups.filter((p) => p.kind === "boon")).toHaveLength(10);
+  });
+
+  it("시련 점수만큼 뒤에 나오는 적이 세짐 (700점에서 멈춤)", () => {
+    const s = inTrial();
+    const base = makeEnemy(s, "crawler", 100, 100, 1, 0).maxHp;
+    s.player.trial = { rooms: [], total: 350 };
+    const half = makeEnemy(s, "crawler", 100, 100, 1, 0).maxHp;
+    s.player.trial!.total = 1000;
+    const full = makeEnemy(s, "crawler", 100, 100, 1, 0).maxHp;
+    expect(half).toBeGreaterThan(base);
+    expect(full).toBe(Math.round(base * (1 + TRIAL_FOE_RULES.HP)));
   });
 
   it("끝없는 시련: 처치마다 점수 · 쓰러져도 죽지 않고 그 점수로 끝", () => {
