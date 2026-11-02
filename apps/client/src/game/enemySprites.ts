@@ -63,8 +63,8 @@ export function shapeSprite(kind: string, color: string): HTMLCanvasElement | un
 /** 2배 촘촘하게 다시 그린 몬스터 (그림 칸 ÷ 이 값 = 게임 크기) */
 /** 일반 몬스터 20종은 2배 (원래 그림 그대로 촘촘하게, scripts/art/hd_monsters_2x, 2026-10-31) */
 const HD2 = "crawler spitter mortar charger gnat guardian paladin slime runner bat beetle golem shaman eggsac wisp venom landfish lurker soul doppel bombbug skelarcher chainward".split(" ");
-/** 하이오크는 3배 큰 도트 (scripts/art/highorc_sprite, 칸: 걷기 2 · 휘두르기 · 정면) */
-export const ENEMY_SRC: Readonly<Record<string, number>> = { highorc: 3, hulk: 2, seer: 2, tower: 2, brood: 4, dragon: 4, ...Object.fromEntries(HD2.map((k) => [k, 2])) };
+/** 하이오크는 큰 도트 48칸의 2배 (scripts/art/highorc_sprite, 칸: 걷기 2 · 도끼 치켜듦) */
+export const ENEMY_SRC: Readonly<Record<string, number>> = { highorc: 2, hulk: 2, seer: 2, tower: 2, brood: 4, dragon: 4, ...Object.fromEntries(HD2.map((k) => [k, 2])) };
 
 /** 몬스터 그림 한 칸 크기 (게임 크기, 아직 못 불러왔으면 undefined) */
 export const enemyCell = (kind: string): number | undefined => {

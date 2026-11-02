@@ -4,12 +4,21 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.358",
+    date: "2026-11-02",
+    items: {
+      ko: ["하이오크 큰 도트 다시 그림 (붉은 피부·상투·뼈 가시 어깨 갑옷·엄니·해골 허리띠·양날 도끼) · 휘두르기 직전 노랗게 깜빡이지 않고 도끼를 치켜든 모습으로 예고"],
+      en: ["High Orc redrawn as big pixel art (red skin, topknot, bone-spiked pauldron, tusks, skull belt, double axe) · no more yellow flashing before a swing; it telegraphs by raising its axe"],
+      ja: ["ハイオークを大きなドットで描き直し（赤い肌・まげ・骨トゲの肩当て・牙・ドクロのベルト・両刃斧）· 振り下ろし前に黄色く点滅せず、斧を振り上げた姿で予告"],
+    },
+  },
+  {
     version: "0.48.357",
     date: "2026-11-02",
     items: {
-      ko: ["하이오크 새 그림: 붉은 피부·털 달린 가시 갑옷·큰 도끼의 큰 도트 (걷기 · 도끼 휘두르기 · 정면) · 몸이 커지고 도끼 범위도 넓어짐"],
-      en: ["High Orc redrawn: big pixel art with red skin, spiked fur armor and a great axe (walk · axe swing · front) · bigger body and wider axe reach"],
-      ja: ["ハイオークの新しい絵：赤い肌・毛皮付きトゲ鎧・大斧の大きなドット（歩き · 大斧振り · 正面）· 体が大きくなり斧の範囲も広く"],
+      ko: ["하이오크 몸이 커지고 도끼 범위도 넓어짐"],
+      en: ["High Orc: bigger body and wider axe reach"],
+      ja: ["ハイオーク：体が大きくなり斧の範囲も広く"],
     },
   },
   {

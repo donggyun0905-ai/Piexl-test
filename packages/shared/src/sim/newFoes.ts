@@ -155,11 +155,11 @@ function chainward(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
 /** 하이오크 분노 (0 = 체력 가득 ~ 1 = 거의 쓰러짐) */
 export const orcRage = (e: EnemyState): number => (e.kind === "highorc" ? Math.max(0, Math.min(1, 1 - e.hp / Math.max(1, e.maxHp))) : 0);
 
-/** 하이오크: phase walk 다가옴 · windup 도끼 휘두르기 예고(반원) */
+/** 하이오크: phase walk 다가옴 · swing 도끼 휘두르기 예고(반원, 큰 그림이라 노란 깜빡임 없이 도끼 든 그림으로) */
 function highorc(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
   const rage = orcRage(e);
   e.timer--;
-  if (e.phase === "windup") {
+  if (e.phase === "swing") {
     if (e.timer > 0) return;
     e.phase = "walk";
     e.timer = Math.round(R.ORC_REST * (1 - 0.4 * rage));
@@ -174,7 +174,7 @@ function highorc(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
   const warn = Math.round(R.ORC_WARN * (1 - 0.3 * rage));
   const dmg = (R.ORC_DMG + 3 * depth(s)) * (1 + R.ORC_DMG_UP * rage);
   addShape(s, warn, { x: e.x, y: e.y, radius: R.ORC_R, damage: Math.round(dmg), dirX: toP[0], dirY: toP[1], arc: 0, fx: "bslash", by: "highorc", owner: e.id });
-  e.phase = "windup";
+  e.phase = "swing";
   e.timer = warn;
 }
 
