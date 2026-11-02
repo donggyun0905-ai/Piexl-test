@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.340",
+    date: "2026-11-02",
+    items: {
+      ko: ["풋내기: 레벨업 때 능력치 버튼이 게임 화면 위에 떠서 나옴 (게임 화면이 작아지지 않음)"],
+      en: ["Novice: on level up, the stat buttons now float over the game view (the game view no longer shrinks)"],
+      ja: ["新米: レベルアップ時の能力値ボタンがゲーム画面の上に浮かんで出る（ゲーム画面が小さくならない）"],
+    },
+  },
+  {
     version: "0.48.339",
     date: "2026-11-02",
     items: {

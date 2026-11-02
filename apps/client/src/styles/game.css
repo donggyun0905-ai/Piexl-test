@@ -237,8 +237,9 @@ button.danger {
   }
 }
 
-/* 풋내기: 레벨·경험치 막대 · 스탯 버튼 (장비 줄 위) */
+/* 풋내기: 레벨·경험치 막대 · 스탯 버튼 (장비 줄 위, 버튼은 게임 화면 위에 떠서 화면 크기를 바꾸지 않음) */
 .novice-bar {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -262,16 +263,26 @@ button.danger {
   background: #7ae07a;
 }
 .novice-pick {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: 4px;
-  width: 100%;
+  width: min(560px, 96vw);
+  padding: 6px;
+  background: rgba(10, 10, 20, 0.88);
+  border: 1px solid var(--accent);
   pointer-events: auto;
 }
 .novice-pick small {
   color: #ffe080;
   width: 100%;
+  text-align: center;
 }
 .novice-pick button {
   padding: 3px 8px;
