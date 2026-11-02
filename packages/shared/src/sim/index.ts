@@ -63,7 +63,7 @@ export { guardSpots } from "./ren";
 export { SPIRIT_TINT, spiritSpot } from "./spirit";
 export { GREAT_INDEX, greatSpot } from "./spiritGreat";
 export { MORPH_EVO, morphEvolved, evolvedAnimals } from "./morphEvo";
-export { fxKeys, fxScale } from "./gymPerks";
+export { fxKeys, fxScale, withGymFx } from "./gymPerks";
 export { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymBlocked, gymLv, gymPassives, gymPassiveStep, gymStep, gymUsed, type GymStat } from "./gym";
 export { stageTokens } from "./abandoned";
 export { eaterRegen, eaterRegenCap } from "./eater";

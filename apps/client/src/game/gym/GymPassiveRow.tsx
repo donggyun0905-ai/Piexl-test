@@ -46,7 +46,7 @@ export function GymPassiveRow({ id, lv, max, canUp, lang, t, onUp }: Props) {
         ))}
         {fx.map(([k, v]) => (
           <small key={k}>
-            {t(FX_NAME[k] ?? "gymFxAmount")} · {r2(v)} → {r2(fxScale(k, v, lv))} ({t("gymPer")} {pct(fxScale(k, v, 1) / v - 1)})
+            {t(FX_NAME[k] ?? "gymFxAmount")} · {r2(v)} → {r2(fxScale(k, v, lv, id))} ({t("gymPer")} {pct(fxScale(k, v, 1, id) / v - 1)})
           </small>
         ))}
         {bad && <small className="gym-note">{t("gymPassiveBadNote")}</small>}

@@ -1,5 +1,5 @@
 // 능력치 보기: 지금 내 수치 (패시브·무기 반영). 설정의 '능력치 보기'를 켰을 때만 화면에 표시
-import { artChance, attackSpeedNow, classDamageMul, classMoveMul, critNow, eaterRegen, extraOf, mukinDef, mukinRegen, PERKS, petGold, petTaken, type PlayerState, riderSpeedMul, type RunState, type WeaponDef, WEAPONS } from "@pixel-rogue/shared";
+import { artChance, attackSpeedNow, classDamageMul, classMoveMul, critNow, eaterRegen, extraOf, mukinDef, mukinRegen, PERKS, petGold, withGymFx, petTaken, type PlayerState, riderSpeedMul, type RunState, type WeaponDef, WEAPONS } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 
 export interface StatRow {
@@ -74,4 +74,13 @@ export function statRows(run: RunState, t: (k: TextKey) => string): StatRow[] {
     ...(petGold(run) > 1 ? [{ label: t("statPetGold"), value: `+${Math.round((petGold(run) - 1) * 100)}%` }] : []),
     ...(run.pet === "phoenix" ? [{ label: t("statPetLife"), value: run.petRevived ? "0" : "1" }] : []),
   ];
+}
+
+/** 능력치 창 줄: 단련한 패시브 효과 수치도 반영 (sim/gymPerks) */
+export function gymStatRows(run: RunState, t: Parameters<typeof statRows>[1]): StatRow[] {
+  let out: StatRow[] = [];
+  withGymFx(run, () => {
+    out = statRows(run, t);
+  });
+  return out;
 }

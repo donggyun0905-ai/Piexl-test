@@ -1,5 +1,5 @@
 // 한 프레임 그리기: 방 → 위험 → 궁극기 바닥 → 사거리 → 예고선 → 장치(포탑·지뢰) → 의사 바닥(가스·알약·봉합 실) → 원소술사 장판 → 악의 사도 장판·영혼 → 적 → 플레이어(+드론·보호막·회전체·고양이·덮치기 호랑이·닌자 그림자·시간술사 잔상·베두인 차크람·이무기 오라) → 의사 공중(탄·키트·구급차) → 투사체 → 효과 → 라스트 보스 어둠·궁극기 → 이무기 용·브레스 → 피해 숫자 → 보스 막대 → 조준점 (이 순서가 겹침 순서)
-import { applyRoom, useSeat, type RunState, type TagSpecialKind } from "@pixel-rogue/shared";
+import { applyRoom, useSeat, withGymFx, type RunState, type TagSpecialKind } from "@pixel-rogue/shared";
 import { cameraFor } from "../camera";
 import { drawRangeRing } from "../rangeRing";
 import { drawEnemies, drawPlayer } from "./actors";
@@ -145,7 +145,12 @@ function cursorWorld(ctx: CanvasRenderingContext2D, opt: DrawOptions, k: number,
   return { x: ((m.x - r.left) * (ctx.canvas.width / r.width)) / k + camX, y: ((m.y - r.top) * (ctx.canvas.height / r.height)) / k + camY };
 }
 
+/** 한 장면 그리기 · 단련의 방에서 강화한 패시브 효과(폭발 범위 등)도 오른 크기로 보이게 그 사람 기준으로 읽음 (sim/gymPerks) */
 export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions): void {
+  withGymFx(s, () => drawScene(ctx, s, opt));
+}
+
+function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions): void {
   const { alpha } = opt;
   // 지금 방 크기 (라스트 보스방은 큼)
   applyRoom(s);

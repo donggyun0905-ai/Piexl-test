@@ -14,7 +14,7 @@ import { drawMinimap } from "./minimap";
 import { viewH, viewW } from "./viewSize";
 import { drawFrame, type DrawOverlay } from "./render";
 import { getSettings } from "../settings";
-import { statRows, type StatRow } from "./statsView";
+import { gymStatRows, type StatRow } from "./statsView";
 import { DamageTracker } from "./damageNumbers";
 import { PwInfoNumbers } from "./pwInfoNumbers";
 import { wornLimited, wornVictory } from "./limited/limited";
@@ -182,7 +182,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       noteExhibits(run, p.useSlots, !!o.practice);
       o.setLoadout(view);
     }
-    const rows = getSettings().showStats ? statRows(run, t) : null;
+    const rows = getSettings().showStats ? gymStatRows(run, t) : null;
     const sk = rows ? rows.map((r) => r.value).join("|") : "";
     if (sk !== shownStats) {
       shownStats = sk;

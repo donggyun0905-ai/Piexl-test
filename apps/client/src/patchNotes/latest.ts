@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.339",
+    date: "2026-11-02",
+    items: {
+      ko: [
+        "단련의 방 효과 강화 점검: 333개 패시브 모두 효과 수치가 실제로 오르는 것 확인 · 1.4배 같은 배율은 1을 넘는 몫만 키움 (10단계 1.4배 → 1.8배) · 소환술사 유대의 방패가 거꾸로 약해지던 것 고침",
+        "단련한 효과가 화면(폭발·범위 원 등)과 능력치 창에도 오른 크기로 보임",
+      ],
+      en: [
+        "Training Room effect check: all 333 passives verified to actually improve · multipliers like ×1.4 now grow only the part above 1 (×1.4 → ×1.8 at level 10) · fixed Summoner's Bond Shield getting weaker instead of stronger",
+        "Upgraded effects now also show at their boosted size on screen (blast and area rings, etc.) and in the stats panel",
+      ],
+      ja: [
+        "鍛錬の部屋の効果強化を点検: 333個のパッシブ全部で効果の数値が実際に上がるのを確認 · ×1.4のような倍率は1を超える分だけ伸びる（10段階で×1.4 → ×1.8）· 召喚術師の絆の盾が逆に弱くなっていたのを修正",
+        "鍛錬した効果が画面（爆発・範囲の輪など）と能力値画面でも上がった大きさで見える",
+      ],
+    },
+  },
+  {
     version: "0.48.338",
     date: "2026-11-02",
     items: {
