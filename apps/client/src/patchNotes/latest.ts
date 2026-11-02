@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.354",
+    date: "2026-11-02",
+    items: {
+      ko: [
+        "제단의 방: 증강은 한 판에 하나 · 이미 있으면 가운데 카드가 '증강 바꾸기'로 바뀜 (최대 체력 20을 바치고 기존 증강 기술을 이 성좌 것으로, 패시브는 바치지 않음)",
+        "제단의 방: 고른 뒤 작은 창으로 결과를 알려 줌 (바친 패시브 둘 · 증강이 새겨진 패시브와 기술 · 바꾸기에 바친 최대 체력 · 무시 벌칙으로 빼앗긴 패시브), Esc로 닫음",
+      ],
+      en: [
+        "Altar Room: one augment per run · if you already have one, the middle card becomes 'Swap augment' (pay 20 max HP to replace your augments with this constellation's; no passives offered)",
+        "Altar Room: a small window now shows the result (the two passives offered · the passive that got augments and its skills · max HP paid for a swap · passives taken by the ignore penalty), close with Esc",
+      ],
+      ja: [
+        "祭壇の部屋：増強は1ランに1つ · 既にあれば中央のカードが「増強の付け替え」に（最大体力20を捧げ既存の増強技をこの星座のものに、パッシブは捧げない）",
+        "祭壇の部屋：選んだ後に小さな窓で結果を表示（捧げたパッシブ2つ · 増強が刻まれたパッシブと技 · 付け替えで捧げた最大体力 · 無視の罰で奪われたパッシブ）、Escで閉じる",
+      ],
+    },
+  },
+  {
     version: "0.48.353",
     date: "2026-11-02",
     items: {

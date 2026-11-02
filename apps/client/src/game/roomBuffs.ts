@@ -51,7 +51,7 @@ export function roomBuffs(p: PlayerState, floor: number, lang: Lang, t: (k: Text
   if (stats) out.push({ key: "stats", label: t("bfRoomStats"), tip: stats.text, bad: stats.bad });
   (p.altar?.got ?? []).forEach((g, i) => {
     const card = t(g.card === 0 ? "altarCardTrade" : g.card === 1 ? "altarCardAug" : "altarCardIgnore");
-    const tip = g.card === 0 ? t(`altarTrade_${g.id}` as TextKey) : g.card === 1 ? t("bfAltarAugTip") : g.hit ? t(`altarHit_${g.id}` as TextKey) : t("bfNothing");
+    const tip = g.card === 0 ? t(`altarTrade_${g.id}` as TextKey) : g.card === 1 ? t(g.swap ? "bfAltarSwapTip" : "bfAltarAugTip") : g.hit ? t(`altarHit_${g.id}` as TextKey) : t("bfNothing");
     out.push({ key: `altar${i}`, label: `${t("bfAltar")} · ${t(`altar_${g.id}` as TextKey).split(" · ").pop()} — ${card}`, tip, bad: g.card === 2 && !!g.hit });
   });
   for (const [i, a] of (p.augments ?? []).entries()) {

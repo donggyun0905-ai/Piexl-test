@@ -35,7 +35,7 @@ export { TRIAL_OP, TRIAL_RULES, trialUsed, trialBusy } from "./trial";
 export { endlessHp, TRIAL_RUN_RULES, trialCap } from "./trialRun";
 export { BOON_STATS, chestOptions, STONE_Y, trialRewardRow, type BoonStat } from "./trialRewards";
 export type { TrialKind } from "./trialTypes";
-export { ALTAR_AUG_MIN, ALTAR_OP, altarAugTaken, ALTAR_Y, altarOf, altarPending, altarUsed, augmented } from "./altar";
+export { ALTAR_AUG_MIN, ALTAR_OP, altarAugOk, altarAugTaken, ALTAR_Y, altarOf, altarPending, altarUsed, augmented } from "./altar";
 export { crackHere, crackSpot } from "./vault";
 export { devilCost, devilPact, offerY, statueY } from "./devil";
 export { CUP_GAP, CUP_PAIRS, cupState, cupY, GAMBLE_OP, TABLE as GAMBLE_TABLE, gambleDone, gamblerY, gambleNow, gambleUsed } from "./gamble";

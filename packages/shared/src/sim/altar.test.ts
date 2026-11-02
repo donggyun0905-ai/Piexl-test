@@ -102,16 +102,20 @@ describe("제단의 방", () => {
     expect(altarUsed(one)).toBe(false);
   });
 
-  it("카드 2(증강)는 한 판에 한 번만 · 1·3은 여러 번", () => {
+  it("제단 증강은 한 판에 하나: 다시 고르면 최대 체력 20을 내고 바꿈 (패시브는 안 바침) · 결과 기록", () => {
     const s = inAltar(7);
     menu(s, menuCode(ALTAR_OP, 1));
     expect(s.player.augments).toHaveLength(1);
+    expect(s.player.altar!.last!.taken).toHaveLength(2);
     s.player.altar!.rooms = [];
-    s.player.passives.push("whetstone", "lightGloves");
+    s.player.augments![0]!.skills = ["fan", "curse"];
+    const hp = s.player.stats.maxHp;
+    const n = s.player.passives.length;
     menu(s, menuCode(ALTAR_OP, 1));
-    expect(altarUsed(s)).toBe(false);
-    menu(s, menuCode(ALTAR_OP, 0));
-    expect(altarUsed(s)).toBe(true);
     expect(s.player.augments).toHaveLength(1);
+    expect(s.player.augments![0]!.skills).toEqual([...ALTARS[altarOf(s)].skills]);
+    expect(s.player.stats.maxHp).toBe(hp - 20);
+    expect(s.player.passives).toHaveLength(n);
+    expect(s.player.altar!.last!.swap).toBe(true);
   });
 });

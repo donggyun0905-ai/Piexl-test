@@ -1,5 +1,5 @@
 // 작업대 창에 보여 줄 값 (gameLoop가 만들어 LoadoutView.station으로 넘김): 아티팩터 제작대 · 추적자 튜닝소 · 단련의 방 · 시련의 비석·보상 상자
-import { altarAugTaken, auctionHere, gambleNow, type AuctionState, altarOf, chestOptions, trialUsed, type AltarId, GYM_OFF, GYM_STATS, gymBlocked, gymPassives, gymUsed, BENCH_OP, benchCan, benchCost, benchLv, benchStats, isHidden, isOwn, TUNE, TUNE_SLOTS, tuneChance, tuneCost, type PassiveId, type RunState, type StationKind, type StationResult } from "@pixel-rogue/shared";
+import { altarAugOk, altarAugTaken, auctionHere, gambleNow, type AuctionState, altarOf, chestOptions, trialUsed, type AltarId, GYM_OFF, GYM_STATS, gymBlocked, gymPassives, gymUsed, BENCH_OP, benchCan, benchCost, benchLv, benchStats, isHidden, isOwn, TUNE, TUNE_SLOTS, tuneChance, tuneCost, type PassiveId, type RunState, type StationKind, type StationResult } from "@pixel-rogue/shared";
 
 export interface BenchItem {
   id: PassiveId;
@@ -36,7 +36,7 @@ export interface StationView {
   trial?: { used: boolean };
   chest?: { code: string; options: string[] };
   /** 제단의 방: 이 방 성좌 · 바칠 패시브가 있는지 */
-  altar?: { id: AltarId; passives: number; augTaken: boolean };
+  altar?: { id: AltarId; passives: number; augTaken: boolean; augOk: boolean };
   /** 비밀의 방: 야바위 (0 시작 전 · 1 고르기 · 2 끝) · 경매 (지금 상태 · 틱 · 증강을 붙일 패시브) */
   gamble?: { phase: number; win?: boolean };
   auction?: { a: AuctionState; tick: number; passives: PassiveId[] };
@@ -47,7 +47,7 @@ export function stationView(run: RunState): StationView | undefined {
   if (pr.kind !== "station" || !pr.open) return undefined;
   const p = run.player;
   const base = { kind: pr.station, gold: run.gold, ...(p.stLast ? { last: p.stLast } : {}) };
-  if (pr.station === "altar") return { ...base, altar: { id: altarOf(run), passives: p.passives.length, augTaken: altarAugTaken(p) } };
+  if (pr.station === "altar") return { ...base, altar: { id: altarOf(run), passives: p.passives.length, augTaken: altarAugTaken(p), augOk: altarAugOk(p) } };
   if (pr.station === "trial") return { ...base, trial: { used: trialUsed(run) } };
   if (pr.station === "gambler") {
     const g = gambleNow(run);

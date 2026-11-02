@@ -39,5 +39,5 @@ export const ALTARS: Record<AltarId, AltarDef> = {
   unknown: { give: [], take: [], skills: ["boomerang", "barrage"] },
 };
 
-/** 제단 수치: 이 층부터 · 카드 2가 빼앗는 패시브 수 · 무시했을 때 벌칙 확률 · ??? 무시 벌칙 패시브 수 · ??? 거래로 바꾸는 패시브 수 */
-export const ALTAR = { fromFloor: 3, takePassives: 2, ignoreChance: 0.3, unknownIgnore: 4, unknownSwap: 2 };
+/** 제단 수치: 이 층부터 · 카드 2가 빼앗는 패시브 수 · 무시했을 때 벌칙 확률 · ??? 무시 벌칙 패시브 수 · ??? 거래로 바꾸는 패시브 수 · 증강을 바꿀 때 바치는 최대 체력 · 바친 뒤 남아야 하는 최대 체력 */
+export const ALTAR = { fromFloor: 3, takePassives: 2, ignoreChance: 0.3, unknownIgnore: 4, unknownSwap: 2, swapHp: 20, swapMinHp: 10 };

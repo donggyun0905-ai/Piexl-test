@@ -4,6 +4,14 @@ import type { LoadoutView } from "./Loadout";
 import { pwSkillView } from "./pwSkillView";
 import { sellCodes } from "./SellBar";
 import { stationView } from "./stationView";
+import type { AltarResultView } from "./altar/AltarResult";
+
+/** 제단 결과 창: 증강·바꾸기·패시브를 빼앗긴 벌칙만, 고른 뒤 10초 */
+function altarRes(run: RunState): { altarRes?: AltarResultView } {
+  const l = run.player.altar?.last;
+  if (!l || run.tick - l.tick > 600 || !(l.card === 1 || l.taken?.length)) return {};
+  return { altarRes: { tick: l.tick, id: l.id, card: l.card, taken: [...(l.taken ?? [])], ...(l.keep ? { keep: l.keep } : {}), ...(l.swap ? { swap: true } : {}) } };
+}
 
 export function loadoutView(run: RunState, armed: Parameters<typeof pwSkillView>[1]): LoadoutView {
   const p = run.player;
@@ -21,5 +29,6 @@ export function loadoutView(run: RunState, armed: Parameters<typeof pwSkillView>
     ...(run.prompt.kind === "trash" && run.prompt.confirm && !run.party ? { sell: sellCodes(p.passives.length).map((n) => sellPrice(run, n)) } : {}),
     ...(run.prompt.kind === "station" ? { station: stationView(run) } : {}),
     ...(p.hdPick ? { hdPick: p.hdPick } : {}),
+    ...altarRes(run),
   };
 }

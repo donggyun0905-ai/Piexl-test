@@ -1,6 +1,6 @@
 // 제단의 방 (3층부터 층마다 하나, 푸른 바다 같은 방): 성좌 하나(시드)가 방을 감쌀 만큼 크게 떠 있음 · 성좌 앞 F → 긴 카드 셋
 // 카드 1 거래 · 카드 2 패시브 둘을 바치고 남은 패시브 하나에 증강 기술 둘(광야의 새벽 각성 기술, 패시브 둘 이상일 때) · 카드 3 무시(30%로 벌칙)
-// 증강이 새겨진 패시브는 다시 제단에 와도 빼앗기지 않음 · 카드 2(증강)는 한 판에 한 번만 (1·3은 여러 번)
+// 증강이 새겨진 패시브는 다시 제단에 와도 빼앗기지 않음 · 제단 증강은 한 판에 하나: 이미 있으면 카드 2는 최대 체력 20을 바치고 바꾸기 (1·3은 여러 번)
 // 고르기 전에는 방을 나갈 수 없음 (잠긴 출구도 못 지남). 수치는 altarDefs
 import { ALTAR, ALTAR_IDS, ALTARS, type AltarId, type AltarTrade } from "../altarDefs";
 import type { PassiveId } from "../items";
@@ -17,7 +17,7 @@ export const ALTAR_OP = 13;
 
 export interface AltarPlayerState {
   /** 쓴 제단 (층 × 1000 + 방) · 마지막 결과 (화면 안내) · 고른 카드 기록 (버프 창) */
-  altar?: { rooms: number[]; last?: { id: AltarId; card: number; hit?: number; tick: number }; got?: { id: AltarId; card: number; hit?: number }[] };
+  altar?: { rooms: number[]; last?: { id: AltarId; card: number; hit?: number; tick: number; taken?: PassiveId[]; keep?: PassiveId; swap?: boolean }; got?: { id: AltarId; card: number; hit?: number; swap?: boolean }[] };
   /** 증강: 붙은 패시브 · 기술 둘 (그 패시브를 가진 동안 늘 씀) */
   augments?: { passive: PassiveId; skills: SwarmSkill[] }[];
   /** 증강 기술 '블랙홀' (던전, 광야의 새벽은 판에 있음) */
@@ -50,8 +50,13 @@ function trade(s: RunState, list: readonly AltarTrade[]): void {
 export const augmented = (p: PlayerState, id: PassiveId): boolean => !!p.augments?.some((a) => a.passive === id);
 /** 카드 2(증강)를 고를 수 있는 패시브 수 */
 export const ALTAR_AUG_MIN = 2;
-/** 카드 2(증강)는 한 판에 한 번만 (제단 증강은 기술 둘 · 경매 증강은 하나라 따로 셈) */
-export const altarAugTaken = (p: PlayerState): boolean => !!p.altar?.got?.some((g) => g.card === 1) || !!p.augments?.some((a) => a.skills.length >= 2);
+/** 제단 증강 (한 판에 하나: 기술 둘 · 경매 증강은 하나라 따로 셈) */
+const altarAug = (p: PlayerState) => p.augments?.find((a) => a.skills.length >= 2);
+/** 이미 제단 증강이 있는지 → 카드 2는 '바꾸기' (최대 체력을 바치고 기존 증강을 이 성좌 것으로) */
+export const altarAugTaken = (p: PlayerState): boolean => !!altarAug(p);
+/** 카드 2를 고를 수 있는지: 새로 새기기는 패시브 둘 이상 · 바꾸기는 패시브 하나 이상 + 최대 체력이 남아야 함 */
+export const altarAugOk = (p: PlayerState): boolean =>
+  altarAugTaken(p) ? p.passives.length > 0 && p.stats.maxHp - ALTAR.swapHp >= ALTAR.swapMinHp : p.passives.length >= ALTAR_AUG_MIN;
 
 /** 패시브 n개를 빼앗음 (증강이 새겨진 것·keep은 빼고, 빼앗은 것 목록) */
 function takePassives(p: PlayerState, rng: Rng, n: number, keep?: PassiveId): PassiveId[] {
@@ -72,8 +77,7 @@ export function altarMenu(s: RunState, card: number): void {
   const id = altarOf(s);
   const def = ALTARS[id];
   const rng = createRng(deriveSeed(s.seed, "altarPick", s.floor, s.roomId, card, p.characterId));
-  // 증강은 패시브가 둘은 있어야 고를 수 있음
-  if (card === 1 && (p.passives.length < ALTAR_AUG_MIN || altarAugTaken(p))) return;
+  if (card === 1 && !altarAugOk(p)) return;
   const a = (p.altar ??= { rooms: [] });
   a.rooms.push(roomKey(s));
   a.last = { id, card, tick: s.tick };
@@ -84,12 +88,21 @@ export function altarMenu(s: RunState, card: number): void {
       p.passives.push(...pickDistinct(rng, passivePool(s), n));
     }
     trade(s, [...def.give, ...def.take]);
+  } else if (card === 1 && altarAugTaken(p)) {
+    // 바꾸기: 최대 체력을 바치고 기존 제단 증강의 기술을 이 성좌 것으로 (그 패시브를 잃었으면 가진 패시브 하나로 옮김)
+    const aug = altarAug(p)!;
+    if (!p.passives.includes(aug.passive)) aug.passive = p.passives[rng.int(0, p.passives.length - 1)]!;
+    aug.skills = [...def.skills];
+    addBoonMod(s, { stat: "maxHp", add: -ALTAR.swapHp });
+    p.hp = Math.min(p.hp, p.stats.maxHp);
+    Object.assign(a.last, { keep: aug.passive, swap: true });
   } else if (card === 1) {
     // 새길 패시브(아직 증강이 없는 것 먼저)를 정하고, 나머지 중 증강 없는 것을 바침
     const fresh = p.passives.filter((x) => !augmented(p, x));
     const keep = (fresh.length > 0 ? fresh : p.passives)[rng.int(0, (fresh.length > 0 ? fresh : p.passives).length - 1)]!;
-    takePassives(p, rng, ALTAR.takePassives, keep);
+    const taken = takePassives(p, rng, ALTAR.takePassives, keep);
     (p.augments ??= []).push({ passive: keep, skills: [...def.skills] });
+    Object.assign(a.last, { keep, taken });
     recalcStats(s);
   } else if (rng.nextFloat() < ALTAR.ignoreChance) {
     // 무시: 30%로 벌칙 (빼앗기는 능력치 또는 패시브 둘 · ???는 패시브 넷)
@@ -97,11 +110,11 @@ export function altarMenu(s: RunState, card: number): void {
     a.last.hit = first ? 1 : 2;
     if (first) trade(s, def.take);
     else {
-      takePassives(p, rng, id === "unknown" ? ALTAR.unknownIgnore : ALTAR.takePassives);
+      a.last.taken = takePassives(p, rng, id === "unknown" ? ALTAR.unknownIgnore : ALTAR.takePassives);
       recalcStats(s);
     }
   }
-  (a.got ??= []).push({ id, card, ...(a.last.hit ? { hit: a.last.hit } : {}) });
+  (a.got ??= []).push({ id, card, ...(a.last.hit ? { hit: a.last.hit } : {}), ...(a.last.swap ? { swap: true } : {}) });
   addEffect(s, { kind: "alChoose", x: CX, y: ALTAR_Y, dirX: ALTAR_IDS.indexOf(id), dirY: 0, size: 80, maxTicks: 60, width: card });
 }
 

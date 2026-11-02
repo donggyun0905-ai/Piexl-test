@@ -52,6 +52,7 @@ export const BUFF_TEXT = {
   bfRoomStats: l("방에서 바뀐 능력치", "Stats changed by rooms", "部屋で変わった能力値"),
   bfAltar: l("제단", "Altar", "祭壇"),
   bfAltarAugTip: l("패시브 둘을 바치고 하나에 증강 기술을 새김 (✦ 줄에 기술 설명)", "Offered two passives and engraved augments on one (see the ✦ rows)", "パッシブ2つを捧げ1つに増強技を刻んだ（✦の行に技の説明）"),
+  bfAltarSwapTip: l("최대 체력 20을 바치고 증강 기술을 이 성좌 것으로 바꿈", "Paid 20 max HP to swap the augments for this constellation's", "最大体力20を捧げて増強技をこの星座のものに替えた"),
   bfNothing: l("아무 일 없음", "Nothing happened", "何も起きなかった"),
   bfImmune: l("상태이상 면역", "Status immunity", "状態異常無効"),
   bfImmuneTip: l("일곱 갈래의 마녀와 거래: 모든 상태이상에 걸리지 않음", "Bargain with the Seven-Horned Witch: immune to all status effects", "七つ角の魔女との取引：すべての状態異常にかからない"),
