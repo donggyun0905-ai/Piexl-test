@@ -9,7 +9,7 @@ import { spawnBoss } from "./bosses";
 import { makeTerrain } from "./terrain";
 import { healPlayer } from "./combat";
 import { onRoomCleared, spawnBlessing, spawnGolden, spawnTreasure } from "./loot";
-import { spawnSpecialRoom, trialBusy } from "./specialRooms";
+import { roomLocked, spawnSpecialRoom } from "./specialRooms";
 import { makeArena } from "./bossPrimeval";
 import { arenaBig, arenaEnemies, arenaMap, arenaNext, arenaPrimeval } from "./arena";
 import { spawnShop } from "./shop";
@@ -241,7 +241,7 @@ export function warpRoom(s: RunState, roomId: number): void {
 /** 적을 다 잡았으면 방 정리 (보상은 사람마다) */
 export function checkCleared(s: RunState): void {
   const st = s.rooms[s.roomId]!;
-  if (!st.cleared && s.enemies.length === 0 && !trialBusy(s)) {
+  if (!st.cleared && s.enemies.length === 0 && !roomLocked(s)) {
     st.cleared = true;
     eachSeat(s, () => onRoomCleared(s, s.roomId));
     if (s.lastBoss && s.raidStart !== undefined && s.map.rooms[s.roomId]!.type === "exit") s.raidTicks = s.tick - s.raidStart;
@@ -283,7 +283,7 @@ export function updateRoom(s: RunState, input: TickInput): void {
       return;
     }
     // 잠긴 출구: 지금 체력에서 최대 체력의 20%를 내고 나갈 수 있음 (체력이 모자라면 불가). 서든데스는 불가
-    if (s.sudden || s.arenaLv) return;
+    if (s.sudden || s.arenaLv || roomLocked(s)) return;
     const cost = Math.ceil(p.stats.maxHp * (FLEE_COST + tabooSum(s, "fleeCost")));
     s.prompt = { kind: "flee", lane, cost };
     if (input.interact && p.hp > cost) {

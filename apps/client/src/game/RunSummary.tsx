@@ -15,6 +15,7 @@ const ROOM_KEY: Record<RoomType, TextKey> = {
   rest: "sumRoomRest",
   gym: "sumRoomGym",
   trial: "sumRoomTrial",
+  altar: "sumRoomAltar",
   treasure: "sumRoomTreasure",
   shop: "sumRoomShop",
   exit: "sumRoomExit",

@@ -49,9 +49,14 @@ function nearest(s: RunState, n: number, range: number): EnemyState[] {
 export function evoNova(s: RunState): void {
   const p = s.player;
   if (!p.svEvo) return;
+  runSkill(s, evoSkill(p.weaponId, p.characterId));
+}
+
+/** 각성 기술 하나를 이번 틱에 (때가 되면 씀 · 제단의 방 증강 기술도 같이 씀, sim/altar) */
+export function runSkill(s: RunState, skill: SwarmSkill): void {
+  const p = s.player;
   const dmg = p.stats.damage;
   const t = s.tick;
-  const skill = evoSkill(p.weaponId, p.characterId);
   switch (skill) {
     case "storm":
       if (t % K.storm.every) return;

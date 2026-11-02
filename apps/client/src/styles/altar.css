@@ -1,0 +1,72 @@
+/* 제단의 방 창 (game/altar/AltarPanel): 성좌 색(--al-a 주색 · --al-b 빛)으로 물든 세로로 긴 카드 셋 */
+.station-window.altar {
+  width: min(900px, 96vw);
+  border-color: var(--al-a);
+  background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--al-a) 35%, #050a14), #050a14 75%);
+  box-shadow: 0 0 40px color-mix(in srgb, var(--al-a) 50%, transparent);
+  text-align: center;
+}
+.altar-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.altar-head b {
+  font-size: 1.7rem;
+  color: var(--al-b);
+  text-shadow: 0 0 14px var(--al-a);
+}
+.altar-head small,
+.altar-close {
+  opacity: 0.75;
+}
+.altar-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.altar-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-height: 320px;
+  padding: 18px 12px;
+  border: 2px solid var(--al-a);
+  border-radius: 10px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--al-a) 30%, #0a0f1c), #070a12 70%);
+  box-shadow: inset 0 0 24px color-mix(in srgb, var(--al-a) 30%, transparent);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.altar-card:hover:not(:disabled) {
+  transform: translateY(-6px);
+  box-shadow: 0 0 26px var(--al-a), inset 0 0 24px color-mix(in srgb, var(--al-a) 40%, transparent);
+}
+.altar-card:disabled {
+  opacity: 0.4;
+}
+.altar-card.c2 {
+  border-style: dashed;
+  background: linear-gradient(180deg, #1a1a24, #07080c 70%);
+}
+.altar-card-sigil {
+  font-size: 3rem;
+  color: var(--al-b);
+  text-shadow: 0 0 16px var(--al-a);
+}
+.altar-card b {
+  font-size: 1.4rem;
+  color: var(--al-b);
+}
+.altar-card span {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+@media (max-width: 640px) {
+  .altar-cards {
+    grid-template-columns: 1fr;
+  }
+  .altar-card {
+    min-height: 0;
+  }
+}

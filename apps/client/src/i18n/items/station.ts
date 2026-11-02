@@ -3,7 +3,8 @@ import type { TunePartFx } from "@pixel-rogue/shared";
 import type { Lang } from "../index";
 import type { Names } from "./names";
 
-export const STATION_NAME: Record<"bench" | "tune" | "gym" | "trial" | "boon", Names> = {
+export const STATION_NAME: Record<"bench" | "tune" | "gym" | "trial" | "boon" | "altar", Names> = {
+  altar: { ko: "성좌의 제단", en: "Constellation Altar", ja: "星座の祭壇" },
   trial: { ko: "시련의 비석", en: "Monolith of Trials", ja: "試練の石碑" },
   boon: { ko: "시련의 보상 상자", en: "Trial Reward Chest", ja: "試練の報酬箱" },
   bench: { ko: "거대한 제작대", en: "Grand Workbench", ja: "巨大な作業台" },
@@ -18,7 +19,12 @@ export const GYM_DEVICE: Names[] = [
   { ko: "벤치 프레스", en: "Bench Press", ja: "ベンチプレス" },
 ];
 
-export const STATION_DESC: Record<"bench" | "tune" | "gym" | "trial" | "boon", Names> = {
+export const STATION_DESC: Record<"bench" | "tune" | "gym" | "trial" | "boon" | "altar", Names> = {
+  altar: {
+    ko: "F를 눌러 성좌와 마주함 · 카드 셋 중 하나를 골라야 방을 나갈 수 있음",
+    en: "Press F to face the constellation · you must pick one of three cards to leave",
+    ja: "Fで星座と向き合う · 3枚のカードから1枚選ばないと部屋を出られない",
+  },
   trial: {
     ko: "F를 눌러 시련에 도전할지 고름 · 거절하면 무언가를 빼앗김 · 도전하면 시련을 이겨 낸 만큼 보상이 쏟아짐",
     en: "Press F to choose whether to face the trial · refusing costs you something · the better you do, the more rewards pour out",

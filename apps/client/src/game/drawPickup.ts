@@ -11,7 +11,7 @@ export function drawPickup(ctx: CanvasRenderingContext2D, pk: Pickup, tick: numb
   const x = Math.round(pk.x);
   const y = Math.round(pk.y) + bob;
   ctx.globalAlpha = pk.armed ? 1 : 0.55;
-  if (near && pk.kind !== "bench" && pk.kind !== "tune" && pk.kind !== "gym" && pk.kind !== "trial") {
+  if (near && pk.kind !== "bench" && pk.kind !== "tune" && pk.kind !== "gym" && pk.kind !== "trial" && pk.kind !== "altar") {
     ctx.strokeStyle = "rgba(255,255,255,0.7)";
     ctx.lineWidth = 1;
     ctx.strokeRect(x - 7.5, y - 7.5, 15, 15);

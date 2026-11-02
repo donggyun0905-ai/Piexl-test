@@ -68,6 +68,7 @@ import { drawAmbushOverlay, drawTrackerAura } from "./tracker";
 import { drawForgottenAura, drawForgottenBack } from "./forgotten";
 import { drawRemnantAura, drawRemnantSlowmo } from "./remnant";
 import { drawTrialEdge } from "./trialFx";
+import { drawAugments } from "./altarDraw";
 import { drawWandererAura, drawWandererGround } from "./wanderer";
 import { drawSilkAmmo, drawSilkStacks } from "./silk";
 import { drawSecretAura, drawSecretGround } from "./secret";
@@ -197,6 +198,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
     drawMorphGround(ctx, s, snap);
     drawForgottenBack(ctx, s, alpha, snap);
     drawRemnantAura(ctx, s, snap);
+    drawAugments(ctx, s, snap);
     drawWandererGround(ctx, s, snap);
     drawSecretGround(ctx, s, alpha, snap);
   });

@@ -1,11 +1,13 @@
 // 게임 상태가 바뀐 것을 보고 소리·진동·화면 흔들림을 냄 (게임 계산에는 영향 없음)
-import { ENEMIES, type RunState } from "@pixel-rogue/shared";
+import { altarOf, ENEMIES, type AltarId, type RunState } from "@pixel-rogue/shared";
 import { getSettings } from "../settings";
 import { wornLimited, wornVictory } from "../game/limited/limited";
 import { setVictoryMusic } from "./victorySound";
 import { skillSounds } from "./sfxSkills";
 import { play, setMusicBoss, startMusic, stopMusic, type Sfx } from "./sound";
-import { setTrialMusic } from "./trialSound";
+import { TRIAL_MUSIC } from "./trialSound";
+import { setRoomMusic } from "./roomMusic";
+import { altarMusic } from "./altarSound";
 import { setTigerMusic } from "./tigerSound";
 import { setSummerMusic } from "./summerSound";
 
@@ -42,7 +44,9 @@ interface Seen {
   rmCuts: number;
   /** 시련의 방: 이번 틱에 새로 생긴 효과 종류 · 시련 중 */
   trFx: string;
-  trial: boolean;
+  /** 방 곡: 시련 · 제단 성좌 (없으면 빈칸) */
+  music: string;
+  alFx: number;
   /** 예리함 칼빛 · 천검란 (화면에 있는 효과 수) */
   sharps: number;
   cuts: number;
@@ -102,7 +106,8 @@ function snapshot(s: RunState): Seen {
     rmDodges: s.player.rmDodges ?? 0,
     rmCuts: s.effects.filter((f) => f.kind === "rmFlurry" && f.ticks >= f.maxTicks - 1).length,
     trFx: [...new Set(s.effects.filter((f) => f.kind.startsWith("tr") && f.ticks >= f.maxTicks - 1).map((f) => f.kind))].join(","),
-    trial: !!s.trialRun && s.trialRun.room === s.roomId,
+    music: s.trialRun && s.trialRun.room === s.roomId ? "trial" : s.map.rooms[s.roomId]?.type === "altar" ? altarOf(s) : "",
+    alFx: s.effects.some((f) => f.kind === "alChoose" && f.ticks >= f.maxTicks - 1) ? (s.player.altar?.last?.hit ? 2 : 1) : 0,
     sharps: s.effects.filter((f) => f.kind === "wdSharp").length,
     cuts: s.effects.filter((f) => f.kind === "wdCut" && f.ticks >= f.maxTicks - 1).length,
     storms: s.effects.filter((f) => f.kind === "wdTempest").length,
@@ -259,7 +264,11 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
       if (!now.boss && seen.boss) setMusicBoss(false);
       // 시련의 방: 비석이 깨어남·벌칙·상자 쏟아짐·열림 소리 · 시련 중 웅장한 곡
       for (const [k, sfx] of [["trWake", "trialWake"], ["trCurse", "trialCurse"], ["trChest", "trialSpill"], ["trOpen", "trialOpen"]] as const) if (now.trFx.includes(k)) fx.push(sfx);
-      if (now.trial !== seen.trial) setTrialMusic(now.trial);
+      if (now.music !== seen.music) {
+        setRoomMusic(now.music === "trial" ? TRIAL_MUSIC : now.music ? altarMusic(now.music as AltarId) : null);
+        if (now.music && now.music !== "trial") fx.push("altarAppear");
+      }
+      if (now.alFx) fx.push(now.alFx === 2 ? "altarWrath" : "altarChoose");
       if (now.over && !seen.over) {
         fx.push(run.won ? "clear" : "fall");
         stopMusic();
@@ -269,7 +278,7 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
     },
     dispose(): void {
       stopMusic();
-      setTrialMusic(false);
+      setRoomMusic(null);
       setTigerMusic(false);
     },
   };

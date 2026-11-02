@@ -34,6 +34,8 @@ export { TRIAL_OP, TRIAL_RULES, trialUsed, trialBusy } from "./trial";
 export { endlessHp, TRIAL_RUN_RULES } from "./trialRun";
 export { BOON_STATS, chestOptions, STONE_Y, trialRewardRow, type BoonStat } from "./trialRewards";
 export type { TrialKind } from "./trialTypes";
+export { ALTAR_OP, ALTAR_Y, altarOf, altarPending, altarUsed } from "./altar";
+export { runSkill } from "./swarmEvo";
 export * from "./customRooms";
 export { characterWeapons } from "./loot";
 export { ROOM_SHAPES, shapeGrid, tileAt, TILE_FLOOR, TILE_PILLAR, TILE_PIT, TILE_WALL, type RoomShape, type TileGrid } from "./layout";

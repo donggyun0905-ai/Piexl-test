@@ -1,5 +1,5 @@
 // 작업대 창에 보여 줄 값 (gameLoop가 만들어 LoadoutView.station으로 넘김): 아티팩터 제작대 · 추적자 튜닝소 · 단련의 방 · 시련의 비석·보상 상자
-import { chestOptions, trialUsed, GYM_OFF, GYM_STATS, gymBlocked, gymPassives, gymUsed, BENCH_OP, benchCan, benchCost, benchLv, benchStats, isHidden, isOwn, TUNE, TUNE_SLOTS, tuneChance, tuneCost, type PassiveId, type RunState, type StationKind, type StationResult } from "@pixel-rogue/shared";
+import { altarOf, chestOptions, trialUsed, type AltarId, GYM_OFF, GYM_STATS, gymBlocked, gymPassives, gymUsed, BENCH_OP, benchCan, benchCost, benchLv, benchStats, isHidden, isOwn, TUNE, TUNE_SLOTS, tuneChance, tuneCost, type PassiveId, type RunState, type StationKind, type StationResult } from "@pixel-rogue/shared";
 
 export interface BenchItem {
   id: PassiveId;
@@ -35,6 +35,8 @@ export interface StationView {
   /** 시련의 비석 (이미 썼는지) · 보상 상자 (상자 내용 · 고를 것) */
   trial?: { used: boolean };
   chest?: { code: string; options: string[] };
+  /** 제단의 방: 이 방 성좌 · 바칠 패시브가 있는지 */
+  altar?: { id: AltarId; passives: number };
 }
 
 export function stationView(run: RunState): StationView | undefined {
@@ -42,6 +44,7 @@ export function stationView(run: RunState): StationView | undefined {
   if (pr.kind !== "station" || !pr.open) return undefined;
   const p = run.player;
   const base = { kind: pr.station, gold: run.gold, ...(p.stLast ? { last: p.stLast } : {}) };
+  if (pr.station === "altar") return { ...base, altar: { id: altarOf(run), passives: p.passives.length } };
   if (pr.station === "trial") return { ...base, trial: { used: trialUsed(run) } };
   if (pr.station === "boon") {
     const pk = run.rooms[run.roomId]?.pickups.find((x) => x.id === p.trial?.open);

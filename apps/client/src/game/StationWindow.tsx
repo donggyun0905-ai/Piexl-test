@@ -8,6 +8,7 @@ import { StationResultFx } from "./StationResultFx";
 import type { StationView } from "./stationView";
 import { TunePanel } from "./TunePanel";
 import { TrialPanel } from "./trial/TrialPanel";
+import { AltarPanel } from "./altar/AltarPanel";
 
 interface Props {
   view: StationView;
@@ -21,6 +22,8 @@ export function StationWindow({ view, lang, t, controls }: Props) {
   const bench = view.kind === "bench";
   // 시련의 방: 비석 YES/NO · 보상 상자 고르기 (game/trial)
   if (view.trial || view.chest) return <TrialPanel view={view} lang={lang} t={t} send={send} />;
+  // 제단의 방: 성좌의 카드 셋 (game/altar)
+  if (view.altar) return <AltarPanel altar={view.altar} t={t} send={send} />;
   // 단련의 방: 미니게임·강화 (game/gym)
   if (view.gym) {
     return (

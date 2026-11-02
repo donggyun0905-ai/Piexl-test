@@ -3,6 +3,7 @@ import { EXIT_X, ROOM_COLS, ROOM_HEIGHT, ROOM_ROWS, ROOM_WIDTH, TILE_SIZE, type 
 import { drawGlyph, roomLook } from "./minimap";
 import { drawHeavenRoom } from "./render/heavenDraw";
 import { drawTrialRoom } from "./render/trialDraw";
+import { drawAltarRoom } from "./render/altarDraw";
 
 const C = {
   doorOpen: "#1c1926",
@@ -93,6 +94,8 @@ export function drawRoomFeatures(ctx: CanvasRenderingContext2D, s: RunState): vo
     drawHeavenRoom(ctx, s, cx, cy, room.type === "golden");
   } else if (room.type === "trial") {
     drawTrialRoom(ctx, s, cx, cy);
+  } else if (room.type === "altar") {
+    drawAltarRoom(ctx, s, cx, cy);
   } else if (room.type === "shop") {
     ctx.fillStyle = C.shopEdge;
     ctx.fillRect(cx - 56, cy - 22, 112, 30);

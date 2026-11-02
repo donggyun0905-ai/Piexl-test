@@ -25,7 +25,7 @@ export function floorTipAt(run: RunState, canvas: HTMLCanvasElement, zoom: numbe
   const reward = pk.kind === "passive" && pk.group > 0 && pk.price === 0;
   const pos = pickupScreenPos(run, canvas, zoom, pk);
   return {
-    icon: pk.kind === "coin" || pk.kind === "reroll" || pk.kind === "trash" || pk.kind === "bench" || pk.kind === "tune" || pk.kind === "gym" || pk.kind === "trial" || pk.kind === "boon" ? null : ({ kind: pk.kind, id: pk.itemId } as IconItem),
+    icon: pk.kind === "coin" || pk.kind === "reroll" || pk.kind === "trash" || pk.kind === "bench" || pk.kind === "tune" || pk.kind === "gym" || pk.kind === "trial" || pk.kind === "boon" || pk.kind === "altar" ? null : ({ kind: pk.kind, id: pk.itemId } as IconItem),
     name: `${itemName(pk.kind, pk.itemId, lang)}${price}`,
     desc: itemDesc(pk.kind, pk.itemId, lang, t),
     x: pos.x,

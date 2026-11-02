@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.345",
+    date: "2026-11-02",
+    items: {
+      ko: [
+        "새 방 '제단의 방' (3층부터 층마다 하나, 푸른 바다 같은 방): 성좌 여덟 중 하나가 방을 감쌀 만큼 크게 떠 있고, 방 색·떠도는 것·음악이 성좌마다 다름",
+        "성좌: 바다(흰수염고래) · 화산(용암 거북) · 하늘(천둥 매) · 바람(세실리아) · 빛과 어둠(시온) · 그린우드(실베스타) · 일곱 갈래의 마녀(세티아) · 알 수 없는 성좌(???)",
+        "제단 앞 F → 긴 카드 셋: 거래(성좌마다 주고 받는 능력치) · 증강(무작위 패시브 둘을 바치고 남은 패시브 하나에 광야의 새벽 각성 기술 둘을 새김, 그 패시브를 가진 동안 늘 발동) · 무시(30%로 성좌가 노해 능력치나 패시브 둘을 가져감)",
+        "카드를 고르기 전에는 방을 나갈 수 없음 (잠긴 출구도 못 지남) · 연습장 '방' 탭에서 제단의 방 시험 가능",
+      ],
+      en: [
+        "New room 'Altar Room' (one per floor from floor 3, sea-blue): one of eight constellations looms large enough to wrap the room, with its own colors, drifting motes and music",
+        "Constellations: Sea (Blue Whale) · Volcano (Lava Tortoise) · Sky (Thunder Hawk) · Wind (Cecilia) · Light and Dark (Sion) · Greenwood (Sylvester) · Witch of the Seven Paths (Setia) · Unknown (???)",
+        "Press F at the altar → three tall cards: Bargain (a stat trade per constellation) · Augment (offer 2 random passives; the remaining one gains 2 Dawn of the Wilds awakened skills that fire while you hold it) · Ignore (30% chance the constellation takes stats or 2 passives)",
+        "You can't leave until you choose (locked exits too) · try it from the practice 'Rooms' tab",
+      ],
+      ja: [
+        "新しい部屋「祭壇の部屋」（3階から各階に一つ、海のような青い部屋）：8つの星座のどれかが部屋を包むほど大きく浮かび、部屋の色・漂うもの・音楽が星座ごとに違う",
+        "星座：海（シロナガスクジラ）· 火山（溶岩亀）· 空（雷鷹）· 風（セシリア）· 光と闇（シオン）· グリーンウッド（シルベスタ）· 七筋の魔女（セティア）· 知られざる星座（???）",
+        "祭壇の前でF → 縦長のカード3枚：取引（星座ごとの能力値の交換）· 増強（ランダムなパッシブ2つを捧げ、残ったパッシブ1つに荒野の夜明けの覚醒技2つを刻む。そのパッシブを持つ間ずっと発動）· 無視（30%で星座が怒り能力値かパッシブ2つを奪う）",
+        "カードを選ぶまで部屋を出られない（鍵のかかった出口も通れない）· 練習場「部屋」タブで試せる",
+      ],
+    },
+  },
+  {
     version: "0.48.344",
     date: "2026-11-02",
     items: {

@@ -10,6 +10,7 @@ import { hiddenPick } from "./hiddenDice";
 import { GYM_OP, gymMenu, gymMods } from "./gym";
 import { boonMods } from "./boons";
 import { TRIAL_OP, trialAt, trialMenu } from "./trial";
+import { ALTAR_OP, altarMenu, altarPending } from "./altar";
 import type { StationKind } from "./stationTypes";
 import type { Pickup, RunState } from "./types";
 
@@ -35,12 +36,15 @@ export function spawnStation(s: RunState, roomId: number): boolean {
   return true;
 }
 
-export const isStation = (pk: Pickup) => pk.kind === "bench" || pk.kind === "tune" || pk.kind === "gym" || pk.kind === "trial" || pk.kind === "boon";
+export const isStation = (pk: Pickup) => pk.kind === "bench" || pk.kind === "tune" || pk.kind === "gym" || pk.kind === "trial" || pk.kind === "boon" || pk.kind === "altar";
+/** 큰 물건(비석·제단)은 조금 멀리서도 닿음 (items.updateItems) */
+export const bigReach = (pk: Pickup) => (pk.kind === "trial" || pk.kind === "altar" ? 24 : 0);
 
 /** 작업대 앞: F = 창 열기·닫기 (itemId "1" = 열림) */
 export function stationAt(s: RunState, pk: Pickup, interact: boolean): void {
   if (s.prompt.kind !== "none" || !isStation(pk)) return;
   if (pk.kind === "trial" || pk.kind === "boon") return trialAt(s, pk, interact);
+  if (pk.kind === "altar" && !altarPending(s)) return;
   if (interact) pk.itemId = pk.itemId === "1" ? "0" : "1";
   s.prompt = { kind: "station", station: pk.kind as StationKind, open: pk.itemId === "1", ...(pk.kind === "gym" ? { device: pk.group } : {}) };
 }
@@ -56,6 +60,8 @@ export function stationMenu(s: RunState, code: number): void {
   if (op === GYM_OP.result || op === GYM_OP.up) return gymMenu(s, op, a, b);
   // 시련의 방 (sim/trial): 비석 대답 · 보상 상자 고르기
   if (op === TRIAL_OP.answer || op === TRIAL_OP.chest) return trialMenu(s, op, a);
+  // 제단의 방 (sim/altar): 카드 고르기
+  if (op === ALTAR_OP) return altarMenu(s, a);
   const kind = stationFor(s);
   const here = s.rooms[s.roomId]?.pickups.some((pk) => pk.kind === kind && (pk.owner === undefined || pk.owner === (s.seat ?? 0)));
   if (!kind || !here) return;

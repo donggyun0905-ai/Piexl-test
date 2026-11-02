@@ -1,10 +1,14 @@
 // 층 테마: 그 층 보스에 어울리는 바닥·벽 색과 바닥 꾸밈 (그리기 전용, 게임 계산과 상관없음)
 // 보통 판은 bossForFloor, 영웅의 길은 heroBosses, 라스트 보스 층은 그 보스, 레이드 아레나는 지금 방의 보스
-import { bossForFloor, ENEMIES, heroBosses, type PwArenaId, type RunState } from "@pixel-rogue/shared";
+import { altarOf, bossForFloor, ENEMIES, heroBosses, type AltarId, type PwArenaId, type RunState } from "@pixel-rogue/shared";
+import { ALTAR_LOOK } from "./altarLook";
 import { C } from "./palette";
 
 /** 바닥 꾸밈: grass 풀 · leaf 잎 · rivet 쇠못 · ember 불씨 · crack 금 · bubble 물방울 · egg 알 · star 별 · bone 뼈 · petal 꽃잎 · feather 깃털 · sand 모래 · flower 꽃 */
 export type Deco = "grass" | "leaf" | "rivet" | "ember" | "crack" | "bubble" | "egg" | "star" | "bone" | "petal" | "feather" | "sand" | "flower";
+
+/** 두 #rrggbb 색의 가운데 */
+const mixHex = (a: string, b: string) => `#${[1, 3, 5].map((i) => Math.round((parseInt(a.slice(i, i + 2), 16) + parseInt(b.slice(i, i + 2), 16)) / 2).toString(16).padStart(2, "0")).join("")}`;
 
 export interface FloorTheme {
   floorA: string;
@@ -39,6 +43,10 @@ const BASE: FloorTheme = { ...C, deco: [], density: 0 };
 /** 천상의 방 (여신의 선물·천상의 상점): 하얀 대리석 바닥 · 연보라 벽 · 금빛 별·하얀 깃털 */
 /** 시련의 방: 새빨간 바닥 · 핏빛 벽 · 붉은 금·불씨 */
 const TRIAL = T("#3a0e14", "#320c12", "#5a141c", "#ff3a3a", "#4a1018", "#7a2028", "#140408", "#ff2a3a", [["crack", "#ff2a3a"], ["ember", "#ff7a3a"]], 0.14);
+/** 제단의 방: 푸른 바다 같은 바닥에 성좌 색이 번짐 (바닥 두 색은 바다 + 성좌 어두운 색, 벽은 성좌 주색) */
+const ALTAR_THEME = Object.fromEntries(
+  Object.entries(ALTAR_LOOK).map(([id, L]) => [id, T(mixHex("#0e3a5a", L.deep), mixHex("#0a2e4a", L.deep), L.deep, L.main, mixHex("#1a4a6a", L.deep), L.glow, "#04121e", L.main, [["bubble", L.glow], ["star", L.main]], 0.12)]),
+) as Record<AltarId, FloorTheme>;
 const HEAVEN = T("#f1eff8", "#e7e3f2", "#b4aed0", "#fff2c8", "#e4e0f0", "#fffaf0", "#c8c2dc", "#f0d890", [["feather", "#ffffff"], ["star", "#e8c25a"]], 0.16);
 
 /** 보스 → 테마 */
@@ -109,6 +117,7 @@ export function themeFor(s: RunState): FloorTheme {
   const room = s.map?.rooms[s.roomId];
   if (room && (room.heaven || room.type === "golden")) return HEAVEN;
   if (room?.type === "trial") return TRIAL;
+  if (room?.type === "altar") return ALTAR_THEME[altarOf(s)];
   if (s.swarm) return THEMES[SWARM_THEME[(s.swarm.map ?? "plains") as keyof typeof SWARM_THEME] ?? SWARM_THEME.plains]!;
   const pa = s.pvp?.arena ?? s.pw?.arena;
   if (pa) return THEMES[PW_THEME[pa]]!;

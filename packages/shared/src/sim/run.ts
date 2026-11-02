@@ -37,6 +37,7 @@ import { kingFall } from "./kingForm";
 import { allyFeed } from "./allies";
 import { withGymFx } from "./gymPerks";
 import { trialCurseTick } from "./trial";
+import { altarTick } from "./altar";
 import { trialTick } from "./trialRun";
 import { trialRevive } from "./trialRewards";
 
@@ -191,7 +192,7 @@ export function stepWorld(s: RunState): void {
   updateDelayed(s);
   updateEffects(s);
   // 시련의 방: 진행 · 거절 벌칙 (쓰러짐 판정 전)
-  eachSeat(s, () => trialCurseTick(s));
+  eachSeat(s, () => (trialCurseTick(s), altarTick(s)));
   trialTick(s);
 }
 

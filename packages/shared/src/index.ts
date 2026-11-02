@@ -37,3 +37,4 @@ export * from "./petDefs";
 export * from "./voyagerFates";
 export * from "./customMaps";
 export * from "./customMapUse";
+export * from "./altarDefs";

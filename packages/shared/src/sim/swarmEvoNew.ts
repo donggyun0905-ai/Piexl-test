@@ -46,9 +46,10 @@ function aim(s: RunState): number {
 
 /** 블랙홀: 남은 틱 동안 둘레 적을 빨아들이고 끝나면 터짐 */
 function vortexTick(s: RunState, dmg: number): void {
-  const sw = s.swarm;
-  const v = sw?.vortex;
-  if (!sw || !v) return;
+  // 광야의 새벽은 판에, 던전(제단의 방 증강)은 플레이어에 블랙홀 하나
+  const sw: { vortex?: { x: number; y: number; t: number } } = s.swarm ?? (s.player.augVortex ??= {});
+  const v = sw.vortex;
+  if (!v) return;
   const K = EVO2.vortex;
   for (const e of alive(s)) {
     if (boss(e) || dist2(e, v) > K.r * K.r) continue;
@@ -136,9 +137,9 @@ export function evoSkill2(s: RunState, skill: SwarmSkill2): void {
     }
     case "vortex": {
       // 블랙홀: 적이 가장 많은 곳 근처(가까운 적 자리)에 열림
-      const sw = s.swarm;
+      const sw: { vortex?: { x: number; y: number; t: number } } = s.swarm ?? (p.augVortex ??= {});
       const e = nearestTo(s, p.x, p.y);
-      if (!sw || !e || sw.vortex) return;
+      if (!e || sw.vortex) return;
       sw.vortex = { x: e.x, y: e.y, t: EVO2.vortex.ticks };
       addEffect(s, { kind: "dark", x: e.x, y: e.y, dirX: 0, dirY: 0, size: EVO2.vortex.r, maxTicks: EVO2.vortex.ticks });
       return;

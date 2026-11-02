@@ -1,6 +1,6 @@
 // 시련의 방 소리: 비석이 깨어나는 웅장한 소리(깊은 북·낮은 합창 화음·땅울림) · 거절 벌칙(사슬·낮은 신음) · 보상 상자가 쏟아짐·열림
 // 시련 중에는 기본 곡 대신 웅장한 시련 곡 (끝나면 원래 곡으로, 한정 스킨 곡이었으면 그 곡으로)
-import { musicBeat, musicOut, noise, setMusicBeat, tone } from "./sound";
+import { musicOut, noise, tone } from "./sound";
 
 /** 효과음 (sound의 효과음 표에 합쳐짐) */
 export const TRIAL_SOUNDS = {
@@ -51,15 +51,5 @@ function trialBeat(step: number): void {
 }
 const TRIAL = { beat: trialBeat, ms: 140 };
 
-let saved: ReturnType<typeof musicBeat> | undefined;
-
-/** 시련 중이면 시련 곡 (끝나면 원래 곡으로) */
-export function setTrialMusic(on: boolean): void {
-  if (on && saved === undefined) {
-    saved = musicBeat();
-    setMusicBeat(TRIAL);
-  } else if (!on && saved !== undefined) {
-    setMusicBeat(saved);
-    saved = undefined;
-  }
-}
+/** 시련 곡 (audio/roomMusic이 켜고 끔) */
+export const TRIAL_MUSIC = TRIAL;

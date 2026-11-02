@@ -96,6 +96,9 @@ export function drawTrialFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
 export function drawTrialEdge(ctx: Ctx, s: RunState, scale: number, text?: (key: string) => string): void {
   const run = s.trialRun;
   const last = s.player.trial?.last;
+  // 제단의 방: 카드를 고른 결과 (3초)
+  const al = s.player.altar?.last;
+  if (text && al && s.tick - al.tick < 180) banner(ctx, scale, text(al.hit ? "altarResultHit" : `altarResult_${al.card}`), al.hit ? text(`altarHit_${al.id}`) : "", al.hit ? "#ff8a8a" : "#bfe8ff");
   if (text && last && !run && s.tick - last.tick < 180) {
     const line = last.penalty ? text(`trialPen_${last.penalty}`) : last.score !== undefined ? text("trialResult").replace("{n}", String(last.score)) : "";
     if (line) banner(ctx, scale, line, "", last.penalty ? "#ff8a8a" : GOLD);

@@ -14,7 +14,7 @@ import { tabooN, tabooUp } from "./taboo";
 import { xpOnly } from "./morphXp";
 import { spawnStation } from "./station";
 
-export { isStation, stationAt, stationMenu, stationMods } from "./station";
+export { bigReach, isStation, stationAt, stationMenu, stationMods } from "./station";
 export { hiddenUse } from "./hiddenUse";
 
 const PRICE = SHOP_PRICES.price;

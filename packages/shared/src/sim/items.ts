@@ -21,7 +21,7 @@ import { downedNear, seatNo } from "./party";
 import { tabooDown, tabooMods } from "./taboo";
 import { addEffect, hasPerk } from "./util";
 import { charmed } from "./bossesTwo";
-import { clearShelf, EMPTY_HANDS, hiddenUse, isStation, rerollShop, sellItem, stationAt, stationMenu, stationMods, trashAt } from "./shop";
+import { bigReach, clearShelf, EMPTY_HANDS, hiddenUse, isStation, rerollShop, sellItem, stationAt, stationMenu, stationMods, trashAt } from "./shop";
 import { resetCombo } from "./brawl";
 import { resetGun } from "./gun";
 import { resetAbandoned } from "./abandoned";
@@ -138,7 +138,7 @@ export function updateItems(s: RunState, input: TickInput): void {
       }
       continue;
     }
-    if (!touching(s, pk, pk.kind === "trial" ? R.TOUCH + 24 : R.TOUCH)) {
+    if (!touching(s, pk, R.TOUCH + bigReach(pk))) {
       // 한 번 떨어지면 다시 주울 수 있음 (무기·사용 아이템을 번갈아 써 보게)
       pk.armed = true;
       if (pk.kind === "trash" || (isStation(pk) && pk.kind !== "boon")) pk.itemId = "0";

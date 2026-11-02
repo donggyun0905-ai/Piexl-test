@@ -8,6 +8,8 @@ import type { PlayerState, RunState } from "./types";
 export interface BoonPlayerState {
   /** 받은 능력치 변화 · 추가 기본 스탯 (더하기) */
   boons?: { mods: StatMod[]; extra: Partial<ExtraStats> };
+  /** 모든 상태이상 면역 (제단의 방 일곱 갈래의 마녀) */
+  boonImmune?: boolean;
 }
 
 const ensure = (p: PlayerState) => (p.boons ??= { mods: [], extra: {} });

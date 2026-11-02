@@ -17,7 +17,7 @@ const styleOf = (p: PlayerState): PhantomStyle => weaponOf(p).phantom ?? { reach
 const isRemnant = (p: PlayerState) => p.characterId === "remnant";
 
 /** 상태이상 면역 (앞으로 나올 상태이상도 이것으로 막음) */
-export const statusImmune = (p: PlayerState) => isRemnant(p);
+export const statusImmune = (p: PlayerState) => isRemnant(p) || !!p.boonImmune;
 
 /** 몸에 걸린 상태이상을 바로 걷어냄: 어둠 · 거울(이동 반대) · 깜깜함 */
 function cleanse(p: PlayerState): void {

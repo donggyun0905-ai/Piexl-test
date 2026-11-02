@@ -143,7 +143,7 @@ function drawEvoAura(ctx: Ctx, s: RunState, snap: Snap): void {
 }
 
 /** 각성 기술 '회전 칼날': 몸 둘레를 도는 칼날 셋 (sim/swarmEvo.bladeSpots와 같은 자리) */
-function drawBlades(ctx: Ctx, tick: number, p: PlayerState, snap: Snap): void {
+export function drawBlades(ctx: Ctx, tick: number, p: PlayerState, snap: Snap): void {
   for (const b of bladeSpots(tick, p.x, p.y)) {
     const a = tick * 0.4;
     const dx = Math.cos(a) * 4;

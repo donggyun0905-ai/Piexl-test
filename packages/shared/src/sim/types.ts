@@ -4,8 +4,8 @@ import type { ArenaRunState, BossEnemyState, BossPlayerState, BossShotState, Rai
 import type { BossKind, CharacterId, CharmKind, EnemyKind, WeaponId } from "../content";
 import type { FoeStatusPlayerState } from "./foeStatus";
 import type { GymPlayerState } from "./gym";
-import type { BoonPlayerState } from "./boons";
-import type { TrialPlayerState, TrialRunState } from "./trialTypes";
+import type { TrialRunState } from "./trialTypes";
+import type { RoomPlayerState } from "./roomTypes";
 import type { PassiveId, UseItemId } from "../items";
 import type { StatMod, Stats } from "../stats";
 import type { FloorMap } from "./floor";
@@ -41,7 +41,7 @@ export interface Body {
   prevY: number;
   r: number;
 }
-export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, BrawlPlayerState, MedicPlayerState, GunPlayerState, BeastPlayerState, BossPlayerState, NinjaPlayerState, ChronoPlayerState, SummonPlayerState, NovicePlayerState, BedouinPlayerState, GeneralPlayerState, ImugiPlayerState, ApostlePlayerState, StarPlayerState, DuckPlayerState, SwarmPlayerState, AbandonedPlayerState, TitanPlayerState, OniPlayerState, ScribePlayerState, IdraPlayerState, MorphPlayerState, FlyPlayerState, ElderPlayerState, RenPlayerState, SpiritPlayerState, H2PlayerState, TcPlayerState, AscalonPlayerState, PwPlayerState, LuxPlayerState, FoeStatusPlayerState, GymPlayerState, BoonPlayerState, TrialPlayerState {
+export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, BrawlPlayerState, MedicPlayerState, GunPlayerState, BeastPlayerState, BossPlayerState, NinjaPlayerState, ChronoPlayerState, SummonPlayerState, NovicePlayerState, BedouinPlayerState, GeneralPlayerState, ImugiPlayerState, ApostlePlayerState, StarPlayerState, DuckPlayerState, SwarmPlayerState, AbandonedPlayerState, TitanPlayerState, OniPlayerState, ScribePlayerState, IdraPlayerState, MorphPlayerState, FlyPlayerState, ElderPlayerState, RenPlayerState, SpiritPlayerState, H2PlayerState, TcPlayerState, AscalonPlayerState, PwPlayerState, LuxPlayerState, FoeStatusPlayerState, GymPlayerState, RoomPlayerState {
   characterId: CharacterId;
   weaponId: WeaponId;
   /** 가진 패시브 (같은 것 여러 개 가능) */
