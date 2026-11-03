@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.363",
+    date: "2026-11-03",
+    items: {
+      ko: ["수집가 검격 이펙트가 겹쳐 보이던 것 고침: 칼날을 한 줄로만 그림(잔상·바깥 빛 겹침 없앰) · 다음 공격이 나가면 앞 칼날은 바로 사라짐", "스켈레톤 궁병: 선이 굳은 뒤 레이저처럼 선 전체에 피해를 주던 것을 진짜 화살 한 발이 매우 빠르게 날아가는 것으로 바꿈 (선에서 비키면 안 맞음)"],
+      en: ["Fixed the Collector's blade arcs looking stacked: each arc is now a single blade (no offset shadow or outer glow layer) · the previous arc vanishes as soon as the next attack starts", "Skeleton Archer: instead of a laser-like hit along the whole locked line, it now fires a single very fast arrow along that line (step off the line to dodge)"],
+      ja: ["コレクターの斬撃エフェクトが重なって見えていたのを修正：刃を一本だけで描画（残像・外側の光の重なりを削除）· 次の攻撃が出ると前の刃はすぐ消える", "スケルトン弓兵：線が固まった後、レーザーのように線全体にダメージを与えていたのを、本物の矢が一本とても速く飛ぶように変更（線から外れれば当たらない）"],
+    },
+  },
+  {
     version: "0.48.362",
     date: "2026-11-03",
     items: {

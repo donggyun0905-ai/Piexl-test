@@ -1,7 +1,7 @@
 // 시즌 3 새 몬스터 (enemies → stalkers.updateStalker에서 부름)
 // 폭발풍뎅이: 들어오자마자 빠르게 달려와 몸에 달라붙음(닿아도 피해 없음) → 1.5초 뒤 폭발. 대시하면 떨어져 나가 그 자리에서 터짐
 //   (못 피하면 큰 피해 + 화상, foeStatus) · 터지기 전에 잡으면 안 터짐
-// 스켈레톤 궁병: 멀리서 얇은 일직선으로 나를 겨눔(따라옴) → 선이 굳어 깜빡임 → 매우 빠른 화살이 그 선을 따라 (큰 피해)
+// 스켈레톤 궁병: 멀리서 얇은 일직선으로 나를 겨눔(따라옴) → 선이 굳어 깜빡임 → 진짜 화살 한 발이 그 선을 따라 매우 빠르게 날아감 (큰 피해)
 // 쇠사슬 간수(3층부터): 사슬이 날아갈 길이 미리 보임 → 사슬에 맞으면 피해 + 간수 쪽으로 끌려감 (대시로 피함)
 // 하이오크(3층부터): 다가와 큰 도끼를 반원으로 휘두름 · 체력이 적을수록 빨라지고 세짐
 import { ENEMIES } from "../content";
@@ -9,7 +9,7 @@ import { depth } from "./hero";
 import { addShape, inHazard } from "./hazards";
 import { damagePlayer } from "./combat";
 import type { EnemyState, RunState } from "./types";
-import { addEffect, dist2 } from "./util";
+import { addEffect, dist2, enemyShot } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -17,7 +17,7 @@ const R = {
   BUG_FUSE: 90,
   BUG_BLAST_R: 26,
   BUG_DMG: 24,
-  /** 스켈레톤 궁병: 거리 두기 · 쉬는 틱 · 겨누는 틱(선이 나를 따라옴) · 깜빡이는 틱(선이 굳음) · 선 길이 · 선 굵기(반) · 피해(+층 세기 × 3) */
+  /** 스켈레톤 궁병: 거리 두기 · 쉬는 틱 · 겨누는 틱(선이 나를 따라옴) · 깜빡이는 틱(선이 굳음) · 선 길이 · 선 굵기(반) · 피해(+층 세기 × 3) · 화살 빠르기(틱마다) */
   ARCH_KEEP: 110,
   ARCH_REST: 150,
   ARCH_AIM: 60,
@@ -25,6 +25,7 @@ const R = {
   ARCH_LEN: 320,
   ARCH_WIDTH: 3,
   ARCH_DMG: 22,
+  ARCH_SPEED: 9,
   /** 쇠사슬 간수: 거리 두기 · 쉬는 틱 · 사슬 길 예고 틱 · 사슬 길이 · 굵기(반) · 피해(+층 세기 × 2) · 끌려가는 틱 */
   JAIL_KEEP: 85,
   JAIL_REST: 170,
@@ -89,11 +90,14 @@ function skelarcher(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
       if (e.timer > 0) return;
       e.step = 1;
       e.timer = R.ARCH_LOCK;
-      const dmg = R.ARCH_DMG + 3 * depth(s);
-      addShape(s, R.ARCH_LOCK, { x: e.x, y: e.y, toX: e.x + e.dirX * R.ARCH_LEN, toY: e.y + e.dirY * R.ARCH_LEN, width: R.ARCH_WIDTH, radius: 0, damage: dmg, fx: "rgleam", from: "skelarcher", by: "skelarcher", owner: e.id });
+      // 굳은 선은 표시만 (피해는 화살이 줌)
+      addShape(s, R.ARCH_LOCK, { x: e.x, y: e.y, toX: e.x + e.dirX * R.ARCH_LEN, toY: e.y + e.dirY * R.ARCH_LEN, width: R.ARCH_WIDTH, radius: 0, damage: 0, from: "skelarcher", owner: e.id });
       return;
     }
     if (e.timer > 0) return;
+    // 굳은 선을 따라 매우 빠른 화살 한 발
+    const arrow = enemyShot(s, e.x, e.y, e.dirX, e.dirY, R.ARCH_SPEED, R.ARCH_DMG + 3 * depth(s));
+    Object.assign(arrow, { look: "arrow", by: "skelarcher", from: "skelarcher", ticksLeft: Math.ceil(R.ARCH_LEN / R.ARCH_SPEED) });
     e.phase = "walk";
     e.timer = R.ARCH_REST;
     return;

@@ -81,6 +81,8 @@ export function collectorTick(s: RunState, want: boolean, speed: number): void {
   const list = comboList(p);
   const i = (p.clStep ?? 0) % list.length;
   const id = list[i]!;
+  // 앞 공격 칼날이 아직 사라지는 중이면 지움 (공격 한 번에 칼날 하나만 보이게)
+  s.effects = s.effects.filter((f) => f.kind !== "clMove" || f.from !== "arc");
   step(s, id);
   // 날아 나간 무기는 잠깐 등 뒤에서 빠짐 (그리기)
   p.clOut = id;

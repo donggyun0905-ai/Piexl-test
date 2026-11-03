@@ -43,15 +43,18 @@ describe("시즌 3 새 몬스터", () => {
     expect(run.player.hp).toBe(hp0);
   });
 
-  it("스켈레톤 궁병: 겨눈 선 위에 있으면 큰 피해, 깜빡일 때 비키면 안 맞음", () => {
+  it("스켈레톤 궁병: 선이 굳은 뒤 빠른 화살 한 발(레이저 아님) · 맞으면 큰 피해, 깜빡일 때 비키면 안 맞음", () => {
     const hit = withOne("skelarcher", 0, -100);
     const hp0 = hit.player.hp;
-    for (let i = 0; i < R.ARCH_AIM + R.ARCH_LOCK + 5; i++) stepSim(hit, EMPTY_INPUT);
+    for (let i = 0; i < R.ARCH_AIM + R.ARCH_LOCK + 1; i++) stepSim(hit, EMPTY_INPUT);
+    expect(hit.player.hp).toBe(hp0);
+    expect(hit.projectiles.some((pr) => !pr.fromPlayer && pr.look === "arrow")).toBe(true);
+    for (let i = 0; i < 20; i++) stepSim(hit, EMPTY_INPUT);
     expect(hit.player.hp).toBeLessThan(hp0 - R.ARCH_DMG / 2);
 
     const miss = withOne("skelarcher", 0, -100);
     for (let i = 0; i < R.ARCH_AIM + 2; i++) stepSim(miss, EMPTY_INPUT);
-    for (let i = 0; i < R.ARCH_LOCK + 5; i++) stepSim(miss, { ...EMPTY_INPUT, moveX: 100 });
+    for (let i = 0; i < R.ARCH_LOCK + 25; i++) stepSim(miss, { ...EMPTY_INPUT, moveX: 100 });
     expect(miss.player.hp).toBe(hp0);
   });
 
