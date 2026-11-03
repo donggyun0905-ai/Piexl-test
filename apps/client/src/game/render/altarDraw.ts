@@ -147,6 +147,6 @@ export function drawAltarFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
 /** 제단 증강 '회전 칼날'을 가진 동안 몸 둘레 칼날 (광야의 새벽과 같은 그림) */
 export function drawAugments(ctx: Ctx, s: RunState, snap: Snap): void {
   const p = s.player;
-  if (s.swarm || !p.augments?.some((a) => a.skills.includes("blades") && p.passives.includes(a.passive))) return;
+  if (s.swarm || s.trialRun?.room === s.roomId || !p.augments?.some((a) => a.skills.includes("blades") && p.passives.includes(a.passive))) return;
   drawBlades(ctx, s.tick, p, snap);
 }

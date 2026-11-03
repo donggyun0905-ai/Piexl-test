@@ -16,6 +16,9 @@ import type { TrialKind } from "./trialTypes";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, keepInRoom, makeEnemy, roomGrid } from "./util";
 
+/** 시즌 3 새 몬스터 (시련 무리에 두 배로 섞임) */
+const NEW_FOES: string[] = ["bombbug", "skelarcher", "chainward", "highorc"];
+
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
   /** 무리: 물결 수 · 한 물결 적 수(층 세기마다 더함) · 체력 배율 */
@@ -77,7 +80,9 @@ function spot(s: RunState, rng: ReturnType<typeof createRng>, r: number): [numbe
 function spawnMinions(s: RunState, n: number, hpMul: number, salt: number): EnemyState[] {
   const d = depth(s);
   const rng = createRng(deriveSeed(s.seed, "trialSpawn", s.floor, s.roomId, salt));
-  const kinds = [...minionKinds(d), ...stalkerKinds(d)].filter((k) => k !== "gnat" && k !== "bat" && k !== "golem");
+  // 시즌 3 새 몬스터는 두 배로 자주
+  const news = stalkerKinds(d).filter((k) => NEW_FOES.includes(k));
+  const kinds = [...minionKinds(d), ...stalkerKinds(d), ...news].filter((k) => k !== "gnat" && k !== "bat" && k !== "golem");
   const out: EnemyState[] = [];
   for (let i = 0; i < n; i++) {
     const kind = rng.pick(kinds);

@@ -39,5 +39,7 @@ export interface TrialRunState {
     got?: number;
     /** 시작한 틱 (화면 연출) */
     at: number;
+    /** 처치로 쌓인 이동 속도 느려짐 (trialFoes.trialMoveMul) */
+    slow?: number;
   };
 }

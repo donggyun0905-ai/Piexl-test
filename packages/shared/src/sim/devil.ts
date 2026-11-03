@@ -6,7 +6,7 @@ import { createRng, deriveSeed } from "../rng";
 import { addBoonMod } from "./boons";
 import { recalcStats } from "./items";
 import { addPickup, CX, pickDistinct, seatSalt } from "./loot";
-import type { Pickup, RunState } from "./types";
+import type { Pickup, PlayerState, RunState } from "./types";
 import { addEffect, ROOM_MIN_Y } from "./util";
 
 /** 사탄의 석상 자리 (방 위쪽 가운데) · 거래 물건 줄 */
@@ -14,8 +14,8 @@ export const statueY = () => ROOM_MIN_Y + 46;
 export const offerY = () => statueY() + 68;
 const OFFER_GAP = 46;
 
-/** 거래 조건: 바치는 최대 체력 */
-export const devilCost = (id: DevilId) => DEVIL_PERKS[id].cost;
+/** 거래 조건: 바치는 최대 체력 (이미 한 악마 거래 하나마다 DEVIL_ROOM.more 더) */
+export const devilCost = (id: DevilId, p?: PlayerState) => DEVIL_PERKS[id].cost + (p ? p.passives.filter((x) => x in DEVIL_PERKS).length * DEVIL_ROOM.more : 0);
 
 /** 협동이면 한 사람이라도 거래했는지 (7층 지도는 모두 같이 씀) */
 export function devilPact(s: RunState): boolean {
@@ -38,7 +38,7 @@ export function devilAt(s: RunState, pk: Pickup, interact: boolean): void {
   if (!interact) return;
   const p = s.player;
   const id = pk.itemId as DevilId;
-  const cost = devilCost(id);
+  const cost = devilCost(id, p);
   const d = (p.devil ??= {});
   // 최대 체력이 모자라면 석상이 거절함
   if (p.stats.maxHp - cost < DEVIL_ROOM.minHp) {

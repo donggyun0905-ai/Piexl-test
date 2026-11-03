@@ -84,12 +84,12 @@ export function itemName(kind: ItemKind, id: string, lang: Lang): string {
   return (table as Record<string, Names>)[id]?.[lang] ?? id;
 }
 
-export function itemDesc(kind: ItemKind, id: string, lang: Lang, t: (k: TextKey) => string): string {
+export function itemDesc(kind: ItemKind, id: string, lang: Lang, t: (k: TextKey) => string, cost?: number): string {
   if (kind === "coin") return "";
   if (kind === "reroll") return REROLL_DESC[lang];
   if (kind === "trash") return TRASH_DESC[lang];
   if (kind === "bench" || kind === "tune" || kind === "gym" || kind === "trial" || kind === "boon" || kind === "altar" || kind === "gambler" || kind === "auction") return STATION_DESC[kind][lang];
-  if (kind === "devil") return `${itemDesc("passive", id, lang, t)} · ${STATION_DESC.devil[lang].replace("{cost}", String(devilCost(id as DevilId)))}`;
+  if (kind === "devil") return `${itemDesc("passive", id, lang, t)} · ${STATION_DESC.devil[lang].replace("{cost}", String(cost ?? devilCost(id as DevilId)))}`;
   if (kind === "use") return fill(USE_DESC[id as UseItemId][lang], USE_ITEMS[id as UseItemId]);
   if (kind === "weapon") {
     const w: WeaponDef = WEAPONS[id as WeaponId];

@@ -40,7 +40,7 @@ export function promptText(run: RunState, lang: Lang, t: (k: TextKey) => string)
   if (pr.kind === "station" && pr.station === "devil") {
     const pk = run.rooms[run.roomId]?.pickups.find((x) => x.id === run.nearPickupId && x.kind === "devil");
     const no = run.player.devil?.last && !run.player.devil.last.ok && run.tick - run.player.devil.last.tick < 90;
-    return no ? t("promptDevilNo") : pk ? t("promptDevil").replace("{name}", itemName("passive", pk.itemId, lang)).replace("{cost}", String(devilCost(pk.itemId as DevilId))) : "";
+    return no ? t("promptDevilNo") : pk ? t("promptDevil").replace("{name}", itemName("passive", pk.itemId, lang)).replace("{cost}", String(devilCost(pk.itemId as DevilId, run.player))) : "";
   }
   if (pr.kind === "station") return t(pr.open ? "promptStationOpen" : "promptStation").replace("{name}", pr.station === "gym" ? GYM_DEVICE[pr.device ?? 0]![lang] : itemName(pr.station, "", lang));
   if (pr.kind === "trash") return t(pr.confirm ? "promptTrashSure" : "promptTrash").replace("{price}", String(pr.price));

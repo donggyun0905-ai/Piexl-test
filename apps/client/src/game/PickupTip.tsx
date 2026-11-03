@@ -1,5 +1,5 @@
 // 바닥 아이템 설명: 마우스를 올린 아이템 위에 이름·값·설명·무기 비교 (경매장 무대 상품도)
-import type { RunState, WeaponId } from "@pixel-rogue/shared";
+import { devilCost, type DevilId, type RunState, type WeaponId } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { itemDesc, itemName } from "../i18n/items";
 import { pickupAt, pickupScreenPos } from "./clickTargets";
@@ -29,7 +29,7 @@ export function floorTipAt(run: RunState, canvas: HTMLCanvasElement, zoom: numbe
   return {
     icon: pk.kind === "coin" || pk.kind === "reroll" || pk.kind === "trash" || pk.kind === "bench" || pk.kind === "tune" || pk.kind === "gym" || pk.kind === "trial" || pk.kind === "boon" || pk.kind === "altar" || pk.kind === "gambler" || pk.kind === "auction" ? null : ({ kind: pk.kind === "devil" ? "passive" : pk.kind, id: pk.itemId } as IconItem),
     name: `${itemName(pk.kind, pk.itemId, lang)}${price}`,
-    desc: itemDesc(pk.kind, pk.itemId, lang, t),
+    desc: itemDesc(pk.kind, pk.itemId, lang, t, pk.kind === "devil" ? devilCost(pk.itemId as DevilId, run.player) : undefined),
     x: pos.x,
     y: pos.y,
     hint: reward ? t("tipClickPick") : pk.kind === "weapon" && pk.price === 0 ? t("tipPressF") : "",

@@ -39,5 +39,5 @@ export const DEVIL_PERKS = {
   devilReaper: { cost: 45, taken: 0.3, fx: 0.25 },
 };
 
-/** 악마의 방 수치: 석상 앞에 놓이는 거래 수 · 거래 뒤 남아야 하는 최대 체력 */
-export const DEVIL_ROOM = { offers: 3, minHp: 10 };
+/** 악마의 방 수치: 석상 앞에 놓이는 거래 수 · 거래 뒤 남아야 하는 최대 체력 · 이미 한 거래 하나마다 더 바치는 최대 체력 */
+export const DEVIL_ROOM = { offers: 3, minHp: 10, more: 20 };

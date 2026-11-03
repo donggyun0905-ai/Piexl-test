@@ -54,7 +54,7 @@ function guide(kind: PracticeRoom, lang: Lang): L[] {
     case "devil":
       return [
         [`비밀의 방 · 방 안이 암흑 · 사탄의 석상 앞에 거래 ${DEVIL_ROOM.offers}개 (악마 패시브 ${DEVIL_IDS.length}개 중 가진 것 빼고 무작위)`, `Secret room · pitch dark · ${DEVIL_ROOM.offers} deals before Satan's statue (random from ${DEVIL_IDS.length} devil passives you don't own)`, `秘密の部屋 · 暗闇 · サタン像の前に取引${DEVIL_ROOM.offers}つ (悪魔パッシブ${DEVIL_IDS.length}種から未所持をランダム)`],
-        [`F로 거래 = 최대 체력을 바치고 그 패시브를 얻음 (100%, 여러 번 가능) · 바친 뒤 최대 체력이 ${DEVIL_ROOM.minHp} 미만이면 석상이 거절`, `F to deal = pay max HP for the passive (100%, repeatable) · refused if max HP would drop below ${DEVIL_ROOM.minHp}`, `Fで取引 = 最大体力を捧げてパッシブ獲得 (100%、何度でも) · 捧げた後の最大体力が${DEVIL_ROOM.minHp}未満なら拒否`],
+        [`F로 거래 = 최대 체력을 바치고 그 패시브를 얻음 (100%, 여러 번 가능) · 바친 뒤 최대 체력이 ${DEVIL_ROOM.minHp} 미만이면 석상이 거절 · 거래 하나 할 때마다 남은 거래가 최대 체력 ${DEVIL_ROOM.more}씩 더 비싸짐`, `F to deal = pay max HP for the passive (100%, repeatable) · refused if max HP would drop below ${DEVIL_ROOM.minHp} · each deal makes the rest cost ${DEVIL_ROOM.more} more max HP`, `Fで取引 = 最大体力を捧げてパッシブ獲得 (100%、何度でも) · 捧げた後の最大体力が${DEVIL_ROOM.minHp}未満なら拒否 · 取引するたびに残りの取引が最大体力${DEVIL_ROOM.more}ずつ高くなる`],
         ...DEVIL_IDS.map((id): L => {
           const n = `${itemName("passive", id, lang)} −${DEVIL_PERKS[id].cost}`;
           return [`· ${n} 최대 체력`, `· ${n} max HP`, `· ${n} 最大体力`];

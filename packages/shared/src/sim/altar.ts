@@ -118,10 +118,10 @@ export function altarMenu(s: RunState, card: number): void {
   addEffect(s, { kind: "alChoose", x: CX, y: ALTAR_Y, dirX: ALTAR_IDS.indexOf(id), dirY: 0, size: 80, maxTicks: 60, width: card });
 }
 
-/** 틱마다 (사람마다): 가진 패시브에 붙은 증강 기술 · 고르기 전 제단 방은 잠김 */
+/** 틱마다 (사람마다): 가진 패시브에 붙은 증강 기술 (시련 중에는 안 나감) · 고르기 전 제단 방은 잠김 */
 export function altarTick(s: RunState): void {
   const p = s.player;
   if (altarPending(s)) s.rooms[s.roomId]!.cleared = false;
-  if (!p.augments?.length || s.swarm || s.pvp) return;
+  if (!p.augments?.length || s.swarm || s.pvp || s.trialRun?.room === s.roomId) return;
   for (const aug of p.augments) if (p.passives.includes(aug.passive)) for (const k of aug.skills) runSkill(s, k);
 }

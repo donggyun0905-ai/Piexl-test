@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.365",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "악마의 방: 거래를 하나 할 때마다 남은 거래가 최대 체력 20씩 더 비싸짐 (하나 하면 +20, 둘 하면 +40)",
+        "시련의 방: 암흑·보스 다섯·끝없는 무리 시련 중 몬스터를 잡을 때마다 이동 속도가 1%씩 느려짐 (보스는 10%, 최대 절반까지, 시련이 끝나면 풀림)",
+        "시련의 방: 시련 중에는 제단(성좌)에서 받은 증강 기술이 나가지 않음",
+        "시련의 방: 시즌 3 새 몬스터(폭발풍뎅이·스켈레톤 궁병·쇠사슬 간수·하이오크)가 무리에 두 배로 자주 섞임",
+      ],
+      en: [
+        "Devil's Room: each deal makes the remaining deals cost 20 more max HP (+20 after one, +40 after two)",
+        "Trial Room: during the dark, five-boss and endless trials each kill slows you 1% (bosses 10%, down to half speed; resets when the trial ends)",
+        "Trial Room: altar (constellation) augment skills are off during trials",
+        "Trial Room: the new season 3 monsters (Bomb Beetle, Skeleton Archer, Chain Warden, High Orc) now show up twice as often in trial hordes",
+      ],
+      ja: [
+        "悪魔の部屋：取引するたびに残りの取引が最大体力20ずつ高くなる（1つで+20、2つで+40）",
+        "試練の部屋：暗闇・ボス5体・終わらない群れの試練中、倒すたびに移動速度が1%ずつ遅くなる（ボスは10%、最大半分まで、試練が終わると解除）",
+        "試練の部屋：試練中は祭壇（星座）でもらった増強スキルが発動しない",
+        "試練の部屋：シーズン3の新モンスター（爆発甲虫・スケルトン弓兵・鎖の看守・ハイオーク）が群れに2倍の頻度で混ざる",
+      ],
+    },
+  },
+  {
     version: "0.48.364",
     date: "2026-11-03",
     items: {

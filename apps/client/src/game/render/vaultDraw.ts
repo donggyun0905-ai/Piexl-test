@@ -156,7 +156,7 @@ export function drawDevilOffer(ctx: Ctx, s: RunState, pk: Pickup, near: boolean)
   ctx.font = "bold 7px sans-serif";
   ctx.textAlign = "center";
   ctx.fillStyle = "#ff6a7a";
-  ctx.fillText(`♥-${devilCost(pk.itemId as DevilId)}`, x, y + (top === null ? 18 : 22));
+  ctx.fillText(`♥-${devilCost(pk.itemId as DevilId, s.player)}`, x, y + (top === null ? 18 : 22));
   ctx.textAlign = "start";
 }
 

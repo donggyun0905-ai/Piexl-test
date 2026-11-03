@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import "../balanceTables";
-import { DEVIL_PERKS } from "../itemsDevil";
+import { DEVIL_PERKS, DEVIL_ROOM } from "../itemsDevil";
 import { AUCTION, GAMBLE, SECRET_KINDS, SECRET_WALL } from "../secretDefs";
 import { auctionHere } from "./auction";
 import { extraOf } from "./baseStats";
-import { devilPact } from "./devil";
+import { devilCost, devilPact } from "./devil";
 import { devilMul } from "./devilPerks";
 import { cupState, cupY, GAMBLE_OP, gambleDone, gambleNow, TABLE as GAMBLE_TABLE } from "./gamble";
 import { CX } from "./loot";
@@ -91,6 +91,12 @@ describe("악마의 방", () => {
     expect(s.player.passives).toContain(pk.itemId);
     expect(s.player.stats.maxHp).toBeCloseTo(hp - DEVIL_PERKS[pk.itemId as keyof typeof DEVIL_PERKS].cost);
     expect(devilPact(s)).toBe(true);
+    // 거래 하나마다 남은 거래가 20씩 비싸짐 (둘 했으면 +40)
+    const next = offers[1]!.itemId as keyof typeof DEVIL_PERKS;
+    expect(devilCost(next, s.player)).toBe(DEVIL_PERKS[next].cost + DEVIL_ROOM.more);
+    s.player.passives.push("devilCross");
+    expect(devilCost(next, s.player)).toBe(DEVIL_PERKS[next].cost + DEVIL_ROOM.more * 2);
+    s.player.passives.pop();
     expect(s.player.blindTicks).toBeGreaterThan(0);
     continueToLastFloor(s, "dragon");
     expect(s.map.rooms.map((r) => r.type)).toEqual(["start", "shop", "exit"]);

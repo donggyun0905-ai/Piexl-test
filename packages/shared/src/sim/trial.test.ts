@@ -6,7 +6,7 @@ import { menuCode } from "./station";
 import { createRun, stepSim } from "./run";
 import { TRIAL_OP, trialBusy, trialUsed } from "./trial";
 import { startTrial } from "./trialRun";
-import { TRIAL_FOE_RULES } from "./trialFoes";
+import { TRIAL_FOE_RULES, trialMoveMul } from "./trialFoes";
 import { makeEnemy } from "./util";
 import { ENEMIES } from "../content";
 import { chestOptions, spillRewards, trialRewardRow } from "./trialRewards";
@@ -82,6 +82,25 @@ describe("시련의 방", () => {
     const full = makeEnemy(s, "crawler", 100, 100, 1, 0).maxHp;
     expect(half).toBeGreaterThan(base);
     expect(full).toBe(Math.round(base * (1 + TRIAL_FOE_RULES.HP)));
+  });
+
+  it("시련 1·3·4: 처치마다 이동 속도가 느려짐 (최대 절반) · 증강은 안 나감 · 2는 안 느려짐", () => {
+    const s = inTrial();
+    startTrial(s, 4);
+    for (let i = 0; i < 70; i++) stepSim(s, EMPTY_INPUT);
+    expect(trialMoveMul(s)).toBe(1);
+    const n = s.enemies.length;
+    s.enemies.forEach((e) => (e.hp = 0));
+    stepSim(s, EMPTY_INPUT);
+    expect(trialMoveMul(s)).toBeCloseTo(1 - n * TRIAL_FOE_RULES.SLOW_KILL);
+    s.trialRun!.slow = 3;
+    expect(trialMoveMul(s)).toBe(TRIAL_FOE_RULES.SLOW_MIN);
+    const t = inTrial();
+    startTrial(t, 2);
+    for (let i = 0; i < 70; i++) stepSim(t, EMPTY_INPUT);
+    t.enemies.forEach((e) => (e.hp = 0));
+    stepSim(t, EMPTY_INPUT);
+    expect(trialMoveMul(t)).toBe(1);
   });
 
   it("끝없는 시련: 처치마다 점수 · 쓰러져도 죽지 않고 그 점수로 끝", () => {
