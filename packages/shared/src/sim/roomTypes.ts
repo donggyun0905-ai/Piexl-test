@@ -5,4 +5,7 @@ import type { VaultPlayerState, VaultRunState } from "./vaultTypes";
 import type { TrialPlayerState, TrialRunState } from "./trialTypes";
 
 export interface RoomPlayerState extends BoonPlayerState, TrialPlayerState, AltarPlayerState, VaultPlayerState {}
-export interface RoomRunState extends TrialRunState, VaultRunState {}
+export interface RoomRunState extends TrialRunState, VaultRunState {
+  /** 엘리트 방 라운드 (sim/roomSpawn.eliteWave): 층·방 · 지금 라운드 · 다음 무리까지 틱 */
+  eliteWave?: { floor: number; room: number; n: number; t: number };
+}

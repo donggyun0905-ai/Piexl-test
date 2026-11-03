@@ -1,4 +1,5 @@
 // 보스 행동: 강철 거구·무리 여왕·공허의 눈 (나머지 보스는 bossKit.BOSS_AI). 층마다 보스방(계단방)에 하나. 탄 방향은 16방향 고정 값으로 계산 (삼각함수 없음)
+import { lateBossHp } from "./foeScale";
 import { ROOM_WIDTH } from "../constants";
 import { ENEMIES } from "../content";
 import { createRng, deriveSeed } from "../rng";
@@ -157,5 +158,5 @@ export function updateBoss(s: RunState, e: EnemyState, toP: readonly [number, nu
 /** 보스방에 들어갔을 때: 보스 하나 (방 위쪽 가운데. 플레이어는 아래쪽 가운데에 놓임) */
 export function spawnBoss(s: RunState, kind: BossKind): EnemyState {
   // 협동: 보스는 수 대신 체력만 조금 더
-  return makeEnemy(s, kind, ROOM_WIDTH / 2, ROOM_MIN_Y + 20, bossHpMul(depth(s)) * partyHpMul(s) * tabooUp(s, "bossHp"), 90);
+  return makeEnemy(s, kind, ROOM_WIDTH / 2, ROOM_MIN_Y + 20, bossHpMul(depth(s)) * lateBossHp(depth(s)) * partyHpMul(s) * tabooUp(s, "bossHp"), 90);
 }

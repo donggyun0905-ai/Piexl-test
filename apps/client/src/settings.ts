@@ -58,8 +58,8 @@ const DEFAULTS: Settings = {
   simpleView: false,
   showGoal: true,
 };
-/** 처음 하는 기기: 간단한 화면 · 피해 숫자·능력치 칸 끄고 시작 */
-const FIRST: Settings = { ...DEFAULTS, simpleView: true, showDamage: false, showStats: false };
+/** 처음 하는 기기: 간단한 화면 · 능력치 칸 끄고 시작 (피해 숫자는 타격감에 필요해 켬) */
+const FIRST: Settings = { ...DEFAULTS, simpleView: true, showStats: false };
 
 /** 스킬 키: 설정에서 고른 키 (숫자 패드 1~4도 늘 됨) · 0 = 스킬 키 아님 */
 export function skillOf(code: string): number {

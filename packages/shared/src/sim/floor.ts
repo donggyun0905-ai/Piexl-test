@@ -44,9 +44,17 @@ export interface FloorMap {
   layers: number;
 }
 
-/** 시작 방과 보스방 사이의 칸 수: 1층 7칸, 한 층마다 1칸씩, 최대 10칸 (2026-10-31 3칸씩 늘림 → 최대 10칸) */
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry): 시작 방과 보스방 사이의 칸 수 = 기본 + 층 (최대) · 2026-11-03 지루하지 않게 2칸씩 줄임 (1층 5칸 → 4층부터 8칸) */
+const R = {
+  /** 칸 수 = 이 값 + 층 */
+  BASE: 4,
+  /** 가장 많은 칸 수 */
+  MAX: 8,
+};
+export { R as FLOOR_RULES };
+
 export function middleLayersFor(floor: number): number {
-  return Math.min(6 + floor, MAX_LAYERS - 2);
+  return Math.min(R.BASE + floor, R.MAX, MAX_LAYERS - 2);
 }
 
 /** custom: 관리자가 만든 방 틀 (혼자 하기만, run.customRooms) */

@@ -43,7 +43,7 @@ describe("추적자", () => {
     for (let i = 0; i < 30; i++) stepSim(s, MISS);
     expect(lost(s)).toBe(0);
     for (let i = 0; i < 30; i++) stepSim(s, AIM);
-    expect(lost(s)).toBeGreaterThanOrEqual(s.player.stats.damage * T.ambushMul);
+    expect(lost(s)).toBeGreaterThanOrEqual(s.player.stats.damage * T.ambushMul - 1e-6);
     // 자동 조준이면 쏘지 않음
     const before = lost(s);
     for (let i = 0; i < 30; i++) stepSim(s, { ...EMPTY_INPUT, autoAim: true });

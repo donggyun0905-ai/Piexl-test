@@ -112,6 +112,11 @@ export interface SpiritPlayerState {
 }
 
 export interface S2EnemyState {
+  /** 맞고 밀리는 중 (sim/knock): 틱마다 이동 · 남은 틱 · 연타 판정 틱 */
+  kbX?: number;
+  kbY?: number;
+  kbT?: number;
+  kbCd?: number;
   /** 렌의 토목 감옥에 갇힌 남은 틱 */
   renJail?: number;
   /** 예리함이 걸려 더 아픈 틱까지 (sim/baseStats) */

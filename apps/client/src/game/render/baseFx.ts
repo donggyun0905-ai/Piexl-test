@@ -60,12 +60,27 @@ export function drawBlast(ctx: Ctx, fx: EffectState, snap: Snap, t: number): voi
 }
 
 /** 그 밖의 터짐: 흰 충격파 + 빛 */
+/** 터짐 (t: 1 → 0) · 처치(from "kill")면 처음 몇 틱 하얗게 번쩍 + 사방으로 튀는 불똥·조각 */
 export function drawBurst(ctx: Ctx, fx: EffectState, t: number): void {
-  const r = Math.max(4, fx.size) * (1.5 - t);
+  const size = Math.max(4, fx.size);
+  const r = size * (1.5 - t);
+  const f = 1 - t;
+  const seed = Math.round(fx.x * 7 + fx.y * 13);
+  const kill = fx.from === "kill";
   additive(ctx, () => {
+    if (kill && t > 0.75) glow(ctx, fx.x, fx.y, size * 0.9, "#ffffff", (t - 0.75) * 4, 2);
     glow(ctx, fx.x, fx.y, r * 0.9, "#fff4d0", t * 0.7, 1);
     shock(ctx, fx.x, fx.y, r, "#ffe8b0", t, 4);
+    if (kill) sparks(ctx, fx.x, fx.y, 10, size * 2.2, f, "#ffd890", seed);
   });
+  if (!kill) return;
+  // 조각: 작은 네모가 튀었다가 떨어짐
+  ctx.fillStyle = `rgba(255,236,200,${t})`;
+  for (let i = 0; i < 6; i++) {
+    const a = ((seed * 37 + i * 61) % 360) * (Math.PI / 180);
+    const d = size * (0.6 + f * 1.6) * (0.6 + ((seed + i * 13) % 5) / 10);
+    ctx.fillRect(Math.round(fx.x + Math.cos(a) * d), Math.round(fx.y + Math.sin(a) * d * 0.7 + f * f * 6), 2, 2);
+  }
 }
 
 /** 기본 탄: 빛 번짐 + 밝은 속 + 지나온 쪽 꼬리 (내 탄 노랑 · 적 탄 붉은 · 마법탄 보라) */

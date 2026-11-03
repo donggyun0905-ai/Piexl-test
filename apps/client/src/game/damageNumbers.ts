@@ -10,10 +10,11 @@ import { drawCrit } from "./critNumber";
 import type { DmgStyle } from "../shop/effects";
 import type { Snap } from "./render/palette";
 
-/** 숫자가 떠 있는 틱, 위로 떠오르는 거리, 한 번에 떠 있는 최대 수 */
-const LIFE = 40;
+/** 숫자가 떠 있는 틱, 위로 떠오르는 거리, 한 번에 떠 있는 최대 수 · 적 하나에 남기는 수 (화면을 덜 가리게) */
+const LIFE = 30;
 const RISE = 10;
-const MAX_NUMBERS = 80;
+const MAX_NUMBERS = 30;
+const PER_ENEMY = 3;
 /** 숫자가 뜬 뒤 이만큼(틱) 안에 같은 적이 또 맞으면 합침 (한꺼번에 맞은 빔·폭발 등이 겹치지 않게) */
 const MERGE_TICKS = 4;
 /** 허수아비를 이만큼(3초) 안 때리면 기록을 처음부터 */
@@ -121,6 +122,9 @@ export class DamageTracker {
       const far = 7 + (slot % 3) * 5;
       this.numbers.push({ enemyId: id, x, y, amount, born: s.tick, kind, ox: Math.cos(ang) * far, oy: -Math.abs(Math.sin(ang)) * far * 0.7 - (slot % 4) * 3 });
       if (this.numbers.length > MAX_NUMBERS) this.numbers.shift();
+      // 같은 적의 오래된 숫자는 최근 몇 개만
+      const mine = this.numbers.filter((n) => n.enemyId === id);
+      if (mine.length > PER_ENEMY) this.numbers = this.numbers.filter((n) => !mine.slice(0, mine.length - PER_ENEMY).includes(n));
     }
     if (!isDummy) {
       this.dealt[kind] = (this.dealt[kind] ?? 0) + amount;
@@ -182,14 +186,18 @@ export class DamageTracker {
     ctx.textBaseline = "bottom";
     ctx.lineWidth = 2;
     ctx.strokeStyle = "#1a1622";
+    // 적마다 가장 최근 숫자 (나머지는 반투명하게 → 최신이 또렷이 맨 위)
+    const newest = new Map<number, number>();
+    for (const n of this.numbers) newest.set(n.enemyId, Math.max(newest.get(n.enemyId) ?? 0, n.born));
     for (const n of this.numbers) {
       const age = (tick - n.born) / LIFE;
+      const old = n.born < (newest.get(n.enemyId) ?? 0);
       const text = formatDamage(n.amount);
       // 빨리 튀어 나갔다 천천히 멈춤 · 숫자마다 정해 둔 방향으로 흩뿌려지며 위로 솟음 (겹쳐도 읽히게)
       const ease = 1 - (1 - Math.min(1, age * 1.6)) ** 3;
       const x = snap(n.x + n.ox * ease);
       const y = snap(n.y - 2 + n.oy * ease - RISE * age);
-      ctx.globalAlpha = Math.min(1, 2 - age * 2);
+      ctx.globalAlpha = Math.min(1, 2 - age * 2) * (old ? 0.45 : 1);
       if (this.style && (n.kind === "hit" || n.kind === "crit")) {
         if (this.style === "tiger") drawTigerNumber(ctx, text, x, y, tick - n.born, n.kind === "crit");
         else if (this.style === "summer") drawSummerNumber(ctx, text, x, y, tick - n.born, n.kind === "crit");

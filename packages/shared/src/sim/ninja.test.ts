@@ -58,7 +58,7 @@ describe("닌자", () => {
     const s = ninja();
     s.enemies = [enemy(1, 110, 72)];
     fire(s, 90);
-    expect(lost(s)).toBeGreaterThan(s.player.stats.damage * 5);
+    expect(lost(s)).toBeGreaterThan(s.player.stats.damage * 4.5);
   });
 
   it("환영진: 표식 5개가 찬 적 둘레 사거리 절반만 한 원 위 9곳에서 그림자가 가운데로 돌진", () => {

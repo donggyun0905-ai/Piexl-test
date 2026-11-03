@@ -92,6 +92,10 @@ import { TRIAL_RULES } from "./trial";
 import { TRIAL_RUN_RULES } from "./trialRun";
 import { TRIAL_FOE_RULES } from "./trialFoes";
 import { INTRO_RULES } from "./intro";
+import { KNOCK_RULES } from "./knock";
+import { FLOOR_RULES } from "./floor";
+import { FOE_SCALE_RULES } from "./foeScale";
+import { ROOM_SPAWN_RULES } from "./roomSpawn";
 import { TALISMAN_RULES } from "./talisman";
 import { TD_RULES } from "./td";
 import { TD_WAVES_RULES } from "./tdWaves";
@@ -191,6 +195,10 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   TRIAL_RUN_RULES,
   TRIAL_FOE_RULES,
   INTRO_RULES,
+  KNOCK_RULES,
+  FLOOR_RULES,
+  FOE_SCALE_RULES,
+  ROOM_SPAWN_RULES,
   GYM_FX_RULES,
   TALISMAN_RULES,
   TD_RULES,

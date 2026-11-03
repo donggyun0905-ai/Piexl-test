@@ -123,5 +123,9 @@ export function altarTick(s: RunState): void {
   const p = s.player;
   if (altarPending(s)) s.rooms[s.roomId]!.cleared = false;
   if (!p.augments?.length || s.swarm || s.pvp || s.trialRun?.room === s.roomId) return;
+  // 제단·경매 증강은 광야의 새벽 각성 기술보다 약하게 (공격력에 ALTAR.augPower를 곱해 씀)
+  const keep = p.stats.damage;
+  p.stats.damage = keep * ALTAR.augPower;
   for (const aug of p.augments) if (p.passives.includes(aug.passive)) for (const k of aug.skills) runSkill(s, k);
+  p.stats.damage = keep;
 }

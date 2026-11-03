@@ -1,10 +1,10 @@
 // 방·층 이동: 방 들어가기(적 배치), 출구 잠김·억지로 나가기, 쉼터, 계단
+import { eliteWave, spawnEnemies } from "./roomSpawn";
+export { spawnEnemies } from "./roomSpawn";
 import { introRooms } from "./intro";
-import { eliteRoomHp, makeChamps } from "./elite";
 import { PERKS } from "../perks";
 import { COOP_ROOM, ROOM_CX as CX, ROOM_CY as CY, setRoomSize } from "../constants";
-import { bossForFloor, ENEMIES, type BossKind } from "../content";
-import { createRng, deriveSeed } from "../rng";
+import { bossForFloor, type BossKind } from "../content";
 import { FLOOR_COUNT, generateFloor, LANES, LAST_FLOOR, lastFloorMap } from "./floor";
 import { spawnBoss } from "./bosses";
 import { makeTerrain } from "./terrain";
@@ -15,19 +15,15 @@ import { makeArena } from "./bossPrimeval";
 import { arenaBig, arenaEnemies, arenaMap, arenaNext, arenaPrimeval } from "./arena";
 import { devilPact, spawnShop } from "./shop";
 import { endlessBosses, endlessPrimeval, endlessSize } from "./endless";
-import { depth, heroBosses, heroNext, heroPair, lastFloorOf } from "./hero";
-import { SWARM } from "./minions";
-import { BAT_FLOCK, minionKinds } from "./critters";
-import { STALKER_MAX, stalkerKinds } from "./stalkers";
-import { bodyFits, shapeGrid } from "./layout";
-import { eachSeat, partyExtraEnemies, partyHpMul, placeParty } from "./party";
-import { tabooDown, tabooN, tabooSum, tabooUp } from "./taboo";
-import type { EnemyState, RunState, TickInput } from "./types";
+import { heroBosses, heroNext, heroPair, lastFloorOf } from "./hero";
+import { eachSeat, placeParty } from "./party";
+import { tabooDown, tabooN, tabooSum } from "./taboo";
+import type { RunState, TickInput } from "./types";
 import { meetPilgrim, pilgrimRoom } from "./pilgrim";
 import { luxRoom } from "./luxFoes";
 import { skipTrials } from "./trialRun";
 import { terraBoss } from "./hiddenDice";
-import { DOOR_HALF, EXIT_X, FLEE_COST, hasPerk, keepInRoom, makeEnemy, PLAYER_RADIUS, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { DOOR_HALF, EXIT_X, FLEE_COST, hasPerk, PLAYER_RADIUS, ROOM_MAX_Y, ROOM_MIN_Y } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -37,8 +33,6 @@ const R = {
   BOSS_ENTRY_DELAY: 90,
   /** 보스가 여럿일 때 사이 거리 */
   BOSS_SPREAD: 64,
-  /** 한 방 졸개: 기본 수 + 층 × 값 · 최대 수 · 층마다 체력 비율 */
-  BASE_ENEMIES: 5, PER_FLOOR: 1, MAX_ENEMIES: 18, HP_PER_FLOOR: 0.2,
 };
 export { R as ROOMS_RULES };
 /** 보스 시작 자리 (방 위쪽 가운데) */
@@ -160,49 +154,6 @@ function placeBossFight(s: RunState): void {
   });
 }
 
-/** 층·방 번호로 정해지는 적 배치 (들어가는 순서와 상관없이 항상 같음). 강한 적 방은 2마리 더, 체력 1.5배 */
-export function spawnEnemies(s: RunState, roomId: number, elite: boolean): EnemyState[] {
-  const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "enemies"));
-  const d = depth(s);
-  const base = Math.min(R.MAX_ENEMIES, R.BASE_ENEMIES + Math.floor(d * R.PER_FLOOR) + rng.int(0, 2) + (elite ? 4 : 0));
-  // 협동: 사람이 많으면 적·체력 조금 더 · 금기: 무리 지어 (전투방 +1) · 정예 (강한 적 방 +2)
-  const count = base + partyExtraEnemies(s, base) + tabooSum(s, "horde") + (elite ? tabooSum(s, "eliteMore") : 0);
-  // 층마다 나오는 졸개 (타워 디펜스 적 8종 포함, critters.minionKinds)
-  const kinds = [...minionKinds(d), ...stalkerKinds(d)];
-  const hpMul = (1 + R.HP_PER_FLOOR * (d - 1)) * (elite ? eliteRoomHp() : 1) * partyHpMul(s) * tabooUp(s, "fleshHp");
-  const out: EnemyState[] = [];
-  const g = shapeGrid(s.map.rooms[roomId]!.shape);
-  for (let i = 0; i < count; i++) {
-    let kind = rng.pick(kinds);
-    // 바위 골렘은 한 방에 한 마리만
-    if (kind === "golem" && out.some((e) => e.kind === "golem")) kind = "crawler";
-    // 새 몬스터도 한 방에 정해진 수까지만
-    if (out.filter((e) => e.kind === kind).length >= (STALKER_MAX[kind] ?? 99)) kind = "crawler";
-    const r = ENEMIES[kind].radius;
-    let x = 0;
-    let y = 0;
-    // 들어온 자리 가까이·벽·기둥·구덩이 위는 피함 (정해진 횟수만 시도)
-    for (let tries = 0; tries < 40; tries++) {
-      x = rng.int(ROOM_MIN_X + 10, ROOM_MAX_X - 10);
-      y = rng.int(ROOM_MIN_Y + 10, ROOM_MAX_Y - 10);
-      const dx = x - s.player.x;
-      const dy = y - s.player.y;
-      if (dx * dx + dy * dy > 64 * 64 && (!g || bodyFits(g, x, y, r))) break;
-    }
-    const timer = rng.int(30, 90);
-    const flock = kind === "gnat" || kind === "bat" ? s.nextId : undefined;
-    for (const [ox, oy] of kind === "gnat" ? SWARM : kind === "bat" ? BAT_FLOCK : [[0, 0] as const]) {
-      // 퍼진 자리가 벽·기둥·구덩이·방 밖이면 무리 가운데에서 나옴
-      const ok = x + ox > ROOM_MIN_X + r && x + ox < ROOM_MAX_X - r && y + oy > ROOM_MIN_Y + r && y + oy < ROOM_MAX_Y - r && (!g || bodyFits(g, x + ox, y + oy, r));
-      const e = Object.assign(makeEnemy(s, kind, ok ? x + ox : x, ok ? y + oy : y, hpMul, timer), flock ? { flock } : {});
-      keepInRoom(e, g);
-      out.push(e);
-    }
-  }
-  if (elite) makeChamps(out, d); // 강한 적 방: 가장 센 몇 마리가 정예 (sim/elite)
-  return out;
-}
-
 /** 플레이어가 닿아 있는 출구 줄 (위쪽 벽에 붙어 있고 출구 구멍 안), 없으면 -1 */
 export function touchingExit(s: RunState): number {
   const p = s.player;
@@ -232,7 +183,7 @@ export function warpRoom(s: RunState, roomId: number): void {
 /** 적을 다 잡았으면 방 정리 (보상은 사람마다) */
 export function checkCleared(s: RunState): void {
   const st = s.rooms[s.roomId]!;
-  if (!st.cleared && s.enemies.length === 0 && !roomLocked(s)) {
+  if (!st.cleared && s.enemies.length === 0 && !roomLocked(s) && !eliteWave(s)) {
     st.cleared = true;
     eachSeat(s, () => onRoomCleared(s, s.roomId));
     if (s.lastBoss && s.raidStart !== undefined && s.map.rooms[s.roomId]!.type === "exit") s.raidTicks = s.tick - s.raidStart;

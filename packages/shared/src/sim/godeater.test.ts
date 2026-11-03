@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { lateDmg } from "./foeScale";
 import { chainPlayer } from "./bossBinds";
 import { closeZones, updateZones, ZONE_DAMAGE, zoneRect } from "./bossZones";
 import { damageEnemy } from "./combat";
@@ -139,7 +140,7 @@ describe("갓이터", () => {
       r.player.dashTicks = dash ? 5 : 0;
       const hp = r.player.hp;
       updateZones(r, e);
-      expect(hp - r.player.hp).toBe(dash ? 0 : ZONE_DAMAGE);
+      expect(hp - r.player.hp).toBeCloseTo(dash ? 0 : ZONE_DAMAGE * lateDmg(r));
       expect((r.player.blindTicks ?? 0) > 0).toBe(!dash);
     }
   });

@@ -1,4 +1,5 @@
 // 적 행동
+import { knockTick } from "./knock";
 import { champFade, champMove } from "./elite";
 import { ENEMIES } from "../content";
 import { renMelee } from "./ren";
@@ -45,6 +46,7 @@ export function updateEnemies(s: RunState): void {
   const fields = new Map<number, ReturnType<typeof distanceField>>();
   for (const e of s.enemies) {
     if (e.hitFlash > 0) e.hitFlash--;
+    knockTick(s, e);
     if (e.kind === "dummy") {
       // 연습장 허수아비는 밀리거나 끌려가도 제자리 (anchor)
       if (e.anchor) {

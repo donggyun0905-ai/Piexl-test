@@ -3,6 +3,8 @@ import { remnantDodge } from "./remnant";
 import { killGold } from "./loot";
 import { endlessPow } from "./endless";
 import { trialFoeDmg, trialKill } from "./trialFoes";
+import { knock as knockHit } from "./knock";
+import { lateDmg } from "./foeScale";
 import { inkTaken, scribeKill } from "./scribe";
 import { minerKill } from "./minerGround";
 import { PERKS } from "../perks";
@@ -35,7 +37,7 @@ import type { EnemyState, RunState } from "./types";
 import { morphKill } from "./morphXp";
 import { recalcStats } from "./items";
 import { trackerGuard, trackerTaken } from "./tracker";
-import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, KNOCKBACK, keepInRoom, markCrit, normalize, roomGrid, RUSH_TICKS, STILL_TICKS } from "./util";
+import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, keepInRoom, markCrit, normalize, roomGrid, RUSH_TICKS, STILL_TICKS } from "./util";
 import { raiseShield } from "./imugiMods";
 import { devilMul } from "./devilPerks";
 
@@ -94,12 +96,8 @@ export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: numbe
   onHitExtra(s, e, dmg);
   e.hitFlash = 6;
   if (s.party) e.lastHit = seatNo(s);
-  // 돌진 중인 적·보스는 밀리지 않음 (소환수 공격은 밀지 않음)
-  if (knock && !(e.kind === "charger" && e.phase === "charge") && !ENEMIES[e.kind].boss) {
-    e.x += dirX * KNOCKBACK;
-    e.y += dirY * KNOCKBACK;
-    keepInRoom(e, roomGrid(s));
-  }
+  // 밀림 (sim/knock: 보스·돌진·연타·소환수 공격은 밀지 않음)
+  if (knock) knockHit(s, e, dirX, dirY, hurt, roll.crit);
   addEffect(s, { kind: "hit", x: e.x, y: e.y, dirX, dirY, size: roll.crit ? 8 : 4, maxTicks: roll.crit ? 10 : 6 });
 }
 
@@ -127,7 +125,7 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
   }
   // 금기 취약 · 광야의 새벽은 받는 피해 줄임
   // 무한 모드 7층부터 보스방마다·시련 점수만큼(trialFoes) 세짐
-  dmg *= endlessPow(s) * trialFoeDmg(p) * tabooUp(s, "frail") * (s.swarm ? SWARM.taken * (SWARM_LEVELS[s.swarm.level ?? 0]?.taken ?? 1) : 1);
+  dmg *= endlessPow(s) * (envHit ? 1 : lateDmg(s)) * trialFoeDmg(p) * tabooUp(s, "frail") * (s.swarm ? SWARM.taken * (SWARM_LEVELS[s.swarm.level ?? 0]?.taken ?? 1) : 1);
   // 방패 자세: 가만히 서 있으면 받는 피해 절반
   let taken = hasPerk(p, "bulwarkStance") && p.stillTicks >= STILL_TICKS ? dmg * PERKS.bulwarkStance.taken : dmg;
   // 버티기(가라테): 받는 피해 절반, 받은 만큼 모아 되받아침
@@ -249,7 +247,7 @@ export function removeDead(s: RunState): void {
       alive.push(e);
       continue;
     }
-    addEffect(s, { kind: "burst", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r * 2, maxTicks: 14 });
+    addEffect(s, { kind: "burst", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r * 2, maxTicks: 14, from: e.hp > 0 ? undefined : "kill" });
     if (e.hp > 0) continue; // 보스와 같이 사라진 적은 처치로 세지 않음
     // 금기: 죽음의 메아리 (쓰러진 자리에 잠시 뒤 폭발)
     if (tabooN(s, "deathBurst") > 0 && e.kind !== "dummy") addHazard(s, e.x, e.y, ENEMIES[e.kind].contactDamage);

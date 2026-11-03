@@ -142,7 +142,7 @@ describe("이무기", () => {
     s.enemies = [{ ...enemy(1, 100, 72, 1e6), rootTicks: 99999 }];
     const hits: number[] = [];
     for (let i = 0; i < 20; i++) {
-      Object.assign(s.enemies[0]!, { x: 100, prevX: 100, y: 72, prevY: 72 });
+      Object.assign(s.enemies[0]!, { x: 100, prevX: 100, y: 72, prevY: 72, kbT: 0, kbCd: 0 });
       const before = s.enemies[0]!.hp;
       attackOnce(s);
       hits.push(before - s.enemies[0]!.hp);

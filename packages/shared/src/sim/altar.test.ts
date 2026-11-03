@@ -30,7 +30,7 @@ function inAltar(seed = 5): RunState {
 describe("제단의 방", () => {
   it("3층부터 층마다 하나 · 시련의 방과 겹치지 않음 · 성좌 8 모두 나옴", () => {
     const seen = new Set<string>();
-    for (let seed = 1; seed < 40; seed++) {
+    for (let seed = 1; seed < 80; seed++) {
       for (const f of [1, 2]) expect(generateFloor(seed, f).rooms.filter((r) => r.type === "altar")).toHaveLength(0);
       for (const f of [3, 4, 6]) {
         const m = generateFloor(seed, f);
