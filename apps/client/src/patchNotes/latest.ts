@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.367",
+    date: "2026-11-03",
+    items: {
+      ko: ["관리자 페이지: 다른 서버(시험 서버·라이브)의 지금 수치를 그대로 가져오는 버튼 (가져온 뒤 확인하고 저장)"],
+      en: ["Admin page: a button to copy the current values from another server (test or live), then review and save"],
+      ja: ["管理者ページ：別のサーバー（テスト・ライブ）の今の数値をそのまま取り込むボタン（取り込んだ後に確認して保存）"],
+    },
+  },
+  {
     version: "0.48.366",
     date: "2026-11-03",
     items: {

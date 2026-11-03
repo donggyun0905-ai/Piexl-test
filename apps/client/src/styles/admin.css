@@ -271,3 +271,7 @@ body,
   color: var(--accent);
 }
 
+/* 다른 서버 수치 가져오기 줄 (admin/ImportRow) */
+.admin-import button {
+  margin-left: 6px;
+}
