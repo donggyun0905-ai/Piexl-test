@@ -11,6 +11,7 @@ import { GymPassiveRow } from "./GymPassiveRow";
 import { useGymPause } from "./gymKit";
 import { LatPull } from "./LatPull";
 import { Sandbag } from "./Sandbag";
+import { GymDemo } from "./GymDemo";
 
 type Gym = NonNullable<StationView["gym"]>;
 /** 퍼센트로 보여 줄 능력치 */
@@ -37,9 +38,12 @@ export function GymPanel({ gym, lang, t, send }: { gym: Gym; lang: Lang; t: (k: 
         {started ? (
           <Game onDone={done} t={t} />
         ) : (
-          <button type="button" className="gym-start" onClick={() => setStarted(true)}>
-            {t("gymStartBtn")}
-          </button>
+          <>
+            <GymDemo device={gym.device} t={t} />
+            <button type="button" className="gym-start" onClick={() => setStarted(true)}>
+              {t("gymStartBtn")}
+            </button>
+          </>
         )}
       </div>
     );

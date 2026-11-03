@@ -1,0 +1,46 @@
+/* 던전 쓰러짐: 결과 창 안 받은 피해 정리 (game/DeathRecap) */
+.death-recap {
+  margin: 8px 0;
+  padding: 8px 10px;
+  border: 1px solid #ff8a8a66;
+  border-radius: 8px;
+  background: rgb(30 8 12 / 0.6);
+  font-size: 12px;
+  text-align: left;
+}
+.death-recap h4 {
+  margin: 0 0 6px;
+  color: #ffb0b0;
+  font-size: 13px;
+}
+.death-last {
+  margin: 0 0 6px;
+  color: #ffd0d0;
+}
+.death-last span {
+  color: #ff6a6a;
+  font-weight: bold;
+}
+.death-recap ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.death-recap li {
+  margin-bottom: 5px;
+}
+.death-row {
+  display: flex;
+  justify-content: space-between;
+}
+.death-bar {
+  display: block;
+  height: 4px;
+  margin-top: 2px;
+  border-radius: 2px;
+  background: #ff6a6a;
+}
+.death-recap small {
+  color: #b8a8c8;
+  font-size: 10px;
+}

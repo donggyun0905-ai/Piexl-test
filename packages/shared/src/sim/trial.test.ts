@@ -5,7 +5,8 @@ import { goThrough, startFloor } from "./rooms";
 import { menuCode } from "./station";
 import { createRun, stepSim } from "./run";
 import { TRIAL_OP, trialBusy, trialUsed } from "./trial";
-import { startTrial } from "./trialRun";
+import { startTrial, trialNoItems } from "./trialRun";
+import { healPlayer } from "./combat";
 import { TRIAL_FOE_RULES, trialMoveMul } from "./trialFoes";
 import { makeEnemy } from "./util";
 import { ENEMIES } from "../content";
@@ -46,6 +47,15 @@ describe("시련의 방", () => {
     stepSim(s, EMPTY_INPUT);
     expect(trialBusy(s)).toBe(false);
     expect(s.rooms[s.roomId]!.cleared).toBe(true);
+  });
+
+  it("끝없는 시련: 회복이 모두 막히고(흡혈 포함) 사용 아이템을 못 씀", () => {
+    const s = inTrial();
+    startTrial(s, 4);
+    s.player.hp = 10;
+    healPlayer(s, 50);
+    expect(s.player.hp).toBe(10);
+    expect(trialNoItems(s)).toBe(true);
   });
 
   it("NO: 벌칙 하나가 걸리고 비석은 다시 못 씀", () => {

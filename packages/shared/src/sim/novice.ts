@@ -1,5 +1,6 @@
 // 풋내기: 적을 쓰러뜨려 경험치를 모으고, 레벨이 오르면 받은 스탯 포인트를 원하는 능력치에 직접 찍음.
 // 공용 무기·공용 패시브만 얻음 (loot). 찍은 스탯은 능력치 계산(items.recalcStats)에 더해짐
+import { trialNoHeal } from "./trialFoes";
 import { IMUGI } from "../weaponsImugi";
 import { SAMYEOL } from "../weaponsSamyeol";
 import { petCrit } from "./lobbyPet";
@@ -65,7 +66,7 @@ export function gainExp(s: RunState, e: EnemyState): void {
     p.lv++;
     recalcStats(s);
     p.points = (p.points ?? 0) + R.POINTS_PER_LEVEL;
-    p.hp = Math.min(p.stats.maxHp, p.hp + p.stats.maxHp * R.LEVEL_HEAL);
+    if (!trialNoHeal(s)) p.hp = Math.min(p.stats.maxHp, p.hp + p.stats.maxHp * R.LEVEL_HEAL);
     addEffect(s, { kind: "ring", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 18, maxTicks: 20, width: 1, follow: true });
   }
 }

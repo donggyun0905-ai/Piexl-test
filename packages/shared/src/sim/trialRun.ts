@@ -115,8 +115,8 @@ function spawnBosses(s: RunState): void {
   });
 }
 
-/** 보스 시련 중에는 사용 아이템을 못 씀 */
-export const trialNoItems = (s: RunState): boolean => s.trialRun?.kind === 3 && s.trialRun.room === s.roomId;
+/** 보스 시련·끝없는 시련 중에는 사용 아이템을 못 씀 */
+export const trialNoItems = (s: RunState): boolean => (s.trialRun?.kind === 3 || s.trialRun?.kind === 4) && s.trialRun.room === s.roomId;
 
 /** 끝없는 시련의 적 체력 배율: 700점까지는 조금씩, 그 뒤로 아주 가파르게 */
 export const endlessHp = (score: number) => 1 + R.HP_PER_100 * (score / 100) + R.HP_LATE * Math.max(0, (score - 700) / 300) ** 2;

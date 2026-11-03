@@ -62,6 +62,8 @@ export function drawRoomFeatures(ctx: CanvasRenderingContext2D, s: RunState): vo
     ctx.fillStyle = C.entryBar;
     for (let i = 0; i < 3; i++) ctx.fillRect(x + 2 + i * 5, y + 1, 2, TILE_SIZE - 2);
   }
+  // 비밀의 방 뒷문 (아래 벽 가운데, 들어온 쪽): 열린 문이 빛나고 아래 화살표 · 닿으면 원래 방으로 (sim/vault)
+  if (room.back !== undefined) drawBackDoor(ctx, s.tick);
   // 위쪽 벽 출구: 잠겼으면 빗장, 바로 아래에 다음 방 종류 표시
   room.exits.forEach((next, lane) => {
     if (next < 0) return;
@@ -131,4 +133,31 @@ export function drawRoomFeatures(ctx: CanvasRenderingContext2D, s: RunState): vo
     ctx.fillRect(cx - 7 + shimmer * 3, cy - 3, 4, 1);
     ctx.fillRect(cx - 1 - shimmer * 2, cy + 2, 3, 1);
   }
+}
+
+/** 비밀의 방 뒷문: 보라빛으로 빛나는 열린 문 · 위로 떠오르는 빛 · 깜빡이는 아래 화살표 */
+function drawBackDoor(ctx: CanvasRenderingContext2D, tick: number): void {
+  const x = Math.floor(ROOM_COLS / 2) * TILE_SIZE;
+  const y = (ROOM_ROWS - 1) * TILE_SIZE;
+  const pulse = 0.6 + 0.4 * Math.sin(tick / 8);
+  const g = ctx.createRadialGradient(x + TILE_SIZE / 2, y + 4, 2, x + TILE_SIZE / 2, y + 4, 26);
+  g.addColorStop(0, `rgba(200, 150, 255, ${0.55 * pulse})`);
+  g.addColorStop(1, "rgba(160, 100, 255, 0)");
+  ctx.fillStyle = g;
+  ctx.fillRect(x - 20, y - 22, TILE_SIZE + 40, TILE_SIZE + 22);
+  ctx.fillStyle = "#1a0f2a";
+  ctx.fillRect(x - 1, y, TILE_SIZE + 2, TILE_SIZE);
+  ctx.fillStyle = "#b48aff";
+  ctx.fillRect(x - 1, y, 2, TILE_SIZE);
+  ctx.fillRect(x + TILE_SIZE - 1, y, 2, TILE_SIZE);
+  ctx.fillRect(x - 1, y, TILE_SIZE + 2, 2);
+  // 아래 화살표 (문 앞, 깜빡임)
+  const ay = y - 10 + Math.round(Math.sin(tick / 6) * 1.5);
+  ctx.fillStyle = `rgba(240, 220, 255, ${0.5 + 0.5 * pulse})`;
+  ctx.beginPath();
+  ctx.moveTo(x + TILE_SIZE / 2 - 4, ay);
+  ctx.lineTo(x + TILE_SIZE / 2 + 4, ay);
+  ctx.lineTo(x + TILE_SIZE / 2, ay + 5);
+  ctx.closePath();
+  ctx.fill();
 }

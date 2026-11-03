@@ -1,5 +1,6 @@
 // 회복: 모든 체력 회복이 지나는 길 (combat.healPlayer). 의사는 체력이 가득 차면 넘친 회복이 보호막이 됨 (초과 치료).
 // 의사 공격 회복(직접 피해의 일부)은 1초마다 상한이 있음
+import { trialNoHeal } from "./trialFoes";
 import { roleHealMul } from "./pwMatchup";
 import { plagueCut } from "./pwPassive";
 import { growHealMul } from "./pwGearStat";
@@ -43,8 +44,8 @@ export function overheals(s: RunState): boolean {
 /** 체력 회복. 의사는 체력을 먼저 채우고 남는 양을 보호막으로 */
 export function heal(s: RunState, amount: number): void {
   const p = s.player;
-  // 학살자: 회복이 듣지 않음 (피의 학살 흡혈만)
-  if (p.characterId === "slayer") return;
+  // 학살자: 회복이 듣지 않음 (피의 학살 흡혈만) · 끝없는 시련 중에는 모든 회복이 막힘
+  if (p.characterId === "slayer" || trialNoHeal(s)) return;
   // 금기: 메마른 몸 (모든 회복 감소)
   amount *= tabooDown(s, "lessHeal");
   // 부식독 (베놈 독가스): 회복·재생 감소

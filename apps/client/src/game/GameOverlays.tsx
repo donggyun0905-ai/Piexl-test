@@ -5,6 +5,7 @@ import type { Lang, TextKey } from "../i18n";
 import { achievementName, achievementUnlock } from "../i18n/achievements";
 import { shareUrl } from "../records";
 import { RunSummary } from "./RunSummary";
+import { DeathRecap, type HurtData } from "./DeathRecap";
 import type { RunSummaryData } from "./runSummary";
 
 /** 게임 위에 뜨는 창. 혼자 하기에서는 창이 떠 있는 동안 게임이 멈춤 */
@@ -27,6 +28,8 @@ export interface Result {
   arenaLevel?: number;
   /** 한 판 요약 */
   summary?: RunSummaryData;
+  /** 쓰러졌을 때 받은 피해 정리 (sim/hurtLog) */
+  hurt?: HurtData;
 }
 
 interface Props {
@@ -106,6 +109,7 @@ export function GameOverlays({ overlay, result, time, seedText, lang, t, onClose
               ))}
             </ul>
           )}
+          {result.hurt && <DeathRecap d={result.hurt} t={t} lang={lang} />}
           {result.summary && <RunSummary d={result.summary} t={t} lang={lang} />}
           {extra}
           {seedText && <SeedLine seedText={seedText} t={t} />}

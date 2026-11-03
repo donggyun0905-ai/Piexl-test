@@ -77,8 +77,14 @@ describe("금 간 벽", () => {
     step(s, SECRET_WALL.crumble + 2);
     expect(s.map.rooms[s.roomId]!.type).toBe("gamble");
     expect(s.map.rooms[s.roomId]!.layer).toBe(-1);
-    expect(s.map.rooms[s.roomId]!.exits).toEqual(s.map.rooms[from]!.exits);
+    // 위쪽 출구는 없고 아래 뒷문으로 원래 방에 돌아감 (금 간 벽에서 조금 안쪽에 섬)
+    expect(s.map.rooms[s.roomId]!.exits).toEqual([-1, -1, -1]);
+    expect(s.map.rooms[s.roomId]!.back).toBe(from);
     expect(s.rooms[s.roomId]!.pickups.some((p) => p.kind === "gambler")).toBe(true);
+    s.player.y = 999;
+    step(s);
+    expect(s.roomId).toBe(from);
+    expect(s.player.x).toBeGreaterThan(at.x + s.player.r + 5);
   });
 
   it("방에 몬스터가 남아 있으면 닿아도 안 무너짐 · 다 잡으면 무너짐", () => {
@@ -259,7 +265,12 @@ describe("시련 1000점", () => {
     (s.player.trial ??= { rooms: [] }).open = chest!.id;
     openChest(s, null, false, 0);
     expect(s.roomId).not.toBe(home);
-    expect(s.map.rooms[s.roomId]!.exits).toEqual([-1, home, -1]);
+    expect(s.map.rooms[s.roomId]!.exits).toEqual([-1, -1, -1]);
+    expect(s.map.rooms[s.roomId]!.back).toBe(home);
     expect(s.rooms[home]!.pickups).toHaveLength(left - 1);
+    // 아래 뒷문에 닿으면 이 방으로 돌아옴
+    s.player.y = 999;
+    step(s);
+    expect(s.roomId).toBe(home);
   });
 });

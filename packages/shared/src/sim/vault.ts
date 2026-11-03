@@ -1,7 +1,7 @@
 // 비밀의 방 (히든 상점이 나오는 판: 혼자 하기·무한·협동): 일반 전투방에 처음 들어갈 때 5%로 옆·아래 벽 어딘가에 금 간 곳
 // 몸이 닿으면 벽이 무너지며(효과·소리) 문이 열리고, 문으로 들어가면 악마의 방·도박꾼의 방·경매장 중 하나 (같은 확률)
-// 비밀의 방은 층 지도 끝에 붙는 옆방 (노선도에는 안 보임) · 출구는 원래 방의 출구와 같음 (출구가 없는 방이면 원래 방으로 돌아가는 문)
-// 시련 1000점 보상 상자로도 골라 들어감 (openVault, 히든 상점 포함) · 그때는 나오면 시련의 방으로 돌아옴 (남은 상자를 잃지 않게)
+// 비밀의 방은 층 지도 끝에 붙는 옆방 (노선도에는 안 보임) · 위쪽 출구는 없고, 들어온 쪽(아래 가운데) 뒷문으로 원래 방에 돌아감 (헷갈리지 않게)
+// 시련 1000점 보상 상자로도 골라 들어감 (openVault, 히든 상점 포함) · 그때도 뒷문으로 시련의 방에 돌아옴 (남은 상자를 잃지 않게)
 import { introOpen } from "./intro";
 import { SECRET_KINDS, SECRET_WALL, type SecretPick } from "../secretDefs";
 import { createRng, deriveSeed } from "../rng";
@@ -14,7 +14,7 @@ import { meetPilgrim, pilgrimRoom } from "./pilgrim";
 import { warpRoom } from "./rooms";
 import type { RoomType } from "./floor";
 import type { RunState } from "./types";
-import { addEffect, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { addEffect, DOOR_HALF, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 import { ROOM_CX as CX } from "../constants";
 
 /** 금 간 벽이 생길 수 있는 판 */
@@ -53,13 +53,12 @@ export function rollCrack(s: RunState, roomId: number): void {
   }
 }
 
-/** 비밀의 방으로: 지도 끝에 옆방을 붙이고 들어감 (협동은 다 같이) · back: 출구가 원래 방으로 돌아가는 문 하나 (시련 보상 상자로 들어간 경우) */
-export function openVault(s: RunState, kind: SecretPick, back = false): number {
+/** 비밀의 방으로: 지도 끝에 옆방을 붙이고 들어감 (협동은 다 같이) · 뒷문은 원래 방으로 · at: 돌아가면 설 자리 (없으면 지금 자리) */
+export function openVault(s: RunState, kind: SecretPick, at?: [number, number]): number {
   const from = s.map.rooms[s.roomId]!;
   const id = s.map.rooms.length;
   const type: RoomType = kind;
-  const exits = !back && from.exits.some((x) => x >= 0) ? [...from.exits] : [-1, from.id, -1];
-  s.map.rooms.push({ id, layer: -1, lane: 1, type, exits, shape: PLAIN_SHAPE });
+  s.map.rooms.push({ id, layer: -1, lane: 1, type, exits: [-1, -1, -1], shape: PLAIN_SHAPE, back: from.id, backAt: at ?? [s.player.x, s.player.y] });
   s.rooms.push({ visited: false, cleared: false, pickups: [], enemies: null });
   warpRoom(s, id);
   return id;
@@ -80,6 +79,7 @@ export function vaultTick(s: RunState): void {
   devilRoomTick(s);
   auctionTick(s);
   gambleTableBlock(s);
+  backDoor(s);
   const c = crackHere(s);
   const p = s.player;
   // 방에 몬스터가 남아 있으면 다 잡아야 무너짐 (덜 잡고 들어가 방 보상을 놓치지 않게)
@@ -95,5 +95,18 @@ export function vaultTick(s: RunState): void {
   }
   if (s.tick < c.broke + SECRET_WALL.crumble) return;
   if (c.to !== undefined && s.map.rooms[c.to]) warpRoom(s, c.to);
-  else c.to = openVault(s, c.kind);
+  // 돌아올 자리: 금 간 벽에서 안쪽으로 조금 (바로 다시 닿지 않게)
+  else c.to = openVault(s, c.kind, [at.x + (c.side === 0 ? R_BACK : c.side === 1 ? -R_BACK : 0), at.y - (c.side === 2 ? R_BACK : 0)]);
+}
+
+/** 금 간 벽에서 돌아올 자리까지 거리 */
+const R_BACK = 30;
+
+/** 비밀의 방 뒷문 (아래 벽 가운데, 들어온 쪽): 닿으면 원래 방으로 돌아감 */
+function backDoor(s: RunState): void {
+  const room = s.map.rooms[s.roomId];
+  const p = s.player;
+  if (room?.back === undefined || p.hp <= 0 || Math.abs(p.x - CX) > DOOR_HALF || p.y < ROOM_MAX_Y - p.r - 0.5) return;
+  warpRoom(s, room.back);
+  if (room.backAt && !s.party) [p.x, p.y, p.prevX, p.prevY] = [...room.backAt, ...room.backAt];
 }

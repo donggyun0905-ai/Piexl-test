@@ -48,7 +48,7 @@ function guide(kind: PracticeRoom, lang: Lang): L[] {
       return [
         [`나오는 곳: 히든 상점(차원의 순례자)이 나오는 판에서, 일반 전투방에 처음 들어갈 때 ${pct(SECRET_WALL.chance)}%로 옆·아래 벽에 금 간 곳`, `Where: in runs with the hidden shop, ${pct(SECRET_WALL.chance)}% when first entering a normal battle room — a crack in a side/bottom wall`, `出現: 隠しショップが出る回で、普通の戦闘部屋に初めて入ると${pct(SECRET_WALL.chance)}%で横・下の壁にひび`],
         [`몸으로 부딪히면 무너지고 문이 열림 → 악마의 방·도박꾼의 방·암흑가 경매장 중 하나 (각 ${share}%)`, `Bump it to break it open → Devil's Room, Gambler's Room or Underworld Auction (${share}% each)`, `体当たりで崩れて扉が開く → 悪魔の部屋・ギャンブラーの部屋・闇街オークションのどれか (各${share}%)`],
-        ["비밀의 방의 출구 = 원래 방의 출구와 같은 문 (그대로 다음 칸으로) · 원래 방에 출구가 없었다면 원래 방으로 돌아가는 문", "Secret room exits = the same doors as the original room (straight to the next column) · if it had none, a door back to the original room", "秘密の部屋の出口 = 元の部屋と同じ扉 (そのまま次の列へ) · 出口がなければ元の部屋に戻る扉"],
+        ["비밀의 방에서 나갈 때는 들어온 쪽(아래 가운데)의 빛나는 뒷문 → 원래 방으로 돌아감", "To leave a secret room, use the glowing back door where you came in (bottom center) → back to the original room", "秘密の部屋から出るときは入ってきた側(下の中央)の光る裏口 → 元の部屋に戻る"],
         ["시련의 방 1000점 보상 상자로도 골라 들어감 (히든 상점 포함) · 안 부수고 지나가도 아무 일 없음", "Also selectable from the 1000-pt trial chest (hidden shop too) · ignoring it does nothing", "試練の部屋1000点の報酬箱でも選んで入れる (隠しショップも) · 壊さず通っても何もない"],
       ];
     case "devil":

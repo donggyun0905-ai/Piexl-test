@@ -128,3 +128,13 @@
 .gym-row.off {
   opacity: 0.5;
 }
+
+/* 설명 창 예시 화면 (game/gym/GymDemo) */
+.gym-demo {
+  display: block;
+  width: min(300px, 100%);
+  margin: 6px auto;
+  border: 1px solid #6a5a88;
+  border-radius: 6px;
+  image-rendering: auto;
+}
