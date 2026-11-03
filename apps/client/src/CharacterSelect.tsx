@@ -36,19 +36,14 @@ interface Props {
   onBack: () => void;
 }
 
-/** 무작위 캐릭터로 숨은 캐릭터가 나올 확률 (별지기 10% · 오리 5%) */
-const HIDDEN_CHANCE: Partial<Record<CharacterId, number>> = { stargazer: 0.1, duck: 0.05, scribe: 0.05, miner: 0.05, voyager: 0.05, zeus: 0.05, pilgrim: 0.05 };
+/** 무작위 캐릭터로 숨은 캐릭터가 나올 확률 (숨은 캐릭터 묶음 전체 2%) · 걸리면 이 목록에서 같은 확률로 하나 */
+const HIDDEN_CHANCE = 0.02;
+const HIDDEN_ROLL: readonly CharacterId[] = ["stargazer", "duck", "scribe", "miner", "voyager", "zeus", "pilgrim"];
 
 /** 무작위 캐릭터 고르기 (꾸밈 선택이라 브라우저 랜덤). withHidden이면 낮은 확률로 숨은 캐릭터 */
 function rollCharacter(withHidden: boolean): { id: CharacterId; hidden: boolean } | null {
-  if (withHidden) {
-    let r = Math.random();
-    for (const id of HIDDEN_CHARACTERS) {
-      const c = HIDDEN_CHANCE[id] ?? 0;
-      if (r < c) return { id, hidden: true };
-      r -= c;
-    }
-  }
+  const pool = HIDDEN_ROLL.filter((c) => HIDDEN_CHARACTERS.includes(c));
+  if (withHidden && pool.length && Math.random() < HIDDEN_CHANCE) return { id: pool[Math.floor(Math.random() * pool.length)]!, hidden: true };
   const open = CHARACTER_IDS.filter((c) => characterOpen(c));
   const id = open[Math.floor(Math.random() * open.length)];
   return id ? { id, hidden: false } : null;

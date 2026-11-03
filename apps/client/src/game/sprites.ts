@@ -1,5 +1,6 @@
 // 그림 교체 준비: public/sprites/ 에 PNG를 넣고 아래 목록에 이름을 적으면 도형 대신 그 그림을 그림.
 // 목록에 없거나 아직 못 불러온 그림은 지금처럼 도형으로 그림. 규격은 docs/ART.md
+import { CHARACTER_SHEETS } from "./spriteSheets";
 import { mipFor, screenScale } from "./mipmap";
 import type { CharacterId } from "@pixel-rogue/shared";
 import { equippedSkin } from "../shop/wallet";
@@ -44,76 +45,6 @@ export function drawSprite(ctx: CanvasRenderingContext2D, name: string, x: numbe
 }
 
 // ── 캐릭터 방향 시트 ──
-// 한 칸 크기 정사각형, 4줄 × 4칸: 1줄 앞(아래), 2줄 뒤(위), 3줄 옆(오른쪽, 왼쪽은 뒤집음), 4줄 마법 쓰기
-// 테두리가 잘리지 않게 칸 둘레에 여백을 둠
-/** 방향 시트로 넣은 캐릭터 그림: 이름 → 한 칸 크기, 발 아래 여백 */
-/** src: 그림 파일의 한 칸 크기가 다를 때 (빛의 사도 성장 그림 2배 촘촘 · 몰락한 왕 96칸 → 보통 크기로 줄여 그림) */
-/** v2: 새 시트 4칸 × 5줄 (칸 = 앞·뒤·왼·오): 1줄 서기 · 2줄 공격 · 3줄 걷기(왼발) · 4줄 걷기(오른발) · 5줄 맞음·쓰러짐·대시 오른쪽·대시 왼쪽 (scripts/art/import_v2.py) */
-const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number; src?: number; v2?: true }>> = {
-  mage: { size: 32, footPad: 2, src: 128, v2: true },
-  drifter: { size: 32, footPad: 2, src: 128, v2: true },
-  warden: { size: 32, footPad: 2, src: 128, v2: true },
-  mystic: { size: 32, footPad: 2, src: 128, v2: true },
-  engineer: { size: 32, footPad: 2, src: 128, v2: true },
-  elementalist: { size: 32, footPad: 2, src: 128, v2: true },
-  brawler: { size: 32, footPad: 2, src: 128, v2: true },
-  doctor: { size: 32, footPad: 2, src: 128, v2: true },
-  gunner: { size: 32, footPad: 2, src: 128, v2: true },
-  beast: { size: 32, footPad: 2, src: 128, v2: true },
-  ninja: { size: 32, footPad: 2, src: 128, v2: true },
-  chronomancer: { size: 32, footPad: 2, src: 128, v2: true },
-  summoner: { size: 32, footPad: 2, src: 128, v2: true },
-  novice: { size: 32, footPad: 2, src: 128, v2: true },
-  bedouin: { size: 32, footPad: 2, src: 128, v2: true },
-  general: { size: 32, footPad: 2, src: 128, v2: true },
-  imugi: { size: 32, footPad: 2, src: 128, v2: true },
-  apostle: { size: 32, footPad: 2, src: 128, v2: true },
-  stargazer: { size: 32, footPad: 2, src: 128, v2: true },
-  duck: { size: 32, footPad: 2, src: 128, v2: true },
-  scribe: { size: 32, footPad: 2, src: 128, v2: true },
-  idra: { size: 32, footPad: 2, src: 128, v2: true },
-  byeonhui: { size: 32, footPad: 2, src: 128, v2: true },
-  fly: { size: 32, footPad: 2, src: 128, v2: true },
-  elder: { size: 32, footPad: 2, src: 128, v2: true },
-  ren: { size: 32, footPad: 2, src: 128, v2: true },
-  spiritist: { size: 32, footPad: 2, src: 128, v2: true },
-  plague: { size: 32, footPad: 2, src: 128, v2: true },
-  slayer: { size: 32, footPad: 2, src: 128, v2: true },
-  eater: { size: 32, footPad: 2, src: 128, v2: true },
-  mukin: { size: 32, footPad: 2, src: 128, v2: true },
-  samyeol: { size: 32, footPad: 2, src: 128, v2: true },
-  automata: { size: 32, footPad: 2, src: 128, v2: true },
-  rider: { size: 32, footPad: 2, src: 128, v2: true },
-  bomber: { size: 32, footPad: 2, src: 128, v2: true },
-  artifacter: { size: 32, footPad: 2, src: 128, v2: true },
-  punk: { size: 32, footPad: 2, src: 128, v2: true },
-  collector: { size: 32, footPad: 2, src: 128, v2: true },
-  tracker: { size: 32, footPad: 2, src: 128, v2: true },
-  forgotten: { size: 32, footPad: 2, src: 128, v2: true },
-  remnant: { size: 32, footPad: 2, src: 128, v2: true },
-  wanderer: { size: 32, footPad: 2, src: 128, v2: true },
-  silk: { size: 32, footPad: 2, src: 128, v2: true },
-  // 히든 캐릭터도 일반 캐릭터와 같은 크기 (2026-10-31) · 빛의 사도는 칸에 여백이 많아 키를 맞춘 크기(성장 모습은 단계마다 커짐) · 차원의 순례자는 소녀 키를 일반 캐릭터에 맞춤 (큰 가방은 그만큼 같이 커서 칸이 큼)
-  miner: { size: 32, footPad: 2, src: 128, v2: true },
-  voyager: { size: 32, footPad: 2, src: 128, v2: true }, zeus: { size: 32, footPad: 2, src: 128, v2: true }, pilgrim: { size: 32, footPad: 2, src: 128, v2: true }, crownKing: { size: 80, footPad: 3, src: 128, v2: true }, fallenKing: { size: 32, footPad: 2, src: 128, v2: true }, lux: { size: 32, footPad: 2, src: 128, v2: true }, lux2: { size: 32, footPad: 2, src: 128, v2: true }, lux3: { size: 32, footPad: 2, src: 128, v2: true }, lux4: { size: 32, footPad: 2, src: 128, v2: true },
-  // 변희가 변한 동물 (옆모습만, render/actors가 옆을 보게 그림)
-  ...Object.fromEntries(["wolf", "bear", "eagle", "snake", "boar", "scorpion", "bat", "elephant", "spider", "phoenix"].flatMap((a) => [[`morph-${a}`, { size: 32, footPad: 2, src: 128, v2: true as const }], [`morph-${a}-evo`, { size: 48, footPad: 3, src: 128, v2: true as const }]])),
-  abandoned: { size: 32, footPad: 2, src: 128, v2: true },
-  abandoned2: { size: 32, footPad: 2, src: 128, v2: true },
-  abandoned3: { size: 32, footPad: 2, src: 128, v2: true },
-  titan: { size: 32, footPad: 2, src: 128, v2: true },
-  oni: { size: 32, footPad: 2, src: 128, v2: true },
-  // 각성 오니 (스킨 폴더 그림 skins/oni_god.png)
-  oni_god: { size: 48, footPad: 3, src: 128, v2: true },
-  // 학살자 피의 학살 모습 (skins/slayer_rage.png)
-  slayer_rage: { size: 48, footPad: 3, src: 128, v2: true },
-  novice5: { size: 32, footPad: 2, src: 128, v2: true },
-  novice10: { size: 32, footPad: 2, src: 128, v2: true },
-  novice15: { size: 32, footPad: 2, src: 128, v2: true },
-  novice20: { size: 32, footPad: 2, src: 128, v2: true },
-  // 야수 변신 백호 (render/beastTiger)
-  beasttiger: { size: 56, footPad: 3, src: 128, v2: true },
-};
 
 for (const name of Object.keys(CHARACTER_SHEETS)) {
   if (name.includes("_")) continue; // 스킨 폴더 그림은 skinImage로
@@ -194,16 +125,17 @@ export interface CharacterPose {
   dash?: boolean;
 }
 
-/** 새 시트(v2)의 [줄, 칸] · 걷기는 왼발 → 서기 → 오른발 → 서기 */
-function v2Cell(pose: CharacterPose): [number, number] {
-  if (pose.down) return [4, 1];
-  if (pose.hurt) return [4, 0];
-  if (pose.dash) return [4, pose.faceX < 0 ? 3 : 2];
+/** 새 시트(v2)의 [줄, 칸, 아래로 내림] · 걷기는 왼발 → 서기 → 오른발 → 서기 (standWalk: 서기 칸 + 걸음마다 반 칸 아래) */
+function v2Cell(pose: CharacterPose, standWalk?: boolean): [number, number, number] {
+  if (pose.down) return [4, 1, 0];
+  if (pose.hurt) return [4, 0, 0];
+  if (pose.dash) return [4, pose.faceX < 0 ? 3 : 2, 0];
   const side = Math.abs(pose.faceX) > Math.abs(pose.faceY);
   const dir = side ? (pose.faceX < 0 ? 2 : 3) : pose.faceY < 0 ? 1 : 0;
-  if (pose.casting) return [1, dir];
+  if (pose.casting) return [1, dir, 0];
   const walk = pose.moving ? pose.step % 4 : 1;
-  return [walk === 0 ? 2 : walk === 2 ? 3 : 0, dir];
+  if (standWalk) return [0, dir, walk % 2 === 0 ? 0.5 : 0];
+  return [walk === 0 ? 2 : walk === 2 ? 3 : 0, dir, 0];
 }
 
 /**
@@ -231,7 +163,8 @@ export function drawCharacter(ctx: CanvasRenderingContext2D, name: string, x: nu
   const ss = Math.round(img.width / 4); // 그림 한 칸 (4칸 시트: 2배·4배 촘촘한 그림·스킨도 자동)
   const side = Math.abs(pose.faceX) > Math.abs(pose.faceY);
   let [row, col, flip] = [0, 0, false];
-  if ("v2" in sheet && sheet.v2) [row, col] = v2Cell(pose);
+  let bob = 0;
+  if ("v2" in sheet && sheet.v2) [row, col, bob] = v2Cell(pose, "standWalk" in sheet && !!sheet.standWalk);
   else if (pose.casting && pose.faceY > -0.5) {
     // 앞을 보면 팔을 오른쪽으로 뻗은 1번째 칸, 옆이면 4번째 칸
     row = 3;
@@ -245,7 +178,7 @@ export function drawCharacter(ctx: CanvasRenderingContext2D, name: string, x: nu
   // 화면 픽셀에 맞춰 놓음 (반 픽셀에 걸치면 흐려짐)
   const k = screenScale(ctx);
   const left = Math.round((x - size / 2) * k) / k;
-  const top = Math.round((y + r + 1 + footPad - size) * k) / k;
+  const top = Math.round((y + r + 1 + footPad - size + bob) * k) / k;
   const [sx, sy] = [col * ss, row * ss];
   const blit = (img0: HTMLImageElement, y0: number) => {
     // 줄여 그리는 촘촘한 그림은 화면 크기에 딱 맞춘 그림(mipmap)을 거의 1:1로 → 흐리지 않게 또렷한 픽셀로

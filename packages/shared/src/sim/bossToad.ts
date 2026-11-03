@@ -26,7 +26,7 @@ const R = {
   MUD_MAX: 8,
   /** 폴짝 한 번 거리 · 쉬는 틱 */
   HOP: 14,
-  REST: 70,
+  REST: 90,
 };
 export { R as BOSS_TOAD_RULES };
 

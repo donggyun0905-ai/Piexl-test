@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.368",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "무작위 캐릭터: 숨은 캐릭터는 묶음 전체 2% (걸리면 숨은 캐릭터 중 하나를 같은 확률로)",
+        "캐릭터 해금 다시 나눔: 첫 클리어 한 판이면 5명쯤 (음양사·야수·기계공학자·의사·풋내기) · 나머지는 그 캐릭터로 클리어하면 어울리는 다음 캐릭터가 열림 (파수꾼 → 격투가 → 장수 → 묵인 …) · 특별한 클리어 (닌자: 한 판 보스 셋 무피격 · 시간술사: 상점 안 쓰고 · 악의 사도: 체력 10 이하 · 플라이: 10분 안) · 누적 (판 수·승리·처치·보스·돈)",
+        "차원의 순례자: 걸을 때 가방·몸 크기가 왔다 갔다 하던 것 고침 (걸어도 서 있는 그림으로 살짝만 흔들림)",
+        "늪의 두꺼비 왕: 기술 사이에 조금 더 쉼 (공격이 덜 잦음)",
+      ],
+      en: [
+        "Random character: hidden characters now share a single 2% chance (then one of them is picked evenly)",
+        "Character unlocks reworked: a first clear opens about five (Talisman Master, Beastkin, Engineer, Doctor, Novice) · clearing with a character opens a fitting next one (Warden → Brawler → General → Mukin …) · special clears (Ninja: 3 flawless bosses in a run · Chronomancer: no shop · Apostle of Malice: 10 HP or less · Fly: under 10 min) · long-term totals (runs, wins, kills, bosses, gold)",
+        "Dimensional Pilgrim: her bag and body no longer change size while walking (uses the standing art with a gentle bob)",
+        "Bog Toad King: rests a little longer between moves (attacks less often)",
+      ],
+      ja: [
+        "ランダムキャラ：隠しキャラはまとめて2%（当たれば隠しキャラの中から均等に1人）",
+        "キャラ解放を再調整：初クリア1回で5人ほど（陰陽師・獣人・エンジニア・医者・見習い）· 残りはそのキャラでクリアすると相性のいい次のキャラが開く（番人 → 格闘家 → 武将 → 黙忍 …）· 特別なクリア（忍者：1回でボス3体ノーダメージ · 時間術師：ショップを使わず · 悪の使徒：体力10以下 · フライ：10分以内）· 累計（回数・勝利・撃破・ボス・お金）",
+        "次元の巡礼者：歩くたびにバッグと体の大きさが変わっていたのを修正（歩いても立ち絵で少しだけ揺れる）",
+        "沼のガマ王：技の間に少し長く休む（攻撃の頻度が下がる）",
+      ],
+    },
+  },
+  {
     version: "0.48.367",
     date: "2026-11-03",
     items: {
