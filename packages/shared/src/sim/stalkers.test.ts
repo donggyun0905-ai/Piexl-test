@@ -94,6 +94,16 @@ describe("시즌 2 새 몬스터", () => {
     expect(hazards).toBeGreaterThan(0);
   });
 
+  it("땅 물고기: 땅속에 있으면 기절·화상 등 아무것도 받지 않음", () => {
+    const run = withOne("landfish");
+    play(run, 5, () => {});
+    const e = run.enemies[0]!;
+    expect(e.immune).toBe(true);
+    Object.assign(e, { stunTicks: 120, burnTicks: 120, slowTicks: 120 });
+    play(run, 1, () => {});
+    expect([e.stunTicks, e.burnTicks, e.slowTicks]).toEqual([0, 0, 0]);
+  });
+
   it("땅 물고기: 기절해 늦어지면 예고만 남고, 실제로 땅에 닿을 때 그 자리에서 터짐", () => {
     const run = withOne("landfish");
     // 뛰어오르기 시작할 때까지

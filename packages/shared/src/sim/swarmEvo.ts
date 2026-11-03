@@ -34,7 +34,7 @@ export function bladeSpots(tick: number, x: number, y: number): { x: number; y: 
   return out;
 }
 
-const alive = (s: RunState) => s.enemies.filter((e) => e.hp > 0 && !e.svBox);
+const alive = (s: RunState) => s.enemies.filter((e) => e.hp > 0 && !e.svBox && !e.immune);
 
 /** 가까운 적 n (range 안) */
 function nearest(s: RunState, n: number, range: number): EnemyState[] {

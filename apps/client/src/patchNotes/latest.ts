@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.372",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "노선도 큰 지도: Tab(모바일은 오른쪽 작은 지도를 누름)으로 열고 닫음 · 지금 방에서 이어진 방을 차례로 누르면 빛나는 파란 테두리로 갈 길이 정해짐 (다시 누르면 취소)",
+        "갈 길을 정해 두면 싸운 방을 정리한 뒤 다음 방 출구로 알아서 걸어감 (직접 움직이면 그동안은 내 조작대로 · 고를 패시브가 바닥에 있으면 기다림)",
+        "땅 물고기: 땅속에 있는 동안은 기절·느려짐·화상 등 아무것도 받지 않음 (증강 기술도 땅속 땅 물고기는 노리지 않음)",
+        "제단·경매장 증강 기술은 내가 공격하는 동안만 나감 (가만히 있으면 안 나감)",
+      ],
+      en: [
+        "Big route map: open/close with Tab (on mobile, tap the small map on the right) · tap connected rooms in order to set your path with a glowing blue border (tap again to cancel)",
+        "With a path set, after you clear a fight room you walk to the next room's exit on your own (moving yourself overrides it · it waits if a passive choice is on the floor)",
+        "Land fish: while underground they take nothing at all — no stun, slow, burn and so on (augment skills no longer target them either)",
+        "Altar and auction augment skills only fire while you are attacking (not while standing idle)",
+      ],
+      ja: [
+        "ルートマップ拡大：Tab（モバイルは右の小さなマップをタップ）で開閉・今の部屋からつながる部屋を順に押すと光る青い枠で道が決まる（もう一度押すと取り消し）",
+        "道を決めておくと、戦った部屋を片付けたあと次の部屋の出口へ自動で歩く（自分で動くとその間は自分の操作・選ぶパッシブが床にあれば待つ）",
+        "地中魚：地中にいる間は気絶・鈍化・火傷など何も受けない（増強スキルも地中の地中魚を狙わない）",
+        "祭壇・オークションの増強スキルは自分が攻撃している間だけ発動（じっとしていると出ない）",
+      ],
+    },
+  },
+  {
     version: "0.48.371",
     date: "2026-11-03",
     items: {

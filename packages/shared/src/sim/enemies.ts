@@ -13,7 +13,7 @@ import { updateBlade } from "./bossBlades";
 import { updateGhost } from "./bossPrimeval";
 import { addHazard, addShape } from "./hazards";
 import { updateCritter } from "./critters";
-import { fishLeaping, updateStalker } from "./stalkers";
+import { burrowed, fishLeaping, updateStalker } from "./stalkers";
 import { guardSpot, updateGnat, updateGuardian } from "./minions";
 import { domainSlow } from "./talisman";
 import type { EnemyState, RunState } from "./types";
@@ -46,6 +46,7 @@ export function updateEnemies(s: RunState): void {
   const fields = new Map<number, ReturnType<typeof distanceField>>();
   for (const e of s.enemies) {
     if (e.hitFlash > 0) e.hitFlash--;
+    burrowed(e); // 땅속 땅 물고기는 아무것도 받지 않음
     knockTick(s, e);
     if (e.kind === "dummy") {
       // 연습장 허수아비는 밀리거나 끌려가도 제자리 (anchor)

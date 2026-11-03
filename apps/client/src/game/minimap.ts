@@ -123,13 +123,39 @@ const BOX_RES = 4;
 export const MINIMAP_BOX_W = MINIMAP_WIDTH * BOX_RES;
 export const MINIMAP_BOX_H = routeHeight(BOX_LAYERS) * BOX_RES;
 
-/** 게임 중 노선도 (창 가운데에, 넘치면 줄여서) */
-export function drawMinimap(ctx: CanvasRenderingContext2D, s: RunState): void {
+/** 미리 정한 길 (routePlan): 방마다 빛나는 파란 테두리 · 길 끝 다음에 고를 수 있는 방은 흐린 테두리 */
+export function drawPlan(ctx: CanvasRenderingContext2D, map: FloorMap, plan: readonly number[], next: readonly number[] = []): void {
+  ctx.save();
+  ctx.lineWidth = 1;
+  for (const id of next) {
+    const r = map.rooms[id];
+    if (!r) continue;
+    const { x, y } = routeNodePos(map, r.layer, r.lane);
+    ctx.strokeStyle = "rgba(120, 200, 255, 0.45)";
+    ctx.setLineDash([1, 1]);
+    ctx.strokeRect(x - 1.5, y - 1.5, NODE_W + 3, NODE_H + 3);
+  }
+  ctx.setLineDash([]);
+  ctx.shadowColor = "#3ab8ff";
+  ctx.shadowBlur = 4;
+  ctx.strokeStyle = "#5ad0ff";
+  for (const id of plan) {
+    const r = map.rooms[id];
+    if (!r) continue;
+    const { x, y } = routeNodePos(map, r.layer, r.lane);
+    ctx.strokeRect(x - 1.5, y - 1.5, NODE_W + 3, NODE_H + 3);
+  }
+  ctx.restore();
+}
+
+/** 게임 중 노선도 (창 가운데에, 넘치면 줄여서) · plan: 미리 정한 길 */
+export function drawMinimap(ctx: CanvasRenderingContext2D, s: RunState, plan: readonly number[] = []): void {
   const h = routeHeight(s.map.layers);
   const k = BOX_RES * Math.min(1, routeHeight(BOX_LAYERS) / h);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   ctx.setTransform(k, 0, 0, k, (ctx.canvas.width - MINIMAP_WIDTH * k) / 2, (ctx.canvas.height - h * k) / 2);
   drawRoute(ctx, s.map, (id) => s.rooms[id]?.visited === true, s.roomId);
+  drawPlan(ctx, s.map, plan);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
 }

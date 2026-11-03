@@ -22,7 +22,7 @@ export const EVO2 = {
   boomerang: { every: 75, mul: 1.3, speed: 3.2, span: 40 },
 };
 
-const alive = (s: RunState) => s.enemies.filter((e) => e.hp > 0 && !e.svBox);
+const alive = (s: RunState) => s.enemies.filter((e) => e.hp > 0 && !e.svBox && !e.immune);
 const boss = (e: EnemyState) => !!ENEMIES[e.kind].boss;
 
 function nearestTo(s: RunState, x: number, y: number, skip: ReadonlySet<number> = new Set()): EnemyState | undefined {
