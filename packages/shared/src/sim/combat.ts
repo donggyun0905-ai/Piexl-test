@@ -13,7 +13,8 @@ import { relicKill } from "./hiddenPerks";
 import { createRng, deriveSeed } from "../rng";
 import { ENEMIES, type EnemyKind } from "../content";
 import { SWARM } from "../swarmDefs";
-import { titanHurt, titanParried } from "./titan";
+import { titanParried } from "./titan";
+import { hpLost } from "./hurtLog";
 import { logHit } from "./pvpRecap";
 import { roleDmgMul } from "./pwMatchup";
 import { afterHurt, classTaken } from "./classTaken";
@@ -133,7 +134,7 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
     taken *= 0.5;
     p.guardTaken = (p.guardTaken ?? 0) + taken;
   }
-  // 모래 장막(베두인): 차크람을 던져 손이 비어 있으면 받는 피해 감소 · 철벽진(장수): 콤보 사이 쉬는 동안 감소
+  // 모래 장막(베두인): 차크람이 손에 없으면 · 철벽진(장수): 콤보 사이 쉴 때 받는 피해 감소
   if (hasPerk(p, "sandVeil") && p.ckHeld === false) taken *= PERKS.sandVeil.taken;
   if (hasPerk(p, "ironWall") && (p.gPause ?? 0) > 0) taken *= PERKS.ironWall.taken;
   // 용린갑(이무기)
@@ -158,7 +159,7 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
     taken -= used;
   }
   p.hp -= taken;
-  titanHurt(s, dmg);
+  hpLost(s, dmg, taken, from, envHit);
   if (s.party) p.hurt = (p.hurt ?? 0) + taken;
   s.roomDamaged = true;
   // 배수의 진: 체력이 30% 이하면 무적 시간 2배 · 패왕전은 맞은 뒤 무적 없음

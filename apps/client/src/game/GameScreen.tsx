@@ -176,7 +176,7 @@ export function GameScreen(props: GameScreenProps) {
         cb.current.onAdvance?.(r);
       },
       onOver: (r, dmg) => {
-        setResult(tracker.finish(dmg));
+        setResult({ ...tracker.finish(dmg), hurt: r.won || r.player.hp > 0 ? undefined : r.player.hurtLog });
         const can = mode === "solo" && r.won && r.floor === FLOOR_COUNT && !r.endless && !r.hero && !r.lastBoss;
         const auto = can ? cb.current.autoLastBoss?.() : undefined;
         if (auto) challenge(auto);

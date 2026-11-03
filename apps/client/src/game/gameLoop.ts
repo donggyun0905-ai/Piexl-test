@@ -1,16 +1,15 @@
 // 게임 진행: 고정 간격 계산 + 화면 주사율에 맞춘 그리기 + HUD 갱신 (React 밖에서 돌림)
 import { noteExhibits, noteRecords } from "../lobby/exhibits";
-import { itemName } from "../i18n/items";
-import { fateParts } from "../i18n/items/voyagerAbilities";
-import { applyRoom, ARENA_LEVELS, inPlay, FLOOR_COUNT, HERO_FLOORS, LEGENDS, tabooPoints, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
+import { applyRoom, ARENA_LEVELS, inPlay, FLOOR_COUNT, HERO_FLOORS, tabooPoints, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
-import { LEGEND_NAMES } from "../i18n/items/general";
-import { SPECIAL_NAMES } from "../i18n/items/abandoned";
 import type { Controls } from "./controls";
 import { formatTime, pickupText, promptText } from "./hudText";
 import { loadoutKey, type LoadoutView } from "./Loadout";
 import { loadoutView } from "./loadoutView";
 import { autoRoute, redrawMini } from "./routePlan";
+import { frameTexts } from "./frameTexts";
+import { DeathCam } from "./deathCam";
+import { drawPlayer } from "./render/actors";
 import { viewH, viewW } from "./viewSize";
 import { drawFrame, type DrawOverlay } from "./render";
 import { getSettings } from "../settings";
@@ -29,13 +28,8 @@ import { roar } from "../audio/tigerSound";
 import { fanfare } from "../audio/victorySound";
 import { activeFx } from "../shop/effects";
 
-/** 머리 위 히든 글자 (효과 hdText 번호): 0~3 저주받은 주사위 저주 (sim/hiddenDice 순서) · 4~13 떨어진 신의 파편으로 얻은 힘 (sim/hiddenPerks 순서) */
-const HIDDEN_TEXT = ["curseSummon", "curseHp", "cursePassives", "curseBare", "shard0", "shard1", "shard2", "shard3", "shard4", "shard5", "shard6", "shard7", "shard8", "shard9"] as const;
-
 /** 한 번에 따라잡는 최대 틱 수 (탭을 오래 비웠다 돌아올 때 멈춤 방지) */
 const MAX_CATCH_UP = 10;
-/** 검은 잔영 대사 */
-const UMBRA_LINES: readonly TextKey[] = ["umbraSay0", "umbraSay1", "umbraSay2", "umbraSay3", "umbraSay4", "umbraSay5", "umbraSay6"];
 
 export interface LoopOptions {
   run: RunState;
@@ -74,6 +68,9 @@ export interface LoopOptions {
 
 export function startGameLoop(o: LoopOptions): () => void {
   const { run, ctx, controls, t, lang } = o;
+  const texts = frameTexts(t, lang);
+  // 쓰러질 때 느린 다시 보기·쓰러지는 몸 (혼자 하기 던전)
+  const cam = new DeathCam(!run.pvp && !run.party && !o.practice, drawPlayer);
   // 추적자는 숫자 1·2·3이 스킬 (아이템은 Q·E)
   // 패왕전은 숫자 1~4가 스킬 (조준 모드)
   controls.skillKeys = run.player.characterId === "tracker" || !!run.pvp;
@@ -202,6 +199,7 @@ export function startGameLoop(o: LoopOptions): () => void {
     let steps = 0;
     while (acc >= TICK_MS && steps < MAX_CATCH_UP) {
       const input = autoRoute(run, controls.read());
+      cam.record(run, input);
       o.onInput?.(input);
       if (!o.step) stepSim(run, input);
       else if (!o.step(run, input)) {
@@ -224,35 +222,25 @@ export function startGameLoop(o: LoopOptions): () => void {
     if (steps === MAX_CATCH_UP) acc = 0;
     if (steps > 0) o.show?.(run);
     if (steps > 0) o.onAdvance?.(run);
-    drawFrame(ctx, run, {
+    drawFrame(ctx, cam.view(run), {
       alpha: stopped || run.over ? 1 : acc / TICK_MS,
       showReticle: controls.touchAiming,
       showHitbox: controls.hitboxHeld || getSettings().showHitbox,
       showRange: getSettings().showRange,
-      pilgrimLine: t("pilgrimHello"),
-      curseNames: HIDDEN_TEXT.map((k) => t(k)),
+      ...texts,
       ...(run.pvp && getSettings().showNames ? { charName: (id: string) => t(id as TextKey) } : {}),
       skillAim: controls.arm.armed,
       pixelScale: ctx.canvas.width / viewW(),
       zoom: controls.zoom,
       cursor: () => controls.mouse,
-      legendName: (i) => LEGEND_NAMES[LEGENDS[i] ?? "charge"][lang],
-      passiveName: (id) => itemName("passive", id as never, lang),
-      fateName: (part, i) => fateParts(i, lang)[part]!.name,
-      tagName: (kind) => SPECIAL_NAMES[kind][lang],
-      oniUp: (k) => t(k === "hp" ? "oniUpHp" : k === "regen" ? "oniUpRegen" : "oniUpReach"),
-      umbraLine: (i) => t(UMBRA_LINES[i] ?? "umbraSay0"),
-      sageText: t("sageMaxStaff"),
-      trialText: (k) => t(k as TextKey),
-      useName: (id) => itemName("use", id as never, lang),
-      bossName: (k) => t(k === "dragon" ? "bossDragon" : k === "godeater" ? "bossGodEater" : "bossPrimeval"),
-      hidePlayer: tiger ? () => onMe() && resting(tiger) : undefined,
+      hidePlayer: () => cam.falling() || (!!tiger && onMe() && resting(tiger)),
       under: tiger || theme ? (c, snap) => {
         if (!onMe()) return;
         if (theme) drawThemeUnder(c, theme, run, acc / TICK_MS, snap);
         if (tiger) under(c, tiger, run, acc / TICK_MS, snap, run.tick);
       } : undefined,
       overlay: (c, snap) => {
+        cam.drawFall(c, snap);
         if (tiger && onMe()) over(c, tiger, run, acc / TICK_MS, snap, run.tick);
         if (theme && onMe()) drawThemeOver(c, theme, run, acc / TICK_MS, snap);
         if (getSettings().showDamage) damage.draw(c, run.tick, snap);
@@ -264,7 +252,7 @@ export function startGameLoop(o: LoopOptions): () => void {
     updateHud();
     // 라스트 보스 도전으로 판이 다시 이어지면 끝 처리도 다시
     if (!run.over) overShown = false;
-    if (run.over && !overShown) {
+    if (run.over && !overShown && cam.ready(run)) {
       overShown = true;
       controls.releaseAll();
       o.onOver(run, damage);
