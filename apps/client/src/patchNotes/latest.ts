@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.373",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "그림 리퍼·뒤집어진 십자가·풍뎅이 부적: 기계공학자·의사 공격, 원소술사 일부 공격, 화상·중독 같은 상태이상 피해에도 붙지 않던 것을 고침 (이제 모든 공격에 적이 받는 피해 +30%)",
+        "비밀의 방(금 간 벽): 방에 몬스터가 남아 있으면 닿아도 무너지지 않음 · 다 잡아야 열림 (덜 잡고 들어가 방 보상을 놓치던 것)",
+      ],
+      en: [
+        "Grim Reaper, Inverted Cross and Scarab Charm now also apply to Engineer and Doctor attacks, some Elementalist attacks and status damage such as burn and poison (every attack now deals +30% to enemies)",
+        "Secret rooms (cracked walls): the wall won't crumble while monsters remain in the room — clear it first (you could slip in early and lose the room reward)",
+      ],
+      ja: [
+        "グリムリーパー・逆さ十字・スカラベの護符：機械工学者・医者の攻撃、元素術師の一部の攻撃、火傷・毒などの状態異常ダメージにも乗るよう修正（すべての攻撃で敵の被ダメージ+30%）",
+        "秘密の部屋（ひび割れた壁）：部屋にモンスターが残っていると触れても崩れない・全部倒すと開く（倒しきらずに入って部屋の報酬を逃していた問題）",
+      ],
+    },
+  },
+  {
     version: "0.48.372",
     date: "2026-11-03",
     items: {

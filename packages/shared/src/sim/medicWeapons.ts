@@ -2,6 +2,7 @@
 // 직접 피해의 일부만큼 회복 (sim/heal). 날아가는 탄·장판·바늘·알약·구급차의 틱마다 처리는 medicGear
 import { ENEMIES } from "../content";
 import { removeDead } from "./combat";
+import { devilMul } from "./devilPerks";
 import { leechHeal, leechRate } from "./heal";
 import { tickDamage, traceBeam } from "./laser";
 import { aimPoint, FLY_TICKS } from "./laserWeapons";
@@ -63,7 +64,7 @@ export function medicHit(s: RunState, e: EnemyState, dmg: number, leechMul = 1, 
   const p = s.player;
   if (e.immune) return;
   if ((p.shieldPts ?? 0) > 0 && hasPerk(p, "robust")) dmg *= R.ROBUST_MUL;
-  e.hp -= dmg;
+  e.hp -= dmg * devilMul(s, e); // 그림 리퍼 등 (combat.damageEnemy와 같게)
   if (flash) e.hitFlash = Math.max(e.hitFlash, 2);
   leechHeal(s, dmg * leechRate(p, leechMul));
 }
