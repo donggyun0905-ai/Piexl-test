@@ -101,7 +101,7 @@ export function openChest(s: RunState, pk: Pickup | null, interact: boolean, cho
     if (code === "sr") {
       done();
       // 나오면 이 시련의 방으로 돌아옴 (남은 보상 상자를 잃지 않게)
-      openVault(s, opt as SecretPick, true);
+      openVault(s, opt as SecretPick);
       return;
     }
     if (code === "ps") boonStat(s, opt as BoonStat);

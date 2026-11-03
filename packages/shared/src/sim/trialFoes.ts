@@ -36,3 +36,5 @@ export function trialKill(s: RunState, e: EnemyState): void {
 }
 /** 시련 중 이동 속도 배율 (시련 방 안에서만) */
 export const trialMoveMul = (s: RunState) => (s.trialRun && s.trialRun.room === s.roomId ? Math.max(R.SLOW_MIN, 1 - (s.trialRun.slow ?? 0)) : 1);
+/** 끝없는 시련 중 (시련의 방 안): 모든 회복이 듣지 않음 (흡혈·재생·회복약 포함, heal) */
+export const trialNoHeal = (s: RunState) => s.trialRun?.kind === 4 && s.trialRun.room === s.roomId;

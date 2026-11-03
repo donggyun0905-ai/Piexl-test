@@ -39,7 +39,7 @@ export { hiddenOn, SEA_BUBBLE_R } from "./hiddenFoes";
 export { fogOn, inPocket } from "./hiddenForts";
 export { breathRatio } from "./hiddenSea";
 export type { HiddenKind, HiddenTrialState, HiddenFort } from "./hiddenTrialTypes";
-export { TRIAL_FOE_RULES } from "./trialFoes";
+export { TRIAL_FOE_RULES, trialMoveMul } from "./trialFoes";
 export { INTRO_RULES, introNext, introRuns, type IntroRoom } from "./intro";
 export { BOON_STATS, chestOptions, STONE_Y, trialRewardRow, type BoonStat } from "./trialRewards";
 export type { TrialKind } from "./trialTypes";

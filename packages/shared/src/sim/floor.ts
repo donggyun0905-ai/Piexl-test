@@ -33,6 +33,9 @@ export interface RoomInfo {
   shape: RoomShape;
   /** 천상의 상점 (라스트 보스 층 상점: 하얀 방·여신 표시로 꾸밈, 그리기 전용) */
   heaven?: boolean;
+  /** 비밀의 방: 아래쪽 뒷문으로 돌아갈 방 · 돌아가면 설 자리 (sim/vault) */
+  back?: number;
+  backAt?: [number, number];
 }
 
 export interface FloorMap {

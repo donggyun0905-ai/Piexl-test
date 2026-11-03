@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.376",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "끝없는 시련: 처치로 느려지는 이동 속도가 능력치 창에도 보임 · 시련 중에는 모든 회복이 막힘 (흡혈·재생·회복약·레벨업 회복 등) · 사용 아이템을 못 씀",
+        "비밀의 방: 위쪽 출구가 없어지고, 들어온 쪽(아래 가운데)의 빛나는 뒷문으로 원래 방에 돌아감 (금 간 벽에서 조금 안쪽에 섬) · 시련 보상 상자로 들어간 비밀의 방도 같은 뒷문으로 시련의 방에 돌아옴",
+      ],
+      en: [
+        "Endless trial: the move-speed slowdown from kills now shows in the stats window · all healing is blocked during the trial (lifesteal, regen, potions, level-up heals…) · use items can't be used",
+        "Secret rooms: no more top exits — leave through the glowing back door where you came in (bottom center) to return to the original room (you stand just inside the cracked wall) · secret rooms opened from trial reward chests use the same back door to return to the trial room",
+      ],
+      ja: [
+        "終わりなき試練：撃破で遅くなる移動速度が能力値ウィンドウにも表示・試練中はすべての回復が無効（吸血・再生・回復薬・レベルアップ回復など）・使用アイテム不可",
+        "秘密の部屋：上の出口をなくし、入ってきた側(下の中央)の光る裏口から元の部屋に戻る（ひび割れた壁の少し内側に立つ）・試練の報酬箱から入った秘密の部屋も同じ裏口で試練の部屋に戻る",
+      ],
+    },
+  },
+  {
     version: "0.48.375",
     date: "2026-11-03",
     items: {

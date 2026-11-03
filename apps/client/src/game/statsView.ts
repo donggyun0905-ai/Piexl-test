@@ -1,5 +1,5 @@
 // 능력치 보기: 지금 내 수치 (패시브·무기 반영). 설정의 '능력치 보기'를 켰을 때만 화면에 표시
-import { artChance, attackSpeedNow, classDamageMul, classMoveMul, critNow, eaterRegen, extraOf, mukinDef, mukinRegen, PERKS, petGold, withGymFx, petTaken, type PlayerState, riderSpeedMul, type RunState, type WeaponDef, WEAPONS } from "@pixel-rogue/shared";
+import { artChance, attackSpeedNow, classDamageMul, classMoveMul, trialMoveMul, critNow, eaterRegen, extraOf, mukinDef, mukinRegen, PERKS, petGold, withGymFx, petTaken, type PlayerState, riderSpeedMul, type RunState, type WeaponDef, WEAPONS } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 
 export interface StatRow {
@@ -52,7 +52,7 @@ export function statRows(run: RunState, t: (k: TextKey) => string): StatRow[] {
     { label: t("statDps"), value: round(perSecond) },
     { label: t("statRange"), value: round(s.range) },
     // 지금 실제 이동 속도 (라이더 공격 빠르기·단검 · 펑크 신경 가속 · 플라이 등 직업 배율 포함, 늘면 + 표시)
-    { label: t("statMoveSpeed"), value: moveText(s.moveSpeed, classMoveMul(run.player, run.tick)) },
+    { label: t("statMoveSpeed"), value: moveText(s.moveSpeed, classMoveMul(run.player, run.tick) * trialMoveMul(run)) },
     ...(w.kind === "ranged" ? [{ label: t("statProjectileSpeed"), value: round(s.projectileSpeed) }] : []),
     { label: t("statLuck"), value: round(s.luck) },
     // 오니: 재생력 · 추가 공격 범위 · 추가 공격 확률
