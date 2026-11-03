@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { adminApi, errorText, logout, type BalanceRes, type ServerInfo, type SetKind } from "./adminApi";
 import { BalanceEditor } from "./BalanceEditor";
 import { HistoryView } from "./HistoryView";
+import { ImportRow } from "./ImportRow";
 import { GROUP_LABEL, SETS } from "./labels";
 import { PracticePreview } from "./PracticePreview";
 import { StatusView } from "./StatusView";
@@ -87,6 +88,7 @@ export function BalanceAdmin({ server, kind, onLoggedOut }: Props) {
   return (
     <>
       {message && <p className={message.ok ? "admin-ok" : "admin-error"}>{message.text}</p>}
+      <ImportRow server={server} kind={kind} onLoad={(v, from) => (setDraft(set.cleanBalance(v)), setMessage({ ok: true, text: `${from} 수치를 가져왔습니다. 아래 저장 줄에서 확인하고 저장하세요.` }))} />
       <nav className="admin-tabs">
         {set.groups.map((g) => (
           <button key={g.id} type="button" className={tab === g.id ? "active" : undefined} onClick={() => setTab(g.id)}>
