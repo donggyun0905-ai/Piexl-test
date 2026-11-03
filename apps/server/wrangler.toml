@@ -1,5 +1,5 @@
-# 라이브 (main): pixel-rogue.numgame.workers.dev
-name = "pixel-rogue"
+# 라이브 (main): pixel-toybox.donggyun0905.workers.dev (화면 pixel-toybox.pages.dev)
+name = "pixel-toybox"
 main = "src/index.ts"
 compatibility_date = "2026-10-01"
 workers_dev = true
@@ -7,7 +7,7 @@ preview_urls = false
 
 [vars]
 APP_ENV = "live"
-ALLOWED_ORIGINS = "https://pixel-rogue.pages.dev"
+ALLOWED_ORIGINS = "https://pixel-toybox.pages.dev"
 
 # Durable Objects (무료 플랜: SQLite 방식만 → migrations에 new_sqlite_classes)
 # Hub: 계정·해금·일일 도전 순위표·빠른 매칭 (하나만 씀)
@@ -60,7 +60,7 @@ class_name = "BattleRoom"
 name = "CARDS"
 class_name = "CardRoom"
 
-# 시험 (test): pixel-rogue-test.numgame.workers.dev (test 화면 전용, 저장소도 따로)
+# 시험 (test): pixel-rogue-test.donggyun0905.workers.dev (test 화면 전용, 저장소도 따로)
 [env.test]
 name = "pixel-rogue-test"
 workers_dev = true

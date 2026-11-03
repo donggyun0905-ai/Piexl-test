@@ -26,7 +26,7 @@
   - 화면이 내 조작을 바로 처리(예측)하고 서버는 같은 규칙으로 다시 계산해 확인 (점수 조작 방지)
   - 메시지는 묶어서 보낸다 (받는 메시지 수 = 비용). 저장은 값이 바뀔 때만
   - 랜덤은 시드로만 (`Math.random`으로 게임 결과를 정하지 않음)
-- 브랜치: `develop` → 테스트(`develop.pixel-rogue.pages.dev`, 서버 `pixel-rogue-beta`), `test` → 시험(`test.pixel-rogue-test.pages.dev`, 서버 `pixel-rogue-test.donggyun0905.workers.dev`·저장소 `donggyun0905-ai/Piexl-test`), `main` → 라이브(`pixel-rogue.pages.dev`, 서버 `pixel-rogue`). 작업은 `develop`에서
+- 브랜치: `develop` → 테스트(`develop.pixel-rogue.pages.dev`, 서버 `pixel-rogue-beta`), `test` → 시험(`test.pixel-rogue-test.pages.dev`, 서버 `pixel-rogue-test.donggyun0905.workers.dev`·저장소 `donggyun0905-ai/Piexl-test`), `main` → 라이브(`pixel-toybox.pages.dev`, 서버 `pixel-toybox.donggyun0905.workers.dev`, 같은 저장소 `Piexl-test`, 2026-11-03 결정). 작업은 `develop`에서
 - 그림 규격: `docs/ART.md` (생성 AI로 캐릭터 그림 만들기: `docs/ART_AI.md` · 바꿀 그림 전체 목록: `docs/ART_LIST.md` · GPT 프롬프트: `docs/ART_PROMPTS.md`) · 공개 전 점검: `docs/LAUNCH.md` · 관리자 페이지(게임 수치 조정): `docs/ADMIN.md`
 - 패왕전 새 대결 유형 계획(시즌 3 뒤): `docs/PW_MODES.md`
 - 게임 계획: `docs/PLAN.md` (고치면 맨 위 '마지막 수정' 날짜·시간 갱신)

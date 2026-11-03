@@ -1,12 +1,11 @@
-# develop → 베타 (develop.pixel-rogue.pages.dev, pixel-rogue-beta 서버)
-# test    → 시험 (test.pixel-rogue.pages.dev, pixel-rogue-test 서버. 저장소도 따로)
-# main    → 라이브 (pixel-rogue.pages.dev, pixel-rogue 서버)
+# test → 시험 (test.pixel-rogue-test.pages.dev, pixel-rogue-test 서버. 저장소도 따로 · 캐릭터·스킨 모두 열림)
+# main → 라이브 (pixel-toybox.pages.dev, pixel-toybox 서버 · 구매·도전과제로 해금, VITE_TEST_OPEN=false)
 # 화면·서버 중 바뀐 쪽만 배포. Actions 화면에서 수동 실행하면 둘 다 배포
 name: Deploy
 
 on:
   push:
-    branches: [test]
+    branches: [test, main]
   workflow_dispatch:
 
 concurrency:
@@ -70,11 +69,12 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_SERVER_URL: ${{ github.ref_name == 'main' && 'https://pixel-rogue.numgame.workers.dev' || github.ref_name == 'test' && 'https://pixel-rogue-test.donggyun0905.workers.dev' || 'https://pixel-rogue-beta.numgame.workers.dev' }}
+          VITE_SERVER_URL: ${{ github.ref_name == 'main' && 'https://pixel-toybox.donggyun0905.workers.dev' || 'https://pixel-rogue-test.donggyun0905.workers.dev' }}
+          VITE_TEST_OPEN: ${{ github.ref_name == 'main' && 'false' || 'true' }}
       - name: Create Pages project (first time only)
-        run: npx wrangler pages project create pixel-rogue-test --production-branch=main || echo "already exists"
+        run: npx wrangler pages project create ${{ github.ref_name == 'main' && 'pixel-toybox' || 'pixel-rogue-test' }} --production-branch=main || echo "already exists"
       - name: Deploy to Pages
-        run: npx wrangler pages deploy apps/client/dist --project-name=pixel-rogue-test --branch=${{ github.ref_name }} --commit-dirty=true
+        run: npx wrangler pages deploy apps/client/dist --project-name=${{ github.ref_name == 'main' && 'pixel-toybox' || 'pixel-rogue-test' }} --branch=${{ github.ref_name }} --commit-dirty=true
 
   server:
     needs: [changes, check]
@@ -92,4 +92,4 @@ jobs:
       - run: npm ci
       - name: Deploy Worker
         working-directory: apps/server
-        run: npx wrangler deploy ${{ github.ref_name == 'main' && ' ' || github.ref_name == 'test' && '--env test' || '--env beta' }}
+        run: npx wrangler deploy ${{ github.ref_name == 'main' && ' ' || '--env test' }}

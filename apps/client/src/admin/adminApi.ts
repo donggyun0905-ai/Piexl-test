@@ -10,7 +10,7 @@ export interface ServerInfo {
 }
 
 export const SERVERS: ServerInfo[] = [
-  { id: "live", label: "라이브 (main)", url: "https://pixel-rogue.numgame.workers.dev" },
+  { id: "live", label: "라이브 (main)", url: "https://pixel-toybox.donggyun0905.workers.dev" },
   { id: "beta", label: "디벨롭 (develop)", url: "https://pixel-rogue-beta.numgame.workers.dev" },
   { id: "test", label: "테스트 (test)", url: "https://pixel-rogue-test.donggyun0905.workers.dev" },
 ];

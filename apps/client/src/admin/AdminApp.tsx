@@ -21,7 +21,7 @@ const KIND_NAME: Record<SetKind, string> = { dungeon: "던전 수치", td: "타�
 const PAGE_NAME = { clears: "클리어 시간", tier: "티어 플레잉", maps: "맵 만들기" } as const;
 
 export function AdminApp() {
-  // 이 주소의 서버만 다룸 (라이브는 pixel-rogue.pages.dev/admin/, 디벨롭은 develop…, 테스트는 test…)
+  // 이 주소의 서버만 다룸 (라이브는 pixel-toybox.pages.dev/admin/, 디벨롭은 develop…, 테스트는 test…)
   const [server] = useState<ServerInfo>(homeServer);
   const [kind, setKind] = useState<SetKind>(kindFromUrl);
   /** 수치 대신: 캐릭터별 클리어 시간 · 티어 플레잉(티어표·캐릭터 차례로 해 본 기록) · 맵 만들기 */
