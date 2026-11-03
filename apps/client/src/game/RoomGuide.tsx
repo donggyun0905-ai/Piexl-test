@@ -6,6 +6,7 @@ import type { Lang, TextKey } from "../i18n";
 import { roomGuide } from "../i18n/roomGuide";
 import { GameScreen } from "./GameScreen";
 import { practiceRoomLook, ROOM_NAME } from "./practice/PracticeRooms";
+import { takeGuideRoom } from "./roomPick";
 
 interface Props {
   character: CharacterId;
@@ -44,12 +45,13 @@ function TrialTable({ t }: { t: (k: TextKey) => string }) {
 }
 
 export default function RoomGuide({ character, lang, t, onClose }: Props) {
+  const [first] = useState<PracticeRoom>(() => takeGuideRoom() ?? "shop");
   const [run] = useState(() => {
     const r = createPracticeRun(character);
-    practiceRoom(r, "shop");
+    practiceRoom(r, first);
     return r;
   });
-  const [room, setRoom] = useState<PracticeRoom>("shop");
+  const [room, setRoom] = useState<PracticeRoom>(first);
   const go = (k: PracticeRoom) => {
     practiceRoom(run, k);
     setRoom(k);

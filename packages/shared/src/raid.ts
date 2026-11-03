@@ -3,6 +3,7 @@
 import type { CharacterId, LastBossKind } from "./content";
 import { createRun, continueToLastFloor, stepSim } from "./sim/index";
 import type { RunState, TickInput } from "./sim/types";
+import { introActive } from "./sim/intro";
 
 /** 명예의 전당 보스 (태초의 빛과 어둠은 plight 하나로) · 보스마다 보여 주는 순위 수 */
 export const RAID_BOSSES: readonly LastBossKind[] = ["dragon", "godeater", "plight"];
@@ -10,7 +11,7 @@ export const RAID_BOARD_SIZE = 10;
 
 /** 레이드에 쓸 수 있는 판: 혼자 하기에서 라스트 보스를 잡고 끝남 */
 export function raidCleared(run: RunState): boolean {
-  return run.won && run.lastBoss !== undefined && (RAID_BOSSES as readonly string[]).includes(run.lastBoss) && run.raidTicks !== undefined && !run.endless && !run.hero && !run.sudden && !run.taboo && !run.randomKit;
+  return run.won && run.lastBoss !== undefined && (RAID_BOSSES as readonly string[]).includes(run.lastBoss) && run.raidTicks !== undefined && !run.endless && !run.hero && !run.sudden && !run.taboo && !run.randomKit && !introActive(run);
 }
 
 /** 입력 기록으로 판 전체 다시 돌리기: 6층을 깨고 끝나면 그 자리에서 라스트 보스에 도전 */

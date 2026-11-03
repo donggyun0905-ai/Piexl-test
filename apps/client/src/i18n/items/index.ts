@@ -154,6 +154,19 @@ export function itemDesc(kind: ItemKind, id: string, lang: Lang, t: (k: TextKey)
     return `${type} · ${t("statDamage")} ×${num(w.damageMul)} · ${t("statAttackSpeed")} ${num(w.attackSpeed)} · ${t("statRange")} ${w.range >= 400 ? "∞" : w.range}${extra}`;
   }
   const def: PassiveDef = PASSIVES[id as PassiveId];
+  return `[${t(passiveRole(def))}] ${passiveDesc(id, def, lang, t)}`;
+}
+
+/** 패시브 꼬리표: 효과 아이템은 특수, 능력치 아이템은 가장 앞 능력치로 공격·방어·이동·보조 */
+function passiveRole(def: PassiveDef): TextKey {
+  if (def.effect) return "roleSpecial";
+  const st = String(def.mods[0]?.stat ?? "");
+  if (["damage", "attackSpeed", "range", "projectileSpeed", "critChance", "critDamage", "sharpness", "statusPower"].includes(st)) return "roleAtk";
+  if (["maxHp", "defense", "regen", "dodge", "lifesteal", "dmgReduce"].includes(st)) return "roleDef";
+  return st === "moveSpeed" ? "roleMove" : "roleUtil";
+}
+
+function passiveDesc(id: string, def: PassiveDef, lang: Lang, t: (k: TextKey) => string): string {
   // 공격 방식 아이템 · 설명이 따로 있는 아이템 (천지창조처럼 여러 개 가질 수 있는 전용 아이템)
   if (def.effect || EFFECT_DESC[id as PassiveId]) {
     const tag = def.exclusive ? `[${t(def.exclusive)} ${t("exclusiveTag")}] ` : "";

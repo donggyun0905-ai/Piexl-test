@@ -1,4 +1,5 @@
 import { ALL_CHARACTER_IDS, CHARACTER_IDS, HIDDEN_CHARACTERS, LIMITED_CHARACTERS, type CharacterId } from "@pixel-rogue/shared";
+import { charDifficulty, diffStars, recommended, recommendedFirst } from "./charDifficulty";
 import { ownedLimited } from "./shop/limitedChars";
 import { useState } from "react";
 import { useLang, type TextKey } from "./i18n";
@@ -83,7 +84,8 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
   // 한정 캐릭터(서고의 감시자): 가졌으면 기록이 남지 않는 곳에서 마음껏 (패왕전·일일 도전은 빼고)
   const all = [...new Set<CharacterId>(showHidden || (taboo && TEST_OPEN) ? ALL_CHARACTER_IDS : [...CHARACTER_IDS, ...hallUnlocked(), ...ownedLimited()])].filter((c) => !noLimited || !LIMITED_CHARACTERS.includes(c));
   const q = find.trim().toLowerCase();
-  const list = all.filter((c) => (!tab || factionOf(c) === tab) && (!q || t(c as TextKey).toLowerCase().includes(q)));
+  const found = all.filter((c) => (!tab || factionOf(c) === tab) && (!q || t(c as TextKey).toLowerCase().includes(q)));
+  const list = !tab && !q ? recommendedFirst(found) : found;
   // 서고의 감시자(한정 캐릭터) 탭은 아직 비어 있어도 늘 보임
   const tabs = SELECT_TABS.filter((x) => x.id === "archive" || all.some((c) => factionOf(c) === x.id));
   return (
@@ -123,6 +125,10 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
                   <strong>{t(id as TextKey)}</strong>
                   <small className="cs-skin">{skinName(t, id)}</small>
                   {lv > 0 && <span className={`cs-lv-badge lv-${lv}`}>Lv.{lv}</span>}
+                  <span className={`cs-diff d${charDifficulty(id)}`} title={t("csDiff")}>
+                    {recommended(id) && <b>{t("csRecommend")}</b>}
+                    {diffStars(id)}
+                  </span>
                   {!open && <span className="character-lock">🔒</span>}
                 </button>
                 {open && <CardMedals t={t} lang={lang} character={id} />}

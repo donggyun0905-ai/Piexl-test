@@ -41,6 +41,7 @@ import { additive, beam, glow } from "./pwFxBits";
 import { drawAmbushShot, drawOriginFx } from "./origin";
 import { drawStationFx } from "./stationFx";
 import { drawHiddenFx } from "./pilgrim";
+import { getSettings } from "../../settings";
 import { drawLanceShot } from "./hiddenGear";
 import { drawBaseShot, drawBlast, drawBurst, drawHit, drawSwing } from "./baseFx";
 
@@ -104,6 +105,29 @@ function drawCharm(ctx: CanvasRenderingContext2D, pr: ProjectileState, x: number
   ctx.fillStyle = pr.charged ? "#fff" : ink;
   ctx.fillRect(x - 1, y - 1, 2, 2);
 }
+
+let layer: HTMLCanvasElement | null = null;
+/** 효과 그리기 (설정 '간단한 화면'이면 적의 위험 표시가 아닌 효과는 따로 그려 흐리게 얹음) */
+export function drawFx(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
+  if (!getSettings().simpleView || s.pvp) return drawEffects(ctx, s, alpha, snap);
+  drawEffects(ctx, { ...s, effects: s.effects.filter((f) => f.foe) }, alpha, snap);
+  const cv = ctx.canvas;
+  layer ??= document.createElement("canvas");
+  if (layer.width !== cv.width || layer.height !== cv.height) [layer.width, layer.height] = [cv.width, cv.height];
+  const l = layer.getContext("2d")!;
+  l.setTransform(1, 0, 0, 1, 0, 0);
+  l.clearRect(0, 0, layer.width, layer.height);
+  l.setTransform(ctx.getTransform());
+  l.imageSmoothingEnabled = ctx.imageSmoothingEnabled;
+  drawEffects(l, { ...s, effects: s.effects.filter((f) => !f.foe) }, alpha, snap);
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = DIM;
+  ctx.drawImage(layer, 0, 0);
+  ctx.restore();
+}
+/** 간단한 화면에서 내 효과 투명도 */
+const DIM = 0.45;
 
 export function drawEffects(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   const players = allPlayers(s);

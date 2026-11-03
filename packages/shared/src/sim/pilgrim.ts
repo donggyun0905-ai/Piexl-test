@@ -1,5 +1,6 @@
 // 히든 상점 '차원의 순례자' (혼자 하기·무한·협동, s.pilgrim): 층마다 낮은 확률로 전투방 하나가 몬스터 없는 빈 방이 되고,
 // 들어가면 벽쪽 포탈에서 큰 배낭을 멘 꼬마가 걸어 나와 가운데로 옴 → 도착하면 히든 물건 3개를 골드로 진열 (itemsHidden)
+import { introOpen } from "./intro";
 import { HIDDEN_STOCK, PILGRIM_PRICE } from "../itemsHidden";
 import { createRng, deriveSeed } from "../rng";
 import { depth } from "./hero";
@@ -20,7 +21,7 @@ export { R as PILGRIM_RULES };
 
 /** 이 층에서 순례자가 기다리는 방 (없으면 -1) */
 export function pilgrimRoom(s: RunState): number {
-  if (!s.pilgrim || s.lastBoss || s.arenaLv || s.sudden || s.floor < R.fromFloor) return -1;
+  if (!s.pilgrim || !introOpen(s, "SECRET") || s.lastBoss || s.arenaLv || s.sudden || s.floor < R.fromFloor) return -1;
   const rng = createRng(deriveSeed(s.seed, "pilgrim", s.floor));
   if (rng.nextFloat() >= R.chance) return -1;
   const rooms = s.map.rooms.filter((r) => r.type === "combat");

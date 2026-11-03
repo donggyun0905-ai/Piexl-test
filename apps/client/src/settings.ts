@@ -30,6 +30,10 @@ export interface Settings {
   quickCast: boolean[];
   /** PC 사용 아이템 칸 1·2 키 (기본 Q·E) */
   useKeys: string[];
+  /** 간단한 화면: 내 위험 표시가 아닌 효과를 흐리게 (처음 하는 기기는 켜고 시작) */
+  simpleView: boolean;
+  /** 지금 할 일 한 줄 (game/RunGuide) */
+  showGoal: boolean;
 }
 
 /** 모바일 버튼 (TouchButtons의 data-act) */
@@ -51,7 +55,11 @@ const DEFAULTS: Settings = {
   skillKeys: ["Digit1", "Digit2", "Digit3", "Digit4"],
   quickCast: [false, false, false, false],
   useKeys: ["KeyQ", "KeyE"],
+  simpleView: false,
+  showGoal: true,
 };
+/** 처음 하는 기기: 간단한 화면 · 피해 숫자·능력치 칸 끄고 시작 */
+const FIRST: Settings = { ...DEFAULTS, simpleView: true, showDamage: false, showStats: false };
 
 /** 스킬 키: 설정에서 고른 키 (숫자 패드 1~4도 늘 됨) · 0 = 스킬 키 아님 */
 export function skillOf(code: string): number {
@@ -73,7 +81,7 @@ export function keyLabel(code: string): string {
 function read(): Settings {
   try {
     const raw = loadText("settings");
-    const got = raw ? { ...DEFAULTS, ...(JSON.parse(raw) as Partial<Settings>) } : DEFAULTS;
+    const got = raw ? { ...DEFAULTS, ...(JSON.parse(raw) as Partial<Settings>) } : FIRST;
     // 예전 저장(스킬 키 셋)에는 4번 키를 더함
     return got.skillKeys.length < 4 ? { ...got, skillKeys: [...got.skillKeys, ...DEFAULTS.skillKeys.slice(got.skillKeys.length)] } : got;
   } catch {

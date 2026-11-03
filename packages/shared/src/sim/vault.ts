@@ -2,6 +2,7 @@
 // 몸이 닿으면 벽이 무너지며(효과·소리) 문이 열리고, 문으로 들어가면 악마의 방·도박꾼의 방·경매장 중 하나 (같은 확률)
 // 비밀의 방은 층 지도 끝에 붙는 옆방 (노선도에는 안 보임) · 출구는 원래 방의 출구와 같음 (출구가 없는 방이면 원래 방으로 돌아가는 문)
 // 시련 1000점 보상 상자로도 골라 들어감 (openVault, 히든 상점 포함) · 그때는 나오면 시련의 방으로 돌아옴 (남은 상자를 잃지 않게)
+import { introOpen } from "./intro";
 import { SECRET_KINDS, SECRET_WALL, type SecretPick } from "../secretDefs";
 import { createRng, deriveSeed } from "../rng";
 import { auctionTick, spawnAuction } from "./auction";
@@ -17,7 +18,7 @@ import { addEffect, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./uti
 import { ROOM_CX as CX } from "../constants";
 
 /** 금 간 벽이 생길 수 있는 판 */
-const vaultOn = (s: RunState) => !!s.pilgrim && !s.lastBoss && !s.arenaLv && !s.sudden && !s.hero && !s.swarm && !s.pvp;
+const vaultOn = (s: RunState) => !!s.pilgrim && introOpen(s, "SECRET") && !s.lastBoss && !s.arenaLv && !s.sudden && !s.hero && !s.swarm && !s.pvp;
 
 /** 금 간 곳의 벽 위 자리 (그리기도 씀) */
 export function crackSpot(c: NonNullable<RunState["crack"]>): { x: number; y: number } {

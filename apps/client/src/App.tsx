@@ -9,7 +9,7 @@ import { GameScreen } from "./game/GameScreen";
 import { SoloGame } from "./game/SoloGame";
 import { ADMIN_PRACTICE, ADMIN_TD } from "./balance";
 import { useLang } from "./i18n";
-import { loadAchievements, loadSavedRun, newSeedText, seedFromUrl } from "./records";
+import { loadSavedRun, newSeedText, seedFromUrl, soloUnlocks } from "./records";
 import { TitleScreen } from "./TitleScreen";
 import { ArenaBoard, BattleScreen, CoopScreen, HallOfFame, PwFlow, ShopScreen, StoryScreen, SwarmGame, SwarmMaps, TdGame, TdScreen, TierScreen } from "./lazyScreens";
 
@@ -117,7 +117,7 @@ export function App() {
         endless={screen.endless}
         arena={screen.arena}
         hero={screen.hero}
-        unlocks={loadAchievements()}
+        unlocks={soloUnlocks(!screen.endless && !screen.arena && !screen.hero)}
         lang={lang.lang}
         t={lang.t}
         onExit={toTitle}

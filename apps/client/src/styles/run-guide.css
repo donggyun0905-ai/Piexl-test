@@ -1,0 +1,99 @@
+/* 처음 하는 사람 안내 (game/RunGuide): 지금 할 일 한 줄 · 새 방이 열리기까지 · 처음 만난 방 카드 */
+.run-goal,
+.run-intro {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  white-space: nowrap;
+  max-width: 92%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  z-index: 3;
+}
+.run-goal {
+  top: 34px;
+  color: #fff4c8;
+  background: rgba(20, 14, 30, 0.72);
+  border: 1px solid rgba(255, 220, 120, 0.45);
+}
+.run-intro {
+  top: 62px;
+  color: #d8f0ff;
+  background: rgba(20, 30, 50, 0.72);
+  border: 1px solid rgba(120, 200, 255, 0.45);
+}
+.room-card {
+  position: absolute;
+  top: 92px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(360px, 90%);
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(24, 16, 40, 0.92);
+  border: 2px solid #b08aff;
+  color: #eee8ff;
+  z-index: 4;
+  animation: room-card-in 0.3s ease-out;
+}
+.room-card small {
+  color: #ffd860;
+  font-weight: bold;
+}
+.room-card b {
+  display: block;
+  font-size: 17px;
+  margin: 2px 0 4px;
+}
+.room-card ul {
+  margin: 0 0 8px;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.room-card div {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.room-card button {
+  padding: 4px 12px;
+  border-radius: 8px;
+  border: 1px solid #b08aff;
+  background: #3a2a6a;
+  color: #fff;
+  cursor: pointer;
+}
+@keyframes room-card-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -8px);
+  }
+}
+
+/* 캐릭터 선택창 난이도 별 · 추천 (charDifficulty) */
+.cs-diff {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 1px 6px;
+  border-radius: 9px;
+  font-size: 11px;
+  letter-spacing: -1px;
+  color: #ffd860;
+  background: rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+.cs-diff b {
+  margin-right: 4px;
+  letter-spacing: 0;
+  color: #9af0a8;
+}
+.cs-diff.d3 {
+  color: #ff9a7a;
+}

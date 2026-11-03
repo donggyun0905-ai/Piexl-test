@@ -7,6 +7,7 @@ import type { Lang, TextKey } from "../i18n";
 import { setSettings, useSettings } from "../settings";
 import { resetPan, usePan } from "./cameraPan";
 import { BuffPanel } from "./BuffPanel";
+import { RunGuide } from "./RunGuide";
 import type { StatRow } from "./statsView";
 import type { Controls } from "./controls";
 import type { GameScreenProps } from "./gameScreenProps";
@@ -98,8 +99,8 @@ export function StatsPanel({ rows, t, lang, onInfo, run }: { rows: StatRow[]; t?
 /** 설명 창을 열거나(k) 닫음(null): 일시정지·나가기 창이 떠 있으면 그대로 */
 export const infoNext = (o: Overlay, k: InfoKind | null): Overlay => (k ? (o === "none" || isInfo(o) ? k : o) : isInfo(o) ? "none" : o);
 
-/** 캐릭터 설명(I)·방 설명(O) 큰 창. 능력치 칸과 따로 있어 연습장에서 능력치를 꺼도 창·일시정지가 꼬이지 않음 */
-export function CharInfoHost({ character, lang, t, open, onInfo }: { character: CharacterId; lang: Lang; t: (k: TextKey) => string; open: Overlay; onInfo: (k: InfoKind | null) => void }) {
+/** 캐릭터 설명(I)·방 설명(O) 큰 창 + 처음 하는 사람 안내(RunGuide). 능력치 칸과 따로 있어 연습장에서 능력치를 꺼도 창·일시정지가 꼬이지 않음 */
+export function CharInfoHost({ run, character, lang, t, open, onInfo }: { run: () => RunState | null; character: CharacterId; lang: Lang; t: (k: TextKey) => string; open: Overlay; onInfo: (k: InfoKind | null) => void }) {
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       const el = e.target as HTMLElement | null;
@@ -109,13 +110,19 @@ export function CharInfoHost({ character, lang, t, open, onInfo }: { character: 
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   }, [open, onInfo]);
-  if (!isInfo(open)) return null;
+  const guide = <RunGuide run={run} lang={lang} t={t} onMore={() => onInfo("rooms")} />;
+  if (!isInfo(open)) return guide;
   const Big = open === "rooms" ? RoomGuide : CharInfo;
-  return createPortal(
-    <Suspense fallback={null}>
-      <Big character={character} lang={lang} t={t} onClose={() => onInfo(null)} />
-    </Suspense>,
-    document.body,
+  return (
+    <>
+      {guide}
+      {createPortal(
+        <Suspense fallback={null}>
+          <Big character={character} lang={lang} t={t} onClose={() => onInfo(null)} />
+        </Suspense>,
+        document.body,
+      )}
+    </>
   );
 }
 

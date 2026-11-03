@@ -34,6 +34,7 @@ export { GOLDEN_PICKS } from "./golden";
 export { TRIAL_OP, TRIAL_RULES, trialUsed, trialBusy } from "./trial";
 export { endlessHp, TRIAL_RUN_RULES, trialCap, trialNoItems } from "./trialRun";
 export { TRIAL_FOE_RULES } from "./trialFoes";
+export { INTRO_RULES, introNext, introRuns, type IntroRoom } from "./intro";
 export { BOON_STATS, chestOptions, STONE_Y, trialRewardRow, type BoonStat } from "./trialRewards";
 export type { TrialKind } from "./trialTypes";
 export { ALTAR_AUG_MIN, ALTAR_OP, altarAugOk, altarAugTaken, ALTAR_Y, altarOf, altarPending, altarUsed, augmented } from "./altar";

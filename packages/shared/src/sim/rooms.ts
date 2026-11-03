@@ -1,4 +1,5 @@
 // 방·층 이동: 방 들어가기(적 배치), 출구 잠김·억지로 나가기, 쉼터, 계단
+import { introRooms } from "./intro";
 import { eliteRoomHp, makeChamps } from "./elite";
 import { PERKS } from "../perks";
 import { COOP_ROOM, ROOM_CX as CX, ROOM_CY as CY, setRoomSize } from "../constants";
@@ -70,6 +71,7 @@ export function startFloor(s: RunState, floor: number): void {
   s.map = s.arenaLv ? arenaMap(s) : s.lastBoss && floor === lastFloorOf(s) ? lastFloorMap(devilPact(s)) : generateFloor(s.seed, floor, s.customRooms);
   s.rooms = s.map.rooms.map(() => ({ visited: false, cleared: false, pickups: [], enemies: null }));
   skipTrials(s);
+  introRooms(s);
   s.enemies = [];
   s.projectiles = [];
   s.prompt = { kind: "none" };

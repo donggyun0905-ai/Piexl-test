@@ -239,7 +239,7 @@ export function GameScreen(props: GameScreenProps) {
       )}
 
       <div ref={wrapRef} className="game-canvas-wrap">
-        {/* 실제 화면 해상도 크기 (고해상도 화면 포함) */}
+        {/* 실제 해상도 크기 */}
         <canvas
           ref={canvasRef}
           width={Math.round(VIEW_WIDTH * wide * scale * dpr)}
@@ -247,7 +247,7 @@ export function GameScreen(props: GameScreenProps) {
           style={{ width: VIEW_WIDTH * wide * scale, height: VIEW_HEIGHT * scale }}
         />
         {stats && !pvp && <StatsPanel rows={stats} t={t} lang={lang} onInfo={props.embedded ? undefined : setOverlay} run={() => runRef.current} />}
-        {!pvp && !props.embedded && <CharInfoHost character={characterId} lang={lang} t={t} open={overlay} onInfo={(k) => setOverlay((o) => infoNext(o, k))} />}
+        {!pvp && !props.embedded && <CharInfoHost run={() => runRef.current} character={characterId} lang={lang} t={t} open={overlay} onInfo={(k) => setOverlay((o) => infoNext(o, k))} />}
         {mode !== "practice" && mode !== "swarm" && mode !== "paewang" && (
           <canvas ref={miniRef} className="minimap" width={MINIMAP_BOX_W} height={MINIMAP_BOX_H} aria-label={t("minimap")} />
         )}

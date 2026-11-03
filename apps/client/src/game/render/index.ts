@@ -75,7 +75,7 @@ import { drawDevilAura, drawVaultOverlay } from "./vaultFx";
 import { drawWandererAura, drawWandererGround } from "./wanderer";
 import { drawSilkAmmo, drawSilkStacks } from "./silk";
 import { drawSecretAura, drawSecretGround } from "./secret";
-import { drawBossBar, drawEffects, drawProjectiles, drawReticleFor } from "./shots";
+import { drawBossBar, drawFx, drawProjectiles, drawReticleFor } from "./shots";
 
 export interface DrawOptions {
   /** 0~1: 이전 틱과 이번 틱 사이 위치 */
@@ -259,7 +259,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
     drawSecretAura(ctx, s, alpha, snap, opt.fateName);
   });
   drawProjectiles(ctx, s, alpha, snap);
-  drawEffects(ctx, s, alpha, snap);
+  drawFx(ctx, s, alpha, snap);
   drawCurseText(ctx, s, opt.curseNames, alpha, snap);
   drawPrimevalOverlay(ctx, s, alpha, snap);
   drawVaultOverlay(ctx, s);

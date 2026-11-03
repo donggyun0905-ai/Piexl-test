@@ -91,6 +91,7 @@ import { GYM_FX_RULES } from "./gymPerks";
 import { TRIAL_RULES } from "./trial";
 import { TRIAL_RUN_RULES } from "./trialRun";
 import { TRIAL_FOE_RULES } from "./trialFoes";
+import { INTRO_RULES } from "./intro";
 import { TALISMAN_RULES } from "./talisman";
 import { TD_RULES } from "./td";
 import { TD_WAVES_RULES } from "./tdWaves";
@@ -189,6 +190,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   TRIAL_RULES,
   TRIAL_RUN_RULES,
   TRIAL_FOE_RULES,
+  INTRO_RULES,
   GYM_FX_RULES,
   TALISMAN_RULES,
   TD_RULES,

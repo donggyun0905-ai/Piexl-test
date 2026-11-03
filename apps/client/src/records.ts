@@ -1,5 +1,5 @@
 // 이 기기에 남기는 기록: 이어하기 저장 · 최고 기록 · 업적(해금). 가입하면 업적은 서버에도 저장 (일일 도전 단계)
-import { careerWith, createRng, EMPTY_CAREER, seedToText, type CareerStats, type CharacterId, type RunState } from "@pixel-rogue/shared";
+import { careerWith, createRng, EMPTY_CAREER, INTRO_RULES, seedToText, type CareerStats, type CharacterId, type RunState } from "@pixel-rogue/shared";
 import { loadText, saveText } from "./storage";
 
 // ───────── 시드 ─────────
@@ -128,6 +128,12 @@ export function loadHistory(): BestRecord[] {
   } catch {
     return [];
   }
+}
+
+/** 혼자 하기 판 시작 정보: 업적 + 처음 몇 판은 특별한 방 단계적 열기 표시 (sim/intro, 무한·아레나·영웅은 빼고) */
+export function soloUnlocks(plain: boolean): string[] {
+  const runs = loadTotals().runs;
+  return plain && runs < INTRO_RULES.SECRET ? [...loadAchievements(), `intro:${runs}`] : loadAchievements();
 }
 
 export function loadTotals(): RunTotals {
