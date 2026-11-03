@@ -21,6 +21,12 @@ function terrainRun(s: RunState): boolean {
   return !s.arenaLv && !s.hero && !s.pvp && !s.swarm && !s.lastBoss && s.floor <= 6;
 }
 
+/** 함정(가시·용암)에 다침: 피해 + 판 기록 (캐릭터 해금 '함정에 1000번') */
+function trap(s: RunState, dmg: number): void {
+  envDamage(s, dmg);
+  s.trapHits = (s.trapHits ?? 0) + 1;
+}
+
 export const inRect = (x: number, y: number, [rx, ry, w, h]: readonly number[]): boolean => x >= rx! && x < rx! + w! && y >= ry! && y < ry! + h!;
 
 /** 방에 들어갈 때: 지형 정하기 (없으면 undefined) */
@@ -110,7 +116,7 @@ export function updateTerrain(s: RunState): void {
           p.y = p.prevY + (p.y - p.prevY) * slow;
         }
       }
-      if (s.tick % TERRAIN.lavaEvery === 0 && at(t.lava)) envDamage(s, TERRAIN.lavaDamage + d);
+      if (s.tick % TERRAIN.lavaEvery === 0 && at(t.lava)) trap(s, TERRAIN.lavaDamage + d);
       if ((t.shock ?? 0) > 0 && s.tick >= (t.shockAt ?? 0) && s.tick % TERRAIN.shockEvery === 0 && at(t.water)) envDamage(s, TERRAIN.shockDamage + d);
       // 독가스를 밟으면: 치유감소 + 독 상태이상 3초 (밟고 있는 동안 계속 새로)
       if (t.gas?.some((g) => (p.x - g.x) ** 2 + (p.y - g.y) ** 2 < g.r * g.r)) {
@@ -118,7 +124,7 @@ export function updateTerrain(s: RunState): void {
         if (!statusImmune(p)) p.poison = Math.max(p.poison ?? 0, TERRAIN.poisonTicks);
       }
       t.spikes.forEach((r, i) => {
-        if (spikeState(s.tick, i) === 2 && (s.tick + i * 37) % 15 === 0 && inRect(p.x, p.y, r)) envDamage(s, TERRAIN.spikeDamage + d);
+        if (spikeState(s.tick, i) === 2 && (s.tick + i * 37) % 15 === 0 && inRect(p.x, p.y, r)) trap(s, TERRAIN.spikeDamage + d);
       });
     },
     !!s.party,

@@ -12,6 +12,7 @@ import { buildSummary, TakenTracker } from "./runSummary";
 import { noteRun } from "../codex/codexStore";
 import { recordMedal } from "../medals/medals";
 import { recordModeMedal } from "../medals/modeMedals";
+import { createUnlockRun } from "../unlock/runStats";
 
 /** coop: 협동 인원 (같이 낸 기록을 최근 기록에 남김, 최고 기록·이어하기는 혼자 하기만) */
 export function createRunTracker(solo: boolean, seedText: string, run: RunState, onAchievement: (id: string) => void, coop = 0) {
@@ -24,6 +25,7 @@ export function createRunTracker(solo: boolean, seedText: string, run: RunState,
   let historyAdded = false;
   let clearSent = false;
   const taken = new TakenTracker();
+  const unlock = createUnlockRun(run);
   if (solo) startRaidLog(run);
   const save = () => {
     if (!solo || run.over) return;
@@ -40,6 +42,7 @@ export function createRunTracker(solo: boolean, seedText: string, run: RunState,
     /** 틱을 진행한 프레임마다 */
     advance(): void {
       taken.observe(run);
+      unlock.observe();
       noteRun(run);
       for (const id of achievedIn(run, career)) {
         if (known.has(id)) continue;
@@ -63,6 +66,7 @@ export function createRunTracker(solo: boolean, seedText: string, run: RunState,
         finished = true;
         // 일일 미션 (혼자 하기·일일 도전)
         if (solo || run.sudden) recordRun(run);
+        unlock.finish();
         // 레이드 아레나·패왕전은 누적 기록·최고 기록에 넣지 않음 (순위표는 따로)
         if (!run.arenaLv && !run.pw && !run.pvp) addCareer(run);
       }

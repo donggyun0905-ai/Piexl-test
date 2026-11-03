@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.370",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "캐릭터 해금 조건을 캐릭터마다 새로 정함 (처음엔 파수꾼·떠돌이·마법사): 음양사 첫 보스 · 야수 30마리 · 기계공학자 상점 4번 · 의사 4층 · 풋내기 첫 클리어 · 격투가 시련 1000점 · 장수 엘리트 방 50번 · 묵인 방어력 20 · 거너 서든데스 클리어 · 거인 체력 200 · 추적자 타워 디펜스 ★5 맵 클리어 · 원소술사 영웅의 길 클리어 · 이무기 멸망의 용 처치 · 방랑객 공격 속도 1.5 · 소환술사 스켈레톤 궁병 300마리 · 정령사 큐피트의 정령 얻기 · 오토마타 로비 펫 3마리 · 역병의사 의사로 영웅의 길 · 이터 악의 사도로 영웅의 길 · 베두인 광야의 새벽 클리어 · 라이더 이동 속도 1.7 · 닌자 레이드 아레나 클리어 · 학살자 패왕전 대난투 우승 · 잔영 1대1 10연승 · 악의 사도 무한 모드 20층 · 사멸 베놈 1000마리 · 버려진 자들 데스매치 우승 · 펑크 칩 200,000 · 오니 100판 · 붐버 폭탄 100번 · 이드라 쉼터 100번 · 잊혀진 자 제단 1000번 · 변희 한 판 보스 셋 무피격 · 영사 점령전 10번 우승 · 시간술사 상점 안 쓰고 클리어 · 플라이 7분 클리어 · 장로 함정 1000번 · 렌 보스 50마리 · 아티팩터 칩 300,000 · 수집가 악마의 방 패시브 6가지",
+        "캐릭터 고르기 창에 잠긴 캐릭터의 조건·진행도 (예: 0 / 300) · 칩으로 여는 캐릭터는 '칩으로 열기' 버튼",
+      ],
+      en: [
+        "Every character now has its own unlock condition (Warden, Drifter and Mage are open from the start) — e.g. Brawler: 1000 Trial points · General: enter 50 elite rooms · Titan: 200 max HP · Summoner: 300 Skeleton Archers · Remnant: 10 duel wins in a row · Punk: 200,000 chips · Artifacter: 300,000 chips · Collector: all 6 Devil's Room passives (see each character for details)",
+        "Locked characters show their condition and progress (e.g. 0 / 300) in the character window · chip-unlock characters get an 'Unlock for chips' button",
+      ],
+      ja: [
+        "キャラ解放条件をキャラごとに新しく設定（最初は番人・流れ者・魔法使い）— 例：格闘家 試練1000点 · 武将 エリート部屋50回 · 巨人 体力200 · 召喚術師 スケルトン弓兵300体 · 残影 1対1で10連勝 · パンク チップ200,000 · アーティファクター チップ300,000 · コレクター 悪魔の部屋のパッシブ6種（詳しくは各キャラで）",
+        "キャラ選択ウィンドウで、ロック中のキャラの条件と進行度（例：0 / 300）を表示 · チップで解放するキャラには「チップで解放」ボタン",
+      ],
+    },
+  },
+  {
     version: "0.48.369",
     date: "2026-11-03",
     items: {

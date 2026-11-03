@@ -8,4 +8,6 @@ export interface RoomPlayerState extends BoonPlayerState, TrialPlayerState, Alta
 export interface RoomRunState extends TrialRunState, VaultRunState {
   /** 엘리트 방 라운드 (sim/roomSpawn.eliteWave): 층·방 · 지금 라운드 · 다음 무리까지 틱 */
   eliteWave?: { floor: number; room: number; n: number; t: number };
+  /** 이 판에 함정(가시·용암)에 다친 횟수 (화면 캐릭터 해금 기록) */
+  trapHits?: number;
 }

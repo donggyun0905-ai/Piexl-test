@@ -1,4 +1,5 @@
 // 타워 디펜스 맵 고르기: 맵 8개(+ 관리자가 만든 맵) 미리 보기 · 난이도 · 내 최고 기록
+import { TD_STARS as STARS } from "./tdRecords";
 import { CUSTOM_TD, TD_MAPS, tdThemeOf, type CharacterId, type TdMapId } from "@pixel-rogue/shared";
 import { useEffect, useRef } from "react";
 import type { TextKey } from "../i18n";
@@ -12,8 +13,6 @@ interface Props {
   onBack: () => void;
 }
 
-/** 맵마다 난이도 별 수 (맵 순서) */
-const STARS = [1, 2, 2, 3, 3, 4, 5, 7];
 
 function MapPreview({ mapId }: { mapId: TdMapId }) {
   const ref = useRef<HTMLCanvasElement>(null);
