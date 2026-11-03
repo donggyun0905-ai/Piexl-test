@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.375",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "시련의 방: 비석에 YES/NO로 답하기 전에는 출구가 닫혀 다음 방으로 갈 수 없음 (잠긴 출구로도 못 감)",
+        "노선도 갈 길: 걸어가던 것을 바꿈 — 큰 지도를 닫은 뒤(또는 싸운 방을 정리하면) '이동합니다'와 함께 귀환 빛기둥 1.5초 뒤 다음 방으로 이동 · 지도를 보는 동안에는 움직이지 않음 · 움직이거나 맞으면 취소 (지도를 다시 닫으면 다시 시작)",
+      ],
+      en: [
+        "Trial room: the exits stay shut until you answer the monolith YES/NO (you can't even pay to leave)",
+        "Planned path: no more auto-walking — after you close the big map (or clear a fight room), 'Moving on' shows with the recall light pillar and you move to the next room 1.5s later · nothing moves while the map is open · moving or getting hit cancels it (close the map again to retry)",
+      ],
+      ja: [
+        "試練の部屋：石碑にYES/NOで答えるまで出口が閉じて次の部屋へ行けない（閉じた出口からも出られない）",
+        "ルートの道：自動で歩く方式を変更 — 大きな地図を閉じたあと（または戦った部屋を片付けると）「移動します」と帰還の光の柱が出て1.5秒後に次の部屋へ移動・地図を見ている間は動かない・動いたり攻撃を受けると取り消し（地図をもう一度閉じると再開）",
+      ],
+    },
+  },
+  {
     version: "0.48.374",
     date: "2026-11-03",
     items: {

@@ -34,6 +34,7 @@ export { GOLDEN_PICKS } from "./golden";
 export { TRIAL_OP, TRIAL_RULES, trialUsed, trialBusy } from "./trial";
 export { endlessHp, TRIAL_RUN_RULES, trialCap, trialNoItems } from "./trialRun";
 export { darkLifted, hiddenTick } from "./hiddenTrial";
+export { ROUTE_GO_RULES, ROUTE_OP } from "./routeGo";
 export { hiddenOn, SEA_BUBBLE_R } from "./hiddenFoes";
 export { fogOn, inPocket } from "./hiddenForts";
 export { breathRatio } from "./hiddenSea";

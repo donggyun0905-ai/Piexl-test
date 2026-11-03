@@ -38,8 +38,10 @@ const roomKey = (s: RunState) => s.floor * 1000 + s.roomId;
 const ensure = (p: PlayerState) => (p.trial ??= { rooms: [] });
 /** 이 방 비석을 이미 썼는지 */
 export const trialUsed = (s: RunState) => !!s.player.trial?.rooms.includes(roomKey(s));
-/** 시련 중인지 (방이 잠김, rooms.checkCleared) */
-export const trialBusy = (s: RunState) => !!s.trialRun && s.trialRun.room === s.roomId;
+/** 아직 비석에 답하지 않은 시련의 방 (YES/NO를 골라야 나갈 수 있음) */
+export const trialPending = (s: RunState) => s.map.rooms[s.roomId]?.type === "trial" && !trialUsed(s) && !s.trialRun;
+/** 시련 중이거나 아직 답하지 않음: 방이 잠김 (rooms.checkCleared·잠긴 출구도 못 지남) */
+export const trialBusy = (s: RunState) => (!!s.trialRun && s.trialRun.room === s.roomId) || trialPending(s);
 
 /** 방에 처음 들어가면 비석 하나 */
 export function spawnTrial(s: RunState, roomId: number): void {
@@ -105,6 +107,8 @@ function penalty(s: RunState, r: number): number {
 
 /** 틱마다: 거절 벌칙(이 층 암흑 · 체력 1) */
 export function trialCurseTick(s: RunState): void {
+  // 비석에 답하기 전에는 방이 정리되지 않음 (출구가 닫힘)
+  if (trialPending(s)) s.rooms[s.roomId]!.cleared = false;
   const t = s.player.trial;
   if (!t) return;
   if (t.dark === s.floor) s.player.blindTicks = Math.max(s.player.blindTicks ?? 0, 2);

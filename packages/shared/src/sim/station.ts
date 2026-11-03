@@ -1,5 +1,6 @@
 // 상점 대신 나오는 작업대: 아티팩터는 모든 상점이 거대한 제작대(sim/afBench) · 추적자는 라스트 보스 층 상점이 튜닝소(sim/trTune)
 // 작업대 앞에서 F = 창 열기·닫기. 창에서 누른 것은 입력 menu (기능 × 4096 + a × 64 + b)로 와서 같은 결과가 나옴 (기록·협동)
+import { ROUTE_OP, routeMenu } from "./routeGo";
 import type { StatMod } from "../stats";
 import { BENCH_OP, benchMods, benchUse } from "./afBench";
 import { lastFloorOf } from "./hero";
@@ -69,6 +70,8 @@ export function stationMenu(s: RunState, code: number): void {
   if (op === TRIAL_OP.answer || op === TRIAL_OP.chest) return trialMenu(s, op, a);
   // 제단의 방 (sim/altar): 카드 고르기
   if (op === ALTAR_OP) return altarMenu(s, a);
+  // 미리 정한 길로 가기 (sim/routeGo)
+  if (op === ROUTE_OP) return routeMenu(s, a);
   // 비밀의 방: 야바위 · 경매
   if (op === GAMBLE_OP) return gambleMenu(s, a);
   if (op === AUCTION_OP) return auctionMenu(s, a);

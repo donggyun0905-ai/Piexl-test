@@ -91,6 +91,7 @@ import { GYM_FX_RULES } from "./gymPerks";
 import { TRIAL_RULES } from "./trial";
 import { TRIAL_RUN_RULES } from "./trialRun";
 import { HIDDEN_RULES } from "./hiddenTrial";
+import { ROUTE_GO_RULES } from "./routeGo";
 import { HIDDEN_FOE_RULES } from "./hiddenFoes";
 import { HIDDEN_FORT_RULES } from "./hiddenForts";
 import { HIDDEN_SEA_RULES } from "./hiddenSea";
@@ -198,6 +199,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   TRIAL_RULES,
   TRIAL_RUN_RULES,
   HIDDEN_RULES,
+  ROUTE_GO_RULES,
   HIDDEN_FOE_RULES,
   HIDDEN_FORT_RULES,
   HIDDEN_SEA_RULES,
