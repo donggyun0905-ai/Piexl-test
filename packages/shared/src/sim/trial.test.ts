@@ -37,6 +37,17 @@ describe("시련의 방", () => {
     expect(s.rooms[s.roomId]!.pickups.filter((p) => p.kind === "trial")).toHaveLength(1);
   });
 
+  it("비석에 답하기 전에는 출구가 닫혀 나갈 수 없음 (잠긴 출구로도 못 감) · 답하면 열림", () => {
+    const s = inTrial();
+    stepSim(s, EMPTY_INPUT);
+    expect(s.rooms[s.roomId]!.cleared).toBe(false);
+    expect(trialBusy(s)).toBe(true);
+    menu(s, menuCode(TRIAL_OP.answer, 0));
+    stepSim(s, EMPTY_INPUT);
+    expect(trialBusy(s)).toBe(false);
+    expect(s.rooms[s.roomId]!.cleared).toBe(true);
+  });
+
   it("NO: 벌칙 하나가 걸리고 비석은 다시 못 씀", () => {
     for (let seed = 1; seed < 12; seed++) {
       const s = inTrial(seed);

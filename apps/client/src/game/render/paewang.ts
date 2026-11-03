@@ -2,7 +2,7 @@
 import { drawPwZone } from "./pwZone";
 import { drawCapChan, drawCapGround } from "./pwCapture";
 import { drawGrowGround, drawGrowUnits, drawWarFog } from "./pwGrowDraw";
-import { drawRecall } from "./pwRecallFx";
+import { drawRecall, drawRouteRecall } from "./pwRecallFx";
 import { drawPings } from "./pwPingFx";
 import { drawGrowTheme } from "./pwGrowTheme";
 import { allPlayers, inBush, PW, PW_ARENAS, TILE_SIZE, trapUp, type EnemyState, type ProjectileState, type PwAlly, type PwBrain, type RunState } from "@pixel-rogue/shared";
@@ -81,6 +81,7 @@ export function drawPwShot(ctx: Ctx, pr: ProjectileState, x: number, y: number):
 /** 바닥: 2층 발판(나무 판자 + 그림자) · 가시 함정 */
 export function drawPwGround(ctx: Ctx, s: RunState): void {
   if (s.pvp) setPwViewer(s);
+  drawRouteRecall(ctx, s);
   const id = s.pvp?.arena ?? s.pw?.arena;
   if (!id) return;
   const a = PW_ARENAS[id];

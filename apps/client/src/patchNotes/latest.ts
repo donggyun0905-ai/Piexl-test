@@ -4,6 +4,60 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.375",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "시련의 방: 비석에 YES/NO로 답하기 전에는 출구가 닫혀 다음 방으로 갈 수 없음 (잠긴 출구로도 못 감)",
+        "노선도 갈 길: 걸어가던 것을 바꿈 — 큰 지도를 닫은 뒤(또는 싸운 방을 정리하면) '이동합니다'와 함께 귀환 빛기둥 1.5초 뒤 다음 방으로 이동 · 지도를 보는 동안에는 움직이지 않음 · 움직이거나 맞으면 취소 (지도를 다시 닫으면 다시 시작)",
+      ],
+      en: [
+        "Trial room: the exits stay shut until you answer the monolith YES/NO (you can't even pay to leave)",
+        "Planned path: no more auto-walking — after you close the big map (or clear a fight room), 'Moving on' shows with the recall light pillar and you move to the next room 1.5s later · nothing moves while the map is open · moving or getting hit cancels it (close the map again to retry)",
+      ],
+      ja: [
+        "試練の部屋：石碑にYES/NOで答えるまで出口が閉じて次の部屋へ行けない（閉じた出口からも出られない）",
+        "ルートの道：自動で歩く方式を変更 — 大きな地図を閉じたあと（または戦った部屋を片付けると）「移動します」と帰還の光の柱が出て1.5秒後に次の部屋へ移動・地図を見ている間は動かない・動いたり攻撃を受けると取り消し（地図をもう一度閉じると再開）",
+      ],
+    },
+  },
+  {
+    version: "0.48.374",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "하이오크: 체력이 줄수록 세지는 것이 붉은 오라로 보임 (체력이 적을수록 크고 진해지고 불꽃이 솟음) · 도끼 한 방에 내 체력이 다 날아갈 만큼 세면 머리 위에 작은 WARNING",
+        "단련의 방: 악마의 거래 아이템·히든 아이템은 포인트로 강화할 수 없음 (목록에 안 나옴)",
+      ],
+      en: [
+        "High orcs: their low-HP rage now shows as a red aura (bigger, deeper and flaming as their HP drops) · a small WARNING appears over their head when one axe hit could take all your HP",
+        "Training room: devil-deal and hidden items can no longer be trained with points (they don't appear in the list)",
+      ],
+      ja: [
+        "ハイオーク：体力が減るほど強くなる様子が赤いオーラで見える（体力が少ないほど大きく濃く、炎が立つ）・斧の一撃で自分の体力が尽きるほど強いと頭上に小さくWARNING",
+        "鍛錬の部屋：悪魔の取引アイテム・ヒドゥンアイテムはポイントで強化できない（一覧に出ない）",
+      ],
+    },
+  },
+  {
+    version: "0.48.373",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "그림 리퍼·뒤집어진 십자가·풍뎅이 부적: 기계공학자·의사 공격, 원소술사 일부 공격, 화상·중독 같은 상태이상 피해에도 붙지 않던 것을 고침 (이제 모든 공격에 적이 받는 피해 +30%)",
+        "비밀의 방(금 간 벽): 방에 몬스터가 남아 있으면 닿아도 무너지지 않음 · 다 잡아야 열림 (덜 잡고 들어가 방 보상을 놓치던 것)",
+      ],
+      en: [
+        "Grim Reaper, Inverted Cross and Scarab Charm now also apply to Engineer and Doctor attacks, some Elementalist attacks and status damage such as burn and poison (every attack now deals +30% to enemies)",
+        "Secret rooms (cracked walls): the wall won't crumble while monsters remain in the room — clear it first (you could slip in early and lose the room reward)",
+      ],
+      ja: [
+        "グリムリーパー・逆さ十字・スカラベの護符：機械工学者・医者の攻撃、元素術師の一部の攻撃、火傷・毒などの状態異常ダメージにも乗るよう修正（すべての攻撃で敵の被ダメージ+30%）",
+        "秘密の部屋（ひび割れた壁）：部屋にモンスターが残っていると触れても崩れない・全部倒すと開く（倒しきらずに入って部屋の報酬を逃していた問題）",
+      ],
+    },
+  },
+  {
     version: "0.48.372",
     date: "2026-11-03",
     items: {

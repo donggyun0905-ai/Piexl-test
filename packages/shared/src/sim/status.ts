@@ -3,6 +3,7 @@
 import { PERKS } from "../perks";
 import { statusMul } from "./baseStats";
 import { dotCrit } from "./novice";
+import { devilMul } from "./devilPerks";
 import type { DotKind, EnemyState, RunState } from "./types";
 import { hasPerk, markDot } from "./util";
 
@@ -17,7 +18,7 @@ export { R as STATUS_RULES };
 /** 상태이상 피해: 맞음 효과·밀림 없이 체력만 · 탐식 방어력 깎기 · 악의(악의 사도) · 상태이상 강화(기본 스탯) */
 export function dotDamage(s: RunState, e: EnemyState, kind: DotKind, amount: number): void {
   if (e.immune || e.hp <= 0 || amount <= 0) return;
-  const dmg = dotCrit(s, e, amount) * (1 + (e.apDef ?? 0)) * (hasPerk(s.player, "malice") ? PERKS.malice.dot : 1) * statusMul(s.player);
+  const dmg = dotCrit(s, e, amount) * (1 + (e.apDef ?? 0)) * devilMul(s, e) * (hasPerk(s.player, "malice") ? PERKS.malice.dot : 1) * statusMul(s.player);
   e.hp -= dmg;
   e.hitFlash = 3;
   markDot(s, e, kind, dmg);
@@ -36,7 +37,7 @@ export function tickDots(s: RunState): void {
     for (const e of s.enemies) {
       for (const [kind, ticks, dmg] of [["burn", e.burnTicks, e.burnDmg], ["poison", e.poisonTicks, e.poisonDmg]] as const) {
         if (e.hp <= 0 || (ticks ?? 0) <= 0 || e.immune) continue;
-        const d = dotCrit(s, e, (dmg ?? 0) * mul);
+        const d = dotCrit(s, e, (dmg ?? 0) * mul) * devilMul(s, e);
         e.hp -= d;
         e.hitFlash = 3;
         markDot(s, e, kind, d);

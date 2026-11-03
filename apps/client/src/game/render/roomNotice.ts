@@ -35,6 +35,8 @@ function notice(s: RunState, text: (key: string) => string, name: (kind: "passiv
     const sub = hn.code === "start" ? text(`hiddenHint_${k}`) : hn.code === "round3" ? text(`hiddenLast_${k}`) : hn.code === "clear" ? text("hiddenClearSub") : "";
     out.push({ head, sub, color: hn.code === "clear" ? "#ffd84a" : "#c8a0ff", at: hn.tick });
   }
+  // 미리 정한 길로 가는 중 (sim/routeGo)
+  if (p.routeGo) out.push({ head: text("routeGoing"), sub: "", color: "#8ad8ff", at: s.tick });
   const got = p.trial?.got;
   if (got && s.tick - got.tick < SHOW) {
     const [k, id = ""] = got.code.split(":");

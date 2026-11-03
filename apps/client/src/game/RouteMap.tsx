@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 import { type RunState } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 import { drawPlan, drawRoute, MINIMAP_BOX_H, MINIMAP_BOX_W, MINIMAP_WIDTH, routeHeight, routeNodePos, ROUTE_NODE_H, ROUTE_NODE_W } from "./minimap";
-import { pickRoute, routePlan } from "./routePlan";
+import { pickRoute, routePlan, setRouteMapOpen } from "./routePlan";
 
 /** 큰 지도 배율 */
 const BIG = 5;
@@ -38,6 +38,9 @@ export function RouteMap(props: { miniRef: RefObject<HTMLCanvasElement | null>; 
   const openRef = useRef(false);
   useEffect(() => {
     openRef.current = open;
+    setRouteMapOpen(run(), open);
+    // run은 화면마다 새로 만들어지는 함수라 열고 닫을 때만 알림
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
   useEffect(() => {
     const key = (e: KeyboardEvent) => {

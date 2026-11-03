@@ -23,6 +23,7 @@ import { meetPilgrim, pilgrimRoom } from "./pilgrim";
 import { luxRoom } from "./luxFoes";
 import { skipTrials } from "./trialRun";
 import { hiddenAt, pickHidden, startHidden } from "./hiddenTrial";
+import { routeDue } from "./routeGo";
 import { terraBoss } from "./hiddenDice";
 import { DOOR_HALF, EXIT_X, FLEE_COST, hasPerk, PLAYER_RADIUS, ROOM_MAX_Y, ROOM_MIN_Y } from "./util";
 
@@ -217,6 +218,9 @@ export function updateRoom(s: RunState, input: TickInput): void {
   const st = s.rooms[s.roomId]!;
   checkCleared(s);
   s.prompt = { kind: "none" };
+  // 미리 정한 길: 빛기둥이 다 차면 그 출구로 (sim/routeGo)
+  const go = routeDue(s);
+  if (go >= 0 && st.cleared) return goThrough(s, go);
 
   const p = s.player;
   const lane = touchingExit(s);

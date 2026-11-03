@@ -16,6 +16,10 @@ import { menuCode } from "./station";
 import { chestOptions, spillRewards } from "./trialRewards";
 import { createRun, stepSim } from "./run";
 import { crackSpot, rollCrack } from "./vault";
+import { beamHit } from "./laser";
+import { medicHit } from "./medicWeapons";
+import { dotDamage } from "./status";
+import { makeEnemy } from "./util";
 import { EMPTY_INPUT, type RunState } from "./types";
 import { AUCTION_OP } from "./auction";
 
@@ -76,6 +80,30 @@ describe("금 간 벽", () => {
     expect(s.map.rooms[s.roomId]!.exits).toEqual(s.map.rooms[from]!.exits);
     expect(s.rooms[s.roomId]!.pickups.some((p) => p.kind === "gambler")).toBe(true);
   });
+
+  it("방에 몬스터가 남아 있으면 닿아도 안 무너짐 · 다 잡으면 무너짐", () => {
+    const s = createRun(3, "warden");
+    startFloor(s, 1);
+    const from = s.roomId;
+    s.rooms[from]!.cleared = false;
+    s.enemies = [makeEnemy(s, "crawler", 200, 60, 1, 30)];
+    s.enemies[0]!.rootTicks = 99999;
+    s.crack = { floor: 1, room: from, side: 0, pos: 100, kind: "gamble" };
+    const at = crackSpot(s.crack);
+    const stand = () => {
+      s.player.x = at.x + s.player.r;
+      s.player.y = at.y;
+    };
+    for (let i = 0; i < 5; i++) {
+      stand();
+      step(s);
+    }
+    expect(s.crack.broke).toBeUndefined();
+    s.enemies = [];
+    stand();
+    step(s, 2);
+    expect(s.crack.broke).toBeDefined();
+  });
 });
 
 describe("악마의 방", () => {
@@ -112,6 +140,12 @@ describe("악마의 방", () => {
     expect(devilMul(s, e)).toBe(1);
     s.player.passives.push("devilReaper");
     expect(devilMul(s, e)).toBeCloseTo(1 + DEVIL_PERKS.devilReaper.taken);
+    // 기계공학자 빔·의사·상태이상 피해에도 리퍼가 붙음 (적에게 주는 피해만, 내가 받는 피해는 그대로)
+    const hp = e.hp;
+    beamHit(s, e, 10, 1);
+    medicHit(s, e, 10);
+    dotDamage(s, e, "burn", 10);
+    expect(hp - e.hp).toBeCloseTo(30 * (1 + DEVIL_PERKS.devilReaper.taken), 0);
   });
 });
 

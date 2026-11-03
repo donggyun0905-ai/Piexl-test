@@ -110,6 +110,7 @@ export const GAME_TEXT = {
   promptEscape: { ko: "탈출하기", en: "Escape", ja: "脱出する" },
   promptNoHp: { ko: "체력이 모자라 나갈 수 없음", en: "Not enough HP to leave", ja: "体力が足りず出られない" },
   minimap: { ko: "노선도", en: "Route map", ja: "ルートマップ" },
+  routeGoing: { ko: "이동합니다", en: "Moving on", ja: "移動します" },
   routeBigTitle: { ko: "노선도 · 갈 길 정하기", en: "Route map · plan your path", ja: "ルートマップ・道を決める" },
   routeBigHint: { ko: "이어진 방을 차례로 누르면 파란 테두리로 길이 정해지고, 싸운 방을 정리하면 다음 방으로 알아서 걸어갑니다 · 다시 누르면 취소 · Tab/Esc 닫기", en: "Tap connected rooms in order to set a blue path; after clearing a fight room you walk to the next one on your own · tap again to cancel · Tab/Esc to close", ja: "つながった部屋を順に押すと青い枠で道が決まり、戦った部屋を片付けると次の部屋へ自動で歩きます・もう一度押すと取り消し・Tab/Escで閉じる" },
   autoAim: { ko: "자동 공격", en: "Auto-attack", ja: "オートアタック" },

@@ -10,6 +10,9 @@ import { addShape, inHazard } from "./hazards";
 import { damagePlayer } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, enemyShot } from "./util";
+import { lateDmg } from "./foeScale";
+import { trialFoeDmg } from "./trialFoes";
+import { tabooUp } from "./taboo";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -159,6 +162,13 @@ function chainward(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
 /** 하이오크 분노 (0 = 체력 가득 ~ 1 = 거의 쓰러짐) */
 export const orcRage = (e: EnemyState): number => (e.kind === "highorc" ? Math.max(0, Math.min(1, 1 - e.hp / Math.max(1, e.maxHp))) : 0);
 
+/** 하이오크 도끼 한 방 피해 (분노가 클수록 셈) */
+export const orcAxe = (s: RunState, e: EnemyState): number => (R.ORC_DMG + 3 * depth(s)) * (1 + R.ORC_DMG_UP * orcRage(e));
+
+/** 하이오크 한 방이 지금 내 체력을 넘을 만큼 센지 (화면 WARNING): 내 방어·회피는 빼고 적이 세지는 배율만 넣어 넉넉히 셈 */
+export const orcLethal = (s: RunState, e: EnemyState): boolean =>
+  e.kind === "highorc" && e.hp > 0 && orcAxe(s, e) * lateDmg(s) * trialFoeDmg(s.player, s, "highorc") * tabooUp(s, "frail") >= s.player.hp;
+
 /** 하이오크: phase walk 다가옴 · swing 도끼 휘두르기 예고(반원, 큰 그림이라 노란 깜빡임 없이 도끼 든 그림으로) */
 function highorc(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
   const rage = orcRage(e);
@@ -176,8 +186,7 @@ function highorc(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
   e.dirY = toP[1];
   if (e.timer > 0 || dist2(e, s.player) > R.ORC_REACH ** 2) return;
   const warn = Math.round(R.ORC_WARN * (1 - 0.3 * rage));
-  const dmg = (R.ORC_DMG + 3 * depth(s)) * (1 + R.ORC_DMG_UP * rage);
-  addShape(s, warn, { x: e.x, y: e.y, radius: R.ORC_R, damage: Math.round(dmg), dirX: toP[0], dirY: toP[1], arc: 0, fx: "bslash", by: "highorc", owner: e.id });
+  addShape(s, warn, { x: e.x, y: e.y, radius: R.ORC_R, damage: Math.round(orcAxe(s, e)), dirX: toP[0], dirY: toP[1], arc: 0, fx: "bslash", by: "highorc", owner: e.id });
   e.phase = "swing";
   e.timer = warn;
 }

@@ -1,5 +1,7 @@
 // 단련의 방 (4층부터 층마다 하나): 기구 셋(샌드백·랫풀다운·벤치 프레스) 중 하나만 골라 F → 미니게임(화면) → 점수(최대 1000)로 강화 포인트(최대 10)
 // 포인트로 능력치·무기·가진 패시브를 한 단계씩 강화 (언제든 다시 F로 창을 열어 남은 포인트를 씀). 창에서 누른 것은 입력 menu로 와서 같은 결과 (기록·협동)
+import { DEVIL_PASSIVES } from "../itemsDevil";
+import { HIDDEN_PASSIVES } from "../itemsHidden";
 import type { ExtraStats } from "../characters";
 import { PASSIVES, type PassiveDef, type PassiveId } from "../items";
 import type { StatMod } from "../stats";
@@ -64,8 +66,10 @@ export const gymFloor = (floor: number) => floor >= R.FROM_FLOOR;
 const roomKey = (s: RunState) => s.floor * 1000 + s.roomId;
 /** 이 방의 기구를 이미 썼는지 (셋 중 하나만) */
 export const gymUsed = (s: RunState) => !!s.player.gym?.rooms.includes(roomKey(s));
-/** 단련할 수 있는 가진 패시브 (같은 것은 하나로): 좋은 능력치 몫이 있거나 올릴 효과 수치가 있는 것만 (sim/gymPerks) */
-export const gymPassives = (p: PlayerState) => [...new Set(p.passives)].filter((id) => gymPassiveStep(id).length > 0 || fxKeys(id).length > 0);
+/** 단련할 수 없는 패시브: 악마의 거래 · 히든 아이템 */
+const NO_GYM = new Set<string>([...Object.keys(DEVIL_PASSIVES), ...Object.keys(HIDDEN_PASSIVES)]);
+/** 단련할 수 있는 가진 패시브 (같은 것은 하나로): 좋은 능력치 몫이 있거나 올릴 효과 수치가 있는 것만 (sim/gymPerks) · 악마·히든은 빼고 */
+export const gymPassives = (p: PlayerState) => [...new Set(p.passives)].filter((id) => !NO_GYM.has(id) && (gymPassiveStep(id).length > 0 || fxKeys(id).length > 0));
 export const gymLv = (p: PlayerState, key: string) => p.gym?.lv[key] ?? 0;
 const ensure = (p: PlayerState) => (p.gym ??= { pts: 0, lv: {}, rooms: [] });
 

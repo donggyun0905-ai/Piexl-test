@@ -82,7 +82,8 @@ export function vaultTick(s: RunState): void {
   gambleTableBlock(s);
   const c = crackHere(s);
   const p = s.player;
-  if (!c || p.hp <= 0) return;
+  // 방에 몬스터가 남아 있으면 다 잡아야 무너짐 (덜 잡고 들어가 방 보상을 놓치지 않게)
+  if (!c || p.hp <= 0 || (c.broke === undefined && !s.rooms[s.roomId]?.cleared)) return;
   const at = crackSpot(c);
   const along = c.side < 2 ? Math.abs(p.y - at.y) : Math.abs(p.x - at.x);
   const into = c.side === 0 ? p.x - at.x : c.side === 1 ? at.x - p.x : at.y - p.y;
