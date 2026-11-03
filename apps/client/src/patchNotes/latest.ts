@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.374",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "하이오크: 체력이 줄수록 세지는 것이 붉은 오라로 보임 (체력이 적을수록 크고 진해지고 불꽃이 솟음) · 도끼 한 방에 내 체력이 다 날아갈 만큼 세면 머리 위에 작은 WARNING",
+        "단련의 방: 악마의 거래 아이템·히든 아이템은 포인트로 강화할 수 없음 (목록에 안 나옴)",
+      ],
+      en: [
+        "High orcs: their low-HP rage now shows as a red aura (bigger, deeper and flaming as their HP drops) · a small WARNING appears over their head when one axe hit could take all your HP",
+        "Training room: devil-deal and hidden items can no longer be trained with points (they don't appear in the list)",
+      ],
+      ja: [
+        "ハイオーク：体力が減るほど強くなる様子が赤いオーラで見える（体力が少ないほど大きく濃く、炎が立つ）・斧の一撃で自分の体力が尽きるほど強いと頭上に小さくWARNING",
+        "鍛錬の部屋：悪魔の取引アイテム・ヒドゥンアイテムはポイントで強化できない（一覧に出ない）",
+      ],
+    },
+  },
+  {
     version: "0.48.373",
     date: "2026-11-03",
     items: {

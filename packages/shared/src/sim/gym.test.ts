@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { generateFloor } from "./floor";
 import "../balanceTables";
 import { PERKS } from "../perks";
+import { DEVIL_PASSIVES } from "../itemsDevil";
+import { HIDDEN_PASSIVES } from "../itemsHidden";
 import { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymBlocked, gymPassives, gymPassiveStep, gymUsed } from "./gym";
 import { fxKeys, GYM_FX_RULES, withGymFx } from "./gymPerks";
 import { goThrough, startFloor } from "./rooms";
@@ -78,6 +80,15 @@ describe("단련의 방", () => {
   it("패시브 강화는 좋은 몫만 키움 (무거운 갑옷: 체력만 오르고 이동 속도 −는 그대로) · 능력치 없는 패시브는 공격력", () => {
     expect(gymPassiveStep("heavyPlate")).toEqual([{ stat: "maxHp", add: 40 * GYM_RULES.passiveBoost }]);
     expect(gymPassiveStep("ricochet")).toEqual([]);
+  });
+
+  it("악마의 거래·히든 아이템은 단련 목록에 안 나옴", () => {
+    const s = createRun(5, "warden");
+    const hidden = Object.keys(HIDDEN_PASSIVES)[0]! as (typeof s.player.passives)[number];
+    s.player.passives.push("devilReaper", "devilScream", hidden, "chainBurst");
+    const list = gymPassives(s.player) as string[];
+    expect(list).toContain("chainBurst");
+    expect(list.filter((id) => id in DEVIL_PASSIVES || id in HIDDEN_PASSIVES)).toEqual([]);
   });
 
   it("효과 패시브는 그 효과 수치를 단계마다 키움 (그 사람에게만, 게임 한 틱 동안) · 올릴 수치가 없으면 단련 목록에 안 나옴", () => {
