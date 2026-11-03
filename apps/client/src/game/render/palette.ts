@@ -102,6 +102,7 @@ export const C = {
   archangel: "#f4f0ff",
   paladin: "#d8c070",
   tower: "#b8b0d0",
+  fort: "#8a7a62",
   dragon: "#8a2a1a",
   godeater: "#2a2438",
   umbra: "#1a1424",

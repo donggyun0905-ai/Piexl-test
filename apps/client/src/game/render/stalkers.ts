@@ -1,5 +1,6 @@
 // 시즌 2 새 몬스터 그리기 (sim/stalkers): 도플갱어(내 캐릭터 모습을 어둡게 · 붉은 눈) · 그림자(거의 투명, 치기 직전에만 짙어짐)
 // 땅 물고기(땅속이면 나를 따라오는 깜빡이는 원과 흙 · 뛰어오르면 그림) · 독가스 구름과 부식독 표시 (지형 층)
+import { drawHiddenFoe } from "./hiddenTrial";
 import { type EnemyState, type RunState } from "@pixel-rogue/shared";
 import { drawCharacter, drawEnemySprite, sheetFor } from "../sprites";
 import { C, type Snap } from "./palette";
@@ -79,6 +80,8 @@ function drawBurrow(ctx: Ctx, s: RunState, e: EnemyState, x: number, y: number):
 
 /** 새 몬스터면 그리고 true (뛰어오른 땅 물고기·베놈은 보통 그림) */
 export function drawStalker(ctx: Ctx, s: RunState, e: EnemyState, x: number, y: number): boolean {
+  // 숨은 시련 구조물(성벽·살포기·해적선) · 독안개 속에 숨은 적 (render/hiddenTrial)
+  if (drawHiddenFoe(ctx, s, e, x, y)) return true;
   if (e.kind === "doppel") return drawDoppel(ctx, s, e, x, y);
   if (e.kind === "lurker") return drawLurker(ctx, s, e, x, y);
   if (e.kind === "landfish" && e.air) {

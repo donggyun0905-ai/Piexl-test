@@ -5,12 +5,13 @@ import { spawnGym } from "./gym";
 import { spawnTrial, trialBusy, TRIAL_RULES } from "./trial";
 import { altarPending, spawnAltar } from "./altar";
 import { spawnVault } from "./vault";
+import { hiddenBusy } from "./hiddenFoes";
 import type { RunState } from "./types";
 
 export const trialFloor = (floor: number) => floor >= TRIAL_RULES.FROM_FLOOR;
 
 /** 시련 중 · 아직 카드를 고르지 않은 제단: 방이 잠기고 잠긴 출구로도 못 나감 (rooms.checkCleared·updateRoom) */
-export const roomLocked = (s: RunState) => trialBusy(s) || altarPending(s);
+export const roomLocked = (s: RunState) => trialBusy(s) || altarPending(s) || hiddenBusy(s);
 
 /** 특별한 방 하나: 가운데 칸(2칸째 ~ 쉼터 앞) 중 아무 칸의 전투방 하나 (그 칸에 전투방이 없으면 다른 칸) */
 export function setSpecial(byLayer: RoomInfo[][], rng: Rng, middle: number, type: RoomType): void {

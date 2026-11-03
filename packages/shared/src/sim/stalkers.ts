@@ -116,6 +116,12 @@ function fishHit(s: RunState, e: EnemyState): void {
 /** 뛰어오른 땅 물고기: 하늘이라 벽·다른 적을 지나 내려앉을 자리까지 감 (enemies가 밀어내지 않음) */
 export const fishLeaping = (e: EnemyState) => e.kind === "landfish" && e.step === 2;
 
+/** 땅속에 있는 동안: 아무것도 받지 않음 (기절·느려짐·속박·공포·화상·중독·부적·밀림·맞은 빛 모두 풀림) */
+export function burrowed(e: EnemyState): void {
+  if (e.kind !== "landfish" || !e.immune) return;
+  e.stunTicks = e.slowTicks = e.rootTicks = e.fearTicks = e.sluggish = e.burnTicks = e.poisonTicks = e.sealTicks = e.seal = e.kbT = e.hitFlash = 0;
+}
+
 /** 땅 물고기: step 0 땅속에서 따라옴 · 1 멈춰 깜빡임(솟구칠 예고) · 2 뛰어오름(맞출 수 있음) */
 function landfish(s: RunState, e: EnemyState): void {
   const st = e.step ?? 0;

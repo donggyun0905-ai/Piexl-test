@@ -1,0 +1,43 @@
+/* 노선도: 작은 지도를 누르면 큰 지도 (game/RouteMap) */
+.minimap.route-mini {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.route-big {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 0.55);
+}
+.route-big-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  max-height: 96%;
+  padding: 8px 12px;
+  background: rgb(14 10 24 / 0.92);
+  border: 2px solid #3ab8ff;
+  box-shadow: 0 0 14px rgb(58 184 255 / 0.45);
+}
+.route-big-box canvas {
+  height: min(70vh, 520px);
+  width: auto;
+  max-width: 90vw;
+  object-fit: contain;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+.route-big-title {
+  color: #9adcff;
+  font-weight: bold;
+}
+.route-big-hint {
+  max-width: 340px;
+  color: #c8c0e0;
+  font-size: 11px;
+  text-align: center;
+}

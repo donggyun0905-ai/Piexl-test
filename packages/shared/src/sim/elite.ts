@@ -4,6 +4,7 @@
 import { ENEMIES } from "../content";
 import type { EnemyState, RunState } from "./types";
 import { addEffect } from "./util";
+import { hiddenOn } from "./hiddenFoes";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -60,7 +61,7 @@ export function champMove(s: RunState, e: EnemyState, x0: number, y0: number): v
 /** 틱마다: 방에 정예만 남으면 정예가 풀림 (체력·크기를 보통으로, 남은 체력 비율은 그대로) */
 export function champFade(s: RunState): void {
   const champs = s.enemies.filter((e) => e.champ && e.hp > 0);
-  if (!champs.length || s.enemies.some((e) => !e.champ && e.hp > 0 && !e.noGold)) return;
+  if (!champs.length || hiddenOn(s) || s.enemies.some((e) => !e.champ && e.hp > 0 && !e.noGold)) return;
   for (const e of champs) {
     const k = e.champK ?? R.CHAMP_HP;
     const ratio = e.hp / e.maxHp;

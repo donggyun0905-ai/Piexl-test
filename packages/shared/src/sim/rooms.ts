@@ -22,6 +22,7 @@ import type { RunState, TickInput } from "./types";
 import { meetPilgrim, pilgrimRoom } from "./pilgrim";
 import { luxRoom } from "./luxFoes";
 import { skipTrials } from "./trialRun";
+import { hiddenAt, pickHidden, startHidden } from "./hiddenTrial";
 import { terraBoss } from "./hiddenDice";
 import { DOOR_HALF, EXIT_X, FLEE_COST, hasPerk, PLAYER_RADIUS, ROOM_MAX_Y, ROOM_MIN_Y } from "./util";
 
@@ -65,6 +66,7 @@ export function startFloor(s: RunState, floor: number): void {
   s.map = s.arenaLv ? arenaMap(s) : s.lastBoss && floor === lastFloorOf(s) ? lastFloorMap(devilPact(s)) : generateFloor(s.seed, floor, s.customRooms);
   s.rooms = s.map.rooms.map(() => ({ visited: false, cleared: false, pickups: [], enemies: null }));
   skipTrials(s);
+  pickHidden(s);
   introRooms(s);
   s.enemies = [];
   s.projectiles = [];
@@ -110,7 +112,7 @@ function enterRoom(s: RunState, roomId: number): void {
     st.enemies = s.arenaLv
       ? arenaEnemies(s, roomId)
       : info.type === "combat" || info.type === "elite"
-        ? roomId === pilgrimRoom(s) ? [] : luxRoom(s, roomId, spawnEnemies(s, roomId, info.type === "elite"))
+        ? roomId === pilgrimRoom(s) ? [] : hiddenAt(s, roomId) ? startHidden(s) : luxRoom(s, roomId, spawnEnemies(s, roomId, info.type === "elite"))
         : info.type === "exit"
           ? s.lastBoss === "plight"
             ? [spawnBoss(s, "plight"), spawnBoss(s, "pdark")]

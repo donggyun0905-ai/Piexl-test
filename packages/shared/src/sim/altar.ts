@@ -20,6 +20,8 @@ export interface AltarPlayerState {
   altar?: { rooms: number[]; last?: { id: AltarId; card: number; hit?: number; tick: number; taken?: PassiveId[]; keep?: PassiveId; swap?: boolean }; got?: { id: AltarId; card: number; hit?: number; swap?: boolean }[] };
   /** 증강: 붙은 패시브 · 기술 둘 (그 패시브를 가진 동안 늘 씀) */
   augments?: { passive: PassiveId; skills: SwarmSkill[] }[];
+  /** 마지막으로 공격한 틱 (증강 기술은 공격하는 동안만, sim/player) */
+  atkAt?: number;
   /** 증강 기술 '블랙홀' (던전, 광야의 새벽은 판에 있음) */
   augVortex?: { vortex?: { x: number; y: number; t: number } };
 }
@@ -123,6 +125,8 @@ export function altarTick(s: RunState): void {
   const p = s.player;
   if (altarPending(s)) s.rooms[s.roomId]!.cleared = false;
   if (!p.augments?.length || s.swarm || s.pvp || s.trialRun?.room === s.roomId) return;
+  // 공격하는 동안(마지막 공격 뒤 잠깐)만 나감 · 가만히 있으면 안 나감
+  if (s.tick - (p.atkAt ?? -1e9) > ALTAR.augGrace) return;
   // 제단·경매 증강은 광야의 새벽 각성 기술보다 약하게 (공격력에 ALTAR.augPower를 곱해 씀)
   const keep = p.stats.damage;
   p.stats.damage = keep * ALTAR.augPower;

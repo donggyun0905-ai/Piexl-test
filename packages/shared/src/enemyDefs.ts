@@ -1,7 +1,7 @@
 // 적 정의 (졸개·보스·허수아비 수치, 층마다 보스). content에서 다시 내보냄
 import { createRng, deriveSeed } from "./rng";
 
-export type MinionKind = "crawler" | "spitter" | "charger" | "mortar" | "gnat" | "guardian" | "paladin" | "tower" | "ruinblade" | "chaosblade" | "soul" | "ghost" | StalkerKind | NewFoeKind | TdMinionKind;
+export type MinionKind = "crawler" | "spitter" | "charger" | "mortar" | "gnat" | "guardian" | "paladin" | "tower" | "fort" | "ruinblade" | "chaosblade" | "soul" | "ghost" | StalkerKind | NewFoeKind | TdMinionKind;
 /** 시즌 2 새 몬스터 (sim/stalkers): 도플갱어 · 베놈 · 땅 물고기 · 그림자 */
 export type StalkerKind = "doppel" | "venom" | "landfish" | "lurker";
 /** 시즌 3 새 몬스터 (sim/newFoes): 폭발풍뎅이 · 스켈레톤 궁병 · 쇠사슬 간수 · 하이오크 */
@@ -60,6 +60,8 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   paladin: { kind: "paladin", hp: 40, radius: 6, speed: 0.42, contactDamage: 11, gold: 2 },
   /** 천사장 탑: 네 모서리에 서 있고 차례가 된 것만 맞음 */
   tower: { kind: "tower", hp: 90, radius: 7, speed: 0, contactDamage: 0, gold: 0 },
+  /** 숨은 시련 구조물 조각 (sim/hiddenKit) */
+  fort: { kind: "fort", hp: 400, radius: 10, speed: 0, contactDamage: 0, gold: 0, boss: true },
   // 타워 디펜스에서 처음 나온 적 (타워 디펜스는 tdDefs 수치로 길을 따라 걸어옴 · 던전 행동은 sim/critters)
   /** 슬라임: 가장 흔한 적 */
   slime: { kind: "slime", hp: 30, radius: 5, speed: 0.42, contactDamage: 8, gold: 1 },

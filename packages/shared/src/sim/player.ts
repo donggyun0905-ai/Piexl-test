@@ -157,9 +157,9 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
   }
   p.stillTicks = mlen > 0 || p.dashTicks > 0 ? 0 : p.stillTicks + 1;
 
-  // 자동 공격: 누르지 않아도 사거리 안에 적이 있으면 공격. 수동: 누르고 있으면 공격
-  // 세이렌에게 홀린 동안은 공격하지 못함
+  // 자동 공격: 누르지 않아도 사거리 안에 적이 있으면 공격. 수동: 누르고 있으면 공격 · 세이렌에게 홀린 동안은 공격하지 못함
   const wantAttack = !charmed(p) && !foeNoAttack(p) && (input.autoAim ? autoInRange : input.attack);
+  if (wantAttack) p.atkAt = s.tick; // 증강 기술은 공격하는 동안만 (altar)
   const speed = attackSpeedNow(p);
   // 직업 무기: 누르고 있는 동안(연속 공격·모으기·에너지파 게이지)도 매 틱 처리 (classTicks)
   const classTick = pwBasicTick(s) ?? (p.kingRoom !== undefined ? kingTick : CLASS_TICKS[weaponOf(p).kind]);

@@ -10,7 +10,7 @@ import type { Controls } from "./controls";
 import { formatTime, pickupText, promptText } from "./hudText";
 import { loadoutKey, type LoadoutView } from "./Loadout";
 import { loadoutView } from "./loadoutView";
-import { drawMinimap } from "./minimap";
+import { autoRoute, redrawMini } from "./routePlan";
 import { viewH, viewW } from "./viewSize";
 import { drawFrame, type DrawOverlay } from "./render";
 import { getSettings } from "../settings";
@@ -92,7 +92,6 @@ export function startGameLoop(o: LoopOptions): () => void {
   let shownHp = "";
   let shownInfo = "";
   let shownPrompt = "";
-  let shownMap = "";
   let shownLoadout = "";
   let shownStats = "";
   let overShown = false;
@@ -190,13 +189,8 @@ export function startGameLoop(o: LoopOptions): () => void {
       o.setStats(rows);
     }
 
-    // 노선도는 방이 바뀌거나 정리됐을 때만 다시 그림 (튜토리얼은 출구가 열리기도 함)
-    const exits = run.map.rooms[run.roomId]?.exits;
-    const mapKey = `${run.floor}/${run.roomId}/${run.rooms[run.roomId]?.cleared}/${exits ? exits.join() : ""}`;
-    if (mapKey !== shownMap && o.miniCtx) {
-      shownMap = mapKey;
-      drawMinimap(o.miniCtx, run);
-    }
+    // 노선도 (바뀌었을 때만 다시 그림, routePlan)
+    if (o.miniCtx) redrawMini(o.miniCtx, run);
   };
 
   const loop = (now: number) => {
@@ -207,7 +201,7 @@ export function startGameLoop(o: LoopOptions): () => void {
     last = now;
     let steps = 0;
     while (acc >= TICK_MS && steps < MAX_CATCH_UP) {
-      const input = controls.read();
+      const input = autoRoute(run, controls.read());
       o.onInput?.(input);
       if (!o.step) stepSim(run, input);
       else if (!o.step(run, input)) {

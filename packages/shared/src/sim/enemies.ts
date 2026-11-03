@@ -13,7 +13,7 @@ import { updateBlade } from "./bossBlades";
 import { updateGhost } from "./bossPrimeval";
 import { addHazard, addShape } from "./hazards";
 import { updateCritter } from "./critters";
-import { fishLeaping, updateStalker } from "./stalkers";
+import { burrowed, fishLeaping, updateStalker } from "./stalkers";
 import { guardSpot, updateGnat, updateGuardian } from "./minions";
 import { domainSlow } from "./talisman";
 import type { EnemyState, RunState } from "./types";
@@ -46,6 +46,7 @@ export function updateEnemies(s: RunState): void {
   const fields = new Map<number, ReturnType<typeof distanceField>>();
   for (const e of s.enemies) {
     if (e.hitFlash > 0) e.hitFlash--;
+    burrowed(e); // 땅속 땅 물고기는 아무것도 받지 않음
     knockTick(s, e);
     if (e.kind === "dummy") {
       // 연습장 허수아비는 밀리거나 끌려가도 제자리 (anchor)
@@ -87,6 +88,7 @@ export function updateEnemies(s: RunState): void {
       // 패왕전 AI 캐릭터: 움직임·공격은 sim/paewangAi (기절·둔화·속박은 여기서 줄고 그쪽에서 확인)
     } else if (e.kind === "gnat") updateGnat(s, e, go);
     else if (e.kind === "tower") updateTower(s, e);
+    else if (e.kind === "fort") e.timer = 0; // 숨은 시련 구조물: 가만히 (sim/hiddenKit)
     else if (e.kind === "ghost") updateGhost(s, e);
     else if (e.kind === "ruinblade" || e.kind === "chaosblade") updateBlade(s, e, toP);
     else if (e.kind === "guardian") updateGuardian(s, e, toP, e.aux ? guardSpot(s, e, go) : go);
