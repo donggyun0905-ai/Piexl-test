@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.362",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "수집가 콤보를 격투가처럼: 공격할 때마다 한 칸씩 기본 검 → 얻은 차례대로 수집 무기 → 다시 기본 검 · 1초 쉬면 처음부터 · 발밑에 콤보 단계 점 (지나온 칸은 그 무기 색, 10칸마다 한 줄 아래)",
+        "수집가 검격 끝에 붙던 짧은 빗금 파편 이펙트를 없앰",
+      ],
+      en: [
+        "Collector combo now works like the Brawler's: each attack fires the next step — blade → collectibles in the order obtained → blade again · pause 1s and it restarts · combo dots under his feet (done steps glow in each weapon's color, a new row every 10)",
+        "Removed the short slash-mark shards at the end of the Collector's blade arcs",
+      ],
+      ja: [
+        "コレクターのコンボを格闘家のように：攻撃するたびに一段ずつ基本の剣 → 手に入れた順に収集武器 → また基本の剣 · 1秒休むと最初から · 足元にコンボ段階の点（済んだ段はその武器の色、10段ごとに一行下）",
+        "コレクターの斬撃の先に付いていた短い斜線の破片エフェクトを削除",
+      ],
+    },
+  },
+  {
     version: "0.48.361",
     date: "2026-11-03",
     items: {

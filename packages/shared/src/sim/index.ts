@@ -92,7 +92,7 @@ export { forgottenRing } from "./forgotten";
 export { statusImmune } from "./remnant";
 export { wandererGauge, zoneRadius } from "./wanderer";
 export { silkAmmo } from "./silk";
-export { armsOnBack, collected, isCollector } from "./collector";
+export { armsOnBack, collected, comboList, isCollector } from "./collector";
 export { caveNeed, minerOre } from "./miner";
 export { voyagerCharge, voyagerGlass } from "./voyager";
 export { zeusWrath } from "./zeus";

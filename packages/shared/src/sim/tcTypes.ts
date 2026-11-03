@@ -65,8 +65,11 @@ export interface TcPlayerState {
   cyQuick?: number;
   /** 광학 위장: 대시한 뒤 기습 공격이 남은 틱 */
   cyAmbush?: number;
-  /** 수집가: 이어지는 콤보 (칸 차례 무기 id · 다음 칸 · 다음 칸까지 틱) (sim/collector) */
-  clCombo?: { list: string[]; i: number; t: number };
+  /** 수집가: 다음 콤보 칸 · 쉰 틱 · 방금 날아 나간 무기(남은 틱) (sim/collector) */
+  clStep?: number;
+  clIdle?: number;
+  clOut?: string;
+  clOutT?: number;
   /** 수집가: 여러 번 때리는 무기의 다음 칸 예약 (무기 id · 칸 · 남은 틱) */
   clQueue?: { id: string; k: number; t: number }[];
 }

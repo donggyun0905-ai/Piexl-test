@@ -116,7 +116,7 @@ function snapshot(s: RunState): Seen {
     cuts: s.effects.filter((f) => f.kind === "wdCut" && f.ticks >= f.maxTicks - 1).length,
     storms: s.effects.filter((f) => f.kind === "wdTempest").length,
     rends: s.effects.filter((f) => f.kind === "skRend").length,
-    clStep: s.player.clCombo ? `${s.player.clCombo.i}:${s.player.clCombo.list[s.player.clCombo.i - 1]}` : "",
+    clStep: s.player.clOut ? `${s.player.attackCount}:${s.player.clOut}` : "",
     reloads: s.effects.filter((f) => f.kind === "skReload").length,
     caves: s.effects.filter((f) => f.kind === "mnCave").length,
     flips: s.player.vyFlips ?? 0,

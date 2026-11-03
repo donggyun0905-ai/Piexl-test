@@ -1,7 +1,7 @@
 // 수집가 그리기 (sim/collector·collectorMoves): 등 뒤 위 공중에 줄지어 뜬 수집 무기 · 무기마다 다른 공격 이펙트(clMove, 무기 색) · 날아가는 탄(clShot)
 // 이펙트 모양(from): arc 빛나는 칼날 · spin 한 바퀴 · thrust 찌르기 · slam 내려찍기 · spikes 얼음 가시 · claw 발톱 · beam 레이저 · charge 모으기
 //   · fist 주먹 · shock 충격파 · pillar 빛기둥 · vortex 소용돌이 · vines 덩굴 · flash 총구 불꽃 (도구는 render/collectorArt)
-import { armsOnBack, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { armsOnBack, CL_ARMS, comboList, type ClArmId, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { armSprite, bladeArc, clawMarks, dust, iceSpikes, laser, thrustLine } from "./collectorArt";
 import { lerp, type Snap } from "./palette";
 import { additive, alpha, beam, crescent, easeOut, glow, rune, shock, sparks } from "./pwFxBits";
@@ -23,6 +23,17 @@ export function drawCollectorBack(ctx: Ctx, s: RunState, alphaT: number, snap: S
     const x = px + off - p.faceX * 4;
     const y = py - 31 - row * 10 - Math.abs(off) * 0.12 + Math.sin(s.tick / 14 + i) * 1.2;
     armSprite(ctx, id, x, y, 14, (off / 40) * 0.6);
+  });
+  // 콤보 단계 점 (발 아래, 격투가처럼): 지나온 칸은 그 무기 색, 남은 칸은 흐리게 · 10칸마다 한 줄 아래
+  const combo = comboList(p);
+  if (combo.length < 2) return;
+  const step = p.clStep ?? 0;
+  combo.forEach((cid, i) => {
+    const row = Math.floor(i / 10);
+    const inRow = Math.min(10, combo.length - row * 10);
+    const dx = ((i % 10) - (inRow - 1) / 2) * 3;
+    ctx.fillStyle = i < step ? (cid in CL_ARMS ? CL_ARMS[cid as ClArmId].color : "#ffe070") : "rgba(255, 255, 255, 0.3)";
+    ctx.fillRect(Math.round(px + dx - 1), Math.round(py + p.r + 3 + row * 2), 2, 1);
   });
 }
 

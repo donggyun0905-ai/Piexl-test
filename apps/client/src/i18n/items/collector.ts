@@ -91,6 +91,6 @@ export function collectorArmDesc(id: ClArmId, lang: Lang): string {
   const a = CL_ARMS[id];
   const parts = [MOVE[id][lang], `${Math.round(a.mul * 100)}%`];
   if (a.fx) parts.push(FX[a.fx](a.val ?? 0)[lang]);
-  const head = c("콤보 +1칸 (공격 한 번에 콤보 전체가 이어짐): ", "Combo +1 (one attack chains the whole combo): ", "コンボ+1（一回の攻撃でコンボ全体が続く）：")[lang];
+  const head = c("콤보 +1칸: ", "Combo +1: ", "コンボ+1：")[lang];
   return head + parts.join(" · ");
 }

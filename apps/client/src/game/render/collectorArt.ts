@@ -1,4 +1,4 @@
-// 수집가 그리기 도구: 무기 그림(sprites/collector_arms) · 빛나는 칼날 초승달(색 → 흰 가장자리, 아래 어두운 잔상, 끝 파편)
+// 수집가 그리기 도구: 무기 그림(sprites/collector_arms) · 빛나는 칼날 초승달(색 → 흰 가장자리, 아래 어두운 잔상)
 // · 찌르기 칼선 · 얼음 가시 · 발톱 · 레이저 · 충격·먼지. render/collector가 무기마다 골라 씀
 import { CL_ARM_IDS, type ClArmId } from "@pixel-rogue/shared";
 import { alpha, crescent, glow } from "./pwFxBits";
@@ -56,17 +56,6 @@ export function bladeArc(ctx: Ctx, x: number, y: number, r: number, a: number, h
   ctx.beginPath();
   ctx.arc(0, 0, r, mid - span * 0.9, mid + span * 0.9);
   ctx.stroke();
-  // 칼끝 파편
-  const head = mid + span;
-  ctx.strokeStyle = alpha(color, fade);
-  for (let k = 0; k < 4; k++) {
-    const q = head - k * 0.12;
-    const rr = r + 3 + k * 2;
-    ctx.beginPath();
-    ctx.moveTo(Math.cos(q) * rr, Math.sin(q) * rr);
-    ctx.lineTo(Math.cos(q + 0.08) * (rr + 4), Math.sin(q + 0.08) * (rr + 4));
-    ctx.stroke();
-  }
   ctx.restore();
 }
 

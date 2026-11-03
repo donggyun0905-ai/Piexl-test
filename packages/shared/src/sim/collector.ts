@@ -1,5 +1,5 @@
 // 수집가(테라코어, 시즌 3): 기본 검 + 수집 무기(패시브 30, itemsCollector)로 이어지는 콤보
-// 공격 한 번 = 콤보 전체: 기본 검 → 얻은 차례대로 등 뒤 수집 무기가 하나씩 날아 나와 자기 기술 (COLLECTOR.gap 틱 간격) → 다 끝나면 공격 대기
+// 격투가처럼 공격할 때마다 콤보 한 칸: 기본 검 → 얻은 차례대로 등 뒤 수집 무기가 날아 나와 자기 기술 → 다시 기본 검 (잠깐 쉬면 처음부터)
 // 수집 무기를 얻을 때마다 콤보가 한 칸 늘어남 · 수치는 weaponsCollector.COLLECTOR · 기술 표는 itemsCollector.CL_ARMS
 // 무기마다 공격은 sim/collectorMoves (여러 번 때리는 무기는 clQueue에 다음 칸) · 그리기(render/collector)는 효과 clMove·탄 clShot
 import { TICK_RATE } from "../constants";
@@ -21,10 +21,9 @@ export function collected(p: PlayerState): ClArmId[] {
   return out;
 }
 
-/** 등 뒤에 떠 있는 수집 무기 (콤보에서 날아 나가 있는 동안의 무기는 빼고) */
+/** 등 뒤에 떠 있는 수집 무기 (방금 콤보로 날아 나간 무기는 잠깐 빼고) */
 export function armsOnBack(p: PlayerState): ClArmId[] {
-  const c = p.clCombo;
-  const out = c && c.i > 0 ? c.list[c.i - 1] : undefined;
+  const out = (p.clOutT ?? 0) > 0 ? p.clOut : undefined;
   return collected(p).filter((id) => id !== out);
 }
 
@@ -67,33 +66,32 @@ function step(s: RunState, id: string): void {
   else baseSlash(s);
 }
 
-/** 틱마다 (수집가의 검을 들었을 때 player에서) */
+/** 콤보 차례: 기본 검 → 얻은 차례대로 수집 무기 */
+export const comboList = (p: PlayerState): string[] => ["clBlade", ...collected(p)];
+
+/** 틱마다 (수집가의 검을 들었을 때 player에서): 격투가처럼 공격할 때마다 콤보 다음 칸 · 잠깐 쉬면 처음부터 */
 export function collectorTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
   runQueue(s);
-  const c = p.clCombo;
-  if (c) {
-    // 이어지는 콤보: 간격마다 다음 무기
-    if (--c.t > 0) return;
-    if (c.i >= c.list.length) {
-      delete p.clCombo;
-      p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
-      return;
-    }
-    step(s, c.list[c.i]!);
-    c.i++;
-    c.t = R.gap;
-    return;
-  }
+  if ((p.clOutT ?? 0) > 0) p.clOutT = (p.clOutT ?? 0) - 1;
+  // 다음 칸을 쓸 수 있게 된 뒤 이만큼 안 누르면 콤보가 끊김
+  if (p.attackCooldown === 0) p.clIdle = (p.clIdle ?? 0) + 1;
+  if ((p.clStep ?? 0) > 0 && (p.clIdle ?? 0) > R.reset) p.clStep = 0;
   if (!want || p.attackCooldown > 0) return;
+  const list = comboList(p);
+  const i = (p.clStep ?? 0) % list.length;
+  const id = list[i]!;
+  step(s, id);
+  // 날아 나간 무기는 잠깐 등 뒤에서 빠짐 (그리기)
+  p.clOut = id;
+  p.clOutT = R.out;
+  p.attackCooldown = Math.max(1, Math.round((TICK_RATE / speed) * R.pace));
   p.attackCount++;
-  const list = ["clBlade", ...collected(p)];
-  step(s, list[0]!);
-  p.clCombo = { list, i: 1, t: R.gap };
+  p.clIdle = 0;
+  p.clStep = (i + 1) % list.length;
 }
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetCollector(p: PlayerState): void {
-  delete p.clCombo;
-  delete p.clQueue;
+  for (const k of ["clStep", "clIdle", "clOut", "clOutT", "clQueue"] as const) delete p[k];
 }
