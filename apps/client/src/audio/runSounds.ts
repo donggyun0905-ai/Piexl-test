@@ -193,8 +193,8 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         // 수집가: 콤보 한 칸마다 그 무기 소리 (활·총 "팅" · 지팡이·책 맑은 소리 · 망치·도끼 "깡" + 흔들림 · 나머지 베는 소리)
         if (now.clStep && now.clStep !== seen.clStep) {
           const st = (CL_ARMS as Record<string, { style: string }>)[now.clStep.split(":")[1]!]?.style ?? "";
-          fx.push(st === "volley" ? "twang" : st === "cast" || st === "stars" || st === "beam" ? "chime" : st === "chop" ? "clank" : "slice");
-          if (st === "chop") onShake(2);
+          fx.push(st === "shot" ? "twang" : st === "magic" ? "chime" : st === "heavy" ? "clank" : "slice");
+          if (st === "heavy") onShake(2);
         }
       } else if (c === "miner") {
         // 에테르 광부: 곡괭이는 "깡" · 광산 붕괴는 우르르 + 화면이 크게 흔들림

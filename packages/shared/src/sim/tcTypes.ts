@@ -67,4 +67,6 @@ export interface TcPlayerState {
   cyAmbush?: number;
   /** 수집가: 이어지는 콤보 (칸 차례 무기 id · 다음 칸 · 다음 칸까지 틱) (sim/collector) */
   clCombo?: { list: string[]; i: number; t: number };
+  /** 수집가: 여러 번 때리는 무기의 다음 칸 예약 (무기 id · 칸 · 남은 틱) */
+  clQueue?: { id: string; k: number; t: number }[];
 }

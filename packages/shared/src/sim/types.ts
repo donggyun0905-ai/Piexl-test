@@ -164,7 +164,7 @@ export interface ProjectileState extends Body, GunShotState, BeastShotState, Orb
   aura?: number;
   /** 색 (장수 필살기 검기) */
   tint?: string;
-  spirit?: "orb" | "seek" | "pet" | "steel" | "trigger" | "bullet" | "yarn" | "hairball" | "ki" | "shuriken" | "kunai" | "fuma" | "needle" | "chrono" | "sand" | "disc" | "gear" | "fireball" | "bone" | "spore" | "fairy" | "chakram" | "crescent" | "spearShot" | "shard" | "feather" | "bubble" | "ink" | S2Spirit;
+  spirit?: "orb" | "seek" | "pet" | "steel" | "trigger" | "bullet" | "yarn" | "hairball" | "ki" | "shuriken" | "kunai" | "fuma" | "needle" | "chrono" | "sand" | "disc" | "gear" | "fireball" | "bone" | "spore" | "fairy" | "chakram" | "crescent" | "spearShot" | "shard" | "feather" | "bubble" | "ink" | "clShot" | S2Spirit;
 }
 
 /** reroll: 상점 새로고침 (itemId = 누른 횟수, price = 다음 가격) */

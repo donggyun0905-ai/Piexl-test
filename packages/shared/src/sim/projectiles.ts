@@ -223,6 +223,8 @@ function spawnSplits(s: RunState, pr: ProjectileState, hit: EnemyState, out: Pro
       ticksLeft: R.SPLIT_TICKS,
       hitIds: [hit.id],
       ...(pr.shooter !== undefined ? { shooter: pr.shooter } : {}),
+      // 수집가 얼음 활: 갈라진 가지도 같은 얼음 화살
+      ...(pr.spirit === "clShot" ? { spirit: pr.spirit, tint: pr.tint, slow: pr.slow } : {}),
     });
   }
 }

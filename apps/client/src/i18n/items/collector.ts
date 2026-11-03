@@ -1,5 +1,5 @@
 // 수집가 글자 (한·영·일): 기본 검 · 수집 무기 30 이름 · 수집 무기 설명(기술 표 CL_ARMS에서 만듦)
-import { CL_ARMS, type ClArmId, type ClFx, type ClStyle } from "@pixel-rogue/shared";
+import { CL_ARMS, type ClArmId, type ClFx } from "@pixel-rogue/shared";
 import type { Lang } from "../index";
 import type { Names } from "./names";
 
@@ -40,19 +40,38 @@ export const CL_PASSIVE_NAMES: Record<ClArmId, Names> = {
   clCrescent: c("쌍월 칼날", "Twin Crescent", "双月の刃"),
 };
 
-const STYLE: Record<ClStyle, (n: number) => Names> = {
-  sweep: () => c("등 뒤에서 날아 나와 내 둘레를 한 바퀴 휘돎", "flies off your back and whirls once around you", "背中から飛び出し自分の周りを一周する"),
-  reap: () => c("거대한 낫이 앞을 크게 쓸어 벰", "a giant scythe reaps a wide arc ahead", "巨大な鎌が前方を大きく薙ぐ"),
-  chop: () => c("노린 적 위로 떨어져 내리찍음", "drops onto the target and slams down", "狙った敵の上に落ちて叩きつける"),
-  iai: () => c("앞으로 내달리며 발도", "dashes forward with a drawing cut", "前へ駆け抜けて抜刀"),
-  cast: () => c("지팡이가 떠올라 노린 적 자리에 마법", "the staff rises and casts on the target", "杖が浮かび狙った敵の位置に魔法"),
-  volley: (n) => (n > 1 ? c(`나타나 ${n}발을 쏨`, `appears and fires ${n} shots`, `現れて${n}発撃つ`) : c("나타나 꿰뚫는 한 발", "appears and fires one piercing bolt", "現れて貫く一撃")),
-  throw: (n) => (n > 1 ? c(`던져 앞을 꿰뚫고 ${n}번 벰`, `thrown to pierce ahead, hitting ${n} times`, `投げて前方を貫き${n}回斬る`) : c("던져 앞을 꿰뚫음", "thrown to pierce ahead", "投げて前方を貫く")),
-  stars: (n) => c(`둘레 적 ${n}마리 위로 별이 떨어짐`, `stars fall on ${n} nearby foes`, `周りの敵${n}体に星が降る`),
-  beam: () => c("책이 펼쳐지며 굵은 빛줄기", "the tome opens and fires a thick beam", "本が開き太い光線"),
-  punch: () => c("거대한 주먹이 앞으로 뻗음", "a giant fist punches ahead", "巨大な拳が前へ伸びる"),
-  claw: (n) => c(`노린 적을 ${n}번 X자로 할큄`, `claws the target in an X ${n} times`, `狙った敵を${n}回X字に引っかく`),
-  whirl: (n) => c(`도끼가 내 둘레를 ${n}바퀴 돌며 벰`, `the axe circles you ${n} times, cutting`, `斧が自分の周りを${n}周して斬る`),
+/** 무기마다 공격 (sim/collectorMoves와 맞춤) */
+const MOVE: Record<ClArmId, Names> = {
+  clHolySword: c("빛나는 검격", "a radiant slash", "輝く斬撃"),
+  clBloodSword: c("X자로 두 번 베기 (/ → \\)", "an X slash: / then \\", "X字に二回斬る（/ → \\）"),
+  clIceSword: c("앞을 내려찍고 그 자리에 얼음 가시", "slams down ahead, raising ice spikes", "前方を叩きつけその場に氷の棘"),
+  clSunSword: c("한 바퀴 베기", "a full spinning slash", "一回転斬り"),
+  clVoidSword: c("앞을 반원으로 크게 벰", "a huge half-circle slash ahead", "前方を半円に大きく斬る"),
+  clChainCleaver: c("공허의 검보다 더 넓은 부채꼴 베기", "a fan slash even wider than the Void Sword", "虚空の剣よりさらに広い扇状斬り"),
+  clKatana: c("칼선으로 네 번 연속 베기", "four rapid needle-thin cuts", "刀線で四連続斬り"),
+  clSunStaff: c("노린 자리에 태양 빛기둥", "a pillar of sunlight on the target", "狙った位置に太陽の光柱"),
+  clVoidStaff: c("노린 자리에 블랙홀 (세 번 끌어당기며 때림)", "a black hole on the target (pulls and hits 3 times)", "狙った位置にブラックホール（3回引き寄せて攻撃）"),
+  clVineStaff: c("노린 자리에 덩굴이 솟아 묶음", "vines burst up on the target and bind", "狙った位置に蔦が生えて拘束"),
+  clWhiteBow: c("세 방향 유도 화살", "three homing arrows", "三方向の追尾矢"),
+  clBloodBow: c("피의 화살 세 줄", "three lines of blood arrows", "血の矢を三本"),
+  clIceBow: c("부채꼴로 퍼지는 얼음 화살 다섯 (맞으면 두 갈래로 갈라짐)", "five ice arrows in a fan (split in two on hit)", "扇状に広がる氷の矢5本（当たると二股に分かれる）"),
+  clGoldBow: c("모든 적을 꿰뚫는 거대한 마력 화살", "a giant mana arrow that pierces everything", "すべてを貫く巨大な魔力の矢"),
+  clCrossbow: c("꿰뚫는 석궁 살 (출혈)", "a piercing bolt (bleed)", "貫くクロスボウの矢（出血）"),
+  clPistol: c("산탄 일곱 발이 퍼짐 · 반동으로 뒤로 밀림", "seven pellets spread like a shotgun · recoil knocks you back", "散弾7発が広がる · 反動で後ろへ"),
+  clStarTome: c("몸 둘레의 별빛 여덟이 적을 쫓아감", "eight starlights around you chase foes", "体の周りの星明かり8つが敵を追う"),
+  clEyeTome: c("모았다가 레이저", "charges, then fires a laser", "溜めてからレーザー"),
+  clGoldFist: c("거대한 주먹 지르기 · 뒤로 충격파", "a giant punch · shockwave behind", "巨大な拳の突き · 後ろへ衝撃波"),
+  clClaw: c("어둠의 발톱으로 두 번 할퀴기 (/ → \\)", "two dark claw rakes: / then \\", "闇の爪で二回引っかく（/ → \\）"),
+  clBlueSpear: c("바닥을 찍고(둘레) → 앞으로 지르기", "strikes the ground (around you) → thrusts ahead", "地面を突き（周囲）→ 前へ突く"),
+  clRedSpear: c("검격 → 찌르기", "a slash → a thrust", "斬撃 → 突き"),
+  clIceSpear: c("앞으로 사방팔방 열 번 찌르기", "ten rapid thrusts spraying ahead", "前方へ四方八方に十連突き"),
+  clGoldSpear: c("찌르기와 검격을 동시에", "a thrust and a slash at once", "突きと斬撃を同時に"),
+  clStoneHammer: c("천천히 치켜들었다가 크게 휘둘러 내리침", "slowly raises, then a crushing swing", "ゆっくり振り上げて大きく振り下ろす"),
+  clBloodHammer: c("휘두른 뒤 피의 칼날이 날아감", "a swing, then a blood blade flies", "振り回した後に血の刃が飛ぶ"),
+  clBlueAxe: c("휘두른 뒤 푸른 검기가 날아감", "a swing, then a blue slash wave flies", "振り回した後に青い剣気が飛ぶ"),
+  clRedAxe: c("빠르게 세 번 휘두르기", "three rapid swings", "素早く三回振る"),
+  clScythe: c("왼쪽으로 · 위에서 아래로 · 왼쪽에서 오른쪽으로 세 번 휘두르기", "three reaps: leftward · top to bottom · left to right", "左へ · 上から下へ · 左から右へ三回振る"),
+  clCrescent: c("되돌아오는 칼날 둘 + 앞으로 검격 두 번", "two returning blades + two slashes ahead", "戻ってくる刃2つ＋前へ斬撃2回"),
 };
 
 const FX: Record<ClFx, (v: number) => Names> = {
@@ -70,7 +89,7 @@ const FX: Record<ClFx, (v: number) => Names> = {
 /** 수집 무기 설명: 콤보 기술 (모양·피해·추가 효과) */
 export function collectorArmDesc(id: ClArmId, lang: Lang): string {
   const a = CL_ARMS[id];
-  const parts = [STYLE[a.style](a.n ?? 1)[lang], `${Math.round(a.mul * 100)}%`];
+  const parts = [MOVE[id][lang], `${Math.round(a.mul * 100)}%`];
   if (a.fx) parts.push(FX[a.fx](a.val ?? 0)[lang]);
   const head = c("콤보 +1칸 (공격 한 번에 콤보 전체가 이어짐): ", "Combo +1 (one attack chains the whole combo): ", "コンボ+1（一回の攻撃でコンボ全体が続く）：")[lang];
   return head + parts.join(" · ");

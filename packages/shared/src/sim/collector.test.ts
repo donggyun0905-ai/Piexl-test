@@ -34,6 +34,7 @@ describe("수집가", () => {
   });
 
   it("공격 한 번에 콤보 전체가 짧은 간격으로 이어짐 (기본 검 → 얻은 차례대로), 무기는 빠지지 않음", () => {
+    // 무기마다 나오는 효과 (motif = 무기 id)
     const s = setup(["clIceSword", "clBlueSpear", "clStoneHammer"]);
     expect(collected(s.player)).toEqual(["clIceSword", "clBlueSpear", "clStoneHammer"]);
     const used: string[] = [];
@@ -43,7 +44,7 @@ describe("수집가", () => {
       stepSim(s, attack);
       const now = s.effects.filter((f) => f.kind === "clMove");
       if (now.length > before) {
-        used.push(now.at(-1)!.from ?? "");
+        used.push(now.at(-1)!.motif ?? "");
         if (first < 0) first = i;
       }
       if (used.length >= 4) {
@@ -65,12 +66,28 @@ describe("수집가", () => {
     expect(s.player.clCombo?.i).toBe(1);
   });
 
-  it("수집 무기마다 맞히는 방식이 다름 (망치는 노린 적 자리를 내리찍어 피해)", () => {
+  it("무기마다 공격이 다름: 돌 망치는 치켜든 뒤 크게 휘둘러 피해 · 흰 날개 활은 유도 화살 셋", () => {
     const s = setup(["clStoneHammer"]);
     const e = s.enemies[0]!;
     const hp = e.hp;
     for (let i = 0; i < 20; i++) stepSim(s, attack);
     expect(e.hp).toBeLessThan(hp);
-    expect(s.effects.some((f) => f.kind === "clMove" && f.from === "clStoneHammer")).toBe(true);
+    expect(s.effects.some((f) => f.kind === "clMove" && f.motif === "clStoneHammer")).toBe(true);
+    const b = setup(["clWhiteBow"]);
+    for (let i = 0; i < 6; i++) stepSim(b, attack);
+    const arrows = b.projectiles.filter((pr) => pr.spirit === "clShot" && pr.tint === "clWhiteBow");
+    expect(arrows).toHaveLength(3);
+    expect(arrows.every((pr) => pr.homing)).toBe(true);
+  });
+
+  it("여러 번 때리는 무기: 얼음 창은 열 번 찌름", () => {
+    const s = setup(["clIceSpear"]);
+    const seen = new Set<object>();
+    for (let i = 0; i < 40; i++) {
+      stepSim(s, attack);
+      for (const f of s.effects) if (f.kind === "clMove" && f.motif === "clIceSpear") seen.add(f);
+      if (s.player.attackCooldown > 0 && !s.player.clCombo && !s.player.clQueue?.length) break;
+    }
+    expect(seen.size).toBe(10);
   });
 });

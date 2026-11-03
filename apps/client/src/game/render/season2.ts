@@ -24,7 +24,7 @@ import { drawVaultFx } from "./vaultFx";
 import { drawAltarFx } from "./altarDraw";
 import { drawWandererFx, drawWandererShot } from "./wanderer";
 import { drawSilkFx } from "./silk";
-import { drawCollectorFx } from "./collector";
+import { drawCollectorFx, drawCollectorShot } from "./collector";
 import { drawSecretFx, drawSecretShot } from "./secret";
 import { lerp, type Snap } from "./palette";
 
@@ -39,7 +39,7 @@ const dirOf = (pr: ProjectileState) => {
 };
 
 export function drawS2Shot(ctx: Ctx, pr: ProjectileState, x: number, y: number, tick: number): boolean {
-  if (drawSlayerShot(ctx, pr, x, y, tick) || drawEaterShot(ctx, pr, x, y) || drawNeedleShot(ctx, pr, x, y) || drawTerraShot(ctx, pr, x, y, tick) || drawTerraShotB(ctx, pr, x, y, tick) || drawTerraShotC(ctx, pr, x, y) || drawTrackerShot(ctx, pr, x, y) || drawForgottenShot(ctx, pr, x, y) || drawRemnantShot(ctx, pr, x, y) || drawWandererShot(ctx, pr, x, y, tick) || drawSecretShot(ctx, pr, x, y, tick)) return true;
+  if (drawSlayerShot(ctx, pr, x, y, tick) || drawEaterShot(ctx, pr, x, y) || drawNeedleShot(ctx, pr, x, y) || drawTerraShot(ctx, pr, x, y, tick) || drawTerraShotB(ctx, pr, x, y, tick) || drawTerraShotC(ctx, pr, x, y) || drawTrackerShot(ctx, pr, x, y) || drawForgottenShot(ctx, pr, x, y) || drawRemnantShot(ctx, pr, x, y) || drawWandererShot(ctx, pr, x, y, tick) || drawSecretShot(ctx, pr, x, y, tick) || drawCollectorShot(ctx, pr, x, y, tick)) return true;
   const [dx, dy] = dirOf(pr);
   switch (pr.spirit) {
     case "gaiaArrow":
