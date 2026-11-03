@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { USE_ITEMS } from "../items";
 import { createRun, EMPTY_INPUT, PICKUP_HOLD_TICKS, stepSim, type Pickup, type RunState } from "./index";
 import { WEAPONS } from "../content";
 
@@ -142,7 +143,7 @@ describe("아이템", () => {
     expect(p.hp).toBe(10);
     p.useSlots = ["potion", "bomb"];
     stepSim(run, { ...EMPTY_INPUT, useSlot: 1 });
-    expect(p.hp).toBeCloseTo(10 + 120 * 0.35);
+    expect(p.hp).toBeCloseTo(10 + USE_ITEMS.potion.heal);
     run.enemies = [{ id: 77, kind: "crawler", x: p.x + 20, y: p.y, prevX: 0, prevY: 0, r: 5, hp: 40, maxHp: 40, timer: 0, phase: "walk", dirX: 0, dirY: 0, hitFlash: 0, count: 0, noGold: false }];
     stepSim(run, { ...EMPTY_INPUT, useSlot: 2 });
     expect(run.enemies).toHaveLength(0);

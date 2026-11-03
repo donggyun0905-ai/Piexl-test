@@ -13,6 +13,20 @@
   font-size: 15px;
   color: #d8d0f0;
 }
+.gym-start {
+  align-self: center;
+  padding: 12px 40px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  background: #6a3ac8;
+  border: 2px solid #b08aff;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.gym-start:hover {
+  background: #7d4ae0;
+}
 .gym-game {
   display: flex;
   flex-direction: column;

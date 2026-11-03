@@ -62,7 +62,7 @@ export function GameHud({ t, touchMode, autoAim, manualOnly, pvp, onPause, onAut
       <Toggle {...toggle} on={showRange} label="rangeToggle" keyName="G" onClick={() => setSettings({ showRange: !showRange })} />
       {pvp && <Toggle {...toggle} on={showNames} label="namesToggle" keyName="N" onClick={() => setSettings({ showNames: !showNames })} />}
       {!pvp && <Toggle {...toggle} on={showHitbox} label="hitboxToggle" keyName="H" onClick={() => setSettings({ showHitbox: !showHitbox })} />}
-      {!manualOnly && <Toggle {...toggle} on={autoAim} label="autoAim" keyName="R" onClick={() => onAutoAim(!autoAim)} />}
+      {!manualOnly && touchMode && <Toggle {...toggle} on={autoAim} label="autoAim" keyName="R" onClick={() => onAutoAim(!autoAim)} />}
     </div>
   );
 }

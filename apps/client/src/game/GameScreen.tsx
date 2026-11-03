@@ -57,7 +57,7 @@ export function GameScreen(props: GameScreenProps) {
   const [overlay, setOverlay] = useState<Overlay>("none");
   const overlayRef = useRef<Overlay>("none");
   const [touchMode, setTouchMode] = useState(() => window.matchMedia("(pointer: coarse)").matches);
-  const [autoAim, setAutoAim] = useState(true);
+  const [autoAim, setAutoAim] = useState(() => window.matchMedia("(pointer: coarse)").matches);
   const [result, setResult] = useState<Result | null>(null);
   /** 혼자 하기에서 6층을 깨면 라스트 보스 도전 (무한 모드·이미 도전한 판은 제외) */
   const [canChallenge, setCanChallenge] = useState(false);

@@ -34,8 +34,12 @@ export function recordBook(p: PlayerState): boolean {
 /** 도감 공격력 배율 (수집 일지: 두 배로 오름) */
 export const bookMul = (p: PlayerState) => 1 + pilgrimBook(p) * P.bookDmg * (hasPerk(p, "pgJournal") ? K.pgJournal.mul : 1);
 
-/** 도감 공격력은 능력치에 바로 반영 (능력치 창에서 보이게, recalcStats) */
-export const pilgrimMods = (p: PlayerState): StatMod[] => (p.characterId === "pilgrim" && pilgrimBook(p) ? [{ stat: "damage", mul: bookMul(p) }] : []);
+/** 도감 공격 범위 배율 (모든 수집품의 사거리·범위) */
+export const areaMul = (p: PlayerState) => (p.characterId === "pilgrim" ? 1 + pilgrimBook(p) * P.bookArea : 1);
+
+/** 도감 공격력·사거리는 능력치에 바로 반영 (능력치 창에서 보이게, recalcStats) */
+export const pilgrimMods = (p: PlayerState): StatMod[] =>
+  p.characterId === "pilgrim" && pilgrimBook(p) ? [{ stat: "damage", mul: bookMul(p) }, { stat: "range", mul: areaMul(p) }] : [];
 
 /** 순례자가 맞힘: 보스(열쇠고리) · 처치하면 기념품·도장 */
 export function hitE(s: RunState, e: EnemyState, dmg: number, push = 0): void {

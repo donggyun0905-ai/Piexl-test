@@ -34,8 +34,8 @@ export interface ControlsOptions {
 }
 
 export class Controls {
-  /** 자동 공격 (기본). 끄면 수동 조준 */
-  autoAim = true;
+  private touched = window.matchMedia("(pointer: coarse)").matches; // 자동 공격은 모바일(터치)에서만, 컴퓨터는 좌클릭(꾹 = 계속)
+  autoAim = this.touched;
   manualOnly = false; // 패왕전: 자동 공격 없이 직접 조준만
   private keys = new Set<string>();
   private mouseX: number | null = null;
@@ -69,7 +69,7 @@ export class Controls {
     this.cleanup.push(bindPan(opt.zone, opt.zoom.min < 1, () => opt.playerScreenPos()?.scale ?? 1));
     this.touch = new TouchSticks({
       zone: opt.zone,
-      onTouch: opt.onTouch,
+      onTouch: () => (this.touched || ((this.touched = true), this.setAutoAim(true)), opt.onTouch()), // 처음 터치하면 모바일: 자동 공격 켬
       clickTarget: opt.clickTarget,
       zoom: () => this.zoom,
       setZoom: (z) => this.setZoom(z),
@@ -172,8 +172,8 @@ export class Controls {
   }
 
   setAutoAim(on: boolean): void {
-    this.autoAim = on && !this.manualOnly;
-    this.opt.onAutoAimChange(on);
+    this.autoAim = on && !this.manualOnly && this.touched;
+    this.opt.onAutoAimChange(this.autoAim);
   }
 
   setZoom(z: number): void {
@@ -285,7 +285,7 @@ export class Controls {
   }
 
   private drawSticks(): void {
-    // 자동 공격 중에는 조준하지 않으므로 조준 조이스틱을 그리지 않음
+    // 자동 공격 중에는 조준 조이스틱을 그리지 않음
     drawSticks(this.opt.sticks, this.touch.move, this.autoAim ? null : this.touch.aim);
   }
 }

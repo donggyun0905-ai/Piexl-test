@@ -1,13 +1,13 @@
 // 차원의 순례자(히든): 수많은 차원을 다니며 무기·능력·물건을 모으는 수집가. 차원 수집품 무기 20 (별 탄 · 칼 · 깃발 · 랜턴 · 냄비 · 지도 · 나침반 · 부메랑 · 새총 · 우산
 // · 은방울 · 종이학 · 수정 · 태엽 폭탄 · 떨어진 별 · 씨앗 · 거울 조각 · 모래시계 · 열쇠 · 차원의 문)
-// 들어 본 순례자 무기는 수집 도감에 남아 한 칸마다 공격력이 오르고, 다섯 번째 공격마다 배낭에서 도감의 다른 수집품을 꺼내 한 번 씀
+// 들어 본 순례자 무기는 수집 도감에 남아 한 칸마다 공격력·공격 범위가 오르고, 다섯 번째 공격마다 배낭에서 도감의 다른 수집품을 꺼내 한 번 씀
 // 수치는 weaponsPilgrim.PILGRIM, 아이템은 itemsPilgrim, 도감·땅·맞히기는 pgBag
 import { ROOM_WIDTH, TICK_RATE } from "../constants";
 import { WEAPONS, type WeaponId } from "../content";
 import { PILGRIM_PERKS as K } from "../itemsPilgrim";
 import { PILGRIM as P, type CurioMode } from "../weaponsPilgrim";
 import { nearest } from "./brawlMoves";
-import { hitE, marksTick, PG_IDS, pgRnd, placeMark, recordBook } from "./pgBag";
+import { areaMul, hitE, marksTick, PG_IDS, pgRnd, placeMark, recordBook } from "./pgBag";
 import { recalcStats } from "./items";
 import { fan, inCircle, inCone, inLine, isBoss, shoot, stun } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
@@ -23,8 +23,10 @@ function homing(s: RunState, n: number, fire: () => void): void {
 }
 
 /** 수집품 한 번 쓰기 (배낭에서 꺼낸 것도 같음) */
-function use(s: RunState, mode: CurioMode, radius: number, dmg: number, range: number): void {
+function use(s: RunState, mode: CurioMode, rad: number, dmg: number, range: number): void {
   const p = s.player;
+  // 도감 칸만큼 범위(베기·폭발·파동·자리)도 넓어짐 (사거리는 능력치 range에 이미)
+  const radius = rad * areaMul(p);
   const target = nearest(s, range + 20);
   const d = target && normalize(target.x - p.x, target.y - p.y);
   if (d) [p.faceX, p.faceY] = d;
@@ -130,7 +132,7 @@ function rummage(s: RunState): void {
     const id = others.splice(Math.floor(pgRnd(s, "bag", i) * others.length), 1)[0]!;
     const w = WEAPONS[id] as { curio?: { mode: CurioMode; radius: number }; range: number };
     if (!w.curio) continue;
-    use(s, w.curio.mode, w.curio.radius, p.stats.damage * mul, w.range);
+    use(s, w.curio.mode, w.curio.radius, p.stats.damage * mul, w.range * areaMul(p));
     addEffect(s, { kind: "pgBag", x: p.x, y: p.y - 22, dirX: 0, dirY: 0, size: PG_IDS.indexOf(id), maxTicks: 30 });
   }
   if (n > 0 && hasPerk(p, "pgCampfire")) {

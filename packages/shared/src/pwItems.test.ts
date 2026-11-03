@@ -7,6 +7,6 @@ describe("패왕전 사용 아이템", () => {
     expect(itemVal(true, "bomb").damage).toBe(PW_ITEMS.bomb.damage);
     expect(itemVal(true, "bomb").damage).toBe(20);
     expect(itemVal(false, "bomb").damage).toBe(USE_ITEMS.bomb.damage);
-    expect(itemVal(false, "potion").healRatio).toBe(USE_ITEMS.potion.healRatio);
+    expect(itemVal(false, "potion").heal).toBe(USE_ITEMS.potion.heal);
   });
 });

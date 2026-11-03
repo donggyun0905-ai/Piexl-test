@@ -3,9 +3,9 @@ import type { Lang } from "../index";
 // 화면 글자: 게임 화면(HUD·안내·능력치·일시정지·결과)
 export const GAME_TEXT = {
   hintPc: {
-    ko: "WASD·방향키 이동 · 자동 공격 (R로 끄면 좌클릭 조준·공격) · C 능력치 보기 · 우클릭 대시 · Space 누르는 동안 맞는 범위 보기 (H 늘 보기) · G 공격 사거리 보기 · Q·E 아이템 · 꽉 찬 아이템 칸은 위에 잠깐 서 있으면 교체 · 무기는 F로 교체 · 층 보상은 클릭 · 출구 아래 그림 = 다음 방 · F 상호작용 · 휠 확대 · P 일시정지 · Esc 나가기",
-    en: "WASD/Arrows move · Auto-attack (R off: left click to aim & attack) · C stats · Right click dash · Hold Space to show your hitbox (H: always) · G attack range · Q/E items · Stand on an item to swap a full slot · F swaps weapons · Click floor rewards · Icon under an exit = next room · F interact · Wheel zoom · P pause · Esc quit",
-    ja: "WASD・矢印キー 移動 · オートアタック (Rでオフ: 左クリックで照準・攻撃) · C ステータス · 右クリック ダッシュ · Space押している間 当たり判定を表示 (H 常に表示) · G 攻撃の射程 · Q・E アイテム · いっぱいの枠はアイテムの上で少し止まると交換 · 武器はFで交換 · 階層報酬はクリック · 出口の下の絵 = 次の部屋 · F 調べる · ホイール ズーム · P 一時停止 · Esc 終了",
+    ko: "WASD·방향키 이동 · 좌클릭 조준·공격 (꾹 누르면 계속) · C 능력치 보기 · 우클릭 대시 · Space 누르는 동안 맞는 범위 보기 (H 늘 보기) · G 공격 사거리 보기 · Q·E 아이템 · 꽉 찬 아이템 칸은 위에 잠깐 서 있으면 교체 · 무기는 F로 교체 · 층 보상은 클릭 · 출구 아래 그림 = 다음 방 · F 상호작용 · 휠 확대 · P 일시정지 · Esc 나가기",
+    en: "WASD/Arrows move · Left click to aim & attack (hold to keep attacking) · C stats · Right click dash · Hold Space to show your hitbox (H: always) · G attack range · Q/E items · Stand on an item to swap a full slot · F swaps weapons · Click floor rewards · Icon under an exit = next room · F interact · Wheel zoom · P pause · Esc quit",
+    ja: "WASD・矢印キー 移動 · 左クリックで照準・攻撃 (長押しで連続) · C ステータス · 右クリック ダッシュ · Space押している間 当たり判定を表示 (H 常に表示) · G 攻撃の射程 · Q・E アイテム · いっぱいの枠はアイテムの上で少し止まると交換 · 武器はFで交換 · 階層報酬はクリック · 出口の下の絵 = 次の部屋 · F 調べる · ホイール ズーム · P 一時停止 · Esc 終了",
   },
   hintRotate: { ko: "📱 휴대폰을 가로로 돌리면 화면이 더 크게 보여요", en: "📱 Turn your phone sideways for a bigger view", ja: "📱 スマホを横にすると画面が大きく見えます" },
   hintTouch: {

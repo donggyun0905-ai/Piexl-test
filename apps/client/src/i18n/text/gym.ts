@@ -7,6 +7,7 @@ export const GYM_TEXT = {
   gymHowSandbag: l("화살표가 뜨면 고리가 줄어드는 동안 같은 방향(화살표·WASD·아래 버튼)을 눌러요. 맞힐수록 빨라지고, 3번 틀리면 끝", "When an arrow appears, press the same direction (arrows, WASD or the buttons) before the ring closes. It speeds up; 3 misses ends it", "矢印が出たら輪が縮む間に同じ方向（矢印・WASD・下のボタン）を押そう。当てるほど速くなり、3回ミスで終わり"),
   gymHowLat: l("공이 가운데 초록 칸에 들어왔을 때 패드(Space·F·동그라미)를 눌러 터뜨려요. 칸 밖에서 누르거나 놓치면 실수, 3번이면 끝", "Press the pad (Space, F or the circle) while a ball is in the green zone. Pressing outside or letting one pass is a miss; 3 misses ends it", "ボールが真ん中の緑の枠に入ったらパッド（Space・F・丸）を押して割ろう。枠の外で押すか見逃すとミス、3回で終わり"),
   gymHowBench: l("패드(Space·F·동그라미)를 계속 눌러 힘을 채워 바벨을 버텨요. 갈수록 빨리 빠지고, 힘이 다 빠지면 안전바에 내려놓고 끝", "Keep tapping the pad (Space, F or the circle) to hold the barbell up. Your strength drains faster over time; when it runs out the bar goes on the safety rack", "パッド（Space・F・丸）を押し続けて力を溜め、バーベルを支えよう。だんだん早く抜け、力が尽きたらセーフティに置いて終わり"),
+  gymStartBtn: l("시작하기", "Start", "スタート"),
   gymEnd: l("끝!", "Done!", "終了！"),
   gymRack: l("안전바에 내려놓음", "Racked on the safety bar", "セーフティに置いた"),
   gymPad: l("누르기", "Press", "押す"),

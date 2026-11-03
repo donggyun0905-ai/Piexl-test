@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.364",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "회복약: 최대 체력 35% → 체력 40 고정 회복 (명약은 그대로 전부 회복)",
+        "악마의 방 거래: 바치는 최대 체력이 모두 +10 (40·55·55·40·50·45)",
+        "컴퓨터에서는 자동 공격 없음: 좌클릭으로 조준·공격, 꾹 누르면 계속 공격 (모바일은 자동 공격 그대로)",
+        "단련의 방: 미니게임 창에서 설명을 읽고 '시작하기'를 눌러야 시작",
+        "차원의 순례자: 도감 한 칸마다 공격력 +2% → +5%, 공격 범위 +3% 새로 (사거리·베기·폭발·파동·자리 범위 모두) · 수집품 이펙트를 더 화려하게 (빛·충격파·문양·불똥)",
+      ],
+      en: [
+        "Potion: heals a flat 40 HP instead of 35% max HP (Elixir still heals fully)",
+        "Devil's Room deals: every deal costs 10 more max HP (40/55/55/40/50/45)",
+        "No auto-attack on PC: left click to aim and attack, hold to keep attacking (mobile keeps auto-attack)",
+        "Training Room: the minigame starts only after you read the rules and press Start",
+        "Dimensional Pilgrim: each journal entry now gives +5% damage (was +2%) and a new +3% attack area (range, slashes, blasts, waves, zones) · flashier curio effects (glow, shockwaves, runes, sparks)",
+      ],
+      ja: [
+        "回復薬：最大体力35% → 体力40固定回復（名薬はそのまま全回復）",
+        "悪魔の部屋の取引：捧げる最大体力がすべて+10（40・55・55・40・50・45）",
+        "PCではオートアタックなし：左クリックで照準・攻撃、長押しで連続攻撃（モバイルはオートアタックのまま）",
+        "鍛錬の部屋：ミニゲームは説明を読んで「スタート」を押してから始まる",
+        "次元の巡礼者：図鑑1マスごとの攻撃力 +2% → +5%、攻撃範囲 +3% を新たに（射程・斬撃・爆発・波動・設置範囲すべて）· 収集品のエフェクトをより派手に（光・衝撃波・紋様・火花）",
+      ],
+    },
+  },
+  {
     version: "0.48.363",
     date: "2026-11-03",
     items: {

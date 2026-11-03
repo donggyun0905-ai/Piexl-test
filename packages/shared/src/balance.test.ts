@@ -74,7 +74,7 @@ describe("수치 바꾸기", () => {
     const v = cleanBalance({
       passives: { sturdyHeart: { "maxHp.add": 35, "maxHp.mul": 2 } },
       effects: { goldPouch: { gold: 2 }, spinCleave: { every: 0 } },
-      useItems: { potion: { healRatio: 0.5 }, bomb: { damage: 60 } },
+      useItems: { potion: { heal: 55 }, bomb: { damage: 60 } },
       shop: { price: { passive: 40 } },
     });
     // 없는 값(곱하기가 없는 아이템)은 버리고, 횟수는 1 이상
@@ -84,7 +84,7 @@ describe("수치 바꾸기", () => {
     expect(PASSIVES.sturdyHeart.mods[0]!.add).toBe(35);
     expect(PERKS.goldPouch.gold).toBe(2);
     expect(PERKS.spinCleave.every).toBe(1);
-    expect(USE_ITEMS.potion.healRatio).toBe(0.5);
+    expect(USE_ITEMS.potion.heal).toBe(55);
     expect(SHOP_PRICES.price.passive).toBe(40);
     applyBalance({});
     expect(PASSIVES.sturdyHeart.mods[0]!.add).toBe(20);

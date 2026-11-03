@@ -1,4 +1,4 @@
-// 단련의 방 창 (기구 앞에서 F, game/StationWindow): 아직 이 방 기구를 안 썼으면 그 기구 미니게임 → 끝나면 점수로 포인트 → 강화 목록
+// 단련의 방 창 (기구 앞에서 F, game/StationWindow): 아직 이 방 기구를 안 썼으면 설명 + '시작하기' → 그 기구 미니게임 → 끝나면 점수로 포인트 → 강화 목록
 // 강화 목록: 능력치·무기 숙련·가진 패시브마다 단계 · 단계당 오르는 몫 · 지금까지 오른 몫 · '+' (남은 포인트 사용). 누른 것은 입력 menu (sim/gym)
 import { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymStep, menuCode, type GymStat } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../../i18n";
@@ -19,6 +19,8 @@ const fmt = (k: GymStat, v: number) => (PCT.includes(k) ? `+${Math.round(v * 100
 
 export function GymPanel({ gym, lang, t, send }: { gym: Gym; lang: Lang; t: (k: TextKey) => string; send: (code: number) => void }) {
   const [sent, setSent] = useState(false);
+  // 설명을 읽고 '시작하기'를 눌러야 미니게임 시작
+  const [started, setStarted] = useState(false);
   // 미니게임 동안 게임 시간 멈춤 (혼자 하는 판)
   useGymPause(!gym.used && !sent);
   const done = (score: number) => {
@@ -32,7 +34,13 @@ export function GymPanel({ gym, lang, t, send }: { gym: Gym; lang: Lang; t: (k: 
         <p className="gym-how">
           <b>{GYM_DEVICE[gym.device]![lang]}</b> — {t((["gymHowSandbag", "gymHowLat", "gymHowBench"] as const)[gym.device] ?? "gymHowSandbag")}
         </p>
-        <Game onDone={done} t={t} />
+        {started ? (
+          <Game onDone={done} t={t} />
+        ) : (
+          <button type="button" className="gym-start" onClick={() => setStarted(true)}>
+            {t("gymStartBtn")}
+          </button>
+        )}
       </div>
     );
   }

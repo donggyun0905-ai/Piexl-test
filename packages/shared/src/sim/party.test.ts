@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { USE_ITEMS } from "../items";
 import { EXIT_X, ROOM_COLS, ROOM_MIN_Y, ROOM_ROWS } from "../constants";
 import { createRng } from "../rng";
 import { ROOM_SHAPES, shapeGrid, TILE_FLOOR, tileAt } from "./layout";
@@ -143,7 +144,7 @@ describe("협동", () => {
     a.useSlots = ["potion", null];
     s.enemies = [];
     stepParty(s, [{ ...EMPTY_INPUT, useSlot: 1 }, EMPTY_INPUT]);
-    expect(b.hp).toBeCloseTo(b.stats.maxHp * 0.35);
+    expect(b.hp).toBeCloseTo(USE_ITEMS.potion.heal);
     expect(a.useSlots[0]).toBe(null);
   });
 

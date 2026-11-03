@@ -100,6 +100,7 @@ export const BALANCE_GROUPS: readonly BalanceGroup[] = [
     ids: Object.keys(USE_ITEMS),
     fields: [
       { key: "healRatio", min: 0, max: 1 },
+      { key: "heal", min: 0, max: 999, int: true },
       { key: "damage", min: 0, max: 9999 },
       { key: "radius", min: 0, max: 400 },
       { key: "ticks", min: 0, max: 3600, int: true },

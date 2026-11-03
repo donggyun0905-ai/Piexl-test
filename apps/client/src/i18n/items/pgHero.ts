@@ -81,7 +81,7 @@ export const PG_PASSIVE_NAMES: Record<PgPassive & PassiveId, Names> = {
 };
 
 export const PG_EFFECTS: Partial<Record<PgPassive & PassiveId, Names>> = {
-  pgJournal: c("도감 한 칸마다 오르는 공격력이 {mul}배 (2% → 4%)", "Damage per journal entry ×{mul} (2% → 4%)", "図鑑1マスごとの攻撃力上昇が{mul}倍（2% → 4%）"),
+  pgJournal: c("도감 한 칸마다 오르는 공격력이 {mul}배 (5% → 10%)", "Damage per journal entry ×{mul} (5% → 10%)", "図鑑1マスごとの攻撃力上昇が{mul}倍（5% → 10%）"),
   pgRummage: c("배낭에서 꺼내 쓰기가 5번째 → {every}번째 공격마다", "Pull from the pack every {every} attacks instead of 5", "リュックから取り出すのが5回目 → {every}回目の攻撃ごと"),
   pgDoubleBag: c("꺼낼 때 수집품 {n}개를 꺼냄", "Pull out {n} curios at once", "取り出すとき収集品を{n}つ"),
   pgEcho: c("공격할 때 {chance:pct}% 확률로 한 번 더", "{chance:pct}% chance to attack once more", "攻撃時{chance:pct}%でもう一度"),

@@ -55,6 +55,15 @@ describe("차원의 순례자", () => {
     expect(pulled).toBeGreaterThan(0);
   });
 
+  it("도감 한 칸마다 공격력 · 사거리가 % 로 오름", () => {
+    const a = pilgrim("pgBlade");
+    const b = pilgrim("pgBlade");
+    b.player.pgBook = [...PG_IDS];
+    recalcStats(b);
+    expect(b.player.stats.damage / a.player.stats.damage).toBeCloseTo(1 + 20 * P.bookDmg, 2);
+    expect(b.player.stats.range).toBeGreaterThan(a.player.stats.range * 1.4);
+  });
+
   it("우산을 들면 받는 피해가 줄어듦", async () => {
     const { pilgrimTaken } = await import("./pgBag");
     const s = pilgrim("pgUmbrella");

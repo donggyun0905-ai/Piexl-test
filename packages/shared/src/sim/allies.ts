@@ -3,7 +3,8 @@
 // 무기는 그 캐릭터 무기 중 무작위 (사거리가 길면 탄, 짧으면 휘두르기). 월계선 동료는 그 캐릭터 전용 패시브를 모두 가진 만큼 셈
 import { baseStats, CHARACTERS, HIDDEN_CHARACTERS, WEAPON_IDS, WEAPONS, type CharacterId, type WeaponDef, type WeaponId } from "../content";
 import { ENEMIES } from "../enemyDefs";
-import { PASSIVE_IDS, PASSIVES, USE_ITEMS, type PassiveDef } from "../items";
+import { PASSIVE_IDS, PASSIVES, type PassiveDef } from "../items";
+import { healAmount } from "../pwItems";
 import { createRng, deriveSeed } from "../rng";
 import { damageEnemy } from "./combat";
 import type { AllyState } from "./hiddenTypes";
@@ -214,6 +215,6 @@ export function allyFeed(s: RunState, input: TickInput): void {
   const a = p.allies![i]!;
   const item = p.useSlots[slot] as "potion" | "elixir";
   p.useSlots[slot] = null;
-  a.hp = Math.min(a.maxHp, a.hp + a.maxHp * USE_ITEMS[item].healRatio);
+  a.hp = Math.min(a.maxHp, a.hp + healAmount(false, item, a.maxHp));
   addEffect(s, { kind: "burst", x: a.x, y: a.y, dirX: 0, dirY: 0, size: 12, maxTicks: 16 });
 }

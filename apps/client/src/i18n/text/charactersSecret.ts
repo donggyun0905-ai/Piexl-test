@@ -24,9 +24,9 @@ export const CHARACTER_TEXT_SECRET = {
   thunder: { ko: "번개", en: "Lightning", ja: "雷" },
   pilgrim: { ko: "차원의 순례자", en: "Dimensional Pilgrim", ja: "次元の巡礼者" },
   pilgrimDesc: {
-    ko: "히든 · 수많은 차원을 다니며 무기·능력·물건을 모으는 수집가 소녀. 차원 수집품 무기 20 (지팡이 · 칼 · 깃발 · 우산 · 종이학 · 태엽 폭탄 · 차원의 문 등) · 들어 본 무기는 수집 도감에 남아 한 칸마다 공격력 +2% · 다섯 번째 공격마다 배낭에서 도감의 다른 수집품을 꺼내 씀 · 전용 아이템 20",
-    en: "Hidden · A collector girl who wanders countless dimensions gathering weapons, powers and trinkets. 20 curio weapons (staff · blade · flag · umbrella · paper cranes · clockwork bomb · Door of Dimensions and more) · every weapon she has held stays in her journal for +2% damage each · every 5th attack she pulls another curio from her pack · 20 own items",
-    ja: "ヒドゥン · 数多の次元を巡り武器・能力・品物を集めるコレクターの少女。次元の収集品の武器20（杖 · 剣 · 旗 · 傘 · 折り鶴 · ぜんまい爆弾 · 次元の扉など）· 持った武器は収集図鑑に残り1マスごとに攻撃力+2% · 5回目の攻撃ごとにリュックから図鑑の別の収集品を取り出して使う · 専用アイテム20",
+    ko: "히든 · 수많은 차원을 다니며 무기·능력·물건을 모으는 수집가 소녀. 차원 수집품 무기 20 (지팡이 · 칼 · 깃발 · 우산 · 종이학 · 태엽 폭탄 · 차원의 문 등) · 들어 본 무기는 수집 도감에 남아 한 칸마다 공격력 +5%·공격 범위 +3% · 다섯 번째 공격마다 배낭에서 도감의 다른 수집품을 꺼내 씀 · 전용 아이템 20",
+    en: "Hidden · A collector girl who wanders countless dimensions gathering weapons, powers and trinkets. 20 curio weapons (staff · blade · flag · umbrella · paper cranes · clockwork bomb · Door of Dimensions and more) · every weapon she has held stays in her journal for +5% damage and +3% attack area each · every 5th attack she pulls another curio from her pack · 20 own items",
+    ja: "ヒドゥン · 数多の次元を巡り武器・能力・品物を集めるコレクターの少女。次元の収集品の武器20（杖 · 剣 · 旗 · 傘 · 折り鶴 · ぜんまい爆弾 · 次元の扉など）· 持った武器は収集図鑑に残り1マスごとに攻撃力+5%・攻撃範囲+3% · 5回目の攻撃ごとにリュックから図鑑の別の収集品を取り出して使う · 専用アイテム20",
   },
   curio: { ko: "수집품", en: "Curio", ja: "収集品" },
   fallenKing: { ko: "몰락한 왕", en: "Fallen King", ja: "没落した王" },

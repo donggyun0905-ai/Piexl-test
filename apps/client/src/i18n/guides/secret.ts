@@ -24,7 +24,7 @@ export const GUIDE_KO_SECRET = {
   pilgrim: [
     "히든 · 수많은 차원을 다니며 무기·능력·물건을 모으는 수집가 · 체력 115 · 공격력 13 · 행운 4",
     "차원 수집품 무기 20: 지팡이 · 칼 · 깃발 · 랜턴 · 냄비 · 지도 · 나침반 · 부메랑 · 새총 · 우산 · 은방울 · 종이학 · 수정 · 태엽 폭탄 · 떨어진 별 · 씨앗 · 거울 조각 · 모래시계 · 만능 열쇠 · 차원의 문",
-    "수집 도감: 한 번이라도 든 순례자 무기는 도감에 남고 한 칸마다 공격력 +2% (발밑에 도감 칸 수)",
+    "수집 도감: 한 번이라도 든 순례자 무기는 도감에 남고 한 칸마다 공격력 +5%·공격 범위 +3%(사거리·베기·폭발·파동 모두) (발밑에 도감 칸 수)",
     "배낭 뒤지기: 다섯 번째 공격마다 배낭에서 도감의 다른 수집품을 꺼내 한 번 씀 (머리 위로 그 물건이 튀어나옴)",
     "전용 아이템 20: 배낭·부츠·돋보기·클로버·간식·배지 · 수집 일지 · 배낭 정리 · 두 겹 배낭 · 메아리 구슬 · 기념품 · 차원 도장 · 모닥불 · 별 가루 · 열쇠고리 · 그림엽서 · 텐트 · 지름길 · 행운 동전 · 세계수 잎",
   ],
@@ -60,7 +60,7 @@ export const GUIDE_EN_SECRET = {
   pilgrim: [
     "Hidden · A collector who wanders countless dimensions gathering weapons, powers and trinkets · HP 115 · Attack 13 · Luck 4",
     "20 curio weapons: staff · blade · flag · lantern · pot · map · compass · boomerang · slingshot · umbrella · silver bell · paper cranes · crystal · clockwork bomb · fallen star · seed · mirror shards · hourglass · master key · Door of Dimensions",
-    "Collector's journal: every pilgrim weapon you have ever held stays in it for +2% damage each (entries shown under your feet)",
+    "Collector's journal: every pilgrim weapon you have ever held stays in it for +5% damage and +3% attack area each (range, slashes, blasts, waves) (entries shown under your feet)",
     "Rummage: every 5th attack you pull another curio from your journal out of the pack and use it once (it pops out over your head)",
     "20 own items: backpack · boots · magnifier · clover · snacks · badge · journal · tidy pack · double pack · echo marble · souvenir · dimension stamp · campfire · stardust · keychain · postcards · tent · shortcut · lucky coin · world tree leaf",
   ],
@@ -96,7 +96,7 @@ export const GUIDE_JA_SECRET = {
   pilgrim: [
     "ヒドゥン · 数多の次元を巡り武器・能力・品物を集めるコレクター · 体力115 · 攻撃力13 · 運4",
     "次元の収集品の武器20：杖 · 剣 · 旗 · ランタン · 鍋 · 地図 · 羅針盤 · ブーメラン · パチンコ · 傘 · 銀の鈴 · 折り鶴 · 水晶 · ぜんまい爆弾 · 落ちた星 · 種 · 鏡のかけら · 砂時計 · 万能の鍵 · 次元の扉",
-    "収集図鑑：一度でも持った巡礼者の武器は図鑑に残り、1マスごとに攻撃力+2%（足元に図鑑のマス数）",
+    "収集図鑑：一度でも持った巡礼者の武器は図鑑に残り、1マスごとに攻撃力+5%・攻撃範囲+3%（射程・斬撃・爆発・波動すべて）（足元に図鑑のマス数）",
     "リュックあさり：5回目の攻撃ごとにリュックから図鑑の別の収集品を取り出して1回使う（頭上にその品が飛び出す）",
     "専用アイテム20：リュック・ブーツ・虫めがね・クローバー・おやつ・バッジ · 収集日誌 · リュックの整理 · 二重リュック · こだまのビー玉 · おみやげ · 次元スタンプ · たき火 · 星くず · キーホルダー · 絵はがき · テント · 近道 · 幸運のコイン · 世界樹の葉",
   ],

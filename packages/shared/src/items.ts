@@ -196,8 +196,8 @@ export const PASSIVE_IDS = Object.keys(PASSIVES) as PassiveId[];
 
 /** 사용 아이템: 쓰면 없어짐 (종류는 임시) */
 export const USE_ITEMS = {
-  /** 최대 체력의 35% 회복 */
-  potion: { id: "potion", healRatio: 0.35 },
+  /** 체력 40 회복 (고정 수치) */
+  potion: { id: "potion", heal: 40 },
   /** 주변 적에게 큰 피해 */
   bomb: { id: "bomb", damage: 45, radius: 64 },
   /** 3초 동안 피해를 받지 않음 */

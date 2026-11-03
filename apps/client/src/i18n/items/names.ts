@@ -215,9 +215,9 @@ export const USE_NAMES: Record<UseItemId, Names> = {
 /** 사용 아이템 설명. {값 이름:모양}은 USE_ITEMS의 지금 수치로 채움 (items/index.ts) */
 export const USE_DESC: Record<UseItemId, Names> = {
   potion: {
-    ko: `체력 {healRatio:pct}% 회복`,
-    en: `Restore {healRatio:pct}% HP`,
-    ja: `体力を{healRatio:pct}%回復`,
+    ko: `체력 {heal} 회복`,
+    en: `Restore {heal} HP`,
+    ja: `体力を{heal}回復`,
   },
   bomb: { ko: "주변 적에게 큰 피해", en: "Heavy damage to nearby enemies", ja: "周りの敵に大ダメージ" },
   ward: {
