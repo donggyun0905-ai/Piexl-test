@@ -16,6 +16,7 @@ export const DESC: Record<string, Names> = {
   guardian: n("방패 3번을 깨야 피해가 들어감, 돌진 뒤 크게 휘두름. 돌진·휘두르기에 맞으면 기절 0.5초", "Break its shield 3 times first; charges then swings wide. Its charge and swing Stun you for 0.5s", "盾を3回割らないとダメージが通らない。突進後に大振り。突進・振りに当たると気絶0.5秒"),
   paladin: n("천사장이 부르는 단단한 기사. 빛기둥에 맞으면 속박 1초(못 움직임)", "A sturdy knight called by the Archangel. Its pillars of light Root you for 1s", "大天使が呼ぶ頑丈な騎士。光の柱に当たると拘束1秒（移動不可）"),
   tower: n("네 모서리에 서 있고 차례가 된 탑만 맞음", "Stands in the corners; only the active one can be hit", "四隅に立ち、順番の塔だけ攻撃できる"),
+  fort: n("성벽·독가스 살포기·해적선. 움직이지 않고, 부수면 시련이 다음으로 넘어감", "Walls, gas sprayers and pirate ships. They never move; break them to push the trial on", "城壁・毒ガス散布機・海賊船。動かず、壊すと試練が先へ進む"),
   soul: n("혼돈의 검이 풀어놓는 영혼", "A soul released by the Blade of Chaos", "混沌の剣が放つ魂"),
   ghost: n("맞지 않고, 닿으면 어둠이 짙어짐", "Can't be hit; touching it deepens the darkness", "攻撃が当たらず、触れると闇が濃くなる"),
   slime: n("가장 흔한 적. 부딪히면 부식 4초(받는 피해 20% 증가)", "The most common foe. Touching it Corrodes you for 4s (+20% damage taken)", "いちばんよく出る敵。ぶつかると腐食4秒（被ダメージ20%増加）"),

@@ -64,7 +64,7 @@ export function startTrial(s: RunState, kind: TrialKind): void {
 }
 
 /** 문 쪽을 피해 빈 자리 하나 (플레이어와 떨어진 곳) */
-function spot(s: RunState, rng: ReturnType<typeof createRng>, r: number): [number, number] {
+export function spot(s: RunState, rng: ReturnType<typeof createRng>, r: number): [number, number] {
   const g = roomGrid(s);
   let x = 0;
   let y = 0;

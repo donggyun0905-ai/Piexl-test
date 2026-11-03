@@ -3,9 +3,10 @@ import type { AltarPlayerState } from "./altar";
 import type { BoonPlayerState } from "./boons";
 import type { VaultPlayerState, VaultRunState } from "./vaultTypes";
 import type { TrialPlayerState, TrialRunState } from "./trialTypes";
+import type { HiddenTrialRunState } from "./hiddenTrialTypes";
 
 export interface RoomPlayerState extends BoonPlayerState, TrialPlayerState, AltarPlayerState, VaultPlayerState {}
-export interface RoomRunState extends TrialRunState, VaultRunState {
+export interface RoomRunState extends TrialRunState, VaultRunState, HiddenTrialRunState {
   /** 엘리트 방 라운드 (sim/roomSpawn.eliteWave): 층·방 · 지금 라운드 · 다음 무리까지 틱 */
   eliteWave?: { floor: number; room: number; n: number; t: number };
   /** 이 판에 함정(가시·용암)에 다친 횟수 (화면 캐릭터 해금 기록) */

@@ -40,6 +40,7 @@ import { trialCurseTick } from "./trial";
 import { altarTick } from "./altar";
 import { vaultTick } from "./vault";
 import { trialTick } from "./trialRun";
+import { hiddenTick } from "./hiddenTrial";
 import { trialRevive } from "./trialRewards";
 
 // ───────── 시작 ─────────
@@ -195,6 +196,7 @@ export function stepWorld(s: RunState): void {
   // 시련의 방: 진행 · 거절 벌칙 (쓰러짐 판정 전)
   eachSeat(s, () => (trialCurseTick(s), altarTick(s), vaultTick(s)));
   trialTick(s);
+  hiddenTick(s);
 }
 
 /** 체력이 0 이하면 (되살아나는 아이템이 있으면 버팀) 쓰러짐: true */

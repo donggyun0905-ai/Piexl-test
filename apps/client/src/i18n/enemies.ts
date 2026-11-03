@@ -26,6 +26,7 @@ const NAMES: Record<string, Names> = {
   guardian: n("방패 가디언", "Shield Guardian", "盾のガーディアン"),
   paladin: n("성기사", "Paladin", "聖騎士"),
   tower: n("천사장의 탑", "Archangel's Tower", "大天使の塔"),
+  fort: n("숨은 시련 구조물", "Trial Structure", "隠れた試練の構造物"),
   soul: n("풀려난 영혼", "Freed Soul", "解き放たれた魂"),
   ghost: n("어둠의 유령", "Shadow Ghost", "闇の亡霊"),
   slime: n("슬라임", "Slime", "スライム"),

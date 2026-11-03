@@ -26,6 +26,15 @@ function notice(s: RunState, text: (key: string) => string, name: (kind: "passiv
       out.push({ head: text(`trialKind_${last.kind}`), sub, color: "#ffd0d0", at: last.tick });
     }
   }
+  // 숨은 시련 (시작·라운드·구조물·끝)
+  const hn = s.hidden?.on && s.hidden.floor === s.floor ? s.hidden.note : undefined;
+  if (hn && s.tick - hn.tick < SHOW) {
+    const k = s.hidden!.kind;
+    const round = hn.code.startsWith("round");
+    const head = hn.code === "start" ? text(`hiddenName_${k}`) : round ? text("hiddenRound").replace("{n}", hn.code.slice(5)) : text(`hidden_${hn.code}`);
+    const sub = hn.code === "start" ? text(`hiddenHint_${k}`) : hn.code === "round3" ? text(`hiddenLast_${k}`) : hn.code === "clear" ? text("hiddenClearSub") : "";
+    out.push({ head, sub, color: hn.code === "clear" ? "#ffd84a" : "#c8a0ff", at: hn.tick });
+  }
   const got = p.trial?.got;
   if (got && s.tick - got.tick < SHOW) {
     const [k, id = ""] = got.code.split(":");

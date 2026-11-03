@@ -1,5 +1,5 @@
 // 아이템: 바닥 아이템 줍기·바꾸기, 사용 아이템 쓰기, 능력치 다시 계산 (놓기는 loot, 상점은 shop)
-import { pvpStats } from "./pvp";
+import { modeStats } from "./modeStats";
 import { throwIce } from "./pvpExtras";
 import { BIG_COIN } from "../constants";
 import { morphMods } from "./morphEvo";
@@ -60,7 +60,7 @@ export function recalcStats(s: RunState): void {
   const fixed = p.curseHp ?? (CHARACTERS[p.characterId] as CharacterDef).fixedHp;
   if (fixed) p.stats.maxHp = fixed;
   // 패왕전: 모두 최대 체력 ×10, AI는 모드 보정
-  pvpStats(s);
+  modeStats(s);
   if (p.stats.maxHp > oldMax) p.hp += p.stats.maxHp - oldMax;
   if (p.hp > p.stats.maxHp) p.hp = p.stats.maxHp;
 }

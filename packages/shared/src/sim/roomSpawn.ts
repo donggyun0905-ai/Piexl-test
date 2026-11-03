@@ -27,6 +27,9 @@ const R = {
 };
 export { R as ROOM_SPAWN_RULES };
 
+/** 깊이 d의 졸개 체력 배율 (층마다 + 후반 강화, 숨은 시련도 같이 씀) */
+export const foeHpMul = (d: number) => (1 + R.HP_PER_FLOOR * (d - 1)) * lateHp(d);
+
 /** 층·방 번호로 정해지는 적 배치 (들어가는 순서와 상관없이 항상 같음). 강한 적 방은 더 많고 단단함 · wave: 엘리트 방 두 번째 무리 (조금 적게) */
 export function spawnEnemies(s: RunState, roomId: number, elite: boolean, wave = 0): EnemyState[] {
   const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "enemies", ...(wave ? [wave] : [])));
@@ -37,7 +40,7 @@ export function spawnEnemies(s: RunState, roomId: number, elite: boolean, wave =
   const count = wave ? Math.max(1, Math.round(all * R.WAVE2_MUL)) : all;
   // 층마다 나오는 졸개 (타워 디펜스 적 8종 포함, critters.minionKinds)
   const kinds = [...minionKinds(d), ...stalkerKinds(d)];
-  const hpMul = (1 + R.HP_PER_FLOOR * (d - 1)) * lateHp(d) * (elite ? eliteRoomHp() : 1) * partyHpMul(s) * tabooUp(s, "fleshHp");
+  const hpMul = foeHpMul(d) * (elite ? eliteRoomHp() : 1) * partyHpMul(s) * tabooUp(s, "fleshHp");
   const out: EnemyState[] = [];
   const g = shapeGrid(s.map.rooms[roomId]!.shape);
   for (let i = 0; i < count; i++) {
