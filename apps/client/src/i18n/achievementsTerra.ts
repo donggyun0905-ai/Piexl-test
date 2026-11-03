@@ -11,4 +11,5 @@ export const TERRA_ACHIEVEMENTS = {
   clearBomber: n(["폭발은 예술이다", "Explosions Are Art", "爆発は芸術だ"], ["붐버로 클리어", "Clear as Bomber", "ボマーでクリア"]),
   clearArtifacter: n(["푸른 문신의 장인", "Artisan of Blue Ink", "青き刺青の匠"], ["아티팩터로 클리어", "Clear as Artifacter", "アーティファクターでクリア"]),
   clearPunk: n(["네온의 전설", "Neon Legend", "ネオンの伝説"], ["펑크로 클리어", "Clear as Punk", "パンクでクリア"]),
+  clearCollector: n(["서른 자루의 주인", "Master of Thirty Blades", "三十振りの主"], ["수집가로 클리어", "Clear as Collector", "コレクターでクリア"]),
 };

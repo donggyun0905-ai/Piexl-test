@@ -45,6 +45,7 @@ export const PW_CHAR: Partial<Record<CharacterId, PwCharTune>> = {
   oni: { hp: 1.25, dmg: 1.25, taken: 1.22 },
   plague: { hp: 0.86, dmg: 0.86, taken: 0.84 },
   punk: { hp: 1.28, dmg: 1.28, taken: 1.28 },
+  collector: { hp: 1.2, dmg: 1.2, taken: 1 },
   remnant: { hp: 1.55, dmg: 1.55, taken: 0.32 },
   ren: { hp: 1.34, dmg: 1.34, taken: 1.21 },
   rider: { hp: 1.59, dmg: 1.59, taken: 1.19 },

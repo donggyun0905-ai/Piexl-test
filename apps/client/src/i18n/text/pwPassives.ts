@@ -25,6 +25,7 @@ export const PW_PASSIVE_TEXT = {
   pwPvBedouin: { ko: "사막 바람: 스킬을 쓰면 2초 동안 이동 속도 +30%", en: "Desert Wind: after a skill, move speed +30% for 2s", ja: "砂漠の風: スキル後2秒間移動速度+30%" },
   pwPvAbandoned: { ko: "교대 일격: 탭 뒤 첫 기본 공격 피해 +30% (순서를 틀려도 처음으로 돌아가지 않음)", en: "Tag Strike: first basic after a tag deals +30% (wrong order no longer resets)", ja: "交代一撃: タッチ後最初の通常攻撃+30% (順番を間違えてもリセットなし)" },
   pwPvPunk: { ko: "가속: 2초 가속, 그동안 둘레 상대가 느려짐 (무적 없음)", en: "Overdrive: 2s of acceleration that slows nearby opponents (no invulnerability)", ja: "加速: 2秒加速、その間周囲の相手が鈍化 (無敵なし)" },
+  pwPvCollector: { ko: "수집품의 무게: 등 뒤에 뜬 수집 무기 하나마다 평타 피해 +4% (최대 +30%) · 쓴 무기는 경기장에 박히고 닿으면 그 기술", en: "Weight of the Hoard: +4% basic damage per collectible floating on his back (up to +30%) · used weapons stick in the arena and fire their technique when touched", ja: "収集品の重み: 背中に浮かぶ収集武器1つごとに通常攻撃+4% (最大+30%) · 使った武器は闘技場に刺さり触れると技が発動" },
   pwPvRemnant: { ko: "그림자 일격: 치명타 피해 200%", en: "Shadow Strike: critical damage 200%", ja: "影の一撃: クリティカルダメージ200%" },
   pwPvSilk: { ko: "실 얽힘: 실에 얽힌 상대를 찢음 (과다출혈·30가닥 연사 없음)", en: "Entangle: rends entangled targets (no overbleed or 30-thread burst)", ja: "糸絡み: 絡んだ相手を裂く (過剰出血・30本連射なし)" },
   pwPvMystic: { ko: "수호 부적: 기본 공격이 맞으면 가장 가까운 아군 최대 체력 2% 회복", en: "Ward Charm: basic hits heal the nearest ally for 2% max HP", ja: "守護札: 通常攻撃が当たると一番近い味方を最大体力2%回復" },

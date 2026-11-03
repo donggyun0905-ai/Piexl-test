@@ -55,6 +55,7 @@ interface Seen {
   storms: number;
   /** 영사: 찢기 · 장전 끝 (화면에 있는 효과 수) */
   rends: number;
+  clStuck: number;
   reloads: number;
   /** 에테르 광부: 광산 붕괴 (화면에 있는 효과 수) */
   caves: number;
@@ -115,6 +116,7 @@ function snapshot(s: RunState): Seen {
     cuts: s.effects.filter((f) => f.kind === "wdCut" && f.ticks >= f.maxTicks - 1).length,
     storms: s.effects.filter((f) => f.kind === "wdTempest").length,
     rends: s.effects.filter((f) => f.kind === "skRend").length,
+    clStuck: s.player.clStuck?.length ?? 0,
     reloads: s.effects.filter((f) => f.kind === "skReload").length,
     caves: s.effects.filter((f) => f.kind === "mnCave").length,
     flips: s.player.vyFlips ?? 0,
@@ -187,6 +189,13 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         if (now.rends > seen.rends) fx.push("ting");
         else if (now.attacks > seen.attacks) fx.push("string");
         if (now.reloads > seen.reloads) fx.push("spool");
+      } else if (c === "collector") {
+        // 수집가: 무기가 방에 박히면 "깡", 닿아 기술이 터지면 맑은 소리 + 흔들림
+        if (now.clStuck > seen.clStuck) fx.push("clank");
+        else if (now.clStuck < seen.clStuck) {
+          fx.push("chime");
+          onShake(3);
+        }
       } else if (c === "miner") {
         // 에테르 광부: 곡괭이는 "깡" · 광산 붕괴는 우르르 + 화면이 크게 흔들림
         if (now.attacks > seen.attacks) fx.push("clank");

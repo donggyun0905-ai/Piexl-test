@@ -54,6 +54,7 @@ const DEMO_WEAPONS: Record<CharacterId, [WeaponId, WeaponId] | null> = {
   bomber: ["bmFirework", "bmMega"],
   artifacter: null,
   punk: ["cyMonowire", "cyHack"],
+  collector: null,
   tracker: null,
   forgotten: null,
   remnant: null,

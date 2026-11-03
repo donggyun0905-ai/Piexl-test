@@ -1,5 +1,6 @@
 // 테라코어 시즌 2 그리기 (셋째): 펑크 네온 베기·모노와이어·맨티스·고릴라 주먹·회오리·해킹 줄·EMP·네온 총알
 // 신경 가속: 켜질 때 퍼지는 고리 · 지나온 자리에 분홍·하늘빛 잔상 · 둘레가 보랏빛으로 물듦 · 옆의 게이지
+import { drawCollectorBack } from "./collector";
 import { punkAccel, punkGauge, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { glowEdge } from "./pwFxBits";
 import { drawCharacter } from "../sprites";
@@ -146,6 +147,8 @@ export function drawTerraFxC(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
 /** 몸 둘레: 날아가는 EMP · 신경 가속 잔상·보랏빛 둘레 · 옆의 게이지 */
 export function drawTerraAuraC(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const p = s.player;
+  // 수집가: 등 뒤 위 공중의 수집 무기 (render/collector)
+  drawCollectorBack(ctx, s, alpha, snap);
   for (const g of p.cyEmp ?? []) {
     const k = 1 - g.t / 24;
     const gx = snap(lerp(g.sx, g.x, k));

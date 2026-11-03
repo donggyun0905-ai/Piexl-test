@@ -90,15 +90,17 @@ export const CHARACTERS = {
   artifacter: { id: "artifacter", maxHp: 100, damage: 12, moveSpeed: 1.3, luck: 1, startWeapon: "afRepulsor" },
   /** 펑크 (테라코어): 네온과 크롬의 사이버 무기 · 몸에 심는 능력 · 신경 가속(게이지가 차면 대시로 켜서 시간을 느리게) (sim/punk) */
   punk: { id: "punk", maxHp: 95, damage: 12, moveSpeed: 1.4, luck: 1, startWeapon: "cyKatana" },
+  /** 수집가 (테라코어): 수집 무기 30 = 콤보 (sim/collector) */
+  collector: { id: "collector", maxHp: 100, damage: 11, moveSpeed: 1.35, luck: 2, startWeapon: "clBlade" },
   /** 추적자 (아스칼론): 저격총 하나 · 스킬 셋(1 암습 저격 · 2 강력한 한방 · 3 연발사격) (sim/tracker) */
   tracker: { id: "tracker", maxHp: 90, damage: 13, moveSpeed: 1.3, luck: 0, startWeapon: "trSniper" },
   /** 잊혀진 자 (아스칼론): 옛 신의 후손 반신 · 빛 무기 10 · 처치로 빛의 고리를 채워 신족(공속 2배 + 빛기둥) · 재생력 20 · 빠름 · 회피 20% (sim/forgotten) */
   forgotten: { id: "forgotten", maxHp: 85, damage: 12, moveSpeed: 1.5, luck: 1, startWeapon: "fgGrace", regen: 20, dodge: 0.2 },
   /** 잔영 (아스칼론): 그림자 속 암살자 · 짧은 단검 내려찍기 · 대시 회피 슬로우모션·클릭 연속 베기 · 상태이상 면역 · 치명타 45%·치명타 피해 250% (sim/remnant) */
   remnant: { id: "remnant", maxHp: 45, damage: 9, moveSpeed: 1.45, luck: 1, startWeapon: "rmDagger", critChance: 0.45, critDamage: 2.5 },
-  /** 방랑객 (아스칼론): 카타나를 든 떠돌이 무사 · 카타나 10 · 기본 예리함 25% (sim/wanderer) */
+  /** 방랑객 (아스칼론): 카타나 10 · 예리함 25% (sim/wanderer) */
   wanderer: { id: "wanderer", maxHp: 105, damage: 13, moveSpeed: 1.3, luck: 0, startWeapon: "wdKatana", sharpness: 0.25 },
-  /** 영사 (아스칼론): 실을 다루는 여자 · 실 100가닥 장전 · 아주 빠른 실 · 얽힘 5면 찢기 · 30가닥마다 실 연사 (sim/silk) */
+  /** 영사 (아스칼론): 실 100가닥 장전·얽힘 5면 찢기 (sim/silk) */
   silk: { id: "silk", maxHp: 90, damage: 10, moveSpeed: 1.35, luck: 1, startWeapon: "skThread" },
   /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 쓰러진 적은 에테르 결정 · 대시는 땅굴 · 원석 100이면 광산 붕괴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },

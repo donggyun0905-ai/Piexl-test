@@ -22,7 +22,7 @@ export const PW_MOTIF: Partial<Record<CharacterId, string>> = {
   bedouin: "wind", drifter: "wind",
   chronomancer: "time",
   brawler: "impact", titan: "impact", novice: "impact", abandoned: "impact",
-  wanderer: "blade", general: "blade",
+  wanderer: "blade", general: "blade", collector: "blade",
 };
 
 /** 그 캐릭터의 패왕전 스킬 (숨은 캐릭터는 없음) */

@@ -11,7 +11,7 @@ export const TIERS: readonly { id: TierId; color: string; chars: readonly Charac
     color: "#ffa64a",
     chars: ["spiritist", "apostle", "ninja", "summoner", "wanderer", "punk", "imugi", "samyeol", "gunner", "bedouin", "elder", "plague", "chronomancer", "byeonhui"],
   },
-  { id: "mid", color: "#ffe066", chars: ["idra", "doctor", "engineer", "forgotten", "eater", "drifter", "beast", "remnant", "warden", "elementalist"] },
+  { id: "mid", color: "#ffe066", chars: ["idra", "collector", "doctor", "engineer", "forgotten", "eater", "drifter", "beast", "remnant", "warden", "elementalist"] },
   { id: "meh", color: "#7ad0ff", chars: ["brawler", "fly", "ren", "rider", "titan", "bomber", "general", "mukin", "mage", "mystic"] },
   { id: "trash", color: "#a08ab8", chars: ["abandoned"] },
 ];
@@ -20,7 +20,7 @@ export const TIERS: readonly { id: TierId; color: string; chars: readonly Charac
 export const SEASON2: ReadonlySet<CharacterId> = new Set<CharacterId>([
   "idra", "byeonhui", "fly", "elder", "ren", "spiritist",
   "plague", "slayer", "eater", "mukin", "samyeol",
-  "automata", "rider", "bomber", "artifacter", "punk",
+  "automata", "rider", "bomber", "artifacter", "punk", "collector",
   "tracker", "forgotten", "remnant", "wanderer", "silk",
 ]);
 

@@ -30,6 +30,13 @@ export const CHARACTER_TEXT_TERRA = {
     en: "Cyber · Terracore. An alluring woman with neon hair and a chrome body. 10 cyber weapons such as the Thermal Katana, Monowire, Smart Gun, Mantis Blades and Quickhack, plus 10 implanted abilities. Hits fill the 'Neural Accel' gauge; dash when it's full and for 4s she is invulnerable, time slows sharply around her (foes' movement, attacks and shots) and she attacks and moves far faster, leaving afterimages. Light on her feet, she is always quick · 10 weapons · 10 abilities",
     ja: "サイバー · テラコア。ネオンの髪とクロームの体を持つ魅惑的な女。熱線カタナ・モノワイヤー・スマートガン・マンティスブレード・クイックハックなどサイバー武器10と、体に埋め込む能力10。当てるたびに「神経加速」ゲージが溜まり、満タンでダッシュすると4秒間無敵になり周囲の時間が大きく遅くなり（敵の動き・攻撃・弾）攻撃と移動がずっと速くなり残像が残る。身軽でいつも速い · 武器10 · 能力10",
   },
+  collector: { ko: "수집가", en: "Collector", ja: "コレクター" },
+  collectorDesc: {
+    ko: "수집 · 테라코어. 등에 무기를 잔뜩 짊어진 푸른 머리의 무기 수집가. 무기는 잃지 않는 수집가의 검 하나뿐이고, 바닥·상자·상점에서 수집 무기 30개(검·활·지팡이·창·망치·도끼·마법서 등)를 모음. 하나 얻을 때마다 공격 콤보가 한 칸씩 늘고, 모은 무기는 등 뒤 공중에 줄지어 떠 있음. 콤보에 쓴 무기는 방 어딘가에 날아가 박히고, 몸이 닿으면 그 자리에서 그 무기의 기술이 바로 터진 뒤 등 뒤로 돌아옴(방을 나가면 저절로) · 검 1 · 수집 무기 30",
+    en: "Collecting · Terracore. A blue-haired weapon collector with a back full of blades. His only weapon is the Collector's Blade, which he never loses, and he gathers 30 collectible weapons (swords, bows, staves, spears, hammers, axes, tomes and more) from floors, chests and shops. Each one adds a step to his attack combo, and his collection floats in a row above his back. A weapon used in the combo flies off and sticks somewhere in the room; touch it to unleash its technique on the spot, then it returns to his back (or on its own when he leaves) · 1 blade · 30 collectibles",
+    ja: "収集 · テラコア。背中に武器をどっさり背負った青髪の武器コレクター。武器は失わないコレクターの剣一つだけで、床・宝箱・ショップから収集武器30個（剣・弓・杖・槍・大槌・斧・魔導書など）を集める。一つ手に入れるたびに攻撃コンボが一段増え、集めた武器は背中の上の空中に並んで浮かぶ。コンボで使った武器は部屋のどこかに飛んで刺さり、体が触れるとその場でその武器の技がすぐ炸裂して背中に戻る（部屋を出ると自動で）· 剣1 · 収集武器30",
+  },
+  hoard: { ko: "수집", en: "Collection", ja: "収集" },
   cyber: { ko: "사이버", en: "Cyber", ja: "サイバー" },
   bomb: { ko: "폭발", en: "Explosive", ja: "爆発" },
   repulse: { ko: "리펄스", en: "Repulsor", ja: "リパルス" },

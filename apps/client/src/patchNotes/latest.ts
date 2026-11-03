@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.359",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "새 캐릭터 수집가 (테라코어): 등에 무기를 잔뜩 짊어진 푸른 머리의 무기 수집가 · 무기는 잃지 않는 수집가의 검 하나 + 바닥·상자·상점에서 모으는 수집 무기 30 (검·활·지팡이·창·망치·도끼·마법서·건틀릿 등, 무기마다 작은 능력치)",
+        "수집가 콤보: 공격마다 한 칸씩 기본 검 → 얻은 차례대로 수집 무기의 기술 · 하나 얻을 때마다 콤보가 한 칸 늘고, 모은 무기는 등 뒤 위 공중에 줄지어 뜸",
+        "수집가 기본 패시브: 콤보에 쓴 무기는 등 뒤에서 사라져 방 어딘가에 날아가 박힘 → 몸이 닿으면 그 자리에서 그 기술이 바로 터지고(공격 주기와 따로, 120%) 등 뒤로 돌아옴 · 방을 나가면 저절로 돌아옴 · 기술 이펙트는 무기 색",
+        "수집가 패왕전: 스킬 넷(푸른 창 던지기·공허 구슬·붉은 발도·서른 자루 폭풍) · 전용 패시브 '수집품의 무게' (등 뒤 수집 무기 하나마다 평타 +4%, 최대 +30%) · 역할 전사",
+      ],
+      en: [
+        "New character Collector (Terracore): a blue-haired weapon collector with a back full of blades · his only weapon is the Collector's Blade (never lost), plus 30 collectibles gathered from floors, chests and shops (swords, bows, staves, spears, hammers, axes, tomes, gauntlets and more, each with a small stat)",
+        "Collector combo: one step per attack — blade → each collectible's technique in the order obtained · every new collectible adds a step, and the collection floats in a row above his back",
+        "Collector passive: a weapon used in the combo vanishes from his back and sticks somewhere in the room → touch it to unleash its technique on the spot (apart from the attack cycle, 120%) and it returns · leaving the room brings them back · effects take each weapon's color",
+        "Collector in the Paewang arena: 4 skills (Azure Javelin, Void Orb, Crimson Draw, Storm of Thirty Blades) · passive 'Weight of the Hoard' (+4% basic damage per collectible on his back, up to +30%) · Warrior role",
+      ],
+      ja: [
+        "新キャラクター コレクター（テラコア）：背中に武器をどっさり背負った青髪の武器コレクター · 武器は失わないコレクターの剣一つ＋床・宝箱・ショップで集める収集武器30（剣・弓・杖・槍・大槌・斧・魔導書・籠手など、武器ごとに小さな能力値）",
+        "コレクターのコンボ：攻撃ごとに一段ずつ基本の剣 → 手に入れた順に収集武器の技 · 一つ手に入れるたびにコンボが一段伸び、集めた武器は背中の上の空中に並んで浮かぶ",
+        "コレクターの基本パッシブ：コンボで使った武器は背中から消えて部屋のどこかに飛んで刺さる → 体が触れるとその場で技がすぐ炸裂し（攻撃周期とは別、120%）背中に戻る · 部屋を出ると自動で戻る · 技のエフェクトは武器の色",
+        "コレクターの覇王戦：スキル4つ（蒼槍投げ・虚空珠・紅の抜刀・三十振りの嵐）· 専用パッシブ「収集品の重み」（背中の収集武器1つごとに通常攻撃+4%、最大+30%）· 役割 戦士",
+      ],
+    },
+  },
+  {
     version: "0.48.358",
     date: "2026-11-02",
     items: {

@@ -87,6 +87,7 @@ const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: number;
   bomber: { size: 32, footPad: 2, src: 128, v2: true },
   artifacter: { size: 32, footPad: 2, src: 128, v2: true },
   punk: { size: 32, footPad: 2, src: 128, v2: true },
+  collector: { size: 32, footPad: 2, src: 128, v2: true },
   tracker: { size: 32, footPad: 2, src: 128, v2: true },
   forgotten: { size: 32, footPad: 2, src: 128, v2: true },
   remnant: { size: 32, footPad: 2, src: 128, v2: true },

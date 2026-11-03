@@ -37,6 +37,7 @@ import { forgottenTick } from "./forgotten";
 import { remnantTick } from "./remnant";
 import { wandererTick } from "./wanderer";
 import { silkTick } from "./silk";
+import { collectorTick } from "./collector";
 import { minerTick } from "./miner";
 import { voyagerTick } from "./voyager";
 import { zeusTick } from "./zeus";
@@ -88,6 +89,7 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   phantom: remnantTick,
   katana: wandererTick,
   thread: silkTick,
+  hoard: collectorTick,
   pick: minerTick,
   fate: voyagerTick,
   thunder: zeusTick,

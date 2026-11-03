@@ -32,7 +32,7 @@ export type TagFx = "tagDash" | "tagCut" | "tagMeteor" | "tagShove" | "tagFlash"
 export type PilgrimFx = "pgSlash" | "pgFire" | "pgBonk" | "pgBeam" | "pgPush" | "pgRing" | "pgSand" | "pgBlast" | "pgFall" | "pgKey" | "pgBag" | "pgPlant" | "pgHeal";
 export type ZeusFx = "zsSky" | "zsArc" | "zsOverload" | "zsDescend" | "zsAegis" | "zsClap" | "zsSpear";
 export type VoyagerFx = "vyFlip" | "vyLoose" | "vyCrit" | "vyBeam" | "vyChain" | "vyRain" | "vyMeteor" | "vyBoulder" | "vyHorse" | "vyWind" | "vyShield" | "vySiren" | "vyTide" | "vyWhirl" | "vyBite" | "vyBolt" | "vyPig" | "vyIsland" | "vySun";
-export type SecretFx = VoyagerFx | ZeusFx | PilgrimFx | "mnSwing" | "mnCrack" | "mnErupt" | "mnRock" | "mnCave" | "mnBoom" | "mnShatter" | "mnFall" | "mnDig" | "mnBurst" | "mnPull" | "mnGem" | "mnPillar" | "mnCanary";
+export type SecretFx = VoyagerFx | ZeusFx | PilgrimFx | "clArm" | "clFly" | "mnSwing" | "mnCrack" | "mnErupt" | "mnRock" | "mnCave" | "mnBoom" | "mnShatter" | "mnFall" | "mnDig" | "mnBurst" | "mnPull" | "mnGem" | "mnPillar" | "mnCanary";
 /** 떠돌이 기습 쏨·맞음 · 파수꾼 반격 베기 (sim/origin) · 작업대 성공·실패·파괴 (sim/station) */
 /** 히든 아이템·순례자 (sim/hiddenPerks·hiddenUse·pilgrim) */
 export type HiddenFx = "hdDice" | "hdChest" | "hdCurse" | "hdFreeze" | "hdWarp" | "hdQuake" | "hdMirror" | "hdLeaf" | "hdAether" | "hdMeteor" | "hdScroll" | "hdGate" | "hdPortal" | "hdShow" | "hdText";

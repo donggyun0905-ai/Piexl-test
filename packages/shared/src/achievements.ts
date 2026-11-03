@@ -135,6 +135,7 @@ export const ACHIEVEMENTS = [
   { id: "clearBomber", category: "character", run: clearAs("bomber") },
   { id: "clearArtifacter", category: "character", run: clearAs("artifacter") },
   { id: "clearPunk", category: "character", run: clearAs("punk") },
+  { id: "clearCollector", category: "character", run: clearAs("collector") },
   { id: "clearTracker", category: "character", run: clearAs("tracker") },
   { id: "clearForgotten", category: "character", run: clearAs("forgotten") },
   { id: "clearRemnant", category: "character", run: clearAs("remnant") },

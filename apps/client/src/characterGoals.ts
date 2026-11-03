@@ -65,6 +65,7 @@ export const CHARACTER_GOALS: Partial<Record<CharacterId, string>> = {
   bomber: "kills5000",
   artifacter: "kills5000",
   punk: "kills5000",
+  collector: "kills5000",
   tracker: "kills5000",
   forgotten: "kills5000",
   remnant: "kills5000",

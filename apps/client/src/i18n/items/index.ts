@@ -1,5 +1,6 @@
 // 아이템 이름·설명. 패시브·무기 설명은 수치에서 자동으로 만듦 (이름은 names.ts, 효과 설명은 effects.ts)
-import { devilCost, PASSIVES, type DevilId, PERKS, USE_ITEMS, WEAPONS, type PassiveDef, type PassiveId, type StatKey, type UseItemId, type WeaponDef, type WeaponId } from "@pixel-rogue/shared";
+import { CL_ARMS, type ClArmId, devilCost, PASSIVES, type DevilId, PERKS, USE_ITEMS, WEAPONS, type PassiveDef, type PassiveId, type StatKey, type UseItemId, type WeaponDef, type WeaponId } from "@pixel-rogue/shared";
+import { collectorArmDesc } from "./collector";
 import type { Lang, TextKey } from "../index";
 import { CHARM_DESC } from "./charms";
 import { EFFECT_DESC } from "./effects";
@@ -156,8 +157,15 @@ export function itemDesc(kind: ItemKind, id: string, lang: Lang, t: (k: TextKey)
   // 공격 방식 아이템 · 설명이 따로 있는 아이템 (천지창조처럼 여러 개 가질 수 있는 전용 아이템)
   if (def.effect || EFFECT_DESC[id as PassiveId]) {
     const tag = def.exclusive ? `[${t(def.exclusive)} ${t("exclusiveTag")}] ` : "";
+    // 수집가 수집 무기: 콤보 기술 + 작은 능력치
+    if (id in CL_ARMS) return `${tag}${collectorArmDesc(id as ClArmId, lang)} · ${modsText(def, t)}`;
     return tag + fill(EFFECT_DESC[id as PassiveId]?.[lang] ?? "", (PERKS as Record<string, Record<string, number>>)[id]);
   }
+  return modsText(def, t);
+}
+
+/** 능력치 아이템 설명 (능력치 · 오름) */
+function modsText(def: PassiveDef, t: (k: TextKey) => string): string {
   return def.mods
     .map((m) => {
       const label = t(STAT_LABEL[m.stat]);

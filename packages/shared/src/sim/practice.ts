@@ -28,6 +28,7 @@ import { resetForgotten } from "./forgotten";
 import { resetRemnant } from "./remnant";
 import { resetWanderer } from "./wanderer";
 import { resetSilk } from "./silk";
+import { resetCollector } from "./collector";
 import { resetMiner } from "./miner";
 import { resetVoyager } from "./voyager";
 import { resetZeus } from "./zeus";
@@ -225,6 +226,7 @@ export function practiceReset(s: RunState): void {
   resetRemnant(p);
   resetWanderer(p);
   resetSilk(p);
+  resetCollector(p);
   resetMiner(p);
   resetVoyager(p);
   resetZeus(p);

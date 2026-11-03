@@ -46,6 +46,8 @@ export const PW_PASSIVE = {
   abandonedMul: 1.3,
   /** 펑크 신경 가속: 시간(틱) · 둘레 상대 둔화 반경 */
   punkTicks: 120, punkSlowR: 70,
+  /** 수집가 수집품의 무게: 등 뒤 수집 무기 하나마다 평타 피해 + · 최대 */
+  collectorPer: 0.04, collectorMax: 0.3,
   /** 잔영 치명타 피해 */
   remnantCrit: 2,
   /** 음양사 수호 부적: 평타가 맞으면 가장 가까운 아군 회복 (최대 체력 비율) */

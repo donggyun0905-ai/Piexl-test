@@ -1,5 +1,6 @@
 // 테라코어 시즌 2 그리기: 오토마타 레이저(빛 줄기·끝 섬광)·자매 인형(똑같은 오토마타)·연기를 뿜는 유도 미사일·궤도 포격
 // 라이더는 render/rider
+import { drawCollectorStuck } from "./collector";
 import { DOLL_TINTS, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { glowEdge } from "./pwFxBits";
 import { drawCharacter } from "../sprites";
@@ -124,6 +125,7 @@ export function drawTerraFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
 /** 바닥: 라이더가 달린 자리의 불꽃 자국 */
 export function drawTerraGround(ctx: Ctx, s: RunState, snap: Snap): void {
   drawRiderGround(ctx, s, snap);
+  drawCollectorStuck(ctx, s, snap);
 }
 
 /** 몸 곁: 자매 인형 (똑같은 오토마타, 조금 투명한 하늘빛 테두리) · 라이더 게이지 */

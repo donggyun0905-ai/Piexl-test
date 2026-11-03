@@ -65,4 +65,7 @@ export interface TcPlayerState {
   cyQuick?: number;
   /** 광학 위장: 대시한 뒤 기습 공격이 남은 틱 */
   cyAmbush?: number;
+  /** 수집가: 다음 콤보 칸 · 방에 박힌 수집 무기(무기 id·자리·방 = 층×1000+방·박힌 틱) (sim/collector) */
+  clStep?: number;
+  clStuck?: { id: string; x: number; y: number; room: number; at: number }[];
 }

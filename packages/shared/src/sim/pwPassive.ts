@@ -4,6 +4,7 @@
 import { PW } from "../paewangDefs";
 import { PW_PASSIVE as P } from "../paewangPassive";
 import { createRng, deriveSeed } from "../rng";
+import { armsOnBack } from "./collector";
 import { heal } from "./heal";
 import { allPlayers, seatNo } from "./party";
 import { roleHealMul } from "./pwMatchup";
@@ -151,6 +152,10 @@ export function passiveHitMul(s: RunState, e: EnemyState, j: number, target: Pla
       break;
     case "artifacter":
       if (pwCount(p, "afN") % P.artifacterN === 0) craft(s);
+      break;
+    case "collector":
+      // 수집품의 무게: 등 뒤에 뜬 수집 무기 하나마다 평타 피해 +
+      if (basic) m *= 1 + Math.min(P.collectorMax, armsOnBack(p).length * P.collectorPer);
       break;
   }
   return m;
