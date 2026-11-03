@@ -32,9 +32,9 @@ export const CHARACTER_TEXT_TERRA = {
   },
   collector: { ko: "수집가", en: "Collector", ja: "コレクター" },
   collectorDesc: {
-    ko: "수집 · 테라코어. 등에 무기를 잔뜩 짊어진 푸른 머리의 무기 수집가. 무기는 잃지 않는 수집가의 검 하나뿐이고, 바닥·상자·상점에서 수집 무기 30개(검·활·지팡이·창·망치·도끼·마법서 등)를 모음. 하나 얻을 때마다 공격 콤보가 한 칸씩 늘고, 모은 무기는 등 뒤 공중에 줄지어 떠 있음. 콤보에 쓴 무기는 방 어딘가에 날아가 박히고, 몸이 닿으면 그 자리에서 그 무기의 기술이 바로 터진 뒤 등 뒤로 돌아옴(방을 나가면 저절로) · 검 1 · 수집 무기 30",
-    en: "Collecting · Terracore. A blue-haired weapon collector with a back full of blades. His only weapon is the Collector's Blade, which he never loses, and he gathers 30 collectible weapons (swords, bows, staves, spears, hammers, axes, tomes and more) from floors, chests and shops. Each one adds a step to his attack combo, and his collection floats in a row above his back. A weapon used in the combo flies off and sticks somewhere in the room; touch it to unleash its technique on the spot, then it returns to his back (or on its own when he leaves) · 1 blade · 30 collectibles",
-    ja: "収集 · テラコア。背中に武器をどっさり背負った青髪の武器コレクター。武器は失わないコレクターの剣一つだけで、床・宝箱・ショップから収集武器30個（剣・弓・杖・槍・大槌・斧・魔導書など）を集める。一つ手に入れるたびに攻撃コンボが一段増え、集めた武器は背中の上の空中に並んで浮かぶ。コンボで使った武器は部屋のどこかに飛んで刺さり、体が触れるとその場でその武器の技がすぐ炸裂して背中に戻る（部屋を出ると自動で）· 剣1 · 収集武器30",
+    ko: "수집 · 테라코어. 등에 무기를 잔뜩 짊어진 푸른 머리의 무기 수집가. 무기는 잃지 않는 수집가의 검 하나뿐이고, 바닥·상자·상점에서 수집 무기 30개(검·활·지팡이·창·망치·도끼·마법서 등)를 모음. 하나 얻을 때마다 공격 콤보가 한 칸씩 늘고, 모은 무기는 등 뒤 공중에 줄지어 떠 있음. 공격 한 번에 콤보 전체가 짧은 간격으로 이어지며, 무기마다 등 뒤에서 날아 나와 자기 방식(휘돌기·내리찍기·발도·마법·사격·투척·별·빛줄기·주먹·할퀴기)으로 공격하고 돌아옴 · 검 1 · 수집 무기 30",
+    en: "Collecting · Terracore. A blue-haired weapon collector with a back full of blades. His only weapon is the Collector's Blade, which he never loses, and he gathers 30 collectible weapons (swords, bows, staves, spears, hammers, axes, tomes and more) from floors, chests and shops. Each one adds a step to his attack combo, and his collection floats in a row above his back. One attack chains the whole combo at short intervals: each weapon flies off his back, attacks in its own way (whirl, slam, drawing cut, magic, shots, throws, stars, beams, fist, claws) and returns · 1 blade · 30 collectibles",
+    ja: "収集 · テラコア。背中に武器をどっさり背負った青髪の武器コレクター。武器は失わないコレクターの剣一つだけで、床・宝箱・ショップから収集武器30個（剣・弓・杖・槍・大槌・斧・魔導書など）を集める。一つ手に入れるたびに攻撃コンボが一段増え、集めた武器は背中の上の空中に並んで浮かぶ。一回の攻撃でコンボ全体が短い間隔で続き、武器ごとに背中から飛び出して自分のやり方（旋回・叩きつけ・抜刀・魔法・射撃・投擲・星・光線・拳・引っかき）で攻撃して戻る · 剣1 · 収集武器30",
   },
   hoard: { ko: "수집", en: "Collection", ja: "収集" },
   cyber: { ko: "사이버", en: "Cyber", ja: "サイバー" },

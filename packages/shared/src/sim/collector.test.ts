@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import "../balanceTables";
 import { CL_ARM_IDS } from "../itemsCollector";
 import { COLLECTOR } from "../weaponsCollector";
-import { armsOnBack, collected } from "./collector";
+import { collected } from "./collector";
 import { recalcStats } from "./items";
 import { passivePool, weaponPool } from "./loot";
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
@@ -33,45 +33,44 @@ describe("수집가", () => {
     expect(passivePool(createRun(3, "warden"))).not.toContain("clKatana");
   });
 
-  it("얻은 차례로 콤보가 늘고, 쓴 무기는 방에 박혀 등 뒤에서 빠짐", () => {
-    const s = setup(["clIceSword", "clBlueSpear"]);
-    expect(collected(s.player)).toEqual(["clIceSword", "clBlueSpear"]);
+  it("공격 한 번에 콤보 전체가 짧은 간격으로 이어짐 (기본 검 → 얻은 차례대로), 무기는 빠지지 않음", () => {
+    const s = setup(["clIceSword", "clBlueSpear", "clStoneHammer"]);
+    expect(collected(s.player)).toEqual(["clIceSword", "clBlueSpear", "clStoneHammer"]);
     const used: string[] = [];
-    for (let i = 0; i < 200 && used.length < 3; i++) {
-      const before = s.player.attackCount;
+    let first = -1;
+    for (let i = 0; i < 60; i++) {
+      const before = s.effects.filter((f) => f.kind === "clMove").length;
       stepSim(s, attack);
-      if (s.player.attackCount > before) used.push(s.effects.filter((f) => f.kind === "clArm").at(-1)?.from ?? "");
+      const now = s.effects.filter((f) => f.kind === "clMove");
+      if (now.length > before) {
+        used.push(now.at(-1)!.from ?? "");
+        if (first < 0) first = i;
+      }
+      if (used.length >= 4) {
+        // 넷째(망치)까지 간격 3번 = 15틱 안에
+        expect(i - first).toBeLessThanOrEqual(COLLECTOR.gap * 3);
+        break;
+      }
     }
-    expect(used).toEqual(["clBlade", "clIceSword", "clBlueSpear"]);
-    expect(s.player.clStuck?.map((w) => w.id)).toEqual(["clIceSword", "clBlueSpear"]);
-    expect(armsOnBack(s.player)).toEqual([]);
-    // 박힌 자리는 방 안
-    for (const w of s.player.clStuck!) expect(Math.hypot(w.x - s.player.x, w.y - s.player.y)).toBeGreaterThanOrEqual(COLLECTOR.stickMin - 30);
+    expect(used).toEqual(["clBlade", "clIceSword", "clBlueSpear", "clStoneHammer"]);
+    expect(collected(s.player)).toHaveLength(3);
   });
 
-  it("박힌 무기에 닿으면 그 기술이 발동하고 등 뒤로 돌아옴", () => {
-    const s = setup(["clStoneHammer"]);
-    for (let i = 0; i < 200 && !s.player.clStuck?.length; i++) stepSim(s, attack);
-    const w = s.player.clStuck![0]!;
-    for (let i = 0; i < COLLECTOR.rest; i++) stepSim(s, EMPTY_INPUT);
-    const e = s.enemies[0]!;
-    e.x = w.x + 10;
-    e.y = w.y;
-    const hp = e.hp;
-    s.player.x = s.player.prevX = w.x;
-    s.player.y = s.player.prevY = w.y;
-    stepSim(s, EMPTY_INPUT);
-    expect(s.player.clStuck).toEqual([]);
-    expect(armsOnBack(s.player)).toEqual(["clStoneHammer"]);
-    expect(e.hp).toBeLessThan(hp);
-  });
-
-  it("방을 나가면 박힌 무기는 저절로 돌아옴", () => {
+  it("콤보가 끝나야 공격 대기가 시작되고, 다음 공격에 다시 처음부터", () => {
     const s = setup(["clKatana"]);
-    for (let i = 0; i < 200 && !s.player.clStuck?.length; i++) stepSim(s, attack);
-    expect(armsOnBack(s.player)).toEqual([]);
-    s.roomId = (s.roomId + 1) % s.map.rooms.length;
-    stepSim(s, EMPTY_INPUT);
-    expect(armsOnBack(s.player)).toEqual(["clKatana"]);
+    for (let i = 0; i < 3 * COLLECTOR.gap && (s.player.clCombo || i === 0); i++) stepSim(s, attack);
+    expect(s.player.clCombo).toBeUndefined();
+    expect(s.player.attackCooldown).toBeGreaterThan(0);
+    for (let i = 0; i < 200 && !s.player.clCombo; i++) stepSim(s, attack);
+    expect(s.player.clCombo?.i).toBe(1);
+  });
+
+  it("수집 무기마다 맞히는 방식이 다름 (망치는 노린 적 자리를 내리찍어 피해)", () => {
+    const s = setup(["clStoneHammer"]);
+    const e = s.enemies[0]!;
+    const hp = e.hp;
+    for (let i = 0; i < 20; i++) stepSim(s, attack);
+    expect(e.hp).toBeLessThan(hp);
+    expect(s.effects.some((f) => f.kind === "clMove" && f.from === "clStoneHammer")).toBe(true);
   });
 });

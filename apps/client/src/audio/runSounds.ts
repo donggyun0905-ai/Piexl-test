@@ -1,5 +1,5 @@
 // 게임 상태가 바뀐 것을 보고 소리·진동·화면 흔들림을 냄 (게임 계산에는 영향 없음)
-import { altarOf, ENEMIES, type AltarId, type RunState } from "@pixel-rogue/shared";
+import { altarOf, CL_ARMS, ENEMIES, type AltarId, type RunState } from "@pixel-rogue/shared";
 import { getSettings } from "../settings";
 import { wornLimited, wornVictory } from "../game/limited/limited";
 import { setVictoryMusic } from "./victorySound";
@@ -55,7 +55,7 @@ interface Seen {
   storms: number;
   /** 영사: 찢기 · 장전 끝 (화면에 있는 효과 수) */
   rends: number;
-  clStuck: number;
+  clStep: string;
   reloads: number;
   /** 에테르 광부: 광산 붕괴 (화면에 있는 효과 수) */
   caves: number;
@@ -116,7 +116,7 @@ function snapshot(s: RunState): Seen {
     cuts: s.effects.filter((f) => f.kind === "wdCut" && f.ticks >= f.maxTicks - 1).length,
     storms: s.effects.filter((f) => f.kind === "wdTempest").length,
     rends: s.effects.filter((f) => f.kind === "skRend").length,
-    clStuck: s.player.clStuck?.length ?? 0,
+    clStep: s.player.clCombo ? `${s.player.clCombo.i}:${s.player.clCombo.list[s.player.clCombo.i - 1]}` : "",
     reloads: s.effects.filter((f) => f.kind === "skReload").length,
     caves: s.effects.filter((f) => f.kind === "mnCave").length,
     flips: s.player.vyFlips ?? 0,
@@ -190,11 +190,11 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         else if (now.attacks > seen.attacks) fx.push("string");
         if (now.reloads > seen.reloads) fx.push("spool");
       } else if (c === "collector") {
-        // 수집가: 무기가 방에 박히면 "깡", 닿아 기술이 터지면 맑은 소리 + 흔들림
-        if (now.clStuck > seen.clStuck) fx.push("clank");
-        else if (now.clStuck < seen.clStuck) {
-          fx.push("chime");
-          onShake(3);
+        // 수집가: 콤보 한 칸마다 그 무기 소리 (활·총 "팅" · 지팡이·책 맑은 소리 · 망치·도끼 "깡" + 흔들림 · 나머지 베는 소리)
+        if (now.clStep && now.clStep !== seen.clStep) {
+          const st = (CL_ARMS as Record<string, { style: string }>)[now.clStep.split(":")[1]!]?.style ?? "";
+          fx.push(st === "volley" ? "twang" : st === "cast" || st === "stars" || st === "beam" ? "chime" : st === "chop" ? "clank" : "slice");
+          if (st === "chop") onShake(2);
         }
       } else if (c === "miner") {
         // 에테르 광부: 곡괭이는 "깡" · 광산 붕괴는 우르르 + 화면이 크게 흔들림

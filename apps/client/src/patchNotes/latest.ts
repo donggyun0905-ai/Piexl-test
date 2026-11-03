@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.360",
+    date: "2026-11-03",
+    items: {
+      ko: [
+        "수집가 콤보 다시 만듦: 무기가 방에 박히던 것을 없애고, 공격 한 번에 기본 검 → 모은 무기 전부가 짧은 간격(0.08초)으로 이어지는 콤보 (끝나면 공격 대기)",
+        "수집가 무기마다 다른 공격: 검은 둘레를 한 바퀴 · 낫은 크게 쓸기 · 망치·큰칼은 떨어져 내리찍기 · 카타나는 발도 · 지팡이는 떠올라 마법(빛기둥·소용돌이·덩굴) · 활·석궁·총은 나타나 쏨 · 창·쌍월은 던짐 · 별이 떨어짐 · 빛줄기 · 거대한 주먹 · X자 할퀴기 · 도끼가 둘레를 돎 (그 무기 그림이 직접 날아 나와 공격)",
+        "수집가 기본 검 이펙트가 여러 겹으로 겹쳐 보이던 것을 깔끔한 한 줄로 고침",
+      ],
+      en: [
+        "Collector combo reworked: weapons no longer stick in the room; one attack chains the blade and every collected weapon at short intervals (0.08s), then the attack cooldown",
+        "Each Collector weapon attacks differently: swords whirl around you · the scythe reaps wide · hammers and the cleaver drop and slam · the katana draws · staves rise and cast (light pillar, vortex, vines) · bows, crossbow and pistol appear and shoot · spears and the crescent are thrown · stars fall · a beam · a giant fist · X claws · axes circle you (the weapon itself flies out to attack)",
+        "Fixed the Collector's blade effect looking stacked several times; it is now a single clean arc",
+      ],
+      ja: [
+        "コレクターのコンボを作り直し：武器が部屋に刺さる仕組みをなくし、一回の攻撃で基本の剣 → 集めた武器すべてが短い間隔（0.08秒）で続くコンボに（終われば攻撃待ち）",
+        "コレクターの武器ごとに違う攻撃：剣は周りを一周 · 鎌は大きく薙ぐ · 大槌・大鉈は落ちて叩きつけ · 刀は抜刀 · 杖は浮かんで魔法（光の柱・渦・蔦）· 弓・クロスボウ・銃は現れて撃つ · 槍・双月は投げる · 星が降る · 光線 · 巨大な拳 · X字の引っかき · 斧が周りを回る（その武器自体が飛び出して攻撃）",
+        "コレクターの基本の剣のエフェクトが何重にも重なって見えたのを、すっきり一本に修正",
+      ],
+    },
+  },
+  {
     version: "0.48.359",
     date: "2026-11-03",
     items: {

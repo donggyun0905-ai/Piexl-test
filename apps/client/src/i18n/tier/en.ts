@@ -15,7 +15,7 @@ export const TIER_EN: Partial<Record<CharacterId, string>> = {
   summoner: "Whip hits add summons until they cover the screen, and they soak hits for you. Slightly low burst on single bosses",
   wanderer: "25% sharpness shreds defense and bleeds; standing still triggers the Mindless Circle and Thousand Blades over the whole room. Melee positioning is key",
   punk: "Neural boost dash gives 4s of invincibility and slows time around you, solving both escapes and burst windows. All 10 cyber weapons are good",
-  collector: "Weak at first with only his blade, but every collectible lengthens the combo, and stepping on weapons stuck in the room fires their techniques for free. The more you move, the stronger he gets (new character, estimate before hands-on play)",
+  collector: "Weak at first with only his blade, but every collectible lengthens the combo, and one attack sends the whole collection flying in a chain; the longer the combo, the flashier and stronger (new character, estimate before hands-on play)",
   imugi: "At 108 combo you become a dragon that slashes the whole map and gain permanent crit. Weak early before the combo builds",
   samyeol: "Every needle carries poison and death, and poison gas spreads the more you throw: very fast crowd clearing. Boss burst is average since poison takes time",
   gunner: "Strong crits and fast feet, but HP is fixed at 40, so one mistake can end the run. Bottom of this tier",

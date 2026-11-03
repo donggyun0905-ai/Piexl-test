@@ -41,17 +41,18 @@ export const CL_PASSIVE_NAMES: Record<ClArmId, Names> = {
 };
 
 const STYLE: Record<ClStyle, (n: number) => Names> = {
-  slash: (n) => (n > 1 ? c(`앞을 부채꼴로 ${n}번 벰`, `slashes ahead ${n} times`, `前方を扇状に${n}回斬る`) : c("앞을 부채꼴로 벰", "slashes in an arc ahead", "前方を扇状に斬る")),
-  dash: () => c("앞으로 내달리며 벰", "dashes forward, cutting through", "前へ駆け抜けて斬る"),
-  nova: () => c("내 둘레가 터짐", "bursts all around you", "自分の周りが爆発"),
-  orb: () => c("노린 적 자리에 구체가 터짐", "an orb bursts on the target", "狙った敵の位置で球が炸裂"),
-  arrows: (n) => c(`화살 ${n}발을 부채꼴로`, `${n} arrows in a fan`, `矢${n}本を扇状に`),
-  bolt: () => c("길게 꿰뚫는 한 발", "one long piercing bolt", "長く貫く一撃"),
-  shots: (n) => c(`앞으로 ${n}발`, `${n} shots ahead`, `前方へ${n}発`),
-  rain: (n) => c(`둘레 적 ${n}마리 위로 별이 떨어짐`, `stars fall on ${n} nearby foes`, `周りの敵${n}体に星が降る`),
-  beam: () => c("굵은 빛줄기", "a thick beam", "太い光線"),
-  thrust: () => c("길게 찌름", "a long thrust", "長く突く"),
-  spin: (n) => c(`둘레를 ${n}번 회전 베기`, `spins ${n} times around you`, `周りを${n}回回転斬り`),
+  sweep: () => c("등 뒤에서 날아 나와 내 둘레를 한 바퀴 휘돎", "flies off your back and whirls once around you", "背中から飛び出し自分の周りを一周する"),
+  reap: () => c("거대한 낫이 앞을 크게 쓸어 벰", "a giant scythe reaps a wide arc ahead", "巨大な鎌が前方を大きく薙ぐ"),
+  chop: () => c("노린 적 위로 떨어져 내리찍음", "drops onto the target and slams down", "狙った敵の上に落ちて叩きつける"),
+  iai: () => c("앞으로 내달리며 발도", "dashes forward with a drawing cut", "前へ駆け抜けて抜刀"),
+  cast: () => c("지팡이가 떠올라 노린 적 자리에 마법", "the staff rises and casts on the target", "杖が浮かび狙った敵の位置に魔法"),
+  volley: (n) => (n > 1 ? c(`나타나 ${n}발을 쏨`, `appears and fires ${n} shots`, `現れて${n}発撃つ`) : c("나타나 꿰뚫는 한 발", "appears and fires one piercing bolt", "現れて貫く一撃")),
+  throw: (n) => (n > 1 ? c(`던져 앞을 꿰뚫고 ${n}번 벰`, `thrown to pierce ahead, hitting ${n} times`, `投げて前方を貫き${n}回斬る`) : c("던져 앞을 꿰뚫음", "thrown to pierce ahead", "投げて前方を貫く")),
+  stars: (n) => c(`둘레 적 ${n}마리 위로 별이 떨어짐`, `stars fall on ${n} nearby foes`, `周りの敵${n}体に星が降る`),
+  beam: () => c("책이 펼쳐지며 굵은 빛줄기", "the tome opens and fires a thick beam", "本が開き太い光線"),
+  punch: () => c("거대한 주먹이 앞으로 뻗음", "a giant fist punches ahead", "巨大な拳が前へ伸びる"),
+  claw: (n) => c(`노린 적을 ${n}번 X자로 할큄`, `claws the target in an X ${n} times`, `狙った敵を${n}回X字に引っかく`),
+  whirl: (n) => c(`도끼가 내 둘레를 ${n}바퀴 돌며 벰`, `the axe circles you ${n} times, cutting`, `斧が自分の周りを${n}周して斬る`),
 };
 
 const FX: Record<ClFx, (v: number) => Names> = {
@@ -71,6 +72,6 @@ export function collectorArmDesc(id: ClArmId, lang: Lang): string {
   const a = CL_ARMS[id];
   const parts = [STYLE[a.style](a.n ?? 1)[lang], `${Math.round(a.mul * 100)}%`];
   if (a.fx) parts.push(FX[a.fx](a.val ?? 0)[lang]);
-  const head = c("콤보 +1칸: ", "Combo +1: ", "コンボ+1：")[lang];
+  const head = c("콤보 +1칸 (공격 한 번에 콤보 전체가 이어짐): ", "Combo +1 (one attack chains the whole combo): ", "コンボ+1（一回の攻撃でコンボ全体が続く）：")[lang];
   return head + parts.join(" · ");
 }
