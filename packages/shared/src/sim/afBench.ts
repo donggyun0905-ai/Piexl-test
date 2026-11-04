@@ -12,6 +12,7 @@ import { passivePool } from "./loot";
 import type { PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
 import { stationPay } from "./station";
+import { splicePassives } from "./retag";
 
 const R = {
   /** 값 (골드, 층마다 perFloor씩 오름): 강화 · 합치기(일반 둘) · 교체 · 튜닝 */
@@ -135,7 +136,7 @@ export function benchUse(s: RunState, op: number, i: number, j: number): void {
     } else {
       // 실패: 부서짐
       if (p.benchLv) delete p.benchLv[id!];
-      p.passives.splice(i, 1);
+      splicePassives(p, i, 1);
       result(s, op, 2, id);
     }
   } else {
@@ -145,8 +146,8 @@ export function benchUse(s: RunState, op: number, i: number, j: number): void {
     const pool = hidden.length && (rng.nextFloat() < R.fuseHidden || !normal.length) ? hidden : normal;
     const to = pool.length ? rng.pick(pool) : undefined;
     if (!to) return;
-    p.passives.splice(Math.max(i, j), 1);
-    p.passives.splice(Math.min(i, j), 1, to);
+    splicePassives(p, Math.max(i, j), 1);
+    splicePassives(p, Math.min(i, j), 1, to);
     result(s, op, 1, to);
   }
   recalcStats(s);

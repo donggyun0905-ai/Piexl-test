@@ -14,7 +14,7 @@ export function GoalLine({ t, c, onOpen }: { t: (k: TextKey) => string; c: Chara
   if (!goal) return null;
   const p = goalProgress(c, goal);
   const n = "buy" in goal ? goal.buy : p.n;
-  const text = t(`cg_${c}` as TextKey).replace("{n}", fmt(n));
+  const text = t(`cg_${c}` as TextKey).replace("{n}", fmt(n)).replace("{t}", "taboo" in goal ? fmt(goal.taboo) : "");
   const buy = () => {
     if (!("buy" in goal)) return;
     const chips = loadChips();

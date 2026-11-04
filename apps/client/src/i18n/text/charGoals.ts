@@ -36,6 +36,8 @@ export const CHAR_GOAL_TEXT = {
   cg_idra: l("쉼터 {n}번 쉬기 (누적)", "Rest at {n} rest rooms (total)", "休憩所で{n}回休む（累計）"),
   cg_forgotten: l("제단의 방 {n}번 쓰기 (누적)", "Use Altar Rooms {n} times (total)", "祭壇の部屋を{n}回使う（累計）"),
   cg_byeonhui: l("한 판에 보스 셋을 한 대도 안 맞고 처치", "Defeat 3 bosses flawlessly in one run", "1回でボス3体を無傷で倒す"),
+  cg_leo: l("아스칼론 캐릭터 {n}명을 모두 열고, 저마다 금기의 서 {t}점 이상으로 라스트 보스 클리어", "Unlock all {n} Ascalon characters and clear a last boss with each at {t}+ Taboo points", "アスカロンのキャラ{n}人をすべて解放し、それぞれ禁忌の書{t}点以上でラストボスをクリア"),
+  cg_onyx: l("테라코어 캐릭터 {n}명을 모두 열고, 저마다 금기의 서 {t}점 이상으로 라스트 보스 클리어", "Unlock all {n} Terracore characters and clear a last boss with each at {t}+ Taboo points", "テラコアのキャラ{n}人をすべて解放し、それぞれ禁忌の書{t}点以上でラストボスをクリア"),
   cg_pungryu: l("이동 속도 {n} 달성", "Reach {n} move speed", "移動速度{n}達成"),
   cg_silk: l("패왕전 점령전 {n}번 우승", "Win {n} Capture matches in the Champion Clash", "覇王戦の占領戦で{n}回優勝"),
   cg_chronomancer: l("상점을 한 번도 안 쓰고 클리어", "Clear without buying anything", "ショップを一度も使わずにクリア"),

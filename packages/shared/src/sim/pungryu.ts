@@ -7,7 +7,7 @@ import { PUNGRYU as U, type ScriptStyle } from "../weaponsPungryu";
 import { nearest } from "./brawlMoves";
 import { rot } from "./orbit";
 import { isPungryu, letterFrom, puPower } from "./pungryuKit";
-import { addClone, cloneTick, cloneWrite, flute, inkAt, perkTick, puDash } from "./pungryuPerks";
+import { addClone, cloneTick, flute, inkAt, perkTick, puDash } from "./pungryuPerks";
 import { castVerse, puHit, verseTick } from "./pungryuVerse";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, hasPerk, weaponOf } from "./util";
@@ -32,7 +32,6 @@ function write(s: RunState): void {
     const [c, sn] = rot((i - (st.n - 1) / 2) * (st.spread ?? 0));
     letterFrom(s, p.x, p.y, p.faceX * c - p.faceY * sn, p.faceX * sn + p.faceY * c, dmg, idx, st.pierce);
   }
-  cloneWrite(s, idx);
   p.puStep = idx + 1;
   p.puLast = s.tick;
   if (p.puStep < verseNeed(p)) return;

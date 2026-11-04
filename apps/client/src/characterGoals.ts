@@ -1,7 +1,9 @@
 // 캐릭터 해금 (2026-11-03 사용자 지정): 처음엔 파수꾼·떠돌이·마법사만 열려 있고, 나머지는 캐릭터마다 정한 조건을 이루면 열림.
 // 조건 종류: 업적 · 누적 횟수 · 가장 높았던 능력치 · 한 번이라도 · 패왕전 승리 · 펫 수 · 판 수 · 악마 템 · 로비 칩으로 사기 (기록은 unlock/unlockStats)
 // 테스트 중에는 전부 열림 (testFlags.TEST_OPEN)
-import { DEVIL_IDS, type CharacterId, type PwMode } from "@pixel-rogue/shared";
+import { CHARACTERS, DEVIL_IDS, type CharacterId, type PwMode } from "@pixel-rogue/shared";
+import { loadMedals } from "./medals/medals";
+import { FACTIONS, type FactionId } from "./story/storyData";
 import { pwWins } from "./event/pwRecords";
 import { ownedPets } from "./lobby/petStore";
 import { loadAchievements, loadTotals } from "./records";
@@ -20,7 +22,9 @@ export type CharGoal =
   | { pets: number }
   | { runs: number }
   | { devil: number }
-  | { buy: number };
+  | { buy: number }
+  /** 진영 캐릭터를 모두 열고, 저마다 금기의 서 taboo점 이상으로 라스트 보스를 깸 (훈장 기록) */
+  | { faction: FactionId; taboo: number };
 
 /** 캐릭터 → 여는 조건 (없으면 처음부터 열림) · 글자는 i18n/text/charGoals */
 export const CHARACTER_GOALS: Partial<Record<CharacterId, CharGoal>> = {
@@ -59,6 +63,8 @@ export const CHARACTER_GOALS: Partial<Record<CharacterId, CharGoal>> = {
   byeonhui: { a: "flawless3" },
   silk: { pw: "capture", n: 10 },
   pungryu: { m: "moveSpeed", n: 2 },
+  leo: { faction: "ascalon", taboo: 45 },
+  onyx: { faction: "terracore", taboo: 45 },
   chronomancer: { a: "thrift" },
   fly: { f: "clear7" },
   elder: { c: "traps", n: 1000 },
@@ -78,8 +84,17 @@ export function goalProgress(c: CharacterId, g: CharGoal, achieved: readonly str
   if ("pets" in g) return { v: ownedPets().length, n: g.pets };
   if ("runs" in g) return { v: loadTotals().runs, n: g.runs };
   if ("devil" in g) return { v: st.devil.length, n: g.devil };
+  if ("faction" in g) {
+    const team = factionMembers(g.faction).filter((x) => x !== c);
+    const medals = Object.values(loadMedals());
+    const done = team.filter((x) => characterOpen(x, achieved) && medals.some((m) => m.character === x && (m.taboo ?? 0) >= g.taboo));
+    return { v: done.length, n: team.length };
+  }
   return { v: st.bought.includes(c) ? 1 : 0, n: 1 };
 }
+
+/** 진영 캐릭터 (이야기 진영 표에서 고를 수 있는 캐릭터만) */
+const factionMembers = (f: FactionId): CharacterId[] => (FACTIONS.find((x) => x.id === f)?.members ?? []).filter((x): x is CharacterId => x in CHARACTERS);
 
 /** 이 캐릭터를 고를 수 있는지 */
 export function characterOpen(c: CharacterId, achieved: readonly string[] = loadAchievements()): boolean {

@@ -4,7 +4,8 @@
 // 패왕전·광야의 새벽은 꺼짐 (밸런스 따로)
 import { ALTAR_TAGS, BUILD_SETS as B, SET_STEPS } from "../buildSetDefs";
 import type { ExtraStats } from "../characters";
-import { ITEM_TAGS, passiveTag, type ItemTag } from "../itemsTags";
+import { ITEM_TAGS, type ItemTag } from "../itemsTags";
+import { passiveTagAt } from "./retag";
 import type { StatMod } from "../stats";
 import { raiseShield } from "./imugiMods";
 import type { AwakenPlayerState } from "./buildAwaken";
@@ -32,10 +33,10 @@ export const setsOn = (s: RunState): boolean => !s.pvp && !s.swarm;
 export function tagCounts(p: PlayerState): Record<ItemTag, number> {
   const out = Object.fromEntries(ITEM_TAGS.map((t) => [t, 0])) as Record<ItemTag, number>;
   // 대장간에서 바꾼 꼬리표가 먼저 · 무기는 대장간에서 꼬리표를 붙였을 때만 (sim/forge)
-  for (const id of p.passives) {
-    const t = p.retag?.[id] ?? passiveTag(id);
+  p.passives.forEach((_, k) => {
+    const t = passiveTagAt(p, k);
     if (t) out[t]++;
-  }
+  });
   const wt = p.forge?.[p.weaponId]?.tag;
   if (wt) out[wt]++;
   for (const aug of p.augments ?? []) {

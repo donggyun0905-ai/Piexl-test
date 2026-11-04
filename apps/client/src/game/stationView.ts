@@ -1,5 +1,5 @@
 // 작업대 창에 보여 줄 값 (gameLoop가 만들어 LoadoutView.station으로 넘김): 아티팩터 제작대 · 추적자 튜닝소 · 단련의 방 · 시련의 비석·보상 상자
-import { altarAugOk, altarAugTaken, auctionHere, gambleNow, type AuctionState, altarOf, chestOptions, trialUsed, type AltarId, GYM_OFF, GYM_STATS, gymBlocked, gymPassives, gymUsed, BENCH_OP, benchCan, benchCost, benchLv, benchStats, isHidden, isOwn, TUNE, TUNE_SLOTS, tuneChance, tuneCost, type PassiveId, type RunState, type StationKind, type StationResult, FORGE_OP, forgeChance, forgeCost, forgeOf, passiveTag, type ItemTag, type WeaponId } from "@pixel-rogue/shared";
+import { altarAugOk, altarAugTaken, auctionHere, gambleNow, type AuctionState, altarOf, chestOptions, trialUsed, type AltarId, GYM_OFF, GYM_STATS, gymBlocked, gymPassives, gymUsed, BENCH_OP, benchCan, benchCost, benchLv, benchStats, isHidden, isOwn, TUNE, TUNE_SLOTS, tuneChance, tuneCost, type PassiveId, type RunState, type StationKind, type StationResult, FORGE_OP, forgeChance, forgeCost, forgeOf, passiveTagAt, type ItemTag, type WeaponId } from "@pixel-rogue/shared";
 
 export interface BenchItem {
   id: PassiveId;
@@ -53,7 +53,7 @@ export function stationView(run: RunState): StationView | undefined {
   if (pr.station === "forge") {
     const m = forgeOf(p);
     const ops = [FORGE_OP.up, FORGE_OP.tag, FORGE_OP.dark] as const;
-    return { ...base, forge: { weapon: p.weaponId, lv: m.lv ?? 0, dark: m.dark ?? 0, ...(m.tag ? { tag: m.tag } : {}), chance: forgeChance(p, FORGE_OP.up), costs: ops.map((op) => forgeCost(run, op)) as [number, number, number], passives: p.passives.map((id) => ({ id, tag: p.retag?.[id] ?? passiveTag(id) })) } };
+    return { ...base, forge: { weapon: p.weaponId, lv: m.lv ?? 0, dark: m.dark ?? 0, ...(m.tag ? { tag: m.tag } : {}), chance: forgeChance(p, FORGE_OP.up), costs: ops.map((op) => forgeCost(run, op)) as [number, number, number], passives: p.passives.map((id, k) => ({ id, tag: passiveTagAt(p, k) })) } };
   }
   if (pr.station === "trial") return { ...base, trial: { used: trialUsed(run) } };
   if (pr.station === "gambler") {

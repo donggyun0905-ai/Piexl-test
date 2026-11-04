@@ -66,7 +66,7 @@ export const CHARACTERS = {
   fly: { id: "fly", maxHp: 85, damage: 11, moveSpeed: 1.5, luck: 0, startWeapon: "glassClaw" },
   /** 장로 (비르디아): 적 자리에 진을 깔아 잠시 뒤 발동 · 느림 (sim/elder) */
   elder: { id: "elder", maxHp: 95, damage: 12, moveSpeed: 1.15, luck: 1, startWeapon: "vineGate" },
-  /** 렌 (비르디아): 맨손으로 거대한 토목을 부림 (타격·묶기·날려버리기·짓뭉개기·가두기), 수호 토목이 원거리 탄을 막음 (sim/ren) */
+  /** 렌 (비르디아): 맨손으로 거대한 토목을 부림 (sim/ren) */
   ren: { id: "ren", maxHp: 120, damage: 12, moveSpeed: 1.15, luck: 0, startWeapon: "renHands" },
   /** 정령사 (비르디아): 매직 미사일 + 작은 정령 셋(30초마다 바뀜) + 대정령 (sim/spirit) */
   spiritist: { id: "spiritist", maxHp: 85, damage: 10, moveSpeed: 1.3, luck: 1, startWeapon: "titanCoreSpirit" },
@@ -84,11 +84,11 @@ export const CHARACTERS = {
   automata: { id: "automata", maxHp: 100, damage: 12, moveSpeed: 1.3, luck: 0, startWeapon: "adFinger" },
   /** 라이더 (테라코어): 오토바이 폭주족. 빠를수록 피해 · 달린 거리 게이지가 차면 범위 펄스 (sim/rider) */
   rider: { id: "rider", maxHp: 110, damage: 12, moveSpeed: 1.5, luck: 0, startWeapon: "rdHammer" },
-  /** 붐버 (테라코어): "폭발은 예술이다". 모든 무기가 터짐 · 1초 안에 잇따라 터지면 예술 연쇄로 커짐 · 터져 쓰러진 적 자리에 여진 (sim/bomber) */
+  /** 붐버 (테라코어): 터지는 무기 · 예술 연쇄 · 여진 (sim/bomber) */
   bomber: { id: "bomber", maxHp: 105, damage: 12, moveSpeed: 1.25, luck: 0, startWeapon: "bmGrenade" },
-  /** 아티팩터 (테라코어): 푸른빛 문신의 제작자. 리펄스 총 하나 · 쓰러뜨린 적으로 제작 게이지가 차면 아이템을 만듦(숨겨진 아이템 5) (sim/artifacter) */
+  /** 아티팩터 (테라코어): 리펄스 총 · 제작 게이지로 아이템 (sim/artifacter) */
   artifacter: { id: "artifacter", maxHp: 100, damage: 12, moveSpeed: 1.3, luck: 1, startWeapon: "afRepulsor" },
-  /** 펑크 (테라코어): 네온과 크롬의 사이버 무기 · 몸에 심는 능력 · 신경 가속(게이지가 차면 대시로 켜서 시간을 느리게) (sim/punk) */
+  /** 펑크 (테라코어): 네온과 크롬의 사이버 무기 · 몸에 심는 능력 · 신경 가속(sim/punk) */
   punk: { id: "punk", maxHp: 95, damage: 12, moveSpeed: 1.4, luck: 1, startWeapon: "cyKatana" },
   /** 수집가 (테라코어): 수집 무기 30 = 콤보 (sim/collector) */
   collector: { id: "collector", maxHp: 100, damage: 11, moveSpeed: 1.35, luck: 2, startWeapon: "clBlade" },
@@ -104,9 +104,13 @@ export const CHARACTERS = {
   silk: { id: "silk", maxHp: 90, damage: 10, moveSpeed: 1.35, luck: 1, startWeapon: "skThread" },
   /** 풍류사 (아스칼론): 구름을 타고 천자문 글자 · 구절 완성 마법 (sim/pungryu) */
   pungryu: { id: "pungryu", maxHp: 90, damage: 10, moveSpeed: 1.35, luck: 5, startWeapon: "puHeaven" },
-  /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 쓰러진 적은 에테르 결정 · 대시는 땅굴 · 원석 100이면 광산 붕괴 (sim/miner) */
+  /** 레오 (아스칼론, 영물): 뇌전 발톱 (sim/leo) */
+  leo: { id: "leo", maxHp: 120, damage: 12, moveSpeed: 1.4, luck: 1, startWeapon: "leClaw", defense: 5 },
+  /** 오닉스 (테라코어, 영물): 칠보 광륜 · 비행 대시 · 보석 7 (sim/onyx) */
+  onyx: { id: "onyx", maxHp: 190, damage: 15, moveSpeed: 0.95, luck: 1, startWeapon: "oxHalo", defense: 30 },
+  /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 대시는 땅굴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },
-  /** 운명의 여행자 (히든, 시즌 2): 운명의 활로 모아 쏘는 한 발 · 모래시계가 뒤집힐 때마다 주사위로 운명(버프·기술·능력 36칸) (sim/voyager) */
+  /** 운명의 여행자 (히든, 시즌 2): 운명의 활로 모아 쏘는 한 발 · 모래시계가 뒤집힐 때마다 주사위로 운명(sim/voyager) */
   voyager: { id: "voyager", maxHp: 105, damage: 14, moveSpeed: 1.3, luck: 2, startWeapon: "vyBow" },
   /** 제우스 (히든, 시즌 2): 번개 무기 10 · 감전 · 천벌 게이지 → 제우스 강림 · 번개 걸음 (sim/zeus) */
   zeus: { id: "zeus", maxHp: 140, damage: 15, moveSpeed: 1.3, luck: 3, startWeapon: "zsBolt" },

@@ -111,14 +111,21 @@ describe("풍류사", () => {
     expect(s.player.puQuick).toBeGreaterThan(0);
   });
 
-  it("분신술: 구절을 완성하면 분신이 나와 글자를 따라 씀", () => {
+  it("분신술: 구절을 완성하면 분신이 나와 따로 돌아다니며 글자를 씀", () => {
     const s = pung("puHeaven", "puClone");
     for (let i = 0; i < 400 && !s.player.puVerses; i++) stepSim(s, FIRE);
     expect(s.player.puClones?.length).toBe(1);
-    const before = s.projectiles.length;
-    s.player.attackCooldown = 0;
-    stepSim(s, FIRE);
-    expect(s.projectiles.length - before).toBeGreaterThanOrEqual(2);
+    const c = s.player.puClones![0]!;
+    const from = { x: c.x, y: c.y };
+    let shots = 0;
+    for (let i = 0; i < 60; i++) {
+      const n = s.projectiles.length;
+      stepSim(s, IDLE);
+      shots += Math.max(0, s.projectiles.length - n);
+    }
+    // 내가 쓰지 않아도 분신이 제 박자로 씀 · 자리를 옮김
+    expect(shots).toBeGreaterThanOrEqual(2);
+    expect(Math.hypot(c.x - from.x, c.y - from.y)).toBeGreaterThan(1);
   });
 
   it("의적 주머니: 가진 돈이 많을수록 공격력 +", () => {

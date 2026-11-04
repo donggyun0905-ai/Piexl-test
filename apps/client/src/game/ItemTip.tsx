@@ -44,17 +44,20 @@ interface Props {
   children?: ReactNode;
   /** 꼬리표 (대장간에서 바꾼 것·무기 꼬리표, 없으면 패시브 원래 꼬리표) */
   tag?: ItemTag;
+  /** 같은 패시브 여럿이 저마다 다른 꼬리표일 때 (대장간, 겹치지 않게 모두 보임) */
+  tags?: ItemTag[];
 }
 
 /** 말풍선은 body에 그림: 감싼 창이 transform·스크롤을 가지면 fixed가 그 창 안에 붙어 창이 커졌다 줄었다 흔들림 (패왕전 Tab 점수판) */
-export function ItemTip({ pos, icon, name, desc, children, tag }: Props) {
-  const shownTag = tag ?? (icon?.kind === "passive" ? passiveTag(icon.id) : undefined);
+export function ItemTip({ pos, icon, name, desc, children, tag, tags }: Props) {
+  const one = tag ?? (icon?.kind === "passive" ? passiveTag(icon.id) : undefined);
+  const shown = tags?.length ? [...new Set(tags)] : one ? [one] : [];
   return createPortal(
     <div className={pos.below ? "item-tip below" : "item-tip"} style={{ left: pos.x, top: pos.y }}>
       <div className="item-tip-name">
         {icon && <ItemIcon item={icon} size={24} />}
         {name}
-        {shownTag && <TagChip tag={shownTag} />}
+        {shown.map((g) => <TagChip key={g} tag={g} />)}
       </div>
       <div>{desc}</div>
       {children}

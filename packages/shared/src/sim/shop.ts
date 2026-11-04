@@ -16,6 +16,7 @@ import { tabooN, tabooUp } from "./taboo";
 import { xpOnly } from "./morphXp";
 import { spawnStation } from "./station";
 import { devilPact } from "./devil";
+import { splicePassives } from "./retag";
 export { devilPact };
 
 export { bigReach, isStation, stationAt, stationMenu, stationMods } from "./station";
@@ -105,7 +106,7 @@ export function sellItem(s: RunState, n: number): void {
   if (n === SELL_WEAPON) equipWeapon(s, EMPTY_HANDS);
   else if (n <= 2) p.useSlots[n - 1] = null;
   else {
-    p.passives.splice(n - 3, 1);
+    splicePassives(p, n - 3, 1);
     recalcStats(s);
   }
   addGold(s, price);

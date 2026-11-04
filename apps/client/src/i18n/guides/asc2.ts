@@ -1,9 +1,23 @@
-// 캐릭터 설명: 아스칼론 둘째 묶음 (영사 · 풍류사) · 한·영·일
+// 캐릭터 설명: 아스칼론 둘째 묶음 (영사 · 풍류사 · 레오 · 테라코어 오닉스) · 한·영·일
 import type { CharacterId } from "@pixel-rogue/shared";
 
 type Guide = Partial<Record<CharacterId, readonly string[]>>;
 
 export const GUIDE_KO_ASC2: Guide = {
+  onyx: [
+    "테라코어 · 오닉스 · 영물, 몸에 일곱 보석이 박힌 광석 영물 · 체력 190 · 방어력 30 · 느림 · 무기는 칠보 광륜 하나",
+    "공격: 가운데 자수정에서 방 안 모든 적에게 빛줄기. 쏘는 동안은 몸을 움직이지 못함",
+    "대시: 하늘을 나는 부스트. 한 번 누르면 비행(빠르고 손을 떼도 계속 날아감, 무적 아님) · 다시 누르면 내려앉음",
+    "날아오를 때·내려앉을 때·비행 중 몇 초마다 보석 7개가 저마다 따로 확률을 굴려 반응: 홍옥 불기둥 · 호박 운석 · 황옥 연쇄 번개 · 비취 덩굴(회복) · 청옥 서리 · 남옥 빛줄기 · 자수정 공허. 일곱이 함께 반응하면 칠보 공명",
+    "맞아도 무적이 거의 없음 (묵인처럼) · 전용 아이템 10: 연마된 보석 · 보석 왕관 · 비상의 날개 · 낙하 충격 · 공명석 · 광물 갑피 · 프리즘 광륜 · 수정 반격 · 빠른 집광 · 보석 꼬리",
+  ],
+  leo: [
+    "아스칼론 · 레오 · 영물, 이마에 보석이 박힌 뇌전의 사자 · 체력 120 · 방어력 5 · 무기는 뇌전 발톱 하나",
+    "앞쪽을 왼발·오른발 번갈아 할큄, 세 번째 공격마다 번개 물기(크게 + 기절). 맞힌 적에 뇌인(번개 표식)이 쌓여 발톱이 더 아픔",
+    "맞힐 때마다 발밑 고리에 전하가 참. 가득 차면 사자후: 방 안 모든 적에게 낙뢰 (뇌인이 많을수록 더 아픔) + 기절",
+    "머리의 보석이 몇 초마다 가장 먼 적에게 낙뢰를 내려 멀리 있는 적까지 잡음",
+    "전용 아이템 10: 번개 갈기 · 천뢰 보석 · 우레 포효 · 뇌광 도약 · 연쇄 뇌전 · 뇌운 · 사자의 긍지 · 번개 송곳니 · 황금 갑주 · 백수의 왕",
+  ],
   pungryu: [
     "아스칼론 · 풍류사 · 구름을 타고 다니는 의적 선비 · 체력 90 · 빠름 · 행운 5",
     "공격할 때마다 천자문 글자 하나를 써서 날림. 네 개(천자문 책이면 셋)를 쓰면 구절 완성 → 무기마다 큰 마법. 2초 동안 쓰지 않으면 구절은 처음부터",
@@ -22,6 +36,20 @@ export const GUIDE_KO_ASC2: Guide = {
 };
 
 export const GUIDE_EN_ASC2: Guide = {
+  onyx: [
+    "Terracore · Onyx · a Spirit Beast of living mineral with seven gems in its body · HP 190 · Defense 30 · slow · one weapon, the Seven-Gem Halo",
+    "Attack: the amethyst at its core beams every foe in the room. It can't move while casting",
+    "Dash: a flight boost. Press once to fly (fast, keeps flying when you let go, not invincible) · press again to land",
+    "On takeoff, on landing and every few seconds in flight, each of the 7 gems rolls its own chance: Ruby fire pillar · Amber meteors · Topaz chain lightning · Jade vines (heal) · Sapphire frost · Aquamarine beam · Amethyst void. All seven at once trigger Seven-Gem Resonance",
+    "Almost no invincibility after being hit · 10 exclusive items: Polished Gems · Gem Crown · Soaring Wings · Meteor Landing · Resonance Stone · Mineral Hide · Prism Halo · Crystal Riposte · Quick Focus · Gem Trail",
+  ],
+  leo: [
+    "Ascalon · Leo · a Spirit Beast, a thunder lion with a gem in his brow · HP 120 · Defense 5 · one weapon, the Thunder Claws",
+    "Rakes ahead with alternating left and right claws; every third attack is a Lightning Bite (big hit + stun). Hits stack Thunder Marks that make the claws hurt more",
+    "Every hit fills the charge ring under his feet. When full, Lion's Roar strikes every foe in the room with lightning (more marks, more damage) + stun",
+    "The gem on his brow strikes the farthest foe every few seconds, reaching even distant enemies",
+    "10 exclusive items: Lightning Mane · Sky-Thunder Gem · Thunderous Roar · Lightning Pounce · Chain Thunder · Thundercloud · Lion's Pride · Lightning Fangs · Golden Barding · King of Beasts",
+  ],
   pungryu: [
     "Ascalon · Pungryu · a scholar-outlaw who rides a cloud · HP 90 · fast · Luck 5",
     "Each attack writes one character of the Thousand Character Classic and hurls it. Write four (three with the Thousand Character Book) to complete a verse and unleash the weapon's spell. Stop writing for 2s and the verse starts over",
@@ -40,6 +68,20 @@ export const GUIDE_EN_ASC2: Guide = {
 };
 
 export const GUIDE_JA_ASC2: Guide = {
+  onyx: [
+    "テラコア · オニキス · 霊獣、体に七つの宝石が埋まった鉱石の霊獣 · 体力190 · 防御力30 · 遅い · 武器は七宝の光輪ひとつ",
+    "攻撃：中心のアメジストから部屋の全ての敵に光線。撃つ間は体を動かせない",
+    "ダッシュ：空を飛ぶブースト。一度押すと飛行（速く、手を離しても飛び続ける、無敵ではない）· もう一度押すと着地",
+    "飛び立つ時・着地する時・飛行中数秒ごとに7つの宝石がそれぞれ確率で反応：ルビーの火柱 · 琥珀の隕石 · トパーズの連鎖雷 · 翡翠の茨（回復）· サファイアの霜 · アクアマリンの光線 · アメジストの虚無。7つ同時なら七宝共鳴",
+    "被弾後の無敵がほとんどない · 専用アイテム10：磨かれた宝石 · 宝石の冠 · 飛翔の翼 · 落下の衝撃 · 共鳴石 · 鉱物の甲殻 · プリズムの光輪 · 水晶の反撃 · 素早い集光 · 宝石の尾",
+  ],
+  leo: [
+    "アスカロン · レオ · 霊獣、額に宝石が埋まった雷電の獅子 · 体力120 · 防御力5 · 武器は雷電の爪ひとつ",
+    "前方を左右の爪で交互に引っかき、3回目ごとに雷の噛みつき（大ダメージ＋気絶）。当てた敵に雷印が重なり爪がより痛くなる",
+    "当てるたびに足元の輪に電荷が溜まる。満タンで獅子吼：部屋の全ての敵に落雷（雷印が多いほど痛い）＋気絶",
+    "額の宝石が数秒ごとに一番遠い敵に落雷を落とし、遠くの敵まで捉える",
+    "専用アイテム10：稲妻のたてがみ · 天雷の宝石 · 雷鳴の咆哮 · 雷光の跳躍 · 連鎖雷電 · 雷雲 · 獅子の誇り · 稲妻の牙 · 黄金の鎧 · 百獣の王",
+  ],
   pungryu: [
     "アスカロン · 風流士 · 雲に乗る義賊の書生 · 体力90 · 速い · 幸運5",
     "攻撃するたびに千字文の文字を1つ書いて飛ばす。4つ（千字文の書なら3つ）書くと句が完成し、武器ごとの魔法が発動。2秒書かないと句は最初から",

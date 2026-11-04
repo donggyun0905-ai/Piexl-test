@@ -29,6 +29,8 @@ import { resetRemnant } from "./remnant";
 import { resetWanderer } from "./wanderer";
 import { resetSilk } from "./silk";
 import { resetPungryu } from "./pungryu";
+import { resetLeo } from "./leo";
+import { resetOnyx } from "./onyx";
 import { resetCollector } from "./collector";
 import { resetMiner } from "./miner";
 import { resetVoyager } from "./voyager";
@@ -52,6 +54,7 @@ import { makeArena } from "./bossPrimeval";
 import { bossHpMul } from "./bosses";
 import { depth } from "./hero";
 import { practiceRoomOff } from "./practiceRoom";
+import { splicePassives } from "./retag";
 
 export type PracticeItem =
   | { kind: "weapon"; id: WeaponId }
@@ -124,7 +127,7 @@ export function practiceGive(s: RunState, item: PracticeItem): void {
 export function practiceRemovePassive(s: RunState, id: PassiveId): void {
   const i = s.player.passives.lastIndexOf(id);
   if (i < 0) return;
-  s.player.passives.splice(i, 1);
+  splicePassives(s.player, i, 1);
   recalcStats(s);
 }
 
@@ -189,6 +192,7 @@ export function practiceReset(s: RunState): void {
   s.effects = [];
   p.weaponId = CHARACTERS[p.characterId].startWeapon;
   p.passives = [];
+  delete p.retag;
   p.useSlots = [null, null];
   p.replaceSlot = 0;
   p.shieldTicks = 0;
@@ -228,6 +232,8 @@ export function practiceReset(s: RunState): void {
   resetWanderer(p);
   resetSilk(p);
   resetPungryu(p);
+  resetLeo(p);
+  resetOnyx(p);
   resetCollector(p);
   resetMiner(p);
   resetVoyager(p);

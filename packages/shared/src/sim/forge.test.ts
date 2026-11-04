@@ -8,6 +8,7 @@ import { FORGE_OP, FORGE_RULES as R, forgeOf } from "./forge";
 import { equipWeapon, recalcStats } from "./items";
 import { createRun, stepSim } from "./run";
 import { menuCode } from "./station";
+import { passiveTagAt, splicePassives } from "./retag";
 import { EMPTY_HANDS } from "./shop";
 import { EMPTY_INPUT, type RunState } from "./types";
 
@@ -66,6 +67,28 @@ describe("대장간", () => {
     menu(s, FORGE_OP.tag, 1, fire);
     expect(s.gold).toBe(gold - R.TAG_COST);
     expect(tagCounts(s.player).fire).toBe(2);
+  });
+
+  it("꼬리표 변환: 같은 패시브 여러 개는 하나씩 따로 바뀜 · 하나를 팔아도 나머지 꼬리표는 그대로", () => {
+    const s = inForge();
+    s.player.passives.push("sturdyHeart", "sturdyHeart", "sturdyHeart");
+    recalcStats(s);
+    const fire = ITEM_TAGS.indexOf("fire");
+    const wind = ITEM_TAGS.indexOf("wind");
+    menu(s, FORGE_OP.tag, 1, fire);
+    menu(s, FORGE_OP.tag, 3, wind);
+    expect([0, 1, 2].map((k) => passiveTagAt(s.player, k))).toEqual(["fire", "tough", "wind"]);
+    expect(tagCounts(s.player)).toMatchObject({ fire: 1, wind: 1, tough: 1 });
+    splicePassives(s.player, 0, 1);
+    expect([0, 1].map((k) => passiveTagAt(s.player, k))).toEqual(["tough", "wind"]);
+  });
+
+  it("예전 저장(패시브 id 하나에 꼬리표)은 모두에 붙은 것으로 읽고, 하나를 바꾸면 나머지는 그대로", () => {
+    const s = inForge();
+    s.player.passives.push("sturdyHeart", "sturdyHeart");
+    s.player.retag = { sturdyHeart: "fire" };
+    menu(s, FORGE_OP.tag, 2, ITEM_TAGS.indexOf("wind"));
+    expect([0, 1].map((k) => passiveTagAt(s.player, k))).toEqual(["fire", "wind"]);
   });
 
   it("암흑 강화: 성공하면 암흑 단계 · 실패하면 무기 파괴 (맨손이 됨, 기록 지움)", () => {

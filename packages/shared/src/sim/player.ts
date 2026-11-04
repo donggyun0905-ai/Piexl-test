@@ -25,7 +25,7 @@ import { TITAN } from "../weaponsTitan";
 import { beastSpeedMul } from "./pets";
 import { fireMedic } from "./medicWeapons";
 import { medicSpeedMul } from "./heal";
-import { classMoveMul, classSpeedMul, foeHeld, foeMoveMul, foeNoAttack, trialMoveMul } from "./moveMul";
+import { classMoveMul, classSpeedMul, foeHeld, foeMoveMul, foeNoAttack, onyxDash, trialMoveMul } from "./moveMul";
 import type { EnemyState, PlayerState, RunState, TickInput } from "./types";
 import { addEffect, shotDirs, DASH_COOLDOWN, DASH_SPEED_MUL, DASH_TICKS, dist2, hasPerk, keepInRoom, normalize, roomGrid, STILL_TICKS, weaponOf } from "./util";
 import { readAim } from "./tracker";
@@ -114,7 +114,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
   // 금기: 느린 숨 (대시 재사용 시간 증가)
   const cool = Math.round(dashCooldown(p) * tabooUp(s, "slowDash"));
   rechargeDash(p, cool);
-  if (input.dash && !guarded && p.dashTicks === 0 && canDash(p) && !foeHeld(p)) {
+  if (onyxDash(s, input.dash) && !guarded && p.dashTicks === 0 && canDash(p) && !foeHeld(p)) {
     const d = normalize(mx, my) ?? [p.faceX, p.faceY];
     p.dashDirX = d[0];
     p.dashDirY = d[1];

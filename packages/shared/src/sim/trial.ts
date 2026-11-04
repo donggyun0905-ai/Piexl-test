@@ -11,6 +11,7 @@ import { openChest, STONE_Y } from "./trialRewards";
 import type { TrialKind } from "./trialTypes";
 import type { Pickup, PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
+import { splicePassives } from "./retag";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -92,7 +93,7 @@ function penalty(s: RunState, r: number): number {
   if (n === 4) addBoonMod(s, { stat: "range", add: -R.P_RANGE });
   if (n === 5) equipWeapon(s, EMPTY_HANDS);
   if (n === 6) {
-    p.passives.splice(Math.floor(r * 997) % p.passives.length, 1);
+    splicePassives(p, Math.floor(r * 997) % p.passives.length, 1);
     recalcStats(s);
   }
   if (n === 7) for (let i = 0, k = 0; i < p.useSlots.length && k < R.P_ITEMS; i++) if (p.useSlots[i]) [p.useSlots[i], k] = [null, k + 1];

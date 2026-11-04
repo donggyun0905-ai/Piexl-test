@@ -16,8 +16,8 @@ export interface PungPlayerState {
   /** 축지법: 대시 중이었는지 · 다음 글자 2배 남은 틱 */
   puDashing?: boolean;
   puQuick?: number;
-  /** 분신(남은 틱·옆쪽 -1/1) · 둔갑술을 쓴 층 · 구름 자국 · 먹물 웅덩이 · 피리까지 틱 */
-  puClones?: { t: number; side: number }[];
+  /** 분신(남은 틱·처음 나온 옆쪽 -1/1·자리·다음 글자까지 틱·쓴 글자 수·바라보는 쪽) · 둔갑술을 쓴 층 · 구름 자국 · 먹물 웅덩이 · 피리까지 틱 */
+  puClones?: { t: number; side: number; x: number; y: number; cd: number; k: number; fx: number; fy: number }[];
   puDisguised?: number;
   puTrail?: { x: number; y: number; t: number }[];
   puInks?: { x: number; y: number; t: number }[];

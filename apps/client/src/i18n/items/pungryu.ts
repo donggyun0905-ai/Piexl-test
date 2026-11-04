@@ -43,7 +43,7 @@ export function scriptDesc(st: ScriptStyle, lang: Lang): string {
 
 export const PU_PASSIVE_NAMES: Record<PuPassive & PassiveId, Names> = {
   puShrink: c("축지법", "Earth-Folding Step", "縮地法"),
-  puClone: c("분신술", "Clone Art", "分身術"),
+  puClone: c("구절을 완성하면 분신이 나와 {ticks:sec}초 동안 따로 적을 찾아다니며 글자를 씀 (공격력 {mul:pct}%, 최대 {max})", "Completing a verse summons a clone that roams on its own for {ticks:sec}s, writing letters at enemies ({mul:pct}% damage, up to {max})", "句を完成すると分身が現れ{ticks:sec}秒間それぞれ敵を追って文字を書く（攻撃力{mul:pct}%、最大{max}）"),
   puDisguise: c("둔갑술", "Shape-Shift", "遁甲術"),
   puThief: c("의적 주머니", "Outlaw's Pouch", "義賊の巾着"),
   puCloud: c("오색 구름", "Five-Color Cloud", "五色の雲"),

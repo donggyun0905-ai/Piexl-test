@@ -7,7 +7,7 @@ const P = <T extends string>(id: T) => ({ id, mods: [] as StatMod[], exclusive: 
 export const PUNGRYU_PASSIVES = {
   /** 축지법: 대시가 순간이동 (거리 +40%), 그 뒤 잠깐 다음 글자 피해 2배 */
   puShrink: P("puShrink"),
-  /** 분신술: 구절을 완성하면 분신이 나와 잠깐 같은 글자를 따라 씀 */
+  /** 분신술: 구절을 완성하면 분신이 나와 잠깐 따로 돌아다니며 글자를 씀 */
   puClone: P("puClone"),
   /** 둔갑술: 체력이 30% 아래로 떨어질 피해를 층마다 한 번 허수아비로 둔갑해 피함 */
   puDisguise: P("puDisguise"),
@@ -31,8 +31,8 @@ export const PUNGRYU_PASSIVES = {
 export const PUNGRYU_PERKS = {
   /** 축지법: 대시 거리 배율 · 다음 글자 2배가 남는 틱 · 배율 */
   puShrink: { reach: 1.4, ticks: 30, mul: 2 },
-  /** 분신술: 분신 시간 · 최대 수 · 분신 글자 피해 배율 · 내 옆 거리 */
-  puClone: { ticks: 240, max: 2, mul: 0.6, side: 18 },
+  /** 분신술: 분신 시간 · 최대 수 · 분신 글자 피해 배율 · 처음 나오는 내 옆 거리 · 글자 쓰는 간격(틱) · 사거리 · 적이 없을 때 내 둘레 거리 · 나에게서 이 거리 안 적만 · 빠르기 */
+  puClone: { ticks: 240, max: 2, mul: 0.6, side: 18, every: 20, range: 110, gap: 26, leash: 150, speed: 1.6 },
   /** 둔갑술: 이 아래로 떨어질 피해 · 무적 틱 */
   puDisguise: { below: 0.3, invuln: 60 },
   /** 의적 주머니: 얻는 돈 배율 · 100G마다 공격력 + · 최대 */
