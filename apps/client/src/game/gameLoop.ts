@@ -27,6 +27,7 @@ import { splash } from "../audio/summerSound";
 import { roar } from "../audio/tigerSound";
 import { fanfare } from "../audio/victorySound";
 import { activeFx } from "../shop/effects";
+import { watchingSeat } from "./camera";
 
 /** 한 번에 따라잡는 최대 틱 수 (탭을 오래 비웠다 돌아올 때 멈춤 방지) */
 const MAX_CATCH_UP = 10;
@@ -159,7 +160,7 @@ export function startGameLoop(o: LoopOptions): () => void {
     if (text !== shownPrompt) {
       shownPrompt = text;
       // 협동의 모이기·쓰러짐 안내는 누를 것이 아님
-      const passive = run.prompt.kind === "gather" || run.prompt.kind === "revive" || (!!run.party && p.hp <= 0);
+      const passive = run.prompt.kind === "gather" || run.prompt.kind === "revive" || (!!run.party && p.hp <= 0) || watchingSeat() !== undefined;
       o.setPrompt({ text, interact: action !== "" && !passive });
     }
     const ambush = !!p.trAmbush;
@@ -171,7 +172,8 @@ export function startGameLoop(o: LoopOptions): () => void {
       controls.setAutoAim(true);
       autoBack = false;
     }
-    noteRecords(run, { souls: p.apEaten ?? 0, pilgrims: run.pilgrimMet ?? 0 }, !!o.practice);
+    // 동료를 관전하는 동안은 내 기록에 넣지 않음
+    noteRecords(run, { souls: p.apEaten ?? 0, pilgrims: run.pilgrimMet ?? 0 }, !!o.practice || watchingSeat() !== undefined);
     const view = loadoutView(run, controls.arm.armed);
     const lk = loadoutKey(view);
     if (lk !== shownLoadout) {

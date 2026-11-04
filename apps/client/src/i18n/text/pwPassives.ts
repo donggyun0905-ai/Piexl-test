@@ -28,6 +28,7 @@ export const PW_PASSIVE_TEXT = {
   pwPvCollector: { ko: "수집품의 무게: 등 뒤에 뜬 수집 무기 하나마다 평타 피해 +4% (최대 +30%) · 공격할 때마다 콤보 한 칸", en: "Weight of the Hoard: +4% basic damage per collectible floating on his back (up to +30%) · each attack is the next combo step", ja: "収集品の重み: 背中に浮かぶ収集武器1つごとに通常攻撃+4% (最大+30%) · 攻撃するたびにコンボ一段" },
   pwPvRemnant: { ko: "그림자 일격: 치명타 피해 200%", en: "Shadow Strike: critical damage 200%", ja: "影の一撃: クリティカルダメージ200%" },
   pwPvLeo: { ko: "번개 물기: 평타 세 번째마다 피해 +50%", en: "Lightning Bite: every 3rd basic attack deals +50%", ja: "雷の噛みつき: 通常攻撃3回目ごとにダメージ+50%" },
+  pwPvFenrir: { ko: "천랑 낙인: 평타 다섯 번째마다 피해 +100%", en: "Sirius Brand: every 5th basic attack deals +100%", ja: "天狼の烙印: 通常攻撃5回目ごとにダメージ+100%" },
   pwPvOnyx: { ko: "칠보: 평타 일곱 번째마다 피해 +120%", en: "Seven Gems: every 7th basic attack deals +120%", ja: "七宝: 通常攻撃7回目ごとにダメージ+120%" },
   pwPvPungryu: { ko: "구절 완성: 평타 네 번째마다 피해 +60%", en: "Verse: every 4th basic attack deals +60%", ja: "句の完成: 通常攻撃4回目ごとにダメージ+60%" },
   pwPvSilk: { ko: "실 얽힘: 실에 얽힌 상대를 찢음 (과다출혈·30가닥 연사 없음)", en: "Entangle: rends entangled targets (no overbleed or 30-thread burst)", ja: "糸絡み: 絡んだ相手を裂く (過剰出血・30本連射なし)" },

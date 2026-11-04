@@ -4,6 +4,48 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.16",
+    date: "2026-11-04",
+    items: {
+      ko: [
+        "새 캐릭터 펜리르 (비르디아 · 영물): 지난 비르디아 왕이 다스리던 늙은 백랑. 왕이 쓰던 거대한 대검을 입에 물고 다시 전쟁에 나섬 · 체력 45 · 공격력 16 · 이동 1.55 (아주 빠름) · 기본 회피 25%·예리함 25%",
+        "선왕의 대검: 한 번 누르면 고정 5연 콤보가 저절로 이어짐 · 물어 베기 → 되베기 → 지면 검기(큰 검기가 바닥을 그으며 나아가 뚫음) → 난도(한 자리를 사방에서 빠르게 6번) → 천랑 낙인(뛰어오른 동안 무적, 내려찍으면 무적이 풀리고 사방 8갈래 검기)",
+        "펜리르 전용 아이템 10 (늙은 늑대의 지혜 · 선왕의 광륜 · 벼린 송곳니 · 질풍 · 늑대의 울부짖음 · 천랑성 · 월광 난무 · 대지 가르기 · 노장의 투혼 · 사냥 본능) · 푸른 초승달 검기·수정 파편·갈라진 땅 이펙트 · 그림 시트",
+        "펜리르 여는 조건: 비르디아 캐릭터를 모두 열고, 저마다 금기의 서 45점 이상으로 라스트 보스 클리어",
+      ],
+      en: [
+        "New character Fenrir (Virdia · Spirit Beast): an old white wolf once ruled by the late king of Virdia, marching to war again with the king's giant blade in its jaws · 45 HP · 16 Attack · 1.55 move (very fast) · base 25% dodge and 25% Sharpness",
+        "Blade of the Late King: one press runs a fixed 5-hit combo · Bite Slash → Return Slash → Ground Wave (a huge wave scrapes along the floor and pierces) → Frenzy Cut (6 fast slashes from every side on one spot) → Sirius Brand (invincible while leaping; the slam ends invincibility and sends sword waves 8 ways)",
+        "10 Fenrir items (Old Wolf's Wisdom · Halo of the Late King · Honed Fangs · Gale · Wolf's Howl · Sirius · Moonlit Frenzy · Earth Splitter · Veteran's Spirit · Hunting Instinct) · blue crescent waves, crystal shards and cracked-ground effects · sprite sheet",
+        "Fenrir unlock: unlock every Virdia character and clear a last boss with each at 45+ Taboo points",
+      ],
+      ja: [
+        "新キャラ フェンリル（ヴィルディア · 霊獣）：先代ヴィルディア王に仕えた老いた白狼。王が使っていた巨大な大剣をくわえ再び戦に出る · 体力45 · 攻撃力16 · 移動1.55（とても速い）· 基本回避25%・鋭さ25%",
+        "先王の大剣：一度押すと固定5連コンボが自動で続く · 噛み斬り → 返し斬り → 地面の剣気（大きな剣気が床をえぐりながら進み貫通）→ 乱刀（一か所を四方からすばやく6回）→ 天狼の烙印（跳び上がる間は無敵、叩きつけると無敵が解け四方8本の剣気）",
+        "フェンリル専用アイテム10（老狼の知恵 · 先王の光輪 · 研ぎ澄まされた牙 · 疾風 · 狼の遠吠え · 天狼星 · 月光乱舞 · 大地割り · 老将の闘魂 · 狩りの本能）· 青い三日月の剣気・水晶の破片・割れた地面のエフェクト · スプライトシート",
+        "フェンリルの解放条件：ヴィルディアのキャラをすべて解放し、それぞれ禁忌の書45点以上でラストボスをクリア",
+      ],
+    },
+  },
+  {
+    version: "0.49.15",
+    date: "2026-11-04",
+    items: {
+      ko: [
+        "협동: 빌드 세트·버프 칸이 갱신되지 않아 비어 보이던 것을 고침 (세트 효과는 원래대로 적용) · 동료 체력 칸을 왼쪽 아래로 옮겨 능력치·빌드 칸을 가리지 않게",
+        "협동: 쓰러진 동안 살아 있는 동료의 화면을 그대로 관전 (그 사람을 따라가는 화면·체력·장비·빌드 세트·능력치) · 누르면 다음 동료",
+      ],
+      en: [
+        "Co-op: the build set and buff panels no longer stay empty (set effects were already applied) · the party health list moved to the lower left so it no longer covers the stats and build panels",
+        "Co-op: while you are down you now watch a living teammate's screen (camera, health, loadout, build sets and stats) · tap for the next teammate",
+      ],
+      ja: [
+        "協力：ビルドセット・バフ欄が更新されず空に見えていたのを修正（セット効果はもともと適用）· 仲間の体力欄を左下に移し、能力値・ビルド欄を隠さないように",
+        "協力：倒れている間は生きている仲間の画面をそのまま観戦（その人を追う画面・体力・装備・ビルドセット・能力値）· 押すと次の仲間",
+      ],
+    },
+  },
+  {
     version: "0.49.14",
     date: "2026-11-04",
     items: {
@@ -19,66 +61,6 @@ export const NOTES: PatchNote[] = [
         "レオの解放条件：アスカロンのキャラをすべて解放し、それぞれ禁忌の書45点以上でラストボスをクリア（キャラ選択画面に進行度）",
         "オニキスの解放条件：テラコアのキャラをすべて解放し、それぞれ禁忌の書45点以上でラストボスをクリア · オニキスの陣営をテラコアに修正",
       ],
-    },
-  },
-  {
-    version: "0.49.13",
-    date: "2026-11-04",
-    items: {
-      ko: ["대장간 꼬리표 변환: 같은 패시브를 여러 개 가졌을 때 하나를 바꾸면 전부 바뀌던 것을 고침 · 이제 하나하나 따로 바뀜 (숫돌 3개면 3개 저마다 다른 꼬리표) · 패시브를 팔거나 잃어도 남은 것의 꼬리표는 그대로 · 아이템 설명에 바뀐 꼬리표가 모두 보임"],
-      en: ["Forge tag reforge: changing one copy of a stacked passive no longer changes every copy · each copy now keeps its own tag (3 whetstones can have 3 different tags) · selling or losing a copy keeps the others' tags · the item tooltip shows every tag"],
-      ja: ["鍛冶屋のタグ変換：同じパッシブを複数持つ時、1つ変えると全部変わっていたのを修正 · 1つずつ別々に変わるように（砥石3個ならそれぞれ別のタグ）· 売ったり失っても残りのタグはそのまま · アイテム説明に変えたタグがすべて表示"],
-    },
-  },
-  {
-    version: "0.49.12",
-    date: "2026-11-04",
-    items: {
-      ko: ["히든 아이템 '떨어진 신의 날개' 모습을 새로 그림: 등 뒤로 활짝 펼친 깃털 날개(긴 첫째 깃·늘어진 둘째 깃·덮깃 세 겹, 짙은 청록 → 하늘빛 → 흰 끝) · 천천히 퍼덕이고 깃 끝에서 빛 가루가 흩날림"],
-      en: ["Hidden item 'Fallen God's Wings' redrawn: wide feathered wings spread behind you (three layers of long primaries, drooping secondaries and coverts, deep teal → sky blue → white tips) · they flap slowly and shed motes of light from the tips"],
-      ja: ["隠しアイテム「堕ちた神の翼」の見た目を一新：背中に大きく広げた羽根の翼（長い初列風切・垂れた次列風切・雨覆の三層、深い青緑 → 空色 → 白い先端）· ゆっくり羽ばたき、羽先から光の粉が舞う"],
-    },
-  },
-  {
-    version: "0.49.11",
-    date: "2026-11-04",
-    items: {
-      ko: [
-        "새 캐릭터 오닉스(아스칼론, 영물): 몸에 일곱 보석이 박힌 광석 영물 · 체력 190·방어력 30, 느린 걸음, 맞아도 무적이 거의 없음 · 칠보 광륜으로 방 안 모든 적을 한 번에 치지만 쏘는 동안 못 움직임 · 대시는 하늘을 나는 부스트(한 번 누르면 계속 날고 다시 누르면 내려앉음, 무적 아님) · 날아오를 때·내려앉을 때·비행 중 보석 7개가 저마다 확률로 반응: 홍옥 불기둥·호박 운석·황옥 연쇄 번개·비취 덩굴·청옥 서리·남옥 빛줄기·자수정 공허 · 일곱이 함께 반응하면 칠보 공명 · 전용 아이템 10 (연마된 보석·보석 왕관·비상의 날개·낙하 충격·공명석·광물 갑피·프리즘 광륜·수정 반격·빠른 집광·보석 꼬리)",
-      ],
-      en: [
-        "New character Onyx (Ascalon, Spirit Beast): a mineral spirit with seven gems in its body · 190 HP, 30 Defense, slow walk, almost no invincibility when hit · the Seven-Gem Halo hits every foe in the room at once but roots you while casting · Dash is a flight boost (press once to keep flying, again to land; not invincible) · on takeoff, on landing and in flight each of the 7 gems rolls its own chance: Ruby fire pillar · Amber meteors · Topaz chain lightning · Jade vines · Sapphire frost · Aquamarine beam · Amethyst void · all seven at once trigger Seven-Gem Resonance · 10 exclusive items (Polished Gems · Gem Crown · Soaring Wings · Meteor Landing · Resonance Stone · Mineral Hide · Prism Halo · Crystal Riposte · Quick Focus · Gem Trail)",
-      ],
-      ja: [
-        "新キャラ オニキス（アスカロン、霊獣）：体に七つの宝石が埋まった鉱石の霊獣 · 体力190・防御力30、遅い歩み、被弾しても無敵がほとんどない · 七宝の光輪で部屋の全ての敵を一度に撃つが撃つ間は動けない · ダッシュは空を飛ぶブースト（一度押すと飛び続け、もう一度で着地、無敵ではない）· 飛び立つ時・着地する時・飛行中に7つの宝石がそれぞれの確率で反応：ルビーの火柱・琥珀の隕石・トパーズの連鎖雷・翡翠の茨・サファイアの霜・アクアマリンの光線・アメジストの虚無 · 7つ同時なら七宝共鳴 · 専用アイテム10（磨かれた宝石・宝石の冠・飛翔の翼・落下の衝撃・共鳴石・鉱物の甲殻・プリズムの光輪・水晶の反撃・素早い集光・宝石の尾）",
-      ],
-    },
-  },
-  {
-    version: "0.49.10",
-    date: "2026-11-04",
-    items: {
-      ko: [
-        "새 캐릭터 레오(아스칼론, 영물): 이마에 보석이 박힌 뇌전의 사자 · 뇌전 발톱 하나로 번갈아 할퀴고 세 번째마다 번개 물기 · 맞힌 적에 뇌인 · 전하가 차면 사자후로 방 안 모든 적에게 낙뢰 · 보석이 몇 초마다 가장 먼 적에게 낙뢰 · 전용 아이템 10 (번개 갈기·천뢰 보석·우레 포효·뇌광 도약·연쇄 뇌전·뇌운·사자의 긍지·번개 송곳니·황금 갑주·백수의 왕)",
-        "풍류사 분신술: 분신이 옆에 붙어 따라 쓰지 않고, 저마다 다른 적을 찾아 따로 돌아다니며 제 박자로 글자를 씀",
-      ],
-      en: [
-        "New character Leo (Ascalon, Spirit Beast): a thunder lion with a gem in his brow · rakes with his Thunder Claws and bites with lightning every third strike · hits leave Thunder Marks · full charge unleashes Lion's Roar, striking every foe in the room · the gem strikes the farthest foe every few seconds · 10 exclusive items",
-        "Pungryu Clone Art: clones no longer just copy your letters at your side — each roams to its own target and writes on its own rhythm",
-      ],
-      ja: [
-        "新キャラ レオ（アスカロン、霊獣）：額に宝石が埋まった雷電の獅子 · 雷電の爪で交互に引っかき3回目ごとに雷の噛みつき · 当てた敵に雷印 · 電荷が満ちると獅子吼で部屋の全ての敵に落雷 · 宝石が数秒ごとに一番遠い敵に落雷 · 専用アイテム10",
-        "風流士の分身術：分身が横で真似して書くのではなく、それぞれ別の敵を追って動き回り自分のリズムで文字を書く",
-      ],
-    },
-  },
-  {
-    version: "0.49.9",
-    date: "2026-11-04",
-    items: {
-      ko: ["숨은 시련 '죽음의 바다': 숨 게이지가 캐릭터 뒤에 가려지던 것을 고쳐, 캐릭터 위 체력 줄 바로 위에 보이게 함"],
-      en: ["Hidden trial 'Sea of Death': the breath gauge no longer hides behind your character and now sits right above your health bar"],
-      ja: ["隠し試練「死の海」: 息ゲージがキャラクターの後ろに隠れていたのを直し、頭上の体力バーのすぐ上に表示"],
     },
   },
 ];

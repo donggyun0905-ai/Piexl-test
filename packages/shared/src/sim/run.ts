@@ -9,6 +9,7 @@ import { PERKS } from "../perks";
 import { petRevive } from "./lobbyPet";
 import { artifacterRevive } from "./artifacter";
 import { slayerSave } from "./slayer";
+import { fenrirSave } from "./fenrirStats";
 import { ROOM_COLS, ROOM_ROWS, TILE_SIZE } from "../constants";
 import { baseStats, CHARACTERS, type CharacterId } from "../content";
 import { computeStats } from "../stats";
@@ -230,6 +231,7 @@ export function checkDeath(s: RunState): boolean {
   }
   // 불사조(로비 펫): 한 판에 한 번
   slayerSave(s);
+  fenrirSave(s);
   if (p.hp <= 0) petRevive(s);
   trialRevive(s);
   artifacterRevive(s);

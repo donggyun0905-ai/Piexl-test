@@ -81,4 +81,10 @@ export const PW_KITS_2: PwKits = {
     sk("sylvanGuard", "point", 14, "#8aff8a", { range: 130, radius: 46, fx: "heal", heal: 0.15, buff: { ticks: 3 * SEC, taken: 0.7, allies: true } }),
     sk("idraSpirit", "summon", 60, "#6aff9a", { summon: { n: 1, ticks: 10 * SEC, dmg: 0.9, range: 90, every: 24, look: "spirit" } }),
   ),
+  fenrir: kit(1,
+    sk("fnKingBlade", "dash", 7, "#8ab8ff", { range: 130, speed: 10, fx: "slash", hit: { dmg: 1.6 } }),
+    sk("fnKingBlade", "line", 9, "#5a8aff", { range: 190, radius: 14, fx: "wave", hit: { dmg: 1.8 } }),
+    sk("fnKingBlade", "point", 11, "#c8d8ff", { range: 120, radius: 30, fx: "spin", repeat: { n: 6, every: 4 }, hit: { dmg: 0.45 } }),
+    sk("fnKingBlade", "self", 60, "#b0c8ff", { radius: 70, delay: 24, fx: "burst", hit: { dmg: 4, stun: 0.8 * SEC } }),
+  ),
 };

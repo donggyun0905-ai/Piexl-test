@@ -1,6 +1,7 @@
 // 패왕전 스킬 효과음 (sound의 효과음 표에 합쳐짐): 스킬 그림 모양마다 하나 · 예고 · 궁극기 외침
 import type { RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
+import { fenrirSounds } from "./fenrirSounds";
 
 export const SKILL_SOUNDS = {
   // 터짐: 낮은 펑 · 떨어지는 운석: 쿵 + 우르르
@@ -74,6 +75,7 @@ const ultAt = new Map<number, number>();
 
 /** 이번 프레임에 새로 생긴 스킬 그림 → 소리 (내 둘레만) · 궁극기는 어디서든 외침 + 가까우면 화면 흔들림 */
 export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) => void): void {
+  fenrirSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;
   for (const e of run.effects) {

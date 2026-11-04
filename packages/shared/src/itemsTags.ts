@@ -39,7 +39,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "scrapRepair chargeKnuckle idDew idGaiaGrace idFourSeasons idWorldHeart elExpand elTea rdShock " +
     "rdRepair afTattoo afInfinity fgMemory fgPillar fgMany fgShine fgCross fgHeal vyKeepFate vyQuiver " +
     "vyBlessing vyHomeward pgStarDust pgKeyring lxShard lxHalo lxGrace lxMore lxWide lxTattoo clHolySword " +
-    "clStarTome dryadOrb aphroditeMirror puBook",
+    "clStarTome dryadOrb aphroditeMirror puBook fnHalo fnStar",
   // 어둠 42
   dark:
     "ambush volleyCharm strongman intimidate sharpClaws hunterInstinct shadowMark twinShadow moonlight " +
@@ -59,7 +59,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "whetstone dashSlash earthshaker perfectCircle steadfast surgery antibody sandstorm sandVeil redHare " +
     "warBanner hydraulicJoint aftershock bearQuake boarTusk boarStampede boarMud eleMammoth renSoil " +
     "renQuake renBindLong renEarth renBigger renCollapse mkMomentum mkShock mkTrample mkIron rdDouble " +
-    "rdRam bmEcho bmFinale mnMole mnExpert clVineStaff clStoneHammer clCrescent",
+    "rdRam bmEcho bmFinale mnMole mnExpert clVineStaff clStoneHammer clCrescent fnRift",
   // 물 3
   water:
     "oniGreatWave oniSprayChain oniDragonPalace",
@@ -73,7 +73,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "smMore smPierce afFocus cyBoost cyBerserk trScope trHollow trBipod trCharge rmBackstab rmEcho wdHone " +
     "wdCalm wdSheath wdGauge skEdge skRend vyString vyLaurel zsKing zsSkyEye zsGiant pgLens fkCrest " +
     "fkReach lxReach lxQuick lxPierce lxJudge clEyeTome clBlueSpear clBlueAxe relicRed relicGold " +
-    "relicPrism relicGreen sylphQuiver gnomeHammer puDog leFang lePride leKing oxPolish oxCrown oxResonance",
+    "relicPrism relicGreen sylphQuiver gnomeHammer puDog leFang lePride leKing oxPolish oxCrown oxResonance fnFang fnMoon",
   // 단단함 79
   tough:
     "sturdyHeart furySeal secondWind ricochet splitHead counterGuard bulwarkStance arcaneShield " +
@@ -83,7 +83,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "idAncientWall bearHide scorpShell eleHerd elBeard elWard renStone renGuardPlus renWall renReflect " +
     "spRibbon spShield mkPlate mkBulk mkSpikes mkMeditate adWide adShield rdSlip rdGear bmMore bmSuit " +
     "afShield afGolem cyLeech cySkin trMark trCamo fgEcho fgBless mnHelmet mnMuscle mnCanary mnChain " +
-    "zsNectar zsRetort pgPack pgSouvenir pgPostcard pgTent relicSilver relicWhite ironSkin puDisguise leArmor oxBulwark oxShard",
+    "zsNectar zsRetort pgPack pgSouvenir pgPostcard pgTent relicSilver relicWhite ironSkin puDisguise leArmor oxBulwark oxShard fnHowl fnVeteran",
   // 바람 77
   wind:
     "lightGloves windBoots featherTip hunterEye dashCloak heavyPlate returnFletch chaseSteps chainBurst " +
@@ -93,7 +93,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "eagleStorm eagleDive flyWings flyAfterburn elMore elDouble renRootPulse renMoss eaAbyss eaFrenzy " +
     "rdTurbo rdDrift bmWide bmFuse afCrafter afSurge cyReflex cyCloak rmSwift wdWind wdRonin wdFocus " +
     "wdBlink skFast skAgile vySandglass vySeaLegs zsCloud pgBoots pgSnack pgShortcut pgWorldLeaf fkGrip " +
-    "lxSwift clWhiteBow clPistol relicBlue fallenWings quickDraw puShrink puCloud puFlute lePounce oxWings oxLanding oxQuick oxTrail",
+    "lxSwift clWhiteBow clPistol relicBlue fallenWings quickDraw puShrink puCloud puFlute lePounce oxWings oxLanding oxQuick oxTrail fnGale",
   // 행운 53
   luck:
     "cloverCharm resolve prajna luckyDeflect gunMaster scrapGun doubleEcho echoBurst soulHarvest " +
@@ -101,7 +101,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "goldenFeather bigQuack quickSwap threeAsOne idClover idBreaker flyEvade flyGust renAmber renRegrow " +
     "eaGluttony eaEcho adSalvo adEcho afLucky afBlueprint trRicochet trDrum mnLamp mnVein mnGold " +
     "mnJackpot vyTwinDice vyLoadedDie pgClover pgRummage pgDoubleBag pgEcho pgStamp pgLuckyCoin clGoldBow " +
-    "clGoldFist clGoldSpear godShard goldTooth puThief puBanner",
+    "clGoldFist clGoldSpear godShard goldTooth puThief puBanner fnWisdom",
   // 소환 28
   summon:
     "genesis pet supportFire extraCat packLeader fishTreat horde lash empower sacrifice returnWind " +
@@ -111,7 +111,7 @@ const MEMBERS: Record<ItemTag, string> = {
   blood:
     "seekerFeather huntFrenzy lifeLeech rage drunkenFist bloodDemon bleed bloodBlade loyalty rustyEdge " +
     "grewTogether batDrain slPact slThirst slNumb slMassacre rmBlood wdDeep wdRain skFrenzy skBlood " +
-    "clBloodSword clChainCleaver clBloodBow clCrossbow clRedSpear clBloodHammer",
+    "clBloodSword clChainCleaver clBloodBow clCrossbow clRedSpear clBloodHammer fnHunt",
 };
 
 const TAG_OF = new Map<string, ItemTag>();

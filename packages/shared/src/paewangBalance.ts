@@ -54,6 +54,7 @@ export const PW_CHAR: Partial<Record<CharacterId, PwCharTune>> = {
   pungryu: { hp: 1.2, dmg: 1.2, taken: 1 },
   leo: { hp: 1.1, dmg: 1.1, taken: 1 },
   onyx: { hp: 1.15, dmg: 1, taken: 0.9 },
+  fenrir: { hp: 1.6, dmg: 1, taken: 0.8 },
   slayer: { hp: 0.52, dmg: 0.52, taken: 0.23 },
   spiritist: { hp: 0.84, dmg: 0.84, taken: 0.73 },
   summoner: { hp: 1.08, dmg: 1.08, taken: 0.72 },

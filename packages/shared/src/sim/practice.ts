@@ -31,6 +31,7 @@ import { resetSilk } from "./silk";
 import { resetPungryu } from "./pungryu";
 import { resetLeo } from "./leo";
 import { resetOnyx } from "./onyx";
+import { resetFenrir } from "./fenrir";
 import { resetCollector } from "./collector";
 import { resetMiner } from "./miner";
 import { resetVoyager } from "./voyager";
@@ -234,6 +235,7 @@ export function practiceReset(s: RunState): void {
   resetPungryu(p);
   resetLeo(p);
   resetOnyx(p);
+  resetFenrir(p);
   resetCollector(p);
   resetMiner(p);
   resetVoyager(p);

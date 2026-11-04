@@ -46,6 +46,7 @@ export function GameScreen(props: GameScreenProps) {
   const controlsRef = useRef<Controls | null>(null);
   const getControls = useCallback(() => controlsRef.current, []);
   const runRef = useRef<RunState | null>(null);
+  const getRun = useCallback(() => runRef.current, []);
   // 콜백이 바뀌어도 다시 시작 안 하게 ref로
   const cb = useRef(props);
   useLayoutEffect(() => {
@@ -246,17 +247,17 @@ export function GameScreen(props: GameScreenProps) {
           height={Math.round(VIEW_HEIGHT * scale * dpr)}
           style={{ width: VIEW_WIDTH * wide * scale, height: VIEW_HEIGHT * scale }}
         />
-        {stats && !pvp && <StatsPanel rows={stats} t={t} lang={lang} onInfo={props.embedded ? undefined : setOverlay} run={() => runRef.current} />}
-        {!pvp && !props.embedded && <CharInfoHost run={() => runRef.current} character={characterId} lang={lang} t={t} open={overlay} onInfo={(k) => setOverlay((o) => infoNext(o, k))} />}
+        {stats && !pvp && <StatsPanel rows={stats} t={t} lang={lang} onInfo={props.embedded ? undefined : setOverlay} run={getRun} />}
+        {!pvp && !props.embedded && <CharInfoHost run={getRun} character={characterId} lang={lang} t={t} open={overlay} onInfo={(k) => setOverlay((o) => infoNext(o, k))} />}
         {mode !== "practice" && mode !== "swarm" && mode !== "paewang" && (
-          <RouteMap miniRef={miniRef} run={() => runRef.current} t={t} />
+          <RouteMap miniRef={miniRef} run={getRun} t={t} />
         )}
         {prompt.text && (!touchMode || !prompt.interact) && (
           <div className="prompt">{prompt.interact ? `F · ${prompt.text}` : prompt.text}</div>
         )}
       </div>
       {mode === "practice" && props.onPracticeCharacter && (
-        <PracticePanel run={() => runRef.current} loadout={loadout} characterId={characterId} lang={lang} t={t} onCharacter={props.onPracticeCharacter} />
+        <PracticePanel run={getRun} loadout={loadout} characterId={characterId} lang={lang} t={t} onCharacter={props.onPracticeCharacter} />
       )}
       {loadout && <Loadout view={loadout} character={characterId} lang={lang} t={t} touchMode={touchMode} controls={() => controlsRef.current} />}
       {pvp ? <PanHint t={t} touchMode={touchMode} /> : <p className={`game-hint ${touchMode ? "touch" : ""}`}>{t(touchMode ? "hintRotate" : "hintPc")}</p>}
