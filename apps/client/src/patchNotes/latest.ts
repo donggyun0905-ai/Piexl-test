@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.2",
+    date: "2026-11-05",
+    items: {
+      ko: ["대장간 암흑 강화: 실패해서 무기가 부서지면 처음 무기가 새로 생기지 않고 맨손이 됨"],
+      en: ["Forge dark upgrade: when it fails and the weapon shatters, you're now bare-handed instead of getting a fresh starting weapon"],
+      ja: ["鍛冶場の暗黒強化：失敗して武器が壊れると、最初の武器が新しく出るのではなく素手になる"],
+    },
+  },
+  {
     version: "0.49.1",
     date: "2026-11-05",
     items: {

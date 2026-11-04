@@ -8,6 +8,7 @@ import { FORGE_OP, FORGE_RULES as R, forgeOf } from "./forge";
 import { equipWeapon, recalcStats } from "./items";
 import { createRun, stepSim } from "./run";
 import { menuCode } from "./station";
+import { EMPTY_HANDS } from "./shop";
 import { EMPTY_INPUT, type RunState } from "./types";
 
 const menu = (s: RunState, op: number, a = 0, b = 0) => stepSim(s, { ...EMPTY_INPUT, menu: menuCode(op, a, b) });
@@ -67,7 +68,7 @@ describe("대장간", () => {
     expect(tagCounts(s.player).fire).toBe(2);
   });
 
-  it("암흑 강화: 성공하면 암흑 단계 · 실패하면 무기 파괴 (처음 무기로, 기록 지움)", () => {
+  it("암흑 강화: 성공하면 암흑 단계 · 실패하면 무기 파괴 (맨손이 됨, 기록 지움)", () => {
     let ok = false;
     let broke = false;
     for (let seed = 1; seed < 40 && !(ok && broke); seed++) {
@@ -78,7 +79,7 @@ describe("대장간", () => {
       if (forgeOf(s.player).dark === 1) ok = true;
       else {
         broke = true;
-        expect(s.player.weaponId).toBe(CHARACTERS.warden.startWeapon);
+        expect(s.player.weaponId).toBe(EMPTY_HANDS);
         expect(s.player.forge?.[w]).toBeUndefined();
       }
     }

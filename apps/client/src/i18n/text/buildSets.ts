@@ -31,7 +31,7 @@ export const BUILD_SET_TEXT = {
   forgeUp: l("무기 강화", "Weapon upgrade", "武器強化"),
   forgeUpDesc: l("성공 {p}% · 실패하면 한 단계 떨어짐 · 단계마다 무기 피해 +{d}%", "{p}% success · failure drops a level · +{d}% weapon damage per level", "成功{p}%・失敗すると1段階下がる・段階ごとに武器ダメージ+{d}%"),
   forgeDark: l("암흑 강화", "Dark upgrade", "暗黒強化"),
-  forgeDarkDesc: l("성공 {p}% · 실패하면 무기 파괴 (처음 무기로) · 단계마다 무기 피해 +{d}%", "{p}% success · failure shatters the weapon (back to your starting weapon) · +{d}% weapon damage per level", "成功{p}%・失敗すると武器破壊（最初の武器に）・段階ごとに武器ダメージ+{d}%"),
+  forgeDarkDesc: l("성공 {p}% · 실패하면 무기 파괴 (맨손이 됨) · 단계마다 무기 피해 +{d}%", "{p}% success · failure shatters the weapon (you go bare-handed) · +{d}% weapon damage per level", "成功{p}%・失敗すると武器破壊（素手になる）・段階ごとに武器ダメージ+{d}%"),
   forgeTag: l("꼬리표 변환", "Tag reforge", "タグ変換"),
   forgeTagDesc: l("무기 또는 패시브를 고르고 바꿀 꼬리표를 누르세요 (대장간마다 처음 1번 무료)", "Pick the weapon or a passive, then tap the new tag (first one free at each forge)", "武器かパッシブを選び、変えるタグを押してください（鍛冶場ごとに最初の1回無料）"),
   bsAltarTags: l("증강 꼬리표 +1: {tags}", "Augment tags +1: {tags}", "増強タグ+1：{tags}"),
