@@ -1,7 +1,7 @@
-// 이클립스 그리기 도우미: 색 · 태양 검격(불꽃 도끼 궤적·찌르기, 빨강 몸통 · 앞쪽 테두리 얇은 노랑) · 일식 초승달 날(안쪽 검보라·바깥 분홍 보라 · 끝 하나 도끼날) · 블랙홀 · 연기
+// 이클립스 그리기 도우미: 색 · 태양 검격(불꽃 도끼 궤적·X자 엇베기·태양 낙인, 빨강 몸통 · 앞쪽 테두리 얇은 노랑) · 일식 초승달 날(안쪽 검보라·바깥 분홍 보라 · 끝 하나 도끼날) · 블랙홀 · 연기
 // 일식 날은 두 색만 (겹겹이 싸지 않음)
 import type { PlayerState } from "@pixel-rogue/shared";
-import { ECLIPSE, sunCutPath } from "@pixel-rogue/shared";
+import { ECLIPSE, sunCutPaths } from "@pixel-rogue/shared";
 import { additive, alpha, glow, rnd, type Ctx } from "./pwFxBits";
 
 export const TAU = Math.PI * 2;
@@ -107,9 +107,9 @@ export function embers(ctx: Ctx, pts: readonly Pt[], f: number, c: string, seed:
 const SUN_PULL = 0.8;
 const SUN_BACK = 0.07;
 
-/** 그려지는 태양 검격 길 (몸 쪽으로 당긴 자리, 꼬리 → 머리) */
+/** 그려지는 태양 검격 날 길들 (몸 쪽으로 당긴 자리, 날마다 꼬리 → 머리) */
 export const sunPts = (x: number, y: number, fx: number, fy: number, r: number, i: number) =>
-  sunCutPath(x - fx * r * SUN_BACK, y - fy * r * SUN_BACK, fx, fy, r * SUN_PULL, i);
+  sunCutPaths(x - fx * r * SUN_BACK, y - fy * r * SUN_BACK, fx, fy, r * SUN_PULL, i);
 
 /** 불꽃 도끼 두께: 가는 꼬리에서 굵어져 휘두른 끝(도끼 머리)에서 넓게 벌어짐 */
 const fireAxe = (u: number) => (0.12 + 0.88 * u ** 0.6) * (u > 0.75 ? 1 + 1.3 * ((u - 0.75) / 0.25) ** 1.2 : 1);
@@ -119,17 +119,24 @@ const thrust = (u: number) => (1 - u) ** 0.8;
 /**
  * 태양 검격 i(0~4) (모양은 sim/eclipseCuts, 몸 쪽으로 당겨 그림)
  * 1~3타: 불꽃 도끼 궤적 — 빨강 몸통(몸 쪽으로 두껍게) · 앞쪽 테두리 얇은 노랑 · 휘두른 끝이 도끼 머리
- * 4·5타: 가는 찌르기 (끝의 작은 태양 터짐은 render/eclipseFlair)
+ * 4타: X자로 엇갈리는 두 날 (둘째 날이 조금 늦게) · 5타: 내리찍는 짧은 불줄기 (태양 낙인은 render/eclipseFlair)
  * grow(0~1): 꼬리에서부터 그어 나간 만큼 · thin: 두께 배율 · al: 투명도 · spark: 불티 진행
  */
 export function rightSlash(ctx: Ctx, x: number, y: number, fx: number, fy: number, r: number, i: number, grow: number, thin: number, al: number, spark = 0): void {
   if (al <= 0 || grow <= 0 || thin <= 0) return;
-  const pts = sunPts(x, y, fx, fy, r, i);
-  const stab = i >= 3;
-  const w = Math.max(2, r * SUN_PULL * (stab ? 0.13 : 0.15)) * thin;
+  const paths = sunPts(x, y, fx, fy, r, i);
+  paths.forEach((pts, k) => {
+    const g = paths.length > 1 ? Math.min(1, Math.max(0, grow * 1.5 - k * 0.5)) : grow;
+    if (g > 0) fireBlade(ctx, pts, i >= 4, Math.max(2, r * SUN_PULL * (i >= 4 ? 0.12 : 0.15)) * thin, x, y, g, al);
+    embers(ctx, pts, spark, S_GOLD, Math.round(r * 10 + i + k));
+  });
+}
+
+/** 불꽃 날 하나 (stab: 몸 쪽이 넓고 끝이 바늘인 불줄기) */
+function fireBlade(ctx: Ctx, pts: readonly Pt[], stab: boolean, w: number, x: number, y: number, grow: number, al: number): void {
   const path = bladePath(pts, stab ? thrust : fireAxe, w, x, y, grow);
   if (path.length < 2) return;
-  // 찌르기는 양쪽으로 똑같이 · 도끼 궤적은 몸 쪽(안쪽)으로 두껍게
+  // 불줄기는 양쪽으로 똑같이 · 도끼 궤적은 몸 쪽(안쪽)으로 두껍게
   const [o, n] = stab ? [1, -1] : [0.35, -1];
   ctx.save();
   ctx.globalCompositeOperation = "lighter";
@@ -142,13 +149,12 @@ export function rightSlash(ctx: Ctx, x: number, y: number, fx: number, fy: numbe
   strip(ctx, path, (q) => q.w * o, (q) => q.w * n);
   ctx.fillStyle = alpha(S_DEEP, 0.85 * al);
   if (!stab) strip(ctx, path, (q) => -q.w * 0.4, (q) => q.w * n);
-  // 앞쪽 테두리(찌르기는 가운데 심) 노랑 · 흰 빛
+  // 앞쪽 테두리(불줄기는 가운데 심) 노랑 · 흰 빛
   const [g0, g1] = stab ? [0.35, -0.35] : [0.5, 0.25];
   ctx.fillStyle = alpha(S_GOLD, 0.95 * al);
   strip(ctx, path, (q) => q.w * g0, (q) => q.w * g1);
   ctx.fillStyle = alpha("#fff6c0", 0.85 * al);
   strip(ctx, path, (q) => q.w * (g0 - 0.08), (q) => q.w * (g1 + 0.08));
-  embers(ctx, pts, spark, S_GOLD, Math.round(r * 10 + i));
 }
 
 /** 도끼날 두께: 가는 꼬리(0)에서 점점 굵어져 머리(1)에서 가장 넓게 벌어지고 네모로 끊김 */

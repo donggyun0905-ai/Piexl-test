@@ -1,44 +1,84 @@
-// 이클립스 화려한 꾸밈 (render/eclipse·eclipseAura가 씀): 검격 번쩍임·불똥·찌른 끝 작은 태양 · 일식 잔상·도끼 머리 빛 · 돌진 그림자 · 낙하 빛기둥
+// 이클립스 화려한 꾸밈 (render/eclipse·eclipseAura가 씀): 검격 번쩍임·불똥·태양 낙인 · 일식 잔상·도끼 머리 빛 · 돌진 그림자 · 낙하 빛기둥
 // · 맞음 터짐 · 개기일식 빛살 · 영역 도는 고리·불꽃 혀 · 블랙홀 빨려 드는 알갱이 · 날아가는 초승달 꼬리 · 변신·치유 빛 알갱이
 import { SUN_BURST } from "@pixel-rogue/shared";
 import { N_PINK, S_GOLD, S_RED, sunPts, TAU, voidArc } from "./eclipseBits";
 import { additive, alpha, glow, rnd, sparks, type Ctx } from "./pwFxBits";
 
-/** 태양 검격: 휘두른 끝(도끼 머리)에서 번쩍 + 불똥 · 손 쪽 작은 빛 · 4·5타는 찌른 끝에서 작은 태양이 터짐 (f: 진행) */
+/** 태양 검격: 휘두른 끝(도끼 머리)마다 번쩍 + 불똥 · 손 쪽 작은 빛 · 4타는 엇갈린 자리 번쩍 · 5타는 태양 낙인 (f: 진행) */
 export function sunFlair(ctx: Ctx, x: number, y: number, fx: number, fy: number, r: number, i: number, f: number, seed: number): void {
-  const path = sunPts(x, y, fx, fy, r, i);
-  const v = path[path.length - 1]!;
-  const burst = r * 0.8 * (SUN_BURST[i] ?? 0);
+  const paths = sunPts(x, y, fx, fy, r, i);
+  const stamp = r * 0.8 * (SUN_BURST[i] ?? 0);
   additive(ctx, () => {
-    if (f < 0.45) glow(ctx, v[0], v[1], r * (0.3 + f * 0.5), S_GOLD, 0.8 * (1 - f / 0.45), 1.1);
     if (f < 0.3) glow(ctx, x + fx * 6, y + fy * 6, 14, S_RED, 0.6 * (1 - f / 0.3), 0.6);
-    sparks(ctx, v[0], v[1], burst ? 12 : 7, burst ? burst * 1.4 : r * 0.45, Math.min(1, f * 1.4), S_GOLD, seed);
-    if (burst && f > 0.12) sunBurst(ctx, v[0], v[1], burst, (f - 0.12) / 0.88);
+    paths.forEach((pts, k) => {
+      const v = pts[pts.length - 1]!;
+      if (!stamp && f < 0.45) glow(ctx, v[0], v[1], r * (0.3 + f * 0.5), S_GOLD, 0.8 * (1 - f / 0.45), 1.1);
+      if (!stamp) sparks(ctx, v[0], v[1], 7, r * 0.45, Math.min(1, f * 1.4), S_GOLD, seed + k);
+    });
+    if (i === 3 && f > 0.15 && f < 0.6) {
+      const c = paths[0]![6]!;
+      glow(ctx, c[0], c[1], r * 0.55, S_GOLD, 1 - (f - 0.15) / 0.45, 1.3);
+    }
+    if (stamp && f > 0.1) {
+      const v = paths[0]![paths[0]!.length - 1]!;
+      sunStamp(ctx, v[0], v[1], stamp, (f - 0.1) / 0.9, seed);
+    }
   });
 }
 
-/** 작은 태양 터짐: 흰 속 · 금빛 고리 · 금빛·빨강 빛살 (k: 진행 0~1) */
-function sunBurst(ctx: Ctx, x: number, y: number, R: number, k: number): void {
+/** 태양 낙인: 바닥에 눕는 불 원판·불꽃 혀 고리 · 흰 속 · 금빛 고리 · 금빛·빨강 빛살 · 불똥 (k: 진행 0~1) */
+function sunStamp(ctx: Ctx, x: number, y: number, R: number, k: number, seed: number): void {
   const fade = 1 - k;
-  const g = 0.6 + 0.4 * Math.min(1, k * 4);
-  glow(ctx, x, y, R * 1.5 * g, S_GOLD, 0.8 * fade, 1);
+  const g = 0.55 + 0.45 * Math.min(1, k * 5);
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(1, 0.55);
+  const disk = ctx.createRadialGradient(0, 0, 0, 0, 0, R * g);
+  disk.addColorStop(0, alpha("#fff6c0", 0.9 * fade));
+  disk.addColorStop(0.45, alpha(S_GOLD, 0.7 * fade));
+  disk.addColorStop(1, alpha(S_RED, 0));
+  ctx.fillStyle = disk;
+  ctx.beginPath();
+  ctx.arc(0, 0, R * g, 0, TAU);
+  ctx.fill();
+  ctx.strokeStyle = alpha(S_GOLD, fade);
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.arc(0, 0, R * g * 0.95, 0, TAU);
+  ctx.stroke();
+  ctx.restore();
+  // 테를 따라 솟는 불꽃 혀
+  for (let n = 0; n < 14; n++) {
+    const ang = (n / 14) * TAU;
+    const px = x + Math.cos(ang) * R * g * 0.95;
+    const py = y + Math.sin(ang) * R * g * 0.95 * 0.55;
+    const h = R * 0.35 * fade * (0.6 + 0.4 * rnd(seed, n));
+    const fl = ctx.createLinearGradient(0, py, 0, py - h);
+    fl.addColorStop(0, alpha(S_RED, 0.9 * fade));
+    fl.addColorStop(1, alpha(S_GOLD, 0));
+    ctx.fillStyle = fl;
+    ctx.beginPath();
+    ctx.moveTo(px - 2.5, py);
+    ctx.quadraticCurveTo(px, py - h * 0.5, px, py - h);
+    ctx.quadraticCurveTo(px, py - h * 0.5, px + 2.5, py);
+    ctx.fill();
+  }
+  // 가운데 작은 해 + 빛살
+  const cy = y - 4;
+  glow(ctx, x, cy, R * 0.9 * g, S_GOLD, 0.8 * fade, 1.2);
   ctx.lineCap = "round";
-  for (let n = 0; n < 16; n++) {
-    const ang = (n / 16) * TAU + k * 0.4;
-    const r1 = R * g * (n % 2 ? 1.05 : 1.55);
+  for (let n = 0; n < 12; n++) {
+    const ang = (n / 12) * TAU + k * 0.5;
+    const r1 = R * g * (n % 2 ? 0.7 : 1.05);
     ctx.strokeStyle = alpha(n % 2 ? S_RED : S_GOLD, fade);
     ctx.lineWidth = n % 2 ? 1.5 : 2.2;
     ctx.beginPath();
-    ctx.moveTo(x + Math.cos(ang) * R * 0.5 * g, y + Math.sin(ang) * R * 0.5 * g);
-    ctx.lineTo(x + Math.cos(ang) * r1, y + Math.sin(ang) * r1);
+    ctx.moveTo(x + Math.cos(ang) * R * 0.3 * g, cy + Math.sin(ang) * R * 0.3 * g);
+    ctx.lineTo(x + Math.cos(ang) * r1, cy + Math.sin(ang) * r1);
     ctx.stroke();
   }
   ctx.lineCap = "butt";
-  ctx.strokeStyle = alpha(S_GOLD, fade);
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(x, y, R * 0.5 * g, 0, TAU);
-  ctx.stroke();
+  sparks(ctx, x, cy, 14, R * 1.3, Math.min(1, k * 1.3), S_GOLD, seed);
 }
 
 /** 일식 휘두르기: 뒤따르는 옅은 잔상 날 · 도끼 머리 쪽 분홍 빛·불똥 */

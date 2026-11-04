@@ -53,7 +53,7 @@ function drawFx(ctx: Ctx, fx: EffectState, snap: Snap): void {
   const w = fx.width ?? 0;
   switch (fx.kind) {
     case "ecSlash": {
-      // 한 번에 그어(찔러) 나감 → 얇아지며 불티를 흩뿌리고 사라짐 · 5타는 4타와 같은 깊은 찌르기
+      // 한 번에 그어 나감 → 얇아지며 불티를 흩뿌리고 사라짐 · 4타는 두 날이 X자로 엇갈림 · 5타는 내리찍어 태양 낙인
       const cut = w >= 4 ? 0.18 : 0.22;
       const after = Math.max(0, (f - cut) / (1 - cut));
       const grow = easeOut(Math.min(1, f / cut));
