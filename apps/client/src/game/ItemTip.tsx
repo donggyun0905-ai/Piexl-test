@@ -2,6 +2,8 @@
 import { useEffect, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { ItemIcon, type IconItem } from "./itemIcon";
+import { passiveTag } from "@pixel-rogue/shared";
+import { TagChip } from "./build/TagChip";
 
 const TIP_HALF_WIDTH = 132;
 /** 이보다 위쪽이면 말풍선을 아래로 띄움 */
@@ -49,6 +51,7 @@ export function ItemTip({ pos, icon, name, desc, children }: Props) {
       <div className="item-tip-name">
         {icon && <ItemIcon item={icon} size={24} />}
         {name}
+        {icon?.kind === "passive" && passiveTag(icon.id) && <TagChip tag={passiveTag(icon.id)!} />}
       </div>
       <div>{desc}</div>
       {children}

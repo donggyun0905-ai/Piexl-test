@@ -7,6 +7,7 @@ import type { Lang, TextKey } from "../i18n";
 import { setSettings, useSettings } from "../settings";
 import { resetPan, usePan } from "./cameraPan";
 import { BuffPanel } from "./BuffPanel";
+import { SetPanel } from "./build/SetPanel";
 import { RunGuide } from "./RunGuide";
 import type { StatRow } from "./statsView";
 import type { Controls } from "./controls";
@@ -91,6 +92,7 @@ export function StatsPanel({ rows, t, lang, onInfo, run }: { rows: StatRow[]; t?
           </button>
         </>
       )}
+      {run && t && <SetPanel run={run} t={t} lang={lang ?? "ko"} />}
       {run && t && <BuffPanel run={run} t={t} lang={lang ?? "ko"} />}
     </div>
   );

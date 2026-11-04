@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.380",
+    date: "2026-11-04",
+    items: {
+      ko: [
+        "아이템 설명 말풍선에 패시브 꼬리표(색 칩)가 보임",
+        "왼쪽 능력치 칸에 '빌드 세트': 모은 꼬리표마다 가진 수/다음 단계·★ 단계 · 마우스를 올리면 2·4·6단계 효과 · 단계가 오르면 화면 위에 알림",
+        "제단의 방: 증강 카드에 받을 꼬리표 표시 · 알 수 없는 성좌는 증강을 누르면 꼬리표 15종 중 하나를 고름",
+      ],
+      en: [
+        "Item tooltips now show the passive's tag (colored chip)",
+        "'Build sets' in the left stats column: count / next tier and ★ tier for each tag you collect · hover for the 2/4/6 bonuses · a banner appears when a tier goes up",
+        "Altar room: the augment card shows the tags you'll get · for the Unknown constellation, pick one of 15 tags after choosing the augment",
+      ],
+      ja: [
+        "アイテム説明の吹き出しにパッシブのタグ（色チップ）を表示",
+        "左の能力値欄に「ビルドセット」：集めたタグごとに所持数／次の段階・★段階・カーソルを合わせると2・4・6段階の効果・段階が上がると画面上に通知",
+        "祭壇の部屋：増強カードに得るタグを表示・知られざる星座は増強を押すと15種のタグから1つ選ぶ",
+      ],
+    },
+  },
+  {
     version: "0.48.379",
     date: "2026-11-04",
     items: {

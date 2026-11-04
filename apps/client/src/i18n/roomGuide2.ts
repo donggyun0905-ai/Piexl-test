@@ -35,6 +35,7 @@ function altar(t: (k: TextKey) => string): L[] {
     ["카드 1 거래: 성좌마다 정해진 능력치를 받고 다른 능력치를 내줌 (100%)", "Card 1 Bargain: gain that constellation's stat and give up another (100%)", "カード1 取引: 星座ごとの能力値を得て別の能力値を渡す (100%)"],
     [`카드 2 증강: 패시브 ${ALTAR.takePassives}개를 바치고 남은 패시브 하나(무작위)에 증강 기술 둘 · 패시브가 둘 이상 필요 · 한 판에 하나 (이미 있으면 최대 체력 ${ALTAR.swapHp}을 내고 바꾸기)`, `Card 2 Augment: give up ${ALTAR.takePassives} passives, a random remaining one gets two augment skills · needs at least two passives · one per run (if you have one, pay ${ALTAR.swapHp} max HP to swap)`, `カード2 増強: パッシブ${ALTAR.takePassives}つを捧げ、残り1つ(ランダム)に増強技2つ · パッシブが2つ以上必要 · 1ランに1つ（既にあれば最大体力${ALTAR.swapHp}で付け替え）`],
     [`카드 3 무시: ${ig}%로 벌칙 (카드 1에서 내주는 능력치, 또는 패시브 둘 · ??? 성좌는 패시브 ${ALTAR.unknownIgnore}개) · ${pct(1 - ALTAR.ignoreChance)}%는 아무 일 없음`, `Card 3 Ignore: ${ig}% penalty (card 1's cost, or two passives · ??? takes ${ALTAR.unknownIgnore}) · ${pct(1 - ALTAR.ignoreChance)}% nothing happens`, `カード3 無視: ${ig}%で罰 (カード1で渡す能力値、またはパッシブ2つ · ???はパッシブ${ALTAR.unknownIgnore}つ) · ${pct(1 - ALTAR.ignoreChance)}%は何もない`],
+    ["증강을 받으면 그 성좌 꼬리표 둘이 빌드 세트에 하나씩 더해짐 (알 수 없는 성좌: 행운 + 고르는 꼬리표)", "Taking an augment adds that constellation's two tags to your build sets (Unknown: Luck + a tag you choose)", "増強を受けるとその星座のタグ2つがビルドセットに1つずつ加算（知られざる星座：幸運＋選ぶタグ）"],
     ["카드를 고르기 전에는 방을 나갈 수 없음", "You can't leave until you pick a card", "カードを選ぶまで部屋を出られない"],
   ];
 }
