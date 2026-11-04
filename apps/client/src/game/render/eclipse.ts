@@ -30,9 +30,20 @@ function ring2(ctx: Ctx, x: number, y: number, r: number, thick: number, c1: str
   ctx.restore();
 }
 
+/** 이클립스 효과 투명도 (다른 캐릭터처럼 비쳐 보이게) */
+export const EC_ALPHA = 0.6;
+
 export function drawEclipseFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   if (!EC_FX.has(fx.kind)) return false;
   if (ON_BODY.has(fx.kind)) return true;
+  ctx.save();
+  ctx.globalAlpha *= EC_ALPHA;
+  drawFx(ctx, fx, snap);
+  ctx.restore();
+  return true;
+}
+
+function drawFx(ctx: Ctx, fx: EffectState, snap: Snap): void {
   const f = 1 - fx.ticks / fx.maxTicks;
   const fade = 1 - f;
   const x = snap(fx.x);
@@ -167,5 +178,4 @@ export function drawEclipseFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       band(ctx, x, y, fx.size, a - 0.5, a + 0.5, 4 * fade);
       break;
   }
-  return true;
 }

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.23",
+    date: "2026-11-05",
+    items: {
+      ko: ["이클립스: 검격·이펙트를 다른 캐릭터처럼 비쳐 보이게 투명도를 낮춤"],
+      en: ["Eclipse: slashes and effects are now more transparent, like other characters'"],
+      ja: ["エクリプス：斬撃・エフェクトを他のキャラクターのように透けて見えるよう不透明度を下げた"],
+    },
+  },
+  {
     version: "0.49.22",
     date: "2026-11-05",
     items: {

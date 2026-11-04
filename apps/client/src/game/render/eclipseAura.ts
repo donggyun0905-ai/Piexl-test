@@ -2,6 +2,7 @@
 // · 바뀌는 오라(보라는 아래로, 노랑은 위로 꺼짐) · 치유의 빛 · 머리 위 게이지 · 지금 모습 그림 이름
 import { ECLIPSE, eclipseZoneR, isEclipse, type PlayerState, type RunState } from "@pixel-rogue/shared";
 import { blackHole, eclipseLift, N_PINK, N_VOID, S_GOLD, S_RED, TAU, voidArc } from "./eclipseBits";
+import { EC_ALPHA } from "./eclipse";
 import { holeDust, moonTrail, riseMotes, zoneFlair } from "./eclipseFlair";
 import { additive, alpha, glow, rnd, type Ctx } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
@@ -137,6 +138,8 @@ function shiftEnd(ctx: Ctx, x: number, y: number, f: number, night: boolean): vo
 export function drawEclipseAura(ctx: Ctx, s: RunState, a: number, snap: Snap): void {
   const p = s.player;
   if (!isEclipse(p)) return;
+  ctx.save();
+  ctx.globalAlpha *= EC_ALPHA;
   for (const c of p.ecCuts ?? []) {
     if (c.sun) continue;
     const k = Math.min(1, a);
@@ -148,6 +151,7 @@ export function drawEclipseAura(ctx: Ctx, s: RunState, a: number, snap: Snap): v
     moonTrail(ctx, cx - c.dx * r * 0.75, cy - c.dy * r * 0.75, c.dx, c.dy, r, c.w * 0.6, cal);
     voidArc(ctx, cx - c.dx * r * 0.75, cy - c.dy * r * 0.75, r, ang - 1.1, ang + 1.1, c.w * 0.6, cal, 0.85);
   }
+  ctx.restore();
   const x = snap(lerp(p.prevX, p.x, a));
   const y = snap(lerp(p.prevY, p.y, a));
   const lift = eclipseLift(p);
