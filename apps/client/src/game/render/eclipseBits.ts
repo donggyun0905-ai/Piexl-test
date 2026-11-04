@@ -1,7 +1,7 @@
-// 이클립스 그리기 도우미: 색 · 태양 검격(두꺼운 빨강 날 · 앞쪽 테두리 얇은 노랑) · 일식 초승달 날(안쪽 검보라·바깥 분홍 보라 · 끝 하나 도끼날) · 블랙홀 · 연기
+// 이클립스 그리기 도우미: 색 · 태양 검격(불꽃 도끼 궤적·찌르기, 빨강 몸통 · 앞쪽 테두리 얇은 노랑) · 일식 초승달 날(안쪽 검보라·바깥 분홍 보라 · 끝 하나 도끼날) · 블랙홀 · 연기
 // 일식 날은 두 색만 (겹겹이 싸지 않음)
 import type { PlayerState } from "@pixel-rogue/shared";
-import { ECLIPSE, sunCutPoints } from "@pixel-rogue/shared";
+import { ECLIPSE, sunCutPath } from "@pixel-rogue/shared";
 import { additive, alpha, glow, rnd, type Ctx } from "./pwFxBits";
 
 export const TAU = Math.PI * 2;
@@ -28,20 +28,18 @@ type Pt = readonly [number, number];
 type Sample = { x: number; y: number; nx: number; ny: number; d: number; w: number };
 
 /**
- * 꺾인 날 길: 점들을 잇는 길을 잘게 나눠, 바깥쪽(가운데 cx·cy에서 먼 쪽 = 앞쪽 테두리) 법선과 두께를 붙임
- * 두께는 양 끝이 0, 꺾이는 점(peak 번째)에서 가장 두꺼움 · upTo(0~1): 앞에서부터 그 길이까지만
+ * 날 길: 점들을 잇는 길을 잘게 나눠 한쪽(가운데 cx·cy에서 먼 쪽 = 앞쪽 테두리) 법선과 두께를 붙임
+ * 법선 쪽은 길 가운데 마디로 한 번 정해 모든 마디에 똑같이 (몸 쪽으로 꺾인 꼬리도 뒤집히지 않게)
+ * prof(u): 길 비율 u(0~1) 자리의 두께 배율 · upTo(0~1): 앞에서부터 그 길이까지만
  */
-function bladePath(pts: readonly Pt[], peak: number, w: number, cx: number, cy: number, upTo: number): Sample[] {
-  const segs = pts.slice(1).map((q, i) => Math.hypot(q[0] - pts[i]![0], q[1] - pts[i]![1]));
+function bladePath(pts: readonly Pt[], prof: (u: number) => number, w: number, cx: number, cy: number, upTo: number): Sample[] {
+  const segs = pts.slice(1).map((q, i) => Math.hypot(q[0] - pts[i]![0], q[1] - pts[i]![1]) || 1e-6);
   const total = segs.reduce((a, b) => a + b, 0);
-  const peakAt = segs.slice(0, peak).reduce((a, b) => a + b, 0);
-  const width = (d: number) => w * (d <= peakAt ? (d / peakAt) ** 0.6 : ((total - d) / (total - peakAt)) ** 0.5);
-  const norms = segs.map((len, i) => {
-    const [ax, ay] = pts[i]!;
-    const [bx, by] = pts[i + 1]!;
-    const n: Pt = [-(by - ay) / len, (bx - ax) / len];
-    return n[0] * ((ax + bx) / 2 - cx) + n[1] * ((ay + by) / 2 - cy) < 0 ? ([-n[0], -n[1]] as Pt) : n;
-  });
+  const left = segs.map((len, i): Pt => [-(pts[i + 1]![1] - pts[i]![1]) / len, (pts[i + 1]![0] - pts[i]![0]) / len]);
+  const m = Math.floor(segs.length / 2);
+  const mid = left[m]!;
+  const side = mid[0] * ((pts[m]![0] + pts[m + 1]![0]) / 2 - cx) + mid[1] * ((pts[m]![1] + pts[m + 1]![1]) / 2 - cy) < 0 ? -1 : 1;
+  const norms = left.map((n): Pt => [n[0] * side, n[1] * side]);
   const out: Sample[] = [];
   let d0 = 0;
   const end = total * upTo;
@@ -56,7 +54,7 @@ function bladePath(pts: readonly Pt[], peak: number, w: number, cx: number, cy: 
       const n0 = norms[i]!;
       const n1 = k === steps && i < segs.length - 1 ? norms[i + 1]! : n0;
       const k1 = 1 + n0[0] * n1[0] + n0[1] * n1[1];
-      out.push({ x: ax + ((bx - ax) * k) / steps, y: ay + ((by - ay) * k) / steps, nx: (n0[0] + n1[0]) / k1, ny: (n0[1] + n1[1]) / k1, d, w: width(d) });
+      out.push({ x: ax + ((bx - ax) * k) / steps, y: ay + ((by - ay) * k) / steps, nx: (n0[0] + n1[0]) / k1, ny: (n0[1] + n1[1]) / k1, d, w: w * prof(d / total) });
     }
     d0 += len;
   });
@@ -73,22 +71,6 @@ function strip(ctx: Ctx, pa: readonly Sample[], a: (q: Sample) => number, b: (q:
   }
   ctx.closePath();
   ctx.fill();
-}
-
-/** 꼭짓점(가운데 점)을 둥글게 깎은 길 [A, …둥근 곡선…, B]과 그 곡선 가운데 번호 (cut: 각 마디에서 깎는 비율) */
-function roundTip(pts: readonly Pt[], cut: number): [Pt[], number] {
-  const [A, V, B] = pts as [Pt, Pt, Pt];
-  const p1: Pt = [V[0] + (A[0] - V[0]) * cut, V[1] + (A[1] - V[1]) * cut];
-  const p2: Pt = [V[0] + (B[0] - V[0]) * cut, V[1] + (B[1] - V[1]) * cut];
-  const out: Pt[] = [A];
-  const n = 8;
-  for (let k = 0; k <= n; k++) {
-    const t = k / n;
-    const u = 1 - t;
-    out.push([u * u * p1[0] + 2 * u * t * V[0] + t * t * p2[0], u * u * p1[1] + 2 * u * t * V[1] + t * t * p2[1]]);
-  }
-  out.push(B);
-  return [out, 1 + n / 2];
 }
 
 /**
@@ -125,49 +107,47 @@ export function embers(ctx: Ctx, pts: readonly Pt[], f: number, c: string, seed:
 const SUN_PULL = 0.8;
 const SUN_BACK = 0.07;
 
-/** 그려지는 태양 검격 세 점 (몸 쪽으로 당긴 자리) */
+/** 그려지는 태양 검격 길 (몸 쪽으로 당긴 자리, 꼬리 → 머리) */
 export const sunPts = (x: number, y: number, fx: number, fy: number, r: number, i: number) =>
-  sunCutPoints(x - fx * r * SUN_BACK, y - fy * r * SUN_BACK, fx, fy, r * SUN_PULL, i);
+  sunCutPath(x - fx * r * SUN_BACK, y - fy * r * SUN_BACK, fx, fy, r * SUN_PULL, i);
+
+/** 불꽃 도끼 두께: 가는 꼬리에서 굵어져 휘두른 끝(도끼 머리)에서 넓게 벌어짐 */
+const fireAxe = (u: number) => (0.12 + 0.88 * u ** 0.6) * (u > 0.75 ? 1 + 1.3 * ((u - 0.75) / 0.25) ** 1.2 : 1);
+/** 찌르기 두께: 몸 쪽이 넓고 끝이 바늘처럼 */
+const thrust = (u: number) => (1 - u) ** 0.8;
 
 /**
- * 태양 검격 i(0~4): 몸 양옆에서 앞쪽 꼭짓점으로 모이는 '^' 날 (모양은 sim/eclipseCuts, 몸 쪽으로 당겨 그림)
- * 두꺼운 빨강 몸통(몸 쪽으로 훨씬 두껍게) · 앞쪽 테두리에만 얇은 노랑 줄 · 붉은 빛 번짐
- * 4·5타(깊은 찌르기)는 바깥 테두리는 각지고 안쪽(몸 쪽)은 꼭짓점이 살짝 둥긂
- * grow(0~1): 한쪽 끝에서부터 그어 나간 만큼 · thin: 두께 배율 · al: 투명도 · spark: 불티 진행
+ * 태양 검격 i(0~4) (모양은 sim/eclipseCuts, 몸 쪽으로 당겨 그림)
+ * 1~3타: 불꽃 도끼 궤적 — 빨강 몸통(몸 쪽으로 두껍게) · 앞쪽 테두리 얇은 노랑 · 휘두른 끝이 도끼 머리
+ * 4·5타: 가는 찌르기 (끝의 작은 태양 터짐은 render/eclipseFlair)
+ * grow(0~1): 꼬리에서부터 그어 나간 만큼 · thin: 두께 배율 · al: 투명도 · spark: 불티 진행
  */
 export function rightSlash(ctx: Ctx, x: number, y: number, fx: number, fy: number, r: number, i: number, grow: number, thin: number, al: number, spark = 0): void {
   if (al <= 0 || grow <= 0 || thin <= 0) return;
   const pts = sunPts(x, y, fx, fy, r, i);
-  const [soft, softPeak] = i >= 3 ? roundTip(pts, 0.22) : [pts as Pt[], 1];
-  if (grow >= 1) {
-    ctx.fillStyle = alpha(S_RED, 0.4 * al * thin);
-    ctx.beginPath();
-    for (const q of soft) ctx.lineTo(q[0], q[1]);
-    ctx.closePath();
-    ctx.fill();
-  }
-  const w = Math.max(2, r * SUN_PULL * (i === 0 ? 0.2 : i >= 3 ? 0.13 : 0.17)) * thin;
-  const path = bladePath(pts, 1, w, x, y, grow);
-  const back = bladePath(soft, softPeak, w, x, y, grow);
-  if (path.length < 2 || back.length < 2) return;
-  // 붉은 빛 번짐
+  const stab = i >= 3;
+  const w = Math.max(2, r * SUN_PULL * (stab ? 0.13 : 0.15)) * thin;
+  const path = bladePath(pts, stab ? thrust : fireAxe, w, x, y, grow);
+  if (path.length < 2) return;
+  // 찌르기는 양쪽으로 똑같이 · 도끼 궤적은 몸 쪽(안쪽)으로 두껍게
+  const [o, n] = stab ? [1, -1] : [0.35, -1];
   ctx.save();
   ctx.globalCompositeOperation = "lighter";
   ctx.shadowColor = alpha(S_RED, al);
-  ctx.shadowBlur = 12;
-  ctx.fillStyle = alpha(S_RED, 0.45 * al);
-  strip(ctx, path, (q) => q.w * 1.25, (q) => -q.w * 1.6, back);
+  ctx.shadowBlur = 14;
+  ctx.fillStyle = alpha(S_RED, 0.4 * al);
+  strip(ctx, path, (q) => q.w * (o + 0.25), (q) => q.w * (n - 0.35));
   ctx.restore();
-  // 빨강 몸통: 몸 쪽(안쪽)으로 두껍게 · 그 안쪽에 짙은 빨강
-  ctx.fillStyle = alpha(S_RED, al);
-  strip(ctx, path, (q) => q.w * 0.9, (q) => -q.w * 1.3, back);
-  ctx.fillStyle = alpha(S_DEEP, al);
-  strip(ctx, back, (q) => -q.w * 0.35, (q) => -q.w * 1.3);
-  // 앞쪽 테두리: 얇은 노랑 줄 (물결 없이 매끈하게)
-  ctx.fillStyle = alpha(S_GOLD, al);
-  strip(ctx, path, (q) => q.w * 0.78, (q) => q.w * 1.02 + 0.5);
-  ctx.fillStyle = alpha("#fff6c0", al);
-  strip(ctx, path, (q) => q.w * 0.84, (q) => q.w * 0.92 + 0.3);
+  ctx.fillStyle = alpha(S_RED, 0.9 * al);
+  strip(ctx, path, (q) => q.w * o, (q) => q.w * n);
+  ctx.fillStyle = alpha(S_DEEP, 0.85 * al);
+  if (!stab) strip(ctx, path, (q) => -q.w * 0.4, (q) => q.w * n);
+  // 앞쪽 테두리(찌르기는 가운데 심) 노랑 · 흰 빛
+  const [g0, g1] = stab ? [0.35, -0.35] : [0.5, 0.25];
+  ctx.fillStyle = alpha(S_GOLD, 0.95 * al);
+  strip(ctx, path, (q) => q.w * g0, (q) => q.w * g1);
+  ctx.fillStyle = alpha("#fff6c0", 0.85 * al);
+  strip(ctx, path, (q) => q.w * (g0 - 0.08), (q) => q.w * (g1 + 0.08));
   embers(ctx, pts, spark, S_GOLD, Math.round(r * 10 + i));
 }
 

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.26",
+    date: "2026-11-05",
+    items: {
+      ko: ["이클립스 태양: 공격을 새로 · 1~3타는 불꽃 도끼 궤적(1 위→아래 · 2 아래→위 · 3 옆으로 크게, 가는 꼬리는 몸 쪽으로 살짝 꺾이고 휘두른 끝은 도끼 머리) · 4·5타는 가늘고 길게 찌른 끝에서 작은 태양이 터짐 (터진 자리도 맞음) · 맞는 범위도 새 모양대로"],
+      en: ["Eclipse Sun: new attacks · hits 1–3 are fiery axe arcs (1 top→down · 2 bottom→up · 3 a wide sideways sweep; the thin tail bends slightly toward her and the leading end is an axe head) · hits 4–5 are long thin thrusts that end in a small sun burst (the burst also deals damage) · hit areas follow the new shapes"],
+      ja: ["エクリプス太陽：攻撃を一新 · 1〜3撃目は炎の斧の軌跡（1 上→下 · 2 下→上 · 3 横に大きく、細い尾は体側へ少し折れ、振った先端は斧頭）· 4・5撃目は細く長く突いた先で小さな太陽が弾ける（弾けた所にも当たる）· 当たり範囲も新しい形どおり"],
+    },
+  },
+  {
     version: "0.49.25",
     date: "2026-11-05",
     items: {

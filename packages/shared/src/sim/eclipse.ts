@@ -1,12 +1,12 @@
 // 이클립스(헬리오스): 태양(여자) ↔ 일식(남자). 한 번 누르면 그 모습의 콤보가 저절로 이어짐
-// 태양 5연격: 작은 불의 도끼로 직각으로 꺾인 검격을 아주 빠르게 날림 (5타는 여러 갈래)
+// 태양 5연격: 작은 불의 도끼로 휘두르는 불꽃 궤적 3번(위→아래·아래→위·옆으로 크게) → 찌르기 2번(끝에서 작은 태양이 터짐)
 // 일식 6연 콤보: 내려베기 → 올려베기 → 흑월 회전 → 그림자 돌진 → 초승달 참격 → 일식 낙하(뛰어오른 동안 무적, 거대한 내려찍기 + 블랙홀)
 // 게이지가 다 차면 오라에 감싸여(무적) 다른 모습으로 바뀜. 수치는 weaponsEclipse.ECLIPSE, 아이템은 itemsEclipse
 import { TICK_RATE } from "../constants";
 import { ECLIPSE_PERKS as K } from "../itemsEclipse";
 import { ECLIPSE as E } from "../weaponsEclipse";
 import { alive, inCircle, inCone, onSegment } from "./s2Kit";
-import { sunCutPoints } from "./eclipseCuts";
+import { SUN_BURST, sunCutPath } from "./eclipseCuts";
 import { nightReach, sunReach } from "./eclipseStats";
 import { comboStep } from "./comboStep";
 import { eclipsePower, eclipseWorld, ecHit, totality } from "./eclipseZone";
@@ -32,27 +32,27 @@ function fly(p: PlayerState, dx: number, dy: number, dmg: number): void {
   (p.ecCuts ??= []).push({ x: p.x + dx * 4, y: p.y + dy * 4, dx, dy, t, max: t, sp: E.moonSpeed, w: E.moonW, dmg, sun: false, k: 0, size: 1, hit: [] });
 }
 
-/** 태양 연격 하나 (i: 0~4): 직각 검격(1 위 · 2 가운데 · 3 아래에서 꺾임 · 4 깊게 찌름) · 5타는 4타와 같은 깊은 찌르기(더 아픔) */
+/** 태양 연격 하나 (i: 0~4): 불꽃 도끼 궤적(1 위→아래 · 2 아래→위 · 3 옆으로 크게) · 4·5 찌르기 + 끝 태양 터짐 (5타가 더 길고 아픔) */
 function sunMove(s: RunState, i: number): void {
   const p = s.player;
   faceNear(s, sunReach(p) + 30);
   const dmg = eclipsePower(p);
   const reach = sunReach(p);
-  // 그려진 날을 따라 맞힘 (두 팔)
-  // 5타는 더 길게 깊게 찌름 (더 아픔)
+  // 그려진 날(불꽃 도끼 궤적 · 4·5타는 찌르기)을 따라 맞힘 · 5타는 더 길게 깊게 찌름 (더 아픔)
   const fin = i >= 4;
   const r = reach * (fin ? E.sunFinSize * (hasPerk(p, "ecFlare") ? K.ecFlare.size : 1) : 1);
-  const [a, v, b] = sunCutPoints(p.x, p.y, p.faceX, p.faceY, r, i);
+  const path = sunCutPath(p.x, p.y, p.faceX, p.faceY, r, i);
   const w = r * E.cutW;
   const hit = new Set<number>();
-  // 몸 바로 앞 반원(도끼를 휘두른 자리)도 같이 벰: 날 사이에 붙은 적이 빠지지 않게
-  const near = inCone(s, reach * E.sunNear, 0);
-  for (const [q0, q1] of [[a!, v!], [v!, b!]])
-    for (const e of [...onSegment(s, q0![0], q0![1], q1![0], q1![1], w), ...near]) {
-      if (hit.has(e.id)) continue;
-      hit.add(e.id);
-      ecHit(s, e, dmg * (fin ? E.sunFinMul : E.cutMul), fin ? 3 : 1);
-    }
+  // 몸 바로 앞 반원(도끼를 휘두른 자리)도 같이 벰: 날 사이에 붙은 적이 빠지지 않게 · 찌른 끝은 작은 태양이 터짐
+  const tip = path[path.length - 1]!;
+  const targets = [...inCone(s, reach * E.sunNear, 0), ...(SUN_BURST[i] ? inCircle(s, tip[0], tip[1], r * SUN_BURST[i]!) : [])];
+  for (let k = 1; k < path.length; k++) targets.push(...onSegment(s, path[k - 1]![0], path[k - 1]![1], path[k]![0], path[k]![1], w));
+  for (const e of targets) {
+    if (hit.has(e.id)) continue;
+    hit.add(e.id);
+    ecHit(s, e, dmg * (fin ? E.sunFinMul : E.cutMul), fin ? 3 : 1);
+  }
   addEffect(s, { kind: "ecSlash", x: p.x, y: p.y - 3, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: fin ? 15 : 13, width: i });
 }
 
