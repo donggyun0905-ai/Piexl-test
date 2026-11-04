@@ -1,4 +1,5 @@
 // 투사체
+import { dashDodged } from "./remnant";
 import { ambushCut, ambushHitFx } from "./origin";
 import { lanceHit } from "./hiddenPerks";
 import { PERKS } from "../perks";
@@ -120,7 +121,7 @@ export function updateProjectiles(s: RunState, frozen = false): void {
         const p = s.player;
         const rr = p.r + pr.r;
         // 검은 독액(전갈 필살기)은 대시로 피하지 못함
-        if (gone || (s.party && !isAlive(p)) || dist2(p, pr) >= rr * rr || (p.dashTicks !== 0 && !pr.doom)) return;
+        if (gone || (s.party && !isAlive(p)) || dist2(p, pr) >= rr * rr || (!pr.doom && dashDodged(s))) return;
         if (tryParry(s, pr) || renBlock(s, pr)) gone = true;
         else {
           const open = p.invulnTicks <= 0 && p.shieldTicks <= 0;

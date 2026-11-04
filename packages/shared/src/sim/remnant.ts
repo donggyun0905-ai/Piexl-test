@@ -44,6 +44,13 @@ export function remnantDodge(s: RunState): void {
   addEffect(s, { kind: "rmDodge", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: 30, maxTicks: 24, follow: true });
 }
 
+/** 대시로 적 공격을 피했으면 true (잔영이면 회피 슬로우모션). 탄·휘두르기·보스 기술 모두 여기로 */
+export function dashDodged(s: RunState): boolean {
+  if (s.player.dashTicks <= 0) return false;
+  remnantDodge(s);
+  return true;
+}
+
 /** 슬로우모션 끝: 적 탄을 원래 빠르기로 */
 function endSlow(s: RunState): void {
   const p = s.player;

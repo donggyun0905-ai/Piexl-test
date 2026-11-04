@@ -55,6 +55,22 @@ describe("잔영", () => {
     expect(s.player.rmSlow ?? 0).toBe(0);
   });
 
+  it("적 탄(원거리)·위험 표시(휘두르기) 공격도 대시로 피하면 슬로우모션", () => {
+    const s = remnant();
+    s.enemies = [];
+    s.player.dashTicks = 5;
+    s.projectiles.push({ id: 900, fromPlayer: false, x: s.player.x, y: s.player.y, prevX: s.player.x, prevY: s.player.y, r: 3, vx: 0, vy: 0, damage: 10, ticksLeft: 30 });
+    stepSim(s, IDLE);
+    expect(s.player.rmSlow).toBeGreaterThan(0);
+    const h = remnant();
+    h.enemies = [];
+    h.player.dashTicks = 5;
+    (h.hazards ??= []).push({ x: h.player.x, y: h.player.y, radius: 20, damage: 10, tick: h.tick, start: h.tick });
+    stepSim(h, IDLE);
+    expect(h.player.rmSlow).toBeGreaterThan(0);
+    expect(h.player.hp).toBe(h.player.stats.maxHp);
+  });
+
   it("슬로우모션 중 적과 적 탄이 느려지고, 끝나면 원래 빠르기로", () => {
     const s = remnant();
     s.enemies = [];

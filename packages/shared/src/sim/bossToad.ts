@@ -1,5 +1,6 @@
 // 시즌 2 1단계 보스 늪의 두꺼비 왕: 폴짝 다가옴 → 차례로 ① 뛰어 내려찍기(떨어진 자리가 진흙) ② 혀로 끌어당기기 ③ 진흙 덩이 뱉기(떨어진 자리가 진흙)
 // 체력 절반 아래면 더 자주·더 많이 (내려찍을 때 진흙 탄 고리). 진흙은 사람을 느리게 함 (sim/terrain)
+import { dashDodged } from "./remnant";
 import { TILE_SIZE } from "../constants";
 import { distTo, fan, half, hitDamage, ring } from "./bossKit";
 import { addShape, inHazard } from "./hazards";
@@ -116,7 +117,7 @@ export function updateToad(s: RunState, e: EnemyState, toP: Vec): void {
       s,
       () => {
         const p = s.player;
-        if (p.dashTicks > 0 || !inHazard(line, p.x, p.y, p.r)) return;
+        if (!inHazard(line, p.x, p.y, p.r) || dashDodged(s)) return;
         p.x -= e.dirX * R.PULL;
         p.y -= e.dirY * R.PULL;
         keepInRoom(p, roomGrid(s));

@@ -1,5 +1,6 @@
 // 갓이터 혼자 남았을 때: 방을 4분할해 무작위 구역에 거대한 낫을 내려 하나씩 닫음 (마지막 한 곳만 남음)
 // 닫히는 순간 그 구역에 있으면(대시로 피하지 못하면) 피해 20 + 태초의 어둠처럼 깜깜해짐. 닫힌 구역에 머물러도 같음
+import { dashDodged } from "./remnant";
 import { ROOM_CX, ROOM_CY } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { damagePlayer } from "./combat";
@@ -49,7 +50,7 @@ export function closeZones(s: RunState, e: EnemyState): boolean {
 
 function trap(s: RunState): void {
   const p = s.player;
-  if (p.dashTicks > 0 || p.invulnTicks > 0) return;
+  if (p.invulnTicks > 0 || dashDodged(s)) return;
   damagePlayer(s, ZONE_DAMAGE);
   p.blindTicks = R.BLIND_TICKS;
 }

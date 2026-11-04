@@ -1,6 +1,7 @@
 // 검은 잔영의 셋째 짐승 거대 매: 늘 하늘에 있어 보이지 않음 (맞지 않음)
 // 내려찍기: 갑자기 플레이어 자리에 범위가 뜨고 찍어 내림 → 피하면 매가 3초 경직(이때 때리기), 맞으면 곧바로 하늘로
 // 세 줄 활강: 방을 가로지르는 선 세 개가 차례로 → 매가 선을 따라 활강한 뒤 어지러워 마지막 선 끝에 떨어져 3초 경직
+import { dashDodged } from "./remnant";
 import { createRng, deriveSeed } from "../rng";
 import { half, hitDamage } from "./bossKit";
 import { damagePlayer } from "./combat";
@@ -101,7 +102,7 @@ export function updateRoc(s: RunState, e: EnemyState): void {
     const dx = p.x - e.x;
     const dy = p.y - e.y;
     const rr = R.DIVE_R + p.r;
-    if (dx * dx + dy * dy <= rr * rr && p.dashTicks <= 0) {
+    if (dx * dx + dy * dy <= rr * rr && !dashDodged(s)) {
       damagePlayer(s, hitDamage(s) * R.DIVE_MUL);
       e.phase = "blink";
       e.timer = R.RISE;

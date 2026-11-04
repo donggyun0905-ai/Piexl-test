@@ -1,4 +1,5 @@
 // 졸개 행동 (enemies에서 부름): 날벌레(무리 지어 천천히, 흔들리며) · 가디언(돌진 → 멈춰서 앞쪽 휘두르기)
+import { dashDodged } from "./remnant";
 import { ENEMIES } from "../content";
 import { renMelee } from "./ren";
 import { damagePlayer } from "./combat";
@@ -86,7 +87,7 @@ export function updateGuardian(s: RunState, e: EnemyState, toP: readonly [number
     const dx = p.x - e.x;
     const dy = p.y - e.y;
     const d = Math.sqrt(dx * dx + dy * dy);
-    if (d <= GUARD_REACH + p.r && (d < e.r + p.r || (dx * e.dirX + dy * e.dirY) / d >= GUARD_ARC) && p.dashTicks === 0) damagePlayer(s, renMelee(s, R.GUARD_DAMAGE), "guardian");
+    if (d <= GUARD_REACH + p.r && (d < e.r + p.r || (dx * e.dirX + dy * e.dirY) / d >= GUARD_ARC) && !dashDodged(s)) damagePlayer(s, renMelee(s, R.GUARD_DAMAGE), "guardian");
     addEffect(s, { kind: "cleave", x: e.x, y: e.y, dirX: e.dirX, dirY: e.dirY, size: GUARD_REACH, maxTicks: 10 });
     e.phase = "walk";
     e.timer = 90;

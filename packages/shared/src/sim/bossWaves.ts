@@ -1,4 +1,5 @@
 // 보스가 바닥을 쳐서 퍼지는 원형 파동: 원이 바깥으로 커지며 지나가고, 고리에 닿으면 피해 (대시 무적으로 넘어감)
+import { dashDodged } from "./remnant";
 import { damagePlayer } from "./combat";
 import type { EnemyState, RunState } from "./types";
 
@@ -26,7 +27,7 @@ export function updateWaves(s: RunState, e: EnemyState): void {
     }
     w.r += w.speed;
     const d = Math.hypot(p.x - w.x, p.y - w.y);
-    if (!w.hit && Math.abs(d - w.r) < R.WAVE_W + p.r && p.dashTicks === 0) {
+    if (!w.hit && Math.abs(d - w.r) < R.WAVE_W + p.r && !dashDodged(s)) {
       w.hit = true;
       damagePlayer(s, w.damage);
     }
