@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.20",
+    date: "2026-11-05",
+    items: {
+      ko: [
+        "이클립스 태양: 검격을 두꺼운 빨강 날로 (몸 쪽으로 더 두껍게) · 앞쪽 테두리에만 얇은 노랑 불꽃 무늬가 일렁임 · 검격을 몸에 더 붙여 직접 베는 느낌으로",
+        "이클립스 일식: 내려베기·올려베기·초승달 참격의 휘두르는 쪽 끝을 도끼날처럼 네모나고 두껍게 · 날을 더 진하게 · 바깥 날에 밝은 줄",
+      ],
+      en: [
+        "Eclipse Sun: slashes are now thick red blades (thicker toward her body) with a thin flickering gold flame pattern only on the front edge · drawn closer to her body so the hits feel like her own strikes",
+        "Eclipse (Eclipse form): the leading end of Downward Cut, Rising Cut and Crescent Slash is now square and heavy like an axe blade · bolder blades with a bright outer edge",
+      ],
+      ja: [
+        "エクリプス太陽：斬撃を太い赤い刃に（体側ほど太く）· 前側の縁だけに細い黄色の炎模様が揺らめく · 斬撃を体に近づけ、自分で斬っている感じに",
+        "エクリプス日食：振り下ろし・振り上げ・三日月斬りの振る側の先端を斧の刃のように四角く太く · 刃をより濃く · 外側の刃に明るい線",
+      ],
+    },
+  },
+  {
     version: "0.49.19",
     date: "2026-11-05",
     items: {

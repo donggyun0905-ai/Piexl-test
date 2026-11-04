@@ -1,4 +1,4 @@
-// 이클립스 그리기 (1): 효과 — 태양 직각 검격(날 하나, 안쪽 빨강·바깥 노랑, 타마다 꺾이는 자리가 다름) · 일식 내려베기·올려베기·초승달
+// 이클립스 그리기 (1): 효과 — 태양 검격(두꺼운 빨강 날 · 앞쪽 테두리에 노랑 불꽃 무늬, 몸에 붙여 그림) · 일식 내려베기·올려베기·초승달
 // · 흑월 회전 · 그림자 돌진 · 뛰어오름 · 일식 낙하(검보라 고리가 크게 퍼짐) · 맞음 표시 · 영역 불꽃 · 개기일식
 // 날아가는 초승달·영역·블랙홀·바뀌는 오라·치유의 빛·게이지는 render/eclipseAura
 import type { EffectState } from "@pixel-rogue/shared";
@@ -51,14 +51,15 @@ export function drawEclipseFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       break;
     }
     case "ecHew": {
-      // 내려베기(0)는 시계 방향, 올려베기(1)는 반대로, 초승달(2)은 짧고 굵게 · 날 하나에 분홍 보라 테 + 검보라 속
+      // 내려베기(0)는 시계 방향, 올려베기(1)는 반대로, 초승달(2)은 짧고 굵게 · 날 하나에 분홍 보라 테 + 검보라 속 · 끝 하나는 도끼날
       const sweep = easeOut(Math.min(1, f / 0.3));
       const arc = w === 2 ? 0.75 : 1.2;
       const dir = w === 1 ? -1 : 1;
       const from = a - arc * dir;
       const to = from + arc * 2 * dir * sweep;
       const after = Math.max(0, (f - 0.3) / 0.7);
-      voidArc(ctx, x, y, fx.size, Math.min(from, to), Math.max(from, to), fx.size * (w === 2 ? 0.32 : 0.26) * (1 - after * 0.7), Math.min(1, (1 - after) * 1.3), 0.78);
+      // 휘두르는 쪽 끝(앞장선 끝)은 도끼날처럼 네모나고 두껍게 · 꼬리는 가늘게 · 진하게
+      voidArc(ctx, x, y, fx.size, Math.min(from, to), Math.max(from, to), fx.size * (w === 2 ? 0.34 : 0.28) * (1 - after * 0.6), Math.min(1, (1 - after) * 1.8), 0.78, dir > 0 ? 1 : 0);
       if (after > 0) smoke(ctx, x + Math.cos(to) * fx.size, y + Math.sin(to) * fx.size * 0.78, 3, 8, after, seed);
       break;
     }
