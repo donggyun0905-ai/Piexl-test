@@ -12,6 +12,7 @@ import { ghostTick } from "./bedouinGhosts";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid } from "./util";
 import { setDashMul } from "./buildSets";
+import { fenrirDashMul } from "./fenrirStats";
 
 const where = (s: RunState) => `${s.floor}/${s.roomId}`;
 const roll = (s: RunState, label: string) => createRng(deriveSeed(s.seed, label, s.tick)).nextFloat();
@@ -54,7 +55,7 @@ export function rechargeDash(p: PlayerState, cooldown: number): void {
 }
 
 /** 신기루 걸음: 대시 대기 시간 배율 */
-export const dashCooldownMul = (p: PlayerState) => (hasPerk(p, "mirageStep") ? K.mirageStep.cooldown : 1) * (1 - (p.pwDashCut ?? 0)) * setDashMul(p);
+export const dashCooldownMul = (p: PlayerState) => (hasPerk(p, "mirageStep") ? K.mirageStep.cooldown : 1) * (1 - (p.pwDashCut ?? 0)) * setDashMul(p) * fenrirDashMul(p);
 
 /** 피해 배율: 태양 전사는 모아 둔 대시 하나마다 +5% */
 function power(p: PlayerState): number {

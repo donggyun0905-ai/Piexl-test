@@ -74,9 +74,9 @@ export const CHARACTERS = {
   plague: { id: "plague", maxHp: 100, damage: 10, moveSpeed: 1.25, luck: 1, startWeapon: "mosquitoSwarm" },
   /** 학살자 (헬리오스): 피에 젖은 대낫 5연속 콤보, 기술마다 체력 5 · 체력 280 · 회복 안 됨 · 피의 학살 (sim/slayer) */
   slayer: { id: "slayer", maxHp: 280, damage: 16, moveSpeed: 1.3, luck: 0, startWeapon: "bloodScythe" },
-  /** 이터 (헬리오스): 이빨 달린 그림자, 열 가지 공격이 확률로 · 넓고 세지만 느림 · 먹은 적마다 재생력 +0.1 (sim/eater) */
+  /** 이터 (헬리오스): 이빨 달린 그림자, 열 가지 공격이 확률로 (sim/eater) */
   eater: { id: "eater", maxHp: 110, damage: 16, moveSpeed: 1.25, luck: 0, startWeapon: "shadowMaw" },
-  /** 묵인 (헬리오스): 거대한 몸 · 방어력 30 · 맞아도 무적 없음 · 방어력 300% 돌진 · 재생력 10 · 회복약은 천천히 (sim/mukin) */
+  /** 묵인 (헬리오스): 거대한 몸 · 맞아도 무적 없음 · 방어력 300% 돌진 (sim/mukin) */
   mukin: { id: "mukin", maxHp: 160, damage: 6, moveSpeed: 1.05, luck: 0, startWeapon: "ironHorn" },
   /** 사멸 (헬리오스, 사천 당가): 독침, 모든 침에 독 + 죽음 · 침을 많이 던질수록 독가스 (sim/samyeol) */
   samyeol: { id: "samyeol", maxHp: 95, damage: 11, moveSpeed: 1.35, luck: 1, startWeapon: "tangNeedle" },
@@ -108,6 +108,8 @@ export const CHARACTERS = {
   leo: { id: "leo", maxHp: 120, damage: 12, moveSpeed: 1.4, luck: 1, startWeapon: "leClaw", defense: 5 },
   /** 오닉스 (테라코어, 영물): 칠보 광륜 · 비행 대시 · 보석 7 (sim/onyx) */
   onyx: { id: "onyx", maxHp: 190, damage: 15, moveSpeed: 0.95, luck: 1, startWeapon: "oxHalo", defense: 30 },
+  /** 펜리르 (비르디아, 영물): 대검 고정 5연 콤보 (sim/fenrir) */
+  fenrir: { id: "fenrir", maxHp: 45, damage: 16, moveSpeed: 1.55, luck: 0, startWeapon: "fnKingBlade", dodge: 0.25, sharpness: 0.25 },
   /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 대시는 땅굴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },
   /** 운명의 여행자 (히든, 시즌 2): 운명의 활로 모아 쏘는 한 발 · 모래시계가 뒤집힐 때마다 주사위로 운명(sim/voyager) */

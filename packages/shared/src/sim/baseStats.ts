@@ -17,6 +17,7 @@ import { luxExtras } from "./lux";
 import { devilExtras } from "./devilPerks";
 import { setExtras, setTaken } from "./buildSets";
 import { setOnHit, setTick } from "./buildSetFx";
+import { fenrirDodged, fenrirExtras } from "./fenrirStats";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -47,9 +48,11 @@ export function extraOf(p: PlayerState): ExtraStats {
   const devil = devilExtras(p);
   // 빌드 세트 효과 (sim/buildSets)
   const set = setExtras(p);
-  if (!add && !grow && !lux && !gym && !boon && !devil && !set) return base;
+  // 펜리르 벼린 송곳니·노장의 투혼 (sim/fenrirStats)
+  const fen = fenrirExtras(p);
+  if (!add && !grow && !lux && !gym && !boon && !devil && !set && !fen) return base;
   const out = { ...base };
-  for (const a of [add, grow, lux, gym, boon, devil, set]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
+  for (const a of [add, grow, lux, gym, boon, devil, set, fen]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
   return out;
 }
 
@@ -60,6 +63,7 @@ export function dodged(s: RunState): boolean {
   const d = extraOf(s.player).dodge;
   if (d <= 0 || roll(s, "dodge", 0) >= d) return false;
   addEffect(s, { kind: "ring", x: s.player.x, y: s.player.y, dirX: 0, dirY: 0, size: 10, maxTicks: 10 });
+  fenrirDodged(s);
   return true;
 }
 

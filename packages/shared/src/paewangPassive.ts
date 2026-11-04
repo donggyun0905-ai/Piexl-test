@@ -54,6 +54,8 @@ export const PW_PASSIVE = {
   leoN: 3, leoMul: 1.5,
   /** 오닉스 칠보: 평타 일곱 번째마다 피해 배율 */
   onyxN: 7, onyxMul: 2.2,
+  /** 펜리르 천랑 낙인: 평타 다섯 번째마다 피해 배율 */
+  fenrirN: 5, fenrirMul: 2,
   /** 잔영 치명타 피해 */
   remnantCrit: 2,
   /** 음양사 수호 부적: 평타가 맞으면 가장 가까운 아군 회복 (최대 체력 비율) */

@@ -65,6 +65,7 @@ export const CHARACTER_GOALS: Partial<Record<CharacterId, CharGoal>> = {
   pungryu: { m: "moveSpeed", n: 2 },
   leo: { faction: "ascalon", taboo: 45 },
   onyx: { faction: "terracore", taboo: 45 },
+  fenrir: { faction: "virdia", taboo: 45 },
   chronomancer: { a: "thrift" },
   fly: { f: "clear7" },
   elder: { c: "traps", n: 1000 },

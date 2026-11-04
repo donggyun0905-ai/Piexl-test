@@ -56,6 +56,13 @@ export const CHARACTER_TEXT_NEW = {
     en: "Spirit Pact · A student spiritist of Virdia. She only fires magic missiles; three small spirits (one swaps at random every 30s) and her weapon, a great spirit, do the fighting · 10 great spirits (Idra is the grown-up Idra of the future)",
     ja: "精霊契約 · ヴィルディアの学生の精霊使い。本人はマジックミサイルだけ、そばの小さな精霊三体（30秒ごとに一体ずつランダムに入れ替わる）と武器の大精霊が戦う · 大精霊10（イドラは大人になった未来のイドラ）",
   },
+  fenrir: { ko: "펜리르", en: "Fenrir", ja: "フェンリル" },
+  fenrirDesc: {
+    ko: "영물 · 비르디아. 지난 비르디아 왕이 다스리던 늙은 백랑. 왕이 쓰던 거대한 대검을 입에 물고 다시 전쟁에 나섬 · 한 번 누르면 고정 5연 콤보(물어 베기·되베기·지면 검기·난도·천랑 낙인) · 아주 빠르고 공격력이 높지만 체력 45 · 기본 회피 25%·예리함 25%",
+    en: "Spirit Beast · Virdia. An old white wolf once ruled by the late king of Virdia, now marching to war again with the king's giant blade in its jaws · One press runs a fixed 5-hit combo (Bite Slash, Return Slash, Ground Wave, Frenzy Cut, Sirius Brand) · very fast and hard-hitting, but only 45 HP · base 25% dodge and 25% Sharpness",
+    ja: "霊獣 · ヴィルディア。先代ヴィルディア王に仕えた老いた白狼。王が使っていた巨大な大剣をくわえ、再び戦に出る · 一度押すと固定5連コンボ（噛み斬り・返し斬り・地面の剣気・乱刀・天狼の烙印）· とても速く攻撃力も高いが体力45 · 基本回避25%・鋭さ25%",
+  },
+  fang: { ko: "선왕의 대검", en: "Late King's Blade", ja: "先王の大剣" },
   oni: { ko: "오니", en: "Oni", ja: "鬼" },
   oniDesc: {
     ko: "방망이 · 무기가 본체인 도깨비. 느리고 아주 센 휘두르기(공격력 36) + 무기마다 확률 추가 공격 · 25번 휘두르면 30초 신인족(공격력 +45%·최대 체력 +50%·추가 공격 100%) · 공격력 아이템은 최대 체력으로, 공격 속도는 체력 재생력으로, 사거리는 추가 공격 범위로 · 받는 피해 +30% · ??? : 최대 체력 400, 부활 1회 뒤 얻을 수 있는 명계의 무기 · ??? : 재생력 60, 부활 1회 뒤 얻을 수 있는 청전의 무기",

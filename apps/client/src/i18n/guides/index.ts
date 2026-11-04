@@ -13,15 +13,16 @@ import { GUIDE_EN_T2, GUIDE_JA_T2, GUIDE_KO_T2 } from "./t2";
 import { GUIDE_EN_T3, GUIDE_JA_T3, GUIDE_KO_T3 } from "./t3";
 import { GUIDE_EN_ASC, GUIDE_JA_ASC, GUIDE_KO_ASC } from "./asc";
 import { GUIDE_EN_ASC2, GUIDE_JA_ASC2, GUIDE_KO_ASC2 } from "./asc2";
+import { GUIDE_EN_VIR2, GUIDE_JA_VIR2, GUIDE_KO_VIR2 } from "./vir2";
 import { GUIDE_EN_SECRET, GUIDE_JA_SECRET, GUIDE_KO_SECRET } from "./secret";
 import { GUIDE_EN_ARCHIVE, GUIDE_JA_ARCHIVE, GUIDE_KO_ARCHIVE } from "./archive";
 import { EVO_DESC } from "../items/morphEvo";
 import { fateParts } from "../items/voyagerAbilities";
 
 const GUIDES: Record<Lang, Partial<Record<CharacterId, readonly string[]>>> = {
-  ko: { ...GUIDE_KO_A, ...GUIDE_KO_B, ...GUIDE_KO_S2, ...GUIDE_KO_H2, ...GUIDE_KO_T2, ...GUIDE_KO_T3, ...GUIDE_KO_ASC, ...GUIDE_KO_ASC2, ...GUIDE_KO_SECRET, ...GUIDE_KO_ARCHIVE },
-  en: { ...GUIDE_EN_A, ...GUIDE_EN_B, ...GUIDE_EN_S2, ...GUIDE_EN_H2, ...GUIDE_EN_T2, ...GUIDE_EN_T3, ...GUIDE_EN_ASC, ...GUIDE_EN_ASC2, ...GUIDE_EN_SECRET, ...GUIDE_EN_ARCHIVE },
-  ja: { ...GUIDE_JA_A, ...GUIDE_JA_B, ...GUIDE_JA_S2, ...GUIDE_JA_H2, ...GUIDE_JA_T2, ...GUIDE_JA_T3, ...GUIDE_JA_ASC, ...GUIDE_JA_ASC2, ...GUIDE_JA_SECRET, ...GUIDE_JA_ARCHIVE },
+  ko: { ...GUIDE_KO_A, ...GUIDE_KO_B, ...GUIDE_KO_S2, ...GUIDE_KO_H2, ...GUIDE_KO_T2, ...GUIDE_KO_T3, ...GUIDE_KO_ASC, ...GUIDE_KO_ASC2, ...GUIDE_KO_VIR2, ...GUIDE_KO_SECRET, ...GUIDE_KO_ARCHIVE },
+  en: { ...GUIDE_EN_A, ...GUIDE_EN_B, ...GUIDE_EN_S2, ...GUIDE_EN_H2, ...GUIDE_EN_T2, ...GUIDE_EN_T3, ...GUIDE_EN_ASC, ...GUIDE_EN_ASC2, ...GUIDE_EN_VIR2, ...GUIDE_EN_SECRET, ...GUIDE_EN_ARCHIVE },
+  ja: { ...GUIDE_JA_A, ...GUIDE_JA_B, ...GUIDE_JA_S2, ...GUIDE_JA_H2, ...GUIDE_JA_T2, ...GUIDE_JA_T3, ...GUIDE_JA_ASC, ...GUIDE_JA_ASC2, ...GUIDE_JA_VIR2, ...GUIDE_JA_SECRET, ...GUIDE_JA_ARCHIVE },
 };
 
 /** 운명의 여행자 운명 36칸: "⚀⚁ 버프(설명) / 기술(설명) / 능력(설명)" */

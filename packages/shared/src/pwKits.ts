@@ -13,7 +13,7 @@ export const PW_MOTIF: Partial<Record<CharacterId, string>> = {
   elementalist: "elements", engineer: "lightning", punk: "lightning",
   gunner: "tech", automata: "tech", artifacter: "tech", rider: "tech", tracker: "tech",
   plague: "poison", samyeol: "poison",
-  ninja: "shadow", remnant: "shadow", mukin: "shadow", silk: "shadow", pungryu: "wind", leo: "lightning", onyx: "elements", byeonhui: "shadow",
+  ninja: "shadow", remnant: "shadow", mukin: "shadow", silk: "shadow", pungryu: "wind", leo: "lightning", onyx: "elements", fenrir: "wind", byeonhui: "shadow",
   forgotten: "holy", apostle: "holy", warden: "holy", doctor: "holy",
   slayer: "blood", eater: "blood",
   elder: "nature", idra: "nature", ren: "nature",
