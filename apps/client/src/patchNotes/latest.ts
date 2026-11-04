@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.29",
+    date: "2026-11-05",
+    items: {
+      ko: ["이클립스: 새 그림을 색을 더 진하게 하지 않고 원래 색 그대로"],
+      en: ["Eclipse: the new sprites now keep their original colors (no extra saturation)"],
+      ja: ["エクリプス：新しい絵の色を濃くせず元の色のままに"],
+    },
+  },
+  {
     version: "0.49.28",
     date: "2026-11-05",
     items: {
