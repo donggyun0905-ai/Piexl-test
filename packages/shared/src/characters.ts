@@ -106,7 +106,7 @@ export const CHARACTERS = {
   pungryu: { id: "pungryu", maxHp: 90, damage: 10, moveSpeed: 1.35, luck: 5, startWeapon: "puHeaven" },
   /** 레오 (아스칼론, 영물): 뇌전 발톱 (sim/leo) */
   leo: { id: "leo", maxHp: 120, damage: 12, moveSpeed: 1.4, luck: 1, startWeapon: "leClaw", defense: 5 },
-  /** 오닉스 (아스칼론, 영물): 칠보 광륜 · 비행 대시 · 보석 7 (sim/onyx) */
+  /** 오닉스 (테라코어, 영물): 칠보 광륜 · 비행 대시 · 보석 7 (sim/onyx) */
   onyx: { id: "onyx", maxHp: 190, damage: 15, moveSpeed: 0.95, luck: 1, startWeapon: "oxHalo", defense: 30 },
   /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 대시는 땅굴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },

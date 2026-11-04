@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.14",
+    date: "2026-11-04",
+    items: {
+      ko: [
+        "레오 여는 조건: 아스칼론 캐릭터를 모두 열고, 저마다 금기의 서 45점 이상으로 라스트 보스 클리어 (캐릭터 선택창에 진행도)",
+        "오닉스 여는 조건: 테라코어 캐릭터를 모두 열고, 저마다 금기의 서 45점 이상으로 라스트 보스 클리어 · 오닉스의 진영을 테라코어로 바로잡음",
+      ],
+      en: [
+        "Leo unlock: unlock every Ascalon character and clear a last boss with each at 45+ Taboo points (progress shown on character select)",
+        "Onyx unlock: unlock every Terracore character and clear a last boss with each at 45+ Taboo points · Onyx now correctly belongs to Terracore",
+      ],
+      ja: [
+        "レオの解放条件：アスカロンのキャラをすべて解放し、それぞれ禁忌の書45点以上でラストボスをクリア（キャラ選択画面に進行度）",
+        "オニキスの解放条件：テラコアのキャラをすべて解放し、それぞれ禁忌の書45点以上でラストボスをクリア · オニキスの陣営をテラコアに修正",
+      ],
+    },
+  },
+  {
     version: "0.49.13",
     date: "2026-11-04",
     items: {

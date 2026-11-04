@@ -1,11 +1,11 @@
-// 캐릭터 설명: 아스칼론 둘째 묶음 (영사 · 풍류사 · 레오 · 오닉스) · 한·영·일
+// 캐릭터 설명: 아스칼론 둘째 묶음 (영사 · 풍류사 · 레오 · 테라코어 오닉스) · 한·영·일
 import type { CharacterId } from "@pixel-rogue/shared";
 
 type Guide = Partial<Record<CharacterId, readonly string[]>>;
 
 export const GUIDE_KO_ASC2: Guide = {
   onyx: [
-    "아스칼론 · 오닉스 · 영물, 몸에 일곱 보석이 박힌 광석 영물 · 체력 190 · 방어력 30 · 느림 · 무기는 칠보 광륜 하나",
+    "테라코어 · 오닉스 · 영물, 몸에 일곱 보석이 박힌 광석 영물 · 체력 190 · 방어력 30 · 느림 · 무기는 칠보 광륜 하나",
     "공격: 가운데 자수정에서 방 안 모든 적에게 빛줄기. 쏘는 동안은 몸을 움직이지 못함",
     "대시: 하늘을 나는 부스트. 한 번 누르면 비행(빠르고 손을 떼도 계속 날아감, 무적 아님) · 다시 누르면 내려앉음",
     "날아오를 때·내려앉을 때·비행 중 몇 초마다 보석 7개가 저마다 따로 확률을 굴려 반응: 홍옥 불기둥 · 호박 운석 · 황옥 연쇄 번개 · 비취 덩굴(회복) · 청옥 서리 · 남옥 빛줄기 · 자수정 공허. 일곱이 함께 반응하면 칠보 공명",
@@ -37,7 +37,7 @@ export const GUIDE_KO_ASC2: Guide = {
 
 export const GUIDE_EN_ASC2: Guide = {
   onyx: [
-    "Ascalon · Onyx · a Spirit Beast of living mineral with seven gems in its body · HP 190 · Defense 30 · slow · one weapon, the Seven-Gem Halo",
+    "Terracore · Onyx · a Spirit Beast of living mineral with seven gems in its body · HP 190 · Defense 30 · slow · one weapon, the Seven-Gem Halo",
     "Attack: the amethyst at its core beams every foe in the room. It can't move while casting",
     "Dash: a flight boost. Press once to fly (fast, keeps flying when you let go, not invincible) · press again to land",
     "On takeoff, on landing and every few seconds in flight, each of the 7 gems rolls its own chance: Ruby fire pillar · Amber meteors · Topaz chain lightning · Jade vines (heal) · Sapphire frost · Aquamarine beam · Amethyst void. All seven at once trigger Seven-Gem Resonance",
@@ -69,7 +69,7 @@ export const GUIDE_EN_ASC2: Guide = {
 
 export const GUIDE_JA_ASC2: Guide = {
   onyx: [
-    "アスカロン · オニキス · 霊獣、体に七つの宝石が埋まった鉱石の霊獣 · 体力190 · 防御力30 · 遅い · 武器は七宝の光輪ひとつ",
+    "テラコア · オニキス · 霊獣、体に七つの宝石が埋まった鉱石の霊獣 · 体力190 · 防御力30 · 遅い · 武器は七宝の光輪ひとつ",
     "攻撃：中心のアメジストから部屋の全ての敵に光線。撃つ間は体を動かせない",
     "ダッシュ：空を飛ぶブースト。一度押すと飛行（速く、手を離しても飛び続ける、無敵ではない）· もう一度押すと着地",
     "飛び立つ時・着地する時・飛行中数秒ごとに7つの宝石がそれぞれ確率で反応：ルビーの火柱 · 琥珀の隕石 · トパーズの連鎖雷 · 翡翠の茨（回復）· サファイアの霜 · アクアマリンの光線 · アメジストの虚無。7つ同時なら七宝共鳴",

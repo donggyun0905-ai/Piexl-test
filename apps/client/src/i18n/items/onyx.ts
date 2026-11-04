@@ -1,4 +1,4 @@
-// 아스칼론 오닉스 글자 (한·영·일): 칠보 광륜 이름·설명 · 전용 아이템 이름·효과 (수치는 weaponsOnyx.ONYX·ONYX_GEMS·ONYX_PERKS와 맞춤)
+// 테라코어 오닉스 글자 (한·영·일): 칠보 광륜 이름·설명 · 전용 아이템 이름·효과 (수치는 weaponsOnyx.ONYX·ONYX_GEMS·ONYX_PERKS와 맞춤)
 import { ONYX, ONYX_GEMS, type PassiveId, type WeaponId } from "@pixel-rogue/shared";
 import type { Lang } from "../index";
 import type { Names } from "./names";
