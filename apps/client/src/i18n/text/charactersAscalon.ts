@@ -36,6 +36,13 @@ export const CHARACTER_TEXT_ASCALON = {
     ja: "糸 · アスカロン。見えない糸を操る魅惑的な女性。糸100本を装填しとても速く放つ（部屋の端から端までの糸）· 絡みが5溜まった敵は糸が引かれ引き裂かれる（250%＋出血）· 30本ごとに狙う敵を横切る糸30本の連射 · 武器10 · 専用アイテム10 · 糸のダメージは弱く攻撃力アイテムは引き裂きだけ強化 · 糸が当たるたび出血スタック、30で大量出血（500%）",
   },
   thread: { ko: "실", en: "Thread", ja: "糸" },
+  pungryu: { ko: "풍류사", en: "Pungryu", ja: "風流士" },
+  pungryuDesc: {
+    ko: "글자 · 아스칼론. 늘 구름을 타고 다니는 의적 선비. 큰 붓으로 천자문 글자를 써서 날림 · 글자 네 개를 쓰면 구절 완성 → 무기마다 큰 마법 (하늘·땅 기둥 · 큰 물결 · 해와 달 · 별자리 · 찬바람과 뜨거운 바람 · 추수 · 비구름 · 서리 · 금빛 물줄기 · 명검) · 구름 위라 지형·지속 피해 절반 · 천자문 무기 10 · 전용 아이템 10 (축지법 · 분신술 · 둔갑술 · 의적 주머니 등)",
+    en: "Letters · Ascalon. A scholar-outlaw who always rides a cloud. He writes characters from the Thousand Character Classic with a giant brush and hurls them · every fourth letter completes a verse and unleashes a weapon's great spell (pillars of heaven and earth · a great wave · sun and moon · constellations · cold and hot winds · harvest · rain cloud · frost · golden stream · a famed sword) · half terrain and damage-over-time hurt on his cloud · 10 verse weapons · 10 exclusive items (Earth-Folding Step · Clone Art · Shape-Shift · Outlaw's Pouch and more)",
+    ja: "文字 · アスカロン。いつも雲に乗って歩く義賊の書生。大きな筆で千字文の文字を書いて飛ばす · 文字4つで句が完成 → 武器ごとの大きな魔法（天地の柱 · 大波 · 日と月 · 星座 · 冷たい風と熱い風 · 収穫 · 雨雲 · 霜 · 金の水流 · 名剣）· 雲の上なので地形・持続ダメージ半分 · 千字文の武器10 · 専用アイテム10（縮地法 · 分身術 · 遁甲術 · 義賊の巾着など）",
+  },
+  script: { ko: "천자문", en: "Verse", ja: "千字文" },
   trSkill1: { ko: "암습 저격", en: "Ambush Snipe", ja: "暗襲狙撃" },
   trSkill2: { ko: "강력한 한방", en: "Power Shot", ja: "強力な一撃" },
   trSkill3: { ko: "연발사격", en: "Rapid Fire", ja: "連射" },

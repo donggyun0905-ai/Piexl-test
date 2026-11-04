@@ -99,4 +99,10 @@ export const PW_KITS_3: PwKits = {
     sk("skHarp", "cone", 7, "#f0e8ff", { radius: 110, arc: 0.6, fx: "beam", hit: { dmg: 1.6, dot: 2 * SEC } }),
     sk("skCocoon", "point", 60, "#ffffff", { range: 150, radius: 40, delay: 30, fx: "net", hit: { dmg: 4, stun: 1.5 * SEC } }),
   ),
+  pungryu: kit(1,
+    sk("puHeaven", "point", 9, "#f0c040", { range: 150, radius: 30, delay: 18, fx: "pillar", hit: { dmg: 1.8 } }),
+    sk("puFlood", "line", 10, "#4ab8ff", { range: 200, radius: 16, fx: "wave", hit: { dmg: 1.2, push: 18 } }),
+    sk("puSeasons", "cone", 11, "#a8e8ff", { radius: 90, arc: 0.6, fx: "wave", hit: { dmg: 1, slow: 1.5 * SEC } }),
+    sk("puSword", "line", 60, "#ffe08a", { range: 180, radius: 24, delay: 24, fx: "slash", hit: { dmg: 4.5 } }),
+  ),
 };

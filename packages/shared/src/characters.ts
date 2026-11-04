@@ -94,14 +94,16 @@ export const CHARACTERS = {
   collector: { id: "collector", maxHp: 100, damage: 11, moveSpeed: 1.35, luck: 2, startWeapon: "clBlade" },
   /** 추적자 (아스칼론): 저격총 하나 · 스킬 셋(1 암습 저격 · 2 강력한 한방 · 3 연발사격) (sim/tracker) */
   tracker: { id: "tracker", maxHp: 90, damage: 13, moveSpeed: 1.3, luck: 0, startWeapon: "trSniper" },
-  /** 잊혀진 자 (아스칼론): 옛 신의 후손 반신 · 빛 무기 10 · 처치로 빛의 고리를 채워 신족(공속 2배 + 빛기둥) · 재생력 20 · 빠름 · 회피 20% (sim/forgotten) */
+  /** 잊혀진 자 (아스칼론): 빛 무기 10 · 빛의 고리 → 신족 (sim/forgotten) */
   forgotten: { id: "forgotten", maxHp: 85, damage: 12, moveSpeed: 1.5, luck: 1, startWeapon: "fgGrace", regen: 20, dodge: 0.2 },
-  /** 잔영 (아스칼론): 그림자 속 암살자 · 짧은 단검 내려찍기 · 대시 회피 슬로우모션·클릭 연속 베기 · 상태이상 면역 · 치명타 45%·치명타 피해 250% (sim/remnant) */
+  /** 잔영 (아스칼론): 단검 암살자 · 대시 회피 슬로우 (sim/remnant) */
   remnant: { id: "remnant", maxHp: 45, damage: 9, moveSpeed: 1.45, luck: 1, startWeapon: "rmDagger", critChance: 0.45, critDamage: 2.5 },
   /** 방랑객 (아스칼론): 카타나 10 · 예리함 25% (sim/wanderer) */
   wanderer: { id: "wanderer", maxHp: 105, damage: 13, moveSpeed: 1.3, luck: 0, startWeapon: "wdKatana", sharpness: 0.25 },
   /** 영사 (아스칼론): 실 100가닥 장전·얽힘 5면 찢기 (sim/silk) */
   silk: { id: "silk", maxHp: 90, damage: 10, moveSpeed: 1.35, luck: 1, startWeapon: "skThread" },
+  /** 풍류사 (아스칼론): 구름을 타고 천자문 글자 · 구절 완성 마법 (sim/pungryu) */
+  pungryu: { id: "pungryu", maxHp: 90, damage: 10, moveSpeed: 1.35, luck: 5, startWeapon: "puHeaven" },
   /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 쓰러진 적은 에테르 결정 · 대시는 땅굴 · 원석 100이면 광산 붕괴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },
   /** 운명의 여행자 (히든, 시즌 2): 운명의 활로 모아 쏘는 한 발 · 모래시계가 뒤집힐 때마다 주사위로 운명(버프·기술·능력 36칸) (sim/voyager) */

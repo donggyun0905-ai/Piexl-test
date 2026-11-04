@@ -9,6 +9,7 @@ import { itemAvailable } from "../achievements";
 import { healPlayer } from "./combat";
 import { petGold } from "./lobbyPet";
 import { goldMul } from "./baseStats";
+import { bannerHeal, thiefGold } from "./pungHooks";
 import type { EnemyState, Pickup, PickupKind, RunState } from "./types";
 import { ENEMIES } from "../content";
 import { depth, lastFloorOf } from "./hero";
@@ -55,7 +56,7 @@ export const ROOM_GOLD_MAX = () => Math.max(R.ROOM_GOLD_1, R.ROOM_GOLD_3, R.ROOM
 /** 돈 얻기: 돈 주머니·로비 펫·기본 스탯·금기 가난 → 한도(MAX_GOLD)까지만 (넘친 만큼은 번 돈에도 안 넣음) */
 export function addGold(s: RunState, amount: number): void {
   if (hasPerk(s.player, "goldPouch")) amount = Math.round(amount * PERKS.goldPouch.gold);
-  amount = Math.round(amount * petGold(s) * goldMul(s.player));
+  amount = Math.round(amount * petGold(s) * goldMul(s.player) * thiefGold(s.player));
   if (s.taboo) amount = Math.round(amount * tabooDown(s, "poverty"));
   if (!s.pvp) amount = Math.max(0, Math.min(amount, R.MAX_GOLD - s.gold));
   s.gold += amount;
@@ -99,7 +100,7 @@ export function seatSalt(s: RunState): (string | number)[] {
 }
 
 /** 캐릭터가 쓰는 공격 방식: 공용 무기는 이 방식만 얻을 수 있음 (전용 아이템 효과가 맞게). 음양사는 부적(전용 무기)만 */
-const NATIVE_KIND: Record<CharacterId, WeaponKind | null> = { warden: "melee", drifter: "ranged", mage: "ranged", mystic: null, engineer: "laser", elementalist: null, brawler: null, doctor: "medic", gunner: null, beast: null, ninja: null, chronomancer: null, summoner: null, novice: null, bedouin: null, general: null, imugi: null, apostle: null, stargazer: null, duck: null, abandoned: null, titan: null, oni: null, scribe: null, idra: null, byeonhui: null, fly: null, elder: null, ren: null, spiritist: null, plague: null, slayer: null, eater: null, mukin: null, samyeol: null, automata: null, rider: null, bomber: null, artifacter: null, punk: null, collector: null, tracker: null, forgotten: null, remnant: null, wanderer: null, silk: null, miner: null, voyager: null, zeus: null, pilgrim: null, fallenKing: null, lux: null };
+const NATIVE_KIND: Record<CharacterId, WeaponKind | null> = { warden: "melee", drifter: "ranged", mage: "ranged", mystic: null, engineer: "laser", elementalist: null, brawler: null, doctor: "medic", gunner: null, beast: null, ninja: null, chronomancer: null, summoner: null, novice: null, bedouin: null, general: null, imugi: null, apostle: null, stargazer: null, duck: null, abandoned: null, titan: null, oni: null, scribe: null, idra: null, byeonhui: null, fly: null, elder: null, ren: null, spiritist: null, plague: null, slayer: null, eater: null, mukin: null, samyeol: null, automata: null, rider: null, bomber: null, artifacter: null, punk: null, collector: null, tracker: null, forgotten: null, remnant: null, wanderer: null, silk: null, pungryu: null, miner: null, voyager: null, zeus: null, pilgrim: null, fallenKing: null, lux: null };
 
 /** 이 캐릭터가 얻을 수 있는 무기 (자기 전용 + 자기 공격 방식의 공용, 지금 든 무기 제외, 해금된 것만 · all이면 해금과 상관없이) */
 export function weaponPool(s: RunState, all = false): WeaponId[] {
@@ -190,6 +191,8 @@ export function onRoomCleared(s: RunState, roomId: number): void {
   if (type === "combat" || type === "elite" || type === "exit") setRoomClear(s);
   // 전투식량(거너): 전투가 끝나면 최대 체력의 10% 회복
   if ((type === "combat" || type === "elite" || type === "exit") && hasPerk(s.player, "ration")) healPlayer(s, s.player.stats.maxHp * 0.1);
+  // 활빈당 깃발(풍류사)
+  if ((type === "combat" || type === "elite" || type === "exit") && bannerHeal(s.player) > 0) healPlayer(s, bannerHeal(s.player));
   // 레이드 아레나: 보스를 잡아도 보상 없음 (레벨마다 보상 방에서)
   if (s.arenaLv) return;
   if (type === "combat" || type === "elite") {

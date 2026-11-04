@@ -10,6 +10,7 @@ import { equipWeapon, recalcStats } from "./items";
 import { goldLocked } from "./oniRules";
 import type { Pickup, RunState } from "./types";
 import { addEffect } from "./util";
+import { bannerPrice } from "./pungHooks";
 import { depth, lastFloorOf } from "./hero";
 import { tabooN, tabooUp } from "./taboo";
 import { xpOnly } from "./morphXp";
@@ -26,7 +27,7 @@ const PRICE = SHOP_PRICES.price;
 function shopPrice(s: RunState, base: number): number {
   const discount = Math.min(PRICE.maxDiscount, PRICE.luckDiscount * s.player.stats.luck);
   // 금기: 물가 상승
-  return Math.max(1, Math.round((base + PRICE.perFloor * (depth(s) - 1)) * (1 - discount) * tabooUp(s, "inflation")));
+  return Math.max(1, Math.round((base + PRICE.perFloor * (depth(s) - 1)) * (1 - discount) * tabooUp(s, "inflation") * bannerPrice(s.player)));
 }
 
 /** 금기: 빈 진열대 (1번 = 사용 아이템 칸, 2번 = 무기 칸도 없음) · 새로고침 세금 (한 번마다 2배) */

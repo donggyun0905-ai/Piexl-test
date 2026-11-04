@@ -189,8 +189,10 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         if (now.rends > seen.rends) fx.push("ting");
         else if (now.attacks > seen.attacks) fx.push("string");
         if (now.reloads > seen.reloads) fx.push("spool");
+      } else if (c === "pungryu") { // 풍류사: 글자 · 구절 완성
+        if (now.attacks > seen.attacks) fx.push(run.player.puStep === 0 ? "awaken" : "string");
       } else if (c === "collector") {
-        // 수집가: 콤보 한 칸마다 그 무기 소리 (활·총 "팅" · 지팡이·책 맑은 소리 · 망치·도끼 "깡" + 흔들림 · 나머지 베는 소리)
+        // 수집가: 콤보 한 칸마다 그 무기 소리 (활·총 · 마법 · 망치·도끼 흔들림 · 베기)
         if (now.clStep && now.clStep !== seen.clStep) {
           const st = (CL_ARMS as Record<string, { style: string }>)[now.clStep.split(":")[1]!]?.style ?? "";
           fx.push(st === "shot" ? "twang" : st === "magic" ? "chime" : st === "heavy" ? "clank" : "slice");

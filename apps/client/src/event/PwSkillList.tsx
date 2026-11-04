@@ -14,7 +14,7 @@ export function pwPassiveKey(c: CharacterId): TextKey {
   const pv = `pwPv${c[0]!.toUpperCase()}${c.slice(1)}`;
   return PAS[c] ?? (pv in PW_PASSIVE_TEXT ? (pv as TextKey) : (`${c}Desc` as TextKey));
 }
-const BASIC: Partial<Record<CharacterId, TextKey>> = { bedouin: "pwBasicBedouin", slayer: "pwBasicSlayer", remnant: "pwBasicRemnant", apostle: "pwBasicAim", elder: "pwBasicAim", silk: "pwBasicAim" };
+const BASIC: Partial<Record<CharacterId, TextKey>> = { bedouin: "pwBasicBedouin", slayer: "pwBasicSlayer", remnant: "pwBasicRemnant", apostle: "pwBasicAim", elder: "pwBasicAim", silk: "pwBasicAim", pungryu: "pwBasicAim" };
 
 export function PwSkillList({ characterId, lang, t }: { characterId: CharacterId; lang: Lang; t: (key: TextKey) => string }) {
   const keys = useSettings().skillKeys;

@@ -23,7 +23,7 @@ export interface StatusInfo {
 
 export const STATUS_INFO: readonly StatusInfo[] = [
   { kind: "bleed", label: "출혈", type: "지속 피해", desc: "맞을 때마다 3초로 다시 걸리고 0.5초마다 피해", users: ["gunner", "punk", "slayer", "silk", "collector", "brawler", "general", "wanderer", "remnant", "abandoned"], more: "예리함(기본 스탯) · 금기 '피의 대가'", words: ["bleed", "blood", "sharpness"] },
-  { kind: "burn", label: "화상", type: "지속 피해", desc: "점화 2초 동안 0.5초마다 공격력의 25% (공용 규칙)", users: ["bomber", "rider", "apostle", "plague", "byeonhui", "scribe", "stargazer", "summoner", "mage", "elementalist", "mystic", "fallenKing"], more: "아이템 '이프리트 발톱'", words: ["burn", "ignite", "fire", "flame", "ember", "napalm", "blaze"] },
+  { kind: "burn", label: "화상", type: "지속 피해", desc: "점화 2초 동안 0.5초마다 공격력의 25% (공용 규칙)", users: ["bomber", "rider", "pungryu", "apostle", "plague", "byeonhui", "scribe", "stargazer", "summoner", "mage", "elementalist", "mystic", "fallenKing"], more: "아이템 '이프리트 발톱'", words: ["burn", "ignite", "fire", "flame", "ember", "napalm", "blaze"] },
   { kind: "poison", label: "독", type: "지속 피해", desc: "걸린 동안 0.5초마다 피해 (세기·시간은 캐릭터마다)", users: ["samyeol", "plague", "fly", "imugi", "byeonhui", "spiritist", "remnant", "idra", "elementalist", "doctor", "ninja"], more: "무기 '전갈 침'·'환영 송곳니' · 아이템 '가시덤불' · 독 지형 · 보스 독", words: ["poison", "venom", "toxic", "gas", "sting"] },
   { kind: "curse", label: "저주", type: "쌓아서 터뜨림", desc: "봉인이 쌓이면 한꺼번에 피해 · 오니 야마타 추가 공격", users: ["mystic", "oni", "scribe"], more: "아이템 '저주받은 승리'", words: ["curse", "hex", "seal"], paths: ["rules/ONI/yamata"] },
   { kind: "storm", label: "폭풍", type: "한 방 추가", desc: "일정 간격으로 베거나 몰아치는 피해", users: ["imugi", "zeus", "mage", "oni", "elder"], more: "광야의 새벽 기술", words: ["storm", "gale"] },

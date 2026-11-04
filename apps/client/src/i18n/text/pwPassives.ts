@@ -27,6 +27,7 @@ export const PW_PASSIVE_TEXT = {
   pwPvPunk: { ko: "가속: 2초 가속, 그동안 둘레 상대가 느려짐 (무적 없음)", en: "Overdrive: 2s of acceleration that slows nearby opponents (no invulnerability)", ja: "加速: 2秒加速、その間周囲の相手が鈍化 (無敵なし)" },
   pwPvCollector: { ko: "수집품의 무게: 등 뒤에 뜬 수집 무기 하나마다 평타 피해 +4% (최대 +30%) · 공격할 때마다 콤보 한 칸", en: "Weight of the Hoard: +4% basic damage per collectible floating on his back (up to +30%) · each attack is the next combo step", ja: "収集品の重み: 背中に浮かぶ収集武器1つごとに通常攻撃+4% (最大+30%) · 攻撃するたびにコンボ一段" },
   pwPvRemnant: { ko: "그림자 일격: 치명타 피해 200%", en: "Shadow Strike: critical damage 200%", ja: "影の一撃: クリティカルダメージ200%" },
+  pwPvPungryu: { ko: "구절 완성: 평타 네 번째마다 피해 +60%", en: "Verse: every 4th basic attack deals +60%", ja: "句の完成: 通常攻撃4回目ごとにダメージ+60%" },
   pwPvSilk: { ko: "실 얽힘: 실에 얽힌 상대를 찢음 (과다출혈·30가닥 연사 없음)", en: "Entangle: rends entangled targets (no overbleed or 30-thread burst)", ja: "糸絡み: 絡んだ相手を裂く (過剰出血・30本連射なし)" },
   pwPvMystic: { ko: "수호 부적: 기본 공격이 맞으면 가장 가까운 아군 최대 체력 2% 회복", en: "Ward Charm: basic hits heal the nearest ally for 2% max HP", ja: "守護札: 通常攻撃が当たると一番近い味方を最大体力2%回復" },
   pwPvDoctor: { ko: "초과 치료: 아군에게 넘친 회복은 보호막이 됨 (최대 체력 30%까지)", en: "Overtreat: overflow healing on allies becomes a shield (up to 30% max HP)", ja: "過剰治療: 味方へのあふれた回復はシールドに (最大体力30%まで)" },

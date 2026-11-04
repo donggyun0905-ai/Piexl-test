@@ -17,7 +17,7 @@ import { titanParried } from "./titan";
 import { hpLost } from "./hurtLog";
 import { logHit } from "./pvpRecap";
 import { roleDmgMul } from "./pwMatchup";
-import { afterHurt, classTaken } from "./classTaken";
+import { afterHurt, classTaken, cloudEnv } from "./classTaken";
 import { dodged, extraTaken, onHitExtra, sharpBonus } from "./baseStats";
 // 돈 얻기는 sim/loot (가질 수 있는 돈 한도)
 import { addGold } from "./loot";
@@ -107,7 +107,7 @@ let envHit = false;
 /** 지형·상태이상 피해 (잔영 회피로 안 셈) */
 export function envDamage(s: RunState, dmg: number): void {
   envHit = true;
-  damagePlayer(s, dmg);
+  damagePlayer(s, dmg * cloudEnv(s.player));
   envHit = false;
 }
 
@@ -125,8 +125,7 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
     addEffect(s, { kind: "hit", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 6, maxTicks: 10 });
     return;
   }
-  // 금기 취약 · 광야의 새벽은 받는 피해 줄임
-  // 무한 모드 7층부터 보스방마다·시련 점수만큼(trialFoes) 세짐
+  // 금기 취약 · 광야의 새벽 줄임 · 무한 7층부터·시련 점수만큼 세짐
   dmg *= endlessPow(s) * (envHit ? 1 : lateDmg(s)) * trialFoeDmg(p, s, from) * tabooUp(s, "frail") * (s.swarm ? SWARM.taken * (SWARM_LEVELS[s.swarm.level ?? 0]?.taken ?? 1) : 1);
   // 방패 자세: 가만히 서 있으면 받는 피해 절반
   let taken = hasPerk(p, "bulwarkStance") && p.stillTicks >= STILL_TICKS ? dmg * PERKS.bulwarkStance.taken : dmg;

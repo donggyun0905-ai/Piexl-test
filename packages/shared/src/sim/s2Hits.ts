@@ -9,6 +9,7 @@ import { repulsorHit } from "./artifacter";
 import { punkShotHit } from "./punk";
 import { trackerShotHit } from "./tracker";
 import { lightBoltHit } from "./forgotten";
+import { letterHit } from "./pungryu";
 import { minerShotHit } from "./miner";
 import { voyagerShotHit } from "./voyager";
 import { zeusShotHit } from "./zeusPower";
@@ -25,6 +26,7 @@ export function s2Hit(s: RunState, pr: ProjectileState, e: EnemyState): void {
   else if (pr.spirit === "cyBullet") punkShotHit(s, pr, e);
   else if (pr.spirit === "trBullet" || pr.spirit === "trBurst" || pr.spirit === "trRico") trackerShotHit(s, pr, e);
   else if (pr.spirit === "fgBolt") lightBoltHit(s, pr, e);
+  else if (pr.spirit === "puLetter") letterHit(s, pr, e);
   else if (pr.spirit === "mnShard" || pr.spirit === "mnCart" || pr.spirit === "mnPickaxe") minerShotHit(s, pr, e);
   else if (pr.spirit === "vyArrow" || pr.spirit === "vyMagic" || pr.spirit === "vyChain") voyagerShotHit(s, pr, e);
   else if (pr.spirit === "zsJavelin" || pr.spirit === "zsEagle" || pr.spirit === "zsOrb") zeusShotHit(s, pr, e);

@@ -58,6 +58,7 @@ export const CHARACTER_GOALS: Partial<Record<CharacterId, CharGoal>> = {
   forgotten: { c: "altars", n: 1000 },
   byeonhui: { a: "flawless3" },
   silk: { pw: "capture", n: 10 },
+  pungryu: { m: "moveSpeed", n: 2 },
   chronomancer: { a: "thrift" },
   fly: { f: "clear7" },
   elder: { c: "traps", n: 1000 },

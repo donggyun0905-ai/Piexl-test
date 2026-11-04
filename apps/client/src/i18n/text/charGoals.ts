@@ -36,6 +36,7 @@ export const CHAR_GOAL_TEXT = {
   cg_idra: l("쉼터 {n}번 쉬기 (누적)", "Rest at {n} rest rooms (total)", "休憩所で{n}回休む（累計）"),
   cg_forgotten: l("제단의 방 {n}번 쓰기 (누적)", "Use Altar Rooms {n} times (total)", "祭壇の部屋を{n}回使う（累計）"),
   cg_byeonhui: l("한 판에 보스 셋을 한 대도 안 맞고 처치", "Defeat 3 bosses flawlessly in one run", "1回でボス3体を無傷で倒す"),
+  cg_pungryu: l("이동 속도 {n} 달성", "Reach {n} move speed", "移動速度{n}達成"),
   cg_silk: l("패왕전 점령전 {n}번 우승", "Win {n} Capture matches in the Champion Clash", "覇王戦の占領戦で{n}回優勝"),
   cg_chronomancer: l("상점을 한 번도 안 쓰고 클리어", "Clear without buying anything", "ショップを一度も使わずにクリア"),
   cg_fly: l("7분 안에 클리어", "Clear within 7 minutes", "7分以内にクリア"),
