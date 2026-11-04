@@ -127,7 +127,7 @@ function drawSpikes(ctx: Ctx, r: Rect, state: 0 | 1 | 2, tick: number): void {
 export function drawTerrain(ctx: Ctx, s: RunState, snap: Snap): void {
   drawGas(ctx, s, snap);
   // 숨은 시련 바닥·독안개·숨 게이지 (render/hiddenTrial)
-  drawHiddenGround(ctx, s, snap);
+  drawHiddenGround(ctx, s);
   const t = s.terrain;
   if (!t || t.room !== s.roomId) return;
   const tick = s.tick;

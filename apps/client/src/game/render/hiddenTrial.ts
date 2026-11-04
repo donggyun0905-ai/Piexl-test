@@ -1,4 +1,5 @@
 // 숨은 시련 그리기: 바닥(하이오크 부락 풀숲·어둠의 검은 땅·깊은 바다·비눗방울) · 구조물(성벽·독가스 살포기·해적선) · 독안개 · 숨 게이지
+import { hpBarTop } from "./hpTop";
 import { breathRatio, fogOn, hiddenOn, ROOM_HEIGHT, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, ROOM_WIDTH, SEA_BUBBLE_R, type EnemyState, type HiddenFort, type HiddenTrialState, type RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
 
@@ -7,13 +8,12 @@ const TAU = Math.PI * 2;
 /** 자리마다 늘 같은 값 (그림용) */
 const hash = (i: number, k: number) => ((i * 7919 + k * 104729) % 1000) / 1000;
 
-/** 바닥 (render/terrain, 적 전): 시련마다 바닥 · 독안개 · 숨 게이지 */
-export function drawHiddenGround(ctx: Ctx, s: RunState, snap: Snap): void {
+/** 바닥 (render/terrain, 적 전): 시련마다 바닥 · 독안개 */
+export function drawHiddenGround(ctx: Ctx, s: RunState): void {
   const h = hiddenOn(s);
   if (!h) return;
   drawGround(ctx, s, h);
   drawHiddenFog(ctx, s);
-  drawHiddenAir(ctx, s, 1, snap);
 }
 
 function drawGround(ctx: Ctx, s: RunState, h: HiddenTrialState): void {
@@ -271,13 +271,13 @@ function drawHiddenFog(ctx: Ctx, s: RunState): void {
   ctx.setLineDash([]);
 }
 
-/** 플레이어 머리 위 죽음의 바다 숨 게이지 */
-function drawHiddenAir(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
+/** 플레이어 머리 위 죽음의 바다 숨 게이지 (캐릭터를 다 그린 뒤, 체력 줄 바로 위) */
+export function drawHiddenAir(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const h = hiddenOn(s);
   if (!h || h.kind !== 5) return;
   const p = s.player;
   const x = snap(lerp(p.prevX, p.x, alpha));
-  const y = snap(lerp(p.prevY, p.y, alpha)) - p.r - 12;
+  const y = hpBarTop(p, snap(lerp(p.prevY, p.y, alpha))) - 6;
   const k = breathRatio(h);
   ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
   ctx.fillRect(x - 12, y - 1, 24, 4);

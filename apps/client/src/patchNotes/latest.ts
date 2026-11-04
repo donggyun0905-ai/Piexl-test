@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.9",
+    date: "2026-11-04",
+    items: {
+      ko: ["숨은 시련 '죽음의 바다': 숨 게이지가 캐릭터 뒤에 가려지던 것을 고쳐, 캐릭터 위 체력 줄 바로 위에 보이게 함"],
+      en: ["Hidden trial 'Sea of Death': the breath gauge no longer hides behind your character and now sits right above your health bar"],
+      ja: ["隠し試練「死の海」: 息ゲージがキャラクターの後ろに隠れていたのを直し、頭上の体力バーのすぐ上に表示"],
+    },
+  },
+  {
     version: "0.49.8",
     date: "2026-11-04",
     items: {

@@ -1,5 +1,6 @@
 // 히든 아이템 둘째 묶음 그림: 등 뒤에 떠 있는 블리자드 랜스 다섯 · 날아가는 얼음 창 · 몸 좌우에 떠 있는 떨어진 신의 날개
 // · 운명의/저주받은 주사위(머리 위에서 굴러가다 멈춤) · 화려한 보물 상자 · 저주 · 빙결
+import { drawHiddenAir } from "./hiddenTrial";
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
 import { additive, alpha, beam, glow, shock, sparks } from "./pwFxBits";
@@ -23,6 +24,8 @@ export function drawHiddenGear(ctx: Ctx, s: RunState, a: number, snap: Snap): vo
   const p = s.player;
   drawAllies(ctx, s, a, snap);
   if (p.hp <= 0) return;
+  // 죽음의 바다 숨 게이지 (체력 줄 위)
+  drawHiddenAir(ctx, s, a, snap);
   const x = snap(lerp(p.prevX, p.x, a));
   const y = snap(lerp(p.prevY, p.y, a));
   if (p.passives.includes("fallenWings")) {

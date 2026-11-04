@@ -1,4 +1,5 @@
 // 적·플레이어 그리기 (공격 예고선은 telegraphs): 적(체력 줄·자동 조준 표시) · 플레이어(대시 잔상·방향·맞는 범위·보호막)
+import { hpBarTop } from "./hpTop";
 import { drawLuxFoe } from "./lux";
 import { additive, glow } from "./pwFxBits";
 import { drawSlash, enemyPose } from "./enemyPose";
@@ -216,8 +217,7 @@ function morphPose(p: PlayerState, pose: CharacterPose): CharacterPose {
 function drawPlayerHp(ctx: CanvasRenderingContext2D, p: PlayerState, x: number, y: number, tick: number): void {
   const w = 16;
   const r = Math.max(0, Math.min(1, p.hp / p.stats.maxHp));
-  // 캐릭터 그림(모두 파수꾼과 같은 32칸, 발이 몸 아래)의 맨 위 바로 위 · 큰 변신 모습(각성 오니·피의 학살·각성 동물)은 48칸
-  const top = y + p.r - ((p.characterId === "oni" && (p.oGod ?? 0) > 0) || (p.characterId === "slayer" && (p.slRage ?? 0) > 0) || morphEvolved(p) ? 46 : 31);
+  const top = hpBarTop(p, y);
   ctx.fillStyle = "rgba(10,8,16,0.85)";
   ctx.fillRect(x - w / 2 - 1, top - 1, w + 2, 4);
   ctx.fillStyle = r > 0.5 ? "#6ad86a" : r > 0.25 ? "#f2c14e" : "#e0505a";
