@@ -48,7 +48,7 @@ import { COLLECTOR_WEAPONS } from "./weaponsCollector";
 import { PUNGRYU_WEAPONS, type ScriptStyle } from "./weaponsPungryu";
 import { LEO_WEAPONS } from "./weaponsLeo";
 import { ONYX_WEAPONS } from "./weaponsOnyx";
-import { FENRIR_WEAPONS } from "./weaponsFenrir";
+import { FENRIR_WEAPONS } from "./weaponsFenrir"; import { ECLIPSE_WEAPONS } from "./weaponsEclipse";
 import { MINER_WEAPONS, type PickStyle } from "./weaponsMiner";
 import { VOYAGER_WEAPONS } from "./weaponsVoyager";
 import { ZEUS_WEAPONS, type ThunderStyle } from "./weaponsZeus";
@@ -57,7 +57,7 @@ import { FALLEN_KING_WEAPONS } from "./weaponsFallenKing";
 import { LUX_WEAPONS } from "./weaponsLux";
 
 /** laser 기계공학자·medic 의사: 누르고 있는 동안 짧은 간격으로 틱 피해 · combo 격투가: 누를 때마다 콤보의 다음 기술 (combos) · chakram 베두인 · spear 장수 */
-export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio" | "zwei" | "radiant" | "hoard" | "script" | "lion" | "gem" | "fang";
+export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio" | "zwei" | "radiant" | "hoard" | "script" | "lion" | "gem" | "fang" | "solar";
 export type { OrbitKind } from "./weaponsElemental";
 export type { LaserGear } from "./weaponsEngineer";
 export type { MedicGear } from "./weaponsDoctor";
@@ -107,7 +107,7 @@ export { FALLEN_KING } from "./weaponsFallenKing";
 export { PUNGRYU, type ScriptStyle, type VerseKind } from "./weaponsPungryu";
 export { LEO } from "./weaponsLeo";
 export { ONYX, ONYX_GEMS, ONYX_GEM_IDS, type OnyxGem } from "./weaponsOnyx";
-export { FENRIR } from "./weaponsFenrir";
+export { FENRIR } from "./weaponsFenrir"; export { ECLIPSE } from "./weaponsEclipse";
 export { LUX } from "./weaponsLux";
 
 export interface WeaponDef {
@@ -220,7 +220,7 @@ export interface WeaponDef {
 
 /**
  * 부적 추가 효과. ramp 수제(맞힐수록 강해짐) · smite 강력(주변 3명) · seal 수양(붙어서 도트 3중첩) · spark 번개(벽 통과, 추가 공격)
- * blaze 불꽃(불탐, 아주 강한 공격) · frost 얼음(경직) · bloom 벚꽃(느린 꽃잎, 폭발) · radiant 빛(밀침) · shade 어둠(유도 부적) · quake 땅(주변 피해, 공격 빨라짐)
+ * blaze 불꽃(불탐, 아주 강한 공격) · frost 얼음(경직) · bloom 벚꽃(느린 꽃잎, 폭발) · radiant 빛(밀침) · shade 어둠(유도 부적) · quake 땅(주변 피해·빨라짐)
  */
 export type CharmKind = "ramp" | "smite" | "seal" | "spark" | "blaze" | "frost" | "bloom" | "radiant" | "shade" | "quake";
 
@@ -268,7 +268,7 @@ export const WEAPONS = {
   ...WANDERER_WEAPONS,
   ...SILK_WEAPONS,
   ...COLLECTOR_WEAPONS,
-  ...PUNGRYU_WEAPONS, ...LEO_WEAPONS, ...ONYX_WEAPONS, ...FENRIR_WEAPONS,
+  ...PUNGRYU_WEAPONS, ...LEO_WEAPONS, ...ONYX_WEAPONS, ...FENRIR_WEAPONS, ...ECLIPSE_WEAPONS,
   ...MINER_WEAPONS,
   ...VOYAGER_WEAPONS,
   ...ZEUS_WEAPONS,

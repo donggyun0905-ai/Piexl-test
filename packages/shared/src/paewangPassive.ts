@@ -56,6 +56,8 @@ export const PW_PASSIVE = {
   onyxN: 7, onyxMul: 2.2,
   /** 펜리르 천랑 낙인: 평타 다섯 번째마다 피해 배율 */
   fenrirN: 5, fenrirMul: 2,
+  /** 이클립스 일식 낙하: 평타 여섯 번째마다 피해 배율 */
+  eclipseN: 6, eclipseMul: 2.2,
   /** 잔영 치명타 피해 */
   remnantCrit: 2,
   /** 음양사 수호 부적: 평타가 맞으면 가장 가까운 아군 회복 (최대 체력 비율) */

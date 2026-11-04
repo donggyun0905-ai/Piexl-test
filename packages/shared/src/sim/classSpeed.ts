@@ -13,11 +13,13 @@ import type { PlayerState } from "./types";
 import { hasPerk } from "./util";
 import { slayerDmgMul } from "./slayer";
 import { idraDmgMul } from "./idra";
+import { eclipseDmgMul, eclipseSpeedMul } from "./eclipseStats";
 
 /** 직업마다 평타 공격력 배율 (능력치 창 '공격력'에 같이 보임): 이드라 모습·사계절 · 학살자 낮은 체력·분노 */
 export function classDamageMul(p: PlayerState): number {
   if (p.characterId === "idra") return idraDmgMul(p);
   if (p.characterId === "slayer") return slayerDmgMul(p);
+  if (p.characterId === "eclipse") return eclipseDmgMul(p);
   return 1;
 }
 
@@ -41,6 +43,8 @@ export function classSpeedMul(p: PlayerState): number {
       return (p.cyAccel ?? 0) > 0 ? PUNK.accelSpeed : 1;
     case "slayer":
       return (p.slRage ?? 0) > 0 ? SLAYER.rageSpeed : 1;
+    case "eclipse":
+      return eclipseSpeedMul(p);
     case "zeus":
       return p.zsGod ? ZEUS.godSpeed : 1;
     default:

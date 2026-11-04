@@ -37,6 +37,7 @@ export const CHAR_GOAL_TEXT = {
   cg_forgotten: l("제단의 방 {n}번 쓰기 (누적)", "Use Altar Rooms {n} times (total)", "祭壇の部屋を{n}回使う（累計）"),
   cg_byeonhui: l("한 판에 보스 셋을 한 대도 안 맞고 처치", "Defeat 3 bosses flawlessly in one run", "1回でボス3体を無傷で倒す"),
   cg_leo: l("아스칼론 캐릭터 {n}명을 모두 열고, 저마다 금기의 서 {t}점 이상으로 라스트 보스 클리어", "Unlock all {n} Ascalon characters and clear a last boss with each at {t}+ Taboo points", "アスカロンのキャラ{n}人をすべて解放し、それぞれ禁忌の書{t}点以上でラストボスをクリア"),
+  cg_eclipse: l("헬리오스 캐릭터 {n}명을 모두 열고, 저마다 금기의 서 {t}점 이상으로 라스트 보스 클리어", "Unlock all {n} Helios characters and clear a last boss with each at {t}+ Taboo points", "ヘリオスのキャラ{n}人をすべて解放し、それぞれ禁忌の書{t}点以上でラストボスをクリア"),
   cg_fenrir: l("비르디아 캐릭터 {n}명을 모두 열고, 저마다 금기의 서 {t}점 이상으로 라스트 보스 클리어", "Unlock all {n} Virdia characters and clear a last boss with each at {t}+ Taboo points", "ヴィルディアのキャラ{n}人をすべて解放し、それぞれ禁忌の書{t}点以上でラストボスをクリア"),
   cg_onyx: l("테라코어 캐릭터 {n}명을 모두 열고, 저마다 금기의 서 {t}점 이상으로 라스트 보스 클리어", "Unlock all {n} Terracore characters and clear a last boss with each at {t}+ Taboo points", "テラコアのキャラ{n}人をすべて解放し、それぞれ禁忌の書{t}点以上でラストボスをクリア"),
   cg_pungryu: l("이동 속도 {n} 달성", "Reach {n} move speed", "移動速度{n}達成"),

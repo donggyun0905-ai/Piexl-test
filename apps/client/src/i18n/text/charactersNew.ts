@@ -56,6 +56,12 @@ export const CHARACTER_TEXT_NEW = {
     en: "Spirit Pact · A student spiritist of Virdia. She only fires magic missiles; three small spirits (one swaps at random every 30s) and her weapon, a great spirit, do the fighting · 10 great spirits (Idra is the grown-up Idra of the future)",
     ja: "精霊契約 · ヴィルディアの学生の精霊使い。本人はマジックミサイルだけ、そばの小さな精霊三体（30秒ごとに一体ずつランダムに入れ替わる）と武器の大精霊が戦う · 大精霊10（イドラは大人になった未来のイドラ）",
   },
+  eclipse: { ko: "이클립스", en: "Eclipse", ja: "エクリプス" },
+  eclipseDesc: {
+    ko: "헬리오스. 제국의 태양인 그녀와, 그 거대한 뒷면 일식의 밤의 주인인 그 · 태양: 작은 불의 도끼로 직각 검격을 아주 빠르게 날리는 5연격·치명타·이글거리는 영역과 치유의 빛 · 일식: 거대한 도끼로 느리지만 강한 6연 콤보(마지막은 뛰어올라 내려찍기 + 블랙홀)·죽음의 영역 · 맞힐 때마다 게이지가 차고 다 차면 모습이 바뀜",
+    en: "Helios. She is the Sun of the empire; he is its vast far side, lord of the eclipsed night · Sun: a small fire axe flinging right-angle slashes in a very fast 5-hit string, crits, a Blazing zone and healing light · Eclipse: a giant axe with a slow but heavy 6-hit combo (ending in a leaping slam + black hole) and a Death zone · Every hit fills the gauge; when full, the form changes",
+    ja: "ヘリオス。帝国の太陽である彼女と、その巨大な裏側、日食の夜の主である彼 · 太陽：小さな炎の斧で直角の斬撃をとても速く飛ばす5連撃・会心・灼熱の領域と癒しの光 · 日食：巨大な斧で遅いが強い6連コンボ（最後は跳び上がって叩きつけ + ブラックホール）・死の領域 · 当てるたびにゲージがたまり、満タンで姿が変わる",
+  },
   fenrir: { ko: "펜리르", en: "Fenrir", ja: "フェンリル" },
   fenrirDesc: {
     ko: "영물 · 비르디아. 지난 비르디아 왕이 다스리던 늙은 백랑. 왕이 쓰던 거대한 대검을 입에 물고 다시 전쟁에 나섬 · 한 번 누르면 고정 5연 콤보(물어 베기·되베기·지면 검기·난도·천랑 낙인) · 아주 빠르고 공격력이 높지만 체력 45 · 기본 회피 25%·예리함 25%",
@@ -63,6 +69,7 @@ export const CHARACTER_TEXT_NEW = {
     ja: "霊獣 · ヴィルディア。先代ヴィルディア王に仕えた老いた白狼。王が使っていた巨大な大剣をくわえ、再び戦に出る · 一度押すと固定5連コンボ（噛み斬り・返し斬り・地面の剣気・乱刀・天狼の烙印）· とても速く攻撃力も高いが体力45 · 基本回避25%・鋭さ25%",
   },
   fang: { ko: "선왕의 대검", en: "Late King's Blade", ja: "先王の大剣" },
+  solar: { ko: "태양의 도끼", en: "Axe of the Sun", ja: "太陽の斧" },
   oni: { ko: "오니", en: "Oni", ja: "鬼" },
   oniDesc: {
     ko: "방망이 · 무기가 본체인 도깨비. 느리고 아주 센 휘두르기(공격력 36) + 무기마다 확률 추가 공격 · 25번 휘두르면 30초 신인족(공격력 +45%·최대 체력 +50%·추가 공격 100%) · 공격력 아이템은 최대 체력으로, 공격 속도는 체력 재생력으로, 사거리는 추가 공격 범위로 · 받는 피해 +30% · ??? : 최대 체력 400, 부활 1회 뒤 얻을 수 있는 명계의 무기 · ??? : 재생력 60, 부활 1회 뒤 얻을 수 있는 청전의 무기",

@@ -40,7 +40,9 @@ export type LeoFx = "leClaw" | "leBite" | "leRoar" | "leBolt" | "leChain" | "leP
 export type OnyxFx = "oxHalo" | "oxBeam" | "oxLift" | "oxLand" | "oxRuby" | "oxAmber" | "oxTopaz" | "oxJade" | "oxSapph" | "oxFrost" | "oxAqua" | "oxAmeth" | "oxReson" | "oxShard" | "oxDust";
 /** 펜리르 (sim/fenrir·fenrirStats): 1·2타 베기(width 1 = 되베기) · 지면 검기 출발·바닥 자국(width 1 = 큰 검기) · 난도 고리·베기 · 뛰어오름·착지(width 1 = 울부짖음) · 광륜 · 회피 잔상 · 사냥 */
 export type FenrirFx = "fnBite" | "fnWaveGo" | "fnScar" | "fnRing" | "fnCut" | "fnJump" | "fnLand" | "fnHalo" | "fnDodge" | "fnHunt";
-export type SecretFx = VoyagerFx | ZeusFx | PilgrimFx | PungFx | LeoFx | OnyxFx | FenrirFx | "clMove" | "mnSwing" | "mnCrack" | "mnErupt" | "mnRock" | "mnCave" | "mnBoom" | "mnShatter" | "mnFall" | "mnDig" | "mnBurst" | "mnPull" | "mnGem" | "mnPillar" | "mnCanary";
+/** 이클립스 (sim/eclipse·eclipseZone): 태양 직각 검격(width 1~4타)·5타 십자 · 일식 베기(width 0 내려·1 올려·2 초승달)·회전·돌진·뛰어오름·낙하 · 맞음 불꽃(width 1 = 일식) · 영역 불꽃 · 치유의 빛 · 바뀜(width 1 = 일식이 됨)·바뀜 끝 · 개기일식 */
+export type EclipseFx = "ecSlash" | "ecCross" | "ecHew" | "ecSpin" | "ecDash" | "ecJump" | "ecSlam" | "ecSpark" | "ecBurn" | "ecHeal" | "ecShift" | "ecShiftEnd" | "ecTotal";
+export type SecretFx = VoyagerFx | ZeusFx | PilgrimFx | PungFx | LeoFx | OnyxFx | FenrirFx | EclipseFx | "clMove" | "mnSwing" | "mnCrack" | "mnErupt" | "mnRock" | "mnCave" | "mnBoom" | "mnShatter" | "mnFall" | "mnDig" | "mnBurst" | "mnPull" | "mnGem" | "mnPillar" | "mnCanary";
 /** 떠돌이 기습 쏨·맞음 · 파수꾼 반격 베기 (sim/origin) · 작업대 성공·실패·파괴 (sim/station) */
 /** 히든 아이템·순례자 (sim/hiddenPerks·hiddenUse·pilgrim) */
 export type HiddenFx = "hdDice" | "hdChest" | "hdCurse" | "hdFreeze" | "hdWarp" | "hdQuake" | "hdMirror" | "hdLeaf" | "hdAether" | "hdMeteor" | "hdScroll" | "hdGate" | "hdPortal" | "hdShow" | "hdText";

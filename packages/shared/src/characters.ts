@@ -58,7 +58,7 @@ export const CHARACTERS = {
   titan: { id: "titan", maxHp: 170, damage: 12, moveSpeed: 1.05, luck: 0, startWeapon: "ironArm" },
   /** 오니: 느리고 센 방망이 + 확률 추가 공격 · 30초 신인족 · 받는 피해 +30% (sim/oni) */
   oni: { id: "oni", maxHp: 150, damage: 36, moveSpeed: 1.15, luck: 0, startWeapon: "thunderClub" },
-  /** 이드라 (비르디아, 세계수의 아이): 가이아 하나가 대시마다 대궁·단검·방패·채찍으로 바뀜 · 전용 아이템만 나옴 (sim/idra) */
+  /** 이드라 (비르디아, 세계수의 아이): 가이아가 대시마다 모습이 바뀜 (sim/idra) */
   idra: { id: "idra", maxHp: 100, damage: 10, moveSpeed: 1.3, luck: 1, startWeapon: "gaia" },
   /** 변희 (비르디아, 만물의 소녀): 든 무기의 동물로 변해 싸움 (sim/morph) */
   byeonhui: { id: "byeonhui", maxHp: 105, damage: 10, moveSpeed: 1.3, luck: 0, startWeapon: "wolfForm" },
@@ -80,7 +80,7 @@ export const CHARACTERS = {
   mukin: { id: "mukin", maxHp: 160, damage: 6, moveSpeed: 1.05, luck: 0, startWeapon: "ironHorn" },
   /** 사멸 (헬리오스, 사천 당가): 독침, 모든 침에 독 + 죽음 · 침을 많이 던질수록 독가스 (sim/samyeol) */
   samyeol: { id: "samyeol", maxHp: 95, damage: 11, moveSpeed: 1.35, luck: 1, startWeapon: "tangNeedle" },
-  /** 오토마타 (테라코어): 처음 자아를 가진 기계 인형. 손의 레이저가 기본 공격 · 자매 인형 · 등 뒤 유도 미사일 (sim/automata) */
+  /** 오토마타 (테라코어): 손 레이저 · 자매 인형 · 유도 미사일 (sim/automata) */
   automata: { id: "automata", maxHp: 100, damage: 12, moveSpeed: 1.3, luck: 0, startWeapon: "adFinger" },
   /** 라이더 (테라코어): 오토바이 폭주족. 빠를수록 피해 · 달린 거리 게이지가 차면 범위 펄스 (sim/rider) */
   rider: { id: "rider", maxHp: 110, damage: 12, moveSpeed: 1.5, luck: 0, startWeapon: "rdHammer" },
@@ -110,9 +110,11 @@ export const CHARACTERS = {
   onyx: { id: "onyx", maxHp: 190, damage: 15, moveSpeed: 0.95, luck: 1, startWeapon: "oxHalo", defense: 30 },
   /** 펜리르 (비르디아, 영물): 대검 고정 5연 콤보 (sim/fenrir) */
   fenrir: { id: "fenrir", maxHp: 45, damage: 16, moveSpeed: 1.55, luck: 0, startWeapon: "fnKingBlade", dodge: 0.25, sharpness: 0.25 },
+  /** 이클립스 (헬리오스): 태양 ↔ 일식 (sim/eclipse) */
+  eclipse: { id: "eclipse", maxHp: 115, damage: 11, moveSpeed: 1.3, luck: 1, startWeapon: "ecAxe" },
   /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 대시는 땅굴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },
-  /** 운명의 여행자 (히든, 시즌 2): 운명의 활로 모아 쏘는 한 발 · 모래시계가 뒤집힐 때마다 주사위로 운명(sim/voyager) */
+  /** 운명의 여행자 (히든, 시즌 2): 모아 쏘는 활 · 모래시계 주사위 운명 (sim/voyager) */
   voyager: { id: "voyager", maxHp: 105, damage: 14, moveSpeed: 1.3, luck: 2, startWeapon: "vyBow" },
   /** 제우스 (히든, 시즌 2): 번개 무기 10 · 감전 · 천벌 게이지 → 제우스 강림 · 번개 걸음 (sim/zeus) */
   zeus: { id: "zeus", maxHp: 140, damage: 15, moveSpeed: 1.3, luck: 3, startWeapon: "zsBolt" },

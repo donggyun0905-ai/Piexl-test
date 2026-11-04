@@ -23,6 +23,7 @@ import { drawParryCd } from "./titan";
 import { drawTagCue } from "./tagCue";
 import { drawSlayerGauge } from "./slayer";
 import { fenrirLift } from "./fenrirBits";
+import { drawEclipseGauge, eclipseLift, eclipseSheet } from "./eclipseAura";
 
 export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   // 무리 여왕이 부른 기는 적은 인큐버스 그림
@@ -155,7 +156,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     const gx = snap(p.prevX - p.dashDirX * 6);
     const gy = snap(p.prevY - p.dashDirY * 6);
     ctx.globalAlpha = 0.35;
-    if (!drawCharacter(ctx, morphSheet(p) ?? p.characterId, gx, gy, p.r, { ...morphPose(p, pose), casting: false })) {
+    if (!drawCharacter(ctx, morphSheet(p) ?? eclipseSheet(p) ?? p.characterId, gx, gy, p.r, { ...morphPose(p, pose), casting: false })) {
       ctx.globalAlpha = 1;
       ctx.fillStyle = "rgba(255,255,255,0.25)";
       ctx.fillRect(gx - p.r, gy - p.r, p.r * 2, p.r * 2);
@@ -170,7 +171,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     if (s.enemies.some((e) => e.kind === "soul" && e.aux === 1 && e.hp > 0)) ctx.globalAlpha = 0.12;
     // 베두인: 차크람을 던지면 _bare 그림 (새 그림 시트 v2는 빈손 그림이 아직 없어 그대로)
     // 오니 신인족: 긴 뿔의 날렵한 모습
-    const sheet = p.kingRoom !== undefined ? "crownKing" : p.characterId === "oni" && (p.oGod ?? 0) > 0 ? "oni_god" : p.characterId === "slayer" && (p.slRage ?? 0) > 0 ? "slayer_rage" : p.characterId === "lux" && luxStage(p) > 0 ? `lux${luxStage(p) + 1}` : sheetFor(p.characterId, p.lv, p.abM);
+    const sheet = p.kingRoom !== undefined ? "crownKing" : p.characterId === "oni" && (p.oGod ?? 0) > 0 ? "oni_god" : p.characterId === "slayer" && (p.slRage ?? 0) > 0 ? "slayer_rage" : p.characterId === "lux" && luxStage(p) > 0 ? `lux${luxStage(p) + 1}` : (eclipseSheet(p) ?? sheetFor(p.characterId, p.lv, p.abM));
     // 베두인 무희의 춤: 대시하는 동안 몸이 한 바퀴 빙글 돎
     const twirl = p.characterId === "bedouin" && p.dashTicks > 0 && p.passives.includes("duneRush");
     if (twirl) {
@@ -187,7 +188,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
       ctx.globalAlpha = 0.75;
       ctx.filter = "brightness(0.15) sepia(1) hue-rotate(220deg) saturate(2)";
     }
-    const look = [p.characterId, x, y - fenrirLift(p), p.r, morphPose(p, pose), moving ? Math.floor(s.tick / 8) : 0, body, club] as const;
+    const look = [p.characterId, x, y - fenrirLift(p) - eclipseLift(p), p.r, morphPose(p, pose), moving ? Math.floor(s.tick / 8) : 0, body, club] as const;
     // 패왕전: 편 색 외곽선
     if (s.pw && inBush(s.pw.arena, x, y)) ctx.globalAlpha *= 0.5;
     if (!hideBody && !p.mRaid) footShadow(ctx, x, y, p.r);
@@ -226,6 +227,7 @@ function drawPlayerHp(ctx: CanvasRenderingContext2D, p: PlayerState, x: number, 
   if (p.characterId === "titan") drawParryCd(ctx, p, x + w / 2 + 3, top + 1);
   drawTagCue(ctx, p, x, top, tick);
   drawSlayerGauge(ctx, p, x, top, tick);
+  drawEclipseGauge(ctx, p, x, top, tick);
 }
 
 /** 캐릭터 몸 (그림이 없으면 도형). 타워 디펜스 캐릭터 고르기 칸에도 씀 */
