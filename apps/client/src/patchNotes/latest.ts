@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.12",
+    date: "2026-11-04",
+    items: {
+      ko: ["히든 아이템 '떨어진 신의 날개' 모습을 새로 그림: 등 뒤로 활짝 펼친 깃털 날개(긴 첫째 깃·늘어진 둘째 깃·덮깃 세 겹, 짙은 청록 → 하늘빛 → 흰 끝) · 천천히 퍼덕이고 깃 끝에서 빛 가루가 흩날림"],
+      en: ["Hidden item 'Fallen God's Wings' redrawn: wide feathered wings spread behind you (three layers of long primaries, drooping secondaries and coverts, deep teal → sky blue → white tips) · they flap slowly and shed motes of light from the tips"],
+      ja: ["隠しアイテム「堕ちた神の翼」の見た目を一新：背中に大きく広げた羽根の翼（長い初列風切・垂れた次列風切・雨覆の三層、深い青緑 → 空色 → 白い先端）· ゆっくり羽ばたき、羽先から光の粉が舞う"],
+    },
+  },
+  {
     version: "0.49.11",
     date: "2026-11-04",
     items: {

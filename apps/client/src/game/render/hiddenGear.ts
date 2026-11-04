@@ -1,4 +1,4 @@
-// 히든 아이템 둘째 묶음 그림: 등 뒤에 떠 있는 블리자드 랜스 다섯 · 날아가는 얼음 창 · 몸 좌우에 떠 있는 떨어진 신의 날개
+// 히든 아이템 둘째 묶음 그림: 등 뒤에 떠 있는 블리자드 랜스 다섯 · 날아가는 얼음 창 (떨어진 신의 날개는 render/fallenWings)
 // · 운명의/저주받은 주사위(머리 위에서 굴러가다 멈춤) · 화려한 보물 상자 · 저주 · 빙결
 import { drawHiddenAir } from "./hiddenTrial";
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
@@ -19,7 +19,7 @@ function lance(ctx: Ctx, x: number, y: number, dx: number, dy: number, len: numb
   });
 }
 
-/** 몸 둘레 (플레이어 다음): 블리자드 랜스 · 떨어진 신의 날개 */
+/** 몸 둘레 (플레이어 다음): 블리자드 랜스 */
 export function drawHiddenGear(ctx: Ctx, s: RunState, a: number, snap: Snap): void {
   const p = s.player;
   drawAllies(ctx, s, a, snap);
@@ -28,35 +28,6 @@ export function drawHiddenGear(ctx: Ctx, s: RunState, a: number, snap: Snap): vo
   drawHiddenAir(ctx, s, a, snap);
   const x = snap(lerp(p.prevX, p.x, a));
   const y = snap(lerp(p.prevY, p.y, a));
-  if (p.passives.includes("fallenWings")) {
-    // 몸에 붙지 않고 좌우로 조금 떨어져 떠 있는 커다란 반투명 날개 (천천히 펄럭임)
-    const flap = Math.sin(s.tick * 0.06) * 3;
-    for (const side of [-1, 1]) {
-      const bx = x + side * 9;
-      const by = y - 10;
-      ctx.save();
-      ctx.globalAlpha = 0.45;
-      ctx.fillStyle = "#fff6d8";
-      ctx.beginPath();
-      ctx.moveTo(bx, by);
-      ctx.quadraticCurveTo(bx + side * 18, by - 18 - flap, bx + side * 30, by - 10 - flap);
-      ctx.quadraticCurveTo(bx + side * 22, by + 2, bx + side * 26, by + 10 + flap * 0.5);
-      ctx.quadraticCurveTo(bx + side * 12, by + 6, bx, by + 6);
-      ctx.closePath();
-      ctx.fill();
-      ctx.globalAlpha = 0.6;
-      ctx.strokeStyle = "#ffe08a";
-      ctx.lineWidth = 0.8;
-      for (let i = 0; i < 4; i++) {
-        ctx.beginPath();
-        ctx.moveTo(bx + side * 2, by + 1 + i);
-        ctx.lineTo(bx + side * (12 + i * 4), by - 6 + i * 4 - flap * (1 - i / 4));
-        ctx.stroke();
-      }
-      ctx.restore();
-    }
-    additive(ctx, () => glow(ctx, x, y - 8, 16, "#fff0b0", 0.2));
-  }
   if (p.passives.includes("blizzardLance") && s.tick >= (p.lanceOut ?? 0)) {
     // 등 뒤 부채꼴로 떠 있는 얼음 창 다섯 (끝이 위를 봄)
     for (let i = 0; i < 5; i++) {
