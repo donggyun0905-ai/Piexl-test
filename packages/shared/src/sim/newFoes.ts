@@ -10,7 +10,7 @@ import { depth } from "./hero";
 import { addShape, inHazard } from "./hazards";
 import { damagePlayer } from "./combat";
 import type { EnemyState, RunState } from "./types";
-import { addEffect, dist2, enemyShot } from "./util";
+import { addEffect, dist2, enemyShot, keepInRoom, normalize, roomGrid } from "./util";
 import { lateDmg } from "./foeScale";
 import { trialFoeDmg } from "./trialFoes";
 import { tabooUp } from "./taboo";
@@ -37,7 +37,8 @@ const R = {
   JAIL_LEN: 170,
   JAIL_WIDTH: 4,
   JAIL_DMG: 10,
-  JAIL_PULL: 40,
+  /** 끌려간 뒤 간수와 떨어진 거리 */
+  JAIL_GAP: 4,
   /** 하이오크: 휘두르기 시작 거리 · 예고 틱 · 범위 · 피해(+층 세기 × 3) · 쉬는 틱 · 체력이 0에 가까울 때 더하는 이동 속도·공격력 배율 */
   ORC_REACH: 36,
   ORC_WARN: 30,
@@ -125,6 +126,29 @@ function skelarcher(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
 export const archerAim = (e: EnemyState): 0 | 1 | undefined => (e.kind === "skelarcher" && e.phase === "windup" ? (e.step === 1 ? 1 : 0) : undefined);
 export const ARCHER_LEN = () => R.ARCH_LEN;
 
+/** 사슬에 맞으면 사슬을 따라 간수 앞까지 한 번에 끌려감 (벽·기둥에 걸리면 거기서 멈춤) */
+function yank(s: RunState, e: EnemyState): void {
+  const p = s.player;
+  const fromX = p.x;
+  const fromY = p.y;
+  const len = Math.sqrt(dist2(e, p)) - e.r - p.r - R.JAIL_GAP;
+  const d = normalize(e.x - p.x, e.y - p.y);
+  if (!d || len <= 0) return;
+  const g = roomGrid(s);
+  for (let t = 0; t < len; t += 4) {
+    const bx = p.x;
+    const by = p.y;
+    const step = Math.min(4, len - t);
+    p.x += d[0] * step;
+    p.y += d[1] * step;
+    keepInRoom(p, g);
+    if (Math.abs(p.x - bx - d[0] * step) + Math.abs(p.y - by - d[1] * step) > 1) break;
+  }
+  p.prevX = p.x;
+  p.prevY = p.y;
+  addEffect(s, { kind: "streak", x: fromX, y: fromY, dirX: d[0], dirY: d[1], size: 4, toX: p.x, toY: p.y, maxTicks: 12, tint: "#c8c8d8" });
+}
+
 /** 쇠사슬 간수: phase walk 거리 두기 · windup 사슬 길 예고(굳음) → 맞으면 끌어당김 */
 function chainward(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
   const p = s.player;
@@ -138,8 +162,7 @@ function chainward(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
       addEffect(s, { kind: "gleam", x: h.x, y: h.y, toX: h.toX, toY: h.toY, dirX: 0, dirY: 0, size: 4, width: R.JAIL_WIDTH, maxTicks: 12, foe: true });
       if (inHazard(h, p.x, p.y, p.r) && p.invulnTicks <= 0 && p.shieldTicks <= 0 && !dashDodged(s)) {
         damagePlayer(s, R.JAIL_DMG + 2 * depth(s), "chainward");
-        p.lureTicks = R.JAIL_PULL;
-        p.lureId = e.id;
+        yank(s, e);
       }
     }
     e.phase = "walk";

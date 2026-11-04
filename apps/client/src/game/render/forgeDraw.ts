@@ -1,6 +1,6 @@
-// 대장간 그림 (sim/forge): 방 꾸밈(위쪽 벽 화덕·불꽃·굴뚝 불빛 · 연장 걸이 · 무기 걸이 · 숯 더미 · 물통 · 바닥 불빛 · 떠오르는 불티)
+// 대장간 그림 (sim/forge): 방 꾸밈(왼쪽 벽 화덕·불꽃·굴뚝 불빛 · 연장 걸이 · 무기 걸이 · 숯 더미 · 물통 · 바닥 불빛 · 떠오르는 불티)
 // · 가운데 모루 + 그 옆 대장장이: 사용자 그림 sprites/blacksmith.png (64×64 6장, 원본 art/대장장이) · 못 불러오면 코드로 그린 대장장이·모루
-import { ROOM_WIDTH, type Pickup, type RunState } from "@pixel-rogue/shared";
+import { ROOM_MAX_X, ROOM_MIN_X, ROOM_WIDTH, type Pickup, type RunState } from "@pixel-rogue/shared";
 import { drawSprite } from "../sprites";
 import { additive, alpha, glow, rnd, sparks, type Ctx } from "./pwFxBits";
 
@@ -12,12 +12,15 @@ const HIT = 22;
 export function drawForgeRoom(ctx: Ctx, s: RunState, cx: number, cy: number): void {
   const t = s.tick;
   const top = cy - 80;
+  // 화덕은 왼쪽 벽, 연장·무기 걸이는 오른쪽 벽 (위쪽 벽의 출구 문 셋을 가리지 않게)
+  const hx = ROOM_MIN_X + 34;
+  const hy = cy - 34;
   // 바닥 불빛 (화덕에서 번지는 주황빛, 숨 쉬듯)
-  additive(ctx, () => glow(ctx, cx - 70, top + 30, 120, "#ff7a2a", 0.28 + 0.06 * Math.sin(t / 9)));
-  hearth(ctx, cx - 70, top + 4, t);
-  toolRack(ctx, cx + 64, top + 2);
-  weaponRack(ctx, cx + 120, top + 4);
-  coal(ctx, cx - 118, top + 34);
+  additive(ctx, () => glow(ctx, hx + 10, hy + 26, 110, "#ff7a2a", 0.28 + 0.06 * Math.sin(t / 9)));
+  hearth(ctx, hx, hy, t);
+  toolRack(ctx, ROOM_MAX_X - 34, cy - 44);
+  weaponRack(ctx, ROOM_MAX_X - 30, cy + 4);
+  coal(ctx, ROOM_MIN_X + 22, hy + 40);
   barrel(ctx, cx + 34, cy + 6, t);
   grindstone(ctx, cx - 110, cy + 56, t);
   ingots(ctx, cx + 104, cy + 60);
@@ -25,8 +28,8 @@ export function drawForgeRoom(ctx: Ctx, s: RunState, cx: number, cy: number): vo
   additive(ctx, () => {
     for (let i = 0; i < 22; i++) {
       const f = ((t * (0.5 + rnd(i, 1) * 0.6) + i * 37) % 200) / 200;
-      const x = cx - 70 + (rnd(i, 2) - 0.5) * 60 + Math.sin(t / 14 + i) * 6;
-      const y = top + 16 - f * 70 + f * 160 * rnd(i, 3) * 0;
+      const x = hx + (rnd(i, 2) - 0.5) * 60 + Math.sin(t / 14 + i) * 6;
+      const y = hy + 16 - f * 70;
       glow(ctx, x + f * (rnd(i, 4) - 0.5) * 40, y, 2, i % 3 ? "#ffb347" : "#ffe6a0", (1 - f) * 0.9, 1);
     }
   });

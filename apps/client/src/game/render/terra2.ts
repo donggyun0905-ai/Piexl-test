@@ -9,8 +9,8 @@ import { drawRiderAura, drawRiderFx, drawRiderGround, drawRiderShot } from "./ri
 type Ctx = CanvasRenderingContext2D;
 const LZ = "#8ae8ff";
 const LZW = "#ffffff";
-/** 자매 인형 옷 (스킨 그림을 빌려 색으로 구분: 분홍 · 연두 · 보라 · 금빛, DOLL_TINTS와 같은 차례) */
-const DOLL_SKINS = ["automata_newyear", "automata_xmas", "automata_halloween", "automata_china"] as const;
+/** 자매 인형 그림: 진홍빛 자매 인형 (발밑 빛은 DOLL_TINTS 색으로 인형마다 구분) */
+const DOLL_SHEET = "automataDoll";
 const HOT = "#ffd040";
 
 /** 탄: 유도 미사일(뒤로 연기) · 에너지탄 · 톱날 */
@@ -140,7 +140,7 @@ export function drawTerraAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap):
     ctx.ellipse(x, y + 6, 5, 1.5, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.globalAlpha = 1;
-    if (!drawCharacter(ctx, DOLL_SKINS[i % DOLL_SKINS.length]!, x, y, 6, { faceX: p.faceX, faceY: p.faceY, moving: true, casting: d.cd > 40, step: Math.floor(s.tick / 8 + i) })) {
+    if (!drawCharacter(ctx, DOLL_SHEET, x, y, 6, { faceX: p.faceX, faceY: p.faceY, moving: true, casting: d.cd > 40, step: Math.floor(s.tick / 8 + i) })) {
       ctx.fillStyle = tint;
       ctx.fillRect(x - 2, y - 8, 4, 8);
     }

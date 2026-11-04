@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.6",
+    date: "2026-11-04",
+    items: {
+      ko: [
+        "대장간: 화덕은 왼쪽 벽, 연장·무기 걸이는 오른쪽 벽으로 옮겨 위쪽 출구 문이 잘 보임",
+        "쇠사슬 간수: 사슬에 맞으면 천천히 끌려가지 않고 사슬을 따라 간수 앞까지 한 번에 끌려감",
+        "오토마타: 자매 인형이 새 진홍빛 자매 인형 그림으로 나옴",
+        "연습장 '방': 숨은 시련 5종(하이오크 부락 · 어둠의 세계 · 공성전 · 안개숲 · 죽음의 바다)을 바로 시작해 볼 수 있음 · '보통 방으로'를 누르면 끝남",
+      ],
+      en: [
+        "Forge: the hearth moved to the left wall and the tool/weapon racks to the right wall, so the exit doors up top are easy to see",
+        "Chain Warden: getting hit by the chain now yanks you straight to the warden instead of pulling you slowly",
+        "Automata: the sister dolls now use the new crimson sister-doll art",
+        "Practice 'Rooms': start any of the 5 Hidden Trials (High Orc Village · World of Darkness · Siege · Misty Forest · Sea of Death) right away · 'Back to normal' ends it",
+      ],
+      ja: [
+        "鍛冶場：炉を左の壁、道具・武器掛けを右の壁に移し、上の出口の扉が見やすくなった",
+        "鎖の看守：鎖に当たるとゆっくり引かれるのではなく、鎖に沿って看守の前まで一気に引き寄せられる",
+        "オートマタ：姉妹人形が新しい真紅の姉妹人形の絵で登場",
+        "練習場「部屋」：隠れた試練5種（ハイオークの集落・闇の世界・攻城戦・霧の森・死の海）をすぐ始められる・「普通の部屋に」で終了",
+      ],
+    },
+  },
+  {
     version: "0.49.5",
     date: "2026-11-04",
     items: {
