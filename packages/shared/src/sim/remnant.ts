@@ -150,6 +150,9 @@ function update(s: RunState): void {
 export function remnantTick(s: RunState, want: boolean, _speed: number): void {
   const p = s.player;
   if (!isRemnant(p)) return;
+  // 대시를 시작한 틱: 더 멀리 (대시 틱이 늘어난 만큼 무적도 딱 맞게 길어짐)
+  if (p.dashTicks > 0 && !p.rmDashing) p.dashTicks += R.dashMore;
+  p.rmDashing = p.dashTicks > 0;
   update(s);
   if (!want || p.attackCooldown > 0 || p.rmFlurry) return;
   // 공격 속도는 무기 그대로 (아이템·버프로 오르지 않음)
@@ -160,5 +163,5 @@ export function remnantTick(s: RunState, want: boolean, _speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetRemnant(p: PlayerState): void {
-  for (const k of ["rmSlow", "rmFrozen", "rmFlurry", "rmDodges"] as const) delete p[k];
+  for (const k of ["rmSlow", "rmFrozen", "rmFlurry", "rmDodges", "rmDashing"] as const) delete p[k];
 }

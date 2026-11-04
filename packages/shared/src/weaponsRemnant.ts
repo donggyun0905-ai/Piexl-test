@@ -45,6 +45,8 @@ export const REMNANT_WEAPONS = {
 
 /** 잔영 수치 (배율 1 = 100%, 시간은 틱, 거리는 픽셀) */
 export const REMNANT = {
+  /** 대시를 더 길게: 보통 대시(9틱)에 더하는 틱 (같은 빠르기로 더 멀리 · 그만큼 대시 무적도 길어짐) */
+  dashMore: 6,
   /** 슬로우모션 중 적이 쉬는 틱 (일반 적은 네 틱 중 세 틱, 보스는 두 틱 중 한 틱) · 적 탄 빠르기 배율 */
   slowEvery: 4,
   bossEvery: 2,

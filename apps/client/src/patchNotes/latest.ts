@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.5",
+    date: "2026-11-04",
+    items: {
+      ko: ["잔영: 대시가 더 멀리 감 (대시 시간 9틱 → 15틱, 같은 빠르기) · 대시 무적도 그만큼 길어져 대시가 끝날 때 딱 끝남"],
+      en: ["Remnant: dash goes farther (9 → 15 ticks at the same speed) · dash invulnerability lasts exactly as long as the dash"],
+      ja: ["残影：ダッシュがより遠くへ（9ティック → 15ティック、同じ速さ）・ダッシュ無敵もその分長くなり、ダッシュの終わりとぴったり一緒に終わる"],
+    },
+  },
+  {
     version: "0.49.4",
     date: "2026-11-04",
     items: {
