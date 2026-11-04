@@ -1,5 +1,5 @@
 // 방 설명 창 글: 시련의 방 · 제단의 방 (나머지 방은 roomGuide). 수치는 게임 계산 값에서 바로 가져옴
-import { ALTAR, ALTAR_IDS, TRIAL_FOE_RULES as F, TRIAL_RULES as R, TRIAL_RUN_RULES as RR } from "@pixel-rogue/shared";
+import { FORGE_RULES, ALTAR, ALTAR_IDS, TRIAL_FOE_RULES as F, TRIAL_RULES as R, TRIAL_RUN_RULES as RR } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "./index";
 
 export type L = [string, string, string];
@@ -35,10 +35,22 @@ function altar(t: (k: TextKey) => string): L[] {
     ["카드 1 거래: 성좌마다 정해진 능력치를 받고 다른 능력치를 내줌 (100%)", "Card 1 Bargain: gain that constellation's stat and give up another (100%)", "カード1 取引: 星座ごとの能力値を得て別の能力値を渡す (100%)"],
     [`카드 2 증강: 패시브 ${ALTAR.takePassives}개를 바치고 남은 패시브 하나(무작위)에 증강 기술 둘 · 패시브가 둘 이상 필요 · 한 판에 하나 (이미 있으면 최대 체력 ${ALTAR.swapHp}을 내고 바꾸기)`, `Card 2 Augment: give up ${ALTAR.takePassives} passives, a random remaining one gets two augment skills · needs at least two passives · one per run (if you have one, pay ${ALTAR.swapHp} max HP to swap)`, `カード2 増強: パッシブ${ALTAR.takePassives}つを捧げ、残り1つ(ランダム)に増強技2つ · パッシブが2つ以上必要 · 1ランに1つ（既にあれば最大体力${ALTAR.swapHp}で付け替え）`],
     [`카드 3 무시: ${ig}%로 벌칙 (카드 1에서 내주는 능력치, 또는 패시브 둘 · ??? 성좌는 패시브 ${ALTAR.unknownIgnore}개) · ${pct(1 - ALTAR.ignoreChance)}%는 아무 일 없음`, `Card 3 Ignore: ${ig}% penalty (card 1's cost, or two passives · ??? takes ${ALTAR.unknownIgnore}) · ${pct(1 - ALTAR.ignoreChance)}% nothing happens`, `カード3 無視: ${ig}%で罰 (カード1で渡す能力値、またはパッシブ2つ · ???はパッシブ${ALTAR.unknownIgnore}つ) · ${pct(1 - ALTAR.ignoreChance)}%は何もない`],
+    ["증강을 받으면 그 성좌 꼬리표 둘이 빌드 세트에 하나씩 더해짐 (알 수 없는 성좌: 행운 + 고르는 꼬리표)", "Taking an augment adds that constellation's two tags to your build sets (Unknown: Luck + a tag you choose)", "増強を受けるとその星座のタグ2つがビルドセットに1つずつ加算（知られざる星座：幸運＋選ぶタグ）"],
     ["카드를 고르기 전에는 방을 나갈 수 없음", "You can't leave until you pick a card", "カードを選ぶまで部屋を出られない"],
   ];
 }
 
-export function roomGuide2(kind: "trial" | "altar", lang: Lang, t: (k: TextKey) => string): string[] {
-  return pick(lang, kind === "trial" ? trial(t) : altar(t));
+function forge(): L[] {
+  const F = FORGE_RULES;
+  return [
+    [`나오는 곳: ${F.FROM_FLOOR}층부터 층마다 ${pct(F.CHANCE)}%로 하나 (불빛 도는 대장간)`, `Where: from floor ${F.FROM_FLOOR}, ${pct(F.CHANCE)}% per floor (a fire-lit forge)`, `出現: ${F.FROM_FLOOR}階から各階${pct(F.CHANCE)}%で1つ（火の灯る鍛冶場）`],
+    [`무기 강화: +0→+1은 100%, 단계마다 ${pct(F.UP_STEP)}%씩 낮아져 최저 ${pct(F.UP_MIN)}% · 실패하면 한 단계 떨어짐 · 단계마다 무기 피해 +${pct(F.UP_DMG)}% (최대 +${F.MAX_LV})`, `Weapon upgrade: +0→+1 is 100%, each level ${pct(F.UP_STEP)}% lower, min ${pct(F.UP_MIN)}% · failing drops a level · +${pct(F.UP_DMG)}% weapon damage per level (max +${F.MAX_LV})`, `武器強化：+0→+1は100%、段階ごとに${pct(F.UP_STEP)}%下がり最低${pct(F.UP_MIN)}%・失敗すると1段階下がる・段階ごとに武器ダメージ+${pct(F.UP_DMG)}%（最大+${F.MAX_LV}）`],
+    [`꼬리표 변환: 무기·패시브 하나를 원하는 꼬리표로 · 대장간마다 처음 1번 무료, 그다음 ${F.TAG_COST}골드씩 점점 비쌈`, `Tag reforge: set a weapon or passive to any tag · first one free at each forge, then ${F.TAG_COST} gold and rising`, `タグ変換：武器・パッシブ1つを好きなタグに・鍛冶場ごとに最初の1回無料、その後${F.TAG_COST}ゴールドずつ高くなる`],
+    [`암흑 강화 (무기만): ${pct(F.DARK_CHANCE)}% · 성공하면 암흑 단계 +1 (무기 피해 +${pct(F.DARK_DMG)}%, 최대 +${F.DARK_MAX}) · 실패하면 무기가 부서져 처음 무기로`, `Dark upgrade (weapon only): ${pct(F.DARK_CHANCE)}% · success adds a dark level (+${pct(F.DARK_DMG)}% weapon damage, max +${F.DARK_MAX}) · failure shatters the weapon and you get your starting weapon`, `暗黒強化（武器のみ）：${pct(F.DARK_CHANCE)}%・成功で暗黒段階+1（武器ダメージ+${pct(F.DARK_DMG)}%、最大+${F.DARK_MAX}）・失敗すると武器が壊れ最初の武器に`],
+    ["강화·꼬리표는 그 무기에만 남음 (다른 무기로 바꾸면 사라지고, 그 무기를 다시 들면 그대로) · 그냥 나가도 아무 일 없음", "Upgrades and tags stay on that weapon (swap and they're gone; pick it up again and they're back) · leaving does nothing", "強化・タグはその武器にだけ残る（別の武器に替えると消え、その武器を持ち直すと戻る）・そのまま出ても何もない"],
+  ];
+}
+
+export function roomGuide2(kind: "trial" | "altar" | "forge", lang: Lang, t: (k: TextKey) => string): string[] {
+  return pick(lang, kind === "trial" ? trial(t) : kind === "forge" ? forge() : altar(t));
 }

@@ -15,6 +15,8 @@ import { kingExtras } from "./kingForm";
 import { growExtras } from "./pwGearStat";
 import { luxExtras } from "./lux";
 import { devilExtras } from "./devilPerks";
+import { setExtras, setTaken } from "./buildSets";
+import { setOnHit, setTick } from "./buildSetFx";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -43,9 +45,11 @@ export function extraOf(p: PlayerState): ExtraStats {
   const boon = boonExtras(p);
   // 악마의 거래 (sim/devilPerks)
   const devil = devilExtras(p);
-  if (!add && !grow && !lux && !gym && !boon && !devil) return base;
+  // 빌드 세트 효과 (sim/buildSets)
+  const set = setExtras(p);
+  if (!add && !grow && !lux && !gym && !boon && !devil && !set) return base;
   const out = { ...base };
-  for (const a of [add, grow, lux, gym, boon, devil]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
+  for (const a of [add, grow, lux, gym, boon, devil, set]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
   return out;
 }
 
@@ -64,7 +68,7 @@ export function extraTaken(p: PlayerState, taken: number): number {
   const ex = extraOf(p);
   if (ex.defense > 0) taken *= 100 / (100 + ex.defense);
   if (ex.reduction > 0) taken *= 1 - Math.min(R.REDUCTION_MAX, ex.reduction);
-  return taken;
+  return setTaken(p, taken);
 }
 
 /** 예리함이 걸린 적이 더 받는 피해 */
@@ -76,6 +80,7 @@ export function onHitExtra(s: RunState, e: EnemyState, dmg: number): void {
   const ex = extraOf(s.player);
   if (dmg <= 0) return;
   hiddenOnHit(s, e, dmg);
+  setOnHit(s, e, dmg);
   if (ex.lifesteal > 0) healPlayer(s, dmg * ex.lifesteal);
   // 예리함 (방랑객 숫돌: 더 자주) · 터지면 칼빛 효과
   const sharp = ex.sharpness + (hasPerk(s.player, "wdHone") ? WANDERER_PERKS.wdHone.add : 0);
@@ -95,5 +100,7 @@ export function extraTick(s: RunState): void {
   const p = s.player;
   const ex = extraOf(p);
   if (ex.regen > 0 && s.tick % R.REGEN_EVERY === 0 && p.hp > 0) healPlayer(s, (ex.regen / 10) * (R.REGEN_EVERY / 60));
+  const bleeds = ex.sharpness > 0 || weaponOf(p).kind === "gun";
   if (ex.sharpness > 0 && weaponOf(p).kind !== "gun") updateBleed(s);
+  setTick(s, bleeds);
 }

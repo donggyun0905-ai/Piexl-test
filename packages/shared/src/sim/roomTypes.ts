@@ -6,8 +6,10 @@ import type { TrialPlayerState, TrialRunState } from "./trialTypes";
 import type { HiddenTrialRunState } from "./hiddenTrialTypes";
 import type { RoutePlayerState } from "./routeGo";
 import type { HurtLogPlayerState } from "./hurtLog";
+import type { BuildSetPlayerState } from "./buildSets";
+import type { ForgePlayerState } from "./forge";
 
-export interface RoomPlayerState extends BoonPlayerState, TrialPlayerState, AltarPlayerState, VaultPlayerState, RoutePlayerState, HurtLogPlayerState {}
+export interface RoomPlayerState extends BoonPlayerState, TrialPlayerState, AltarPlayerState, VaultPlayerState, RoutePlayerState, HurtLogPlayerState, BuildSetPlayerState, ForgePlayerState {}
 export interface RoomRunState extends TrialRunState, VaultRunState, HiddenTrialRunState {
   /** 엘리트 방 라운드 (sim/roomSpawn.eliteWave): 층·방 · 지금 라운드 · 다음 무리까지 틱 */
   eliteWave?: { floor: number; room: number; n: number; t: number };

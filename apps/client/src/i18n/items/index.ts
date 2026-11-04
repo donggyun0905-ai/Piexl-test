@@ -57,7 +57,7 @@ function fill(text: string, row: Record<string, unknown> | undefined): string {
   });
 }
 
-type ItemKind = "weapon" | "use" | "passive" | "coin" | "reroll" | "trash" | "bench" | "tune" | "gym" | "trial" | "boon" | "altar" | "devil" | "gambler" | "auction";
+type ItemKind = "weapon" | "use" | "passive" | "coin" | "reroll" | "trash" | "bench" | "tune" | "gym" | "trial" | "boon" | "altar" | "devil" | "gambler" | "auction" | "forge";
 
 const COIN_NAME: Names = { ko: "돈", en: "Gold", ja: "ゴールド" };
 const REROLL_NAME: Names = { ko: "새로고침", en: "Refresh", ja: "入れ替え" };
@@ -78,7 +78,7 @@ export function itemName(kind: ItemKind, id: string, lang: Lang): string {
   if (kind === "coin") return COIN_NAME[lang];
   if (kind === "reroll") return REROLL_NAME[lang];
   if (kind === "trash") return TRASH_NAME[lang];
-  if (kind === "bench" || kind === "tune" || kind === "gym" || kind === "trial" || kind === "boon" || kind === "altar" || kind === "gambler" || kind === "auction") return STATION_NAME[kind][lang];
+  if (kind === "bench" || kind === "tune" || kind === "gym" || kind === "trial" || kind === "boon" || kind === "altar" || kind === "gambler" || kind === "auction" || kind === "forge") return STATION_NAME[kind][lang];
   if (kind === "devil") kind = "passive"; // 악마의 거래는 패시브 이름
   const table = kind === "weapon" ? WEAPON_NAMES : kind === "use" ? USE_NAMES : PASSIVE_NAMES;
   return (table as Record<string, Names>)[id]?.[lang] ?? id;
@@ -88,7 +88,7 @@ export function itemDesc(kind: ItemKind, id: string, lang: Lang, t: (k: TextKey)
   if (kind === "coin") return "";
   if (kind === "reroll") return REROLL_DESC[lang];
   if (kind === "trash") return TRASH_DESC[lang];
-  if (kind === "bench" || kind === "tune" || kind === "gym" || kind === "trial" || kind === "boon" || kind === "altar" || kind === "gambler" || kind === "auction") return STATION_DESC[kind][lang];
+  if (kind === "bench" || kind === "tune" || kind === "gym" || kind === "trial" || kind === "boon" || kind === "altar" || kind === "gambler" || kind === "auction" || kind === "forge") return STATION_DESC[kind][lang];
   if (kind === "devil") return `${itemDesc("passive", id, lang, t)} · ${STATION_DESC.devil[lang].replace("{cost}", String(cost ?? devilCost(id as DevilId)))}`;
   if (kind === "use") return fill(USE_DESC[id as UseItemId][lang], USE_ITEMS[id as UseItemId]);
   if (kind === "weapon") {

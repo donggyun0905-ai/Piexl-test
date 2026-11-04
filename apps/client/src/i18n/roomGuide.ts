@@ -87,6 +87,6 @@ function guide(kind: PracticeRoom, lang: Lang): L[] {
 
 /** 방 설명 줄 (t: 시련 벌칙·성좌 이름 등 다른 화면 글자) */
 export function roomGuide(kind: PracticeRoom, lang: Lang, t: (k: TextKey) => string): string[] {
-  if (kind === "trial" || kind === "altar") return roomGuide2(kind, lang, t);
+  if (kind === "trial" || kind === "altar" || kind === "forge") return roomGuide2(kind, lang, t);
   return pick(lang, guide(kind, lang));
 }

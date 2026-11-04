@@ -4,6 +4,7 @@
 // 고르기 전에는 방을 나갈 수 없음 (잠긴 출구도 못 지남). 수치는 altarDefs
 import { ALTAR, ALTAR_IDS, ALTARS, type AltarId, type AltarTrade } from "../altarDefs";
 import type { PassiveId } from "../items";
+import { ITEM_TAGS, type ItemTag } from "../itemsTags";
 import { createRng, deriveSeed, type Rng } from "../rng";
 import { addBoonExtra, addBoonMod } from "./boons";
 import { recalcStats } from "./items";
@@ -18,8 +19,8 @@ export const ALTAR_OP = 13;
 export interface AltarPlayerState {
   /** 쓴 제단 (층 × 1000 + 방) · 마지막 결과 (화면 안내) · 고른 카드 기록 (버프 창) */
   altar?: { rooms: number[]; last?: { id: AltarId; card: number; hit?: number; tick: number; taken?: PassiveId[]; keep?: PassiveId; swap?: boolean }; got?: { id: AltarId; card: number; hit?: number; swap?: boolean }[] };
-  /** 증강: 붙은 패시브 · 기술 둘 (그 패시브를 가진 동안 늘 씀) */
-  augments?: { passive: PassiveId; skills: SwarmSkill[] }[];
+  /** 증강: 붙은 패시브 · 기술 둘 (그 패시브를 가진 동안 늘 씀) · 제단 성좌 (그 꼬리표가 세트에 +1, buildSetDefs.ALTAR_TAGS) · 알 수 없는 성좌에서 고른 꼬리표 */
+  augments?: { passive: PassiveId; skills: SwarmSkill[]; alt?: AltarId; pick?: ItemTag }[];
   /** 마지막으로 공격한 틱 (증강 기술은 공격하는 동안만, sim/player) */
   atkAt?: number;
   /** 증강 기술 '블랙홀' (던전, 광야의 새벽은 판에 있음) */
@@ -72,8 +73,16 @@ function takePassives(p: PlayerState, rng: Rng, n: number, keep?: PassiveId): Pa
   return out;
 }
 
-/** 카드를 고름 */
-export function altarMenu(s: RunState, card: number): void {
+/** 증강에 성좌 꼬리표 (알 수 없는 성좌는 고른 꼬리표 하나 더) */
+function setAugTags(aug: NonNullable<AltarPlayerState["augments"]>[number], id: AltarId, pick: number): void {
+  aug.alt = id;
+  const t = id === "unknown" ? ITEM_TAGS[pick - 1] : undefined;
+  if (t) aug.pick = t;
+  else delete aug.pick;
+}
+
+/** 카드를 고름 (pick: 알 수 없는 성좌 증강에서 고른 꼬리표 ITEM_TAGS 차례 + 1, 없으면 행운만) */
+export function altarMenu(s: RunState, card: number, pick = 0): void {
   if (!altarPending(s) || card < 0 || card > 2) return;
   const p = s.player;
   const id = altarOf(s);
@@ -95,15 +104,19 @@ export function altarMenu(s: RunState, card: number): void {
     const aug = altarAug(p)!;
     if (!p.passives.includes(aug.passive)) aug.passive = p.passives[rng.int(0, p.passives.length - 1)]!;
     aug.skills = [...def.skills];
+    setAugTags(aug, id, pick);
     addBoonMod(s, { stat: "maxHp", add: -ALTAR.swapHp });
     p.hp = Math.min(p.hp, p.stats.maxHp);
     Object.assign(a.last, { keep: aug.passive, swap: true });
+    recalcStats(s);
   } else if (card === 1) {
     // 새길 패시브(아직 증강이 없는 것 먼저)를 정하고, 나머지 중 증강 없는 것을 바침
     const fresh = p.passives.filter((x) => !augmented(p, x));
     const keep = (fresh.length > 0 ? fresh : p.passives)[rng.int(0, (fresh.length > 0 ? fresh : p.passives).length - 1)]!;
     const taken = takePassives(p, rng, ALTAR.takePassives, keep);
-    (p.augments ??= []).push({ passive: keep, skills: [...def.skills] });
+    const aug = { passive: keep, skills: [...def.skills] };
+    setAugTags(aug, id, pick);
+    (p.augments ??= []).push(aug);
     Object.assign(a.last, { keep, taken });
     recalcStats(s);
   } else if (rng.nextFloat() < ALTAR.ignoreChance) {

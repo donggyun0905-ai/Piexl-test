@@ -1,6 +1,6 @@
 // 작업대 결과 연출 (창 가운데): 성공 = 금빛 빛줄기가 돌며 새 아이템이 떠오름 · 실패 = 회색 연기가 피어오르며 흔들림
 // · 파괴 = 아이템이 금이 가 산산조각 나며 파편이 튐 · 단계 하락 = 붉게 번쩍이며 아래로 떨어지는 화살표. 창을 다시 열면 지난 결과는 다시 안 나옴
-import { TUNE_SLOTS, type StationResult } from "@pixel-rogue/shared";
+import { TUNE_SLOTS, WEAPONS, type StationResult } from "@pixel-rogue/shared";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { itemName } from "../i18n/items";
@@ -24,11 +24,13 @@ export function StationResultFx({ last, lang, t }: { last?: StationResult; lang:
   }, [last]);
   if (!shown) return null;
   const slot = shown.slot !== undefined ? TUNE_SLOTS[shown.slot]?.id : undefined;
+  // 대장간은 무기 결과도 있음
+  const kind = shown.id && shown.id in WEAPONS ? "weapon" : "passive";
   return (
     <div className={`station-result ${CLASS[shown.ok]}`} key={shown.tick} aria-live="polite">
       <div className="sr-rays" />
       <div className="sr-item">
-        {shown.id ? <ItemIcon item={{ kind: "passive", id: shown.id as never }} size={48} /> : <span className="sr-part">⚙</span>}
+        {shown.id ? <ItemIcon item={{ kind, id: shown.id as never }} size={48} /> : <span className="sr-part">⚙</span>}
         {shown.ok === 2 && (
           <span className="sr-shards">
             {Array.from({ length: 8 }, (_, i) => (
@@ -38,7 +40,7 @@ export function StationResultFx({ last, lang, t }: { last?: StationResult; lang:
         )}
       </div>
       <strong className="sr-label">{t(LABEL[shown.ok])}</strong>
-      <small>{shown.id ? itemName("passive", shown.id, lang) : slot ? TUNE_SLOT_NAMES[slot]?.[lang] : ""}</small>
+      <small>{shown.id ? itemName(kind, shown.id, lang) : slot ? TUNE_SLOT_NAMES[slot]?.[lang] : ""}</small>
     </div>
   );
 }

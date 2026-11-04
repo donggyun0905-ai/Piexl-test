@@ -5,7 +5,7 @@ import type { TextKey } from "../../i18n";
 import { roomLook } from "../minimap";
 
 /** 방 이름 글자 (방 설명 창 RoomGuide도 씀) */
-export const ROOM_NAME: Record<PracticeRoom, TextKey> = { shop: "sumRoomShop", heaven: "roomHeaven", golden: "sumRoomGolden", treasure: "sumRoomTreasure", gym: "sumRoomGym", trial: "sumRoomTrial", altar: "sumRoomAltar", devil: "sumRoomDevil", gamble: "sumRoomGamble", auction: "sumRoomAuction", crack: "sumRoomCrack", rest: "sumRoomRest" };
+export const ROOM_NAME: Record<PracticeRoom, TextKey> = { shop: "sumRoomShop", heaven: "roomHeaven", golden: "sumRoomGolden", treasure: "sumRoomTreasure", gym: "sumRoomGym", trial: "sumRoomTrial", altar: "sumRoomAltar", forge: "sumRoomForge", devil: "sumRoomDevil", gamble: "sumRoomGamble", auction: "sumRoomAuction", crack: "sumRoomCrack", rest: "sumRoomRest" };
 
 /** 방 색 (미니맵과 같음) */
 export const practiceRoomLook = (k: PracticeRoom) => roomLook({ type: k === "heaven" ? "shop" : k === "crack" ? "combat" : k, ...(k === "heaven" ? { heaven: true } : {}) });

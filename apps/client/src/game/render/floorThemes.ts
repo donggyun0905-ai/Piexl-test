@@ -53,6 +53,8 @@ const VAULT = {
   gamble: T("#2a1e14", "#261a12", "#1e4a2a", "#e8c25a", "#3a2a1a", "#2e6a3a", "#0e0a06", "#e8c25a", [["star", "#e8c25a"]], 0.04),
   auction: T("#2a0c12", "#240a10", "#3a1a10", "#e8c25a", "#3a1218", "#6a1a24", "#0e0406", "#e8c25a", [["petal", "#7a1a24"]], 0.05),
 } as const;
+/** 대장간: 그을린 돌바닥 · 검붉은 벽돌 벽 · 불티 */
+const FORGE = T("#2a201c", "#241c18", "#4a2a20", "#ff8a3a", "#3a2a22", "#6a3a26", "#0e0806", "#ff6a1e", [["ember", "#ff7a2a"], ["crack", "#1a1210"]], 0.1);
 const HEAVEN = T("#f1eff8", "#e7e3f2", "#b4aed0", "#fff2c8", "#e4e0f0", "#fffaf0", "#c8c2dc", "#f0d890", [["feather", "#ffffff"], ["star", "#e8c25a"]], 0.16);
 
 /** 보스 → 테마 */
@@ -125,6 +127,7 @@ export function themeFor(s: RunState): FloorTheme {
   if (room?.type === "trial") return TRIAL;
   if (room?.type === "devil" || room?.type === "gamble" || room?.type === "auction") return VAULT[room.type];
   if (room?.type === "altar") return ALTAR_THEME[altarOf(s)];
+  if (room?.type === "forge") return FORGE;
   if (s.swarm) return THEMES[SWARM_THEME[(s.swarm.map ?? "plains") as keyof typeof SWARM_THEME] ?? SWARM_THEME.plains]!;
   const pa = s.pvp?.arena ?? s.pw?.arena;
   if (pa) return THEMES[PW_THEME[pa]]!;

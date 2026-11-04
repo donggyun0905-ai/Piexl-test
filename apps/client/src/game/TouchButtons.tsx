@@ -8,6 +8,8 @@ import { ItemIcon } from "./itemIcon";
 
 interface Props {
   slots: (UseItemId | null)[];
+  /** 사용 아이템을 못 쓰는 동안 (✕) */
+  useOff?: boolean;
   lang: Lang;
   t: (key: TextKey) => string;
   controls: () => Controls | null;
@@ -42,7 +44,7 @@ function feedback(el: HTMLElement): void {
 /** 모바일 오른쪽 아래 버튼 (오른손 엄지 자리): 대시(가장 큼) · 사용 아이템 1·2번 · 맞는 범위(누르는 동안 보임) · 상호작용.
  *  controls는 바뀌지 않는 함수로 넘길 것 (바뀌면 터치 받기를 다시 붙임).
  *  손가락마다 따로 받는 터치 이벤트로 처리해, 조이스틱을 잡은 채·여러 버튼을 동시에 눌러도 바로 동작 */
-export function TouchButtons({ slots, lang, t, controls, interact, dashRef, editing }: Props) {
+export function TouchButtons({ slots, useOff, lang, t, controls, interact, dashRef, editing }: Props) {
   const boxRef = useRef<HTMLDivElement>(null);
   const { buttonPos } = useSettings();
 
@@ -118,7 +120,7 @@ export function TouchButtons({ slots, lang, t, controls, interact, dashRef, edit
           <button
             key={i}
             type="button"
-            className={`touch-btn item item${i + 1} ${id ? "filled" : ""}`}
+            className={`touch-btn item item${i + 1} ${id ? "filled" : ""}${useOff ? " off" : ""}`}
             disabled={!id && !editing}
             data-act={`use${i + 1}`}
             aria-label={name}
@@ -127,6 +129,7 @@ export function TouchButtons({ slots, lang, t, controls, interact, dashRef, edit
           >
             {id ? <ItemIcon item={{ kind: "use", id }} size={26} /> : <span className="touch-empty">{i + 1}</span>}
             {id && <small>{name}</small>}
+            {useOff && <i className="slot-x" aria-hidden="true">✕</i>}
           </button>
         );
       })}

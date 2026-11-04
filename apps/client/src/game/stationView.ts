@@ -1,5 +1,5 @@
 // 작업대 창에 보여 줄 값 (gameLoop가 만들어 LoadoutView.station으로 넘김): 아티팩터 제작대 · 추적자 튜닝소 · 단련의 방 · 시련의 비석·보상 상자
-import { altarAugOk, altarAugTaken, auctionHere, gambleNow, type AuctionState, altarOf, chestOptions, trialUsed, type AltarId, GYM_OFF, GYM_STATS, gymBlocked, gymPassives, gymUsed, BENCH_OP, benchCan, benchCost, benchLv, benchStats, isHidden, isOwn, TUNE, TUNE_SLOTS, tuneChance, tuneCost, type PassiveId, type RunState, type StationKind, type StationResult } from "@pixel-rogue/shared";
+import { altarAugOk, altarAugTaken, auctionHere, gambleNow, type AuctionState, altarOf, chestOptions, trialUsed, type AltarId, GYM_OFF, GYM_STATS, gymBlocked, gymPassives, gymUsed, BENCH_OP, benchCan, benchCost, benchLv, benchStats, isHidden, isOwn, TUNE, TUNE_SLOTS, tuneChance, tuneCost, type PassiveId, type RunState, type StationKind, type StationResult, FORGE_OP, forgeChance, forgeCost, forgeOf, passiveTag, type ItemTag, type WeaponId } from "@pixel-rogue/shared";
 
 export interface BenchItem {
   id: PassiveId;
@@ -37,6 +37,8 @@ export interface StationView {
   chest?: { code: string; options: string[] };
   /** 제단의 방: 이 방 성좌 · 바칠 패시브가 있는지 */
   altar?: { id: AltarId; passives: number; augTaken: boolean; augOk: boolean };
+  /** 대장간: 지금 무기·단계·꼬리표 · 강화 성공 확률 · 값 [강화, 변환, 암흑] (-1 = 더 못 함) · 가진 패시브와 꼬리표 */
+  forge?: { weapon: WeaponId; lv: number; dark: number; tag?: ItemTag; chance: number; costs: [number, number, number]; passives: { id: PassiveId; tag?: ItemTag }[] };
   /** 비밀의 방: 야바위 (0 시작 전 · 1 고르기 · 2 끝) · 경매 (지금 상태 · 틱 · 증강을 붙일 패시브) */
   gamble?: { phase: number; win?: boolean };
   auction?: { a: AuctionState; tick: number; passives: PassiveId[] };
@@ -48,6 +50,11 @@ export function stationView(run: RunState): StationView | undefined {
   const p = run.player;
   const base = { kind: pr.station, gold: run.gold, ...(p.stLast ? { last: p.stLast } : {}) };
   if (pr.station === "altar") return { ...base, altar: { id: altarOf(run), passives: p.passives.length, augTaken: altarAugTaken(p), augOk: altarAugOk(p) } };
+  if (pr.station === "forge") {
+    const m = forgeOf(p);
+    const ops = [FORGE_OP.up, FORGE_OP.tag, FORGE_OP.dark] as const;
+    return { ...base, forge: { weapon: p.weaponId, lv: m.lv ?? 0, dark: m.dark ?? 0, ...(m.tag ? { tag: m.tag } : {}), chance: forgeChance(p, FORGE_OP.up), costs: ops.map((op) => forgeCost(run, op)) as [number, number, number], passives: p.passives.map((id) => ({ id, tag: p.retag?.[id] ?? passiveTag(id) })) } };
+  }
   if (pr.station === "trial") return { ...base, trial: { used: trialUsed(run) } };
   if (pr.station === "gambler") {
     const g = gambleNow(run);

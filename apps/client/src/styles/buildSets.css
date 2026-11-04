@@ -1,0 +1,189 @@
+/* 빌드 세트: 꼬리표 칩 · 로그 왼쪽 세트 칸 · 단계 알림 · 알 수 없는 성좌 꼬리표 고르기 */
+.tag-chip {
+  display: inline-block;
+  padding: 0 6px;
+  border: 1px solid;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.35);
+  font-size: 11px;
+  line-height: 16px;
+  white-space: nowrap;
+}
+.tag-chip.pick {
+  padding: 4px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.tag-chip.pick:hover {
+  background: rgb(255 255 255 / 0.12);
+}
+.item-tip .tag-chip {
+  margin-left: auto;
+}
+.set-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-top: 6px;
+  border-top: 1px solid #3a3450;
+  pointer-events: auto;
+}
+.set-panel b {
+  color: #ffd84a;
+}
+.set-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+.set-stars {
+  letter-spacing: -1px;
+}
+.set-stars i {
+  font-style: normal;
+  opacity: 0.35;
+}
+.set-row em {
+  margin-left: auto;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.set-toast {
+  position: fixed;
+  top: 64px;
+  left: 50%;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 16px;
+  border: 2px solid;
+  border-radius: 8px;
+  background: rgb(14 10 24 / 0.9);
+  font-size: 13px;
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: set-toast 2.6s ease forwards;
+}
+.set-toast strong {
+  font-size: 16px;
+}
+@keyframes set-toast {
+  0% { opacity: 0; transform: translate(-50%, -8px); }
+  10%, 80% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -4px); }
+}
+.altar-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  max-width: 520px;
+  margin: 8px auto 0;
+}
+.set-awake {
+  margin-left: 2px;
+  color: #fff;
+  text-shadow: 0 0 4px currentColor, 0 0 8px #ffd84a;
+}
+/* 대장간 창 (game/forge): 불빛 테두리 · 무기 줄 · 강화 칸 둘 · 꼬리표 변환 */
+.station-window.forge {
+  border-color: #b8622a;
+  box-shadow: 0 0 28px rgb(255 120 40 / 0.3);
+  background: linear-gradient(180deg, rgb(34 20 14 / 0.97), rgb(14 10 10 / 0.97));
+}
+.station-window.forge .station-head b {
+  color: #ffc48a;
+  text-shadow: 0 0 10px rgb(255 140 60 / 0.7);
+}
+.forge-weapon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1em;
+}
+.forge-ops {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px;
+}
+.forge-op {
+  padding: 10px 12px;
+  border: 1px solid #5a3a24;
+  border-radius: 8px;
+  background: rgb(255 140 60 / 0.06);
+}
+.forge-op.dark {
+  border-color: #5a2a7a;
+  background: rgb(160 80 255 / 0.08);
+}
+.forge-op h3 {
+  margin: 0 0 4px;
+  font-size: 1em;
+  color: #ffd2a0;
+}
+.forge-op.dark h3 {
+  color: #d8b0ff;
+}
+.forge-op p {
+  margin: 0 0 8px;
+  font-size: 0.8em;
+  color: var(--muted);
+}
+.forge-btn {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #c8782a;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #6a3a1a, #3a200e);
+  color: #ffe2c0;
+  font: inherit;
+  cursor: pointer;
+}
+.forge-btn.dark {
+  border-color: #9a5aff;
+  background: linear-gradient(180deg, #3a1a5a, #1e0e30);
+  color: #efe0ff;
+}
+.forge-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.forge-targets,
+.forge-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.forge-targets button {
+  padding: 3px;
+  border: 1px solid #4a3a30;
+  border-radius: 6px;
+  background: rgb(0 0 0 / 0.3);
+  cursor: pointer;
+}
+.forge-targets button.on {
+  border-color: #ffb060;
+  box-shadow: 0 0 6px #ff9a3a;
+}
+.forge-tags .now .tag-chip {
+  opacity: 0.4;
+}
+.forge-stars {
+  display: inline-flex;
+  gap: 3px;
+  font-weight: 700;
+  font-size: 0.9em;
+}
+.fs-up {
+  color: #ffd84a;
+  text-shadow: 0 0 4px rgb(255 200 60 / 0.6);
+}
+.fs-dark {
+  color: #c08aff;
+  text-shadow: 0 0 4px rgb(170 90 255 / 0.8);
+}

@@ -7,7 +7,7 @@ import { equippedSkin } from "../shop/wallet";
 import { draftSrc, mySkinSrc } from "./customArt";
 
 /** 넣은 그림 이름 (확장자 빼고). 예: "warden", "crawler" */
-const SPRITE_FILES: readonly string[] = [];
+const SPRITE_FILES: readonly string[] = ["blacksmith"];
 
 const images = new Map<string, HTMLImageElement>();
 

@@ -16,6 +16,7 @@ import { stun } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
 import { devilOnHit } from "./devilPerks";
+import { setKill } from "./buildSetFx";
 
 /** 아티팩트 색 (스택 창 차례) */
 export const RELICS = ["relicRed", "relicBlue", "relicSilver", "relicGold", "relicPrism", "relicWhite", "relicGreen"] as const;
@@ -76,6 +77,7 @@ export function hiddenExtras(p: PlayerState): Partial<ExtraStats> | null {
 export function relicKill(s: RunState, e: EnemyState): void {
   kingKill(s, e);
   luxKill(s, e);
+  setKill(s, e);
   const p = s.player;
   let recalc = false;
   for (const id of RELICS) {

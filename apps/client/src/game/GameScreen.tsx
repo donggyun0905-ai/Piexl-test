@@ -269,7 +269,7 @@ export function GameScreen(props: GameScreenProps) {
       <div ref={aimKnobRef} className="stick-knob aim" />
       {touchMode && loadout && (
         <TouchButtons
-          slots={loadout.slots}
+          slots={loadout.slots} useOff={loadout.useOff}
           lang={lang}
           t={t}
           controls={getControls}

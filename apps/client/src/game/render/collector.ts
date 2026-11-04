@@ -40,7 +40,8 @@ export function drawCollectorBack(ctx: Ctx, s: RunState, alphaT: number, snap: S
 /** 수집가 이펙트면 그리고 true */
 export function drawCollectorFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   if (fx.kind !== "clMove") return false;
-  const t = fx.ticks / fx.maxTicks;
+  // 지난 정도 (0 → 1): sim의 ticks는 maxTicks에서 줄어듦
+  const t = 1 - fx.ticks / fx.maxTicks;
   const f = easeOut(t);
   const fade = 1 - t;
   const x = snap(fx.x);

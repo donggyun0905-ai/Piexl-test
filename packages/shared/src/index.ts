@@ -40,3 +40,5 @@ export * from "./customMapUse";
 export * from "./altarDefs";
 export * from "./secretDefs";
 export * from "./itemsDevil";
+export * from "./itemsTags";
+export * from "./buildSetDefs";

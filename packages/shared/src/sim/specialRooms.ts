@@ -5,6 +5,7 @@ import { spawnGym } from "./gym";
 import { spawnTrial, trialBusy, TRIAL_RULES } from "./trial";
 import { altarPending, spawnAltar } from "./altar";
 import { spawnVault } from "./vault";
+import { spawnForge } from "./forge";
 import { hiddenBusy } from "./hiddenFoes";
 import type { RunState } from "./types";
 
@@ -31,6 +32,7 @@ export function spawnSpecialRoom(s: RunState, type: RoomType, roomId: number): v
   if (type === "gym") spawnGym(s, roomId);
   else if (type === "trial") spawnTrial(s, roomId);
   else if (type === "altar") spawnAltar(s, roomId);
+  else if (type === "forge") spawnForge(s, roomId);
   // 비밀의 방·전투방 금 간 벽 (sim/vault)
   else spawnVault(s, type, roomId);
 }

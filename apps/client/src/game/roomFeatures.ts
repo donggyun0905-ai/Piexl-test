@@ -4,6 +4,7 @@ import { drawGlyph, roomLook } from "./minimap";
 import { drawHeavenRoom } from "./render/heavenDraw";
 import { drawTrialRoom } from "./render/trialDraw";
 import { drawAltarRoom } from "./render/altarDraw";
+import { drawForgeRoom } from "./render/forgeDraw";
 import { drawCrack, drawDevilRoom, drawGambleTable } from "./render/vaultDraw";
 import { drawAuctionHall } from "./render/auctionDraw";
 
@@ -101,6 +102,8 @@ export function drawRoomFeatures(ctx: CanvasRenderingContext2D, s: RunState): vo
     drawTrialRoom(ctx, s, cx, cy);
   } else if (room.type === "altar") {
     drawAltarRoom(ctx, s, cx, cy);
+  } else if (room.type === "forge") {
+    drawForgeRoom(ctx, s, cx, cy);
   } else if (room.type === "devil") {
     drawDevilRoom(ctx, s, cx);
   } else if (room.type === "gamble") {
