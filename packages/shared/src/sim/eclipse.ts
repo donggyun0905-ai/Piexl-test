@@ -5,10 +5,11 @@
 import { TICK_RATE } from "../constants";
 import { ECLIPSE_PERKS as K } from "../itemsEclipse";
 import { ECLIPSE as E } from "../weaponsEclipse";
-import { rot } from "./orbit";
-import { alive, inCircle, inCone } from "./s2Kit";
-import { nightReach } from "./eclipseStats";
-import { eclipsePower, eclipseWorld, ecHit, totality, turn } from "./eclipseZone";
+import { alive, inCircle, inCone, onSegment } from "./s2Kit";
+import { sunCutPoints } from "./eclipseCuts";
+import { nightReach, sunReach } from "./eclipseStats";
+import { comboStep } from "./comboStep";
+import { eclipsePower, eclipseWorld, ecHit, totality } from "./eclipseZone";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize } from "./util";
 
@@ -25,31 +26,34 @@ function faceNear(s: RunState, reach: number): EnemyState | undefined {
   return e;
 }
 
-/** 검격 하나 날림 */
-function fly(p: PlayerState, dx: number, dy: number, sun: boolean, dmg: number, k: number, size = 1): void {
-  const t = sun ? E.cutTicks : E.moonTicks;
-  (p.ecCuts ??= []).push({ x: p.x + dx * 4, y: p.y + dy * 4, dx, dy, t, max: t, sp: sun ? E.cutSpeed : E.moonSpeed, w: (sun ? E.cutW : E.moonW) * size, dmg, sun, k, size, hit: [] });
+/** 일식 초승달 참격 하나 날림 */
+function fly(p: PlayerState, dx: number, dy: number, dmg: number): void {
+  const t = E.moonTicks;
+  (p.ecCuts ??= []).push({ x: p.x + dx * 4, y: p.y + dy * 4, dx, dy, t, max: t, sp: E.moonSpeed, w: E.moonW, dmg, sun: false, k: 0, size: 1, hit: [] });
 }
 
-/** 태양 연격 하나 (i: 0~4): 직각 검격을 날림 · 5타는 여러 갈래 */
+/** 태양 연격 하나 (i: 0~4): 직각 검격(1 위 · 2 가운데 · 3 아래에서 꺾임 · 4 깊게 찌름) · 5타는 4타와 같은 깊은 찌르기(더 아픔) */
 function sunMove(s: RunState, i: number): void {
   const p = s.player;
-  faceNear(s, p.stats.range + 50);
+  faceNear(s, sunReach(p) + 30);
   const dmg = eclipsePower(p);
-  if (i < 4) {
-    fly(p, p.faceX, p.faceY, true, dmg * E.cutMul, i);
-    addEffect(s, { kind: "ecSlash", x: p.x, y: p.y - 3, dirX: p.faceX, dirY: p.faceY, size: p.stats.range, maxTicks: 8, width: i });
-    return;
-  }
-  const flare = hasPerk(p, "ecFlare");
-  const n = flare ? K.ecFlare.n : E.sunFinN;
-  const size = E.sunFinSize * (flare ? K.ecFlare.size : 1);
-  for (let j = 0; j < n; j++) {
-    const [c, sn] = rot((j - (n - 1) / 2) * E.sunFinSpread);
-    const [dx, dy] = turn(p, c, sn);
-    fly(p, dx, dy, true, dmg * E.sunFinMul, 4, size);
-  }
-  addEffect(s, { kind: "ecCross", x: p.x, y: p.y - 3, dirX: p.faceX, dirY: p.faceY, size: p.stats.range * 1.4, maxTicks: 14 });
+  const reach = sunReach(p);
+  // 그려진 날을 따라 맞힘 (두 팔)
+  // 5타는 4타와 같은 깊은 찌르기 (더 아픔)
+  const fin = i >= 4;
+  const r = reach * (fin ? E.sunFinSize * (hasPerk(p, "ecFlare") ? K.ecFlare.size : 1) : 1);
+  const [a, v, b] = sunCutPoints(p.x, p.y, p.faceX, p.faceY, r, Math.min(3, i));
+  const w = r * E.cutW;
+  const hit = new Set<number>();
+  // 몸 바로 앞 반원(도끼를 휘두른 자리)도 같이 벰: 날 사이에 붙은 적이 빠지지 않게
+  const near = inCone(s, reach * E.sunNear, 0);
+  for (const [q0, q1] of [[a!, v!], [v!, b!]])
+    for (const e of [...onSegment(s, q0![0], q0![1], q1![0], q1![1], w), ...near]) {
+      if (hit.has(e.id)) continue;
+      hit.add(e.id);
+      ecHit(s, e, dmg * (fin ? E.sunFinMul : E.cutMul), fin ? 3 : 1);
+    }
+  addEffect(s, { kind: "ecSlash", x: p.x, y: p.y - 3, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: fin ? 15 : 13, width: i });
 }
 
 /** 일식 콤보 하나 (i: 0~5) */
@@ -66,9 +70,9 @@ function nightMove(s: RunState, i: number): void {
     for (const e of inCircle(s, p.x, p.y, r)) ecHit(s, e, dmg * E.spinMul, E.push);
     addEffect(s, { kind: "ecSpin", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 20, follow: true });
   } else if (i === 3) {
-    p.ecRush = { t: E.rushTicks, dx: p.faceX, dy: p.faceY, dmg: dmg * E.rushMul, hit: [] };
+    p.ecRush = { t: E.rushTicks, dx: p.faceX, dy: p.faceY, dmg: dmg * E.rushMul, hit: [], sx: p.x, sy: p.y };
   } else if (i === 4) {
-    fly(p, p.faceX, p.faceY, false, dmg * E.moonMul, 0);
+    fly(p, p.faceX, p.faceY, dmg * E.moonMul);
     addEffect(s, { kind: "ecHew", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: reach, maxTicks: 16, width: 2 });
   } else {
     p.ecAir = E.jumpTicks;
@@ -90,13 +94,14 @@ function slam(s: RunState): void {
   addEffect(s, { kind: "ecSlam", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 40 });
 }
 
-/** 게이지가 다 찼으면 바뀌기 시작 (콤보·돌진·공중이 아닐 때) */
+/** 게이지가 다 찼으면 바뀌기 시작 (동작 중·돌진·공중이 아닐 때) */
 function startShift(s: RunState): boolean {
   const p = s.player;
-  if ((p.ecGauge ?? 0) < E.gaugeMax || p.ecCombo || p.ecRush || p.ecAir) return false;
+  if ((p.ecGauge ?? 0) < E.gaugeMax || (p.ecCombo?.t ?? 0) > 0 || p.ecRush || p.ecAir) return false;
+  delete p.ecCombo;
   p.ecShift = E.shiftTicks;
   p.invulnTicks = Math.max(p.invulnTicks, 2);
-  addEffect(s, { kind: "ecShift", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 26, maxTicks: E.shiftTicks, follow: true, width: p.ecNight ? 0 : 1 });
+  addEffect(s, { kind: "ecShift", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 26, maxTicks: E.shiftTicks, width: p.ecNight ? 0 : 1 });
   return true;
 }
 
@@ -111,46 +116,57 @@ function shiftTick(s: RunState): void {
   p.ecShifts = (p.ecShifts ?? 0) + 1;
   if (hasPerk(p, "ecCrown")) p.ecCrownT = K.ecCrown.ticks;
   // 일식이 되면 보라 빛이 아래로 꺼지고, 태양이 되면 노란 빛이 위로 꺼짐
-  addEffect(s, { kind: "ecShiftEnd", x: p.x, y: p.y, dirX: 0, dirY: p.ecNight ? 1 : -1, size: 26, maxTicks: 26, follow: true, width: p.ecNight ? 1 : 0 });
+  addEffect(s, { kind: "ecShiftEnd", x: p.x, y: p.y, dirX: 0, dirY: p.ecNight ? 1 : -1, size: 26, maxTicks: 26, width: p.ecNight ? 1 : 0 });
   totality(s);
   p.attackCooldown = 0;
 }
 
-/** 틱마다 (태양의 도끼를 들었을 때 player에서) */
+/** 콤보 끝: 공격 속도만큼 쉼 */
+function endCombo(p: PlayerState, speed: number, rest: boolean): void {
+  delete p.ecCombo;
+  if (rest) p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
+}
+
+/** 틱마다 (태양의 도끼를 들었을 때 player에서). 누를 때마다 한 동작 (누르고 있으면 이어짐) */
 export function eclipseTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
+  const press = want && !p.ecHeld;
+  p.ecHeld = want;
   if (p.ecCrownT) p.ecCrownT--;
   eclipseWorld(s);
   if (p.ecShift) return shiftTick(s);
-  if (startShift(s)) return;
-  const c = p.ecCombo;
-  const night = !!p.ecNight;
-  if (c) {
-    if (p.ecAir) {
-      if (--p.ecAir > 0) {
-        p.invulnTicks = Math.max(p.invulnTicks, 2);
-        return;
-      }
-      delete p.ecAir;
-      slam(s);
-    } else if (p.ecRush || --c.t > 0) return;
-    const last = night ? 6 : 5;
-    if (c.i >= last) {
-      delete p.ecCombo;
-      p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
+  if (p.ecAir) {
+    if (--p.ecAir > 0) {
+      p.invulnTicks = Math.max(p.invulnTicks, 2);
       return;
     }
+    delete p.ecAir;
+    slam(s);
+    return endCombo(p, speed, true);
+  }
+  if (p.ecRush || startShift(s)) return;
+  const night = !!p.ecNight;
+  const run = (c: { i: number; t: number }) => {
     (night ? nightMove : sunMove)(s, c.i++);
     c.t = night ? E.nightGap : E.sunGap;
+  };
+  const c = p.ecCombo;
+  if (c) {
+    const step = comboStep(c, want, press, E.idle);
+    if (step === "drop") endCombo(p, speed, false);
+    else if (step === "go") {
+      run(c);
+      if (c.i >= (night ? 6 : 5) && !p.ecAir) endCombo(p, speed, true);
+    }
     return;
   }
   if (!want || p.attackCooldown > 0) return;
   p.attackCount++;
-  p.ecCombo = { i: 1, t: night ? E.nightGap : E.sunGap };
-  (night ? nightMove : sunMove)(s, 0);
+  p.ecCombo = { i: 0, t: 0, idle: 0 };
+  run(p.ecCombo);
 }
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetEclipse(p: PlayerState): void {
-  for (const k of ["ecNight", "ecGauge", "ecShift", "ecCombo", "ecAir", "ecCuts", "ecHoles", "ecRush", "ecCrownT", "ecSlams", "ecShifts"] as const) delete p[k];
+  for (const k of ["ecNight", "ecGauge", "ecShift", "ecCombo", "ecAir", "ecCuts", "ecHoles", "ecRush", "ecCrownT", "ecSlams", "ecShifts", "ecHeld"] as const) delete p[k];
 }

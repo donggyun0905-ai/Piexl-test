@@ -5,7 +5,7 @@ import { heal } from "./heal";
 import { alive, inCircle, isBoss, onSegment, strike } from "./s2Kit";
 import { eclipseDmgMul, zoneR } from "./eclipseStats";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { addEffect, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
+import { addEffect, hasPerk, keepInRoom, roomGrid } from "./util";
 
 /** 지금 모습의 공격력 */
 export const eclipsePower = (p: PlayerState) => p.stats.damage * eclipseDmgMul(p);
@@ -83,8 +83,10 @@ function rushTick(s: RunState): void {
     r.hit.push(e.id);
     ecHit(s, e, r.dmg, 6);
   }
-  addEffect(s, { kind: "ecDash", x: ax, y: ay, dirX: r.dx, dirY: r.dy, size: 14, toX: p.x, toY: p.y, maxTicks: 14 });
-  if (--r.t <= 0) delete p.ecRush;
+  if (--r.t > 0) return;
+  // 지나온 줄 전체에 날 자국 하나
+  addEffect(s, { kind: "ecDash", x: r.sx ?? ax, y: r.sy ?? ay, dirX: r.dx, dirY: r.dy, size: 14, toX: p.x, toY: p.y, maxTicks: 18 });
+  delete p.ecRush;
 }
 
 /** 영역: 태양은 불태우고 몸에서 치유의 빛 · 일식은 죽음의 영역 (피해 + 둔화) */
@@ -117,11 +119,6 @@ export function totality(s: RunState): void {
     if (!isBoss(e) && e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, k.stun);
   }
   addEffect(s, { kind: "ecTotal", x: p.x, y: p.y, dirX: 0, dirY: 0, size: k.r, maxTicks: 30, width: p.ecNight ? 1 : 0 });
-}
-
-/** 바라보는 쪽에서 a만큼 돌린 방향 */
-export function turn(p: PlayerState, c: number, sn: number): [number, number] {
-  return normalize(p.faceX * c - p.faceY * sn, p.faceX * sn + p.faceY * c) ?? [p.faceX, p.faceY];
 }
 
 export function eclipseWorld(s: RunState): void {

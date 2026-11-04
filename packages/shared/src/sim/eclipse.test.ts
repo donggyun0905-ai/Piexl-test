@@ -45,11 +45,15 @@ describe("이클립스", () => {
     expect(createRun(1, "eclipse").player.ecNight).toBeFalsy();
   });
 
-  it("태양: 직각 검격을 날려 맞히고 치명타가 있음 · 게이지가 참", () => {
+  it("태양: 누를 때마다 직각 검격 하나 · 맞히고 치명타가 있음 · 게이지가 참", () => {
+    const one = eclipse();
+    for (let i = 0; i < 80; i++) stepSim(one, { ...FIRE, attack: i < 3 });
+    expect(one.player.ecCombo).toBeUndefined();
+    expect(one.player.attackCount).toBe(1);
     const s = eclipse();
     expect(extraOf(s.player).critChance).toBeCloseTo(E.sunCrit);
-    const k = seen(s, 30);
-    expect(k.has("ecSlash") && k.has("ecCross")).toBe(true);
+    const k = seen(s, 60);
+    expect(k.has("ecSlash")).toBe(true);
     expect(lost(s)).toBeGreaterThan(0);
     expect(s.player.ecGauge ?? 0).toBeGreaterThan(0);
   });

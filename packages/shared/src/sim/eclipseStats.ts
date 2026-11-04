@@ -29,6 +29,9 @@ export function eclipseDmgMul(p: PlayerState): number {
 /** 모습마다 공격 속도 배율 (classSpeed) */
 export const eclipseSpeedMul = (p: PlayerState) => (p.ecNight ? E.nightSpeed : E.sunSpeed);
 
+/** 태양 직각 검격 반지름 (긴 검격) */
+export const sunReach = (p: PlayerState) => p.stats.range * E.sunReach;
+
 /** 일식 거대한 도끼 사거리 */
 export const nightReach = (p: PlayerState) => p.stats.range * E.nightReach * (hasPerk(p, "ecMoonAxe") ? K.ecMoonAxe.reach : 1);
 

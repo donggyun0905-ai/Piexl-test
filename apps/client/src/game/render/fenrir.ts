@@ -92,10 +92,10 @@ export function drawFenrirFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const back = !!fx.width;
       const sweep = easeOut(Math.min(1, f / 0.4));
       const out = f < 0.4 ? 1 : 1 - (f - 0.4) / 0.6;
-      slashArc(ctx, x, y, fx.size, a, back ? 1.35 : 0.95, back ? 9 : 7, sweep, out, back ? -1 : 1, back, back ? VIOLET : BLUE);
+      slashArc(ctx, x, y, fx.size, a, back ? 1.6 : 1.2, fx.size * (back ? 0.24 : 0.2), sweep, out, back ? -1 : 1, back, back ? VIOLET : BLUE);
       if (sweep >= 1) {
-        const ea = a + (back ? -1.35 : 0.95) * (back ? -1 : 1);
-        shards(ctx, x + Math.cos(ea) * fx.size, y + Math.sin(ea) * fx.size, 5, 12, (f - 0.4) / 0.6, seed);
+        const ea = a + (back ? -1.6 : 1.2) * (back ? -1 : 1);
+        shards(ctx, x + Math.cos(ea) * fx.size, y + Math.sin(ea) * fx.size, 7, 18, (f - 0.4) / 0.6, seed);
       }
       break;
     }
@@ -136,7 +136,7 @@ export function drawFenrirFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const r = fx.size;
       const sweep = easeOut(Math.min(1, f / 0.3));
       const out = f < 0.3 ? 1 : 1 - (f - 0.3) / 0.7;
-      slashArc(ctx, x - nx * r * 0.7, y - ny * r * 0.7, r, Math.atan2(ny, nx), 0.85, 5, sweep, out, side, true, fx.width ? VIOLET : BLUE);
+      slashArc(ctx, x - nx * r * 0.7, y - ny * r * 0.7, r, Math.atan2(ny, nx), 0.9, r * 0.2, sweep, out, side, true, fx.width ? VIOLET : BLUE);
       additive(ctx, () => {
         ctx.strokeStyle = `rgba(255,255,255,${out})`;
         ctx.lineWidth = 1;

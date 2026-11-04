@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.18",
+    date: "2026-11-05",
+    items: {
+      ko: [
+        "이클립스·펜리르: 한 번 누르면 콤보가 다 나가지 않고, 누를 때마다 한 동작씩 이어짐 (누르고 있으면 계속 이어지고, 1초 동안 안 누르면 처음 동작으로)",
+        "이클립스 태양: 검격을 새로 그림 · 90°로 꺾인 긴 날 하나(바깥 노랑·안쪽 빨강·은은한 빛) · 1 위에서 꺾임 → 2 가운데 → 3 아래에서 꺾임 → 4·5 깊게 찌름 · 꺾이는 끝이 앞으로 멀리 뻗어 떨어진 적에게도 닿음 · 맞는 범위도 그려진 날 모양대로",
+        "이클립스 일식·영역·블랙홀·변신 이펙트를 깔끔하게 새로 그림 (분홍 보라 겉·검보라 속) · 게이지가 더 빨리 참",
+        "펜리르: 몸을 키우고 모든 검기·베기 범위를 크게 (대검답게 넓게) · 천랑 낙인 착지 검기는 방 끝까지 날아감",
+      ],
+      en: [
+        "Eclipse & Fenrir: one press no longer runs the whole combo; each press performs the next move (hold to keep going; after 1s without pressing it starts over)",
+        "Eclipse Sun: slashes redrawn · one long blade bent at 90° (gold outside, red inside, soft glow) · 1 bends high → 2 middle → 3 bends low → 4 and 5 stab deep · the bend reaches far ahead, hitting distant foes · hit areas follow the drawn blade",
+        "Eclipse's Eclipse-form, zone, black hole and transformation effects redrawn cleanly (pink-violet outside, dark violet inside) · the gauge fills faster",
+        "Fenrir: bigger body and much wider sword waves and slashes (a true greatsword) · Sirius Brand's landing waves now fly to the edge of the room",
+      ],
+      ja: [
+        "エクリプス・フェンリル：一度押すとコンボが全部出るのではなく、押すたびに1動作ずつ続く（押し続けると続き、1秒押さないと最初の動作に戻る）",
+        "エクリプス太陽：斬撃を描き直し · 90°に折れた長い刃ひとつ（外は金・内は赤・柔らかな光）· 1 上で折れる → 2 中央 → 3 下で折れる → 4・5 深く突く · 折れる先が前へ遠く伸び、離れた敵にも届く · 当たり範囲も描かれた刃の形どおり",
+        "エクリプスの日食・領域・ブラックホール・変身エフェクトをすっきり描き直し（外はピンク紫・内は黒紫）· ゲージが早くたまる",
+        "フェンリル：体を大きくし、すべての剣気・斬撃の範囲を広く（大剣らしく）· 天狼の烙印の着地の剣気は部屋の端まで飛ぶ",
+      ],
+    },
+  },
+  {
     version: "0.49.17",
     date: "2026-11-05",
     items: {
@@ -24,66 +48,6 @@ export const NOTES: PatchNote[] = [
         "太陽（女）：小さな炎の斧でとても速い5連撃 · すべての攻撃が赤い芯・金色の縁の直角の斬撃を飛ばす（5撃目は3本）· 会心35% · 灼熱の領域 + 癒しの光",
         "日食（男）：巨大な斧で遅いが強い6連コンボ · 最後の日食落下は跳び上がり（無敵）とても広く叩きつけ、中央に敵を引き寄せるブラックホール · 会心なし · 死の領域（ダメージ + 鈍化）",
         "変わる間は無敵：紫のオーラに包まれ紫の光が下へ消えると日食、金色のオーラに包まれ金色の光が上へ消えると太陽 · 専用アイテム10 · 解放条件：ヘリオスのキャラをすべて解放し、それぞれ禁忌の書45点以上でラストボスをクリア",
-      ],
-    },
-  },
-  {
-    version: "0.49.16",
-    date: "2026-11-04",
-    items: {
-      ko: [
-        "새 캐릭터 펜리르 (비르디아 · 영물): 지난 비르디아 왕이 다스리던 늙은 백랑. 왕이 쓰던 거대한 대검을 입에 물고 다시 전쟁에 나섬 · 체력 45 · 공격력 16 · 이동 1.55 (아주 빠름) · 기본 회피 25%·예리함 25%",
-        "선왕의 대검: 한 번 누르면 고정 5연 콤보가 저절로 이어짐 · 물어 베기 → 되베기 → 지면 검기(큰 검기가 바닥을 그으며 나아가 뚫음) → 난도(한 자리를 사방에서 빠르게 6번) → 천랑 낙인(뛰어오른 동안 무적, 내려찍으면 무적이 풀리고 사방 8갈래 검기)",
-        "펜리르 전용 아이템 10 (늙은 늑대의 지혜 · 선왕의 광륜 · 벼린 송곳니 · 질풍 · 늑대의 울부짖음 · 천랑성 · 월광 난무 · 대지 가르기 · 노장의 투혼 · 사냥 본능) · 푸른 초승달 검기·수정 파편·갈라진 땅 이펙트 · 그림 시트",
-        "펜리르 여는 조건: 비르디아 캐릭터를 모두 열고, 저마다 금기의 서 45점 이상으로 라스트 보스 클리어",
-      ],
-      en: [
-        "New character Fenrir (Virdia · Spirit Beast): an old white wolf once ruled by the late king of Virdia, marching to war again with the king's giant blade in its jaws · 45 HP · 16 Attack · 1.55 move (very fast) · base 25% dodge and 25% Sharpness",
-        "Blade of the Late King: one press runs a fixed 5-hit combo · Bite Slash → Return Slash → Ground Wave (a huge wave scrapes along the floor and pierces) → Frenzy Cut (6 fast slashes from every side on one spot) → Sirius Brand (invincible while leaping; the slam ends invincibility and sends sword waves 8 ways)",
-        "10 Fenrir items (Old Wolf's Wisdom · Halo of the Late King · Honed Fangs · Gale · Wolf's Howl · Sirius · Moonlit Frenzy · Earth Splitter · Veteran's Spirit · Hunting Instinct) · blue crescent waves, crystal shards and cracked-ground effects · sprite sheet",
-        "Fenrir unlock: unlock every Virdia character and clear a last boss with each at 45+ Taboo points",
-      ],
-      ja: [
-        "新キャラ フェンリル（ヴィルディア · 霊獣）：先代ヴィルディア王に仕えた老いた白狼。王が使っていた巨大な大剣をくわえ再び戦に出る · 体力45 · 攻撃力16 · 移動1.55（とても速い）· 基本回避25%・鋭さ25%",
-        "先王の大剣：一度押すと固定5連コンボが自動で続く · 噛み斬り → 返し斬り → 地面の剣気（大きな剣気が床をえぐりながら進み貫通）→ 乱刀（一か所を四方からすばやく6回）→ 天狼の烙印（跳び上がる間は無敵、叩きつけると無敵が解け四方8本の剣気）",
-        "フェンリル専用アイテム10（老狼の知恵 · 先王の光輪 · 研ぎ澄まされた牙 · 疾風 · 狼の遠吠え · 天狼星 · 月光乱舞 · 大地割り · 老将の闘魂 · 狩りの本能）· 青い三日月の剣気・水晶の破片・割れた地面のエフェクト · スプライトシート",
-        "フェンリルの解放条件：ヴィルディアのキャラをすべて解放し、それぞれ禁忌の書45点以上でラストボスをクリア",
-      ],
-    },
-  },
-  {
-    version: "0.49.15",
-    date: "2026-11-04",
-    items: {
-      ko: [
-        "협동: 빌드 세트·버프 칸이 갱신되지 않아 비어 보이던 것을 고침 (세트 효과는 원래대로 적용) · 동료 체력 칸을 왼쪽 아래로 옮겨 능력치·빌드 칸을 가리지 않게",
-        "협동: 쓰러진 동안 살아 있는 동료의 화면을 그대로 관전 (그 사람을 따라가는 화면·체력·장비·빌드 세트·능력치) · 누르면 다음 동료",
-      ],
-      en: [
-        "Co-op: the build set and buff panels no longer stay empty (set effects were already applied) · the party health list moved to the lower left so it no longer covers the stats and build panels",
-        "Co-op: while you are down you now watch a living teammate's screen (camera, health, loadout, build sets and stats) · tap for the next teammate",
-      ],
-      ja: [
-        "協力：ビルドセット・バフ欄が更新されず空に見えていたのを修正（セット効果はもともと適用）· 仲間の体力欄を左下に移し、能力値・ビルド欄を隠さないように",
-        "協力：倒れている間は生きている仲間の画面をそのまま観戦（その人を追う画面・体力・装備・ビルドセット・能力値）· 押すと次の仲間",
-      ],
-    },
-  },
-  {
-    version: "0.49.14",
-    date: "2026-11-04",
-    items: {
-      ko: [
-        "레오 여는 조건: 아스칼론 캐릭터를 모두 열고, 저마다 금기의 서 45점 이상으로 라스트 보스 클리어 (캐릭터 선택창에 진행도)",
-        "오닉스 여는 조건: 테라코어 캐릭터를 모두 열고, 저마다 금기의 서 45점 이상으로 라스트 보스 클리어 · 오닉스의 진영을 테라코어로 바로잡음",
-      ],
-      en: [
-        "Leo unlock: unlock every Ascalon character and clear a last boss with each at 45+ Taboo points (progress shown on character select)",
-        "Onyx unlock: unlock every Terracore character and clear a last boss with each at 45+ Taboo points · Onyx now correctly belongs to Terracore",
-      ],
-      ja: [
-        "レオの解放条件：アスカロンのキャラをすべて解放し、それぞれ禁忌の書45点以上でラストボスをクリア（キャラ選択画面に進行度）",
-        "オニキスの解放条件：テラコアのキャラをすべて解放し、それぞれ禁忌の書45点以上でラストボスをクリア · オニキスの陣営をテラコアに修正",
       ],
     },
   },

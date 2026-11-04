@@ -39,11 +39,15 @@ describe("펜리르", () => {
     expect(CHARACTERS.fenrir).toMatchObject({ maxHp: 45, dodge: 0.25, sharpness: 0.25 });
   });
 
-  it("한 번 누르면 다섯 기술이 저절로 이어짐 (베기·되베기·지면 검기·난도·천랑 낙인)", () => {
+  it("누를 때마다 한 기술: 한 번 누르면 물어 베기만 · 다시 누르면 다음 기술 · 다섯 번이면 천랑 낙인까지", () => {
+    const one = fenrir();
+    for (let i = 0; i < 90; i++) stepSim(one, { ...FIRE, attack: i < 3 });
+    expect(one.player.fnFalls ?? 0).toBe(0);
+    expect(one.effects.some((f) => f.kind === "fnWaveGo")).toBe(false);
     const s = fenrir();
     const seen = new Set<string>();
-    for (let i = 0; i < 120 && !s.player.fnFalls; i++) {
-      stepSim(s, { ...FIRE, attack: i === 0 });
+    for (let i = 0; i < 400 && !s.player.fnFalls; i++) {
+      stepSim(s, { ...FIRE, attack: i % 40 < 3 });
       for (const k of kinds(s)) seen.add(k);
     }
     expect(s.player.attackCount).toBe(1);

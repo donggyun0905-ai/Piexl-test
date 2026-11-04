@@ -52,7 +52,7 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   pungryu: { size: 32, footPad: 2, src: 128, v2: true },
   leo: { size: 32, footPad: 2, src: 128, v2: true },
   onyx: { size: 32, footPad: 2, src: 128, v2: true },
-  fenrir: { size: 32, footPad: 2, src: 128, v2: true },
+  fenrir: { size: 40, footPad: 2, src: 128, v2: true },
   /** 이클립스 태양(여자) · 일식(남자) 모습 (등 뒤 큰 광륜까지 그림이라 칸을 크게) */
   eclipse: { size: 40, footPad: 2, src: 128, v2: true },
   eclipseNight: { size: 40, footPad: 2, src: 128, v2: true },

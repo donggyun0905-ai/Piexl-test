@@ -9,7 +9,7 @@ export const ECLIPSE_PASSIVES = {
   ecDawn: P("ecDawn"),
   /** 코로나: 이글거리는 영역·죽음의 영역 반지름 + */
   ecCorona: P("ecCorona"),
-  /** 태양 플레어: 태양 5타 직각 검격 갈래 + · 더 크게 */
+  /** 태양 플레어: 태양 5타 깊은 찌르기가 더 길게 */
   ecFlare: P("ecFlare"),
   /** 흑점: 태양 모습 치명타 확률 · 치명타 피해 + */
   ecSunspot: P("ecSunspot"),
@@ -33,8 +33,8 @@ export const ECLIPSE_PERKS = {
   ecDawn: { heal: 1.6 },
   /** 코로나: 영역 반지름 배율 */
   ecCorona: { r: 1.25 },
-  /** 태양 플레어: 5타 갈래 수 · 크기 배율 */
-  ecFlare: { n: 5, size: 1.3 },
+  /** 태양 플레어: 5타 반지름 배율 */
+  ecFlare: { size: 1.25 },
   /** 흑점: 치명타 확률 + · 치명타 피해 + (태양 모습만) */
   ecSunspot: { crit: 0.15, critDmg: 0.4 },
   /** 본영: 죽음의 영역 피해 배율 · 둔화 틱 배율 */
