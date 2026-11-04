@@ -107,6 +107,8 @@ export { isPungryu, pungryuStep } from "./pungryu";
 export { orbSpots } from "./pungryuVerse";
 export { cloneSpots } from "./pungryuPerks";
 export { isLeo, leoVolt } from "./leo";
+export { isOnyx } from "./onyx";
+export { gemChance } from "./onyxGems";
 export { armsOnBack, collected, comboList, isCollector } from "./collector";
 export { caveNeed, minerOre } from "./miner";
 export { voyagerCharge, voyagerGlass } from "./voyager";

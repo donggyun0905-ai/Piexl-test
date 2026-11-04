@@ -165,6 +165,10 @@ export function passiveHitMul(s: RunState, e: EnemyState, j: number, target: Pla
       // 번개 물기: 평타 세 번째마다 더 아픔
       if (basic && pwCount(p, "leN") % P.leoN === 0) m *= P.leoMul;
       break;
+    case "onyx":
+      // 칠보: 평타 일곱 번째마다 더 아픔
+      if (basic && pwCount(p, "oxN") % P.onyxN === 0) m *= P.onyxMul;
+      break;
   }
   return m;
 }

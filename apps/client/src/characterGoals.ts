@@ -60,6 +60,7 @@ export const CHARACTER_GOALS: Partial<Record<CharacterId, CharGoal>> = {
   silk: { pw: "capture", n: 10 },
   pungryu: { m: "moveSpeed", n: 2 },
   leo: { m: "maxHp", n: 250 },
+  onyx: { m: "maxHp", n: 350 },
   chronomancer: { a: "thrift" },
   fly: { f: "clear7" },
   elder: { c: "traps", n: 1000 },

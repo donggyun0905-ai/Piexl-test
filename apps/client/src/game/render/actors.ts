@@ -148,7 +148,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
   const moving = p.x !== p.prevX || p.y !== p.prevY;
   // 기계공학자 레이저는 공격 횟수가 늘지 않음 → 몸에서 나가는 레이저가 있으면 공격 자세
   const beaming = p.characterId === "engineer" && s.effects.some((f) => f.kind === "beam" && Math.abs(f.x - p.x) < 12 && Math.abs(f.y - p.y) < 12);
-  const pose = { faceX: p.faceX, faceY: p.faceY, moving, casting: beaming || isCasting(s.tick, p.attackCount), step: Math.floor(s.tick / 8), hurt: isHurt(p.characterId, s.tick, p.hp), dash: p.dashTicks > 0 };
+  const pose = { faceX: p.faceX, faceY: p.faceY, moving, casting: beaming || isCasting(s.tick, p.attackCount), step: Math.floor(s.tick / 8), hurt: isHurt(p.characterId, s.tick, p.hp), dash: p.dashTicks > 0 || !!p.oxFly };
   if (p.dashTicks > 0) {
     // 대시 잔상 (반투명 몸)
     const gx = snap(p.prevX - p.dashDirX * 6);

@@ -1,9 +1,16 @@
-// 캐릭터 설명: 아스칼론 둘째 묶음 (영사 · 풍류사 · 레오) · 한·영·일
+// 캐릭터 설명: 아스칼론 둘째 묶음 (영사 · 풍류사 · 레오 · 오닉스) · 한·영·일
 import type { CharacterId } from "@pixel-rogue/shared";
 
 type Guide = Partial<Record<CharacterId, readonly string[]>>;
 
 export const GUIDE_KO_ASC2: Guide = {
+  onyx: [
+    "아스칼론 · 오닉스 · 영물, 몸에 일곱 보석이 박힌 광석 영물 · 체력 190 · 방어력 30 · 느림 · 무기는 칠보 광륜 하나",
+    "공격: 가운데 자수정에서 방 안 모든 적에게 빛줄기. 쏘는 동안은 몸을 움직이지 못함",
+    "대시: 하늘을 나는 부스트. 한 번 누르면 비행(빠르고 손을 떼도 계속 날아감, 무적 아님) · 다시 누르면 내려앉음",
+    "날아오를 때·내려앉을 때·비행 중 몇 초마다 보석 7개가 저마다 따로 확률을 굴려 반응: 홍옥 불기둥 · 호박 운석 · 황옥 연쇄 번개 · 비취 덩굴(회복) · 청옥 서리 · 남옥 빛줄기 · 자수정 공허. 일곱이 함께 반응하면 칠보 공명",
+    "맞아도 무적이 거의 없음 (묵인처럼) · 전용 아이템 10: 연마된 보석 · 보석 왕관 · 비상의 날개 · 낙하 충격 · 공명석 · 광물 갑피 · 프리즘 광륜 · 수정 반격 · 빠른 집광 · 보석 꼬리",
+  ],
   leo: [
     "아스칼론 · 레오 · 영물, 이마에 보석이 박힌 뇌전의 사자 · 체력 120 · 방어력 5 · 무기는 뇌전 발톱 하나",
     "앞쪽을 왼발·오른발 번갈아 할큄, 세 번째 공격마다 번개 물기(크게 + 기절). 맞힌 적에 뇌인(번개 표식)이 쌓여 발톱이 더 아픔",
@@ -29,6 +36,13 @@ export const GUIDE_KO_ASC2: Guide = {
 };
 
 export const GUIDE_EN_ASC2: Guide = {
+  onyx: [
+    "Ascalon · Onyx · a Spirit Beast of living mineral with seven gems in its body · HP 190 · Defense 30 · slow · one weapon, the Seven-Gem Halo",
+    "Attack: the amethyst at its core beams every foe in the room. It can't move while casting",
+    "Dash: a flight boost. Press once to fly (fast, keeps flying when you let go, not invincible) · press again to land",
+    "On takeoff, on landing and every few seconds in flight, each of the 7 gems rolls its own chance: Ruby fire pillar · Amber meteors · Topaz chain lightning · Jade vines (heal) · Sapphire frost · Aquamarine beam · Amethyst void. All seven at once trigger Seven-Gem Resonance",
+    "Almost no invincibility after being hit · 10 exclusive items: Polished Gems · Gem Crown · Soaring Wings · Meteor Landing · Resonance Stone · Mineral Hide · Prism Halo · Crystal Riposte · Quick Focus · Gem Trail",
+  ],
   leo: [
     "Ascalon · Leo · a Spirit Beast, a thunder lion with a gem in his brow · HP 120 · Defense 5 · one weapon, the Thunder Claws",
     "Rakes ahead with alternating left and right claws; every third attack is a Lightning Bite (big hit + stun). Hits stack Thunder Marks that make the claws hurt more",
@@ -54,6 +68,13 @@ export const GUIDE_EN_ASC2: Guide = {
 };
 
 export const GUIDE_JA_ASC2: Guide = {
+  onyx: [
+    "アスカロン · オニキス · 霊獣、体に七つの宝石が埋まった鉱石の霊獣 · 体力190 · 防御力30 · 遅い · 武器は七宝の光輪ひとつ",
+    "攻撃：中心のアメジストから部屋の全ての敵に光線。撃つ間は体を動かせない",
+    "ダッシュ：空を飛ぶブースト。一度押すと飛行（速く、手を離しても飛び続ける、無敵ではない）· もう一度押すと着地",
+    "飛び立つ時・着地する時・飛行中数秒ごとに7つの宝石がそれぞれ確率で反応：ルビーの火柱 · 琥珀の隕石 · トパーズの連鎖雷 · 翡翠の茨（回復）· サファイアの霜 · アクアマリンの光線 · アメジストの虚無。7つ同時なら七宝共鳴",
+    "被弾後の無敵がほとんどない · 専用アイテム10：磨かれた宝石 · 宝石の冠 · 飛翔の翼 · 落下の衝撃 · 共鳴石 · 鉱物の甲殻 · プリズムの光輪 · 水晶の反撃 · 素早い集光 · 宝石の尾",
+  ],
   leo: [
     "アスカロン · レオ · 霊獣、額に宝石が埋まった雷電の獅子 · 体力120 · 防御力5 · 武器は雷電の爪ひとつ",
     "前方を左右の爪で交互に引っかき、3回目ごとに雷の噛みつき（大ダメージ＋気絶）。当てた敵に雷印が重なり爪がより痛くなる",

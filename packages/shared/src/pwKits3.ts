@@ -111,4 +111,10 @@ export const PW_KITS_3: PwKits = {
     sk("leClaw", "self", 11, "#ffd020", { radius: 70, fx: "aura", hit: { dmg: 1.2, stun: 0.6 * SEC } }),
     sk("leClaw", "point", 60, "#ffe860", { range: 220, radius: 56, delay: 30, fx: "pillar", repeat: { n: 3, every: 12 }, hit: { dmg: 1.8 } }),
   ),
+  onyx: kit(1,
+    sk("oxHalo", "dash", 8, "#b070ff", { range: 120, speed: 8, fx: "dash", hit: { dmg: 1.3 } }),
+    sk("oxHalo", "point", 10, "#ff5a5a", { range: 220, radius: 30, delay: 18, fx: "pillar", hit: { dmg: 2 } }),
+    sk("oxHalo", "self", 12, "#60e0a0", { radius: 64, fx: "aura", hit: { dmg: 1.2, slow: 1.5 * SEC } }),
+    sk("oxHalo", "point", 60, "#d0a0ff", { range: 240, radius: 70, delay: 30, fx: "pillar", repeat: { n: 7, every: 6 }, hit: { dmg: 1.2, stun: 0.3 * SEC } }),
+  ),
 };

@@ -64,6 +64,7 @@ interface Seen {
   /** 제우스 강림 중 */
   zsGod: boolean;
   roars: number;
+  gems: number;
   /** 차원의 순례자: 배낭에서 꺼낸 수집품 그림 수 */
   bags: number;
   /** 왕 대검 (왕관 변신·몰락한 왕): 휘두른 효과 수 · 내리꽂은 효과 수 · 들어온 영혼 */
@@ -122,7 +123,8 @@ function snapshot(s: RunState): Seen {
     caves: s.effects.filter((f) => f.kind === "mnCave").length,
     flips: s.player.vyFlips ?? 0,
     zsGod: (s.player.zsGod ?? 0) > 0,
-    roars: s.player.leRoars ?? 0,
+    roars: s.player.leRoars ?? s.player.oxResons ?? 0,
+    gems: s.player.oxGems ?? 0,
     bags: s.effects.filter((f) => f.kind === "pgBag").length,
     kgSwings: s.effects.filter((f) => f.kind === "kgSlash" || f.kind === "kgWave").length,
     kgPlants: s.effects.filter((f) => f.kind === "kgPlant").length,
@@ -184,8 +186,7 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
           onShake(4);
         }
         if (now.attacks > seen.attacks) fx.push("chime");
-        const i = fx.indexOf("shot");
-        if (i >= 0) fx.splice(i, 1);
+        const i = fx.indexOf("shot"); if (i >= 0) fx.splice(i, 1);
       } else if (c === "silk") {
         // 영사: 실 튕김 · 찢기 "띵" · 장전 끝 실 감기
         if (now.rends > seen.rends) fx.push("ting");
@@ -201,32 +202,31 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
           if (st === "heavy") onShake(2);
         }
       } else if (c === "miner") {
-        // 에테르 광부: 곡괭이는 "깡" · 광산 붕괴는 우르르 + 화면이 크게 흔들림
+        // 에테르 광부: 곡괭이 "깡" · 광산 붕괴 우르르 + 흔들림
         if (now.attacks > seen.attacks) fx.push("clank");
         if (now.caves > seen.caves) { fx.push("rumble"); onShake(6); }
       } else if (c === "zeus" || c === "leo") {
         // 제우스·레오: 번개마다 지직 · 강림·사자후는 큰 천둥 + 크게 흔들림
         if (now.attacks > seen.attacks) fx.push("zap");
-        if ((now.zsGod && !seen.zsGod) || now.roars > seen.roars) {
-          fx.push("descend");
-          onShake(8);
-        }
-        const i = fx.indexOf("shot");
-        if (i >= 0) fx.splice(i, 1);
+        if ((now.zsGod && !seen.zsGod) || now.roars > seen.roars) { fx.push("descend"); onShake(8); }
+        const i = fx.indexOf("shot"); if (i >= 0) fx.splice(i, 1);
+      } else if (c === "onyx") {
+        // 오닉스: 광륜 울림 · 보석 반짝 · 칠보 공명 큰 울림 + 흔들림
+        if (now.attacks > seen.attacks) fx.push("chime");
+        if (now.gems > seen.gems) fx.push("twinkle");
+        if (now.roars > seen.roars) { fx.push("descend"); onShake(8); }
       } else if (c === "pilgrim") {
-        // 차원의 순례자: 쓸 때 반짝 소리 · 배낭에서 꺼내면 바스락
+        // 차원의 순례자: 반짝 · 배낭 바스락
         if (now.attacks > seen.attacks) fx.push("twinkle");
         if (now.bags > seen.bags) fx.push("rustle");
-        const i = fx.indexOf("shot");
-        if (i >= 0) fx.splice(i, 1);
+        const i = fx.indexOf("shot"); if (i >= 0) fx.splice(i, 1);
       } else if (c === "voyager") {
-        // 운명의 여행자: 쏠 때 시위 소리 · 모래시계가 뒤집히면 주사위 구르는 소리
+        // 운명의 여행자: 시위 소리 · 모래시계 주사위
         if (now.attacks > seen.attacks) fx.push("twang");
         if (now.flips > seen.flips) fx.push("dice");
-        const i = fx.indexOf("shot");
-        if (i >= 0) fx.splice(i, 1);
+        const i = fx.indexOf("shot"); if (i >= 0) fx.splice(i, 1);
       } else if (c === "wanderer") {
-        // 방랑객: 적에게 칼선이 들어가면 "삥" · 그 밖의 칼질은 카타나 소리 · 천검란은 화면이 흔들림
+        // 방랑객: 칼선 "삥" · 카타나 소리 · 천검란 흔들림
         if (now.cuts > 0 && now.tick !== seen.tick) fx.push("ping");
         else if (now.attacks > seen.attacks) fx.push("katana");
         if (now.storms > seen.storms) {
@@ -236,14 +236,14 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         const i = fx.indexOf("swing");
         if (i >= 0) fx.splice(i, 1);
       } else if (c === "remnant") {
-        // 잔영: 회피 성공(슬로우모션)은 쉭 빨려 드는 소리, 연속 베기는 칼 소리 + 흔들림, 내려찍기는 짧은 쉭
+        // 잔영: 회피 쉭 · 연속 베기 칼 소리 + 흔들림 · 내려찍기 짧은 쉭
         if (now.rmDodges > seen.rmDodges) fx.push("blink");
         if (now.rmCuts > 0) {
           fx.push("katana");
           onShake(3);
         } else if (now.attacks > seen.attacks && !fx.includes("swing")) fx.push("slice");
       } else if (c === "fallenKing" || run.player.kingRoom !== undefined) {
-        // 왕 대검: 무거운 휘두름 · 내리꽂으면 불길이 솟는 소리 · 영혼이 들어오면 맑은 소리
+        // 왕 대검: 휘두름 · 불길 · 영혼
         if (now.kgSwings > seen.kgSwings) fx.push("kgCleave");
         if (now.kgPlants > seen.kgPlants) {
           fx.push("kgPyre");
@@ -251,7 +251,7 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         }
         if (now.kgSouls > seen.kgSouls) fx.push("kgSoul");
       } else if (c === "lux") {
-        // 빛의 사도: 가벼운 빛 칼날 · '+' 빛의 검이 생기는 맑은 소리 · 빛의 조각을 얻는 오르는 소리
+        // 빛의 사도: 빛 칼날 · 빛의 검 · 빛의 조각 소리
         if (now.attacks > seen.attacks) fx.push("lxBlade");
         if (now.lxCrosses > seen.lxCrosses) fx.push("lxCross");
         if (now.lxShards > seen.lxShards) fx.push("lxShard");

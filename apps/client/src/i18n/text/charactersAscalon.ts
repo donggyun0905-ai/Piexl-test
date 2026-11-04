@@ -50,6 +50,13 @@ export const CHARACTER_TEXT_ASCALON = {
     ja: "霊獣 · アスカロン。額の真ん中に宝石がひとつ埋まった雷電の獅子。近くでは雷電の爪で交互に引っかき、3回目ごとに雷の噛みつき · 当てた敵に雷印を刻み電荷を溜めて獅子吼：部屋の全ての敵に落雷 · 額の宝石が数秒ごとに一番遠い敵に落雷を落とし部屋全体を制する · 武器は雷電の爪ひとつ · 専用アイテム10（稲妻のたてがみ · 雷光の跳躍 · 連鎖雷電 · 雷雲 · 百獣の王など）",
   },
   lion: { ko: "뇌전 발톱", en: "Thunder Claws", ja: "雷電の爪" },
+  onyx: { ko: "오닉스", en: "Onyx", ja: "オニキス" },
+  onyxDesc: {
+    ko: "영물 · 아스칼론. 몸에 일곱 보석이 박힌 광석 영물. 칠보 광륜으로 방 안 모든 적을 한 번에 치지만 쏘는 동안 움직이지 못함 · 대시는 하늘을 나는 부스트: 한 번 누르면 계속 날고 다시 누르면 내려앉음 · 날아오를 때·내려앉을 때·나는 동안 보석 7개가 저마다 확률로 반응(불기둥·운석·번개·덩굴·서리·빛줄기·공허) · 일곱이 함께 반응하면 칠보 공명 · 높은 체력·방어력, 느린 걸음, 맞아도 무적이 거의 없음 · 무기는 칠보 광륜 하나 · 전용 아이템 10",
+    en: "Spirit Beast · Ascalon. A mineral spirit with seven gems set in its body. The Seven-Gem Halo hits every foe in the room at once, but it can't move while casting · Dash is a flight boost: press once to keep flying, press again to land · on takeoff, on landing and in flight, each of the 7 gems rolls its own chance to react (fire pillar · meteors · lightning · vines · frost · beam · void) · all seven at once trigger Seven-Gem Resonance · high HP and defense, slow walk, almost no invincibility when hit · one weapon, the Seven-Gem Halo · 10 exclusive items",
+    ja: "霊獣 · アスカロン。体に七つの宝石が埋まった鉱石の霊獣。七宝の光輪で部屋の全ての敵を一度に撃つが、撃つ間は動けない · ダッシュは空を飛ぶブースト：一度押すと飛び続け、もう一度押すと着地 · 飛び立つ時・着地する時・飛行中に7つの宝石がそれぞれの確率で反応（火柱・隕石・雷・茨・霜・光線・虚無）· 7つ同時に反応すると七宝共鳴 · 高い体力と防御力、遅い歩み、被弾しても無敵がほとんどない · 武器は七宝の光輪ひとつ · 専用アイテム10",
+  },
+  gem: { ko: "칠보 광륜", en: "Seven-Gem Halo", ja: "七宝の光輪" },
   trSkill1: { ko: "암습 저격", en: "Ambush Snipe", ja: "暗襲狙撃" },
   trSkill2: { ko: "강력한 한방", en: "Power Shot", ja: "強力な一撃" },
   trSkill3: { ko: "연발사격", en: "Rapid Fire", ja: "連射" },
