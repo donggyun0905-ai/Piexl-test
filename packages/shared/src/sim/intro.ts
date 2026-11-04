@@ -6,7 +6,7 @@ import type { RunState } from "./types";
 const R = {
   /** 제단의 방 */
   ALTAR: 1,
-  /** 단련의 방 */
+  /** 단련의 방 · 대장간 */
   GYM: 2,
   /** 시련의 방 */
   TRIAL: 3,
@@ -34,6 +34,6 @@ export function introNext(runs: number): { room: IntroRoom; at: number } | null 
 
 /** 층 시작 (rooms.startFloor): 아직 안 열린 방은 전투방으로 */
 export function introRooms(s: RunState): void {
-  const lock: Record<string, IntroRoom> = { altar: "ALTAR", gym: "GYM", trial: "TRIAL" };
+  const lock: Record<string, IntroRoom> = { altar: "ALTAR", gym: "GYM", forge: "GYM", trial: "TRIAL" };
   for (const r of s.map.rooms) if (lock[r.type] && !introOpen(s, lock[r.type]!)) r.type = "combat";
 }

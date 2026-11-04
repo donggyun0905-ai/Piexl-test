@@ -7,7 +7,8 @@ import { StationWindow } from "./StationWindow";
 import { AltarResult, type AltarResultView } from "./altar/AltarResult";
 export { gymPlaying } from "./gym/gymKit";
 import type { StationView } from "./stationView";
-import type { CharacterId, PassiveId, UseItemId, WeaponId } from "@pixel-rogue/shared";
+import type { CharacterId, ItemTag, PassiveId, UseItemId, WeaponId } from "@pixel-rogue/shared";
+import { ForgeStars } from "./forge/ForgeStars";
 import { CHAR_DESC } from "../select/charDesc";
 import type { Lang, TextKey } from "../i18n";
 import { useState, type MouseEvent } from "react";
@@ -22,6 +23,9 @@ export interface LoadoutView {
   slots: (UseItemId | null)[];
   /** 지금 사용 아이템을 못 씀 (끝없는 시련) */
   useOff?: boolean;
+  /** 대장간: 지금 무기 강화·암흑 강화·꼬리표 · 꼬리표를 바꾼 패시브 */
+  forge?: { lv: number; dark: number; tag?: ItemTag };
+  retag?: Record<string, ItemTag>;
   passives: PassiveId[];
   /** 증강 기술이 새겨진 패시브 */
   augs?: { passive: PassiveId; skills: string[] }[];
@@ -47,7 +51,7 @@ export interface LoadoutView {
 export function loadoutKey(v: LoadoutView): string {
   const n = v.novice ? `|${v.novice.lv},${v.novice.exp},${v.novice.points}` : "";
   const pw = v.pw ? `|${v.pw.cds.join(",")}|${v.pw.armed}|${v.pw.silenced}` : "";
-  return `${v.weaponId}|${v.slots.join(",")}${v.useOff ? "x" : ""}|${v.passives.join(",")}|${v.augs?.map((a) => a.passive + a.skills.join("+")).join(",") ?? ""}${n}|${v.skills?.join(",") ?? ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}|${v.altarRes?.tick ?? ""}`;
+  return `${v.weaponId}${v.forge ? JSON.stringify(v.forge) : ""}${v.retag ? JSON.stringify(v.retag) : ""}|${v.slots.join(",")}${v.useOff ? "x" : ""}|${v.passives.join(",")}|${v.augs?.map((a) => a.passive + a.skills.join("+")).join(",") ?? ""}${n}|${v.skills?.join(",") ?? ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}|${v.altarRes?.tick ?? ""}`;
 }
 
 interface Props {
@@ -115,6 +119,7 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
           <ItemIcon item={weapon} size={24} />
         </span>{" "}
         <strong>{itemName("weapon", view.weaponId, lang)}</strong>
+        {view.forge && <ForgeStars lv={view.forge.lv} dark={view.forge.dark} />}
       </span>
       {!touchMode && (
         <span className="loadout-slots" aria-label={t("item")}>
@@ -158,6 +163,7 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
           icon={shown.kind === "weapon" ? { kind: "weapon", id: shown.id } : shown.kind === "use" ? { kind: "use", id: shown.id } : { kind: "passive", id: shown.id }}
           name={<>{itemName(shown.kind, shown.id, lang)}{shown.kind === "passive" && (counts.get(shown.id) ?? 1) > 1 && ` ×${counts.get(shown.id)}`}</>}
           desc={itemDesc(shown.kind, shown.id, lang, t)}
+          tag={shown.kind === "weapon" ? view.forge?.tag : shown.kind === "passive" ? view.retag?.[shown.id] : undefined}
         >
           {shown.kind === "passive" && augOf(shown.id).length > 0 && (
             <div className="item-tip-aug">

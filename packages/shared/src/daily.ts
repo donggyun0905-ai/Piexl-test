@@ -224,6 +224,12 @@ export function checkProgress(seed: number, r: RunSummary, sudden = false): stri
     if (b.floor < 1 || b.floor > r.floor) return "buy";
     const map = maps.get(b.floor) ?? generateFloor(seed, b.floor);
     maps.set(b.floor, map);
+    // 대장간에 쓴 돈 (itemId = 기능 번호)
+    if (b.kind === "forge") {
+      if (map.rooms[b.roomId]?.type !== "forge") return "buy";
+      spent += b.price;
+      continue;
+    }
     if (map.rooms[b.roomId]?.type !== "shop") return "buy";
     if (b.kind === "coin" || b.kind === "trash" || b.kind === "gym" || b.kind === "trial" || b.kind === "boon" || b.kind === "altar" || b.kind === "devil" || b.kind === "gambler" || b.kind === "auction") return "buy";
     // 작업대(아티팩터 제작대·추적자 튜닝소)에 쓴 돈은 물건이 아니라 itemId = 기능 번호

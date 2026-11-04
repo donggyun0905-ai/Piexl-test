@@ -11,9 +11,10 @@ import { SECRET_KINDS } from "../secretDefs";
 import { ROOM_CY } from "../constants";
 import { deriveSeed } from "../rng";
 import type { RunState } from "./types";
+import { spawnForge } from "./forge";
 
 /** 시험할 수 있는 방 (heaven = 천상의 상점 · golden = 여신의 선물) */
-export const PRACTICE_ROOMS = ["shop", "heaven", "golden", "treasure", "gym", "trial", "altar", "devil", "gamble", "auction", "crack", "rest"] as const;
+export const PRACTICE_ROOMS = ["shop", "heaven", "golden", "treasure", "gym", "trial", "altar", "devil", "gamble", "auction", "crack", "rest", "forge"] as const;
 export type PracticeRoom = (typeof PRACTICE_ROOMS)[number];
 
 /** 지금 방을 그 방으로: 바닥 물건을 새로 놓음 (상점은 돈을 한도까지 채워 줌 · 단련의 방은 기구를 다시 쓸 수 있음) */
@@ -34,6 +35,10 @@ export function practiceRoom(s: RunState, kind: PracticeRoom): void {
   else if (kind === "gym") {
     if (s.player.gym) s.player.gym.rooms = [];
     spawnGym(s, s.roomId);
+  } else if (kind === "forge") {
+    s.player.forgeFree = [];
+    s.gold = Math.max(s.gold, LOOT_RULES.MAX_GOLD);
+    spawnForge(s, s.roomId);
   } else if (kind === "altar") {
     // 제단을 다시 쓸 수 있게 (성좌는 방 번호 시드)
     if (s.player.altar) s.player.altar.rooms = [];

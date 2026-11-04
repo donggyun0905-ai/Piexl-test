@@ -31,10 +31,13 @@ export const setsOn = (s: RunState): boolean => !s.pvp && !s.swarm;
 /** 꼬리표마다 가진 수 (패시브 + 가진 패시브에 붙은 제단 증강의 성좌 꼬리표) */
 export function tagCounts(p: PlayerState): Record<ItemTag, number> {
   const out = Object.fromEntries(ITEM_TAGS.map((t) => [t, 0])) as Record<ItemTag, number>;
+  // 대장간에서 바꾼 꼬리표가 먼저 · 무기는 대장간에서 꼬리표를 붙였을 때만 (sim/forge)
   for (const id of p.passives) {
-    const t = passiveTag(id);
+    const t = p.retag?.[id] ?? passiveTag(id);
     if (t) out[t]++;
   }
+  const wt = p.forge?.[p.weaponId]?.tag;
+  if (wt) out[wt]++;
   for (const aug of p.augments ?? []) {
     if (!aug.alt || !p.passives.includes(aug.passive)) continue;
     for (const t of ALTAR_TAGS[aug.alt]) out[t]++;

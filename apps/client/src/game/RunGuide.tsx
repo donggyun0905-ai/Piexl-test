@@ -15,7 +15,7 @@ function roomKind(s: RunState): PracticeRoom | null {
   const info = s.map.rooms[s.roomId];
   if (!info) return null;
   if (info.type === "shop") return info.heaven ? "heaven" : "shop";
-  const list: string[] = ["golden", "treasure", "gym", "trial", "altar", "devil", "gamble", "auction", "rest"];
+  const list: string[] = ["golden", "treasure", "gym", "trial", "altar", "forge", "devil", "gamble", "auction", "rest"];
   return list.includes(info.type) ? (info.type as PracticeRoom) : null;
 }
 
@@ -29,7 +29,7 @@ function goal(s: RunState): TextKey | null {
   if (info.type === "exit") return "goalStairs";
   const special: Record<string, TextKey> = { shop: "goalShop", treasure: "goalTreasure", golden: "goalGolden", rest: "goalRest" };
   if (special[info.type]) return special[info.type]!;
-  return ["gym", "trial", "altar", "devil", "gamble", "auction"].includes(info.type) ? "goalSpecial" : "goalExit";
+  return ["gym", "trial", "altar", "forge", "devil", "gamble", "auction"].includes(info.type) ? "goalSpecial" : "goalExit";
 }
 
 /** 새 방이 열리기까지 안내 (단계적 열기가 끝났으면 null) */

@@ -3,7 +3,8 @@ import type { TunePartFx } from "@pixel-rogue/shared";
 import type { Lang } from "../index";
 import type { Names } from "./names";
 
-export const STATION_NAME: Record<"bench" | "tune" | "gym" | "trial" | "boon" | "altar" | "gambler" | "auction", Names> = {
+export const STATION_NAME: Record<"bench" | "tune" | "gym" | "trial" | "boon" | "altar" | "gambler" | "auction" | "forge", Names> = {
+  forge: { ko: "대장장이의 모루", en: "Blacksmith's Anvil", ja: "鍛冶屋の金床" },
   gambler: { ko: "도박꾼", en: "Gambler", ja: "ギャンブラー" },
   auction: { ko: "내 자리 (맨 앞줄)", en: "Your seat (front row)", ja: "自分の席 (最前列)" },
   altar: { ko: "성좌의 제단", en: "Constellation Altar", ja: "星座の祭壇" },
@@ -21,7 +22,12 @@ export const GYM_DEVICE: Names[] = [
   { ko: "벤치 프레스", en: "Bench Press", ja: "ベンチプレス" },
 ];
 
-export const STATION_DESC: Record<"bench" | "tune" | "gym" | "trial" | "boon" | "altar" | "gambler" | "auction" | "devil", Names> = {
+export const STATION_DESC: Record<"bench" | "tune" | "gym" | "trial" | "boon" | "altar" | "gambler" | "auction" | "devil" | "forge", Names> = {
+  forge: {
+    ko: "F: 대장장이에게 무기 강화 · 꼬리표 변환 · 암흑 강화를 맡김",
+    en: "F: ask the blacksmith for weapon upgrades, tag reforging or dark upgrades",
+    ja: "F：鍛冶屋に武器強化・タグ変換・暗黒強化を頼む",
+  },
   devil: { ko: "거래 조건: 최대 체력 {cost} · F로 거래", en: "Price: {cost} max HP · press F to deal", ja: "取引条件: 最大体力{cost} · Fで取引" },
   gambler: {
     ko: "F를 눌러 야바위 · 당첨 상자를 잘 따라가 맞히면 패시브 5 · 300원 · 원하는 능력치 2장, 틀리면 무작위 능력치 둘 -10% (한 번만)",

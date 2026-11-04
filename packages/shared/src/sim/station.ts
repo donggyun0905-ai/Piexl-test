@@ -16,6 +16,7 @@ import { devilAt } from "./devil";
 import { GAMBLE_OP, gambleAt, gambleMenu } from "./gamble";
 import { AUCTION_OP, auctionAt, auctionMenu } from "./auction";
 import type { StationKind } from "./stationTypes";
+import { FORGE_OP, forgeMenu, forgeMods } from "./forge";
 import type { Pickup, RunState } from "./types";
 
 /** 튜닝소 기능 번호 (제작대 BENCH_OP 다음) */
@@ -40,9 +41,9 @@ export function spawnStation(s: RunState, roomId: number): boolean {
   return true;
 }
 
-export const isStation = (pk: Pickup) => pk.kind === "bench" || pk.kind === "tune" || pk.kind === "gym" || pk.kind === "trial" || pk.kind === "boon" || pk.kind === "altar" || pk.kind === "devil" || pk.kind === "gambler" || pk.kind === "auction";
+export const isStation = (pk: Pickup) => pk.kind === "bench" || pk.kind === "tune" || pk.kind === "gym" || pk.kind === "trial" || pk.kind === "boon" || pk.kind === "altar" || pk.kind === "devil" || pk.kind === "gambler" || pk.kind === "auction" || pk.kind === "forge";
 /** 큰 물건(비석·제단)은 조금 멀리서도 닿음 (items.updateItems) */
-export const bigReach = (pk: Pickup) => (pk.kind === "trial" || pk.kind === "altar" || pk.kind === "gambler" || pk.kind === "auction" ? 24 : 0);
+export const bigReach = (pk: Pickup) => (pk.kind === "trial" || pk.kind === "altar" || pk.kind === "gambler" || pk.kind === "auction" || pk.kind === "forge" ? 24 : 0);
 
 /** 작업대 앞: F = 창 열기·닫기 (itemId "1" = 열림) */
 export function stationAt(s: RunState, pk: Pickup, interact: boolean): void {
@@ -75,6 +76,8 @@ export function stationMenu(s: RunState, code: number): void {
   // 비밀의 방: 야바위 · 경매
   if (op === GAMBLE_OP) return gambleMenu(s, a);
   if (op === AUCTION_OP) return auctionMenu(s, a);
+  // 대장간 (sim/forge)
+  if (op >= FORGE_OP.up && op <= FORGE_OP.dark) return forgeMenu(s, op, a, b);
   const kind = stationFor(s);
   const here = s.rooms[s.roomId]?.pickups.some((pk) => pk.kind === kind && (pk.owner === undefined || pk.owner === (s.seat ?? 0)));
   if (!kind || !here) return;
@@ -84,7 +87,7 @@ export function stationMenu(s: RunState, code: number): void {
 }
 
 /** 작업대·히든 아이템이 바꾼 능력치 (recalcStats) */
-export const stationMods = (s: RunState): StatMod[] => [...benchMods(s.player), ...tuneMods(s.player), ...hiddenMods(s), ...gymMods(s.player), ...boonMods(s.player)];
+export const stationMods = (s: RunState): StatMod[] => [...benchMods(s.player), ...tuneMods(s.player), ...hiddenMods(s), ...gymMods(s.player), ...boonMods(s.player), ...forgeMods(s.player)];
 
 /** 작업대에 돈 내기: 상점 구매 기록에도 남김 (일일 도전 진행 기록 검사가 쓴 돈을 맞춰 봄) */
 export function stationPay(s: RunState, kind: StationKind, op: number, cost: number): boolean {

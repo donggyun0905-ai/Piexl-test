@@ -8,6 +8,7 @@ import { BOSS_SHAPE_KINDS } from "./roomShapes";
 import { gymFloor } from "./gym";
 import { setSpecial, trialFloor } from "./specialRooms";
 import { altarFloor } from "./altar";
+import { FORGE_RULES, forgeFloor } from "./forge";
 
 export const FLOOR_COUNT = 6;
 /** 6층을 깬 뒤 도전하는 라스트 보스 층 */
@@ -18,7 +19,7 @@ export const LANES = 3;
 export const MAX_LAYERS = 12;
 
 /** exit = 보스방 (보스를 잡으면 계단이 열림) · elite = 강한 적 (보상이 많음) · rest = 쉼터 (체력 회복) · golden = 여신의 선물 (라스트 보스 층: 아이템 9개 중 3개 고르기) · gym = 단련의 방 (4층부터, sim/gym) · trial = 시련의 방 (4층부터, sim/trial) · altar = 제단의 방 (3층부터, sim/altar) · devil·gamble·auction = 비밀의 방 · hidden = 시련 보상으로 들어간 히든 상점 (sim/vault, 지도 끝 옆방) */
-export type RoomType = "start" | "combat" | "elite" | "rest" | "treasure" | "shop" | "exit" | "golden" | "gym" | "trial" | "altar" | "devil" | "gamble" | "auction" | "hidden";
+export type RoomType = "start" | "combat" | "elite" | "rest" | "treasure" | "shop" | "exit" | "golden" | "gym" | "trial" | "altar" | "devil" | "gamble" | "auction" | "hidden" | "forge";
 
 export interface RoomInfo {
   id: number;
@@ -104,6 +105,9 @@ export function generateFloor(seed: number, floor: number, custom: readonly (rea
   if (trialFloor(floor)) setSpecial(byLayer, createRng(deriveSeed(seed, "floor", floor, "trialRoom")), middle, "trial");
   // 제단의 방 (sim/altar): 3층부터 층마다 하나
   if (altarFloor(floor)) setSpecial(byLayer, createRng(deriveSeed(seed, "floor", floor, "altarRoom")), middle, "altar");
+  // 대장간 (sim/forge): 2층부터 층마다 확률로 하나
+  const forgeRng = createRng(deriveSeed(seed, "floor", floor, "forgeRoom"));
+  if (forgeFloor(floor) && forgeRng.nextFloat() < FORGE_RULES.CHANCE) setSpecial(byLayer, forgeRng, middle, "forge");
 
   // 방 모양: 방마다 따로 시드를 써서 지도 모양·방 종류에는 영향 없음
   for (const r of rooms) {

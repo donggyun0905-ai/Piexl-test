@@ -89,3 +89,101 @@
   color: #fff;
   text-shadow: 0 0 4px currentColor, 0 0 8px #ffd84a;
 }
+/* 대장간 창 (game/forge): 불빛 테두리 · 무기 줄 · 강화 칸 둘 · 꼬리표 변환 */
+.station-window.forge {
+  border-color: #b8622a;
+  box-shadow: 0 0 28px rgb(255 120 40 / 0.3);
+  background: linear-gradient(180deg, rgb(34 20 14 / 0.97), rgb(14 10 10 / 0.97));
+}
+.station-window.forge .station-head b {
+  color: #ffc48a;
+  text-shadow: 0 0 10px rgb(255 140 60 / 0.7);
+}
+.forge-weapon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1em;
+}
+.forge-ops {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px;
+}
+.forge-op {
+  padding: 10px 12px;
+  border: 1px solid #5a3a24;
+  border-radius: 8px;
+  background: rgb(255 140 60 / 0.06);
+}
+.forge-op.dark {
+  border-color: #5a2a7a;
+  background: rgb(160 80 255 / 0.08);
+}
+.forge-op h3 {
+  margin: 0 0 4px;
+  font-size: 1em;
+  color: #ffd2a0;
+}
+.forge-op.dark h3 {
+  color: #d8b0ff;
+}
+.forge-op p {
+  margin: 0 0 8px;
+  font-size: 0.8em;
+  color: var(--muted);
+}
+.forge-btn {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #c8782a;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #6a3a1a, #3a200e);
+  color: #ffe2c0;
+  font: inherit;
+  cursor: pointer;
+}
+.forge-btn.dark {
+  border-color: #9a5aff;
+  background: linear-gradient(180deg, #3a1a5a, #1e0e30);
+  color: #efe0ff;
+}
+.forge-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.forge-targets,
+.forge-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.forge-targets button {
+  padding: 3px;
+  border: 1px solid #4a3a30;
+  border-radius: 6px;
+  background: rgb(0 0 0 / 0.3);
+  cursor: pointer;
+}
+.forge-targets button.on {
+  border-color: #ffb060;
+  box-shadow: 0 0 6px #ff9a3a;
+}
+.forge-tags .now .tag-chip {
+  opacity: 0.4;
+}
+.forge-stars {
+  display: inline-flex;
+  gap: 3px;
+  font-weight: 700;
+  font-size: 0.9em;
+}
+.fs-up {
+  color: #ffd84a;
+  text-shadow: 0 0 4px rgb(255 200 60 / 0.6);
+}
+.fs-dark {
+  color: #c08aff;
+  text-shadow: 0 0 4px rgb(170 90 255 / 0.8);
+}

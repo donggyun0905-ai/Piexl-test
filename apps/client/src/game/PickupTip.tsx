@@ -27,7 +27,7 @@ export function floorTipAt(run: RunState, canvas: HTMLCanvasElement, zoom: numbe
   const reward = pk.kind === "passive" && pk.group > 0 && pk.price === 0;
   const pos = pickupScreenPos(run, canvas, zoom, pk);
   return {
-    icon: pk.kind === "coin" || pk.kind === "reroll" || pk.kind === "trash" || pk.kind === "bench" || pk.kind === "tune" || pk.kind === "gym" || pk.kind === "trial" || pk.kind === "boon" || pk.kind === "altar" || pk.kind === "gambler" || pk.kind === "auction" ? null : ({ kind: pk.kind === "devil" ? "passive" : pk.kind, id: pk.itemId } as IconItem),
+    icon: pk.kind === "coin" || pk.kind === "reroll" || pk.kind === "trash" || pk.kind === "bench" || pk.kind === "tune" || pk.kind === "gym" || pk.kind === "trial" || pk.kind === "boon" || pk.kind === "altar" || pk.kind === "gambler" || pk.kind === "auction" || pk.kind === "forge" ? null : ({ kind: pk.kind === "devil" ? "passive" : pk.kind, id: pk.itemId } as IconItem),
     name: `${itemName(pk.kind, pk.itemId, lang)}${price}`,
     desc: itemDesc(pk.kind, pk.itemId, lang, t, pk.kind === "devil" ? devilCost(pk.itemId as DevilId, run.player) : undefined),
     x: pos.x,

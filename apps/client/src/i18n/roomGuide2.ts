@@ -1,5 +1,5 @@
 // 방 설명 창 글: 시련의 방 · 제단의 방 (나머지 방은 roomGuide). 수치는 게임 계산 값에서 바로 가져옴
-import { ALTAR, ALTAR_IDS, TRIAL_FOE_RULES as F, TRIAL_RULES as R, TRIAL_RUN_RULES as RR } from "@pixel-rogue/shared";
+import { FORGE_RULES, ALTAR, ALTAR_IDS, TRIAL_FOE_RULES as F, TRIAL_RULES as R, TRIAL_RUN_RULES as RR } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "./index";
 
 export type L = [string, string, string];
@@ -40,6 +40,17 @@ function altar(t: (k: TextKey) => string): L[] {
   ];
 }
 
-export function roomGuide2(kind: "trial" | "altar", lang: Lang, t: (k: TextKey) => string): string[] {
-  return pick(lang, kind === "trial" ? trial(t) : altar(t));
+function forge(): L[] {
+  const F = FORGE_RULES;
+  return [
+    [`나오는 곳: ${F.FROM_FLOOR}층부터 층마다 ${pct(F.CHANCE)}%로 하나 (불빛 도는 대장간)`, `Where: from floor ${F.FROM_FLOOR}, ${pct(F.CHANCE)}% per floor (a fire-lit forge)`, `出現: ${F.FROM_FLOOR}階から各階${pct(F.CHANCE)}%で1つ（火の灯る鍛冶場）`],
+    [`무기 강화: +0→+1은 100%, 단계마다 ${pct(F.UP_STEP)}%씩 낮아져 최저 ${pct(F.UP_MIN)}% · 실패하면 한 단계 떨어짐 · 단계마다 무기 피해 +${pct(F.UP_DMG)}% (최대 +${F.MAX_LV})`, `Weapon upgrade: +0→+1 is 100%, each level ${pct(F.UP_STEP)}% lower, min ${pct(F.UP_MIN)}% · failing drops a level · +${pct(F.UP_DMG)}% weapon damage per level (max +${F.MAX_LV})`, `武器強化：+0→+1は100%、段階ごとに${pct(F.UP_STEP)}%下がり最低${pct(F.UP_MIN)}%・失敗すると1段階下がる・段階ごとに武器ダメージ+${pct(F.UP_DMG)}%（最大+${F.MAX_LV}）`],
+    [`꼬리표 변환: 무기·패시브 하나를 원하는 꼬리표로 · 대장간마다 처음 1번 무료, 그다음 ${F.TAG_COST}골드씩 점점 비쌈`, `Tag reforge: set a weapon or passive to any tag · first one free at each forge, then ${F.TAG_COST} gold and rising`, `タグ変換：武器・パッシブ1つを好きなタグに・鍛冶場ごとに最初の1回無料、その後${F.TAG_COST}ゴールドずつ高くなる`],
+    [`암흑 강화 (무기만): ${pct(F.DARK_CHANCE)}% · 성공하면 암흑 단계 +1 (무기 피해 +${pct(F.DARK_DMG)}%, 최대 +${F.DARK_MAX}) · 실패하면 무기가 부서져 처음 무기로`, `Dark upgrade (weapon only): ${pct(F.DARK_CHANCE)}% · success adds a dark level (+${pct(F.DARK_DMG)}% weapon damage, max +${F.DARK_MAX}) · failure shatters the weapon and you get your starting weapon`, `暗黒強化（武器のみ）：${pct(F.DARK_CHANCE)}%・成功で暗黒段階+1（武器ダメージ+${pct(F.DARK_DMG)}%、最大+${F.DARK_MAX}）・失敗すると武器が壊れ最初の武器に`],
+    ["강화·꼬리표는 그 무기에만 남음 (다른 무기로 바꾸면 사라지고, 그 무기를 다시 들면 그대로) · 그냥 나가도 아무 일 없음", "Upgrades and tags stay on that weapon (swap and they're gone; pick it up again and they're back) · leaving does nothing", "強化・タグはその武器にだけ残る（別の武器に替えると消え、その武器を持ち直すと戻る）・そのまま出ても何もない"],
+  ];
+}
+
+export function roomGuide2(kind: "trial" | "altar" | "forge", lang: Lang, t: (k: TextKey) => string): string[] {
+  return pick(lang, kind === "trial" ? trial(t) : kind === "forge" ? forge() : altar(t));
 }

@@ -3,6 +3,7 @@ import { drawHazards } from "./bossFx";
 import { gymUsed, trialUsed, mine, PICKUP_HOLD_TICKS, ROOM_COLS, ROOM_ROWS, roomGrid, THIN_WALLS, TILE_FLOOR, TILE_PILLAR, TILE_PIT, TILE_SIZE, TILE_WALL, tileAt, WALL_THIN, type RunState } from "@pixel-rogue/shared";
 import { drawPickup } from "../drawPickup";
 import { drawAltarStand } from "./altarDraw";
+import { drawForgeAnvil } from "./forgeDraw";
 import { drawDevilOffer, drawGambler } from "./vaultDraw";
 import { drawMySeat } from "./auctionDraw";
 import { drawRoomFeatures } from "../roomFeatures";
@@ -58,6 +59,10 @@ export function drawPickups(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
     // 협동: 다른 사람 아이템은 보이지 않음
     if (!mine(s, pk)) continue;
     const hold = pk.id === s.holdPickupId ? s.holdTicks / PICKUP_HOLD_TICKS : 0;
+    if (pk.kind === "forge") {
+      drawForgeAnvil(ctx, s, pk, pk.id === s.nearPickupId);
+      continue;
+    }
     if (pk.kind === "altar") {
       drawAltarStand(ctx, s, pk, Math.round(pk.x), Math.round(pk.y));
       continue;

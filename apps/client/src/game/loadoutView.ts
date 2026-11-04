@@ -21,6 +21,9 @@ export function loadoutView(run: RunState, armed: Parameters<typeof pwSkillView>
     // 끝없는 시련 등 사용 아이템을 못 쓰는 동안 (칸에 ✕)
     ...(trialNoItems(run) ? { useOff: true } : {}),
     passives: [...p.passives],
+    // 대장간 (sim/forge): 지금 무기 강화·암흑 강화·꼬리표 · 꼬리표를 바꾼 패시브
+    ...(p.forge?.[p.weaponId] ? { forge: { lv: p.forge[p.weaponId]!.lv ?? 0, dark: p.forge[p.weaponId]!.dark ?? 0, ...(p.forge[p.weaponId]!.tag ? { tag: p.forge[p.weaponId]!.tag } : {}) } } : {}),
+    ...(p.retag ? { retag: { ...p.retag } } : {}),
     // 제단·경매로 증강 기술이 새겨진 패시브 (칸에 ✦ · 설명에 기술 이름)
     ...(p.augments?.length ? { augs: p.augments.map((a) => ({ passive: a.passive, skills: [...a.skills] })) } : {}),
     ...(p.characterId === "novice" && !run.pvp ? { novice: { lv: p.lv ?? 1, exp: p.exp ?? 0, need: expToNext(p.lv ?? 1), points: p.points ?? 0 } } : {}),

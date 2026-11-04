@@ -47,6 +47,7 @@ export type { TrialKind } from "./trialTypes";
 export { ALTAR_AUG_MIN, ALTAR_OP, altarAugOk, altarAugTaken, ALTAR_Y, altarOf, altarPending, altarUsed, augmented } from "./altar";
 export { setsOn, tagCounts, tier, tierOf } from "./buildSets";
 export { awakened } from "./buildAwaken";
+export { FORGE_OP, FORGE_RULES, forgeChance, forgeCost, forgeOf, type ForgeMark } from "./forge";
 export { crackHere, crackSpot } from "./vault";
 export { devilCost, devilPact, offerY, statueY } from "./devil";
 export { CUP_GAP, CUP_PAIRS, cupState, cupY, GAMBLE_OP, TABLE as GAMBLE_TABLE, gambleDone, gamblerY, gambleNow, gambleUsed } from "./gamble";

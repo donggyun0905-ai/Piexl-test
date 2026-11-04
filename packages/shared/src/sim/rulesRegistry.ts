@@ -97,6 +97,7 @@ import { HIDDEN_FORT_RULES } from "./hiddenForts";
 import { HIDDEN_SEA_RULES } from "./hiddenSea";
 import { TRIAL_FOE_RULES } from "./trialFoes";
 import { INTRO_RULES } from "./intro";
+import { FORGE_RULES } from "./forge";
 import { KNOCK_RULES } from "./knock";
 import { FLOOR_RULES } from "./floor";
 import { FOE_SCALE_RULES } from "./foeScale";
@@ -205,6 +206,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   HIDDEN_SEA_RULES,
   TRIAL_FOE_RULES,
   INTRO_RULES,
+  FORGE_RULES,
   KNOCK_RULES,
   FLOOR_RULES,
   FOE_SCALE_RULES,
