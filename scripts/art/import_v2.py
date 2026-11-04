@@ -40,7 +40,7 @@ FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", 
 # 서기·걷기에서 오른쪽을 보는 원본 칸 (기본 3 = 넷째 칸, GPT가 셋째 칸에 오른쪽을 그린 캐릭터만)
 STAND_RIGHT = {"abandoned": 2, "abandoned2": 2, "fenrir": 2}
 # 서기·걷기에서 고른 칸이 왼쪽을 보는 캐릭터: 뒤집어서 오른쪽으로 (사용자 확인)
-STAND_FLIP = {"abandoned3", "byeonhui", "eclipse"}
+STAND_FLIP = {"abandoned3", "byeonhui", "eclipse", "eclipseNight"}
 # 공격 줄 오른쪽·왼쪽에 쓸 원본 칸 (0~3, 끝에 f = 뒤집기): GPT가 칸 순서를 바꿔 그린 캐릭터만 (화면을 보고 정함)
 ATTACK_LR = {
     "warden": ("2", "3"), "drifter": ("2", "3"), "engineer": ("2", "3"), "elementalist": ("2", "3"),
