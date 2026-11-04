@@ -4,6 +4,7 @@ import { BUILD_SETS as B } from "../buildSetDefs";
 import { ENEMIES } from "../enemyDefs";
 import { createRng, deriveSeed } from "../rng";
 import { tier } from "./buildSets";
+import { awakenTick } from "./buildAwaken";
 import { blastAt, damageEnemy, healPlayer } from "./combat";
 import { applyBleed, updateBleed } from "./gunExtras";
 import { ignite } from "./status";
@@ -121,6 +122,8 @@ export function setTick(s: RunState, bleedRuns: boolean): void {
     if (t("earth") >= 2) blastAt(s, p.x, p.y, B.earth.quakeR4, p.stats.damage * B.earth.quake4);
   }
   p.setWasDash = dashing;
+  // 각성 증강 (꼬리표 8개, sim/buildAwaken)
+  awakenTick(s);
   if (s.enemies.length === 0) return;
   if (t("bolt") >= 3 && s.tick % B.bolt.every6 === 0) {
     const near = s.enemies.filter((e) => e.hp > 0 && !e.immune && dist2(e, p) <= B.bolt.range6 ** 2);

@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.381",
+    date: "2026-11-04",
+    items: {
+      ko: [
+        "각성 증강: 같은 꼬리표를 8개 모으면 그 꼬리표의 각성 기술이 저절로 나감 (15종) — 얼음 서리바람(둥근 범위에 얼음 결정이 눈처럼 내림) · 불 유성우 · 번개 뇌신의 사슬 · 독 역병 꽃 · 빛 성광 · 어둠 심연 · 죽음 사신의 낫 · 대지 지각 분쇄 · 물 해일 · 날카로움 천검 · 단단함 강철 요새 · 바람 대회오리 · 행운 황금 소나기 · 소환 정령 군단 · 피 핏빛 달",
+        "빌드 세트 칸: 8개를 모으면 ✦ 표시와 '각성!' 알림 · 마우스를 올리면 각성 기술 설명",
+        "끝없는 시련: 사용 아이템을 못 쓰는 동안 아이템 칸에 빨간 ✕",
+        "수집가: 공격 이펙트가 거꾸로 재생되던 것을 고침 (피의 활 화살이 활에서 뻗어 나감)",
+      ],
+      en: [
+        "Awakening: collect 8 of the same tag and that tag's awakening skill fires on its own (15 kinds) — Ice Frost Gale (ice crystals fall like snow in a circle) · Fire Meteor Rain · Lightning Thunder Chain · Poison Plague Bloom · Light Holy Radiance · Dark Abyss · Death Reaper's Scythe · Earth Crust Breaker · Water Tidal Wave · Sharp Thousand Blades · Sturdy Steel Bastion · Wind Great Cyclone · Luck Golden Shower · Summon Spirit Legion · Blood Blood Moon",
+        "Build sets: 8 of a tag shows ✦ and an 'awakened!' banner · hover for the awakening skill",
+        "Endless trial: a red ✕ on the item slots while use items are blocked",
+        "Collector: attack effects no longer play backwards (Blood Bow arrows now shoot out from the bow)",
+      ],
+      ja: [
+        "覚醒増強：同じタグを8個集めるとそのタグの覚醒技が自動で発動（15種）— 氷 霜風（丸い範囲に氷の結晶が雪のように降る）・火 流星雨・雷 雷神の鎖・毒 疫病の花・光 聖光・闇 深淵・死 死神の鎌・大地 地殻粉砕・水 津波・鋭さ 千剣・頑丈 鋼鉄の要塞・風 大竜巻・幸運 黄金の雨・召喚 精霊の軍団・血 血の月",
+        "ビルドセット欄：8個集めると✦表示と「覚醒！」通知・カーソルを合わせると覚醒技の説明",
+        "終わりなき試練：使用アイテムが使えない間はアイテム欄に赤い✕",
+        "収集家：攻撃エフェクトが逆再生されていたのを修正（血の弓の矢が弓から伸びる）",
+      ],
+    },
+  },
+  {
     version: "0.48.380",
     date: "2026-11-04",
     items: {

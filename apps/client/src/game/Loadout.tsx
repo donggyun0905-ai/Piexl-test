@@ -20,6 +20,8 @@ import { keyLabel, useSettings } from "../settings";
 export interface LoadoutView {
   weaponId: WeaponId;
   slots: (UseItemId | null)[];
+  /** 지금 사용 아이템을 못 씀 (끝없는 시련) */
+  useOff?: boolean;
   passives: PassiveId[];
   /** 증강 기술이 새겨진 패시브 */
   augs?: { passive: PassiveId; skills: string[] }[];
@@ -45,7 +47,7 @@ export interface LoadoutView {
 export function loadoutKey(v: LoadoutView): string {
   const n = v.novice ? `|${v.novice.lv},${v.novice.exp},${v.novice.points}` : "";
   const pw = v.pw ? `|${v.pw.cds.join(",")}|${v.pw.armed}|${v.pw.silenced}` : "";
-  return `${v.weaponId}|${v.slots.join(",")}|${v.passives.join(",")}|${v.augs?.map((a) => a.passive + a.skills.join("+")).join(",") ?? ""}${n}|${v.skills?.join(",") ?? ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}|${v.altarRes?.tick ?? ""}`;
+  return `${v.weaponId}|${v.slots.join(",")}${v.useOff ? "x" : ""}|${v.passives.join(",")}|${v.augs?.map((a) => a.passive + a.skills.join("+")).join(",") ?? ""}${n}|${v.skills?.join(",") ?? ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}|${v.altarRes?.tick ?? ""}`;
 }
 
 interface Props {
@@ -120,13 +122,14 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
             <button
               key={i}
               type="button"
-              className={`slot ${id ? "filled" : ""}`}
+              className={`slot ${id ? "filled" : ""}${view.useOff ? " off" : ""}`}
               disabled={!id}
               onClick={() => controls()?.queueUse(i + 1)}
               onMouseEnter={(e) => id && setTip(tipAt({ kind: "use", id }, e.currentTarget))}
               onMouseLeave={() => setTip(null)}
             >
               <kbd>{keyLabel(useKeys[i] ?? "")}</kbd> {id && <ItemIcon item={{ kind: "use", id }} size={20} />} {id ? itemName("use", id, lang) : t("empty")}
+              {view.useOff && <i className="slot-x" aria-hidden="true">✕</i>}
             </button>
           ))}
         </span>

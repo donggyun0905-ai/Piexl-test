@@ -84,3 +84,8 @@
   max-width: 520px;
   margin: 8px auto 0;
 }
+.set-awake {
+  margin-left: 2px;
+  color: #fff;
+  text-shadow: 0 0 4px currentColor, 0 0 8px #ffd84a;
+}

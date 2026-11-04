@@ -22,6 +22,7 @@ export const BUILD_SET_TEXT = {
   bsNone: l("같은 꼬리표 패시브를 2·4·6개 모으면 세트 효과", "Collect 2, 4 or 6 passives with the same tag for set bonuses", "同じタグのパッシブを2・4・6個集めるとセット効果"),
   bsNext: l("다음 단계까지 {n}개", "{n} more for the next tier", "次の段階まであと{n}個"),
   bsUp: l("{tag} 세트 {n}단계!", "{tag} set tier {n}!", "{tag}セット{n}段階！"),
+  bsAwake: l("{tag} 각성!", "{tag} awakened!", "{tag}覚醒！"),
   bsTagLabel: l("꼬리표", "Tag", "タグ"),
   bsPickHead: l("알 수 없는 성좌: 행운과 함께 받을 꼬리표 하나를 고르세요", "Unknown constellation: choose one tag to gain along with Luck", "知られざる星座：幸運と一緒に得るタグを1つ選んでください"),
   bsAltarTags: l("증강 꼬리표 +1: {tags}", "Augment tags +1: {tags}", "増強タグ+1：{tags}"),

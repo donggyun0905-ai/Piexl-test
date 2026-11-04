@@ -4,11 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ITEM_TAGS, SET_STEPS, setsOn, tagCounts, tierOf, type ItemTag, type RunState } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../../i18n";
+import { awakenLine } from "../../i18n/awakenLines";
 import { setLines } from "../../i18n/buildSetLines";
 import { TagChip } from "./TagChip";
 import { TAG_COLORS } from "./tagColors";
 
-const STEPS = [SET_STEPS.one, SET_STEPS.two, SET_STEPS.three];
+const STEPS = [SET_STEPS.one, SET_STEPS.two, SET_STEPS.three, SET_STEPS.four];
 type Row = { tag: ItemTag; n: number; tier: number };
 
 export function SetPanel({ run, t, lang }: { run: () => RunState | null; t: (k: TextKey) => string; lang: Lang }) {
@@ -39,15 +40,16 @@ export function SetPanel({ run, t, lang }: { run: () => RunState | null; t: (k: 
     <div className="set-panel">
       {rows.length > 0 && <b>{t("bsTitle")}</b>}
       {rows.map((row) => {
-        const lines = setLines(row.tag, lang);
+        const lines = [...setLines(row.tag, lang), awakenLine(row.tag, lang)];
         const need = STEPS.find((s) => s > row.n);
         const tip = lines.map((l, i) => `${row.tier > i ? "★" : "☆"} ${STEPS[i]}: ${l}`).join("\n");
         return (
           <div key={row.tag} className="set-row" title={tip}>
             <TagChip tag={row.tag} />
             <span className="set-stars" style={{ color: TAG_COLORS[row.tag] }}>
-              {"★".repeat(row.tier)}
-              <i>{"☆".repeat(3 - row.tier)}</i>
+              {"★".repeat(Math.min(3, row.tier))}
+              <i>{"☆".repeat(Math.max(0, 3 - row.tier))}</i>
+              {row.tier >= 4 && <b className="set-awake">✦</b>}
             </span>
             <em>{need ? `${row.n}/${need}` : row.n}</em>
           </div>
@@ -57,9 +59,9 @@ export function SetPanel({ run, t, lang }: { run: () => RunState | null; t: (k: 
         createPortal(
           <div key={toast.key} className="set-toast" style={{ borderColor: TAG_COLORS[toast.tag] }}>
             <strong style={{ color: TAG_COLORS[toast.tag] }}>
-              {t("bsUp").replace("{tag}", t(`bt_${toast.tag}` as TextKey)).replace("{n}", String(toast.tier))}
+              {t(toast.tier >= 4 ? "bsAwake" : "bsUp").replace("{tag}", t(`bt_${toast.tag}` as TextKey)).replace("{n}", String(toast.tier))}
             </strong>
-            <span>{setLines(toast.tag, lang)[toast.tier - 1]}</span>
+            <span>{toast.tier >= 4 ? awakenLine(toast.tag, lang) : setLines(toast.tag, lang)[toast.tier - 1]}</span>
           </div>,
           document.body,
         )}

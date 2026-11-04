@@ -7,10 +7,11 @@ import type { ExtraStats } from "../characters";
 import { ITEM_TAGS, passiveTag, type ItemTag } from "../itemsTags";
 import type { StatMod } from "../stats";
 import { raiseShield } from "./imugiMods";
+import type { AwakenPlayerState } from "./buildAwaken";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { STILL_TICKS } from "./util";
 
-export interface BuildSetPlayerState {
+export interface BuildSetPlayerState extends AwakenPlayerState {
   /** 꼬리표마다 세트 단계 0~3 (ITEM_TAGS 차례, 능력치를 다시 셀 때 정함, 세트가 꺼진 모드는 없음) */
   setTiers?: number[];
   /** 죽음 6: 쌓인 영혼 수 · 끝나는 틱 */
@@ -42,8 +43,8 @@ export function tagCounts(p: PlayerState): Record<ItemTag, number> {
   return out;
 }
 
-/** 가진 수 → 단계 (0 · 2개 1 · 4개 2 · 6개 3) */
-export const tierOf = (n: number): number => (n >= SET_STEPS.three ? 3 : n >= SET_STEPS.two ? 2 : n >= SET_STEPS.one ? 1 : 0);
+/** 가진 수 → 단계 (0 · 2개 1 · 4개 2 · 6개 3 · 8개 4 = 각성 증강) */
+export const tierOf = (n: number): number => (n >= SET_STEPS.four ? 4 : n >= SET_STEPS.three ? 3 : n >= SET_STEPS.two ? 2 : n >= SET_STEPS.one ? 1 : 0);
 
 /** 꼬리표의 지금 단계 */
 export const tier = (p: PlayerState, tag: ItemTag): number => p.setTiers?.[ITEM_TAGS.indexOf(tag)] ?? 0;

@@ -88,3 +88,22 @@
   font-size: 0.85rem;
   opacity: 0.8;
 }
+/* 사용 아이템을 못 쓰는 동안 (끝없는 시련): 칸 위에 빨간 ✕ */
+.loadout-slots .slot.off,
+.touch-btn.item.off {
+  position: relative;
+  opacity: 0.6;
+}
+.slot-x {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: normal;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ff4a4a;
+  text-shadow: 0 0 4px #000;
+  pointer-events: none;
+}

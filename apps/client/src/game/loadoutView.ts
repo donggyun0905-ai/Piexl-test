@@ -1,5 +1,5 @@
 // 아래 장비 칸에 보낼 값 (gameLoop가 틱마다 만들어 바뀌었을 때만 보냄): 무기·사용 아이템·패시브 · 풋내기 레벨 · 추적자 스킬 대기 · 패왕전 스킬 · 판매 값 · 작업대 · 히든 고르는 창
-import { expToNext, sellPrice, trackerSkills, type RunState } from "@pixel-rogue/shared";
+import { expToNext, sellPrice, trackerSkills, trialNoItems, type RunState } from "@pixel-rogue/shared";
 import type { LoadoutView } from "./Loadout";
 import { pwSkillView } from "./pwSkillView";
 import { sellCodes } from "./SellBar";
@@ -18,6 +18,8 @@ export function loadoutView(run: RunState, armed: Parameters<typeof pwSkillView>
   return {
     weaponId: p.weaponId,
     slots: [...p.useSlots],
+    // 끝없는 시련 등 사용 아이템을 못 쓰는 동안 (칸에 ✕)
+    ...(trialNoItems(run) ? { useOff: true } : {}),
     passives: [...p.passives],
     // 제단·경매로 증강 기술이 새겨진 패시브 (칸에 ✦ · 설명에 기술 이름)
     ...(p.augments?.length ? { augs: p.augments.map((a) => ({ passive: a.passive, skills: [...a.skills] })) } : {}),
