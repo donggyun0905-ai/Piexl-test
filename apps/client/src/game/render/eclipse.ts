@@ -47,7 +47,7 @@ export function drawEclipseFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const grow = easeOut(Math.min(1, f / cut));
       const thin = (1 - after) ** 1.4;
       const al = Math.min(1, (1 - after) * 3);
-      rightSlash(ctx, x, y, fx.dirX, fx.dirY, fx.size, Math.min(3, w), grow, thin, al, after);
+      rightSlash(ctx, x, y, fx.dirX, fx.dirY, fx.size, w, grow, thin, al, after);
       break;
     }
     case "ecHew": {

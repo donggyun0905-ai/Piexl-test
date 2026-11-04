@@ -39,10 +39,10 @@ function sunMove(s: RunState, i: number): void {
   const dmg = eclipsePower(p);
   const reach = sunReach(p);
   // 그려진 날을 따라 맞힘 (두 팔)
-  // 5타는 4타와 같은 깊은 찌르기 (더 아픔)
+  // 5타는 더 길게 깊게 찌름 (더 아픔)
   const fin = i >= 4;
   const r = reach * (fin ? E.sunFinSize * (hasPerk(p, "ecFlare") ? K.ecFlare.size : 1) : 1);
-  const [a, v, b] = sunCutPoints(p.x, p.y, p.faceX, p.faceY, r, Math.min(3, i));
+  const [a, v, b] = sunCutPoints(p.x, p.y, p.faceX, p.faceY, r, i);
   const w = r * E.cutW;
   const hit = new Set<number>();
   // 몸 바로 앞 반원(도끼를 휘두른 자리)도 같이 벰: 날 사이에 붙은 적이 빠지지 않게

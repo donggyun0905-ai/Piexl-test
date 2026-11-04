@@ -103,13 +103,20 @@ export function embers(ctx: Ctx, pts: readonly Pt[], f: number, c: string, seed:
 }
 
 /**
- * 태양 직각 검격 i(0~3): 꺾이는 점에서 90°로 꺾인 날 하나 (모양은 sim/eclipseCuts · 바깥 노랑 · 안쪽 빨강 · 은은한 빛)
- * grow(0~1): 위 팔 끝에서부터 그어 나간 만큼 · thin: 두께 배율 · al: 투명도 · spark: 불티 진행(0 = 없음)
+ * 태양 검격 i(0~4): 몸 양옆에서 앞쪽 꼭짓점으로 모이는 '^' 날 (모양은 sim/eclipseCuts · 바깥 노랑 · 안쪽 빨강 · 은은한 빛)
+ * 날 사이 안쪽도 옅은 빨강으로 채움 · grow(0~1): 한쪽 끝에서부터 그어 나간 만큼 · thin: 두께 배율 · al: 투명도 · spark: 불티 진행
  */
 export function rightSlash(ctx: Ctx, x: number, y: number, fx: number, fy: number, r: number, i: number, grow: number, thin: number, al: number, spark = 0): void {
   if (al <= 0 || grow <= 0 || thin <= 0) return;
   const pts = sunCutPoints(x, y, fx, fy, r, i);
-  const w = Math.max(2, r * (i === 3 ? 0.16 : 0.2)) * thin;
+  if (grow >= 1) {
+    ctx.fillStyle = alpha(S_RED, 0.28 * al * thin);
+    ctx.beginPath();
+    for (const q of pts) ctx.lineTo(q[0], q[1]);
+    ctx.closePath();
+    ctx.fill();
+  }
+  const w = Math.max(2, r * (i === 0 ? 0.24 : i >= 3 ? 0.13 : 0.18)) * thin;
   paintBlade(ctx, (k) => blade(ctx, pts, 1, w * k, x, y, grow), S_GOLD, S_RED, al);
   embers(ctx, pts, spark, S_GOLD, Math.round(r * 10 + i));
 }
