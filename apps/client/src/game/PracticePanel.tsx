@@ -8,7 +8,7 @@ import {
   practiceRemoveUse,
   practiceReset,
   practiceRoom,
-  practiceRoomOff,
+  practiceHidden, practiceRoomOff,
   practiceShape,
   practiceSetFloor,
   practiceSpawn,
@@ -154,7 +154,7 @@ export function PracticePanel({ run, loadout, characterId, lang, t, onCharacter 
       )}
       <div className="practice-list">
         {tab === "room" ? (
-          <PracticeRooms t={t} onRoom={(k) => run() && (k ? practiceRoom(run()!, k) : practiceRoomOff(run()!))} onShape={(rows) => run() && practiceShape(run()!, rows)} />
+          <PracticeRooms t={t} onRoom={(k) => run() && (k ? practiceRoom(run()!, k) : practiceRoomOff(run()!))} onShape={(rows) => run() && practiceShape(run()!, rows)} onHidden={(k) => run() && practiceHidden(run()!, k)} />
         ) : tab === "enemy" ? (
           <PracticeEnemies floor={floor} t={t} onFloor={chooseFloor} onSpawn={(k) => run() && practiceSpawn(run()!, k)} />
         ) : (

@@ -4,6 +4,57 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.8",
+    date: "2026-11-04",
+    items: {
+      ko: ["빌드 세트 설명: 브라우저 기본 툴팁 대신 패시브 설명과 같은 말풍선으로 뜸 (꼬리표 칩 · 단계마다 필요한 수와 효과 · 켜진 단계는 꼬리표 색 · 지금 수와 다음 단계까지) · 모바일은 눌러서 열고 닫음"],
+      en: ["Build set details: now shown in the same tooltip as passives instead of the browser's plain tooltip (tag chip · count and effect per tier · active tiers in the tag color · current count and how many to the next tier) · tap to open/close on mobile"],
+      ja: ["ビルドセットの説明：ブラウザ標準のツールチップではなくパッシブ説明と同じ吹き出しで表示（タグチップ・段階ごとの必要数と効果・達成した段階はタグの色・今の数と次の段階まで）・モバイルはタップで開閉"],
+    },
+  },
+  {
+    version: "0.49.7",
+    date: "2026-11-04",
+    items: {
+      ko: [
+        "풍류사 분신술: 분신이 먹으로 그린 듯 새까만 모습으로 나옴 (둘레 먹 번짐 · 발밑 먹 웅덩이 · 떨어지는 먹물)",
+        "풍류사 이펙트 다듬기: 글자탄에 먹 붓질 꼬리·빛 · 구절 완성 때 바닥 금빛 문양과 네 글자 · 하늘 기둥 내리꽂기·땅 기둥 솟음과 갈라짐 · 굵은 물결과 흰 물마루 · 명검 거궐이 큰 검기 초승달로 그어짐 · 찬바람·뜨거운 바람 초승달 · 금빛 거두기 · 서리 결정 · 축지 먹 붓질 · 먹 터짐",
+      ],
+      en: [
+        "Pungryu Clone Art: clones now look painted in ink — pitch black with ink wisps, an ink puddle and dripping ink",
+        "Pungryu effects polished: ink-brush tails and glow on letters · golden floor rune and four glyphs on a verse · heaven pillar strikes down, earth pillar bursts up with cracks · thick waves with white crests · Geogwol cleaves with huge sword-qi crescents · cold/hot wind crescents · golden reaping · frost crystals · ink-stroke teleport · ink splashes",
+      ],
+      ja: [
+        "風流士の分身術：分身が墨で描いたような真っ黒な姿に（周りの墨のにじみ・足元の墨だまり・垂れる墨）",
+        "風流士のエフェクト調整：文字弾に墨の筆跡の尾と光・句の完成で床の金色の紋様と四文字・天の柱が降り注ぎ地の柱が割れて立ち上がる・太い波と白い波頭・名剣巨闕が大きな剣気の三日月で斬る・冷たい風／熱い風の三日月・金色の刈り取り・霜の結晶・縮地の墨の一筆・墨の飛沫",
+      ],
+    },
+  },
+  {
+    version: "0.49.6",
+    date: "2026-11-04",
+    items: {
+      ko: [
+        "대장간: 화덕은 왼쪽 벽, 연장·무기 걸이는 오른쪽 벽으로 옮겨 위쪽 출구 문이 잘 보임",
+        "쇠사슬 간수: 사슬에 맞으면 천천히 끌려가지 않고 사슬을 따라 간수 앞까지 한 번에 끌려감",
+        "오토마타: 자매 인형이 새 진홍빛 자매 인형 그림으로 나옴",
+        "연습장 '방': 숨은 시련 5종(하이오크 부락 · 어둠의 세계 · 공성전 · 안개숲 · 죽음의 바다)을 바로 시작해 볼 수 있음 · '보통 방으로'를 누르면 끝남",
+      ],
+      en: [
+        "Forge: the hearth moved to the left wall and the tool/weapon racks to the right wall, so the exit doors up top are easy to see",
+        "Chain Warden: getting hit by the chain now yanks you straight to the warden instead of pulling you slowly",
+        "Automata: the sister dolls now use the new crimson sister-doll art",
+        "Practice 'Rooms': start any of the 5 Hidden Trials (High Orc Village · World of Darkness · Siege · Misty Forest · Sea of Death) right away · 'Back to normal' ends it",
+      ],
+      ja: [
+        "鍛冶場：炉を左の壁、道具・武器掛けを右の壁に移し、上の出口の扉が見やすくなった",
+        "鎖の看守：鎖に当たるとゆっくり引かれるのではなく、鎖に沿って看守の前まで一気に引き寄せられる",
+        "オートマタ：姉妹人形が新しい真紅の姉妹人形の絵で登場",
+        "練習場「部屋」：隠れた試練5種（ハイオークの集落・闇の世界・攻城戦・霧の森・死の海）をすぐ始められる・「普通の部屋に」で終了",
+      ],
+    },
+  },
+  {
     version: "0.49.5",
     date: "2026-11-04",
     items: {
@@ -39,93 +90,6 @@ export const NOTES: PatchNote[] = [
         "新キャラ風流士（アスカロン）：いつも雲に乗って歩く義賊の書生・大きな筆で千字文の文字を書いて飛ばす・文字4つで句が完成 → 武器ごとの大きな魔法・2秒書かないと句は最初から・足元の4マスに書いた文字を表示",
         "雲に乗る：地形・持続ダメージ半分・千字文の武器10（天地玄黄・宇宙洪荒・日月盈昃・辰宿列張・寒来暑往・秋収冬蔵・雲騰致雨・露結為霜・金生麗水・剣号巨闕）",
         "専用アイテム10：縮地法（瞬間移動ダッシュ）・分身術・遁甲術・義賊の巾着・五色の雲・墨の筆・門前の小僧・風流の笛・千字文の書・活貧党の旗・覇王戦スキル4・解放：移動速度2達成",
-      ],
-    },
-  },
-  {
-    version: "0.49.2",
-    date: "2026-11-05",
-    items: {
-      ko: ["대장간 암흑 강화: 실패해서 무기가 부서지면 처음 무기가 새로 생기지 않고 맨손이 됨"],
-      en: ["Forge dark upgrade: when it fails and the weapon shatters, you're now bare-handed instead of getting a fresh starting weapon"],
-      ja: ["鍛冶場の暗黒強化：失敗して武器が壊れると、最初の武器が新しく出るのではなく素手になる"],
-    },
-  },
-  {
-    version: "0.49.1",
-    date: "2026-11-05",
-    items: {
-      ko: ["노선도로 정한 길: 방을 정리해도 저절로 넘어가지 않고 '다음 방으로 이동할까요?' 안내가 뜸 → F(모바일은 상호작용 버튼)를 눌러야 이동 · 아이템 옆이거나 싸우는 동안은 안내가 뜨지 않아 방해하지 않음"],
-      en: ["Planned route: clearing a room no longer moves you on automatically — a 'Move to the next room?' prompt appears and you press F (interact button on mobile) to go · no prompt while next to items or in combat"],
-      ja: ["ルートマップで決めた道：部屋をクリアしても自動では進まず「次の部屋へ移動しますか？」と表示 → F（モバイルはアクションボタン）で移動・アイテムのそばや戦闘中は表示されず邪魔しない"],
-    },
-  },
-  {
-    version: "0.49.0",
-    date: "2026-11-04",
-    items: {
-      ko: ["빌드 업데이트 묶음 (0.48.378~0.48.383): 패시브 꼬리표 15종 · 세트 효과 2·4·6개 · 각성 증강 8개 · 보상 편향 · 성좌 증강 꼬리표 · 대장간 — 이제부터 큰 기능 묶음마다 가운데 숫자가 올라감"],
-      en: ["Build update bundle (0.48.378–0.48.383): 15 passive tags · 2/4/6 set bonuses · 8-tag awakenings · reward bias · constellation augment tags · the Forge — from now on the middle number goes up with each major feature bundle"],
-      ja: ["ビルドアップデートまとめ（0.48.378〜0.48.383）：パッシブタグ15種・セット効果2・4・6個・覚醒増強8個・報酬の偏り・星座増強タグ・鍛冶場 — 今後は大きな機能のまとまりごとに真ん中の数字が上がります"],
-    },
-  },
-  {
-    version: "0.48.383",
-    date: "2026-11-04",
-    items: {
-      ko: ["대장간: 새로 그린 드워프 대장장이가 모루에서 망치질 (들기 → 내려치기 → 불똥)"],
-      en: ["Forge: a newly drawn dwarf blacksmith hammers at the anvil (raise → strike → sparks)"],
-      ja: ["鍛冶場：新しく描いたドワーフの鍛冶屋が金床でハンマーを振るう（振り上げ → 打ち下ろし → 火花）"],
-    },
-  },
-  {
-    version: "0.48.382",
-    date: "2026-11-04",
-    items: {
-      ko: [
-        "새 특별한 방 '대장간': 2층부터 층마다 60%로 나옴 · 불타는 화덕과 연장이 걸린 방, 가운데 모루 옆 대장장이 앞에서 F",
-        "무기 강화: +0→+1은 100%, 단계마다 10%씩 낮아져 최저 20% · 실패하면 한 단계 떨어짐 · 단계마다 무기 피해 +8% (최대 +10)",
-        "꼬리표 변환: 무기·패시브 하나를 원하는 꼬리표로 (대장간마다 처음 1번 무료, 그다음은 점점 비쌈) · 무기에 붙인 꼬리표도 세트에 들어감",
-        "암흑 강화: 50% · 성공하면 무기 피해 +16% · 실패하면 무기가 부서져 처음 무기로",
-        "강화·꼬리표는 그 무기에만 남음 · 장비 줄 무기 이름 옆에 노란 별(강화)·보라 별(암흑 강화) 표시",
-      ],
-      en: [
-        "New special room 'Forge': 60% per floor from floor 2 · a room with a blazing hearth and hanging tools — press F at the blacksmith beside the anvil",
-        "Weapon upgrade: +0→+1 is 100%, 10% lower each level down to 20% · failure drops a level · +8% weapon damage per level (max +10)",
-        "Tag reforge: set a weapon or passive to any tag (first one free at each forge, then pricier) · weapon tags count toward sets too",
-        "Dark upgrade: 50% · success gives +16% weapon damage · failure shatters the weapon and you get your starting weapon",
-        "Upgrades and tags stay on that weapon · yellow star (upgrade) and purple star (dark) next to the weapon name",
-      ],
-      ja: [
-        "新しい特別な部屋「鍛冶場」：2階から各階60%で出現・燃える炉と道具が掛かった部屋、中央の金床のそばの鍛冶屋の前でF",
-        "武器強化：+0→+1は100%、段階ごとに10%下がり最低20%・失敗すると1段階下がる・段階ごとに武器ダメージ+8%（最大+10）",
-        "タグ変換：武器・パッシブ1つを好きなタグに（鍛冶場ごとに最初の1回無料、その後は高くなる）・武器に付けたタグもセットに入る",
-        "暗黒強化：50%・成功で武器ダメージ+16%・失敗すると武器が壊れ最初の武器に",
-        "強化・タグはその武器にだけ残る・装備欄の武器名の横に黄色い星（強化）・紫の星（暗黒強化）",
-      ],
-    },
-  },
-  {
-    version: "0.48.381",
-    date: "2026-11-04",
-    items: {
-      ko: [
-        "각성 증강: 같은 꼬리표를 8개 모으면 그 꼬리표의 각성 기술이 저절로 나감 (15종) — 얼음 서리바람(둥근 범위에 얼음 결정이 눈처럼 내림) · 불 유성우 · 번개 뇌신의 사슬 · 독 역병 꽃 · 빛 성광 · 어둠 심연 · 죽음 사신의 낫 · 대지 지각 분쇄 · 물 해일 · 날카로움 천검 · 단단함 강철 요새 · 바람 대회오리 · 행운 황금 소나기 · 소환 정령 군단 · 피 핏빛 달",
-        "빌드 세트 칸: 8개를 모으면 ✦ 표시와 '각성!' 알림 · 마우스를 올리면 각성 기술 설명",
-        "끝없는 시련: 사용 아이템을 못 쓰는 동안 아이템 칸에 빨간 ✕",
-        "수집가: 공격 이펙트가 거꾸로 재생되던 것을 고침 (피의 활 화살이 활에서 뻗어 나감)",
-      ],
-      en: [
-        "Awakening: collect 8 of the same tag and that tag's awakening skill fires on its own (15 kinds) — Ice Frost Gale (ice crystals fall like snow in a circle) · Fire Meteor Rain · Lightning Thunder Chain · Poison Plague Bloom · Light Holy Radiance · Dark Abyss · Death Reaper's Scythe · Earth Crust Breaker · Water Tidal Wave · Sharp Thousand Blades · Sturdy Steel Bastion · Wind Great Cyclone · Luck Golden Shower · Summon Spirit Legion · Blood Blood Moon",
-        "Build sets: 8 of a tag shows ✦ and an 'awakened!' banner · hover for the awakening skill",
-        "Endless trial: a red ✕ on the item slots while use items are blocked",
-        "Collector: attack effects no longer play backwards (Blood Bow arrows now shoot out from the bow)",
-      ],
-      ja: [
-        "覚醒増強：同じタグを8個集めるとそのタグの覚醒技が自動で発動（15種）— 氷 霜風（丸い範囲に氷の結晶が雪のように降る）・火 流星雨・雷 雷神の鎖・毒 疫病の花・光 聖光・闇 深淵・死 死神の鎌・大地 地殻粉砕・水 津波・鋭さ 千剣・頑丈 鋼鉄の要塞・風 大竜巻・幸運 黄金の雨・召喚 精霊の軍団・血 血の月",
-        "ビルドセット欄：8個集めると✦表示と「覚醒！」通知・カーソルを合わせると覚醒技の説明",
-        "終わりなき試練：使用アイテムが使えない間はアイテム欄に赤い✕",
-        "収集家：攻撃エフェクトが逆再生されていたのを修正（血の弓の矢が弓から伸びる）",
       ],
     },
   },

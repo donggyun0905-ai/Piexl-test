@@ -1,8 +1,9 @@
-// 풍류사 그리기 (2): 몸 둘레 — 발밑 구름(그림이 없을 때)·구름 자국·먹물 웅덩이·기둥 예고 (몸 뒤) / 구절 네 칸·해달 구슬·비구름·분신 (몸 위)
+// 풍류사 그리기 (3): 몸 둘레 — 발밑 구름(그림이 없을 때)·구름 자국·먹물 웅덩이·기둥 예고 (몸 뒤) / 구절 네 칸·해달 구슬·비구름·분신 (몸 위)
 import { cloneSpots, isPungryu, orbSpots, pungryuStep, type RunState } from "@pixel-rogue/shared";
-import { hasV2 } from "../sprites";
+import { drawCharacter, hasV2 } from "../sprites";
+import { additive, glow } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
-import { glyph, VERSE_HANJA, VERSE_TINT } from "./pungryu";
+import { brush, glyph, INK, VERSE_HANJA, VERSE_TINT } from "./pungryu";
 
 type Ctx = CanvasRenderingContext2D;
 const TAU = Math.PI * 2;
@@ -80,6 +81,7 @@ export function drawPungryuAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap
     ctx.globalAlpha = 1;
   }
   orbSpots(s).forEach((o, i) => {
+    additive(ctx, () => glow(ctx, snap(o.x), snap(o.y), o.r * 1.6, i === 0 ? "#ff8a3a" : "#aab8ff", 0.8, 0.5));
     ctx.fillStyle = i === 0 ? "#ff7a3a" : "#c8d0ff";
     ctx.beginPath();
     ctx.arc(snap(o.x), snap(o.y), o.r * 0.6, 0, TAU);
@@ -97,13 +99,30 @@ export function drawPungryuAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap
       ctx.fillRect(snap(rx), snap(ry), 1, 3);
     }
   }
-  for (const c of cloneSpots(s)) {
-    ctx.globalAlpha = Math.min(1, c.t / 30) * 0.55;
-    ctx.fillStyle = "#3ad8b0";
-    ctx.fillRect(snap(c.x) - 4, snap(c.y) - 9, 8, 12);
-    ctx.fillStyle = "#1a1628";
-    ctx.fillRect(snap(c.x) - 5, snap(c.y) - 11, 10, 2);
-    puff(ctx, snap(c.x), snap(c.y) + 6, 12);
+  // 분신술: 먹으로 그린 분신 (완전히 어두운 먹빛 몸 · 둘레 먹 번짐 · 발밑 먹 웅덩이 · 사라질 땐 옅어짐)
+  for (const [i, c] of cloneSpots(s).entries()) {
+    const cx = snap(c.x);
+    const cy = snap(c.y);
+    const a = Math.min(1, c.t / 30);
+    ctx.globalAlpha = a * 0.55;
+    ctx.fillStyle = INK;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy + p.r + 2, p.r + 4, 3, 0, 0, TAU);
+    ctx.fill();
+    for (let k = 0; k < 3; k++) brush(ctx, cx - 6 + k * 6, cy - 6, cx - 7 + k * 6 + Math.sin(s.tick * 0.07 + k + i) * 2, cy - 16 - k * 2, 2, INK, 0.5 * a);
+    ctx.globalAlpha = a * 0.92;
+    ctx.filter = "grayscale(1) brightness(0.12) contrast(1.6)";
+    const pose = { faceX: p.faceX, faceY: p.faceY, moving: p.stillTicks === 0, casting: false, step: Math.floor(s.tick / 8) + i };
+    const ok = drawCharacter(ctx, "pungryu", cx, cy, p.r, pose);
+    ctx.filter = "none";
+    if (!ok) {
+      ctx.fillStyle = INK;
+      ctx.fillRect(cx - 4, cy - 9, 8, 12);
+    }
+    // 먹물이 떨어짐
+    ctx.fillStyle = INK;
+    const drop = (s.tick * 0.6 + i * 9) % 10;
+    ctx.fillRect(cx - 3 + i * 4, cy + 2 + drop, 1, 2);
   }
   ctx.globalAlpha = 1;
 }

@@ -36,7 +36,7 @@ FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", 
              "rider", "ren", "mukin", "wanderer", "bomber", "samyeol", "artifacter", "miner", "plague", "silk", "automata", "voyager",
              "eater", "forgotten", "remnant", "elder", "spiritist", "zeus", "tracker", "punk", "fly", "slayer", "slayer_rage",
              # 히든·한정 마지막 6명 (2026-11-01)
-             "stargazer", "scribe", "duck", "pilgrim", "pungryu", "crownKing", "fallenKing", "lux", "lux2", "lux3", "lux4"}
+             "stargazer", "scribe", "duck", "pilgrim", "pungryu", "automataDoll", "crownKing", "fallenKing", "lux", "lux2", "lux3", "lux4"}
 # 서기·걷기에서 오른쪽을 보는 원본 칸 (기본 3 = 넷째 칸, GPT가 셋째 칸에 오른쪽을 그린 캐릭터만)
 STAND_RIGHT = {"abandoned": 2, "abandoned2": 2}
 # 서기·걷기에서 고른 칸이 왼쪽을 보는 캐릭터: 뒤집어서 오른쪽으로 (사용자 확인)

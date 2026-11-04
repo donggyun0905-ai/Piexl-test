@@ -58,12 +58,15 @@ describe("시즌 3 새 몬스터", () => {
     expect(miss.player.hp).toBe(hp0);
   });
 
-  it("쇠사슬 간수: 사슬에 맞으면 피해 + 끌려감, 길에서 비키면 안 맞음", () => {
+  it("쇠사슬 간수: 사슬에 맞으면 피해 + 바로 끌려감, 길에서 비키면 안 맞음", () => {
     const hit = withOne("chainward", 0, -70);
     const hp0 = hit.player.hp;
+    const far = Math.sqrt((hit.player.x - hit.enemies[0]!.x) ** 2 + (hit.player.y - hit.enemies[0]!.y) ** 2);
     for (let i = 0; i < R.JAIL_WARN + 3; i++) stepSim(hit, EMPTY_INPUT);
     expect(hit.player.hp).toBeLessThan(hp0);
-    expect(hit.player.lureId).toBe(hit.enemies[0]!.id);
+    // 사슬을 따라 간수 앞까지 한 번에 끌려감
+    const near = Math.sqrt((hit.player.x - hit.enemies[0]!.x) ** 2 + (hit.player.y - hit.enemies[0]!.y) ** 2);
+    expect(near).toBeLessThan(far / 3);
 
     const miss = withOne("chainward", 0, -70);
     for (let i = 0; i < R.JAIL_WARN + 3; i++) stepSim(miss, { ...EMPTY_INPUT, moveX: 100 });

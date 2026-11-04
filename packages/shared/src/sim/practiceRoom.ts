@@ -12,6 +12,10 @@ import { ROOM_CY } from "../constants";
 import { deriveSeed } from "../rng";
 import type { RunState } from "./types";
 import { spawnForge } from "./forge";
+import { startHidden } from "./hiddenTrial";
+import type { HiddenKind } from "./hiddenTrialTypes";
+import { recalcStats } from "./items";
+import { PLAIN_SHAPE } from "./layout";
 
 /** 시험할 수 있는 방 (heaven = 천상의 상점 · golden = 여신의 선물) */
 export const PRACTICE_ROOMS = ["shop", "heaven", "golden", "treasure", "gym", "trial", "altar", "devil", "gamble", "auction", "crack", "rest", "forge"] as const;
@@ -64,7 +68,20 @@ export function practiceRoom(s: RunState, kind: PracticeRoom): void {
   } else healPlayer(s, s.player.stats.maxHp);
 }
 
-/** 보통 연습장 방으로 되돌림 (바닥 물건 치움) */
+/** 연습장 숨은 시련 (1 하이오크 부락 · 2 어둠의 세계 · 3 공성전 · 4 안개숲 · 5 죽음의 바다): 지금 방을 기둥 없는 방으로 바꾸고 바로 시작 */
+export const PRACTICE_HIDDEN: readonly HiddenKind[] = [1, 2, 3, 4, 5];
+export function practiceHidden(s: RunState, kind: HiddenKind): void {
+  const info = s.map.rooms[s.roomId];
+  if (!info) return;
+  practiceRoomOff(s);
+  s.seed = deriveSeed(s.seed, "practiceHidden", kind);
+  info.type = "combat";
+  info.shape = PLAIN_SHAPE;
+  s.hidden = { floor: s.floor, room: s.roomId, kind, round: 0, t: 0, at: 0 };
+  s.enemies = startHidden(s);
+}
+
+/** 보통 연습장 방으로 되돌림 (바닥 물건 치움 · 숨은 시련도 끝냄) */
 export function practiceRoomOff(s: RunState): void {
   const info = s.map.rooms[s.roomId];
   const st = s.rooms[s.roomId];
@@ -74,5 +91,12 @@ export function practiceRoomOff(s: RunState): void {
   s.trialRun = undefined;
   delete s.crack;
   st.pickups = [];
+  if (s.hidden) {
+    s.hidden = undefined;
+    s.enemies = [];
+    s.terrain = undefined;
+    // 어둠의 세계가 줄인 사거리를 되돌림
+    recalcStats(s);
+  }
   s.prompt = { kind: "none" };
 }

@@ -9,6 +9,7 @@ export const PRACTICE_TEXT = {
   practiceEnemies: { ko: "적 부르기", en: "Enemies", ja: "敵を呼ぶ" },
   practiceRooms: { ko: "방", en: "Rooms", ja: "部屋" },
   practiceRoomOff: { ko: "보통 방으로", en: "Back to normal", ja: "普通の部屋に" },
+  practiceHiddenTitle: { ko: "숨은 시련 (바로 시작)", en: "Hidden Trials (start now)", ja: "隠れた試練（すぐ開始）" },
   practiceShapes: { ko: "직접 만든 방 모양", en: "Custom room layouts", ja: "自作の部屋の形" },
   practiceShapeOff: { ko: "네모 방으로", en: "Plain room", ja: "四角い部屋に" },
   practiceRoomHint: {
