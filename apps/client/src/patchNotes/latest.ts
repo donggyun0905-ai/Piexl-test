@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.1",
+    date: "2026-11-05",
+    items: {
+      ko: ["노선도로 정한 길: 방을 정리해도 저절로 넘어가지 않고 '다음 방으로 이동할까요?' 안내가 뜸 → F(모바일은 상호작용 버튼)를 눌러야 이동 · 아이템 옆이거나 싸우는 동안은 안내가 뜨지 않아 방해하지 않음"],
+      en: ["Planned route: clearing a room no longer moves you on automatically — a 'Move to the next room?' prompt appears and you press F (interact button on mobile) to go · no prompt while next to items or in combat"],
+      ja: ["ルートマップで決めた道：部屋をクリアしても自動では進まず「次の部屋へ移動しますか？」と表示 → F（モバイルはアクションボタン）で移動・アイテムのそばや戦闘中は表示されず邪魔しない"],
+    },
+  },
+  {
     version: "0.49.0",
     date: "2026-11-04",
     items: {

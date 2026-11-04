@@ -3,6 +3,7 @@ import { GYM_DEVICE } from "../i18n/items/station";
 import { devilCost, type DevilId, FLOOR_COUNT, HERO_FLOORS, isCapture, isGiga, nearBuff, nearDoor, nearPortal, nearExit, nearLoot, TICK_RATE, type RunState } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { itemDesc, itemName } from "../i18n/items";
+import { routeAsk } from "./routePlan";
 
 export function formatTime(ticks: number): string {
   const sec = Math.floor(ticks / TICK_RATE);
@@ -12,6 +13,8 @@ export function formatTime(ticks: number): string {
 /** 상호작용(F·버튼) 안내. 없으면 빈 글자 */
 export function promptText(run: RunState, lang: Lang, t: (k: TextKey) => string): string {
   const pr = run.prompt;
+  // 미리 정한 길: 방을 정리했으면 F로 다음 방 (game/routePlan)
+  if (routeAsk(run)) return t("routeAsk");
   // 패왕전은 쓰러짐 안내를 위쪽(PwFeed)에서 따로 보여 줌
   if (run.party && run.player.hp <= 0) return run.pvp ? "" : t("coopDown");
   // 전쟁의 서막 포털
