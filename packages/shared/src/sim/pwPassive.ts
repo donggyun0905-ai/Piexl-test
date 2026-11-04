@@ -157,6 +157,10 @@ export function passiveHitMul(s: RunState, e: EnemyState, j: number, target: Pla
       // 수집품의 무게: 등 뒤에 뜬 수집 무기 하나마다 평타 피해 +
       if (basic) m *= 1 + Math.min(P.collectorMax, armsOnBack(p).length * P.collectorPer);
       break;
+    case "pungryu":
+      // 구절 완성: 평타 네 번째마다 더 아픔
+      if (basic && pwCount(p, "puN") % P.pungryuN === 0) m *= P.pungryuMul;
+      break;
   }
   return m;
 }

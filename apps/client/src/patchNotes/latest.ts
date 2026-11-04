@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.3",
+    date: "2026-11-04",
+    items: {
+      ko: [
+        "새 캐릭터 풍류사 (아스칼론): 늘 구름을 타고 다니는 의적 선비 · 큰 붓으로 천자문 글자를 써서 날림 · 글자 네 개를 쓰면 구절 완성 → 무기마다 큰 마법 · 2초 동안 쓰지 않으면 구절은 처음부터 · 발밑 네 칸에 쓴 글자 표시",
+        "구름 타기: 지형·지속 피해 절반 · 천자문 무기 10 (천지현황 · 우주홍황 · 일월영측 · 진수열장 · 한래서왕 · 추수동장 · 운등치우 · 노결위상 · 금생여수 · 검호거궐)",
+        "전용 아이템 10: 축지법(순간이동 대시) · 분신술 · 둔갑술 · 의적 주머니 · 오색 구름 · 먹물 붓 · 서당 개 삼 년 · 풍류 피리 · 천자문 책 · 활빈당 깃발 · 패왕전 스킬 4 · 해금: 이동 속도 2 달성",
+      ],
+      en: [
+        "New character Pungryu (Ascalon): a scholar-outlaw who always rides a cloud · writes characters from the Thousand Character Classic with a giant brush and hurls them · every 4 letters complete a verse and unleash the weapon's great spell · stop for 2s and the verse restarts · four boxes under his feet show the letters written",
+        "Cloud riding: half terrain and damage-over-time hurt · 10 verse weapons (Heaven Dark, Earth Gold · Vast Cosmos · Sun and Moon · Spread Stars · Cold Comes, Heat Goes · Autumn Harvest · Rising Clouds · Dew Turns Frost · Gold in the River · Sword Named Geogwol)",
+        "10 exclusive items: Earth-Folding Step (teleport dash) · Clone Art · Shape-Shift · Outlaw's Pouch · Five-Color Cloud · Ink Brush · Three Years at School · Wandering Flute · Thousand Character Book · Banner of the Poor's Friends · 4 Champion Clash skills · unlock: reach 2 move speed",
+      ],
+      ja: [
+        "新キャラ風流士（アスカロン）：いつも雲に乗って歩く義賊の書生・大きな筆で千字文の文字を書いて飛ばす・文字4つで句が完成 → 武器ごとの大きな魔法・2秒書かないと句は最初から・足元の4マスに書いた文字を表示",
+        "雲に乗る：地形・持続ダメージ半分・千字文の武器10（天地玄黄・宇宙洪荒・日月盈昃・辰宿列張・寒来暑往・秋収冬蔵・雲騰致雨・露結為霜・金生麗水・剣号巨闕）",
+        "専用アイテム10：縮地法（瞬間移動ダッシュ）・分身術・遁甲術・義賊の巾着・五色の雲・墨の筆・門前の小僧・風流の笛・千字文の書・活貧党の旗・覇王戦スキル4・解放：移動速度2達成",
+      ],
+    },
+  },
+  {
     version: "0.49.2",
     date: "2026-11-05",
     items: {

@@ -3,6 +3,7 @@ import { type EffectState, type ProjectileState, type RunState } from "@pixel-ro
 import { glowEdge } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 import { drawHaloBack } from "./forgottenHalo";
+import { drawPungryuAura, drawPungryuBack } from "./pungryuBody";
 
 type Ctx = CanvasRenderingContext2D;
 const TAU = Math.PI * 2;
@@ -62,6 +63,8 @@ export function drawForgottenShot(ctx: Ctx, pr: ProjectileState, x: number, y: n
 
 /** 등 뒤의 빛의 고리 (몸보다 먼저 그려 등 뒤로 보임): 신족이면 빛 날개와 함께 환하게 */
 export function drawForgottenBack(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
+  // 풍류사: 구름 자국·먹물·발밑 구름 (render/pungryuBody)
+  drawPungryuBack(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten") return;
   const x = snap(lerp(p.prevX, p.x, alpha));
@@ -87,6 +90,8 @@ export function drawForgottenBack(ctx: Ctx, s: RunState, alpha: number, snap: Sn
 
 /** 신족인 동안 몸 위: 떠오르는 빛 알갱이 */
 export function drawForgottenAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
+  // 풍류사: 구절 네 칸·해달 구슬·비구름·분신 (render/pungryuBody)
+  drawPungryuAura(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten" || (p.fgGod ?? 0) <= 0) return;
   const x = lerp(p.prevX, p.x, alpha);

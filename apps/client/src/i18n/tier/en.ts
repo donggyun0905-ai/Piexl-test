@@ -5,6 +5,7 @@ export const TIER_EN: Partial<Record<CharacterId, string>> = {
   tracker: "Three skills (Ambush Shot, Power Shot, Rapid Fire) give by far the top dummy damage even with no items. Deletes bosses from range. Only 90 HP, so keep your distance",
   novice: "The real protagonist. Level up and spend stats however you like, so every run ends up built your way. Weak bare-handed start, biggest late-game growth",
   oni: "A 36-attack club plus a crazy ??? weapon. 25 swings trigger the divine form with big HP and attack boosts. Takes 30% more damage, so be careful up close",
+  pungryu: "Every four letters unleash a verse spell, so each weapon plays very differently. Riding a cloud shrugs off floor traps, and Earth-Folding Step and Clone Art keep him moving (new character, estimate before hands-on play)",
   silk: "100 threads reach wall to wall; 5 tangles rip (250% + bleed) and 30-thread volleys melt crowds and bosses alike. Each thread is weak, so attack speed matters",
   slayer: "280 HP and a 5-hit scythe combo, 2nd in dummy damage. Stronger at low HP. Takes 50% more damage and potions don't work, but top tier once you manage HP",
   automata: "Every laser spits homing missiles and three sister dolls hunt on their own. Damage keeps flowing even with sloppy aim: easy and strong",

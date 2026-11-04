@@ -45,6 +45,7 @@ import { REMNANT_WEAPONS, type PhantomStyle } from "./weaponsRemnant";
 import { WANDERER_WEAPONS, type KatanaStyle } from "./weaponsWanderer";
 import { SILK_WEAPONS, type SilkStyle } from "./weaponsSilk";
 import { COLLECTOR_WEAPONS } from "./weaponsCollector";
+import { PUNGRYU_WEAPONS, type ScriptStyle } from "./weaponsPungryu";
 import { MINER_WEAPONS, type PickStyle } from "./weaponsMiner";
 import { VOYAGER_WEAPONS } from "./weaponsVoyager";
 import { ZEUS_WEAPONS, type ThunderStyle } from "./weaponsZeus";
@@ -53,7 +54,7 @@ import { FALLEN_KING_WEAPONS } from "./weaponsFallenKing";
 import { LUX_WEAPONS } from "./weaponsLux";
 
 /** laser 기계공학자·medic 의사: 누르고 있는 동안 짧은 간격으로 틱 피해 · combo 격투가: 누를 때마다 콤보의 다음 기술 (combos) · chakram 베두인 · spear 장수 */
-export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio" | "zwei" | "radiant" | "hoard";
+export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio" | "zwei" | "radiant" | "hoard" | "script";
 export type { OrbitKind } from "./weaponsElemental";
 export type { LaserGear } from "./weaponsEngineer";
 export type { MedicGear } from "./weaponsDoctor";
@@ -100,6 +101,7 @@ export { VOYAGER } from "./weaponsVoyager";
 export { ZEUS, type ThunderMode, type ThunderStyle } from "./weaponsZeus";
 export { PILGRIM, type CurioMode, type CurioStyle } from "./weaponsPilgrim";
 export { FALLEN_KING } from "./weaponsFallenKing";
+export { PUNGRYU, type ScriptStyle, type VerseKind } from "./weaponsPungryu";
 export { LUX } from "./weaponsLux";
 
 export interface WeaponDef {
@@ -207,6 +209,7 @@ export interface WeaponDef {
   pick?: PickStyle;
   zeus?: ThunderStyle;
   curio?: CurioStyle;
+  script?: ScriptStyle;
 }
 
 /**
@@ -259,6 +262,7 @@ export const WEAPONS = {
   ...WANDERER_WEAPONS,
   ...SILK_WEAPONS,
   ...COLLECTOR_WEAPONS,
+  ...PUNGRYU_WEAPONS,
   ...MINER_WEAPONS,
   ...VOYAGER_WEAPONS,
   ...ZEUS_WEAPONS,

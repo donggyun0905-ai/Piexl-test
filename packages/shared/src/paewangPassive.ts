@@ -48,6 +48,8 @@ export const PW_PASSIVE = {
   punkTicks: 120, punkSlowR: 70,
   /** 수집가 수집품의 무게: 등 뒤 수집 무기 하나마다 평타 피해 + · 최대 */
   collectorPer: 0.04, collectorMax: 0.3,
+  /** 풍류사 구절 완성: 평타 네 번째마다 피해 배율 */
+  pungryuN: 4, pungryuMul: 1.6,
   /** 잔영 치명타 피해 */
   remnantCrit: 2,
   /** 음양사 수호 부적: 평타가 맞으면 가장 가까운 아군 회복 (최대 체력 비율) */

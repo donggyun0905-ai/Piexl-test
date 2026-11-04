@@ -49,6 +49,7 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   remnant: { size: 32, footPad: 2, src: 128, v2: true },
   wanderer: { size: 32, footPad: 2, src: 128, v2: true },
   silk: { size: 32, footPad: 2, src: 128, v2: true },
+  pungryu: { size: 32, footPad: 2, src: 128, v2: true },
   // 히든 캐릭터도 일반 캐릭터와 같은 크기 (2026-10-31) · 빛의 사도는 칸에 여백이 많아 키를 맞춘 크기(성장 모습은 단계마다 커짐) · 차원의 순례자는 소녀 키를 일반 캐릭터에 맞춤 (큰 가방은 그만큼 같이 커서 칸이 큼)
   miner: { size: 32, footPad: 2, src: 128, v2: true },
   voyager: { size: 32, footPad: 2, src: 128, v2: true }, zeus: { size: 32, footPad: 2, src: 128, v2: true }, pilgrim: { size: 32, footPad: 2, src: 128, v2: true, standWalk: true }, crownKing: { size: 80, footPad: 3, src: 128, v2: true }, fallenKing: { size: 32, footPad: 2, src: 128, v2: true }, lux: { size: 32, footPad: 2, src: 128, v2: true }, lux2: { size: 32, footPad: 2, src: 128, v2: true }, lux3: { size: 32, footPad: 2, src: 128, v2: true }, lux4: { size: 32, footPad: 2, src: 128, v2: true },

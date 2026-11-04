@@ -65,6 +65,7 @@ export const ACCENT: Record<string, string> = {
   remnant: "#8a6aff",
   wanderer: "#e85a5a",
   silk: "#ff8ad8",
+  pungryu: "#3ad8b0",
   collector: "#5a8aff",
   mystic: "#ff6a8a",
   engineer: "#5ad0f0",
