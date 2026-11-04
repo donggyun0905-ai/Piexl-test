@@ -63,6 +63,7 @@ interface Seen {
   flips: number;
   /** 제우스 강림 중 */
   zsGod: boolean;
+  roars: number;
   /** 차원의 순례자: 배낭에서 꺼낸 수집품 그림 수 */
   bags: number;
   /** 왕 대검 (왕관 변신·몰락한 왕): 휘두른 효과 수 · 내리꽂은 효과 수 · 들어온 영혼 */
@@ -121,6 +122,7 @@ function snapshot(s: RunState): Seen {
     caves: s.effects.filter((f) => f.kind === "mnCave").length,
     flips: s.player.vyFlips ?? 0,
     zsGod: (s.player.zsGod ?? 0) > 0,
+    roars: s.player.leRoars ?? 0,
     bags: s.effects.filter((f) => f.kind === "pgBag").length,
     kgSwings: s.effects.filter((f) => f.kind === "kgSlash" || f.kind === "kgWave").length,
     kgPlants: s.effects.filter((f) => f.kind === "kgPlant").length,
@@ -185,14 +187,14 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         const i = fx.indexOf("shot");
         if (i >= 0) fx.splice(i, 1);
       } else if (c === "silk") {
-        // 영사: 실은 작게 튕기는 소리, 찢으면 "띵", 장전이 끝나면 실 감는 소리
+        // 영사: 실 튕김 · 찢기 "띵" · 장전 끝 실 감기
         if (now.rends > seen.rends) fx.push("ting");
         else if (now.attacks > seen.attacks) fx.push("string");
         if (now.reloads > seen.reloads) fx.push("spool");
       } else if (c === "pungryu") { // 풍류사: 글자 · 구절 완성
         if (now.attacks > seen.attacks) fx.push(run.player.puStep === 0 ? "awaken" : "string");
       } else if (c === "collector") {
-        // 수집가: 콤보 한 칸마다 그 무기 소리 (활·총 · 마법 · 망치·도끼 흔들림 · 베기)
+        // 수집가: 콤보 한 칸마다 그 무기 소리
         if (now.clStep && now.clStep !== seen.clStep) {
           const st = (CL_ARMS as Record<string, { style: string }>)[now.clStep.split(":")[1]!]?.style ?? "";
           fx.push(st === "shot" ? "twang" : st === "magic" ? "chime" : st === "heavy" ? "clank" : "slice");
@@ -201,14 +203,11 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
       } else if (c === "miner") {
         // 에테르 광부: 곡괭이는 "깡" · 광산 붕괴는 우르르 + 화면이 크게 흔들림
         if (now.attacks > seen.attacks) fx.push("clank");
-        if (now.caves > seen.caves) {
-          fx.push("rumble");
-          onShake(6);
-        }
-      } else if (c === "zeus") {
-        // 제우스: 번개마다 지직 · 강림하면 큰 천둥 + 화면이 크게 흔들림
+        if (now.caves > seen.caves) { fx.push("rumble"); onShake(6); }
+      } else if (c === "zeus" || c === "leo") {
+        // 제우스·레오: 번개마다 지직 · 강림·사자후는 큰 천둥 + 크게 흔들림
         if (now.attacks > seen.attacks) fx.push("zap");
-        if (now.zsGod && !seen.zsGod) {
+        if ((now.zsGod && !seen.zsGod) || now.roars > seen.roars) {
           fx.push("descend");
           onShake(8);
         }

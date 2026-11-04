@@ -112,7 +112,7 @@ export function drawPungryuAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap
     for (let k = 0; k < 3; k++) brush(ctx, cx - 6 + k * 6, cy - 6, cx - 7 + k * 6 + Math.sin(s.tick * 0.07 + k + i) * 2, cy - 16 - k * 2, 2, INK, 0.5 * a);
     ctx.globalAlpha = a * 0.92;
     ctx.filter = "grayscale(1) brightness(0.12) contrast(1.6)";
-    const pose = { faceX: p.faceX, faceY: p.faceY, moving: p.stillTicks === 0, casting: false, step: Math.floor(s.tick / 8) + i };
+    const pose = { faceX: c.fx, faceY: c.fy, moving: true, casting: false, step: Math.floor(s.tick / 8) + i };
     const ok = drawCharacter(ctx, "pungryu", cx, cy, p.r, pose);
     ctx.filter = "none";
     if (!ok) {

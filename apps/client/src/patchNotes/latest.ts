@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.10",
+    date: "2026-11-04",
+    items: {
+      ko: [
+        "새 캐릭터 레오(아스칼론, 영물): 이마에 보석이 박힌 뇌전의 사자 · 뇌전 발톱 하나로 번갈아 할퀴고 세 번째마다 번개 물기 · 맞힌 적에 뇌인 · 전하가 차면 사자후로 방 안 모든 적에게 낙뢰 · 보석이 몇 초마다 가장 먼 적에게 낙뢰 · 전용 아이템 10 (번개 갈기·천뢰 보석·우레 포효·뇌광 도약·연쇄 뇌전·뇌운·사자의 긍지·번개 송곳니·황금 갑주·백수의 왕)",
+        "풍류사 분신술: 분신이 옆에 붙어 따라 쓰지 않고, 저마다 다른 적을 찾아 따로 돌아다니며 제 박자로 글자를 씀",
+      ],
+      en: [
+        "New character Leo (Ascalon, Spirit Beast): a thunder lion with a gem in his brow · rakes with his Thunder Claws and bites with lightning every third strike · hits leave Thunder Marks · full charge unleashes Lion's Roar, striking every foe in the room · the gem strikes the farthest foe every few seconds · 10 exclusive items",
+        "Pungryu Clone Art: clones no longer just copy your letters at your side — each roams to its own target and writes on its own rhythm",
+      ],
+      ja: [
+        "新キャラ レオ（アスカロン、霊獣）：額に宝石が埋まった雷電の獅子 · 雷電の爪で交互に引っかき3回目ごとに雷の噛みつき · 当てた敵に雷印 · 電荷が満ちると獅子吼で部屋の全ての敵に落雷 · 宝石が数秒ごとに一番遠い敵に落雷 · 専用アイテム10",
+        "風流士の分身術：分身が横で真似して書くのではなく、それぞれ別の敵を追って動き回り自分のリズムで文字を書く",
+      ],
+    },
+  },
+  {
     version: "0.49.9",
     date: "2026-11-04",
     items: {

@@ -10,9 +10,10 @@ import { AUTOMATA as A, type AutoStyle } from "../weaponsAutomata";
 import { nearest } from "./brawlMoves";
 import { recalcStats } from "./items";
 import { backMissiles } from "./missiles";
+import { roamStep } from "./roam";
 import { alive, inCone, onSegment, root, strike } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { addEffect, dist2, hasPerk, keepInRoom, markCrit, roomGrid, weaponOf } from "./util";
+import { addEffect, dist2, hasPerk, markCrit, weaponOf } from "./util";
 
 const styleOf = (p: PlayerState): AutoStyle => weaponOf(p).auto ?? { beams: 1, spread: 0, width: 3 };
 const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.seed, tag, s.tick, n)).nextFloat();
@@ -149,38 +150,9 @@ function dolls(s: RunState): void {
   const list = (p.adDolls ?? []).slice(0, n);
   while (list.length < n) list.push({ x: p.x, y: p.y, cd: A.dollEvery / 2 + list.length * 7 });
   const taken = new Set<number>();
-  const grid = roomGrid(s);
+  const spec = { leash: A.dollLeash, range: A.dollRange, gap: A.dollGap, speed: A.dollSpeed };
   list.forEach((d, i) => {
-    // 가까운 적 중 다른 인형이 고르지 않은 적 (없으면 아무 적)
-    const near = alive(s)
-      .filter((e) => dist2(e, p) <= A.dollLeash ** 2)
-      .sort((a, b) => dist2(a, d) - dist2(b, d) || a.id - b.id);
-    const e = near.find((o) => !taken.has(o.id)) ?? near[0];
-    let tx: number;
-    let ty: number;
-    if (e) {
-      taken.add(e.id);
-      // 적에게서 사거리 반쯤 떨어진 자리로 (인형마다 다른 쪽에서)
-      const a = Math.atan2(d.y - e.y, d.x - e.x) + (i - (n - 1) / 2) * 0.3;
-      tx = e.x + Math.cos(a) * A.dollRange * 0.45;
-      ty = e.y + Math.sin(a) * A.dollRange * 0.45;
-    } else {
-      // 적이 없으면 내 둘레를 저마다 다른 자리에서 천천히 돔
-      const a = (i / n) * Math.PI * 2 + s.tick * 0.012;
-      tx = p.x + Math.cos(a) * A.dollGap;
-      ty = p.y + Math.sin(a) * A.dollGap;
-    }
-    const dd = Math.hypot(tx - d.x, ty - d.y);
-    if (dd > 1) {
-      const step = Math.min(dd, A.dollSpeed * (dd > A.dollLeash ? 3 : 1));
-      d.x += ((tx - d.x) / dd) * step;
-      d.y += ((ty - d.y) / dd) * step;
-    }
-    // 방 밖·벽 안으로 나가지 않게
-    const body = { x: d.x, y: d.y, prevX: d.x, prevY: d.y, r: 4 };
-    keepInRoom(body, grid);
-    d.x = body.x;
-    d.y = body.y;
+    const e = roamStep(s, d, i, n, spec, taken);
     if (--d.cd > 0 || !e || dist2(e, d) > (A.dollRange + e.r) ** 2) return;
     d.cd = A.dollEvery;
     const dl = Math.hypot(e.x - d.x, e.y - d.y) || 1;

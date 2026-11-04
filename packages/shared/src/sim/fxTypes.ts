@@ -34,7 +34,9 @@ export type ZeusFx = "zsSky" | "zsArc" | "zsOverload" | "zsDescend" | "zsAegis" 
 export type VoyagerFx = "vyFlip" | "vyLoose" | "vyCrit" | "vyBeam" | "vyChain" | "vyRain" | "vyMeteor" | "vyBoulder" | "vyHorse" | "vyWind" | "vyShield" | "vySiren" | "vyTide" | "vyWhirl" | "vyBite" | "vyBolt" | "vyPig" | "vyIsland" | "vySun";
 /** 풍류사 (sim/pungryu·pungryuVerse·pungryuPerks) */
 export type PungFx = "puVerse" | "puPillar" | "puWave" | "puStarLine" | "puWind" | "puReap" | "puFrost" | "puGoldStream" | "puSword" | "puTeleport" | "puClone" | "puDisguise" | "puFlute";
-export type SecretFx = VoyagerFx | ZeusFx | PilgrimFx | PungFx | "clMove" | "mnSwing" | "mnCrack" | "mnErupt" | "mnRock" | "mnCave" | "mnBoom" | "mnShatter" | "mnFall" | "mnDig" | "mnBurst" | "mnPull" | "mnGem" | "mnPillar" | "mnCanary";
+/** 레오 (sim/leo·leoPerks): 발톱(width 0/1 왼·오) · 번개 물기 · 사자후(width 1 = 우레 포효) · 낙뢰(tint gem·storm·roar) · 연쇄(toX·toY) · 도약(toX·toY) · 방전(width 1 = 갑주) · 보석 빛 */
+export type LeoFx = "leClaw" | "leBite" | "leRoar" | "leBolt" | "leChain" | "lePounce" | "leSpark" | "leGem";
+export type SecretFx = VoyagerFx | ZeusFx | PilgrimFx | PungFx | LeoFx | "clMove" | "mnSwing" | "mnCrack" | "mnErupt" | "mnRock" | "mnCave" | "mnBoom" | "mnShatter" | "mnFall" | "mnDig" | "mnBurst" | "mnPull" | "mnGem" | "mnPillar" | "mnCanary";
 /** 떠돌이 기습 쏨·맞음 · 파수꾼 반격 베기 (sim/origin) · 작업대 성공·실패·파괴 (sim/station) */
 /** 히든 아이템·순례자 (sim/hiddenPerks·hiddenUse·pilgrim) */
 export type HiddenFx = "hdDice" | "hdChest" | "hdCurse" | "hdFreeze" | "hdWarp" | "hdQuake" | "hdMirror" | "hdLeaf" | "hdAether" | "hdMeteor" | "hdScroll" | "hdGate" | "hdPortal" | "hdShow" | "hdText";

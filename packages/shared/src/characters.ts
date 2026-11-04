@@ -84,9 +84,9 @@ export const CHARACTERS = {
   automata: { id: "automata", maxHp: 100, damage: 12, moveSpeed: 1.3, luck: 0, startWeapon: "adFinger" },
   /** 라이더 (테라코어): 오토바이 폭주족. 빠를수록 피해 · 달린 거리 게이지가 차면 범위 펄스 (sim/rider) */
   rider: { id: "rider", maxHp: 110, damage: 12, moveSpeed: 1.5, luck: 0, startWeapon: "rdHammer" },
-  /** 붐버 (테라코어): "폭발은 예술이다". 모든 무기가 터짐 · 1초 안에 잇따라 터지면 예술 연쇄로 커짐 · 터져 쓰러진 적 자리에 여진 (sim/bomber) */
+  /** 붐버 (테라코어): 터지는 무기 · 예술 연쇄 · 여진 (sim/bomber) */
   bomber: { id: "bomber", maxHp: 105, damage: 12, moveSpeed: 1.25, luck: 0, startWeapon: "bmGrenade" },
-  /** 아티팩터 (테라코어): 푸른빛 문신의 제작자. 리펄스 총 하나 · 쓰러뜨린 적으로 제작 게이지가 차면 아이템을 만듦(숨겨진 아이템 5) (sim/artifacter) */
+  /** 아티팩터 (테라코어): 리펄스 총 · 제작 게이지로 아이템 (sim/artifacter) */
   artifacter: { id: "artifacter", maxHp: 100, damage: 12, moveSpeed: 1.3, luck: 1, startWeapon: "afRepulsor" },
   /** 펑크 (테라코어): 네온과 크롬의 사이버 무기 · 몸에 심는 능력 · 신경 가속(게이지가 차면 대시로 켜서 시간을 느리게) (sim/punk) */
   punk: { id: "punk", maxHp: 95, damage: 12, moveSpeed: 1.4, luck: 1, startWeapon: "cyKatana" },
@@ -104,6 +104,8 @@ export const CHARACTERS = {
   silk: { id: "silk", maxHp: 90, damage: 10, moveSpeed: 1.35, luck: 1, startWeapon: "skThread" },
   /** 풍류사 (아스칼론): 구름을 타고 천자문 글자 · 구절 완성 마법 (sim/pungryu) */
   pungryu: { id: "pungryu", maxHp: 90, damage: 10, moveSpeed: 1.35, luck: 5, startWeapon: "puHeaven" },
+  /** 레오 (아스칼론, 영물): 뇌전 발톱 (sim/leo) */
+  leo: { id: "leo", maxHp: 120, damage: 12, moveSpeed: 1.4, luck: 1, startWeapon: "leClaw", defense: 5 },
   /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 쓰러진 적은 에테르 결정 · 대시는 땅굴 · 원석 100이면 광산 붕괴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },
   /** 운명의 여행자 (히든, 시즌 2): 운명의 활로 모아 쏘는 한 발 · 모래시계가 뒤집힐 때마다 주사위로 운명(버프·기술·능력 36칸) (sim/voyager) */

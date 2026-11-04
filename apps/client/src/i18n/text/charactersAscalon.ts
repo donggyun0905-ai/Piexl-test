@@ -43,6 +43,13 @@ export const CHARACTER_TEXT_ASCALON = {
     ja: "文字 · アスカロン。いつも雲に乗って歩く義賊の書生。大きな筆で千字文の文字を書いて飛ばす · 文字4つで句が完成 → 武器ごとの大きな魔法（天地の柱 · 大波 · 日と月 · 星座 · 冷たい風と熱い風 · 収穫 · 雨雲 · 霜 · 金の水流 · 名剣）· 雲の上なので地形・持続ダメージ半分 · 千字文の武器10 · 専用アイテム10（縮地法 · 分身術 · 遁甲術 · 義賊の巾着など）",
   },
   script: { ko: "천자문", en: "Verse", ja: "千字文" },
+  leo: { ko: "레오", en: "Leo", ja: "レオ" },
+  leoDesc: {
+    ko: "영물 · 아스칼론. 머리 가운데 보석 하나가 박힌 뇌전의 사자. 가까이서는 뇌전 발톱으로 번갈아 할퀴고 세 번째마다 번개 물기 · 맞힌 적에 뇌인을 새기고 전하를 모아 사자후: 방 안 모든 적에게 낙뢰 · 머리의 보석이 몇 초마다 가장 먼 적에게 낙뢰를 내려 방 전체를 장악 · 무기는 뇌전 발톱 하나 · 전용 아이템 10 (번개 갈기 · 뇌광 도약 · 연쇄 뇌전 · 뇌운 · 백수의 왕 등)",
+    en: "Spirit Beast · Ascalon. A lion of thunder with a single gem set in his brow. Up close he rakes with alternating Thunder Claws and bites with lightning every third strike · hits brand Thunder Marks and build charge for Lion's Roar, calling lightning on every foe in the room · the gem on his brow strikes the farthest foe every few seconds, holding the whole room · one weapon, the Thunder Claws · 10 exclusive items (Lightning Mane · Lightning Pounce · Chain Thunder · Thundercloud · King of Beasts and more)",
+    ja: "霊獣 · アスカロン。額の真ん中に宝石がひとつ埋まった雷電の獅子。近くでは雷電の爪で交互に引っかき、3回目ごとに雷の噛みつき · 当てた敵に雷印を刻み電荷を溜めて獅子吼：部屋の全ての敵に落雷 · 額の宝石が数秒ごとに一番遠い敵に落雷を落とし部屋全体を制する · 武器は雷電の爪ひとつ · 専用アイテム10（稲妻のたてがみ · 雷光の跳躍 · 連鎖雷電 · 雷雲 · 百獣の王など）",
+  },
+  lion: { ko: "뇌전 발톱", en: "Thunder Claws", ja: "雷電の爪" },
   trSkill1: { ko: "암습 저격", en: "Ambush Snipe", ja: "暗襲狙撃" },
   trSkill2: { ko: "강력한 한방", en: "Power Shot", ja: "強力な一撃" },
   trSkill3: { ko: "연발사격", en: "Rapid Fire", ja: "連射" },

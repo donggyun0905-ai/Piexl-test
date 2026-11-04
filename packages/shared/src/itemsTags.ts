@@ -26,7 +26,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "beamSplitter refractPrism electronic shadowChain spinMaster mirageDouble ascension thunderCry " +
     "bigCapacitor gyroStabilizer oniThunderCloud oniJudgment oniChainBolt flyKeen flyFrenzy elSage " +
     "elMaster adCore adSoul bmShrapnel bmArtist afPush afOverdrive cyCharge cyOverclock zsConductor " +
-    "zsOverload zsWrath zsStep pgBadge pgJournal",
+    "zsOverload zsWrath zsStep pgBadge pgJournal leMane leSky leChain leStorm leRoar",
   // 독 17
   poison:
     "venomStar footnote shorthand idLongWhip idBramble snakeVenom snakeSpit scorpTail spiderFang plRust " +
@@ -73,7 +73,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "smMore smPierce afFocus cyBoost cyBerserk trScope trHollow trBipod trCharge rmBackstab rmEcho wdHone " +
     "wdCalm wdSheath wdGauge skEdge skRend vyString vyLaurel zsKing zsSkyEye zsGiant pgLens fkCrest " +
     "fkReach lxReach lxQuick lxPierce lxJudge clEyeTome clBlueSpear clBlueAxe relicRed relicGold " +
-    "relicPrism relicGreen sylphQuiver gnomeHammer puDog",
+    "relicPrism relicGreen sylphQuiver gnomeHammer puDog leFang lePride leKing",
   // 단단함 79
   tough:
     "sturdyHeart furySeal secondWind ricochet splitHead counterGuard bulwarkStance arcaneShield " +
@@ -83,7 +83,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "idAncientWall bearHide scorpShell eleHerd elBeard elWard renStone renGuardPlus renWall renReflect " +
     "spRibbon spShield mkPlate mkBulk mkSpikes mkMeditate adWide adShield rdSlip rdGear bmMore bmSuit " +
     "afShield afGolem cyLeech cySkin trMark trCamo fgEcho fgBless mnHelmet mnMuscle mnCanary mnChain " +
-    "zsNectar zsRetort pgPack pgSouvenir pgPostcard pgTent relicSilver relicWhite ironSkin puDisguise",
+    "zsNectar zsRetort pgPack pgSouvenir pgPostcard pgTent relicSilver relicWhite ironSkin puDisguise leArmor",
   // 바람 77
   wind:
     "lightGloves windBoots featherTip hunterEye dashCloak heavyPlate returnFletch chaseSteps chainBurst " +
@@ -93,7 +93,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "eagleStorm eagleDive flyWings flyAfterburn elMore elDouble renRootPulse renMoss eaAbyss eaFrenzy " +
     "rdTurbo rdDrift bmWide bmFuse afCrafter afSurge cyReflex cyCloak rmSwift wdWind wdRonin wdFocus " +
     "wdBlink skFast skAgile vySandglass vySeaLegs zsCloud pgBoots pgSnack pgShortcut pgWorldLeaf fkGrip " +
-    "lxSwift clWhiteBow clPistol relicBlue fallenWings quickDraw puShrink puCloud puFlute",
+    "lxSwift clWhiteBow clPistol relicBlue fallenWings quickDraw puShrink puCloud puFlute lePounce",
   // 행운 53
   luck:
     "cloverCharm resolve prajna luckyDeflect gunMaster scrapGun doubleEcho echoBurst soulHarvest " +

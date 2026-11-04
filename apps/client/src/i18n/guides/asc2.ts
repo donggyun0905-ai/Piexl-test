@@ -1,9 +1,16 @@
-// 캐릭터 설명: 아스칼론 둘째 묶음 (영사 · 풍류사) · 한·영·일
+// 캐릭터 설명: 아스칼론 둘째 묶음 (영사 · 풍류사 · 레오) · 한·영·일
 import type { CharacterId } from "@pixel-rogue/shared";
 
 type Guide = Partial<Record<CharacterId, readonly string[]>>;
 
 export const GUIDE_KO_ASC2: Guide = {
+  leo: [
+    "아스칼론 · 레오 · 영물, 이마에 보석이 박힌 뇌전의 사자 · 체력 120 · 방어력 5 · 무기는 뇌전 발톱 하나",
+    "앞쪽을 왼발·오른발 번갈아 할큄, 세 번째 공격마다 번개 물기(크게 + 기절). 맞힌 적에 뇌인(번개 표식)이 쌓여 발톱이 더 아픔",
+    "맞힐 때마다 발밑 고리에 전하가 참. 가득 차면 사자후: 방 안 모든 적에게 낙뢰 (뇌인이 많을수록 더 아픔) + 기절",
+    "머리의 보석이 몇 초마다 가장 먼 적에게 낙뢰를 내려 멀리 있는 적까지 잡음",
+    "전용 아이템 10: 번개 갈기 · 천뢰 보석 · 우레 포효 · 뇌광 도약 · 연쇄 뇌전 · 뇌운 · 사자의 긍지 · 번개 송곳니 · 황금 갑주 · 백수의 왕",
+  ],
   pungryu: [
     "아스칼론 · 풍류사 · 구름을 타고 다니는 의적 선비 · 체력 90 · 빠름 · 행운 5",
     "공격할 때마다 천자문 글자 하나를 써서 날림. 네 개(천자문 책이면 셋)를 쓰면 구절 완성 → 무기마다 큰 마법. 2초 동안 쓰지 않으면 구절은 처음부터",
@@ -22,6 +29,13 @@ export const GUIDE_KO_ASC2: Guide = {
 };
 
 export const GUIDE_EN_ASC2: Guide = {
+  leo: [
+    "Ascalon · Leo · a Spirit Beast, a thunder lion with a gem in his brow · HP 120 · Defense 5 · one weapon, the Thunder Claws",
+    "Rakes ahead with alternating left and right claws; every third attack is a Lightning Bite (big hit + stun). Hits stack Thunder Marks that make the claws hurt more",
+    "Every hit fills the charge ring under his feet. When full, Lion's Roar strikes every foe in the room with lightning (more marks, more damage) + stun",
+    "The gem on his brow strikes the farthest foe every few seconds, reaching even distant enemies",
+    "10 exclusive items: Lightning Mane · Sky-Thunder Gem · Thunderous Roar · Lightning Pounce · Chain Thunder · Thundercloud · Lion's Pride · Lightning Fangs · Golden Barding · King of Beasts",
+  ],
   pungryu: [
     "Ascalon · Pungryu · a scholar-outlaw who rides a cloud · HP 90 · fast · Luck 5",
     "Each attack writes one character of the Thousand Character Classic and hurls it. Write four (three with the Thousand Character Book) to complete a verse and unleash the weapon's spell. Stop writing for 2s and the verse starts over",
@@ -40,6 +54,13 @@ export const GUIDE_EN_ASC2: Guide = {
 };
 
 export const GUIDE_JA_ASC2: Guide = {
+  leo: [
+    "アスカロン · レオ · 霊獣、額に宝石が埋まった雷電の獅子 · 体力120 · 防御力5 · 武器は雷電の爪ひとつ",
+    "前方を左右の爪で交互に引っかき、3回目ごとに雷の噛みつき（大ダメージ＋気絶）。当てた敵に雷印が重なり爪がより痛くなる",
+    "当てるたびに足元の輪に電荷が溜まる。満タンで獅子吼：部屋の全ての敵に落雷（雷印が多いほど痛い）＋気絶",
+    "額の宝石が数秒ごとに一番遠い敵に落雷を落とし、遠くの敵まで捉える",
+    "専用アイテム10：稲妻のたてがみ · 天雷の宝石 · 雷鳴の咆哮 · 雷光の跳躍 · 連鎖雷電 · 雷雲 · 獅子の誇り · 稲妻の牙 · 黄金の鎧 · 百獣の王",
+  ],
   pungryu: [
     "アスカロン · 風流士 · 雲に乗る義賊の書生 · 体力90 · 速い · 幸運5",
     "攻撃するたびに千字文の文字を1つ書いて飛ばす。4つ（千字文の書なら3つ）書くと句が完成し、武器ごとの魔法が発動。2秒書かないと句は最初から",
