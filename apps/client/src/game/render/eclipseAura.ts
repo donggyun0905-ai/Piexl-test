@@ -2,7 +2,8 @@
 // · 바뀌는 오라(보라는 아래로, 노랑은 위로 꺼짐) · 치유의 빛 · 머리 위 게이지 · 지금 모습 그림 이름
 import { ECLIPSE, eclipseZoneR, isEclipse, type PlayerState, type RunState } from "@pixel-rogue/shared";
 import { blackHole, eclipseLift, N_PINK, N_VOID, S_GOLD, S_RED, TAU, voidArc } from "./eclipseBits";
-import { alpha, rnd, type Ctx } from "./pwFxBits";
+import { holeDust, moonTrail, riseMotes, zoneFlair } from "./eclipseFlair";
+import { additive, alpha, glow, rnd, type Ctx } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
 
 export { eclipseLift } from "./eclipseBits";
@@ -31,10 +32,11 @@ function zone(ctx: Ctx, x: number, y: number, r: number, night: boolean, tick: n
   ctx.beginPath();
   ctx.arc(0, 0, r, 0, TAU);
   ctx.fill();
-  ctx.strokeStyle = alpha(rim, 0.75);
-  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = alpha(rim, 0.85);
+  ctx.lineWidth = 2;
   ctx.stroke();
   ctx.restore();
+  zoneFlair(ctx, x, y, r, night, tick);
   // 테에서 피어오르는 불티(태양) · 검은 넋(일식)
   for (let i = 0; i < 12; i++) {
     const u = (tick * (night ? 0.008 : 0.014) + rnd(i, 3)) % 1;
@@ -58,7 +60,11 @@ export function drawEclipseBack(ctx: Ctx, s: RunState, a: number, snap: Snap): v
   const y = snap(lerp(p.prevY, p.y, a) + p.r);
   const night = eclipseSheet(p) === "eclipseNight";
   zone(ctx, x, y, eclipseZoneR({ ...p, ecNight: night }), night, s.tick);
-  for (const h of p.ecHoles ?? []) blackHole(ctx, snap(h.x), snap(h.y + p.r), h.r, h.t / h.max, s.tick);
+  for (const h of p.ecHoles ?? []) {
+    const life = h.t / h.max;
+    blackHole(ctx, snap(h.x), snap(h.y + p.r), h.r, life, s.tick);
+    holeDust(ctx, snap(h.x), snap(h.y + p.r) - 6, h.r, Math.min(1, (1 - life) * 6) * Math.min(1, life * 5), s.tick);
+  }
   const lift = eclipseLift(p);
   if (lift <= 0) return;
   ctx.fillStyle = `rgba(10,4,20,${0.5 - lift / 110})`;
@@ -102,6 +108,8 @@ function shiftAura(ctx: Ctx, x: number, y: number, u: number, toNight: boolean, 
   ctx.strokeStyle = alpha(edge, 0.9);
   ctx.lineWidth = 1.2;
   ctx.stroke();
+  additive(ctx, () => glow(ctx, x, (top + bot) / 2, 26, edge, 0.5));
+  riseMotes(ctx, x, bot, 10, (tick % 24) / 24, edge, core, 7);
 }
 
 /** 바뀜 끝 (0~1): 보라 고리가 바닥으로 좁혀 들어가고 / 노란 빛 알갱이가 하늘로 흩어짐 */
@@ -136,7 +144,9 @@ export function drawEclipseAura(ctx: Ctx, s: RunState, a: number, snap: Snap): v
     const cy = snap(c.y + c.dy * c.sp * (k - 1));
     const ang = Math.atan2(c.dy, c.dx);
     const r = c.w * 1.6;
-    voidArc(ctx, cx - c.dx * r * 0.75, cy - c.dy * r * 0.75, r, ang - 1.1, ang + 1.1, c.w * 0.6, Math.min(1, (c.t / c.max) * 3), 0.85);
+    const cal = Math.min(1, (c.t / c.max) * 3);
+    moonTrail(ctx, cx - c.dx * r * 0.75, cy - c.dy * r * 0.75, c.dx, c.dy, r, c.w * 0.6, cal);
+    voidArc(ctx, cx - c.dx * r * 0.75, cy - c.dy * r * 0.75, r, ang - 1.1, ang + 1.1, c.w * 0.6, cal, 0.85);
   }
   const x = snap(lerp(p.prevX, p.x, a));
   const y = snap(lerp(p.prevY, p.y, a));
@@ -154,11 +164,9 @@ export function drawEclipseAura(ctx: Ctx, s: RunState, a: number, snap: Snap): v
     const f = 1 - fx.ticks / fx.maxTicks;
     if (fx.kind === "ecShiftEnd") shiftEnd(ctx, x, y + p.r, f, !!fx.width);
     else if (fx.kind === "ecHeal") {
-      // 치유의 빛: 몸에서 피어오르는 작은 빛 알갱이 몇 개
-      for (let k = 0; k < 5; k++) {
-        ctx.fillStyle = alpha(k % 2 ? "#c8ff9a" : S_GOLD, 1 - f);
-        ctx.fillRect(x + (rnd(k, 8) - 0.5) * 16, y + 4 - f * 22 * (0.6 + rnd(8, k) * 0.6), 1.5, 1.5);
-      }
+      // 치유의 빛: 몸에서 피어오르는 빛 알갱이·십자 + 은은한 초록 빛
+      additive(ctx, () => glow(ctx, x, y, 16, "#c8ff9a", 0.4 * (1 - f)));
+      riseMotes(ctx, x, y, 9, f, "#c8ff9a", S_GOLD, 8, true);
     }
   }
 }

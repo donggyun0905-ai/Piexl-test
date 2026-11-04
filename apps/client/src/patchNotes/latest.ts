@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.22",
+    date: "2026-11-05",
+    items: {
+      ko: ["이클립스 일식: 도끼날 끝을 훨씬 두껍게 · 이클립스 이펙트를 화려하게: 태양 검격 꼭짓점 번쩍임·불똥, 일식 베기 잔상·도끼 머리 빛, 흑월 회전 도는 고리, 그림자 돌진 잔상, 일식 낙하 빛기둥·불똥, 맞은 자리 터짐, 개기일식 빛살, 영역의 도는 고리·태양 불꽃 혀, 블랙홀에 빨려 드는 알갱이, 날아가는 초승달 꼬리, 변신·치유의 빛 알갱이"],
+      en: ["Eclipse (Eclipse form): much heavier axe-blade tips · flashier Eclipse effects: a flash and sparks at the tip of Sun slashes, afterimages and a glowing axe head on Eclipse cuts, a spinning ring on the Black Moon spin, shadow afterimages on the dash, a pillar of light and sparks on the eclipse slam, hit bursts, light rays on Totality, a turning ring and Sun flame tongues on the zone, dust swirling into black holes, trails on flying crescents, and rising motes on transformation and healing"],
+      ja: ["エクリプス日食：斧の刃先をさらに太く · エクリプスのエフェクトを華やかに：太陽斬撃の頂点の閃光・火花、日食斬りの残像・斧頭の光、黒月回転の回るリング、影の突進の残像、日食落下の光の柱・火花、命中時の弾け、皆既日食の光芒、領域の回るリング・太陽の炎の舌、ブラックホールに吸い込まれる粒、飛ぶ三日月の尾、変身・治癒の光の粒"],
+    },
+  },
+  {
     version: "0.49.21",
     date: "2026-11-05",
     items: {

@@ -125,6 +125,10 @@ export function embers(ctx: Ctx, pts: readonly Pt[], f: number, c: string, seed:
 const SUN_PULL = 0.8;
 const SUN_BACK = 0.07;
 
+/** 그려지는 태양 검격 세 점 (몸 쪽으로 당긴 자리) */
+export const sunPts = (x: number, y: number, fx: number, fy: number, r: number, i: number) =>
+  sunCutPoints(x - fx * r * SUN_BACK, y - fy * r * SUN_BACK, fx, fy, r * SUN_PULL, i);
+
 /**
  * 태양 검격 i(0~4): 몸 양옆에서 앞쪽 꼭짓점으로 모이는 '^' 날 (모양은 sim/eclipseCuts, 몸 쪽으로 당겨 그림)
  * 두꺼운 빨강 몸통(몸 쪽으로 훨씬 두껍게) · 앞쪽 테두리에만 얇은 노랑 줄 · 붉은 빛 번짐
@@ -133,7 +137,7 @@ const SUN_BACK = 0.07;
  */
 export function rightSlash(ctx: Ctx, x: number, y: number, fx: number, fy: number, r: number, i: number, grow: number, thin: number, al: number, spark = 0): void {
   if (al <= 0 || grow <= 0 || thin <= 0) return;
-  const pts = sunCutPoints(x - fx * r * SUN_BACK, y - fy * r * SUN_BACK, fx, fy, r * SUN_PULL, i);
+  const pts = sunPts(x, y, fx, fy, r, i);
   const [soft, softPeak] = i >= 3 ? roundTip(pts, 0.22) : [pts as Pt[], 1];
   if (grow >= 1) {
     ctx.fillStyle = alpha(S_RED, 0.4 * al * thin);
@@ -168,7 +172,7 @@ export function rightSlash(ctx: Ctx, x: number, y: number, fx: number, fy: numbe
 }
 
 /** 도끼날 두께: 가는 꼬리(0)에서 점점 굵어져 머리(1)에서 가장 넓게 벌어지고 네모로 끊김 */
-const axe = (u: number) => u ** 0.6 * (u > 0.72 ? 1 + 0.85 * ((u - 0.72) / 0.28) ** 1.3 : 1);
+const axe = (u: number) => u ** 0.55 * (u > 0.66 ? 1 + 1.6 * ((u - 0.66) / 0.34) ** 1.2 : 1);
 
 /**
  * 초승달 띠 (가운데가 두껍고 양 끝이 가늘어짐 · sy: 세로 눌림)
@@ -184,7 +188,7 @@ export function band(ctx: Ctx, x: number, y: number, r: number, a0: number, a1: 
   for (let k = steps; k >= 0; k--) {
     const u = k / steps;
     const ang = a0 + (a1 - a0) * u;
-    const rr = r - thick * (head === undefined ? Math.sin(u * Math.PI) ** 0.8 : axe(head ? u : 1 - u) * 0.75);
+    const rr = r - thick * (head === undefined ? Math.sin(u * Math.PI) ** 0.8 : axe(head ? u : 1 - u) * 0.8);
     ctx.lineTo(x + Math.cos(ang) * rr, y + Math.sin(ang) * rr * sy);
   }
   ctx.closePath();

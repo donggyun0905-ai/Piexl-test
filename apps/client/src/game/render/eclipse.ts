@@ -3,6 +3,7 @@
 // 날아가는 초승달·영역·블랙홀·바뀌는 오라·치유의 빛·게이지는 render/eclipseAura
 import type { EffectState } from "@pixel-rogue/shared";
 import { band, N_PINK, N_VOID, rightSlash, S_GOLD, S_RED, smoke, TAU, voidArc } from "./eclipseBits";
+import { dashGhosts, hewFlair, hitBurst, slamFlash, spinFlair, sunFlair, totalFlair } from "./eclipseFlair";
 import { alpha, easeOut, rnd, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
 
@@ -48,6 +49,7 @@ export function drawEclipseFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const thin = (1 - after) ** 0.9;
       const al = Math.min(1, (1 - after) * 3);
       rightSlash(ctx, x, y, fx.dirX, fx.dirY, fx.size, w, grow, thin, al, after);
+      sunFlair(ctx, x, y, fx.dirX, fx.dirY, fx.size, w, f, seed);
       break;
     }
     case "ecHew": {
@@ -59,7 +61,10 @@ export function drawEclipseFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const to = from + arc * 2 * dir * sweep;
       const after = Math.max(0, (f - 0.3) / 0.7);
       // 휘두르는 쪽 끝(앞장선 끝)은 도끼날처럼 네모나고 두껍게 · 꼬리는 가늘게 · 진하게
-      voidArc(ctx, x, y, fx.size, Math.min(from, to), Math.max(from, to), fx.size * (w === 2 ? 0.34 : 0.28) * (1 - after * 0.6), Math.min(1, (1 - after) * 1.8), 0.78, dir > 0 ? 1 : 0);
+      const hal = Math.min(1, (1 - after) * 1.8);
+      const thick = fx.size * (w === 2 ? 0.36 : 0.3) * (1 - after * 0.6);
+      hewFlair(ctx, x, y, fx.size, Math.min(from, to), Math.max(from, to), to, thick, hal, f, seed);
+      voidArc(ctx, x, y, fx.size, Math.min(from, to), Math.max(from, to), thick, hal, 0.78, dir > 0 ? 1 : 0);
       if (after > 0) smoke(ctx, x + Math.cos(to) * fx.size, y + Math.sin(to) * fx.size * 0.78, 3, 8, after, seed);
       break;
     }
@@ -67,7 +72,8 @@ export function drawEclipseFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       // 흑월 회전: 몸 둘레를 한 바퀴 휘감는 날
       const sweep = easeOut(Math.min(1, f / 0.45));
       const after = Math.max(0, (f - 0.45) / 0.55);
-      voidArc(ctx, x, y - 2, fx.size, a, a + TAU * 0.92 * sweep, fx.size * 0.2 * (1 - after * 0.7), Math.min(1, (1 - after) * 1.3), 0.7);
+      spinFlair(ctx, x, y - 2, fx.size, fade, fx.maxTicks - fx.ticks);
+      voidArc(ctx, x, y - 2, fx.size, a, a + TAU * 0.92 * sweep, fx.size * 0.22 * (1 - after * 0.7), Math.min(1, (1 - after) * 1.6), 0.7);
       break;
     }
     case "ecDash": {
@@ -76,6 +82,7 @@ export function drawEclipseFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const ty = snap(fx.toY ?? fx.y);
       const nx = -fx.dirY;
       const ny = fx.dirX;
+      dashGhosts(ctx, x, y, tx, ty, fade, seed);
       // 시작은 바늘처럼, 끝(지금 몸)쪽이 굵은 한 줄
       for (const [c, k] of [[N_PINK, 1], [N_VOID, 0.5]] as const) {
         const t = 8 * fade * k;
@@ -119,6 +126,7 @@ export function drawEclipseFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       }
       ctx.restore();
       ring2(ctx, x, y, fx.size * grow, 10 * fade + 2, N_PINK, N_VOID, fade);
+      slamFlash(ctx, x, y, fx.size, f, seed);
       // 내려찍은 자리에서 솟는 날 둘 (X자)
       if (f < 0.5) {
         const k = 1 - f / 0.5;
@@ -129,6 +137,7 @@ export function drawEclipseFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     }
     case "ecSpark":
       // 맞은 자리: 짧은 꺾인 칼자국 (태양 빨강·노랑 / 일식 분홍 보라·검보라)
+      hitBurst(ctx, x, y, !!w, f, seed);
       if (w) voidArc(ctx, x - Math.cos(a) * 6, y - Math.sin(a) * 6, 8, a - 0.9, a + 0.9, 4 * fade, fade, 1);
       else rightSlash(ctx, x - Math.cos(a) * 7, y - Math.sin(a) * 7, Math.cos(a), Math.sin(a), 6, 1, 1, 0.9 * fade + 0.3, fade);
       break;
@@ -150,6 +159,7 @@ export function drawEclipseFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       // 개기일식: 금빛 고리와 검보라 고리가 함께 퍼짐
       ring2(ctx, x, y, fx.size * easeOut(f), 6 * fade + 1, S_GOLD, S_RED, fade);
       ring2(ctx, x, y, fx.size * 0.72 * easeOut(f), 6 * fade + 1, N_PINK, N_VOID, fade);
+      totalFlair(ctx, x, y, fx.size, f);
       break;
     case "ecCross":
       // 예전 저장의 5타 효과 (지금은 쓰지 않음)
