@@ -1,6 +1,7 @@
 // 라스트 보스 갓이터: 대검 두 자루(파괴·혼돈)를 먼저 부숴야 맞음. 그동안은 방 전체 심판(검정 = 가만히 · 붉은색 = 움직여야 안 맞음)
 // 두 자루를 다 부수면 심판에 더해 느긋하게 떠다니는 거대한 파괴·혼돈 구슬 · 바닥에서 솟는 대낫 · 4분할 구역 닫기(bossZones) · 벽에서 날아오는 거대한 검기 · 대낫 한 바퀴 · 벽에 튕기는 거대한 낫 3개 · 망령 소환
 // 체력 절반 아래면 날려 버리기 · 봉인의 사슬(W·A·S·D 순서) · 10% 아래면 궁극기 패링(bossCage)
+import { dashDodged } from "./remnant";
 import { ENEMIES } from "../content";
 import { createRng, deriveSeed } from "../rng";
 import { half, hitDamage, keepAway, shotDamage } from "./bossKit";
@@ -134,7 +135,7 @@ export function updateHades(s: RunState, e: EnemyState, toP: Vec, go: Vec, spawn
 function repel(s: RunState, e: EnemyState): void {
   const p = s.player;
   const d = normalize(p.x - e.x, p.y - e.y) ?? [0, 1];
-  if (Math.hypot(p.x - e.x, p.y - e.y) > R.REPEL_R + p.r || p.dashTicks > 0) return;
+  if (Math.hypot(p.x - e.x, p.y - e.y) > R.REPEL_R + p.r || dashDodged(s)) return;
   damagePlayer(s, hitDamage(s));
   p.x += d[0] * R.REPEL_PUSH;
   p.y += d[1] * R.REPEL_PUSH;

@@ -47,6 +47,8 @@ export interface RemnantPlayerState {
   rmFrozen?: number[];
   rmFlurry?: { i: number; n: number; t: number };
   rmDodges?: number;
+  /** 지난 틱에 대시 중이었는지 (대시를 시작한 틱에 더 길게) */
+  rmDashing?: boolean;
   /** 연속 베기: 이번 피해는 반드시 치명타 (novice.rollCrit) */
   rmSure?: boolean;
 }

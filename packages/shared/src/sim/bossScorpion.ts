@@ -1,6 +1,7 @@
 // 검은 잔영의 둘째 짐승 거대 전갈: 모래 밑을 기어다님 (자리를 알 수 있게 위험 표시가 따라 움직임)
 // 표시가 사라지면 둘 중 하나 — 꼬리 찌르기(맞으면 독) · 땅을 밀며 앞으로만 3초 돌진(몸을 틀지 못함, 부딪히면 집게에 3초 붙잡혀 못 움직이고 피해)
 // 찌르기·돌진이 끝나면 잠깐 지쳐 서 있음 (옆으로 대시해 피한 뒤 이때 때리기)
+import { dashDodged } from "./remnant";
 import { createRng, deriveSeed } from "../rng";
 import { half, hitDamage } from "./bossKit";
 import { pinchPlayer, poisonPlayer } from "./bossGrip";
@@ -92,7 +93,7 @@ export function updateScorpion(s: RunState, e: EnemyState, toP: readonly [number
     // 꼬리가 찌르는 순간: 선 안이면 피해 + 독
     if (e.aux === R.STING_WARN) {
       const line = { x: e.x, y: e.y, toX: e.auxX, toY: e.auxY, width: R.STING_W, radius: 0, damage: 0, tick: 0, start: 0 };
-      if (inHazard(line, p.x, p.y, p.r) && p.dashTicks <= 0) {
+      if (inHazard(line, p.x, p.y, p.r) && !dashDodged(s)) {
         const hp = p.hp;
         damagePlayer(s, hitDamage(s));
         if (p.hp < hp) poisonPlayer(s);
@@ -109,7 +110,7 @@ export function updateScorpion(s: RunState, e: EnemyState, toP: readonly [number
     e.x += e.dirX * R.CHARGE_SPEED;
     e.y += e.dirY * R.CHARGE_SPEED;
     const rr = e.r + p.r;
-    if (dist2(e, p) < rr * rr && p.dashTicks <= 0 && p.invulnTicks <= 0 && (p.pinchTicks ?? 0) <= 0) {
+    if (dist2(e, p) < rr * rr && p.invulnTicks <= 0 && (p.pinchTicks ?? 0) <= 0 && !dashDodged(s)) {
       damagePlayer(s, hitDamage(s));
       pinchPlayer(s, e);
       e.phase = "act";

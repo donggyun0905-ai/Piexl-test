@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.5",
+    date: "2026-11-04",
+    items: {
+      ko: ["잔영: 대시가 더 멀리 감 (대시 시간 9틱 → 15틱, 같은 빠르기) · 대시 무적도 그만큼 길어져 대시가 끝날 때 딱 끝남"],
+      en: ["Remnant: dash goes farther (9 → 15 ticks at the same speed) · dash invulnerability lasts exactly as long as the dash"],
+      ja: ["残影：ダッシュがより遠くへ（9ティック → 15ティック、同じ速さ）・ダッシュ無敵もその分長くなり、ダッシュの終わりとぴったり一緒に終わる"],
+    },
+  },
+  {
+    version: "0.49.4",
+    date: "2026-11-04",
+    items: {
+      ko: ["잔영: 적 탄(원거리 공격)과 보스 기술(전갈 꼬리·괴조 급강하·개구리 혀·선장 갈고리·하데스 밀쳐내기·원형 파동·구역 닫기·가디언 휘두르기 등)을 대시로 피해도 회피 슬로우모션이 발동"],
+      en: ["Remnant: dodging enemy shots (ranged attacks) and boss moves (scorpion sting, roc dive, toad tongue, captain's hook, Hades repel, ring waves, closing zones, guardian swings and more) with a dash now triggers the dodge slow-motion"],
+      ja: ["残影：敵弾（遠距離攻撃）やボスの技（サソリの尾・怪鳥の急降下・カエルの舌・船長の鉤・ハデスの押し返し・円形の波動・区域閉鎖・ガーディアンの振り回しなど）をダッシュで避けても回避スローモーションが発動"],
+    },
+  },
+  {
     version: "0.49.3",
     date: "2026-11-04",
     items: {

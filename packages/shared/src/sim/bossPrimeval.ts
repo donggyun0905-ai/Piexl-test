@@ -1,5 +1,6 @@
 // 라스트 보스 태초의 빛과 어둠 (공통): 상자 벽 6개가 놓인 큰 방 · 둘의 체력 합이 절반이 되면 더 많은 쪽만 남아 체력이 다 차고 패턴이 늘어남
 // 플레이어에게 거는 것: 빛의 그물(방향키 5개를 맞게 눌러야 풀림, 틀리면 3초 못 움직임) · 어둠(유령에 닿을수록 짙어지고 5번이면 쓰러짐) · 다크 오라(방을 가로지르는 선)
+import { dashDodged } from "./remnant";
 import { ROOM_COLS, ROOM_ROWS } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { damagePlayer } from "./combat";
@@ -137,7 +138,7 @@ export function updateGhost(s: RunState, e: EnemyState): void {
   e.y += e.dirY * 0.4;
   if ((e.aux ?? 0) > 0) e.aux = (e.aux ?? 0) - 1;
   const rr = e.r + p.r;
-  if ((e.aux ?? 0) === 0 && dist2(e, p) < rr * rr && p.dashTicks === 0) {
+  if ((e.aux ?? 0) === 0 && dist2(e, p) < rr * rr && !dashDodged(s)) {
     e.aux = R.GHOST_TOUCH_WAIT;
     p.darkStacks = (p.darkStacks ?? 0) + 1;
     p.darkTicks = DARK_TICKS;

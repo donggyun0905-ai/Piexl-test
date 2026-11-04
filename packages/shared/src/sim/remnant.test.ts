@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { CHARACTERS } from "../characters";
 import { WEAPONS, type WeaponId } from "../content";
 import { REMNANT_PERKS as K } from "../itemsRemnant";
-import { REMNANT_WEAPONS } from "../weaponsRemnant";
+import { REMNANT, REMNANT_WEAPONS } from "../weaponsRemnant";
 import { damagePlayer, envDamage } from "./combat";
 import { createRun, stepSim, type RunState } from "./index";
 import { recalcStats } from "./items";
@@ -53,6 +53,44 @@ describe("잔영", () => {
     // 클릭하지 않으면 1.5초 뒤 끝남
     for (let i = 0; i < 95; i++) stepSim(s, IDLE);
     expect(s.player.rmSlow ?? 0).toBe(0);
+  });
+
+  it("대시가 다른 캐릭터보다 멀리 가고, 그만큼 대시(무적)도 길게", () => {
+    const go = (s: RunState) => {
+      s.enemies = [];
+      const x = s.player.x;
+      let ticks = 0;
+      stepSim(s, { ...IDLE, dash: true, moveX: 1, moveY: 0 });
+      while (s.player.dashTicks > 0 && ticks < 60) {
+        ticks++;
+        stepSim(s, { ...IDLE, moveX: 1, moveY: 0 });
+      }
+      return { dist: s.player.x - x, ticks };
+    };
+    const r = go(remnant());
+    const w = createRun(5, "warden");
+    w.player.x = w.player.prevX = 50;
+    w.player.y = w.player.prevY = 72;
+    w.player.stats.moveSpeed = remnant().player.stats.moveSpeed;
+    const n = go(w);
+    expect(r.dist).toBeGreaterThan(n.dist * 1.4);
+    expect(r.ticks - n.ticks).toBe(REMNANT.dashMore);
+  });
+
+  it("적 탄(원거리)·위험 표시(휘두르기) 공격도 대시로 피하면 슬로우모션", () => {
+    const s = remnant();
+    s.enemies = [];
+    s.player.dashTicks = 5;
+    s.projectiles.push({ id: 900, fromPlayer: false, x: s.player.x, y: s.player.y, prevX: s.player.x, prevY: s.player.y, r: 3, vx: 0, vy: 0, damage: 10, ticksLeft: 30 });
+    stepSim(s, IDLE);
+    expect(s.player.rmSlow).toBeGreaterThan(0);
+    const h = remnant();
+    h.enemies = [];
+    h.player.dashTicks = 5;
+    (h.hazards ??= []).push({ x: h.player.x, y: h.player.y, radius: 20, damage: 10, tick: h.tick, start: h.tick });
+    stepSim(h, IDLE);
+    expect(h.player.rmSlow).toBeGreaterThan(0);
+    expect(h.player.hp).toBe(h.player.stats.maxHp);
   });
 
   it("슬로우모션 중 적과 적 탄이 느려지고, 끝나면 원래 빠르기로", () => {

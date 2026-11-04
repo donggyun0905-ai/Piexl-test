@@ -1,5 +1,6 @@
 // 시즌 2 3단계 보스 유령선 선장: 갑판 방. 가까우면 해적 칼 베기, 아니면 차례로 ① 대포 포격(가로줄 여럿) ② 닻 던져 끌어당기기
 // ③ 밀물(방 왼쪽·오른쪽 절반을 쓸고, 맞으면 반대쪽으로 밀림) ④ 물에 빠진 선원 부르기. 체력 절반 아래면 포격 줄·선원이 늘고 더 빠름
+import { dashDodged } from "./remnant";
 import { ROOM_WIDTH } from "../constants";
 import { ENEMIES } from "../content";
 import { distTo, half, hitDamage, keepAway } from "./bossKit";
@@ -49,7 +50,7 @@ function lineHit(x: number, y: number, toX: number, toY: number, width: number, 
     s,
     () => {
       const p = s.player;
-      if (p.dashTicks > 0 || !inHazard(line, p.x, p.y, p.r)) return;
+      if (!inHazard(line, p.x, p.y, p.r) || dashDodged(s)) return;
       fn(p.x, p.y);
       keepInRoom(p, roomGrid(s));
     },

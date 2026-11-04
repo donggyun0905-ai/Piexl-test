@@ -4,6 +4,7 @@
 // 스켈레톤 궁병: 멀리서 얇은 일직선으로 나를 겨눔(따라옴) → 선이 굳어 깜빡임 → 진짜 화살 한 발이 그 선을 따라 매우 빠르게 날아감 (큰 피해)
 // 쇠사슬 간수(3층부터): 사슬이 날아갈 길이 미리 보임 → 사슬에 맞으면 피해 + 간수 쪽으로 끌려감 (대시로 피함)
 // 하이오크(3층부터): 다가와 큰 도끼를 반원으로 휘두름 · 체력이 적을수록 빨라지고 세짐
+import { dashDodged } from "./remnant";
 import { ENEMIES } from "../content";
 import { depth } from "./hero";
 import { addShape, inHazard } from "./hazards";
@@ -135,7 +136,7 @@ function chainward(s: RunState, e: EnemyState, toP: Vec, go: Vec): void {
     s.hazards = s.hazards?.filter((z) => z !== h);
     if (h) {
       addEffect(s, { kind: "gleam", x: h.x, y: h.y, toX: h.toX, toY: h.toY, dirX: 0, dirY: 0, size: 4, width: R.JAIL_WIDTH, maxTicks: 12, foe: true });
-      if (inHazard(h, p.x, p.y, p.r) && p.dashTicks <= 0 && p.invulnTicks <= 0 && p.shieldTicks <= 0) {
+      if (inHazard(h, p.x, p.y, p.r) && p.invulnTicks <= 0 && p.shieldTicks <= 0 && !dashDodged(s)) {
         damagePlayer(s, R.JAIL_DMG + 2 * depth(s), "chainward");
         p.lureTicks = R.JAIL_PULL;
         p.lureId = e.id;

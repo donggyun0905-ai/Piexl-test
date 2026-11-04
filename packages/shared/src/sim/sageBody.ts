@@ -1,5 +1,6 @@
 // 제천대성 몸 갈래 ① 꼬리·주먹 10가지 (무작위로 하나씩, 여의봉 10가지와 같은 갈래)
 // 세 번 지르기 · 꼬리 한 바퀴 · 꼬리 채찍 · 뛰어올라 내려찍기 · 장풍 부채꼴 · 여의봉 벽 + 꼬리로 감아 붙잡고 주먹 · 주먹 난타 · 분신 셋 · 둘러싸는 꼬리 · 돌진 올려치기
+import { dashDodged } from "./remnant";
 import { pinchPlayer } from "./bossGrip";
 import { shotDamage } from "./bossKit";
 import { damagePlayer } from "./combat";
@@ -184,7 +185,7 @@ export function bodyTick(s: RunState, e: EnemyState): boolean {
   } else if (t === R.GRAB_AT + R.GRAB_WARN) {
     // 꼬리에 감기면 붙잡혀 못 움직임 → 주먹
     const line = { x: e.x, y: e.y, toX: g.bX, toY: g.bY, width: 10 * sageRange(e), radius: 0, damage: 0, tick: 0, start: 0 };
-    if (inHazard(line, p.x, p.y, p.r) && p.dashTicks <= 0) {
+    if (inHazard(line, p.x, p.y, p.r) && !dashDodged(s)) {
       pinchPlayer(s, e, R.GRAB_HOLD);
       damagePlayer(s, sageDmg(s, e, 0.5));
       addEffect(s, { kind: "burst", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 14, maxTicks: 14 });
