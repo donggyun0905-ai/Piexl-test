@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.21",
+    date: "2026-11-05",
+    items: {
+      ko: ["이클립스 태양: 검격을 더 진하게 · 빨강을 몸 쪽으로 2배 두껍게 · 테두리 물결 무늬 빼고 얇은 노랑 줄만 · 1타는 위에서 꺾임(위 짧게·아래 길게), 2타는 가운데, 3타는 아래에서 꺾임(아래 짧게·위 길게) · 1타 좌우 폭 조금 좁게 · 4·5타 찌르기는 바깥은 각지고 안쪽 끝은 살짝 둥글게 · 왼쪽을 볼 때도 위·아래가 화면 그대로 · 맞는 범위도 새 모양대로"],
+      en: ["Eclipse Sun: bolder slashes · the red part is twice as thick toward her body · the wavy edge pattern is gone, leaving a thin gold line · hit 1 bends high (short above, long below), hit 2 in the middle, hit 3 bends low (short below, long above) · hit 1 is slightly narrower · stabs 4 and 5 keep a sharp outer edge with a slightly rounded inner tip · up/down stays the same on screen when facing left · hit areas follow the new shapes"],
+      ja: ["エクリプス太陽：斬撃をより濃く · 赤を体側へ2倍太く · 縁の波模様をなくし細い黄色の線だけに · 1撃目は上で折れる（上短く・下長く）、2撃目は中央、3撃目は下で折れる（下短く・上長く）· 1撃目の左右幅を少し狭く · 4・5撃目の突きは外側は角張り、内側の先端は少し丸く · 左を向いても上下は画面どおり · 当たり範囲も新しい形どおり"],
+    },
+  },
+  {
     version: "0.49.20",
     date: "2026-11-05",
     items: {

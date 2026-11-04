@@ -1,4 +1,4 @@
-// 이클립스 그리기 도우미: 색 · 태양 검격(두꺼운 빨강 날 · 앞쪽 테두리 노랑 불꽃 무늬) · 일식 초승달 날(안쪽 검보라·바깥 분홍 보라 · 끝 하나 도끼날) · 블랙홀 · 연기
+// 이클립스 그리기 도우미: 색 · 태양 검격(두꺼운 빨강 날 · 앞쪽 테두리 얇은 노랑) · 일식 초승달 날(안쪽 검보라·바깥 분홍 보라 · 끝 하나 도끼날) · 블랙홀 · 연기
 // 일식 날은 두 색만 (겹겹이 싸지 않음)
 import type { PlayerState } from "@pixel-rogue/shared";
 import { ECLIPSE, sunCutPoints } from "@pixel-rogue/shared";
@@ -63,23 +63,32 @@ function bladePath(pts: readonly Pt[], peak: number, w: number, cx: number, cy: 
   return out;
 }
 
-/** 길 따라 두 줄(법선 방향 거리 a(q) · b(q)) 사이를 채움 */
-function strip(ctx: Ctx, path: readonly Sample[], a: (q: Sample) => number, b: (q: Sample) => number): void {
+/** 두 길 사이를 채움: pa 길에서 법선 방향 a(q)만큼 간 줄 → pb 길에서 b(q)만큼 간 줄(거꾸로) */
+function strip(ctx: Ctx, pa: readonly Sample[], a: (q: Sample) => number, b: (q: Sample) => number, pb: readonly Sample[] = pa): void {
   ctx.beginPath();
-  for (const q of path) ctx.lineTo(q.x + q.nx * a(q), q.y + q.ny * a(q));
-  for (let k = path.length - 1; k >= 0; k--) {
-    const q = path[k]!;
+  for (const q of pa) ctx.lineTo(q.x + q.nx * a(q), q.y + q.ny * a(q));
+  for (let k = pb.length - 1; k >= 0; k--) {
+    const q = pb[k]!;
     ctx.lineTo(q.x + q.nx * b(q), q.y + q.ny * b(q));
   }
   ctx.closePath();
   ctx.fill();
 }
 
-/** 태양 불꽃 혀: 앞쪽 테두리에 뾰족하게 솟는 불꽃 무늬 높이 (0~1, d: 길 위 거리 · ph: 일렁임) */
-function flame(d: number, ph: number): number {
-  const u = (d / 9 + ph) % 1;
-  const tri = 1 - Math.abs(u * 2 - 1);
-  return tri ** 2.2 * (0.65 + 0.35 * Math.sin(d * 0.37 + ph * 9));
+/** 꼭짓점(가운데 점)을 둥글게 깎은 길 [A, …둥근 곡선…, B]과 그 곡선 가운데 번호 (cut: 각 마디에서 깎는 비율) */
+function roundTip(pts: readonly Pt[], cut: number): [Pt[], number] {
+  const [A, V, B] = pts as [Pt, Pt, Pt];
+  const p1: Pt = [V[0] + (A[0] - V[0]) * cut, V[1] + (A[1] - V[1]) * cut];
+  const p2: Pt = [V[0] + (B[0] - V[0]) * cut, V[1] + (B[1] - V[1]) * cut];
+  const out: Pt[] = [A];
+  const n = 8;
+  for (let k = 0; k <= n; k++) {
+    const t = k / n;
+    const u = 1 - t;
+    out.push([u * u * p1[0] + 2 * u * t * V[0] + t * t * p2[0], u * u * p1[1] + 2 * u * t * V[1] + t * t * p2[1]]);
+  }
+  out.push(B);
+  return [out, 1 + n / 2];
 }
 
 /**
@@ -118,41 +127,43 @@ const SUN_BACK = 0.07;
 
 /**
  * 태양 검격 i(0~4): 몸 양옆에서 앞쪽 꼭짓점으로 모이는 '^' 날 (모양은 sim/eclipseCuts, 몸 쪽으로 당겨 그림)
- * 두꺼운 빨강 몸통(뒤쪽으로 더 두껍게) · 앞쪽 테두리에만 얇은 노랑 불꽃 무늬 · 붉은 빛 번짐
+ * 두꺼운 빨강 몸통(몸 쪽으로 훨씬 두껍게) · 앞쪽 테두리에만 얇은 노랑 줄 · 붉은 빛 번짐
+ * 4·5타(깊은 찌르기)는 바깥 테두리는 각지고 안쪽(몸 쪽)은 꼭짓점이 살짝 둥긂
  * grow(0~1): 한쪽 끝에서부터 그어 나간 만큼 · thin: 두께 배율 · al: 투명도 · spark: 불티 진행
  */
 export function rightSlash(ctx: Ctx, x: number, y: number, fx: number, fy: number, r: number, i: number, grow: number, thin: number, al: number, spark = 0): void {
   if (al <= 0 || grow <= 0 || thin <= 0) return;
   const pts = sunCutPoints(x - fx * r * SUN_BACK, y - fy * r * SUN_BACK, fx, fy, r * SUN_PULL, i);
+  const [soft, softPeak] = i >= 3 ? roundTip(pts, 0.22) : [pts as Pt[], 1];
   if (grow >= 1) {
-    ctx.fillStyle = alpha(S_RED, 0.22 * al * thin);
+    ctx.fillStyle = alpha(S_RED, 0.4 * al * thin);
     ctx.beginPath();
-    for (const q of pts) ctx.lineTo(q[0], q[1]);
+    for (const q of soft) ctx.lineTo(q[0], q[1]);
     ctx.closePath();
     ctx.fill();
   }
-  const w = Math.max(2, r * SUN_PULL * (i === 0 ? 0.24 : i >= 3 ? 0.14 : 0.19)) * thin;
+  const w = Math.max(2, r * SUN_PULL * (i === 0 ? 0.2 : i >= 3 ? 0.13 : 0.17)) * thin;
   const path = bladePath(pts, 1, w, x, y, grow);
-  if (path.length < 2) return;
-  const ph = (1 - thin) * 1.5 + i * 0.3;
+  const back = bladePath(soft, softPeak, w, x, y, grow);
+  if (path.length < 2 || back.length < 2) return;
   // 붉은 빛 번짐
   ctx.save();
   ctx.globalCompositeOperation = "lighter";
-  ctx.shadowColor = alpha(S_RED, 0.9 * al);
+  ctx.shadowColor = alpha(S_RED, al);
   ctx.shadowBlur = 12;
-  ctx.fillStyle = alpha(S_RED, 0.3 * al);
-  strip(ctx, path, (q) => -q.w * 0.8, (q) => q.w * 1.3);
+  ctx.fillStyle = alpha(S_RED, 0.45 * al);
+  strip(ctx, path, (q) => q.w * 1.25, (q) => -q.w * 1.6, back);
   ctx.restore();
-  // 빨강 몸통: 길 뒤쪽(몸 쪽)으로 더 두껍게
-  ctx.fillStyle = alpha(S_RED, 0.95 * al);
-  strip(ctx, path, (q) => -q.w * 0.65, (q) => q.w * 0.9);
-  ctx.fillStyle = alpha(S_DEEP, 0.85 * al);
-  strip(ctx, path, (q) => -q.w * 0.65, (q) => -q.w * 0.3);
-  // 앞쪽 테두리: 얇은 노랑 띠 + 일렁이는 불꽃 혀
+  // 빨강 몸통: 몸 쪽(안쪽)으로 두껍게 · 그 안쪽에 짙은 빨강
+  ctx.fillStyle = alpha(S_RED, al);
+  strip(ctx, path, (q) => q.w * 0.9, (q) => -q.w * 1.3, back);
+  ctx.fillStyle = alpha(S_DEEP, al);
+  strip(ctx, back, (q) => -q.w * 0.35, (q) => -q.w * 1.3);
+  // 앞쪽 테두리: 얇은 노랑 줄 (물결 없이 매끈하게)
   ctx.fillStyle = alpha(S_GOLD, al);
-  strip(ctx, path, (q) => q.w * 0.78, (q) => q.w * 0.95 + (q.w * 0.9 + 3) * flame(q.d, ph) * Math.min(1, q.w / 4) + 0.5);
-  ctx.fillStyle = alpha("#fff6c0", 0.9 * al);
-  strip(ctx, path, (q) => q.w * 0.84, (q) => q.w * 0.9 + 0.4);
+  strip(ctx, path, (q) => q.w * 0.78, (q) => q.w * 1.02 + 0.5);
+  ctx.fillStyle = alpha("#fff6c0", al);
+  strip(ctx, path, (q) => q.w * 0.84, (q) => q.w * 0.92 + 0.3);
   embers(ctx, pts, spark, S_GOLD, Math.round(r * 10 + i));
 }
 
