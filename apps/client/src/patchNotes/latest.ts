@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.383",
+    date: "2026-11-04",
+    items: {
+      ko: ["대장간: 새로 그린 드워프 대장장이가 모루에서 망치질 (들기 → 내려치기 → 불똥)"],
+      en: ["Forge: a newly drawn dwarf blacksmith hammers at the anvil (raise → strike → sparks)"],
+      ja: ["鍛冶場：新しく描いたドワーフの鍛冶屋が金床でハンマーを振るう（振り上げ → 打ち下ろし → 火花）"],
+    },
+  },
+  {
     version: "0.48.382",
     date: "2026-11-04",
     items: {

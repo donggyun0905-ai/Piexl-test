@@ -1,5 +1,5 @@
 // 대장간 그림 (sim/forge): 방 꾸밈(위쪽 벽 화덕·불꽃·굴뚝 불빛 · 연장 걸이 · 무기 걸이 · 숯 더미 · 물통 · 바닥 불빛 · 떠오르는 불티)
-// · 가운데 모루 + 그 옆 대장장이 (망치질 · 내려칠 때 불똥 · 달군 쇠막대). 대장장이 그림(sprites/blacksmith.png, 48×48 6장)을 넣으면 그것으로 그림
+// · 가운데 모루 + 그 옆 대장장이: 사용자 그림 sprites/blacksmith.png (64×64 6장, 원본 art/대장장이) · 못 불러오면 코드로 그린 대장장이·모루
 import { ROOM_WIDTH, type Pickup, type RunState } from "@pixel-rogue/shared";
 import { drawSprite } from "../sprites";
 import { additive, alpha, glow, rnd, sparks, type Ctx } from "./pwFxBits";
@@ -183,6 +183,13 @@ export function drawForgeAnvil(ctx: Ctx, s: RunState, pk: Pickup, near: boolean)
   ctx.beginPath();
   ctx.ellipse(x, y + 9, 16, 4, 0, 0, Math.PI * 2);
   ctx.fill();
+  // 사용자 그림 (모루까지 한 장, 64×64 6장: 서기 2 · 들기 · 내려치기 · 불똥 · 다시 들기) · 모루가 그림 오른쪽에 있어 왼쪽으로 옮겨 그림
+  const art = ph < HIT - 6 ? 2 : ph < HIT ? 3 : ph < HIT + 8 ? 4 : ph < HIT + 16 ? 5 : Math.floor(s.tick / 30) % 2;
+  if (drawSprite(ctx, "blacksmith", x - 11, y - 23, art)) {
+    if (ph >= HIT && ph < HIT + 8) additive(ctx, () => glow(ctx, x + 2, y - 8, 14, "#ff9a3a", 0.5 * (1 - (ph - HIT) / 8), 0.6));
+    nearRing(ctx, s, x, y, near);
+    return;
+  }
   // 모루: 받침 · 몸 · 뿔
   ctx.fillStyle = "#3a3a44";
   ctx.fillRect(x - 6, y + 2, 12, 7);
@@ -201,10 +208,14 @@ export function drawForgeAnvil(ctx: Ctx, s: RunState, pk: Pickup, near: boolean)
   ctx.fillRect(x - 5, y - 6, 10, 2);
   additive(ctx, () => glow(ctx, x, y - 6, 9, "#ff8a3a", 0.6 * hot, 0.5));
   // 대장장이 (모루 왼쪽, 오른쪽을 봄)
-  const frame = ph < HIT - 10 ? 2 : ph < HIT ? 3 : ph < HIT + 6 ? 4 : ph < HIT + 14 ? 5 : Math.floor(s.tick / 30) % 2;
-  if (!drawSprite(ctx, "blacksmith", x - 20, y - 12, frame)) smith(ctx, x - 20, y, ph);
+  smith(ctx, x - 20, y, ph);
   // 내려칠 때 불똥
   if (ph >= HIT && ph < HIT + 14) additive(ctx, () => sparks(ctx, x, y - 6, 10, 18, (ph - HIT) / 14, "#ffc060", s.tick - ph));
+  nearRing(ctx, s, x, y, near);
+}
+
+/** 가까이 서면 발밑 고리 */
+function nearRing(ctx: Ctx, s: RunState, x: number, y: number, near: boolean): void {
   if (near) {
     ctx.strokeStyle = alpha("#ffb060", 0.6 + 0.3 * Math.sin(s.tick / 8));
     ctx.lineWidth = 1;
