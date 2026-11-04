@@ -41,6 +41,7 @@ import { trackerGuard, trackerTaken } from "./tracker";
 import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, keepInRoom, markCrit, normalize, roomGrid, RUSH_TICKS, STILL_TICKS } from "./util";
 import { raiseShield } from "./imugiMods";
 import { devilMul } from "./devilPerks";
+import { setDmgMul } from "./buildSets";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -82,8 +83,8 @@ export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: numbe
   dmg = roll.dmg;
   if (roll.crit) markCrit(s, e);
   // 풍뎅이 부적(베두인) · 악마의 거래 (sim/devilPerks)
-  dmg *= devilMul(s, e);
-  // 탐식(악의 사도)·예리함: 방어력이 깎인 적은 더 아픔 · 각주(서기관): 기록이 새겨진 적은 더 아픔
+  dmg *= devilMul(s, e) * setDmgMul(s, e);
+  // 탐식(악의 사도)·예리함·각주(서기관): 방어가 깎이거나 기록이 새겨진 적은 더 아픔
   dmg *= (1 + (e.apDef ?? 0) + inkTaken(s.player, e) + sharpBonus(s, e)) * trackerTaken(e);
   let hurt = (e.melt ? dmg * (1 + R.MELT_ADD * e.melt) : dmg) * roleDmgMul(s, e); // 패왕전 역할 상성
   // 흰 보호막(거대 전갈): 체력보다 먼저 깎임
@@ -134,7 +135,7 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
     taken *= 0.5;
     p.guardTaken = (p.guardTaken ?? 0) + taken;
   }
-  // 모래 장막(베두인): 차크람이 손에 없으면 · 철벽진(장수): 콤보 사이 쉴 때 받는 피해 감소
+  // 모래 장막(베두인)·철벽진(장수): 받는 피해 감소
   if (hasPerk(p, "sandVeil") && p.ckHeld === false) taken *= PERKS.sandVeil.taken;
   if (hasPerk(p, "ironWall") && (p.gPause ?? 0) > 0) taken *= PERKS.ironWall.taken;
   // 용린갑(이무기)

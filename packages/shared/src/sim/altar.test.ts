@@ -80,7 +80,7 @@ describe("제단의 방", () => {
     const id = altarOf(s);
     menu(s, menuCode(ALTAR_OP, 1));
     expect(s.player.passives).toHaveLength(2);
-    expect(s.player.augments).toEqual([{ passive: expect.any(String), skills: [...ALTARS[id].skills] }]);
+    expect(s.player.augments).toEqual([{ passive: expect.any(String), skills: [...ALTARS[id].skills], alt: id }]);
     s.enemies = [{ ...enemy(1, s.player.x + 30, s.player.y, 99999), rootTicks: 99999 }];
     // 가만히 있으면 증강 기술이 나가지 않음 · 공격하는 동안만
     for (let i = 0; i < 400; i++) stepSim(s, EMPTY_INPUT);

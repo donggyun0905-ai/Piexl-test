@@ -18,6 +18,7 @@ import { tabooDown, tabooN } from "./taboo";
 import { ONI } from "../weaponsOni";
 import { xpOnly } from "./morphXp";
 import { goldLocked, oniWeaponOk } from "./oniRules";
+import { setRoomClear } from "./buildSetFx";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -184,6 +185,8 @@ export function onRoomCleared(s: RunState, roomId: number): void {
   const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "clear", ...seatSalt(s)));
   // 재생 부적: 전투방·보스방을 정리하면 체력 회복
   if ((type === "combat" || type === "elite" || type === "exit") && hasPerk(s.player, "regenCharm")) healPlayer(s, s.player.stats.maxHp * PERKS.regenCharm.heal);
+  // 빌드 세트 빛 4 (sim/buildSetFx)
+  if (type === "combat" || type === "elite" || type === "exit") setRoomClear(s);
   // 전투식량(거너): 전투가 끝나면 최대 체력의 10% 회복
   if ((type === "combat" || type === "elite" || type === "exit") && hasPerk(s.player, "ration")) healPlayer(s, s.player.stats.maxHp * 0.1);
   // 레이드 아레나: 보스를 잡아도 보상 없음 (레벨마다 보상 방에서)

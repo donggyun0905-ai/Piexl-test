@@ -69,7 +69,7 @@ export function stationMenu(s: RunState, code: number): void {
   // 시련의 방 (sim/trial): 비석 대답 · 보상 상자 고르기
   if (op === TRIAL_OP.answer || op === TRIAL_OP.chest) return trialMenu(s, op, a);
   // 제단의 방 (sim/altar): 카드 고르기
-  if (op === ALTAR_OP) return altarMenu(s, a);
+  if (op === ALTAR_OP) return altarMenu(s, a, b);
   // 미리 정한 길로 가기 (sim/routeGo)
   if (op === ROUTE_OP) return routeMenu(s, a);
   // 비밀의 방: 야바위 · 경매

@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.378",
+    date: "2026-11-04",
+    items: {
+      ko: [
+        "빌드 세트 효과: 모든 패시브에 꼬리표 15종(불·얼음·번개·독·빛·어둠·죽음·대지·물 / 날카로움·단단함·바람·행운·소환·피) 중 하나가 붙고, 같은 꼬리표를 2·4·6개 모으면 세트 효과가 생김 (예: 불 4개 — 화상 걸린 적이 쓰러지면 폭발, 단단함 6개 — 맞으면 보호막)",
+        "제단의 방: 증강을 받으면 그 성좌의 꼬리표 둘이 세트에 하나씩 더해짐 (바다: 물·얼음 · 화산: 대지·불 · 하늘: 번개·단단함 · 바람: 날카로움·바람 · 빛과 어둠: 빛·어둠 · 그린우드: 독·소환 · 일곱 갈래의 마녀: 죽음·피 · 알 수 없는 성좌: 행운 + 고르는 꼬리표)",
+        "패왕전·광야의 새벽에서는 세트 효과가 없음 · 꼬리표·세트 단계 표시는 다음 업데이트에서",
+      ],
+      en: [
+        "Build set bonuses: every passive now carries one of 15 tags (Fire, Ice, Lightning, Poison, Light, Dark, Death, Earth, Water / Sharp, Sturdy, Wind, Luck, Summon, Blood); collect 2, 4 or 6 of the same tag for set bonuses (e.g. Fire 4: burning foes explode when they fall, Sturdy 6: gain a shield when hit)",
+        "Altar room: taking an augment adds that constellation's two tags to your sets (Sea: Water·Ice · Volcano: Earth·Fire · Sky: Lightning·Sturdy · Wind: Sharp·Wind · Light and Dark: Light·Dark · Greenwood: Poison·Summon · Seven-Branched Witch: Death·Blood · Unknown: Luck + a tag you choose)",
+        "No set bonuses in Champion Clash or Dawn of the Wilds · tag and set tier display comes in the next update",
+      ],
+      ja: [
+        "ビルドのセット効果：すべてのパッシブに15種のタグ（火・氷・雷・毒・光・闇・死・大地・水／鋭さ・頑丈・風・幸運・召喚・血）のどれかが付き、同じタグを2・4・6個集めるとセット効果（例：火4個―燃えている敵が倒れると爆発、頑丈6個―被弾でシールド）",
+        "祭壇の部屋：増強を受けるとその星座のタグ2つがセットに1つずつ加算（海：水・氷・火山：大地・火・空：雷・頑丈・風：鋭さ・風・光と闇：光・闇・グリーンウッド：毒・召喚・七つ枝の魔女：死・血・知られざる星座：幸運＋選ぶタグ）",
+        "覇王戦・荒野の夜明けではセット効果なし・タグとセット段階の表示は次のアップデートで",
+      ],
+    },
+  },
+  {
     version: "0.48.377",
     date: "2026-11-04",
     items: {

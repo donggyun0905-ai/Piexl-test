@@ -6,6 +6,7 @@ import { dotCrit } from "./novice";
 import { devilMul } from "./devilPerks";
 import type { DotKind, EnemyState, RunState } from "./types";
 import { hasPerk, markDot } from "./util";
+import { setBurnMul, setPoisonMul } from "./buildSets";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -37,7 +38,7 @@ export function tickDots(s: RunState): void {
     for (const e of s.enemies) {
       for (const [kind, ticks, dmg] of [["burn", e.burnTicks, e.burnDmg], ["poison", e.poisonTicks, e.poisonDmg]] as const) {
         if (e.hp <= 0 || (ticks ?? 0) <= 0 || e.immune) continue;
-        const d = dotCrit(s, e, (dmg ?? 0) * mul) * devilMul(s, e);
+        const d = dotCrit(s, e, (dmg ?? 0) * mul * (kind === "burn" ? setBurnMul(s.player) : setPoisonMul(s.player))) * devilMul(s, e);
         e.hp -= d;
         e.hitFlash = 3;
         markDot(s, e, kind, d);
