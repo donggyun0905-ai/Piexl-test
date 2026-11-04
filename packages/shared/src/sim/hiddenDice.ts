@@ -10,6 +10,7 @@ import { spawnEnemies, warpRoom } from "./rooms";
 import { EMPTY_HANDS } from "./shop";
 import type { RunState } from "./types";
 import { addEffect, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { splicePassives } from "./retag";
 
 /** 고르는 창 기능 번호 (menu 입력) */
 export const PICK_OP = { curse: 7, terra: 8 } as const;
@@ -36,7 +37,7 @@ export function fateDice(s: RunState): void {
   const rng = rngOf(s, "fateDice");
   const n = rng.int(1, 6);
   addEffect(s, { kind: "hdDice", x: p.x, y: p.y - 22, dirX: 0, dirY: 0, size: n, maxTicks: 70 });
-  if (n === 1 && p.passives.length) p.passives.splice(rng.int(0, p.passives.length - 1), 1);
+  if (n === 1 && p.passives.length) splicePassives(p, rng.int(0, p.passives.length - 1), 1);
   if (n === 2) {
     const pool = weaponPool(s);
     if (pool.length) equipWeapon(s, rng.pick(pool));
@@ -72,7 +73,10 @@ function cursedDice(s: RunState, pick: number): void {
     addEffect(s, { kind: "hdText", x: p.x, y: p.y, dirX: 0, dirY: 0, size: which, maxTicks: 180 });
     if (which === 0) summon(s, rng);
     if (which === 1) p.curseHp = K.curseWin.curseHp;
-    if (which === 2) p.passives = [];
+    if (which === 2) {
+      p.passives = [];
+      delete p.retag;
+    }
     if (which === 3) {
       equipWeapon(s, EMPTY_HANDS);
       summon(s, rng, true);

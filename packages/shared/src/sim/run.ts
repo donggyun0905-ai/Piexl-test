@@ -42,6 +42,7 @@ import { vaultTick } from "./vault";
 import { trialTick } from "./trialRun";
 import { hiddenTick } from "./hiddenTrial";
 import { trialRevive } from "./trialRewards";
+import { splicePassives } from "./retag";
 
 // ───────── 시작 ─────────
 
@@ -206,7 +207,7 @@ export function checkDeath(s: RunState): boolean {
   const dying = p.hp <= 0;
   if (p.hp <= 0 && !s.sudden && hasPerk(p, "secondWind")) {
     // 두 번째 숨: 한 번 되살아나고 아이템은 사라짐
-    p.passives.splice(p.passives.indexOf("secondWind"), 1);
+    splicePassives(p, p.passives.indexOf("secondWind"), 1);
     recalcStats(s);
     p.hp = Math.ceil(p.stats.maxHp * PERKS.secondWind.hp);
     p.invulnTicks = 120;

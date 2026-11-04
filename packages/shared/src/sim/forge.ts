@@ -13,6 +13,7 @@ import { stationPay } from "./station";
 import { EMPTY_HANDS } from "./shop";
 import type { PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
+import { setRetag } from "./retag";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -51,7 +52,7 @@ export interface ForgeMark {
 export interface ForgePlayerState {
   /** 무기 id → 강화·암흑 강화·꼬리표 */
   forge?: Record<string, ForgeMark>;
-  /** 꼬리표를 바꾼 패시브 (패시브 id → 꼬리표) */
+  /** 꼬리표를 바꾼 패시브 ("패시브 id#같은 패시브 중 차례" → 꼬리표, sim/retag) */
   retag?: Record<string, ItemTag>;
   /** 무료 변환을 쓴 대장간 (층 × 1000 + 방) · 돈을 낸 변환 수 */
   forgeFree?: number[];
@@ -125,7 +126,7 @@ export function forgeMenu(s: RunState, op: number, a: number, b: number): void {
     if (cost === 0) (p.forgeFree ??= []).push(roomKey(s));
     else p.forgePaid = (p.forgePaid ?? 0) + 1;
     if (a === 0) m.tag = tag;
-    else (p.retag ??= {})[p.passives[a - 1]!] = tag!;
+    else setRetag(p, a - 1, tag!);
     result(s, op, 1, a === 0 ? w : p.passives[a - 1]!);
   }
   if (!Object.keys(m).length) delete p.forge[w];

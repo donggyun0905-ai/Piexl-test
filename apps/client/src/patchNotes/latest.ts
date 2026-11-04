@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.13",
+    date: "2026-11-04",
+    items: {
+      ko: ["대장간 꼬리표 변환: 같은 패시브를 여러 개 가졌을 때 하나를 바꾸면 전부 바뀌던 것을 고침 · 이제 하나하나 따로 바뀜 (숫돌 3개면 3개 저마다 다른 꼬리표) · 패시브를 팔거나 잃어도 남은 것의 꼬리표는 그대로 · 아이템 설명에 바뀐 꼬리표가 모두 보임"],
+      en: ["Forge tag reforge: changing one copy of a stacked passive no longer changes every copy · each copy now keeps its own tag (3 whetstones can have 3 different tags) · selling or losing a copy keeps the others' tags · the item tooltip shows every tag"],
+      ja: ["鍛冶屋のタグ変換：同じパッシブを複数持つ時、1つ変えると全部変わっていたのを修正 · 1つずつ別々に変わるように（砥石3個ならそれぞれ別のタグ）· 売ったり失っても残りのタグはそのまま · アイテム説明に変えたタグがすべて表示"],
+    },
+  },
+  {
     version: "0.49.12",
     date: "2026-11-04",
     items: {

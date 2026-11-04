@@ -12,6 +12,7 @@ import { addPickup, CX, passivePool, pickDistinct } from "./loot";
 import { runSkill, type SwarmSkill } from "./swarmEvo";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, ROOM_MIN_Y } from "./util";
+import { splicePassives } from "./retag";
 
 /** 입력 menu 기능 번호: 카드 고르기 (a = 0 거래 · 1 증강 · 2 무시) */
 export const ALTAR_OP = 13;
@@ -68,7 +69,7 @@ function takePassives(p: PlayerState, rng: Rng, n: number, keep?: PassiveId): Pa
     const can = p.passives.map((id, k) => [id, k] as const).filter(([id]) => id !== keep && !augmented(p, id));
     if (can.length === 0) break;
     const [, k] = can[rng.int(0, can.length - 1)]!;
-    out.push(...p.passives.splice(k, 1));
+    out.push(...splicePassives(p, k, 1));
   }
   return out;
 }
