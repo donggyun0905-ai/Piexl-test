@@ -54,4 +54,7 @@ export const TUTORIAL_TEXT = {
     en: "That's it! Climb the floors, collect items and defeat the floor 6 boss to clear.",
     ja: "以上です！階を登ってアイテムを集め、6階のボスを倒せばクリアです。",
   },
+  // 노선도로 정한 길 (game/routePlan)
+  routeGoing: { ko: "이동합니다", en: "Moving on", ja: "移動します" },
+  routeAsk: { ko: "다음 방으로 이동할까요?", en: "Move to the next room?", ja: "次の部屋へ移動しますか？" },
 } satisfies Record<string, Record<Lang, string>>;

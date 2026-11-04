@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createRun, EMPTY_INPUT, stepSim } from "@pixel-rogue/shared";
-import { autoRoute, canPlan, pickRoute, routePlan, setRouteMapOpen } from "./routePlan";
+import { autoRoute, canPlan, pickRoute, routeAsk, routePlan, setRouteMapOpen } from "./routePlan";
 
 describe("미리 정한 길", () => {
   it("지금 방·길 끝 방에서 이어진 방만 고를 수 있고, 다시 누르면 거기부터 지움", () => {
@@ -18,7 +18,7 @@ describe("미리 정한 길", () => {
     expect(routePlan(s)).toEqual([]);
   });
 
-  it("지도를 보는 동안은 안 감 · 닫으면 이동 요청 → 귀환 빛기둥 뒤 다음 방", () => {
+  it("정리된 방에서는 저절로 안 가고, F를 눌러야 귀환 빛기둥 뒤 다음 방 · 지도를 보는 동안·싸우는 동안은 안내 없음", () => {
     const s = createRun(5, "warden");
     const fight = s.map.rooms.find((r) => r.type === "combat" && r.exits.some((n) => n >= 0))!;
     const to = fight.exits.find((n) => n >= 0)!;
@@ -26,12 +26,14 @@ describe("미리 정한 길", () => {
     s.rooms[fight.id] = { visited: true, cleared: true, pickups: [], enemies: [] };
     s.enemies = [];
     pickRoute(s, to);
-    setRouteMapOpen(s, true);
     for (let i = 0; i < 200; i++) stepSim(s, autoRoute(s, EMPTY_INPUT));
     expect(s.roomId).toBe(fight.id);
     expect(s.player.routeGo).toBeUndefined();
+    expect(routeAsk(s)).toBe(true);
+    setRouteMapOpen(s, true);
+    expect(routeAsk(s)).toBe(false);
     setRouteMapOpen(s, false);
-    stepSim(s, autoRoute(s, EMPTY_INPUT));
+    stepSim(s, autoRoute(s, { ...EMPTY_INPUT, interact: true }));
     expect(s.player.routeGo).toBeDefined();
     for (let i = 0; i < 200 && s.roomId === fight.id; i++) stepSim(s, autoRoute(s, EMPTY_INPUT));
     expect(s.roomId).toBe(to);

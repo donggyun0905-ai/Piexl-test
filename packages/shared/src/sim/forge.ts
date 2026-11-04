@@ -1,9 +1,8 @@
 // 대장간 (2층부터 층마다 확률로 하나, 특별한 방 sim/specialRooms): 가운데 모루 옆 대장장이 앞에서 F → 창 (누른 것은 입력 menu, sim/station)
 // ① 무기 강화: 성공 확률 100% → 단계마다 10%씩 낮아져 최저 20% · 실패하면 단계 -1 · 단계마다 무기 피해 +
 // ② 꼬리표 변환: 가진 무기·패시브 하나를 원하는 꼬리표로 (대장간마다 처음 1번 무료, 그다음은 점점 비쌈) · 무기는 원래 꼬리표가 없고 변환하면 생김
-// ③ 암흑 강화 (무기만): 50% · 성공하면 암흑 단계 +1 (일반 강화 2단계만큼) · 실패하면 무기 파괴 (처음 무기로)
+// ③ 암흑 강화 (무기만): 50% · 성공하면 암흑 단계 +1 (일반 강화 2단계만큼) · 실패하면 무기 파괴 (맨손이 됨)
 // 강화·암흑 강화·꼬리표는 그 무기에만 남음 (무기 id마다 기록: 바꿨다가 다시 들면 그대로)
-import { CHARACTERS } from "../characters";
 import { ITEM_TAGS, type ItemTag } from "../itemsTags";
 import { createRng, deriveSeed } from "../rng";
 import type { StatMod } from "../stats";
@@ -11,6 +10,7 @@ import { depth } from "./hero";
 import { equipWeapon, recalcStats } from "./items";
 import { addPickup, CX, CY } from "./loot";
 import { stationPay } from "./station";
+import { EMPTY_HANDS } from "./shop";
 import type { PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
 
@@ -116,9 +116,9 @@ export function forgeMenu(s: RunState, op: number, a: number, b: number): void {
       m.dark = (m.dark ?? 0) + 1;
       result(s, op, 1, w);
     } else {
-      // 파괴: 그 무기 기록을 지우고 처음 무기로
+      // 파괴: 그 무기 기록을 지우고 맨손 (휴지통에 버린 것과 같음)
       delete p.forge[w];
-      equipWeapon(s, CHARACTERS[p.characterId].startWeapon);
+      equipWeapon(s, EMPTY_HANDS);
       result(s, op, 2, w);
     }
   } else {
