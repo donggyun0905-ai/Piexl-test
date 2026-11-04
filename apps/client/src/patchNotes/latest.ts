@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.8",
+    date: "2026-11-04",
+    items: {
+      ko: ["빌드 세트 설명: 브라우저 기본 툴팁 대신 패시브 설명과 같은 말풍선으로 뜸 (꼬리표 칩 · 단계마다 필요한 수와 효과 · 켜진 단계는 꼬리표 색 · 지금 수와 다음 단계까지) · 모바일은 눌러서 열고 닫음"],
+      en: ["Build set details: now shown in the same tooltip as passives instead of the browser's plain tooltip (tag chip · count and effect per tier · active tiers in the tag color · current count and how many to the next tier) · tap to open/close on mobile"],
+      ja: ["ビルドセットの説明：ブラウザ標準のツールチップではなくパッシブ説明と同じ吹き出しで表示（タグチップ・段階ごとの必要数と効果・達成した段階はタグの色・今の数と次の段階まで）・モバイルはタップで開閉"],
+    },
+  },
+  {
     version: "0.49.7",
     date: "2026-11-04",
     items: {
