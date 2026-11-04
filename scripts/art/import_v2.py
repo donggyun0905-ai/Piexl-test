@@ -6,7 +6,7 @@ import os
 import sys
 from collections import deque
 
-from PIL import Image
+from PIL import Image, ImageEnhance
 
 from import_sheet import CELL, FOOT, HERE, finish, shrink
 from s2_common import SPRITES
@@ -58,6 +58,8 @@ ATTACK_LR = {
 BACK_ATTACK_STAND = {"mystic"}
 # 대시 오른쪽 칸이 왼쪽을 보는 캐릭터: 그 칸을 뒤집어 오른쪽으로, 원래 그림은 왼쪽으로 (사용자 확인)
 DASH_FLIP = {"morph-bear"}
+# 옅은 색이 많아 작게 줄이면 흐린 캐릭터: 시트 전체 대비·채도를 더 올림 (배율)
+CRISP = {"eclipse": 1.3, "eclipseNight": 1.25}
 # 다 맞춘 뒤에도 왼·오가 반대인 줄: 그 줄의 왼쪽·오른쪽 칸을 서로 바꿈 (1 공격 · 2 걷기 왼발 · 3 걷기 오른발, 오른쪽 그림 확인 2026-10-31)
 ROW_SWAP = {"morph-snake": (1, 3), "morph-bat": (1, 3), "morph-boar-evo": (3,), "morph-snake-evo": (3,), "morph-wolf-evo": (1,), **{n: (4,) for n in ("pungryu", "collector", "samyeol", "silk", "voyager", "forgotten", "remnant", "tracker", "punk", "miner",
                                        "rider", "mukin", "wanderer", "bomber", "artifacter", "automata", "eater", "zeus", "slayer", "slayer_rage")}}
@@ -257,6 +259,11 @@ def build(name):
         if name in CROP_WIDE: p = crop_wide(p, (CELL - 2) / min(base, (FOOT - 1) / p.height))
         p = shrink(p, min(base, (CELL - 2) / p.width, (FOOT - 1) / p.height))
         sheet.alpha_composite(p, (c * CELL + (CELL - p.width) // 2, r * CELL + FOOT - p.height))
+    if name in CRISP:
+        a = sheet.getchannel("A")
+        rgb = ImageEnhance.Color(ImageEnhance.Contrast(sheet.convert("RGB")).enhance(CRISP[name])).enhance(CRISP[name])
+        sheet = rgb.convert("RGBA")
+        sheet.putalpha(a)
     # 스킨처럼 쓰는 그림(이름에 _ : 각성 오니 oni_god 등)은 skins 폴더에
     out = os.path.join(SPRITES, "skins", f"{name}.png") if "_" in name else os.path.join(SPRITES, f"{name}.png")
     finish(sheet).save(out, optimize=True)

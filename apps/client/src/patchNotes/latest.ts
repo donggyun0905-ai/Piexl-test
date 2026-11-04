@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.28",
+    date: "2026-11-05",
+    items: {
+      ko: ["이클립스: 태양·일식 두 모습 그림을 새로 (선이 또렷하고 몸이 더 잘 보이게, 색 대비도 진하게)"],
+      en: ["Eclipse: new sprites for both Sun and Eclipse forms (cleaner lines, more readable body, stronger contrast)"],
+      ja: ["エクリプス：太陽・日食の両方の姿の絵を新しく（線がくっきり、体が見やすく、色のコントラストも強く）"],
+    },
+  },
+  {
     version: "0.49.27",
     date: "2026-11-05",
     items: {
