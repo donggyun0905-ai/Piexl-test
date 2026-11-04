@@ -3,6 +3,7 @@ import { PASSIVES, type PassiveDef, type PassiveId, type UseItemId } from "../it
 import { SHOP_PRICES } from "../perks";
 import { createRng, deriveSeed } from "../rng";
 import { addPickup, CX, CY, passivePool, seatSalt, usePool, weaponPool, weaponSlot } from "./loot";
+import { pickPassive } from "./buildBias";
 import type { WeaponId } from "../content";
 import { addGold } from "./combat";
 import { equipWeapon, recalcStats } from "./items";
@@ -45,7 +46,7 @@ export function spawnShop(s: RunState, roomId: number): void {
   if (spawnStation(s, roomId)) return;
   const rng = createRng(deriveSeed(s.seed, "floor", s.floor, "room", roomId, "shop", ...seatSalt(s)));
   const use = rng.pick(usePool(s, true));
-  addPickup(s, roomId, "passive", rng.pick(passivePool(s)), CX + SHOP_X.passive, shopY(), 0, shopPrice(s, PRICE.passive));
+  addPickup(s, roomId, "passive", pickPassive(s, rng, passivePool(s)), CX + SHOP_X.passive, shopY(), 0, shopPrice(s, PRICE.passive));
   const w = weaponSlot(s, rng);
   if (!shelfGone(s, "weapon")) addPickup(s, roomId, w.kind, w.id, CX + SHOP_X.weapon, shopY(), 0, shopPrice(s, PRICE[w.kind]));
   if (!shelfGone(s, "use")) addPickup(s, roomId, "use", use, CX + SHOP_X.use, shopY(), 0, shopPrice(s, useBase(use)));
@@ -123,7 +124,8 @@ export function rerollShop(s: RunState, reroll: Pickup): void {
     // 산 물건·내려놓은 물건은 가격이 0이라 그대로 둠
     if (pk.price <= 0 || pk.y !== shopY() || pk.x === CX + SHOP_X.potion) continue;
     if (pk.kind === "passive") {
-      pk.itemId = pickNew(passivePool(s), pk.itemId);
+      const others = passivePool(s).filter((id) => id !== pk.itemId);
+      pk.itemId = pickPassive(s, rng, others.length > 0 ? others : passivePool(s));
       pk.price = shopPrice(s, PRICE.passive);
     } else if (pk.kind === "weapon") {
       pk.itemId = pickNew(weaponPool(s), pk.itemId);
@@ -139,7 +141,7 @@ export function rerollShop(s: RunState, reroll: Pickup): void {
   if (s.floor === lastFloorOf(s) && !devilPact(s)) {
     const room = s.rooms[s.roomId]!;
     const empty = (dx: number) => !room.pickups.some((pk) => pk.price > 0 && pk.y === shopY() && pk.x === CX + dx);
-    if (empty(SHOP_X.passive)) addPickup(s, s.roomId, "passive", rng.pick(passivePool(s)), CX + SHOP_X.passive, shopY(), 0, shopPrice(s, PRICE.passive));
+    if (empty(SHOP_X.passive)) addPickup(s, s.roomId, "passive", pickPassive(s, rng, passivePool(s)), CX + SHOP_X.passive, shopY(), 0, shopPrice(s, PRICE.passive));
     if (empty(SHOP_X.weapon) && !shelfGone(s, "weapon")) {
       const w = weaponSlot(s, rng);
       addPickup(s, s.roomId, w.kind, w.id, CX + SHOP_X.weapon, shopY(), 0, shopPrice(s, PRICE[w.kind]));

@@ -19,6 +19,7 @@ import { ONI } from "../weaponsOni";
 import { xpOnly } from "./morphXp";
 import { goldLocked, oniWeaponOk } from "./oniRules";
 import { setRoomClear } from "./buildSetFx";
+import { pickPassives } from "./buildBias";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -205,7 +206,7 @@ export function onRoomCleared(s: RunState, roomId: number): void {
     addEffect(s, { kind: "coinGet", x: CX, y: CY + 18, dirX: 0, dirY: 0, size: s.goldEarned - before, maxTicks: 40 });
   } else if (type === "exit") {
     // 금기: 좁은 선택 (고를 수 있는 패시브가 줄어듦)
-    const choices = pickDistinct(rng, passivePool(s), 3).slice(0, Math.max(1, 3 - tabooN(s, "fewChoices")));
+    const choices = pickPassives(s, rng, passivePool(s), 3).slice(0, Math.max(1, 3 - tabooN(s, "fewChoices")));
     choices.forEach((id, i) => addPickup(s, roomId, "passive", id, CX - 14 * (choices.length - 1) + i * 28, CY - 34, s.floor));
   }
 }

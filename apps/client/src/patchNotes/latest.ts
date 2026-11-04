@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.48.379",
+    date: "2026-11-04",
+    items: {
+      ko: ["보상 편향: 가장 많이 모은 꼬리표의 패시브가 층 보상·상점·여신의 선물에 더 잘 나옴 (가진 수 1개마다 ×1.25, 최대 ×2.5) · 셋 중 한 칸은 늘 다른 꼬리표"],
+      en: ["Reward bias: passives of your most-collected tag show up more in floor rewards, shops and the Goddess's Gift (×1.25 per tag owned, up to ×2.5) · one of three choices is always a different tag"],
+      ja: ["報酬の偏り：一番多く集めたタグのパッシブがフロア報酬・ショップ・女神の贈り物に出やすい（所持1個ごとに×1.25、最大×2.5）・3つのうち1つは必ず別のタグ"],
+    },
+  },
+  {
     version: "0.48.378",
     date: "2026-11-04",
     items: {

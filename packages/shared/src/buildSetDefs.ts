@@ -51,3 +51,6 @@ export const ALTAR_TAGS: Record<AltarId, readonly ItemTag[]> = {
   witch: ["death", "blood"],
   unknown: ["luck"],
 };
+
+/** 보상 편향: 가장 많이 가진 꼬리표 패시브가 더 잘 나옴 (가진 수 1개마다 배율 +per, 최대 max) · 셋 이상 고르는 보상은 한 칸을 늘 다른 꼬리표로 */
+export const SET_BIAS = { per: 0.25, max: 2.5 };

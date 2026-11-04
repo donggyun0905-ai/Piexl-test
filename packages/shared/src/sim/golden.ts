@@ -2,6 +2,7 @@
 import { PASSIVES, type PassiveDef } from "../items";
 import { createRng, deriveSeed } from "../rng";
 import { addPickup, CX, CY, goldClubBonus, passivePool, seatSalt, usePool } from "./loot";
+import { biasOf, pickPassive } from "./buildBias";
 import type { RunState } from "./types";
 
 /** 고르는 아이템 묶음 번호 · 고를 수 있는 수 */
@@ -23,7 +24,7 @@ export function spawnGolden(s: RunState, roomId: number): void {
     // 얻을 수 있는 종류가 9개보다 적으면 (해금이 적거나 풋내기·변희) 겹쳐 가질 수 있는 것으로 다시 채워 늘 9칸
     if (!pool.length) pool = all.filter((x) => !(PASSIVES[x] as PassiveDef).effect);
     if (!pool.length) pool = all;
-    const id = pool[rng.int(0, pool.length - 1)]!;
+    const id = biasOf(s) ? pickPassive(s, rng, pool) : pool[rng.int(0, pool.length - 1)]!;
     pool = pool.filter((x) => x !== id);
     addPickup(s, roomId, "passive", id, at[0], at[1], GOLDEN_GROUP);
   }
