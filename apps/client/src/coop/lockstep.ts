@@ -3,6 +3,7 @@
 // 그 뒤 지금 시각까지는 아직 안 온 남의 입력을 "마지막 입력 그대로"로 짐작해 미리 계산해서 보여 줌 (내 조작은 바로 반응).
 // 실제 입력이 오면 확정에서 다시 계산하므로 짐작이 틀려도 결과는 모두 같음. 방장이 입력을 확정해 나눠 줌 (hostSync · guestSync)
 import { applyRoom, EMPTY_INPUT, stepParty, useSeat, allPlayers, type CharacterId, type PwArenaId, type PwDraft, type PwLoadout, type PwMode, type RunState, type TickInput } from "@pixel-rogue/shared";
+import { watchingSeat } from "../game/camera";
 
 /** 직접 연결로 주고받는 메시지 */
 export type CoopMsg =
@@ -98,5 +99,6 @@ export function showPredicted(display: RunState, confirmed: RunState, upTo: numb
   for (let t = s.tick + 1; t <= upTo && !s.over; t++) stepParty(s, inputsAt(t));
   // 짐작으로 끝난 판은 확정될 때까지 끝내지 않음 (게임 화면이 멈추지 않게)
   if (s.over && !confirmed.over) s.over = false;
-  replaceRun(display, s, s.seat ?? 0);
+  // 관전 중이면 그 사람 자리를 꺼내 놓음 (화면·체력·장비·빌드가 모두 그 사람 것)
+  replaceRun(display, s, watchingSeat() ?? s.seat ?? 0);
 }

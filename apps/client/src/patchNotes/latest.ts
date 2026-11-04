@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.15",
+    date: "2026-11-04",
+    items: {
+      ko: [
+        "협동: 빌드 세트·버프 칸이 갱신되지 않아 비어 보이던 것을 고침 (세트 효과는 원래대로 적용) · 동료 체력 칸을 왼쪽 아래로 옮겨 능력치·빌드 칸을 가리지 않게",
+        "협동: 쓰러진 동안 살아 있는 동료의 화면을 그대로 관전 (그 사람을 따라가는 화면·체력·장비·빌드 세트·능력치) · 누르면 다음 동료",
+      ],
+      en: [
+        "Co-op: the build set and buff panels no longer stay empty (set effects were already applied) · the party health list moved to the lower left so it no longer covers the stats and build panels",
+        "Co-op: while you are down you now watch a living teammate's screen (camera, health, loadout, build sets and stats) · tap for the next teammate",
+      ],
+      ja: [
+        "協力：ビルドセット・バフ欄が更新されず空に見えていたのを修正（セット効果はもともと適用）· 仲間の体力欄を左下に移し、能力値・ビルド欄を隠さないように",
+        "協力：倒れている間は生きている仲間の画面をそのまま観戦（その人を追う画面・体力・装備・ビルドセット・能力値）· 押すと次の仲間",
+      ],
+    },
+  },
+  {
     version: "0.49.14",
     date: "2026-11-04",
     items: {

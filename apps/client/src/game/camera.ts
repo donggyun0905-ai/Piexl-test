@@ -7,6 +7,8 @@ let watchSeat: number | undefined;
 export function setWatchSeat(i?: number): void {
   watchSeat = i;
 }
+/** 지금 관전 중인 자리 (협동·패왕전 화면이 그 자리를 꺼내 놓고 보여 줌, coop/lockstep) */
+export const watchingSeat = (): number | undefined => watchSeat;
 
 /** 보이는 영역의 왼쪽 위 (플레이어를 따라가되 방 밖은 보이지 않게). 보이는 크기는 보통 방 크기 ÷ 확대, 큰 방(라스트 보스)은 따라다님 · 끌어 본 만큼 옮김 (cameraPan) */
 export function cameraFor(s: RunState, zoom: number, alpha = 1): { x: number; y: number } {

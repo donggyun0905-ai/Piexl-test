@@ -16,6 +16,7 @@ import type { CoopMsg } from "./lockstep";
 import type { PwRoomGame } from "../event/PwRoom";
 import { PwBoard, useBoard } from "../event/PwBoard";
 import { PwHud } from "../event/PwHud";
+import { CoopWatch } from "./CoopWatch";
 import { PwWatch } from "../event/PwWatch";
 import { RankOutcome } from "../event/RankResult";
 import { PwResult } from "../event/PwResult";
@@ -47,10 +48,9 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
   const [ready, setReady] = useState(isHost);
   const [hostLost, setHostLost] = useState(false);
   const [ended, setEnded] = useState(false);
-  // 패왕전 위쪽 정보·관전 갱신
+  // 패왕전 위쪽 정보·관전 갱신 (협동도 쓰러지면 동료 관전)
   const [, refresh] = useState(0);
   useEffect(() => {
-    if (!pw) return;
     const id = setInterval(() => refresh((n) => n + 1), 250);
     return () => clearInterval(id);
   }, [pw]);
@@ -223,6 +223,7 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
         }}
       />
       {!ended && !pw && <CoopParty run={run} members={members} extras={extras} t={t} onSignal={signal} />}
+      {!ended && !pw && <CoopWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}
       {!ended && pw && run.pvp && <PwWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}
       {!ended && pw && run.pvp && !watching && <PwHud run={run} me={mySeat} names={names} t={t} onBoard={toggleBoard} />}
       {!ended && watching && <div className="coop-banner">{t("lobbyWatchNote")}</div>}

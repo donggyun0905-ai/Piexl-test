@@ -37,9 +37,10 @@
 
 /* 협동: 왼쪽 위 같이 하는 사람 체력 줄 · 신호 버튼 */
 .coop-party {
+  /* 왼쪽 아래 (왼쪽 위 능력치·빌드 칸을 가리지 않게) */
   position: fixed;
   left: 8px;
-  top: 52px;
+  bottom: 72px;
   z-index: 20;
   display: flex;
   flex-direction: column;
