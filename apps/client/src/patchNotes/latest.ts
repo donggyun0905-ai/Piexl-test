@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.0",
+    date: "2026-11-04",
+    items: {
+      ko: ["빌드 업데이트 묶음 (0.48.378~0.48.383): 패시브 꼬리표 15종 · 세트 효과 2·4·6개 · 각성 증강 8개 · 보상 편향 · 성좌 증강 꼬리표 · 대장간 — 이제부터 큰 기능 묶음마다 가운데 숫자가 올라감"],
+      en: ["Build update bundle (0.48.378–0.48.383): 15 passive tags · 2/4/6 set bonuses · 8-tag awakenings · reward bias · constellation augment tags · the Forge — from now on the middle number goes up with each major feature bundle"],
+      ja: ["ビルドアップデートまとめ（0.48.378〜0.48.383）：パッシブタグ15種・セット効果2・4・6個・覚醒増強8個・報酬の偏り・星座増強タグ・鍛冶場 — 今後は大きな機能のまとまりごとに真ん中の数字が上がります"],
+    },
+  },
+  {
     version: "0.48.383",
     date: "2026-11-04",
     items: {
