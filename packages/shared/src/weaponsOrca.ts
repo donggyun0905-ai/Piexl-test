@@ -89,4 +89,17 @@ export const ORCA = {
   waveMul: 2.4,
   wavePush: 22,
   waveStun: 40,
+  /** 해방 상태 (범고래 돌파 뒤): 틱 · 모든 공격 범위 배율 · 공격 속도 배율 */
+  freeTicks: 600,
+  freeRange: 1.35,
+  freeSpeed: 1.3,
+  /** 해방 중 추가타: 타격마다 날아가는 물 상어 · 빠르기 · 거리 · 몸 반지름 · 피해 배율 */
+  dartSpeed: 7,
+  dartRange: 150,
+  dartR: 10,
+  dartMul: 0.6,
+  /** 해방 중 번개 대시: 지나간 자리 폭 · 피해 배율 · 기절 틱 */
+  boltW: 16,
+  boltMul: 1.2,
+  boltStun: 20,
 };

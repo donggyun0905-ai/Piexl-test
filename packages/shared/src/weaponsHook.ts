@@ -51,7 +51,7 @@ export const HOOK = {
   /** 산탄총: 닿는 거리 · 부채꼴 · 피해 배율 · 끌려온 적 피해 배율(초근접) · 기본 튕김 거리(끌려오지 않은 적) */
   shotReach: 58,
   shotArc: 0.55,
-  shotMul: 1.0,
+  shotMul: 1.5,
   pointBlank: 1.3,
   knockDist: 50,
   /** 튕겨 날아가는 틱 · 난파(벽에 부딪힘) 피해 배율 · 기절 틱 */
@@ -63,6 +63,9 @@ export const HOOK = {
   zipTicks: 20,
   zipStop: 14,
   bounceTicks: 10,
+  /** 약화(캐릭터 능력): 갈고리에 걸릴 때마다 1스택 · 최대 스택 · 스택마다 받는 피해 더함 */
+  markMax: 5,
+  markTaken: 0.05,
   /** 폭풍탄: 번개 튀는 거리 · 피해 배율 · 용의 숨결: 화상 세기 */
   boltReach: 80,
   boltMul: 0.45,

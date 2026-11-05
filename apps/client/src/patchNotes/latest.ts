@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.47",
+    date: "2026-11-06",
+    items: {
+      ko: [
+        "오르카: 머리 위에 해방 게이지가 보임 (차는 동안 물빛 · 가득이면 흰빛 깜빡 · 해방 중에는 남은 시간이 노랗게 줄어듦)",
+        "오르카 해방: 범고래 돌파로 내려앉은 뒤 10초 동안 모든 공격 범위 +35% · 공격 속도 +30% · 때릴 때마다 물 상어가 날아가 꿰뚫음 · 대시가 번개 대시(번개 소리와 함께 지나간 자리의 적에게 번개 피해 + 기절) · 몸에 번개가 튀는 오라 (해방의 노래 아이템은 해방 시간 +5초로 바뀜)",
+        "오르카 이펙트 다듬기: 1타는 앞으로 뻗는 물 주먹 파동으로 · 물기둥은 땅이 부풀었다 굵게 치솟아 무너지는 웅장한 기둥으로 · 무지개 뺌 · 상어는 테일과 같은 물 상어 그림 · 물기·터짐·큰 파도 새로 그림",
+        "훅: 갈고리에 걸린 적에게 약화 표식이 쌓임 (머리 위 작은 갈고리, 최대 5) · 표식 하나마다 받는 피해 +5% (최대 +25%) · 더블배럴 산탄총 피해 1.5배 (공격력 100% → 150%)",
+      ],
+      en: [
+        "Orca: the Liberation gauge now shows above his head (aqua while filling · flashes white when full · drains in yellow during Liberation)",
+        "Orca Liberation: for 10s after an Orca Breach lands, +35% range on every attack · +30% attack speed · every hit launches a flying water shark that pierces · dashes become Lightning Dashes (thunder crackle, lightning damage + stun along the path) · a crackling lightning aura (Song of Liberation now extends Liberation by 5s)",
+        "Orca effects reworked: the 1st hit is now a forward-surging water-fist wave · the geyser swells from the ground, erupts as a thick, towering column and collapses · rainbows removed · the shark uses the same water shark art as Tail · new bite, burst and huge-wave effects",
+        "Hook: foes caught by the hook stack weaken marks (tiny hooks above their head, up to 5) · +5% damage taken per mark (up to +25%) · double-barrel shotgun damage x1.5 (100% → 150% ATK)",
+      ],
+      ja: [
+        "オルカ：頭上に解放ゲージが表示されるように（たまる間は水色 · 満タンで白く点滅 · 解放中は残り時間が黄色く減る）",
+        "オルカの解放：シャチ突破で着地した後10秒間、全攻撃の範囲+35% · 攻撃速度+30% · 攻撃のたびに水の鮫が飛んで貫く · ダッシュが雷ダッシュに（雷鳴と共に通った道の敵に雷ダメージ＋気絶）· 体に雷が走るオーラ（解放の歌は解放時間+5秒に変更）",
+        "オルカのエフェクトを調整：1撃目は前へ伸びる水の拳の波動に · 水柱は地面が膨らんで太く噴き上がり崩れる壮大な柱に · 虹を削除 · 鮫はテイルと同じ水の鮫の絵 · 噛みつき・弾け・大波を新しく",
+        "フック：フックに掛かった敵に弱化の印がたまる（頭上の小さなフック、最大5）· 印1つごとに被ダメージ+5%（最大+25%）· ダブルバレル散弾銃のダメージ1.5倍（攻撃力100% → 150%）",
+      ],
+    },
+  },
+  {
     version: "0.49.46",
     date: "2026-11-06",
     items: {
@@ -27,63 +51,6 @@ export const NOTES: PatchNote[] = [
         "鮫の気功波は自ら獲物を探して曲がりながら泳ぎ、3体まで噛みついて飛沫と共に弾ける",
         "攻撃するほど解放ゲージがたまり、満タンでダッシュが「シャチ突破」に：巨大なシャチの水気となって（無敵）敵を左右に裂きながら突き抜け、大波と共に着地",
         "籠手武器6（波 · 離岸流 · 間欠泉 · メガロドン · シャチの群れ · 大渦）· 専用アイテム10 · 飛沫・渦・水柱・鮫・シャチ・大波のエフェクト · 効果音 · スプライトシート · 覇王戦スキル",
-      ],
-    },
-  },
-  {
-    version: "0.49.45",
-    date: "2026-11-06",
-    items: {
-      ko: ["훅: 옆으로 서 있을 때 머리만 반대로 돌아가 보이던 그림 고침 · 서기·걷기 오른쪽 모습은 왼쪽 모습을 좌우로 뒤집어 씀 (갈고리 날이 얼굴 반대편에)"],
-      en: ["Hook: fixed the side standing pose where only the head faced the other way · right-facing stand and walk poses now mirror the left ones (the hook blade sits opposite the face)"],
-      ja: ["フック：横向きに立つとき頭だけ逆を向いて見えた絵を修正 · 立ち・歩きの右向きは左向きを左右反転して使用（フックの刃が顔の反対側に）"],
-    },
-  },
-  {
-    version: "0.49.42",
-    date: "2026-11-06",
-    items: {
-      ko: [
-        "탈라시아 새 캐릭터 훅: 자유의 바다를 누비는 해적 (체력 115 · 공격력 13 · 이동 1.3, 여는 조건: 이동 속도 1.7 달성)",
-        "누르면 커다란 빛 갈고리를 던져 지나가는 적을 걸고(최대 3) 내 앞까지 끌어온 뒤, 품속 더블배럴 산탄총으로 초근접 발사 · 맞은 적은 원래 있던 자리로 튕겨 날아가고 벽에 부딪히면 난파(추가 피해 + 기절)",
-        "빈 갈고리가 벽에 박히면 밧줄을 타고 벽으로 날아가 내리며 쏨 · 보스에 걸면 보스 코앞으로 끌려가 쏘고 원래 자리로 튕겨 돌아옴",
-        "갈고리 무기 6 (녹슨 · 크라켄 · 작살 · 폭풍탄 · 용의 숨결탄 · 역조) · 전용 아이템 10 · 빛 갈고리·밧줄·푸른 산탄 발사·난파 이펙트 · 효과음 · 그림 시트 · 패왕전 스킬",
-      ],
-      en: [
-        "New Thalassia character Hook: a pirate roaming the sea of freedom (HP 115 · ATK 13 · Move 1.3, unlock: reach 1.7 move speed)",
-        "Press to throw a giant spectral hook that snags foes along its path (up to 3) and reels them in, then a double-barrel shotgun from his coat fires point-blank · foes fly back to where they were and wreck on walls (extra damage + stun)",
-        "An empty hook that sticks into a wall swings him over to it, firing as he lands · hook a boss and he is pulled point-blank, fires, then bounces back",
-        "6 hook weapons (Rusty · Kraken · Harpoon · Stormshot · Dragon's Breath · Undertow) · 10 exclusive items · spectral hook, rope, blue shotgun blast and wreck effects · sounds · sprite sheet · Champion Clash skills",
-      ],
-      ja: [
-        "タラシアの新キャラ フック：自由の海を駆ける海賊（体力115 · 攻撃力13 · 移動1.3、解放条件：移動速度1.7達成）",
-        "押すと大きな光のフックを投げて通り道の敵を掛け（最大3）目の前まで引き寄せ、懐のダブルバレル散弾銃で零距離射撃 · 敵は元の場所へ吹き飛び、壁に当たると難破（追加ダメージ＋気絶）",
-        "空のフックが壁に刺さるとロープで壁へ飛び着地しながら撃つ · ボスに掛けるとボスの目の前へ引き寄せられて撃ち、元の場所へ跳ね返る",
-        "フック武器6（錆び · クラーケン · 銛 · 嵐弾 · 竜の息吹弾 · 逆潮）· 専用アイテム10 · 光のフック・ロープ・青い散弾・難破のエフェクト · 効果音 · スプライトシート · 覇王戦スキル",
-      ],
-    },
-  },
-  {
-    version: "0.49.41",
-    date: "2026-11-05",
-    items: {
-      ko: [
-        "탈라시아 새 캐릭터 매드퀸: 해방의 바다를 다스리는 은빛 제독 (체력 100 · 공격력 11 · 이동 1.35, 여는 조건: 공격 속도 1.8 달성)",
-        "손가락으로 가리키면 머리 위 미래형 대포가 터지는 포탄을 한 발씩 · 쏠 때마다 30% 확률로 맵 아무 곳에 네온 터렛(최대 4, 사거리 안 적을 저절로 쏨) · 30% 확률로 몸 양옆에 날개 무기(최대 4, 같이 레이저)",
-        "터렛 4 + 날개 4가 모두 모이면 '전탄 일제사격': 맵 전체에 포탄이 쏟아지고 대포부터 다시 시작",
-        "함대 무기 4 (해방의 파도포 · 적조 섬멸포 · 등대 번개포 · 산호 폭풍포, 대포·터렛·날개 색이 같이 바뀜) · 전용 아이템 10 (대포 아이템 셋으로 대포 최대 4문) · 포격·레이저·물보라 이펙트 · 효과음 · 그림 시트 · 패왕전 스킬",
-      ],
-      en: [
-        "New Thalassia character Mad Queen: the silver admiral who rules the sea of liberty (HP 100 · ATK 11 · Move 1.35, unlock: reach 1.8 attack speed)",
-        "Point a finger and the futuristic cannon above her head fires one exploding shell · each shot has a 30% chance to drop a neon turret anywhere on the map (up to 4, auto-fires at foes in range) and a 30% chance to add a wing weapon at her side (up to 4, fires lasers with her)",
-        "With 4 turrets and 4 wings she unleashes an 'All-Guns Salvo': shells rain over the whole map, then it starts again from the cannon",
-        "4 fleet weapons (Tide Liberator · Red Tide Annihilator · Lighthouse Thunder · Coral Tempest; cannon, turret and wing colors change together) · 10 exclusive items (up to 4 cannons with the three cannon items) · barrage, laser and spray effects · sounds · sprite sheet · Champion Clash skills",
-      ],
-      ja: [
-        "タラシアの新キャラ マッドクイーン：解放の海を治める銀の提督（体力100 · 攻撃力11 · 移動1.35、解放条件：攻撃速度1.8達成）",
-        "指さすと頭上の未来型大砲が爆発する砲弾を1発ずつ · 撃つたびに30%でマップのどこかにネオンタレット（最大4、射程内の敵を自動で撃つ）· 30%で体の両横に翼の武器（最大4、一緒にレーザー）",
-        "タレット4と翼4がそろうと「全弾一斉射撃」：マップ全体に砲弾が降り注ぎ、大砲から再スタート",
-        "艦隊武器4つ（解放の波動砲 · 赤潮殲滅砲 · 灯台の雷砲 · 珊瑚の嵐砲、大砲・タレット・翼の色が一緒に変わる）· 専用アイテム10（大砲アイテム3つで最大4門）· 砲撃・レーザー・しぶきのエフェクト · 効果音 · スプライトシート · 覇王戦スキル",
       ],
     },
   },

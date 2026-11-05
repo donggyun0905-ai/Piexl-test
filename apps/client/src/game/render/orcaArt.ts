@@ -1,13 +1,14 @@
-// 오르카 그림 공용: 물기운 상어(기공파) · 거대한 범고래 물기운(범고래 돌파) · 푸른 불꽃 주먹 · 소용돌이 팔
-// 모두 코드로 그림 (하늘색 물빛 · 흰 거품 · 짙은 바다색 테두리)
-import { additive, alpha, glow, type Ctx } from "./pwFxBits";
+// 오르카 그림 공용: 거대한 범고래 물기운(범고래 돌파) · 푸른 불꽃 주먹 · 소용돌이 팔 · 웅장한 물기둥 · 몸 둘레 번개 (상어는 테일과 같은 tailShark 그림)
+// 모두 코드로 그림 (하늘색 물빛 · 흰 거품 · 짙은 바다색 테두리 · 해방 번개는 흰 노랑)
+import { additive, alpha, glow, rnd, type Ctx } from "./pwFxBits";
+import { bolt } from "./thorkenFx";
 
 export const OC_AQUA = "#5ae8ff";
 export const OC_DEEP = "#1a6ae0";
 export const OC_FOAM = "#f0fcff";
 export const OC_INK = "#0a2a52";
 
-/** 몸 윤곽 한 점 (u: 0 머리 → 1 꼬리, 위/아래 폭) */
+/** 몸 윤곽 (len 길이 · half 폭 · flap 꼬리 흔들림) */
 function bodyPath(ctx: Ctx, len: number, half: number, flap: number): void {
   ctx.beginPath();
   ctx.moveTo(len * 0.55, 0);
@@ -16,71 +17,6 @@ function bodyPath(ctx: Ctx, len: number, half: number, flap: number): void {
   ctx.quadraticCurveTo(-len * 0.35, half * 0.5, -len * 0.1, half * 0.75);
   ctx.quadraticCurveTo(len * 0.35, half * 0.95, len * 0.55, 0);
   ctx.closePath();
-}
-
-/** 상어 기공파 (머리 x,y · a 방향 · s 크기 · al 진하기 · tick 꼬리 흔들기 · bite 0~1 입 벌림) */
-export function sharkShape(ctx: Ctx, x: number, y: number, a: number, s: number, al: number, tick: number, bite = 0): void {
-  const len = 30 * s;
-  const half = 7 * s;
-  const flap = Math.sin(tick * 0.6) * half;
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(a);
-  additive(ctx, () => {
-    glow(ctx, 0, 0, len * 0.75, OC_AQUA, 0.5 * al, 0.4);
-    // 꼬리지느러미 (흔들림)
-    ctx.fillStyle = alpha(OC_AQUA, 0.85 * al);
-    ctx.beginPath();
-    ctx.moveTo(-len * 0.42, flap * 0.3);
-    ctx.lineTo(-len * 0.72, -half * 1.2 + flap);
-    ctx.lineTo(-len * 0.6, flap * 0.4);
-    ctx.lineTo(-len * 0.74, half * 1.1 + flap);
-    ctx.closePath();
-    ctx.fill();
-    // 몸: 짙은 바다색 → 물빛 · 흰 배
-    bodyPath(ctx, len, half, flap);
-    const g = ctx.createLinearGradient(0, -half, 0, half);
-    g.addColorStop(0, alpha(OC_DEEP, 0.9 * al));
-    g.addColorStop(0.55, alpha(OC_AQUA, 0.9 * al));
-    g.addColorStop(1, alpha(OC_FOAM, 0.95 * al));
-    ctx.fillStyle = g;
-    ctx.fill();
-    ctx.strokeStyle = alpha(OC_FOAM, al);
-    ctx.lineWidth = 1;
-    ctx.stroke();
-    // 등지느러미 · 가슴지느러미
-    ctx.fillStyle = alpha(OC_AQUA, al);
-    ctx.beginPath();
-    ctx.moveTo(len * 0.12, -half * 0.85);
-    ctx.lineTo(-len * 0.08, -half * 2);
-    ctx.lineTo(-len * 0.12, -half * 0.75);
-    ctx.closePath();
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(len * 0.12, half * 0.7);
-    ctx.lineTo(-len * 0.04, half * 1.6);
-    ctx.lineTo(-len * 0.02, half * 0.65);
-    ctx.closePath();
-    ctx.fill();
-    // 아가미 줄 · 입 (벌리면 이빨)
-    ctx.strokeStyle = alpha(OC_FOAM, 0.8 * al);
-    for (let i = 0; i < 3; i++) {
-      ctx.beginPath();
-      ctx.moveTo(len * (0.2 - i * 0.06), -half * 0.4);
-      ctx.lineTo(len * (0.18 - i * 0.06), half * 0.3);
-      ctx.stroke();
-    }
-    const open = half * 0.25 + bite * half * 0.6;
-    ctx.fillStyle = alpha(OC_FOAM, al);
-    for (let i = 0; i < 4; i++) {
-      const tx = len * (0.5 - i * 0.07);
-      ctx.fillRect(tx, open * 0.6 - 0.5, 1.2 * s, 1.6 * s);
-      ctx.fillRect(tx, -open * 0.2 - 1, 1.2 * s, 1.4 * s);
-    }
-  });
-  ctx.fillStyle = alpha(OC_INK, al);
-  ctx.fillRect(len * 0.36, -half * 0.45, 1.6 * s, 1.6 * s);
-  ctx.restore();
 }
 
 /** 거대한 범고래 물기운 (가운데 x,y · a 방향 · s 크기 · al): 짙은 몸 + 흰 눈무늬·배 + 물빛 테두리 · 큰 등지느러미 */
@@ -161,4 +97,64 @@ export function spiral(ctx: Ctx, x: number, y: number, r: number, spin: number, 
     }
     ctx.lineCap = "butt";
   });
+}
+
+/** 웅장한 물기둥 (바닥 x,y · 바닥 폭 w · 높이 h · al · tick 물살 흐름): 짙은 바깥 → 물빛 → 흰 심 · 위로 치솟는 물살 줄 · 꼭대기 물보라 */
+export function grandGeyser(ctx: Ctx, x: number, y: number, w: number, h: number, al: number, tick: number, seed: number): void {
+  if (al <= 0.02 || h < 2) return;
+  const col = (ww: number, top: number) => {
+    ctx.beginPath();
+    ctx.moveTo(x - ww, y);
+    ctx.bezierCurveTo(x - ww * 0.55, y - h * 0.35, x - ww * 0.5, y - h * 0.8, x - ww * top, y - h);
+    ctx.lineTo(x + ww * top, y - h);
+    ctx.bezierCurveTo(x + ww * 0.5, y - h * 0.8, x + ww * 0.55, y - h * 0.35, x + ww, y);
+    ctx.closePath();
+  };
+  additive(ctx, () => {
+    glow(ctx, x, y - h * 0.5, Math.max(w, h * 0.6), OC_DEEP, 0.45 * al);
+    for (const [c, ww, top, a] of [[OC_DEEP, w, 0.7, 0.75], [OC_AQUA, w * 0.7, 0.55, 0.8], [OC_FOAM, w * 0.28, 0.3, 0.85]] as const) {
+      const g = ctx.createLinearGradient(x, y, x, y - h);
+      g.addColorStop(0, alpha(c, a * al));
+      g.addColorStop(0.85, alpha(c, a * 0.8 * al));
+      g.addColorStop(1, alpha(c, 0));
+      ctx.fillStyle = g;
+      col(ww, top);
+      ctx.fill();
+    }
+    // 위로 치솟는 물살 줄
+    ctx.lineCap = "round";
+    for (let i = 0; i < 7; i++) {
+      const ox = (rnd(seed, i) - 0.5) * w * 1.1;
+      const u = (tick * 0.09 + rnd(i, seed)) % 1;
+      const yy = y - h * u;
+      ctx.strokeStyle = alpha(i % 2 ? OC_FOAM : OC_AQUA, 0.9 * al * (1 - u * 0.6));
+      ctx.lineWidth = i % 2 ? 1.2 : 2;
+      ctx.beginPath();
+      ctx.moveTo(x + ox * (1 - u * 0.5), yy + 12);
+      ctx.lineTo(x + ox * (1 - u * 0.5), yy);
+      ctx.stroke();
+    }
+    ctx.lineCap = "butt";
+    // 꼭대기: 터지는 물보라 송이
+    glow(ctx, x, y - h, w * 1.4, OC_FOAM, 0.7 * al, 1);
+    for (let i = 0; i < 9; i++) {
+      const ang = -Math.PI + (i / 8) * Math.PI;
+      const d = w * (0.6 + rnd(seed, i + 9) * 0.8);
+      ctx.fillStyle = alpha(i % 2 ? OC_FOAM : OC_AQUA, al);
+      ctx.beginPath();
+      ctx.arc(x + Math.cos(ang) * d, y - h + Math.sin(ang) * d * 0.7, 1.5 + rnd(i, 3) * 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+}
+
+/** 몸 둘레 번개 (해방): 짧은 번개 갈래가 깜빡이며 튐 */
+export function crackle(ctx: Ctx, x: number, y: number, r: number, tick: number, al: number): void {
+  const t = tick >> 2;
+  for (let i = 0; i < 3; i++) {
+    if (rnd(t, i) < 0.35) continue;
+    const a = rnd(i, t) * Math.PI * 2;
+    const r0 = r * 0.5;
+    bolt(ctx, x + Math.cos(a) * r0, y + Math.sin(a) * r0, x + Math.cos(a + 0.6) * r, y + Math.sin(a + 0.6) * r, t * 7 + i, al, 1.2);
+  }
 }

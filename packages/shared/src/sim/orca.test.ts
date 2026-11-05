@@ -4,6 +4,7 @@ import type { WeaponId } from "../content";
 import { createRun, stepSim, type RunState } from "./index";
 import { recalcStats } from "./items";
 import { damagePlayer } from "./combat";
+import { attackSpeedNow } from "./player";
 import { enemy, FIRE } from "./perkTestUtil";
 
 const ALL: WeaponId[] = ["ocTide", "ocRiptide", "ocGeyser", "ocMegalodon", "ocPod", "ocMaelstrom"];
@@ -115,5 +116,28 @@ describe("오르카", () => {
     run(a, 200);
     run(b, 200);
     expect(lost(a)).toBe(lost(b));
+  });
+  it("해방: 범고래 돌파 뒤 10초 동안 공격 속도·범위 +, 타격마다 물 상어 추가타", () => {
+    const s = orca();
+    s.player.ocTide = O.tideMax;
+    stepSim(s, { ...IDLE, dash: true, moveX: 100 });
+    run(s, O.breachTicks + 2, IDLE);
+    expect(s.player.ocFree).toBeGreaterThan(O.freeTicks - 10);
+    expect(attackSpeedNow(s.player)).toBeCloseTo(s.player.stats.attackSpeed * O.freeSpeed);
+    strikes(s, 1);
+    expect(s.player.ocDarts?.length).toBe(1);
+    run(s, O.freeTicks, IDLE);
+    expect(s.player.ocFree).toBeUndefined();
+  });
+
+  it("해방 중 대시는 번개 대시: 지나간 자리 적에게 피해", () => {
+    const s = orca();
+    s.player.ocFree = 300;
+    const e = { ...enemy(1, 85, 100, 9999), rootTicks: 9999 };
+    s.enemies = [e];
+    stepSim(s, { ...IDLE, dash: true, moveX: 100 });
+    run(s, 20, IDLE);
+    expect(e.hp).toBeLessThan(e.maxHp);
+    expect(s.effects.some((f) => f.kind === "ocBolt" && (f.size ?? 0) > 0)).toBe(true);
   });
 });

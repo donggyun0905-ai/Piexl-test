@@ -1,6 +1,7 @@
 // 모든 캐릭터 공통 추가 기본 스탯 (캐릭터 표 CHARACTERS에 있음, 관리자 '캐릭터'에서 캐릭터마다 바꿈. 처음 값은 지금 게임과 같게 0 · 치명타 피해 150%)
 // 치명타 확률·치명타 피해 · 방어력(받는 피해 100/(100+방어력)) · 피해 감소(%) · 회피(확률) · 재생력(10초마다 회복) · 흡혈(준 피해의 %)
 // 예리함(맞힐 때 확률로 적 방어 -25%(받는 피해 +25%) + 출혈) · 상태이상 강화(상태이상 피해 +%) · 돈 획득(+%)
+import { HOOK } from "../weaponsHook";
 import { gymExtras } from "./gym";
 import { boonExtras } from "./boons";
 import { CHARACTERS, type ExtraStats } from "../characters";
@@ -78,9 +79,9 @@ export function extraTaken(p: PlayerState, taken: number): number {
   return setTaken(p, taken);
 }
 
-/** 예리함이 걸린 적이 더 받는 피해 */
-/** (방랑객 깊은 상처: 더 크게) */
-export const sharpBonus = (s: RunState, e: EnemyState) => ((e.sharpT ?? 0) > s.tick ? (hasPerk(s.player, "wdDeep") ? WANDERER_PERKS.wdDeep.def : R.SHARP_DEF) : 0);
+/** 예리함이 걸린 적이 더 받는 피해 (방랑객 깊은 상처: 더 크게) + 훅 갈고리 약화 스택 */
+export const sharpBonus = (s: RunState, e: EnemyState) =>
+  ((e.sharpT ?? 0) > s.tick ? (hasPerk(s.player, "wdDeep") ? WANDERER_PERKS.wdDeep.def : R.SHARP_DEF) : 0) + (e.hkMark ?? 0) * HOOK.markTaken;
 
 /** 적을 맞힌 뒤: 흡혈 · 예리함 (확률로 방어 깎기 + 출혈) */
 export function onHitExtra(s: RunState, e: EnemyState, dmg: number): void {

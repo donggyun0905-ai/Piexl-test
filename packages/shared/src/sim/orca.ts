@@ -3,6 +3,7 @@
 import { TICK_RATE } from "../constants";
 import { ORCA_PERKS as K } from "../itemsOrca";
 import { ORCA as O } from "../weaponsOrca";
+import { freeTick, launchDart } from "./orcaFree";
 import { breachTick, geysers, sharksTick, sharkWave, spray, startBreach, whirl } from "./orcaMoves";
 import { roomKey } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
@@ -47,13 +48,13 @@ export function orcaTick(s: RunState, want: boolean, speed: number): void {
   roomCheck(s);
   sharksTick(s);
   if (p.ocSurf) p.ocSurf--;
-  if (p.ocFury) p.ocFury--;
   if (p.ocBreach) {
     breachTick(s);
     return;
   }
   dashCheck(s);
   if (p.ocBreach) return;
+  freeTick(s);
   p.ocGap = (p.ocGap ?? 0) + 1;
   if (p.ocGap > O.comboGap) p.ocStep = 0;
   if (!want || p.attackCooldown > 0) return;
@@ -61,6 +62,7 @@ export function orcaTick(s: RunState, want: boolean, speed: number): void {
   const surf = (p.ocSurf ?? 0) > 0 ? K.ocSurf.mul : 1;
   p.ocSurf = 0;
   MOVES[k]!(s, surf);
+  launchDart(s);
   p.ocLast = { k, t: s.tick };
   p.ocStep = (k + 1) % MOVES.length;
   p.ocGap = 0;
@@ -70,8 +72,8 @@ export function orcaTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 (keepRoom: 방 이름·게이지는 남김) */
 export function resetOrca(p: PlayerState, keepRoom = false): void {
-  for (const k of ["ocSharks", "ocPools", "ocBreach", "ocDash", "ocSurf", "ocStep", "ocGap", "ocLast"] as const) delete p[k];
-  if (!keepRoom) for (const k of ["ocRoom", "ocTide", "ocFury"] as const) delete p[k];
+  for (const k of ["ocSharks", "ocPools", "ocBreach", "ocDash", "ocSurf", "ocStep", "ocGap", "ocLast", "ocDarts", "ocBolt"] as const) delete p[k];
+  if (!keepRoom) for (const k of ["ocRoom", "ocTide", "ocFree", "ocFree0"] as const) delete p[k];
 }
 
 export { isOrca, orcaTaken } from "./orcaMoves";

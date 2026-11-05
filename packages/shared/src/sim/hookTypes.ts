@@ -32,6 +32,11 @@ export interface HkSlide {
   dmg: number;
 }
 
+/** 적: 갈고리 약화 스택 (스택마다 받는 피해 +, HOOK.markTaken) */
+export interface HookEnemyState {
+  hkMark?: number;
+}
+
 export interface HookPlayerState {
   /** 던진 갈고리 · 튕겨 날아가는 적들 */
   hkHook?: HkHook;
@@ -45,4 +50,4 @@ export interface HookPlayerState {
 }
 
 /** 효과: 산탄 발사 · 둘째 총열 · 갈고리 걸림 · 난파 · 밧줄 착지 · 번개 */
-export type HookFx = "hkBlast" | "hkTap" | "hkGrab" | "hkWreck" | "hkLand" | "hkBolt";
+export type HookFx = "hkBlast" | "hkTap" | "hkGrab" | "hkWreck" | "hkLand" | "hkBolt" | "hkMark";

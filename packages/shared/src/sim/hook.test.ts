@@ -3,7 +3,7 @@ import { HOOK as H } from "../weaponsHook";
 import type { WeaponId } from "../content";
 import { createRun, stepSim, type RunState } from "./index";
 import { recalcStats } from "./items";
-import { damagePlayer } from "./combat";
+import { damageEnemy, damagePlayer } from "./combat";
 import { blast } from "./hookShot";
 import { enemy, FIRE } from "./perkTestUtil";
 
@@ -128,5 +128,20 @@ describe("훅", () => {
     run(a, 300);
     run(b, 300);
     expect(lost(a)).toBe(lost(b));
+  });
+  it("갈고리에 걸릴 때마다 약화 스택 (최대 5, 스택마다 받는 피해 +5%)", () => {
+    const s = hook();
+    const e = s.enemies[0]!;
+    for (let i = 0; i < 14; i++) {
+      e.x = 150;
+      e.y = 100;
+      cycle(s);
+    }
+    expect(e.hkMark).toBe(H.markMax);
+    const a = { ...enemy(2, 0, 0, 9999) };
+    const b = { ...enemy(3, 0, 0, 9999), hkMark: 5 };
+    damageEnemy(s, a, 100, 1, 0, false);
+    damageEnemy(s, b, 100, 1, 0, false);
+    expect((b.maxHp - b.hp) / (a.maxHp - a.hp)).toBeCloseTo(1 + H.markMax * H.markTaken, 2);
   });
 });

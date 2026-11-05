@@ -22,7 +22,7 @@ export const ORCA_PASSIVES = {
   // ── 해방 ──
   /** 고래의 숨: 해방 게이지가 빨리 참 */
   ocBreath: P("ocBreath"),
-  /** 해방의 노래: 범고래 돌파 뒤 잠시 공격 속도 + */
+  /** 해방의 노래: 해방 상태가 더 오래 감 */
   ocLiberty: P("ocLiberty"),
   /** 물거품 방패: 범고래 돌파로 내려앉으면 체력 회복 */
   ocFoam: P("ocFoam", [{ stat: "maxHp", add: 10 }]),
@@ -46,8 +46,8 @@ export const ORCA_PERKS = {
   ocEcho: { r: 1.5 },
   /** 고래의 숨: 게이지 차는 배율 */
   ocBreath: { gain: 1.5 },
-  /** 해방의 노래: 공격 속도 배율 · 틱 */
-  ocLiberty: { speed: 1.3, ticks: 300 },
+  /** 해방의 노래: 해방 상태 더 늘어나는 틱 */
+  ocLiberty: { ticks: 300 },
   /** 물거품 방패: 회복(최대 체력 비율) */
   ocFoam: { heal: 0.12 },
   /** 바닷바람: 받는 피해 배율 */

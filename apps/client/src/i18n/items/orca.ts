@@ -52,7 +52,7 @@ export const OC_EFFECTS: Partial<Record<OcPassive & PassiveId, Names>> = {
   ocFrenzy: c("상어가 한 번 물 때마다 다음 물기 피해 +{up:pct}%", "Each shark bite makes its next bite +{up:pct}% stronger", "鮫が噛むたびに次の噛みつき+{up:pct}%"),
   ocEcho: c("상어가 터질 때 물기둥이 솟고 터짐 범위 +{r:up}%", "A bursting shark raises a geyser · +{r:up}% burst size", "鮫が弾けると水柱が噴き上がり範囲+{r:up}%"),
   ocBreath: c("해방 게이지가 {gain}배 빨리 참", "The Liberation gauge fills {gain}x faster", "解放ゲージが{gain}倍速くたまる"),
-  ocLiberty: c("범고래 돌파 뒤 {ticks}틱 동안 공격 속도 {speed}배", "After Orca Breach, {speed}x attack speed for {ticks} ticks", "シャチ突破の後{ticks}ティックの間 攻撃速度{speed}倍"),
+  ocLiberty: c("해방 상태가 {ticks}틱 더 오래 감", "Liberation lasts {ticks} ticks longer", "解放状態が{ticks}ティック長く続く"),
   ocFoam: c("범고래 돌파로 내려앉으면 최대 체력의 {heal:pct}% 회복", "Landing an Orca Breach heals {heal:pct}% of max HP", "シャチ突破で着地すると最大体力の{heal:pct}%回復"),
   ocSeaWind: c("받는 피해 -{taken:down}%", "-{taken:down}% damage taken", "被ダメージ-{taken:down}%"),
 };

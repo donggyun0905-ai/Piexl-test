@@ -5,9 +5,9 @@ import { additive, alpha, easeOut, glow, rnd, shock, sparks, type Ctx } from "./
 import type { Snap } from "./palette";
 import { bolt, droplets } from "./thorkenFx";
 import { bubbles, rainbow } from "./seaLight";
-import { blastSprite, HK_AQUA, HK_DEEP, HK_FOAM } from "./hookArt";
+import { blastSprite, HK_AQUA, HK_DEEP, HK_FOAM, hookShape } from "./hookArt";
 
-const HK_FX = new Set(["hkBlast", "hkTap", "hkGrab", "hkWreck", "hkLand", "hkBolt"]);
+const HK_FX = new Set(["hkBlast", "hkTap", "hkGrab", "hkWreck", "hkLand", "hkBolt", "hkMark"]);
 
 /** 산탄 줄기: 부채꼴로 퍼지며 뻗는 흰·물빛 선 (reach 길이) */
 function pellets(ctx: Ctx, x: number, y: number, a: number, reach: number, f: number, seed: number, n: number, spread: number): void {
@@ -85,6 +85,11 @@ export function drawHookFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       droplets(ctx, x, y, fx.size * 0.8, f, seed, 10);
       bubbles(ctx, x, y, fx.size * 0.6, f, seed, 5, fade);
       if (f < 0.6) rainbow(ctx, x, y - 4, fx.size * 0.7, 0.3 * (1 - f / 0.6));
+      return true;
+    case "hkMark":
+      // 약화 스택: 머리 위에서 작은 갈고리가 번쩍
+      hookShape(ctx, x, y - f * 4, -Math.PI / 2, 0.45 + (1 - f) * 0.3, fade);
+      additive(ctx, () => glow(ctx, x, y, 8, HK_AQUA, 0.7 * (1 - f), 1));
       return true;
     case "hkBolt":
       additive(ctx, () => bolt(ctx, x, y, snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y), seed + Math.floor(f * 4), fade, 2));

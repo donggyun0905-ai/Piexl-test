@@ -7,8 +7,15 @@ import { anchored, blast, catchMax, hkHit, hookOf, hookReach, slideTick } from "
 import type { HkHook } from "./hookTypes";
 import { blocksShot } from "./layout";
 import { alive, isBoss, roomKey, stun } from "./s2Kit";
-import type { PlayerState, RunState } from "./types";
+import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid } from "./util";
+
+/** 갈고리 약화: 걸릴 때마다 1스택 (최대 HOOK.markMax) */
+function mark(s: RunState, e: EnemyState): void {
+  if ((e.hkMark ?? 0) >= H.markMax) return;
+  e.hkMark = (e.hkMark ?? 0) + 1;
+  addEffect(s, { kind: "hkMark", x: e.x, y: e.y - e.r - 6, dirX: 0, dirY: 0, size: e.hkMark, maxTicks: 18 });
+}
 
 /** 갈고리가 나가는 한 틱: 지나가는 적을 걸고 · 보스면 내가 끌려감 · 벽에 박히면 (빈 갈고리는) 밧줄 타기 */
 function hookOut(s: RunState, h: HkHook): void {
@@ -19,6 +26,7 @@ function hookOut(s: RunState, h: HkHook): void {
   h.left -= step;
   for (const e of alive(s)) {
     if (h.caught.some((c) => c.id === e.id) || dist2(e, h) > (H.catchR + e.r) ** 2) continue;
+    if (h.caught.length < catchMax(p) || isBoss(e)) mark(s, e);
     if (isBoss(e) && h.caught.length === 0) {
       h.k = 3;
       h.boss = e.id;

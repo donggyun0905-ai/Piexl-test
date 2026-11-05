@@ -5,6 +5,7 @@ import { ORCA as O, type OrcaStyle } from "../weaponsOrca";
 import { damageEnemy, healPlayer } from "./combat";
 import { blocksShot } from "./layout";
 import { rot } from "./orbit";
+import { isFree, startFree, wide } from "./orcaFree";
 import type { OcShark } from "./orcaTypes";
 import { alive, isBoss, stun } from "./s2Kit";
 import { statusHit } from "./statusHit";
@@ -19,7 +20,7 @@ const anchored = (e: EnemyState) => isBoss(e) || e.kind === "dummy";
 /** 해방 게이지 채우기 (가득 차는 순간 알림 효과) */
 export function gain(s: RunState, n: number): void {
   const p = s.player;
-  if (p.ocBreach) return;
+  if (p.ocBreach || isFree(p)) return;
   const before = p.ocTide ?? 0;
   p.ocTide = Math.min(O.tideMax, before + n * (hasPerk(p, "ocBreath") ? K.ocBreath.gain : 1));
   if (before < O.tideMax && p.ocTide >= O.tideMax) addEffect(s, { kind: "ocReady", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 26, maxTicks: 30 });
@@ -42,7 +43,7 @@ export function ocHit(s: RunState, e: EnemyState, dmg: number, fx: number, fy: n
 export function spray(s: RunState, mul: number): void {
   const p = s.player;
   const up = hasPerk(p, "ocSpray");
-  const reach = O.sprayReach * (up ? K.ocSpray.reach : 1);
+  const reach = O.sprayReach * (up ? K.ocSpray.reach : 1) * wide(p);
   const dmg = p.stats.damage * O.sprayMul * mul * (up ? K.ocSpray.mul : 1);
   for (const e of alive(s)) {
     const ox = e.x - p.x;
@@ -59,7 +60,7 @@ export function whirl(s: RunState, mul: number): void {
   const p = s.player;
   const st = orcaOf(p);
   const up = hasPerk(p, "ocUndertow");
-  const r = O.whirlR * (st.whirl ?? 1) * (up ? K.ocUndertow.r : 1);
+  const r = O.whirlR * (st.whirl ?? 1) * (up ? K.ocUndertow.r : 1) * wide(p);
   const pull = O.whirlPull * (st.pull ?? 1) * (up ? K.ocUndertow.pull : 1);
   for (const e of alive(s)) {
     if (dist2(e, p) > (r + e.r) ** 2) continue;
@@ -85,11 +86,11 @@ export function geysers(s: RunState, mul: number): void {
   const n = orcaOf(p).geysers ?? 1;
   const g = roomGrid(s);
   for (let i = 0; i < n; i++) {
-    const at = O.geyserAt + i * O.geyserGap;
+    const at = (O.geyserAt + i * O.geyserGap) * wide(p);
     const x = p.x + p.faceX * at;
     const y = p.y + p.faceY * at;
     if (i > 0 && g !== null && blocksShot(g, x, y)) break;
-    geyserAt(s, x, y, O.geyserR, p.stats.damage * O.geyserMul * mul);
+    geyserAt(s, x, y, O.geyserR * wide(p), p.stats.damage * O.geyserMul * mul);
   }
 }
 
@@ -99,7 +100,7 @@ export function sharkWave(s: RunState, mul: number): void {
   const st = orcaOf(p);
   const n = st.sharks ?? 1;
   const big = (st.shark ?? 1) > 1;
-  const size = big ? 1.7 : n > 1 ? 0.8 : 1;
+  const size = (big ? 1.7 : n > 1 ? 0.8 : 1) * wide(p);
   const hunts = Math.max(1, O.hunts + (st.hunts ?? 0) + (hasPerk(p, "ocFin") ? K.ocFin.hunts : 0));
   const list = (p.ocSharks ??= []);
   for (let i = 0; i < n; i++) {
@@ -232,7 +233,7 @@ export function breachTick(s: RunState): boolean {
     stun(e, O.waveStun);
   }
   if (hasPerk(p, "ocFoam")) healPlayer(s, p.stats.maxHp * K.ocFoam.heal);
-  if (hasPerk(p, "ocLiberty")) p.ocFury = K.ocLiberty.ticks;
+  startFree(s);
   p.ocTide = 0;
   addEffect(s, { kind: "ocWave", x: p.x, y: p.y, dirX: b.dx, dirY: b.dy, size: O.waveR, maxTicks: 34 });
   delete p.ocBreach;
@@ -241,5 +242,3 @@ export function breachTick(s: RunState): boolean {
 
 /** 바닷바람 (classTaken) */
 export const orcaTaken = (p: PlayerState) => (hasPerk(p, "ocSeaWind") ? K.ocSeaWind.taken : 1);
-/** 해방의 노래 (classSpeed) */
-export const orcaSpeedMul = (p: PlayerState) => ((p.ocFury ?? 0) > 0 ? K.ocLiberty.speed : 1);

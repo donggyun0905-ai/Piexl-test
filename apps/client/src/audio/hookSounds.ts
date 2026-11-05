@@ -2,7 +2,7 @@
 import type { RunState } from "@pixel-rogue/shared";
 import type { Sfx } from "./sound";
 
-const SFX: Partial<Record<string, Sfx>> = { hkBlast: "hkShotgun", hkTap: "hkShotgun", hkGrab: "hkClank", hkWreck: "pwBurst", hkLand: "tlSplash", hkBolt: "zap" };
+const SFX: Partial<Record<string, Sfx>> = { hkBlast: "hkShotgun", hkTap: "hkShotgun", hkGrab: "hkClank", hkWreck: "pwBurst", hkLand: "tlSplash", hkBolt: "zap", hkMark: "hkClank" };
 
 export function hookSounds(run: RunState, out: Sfx[], onShake: (power: number) => void): void {
   if (run.player.characterId !== "hook") return;

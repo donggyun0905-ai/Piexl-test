@@ -14,6 +14,16 @@ export interface OcShark {
   prey?: number;
 }
 
+/** 해방 중 추가타 물 상어: 자리 · 방향 · 남은 거리 · 맞은 적 */
+export interface OcDart {
+  x: number;
+  y: number;
+  dx: number;
+  dy: number;
+  left: number;
+  hit: number[];
+}
+
 /** 소용돌이 장판: 자리 · 남은 틱 */
 export interface OcPool {
   x: number;
@@ -41,9 +51,13 @@ export interface OrcaPlayerState {
   ocBreach?: OcBreach;
   /** 지난 틱에 대시 중이었는지 (대시 시작 알아채기) */
   ocDash?: boolean;
-  /** 파도 타기 남은 틱 · 해방의 노래 남은 틱 */
+  /** 파도 타기 남은 틱 · 해방 상태 남은 틱 (범위·공속·추가타·번개 대시) · 해방이 처음 시작될 때 틱 수 (게이지 표시) */
   ocSurf?: number;
-  ocFury?: number;
+  ocFree?: number;
+  ocFree0?: number;
+  /** 해방 중 추가타 물 상어들 · 번개 대시 (출발 자리·맞은 적) */
+  ocDarts?: OcDart[];
+  ocBolt?: { x: number; y: number; hit: number[] };
   /** 마지막으로 때린 콤보 단계 · 틱 (주먹 그림) */
   ocLast?: { k: number; t: number };
   /** 지금 방 ("층/방", 바뀌면 상어·장판을 거둠) */
@@ -51,4 +65,4 @@ export interface OrcaPlayerState {
 }
 
 /** 효과: 물보라 잽 · 소용돌이 훅 · 물기둥 · 상어 물기 · 상어 터짐 · 해방 준비 · 범고래 돌파 · 큰 파도 */
-export type OrcaFx = "ocSpray" | "ocWhirl" | "ocGeyser" | "ocBite" | "ocBurst" | "ocReady" | "ocBreach" | "ocWave";
+export type OrcaFx = "ocSpray" | "ocWhirl" | "ocGeyser" | "ocBite" | "ocBurst" | "ocReady" | "ocBreach" | "ocWave" | "ocFree" | "ocDart" | "ocBolt";
