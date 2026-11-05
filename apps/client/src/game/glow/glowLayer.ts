@@ -4,6 +4,8 @@ import type { RunState } from "@pixel-rogue/shared";
 import { cameraFor } from "../camera";
 import { viewW } from "../viewSize";
 import { GlowCanvas, type GlowCues } from "./glowCanvas";
+import { setGlowActive, takeGlowHints } from "./glowHints";
+import { hexColor } from "./glowParts";
 import type { GlowParts } from "./glowParts";
 import { GlowSkills } from "./glowSkills";
 import { GlowWatch } from "./glowWatch";
@@ -27,7 +29,9 @@ export function createGlowLayer(game: HTMLCanvasElement): GlowLayer {
   return {
     frame(view, zoom, alpha, stopped) {
       const dt = glow.tick(stopped);
-      if (!glow.ready() || !glow.parts) return;
+      const on = glow.ready() && !!glow.parts;
+      setGlowActive(on);
+      if (!on || !glow.parts) return;
       const { w } = glow.size();
       if (!stopped) {
         watch.observe(view, glow.parts, glow.cues);
@@ -35,9 +39,18 @@ export function createGlowLayer(game: HTMLCanvasElement): GlowLayer {
         for (const x of extra) x(view, glow.parts, glow.cues);
       }
       const cam = cameraFor(view, zoom, alpha);
-      glow.render(dt, (zoom * w) / viewW(), cam.x, cam.y);
+      const f = (zoom * w) / viewW();
+      // 그리는 쪽이 남긴 빛 (shadowBlur 대신, glowHints): 캔버스 픽셀 → 게임 좌표
+      const k = f * (game.width / Math.max(1, w));
+      // 멈춤 중에는 조각이 줄지 않으니 새로 놓지 않음 (지난 빛이 그대로 남아 보임)
+      const hints = takeGlowHints();
+      if (!stopped) for (const h of hints) glow.parts.steady(h.x / k + cam.x, h.y / k + cam.y, h.d / k, hexColor(h.color, 0xffffff), 0.6);
+      glow.render(dt, f, cam.x, cam.y);
     },
     addWatch: (w) => void extra.push(w),
-    destroy: () => glow.destroy(),
+    destroy: () => {
+      setGlowActive(false);
+      glow.destroy();
+    },
   };
 }

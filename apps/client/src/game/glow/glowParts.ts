@@ -91,6 +91,8 @@ export class GlowParts {
   private live: Part[] = [];
   private free: Sprite[] = [];
   private tex: { dot: Texture; ring: Texture };
+  /** 지난 update의 dt (steady가 밝기를 맞춤) */
+  private lastDt = 1 / 60;
 
   constructor(
     private P: Pixi,
@@ -115,6 +117,12 @@ export class GlowParts {
     this.live.push({ sp, kind, x, y, vx: o.vx ?? 0, vy: o.vy ?? 0, life: o.life, max: o.life, s0: o.s0, s1: o.s1 ?? o.s0, drag: o.drag ?? 0, alpha: o.alpha ?? 1 });
   }
 
+  /** 계속 켜져 있는 빛 (매 화면 부름): 짧게 살다 사라지는 빛을 겹쳐 놓되, 화면 속도와 상관없이 밝기가 같게 */
+  steady(x: number, y: number, size: number, color: number, alpha: number): void {
+    const life = 0.12;
+    this.spawn(x, y, { life, s0: size, color, alpha: alpha * Math.min(1, (3.5 * this.lastDt) / life) });
+  }
+
   /** 한 점에서 사방으로 튀는 불티 */
   burst(x: number, y: number, n: number, speed: number, color: number, life = 0.45, size = 2.2): void {
     for (let i = 0; i < n; i++) {
@@ -134,6 +142,7 @@ export class GlowParts {
 
   /** dt초 진행 후 화면 좌표로 놓기. f = 게임 1픽셀의 화면 크기, (cx, cy) = 보이는 영역 왼쪽 위 */
   update(dt: number, f: number, cx: number, cy: number): void {
+    if (dt > 0) this.lastDt = dt;
     const out: Part[] = [];
     for (const p of this.live) {
       p.life -= dt;

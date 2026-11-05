@@ -1,6 +1,7 @@
 // 게임 상태가 바뀐 것을 보고 빛 효과를 만듦: 적 맞음 불티 · 치명타 별빛 · 처치 폭발·충격파 · 보스 처치 큰 빛 · 탄 꼬리 빛 · 큰 공격 빛 · 내가 맞으면 붉은 테두리
 import { ENEMIES, type EffectState, type RunState } from "@pixel-rogue/shared";
 import type { GlowCues } from "./glowCanvas";
+import { BIG_FX } from "./glowKinds";
 import { hexColor, type GlowParts } from "./glowParts";
 
 /** 처치 폭발 색 (적 종류마다 하나로 정해짐) */
@@ -9,8 +10,6 @@ const HIT = 0xffe2a8;
 const CRIT = 0xfff3c4;
 const MY_SHOT = 0x8fe9ff;
 const FOE_SHOT = 0xff4d6d;
-/** 크게 빛나는 공격 효과 종류 */
-const BIG_FX = new Set<string>(["blast", "burst", "meteor", "slam", "bolt", "pillar", "holy", "bmBoom", "afBlast", "hdMeteor", "titanSmash", "renCrush", "tagMeteor", "vyMeteor", "mnBoom", "elBang", "oPillar", "imBoom", "stBurst", "plBurst", "smBurst"]);
 /** 한 화면에 그리는 탄 꼬리 최대 수 */
 const MAX_TRAILS = 70;
 

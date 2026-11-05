@@ -1,4 +1,5 @@
 // 리바이어 그림 도구: 고래 모양(푸른 등 · 흰 배 주름 · 꼬리지느러미 · 눈 · 물빛 테두리) · 바다의 창 모양 · 물살 꼬리
+import { glowHint } from "../glow/glowHints";
 import { additive, alpha, glow, rnd, type Ctx } from "./pwFxBits";
 import { bubbles, glint } from "./seaLight";
 
@@ -30,8 +31,10 @@ export function whaleShape(ctx: Ctx, x: number, y: number, ang: number, len: num
   additive(ctx, () => glow(ctx, 0, 0, len * 0.75, SEA, 0.35, 0.15));
   // 빛나는 물빛 테두리
   additive(ctx, () => {
-    ctx.shadowColor = CYAN;
-    ctx.shadowBlur = 10;
+    if (!glowHint(ctx, 0, 0, len * 1.2, CYAN)) {
+      ctx.shadowColor = CYAN;
+      ctx.shadowBlur = 10;
+    }
     ctx.strokeStyle = alpha(CYAN, 0.8);
     ctx.lineWidth = 3;
     body();

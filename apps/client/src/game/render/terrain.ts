@@ -1,4 +1,5 @@
 // 던전 지형 그리기 (sim/terrain, 독가스는 stalkers): 진흙(갈색·거품) · 용암(일렁이는 금·빛) · 얕은 물(물결, 감전 예고는 노랗게 깜빡 · 감전 중엔 번개) · 가시 함정(예고 붉게 · 솟으면 가시)
+import { glowHintRect } from "../glow/glowHints";
 import { drawHiddenGround } from "./hiddenTrial";
 import { spikeState, terrainIdle, type RunState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
@@ -41,8 +42,11 @@ function drawMud(ctx: Ctx, r: Rect, tick: number): void {
 function drawLava(ctx: Ctx, r: Rect, tick: number): void {
   const [x, y, w, h] = r;
   ctx.save();
-  ctx.shadowColor = "#ff6a1a";
-  ctx.shadowBlur = 8;
+  // 빛 층이 켜져 있으면 번짐은 빛 층이 (폰에서 shadowBlur는 느림)
+  if (!glowHintRect(ctx, x, y, w, h, "#ff6a1a")) {
+    ctx.shadowColor = "#ff6a1a";
+    ctx.shadowBlur = 8;
+  }
   ctx.fillStyle = "#c8380a";
   rounded(ctx, r);
   ctx.fill();

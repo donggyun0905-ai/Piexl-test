@@ -2,6 +2,7 @@
 // 상태를 읽기만 함 (glowWatch와 같은 방식). 꾸밈이라 Math.random을 씀
 import type { EffectState, RunState } from "@pixel-rogue/shared";
 import type { GlowCues } from "./glowCanvas";
+import { ULT_FX } from "./glowKinds";
 import type { GlowParts } from "./glowParts";
 
 /** 각성 꼬리표(motif) → 빛 색 (글자 안에 이 말이 있으면) */
@@ -11,8 +12,6 @@ const MOTIF: [string, number][] = [
   ["earth", 0xe0a85a], ["water", 0x5ac8ff], ["sharp", 0xffffff], ["hard", 0xd8d8e8], ["wind", 0xb8ffe0], ["luck", 0xffd84a],
   ["summon", 0xc0a0ff], ["blood", 0xff3b5c],
 ];
-/** 필살기·변신처럼 드물고 큰 기술 (화면이 살짝 번쩍임) */
-const ULT_FX = new Set<string>(["legend", "fgAwaken", "imAwaken", "slGrand", "rmEclipse", "wdTempest", "zsDescend", "ecTotal", "kgForm", "awaken", "tagSpecial", "oGod", "mEvo"]);
 const GOLD = 0xffd84a;
 
 const motifColor = (m: string | undefined): number => {
@@ -101,7 +100,7 @@ export class GlowSkills {
     if (this.gold >= 0 && s.gold > this.gold) parts.burst(p.x, p.y - 4, 5, 60, GOLD, 0.35, 1.5);
     this.gold = s.gold;
     // 어두운 장면(태초의 어둠 유령에 닿음 · 추적자 암습): 내 둘레만 작은 등불 빛 (깜깜한 갓이터 구역은 그대로 깜깜하게)
-    if ((p.darkTicks ?? 0) > 0 || p.trAmbush) parts.spawn(p.x, p.y, { life: 0.07, s0: 34, color: 0xffd9a0, alpha: 0.22 });
+    if ((p.darkTicks ?? 0) > 0 || p.trAmbush) parts.steady(p.x, p.y, 34, 0xffd9a0, 0.3);
   }
 
   /** 바닥 무기·패시브는 은은한 빛이 맥박 치듯 · 사라지면(주움) 반짝 터짐 */

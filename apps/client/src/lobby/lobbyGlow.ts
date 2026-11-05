@@ -31,7 +31,7 @@ export function createLobbyGlow(canvas: HTMLCanvasElement): LobbyGlow {
           const a = t * 0.5 + (i * Math.PI) / 2;
           const x = LOBBY_W / 2 + Math.cos(a) * 90;
           const y = LOBBY_H / 2 + 20 + Math.sin(a * 1.3) * 40;
-          parts.spawn(x, y, { life: 0.07, s0: 46, color: COLORS[(i + Math.floor(t / 2)) % COLORS.length]!, alpha: 0.35 });
+          parts.steady(x, y, 46, COLORS[(i + Math.floor(t / 2)) % COLORS.length]!, 0.45);
         }
         // 미러볼 반짝임·빛살
         const mx = LOBBY_W / 2;
@@ -49,7 +49,7 @@ export function createLobbyGlow(canvas: HTMLCanvasElement): LobbyGlow {
           parts.spawn(x, y, { life: 0.3, s0: 5, s1: 1, color: COLORS[i % COLORS.length]! });
         }
         // 게임기 화면이 은은하게 빛남
-        for (const m of MACHINES) parts.spawn(m.x, m.y - 10, { life: 0.07, s0: 26 + Math.sin(t * 3 + m.x) * 3, color: hexColor(m.color, 0xffffff), alpha: 0.22 });
+        for (const m of MACHINES) parts.steady(m.x, m.y - 10, 26 + Math.sin(t * 3 + m.x) * 3, hexColor(m.color, 0xffffff), 0.3);
       }
       glow.render(dt, scale, view.x, view.y);
     },

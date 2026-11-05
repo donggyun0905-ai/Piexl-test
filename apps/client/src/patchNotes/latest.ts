@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.38",
+    date: "2026-11-05",
+    items: {
+      ko: [
+        "캐릭터 큰 기술 38가지에 빛 (거인 내려찍기·렌 낙석·토르켄 천둥·리바이어 지진·오닉스 공명·펜리르 착지·이클립스 내려찍기·제우스 창 등)",
+        "용암·리바이어 고래·테일 상어의 번짐을 빛 효과로 옮김: 빛 효과를 켜면 더 밝고 폰에서 가벼워짐 (끄면 예전 모습 그대로)",
+        "계속 켜져 있는 빛(로비 조명·게임기 화면·등불)이 느린 기기에서도 흐려지지 않게 맞춤",
+      ],
+      en: [
+        "Glow on 38 big character moves (Titan slam, Ren rockfall, Thorken thunder, Levia quake, Onyx resonance, Fenrir landing, Eclipse slam, Zeus spear and more)",
+        "Lava, Levia's whales and Tail's sharks now use the glow layer for their halo: brighter and lighter on phones with glow on (unchanged with glow off)",
+        "Steady lights (lobby lighting, arcade screens, lantern) no longer fade on slower devices",
+      ],
+      ja: [
+        "キャラクターの大技38種に光（巨人の叩きつけ・レンの落石・トルケンの雷・リヴァイアの地震・オニキスの共鳴・フェンリルの着地・イクリプスの叩きつけ・ゼウスの槍など）",
+        "溶岩・リヴァイアのクジラ・テイルのサメのにじみを光のエフェクトに移行：オンだとより明るく、スマホで軽く（オフなら従来どおり）",
+        "常に灯る光（ロビーの照明・ゲーム機の画面・灯り）が遅い端末でも薄くならないよう調整",
+      ],
+    },
+  },
+  {
     version: "0.49.37",
     date: "2026-11-05",
     items: {

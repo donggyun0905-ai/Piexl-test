@@ -1,6 +1,6 @@
 # 빛 효과 층 (PixiJS·WebGL) 안내
 
-마지막 수정: 2026-11-05 16:30 (한국 시간)
+마지막 수정: 2026-11-05 15:46 (한국 시간)
 
 게임 화면은 Canvas 2D로 그리고, 그 **바로 위에 PixiJS(WebGL) 투명 캔버스 한 장**을 겹쳐 "빛나는 것"만 그린다 (0.49.36부터).
 디자인·이펙트를 만들 때 "이건 Canvas 2D로 그릴까, 빛 층으로 그릴까"를 정하는 기준과 쓰는 법을 적는다.
@@ -14,6 +14,8 @@
 | `game/glow/glowLayer.ts` | 게임 화면: 게임 카메라에 맞춰 그림 · `addWatch`로 상태 보기 더함 (`gameLoop`에서 만듦) |
 | `game/glow/glowWatch.ts` | 맞힘 불티·치명타 별빛 · 처치 폭발·보스 처치 번쩍 · 탄 꼬리(내 편 하늘색·적 붉게·보스 탄 크게) · 큰 공격(`BIG_FX`) · 내가 맞음 |
 | `game/glow/glowSkills.ts` | 각성(꼬리표 색)·필살기(`ULT_FX`) · 보스 궁극기 기 모음 · 회복·보호막·돈 · 바닥 아이템 빛·주움 · 용암 불티 · 어두운 장면 등불 |
+| `game/glow/glowKinds.ts` | 크게 빛날 효과 이름 `BIG_FX`(빛·고리·불티)·`ULT_FX`(빛기둥·번쩍) — **새 캐릭터 큰 기술은 여기에 이름만 더함** |
+| `game/glow/glowHints.ts` | Canvas 2D → 빛 층 다리: `glowHint(ctx, x, y, 지름, 색)`·`glowHintRect` — 빛 층이 돌고 있으면 true(그리는 쪽은 `shadowBlur` 생략), 아니면 false(예전처럼 번짐) |
 | `game/glow/glowSkin.ts` | 한정 스킨·상점 이벤트 효과 조각(`limited/tigerFx`의 `parts`)에 빛을 더함 |
 | `game/glow/glowFlat.ts` | 카메라 없는 판 전체 화면 (타워 디펜스 `td/TdGame`) — 내 체력 빛은 끔 |
 | `game/glow/useGlow.ts` | 화면 요소(DOM 카드·창)에 붙이는 훅 — 명예의 전당 우승자 카드(`daily/HallOfFame`) |
@@ -61,6 +63,8 @@ parts.spawn(x, y, { life: 0.3, s0: 12, s1: 24, color: 0xffc53c, alpha: 0.8 });
 parts.spawn(x, y, { kind: "ring", life: 0.4, s0: 6, s1: 40, color: 0x7cf0ff });
 // 사방 불티 (개수, 속도, 색, 수명, 크기)
 parts.burst(x, y, 16, 220, 0xff7a3c, 0.55, 2.4);
+// 계속 켜져 있는 빛 (매 화면 부름, 화면 속도와 상관없이 같은 밝기)
+parts.steady(x, y, 30, 0xffd9a0, 0.3);
 // 화면 전체: 붉은 테두리·번쩍임 (0~1, 저절로 줄어듦)
 cues.hurt = 1;
 cues.flash = 1;
@@ -68,7 +72,9 @@ cues.flash = 1;
 
 - "새로 생긴 것" 찾기: 효과(`s.effects`)는 `WeakSet`으로 처음 본 것만 · 적은 `id`별 이전 체력과 비교 · 처치는 사라진 적 + `s.kills` 증가로.
 - 특정 캐릭터 전용 빛: `s.player`의 그 캐릭터 상태 값 변화를 보고 만든다 (협동은 `allPlayers`).
-- 크게 빛날 효과 종류는 `glowWatch.ts`의 `BIG_FX` 목록에 이름만 넣으면 빛·고리·불티가 붙는다.
+- 크게 빛날 효과 종류는 `glowKinds.ts`의 `BIG_FX`(필살기급은 `ULT_FX`)에 이름만 넣으면 빛이 붙는다.
+- Canvas 2D 그림에 번짐이 필요하면 `shadowBlur` 대신: `if (!glowHint(ctx, 0, 0, 지름, 색)) { ctx.shadowColor = 색; ctx.shadowBlur = 8; }` (빛 효과를 끈 사람은 예전 번짐)
+- 매 화면 새로 놓는 빛은 `spawn`이 아니라 `steady` (느린 기기에서 흐려지지 않음)
 
 ## 5. 확인하는 법
 
@@ -82,12 +88,12 @@ cues.flash = 1;
 
 ## 6. 넣은 곳과 남은 곳 (2026-11-05)
 
-**넣음 (0.49.36~0.49.37)**: 게임 화면 공통(맞힘·처치·탄·큰 공격·피격) · 한정 스킨·상점 이벤트 효과(게임 안) · 각성·필살기·보스 궁극기 · 회복·보호막·돈 · 바닥 아이템 · 용암 · 어두운 장면 등불 · 패왕전 편 색 탄 · 타워 디펜스 · 로비·메인 화면 배경·전시장 · 뽑기 · 명예의 전당 우승자 카드
+**넣음 (0.49.36~0.49.38)**: 캐릭터 큰 기술 38가지(`glowKinds`) · 용암·리바이어 고래·테일 상어 번짐을 빛 층으로(`glowHints`) · 게임 화면 공통(맞힘·처치·탄·큰 공격·피격) · 한정 스킨·상점 이벤트 효과(게임 안) · 각성·필살기·보스 궁극기 · 회복·보호막·돈 · 바닥 아이템 · 용암 · 어두운 장면 등불 · 패왕전 편 색 탄 · 타워 디펜스 · 로비·메인 화면 배경·전시장 · 뽑기 · 명예의 전당 우승자 카드
 
 **남음 (다음에 할 만한 것)**
 | 곳 | 파일 | 할 일 |
 | --- | --- | --- |
-| Canvas 2D로 빛을 흉내 내는 이펙트 | `shadowBlur`: `render/terrain`(용암)·`leviaWhale`·`tailShark`·`eclipseBits`·`minimap` · `lighter`: `pwFxBits`·`eclipseBits`·`imugi`·`collectorArt`·`propArt`·`drawStation`·`dmgSkins`·`lobby/hallArt` | 번짐 부분만 빛 층으로 옮김 → 폰에서 더 빠름. 빛 효과를 끈 사람에게도 보이게 할지 정하고 옮길 것 |
+| Canvas 2D 빛 흉내 (남은 것) | `shadowBlur`: `eclipseBits`(날 모양이 그때그때 달라 한 점 빛으로는 안 맞음)·`minimap`(화면 글자 칸, 게임 층 밖) · `lighter` 합성: `pwFxBits`·`eclipseBits`·`imugi`·`collectorArt`·`propArt`·`drawStation`·`dmgSkins`·`lobby/hallArt` (`lighter`는 느리지 않아 그대로 둠) | 이클립스는 날 길을 따라 `glowHint`를 여러 개 놓는 식으로 옮길 수 있음 |
 | 캐릭터 전용 큰 기술 | 캐릭터마다 `render/*` | `glowSkills`의 `ULT_FX`·`glowWatch`의 `BIG_FX`에 효과 이름을 더하면 바로 빛남 |
 | 상점 효과 미리보기 | `shop/FxPreview.tsx` | 카드가 여러 장이라 WebGL 한도 때문에 보류 (하나만 크게 보는 창을 만들면 그 창에만) |
 | 메인 화면 글자 | `TitleScreen.tsx` | 지금은 뒤 로비 빛만. 제목 글자 반짝임은 CSS로 충분 |

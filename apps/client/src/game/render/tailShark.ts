@@ -1,4 +1,5 @@
 // 테일 그림 도구: 물로 된 상어(맑은 물빛 몸 · 흰 배 · 등지느러미 · 꼬리 · 벌어지는 턱과 이빨 · 빛나는 테두리) · 물 위 등지느러미 · 물결 고리
+import { glowHint } from "../glow/glowHints";
 import { additive, alpha, glow, type Ctx } from "./pwFxBits";
 import { glint } from "./seaLight";
 
@@ -113,8 +114,10 @@ export function sharkShape(ctx: Ctx, x: number, y: number, ang: number, len: num
   ctx.fillRect(len * 0.3, -h * 0.36, 1, 1);
   // 빛나는 물빛 테두리 · 등의 햇빛 줄
   additive(ctx, () => {
-    ctx.shadowColor = AQUA;
-    ctx.shadowBlur = 8;
+    if (!glowHint(ctx, 0, 0, len * 1.2, AQUA)) {
+      ctx.shadowColor = AQUA;
+      ctx.shadowBlur = 8;
+    }
     ctx.strokeStyle = alpha(AQUA, 0.85);
     ctx.lineWidth = 1.5;
     back();
