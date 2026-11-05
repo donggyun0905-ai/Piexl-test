@@ -69,6 +69,7 @@ const DEMO_WEAPONS: Record<CharacterId, [WeaponId, WeaponId] | null> = {
   levia: ["lvAqua", "lvTopaz"],
   tail: ["tlTide", "tlMako"],
   madQueen: ["mqTide", "mqCrimson"],
+  hook: ["hkRusty", "hkKraken"],
   miner: ["mnTnt", "mnPit"],
   voyager: null,
   zeus: ["zsSky", "zsChain"],

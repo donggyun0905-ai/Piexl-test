@@ -14,4 +14,5 @@ export { PUNGRYU, type ScriptStyle, type VerseKind } from "./weaponsPungryu";
 export { LEO } from "./weaponsLeo";
 export { ONYX, ONYX_GEMS, ONYX_GEM_IDS, type OnyxGem } from "./weaponsOnyx";
 export { FENRIR } from "./weaponsFenrir"; export { ECLIPSE } from "./weaponsEclipse"; export { THORKEN, type BallKind, type FlailStyle } from "./weaponsThorken"; export { LEVIA, type SeaGem, type GemStyle } from "./weaponsLevia"; export { TAIL, type SharkSea, type SeaStyle } from "./weaponsTail"; export { MADQUEEN, type FleetColor, type FleetStyle } from "./weaponsMadQueen";
+export { HOOK, type HookKind, type HookStyle } from "./weaponsHook";
 export { LUX } from "./weaponsLux";

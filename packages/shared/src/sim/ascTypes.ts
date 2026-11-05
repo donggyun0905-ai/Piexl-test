@@ -7,6 +7,7 @@ import type { ThorPlayerState } from "./thorkenTypes";
 import type { LeviaPlayerState } from "./leviaTypes";
 import type { TailPlayerState } from "./tailTypes";
 import type { MadQueenPlayerState } from "./madQueenTypes";
+import type { HookPlayerState } from "./hookTypes";
 import type { LeoEnemyState, LeoPlayerState } from "./leoTypes";
 import type { OnyxPlayerState } from "./onyxTypes";
 import type { FenrirPlayerState } from "./fenrirTypes";
@@ -108,5 +109,5 @@ export interface OriginShotState {
   hpCut?: number;
 }
 
-export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState, PungPlayerState, LeoPlayerState, OnyxPlayerState, FenrirPlayerState, EclipsePlayerState, ThorPlayerState, LeviaPlayerState, TailPlayerState, MadQueenPlayerState {}
+export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState, PungPlayerState, LeoPlayerState, OnyxPlayerState, FenrirPlayerState, EclipsePlayerState, ThorPlayerState, LeviaPlayerState, TailPlayerState, MadQueenPlayerState, HookPlayerState {}
 export interface AscalonEnemyState extends HiddenEnemyState, AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState, PungEnemyState, LeoEnemyState {}

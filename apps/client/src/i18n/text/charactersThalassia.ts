@@ -30,4 +30,11 @@ export const CHARACTER_TEXT_THALASSIA = {
     ja: "タラシア。解放の海を治める銀の提督。指さすと頭上の未来型大砲が爆発する砲弾を1発ずつ撃つ · 撃つたびに30%でマップのどこかにネオンタレット（最大4、射程内の敵を自動で撃つ）· 30%で体の両横に翼の武器（最大4、一緒にレーザー）· タレット4と翼4がそろうと全弾一斉射撃でマップ全体に砲弾が降り注ぎ、大砲から再スタート",
   },
   fleet: { ko: "함대 포격", en: "Fleet Barrage", ja: "艦隊砲撃" },
+  hook: { ko: "훅", en: "Hook", ja: "フック" },
+  grapple: { ko: "갈고리와 산탄총", en: "Hook & Shotgun", ja: "フックと散弾銃" },
+  hookDesc: {
+    ko: "탈라시아. 자유의 바다를 누비는 해적. 누르면 커다란 빛 갈고리를 던져 지나가는 적을 걸고(최대 3) 내 앞까지 끌어온 뒤, 품속 더블배럴 산탄총으로 초근접 발사 · 맞은 적은 원래 있던 자리로 튕겨 날아가고 벽에 부딪히면 난파(추가 피해 + 기절) · 빈 갈고리가 벽에 박히면 밧줄을 타고 그 벽으로 날아가 내리며 쏨 · 보스에 걸면 내가 보스에게 끌려가 쏘고 원래 자리로 튕겨 돌아옴",
+    en: "Thalassia. A pirate roaming the sea of freedom. Press to throw a giant spectral hook that snags foes along its path (up to 3) and reels them right in front of him, then a double-barrel shotgun from his coat fires point-blank · foes fly back to where they were, and wreck on walls (extra damage + stun) · an empty hook that sticks into a wall swings him over to it, firing as he lands · hook a boss and he is pulled to it, fires, then bounces back",
+    ja: "タラシア。自由の海を駆ける海賊。押すと大きな光のフックを投げて通り道の敵を掛け（最大3）目の前まで引き寄せ、懐のダブルバレル散弾銃で零距離射撃 · 当たった敵は元の場所へ吹き飛び、壁に当たると難破（追加ダメージ＋気絶）· 空のフックが壁に刺さるとロープでその壁へ飛び、着地しながら撃つ · ボスに掛けると自分がボスへ引き寄せられて撃ち、元の場所へ跳ね返る",
+  },
 } satisfies Record<string, Record<Lang, string>>;

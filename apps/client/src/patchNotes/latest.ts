@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.42",
+    date: "2026-11-06",
+    items: {
+      ko: [
+        "탈라시아 새 캐릭터 훅: 자유의 바다를 누비는 해적 (체력 115 · 공격력 13 · 이동 1.3, 여는 조건: 이동 속도 1.7 달성)",
+        "누르면 커다란 빛 갈고리를 던져 지나가는 적을 걸고(최대 3) 내 앞까지 끌어온 뒤, 품속 더블배럴 산탄총으로 초근접 발사 · 맞은 적은 원래 있던 자리로 튕겨 날아가고 벽에 부딪히면 난파(추가 피해 + 기절)",
+        "빈 갈고리가 벽에 박히면 밧줄을 타고 벽으로 날아가 내리며 쏨 · 보스에 걸면 보스 코앞으로 끌려가 쏘고 원래 자리로 튕겨 돌아옴",
+        "갈고리 무기 6 (녹슨 · 크라켄 · 작살 · 폭풍탄 · 용의 숨결탄 · 역조) · 전용 아이템 10 · 빛 갈고리·밧줄·푸른 산탄 발사·난파 이펙트 · 효과음 · 그림 시트 · 패왕전 스킬",
+      ],
+      en: [
+        "New Thalassia character Hook: a pirate roaming the sea of freedom (HP 115 · ATK 13 · Move 1.3, unlock: reach 1.7 move speed)",
+        "Press to throw a giant spectral hook that snags foes along its path (up to 3) and reels them in, then a double-barrel shotgun from his coat fires point-blank · foes fly back to where they were and wreck on walls (extra damage + stun)",
+        "An empty hook that sticks into a wall swings him over to it, firing as he lands · hook a boss and he is pulled point-blank, fires, then bounces back",
+        "6 hook weapons (Rusty · Kraken · Harpoon · Stormshot · Dragon's Breath · Undertow) · 10 exclusive items · spectral hook, rope, blue shotgun blast and wreck effects · sounds · sprite sheet · Champion Clash skills",
+      ],
+      ja: [
+        "タラシアの新キャラ フック：自由の海を駆ける海賊（体力115 · 攻撃力13 · 移動1.3、解放条件：移動速度1.7達成）",
+        "押すと大きな光のフックを投げて通り道の敵を掛け（最大3）目の前まで引き寄せ、懐のダブルバレル散弾銃で零距離射撃 · 敵は元の場所へ吹き飛び、壁に当たると難破（追加ダメージ＋気絶）",
+        "空のフックが壁に刺さるとロープで壁へ飛び着地しながら撃つ · ボスに掛けるとボスの目の前へ引き寄せられて撃ち、元の場所へ跳ね返る",
+        "フック武器6（錆び · クラーケン · 銛 · 嵐弾 · 竜の息吹弾 · 逆潮）· 専用アイテム10 · 光のフック・ロープ・青い散弾・難破のエフェクト · 効果音 · スプライトシート · 覇王戦スキル",
+      ],
+    },
+  },
+  {
     version: "0.49.41",
     date: "2026-11-05",
     items: {
