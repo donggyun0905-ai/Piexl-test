@@ -1,5 +1,6 @@
 // 토르켄 닻 휘두르기 그림: 커다란 금빛 닻이 몸을 중심으로 부채꼴을 그리며 휙 돌아감 (잔상 셋 + 뒤따르는 물살)
 import { additive, crescent, easeOut, glow, type Ctx } from "./pwFxBits";
+import { glint } from "./seaLight";
 
 const GOLD = "#ffc84a";
 const GOLD_HI = "#fff0a0";
@@ -81,4 +82,10 @@ export function drawAnchorSwing(ctx: Ctx, x: number, y: number, face: number, si
   anchorShape(ctx, x, y, at(k), reach, fade);
   const tip = at(k);
   additive(ctx, () => glow(ctx, x + Math.cos(tip) * reach, y + Math.sin(tip) * reach, 14, GOLD_HI, 0.7 * fade, 0.8));
+  // 지나간 길에 금빛 반짝임
+  for (let i = 0; i < 5; i++) {
+    const u = k * (i / 5);
+    glint(ctx, x + Math.cos(at(u)) * reach * 0.95, y + Math.sin(at(u)) * reach * 0.95, 2 + (i % 3), GOLD_HI, fade * (0.3 + u * 0.7));
+  }
+  glint(ctx, x + Math.cos(tip) * reach, y + Math.sin(tip) * reach, 6 * fade, "#ffffff", fade);
 }

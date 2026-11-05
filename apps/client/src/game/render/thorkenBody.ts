@@ -3,6 +3,7 @@ import { isThorken, thorkenGauge, type ProjectileState, type RunState } from "@p
 import { lerp, type Snap } from "./palette";
 import { additive, alpha, glow, shock } from "./pwFxBits";
 import { bolt, CYAN, FOAM, SEA, VOLT } from "./thorkenFx";
+import { caustic, glint, glints } from "./seaLight";
 
 type Ctx = CanvasRenderingContext2D;
 const TAU = Math.PI * 2;
@@ -63,6 +64,8 @@ export function drawThorkenBack(ctx: Ctx, s: RunState, _alpha: number, snap: Sna
   const y = snap(st.y);
   vortex(ctx, x, y, st.r * 1.1, -s.tick * 0.12, a);
   vortex(ctx, x, y, st.r * 0.6, -s.tick * 0.2 + 1, a);
+  caustic(ctx, x, y, st.r * 0.8, s.tick, 0.4 * a);
+  glints(ctx, x, y, st.r, 6, s.tick, 7, FOAM, a);
   // 빗줄기 (기울어진 흰 줄)
   ctx.strokeStyle = alpha(FOAM, 0.55 * a);
   ctx.lineWidth = 1;
@@ -89,8 +92,16 @@ function ballAt(ctx: Ctx, x: number, y: number, id: string, tick: number): void 
   ctx.beginPath();
   ctx.arc(x, y, 5, 0, TAU);
   ctx.fill();
+  // 둥근 빛 테두리 + 위쪽 반짝임 (천천히 깜빡임)
+  ctx.strokeStyle = alpha(rim, 0.8);
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(x, y, 5.5, Math.PI * 1.05, Math.PI * 1.75);
+  ctx.stroke();
   ctx.fillStyle = alpha("#ffffff", 0.55);
   ctx.fillRect(x - 3, y - 3, 2, 2);
+  const tw = Math.sin(tick * 0.15) * 0.5 + 0.5;
+  glint(ctx, x - 2, y - 3, 2 + tw * 3, rim, 0.4 + tw * 0.6);
   if (id === "tkUrchin") {
     ctx.fillStyle = rim;
     for (let k = 0; k < 8; k++) ctx.fillRect(Math.round(x + Math.cos((k / 8) * TAU + tick * 0.1) * 7), Math.round(y + Math.sin((k / 8) * TAU + tick * 0.1) * 7), 1, 1);
@@ -139,7 +150,11 @@ export function drawThorkenAura(ctx: Ctx, s: RunState, alpha0: number, snap: Sna
   ctx.fillRect(x - w / 2 - 1, gy - 1, w + 2, 4);
   ctx.fillStyle = g >= 1 ? (s.tick % 10 < 5 ? VOLT : FOAM) : CYAN;
   ctx.fillRect(x - w / 2, gy, Math.round(w * g), 2);
-  if (g >= 1) additive(ctx, () => shock(ctx, x, y - 4, 16 + Math.sin(s.tick * 0.3) * 2, CYAN, 0.6, 4));
+  if (g >= 1) {
+    additive(ctx, () => shock(ctx, x, y - 4, 16 + Math.sin(s.tick * 0.3) * 2, CYAN, 0.6, 4));
+    glints(ctx, x, y - 6, 18, 3, s.tick, 11, VOLT, 0.9);
+  }
+  if (g > 0 && g < 1) glint(ctx, x - w / 2 + Math.round(w * g), gy + 1, 3, FOAM, 0.8);
 }
 
 /** 성게 가시 · 삼지창 물살 */

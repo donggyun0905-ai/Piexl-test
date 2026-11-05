@@ -4,6 +4,7 @@ import type { EffectState } from "@pixel-rogue/shared";
 import { additive, alpha, crescent, easeOut, glow, rnd, shock, sparks, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
 import { bolt, droplets } from "./thorkenFx";
+import { bubbles, caustic, glint, glints, rainbow, rays } from "./seaLight";
 import { CYAN, FOAM, SEA, spearShape, whaleShape } from "./leviaWhale";
 
 const TAU = Math.PI * 2;
@@ -19,6 +20,12 @@ function spearSweep(ctx: Ctx, x: number, y: number, face: number, half: number, 
       crescent(ctx, x, y, reach * 0.8, (at(0) + at(k)) / 2, span, 4, FOAM, 0.6 * fade);
     }
   });
+  // 지나간 자리에 흩어지는 반짝임
+  for (let i = 0; i < 6; i++) {
+    const u = k * (i / 6);
+    const a = at(u);
+    glint(ctx, x + Math.cos(a) * reach * (0.9 + (i % 2) * 0.12), y + Math.sin(a) * reach * (0.9 + (i % 2) * 0.12), 2 + (i % 3), FOAM, fade * (0.4 + u * 0.6));
+  }
   for (let i = 3; i >= 1; i--) spearShape(ctx, x, y, at(Math.max(0, k - i * 0.08)), reach, 0.15 * (4 - i) * fade);
   spearShape(ctx, x, y, at(k), reach, fade);
 }
@@ -38,6 +45,8 @@ function whaleArc(ctx: Ctx, x: number, y: number, r: number, a0: number, a1: num
   const wy = y + Math.sin(a) * r;
   whaleShape(ctx, wx, wy, a + (dir * Math.PI) / 2, Math.max(26, r * 0.9), fade, tick);
   droplets(ctx, wx, wy, r * 0.35, k, tick, 8);
+  bubbles(ctx, wx, wy, r * 0.4, k, tick, 5, fade);
+  glints(ctx, wx, wy, r * 0.5, 4, tick, 3, FOAM, fade);
 }
 
 export function drawLeviaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
@@ -74,11 +83,14 @@ export function drawLeviaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         shock(ctx, x, y, fx.size * 2.4 * easeOut(f), SEA, 0.8 * (1 - f), 6);
       });
       droplets(ctx, x + fx.dirX * 14, y + fx.dirY * 14, fx.size * 1.5, f, seed, 14);
+      rays(ctx, x + fx.dirX * 10, y + fx.dirY * 10, fx.size * 3 * easeOut(f), 10, 0.55 * (1 - f), seed, CYAN, f * 0.5);
       return true;
     case "lvQuake": {
       // 부채꼴 충격파: 겹겹이 퍼지는 물의 벽 + 흰 거품 줄
       const half = Math.acos(Math.max(-1, Math.min(1, fx.arc ?? 0.35)));
       const c = fx.tint === "abyss" ? "#3a5aff" : CYAN;
+      if (f < 0.35) additive(ctx, () => glow(ctx, x, y, fx.size * 0.6, c, 1 - f / 0.35, 1));
+      rays(ctx, x, y, fx.size * 1.1 * easeOut(f), 8, 0.3 * (1 - f), seed, c, face);
       additive(ctx, () => {
         for (let k = 0; k < 3; k++) {
           const u = easeOut(Math.min(1, f * 1.3 + k * 0.12));
@@ -90,6 +102,7 @@ export function drawLeviaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         const d = fx.size * easeOut(f) * (0.85 + rnd(seed, k) * 0.25);
         ctx.fillStyle = alpha(k % 2 ? FOAM : CYAN, 1 - f);
         ctx.fillRect(Math.round(x + Math.cos(a) * d), Math.round(y + Math.sin(a) * d - Math.sin(f * Math.PI) * 6), 2, 2);
+        if (k % 4 === 0) glint(ctx, x + Math.cos(a) * d, y + Math.sin(a) * d, 4 * (1 - f), FOAM, 1 - f);
       }
       return true;
     }
@@ -102,7 +115,19 @@ export function drawLeviaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         shock(ctx, x, y, fx.size * easeOut(f), CYAN, 0.9 * (1 - f), 8);
         glow(ctx, x, y, fx.size * 0.8, SEA, 0.6 * (1 - f), 0.6);
       });
+      // 바다에서 솟는 빛기둥 · 바닥 물빛 무늬 · 하늘로 퍼지는 빛줄기
+      additive(ctx, () => {
+        const g = ctx.createLinearGradient(x, y, x, y - 110);
+        g.addColorStop(0, alpha(CYAN, 0.55 * up));
+        g.addColorStop(1, alpha(CYAN, 0));
+        ctx.fillStyle = g;
+        ctx.fillRect(x - fx.size * 0.25, y - 110, fx.size * 0.5, 110);
+      });
+      caustic(ctx, x, y, fx.size * 0.9, tick, 0.6 * (1 - f));
+      rays(ctx, x, wy, 46 * up, 12, 0.45 * up, seed, FOAM, tick * 0.03);
       if (f < 0.85) whaleShape(ctx, x, wy, ang, 54, f < 0.75 ? 1 : 1 - (f - 0.75) / 0.1, tick);
+      // 내리꽂힌 뒤 물보라에 걸린 무지개
+      if (f > 0.6) rainbow(ctx, x, y - 8, fx.size * 0.9, Math.sin(((f - 0.6) / 0.4) * Math.PI));
       droplets(ctx, x, y, fx.size, f, seed, 22);
       if (f > 0.7) droplets(ctx, x, y, fx.size * 1.3, (f - 0.7) / 0.3, seed + 9, 18);
       return true;
@@ -111,12 +136,14 @@ export function drawLeviaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       if (f < 0.5) bolt(ctx, x + (rnd(seed, 1) - 0.5) * 24, y - 130, x, y, seed, 1 - f * 1.8, 3);
       additive(ctx, () => glow(ctx, x, y, fx.size * 2, "#fff27a", 1 - f, 1));
       sparks(ctx, x, y, 8, fx.size * 2, f, "#fff27a", seed);
+      glint(ctx, x, y, 10 * (1 - f), "#fff27a", 1 - f);
       return true;
     case "lvSong":
       // 고래의 노래: 퍼지는 음파 고리 셋 + 작은 음표
       additive(ctx, () => {
         for (let k = 0; k < 3; k++) shock(ctx, x, y, fx.size * easeOut(Math.min(1, f * 1.2 + k * 0.18)), k === 1 ? FOAM : "#8ab8ff", 0.7 * (1 - f), 3);
       });
+      glints(ctx, x, y, fx.size * easeOut(f), 6, tick, seed, "#c8d8ff", 1 - f);
       ctx.fillStyle = alpha(FOAM, 1 - f);
       for (let k = 0; k < 5; k++) {
         const a = (k / 5) * TAU + f;
@@ -136,6 +163,8 @@ export function drawLeviaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       ctx.fillStyle = g;
       ctx.fillRect(x - w / 2, y - h, w, h);
       droplets(ctx, x, y - h, fx.size * 0.7, f, seed, 16);
+      rainbow(ctx, x, y - h * 0.6, fx.size * 0.6, 0.8 * Math.sin(f * Math.PI));
+      glints(ctx, x, y - h, fx.size * 0.6, 5, tick, seed, FOAM, 1 - f);
       additive(ctx, () => shock(ctx, x, y, fx.size * easeOut(f), CYAN, 0.7 * (1 - f), 5));
       return true;
     }
@@ -146,6 +175,7 @@ export function drawLeviaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         shock(ctx, x, y, fx.size * easeOut(f), CYAN, 0.9 * (1 - f), 8);
       });
       sparks(ctx, x, y, 10, fx.size, f, "#ff8a9a", seed);
+      rays(ctx, x, y, fx.size * 1.2 * easeOut(f), 9, 0.5 * (1 - f), seed, "#ffb0c0");
       droplets(ctx, x, y, fx.size, f, seed, 16);
       return true;
   }

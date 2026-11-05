@@ -1,5 +1,6 @@
 // 리바이어 그림 도구: 고래 모양(푸른 등 · 흰 배 주름 · 꼬리지느러미 · 눈 · 물빛 테두리) · 바다의 창 모양 · 물살 꼬리
 import { additive, alpha, glow, rnd, type Ctx } from "./pwFxBits";
+import { bubbles, glint } from "./seaLight";
 
 export const DEEP = "#1a4aa8";
 export const SEA = "#2a9cff";
@@ -25,6 +26,8 @@ export function whaleShape(ctx: Ctx, x: number, y: number, ang: number, len: num
     ctx.bezierCurveTo(len * 0.05, h * 0.62, len * 0.45, h * 0.5, len * 0.5, h * 0.05);
     ctx.closePath();
   };
+  // 몸 뒤 은은한 바다빛 (몸보다 크게 번짐)
+  additive(ctx, () => glow(ctx, 0, 0, len * 0.75, SEA, 0.35, 0.15));
   // 빛나는 물빛 테두리
   additive(ctx, () => {
     ctx.shadowColor = CYAN;
@@ -76,6 +79,16 @@ export function whaleShape(ctx: Ctx, x: number, y: number, ang: number, len: num
   ctx.fill();
   ctx.fillStyle = alpha(CYAN, 0.7);
   for (let k = 0; k < 5; k++) ctx.fillRect(Math.round(-len * 0.2 + k * len * 0.09), Math.round(-h * 0.15 - (k % 2) * 2), 2, 2);
+  // 등에 일렁이는 햇빛 무늬 (물속 빛)
+  additive(ctx, () => {
+    ctx.strokeStyle = alpha("#bff4ff", 0.35);
+    ctx.lineWidth = 1;
+    for (let k = 0; k < 3; k++) {
+      ctx.beginPath();
+      for (let u = -0.4; u <= 0.45; u += 0.08) ctx.lineTo(u * len, -h * (0.42 - k * 0.12) + Math.sin(u * 14 + flap * 0.2 + k) * h * 0.05);
+      ctx.stroke();
+    }
+  });
   ctx.restore();
   // 가슴지느러미
   ctx.fillStyle = "#1e5ab8";
@@ -98,6 +111,9 @@ export function whaleShape(ctx: Ctx, x: number, y: number, ang: number, len: num
   ctx.fill();
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(Math.round(ex), Math.round(ey - er * 0.6), 1, 1);
+  // 등 위 반짝임 (깜빡임)
+  const tw = Math.sin(flap * 0.25) * 0.5 + 0.5;
+  glint(ctx, len * 0.1, -h * 0.4, 2 + tw * Math.min(5, len * 0.08), FOAM, 0.5 + tw * 0.5);
   ctx.restore();
 }
 
@@ -121,6 +137,7 @@ export function wake(ctx: Ctx, x: number, y: number, dx: number, dy: number, len
     ctx.fillStyle = k % 2 ? alpha(FOAM, a) : alpha(CYAN, a * 0.9);
     ctx.fillRect(Math.round(x - dx * len * u + nx * off), Math.round(y - dy * len * u + ny * off), 2, 2);
   }
+  bubbles(ctx, x - dx * len, y - dy * len, len * 0.5, (seed % 30) / 30, seed, 5, a);
 }
 
 /** 바다의 창 (손잡이 x·y에서 ang 쪽으로 길이 len): 금빛 자루 · 푸른 수정 창날 · 빛나는 끝 */
@@ -167,5 +184,8 @@ export function spearShape(ctx: Ctx, x: number, y: number, ang: number, len: num
     ctx.fill();
   }
   ctx.restore();
-  additive(ctx, () => glow(ctx, x + Math.cos(ang) * len, y + Math.sin(ang) * len, 10, CYAN, 0.8 * a, 0.9));
+  const tx = x + Math.cos(ang) * len;
+  const ty = y + Math.sin(ang) * len;
+  additive(ctx, () => glow(ctx, tx, ty, 12, CYAN, 0.8 * a, 0.9));
+  glint(ctx, tx, ty, 5 * a, FOAM, a);
 }

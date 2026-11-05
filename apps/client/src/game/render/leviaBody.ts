@@ -3,6 +3,7 @@ import { isLevia, leviaStep, type ProjectileState, type RunState } from "@pixel-
 import { lerp, type Snap } from "./palette";
 import { additive, alpha, glow } from "./pwFxBits";
 import { CYAN, FOAM, SEA, wake, whaleShape } from "./leviaWhale";
+import { caustic, glints } from "./seaLight";
 
 type Ctx = CanvasRenderingContext2D;
 const TAU = Math.PI * 2;
@@ -31,6 +32,8 @@ export function drawLeviaBack(ctx: Ctx, s: RunState, _alpha: number, snap: Snap)
       ctx.stroke();
     }
     ctx.restore();
+    caustic(ctx, x, y, o.r * 0.8, s.tick, 0.35 * a);
+    glints(ctx, x, y, o.r, 2, s.tick, o.x, FOAM, a * 0.8);
   }
 }
 

@@ -4,6 +4,7 @@ import type { EffectState } from "@pixel-rogue/shared";
 import { additive, alpha, beam, easeOut, glow, rnd, shock, sparks, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
 import { drawAnchorSwing } from "./thorkenAnchor";
+import { bubbles, caustic, glint, glints, rainbow, rays } from "./seaLight";
 
 const TAU = Math.PI * 2;
 export const SEA = "#2a9cff";
@@ -91,6 +92,8 @@ export function drawThorkenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const head = Math.min(1, f * (fx.maxTicks / Math.max(1, fx.maxTicks - 8)));
       const tail = Math.max(0, (f - 0.35) / 0.65);
       waterArc(ctx, x, y - 3, fx.size, a0 + (a1 - a0) * tail, a0 + (a1 - a0) * head, 5, 0.85 * (1 - tail * 0.6));
+      const ha = a0 + (a1 - a0) * head;
+      glint(ctx, x + Math.cos(ha) * fx.size, y - 3 + Math.sin(ha) * fx.size, 5, FOAM, 1 - tail);
       return true;
     }
     case "tkThrow": {
@@ -108,11 +111,15 @@ export function drawThorkenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         shock(ctx, x, y, fx.size * easeOut(f) * 1.2, CYAN, 0.9 * fade, 8);
       });
       sparks(ctx, x, y, 10, fx.size, f, VOLT, seed);
+      rays(ctx, x, y, fx.size * 2 * easeOut(f), 10, 0.6 * fade, seed, VOLT, f * 0.4);
+      glint(ctx, x, y - 2, 12 * fade, "#fffbe0", fade);
       return true;
     }
     case "tkSplash": {
       additive(ctx, () => shock(ctx, x, y, fx.size * easeOut(f), CYAN, 0.8 * fade, 5));
       droplets(ctx, x, y, fx.size, f, seed, 14);
+      glints(ctx, x, y - 4, fx.size, 4, fx.ticks, seed, FOAM, fade);
+      bubbles(ctx, x, y, fx.size * 0.6, f, seed, 4, fade);
       return true;
     }
     case "tkReel": {
@@ -128,6 +135,7 @@ export function drawThorkenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         glow(ctx, x, y, fx.size * 1.6, CYAN, 0.9 * fade, 1);
         for (let k = 0; k < 3; k++) shock(ctx, x, y, fx.size * easeOut(Math.min(1, f * 1.4 + k * 0.15)) * (1 + k * 0.3), k === 1 ? FOAM : CYAN, 0.8 * fade, 6);
       });
+      rays(ctx, x, y, fx.size * 2.2 * easeOut(f), 14, 0.35 * fade, seed, CYAN, f);
       return true;
     }
     case "tkBolt": {
@@ -148,6 +156,8 @@ export function drawThorkenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         glow(ctx, x, y, fx.size * 2.2, VOLT, g, 1);
         shock(ctx, x, y, fx.size * 2 * (1 - g), CYAN, g, 5);
       });
+      rays(ctx, x, y, fx.size * 3 * (1 - g * 0.5), 8, 0.5 * g, seed, VOLT);
+      glint(ctx, x, y - 2, 10 * g, "#fffbe0", g);
       return true;
     }
     case "tkBell": {
@@ -155,6 +165,7 @@ export function drawThorkenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         shock(ctx, x, y - 4, fx.size * easeOut(f), "#ffd870", 0.85 * fade, 8);
         glow(ctx, x, y - 6, 18, "#ffe8a0", 0.7 * fade, 1);
       });
+      glints(ctx, x, y - 6, fx.size * easeOut(f), 8, fx.ticks, seed, "#ffe8a0", fade);
       return true;
     }
     case "tkTide": {
@@ -169,6 +180,7 @@ export function drawThorkenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         ctx.fillStyle = alpha(FOAM, fade);
         ctx.fillRect(Math.round(x + Math.cos(ang) * d), Math.round(y + Math.sin(ang) * d * 0.6), 2, 1);
       }
+      caustic(ctx, x, y, fx.size * 0.8 * easeOut(f), fx.ticks, 0.5 * fade);
       return true;
     }
     case "tkVolt": {
@@ -188,6 +200,8 @@ export function drawThorkenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       ctx.fillStyle = alpha(FOAM, 0.9 * fade);
       ctx.fillRect(x - 1, y - h, 2, h);
       droplets(ctx, x, y - h, fx.size, f, seed, 16);
+      rainbow(ctx, x, y - h * 0.55, fx.size * 0.9, 0.8 * Math.sin(f * Math.PI));
+      glints(ctx, x, y - h, fx.size * 0.8, 5, fx.ticks, seed, FOAM, fade);
       additive(ctx, () => shock(ctx, x, y, fx.size * easeOut(f), CYAN, 0.8 * fade, 6));
       return true;
     }
@@ -204,6 +218,7 @@ export function drawThorkenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         ctx.stroke();
       }
       additive(ctx, () => glow(ctx, x, y, fx.size, "#a8e8ff", 0.7 * fade, 0.8));
+      glint(ctx, x, y, fx.size * 0.6 * fade, FOAM, fade);
       return true;
     }
   }
