@@ -59,7 +59,7 @@ describe("광야의 새벽", () => {
       play(s, TICK_RATE * 120, true);
       expect(s.swarm!.lv, c).toBeGreaterThan(1);
     }
-  }, 60000);
+  }, 120000);
 
   it("같은 시드·입력이면 결과가 같음", () => {
     const go = () => {

@@ -109,6 +109,7 @@ export { cloneSpots } from "./pungryuPerks";
 export { isLeo, leoVolt } from "./leo";
 export { isOnyx } from "./onyx";
 export { isFenrir } from "./fenrirStats";
+export { isThorken, thorkenGauge } from "./thorken";
 export { isEclipse, isNight, zoneR as eclipseZoneR } from "./eclipseStats";
 export { SUN_BURST, sunCutPaths } from "./eclipseCuts";
 export { passiveTagAt } from "./retag";

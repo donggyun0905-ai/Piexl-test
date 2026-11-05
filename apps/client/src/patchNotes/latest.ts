@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.30",
+    date: "2026-11-05",
+    items: {
+      ko: [
+        "새 나라 탈라시아(바다의 나라, 자유와 해방) · 첫 캐릭터 토르켄: 거대한 닻 + 사슬로 이은 철구공 (체력 120 · 공격력 12 · 방어 5, 여는 조건: 최대 체력 250 달성)",
+        "토르켄: 처음 누르면 철구공을 던져 떨어진 자리에 천둥 · 그 뒤 닻을 휘두를 때마다(느리지만 넓고 셈) 사슬 끝 철구공이 나를 중심으로 크게 돌며 휩씀 (공을 어디 두느냐에 따라 휩쓰는 길이 달라짐) · 대시하면 철구공을 감아 들여 다시 던짐",
+        "토르켄: 때릴수록 폭풍 게이지가 차고, 가득이면 다음 휘두르기에 태풍(철구공을 따라다니며 끌어당김) + 하늘에서 천둥 · 무기는 철구공 10개(무쇠·조수·뇌운·소용돌이·성게·쌍둥이·간헐천·빙해·크라켄·대해일) · 전용 아이템 10 · 물보라·파도·소용돌이·번개 이펙트 · 그림 시트 · 패왕전 스킬 4",
+      ],
+      en: [
+        "New nation Thalassia (the sea nation of freedom and liberation) · first character Thorken: a giant anchor + a chained iron ball (120 HP · 12 attack · 5 defense; unlock: reach 250 max HP)",
+        "Thorken: the first press throws the ball, and thunder strikes where it lands · then every anchor swing (slow but wide and heavy) whips the chained ball around you in a huge arc (where you leave the ball shapes the sweep) · dash reels the ball back to throw again",
+        "Thorken: hits fill the Storm gauge; when full, your next swing calls a typhoon (follows the ball and pulls foes in) + thunder from the sky · weapons are 10 balls (Iron, Tide, Thundercloud, Whirlpool, Urchin, Twin, Geyser, Ice Floe, Kraken, Maelstrom) · 10 exclusive items · splash, wave, whirlpool and lightning effects · sprite sheet · 4 Paewang skills",
+      ],
+      ja: [
+        "新しい国タラシア（自由と解放の海の国）· 最初のキャラクター、トルケン：巨大な錨 + 鎖でつないだ鉄球（体力120 · 攻撃力12 · 防御5、解放条件：最大体力250達成）",
+        "トルケン：最初の入力で鉄球を投げ、落ちた場所に雷 · 以後は錨を振るたび（遅いが広く強い）鎖の先の鉄球が自分を中心に大きく回って薙ぐ（球をどこに置くかで薙ぐ道が変わる）· ダッシュで鉄球を巻き戻してまた投げる",
+        "トルケン：当てるほど嵐ゲージがたまり、満ちると次の振りで台風（鉄球について回り敵を引き寄せる）+ 空から雷 · 武器は鉄球10種（鉄・潮・雷雲・渦潮・ウニ・双子・間欠泉・氷海・クラーケン・大海嘯）· 専用アイテム10 · 水しぶき・波・渦潮・雷のエフェクト · スプライトシート · 覇王戦スキル4",
+      ],
+    },
+  },
+  {
     version: "0.49.29",
     date: "2026-11-05",
     items: {

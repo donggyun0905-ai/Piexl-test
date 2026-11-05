@@ -8,6 +8,7 @@ export const CHAR_SELECT_TEXT = {
   csTerracore: l("테라코어", "Terracore", "テラコア"),
   csVirdia: l("비르디아", "Virdia", "ヴィルディア"),
   csHelios: l("헬리오스", "Helios", "ヘリオス"),
+  csThalassia: l("탈라시아", "Thalassia", "タラシア"),
   csAkashic: l("아카식 레코드", "Akashic Records", "アカシックレコード"),
   csOutsider: l("이방인", "Outsiders", "異邦人"),
   csArchive: l("서고의 감시자", "Archive Wardens", "書庫の監視者"),

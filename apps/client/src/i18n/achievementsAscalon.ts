@@ -17,6 +17,7 @@ export const ASCALON_ACHIEVEMENTS = {
   clearZeus: n(["신들의 왕", "King of the Gods", "神々の王"], ["제우스로 클리어", "Clear as Zeus", "ゼウスでクリア"]),
   clearWanderer: n(["칼 한 자루의 길", "Path of One Blade", "一刀の道"], ["방랑객으로 클리어", "Clear as Wanderer", "放浪者でクリア"]),
   clearEclipse: n(["태양과 일식의 주인", "Lord of Sun and Eclipse", "太陽と日食の主"], ["이클립스로 클리어", "Clear as Eclipse", "エクリプスでクリア"]),
+  clearThorken: n(["자유의 바다", "The Free Sea", "自由の海"], ["토르켄으로 클리어", "Clear as Thorken", "トルケンでクリア"]),
   clearFenrir: n(["선왕의 검을 문 늑대", "Wolf with the Late King's Blade", "先王の剣をくわえた狼"], ["펜리르로 클리어", "Clear as Fenrir", "フェンリルでクリア"]),
   clearOnyx: n(["일곱 보석의 주인", "Master of Seven Gems", "七つの宝石の主"], ["오닉스로 클리어", "Clear as Onyx", "オニキスでクリア"]),
   clearLeo: n(["뇌전의 왕", "King of Thunder", "雷電の王"], ["레오로 클리어", "Clear as Leo", "レオでクリア"]),

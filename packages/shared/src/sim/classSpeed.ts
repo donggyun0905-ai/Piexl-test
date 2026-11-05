@@ -14,6 +14,7 @@ import { hasPerk } from "./util";
 import { slayerDmgMul } from "./slayer";
 import { idraDmgMul } from "./idra";
 import { eclipseDmgMul, eclipseSpeedMul } from "./eclipseStats";
+import { thorkenSpeedMul } from "./thorkenKit";
 
 /** 직업마다 평타 공격력 배율 (능력치 창 '공격력'에 같이 보임): 이드라 모습·사계절 · 학살자 낮은 체력·분노 */
 export function classDamageMul(p: PlayerState): number {
@@ -45,6 +46,8 @@ export function classSpeedMul(p: PlayerState): number {
       return (p.slRage ?? 0) > 0 ? SLAYER.rageSpeed : 1;
     case "eclipse":
       return eclipseSpeedMul(p);
+    case "thorken":
+      return thorkenSpeedMul(p);
     case "zeus":
       return p.zsGod ? ZEUS.godSpeed : 1;
     default:

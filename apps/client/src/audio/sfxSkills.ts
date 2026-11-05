@@ -3,6 +3,7 @@ import type { RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
 import { fenrirSounds } from "./fenrirSounds";
 import { eclipseSounds } from "./eclipseSounds";
+import { thorkenSounds } from "./thorkenSounds";
 
 export const SKILL_SOUNDS = {
   // 터짐: 낮은 펑 · 떨어지는 운석: 쿵 + 우르르
@@ -78,6 +79,7 @@ const ultAt = new Map<number, number>();
 export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) => void): void {
   fenrirSounds(run, out, onShake);
   eclipseSounds(run, out, onShake);
+  thorkenSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;
   for (const e of run.effects) {

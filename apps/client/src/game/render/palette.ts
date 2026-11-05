@@ -65,6 +65,7 @@ export const C = {
   onyx: "#b070ff",
   fenrir: "#7aa8ff",
   eclipse: "#ff9a30",
+  thorken: "#3ac8e8",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",

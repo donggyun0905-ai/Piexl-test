@@ -13,6 +13,7 @@ export const CHAR_GOAL_TEXT = {
   cg_mukin: l("방어력 {n} 달성", "Reach {n} defense", "防御力{n}達成"),
   cg_gunner: l("서든데스 1번 클리어", "Clear Sudden Death once", "サドンデスを1回クリア"),
   cg_titan: l("최대 체력 {n} 달성", "Reach {n} max HP", "最大体力{n}達成"),
+  cg_thorken: l("최대 체력 {n} 달성", "Reach {n} max HP", "最大体力{n}達成"),
   cg_tracker: l("타워 디펜스 ★5 이상 맵 클리어", "Clear a ★5+ Tower Defense map", "タワーディフェンス★5以上のマップをクリア"),
   cg_elementalist: l("영웅의 길 1번 클리어", "Clear the Hero's Path once", "英雄の道を1回クリア"),
   cg_imugi: l("멸망의 용 1번 처치", "Defeat the Dragon of Ruin once", "滅びの竜を1回倒す"),

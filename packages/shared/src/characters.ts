@@ -42,7 +42,7 @@ export const CHARACTERS = {
   chronomancer: { id: "chronomancer", maxHp: 90, damage: 10, moveSpeed: 1.3, luck: 0, startWeapon: "pocketwatch" },
   /** 소환술사: 근접 채찍으로 쳐서 모은 힘으로 소환수를 부름 (무기마다 다른 소환수) */
   summoner: { id: "summoner", maxHp: 95, damage: 10, moveSpeed: 1.25, luck: 0, startWeapon: "leatherwhip" },
-  /** 풋내기: 맨손으로 시작, 공용 무기·공용 패시브만. 경험치로 레벨이 오르면 스탯을 직접 찍음 (sim/novice) */
+  /** 풋내기: 맨손으로 시작, 공용 무기·공용 패시브만. 경험치로 레벨이 오르면 스탯을 직접 찍음 */
   novice: { id: "novice", maxHp: 100, damage: 10, moveSpeed: 1.3, luck: 0, startWeapon: "fists" },
   /** 베두인: 차크람으로 돌려 베고 던진 뒤 대시로 주움 (sim/bedouin) */
   bedouin: { id: "bedouin", maxHp: 95, damage: 24, moveSpeed: 1.35, luck: 0, startWeapon: "sandChakram" },
@@ -62,7 +62,7 @@ export const CHARACTERS = {
   idra: { id: "idra", maxHp: 100, damage: 10, moveSpeed: 1.3, luck: 1, startWeapon: "gaia" },
   /** 변희 (비르디아, 만물의 소녀): 든 무기의 동물로 변해 싸움 (sim/morph) */
   byeonhui: { id: "byeonhui", maxHp: 105, damage: 10, moveSpeed: 1.3, luck: 0, startWeapon: "wolfForm" },
-  /** 플라이 (비르디아): 잠자리 날개로 날아 급습(그동안 무적), 지나간 적을 발톱으로 벰 · 아주 빠름 (sim/fly) */
+  /** 플라이 (비르디아): 날아 급습·발톱 (sim/fly) */
   fly: { id: "fly", maxHp: 85, damage: 11, moveSpeed: 1.5, luck: 0, startWeapon: "glassClaw" },
   /** 장로 (비르디아): 적 자리에 진을 깔아 잠시 뒤 발동 · 느림 (sim/elder) */
   elder: { id: "elder", maxHp: 95, damage: 12, moveSpeed: 1.15, luck: 1, startWeapon: "vineGate" },
@@ -72,7 +72,7 @@ export const CHARACTERS = {
   spiritist: { id: "spiritist", maxHp: 85, damage: 10, moveSpeed: 1.3, luck: 1, startWeapon: "titanCoreSpirit" },
   /** 역병의사 (헬리오스): 모기떼·연기 구역·쥐떼(흑사병)·죽음의 손아귀 (sim/plague) */
   plague: { id: "plague", maxHp: 100, damage: 10, moveSpeed: 1.25, luck: 1, startWeapon: "mosquitoSwarm" },
-  /** 학살자 (헬리오스): 피에 젖은 대낫 5연속 콤보, 기술마다 체력 5 · 체력 280 · 회복 안 됨 · 피의 학살 (sim/slayer) */
+  /** 학살자 (헬리오스): 피에 젖은 대낫 5연속 콤보 (sim/slayer) */
   slayer: { id: "slayer", maxHp: 280, damage: 16, moveSpeed: 1.3, luck: 0, startWeapon: "bloodScythe" },
   /** 이터 (헬리오스): 이빨 달린 그림자, 열 가지 공격이 확률로 (sim/eater) */
   eater: { id: "eater", maxHp: 110, damage: 16, moveSpeed: 1.25, luck: 0, startWeapon: "shadowMaw" },
@@ -82,7 +82,7 @@ export const CHARACTERS = {
   samyeol: { id: "samyeol", maxHp: 95, damage: 11, moveSpeed: 1.35, luck: 1, startWeapon: "tangNeedle" },
   /** 오토마타 (테라코어): 손 레이저 · 자매 인형 · 유도 미사일 (sim/automata) */
   automata: { id: "automata", maxHp: 100, damage: 12, moveSpeed: 1.3, luck: 0, startWeapon: "adFinger" },
-  /** 라이더 (테라코어): 오토바이 폭주족. 빠를수록 피해 · 달린 거리 게이지가 차면 범위 펄스 (sim/rider) */
+  /** 라이더 (테라코어): 오토바이 · 달린 거리 펄스 (sim/rider) */
   rider: { id: "rider", maxHp: 110, damage: 12, moveSpeed: 1.5, luck: 0, startWeapon: "rdHammer" },
   /** 붐버 (테라코어): 터지는 무기 · 예술 연쇄 · 여진 (sim/bomber) */
   bomber: { id: "bomber", maxHp: 105, damage: 12, moveSpeed: 1.25, luck: 0, startWeapon: "bmGrenade" },
@@ -112,6 +112,8 @@ export const CHARACTERS = {
   fenrir: { id: "fenrir", maxHp: 45, damage: 16, moveSpeed: 1.55, luck: 0, startWeapon: "fnKingBlade", dodge: 0.25, sharpness: 0.25 },
   /** 이클립스 (헬리오스): 태양 ↔ 일식 (sim/eclipse) */
   eclipse: { id: "eclipse", maxHp: 115, damage: 11, moveSpeed: 1.3, luck: 1, startWeapon: "ecAxe" },
+  /** 토르켄 (탈라시아): 닻 + 사슬 철구공 · 태풍·천둥 (sim/thorken) */
+  thorken: { id: "thorken", maxHp: 120, damage: 12, moveSpeed: 1.3, luck: 2, startWeapon: "tkIron", defense: 5 },
   /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 대시는 땅굴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },
   /** 운명의 여행자 (히든, 시즌 2): 모아 쏘는 활 · 모래시계 주사위 운명 (sim/voyager) */
