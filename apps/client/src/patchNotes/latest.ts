@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.39",
+    date: "2026-11-05",
+    items: {
+      ko: ["이클립스 불줄기·도끼 궤적·공허의 날 번짐을 빛 효과로 옮김: 날을 따라 빛이 번져 더 밝고 폰에서 가벼워짐 (빛 효과를 끄면 예전 모습)"],
+      en: ["Eclipse's fire streaks, axe trails and void blades now glow through the glow layer along the blade: brighter and lighter on phones (unchanged with glow off)"],
+      ja: ["イクリプスの炎の筋・斧の軌跡・虚空の刃のにじみを光のエフェクトへ移行：刃に沿って光が広がり、より明るくスマホで軽く（光のエフェクトをオフにすると従来どおり）"],
+    },
+  },
+  {
     version: "0.49.38",
     date: "2026-11-05",
     items: {

@@ -8,6 +8,8 @@ export interface GlowHint {
   y: number;
   d: number;
   color: string;
+  /** 진하기 (0~1) */
+  a: number;
 }
 
 let active = false;
@@ -19,12 +21,15 @@ export function setGlowActive(v: boolean): void {
   if (!v) hints.length = 0;
 }
 
-/** 빛 남기기 (지금 ctx 변환 기준 x·y, 지름 size). 받았으면 true → shadowBlur 생략 */
-export function glowHint(ctx: CanvasRenderingContext2D, x: number, y: number, size: number, color: string): boolean {
+/** 빛 층이 받을 수 있는지 (여러 개를 남기기 전에 확인) */
+export const glowActive = (): boolean => active;
+
+/** 빛 남기기 (지금 ctx 변환 기준 x·y, 지름 size, 진하기 a). 받았으면 true → shadowBlur 생략 */
+export function glowHint(ctx: CanvasRenderingContext2D, x: number, y: number, size: number, color: string, a = 1): boolean {
   if (!active) return false;
   if (hints.length >= 120) return true;
   const m = ctx.getTransform();
-  hints.push({ x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f, d: size * Math.hypot(m.a, m.b), color });
+  hints.push({ x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f, d: size * Math.hypot(m.a, m.b), color, a });
   return true;
 }
 

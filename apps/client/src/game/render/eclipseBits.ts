@@ -3,6 +3,7 @@
 import type { PlayerState } from "@pixel-rogue/shared";
 import { ECLIPSE, sunCutPaths } from "@pixel-rogue/shared";
 import { additive, alpha, glow, rnd, type Ctx } from "./pwFxBits";
+import { glowActive, glowHint } from "../glow/glowHints";
 
 export const TAU = Math.PI * 2;
 /** 태양: 바깥 노랑 · 안쪽 빨강 */
@@ -77,11 +78,15 @@ function strip(ctx: Ctx, pa: readonly Sample[], a: (q: Sample) => number, b: (q:
  * 날 하나 칠하기: 바깥 색으로 은은하게 번지는 반투명 빛 → 바깥 색 날 → 안쪽 색 (draw(k): 두께 배율 k로 날 모양 채우기)
  * 겹겹이 테두리를 두르지 않고, 날 하나가 빛나 보이게
  */
-export function paintBlade(ctx: Ctx, draw: (k: number) => void, outer: string, inner: string, al: number, strong = 1): void {
+export function paintBlade(ctx: Ctx, draw: (k: number) => void, outer: string, inner: string, al: number, strong = 1, light?: readonly [number, number, number][]): void {
   ctx.save();
   ctx.globalCompositeOperation = "lighter";
-  ctx.shadowColor = alpha(outer, 0.9 * al);
-  ctx.shadowBlur = 14;
+  // 빛 층이 켜져 있으면 번짐은 날 자리(light: x·y·지름)마다 빛 층이 (폰에서 shadowBlur는 느림)
+  if (light && glowActive()) for (const [lx, ly, d] of light) glowHint(ctx, lx, ly, d, outer, al);
+  else {
+    ctx.shadowColor = alpha(outer, 0.9 * al);
+    ctx.shadowBlur = 14;
+  }
   ctx.fillStyle = alpha(outer, Math.min(1, 0.3 * strong) * al);
   draw(1.35);
   ctx.restore();
@@ -140,8 +145,11 @@ function fireBlade(ctx: Ctx, pts: readonly Pt[], stab: boolean, w: number, x: nu
   const [o, n] = stab ? [1, -1] : [0.35, -1];
   ctx.save();
   ctx.globalCompositeOperation = "lighter";
-  ctx.shadowColor = alpha(S_RED, al);
-  ctx.shadowBlur = 14;
+  if (glowActive()) for (let i = 0; i < path.length; i += 3) glowHint(ctx, path[i]!.x, path[i]!.y, path[i]!.w * 3.2, S_RED, al);
+  else {
+    ctx.shadowColor = alpha(S_RED, al);
+    ctx.shadowBlur = 14;
+  }
   ctx.fillStyle = alpha(S_RED, 0.4 * al);
   strip(ctx, path, (q) => q.w * (o + 0.25), (q) => q.w * (n - 0.35));
   ctx.restore();
@@ -187,7 +195,12 @@ export function band(ctx: Ctx, x: number, y: number, r: number, a0: number, a1: 
  */
 export function voidArc(ctx: Ctx, x: number, y: number, r: number, a0: number, a1: number, thick: number, al: number, sy = 1, head?: 0 | 1): void {
   if (al <= 0 || a1 <= a0) return;
-  paintBlade(ctx, (k) => band(ctx, x, y, r + thick * (k - 1) * 0.3, a0, a1, thick * k, sy, head), N_PINK, N_VOID, al, head === undefined ? 1 : 1.25);
+  // 빛 층용 날 자리: 호를 따라 6곳
+  const light = Array.from({ length: 6 }, (_, i): [number, number, number] => {
+    const a = a0 + ((a1 - a0) * (i + 0.5)) / 6;
+    return [x + Math.cos(a) * r, y + Math.sin(a) * r * sy, thick * 3];
+  });
+  paintBlade(ctx, (k) => band(ctx, x, y, r + thick * (k - 1) * 0.3, a0, a1, thick * k, sy, head), N_PINK, N_VOID, al, head === undefined ? 1 : 1.25, light);
   if (head === undefined) return;
   // 바깥 날 끝을 따라 밝은 분홍 줄 (꼬리는 가늘게, 도끼 머리 쪽이 밝게)
   ctx.strokeStyle = alpha("#ffd2ff", 0.9 * al);

@@ -44,7 +44,7 @@ export function createGlowLayer(game: HTMLCanvasElement): GlowLayer {
       const k = f * (game.width / Math.max(1, w));
       // 멈춤 중에는 조각이 줄지 않으니 새로 놓지 않음 (지난 빛이 그대로 남아 보임)
       const hints = takeGlowHints();
-      if (!stopped) for (const h of hints) glow.parts.steady(h.x / k + cam.x, h.y / k + cam.y, h.d / k, hexColor(h.color, 0xffffff), 0.6);
+      if (!stopped) for (const h of hints) glow.parts.steady(h.x / k + cam.x, h.y / k + cam.y, h.d / k, hexColor(h.color, 0xffffff), 0.6 * h.a);
       glow.render(dt, f, cam.x, cam.y);
     },
     addWatch: (w) => void extra.push(w),

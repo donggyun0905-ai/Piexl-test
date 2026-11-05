@@ -88,12 +88,12 @@ cues.flash = 1;
 
 ## 6. 넣은 곳과 남은 곳 (2026-11-05)
 
-**넣음 (0.49.36~0.49.38)**: 캐릭터 큰 기술 38가지(`glowKinds`) · 용암·리바이어 고래·테일 상어 번짐을 빛 층으로(`glowHints`) · 게임 화면 공통(맞힘·처치·탄·큰 공격·피격) · 한정 스킨·상점 이벤트 효과(게임 안) · 각성·필살기·보스 궁극기 · 회복·보호막·돈 · 바닥 아이템 · 용암 · 어두운 장면 등불 · 패왕전 편 색 탄 · 타워 디펜스 · 로비·메인 화면 배경·전시장 · 뽑기 · 명예의 전당 우승자 카드
+**넣음 (0.49.36~0.49.39)**: 캐릭터 큰 기술 38가지(`glowKinds`) · 용암·리바이어 고래·테일 상어·이클립스 날 번짐을 빛 층으로(`glowHints`, 이클립스는 날 길을 따라 여러 개) · 게임 화면 공통(맞힘·처치·탄·큰 공격·피격) · 한정 스킨·상점 이벤트 효과(게임 안) · 각성·필살기·보스 궁극기 · 회복·보호막·돈 · 바닥 아이템 · 용암 · 어두운 장면 등불 · 패왕전 편 색 탄 · 타워 디펜스 · 로비·메인 화면 배경·전시장 · 뽑기 · 명예의 전당 우승자 카드
 
 **남음 (다음에 할 만한 것)**
 | 곳 | 파일 | 할 일 |
 | --- | --- | --- |
-| Canvas 2D 빛 흉내 (남은 것) | `shadowBlur`: `eclipseBits`(날 모양이 그때그때 달라 한 점 빛으로는 안 맞음)·`minimap`(화면 글자 칸, 게임 층 밖) · `lighter` 합성: `pwFxBits`·`eclipseBits`·`imugi`·`collectorArt`·`propArt`·`drawStation`·`dmgSkins`·`lobby/hallArt` (`lighter`는 느리지 않아 그대로 둠) | 이클립스는 날 길을 따라 `glowHint`를 여러 개 놓는 식으로 옮길 수 있음 |
+| Canvas 2D 빛 흉내 (남은 것) | `shadowBlur`: `minimap`(화면 글자 칸, 게임 층 밖이라 그대로) · `lighter` 합성: `pwFxBits`·`eclipseBits`·`imugi`·`collectorArt`·`propArt`·`drawStation`·`dmgSkins`·`lobby/hallArt` (`lighter`는 느리지 않아 그대로 둠) | 더 옮길 것 없음 (`lighter`는 그대로) |
 | 캐릭터 전용 큰 기술 | 캐릭터마다 `render/*` | `glowSkills`의 `ULT_FX`·`glowWatch`의 `BIG_FX`에 효과 이름을 더하면 바로 빛남 |
 | 상점 효과 미리보기 | `shop/FxPreview.tsx` | 카드가 여러 장이라 WebGL 한도 때문에 보류 (하나만 크게 보는 창을 만들면 그 창에만) |
 | 메인 화면 글자 | `TitleScreen.tsx` | 지금은 뒤 로비 빛만. 제목 글자 반짝임은 CSS로 충분 |
