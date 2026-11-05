@@ -38,6 +38,7 @@ import { resetLevia } from "./levia";
 import { resetTail } from "./tail";
 import { resetMadQueen } from "./madQueen";
 import { resetHook } from "./hook";
+import { resetOrca } from "./orca";
 import { resetCollector } from "./collector";
 import { resetMiner } from "./miner";
 import { resetVoyager } from "./voyager";
@@ -248,6 +249,7 @@ export function practiceReset(s: RunState): void {
   resetTail(p);
   resetMadQueen(p);
   resetHook(p);
+  resetOrca(p);
   resetCollector(p);
   resetMiner(p);
   resetVoyager(p);

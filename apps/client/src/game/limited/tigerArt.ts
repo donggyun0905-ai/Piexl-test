@@ -75,6 +75,7 @@ export const ACCENT: Record<string, string> = {
   tail: "#6af0e0",
   madQueen: "#5af0ff",
   hook: "#4ab8ff",
+  orca: "#3ae0ff",
   collector: "#5a8aff",
   mystic: "#ff6a8a",
   engineer: "#5ad0f0",

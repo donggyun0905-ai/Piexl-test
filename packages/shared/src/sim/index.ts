@@ -115,6 +115,7 @@ export { whaleChance } from "./leviaKit";
 export { isTail, tailShark, tailStep, seaR } from "./tail";
 export { cannonCount, cannonPos, isMadQueen, wingPos } from "./madQueen";
 export { hookReach, isHook } from "./hook";
+export { isOrca } from "./orca";
 export { isEclipse, isNight, zoneR as eclipseZoneR } from "./eclipseStats";
 export { SUN_BURST, sunCutPaths } from "./eclipseCuts";
 export { passiveTagAt } from "./retag";

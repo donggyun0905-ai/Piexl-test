@@ -1,4 +1,4 @@
-// 캐릭터 설명: 탈라시아 3 (훅) · 한·영·일 (수치는 weaponsHook·itemsHook과 맞춤)
+// 캐릭터 설명: 탈라시아 3 (훅·오르카) · 한·영·일 (수치는 weaponsHook·itemsHook·weaponsOrca·itemsOrca와 맞춤)
 import type { CharacterId } from "@pixel-rogue/shared";
 
 type Guide = Partial<Record<CharacterId, readonly string[]>>;
@@ -13,6 +13,15 @@ export const GUIDE_KO_THAL3: Guide = {
     "무기 6: 녹슨 갈고리 · 크라켄 갈고리(2마리 더) · 작살 갈고리(멀리·빠르게) · 폭풍탄 산탄총(번개) · 용의 숨결탄(넓게·불) · 역조 갈고리(멀리 밀어냄·난파 2배)",
     "전용 아이템 10: 닻사슬 · 네 갈래 갈고리 · 밧줄 그네 · 쌍발 연사 · 흑색 화약 · 난파선 · 약탈 · 럼주 한 병 · 해골 깃발 · 자유의 돛 (공용 아이템도 나옴)",
   ],
+  orca: [
+    "탈라시아 · 오르카 · 바다의 자유를 주먹에 담은 격투가 · 체력 110 · 공격력 12 · 이동 1.4 · 행운 1",
+    "4연속 콤보 (누르고 있으면, 움직이며 때림): ① 물보라 잽 — 앞쪽 넓은 부채꼴 (공격력 70%) ② 소용돌이 훅 — 나를 둘러싼 물회오리가 적을 끌어당김 (80%) ③ 물기둥 어퍼 — 앞에 물기둥이 솟아 적을 띄움 (110% + 기절) ④ 상어 기공파",
+    "상어 기공파: 상어 모양 기공파가 스스로 먹잇감을 찾아 헤엄쳐 꺾어 가며 3마리까지 물어뜯고 (공격력 140%) 물보라로 터짐 (60%)",
+    "자유로운 콤보: 대시해도 콤보가 끊기지 않고 바로 다음 타격을 칠 수 있음 · 1.5초 넘게 안 때리면 처음부터",
+    "해방 게이지: 맞힐 때마다 차고 상어가 물면 더 참 · 가득 차면 양손 불꽃이 커지고, 대시가 '범고래 돌파'로 바뀜 — 거대한 범고래 물기운이 되어(무적) 적을 양옆으로 가르며 뚫고 나가고 (200%) 큰 파도로 내려앉음 (240% + 밀어냄 + 기절)",
+    "무기 6: 파도 손목띠 · 이안류 권갑(큰 소용돌이) · 간헐천 너클(물기둥 셋) · 메갈로돈 이빨(큰 상어) · 범고래 무리(상어 셋) · 대소용돌이 권갑(소용돌이 장판)",
+    "전용 아이템 10: 물보라 장갑 · 밑물결 · 파도 타기 · 등지느러미 · 피 냄새 · 반향정위 · 고래의 숨 · 해방의 노래 · 물거품 방패 · 바닷바람 (공용 아이템도 나옴)",
+  ],
 };
 
 export const GUIDE_EN_THAL3: Guide = {
@@ -25,6 +34,15 @@ export const GUIDE_EN_THAL3: Guide = {
     "6 weapons: Rusty Hook · Kraken Hook (2 more foes) · Harpoon Hook (farther, faster) · Stormshot Scattergun (lightning) · Dragon's Breath Shells (wider, burn) · Undertow Hook (pushes farther, 2x wreck)",
     "10 exclusive items: Anchor Chain · Grapnel · Rope Swing · Double Tap · Black Powder · Shipwreck · Plunder · Bottle of Rum · Jolly Roger · Sail of Freedom (shared items also drop)",
   ],
+  orca: [
+    "Thalassia · Orca · a brawler who carries the freedom of the sea in his fists · HP 110 · ATK 12 · Move 1.4 · Luck 1",
+    "4-hit combo (hold, hits on the move): ① Spray Jab — wide frontal fan (70% ATK) ② Whirl Hook — a water vortex around you pulls foes in (80%) ③ Geyser Upper — a geyser erupts ahead and launches foes (110% + stun) ④ Shark Wave",
+    "Shark Wave: a shark-shaped ki blast hunts on its own, turning to chase prey and biting up to 3 foes (140% ATK) before bursting into spray (60%)",
+    "Free-flowing combo: dashing never breaks the combo and lets you strike again at once · it resets after 1.5s without hitting",
+    "Liberation gauge: fills with every hit, more on shark bites · when full your hands blaze and your dash becomes Orca Breach — you turn into a giant orca of water (invulnerable), split through foes (200%) and land in a huge wave (240% + knockback + stun)",
+    "6 weapons: Tide Wraps · Riptide Gauntlets (bigger whirl) · Geyser Knuckles (three geysers) · Megalodon Fang (big shark) · Orca Pod (three sharks) · Maelstrom Gauntlets (whirlpool)",
+    "10 exclusive items: Spray Gloves · Undertow · Wave Riding · Dorsal Fin · Scent of Blood · Echolocation · Whale's Breath · Song of Liberation · Foam Shield · Sea Breeze (common items appear too)",
+  ],
 };
 
 export const GUIDE_JA_THAL3: Guide = {
@@ -36,5 +54,14 @@ export const GUIDE_JA_THAL3: Guide = {
     "ロープ移動：空のフックが壁に刺さるとロープでその壁へ飛び（飛んでいる間無敵）着地しながら部屋の方へ撃つ · ボスに掛けると自分がボスの目の前へ引き寄せられて撃ち、元の場所へ跳ね返る",
     "武器6：錆びたフック · クラーケンのフック（2体多く）· 銛のフック（遠く・速く）· 嵐弾の散弾銃（雷）· 竜の息吹弾（広く・火）· 逆潮のフック（遠くへ押し出す・難破2倍）",
     "専用アイテム10：錨の鎖 · 四爪錨 · ロープブランコ · 二連射 · 黒色火薬 · 難破船 · 略奪 · ラム酒一瓶 · 海賊旗 · 自由の帆（共用アイテムも出る）",
+  ],
+  orca: [
+    "タラシア · オルカ · 海の自由を拳に込めた格闘家 · 体力110 · 攻撃力12 · 移動1.4 · 運1",
+    "4連続コンボ（押し続けると動きながら）：① 飛沫ジャブ — 前方の広い扇形（攻撃力70%）② 渦巻きフック — 周りの水の渦が敵を引き寄せる（80%）③ 水柱アッパー — 前に水柱が噴き上がり敵を打ち上げる（110%＋気絶）④ 鮫の気功波",
+    "鮫の気功波：鮫の形の気功波が自ら獲物を探して曲がりながら泳ぎ、3体まで噛みつき（攻撃力140%）飛沫と共に弾ける（60%）",
+    "自由なコンボ：ダッシュしてもコンボが途切れず、すぐ次の攻撃ができる · 1.5秒以上攻撃しないと最初から",
+    "解放ゲージ：当てるたびにたまり、鮫が噛むともっとたまる · 満タンで両手の炎が大きくなり、ダッシュが「シャチ突破」に — 巨大なシャチの水気となって（無敵）敵を左右に裂きながら突き抜け（200%）大波と共に着地（240%＋吹き飛ばし＋気絶）",
+    "武器6：波のリストバンド · 離岸流の籠手（大きな渦）· 間欠泉のナックル（水柱3本）· メガロドンの牙（大きな鮫）· シャチの群れ（鮫3匹）· 大渦の籠手（渦の床）",
+    "専用アイテム10：飛沫のグローブ · 引き波 · 波乗り · 背びれ · 血の匂い · 反響定位 · 鯨の息 · 解放の歌 · 泡の盾 · 潮風（共通アイテムも出る）",
   ],
 };

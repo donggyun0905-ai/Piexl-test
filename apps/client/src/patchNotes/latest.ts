@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.46",
+    date: "2026-11-06",
+    items: {
+      ko: [
+        "탈라시아 새 캐릭터 오르카: 바다의 자유를 주먹에 담은 격투가 (체력 110 · 공격력 12 · 이동 1.4, 여는 조건: 공격 속도 1.6 달성)",
+        "누르고 있으면 움직이며 4연속 콤보: 물보라 잽(앞쪽 넓은 부채꼴) → 소용돌이 훅(둘레 적을 끌어당김) → 물기둥 어퍼(띄워 올림) → 상어 기공파 · 대시해도 콤보가 끊기지 않음",
+        "상어 기공파는 스스로 먹잇감을 찾아 꺾어 헤엄치며 3마리까지 물어뜯고 물보라로 터짐",
+        "때릴수록 해방 게이지가 차고, 가득 차면 대시가 '범고래 돌파': 거대한 범고래 물기운이 되어(무적) 적을 양옆으로 가르며 뚫고 나가 큰 파도로 내려앉음",
+        "권갑 무기 6 (파도 · 이안류 · 간헐천 · 메갈로돈 · 범고래 무리 · 대소용돌이) · 전용 아이템 10 · 물보라·소용돌이·물기둥·상어·범고래·큰 파도 이펙트 · 효과음 · 그림 시트 · 패왕전 스킬",
+      ],
+      en: [
+        "New Thalassia character Orca: a brawler who carries the freedom of the sea in his fists (HP 110 · ATK 12 · Move 1.4, unlock: reach 1.6 attack speed)",
+        "Hold to unleash a 4-hit combo on the move: Spray Jab (wide frontal fan) → Whirl Hook (pulls nearby foes in) → Geyser Upper (launches foes) → Shark Wave · dashing never breaks the combo",
+        "The shark-shaped ki blast hunts on its own, turning to chase prey and biting up to 3 foes before bursting into spray",
+        "Hits fill the Liberation gauge; when full, your dash becomes Orca Breach: you turn into a giant orca of water (invulnerable), split through foes and land in a huge wave",
+        "6 gauntlet weapons (Tide · Riptide · Geyser · Megalodon · Orca Pod · Maelstrom) · 10 exclusive items · spray, whirl, geyser, shark, orca and huge wave effects · sounds · sprite sheet · Champion Clash skills",
+      ],
+      ja: [
+        "タラシアの新キャラ オルカ：海の自由を拳に込めた格闘家（体力110 · 攻撃力12 · 移動1.4、解放条件：攻撃速度1.6達成）",
+        "押し続けると動きながら4連続コンボ：飛沫ジャブ（前方の広い扇形）→ 渦巻きフック（周りの敵を引き寄せる）→ 水柱アッパー（打ち上げ）→ 鮫の気功波 · ダッシュしてもコンボが途切れない",
+        "鮫の気功波は自ら獲物を探して曲がりながら泳ぎ、3体まで噛みついて飛沫と共に弾ける",
+        "攻撃するほど解放ゲージがたまり、満タンでダッシュが「シャチ突破」に：巨大なシャチの水気となって（無敵）敵を左右に裂きながら突き抜け、大波と共に着地",
+        "籠手武器6（波 · 離岸流 · 間欠泉 · メガロドン · シャチの群れ · 大渦）· 専用アイテム10 · 飛沫・渦・水柱・鮫・シャチ・大波のエフェクト · 効果音 · スプライトシート · 覇王戦スキル",
+      ],
+    },
+  },
+  {
     version: "0.49.45",
     date: "2026-11-06",
     items: {

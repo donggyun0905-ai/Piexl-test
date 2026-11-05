@@ -13,6 +13,7 @@ import { drawLeviaAura, drawLeviaBack } from "./leviaBody";
 import { drawTailAura, drawTailBack } from "./tailBody";
 import { drawMadQueenAura, drawMadQueenBack } from "./madQueenBody";
 import { drawHookAura, drawHookBack } from "./hookBody";
+import { drawOrcaAura, drawOrcaBack } from "./orcaBody";
 import { drawFallenWings } from "./fallenWings";
 
 type Ctx = CanvasRenderingContext2D;
@@ -84,6 +85,7 @@ export function drawForgottenBack(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawTailBack(ctx, s, alpha, snap);
   drawMadQueenBack(ctx, s, alpha, snap);
   drawHookBack(ctx, s, alpha, snap);
+  drawOrcaBack(ctx, s, alpha, snap);
   drawFallenWings(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten") return;
@@ -121,6 +123,7 @@ export function drawForgottenAura(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawTailAura(ctx, s, alpha, snap);
   drawMadQueenAura(ctx, s, alpha, snap);
   drawHookAura(ctx, s, alpha, snap);
+  drawOrcaAura(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten" || (p.fgGod ?? 0) <= 0) return;
   const x = lerp(p.prevX, p.x, alpha);

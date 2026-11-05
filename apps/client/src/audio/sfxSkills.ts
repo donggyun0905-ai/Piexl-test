@@ -8,6 +8,7 @@ import { leviaSounds } from "./leviaSounds";
 import { tailSounds } from "./tailSounds";
 import { madQueenSounds } from "./madQueenSounds";
 import { hookSounds } from "./hookSounds";
+import { orcaSounds } from "./orcaSounds";
 
 export const SKILL_SOUNDS = {
   // 터짐: 낮은 펑 · 떨어지는 운석: 쿵 + 우르르
@@ -67,6 +68,27 @@ export const SKILL_SOUNDS = {
   hkClank: () => {
     tone({ type: "square", from: 1400, to: 900, dur: 0.05, vol: 0.08 });
     tone({ type: "triangle", from: 700, to: 500, dur: 0.08, vol: 0.08, delay: 0.04 });
+  },
+  // 오르카: 물보라 촥 · 소용돌이 휘익 · 물기둥·큰 파도 콸 · 상어 물기 딱 · 해방 고래 울음
+  ocSplash: () => {
+    noise(0.12, 0.25, 2600);
+    tone({ type: "sine", from: 900, to: 300, dur: 0.1, vol: 0.08 });
+  },
+  ocSwirl: () => {
+    noise(0.25, 0.18, 1400);
+    tone({ type: "sine", from: 300, to: 700, dur: 0.22, vol: 0.07 });
+  },
+  ocGush: () => {
+    noise(0.4, 0.4, 700);
+    tone({ type: "sine", from: 120, to: 60, dur: 0.35, vol: 0.18 });
+  },
+  ocChomp: () => {
+    tone({ type: "square", from: 500, to: 120, dur: 0.06, vol: 0.12 });
+    noise(0.05, 0.2, 3000);
+  },
+  ocCall: () => {
+    tone({ type: "sine", from: 400, to: 900, dur: 0.3, vol: 0.1 });
+    tone({ type: "sine", from: 900, to: 600, dur: 0.35, vol: 0.08, delay: 0.25 });
   },
   mqCannon: () => {
     noise(0.12, 0.28, 1200);
@@ -128,6 +150,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   tailSounds(run, out, onShake);
   madQueenSounds(run, out, onShake);
   hookSounds(run, out, onShake);
+  orcaSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;
   for (const e of run.effects) {

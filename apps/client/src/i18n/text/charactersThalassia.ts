@@ -37,4 +37,11 @@ export const CHARACTER_TEXT_THALASSIA = {
     en: "Thalassia. A pirate roaming the sea of freedom. Press to throw a giant spectral hook that snags foes along its path (up to 3) and reels them right in front of him, then a double-barrel shotgun from his coat fires point-blank · foes fly back to where they were, and wreck on walls (extra damage + stun) · an empty hook that sticks into a wall swings him over to it, firing as he lands · hook a boss and he is pulled to it, fires, then bounces back",
     ja: "タラシア。自由の海を駆ける海賊。押すと大きな光のフックを投げて通り道の敵を掛け（最大3）目の前まで引き寄せ、懐のダブルバレル散弾銃で零距離射撃 · 当たった敵は元の場所へ吹き飛び、壁に当たると難破（追加ダメージ＋気絶）· 空のフックが壁に刺さるとロープでその壁へ飛び、着地しながら撃つ · ボスに掛けると自分がボスへ引き寄せられて撃ち、元の場所へ跳ね返る",
   },
+  orca: { ko: "오르카", en: "Orca", ja: "オルカ" },
+  riptide: { ko: "물주먹 콤보와 상어 기공파", en: "Tide Fists & Shark Wave", ja: "水拳コンボと鮫の気功波" },
+  orcaDesc: {
+    ko: "탈라시아. 바다의 자유를 주먹에 담은 격투가. 누르고 있으면 움직이며 4연속 콤보: 물보라 잽(앞쪽 넓은 부채꼴) → 소용돌이 훅(둘레 적을 끌어당김) → 물기둥 어퍼(띄워 올림) → 상어 기공파 · 상어 기공파는 스스로 먹잇감을 찾아 헤엄쳐 3마리까지 물어뜯고 물보라로 터짐 · 대시해도 콤보가 끊기지 않음 · 때릴수록 해방 게이지가 차고, 가득 차면 대시가 '범고래 돌파'(거대한 범고래 물기운이 되어 적을 가르며 뚫고 나가 큰 파도로 내려앉음)",
+    en: "Thalassia. A brawler who carries the freedom of the sea in his fists. Hold to unleash a 4-hit combo on the move: Spray Jab (wide frontal fan) → Whirl Hook (pulls nearby foes in) → Geyser Upper (launches foes) → Shark Wave · the shark-shaped ki blast hunts on its own, swimming after prey to bite up to 3 foes before bursting into spray · dashing never breaks the combo · hits fill the Liberation gauge; when full, your dash becomes Orca Breach (you become a giant orca of water that splits through foes and lands in a huge wave)",
+    ja: "タラシア。海の自由を拳に込めた格闘家。押し続けると動きながら4連続コンボ：飛沫ジャブ（前方の広い扇形）→ 渦巻きフック（周りの敵を引き寄せる）→ 水柱アッパー（打ち上げ）→ 鮫の気功波 · 鮫の気功波は自ら獲物を探して泳ぎ、3体まで噛みついて飛沫と共に弾ける · ダッシュしてもコンボが途切れない · 攻撃するほど解放ゲージがたまり、満タンになるとダッシュが「シャチ突破」に（巨大なシャチの水気となって敵を裂きながら突き抜け、大波と共に着地）",
+  },
 } satisfies Record<string, Record<Lang, string>>;

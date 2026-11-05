@@ -70,6 +70,7 @@ export const C = {
   tail: "#3ad8d0",
   madQueen: "#5af0ff",
   hook: "#4ab8ff",
+  orca: "#3ae0ff",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",

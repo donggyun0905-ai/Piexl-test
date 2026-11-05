@@ -30,6 +30,7 @@ import { leviaTaken } from "./leviaKit";
 import { tailTaken } from "./tailKit";
 import { madQueenTaken } from "./madQueenKit";
 import { hookTaken } from "./hookShot";
+import { orcaTaken } from "./orcaMoves";
 import { leoTaken } from "./leoPerks";
 import { onyxHurt, onyxTaken } from "./onyx";
 export { cloudEnv } from "./pungHooks";
@@ -39,7 +40,7 @@ import type { RunState } from "./types";
 export function classTaken(s: RunState, taken: number): number {
   const p = s.player;
   idraHurt(s);
-  return disguise(s, mukinTaken(p, taken * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p, !!s.pvp) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p) * leoTaken(s) * onyxTaken(p) * thorkenTaken(p) * leviaTaken(p) * tailTaken(p) * madQueenTaken(p) * hookTaken(p) * foeTakenMul(p)));
+  return disguise(s, mukinTaken(p, taken * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p, !!s.pvp) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p) * leoTaken(s) * onyxTaken(p) * thorkenTaken(p) * leviaTaken(p) * tailTaken(p) * madQueenTaken(p) * hookTaken(p) * orcaTaken(p) * foeTakenMul(p)));
 }
 
 /** 맞은 뒤 무적: 용 염옥·갓이터 패링 궁극기 동안은 없음 · 묵인은 아주 짧게 · 때린 적의 상태이상 (foeStatus) */
