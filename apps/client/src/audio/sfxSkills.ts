@@ -6,6 +6,7 @@ import { eclipseSounds } from "./eclipseSounds";
 import { thorkenSounds } from "./thorkenSounds";
 import { leviaSounds } from "./leviaSounds";
 import { tailSounds } from "./tailSounds";
+import { madQueenSounds } from "./madQueenSounds";
 
 export const SKILL_SOUNDS = {
   // 터짐: 낮은 펑 · 떨어지는 운석: 쿵 + 우르르
@@ -55,6 +56,20 @@ export const SKILL_SOUNDS = {
     tone({ type: "square", from: 220, to: 70, dur: 0.08, vol: 0.14 });
     tone({ type: "square", from: 260, to: 80, dur: 0.08, vol: 0.12, delay: 0.09 });
   },
+  // 매드퀸: 미래형 대포 (짧은 전자음 + 낮은 쾅) · 날개 레이저 (높게 쓸어내림) · 전탄 일제사격 (길게 울리는 포격 소리)
+  mqCannon: () => {
+    noise(0.12, 0.28, 1200);
+    tone({ type: "square", from: 900, to: 300, dur: 0.06, vol: 0.08 });
+    tone({ type: "sine", from: 180, to: 50, dur: 0.18, vol: 0.2 });
+  },
+  mqLaser: () => {
+    tone({ type: "sawtooth", from: 1800, to: 700, dur: 0.12, vol: 0.06 });
+  },
+  mqSalvo: () => {
+    tone({ type: "square", from: 300, to: 900, dur: 0.3, vol: 0.1 });
+    noise(0.9, 0.35, 700);
+    tone({ type: "sine", from: 120, to: 35, dur: 0.8, vol: 0.25, delay: 0.3 });
+  },
   pwBlink: () => {
     tone({ type: "sine", from: 1200, to: 200, dur: 0.14, vol: 0.12 });
     tone({ type: "sine", from: 300, to: 1500, dur: 0.12, vol: 0.08, delay: 0.1 });
@@ -100,6 +115,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   thorkenSounds(run, out, onShake);
   leviaSounds(run, out, onShake);
   tailSounds(run, out, onShake);
+  madQueenSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;
   for (const e of run.effects) {

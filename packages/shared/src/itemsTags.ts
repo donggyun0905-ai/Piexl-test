@@ -15,7 +15,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "wideBlast igniteTip heatBuildup armorMelt sunWarrior scorchBlade warCry unbreakable overdriveCircuit " +
     "counterCoil oniHellBrand oniRedLotus oniBloodFlame phoenixFlare phoenixSun phoenixRebirth adFocus " +
     "adWarhead rdTank rdBurn bmPowder bmBurn afWide afPhoenix fgPulse fgAfter pgCampfire fkPlate fkPyre " +
-    "fkLines fkRequiem clSunSword clKatana clSunStaff clRedAxe ifritClaw ecFlare ecCorona",
+    "fkLines fkRequiem clSunSword clKatana clSunStaff clRedAxe ifritClaw ecFlare ecCorona mqWarhead mqBarrage",
   // 얼음 19
   ice:
     "coolingSystem overloadBurst timeSlow warpField oniFrostMail oniPermafrost oniSpiritEcho spiderNest " +
@@ -26,7 +26,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "beamSplitter refractPrism electronic shadowChain spinMaster mirageDouble ascension thunderCry " +
     "bigCapacitor gyroStabilizer oniThunderCloud oniJudgment oniChainBolt flyKeen flyFrenzy elSage " +
     "elMaster adCore adSoul bmShrapnel bmArtist afPush afOverdrive cyCharge cyOverclock zsConductor " +
-    "zsOverload zsWrath zsStep pgBadge pgJournal leMane leSky leChain leStorm leRoar oxPrism tkPearl",
+    "zsOverload zsWrath zsStep pgBadge pgJournal leMane leSky leChain leStorm leRoar oxPrism tkPearl mqOverclock",
   // 독 17
   poison:
     "venomStar footnote shorthand idLongWhip idBramble snakeVenom snakeSpit scorpTail spiderFang plRust " +
@@ -39,7 +39,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "scrapRepair chargeKnuckle idDew idGaiaGrace idFourSeasons idWorldHeart elExpand elTea rdShock " +
     "rdRepair afTattoo afInfinity fgMemory fgPillar fgMany fgShine fgCross fgHeal vyKeepFate vyQuiver " +
     "vyBlessing vyHomeward pgStarDust pgKeyring lxShard lxHalo lxGrace lxMore lxWide lxTattoo clHolySword " +
-    "clStarTome dryadOrb aphroditeMirror puBook fnHalo fnStar ecDawn tkBell tkLighthouse lvSalt lvBlowhole",
+    "clStarTome dryadOrb aphroditeMirror puBook fnHalo fnStar ecDawn tkBell tkLighthouse lvSalt lvBlowhole mqPrism",
   // 어둠 42
   dark:
     "ambush volleyCharm strongman intimidate sharpClaws hunterInstinct shadowMark twinShadow moonlight " +
@@ -62,7 +62,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "rdRam bmEcho bmFinale mnMole mnExpert clVineStaff clStoneHammer clCrescent fnRift ecMoonAxe",
   // 물 3
   water:
-    "oniGreatWave oniSprayChain oniDragonPalace tkBarnacle tkWhale tkTrident lvCrest lvSpiral lvBreaker lvCurrent lvSpray lvCall lvCalf lvBaleen lvPod lvKingWhale lvDeep lvSong tlDeep tlSchool tlJaws tlBreach tlRip",
+    "oniGreatWave oniSprayChain oniDragonPalace tkBarnacle tkWhale tkTrident lvCrest lvSpiral lvBreaker lvCurrent lvSpray lvCall lvCalf lvBaleen lvPod lvKingWhale lvDeep lvSong tlDeep tlSchool tlJaws tlBreach tlRip mqFreedom",
   // 날카로움 90
   sharp:
     "longGrip backQuiver steadyBreath spinCleave waveSlash echoBolt piercingBolt mach knockout focusFire " +
@@ -73,7 +73,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "smMore smPierce afFocus cyBoost cyBerserk trScope trHollow trBipod trCharge rmBackstab rmEcho wdHone " +
     "wdCalm wdSheath wdGauge skEdge skRend vyString vyLaurel zsKing zsSkyEye zsGiant pgLens fkCrest " +
     "fkReach lxReach lxQuick lxPierce lxJudge clEyeTome clBlueSpear clBlueAxe relicRed relicGold " +
-    "relicPrism relicGreen sylphQuiver gnomeHammer puDog leFang lePride leKing oxPolish oxCrown oxResonance fnFang fnMoon ecSunspot tlFin",
+    "relicPrism relicGreen sylphQuiver gnomeHammer puDog leFang lePride leKing oxPolish oxCrown oxResonance fnFang fnMoon ecSunspot tlFin mqTwin",
   // 단단함 79
   tough:
     "sturdyHeart furySeal secondWind ricochet splitHead counterGuard bulwarkStance arcaneShield " +
@@ -83,7 +83,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "idAncientWall bearHide scorpShell eleHerd elBeard elWard renStone renGuardPlus renWall renReflect " +
     "spRibbon spShield mkPlate mkBulk mkSpikes mkMeditate adWide adShield rdSlip rdGear bmMore bmSuit " +
     "afShield afGolem cyLeech cySkin trMark trCamo fgEcho fgBless mnHelmet mnMuscle mnCanary mnChain " +
-    "zsNectar zsRetort pgPack pgSouvenir pgPostcard pgTent relicSilver relicWhite ironSkin puDisguise leArmor oxBulwark oxShard fnHowl fnVeteran ecCrown tkCoral lvShell lvFlag tlFreedom",
+    "zsNectar zsRetort pgPack pgSouvenir pgPostcard pgTent relicSilver relicWhite ironSkin puDisguise leArmor oxBulwark oxShard fnHowl fnVeteran ecCrown tkCoral lvShell lvFlag tlFreedom mqFlagship",
   // 바람 77
   wind:
     "lightGloves windBoots featherTip hunterEye dashCloak heavyPlate returnFletch chaseSteps chainBurst " +
@@ -93,7 +93,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "eagleStorm eagleDive flyWings flyAfterburn elMore elDouble renRootPulse renMoss eaAbyss eaFrenzy " +
     "rdTurbo rdDrift bmWide bmFuse afCrafter afSurge cyReflex cyCloak rmSwift wdWind wdRonin wdFocus " +
     "wdBlink skFast skAgile vySandglass vySeaLegs zsCloud pgBoots pgSnack pgShortcut pgWorldLeaf fkGrip " +
-    "lxSwift clWhiteBow clPistol relicBlue fallenWings quickDraw puShrink puCloud puFlute lePounce oxWings oxLanding oxQuick oxTrail fnGale ecTwilight tkSail tkGull lvSurf lvAnchorless lvAmber tlChain",
+    "lxSwift clWhiteBow clPistol relicBlue fallenWings quickDraw puShrink puCloud puFlute lePounce oxWings oxLanding oxQuick oxTrail fnGale ecTwilight tkSail tkGull lvSurf lvAnchorless lvAmber tlChain mqBroadside",
   // 행운 53
   luck:
     "cloverCharm resolve prajna luckyDeflect gunMaster scrapGun doubleEcho echoBurst soulHarvest " +
@@ -106,7 +106,7 @@ const MEMBERS: Record<ItemTag, string> = {
   summon:
     "genesis pet supportFire extraCat packLeader fishTreat horde lash empower sacrifice returnWind " +
     "quickCatch extraDuckling loudQuack duckFamily breadSnack echoQuack braveDuckling spBond spLonger " +
-    "spFury spAwaken spFarewell spHarmony adCall adFourth petFlute falseHero puClone",
+    "spFury spAwaken spFarewell spHarmony adCall adFourth petFlute falseHero puClone mqRig mqSquadron",
   // 피 27
   blood:
     "seekerFeather huntFrenzy lifeLeech rage drunkenFist bloodDemon bleed bloodBlade loyalty rustyEdge " +

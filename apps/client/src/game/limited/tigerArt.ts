@@ -73,6 +73,7 @@ export const ACCENT: Record<string, string> = {
   thorken: "#6ae0ff",
   levia: "#7ac0ff",
   tail: "#6af0e0",
+  madQueen: "#5af0ff",
   collector: "#5a8aff",
   mystic: "#ff6a8a",
   engineer: "#5ad0f0",

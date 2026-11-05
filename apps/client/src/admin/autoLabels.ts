@@ -23,6 +23,7 @@ const PREFIX: [RegExp, string][] = [
   [/^(FORMATIONS|ELDER)/, "elder"],
   [/^(REN)/, "ren"],
   [/^(GREAT_SPIRITS|SMALL_SPIRITS|SPIRIT)/, "spiritist"],
+  [/^(MADQUEEN|MQ_)/, "madQueen"],
 ];
 
 /** 계산 파일 이름 → 분류 이름 (캐릭터가 아닌 것) */

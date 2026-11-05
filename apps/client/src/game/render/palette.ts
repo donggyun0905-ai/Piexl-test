@@ -68,6 +68,7 @@ export const C = {
   thorken: "#3ac8e8",
   levia: "#5ab0ff",
   tail: "#3ad8d0",
+  madQueen: "#5af0ff",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",

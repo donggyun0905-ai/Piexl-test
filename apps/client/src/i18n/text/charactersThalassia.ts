@@ -23,4 +23,11 @@ export const CHARACTER_TEXT_THALASSIA = {
     ja: "タラシア。水を自在に操るサメの獣人。周りに領域の海が広がり、海の中の敵を水のサメが自動で攻撃（確率で海の底から現れて丸呑み · 飛び出して貫き再び潜る · 跳び上がって落下攻撃）· 押すと尾の3連撃（上→下 · 下→上 · 叩きつけ）· 一撃で倒せる敵がいれば水のサメに変わり稲妻のように突進して食らいつき体力回復 · 武器は海の種類（10種）· 専用アイテム10",
   },
   shark: { ko: "영역 바다", en: "Sea Domain", ja: "領域の海" },
+  madQueen: { ko: "매드퀸", en: "Mad Queen", ja: "マッドクイーン" },
+  madQueenDesc: {
+    ko: "탈라시아. 해방의 바다를 다스리는 은빛 제독. 손가락으로 가리키면 머리 위 미래형 대포가 터지는 포탄을 한 발씩 쏨 · 쏠 때마다 30% 확률로 맵 아무 곳에 네온 터렛(최대 4, 사거리 안 적을 저절로 쏨) · 30% 확률로 몸 양옆에 날개 무기(최대 4, 같이 레이저) · 터렛 4 + 날개 4가 모이면 전탄 일제사격으로 맵 전체에 포탄이 쏟아지고 대포부터 다시 시작",
+    en: "Thalassia. The silver admiral who rules the sea of liberty. Point a finger and the futuristic cannon above her head fires one exploding shell · each shot has a 30% chance to drop a neon turret anywhere on the map (up to 4, auto-fires at foes in range) and a 30% chance to add a wing weapon at her side (up to 4, fires lasers with her) · with 4 turrets and 4 wings she unleashes an All-Guns Salvo that rains shells over the whole map, then starts again from the cannon",
+    ja: "タラシア。解放の海を治める銀の提督。指さすと頭上の未来型大砲が爆発する砲弾を1発ずつ撃つ · 撃つたびに30%でマップのどこかにネオンタレット（最大4、射程内の敵を自動で撃つ）· 30%で体の両横に翼の武器（最大4、一緒にレーザー）· タレット4と翼4がそろうと全弾一斉射撃でマップ全体に砲弾が降り注ぎ、大砲から再スタート",
+  },
+  fleet: { ko: "함대 포격", en: "Fleet Barrage", ja: "艦隊砲撃" },
 } satisfies Record<string, Record<Lang, string>>;

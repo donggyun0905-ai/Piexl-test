@@ -48,7 +48,7 @@ import { COLLECTOR_WEAPONS } from "./weaponsCollector";
 import { PUNGRYU_WEAPONS, type ScriptStyle } from "./weaponsPungryu";
 import { LEO_WEAPONS } from "./weaponsLeo";
 import { ONYX_WEAPONS } from "./weaponsOnyx";
-import { FENRIR_WEAPONS } from "./weaponsFenrir"; import { ECLIPSE_WEAPONS } from "./weaponsEclipse"; import { THORKEN_WEAPONS, type FlailStyle } from "./weaponsThorken"; import { LEVIA_WEAPONS, type GemStyle } from "./weaponsLevia"; import { TAIL_WEAPONS, type SeaStyle } from "./weaponsTail";
+import { FENRIR_WEAPONS } from "./weaponsFenrir"; import { ECLIPSE_WEAPONS } from "./weaponsEclipse"; import { THORKEN_WEAPONS, type FlailStyle } from "./weaponsThorken"; import { LEVIA_WEAPONS, type GemStyle } from "./weaponsLevia"; import { TAIL_WEAPONS, type SeaStyle } from "./weaponsTail"; import { MADQUEEN_WEAPONS, type FleetStyle } from "./weaponsMadQueen";
 import { MINER_WEAPONS, type PickStyle } from "./weaponsMiner";
 import { VOYAGER_WEAPONS } from "./weaponsVoyager";
 import { ZEUS_WEAPONS, type ThunderStyle } from "./weaponsZeus";
@@ -57,7 +57,7 @@ import { FALLEN_KING_WEAPONS } from "./weaponsFallenKing";
 import { LUX_WEAPONS } from "./weaponsLux";
 
 /** 공격 방식 (laser·medic 누르는 동안 틱 피해 · combo 누를 때마다 다음 기술) */
-export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio" | "zwei" | "radiant" | "hoard" | "script" | "lion" | "gem" | "fang" | "solar" | "anchor" | "whale" | "shark";
+export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio" | "zwei" | "radiant" | "hoard" | "script" | "lion" | "gem" | "fang" | "solar" | "anchor" | "whale" | "shark" | "fleet";
 export type { OrbitKind } from "./weaponsElemental";
 export type { LaserGear } from "./weaponsEngineer";
 export type { MedicGear } from "./weaponsDoctor";
@@ -92,23 +92,7 @@ export { RIDER, type RideMove, type RideStyle } from "./weaponsRider";
 export { BOMBER, type BombMode, type BombStyle } from "./weaponsBomber";
 export { ARTIFACTER } from "./weaponsArtifacter";
 export { PUNK, type CyberMove, type CyberStyle } from "./weaponsPunk";
-export { TRACKER } from "./weaponsTracker";
-export { FORGOTTEN, type LightPattern, type LightStyle } from "./weaponsForgotten";
-export { REMNANT, type PhantomStyle } from "./weaponsRemnant";
-export { WANDERER, type KatanaMode, type KatanaStyle } from "./weaponsWanderer";
-export { SILK, type SilkStyle } from "./weaponsSilk";
-export { COLLECTOR } from "./weaponsCollector";
-export { CL_ARMS, CL_ARM_IDS, type ClArm, type ClArmId, type ClFx, type ClStyle } from "./itemsCollector";
-export { MINER, type PickMode, type PickStyle } from "./weaponsMiner";
-export { VOYAGER } from "./weaponsVoyager";
-export { ZEUS, type ThunderMode, type ThunderStyle } from "./weaponsZeus";
-export { PILGRIM, type CurioMode, type CurioStyle } from "./weaponsPilgrim";
 export { FALLEN_KING } from "./weaponsFallenKing";
-export { PUNGRYU, type ScriptStyle, type VerseKind } from "./weaponsPungryu";
-export { LEO } from "./weaponsLeo";
-export { ONYX, ONYX_GEMS, ONYX_GEM_IDS, type OnyxGem } from "./weaponsOnyx";
-export { FENRIR } from "./weaponsFenrir"; export { ECLIPSE } from "./weaponsEclipse"; export { THORKEN, type BallKind, type FlailStyle } from "./weaponsThorken"; export { LEVIA, type SeaGem, type GemStyle } from "./weaponsLevia"; export { TAIL, type SharkSea, type SeaStyle } from "./weaponsTail";
-export { LUX } from "./weaponsLux";
 
 export interface WeaponDef {
   id: string;
@@ -219,6 +203,8 @@ export interface WeaponDef {
   flail?: FlailStyle;
   sea?: GemStyle;
   shark?: SeaStyle;
+  /** 매드퀸: 함대 빛깔·폭발 (sim/madQueen) */
+  fleet?: FleetStyle;
 }
 
 /** 부적 추가 효과 (수치·설명은 weaponsMystic) */
@@ -268,7 +254,7 @@ export const WEAPONS = {
   ...WANDERER_WEAPONS,
   ...SILK_WEAPONS,
   ...COLLECTOR_WEAPONS,
-  ...PUNGRYU_WEAPONS, ...LEO_WEAPONS, ...ONYX_WEAPONS, ...FENRIR_WEAPONS, ...ECLIPSE_WEAPONS, ...THORKEN_WEAPONS, ...LEVIA_WEAPONS, ...TAIL_WEAPONS,
+  ...PUNGRYU_WEAPONS, ...LEO_WEAPONS, ...ONYX_WEAPONS, ...FENRIR_WEAPONS, ...ECLIPSE_WEAPONS, ...THORKEN_WEAPONS, ...LEVIA_WEAPONS, ...TAIL_WEAPONS, ...MADQUEEN_WEAPONS,
   ...MINER_WEAPONS,
   ...VOYAGER_WEAPONS,
   ...ZEUS_WEAPONS,

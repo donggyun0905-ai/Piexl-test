@@ -15,6 +15,7 @@ export const CHAR_GOAL_TEXT = {
   cg_titan: l("최대 체력 {n} 달성", "Reach {n} max HP", "最大体力{n}達成"),
   cg_thorken: l("최대 체력 {n} 달성", "Reach {n} max HP", "最大体力{n}達成"),
   cg_tail: l("공격 속도 {n} 달성", "Reach {n} attack speed", "攻撃速度{n}達成"),
+  cg_madQueen: l("공격 속도 {n} 달성", "Reach {n} attack speed", "攻撃速度{n}達成"),
   cg_levia: l("이동 속도 {n} 달성", "Reach {n} move speed", "移動速度{n}達成"),
   cg_tracker: l("타워 디펜스 ★5 이상 맵 클리어", "Clear a ★5+ Tower Defense map", "タワーディフェンス★5以上のマップをクリア"),
   cg_elementalist: l("영웅의 길 1번 클리어", "Clear the Hero's Path once", "英雄の道を1回クリア"),

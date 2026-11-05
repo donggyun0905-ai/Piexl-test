@@ -1,5 +1,5 @@
-// 업적 · 영구 해금 · 점수. 업적은 혼자 하기에서만 해금에 쓰임 (일일 도전·배틀은 해금 미적용)
-// 업적 하나에 보상을 붙이려면 그 줄에 unlock만 넣으면 됨 (아이템·무기·캐릭터). 나머지(잠금·해금 판정)는 아래 함수가 처리
+// 업적 · 영구 해금 · 점수. 업적은 혼자 하기에서만 해금에 쓰임 (일일·배틀 제외)
+// 업적 하나에 보상을 붙이려면 그 줄에 unlock만 넣으면 됨 (아이템·무기·캐릭터). 판정은 아래 함수
 import { CHARACTER_IDS, type CharacterId, type WeaponId } from "./content";
 import type { PassiveId, UseItemId } from "./items";
 import { FLOOR_COUNT } from "./sim/floor";
@@ -149,6 +149,7 @@ export const ACHIEVEMENTS = [
   { id: "clearThorken", category: "character", run: clearAs("thorken") },
   { id: "clearLevia", category: "character", run: clearAs("levia") },
   { id: "clearTail", category: "character", run: clearAs("tail") },
+  { id: "clearMadQueen", category: "character", run: clearAs("madQueen") },
   { id: "clearRen", category: "character", run: clearAs("ren") },
   { id: "clearSpiritist", category: "character", run: clearAs("spiritist") },
   { id: "clearAll", category: "character", total: total(CHARACTER_IDS.length, (c) => Object.values(c.clearedBy).filter((n) => (n ?? 0) > 0).length) },
