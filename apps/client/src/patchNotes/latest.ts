@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.48",
+    date: "2026-11-06",
+    items: {
+      ko: [
+        "훅: 약화 표식을 작은 갈고리 하나 + 'x숫자'로 표시 (쌓일 때 숫자가 떠오름, 5면 밝게)",
+        "오르카 해방: 몸의 전류가 모든 공격에 붙음 — 맞은 적에게 번개 (그 공격 피해의 30%) + 가까운 적 하나에게 튐 (15%) · 해방 중 이펙트·상어·소용돌이 장판·번개가 모두 진한 파랑",
+        "오르카 해방 이펙트 '천둥 주먹': 물 파동·소용돌이가 굵어지고, 주먹 끝에서 굵은 번개 다발이 뻗고, 공격한 자리마다 하늘에서 낙뢰가 내리꽂힘 (물기둥·소용돌이·상어 물기·터짐 모두)",
+      ],
+      en: [
+        "Hook: weaken marks now show as one tiny hook + 'xN' (the number pops up when a mark is added, brighter at 5)",
+        "Orca Liberation: his body current now rides every attack — shocking the target (30% of that hit's damage) and arcing to one nearby foe (15%) · during Liberation all effects, sharks, whirlpools and lightning turn deep blue",
+        "Orca Liberation 'Thunder Fist' effects: thicker water waves and whirls, heavy lightning bursts from the fist, and lightning strikes from the sky wherever he hits (geysers, whirls, shark bites and bursts too)",
+      ],
+      ja: [
+        "フック：弱化の印を小さなフック1つ＋「x数字」で表示（たまると数字が浮かぶ、5で明るく）",
+        "オルカの解放：体の電流が全攻撃に乗る — 当たった敵に雷（その攻撃の30%）＋近くの敵1体へ跳ぶ（15%）· 解放中はエフェクト・鮫・渦・雷がすべて濃い青",
+        "オルカの解放エフェクト「雷の拳」：水の波動・渦が太くなり、拳の先から太い雷の束が伸び、攻撃した場所に空から落雷（水柱・渦・鮫の噛みつき・弾けも）",
+      ],
+    },
+  },
+  {
     version: "0.49.47",
     date: "2026-11-06",
     items: {

@@ -8,6 +8,18 @@ export const WATER = "#1ab8e8";
 export const AQUA = "#7af4ff";
 export const FOAM = "#f2feff";
 const TEETH = "#ffffff";
+/** 상어 색 (오르카 해방 중에는 sharkBlue로 진한 파랑) */
+const SC = { water: WATER, aqua: AQUA, foam: FOAM, top: "#0a5aa8", belly: "#bff8ff", jaw: "#c8faff" };
+const BLUE = { water: "#1a4ae8", aqua: "#4a82ff", foam: "#d8e4ff", top: "#081c80", belly: "#9ab8ff", jaw: "#a8c0ff" };
+
+/** fn 안에서 그리는 상어는 진한 파랑 (on일 때) */
+export function sharkBlue(on: boolean, fn: () => void): void {
+  if (!on) return fn();
+  const old = { ...SC };
+  Object.assign(SC, BLUE);
+  fn();
+  Object.assign(SC, old);
+}
 
 /** 물 상어 하나 (가운데 x·y, 머리 쪽 ang, 몸길이 len, 진하기 a, flap: 꼬리 흔들림 시간, open: 턱 벌림 0~1) · 왼쪽을 보면 배가 아래로 오게 뒤집음 */
 export function sharkShape(ctx: Ctx, x: number, y: number, ang: number, len: number, a: number, flap: number, open = 0): void {
@@ -39,9 +51,9 @@ export function sharkShape(ctx: Ctx, x: number, y: number, ang: number, len: num
     ctx.lineTo(len * 0.3, h * (0.12 + jaw * 0.6));
     ctx.closePath();
   };
-  additive(ctx, () => glow(ctx, 0, 0, len * 0.7, WATER, 0.32, 0.15));
+  additive(ctx, () => glow(ctx, 0, 0, len * 0.7, SC.water, 0.32, 0.15));
   // 꼬리지느러미 (초승달 모양, 펄럭임)
-  ctx.fillStyle = alpha(WATER, 0.95);
+  ctx.fillStyle = alpha(SC.water, 0.95);
   ctx.beginPath();
   ctx.moveTo(-len * 0.42, sw * 0.2);
   ctx.quadraticCurveTo(-len * 0.52, -h * 0.4 + sw, -len * 0.66, -h * 1.05 + sw);
@@ -62,14 +74,14 @@ export function sharkShape(ctx: Ctx, x: number, y: number, ang: number, len: num
   ctx.fill();
   // 몸: 위는 깊은 바다 → 가운데 맑은 물빛 → 배는 하얀 거품빛
   const g = ctx.createLinearGradient(0, -h * 0.6, 0, h * 0.5);
-  g.addColorStop(0, "#0a5aa8");
-  g.addColorStop(0.45, WATER);
-  g.addColorStop(0.8, "#bff8ff");
-  g.addColorStop(1, FOAM);
+  g.addColorStop(0, SC.top);
+  g.addColorStop(0.45, SC.water);
+  g.addColorStop(0.8, SC.belly);
+  g.addColorStop(1, SC.foam);
   ctx.fillStyle = g;
   back();
   ctx.fill();
-  ctx.fillStyle = "#c8faff";
+  ctx.fillStyle = SC.jaw;
   lower();
   ctx.fill();
   // 입 안 · 이빨 (벌리면 보임)
@@ -110,26 +122,26 @@ export function sharkShape(ctx: Ctx, x: number, y: number, ang: number, len: num
   }
   ctx.fillStyle = "#04203a";
   ctx.fillRect(len * 0.3, -h * 0.34, 2, 2);
-  ctx.fillStyle = FOAM;
+  ctx.fillStyle = SC.foam;
   ctx.fillRect(len * 0.3, -h * 0.36, 1, 1);
   // 빛나는 물빛 테두리 · 등의 햇빛 줄
   additive(ctx, () => {
-    if (!glowHint(ctx, 0, 0, len * 1.2, AQUA)) {
-      ctx.shadowColor = AQUA;
+    if (!glowHint(ctx, 0, 0, len * 1.2, SC.aqua)) {
+      ctx.shadowColor = SC.aqua;
       ctx.shadowBlur = 8;
     }
-    ctx.strokeStyle = alpha(AQUA, 0.85);
+    ctx.strokeStyle = alpha(SC.aqua, 0.85);
     ctx.lineWidth = 1.5;
     back();
     ctx.stroke();
     ctx.shadowBlur = 0;
-    ctx.strokeStyle = alpha(FOAM, 0.7);
+    ctx.strokeStyle = alpha(SC.foam, 0.7);
     ctx.beginPath();
     ctx.moveTo(len * 0.36, -h * 0.42);
     ctx.quadraticCurveTo(len * 0.05, -h * 0.5, -len * 0.25, -h * 0.25);
     ctx.stroke();
   });
-  glint(ctx, len * 0.2, -h * 0.4, 3, FOAM, 0.8);
+  glint(ctx, len * 0.2, -h * 0.4, 3, SC.foam, 0.8);
   ctx.restore();
 }
 

@@ -140,4 +140,13 @@ describe("오르카", () => {
     expect(e.hp).toBeLessThan(e.maxHp);
     expect(s.effects.some((f) => f.kind === "ocBolt" && (f.size ?? 0) > 0)).toBe(true);
   });
+  it("해방 중 모든 공격에 전류: 같은 타격이 더 아프고 전류 효과", () => {
+    const a = orca();
+    const b = orca();
+    b.player.ocFree = 300;
+    strikes(a, 1);
+    strikes(b, 1);
+    expect(lost(b)).toBeGreaterThan(lost(a) * 1.2);
+    expect(b.effects.some((f) => f.kind === "ocZap" && f.tint)).toBe(true);
+  });
 });

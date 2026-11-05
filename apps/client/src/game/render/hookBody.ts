@@ -29,13 +29,24 @@ export function drawHookBack(ctx: Ctx, s: RunState, _a0: number, snap: Snap): vo
   }
 }
 
-/** 적 머리 위 약화 스택: 아주 작은 빛 갈고리 (스택 수만큼) */
+/** 적 머리 위 약화 스택: 작은 빛 갈고리 하나 + "x숫자" (최대면 밝게) */
 function drawMarks(ctx: Ctx, s: RunState, snap: Snap): void {
+  ctx.font = "bold 7px monospace";
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "left";
   for (const e of s.enemies) {
     const n = e.hp > 0 ? (e.hkMark ?? 0) : 0;
     if (n <= 0) continue;
+    const full = n >= HOOK.markMax;
+    const x = snap(e.x) - 6;
     const y = snap(e.y) - e.r - 9;
-    for (let i = 0; i < n; i++) hookShape(ctx, snap(e.x) + (i - (n - 1) / 2) * 5, y, -Math.PI / 2, 0.32, n >= HOOK.markMax ? 1 : 0.8);
+    hookShape(ctx, x, y, -Math.PI / 2, 0.38, full ? 1 : 0.85);
+    const t = `x${n}`;
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgba(4,16,32,0.9)";
+    ctx.strokeText(t, x + 4, y);
+    ctx.fillStyle = full ? HK_FOAM : HK_AQUA;
+    ctx.fillText(t, x + 4, y);
   }
 }
 

@@ -5,7 +5,7 @@ import { additive, alpha, easeOut, glow, rnd, shock, sparks, type Ctx } from "./
 import type { Snap } from "./palette";
 import { bolt, droplets } from "./thorkenFx";
 import { bubbles, rainbow } from "./seaLight";
-import { blastSprite, HK_AQUA, HK_DEEP, HK_FOAM, hookShape } from "./hookArt";
+import { blastSprite, HK_AQUA, HK_DEEP, HK_FOAM } from "./hookArt";
 
 const HK_FX = new Set(["hkBlast", "hkTap", "hkGrab", "hkWreck", "hkLand", "hkBolt", "hkMark"]);
 
@@ -87,9 +87,16 @@ export function drawHookFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       if (f < 0.6) rainbow(ctx, x, y - 4, fx.size * 0.7, 0.3 * (1 - f / 0.6));
       return true;
     case "hkMark":
-      // 약화 스택: 머리 위에서 작은 갈고리가 번쩍
-      hookShape(ctx, x, y - f * 4, -Math.PI / 2, 0.45 + (1 - f) * 0.3, fade);
-      additive(ctx, () => glow(ctx, x, y, 8, HK_AQUA, 0.7 * (1 - f), 1));
+      // 약화 스택이 쌓임: 머리 위에서 "x숫자"가 번쩍 떠오름
+      additive(ctx, () => glow(ctx, x, y, 9, HK_AQUA, 0.7 * (1 - f), 1));
+      ctx.font = "bold 9px monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = alpha("#04101e", fade);
+      ctx.strokeText(`x${fx.size}`, x, y - 6 - f * 8);
+      ctx.fillStyle = alpha(HK_FOAM, fade);
+      ctx.fillText(`x${fx.size}`, x, y - 6 - f * 8);
       return true;
     case "hkBolt":
       additive(ctx, () => bolt(ctx, x, y, snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y), seed + Math.floor(f * 4), fade, 2));

@@ -1,12 +1,32 @@
 // 오르카 그림 공용: 거대한 범고래 물기운(범고래 돌파) · 푸른 불꽃 주먹 · 소용돌이 팔 · 웅장한 물기둥 · 몸 둘레 번개 (상어는 테일과 같은 tailShark 그림)
 // 모두 코드로 그림 (하늘색 물빛 · 흰 거품 · 짙은 바다색 테두리 · 해방 번개는 흰 노랑)
 import { additive, alpha, glow, rnd, type Ctx } from "./pwFxBits";
-import { bolt } from "./thorkenFx";
+import { OC_INK, OC_VOLT, PAL } from "./orcaPal";
 
-export const OC_AQUA = "#5ae8ff";
-export const OC_DEEP = "#1a6ae0";
-export const OC_FOAM = "#f0fcff";
-export const OC_INK = "#0a2a52";
+/** 진한 파랑 번개 줄기 (x0,y0 → x1,y1 · seed 모양 · a 진하기 · w 굵기) */
+export function blueBolt(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, seed: number, a: number, w = 2): void {
+  const n = 7;
+  const nx = -(y1 - y0);
+  const ny = x1 - x0;
+  const len = Math.hypot(nx, ny) || 1;
+  const pts: [number, number][] = [[x0, y0]];
+  for (let k = 1; k < n; k++) {
+    const u = k / n;
+    const off = (rnd(seed, k) - 0.5) * 0.35 * len * 0.4;
+    pts.push([x0 + (x1 - x0) * u + (nx / len) * off, y0 + (y1 - y0) * u + (ny / len) * off]);
+  }
+  pts.push([x1, y1]);
+  ctx.lineJoin = "round";
+  additive(ctx, () => {
+    for (const [c, ww] of [[alpha("#0a2aff", a * 0.45), w * 3.2], [alpha(OC_VOLT, a), w * 1.2], [alpha("#dfe8ff", a), Math.max(1, w * 0.45)]] as const) {
+      ctx.strokeStyle = c;
+      ctx.lineWidth = ww;
+      ctx.beginPath();
+      for (const [px, py] of pts) ctx.lineTo(px, py);
+      ctx.stroke();
+    }
+  });
+}
 
 /** 몸 윤곽 (len 길이 · half 폭 · flap 꼬리 흔들림) */
 function bodyPath(ctx: Ctx, len: number, half: number, flap: number): void {
@@ -27,7 +47,7 @@ export function orcaShape(ctx: Ctx, x: number, y: number, a: number, s: number, 
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(a);
-  additive(ctx, () => glow(ctx, 0, 0, len * 0.8, OC_AQUA, 0.55 * al, 0.5));
+  additive(ctx, () => glow(ctx, 0, 0, len * 0.8, PAL.aqua, 0.55 * al, 0.5));
   ctx.fillStyle = alpha(OC_INK, 0.8 * al);
   ctx.beginPath();
   ctx.moveTo(-len * 0.42, flap * 0.3);
@@ -38,11 +58,11 @@ export function orcaShape(ctx: Ctx, x: number, y: number, a: number, s: number, 
   ctx.fill();
   bodyPath(ctx, len, half, flap);
   ctx.fill();
-  ctx.strokeStyle = alpha(OC_AQUA, al);
+  ctx.strokeStyle = alpha(PAL.aqua, al);
   ctx.lineWidth = 2;
   ctx.stroke();
   // 흰 배 · 눈 뒤 흰 무늬
-  ctx.fillStyle = alpha(OC_FOAM, 0.9 * al);
+  ctx.fillStyle = alpha(PAL.foam, 0.9 * al);
   ctx.beginPath();
   ctx.ellipse(len * 0.12, half * 0.45, len * 0.32, half * 0.32, 0, 0, Math.PI * 2);
   ctx.fill();
@@ -57,7 +77,7 @@ export function orcaShape(ctx: Ctx, x: number, y: number, a: number, s: number, 
   ctx.lineTo(-len * 0.12, -half * 0.7);
   ctx.closePath();
   ctx.fill();
-  ctx.strokeStyle = alpha(OC_AQUA, al);
+  ctx.strokeStyle = alpha(PAL.aqua, al);
   ctx.lineWidth = 1.2;
   ctx.stroke();
   ctx.restore();
@@ -67,9 +87,9 @@ export function orcaShape(ctx: Ctx, x: number, y: number, a: number, s: number, 
 export function fistGlow(ctx: Ctx, x: number, y: number, r: number, al: number, tick: number): void {
   if (al <= 0.02) return;
   additive(ctx, () => {
-    glow(ctx, x, y, r * 1.6, OC_DEEP, 0.5 * al);
-    glow(ctx, x, y, r, OC_AQUA, 0.8 * al, 1.2);
-    ctx.fillStyle = alpha(OC_FOAM, al);
+    glow(ctx, x, y, r * 1.6, PAL.deep, 0.5 * al);
+    glow(ctx, x, y, r, PAL.aqua, 0.8 * al, 1.2);
+    ctx.fillStyle = alpha(PAL.foam, al);
     for (let i = 0; i < 3; i++) {
       const u = (tick * 0.12 + i / 3) % 1;
       ctx.fillRect(Math.round(x + Math.sin(i * 2.1 + tick * 0.2) * r * 0.5), Math.round(y - u * r * 1.6), 1, 2);
@@ -82,7 +102,7 @@ export function spiral(ctx: Ctx, x: number, y: number, r: number, spin: number, 
   additive(ctx, () => {
     ctx.lineCap = "round";
     for (let k = 0; k < n; k++) {
-      for (const [c, w, a] of [[OC_DEEP, 4, 0.4], [OC_AQUA, 2, 0.8], [OC_FOAM, 0.8, 0.9]] as const) {
+      for (const [c, w, a] of [[PAL.deep, 4, 0.4], [PAL.aqua, 2, 0.8], [PAL.foam, 0.8, 0.9]] as const) {
         ctx.strokeStyle = alpha(c, a * al);
         ctx.lineWidth = w;
         ctx.beginPath();
@@ -111,8 +131,8 @@ export function grandGeyser(ctx: Ctx, x: number, y: number, w: number, h: number
     ctx.closePath();
   };
   additive(ctx, () => {
-    glow(ctx, x, y - h * 0.5, Math.max(w, h * 0.6), OC_DEEP, 0.45 * al);
-    for (const [c, ww, top, a] of [[OC_DEEP, w, 0.7, 0.75], [OC_AQUA, w * 0.7, 0.55, 0.8], [OC_FOAM, w * 0.28, 0.3, 0.85]] as const) {
+    glow(ctx, x, y - h * 0.5, Math.max(w, h * 0.6), PAL.deep, 0.45 * al);
+    for (const [c, ww, top, a] of [[PAL.deep, w, 0.7, 0.75], [PAL.aqua, w * 0.7, 0.55, 0.8], [PAL.foam, w * 0.28, 0.3, 0.85]] as const) {
       const g = ctx.createLinearGradient(x, y, x, y - h);
       g.addColorStop(0, alpha(c, a * al));
       g.addColorStop(0.85, alpha(c, a * 0.8 * al));
@@ -127,7 +147,7 @@ export function grandGeyser(ctx: Ctx, x: number, y: number, w: number, h: number
       const ox = (rnd(seed, i) - 0.5) * w * 1.1;
       const u = (tick * 0.09 + rnd(i, seed)) % 1;
       const yy = y - h * u;
-      ctx.strokeStyle = alpha(i % 2 ? OC_FOAM : OC_AQUA, 0.9 * al * (1 - u * 0.6));
+      ctx.strokeStyle = alpha(i % 2 ? PAL.foam : PAL.aqua, 0.9 * al * (1 - u * 0.6));
       ctx.lineWidth = i % 2 ? 1.2 : 2;
       ctx.beginPath();
       ctx.moveTo(x + ox * (1 - u * 0.5), yy + 12);
@@ -136,11 +156,11 @@ export function grandGeyser(ctx: Ctx, x: number, y: number, w: number, h: number
     }
     ctx.lineCap = "butt";
     // 꼭대기: 터지는 물보라 송이
-    glow(ctx, x, y - h, w * 1.4, OC_FOAM, 0.7 * al, 1);
+    glow(ctx, x, y - h, w * 1.4, PAL.foam, 0.7 * al, 1);
     for (let i = 0; i < 9; i++) {
       const ang = -Math.PI + (i / 8) * Math.PI;
       const d = w * (0.6 + rnd(seed, i + 9) * 0.8);
-      ctx.fillStyle = alpha(i % 2 ? OC_FOAM : OC_AQUA, al);
+      ctx.fillStyle = alpha(i % 2 ? PAL.foam : PAL.aqua, al);
       ctx.beginPath();
       ctx.arc(x + Math.cos(ang) * d, y - h + Math.sin(ang) * d * 0.7, 1.5 + rnd(i, 3) * 2, 0, Math.PI * 2);
       ctx.fill();
@@ -155,6 +175,6 @@ export function crackle(ctx: Ctx, x: number, y: number, r: number, tick: number,
     if (rnd(t, i) < 0.35) continue;
     const a = rnd(i, t) * Math.PI * 2;
     const r0 = r * 0.5;
-    bolt(ctx, x + Math.cos(a) * r0, y + Math.sin(a) * r0, x + Math.cos(a + 0.6) * r, y + Math.sin(a + 0.6) * r, t * 7 + i, al, 1.2);
+    blueBolt(ctx, x + Math.cos(a) * r0, y + Math.sin(a) * r0, x + Math.cos(a + 0.6) * r, y + Math.sin(a + 0.6) * r, t * 7 + i, al, 1.2);
   }
 }

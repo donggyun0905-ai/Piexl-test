@@ -102,4 +102,8 @@ export const ORCA = {
   boltW: 16,
   boltMul: 1.2,
   boltStun: 20,
+  /** 해방 중 모든 공격에 붙는 전류: 맞은 적 피해 배율(그 공격 피해의) · 옆 적에게 튀는 거리 · 튄 피해 배율 */
+  zapMul: 0.3,
+  zapReach: 60,
+  zapChain: 0.5,
 };

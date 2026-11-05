@@ -158,7 +158,7 @@ export function geyser(ctx: Ctx, x: number, y: number, w: number, h: number, a: 
 }
 
 /** 왕관 물보라: 둥글게 솟는 물 기둥들 끝에 물방울 (크기 r, 진행 f) */
-export function crown(ctx: Ctx, x: number, y: number, r: number, f: number, seed: number, n = 11): void {
+export function crown(ctx: Ctx, x: number, y: number, r: number, f: number, seed: number, n = 11, aqua = AQUA, foam = FOAM): void {
   const up = Math.sin(Math.min(1, f * 1.5) * Math.PI);
   if (up <= 0.02) return;
   ctx.lineCap = "round";
@@ -167,13 +167,13 @@ export function crown(ctx: Ctx, x: number, y: number, r: number, f: number, seed
     const bx = x + Math.cos(a) * r * 0.45;
     const tx = x + Math.cos(a) * r * (0.7 + f * 0.6);
     const h = r * (0.6 + rnd(seed, i) * 0.7) * up;
-    ctx.strokeStyle = alpha(i % 2 ? FOAM : AQUA, 0.9 * (1 - f));
+    ctx.strokeStyle = alpha(i % 2 ? foam : aqua, 0.9 * (1 - f));
     ctx.lineWidth = 2.2 - f;
     ctx.beginPath();
     ctx.moveTo(bx, y);
     ctx.quadraticCurveTo((bx + tx) / 2, y - h * 1.1, tx, y - h);
     ctx.stroke();
-    ctx.fillStyle = alpha(FOAM, 1 - f);
+    ctx.fillStyle = alpha(foam, 1 - f);
     ctx.beginPath();
     ctx.arc(tx, y - h - 1, 1.4, 0, Math.PI * 2);
     ctx.fill();

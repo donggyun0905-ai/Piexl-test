@@ -65,4 +65,4 @@ export interface OrcaPlayerState {
 }
 
 /** 효과: 물보라 잽 · 소용돌이 훅 · 물기둥 · 상어 물기 · 상어 터짐 · 해방 준비 · 범고래 돌파 · 큰 파도 */
-export type OrcaFx = "ocSpray" | "ocWhirl" | "ocGeyser" | "ocBite" | "ocBurst" | "ocReady" | "ocBreach" | "ocWave" | "ocFree" | "ocDart" | "ocBolt";
+export type OrcaFx = "ocSpray" | "ocWhirl" | "ocGeyser" | "ocBite" | "ocBurst" | "ocReady" | "ocBreach" | "ocWave" | "ocFree" | "ocDart" | "ocBolt" | "ocZap";

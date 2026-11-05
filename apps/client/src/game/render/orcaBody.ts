@@ -3,17 +3,17 @@
 import { isOrca, ORCA, type RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
 import { additive, alpha, glow, shock, type Ctx } from "./pwFxBits";
-import { bubbles, caustic, glints } from "./seaLight";
-import { bolt, VOLT } from "./thorkenFx";
+import { glints } from "./seaLight";
 import { sharkShape } from "./tailShark";
 import { hpBarTop } from "./hpTop";
-import { crackle, fistGlow, OC_AQUA, OC_DEEP, OC_FOAM, orcaShape, spiral } from "./orcaArt";
+import { blueBolt, crackle, fistGlow, orcaShape, spiral } from "./orcaArt";
+import { bubs, caust, inBlue, OC_VOLT as VOLT, PAL } from "./orcaPal";
 
 /** 물살 꼬리 (x,y에서 뒤로 len) */
 function wake(ctx: Ctx, x: number, y: number, dx: number, dy: number, len: number, w: number, a: number): void {
   additive(ctx, () => {
     ctx.lineCap = "round";
-    for (const [c, ww, al] of [[OC_DEEP, w * 1.6, 0.35], [OC_AQUA, w, 0.6], [OC_FOAM, w * 0.3, 0.8]] as const) {
+    for (const [c, ww, al] of [[PAL.deep, w * 1.6, 0.35], [PAL.aqua, w, 0.6], [PAL.foam, w * 0.3, 0.8]] as const) {
       const g = ctx.createLinearGradient(x, y, x - dx * len, y - dy * len);
       g.addColorStop(0, alpha(c, al * a));
       g.addColorStop(1, alpha(c, 0));
@@ -32,13 +32,26 @@ function wake(ctx: Ctx, x: number, y: number, dx: number, dy: number, len: numbe
 export function drawOrcaBack(ctx: Ctx, s: RunState, a0: number, snap: Snap): void {
   const p = s.player;
   if (!isOrca(p) || s.over) return;
+  inBlue(ctx, (p.ocFree ?? 0) > 0, () => back(ctx, s, a0, snap));
+  // 번개 대시 중: 출발 자리부터 몸까지 번개
+  const c = p.ocBolt;
+  const px = snap(lerp(p.prevX, p.x, a0));
+  const py = snap(lerp(p.prevY, p.y, a0));
+  if (c) {
+    blueBolt(ctx, snap(c.x), snap(c.y), px, py - 4, s.tick >> 1, 1, 3);
+    blueBolt(ctx, snap(c.x), snap(c.y) - 3, px, py - 6, (s.tick >> 1) + 9, 0.7, 1.5);
+  }
+}
+
+function back(ctx: Ctx, s: RunState, a0: number, snap: Snap): void {
+  const p = s.player;
   for (const w of p.ocPools ?? []) {
     const al = Math.min(1, w.t / 20);
     const x = snap(w.x);
     const y = snap(w.y);
-    additive(ctx, () => glow(ctx, x, y, 50, OC_DEEP, 0.55 * al));
+    additive(ctx, () => glow(ctx, x, y, 50, PAL.deep, 0.55 * al));
     spiral(ctx, x, y, 48, -s.tick * 0.2, 4, al);
-    caustic(ctx, x, y, 36, s.tick, 0.5 * al);
+    caust(ctx, x, y, 36, s.tick, 0.5 * al);
   }
   for (const k of p.ocSharks ?? []) wake(ctx, snap(k.x), snap(k.y), k.dx, k.dy, 34 * k.size, 8 * k.size, 1);
   for (const d of p.ocDarts ?? []) wake(ctx, snap(d.x), snap(d.y), d.dx, d.dy, 30, 6, 1);
@@ -48,7 +61,7 @@ export function drawOrcaBack(ctx: Ctx, s: RunState, a0: number, snap: Snap): voi
   if (b) {
     for (const side of [-1, 1]) {
       additive(ctx, () => {
-        ctx.strokeStyle = alpha(OC_FOAM, 0.8);
+        ctx.strokeStyle = alpha(PAL.foam, 0.8);
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(px - b.dy * side * 10, py + b.dx * side * 10);
@@ -57,12 +70,6 @@ export function drawOrcaBack(ctx: Ctx, s: RunState, a0: number, snap: Snap): voi
       });
     }
     wake(ctx, px, py, b.dx, b.dy, 80, 18, 1);
-  }
-  // 번개 대시 중: 출발 자리부터 몸까지 번개
-  const c = p.ocBolt;
-  if (c) {
-    bolt(ctx, snap(c.x), snap(c.y), px, py - 4, s.tick >> 1, 1, 3);
-    bolt(ctx, snap(c.x), snap(c.y) - 3, px, py - 6, (s.tick >> 1) + 9, 0.7, 1.5);
   }
 }
 
@@ -75,15 +82,23 @@ function gauge(ctx: Ctx, s: RunState, x: number, y: number): void {
   const w = 18;
   ctx.fillStyle = "rgba(4,16,32,0.9)";
   ctx.fillRect(x - w / 2 - 1, top - 1, w + 2, 4);
-  ctx.fillStyle = free ? VOLT : r >= 1 && (s.tick >> 2) % 2 ? "#ffffff" : OC_AQUA;
+  ctx.fillStyle = free ? VOLT : r >= 1 && (s.tick >> 2) % 2 ? "#ffffff" : PAL.aqua;
   ctx.fillRect(x - w / 2, top, Math.round(w * r), 2);
-  if (free || r >= 1) additive(ctx, () => glow(ctx, x - w / 2 + w * r, top + 1, 5, free ? VOLT : OC_AQUA, 0.8));
+  if (free || r >= 1) additive(ctx, () => glow(ctx, x - w / 2 + w * r, top + 1, 5, free ? VOLT : PAL.aqua, 0.8));
 }
 
 /** 몸 위 */
 export function drawOrcaAura(ctx: Ctx, s: RunState, a0: number, snap: Snap): void {
   const p = s.player;
   if (!isOrca(p) || s.over) return;
+  const free = (p.ocFree ?? 0) > 0;
+  inBlue(ctx, free, () => aura(ctx, s, a0, snap));
+  if (free) crackle(ctx, snap(lerp(p.prevX, p.x, a0)), snap(lerp(p.prevY, p.y, a0)) - 4, 18, s.tick, 0.9);
+  if (!s.pvp) gauge(ctx, s, snap(lerp(p.prevX, p.x, a0)), snap(lerp(p.prevY, p.y, a0)));
+}
+
+function aura(ctx: Ctx, s: RunState, a0: number, snap: Snap): void {
+  const p = s.player;
   for (const k of p.ocSharks ?? []) {
     const near = k.prey !== undefined ? s.enemies.find((e) => e.id === k.prey) : undefined;
     const bite = near ? Math.max(0, 1 - Math.hypot(near.x - k.x, near.y - k.y) / 40) : 0.2;
@@ -94,7 +109,7 @@ export function drawOrcaAura(ctx: Ctx, s: RunState, a0: number, snap: Snap): voi
     const k = 1 - d.left / ORCA.dartRange;
     const hop = Math.sin(k * Math.PI) * 10;
     sharkShape(ctx, snap(d.x), snap(d.y) - hop, Math.atan2(d.dy - (0.5 - k) * 0.6, d.dx), 22, 1, s.tick, 0.7);
-    bubbles(ctx, snap(d.x - d.dx * 10), snap(d.y - d.dy * 10), 8, k, d.hit.length + 3, 3, 0.7);
+    bubs(ctx, snap(d.x - d.dx * 10), snap(d.y - d.dy * 10), 8, k, d.hit.length + 3, 3, 0.7);
   }
   const px = snap(lerp(p.prevX, p.x, a0));
   const by = snap(lerp(p.prevY, p.y, a0));
@@ -102,7 +117,7 @@ export function drawOrcaAura(ctx: Ctx, s: RunState, a0: number, snap: Snap): voi
   const b = p.ocBreach;
   if (b) {
     orcaShape(ctx, px, py, Math.atan2(b.dy, b.dx), 1.1, 0.9, s.tick);
-    bubbles(ctx, px, py, 34, (s.tick % 20) / 20, s.tick, 8, 0.9);
+    bubs(ctx, px, py, 34, (s.tick % 20) / 20, s.tick, 8, 0.9);
     return;
   }
   const free = (p.ocFree ?? 0) > 0;
@@ -113,14 +128,13 @@ export function drawOrcaAura(ctx: Ctx, s: RunState, a0: number, snap: Snap): voi
   if (free) {
     // 해방 오라: 몸을 감싸는 물빛 + 튀는 번개
     additive(ctx, () => {
-      glow(ctx, px, py, 26, OC_AQUA, 0.35 + Math.sin(s.tick * 0.3) * 0.1, 0.3);
-      shock(ctx, px, by, 15 + Math.sin(s.tick * 0.25) * 2, VOLT, 0.35, 2);
+      glow(ctx, px, py, 26, PAL.aqua, 0.35 + Math.sin(s.tick * 0.3) * 0.1, 0.3);
+      shock(ctx, px, by, 15 + Math.sin(s.tick * 0.25) * 2, PAL.aqua, 0.45, 2);
     });
-    crackle(ctx, px, py, 18, s.tick, 0.9);
   } else if (fill >= 1) {
     const pulse = 0.5 + Math.sin(s.tick * 0.2) * 0.3;
-    additive(ctx, () => shock(ctx, px, py + 2, 16 + Math.sin(s.tick * 0.2) * 2, OC_AQUA, 0.6 * pulse, 3));
-    glints(ctx, px, py, 16, 3, s.tick, 5, OC_FOAM, 0.8);
+    additive(ctx, () => shock(ctx, px, py + 2, 16 + Math.sin(s.tick * 0.2) * 2, PAL.aqua, 0.6 * pulse, 3));
+    glints(ctx, px, py, 16, 3, s.tick, 5, PAL.foam, 0.8);
   }
   // 막 때린 주먹: 앞으로 뻗은 큰 빛
   const last = p.ocLast;
@@ -130,7 +144,8 @@ export function drawOrcaAura(ctx: Ctx, s: RunState, a0: number, snap: Snap): voi
     const fx = px + p.faceX * reach;
     const fy = py + 2 + p.faceY * reach - (last.k === 2 ? 8 : 0);
     fistGlow(ctx, fx, fy, 7 - since * 0.4, 1 - since / 10, s.tick);
-    if (since < 4) additive(ctx, () => shock(ctx, fx, fy, 6 + since * 4, OC_FOAM, 0.9, 2));
+    if (since < 4) additive(ctx, () => shock(ctx, fx, fy, 6 + since * 4, PAL.foam, 0.9, 2));
+    // 해방 중: 주먹에서 천둥이 튐
+    if (free && since < 7) for (let i = 0; i < 3; i++) blueBolt(ctx, fx, fy, fx + p.faceX * 22 + (i - 1) * p.faceY * 14, fy + p.faceY * 22 - (i - 1) * p.faceX * 14, s.tick + i * 5, 1 - since / 7, 2.4);
   }
-  if (!s.pvp) gauge(ctx, s, px, by);
 }

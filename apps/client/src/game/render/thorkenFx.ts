@@ -40,23 +40,23 @@ export function bolt(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, s
 }
 
 /** 물방울 왕관: 가운데서 위로 튀어 올랐다 떨어지는 물방울 */
-export function droplets(ctx: Ctx, x: number, y: number, r: number, f: number, seed: number, n = 12): void {
+export function droplets(ctx: Ctx, x: number, y: number, r: number, f: number, seed: number, n = 12, cyan = CYAN, foam = FOAM): void {
   for (let k = 0; k < n; k++) {
     const ang = rnd(seed, k) * TAU;
     const d = r * (0.4 + rnd(k, seed) * 0.7) * easeOut(f);
     const up = Math.sin(f * Math.PI) * r * (0.4 + rnd(k, 3) * 0.6);
     const s = 1 + rnd(k, 5) * 1.8 * (1 - f * 0.6);
-    ctx.fillStyle = k % 3 === 0 ? alpha(FOAM, 1 - f) : alpha(CYAN, 0.9 * (1 - f));
+    ctx.fillStyle = k % 3 === 0 ? alpha(foam, 1 - f) : alpha(cyan, 0.9 * (1 - f));
     ctx.fillRect(Math.round(x + Math.cos(ang) * d - s / 2), Math.round(y + Math.sin(ang) * d * 0.55 - up - s / 2), Math.ceil(s), Math.ceil(s));
   }
 }
 
 /** 물 띠 (가운데 x·y, 반지름 r, a0 → a1 사이를 칠함) · 앞쪽 끝에 흰 거품 */
-export function waterArc(ctx: Ctx, x: number, y: number, r: number, a0: number, a1: number, w: number, a: number): void {
+export function waterArc(ctx: Ctx, x: number, y: number, r: number, a0: number, a1: number, w: number, a: number, sea = SEA, cyan = CYAN, foam = FOAM): void {
   if (Math.abs(a1 - a0) < 0.01) return;
   const ccw = a1 < a0;
   ctx.lineCap = "round";
-  for (const [c, ww] of [[alpha(SEA, a * 0.35), w * 2.2], [alpha(CYAN, a * 0.8), w], [alpha(FOAM, a), Math.max(1, w * 0.3)]] as const) {
+  for (const [c, ww] of [[alpha(sea, a * 0.35), w * 2.2], [alpha(cyan, a * 0.8), w], [alpha(foam, a), Math.max(1, w * 0.3)]] as const) {
     ctx.strokeStyle = c;
     ctx.lineWidth = ww;
     ctx.beginPath();
@@ -67,7 +67,7 @@ export function waterArc(ctx: Ctx, x: number, y: number, r: number, a0: number, 
   // 앞 끝 물보라
   const hx = x + Math.cos(a1) * r;
   const hy = y + Math.sin(a1) * r;
-  additive(ctx, () => glow(ctx, hx, hy, w * 2.2, CYAN, a * 0.9, 0.8));
+  additive(ctx, () => glow(ctx, hx, hy, w * 2.2, cyan, a * 0.9, 0.8));
 }
 
 export function drawThorkenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {

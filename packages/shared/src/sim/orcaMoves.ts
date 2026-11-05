@@ -5,7 +5,7 @@ import { ORCA as O, type OrcaStyle } from "../weaponsOrca";
 import { damageEnemy, healPlayer } from "./combat";
 import { blocksShot } from "./layout";
 import { rot } from "./orbit";
-import { isFree, startFree, wide } from "./orcaFree";
+import { isFree, startFree, tint, wide, zap } from "./orcaFree";
 import type { OcShark } from "./orcaTypes";
 import { alive, isBoss, stun } from "./s2Kit";
 import { statusHit } from "./statusHit";
@@ -31,6 +31,7 @@ export function ocHit(s: RunState, e: EnemyState, dmg: number, fx: number, fy: n
   const [dx, dy] = normalize(e.x - fx, e.y - fy) ?? [s.player.faceX, s.player.faceY];
   if (tide) statusHit(s, e, "tide", dmg, dx, dy, false);
   else damageEnemy(s, e, dmg, dx, dy, false);
+  zap(s, e, dmg);
   if (push !== 0 && !anchored(e) && e.hp > 0) {
     e.x += dx * push;
     e.y += dy * push;
@@ -52,7 +53,7 @@ export function spray(s: RunState, mul: number): void {
     if (d > reach + e.r || (d > e.r + p.r && (ox * p.faceX + oy * p.faceY) / d < O.sprayArc)) continue;
     ocHit(s, e, dmg, p.x, p.y, O.sprayPush);
   }
-  addEffect(s, { kind: "ocSpray", x: p.x, y: p.y - 3, dirX: p.faceX, dirY: p.faceY, size: reach, maxTicks: 18 });
+  addEffect(s, { kind: "ocSpray", x: p.x, y: p.y - 3, dirX: p.faceX, dirY: p.faceY, size: reach, maxTicks: 18, ...tint(s) });
 }
 
 /** 2타 소용돌이 훅: 나를 둘러싼 물회오리가 적을 끌어당김 */
@@ -67,7 +68,7 @@ export function whirl(s: RunState, mul: number): void {
     const d = Math.sqrt(dist2(e, p));
     ocHit(s, e, p.stats.damage * O.whirlMul * mul, p.x, p.y, -Math.min(pull, Math.max(0, d - p.r - e.r - 2)));
   }
-  addEffect(s, { kind: "ocWhirl", x: p.x, y: p.y - 3, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 20 });
+  addEffect(s, { kind: "ocWhirl", x: p.x, y: p.y - 3, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 20, ...tint(s) });
 }
 
 /** 물기둥 하나 (x, y): 띄워 올림(기절) */
@@ -77,7 +78,7 @@ export function geyserAt(s: RunState, x: number, y: number, r: number, dmg: numb
     ocHit(s, e, dmg, x, y, 0, true);
     stun(e, O.geyserStun);
   }
-  addEffect(s, { kind: "ocGeyser", x, y, dirX: 0, dirY: -1, size: r, maxTicks: 26 });
+  addEffect(s, { kind: "ocGeyser", x, y, dirX: 0, dirY: -1, size: r, maxTicks: 26, ...tint(s) });
 }
 
 /** 3타 물기둥 어퍼: 바라보는 쪽 앞에 물기둥 (간헐천은 셋 줄지어) */
@@ -119,7 +120,7 @@ function burst(s: RunState, k: OcShark): void {
   for (const e of alive(s)) if (dist2(e, k) <= (r + e.r) ** 2) ocHit(s, e, p.stats.damage * O.burstMul * k.mul, k.x, k.y, 8, true);
   if (echo) geyserAt(s, k.x, k.y, O.geyserR, p.stats.damage * O.geyserMul * 0.6 * k.mul);
   if (orcaOf(p).pool) (p.ocPools ??= []).push({ x: k.x, y: k.y, t: O.poolTicks });
-  addEffect(s, { kind: "ocBurst", x: k.x, y: k.y, dirX: k.dx, dirY: k.dy, size: r, maxTicks: 22 });
+  addEffect(s, { kind: "ocBurst", x: k.x, y: k.y, dirX: k.dx, dirY: k.dy, size: r, maxTicks: 22, ...tint(s) });
 }
 
 /** 가장 가까운 아직 안 문 적 (찾는 거리 안) */
@@ -151,7 +152,7 @@ function sharkStep(s: RunState, k: OcShark): boolean {
     ocHit(s, e, p.stats.damage * O.biteMul * k.mul, k.x - k.dx * 6, k.y - k.dy * 6, 10, true);
     gain(s, O.tideBite);
     if (hasPerk(p, "ocFrenzy")) k.mul *= 1 + K.ocFrenzy.up;
-    addEffect(s, { kind: "ocBite", x: e.x, y: e.y, dirX: k.dx, dirY: k.dy, size: reach + 6, maxTicks: 16 });
+    addEffect(s, { kind: "ocBite", x: e.x, y: e.y, dirX: k.dx, dirY: k.dy, size: reach + 6, maxTicks: 16, ...tint(s) });
     k.prey = undefined;
     if (--k.left <= 0) break;
   }
