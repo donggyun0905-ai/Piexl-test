@@ -1,14 +1,15 @@
-// 펜리르(비르디아, 영물): 선왕의 대검을 문 늙은 백랑. 한 번 누르면 고정 5연 콤보가 저절로 이어짐
-// 1 물어 베기(앞 부채꼴) → 2 되베기(넓은 부채꼴) → 3 지면 검기(바닥을 그으며 나아가 뚫음) → 4 난도(한 자리를 사방에서 빠르게 벰)
+// 펜리르(비르디아, 영물): 선왕의 대검을 문 늙은 백랑. 고정 5연 콤보
+// 누를 때마다 한 기술씩 (누르고 있으면 이어짐) · 1 물어 베기(앞 부채꼴) → 2 되베기(넓은 부채꼴) → 3 지면 검기(바닥을 그으며 나아가 뚫음) → 4 난도(한 자리를 사방에서 빠르게 벰)
 // → 5 천랑 낙인(뛰어오른 동안 무적, 내려찍는 순간 풀리고 사방으로 검기). 수치는 weaponsFenrir.FENRIR, 아이템은 itemsFenrir·fenrirStats
 import { TICK_RATE } from "../constants";
 import { FENRIR_PERKS as K } from "../itemsFenrir";
 import { FENRIR as F } from "../weaponsFenrir";
 import { rot } from "./orbit";
+import { comboStep } from "./comboStep";
 import { alive, inCircle, inCone, onSegment, strike, stun } from "./s2Kit";
 import type { FenrirWave } from "./fenrirTypes";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { addEffect, dist2, hasPerk, normalize } from "./util";
+import { addEffect, dist2, hasPerk, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
 export { isFenrir } from "./fenrirStats";
 const TAU = 6.283185307179586;
@@ -42,7 +43,8 @@ function faceNear(s: RunState, reach: number): EnemyState | undefined {
 /** 검기 하나 내보냄 */
 function launch(p: PlayerState, dx: number, dy: number, big: boolean, dmg: number): void {
   const reach = !big && hasPerk(p, "fnStar") ? K.fnStar.reach : 1;
-  const t = Math.round((big ? F.waveTicks : F.starTicks) * reach);
+  // 착지 검기는 방 끝까지 날아감 (끝에 닿으면 사라짐)
+  const t = big ? Math.round(F.waveTicks * reach) : F.starTicks;
   const w: FenrirWave = { x: p.x, y: p.y, dx, dy, t, max: t, sp: big ? F.waveSpeed : F.starSpeed, w: big ? F.waveW : F.starW, dmg, big, hit: [] };
   (p.fnWaves ??= []).push(w);
 }
@@ -117,7 +119,7 @@ function waveTick(s: RunState): void {
     if (age % F.scarEvery === 0) addEffect(s, { kind: "fnScar", x: w.x, y: w.y, dirX: w.dx, dirY: w.dy, size: w.w, maxTicks: w.big ? 26 : 16, width: w.big ? 1 : 0 });
     if (rift && w.big && age % K.fnRift.every === 0) (p.fnCracks ??= []).push({ x: w.x, y: w.y, t: K.fnRift.ticks });
   }
-  p.fnWaves = p.fnWaves.filter((w) => w.t > 0);
+  p.fnWaves = p.fnWaves.filter((w) => w.t > 0 && w.x > ROOM_MIN_X && w.x < ROOM_MAX_X && w.y > ROOM_MIN_Y && w.y < ROOM_MAX_Y);
 }
 
 /** 대지 가르기 균열: 사이마다 위에 선 적을 벰 */
@@ -145,41 +147,50 @@ function move(s: RunState, i: number): number {
     p.fnAir = F.jumpTicks;
     addEffect(s, { kind: "fnJump", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 20, maxTicks: 22 });
   }
-  return [F.gap1, F.gap2, F.gap3, 0, 0][i]!;
+  return [F.gap1, F.gap2, F.gap3, F.gap4, 0][i]!;
 }
 
-/** 틱마다 (선왕의 대검을 들었을 때 player에서) */
+/** 틱마다 (선왕의 대검을 들었을 때 player에서). 누를 때마다 한 기술 (누르고 있으면 이어짐) */
 export function fenrirTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
+  const press = want && !p.fnHeld;
+  p.fnHeld = want;
   if (p.fnWise) p.fnWise--;
   if (p.fnHuntT) p.fnHuntT--;
   waveTick(s);
   crackTick(s);
   flurryTick(s);
-  const c = p.fnCombo;
-  if (c) {
-    // 천랑 낙인: 뛰어오른 동안 무적, 내려찍는 틱에 풀림
-    if (p.fnAir) {
-      if (--p.fnAir > 0) {
-        p.invulnTicks = Math.max(p.invulnTicks, 2);
-        return;
-      }
-      delete p.fnAir;
-      land(s);
-      delete p.fnCombo;
-      p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
+  const rest = () => {
+    delete p.fnCombo;
+    p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
+  };
+  // 천랑 낙인: 뛰어오른 동안 무적, 내려찍는 틱에 풀리고 콤보 끝
+  if (p.fnAir) {
+    if (--p.fnAir > 0) {
+      p.invulnTicks = Math.max(p.invulnTicks, 2);
       return;
     }
-    if (p.fnFlurry || --c.t > 0) return;
-    c.t = move(s, c.i++);
+    delete p.fnAir;
+    land(s);
+    return rest();
+  }
+  const c = p.fnCombo;
+  if (c) {
+    if (p.fnFlurry) {
+      if (press) c.q = true;
+      return;
+    }
+    const step = comboStep(c, want, press, F.idle);
+    if (step === "drop") delete p.fnCombo;
+    else if (step === "go") c.t = move(s, c.i++);
     return;
   }
   if (!want || p.attackCooldown > 0) return;
   p.attackCount++;
-  p.fnCombo = { i: 1, t: move(s, 0) };
+  p.fnCombo = { i: 1, t: move(s, 0), idle: 0 };
 }
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetFenrir(p: PlayerState): void {
-  for (const k of ["fnCombo", "fnAir", "fnWaves", "fnFlurry", "fnCracks", "fnWise", "fnHuntT", "fnHaloFloor", "fnFalls"] as const) delete p[k];
+  for (const k of ["fnCombo", "fnAir", "fnWaves", "fnFlurry", "fnCracks", "fnWise", "fnHuntT", "fnHaloFloor", "fnFalls", "fnHeld"] as const) delete p[k];
 }

@@ -38,9 +38,12 @@ import { remnantTick } from "./remnant";
 import { wandererTick } from "./wanderer";
 import { silkTick } from "./silk";
 import { pungryuTick } from "./pungryu";
+import { thorkenTick } from "./thorken";
+import { leviaTick } from "./levia";
 import { leoTick } from "./leo";
 import { onyxTick } from "./onyx";
 import { fenrirTick } from "./fenrir";
+import { eclipseTick } from "./eclipse";
 import { collectorTick } from "./collector";
 import { minerTick } from "./miner";
 import { voyagerTick } from "./voyager";
@@ -94,9 +97,12 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   katana: wandererTick,
   thread: silkTick,
   script: pungryuTick,
+  anchor: thorkenTick,
+  whale: leviaTick,
   lion: leoTick,
   gem: onyxTick,
   fang: fenrirTick,
+  solar: eclipseTick,
   hoard: collectorTick,
   pick: minerTick,
   fate: voyagerTick,

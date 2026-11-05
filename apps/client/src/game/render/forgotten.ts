@@ -7,6 +7,9 @@ import { drawPungryuAura, drawPungryuBack } from "./pungryuBody";
 import { drawLeoAura, drawLeoBack } from "./leoAura";
 import { drawOnyxAura, drawOnyxBack } from "./onyxAura";
 import { drawFenrirAura, drawFenrirBack } from "./fenrirAura";
+import { drawEclipseAura, drawEclipseBack } from "./eclipseAura";
+import { drawThorkenAura, drawThorkenBack } from "./thorkenBody";
+import { drawLeviaAura, drawLeviaBack } from "./leviaBody";
 import { drawFallenWings } from "./fallenWings";
 
 type Ctx = CanvasRenderingContext2D;
@@ -72,6 +75,9 @@ export function drawForgottenBack(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawLeoBack(ctx, s, alpha, snap);
   drawOnyxBack(ctx, s, alpha, snap);
   drawFenrirBack(ctx, s, alpha, snap);
+  drawEclipseBack(ctx, s, alpha, snap);
+  drawThorkenBack(ctx, s, alpha, snap);
+  drawLeviaBack(ctx, s, alpha, snap);
   drawFallenWings(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten") return;
@@ -103,6 +109,9 @@ export function drawForgottenAura(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawLeoAura(ctx, s, alpha, snap);
   drawOnyxAura(ctx, s, alpha, snap);
   drawFenrirAura(ctx, s, alpha, snap);
+  drawEclipseAura(ctx, s, alpha, snap);
+  drawThorkenAura(ctx, s, alpha, snap);
+  drawLeviaAura(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten" || (p.fgGod ?? 0) <= 0) return;
   const x = lerp(p.prevX, p.x, alpha);

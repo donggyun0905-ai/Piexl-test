@@ -1,4 +1,5 @@
 // 펜리르 상태 타입 (sim/fenrir). 모두 선택 값 (예전 저장에는 없음)
+import type { StepCombo } from "./comboStep";
 
 /** 바닥을 그으며 나아가는 검기 하나 (big: 3타 지면 검기, 아니면 착지 검기) */
 export interface FenrirWave {
@@ -28,7 +29,9 @@ export interface FenrirFlurry {
 
 export interface FenrirPlayerState {
   /** 콤보 진행 (몇 번째 기술 · 다음 기술까지 틱) · 천랑 낙인으로 뛰어오른 남은 틱 */
-  fnCombo?: { i: number; t: number };
+  fnCombo?: StepCombo;
+  /** 지난 틱에 누르고 있었는지 (막 누름 알기) */
+  fnHeld?: boolean;
   fnAir?: number;
   /** 나아가는 검기들 · 난도 · 대지 가르기 균열(남은 틱) */
   fnWaves?: FenrirWave[];

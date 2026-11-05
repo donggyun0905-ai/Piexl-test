@@ -4,63 +4,51 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
-    version: "0.49.16",
-    date: "2026-11-04",
+    version: "0.49.34",
+    date: "2026-11-05",
+    items: {
+      ko: ["탈라시아 이펙트 다듬기: 리바이어 고래가 은은한 바다빛·등에 일렁이는 햇빛 무늬·반짝임을 띠고, 창끝·충격파·고래 도약에 빛기둥·빛줄기·물보라 무지개 · 토르켄 철구공 빛 테두리·반짝임, 천둥 빛줄기, 닻이 지나간 길의 금빛 반짝임, 물기둥 무지개, 태풍 속 물빛 무늬"],
+      en: ["Thalassia effects polished: Levia's whales now glow with sea light, shimmering sunlight ripples and sparkles, with light pillars, rays and spray rainbows on the spear tip, shockwave and whale breach · Thorken's iron ball gets a glowing rim and sparkle, thunder gets light rays, the anchor leaves golden glints, geysers show rainbows, and typhoons shimmer"],
+      ja: ["タラシアのエフェクトを磨き上げ：リヴァイアのクジラが淡い海の光・背中に揺れる陽光の模様・きらめきをまとい、穂先・衝撃波・クジラの跳躍に光の柱・光の筋・しぶきの虹 · トルケンの鉄球に光の縁ときらめき、雷に光の筋、錨が通った跡に金色のきらめき、水柱に虹、台風の中に水の光模様"],
+    },
+  },
+  {
+    version: "0.49.33",
+    date: "2026-11-05",
     items: {
       ko: [
-        "새 캐릭터 펜리르 (비르디아 · 영물): 지난 비르디아 왕이 다스리던 늙은 백랑. 왕이 쓰던 거대한 대검을 입에 물고 다시 전쟁에 나섬 · 체력 45 · 공격력 16 · 이동 1.55 (아주 빠름) · 기본 회피 25%·예리함 25%",
-        "선왕의 대검: 한 번 누르면 고정 5연 콤보가 저절로 이어짐 · 물어 베기 → 되베기 → 지면 검기(큰 검기가 바닥을 그으며 나아가 뚫음) → 난도(한 자리를 사방에서 빠르게 6번) → 천랑 낙인(뛰어오른 동안 무적, 내려찍으면 무적이 풀리고 사방 8갈래 검기)",
-        "펜리르 전용 아이템 10 (늙은 늑대의 지혜 · 선왕의 광륜 · 벼린 송곳니 · 질풍 · 늑대의 울부짖음 · 천랑성 · 월광 난무 · 대지 가르기 · 노장의 투혼 · 사냥 본능) · 푸른 초승달 검기·수정 파편·갈라진 땅 이펙트 · 그림 시트",
-        "펜리르 여는 조건: 비르디아 캐릭터를 모두 열고, 저마다 금기의 서 45점 이상으로 라스트 보스 클리어",
+        "탈라시아 새 캐릭터 리바이어: 고래와 함께 자유로운 바다를 누비는 창술사 (체력 105 · 공격력 12 · 이동 1.35, 여는 조건: 이동 속도 1.8 달성)",
+        "리바이어: 바다의 창 3단 콤보 · 1타 앞 휘두르기 → 2타 한 바퀴 돌고 앞으로 커다란 고래 대돌격 → 3타 앞으로 돌진하고 부채꼴 충격파 · 타마다 확률로 고래가 같이 나와 날개로 넓게 쓸고 · 몸을 감아 한 바퀴 돌고 · 같이 돌진함 (안 나올수록 다음엔 잘 나옴)",
+        "리바이어: 무기는 창에 박는 힘의 보석 10 (아쿠아마린·해류 사파이어·뇌명 토파즈·산호석·밀물 월장석·심해석·빙정·쌍둥이 진주·해풍석·리바이어던의 눈) · 전용 아이템 20 (창 10 · 고래 10) · 푸른 고래·물살·물보라 이펙트 · 고래 울음 · 그림 시트 · 패왕전 스킬 4",
       ],
       en: [
-        "New character Fenrir (Virdia · Spirit Beast): an old white wolf once ruled by the late king of Virdia, marching to war again with the king's giant blade in its jaws · 45 HP · 16 Attack · 1.55 move (very fast) · base 25% dodge and 25% Sharpness",
-        "Blade of the Late King: one press runs a fixed 5-hit combo · Bite Slash → Return Slash → Ground Wave (a huge wave scrapes along the floor and pierces) → Frenzy Cut (6 fast slashes from every side on one spot) → Sirius Brand (invincible while leaping; the slam ends invincibility and sends sword waves 8 ways)",
-        "10 Fenrir items (Old Wolf's Wisdom · Halo of the Late King · Honed Fangs · Gale · Wolf's Howl · Sirius · Moonlit Frenzy · Earth Splitter · Veteran's Spirit · Hunting Instinct) · blue crescent waves, crystal shards and cracked-ground effects · sprite sheet",
-        "Fenrir unlock: unlock every Virdia character and clear a last boss with each at 45+ Taboo points",
+        "New Thalassia character Levia: a spear dancer roaming the free sea with the whales (105 HP · 12 attack · 1.35 move; unlock: reach 1.8 move speed)",
+        "Levia: a 3-hit sea-spear combo · 1st a forward sweep → 2nd a full spin, then a giant whale charges forward → 3rd a lunge ending in a fan-shaped shockwave · each hit may bring a whale that sweeps wide with its fins, coils around you, or lunges beside you (more likely the longer it stays away)",
+        "Levia: weapons are 10 power gems set in the spear (Aquamarine, Current Sapphire, Thunder Topaz, Coral Stone, Tide Moonstone, Abyss Stone, Ice Crystal, Twin Pearls, Sea Breeze Stone, Eye of the Leviathan) · 20 exclusive items (10 spear · 10 whale) · blue whale, water and splash effects · whale song · sprite sheet · 4 Paewang skills",
       ],
       ja: [
-        "新キャラ フェンリル（ヴィルディア · 霊獣）：先代ヴィルディア王に仕えた老いた白狼。王が使っていた巨大な大剣をくわえ再び戦に出る · 体力45 · 攻撃力16 · 移動1.55（とても速い）· 基本回避25%・鋭さ25%",
-        "先王の大剣：一度押すと固定5連コンボが自動で続く · 噛み斬り → 返し斬り → 地面の剣気（大きな剣気が床をえぐりながら進み貫通）→ 乱刀（一か所を四方からすばやく6回）→ 天狼の烙印（跳び上がる間は無敵、叩きつけると無敵が解け四方8本の剣気）",
-        "フェンリル専用アイテム10（老狼の知恵 · 先王の光輪 · 研ぎ澄まされた牙 · 疾風 · 狼の遠吠え · 天狼星 · 月光乱舞 · 大地割り · 老将の闘魂 · 狩りの本能）· 青い三日月の剣気・水晶の破片・割れた地面のエフェクト · スプライトシート",
-        "フェンリルの解放条件：ヴィルディアのキャラをすべて解放し、それぞれ禁忌の書45点以上でラストボスをクリア",
+        "タラシアの新キャラクター、リヴァイア：クジラと共に自由な海を駆ける槍使い（体力105 · 攻撃力12 · 移動1.35、解放条件：移動速度1.8達成）",
+        "リヴァイア：海の槍の3段コンボ · 1段目 前へ薙ぎ払い → 2段目 一回転して前へ巨大なクジラ大突撃 → 3段目 前へ突進して扇形の衝撃波 · 各段で確率でクジラが現れ、ヒレで広く薙ぎ・体を巻いて一回転し・一緒に突進する（出ないほど次は出やすい）",
+        "リヴァイア：武器は槍にはめる力の宝石10（アクアマリン・海流のサファイア・雷鳴のトパーズ・珊瑚石・満ち潮のムーンストーン・深海石・氷晶・双子の真珠・海風石・リヴァイアサンの瞳）· 専用アイテム20（槍10 · クジラ10）· 青いクジラ・水流・水しぶきのエフェクト · クジラの歌 · スプライトシート · 覇王戦スキル4",
       ],
     },
   },
   {
-    version: "0.49.15",
-    date: "2026-11-04",
+    version: "0.49.32",
+    date: "2026-11-05",
     items: {
-      ko: [
-        "협동: 빌드 세트·버프 칸이 갱신되지 않아 비어 보이던 것을 고침 (세트 효과는 원래대로 적용) · 동료 체력 칸을 왼쪽 아래로 옮겨 능력치·빌드 칸을 가리지 않게",
-        "협동: 쓰러진 동안 살아 있는 동료의 화면을 그대로 관전 (그 사람을 따라가는 화면·체력·장비·빌드 세트·능력치) · 누르면 다음 동료",
-      ],
-      en: [
-        "Co-op: the build set and buff panels no longer stay empty (set effects were already applied) · the party health list moved to the lower left so it no longer covers the stats and build panels",
-        "Co-op: while you are down you now watch a living teammate's screen (camera, health, loadout, build sets and stats) · tap for the next teammate",
-      ],
-      ja: [
-        "協力：ビルドセット・バフ欄が更新されず空に見えていたのを修正（セット効果はもともと適用）· 仲間の体力欄を左下に移し、能力値・ビルド欄を隠さないように",
-        "協力：倒れている間は生きている仲間の画面をそのまま観戦（その人を追う画面・体力・装備・ビルドセット・能力値）· 押すと次の仲間",
-      ],
+      ko: ["캐릭터 선택창: 게임에서 크게 그리는 캐릭터(토르켄·이클립스·펜리르)의 그림이 칸보다 커서 잘리고 더 늘어나 흐리게 보이던 것 고침 · 이제 닻·광륜까지 다 보이고 다른 캐릭터와 같은 또렷함"],
+      en: ["Character select: characters drawn larger in game (Thorken, Eclipse, Fenrir) no longer get cropped and over-stretched (blurry) in their cards · the anchor and halo now fit and look as crisp as everyone else"],
+      ja: ["キャラクター選択：ゲームで大きく描くキャラクター（トルケン・エクリプス・フェンリル）の絵が枠より大きく切れて引き伸ばされ、ぼやけて見えていたのを修正 · 錨や光輪まで全部見え、他のキャラと同じくっきりさに"],
     },
   },
   {
-    version: "0.49.14",
-    date: "2026-11-04",
+    version: "0.49.31",
+    date: "2026-11-05",
     items: {
-      ko: [
-        "레오 여는 조건: 아스칼론 캐릭터를 모두 열고, 저마다 금기의 서 45점 이상으로 라스트 보스 클리어 (캐릭터 선택창에 진행도)",
-        "오닉스 여는 조건: 테라코어 캐릭터를 모두 열고, 저마다 금기의 서 45점 이상으로 라스트 보스 클리어 · 오닉스의 진영을 테라코어로 바로잡음",
-      ],
-      en: [
-        "Leo unlock: unlock every Ascalon character and clear a last boss with each at 45+ Taboo points (progress shown on character select)",
-        "Onyx unlock: unlock every Terracore character and clear a last boss with each at 45+ Taboo points · Onyx now correctly belongs to Terracore",
-      ],
-      ja: [
-        "レオの解放条件：アスカロンのキャラをすべて解放し、それぞれ禁忌の書45点以上でラストボスをクリア（キャラ選択画面に進行度）",
-        "オニキスの解放条件：テラコアのキャラをすべて解放し、それぞれ禁忌の書45点以上でラストボスをクリア · オニキスの陣営をテラコアに修正",
-      ],
+      ko: ["토르켄: 닻을 휘두를 때마다 커다란 금빛 닻 모양이 몸 둘레로 부채꼴을 그리며 휙 돌아감 (잔상 셋 + 뒤따르는 물살)"],
+      en: ["Thorken: every anchor swing now shows a big golden anchor sweeping around you in an arc (three afterimages + a trailing water wake)"],
+      ja: ["トルケン：錨を振るたび、大きな金色の錨の形が体の周りを扇形にぶんと回る（残像3つ + 後を追う水流）"],
     },
   },
 ];

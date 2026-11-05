@@ -36,7 +36,7 @@ function wave(ctx: Ctx, x: number, y: number, dx: number, dy: number, w: number,
   const cx = x - dx * r * 0.7;
   const cy = y - dy * r * 0.7;
   additive(ctx, () => glow(ctx, x, y, r * 0.9, big ? BLUE : SKY, 0.5 * fade, 1));
-  slashArc(ctx, cx, cy, r, a, big ? 1.1 : 0.9, big ? 8 : 5, 1, fade, 1, big, big ? BLUE : tick % 2 ? VIOLET : BLUE, 0.7);
+  slashArc(ctx, cx, cy, r, a, big ? 1.15 : 0.95, w * (big ? 0.6 : 0.55), 1, fade, 1, big, big ? BLUE : tick % 2 ? VIOLET : BLUE, 0.7);
   // 날 끝에서 튀는 빛 가루
   for (let k = 0; k < (big ? 4 : 2); k++) {
     const off = ((tick * 3 + k * 7) % 11) - 5;

@@ -18,6 +18,7 @@ import { devilExtras } from "./devilPerks";
 import { setExtras, setTaken } from "./buildSets";
 import { setOnHit, setTick } from "./buildSetFx";
 import { fenrirDodged, fenrirExtras } from "./fenrirStats";
+import { eclipseExtras } from "./eclipseStats";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -50,9 +51,11 @@ export function extraOf(p: PlayerState): ExtraStats {
   const set = setExtras(p);
   // 펜리르 벼린 송곳니·노장의 투혼 (sim/fenrirStats)
   const fen = fenrirExtras(p);
-  if (!add && !grow && !lux && !gym && !boon && !devil && !set && !fen) return base;
+  // 이클립스 태양 모습 치명타 (sim/eclipseStats)
+  const ecl = eclipseExtras(p);
+  if (!add && !grow && !lux && !gym && !boon && !devil && !set && !fen && !ecl) return base;
   const out = { ...base };
-  for (const a of [add, grow, lux, gym, boon, devil, set, fen]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
+  for (const a of [add, grow, lux, gym, boon, devil, set, fen, ecl]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
   return out;
 }
 

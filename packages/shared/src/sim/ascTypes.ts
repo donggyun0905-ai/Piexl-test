@@ -3,9 +3,12 @@ import type { StationPlayerState } from "./stationTypes";
 import type { HiddenEnemyState, HiddenPlayerState } from "./hiddenTypes";
 import type { SecretEnemyState, SecretPlayerState } from "./secretTypes";
 import type { PungEnemyState, PungPlayerState } from "./pungTypes";
+import type { ThorPlayerState } from "./thorkenTypes";
+import type { LeviaPlayerState } from "./leviaTypes";
 import type { LeoEnemyState, LeoPlayerState } from "./leoTypes";
 import type { OnyxPlayerState } from "./onyxTypes";
 import type { FenrirPlayerState } from "./fenrirTypes";
+import type { EclipsePlayerState } from "./eclipseTypes";
 
 export interface AscPlayerState {
   /** 추적자: 스킬 셋 남은 대기 틱 · 암습 저격(남은 발·남은 틱·다음 발까지) · 강력한 한방 모으는 남은 틱 · 연발사격(남은 발·다음 발까지) · 마지막 저격 틱(반동) · 지난 틱 대시 */
@@ -103,5 +106,5 @@ export interface OriginShotState {
   hpCut?: number;
 }
 
-export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState, PungPlayerState, LeoPlayerState, OnyxPlayerState, FenrirPlayerState {}
+export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState, PungPlayerState, LeoPlayerState, OnyxPlayerState, FenrirPlayerState, EclipsePlayerState, ThorPlayerState, LeviaPlayerState {}
 export interface AscalonEnemyState extends HiddenEnemyState, AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState, PungEnemyState, LeoEnemyState {}

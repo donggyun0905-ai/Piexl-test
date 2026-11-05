@@ -43,6 +43,15 @@ export const FACTION_TEXT: Record<FactionId, { name: L; tag: L; desc: L }> = {
       "獣人やエルフなど、自然と共に生きる者たちの国。誤解からアスカロンと敵対している。",
     ),
   },
+  thalassia: {
+    name: c("탈라시아", "Thalassia", "タラシア"),
+    tag: c("바다의 나라", "Sea Nation", "海の国"),
+    desc: c(
+      "끝없는 바다와 해안을 품은 자유와 해방의 나라. 누구의 깃발 아래에도 묶이지 않는 뱃사람들이 파도와 폭풍을 벗 삼아 산다.",
+      "A nation of freedom and liberation embracing the endless sea and its shores. Sailors bound to no one's banner live with the waves and storms as friends.",
+      "果てしない海と海岸を抱く自由と解放の国。誰の旗の下にも縛られない船乗りたちが、波と嵐を友に生きる。",
+    ),
+  },
   akashic: {
     name: c("아카식 레코드", "Akashic Records", "アカシックレコード"),
     tag: c("기록자", "Chroniclers", "記録者"),
