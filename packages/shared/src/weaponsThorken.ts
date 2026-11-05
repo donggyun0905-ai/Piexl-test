@@ -50,6 +50,14 @@ export const THORKEN = {
   anchorPush: 8,
   /** 사슬 길이 · 철구공 반지름 · 철구공이 휘두르는 각도(기본) · 휘두르는 데 걸리는 틱 */
   chain: 80,
+  /** 사거리가 줄어도 사슬은 이 배율 밑으로 안 짧아짐 */
+  chainMinMul: 0.6,
+  /** 사슬: 나와 철구공 사이 사슬에 닿은 적도 맞음 · 사슬 폭(절반) · 피해 배율 */
+  chainW: 4,
+  chainMul: 0.9,
+  /** 대시로 감아 들일 때: 철구공이 돌아오는 틱 · 돌아오며 맞히는 피해 배율 */
+  reelTicks: 9,
+  reelMul: 1.2,
   ballR: 10,
   sweep: 3.6,
   sweepTicks: 10,
@@ -58,8 +66,6 @@ export const THORKEN = {
   clapR: 30,
   clapMul: 1.6,
   clapStun: 30,
-  /** 대시하면 철구공을 감아 들임 (다음에 누르면 다시 던짐) */
-  reelOnDash: 1,
   /** 폭풍 게이지: 가득 · 닻에 맞은 적마다 · 철구공에 맞은 적마다 · 천둥마다 */
   gaugeMax: 100,
   gaugeAnchor: 8,
@@ -101,7 +107,7 @@ export const THORKEN = {
   /** 빙해: 느려짐 틱 · 느려진 적이 받는 피해 배율 */
   floeSlow: 60,
   floeTaken: 1.25,
-  /** 크라켄: 사슬 폭(절반) · 사슬 피해 배율 */
+  /** 크라켄: 사슬 폭(절반) · 사슬 피해 배율 (출혈) */
   krakenW: 6,
   krakenMul: 0.8,
 };

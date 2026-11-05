@@ -29,11 +29,11 @@ const GEM: Record<SeaGem, Names> = {
   topaz: c("고래가 나올 때마다 둘레 적 3명에게 번개", "each time a whale appears, lightning strikes 3 nearby foes", "クジラが現れるたび周りの敵3体に雷"),
   coral: c("대돌격 고래가 끝에서 터져 큰 물보라", "the charging whale bursts into a big splash at the end", "大突撃のクジラが最後に弾けて大きな水しぶき"),
   moon: c("고래 확률 +20% (고래 피해 -10%)", "+20% whale chance (-10% whale damage)", "クジラ確率+20%（クジラダメージ-10%）"),
-  abyss: c("3타 충격파 피해 +25% · 맞은 적 기절", "3rd-hit shockwave +25% damage and stuns", "3段目の衝撃波ダメージ+25% · 当たった敵を気絶"),
+  abyss: c("4타 충격파 피해 +25% · 맞은 적 기절", "4th-hit shockwave +25% damage and stuns", "4段目の衝撃波ダメージ+25% · 当たった敵を気絶"),
   ice: c("맞은 적이 느려지고, 느려진 적은 +20% 아픔", "hits slow foes; slowed foes take +20%", "当たった敵が鈍化し、鈍化した敵は+20%"),
   twin: c("대돌격 고래가 두 마리 (둘째는 70%)", "two charging whales (the second at 70%)", "大突撃のクジラが2頭（2頭目は70%）"),
-  gale: c("콤보가 빠르고 3타 돌진이 50% 멀리 감", "faster combo, 3rd-hit lunge goes 50% farther", "コンボが速く、3段目の突進が50%遠くへ"),
-  king: c("3타가 끝나면 고래가 반드시 솟구쳐 넓게 내리찍음 (기절)", "after the 3rd hit, a whale always breaches and slams a wide area (stun)", "3段目の後、必ずクジラが跳び上がり広く叩きつける（気絶）"),
+  gale: c("콤보가 빠르고 4타 돌진이 50% 멀리 감", "faster combo, 4th-hit lunge goes 50% farther", "コンボが速く、4段目の突進が50%遠くへ"),
+  king: c("4타가 끝나면 고래가 반드시 솟구쳐 넓게 내리찍음 (기절)", "after the 4th hit, a whale always breaches and slams a wide area (stun)", "4段目の後、必ずクジラが跳び上がり広く叩きつける（気絶）"),
 };
 
 /** 바다의 창 무기 설명: 보석 기술 */
@@ -66,12 +66,12 @@ export const LV_PASSIVE_NAMES: Record<LvPassive & PassiveId, Names> = {
 
 export const LV_EFFECTS: Partial<Record<LvPassive & PassiveId, Names>> = {
   lvCrest: c("1타 휘두르기 범위 +{reach:up}%", "+{reach:up}% 1st-hit sweep reach", "1段目の薙ぎ範囲+{reach:up}%"),
-  lvSpiral: c("2타 한 바퀴 휘두르기 피해 {mul}배 · 범위 +{reach:up}%", "2nd-hit spin {mul}x damage · +{reach:up}% reach", "2段目の回転斬り{mul}倍 · 範囲+{reach:up}%"),
-  lvBreaker: c("3타 충격파 피해 {mul}배 · 반원으로 넓어짐", "3rd-hit shockwave {mul}x damage · widens to a half circle", "3段目の衝撃波{mul}倍 · 半円に広がる"),
-  lvSurf: c("3타 돌진 거리 +{rush:up}% · 돌진하는 동안 무적", "+{rush:up}% 3rd-hit lunge distance · invincible while lunging", "3段目の突進距離+{rush:up}% · 突進中は無敵"),
+  lvSpiral: c("3타 한 바퀴 휘두르기 피해 {mul}배 · 범위 +{reach:up}%", "3rd-hit spin {mul}x damage · +{reach:up}% reach", "3段目の回転斬り{mul}倍 · 範囲+{reach:up}%"),
+  lvBreaker: c("4타 충격파 피해 {mul}배 · 반원으로 넓어짐", "4th-hit shockwave {mul}x damage · widens to a half circle", "4段目の衝撃波{mul}倍 · 半円に広がる"),
+  lvSurf: c("4타 돌진 거리 +{rush:up}% · 돌진하는 동안 무적", "+{rush:up}% 4th-hit lunge distance · invincible while lunging", "4段目の突進距離+{rush:up}% · 突進中は無敵"),
   lvCurrent: c("고래 대돌격 거리 +{range:up}% · 크기 +{r:up}%", "Whale charge +{range:up}% range · +{r:up}% size", "クジラ大突撃の距離+{range:up}% · 大きさ+{r:up}%"),
-  lvAnchorless: c("대시한 뒤 {ticks:sec}초 안의 첫 공격이 곧바로 3타 돌진", "The first attack within {ticks:sec}s after a dash jumps straight to the 3rd-hit lunge", "ダッシュ後{ticks:sec}秒以内の最初の攻撃がすぐ3段目の突進に"),
-  lvSalt: c("3타를 끝낼 때마다 최대 체력 {heal:pct}% 회복", "Heal {heal:pct}% max HP each time you finish the 3rd hit", "3段目を終えるたび最大体力の{heal:pct}%回復"),
+  lvAnchorless: c("대시한 뒤 {ticks:sec}초 안의 첫 공격이 곧바로 4타 돌진", "The first attack within {ticks:sec}s after a dash jumps straight to the 4th-hit lunge", "ダッシュ後{ticks:sec}秒以内の最初の攻撃がすぐ4段目の突進に"),
+  lvSalt: c("4타를 끝낼 때마다 최대 체력 {heal:pct}% 회복", "Heal {heal:pct}% max HP each time you finish the 4th hit", "4段目を終えるたび最大体力の{heal:pct}%回復"),
   lvShell: c("받는 피해 -{taken:down}%", "-{taken:down}% damage taken", "被ダメージ-{taken:down}%"),
   lvFlag: c("체력이 {hp:pct}% 이상이면 피해 {mul}배", "{mul}x damage while HP is at least {hp:pct}%", "体力{hp:pct}%以上ならダメージ{mul}倍"),
   lvSpray: c("1타 때 앞으로 물살 {n}줄기 (공격력 {mul:pct}%)", "The 1st hit also shoots {n} water jets ({mul:pct}% attack)", "1段目で前方に水流{n}本（攻撃力{mul:pct}%）"),

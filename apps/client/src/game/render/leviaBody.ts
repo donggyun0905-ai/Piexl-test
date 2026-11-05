@@ -2,7 +2,7 @@
 import { isLevia, leviaStep, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
 import { additive, alpha, glow } from "./pwFxBits";
-import { CYAN, FOAM, SEA, wake, whaleShape } from "./leviaWhale";
+import { CYAN, FOAM, SEA, wake, waterJet, whaleShape } from "./leviaWhale";
 import { caustic, glints } from "./seaLight";
 
 type Ctx = CanvasRenderingContext2D;
@@ -54,31 +54,20 @@ export function drawLeviaAura(ctx: Ctx, s: RunState, alpha0: number, snap: Snap)
   const y = snap(lerp(p.prevY, p.y, alpha0));
   const step = leviaStep(p);
   const gy = y + p.r + 7;
-  for (let k = 0; k < 3; k++) {
+  for (let k = 0; k < 4; k++) {
     const on = (p.lvGap ?? 0) > 0 && k < step;
     ctx.fillStyle = "#0a1a2a";
-    ctx.fillRect(x - 8 + k * 6, gy - 1, 4, 4);
+    ctx.fillRect(x - 11 + k * 6, gy - 1, 4, 4);
     ctx.fillStyle = on ? CYAN : alpha(SEA, 0.5);
-    ctx.fillRect(x - 7 + k * 6, gy, 2, 2);
+    ctx.fillRect(x - 10 + k * 6, gy, 2, 2);
   }
   if ((p.lvHaste ?? 0) > 0 && s.tick % 6 < 3) additive(ctx, () => glow(ctx, x, y - 4, 14, FOAM, 0.35, 0.5));
 }
 
-/** 물보라 창끝 물살 */
+/** 물보라 창끝 물살 (일렁이는 물줄기, render/leviaWhale.waterJet) */
 export function drawLeviaShot(ctx: Ctx, pr: ProjectileState, x: number, y: number): boolean {
   if (pr.spirit !== "lvJet") return false;
   const len = Math.hypot(pr.vx, pr.vy) || 1;
-  const dx = pr.vx / len;
-  const dy = pr.vy / len;
-  ctx.lineCap = "round";
-  for (const [c, w] of [[alpha(SEA, 0.5), 6], [alpha(CYAN, 0.9), 3], [FOAM, 1]] as const) {
-    ctx.strokeStyle = c;
-    ctx.lineWidth = w;
-    ctx.beginPath();
-    ctx.moveTo(x - dx * 12, y - dy * 12);
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  }
-  ctx.lineCap = "butt";
+  waterJet(ctx, x, y, pr.vx / len, pr.vy / len, pr.id, pr.ticksLeft);
   return true;
 }

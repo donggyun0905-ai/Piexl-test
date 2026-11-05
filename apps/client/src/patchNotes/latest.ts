@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.40",
+    date: "2026-11-05",
+    items: {
+      ko: [
+        "토르켄: 사거리가 늘면 사슬도 길어짐 · 철구공이 적을 따라가지 않고 늘 사슬 끝까지 크게 휘둘러짐 · 나와 철구공 사이 사슬에 닿은 적도 피해 · 철구공이 벽·기둥에 부딪히면 멈춤 · 철구공이 나가 있을 때 대시하면 철구공이 나에게 날아오며 지나는 적을 때림",
+        "리바이어: 4단 콤보로 바뀜 (1타 휘두르기 → 2타 찌르기(고래는 꼬리로 앞을 크게 휩쓸기) → 3타 회전 + 고래 대돌격 → 0.5초 만에 4타 돌진) · 공격 때 창 그림이 따로 나오지 않음 · 고래를 멋진 큰 고래로 다시 그림 · 물살(물보라 창끝·바다의 삼지창)이 일렁이는 물줄기로",
+        "테일: 꼬리 공격이 밑동이 굵은 진짜 꼬리처럼 · 휘두를 때 겹겹의 물결과 튀는 물살 · 내려치기·낙하에 왕관 물보라 · 돌진·씹기·변신 효과 다듬음",
+        "단련의 방: '+' 버튼 가운데 정렬 · 패시브에 마우스를 올리면 설명 · 미니게임이 끝난 뒤 누르던 키 때문에 강화 창이 꺼지던 문제 고침",
+        "히든 상점(차원의 순례자) 말풍선이 머리 바로 위에 오게 고침",
+      ],
+      en: [
+        "Thorken: the chain grows with range · the ball no longer homes in and always swings out to the chain's full length · the chain between you and the ball now damages foes too · the ball stops when it hits walls or pillars · dashing while the ball is out reels it back, hitting foes along the way",
+        "Levia: now a 4-hit combo (1st sweep → 2nd thrust (the whale sweeps wide with its tail) → 3rd spin + whale charge → 4th lunge just 0.5s later) · no separate spear drawing on attacks · the whale is redrawn as a grand whale · water jets (Spray Spearhead, Sea Trident) now look like rippling streams",
+        "Tail: tail attacks look like a real tail, thick at the base · layered waves and flying spray on swings · crown splashes on slams and dives · dash, chomp and transform effects polished",
+        "Training Room: '+' buttons centered · hover a passive to see its description · fixed the upgrade window closing from keys still being pressed after a minigame",
+        "Hidden shop (Dimensional Pilgrim): the speech bubble now sits right above her head",
+      ],
+      ja: [
+        "トルケン：射程が伸びると鎖も長くなる · 鉄球が敵を追わず常に鎖の端まで大きく振り回される · 自分と鉄球の間の鎖に触れた敵にもダメージ · 鉄球が壁・柱に当たると止まる · 鉄球が出ている時にダッシュすると鉄球が戻りながら途中の敵を叩く",
+        "リヴァイア：4段コンボに変更（1段目 薙ぎ → 2段目 突き（クジラは尾で前を大きく薙ぐ）→ 3段目 回転＋クジラ大突撃 → 0.5秒で4段目 突進）· 攻撃時に槍の絵が別に出ない · クジラを迫力ある大きなクジラに描き直し · 水流（水しぶきの穂先・海の三叉槍）が揺らめく水の流れに",
+        "テイル：尾の攻撃が根元の太い本物の尾のように · 振るたびに重なる波と飛び散る水 · 叩きつけ・落下に王冠のしぶき · 突進・噛みつき・変身のエフェクトを調整",
+        "鍛錬の部屋：「+」ボタンを中央揃え · パッシブにマウスを乗せると説明 · ミニゲーム後に押していたキーで強化ウィンドウが閉じる問題を修正",
+        "隠しショップ（次元の巡礼者）の吹き出しが頭のすぐ上に来るよう修正",
+      ],
+    },
+  },
+  {
     version: "0.49.39",
     date: "2026-11-05",
     items: {

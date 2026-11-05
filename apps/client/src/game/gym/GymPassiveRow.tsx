@@ -1,8 +1,10 @@
 // 단련의 방 패시브 강화 한 줄: 오르는 능력치마다 '단계당 몫 · 지금 오른 몫' (sim/gym.gymPassiveStep) · 효과 수치마다 '원래 → 지금' (sim/gymPerks) · 깎는 몫 안내
 import { fxKeys, fxScale, gymPassiveStep, PASSIVES, type PassiveDef, type PassiveId, type StatMod } from "@pixel-rogue/shared";
+import { useState } from "react";
 import type { Lang, TextKey } from "../../i18n";
-import { itemName } from "../../i18n/items";
+import { itemDesc, itemName } from "../../i18n/items";
 import { ItemIcon } from "../itemIcon";
+import { ItemTip, tipPos, type TipPos } from "../ItemTip";
 
 const r2 = (v: number) => Math.round(v * 100) / 100;
 /** 단계 하나로 바뀌는 몫 (+10% · −9.1%) */
@@ -33,8 +35,15 @@ export function GymPassiveRow({ id, lv, max, canUp, lang, t, onUp }: Props) {
   const steps = gymPassiveStep(id);
   const fx = fxKeys(id);
   const bad = mods.some((m) => (m.add ?? 0) < 0 || (m.mul !== undefined && m.mul < 1));
+  // 마우스를 올리면 패시브 설명 말풍선
+  const [tip, setTip] = useState<TipPos | null>(null);
+  const show = (el: HTMLElement) => {
+    const r = el.getBoundingClientRect();
+    setTip(tipPos(r.left + r.width / 2, r.top, r.bottom));
+  };
   return (
-    <div className="gym-row passive">
+    <div className="gym-row passive" onPointerEnter={(e) => show(e.currentTarget)} onPointerLeave={() => setTip(null)}>
+      {tip && <ItemTip pos={tip} icon={{ kind: "passive", id }} name={itemName("passive", id, lang)} desc={itemDesc("passive", id, lang, t)} />}
       <div className="gym-pinfo">
         <span className="gym-name">
           <ItemIcon item={{ kind: "passive", id }} size={18} /> {itemName("passive", id, lang)} <small>Lv {lv}/{max}</small>

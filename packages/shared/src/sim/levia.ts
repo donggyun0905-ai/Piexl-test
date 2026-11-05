@@ -1,6 +1,6 @@
-// 리바이어(탈라시아): 바다의 창 3단 콤보 + 확률로 같이 나오는 고래 (sim/leviaWhale)
-// 1타 앞 휘두르기(고래: 날개로 더 넓게 쓸기) → 2타 한 바퀴 + 고래 대돌격(고래: 몸을 감아 한 바퀴 더 넓게)
-// → 3타 앞으로 돌진 + 부채꼴 충격파(고래: 같이 돌진). 멈추면 1타부터 · 고래가 안 나올수록 다음엔 잘 나옴
+// 리바이어(탈라시아): 바다의 창 4단 콤보 + 확률로 같이 나오는 고래 (sim/leviaWhale)
+// 1타 앞 휘두르기(고래: 날개로 더 넓게 쓸기) → 2타 찌르기(고래: 꼬리로 앞을 크게 휩쓸기) → 3타 한 바퀴 + 고래 대돌격(고래: 몸을 감아 한 바퀴 더 넓게)
+// → (0.5초 만에 바로) 4타 앞으로 돌진 + 부채꼴 충격파(고래: 같이 돌진). 멈추면 1타부터 · 고래가 안 나올수록 다음엔 잘 나옴
 import { TICK_RATE } from "../constants";
 import { LEVIA_PERKS as K } from "../itemsLevia";
 import { LEVIA as L } from "../weaponsLevia";
@@ -27,7 +27,18 @@ function sweep(s: RunState, whale: boolean): void {
   addEffect(s, { kind: "lvFin", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: fin, maxTicks: 22, follow: true });
 }
 
-/** 2타: 한 바퀴 휘두르고 앞으로 고래 대돌격 · 고래가 몸을 감아 더 넓게 한 바퀴 */
+/** 2타: 창으로 앞을 길게 찌름 · 고래가 꼬리로 앞을 크게 휩쓸어 줌 */
+function thrust(s: RunState, whale: boolean): void {
+  const p = s.player;
+  for (const e of inCone(s, L.thrustReach, L.thrustArc)) lvHit(s, e, p.stats.damage * L.thrustMul, L.thrustPush);
+  addEffect(s, { kind: "lvThrust", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: L.thrustReach, maxTicks: 12, follow: true });
+  if (!whale) return;
+  const r = L.tailReach * whaleSize(p);
+  for (const e of inCone(s, r, L.tailArc)) lvHit(s, e, whaleDmg(p, L.tailMul), L.tailPush, "tide", true);
+  addEffect(s, { kind: "lvTailSweep", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 22, follow: true, tint: String(s.tick % 2 ? 1 : -1) });
+}
+
+/** 3타: 한 바퀴 휘두르고 앞으로 고래 대돌격 · 고래가 몸을 감아 더 넓게 한 바퀴 */
 function spin(s: RunState, whale: boolean): void {
   const p = s.player;
   const sp = hasPerk(p, "lvSpiral");
@@ -41,7 +52,7 @@ function spin(s: RunState, whale: boolean): void {
   addEffect(s, { kind: "lvOrbit", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 24, follow: true });
 }
 
-/** 3타: 앞으로 돌진 (끝나면 충격파) · 고래가 옆에서 같이 돌진 */
+/** 4타: 앞으로 돌진 (끝나면 충격파) · 고래가 옆에서 같이 돌진 */
 function rush(s: RunState, whale: boolean): void {
   const p = s.player;
   const far = (gemOf(p).gem === "gale" ? L.galeRush : 1) * (hasPerk(p, "lvSurf") ? K.lvSurf.rush : 1);
@@ -76,7 +87,7 @@ function roomCheck(s: RunState): void {
   resetLevia(p, true);
 }
 
-/** 대시가 끝나면 닻 없는 배: 다음 공격이 곧바로 3타 */
+/** 대시가 끝나면 닻 없는 배: 다음 공격이 곧바로 4타 */
 function dashCheck(p: PlayerState): void {
   const dashing = p.dashTicks > 0;
   if (!dashing && p.lvDashing && hasPerk(p, "lvAnchorless")) p.lvFree = K.lvAnchorless.ticks;
@@ -101,18 +112,21 @@ export function leviaTick(s: RunState, want: boolean, speed: number): void {
   if (!want || p.attackCooldown > 0) return;
   let step = (p.lvGap ?? 0) > 0 ? (p.lvStep ?? 0) : 0;
   if ((p.lvFree ?? 0) > 0) {
-    step = 2;
+    step = 3;
     p.lvFree = 0;
   }
-  const cd = Math.max(1, Math.round((TICK_RATE / speed) * (step === 2 ? L.restMul : 1)));
+  // 4타 뒤는 조금 쉼 · 3타(회전) 뒤 4타(돌진)는 0.5초 만에 바로 이어짐
+  const base = Math.max(1, Math.round((TICK_RATE / speed) * (step === 3 ? L.restMul : 1)));
+  const cd = step === 2 ? Math.min(base, Math.round(TICK_RATE * L.spinToRush)) : base;
   p.attackCooldown = cd;
   p.attackCount++;
   const whale = rollWhale(s);
   if (step === 0) sweep(s, whale);
-  else if (step === 1) spin(s, whale);
+  else if (step === 1) thrust(s, whale);
+  else if (step === 2) spin(s, whale);
   else rush(s, whale);
   if (whale) onWhale(s);
-  p.lvStep = (step + 1) % 3;
+  p.lvStep = (step + 1) % 4;
   p.lvGap = L.comboGap + cd;
 }
 

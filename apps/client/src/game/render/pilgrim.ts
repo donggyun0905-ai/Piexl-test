@@ -31,8 +31,10 @@ export function drawPilgrim(ctx: Ctx, s: RunState, line: string | undefined): vo
   const bob = f < 1 ? Math.round(Math.abs(Math.sin(s.tick * 0.3)) * 1) : Math.round(Math.sin(s.tick * 0.08) * 0.6);
   // 캐릭터 시트 (scripts/art/pilgrim_sprite.py, 나중에 히든 캐릭터로도 씀). 아직 못 불러왔으면 간단한 그림
   const pose = { faceX: 0, faceY: 1, moving: f < 1, casting: false, step: (s.tick >> 3) % 4 };
-  if (!drawCharacter(ctx, "pilgrim", x, y - 6, 6, pose)) drawGirl(ctx, x, y - bob, s.tick, f < 1);
-  if (f >= 1 && line && s.tick - npc.t0 < 110 + 240) drawBubble(ctx, x, y - 76, line);
+  const sheet = drawCharacter(ctx, "pilgrim", x, y - 6, 6, pose);
+  if (!sheet) drawGirl(ctx, x, y - bob, s.tick, f < 1);
+  // 말풍선 꼬리가 머리 바로 위에 오게 (그림 시트는 32칸 · 간단한 그림은 배낭까지 45)
+  if (f >= 1 && line && s.tick - npc.t0 < 110 + 240) drawBubble(ctx, x, y - (sheet ? 34 : 50), line);
 }
 
 /** 차원 포탈 (가로 42 · 세로 50 반지름, 거대한 배낭까지 들어가는 크기): 바깥 빛 · 검보라 속 · 소용돌이 고리 넷 · 테두리 룬 여덟 · 빨려 들어가는 별 가루 */

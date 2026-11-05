@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { TICK_RATE } from "../constants";
 import { LEVIA as L } from "../weaponsLevia";
 import type { WeaponId } from "../content";
 import { createRun, stepSim, type RunState } from "./index";
@@ -39,13 +40,17 @@ describe("리바이어", () => {
     });
   }
 
-  it("3단 콤보: 1타 휘두르기 → 2타 회전 + 고래 대돌격 → 3타 돌진 뒤 충격파", () => {
+  it("4단 콤보: 1타 휘두르기 → 2타 찌르기 → 3타 회전 + 고래 대돌격 → (0.5초 만에) 4타 돌진 뒤 충격파", () => {
     const s = levia();
     press(s);
     expect(s.effects.some((e) => e.kind === "lvSwing")).toBe(true);
     expect(s.player.lvStep).toBe(1);
     press(s);
+    expect(s.effects.some((e) => e.kind === "lvThrust")).toBe(true);
+    expect(s.player.lvStep).toBe(2);
+    press(s);
     expect(s.effects.some((e) => e.kind === "lvSpin")).toBe(true);
+    expect(s.player.attackCooldown).toBeLessThanOrEqual(Math.round(TICK_RATE * L.spinToRush));
     expect(s.player.lvWhales?.length).toBeGreaterThan(0);
     const x0 = s.player.x;
     press(s);
@@ -72,7 +77,7 @@ describe("리바이어", () => {
     let seen = false;
     for (let i = 0; i < 60 && !seen; i++) {
       press(s);
-      seen = s.effects.some((e) => e.kind === "lvFin" || e.kind === "lvOrbit") || (s.player.lvRush === 2);
+      seen = s.effects.some((e) => e.kind === "lvFin" || e.kind === "lvTailSweep" || e.kind === "lvOrbit") || (s.player.lvRush === 2);
       run(s, 12, IDLE);
     }
     expect(seen).toBe(true);
@@ -95,8 +100,9 @@ describe("리바이어", () => {
     expect(s.player.lvRush).toBeTruthy();
   });
 
-  it("리바이어던의 눈: 3타 끝에 고래 도약", () => {
+  it("리바이어던의 눈: 4타 끝에 고래 도약", () => {
     const s = levia("lvKing");
+    press(s);
     press(s);
     press(s);
     press(s);

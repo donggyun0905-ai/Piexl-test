@@ -25,13 +25,13 @@ export interface LvPool {
 }
 
 export interface LeviaPlayerState {
-  /** 다음에 칠 타 (0 1타 · 1 2타 · 2 3타) · 이어 칠 수 있는 남은 틱 */
+  /** 다음에 칠 타 (0 1타 · 1 2타 찌르기 · 2 3타 회전 · 3 4타 돌진) · 이어 칠 수 있는 남은 틱 */
   lvStep?: number;
   lvGap?: number;
   /** 고래가 안 나온 횟수 (확률이 오름) · 흰 고래로 오른 확률 */
   lvMiss?: number;
   lvWhite?: number;
-  /** 3타 돌진 중 (1 = 고래 없이 · 2 = 고래와 같이) */
+  /** 4타 돌진 중 (1 = 고래 없이 · 2 = 고래와 같이) */
   lvRush?: number;
   /** 날아가는 고래들 · 해류 웅덩이 */
   lvWhales?: LvWhale[];

@@ -4,6 +4,7 @@ import { lerp, type Snap } from "./palette";
 import { additive, alpha, glow, shock } from "./pwFxBits";
 import { bolt, CYAN, FOAM, SEA, VOLT } from "./thorkenFx";
 import { caustic, glint, glints } from "./seaLight";
+import { waterJet } from "./leviaWhale";
 
 type Ctx = CanvasRenderingContext2D;
 const TAU = Math.PI * 2;
@@ -174,16 +175,7 @@ export function drawThorkenShot(ctx: Ctx, pr: ProjectileState, x: number, y: num
     ctx.fillRect(Math.round(x + dx * 2), Math.round(y + dy * 2), 1, 1);
     return true;
   }
-  // 물살: 흰 머리 + 하늘색 꼬리 + 물방울
-  ctx.lineCap = "round";
-  for (const [c, w] of [[alpha(SEA, 0.5), 6], [alpha(CYAN, 0.9), 3], [FOAM, 1]] as const) {
-    ctx.strokeStyle = c;
-    ctx.lineWidth = w;
-    ctx.beginPath();
-    ctx.moveTo(x - dx * 12, y - dy * 12);
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  }
-  ctx.lineCap = "butt";
+  // 물살: 일렁이는 물줄기 (리바이어 물살과 같은 그림)
+  waterJet(ctx, x, y, dx, dy, pr.id, pr.ticksLeft, 18);
   return true;
 }

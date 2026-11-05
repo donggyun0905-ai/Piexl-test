@@ -57,13 +57,36 @@ describe("토르켄", () => {
     expect(d).toBeGreaterThan(T.anchorReach * 0.7);
   });
 
-  it("대시하면 철구공을 감아 들임 → 다시 던질 수 있음", () => {
+  it("대시하면 철구공이 나에게 돌아오며 그 사이 적을 때림 → 다시 던질 수 있음", () => {
     const s = thor();
     run(s, 40);
     expect(s.player.tkMode).toBe(2);
+    s.player.tkBx = 150;
+    s.player.tkBy = 72;
+    const before = lost(s);
     s.player.dashTicks = 5;
     stepSim(s, IDLE);
+    expect(s.player.tkMode).toBe(3);
+    run(s, T.reelTicks + 1, IDLE);
     expect(s.player.tkMode ?? 0).toBe(0);
+    expect(lost(s)).toBeGreaterThan(before);
+  });
+
+  it("철구공은 적을 따라가지 않고 사슬 끝까지 · 사거리가 늘면 사슬도 길어짐", () => {
+    const s = thor();
+    run(s, 40, IDLE);
+    s.player.attackCooldown = 0;
+    run(s, 1);
+    run(s, T.throwTicks + 1, IDLE);
+    const d0 = Math.hypot((s.player.tkBx ?? 0) - s.player.x, (s.player.tkBy ?? 0) - s.player.y);
+    expect(d0).toBeGreaterThan(T.chain * 0.9);
+    const b = thor();
+    b.player.x = b.player.prevX = 40;
+    b.player.stats.range *= 1.5;
+    run(b, 1);
+    run(b, T.throwTicks + 1, IDLE);
+    const d1 = Math.hypot((b.player.tkBx ?? 0) - b.player.x, (b.player.tkBy ?? 0) - b.player.y);
+    expect(d1).toBeGreaterThan(d0 * 1.3);
   });
 
   it("폭풍 게이지가 가득이면 다음 휘두르기에 태풍 + 천둥, 태풍이 적을 끌어당김", () => {
@@ -104,7 +127,7 @@ describe("토르켄", () => {
       const s = thor(w);
       for (let i = 0; i < 600; i++) {
         stepSim(s, FIRE);
-        s.enemies[0]!.x = 100;
+        s.enemies[0]!.x = 50 + T.chain;
         s.enemies[0]!.y = 72;
       }
       const dps = lost(s) / 10;

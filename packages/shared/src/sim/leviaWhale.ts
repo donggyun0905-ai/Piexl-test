@@ -17,7 +17,7 @@ export function launchWhale(s: RunState, dx: number, dy: number, w: Omit<LvWhale
   if (p.lvWhales.length > 8) p.lvWhales.shift();
 }
 
-/** 2타 고래 대돌격: 바라보는 쪽으로 큰 고래 (쌍둥이 진주 · 고래 무리면 여럿이 벌어져서) */
+/** 3타 고래 대돌격: 바라보는 쪽으로 큰 고래 (쌍둥이 진주 · 고래 무리면 여럿이 벌어져서) */
 export function whaleCharge(s: RunState): void {
   const p = s.player;
   const cur = hasPerk(p, "lvCurrent");
@@ -42,7 +42,7 @@ export function whaleCharge(s: RunState): void {
   addEffect(s, { kind: "lvCharge", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: L.chargeR * whaleSize(p), maxTicks: 18 });
 }
 
-/** 고래가 나왔을 때 (1·2·3타 어디서든): 뇌명 토파즈 번개 · 심해의 노래 · 아기 고래 · 물뿜기 */
+/** 고래가 나왔을 때 (1~4타 어디서든): 뇌명 토파즈 번개 · 심해의 노래 · 아기 고래 · 물뿜기 */
 export function onWhale(s: RunState): void {
   const p = s.player;
   if (gemOf(p).gem === "topaz") {

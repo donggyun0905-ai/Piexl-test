@@ -4,11 +4,11 @@ import { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymStep, menuCode, type GymStat 
 import type { Lang, TextKey } from "../../i18n";
 import { GYM_DEVICE } from "../../i18n/items/station";
 import type { StationView } from "../stationView";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { play } from "../../audio/sound";
 import { BenchPress } from "./BenchPress";
 import { GymPassiveRow } from "./GymPassiveRow";
-import { useGymPause } from "./gymKit";
+import { useGymKeys, useGymPause } from "./gymKit";
 import { LatPull } from "./LatPull";
 import { Sandbag } from "./Sandbag";
 import { GymDemo } from "./GymDemo";
@@ -24,8 +24,17 @@ export function GymPanel({ gym, lang, t, send }: { gym: Gym; lang: Lang; t: (k: 
   const [started, setStarted] = useState(false);
   // 미니게임 동안 게임 시간 멈춤 (혼자 하는 판)
   useGymPause(!gym.used && !sent);
+  // 미니게임이 끝난 뒤에도 잠깐 F·Space·이동 키를 막음: 연타하던 키가 게임으로 넘어가 창이 닫히거나 캐릭터가 걸어 나가지 않게
+  const [guard, setGuard] = useState(false);
+  useGymKeys(() => {}, guard);
+  useEffect(() => {
+    if (!guard) return;
+    const id = window.setTimeout(() => setGuard(false), 1500);
+    return () => clearTimeout(id);
+  }, [guard]);
   const done = (score: number) => {
     setSent(true);
+    setGuard(true);
     send(menuCode(GYM_OP.result, gym.device, Math.round(Math.min(1000, score) / 20)));
   };
   if (!gym.used) {

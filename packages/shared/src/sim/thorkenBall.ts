@@ -1,11 +1,10 @@
 // 토르켄 철구공: 닻을 휘두를 때 사슬 끝 철구공이 나를 중심으로 크게 돌며 휩쓸고, 끝나는 자리에서 철구공마다 다른 기술
 import { THORKEN_PERKS as K } from "../itemsThorken";
 import { THORKEN as T } from "../weaponsThorken";
-import { nearest } from "./brawlMoves";
 import { healPlayer } from "./combat";
 import { rot } from "./orbit";
 import { alive, inCircle, shoot } from "./s2Kit";
-import { addGauge, chainLen, flailOf, tkHit } from "./thorkenKit";
+import { addGauge, ballBlocked, chainLen, flailOf, tkHit } from "./thorkenKit";
 import { addWhirl, clap } from "./thorkenStorm";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2 } from "./util";
@@ -33,16 +32,14 @@ export function startSweep(s: RunState): void {
     span = Math.min(TAU, Math.max(arc * 0.6, Math.abs(d) + arc / 2));
   }
   p.tkDir = -dir;
-  // 사슬을 감거나 풀어 가까운 적이 있는 거리로 휘두름 (없으면 사슬 끝까지)
-  const L = chainLen(p);
-  const e = nearest(s, L);
-  const r = e ? Math.max(T.anchorReach * 0.8, Math.min(L, Math.hypot(e.x - p.x, e.y - p.y))) : L;
+  // 적을 따라가지 않고 언제나 사슬 끝까지 크게 휘두름
+  const r = chainLen(p);
   p.tkSweep = { t: T.sweepTicks, a0, a1: a0 + dir * span, r, hit: [] };
   addEffect(s, { kind: "tkSweep", x: p.x, y: p.y, dirX: a0, dirY: a0 + dir * span, size: r, maxTicks: T.sweepTicks + 8, tint: p.weaponId, follow: true });
 }
 
 /** 공 하나가 (x, y)에 있을 때 닿은 적 맞히기 (뇌운: 둘레로 번개 · 빙해: 느려짐) */
-function ballHits(s: RunState, x: number, y: number, mul: number, hit: number[]): number {
+export function ballHits(s: RunState, x: number, y: number, mul: number, hit: number[]): number {
   const p = s.player;
   const st = flailOf(p);
   let n = 0;
@@ -70,9 +67,11 @@ function volt(s: RunState, from: EnemyState): void {
   }
 }
 
-/** 크라켄: 나와 철구공 사이 사슬에 닿은 적도 벰 */
+/** 나와 철구공 사이 사슬에 닿은 적도 맞음 (크라켄: 더 넓고 세게 벰 + 출혈) */
 function chainHits(s: RunState, x: number, y: number, hit: number[]): void {
   const p = s.player;
+  const kraken = flailOf(p).ball === "kraken";
+  const w = kraken ? T.krakenW : T.chainW;
   const len = Math.hypot(x - p.x, y - p.y);
   if (len < 1) return;
   const dx = (x - p.x) / len;
@@ -81,9 +80,9 @@ function chainHits(s: RunState, x: number, y: number, hit: number[]): void {
     if (hit.includes(-e.id)) continue;
     const t = (e.x - p.x) * dx + (e.y - p.y) * dy;
     const off = Math.abs((e.x - p.x) * dy - (e.y - p.y) * dx);
-    if (t < 0 || t > len - T.ballR || off > T.krakenW + e.r) continue;
+    if (t < 0 || t > len - T.ballR || off > w + e.r) continue;
     hit.push(-e.id);
-    tkHit(s, e, p.stats.damage * T.krakenMul, 0, "bleed");
+    tkHit(s, e, p.stats.damage * (kraken ? T.krakenMul : T.chainMul), 0, kraken ? "bleed" : undefined);
   }
 }
 
@@ -96,19 +95,28 @@ export function sweepTick(s: RunState): void {
   // 한 틱에 너무 많이 돌면 그 사이도 확인 (빈틈 없이)
   const parts = 3;
   let n = 0;
+  let wall = false;
   for (let k = 1; k <= parts; k++) {
     const f = 1 - (sw.t - 1 + (parts - k) / parts) / T.sweepTicks;
     const a = sw.a0 + (sw.a1 - sw.a0) * Math.min(1, f);
     const [c, sn] = rot(a);
-    p.tkBx = p.x + c * sw.r;
-    p.tkBy = p.y + sn * sw.r;
-    n += ballHits(s, p.tkBx, p.tkBy, 1, sw.hit);
+    const bx = p.x + c * sw.r;
+    const by = p.y + sn * sw.r;
+    // 벽·기둥에 부딪히면 그 자리에서 멈춤
+    if (ballBlocked(s, bx, by)) {
+      wall = true;
+      break;
+    }
+    p.tkBx = bx;
+    p.tkBy = by;
+    n += ballHits(s, bx, by, 1, sw.hit);
     if (st.ball === "twin") n += ballHits(s, p.x - c * sw.r, p.y - sn * sw.r, 1, sw.hit);
-    if (st.ball === "kraken") chainHits(s, p.tkBx, p.tkBy, sw.hit);
+    chainHits(s, bx, by, sw.hit);
   }
   addGauge(p, n * T.gaugeBall);
   sw.t--;
-  if (sw.t > 0) return;
+  if (sw.t > 0 && !wall) return;
+  if (wall) addEffect(s, { kind: "tkSplash", x: p.tkBx ?? p.x, y: p.tkBy ?? p.y, dirX: 0, dirY: 0, size: 10, maxTicks: 12 });
   const hits = sw.hit.filter((id) => id > 0).length;
   delete p.tkSweep;
   if (p.passives.includes("tkCompass") && hits >= K.tkCompass.need) healPlayer(s, p.stats.maxHp * K.tkCompass.heal);

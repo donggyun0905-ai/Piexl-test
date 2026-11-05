@@ -96,9 +96,14 @@
 .gym-row button {
   grid-row: 1 / span 2;
   grid-column: 2;
+  display: grid;
+  place-items: center;
+  align-self: center;
   width: 40px;
   height: 40px;
+  padding: 0;
   font-size: 22px;
+  line-height: 1;
 }
 .gym-row.passive {
   border-color: #5a4a8a;
@@ -121,6 +126,9 @@
 }
 .gym-row.passive button {
   grid-row: 1;
+}
+.gym-row.passive:hover {
+  border-color: #8a7ac0;
 }
 .gym-pinfo .gym-note {
   color: #b8a8e0;
