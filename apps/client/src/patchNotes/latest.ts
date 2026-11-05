@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.43",
+    date: "2026-11-06",
+    items: {
+      ko: ["훅: 왼쪽·오른쪽을 보고 서 있을 때 머리만 반대로 돌아가 보이던 그림 고침 (걷기와 같은 방향)"],
+      en: ["Hook: fixed the side standing pose where only the head faced the other way (now matches walking)"],
+      ja: ["フック：左右を向いて立つとき頭だけ逆を向いて見えた絵を修正（歩きと同じ向き）"],
+    },
+  },
+  {
     version: "0.49.42",
     date: "2026-11-06",
     items: {

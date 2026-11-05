@@ -36,7 +36,7 @@ FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", 
              "rider", "ren", "mukin", "wanderer", "bomber", "samyeol", "artifacter", "miner", "plague", "silk", "automata", "voyager",
              "eater", "forgotten", "remnant", "elder", "spiritist", "zeus", "tracker", "punk", "fly", "slayer", "slayer_rage",
              # 히든·한정 마지막 6명 (2026-11-01)
-             "stargazer", "scribe", "duck", "pilgrim", "pungryu", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "thorken", "levia", "tail", "madQueen", "hook", "automataDoll", "crownKing", "fallenKing", "lux", "lux2", "lux3", "lux4"}
+             "stargazer", "scribe", "duck", "pilgrim", "pungryu", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "thorken", "levia", "tail", "madQueen", "automataDoll", "crownKing", "fallenKing", "lux", "lux2", "lux3", "lux4"}
 # 서기·걷기에서 오른쪽을 보는 원본 칸 (기본 3 = 넷째 칸, GPT가 셋째 칸에 오른쪽을 그린 캐릭터만)
 STAND_RIGHT = {"abandoned": 2, "abandoned2": 2, "fenrir": 2}
 # 서기·걷기에서 고른 칸이 왼쪽을 보는 캐릭터: 뒤집어서 오른쪽으로 (사용자 확인)
@@ -54,6 +54,8 @@ ATTACK_LR = {
     # 각성 동물: 공격 줄 왼·오 칸이 바뀌어 있음
     **{f"morph-{a}-evo": ("2", "3") for a in ("bear", "boar", "eagle", "snake", "phoenix", "bat")},
 }
+# 서기 옆모습의 머리가 몸과 반대로 돌아간 캐릭터 (사용자 확인): 서기 왼·오 칸에 걷기(왼발) 왼·오 칸을 씀
+STAND_FROM_WALK = {"hook"}
 # 원본에 뒷모습 공격이 없는 캐릭터 (둘째 칸이 앞모습·옆 칸 조각과 겹침): 뒷모습 공격 칸에 뒷모습 서기를 씀
 BACK_ATTACK_STAND = {"mystic", "thorken", "levia"}
 # 대시 오른쪽 칸이 왼쪽을 보는 캐릭터: 그 칸을 뒤집어 오른쪽으로, 원래 그림은 왼쪽으로 (사용자 확인)
@@ -249,6 +251,8 @@ def build(name):
         grid[r, 3] = grid[r, 2].transpose(Image.FLIP_LEFT_RIGHT)
     for r in ROW_SWAP.get(name, ()):
         grid[r, 2], grid[r, 3] = grid[r, 3], grid[r, 2]
+    if name in STAND_FROM_WALK:
+        grid[0, 2], grid[0, 3] = grid[2, 2], grid[2, 3]
     if name in BACK_ATTACK_STAND:
         grid[1, 1] = raw[0, 1]
     if name in DASH_FLIP:
