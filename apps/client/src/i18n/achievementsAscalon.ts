@@ -18,6 +18,7 @@ export const ASCALON_ACHIEVEMENTS = {
   clearWanderer: n(["칼 한 자루의 길", "Path of One Blade", "一刀の道"], ["방랑객으로 클리어", "Clear as Wanderer", "放浪者でクリア"]),
   clearEclipse: n(["태양과 일식의 주인", "Lord of Sun and Eclipse", "太陽と日食の主"], ["이클립스로 클리어", "Clear as Eclipse", "エクリプスでクリア"]),
   clearLevia: n(["고래와 함께 자유롭게", "Free with the Whales", "クジラと共に自由に"], ["리바이어로 클리어", "Clear as Levia", "リヴァイアでクリア"]),
+  clearTail: n(["바다의 포식자", "Apex of the Sea", "海の捕食者"], ["테일로 클리어", "Clear as Tail", "テイルでクリア"]),
   clearThorken: n(["자유의 바다", "The Free Sea", "自由の海"], ["토르켄으로 클리어", "Clear as Thorken", "トルケンでクリア"]),
   clearFenrir: n(["선왕의 검을 문 늑대", "Wolf with the Late King's Blade", "先王の剣をくわえた狼"], ["펜리르로 클리어", "Clear as Fenrir", "フェンリルでクリア"]),
   clearOnyx: n(["일곱 보석의 주인", "Master of Seven Gems", "七つの宝石の主"], ["오닉스로 클리어", "Clear as Onyx", "オニキスでクリア"]),

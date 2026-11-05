@@ -5,6 +5,7 @@ import { fenrirSounds } from "./fenrirSounds";
 import { eclipseSounds } from "./eclipseSounds";
 import { thorkenSounds } from "./thorkenSounds";
 import { leviaSounds } from "./leviaSounds";
+import { tailSounds } from "./tailSounds";
 
 export const SKILL_SOUNDS = {
   // 터짐: 낮은 펑 · 떨어지는 운석: 쿵 + 우르르
@@ -43,6 +44,16 @@ export const SKILL_SOUNDS = {
     noise(0.35, 0.22, 900);
     tone({ type: "sine", from: 170, to: 340, dur: 0.35, vol: 0.16 });
     tone({ type: "sine", from: 340, to: 190, dur: 0.45, vol: 0.13, delay: 0.3 });
+  },
+  // 물 상어 (테일): 첨벙 솟구치는 물보라 + 쏴아 · 씹기: 짧고 단단한 콱 두 번
+  tlSplash: () => {
+    noise(0.28, 0.24, 1600);
+    tone({ type: "triangle", from: 620, to: 180, dur: 0.18, vol: 0.12 });
+  },
+  tlChomp: () => {
+    noise(0.06, 0.3, 500);
+    tone({ type: "square", from: 220, to: 70, dur: 0.08, vol: 0.14 });
+    tone({ type: "square", from: 260, to: 80, dur: 0.08, vol: 0.12, delay: 0.09 });
   },
   pwBlink: () => {
     tone({ type: "sine", from: 1200, to: 200, dur: 0.14, vol: 0.12 });
@@ -88,6 +99,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   eclipseSounds(run, out, onShake);
   thorkenSounds(run, out, onShake);
   leviaSounds(run, out, onShake);
+  tailSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;
   for (const e of run.effects) {

@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.35",
+    date: "2026-11-05",
+    items: {
+      ko: [
+        "탈라시아 새 캐릭터 테일: 물을 자유롭게 다루는 상어 수인 (체력 110 · 공격력 12 · 이동 1.4, 여는 조건: 공격 속도 1.6 달성)",
+        "테일: 둘레에 영역 바다가 펼쳐지고, 바다 안의 적을 물 상어가 저절로 공격 · 확률로 바다 밑에서 솟아 삼키기 · 튀어나와 꿰뚫고 다시 잠수하는 돌진 · 높이 솟구쳐 내리꽂는 낙하",
+        "테일: 누르면 꼬리 3연타 (위→아래 · 아래→위 · 내려치기 물기둥) · 한 방에 쓰러뜨릴 적이 있으면 물 상어로 변해 번개처럼 돌진해 씹어먹고 체력 회복",
+        "테일: 무기는 바다 10 (밀물·귀상어·청상아리·백상아리·뇌우·빙해·대양·광란·소용돌이·메갈로돈) · 전용 아이템 10 · 맑은 물 상어·물보라·무지개 이펙트 · 상어 소리 · 그림 시트 · 패왕전 스킬 4",
+      ],
+      en: [
+        "New Thalassia character Tail: a shark beastfolk who bends water freely (110 HP · 12 attack · 1.4 move; unlock: reach 1.6 attack speed)",
+        "Tail: a sea domain spreads around Tail and water sharks attack foes inside it on their own · by chance they rise from below and gulp, leap out to pierce and dive back, or soar high and crash down",
+        "Tail: pressing attack swings a 3-hit tail combo (down · up · a geyser slam) · if a foe can be finished in one bite, Tail turns into a water shark, darts in like lightning, devours it and heals",
+        "Tail: weapons are 10 seas (Tide, Hammerhead, Mako, Great White, Thunderstorm, Ice Sea, Open Ocean, Frenzy, Whirlpool, Megalodon) · 10 exclusive items · clear water shark, splash and rainbow effects · shark sounds · sprite sheet · 4 Paewang skills",
+      ],
+      ja: [
+        "タラシアの新キャラクター、テイル：水を自在に操るサメの獣人（体力110 · 攻撃力12 · 移動1.4、解放条件：攻撃速度1.6達成）",
+        "テイル：周りに領域の海が広がり、海の中の敵を水のサメが自動で攻撃 · 確率で海の底から現れて丸呑み · 飛び出して貫き再び潜る突進 · 高く跳び上がって落ちる落下攻撃",
+        "テイル：押すと尾の3連撃（上→下 · 下→上 · 水柱の叩きつけ）· 一撃で倒せる敵がいれば水のサメに変わり、稲妻のように突進して食らいつき体力回復",
+        "テイル：武器は海10（満ち潮・シュモクザメ・アオザメ・ホホジロザメ・雷雨・氷海・大洋・狂乱・渦潮・メガロドン）· 専用アイテム10 · 澄んだ水のサメ・水しぶき・虹のエフェクト · サメの音 · スプライトシート · 覇王戦スキル4",
+      ],
+    },
+  },
+  {
     version: "0.49.34",
     date: "2026-11-05",
     items: {

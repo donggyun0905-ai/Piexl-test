@@ -112,6 +112,7 @@ export { isFenrir } from "./fenrirStats";
 export { isThorken, thorkenGauge } from "./thorken";
 export { isLevia, leviaStep } from "./levia";
 export { whaleChance } from "./leviaKit";
+export { isTail, tailShark, tailStep, seaR } from "./tail";
 export { isEclipse, isNight, zoneR as eclipseZoneR } from "./eclipseStats";
 export { SUN_BURST, sunCutPaths } from "./eclipseCuts";
 export { passiveTagAt } from "./retag";

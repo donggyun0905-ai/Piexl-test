@@ -16,4 +16,11 @@ export const CHARACTER_TEXT_THALASSIA = {
     ja: "タラシア。クジラと共に自由な海を駆ける槍使い。海の槍の3段コンボ · 1段目 前へ薙ぎ払い → 2段目 一回転して前へクジラ大突撃 → 3段目 前へ突進して扇形の衝撃波 · 各段で確率でクジラも現れ、さらに広く薙ぐ（出ないほど次は出やすい）· 武器は槍にはめる力の宝石（10種）· 専用アイテム20（槍10 · クジラ10）",
   },
   whale: { ko: "바다의 창", en: "Sea Spear", ja: "海の槍" },
+  tail: { ko: "테일", en: "Tail", ja: "テイル" },
+  tailDesc: {
+    ko: "탈라시아. 물을 자유롭게 다루는 상어 수인. 둘레에 영역 바다가 펼쳐지고, 바다 안의 적을 물 상어가 저절로 공격 (확률로 바다 밑에서 솟아 삼키기 · 튀어나와 꿰뚫고 다시 잠수 · 솟구쳐 내리꽂기) · 누르면 꼬리 3연타 (위→아래 · 아래→위 · 내려치기) · 한 방에 쓰러뜨릴 적이 있으면 물 상어로 변해 번개처럼 돌진해 씹어먹고 체력 회복 · 무기는 바다의 종류 (10가지) · 전용 아이템 10",
+    en: "Thalassia. A shark beastfolk who bends water freely. A sea domain spreads around Tail, and water sharks attack every foe inside it on their own (by chance: rise from below and gulp · leap out, pierce and dive back · soar and crash down) · pressing attack swings a 3-hit tail combo (down · up · slam) · if a foe can be finished in one bite, Tail turns into a water shark, darts in like lightning and devours it to heal · weapons are kinds of sea (10) · 10 exclusive items",
+    ja: "タラシア。水を自在に操るサメの獣人。周りに領域の海が広がり、海の中の敵を水のサメが自動で攻撃（確率で海の底から現れて丸呑み · 飛び出して貫き再び潜る · 跳び上がって落下攻撃）· 押すと尾の3連撃（上→下 · 下→上 · 叩きつけ）· 一撃で倒せる敵がいれば水のサメに変わり稲妻のように突進して食らいつき体力回復 · 武器は海の種類（10種）· 専用アイテム10",
+  },
+  shark: { ko: "영역 바다", en: "Sea Domain", ja: "領域の海" },
 } satisfies Record<string, Record<Lang, string>>;

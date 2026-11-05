@@ -35,7 +35,7 @@ export const FACTIONS: readonly { id: FactionId; color: string; members: readonl
   { id: "terracore", color: "#e8a040", members: ["gunner", "engineer", "doctor", "chronomancer", "titan", "automata", "rider", "bomber", "artifacter", "punk", "collector", "onyx"] },
   { id: "helios", color: "#c83a4a", members: ["apostle", "bedouin", "brawler", "ninja", "raven", "cain", "jade", "oni", "plague", "slayer", "eater", "mukin", "samyeol", "eclipse"] },
   { id: "virdia", color: "#4ac86a", members: ["beast", "summoner", "elementalist", "mystic", "imugi", "idra", "byeonhui", "fly", "elder", "ren", "spiritist", "fenrir"] },
-  { id: "thalassia", color: "#3ac8e8", members: ["thorken", "levia"] },
+  { id: "thalassia", color: "#3ac8e8", members: ["thorken", "levia", "tail"] },
   { id: "akashic", color: "#b89aff", members: ["scribe", "duck", "stargazer", "miner", "voyager", "zeus"] },
   /** 이방인: 세계의 틀을 벗어난 자들 */
   { id: "outsider", color: "#5ae0d0", members: ["pilgrim", "fallenKing"] },

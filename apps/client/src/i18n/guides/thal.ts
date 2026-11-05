@@ -1,4 +1,4 @@
-// 캐릭터 설명: 탈라시아 (토르켄·리바이어) · 한·영·일 (수치는 weaponsThorken·itemsThorken과 맞춤)
+// 캐릭터 설명: 탈라시아 (토르켄·리바이어·테일) · 한·영·일 (수치는 weaponsThorken·itemsThorken과 맞춤)
 import type { CharacterId } from "@pixel-rogue/shared";
 
 type Guide = Partial<Record<CharacterId, readonly string[]>>;
@@ -20,6 +20,15 @@ export const GUIDE_KO_THAL: Guide = {
     "전용 아이템 20 · 창 10: 물마루 · 나선 물결 · 쇄파 · 파도타기 · 역류 · 닻 없는 배 · 소금 바람 · 소라 갑옷 · 해방의 깃발 · 물보라 창끝",
     "고래 10: 고래의 부름 · 심해의 노래 · 아기 고래 · 물뿜기 · 고래수염 · 고래 무리 · 흰 고래 · 용연향 · 심해 압력 · 바다의 왕 (공용 아이템도 나옴)",
   ],
+  tail: [
+    "탈라시아 · 테일 · 물을 자유롭게 다루는 상어 수인 · 체력 110 · 공격력 12 · 이동 1.4",
+    "영역 바다: 둘레(반지름 74)에 늘 바다가 펼쳐지고, 바다 안에 적이 있으면 약 1초마다 물 상어가 저절로 공격 (누르지 않아도 됨)",
+    "상어 3가지 (확률 4:4:2): 삼키기(바다 밑에서 솟아 적을 집어삼키고 가운데로 끌어당김) · 돌진(바다에서 튀어나와 적을 꿰뚫고 다시 잠수) · 낙하(높이 솟구쳐 적에게 내리꽂혀 넓게 기절)",
+    "꼬리 3연타 (누를 때마다 다음 타, 잠깐 멈추면 1타부터): 1타 위→아래 · 2타 아래→위 · 3타 앞을 크게 내려치기 (잠깐 기절)",
+    "마무리 물기: 한 방에 쓰러뜨릴 적이 가까이(150) 있으면 누를 때 물 상어로 변해 번개처럼 돌진해 씹어먹음 (돌진 중 무적 · 준 피해의 25% 흡혈, 최대 체력 5%까지)",
+    "무기는 바다의 종류만 바뀜 (10): 밀물 · 귀상어(낙하) · 청상아리(돌진) · 백상아리(삼키기) · 뇌우(번개) · 빙해(느려짐) · 대양(넓음) · 광란(자주) · 소용돌이(끌어당김) · 메갈로돈(거대)",
+    "전용 아이템 10: 칼 지느러미 · 피 냄새 · 포식 · 연쇄 사냥 · 해방의 물결 · 깊은 바다 · 상어 떼 · 큰 턱 · 솟구침 · 쌍둥이 돌진 (공용 아이템도 나옴)",
+  ],
 };
 
 export const GUIDE_EN_THAL: Guide = {
@@ -39,6 +48,15 @@ export const GUIDE_EN_THAL: Guide = {
     "20 exclusive items · Spear 10: Wave Crest · Spiral Wave · Breaker · Wave Rider · Undertow · Anchorless Ship · Salt Wind · Conch Armor · Flag of Liberty · Spray Spearhead",
     "Whale 10: Whale Call · Song of the Deep · Whale Calf · Blowhole · Baleen · Whale Pod · White Whale · Ambergris · Deep Pressure · King of the Sea (common items also appear)",
   ],
+  tail: [
+    "Thalassia · Tail · a shark beastfolk who bends water freely · 110 HP · 12 attack · 1.4 move",
+    "Sea domain: a sea always spreads around Tail (radius 74); while a foe is inside, a water shark attacks on its own about every second (no button needed)",
+    "3 sharks (odds 4:4:2): Gulp (rises from below, swallows the foe and drags others to the middle) · Dart (leaps out of the sea, pierces the foe and dives back) · Drop (soars high and crashes onto the foe, stunning a wide area)",
+    "3-hit tail combo (each press is the next hit; pause and it restarts): 1st down · 2nd up · 3rd a big slam ahead (short stun)",
+    "Finishing bite: if a nearby foe (150) can be finished in one bite, pressing attack turns Tail into a water shark that darts in like lightning and devours it (invincible while darting · heals 25% of the damage, up to 5% max HP)",
+    "Only the kind of sea changes as a weapon (10): Tide · Hammerhead (drops) · Mako (darts) · Great White (gulps) · Thunderstorm (lightning) · Ice Sea (slow) · Ocean (wide) · Frenzy (frequent) · Whirlpool (pull) · Megalodon (huge)",
+    "10 exclusive items: Blade Fin · Scent of Blood · Feast · Chain Hunt · Wave of Liberty · Deep Sea · Shark School · Great Jaws · Breach · Twin Dart (common items also appear)",
+  ],
 };
 
 export const GUIDE_JA_THAL: Guide = {
@@ -57,5 +75,14 @@ export const GUIDE_JA_THAL: Guide = {
     "武器は槍にはめる力の宝石だけが変わる（10）: アクアマリン · 海流のサファイア（海流） · 雷鳴のトパーズ（雷） · 珊瑚石（破裂） · 満ち潮のムーンストーン（クジラが出やすい） · 深海石（衝撃波で気絶） · 氷晶（鈍化） · 双子の真珠（クジラ2頭） · 海風石（速い） · リヴァイアサンの瞳（クジラの跳躍）",
     "専用アイテム20 · 槍10: 波頭 · 螺旋の波 · 砕け波 · 波乗り · 逆流 · 錨なき船 · 潮風 · ほら貝の鎧 · 解放の旗 · しぶきの穂先",
     "クジラ10: クジラの呼び声 · 深海の歌 · 子クジラ · 潮吹き · クジラのヒゲ · クジラの群れ · 白いクジラ · 龍涎香 · 深海の水圧 · 海の王（共通アイテムも出る）",
+  ],
+  tail: [
+    "タラシア · テイル · 水を自在に操るサメの獣人 · 体力110 · 攻撃力12 · 移動1.4",
+    "領域の海: 周り（半径74）に常に海が広がり、海の中に敵がいると約1秒ごとに水のサメが自動で攻撃（押さなくてよい）",
+    "サメ3種（確率4:4:2）: 丸呑み（海の底から現れて敵を呑み込み、中央へ引き寄せる）· 突進（海から飛び出して敵を貫き再び潜る）· 落下（高く跳び上がって敵に落ち、広く気絶）",
+    "尾の3連撃（押すたび次の段、少し止まると1段目から）: 1段目 上→下 · 2段目 下→上 · 3段目 前方へ大きく叩きつけ（少し気絶）",
+    "とどめの噛みつき: 一撃で倒せる敵が近く（150）にいると、押したとき水のサメに変わって稲妻のように突進し食らいつく（突進中は無敵 · 与えたダメージの25%吸血、最大体力の5%まで）",
+    "武器は海の種類だけが変わる（10）: 満ち潮 · シュモクザメ（落下）· アオザメ（突進）· ホホジロザメ（丸呑み）· 雷雨（雷）· 氷海（鈍化）· 大洋（広い）· 狂乱（頻繁）· 渦潮（引き寄せ）· メガロドン（巨大）",
+    "専用アイテム10: 刃のヒレ · 血の匂い · 捕食 · 連鎖狩り · 解放の波 · 深い海 · サメの群れ · 大きな顎 · 跳び上がり · 双子の突進（共通アイテムも出る）",
   ],
 };

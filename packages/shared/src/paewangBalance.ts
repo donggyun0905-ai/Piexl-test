@@ -58,6 +58,7 @@ export const PW_CHAR: Partial<Record<CharacterId, PwCharTune>> = {
   eclipse: { hp: 1.1, dmg: 1, taken: 0.95 },
   thorken: { hp: 1.1, dmg: 1, taken: 0.95 },
   levia: { hp: 1.1, dmg: 1, taken: 0.95 },
+  tail: { hp: 1.1, dmg: 1, taken: 0.95 },
   slayer: { hp: 0.52, dmg: 0.52, taken: 0.23 },
   spiritist: { hp: 0.84, dmg: 0.84, taken: 0.73 },
   summoner: { hp: 1.08, dmg: 1.08, taken: 0.72 },

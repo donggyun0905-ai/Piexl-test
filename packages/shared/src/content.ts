@@ -1,4 +1,4 @@
-// 게임 내용 정의 (캐릭터·무기·적). 이름·수치는 이 게임만의 것으로 정함. 화면에 보이는 이름은 화면 쪽 번역에서.
+// 게임 내용 정의 (캐릭터·무기·적). 화면에 보이는 이름은 화면 쪽 번역에서.
 import type { Stats } from "./stats";
 import { CHARACTERS, type CharacterDef, type CharacterId, type ExclusiveId } from "./characters";
 import type { ComboStyle } from "./combos";
@@ -48,7 +48,7 @@ import { COLLECTOR_WEAPONS } from "./weaponsCollector";
 import { PUNGRYU_WEAPONS, type ScriptStyle } from "./weaponsPungryu";
 import { LEO_WEAPONS } from "./weaponsLeo";
 import { ONYX_WEAPONS } from "./weaponsOnyx";
-import { FENRIR_WEAPONS } from "./weaponsFenrir"; import { ECLIPSE_WEAPONS } from "./weaponsEclipse"; import { THORKEN_WEAPONS, type FlailStyle } from "./weaponsThorken"; import { LEVIA_WEAPONS, type GemStyle } from "./weaponsLevia";
+import { FENRIR_WEAPONS } from "./weaponsFenrir"; import { ECLIPSE_WEAPONS } from "./weaponsEclipse"; import { THORKEN_WEAPONS, type FlailStyle } from "./weaponsThorken"; import { LEVIA_WEAPONS, type GemStyle } from "./weaponsLevia"; import { TAIL_WEAPONS, type SeaStyle } from "./weaponsTail";
 import { MINER_WEAPONS, type PickStyle } from "./weaponsMiner";
 import { VOYAGER_WEAPONS } from "./weaponsVoyager";
 import { ZEUS_WEAPONS, type ThunderStyle } from "./weaponsZeus";
@@ -57,7 +57,7 @@ import { FALLEN_KING_WEAPONS } from "./weaponsFallenKing";
 import { LUX_WEAPONS } from "./weaponsLux";
 
 /** 공격 방식 (laser·medic 누르는 동안 틱 피해 · combo 누를 때마다 다음 기술) */
-export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio" | "zwei" | "radiant" | "hoard" | "script" | "lion" | "gem" | "fang" | "solar" | "anchor" | "whale";
+export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio" | "zwei" | "radiant" | "hoard" | "script" | "lion" | "gem" | "fang" | "solar" | "anchor" | "whale" | "shark";
 export type { OrbitKind } from "./weaponsElemental";
 export type { LaserGear } from "./weaponsEngineer";
 export type { MedicGear } from "./weaponsDoctor";
@@ -107,7 +107,7 @@ export { FALLEN_KING } from "./weaponsFallenKing";
 export { PUNGRYU, type ScriptStyle, type VerseKind } from "./weaponsPungryu";
 export { LEO } from "./weaponsLeo";
 export { ONYX, ONYX_GEMS, ONYX_GEM_IDS, type OnyxGem } from "./weaponsOnyx";
-export { FENRIR } from "./weaponsFenrir"; export { ECLIPSE } from "./weaponsEclipse"; export { THORKEN, type BallKind, type FlailStyle } from "./weaponsThorken"; export { LEVIA, type SeaGem, type GemStyle } from "./weaponsLevia";
+export { FENRIR } from "./weaponsFenrir"; export { ECLIPSE } from "./weaponsEclipse"; export { THORKEN, type BallKind, type FlailStyle } from "./weaponsThorken"; export { LEVIA, type SeaGem, type GemStyle } from "./weaponsLevia"; export { TAIL, type SharkSea, type SeaStyle } from "./weaponsTail";
 export { LUX } from "./weaponsLux";
 
 export interface WeaponDef {
@@ -150,10 +150,10 @@ export interface WeaponDef {
   /** 야수 무기: 본인 공격 방식 · 데리고 다니는 고양이 */
   beast?: BeastStyle;
   pets?: readonly PetKind[];
-  /** 닌자 무기: 공격 방식 · 그림자가 나오는 데 필요한 표식 수 (sim/ninja·shades) */
+  /** 닌자: 공격 방식 · 그림자에 필요한 표식 수 (sim/ninja) */
   shade?: ShadeStyle;
   marks?: number;
-  /** 시간술사 무기: 공격 방식 (sim/chrono, 모든 공격은 잔상이 한 번 더 함) */
+  /** 시간술사 무기: 공격 방식 (sim/chrono) */
   chrono?: ChronoStyle;
   /** 소환술사 채찍: 나오는 소환수 · 맞힌 적 몇 명마다 소환 · 최대 수 (sim/summon) */
   summon?: SummonKind;
@@ -163,7 +163,7 @@ export interface WeaponDef {
   combo?: ComboStyle;
   /** 장수 무기: 콤보 표 이름(weaponsGeneral.SPEAR_COMBOS) · 숨겨진 힘 필살기 */
   spear?: string;
-  /** 이무기 무기: 맞은 적마다 추가 공격 종류 (sim/imugiArts) · 악의 사도 무기: 공격 종류 (sim/apostle) */
+  /** 이무기 추가 공격 (sim/imugiArts) · 악의 사도 공격 종류 (sim/apostle) */
   dragon?: DragonArt;
   sin?: SinKind;
   /** 별지기 무기: 별 종류 (sim/star) */
@@ -218,6 +218,7 @@ export interface WeaponDef {
   script?: ScriptStyle;
   flail?: FlailStyle;
   sea?: GemStyle;
+  shark?: SeaStyle;
 }
 
 /** 부적 추가 효과 (수치·설명은 weaponsMystic) */
@@ -267,7 +268,7 @@ export const WEAPONS = {
   ...WANDERER_WEAPONS,
   ...SILK_WEAPONS,
   ...COLLECTOR_WEAPONS,
-  ...PUNGRYU_WEAPONS, ...LEO_WEAPONS, ...ONYX_WEAPONS, ...FENRIR_WEAPONS, ...ECLIPSE_WEAPONS, ...THORKEN_WEAPONS, ...LEVIA_WEAPONS,
+  ...PUNGRYU_WEAPONS, ...LEO_WEAPONS, ...ONYX_WEAPONS, ...FENRIR_WEAPONS, ...ECLIPSE_WEAPONS, ...THORKEN_WEAPONS, ...LEVIA_WEAPONS, ...TAIL_WEAPONS,
   ...MINER_WEAPONS,
   ...VOYAGER_WEAPONS,
   ...ZEUS_WEAPONS,

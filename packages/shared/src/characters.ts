@@ -116,6 +116,8 @@ export const CHARACTERS = {
   thorken: { id: "thorken", maxHp: 120, damage: 12, moveSpeed: 1.3, luck: 2, startWeapon: "tkIron", defense: 5 },
   /** 리바이어 (탈라시아): 바다의 창 3단 콤보 + 확률로 같이 싸우는 고래 (sim/levia) */
   levia: { id: "levia", maxHp: 105, damage: 12, moveSpeed: 1.35, luck: 1, startWeapon: "lvAqua" },
+  /** 테일 (탈라시아): 영역 바다 상어 · 꼬리 연타 (sim/tail) */
+  tail: { id: "tail", maxHp: 110, damage: 12, moveSpeed: 1.4, luck: 1, startWeapon: "tlTide" },
   /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 대시는 땅굴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },
   /** 운명의 여행자 (히든, 시즌 2): 모아 쏘는 활 · 모래시계 주사위 운명 (sim/voyager) */

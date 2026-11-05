@@ -69,6 +69,7 @@ export const CHARACTER_GOALS: Partial<Record<CharacterId, CharGoal>> = {
   eclipse: { faction: "helios", taboo: 45 },
   thorken: { m: "maxHp", n: 250 },
   levia: { m: "moveSpeed", n: 1.8 },
+  tail: { m: "attackSpeed", n: 1.6 },
   chronomancer: { a: "thrift" },
   fly: { f: "clear7" },
   elder: { c: "traps", n: 1000 },
