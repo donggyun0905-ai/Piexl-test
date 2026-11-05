@@ -25,5 +25,6 @@ export const RUN_GUIDE_TEXT = {
   csDiff: l("난이도", "Difficulty", "難易度"),
   csRecommend: l("추천", "Easy pick", "おすすめ"),
   simpleView: l("간단한 화면 (다른 효과 흐리게)", "Simple view (dim other effects)", "シンプル画面（他のエフェクトを薄く）"),
+  glowFx: l("빛 효과 (처치 폭발·불티·탄 빛)", "Glow effects (kill bursts, sparks, shot trails)", "光のエフェクト（撃破の爆発・火花・弾の光）"),
   showGoal: l("지금 할 일 안내", "Show current goal", "今やることを表示"),
 };

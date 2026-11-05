@@ -1,0 +1,6 @@
+/* 빛 효과 층 (game/glow): 게임 캔버스 바로 위, 누름은 아래로 통과 */
+.game-canvas-wrap .glow-layer {
+  position: absolute;
+  pointer-events: none;
+  image-rendering: auto;
+}

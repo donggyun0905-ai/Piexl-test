@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.36",
+    date: "2026-11-05",
+    items: {
+      ko: ["빛 효과 시험 (WebGL): 적을 쓰러뜨리면 빛 폭발·충격파 고리·불티, 보스를 쓰러뜨리면 화면이 번쩍이는 큰 빛 · 맞힐 때 불티·치명타 별빛 · 내 탄은 하늘색, 적 탄은 붉은 빛 꼬리 · 큰 공격에 빛 · 내가 맞으면 화면 가장자리가 붉게 (설정 '빛 효과'로 끄기)"],
+      en: ["Glow effects test (WebGL): defeated foes burst into light with a shockwave ring and sparks, bosses go out in a huge screen-flashing blast · sparks on hits, star flashes on crits · sky-blue trails on your shots, red trails on enemy shots · big attacks glow · the screen edges flash red when you are hit (turn off with the 'Glow effects' setting)"],
+      ja: ["光のエフェクト試験（WebGL）：敵を倒すと光の爆発・衝撃波の輪・火花、ボスを倒すと画面が光る大きな爆発 · 当てると火花・クリティカルで星の光 · 自分の弾は空色、敵の弾は赤い光の尾 · 大技が光る · 被弾すると画面の端が赤く（設定「光のエフェクト」でオフ）"],
+    },
+  },
+  {
     version: "0.49.35",
     date: "2026-11-05",
     items: {

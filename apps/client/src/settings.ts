@@ -32,6 +32,8 @@ export interface Settings {
   useKeys: string[];
   /** 간단한 화면: 내 위험 표시가 아닌 효과를 흐리게 (처음 하는 기기는 켜고 시작) */
   simpleView: boolean;
+  /** 빛 효과 (PixiJS·WebGL 층: 처치 폭발·불티·탄 빛, game/glow) */
+  glowFx: boolean;
   /** 지금 할 일 한 줄 (game/RunGuide) */
   showGoal: boolean;
 }
@@ -56,6 +58,7 @@ const DEFAULTS: Settings = {
   quickCast: [false, false, false, false],
   useKeys: ["KeyQ", "KeyE"],
   simpleView: false,
+  glowFx: true,
   showGoal: true,
 };
 /** 처음 하는 기기: 간단한 화면 · 능력치 칸 끄고 시작 (피해 숫자는 타격감에 필요해 켬) */

@@ -28,6 +28,7 @@ import { roar } from "../audio/tigerSound";
 import { fanfare } from "../audio/victorySound";
 import { activeFx } from "../shop/effects";
 import { watchingSeat } from "./camera";
+import { createGlowLayer } from "./glow/glowLayer";
 
 /** 한 번에 따라잡는 최대 틱 수 (탭을 오래 비웠다 돌아올 때 멈춤 방지) */
 const MAX_CATCH_UP = 10;
@@ -87,6 +88,7 @@ export function startGameLoop(o: LoopOptions): () => void {
   let acc = 0;
   let last = performance.now();
   let frame = 0;
+  const glow = createGlowLayer(ctx.canvas);
   let shownHp = "";
   let shownInfo = "";
   let shownPrompt = "";
@@ -251,6 +253,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       },
       modeOverlay: o.overlay,
     });
+    glow.frame(cam.view(run), controls.zoom, stopped || run.over ? 1 : acc / TICK_MS, stopped);
     updateHud();
     // 라스트 보스 도전으로 판이 다시 이어지면 끝 처리도 다시
     if (!run.over) overShown = false;
@@ -262,7 +265,10 @@ export function startGameLoop(o: LoopOptions): () => void {
     frame = requestAnimationFrame(loop);
   };
   frame = requestAnimationFrame(loop);
-  return () => cancelAnimationFrame(frame);
+  return () => {
+    cancelAnimationFrame(frame);
+    glow.destroy();
+  };
 }
 
 /** 캔버스 위 플레이어 화면 위치와 게임 1픽셀의 화면 크기 (마우스 조준 계산용) */
