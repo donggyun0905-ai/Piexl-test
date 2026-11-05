@@ -1,8 +1,9 @@
 // 토르켄 그리기 (1): 기술 효과 — 시원한 바다·폭풍 느낌 (맑은 하늘색 물보라 · 흰 거품 · 노란 번개)
 // 닻 휘두르기(물살 초승달) · 철구공 휩쓸기(물 띠) · 던지기 · 천둥 · 물보라 · 감아 들이기 · 태풍 부르기 · 하늘 번개 · 종 · 물결 · 튀는 번개 · 물기둥 · 얼음
 import type { EffectState } from "@pixel-rogue/shared";
-import { additive, alpha, beam, crescent, easeOut, glow, rnd, shock, sparks, type Ctx } from "./pwFxBits";
+import { additive, alpha, beam, easeOut, glow, rnd, shock, sparks, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
+import { drawAnchorSwing } from "./thorkenAnchor";
 
 const TAU = Math.PI * 2;
 export const SEA = "#2a9cff";
@@ -77,14 +78,9 @@ export function drawThorkenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const seed = fx.x * 7 + fx.y * 3;
   switch (fx.kind) {
     case "tkAnchor": {
-      // 닻 휘두르기: 넓은 금빛 닻 자국 + 바깥 물살 초승달 + 튀는 물방울
-      const a = Math.atan2(fx.dirY, fx.dirX);
+      // 닻 휘두르기: 커다란 금빛 닻이 부채꼴로 휙 돌아감 (잔상 + 물살) · 끝에서 물방울
       const side = fx.tint === "-1" ? -1 : 1;
-      const sweep = (easeOut(Math.min(1, f * 1.8)) - 0.5) * side * 1.6;
-      additive(ctx, () => {
-        crescent(ctx, x, y - 3, fx.size, a + sweep * 0.3, 1.75, 7, CYAN, 0.75 * fade);
-        crescent(ctx, x, y - 3, fx.size * 0.8, a + sweep * 0.3, 1.5, 4, "#ffd870", 0.6 * fade);
-      });
+      drawAnchorSwing(ctx, x, y - 3, Math.atan2(fx.dirY, fx.dirX), side, f, fx.size);
       droplets(ctx, x + fx.dirX * fx.size * 0.7, y - 3 + fx.dirY * fx.size * 0.7, fx.size * 0.6, f, seed, 10);
       return true;
     }
