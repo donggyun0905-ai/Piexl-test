@@ -39,6 +39,7 @@ import { resetTail } from "./tail";
 import { resetMadQueen } from "./madQueen";
 import { resetHook } from "./hook";
 import { resetOrca } from "./orca";
+import { resetWave } from "./wave";
 import { resetCollector } from "./collector";
 import { resetMiner } from "./miner";
 import { resetVoyager } from "./voyager";
@@ -250,6 +251,7 @@ export function practiceReset(s: RunState): void {
   resetMadQueen(p);
   resetHook(p);
   resetOrca(p);
+  resetWave(p);
   resetCollector(p);
   resetMiner(p);
   resetVoyager(p);

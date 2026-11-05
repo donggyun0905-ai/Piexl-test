@@ -10,12 +10,13 @@ import { slayerMoveMul } from "./slayer";
 import { voyagerMoveMul } from "./voyager";
 import { onyxMoveMul } from "./onyx";
 import { fenrirMoveMul } from "./fenrirStats";
+import { waveMoveMul } from "./waveSkillsE";
 import type { PlayerState } from "./types";
 import { PW } from "../paewangDefs";
 export { classDamageMul, classSpeedMul } from "./classSpeed";
 
 export function classMoveMul(p: PlayerState, tick: number): number {
-  return orbitMoveMul(p) * brawlMoveMul(p) * medicMoveMul(p) * gunMoveMul(p, tick) * flyMoveMul(p) * slayerMoveMul(p) * riderMoveMul(p) * punkMoveMul(p) * voyagerMoveMul(p) * onyxMoveMul(p) * fenrirMoveMul(p) * ((p.pwFast ?? 0) > 0 ? PW.orbMove : 1);
+  return orbitMoveMul(p) * brawlMoveMul(p) * medicMoveMul(p) * gunMoveMul(p, tick) * flyMoveMul(p) * slayerMoveMul(p) * riderMoveMul(p) * punkMoveMul(p) * voyagerMoveMul(p) * onyxMoveMul(p) * fenrirMoveMul(p) * waveMoveMul(p) * ((p.pwFast ?? 0) > 0 ? PW.orbMove : 1);
 }
 export { foeHeld, foeMoveMul, foeNoAttack } from "./foeStatus";
 export { trialMoveMul } from "./trialFoes";

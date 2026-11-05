@@ -15,7 +15,7 @@ DARK = 42
 # 어두운 옷 캐릭터: 배경(완전한 검정)만 지우게 기준을 낮춤
 DARK_BY = {"plague": 12}
 # 검은 머리·옷이 많은 캐릭터: 바깥 테두리에서 이어진 거의 완전한 검정(밝기 FLOOD 이하)만 배경으로 지움 (몸 안 검은 머리가 지워지지 않게)
-FLOOD_BG = {"levia", "tail", "madQueen", "hook", "orca", "thorken", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "pungryu", "duck", "fallenKing", "lux", "lux2", "lux3", "lux4", "wanderer", "eater", "slayer", "slayer_rage", "summoner", "mukin", "plague", "ren", "tracker", "remnant"}
+FLOOD_BG = {"levia", "tail", "madQueen", "hook", "orca", "wave", "thorken", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "pungryu", "duck", "fallenKing", "lux", "lux2", "lux3", "lux4", "wanderer", "eater", "slayer", "slayer_rage", "summoner", "mukin", "plague", "ren", "tracker", "remnant"}
 FLOOD = 8
 PURE = 3
 POCKET = 300
@@ -36,11 +36,11 @@ FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", 
              "rider", "ren", "mukin", "wanderer", "bomber", "samyeol", "artifacter", "miner", "plague", "silk", "automata", "voyager",
              "eater", "forgotten", "remnant", "elder", "spiritist", "zeus", "tracker", "punk", "fly", "slayer", "slayer_rage",
              # 히든·한정 마지막 6명 (2026-11-01)
-             "stargazer", "scribe", "duck", "pilgrim", "pungryu", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "thorken", "levia", "tail", "madQueen", "orca", "automataDoll", "crownKing", "fallenKing", "lux", "lux2", "lux3", "lux4"}
+             "stargazer", "scribe", "duck", "pilgrim", "pungryu", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "thorken", "levia", "tail", "madQueen", "orca", "wave", "automataDoll", "crownKing", "fallenKing", "lux", "lux2", "lux3", "lux4"}
 # 서기·걷기에서 오른쪽을 보는 원본 칸 (기본 3 = 넷째 칸, GPT가 셋째 칸에 오른쪽을 그린 캐릭터만)
 STAND_RIGHT = {"abandoned": 2, "abandoned2": 2, "fenrir": 2}
 # 서기·걷기에서 고른 칸이 왼쪽을 보는 캐릭터: 뒤집어서 오른쪽으로 (사용자 확인)
-STAND_FLIP = {"abandoned3", "byeonhui", "eclipse", "eclipseNight", "thorken", "levia", "orca"}
+STAND_FLIP = {"abandoned3", "byeonhui", "eclipse", "eclipseNight", "thorken", "levia", "orca", "wave"}
 # 공격 줄 오른쪽·왼쪽에 쓸 원본 칸 (0~3, 끝에 f = 뒤집기): GPT가 칸 순서를 바꿔 그린 캐릭터만 (화면을 보고 정함)
 ATTACK_LR = {
     "warden": ("2", "3"), "drifter": ("2", "3"), "engineer": ("2", "3"), "elementalist": ("2", "3"),
@@ -49,7 +49,7 @@ ATTACK_LR = {
     "imugi": ("2", "3"), "general": ("2", "3"), "apostle": ("2", "3"), "abandoned": ("2", "3"), "abandoned3": ("2", "3"),
     "bedouin": ("2", "2f"), "abandoned2": ("2", "2f"), "novice": ("2", "2f"), "summoner": ("3f", "3"),
     "novice10": ("2", "2f"), "novice15": ("2", "2f"), "novice20": ("2", "2f"), "morph-eagle": ("3f", "3"),
-    "morph-wolf": ("3f", "3"), "morph-bear": ("3f", "3"), "fenrir": ("1", "1f"), "eclipse": ("0", "0f"), "eclipseNight": ("0", "0f"), "thorken": ("2", "2f"), "levia": ("2", "2f"), "orca": ("2", "2f"),
+    "morph-wolf": ("3f", "3"), "morph-bear": ("3f", "3"), "fenrir": ("1", "1f"), "eclipse": ("0", "0f"), "eclipseNight": ("0", "0f"), "thorken": ("2", "2f"), "levia": ("2", "2f"), "orca": ("2", "2f"), "wave": ("3", "3f"),
     **{n: ("3f", "3") for n in ("ren", "spiritist", "elder")}, "morph-phoenix": ("3f", "3"), "morph-spider-evo": ("3f", "3"),
     # 각성 동물: 공격 줄 왼·오 칸이 바뀌어 있음
     **{f"morph-{a}-evo": ("2", "3") for a in ("bear", "boar", "eagle", "snake", "phoenix", "bat")},
@@ -57,7 +57,7 @@ ATTACK_LR = {
 # 서기 옆모습의 머리가 몸과 반대로 돌아간 캐릭터 (사용자 확인): 서기 왼·오 칸에 걷기(왼발) 왼·오 칸을 씀
 STAND_FROM_WALK = {"hook"}
 # 원본에 뒷모습 공격이 없는 캐릭터 (둘째 칸이 앞모습·옆 칸 조각과 겹침): 뒷모습 공격 칸에 뒷모습 서기를 씀
-BACK_ATTACK_STAND = {"mystic", "thorken", "levia", "orca"}
+BACK_ATTACK_STAND = {"mystic", "thorken", "levia", "orca", "wave"}
 # 대시 오른쪽 칸이 왼쪽을 보는 캐릭터: 그 칸을 뒤집어 오른쪽으로, 원래 그림은 왼쪽으로 (사용자 확인)
 DASH_FLIP = {"morph-bear"}
 # 옅은 색이 많아 작게 줄이면 흐린 캐릭터: 시트 전체 대비·채도를 더 올림 (배율)

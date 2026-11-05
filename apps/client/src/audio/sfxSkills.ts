@@ -9,6 +9,7 @@ import { tailSounds } from "./tailSounds";
 import { madQueenSounds } from "./madQueenSounds";
 import { hookSounds } from "./hookSounds";
 import { orcaSounds } from "./orcaSounds";
+import { waveSounds } from "./waveSounds";
 
 export const SKILL_SOUNDS = {
   // 터짐: 낮은 펑 · 떨어지는 운석: 쿵 + 우르르
@@ -70,6 +71,21 @@ export const SKILL_SOUNDS = {
     tone({ type: "triangle", from: 700, to: 500, dur: 0.08, vol: 0.08, delay: 0.04 });
   },
   // 오르카: 물보라 촥 · 소용돌이 휘익 · 물기둥·큰 파도 콸 · 상어 물기 딱 · 해방 고래 울음
+  // 웨이브: 상상이 물이 되는 반짝 · 거품 퐁 · 맑은 물방울 똑 · 깊은 물 울림
+  wvSparkle: () => {
+    for (let i = 0; i < 3; i++) tone({ type: "sine", from: 1300 + i * 400, to: 1800 + i * 400, dur: 0.08, vol: 0.05, delay: i * 0.05 });
+    noise(0.12, 0.08, 4200);
+  },
+  wvPop: () => {
+    tone({ type: "sine", from: 500, to: 1400, dur: 0.06, vol: 0.1 });
+    noise(0.04, 0.12, 3200);
+  },
+  wvPlip: () => tone({ type: "sine", from: 1600, to: 700, dur: 0.07, vol: 0.06 }),
+  wvDeep: () => {
+    noise(0.6, 0.35, 420);
+    tone({ type: "sine", from: 90, to: 45, dur: 0.6, vol: 0.2 });
+    tone({ type: "sine", from: 300, to: 520, dur: 0.4, vol: 0.05, delay: 0.1 });
+  },
   ocSplash: () => {
     noise(0.12, 0.25, 2600);
     tone({ type: "sine", from: 900, to: 300, dur: 0.1, vol: 0.08 });
@@ -151,6 +167,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   madQueenSounds(run, out, onShake);
   hookSounds(run, out, onShake);
   orcaSounds(run, out, onShake);
+  waveSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;
   for (const e of run.effects) {

@@ -16,4 +16,6 @@ export { ONYX, ONYX_GEMS, ONYX_GEM_IDS, type OnyxGem } from "./weaponsOnyx";
 export { FENRIR } from "./weaponsFenrir"; export { ECLIPSE } from "./weaponsEclipse"; export { THORKEN, type BallKind, type FlailStyle } from "./weaponsThorken"; export { LEVIA, type SeaGem, type GemStyle } from "./weaponsLevia"; export { TAIL, type SharkSea, type SeaStyle } from "./weaponsTail"; export { MADQUEEN, type FleetColor, type FleetStyle } from "./weaponsMadQueen";
 export { HOOK, type HookKind, type HookStyle } from "./weaponsHook";
 export { ORCA, type OrcaKind, type OrcaStyle } from "./weaponsOrca";
+export { WAVE, type WaveKind, type WaveStyle } from "./weaponsWave";
+export { WAVE_PERKS, WV_SKILLS, type WvSkill } from "./itemsWave";
 export { LUX } from "./weaponsLux";

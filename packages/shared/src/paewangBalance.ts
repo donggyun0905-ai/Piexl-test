@@ -62,6 +62,7 @@ export const PW_CHAR: Partial<Record<CharacterId, PwCharTune>> = {
   madQueen: { hp: 1.05, dmg: 1, taken: 1 },
   hook: { hp: 1.1, dmg: 1, taken: 0.95 },
   orca: { hp: 1.05, dmg: 1, taken: 0.95 },
+  wave: { hp: 1.05, dmg: 1, taken: 1 },
   slayer: { hp: 0.52, dmg: 0.52, taken: 0.23 },
   spiritist: { hp: 0.84, dmg: 0.84, taken: 0.73 },
   summoner: { hp: 1.08, dmg: 1.08, taken: 0.72 },

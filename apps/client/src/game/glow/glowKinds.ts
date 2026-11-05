@@ -3,6 +3,7 @@
 
 /** 크게 빛나는 공격 효과 (공용 + 캐릭터별 큰 기술) */
 export const BIG_FX = new Set<string>([
+  "wvBreach", "wvCrush", "wvClap", "wvRopeCrash", "wvArmorPop", "wvBalloonPop", "wvBloom", "wvSurfEnd",
   "blast", "burst", "meteor", "slam", "bolt", "pillar", "holy", "bmBoom", "afBlast", "hdMeteor", "titanSmash", "renCrush", "tagMeteor", "vyMeteor", "mnBoom", "elBang", "oPillar", "imBoom", "stBurst", "plBurst", "smBurst",
   "titanSlam", "renSlam", "renDrop", "slNova", "slBurst", "eaAbyss", "adLaunch", "rdSmash", "cyEmp", "gsCube", "fgNova", "fgPillar", "elPillar", "mnErupt", "mnShatter", "tkClap", "tkBolt", "tkGeyser", "lvQuake", "lvBreach", "lvBurst", "oxReson", "oxHalo", "fnLand", "ecSlam", "zsClap", "zsSpear", "leRoar", "puPillar", "vySun", "hdAether", "kgPillar", "lxCross", "srScythe", "chCollapse", "stComet", "oBolt", "pgBlast",
 ]);

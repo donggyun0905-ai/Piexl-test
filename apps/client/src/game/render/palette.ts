@@ -71,6 +71,7 @@ export const C = {
   madQueen: "#5af0ff",
   hook: "#4ab8ff",
   orca: "#3ae0ff",
+  wave: "#8af4ff",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",
