@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.32",
+    date: "2026-11-05",
+    items: {
+      ko: ["캐릭터 선택창: 게임에서 크게 그리는 캐릭터(토르켄·이클립스·펜리르)의 그림이 칸보다 커서 잘리고 더 늘어나 흐리게 보이던 것 고침 · 이제 닻·광륜까지 다 보이고 다른 캐릭터와 같은 또렷함"],
+      en: ["Character select: characters drawn larger in game (Thorken, Eclipse, Fenrir) no longer get cropped and over-stretched (blurry) in their cards · the anchor and halo now fit and look as crisp as everyone else"],
+      ja: ["キャラクター選択：ゲームで大きく描くキャラクター（トルケン・エクリプス・フェンリル）の絵が枠より大きく切れて引き伸ばされ、ぼやけて見えていたのを修正 · 錨や光輪まで全部見え、他のキャラと同じくっきりさに"],
+    },
+  },
+  {
     version: "0.49.31",
     date: "2026-11-05",
     items: {
