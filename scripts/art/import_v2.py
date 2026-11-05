@@ -66,7 +66,7 @@ CRISP: dict = {}  # 이클립스는 원본 색 그대로 (2026-11-05 사용자)
 ROW_SWAP = {"morph-snake": (1, 3), "morph-bat": (1, 3), "morph-boar-evo": (3,), "morph-snake-evo": (3,), "morph-wolf-evo": (1,), **{n: (4,) for n in ("pungryu", "collector", "samyeol", "silk", "voyager", "forgotten", "remnant", "tracker", "punk", "miner",
                                        "rider", "mukin", "wanderer", "bomber", "artifacter", "automata", "eater", "zeus", "slayer", "slayer_rage", "tail")}}
 # 왼·오 칸이 둘 다 왼쪽을 보는 줄: 오른쪽은 왼쪽을 뒤집어 씀
-ROW_MIRROR = {"morph-spider": (2, 3)}
+ROW_MIRROR = {"morph-spider": (2, 3), "hook": (2,)}
 
 
 def crop_wide(p, width):

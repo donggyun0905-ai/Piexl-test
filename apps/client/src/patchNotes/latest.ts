@@ -4,12 +4,12 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
-    version: "0.49.44",
+    version: "0.49.45",
     date: "2026-11-06",
     items: {
-      ko: ["훅: 왼쪽·오른쪽 모습을 원본 그림 그대로 씀 (갈고리 날이 얼굴 반대편에) · 옆으로 서 있을 때 머리만 반대로 돌아가 보이던 그림 고침"],
-      en: ["Hook: left and right poses now use the original drawings (the hook blade sits opposite the face) · fixed the side standing pose where only the head faced the other way"],
-      ja: ["フック：左右の姿を元の絵のまま使用（フックの刃が顔の反対側に）· 横向きに立つとき頭だけ逆を向いて見えた絵を修正"],
+      ko: ["훅: 옆으로 서 있을 때 머리만 반대로 돌아가 보이던 그림 고침 · 서기·걷기 오른쪽 모습은 왼쪽 모습을 좌우로 뒤집어 씀 (갈고리 날이 얼굴 반대편에)"],
+      en: ["Hook: fixed the side standing pose where only the head faced the other way · right-facing stand and walk poses now mirror the left ones (the hook blade sits opposite the face)"],
+      ja: ["フック：横向きに立つとき頭だけ逆を向いて見えた絵を修正 · 立ち・歩きの右向きは左向きを左右反転して使用（フックの刃が顔の反対側に）"],
     },
   },
   {
