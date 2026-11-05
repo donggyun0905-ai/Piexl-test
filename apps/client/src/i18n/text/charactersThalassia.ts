@@ -9,4 +9,11 @@ export const CHARACTER_TEXT_THALASSIA = {
     ja: "タラシア。自由の海を駆ける船乗り。巨大な錨と鎖でつないだ鉄球で戦う · 最初の入力で鉄球を投げ、落ちた場所に雷 · 以後は錨を振るたび（遅いが広く強い）鎖の先の鉄球も大きく振り回される · ダッシュで鉄球を巻き戻してまた投げられる · 当てるほど嵐ゲージがたまり、満ちると台風を呼んで雷が降る · 武器は鉄球だけが変わる（10種）",
   },
   anchor: { ko: "닻과 철구", en: "Anchor & Ball", ja: "錨と鉄球" },
+  levia: { ko: "리바이어", en: "Levia", ja: "リヴァイア" },
+  leviaDesc: {
+    ko: "탈라시아. 고래와 함께 자유로운 바다를 누비는 창술사. 바다의 창 3단 콤보 · 1타 앞 휘두르기 → 2타 한 바퀴 돌고 앞으로 고래 대돌격 → 3타 앞으로 돌진하고 부채꼴 충격파 · 타마다 확률로 고래가 같이 나와 더 넓게 쓸어 줌 (안 나올수록 다음엔 잘 나옴) · 무기는 창에 박는 힘의 보석 (10가지) · 전용 아이템 20 (창 10 · 고래 10)",
+    en: "Thalassia. A spear dancer roaming the free sea with the whales. A 3-hit sea-spear combo · 1st: a wide forward sweep → 2nd: a full spin, then a giant whale charges forward → 3rd: a lunge forward ending in a fan-shaped shockwave · a whale may join each hit to sweep even wider (more likely the longer it stays away) · weapons are power gems set in the spear (10 kinds) · 20 exclusive items (10 spear · 10 whale)",
+    ja: "タラシア。クジラと共に自由な海を駆ける槍使い。海の槍の3段コンボ · 1段目 前へ薙ぎ払い → 2段目 一回転して前へクジラ大突撃 → 3段目 前へ突進して扇形の衝撃波 · 各段で確率でクジラも現れ、さらに広く薙ぐ（出ないほど次は出やすい）· 武器は槍にはめる力の宝石（10種）· 専用アイテム20（槍10 · クジラ10）",
+  },
+  whale: { ko: "바다의 창", en: "Sea Spear", ja: "海の槍" },
 } satisfies Record<string, Record<Lang, string>>;

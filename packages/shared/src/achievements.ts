@@ -147,6 +147,7 @@ export const ACHIEVEMENTS = [
   { id: "clearFenrir", category: "character", run: clearAs("fenrir") },
   { id: "clearEclipse", category: "character", run: clearAs("eclipse") },
   { id: "clearThorken", category: "character", run: clearAs("thorken") },
+  { id: "clearLevia", category: "character", run: clearAs("levia") },
   { id: "clearRen", category: "character", run: clearAs("ren") },
   { id: "clearSpiritist", category: "character", run: clearAs("spiritist") },
   { id: "clearAll", category: "character", total: total(CHARACTER_IDS.length, (c) => Object.values(c.clearedBy).filter((n) => (n ?? 0) > 0).length) },

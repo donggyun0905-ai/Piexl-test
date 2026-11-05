@@ -44,7 +44,9 @@ export type FenrirFx = "fnBite" | "fnWaveGo" | "fnScar" | "fnRing" | "fnCut" | "
 export type EclipseFx = "ecSlash" | "ecCross" | "ecHew" | "ecSpin" | "ecDash" | "ecJump" | "ecSlam" | "ecSpark" | "ecBurn" | "ecHeal" | "ecShift" | "ecShiftEnd" | "ecTotal";
 /** 토르켄 (sim/thorken·thorkenBall·thorkenStorm) */
 export type ThorFx = "tkAnchor" | "tkSweep" | "tkThrow" | "tkClap" | "tkSplash" | "tkReel" | "tkStormCall" | "tkBolt" | "tkBell" | "tkTide" | "tkVolt" | "tkGeyser" | "tkFrost";
-export type SecretFx = ThorFx | VoyagerFx | ZeusFx | PilgrimFx | PungFx | LeoFx | OnyxFx | FenrirFx | EclipseFx | "clMove" | "mnSwing" | "mnCrack" | "mnErupt" | "mnRock" | "mnCave" | "mnBoom" | "mnShatter" | "mnFall" | "mnDig" | "mnBurst" | "mnPull" | "mnGem" | "mnPillar" | "mnCanary";
+/** 리바이어 (sim/levia·leviaWhale): 1타 창·고래 날개 · 2타 회전·고래 감기·대돌격 · 3타 충격파 · 고래 도약 · 번개 · 노래 · 물뿜기 · 산호 터짐 */
+export type LeviaFx = "lvSwing" | "lvFin" | "lvSpin" | "lvOrbit" | "lvCharge" | "lvQuake" | "lvBreach" | "lvBolt" | "lvSong" | "lvGush" | "lvBurst";
+export type SecretFx = ThorFx | LeviaFx | VoyagerFx | ZeusFx | PilgrimFx | PungFx | LeoFx | OnyxFx | FenrirFx | EclipseFx | "clMove" | "mnSwing" | "mnCrack" | "mnErupt" | "mnRock" | "mnCave" | "mnBoom" | "mnShatter" | "mnFall" | "mnDig" | "mnBurst" | "mnPull" | "mnGem" | "mnPillar" | "mnCanary";
 /** 떠돌이 기습 쏨·맞음 · 파수꾼 반격 베기 (sim/origin) · 작업대 성공·실패·파괴 (sim/station) */
 /** 히든 아이템·순례자 (sim/hiddenPerks·hiddenUse·pilgrim) */
 export type HiddenFx = "hdDice" | "hdChest" | "hdCurse" | "hdFreeze" | "hdWarp" | "hdQuake" | "hdMirror" | "hdLeaf" | "hdAether" | "hdMeteor" | "hdScroll" | "hdGate" | "hdPortal" | "hdShow" | "hdText";

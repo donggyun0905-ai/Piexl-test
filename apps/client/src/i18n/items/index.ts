@@ -17,7 +17,7 @@ import { SIN_DESC } from "./apostle";
 import { STAR_DESC } from "./star";
 import { DUCK_DESC, type DuckWeapon } from "./duck";
 import { EVO_DESC } from "./morphEvo";
-import { ANIMAL_DESC, autoDesc, bombDesc, cyberDesc, FORMATION_DESC, GAIA_DESC, GREAT_DESC, MAW_DESC, needleDesc, PLAGUE_DESC, ramDesc, REPULSOR_DESC, rideDesc, REN_DESC, scytheDesc, SNIPER_DESC, TALON_DESC, lightDesc, phantomDesc, katanaDesc, silkDesc, scriptDesc, lionDesc, gemDesc, fangDesc, solarDesc, flailDesc, pickDesc, FATE_DESC, zeusDesc, curioDesc } from "./season2";
+import { ANIMAL_DESC, autoDesc, bombDesc, cyberDesc, FORMATION_DESC, GAIA_DESC, GREAT_DESC, MAW_DESC, needleDesc, PLAGUE_DESC, ramDesc, REPULSOR_DESC, rideDesc, REN_DESC, scytheDesc, SNIPER_DESC, TALON_DESC, lightDesc, phantomDesc, katanaDesc, silkDesc, scriptDesc, lionDesc, gemDesc, fangDesc, solarDesc, flailDesc, seaDesc, pickDesc, FATE_DESC, zeusDesc, curioDesc } from "./season2";
 import { WORD_DESC } from "./scribe";
 import { tagDesc } from "./abandoned";
 import { titanDesc } from "./titan";
@@ -148,6 +148,7 @@ export function itemDesc(kind: ItemKind, id: string, lang: Lang, t: (k: TextKey)
       w.kind === "fang" ? fangDesc(lang) : "",
       w.kind === "solar" ? solarDesc(lang) : "",
       w.flail ? flailDesc(w.flail, lang) : "",
+      w.sea ? seaDesc(w.sea, lang) : "",
       w.pick ? pickDesc(w.pick, lang) : "",
       w.kind === "fate" ? FATE_DESC[lang] : "",
       w.zeus ? zeusDesc(w.zeus, lang) : "",

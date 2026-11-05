@@ -39,6 +39,7 @@ import { wandererTick } from "./wanderer";
 import { silkTick } from "./silk";
 import { pungryuTick } from "./pungryu";
 import { thorkenTick } from "./thorken";
+import { leviaTick } from "./levia";
 import { leoTick } from "./leo";
 import { onyxTick } from "./onyx";
 import { fenrirTick } from "./fenrir";
@@ -97,6 +98,7 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   thread: silkTick,
   script: pungryuTick,
   anchor: thorkenTick,
+  whale: leviaTick,
   lion: leoTick,
   gem: onyxTick,
   fang: fenrirTick,

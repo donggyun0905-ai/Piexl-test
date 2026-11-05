@@ -78,7 +78,7 @@ export const CHARACTERS = {
   eater: { id: "eater", maxHp: 110, damage: 16, moveSpeed: 1.25, luck: 0, startWeapon: "shadowMaw" },
   /** 묵인 (헬리오스): 거대한 몸 · 맞아도 무적 없음 · 방어력 300% 돌진 (sim/mukin) */
   mukin: { id: "mukin", maxHp: 160, damage: 6, moveSpeed: 1.05, luck: 0, startWeapon: "ironHorn" },
-  /** 사멸 (헬리오스, 사천 당가): 독침, 모든 침에 독 + 죽음 · 침을 많이 던질수록 독가스 (sim/samyeol) */
+  /** 사멸 (헬리오스): 독침 · 독가스 (sim/samyeol) */
   samyeol: { id: "samyeol", maxHp: 95, damage: 11, moveSpeed: 1.35, luck: 1, startWeapon: "tangNeedle" },
   /** 오토마타 (테라코어): 손 레이저 · 자매 인형 · 유도 미사일 (sim/automata) */
   automata: { id: "automata", maxHp: 100, damage: 12, moveSpeed: 1.3, luck: 0, startWeapon: "adFinger" },
@@ -92,7 +92,7 @@ export const CHARACTERS = {
   punk: { id: "punk", maxHp: 95, damage: 12, moveSpeed: 1.4, luck: 1, startWeapon: "cyKatana" },
   /** 수집가 (테라코어): 수집 무기 30 = 콤보 (sim/collector) */
   collector: { id: "collector", maxHp: 100, damage: 11, moveSpeed: 1.35, luck: 2, startWeapon: "clBlade" },
-  /** 추적자 (아스칼론): 저격총 하나 · 스킬 셋(1 암습 저격 · 2 강력한 한방 · 3 연발사격) (sim/tracker) */
+  /** 추적자 (아스칼론): 저격총 · 스킬 셋 (sim/tracker) */
   tracker: { id: "tracker", maxHp: 90, damage: 13, moveSpeed: 1.3, luck: 0, startWeapon: "trSniper" },
   /** 잊혀진 자 (아스칼론): 빛 무기 10 · 빛의 고리 → 신족 (sim/forgotten) */
   forgotten: { id: "forgotten", maxHp: 85, damage: 12, moveSpeed: 1.5, luck: 1, startWeapon: "fgGrace", regen: 20, dodge: 0.2 },
@@ -114,14 +114,16 @@ export const CHARACTERS = {
   eclipse: { id: "eclipse", maxHp: 115, damage: 11, moveSpeed: 1.3, luck: 1, startWeapon: "ecAxe" },
   /** 토르켄 (탈라시아): 닻 + 사슬 철구공 · 태풍·천둥 (sim/thorken) */
   thorken: { id: "thorken", maxHp: 120, damage: 12, moveSpeed: 1.3, luck: 2, startWeapon: "tkIron", defense: 5 },
+  /** 리바이어 (탈라시아): 바다의 창 3단 콤보 + 확률로 같이 싸우는 고래 (sim/levia) */
+  levia: { id: "levia", maxHp: 105, damage: 12, moveSpeed: 1.35, luck: 1, startWeapon: "lvAqua" },
   /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 대시는 땅굴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },
   /** 운명의 여행자 (히든, 시즌 2): 모아 쏘는 활 · 모래시계 주사위 운명 (sim/voyager) */
   voyager: { id: "voyager", maxHp: 105, damage: 14, moveSpeed: 1.3, luck: 2, startWeapon: "vyBow" },
-  /** 제우스 (히든, 시즌 2): 번개 무기 10 · 감전 · 천벌 게이지 → 제우스 강림 · 번개 걸음 (sim/zeus) */
+  /** 제우스 (히든): 번개 · 천벌 게이지 (sim/zeus) */
   zeus: { id: "zeus", maxHp: 140, damage: 15, moveSpeed: 1.3, luck: 3, startWeapon: "zsBolt" },
   pilgrim: { id: "pilgrim", maxHp: 115, damage: 13, moveSpeed: 1.35, luck: 4, startWeapon: "pgStaff" },
-  /** 몰락한 왕 (히든, 전시장 영혼 10,000): 거인 · 츠바이핸더 하나 · 처치한 적의 영혼을 거둬 강해짐 (sim/fallenKing) */
+  /** 몰락한 왕 (히든): 츠바이핸더 · 영혼 (sim/fallenKing) */
   fallenKing: { id: "fallenKing", maxHp: 170, damage: 18, moveSpeed: 1.05, luck: 0, startWeapon: "fkZwei" },
   /** 빛의 사도 (한정 · sim/lux) */
   lux: { id: "lux", maxHp: 100, damage: 8, moveSpeed: 1.35, luck: 2, startWeapon: "luxBlade", critChance: 0.12, critDamage: 1.7, sharpness: 0.12 },
@@ -129,7 +131,7 @@ export const CHARACTERS = {
   stargazer: { id: "stargazer", maxHp: 110, damage: 12, moveSpeed: 1.3, luck: 1, startWeapon: "starStaff" },
   /** 오리 (히든, 무작위 5%): 꽥 음파·새끼 오리 (sim/duck) */
   duck: { id: "duck", maxHp: 130, damage: 12, moveSpeed: 1.4, luck: 2, startWeapon: "rubberDuck" },
-  /** 서기관 (히든, 아카식 레코드, 무작위 5%): 잉크 탄으로 기록을 새기고 몇 번째마다 무기의 글자가 발동 (sim/scribe) */
+  /** 서기관 (히든): 잉크 탄·무기 글자 (sim/scribe) */
   scribe: { id: "scribe", maxHp: 95, damage: 11, moveSpeed: 1.3, luck: 2, startWeapon: "quillPen" },
 } as const satisfies Record<string, CharacterDef>;
 

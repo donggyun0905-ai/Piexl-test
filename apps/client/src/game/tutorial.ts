@@ -66,6 +66,7 @@ const DEMO_WEAPONS: Record<CharacterId, [WeaponId, WeaponId] | null> = {
   fenrir: null,
   eclipse: null,
   thorken: ["tkIron", "tkTide"],
+  levia: ["lvAqua", "lvTopaz"],
   miner: ["mnTnt", "mnPit"],
   voyager: null,
   zeus: ["zsSky", "zsChain"],

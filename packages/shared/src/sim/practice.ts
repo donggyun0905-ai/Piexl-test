@@ -34,6 +34,7 @@ import { resetOnyx } from "./onyx";
 import { resetFenrir } from "./fenrir";
 import { resetEclipse } from "./eclipse";
 import { resetThorken } from "./thorken";
+import { resetLevia } from "./levia";
 import { resetCollector } from "./collector";
 import { resetMiner } from "./miner";
 import { resetVoyager } from "./voyager";
@@ -240,6 +241,7 @@ export function practiceReset(s: RunState): void {
   resetFenrir(p);
   resetEclipse(p);
   resetThorken(p);
+  resetLevia(p);
   resetCollector(p);
   resetMiner(p);
   resetVoyager(p);

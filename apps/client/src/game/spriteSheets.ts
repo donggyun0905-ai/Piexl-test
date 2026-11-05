@@ -59,6 +59,8 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   eclipseNight: { size: 50, footPad: 2, src: 128, v2: true },
   /** 토르켄 (등 뒤 큰 닻까지 그림이라 칸을 크게) */
   thorken: { size: 46, footPad: 2, src: 128, v2: true },
+  /** 리바이어 (머리 위 물결 왕관·긴 창까지 그림이라 칸을 조금 크게) */
+  levia: { size: 44, footPad: 2, src: 128, v2: true },
   /** 오토마타 자매 인형 (진홍빛, 사용자 그림 2026-11-04) */
   automataDoll: { size: 32, footPad: 2, src: 128, v2: true },
   // 히든 캐릭터도 일반 캐릭터와 같은 크기 (2026-10-31) · 빛의 사도는 칸에 여백이 많아 키를 맞춘 크기(성장 모습은 단계마다 커짐) · 차원의 순례자는 소녀 키를 일반 캐릭터에 맞춤 (큰 가방은 그만큼 같이 커서 칸이 큼)

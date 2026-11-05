@@ -4,6 +4,7 @@ import { noise, tone, type Sfx } from "./sound";
 import { fenrirSounds } from "./fenrirSounds";
 import { eclipseSounds } from "./eclipseSounds";
 import { thorkenSounds } from "./thorkenSounds";
+import { leviaSounds } from "./leviaSounds";
 
 export const SKILL_SOUNDS = {
   // 터짐: 낮은 펑 · 떨어지는 운석: 쿵 + 우르르
@@ -37,6 +38,12 @@ export const SKILL_SOUNDS = {
   },
   // 돌진: 바람 · 순간이동: 빨려 드는 소리
   pwDash: () => noise(0.2, 0.28, 1200),
+  // 고래 울음 (리바이어): 낮게 올라갔다 내려오는 긴 노래 + 물보라
+  lvWhale: () => {
+    noise(0.35, 0.22, 900);
+    tone({ type: "sine", from: 170, to: 340, dur: 0.35, vol: 0.16 });
+    tone({ type: "sine", from: 340, to: 190, dur: 0.45, vol: 0.13, delay: 0.3 });
+  },
   pwBlink: () => {
     tone({ type: "sine", from: 1200, to: 200, dur: 0.14, vol: 0.12 });
     tone({ type: "sine", from: 300, to: 1500, dur: 0.12, vol: 0.08, delay: 0.1 });
@@ -80,6 +87,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   fenrirSounds(run, out, onShake);
   eclipseSounds(run, out, onShake);
   thorkenSounds(run, out, onShake);
+  leviaSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;
   for (const e of run.effects) {
