@@ -26,6 +26,7 @@ import { play, startMusic, stopMusic, unlockAudio } from "../audio/sound";
 import type { Lang, TextKey } from "../i18n";
 import { useBackButton } from "../game/screenHooks";
 import { drawTd, MAP_H, MAP_W, type TdView } from "./tdDraw";
+import { createFlatGlow } from "../game/glow/glowFlat";
 import { TdPanel } from "./TdPanel";
 import { TdOverlay } from "./TdOverlay";
 import { recordTd } from "../shop/missions";
@@ -74,6 +75,7 @@ export function TdGame({ mapId, lang, t, onRetry, onExit }: Props) {
     let acc = 0;
     let hudAt = 0;
     let prev = { round: td.round, lives: td.lives, boss: td.run.bossKills, phase: td.phase };
+    const glow = canvasRef.current ? createFlatGlow(canvasRef.current, MAP_W) : null;
     const frame = (now: number) => {
       const { speed: sp, paused: ps } = ui.current;
       acc += Math.min(250, now - last) * (ps ? 0 : sp);
@@ -107,9 +109,13 @@ export function TdGame({ mapId, lang, t, onRetry, onExit }: Props) {
         time: now / 1000,
       };
       drawTd(ctx, td, v);
+      glow?.frame(td.run, ui.current.paused);
     };
     raf = requestAnimationFrame(frame);
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      glow?.destroy();
+    };
   }, [td, t]);
 
   // 캔버스 크기: 감싼 칸에 맞춤 (0.25배 단위)

@@ -1,5 +1,6 @@
 // 레이드 명예의 전당: 라스트 보스 셋을 가장 빨리 잡은 사람들 (보스마다 1위는 크게 · 2~3위 은·동 · 4~10위 목록) · 웅장한 음악
 import { RAID_BOSSES } from "@pixel-rogue/shared";
+import { useGlow, type GlowEach } from "../game/glow/useGlow";
 import { useEffect, useState } from "react";
 import { apiGet } from "../api";
 import { startHallMusic, stopHallMusic } from "../audio/fanfare";
@@ -18,9 +19,20 @@ const BOSS_NAME: Record<string, TextKey> = { dragon: "bossDragon", godeater: "bo
 /** 흩날리는 빛 가루 (자리·늦게 시작·크기는 순서로 정해 둠) */
 const SPARKS = Array.from({ length: 36 }, (_, i) => ({ left: (i * 37) % 100, delay: (i * 0.7) % 9, size: 2 + (i % 3) }));
 
+/** 우승자 카드 빛: 왕관 자리 금빛이 숨 쉬듯 · 테두리 반짝 · 아래에서 금가루가 피어오름 (game/glow) */
+const champGlow: GlowEach = (parts, w, h, n) => {
+  if (n % 20 === 0) parts.spawn(w / 2, 14, { life: 1.1, s0: 60, s1: 90, color: 0xffd76a, alpha: 0.35 });
+  if (n % 7 === 0) {
+    const side = Math.random() < 0.5;
+    parts.spawn(side ? Math.random() * w : Math.random() < 0.5 ? 0 : w, side ? (Math.random() < 0.5 ? 0 : h) : Math.random() * h, { life: 0.4, s0: 9, s1: 2, color: 0xfff1c1 });
+  }
+  if (n % 4 === 0) parts.spawn(Math.random() * w, h, { vx: (Math.random() - 0.5) * 12, vy: -30 - Math.random() * 40, life: 1.6, s0: 3, s1: 0.6, color: 0xffc53c, alpha: 0.8 });
+};
+
 function Champion({ e, t }: { e: Entry; t: (key: TextKey) => string }) {
+  const ref = useGlow<HTMLDivElement>(champGlow, "glow-layer champ-glow");
   return (
-    <div className="hall-champ">
+    <div ref={ref} className="hall-champ">
       <div className="hall-crown" aria-hidden="true">
         <span />
         <span />

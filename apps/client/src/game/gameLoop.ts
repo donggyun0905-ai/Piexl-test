@@ -29,6 +29,7 @@ import { fanfare } from "../audio/victorySound";
 import { activeFx } from "../shop/effects";
 import { watchingSeat } from "./camera";
 import { createGlowLayer } from "./glow/glowLayer";
+import { skinGlow } from "./glow/glowSkin";
 
 /** 한 번에 따라잡는 최대 틱 수 (탭을 오래 비웠다 돌아올 때 멈춤 방지) */
 const MAX_CATCH_UP = 10;
@@ -110,6 +111,8 @@ export function startGameLoop(o: LoopOptions): () => void {
   // 이벤트 상점 테마 효과 (칸마다 다른 세트)
   const th = fx.themes;
   const theme = th.hit || th.idle || th.walk ? new ThemeFx({ ...hooks, roar: victory ? fanfare : () => {}, on: { hit: !!th.hit, idle: !!th.idle, walk: !!th.walk, rest: false } }, th) : null;
+  if (tiger) glow.addWatch(skinGlow(tiger));
+  if (theme) glow.addWatch(skinGlow(theme));
   // 내 자리에서만 (관전으로 다른 사람을 볼 때는 내 스킨 효과를 그리지 않음). 손님은 상태를 처음 받을 때 자리가 정해짐
   let mySeat: number | undefined;
   // 패왕전에서 쓰러져 관전 중이면 내 스킨 효과(대기 장면 포함)를 아예 그리지 않음

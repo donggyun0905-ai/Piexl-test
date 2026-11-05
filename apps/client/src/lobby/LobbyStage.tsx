@@ -1,6 +1,7 @@
 // 로비 캔버스: 메인 화면 뒤 배경(천천히 훑어봄) · 직접 돌아다니기(파수꾼, WASD·방향키·누른 곳으로 걷기, 게임기 앞에서 F)
 // 위 벽 가운데 문으로 들어가면 전시장(hallMap·hallArt), 전시장 아래 문으로 나오면 로비
 import { useEffect, useRef } from "react";
+import { createLobbyGlow } from "./lobbyGlow";
 import { drawBody } from "../game/render/actors";
 import { lobbyTheme } from "../shop/wallet";
 import { drawLobby } from "./lobbyArt";
@@ -40,6 +41,7 @@ export function LobbyStage({ play, onGame, onNear, paused, onRoom, onExhibit, on
     const canvas = ref.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d")!;
+    const glow = createLobbyGlow(canvas);
     const me = { x: START.x, y: START.y, fx: 0, fy: -1, moving: false, step: 0, tx: -1, ty: -1 };
     const keys = new Set<string>();
     let near: GameId | null = null;
@@ -127,6 +129,7 @@ export function LobbyStage({ play, onGame, onNear, paused, onRoom, onExhibit, on
         : [];
       if (hall) drawHall(ctx, t, shown, cb.current.names ?? {}, people);
       else drawLobby(ctx, theme, t, play ? near : null, people);
+      glow.frame(view, scale, t, hall);
       raf = requestAnimationFrame(frame);
     };
 
@@ -158,6 +161,7 @@ export function LobbyStage({ play, onGame, onNear, paused, onRoom, onExhibit, on
     raf = requestAnimationFrame(frame);
     return () => {
       cancelAnimationFrame(raf);
+      glow.destroy();
       window.removeEventListener("keydown", down);
       window.removeEventListener("keyup", up);
       canvas.removeEventListener("pointerdown", tap);

@@ -7,6 +7,14 @@ type Pixi = typeof import("pixi.js");
 /** 한 번에 화면에 있는 조각 최대 수 (폰에서도 가볍게) */
 const MAX_PARTS = 900;
 
+/** "#rrggbb"·"#rgb" 글자 → 숫자 색 (아니면 fallback) */
+export function hexColor(c: string | undefined, fallback: number): number {
+  if (!c) return fallback;
+  if (/^#[0-9a-f]{6}$/i.test(c)) return parseInt(c.slice(1), 16);
+  if (/^#[0-9a-f]{3}$/i.test(c)) return parseInt(c.slice(1).replace(/./g, (h) => h + h), 16);
+  return fallback;
+}
+
 export type PartKind = "dot" | "spark" | "ring";
 
 interface Part {

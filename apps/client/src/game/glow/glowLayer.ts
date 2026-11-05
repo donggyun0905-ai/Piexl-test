@@ -1,112 +1,43 @@
-// 빛 효과 층 (PixiJS·WebGL): 게임 캔버스(Canvas 2D) 바로 위에 투명 캔버스를 겹쳐 빛나는 효과만 그림
-// PixiJS는 처음 쓸 때 따로 불러옴 (첫 화면 로딩은 그대로) · WebGL이 안 되면 효과만 빠지고 게임은 그대로
-import type { Application, Sprite } from "pixi.js";
+// 게임 화면 빛 층: 게임 캔버스(Canvas 2D) 바로 위에 GlowCanvas를 겹치고, 게임 카메라에 맞춰 효과를 그림
+// 상태 보기: 기본(glowWatch: 맞힘·처치·탄·큰 공격) + 각성·궁극기·지형·아이템(glowSkills) + 스킨 효과(glowSkin, addWatch로 붙임)
 import type { RunState } from "@pixel-rogue/shared";
-import { getSettings } from "../../settings";
 import { cameraFor } from "../camera";
 import { viewW } from "../viewSize";
-import { GlowParts, makeVignette } from "./glowParts";
-import { GlowWatch, type GlowCues } from "./glowWatch";
+import { GlowCanvas, type GlowCues } from "./glowCanvas";
+import type { GlowParts } from "./glowParts";
+import { GlowSkills } from "./glowSkills";
+import { GlowWatch } from "./glowWatch";
+
+/** 한 화면마다 상태를 보고 효과를 만드는 것 */
+export type GlowWatcher = (s: RunState, parts: GlowParts, cues: GlowCues) => void;
 
 export interface GlowLayer {
   /** 한 화면 그리기 (게임 화면을 그린 바로 뒤). stopped: 멈춤 중이면 효과도 멈춤 */
   frame(view: RunState, zoom: number, alpha: number, stopped: boolean): void;
+  /** 상태 보기 더하기 (한정 스킨·상점 효과) */
+  addWatch(w: GlowWatcher): void;
   destroy(): void;
 }
 
-/** 설정에서 켜 두었는지 */
-const wanted = (): boolean => getSettings().glowFx;
-
 export function createGlowLayer(game: HTMLCanvasElement): GlowLayer {
-  let app: Application | null = null;
-  let parts: GlowParts | null = null;
-  let hurtSp: Sprite | null = null;
-  let flashSp: Sprite | null = null;
-  let dead = false;
-  let loading = false;
-  let last = performance.now();
+  const glow = new GlowCanvas(game);
   const watch = new GlowWatch();
-  const cues: GlowCues = { hurt: 0, flash: 0 };
-
-  const start = async () => {
-    loading = true;
-    try {
-      const P = await import("pixi.js");
-      const a = new P.Application();
-      await a.init({ backgroundAlpha: 0, antialias: false, autoStart: false, preference: "webgl", width: 16, height: 16 });
-      if (dead) {
-        a.destroy(true);
-        return;
-      }
-      const el = a.canvas;
-      el.className = "glow-layer";
-      game.after(el);
-      const layer = new P.Container();
-      a.stage.addChild(layer);
-      parts = new GlowParts(P, layer);
-      hurtSp = new P.Sprite(makeVignette(P));
-      hurtSp.tint = 0xff2040;
-      flashSp = new P.Sprite(P.Texture.WHITE);
-      flashSp.blendMode = "add";
-      a.stage.addChild(hurtSp, flashSp);
-      app = a;
-    } catch {
-      // WebGL이 안 되는 기기: 빛 효과 없이 진행
-    }
-  };
-
-  /** 게임 캔버스와 같은 자리·크기·흔들림으로 맞춤 */
-  const fit = (a: Application): { w: number; h: number } => {
-    const el = a.canvas;
-    const w = game.clientWidth;
-    const h = game.clientHeight;
-    const res = w > 0 ? game.width / w : 1;
-    if (a.renderer.width !== w || a.renderer.height !== h || a.renderer.resolution !== res) a.renderer.resize(w, h, res);
-    el.style.left = `${game.offsetLeft}px`;
-    el.style.top = `${game.offsetTop}px`;
-    el.style.width = `${w}px`;
-    el.style.height = `${h}px`;
-    el.style.transform = game.style.transform;
-    return { w, h };
-  };
-
+  const skills = new GlowSkills();
+  const extra: GlowWatcher[] = [];
   return {
     frame(view, zoom, alpha, stopped) {
-      const now = performance.now();
-      const dt = stopped ? 0 : Math.min(0.05, (now - last) / 1000);
-      last = now;
-      if (!wanted()) {
-        if (app) app.canvas.style.display = "none";
-        return;
+      const dt = glow.tick(stopped);
+      if (!glow.ready() || !glow.parts) return;
+      const { w } = glow.size();
+      if (!stopped) {
+        watch.observe(view, glow.parts, glow.cues);
+        skills.observe(view, glow.parts, glow.cues);
+        for (const x of extra) x(view, glow.parts, glow.cues);
       }
-      if (!app) {
-        if (!loading) void start();
-        return;
-      }
-      app.canvas.style.display = "";
-      const { w, h } = fit(app);
-      if (w <= 0) return;
-      if (!stopped) watch.observe(view, parts!, cues);
       const cam = cameraFor(view, zoom, alpha);
-      const f = (zoom * w) / viewW();
-      parts!.update(dt, f, cam.x, cam.y);
-      cues.hurt = Math.max(0, cues.hurt - dt * 2.2);
-      cues.flash = Math.max(0, cues.flash - dt * 1.8);
-      hurtSp!.width = w;
-      hurtSp!.height = h;
-      hurtSp!.alpha = cues.hurt * 0.75;
-      flashSp!.width = w;
-      flashSp!.height = h;
-      flashSp!.alpha = cues.flash * cues.flash * 0.6;
-      app.render();
+      glow.render(dt, (zoom * w) / viewW(), cam.x, cam.y);
     },
-    destroy() {
-      dead = true;
-      if (app) {
-        app.canvas.remove();
-        app.destroy(true, { children: true, texture: true });
-      }
-      app = null;
-    },
+    addWatch: (w) => void extra.push(w),
+    destroy: () => glow.destroy(),
   };
 }

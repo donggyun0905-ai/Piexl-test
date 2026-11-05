@@ -1,6 +1,27 @@
-/* 빛 효과 층 (game/glow): 게임 캔버스 바로 위, 누름은 아래로 통과 */
-.game-canvas-wrap .glow-layer {
+/* 빛 효과 층 (game/glow): 겹칠 요소 바로 뒤에 붙음. 부모는 position: relative · 누름은 아래로 통과 */
+.glow-layer {
   position: absolute;
   pointer-events: none;
   image-rendering: auto;
+  /* 아래 화면에 빛을 더함 (그냥 겹치면 흐릿하게 덮임) */
+  mix-blend-mode: screen;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+/* 로비 배경 위 (lobby-canvas처럼 화면에 붙음, 메인 화면 글자보다 아래) */
+.glow-layer.lobby-glow {
+  position: fixed;
+  z-index: 0;
+  opacity: 0.85;
+}
+/* 뽑기 화면 위 (gacha-stage 바로 위) */
+.glow-layer.gacha-glow {
+  position: fixed;
+  z-index: 61;
+}
+/* 명예의 전당 우승자 카드 위 */
+.glow-layer.champ-glow {
+  z-index: 2;
 }

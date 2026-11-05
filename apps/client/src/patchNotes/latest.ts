@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.37",
+    date: "2026-11-05",
+    items: {
+      ko: [
+        "빛 효과 넓힘: 한정 스킨·이벤트 상점 효과(타격·대기·걸음)의 섬광·빛 베기·K.O 도장·기둥이 진짜 빛으로 · 각성·필살기는 꼬리표 색 빛기둥과 고리, 보스 궁극기는 붉은 기가 모여듦",
+        "게임 안 빛 더하기: 회복하면 초록 빛이 오름 · 보호막 고리 · 돈 반짝 · 바닥 무기·패시브가 은은하게 빛나고 주우면 반짝 · 용암 불티 · 어두운 장면에서 내 둘레 작은 등불 · 패왕전은 내 편 탄 하늘색·상대 탄 붉게, 보스 탄은 더 크게",
+        "게임 밖 빛: 타워 디펜스(처치·탄·큰 공격) · 로비와 메인 화면 뒤(무대 조명·미러볼·게임기 화면·전시장 금빛) · 뽑기(한정은 무지개 빛기둥과 번쩍임) · 명예의 전당 우승자 카드 금가루",
+        "빛이 아래 화면에 더해지게 바꿔 더 밝고 선명해짐 (설정 '빛 효과'로 끄기)",
+      ],
+      en: [
+        "Glow expanded: limited skins and event shop effects (hit, idle, walk) now truly glow on flashes, light slashes, K.O stamps and pillars · awakenings and finishers burst with light pillars and rings in their tag's color, boss ultimates draw in red energy",
+        "More in-game glow: green light rises when healing · shield ring · gold glints · floor weapons and passives softly glow and sparkle when picked up · lava embers · a small lantern light around you in dark scenes · in Paewang your team's shots are sky-blue and foes' red, boss shots larger",
+        "Glow outside battles: tower defense (kills, shots, big attacks) · lobby and the main screen backdrop (stage lights, mirror ball, arcade screens, golden exhibits) · gacha (limited pulls get a rainbow pillar and flash) · Hall of Fame champion card gold dust",
+        "Glow now adds onto the screen below, so it looks brighter and clearer (turn off with the 'Glow effects' setting)",
+      ],
+      ja: [
+        "光のエフェクトを拡大：限定スキン・イベントショップ効果（ヒット・待機・歩き）の閃光・光の斬撃・K.O印・光柱が本物の光に · 覚醒・必殺技はタグの色の光柱と輪、ボスの奥義は赤い気が集まる",
+        "ゲーム内の光を追加：回復すると緑の光が昇る · シールドの輪 · お金のきらめき · 床の武器・パッシブがほのかに光り、拾うときらめく · 溶岩の火の粉 · 暗い場面では自分の周りに小さな灯り · 覇王戦は味方の弾が空色・相手の弾が赤、ボスの弾は大きく",
+        "ゲーム外の光：タワーディフェンス（撃破・弾・大技）· ロビーとメイン画面の背景（舞台照明・ミラーボール・ゲーム機の画面・展示室の金色）· ガチャ（限定は虹の光柱と閃光）· 殿堂のチャンピオンカードに金の粉",
+        "光が下の画面に加算されるようになり、より明るく鮮やかに（設定「光のエフェクト」でオフ）",
+      ],
+    },
+  },
+  {
     version: "0.49.36",
     date: "2026-11-05",
     items: {

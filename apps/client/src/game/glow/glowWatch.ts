@@ -1,6 +1,7 @@
 // 게임 상태가 바뀐 것을 보고 빛 효과를 만듦: 적 맞음 불티 · 치명타 별빛 · 처치 폭발·충격파 · 보스 처치 큰 빛 · 탄 꼬리 빛 · 큰 공격 빛 · 내가 맞으면 붉은 테두리
 import { ENEMIES, type EffectState, type RunState } from "@pixel-rogue/shared";
-import type { GlowParts } from "./glowParts";
+import type { GlowCues } from "./glowCanvas";
+import { hexColor, type GlowParts } from "./glowParts";
 
 /** 처치 폭발 색 (적 종류마다 하나로 정해짐) */
 const DEATH_COLORS = [0xff7a3c, 0xffc53c, 0x7cf0ff, 0xc77dff, 0x7dff9a, 0xff5c8a];
@@ -19,18 +20,6 @@ function hashColor(kind: string): number {
   return DEATH_COLORS[Math.abs(h) % DEATH_COLORS.length]!;
 }
 
-function tintOf(fx: EffectState): number {
-  const t = fx.tint;
-  if (t && /^#[0-9a-f]{6}$/i.test(t)) return parseInt(t.slice(1), 16);
-  return 0xffb347;
-}
-
-export interface GlowCues {
-  /** 붉은 테두리 세기 (0~1) */
-  hurt: number;
-  /** 화면 전체 번쩍임 (0~1) */
-  flash: number;
-}
 
 export class GlowWatch {
   private hp = new Map<number, number>();
@@ -40,6 +29,9 @@ export class GlowWatch {
   private kills = -1;
   private room = -1;
   private myHp = -1;
+
+  /** noPlayer: 내 체력을 보지 않음 (타워 디펜스는 run.player가 공격자마다 바뀜) */
+  constructor(private noPlayer = false) {}
 
   /** 이번 화면에서 바뀐 것을 효과로 */
   observe(s: RunState, parts: GlowParts, cues: GlowCues): void {
@@ -55,6 +47,7 @@ export class GlowWatch {
     this.enemies(s, parts, cues);
     this.trails(s, parts);
     this.bigFx(s, parts);
+    if (this.noPlayer) return;
     const hp = s.player.hp;
     if (this.myHp >= 0 && hp < this.myHp - 0.01) cues.hurt = Math.min(1, cues.hurt + 0.35 + ((this.myHp - hp) / Math.max(1, s.player.stats.maxHp)) * 2);
     this.myHp = hp;
@@ -113,7 +106,10 @@ export class GlowWatch {
     let n = 0;
     for (const p of s.projectiles) {
       if (n++ >= MAX_TRAILS) break;
-      parts.spawn(p.x, p.y, { life: 0.14, s0: Math.max(3, p.r * 3.2), s1: 1, color: p.fromPlayer ? MY_SHOT : FOE_SHOT, alpha: p.fromPlayer ? 0.55 : 0.7 });
+      // 내 편(패왕전 편 0 포함)은 하늘색, 적은 붉게 · 보스 탄은 더 크게
+      const mine = p.fromPlayer || p.pwTeam === 0;
+      const big = !mine && p.by !== undefined && ENEMIES[p.by]?.boss === true ? 1.6 : 1;
+      parts.spawn(p.x, p.y, { life: 0.14, s0: Math.max(3, p.r * 3.2) * big, s1: 1, color: mine ? MY_SHOT : FOE_SHOT, alpha: mine ? 0.55 : 0.7 });
     }
   }
 
@@ -123,7 +119,7 @@ export class GlowWatch {
       this.seenFx.add(fx);
       if (!BIG_FX.has(fx.kind)) continue;
       const size = Math.max(6, Math.min(80, fx.size || 10));
-      const color = tintOf(fx);
+      const color = hexColor(fx.tint, 0xffb347);
       parts.spawn(fx.x, fx.y, { life: 0.35, s0: size * 1.6, s1: size * 2.6, color, alpha: 0.85 });
       parts.spawn(fx.x, fx.y, { kind: "ring", life: 0.4, s0: size * 0.6, s1: size * 2.4, color, alpha: 0.8 });
       parts.burst(fx.x, fx.y, 10, 160 + size * 2, color, 0.5, 2.2);

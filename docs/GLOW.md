@@ -1,6 +1,6 @@
 # 빛 효과 층 (PixiJS·WebGL) 안내
 
-마지막 수정: 2026-11-05 14:51 (한국 시간)
+마지막 수정: 2026-11-05 16:30 (한국 시간)
 
 게임 화면은 Canvas 2D로 그리고, 그 **바로 위에 PixiJS(WebGL) 투명 캔버스 한 장**을 겹쳐 "빛나는 것"만 그린다 (0.49.36부터).
 디자인·이펙트를 만들 때 "이건 Canvas 2D로 그릴까, 빛 층으로 그릴까"를 정하는 기준과 쓰는 법을 적는다.
@@ -9,16 +9,23 @@
 
 | 파일 | 하는 일 |
 | --- | --- |
-| `apps/client/src/game/glow/glowLayer.ts` | PixiJS 불러오기(처음 쓸 때만) · 게임 캔버스와 자리·크기·흔들림 맞추기 · 붉은 테두리·번쩍임 · 매 화면 그리기 |
-| `apps/client/src/game/glow/glowParts.ts` | 빛 조각 모음(최대 900개 다시 씀): `dot` 둥근 빛 · `spark` 날아가는 불티(방향으로 길쭉) · `ring` 퍼지는 고리 |
-| `apps/client/src/game/glow/glowWatch.ts` | 게임 상태 변화 → 효과 (맞힘·치명타·처치·보스 처치·탄 꼬리·큰 공격·내가 맞음) |
-| `apps/client/src/styles/glow.css` | 층 위치 (누름은 아래로 통과) |
-| 설정 `glowFx` (`settings.ts`, 글자 `i18n/text/runGuide.ts`) | 설정 창 '빛 효과' 켜기·끄기 (기본 켜짐) |
+| `game/glow/glowCanvas.ts` | **공용 층** `GlowCanvas`: PixiJS 불러오기(처음 쓸 때만) · 겹칠 요소 바로 뒤에 붙어 자리·크기·흔들림 맞춤 · 붉은 테두리(`cues.hurt`)·번쩍임(`cues.flash`) · `glowWanted()` 설정 확인 |
+| `game/glow/glowParts.ts` | 빛 조각 모음(최대 900개 다시 씀): `dot` 둥근 빛 · `spark` 날아가는 불티 · `ring` 퍼지는 고리 · `hexColor` 글자 색 → 숫자 |
+| `game/glow/glowLayer.ts` | 게임 화면: 게임 카메라에 맞춰 그림 · `addWatch`로 상태 보기 더함 (`gameLoop`에서 만듦) |
+| `game/glow/glowWatch.ts` | 맞힘 불티·치명타 별빛 · 처치 폭발·보스 처치 번쩍 · 탄 꼬리(내 편 하늘색·적 붉게·보스 탄 크게) · 큰 공격(`BIG_FX`) · 내가 맞음 |
+| `game/glow/glowSkills.ts` | 각성(꼬리표 색)·필살기(`ULT_FX`) · 보스 궁극기 기 모음 · 회복·보호막·돈 · 바닥 아이템 빛·주움 · 용암 불티 · 어두운 장면 등불 |
+| `game/glow/glowSkin.ts` | 한정 스킨·상점 이벤트 효과 조각(`limited/tigerFx`의 `parts`)에 빛을 더함 |
+| `game/glow/glowFlat.ts` | 카메라 없는 판 전체 화면 (타워 디펜스 `td/TdGame`) — 내 체력 빛은 끔 |
+| `game/glow/useGlow.ts` | 화면 요소(DOM 카드·창)에 붙이는 훅 — 명예의 전당 우승자 카드(`daily/HallOfFame`) |
+| `lobby/lobbyGlow.ts` | 로비·메인 화면 뒤 배경 (`LobbyStage`) |
+| `shop/gachaGlow.ts` | 뽑기 연출 (`GachaReveal`, 카드 등급 색으로 터짐) |
+| `styles/glow.css` | 층 위치 · **`mix-blend-mode: screen`** (아래 화면에 빛을 더함, 없으면 흐릿하게 덮임) |
+| 설정 `glowFx` | 설정 창 '빛 효과' (기본 켜짐, 모든 빛 층이 따름) |
 
-- `gameLoop.ts`에서 `drawFrame` 바로 뒤에 `glow.frame(...)`을 부르고, 끝날 때 `glow.destroy()`.
-- PixiJS는 `import("pixi.js")`로 따로 불러와 **첫 화면 로딩에는 들어가지 않음** (압축 후 약 180KB, 게임 들어갈 때 한 번).
-- WebGL이 안 되는 기기는 `start()`가 조용히 실패 → 빛만 빠지고 게임은 그대로.
+- PixiJS는 `import("pixi.js")`로 따로 불러와 **첫 화면 로딩에는 들어가지 않음** (압축 후 약 180KB).
+- WebGL이 안 되는 기기는 빛만 빠지고 화면은 그대로.
 - Cloudflare 비용 없음: 사용자 기기에서 그리고, Pages 정적 파일은 무료·무제한.
+- **WebGL은 브라우저마다 동시에 16개쯤까지**: 카드가 여러 장 뜨는 목록(상점 효과 미리보기 `FxPreview` 등)에는 붙이지 않는다. 한 화면에 층 1~4개.
 
 ## 2. 꼭 지킬 것
 
@@ -73,32 +80,14 @@ cues.flash = 1;
 3. 헤드리스 브라우저는 `--use-angle=swiftshader --enable-unsafe-swiftshader`로 띄워야 WebGL이 켜짐.
 4. 폰에서 느리면 먼저 조각 수 한도(`MAX_PARTS`·`MAX_TRAILS`)를 낮춘다.
 
-## 6. 앞으로 넣으면 좋을 곳 (2026-11-05 코드 살펴본 결과)
+## 6. 넣은 곳과 남은 곳 (2026-11-05)
 
-### 먼저 (눈에 잘 띄고, 같은 층을 그대로 씀)
-| 곳 | 파일 | 넣을 빛 |
+**넣음 (0.49.36~0.49.37)**: 게임 화면 공통(맞힘·처치·탄·큰 공격·피격) · 한정 스킨·상점 이벤트 효과(게임 안) · 각성·필살기·보스 궁극기 · 회복·보호막·돈 · 바닥 아이템 · 용암 · 어두운 장면 등불 · 패왕전 편 색 탄 · 타워 디펜스 · 로비·메인 화면 배경·전시장 · 뽑기 · 명예의 전당 우승자 카드
+
+**남음 (다음에 할 만한 것)**
+| 곳 | 파일 | 할 일 |
 | --- | --- | --- |
-| 한정 스킨 효과 | `game/limited/` (`tigerFx`·`summerFx`·`themeFx`, 지금 `fxLight.ts`로 빛 흉내) | 타격·KO·대기 빛을 빛 층으로 → 한정 스킨이 확실히 비싸 보이게 |
-| 상점 효과 스킨 (타격·대기·걸음·피해 숫자) | `shop/effects.ts`·`fxThemes.ts`, `game/dmgSkins.ts`(`lighter` 합성), 미리보기 `shop/FxPreview.tsx` | 세트별 색 불티·빛 꼬리 · 미리보기에도 같은 층 |
-| 각성·궁극기·필살기 | `render/awakenA·B·C`·`ults`·`beastUlts`·`general`(필살기 이름) | 큰 번쩍임·빛기둥·충격파 고리 |
-| 이미 빛을 흉내 내는 이펙트 | `shadowBlur`: `render/terrain`(용암)·`leviaWhale`·`tailShark`·`eclipseBits` · `lighter`: `pwFxBits`·`eclipseBits`·`imugi`·`collectorArt`·`propArt`·`drawStation` · 큰 그라데이션: `pwFxBits`·`awakenA`·`guardFx`·`pwMarks`·`onyxPillar`·`seaLight` | 번짐 부분만 빛 층으로 옮김 → 더 밝고 폰에서 더 빠름 |
-
-### 다음 (조금 더 손이 감)
-| 곳 | 파일 | 넣을 빛 |
-| --- | --- | --- |
-| 조명·어둠 | 어두운 방(추적자 조준 어둠, 태초의 어둠 `render/primeval`), 용암 지형 `render/terrain` | 내 주변·횃불·용암만 밝은 조명 (빛 층에 어둠 막 + 구멍) |
-| 바닥 아이템·돈·보물 | `game/drawPickup.ts`, `render/room`, 보물방·황금방 | 희귀할수록 강한 빛기둥·반짝임, 돈 줍기 반짝 |
-| 회복·보호막·레벨 업 | `sim/heal`을 읽어 화면에서, 풋내기 `NovicePanel` 레벨, 패왕전 `pwBuffFx` | 초록 빛 오름·보호막 고리·레벨 업 빛기둥 |
-| 패왕전 스킬 | `render/pwSkillFx`·`pwSkillMotif`·`pwBuffFx` | 편 색 빛 (아군 파랑·적 빨강) |
-| 보스 공격 효과 | `render/bossFx`·`lastShots`·`ults` | 탄·폭발 번짐만 (예고 표시는 그대로 Canvas 2D) |
-
-### 게임 화면 밖 (같은 코드를 다른 캔버스에 붙여야 함)
-| 곳 | 파일 | 넣을 빛 |
-| --- | --- | --- |
-| 뽑기 연출 | `shop/GachaReveal.tsx`·`GachaPrize.tsx`·`GachaPack.tsx` | 등급별 빛기둥·폭죽 (한정 등급은 화면 번쩍임) |
-| 타워 디펜스 | `td/TdGame.tsx`·`tdFx.ts`·`tdDraw.ts` | 타워 공격 빛·적 처치 폭발 (`glowWatch`와 비슷하게 `td` 상태를 봄) |
-| 로비 무대 | `lobby/party.ts`(조명·미러볼·색종이)·`LobbyStage.tsx` | 무대 조명 빛줄기·미러볼 반짝임 |
-| 명예의 전당 | `lobby/hallArt.ts`(`lighter` 합성) | 우승자 빛 |
-| 메인 화면 | `TitleScreen.tsx` | 떠다니는 빛 가루 |
-
-→ 게임 밖 화면에 붙일 때는 `createGlowLayer`를 "상태 보기"와 떼어 공용으로 만들고(층·조각만), 화면마다 자기 `watch`를 둔다.
+| Canvas 2D로 빛을 흉내 내는 이펙트 | `shadowBlur`: `render/terrain`(용암)·`leviaWhale`·`tailShark`·`eclipseBits`·`minimap` · `lighter`: `pwFxBits`·`eclipseBits`·`imugi`·`collectorArt`·`propArt`·`drawStation`·`dmgSkins`·`lobby/hallArt` | 번짐 부분만 빛 층으로 옮김 → 폰에서 더 빠름. 빛 효과를 끈 사람에게도 보이게 할지 정하고 옮길 것 |
+| 캐릭터 전용 큰 기술 | 캐릭터마다 `render/*` | `glowSkills`의 `ULT_FX`·`glowWatch`의 `BIG_FX`에 효과 이름을 더하면 바로 빛남 |
+| 상점 효과 미리보기 | `shop/FxPreview.tsx` | 카드가 여러 장이라 WebGL 한도 때문에 보류 (하나만 크게 보는 창을 만들면 그 창에만) |
+| 메인 화면 글자 | `TitleScreen.tsx` | 지금은 뒤 로비 빛만. 제목 글자 반짝임은 CSS로 충분 |
