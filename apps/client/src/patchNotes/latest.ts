@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.56",
+    date: "2026-11-06",
+    items: {
+      ko: ["베아트리스: 악의 마크와 숫자를 다른 캐릭터 표식 크기로 줄임 ('x숫자') · 칼선 한쪽 끝이 평평하던 것 고침 (양 끝 모두 뾰족)"],
+      en: ["Beatrice: the Evil mark and number are now the same size as other characters' marks ('x number') · fixed one end of her slashes being flat (both ends are sharp)"],
+      ja: ["ベアトリス：悪のマークと数字を他キャラクターの印と同じ大きさに（「x数字」）· 剣線の片端が平らだったのを修正（両端とも尖る）"],
+    },
+  },
+  {
     version: "0.49.55",
     date: "2026-11-06",
     items: {

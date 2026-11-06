@@ -13,16 +13,16 @@ export function bladeStroke(ctx: Ctx, ax: number, ay: number, bx: number, by: nu
   const nx = -dy / len;
   const ny = dx / len;
   const shape = (ww: number, fill: string) => {
-    const n = 12;
+    const n = 16;
     ctx.beginPath();
     for (let i = 0; i <= n; i++) {
       const u = t0 + ((t1 - t0) * i) / n;
-      const k = Math.sin(((i / n) * Math.PI) ** 0.9) * ww;
+      const k = Math.sin(Math.PI * (i / n)) * ww;
       ctx.lineTo(ax + dx * u + nx * k, ay + dy * u + ny * k);
     }
     for (let i = n; i >= 0; i--) {
       const u = t0 + ((t1 - t0) * i) / n;
-      const k = Math.sin(((i / n) * Math.PI) ** 0.9) * ww * 0.35;
+      const k = Math.sin(Math.PI * (i / n)) * ww * 0.35;
       ctx.lineTo(ax + dx * u - nx * k, ay + dy * u - ny * k);
     }
     ctx.closePath();
@@ -91,44 +91,37 @@ export function featherField(ctx: Ctx, x: number, y: number, r: number, n: numbe
   }
 }
 
-/** 악의 마크: 짙은 붉은 뿔 달린 문장 + "×n" (n이 많을수록 붉게 타오름) */
+/** 악의 마크: 작은 붉은 X 문장 + "x숫자" (다른 캐릭터 표식과 같은 크기 · 7 이상이면 붉게 타오름) */
 export function evilMark(ctx: Ctx, x: number, y: number, n: number, tick: number): void {
   const hot = n >= 7;
-  const pulse = hot ? 0.5 + 0.5 * Math.sin(tick * 0.3) : 0;
-  if (hot) additive(ctx, () => glow(ctx, x - 5, y, 8 + pulse * 2, BT.sun, 0.45 + pulse * 0.3));
-  // 문장: 마름모 + 양옆 뿔 + 가운데 X
+  if (hot) additive(ctx, () => glow(ctx, x - 3, y, 4, BT.sun, 0.35 + 0.25 * Math.sin(tick * 0.3)));
+  // 문장: 작은 마름모 바탕 + 가운데 X
   ctx.fillStyle = "#1a0206";
   ctx.beginPath();
-  ctx.moveTo(x - 5, y - 6);
-  ctx.lineTo(x - 1, y);
-  ctx.lineTo(x - 5, y + 5);
-  ctx.lineTo(x - 9, y);
+  ctx.moveTo(x - 3, y - 3);
+  ctx.lineTo(x, y);
+  ctx.lineTo(x - 3, y + 3);
+  ctx.lineTo(x - 6, y);
   ctx.closePath();
   ctx.fill();
-  ctx.strokeStyle = hot ? BT.sun : BT.evil;
-  ctx.lineWidth = 1;
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(x - 9, y - 1);
-  ctx.lineTo(x - 11, y - 6);
-  ctx.moveTo(x - 1, y - 1);
-  ctx.lineTo(x + 1, y - 6);
-  ctx.stroke();
   ctx.strokeStyle = hot ? BT.gold : "#ff4a5a";
+  ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(x - 7, y - 2);
-  ctx.lineTo(x - 3, y + 2);
-  ctx.moveTo(x - 3, y - 2);
-  ctx.lineTo(x - 7, y + 2);
+  ctx.moveTo(x - 4.5, y - 1.5);
+  ctx.lineTo(x - 1.5, y + 1.5);
+  ctx.moveTo(x - 1.5, y - 1.5);
+  ctx.lineTo(x - 4.5, y + 1.5);
   ctx.stroke();
-  // ×n
-  ctx.font = "bold 9px sans-serif";
+  // x숫자
+  const txt = `x${n}`;
+  ctx.font = "bold 7px monospace";
   ctx.textBaseline = "middle";
-  ctx.lineWidth = 2.5;
-  ctx.strokeStyle = "#1a0206";
-  ctx.strokeText(`×${n}`, x + 1, y);
+  ctx.textAlign = "left";
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "rgba(26,2,6,0.9)";
+  ctx.strokeText(txt, x + 1, y);
   ctx.fillStyle = hot ? "#ffd8a0" : "#ff7a8a";
-  ctx.fillText(`×${n}`, x + 1, y);
+  ctx.fillText(txt, x + 1, y);
   ctx.textBaseline = "alphabetic";
 }
 

@@ -82,12 +82,12 @@ export function drawBeatriceBack(ctx: Ctx, s: RunState, a0: number, snap: Snap):
 export function drawBeatriceAura(ctx: Ctx, s: RunState, a0: number, snap: Snap): void {
   const p = s.player;
   if (!isBea(p) || s.over) return;
-  for (const e of s.enemies) if ((e.btEvil ?? 0) > 0 && e.hp > 0) evilMark(ctx, snap(e.x) + 4, snap(e.y) - e.r - 9, e.btEvil!, s.tick);
+  for (const e of s.enemies) if ((e.btEvil ?? 0) > 0 && e.hp > 0) evilMark(ctx, snap(e.x) - 2, snap(e.y) - e.r - 9, e.btEvil!, s.tick);
   const px = snap(lerp(p.prevX, p.x, a0));
   const by = snap(lerp(p.prevY, p.y, a0));
   // 모은 악 (심판까지): 내 체력 줄 위에 악의 마크 ×숫자
   const n = p.btPurged ?? 0;
-  if (n > 0) evilMark(ctx, px + 4, hpBarTop(p, by) - 7, n, s.tick);
+  if (n > 0) evilMark(ctx, px - 2, hpBarTop(p, by) - 6, n, s.tick);
   // 체력이 낮을수록 몸에서 불티가 타오름 (심판의 불꽃)
   const low = 1 - p.hp / Math.max(1, p.stats.maxHp);
   if (low > 0.3) embers(ctx, px, by + 4, Math.round(low * 10), 16, (s.tick % 40) / 40, s.tick >> 6, low);
