@@ -75,14 +75,18 @@ describe("세레나", () => {
     expect(s.enemies[0]!.snNumb ?? 0).toBeGreaterThan(0);
   });
 
-  it("스킬: 스텝(무적 돌진) · 가시 정원 · 맹독 비수(독) · 환혹의 무도(사슬 여섯)", () => {
+  it("스킬: 스텝(무적 돌진) · 매혹 · 맹독 비수(독) · 환혹의 무도(사슬 여섯)", () => {
     const s = serena();
     key(s, 1);
     expect(s.player.s2Rush).toBeTruthy();
     expect(s.player.snCd![0]).toBeGreaterThan(0);
     run(s, 20);
     key(s, 2);
-    expect(s.player.snFields?.length).toBe(N.gardenN + 1);
+    expect(s.enemies[0]!.snCharm ?? 0).toBeGreaterThan(0);
+    const gap = () => Math.hypot(s.enemies[0]!.x - s.player.x, s.enemies[0]!.y - s.player.y);
+    const before = gap();
+    run(s, 30);
+    expect(gap()).toBeLessThan(before);
     s.player.x = 60;
     key(s, 3);
     expect(s.enemies[0]!.poisonTicks ?? 0).toBeGreaterThan(0);

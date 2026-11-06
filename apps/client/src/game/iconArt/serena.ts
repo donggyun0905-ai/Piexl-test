@@ -95,9 +95,9 @@ export const SN_PASSIVE_ART = {
   snWing: (g: Pen) => {
     g.rect(4, 10, 8, 3, IVORY).rect(4, 13, 9, 1, GOLD).line(12, 10, 15, 6, LIGHT).line(11, 9, 14, 5, LIGHT);
   },
-  snBriar: (g: Pen) => {
-    g.line(1, 12, 15, 12, "#4a8a3a").line(3, 12, 6, 6, "#4a8a3a").line(10, 12, 12, 5, "#4a8a3a");
-    for (const [x, y] of [[4, 9], [6, 6], [11, 8], [12, 5], [8, 11]] as const) thorn(g, x, y - 1, GOLD);
+  snPerfume: (g: Pen) => {
+    g.rect(5, 7, 6, 7, PINK).rect(6, 8, 4, 5, ROSE).rect(7, 4, 2, 3, GOLD).rect(6, 3, 4, 1, GOLD);
+    for (const [x, y] of [[3, 2], [12, 1], [13, 5]] as const) g.px(x, y, LIGHT);
   },
   snQuiver: (g: Pen) => {
     dagger(g, 4, 4, ETHER);

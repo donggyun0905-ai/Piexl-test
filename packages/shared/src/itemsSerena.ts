@@ -41,8 +41,8 @@ export const SERENA_PASSIVES = {
   // ── 스킬·환혹 ──
   /** 날개 신: 환혹의 스텝 거리·피해 증가 */
   snWing: P("snWing", [{ stat: "moveSpeed", add: 0.1 }]),
-  /** 가시덤불: 가시 정원이 더 넓고 오래 감 */
-  snBriar: P("snBriar"),
+  /** 매혹의 향수: 매혹이 더 넓고 오래 감 */
+  snPerfume: P("snPerfume"),
   /** 비수 꾸러미: 맹독 비수를 더 많이·넓게 던짐 */
   snQuiver: P("snQuiver"),
   /** 한밤의 무대: 환혹의 무도가 더 오래 감 */
@@ -85,8 +85,8 @@ export const SERENA_PERKS = {
   snMirage: { ticks: 120, mul: 1.3 },
   /** 날개 신: 스텝 거리 배율 · 피해 배율 */
   snWing: { dist: 1.4, mul: 1.5 },
-  /** 가시덤불: 장판 반지름 배율 · 남는 틱 배율 */
-  snBriar: { r: 1.25, ticks: 1.5 },
+  /** 매혹의 향수: 반지름 배율 · 매혹 틱 배율 */
+  snPerfume: { r: 1.25, ticks: 1.5 },
   /** 비수 꾸러미: 비수 더함 · 부채꼴 폭(cos) */
   snQuiver: { more: 4, cos: 0.25 },
   /** 한밤의 무대: 무도 틱 더함 */

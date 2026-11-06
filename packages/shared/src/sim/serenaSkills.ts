@@ -1,26 +1,24 @@
-// 세레나 스킬 넷(1 환혹의 스텝 · 2 가시 정원 · 3 맹독 비수 · 4 환혹의 무도) · 가시 정원 장판 · 도는 사슬 채찍 · 환혹의 회오리 (sim/serena에서 부름)
+// 세레나 스킬 넷(1 환혹의 스텝 · 2 매혹 · 3 맹독 비수 · 4 환혹의 무도) · 매혹 · 도는 사슬 채찍 · 환혹의 회오리 (sim/serena에서 부름)
 import { SERENA_PERKS as K } from "../itemsSerena";
 import { SERENA as N } from "../weaponsSerena";
 import { orbCount, snCooldown, snHit, snOrbAt, addThorns } from "./serenaKit";
-import { rot } from "./orbit";
-import { alive, inCircle, inCone, poison, rushTick, startRush } from "./s2Kit";
+import { alive, inCircle, inCone, isBoss, poison, rushTick, startRush, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
 
-const TAU = Math.PI * 2;
-
-/** 2 가시 정원: 둘레에 빛의 강철 가시 장판을 흩뿌림 (가운데 하나 + 둘레) */
-function garden(s: RunState): void {
+/** 2 매혹: 둘레 적을 홀림 (멈춘 채 나에게 끌려옴 · 받는 피해 증가 · 가시) */
+function charm(s: RunState): void {
   const p = s.player;
-  const briar = hasPerk(p, "snBriar");
-  const r = N.gardenR * (briar ? K.snBriar.r : 1);
-  const t = Math.round(N.gardenTicks * (briar ? K.snBriar.ticks : 1));
-  const list = (p.snFields = [{ x: p.x, y: p.y, t, r }]);
-  for (let i = 0; i < N.gardenN; i++) {
-    const [c, sn] = rot((i / N.gardenN) * TAU);
-    list.push({ x: p.x + c * N.gardenAt, y: p.y + sn * N.gardenAt, t, r });
+  const perfume = hasPerk(p, "snPerfume");
+  const r = N.charmR * (perfume ? K.snPerfume.r : 1);
+  const t = Math.round(N.charmTicks * (perfume ? K.snPerfume.ticks : 1));
+  for (const e of inCircle(s, p.x, p.y, r)) {
+    snHit(s, e, N.charmMul, N.charmThorns);
+    e.snCharm = Math.max(e.snCharm ?? 0, t);
+    if (isBoss(e)) e.slowTicks = Math.max(e.slowTicks ?? 0, t);
+    else stun(e, t);
   }
-  addEffect(s, { kind: "snFieldFx", x: p.x, y: p.y, dirX: 0, dirY: 0, size: N.gardenAt + r, maxTicks: 30 });
+  addEffect(s, { kind: "snCharmFx", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, maxTicks: 36 });
 }
 
 /** 3 맹독 비수: 앞 부채꼴로 에테르 비수를 흩뿌림 (가시 · 독) */
@@ -55,7 +53,7 @@ export function snSkill(s: RunState, i: number): void {
     startRush(p, { t: N.stepTicks, dx: p.faceX, dy: p.faceY, step: N.stepDist * (wing ? K.snWing.dist : 1), dmg, push: 0, invuln: true, tint: "#ffe0f0", w: N.stepW });
     addEffect(s, { kind: "snDashFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: N.stepW, maxTicks: N.stepTicks + 10 });
     if (hasPerk(p, "snMirage")) p.snMirage = N.stepTicks + K.snMirage.ticks;
-  } else if (i === 1) garden(s);
+  } else if (i === 1) charm(s);
   else if (i === 2) knives(s);
   else ult(s);
 }
@@ -65,22 +63,20 @@ export function dashTick(s: RunState): void {
   if (s.player.s2Rush) rushTick(s, (e) => addThorns(s, e, N.stepThorns));
 }
 
-/** 가시 정원 장판: 안의 적에게 시간마다 피해·가시 · 느려짐 */
-export function fieldsTick(s: RunState): void {
+/** 매혹된 적: 멈춘 채 나에게 천천히 끌려옴 (보스는 안 끌려옴) */
+export function charmTick(s: RunState): void {
   const p = s.player;
-  const list = p.snFields;
-  if (!list) return;
-  for (const f of list) {
-    f.t--;
-    for (const e of inCircle(s, f.x, f.y, f.r)) {
-      e.slowTicks = Math.max(e.slowTicks ?? 0, 10);
-      if ((e.snFieldAt ?? 0) > s.tick) continue;
-      e.snFieldAt = s.tick + N.gardenEvery;
-      snHit(s, e, N.gardenMul);
+  for (const e of s.enemies) {
+    if (!(e.snCharm ?? 0)) continue;
+    if (--e.snCharm! <= 0 || e.hp <= 0) {
+      delete e.snCharm;
+      continue;
     }
+    const d = Math.hypot(p.x - e.x, p.y - e.y);
+    if (isBoss(e) || d < p.r + e.r + 6) continue;
+    e.x += ((p.x - e.x) / d) * N.charmPull;
+    e.y += ((p.y - e.y) / d) * N.charmPull;
   }
-  p.snFields = list.filter((f) => f.t > 0);
-  if (p.snFields.length === 0) delete p.snFields;
 }
 
 /** 도는 사슬 채찍: 비수가 지나가는 적을 침 (같은 적은 잠깐 뒤 다시) */

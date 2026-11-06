@@ -5,7 +5,7 @@ import { TICK_RATE } from "../constants";
 import { SERENA_PERKS as K } from "../itemsSerena";
 import { SERENA as N } from "../weaponsSerena";
 import { snHit, thornTick } from "./serenaKit";
-import { dashTick, fieldsTick, orbTick, snSkill, whirlTick } from "./serenaSkills";
+import { charmTick, dashTick, orbTick, snSkill, whirlTick } from "./serenaSkills";
 import { inCone, roomKey } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
@@ -18,13 +18,12 @@ function whip(s: RunState, k: number): void {
   addEffect(s, { kind: "snWhipFx", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: r, style: k, maxTicks: 16 });
 }
 
-/** 방이 바뀌면 장판·회오리를 거둠 */
+/** 방이 바뀌면 회오리를 거둠 */
 function roomCheck(s: RunState): void {
   const p = s.player;
   const key = roomKey(s);
   if (p.snRoom === key) return;
   p.snRoom = key;
-  delete p.snFields;
   delete p.snWhirl;
   delete p.snWhirlAt;
 }
@@ -45,7 +44,7 @@ export function serenaTick(s: RunState, want: boolean, speed: number): void {
   timers(s);
   thornTick(s);
   dashTick(s);
-  fieldsTick(s);
+  charmTick(s);
   orbTick(s);
   whirlTick(s);
   if (p.trKey && p.trKey >= 1 && p.trKey <= 4) snSkill(s, p.trKey - 1);
@@ -69,7 +68,7 @@ export function serenaTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetSerena(p: RunState["player"]): void {
-  for (const k of ["snStep", "snGap", "snCd", "snWhirl", "snWhirlAt", "snFields", "snUlt", "snMirage", "snRoom"] as const) delete p[k];
+  for (const k of ["snStep", "snGap", "snCd", "snWhirl", "snWhirlAt", "snUlt", "snMirage", "snRoom"] as const) delete p[k];
 }
 
 export { isSerena, serenaSkills, snOrbAt } from "./serenaKit";

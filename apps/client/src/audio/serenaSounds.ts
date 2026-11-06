@@ -1,9 +1,9 @@
-// 세레나 효과음: 새로 생긴 세레나 효과마다 (채찍 휘두르기 · 환혹의 회오리 · 스텝 · 가시 정원 · 맹독 비수 · 환혹의 무도 · 마비 + 흔들림)
+// 세레나 효과음: 새로 생긴 세레나 효과마다 (채찍 휘두르기 · 환혹의 회오리 · 스텝 · 매혹 · 맹독 비수 · 환혹의 무도 · 마비 + 흔들림)
 import type { RunState } from "@pixel-rogue/shared";
 import type { Sfx } from "./sound";
 
 const SFX: Partial<Record<string, Sfx>> = {
-  snWhipFx: "pwSlash", snWhirlFx: "pwSpin", snDashFx: "pwDash", snFieldFx: "chime", snKnifeFx: "iaStab", snUltFx: "gbBell", snNumbFx: "chime", snBloomFx: "btBurst",
+  snWhipFx: "pwSlash", snWhirlFx: "pwSpin", snDashFx: "pwDash", snCharmFx: "chime", snKnifeFx: "iaStab", snUltFx: "gbBell", snNumbFx: "chime", snBloomFx: "btBurst",
 };
 /** 화면이 흔들리는 큰 기술 */
 const SHAKE: Partial<Record<string, number>> = { snUltFx: 3, snBloomFx: 1 };

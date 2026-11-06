@@ -12,11 +12,11 @@ export const GUIDE_KO_SEONG4: Guide = {
     "3연격 (누르고 있으면): ① ② 채찍 휘두르기 (앞 넓은 부채꼴, 60%) ③ 환혹의 회오리 — 여러 사슬 채찍이 둘레를 세 번 연달아 크게 휘저음 (한 번 45%)",
     "가시: 맞힌 적마다 +1 (최대 5) · 0.5초마다 가시 하나에 8% · 가득 차면 마비 2초 (느려짐 · 받는 피해 +15%)",
     "1 환혹의 스텝 (대기 8초): 빙글 돌며 미끄러짐 (무적, 80%) · 지나간 적에 가시 +2",
-    "2 가시 정원 (대기 14초): 둘레에 빛의 강철 가시 장판 일곱 (5초) · 안의 적은 느려지고 0.5초마다 30% + 가시",
+    "2 매혹 (대기 14초): 둘레 적을 홀림 (50%) · 2초 동안 멈춘 채 나에게 천천히 끌려옴 (보스는 느려지기만) · 받는 피해 +25% · 가시 +2",
     "3 맹독 비수 (대기 10초): 앞 부채꼴로 맹독 에테르 비수 (120%) · 가시 +3 · 3초 독",
     "4 환혹의 무도 (궁극기, 대기 60초): 8초 동안 사슬 채찍 여섯 · 더 크게 돌고 피해 2배 · 방의 모든 적 가시 +2 · 1·2타에도 환혹의 회오리",
     "무기 1: 강철 가시 채찍 & 맹독성 에테르 비수 · 무기 대신 아이템이 나옴",
-    "전용 아이템 20: 가시·마비 5 (장미 가시 · 미늘 · 마취 향 · 맹독 꽃 · 가시 꽃망울) · 사슬·비수 5 (두 겹 사슬 · 긴 사슬 · 빠른 손목 · 벼린 비수 · 에테르 결정) · 무희·치명 5 (무희의 눈길 · 치명적인 입맞춤 · 끝없는 박자 · 긴 소매 · 신기루 베일) · 스킬·환혹 5 (날개 신 · 가시덤불 · 비수 꾸러미 · 한밤의 무대 · 뮤즈의 축복)",
+    "전용 아이템 20: 가시·마비 5 (장미 가시 · 미늘 · 마취 향 · 맹독 꽃 · 가시 꽃망울) · 사슬·비수 5 (두 겹 사슬 · 긴 사슬 · 빠른 손목 · 벼린 비수 · 에테르 결정) · 무희·치명 5 (무희의 눈길 · 치명적인 입맞춤 · 끝없는 박자 · 긴 소매 · 신기루 베일) · 스킬·환혹 5 (날개 신 · 매혹의 향수 · 비수 꾸러미 · 한밤의 무대 · 뮤즈의 축복)",
   ],
 };
 
@@ -29,11 +29,11 @@ export const GUIDE_EN_SEONG4: Guide = {
     "3-hit chain (hold): ① ② whip lashes (wide front cone, 60%) ③ Bewitching Whirl — many chain whips sweep around you three times in a row (45% each)",
     "Thorns: +1 per hit (max 5) · 8% per thorn every 0.5s · a full set Numbs for 2s (slowed · +15% damage taken)",
     "1 Bewitching Step (8s cooldown): spin and glide (invulnerable, 80%) · +2 thorns on foes passed",
-    "2 Thorn Garden (14s cooldown): seven fields of steel-and-light thorns around you (5s) · foes inside are slowed and take 30% + a thorn every 0.5s",
+    "2 Allure (14s cooldown): bewitch nearby foes (50%) · for 2s they stand entranced and are slowly drawn to you (bosses are only slowed) · +25% damage taken · +2 thorns",
     "3 Venom Daggers (10s cooldown): venomous ether daggers in a cone ahead (120%) · +3 thorns · 3s poison",
     "4 Dance of Bewitchment (Ultimate, 60s cooldown): six chain whips for 8s · wider orbit and 2x damage · +2 thorns on every foe in the room · hits 1 and 2 also trigger a Bewitching Whirl",
     "Weapon 1: Steel Thorn Whip & Venom Ether Daggers · items drop instead of weapons",
-    "20 exclusive items: Thorns/Numb 5 (Rose Thorns · Barbs · Numbing Incense · Venom Blossom · Thorn Bud) · Chains/Daggers 5 (Doubled Chain · Long Chain · Quick Wrist · Honed Dagger · Ether Crystal) · Dancer/Crit 5 (Dancer's Glance · Fatal Kiss · Endless Tempo · Long Sleeves · Mirage Veil) · Skills 5 (Winged Shoes · Briar Patch · Dagger Bundle · Midnight Stage · Muse's Blessing)",
+    "20 exclusive items: Thorns/Numb 5 (Rose Thorns · Barbs · Numbing Incense · Venom Blossom · Thorn Bud) · Chains/Daggers 5 (Doubled Chain · Long Chain · Quick Wrist · Honed Dagger · Ether Crystal) · Dancer/Crit 5 (Dancer's Glance · Fatal Kiss · Endless Tempo · Long Sleeves · Mirage Veil) · Skills 5 (Winged Shoes · Alluring Perfume · Dagger Bundle · Midnight Stage · Muse's Blessing)",
   ],
 };
 
@@ -46,10 +46,10 @@ export const GUIDE_JA_SEONG4: Guide = {
     "3連撃（押し続ける）：① ② 鞭の振り（前方の広い扇形、60%）③ 幻惑の旋風 — 多くの鎖鞭が周りを3回続けて大きく薙ぐ（1回45%）",
     "棘：当てた敵ごとに+1（最大5）· 0.5秒ごとに棘1つにつき8% · 満タンで麻痺2秒（遅くなる · 受けるダメージ+15%）",
     "1 幻惑のステップ（待機8秒）：くるりと回って滑る（無敵、80%）· 通った敵に棘+2",
-    "2 棘の庭（待機14秒）：周りに光の鋼の棘の床を7つ（5秒）· 中の敵は遅くなり0.5秒ごとに30% + 棘",
+    "2 魅惑（待機14秒）：周りの敵を魅了する（50%）· 2秒間立ち止まったまま自分へゆっくり引き寄せられる（ボスは遅くなるだけ）· 受けるダメージ+25% · 棘+2",
     "3 猛毒の短剣（待機10秒）：前方の扇形に猛毒のエーテル短剣（120%）· 棘+3 · 3秒間毒",
     "4 幻惑の舞（必殺技、待機60秒）：8秒間鎖鞭6本 · より大きく回りダメージ2倍 · 部屋の全ての敵に棘+2 · 1・2撃目にも幻惑の旋風",
     "武器1：鋼の棘の鞭＆猛毒のエーテル短剣 · 武器の代わりにアイテムが出る",
-    "専用アイテム20：棘・麻痺5（薔薇の棘 · かえし · 痺れの香 · 猛毒の花 · 棘のつぼみ）· 鎖・短剣5（二重の鎖 · 長い鎖 · 速い手首 · 研いだ短剣 · エーテル結晶）· 舞姫・会心5（舞姫の眼差し · 致命の口づけ · 終わらない拍子 · 長い袖 · 蜃気楼のヴェール）· スキル・幻惑5（翼の靴 · 茨の茂み · 短剣の束 · 真夜中の舞台 · ミューズの祝福）",
+    "専用アイテム20：棘・麻痺5（薔薇の棘 · かえし · 痺れの香 · 猛毒の花 · 棘のつぼみ）· 鎖・短剣5（二重の鎖 · 長い鎖 · 速い手首 · 研いだ短剣 · エーテル結晶）· 舞姫・会心5（舞姫の眼差し · 致命の口づけ · 終わらない拍子 · 長い袖 · 蜃気楼のヴェール）· スキル・幻惑5（翼の靴 · 魅惑の香水 · 短剣の束 · 真夜中の舞台 · ミューズの祝福）",
   ],
 };

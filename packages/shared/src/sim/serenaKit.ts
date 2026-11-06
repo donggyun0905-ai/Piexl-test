@@ -76,10 +76,11 @@ export function snOrbAt(p: PlayerState, tick: number, i: number): [number, numbe
   return [p.x + c * r, p.y + sn * r];
 }
 
-/** 적이 받는 피해 배율 (마비, classTaken.foeTaken) */
+/** 적이 받는 피해 배율 (마비 · 매혹, classTaken.foeTaken) */
 export function snFoeTaken(s: RunState, e: EnemyState): number {
-  if (!(e.snNumb ?? 0) || !isSerena(s.player)) return 1;
-  return 1 + N.numbTaken + (hasPerk(s.player, "snVenom") ? K.snVenom.taken : 0);
+  if (!isSerena(s.player)) return 1;
+  const numb = (e.snNumb ?? 0) > 0 ? N.numbTaken + (hasPerk(s.player, "snVenom") ? K.snVenom.taken : 0) : 0;
+  return 1 + numb + ((e.snCharm ?? 0) > 0 ? N.charmTaken : 0);
 }
 
 /** 처치할 때 (hiddenPerks.relicKill): 가시 꽃망울 */

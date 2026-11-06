@@ -46,7 +46,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "assassin desertMirage desertKing soulFeast longCurse inkWell preface oniEightHeads oniAbyssDrink " +
     "oniShadowSpread snakeCoil batSwarm elLinger elStaff plMask plBloodlet eaHunger eaShade mkRegen " +
     "mkPotion cyOptics cyEcho rmStep rmVanish rmHaste rmShroud clVoidSword clVoidStaff clClaw devilBlood " +
-    "devilSpots devilScream devilCross puInk ecUmbra ecHorizon hkJolly btSin btGrudge btTotality iaChain iaSilence iaShadow iaLaw gbPull gbOrbit snMirage",
+    "devilSpots devilScream devilCross puInk ecUmbra ecHorizon hkJolly btSin btGrudge btTotality iaChain iaSilence iaShadow iaLaw gbPull gbOrbit snMirage snPerfume",
   // 죽음 44
   death:
     "executioner lastStand yinForce deathSeal focusCoil overclock heatHaze whirlRing armorPierce " +
@@ -59,7 +59,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "whetstone dashSlash earthshaker perfectCircle steadfast surgery antibody sandstorm sandVeil redHare " +
     "warBanner hydraulicJoint aftershock bearQuake boarTusk boarStampede boarMud eleMammoth renSoil " +
     "renQuake renBindLong renEarth renBigger renCollapse mkMomentum mkShock mkTrample mkIron rdDouble " +
-    "rdRam bmEcho bmFinale mnMole mnExpert clVineStaff clStoneHammer clCrescent fnRift ecMoonAxe gbQuake gbStun gbAfter gbWeight snBriar",
+    "rdRam bmEcho bmFinale mnMole mnExpert clVineStaff clStoneHammer clCrescent fnRift ecMoonAxe gbQuake gbStun gbAfter gbWeight",
   // 물 3
   water:
     "oniGreatWave oniSprayChain oniDragonPalace tkBarnacle tkWhale tkTrident lvCrest lvSpiral lvBreaker lvCurrent lvSpray lvCall lvCalf lvBaleen lvPod lvKingWhale lvDeep lvSong tlDeep tlSchool tlJaws tlBreach tlRip mqFreedom hkChain hkFreedom ocUndertow ocEcho ocFin wvSpear wvGoddess wvWhale wvBubble wvClock wvCloud wvLotus wvFlood wvBalloon wvPearl wvHands wvFountain wvSkip wvSiren wvOctopus wvEye wvEbb wvTrail wvTsunami mrRipple mrCascade mrSky mrReturn mrBreath",

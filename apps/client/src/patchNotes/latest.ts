@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.67",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "세레나 기본 사슬 채찍: 몸과 이어지지 않고 비수가 화살처럼 둘레를 자유롭게 날아다니며 뒤로 사슬이 따라옴 · 사슬이 가운데가 뚫린 고리가 이어진 진짜 사슬 모양 (가시 없앰)",
+        "세레나 환혹의 회오리: 기울어진 세 회전 고리 (/ \\ -)를 따라 비수 사슬이 휘돎",
+        "세레나 환혹의 무도: 발밑에 꽃이 피어 무희처럼 돌고, 아주 작은 분홍 눈가루가 흩날림",
+        "세레나 2번 스킬 가시 정원 → 매혹: 둘레 적을 홀려 2초 동안 멈춘 채 나에게 천천히 끌려옴 (보스는 느려지기만) · 받는 피해 +25% · 가시 +2 · 아이템 가시덤불 → 매혹의 향수 (매혹 반지름·시간 증가)",
+      ],
+      en: [
+        "Serena's base chain whips: no longer tied to her body — the daggers fly freely around her like arrows with the chain trailing behind · the chain now looks like a real chain of hollow links (thorns removed)",
+        "Serena's Bewitching Whirl: dagger chains sweep along three tilted spinning rings (/ \\ -)",
+        "Serena's Dance of Bewitchment: a flower blooms at her feet and turns like a dancer, with tiny pink snow-like sparkles drifting around",
+        "Serena's skill 2 Thorn Garden → Allure: bewitches nearby foes, who stand entranced for 2s and are slowly drawn to her (bosses are only slowed) · +25% damage taken · +2 thorns · item Briar Patch → Alluring Perfume (bigger, longer Allure)",
+      ],
+      ja: [
+        "セレナの基本の鎖鞭：体とつながらず、短剣が矢のように周りを自由に飛び回り後ろに鎖がついてくる · 鎖は中が空いた輪がつながる本物の鎖の形に（棘をなくした）",
+        "セレナの幻惑の旋風：傾いた3つの回転の輪（/ \\ -）に沿って短剣の鎖が回る",
+        "セレナの幻惑の舞：足元に花が咲いて舞姫のように回り、ごく小さなピンクの粉雪が舞う",
+        "セレナのスキル2 棘の庭 → 魅惑：周りの敵を魅了し、2秒間立ち止まったまま自分へゆっくり引き寄せる（ボスは遅くなるだけ）· 受けるダメージ+25% · 棘+2 · アイテム 茨の茂み → 魅惑の香水（魅惑の半径・時間アップ）",
+      ],
+    },
+  },
+  {
     version: "0.49.66",
     date: "2026-11-07",
     items: {

@@ -4,7 +4,7 @@ import type { Names } from "./names";
 
 type SnPassive =
   | "snThorn" | "snBarb" | "snNumb" | "snVenom" | "snBloom" | "snChain" | "snReach" | "snSpin" | "snEdge" | "snEther"
-  | "snGrace" | "snFatal" | "snTempo" | "snLash" | "snMirage" | "snWing" | "snBriar" | "snQuiver" | "snNight" | "snMuse";
+  | "snGrace" | "snFatal" | "snTempo" | "snLash" | "snMirage" | "snWing" | "snPerfume" | "snQuiver" | "snNight" | "snMuse";
 const c = (ko: string, en: string, ja: string): Names => ({ ko, en, ja });
 
 export const SN_WEAPON_NAMES: Record<"snWhip" & WeaponId, Names> = {
@@ -28,7 +28,7 @@ export const SN_PASSIVE_NAMES: Record<SnPassive & PassiveId, Names> = {
   snLash: c("긴 소매", "Long Sleeves", "長い袖"),
   snMirage: c("신기루 베일", "Mirage Veil", "蜃気楼のヴェール"),
   snWing: c("날개 신", "Winged Shoes", "翼の靴"),
-  snBriar: c("가시덤불", "Briar Patch", "茨の茂み"),
+  snPerfume: c("매혹의 향수", "Alluring Perfume", "魅惑の香水"),
   snQuiver: c("비수 꾸러미", "Dagger Bundle", "短剣の束"),
   snNight: c("한밤의 무대", "Midnight Stage", "真夜中の舞台"),
   snMuse: c("뮤즈의 축복", "Muse's Blessing", "ミューズの祝福"),
@@ -51,7 +51,7 @@ export const SN_EFFECTS: Partial<Record<SnPassive & PassiveId, Names>> = {
   snLash: c("1·2타 채찍 거리 {r}배", "Lashes 1 and 2 reach {r}x farther", "1・2撃目の鞭の距離{r}倍"),
   snMirage: c("환혹의 스텝 뒤 {ticks:sec}초 동안 주는 피해 {mul}배", "For {ticks:sec}s after Bewitching Step, deal {mul}x damage", "幻惑のステップ後{ticks:sec}秒間、与えるダメージ{mul}倍"),
   snWing: c("환혹의 스텝 거리 {dist}배 · 피해 {mul}배", "Bewitching Step {dist}x distance · {mul}x damage", "幻惑のステップの距離{dist}倍 · ダメージ{mul}倍"),
-  snBriar: c("가시 정원 장판 반지름 {r}배 · 시간 {ticks}배", "Thorn Garden fields {r}x radius · {ticks}x duration", "棘の庭の床の半径{r}倍 · 時間{ticks}倍"),
+  snPerfume: c("매혹 반지름 {r}배 · 시간 {ticks}배", "Allure {r}x radius · {ticks}x duration", "魅惑の半径{r}倍 · 時間{ticks}倍"),
   snQuiver: c("맹독 비수 +{more}개 · 더 넓은 부채꼴", "Venom Daggers +{more} · wider cone", "猛毒の短剣+{more}本 · より広い扇形"),
   snNight: c("환혹의 무도 {more:sec}초 더", "Dance of Bewitchment lasts {more:sec}s longer", "幻惑の舞が{more:sec}秒長い"),
   snMuse: c("모든 스킬 대기 -{cd:down}%", "-{cd:down}% all skill cooldowns", "全スキル待機-{cd:down}%"),
