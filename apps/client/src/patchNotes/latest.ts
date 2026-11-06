@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.58",
+    date: "2026-11-06",
+    items: {
+      ko: ["베아트리스 칼빛: 파수꾼 검격과 같은 두께·모양으로 · 색만 평소 주황, 태양 검날(1번)·자애 중 빨강 · 3타·처단도 기본 공격과 같은 칼빛 X자 (심판은 그대로)"],
+      en: ["Beatrice's blade light: same thickness and shape as the Warden's slash · only the color differs, orange normally and red during Solar Blade (1) or Mercy · the 3rd hit and Execution use the same X of blade light (Judgment unchanged)"],
+      ja: ["ベアトリスの剣光：番人の剣撃と同じ太さ・形に · 色だけ普段はオレンジ、太陽剣刃（1番）・慈愛中は赤 · 3撃目・処断も通常攻撃と同じ剣光のX字（審判はそのまま）"],
+    },
+  },
+  {
     version: "0.49.57",
     date: "2026-11-06",
     items: {

@@ -83,7 +83,7 @@ export function execTick(s: RunState): void {
       continue;
     }
     btHit(s, e, B.execMul * x.mul, B.execFire * x.mul);
-    addEffect(s, { kind: "btExec", x: e.x, y: e.y, dirX: x.left, dirY: 0, size: B.execR + e.r, maxTicks: 16 });
+    addEffect(s, { kind: "btExec", x: e.x, y: e.y, dirX: x.left, dirY: 0, size: B.execR + e.r, maxTicks: 24, tint: solarOn(p) ? "sun" : "" });
     x.left--;
     x.gap = B.execGap;
   }

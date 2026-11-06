@@ -18,8 +18,11 @@ export function xMark(ctx: Ctx, x: number, y: number, r: number, a: number, w: n
   }
 }
 
-/** 파수꾼 검격과 같은 초승달 칼빛을 (ax,ay)→(bx,by) 대각선 위에 그림: 앞쪽(fwd)으로 휘어 쓸고 지나감 · g 휘두른 정도 · th 두께 */
-export function arcSlash(ctx: Ctx, ax: number, ay: number, bx: number, by: number, fwdX: number, fwdY: number, g: number, th: number, c: string, al: number): void {
+/** 칼빛 색: 평소 주황 · 태양 검날(1번)·자애 중 빨강 (바깥 · 안쪽 · 빛) */
+const SLASH = { orange: ["#ffb060", "#ff7a1a", "#ffd0a0"], red: ["#ff5a3a", "#e81a1a", "#ffb0a0"] } as const;
+
+/** 파수꾼 검격(baseFx.drawSwing)과 같은 초승달 칼빛을 (ax,ay)→(bx,by) 대각선 위에: 앞쪽(fwd)으로 휘어 쓸고 지나감 · g 휘두른 정도 · t 남은 정도(1→0) */
+export function arcSlash(ctx: Ctx, ax: number, ay: number, bx: number, by: number, fwdX: number, fwdY: number, g: number, t: number, red: boolean): void {
   const half = 0.7;
   const len = Math.hypot(bx - ax, by - ay) || 1;
   let nx = -(by - ay) / len;
@@ -37,22 +40,27 @@ export function arcSlash(ctx: Ctx, ax: number, ay: number, bx: number, by: numbe
   const mid = (aA + cur) / 2;
   const arc = Math.abs(cur - aA) / 2;
   if (arc < 0.02) return;
+  const [c0, c1, c2] = red ? SLASH.red : SLASH.orange;
+  const am = Math.atan2(ny, nx);
   additive(ctx, () => {
-    crescent(ctx, cx, cy, R + th * 0.4, mid, arc, th, c, al);
-    crescent(ctx, cx, cy, R - th * 0.5, mid, arc * 0.9, th * 0.55, BT.gold, al * 0.55);
+    crescent(ctx, cx, cy, R, mid, arc, 5 * t + 1, c0, t);
+    crescent(ctx, cx, cy, R * 0.82, mid, arc * 0.85, 3 * t, c1, t * 0.5);
+    glow(ctx, cx + Math.cos(am) * R * 0.7, cy + Math.sin(am) * R * 0.7, len * 0.35, c2, t * 0.5);
   });
 }
 
-/** 칼선 하나: 파수꾼처럼 초승달이 쓸고 지나가며 활짝 · 천천히 남았다 사라짐 (그래서 1·2타가 겹쳐 X자가 보임) */
-function stroke(ctx: Ctx, fx: EffectState, snap: Snap, f: number, c: string, th: number): void {
-  const ax = snap(fx.x);
-  const ay = snap(fx.y);
-  const bx = snap(fx.toX ?? fx.x);
-  const by = snap(fx.toY ?? fx.y);
-  const g = Math.min(1, f * 4.5);
-  const fade = f < 0.3 ? 1 : 1 - (f - 0.3) / 0.7;
-  arcSlash(ctx, ax, ay, bx, by, fx.dirX, fx.dirY, g, th * (0.55 + 0.45 * fade), c, fade);
-  embers(ctx, (ax + bx) / 2, (ay + by) / 2, 8, Math.hypot(bx - ax, by - ay) * 0.8, f, ax + by, fade * 0.9);
+/** 칼선 하나: 초승달이 빠르게 쓸고 지나간 뒤 천천히 옅어짐 (그래서 1·2타가 겹쳐 X자가 보임) */
+function stroke(ctx: Ctx, fx: EffectState, snap: Snap, f: number, red: boolean): void {
+  arcSlash(ctx, snap(fx.x), snap(fx.y), snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y), fx.dirX, fx.dirY, Math.min(1, f * 10), 1 - f, red);
+}
+
+/** 가운데 (x, y)에 초승달 둘로 X자 (a 바라보는 쪽 · r 반 길이) */
+function crescentX(ctx: Ctx, x: number, y: number, a: number, r: number, f: number, red: boolean): void {
+  for (const d of [Math.PI / 4, -Math.PI / 4]) {
+    const dx = Math.cos(a + d) * r;
+    const dy = Math.sin(a + d) * r;
+    arcSlash(ctx, x - dx, y - dy, x + dx, y + dy, Math.cos(a), Math.sin(a), Math.min(1, f * 10), 1 - f, red);
+  }
 }
 
 export function drawBeatriceFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
@@ -65,45 +73,23 @@ export function drawBeatriceFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const seed = fx.x * 7 + fx.y * 3;
   const r = fx.size;
   const sun = fx.tint === "sun";
-  const main = sun ? BT.sun : BT.orange;
   switch (fx.kind) {
     case "btSlash":
-      stroke(ctx, fx, snap, f, main, sun ? 11 : 9);
+      stroke(ctx, fx, snap, f, sun);
       return true;
     case "btTwin":
-      // 강화 쌍검: 붉은 칼선 + 바로 옆에 금빛 칼선 하나 더 (두 자루)
-      stroke(ctx, fx, snap, f, BT.sun, 11);
-      stroke(ctx, { ...fx, x: fx.x + fx.dirX * 5, y: fx.y + fx.dirY * 5, toX: (fx.toX ?? 0) + fx.dirX * 5, toY: (fx.toY ?? 0) + fx.dirY * 5 }, snap, Math.min(1, f + 0.05), BT.gold, 6);
+      // 강화 쌍검: 같은 칼빛 둘 (두 자루, 빨강)
+      stroke(ctx, fx, snap, f, true);
+      stroke(ctx, { ...fx, x: fx.x + fx.dirX * 5, y: fx.y + fx.dirY * 5, toX: (fx.toX ?? 0) + fx.dirX * 5, toY: (fx.toY ?? 0) + fx.dirY * 5 }, snap, Math.min(1, f + 0.05), true);
       return true;
-    case "btCross": {
-      // 3타: 1·2타가 만든 X자 그대로 다시 X자로 베고 → 가운데에서 태양처럼 터짐
-      const k = Math.min(1, f * 5);
-      for (const d of [Math.PI / 4, -Math.PI / 4]) {
-        const dx = Math.cos(a + d) * r * 1.1;
-        const dy = Math.sin(a + d) * r * 1.1;
-        arcSlash(ctx, x - dx, y - dy, x + dx, y + dy, fx.dirX, fx.dirY, k, sun ? 12 : 10, main, fade);
-      }
-      if (f > 0.18) {
-        const b = (f - 0.18) / 0.82;
-        additive(ctx, () => {
-          glow(ctx, x, y, r * (0.5 + b * 0.9), main, 0.6 * (1 - b), 0.5);
-          if (b < 0.25) glow(ctx, x, y, r * 0.7, BT.white, 0.7 * (1 - b / 0.25), 0.8);
-          shock(ctx, x, y, r * (0.3 + b * 1.1), BT.gold, 0.9 * (1 - b), 3);
-          shock(ctx, x, y, r * (0.2 + b * 0.8), main, 0.6 * (1 - b), 2);
-        });
-        embers(ctx, x, y, 16, r * 1.6, b, seed, 1 - b);
-      }
+    case "btCross":
+      // 3타: 1·2타가 만든 X자를 같은 칼빛 둘로 다시 벰
+      crescentX(ctx, x, y, a, r * 0.75, f, sun);
       return true;
-    }
     case "btExec": {
-      // 처단: 적 몸 곳곳에 X자가 하나씩 박히며 터짐 (모양은 늘 X, 자리·크기만 조금씩 다름)
+      // 처단: 기본 공격과 같은 칼빛 X자가 적 몸 곳곳에 하나씩 (자리·크기만 조금씩 다름)
       const i = fx.dirX;
-      const ox = (rnd(i, 3) - 0.5) * r * 0.6;
-      const oy = (rnd(i, 5) - 0.5) * r * 0.6;
-      const sc = 0.8 + rnd(i, 7) * 0.4;
-      xMark(ctx, x + ox, y + oy, r * sc, 0, 5, i % 2 ? BT.sun : BT.evil, fade, easeOut(Math.min(1, f / 0.25)));
-      additive(ctx, () => glow(ctx, x + ox, y + oy, r * 0.7, BT.sun, 0.45 * fade, 0.3));
-      embers(ctx, x + ox, y + oy, 8, r, f, seed + i, fade);
+      crescentX(ctx, x + (rnd(i, 3) - 0.5) * r * 0.6, y + (rnd(i, 5) - 0.5) * r * 0.6, 0, r * (0.8 + rnd(i, 7) * 0.4), f, sun);
       return true;
     }
     case "btJudgeWarn": {
