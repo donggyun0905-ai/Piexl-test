@@ -6,35 +6,43 @@ import { BEATRICE as B } from "../weaponsBeatrice";
 import { addBurn, btHit, btRegen, burnTick } from "./beatriceKit";
 import { btSkill, danceTick, execTick, judgeTick, solarOn, wavesTick } from "./beatriceSkills";
 import { heal } from "./heal";
-import { rot } from "./orbit";
-import { alive, inCircle, roomKey } from "./s2Kit";
+import { inCircle, onSegment, roomKey } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
 
 /** 기본 공격이 태양 검날로 강화되었을 때 더하는 화염 몫 */
 const fireOf = (p: PlayerState) => (solarOn(p) ? B.solarFire : 0);
 
-/** 1·2타: 바라보는 쪽 부채꼴 베기 (side 1 = 왼→오, -1 = 오→왼) */
-function slash(s: RunState, side: number, mul: number, reach: number): void {
+/** X자 가운데 (바라보는 쪽 앞) */
+const center = (p: PlayerState): [number, number] => [p.x + p.faceX * B.crossAt, p.y + p.faceY * B.crossAt];
+
+/** 대각선 칼선 하나 (side 1 = 왼쪽 위 → 오른쪽 아래, -1 = 오른쪽 위 → 왼쪽 아래 · 둘이 겹치면 X자) */
+export function strokeOf(p: PlayerState, side: number, len: number): [number, number, number, number] {
+  const [cx, cy] = center(p);
+  const h = len * 0.7071;
+  const fx = p.faceX * h;
+  const fy = p.faceY * h;
+  const nx = -p.faceY * h;
+  const ny = p.faceX * h;
+  return side > 0 ? [cx - fx - nx, cy - fy - ny, cx + fx + nx, cy + fy + ny] : [cx + fx - nx, cy + fy - ny, cx - fx + nx, cy - fy + ny];
+}
+
+/** 1·2타: 대각선으로 베어 내림 (1타 왼→오 · 2타 오→왼, 두 칼선이 겹쳐 X자) */
+function slash(s: RunState, side: number, mul: number, len: number, kind: "btSlash" | "btTwin" = "btSlash"): void {
   const p = s.player;
-  const cos = rot(B.slashArc)[0];
-  for (const e of alive(s)) {
-    const ox = e.x - p.x;
-    const oy = e.y - p.y;
-    const d = Math.hypot(ox, oy);
-    if (d > reach + e.r || (d > e.r + p.r && (ox * p.faceX + oy * p.faceY) / d < cos)) continue;
+  const [ax, ay, bx, by] = strokeOf(p, side, len);
+  for (const e of onSegment(s, ax, ay, bx, by, B.slashW)) {
     btHit(s, e, mul, fireOf(p), 3);
     if (solarOn(p)) addBurn(e, p);
   }
-  addEffect(s, { kind: "btSlash", x: p.x, y: p.y - 3, dirX: p.faceX, dirY: p.faceY, size: reach, arc: B.slashArc, style: side, maxTicks: 16, tint: solarOn(p) ? "sun" : "" });
+  addEffect(s, { kind, x: ax, y: ay - 3, toX: bx, toY: by - 3, dirX: p.faceX, dirY: p.faceY, size: B.slashW, style: side, maxTicks: 40, tint: solarOn(p) ? "sun" : "" });
 }
 
 /** 3타: 앞에 생긴 X자를 다시 X로 베어 터뜨림 */
 function cross(s: RunState): void {
   const p = s.player;
   const r = B.crossR * (hasPerk(p, "btBreaker") ? K.btBreaker.r : 1);
-  const cx = p.x + p.faceX * B.crossAt;
-  const cy = p.y + p.faceY * B.crossAt;
+  const [cx, cy] = center(p);
   for (const e of inCircle(s, cx, cy, r)) {
     btHit(s, e, B.crossMul, fireOf(p) * 1.5, B.crossPush);
     if (solarOn(p)) addBurn(e, p, 2);
@@ -45,8 +53,7 @@ function cross(s: RunState): void {
 /** 일식의 춤 뒤 강화 베기: 두 자루로 앞을 빠르게 베어 넘김 */
 function twin(s: RunState): void {
   const p = s.player;
-  slash(s, (p.btTwin ?? 0) % 2 === 0 ? 1 : -1, B.twinMul, B.twinReach);
-  addEffect(s, { kind: "btTwin", x: p.x, y: p.y - 3, dirX: p.faceX, dirY: p.faceY, size: B.twinReach, maxTicks: 14 });
+  slash(s, (p.btTwin ?? 0) % 2 === 0 ? 1 : -1, B.twinMul, B.twinLen, "btTwin");
   p.btTwin = (p.btTwin ?? 1) - 1;
   p.btTwinGap = p.btTwin > 0 ? B.twinGap : 0;
   if (p.btTwin <= 0) delete p.btTwin;
@@ -102,7 +109,7 @@ export function beatriceTick(s: RunState, want: boolean, speed: number): void {
     return;
   }
   const k = p.btStep ?? 0;
-  if (k < 2) slash(s, k === 0 ? 1 : -1, B.slashMul, B.reach);
+  if (k < 2) slash(s, k === 0 ? 1 : -1, B.slashMul, B.slashLen);
   else cross(s);
   p.btLast = { k, t: s.tick };
   p.btStep = (k + 1) % 3;

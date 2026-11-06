@@ -62,6 +62,25 @@ describe("베아트리스", () => {
     expect(s.enemies[0]!.hp).toBeLessThan(before);
   });
 
+  it("1·2타 칼선이 겹쳐 X자 · 악이 쌓인 적을 쓰러뜨리면 그 악이 나에게 들어옴", () => {
+    const s = bea();
+    for (let i = 0; i < 2; i++) {
+      s.player.attackCooldown = 0;
+      stepSim(s, FIRE);
+    }
+    const [a, b] = s.effects.filter((f) => f.kind === "btSlash");
+    // 두 칼선의 가운데가 같은 자리 (X자의 가운데)
+    expect((a!.x + a!.toX!) / 2).toBeCloseTo((b!.x + b!.toX!) / 2, 3);
+    expect((a!.y + a!.toY!) / 2).toBeCloseTo((b!.y + b!.toY!) / 2, 3);
+    const e = s.enemies[0]!;
+    e.kind = "slime";
+    hurt(s, 4);
+    e.hp = 0;
+    stepSim(s, IDLE);
+    expect(s.player.btPurged).toBe(4);
+    expect(s.effects.some((f) => f.kind === "btSoul")).toBe(true);
+  });
+
   it("처단으로 지운 악 100개면 심판 (방 전체)", () => {
     const s = bea();
     s.enemies[0]!.kind = "slime";

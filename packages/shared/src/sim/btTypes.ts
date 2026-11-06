@@ -52,5 +52,5 @@ export interface BeatriceEnemyState {
   btBurnT?: number;
 }
 
-/** 효과: 베기 · X자 터짐 · 강화 쌍검 베기 · 처단 X자 · 심판 예고 · 심판 · 낙인 검기 · 태양 검날 켬 · 자애 · 화상 불티 · 악 쌓임 · 홍염 */
-export type BeatriceFx = "btSlash" | "btCross" | "btTwin" | "btExec" | "btJudgeWarn" | "btJudge" | "btBrand" | "btSolar" | "btGrace" | "btBurn" | "btEvil" | "btFlare";
+/** 효과: 베기 · X자 터짐 · 강화 쌍검 베기 · 처단 X자 · 심판 예고 · 심판 · 낙인 검기 · 태양 검날 켬 · 자애 · 화상 불티 · 악 쌓임 · 홍염 · 처치한 적의 악이 나에게 날아옴 · 일식의 춤 잔상 */
+export type BeatriceFx = "btSlash" | "btCross" | "btTwin" | "btExec" | "btJudgeWarn" | "btJudge" | "btBrand" | "btSolar" | "btGrace" | "btBurn" | "btEvil" | "btFlare" | "btSoul" | "btDance";

@@ -78,15 +78,30 @@ export function addEvil(s: RunState, e: EnemyState, n: number): void {
   e.btEvil = 0;
   const ex = hasPerk(p, "btExecutor");
   (p.btExecs ??= []).push({ id: e.id, left: B.execN + (ex ? K.btExecutor.more : 0), gap: 0, mul: ex ? K.btExecutor.mul : 1 });
-  p.btPurged = (p.btPurged ?? 0) + B.evilMax;
-  const at = hasPerk(p, "btVerdict") ? K.btVerdict.at : B.judgeAt;
-  if (p.btPurged >= at && !p.btJudge) {
-    p.btPurged -= at;
-    p.btJudge = B.judgeWarn;
-    addEffect(s, { kind: "btJudgeWarn", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 1, maxTicks: B.judgeWarn });
-  }
+  addPurge(s, B.evilMax);
   if (hasPerk(p, "btOath")) heal(s, p.stats.maxHp * K.btOath.heal);
   if (hasPerk(p, "btWitness")) for (const o of inCircle(s, e.x, e.y, K.btWitness.r)) if (o !== e) addEvil(s, o, K.btWitness.evil);
+}
+
+/** 지운 악 더하기 (처단·처치): 심판에 필요한 만큼 모이면 심판 예고 */
+function addPurge(s: RunState, n: number): void {
+  const p = s.player;
+  p.btPurged = (p.btPurged ?? 0) + n;
+  const at = hasPerk(p, "btVerdict") ? K.btVerdict.at : B.judgeAt;
+  if (p.btPurged < at || p.btJudge) return;
+  p.btPurged -= at;
+  p.btJudge = B.judgeWarn;
+  addEffect(s, { kind: "btJudgeWarn", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 1, maxTicks: B.judgeWarn });
+}
+
+/** 악이 쌓인 적을 쓰러뜨리면 그 악이 나에게 들어옴 (hiddenPerks.relicKill) */
+export function beaKill(s: RunState, e: EnemyState): void {
+  const p = s.player;
+  const n = e.btEvil ?? 0;
+  if (!isBea(p) || n <= 0) return;
+  e.btEvil = 0;
+  addEffect(s, { kind: "btSoul", x: e.x, y: e.y, toX: p.x, toY: p.y, dirX: 0, dirY: 0, size: n, maxTicks: 26 });
+  addPurge(s, n);
 }
 
 /** 악이 쌓인 적이 받는 피해 배율 (combat.damageEnemy) */

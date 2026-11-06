@@ -4,6 +4,36 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.54",
+    date: "2026-11-06",
+    items: {
+      ko: [
+        "베아트리스: 공격 모습의 왼쪽·오른쪽이 바뀌어 있던 것 바로잡음",
+        "베아트리스 기본 공격: 1타(왼→오)·2타(오→왼)가 대각선 칼선이라 둘이 겹쳐 X자가 됨 · 3타는 그 X자 그대로 다시 베어 터뜨림 ('+' 모양 빼기)",
+        "베아트리스: 악이 쌓인 적을 쓰러뜨리면 그 악이 붉은 넋이 되어 나에게 들어와 심판까지의 수에 쌓임 (처단하지 않아도)",
+        "악의 마크: 적 머리 위에 뿔 달린 붉은 문장 + '×숫자' (7 이상이면 타오름) · 내 머리 위에도 모은 악 '×숫자'",
+        "자애: 캐릭터 둘레에 동그란 성녀의 빛 영역(노랑·하양, 도는 빛 십자·피어오르는 빛 알갱이) · 곳곳에 깃털이 흩날림",
+        "이펙트 다듬기: 가운데 굵고 끝이 가는 빛 칼선 · 불티 · X자 터짐 · 처단 X자 · 일식의 춤 일식 고리 잔상 · 낙인 불꽃 칼날 · 태양 검날 빛살 · 심판",
+      ],
+      en: [
+        "Beatrice: fixed the attack sprites' left/right being swapped",
+        "Beatrice basic attack: hit 1 (left→right) and hit 2 (right→left) are diagonal slashes that overlap into an X · hit 3 re-cuts that same X and bursts it (no more '+' shape)",
+        "Beatrice: killing a foe with Evil sends that Evil to her as a red soul, counting toward Judgment (even without Execution)",
+        "Evil mark: a horned crimson sigil + '×number' above foes (burns at 7+) · her collected Evil also shows '×number' above her head",
+        "Mercy: a round field of saintly light (yellow · white, orbiting light crosses, rising motes) around her · feathers flutter all around",
+        "Polished effects: light slashes thick in the middle and thin at the ends · embers · X burst · Execution X · Eclipse Dance eclipse-ring afterimages · flaming Brand blade · Solar Blade rays · Judgment",
+      ],
+      ja: [
+        "ベアトリス：攻撃画像の左右が逆だったのを修正",
+        "ベアトリスの通常攻撃：1撃目（左→右）・2撃目（右→左）が斜めの剣線で、重なってX字になる · 3撃目はそのX字をそのまま斬り直して破裂（「+」の形をなくした）",
+        "ベアトリス：悪が溜まった敵を倒すと、その悪が赤い魂となって自分に入り、審判までの数に溜まる（処断しなくても）",
+        "悪のマーク：敵の頭上に角のある赤い紋章 + 「×数字」（7以上で燃える）· 自分の頭上にも集めた悪「×数字」",
+        "慈愛：キャラクターの周りに丸い聖女の光の領域（黄・白、回る光の十字・立ち昇る光の粒）· あちこちに羽根が舞う",
+        "エフェクトを磨き直し：中央が太く先が細い光の剣線 · 火の粉 · X字の破裂 · 処断のX字 · 日食の舞の日食の輪の残像 · 烙印の炎の刃 · 太陽剣刃の光条 · 審判",
+      ],
+    },
+  },
+  {
     version: "0.49.53",
     date: "2026-11-06",
     items: {

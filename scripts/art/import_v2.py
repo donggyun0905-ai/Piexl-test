@@ -49,7 +49,7 @@ ATTACK_LR = {
     "imugi": ("2", "3"), "general": ("2", "3"), "apostle": ("2", "3"), "abandoned": ("2", "3"), "abandoned3": ("2", "3"),
     "bedouin": ("2", "2f"), "abandoned2": ("2", "2f"), "novice": ("2", "2f"), "summoner": ("3f", "3"),
     "novice10": ("2", "2f"), "novice15": ("2", "2f"), "novice20": ("2", "2f"), "morph-eagle": ("3f", "3"),
-    "morph-wolf": ("3f", "3"), "morph-bear": ("3f", "3"), "fenrir": ("1", "1f"), "eclipse": ("0", "0f"), "eclipseNight": ("0", "0f"), "thorken": ("2", "2f"), "levia": ("2", "2f"), "orca": ("2", "2f"), "wave": ("3", "3f"), "beatrice": ("3f", "3"),
+    "morph-wolf": ("3f", "3"), "morph-bear": ("3f", "3"), "fenrir": ("1", "1f"), "eclipse": ("0", "0f"), "eclipseNight": ("0", "0f"), "thorken": ("2", "2f"), "levia": ("2", "2f"), "orca": ("2", "2f"), "wave": ("3", "3f"), "beatrice": ("3", "3f"),
     **{n: ("3f", "3") for n in ("ren", "spiritist", "elder")}, "morph-phoenix": ("3f", "3"), "morph-spider-evo": ("3f", "3"),
     # 각성 동물: 공격 줄 왼·오 칸이 바뀌어 있음
     **{f"morph-{a}-evo": ("2", "3") for a in ("bear", "boar", "eagle", "snake", "phoenix", "bat")},

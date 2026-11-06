@@ -14,11 +14,11 @@ export const BEATRICE = {
   /** 기본 3연격 간격 (공격 간격 배율) · 이 틱 동안 안 베면 처음으로 */
   stepTime: [0.55, 0.55, 0.95],
   comboGap: 60,
-  /** 1·2타 베기: 거리 · 반각 · 피해 배율 */
-  reach: 60,
-  slashArc: 1.25,
+  /** 1·2타 대각선 베기 (둘이 겹쳐 X자): 칼선 반 길이 · 맞는 폭(절반) · 피해 배율 */
+  slashLen: 42,
+  slashW: 16,
   slashMul: 1,
-  /** 3타 X자 터뜨림: 앞쪽 거리 · 반지름 · 피해 배율 · 밀어냄 */
+  /** X자 가운데까지 앞쪽 거리 · 3타 X자 터뜨림 반지름 · 피해 배율 · 밀어냄 */
   crossAt: 34,
   crossR: 40,
   crossMul: 1.7,
@@ -61,7 +61,7 @@ export const BEATRICE = {
   danceMul: 1.5,
   danceFire: 0.6,
   twinMul: 1.2,
-  twinReach: 72,
+  twinLen: 52,
   twinGap: 7,
   /** 3 태양의 낙인: 빠르기 · 거리 · 폭(절반) · 피해 배율 · 화염 몫 · 더하는 악 */
   brandSpeed: 8,

@@ -10,6 +10,7 @@ import { addAlly, alliesTick } from "./allies";
 import { kingFormTick } from "./kingForm";
 import { kingKill } from "./fallenKing";
 import { luxKill } from "./luxFoes";
+import { beaKill } from "./beatriceKit";
 import { cupidTick } from "./spiritGreat";
 import { storms } from "./oni";
 import { stun } from "./s2Kit";
@@ -77,6 +78,7 @@ export function hiddenExtras(p: PlayerState): Partial<ExtraStats> | null {
 export function relicKill(s: RunState, e: EnemyState): void {
   kingKill(s, e);
   luxKill(s, e);
+  beaKill(s, e);
   setKill(s, e);
   const p = s.player;
   let recalc = false;

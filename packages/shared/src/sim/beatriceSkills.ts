@@ -39,6 +39,7 @@ export function btSkill(s: RunState, i: number): void {
 export function danceTick(s: RunState): void {
   const p = s.player;
   if (!p.s2Rush) return;
+  addEffect(s, { kind: "btDance", x: p.x, y: p.y, dirX: p.s2Rush.dx, dirY: p.s2Rush.dy, size: 14, maxTicks: 18 });
   rushTick(s, (e) => {
     btHit(s, e, 0, B.danceFire);
     if (solarOn(p)) addBurn(e, p);
