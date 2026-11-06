@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.55",
+    date: "2026-11-06",
+    items: {
+      ko: ["캐릭터 선택창 나라 탭·아카이브 나라 색: 탈라시아는 하늘색, 성국은 흰색 (색이 없어 검게 보이던 것 고침)"],
+      en: ["Nation colors in the character select tabs and the archive: Thalassia is sky blue, the Holy Kingdom is white (they showed as black before)"],
+      ja: ["キャラクター選択の国タブ・アーカイブの国の色：タラシアは空色、聖国は白（色がなく黒く見えていたのを修正）"],
+    },
+  },
+  {
     version: "0.49.54",
     date: "2026-11-06",
     items: {
