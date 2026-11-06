@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.73",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "미카엘라 무기 속성 8가지: 쏟아지는 무기마다 성은·빙결·홍염·혈월·천광·자전·비취·청해 중 하나 · 그 무기로 베고·찌르고·던지고·터질 때 속성 효과 (성은 피해 +25%·크게 밀침 · 빙결 얼음·느려짐 · 홍염 화상 · 혈월 출혈 · 천광 빛 피해 · 자전 옆 적에게 번개 · 비취 독 · 청해 물결·멀리 밀침)",
+        "미카엘라 무기 그림: 속성마다 날 색·폭·코등이·창 촉 모양이 다름 · 박힌 무기는 그 속성 색으로 빛남 · 몸 둘레에 여덟 속성 무기가 떠다님",
+        "미카엘라 폭발이 속성마다 다르게: 은빛 충격파 · 얼음 가시 · 불기둥 · 붉은 X 베기 · 빛 십자 · 번개 갈래 · 독 거품 · 물결 고리 · 베기·찌르기·투척 빛도 그 무기 색",
+        "버프 창에 지금 든 무기 (예: 홍염의 투창) · 투척 뒤 꺼내는 무기는 새 속성",
+      ],
+      en: [
+        "Michaela's 8 weapon elements: every weapon that rains down has one of Sacred Silver, Frost, Crimson Flame, Blood Moon, Heavenly Light, Violet Storm, Jade or Azure Tide · slashes, thrusts, throws and explosions with it carry the element (Silver +25% damage and heavy knockback · Frost ice and slow · Flame burn · Blood Moon bleed · Light light damage · Storm lightning to a nearby foe · Jade poison · Tide water and far knockback)",
+        "Michaela's weapon art: blade colour, width, guard and spearhead shape differ by element · planted weapons glow in their element colour · weapons of all eight elements float around her",
+        "Michaela's explosions now differ by element: silver shockwave · ice spikes · fire pillars · crimson X slash · cross of light · forking lightning · poison bubbles · water rings · slash, thrust and throw trails take the weapon's colour",
+        "The buff panel shows the weapon in hand (e.g. Crimson Flame Javelin) · the weapon drawn after a throw has a new element",
+      ],
+      ja: [
+        "ミカエラの武器属性8種：降り注ぐ武器ごとに聖銀・氷結・紅炎・血月・天光・紫電・翡翠・青海のいずれか · その武器で斬る・突く・投げる・爆発する時に属性効果（聖銀 ダメージ+25%・大きく押し出す · 氷結 氷・鈍足 · 紅炎 火傷 · 血月 出血 · 天光 光ダメージ · 紫電 隣の敵へ雷 · 翡翠 毒 · 青海 水・遠くへ押し出す）",
+        "ミカエラの武器の絵：属性ごとに刃の色・幅・鍔・槍の穂先の形が違う · 刺さった武器はその属性の色で光る · 体の周りに8属性の武器が漂う",
+        "ミカエラの爆発が属性ごとに違う形に：銀の衝撃波 · 氷の棘 · 火柱 · 赤いX斬り · 光の十字 · 枝分かれする雷 · 毒の泡 · 水の輪 · 斬り・突き・投擲の光もその武器の色",
+        "バフ欄に今持っている武器（例：紅炎の投槍）· 投擲後に取り出す武器は新しい属性",
+      ],
+    },
+  },
+  {
     version: "0.49.72",
     date: "2026-11-07",
     items: {

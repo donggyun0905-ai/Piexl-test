@@ -1,10 +1,11 @@
 // 미카엘라(성국, 공허의 인도자): 누르고 있으면 3연격 (들고 있는 무기로 둘: 검이면 베기 · 투창이면 찌르기 → 3타 투척: 박혀 폭발)
+// 무기마다 속성 8가지 중 하나 (성은·빙결·홍염·혈월·천광·자전·비취·청해) → 그 속성으로 맞히고 터짐 (sim/michaelaKit)
 // 박힌 무기 줍기·대시 순간 이동·연쇄 폭발은 sim/michaelaSkills · 콤보·폭발은 sim/michaelaKit · 스킬 넷은 숫자 키
 import { TICK_RATE } from "../constants";
 import { MICHAELA_PERKS as K } from "../itemsMichaela";
 import { MICHAELA as M } from "../weaponsMichaela";
 import { createRng, deriveSeed } from "../rng";
-import { addCombo, explode, mcHit, plant } from "./michaelaKit";
+import { addCombo, explode, mcHit, pickElem, plant } from "./michaelaKit";
 import { mcSkill, mcTouch, mcWorld, roomRain } from "./michaelaSkills";
 import { inCone, onSegment, roomKey } from "./s2Kit";
 import type { RunState } from "./types";
@@ -14,16 +15,17 @@ import { isWall } from "./waveKit";
 /** 1·2타: 검이면 앞 부채꼴 베기 · 투창이면 앞으로 찌르기 */
 function strikeHeld(s: RunState, k: number): void {
   const p = s.player;
+  const v = p.mcElem ?? 0;
   if ((p.mcHeld ?? 0) === 0) {
     const sw = hasPerk(p, "mcSword");
-    for (const e of inCone(s, M.swordR, sw ? K.mcSword.cos : M.swordCos)) mcHit(s, e, M.swordMul * (sw ? K.mcSword.mul : 1), M.swordPush);
-    addEffect(s, { kind: "mcSlashFx", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: M.swordR, style: k, maxTicks: 14 });
+    for (const e of inCone(s, M.swordR, sw ? K.mcSword.cos : M.swordCos)) mcHit(s, e, M.swordMul * (sw ? K.mcSword.mul : 1), M.swordPush, v);
+    addEffect(s, { kind: "mcSlashFx", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: M.swordR, style: v * 2 + k, maxTicks: 14 });
     return;
   }
   const ln = hasPerk(p, "mcLance");
   const len = M.spearLen * (ln ? K.mcLance.len : 1);
-  for (const e of onSegment(s, p.x, p.y, p.x + p.faceX * len, p.y + p.faceY * len, M.spearW)) mcHit(s, e, M.spearMul * (ln ? K.mcLance.mul : 1), 3);
-  addEffect(s, { kind: "mcThrustFx", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: len, style: k, maxTicks: 12 });
+  for (const e of onSegment(s, p.x, p.y, p.x + p.faceX * len, p.y + p.faceY * len, M.spearW)) mcHit(s, e, M.spearMul * (ln ? K.mcLance.mul : 1), 3, v);
+  addEffect(s, { kind: "mcThrustFx", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: len, style: v * 2 + k, maxTicks: 12 });
 }
 
 /** 3타 투척: 들고 있던 무기를 (dx,dy)로 던짐 → 처음 닿은 적(공허의 투창: 줄 위 모두) · 떨어진 자리에 박혀 폭발 · 콤보 · 보관소에서 다른 무기를 꺼냄 */
@@ -36,14 +38,15 @@ function throwHeld(s: RunState, dx: number, dy: number): void {
   const on = onSegment(s, p.x, p.y, p.x + dx * len, p.y + dy * len, M.throwW).sort((a, b) => (a.x - p.x) * dx + (a.y - p.y) * dy - ((b.x - p.x) * dx + (b.y - p.y) * dy) || a.id - b.id);
   const hits = jav ? on : on.slice(0, 1);
   const mul = M.throwMul * (hasPerk(p, "mcHeavy") ? K.mcHeavy.mul : 1);
-  for (const e of hits) mcHit(s, e, mul, 6);
+  const v = p.mcElem ?? 0;
+  for (const e of hits) mcHit(s, e, mul, 6, v);
   const end = !jav && hits[0] ? (hits[0].x - p.x) * dx + (hits[0].y - p.y) * dy : len;
   const x = p.x + dx * end;
   const y = p.y + dy * end;
   const k = p.mcHeld ?? 0;
-  addEffect(s, { kind: "mcThrowFx", x: p.x, y: p.y - 6, dirX: dx, dirY: dy, size: 6, style: k, toX: x, toY: y, maxTicks: 10 });
-  plant(s, x, y, k);
-  explode(s, x, y, M.blastR, M.blastMul);
+  addEffect(s, { kind: "mcThrowFx", x: p.x, y: p.y - 6, dirX: dx, dirY: dy, size: 6, style: v * 2 + k, toX: x, toY: y, maxTicks: 10 });
+  plant(s, x, y, k, v);
+  explode(s, x, y, M.blastR, M.blastMul, v);
   addCombo(p, 1);
 }
 
@@ -55,7 +58,9 @@ function throwAll(s: RunState): void {
     const { c, s: sn } = K.mcEcho;
     throwHeld(s, p.faceX * c - p.faceY * sn, p.faceX * sn + p.faceY * c);
   }
+  // 보관소에서 다른 종류·새 속성의 무기를 꺼냄
   p.mcHeld = 1 - (p.mcHeld ?? 0);
+  p.mcElem = pickElem(s, "draw");
 }
 
 /** 방이 바뀌면 무기를 거두고 새 방에 포탈에서 무기가 쏟아짐 */
@@ -101,7 +106,7 @@ export function michaelaTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetMichaela(p: RunState["player"]): void {
-  for (const k of ["mcStep", "mcGap", "mcLast", "mcCd", "mcHeld", "mcCombo", "mcComboT", "mcBlades", "mcFalls", "mcChains", "mcUlt", "mcDash", "mcRoom"] as const) delete p[k];
+  for (const k of ["mcStep", "mcGap", "mcLast", "mcCd", "mcHeld", "mcElem", "mcCombo", "mcComboT", "mcBlades", "mcFalls", "mcChains", "mcUlt", "mcDash", "mcRoom"] as const) delete p[k];
 }
 
 export { isMichaela, michaelaSkills } from "./michaelaKit";

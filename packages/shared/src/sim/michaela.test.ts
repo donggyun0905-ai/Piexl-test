@@ -86,6 +86,9 @@ describe("미카엘라", () => {
     expect(n).toBeGreaterThan(0);
     key(s, 2);
     expect((s.player.mcBlades ?? []).length).toBe(n - 1);
+    const first = s.player.mcBlades![0]!;
+    s.enemies[0]!.x = first.x;
+    s.enemies[0]!.y = first.y;
     const before = lost(s);
     key(s, 3);
     expect(s.player.mcBlades).toBeUndefined();
@@ -96,6 +99,31 @@ describe("미카엘라", () => {
     const b2 = lost(s);
     run(s, 60);
     expect(lost(s)).toBeGreaterThan(b2);
+  });
+
+  it("속성: 빙결은 느려짐 · 자전은 옆 적에게 번개 · 비취는 독", () => {
+    const s = michaela();
+    s.enemies[0]!.rootTicks = 0;
+    s.player.mcElem = 1;
+    hit(s);
+    expect(s.enemies[0]!.slowTicks ?? 0).toBeGreaterThan(0);
+    const t = michaela();
+    t.enemies.push({ ...enemy(2, 170, 100, 99999), rootTicks: 99999 });
+    t.player.mcElem = 5;
+    hit(t);
+    expect(t.effects.some((f) => f.kind === "mcBoltFx")).toBe(true);
+    expect(t.enemies[1]!.hp).toBeLessThan(t.enemies[1]!.maxHp);
+    const u = michaela();
+    u.player.mcElem = 6;
+    hit(u);
+    expect(u.enemies[0]!.poisonTicks ?? 0).toBeGreaterThan(0);
+  });
+
+  it("박힌 무기를 바꿔 들면 그 속성을 듦", () => {
+    const s = michaela();
+    s.player.mcBlades = [{ x: 100, y: 100, k: 0, v: 4 }];
+    run(s, 1);
+    expect(s.player.mcElem).toBe(4);
   });
 
   it("인도자의 기도: 스킬 대기 감소", () => {

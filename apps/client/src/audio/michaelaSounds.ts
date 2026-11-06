@@ -3,7 +3,7 @@ import type { RunState } from "@pixel-rogue/shared";
 import type { Sfx } from "./sound";
 
 const SFX: Partial<Record<string, Sfx>> = {
-  mcSlashFx: "pwSlash", mcThrustFx: "iaStab", mcThrowFx: "pwDash", mcBlastFx: "gbQuake", mcPortalFx: "gbGrav", mcSwapFx: "chime", mcBlinkFx: "pwDash", mcUltFx: "gbBell",
+  mcSlashFx: "pwSlash", mcThrustFx: "iaStab", mcThrowFx: "pwDash", mcBlastFx: "gbQuake", mcPortalFx: "gbGrav", mcSwapFx: "chime", mcBlinkFx: "pwDash", mcUltFx: "gbBell", mcBoltFx: "iaStab",
 };
 /** 화면이 흔들리는 큰 기술 */
 const SHAKE: Partial<Record<string, number>> = { mcBlastFx: 1, mcUltFx: 3 };

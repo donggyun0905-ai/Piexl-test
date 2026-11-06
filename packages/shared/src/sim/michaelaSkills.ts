@@ -1,9 +1,9 @@
 // 미카엘라 스킬 넷(1 무기 비 · 2 칼날 교대 · 3 일제 폭파 · 4 무한의 무기고) · 방에 들어설 때 무기 비 · 떨어지는 무기 · 연쇄 · 줍기 · 대시 순간 이동 (sim/michaela에서 부름)
 import { MICHAELA_PERKS as K } from "../itemsMichaela";
-import { MICHAELA as M } from "../weaponsMichaela";
+import { MC_ELEMS, MICHAELA as M } from "../weaponsMichaela";
 import { ROOM_CX, ROOM_CY } from "../constants";
 import { createRng, deriveSeed } from "../rng";
-import { addCombo, blinkTo, dropBlade, explode, mcCooldown, mcHit, plant, swapTo } from "./michaelaKit";
+import { addCombo, blinkTo, dropBlade, explode, mcCooldown, mcHit, pickElem, plant, swapTo } from "./michaelaKit";
 import type { McBlade } from "./mcTypes";
 import { alive, inCircle } from "./s2Kit";
 import type { RunState } from "./types";
@@ -20,7 +20,7 @@ function rainAround(s: RunState, tag: string, x: number, y: number, r: number, n
     const bx = Math.max(ROOM_MIN_X + e, Math.min(ROOM_MAX_X - e, x + Math.cos(a) * d));
     const by = Math.max(ROOM_MIN_Y + e, Math.min(ROOM_MAX_Y - e, y + Math.sin(a) * d));
     if (isWall(s, bx, by)) continue;
-    dropBlade(s, bx, by, delay + i * 3, rng.nextFloat() < 0.5 ? 0 : 1, mul);
+    dropBlade(s, bx, by, delay + i * 3, rng.nextFloat() < 0.5 ? 0 : 1, Math.floor(rng.nextFloat() * MC_ELEMS), mul);
     i++;
   }
 }
@@ -62,7 +62,7 @@ export function mcSkill(s: RunState, i: number): void {
   } else if (i === 2) {
     // 3 일제 폭파: 박힌 무기가 모두 차례로 터지고 사라짐
     const list = p.mcBlades ?? [];
-    list.forEach((b, j) => (p.mcChains ??= []).push({ x: b.x, y: b.y, t: 1 + j * M.detGap, mul: M.detMul }));
+    list.forEach((b, j) => (p.mcChains ??= []).push({ x: b.x, y: b.y, t: 1 + j * M.detGap, v: b.v ?? 0, mul: M.detMul }));
     delete p.mcBlades;
   } else {
     p.mcUlt = M.ultTicks + (hasPerk(p, "mcArsenal") ? K.mcArsenal.more : 0);
@@ -76,11 +76,11 @@ export function mcWorld(s: RunState): void {
   const p = s.player;
   for (const f of p.mcFalls ?? []) {
     if (--f.t > 0) continue;
-    for (const e of inCircle(s, f.x, f.y, M.fallR)) mcHit(s, e, f.mul, 4);
-    plant(s, f.x, f.y, f.k);
+    for (const e of inCircle(s, f.x, f.y, M.fallR)) mcHit(s, e, f.mul, 4, f.v);
+    plant(s, f.x, f.y, f.k, f.v);
   }
   if (p.mcFalls) p.mcFalls = p.mcFalls.filter((f) => f.t > 0);
-  for (const c of p.mcChains ?? []) if (--c.t <= 0) explode(s, c.x, c.y, M.blastR, c.mul, true);
+  for (const c of p.mcChains ?? []) if (--c.t <= 0) explode(s, c.x, c.y, M.blastR, c.mul, c.v, true);
   if (p.mcChains) p.mcChains = p.mcChains.filter((c) => c.t > 0);
   if (!(p.mcUlt ?? 0)) return;
   p.mcUlt!--;
@@ -88,7 +88,7 @@ export function mcWorld(s: RunState): void {
   if (s.tick % every !== 0) return;
   const foes = alive(s);
   const e = foes[Math.floor(s.tick / every) % Math.max(1, foes.length)];
-  if (e) dropBlade(s, e.x, e.y, 10, s.tick % 2, M.ultMul);
+  if (e) dropBlade(s, e.x, e.y, 10, s.tick % 2, pickElem(s, "ult"), M.ultMul);
 }
 
 /** 몸에 닿은 박힌 무기를 바꿔 듦 · 대시를 시작하면 범위 안의 박힌 무기로 순간 이동 */
