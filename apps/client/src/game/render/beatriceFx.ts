@@ -2,7 +2,7 @@
 // 대각선 칼선(1·2타가 겹쳐 X자) · X자 다시 베어 터뜨림 · 강화 쌍검 칼선 · 처단 X자 · 심판 예고·심판(맵을 가르는 거대한 X자)
 // 낙인 검기 발사 · 태양 검날 · 자애 발동 · 화상 불티 · 악 쌓임 · 홍염 · 처치한 적의 악이 나에게 날아옴
 import type { EffectState } from "@pixel-rogue/shared";
-import { additive, easeOut, glow, rnd, shock, type Ctx } from "./pwFxBits";
+import { additive, crescent, easeOut, glow, rnd, shock, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
 import { bladeStroke, BT, embers, featherField, rays } from "./beatriceArt";
 
@@ -18,20 +18,40 @@ export function xMark(ctx: Ctx, x: number, y: number, r: number, a: number, w: n
   }
 }
 
-/** 칼선 하나: 앞부분이 그어지며 나아가고, 다 그어진 칼선은 천천히 남았다 사라짐 (그래서 1·2타가 겹쳐 X자가 보임) */
-function stroke(ctx: Ctx, fx: EffectState, snap: Snap, f: number, c: string, w: number): void {
+/** 파수꾼 검격과 같은 초승달 칼빛을 (ax,ay)→(bx,by) 대각선 위에 그림: 앞쪽(fwd)으로 휘어 쓸고 지나감 · g 휘두른 정도 · th 두께 */
+export function arcSlash(ctx: Ctx, ax: number, ay: number, bx: number, by: number, fwdX: number, fwdY: number, g: number, th: number, c: string, al: number): void {
+  const half = 0.7;
+  const len = Math.hypot(bx - ax, by - ay) || 1;
+  let nx = -(by - ay) / len;
+  let ny = (bx - ax) / len;
+  if (nx * fwdX + ny * fwdY < 0) [nx, ny] = [-nx, -ny];
+  const R = len / 2 / Math.sin(half);
+  const d = R * Math.cos(half);
+  const cx = (ax + bx) / 2 - nx * d;
+  const cy = (ay + by) / 2 - ny * d;
+  let aA = Math.atan2(ay - cy, ax - cx);
+  let aB = Math.atan2(by - cy, bx - cx);
+  if (aB - aA > Math.PI) aB -= Math.PI * 2;
+  if (aA - aB > Math.PI) aA -= Math.PI * 2;
+  const cur = aA + (aB - aA) * g;
+  const mid = (aA + cur) / 2;
+  const arc = Math.abs(cur - aA) / 2;
+  if (arc < 0.02) return;
+  additive(ctx, () => {
+    crescent(ctx, cx, cy, R + th * 0.4, mid, arc, th, c, al);
+    crescent(ctx, cx, cy, R - th * 0.5, mid, arc * 0.9, th * 0.55, BT.gold, al * 0.55);
+  });
+}
+
+/** 칼선 하나: 파수꾼처럼 초승달이 쓸고 지나가며 활짝 · 천천히 남았다 사라짐 (그래서 1·2타가 겹쳐 X자가 보임) */
+function stroke(ctx: Ctx, fx: EffectState, snap: Snap, f: number, c: string, th: number): void {
   const ax = snap(fx.x);
   const ay = snap(fx.y);
   const bx = snap(fx.toX ?? fx.x);
   const by = snap(fx.toY ?? fx.y);
-  const k = easeOut(Math.min(1, f / 0.18));
+  const g = Math.min(1, f * 4.5);
   const fade = f < 0.3 ? 1 : 1 - (f - 0.3) / 0.7;
-  bladeStroke(ctx, ax, ay, bx, by, 0, k, w * (1 + 0.4 * (1 - fade)), c, fade);
-  if (f < 0.22) {
-    const hx = ax + (bx - ax) * k;
-    const hy = ay + (by - ay) * k;
-    additive(ctx, () => glow(ctx, hx, hy, 10, BT.gold, 0.8 * (1 - f / 0.22), 0.6));
-  }
+  arcSlash(ctx, ax, ay, bx, by, fx.dirX, fx.dirY, g, th * (0.55 + 0.45 * fade), c, fade);
   embers(ctx, (ax + bx) / 2, (ay + by) / 2, 8, Math.hypot(bx - ax, by - ay) * 0.8, f, ax + by, fade * 0.9);
 }
 
@@ -48,17 +68,21 @@ export function drawBeatriceFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const main = sun ? BT.sun : BT.orange;
   switch (fx.kind) {
     case "btSlash":
-      stroke(ctx, fx, snap, f, main, sun ? 7 : 5.5);
+      stroke(ctx, fx, snap, f, main, sun ? 11 : 9);
       return true;
     case "btTwin":
       // 강화 쌍검: 붉은 칼선 + 바로 옆에 금빛 칼선 하나 더 (두 자루)
-      stroke(ctx, fx, snap, f, BT.sun, 7);
-      stroke(ctx, { ...fx, x: fx.x + fx.dirX * 5, y: fx.y + fx.dirY * 5, toX: (fx.toX ?? 0) + fx.dirX * 5, toY: (fx.toY ?? 0) + fx.dirY * 5 }, snap, Math.min(1, f + 0.05), BT.gold, 4);
+      stroke(ctx, fx, snap, f, BT.sun, 11);
+      stroke(ctx, { ...fx, x: fx.x + fx.dirX * 5, y: fx.y + fx.dirY * 5, toX: (fx.toX ?? 0) + fx.dirX * 5, toY: (fx.toY ?? 0) + fx.dirY * 5 }, snap, Math.min(1, f + 0.05), BT.gold, 6);
       return true;
     case "btCross": {
       // 3타: 1·2타가 만든 X자 그대로 다시 X자로 베고 → 가운데에서 태양처럼 터짐
-      const k = easeOut(Math.min(1, f / 0.2));
-      xMark(ctx, x, y, r * 1.05, a, sun ? 9 : 7, main, fade, k);
+      const k = Math.min(1, f * 5);
+      for (const d of [Math.PI / 4, -Math.PI / 4]) {
+        const dx = Math.cos(a + d) * r * 1.1;
+        const dy = Math.sin(a + d) * r * 1.1;
+        arcSlash(ctx, x - dx, y - dy, x + dx, y + dy, fx.dirX, fx.dirY, k, sun ? 12 : 10, main, fade);
+      }
       if (f > 0.18) {
         const b = (f - 0.18) / 0.82;
         additive(ctx, () => {

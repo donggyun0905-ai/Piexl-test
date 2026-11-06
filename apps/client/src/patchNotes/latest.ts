@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.57",
+    date: "2026-11-06",
+    items: {
+      ko: ["베아트리스 검격: 파수꾼 검격과 같은 초승달 칼빛을 더 두껍게 · 1타·2타 초승달이 대각선으로 겹쳐 X자, 3타도 같은 초승달 둘로 X자를 다시 벰"],
+      en: ["Beatrice's slashes: the same crescent blade light as the Warden's, but thicker · hits 1 and 2 overlap diagonally into an X, and hit 3 re-cuts the X with the same two crescents"],
+      ja: ["ベアトリスの剣撃：番人の剣撃と同じ三日月の剣光をより太く · 1撃目・2撃目の三日月が斜めに重なってX字、3撃目も同じ三日月2つでX字を斬り直す"],
+    },
+  },
+  {
     version: "0.49.56",
     date: "2026-11-06",
     items: {
