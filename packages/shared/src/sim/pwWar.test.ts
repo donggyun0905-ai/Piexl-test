@@ -65,7 +65,7 @@ describe("패왕전 전쟁의 서막", () => {
   }, 60000);
 
   it("AI 역할: 편마다 위 1·가운데 1·아래 2·정글 1 · 2분이면 위·아래가 제 길에", () => {
-    const s = createPvp(7, "war", [{ characterId: "warden", ai: true }], "gWar");
+    const s = createPvp(8, "war", [{ characterId: "warden", ai: true }], "gWar");
     for (const team of [0, 1]) {
       const roles = s.pvp!.seats.map((x, i) => (x.team === team ? warRole(s, i) : "")).filter(Boolean).sort();
       expect(roles).toEqual(["bot", "bot", "jungle", "mid", "top"]);

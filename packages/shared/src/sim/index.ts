@@ -121,6 +121,7 @@ export type { WvBit } from "./waveTypes";
 export { isMiryu, onStream } from "./miryuKit";
 export { beatriceSkills, fireCoef, healBlocked, isBea } from "./beatrice";
 export { btRegen } from "./beatriceKit";
+export { ianSkills, isIan } from "./ian";
 export { isEclipse, isNight, zoneR as eclipseZoneR } from "./eclipseStats";
 export { SUN_BURST, sunCutPaths } from "./eclipseCuts";
 export { passiveTagAt } from "./retag";

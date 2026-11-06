@@ -123,4 +123,10 @@ export const PW_KITS_3: PwKits = {
     sk("btTwin", "line", 9, "#ffb43a", { range: 220, radius: 18, fx: "beam", hit: { dmg: 2.4, push: 10 } }),
     sk("btTwin", "self", 60, "#fff0a0", { radius: 120, fx: "wave", buff: { ticks: 4 * SEC, taken: 0.3 }, hit: { dmg: 3.4, push: 20, stun: 0.6 * SEC } }),
   ),
+  ian: kit(1,
+    sk("iaPen", "line", 9, "#b89aff", { range: 240, radius: 14, fx: "beam", hit: { dmg: 1.9, push: -8, root: 0.8 * SEC } }),
+    sk("iaPen", "dash", 6, "#6a4aff", { range: 140, speed: 13, fx: "slash", hit: { dmg: 1.8 } }),
+    sk("iaPen", "self", 11, "#e8d070", { radius: 130, fx: "net", hit: { dmg: 2.2, silence: 1 * SEC } }),
+    sk("iaPen", "self", 50, "#f2c14e", { radius: 150, fx: "field", hit: { dmg: 3, stun: 1.2 * SEC } }),
+  ),
 };

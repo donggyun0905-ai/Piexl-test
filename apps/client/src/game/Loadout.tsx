@@ -34,6 +34,8 @@ export interface LoadoutView {
   novice?: NoviceView;
   /** 스킬이 있는 캐릭터(추적자): 스킬마다 남은 대기 0~1 */
   skills?: number[];
+  /** 스킬 이름 묶음 (없으면 칸 수로: 셋 추적자 · 넷 베아트리스) */
+  skillSet?: "ia";
   /** 패왕전 스킬 칸 */
   pw?: PwSkillView;
   /** 상점 휴지통 판매 창이 열려 있을 때: 팔면 받는 돈 (sellCodes 순서: 무기 · 사용 아이템 2칸 · 패시브 순서, 0원 = 못 팜) */
@@ -107,7 +109,7 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
       {view.station && <StationWindow view={view.station} lang={lang} t={t} controls={controls} />}
       {view.altarRes && <AltarResult res={view.altarRes} lang={lang} t={t} />}
       {view.hdPick && <HiddenPicker pick={view.hdPick} lang={lang} t={t} controls={controls} />}
-      {view.skills && <SkillButtons skills={view.skills} t={t} controls={controls} />}
+      {view.skills && <SkillButtons skills={view.skills} set={view.skillSet} t={t} controls={controls} />}
       {view.pw && <PwSkillBar view={view.pw} t={t} touchMode={touchMode} controls={controls} />}
       {!view.pw && character && (
         <span className={`pw-skill pw-skill-passive ${isOn(BASE) ? "on" : ""}`} {...tipProps(BASE)}>

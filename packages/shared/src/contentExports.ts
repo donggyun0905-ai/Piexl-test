@@ -21,5 +21,7 @@ export { MIRYU, type MiryuKind, type MiryuStyle } from "./weaponsMiryu";
 export { MIRYU_PERKS } from "./itemsMiryu";
 export { BEATRICE } from "./weaponsBeatrice";
 export { BEATRICE_PERKS } from "./itemsBeatrice";
+export { IAN } from "./weaponsIan";
+export { IAN_PERKS } from "./itemsIan";
 export { WAVE_PERKS, WV_SKILLS, type WvSkill } from "./itemsWave";
 export { LUX } from "./weaponsLux";

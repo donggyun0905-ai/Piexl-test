@@ -11,6 +11,7 @@ import { kingFormTick } from "./kingForm";
 import { kingKill } from "./fallenKing";
 import { luxKill } from "./luxFoes";
 import { beaKill } from "./beatriceKit";
+import { ianKill } from "./ianKit";
 import { cupidTick } from "./spiritGreat";
 import { storms } from "./oni";
 import { stun } from "./s2Kit";
@@ -79,6 +80,7 @@ export function relicKill(s: RunState, e: EnemyState): void {
   kingKill(s, e);
   luxKill(s, e);
   beaKill(s, e);
+  ianKill(s, e);
   setKill(s, e);
   const p = s.player;
   let recalc = false;

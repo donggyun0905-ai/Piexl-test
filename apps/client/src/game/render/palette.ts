@@ -74,6 +74,7 @@ export const C = {
   wave: "#8af4ff",
   miryu: "#5ad0ff",
   beatrice: "#ff3a1a",
+  ian: "#b89aff",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",

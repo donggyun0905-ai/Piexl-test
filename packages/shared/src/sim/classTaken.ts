@@ -34,11 +34,14 @@ import { orcaTaken } from "./orcaMoves";
 import { waveTaken } from "./waveSkillsD";
 import { miryuTaken } from "./miryu";
 import { beaHurt, beaTaken } from "./beatriceKit";
-export { evilTaken } from "./beatriceKit";
+import { ianHurt, ianTaken } from "./ianKit";
+import { evilTaken } from "./beatriceKit";
+/** 적이 받는 피해 배율 (베아트리스 악 · 이안 속박, combat.damageEnemy) */
+export const foeTaken = (s: RunState, e: EnemyState) => evilTaken(s, e) * ianTaken(s, e);
 import { leoTaken } from "./leoPerks";
 import { onyxHurt, onyxTaken } from "./onyx";
 export { cloudEnv } from "./pungHooks";
-import type { RunState } from "./types";
+import type { EnemyState, RunState } from "./types";
 
 /** 버려진 자들 막기·맏이의 방패 · 거인(탱커·장갑판·방벽·자이로) · 오니 · 이드라 방패 · 변희 동물 · 장로 결계 · 정령사 아이언하이드 · 역병의사 가면 · 이터 그림자 몸 · 묵인 방어력(적어도 1). 받는 피해를 돌려줌 */
 export function classTaken(s: RunState, taken: number): number {
@@ -51,6 +54,7 @@ export function classTaken(s: RunState, taken: number): number {
 export function afterHurt(s: RunState, from?: EnemyKind, env = false): void {
   afflict(s, from);
   beaHurt(s, from, env);
+  ianHurt(s, env);
   if (s.enemies.some((e) => e.ultAt !== undefined && (e.kind === "dragon" || e.kind === "godeater"))) s.player.invulnTicks = 0;
   mukinHurt(s);
   onyxHurt(s);

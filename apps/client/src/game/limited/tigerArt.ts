@@ -79,6 +79,7 @@ export const ACCENT: Record<string, string> = {
   wave: "#8af4ff",
   miryu: "#5ad0ff",
   beatrice: "#ff3a1a",
+  ian: "#b89aff",
   collector: "#5a8aff",
   mystic: "#ff6a8a",
   engineer: "#5ad0f0",

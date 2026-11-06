@@ -8,7 +8,7 @@ const MEMBERS: Record<PwRoleId, readonly CharacterId[]> = {
   warrior: ["beatrice", "levia", "thorken", "eclipse", "warden", "novice", "general", "imugi", "titan", "oni", "byeonhui", "mukin", "collector", "leo", "onyx"],
   ranged: ["drifter", "engineer", "gunner", "ninja", "chronomancer", "idra", "samyeol", "automata", "tracker", "madQueen"],
   mage: ["wave", "mage", "elementalist", "summoner", "pungryu", "elder", "ren", "plague", "bomber", "spiritist"],
-  assassin: ["tail", "hook", "orca", "miryu", "brawler", "beast", "fly", "slayer", "eater", "bedouin", "abandoned", "rider", "punk", "remnant", "wanderer", "silk", "fenrir"],
+  assassin: ["ian", "tail", "hook", "orca", "miryu", "brawler", "beast", "fly", "slayer", "eater", "bedouin", "abandoned", "rider", "punk", "remnant", "wanderer", "silk", "fenrir"],
   support: ["mystic", "doctor", "apostle", "artifacter", "forgotten"],
 };
 

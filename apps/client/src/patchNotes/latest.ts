@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.61",
+    date: "2026-11-06",
+    items: {
+      ko: [
+        "성국 새 캐릭터 이안 '침묵의 서기관': 신의 부름을 기다리며 적의 움직임과 마력을 기록하는 나이 든 서기관, 인과율 조작형 암살자 (체력 95 · 공격력 14 · 방어력 1 · 이동 1.45 · 행운 2 · 해금: 공격 속도 1.8 달성)",
+        "기본 공격 3연격: 펜 찌르기 · 펜 찌르기 → 강철 실 휘감기(끌어당김) · 맞힌 적에게 기록(최대 5) → 5면 속박(멈춤 · 받는 피해 +20%) · 속박된 적을 찌르면 급소(180%)",
+        "숫자 키 스킬 넷: 1 인과의 실(꿰뚫는 실, 끌어당김·기록 +2) · 2 그림자 걸음(무적 돌진, 다음 공격 급소) · 3 기록 집행(방의 모든 적에게 기록만큼 피해, '執') · 4 인과율 속박(방의 모든 적 5초 속박, 준 피해의 40%를 끝날 때 되돌려 터뜨림)",
+        "무기 1(집행의 펜 & 강철 실타래) · 전용 아이템 20(기록·속박 5 · 암살·급소 5 · 실 5 · 인과·스킬 5) · 이펙트·효과음·그림 시트·패왕전 스킬",
+      ],
+      en: [
+        "New Holy Kingdom character Ian 'The Silent Scribe': an old scribe who records foes' movements and mana while awaiting the gods' call, a causality-bending assassin (HP 95 · ATK 14 · DEF 1 · Move 1.45 · Luck 2 · Unlock: reach 1.8 attack speed)",
+        "Basic 3-hit chain: pen thrust · pen thrust → steel thread lash (pulls in) · foes hit gain Records (up to 5) → at 5 they are Bound (stopped · +20% damage taken) · stabbing a Bound foe hits a Vital Point (180%)",
+        "Four number-key skills: 1 Thread of Causality (piercing thread, pulls · +2 Records) · 2 Shadow Step (invulnerable dash, next attack is a Vital Point) · 3 Writ of Execution (every foe in the room takes damage per Record, '執') · 4 Law of Causality (binds every foe in the room for 5s, returns 40% of damage dealt as a burst at the end)",
+        "1 weapon (Pen of Execution & Steel Spool) · 20 exclusive items (Record·Bind 5 · Assassination·Vital 5 · Thread 5 · Causality·Skill 5) · effects · sounds · sprite sheet · Paewang skills",
+      ],
+      ja: [
+        "聖国の新キャラクター、イアン「沈黙の書記官」：神々の呼び声を待ちながら敵の動きと魔力を記録する老いた書記官、因果律操作型の暗殺者（体力95 · 攻撃力14 · 防御力1 · 移動1.45 · 幸運2 · 解放：攻撃速度1.8達成）",
+        "通常攻撃3連撃：ペン突き · ペン突き → 鋼の糸の巻きつけ（引き寄せ）· 当てた敵に記録（最大5）→ 5で束縛（停止 · 被ダメージ+20%）· 束縛中の敵を突くと急所（180%）",
+        "数字キーのスキル4つ：1 因果の糸（貫く糸、引き寄せ · 記録+2）· 2 影歩き（無敵突進、次の攻撃が急所）· 3 記録執行（部屋の全ての敵に記録分のダメージ、「執」）· 4 因果律束縛（部屋の全ての敵を5秒束縛、与えたダメージの40%を終了時に跳ね返して炸裂）",
+        "武器1（執行のペン＆鋼の糸巻）· 専用アイテム20（記録・束縛5 · 暗殺・急所5 · 糸5 · 因果・スキル5）· エフェクト · 効果音 · スプライトシート · 覇王戦スキル",
+      ],
+    },
+  },
+  {
     version: "0.49.60",
     date: "2026-11-06",
     items: {
