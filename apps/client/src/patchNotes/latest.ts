@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.70",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "라파엘 이펙트 다듬기: 화살은 금빛 깃과 다이아 촉이 달린 빛의 화살 · 저격은 바람 리본이 감아 돌고 시위에서 에테르 렌즈 고리가 퍼짐 · 맞은 자리 십자 섬광",
+        "라파엘 폭풍 화살비: 화살비 위에 소용돌이치는 폭풍 구름 · 쏟아지는 동안 화살이 자리마다 다른 곳에 사선으로 끊임없이 꽂힘 (차례마다 위치·때가 달라짐) · 꽂힌 자리에 작은 튐",
+        "라파엘 천공의 빛 화살: 거대한 빛의 화살 머리·금빛 깃 · 감아 도는 바람 두 가닥 · 지나간 뒤 금빛 빛길과 떠오르는 빛 알갱이 · 끝 폭발에 십자 섬광·빛 기둥·깃털",
+        "라파엘 바람 걸음·에테르 스코프·표적 조준선도 새로 (휘감는 바람 초승달·겹쳐지는 렌즈·돌아가는 꺾쇠와 붉은 마름모)",
+      ],
+      en: [
+        "Rafael effects polished: arrows are arrows of light with golden fletching and diamond heads · Snipe is wrapped in wind ribbons with ether lens rings bursting from the string · star flares on impact",
+        "Rafael's Storm Volley: a swirling storm cloud above the area · while it pours, arrows slant down nonstop at ever-changing spots (positions and timing differ each wave) · small splashes where they land",
+        "Rafael's Arrow of Heaven: a giant arrowhead of light with golden fletching · two coiling wind ribbons · a golden trail with rising motes left behind · the end blast has a star flare, a pillar of light and feathers",
+        "Rafael's Wind Step, Ether Scope and mark reticle redone too (swirling wind crescents · converging lenses · rotating brackets with a red diamond)",
+      ],
+      ja: [
+        "ラファエルのエフェクト調整：矢は金の矢羽とダイヤの鏃が付いた光の矢 · 狙撃は風のリボンが巻きつき、弦からエーテルのレンズの輪が広がる · 当たった所に十字の閃光",
+        "ラファエルの嵐の矢の雨：範囲の上に渦巻く嵐の雲 · 降る間、矢が場所を変えながら斜めに絶え間なく突き刺さる（回ごとに位置・タイミングが違う）· 刺さった所に小さな飛沫",
+        "ラファエルの天空の光の矢：巨大な光の鏃と金の矢羽 · 巻きつく風2本 · 通った後に金の光の道と浮かぶ光の粒 · 終点の爆発に十字の閃光・光の柱・羽",
+        "ラファエルの風の歩み・エーテルスコープ・標的の照準も新しく（渦巻く風の三日月・重なるレンズ・回る括弧と赤い菱形）",
+      ],
+    },
+  },
+  {
     version: "0.49.69",
     date: "2026-11-07",
     items: {

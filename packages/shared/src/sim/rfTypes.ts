@@ -1,12 +1,13 @@
 // 라파엘 상태 타입 (sim/rafael). 모두 선택 값 (예전 저장에는 없음)
 
-/** 폭풍 화살비: 자리 · 첫 화살까지 틱 · 남은 횟수 · 반지름 */
+/** 폭풍 화살비: 자리 · 다음 화살까지 틱 · 남은 횟수 · 반지름 · 쏟아지기 시작했는지(그림) */
 export interface RfStorm {
   x: number;
   y: number;
   t: number;
   n: number;
   r: number;
+  rain?: boolean;
 }
 
 export interface RafaelPlayerState {

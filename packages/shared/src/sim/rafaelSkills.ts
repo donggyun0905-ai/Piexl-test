@@ -64,11 +64,12 @@ export function stormTick(s: RunState): void {
     if (--st.t > 0) continue;
     st.t = F.stormGap;
     st.n--;
+    st.rain = true;
     for (const e of inCircle(s, st.x, st.y, st.r)) {
       rfHit(s, e, F.stormMul);
       e.slowTicks = Math.max(e.slowTicks ?? 0, F.stormSlow);
     }
-    addEffect(s, { kind: "rfStormFx", x: st.x, y: st.y, dirX: 0, dirY: 0, size: st.r, style: 1, maxTicks: 16 });
+    addEffect(s, { kind: "rfStormFx", x: st.x, y: st.y, dirX: st.n, dirY: 0, size: st.r, style: 1, maxTicks: 22 });
   }
   p.rfStorms = list.filter((st) => st.n > 0);
   if (p.rfStorms.length === 0) delete p.rfStorms;
