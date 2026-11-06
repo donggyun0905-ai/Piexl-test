@@ -45,10 +45,13 @@ export const WAVE = {
   crestR0: 8,
   crestR1: 20,
   ribbonSpread: 0.35,
-  /** 상상력: 가득 · 한 번 때릴 때 · 가진 기술 하나마다 더 참 */
+  /** 상상력 (초승달이 적을 맞혀야 참): 가득 · 처음 맞힌 적 하나 · 가진 기술 하나마다 더 참 · 뚫고 더 맞힌 적 비율 · 리본 양옆·물거울 초승달 비율 */
   gaugeMax: 100,
   gain: 30,
   gainPer: 2.5,
+  pierceGain: 0.25,
+  sideGain: 0.35,
+  mirrorGain: 0.5,
   /** 기술이 하나도 없을 때 나가는 물보라: 반지름 · 피해 배율 */
   splashR: 40,
   splashMul: 0.9,

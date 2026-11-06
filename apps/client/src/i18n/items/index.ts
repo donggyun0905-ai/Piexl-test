@@ -184,7 +184,9 @@ function passiveDesc(id: string, def: PassiveDef, lang: Lang, t: (k: TextKey) =>
     const tag = def.exclusive ? `[${t(def.exclusive)} ${t("exclusiveTag")}] ` : "";
     // 수집가 수집 무기: 콤보 기술 + 작은 능력치
     if (id in CL_ARMS) return `${tag}${collectorArmDesc(id as ClArmId, lang)} · ${modsText(def, t)}`;
-    return tag + fill(EFFECT_DESC[id as PassiveId]?.[lang] ?? "", (PERKS as Record<string, Record<string, number>>)[id]);
+    const body = tag + fill(EFFECT_DESC[id as PassiveId]?.[lang] ?? "", (PERKS as Record<string, Record<string, number>>)[id]);
+    // 웨이브 기술: 작은 능력치도 같이
+    return def.exclusive === "wave" ? `${body} · ${modsText(def, t)}` : body;
   }
   return modsText(def, t);
 }

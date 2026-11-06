@@ -37,7 +37,7 @@ export const CASTS_A: Record<string, SkillCast> = {
   },
   wvGoddess: (s, m) => {
     const p = s.player;
-    addBit(s, { k: "wvGoddess", x: p.x - p.faceX * 14, y: p.y - 6, dx: 0, dy: 0, t: K.wvGoddess.ticks, mul: K.wvGoddess.mul * m });
+    addBit(s, { k: "wvGoddess", x: p.x - p.faceX * 16, y: p.y - 2, dx: 0, dy: 0, t: K.wvGoddess.ticks, mul: K.wvGoddess.mul * m });
   },
   wvWhale: (s, m) => {
     const p = s.player;
@@ -114,17 +114,15 @@ export const STEPS_A: Record<string, BitStep> = {
     fx(s, "wvSplash", b.x, b.y, 22, 22, { dirX: b.dx, dirY: b.dy });
     return false;
   },
-  /** 등 뒤에 떠서 따라오며, 적이 몰린 곳에 물병을 쏟음 */
+  /** 바다의 보석: 세운 자리에서 적이 몰린 곳에 물빛을 쏘아 물기둥 */
   wvGoddess: (s, b) => {
     const p = s.player;
     const k = K.wvGoddess;
-    b.x += (p.x - p.faceX * 14 - b.x) * 0.08;
-    b.y += (p.y - 6 - b.y) * 0.08;
     const age = b.t0 - b.t;
     if (age > 10 && age % k.every === 0 && alive(s).length > 0) {
       const at = densest(s);
       for (const e of burstAt(s, at.x, at.y, k.r * big(p), dmgOf(s, b.mul))) if (!isBoss(e)) e.slowTicks = Math.max(e.slowTicks ?? 0, 40);
-      fx(s, "wvPour", b.x + 8, b.y - 26, k.r * big(p), 26, { toX: at.x, toY: at.y });
+      fx(s, "wvPour", b.x, b.y - 22, k.r * big(p), 26, { toX: at.x, toY: at.y });
     }
     return --b.t > 0;
   },

@@ -1,5 +1,5 @@
 // 웨이브 그림 도구: 상상으로 빚은 물 — 투명한 하늘색 몸 · 흰 거품 테두리 · 안쪽 빛무늬 · 반짝임 (도트가 아닌 부드러운 물)
-// 물덩이 · 초승달 파도 · 나비 · 여신 · 손 · 문어 다리 · 눈 · 꿈의 고래 · 음표 · 깃털 · 물고기 · 연꽃잎 · 구름
+// 물덩이 · 초승달 파도 · 나비 · 손 · 문어 다리 · 눈 · 꿈의 고래 · 음표 (보석·날개·물보라는 waveKit)
 import { additive, alpha, glow, rnd, type Ctx } from "./pwFxBits";
 import { glint } from "./seaLight";
 
@@ -92,65 +92,6 @@ export function butterfly(ctx: Ctx, x: number, y: number, ang: number, flap: num
   ctx.restore();
 }
 
-/** 물의 여신 (발 x, y · s 크기 · pour 0~1 물병 기울임): 흐르는 머리칼 · 물결로 풀리는 옷자락 · 머리 위 물빛 고리 */
-export function goddess(ctx: Ctx, x: number, y: number, s: number, a: number, tick: number, pour: number): void {
-  const h = 46 * s;
-  additive(ctx, () => glow(ctx, x, y - h * 0.55, h * 0.75, WV.aqua, 0.45 * a, 0.4));
-  // 옷자락: 아래로 갈수록 넓어지며 물결로 풀림
-  waterFill(ctx, x, y - h * 0.3, h * 0.5, a * 0.75, () => {
-    ctx.beginPath();
-    ctx.moveTo(x - 4 * s, y - h * 0.62);
-    for (let i = 0; i <= 8; i++) {
-      const u = i / 8;
-      ctx.lineTo(x - 4 * s - u * 12 * s + Math.sin(tick * 0.12 + u * 6) * 1.5 * s, y - h * 0.62 + u * h * 0.62);
-    }
-    for (let i = 0; i <= 6; i++) ctx.lineTo(x - 16 * s + (i / 6) * 32 * s, y + Math.sin(tick * 0.2 + i) * 2 * s);
-    for (let i = 8; i >= 0; i--) {
-      const u = i / 8;
-      ctx.lineTo(x + 4 * s + u * 12 * s + Math.sin(tick * 0.12 + u * 6 + 2) * 1.5 * s, y - h * 0.62 + u * h * 0.62);
-    }
-    ctx.closePath();
-  });
-  // 머리 · 머리칼 물줄기
-  blob(ctx, x, y - h * 0.74, 5 * s, a, tick, 3, 0.05);
-  ctx.lineCap = "round";
-  for (let k = 0; k < 4; k++) {
-    ctx.strokeStyle = alpha(k % 2 ? WV.sky : WV.foam, 0.7 * a);
-    ctx.lineWidth = 1.4 * s;
-    ctx.beginPath();
-    ctx.moveTo(x - 3 * s + k * 2 * s, y - h * 0.78);
-    ctx.quadraticCurveTo(x - 10 * s - k * 2 * s, y - h * 0.6, x - 8 * s - k * 3 * s + Math.sin(tick * 0.15 + k) * 3 * s, y - h * 0.35);
-    ctx.stroke();
-  }
-  // 머리 위 고리
-  additive(ctx, () => {
-    ctx.strokeStyle = alpha(WV.gold, 0.8 * a);
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.ellipse(x, y - h * 0.9, 6 * s, 2 * s, 0, 0, TAU);
-    ctx.stroke();
-  });
-  // 팔과 물병 (오른쪽 위로 들고 기울임)
-  const jx = x + 10 * s;
-  const jy = y - h * 0.62;
-  ctx.strokeStyle = alpha(WV.foam, 0.85 * a);
-  ctx.lineWidth = 1.4 * s;
-  ctx.beginPath();
-  ctx.moveTo(x + 3 * s, y - h * 0.55);
-  ctx.lineTo(jx, jy + 2 * s);
-  ctx.stroke();
-  ctx.lineCap = "butt";
-  ctx.save();
-  ctx.translate(jx, jy);
-  ctx.rotate(0.3 + pour * 0.9);
-  ctx.fillStyle = alpha(WV.gold, 0.9 * a);
-  ctx.beginPath();
-  ctx.ellipse(0, 0, 3 * s, 4 * s, 0, 0, TAU);
-  ctx.fill();
-  ctx.fillRect(-1.5 * s, -6 * s, 3 * s, 3 * s);
-  ctx.restore();
-}
-
 /** 물의 손 (손목 x, y · side -1 왼손 1 오른손 · s 크기): 손바닥 + 손가락 넷 + 엄지 */
 export function waterHand(ctx: Ctx, x: number, y: number, side: number, s: number, a: number, tick: number): void {
   ctx.save();
@@ -181,39 +122,35 @@ export function waterHand(ctx: Ctx, x: number, y: number, side: number, s: numbe
 export function tentacle(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, w: number, a: number, curl: number): void {
   const dx = x1 - x0;
   const dy = y1 - y0;
-  const n = 10;
+  const len = Math.hypot(dx, dy) || 1;
+  const n = 12;
   const pts: [number, number, number][] = [];
   for (let i = 0; i <= n; i++) {
     const u = i / n;
     const bend = Math.sin(u * Math.PI) * curl * 0.25 + u * u * u * curl * 0.35;
-    pts.push([x0 + dx * u - dy * bend, y0 + dy * u + dx * bend, w * (1 - u * 0.8)]);
+    pts.push([x0 + dx * u - dy * bend, y0 + dy * u + dx * bend, (w / 2) * (1 - u * 0.7)]);
   }
-  additive(ctx, () => {
-    ctx.lineCap = "round";
-    for (let i = 0; i < n; i++) {
-      const [ax, ay, aw] = pts[i]!;
-      const [bx, by] = pts[i + 1]!;
-      ctx.strokeStyle = alpha(WV.deep, 0.6 * a);
-      ctx.lineWidth = aw * 1.4;
-      ctx.beginPath();
-      ctx.moveTo(ax, ay);
-      ctx.lineTo(bx, by);
-      ctx.stroke();
-      ctx.strokeStyle = alpha(WV.aqua, 0.8 * a);
-      ctx.lineWidth = aw * 0.8;
-      ctx.stroke();
-      ctx.strokeStyle = alpha(WV.foam, 0.6 * a);
-      ctx.lineWidth = Math.max(0.6, aw * 0.2);
-      ctx.stroke();
-      if (i % 2 === 1) {
-        ctx.fillStyle = alpha(WV.pale, a);
-        ctx.beginPath();
-        ctx.arc(ax, ay, Math.max(0.6, aw * 0.18), 0, TAU);
-        ctx.fill();
-      }
+  // 굵다가 가늘어지는 물 다리 몸 (양쪽 가장자리를 이어 채움)
+  const nx = -dy / len;
+  const ny = dx / len;
+  waterFill(ctx, (x0 + x1) / 2, (y0 + y1) / 2, len * 0.5, a, () => {
+    ctx.beginPath();
+    for (const [px, py, hw] of pts) ctx.lineTo(px + nx * hw, py + ny * hw);
+    for (let i = n; i >= 0; i--) {
+      const [px, py, hw] = pts[i]!;
+      ctx.lineTo(px - nx * hw, py - ny * hw);
     }
-    ctx.lineCap = "butt";
-  });
+    ctx.closePath();
+  }, 0.8);
+  // 빨판 (한쪽 줄)
+  ctx.fillStyle = alpha(WV.foam, 0.85 * a);
+  for (let i = 1; i < n; i += 2) {
+    const [px, py, hw] = pts[i]!;
+    ctx.beginPath();
+    ctx.arc(px - nx * hw * 0.45, py - ny * hw * 0.45, Math.max(0.6, hw * 0.35), 0, TAU);
+    ctx.fill();
+  }
+  additive(ctx, () => glow(ctx, x1, y1, w, WV.aqua, 0.5 * a));
 }
 
 /** 심해의 눈 (open 0~1 뜬 정도 · look 눈동자 흔들림) */

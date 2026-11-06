@@ -1,9 +1,10 @@
 // 웨이브 빚은 것 그리기 1: 초승달 · 물나비 · 물창 · 여신 · 꿈의 고래 · 거품 · 물시계 · 해파리 · 물거울 · 구름 · 용오름 · 연꽃·꽃잎 · 물방울
 import { jellyPts, type RunState, type WvBit } from "@pixel-rogue/shared";
-import { additive, alpha, glow, rnd, shock, type Ctx } from "./pwFxBits";
-import { caustic, glint, glints } from "./seaLight";
-import { blob, butterfly, crestWave, dreamWhale, goddess, waterFill, WV } from "./waveArt";
-import { jelly, petal, waterGirl, zapLine } from "./waveShapes";
+import { additive, alpha, glow, rnd, type Ctx } from "./pwFxBits";
+import { glint, glints } from "./seaLight";
+import { blob, butterfly, crestWave, dreamWhale, waterFill, WV } from "./waveArt";
+import { ripple, seaGem, softLight } from "./waveKit";
+import { jelly, mirrorCopy, petal, zapLine } from "./waveShapes";
 
 export { petal } from "./waveShapes";
 
@@ -20,7 +21,7 @@ const ang = (b: WvBit) => Math.atan2(b.dy, b.dx);
 export const BITS_A: Record<string, BitDraw> = {
   crest: (ctx, s, b, x, y) => crestWave(ctx, x, y, ang(b), b.v ?? 8, life(b, 6), s.tick),
   wvButterfly: (ctx, s, b, x, y) => {
-    butterfly(ctx, x, y, ang(b), (s.tick * 0.09 + (b.v ?? 0)) % 1, 4.5, life(b));
+    butterfly(ctx, x, y, ang(b), (s.tick * 0.09 + (b.v ?? 0)) % 1, 6, life(b));
     glints(ctx, x - b.dx * 6, y - b.dy * 6, 4, 2, s.tick, b.v ?? 0, WV.foam, 0.6 * life(b));
   },
   wvSpear: (ctx, s, b, x, y) => {
@@ -70,8 +71,10 @@ export const BITS_A: Record<string, BitDraw> = {
   },
   wvGoddess: (ctx, s, b, x, y) => {
     const age = b.t0 - b.t;
-    const pour = age > 10 ? Math.max(0, 1 - ((age - 10) % 30) / 12) : 0;
-    goddess(ctx, x, y + 6, 0.9, life(b, 20) * 0.95, s.tick, pour);
+    // 쏘기 직전에 심이 차오르고 쏜 뒤 사그라듦
+    const ph = age > 10 ? (age - 10) % 30 : 30;
+    const pour = ph > 20 ? (ph - 20) / 10 : Math.max(0, 1 - ph / 8);
+    seaGem(ctx, x, y + 4, 40, life(b, 20), s.tick, pour);
   },
   wvBubble: (ctx, s, b, x, y) => {
     const r = (b.v ?? 6) + 6 + Math.sin(s.tick * 0.2) * 0.8;
@@ -117,9 +120,10 @@ export const BITS_A: Record<string, BitDraw> = {
     pts.forEach(([px, py], i) => jelly(ctx, px, py - Math.sin(s.tick * 0.08 + i * 2) * 2, a, s.tick, i * 2.1));
   },
   wvMirror: (ctx, s, b, x, y) => {
-    const a = life(b, 20) * (0.75 + Math.sin(s.tick * 0.3) * 0.1);
-    waterGirl(ctx, x, y, a, s.tick, b.dx >= 0 ? 1 : -1);
-    caustic(ctx, x, y + 2, 9, s.tick, 0.5 * a);
+    const a = life(b, 20);
+    ripple(ctx, x, y + 5, 9 + Math.sin(s.tick * 0.15) * 1.5, 0.7 * a, 1);
+    if (!mirrorCopy(ctx, s, x, y, a)) blob(ctx, x, y - 8, 6, a, s.tick);
+    glints(ctx, x, y - 10, 10, 2, s.tick, 7, WV.foam, 0.8 * a);
   },
   wvCloud: (ctx, s, b, x, y) => {
     const a = life(b, 20);
@@ -173,7 +177,8 @@ export const BITS_A: Record<string, BitDraw> = {
     const open = Math.min(1, age / 20);
     const a = life(b, 10);
     additive(ctx, () => glow(ctx, x, y, 26 * open, WV.pink, 0.5 * a, 0.4));
-    caustic(ctx, x, y, 22, s.tick, 0.5 * a);
+    softLight(ctx, x, y, 24, 14, s.tick, a);
+    ripple(ctx, x, y, 20 * open, 0.6 * a, 1, WV.pink);
     for (let i = (b.n ?? 0); i < k; i++) petal(ctx, x, y, (i * TAU) / k + age * 0.02, 6 + open * 10, a);
     for (let i = 0; i < 5; i++) petal(ctx, x, y, (i * TAU) / 5 - age * 0.03, 5 + open * 4, a * 0.9);
     additive(ctx, () => glow(ctx, x, y, 5, WV.gold, a, 1));
@@ -200,36 +205,65 @@ export const BITS_A: Record<string, BitDraw> = {
     ctx.globalAlpha = 0.55;
     dreamWhale(ctx, x, y + 2, ang(b), 0.8, a * 0.6, s.tick);
     ctx.restore();
-    additive(ctx, () => shock(ctx, x, y, 14 + (s.tick % 16), WV.foam, 0.4 * a, 2));
+    ripple(ctx, x, y + 2, 10 + (s.tick % 18), a * (1 - (s.tick % 18) / 18), 1);
   },
-  /** 물시계: 느려진 시간의 원 (몸 뒤) */
+  /** 물시계: 느려진 시간의 원 (몸 뒤) — 옅은 물빛 원판 · 금빛 눈금 · 천천히 도는 바늘 · 안으로 오므라드는 물결 · 거꾸로 솟는 물방울 */
   wvClock: (ctx, s, b, x, y) => {
     const a = life(b, 20);
     const r = 70;
-    ctx.fillStyle = alpha(WV.deep, 0.16 * a);
+    const g = ctx.createRadialGradient(x, y, r * 0.2, x, y, r);
+    g.addColorStop(0, alpha(WV.deep, 0.03 * a));
+    g.addColorStop(1, alpha(WV.deep, 0.16 * a));
+    ctx.fillStyle = g;
     ctx.beginPath();
     ctx.arc(x, y, r, 0, TAU);
     ctx.fill();
+    softLight(ctx, x, y, r * 0.8, r * 0.8, s.tick, 0.6 * a);
     additive(ctx, () => {
-      shock(ctx, x, y, r, WV.aqua, 0.5 * a, 4);
-      // 안쪽으로 천천히 줄어드는 물결 (거꾸로 흐르는 시간)
-      for (let i = 0; i < 3; i++) shock(ctx, x, y, r * (1 - ((s.tick * 0.006 + i / 3) % 1)), WV.pale, 0.25 * a, 2);
-      ctx.strokeStyle = alpha(WV.gold, 0.7 * a);
-      ctx.lineWidth = 1;
-      for (let i = 0; i < 12; i++) {
-        const t = (i / 12) * TAU;
+      for (const [c, w, al] of [[WV.aqua, 4, 0.25], [WV.aqua, 1.6, 0.6], [WV.foam, 0.7, 0.9]] as const) {
+        ctx.strokeStyle = alpha(c, al * a);
+        ctx.lineWidth = w;
         ctx.beginPath();
-        ctx.moveTo(x + Math.cos(t) * (r - 8), y + Math.sin(t) * (r - 8));
-        ctx.lineTo(x + Math.cos(t) * (r - (i % 3 ? 4 : 0)), y + Math.sin(t) * (r - (i % 3 ? 4 : 0)));
+        ctx.arc(x, y, r, 0, TAU);
         ctx.stroke();
       }
-      ctx.lineWidth = 2;
-      for (const [len, sp] of [[r * 0.5, 0.01], [r * 0.75, 0.04]] as const) {
-        const t = s.tick * sp - Math.PI / 2;
+      ctx.lineWidth = 0.8;
+      for (let i = 0; i < 3; i++) {
+        const rr = r * (1 - ((s.tick * 0.006 + i / 3) % 1));
+        ctx.strokeStyle = alpha(WV.pale, 0.45 * a * (rr / r));
+        ctx.beginPath();
+        ctx.arc(x, y, rr, 0, TAU);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = alpha(WV.gold, 0.85 * a);
+      for (let i = 0; i < 12; i++) {
+        const t2 = (i / 12) * TAU;
+        const l = i % 3 ? 4 : 8;
+        ctx.lineWidth = i % 3 ? 0.8 : 1.6;
+        ctx.beginPath();
+        ctx.moveTo(x + Math.cos(t2) * (r - 2 - l), y + Math.sin(t2) * (r - 2 - l));
+        ctx.lineTo(x + Math.cos(t2) * (r - 2), y + Math.sin(t2) * (r - 2));
+        ctx.stroke();
+      }
+      ctx.lineCap = "round";
+      for (const [len, sp, w] of [[r * 0.45, -0.008, 2.2], [r * 0.7, -0.03, 1.2]] as const) {
+        const t2 = s.tick * sp - Math.PI / 2;
+        ctx.strokeStyle = alpha(WV.gold, 0.9 * a);
+        ctx.lineWidth = w;
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(x + Math.cos(t) * len, y + Math.sin(t) * len);
+        ctx.lineTo(x + Math.cos(t2) * len, y + Math.sin(t2) * len);
         ctx.stroke();
+        glow(ctx, x + Math.cos(t2) * len, y + Math.sin(t2) * len, 4, WV.gold, a, 1);
+      }
+      ctx.lineCap = "butt";
+      // 거꾸로 위로 솟는 물방울 (거꾸로 흐르는 시간)
+      for (let i = 0; i < 10; i++) {
+        const u = (s.tick * 0.004 + rnd(i, 5)) % 1;
+        const px = x + (rnd(5, i) - 0.5) * r * 1.4;
+        const py = y + r * 0.5 - u * r;
+        ctx.fillStyle = alpha(WV.foam, 0.8 * a * Math.sin(u * Math.PI));
+        ctx.fillRect(px, py, 1.4, 2);
       }
     });
     blob(ctx, x, y, 4, a, s.tick, 5, 0.05);

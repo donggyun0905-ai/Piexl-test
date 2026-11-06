@@ -54,9 +54,18 @@ function castSkill(s: RunState): void {
   p.wvNext = roll(s, "next");
 }
 
-/** 물결 초승달 (x, y에서 dx, dy로) */
-function crest(s: RunState, x: number, y: number, dx: number, dy: number, mul: number): void {
-  addBit(s, { k: "crest", x: x + dx * 6, y: y + dy * 6 - 3, dx, dy, t: W.crestLife, mul, hit: [] });
+/** 물결 초승달 (x, y에서 dx, dy로 · gain: 적을 맞혔을 때 차는 상상력 비율) */
+function crest(s: RunState, x: number, y: number, dx: number, dy: number, mul: number, gain = 1): void {
+  addBit(s, { k: "crest", x: x + dx * 6, y: y + dy * 6 - 3, dx, dy, t: W.crestLife, mul, hit: [], n: gain });
+}
+
+/** 상상력 채우기 (초승달이 적을 맞혔을 때만) · 가득 차면 기술 */
+function fill(s: RunState, part: number): void {
+  const p = s.player;
+  p.wvGauge = (p.wvGauge ?? 0) + (W.gain * (waveOf(p).gauge ?? 1) + W.gainPer * ownSkills(p).length) * part;
+  if (p.wvGauge < W.gaugeMax) return;
+  p.wvGauge -= W.gaugeMax;
+  castSkill(s);
 }
 
 /** 누름: 초승달 (리본은 셋) · 물거울 분신도 같이 · 상상력 */
@@ -67,14 +76,10 @@ function basic(s: RunState, speed: number): void {
   for (let i = 0; i < n; i++) {
     const [c, sn] = rot((i - (n - 1) / 2) * W.ribbonSpread);
     const [dx, dy] = turnDir(p.faceX, p.faceY, c, sn);
-    crest(s, p.x, p.y, dx, dy, W.crestMul * (n > 1 && i !== (n - 1) / 2 ? 0.6 : 1));
+    const side = n > 1 && i !== (n - 1) / 2;
+    crest(s, p.x, p.y, dx, dy, W.crestMul * (side ? 0.6 : 1), side ? W.sideGain : 1);
   }
-  for (const b of p.wvBits ?? []) if (b.k === "wvMirror") crest(s, b.x, b.y, p.faceX, p.faceY, W.crestMul * W.mirrorMul * b.mul);
-  p.wvGauge = (p.wvGauge ?? 0) + W.gain * (st.gauge ?? 1) + W.gainPer * ownSkills(p).length;
-  if (p.wvGauge >= W.gaugeMax) {
-    p.wvGauge -= W.gaugeMax;
-    castSkill(s);
-  }
+  for (const b of p.wvBits ?? []) if (b.k === "wvMirror") crest(s, b.x, b.y, p.faceX, p.faceY, W.crestMul * W.mirrorMul * b.mul, W.mirrorGain);
   p.attackCooldown = Math.max(1, Math.round((TICK_RATE / speed) * W.crestTime));
   p.attackCount++;
 }
@@ -92,6 +97,8 @@ function crestStep(s: RunState, b: WvBit): boolean {
     if ((e.x - b.x) * b.dx + (e.y - b.y) * b.dy < -e.r - 2) continue;
     b.hit!.push(e.id);
     wvHit(s, e, dmgOf(s, b.mul), b.x - b.dx * 8, b.y - b.dy * 8, 4);
+    // 처음 맞힌 적은 다 차고, 뚫고 지나가 더 맞힌 적은 조금
+    fill(s, (b.n ?? 1) * (b.hit!.length === 1 ? 1 : W.pierceGain));
   }
   if (--b.t > 0 && !isWall(s, b.x, b.y)) return true;
   fx(s, "wvCrest", b.x, b.y, r, 18, { dirX: b.dx, dirY: b.dy });

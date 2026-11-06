@@ -1,16 +1,17 @@
 // 웨이브 그리기 (몸 둘레). 몸 뒤: 만조 · 바닥에 깔리는 것(웅덩이·물시계·발자국·눈·고리·고래 그림자·문어·분수·연꽃) · 물안개 · 물의 날개 · 서핑 파도
 // 몸 위: 나머지 빚은 것 · 물의 갑옷 · 머리 위 상상력 막대 · 다음 기술(상상의 물감) · 막 나간 기술 이름
-import { isWave, WAVE, type RunState } from "@pixel-rogue/shared";
+import { isWave, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, WAVE, type RunState } from "@pixel-rogue/shared";
 import { detectLang } from "../../i18n";
 import { itemName } from "../../i18n/items";
 import { iconCanvas } from "../iconArt";
 import { hpBarTop } from "./hpTop";
 import { lerp, type Snap } from "./palette";
-import { additive, alpha, glow, shock, type Ctx } from "./pwFxBits";
-import { caustic, glints } from "./seaLight";
+import { additive, alpha, glow, type Ctx } from "./pwFxBits";
+import { glints } from "./seaLight";
 import { crestWave, waterFill, WV } from "./waveArt";
 import { BITS_A, type BitDraw } from "./waveBits";
-import { BITS_B, floodLayer } from "./waveBits2";
+import { BITS_B } from "./waveBits2";
+import { mist, ripple, softLight, waterWings } from "./waveKit";
 
 const DRAW: Record<string, BitDraw> = { ...BITS_A, ...BITS_B };
 const GROUND = new Set(["wvPuddle", "wvClock", "wvTrail", "wvEye", "wvEbb", "wvWhale", "wvOctopus", "wvFountain", "wvLotus"]);
@@ -23,23 +24,29 @@ function bits(ctx: Ctx, s: RunState, snap: Snap, ground: boolean): void {
   }
 }
 
-/** 물의 날개 (등 뒤, 날갯짓) */
-function wings(ctx: Ctx, x: number, y: number, a: number, tick: number): void {
-  const flap = Math.sin(tick * 0.25) * 0.35;
-  for (const sd of [-1, 1]) {
-    ctx.save();
-    ctx.translate(x + sd * 2, y - 10);
-    ctx.scale(sd, 1);
-    ctx.rotate(-0.3 - flap);
-    additive(ctx, () => glow(ctx, 10, -4, 16, WV.aqua, 0.45 * a));
-    for (let k = 0; k < 4; k++) {
-      waterFill(ctx, 6 + k * 3, -4 + k * 2, 6, a * (1 - k * 0.15), () => {
-        ctx.beginPath();
-        ctx.ellipse(6 + k * 3.5, -4 + k * 2.5, 9 - k * 1.5, 2.6, -0.5 + k * 0.25, 0, TAU);
-      }, 0.7);
+/** 방 전체를 덮는 만조 물빛 (몸 뒤, 남은 틱 t): 맑은 물빛 막 · 떠도는 햇빛 얼룩 · 천천히 지나가는 물결 줄 */
+export function floodLayer(ctx: Ctx, s: RunState, t: number): void {
+  const a = Math.min(1, t / 30, (180 - t + 1) / 20);
+  const w = ROOM_MAX_X - ROOM_MIN_X + 24;
+  const h = ROOM_MAX_Y - ROOM_MIN_Y + 24;
+  const x0 = ROOM_MIN_X - 12;
+  const y0 = ROOM_MIN_Y - 12;
+  const g = ctx.createLinearGradient(x0, y0, x0, y0 + h);
+  g.addColorStop(0, alpha(WV.aqua, 0.12 * a));
+  g.addColorStop(1, alpha(WV.deep, 0.2 * a));
+  ctx.fillStyle = g;
+  ctx.fillRect(x0, y0, w, h);
+  for (let i = 0; i < 6; i++) softLight(ctx, x0 + (w * ((i % 3) + 0.5)) / 3, y0 + (h * (Math.floor(i / 3) + 0.5)) / 2, w / 6, h / 4, s.tick + i * 37, 0.8 * a);
+  additive(ctx, () => {
+    ctx.strokeStyle = alpha(WV.foam, 0.22 * a);
+    ctx.lineWidth = 1;
+    for (let k = 0; k < 5; k++) {
+      const yy = y0 + ((s.tick * 0.25 + (k * h) / 5) % h);
+      ctx.beginPath();
+      for (let i = 0; i <= 24; i++) ctx.lineTo(x0 + (i / 24) * w, yy + Math.sin(i * 0.9 + s.tick * 0.05 + k) * 2);
+      ctx.stroke();
     }
-    ctx.restore();
-  }
+  });
 }
 
 /** 몸 뒤 */
@@ -50,21 +57,12 @@ export function drawWaveBack(ctx: Ctx, s: RunState, a0: number, snap: Snap): voi
   bits(ctx, s, snap, true);
   const x = snap(lerp(p.prevX, p.x, a0));
   const y = snap(lerp(p.prevY, p.y, a0));
-  if (p.wvMist) {
-    const a = Math.min(1, p.wvMist / 30);
-    for (let i = 0; i < 7; i++) {
-      const t = s.tick * 0.02 + i * 0.9;
-      ctx.fillStyle = alpha("#e6f6ff", 0.14 * a);
-      ctx.beginPath();
-      ctx.arc(x + Math.cos(t) * 34, y + Math.sin(t) * 24, 18 + (i % 3) * 5, 0, TAU);
-      ctx.fill();
-    }
-    additive(ctx, () => shock(ctx, x, y, 56, WV.pale, 0.25 * a, 8));
-  }
-  if (p.wvWings) wings(ctx, x, y, Math.min(1, p.wvWings / 20), s.tick);
+  if (p.wvMist) mist(ctx, x, y - 4, 56, s.tick, Math.min(1, p.wvMist / 30));
+  if (p.wvWings) waterWings(ctx, x, y - 13, Math.min(1, p.wvWings / 20), s.tick);
   const v = p.wvSurf;
   if (v) {
     // 서핑: 발밑 보드 + 뒤에서 말려 오는 큰 파도
+    ripple(ctx, x, y + 3, 14 + (s.tick % 10), 0.7, 1.2);
     crestWave(ctx, x - v.dx * 10, y - v.dy * 10 - 4, Math.atan2(v.dy, v.dx), 22, 1, s.tick);
     ctx.save();
     ctx.translate(x, y + 2);
@@ -142,7 +140,7 @@ export function drawWaveAura(ctx: Ctx, s: RunState, a0: number, snap: Snap): voi
       }
       ctx.closePath();
     }, 1.2);
-    caustic(ctx, x, y - 6, 9, s.tick, 0.6 * a);
+    softLight(ctx, x, y - 6, 9, 10, s.tick, a);
     glints(ctx, x, y - 6, 12, 2, s.tick, 3, WV.foam, a);
   }
   if (!s.pvp) gauge(ctx, s, x, y);

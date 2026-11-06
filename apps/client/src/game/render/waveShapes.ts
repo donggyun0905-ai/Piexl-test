@@ -1,35 +1,53 @@
 // 웨이브 그림 도구 2 (waveBits·waveBits2·waveFx가 씀): 물로 된 작은 나(물거울) · 연꽃잎 · 전기 줄 · 해파리 · 물고기 · 깃털 · 꼬인 물밧줄
 import { additive, alpha, glow, rnd, type Ctx } from "./pwFxBits";
 import { glint } from "./seaLight";
-import { blob, waterFill, WV } from "./waveArt";
+import type { RunState } from "@pixel-rogue/shared";
+import { screenScale } from "../mipmap";
+import { drawCharacter, isCasting, sheetFor } from "../sprites";
+import { waterFill, WV } from "./waveArt";
 
 const TAU = Math.PI * 2;
 
-/** 물로 된 작은 사람 (물거울): 포니테일 물줄기 · 후드 · 서핑보드 */
-export function waterGirl(ctx: Ctx, x: number, y: number, a: number, tick: number, face: number): void {
-  additive(ctx, () => glow(ctx, x, y - 8, 16, WV.aqua, 0.5 * a, 0.3));
-  waterFill(ctx, x, y - 5, 7, a * 0.8, () => {
-    ctx.beginPath();
-    ctx.moveTo(x - 4, y);
-    ctx.quadraticCurveTo(x - 5, y - 8, x, y - 10);
-    ctx.quadraticCurveTo(x + 5, y - 8, x + 4, y);
-    ctx.closePath();
-  });
-  blob(ctx, x, y - 13, 3.5, a, tick, 1, 0.04);
-  ctx.strokeStyle = alpha(WV.foam, 0.8 * a);
-  ctx.lineWidth = 1.5;
-  ctx.lineCap = "round";
-  ctx.beginPath();
-  ctx.moveTo(x - face * 2, y - 16);
-  ctx.quadraticCurveTo(x - face * 9, y - 15, x - face * 8 + Math.sin(tick * 0.2) * 2, y - 8);
-  ctx.stroke();
-  ctx.strokeStyle = alpha(WV.gold, 0.6 * a);
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(x - face * 7, y - 18);
-  ctx.lineTo(x - face * 5, y + 1);
-  ctx.stroke();
-  ctx.lineCap = "butt";
+/** 물거울: 내 캐릭터 그림을 그대로 복사해 물빛으로 물들이고 반투명하게 (위로 흐르는 빛 띠 · 가장자리 물결) */
+let off: HTMLCanvasElement | null = null;
+export function mirrorCopy(ctx: Ctx, s: RunState, x: number, y: number, a: number): boolean {
+  const p = s.player;
+  const k = Math.min(6, screenScale(ctx));
+  const W = 48;
+  const px = Math.ceil(W * k);
+  off ??= document.createElement("canvas");
+  if (off.width !== px) off.width = off.height = px;
+  const o = off.getContext("2d");
+  if (!o) return false;
+  o.setTransform(1, 0, 0, 1, 0, 0);
+  o.clearRect(0, 0, px, px);
+  o.setTransform(k, 0, 0, k, 0, 0);
+  const pose = { faceX: p.faceX, faceY: p.faceY, moving: p.x !== p.prevX || p.y !== p.prevY, casting: isCasting(s.tick, p.attackCount), step: Math.floor(s.tick / 8) };
+  if (!drawCharacter(o, sheetFor("wave"), W / 2, W / 2 + 8, p.r, pose)) return false;
+  // 그림 위에만 물빛을 덮음: 위는 맑은 하늘색 · 아래는 짙은 바다 · 비스듬히 지나가는 흰 빛 띠
+  o.setTransform(1, 0, 0, 1, 0, 0);
+  o.globalCompositeOperation = "source-atop";
+  const g = o.createLinearGradient(0, 0, 0, px);
+  g.addColorStop(0, "rgba(90,220,255,0.3)");
+  g.addColorStop(1, "rgba(20,110,240,0.45)");
+  o.fillStyle = g;
+  o.fillRect(0, 0, px, px);
+  const band = ((s.tick * 2) % 160) / 100 - 0.3;
+  const bg = o.createLinearGradient(0, px * band, px, px * (band + 0.35));
+  bg.addColorStop(0, "rgba(255,255,255,0)");
+  bg.addColorStop(0.5, "rgba(255,255,255,0.4)");
+  bg.addColorStop(1, "rgba(255,255,255,0)");
+  o.fillStyle = bg;
+  o.fillRect(0, 0, px, px);
+  o.globalCompositeOperation = "source-over";
+  additive(ctx, () => glow(ctx, x, y - 8, 20, WV.aqua, 0.45 * a, 0.2));
+  ctx.save();
+  ctx.globalAlpha = (0.72 + Math.sin(s.tick * 0.12) * 0.08) * a;
+  // 화면 픽셀에 맞춰 1:1로 (흐리지 않게)
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(off, Math.round((x - W / 2) * k) / k, Math.round((y - W / 2 - 8) * k) / k, W, W);
+  ctx.restore();
+  return true;
 }
 
 /** 연꽃잎 하나 (ang 바깥쪽 · len) */

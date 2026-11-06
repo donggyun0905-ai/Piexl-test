@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.50",
+    date: "2026-11-06",
+    items: {
+      ko: [
+        "웨이브 상상력은 이제 물결 초승달이 적을 맞혀야 참 (헛스윙으로는 안 참, 뚫고 더 맞힌 적은 조금씩)",
+        "웨이브 전용 아이템 30개에 작은 능력치를 더함 (공격력 +1 · 체력 +8 · 공격 속도 +0.04 · 이동 +0.05 · 행운 +1 중 하나, 물의 갑옷은 체력 +10)",
+        "물의 여신 → 바다의 보석: 그 자리에 떠 있는 육각 물의 보석이 서서 적이 몰린 곳에 물빛 줄기를 쏘아 물기둥을 일으킴",
+        "물거울: 내 캐릭터 모습을 그대로 복사한 반투명한 물빛 분신 · 물의 날개: 위로 휘어 오른 큰 날개와 깃털 물결·흐르는 빛·떨어지는 물방울로 새로 그림",
+        "웨이브 이펙트 전체 다듬기: 회색 원·막대 물보라 대신 원근 물결 고리와 포물선으로 튀는 물보라 · 맑은 물기둥 · 물빛 일렁임 · 물안개 · 만조 · 물시계 · 밀물 썰물 · 문어 다리 · 나비 크게",
+      ],
+      en: [
+        "Wave's imagination now fills only when a ripple crescent actually hits a foe (whiffs don't count; extra pierced foes add a little)",
+        "All 30 Wave exclusive items now also give a small stat (one of ATK +1 · HP +8 · attack speed +0.04 · move +0.05 · luck +1; Water Armor gives HP +10)",
+        "Water Goddess → Gem of the Sea: a floating hexagonal gem of water stands in place and fires beams of light where foes gather to raise geysers",
+        "Water Mirror: a translucent watery copy of your own character · Wings of Water redrawn as great sweeping wings with feathered edges, flowing light and dripping drops",
+        "Polished all Wave effects: perspective ripple rings and arcing splashes instead of gray circles and stick splashes · clear geysers · shimmering water light · sea mist · high tide · water clock · ebb and flow · octopus arms · bigger butterflies",
+      ],
+      ja: [
+        "ウェーブの想像力は、さざ波の三日月が敵に当たったときだけたまるように（空振りではたまらない、貫いた敵は少しずつ）",
+        "ウェーブ専用アイテム30個に小さな能力値を追加（攻撃力+1 · 体力+8 · 攻撃速度+0.04 · 移動+0.05 · 運+1のどれか、水の鎧は体力+10）",
+        "水の女神 → 海の宝石：その場に浮かぶ六角の水の宝石が立ち、敵が集まる所へ光を放って水柱を起こす",
+        "水鏡：自分のキャラの姿をそのまま写した半透明の水の分身 · 水の翼：大きく反り上がる翼と羽の波・流れる光・滴る水で描き直し",
+        "ウェーブのエフェクト全体を磨き直し：灰色の円や棒の水しぶきの代わりに遠近の波紋と放物線の水しぶき · 澄んだ水柱 · 水の光のゆらめき · 水霧 · 満潮 · 水時計 · 満ち潮引き潮 · タコの足 · 蝶を大きく",
+      ],
+    },
+  },
+  {
     version: "0.49.49",
     date: "2026-11-06",
     items: {

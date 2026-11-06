@@ -34,7 +34,7 @@ export const WV_PASSIVE_NAMES: Record<WvSkill & PassiveId, Names> = {
   wvButterfly: c("물나비", "Water Butterflies", "水の蝶"),
   wvSpear: c("물창", "Water Spear", "水の槍"),
   wvArmor: c("물의 갑옷", "Water Armor", "水の鎧"),
-  wvGoddess: c("물의 여신", "Water Goddess", "水の女神"),
+  wvGoddess: c("바다의 보석", "Gem of the Sea", "海の宝石"),
   wvWhale: c("꿈의 고래", "Dream Whale", "夢の鯨"),
   wvBubble: c("거품 감옥", "Bubble Prison", "泡の牢獄"),
   wvClock: c("물시계", "Water Clock", "水時計"),

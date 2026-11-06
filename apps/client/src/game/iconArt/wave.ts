@@ -60,8 +60,9 @@ export const WV_PASSIVE_ART = {
     g.rect(5, 4, 7, 5, SEA).line(6, 10, 10, 10, SEA).px(5, 4, FOAM).px(6, 5, FOAM);
   },
   wvGoddess: (g: Pen) => {
-    g.disc(7, 3, 2, PALE).line(7, 5, 3, 15, AQUA).line(7, 5, 11, 15, AQUA).line(5, 10, 9, 10, SEA).px(7, 1, GOLD);
-    g.rect(11, 5, 3, 3, GOLD).line(14, 8, 15, 14, AQUA).px(15, 15, FOAM);
+    g.line(8, 1, 12, 6, PALE).line(8, 1, 4, 6, FOAM).line(4, 6, 8, 13, SEA).line(12, 6, 8, 13, DEEP).line(4, 6, 12, 6, AQUA);
+    g.rect(6, 6, 4, 4, AQUA).px(7, 4, FOAM).px(7, 3, FOAM).line(6, 7, 8, 11, PALE);
+    g.ring(8, 14, 2, SEA).px(1, 3, FOAM).px(14, 9, AQUA).px(2, 10, PALE);
   },
   wvWhale: (g: Pen) => {
     g.disc(7, 8, 4, DEEP).rect(3, 8, 9, 3, DEEP).line(11, 9, 14, 6, DEEP).line(11, 9, 14, 12, DEEP).line(3, 11, 11, 11, PALE).px(4, 7, FOAM);

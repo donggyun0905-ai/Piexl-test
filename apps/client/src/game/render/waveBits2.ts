@@ -1,7 +1,8 @@
 // 웨이브 빚은 것 그리기 2: 물고기 떼 · 물밧줄 · 물풍선·웅덩이 · 진주 · 물의 손 · 분수·물방울 · 물수제비 · 음표 · 문어 · 깃털 · 심해의 눈 · 밀물 썰물 · 물발자국 · 자유의 해일
-import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, type RunState } from "@pixel-rogue/shared";
-import { additive, alpha, glow, rnd, shock, type Ctx } from "./pwFxBits";
-import { caustic, glint } from "./seaLight";
+import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "@pixel-rogue/shared";
+import { additive, alpha, glow, rnd } from "./pwFxBits";
+import { glint } from "./seaLight";
+import { ripple, softLight } from "./waveKit";
 import { blob, deepEye, note, tentacle, waterFill, waterHand, WV } from "./waveArt";
 import { life, type BitDraw } from "./waveBits";
 import { feather, fish, rope } from "./waveShapes";
@@ -55,7 +56,15 @@ export const BITS_B: Record<string, BitDraw> = {
       }
       ctx.closePath();
     }, 1);
-    caustic(ctx, x, y, r * 0.8, s.tick, 0.6 * a);
+    softLight(ctx, x, y, r * 0.7, r * 0.35, s.tick, a);
+    // 반들반들한 물웅덩이 윗면 반사
+    additive(ctx, () => {
+      ctx.strokeStyle = alpha(WV.foam, 0.5 * a);
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.ellipse(x - r * 0.15, y - r * 0.12, r * 0.55, r * 0.2, 0, Math.PI * 1.1, Math.PI * 1.6);
+      ctx.stroke();
+    });
   },
   wvPearl: (ctx, s, b, x, y) => {
     const n = b.n ?? 0;
@@ -88,7 +97,8 @@ export const BITS_B: Record<string, BitDraw> = {
     const f = 1 - b.t / b.t0;
     const gap = 50 * (1 - f * f);
     const rise = Math.min(1, f * 3);
-    caustic(ctx, x, y + 2, 40, s.tick, 0.4);
+    softLight(ctx, x, y + 2, 44, 18, s.tick, 0.7);
+    ripple(ctx, x, y + 4, 10 + f * 30, 0.6, 1);
     for (const side of [-1, 1]) waterHand(ctx, x - side * gap, y + 6 + (1 - rise) * 10, side, 1.05, rise, s.tick);
   },
   wvFountain: (ctx, s, b, x, y) => {
@@ -152,12 +162,13 @@ export const BITS_B: Record<string, BitDraw> = {
     const a = life(b, 10);
     const done = b.n ?? 0;
     const base = Math.atan2(b.dy, b.dx);
-    caustic(ctx, x, y, 50, s.tick, 0.4 * a);
+    softLight(ctx, x, y, 50, 26, s.tick, 0.7 * a);
+    ripple(ctx, x, y, 22 + Math.sin(s.tick * 0.1) * 2, 0.6 * a, 1.2);
     // 아직 안 내리친 다리: 머리 둘레에서 꿈틀
     for (let i = done; i < 8; i++) {
       const t = base + ((i * 3) % 8) * (TAU / 8);
       const len = 16 + Math.sin(s.tick * 0.15 + i) * 3;
-      tentacle(ctx, x + Math.cos(t) * 6, y + Math.sin(t) * 4, x + Math.cos(t) * len, y + Math.sin(t) * len * 0.7, 3.5, a, Math.sin(s.tick * 0.1 + i) * 8);
+      tentacle(ctx, x + Math.cos(t) * 6, y + Math.sin(t) * 4, x + Math.cos(t) * len, y + Math.sin(t) * len * 0.7, 8, a, Math.sin(s.tick * 0.1 + i) * 8);
     }
     blob(ctx, x, y - 6, 10, a, s.tick, 4, 0.06);
     ctx.fillStyle = alpha(WV.ink, a);
@@ -174,26 +185,43 @@ export const BITS_B: Record<string, BitDraw> = {
     deepEye(ctx, 0, 0, 26, open, 0.9, s.tick);
     ctx.restore();
     // 짓눌러 오는 수압 고리 (점점 좁아짐)
-    additive(ctx, () => {
-      for (let i = 0; i < 3; i++) shock(ctx, x, y, 44 * (1 - ((f * 2 + i / 3) % 1)), WV.deep, 0.6 * f, 3);
-    });
+    for (let i = 0; i < 3; i++) {
+      const u = (f * 2 + i / 3) % 1;
+      ripple(ctx, x, y + 4, 46 * (1 - u), f * u, 1.4, WV.deep, 0.55);
+    }
   },
+  /** 밀물 썰물: 굵은 물결 띠 (안쪽 짙은 물 · 바깥 흰 물마루) + 물마루에서 튀는 물방울 */
   wvEbb: (ctx, s, b, x, y) => {
     const r = b.v ?? 0;
     if (r < 2) return;
     const out = b.t0 - b.t < 30;
+    const lip = out ? r : r - 6;
     additive(ctx, () => {
-      shock(ctx, x, y, r, WV.aqua, 0.9, 10);
-      shock(ctx, x, y, r - 4, WV.deep, 0.5, 6);
-      ctx.strokeStyle = alpha(WV.foam, 0.9);
-      ctx.lineWidth = 1;
-      for (let i = 0; i < 16; i++) {
-        const t = (i / 16) * TAU + s.tick * 0.02;
-        const k = out ? 1 : -1;
-        ctx.beginPath();
-        ctx.moveTo(x + Math.cos(t) * r, y + Math.sin(t) * r);
-        ctx.lineTo(x + Math.cos(t) * (r + 6 * k), y + Math.sin(t) * (r + 6 * k));
-        ctx.stroke();
+      const g = ctx.createRadialGradient(x, y, Math.max(0, r - 12), x, y, r + 4);
+      g.addColorStop(0, alpha(WV.deep, 0));
+      g.addColorStop(0.55, alpha(WV.aqua, 0.45));
+      g.addColorStop(0.85, alpha(WV.sky, 0.7));
+      g.addColorStop(1, alpha(WV.foam, 0));
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(x, y, r + 4, 0, TAU);
+      ctx.arc(x, y, Math.max(0, r - 12), 0, TAU, true);
+      ctx.fill();
+      // 물마루: 물결치는 흰 줄
+      ctx.strokeStyle = alpha(WV.foam, 0.95);
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      for (let i = 0; i <= 48; i++) {
+        const t = (i / 48) * TAU;
+        const rr = lip + Math.sin(t * 9 + s.tick * 0.3) * 1.4;
+        ctx.lineTo(x + Math.cos(t) * rr, y + Math.sin(t) * rr);
+      }
+      ctx.stroke();
+      for (let i = 0; i < 18; i++) {
+        const t = (i / 18) * TAU + s.tick * 0.01;
+        const off = ((s.tick * 0.5 + i * 3) % 8) * (out ? 1 : -1);
+        ctx.fillStyle = alpha(i % 2 ? WV.foam : WV.sky, 0.9 - Math.abs(off) / 10);
+        ctx.fillRect(x + Math.cos(t) * (lip + off), y + Math.sin(t) * (lip + off) - Math.abs(off) * 0.4, 1.5, 1.5);
       }
     });
   },
@@ -249,16 +277,6 @@ export const BITS_B: Record<string, BitDraw> = {
       }
     });
     ctx.restore();
-    caustic(ctx, x - b.dx * 30, y - b.dy * 30, 40, s.tick, 0.5 * a);
+    softLight(ctx, x - b.dx * 30, y - b.dy * 30, 40, 30, s.tick, a);
   },
 };
-
-/** 방 전체를 덮는 만조 물빛 (몸 뒤, 남은 틱 t) */
-export function floodLayer(ctx: Ctx, s: RunState, t: number): void {
-  const a = Math.min(1, t / 30, (180 - t + 1) / 20);
-  const w = ROOM_MAX_X - ROOM_MIN_X + 24;
-  const h = ROOM_MAX_Y - ROOM_MIN_Y + 24;
-  ctx.fillStyle = alpha(WV.deep, 0.2 * a);
-  ctx.fillRect(ROOM_MIN_X - 12, ROOM_MIN_Y - 12, w, h);
-  for (let i = 0; i < 6; i++) caustic(ctx, ROOM_MIN_X + w * ((i % 3) + 0.5) / 3, ROOM_MIN_Y + h * (Math.floor(i / 3) + 0.5) / 2, w / 6, s.tick + i * 13, 0.35 * a);
-}
