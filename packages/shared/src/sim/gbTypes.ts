@@ -25,6 +25,9 @@ export interface GabrielPlayerState {
   gbGrant?: number;
   /** 떨어지는 빛의 망치 */
   gbDrops?: GbDrop[];
+  /** 중력 붕괴로 끌어모으는 남은 틱 (끝나면 보호막을 터뜨림) · 성벽 미니 망치가 돌기 시작한 틱 */
+  gbWell?: number;
+  gbMini?: number;
   /** 지금 방 ("층/방", 바뀌면 망치·영역을 거둠) */
   gbRoom?: string;
 }
@@ -32,7 +35,9 @@ export interface GabrielPlayerState {
 export interface GabrielEnemyState {
   /** 압박 남은 틱 (느려짐) */
   gbPress?: number;
+  /** 미니 망치에 다시 맞을 수 있는 틱 */
+  gbMiniAt?: number;
 }
 
-/** 효과: 망치 휘두르기 · 대지 강타 · 빛의 망치(그림) · 방패 돌진 · 중력 붕괴 · 성벽 · 불멸의 성벽 · 가시 방패 */
-export type GabrielFx = "gbSwing" | "gbSlam" | "gbHammer" | "gbBash" | "gbWell" | "gbWall" | "gbUlt" | "gbThorn";
+/** 효과: 망치 휘두르기 · 대지 강타 · 빛의 망치(그림) · 방패 돌진 · 중력 붕괴 · 성벽 · 불멸의 성벽 · 가시 방패 · 궁극기 빛의 망치 휘두르기 · 방패 돌진 섬멸 · 보호막 폭발 · 미니 망치 맞힘 */
+export type GabrielFx = "gbSwing" | "gbSlam" | "gbHammer" | "gbBash" | "gbWell" | "gbWall" | "gbUlt" | "gbThorn" | "gbLightSwing" | "gbSmite" | "gbBurst" | "gbMiniHit";

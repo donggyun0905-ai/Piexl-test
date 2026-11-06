@@ -1,43 +1,21 @@
-// 가브리엘 스킬 넷(1 방패 돌진 · 2 중력 붕괴 · 3 성벽 · 4 불멸의 성벽) · 떨어지는 빛의 망치 · 궁극기 영역·보호막 (sim/gabriel에서 부름)
+// 가브리엘 스킬 넷(1 방패 돌진 · 2 중력 붕괴(sim/gabrielShield) · 3 성벽 · 4 불멸의 성벽) · 떨어지는 빛의 망치 · 궁극기 영역·보호막 (sim/gabriel에서 부름)
 import { GABRIEL_PERKS as K } from "../itemsGabriel";
 import { GABRIEL as G } from "../weaponsGabriel";
 import { dropHammer, gbCooldown, gbHit, press, quake } from "./gabrielKit";
-import { inCircle, isBoss, rushTick, startRush, stun } from "./s2Kit";
+import { setShield, startWell } from "./gabrielShield";
+import { inCircle, inCone, rushTick, startRush, strike, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
 
 /** 궁극기 영역 안 보호막 한도 */
 const ultCap = (s: RunState) => G.ultShield + (hasPerk(s.player, "gbImmortal") ? K.gbImmortal.shield : 0);
 
-/** 2 중력 붕괴: 앞 땅에 중력장 → 둘레 적을 가운데로 끌어당기고 압박 → 빛의 망치가 내리꽂힘 */
-function well(s: RunState): void {
-  const p = s.player;
-  const cx = p.x + p.faceX * G.wellAt;
-  const cy = p.y + p.faceY * G.wellAt;
-  const big = hasPerk(p, "gbPull");
-  const r = G.wellR * (big ? K.gbPull.r : 1);
-  const pull = G.wellPull * (big ? K.gbPull.pull : 1);
-  for (const e of inCircle(s, cx, cy, r)) {
-    press(s, e);
-    if (isBoss(e)) continue;
-    const dx = cx - e.x;
-    const dy = cy - e.y;
-    const d = Math.hypot(dx, dy) || 1;
-    const k = Math.min(pull, d);
-    e.x += (dx / d) * k;
-    e.y += (dy / d) * k;
-  }
-  addEffect(s, { kind: "gbWell", x: cx, y: cy, dirX: 0, dirY: 0, size: r, maxTicks: G.wellDelay + 10 });
-  const dmg = p.stats.damage * G.wellMul;
-  dropHammer(s, cx, cy, G.wellDelay, G.wellHitR, dmg, G.wellStun);
-  if (hasPerk(p, "gbOrbit")) dropHammer(s, cx, cy, G.wellDelay + K.gbOrbit.delay, G.wellHitR, dmg * K.gbOrbit.mul, G.wellStun);
-}
-
-/** 3 성벽: 보호막 + 둘레 땅을 울려 밀쳐냄 */
+/** 3 성벽: 보호막(쌓이지 않음) + 둘레 땅을 울려 밀쳐냄 + 몸 둘레를 도는 미니 망치 */
 function wall(s: RunState): void {
   const p = s.player;
   const big = hasPerk(p, "gbBulwark");
-  p.shieldPts = (p.shieldPts ?? 0) + p.stats.maxHp * G.wallShield * (big ? K.gbBulwark.shield : 1);
+  setShield(s, p.stats.maxHp * G.wallShield * (big ? K.gbBulwark.shield : 1));
+  p.gbMini = s.tick;
   const r = G.wallR * (big ? K.gbBulwark.r : 1);
   for (const e of inCircle(s, p.x, p.y, r)) {
     gbHit(s, e, G.wallMul, G.wallPush);
@@ -69,7 +47,7 @@ export function gbSkill(s: RunState, i: number): void {
     const dmg = p.stats.damage * G.bashMul * (bash ? K.gbBash.mul : 1);
     startRush(p, { t: G.bashTicks, dx: p.faceX, dy: p.faceY, step: G.bashDist * (bash ? K.gbBash.dist : 1), dmg, push: G.bashPush, invuln: false, tint: "#f2c14e", w: G.bashW });
     addEffect(s, { kind: "gbBash", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: G.bashW, maxTicks: G.bashTicks + 8 });
-  } else if (i === 1) well(s);
+  } else if (i === 1) startWell(s);
   else if (i === 2) wall(s);
   else ult(s);
 }
@@ -77,9 +55,11 @@ export function gbSkill(s: RunState, i: number): void {
 /** 방패 돌진 한 틱: 부딪힌 적 기절·압박 */
 export function bashTick(s: RunState): void {
   if (!s.player.s2Rush) return;
+  const r = s.player.s2Rush;
   rushTick(s, (e) => {
     stun(e, G.bashStun);
     press(s, e);
+    addEffect(s, { kind: "gbSmite", x: e.x, y: e.y, dirX: r.dx, dirY: r.dy, size: e.r + 10, maxTicks: 22 });
   });
 }
 
@@ -120,10 +100,14 @@ export function ultTick(s: RunState): void {
   }
 }
 
-/** 궁극기 중 기본 공격마다: 친 자리에 빛의 망치 추가타 (최대 체력 비례) */
-export function ultHammer(s: RunState, x: number, y: number): void {
+/** 궁극기 중 기본 공격마다: 거대한 빛의 망치가 함께 휘둘러져 앞을 넓게 침 (최대 체력 비례 · k: 1타 내려찍기 · 2타 휘두르기 · 3타 대지 강타) */
+export function ultHammer(s: RunState, k: number): void {
   const p = s.player;
   if (!(p.gbUlt ?? 0)) return;
   const dmg = p.stats.maxHp * G.ultHpMul * (hasPerk(p, "gbLight") ? K.gbLight.mul : 1);
-  dropHammer(s, x, y, G.dropTicks, G.ultHitR, dmg);
+  for (const e of inCone(s, G.ultSwingR, G.ultSwingCos)) {
+    strike(s, e, dmg, G.ultPush);
+    press(s, e);
+  }
+  addEffect(s, { kind: "gbLightSwing", x: p.x, y: p.y - 6, dirX: p.faceX, dirY: p.faceY, size: G.ultSwingR, style: k, maxTicks: 20 });
 }

@@ -3,10 +3,10 @@ import type { RunState } from "@pixel-rogue/shared";
 import type { Sfx } from "./sound";
 
 const SFX: Partial<Record<string, Sfx>> = {
-  gbSwing: "pwSpin", gbSlam: "gbQuake", gbBash: "pwDash", gbWell: "gbGrav", gbWall: "gbQuake", gbUlt: "gbBell", gbThorn: "chime",
+  gbSwing: "pwSpin", gbLightSwing: "pwSlash", gbSmite: "btBurst", gbBurst: "gbQuake", gbSlam: "gbQuake", gbBash: "pwDash", gbWell: "gbGrav", gbWall: "gbQuake", gbUlt: "gbBell", gbThorn: "chime",
 };
 /** 화면이 흔들리는 큰 기술 */
-const SHAKE: Partial<Record<string, number>> = { gbSlam: 2, gbWall: 2, gbUlt: 5 };
+const SHAKE: Partial<Record<string, number>> = { gbBurst: 4, gbSlam: 2, gbWall: 2, gbUlt: 5 };
 
 export function gabrielSounds(run: RunState, out: Sfx[], onShake: (power: number) => void): void {
   if (run.player.characterId !== "gabriel") return;

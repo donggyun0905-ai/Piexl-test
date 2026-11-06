@@ -1,12 +1,15 @@
 // 가브리엘 기술 효과 — 철옹의 방패 (황금빛 · 흰 빛 · 중력의 짙은 보라)
-// 망치 휘두르기 · 대지 강타(갈라지는 땅) · 빛의 망치(사용자 그림 sprites/gabriel_fx: 하늘에서 내리꽂힘) · 방패 돌진 · 중력 붕괴 · 성벽 · 불멸의 성벽 · 가시 방패
+// 망치 휘두르기 · 궁극기 중 함께 휘둘러지는 거대한 빛의 망치 · 대지 강타(갈라지는 땅) · 빛의 망치(사용자 그림 sprites/gabriel_fx: 하늘에서 내리꽂힘) · 방패 돌진(빛나는 방패 · 맞은 적 섬멸) · 중력 붕괴 · 성벽 · 불멸의 성벽 · 가시 방패
 import type { EffectState } from "@pixel-rogue/shared";
 import { additive, alpha, crescent, easeOut, glow, rune, shock, sparks, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
+import { lightHammer, lightShield } from "./gabrielArt";
 
 /** 가브리엘 색: 금 · 밝은 빛 · 흰 빛 · 중력 보라 · 짙은 보라 · 갈라진 땅 */
 export const GB = { gold: "#f2c14e", light: "#ffe68a", white: "#fff8e0", grav: "#7a4aff", deep: "#1e1040", stone: "#5a4a3a" } as const;
-const GB_FX = new Set(["gbSwing", "gbSlam", "gbHammer", "gbBash", "gbWell", "gbWall", "gbUlt", "gbThorn"]);
+const GB_FX = new Set(["gbSwing", "gbSlam", "gbHammer", "gbBash", "gbWell", "gbWall", "gbUlt", "gbThorn", "gbLightSwing", "gbSmite", "gbBurst", "gbMiniHit"]);
+/** 궁극기 빛의 망치 휘두르는 각 (시작 · 끝, 바라보는 쪽 기준): 1타 내려찍기 · 2타 휘두르기 · 3타 대지 강타 */
+const ARC: readonly (readonly [number, number])[] = [[-1.6, 0.1], [1.4, -1.4], [-1.9, 0.15]];
 const img = new Image();
 img.src = `${import.meta.env.BASE_URL}sprites/gabriel_fx.png`;
 
@@ -94,23 +97,67 @@ export function drawGabrielFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       return true;
     }
     case "gbBash":
-      // 방패 돌진: 앞을 막는 금빛 방패 빛 (세로로 길쭉한 판) + 뒤로 흐르는 빛줄기
+      // 방패 돌진 시작: 발밑에서 금빛이 터지며 빛나는 방패가 앞으로 솟음 (돌진 중 방패는 gabrielBody)
       additive(ctx, () => {
-        const sx = x + fx.dirX * 14 * (1 + f * 6);
-        const sy = y - 6 + fx.dirY * 14 * (1 + f * 6);
         ctx.save();
-        ctx.translate(sx, sy);
-        ctx.rotate(a);
-        ctx.fillStyle = alpha(GB.gold, 0.55 * fade);
-        ctx.fillRect(-2, -r * 0.7, 5, r * 1.4);
-        ctx.fillStyle = alpha(GB.white, 0.8 * fade);
-        ctx.fillRect(0, -r * 0.6, 2, r * 1.2);
+        ctx.translate(x, y);
+        ctx.scale(1, 0.5);
+        shock(ctx, 0, 0, 10 + easeOut(f) * 30, GB.gold, fade, 5);
         ctx.restore();
-        glow(ctx, sx, sy, r, GB.light, 0.5 * fade);
+        glow(ctx, x, y - 6, 26, GB.light, 0.6 * (1 - f), 0.6);
+      });
+      if (f < 0.35) lightShield(ctx, x + fx.dirX * 14, y - 8 + fx.dirY * 14, a, 30 * (0.6 + f), 1 - f / 0.35);
+      return true;
+    case "gbSmite":
+      // 섬멸: 방패에 부딪힌 적이 금빛 십자로 터지고 빛 조각이 돌진 방향으로 흩어짐
+      additive(ctx, () => {
+        const k = easeOut(f);
+        glow(ctx, x, y - 4, r * 1.3, GB.light, 0.9 * fade, 0.9);
+        ctx.fillStyle = alpha(GB.white, fade);
+        ctx.fillRect(x - 1, y - 4 - r * 1.2 * k, 3, r * 2.4 * k);
+        ctx.fillRect(x - r * 1.2 * k, y - 5, r * 2.4 * k, 3);
+        shock(ctx, x, y - 4, r * (0.3 + k), GB.gold, fade, 4);
+        for (let i = 0; i < 8; i++) {
+          const t = a + ((i - 3.5) / 3.5) * 0.9;
+          const d = r * (0.4 + k * (1.2 + (i % 3) * 0.3));
+          ctx.fillStyle = alpha(i % 2 ? GB.gold : GB.white, fade);
+          ctx.fillRect(Math.round(x + Math.cos(t) * d), Math.round(y - 4 + Math.sin(t) * d), 2, 2);
+        }
       });
       return true;
+    case "gbLightSwing": {
+      // 궁극기 추가타: 내 망치와 함께 거대한 빛의 망치가 휘둘러짐 · 지나간 자리에 금빛 잔상 띠 · 3타는 끝에서 땅이 번쩍
+      const [s0, s1] = ARC[fx.style ?? 0] ?? ARC[0]!;
+      const u = easeOut(Math.min(1, f * 2.5));
+      const a0 = a + s0;
+      const cur = a0 + (s1 - s0) * u;
+      const out = f < 0.4 ? 1 : 1 - (f - 0.4) / 0.6;
+      additive(ctx, () => {
+        ctx.strokeStyle = alpha(GB.gold, 0.45 * out);
+        ctx.lineWidth = r * 0.45;
+        ctx.beginPath();
+        ctx.arc(x, y, r * 0.85, Math.min(a0, cur), Math.max(a0, cur));
+        ctx.stroke();
+        ctx.strokeStyle = alpha(GB.white, 0.6 * out);
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x, y, r * 0.95, Math.min(a0, cur), Math.max(a0, cur));
+        ctx.stroke();
+      });
+      for (const back of [0.3, 0.15]) lightHammer(ctx, x, y, a0 + (s1 - s0) * Math.max(0, u - back), r, 0.3 * out);
+      lightHammer(ctx, x, y, cur, r, out);
+      if (fx.style === 2 && u > 0.95) {
+        const tx = x + Math.cos(cur) * r * 0.88;
+        const ty = y + Math.sin(cur) * r * 0.88 + 6;
+        additive(ctx, () => {
+          glow(ctx, tx, ty, r * 0.6, GB.light, 0.8 * out, 0.8);
+          cracks(ctx, tx, ty, r * 0.6, out, seed);
+        });
+      }
+      return true;
+    }
     case "gbWell":
-      // 중력 붕괴: 짙은 보라 중력장이 안으로 말려 들고 금빛 문양이 돎
+      // 중력 붕괴 시작: 짙은 보라 중력장이 안으로 말려 듦 (끌어모으는 동안의 소용돌이는 gabrielBody)
       ctx.fillStyle = alpha(GB.deep, 0.35 * fade);
       ctx.beginPath();
       ctx.ellipse(x, y, r * (1 - 0.3 * f), r * 0.5 * (1 - 0.3 * f), 0, 0, Math.PI * 2);
@@ -158,6 +205,42 @@ export function drawGabrielFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         rune(ctx, x, y, r * easeOut(Math.min(1, f * 2)), GB.gold, fade, f * 2);
         glow(ctx, x, y - 10, 40, GB.light, 0.6 * fade, 0.6);
         sparks(ctx, x, y - 10, 16, r, f, GB.gold, seed);
+      });
+      return true;
+    case "gbBurst": {
+      // 보호막 폭발: 모아 둔 보호막이 금빛 조각으로 깨지며 보라 중력과 함께 터짐 (dirX: 터뜨린 보호막 · 클수록 큼)
+      const big = Math.min(1.6, 0.8 + fx.dirX / 120);
+      const R = r * big;
+      additive(ctx, () => {
+        glow(ctx, x, y - 6, R * 0.9, GB.light, fade, 1);
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(1, 0.55);
+        shock(ctx, 0, 0, R * (0.2 + easeOut(f)), GB.gold, fade, 10);
+        shock(ctx, 0, 0, R * 0.7 * easeOut(Math.max(0, f - 0.1)), GB.grav, fade, 8);
+        ctx.restore();
+        for (let i = 0; i < 14; i++) {
+          const t = (i / 14) * Math.PI * 2 + (seed % 5) * 0.2;
+          const d = 10 + easeOut(f) * R * (0.7 + (i % 3) * 0.15);
+          const px = x + Math.cos(t) * d;
+          const py = y - 8 + Math.sin(t) * d * 0.6;
+          ctx.fillStyle = alpha(i % 2 ? GB.gold : GB.white, fade);
+          ctx.beginPath();
+          ctx.moveTo(px, py - 3);
+          ctx.lineTo(px + 3, py);
+          ctx.lineTo(px, py + 3);
+          ctx.lineTo(px - 3, py);
+          ctx.fill();
+        }
+        sparks(ctx, x, y - 8, 12, R, f, GB.light, seed);
+      });
+      return true;
+    }
+    case "gbMiniHit":
+      // 미니 망치에 맞음: 작은 금빛 번쩍
+      additive(ctx, () => {
+        glow(ctx, x, y - 4, r, GB.light, fade, 0.8);
+        sparks(ctx, x, y - 4, 5, r, f, GB.gold, seed);
       });
       return true;
     case "gbThorn":

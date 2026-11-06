@@ -36,14 +36,14 @@ export const GABRIEL_PASSIVES = {
   gbWeight: P("gbWeight", [{ stat: "maxHp", add: 10 }]),
   /** 압괴: 압박된 적을 쓰러뜨리면 그 자리에 진동 */
   gbCrush: P("gbCrush"),
-  /** 이중 낙하: 중력 붕괴의 빛의 망치가 한 번 더 떨어짐 */
+  /** 궤도 유지: 중력 붕괴로 보호막을 터뜨려도 일부가 남음 */
   gbOrbit: P("gbOrbit"),
   // ── 스킬·성벽 ──
   /** 방패 강타: 방패 돌진이 더 멀리, 더 셈 */
   gbBash: P("gbBash", [{ stat: "moveSpeed", add: 0.05 }]),
   /** 성벽 확장: 성벽 보호막·진동이 더 큼 */
   gbBulwark: P("gbBulwark", [{ stat: "maxHp", add: 10 }]),
-  /** 빛의 망치: 궁극기 빛의 망치 추가타가 더 셈 */
+  /** 빛의 망치: 궁극기 중 함께 휘둘러지는 빛의 망치가 더 셈 */
   gbLight: P("gbLight", [{ stat: "damage", add: 1 }]),
   /** 불멸: 궁극기가 더 오래 가고 보호막이 더 큼 */
   gbImmortal: P("gbImmortal", [{ stat: "maxHp", add: 10 }]),
@@ -81,8 +81,8 @@ export const GABRIEL_PERKS = {
   gbWeight: { mul: 1.6 },
   /** 압괴: 진동 반지름 · 피해(최대 체력 비율) */
   gbCrush: { r: 50, hpMul: 0.1 },
-  /** 이중 낙하: 늦게 떨어지는 틱 · 피해 배율 */
-  gbOrbit: { delay: 24, mul: 0.7 },
+  /** 궤도 유지: 터뜨린 뒤 남는 보호막 비율 */
+  gbOrbit: { keep: 0.5 },
   /** 방패 강타: 거리 배율 · 피해 배율 */
   gbBash: { dist: 1.3, mul: 1.5 },
   /** 성벽 확장: 보호막 배율 · 진동 반지름 배율 */

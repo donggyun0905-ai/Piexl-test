@@ -57,26 +57,57 @@ describe("가브리엘", () => {
     expect(plate).toBeLessThan(g);
   });
 
-  it("중력 붕괴: 적을 끌어당기고 늦게 빛의 망치가 떨어짐", () => {
+  it("중력 붕괴: 나에게 끌어모으는 동안 보호막 유지 → 보호막을 터뜨려 보호막만큼 큰 피해", () => {
     const s = gabriel();
     const e = s.enemies[0]!;
-    e.x = 60 + G.wellAt + 40;
+    e.x = 60 + 90;
     e.rootTicks = 0;
+    s.player.shieldPts = 40;
+    s.player.invulnTicks = 99999;
     key(s, 2);
-    expect(e.x).toBeLessThan(60 + G.wellAt + 40);
+    run(s, G.wellTicks - 4, IDLE);
+    expect(e.x).toBeLessThan(150);
+    expect(s.player.shieldPts).toBe(40);
     expect(lost(s)).toBe(0);
-    run(s, G.wellDelay + 1, IDLE);
-    expect(lost(s)).toBeGreaterThan(0);
+    run(s, 6, IDLE);
+    expect(s.player.shieldPts).toBe(0);
+    expect(lost(s)).toBeGreaterThanOrEqual(40 * G.wellShieldMul);
+    expect(s.effects.some((f) => f.kind === "gbBurst")).toBe(true);
   });
 
-  it("성벽: 보호막 · 둘레 진동", () => {
+  it("성벽: 보호막은 쌓이지 않음 · 둘레 진동 · 미니 망치가 돌다가 보호막이 사라지면 같이 사라짐", () => {
+    const s = gabriel();
+    const amt = s.player.stats.maxHp * G.wallShield;
+    key(s, 3);
+    expect(s.player.shieldPts).toBeCloseTo(amt);
+    expect(lost(s)).toBeGreaterThan(0);
+    s.player.gbCd![2] = 0;
+    key(s, 3);
+    expect(s.player.shieldPts).toBeCloseTo(amt);
+    expect(s.player.gbMini).toBeDefined();
+    const e = s.enemies[0]!;
+    e.hp = e.maxHp;
+    e.x = s.player.x + G.miniR;
+    e.y = s.player.y;
+    s.player.invulnTicks = 99999;
+    run(s, 80, IDLE);
+    expect(e.hp).toBeLessThan(e.maxHp);
+    s.player.shieldPts = 0;
+    run(s, 1, IDLE);
+    expect(s.player.gbMini).toBeUndefined();
+  });
+
+  it("불멸의 성벽 보호막도 쌓이지 않음 (성벽 뒤에 써도 100)", () => {
     const s = gabriel();
     key(s, 3);
-    expect(s.player.shieldPts ?? 0).toBeGreaterThanOrEqual(s.player.stats.maxHp * G.wallShield - 0.01);
-    expect(lost(s)).toBeGreaterThan(0);
+    key(s, 4);
+    expect(s.player.shieldPts).toBeCloseTo(G.ultShield);
+    s.player.gbCd![2] = 0;
+    key(s, 3);
+    expect(s.player.shieldPts).toBeCloseTo(G.ultShield);
   });
 
-  it("불멸의 성벽: 보호막 100 · 기본 공격마다 체력 비례 빛의 망치 · 끝나면 보호막이 천천히 줄어듦", () => {
+  it("불멸의 성벽: 보호막 100 · 기본 공격마다 체력 비례 빛의 망치 휘두르기 · 끝나면 보호막이 천천히 줄어듦", () => {
     const s = gabriel();
     key(s, 4);
     expect(s.player.gbUlt).toBeGreaterThan(0);
@@ -84,10 +115,8 @@ describe("가브리엘", () => {
     run(s, G.dropTicks + 2, IDLE);
     s.enemies[0]!.hp = s.enemies[0]!.maxHp;
     hit(s);
-    expect(s.player.gbDrops?.length).toBe(1);
-    const before = lost(s);
-    run(s, G.dropTicks, IDLE);
-    expect(lost(s) - before).toBeGreaterThanOrEqual(Math.floor(s.player.stats.maxHp * G.ultHpMul));
+    expect(s.effects.some((f) => f.kind === "gbLightSwing")).toBe(true);
+    expect(lost(s)).toBeGreaterThanOrEqual(Math.floor(s.player.stats.maxHp * G.ultHpMul));
     run(s, G.ultTicks, IDLE);
     expect(s.player.gbUlt).toBeUndefined();
     const sh = s.player.shieldPts ?? 0;
