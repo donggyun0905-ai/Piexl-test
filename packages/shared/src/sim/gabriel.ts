@@ -69,7 +69,8 @@ export function gabrielTick(s: RunState, want: boolean, speed: number): void {
   wellTick(s);
   miniTick(s);
   if (p.trKey && p.trKey >= 1 && p.trKey <= 4) gbSkill(s, p.trKey - 1);
-  p.gbGap = (p.gbGap ?? 0) + 1;
+  // 공격 대기가 끝난 뒤부터 잼 (공격 속도가 느려도 3타까지 이어지게)
+  p.gbGap = (p.gbGap ?? 0) + (p.attackCooldown <= 0 ? 1 : 0);
   if (p.gbGap > G.comboGap) p.gbStep = 0;
   if (!want || p.attackCooldown > 0 || p.s2Rush) return;
   const k = p.gbStep ?? 0;

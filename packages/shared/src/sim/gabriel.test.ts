@@ -40,6 +40,16 @@ function hurt(s: RunState, dmg: number): number {
 }
 
 describe("가브리엘", () => {
+  it("공격 속도 0.5로 누르고 있어도 3타 대지 강타까지 이어짐", () => {
+    const s = gabriel();
+    let slam = false;
+    for (let i = 0; i < 400 && !slam; i++) {
+      stepSim(s, FIRE);
+      slam = s.effects.some((f) => f.kind === "gbSlam");
+    }
+    expect(slam).toBe(true);
+  });
+
   it("3연격: 내려찍기 · 휘두르기 → 대지 강타(빛의 망치 · 압박)", () => {
     const s = gabriel();
     for (let i = 0; i < 3; i++) hit(s);

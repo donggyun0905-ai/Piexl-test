@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.66",
+    date: "2026-11-07",
+    items: {
+      ko: ["가브리엘: 공격 속도가 느려도 누르고 있으면 3타 대지 강타까지 이어짐 (전엔 1타로 계속 돌아감) · 세레나도 같게"],
+      en: ["Gabriel: holding attack now carries through to the 3rd-hit Earth Slam even at low attack speed (it kept resetting to the 1st hit) · same for Serena"],
+      ja: ["ガブリエル：攻撃速度が遅くても押し続ければ3撃目の大地強打までつながる（以前は1撃目に戻り続けた）· セレナも同様"],
+    },
+  },
+  {
     version: "0.49.65",
     date: "2026-11-07",
     items: {

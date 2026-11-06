@@ -49,7 +49,8 @@ export function serenaTick(s: RunState, want: boolean, speed: number): void {
   orbTick(s);
   whirlTick(s);
   if (p.trKey && p.trKey >= 1 && p.trKey <= 4) snSkill(s, p.trKey - 1);
-  p.snGap = (p.snGap ?? 0) + 1;
+  // 공격 대기가 끝난 뒤부터 잼 (공격 속도가 느려도 3타까지 이어지게)
+  p.snGap = (p.snGap ?? 0) + (p.attackCooldown <= 0 ? 1 : 0);
   if (p.snGap > N.comboGap) p.snStep = 0;
   if (!want || p.attackCooldown > 0 || p.s2Rush) return;
   const k = p.snStep ?? 0;
