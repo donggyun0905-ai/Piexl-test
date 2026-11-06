@@ -31,5 +31,7 @@ export { RAFAEL } from "./weaponsRafael";
 export { RAFAEL_PERKS } from "./itemsRafael";
 export { YURIEL } from "./weaponsYuriel";
 export { YURIEL_PERKS } from "./itemsYuriel";
+export { MICHAELA } from "./weaponsMichaela";
+export { MICHAELA_PERKS } from "./itemsMichaela";
 export { WAVE_PERKS, WV_SKILLS, type WvSkill } from "./itemsWave";
 export { LUX } from "./weaponsLux";

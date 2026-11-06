@@ -187,7 +187,7 @@ function passiveDesc(id: string, def: PassiveDef, lang: Lang, t: (k: TextKey) =>
     if (id in CL_ARMS) return `${tag}${collectorArmDesc(id as ClArmId, lang)} · ${modsText(def, t)}`;
     const body = tag + fill(EFFECT_DESC[id as PassiveId]?.[lang] ?? "", (PERKS as Record<string, Record<string, number>>)[id]);
     // 웨이브 기술: 작은 능력치도 같이
-    return def.exclusive === "wave" || def.exclusive === "beatrice" || def.exclusive === "ian" || def.exclusive === "gabriel" || def.exclusive === "serena" || def.exclusive === "rafael" || def.exclusive === "yuriel" ? `${body} · ${modsText(def, t)}` : body;
+    return def.exclusive === "wave" || def.exclusive === "beatrice" || def.exclusive === "ian" || def.exclusive === "gabriel" || def.exclusive === "serena" || def.exclusive === "rafael" || def.exclusive === "yuriel" || def.exclusive === "michaela" ? `${body} · ${modsText(def, t)}` : body;
   }
   return modsText(def, t);
 }

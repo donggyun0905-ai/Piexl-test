@@ -1,0 +1,25 @@
+// 화면 글자: 성국 미카엘라(공허의 인도자) 이름·설명 · 스킬 이름·설명 · 버프 창 (charactersSeongguk가 커서 나눔)
+export const CHARACTER_TEXT_MICHAELA = {
+  michaela: { ko: "미카엘라", en: "Michaela", ja: "ミカエラ" },
+  armory: { ko: "무한의 무기 보관소", en: "Infinite Armory", ja: "無限の武器庫" },
+  michaelaDesc: {
+    ko: "성국. '공허의 인도자'. 빛의 성복을 입은 전투광. 공중에 떠다니는 무수한 소형 투창과 검들의 비행 집합체(무한의 무기 보관소)를 부림. 끊임없이 무기를 바꿔치며 전장을 폭격함. 방에 들어서면 포탈에서 무기가 쏟아져 곳곳에 박힘 · 박힌 무기에 몸을 대면 그 무기로 바꿔 듦 · 대시하면 범위 안의 박힌 무기로 순간 이동해 바꿔 듦 · 바꾸거나 던질 때마다 콤보(하나마다 피해 +3%)와 폭발 · 폭발 둘레의 박힌 무기도 연달아 터짐 · 누르고 있으면 3연격(검이면 베기 · 투창이면 찌르기 둘 → 투척) · 숫자 키 스킬 넷: 1 무기 비 · 2 칼날 교대 · 3 일제 폭파 · 4 무한의 무기고",
+    en: "Holy Kingdom. 'The Void Guide'. A battle-mad warrior in vestments of light. She commands a flying swarm of countless small javelins and swords (the Infinite Armory), endlessly swapping weapons as she bombards the field. On entering a room, weapons pour from a portal and stick into the ground everywhere · touch a planted weapon to swap to it · dashing teleports you to a planted weapon within range and swaps to it · every swap or throw builds combo (+3% damage each) and an explosion · planted weapons near an explosion go off in a chain · hold for a 3-hit chain (two sword slashes or spear thrusts → throw) · four number-key skills: 1 Weapon Rain · 2 Blade Swap · 3 Mass Detonation · 4 Infinite Armory",
+    ja: "聖国。「虚空の導き手」。光の聖衣をまとう戦闘狂。空中に漂う無数の小型投槍と剣の飛行集合体（無限の武器庫）を操る。絶えず武器を持ち替えながら戦場を爆撃する。部屋に入るとポータルから武器が降り注ぎあちこちに突き刺さる · 刺さった武器に触れるとその武器に持ち替える · ダッシュすると範囲内の刺さった武器へ瞬間移動して持ち替える · 持ち替えや投擲のたびにコンボ（1つごとにダメージ+3%）と爆発 · 爆発の周りの刺さった武器も連鎖して爆発 · 押し続けると3連撃（剣なら斬り・投槍なら突き2回 → 投擲）· 数字キーのスキル4つ：1 武器の雨 · 2 刃の交代 · 3 一斉爆破 · 4 無限の武器庫",
+  },
+  mcSkill1: { ko: "무기 비", en: "Weapon Rain", ja: "武器の雨" },
+  mcSkill2: { ko: "칼날 교대", en: "Blade Swap", ja: "刃の交代" },
+  mcSkill3: { ko: "일제 폭파", en: "Mass Detonation", ja: "一斉爆破" },
+  mcSkill4: { ko: "무한의 무기고", en: "Infinite Armory", ja: "無限の武器庫" },
+  mcSkillTip1: { ko: "앞에 포탈을 열어 무기 6개가 쏟아져 박힘 (떨어질 때 70%) · 대기 8초", en: "Open a portal ahead; six weapons rain down and stick in the ground (70% on landing) · 8s cooldown", ja: "前方にポータルを開き武器6本が降り注いで突き刺さる（落下時70%）· 待機8秒" },
+  mcSkillTip2: { ko: "가장 가까운 박힌 무기로 순간 이동해 바꿔 듦 · 도착하며 둘레 150% · 콤보 +2 · 대기 6초", en: "Teleport to the nearest planted weapon and swap to it · 150% around you on arrival · +2 combo · 6s cooldown", ja: "最も近い刺さった武器へ瞬間移動して持ち替える · 到着時に周囲150% · コンボ+2 · 待機6秒" },
+  mcSkillTip3: { ko: "박힌 무기가 모두 차례로 터짐 (하나마다 100%, 둘레 무기에 연쇄) · 무기는 사라짐 · 대기 14초", en: "Every planted weapon explodes in turn (100% each, chaining nearby) · the weapons are spent · 14s cooldown", ja: "刺さった武器が全て順に爆発（1本ごとに100%、周りに連鎖）· 武器は消える · 待機14秒" },
+  mcSkillTip4: { ko: "궁극기: 8초 동안 머리 위에 무기고가 열려 0.25초마다 적에게 무기가 쏟아져 꽂힘 (70%, 박혀 남음) · 그동안 기본 공격이 모두 투척 · 대기 60초", en: "Ultimate: for 8s the armory opens overhead and a weapon crashes onto a foe every 0.25s (70%, stays planted) · all basic attacks are throws meanwhile · 60s cooldown", ja: "必殺技：8秒間、頭上に武器庫が開き0.25秒ごとに敵へ武器が降り注ぐ（70%、刺さって残る）· その間、通常攻撃が全て投擲 · 待機60秒" },
+  pwSk_michaela1: { ko: "무기 비", en: "Weapon Rain", ja: "武器の雨" },
+  pwSk_michaela2: { ko: "칼날 교대", en: "Blade Swap", ja: "刃の交代" },
+  pwSk_michaela3: { ko: "일제 폭파", en: "Mass Detonation", ja: "一斉爆破" },
+  pwSk_michaela4: { ko: "무한의 무기고", en: "Infinite Armory", ja: "無限の武器庫" },
+  bfMcCombo: { ko: "콤보 {n}: 피해 +{p}%", en: "Combo {n}: +{p}% damage", ja: "コンボ{n}：ダメージ+{p}%" },
+  bfMcUlt: { ko: "무한의 무기고 {s}초: 모든 공격 투척", en: "Infinite Armory {s}s: every attack throws", ja: "無限の武器庫{s}秒：全攻撃が投擲" },
+  cg_michaela: { ko: "공격 속도 {n} 달성", en: "Reach {n} attack speed", ja: "攻撃速度{n}達成" },
+};

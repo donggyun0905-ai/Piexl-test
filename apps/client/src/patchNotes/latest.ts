@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.72",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "성국 새 캐릭터 미카엘라 '공허의 인도자' (스킬형): 방에 들어서면 포탈에서 무기가 쏟아져 곳곳에 박힘 · 박힌 무기에 몸을 대면 그 무기(검·투창)로 바꿔 듦 · 대시하면 범위 안의 박힌 무기로 순간 이동해 바꿔 듦 · 해금: 공격 속도 1.7 달성",
+        "미카엘라 콤보·연쇄 폭발: 바꾸거나 던질 때마다 콤보 (하나마다 피해 +3%, 최대 20) 와 폭발 · 폭발 둘레의 박힌 무기도 연달아 터짐",
+        "미카엘라 3연격: 검이면 베기 · 투창이면 찌르기 둘 → 투척 (박혀 폭발) · 숫자 키 스킬 넷: 1 무기 비 · 2 칼날 교대 · 3 일제 폭파 · 4 무한의 무기고",
+        "미카엘라 무기 1 (무한의 무기 보관소) · 전용 아이템 20 · 그림 시트 · 박힌 무기·떠다니는 무기·포탈·폭발 이펙트 · 패왕전 스킬",
+      ],
+      en: [
+        "New Holy Kingdom character Michaela 'The Void Guide' (skill-based): on entering a room, weapons pour from a portal and stick into the ground · touch a planted weapon to swap to it (sword or javelin) · dashing teleports you to a planted weapon in range and swaps · unlock: reach 1.7 attack speed",
+        "Michaela's combo and chain explosions: every swap or throw builds combo (+3% damage each, up to 20) and an explosion · planted weapons near an explosion go off in a chain",
+        "Michaela's 3-hit chain: two sword slashes or spear thrusts → throw (sticks and explodes) · four number-key skills: 1 Weapon Rain · 2 Blade Swap · 3 Mass Detonation · 4 Infinite Armory",
+        "Michaela: 1 weapon (Infinite Armory) · 20 exclusive items · sprite sheet · planted and floating weapons, portal and explosion effects · Paewang skills",
+      ],
+      ja: [
+        "聖国の新キャラクター ミカエラ「虚空の導き手」（スキル型）：部屋に入るとポータルから武器が降り注ぎあちこちに刺さる · 刺さった武器に触れるとその武器（剣・投槍）に持ち替える · ダッシュすると範囲内の刺さった武器へ瞬間移動して持ち替える · 解放：攻撃速度1.7達成",
+        "ミカエラのコンボと連鎖爆発：持ち替えや投擲のたびにコンボ（1つごとにダメージ+3%、最大20）と爆発 · 爆発の周りの刺さった武器も連鎖して爆発",
+        "ミカエラの3連撃：剣なら斬り・投槍なら突き2回 → 投擲（刺さって爆発）· 数字キーのスキル4つ：1 武器の雨 · 2 刃の交代 · 3 一斉爆破 · 4 無限の武器庫",
+        "ミカエラ：武器1（無限の武器庫）· 専用アイテム20 · スプライトシート · 刺さった武器・漂う武器・ポータル・爆発のエフェクト · 覇王戦スキル",
+      ],
+    },
+  },
+  {
     version: "0.49.71",
     date: "2026-11-07",
     items: {

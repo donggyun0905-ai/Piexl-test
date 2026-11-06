@@ -153,4 +153,10 @@ export const PW_KITS_3: PwKits = {
     sk("yrFlail", "point", 16, "#c8f0ff", { range: 100, radius: 70, fx: "field", repeat: { n: 6, every: 60 }, heal: 0.03, buff: { ticks: 6 * SEC, taken: 0.7, allies: true }, hit: { dmg: 0.3, slow: 1 * SEC } }),
     sk("yrFlail", "self", 60, "#ffffff", { radius: 200, delay: 40, fx: "pillar", heal: 0.3, buff: { ticks: 8 * SEC, taken: 0.7, allies: true }, hit: { dmg: 3 } }),
   ),
+  michaela: kit(1,
+    sk("mcArmory", "point", 8, "#e8e0ff", { range: 140, radius: 60, delay: 20, fx: "rain", repeat: { n: 6, every: 3 }, hit: { dmg: 0.7 } }),
+    sk("mcArmory", "dash", 6, "#c8b0ff", { range: 160, speed: 14, fx: "slash", hit: { dmg: 1.5, push: 8 } }),
+    sk("mcArmory", "self", 14, "#ffd0a0", { radius: 110, fx: "wave", repeat: { n: 4, every: 8 }, hit: { dmg: 1 } }),
+    sk("mcArmory", "self", 60, "#a080ff", { radius: 220, fx: "rain", repeat: { n: 16, every: 15 }, hit: { dmg: 0.7 } }),
+  ),
 };

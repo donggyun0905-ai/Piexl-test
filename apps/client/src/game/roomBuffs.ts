@@ -9,6 +9,7 @@ import { gabrielBuffs } from "./gabrielBuffs";
 import { serenaBuffs } from "./serenaBuffs";
 import { rafaelBuffs } from "./rafaelBuffs";
 import { yurielBuffs } from "./yurielBuffs";
+import { michaelaBuffs } from "./michaelaBuffs";
 
 export interface RoomBuff {
   key: string;
@@ -61,6 +62,7 @@ export function roomBuffs(p: PlayerState, floor: number, lang: Lang, t: (k: Text
   out.push(...serenaBuffs(p, t));
   out.push(...rafaelBuffs(p, t));
   out.push(...yurielBuffs(p, t));
+  out.push(...michaelaBuffs(p, t));
   const stats = statSummary(p, t);
   if (stats) out.push({ key: "stats", label: t("bfRoomStats"), tip: stats.text, bad: stats.bad });
   (p.altar?.got ?? []).forEach((g, i) => {

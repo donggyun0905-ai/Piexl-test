@@ -81,6 +81,7 @@ export const CHARACTER_GOALS: Partial<Record<CharacterId, CharGoal>> = {
   serena: { m: "moveSpeed", n: 1.8 },
   rafael: { m: "attackSpeed", n: 1.6 },
   yuriel: { m: "maxHp", n: 200 },
+  michaela: { m: "attackSpeed", n: 1.7 },
   chronomancer: { a: "thrift" },
   fly: { f: "clear7" },
   elder: { c: "traps", n: 1000 },
