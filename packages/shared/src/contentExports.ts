@@ -27,5 +27,7 @@ export { GABRIEL } from "./weaponsGabriel";
 export { GABRIEL_PERKS } from "./itemsGabriel";
 export { SERENA } from "./weaponsSerena";
 export { SERENA_PERKS } from "./itemsSerena";
+export { RAFAEL } from "./weaponsRafael";
+export { RAFAEL_PERKS } from "./itemsRafael";
 export { WAVE_PERKS, WV_SKILLS, type WvSkill } from "./itemsWave";
 export { LUX } from "./weaponsLux";

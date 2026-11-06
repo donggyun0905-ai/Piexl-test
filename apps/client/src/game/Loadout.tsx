@@ -35,7 +35,7 @@ export interface LoadoutView {
   /** 스킬이 있는 캐릭터(추적자): 스킬마다 남은 대기 0~1 */
   skills?: number[];
   /** 스킬 이름 묶음 (없으면 칸 수로: 셋 추적자 · 넷 베아트리스) */
-  skillSet?: "ia" | "gb" | "sn";
+  skillSet?: "ia" | "gb" | "sn" | "rf";
   /** 패왕전 스킬 칸 */
   pw?: PwSkillView;
   /** 상점 휴지통 판매 창이 열려 있을 때: 팔면 받는 돈 (sellCodes 순서: 무기 · 사용 아이템 2칸 · 패시브 순서, 0원 = 못 팜) */

@@ -74,9 +74,9 @@ export function startGameLoop(o: LoopOptions): () => void {
   const texts = frameTexts(t, lang);
   // 쓰러질 때 느린 다시 보기·쓰러지는 몸 (혼자 하기 던전)
   const cam = new DeathCam(!run.pvp && !run.party && !o.practice, drawPlayer);
-  // 추적자는 숫자 1·2·3, 성국(베아트리스·이안·가브리엘·세레나)은 1~4가 스킬 (아이템은 Q·E)
+  // 추적자는 숫자 1·2·3, 성국(베아트리스·이안·가브리엘·세레나·라파엘)은 1~4가 스킬 (아이템은 Q·E)
   // 패왕전은 숫자 1~4가 스킬 (조준 모드)
-  controls.skillKeys = run.player.characterId === "tracker" || run.player.characterId === "beatrice" || run.player.characterId === "ian" || run.player.characterId === "gabriel" || run.player.characterId === "serena" || !!run.pvp;
+  controls.skillKeys = run.player.characterId === "tracker" || run.player.characterId === "beatrice" || run.player.characterId === "ian" || run.player.characterId === "gabriel" || run.player.characterId === "serena" || run.player.characterId === "rafael" || !!run.pvp;
   controls.clickSkill = run.player.characterId === "remnant" && !run.pvp && !run.pw;
   controls.arm.on = !!run.pvp;
   // 패왕전은 자동 공격 없이 직접 조준만

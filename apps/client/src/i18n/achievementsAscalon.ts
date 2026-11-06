@@ -20,6 +20,7 @@ export const ASCALON_ACHIEVEMENTS = {
   clearLevia: n(["고래와 함께 자유롭게", "Free with the Whales", "クジラと共に自由に"], ["리바이어로 클리어", "Clear as Levia", "リヴァイアでクリア"]),
   clearTail: n(["바다의 포식자", "Apex of the Sea", "海の捕食者"], ["테일로 클리어", "Clear as Tail", "テイルでクリア"]),
   clearBeatrice: n(["심판의 불꽃", "Flame of Judgment", "審判の炎"], ["베아트리스로 클리어", "Clear as Beatrice", "ベアトリスでクリア"]),
+  clearRafael: n(["폭풍의 사수", "The Storm Archer", "嵐の射手"], ["라파엘로 클리어", "Clear as Rafael", "ラファエルでクリア"]),
   clearSerena: n(["환혹의 무희", "The Bewitching Dancer", "幻惑の舞姫"], ["세레나로 클리어", "Clear as Serena", "セレナでクリア"]),
   clearGabriel: n(["철옹의 방패", "The Iron Shield", "鉄壁の盾"], ["가브리엘로 클리어", "Clear as Gabriel", "ガブリエルでクリア"]),
   clearIan: n(["침묵의 서기관", "The Silent Scribe", "沈黙の書記官"], ["이안으로 클리어", "Clear as Ian", "イアンでクリア"]),

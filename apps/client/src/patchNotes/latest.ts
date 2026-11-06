@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.69",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "성국 새 캐릭터 라파엘 '폭풍의 사수' (스킬형): 멀리 있는 적일수록 화살 피해 증가 (최대 +60%) · 방에서 가장 강한 적에 표적 (받는 피해 +25%, 쓰러뜨리면 스킬 대기 30% 감소) · 해금: 공격 속도 1.6 달성",
+        "라파엘 3연격: 화살 둘 → 저격 (표적을 향해 모든 적을 꿰뚫는 굵은 화살)",
+        "라파엘 숫자 키 스킬 넷: 1 바람 걸음 (돌풍·뒤로 뛰기·다음 공격 저격) · 2 폭풍 화살비 · 3 에테르 스코프 (5초 동안 모든 공격 저격) · 4 천공의 빛 화살 (방을 가로지르는 거대한 빛의 화살)",
+        "라파엘 무기 1 (천공의 마도 복합 대궁) · 전용 아이템 20 · 그림 시트 · 화살·빛 화살 이펙트 · 패왕전 스킬",
+      ],
+      en: [
+        "New Holy Kingdom character Rafael 'The Storm Archer' (skill-based): arrows deal more damage the farther the foe (up to +60%) · marks the strongest foe in the room (+25% damage taken; killing it cuts skill cooldowns by 30%) · unlock: reach 1.6 attack speed",
+        "Rafael's 3-hit chain: two arrows → Snipe (a thick arrow piercing every foe toward the mark)",
+        "Rafael's four number-key skills: 1 Wind Step (gust, backward leap, next attack snipes) · 2 Storm Volley · 3 Ether Scope (every attack snipes for 5s) · 4 Arrow of Heaven (a giant arrow of light across the room)",
+        "Rafael: 1 weapon (Celestial Magitech Compound Bow) · 20 exclusive items · sprite sheet · arrow and arrow-of-light effects · Paewang skills",
+      ],
+      ja: [
+        "聖国の新キャラクター、ラファエル「嵐の射手」（スキル型）：遠い敵ほど矢のダメージ増加（最大+60%）· 部屋で最も強い敵に標的（受けるダメージ+25%、倒すとスキル待機30%減少）· 解放：攻撃速度1.6達成",
+        "ラファエルの3連撃：矢2本 → 狙撃（標的へ向けて全ての敵を貫く太い矢）",
+        "ラファエルの数字キーのスキル4つ：1 風の歩み（突風・後ろへ跳ぶ・次の攻撃が狙撃）· 2 嵐の矢の雨 · 3 エーテルスコープ（5秒間全攻撃が狙撃）· 4 天空の光の矢（部屋を貫く巨大な光の矢）",
+        "ラファエル：武器1（天空の魔導複合大弓）· 専用アイテム20 · スプライトシート · 矢・光の矢のエフェクト · 覇王戦スキル",
+      ],
+    },
+  },
+  {
     version: "0.49.68",
     date: "2026-11-07",
     items: {

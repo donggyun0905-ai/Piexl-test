@@ -141,4 +141,10 @@ export const PW_KITS_3: PwKits = {
     sk("snWhip", "cone", 9, "#b0ff8a", { radius: 140, arc: 0.55, fx: "slash", hit: { dmg: 2, dot: 0.5 } }),
     sk("snWhip", "self", 55, "#fff0b0", { radius: 130, fx: "spin", buff: { ticks: 6 * SEC, dmg: 1.25 }, hit: { dmg: 3, slow: 1.5 * SEC } }),
   ),
+  rafael: kit(1,
+    sk("rfBow", "self", 7, "#d8f0ff", { radius: 50, fx: "wave", hit: { dmg: 1, push: 18 } }),
+    sk("rfBow", "point", 11, "#8ad0ff", { range: 260, radius: 50, delay: 30, fx: "rain", repeat: { n: 5, every: 12 }, hit: { dmg: 0.8, slow: 0.6 * SEC } }),
+    sk("rfBow", "line", 9, "#b0e8ff", { range: 320, radius: 10, fx: "beam", hit: { dmg: 2.6, push: 8 } }),
+    sk("rfBow", "line", 60, "#fff6c0", { range: 520, radius: 24, delay: 45, fx: "beam", hit: { dmg: 6, push: 20 } }),
+  ),
 };
