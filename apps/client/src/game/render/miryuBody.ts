@@ -6,6 +6,7 @@ import { additive, alpha, glow, shock, type Ctx } from "./pwFxBits";
 import { glints } from "./seaLight";
 import { hpBarTop } from "./hpTop";
 import { dragonBody, flowRibbon, MR, waterBlade } from "./miryuArt";
+import { pearl } from "./miryuBits";
 
 /** 몸 뒤 */
 export function drawMiryuBack(ctx: Ctx, s: RunState, _a0: number, snap: Snap): void {
@@ -37,8 +38,8 @@ function gauge(ctx: Ctx, s: RunState, x: number, y: number): void {
   // 모은 물방울: 게이지 아래 작은 점
   const n = p.mrDrops ?? 0;
   for (let i = 0; i < Math.min(10, n); i++) {
-    ctx.fillStyle = MR.foam;
-    ctx.fillRect(x - w / 2 + i * 2, top + 3, 1, 1);
+    ctx.fillStyle = i % 2 ? MR.aqua : MR.foam;
+    ctx.fillRect(x - w / 2 + i * 2, top + 3, 1, 2);
   }
 }
 
@@ -50,18 +51,21 @@ export function drawMiryuAura(ctx: Ctx, s: RunState, a0: number, snap: Snap): vo
   const by = snap(lerp(p.prevY, p.y, a0));
   const py = by - 4;
   for (const b of p.mrBlades ?? []) waterBlade(ctx, snap(b.x), snap(b.y), b.dx, b.dy, Math.min(1, b.left / 30));
-  // 모은 물방울: 칼(몸 앞) 둘레를 물 흐르듯 돌아감
+  // 모은 물 구슬: 몸 둘레 기울어진 고리를 따라 돎 (물길의 물살 줄과 다른 모양 — 진한 테두리 눈물 구슬)
   const n = p.mrDrops ?? 0;
-  if (n > 0) additive(ctx, () => {
+  if (n > 0) {
+    additive(ctx, () => {
+      ctx.strokeStyle = alpha(MR.aqua, 0.25);
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.ellipse(px, py, 16, 7, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    });
     for (let i = 0; i < n; i++) {
-      const t = s.tick * 0.09 + (i / n) * Math.PI * 2;
-      const x = px + Math.cos(t) * 13;
-      const y = py + Math.sin(t) * 6;
-      glow(ctx, x, y, 4, MR.aqua, 0.9, 1);
-      ctx.fillStyle = alpha(MR.foam, 0.9);
-      ctx.fillRect(Math.round(x), Math.round(y), 1, 1);
+      const t = s.tick * 0.07 + (i / n) * Math.PI * 2;
+      pearl(ctx, px + Math.cos(t) * 16, py + Math.sin(t) * 7, -Math.sin(t) * 16, Math.cos(t) * 7, 3, 1, s.tick, i);
     }
-  });
+  }
   const full = (p.mrFlow ?? 0) >= MIRYU.flowMax && !p.mrDragon;
   if (full) {
     // 게이지 가득: 몸을 감아 오르는 두 줄기 물살 (해룡이 깨어나려 함)

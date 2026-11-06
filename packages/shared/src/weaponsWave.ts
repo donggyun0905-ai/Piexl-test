@@ -62,4 +62,8 @@ export const WAVE = {
   mirrorMul: 0.7,
   wingsMove: 1.25,
   floodMove: 1.2,
+  /** 모은 물의 기술(전용 아이템) 이 개수마다 공격력·방어력 더함 */
+  setEvery: 5,
+  setAtk: 5,
+  setDef: 5,
 };

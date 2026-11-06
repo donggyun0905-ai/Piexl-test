@@ -20,6 +20,7 @@ import { setExtras, setTaken } from "./buildSets";
 import { setOnHit, setTick } from "./buildSetFx";
 import { fenrirDodged, fenrirExtras } from "./fenrirStats";
 import { eclipseExtras } from "./eclipseStats";
+import { waveExtras } from "./wave";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -54,9 +55,11 @@ export function extraOf(p: PlayerState): ExtraStats {
   const fen = fenrirExtras(p);
   // 이클립스 태양 모습 치명타 (sim/eclipseStats)
   const ecl = eclipseExtras(p);
-  if (!add && !grow && !lux && !gym && !boon && !devil && !set && !fen && !ecl) return base;
+  // 웨이브 물의 기술 5개마다 방어력 (sim/wave)
+  const wv = waveExtras(p);
+  if (!add && !grow && !lux && !gym && !boon && !devil && !set && !fen && !ecl && !wv) return base;
   const out = { ...base };
-  for (const a of [add, grow, lux, gym, boon, devil, set, fen, ecl]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
+  for (const a of [add, grow, lux, gym, boon, devil, set, fen, ecl, wv]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
   return out;
 }
 

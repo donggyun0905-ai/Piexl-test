@@ -241,5 +241,5 @@ export function breachTick(s: RunState): boolean {
   return false;
 }
 
-/** 바닷바람 (classTaken) */
-export const orcaTaken = (p: PlayerState) => (hasPerk(p, "ocSeaWind") ? K.ocSeaWind.taken : 1);
+/** 바닷바람 · 해방 중 (classTaken) */
+export const orcaTaken = (p: PlayerState) => (hasPerk(p, "ocSeaWind") ? K.ocSeaWind.taken : 1) * (isFree(p) ? O.freeTaken : 1);

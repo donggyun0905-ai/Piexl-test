@@ -9,6 +9,8 @@ export const CHARACTER_TEXT_THALASSIA_2 = {
     en: "Thalassia. A surfer girl who shapes water with nothing but imagination. Press to throw a ripple crescent that grows as it pierces · every throw fills her imagination; when full, a random water skill she owns fires · all 30 exclusive items are different skills (water butterflies · water spear · gem of the sea · dream whale · jellyfish lanterns · tsunami of freedom …) · the more skills you gather, the faster imagination fills and the wilder the mix",
     ja: "タラシア。水を想像だけで自由に形作るサーフィン少女。押すと貫きながら大きくなるさざ波の三日月 · 投げるたびに想像力がたまり、満タンで持っている水の技から一つがランダムに出る · 専用アイテム30個はすべて違う技（水の蝶 · 水の槍 · 海の宝石 · 夢の鯨 · クラゲの灯 · 自由の津波 …）· 技を集めるほど想像力が早くたまり、多彩になる",
   },
+  bfWaveSet: { ko: "물의 기술 {n}개: 공격력 +{b} · 방어력 +{b}", en: "{n} water skills: ATK +{b} · DEF +{b}", ja: "水の技{n}個：攻撃力+{b} · 防御力+{b}" },
+  bfWaveSetTip: { ko: "모은 물의 기술 5개마다 공격력 +5 · 방어력 +5", en: "Every 5 water skills collected: ATK +5 · DEF +5", ja: "集めた水の技5個ごとに攻撃力+5 · 防御力+5" },
   miryu: { ko: "미류", en: "Miryu", ja: "ミリュウ" },
   flowblade: { ko: "물길을 남기는 대태도", en: "Current-Carving Odachi", ja: "水路を刻む大太刀" },
   miryuDesc: {

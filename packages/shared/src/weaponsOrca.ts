@@ -93,6 +93,8 @@ export const ORCA = {
   freeTicks: 600,
   freeRange: 1.35,
   freeSpeed: 1.3,
+  /** 해방 중 받는 피해 배율 */
+  freeTaken: 0.85,
   /** 해방 중 추가타: 타격마다 날아가는 물 상어 · 빠르기 · 거리 · 몸 반지름 · 피해 배율 */
   dartSpeed: 7,
   dartRange: 150,

@@ -29,25 +29,25 @@ const W = (id: string, damageMul: number, attackSpeed: number, miryu: MiryuStyle
 
 export const MIRYU_WEAPONS = {
   /** 청람 (처음 무기): 고른 성능 */
-  mrSeiran: W("mrSeiran", 1, 1, { miryu: "seiran" }),
+  mrSeiran: W("mrSeiran", 1.3, 1, { miryu: "seiran" }),
   /** 수월: 물길이 1.6배 오래 남고 30% 넓음 */
-  mrMoon: W("mrMoon", 0.95, 1, { miryu: "moon", life: 1.6, width: 1.3 }),
+  mrMoon: W("mrMoon", 1.25, 1, { miryu: "moon", life: 1.6, width: 1.3 }),
   /** 격류: 빠르게 벰 · 물길이 1.5배 세게 실어 나르고 두 배 자주 벰 */
-  mrTorrent: W("mrTorrent", 0.92, 1.15, { miryu: "torrent", carry: 1.5, every: 0.5 }),
+  mrTorrent: W("mrTorrent", 1.22, 1.15, { miryu: "torrent", carry: 1.5, every: 0.5 }),
   /** 와류: 셋째 타가 한 바퀴 회오리 베기 · 둥근 물길이 적을 안으로 빨아들임 */
-  mrVortex: W("mrVortex", 1, 0.95, { miryu: "vortex" }),
+  mrVortex: W("mrVortex", 1.3, 0.95, { miryu: "vortex" }),
   /** 명경: 흘리기 시간이 길고 물방울을 10개까지 · 되돌린 물칼날이 1.4배 세고 쏜 적을 쫓아감 */
-  mrMirror: W("mrMirror", 0.95, 1, { miryu: "mirror", guard: 1.8, drops: 10, back: 1.4 }),
+  mrMirror: W("mrMirror", 1.25, 1, { miryu: "mirror", guard: 1.8, drops: 10, back: 1.4 }),
   /** 유엽: 휘는 칼날이 1.5배 멀리 · 적 셋을 이어 벰 */
-  mrWillow: W("mrWillow", 0.92, 1, { miryu: "willow", bend: 1.5, bends: 3 }),
+  mrWillow: W("mrWillow", 1.22, 1, { miryu: "willow", bend: 1.5, bends: 3 }),
   /** 물마루: 해룡 일섬이 1.6배 길고 조금 더 멀리 미끄러짐 */
-  mrCrest: W("mrCrest", 1, 0.95, { miryu: "crest", flash: 1.6 }),
+  mrCrest: W("mrCrest", 1.3, 0.95, { miryu: "crest", flash: 1.6 }),
   /** 빙류: 물길에 닿은 적이 느려지고, 물길이 사라질 때 얼음으로 깨져 벰 */
-  mrFrost: W("mrFrost", 0.95, 1, { miryu: "frost" }),
+  mrFrost: W("mrFrost", 1.25, 1, { miryu: "frost" }),
   /** 심연: 느리지만 무겁고 길게 벰 · 해류 게이지가 빨리 참 */
-  mrAbyss: W("mrAbyss", 1.3, 0.8, { miryu: "abyss", reach: 1.15, gain: 1.4 }),
+  mrAbyss: W("mrAbyss", 1.6, 0.8, { miryu: "abyss", reach: 1.15, gain: 1.4 }),
   /** 무형: 벨 때마다 방금 걸어온 길도 물길이 됨 (자유롭게 강을 그림) */
-  mrFormless: W("mrFormless", 0.95, 1, { miryu: "formless" }),
+  mrFormless: W("mrFormless", 1.25, 1, { miryu: "formless" }),
 } as const satisfies Record<string, WeaponDef>;
 
 /** 미류 수치 (배율 1 = 100%, 시간은 틱(60 = 1초), 거리는 픽셀, 각은 라디안) */
@@ -108,7 +108,7 @@ export const MIRYU = {
   /** 천류 해방: 해룡 빠르기 · 몸 반지름 · 피해 배율 · 같은 적 다시 벨 틱 · 옆으로 밀어냄 · 맨 끝 둘레 고리 반지름 · 고리 점 수 · 마지막 돌진 거리 · 물길 따라가는 점 최대 · 물길 따라가는 길이 최대(픽셀) */
   dragonSpeed: 9,
   dragonR: 16,
-  dragonMul: 1.8,
+  dragonMul: 2.3,
   dragonRehit: 18,
   dragonPush: 10,
   loopR: 60,

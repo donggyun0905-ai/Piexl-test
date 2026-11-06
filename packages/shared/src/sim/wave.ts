@@ -7,6 +7,8 @@ import { WAVE as W } from "../weaponsWave";
 import { rot } from "./orbit";
 import { alive } from "./s2Kit";
 import { roomKey } from "./s2Kit";
+import type { ExtraStats } from "../characters";
+import type { StatMod } from "../stats";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk } from "./util";
 import { addBit, big, burstAt, dmgOf, isWall, turnDir, waveOf, wvHit } from "./waveKit";
@@ -179,3 +181,14 @@ export { isWave } from "./waveKit";
 export { jellyPts } from "./waveSkillsB";
 export { waveTaken } from "./waveSkillsD";
 export { waveMoveMul } from "./waveSkillsE";
+
+/** 모은 물의 기술 5개마다 공격력 +5 · 방어력 +5 (recalcStats, 버프 창에 보임) */
+export const waveSetBonus = (p: PlayerState): number => (p.characterId === "wave" ? Math.floor(ownSkills(p).length / W.setEvery) : 0);
+export function waveMods(p: PlayerState): StatMod[] {
+  const n = waveSetBonus(p);
+  return n > 0 ? [{ stat: "damage", add: n * W.setAtk }] : [];
+}
+export function waveExtras(p: PlayerState): Partial<ExtraStats> | null {
+  const n = waveSetBonus(p);
+  return n > 0 ? { defense: n * W.setDef } : null;
+}

@@ -149,4 +149,16 @@ describe("오르카", () => {
     expect(lost(b)).toBeGreaterThan(lost(a) * 1.2);
     expect(b.effects.some((f) => f.kind === "ocZap" && f.tint)).toBe(true);
   });
+
+  it("해방 중에는 받는 피해가 줄어듦", () => {
+    const a = orca();
+    const b = orca();
+    b.player.ocFree = 100;
+    for (const s of [a, b]) {
+      s.player.hp = s.player.stats.maxHp = 1000;
+      s.player.invulnTicks = 0;
+      damagePlayer(s, 100);
+    }
+    expect(1000 - b.player.hp).toBeCloseTo((1000 - a.player.hp) * O.freeTaken, 0);
+  });
 });

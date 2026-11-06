@@ -144,4 +144,19 @@ describe("웨이브", () => {
     run(s, 1, { ...FIRE, attack: false });
     expect(s.player.wvBits ?? []).toEqual([]);
   });
+
+  it("모은 물의 기술 5개마다 공격력 +5 · 방어력 +5 (15개면 +15)", () => {
+    const a = wave();
+    const b = wave("wvBoard", ...WV_SKILLS.slice(0, 15));
+    const c = wave("wvBoard", ...WV_SKILLS.slice(0, 4));
+    const base = a.player.stats.damage;
+    expect(b.player.stats.damage - base).toBeGreaterThanOrEqual(15 * W.setAtk / 5 - 0.01);
+    expect(c.player.stats.damage).toBeLessThan(b.player.stats.damage);
+    for (const s of [a, b]) {
+      s.player.hp = s.player.stats.maxHp = 1000;
+      s.player.invulnTicks = 0;
+      damagePlayer(s, 100);
+    }
+    expect(1000 - b.player.hp).toBeLessThan(1000 - a.player.hp);
+  });
 });

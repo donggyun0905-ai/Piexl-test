@@ -116,7 +116,7 @@ export { isTail, tailShark, tailStep, seaR } from "./tail";
 export { cannonCount, cannonPos, isMadQueen, wingPos } from "./madQueen";
 export { hookReach, isHook } from "./hook";
 export { isOrca } from "./orca";
-export { isWave, jellyPts, ownSkills } from "./wave";
+export { isWave, jellyPts, ownSkills, waveSetBonus } from "./wave";
 export type { WvBit } from "./waveTypes";
 export { isMiryu, onStream } from "./miryuKit";
 export { isEclipse, isNight, zoneR as eclipseZoneR } from "./eclipseStats";

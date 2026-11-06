@@ -5,6 +5,7 @@ import { additive, alpha, easeOut, glow, rnd, shock, sparks, type Ctx } from "./
 import type { Snap } from "./palette";
 import { glints, rays } from "./seaLight";
 import { bendWhip, fallColumn, MR, slashBand } from "./miryuArt";
+import { edgeGlint, helix, partWalls, tangentSpray } from "./miryuBits";
 import { droplets } from "./thorkenFx";
 import { crown } from "./tailArt";
 
@@ -56,7 +57,8 @@ export function drawMiryuFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         const ty = y + Math.sin(cur) * r;
         flingLines(ctx, tx, ty, cur - (side * Math.PI) / 2, 1.2, 2, 14, seed + k * 9, 5, 1 - k);
       }
-      if (f > 0.25) drops(ctx, x + Math.cos(a1) * r * 0.85, y + Math.sin(a1) * r * 0.85, r * 0.4, (f - 0.25) / 0.75, seed, 10);
+      edgeGlint(ctx, x, y, r, a0, cur, f < 0.12 ? 1 : Math.max(0, 1 - (f - 0.12) / 0.25));
+      tangentSpray(ctx, x, y, r, a0, a1, f, seed, 14);
       return true;
     }
     case "mrFlash": {
@@ -67,7 +69,8 @@ export function drawMiryuFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const k = easeOut(Math.min(1, f / 0.25));
       const ex = x + (tx - x) * k;
       const ey = y + (ty - y) * k;
-      const w = (fx.size ?? 14) * (1 - f * 0.6);
+      const w = (fx.size ?? 14) * (f < 0.1 ? 0.35 : 1 - f * 0.6);
+      partWalls(ctx, x, y, tx, ty, f, fade);
       additive(ctx, () => {
         ctx.lineCap = "round";
         for (const [c, ww, al] of [[MR.deep, w * 2.4, 0.35], [MR.sea, w * 1.4, 0.6], [MR.aqua, w * 0.7, 0.9], [MR.foam, Math.max(1, w * 0.22), 1]] as const) {
@@ -108,6 +111,7 @@ export function drawMiryuFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       // 휘는 물 채찍: 칼끝에서 곡선을 그리며 적까지 뻗고 닿은 자리에 물보라
       const k = easeOut(Math.min(1, f / 0.35));
       bendWhip(ctx, x, y, snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y), fx.dirX, fx.dirY, k, fade, seed);
+      if (f > 0.2) tangentSpray(ctx, (x + snap(fx.toX ?? fx.x)) / 2, (y + snap(fx.toY ?? fx.y)) / 2, 4, a - 0.6, a + 0.6, (f - 0.2) / 0.8, seed, 6);
       if (f > 0.3) drops(ctx, snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y), 10, (f - 0.3) / 0.7, seed, 8);
       return true;
     }
@@ -122,7 +126,7 @@ export function drawMiryuFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         const my = (y + ty) / 2 + (tx - x) * 0.35;
         const px = (1 - k) ** 2 * x + 2 * (1 - k) * k * mx + k * k * tx;
         const py = (1 - k) ** 2 * y + 2 * (1 - k) * k * my + k * k * ty;
-        glow(ctx, px, py, 5, MR.aqua, 1 - f * 0.5, 1);
+        glow(ctx, px, py, 5, f < 0.25 ? "#ff9a5a" : MR.aqua, 1 - f * 0.5, 1);
       });
       return true;
     }
@@ -165,6 +169,7 @@ export function drawMiryuFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       // 천류 해방: 칼끝에서 물기둥이 하늘로 치솟고 큰 물 고리 · 빛줄기
       const k = easeOut(Math.min(1, f / 0.4));
       fallColumn(ctx, x, y, 18 * (1 - f * 0.5), 110 * k, Math.round(f * 60), fade);
+      helix(ctx, x, y, 110 * k, 14 * (1 - f * 0.3), Math.round(f * 40), fade);
       additive(ctx, () => {
         shock(ctx, x, y, 10 + k * r * 1.6, MR.aqua, fade, 5);
         shock(ctx, x, y, 6 + k * r, MR.foam, fade * 0.8, 3);
@@ -189,6 +194,7 @@ export function drawMiryuFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         splash(ctx, x, y, r * 0.8, hit, seed, 15);
         drops(ctx, x, y, r * 1.1, hit, seed, 24);
         sparks(ctx, x, y, 14, r, hit, MR.foam, seed, 1 - hit);
+        additive(ctx, () => glow(ctx, x, y - 8, r * (0.6 + hit * 0.8), MR.ice, 0.3 * Math.sin(hit * Math.PI)));
       }
       return true;
     }

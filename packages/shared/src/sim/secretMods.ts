@@ -1,8 +1,9 @@
-// 시즌 2 히든 캐릭터 능력치 몫 모음 (recalcStats): 차원의 순례자 도감 · 몰락한 왕 영혼
+// 시즌 2 히든 캐릭터 능력치 몫 모음 (recalcStats): 차원의 순례자 도감 · 몰락한 왕 영혼 · 웨이브 물의 기술 5개마다 공격력
 import type { StatMod } from "../stats";
 import { fallenKingMods } from "./fallenKing";
 import { pilgrimMods } from "./pgBag";
 import { luxMods } from "./lux";
 import type { PlayerState } from "./types";
+import { waveMods } from "./wave";
 
-export const secretMods = (p: PlayerState): StatMod[] => [...pilgrimMods(p), ...fallenKingMods(p), ...luxMods(p)];
+export const secretMods = (p: PlayerState): StatMod[] => [...pilgrimMods(p), ...fallenKingMods(p), ...luxMods(p), ...waveMods(p)];

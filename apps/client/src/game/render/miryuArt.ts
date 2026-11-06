@@ -36,26 +36,20 @@ export function flowRibbon(ctx: Ctx, pts: readonly (readonly [number, number])[]
     ctx.strokeStyle = alpha(aqua, 0.3 * a);
     ctx.lineWidth = w * 0.45;
     ctx.stroke();
-    // 흐르는 물살 무늬 (두 겹: 빠른 흰 줄 · 느린 하늘색 줄)
-    ctx.setLineDash([7, 9]);
+    // 흐르는 물살 무늬 (두 겹: 빠른 흰 줄 · 느린 하늘색 줄) — 끝이 각진 긴 줄 (둥근 물방울처럼 보이지 않게)
+    ctx.lineCap = "butt";
+    ctx.setLineDash([14, 10]);
     ctx.lineDashOffset = -tick * 1.6;
     ctx.strokeStyle = alpha(MR.foam, 0.8 * a);
     ctx.lineWidth = Math.max(1, w * 0.18);
     ctx.stroke();
-    ctx.setLineDash([3, 13]);
+    ctx.setLineDash([22, 18]);
     ctx.lineDashOffset = -tick * 1.1 + 5;
     ctx.strokeStyle = alpha(aqua, 0.75 * a);
-    ctx.lineWidth = Math.max(1, w * 0.7);
+    ctx.lineWidth = Math.max(1, w * 0.3);
     ctx.stroke();
     ctx.setLineDash([]);
   });
-  // 물길 끝: 흘러 나가는 물보라 점
-  const [ex, ey] = pts[pts.length - 1]!;
-  for (let i = 0; i < 3; i++) {
-    const u = ((tick * 0.05 + i / 3) % 1);
-    ctx.fillStyle = alpha(MR.foam, (1 - u) * 0.8 * a);
-    ctx.fillRect(Math.round(ex + (rnd(i, 7) - 0.5) * w * 2 * u), Math.round(ey - u * 6 - rnd(7, i) * 3), 1, 1);
-  }
   ctx.lineCap = "butt";
   ctx.lineJoin = "miter";
 }
@@ -195,8 +189,8 @@ export function dragonBody(ctx: Ctx, body: readonly (readonly [number, number])[
     ctx.lineTo(10, 5);
     ctx.fill();
     // 뿔 둘 · 수염
-    ctx.strokeStyle = alpha(MR.foam, al);
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = alpha(MR.foam, 0.75 * al);
+    ctx.lineWidth = 1.2;
     ctx.lineCap = "round";
     for (const s of [-1, 1]) {
       ctx.beginPath();

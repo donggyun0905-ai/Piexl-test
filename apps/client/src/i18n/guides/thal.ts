@@ -5,7 +5,7 @@ type Guide = Partial<Record<CharacterId, readonly string[]>>;
 
 export const GUIDE_KO_THAL: Guide = {
   thorken: [
-    "탈라시아 · 토르켄 · 자유의 바다를 누비는 뱃사람. 거대한 닻과 사슬로 이은 철구공으로 싸움 · 체력 120 · 공격력 12 · 이동 1.3 · 방어 5",
+    "탈라시아 · 토르켄 · 자유의 바다를 누비는 뱃사람. 거대한 닻과 사슬로 이은 철구공으로 싸움 · 체력 120 · 공격력 17 · 이동 1.3 · 방어 5",
     "던지기: 철구공이 손에 있을 때 누르면 바라보는 쪽으로 사슬 끝까지 던짐 (벽·기둥에 부딪히면 그 앞에 멈춤) · 떨어진 자리에 물보라와 천둥 (둘레 피해 + 기절)",
     "휘두르기: 철구공이 나가 있으면 누를 때마다 닻을 넓게 휘두르고(공격력 250%, 느림) 사슬 끝 철구공이 나를 중심으로 크게 돌며 휩씀 · 공이 있던 쪽에서 바라보는 쪽을 지나 반대편까지 돌아서, 공을 어디에 두느냐에 따라 휩쓰는 길이 달라짐 · 멀어지면 공이 끌려옴",
     "대시하면 철구공을 감아 들임 (돌아오는 길의 적을 때림) · 사슬은 사거리만큼 길어지고, 나와 철구공 사이 사슬에 닿은 적도 맞음 → 다시 누르면 새로 던져 또 천둥 · 때릴수록 폭풍 게이지가 차고, 가득 차면 다음 휘두르기에 태풍(철구공을 따라다니며 적을 끌어당겨 때림) + 하늘에서 천둥 5번",
@@ -33,7 +33,7 @@ export const GUIDE_KO_THAL: Guide = {
 
 export const GUIDE_EN_THAL: Guide = {
   thorken: [
-    "Thalassia · Thorken · a sailor of the free sea who fights with a giant anchor and a chained iron ball · 120 HP · 12 attack · 1.3 move · 5 defense",
+    "Thalassia · Thorken · a sailor of the free sea who fights with a giant anchor and a chained iron ball · 120 HP · 17 attack · 1.3 move · 5 defense",
     "Throw: with the ball in hand, a press hurls it ahead to the chain's full length (stops before walls and pillars) · where it lands, a splash and thunder (area damage + stun)",
     "Swing: with the ball out, each press swings the anchor wide (250% attack, slow) and the chained ball whips around you in a huge arc · it travels from where it lay, past where you face, to the far side, so where you leave the ball shapes the sweep · walk away and the ball is dragged along",
     "Dash reels the ball back, hitting foes on its way · the chain grows with your range, and foes touching the chain between you and the ball are hit too → the next press throws it again for more thunder · hits fill the Storm gauge; when full, your next swing calls a typhoon (follows the ball, pulling and striking foes) + 5 thunderbolts from the sky",
@@ -61,7 +61,7 @@ export const GUIDE_EN_THAL: Guide = {
 
 export const GUIDE_JA_THAL: Guide = {
   thorken: [
-    "タラシア · トルケン · 自由の海を駆ける船乗り。巨大な錨と鎖でつないだ鉄球で戦う · 体力120 · 攻撃力12 · 移動1.3 · 防御5",
+    "タラシア · トルケン · 自由の海を駆ける船乗り。巨大な錨と鎖でつないだ鉄球で戦う · 体力120 · 攻撃力17 · 移動1.3 · 防御5",
     "投げ: 鉄球が手にあるとき押すと向いている方へ鎖の端まで投げる（壁・柱に当たると手前で止まる） · 落ちた場所に水しぶきと雷（周りにダメージ + 気絶）",
     "振り: 鉄球が出ていると押すたびに錨を広く振り（攻撃力250%、遅い）、鎖の先の鉄球が自分を中心に大きく回って薙ぐ · 球があった方から向いている方を越えて反対側まで回るので、球をどこに置くかで薙ぐ道が変わる · 離れると球が引きずられる",
     "ダッシュで鉄球を巻き戻す（戻る途中の敵を叩く）· 鎖は射程に合わせて伸び、自分と鉄球の間の鎖に触れた敵にも当たる → 次に押すとまた投げて雷 · 当てるほど嵐ゲージがたまり、満ちると次の振りで台風（鉄球について回り敵を引き寄せて打つ）+ 空から雷5回",
