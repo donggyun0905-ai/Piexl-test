@@ -36,9 +36,10 @@ import { miryuTaken } from "./miryu";
 import { beaHurt, beaTaken } from "./beatriceKit";
 import { ianHurt, ianTaken } from "./ianKit";
 import { gabrielHurt, gabrielTaken, gbFoeTaken } from "./gabrielKit";
+import { snFoeTaken } from "./serenaKit";
 import { evilTaken } from "./beatriceKit";
-/** 적이 받는 피해 배율 (베아트리스 악 · 이안 속박 · 가브리엘 압박, combat.damageEnemy) */
-export const foeTaken = (s: RunState, e: EnemyState) => evilTaken(s, e) * ianTaken(s, e) * gbFoeTaken(s, e);
+/** 적이 받는 피해 배율 (베아트리스 악 · 이안 속박 · 가브리엘 압박 · 세레나 마비, combat.damageEnemy) */
+export const foeTaken = (s: RunState, e: EnemyState) => evilTaken(s, e) * ianTaken(s, e) * gbFoeTaken(s, e) * snFoeTaken(s, e);
 import { leoTaken } from "./leoPerks";
 import { onyxHurt, onyxTaken } from "./onyx";
 export { cloudEnv } from "./pungHooks";

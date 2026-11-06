@@ -49,6 +49,7 @@ import { miryuTick } from "./miryu";
 import { beatriceTick } from "./beatrice";
 import { ianTick } from "./ian";
 import { gabrielTick } from "./gabriel";
+import { serenaTick } from "./serena";
 import { leoTick } from "./leo";
 import { onyxTick } from "./onyx";
 import { fenrirTick } from "./fenrir";
@@ -117,6 +118,7 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   judgment: beatriceTick,
   causality: ianTick,
   bastion: gabrielTick,
+  nightmare: serenaTick,
   lion: leoTick,
   gem: onyxTick,
   fang: fenrirTick,

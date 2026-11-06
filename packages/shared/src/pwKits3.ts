@@ -135,4 +135,10 @@ export const PW_KITS_3: PwKits = {
     sk("gbHammer", "self", 16, "#fff0b0", { radius: 70, fx: "wave", buff: { ticks: 4 * SEC, taken: 0.5 }, hit: { dmg: 1.4, push: 14 } }),
     sk("gbHammer", "self", 60, "#ffd040", { radius: 120, fx: "field", buff: { ticks: 8 * SEC, taken: 0.4 }, hit: { dmg: 3, stun: 1 * SEC } }),
   ),
+  serena: kit(1,
+    sk("snWhip", "dash", 7, "#ffe0f0", { range: 120, speed: 11, fx: "spin", hit: { dmg: 1.5 } }),
+    sk("snWhip", "point", 11, "#ffd76a", { range: 160, radius: 60, delay: 12, fx: "field", hit: { dmg: 1.6, slow: 2 * SEC, dot: 0.4 } }),
+    sk("snWhip", "cone", 9, "#b0ff8a", { radius: 140, arc: 0.55, fx: "slash", hit: { dmg: 2, dot: 0.5 } }),
+    sk("snWhip", "self", 55, "#fff0b0", { radius: 130, fx: "spin", buff: { ticks: 6 * SEC, dmg: 1.25 }, hit: { dmg: 3, slow: 1.5 * SEC } }),
+  ),
 };

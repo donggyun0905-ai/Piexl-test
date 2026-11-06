@@ -7,4 +7,6 @@ export const SEONGGUK_CHARACTERS = {
   ian: { id: "ian", maxHp: 95, damage: 14, moveSpeed: 1.45, luck: 2, startWeapon: "iaPen", defense: 1 },
   /** 성국: 가브리엘 망치 3연격·대지 강타·철옹(받는 피해 절반)·압박·스킬 넷·불멸의 성벽 (sim/gabriel) · 공격력은 18에서 더 오르지 않고 넘는 만큼 체력 */
   gabriel: { id: "gabriel", maxHp: 150, damage: 18, moveSpeed: 0.9, luck: 1, startWeapon: "gbHammer", defense: 5 },
+  /** 성국: 세레나 도는 사슬 채찍 둘·채찍 3연격·환혹의 회오리·가시·마비·치명타·빛 피해·스킬 넷 (sim/serena) */
+  serena: { id: "serena", maxHp: 100, damage: 12, moveSpeed: 1.4, luck: 3, startWeapon: "snWhip", defense: 1 },
 } as const;

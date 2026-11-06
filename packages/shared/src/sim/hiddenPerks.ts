@@ -13,6 +13,7 @@ import { luxKill } from "./luxFoes";
 import { beaKill } from "./beatriceKit";
 import { ianKill } from "./ianKit";
 import { gabrielKill } from "./gabrielKit";
+import { serenaKill } from "./serenaKit";
 import { cupidTick } from "./spiritGreat";
 import { storms } from "./oni";
 import { stun } from "./s2Kit";
@@ -83,6 +84,7 @@ export function relicKill(s: RunState, e: EnemyState): void {
   beaKill(s, e);
   ianKill(s, e);
   gabrielKill(s, e);
+  serenaKill(s, e);
   setKill(s, e);
   const p = s.player;
   let recalc = false;

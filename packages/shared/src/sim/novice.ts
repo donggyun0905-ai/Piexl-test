@@ -16,6 +16,7 @@ import { addEffect, markCrit } from "./util";
 import { extraOf } from "./baseStats";
 import { PW_PASSIVE } from "../paewangPassive";
 import { eclipseNoCrit } from "./eclipseStats";
+import { serenaCrit } from "./serenaCrit";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -112,7 +113,8 @@ export function critNow(s: RunState): { chance: number; mul: number } {
   const pet = petCrit(s);
   const ex = s.pvp && p.characterId === "remnant" ? { ...extraOf(p), critDamage: PW_PASSIVE.remnantCrit } : extraOf(p);
   // 사멸: 기본 치명타 20%
-  const base = p.characterId === "novice" ? noviceCrit(p) : p.characterId === "samyeol" ? { chance: SAMYEOL.critChance, mul: SAMYEOL.critMul } : wake > 0 ? { chance: wake, mul: IMUGI.critMul } : { chance: 0, mul: ex.critChance > 0 ? ex.critDamage : LOBBY_PETS.chick.critMul };
+  // 세레나: 기본 치명타 25% (sim/serenaCrit)
+  const base = p.characterId === "novice" ? noviceCrit(p) : p.characterId === "serena" ? serenaCrit(p)! : p.characterId === "samyeol" ? { chance: SAMYEOL.critChance, mul: SAMYEOL.critMul } : wake > 0 ? { chance: wake, mul: IMUGI.critMul } : { chance: 0, mul: ex.critChance > 0 ? ex.critDamage : LOBBY_PETS.chick.critMul };
   return { chance: base.chance + pet + ex.critChance, mul: base.mul };
 }
 
@@ -123,7 +125,7 @@ export function rollCrit(s: RunState, e: EnemyState, dmg: number): { dmg: number
   const wake = imugiCrit(p);
   // 병아리(로비 펫): 치명타 확률 +
   const pet = petCrit(s);
-  const tang = p.characterId === "samyeol";
+  const tang = p.characterId === "samyeol" || p.characterId === "serena";
   // 기본 스탯 치명타 (모든 캐릭터, sim/baseStats)
   // 패왕전 잔영: 치명타 피해 고정 (pwPassive)
   const ex = s.pvp && p.characterId === "remnant" ? { ...extraOf(p), critDamage: PW_PASSIVE.remnantCrit } : extraOf(p);
