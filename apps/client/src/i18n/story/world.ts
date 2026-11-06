@@ -43,6 +43,15 @@ export const FACTION_TEXT: Record<FactionId, { name: L; tag: L; desc: L }> = {
       "獣人やエルフなど、自然と共に生きる者たちの国。誤解からアスカロンと敵対している。",
     ),
   },
+  seongguk: {
+    name: c("성국", "Holy Kingdom", "聖国"),
+    tag: c("성스러운 나라", "Holy Nation", "聖なる国"),
+    desc: c(
+      "꺼지지 않는 성화를 지키는 기사와 성직자의 나라. 성국의 전사들은 저절로 휘두르는 힘 대신 갈고닦은 기술(스킬)로 싸운다.",
+      "A nation of knights and clergy guarding an undying sacred flame. Its warriors fight not with reflexive strikes but with honed techniques (skills).",
+      "消えない聖火を守る騎士と聖職者の国。聖国の戦士たちは反射的な打撃ではなく、磨き上げた技（スキル）で戦う。",
+    ),
+  },
   thalassia: {
     name: c("탈라시아", "Thalassia", "タラシア"),
     tag: c("바다의 나라", "Sea Nation", "海の国"),

@@ -12,6 +12,7 @@ import { tabooDown } from "./taboo";
 import { TERRAIN } from "../terrainDefs";
 import { PW } from "../paewangDefs";
 import { setHealMul } from "./buildSets";
+import { healBlocked } from "./beatriceKit";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -46,7 +47,7 @@ export function overheals(s: RunState): boolean {
 export function heal(s: RunState, amount: number): void {
   const p = s.player;
   // 학살자: 회복이 듣지 않음 (피의 학살 흡혈만) · 끝없는 시련 중에는 모든 회복이 막힘
-  if (p.characterId === "slayer" || trialNoHeal(s)) return;
+  if (p.characterId === "slayer" || trialNoHeal(s) || healBlocked(p)) return;
   // 금기: 메마른 몸 (모든 회복 감소)
   amount *= tabooDown(s, "lessHeal") * setHealMul(p);
   // 부식독 (베놈 독가스): 회복·재생 감소

@@ -16,6 +16,7 @@ import { drawHookAura, drawHookBack } from "./hookBody";
 import { drawOrcaAura, drawOrcaBack } from "./orcaBody";
 import { drawWaveAura, drawWaveBack } from "./waveBody";
 import { drawMiryuAura, drawMiryuBack } from "./miryuBody";
+import { drawBeatriceAura, drawBeatriceBack } from "./beatriceBody";
 import { drawFallenWings } from "./fallenWings";
 
 type Ctx = CanvasRenderingContext2D;
@@ -90,6 +91,7 @@ export function drawForgottenBack(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawOrcaBack(ctx, s, alpha, snap);
   drawWaveBack(ctx, s, alpha, snap);
   drawMiryuBack(ctx, s, alpha, snap);
+  drawBeatriceBack(ctx, s, alpha, snap);
   drawFallenWings(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten") return;
@@ -130,6 +132,7 @@ export function drawForgottenAura(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawOrcaAura(ctx, s, alpha, snap);
   drawWaveAura(ctx, s, alpha, snap);
   drawMiryuAura(ctx, s, alpha, snap);
+  drawBeatriceAura(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten" || (p.fgGod ?? 0) <= 0) return;
   const x = lerp(p.prevX, p.x, alpha);

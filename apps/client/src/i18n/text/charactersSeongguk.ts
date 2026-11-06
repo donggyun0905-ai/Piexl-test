@@ -1,0 +1,25 @@
+// 화면 글자: 성국(성스러운 나라) 캐릭터 이름·설명 · 스킬 이름 · 버프 창
+export const CHARACTER_TEXT_SEONGGUK = {
+  csSeongguk: { ko: "성국", en: "Holy Kingdom", ja: "聖国" },
+  beatrice: { ko: "베아트리스", en: "Beatrice", ja: "ベアトリス" },
+  judgment: { ko: "심판의 쌍검", en: "Twin Blades of Judgment", ja: "審判の双剣" },
+  beatriceDesc: {
+    ko: "성국. '심판의 불꽃'. 빛의 갑옷을 두른 성국의 최고 전력으로, 단 한 번의 참격으로 성벽을 가르는 묵직한 브레이커. 누르고 있으면 쌍검 3연격(왼→오 · 오→왼 베기로 X자 → 그 X자를 다시 X로 베어 터뜨림) · 숫자 키 스킬 넷: 1 태양 검날(공격 속도·화염·화상) · 2 일식의 춤(돌진 뒤 쌍검 2연속) · 3 태양의 낙인(검기, 악 +2) · 4 자애(체력 1로 10초 동안 줄지 않고 화염 계수 400%, 끝나고 10초 회복 불가) · 나를 때린 적에게 '악'이 쌓여(최대 10, 받는 피해 증가) 10이면 처단, 처단으로 지운 악 100개마다 심판 · 체력이 적을수록 재생력·화염 계수가 오름",
+    en: "Holy Kingdom. 'Flame of Judgment'. The Holy Kingdom's greatest warrior in armor of light, a heavy breaker who splits walls with a single slash. Hold for a twin-blade 3-hit chain (left→right · right→left forms an X → the 3rd hit cuts that X again and bursts it) · four number-key skills: 1 Solar Blade (attack speed · fire · burn) · 2 Eclipse Dance (dash, then a twin double slash) · 3 Solar Brand (sword wave, +2 Evil) · 4 Mercy (HP set to 1 and can't drop for 10s, fire coefficient 400%, then no healing for 10s) · Foes that hit her gain 'Evil' (up to 10, take more damage); at 10 they are Executed, and every 100 purged Evil brings Judgment · lower HP raises regeneration and fire coefficient",
+    ja: "聖国。「審判の炎」。光の鎧をまとう聖国の最高戦力で、一太刀で城壁を断つ重いブレイカー。押し続けると双剣の3連撃（左→右 · 右→左斬りでX字 → そのX字をもう一度X字に斬って破裂）· 数字キーのスキル4つ：1 太陽剣刃（攻撃速度 · 火炎 · 火傷）· 2 日食の舞（突進後に双剣2連）· 3 太陽の烙印（剣気、悪+2）· 4 慈愛（体力1で10秒間減らず火炎係数400%、終了後10秒回復不可）· 自分を攻撃した敵に「悪」が溜まり（最大10、被ダメージ増加）10で処断、処断で消した悪100個ごとに審判 · 体力が少ないほど再生力・火炎係数が上がる",
+  },
+  btSkill1: { ko: "태양 검날", en: "Solar Blade", ja: "太陽剣刃" },
+  btSkill2: { ko: "일식의 춤", en: "Eclipse Dance", ja: "日食の舞" },
+  btSkill3: { ko: "태양의 낙인", en: "Solar Brand", ja: "太陽の烙印" },
+  btSkill4: { ko: "자애", en: "Mercy", ja: "慈愛" },
+  pwSk_beatrice1: { ko: "태양 검날", en: "Solar Blade", ja: "太陽剣刃" },
+  pwSk_beatrice2: { ko: "일식의 춤", en: "Eclipse Dance", ja: "日食の舞" },
+  pwSk_beatrice3: { ko: "태양의 낙인", en: "Solar Brand", ja: "太陽の烙印" },
+  pwSk_beatrice4: { ko: "자애", en: "Mercy", ja: "慈愛" },
+  bfBtFire: { ko: "심판의 불꽃: 화염 계수 {n}% · 재생력 {r}", en: "Flame of Judgment: fire coefficient {n}% · regeneration {r}", ja: "審判の炎：火炎係数{n}% · 再生力{r}" },
+  bfBtSolar: { ko: "태양 검날 {s}초: 공격 속도 +30% · 화염 · 화상", en: "Solar Blade {s}s: +30% attack speed · fire · burn", ja: "太陽剣刃{s}秒：攻撃速度+30% · 火炎 · 火傷" },
+  bfBtGrace: { ko: "자애 {s}초: 체력이 줄지 않음 · 화염 계수 한계 400%", en: "Mercy {s}s: HP can't drop · fire coefficient cap 400%", ja: "慈愛{s}秒：体力が減らない · 火炎係数上限400%" },
+  bfBtNoHeal: { ko: "치유 감소: {s}초 동안 회복 불가", en: "Healing cut: no healing for {s}s", ja: "治癒減少：{s}秒間回復不可" },
+  bfBtPurge: { ko: "심판까지: 지운 악 {n} / {m}", en: "Until Judgment: purged Evil {n} / {m}", ja: "審判まで：消した悪 {n} / {m}" },
+  cg_beatrice: { ko: "최대 체력 {n} 달성", en: "Reach {n} max HP", ja: "最大体力{n}達成" },
+};

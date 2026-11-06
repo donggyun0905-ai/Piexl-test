@@ -10,6 +10,7 @@ export const SELECT_TABS: readonly { id: FactionId; label: TextKey }[] = [
   { id: "virdia", label: "csVirdia" },
   { id: "helios", label: "csHelios" },
   { id: "thalassia", label: "csThalassia" },
+  { id: "seongguk", label: "csSeongguk" },
   { id: "akashic", label: "csAkashic" },
   { id: "outsider", label: "csOutsider" },
   { id: "archive", label: "csArchive" },

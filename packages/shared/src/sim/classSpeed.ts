@@ -18,6 +18,7 @@ import { thorkenSpeedMul } from "./thorkenKit";
 import { leviaDmgMul, leviaSpeedMul } from "./leviaKit";
 import { orcaSpeedMul } from "./orcaFree";
 import { miryuSpeedMul } from "./miryuKit";
+import { beatriceSpeedMul } from "./beatrice";
 
 /** 직업마다 평타 공격력 배율 (능력치 창 '공격력'에 같이 보임): 이드라 모습·사계절 · 학살자 낮은 체력·분노 */
 export function classDamageMul(p: PlayerState): number {
@@ -32,6 +33,8 @@ export function classSpeedMul(p: PlayerState): number {
   switch (p.characterId) {
     case "miryu":
       return miryuSpeedMul(p);
+    case "beatrice":
+      return beatriceSpeedMul(p);
     case "artifacter":
       return (p.afSurge ?? 0) > 0 ? afv(p, "afSurge", "speed") : 1;
     case "forgotten":

@@ -5,7 +5,7 @@ export const PW_ROLE_IDS = ["warrior", "ranged", "mage", "assassin", "support"] 
 export type PwRoleId = (typeof PW_ROLE_IDS)[number];
 
 const MEMBERS: Record<PwRoleId, readonly CharacterId[]> = {
-  warrior: ["levia", "thorken", "eclipse", "warden", "novice", "general", "imugi", "titan", "oni", "byeonhui", "mukin", "collector", "leo", "onyx"],
+  warrior: ["beatrice", "levia", "thorken", "eclipse", "warden", "novice", "general", "imugi", "titan", "oni", "byeonhui", "mukin", "collector", "leo", "onyx"],
   ranged: ["drifter", "engineer", "gunner", "ninja", "chronomancer", "idra", "samyeol", "automata", "tracker", "madQueen"],
   mage: ["wave", "mage", "elementalist", "summoner", "pungryu", "elder", "ren", "plague", "bomber", "spiritist"],
   assassin: ["tail", "hook", "orca", "miryu", "brawler", "beast", "fly", "slayer", "eater", "bedouin", "abandoned", "rider", "punk", "remnant", "wanderer", "silk", "fenrir"],

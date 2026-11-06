@@ -3,6 +3,7 @@
 import { ownSkills, waveSetBonus, WAVE, type PlayerState } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { itemName } from "../i18n/items";
+import { beatriceBuffs } from "./beatriceBuffs";
 
 export interface RoomBuff {
   key: string;
@@ -49,6 +50,7 @@ export function roomBuffs(p: PlayerState, floor: number, lang: Lang, t: (k: Text
   const skill = (k: string) => `${t(`swarmSkill_${k}` as TextKey)}: ${t(`swarmSkillDesc_${k}` as TextKey)}`;
   const wv = waveSetBonus(p);
   if (wv > 0) out.push({ key: "waveSet", label: t("bfWaveSet").replace("{n}", String(ownSkills(p).length)).replaceAll("{b}", String(wv * WAVE.setAtk)), tip: t("bfWaveSetTip") });
+  out.push(...beatriceBuffs(p, t));
   const stats = statSummary(p, t);
   if (stats) out.push({ key: "stats", label: t("bfRoomStats"), tip: stats.text, bad: stats.bad });
   (p.altar?.got ?? []).forEach((g, i) => {

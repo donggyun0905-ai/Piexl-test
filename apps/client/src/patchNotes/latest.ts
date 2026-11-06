@@ -4,6 +4,36 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.53",
+    date: "2026-11-06",
+    items: {
+      ko: [
+        "새 나라 성국 · 새 캐릭터 베아트리스 '심판의 불꽃': 빛의 갑옷을 두른 성국의 최고 전력, 묵직한 브레이커 (체력 130 · 공격력 15 · 방어력 3 · 이동 1.3, 여는 조건: 최대 체력 220 달성)",
+        "성국은 스킬형: 기본 공격 + 숫자 키 스킬 넷 (1·2·3·4, 설정에서 키 변경 · 모바일 스킬 버튼)",
+        "쌍검 3연격: 왼→오 · 오→왼 베기로 X자 → 3타가 그 X자를 다시 X자로 베어 터뜨림",
+        "악: 나를 때린 적에게 쌓임(최대 10, 하나마다 받는 피해 +4%) → 10이면 처단(X자 10개 난발) · 처단으로 지운 악 100개마다 심판(맵 전체를 가르는 거대한 X자 태양 검격) · 체력이 적을수록 재생력(최대 30)·화염 계수(최대 공격력의 200%)가 오름",
+        "1 태양 검날(10초 공격 속도 +30% · 화염 · 화상 5겹, 붉은 태양빛) · 2 일식의 춤(돌진 + 다음 공격 쌍검 2연속) · 3 태양의 낙인(검기, 악 +2) · 4 자애(체력 1로 10초 동안 줄지 않고 화염 계수 400% · 끝나고 10초 회복 불가, 버프 창 '치유 감소')",
+        "무기 1 (사멸·절멸의 쌍검) · 전용 아이템 20 · X자 칼빛·처단·심판·낙인 검기·자애 이펙트 · 적 머리 위 악 눈금 · 효과음 · 그림 시트 · 패왕전 스킬",
+      ],
+      en: [
+        "New nation: the Holy Kingdom · New character Beatrice 'Flame of Judgment': the Holy Kingdom's greatest warrior in armor of light, a heavy breaker (HP 130 · ATK 15 · DEF 3 · Move 1.3, unlock: reach 220 max HP)",
+        "Holy Kingdom characters are skill-based: a basic attack + four number-key skills (1·2·3·4, rebindable in Settings · skill buttons on mobile)",
+        "Twin-blade 3-hit chain: left→right · right→left slashes form an X → the 3rd hit cuts that X again into an X and bursts it",
+        "Evil: stacks on foes that hit her (up to 10, +4% damage taken each) → at 10, Execution (10 X-slashes) · every 100 purged Evil brings Judgment (a giant sun X slash across the map) · lower HP raises regeneration (up to 30) and fire coefficient (up to 200% ATK)",
+        "1 Solar Blade (10s: +30% attack speed · fire · 5-stack Burn, sun-red light) · 2 Eclipse Dance (dash + next attack is a twin double slash) · 3 Solar Brand (sword wave, +2 Evil) · 4 Mercy (HP 1 that can't drop for 10s, 400% fire coefficient · then 10s of no healing, 'Healing cut' in the buff panel)",
+        "1 weapon (Twin Blades of Demise & Annihilation) · 20 exclusive items · X-slash, Execution, Judgment, Brand wave and Mercy effects · Evil gauge above foes · sounds · sprite sheet · Paewang skills",
+      ],
+      ja: [
+        "新しい国「聖国」· 新キャラクター ベアトリス「審判の炎」：光の鎧をまとう聖国の最高戦力、重いブレイカー（体力130 · 攻撃力15 · 防御力3 · 移動1.3、解放条件：最大体力220達成）",
+        "聖国はスキル型：通常攻撃 + 数字キーのスキル4つ（1·2·3·4、設定でキー変更 · モバイルはスキルボタン）",
+        "双剣の3連撃：左→右 · 右→左斬りでX字 → 3撃目がそのX字をもう一度X字に斬って破裂",
+        "悪：自分を攻撃した敵に溜まる（最大10、1つごとに被ダメージ+4%）→ 10で処断（X字10個）· 処断で消した悪100個ごとに審判（マップ全体を断つ巨大なX字の太陽剣撃）· 体力が少ないほど再生力（最大30）・火炎係数（最大攻撃力の200%）が上がる",
+        "1 太陽剣刃（10秒 攻撃速度+30% · 火炎 · 火傷5重、真紅の太陽光）· 2 日食の舞（突進 + 次の攻撃が双剣2連）· 3 太陽の烙印（剣気、悪+2）· 4 慈愛（体力1で10秒間減らず火炎係数400% · 終了後10秒回復不可、バフ欄「治癒減少」）",
+        "武器1（死滅・絶滅の双剣）· 専用アイテム20 · X字の剣光・処断・審判・烙印の剣気・慈愛のエフェクト · 敵の頭上に悪のゲージ · 効果音 · スプライトシート · 覇王戦スキル",
+      ],
+    },
+  },
+  {
     version: "0.49.52",
     date: "2026-11-06",
     items: {

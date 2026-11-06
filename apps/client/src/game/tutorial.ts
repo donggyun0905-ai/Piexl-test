@@ -73,6 +73,7 @@ const DEMO_WEAPONS: Record<CharacterId, [WeaponId, WeaponId] | null> = {
   orca: ["ocTide", "ocPod"],
   wave: ["wvBoard", "wvPrism"],
   miryu: ["mrSeiran", "mrVortex"],
+  beatrice: null,
   miner: ["mnTnt", "mnPit"],
   voyager: null,
   zeus: ["zsSky", "zsChain"],

@@ -19,5 +19,7 @@ export { ORCA, type OrcaKind, type OrcaStyle } from "./weaponsOrca";
 export { WAVE, type WaveKind, type WaveStyle } from "./weaponsWave";
 export { MIRYU, type MiryuKind, type MiryuStyle } from "./weaponsMiryu";
 export { MIRYU_PERKS } from "./itemsMiryu";
+export { BEATRICE } from "./weaponsBeatrice";
+export { BEATRICE_PERKS } from "./itemsBeatrice";
 export { WAVE_PERKS, WV_SKILLS, type WvSkill } from "./itemsWave";
 export { LUX } from "./weaponsLux";

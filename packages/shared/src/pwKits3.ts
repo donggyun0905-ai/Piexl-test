@@ -1,4 +1,4 @@
-// 패왕전 스킬 표 3: 헬리오스 · 테라코어 · 아스칼론 (설계 docs/PW_SKILLS.md 2절). 피해는 PW.skillDmg의 배율
+// 패왕전 스킬 표 3: 헬리오스 · 테라코어 · 아스칼론 · 성국 (설계 docs/PW_SKILLS.md 2절). 피해는 PW.skillDmg의 배율
 import { kit, SEC, sk } from "./pwKitKit";
 import type { PwKits } from "./pwSkillTypes";
 
@@ -116,5 +116,11 @@ export const PW_KITS_3: PwKits = {
     sk("oxHalo", "point", 10, "#ff5a5a", { range: 220, radius: 30, delay: 18, fx: "pillar", hit: { dmg: 2 } }),
     sk("oxHalo", "self", 12, "#60e0a0", { radius: 64, fx: "aura", hit: { dmg: 1.2, slow: 1.5 * SEC } }),
     sk("oxHalo", "point", 60, "#d0a0ff", { range: 240, radius: 70, delay: 30, fx: "pillar", repeat: { n: 7, every: 6 }, hit: { dmg: 1.2, stun: 0.3 * SEC } }),
+  ),
+  beatrice: kit(1.05,
+    sk("btTwin", "self", 12, "#ff3a1a", { radius: 54, fx: "aura", buff: { ticks: 5 * SEC, rate: 1.3, dmg: 1.15 }, hit: { dmg: 1.2, dot: 0.3 } }),
+    sk("btTwin", "dash", 8, "#ff6a2a", { range: 130, speed: 12, fx: "slash", hit: { dmg: 2.1, push: 6 } }),
+    sk("btTwin", "line", 9, "#ffb43a", { range: 220, radius: 18, fx: "beam", hit: { dmg: 2.4, push: 10 } }),
+    sk("btTwin", "self", 60, "#fff0a0", { radius: 120, fx: "wave", buff: { ticks: 4 * SEC, taken: 0.3 }, hit: { dmg: 3.4, push: 20, stun: 0.6 * SEC } }),
   ),
 };

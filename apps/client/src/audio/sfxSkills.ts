@@ -11,6 +11,7 @@ import { hookSounds } from "./hookSounds";
 import { orcaSounds } from "./orcaSounds";
 import { waveSounds } from "./waveSounds";
 import { miryuSounds } from "./miryuSounds";
+import { beatriceSounds } from "./beatriceSounds";
 
 export const SKILL_SOUNDS = {
   // 터짐: 낮은 펑 · 떨어지는 운석: 쿵 + 우르르
@@ -81,6 +82,20 @@ export const SKILL_SOUNDS = {
     tone({ type: "triangle", from: 2400, to: 1800, dur: 0.18, vol: 0.06 });
     tone({ type: "sine", from: 3200, to: 3000, dur: 0.25, vol: 0.03, delay: 0.02 });
     noise(0.22, 0.14, 1800);
+  },
+  // 베아트리스: 쌍검 칼바람 · 불꽃 터짐 · 심판의 태양 검격 (깊은 울림 + 높은 쇳소리)
+  btSwing: () => {
+    noise(0.12, 0.18, 3200);
+    tone({ type: "triangle", from: 1800, to: 900, dur: 0.1, vol: 0.05 });
+  },
+  btBurst: () => {
+    noise(0.3, 0.3, 1100);
+    tone({ type: "sawtooth", from: 320, to: 120, dur: 0.25, vol: 0.06 });
+  },
+  btJudge: () => {
+    tone({ type: "sawtooth", from: 90, to: 60, dur: 0.9, vol: 0.08 });
+    tone({ type: "triangle", from: 2600, to: 1400, dur: 0.6, vol: 0.06, delay: 0.05 });
+    noise(1, 0.35, 700);
   },
   mrRoar: () => {
     tone({ type: "sawtooth", from: 110, to: 220, dur: 0.5, vol: 0.06 });
@@ -185,6 +200,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   orcaSounds(run, out, onShake);
   waveSounds(run, out, onShake);
   miryuSounds(run, out, onShake);
+  beatriceSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;
   for (const e of run.effects) {
