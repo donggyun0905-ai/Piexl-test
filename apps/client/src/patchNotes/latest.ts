@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.68",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "세레나 환혹의 무도: 사슬 비수 여섯이 발밑 꽃의 테두리 모양대로 돎 (반경은 그대로 넓게, 꽃잎 끝에서 멀고 꽃잎 사이에서 안쪽으로)",
+        "세레나 환혹의 스텝: 세 번 연달아 돌진 (한 번 55%) · 돌진마다 몸 둘레를 사슬이 기울어진 고리로 휘돎 (1번 / 연한 회색 · 2번 - 연한 노랑 · 3번 \\ 연한 분홍, 40%) · 대기 8 → 10초",
+        "세레나 매혹 이펙트 다듬기: 크게 퍼지는 하트 테두리 · 소용돌이치는 장미 꽃잎 · 떠오르는 하트 · 매혹된 적과 이어진 분홍 사슬",
+      ],
+      en: [
+        "Serena's Dance of Bewitchment: the six chain daggers now trace the outline of the flower at her feet (same wide radius — far at the petal tips, inward between petals)",
+        "Serena's Bewitching Step: three dashes in a row (55% each) · each dash whirls a chain around her on a tilted ring (1st / pale gray · 2nd - pale yellow · 3rd \\ pale pink, 40%) · cooldown 8 → 10s",
+        "Serena's Allure effect polished: a big expanding heart outline · swirling rose petals · rising hearts · pink chains linking her to charmed foes",
+      ],
+      ja: [
+        "セレナの幻惑の舞：6本の鎖の短剣が足元の花の縁の形に沿って回る（半径はそのまま広く、花びらの先で遠く花びらの間で内側へ）",
+        "セレナの幻惑のステップ：3回続けて突進（1回55%）· 突進ごとに体の周りを鎖が傾いた輪で回る（1回目 / 淡い灰色 · 2回目 - 淡い黄色 · 3回目 \\ 淡いピンク、40%）· 待機 8 → 10秒",
+        "セレナの魅惑のエフェクトを調整：大きく広がるハートの縁 · 渦巻くバラの花びら · 浮かぶハート · 魅了した敵とつながるピンクの鎖",
+      ],
+    },
+  },
+  {
     version: "0.49.67",
     date: "2026-11-07",
     items: {

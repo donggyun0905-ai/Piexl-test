@@ -60,6 +60,11 @@ export function thornTick(s: RunState): void {
 }
 
 /** 도는 사슬 채찍 개수 · 반지름 */
+/** 도는 사슬 반지름 (화면의 무도 꽃 크기도 같이 씀) */
+export function orbRadiusOf(p: PlayerState): number {
+  return orbRadius(p);
+}
+
 export function orbCount(p: PlayerState): number {
   return ((p.snUlt ?? 0) > 0 ? N.ultOrbN : N.orbN) + (hasPerk(p, "snChain") ? K.snChain.more : 0);
 }
@@ -71,6 +76,13 @@ function orbRadius(p: PlayerState): number {
 export function snOrbAt(p: PlayerState, tick: number, i: number): [number, number] {
   const n = orbCount(p);
   const [c, sn] = rot(((tick * N.orbSpin) % TAU) + (i / n) * TAU);
+  if ((p.snUlt ?? 0) > 0) {
+    // 환혹의 무도: 발밑 꽃의 테두리를 따라 돎 (꽃잎 끝에서 가장 멀고 꽃잎 사이에서 오목)
+    const th = ((tick * N.orbSpin) % TAU) + (i / n) * TAU - ((tick * N.ultPetalSpin) % TAU);
+    const [k] = rot((th * N.ultPetals) / 2);
+    const r = orbRadius(p) * (N.ultInner + (1 - N.ultInner) * Math.abs(k));
+    return [p.x + c * r, p.y + sn * r];
+  }
   const [w] = rot(((tick * N.orbWave) % TAU) + i * 2.1);
   const r = orbRadius(p) * (1 - N.orbSway / 2 + (N.orbSway / 2) * w);
   return [p.x + c * r, p.y + sn * r];

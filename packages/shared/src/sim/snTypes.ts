@@ -9,6 +9,9 @@ export interface SerenaPlayerState {
   /** 환혹의 회오리 남은 휘젓기 · 다음 휘젓기까지 틱 */
   snWhirl?: number;
   snWhirlAt?: number;
+  /** 환혹의 스텝 남은 돌진 · 지금 돌진 차례(0 / · 1 - · 2 \\, 그림) */
+  snDash?: number;
+  snDashK?: number;
   /** 환혹의 무도 남은 틱 */
   snUlt?: number;
   /** 신기루 베일 남은 틱 (주는 피해 증가) */

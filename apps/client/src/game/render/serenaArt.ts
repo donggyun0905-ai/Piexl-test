@@ -42,7 +42,7 @@ export function dagger(ctx: Ctx, x: number, y: number, a: number, len: number, a
 }
 
 /** 사슬: 점들을 따라 고리를 번갈아 이음 (넓은 고리는 가운데가 뚫린 타원 · 사이 고리는 옆에서 본 짧은 막대) · fade: 끝으로 갈수록 옅게 */
-export function chainPath(ctx: Ctx, pts: readonly Pt[], al: number, glowC: string = SN.light, fade = false): void {
+export function chainPath(ctx: Ctx, pts: readonly Pt[], al: number, glowC: string = SN.light, fade = false, linkC: string = SN.steel): void {
   if (pts.length < 2) return;
   // 사슬을 따라 번지는 빛
   additive(ctx, () => {
@@ -74,7 +74,7 @@ export function chainPath(ctx: Ctx, pts: readonly Pt[], al: number, glowC: strin
       const la = al * (fade ? 1 - (walked + d) / Math.max(1, total) : 1);
       if (k % 2 === 0) {
         // 넓은 고리: 가운데가 뚫린 타원
-        ctx.strokeStyle = alpha(SN.steel, la);
+        ctx.strokeStyle = alpha(linkC, la);
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.ellipse(x, y, 2.4, 1.4, a, 0, Math.PI * 2);
@@ -114,9 +114,9 @@ export function chainWhip(ctx: Ctx, ax: number, ay: number, cx: number, cy: numb
 }
 
 /** 날아가는 비수와 뒤따르는 사슬: path[0]이 비수 자리, 뒤로 갈수록 지나온 자리 */
-export function flyingChain(ctx: Ctx, path: readonly Pt[], al: number, glowC: string): void {
+export function flyingChain(ctx: Ctx, path: readonly Pt[], al: number, glowC: string, linkC: string = SN.steel): void {
   if (path.length < 2) return;
-  chainPath(ctx, path, al, glowC, true);
+  chainPath(ctx, path, al, glowC, true, linkC);
   const [x, y] = path[0]!;
   const [px, py] = path[1]!;
   dagger(ctx, x, y, Math.atan2(y - py, x - px), 9, al);
@@ -128,14 +128,14 @@ export function petal(ctx: Ctx, x: number, y: number, a: number, len: number, w:
   const c = Math.cos(a);
   const s = Math.sin(a);
   const tx = x + c * len;
-  const ty = y + s * len * 0.55;
+  const ty = y + s * len * 0.6;
   const mx = x + c * len * 0.5;
-  const my = y + s * len * 0.5 * 0.55;
+  const my = y + s * len * 0.5 * 0.6;
   ctx.fillStyle = alpha(color, al);
   ctx.beginPath();
   ctx.moveTo(x, y);
-  ctx.quadraticCurveTo(mx - s * w, my + c * w * 0.55, tx, ty);
-  ctx.quadraticCurveTo(mx + s * w, my - c * w * 0.55, x, y);
+  ctx.quadraticCurveTo(mx - s * w, my + c * w * 0.6, tx, ty);
+  ctx.quadraticCurveTo(mx + s * w, my - c * w * 0.6, x, y);
   ctx.fill();
 }
 
@@ -144,3 +144,18 @@ export const hash = (n: number) => {
   const v = Math.sin(n * 127.1 + 311.7) * 43758.5453;
   return v - Math.floor(v);
 };
+
+/** 기울어진 회전 고리 위 각 th의 자리 (가운데 x,y · 반지름 r · 납작함 0.3 · tilt: -30° / · 0 - · +30° \\) */
+export function onTilt(x: number, y: number, r: number, tilt: number, th: number): Pt {
+  const lx = Math.cos(th) * r;
+  const ly = Math.sin(th) * r * 0.3;
+  return [x + lx * Math.cos(tilt) - ly * Math.sin(tilt), y + lx * Math.sin(tilt) + ly * Math.cos(tilt)];
+}
+
+/** 하트 테두리 위 점 (t 0~2π · 가운데 x,y · 크기 r) */
+export function heartAt(x: number, y: number, r: number, t: number): Pt {
+  const s = Math.sin(t);
+  const hx = 16 * s * s * s;
+  const hy = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+  return [x + (hx / 16) * r, y - (hy / 16) * r * 0.8];
+}

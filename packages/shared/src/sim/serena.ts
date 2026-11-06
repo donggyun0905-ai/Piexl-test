@@ -26,6 +26,8 @@ function roomCheck(s: RunState): void {
   p.snRoom = key;
   delete p.snWhirl;
   delete p.snWhirlAt;
+  delete p.snDash;
+  delete p.snDashK;
 }
 
 /** 시간 재기: 대기 · 무도 · 신기루 베일 */
@@ -68,7 +70,7 @@ export function serenaTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetSerena(p: RunState["player"]): void {
-  for (const k of ["snStep", "snGap", "snCd", "snWhirl", "snWhirlAt", "snUlt", "snMirage", "snRoom"] as const) delete p[k];
+  for (const k of ["snStep", "snGap", "snCd", "snWhirl", "snWhirlAt", "snUlt", "snMirage", "snDash", "snDashK", "snRoom"] as const) delete p[k];
 }
 
 export { isSerena, serenaSkills, snOrbAt } from "./serenaKit";

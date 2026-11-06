@@ -3,7 +3,7 @@
 import type { EffectState } from "@pixel-rogue/shared";
 import { additive, alpha, crescent, easeOut, glow, rune, shock, sparks, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
-import { chainPath, chainWhip, dagger, flyingChain, hash, petal, SN, type Pt } from "./serenaArt";
+import { chainWhip, dagger, flyingChain, hash, heartAt, onTilt, petal, SN, type Pt } from "./serenaArt";
 
 const SN_FX = new Set(["snWhipFx", "snWhirlFx", "snHitFx", "snDashFx", "snCharmFx", "snKnifeFx", "snUltFx", "snNumbFx", "snBloomFx"]);
 
@@ -18,13 +18,9 @@ function whipAt(ctx: Ctx, x: number, y: number, r: number, a: number, bend: numb
 
 /** 회오리 고리 셋의 기울기: / (-30°) · \\ (+30°) · - (0°) */
 const TILTS = [-Math.PI / 6, Math.PI / 6, 0] as const;
-
-/** 기울어진 고리 위 각 th의 자리 (가운데 x,y · 반지름 r · 납작함 0.3) */
-function onTilt(x: number, y: number, r: number, tilt: number, th: number): Pt {
-  const lx = Math.cos(th) * r;
-  const ly = Math.sin(th) * r * 0.3;
-  return [x + lx * Math.cos(tilt) - ly * Math.sin(tilt), y + lx * Math.sin(tilt) + ly * Math.cos(tilt)];
-}
+/** 환혹의 스텝 돌진마다: 기울기(1번 / · 2번 - · 3번 \\\\) · 사슬 색(연한 회색 · 연한 노랑 · 연한 분홍) */
+export const DASH_TILT = [-Math.PI / 6, 0, Math.PI / 6] as const;
+export const DASH_LINK = ["#dde0e8", "#fff2a0", "#ffc8e0"] as const;
 
 export function drawSerenaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   if (!SN_FX.has(fx.kind)) return false;
@@ -97,30 +93,52 @@ export function drawSerenaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       return true;
     }
     case "snCharmFx": {
-      // 매혹: 분홍 하트 물결이 둘레로 퍼지고 사슬이 고리처럼 감겼다 풀림
+      // 매혹: 분홍 하트 테두리가 크게 퍼지며 반짝임 · 장미 꽃잎이 소용돌이치며 날아감 · 작은 하트가 떠오름 · 발밑 분홍 물결 두 겹
+      const grow = easeOut(Math.min(1, f * 1.5));
+      const cy = y - 8;
       additive(ctx, () => {
-        shock(ctx, x, y, r * easeOut(f), SN.pink, fade, 3);
-        shock(ctx, x, y, r * 0.7 * easeOut(f), SN.rose, fade * 0.6, 2);
-        glow(ctx, x, y - 8, 18 * (1 - f) + 6, SN.pink, 0.5 * fade);
-        for (let i = 0; i < 10; i++) {
-          const ang = (i / 10) * Math.PI * 2 + f;
-          const d = r * easeOut(f) * (0.6 + 0.4 * hash(seed + i));
-          const hx = Math.round(x + Math.cos(ang) * d);
-          const hy = Math.round(y - 6 + Math.sin(ang) * d * 0.55 - f * 10);
-          ctx.fillStyle = alpha(SN.rose, fade);
+        ctx.fillStyle = alpha(SN.pink, 0.1 * fade);
+        ctx.beginPath();
+        ctx.ellipse(x, y, r * grow, r * grow * 0.6, 0, 0, Math.PI * 2);
+        ctx.fill();
+        shock(ctx, x, y, r * grow, SN.pink, fade * 0.8, 2);
+        shock(ctx, x, y, r * 0.6 * easeOut(f), SN.rose, fade * 0.5, 2);
+        // 큰 하트 테두리: 넓은 분홍 빛 + 가는 흰 선 · 테두리를 따라 도는 반짝임
+        for (const [w, c, al] of [[6, SN.rose, 0.25], [3, SN.pink, 0.5], [1, SN.white, 0.9]] as const) {
+          ctx.strokeStyle = alpha(c, al * fade);
+          ctx.lineWidth = w;
+          ctx.beginPath();
+          for (let k = 0; k <= 48; k++) {
+            const [hx, hy] = heartAt(x, cy, r * 0.55 * grow, (k / 48) * Math.PI * 2);
+            ctx.lineTo(hx, hy);
+          }
+          ctx.stroke();
+        }
+        for (let i = 0; i < 3; i++) {
+          const [sx, sy] = heartAt(x, cy, r * 0.55 * grow, f * Math.PI * 4 + (i * Math.PI * 2) / 3);
+          glow(ctx, sx, sy, 5, SN.white, fade);
+        }
+        glow(ctx, x, cy, 16 * (1 - f) + 6, SN.pink, 0.5 * fade);
+        // 소용돌이치며 퍼지는 장미 꽃잎
+        for (let i = 0; i < 12; i++) {
+          const ang = (i / 12) * Math.PI * 2 + f * 3;
+          const d = r * grow * (0.5 + 0.5 * hash(seed + i));
+          petal(ctx, x + Math.cos(ang) * d, cy + Math.sin(ang) * d * 0.6, ang + f * 6, 6, 2.5, i % 2 ? SN.rose : SN.pink, 0.8 * fade);
+        }
+        // 떠오르는 작은 하트
+        for (let i = 0; i < 8; i++) {
+          const ang = (i / 8) * Math.PI * 2;
+          const hx = Math.round(x + Math.cos(ang) * r * 0.4 * grow);
+          const hy = Math.round(cy + Math.sin(ang) * r * 0.24 * grow - f * 18 - hash(seed + i) * 6);
+          ctx.fillStyle = alpha(i % 2 ? SN.rose : SN.pink, fade);
           ctx.fillRect(hx - 2, hy, 2, 1);
           ctx.fillRect(hx + 1, hy, 2, 1);
           ctx.fillRect(hx - 2, hy + 1, 5, 1);
           ctx.fillRect(hx - 1, hy + 2, 3, 1);
           ctx.fillRect(hx, hy + 3, 1, 1);
         }
+        sparks(ctx, x, cy, 14, r, f, SN.pink, seed, fade);
       });
-      const pts: Pt[] = [];
-      for (let k = 0; k <= 40; k++) {
-        const th = (k / 40) * Math.PI * 2 * easeOut(Math.min(1, f * 2));
-        pts.push([x + Math.cos(th) * r * 0.45, y - 6 + Math.sin(th) * r * 0.25]);
-      }
-      chainPath(ctx, pts, fade * 0.8, SN.pink);
       return true;
     }
     case "snKnifeFx": {

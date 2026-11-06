@@ -80,7 +80,14 @@ describe("세레나", () => {
     key(s, 1);
     expect(s.player.s2Rush).toBeTruthy();
     expect(s.player.snCd![0]).toBeGreaterThan(0);
-    run(s, 20);
+    let dashes = 1;
+    for (let i = 0; i < N.stepTicks * N.stepN + 5; i++) {
+      stepSim(s, IDLE);
+      dashes += s.effects.filter((f) => f.kind === "snDashFx" && f.ticks === f.maxTicks - 1).length;
+    }
+    expect(dashes).toBe(N.stepN);
+    expect(s.player.s2Rush).toBeFalsy();
+    s.player.x = s.player.prevX = 60;
     key(s, 2);
     expect(s.enemies[0]!.snCharm ?? 0).toBeGreaterThan(0);
     const gap = () => Math.hypot(s.enemies[0]!.x - s.player.x, s.enemies[0]!.y - s.player.y);
@@ -93,6 +100,16 @@ describe("세레나", () => {
     key(s, 4);
     expect(s.player.snUlt).toBeGreaterThan(0);
     expect(orbCount(s.player)).toBe(N.ultOrbN);
+  });
+
+  it("환혹의 무도 중 사슬은 꽃 테두리를 따라 돎 (반지름이 꽃잎 끝과 사이를 오감)", () => {
+    const s = serena();
+    s.player.snUlt = 100;
+    const rs = Array.from({ length: 120 }, (_, t) => {
+      const [x, y] = snOrbAt(s.player, t, 0);
+      return Math.hypot(x - s.player.x, y - s.player.y);
+    });
+    expect(Math.max(...rs) / Math.min(...rs)).toBeGreaterThan(1.6);
   });
 
   it("뮤즈의 축복: 스킬 대기 감소", () => {

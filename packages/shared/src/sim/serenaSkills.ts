@@ -48,19 +48,36 @@ export function snSkill(s: RunState, i: number): void {
   if ((cd[i] ?? 0) > 0 || p.s2Rush) return;
   cd[i] = snCooldown(p, i);
   if (i === 0) {
-    const wing = hasPerk(p, "snWing");
-    const dmg = p.stats.damage * N.stepMul * (wing ? K.snWing.mul : 1);
-    startRush(p, { t: N.stepTicks, dx: p.faceX, dy: p.faceY, step: N.stepDist * (wing ? K.snWing.dist : 1), dmg, push: 0, invuln: true, tint: "#ffe0f0", w: N.stepW });
-    addEffect(s, { kind: "snDashFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: N.stepW, maxTicks: N.stepTicks + 10 });
-    if (hasPerk(p, "snMirage")) p.snMirage = N.stepTicks + K.snMirage.ticks;
+    p.snDash = N.stepN;
+    nextStep(s);
+    if (hasPerk(p, "snMirage")) p.snMirage = N.stepTicks * N.stepN + K.snMirage.ticks;
   } else if (i === 1) charm(s);
   else if (i === 2) knives(s);
   else ult(s);
 }
 
-/** 환혹의 스텝 한 틱: 지나간 적에 가시 */
+/** 환혹의 스텝 다음 돌진: 바라보는 쪽으로 · 둘레를 기울어진 사슬 회전으로 침 (1번 / · 2번 - · 3번 \\) */
+function nextStep(s: RunState): void {
+  const p = s.player;
+  const k = N.stepN - (p.snDash ?? 0);
+  p.snDash = (p.snDash ?? 1) - 1;
+  p.snDashK = k;
+  const wing = hasPerk(p, "snWing");
+  const dmg = p.stats.damage * N.stepMul * (wing ? K.snWing.mul : 1);
+  startRush(p, { t: N.stepTicks, dx: p.faceX, dy: p.faceY, step: N.stepDist * (wing ? K.snWing.dist : 1), dmg, push: 0, invuln: true, tint: "#ffe0f0", w: N.stepW });
+  for (const e of inCircle(s, p.x, p.y, N.stepSpinR)) snHit(s, e, N.stepSpinMul * (wing ? K.snWing.mul : 1));
+  addEffect(s, { kind: "snDashFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: N.stepSpinR, style: k, maxTicks: N.stepTicks + 10 });
+}
+
+/** 환혹의 스텝 한 틱: 지나간 적에 가시 · 돌진이 끝나면 다음 돌진 */
 export function dashTick(s: RunState): void {
-  if (s.player.s2Rush) rushTick(s, (e) => addThorns(s, e, N.stepThorns));
+  const p = s.player;
+  if (p.s2Rush) rushTick(s, (e) => addThorns(s, e, N.stepThorns));
+  if (!p.s2Rush && (p.snDash ?? 0) > 0) nextStep(s);
+  else if (!p.s2Rush) {
+    delete p.snDash;
+    delete p.snDashK;
+  }
 }
 
 /** 매혹된 적: 멈춘 채 나에게 천천히 끌려옴 (보스는 안 끌려옴) */

@@ -124,7 +124,7 @@ export { btRegen } from "./beatriceKit";
 export { ianSkills, isIan } from "./ian";
 export { gabrielSkills, isGabriel } from "./gabriel";
 export { isSerena, serenaSkills, snOrbAt } from "./serena";
-export { orbCount as snOrbCount } from "./serenaKit";
+export { orbCount as snOrbCount, orbRadiusOf as snOrbRadius } from "./serenaKit";
 export { miniAt as gbMiniAt } from "./gabrielShield";
 export { isEclipse, isNight, zoneR as eclipseZoneR } from "./eclipseStats";
 export { SUN_BURST, sunCutPaths } from "./eclipseCuts";
