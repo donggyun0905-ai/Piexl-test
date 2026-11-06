@@ -50,10 +50,19 @@ export function gbFoeTaken(s: RunState, e: EnemyState): number {
   return (e.gbPress ?? 0) > 0 && hasPerk(s.player, "gbGrav") ? 1 + K.gbGrav.taken : 1;
 }
 
-/** 맞은 뒤 (classTaken.afterHurt): 가시 방패 */
+/** 능력치 다시 셀 때 (items.recalcStats): 공격력은 한도에서 멈추고 넘는 만큼 최대 체력으로 */
+export function gabrielStats(p: PlayerState): void {
+  if (!isGabriel(p) || p.stats.damage <= G.damageCap) return;
+  p.stats.maxHp += (p.stats.damage - G.damageCap) * G.hpPerDamage;
+  p.stats.damage = G.damageCap;
+}
+
+/** 맞은 뒤 (classTaken.afterHurt): 깜빡이는 무적 없음(묵인처럼 아주 짧게) · 가시 방패 */
 export function gabrielHurt(s: RunState, env: boolean): void {
   const p = s.player;
-  if (!isGabriel(p) || env || !hasPerk(p, "gbThorns")) return;
+  if (!isGabriel(p)) return;
+  p.invulnTicks = Math.min(p.invulnTicks, G.hurtTicks);
+  if (env || !hasPerk(p, "gbThorns")) return;
   for (const e of inCircle(s, p.x, p.y, K.gbThorns.r)) {
     strike(s, e, p.stats.maxHp * K.gbThorns.hpMul, 8);
     press(s, e);

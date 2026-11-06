@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.64",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "가브리엘 약화: 공격력 18에서 더 오르지 않음 (공격력이 오르는 아이템·효과는 공격력 1마다 최대 체력 +5로 바뀜) · 처음 공격 속도 0.5 · 이동 속도 0.9",
+        "가브리엘 스킬 대기 늘림: 방패 돌진 8 → 10초 · 중력 붕괴 12 → 16초 · 성벽 16 → 20초 · 불멸의 성벽 60 → 75초",
+        "가브리엘: 맞아도 깜빡이는 무적이 없음 (묵인처럼 아주 짧게)",
+      ],
+      en: [
+        "Gabriel nerf: attack no longer rises above 18 (items and effects that raise attack give +5 max HP per point instead) · starting attack speed 0.5 · move speed 0.9",
+        "Gabriel skill cooldowns raised: Shield Charge 8 → 10s · Gravity Collapse 12 → 16s · Bulwark 16 → 20s · Immortal Bastion 60 → 75s",
+        "Gabriel: no blinking invulnerability after being hit (very short, like Mukin)",
+      ],
+      ja: [
+        "ガブリエル弱体化：攻撃力は18から上がらない（攻撃力を上げるアイテム・効果は攻撃力1ごとに最大体力+5に変わる）· 初期攻撃速度0.5 · 移動速度0.9",
+        "ガブリエルのスキル待機を延長：盾突進 8 → 10秒 · 重力崩壊 12 → 16秒 · 城壁 16 → 20秒 · 不滅の城壁 60 → 75秒",
+        "ガブリエル：被弾後の点滅無敵なし（黙忍のようにごく短く）",
+      ],
+    },
+  },
+  {
     version: "0.49.63",
     date: "2026-11-07",
     items: {

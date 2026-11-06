@@ -6,7 +6,7 @@ import type { WeaponDef } from "./content";
 
 export const GABRIEL_WEAPONS = {
   /** 불멸의 성벽 방패 & 단조 해머: 거대한 타일 모양 파열형 방패와 빛을 머금은 단조 해머 */
-  gbHammer: { id: "gbHammer", kind: "bastion", damageMul: 1.25, attackSpeed: 0.9, range: 60, projectileSpeed: 7, exclusive: "gabriel" },
+  gbHammer: { id: "gbHammer", kind: "bastion", damageMul: 1, attackSpeed: 0.5, range: 60, projectileSpeed: 7, exclusive: "gabriel" },
 } as const satisfies Record<string, WeaponDef>;
 
 /** 가브리엘 수치 (배율 1 = 100%, 시간은 틱(60 = 1초), 거리는 픽셀) */
@@ -14,6 +14,11 @@ export const GABRIEL = {
   /** 기본 3연격 간격 (공격 간격 배율) · 이 틱 동안 안 치면 처음으로 */
   stepTime: [0.6, 0.6, 1.05],
   comboGap: 70,
+  /** 공격력 한도 (이보다 오르지 않음) · 넘는 공격력 1마다 늘어나는 최대 체력 */
+  damageCap: 18,
+  hpPerDamage: 5,
+  /** 맞은 뒤 무적 틱 (거의 없음, 깜빡이지 않게) */
+  hurtTicks: 6,
   /** 1·2타 망치: 닿는 거리 · 부채꼴 폭(cos, 1타 내려찍기 · 2타 휘두르기) · 피해 배율 · 밀침 */
   swingR: 50,
   swingCos: [0.4, 0],
@@ -34,7 +39,7 @@ export const GABRIEL = {
   /** 압박: 느려지는 틱 (대지 강타·중력 붕괴·성벽 진동) */
   pressTicks: 90,
   /** 스킬 대기 틱 (1 방패 돌진 · 2 중력 붕괴 · 3 성벽 · 4 불멸의 성벽) */
-  cooldowns: [480, 720, 960, 3600],
+  cooldowns: [600, 960, 1200, 4500],
   /** 1 방패 돌진: 돌진 틱 · 한 틱 거리 · 맞는 폭(절반) · 피해 배율 · 밀침 · 기절 틱 */
   bashTicks: 10,
   bashDist: 9,

@@ -125,6 +125,17 @@ describe("가브리엘", () => {
     expect(s.player.shieldPts ?? 0).toBeGreaterThan(sh - G.ultDecay * 61);
   });
 
+  it("공격력은 18에서 멈추고 넘는 만큼 최대 체력 · 맞아도 깜빡이는 무적이 거의 없음", () => {
+    const s = gabriel();
+    expect(s.player.stats.damage).toBe(G.damageCap);
+    const hp = s.player.stats.maxHp;
+    const t = gabriel("gbForge", "gbAegis");
+    expect(t.player.stats.damage).toBe(G.damageCap);
+    expect(t.player.stats.maxHp).toBe(hp + 2 * G.hpPerDamage);
+    hurt(s, 10);
+    expect(s.player.invulnTicks).toBeLessThanOrEqual(G.hurtTicks);
+  });
+
   it("스킬 대기 · 굳은 신앙으로 줄어듦", () => {
     const s = gabriel("gbFaith");
     expect(gbCooldown(s.player, 3)).toBe(Math.round(G.cooldowns[3]! * K.gbFaith.cd));
