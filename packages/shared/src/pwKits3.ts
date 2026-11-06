@@ -147,4 +147,10 @@ export const PW_KITS_3: PwKits = {
     sk("rfBow", "line", 9, "#b0e8ff", { range: 320, radius: 10, fx: "beam", hit: { dmg: 2.6, push: 8 } }),
     sk("rfBow", "line", 60, "#fff6c0", { range: 520, radius: 24, delay: 45, fx: "beam", hit: { dmg: 6, push: 20 } }),
   ),
+  yuriel: kit(1,
+    sk("yrFlail", "self", 8, "#fff6c0", { radius: 84, fx: "heal", heal: 0.12, hit: { dmg: 0.8, push: 6 } }),
+    sk("yrFlail", "point", 10, "#ffe68a", { range: 120, radius: 48, delay: 14, fx: "pillar", hit: { dmg: 1.8, push: -20, stun: 0.6 * SEC } }),
+    sk("yrFlail", "point", 16, "#c8f0ff", { range: 100, radius: 70, fx: "field", repeat: { n: 6, every: 60 }, heal: 0.03, buff: { ticks: 6 * SEC, taken: 0.7, allies: true }, hit: { dmg: 0.3, slow: 1 * SEC } }),
+    sk("yrFlail", "self", 60, "#ffffff", { radius: 200, delay: 40, fx: "pillar", heal: 0.3, buff: { ticks: 8 * SEC, taken: 0.7, allies: true }, hit: { dmg: 3 } }),
+  ),
 };

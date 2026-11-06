@@ -1,5 +1,5 @@
 // 아래 장비 칸에 보낼 값 (gameLoop가 틱마다 만들어 바뀌었을 때만 보냄): 무기·사용 아이템·패시브 · 풋내기 레벨 · 추적자 스킬 대기 · 패왕전 스킬 · 판매 값 · 작업대 · 히든 고르는 창
-import { beatriceSkills, ianSkills, gabrielSkills, serenaSkills, rafaelSkills, expToNext, passiveTagAt, sellPrice, trackerSkills, trialNoItems, type RunState } from "@pixel-rogue/shared";
+import { beatriceSkills, ianSkills, gabrielSkills, serenaSkills, rafaelSkills, yurielSkills, expToNext, passiveTagAt, sellPrice, trackerSkills, trialNoItems, type RunState } from "@pixel-rogue/shared";
 import type { LoadoutView } from "./Loadout";
 import { pwSkillView } from "./pwSkillView";
 import { sellCodes } from "./SellBar";
@@ -34,6 +34,7 @@ export function loadoutView(run: RunState, armed: Parameters<typeof pwSkillView>
     ...(p.characterId === "gabriel" && !run.pvp ? { skills: gabrielSkills(p).map((v) => Math.ceil(v * 20) / 20), skillSet: "gb" as const } : {}),
     ...(p.characterId === "serena" && !run.pvp ? { skills: serenaSkills(p).map((v) => Math.ceil(v * 20) / 20), skillSet: "sn" as const } : {}),
     ...(p.characterId === "rafael" && !run.pvp ? { skills: rafaelSkills(p).map((v) => Math.ceil(v * 20) / 20), skillSet: "rf" as const } : {}),
+    ...(p.characterId === "yuriel" && !run.pvp ? { skills: yurielSkills(p).map((v) => Math.ceil(v * 20) / 20), skillSet: "yr" as const } : {}),
     ...(run.pvp ? { pw: pwSkillView(run, armed) } : {}),
     // 상점 휴지통에서 F로 판매 창을 열었을 때: 팔 수 있는 값 (무기 + 사용 아이템 2칸 + 패시브 순서, 0 = 못 팜)
     ...(run.prompt.kind === "trash" && run.prompt.confirm && !run.party ? { sell: sellCodes(p.passives.length).map((n) => sellPrice(run, n)) } : {}),

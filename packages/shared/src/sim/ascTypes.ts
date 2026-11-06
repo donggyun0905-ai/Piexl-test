@@ -16,6 +16,7 @@ import type { IanEnemyState, IanPlayerState } from "./iaTypes";
 import type { GabrielEnemyState, GabrielPlayerState } from "./gbTypes";
 import type { SerenaEnemyState, SerenaPlayerState } from "./snTypes";
 import type { RafaelPlayerState } from "./rfTypes";
+import type { YurielEnemyState, YurielPlayerState } from "./yrTypes";
 import type { LeoEnemyState, LeoPlayerState } from "./leoTypes";
 import type { OnyxPlayerState } from "./onyxTypes";
 import type { FenrirPlayerState } from "./fenrirTypes";
@@ -117,5 +118,5 @@ export interface OriginShotState {
   hpCut?: number;
 }
 
-export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState, PungPlayerState, LeoPlayerState, OnyxPlayerState, FenrirPlayerState, EclipsePlayerState, ThorPlayerState, LeviaPlayerState, TailPlayerState, MadQueenPlayerState, HookPlayerState, OrcaPlayerState, WavePlayerState, MiryuPlayerState, BeatricePlayerState, IanPlayerState, GabrielPlayerState, SerenaPlayerState, RafaelPlayerState {}
-export interface AscalonEnemyState extends BeatriceEnemyState, IanEnemyState, GabrielEnemyState, SerenaEnemyState, HiddenEnemyState, AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState, PungEnemyState, LeoEnemyState, HookEnemyState {}
+export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState, PungPlayerState, LeoPlayerState, OnyxPlayerState, FenrirPlayerState, EclipsePlayerState, ThorPlayerState, LeviaPlayerState, TailPlayerState, MadQueenPlayerState, HookPlayerState, OrcaPlayerState, WavePlayerState, MiryuPlayerState, BeatricePlayerState, IanPlayerState, GabrielPlayerState, SerenaPlayerState, RafaelPlayerState, YurielPlayerState {}
+export interface AscalonEnemyState extends BeatriceEnemyState, IanEnemyState, GabrielEnemyState, SerenaEnemyState, YurielEnemyState, HiddenEnemyState, AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState, PungEnemyState, LeoEnemyState, HookEnemyState {}

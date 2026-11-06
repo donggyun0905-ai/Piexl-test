@@ -10,5 +10,7 @@ export const SEONGGUK_CHARACTERS = {
   /** 성국: 세레나 도는 사슬 채찍 둘·채찍 3연격·환혹의 회오리·가시·마비·치명타·빛 피해·스킬 넷 (sim/serena) */
   serena: { id: "serena", maxHp: 100, damage: 12, moveSpeed: 1.4, luck: 3, startWeapon: "snWhip", defense: 1 },
   /** 성국: 라파엘 화살 둘 → 저격 3연격·초장거리 피해·표적·스킬 넷·천공의 빛 화살 (sim/rafael) */
+  /** 성국: 유리엘 철퇴 둘 → 사슬 한 바퀴 3연격·단죄 → 정화의 빛·결계·치유·스킬 넷 (sim/yuriel) */
+  yuriel: { id: "yuriel", maxHp: 120, damage: 14, moveSpeed: 1.2, luck: 2, startWeapon: "yrFlail", defense: 2 },
   rafael: { id: "rafael", maxHp: 90, damage: 15, moveSpeed: 1.3, luck: 2, startWeapon: "rfBow", defense: 0 },
 } as const;

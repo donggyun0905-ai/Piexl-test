@@ -9,7 +9,7 @@ const MEMBERS: Record<PwRoleId, readonly CharacterId[]> = {
   ranged: ["rafael", "drifter", "engineer", "gunner", "ninja", "chronomancer", "idra", "samyeol", "automata", "tracker", "madQueen"],
   mage: ["wave", "mage", "elementalist", "summoner", "pungryu", "elder", "ren", "plague", "bomber", "spiritist"],
   assassin: ["serena", "ian", "tail", "hook", "orca", "miryu", "brawler", "beast", "fly", "slayer", "eater", "bedouin", "abandoned", "rider", "punk", "remnant", "wanderer", "silk", "fenrir"],
-  support: ["mystic", "doctor", "apostle", "artifacter", "forgotten"],
+  support: ["yuriel", "mystic", "doctor", "apostle", "artifacter", "forgotten"],
 };
 
 /** 캐릭터 → { role: 번호 } (관리자 수치 표) */
