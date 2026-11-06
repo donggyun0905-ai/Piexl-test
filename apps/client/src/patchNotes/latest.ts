@@ -4,6 +4,39 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.51",
+    date: "2026-11-06",
+    items: {
+      ko: [
+        "탈라시아 새 캐릭터 미류: 물의 흐름 그 자체로 싸우는 해룡 수인 검사 (체력 105 · 공격력 13 · 이동 1.4, 여는 조건: 공격 속도 1.7 달성)",
+        "대태도 3연격: 물결 가르기 → 역류 베기(반대쪽에서 되돌아 휩쓺) → 해룡 일섬(앞으로 미끄러지며 길게) · 대시해도 연격이 이어짐",
+        "물길: 벤 자리마다 칼이 지나간 모양 그대로 흐르는 물길이 남아, 닿은 적을 흐르는 쪽으로 실어 나르며 벰 · 내 물길 위에서는 빨라짐 (물길을 그리며 자유롭게 누비기)",
+        "휘는 칼날: 칼이 닿지 않는 먼 적은 칼날 물기운이 휘어 따라가 벰 · 흘리기: 벤 직후·대시 중 적 탄을 흘려 물방울로 모았다가 해룡 일섬에 물칼날로 되돌림",
+        "천류 해방: 해류 게이지가 차면 거대한 해룡이 맵 위 모든 물길을 따라 흐르며 적을 가르고, 한 바퀴 돌아 폭포로 내리꽂힘 (모든 물길이 한꺼번에 솟구침)",
+        "대태도 10 (청람 · 수월 · 격류 · 와류 · 명경 · 유엽 · 물마루 · 빙류 · 심연 · 무형) · 전용 아이템 10 (잔물결 · 물길 타기 · 물줄기 걸음 · 흘려 넘기기 · 회류 · 해룡의 뿔 · 폭포 · 해룡 비늘 · 용의 숨결 · 천류)",
+        "흐르는 물길 · 물 칼자국 · 휘는 물 채찍 · 해룡 · 폭포 이펙트 · 효과음 · 그림 시트 · 패왕전 스킬",
+      ],
+      en: [
+        "New Thalassia character Miryu: a sea-dragon swordswoman who fights as the flow of water itself (HP 105 · ATK 13 · Move 1.4, unlock: reach 1.7 attack speed)",
+        "3-cut odachi chain: Tide Cleave → Backflow Cut (sweeps back from the other side) → Dragon Flash (glides forward in a long line) · dashing keeps the chain going",
+        "Currents: every cut leaves a flowing current shaped like the blade's path, carrying foes along and cutting them · you move faster on your own currents (draw rivers and roam freely)",
+        "Bending Edge: foes beyond the blade are chased by its bending water edge · Parry: right after a cut and while dashing, enemy shots are swept into water drops, returned as water blades by the Dragon Flash",
+        "Heavenly Current: a full Current gauge sends a giant sea dragon along every current on the map, splitting foes, then circling and crashing down as a waterfall (every current erupts at once)",
+        "10 odachi (Seiran · Suigetsu · Torrent · Vortex · Clear Mirror · Willow Leaf · Wave Crest · Ice Stream · Abyss · Formless) · 10 exclusive items (Ripples · Current Riding · Stream Step · Flowing Parry · Returning Current · Sea Dragon Horn · Cascade · Sea Dragon Scale · Dragon's Breath · Heavenly Current)",
+        "Flowing current, water slash, bending water whip, sea dragon and waterfall effects · sounds · sprite sheet · Paewang skills",
+      ],
+      ja: [
+        "タラシアの新キャラ、ミリュウ：水の流れそのもので戦う海竜の獣人剣士（体力105 · 攻撃力13 · 移動1.4、解放条件：攻撃速度1.7達成）",
+        "大太刀3連撃：波裂き → 逆流斬り（反対側から薙ぎ返す）→ 海竜一閃（前へ滑りながら長く）· ダッシュしても連撃が続く",
+        "水路：斬った跡ごとに刃の軌跡の形のまま流れる水路が残り、触れた敵を流れる方へ運びながら斬る · 自分の水路の上では速くなる（水路を描いて自由に駆け回る）",
+        "しなる刃：刃が届かない遠くの敵は刃の水気がしなって追い斬る · 受け流し：斬った直後・ダッシュ中は敵の弾を受け流して水滴に集め、海竜一閃で水刃として返す",
+        "天流解放：海流ゲージが満ちると巨大な海竜がマップ上の全ての水路を流れて敵を裂き、一周して滝となって叩きつける（全ての水路が一斉に噴き上がる）",
+        "大太刀10（青嵐 · 水月 · 激流 · 渦流 · 明鏡 · 柳葉 · 波頭 · 氷流 · 深淵 · 無形）· 専用アイテム10（さざ波 · 水路乗り · 水筋の歩み · 受け流し · 回流 · 海竜の角 · 滝 · 海竜の鱗 · 竜の息吹 · 天流）",
+        "流れる水路 · 水の斬撃 · しなる水の鞭 · 海竜 · 滝のエフェクト · 効果音 · スプライトシート · 覇王戦スキル",
+      ],
+    },
+  },
+  {
     version: "0.49.50",
     date: "2026-11-06",
     items: {

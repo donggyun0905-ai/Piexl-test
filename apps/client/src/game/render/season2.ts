@@ -38,6 +38,7 @@ import { drawMadQueenFx } from "./madQueenFx";
 import { drawHookFx } from "./hookFx";
 import { drawOrcaFx } from "./orcaFx";
 import { drawWaveFx } from "./waveFx";
+import { drawMiryuFx } from "./miryuFx";
 import { drawLeviaShot } from "./leviaBody";
 import { drawCollectorFx, drawCollectorShot } from "./collector";
 import { drawSecretFx, drawSecretShot } from "./secret";
@@ -160,7 +161,7 @@ export function drawS2Shot(ctx: Ctx, pr: ProjectileState, x: number, y: number, 
 
 /** 모습 바꿈: 새 모습 색의 잎 고리가 퍼짐 */
 export function drawS2Fx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
-  if (fx.kind !== "gaiaSwap") return drawPungryuFx(ctx, fx, snap) || drawLeoFx(ctx, fx, snap) || drawOnyxFx(ctx, fx, snap) || drawFenrirFx(ctx, fx, snap) || drawEclipseFx(ctx, fx, snap) || drawThorkenFx(ctx, fx, snap) || drawLeviaFx(ctx, fx, snap) || drawTailFx(ctx, fx, snap) || drawMadQueenFx(ctx, fx, snap) || drawHookFx(ctx, fx, snap) || drawOrcaFx(ctx, fx, snap) || drawWaveFx(ctx, fx, snap) || drawElderFx(ctx, fx, snap) || drawSpiritFx(ctx, fx, snap) || drawMorphFx(ctx, fx, snap) || drawClawFx(ctx, fx, snap) || drawPlagueFx(ctx, fx, snap) || drawSlayerFx(ctx, fx, snap) || drawEaterFx(ctx, fx, snap) || drawMukinFx(ctx, fx, snap) || drawSamyeolFx(ctx, fx, snap) || drawTerraFx(ctx, fx, snap) || drawTerraFxB(ctx, fx, snap) || drawTerraFxC(ctx, fx, snap) || drawRuneFx(ctx, fx, snap) || drawTrackerFx(ctx, fx, snap) || drawForgottenFx(ctx, fx, snap) || drawRemnantFx(ctx, fx, snap) || drawTrialFx(ctx, fx, snap) || drawAltarFx(ctx, fx, snap) || drawWandererFx(ctx, fx, snap) || drawSecretFx(ctx, fx, snap) || drawSilkFx(ctx, fx, snap) || drawCollectorFx(ctx, fx, snap) || drawVaultFx(ctx, fx, snap) || drawAwakenFx(ctx, fx, snap);
+  if (fx.kind !== "gaiaSwap") return drawPungryuFx(ctx, fx, snap) || drawLeoFx(ctx, fx, snap) || drawOnyxFx(ctx, fx, snap) || drawFenrirFx(ctx, fx, snap) || drawEclipseFx(ctx, fx, snap) || drawThorkenFx(ctx, fx, snap) || drawLeviaFx(ctx, fx, snap) || drawTailFx(ctx, fx, snap) || drawMadQueenFx(ctx, fx, snap) || drawHookFx(ctx, fx, snap) || drawOrcaFx(ctx, fx, snap) || drawWaveFx(ctx, fx, snap) || drawMiryuFx(ctx, fx, snap) || drawElderFx(ctx, fx, snap) || drawSpiritFx(ctx, fx, snap) || drawMorphFx(ctx, fx, snap) || drawClawFx(ctx, fx, snap) || drawPlagueFx(ctx, fx, snap) || drawSlayerFx(ctx, fx, snap) || drawEaterFx(ctx, fx, snap) || drawMukinFx(ctx, fx, snap) || drawSamyeolFx(ctx, fx, snap) || drawTerraFx(ctx, fx, snap) || drawTerraFxB(ctx, fx, snap) || drawTerraFxC(ctx, fx, snap) || drawRuneFx(ctx, fx, snap) || drawTrackerFx(ctx, fx, snap) || drawForgottenFx(ctx, fx, snap) || drawRemnantFx(ctx, fx, snap) || drawTrialFx(ctx, fx, snap) || drawAltarFx(ctx, fx, snap) || drawWandererFx(ctx, fx, snap) || drawSecretFx(ctx, fx, snap) || drawSilkFx(ctx, fx, snap) || drawCollectorFx(ctx, fx, snap) || drawVaultFx(ctx, fx, snap) || drawAwakenFx(ctx, fx, snap);
   const t = 1 - fx.ticks / fx.maxTicks;
   const r = fx.size * (0.4 + 0.6 * t);
   const x = snap(fx.x);

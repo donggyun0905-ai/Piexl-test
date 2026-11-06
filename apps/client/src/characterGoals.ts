@@ -74,6 +74,7 @@ export const CHARACTER_GOALS: Partial<Record<CharacterId, CharGoal>> = {
   hook: { m: "moveSpeed", n: 1.7 },
   orca: { m: "attackSpeed", n: 1.6 },
   wave: { m: "moveSpeed", n: 1.9 },
+  miryu: { m: "attackSpeed", n: 1.7 },
   chronomancer: { a: "thrift" },
   fly: { f: "clear7" },
   elder: { c: "traps", n: 1000 },

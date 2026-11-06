@@ -10,6 +10,7 @@ import { madQueenSounds } from "./madQueenSounds";
 import { hookSounds } from "./hookSounds";
 import { orcaSounds } from "./orcaSounds";
 import { waveSounds } from "./waveSounds";
+import { miryuSounds } from "./miryuSounds";
 
 export const SKILL_SOUNDS = {
   // 터짐: 낮은 펑 · 떨어지는 운석: 쿵 + 우르르
@@ -71,6 +72,21 @@ export const SKILL_SOUNDS = {
     tone({ type: "triangle", from: 700, to: 500, dur: 0.08, vol: 0.08, delay: 0.04 });
   },
   // 오르카: 물보라 촥 · 소용돌이 휘익 · 물기둥·큰 파도 콸 · 상어 물기 딱 · 해방 고래 울음
+  // 미류: 물을 가르는 쏴아 · 칼 챙 + 물 · 해룡이 깨어나는 깊은 울림
+  mrSwish: () => {
+    noise(0.16, 0.16, 2600);
+    tone({ type: "sine", from: 700, to: 300, dur: 0.12, vol: 0.05 });
+  },
+  mrShing: () => {
+    tone({ type: "triangle", from: 2400, to: 1800, dur: 0.18, vol: 0.06 });
+    tone({ type: "sine", from: 3200, to: 3000, dur: 0.25, vol: 0.03, delay: 0.02 });
+    noise(0.22, 0.14, 1800);
+  },
+  mrRoar: () => {
+    tone({ type: "sawtooth", from: 110, to: 220, dur: 0.5, vol: 0.06 });
+    tone({ type: "sine", from: 220, to: 660, dur: 0.6, vol: 0.06, delay: 0.1 });
+    noise(0.7, 0.22, 900);
+  },
   // 웨이브: 상상이 물이 되는 반짝 · 거품 퐁 · 맑은 물방울 똑 · 깊은 물 울림
   wvSparkle: () => {
     for (let i = 0; i < 3; i++) tone({ type: "sine", from: 1300 + i * 400, to: 1800 + i * 400, dur: 0.08, vol: 0.05, delay: i * 0.05 });
@@ -168,6 +184,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   hookSounds(run, out, onShake);
   orcaSounds(run, out, onShake);
   waveSounds(run, out, onShake);
+  miryuSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;
   for (const e of run.effects) {

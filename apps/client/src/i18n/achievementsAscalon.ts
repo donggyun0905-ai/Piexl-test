@@ -19,6 +19,7 @@ export const ASCALON_ACHIEVEMENTS = {
   clearEclipse: n(["태양과 일식의 주인", "Lord of Sun and Eclipse", "太陽と日食の主"], ["이클립스로 클리어", "Clear as Eclipse", "エクリプスでクリア"]),
   clearLevia: n(["고래와 함께 자유롭게", "Free with the Whales", "クジラと共に自由に"], ["리바이어로 클리어", "Clear as Levia", "リヴァイアでクリア"]),
   clearTail: n(["바다의 포식자", "Apex of the Sea", "海の捕食者"], ["테일로 클리어", "Clear as Tail", "テイルでクリア"]),
+  clearMiryu: n(["흐르는 칼날", "Flowing Blade", "流れる刃"], ["미류로 클리어", "Clear as Miryu", "ミリュウでクリア"]),
   clearWave: n(["상상의 파도", "Waves of Imagination", "想像の波"], ["웨이브로 클리어", "Clear as Wave", "ウェーブでクリア"]),
   clearOrca: n(["해방의 주먹", "Fists of Liberation", "解放の拳"], ["오르카로 클리어", "Clear as Orca", "オルカでクリア"]),
   clearHook: n(["자유의 해적", "Pirate of Freedom", "自由の海賊"], ["훅으로 클리어", "Clear as Hook", "フックでクリア"]),

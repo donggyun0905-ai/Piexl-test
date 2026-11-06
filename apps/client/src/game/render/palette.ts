@@ -72,6 +72,7 @@ export const C = {
   hook: "#4ab8ff",
   orca: "#3ae0ff",
   wave: "#8af4ff",
+  miryu: "#5ad0ff",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",

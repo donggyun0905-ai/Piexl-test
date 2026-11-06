@@ -45,6 +45,7 @@ import { madQueenTick } from "./madQueen";
 import { hookTick } from "./hook";
 import { orcaTick } from "./orca";
 import { waveTick } from "./wave";
+import { miryuTick } from "./miryu";
 import { leoTick } from "./leo";
 import { onyxTick } from "./onyx";
 import { fenrirTick } from "./fenrir";
@@ -109,6 +110,7 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   grapple: hookTick,
   riptide: orcaTick,
   muse: waveTick,
+  flowblade: miryuTick,
   lion: leoTick,
   gem: onyxTick,
   fang: fenrirTick,
