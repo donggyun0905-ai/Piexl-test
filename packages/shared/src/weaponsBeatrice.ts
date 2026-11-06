@@ -55,8 +55,9 @@ export const BEATRICE = {
   solarTicks: 600,
   solarSpeed: 1.3,
   solarFire: 0.35,
-  /** 2 일식의 춤: 돌진 틱 · 한 틱 거리 · 피해 배율 · 화염 몫 · 강화 베기 둘 피해 배율 · 강화 베기 거리 · 두 번째 베기까지 틱 */
+  /** 2 일식의 춤: 돌진 틱 · 지나가며 베는 폭(절반, 경로 둘레) · 한 틱 거리 · 피해 배율 · 화염 몫 · 강화 베기 둘 피해 배율 · 강화 베기 거리 · 두 번째 베기까지 틱 */
   danceTicks: 10,
+  danceW: 28,
   danceStep: 11,
   danceMul: 1.5,
   danceFire: 0.6,

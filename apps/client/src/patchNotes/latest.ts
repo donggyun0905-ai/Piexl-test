@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.59",
+    date: "2026-11-06",
+    items: {
+      ko: ["베아트리스 일식의 춤: 무희가 춤추며 베고 지나가듯 몸 둘레 곳곳에 작은 초승달 칼빛이 연달아 그어지고, 베인 적마다 가는 일직선 칼선 · 지나가며 베는 범위 넓힘 (경로 둘레 28) · 무거운 일식 고리 잔상은 옅은 빛으로"],
+      en: ["Beatrice's Eclipse Dance: like a dancer cutting through as she spins, small crescent blade lights flash all around her, and each foe cut gets a thin straight slash · wider cutting area along the path (28 around it) · the heavy eclipse-ring afterimages are now a faint glow"],
+      ja: ["ベアトリスの日食の舞：舞姫が舞いながら斬り抜けるように、体の周りのあちこちに小さな三日月の剣光が次々と走り、斬られた敵ごとに細い一直線の剣線 · 通り抜けて斬る範囲を広げた（道の周り28）· 重い日食の輪の残像は淡い光に"],
+    },
+  },
+  {
     version: "0.49.58",
     date: "2026-11-06",
     items: {

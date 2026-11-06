@@ -2,12 +2,12 @@
 // 대각선 칼선(1·2타가 겹쳐 X자) · X자 다시 베어 터뜨림 · 강화 쌍검 칼선 · 처단 X자 · 심판 예고·심판(맵을 가르는 거대한 X자)
 // 낙인 검기 발사 · 태양 검날 · 자애 발동 · 화상 불티 · 악 쌓임 · 홍염 · 처치한 적의 악이 나에게 날아옴
 import type { EffectState } from "@pixel-rogue/shared";
-import { additive, crescent, easeOut, glow, rnd, shock, type Ctx } from "./pwFxBits";
+import { additive, crescent, easeOut, glow, glowEdge, rnd, shock, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
 import { bladeStroke, BT, embers, featherField, rays } from "./beatriceArt";
 
 export { BT } from "./beatriceArt";
-const BT_FX = new Set(["btSlash", "btCross", "btTwin", "btExec", "btJudgeWarn", "btJudge", "btBrand", "btSolar", "btGrace", "btBurn", "btEvil", "btFlare", "btSoul", "btDance"]);
+const BT_FX = new Set(["btSlash", "btCross", "btTwin", "btExec", "btJudgeWarn", "btJudge", "btBrand", "btSolar", "btGrace", "btBurn", "btEvil", "btFlare", "btSoul", "btDance", "btSwirl", "btNeedle"]);
 
 /** X자 칼선 둘 (가운데 x, y · 반 길이 r · 바라보는 각 a, 두 획은 a±45도 = 1·2타와 같은 X) · k 그어진 정도 */
 export function xMark(ctx: Ctx, x: number, y: number, r: number, a: number, w: number, c: string, al: number, k = 1): void {
@@ -47,6 +47,29 @@ export function arcSlash(ctx: Ctx, ax: number, ay: number, bx: number, by: numbe
     crescent(ctx, cx, cy, R * 0.82, mid, arc * 0.85, 3 * t, c1, t * 0.5);
     glow(ctx, cx + Math.cos(am) * R * 0.7, cy + Math.sin(am) * R * 0.7, len * 0.35, c2, t * 0.5);
   });
+}
+
+/** 방랑객 칼선처럼 빛 테두리를 두른 선·호 (색 c · 굵기 w) */
+function edgeLine(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, c: string, w: number): void {
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
+  ctx.beginPath();
+  ctx.moveTo(x0, y0);
+  ctx.lineTo(x1, y1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
+  ctx.stroke();
+}
+function edgeArc(ctx: Ctx, x: number, y: number, r: number, a0: number, a1: number, c: string, w: number): void {
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
+  ctx.beginPath();
+  ctx.arc(x, y, Math.max(0.5, r), a0, a1);
+  glowEdge(ctx, c, w);
+  ctx.strokeStyle = c;
+  ctx.lineWidth = w;
+  ctx.stroke();
 }
 
 /** 칼선 하나: 초승달이 빠르게 쓸고 지나간 뒤 천천히 옅어짐 (그래서 1·2타가 겹쳐 X자가 보임) */
@@ -167,16 +190,41 @@ export function drawBeatriceFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       embers(ctx, x, y, 16, r * 1.4, f, seed, fade);
       return true;
     case "btDance": {
-      // 일식의 춤: 지나간 자리마다 검은 해를 두른 붉은 일식 고리 잔상 + 불티
-      additive(ctx, () => {
-        glow(ctx, x, y - 6, r * (1 + f * 0.5), BT.sun, 0.45 * fade, 0.2);
-        shock(ctx, x, y - 6, r * (0.8 + f * 0.6), BT.gold, 0.8 * fade, 2);
-      });
-      ctx.fillStyle = `rgba(30,4,8,${0.55 * fade})`;
+      // 일식의 춤: 지나간 자리에 옅은 주황 빛 꼬리와 불티만 (둘레 칼빛이 잘 보이게)
+      additive(ctx, () => glow(ctx, x, y - 6, r * (1 + f * 0.5), BT.flame, 0.25 * fade, 0.2));
+      embers(ctx, x - fx.dirX * 6, y - fx.dirY * 6, 4, r, f, seed, fade * 0.8);
+      return true;
+    }
+    case "btSwirl": {
+      // 일식의 춤: 무희가 돌며 베고 지나간 둘레 곳곳에 작은 초승달 칼빛이 휙 그어짐 (흰 칼빛 + 주황/빨강 번짐)
+      const [, c1] = sun ? SLASH.red : SLASH.orange;
+      ctx.globalAlpha = 1 - f;
+      edgeArc(ctx, x, y, r, a, a + 0.6 + f * 1.6, "#ffffff", 2 * (1 - f) + 0.6);
+      ctx.globalAlpha = (1 - f) * 0.5;
+      edgeArc(ctx, x, y, r - 2, a, a + 0.4 + f * 1.6, c1, 2);
+      ctx.globalAlpha = 1;
+      return true;
+    }
+    case "btNeedle": {
+      // 일식의 춤에 베인 적: 몸에 바늘처럼 가는 일직선 칼선이 한순간 쭉 (양끝 뾰족한 흰빛 + 주황/빨강 번짐)
+      const [c0] = sun ? SLASH.red : SLASH.orange;
+      const len = Math.hypot(fx.dirX, fx.dirY) || 1;
+      const ux = fx.dirX / len;
+      const uy = fx.dirY / len;
+      const L = r * 1.4 * Math.min(1, f * 5);
+      const w = 1.6 * (1 - f);
+      ctx.globalAlpha = (1 - f) * 0.5;
+      edgeLine(ctx, x - ux * L, y - uy * L, x + ux * L, y + uy * L, c0, 2.5 * (1 - f) + 0.5);
+      ctx.globalAlpha = 1 - f * 0.8;
+      ctx.fillStyle = "#ffffff";
       ctx.beginPath();
-      ctx.arc(x, y - 6, r * 0.6, 0, Math.PI * 2);
+      ctx.moveTo(x - ux * L, y - uy * L);
+      ctx.lineTo(x - uy * w, y + ux * w);
+      ctx.lineTo(x + ux * L, y + uy * L);
+      ctx.lineTo(x + uy * w, y - ux * w);
+      ctx.closePath();
       ctx.fill();
-      embers(ctx, x - fx.dirX * 6, y - fx.dirY * 6, 6, r, f, seed, fade);
+      ctx.globalAlpha = 1;
       return true;
     }
     case "btSoul": {

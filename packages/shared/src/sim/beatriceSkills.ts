@@ -2,6 +2,7 @@
 import { BEATRICE_PERKS as K } from "../itemsBeatrice";
 import { BEATRICE as B } from "../weaponsBeatrice";
 import { addBurn, addEvil, btCooldown, btHit } from "./beatriceKit";
+import { rot } from "./orbit";
 import { alive, onSegment, rushTick, startRush } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
@@ -20,7 +21,7 @@ export function btSkill(s: RunState, i: number): void {
     addEffect(s, { kind: "btSolar", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 26, maxTicks: 30 });
   } else if (i === 1) {
     const far = hasPerk(p, "btTotality") ? K.btTotality.dash : 1;
-    startRush(p, { t: B.danceTicks, dx: p.faceX, dy: p.faceY, step: B.danceStep * far, dmg: p.stats.damage * B.danceMul, push: 4, invuln: true, tint: "#ff3a1a", w: p.r + 10 });
+    startRush(p, { t: B.danceTicks, dx: p.faceX, dy: p.faceY, step: B.danceStep * far, dmg: p.stats.damage * B.danceMul, push: 4, invuln: true, tint: "#ff3a1a", w: B.danceW });
     p.btTwin = hasPerk(p, "btTotality") ? K.btTotality.twins : 2;
     p.btTwinGap = 0;
   } else if (i === 2) {
@@ -35,14 +36,23 @@ export function btSkill(s: RunState, i: number): void {
   }
 }
 
-/** 일식의 춤 돌진 한 틱 (경로의 적: 물리는 rushTick, 화염은 여기) */
+/** 일식의 춤 돌진 한 틱: 무희처럼 돌며 지나가는 둘레 곳곳에 작은 초승달 칼빛 · 베인 적마다 가는 일직선 칼선 (물리는 rushTick, 화염은 여기) */
 export function danceTick(s: RunState): void {
   const p = s.player;
-  if (!p.s2Rush) return;
-  addEffect(s, { kind: "btDance", x: p.x, y: p.y, dirX: p.s2Rush.dx, dirY: p.s2Rush.dy, size: 14, maxTicks: 18 });
+  const r = p.s2Rush;
+  if (!r) return;
+  const tint = solarOn(p) ? "sun" : "";
+  addEffect(s, { kind: "btDance", x: p.x, y: p.y, dirX: r.dx, dirY: r.dy, size: 14, maxTicks: 18 });
+  for (let i = 0; i < 2; i++) {
+    const [c, sn] = rot(r.t * 2.3 + i * 3.1);
+    const d = B.danceW * (0.4 + 0.25 * ((r.t + i) % 3));
+    addEffect(s, { kind: "btSwirl", x: p.x + c * d, y: p.y - 4 + sn * d * 0.7, dirX: c, dirY: sn, size: 9 + ((r.t + i) % 3) * 2, maxTicks: 16, tint });
+  }
   rushTick(s, (e) => {
     btHit(s, e, 0, B.danceFire);
     if (solarOn(p)) addBurn(e, p);
+    const k = (e.id + r.t) % 2 ? 0.6 : -0.6;
+    addEffect(s, { kind: "btNeedle", x: e.x, y: e.y, dirX: r.dx * 0.8 - r.dy * k, dirY: r.dy * 0.8 + r.dx * k, size: e.r + 9, maxTicks: 14, tint });
   });
 }
 
