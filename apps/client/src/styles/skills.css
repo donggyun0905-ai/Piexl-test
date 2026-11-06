@@ -1,8 +1,39 @@
-/* 스킬 버튼 셋 (추적자: PC 1·2·3 키 · 남은 대기 가림) · 상점 판매 줄 */
+/* 스킬 버튼 (추적자 셋 · 베아트리스 넷: PC 숫자 키 · 남은 대기 가림 · 마우스를 올리면 설명) · 상점 판매 줄 */
 .skill-buttons {
   display: flex;
   gap: 6px;
   pointer-events: auto;
+}
+/* 스킬 칸 하나 + 마우스를 올리면 위에 뜨는 설명 (칸은 대기 덮개 때문에 잘려서 바깥에 띄움) */
+.skill-slot {
+  position: relative;
+  display: flex;
+}
+.skill-tip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  z-index: 6;
+  width: 240px;
+  transform: translateX(-50%);
+  padding: 6px 8px;
+  border: 1px solid #6a5aa0;
+  border-radius: 6px;
+  background: rgb(16 12 26 / 0.97);
+  color: #f0e8ff;
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: left;
+  pointer-events: none;
+}
+.skill-tip b {
+  color: var(--accent);
+}
+@media (hover: hover) {
+  .skill-slot:hover .skill-tip {
+    display: block;
+  }
 }
 .skill-btn {
   position: relative;

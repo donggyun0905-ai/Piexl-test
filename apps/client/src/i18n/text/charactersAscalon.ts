@@ -60,5 +60,8 @@ export const CHARACTER_TEXT_ASCALON = {
   trSkill1: { ko: "암습 저격", en: "Ambush Snipe", ja: "暗襲狙撃" },
   trSkill2: { ko: "강력한 한방", en: "Power Shot", ja: "強力な一撃" },
   trSkill3: { ko: "연발사격", en: "Rapid Fire", ja: "連射" },
+  trSkillTip1: { ko: "보호막 20을 받고, 화면이 어두워진 채 5초 동안 직접 조준해 쏨 (조준경 가운데 작은 원 안의 적만 맞음, 한 발 200%) · 다시 누르면 끝, 일찍 끝내면 남은 시간만큼 대기가 줄어듦 · 대기 10초", en: "Gain a 20 shield and aim manually for 5s on a darkened screen (only foes in the scope's small center circle are hit, 200% per shot) · press again to end; ending early shortens the cooldown by the time left · 10s cooldown", ja: "シールド20を得て、画面が暗くなったまま5秒間自分で狙って撃つ（照準中央の小さな円の中の敵だけ当たる、1発200%）· もう一度押すと終了、早く終えると残り時間ぶん待機が短くなる · 待機10秒" },
+  trSkillTip2: { ko: "1.5초 모으는 동안 앞에 적 탄을 막는 벽 → 방을 꿰뚫는 한 줄 (공격력 1000% + 적 최대 체력 20%, 보스는 그 1/5) · 대기 60초", en: "Charge for 1.5s behind a wall that blocks enemy shots → one line piercing the whole room (1000% ATK + 20% of the foe's max HP, 1/5 on bosses) · 60s cooldown", ja: "1.5秒ためる間、前に敵弾を防ぐ壁 → 部屋を貫く一筋（攻撃力1000% + 敵の最大体力20%、ボスはその1/5）· 待機60秒" },
+  trSkillTip3: { ko: "조준 없이 10발을 흩뿌려 쏨 (한 발 70%, 움직이며 쏠 수 있음) · 대기 3초", en: "Spray 10 shots without aiming (70% each, can move while firing) · 3s cooldown", ja: "狙わずに10発をばらまいて撃つ（1発70%、動きながら撃てる）· 待機3秒" },
   trAmbushLeft: { ko: "남은 발 {n} · {s}초", en: "{n} shots · {s}s", ja: "残り{n}発 · {s}秒" },
 };
