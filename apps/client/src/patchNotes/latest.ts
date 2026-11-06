@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.62",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "성국 새 캐릭터 가브리엘 '철옹의 방패': 온몸을 빛의 갑옷으로 두르고 강철과 중력을 다루는 절대 수호자 (체력 150 · 공격력 14 · 방어력 5 · 이동 1.2 · 행운 1 · 해금: 방어력 15 달성)",
+        "철옹: 받는 피해 절반 · 기본 공격 3연격: 내려찍기 · 휘두르기 → 대지 강타(하늘에서 빛의 망치가 내리꽂힘, 180% · 기절 · 압박) · 압박된 적은 느려짐",
+        "숫자 키 스킬 넷: 1 방패 돌진(밀쳐내기·기절) · 2 중력 붕괴(끌어당긴 뒤 빛의 망치 200%) · 3 성벽(최대 체력 30% 보호막 · 둘레 진동) · 4 불멸의 성벽(10초 성역: 안에서 보호막 +100, 끝나면 천천히 줄어듦 · 기본 공격마다 최대 체력 20% 빛의 망치 추가타)",
+        "무기 1(불멸의 성벽 방패 & 단조 해머) · 전용 아이템 20(철옹·방어 5 · 망치·대지 5 · 중력 5 · 스킬·성벽 5) · 빛의 망치 그림 이펙트·효과음·그림 시트·패왕전 스킬",
+      ],
+      en: [
+        "New Holy Kingdom character Gabriel 'The Iron Shield': an absolute guardian clad in armor of light who wields steel and gravity (HP 150 · ATK 14 · DEF 5 · Move 1.2 · Luck 1 · Unlock: reach 15 defense)",
+        "Ironclad: half damage taken · basic 3-hit chain: overhead smash · sweep → Earth Slam (a hammer of light crashes down from the sky, 180% · stun · Press) · Pressed foes are slowed",
+        "Four number-key skills: 1 Shield Charge (knockback · stun) · 2 Gravity Collapse (pulls in, then a 200% hammer of light) · 3 Bulwark (30% max HP shield · quake around you) · 4 Immortal Bastion (10s sanctuary: +100 shield inside that fades slowly afterward · every basic attack drops an extra hammer of light for 20% max HP)",
+        "1 weapon (Immortal Bastion Shield & Forged Hammer) · 20 exclusive items (Ironclad·Defense 5 · Hammer·Earth 5 · Gravity 5 · Skill·Rampart 5) · hammer-of-light art effect · sounds · sprite sheet · Paewang skills",
+      ],
+      ja: [
+        "聖国の新キャラクター、ガブリエル「鉄壁の盾」：全身を光の鎧で包み、鋼と重力を操る絶対守護者（体力150 · 攻撃力14 · 防御力5 · 移動1.2 · 幸運1 · 解放：防御力15達成）",
+        "鉄壁：受けるダメージ半分 · 通常攻撃3連撃：振り下ろし · 薙ぎ払い → 大地強打（空から光のハンマーが叩きつけられる、180% · 気絶 · 圧迫）· 圧迫された敵は遅くなる",
+        "数字キーのスキル4つ：1 盾突進（押し出し・気絶）· 2 重力崩壊（引き寄せた後に光のハンマー200%）· 3 城壁（最大体力30%のシールド · 周りに震動）· 4 不滅の城壁（10秒の聖域：中ではシールド+100、終了後ゆっくり減る · 通常攻撃ごとに最大体力20%の光のハンマー追撃）",
+        "武器1（不滅の城壁の盾＆鍛造ハンマー）· 専用アイテム20（鉄壁・防御5 · ハンマー・大地5 · 重力5 · スキル・城壁5）· 光のハンマーの絵のエフェクト · 効果音 · スプライトシート · 覇王戦スキル",
+      ],
+    },
+  },
+  {
     version: "0.49.61",
     date: "2026-11-06",
     items: {

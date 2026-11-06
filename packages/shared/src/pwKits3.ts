@@ -129,4 +129,10 @@ export const PW_KITS_3: PwKits = {
     sk("iaPen", "self", 11, "#e8d070", { radius: 130, fx: "net", hit: { dmg: 2.2, silence: 1 * SEC } }),
     sk("iaPen", "self", 50, "#f2c14e", { radius: 150, fx: "field", hit: { dmg: 3, stun: 1.2 * SEC } }),
   ),
+  gabriel: kit(1.05,
+    sk("gbHammer", "dash", 8, "#f2c14e", { range: 110, speed: 10, fx: "slash", hit: { dmg: 1.6, push: 12, stun: 0.6 * SEC } }),
+    sk("gbHammer", "point", 12, "#ffe68a", { range: 140, radius: 50, delay: 30, fx: "pillar", hit: { dmg: 2.4, push: -16, slow: 1.5 * SEC } }),
+    sk("gbHammer", "self", 16, "#fff0b0", { radius: 70, fx: "wave", buff: { ticks: 4 * SEC, taken: 0.5 }, hit: { dmg: 1.4, push: 14 } }),
+    sk("gbHammer", "self", 60, "#ffd040", { radius: 120, fx: "field", buff: { ticks: 8 * SEC, taken: 0.4 }, hit: { dmg: 3, stun: 1 * SEC } }),
+  ),
 };

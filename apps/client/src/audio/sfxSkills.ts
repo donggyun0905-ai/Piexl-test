@@ -13,6 +13,7 @@ import { waveSounds } from "./waveSounds";
 import { miryuSounds } from "./miryuSounds";
 import { beatriceSounds } from "./beatriceSounds";
 import { ianSounds } from "./ianSounds";
+import { gabrielSounds } from "./gabrielSounds";
 
 export const SKILL_SOUNDS = {
   // 터짐: 낮은 펑 · 떨어지는 운석: 쿵 + 우르르
@@ -99,6 +100,20 @@ export const SKILL_SOUNDS = {
     noise(1, 0.35, 700);
   },
   // 이안: 펜 찌르기(가늘고 높은 쇳소리) · 실 휘감기(바람 가르는 소리) · 인과율 속박(낮은 종 + 실 떨림)
+  // 가브리엘: 대지 강타(낮게 쿵 + 돌 부서짐) · 중력 붕괴(빨려 드는 낮은 소리) · 불멸의 성벽(큰 종 + 울림)
+  gbQuake: () => {
+    tone({ type: "sine", from: 120, to: 40, dur: 0.35, vol: 0.2 });
+    noise(0.25, 0.22, 700);
+  },
+  gbGrav: () => {
+    tone({ type: "sawtooth", from: 220, to: 60, dur: 0.4, vol: 0.06 });
+    noise(0.3, 0.1, 500);
+  },
+  gbBell: () => {
+    tone({ type: "sine", from: 98, to: 96, dur: 1.4, vol: 0.12 });
+    tone({ type: "triangle", from: 1320, to: 1300, dur: 1, vol: 0.05, delay: 0.05 });
+    noise(0.4, 0.2, 600);
+  },
   iaStab: () => {
     tone({ type: "triangle", from: 2600, to: 1900, dur: 0.06, vol: 0.04 });
     noise(0.05, 0.08, 5200);
@@ -217,6 +232,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   miryuSounds(run, out, onShake);
   beatriceSounds(run, out, onShake);
   ianSounds(run, out, onShake);
+  gabrielSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;
   for (const e of run.effects) {

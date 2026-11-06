@@ -80,6 +80,7 @@ export const ACCENT: Record<string, string> = {
   miryu: "#5ad0ff",
   beatrice: "#ff3a1a",
   ian: "#b89aff",
+  gabriel: "#ffd76a",
   collector: "#5a8aff",
   mystic: "#ff6a8a",
   engineer: "#5ad0f0",

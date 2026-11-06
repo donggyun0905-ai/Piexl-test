@@ -43,6 +43,7 @@ import { resetWave } from "./wave";
 import { resetMiryu } from "./miryu";
 import { resetBeatrice } from "./beatrice";
 import { resetIan } from "./ian";
+import { resetGabriel } from "./gabriel";
 import { resetCollector } from "./collector";
 import { resetMiner } from "./miner";
 import { resetVoyager } from "./voyager";
@@ -258,6 +259,7 @@ export function practiceReset(s: RunState): void {
   resetMiryu(p);
   resetBeatrice(p);
   resetIan(p);
+  resetGabriel(p);
   resetCollector(p);
   resetMiner(p);
   resetVoyager(p);

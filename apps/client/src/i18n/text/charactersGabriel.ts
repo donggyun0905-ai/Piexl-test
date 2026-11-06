@@ -1,0 +1,25 @@
+// 화면 글자: 성국 가브리엘(철옹의 방패) 이름·설명 · 스킬 이름·설명 · 버프 창 (charactersSeongguk가 커서 나눔)
+export const CHARACTER_TEXT_GABRIEL = {
+  gabriel: { ko: "가브리엘", en: "Gabriel", ja: "ガブリエル" },
+  bastion: { ko: "성벽의 해머", en: "Bastion Hammer", ja: "城壁のハンマー" },
+  gabrielDesc: {
+    ko: "성국. '철옹의 방패'. 온몸을 단단한 빛의 갑옷으로 두른 절대 수호자. 강철과 중력을 다루며 전장의 최전선에서 적의 모든 공격을 반감하고 대지를 진동시켜 적을 압박함. 철옹: 받는 피해 절반 · 누르고 있으면 3연격(내려찍기 · 휘두르기 → 대지 강타: 빛의 망치가 내리꽂혀 기절·압박) · 압박된 적은 느려짐 · 숫자 키 스킬 넷: 1 방패 돌진 · 2 중력 붕괴 · 3 성벽 · 4 불멸의 성벽",
+    en: "Holy Kingdom. 'The Iron Shield'. An absolute guardian clad head to toe in hard armor of light. Wielding steel and gravity on the front line, he halves every enemy attack and shakes the earth to press foes down. Ironclad: takes half damage · hold for a 3-hit chain (overhead smash · sweep → Earth Slam: a hammer of light crashes down, stunning and Pressing) · Pressed foes are slowed · four number-key skills: 1 Shield Charge · 2 Gravity Collapse · 3 Bulwark · 4 Immortal Bastion",
+    ja: "聖国。「鉄壁の盾」。全身を固い光の鎧で包んだ絶対守護者。鋼と重力を操り、戦場の最前線で敵のあらゆる攻撃を半減し、大地を震わせて敵を圧迫する。鉄壁：受けるダメージ半分 · 押し続けると3連撃（振り下ろし · 薙ぎ払い → 大地強打：光のハンマーが叩きつけられ気絶・圧迫）· 圧迫された敵は遅くなる · 数字キーのスキル4つ：1 盾突進 · 2 重力崩壊 · 3 城壁 · 4 不滅の城壁",
+  },
+  gbSkill1: { ko: "방패 돌진", en: "Shield Charge", ja: "盾突進" },
+  gbSkill2: { ko: "중력 붕괴", en: "Gravity Collapse", ja: "重力崩壊" },
+  gbSkill3: { ko: "성벽", en: "Bulwark", ja: "城壁" },
+  gbSkill4: { ko: "불멸의 성벽", en: "Immortal Bastion", ja: "不滅の城壁" },
+  gbSkillTip1: { ko: "방패를 앞세워 바라보는 쪽으로 돌진 (120%) · 부딪힌 적을 밀쳐내고 기절·압박 · 대기 8초", en: "Charge where you face behind your shield (120%) · knocks back, stuns and Presses foes hit · 8s cooldown", ja: "盾を構えて向いている方へ突進（120%）· ぶつかった敵を押し出し気絶・圧迫 · 待機8秒" },
+  gbSkillTip2: { ko: "앞 땅에 중력장: 둘레 적을 가운데로 끌어당기고 압박 → 0.5초 뒤 빛의 망치가 내리꽂힘 (200%) · 대기 12초", en: "A gravity field ahead: pulls nearby foes to the center and Presses them → 0.5s later a hammer of light crashes down (200%) · 12s cooldown", ja: "前方の地面に重力場：周りの敵を中心へ引き寄せ圧迫 → 0.5秒後に光のハンマーが叩きつけられる（200%）· 待機12秒" },
+  gbSkillTip3: { ko: "최대 체력 30% 보호막 · 둘레 땅을 울려 밀쳐냄 (100%, 압박) · 대기 16초", en: "Shield equal to 30% max HP · shakes the ground around you, knocking foes back (100%, Press) · 16s cooldown", ja: "最大体力30%のシールド · 周りの地面を震わせて押し出す（100%、圧迫）· 待機16秒" },
+  gbSkillTip4: { ko: "궁극기: 거대한 빛의 망치가 내리꽂히며 10초 동안 성역 · 성역 안에서는 보호막 +100 (끝나면 천천히 줄어듦) · 그동안 기본 공격마다 빛의 망치 추가타 (최대 체력 20%) · 대기 60초", en: "Ultimate: a giant hammer of light crashes down and makes a sanctuary for 10s · inside it you gain a 100 shield (fades slowly afterward) · meanwhile every basic attack calls an extra hammer of light (20% max HP) · 60s cooldown", ja: "必殺技：巨大な光のハンマーが叩きつけられ10秒間の聖域 · 聖域の中ではシールド+100（終了後ゆっくり減る）· その間通常攻撃ごとに光のハンマーの追撃（最大体力20%）· 待機60秒" },
+  pwSk_gabriel1: { ko: "방패 돌진", en: "Shield Charge", ja: "盾突進" },
+  pwSk_gabriel2: { ko: "중력 붕괴", en: "Gravity Collapse", ja: "重力崩壊" },
+  pwSk_gabriel3: { ko: "성벽", en: "Bulwark", ja: "城壁" },
+  pwSk_gabriel4: { ko: "불멸의 성벽", en: "Immortal Bastion", ja: "不滅の城壁" },
+  bfGbHalve: { ko: "철옹: 받는 피해 절반", en: "Ironclad: half damage taken", ja: "鉄壁：受けるダメージ半分" },
+  bfGbUlt: { ko: "불멸의 성벽 {s}초: 성역 보호막 · 빛의 망치 추가타", en: "Immortal Bastion {s}s: sanctuary shield · hammer of light follow-ups", ja: "不滅の城壁{s}秒：聖域シールド · 光のハンマー追撃" },
+  cg_gabriel: { ko: "방어력 {n} 달성", en: "Reach {n} defense", ja: "防御力{n}達成" },
+};

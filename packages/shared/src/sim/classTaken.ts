@@ -35,9 +35,10 @@ import { waveTaken } from "./waveSkillsD";
 import { miryuTaken } from "./miryu";
 import { beaHurt, beaTaken } from "./beatriceKit";
 import { ianHurt, ianTaken } from "./ianKit";
+import { gabrielHurt, gabrielTaken, gbFoeTaken } from "./gabrielKit";
 import { evilTaken } from "./beatriceKit";
-/** 적이 받는 피해 배율 (베아트리스 악 · 이안 속박, combat.damageEnemy) */
-export const foeTaken = (s: RunState, e: EnemyState) => evilTaken(s, e) * ianTaken(s, e);
+/** 적이 받는 피해 배율 (베아트리스 악 · 이안 속박 · 가브리엘 압박, combat.damageEnemy) */
+export const foeTaken = (s: RunState, e: EnemyState) => evilTaken(s, e) * ianTaken(s, e) * gbFoeTaken(s, e);
 import { leoTaken } from "./leoPerks";
 import { onyxHurt, onyxTaken } from "./onyx";
 export { cloudEnv } from "./pungHooks";
@@ -47,7 +48,7 @@ import type { EnemyState, RunState } from "./types";
 export function classTaken(s: RunState, taken: number): number {
   const p = s.player;
   idraHurt(s);
-  return disguise(s, mukinTaken(p, taken * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p, !!s.pvp) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p) * leoTaken(s) * onyxTaken(p) * thorkenTaken(p) * leviaTaken(p) * tailTaken(p) * madQueenTaken(p) * hookTaken(p) * orcaTaken(p) * waveTaken(p) * miryuTaken(p) * beaTaken(p) * foeTakenMul(p)));
+  return disguise(s, mukinTaken(p, taken * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p, !!s.pvp) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p) * leoTaken(s) * onyxTaken(p) * thorkenTaken(p) * leviaTaken(p) * tailTaken(p) * madQueenTaken(p) * hookTaken(p) * orcaTaken(p) * waveTaken(p) * miryuTaken(p) * beaTaken(p) * gabrielTaken(p, !!s.pvp) * foeTakenMul(p)));
 }
 
 /** 맞은 뒤 무적: 용 염옥·갓이터 패링 궁극기 동안은 없음 · 묵인은 아주 짧게 · 때린 적의 상태이상 (foeStatus) */
@@ -55,6 +56,7 @@ export function afterHurt(s: RunState, from?: EnemyKind, env = false): void {
   afflict(s, from);
   beaHurt(s, from, env);
   ianHurt(s, env);
+  gabrielHurt(s, env);
   if (s.enemies.some((e) => e.ultAt !== undefined && (e.kind === "dragon" || e.kind === "godeater"))) s.player.invulnTicks = 0;
   mukinHurt(s);
   onyxHurt(s);

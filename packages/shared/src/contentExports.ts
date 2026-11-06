@@ -23,5 +23,7 @@ export { BEATRICE } from "./weaponsBeatrice";
 export { BEATRICE_PERKS } from "./itemsBeatrice";
 export { IAN } from "./weaponsIan";
 export { IAN_PERKS } from "./itemsIan";
+export { GABRIEL } from "./weaponsGabriel";
+export { GABRIEL_PERKS } from "./itemsGabriel";
 export { WAVE_PERKS, WV_SKILLS, type WvSkill } from "./itemsWave";
 export { LUX } from "./weaponsLux";
