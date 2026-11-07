@@ -9,6 +9,7 @@ import { parseSkin } from "../shop/skins";
 import { THEME_KEY } from "../shop/SkinTab";
 import { equippedSkin } from "../shop/wallet";
 import { CHAR_DESC } from "./charDesc";
+import { FoldDesc } from "../game/FoldDesc";
 import { cardOf, frameOf, masteryLevel, MASTERY_AT, playsOf, toNext } from "../mastery/mastery";
 
 
@@ -76,7 +77,7 @@ export function CharPickDialog({ t, c, onGo, onClose }: Props) {
             <h2>{t(c as TextKey)}</h2>
             <small className="cs-skin">{skinName(t, c)}</small>
             <MasteryLine t={t} c={c} />
-            <p className="cs-pick-desc">{t(CHAR_DESC[c])}</p>
+            <FoldDesc className="cs-pick-desc" text={t(CHAR_DESC[c])} />
             <h3>{t("csStats")}</h3>
             <dl className="cs-pick-stats">
               {stats.map(([k, v]) => (

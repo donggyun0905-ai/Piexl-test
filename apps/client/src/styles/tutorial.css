@@ -32,3 +32,18 @@
   padding: 4px 10px;
   font-size: 12px;
 }
+/* 마지막 단계: 진영 특징 한 줄씩 */
+.tutorial-factions {
+  margin-top: 6px;
+  text-align: left;
+  font-size: 13px;
+}
+.tutorial-factions ul {
+  margin: 4px 0 0;
+  padding-left: 16px;
+  line-height: 1.5;
+}
+.tutorial-factions strong {
+  color: var(--accent, #f2c14e);
+  margin-right: 4px;
+}

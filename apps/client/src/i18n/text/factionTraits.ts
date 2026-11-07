@@ -1,5 +1,16 @@
 // 화면 글자: 진영 특징 시스템 (로그만) — 게이지 이름·설명 · 아스칼론 맹세 6종 · 비르디아 정령 단계 (game/FactionGauge)
 export const FACTION_TRAIT_TEXT = {
+  tutorialFactions: { ko: "캐릭터는 진영마다 공통 특징이 있어요 (아래 게이지 · 왼쪽 버프 창)", en: "Each faction shares a trait (bottom gauge · left buff panel)", ja: "キャラは陣営ごとに共通の特徴があります（下のゲージ・左のバフ欄）" },
+  tfAscalon: { ko: "방마다 맹세 · 지키면 영광(피해 증가)", en: "An oath each room · keep it for Glory (more damage)", ja: "部屋ごとに誓い・守ると栄光（ダメージ上昇）" },
+  tfTerracore: { ko: "맞힐수록 열(피해 증가) · 대시로 식힘 · 100이면 과부하", en: "Hits build Heat (more damage) · dash to vent · Overload at 100", ja: "当てるほど熱（ダメージ上昇）・ダッシュで冷却・100で過負荷" },
+  tfVirdia: { ko: "시작할 때 공생 정령 하나를 골라 함께 다님", en: "Pick a Symbiote at the start to travel with you", ja: "開始時に共生精霊を1体選んで連れて歩く" },
+  tfHelios: { ko: "처치로 타락이 쌓여 세지고 가득 차면 폭주", en: "Kills stack Taint for power · Rampage when full", ja: "撃破で堕落が溜まり強くなり、満タンで暴走" },
+  tfThalassia: { ko: "맞히면 물결 콤보 · 안 맞을수록 물 피해 증가", en: "Hits build a Tide Combo · stay unhit for more water damage", ja: "当てると波のコンボ・被弾しないほど水ダメージ上昇" },
+  tfSeongguk: { ko: "숫자 키 스킬 넷 · 많이 쓰면 핵심 스킬 각성", en: "Four skills on number keys · use them to awaken a Core Skill", ja: "数字キーのスキル4つ・使うほど核心スキルが覚醒" },
+  tfDawn: { ko: "맞히면 성흔이 차고 가득 차면 달빛 각성", en: "Hits fill the Stigma · Moonlight Awakening when full", ja: "当てると聖痕が溜まり、満タンで月光覚醒" },
+  descMore: { ko: "자세히 ▾ (+{n})", en: "More ▾ (+{n})", ja: "詳しく ▾ (+{n})" },
+  descLess: { ko: "접기 ▴", en: "Less ▴", ja: "閉じる ▴" },
+  descShift: { ko: "Shift를 누르면 전체 (+{n}줄)", en: "Hold Shift for all (+{n})", ja: "Shiftで全部表示（+{n}行）" },
   csTrait_ascalon: { ko: "진영 특징 · 맹세", en: "Faction trait · Oaths", ja: "陣営の特徴・誓い" },
   csTrait_terracore: { ko: "진영 특징 · 과열", en: "Faction trait · Heat", ja: "陣営の特徴・過熱" },
   csTrait_virdia: { ko: "진영 특징 · 공생 정령", en: "Faction trait · Symbiote", ja: "陣営の特徴・共生精霊" },

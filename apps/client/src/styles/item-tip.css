@@ -45,3 +45,23 @@
   color: #e05a5a;
 }
 
+/* 긴 설명을 줄마다 (game/FoldDesc): 점 목록 · 요령 줄은 초록 · 접기 버튼 · Shift 안내 */
+.fold-lines {
+  margin: 2px 0 0;
+  padding-left: 14px;
+  line-height: 1.45;
+}
+.fold-lines li { margin: 1px 0; }
+.fold-lines li::marker { color: var(--accent, #f2c14e); }
+.fold-lines li.fold-tip { color: #9aff9a; }
+.fold-more {
+  margin: 4px 0 0;
+  padding: 2px 10px;
+  font-size: 12px;
+}
+.fold-hint {
+  display: block;
+  margin-top: 3px;
+  color: #a0a0b8;
+  font-size: 11px;
+}

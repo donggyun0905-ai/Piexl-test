@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.7",
+    date: "2026-11-07",
+    items: {
+      ko: ["설명 정리: 긴 설명은 한 줄씩 목록으로 · 캐릭터 설명 창은 핵심 3줄만 보이고 '자세히'로 펼침 · 아이템 말풍선은 Shift를 누르면 전체", "설명이 짧던 캐릭터 14명에 플레이 요령 한 줄 추가", "튜토리얼 마지막에 진영마다 공통 특징 안내"],
+      en: ["Cleaner descriptions: long ones are shown line by line · character info shows the key 3 lines with 'More' to expand · hold Shift in item tooltips for the full text", "Added a play tip to 14 characters with short descriptions", "The tutorial's last step now introduces each faction's trait"],
+      ja: ["説明の整理：長い説明は1行ずつリストに・キャラ説明は要点3行だけ表示し「詳しく」で展開・アイテムの吹き出しはShiftで全部表示", "説明が短かったキャラ14人にプレイのコツを1行追加", "チュートリアルの最後に陣営ごとの共通の特徴を案内"],
+    },
+  },
+  {
     version: "0.50.6",
     date: "2026-11-07",
     items: {

@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { ItemIcon, type IconItem } from "./itemIcon";
 import { passiveTag, type ItemTag } from "@pixel-rogue/shared";
 import { TagChip } from "./build/TagChip";
+import { TipDesc } from "./FoldDesc";
 
 const TIP_HALF_WIDTH = 132;
 /** 이보다 위쪽이면 말풍선을 아래로 띄움 */
@@ -59,7 +60,7 @@ export function ItemTip({ pos, icon, name, desc, children, tag, tags }: Props) {
         {name}
         {shown.map((g) => <TagChip key={g} tag={g} />)}
       </div>
-      <div>{desc}</div>
+      <TipDesc text={desc} />
       {children}
     </div>,
     document.body,
