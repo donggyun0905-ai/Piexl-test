@@ -16,7 +16,7 @@ function roomCheck(s: RunState): void {
   const key = roomKey(s);
   if (p.mcRoom === key) return;
   p.mcRoom = key;
-  for (const k of ["mcBlades", "mcFalls", "mcChains", "mcUlt", "mcQueue"] as const) delete p[k];
+  for (const k of ["mcBlades", "mcFalls", "mcChains", "mcUlt", "mcQueue", "mcShiftT"] as const) delete p[k];
   roomRain(s);
 }
 
@@ -28,6 +28,7 @@ function timers(s: RunState): void {
   const cd = (p.mcCd ??= [0, 0, 0, 0]);
   for (let i = 0; i < cd.length; i++) if (cd[i]! > 0) cd[i]!--;
   if ((p.mcComboT ?? 0) > 0 && --p.mcComboT! <= 0) delete p.mcCombo;
+  if ((p.mcShiftT ?? 0) > 0 && --p.mcShiftT! <= 0) delete p.mcShiftT;
 }
 
 /** 틱마다 (무기 보관소를 들었을 때 player에서) */
@@ -56,7 +57,7 @@ export function michaelaTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetMichaela(p: RunState["player"]): void {
-  for (const k of ["mcStep", "mcGap", "mcLast", "mcCd", "mcWeapon", "mcHeld", "mcElem", "mcCombo", "mcComboT", "mcBlades", "mcFalls", "mcChains", "mcUlt", "mcDash", "mcRoom", "mcQueue"] as const) delete p[k];
+  for (const k of ["mcStep", "mcGap", "mcLast", "mcCd", "mcWeapon", "mcHeld", "mcElem", "mcCombo", "mcComboT", "mcBlades", "mcFalls", "mcChains", "mcUlt", "mcDash", "mcRoom", "mcQueue", "mcShiftT"] as const) delete p[k];
 }
 
 export { isMichaela, michaelaSkills } from "./michaelaKit";

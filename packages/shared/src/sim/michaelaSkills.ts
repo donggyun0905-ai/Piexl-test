@@ -11,8 +11,8 @@ import type { RunState } from "./types";
 import { addEffect, hasPerk, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 import { isWall } from "./waveKit";
 
-/** (x,y) 둘레 반지름 r 안 아무 데나 n개 떨어뜨림 (벽은 피함, 시드로 자리) */
-function rainAround(s: RunState, tag: string, x: number, y: number, r: number, n: number, delay: number, mul: number): void {
+/** (x,y) 둘레 반지름 r 안 아무 데나 n개 떨어뜨림 (벽은 피함, 시드로 자리 · gap 틱씩 차례로) */
+function rainAround(s: RunState, tag: string, x: number, y: number, r: number, n: number, delay: number, mul: number, gap = 3): void {
   const rng = createRng(deriveSeed(s.seed, tag, s.tick, s.floor, s.roomId));
   const e = M.rainEdge;
   for (let i = 0, tries = 0; i < n && tries < n * 6; tries++) {
@@ -21,7 +21,7 @@ function rainAround(s: RunState, tag: string, x: number, y: number, r: number, n
     const bx = Math.max(ROOM_MIN_X + e, Math.min(ROOM_MAX_X - e, x + Math.cos(a) * d));
     const by = Math.max(ROOM_MIN_Y + e, Math.min(ROOM_MAX_Y - e, y + Math.sin(a) * d));
     if (isWall(s, bx, by)) continue;
-    dropBlade(s, bx, by, delay + i * 3, Math.floor(rng.nextFloat() * MC_WEAPON_ELEM.length), mul);
+    dropBlade(s, bx, by, delay + i * gap, Math.floor(rng.nextFloat() * MC_WEAPON_ELEM.length), mul);
     i++;
   }
 }
@@ -54,6 +54,7 @@ export function mcSkill(s: RunState, i: number): void {
     if (!b) return;
     blinkTo(s, b, M.shiftMul, M.dashInv);
     addCombo(p, M.shiftCombo - 1);
+    p.mcShiftT = M.shiftResetT;
   } else if (i === 0) {
     // 1 무기 비: 앞에 무기가 쏟아져 박힘
     const x = p.x + p.faceX * M.stormAt;
@@ -87,9 +88,12 @@ export function mcWorld(s: RunState): void {
   p.mcUlt!--;
   const every = Math.max(1, Math.round(M.ultEvery * (hasPerk(p, "mcArsenal") ? K.mcArsenal.every : 1)));
   if (s.tick % every !== 0) return;
-  const foes = alive(s);
-  const e = foes[Math.floor(s.tick / every) % Math.max(1, foes.length)];
-  if (e) dropBlade(s, e.x, e.y, 10, pickWeapon(s, null, "ult"), M.ultMul);
+  // 모든 적에게 한꺼번에 + 맵 곳곳에도 같이 쏟아짐
+  alive(s).forEach((e, j) => {
+    for (let k = 0; k < M.ultPerFoe; k++) dropBlade(s, e.x, e.y, 10 + k * 4, pickWeapon(s, null, "ult", j, k), M.ultMul);
+  });
+  const big = Math.max(ROOM_MAX_X - ROOM_MIN_X, ROOM_MAX_Y - ROOM_MIN_Y) * 0.5;
+  rainAround(s, "mcUlt", ROOM_CX, ROOM_CY, big, M.ultScatter, 10, M.ultScatterMul, 1);
 }
 
 /** 몸에 닿은 박힌 무기를 바꿔 듦 · 대시를 시작하면 범위 안의 박힌 무기로 순간 이동 */

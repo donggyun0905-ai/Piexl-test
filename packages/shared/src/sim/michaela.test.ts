@@ -105,6 +105,7 @@ describe("미카엘라", () => {
     const near = [...s.player.mcBlades!].sort((a, b) => Math.hypot(a.x - 100, a.y - 100) - Math.hypot(b.x - 100, b.y - 100))[0]!;
     key(s, 2);
     expect(s.player.x).toBe(near.x);
+    expect(s.player.mcShiftT).toBe(M.shiftResetT);
     s.player.mcQueue = [];
     const first = s.player.mcBlades![0]!;
     s.enemies[0]!.x = first.x;
@@ -116,9 +117,23 @@ describe("미카엘라", () => {
     expect(lost(s)).toBeGreaterThan(before);
     key(s, 4);
     expect(s.player.mcUlt).toBeGreaterThan(0);
+    while (s.tick % M.ultEvery !== 0) run(s, 1);
+    // 모든 적 + 맵 곳곳에 한꺼번에
+    expect((s.player.mcFalls ?? []).length).toBeGreaterThanOrEqual(M.ultScatter);
     const b2 = lost(s);
     run(s, 60);
     expect(lost(s)).toBeGreaterThan(b2);
+  });
+
+  it("칼날 교대로 잡은 무기로 제한 시간 안에 잡으면 2번 대기 초기화", () => {
+    const s = michaela();
+    s.player.mcBlades = [{ x: 160, y: 100, w: 21, k: 0, v: 0 }];
+    s.enemies = [{ ...enemy(1, 175, 100, 1), rootTicks: 99999 }];
+    key(s, 2);
+    expect(s.player.mcCd![1]).toBeGreaterThan(0);
+    run(s, M.touchGap * 3);
+    expect(s.enemies.length).toBe(0);
+    expect(s.player.mcCd![1]).toBe(0);
   });
 
   it("속성: 빙결은 느려짐 · 자전은 옆 적에게 번개 · 비취는 독", () => {

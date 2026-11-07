@@ -21,8 +21,14 @@ function fx(s: RunState, m: McMove, x: number, y: number, size: number, toX = x,
 function hit(s: RunState, e: EnemyState, mul: number, push = 0): void {
   const p = s.player;
   const m = mul * (hasPerk(p, "mcPowder") ? K.mcPowder.mul : 1);
+  const was = e.hp > 0;
   mcHit(s, e, m, push, p.mcElem ?? 0);
   if (hasPerk(p, "mcShrapnel") && e.hp > 0) strike(s, e, p.stats.damage * m * K.mcShrapnel.mul, 0, "bleed");
+  // 2 칼날 교대로 잡은 무기로 제한 시간 안에 잡으면 2번 대기 초기화
+  if (was && e.hp <= 0 && (p.mcShiftT ?? 0) > 0 && p.mcCd) {
+    p.mcCd[1] = 0;
+    delete p.mcShiftT;
+  }
 }
 
 /** 넓은 폭심: 기술 범위 배율 */

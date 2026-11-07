@@ -57,6 +57,8 @@ export interface MichaelaPlayerState {
   mcBlades?: McBlade[];
   mcFalls?: McFall[];
   mcChains?: McChain[];
+  /** 2 칼날 교대 뒤 남은 틱 (이 안에 그 무기 기술로 잡으면 2번 대기 초기화) */
+  mcShiftT?: number;
   /** 무한의 무기고 남은 틱 */
   mcUlt?: number;
   /** 대시 중인지 (대시 시작을 한 번만 봄) */

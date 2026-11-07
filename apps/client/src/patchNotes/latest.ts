@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.76",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "미카엘라 2 칼날 교대: 순간 이동해 잡은 무기로 1.5초 안에 적을 잡으면 2번 스킬 대기가 바로 초기화",
+        "미카엘라 4 무한의 무기고: 적 하나씩이 아니라 모든 적에게 한꺼번에 무기가 내려꽂히고, 맵 곳곳에도 여러 개가 동시에 쏟아짐",
+      ],
+      en: [
+        "Michaela 2 Blade Swap: kill an enemy within 1.5s with the weapon you teleported to and skill 2's cooldown resets instantly",
+        "Michaela 4 Infinite Armory: weapons now slam into every enemy at once instead of one at a time, and several also rain across the whole map simultaneously",
+      ],
+      ja: [
+        "ミカエラ 2 刃の交代：瞬間移動して持った武器で1.5秒以内に敵を倒すと、スキル2の待ち時間がすぐにリセット",
+        "ミカエラ 4 無限の武器庫：敵1体ずつではなく全ての敵に同時に武器が突き刺さり、マップのあちこちにも複数が同時に降り注ぐ",
+      ],
+    },
+  },
+  {
     version: "0.49.75",
     date: "2026-11-07",
     items: {
