@@ -10,5 +10,5 @@ export interface DawnPlayerState {
   blGap?: number;
 }
 
-/** 효과: 산탄 부채꼴 (size = 거리, arc = cos, style 1 = 각성) · 폭멸 (size = 반지름) · 각성 달빛 폭발 · 각성 중 몸 둘레 달빛 */
+/** 효과: 산탄 부채꼴 (size = 거리, arc = cos, style: 1 = 각성 · 2 = 펌프 앞 마지막 발) · 폭멸 (size = 반지름) · 각성 달빛 폭발 · 각성 중 몸 둘레 달빛 */
 export type DawnFx = "blShotFx" | "blBurstFx" | "blAwakeFx" | "blMoonAura";

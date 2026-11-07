@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.78",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "블래스트 산탄 이펙트: 총구 앞에 주황·검붉은 폭발 (번쩍 → 검은 연기 → 초승달 충격 → 흩어짐, 펌프 앞 둘째 발은 더 크게)",
+        "블래스트 탄약: 체력 줄 위에 남은 탄피 2발 표시 (쏜 발은 어둡게 · 펌프질 중엔 금빛 줄이 깜빡임)",
+      ],
+      en: [
+        "Blast shot effect: an orange and dark-red explosion at the muzzle (flash → black smoke → crescent shock → scatter; the second shot before the pump is bigger)",
+        "Blast ammo: the 2 remaining shells are shown above the HP bar (spent ones dim · a gold line blinks while pumping)",
+      ],
+      ja: [
+        "ブラストの散弾エフェクト：銃口の前にオレンジと赤黒い爆発（閃光→黒煙→三日月の衝撃→散る、ポンプ前の2発目はより大きく）",
+        "ブラストの弾薬：体力バーの上に残り2発の薬莢を表示（撃った分は暗く・ポンプ中は金色の線が点滅）",
+      ],
+    },
+  },
+  {
     version: "0.49.77",
     date: "2026-11-07",
     items: {

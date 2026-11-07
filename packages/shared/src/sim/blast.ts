@@ -63,15 +63,15 @@ function pellet(s: RunState, e: EnemyState, reach: number): number {
   return n;
 }
 
-/** 한 발: 앞 부채꼴 산탄 (각성 중: 더 멀리·넓게·세게 + 달빛 산탄) */
-function fire(s: RunState): void {
+/** 한 발: 앞 부채꼴 산탄 (각성 중: 더 멀리·넓게·세게 + 달빛 산탄) · pump: 펌프 앞 마지막 발 (큰 불꽃) */
+function fire(s: RunState, pump: boolean): void {
   const p = s.player;
   const aw = isAwake(p);
   const reach = B.reach * (aw ? B.awakeReach : 1) * (hasPerk(p, "blChoke") ? K.blChoke.reach : 1);
   const arc = Math.min(aw ? B.awakeArc : B.arcCos, hasPerk(p, "blSpread") ? K.blSpread.arc : 1);
   let n = 0;
   for (const e of inCone(s, reach, arc)) n += pellet(s, e, reach);
-  addEffect(s, { kind: "blShotFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, arc, style: aw ? 1 : 0, maxTicks: 12, follow: true });
+  addEffect(s, { kind: "blShotFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, arc, style: (aw ? 1 : 0) + (pump ? 2 : 0), maxTicks: 16, follow: true });
   if (aw) {
     const k = B.moonN + (hasPerk(p, "blLunar") ? K.blLunar.more : 0);
     fan(s, k, B.moonSpread, { damage: p.stats.damage * B.moonMul, spirit: "blMoon", r: 4, range: B.moonRange, pierce: 2 });
@@ -89,7 +89,7 @@ export function blastTick(s: RunState, want: boolean, speed: number): void {
   if (p.blGap > B.stepGap) p.blStep = 0;
   if (!want || p.attackCooldown > 0 || p.s2Rush) return;
   const k = p.blStep ?? 0;
-  fire(s);
+  fire(s, k === B.stepTime.length - 1);
   p.blStep = (k + 1) % B.stepTime.length;
   p.blGap = 0;
   const time = (B.stepTime[k] ?? 1) * (k === B.stepTime.length - 1 && hasPerk(p, "blPump") ? K.blPump.pump : 1);

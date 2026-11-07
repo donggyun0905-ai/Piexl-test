@@ -1,4 +1,4 @@
-// 블래스트 효과 — 폭멸의 탄환. 산탄(총구 불꽃 + 퍼지는 산탄 줄기 · 각성 중엔 흰 달빛) · 폭멸(검붉은 터짐·핏방울·뼛조각) · 달빛 각성(흰 충격파·초승달·달빛 기둥) · 각성 중 몸 둘레 달빛
+// 블래스트 효과 — 폭멸의 탄환. 산탄(총구 앞 주황·검붉은 폭발 그림 sprites/blast_fx + 퍼지는 산탄 줄기 · 각성 중엔 흰 달빛 더함) · 폭멸(검붉은 터짐·핏방울·뼛조각) · 달빛 각성(흰 충격파·초승달·달빛 기둥) · 각성 중 몸 둘레 달빛
 // 달빛 산탄(blMoon): 흰 초승달 탄과 푸른 꼬리
 import type { EffectState, ProjectileState } from "@pixel-rogue/shared";
 import { additive, alpha, beam, crescent, easeOut, glow, rnd, shock, sparks, type Ctx } from "./pwFxBits";
@@ -9,16 +9,38 @@ const MOON = "#ffffff";
 const MOON_BLUE = "#c8d8ff";
 const BLOOD = "#a01a2a";
 const BL_FX = new Set(["blShotFx", "blBurstFx", "blAwakeFx", "blMoonAura"]);
+const CELL = 128;
+const sheet = new Image();
+sheet.src = `${import.meta.env.BASE_URL}sprites/blast_fx.png`;
+
+/** 발사 폭발 그림 한 칸 (row 0 큰 발사 · 1 첫 발 · frame 0~3) · 총구 x,y에서 a 방향으로 · 폭 w (검은 연기가 보이게 보통 덧칠) */
+function blastSprite(ctx: Ctx, row: number, frame: number, x: number, y: number, a: number, w: number, al: number): void {
+  if (!sheet.complete || sheet.naturalWidth === 0 || al <= 0) return;
+  ctx.save();
+  ctx.globalAlpha *= Math.min(1, al);
+  ctx.translate(x, y);
+  ctx.rotate(a);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(sheet, frame * CELL, row * CELL, CELL, CELL, 0, -w / 2, w, w);
+  ctx.restore();
+}
 
 /** 산탄: 총구 불꽃 + 부채꼴로 퍼지는 산탄 줄기 (style 1 = 각성 달빛) */
 function shot(ctx: Ctx, fx: EffectState, x: number, y: number, f: number): void {
   const a = Math.atan2(fx.dirY, fx.dirX);
   const half = Math.acos(Math.max(-1, Math.min(1, fx.arc ?? 0.6)));
-  const moon = fx.style === 1;
+  const st = fx.style ?? 0;
+  const moon = (st & 1) === 1;
+  const big = (st & 2) === 2;
   const c = moon ? MOON : FIRE;
   const mx = x + Math.cos(a) * 14;
   const my = y - 4 + Math.sin(a) * 14;
   const seed = Math.abs(Math.round(fx.x * 13 + fx.y * 7 + fx.maxTicks));
+  // 총구 앞 폭발: 번쩍 → 검붉은 연기 → 초승달 충격 → 흩어짐 (펌프 앞 마지막 발은 크게)
+  const frame = Math.min(3, Math.floor(f * 4));
+  const w = (big ? 84 : 62) * (moon ? 1.15 : 1);
+  const push = frame >= 2 ? w * 0.15 * (frame - 1) : 0;
+  blastSprite(ctx, big ? 0 : 1, frame, mx + Math.cos(a) * push, my + Math.sin(a) * push, a, w, f < 0.75 ? 1 : 1 - (f - 0.75) / 0.25);
   additive(ctx, () => {
     glow(ctx, mx, my, 16 * (1 - f) + 4, c, 0.9 * (1 - f), 1);
     const n = moon ? 11 : 9;
