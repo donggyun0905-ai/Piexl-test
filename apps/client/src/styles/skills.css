@@ -155,3 +155,65 @@
   0%, 100% { box-shadow: 0 0 4px #ffffff; }
   50% { box-shadow: 0 0 14px #ffffff, 0 0 4px #c8d8ff; }
 }
+/* 진영 특징 게이지 (로그): 진영 색 막대 · 켜지면 빛남 · 아스칼론 맹세 글자 */
+.faction-gauge {
+  --fc: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+  color: var(--fc);
+  font-weight: 700;
+  text-shadow: 0 0 4px rgb(0 0 0 / 0.8);
+}
+.ft-thalassia { --fc: #6ad4ff; }
+.ft-helios { --fc: #ff4a5a; }
+.ft-terracore { --fc: #ff9a3a; }
+.ft-ascalon { --fc: #6aa0ff; }
+.ft-virdia { --fc: #6ae07a; }
+.ft-seongguk { --fc: #ffd84a; }
+.faction-bar {
+  position: relative;
+  width: 110px;
+  height: 10px;
+  border: 1px solid var(--fc);
+  border-radius: 3px;
+  background: rgb(20 20 30 / 0.75);
+  overflow: hidden;
+}
+.faction-bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--fc);
+  transition: width 0.15s;
+}
+.faction-gauge em {
+  min-width: 2ch;
+  font-style: normal;
+}
+.faction-gauge.on .faction-bar {
+  animation: faction-glow 0.7s ease-in-out infinite;
+}
+.ft-terracore.on .faction-bar i { background: #ff3a1a; }
+@keyframes faction-glow {
+  0%, 100% { box-shadow: 0 0 3px var(--fc); }
+  50% { box-shadow: 0 0 12px var(--fc); }
+}
+.faction-oath {
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  background: rgb(20 30 60 / 0.8);
+  color: #c8d8ff;
+}
+.faction-oath.kept { color: #8aff9a; }
+.faction-oath.broken { color: #ff7a7a; }
+/* 성국 핵심 스킬 각성: 칸이 금빛으로 빛남 */
+.skill-btn.core-awake {
+  border-color: #ffd84a;
+  animation: faction-core 0.9s ease-in-out infinite;
+}
+@keyframes faction-core {
+  0%, 100% { box-shadow: 0 0 4px #ffd84a; }
+  50% { box-shadow: 0 0 16px #ffd84a, 0 0 4px #ffffff; }
+}

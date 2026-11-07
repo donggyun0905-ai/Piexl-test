@@ -10,6 +10,7 @@ import { enemy, FIRE } from "./perkTestUtil";
 /** 장로로 시작, 오른쪽에 묶어 둔 적 셋 */
 function elder(weapon: WeaponId = "vineGate", ...perks: PassiveId[]): RunState {
   const s = createRun(3, "elder");
+  s.noFaction = true;
   s.player.weaponId = weapon;
   s.player.passives.push(...perks);
   recalcStats(s);

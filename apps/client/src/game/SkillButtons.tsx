@@ -9,7 +9,8 @@ const GLYPH: Record<string, string[]> = { 3: ["◎", "⚡", "⋯"], 4: ["☀", "
 /** 마우스를 올리면 칸 위에 뜨는 설명 */
 const TIPS: Record<string, TextKey[]> = { 3: ["trSkillTip1", "trSkillTip2", "trSkillTip3"], 4: ["btSkillTip1", "btSkillTip2", "btSkillTip3", "btSkillTip4"], ia: ["iaSkillTip1", "iaSkillTip2", "iaSkillTip3", "iaSkillTip4"], gb: ["gbSkillTip1", "gbSkillTip2", "gbSkillTip3", "gbSkillTip4"], sn: ["snSkillTip1", "snSkillTip2", "snSkillTip3", "snSkillTip4"], rf: ["rfSkillTip1", "rfSkillTip2", "rfSkillTip3", "rfSkillTip4"], yr: ["yrSkillTip1", "yrSkillTip2", "yrSkillTip3", "yrSkillTip4"], mc: ["mcSkillTip1", "mcSkillTip2", "mcSkillTip3", "mcSkillTip4"] };
 
-export function SkillButtons({ skills, set, t, controls }: { skills: number[]; set?: string; t: (k: TextKey) => string; controls: () => Controls | null }) {
+/** core: 성국 핵심 스킬이 각성했으면 그 칸 (금빛으로 빛남) */
+export function SkillButtons({ skills, set, core, t, controls }: { skills: number[]; set?: string; core?: number; t: (k: TextKey) => string; controls: () => Controls | null }) {
   const keys = useSettings().skillKeys;
   const k = set ?? skills.length;
   return (
@@ -18,7 +19,7 @@ export function SkillButtons({ skills, set, t, controls }: { skills: number[]; s
         <span key={i} className="skill-slot">
           <button
             type="button"
-            className={`skill-btn ${cd > 0 ? "cooling" : "ready"}`}
+            className={`skill-btn ${cd > 0 ? "cooling" : "ready"}${i === core ? " core-awake" : ""}`}
             style={{ "--cd": cd } as React.CSSProperties}
             onPointerDown={(e) => {
               e.preventDefault();

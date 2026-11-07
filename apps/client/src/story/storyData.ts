@@ -1,5 +1,5 @@
 // 스토리(시즌 1·2) 짜임: 진영과 소속 캐릭터 · 최종 보스 · 아카식 레코드 장(등장인물·본문 파일). 글자는 i18n/story
-import { CHARACTERS, type CharacterId } from "@pixel-rogue/shared";
+import { CHARACTERS, FACTION_MEMBERS as M, type CharacterId } from "@pixel-rogue/shared";
 import type { Lang } from "../i18n";
 
 /** 본문 한 줄: 글(서술) 또는 [말하는 사람, 대사] */
@@ -29,14 +29,14 @@ export function speakerSheet(s: Speaker): string | null {
 
 export type FactionId = "ascalon" | "terracore" | "helios" | "virdia" | "thalassia" | "seongguk" | "dawn" | "akashic" | "outsider" | "archive";
 
-/** 진영 색 · 소속 (그림 이름: 버려진 자들은 세 아이 따로) */
+/** 진영 색 · 소속 (게임 규칙 factionDefs.FACTION_MEMBERS를 씀 · 그림 이름: 버려진 자들은 세 아이 따로) */
 export const FACTIONS: readonly { id: FactionId; color: string; members: readonly Speaker[] }[] = [
-  { id: "ascalon", color: "#4a8aff", members: ["warden", "mage", "drifter", "general", "novice", "tracker", "forgotten", "remnant", "wanderer", "silk", "pungryu", "leo"] },
-  { id: "terracore", color: "#a8723c", members: ["gunner", "engineer", "doctor", "chronomancer", "titan", "automata", "rider", "bomber", "artifacter", "punk", "collector", "onyx"] },
-  { id: "helios", color: "#c83a4a", members: ["apostle", "bedouin", "brawler", "ninja", "raven", "cain", "jade", "oni", "plague", "slayer", "eater", "mukin", "samyeol", "eclipse"] },
-  { id: "virdia", color: "#4ac86a", members: ["beast", "summoner", "elementalist", "mystic", "imugi", "idra", "byeonhui", "fly", "elder", "ren", "spiritist", "fenrir"] },
-  { id: "thalassia", color: "#6ad4ff", members: ["thorken", "levia", "tail", "madQueen", "hook", "orca", "wave", "miryu"] },
-  { id: "seongguk", color: "#ffd84a", members: ["beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela"] },
+  { id: "ascalon", color: "#4a8aff", members: M.ascalon },
+  { id: "terracore", color: "#a8723c", members: M.terracore },
+  { id: "helios", color: "#c83a4a", members: M.helios.flatMap((c): Speaker[] => (c === "abandoned" ? ["raven", "cain", "jade"] : [c])) },
+  { id: "virdia", color: "#4ac86a", members: M.virdia },
+  { id: "thalassia", color: "#6ad4ff", members: M.thalassia },
+  { id: "seongguk", color: "#ffd84a", members: M.seongguk },
   /** 새벽의 성흔: 악마 사냥꾼 (성흔 = 달빛의 힘, 게이지형) */
   { id: "dawn", color: "#ffffff", members: ["blast"] },
   { id: "akashic", color: "#b89aff", members: ["scribe", "duck", "stargazer", "miner", "voyager", "zeus"] },

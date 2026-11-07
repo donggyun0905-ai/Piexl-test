@@ -34,6 +34,7 @@ export { YURIEL_PERKS } from "./itemsYuriel";
 export { MICHAELA } from "./weaponsMichaela";
 export { MICHAELA_PERKS } from "./itemsMichaela";
 export { BLAST } from "./weaponsBlast";
+export * from "./factionDefs";
 export { BLAST_PERKS } from "./itemsBlast";
 export { STIGMA } from "./weaponsDawn";
 export { MC_SPEARS, MC_WEAPON_ELEM } from "./michaelaWeaponList";

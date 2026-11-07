@@ -8,6 +8,7 @@ import { SLAYER as S } from "../weaponsSlayer";
 import { blastAt } from "./combat";
 import { rushTick, strike } from "./s2Kit";
 import { scytheMove } from "./slayerMoves";
+import { taintBlocksRage } from "./faction";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, weaponOf } from "./util";
 
@@ -64,7 +65,7 @@ export function slayerTick(s: RunState, want: boolean, speed: number): void {
   if (p.s2Rush) rushTick(s, (e) => slayerOnHit(s, e, p.s2Rush?.dmg ?? 0));
   // 피의 학살
   if (raging(p)) p.slRage = (p.slRage ?? 0) - 1;
-  else if ((p.slGauge ?? 0) >= S.gaugeMax) {
+  else if ((p.slGauge ?? 0) >= S.gaugeMax && !taintBlocksRage(p)) {
     p.slGauge = 0;
     p.slRage = S.rageTicks + (hasPerk(p, "slPact") ? K.slPact.ticks : 0);
     addEffect(s, { kind: "slRage", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 30, maxTicks: 30 });

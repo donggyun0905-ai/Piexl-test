@@ -1,0 +1,179 @@
+import { describe, expect, it } from "vitest";
+import type { CharacterId } from "../characters";
+import { FACTION_CORE, FACTION_HEAT, FACTION_OATH, FACTION_SPIRIT, FACTION_TAINT, FACTION_TIDE } from "../factionDefs";
+import { damageEnemy, damagePlayer, removeDead } from "./combat";
+import { factionDmgMul, factionHit, factionTick, tideMul, traitOf } from "./faction";
+import { factionGauge } from "./factionGauge";
+import { foeNoAttack } from "./foeStatus";
+import { createRun, type RunState } from "./index";
+import { enemy } from "./perkTestUtil";
+
+function start(c: CharacterId): RunState {
+  const s = createRun(7, c);
+  s.enemies = [];
+  s.player.x = s.player.prevX = 100;
+  s.player.y = s.player.prevY = 100;
+  return s;
+}
+const hurt = (s: RunState) => {
+  s.player.invulnTicks = 0;
+  damagePlayer(s, 1);
+};
+function kill(s: RunState, n: number): void {
+  for (let i = 0; i < n; i++) {
+    const e = enemy(1000 + i, 300, 300, 1);
+    s.enemies.push(e);
+    e.hp = 0;
+    removeDead(s);
+  }
+}
+
+describe("진영 특징", () => {
+  it("패왕전·대결에서는 꺼짐 · 소속 없는 캐릭터도 없음", () => {
+    const s = start("thorken");
+    expect(traitOf(s)).toBe("thalassia");
+    s.pvp = {} as never;
+    expect(traitOf(s)).toBeNull();
+    expect(traitOf(start("blast"))).toBeNull();
+  });
+
+  it("탈라시아: 맞힌 틱마다 콤보 +1 (한 틱에 여럿은 1) → 물 피해 증가 · 맞으면 0", () => {
+    const s = start("thorken");
+    const e = enemy(1, 120, 100);
+    s.enemies = [e];
+    for (let i = 0; i < 25; i++) {
+      s.tick += 6;
+      factionHit(s, e);
+      factionHit(s, e);
+    }
+    expect(s.player.fcCombo).toBe(25);
+    expect(tideMul(s)).toBeCloseTo(1 + 2 * FACTION_TIDE.perStep);
+    hurt(s);
+    expect(s.player.fcCombo).toBeUndefined();
+    expect(tideMul(s)).toBe(1);
+  });
+
+  it("탈라시아 매드퀸: 콤보가 높으면 맞힐 때 작은 물 피해가 같이", () => {
+    const s = start("madQueen");
+    const e = enemy(1, 120, 100);
+    s.enemies = [e];
+    s.player.fcCombo = FACTION_TIDE.splashFrom;
+    s.tick += 6;
+    factionHit(s, e);
+    expect(e.hp).toBeLessThan(e.maxHp);
+  });
+
+  it("헬리오스: 처치마다 타락 +1 · 가득이면 폭주 · 맞으면 -1 · 피해 주고받기 증가", () => {
+    const s = start("ninja");
+    kill(s, 10);
+    expect(s.player.fcTaint).toBe(10);
+    expect(factionDmgMul(s)).toBeCloseTo(1 + 10 * FACTION_TAINT.dmg);
+    hurt(s);
+    expect(s.player.fcTaint).toBe(10 - FACTION_TAINT.hurtLoss);
+    kill(s, FACTION_TAINT.max);
+    expect(s.player.fcRampage).toBe(FACTION_TAINT.rampageTicks);
+    for (let i = 0; i < FACTION_TAINT.rampageTicks; i++) factionTick(s);
+    expect(s.player.fcRampage).toBeUndefined();
+    expect(s.player.fcTaint).toBe(FACTION_TAINT.after);
+  });
+
+  it("헬리오스 학살자: 피의 학살 중에는 폭주를 미루고, 폭주 중에는 피의 학살을 미룸", () => {
+    const s = start("slayer");
+    s.player.slRage = 100;
+    kill(s, FACTION_TAINT.max);
+    expect(s.player.fcRampage).toBeUndefined();
+    delete s.player.slRage;
+    factionTick(s);
+    expect(s.player.fcRampage).toBe(FACTION_TAINT.rampageTicks);
+  });
+
+  it("테라코어: 맞힐수록 열 · 가득이면 과부하(공격 불가) · 열이 높을 때 대시하면 배출", () => {
+    const s = start("gunner");
+    const e = enemy(1, 120, 100);
+    s.enemies = [e];
+    for (let i = 0; i < 30; i++) {
+      s.tick += 6;
+      factionHit(s, e);
+    }
+    expect(s.player.fcHeat).toBeCloseTo(30 * FACTION_HEAT.gain);
+    expect(factionDmgMul(s)).toBeGreaterThan(1);
+    for (let i = 0; i < 20; i++) {
+      s.tick += 6;
+      factionHit(s, e);
+    }
+    expect(s.player.fcOver).toBeGreaterThan(0);
+    expect(foeNoAttack(s.player)).toBe(true);
+    s.player.dashTicks = 5;
+    factionTick(s);
+    expect(s.player.fcHeat).toBeLessThan(FACTION_HEAT.ventFrom);
+    expect(s.player.fcOver).toBeUndefined();
+    expect(e.hp).toBeLessThan(e.maxHp);
+  });
+
+  it("아스칼론: 적이 있는 방에서 맹세 → 지키고 끝내면 영광 +1", () => {
+    const s = start("warden");
+    s.enemies = [enemy(1, 120, 100)];
+    s.rooms[s.roomId]!.cleared = false;
+    factionTick(s);
+    const o = s.player.fcOath!;
+    expect(o).toBeDefined();
+    o.kind = "swift";
+    s.enemies = [];
+    s.rooms[s.roomId]!.cleared = true;
+    factionTick(s);
+    expect(s.player.fcGlory).toBe(1);
+    expect(factionDmgMul(s)).toBeCloseTo(1 + FACTION_OATH.gloryDmg);
+    expect(factionGauge(s)?.oathState).toBe("kept");
+  });
+
+  it("아스칼론: 맹세를 어기면 그 방에서만 약해짐", () => {
+    const s = start("warden");
+    s.enemies = [enemy(1, 120, 100)];
+    s.rooms[s.roomId]!.cleared = false;
+    factionTick(s);
+    s.player.fcOath!.kind = "unhit";
+    for (let i = 0; i <= FACTION_OATH.hits; i++) hurt(s);
+    expect(s.player.fcOath!.broken).toBe(true);
+    expect(factionDmgMul(s)).toBeCloseTo(FACTION_OATH.brokenDmg);
+  });
+
+  it("비르디아: 정령이 가까운 적을 쏘고 처치 수로 자람", () => {
+    const s = start("beast");
+    const e = enemy(1, 130, 100);
+    s.enemies = [e];
+    factionTick(s);
+    expect(e.hp).toBeLessThan(e.maxHp);
+    kill(s, FACTION_SPIRIT.grow1);
+    expect(factionGauge(s)?.stage).toBe(1);
+  });
+
+  it("성국: 스킬을 정한 횟수만큼 쓰면 핵심 스킬 각성 → 쓰면 피해 증가", () => {
+    const s = start("beatrice");
+    factionTick(s);
+    for (let i = 0; i < FACTION_CORE.uses; i++) {
+      s.player.btCd = [0, 0, 0, 0];
+      factionTick(s);
+      s.player.btCd = [99999, 0, 0, 0];
+      factionTick(s);
+    }
+    expect(factionGauge(s)?.on).toBe(true);
+    s.player.btCd = [0, 0, 0, 0];
+    factionTick(s);
+    s.player.btCd = [0, 0, 0, 99999];
+    factionTick(s);
+    expect(factionDmgMul(s)).toBeCloseTo(FACTION_CORE.dmg);
+  });
+
+  it("공용 피해 경로: 테라코어 열이 있으면 damageEnemy 피해가 늘어남", () => {
+    const a = start("gunner");
+    const b = start("gunner");
+    b.player.fcHeat = FACTION_HEAT.max - 1;
+    const ea = enemy(1, 120, 100);
+    const eb = enemy(1, 120, 100);
+    a.enemies = [ea];
+    b.enemies = [eb];
+    damageEnemy(a, ea, 10, 1, 0, false);
+    damageEnemy(b, eb, 10, 1, 0, false);
+    expect(eb.maxHp - eb.hp).toBeGreaterThan(ea.maxHp - ea.hp);
+  });
+});

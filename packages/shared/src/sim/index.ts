@@ -129,6 +129,8 @@ export { isYuriel, yurielSkills } from "./yuriel";
 export { isMichaela, michaelaSkills } from "./michaela";
 export { isBlast } from "./blast";
 export { stigmaGauge } from "./stigma";
+export { factionGauge, factionOfCharacter, type FactionGauge } from "./factionGauge";
+export type { OathKind } from "./factionTypes";
 export { orbCount as snOrbCount, orbRadiusOf as snOrbRadius } from "./serenaKit";
 export { miniAt as gbMiniAt } from "./gabrielShield";
 export { isEclipse, isNight, zoneR as eclipseZoneR } from "./eclipseStats";

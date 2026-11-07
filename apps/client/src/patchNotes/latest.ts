@@ -4,6 +4,39 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.0",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "진영 특징 시스템 (로그만, 패왕전·대결 제외): 진영마다 모든 캐릭터에 공통 특징 · 아래 칸에 진영 색 게이지",
+        "탈라시아 물결 콤보: 맞힐 때마다 콤보 +1, 맞으면 0 · 콤보 10마다 물 피해 +8% (최대 +80%) · 매드퀸·후크는 콤보 20부터 작은 물 피해가 같이",
+        "헬리오스 타락: 처치마다 +1 (최대 30), 맞으면 -1 · 1당 주는 피해 +1%·받는 피해 +0.5% · 30이면 6초 폭주(공격 속도 +30%) · 학살자는 피의 학살과 폭주가 겹치지 않음 · 악의 사도는 영혼과 타락 두 스택",
+        "테라코어 과열: 맞힐수록 열 (피해 최대 +25%) · 100이면 2초 과부하(공격 불가) · 열 60 이상에서 대시하면 증기 폭발로 열을 비움",
+        "아스칼론 맹세: 적이 있는 방마다 맹세 하나 (6종) · 지키면 영광 +1 (1당 피해 +2%, 최대 10) · 어기면 그 방에서만 피해 -15%",
+        "비르디아 공생 정령: 정령이 따라다니며 적을 쏨 · 처치 30번 꽃(처치 회복) · 80번 나무 정령(뿌리 속박)",
+        "성국 핵심 스킬: 스킬을 12번 쓰면 핵심 스킬이 각성해 스킬 칸이 금빛으로 빛남 · 쓰면 금빛 빛기둥 + 2초 동안 피해 1.3배",
+      ],
+      en: [
+        "Faction Traits (roguelike only, not in Paewang/duels): every character shares a trait with their faction · a faction-colored gauge in the bottom bar",
+        "Thalassia Tide Combo: +1 combo per hit, reset when hit · every 10 combo: +8% water damage (up to +80%) · Mad Queen and Hook add a small water hit from 20 combo",
+        "Helios Taint: +1 per kill (max 30), -1 when hit · each: +1% damage dealt, +0.5% taken · at 30, a 6s Rampage (+30% attack speed) · Slayer's Blood Frenzy never overlaps it · Apostle keeps both souls and Taint",
+        "Terracore Heat: hitting builds heat (up to +25% damage) · at 100, a 2s Overload (no attacks) · dash at 60+ heat to vent it in a steam blast",
+        "Ascalon Oaths: one Oath per room with foes (6 kinds) · keep it for +1 Glory (+2% damage each, max 10) · break it for -15% damage in that room",
+        "Virdia Symbiote: a spirit follows you and shoots foes · Blooms at 30 kills (heal on kill) · becomes a Treant at 80 (roots foes)",
+        "Holy Kingdom Core Skill: use skills 12 times to awaken your Core Skill (its slot glows gold) · casting it calls a golden pillar and +30% damage for 2s",
+      ],
+      ja: [
+        "陣営の特徴（ローグのみ、覇王戦・対戦は除く）：陣営ごとに全キャラ共通の特徴・下の欄に陣営色のゲージ",
+        "タラシア 波のコンボ：当てるたびに+1、被弾で0・コンボ10ごとに水ダメージ+8%（最大+80%）・マッドクイーン・フックはコンボ20から小さな水ダメージが追加",
+        "ヘリオス 堕落：撃破ごとに+1（最大30）、被弾で-1・1ごとに与ダメージ+1%・被ダメージ+0.5%・30で6秒暴走（攻撃速度+30%）・スレイヤーは血の殺戮と暴走が重ならない・悪の使徒は魂と堕落の2スタック",
+        "テラコア 過熱：当てるほど熱（ダメージ最大+25%）・100で2秒過負荷（攻撃不可）・熱60以上でダッシュすると蒸気爆発で熱を放出",
+        "アスカロン 誓い：敵のいる部屋ごとに誓いが一つ（6種）・守ると栄光+1（1ごとにダメージ+2%、最大10）・破るとその部屋だけダメージ-15%",
+        "ヴィルディア 共生精霊：精霊がついて回り敵を撃つ・30体撃破で花（撃破時回復）・80体で樹の精霊（根で拘束）",
+        "聖国 核心スキル：スキルを12回使うと核心スキルが覚醒しスキル枠が金色に光る・使うと金色の光柱＋2秒間ダメージ1.3倍",
+      ],
+    },
+  },
+  {
     version: "0.49.82",
     date: "2026-11-07",
     items: {

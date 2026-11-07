@@ -7,6 +7,7 @@ import { devilMul } from "./devilPerks";
 import type { DotKind, EnemyState, RunState } from "./types";
 import { hasPerk, markDot } from "./util";
 import { setBurnMul, setPoisonMul } from "./buildSets";
+import { tideMul } from "./faction";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -19,7 +20,7 @@ export { R as STATUS_RULES };
 /** 상태이상 피해: 맞음 효과·밀림 없이 체력만 · 탐식 방어력 깎기 · 악의(악의 사도) · 상태이상 강화(기본 스탯) */
 export function dotDamage(s: RunState, e: EnemyState, kind: DotKind, amount: number): void {
   if (e.immune || e.hp <= 0 || amount <= 0) return;
-  const dmg = dotCrit(s, e, amount) * (1 + (e.apDef ?? 0)) * devilMul(s, e) * (hasPerk(s.player, "malice") ? PERKS.malice.dot : 1) * statusMul(s.player);
+  const dmg = dotCrit(s, e, amount) * (1 + (e.apDef ?? 0)) * devilMul(s, e) * (hasPerk(s.player, "malice") ? PERKS.malice.dot : 1) * statusMul(s.player) * (kind === "tide" ? tideMul(s) : 1);
   e.hp -= dmg;
   e.hitFlash = 3;
   markDot(s, e, kind, dmg);

@@ -18,6 +18,7 @@ import { luxExtras } from "./lux";
 import { devilExtras } from "./devilPerks";
 import { setExtras, setTaken } from "./buildSets";
 import { setOnHit, setTick } from "./buildSetFx";
+import { factionHit, factionTick } from "./faction";
 import { fenrirDodged, fenrirExtras } from "./fenrirStats";
 import { eclipseExtras } from "./eclipseStats";
 import { waveExtras } from "./wave";
@@ -91,6 +92,7 @@ export function onHitExtra(s: RunState, e: EnemyState, dmg: number): void {
   const ex = extraOf(s.player);
   if (dmg <= 0) return;
   hiddenOnHit(s, e, dmg);
+  factionHit(s, e);
   setOnHit(s, e, dmg);
   if (ex.lifesteal > 0) healPlayer(s, dmg * ex.lifesteal);
   // 예리함 (방랑객 숫돌: 더 자주) · 터지면 칼빛 효과
@@ -114,4 +116,5 @@ export function extraTick(s: RunState): void {
   const bleeds = ex.sharpness > 0 || weaponOf(p).kind === "gun";
   if (ex.sharpness > 0 && weaponOf(p).kind !== "gun") updateBleed(s);
   setTick(s, bleeds);
+  factionTick(s);
 }

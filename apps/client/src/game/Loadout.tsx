@@ -1,6 +1,7 @@
 import { NovicePanel, type NoviceView } from "./NovicePanel";
 import { SkillButtons } from "./SkillButtons";
 import { StigmaGauge } from "./StigmaGauge";
+import { FactionGauge } from "./FactionGauge";
 import { PwSkillBar, type PwSkillView } from "./PwSkillBar";
 import { SellBar } from "./SellBar";
 import { HiddenPicker } from "./HiddenPicker";
@@ -8,7 +9,7 @@ import { StationWindow } from "./StationWindow";
 import { AltarResult, type AltarResultView } from "./altar/AltarResult";
 export { gymPlaying } from "./gym/gymKit";
 import type { StationView } from "./stationView";
-import type { CharacterId, ItemTag, PassiveId, UseItemId, WeaponId } from "@pixel-rogue/shared";
+import type { CharacterId, FactionGauge as FactionGaugeView, ItemTag, PassiveId, UseItemId, WeaponId } from "@pixel-rogue/shared";
 import { ForgeStars } from "./forge/ForgeStars";
 import { CHAR_DESC } from "../select/charDesc";
 import type { Lang, TextKey } from "../i18n";
@@ -39,6 +40,8 @@ export interface LoadoutView {
   skillSet?: "ia" | "gb" | "sn" | "rf" | "yr" | "mc";
   /** 새벽의 성흔: 성흔 게이지 0~1 · 달빛 각성 중 */
   stigma?: { v: number; awake: boolean };
+  /** 진영 특징 (로그만, sim/factionGauge) */
+  faction?: FactionGaugeView;
   /** 패왕전 스킬 칸 */
   pw?: PwSkillView;
   /** 상점 휴지통 판매 창이 열려 있을 때: 팔면 받는 돈 (sellCodes 순서: 무기 · 사용 아이템 2칸 · 패시브 순서, 0원 = 못 팜) */
@@ -57,7 +60,7 @@ export interface LoadoutView {
 export function loadoutKey(v: LoadoutView): string {
   const n = v.novice ? `|${v.novice.lv},${v.novice.exp},${v.novice.points}` : "";
   const pw = v.pw ? `|${v.pw.cds.join(",")}|${v.pw.armed}|${v.pw.silenced}` : "";
-  return `${v.weaponId}${v.forge ? JSON.stringify(v.forge) : ""}${v.tags?.join(",") ?? ""}|${v.slots.join(",")}${v.useOff ? "x" : ""}|${v.passives.join(",")}|${v.augs?.map((a) => a.passive + a.skills.join("+")).join(",") ?? ""}${n}|${v.skills?.join(",") ?? ""}${v.stigma ? `|${v.stigma.v}${v.stigma.awake ? "a" : ""}` : ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}|${v.altarRes?.tick ?? ""}`;
+  return `${v.weaponId}${v.forge ? JSON.stringify(v.forge) : ""}${v.tags?.join(",") ?? ""}|${v.slots.join(",")}${v.useOff ? "x" : ""}|${v.passives.join(",")}|${v.augs?.map((a) => a.passive + a.skills.join("+")).join(",") ?? ""}${n}|${v.skills?.join(",") ?? ""}${v.stigma ? `|${v.stigma.v}${v.stigma.awake ? "a" : ""}` : ""}${v.faction ? `|${JSON.stringify(v.faction)}` : ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}|${v.altarRes?.tick ?? ""}`;
 }
 
 interface Props {
@@ -112,8 +115,9 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
       {view.station && <StationWindow view={view.station} lang={lang} t={t} controls={controls} />}
       {view.altarRes && <AltarResult res={view.altarRes} lang={lang} t={t} />}
       {view.hdPick && <HiddenPicker pick={view.hdPick} lang={lang} t={t} controls={controls} />}
-      {view.skills && <SkillButtons skills={view.skills} set={view.skillSet} t={t} controls={controls} />}
+      {view.skills && <SkillButtons skills={view.skills} set={view.skillSet} core={view.faction?.on ? view.faction.core : undefined} t={t} controls={controls} />}
       {view.stigma && <StigmaGauge v={view.stigma.v} awake={view.stigma.awake} t={t} />}
+      {view.faction && <FactionGauge view={view.faction} t={t} />}
       {view.pw && <PwSkillBar view={view.pw} t={t} touchMode={touchMode} controls={controls} />}
       {!view.pw && character && (
         <span className={`pw-skill pw-skill-passive ${isOn(BASE) ? "on" : ""}`} {...tipProps(BASE)}>

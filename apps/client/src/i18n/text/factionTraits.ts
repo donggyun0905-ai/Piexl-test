@@ -1,0 +1,53 @@
+// 화면 글자: 진영 특징 시스템 (로그만) — 게이지 이름·설명 · 아스칼론 맹세 6종 · 비르디아 정령 단계 (game/FactionGauge)
+export const FACTION_TRAIT_TEXT = {
+  ftThalassia: { ko: "물결 콤보", en: "Tide Combo", ja: "波のコンボ" },
+  ftThalassiaTip: {
+    ko: "맞힐 때마다 콤보 +1, 맞으면 0으로 · 콤보 10마다 물 피해 +8% (최대 +80%) · 물 피해가 없는 매드퀸·후크는 콤보 20부터 맞힐 때 작은 물 피해가 같이",
+    en: "+1 combo per hit, reset when you are hit · every 10 combo: +8% water damage (up to +80%) · Mad Queen and Hook, who deal no water damage, add a small water hit from 20 combo",
+    ja: "当てるたびにコンボ+1、被弾で0に・コンボ10ごとに水ダメージ+8%（最大+80%）・水ダメージのないマッドクイーン・フックはコンボ20から当てるたびに小さな水ダメージが追加",
+  },
+  ftHelios: { ko: "타락", en: "Taint", ja: "堕落" },
+  ftHeliosOn: { ko: "폭주", en: "Rampage", ja: "暴走" },
+  ftHeliosTip: {
+    ko: "처치할 때마다 타락 +1 (최대 30), 맞으면 -1 · 1당 주는 피해 +1%, 받는 피해 +0.5% · 30이면 6초 폭주(공격 속도 +30%) 뒤 15로 · 학살자는 피의 학살과 폭주가 겹치지 않음",
+    en: "+1 Taint per kill (max 30), -1 when hit · each: +1% damage dealt, +0.5% damage taken · at 30, Rampage for 6s (+30% attack speed), then back to 15 · Slayer's Blood Frenzy and Rampage never overlap",
+    ja: "撃破ごとに堕落+1（最大30）、被弾で-1・1ごとに与ダメージ+1%、被ダメージ+0.5%・30で6秒暴走（攻撃速度+30%）、その後15に・スレイヤーは血の殺戮と暴走が重ならない",
+  },
+  ftTerracore: { ko: "과열", en: "Heat", ja: "過熱" },
+  ftTerracoreOn: { ko: "과부하", en: "Overload", ja: "過負荷" },
+  ftTerracoreTip: {
+    ko: "맞힐수록 열이 오르고 쉬면 식음 · 열이 높을수록 피해 최대 +25% · 100이면 2초 과부하(공격 불가) · 열 60 이상에서 대시하면 열을 비우며 둘레 증기 폭발",
+    en: "Heat rises as you hit and cools when you rest · up to +25% damage at high heat · at 100 you Overload for 2s (can't attack) · dash at 60+ heat to vent it in a steam blast",
+    ja: "当てるほど熱が上がり、休むと冷える・熱が高いほどダメージ最大+25%・100で2秒過負荷（攻撃不可）・熱60以上でダッシュすると熱を放出し周囲に蒸気爆発",
+  },
+  ftAscalon: { ko: "영광", en: "Glory", ja: "栄光" },
+  ftAscalonTip: {
+    ko: "적이 있는 방에 들어서면 맹세 하나 · 지키고 방을 끝내면 영광 +1 (1당 주는 피해 +2%, 최대 10) · 어기면 그 방에서만 주는 피해 -15%",
+    en: "Entering a room with foes gives an Oath · keep it until the room is clear for +1 Glory (+2% damage each, max 10) · break it and you deal 15% less damage in that room",
+    ja: "敵のいる部屋に入ると誓いが一つ・守って部屋を終えると栄光+1（1ごとに与ダメージ+2%、最大10）・破るとその部屋では与ダメージ-15%",
+  },
+  oath_unhit: { ko: "맹세: 3번 넘게 맞지 않기", en: "Oath: Get hit 3 times at most", ja: "誓い：被弾3回まで" },
+  oath_swift: { ko: "맹세: 15초 안에 정리", en: "Oath: Clear within 15s", ja: "誓い：15秒以内に片付ける" },
+  oath_still: { ko: "맹세: 대시 2번까지", en: "Oath: Dash twice at most", ja: "誓い：ダッシュ2回まで" },
+  oath_noItem: { ko: "맹세: 사용 아이템 안 쓰기", en: "Oath: Use no items", ja: "誓い：使用アイテムを使わない" },
+  oath_elite: { ko: "맹세: 가장 강한 적부터", en: "Oath: Strongest foe first", ja: "誓い：最も強い敵から" },
+  oath_hold: { ko: "맹세: 자리를 지키기", en: "Oath: Hold your ground", ja: "誓い：その場を守る" },
+  oathKept: { ko: "맹세를 지킴", en: "Oath kept", ja: "誓いを守った" },
+  oathBroken: { ko: "맹세가 깨짐", en: "Oath broken", ja: "誓いが破れた" },
+  ftVirdia: { ko: "공생 정령", en: "Symbiote", ja: "共生精霊" },
+  ftVirdiaStage0: { ko: "싹", en: "Sprout", ja: "芽" },
+  ftVirdiaStage1: { ko: "꽃", en: "Bloom", ja: "花" },
+  ftVirdiaStage2: { ko: "나무 정령", en: "Treant", ja: "樹の精霊" },
+  ftVirdiaTip: {
+    ko: "정령이 따라다니며 가까운 적을 쏨 · 처치 30번이면 꽃(처치할 때 조금 회복) · 80번이면 나무 정령(가끔 뿌리로 묶음) · 자랄수록 세짐",
+    en: "A spirit follows you and shoots nearby foes · after 30 kills it Blooms (small heal on kills) · after 80 it becomes a Treant (sometimes roots foes) · stronger as it grows",
+    ja: "精霊がついて回り近くの敵を撃つ・30体撃破で花（撃破時に少し回復）・80体で樹の精霊（時々根で拘束）・育つほど強くなる",
+  },
+  ftSeongguk: { ko: "핵심 스킬", en: "Core Skill", ja: "核心スキル" },
+  ftSeonggukOn: { ko: "각성", en: "Awakened", ja: "覚醒" },
+  ftSeonggukTip: {
+    ko: "스킬을 12번 쓰면 핵심 스킬(금빛 칸)이 각성 (그 판 끝까지) · 각성한 핵심 스킬을 쓰면 둘레에 금빛 빛기둥 + 2초 동안 주는 피해 1.3배",
+    en: "Use skills 12 times to awaken your Core Skill (gold slot) for the rest of the run · casting it then calls a golden light pillar around you and +30% damage for 2s",
+    ja: "スキルを12回使うと核心スキル（金色の枠）が覚醒（その回の終わりまで）・覚醒した核心スキルを使うと周囲に金色の光柱＋2秒間与ダメージ1.3倍",
+  },
+};
