@@ -5,7 +5,7 @@ import type { RoomBuff } from "./roomBuffs";
 
 const FACTION: Record<string, TextKey> = { thalassia: "csThalassia", helios: "csHelios", terracore: "csTerracore", ascalon: "csAscalon", virdia: "csVirdia", seongguk: "csSeongguk" };
 const TIP: Record<string, TextKey> = { thalassia: "ftThalassiaTip", helios: "ftHeliosTip", terracore: "ftTerracoreTip", ascalon: "ftAscalonTip", virdia: "ftVirdiaTip", seongguk: "ftSeonggukTip" };
-const STAGE: TextKey[] = ["ftVirdiaStage0", "ftVirdiaStage1", "ftVirdiaStage2"];
+const STAGE: TextKey[] = ["ftVirdiaStage0", "ftVirdiaStage1", "ftVirdiaStage2", "ftVirdiaStage3"];
 
 function line(run: RunState, t: (k: TextKey) => string): string | null {
   const g = factionGauge(run);

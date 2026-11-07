@@ -78,7 +78,7 @@ export function drawFactionBody(ctx: Ctx, s: RunState, a0: number, snap: Snap): 
   if ((p.fcCombo ?? 0) >= 50) additive(ctx, () => ring(ctx, x, y + 2, 12 + Math.sin(t * 0.15) * 2, alpha(SEA, 0.5), 1.5));
 }
 
-const FX = new Set(["fcTideUp", "fcRampage", "fcVent", "fcOathKept", "fcOathBroken", "fcSpGrow", "fcSpHit", "fcSpThorn", "fcSpBite", "fcSpDive", "fcSpStomp", "fcSpFox", "fcSpEat", "fcCoreOn", "fcCorePillar", "fcCoreArt", "fcCoreBolt"]);
+const FX = new Set(["fcTideUp", "fcRampage", "fcVent", "fcOathKept", "fcOathBroken", "fcSpGrow", "fcSpHit", "fcSpThorn", "fcSpBite", "fcSpDive", "fcSpStomp", "fcSpFox", "fcSpEat", "fcSpBox", "fcSpFeather", "fcCoreOn", "fcCorePillar", "fcCoreArt", "fcCoreBolt"]);
 /** 성국 추가 공격 색 (style: 베아트리스 태양 · 이안 보랏빛 실 · 가브리엘 중력 · 세레나 독 · 라파엘 하늘빛 · 유리엘 흰 금빛 · 미카엘라 은빛 칼날) */
 const ART = ["#ff9a2a", "#b06aff", "#8a7aff", "#9aff6a", "#8ae0ff", "#fff0b0", "#d8e0f0"];
 
@@ -156,6 +156,25 @@ export function drawFactionFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       case "fcSpFox":
         shock(ctx, x, y, fx.size * easeOut(f), "#d88aff", fade, 5);
         sparks(ctx, x, y, 12, fx.size * 1.4, f, "#ff8a3a", 13);
+        break;
+      case "fcSpBox": {
+        // 코인 정령 상자: 정령에게서 튀어나와 포물선으로 떨어지고 열리며 금빛
+        const k = Math.min(1, f * 1.6);
+        const bx = lerp(fx.toX ?? x, x, k);
+        const by = lerp(fx.toY ?? y, y, k) - Math.sin(k * Math.PI) * 26;
+        if (k < 1) {
+          ctx.fillStyle = "#a8701a";
+          ctx.fillRect(Math.round(bx - 4), Math.round(by - 3), 8, 6);
+          ctx.fillStyle = "#ffd86a";
+          ctx.fillRect(Math.round(bx - 4), Math.round(by - 1), 8, 1);
+        } else {
+          glow(ctx, x, y, 14, "#ffd86a", fade, 0.6);
+          sparks(ctx, x, y, 10, 18, (f - 0.6) / 0.4, "#ffe86a", fx.size);
+        }
+        break;
+      }
+      case "fcSpFeather":
+        sparks(ctx, x, y, 5, fx.size * 1.5, f, "#fff4e0", 9);
         break;
       case "fcSpEat":
         glow(ctx, x, y, fx.size * (1 - f * 0.5), LEAF, fade * 0.7, 0.5);

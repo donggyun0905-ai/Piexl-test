@@ -1,6 +1,6 @@
 // 비르디아 여우(도박형) · 꾸러미형 정령 (sim/factionSpirit가 부름 · 수치 spiritDefs.SPIRIT_PACK)
-// 여우: 방을 끝낼수록 바꾸기가 쌓임 → 앞의 아이템을 무기·패시브(히든·악마 포함)·사용 아이템 전부 중 무작위 하나로 바꿈
-// 보관 꾸러미: 칸이 차도 사용 아이템을 계속 넣어 둠(빈 칸 키를 누르면 창 → 꺼냄) + 몇 방마다 무작위 사용 아이템 · 상자 꾸러미: 아이템을 주울수록 패시브 3개 중 고르는 상자 · 먹보 꾸러미: 방에 두고 온 아이템을 먹고 모이면 새 패시브
+// 구미호: 방을 끝낼수록 바꾸기가 쌓임 → 5번 키로 이 방 아이템을 전부 무기·패시브(히든·악마 포함)·사용 아이템 중 무작위로 바꿈 (가격은 그대로)
+// 보따리: 칸이 차도 사용 아이템을 계속 넣어 둠(빈 칸 키를 누르면 창 → 꺼냄) + 몇 방마다 무작위 사용 아이템 · 미믹: 아이템을 주울수록 패시브 3개 중 고르는 상자 · 돼지: 방에 두고 온 아이템을 먹고 모이면 새 패시브
 import { PASSIVE_IDS, PASSIVES, USE_ITEM_IDS, type PassiveDef, type PassiveId, type UseItemId } from "../items";
 import { createRng, deriveSeed } from "../rng";
 import { SPIRIT_PACK as K } from "../spiritDefs";
@@ -101,13 +101,17 @@ export function packMenu(s: RunState, op: number, a: number): void {
     delete p.fcChest;
     givePassive(s, id);
   } else if (op === 23 && (p.fcFox ?? 0) > 0) {
-    const pk = s.rooms[s.roomId]?.pickups.find((x) => x.id === s.nearPickupId);
-    if (!pk || (pk.kind !== "weapon" && pk.kind !== "passive" && pk.kind !== "use")) return;
+    // 구미호 (5번 키): 이 방 아이템 전부 (상점·경매·악마의 방·히든 상점도 · 가격은 그대로)
+    const list = (s.rooms[s.roomId]?.pickups ?? []).filter((x) => (x.kind === "weapon" || x.kind === "passive" || x.kind === "use") && !p.fcCoinGift?.includes(x.id));
+    if (!list.length) return;
     const pool = foxPool(s);
-    const got = rngOf(s, "fox", pk.id, p.fcFox!, s.tick).pick(pool);
-    pk.kind = got.kind;
-    pk.itemId = got.id;
+    const rng = rngOf(s, "fox", p.fcFox!, s.tick);
+    for (const pk of list) {
+      const got = rng.pick(pool);
+      pk.kind = got.kind;
+      pk.itemId = got.id;
+      addEffect(s, { kind: "fcSpFox", x: pk.x, y: pk.y, dirX: 0, dirY: 0, size: 18, maxTicks: 30 });
+    }
     p.fcFox!--;
-    addEffect(s, { kind: "fcSpFox", x: pk.x, y: pk.y, dirX: 0, dirY: 0, size: 18, maxTicks: 30 });
   }
 }

@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.9",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "비르디아 공생 정령 개편: 버프형·동행형은 처치 20·50·100번에 유년기 → 성장기 → 성숙기 → 궁극체로 자라며 단계마다 효과가 다름 · 버프형은 상시가 아니라 20초마다 10초 켜짐 · 동행형 유년기는 고정 피해 1 (부엉이 성장기·성숙기는 깃털 날리기)",
+        "도박형: 장난꾸러기 여우 → 구미호 (5번 키로 이 방 아이템 전부를 무작위로 바꿈, 상점·경매·악마의 방·히든 상점도, 가격은 그대로) · 새 정령 '욕심 많은 코인 정령' (아이템을 다 먹고 가치만큼 점수 → 5번 키로 100·300·500·700·900 단계만큼 상자)",
+        "꾸러미형 이름: 보따리 정령 · 미믹 정령 · 돼지 정령 (도박형·꾸러미형은 처음부터 궁극체)",
+        "달빛 표시: 달 하나가 스택마다 초승달 → 보름달로 바뀜",
+        "연습장: 들어갈 때마다 정령 카드가 달라짐 · 새 '진영' 탭 (스킬 대기 초기화 · 진영 게이지 가득 · 바닥에 아이템 놓기 · 정령 카드 다시 뽑기·바로 고르기·자람 단계)",
+      ],
+      en: [
+        "Virdia Symbiote rework: buff and companion spirits grow Child → Growth → Mature → Ultimate at 20/50/100 kills, with different effects per stage · buffs are no longer permanent: they run for 10s every 20s · companions deal a fixed 1 damage as Children (the Owl throws feathers at Growth and Mature)",
+        "Gamble: Trickster Fox → Nine-Tailed Fox (key 5 rerolls every item in the room, including shops, auctions, devil rooms and hidden shops; prices stay) · new 'Greedy Coin Spirit' (eats every item for points by value → key 5 cashes out chests by tier 100/300/500/700/900)",
+        "Bundle names: Bundle Spirit · Mimic Spirit · Piggy Spirit (gamble and bundle spirits start at Ultimate)",
+        "Moonlight mark: a single moon now waxes from crescent to full with each stack",
+        "Practice: spirit cards differ each time you enter · new 'Faction' tab (reset skill cooldowns · fill faction gauge · drop items · redraw/choose spirits · growth stage)",
+      ],
+      ja: [
+        "ヴィルディア共生精霊の刷新：バフ型・同行型は20・50・100体撃破で幼年期→成長期→成熟期→究極体に育ち、段階ごとに効果が違う・バフ型は常時ではなく20秒ごとに10秒・同行型の幼年期は固定1ダメージ（フクロウの成長期・成熟期は羽根を飛ばす）",
+        "ギャンブル型：いたずら狐→九尾の狐（5キーでこの部屋のアイテムを全部ランダムに入れ替え、ショップ・オークション・悪魔の部屋・隠しショップも、価格はそのまま）・新精霊「欲張りなコイン精霊」（アイテムを全部食べて価値分の点数→5キーで100・300・500・700・900の段階分の宝箱）",
+        "包み型の名前：風呂敷の精霊・ミミックの精霊・ブタの精霊（ギャンブル型・包み型は最初から究極体）",
+        "月光の表示：月ひとつがスタックごとに三日月→満月へ変わる",
+        "練習場：入るたびに精霊カードが変わる・新しい「陣営」タブ（スキル待ち時間リセット・陣営ゲージ満タン・床にアイテム・精霊カードの引き直し・直接選ぶ・成長段階）",
+      ],
+    },
+  },
+  {
     version: "0.50.8",
     date: "2026-11-07",
     items: {

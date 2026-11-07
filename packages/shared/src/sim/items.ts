@@ -32,7 +32,7 @@ import { apostleMods, apostlePotion } from "./apostle";
 import { mukinPotion } from "./mukin";
 import { swarmMods } from "./swarmMods";
 import { goldLocked, noUseItems, oniConvert } from "./oniRules";
-import { buildSetMods } from "./buildSets"; import { bagOpen, bagStore } from "./spiritPack";
+import { buildSetMods } from "./buildSets"; import { bagOpen, bagStore } from "./spiritPack"; import { coinEat } from "./spiritCoin";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -141,7 +141,7 @@ export function updateItems(s: RunState, input: TickInput): void {
       continue;
     }
     if (!touching(s, pk, R.TOUCH + bigReach(pk))) {
-      // 한 번 떨어지면 다시 주울 수 있음 (무기·사용 아이템을 번갈아 써 보게)
+      // 한 번 떨어지면 다시 주울 수 있음
       pk.armed = true;
       if (pk.kind === "trash" || (isStation(pk) && pk.kind !== "boon" && pk.kind !== "devil")) pk.itemId = "0";
       continue;
@@ -153,7 +153,7 @@ export function updateItems(s: RunState, input: TickInput): void {
     if (!pk.armed || !room.pickups.includes(pk)) continue;
     if (pk.kind === "use" && noUseItems(p)) continue;
     if (pk.price > 0) {
-      // 상점 물건: 서 있기로는 사지 않고 F·버튼으로만 (금봉을 든 오니는 상점을 못 씀)
+      // 상점 물건: F·버튼으로만 (금봉을 든 오니는 못 씀)
       if (s.prompt.kind !== "none" || goldLocked(p)) continue;
       s.prompt = { kind: "buy", pickupId: pk.id, price: pk.price };
       if (input.interact && s.gold >= pk.price) {
@@ -205,9 +205,8 @@ export function updateItems(s: RunState, input: TickInput): void {
 function take(s: RunState, pk: Pickup): void {
   const p = s.player;
   const room = s.rooms[s.roomId]!;
-  const remove = (pred: (x: Pickup) => boolean) => {
-    room.pickups = room.pickups.filter((x) => !pred(x));
-  };
+  const remove = (pred: (x: Pickup) => boolean) => (room.pickups = room.pickups.filter((x) => !pred(x)));
+  if (coinEat(s, pk)) return; // 코인 정령이 먹음
   if (pk.kind === "weapon") {
     // 바꾸기: 들고 있던 무기를 그 자리에 내려놓음
     const old = p.weaponId;

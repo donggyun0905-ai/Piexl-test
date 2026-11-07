@@ -1,4 +1,4 @@
-// 연습장 도구: 캐릭터 바꾸기 · 묶음별 아이템(찾기, 여러 번 얻기·하나 빼기) · 세기 고르고 적 부르기 · 방 시험(상점·단련의 방 등) · 초기화
+// 연습장 도구: 캐릭터 바꾸기 · 묶음별 아이템(찾기, 여러 번 얻기·하나 빼기) · 세기 고르고 적 부르기 · 방 시험(상점·단련의 방 등) · 진영(스킬 대기 초기화·게이지·정령) · 초기화
 import {
   ALL_CHARACTER_IDS,
   practiceCanStack,
@@ -26,8 +26,9 @@ import { PracticeEnemies } from "./practice/PracticeEnemies";
 import { passiveGroups, useGroups, weaponGroups } from "./practice/practiceGroups";
 import { PracticeItems } from "./practice/PracticeItems";
 import { PracticeRooms } from "./practice/PracticeRooms";
+import { PracticeFaction } from "./practice/PracticeFaction";
 
-type Tab = "weapon" | "passive" | "use" | "enemy" | "room";
+type Tab = "weapon" | "passive" | "use" | "enemy" | "room" | "faction";
 
 const TABS: { id: Tab; label: TextKey }[] = [
   { id: "weapon", label: "practiceWeapons" },
@@ -35,6 +36,7 @@ const TABS: { id: Tab; label: TextKey }[] = [
   { id: "use", label: "practiceUse" },
   { id: "enemy", label: "practiceEnemies" },
   { id: "room", label: "practiceRooms" },
+  { id: "faction", label: "practiceFaction" },
 ];
 
 /** 아이템 설명 창 위치. PC는 마우스 위쪽, 모바일은 누른 칸 위쪽 (위가 좁으면 아래쪽) */
@@ -149,11 +151,13 @@ export function PracticePanel({ run, loadout, characterId, lang, t, onCharacter 
           </button>
         ))}
       </div>
-      {tab !== "enemy" && tab !== "room" && (
+      {tab !== "enemy" && tab !== "room" && tab !== "faction" && (
         <input className="practice-search" type="search" value={query} placeholder={t("practiceSearch")} onChange={(e) => setQuery(e.target.value)} />
       )}
       <div className="practice-list">
-        {tab === "room" ? (
+        {tab === "faction" ? (
+          <PracticeFaction run={run} characterId={characterId} t={t} />
+        ) : tab === "room" ? (
           <PracticeRooms t={t} onRoom={(k) => run() && (k ? practiceRoom(run()!, k) : practiceRoomOff(run()!))} onShape={(rows) => run() && practiceShape(run()!, rows)} onHidden={(k) => run() && practiceHidden(run()!, k)} />
         ) : tab === "enemy" ? (
           <PracticeEnemies floor={floor} t={t} onFloor={chooseFloor} onSpawn={(k) => run() && practiceSpawn(run()!, k)} />
@@ -162,7 +166,7 @@ export function PracticePanel({ run, loadout, characterId, lang, t, onCharacter 
         )}
       </div>
       <div className="practice-info">
-        <small>{t(tab === "enemy" ? "practiceEnemyHint" : tab === "room" ? "practiceRoomHint" : "practiceHint")}</small>
+        <small>{t(tab === "enemy" ? "practiceEnemyHint" : tab === "room" ? "practiceRoomHint" : tab === "faction" ? "pfHint" : "practiceHint")}</small>
       </div>
       {tip && (
         <ItemTip

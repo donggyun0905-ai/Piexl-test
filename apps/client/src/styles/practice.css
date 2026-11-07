@@ -292,3 +292,7 @@
   margin-top: 4px;
   opacity: 0.8;
 }
+.practice-faction { display: flex; flex-direction: column; gap: 6px; padding: 4px 0; }
+.practice-faction b { font-size: 12px; margin-top: 4px; }
+.practice-row.wrap { flex-wrap: wrap; }
+.practice-row.wrap button { flex: 1 0 30%; }

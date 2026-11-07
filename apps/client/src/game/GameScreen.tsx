@@ -52,7 +52,7 @@ export function GameScreen(props: GameScreenProps) {
   useLayoutEffect(() => {
     cb.current = props;
   });
-  const pvp = mode === "paewang" || !!props.initialRun?.pvp; // 패왕전: 화면 꽉 채움 · 필요 없는 정보 숨김
+  const pvp = mode === "paewang" || !!props.initialRun?.pvp; // 패왕전: 화면 꽉 채움
   const [scale, wide] = useFitScale(wrapRef, pvp);
   const dpr = window.devicePixelRatio || 1;
   const [overlay, setOverlay] = useState<Overlay>("none");
@@ -106,7 +106,7 @@ export function GameScreen(props: GameScreenProps) {
     const start = cb.current;
     beginRun(start.balance);
     const run: RunState =
-      withPet(sandbox ? (start.initialRun ?? createPracticeRun(characterId)) : (start.initialRun ?? createRun(parseSeed(seedText), characterId, start.unlocks, sudden, endless, arena, hero, mode === "solo" && !endless && !arena && !hero ? loadTaboo() : undefined, mode === "solo" && randomKitOn())), mode, !!arena);
+      withPet(sandbox ? (start.initialRun ?? createPracticeRun(characterId, mode === "practice" ? Date.now() % 1e6 : 1)) : (start.initialRun ?? createRun(parseSeed(seedText), characterId, start.unlocks, sudden, endless, arena, hero, mode === "solo" && !endless && !arena && !hero ? loadTaboo() : undefined, mode === "solo" && randomKitOn())), mode, !!arena);
     runRef.current = run;
     // 개발 중: 콘솔에서 게임 상태
     if (import.meta.env.DEV) (window as unknown as { pixelRogueRun: RunState }).pixelRogueRun = run;
@@ -114,7 +114,7 @@ export function GameScreen(props: GameScreenProps) {
       zone,
       sticks: sticks as { moveBase: HTMLElement; moveKnob: HTMLElement; aimBase: HTMLElement; aimKnob: HTMLElement },
       playerScreenPos: () => playerScreenPos(canvas, run, controls.zoom, cameraFor(run, controls.zoom)),
-      onEscape: () => (start.embedded ? undefined : run.prompt.kind === "station" && run.prompt.open ? controls.queueInteract() : toggleExit()), // Esc: 작업대 창 닫기 또는 나가기 확인
+      onEscape: () => (start.embedded ? undefined : run.prompt.kind === "station" && run.prompt.open ? controls.queueInteract() : toggleExit()), // Esc: 창 닫기·나가기
       onPause: () => {
         if (canPause) setOverlay((o) => (o === "pause" ? "none" : o === "none" ? "pause" : o));
       },

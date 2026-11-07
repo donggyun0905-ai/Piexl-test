@@ -53,10 +53,11 @@ export function factionGauge(s: RunState): FactionGauge | null {
     case "virdia": {
       const k = p.fcSpKills ?? 0;
       const stage = spiritStage(p);
-      const v = stage >= 2 ? 1 : stage === 1 ? (k - SPIRIT_GROW.grow1) / (SPIRIT_GROW.grow2 - SPIRIT_GROW.grow1) : k / SPIRIT_GROW.grow1;
+      const at = [0, SPIRIT_GROW.grow1, SPIRIT_GROW.grow2, SPIRIT_GROW.grow3];
+      const v = stage >= 3 ? 1 : (k - at[stage]!) / (at[stage + 1]! - at[stage]!);
       const sp = p.fcSp;
       const extra =
-        sp === "fox" ? `${p.fcFox ?? 0}` : sp === "bag" ? `${p.fcBag?.length ?? 0}/${SPIRIT_PACK.bagMax}` : sp === "chest" ? `${p.fcChestN ?? 0}/${SPIRIT_PACK.chestEvery}` : sp === "glutton" ? `${p.fcGlut ?? 0}/${SPIRIT_PACK.gluttonEvery}` : undefined;
+        sp === "fox" ? `${p.fcFox ?? 0}` : sp === "coin" ? `${p.fcCoin ?? 0}` : sp === "bag" ? `${p.fcBag?.length ?? 0}/${SPIRIT_PACK.bagMax}` : sp === "chest" ? `${p.fcChestN ?? 0}/${SPIRIT_PACK.chestEvery}` : sp === "glutton" ? `${p.fcGlut ?? 0}/${SPIRIT_PACK.gluttonEvery}` : undefined;
       return { trait, v: r2(v), n: k, stage, ...(sp ? { spirit: sp } : {}), ...(extra ? { extra } : {}) };
     }
     case "seongguk": {

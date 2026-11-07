@@ -75,9 +75,9 @@ export type PracticeItem =
   | { kind: "passive"; id: PassiveId }
   | { kind: "use"; id: UseItemId };
 
-/** 연습장 시작: 출구가 모두 막힌 시작 방 하나 */
-export function createPracticeRun(characterId: CharacterId): RunState {
-  const s = createRun(1, characterId);
+/** 연습장 시작: 출구가 모두 막힌 시작 방 하나 (seed: 화면은 들어갈 때마다 다르게 → 공생 정령 카드 등이 바뀜) */
+export function createPracticeRun(characterId: CharacterId, seed = 1): RunState {
+  const s = createRun(seed, characterId);
   const room = s.map.rooms[s.map.startId]!;
   room.exits = room.exits.map(() => -1);
   // 허수아비 아래에서 시작 (보통 판은 아래쪽 벽 옆)

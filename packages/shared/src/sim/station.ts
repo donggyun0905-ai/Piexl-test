@@ -65,7 +65,7 @@ export function stationMenu(s: RunState, code: number): void {
   const a = Math.floor(code / 64) % 64;
   const b = code % 64;
   // 비르디아 공생 정령: 고르기 · 꾸러미 · 상자 · 여우 (sim/factionSpirit)
-  if (op >= SPIRIT_OP.pick && op <= SPIRIT_OP.fox) return spiritMenu(s, op, a);
+  if (op >= SPIRIT_OP.pick && op <= SPIRIT_OP.coin) return spiritMenu(s, op, a);
   // 히든 아이템 고르는 창 (저주받은 주사위 · 테라포밍)
   if (op === 7 || op === 8) return hiddenPick(s, op, a);
   // 단련의 방 (sim/gym): 미니게임 결과 · 강화

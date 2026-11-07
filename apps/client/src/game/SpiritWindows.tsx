@@ -1,4 +1,4 @@
-// 비르디아 공생 정령 창 (sim/factionSpirit·spiritPack): 시작 카드 3장 고르기 · 보관 꾸러미 꺼내기 · 상자 꾸러미 패시브 고르기 · 여우 바꾸기 버튼
+// 비르디아 공생 정령 창 (sim/factionSpirit·spiritPack·spiritCoin): 시작 카드 3장 고르기 · 보따리 꺼내기 · 미믹 패시브 고르기 · 5번 키 버튼(구미호 바꾸기 · 코인 정령 상자 받기)
 // 누른 것은 controls.queueMenu → 입력 menu · Esc: 꾸러미 창 닫기 / 고르기·상자 창 잠깐 숨김 (작은 버튼으로 다시 엶)
 import { menuCode, SPIRIT_KIND, SPIRIT_OP, type PassiveId, type SpiritId, type UseItemId } from "@pixel-rogue/shared";
 import { useEffect, useRef, useState } from "react";
@@ -12,9 +12,12 @@ export interface SpiritView {
   bag?: UseItemId[];
   bagOpen?: boolean;
   chest?: PassiveId[];
-  /** 여우: 바꾸기 남은 수 · 앞에 바꿀 아이템이 있는지 */
+  /** 구미호: 바꾸기 남은 수 · 이 방에 바꿀 아이템이 있는지 */
   fox?: number;
   near?: boolean;
+  /** 코인 정령: 점수 · 받을 수 있는 단계 (0 = 아직) */
+  coin?: number;
+  tier?: number;
 }
 
 interface Props {
@@ -32,8 +35,15 @@ export function SpiritWindows({ view, lang, t, controls }: Props) {
   ref.current = view;
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
-      if (e.code !== "Escape" || e.repeat) return;
+      if (e.repeat) return;
       const v = ref.current;
+      // 5번 키: 구미호 바꾸기 · 코인 정령 상자 받기
+      if (e.code === "Digit5" || e.code === "Numpad5") {
+        if (v.fox !== undefined && v.fox > 0 && v.near) send(SPIRIT_OP.fox);
+        else if (v.coin !== undefined && (v.tier ?? 0) > 0) send(SPIRIT_OP.coin);
+        return;
+      }
+      if (e.code !== "Escape") return;
       if (v.bagOpen) send(SPIRIT_OP.bag, 63);
       else if (v.pick) setHidePick(true);
       else if (v.chest) setHideChest(true);
@@ -105,6 +115,11 @@ export function SpiritWindows({ view, lang, t, controls }: Props) {
       {view.fox !== undefined && (
         <button type="button" className="sp-fox" disabled={!view.fox || !view.near} title={t("spFoxTip")} onClick={() => send(SPIRIT_OP.fox)}>
           {t("spFox").replace("{n}", String(view.fox))}
+        </button>
+      )}
+      {view.coin !== undefined && (
+        <button type="button" className="sp-fox sp-coin" disabled={!view.tier} title={t("spCoinTip")} onClick={() => send(SPIRIT_OP.coin)}>
+          {t("spCoin").replace("{n}", String(view.coin))}
         </button>
       )}
     </>

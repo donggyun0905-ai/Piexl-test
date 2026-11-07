@@ -1,5 +1,5 @@
 // 아래 장비 칸에 보낼 값 (gameLoop가 틱마다 만들어 바뀌었을 때만 보냄): 무기·사용 아이템·패시브 · 풋내기 레벨 · 추적자 스킬 대기 · 패왕전 스킬 · 판매 값 · 작업대 · 히든 고르는 창
-import { beatriceSkills, ianSkills, gabrielSkills, serenaSkills, rafaelSkills, yurielSkills, michaelaSkills, stigmaGauge, factionGauge, BLAST, expToNext, passiveTagAt, sellPrice, trackerSkills, trialNoItems, type RunState } from "@pixel-rogue/shared";
+import { coinTier, beatriceSkills, ianSkills, gabrielSkills, serenaSkills, rafaelSkills, yurielSkills, michaelaSkills, stigmaGauge, factionGauge, BLAST, expToNext, passiveTagAt, sellPrice, trackerSkills, trialNoItems, type RunState } from "@pixel-rogue/shared";
 import type { LoadoutView } from "./Loadout";
 import type { SpiritView } from "./SpiritWindows";
 import { pwSkillView } from "./pwSkillView";
@@ -30,7 +30,8 @@ function spiritView(run: RunState): { spirit?: SpiritView } {
     ...(p.fcSpPick ? { pick: [...p.fcSpPick] } : {}),
     ...(p.fcBagOpen && p.fcBag ? { bag: [...p.fcBag], bagOpen: true } : {}),
     ...(p.fcChest ? { chest: [...p.fcChest] } : {}),
-    ...(p.fcSp === "fox" ? { fox: p.fcFox ?? 0, near: run.nearPickupId > 0 } : {}),
+    ...(p.fcSp === "fox" ? { fox: p.fcFox ?? 0, near: (run.rooms[run.roomId]?.pickups ?? []).some((x) => x.kind === "weapon" || x.kind === "passive" || x.kind === "use") } : {}),
+    ...(p.fcSp === "coin" ? { coin: p.fcCoin ?? 0, tier: coinTier(p.fcCoin ?? 0) } : {}),
   };
   return Object.keys(v).length ? { spirit: v } : {};
 }

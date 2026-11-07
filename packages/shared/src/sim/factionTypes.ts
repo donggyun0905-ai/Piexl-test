@@ -28,6 +28,10 @@ export interface FactionPlayerState {
   fcSpBuffT?: number;
   fcSpHealT?: number;
   fcSpRooms?: number;
+  /** 버프형 주기 틱 (0~cycle) · 코인 정령 점수 · 코인 정령이 내놓은 아이템(먹지 않음) */
+  fcSpCyc?: number;
+  fcCoin?: number;
+  fcCoinGift?: number[];
   /** 동행형: 자리 · 다음 공격까지 틱 · 부엉이 도는 각(테일러 rot) · 급강하 중 목표 */
   fcCo?: { x: number; y: number; cd: number; a: number; dive?: { x: number; y: number; t: number } };
   /** 여우 바꾸기 남은 수 · 보관 꾸러미 (넣어 둔 것 · 창 열림) · 상자 꾸러미 (주운 수 · 고를 패시브 3) · 먹보 (먹은 수) · 주운 것 세기 · 지난 방 */
@@ -46,4 +50,4 @@ export interface FactionPlayerState {
 }
 
 /** 효과: 탈라시아 콤보 10단계마다 물보라 · 타락 폭주 시작 · 에너지 폭발 · 맹세 지킴 · 맹세 깨짐 · 정령 자람 · 정령 탄 맞음 · 핵심 스킬 각성 · 각성 핵심 스킬 금빛 빛기둥 */
-export type FactionFx = "fcTideUp" | "fcRampage" | "fcVent" | "fcOathKept" | "fcOathBroken" | "fcSpGrow" | "fcSpHit" | "fcSpThorn" | "fcSpBite" | "fcSpDive" | "fcSpStomp" | "fcSpFox" | "fcSpEat" | "fcCoreOn" | "fcCorePillar" | "fcCoreArt" | "fcCoreBolt";
+export type FactionFx = "fcTideUp" | "fcRampage" | "fcVent" | "fcOathKept" | "fcOathBroken" | "fcSpGrow" | "fcSpHit" | "fcSpThorn" | "fcSpBite" | "fcSpDive" | "fcSpStomp" | "fcSpFox" | "fcSpEat" | "fcSpBox" | "fcSpFeather" | "fcCoreOn" | "fcCorePillar" | "fcCoreArt" | "fcCoreBolt";
