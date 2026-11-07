@@ -45,7 +45,7 @@ export function practiceFactionFill(s: RunState): void {
     if (p.fcSp === "fox") p.fcFox = SPIRIT_PACK.foxMax;
     if (p.fcSp === "coin") p.fcCoin = (p.fcCoin ?? 0) + SPIRIT_COIN.tier1;
   }
-  if (p.characterId === "blast" || p.characterId === "nailer" || p.characterId === "scissors") awaken(p, STIGMA.awakeTicks);
+  if (p.characterId === "blast" || p.characterId === "nailer" || p.characterId === "scissors" || p.characterId === "hellfist") awaken(p, STIGMA.awakeTicks);
 }
 
 /** 스킬 대기 초기화: 이름이 Cd로 끝나는 대기 값(숫자·배열)을 모두 0 */

@@ -9,6 +9,7 @@ import type { MichaelaFx } from "./mcTypes";
 import type { DawnFx } from "./blastTypes";
 import type { NailerFx } from "./nlTypes";
 import type { ScissorsFx } from "./sxTypes";
+import type { HellfistFx } from "./hfTypes";
 import type { FactionFx } from "./factionTypes";
 
-export type SeongFx = BeatriceFx | IanFx | GabrielFx | SerenaFx | RafaelFx | YurielFx | MichaelaFx | DawnFx | NailerFx | ScissorsFx | FactionFx;
+export type SeongFx = BeatriceFx | IanFx | GabrielFx | SerenaFx | RafaelFx | YurielFx | MichaelaFx | DawnFx | NailerFx | ScissorsFx | HellfistFx | FactionFx;

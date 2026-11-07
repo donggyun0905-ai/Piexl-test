@@ -42,7 +42,7 @@ export interface LoadoutView {
   /** 여러 번 누르는 스킬의 다음 단계 (네일러, 0 = 처음) */
   stages?: number[];
   /** 새벽의 성흔: 성흔 게이지 0~1 · 달빛 각성 중 */
-  stigma?: { v: number; awake: boolean; slide?: { cd: number; s: number; on: boolean } };
+  stigma?: { v: number; awake: boolean; hell?: boolean; slide?: { cd: number; s: number; on: boolean } };
   /** 진영 특징 (로그만, sim/factionGauge) */
   faction?: FactionGaugeView;
   /** 패왕전 스킬 칸 */
@@ -122,7 +122,7 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
       {view.hdPick && <HiddenPicker pick={view.hdPick} lang={lang} t={t} controls={controls} />}
       {view.spirit && <SpiritWindows view={view.spirit} lang={lang} t={t} controls={controls} />}
       {view.skills && <SkillButtons skills={view.skills} set={view.skillSet} stages={view.stages} core={view.faction?.on ? view.faction.core : undefined} t={t} controls={controls} />}
-      {view.stigma && <StigmaGauge v={view.stigma.v} awake={view.stigma.awake} slide={view.stigma.slide} t={t} />}
+      {view.stigma && <StigmaGauge v={view.stigma.v} awake={view.stigma.awake} hell={view.stigma.hell} slide={view.stigma.slide} t={t} />}
       {view.faction && <FactionGauge view={view.faction} t={t} />}
       {view.pw && <PwSkillBar view={view.pw} t={t} touchMode={touchMode} controls={controls} />}
       {!view.pw && character && (

@@ -83,6 +83,7 @@ export const C = {
   blast: "#e8e8f4",
   nailer: "#c8303a",
   scissors: "#c8b8e8",
+  hellfist: "#d8202a",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",

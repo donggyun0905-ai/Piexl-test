@@ -21,6 +21,7 @@ import type { MichaelaPlayerState } from "./mcTypes";
 import type { DawnEnemyState, DawnPlayerState } from "./blastTypes";
 import type { NailerEnemyState, NailerPlayerState } from "./nlTypes";
 import type { ScissorsPlayerState } from "./sxTypes";
+import type { HellfistPlayerState } from "./hfTypes";
 import type { FactionPlayerState } from "./factionTypes";
 import type { LeoEnemyState, LeoPlayerState } from "./leoTypes";
 import type { OnyxPlayerState } from "./onyxTypes";
@@ -123,5 +124,5 @@ export interface OriginShotState {
   hpCut?: number;
 }
 
-export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState, PungPlayerState, LeoPlayerState, OnyxPlayerState, FenrirPlayerState, EclipsePlayerState, ThorPlayerState, LeviaPlayerState, TailPlayerState, MadQueenPlayerState, HookPlayerState, OrcaPlayerState, WavePlayerState, MiryuPlayerState, BeatricePlayerState, IanPlayerState, GabrielPlayerState, SerenaPlayerState, RafaelPlayerState, YurielPlayerState, MichaelaPlayerState, DawnPlayerState, NailerPlayerState, ScissorsPlayerState, FactionPlayerState {}
+export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState, PungPlayerState, LeoPlayerState, OnyxPlayerState, FenrirPlayerState, EclipsePlayerState, ThorPlayerState, LeviaPlayerState, TailPlayerState, MadQueenPlayerState, HookPlayerState, OrcaPlayerState, WavePlayerState, MiryuPlayerState, BeatricePlayerState, IanPlayerState, GabrielPlayerState, SerenaPlayerState, RafaelPlayerState, YurielPlayerState, MichaelaPlayerState, DawnPlayerState, NailerPlayerState, ScissorsPlayerState, HellfistPlayerState, FactionPlayerState {}
 export interface AscalonEnemyState extends BeatriceEnemyState, IanEnemyState, GabrielEnemyState, SerenaEnemyState, YurielEnemyState, HiddenEnemyState, AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState, PungEnemyState, LeoEnemyState, HookEnemyState, DawnEnemyState, NailerEnemyState {}

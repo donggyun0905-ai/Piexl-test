@@ -1,4 +1,4 @@
-// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스) — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
+// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트) — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
 import { kit, SEC, sk } from "./pwKitKit";
 import type { PwKits } from "./pwSkillTypes";
 
@@ -20,5 +20,11 @@ export const PW_KITS_4: PwKits = {
     sk("sxShears", "dash", 8, "#ff3a4a", { range: 130, speed: 11, fx: "slash", hit: { dmg: 1.6 } }),
     sk("sxShears", "line", 11, "#ff5a6a", { range: 180, hit: { dmg: 2.2, slow: 1 * SEC } }),
     sk("sxShears", "self", 60, "#ffffff", { radius: 110, fx: "pillar", buff: { ticks: 6 * SEC, dmg: 1.3 }, hit: { dmg: 1.5, push: 12 } }),
+  ),
+  hellfist: kit(1,
+    sk("hfFist", "line", 4, "#ff3a3a", { range: 80, hit: { dmg: 1.4, push: 8 } }),
+    sk("hfFist", "cone", 8, "#c01a1a", { radius: 72, arc: 0.6, fx: "slash", hit: { dmg: 2, push: 14, stun: 0.5 * SEC } }),
+    sk("hfFist", "point", 10, "#ff2a2a", { range: 190, radius: 30, delay: 6, fx: "slash", repeat: { n: 3, every: 4 }, hit: { dmg: 0.9 } }),
+    sk("hfFist", "self", 60, "#ff4040", { radius: 110, fx: "pillar", buff: { ticks: 6 * SEC, dmg: 1.2 }, hit: { dmg: 1.6, push: 12 } }),
   ),
 };

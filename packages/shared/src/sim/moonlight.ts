@@ -44,7 +44,7 @@ export function applyMoon(e: EnemyState, n = 1): void {
 /** n스택일 때 약점 공격 확률 */
 export const chance = (n: number) => [0, R.CHANCE_1, R.CHANCE_2, R.CHANCE_3, R.CHANCE_4, R.CHANCE_5][Math.min(R.MAX, n)] ?? 0;
 
-/** 맞힌 뒤 (baseStats.onHitExtra): 걸려 있으면 약점 공격 확률 · 성흔 각성 중이면 확정으로 달빛 */
+/** 맞힌 뒤 (baseStats.onHitExtra): 걸려 있으면 약점 공격 확률 · 성흔 각성 중이면 확정으로 달빛 (헬피스트 빼고) */
 export function moonHit(s: RunState, e: EnemyState, dmg: number): void {
   const n = e.moon ?? 0;
   if (n > 0 && e.hp > 0 && !e.immune && createRng(deriveSeed(s.seed, "moon", e.id, s.tick)).nextFloat() < chance(n)) {
@@ -52,7 +52,8 @@ export function moonHit(s: RunState, e: EnemyState, dmg: number): void {
     e.hp -= extra;
     markDot(s, e, "moon", extra);
   }
-  if (isAwake(s.player)) applyMoon(e, 1 + (hasPerk(s.player, "blLunar") ? BLAST_PERKS.blLunar.more : 0));
+  // 헬피스트 적혈 각성은 달빛 대신 공격 속도·회복 (sim/hellfist)
+  if (isAwake(s.player) && s.player.characterId !== "hellfist") applyMoon(e, 1 + (hasPerk(s.player, "blLunar") ? BLAST_PERKS.blLunar.more : 0));
 }
 
 /** 틱마다 (status.tickDots): 시간이 다 되면 풀림 */

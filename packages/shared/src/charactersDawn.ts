@@ -7,4 +7,6 @@ export const DAWN_CHARACTERS = {
   nailer: { id: "nailer", maxHp: 120, damage: 15, moveSpeed: 1.25, luck: 2, startWeapon: "nlHammer", defense: 2 },
   /** 새벽의 성흔: 시저스 가위질(열기 → 닫기) · 운명의 실 → 대시로 끊기 · 단죄(목 자르기) · 성흔 → 달빛 각성 (sim/scissors) */
   scissors: { id: "scissors", maxHp: 105, damage: 16, moveSpeed: 1.4, luck: 2, startWeapon: "sxShears", defense: 1 },
+  /** 새벽의 성흔: 헬피스트 주먹 세 박자(찌르기 → 악마 왼팔 내려찍기 → 검지로 허공 긁기) · 악마화(맞힐수록 사거리 증가) · 성흔 → 적혈 각성 (sim/hellfist) */
+  hellfist: { id: "hellfist", maxHp: 125, damage: 16, moveSpeed: 1.3, luck: 1, startWeapon: "hfFist", defense: 2 },
 } as const;

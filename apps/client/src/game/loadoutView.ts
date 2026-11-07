@@ -58,7 +58,7 @@ export function loadoutView(run: RunState, armed: Parameters<typeof pwSkillView>
     ...(p.characterId === "serena" && !run.pvp ? { skills: serenaSkills(p).map((v) => Math.ceil(v * 20) / 20), skillSet: "sn" as const } : {}),
     ...(p.characterId === "rafael" && !run.pvp ? { skills: rafaelSkills(p).map((v) => Math.ceil(v * 20) / 20), skillSet: "rf" as const } : {}),
     ...(p.characterId === "yuriel" && !run.pvp ? { skills: yurielSkills(p).map((v) => Math.ceil(v * 20) / 20), skillSet: "yr" as const } : {}),
-    ...(stigmaGauge(p) ? { stigma: { v: Math.round(stigmaGauge(p)!.v * 50) / 50, awake: stigmaGauge(p)!.awake, ...blastSlide(run) } } : {}),
+    ...(stigmaGauge(p) ? { stigma: { v: Math.round(stigmaGauge(p)!.v * 50) / 50, awake: stigmaGauge(p)!.awake, ...(p.characterId === "hellfist" ? { hell: true } : {}), ...blastSlide(run) } } : {}),
     ...(p.characterId === "michaela" && !run.pvp ? { skills: michaelaSkills(p).map((v) => Math.ceil(v * 20) / 20), skillSet: "mc" as const } : {}),
     ...(p.characterId === "nailer" && !run.pvp ? { skills: nailerSkills(p).map((v) => Math.ceil(v * 20) / 20), skillSet: "nl" as const, stages: nailerStages(p) } : {}),
     // 진영 특징 (로그만: 물결 콤보·타락·과열·맹세·정령·핵심 스킬)

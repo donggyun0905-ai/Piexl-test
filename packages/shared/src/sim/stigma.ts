@@ -30,6 +30,6 @@ export const isAwake = (p: PlayerState) => (p.sgAwake ?? 0) > 0;
 
 /** 화면용: 게이지 0~1 · 각성 중인지 (새벽의 성흔이 아니면 null) */
 export function stigmaGauge(p: PlayerState): { v: number; awake: boolean } | null {
-  if (p.characterId !== "blast" && p.characterId !== "nailer" && p.characterId !== "scissors") return null;
+  if (p.characterId !== "blast" && p.characterId !== "nailer" && p.characterId !== "scissors" && p.characterId !== "hellfist") return null;
   return { v: Math.min(1, (p.sgGauge ?? 0) / STIGMA.max), awake: isAwake(p) };
 }

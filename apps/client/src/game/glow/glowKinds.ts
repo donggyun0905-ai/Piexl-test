@@ -7,11 +7,11 @@ export const BIG_FX = new Set<string>([
   "btCross", "btExec", "btFlare", "btSolar",
   "iaWhip", "iaWrit", "iaRebound",
   "gbSlam", "gbWell", "gbWall", "gbThorn",
-  "snWhirlFx", "snCharmFx", "snBloomFx", "rfBlastFx", "rfGustFx", "yrPurgeFx", "yrLightFx", "yrSlamFx", "mcBlastFx", "mcBlinkFx", "mcPortalFx", "blShotFx", "blBurstFx", "nlSmashFx", "nlCurseFx", "nlPinFx", "sxCutFx", "sxExecFx", "mcBoltFx", "gbLightSwing", "gbSmite", "gbBurst",
+  "snWhirlFx", "snCharmFx", "snBloomFx", "rfBlastFx", "rfGustFx", "yrPurgeFx", "yrLightFx", "yrSlamFx", "mcBlastFx", "mcBlinkFx", "mcPortalFx", "blShotFx", "blBurstFx", "nlSmashFx", "nlCurseFx", "nlPinFx", "sxCutFx", "sxExecFx", "hfSmashFx", "hfClawFx", "mcBoltFx", "gbLightSwing", "gbSmite", "gbBurst",
   "wvBreach", "wvCrush", "wvClap", "wvRopeCrash", "wvArmorPop", "wvBalloonPop", "wvBloom", "wvSurfEnd",
   "blast", "burst", "meteor", "slam", "bolt", "pillar", "holy", "bmBoom", "afBlast", "hdMeteor", "titanSmash", "renCrush", "tagMeteor", "vyMeteor", "mnBoom", "elBang", "oPillar", "imBoom", "stBurst", "plBurst", "smBurst",
   "titanSlam", "renSlam", "renDrop", "slNova", "slBurst", "eaAbyss", "adLaunch", "rdSmash", "cyEmp", "gsCube", "fgNova", "fgPillar", "elPillar", "mnErupt", "mnShatter", "tkClap", "tkBolt", "tkGeyser", "lvQuake", "lvBreach", "lvBurst", "oxReson", "oxHalo", "fnLand", "ecSlam", "zsClap", "zsSpear", "leRoar", "puPillar", "vySun", "hdAether", "kgPillar", "lxCross", "srScythe", "chCollapse", "stComet", "oBolt", "pgBlast",
 ]);
 
 /** 필살기·변신처럼 드물고 큰 기술 */
-export const ULT_FX = new Set<string>(["btJudge", "btGrace", "iaLaw", "gbUlt", "snUltFx", "rfHeavenFx", "yrHolyFx", "mcUltFx", "blAwakeFx", "mrRelease", "mrFall", "legend", "fgAwaken", "imAwaken", "slGrand", "rmEclipse", "wdTempest", "zsDescend", "ecTotal", "kgForm", "awaken", "tagSpecial", "oGod", "mEvo"]);
+export const ULT_FX = new Set<string>(["btJudge", "btGrace", "iaLaw", "gbUlt", "snUltFx", "rfHeavenFx", "yrHolyFx", "mcUltFx", "blAwakeFx", "hfAwakeFx", "mrRelease", "mrFall", "legend", "fgAwaken", "imAwaken", "slGrand", "rmEclipse", "wdTempest", "zsDescend", "ecTotal", "kgForm", "awaken", "tagSpecial", "oGod", "mEvo"]);

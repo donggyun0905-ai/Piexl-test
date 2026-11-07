@@ -37,6 +37,8 @@ export { NAILER } from "./weaponsNailer";
 export { NAILER_PERKS } from "./itemsNailer";
 export { SCISSORS } from "./weaponsScissors";
 export { SCISSORS_PERKS } from "./itemsScissors";
+export { HELLFIST } from "./weaponsHellfist";
+export { HELLFIST_PERKS } from "./itemsHellfist";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";
