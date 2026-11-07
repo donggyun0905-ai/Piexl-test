@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.14",
+    date: "2026-11-08",
+    items: {
+      ko: ["시저스 단죄: 피 폭발을 빼고 목 높이 흰 일섬 → 라벤더 X 표시 · 빛 조각으로"],
+      en: ["Scissors Condemnation: no more blood burst — a white slash at neck height, then a lavender X and shards of light"],
+      ja: ["シザーズの断罪：血の爆発をやめ、首の高さの白い一閃 → ラベンダーのX印・光のかけらに"],
+    },
+  },
+  {
     version: "0.50.13",
     date: "2026-11-08",
     items: {

@@ -1,9 +1,8 @@
 // 시저스 효과 — 단죄의 가위. 열기(두 날이 벌어지며 넓게 휘두르는 라벤더·흰 초승달 두 줄) · 닫기(두 날이 앞에서 맞물리는 X자 · 맞물린 자리 붉은 번쩍)
-// 실 끊김(나 → 적 실이 하얗게 번쩍 → 가운데서 끊겨 양쪽으로 튕겨 감김 · 팽팽할수록 밝고 굵게) · 단죄(목 높이 가로 일섬 · 피 폭발 그림) · 실 묶임(붉은 매듭)
+// 실 끊김(나 → 적 실이 하얗게 번쩍 → 가운데서 끊겨 양쪽으로 튕겨 감김 · 팽팽할수록 밝고 굵게) · 단죄(목 높이 가로 일섬 · 라벤더 X · 빛 조각, 피 없음) · 실 묶임(붉은 매듭)
 import type { EffectState } from "@pixel-rogue/shared";
 import { additive, alpha, beam, crescent, easeOut, glow, sparks, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
-import { bloodBurst } from "./nailerFx";
 
 export const SX = { blade: "#f4f0fa", lav: "#c8b8e8", red: "#ff2a3a", thread: "#ff3a4a", moon: "#c8d8ff" };
 const SX_FX = new Set(["sxOpenFx", "sxCloseFx", "sxCutFx", "sxExecFx", "sxTieFx"]);
@@ -70,13 +69,22 @@ function snap(ctx: Ctx, fx: EffectState, x: number, y: number, tx: number, ty: n
   sparks(ctx, mx, my, 6 + Math.round(taut * 6), 12 + 10 * taut, g, taut > 0.6 ? "#ffffff" : "#ff8a94", Math.round(tx + ty));
 }
 
-/** 단죄: 목 높이를 가로지르는 흰 일섬 · 피 폭발 */
+/** 단죄: 목 높이를 가로지르는 흰 일섬 → 두 날이 맞물리는 작은 X · 라벤더 빛 조각이 흩어짐 (피 없음) */
 function exec(ctx: Ctx, fx: EffectState, x: number, y: number, f: number): void {
   const ny = y - fx.size - 2;
   const w = 26 + fx.size * 2;
   const slash = easeOut(Math.min(1, f * 4));
-  if (f < 0.5) additive(ctx, () => beam(ctx, x - w / 2, ny, x - w / 2 + w * slash, ny, 2.5, SX.blade, 1 - f * 2));
-  bloodBurst(ctx, x, y + 4, 40 + fx.size * 3, f);
+  additive(ctx, () => {
+    if (f < 0.55) beam(ctx, x - w / 2, ny, x - w / 2 + w * slash, ny, 2.5, SX.blade, 1 - f / 0.55);
+    if (f > 0.15) {
+      const g = (f - 0.15) / 0.85;
+      const r = 6 + 4 * (1 - g);
+      beam(ctx, x - r, ny - r, x + r, ny + r, 1.5, SX.lav, 1 - g);
+      beam(ctx, x - r, ny + r, x + r, ny - r, 1.5, SX.lav, 1 - g);
+      glow(ctx, x, ny, 14 * (1 - g) + 4, SX.lav, 0.7 * (1 - g), 0.9);
+    }
+  });
+  sparks(ctx, x, ny, 10, 20, f, SX.lav, Math.round(fx.x + fx.y));
 }
 
 /** 실 묶임: 붉은 매듭 고리가 조여 듦 */
