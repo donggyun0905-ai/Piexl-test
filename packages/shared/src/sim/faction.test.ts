@@ -160,8 +160,13 @@ describe("진영 특징", () => {
     s.player.btCd = [0, 0, 0, 0];
     factionTick(s);
     s.player.btCd = [0, 0, 0, 99999];
+    s.enemies = [enemy(1, 130, 100)];
     factionTick(s);
     expect(factionDmgMul(s)).toBeCloseTo(FACTION_CORE.dmg);
+    // 한 번 쓰면 각성이 끝나고 다시 셈 · 추가 공격이 맞음
+    expect(factionGauge(s)?.on).toBe(false);
+    expect(s.player.fcUses).toBe(0);
+    expect(s.enemies[0]!.hp).toBeLessThan(s.enemies[0]!.maxHp);
   });
 
   it("공용 피해 경로: 테라코어 열이 있으면 damageEnemy 피해가 늘어남", () => {

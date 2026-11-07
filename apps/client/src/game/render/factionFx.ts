@@ -64,7 +64,22 @@ export function drawFactionBody(ctx: Ctx, s: RunState, a0: number, snap: Snap): 
   if ((p.fcCombo ?? 0) >= 50) additive(ctx, () => ring(ctx, x, y + 2, 12 + Math.sin(t * 0.15) * 2, alpha(SEA, 0.5), 1.5));
 }
 
-const FX = new Set(["fcTideUp", "fcRampage", "fcVent", "fcOverload", "fcOathKept", "fcOathBroken", "fcSpGrow", "fcSpHit", "fcCoreOn", "fcCorePillar"]);
+const FX = new Set(["fcTideUp", "fcRampage", "fcVent", "fcOverload", "fcOathKept", "fcOathBroken", "fcSpGrow", "fcSpHit", "fcCoreOn", "fcCorePillar", "fcCoreArt", "fcCoreBolt"]);
+/** 성국 추가 공격 색 (style: 베아트리스 태양 · 이안 보랏빛 실 · 가브리엘 중력 · 세레나 독 · 라파엘 하늘빛 · 유리엘 흰 금빛 · 미카엘라 은빛 칼날) */
+const ART = ["#ff9a2a", "#b06aff", "#8a7aff", "#9aff6a", "#8ae0ff", "#fff0b0", "#d8e0f0"];
+
+/** 성국 추가 공격: 둘레 고리 (베아트리스 3겹 · 가브리엘 안으로 모임 · 유리엘 앞쪽 부채꼴) */
+function coreArt(ctx: Ctx, fx: EffectState, x: number, y: number, f: number): void {
+  const c = ART[fx.style ?? 0] ?? GOLD;
+  const fade = 1 - f;
+  if (fx.style === 0) for (let k = 0; k < 3; k++) shock(ctx, x, y, fx.size * easeOut(Math.max(0, f * 1.5 - k * 0.2)), c, fade, 6);
+  else if (fx.style === 2) shock(ctx, x, y, fx.size * 1.3 * (1 - easeOut(f)), c, fade, 10);
+  else if (fx.style === 5) {
+    const a = Math.atan2(fx.dirY, fx.dirX);
+    for (const d of [-0.5, 0, 0.5]) beam(ctx, x, y, x + Math.cos(a + d) * fx.size * 1.6 * easeOut(f), y + Math.sin(a + d) * fx.size * 1.6 * easeOut(f), 6 * fade + 1, c, fade);
+  } else shock(ctx, x, y, fx.size * easeOut(f), c, fade * 0.8, 5);
+  sparks(ctx, x, y, 14, fx.size, f, c, (fx.style ?? 0) + 5);
+}
 
 /** 효과 (season2 drawSeason2Fx 사슬에서) */
 export function drawFactionFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
@@ -115,6 +130,18 @@ export function drawFactionFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         shock(ctx, x, y, fx.size * easeOut(f), GOLD, fade, 6);
         sparks(ctx, x, y - 6, 14, fx.size, f, GOLD, 11);
         break;
+      case "fcCoreArt":
+        coreArt(ctx, fx, x, y, f);
+        break;
+      case "fcCoreBolt": {
+        const c = ART[fx.style ?? 0] ?? GOLD;
+        const tx = snap(fx.toX ?? fx.x);
+        const ty = snap(fx.toY ?? fx.y);
+        const k = Math.min(1, f * 3);
+        beam(ctx, x, y, lerp(x, tx, k), lerp(y, ty, k), 3 * fade + 1, c, fade);
+        if (k >= 1) glow(ctx, tx, ty, 16, c, fade, 0.6);
+        break;
+      }
       case "fcCorePillar":
         shock(ctx, x, y, fx.size * easeOut(f), GOLD, fade, 8);
         beam(ctx, x, y - 120 * (1 - f * 0.3), x, y, 10 * fade + 2, GOLD, fade);

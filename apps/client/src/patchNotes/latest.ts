@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.2",
+    date: "2026-11-07",
+    items: {
+      ko: ["테라코어 과열: 열이 저절로 식지 않음 (방이 바뀌어도 그대로) · 대시 증기 폭발로만 비움 · 과부하가 끝나면 50", "성국 핵심 스킬: 각성한 핵심 스킬을 한 번 쓰면 각성이 끝나고 다시 12번부터 · 쓸 때 캐릭터마다 다른 추가 공격 (태양 고리·인과의 실·중력 내려찍기·독 비수·빛 화살 비·세 갈래 철퇴·무기 폭격)"],
+      en: ["Terracore Heat: no longer cools on its own (kept between rooms) · only a dash steam vent clears it · Overload ends at 50", "Holy Kingdom Core Skill: casting the awakened Core Skill ends the awakening and you count 12 again · each character adds a unique bonus attack (sun rings, causal threads, gravity slam, poison daggers, arrow rain, triple mace wave, weapon barrage)"],
+      ja: ["テラコア過熱：熱が自然に冷えない（部屋が変わってもそのまま）・ダッシュの蒸気爆発でのみ放出・過負荷が終わると50", "聖国 核心スキル：覚醒した核心スキルを一度使うと覚醒が終わりまた12回から・使うとキャラごとに違う追加攻撃（太陽の輪・因果の糸・重力叩きつけ・毒の短剣・光の矢の雨・三叉の鉄槌・武器の爆撃）"],
+    },
+  },
+  {
     version: "0.50.1",
     date: "2026-11-07",
     items: {

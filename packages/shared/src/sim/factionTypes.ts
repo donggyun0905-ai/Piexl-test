@@ -30,4 +30,4 @@ export interface FactionPlayerState {
 }
 
 /** 효과: 탈라시아 콤보 10단계마다 물보라 · 타락 폭주 시작 · 과열 배출 증기 폭발 · 과부하 연기 · 맹세 지킴 · 맹세 깨짐 · 정령 자람 · 정령 탄 맞음 · 핵심 스킬 각성 · 각성 핵심 스킬 금빛 빛기둥 */
-export type FactionFx = "fcTideUp" | "fcRampage" | "fcVent" | "fcOverload" | "fcOathKept" | "fcOathBroken" | "fcSpGrow" | "fcSpHit" | "fcCoreOn" | "fcCorePillar";
+export type FactionFx = "fcTideUp" | "fcRampage" | "fcVent" | "fcOverload" | "fcOathKept" | "fcOathBroken" | "fcSpGrow" | "fcSpHit" | "fcCoreOn" | "fcCorePillar" | "fcCoreArt" | "fcCoreBolt";

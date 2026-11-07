@@ -16,9 +16,9 @@ export const FACTION_TRAIT_TEXT = {
   ftTerracore: { ko: "과열", en: "Heat", ja: "過熱" },
   ftTerracoreOn: { ko: "과부하", en: "Overload", ja: "過負荷" },
   ftTerracoreTip: {
-    ko: "맞힐수록 열이 오르고 쉬면 식음 · 열이 높을수록 피해 최대 +25% · 100이면 2초 과부하(공격 불가) · 열 60 이상에서 대시하면 열을 비우며 둘레 증기 폭발",
-    en: "Heat rises as you hit and cools when you rest · up to +25% damage at high heat · at 100 you Overload for 2s (can't attack) · dash at 60+ heat to vent it in a steam blast",
-    ja: "当てるほど熱が上がり、休むと冷える・熱が高いほどダメージ最大+25%・100で2秒過負荷（攻撃不可）・熱60以上でダッシュすると熱を放出し周囲に蒸気爆発",
+    ko: "맞힐수록 열이 오르고 저절로는 안 식음 · 열이 높을수록 피해 최대 +25% · 100이면 2초 과부하(공격 불가) · 열 60 이상에서 대시하면 증기 폭발로 열을 비움",
+    en: "Heat rises as you hit and never cools on its own · up to +25% damage at high heat · at 100 you Overload for 2s (can't attack) · dash at 60+ heat to vent it in a steam blast",
+    ja: "当てるほど熱が上がり、自然には冷えない・熱が高いほどダメージ最大+25%・100で2秒過負荷（攻撃不可）・熱60以上でダッシュすると蒸気爆発で熱を放出",
   },
   ftAscalon: { ko: "영광", en: "Glory", ja: "栄光" },
   ftAscalonTip: {
@@ -46,8 +46,8 @@ export const FACTION_TRAIT_TEXT = {
   ftSeongguk: { ko: "핵심 스킬", en: "Core Skill", ja: "核心スキル" },
   ftSeonggukOn: { ko: "각성", en: "Awakened", ja: "覚醒" },
   ftSeonggukTip: {
-    ko: "스킬을 12번 쓰면 핵심 스킬(금빛 칸)이 각성 (그 판 끝까지) · 각성한 핵심 스킬을 쓰면 둘레에 금빛 빛기둥 + 2초 동안 주는 피해 1.3배",
-    en: "Use skills 12 times to awaken your Core Skill (gold slot) for the rest of the run · casting it then calls a golden light pillar around you and +30% damage for 2s",
-    ja: "スキルを12回使うと核心スキル（金色の枠）が覚醒（その回の終わりまで）・覚醒した核心スキルを使うと周囲に金色の光柱＋2秒間与ダメージ1.3倍",
+    ko: "스킬을 12번 쓰면 핵심 스킬(금빛 칸)이 각성 · 쓰면 금빛 빛기둥 + 캐릭터만의 추가 공격 + 2초 동안 피해 1.3배 · 한 번 쓰면 다시 12번부터",
+    en: "Use skills 12 times to awaken your Core Skill (gold slot) · casting it calls a golden pillar, a unique bonus attack and +30% damage for 2s · then count 12 again",
+    ja: "スキルを12回使うと核心スキル（金色の枠）が覚醒・使うと金色の光柱＋キャラ固有の追加攻撃＋2秒間ダメージ1.3倍・一度使うとまた12回から",
   },
 };

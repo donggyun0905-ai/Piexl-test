@@ -1,9 +1,10 @@
-// 성국 핵심 스킬 각성 (sim/faction이 부름): 스킬을 쓴 횟수를 셈(스킬 대기가 다시 찬 순간) → 정한 횟수면 핵심 스킬이 각성(그 판 끝까지)
+// 성국 핵심 스킬 각성 (sim/faction이 부름): 스킬을 쓴 횟수를 셈(스킬 대기가 다시 찬 순간) → 정한 횟수면 핵심 스킬이 각성 → 쓰면 한 번 터지고 다시 셈
 // 각성한 핵심 스킬을 쓰면 잠깐 주는 피해 증가 + 둘레 금빛 빛기둥 (수치 factionDefs.FACTION_CORE · 캐릭터마다 핵심 스킬 FACTION_CORE_SKILL)
 import type { CharacterId } from "../characters";
 import { FACTION_CORE as C, FACTION_CORE_SKILL } from "../factionDefs";
 import { beatriceSkills } from "./beatriceKit";
 import { blastAt } from "./combat";
+import { coreArt } from "./factionCoreArts";
 import { gabrielSkills } from "./gabrielKit";
 import { ianSkills } from "./ianKit";
 import { michaelaSkills } from "./michaelaKit";
@@ -32,7 +33,13 @@ export function coreTick(s: RunState): void {
   cds.forEach((v, i) => {
     if (v <= (prev[i] ?? 0) + 0.3) return;
     const was = coreAwake(p);
-    if (i === coreSkillOf(p.characterId) && was) pillar(s);
+    // 각성한 핵심 스킬: 빛기둥 + 추가 공격 → 각성이 끝나고 처음부터 다시 셈
+    if (i === coreSkillOf(p.characterId) && was) {
+      pillar(s);
+      coreArt(s);
+      p.fcUses = 0;
+      return;
+    }
     p.fcUses = (p.fcUses ?? 0) + 1;
     if (!was && coreAwake(p)) addEffect(s, { kind: "fcCoreOn", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 40, maxTicks: 50, follow: true });
   });

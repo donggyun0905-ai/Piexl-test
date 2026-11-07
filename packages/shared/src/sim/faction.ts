@@ -105,7 +105,6 @@ function heatTick(s: RunState): void {
   const p = s.player;
   const dashing = p.dashTicks > 0;
   if (dashing && !p.fcDash && (p.fcHeat ?? 0) >= H.ventFrom) {
-    p.fcHeat = 0;
     blastAt(s, p.x, p.y, H.ventR, p.stats.damage * H.ventMul, { push: 10 });
     p.fcHeat = 0;
     delete p.fcOver;
@@ -119,7 +118,7 @@ function heatTick(s: RunState): void {
     }
     return;
   }
-  if (s.tick - (p.fcHeatT ?? -999) > H.coolDelay && (p.fcHeat ?? 0) > 0) p.fcHeat = Math.max(0, p.fcHeat! - H.cool);
+  if (H.cool > 0 && s.tick - (p.fcHeatT ?? -999) > H.coolDelay && (p.fcHeat ?? 0) > 0) p.fcHeat = Math.max(0, p.fcHeat! - H.cool);
 }
 
 /** 과부하 중이면 공격 못 함 (foeStatus.foeNoAttack) */
