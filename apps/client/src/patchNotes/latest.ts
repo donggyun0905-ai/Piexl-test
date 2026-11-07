@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.17",
+    date: "2026-11-08",
+    items: {
+      ko: ["시저스 이펙트 다듬기: 가위 날을 가늘고 끝이 뾰족한 칼날 모양으로 · 열기는 두 날이 벌어지며 휘두른 자리에 옅은 결·가장자리 빛줄 · 닫기는 두 날이 X자로 맞물린 자리에 네 갈래 '싹둑' 빛과 잘린 붉은 실 조각 · 실 끊김·단죄도 네 갈래 빛 · 실 묶임 매듭"],
+      en: ["Scissors effects polished: slim, sharp-tipped blades · Open spreads both blades with a faint swept arc and a thin edge line · Close meets in an X with a four-point 'snip' gleam and cut red thread bits · thread snaps and Condemnation get the gleam too · knot on tied threads"],
+      ja: ["シザーズのエフェクト調整：鋏の刃を細く先の尖った刃の形に · 開きは二枚の刃が開いて振った跡に淡い筋・縁の細い光 · 閉じは刃がX字に噛み合った所に四方の「チョキン」光と切れた赤い糸のかけら · 糸断ち・断罪にも四方の光 · 糸を結ぶ結び目"],
+    },
+  },
+  {
     version: "0.50.16",
     date: "2026-11-08",
     items: {
