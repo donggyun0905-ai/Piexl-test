@@ -33,7 +33,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "plContagion smVenom smMist smCloud smSilk smTang smBloom snVenom snQuiver snNumb",
   // 빛 65
   light:
-    "regenCharm goldPouch goddessBlessing starShower manaDrain jadeOrb lifeSiphon beautiful flashy ration " +
+    "nlMoon nlBlind nlFocus regenCharm goldPouch goddessBlessing starShower manaDrain jadeOrb lifeSiphon beautiful flashy ration " +
     "elite catNap purr woundSuture firstAid checkup prescription quickEcho eternity accumulate oasis " +
     "dragonBlood dragonEye brightStar longNight wideSky extraStar stardust zodiac parchment revision " +
     "scrapRepair chargeKnuckle idDew idGaiaGrace idFourSeasons idWorldHeart elExpand elTea rdShock " +
@@ -42,7 +42,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "clStarTome dryadOrb aphroditeMirror puBook fnHalo fnStar ecDawn tkBell tkLighthouse lvSalt lvBlowhole mqPrism btVerdict btWitness btGrace btMercy iaQuill iaAbsolute iaVerse iaCall gbLight gbImmortal gbFaith gbVow snEther snMuse snNight rfHalo rfWrath rfPrayer rfLance yrPyre yrBloom yrHeaven yrOrb yrThorn yrPrayer mcPrayer mcArsenal blMoonlight blFull blHalo blLunar blSilver blRemain",
   // 어둠 42
   dark:
-    "ambush volleyCharm strongman intimidate sharpClaws hunterInstinct shadowMark twinShadow moonlight " +
+    "nlCurse nlChain ambush volleyCharm strongman intimidate sharpClaws hunterInstinct shadowMark twinShadow moonlight " +
     "assassin desertMirage desertKing soulFeast longCurse inkWell preface oniEightHeads oniAbyssDrink " +
     "oniShadowSpread snakeCoil batSwarm elLinger elStaff plMask plBloodlet eaHunger eaShade mkRegen " +
     "mkPotion cyOptics cyEcho rmStep rmVanish rmHaste rmShroud clVoidSword clVoidStaff clClaw devilBlood " +
@@ -65,7 +65,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "oniGreatWave oniSprayChain oniDragonPalace tkBarnacle tkWhale tkTrident lvCrest lvSpiral lvBreaker lvCurrent lvSpray lvCall lvCalf lvBaleen lvPod lvKingWhale lvDeep lvSong tlDeep tlSchool tlJaws tlBreach tlRip mqFreedom hkChain hkFreedom ocUndertow ocEcho ocFin wvSpear wvGoddess wvWhale wvBubble wvClock wvCloud wvLotus wvFlood wvBalloon wvPearl wvHands wvFountain wvSkip wvSiren wvOctopus wvEye wvEbb wvTrail wvTsunami mrRipple mrCascade mrSky mrReturn mrBreath",
   // 날카로움 90
   sharp:
-    "longGrip backQuiver steadyBreath spinCleave waveSlash echoBolt piercingBolt mach knockout focusFire " +
+    "nlIron nlBarb nlSpread nlDeep nlSledge nlWide nlDrive nlEcho longGrip backQuiver steadyBreath spinCleave waveSlash echoBolt piercingBolt mach knockout focusFire " +
     "allIn bigStar longEcho precision longWhip command duneRush farThrow spearMastery momentum dragonRage " +
     "dragonLance fallenGrail sinWeight thickNib sealStamp alleyBond tagStrike idSap idRoots idTwinStab " +
     "idBloomSwap wolfFang wolfPack eagleEye scorpPincer batEcho eleTrunk flyLonger flyDragonEye renOak " +
@@ -76,7 +76,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "relicPrism relicGreen sylphQuiver gnomeHammer puDog leFang lePride leKing oxPolish oxCrown oxResonance fnFang fnMoon ecSunspot tlFin mqTwin mrHorn iaVital iaNeedle iaSteel iaClause gbForge gbAegis gbGrav snEdge snBarb snThorn snLash snChain rfScope rfPierce rfHead rfSpotter rfShard yrHeavy yrNoMercy yrVerdict yrWrist yrChain mcSword mcLance mcJavelin mcHeavy mcShrapnel blSlug blChoke blShred blSpread",
   // 단단함 79
   tough:
-    "sturdyHeart furySeal secondWind ricochet splitHead counterGuard bulwarkStance arcaneShield " +
+    "nlStun nlBind nlFuse sturdyHeart furySeal secondWind ricochet splitHead counterGuard bulwarkStance arcaneShield " +
     "tempestBreath barrier domain highLens energyRecycle balance ironBody nineLives wildRoar healthCare " +
     "robust smokeVeil oldPact bondShield hiddenPower ironWall scaleArmor scaleGuard blackMass apostate " +
     "featherShield eldestShield streetScars armorPlate titanHull idSprout idAcorn idThornShield " +
@@ -86,7 +86,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "zsNectar zsRetort pgPack pgSouvenir pgPostcard pgTent relicSilver relicWhite ironSkin puDisguise leArmor oxBulwark oxShard fnHowl fnVeteran ecCrown tkCoral lvShell lvFlag tlFreedom mqFlagship hkWreck hkRum ocFoam wvArmor wvMist mrScale mrParry btVow btSilver btBreaker iaLedger iaKnot gbPlate gbThorns gbIron gbBulwark gbTitan rfSteady yrBulwark yrSanct yrGuard yrVigil yrGrace yrTouch yrBaptism mcHoard blRecoil",
   // 바람 77
   wind:
-    "lightGloves windBoots featherTip hunterEye dashCloak heavyPlate returnFletch chaseSteps chainBurst " +
+    "nlQuick nlRain lightGloves windBoots featherTip hunterEye dashCloak heavyPlate returnFletch chaseSteps chainBurst " +
     "overcharge mindEye yangForce cleanFreak bigger zone speedIsPower discipline rapidFire agility " +
     "overtreat doctorGown shadowRush silentStep haste clockwork mirageStep nomadSpirit cloudRide duckWalk " +
     "lastMag backAlleyRun oniTyphoonEye oniGale oniTwinWind idBreeze idPetal idSplitArrow idRootArrow " +
@@ -109,7 +109,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "spFury spAwaken spFarewell spHarmony adCall adFourth petFlute falseHero puClone mqRig mqSquadron hkGrapnel ocBreath ocLiberty wvButterfly wvMirror wvSchool wvRope",
   // 피 27
   blood:
-    "seekerFeather huntFrenzy lifeLeech rage drunkenFist bloodDemon bleed bloodBlade loyalty rustyEdge " +
+    "nlBleed nlRelent seekerFeather huntFrenzy lifeLeech rage drunkenFist bloodDemon bleed bloodBlade loyalty rustyEdge " +
     "grewTogether batDrain slPact slThirst slNumb slMassacre rmBlood wdDeep wdRain skFrenzy skBlood " +
     "clBloodSword clChainCleaver clBloodBow clCrossbow clRedSpear clBloodHammer fnHunt tlBlood tlFeast btOath mcFrenzy mcMadness blBlood blHunter blNight",
 };

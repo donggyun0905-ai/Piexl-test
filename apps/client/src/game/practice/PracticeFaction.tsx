@@ -29,7 +29,7 @@ export function PracticeFaction({ run, characterId, t }: Props) {
           {t("pfDrop")}
         </button>
       </div>
-      {!faction && characterId !== "blast" && <small>{t("pfNoFaction")}</small>}
+      {!faction && characterId !== "blast" && characterId !== "nailer" && <small>{t("pfNoFaction")}</small>}
       {faction === "virdia" && (
         <>
           <b>{t("pfSpirit")}</b>

@@ -81,6 +81,7 @@ const DEMO_WEAPONS: Record<CharacterId, [WeaponId, WeaponId] | null> = {
   yuriel: null,
   michaela: null,
   blast: null,
+  nailer: null,
   miner: ["mnTnt", "mnPit"],
   voyager: null,
   zeus: ["zsSky", "zsChain"],

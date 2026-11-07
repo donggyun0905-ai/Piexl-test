@@ -33,6 +33,8 @@ export { YURIEL } from "./weaponsYuriel";
 export { YURIEL_PERKS } from "./itemsYuriel";
 export { MICHAELA } from "./weaponsMichaela";
 export { MICHAELA_PERKS } from "./itemsMichaela";
+export { NAILER } from "./weaponsNailer";
+export { NAILER_PERKS } from "./itemsNailer";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";

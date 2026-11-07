@@ -130,6 +130,7 @@ export { isYuriel, yurielSkills } from "./yuriel";
 export { isMichaela, michaelaSkills } from "./michaela";
 export { isBlast } from "./blast";
 export { stigmaGauge } from "./stigma";
+export { isNailer, nailerSkills, nailerStages } from "./nailer";
 export { factionGauge, factionOfCharacter, type FactionGauge } from "./factionGauge";
 export { buffOn, SPIRIT_OP, spiritStage } from "./factionSpirit";
 export { coinTier } from "./spiritCoin";

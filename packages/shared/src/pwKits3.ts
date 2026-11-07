@@ -165,4 +165,10 @@ export const PW_KITS_3: PwKits = {
     sk("blShotgun", "point", 11, "#ff8a5a", { range: 130, radius: 44, delay: 12, fx: "meteor", hit: { dmg: 1.8 } }),
     sk("blShotgun", "self", 60, "#ffffff", { radius: 110, fx: "pillar", buff: { ticks: 6 * SEC, dmg: 1.4 }, hit: { dmg: 1.5, push: 12 } }),
   ),
+  nailer: kit(1,
+    sk("nlHammer", "line", 3, "#e0e0e8", { range: 170, repeat: { n: 3, every: 5 }, hit: { dmg: 0.6 } }),
+    sk("nlHammer", "dash", 10, "#ff2a3a", { range: 140, speed: 10, hit: { dmg: 1.2, stun: 1 * SEC } }),
+    sk("nlHammer", "point", 12, "#c01a2a", { range: 160, radius: 40, delay: 36, fx: "pillar", hit: { dmg: 2.4 } }),
+    sk("nlHammer", "line", 60, "#ffffff", { range: 200, repeat: { n: 10, every: 6 }, hit: { dmg: 0.9 } }),
+  ),
 };

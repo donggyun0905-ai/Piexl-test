@@ -1,5 +1,5 @@
 // 아래 장비 칸에 보낼 값 (gameLoop가 틱마다 만들어 바뀌었을 때만 보냄): 무기·사용 아이템·패시브 · 풋내기 레벨 · 추적자 스킬 대기 · 패왕전 스킬 · 판매 값 · 작업대 · 히든 고르는 창
-import { coinTier, beatriceSkills, ianSkills, gabrielSkills, serenaSkills, rafaelSkills, yurielSkills, michaelaSkills, stigmaGauge, factionGauge, BLAST, expToNext, passiveTagAt, sellPrice, trackerSkills, trialNoItems, type RunState } from "@pixel-rogue/shared";
+import { coinTier, beatriceSkills, ianSkills, gabrielSkills, serenaSkills, rafaelSkills, yurielSkills, michaelaSkills, nailerSkills, nailerStages, stigmaGauge, factionGauge, BLAST, expToNext, passiveTagAt, sellPrice, trackerSkills, trialNoItems, type RunState } from "@pixel-rogue/shared";
 import type { LoadoutView } from "./Loadout";
 import type { SpiritView } from "./SpiritWindows";
 import { pwSkillView } from "./pwSkillView";
@@ -60,6 +60,7 @@ export function loadoutView(run: RunState, armed: Parameters<typeof pwSkillView>
     ...(p.characterId === "yuriel" && !run.pvp ? { skills: yurielSkills(p).map((v) => Math.ceil(v * 20) / 20), skillSet: "yr" as const } : {}),
     ...(stigmaGauge(p) ? { stigma: { v: Math.round(stigmaGauge(p)!.v * 50) / 50, awake: stigmaGauge(p)!.awake, ...blastSlide(run) } } : {}),
     ...(p.characterId === "michaela" && !run.pvp ? { skills: michaelaSkills(p).map((v) => Math.ceil(v * 20) / 20), skillSet: "mc" as const } : {}),
+    ...(p.characterId === "nailer" && !run.pvp ? { skills: nailerSkills(p).map((v) => Math.ceil(v * 20) / 20), skillSet: "nl" as const, stages: nailerStages(p) } : {}),
     // 진영 특징 (로그만: 물결 콤보·타락·과열·맹세·정령·핵심 스킬)
     ...(factionGauge(run) ? { faction: factionGauge(run)! } : {}),
     ...(run.pvp ? { pw: pwSkillView(run, armed) } : {}),
