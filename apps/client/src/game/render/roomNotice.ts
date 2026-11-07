@@ -1,5 +1,6 @@
 // 특별한 방 결과 알림 (화면 가운데 위, 3초): 시련 시작(어떤 시련인지) · 시련 거절 벌칙(무엇을 빼앗겼는지) · 시련 결과 점수
 // · 보상 상자에서 받은 것 · 야바위 당첨/꽝(깎인 능력치). 글자는 화면 언어 (text: 키 → 글자, 없는 키면 키 그대로)
+import { drawOathCard } from "./oathCard";
 import { TRIAL_FOE_RULES as F, trialCap, type RunState } from "@pixel-rogue/shared";
 
 type Ctx = CanvasRenderingContext2D;
@@ -53,6 +54,8 @@ function notice(s: RunState, text: (key: string) => string, name: (kind: "passiv
 
 export function drawRoomNotice(ctx: Ctx, s: RunState, scale: number, text: ((key: string) => string) | undefined, name: (kind: "passive" | "use", id: string) => string): void {
   if (!text) return;
+  // 아스칼론 맹세 카드 (render/oathCard)
+  drawOathCard(ctx, s, scale, text);
   const n = notice(s, text, name);
   if (!n) return;
   ctx.save();

@@ -117,6 +117,9 @@ describe("진영 특징", () => {
     factionTick(s);
     const o = s.player.fcOath!;
     expect(o).toBeDefined();
+    expect(o.intro).toBeGreaterThan(0);
+    for (let i = 0; i < 200; i++) factionTick(s);
+    expect(o.intro).toBe(0);
     o.kind = "swift";
     s.enemies = [];
     s.rooms[s.roomId]!.cleared = true;
@@ -130,7 +133,7 @@ describe("진영 특징", () => {
     const s = start("warden");
     s.enemies = [enemy(1, 120, 100)];
     s.rooms[s.roomId]!.cleared = false;
-    factionTick(s);
+    for (let i = 0; i < 200; i++) factionTick(s);
     s.player.fcOath!.kind = "unhit";
     for (let i = 0; i <= FACTION_OATH.hits; i++) hurt(s);
     expect(s.player.fcOath!.broken).toBe(true);

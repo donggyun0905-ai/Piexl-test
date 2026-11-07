@@ -44,6 +44,7 @@ import { trialTick } from "./trialRun";
 import { hiddenTick } from "./hiddenTrial";
 import { trialRevive } from "./trialRewards";
 import { splicePassives } from "./retag";
+import { oathHold } from "./factionOath";
 
 // ───────── 시작 ─────────
 
@@ -184,8 +185,9 @@ export function stepWorld(s: RunState): void {
   // 지형: 진흙·물에서 느려짐 · 용암 · 가시 · 감전 (사람마다)
   updateTerrain(s);
   // 얼음 시계: 적·적 탄이 멈춤 (라스트 보스 궁극기 동안은 멈추지 않음)
-  const frozen = s.freezeTicks > 0 && !s.enemies.some(ultBusy);
-  if (frozen) s.freezeTicks--;
+  // 아스칼론 맹세 카드가 떠 있는 동안도 멈춤 (sim/factionOath)
+  const frozen = (s.freezeTicks > 0 || oathHold(s)) && !s.enemies.some(ultBusy);
+  if (frozen && s.freezeTicks > 0) s.freezeTicks--;
   else {
     // 잔영 분신이 있으면 적은 분신을 쫓음
     updateEnemies(s);

@@ -72,6 +72,8 @@ export const FACTION_HEAT = {
 
 /** 아스칼론 맹세: 전투방에 들어설 때 맹세 하나 → 방을 끝낼 때 지켰으면 영광 +1 · 어기면 그 방에서만 약해짐 */
 export const FACTION_OATH = {
+  /** 맹세 카드가 가운데 떠 있는 틱 (그동안 방이 멈춤, 화면 render/oathCard와 맞춤) */
+  introTicks: 100,
   /** 영광 최대 · 영광 1당 주는 피해 증가 */
   gloryMax: 10,
   gloryDmg: 0.02,

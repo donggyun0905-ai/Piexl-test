@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.4",
+    date: "2026-11-07",
+    items: {
+      ko: ["아스칼론 맹세 카드: 방에 들어서면 맹세·보상·벌칙이 적힌 카드가 화면 가운데 크게 뜨고(그동안 방이 멈춤) 아래 영광 게이지로 빨려 들어감 · 방을 끝내면 지켰을 땐 금빛으로 산화해 몸속으로, 어겼을 땐 검은 모래처럼 부서져 날아감"],
+      en: ["Ascalon Oath card: entering a room shows a large card with the oath, reward and penalty (the room waits) before it flies into the Glory gauge · when the room ends it dissolves into golden light into you if kept, or crumbles away like black sand if broken"],
+      ja: ["アスカロンの誓いカード：部屋に入ると誓い・報酬・罰が書かれたカードが画面中央に大きく出て（その間部屋は止まる）下の栄光ゲージへ吸い込まれる・部屋を終えると守った時は金色に散って体の中へ、破った時は黒い砂のように崩れて飛んでいく"],
+    },
+  },
+  {
     version: "0.50.3",
     date: "2026-11-07",
     items: {

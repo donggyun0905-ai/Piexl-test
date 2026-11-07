@@ -25,9 +25,17 @@ export function oathTick(s: RunState): void {
     if (cleared || !s.enemies.length) return;
     const kind = createRng(deriveSeed(s.seed, "oath", s.floor, s.roomId)).pick(KINDS);
     const top = s.enemies.reduce((a, e) => (e.maxHp > a.maxHp ? e : a), s.enemies[0]!);
-    o = p.fcOath = { kind, at, t: s.tick, x: p.x, y: p.y, n: 0, u: filled(p), ...(kind === "elite" ? { elite: top.id } : {}) };
+    // 맹세 카드가 가운데 뜨는 동안(intro) 방이 멈춤 (run.stepWorld) · 시간은 카드가 들어간 뒤부터
+    o = p.fcOath = { kind, at, t: s.tick + O.introTicks, x: p.x, y: p.y, n: 0, u: filled(p), intro: O.introTicks, ...(kind === "elite" ? { elite: top.id } : {}) };
   }
   if (o.kept || o.done) return;
+  if ((o.intro ?? 0) > 0) {
+    o.intro!--;
+    o.x = p.x;
+    o.y = p.y;
+    o.u = filled(p);
+    return;
+  }
   const dashing = p.dashTicks > 0;
   if (o.kind === "still" && dashing && !o.dash && ++o.n > O.dashes) broke(s);
   o.dash = dashing;
@@ -39,11 +47,15 @@ export function oathTick(s: RunState): void {
   }
   if (!cleared) return;
   o.done = true;
+  o.end = s.tick;
   if (o.broken) return;
   o.kept = true;
   p.fcGlory = Math.min(O.gloryMax, (p.fcGlory ?? 0) + 1);
   addEffect(s, { kind: "fcOathKept", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 30, maxTicks: 40, follow: true });
 }
+
+/** 맹세 카드가 떠 있는 동안: 적·적 탄이 멈춤 (run.stepWorld) */
+export const oathHold = (s: RunState) => (s.player.fcOath?.intro ?? 0) > 0;
 
 /** 맞음: 맞지 않기 맹세 */
 export function oathHurt(s: RunState): void {
