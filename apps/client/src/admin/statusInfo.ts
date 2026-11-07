@@ -1,4 +1,4 @@
-// 관리자 상태이상 탭의 정리본 데이터: 14종(게임 DotKind) + 피해 없는 상태이상 · 설명·거는 캐릭터·값 찾는 낱말 (문서 docs/STATUS.md)
+// 관리자 상태이상 탭의 정리본 데이터: 15종(게임 DotKind) + 피해 없는 상태이상 · 설명·거는 캐릭터·값 찾는 낱말 (문서 docs/STATUS.md)
 import type { DotKind } from "@pixel-rogue/shared";
 
 export interface StatusInfo {
@@ -35,6 +35,7 @@ export const STATUS_INFO: readonly StatusInfo[] = [
   { kind: "tide", label: "물결", type: "약화", desc: "해일 피해 · 밀치기 · 주변 적에게 나눠 줌 · 물 지형은 느림", users: ["oni", "elementalist"], more: "물 지형 · 보스 유령선 선장", words: ["tide", "wet", "water"] },
   { kind: "gold", label: "황금", type: "한 방 추가", desc: "가진 돈에 비례한 피해 (돈을 조금 씀)", users: ["oni"], words: [], paths: ["rules/ONI/gold"] },
   { kind: "radiance", label: "광휘", type: "한 방 추가", desc: "빛 피해 · 밀치기 (잊혀진 자는 걸린 동안 1초마다)", users: ["forgotten", "oni", "imugi", "mystic", "elementalist", "elder"], more: "보스 대천사", words: ["radiance", "radiant", "holy"], paths: ["rules/ONI/genesis"] },
+  { kind: "moon", label: "달빛", type: "약화", desc: "최대 5스택(5초) · 걸린 적은 주는 피해 약화 · 맞을 때 스택만큼 확률로 약점 공격(받은 피해의 50% 더, 흰 숫자)", users: ["blast"], more: "성흔 각성 중 모든 공격에 확정", words: ["moon"], paths: ["rules/MOON"] },
   { kind: "voidbolt", label: "공허탄", type: "한 방 추가", desc: "큰 한 방 피해 + 부채꼴로 퍼짐", users: ["oni", "scribe"], words: ["void", "voidbolt"], paths: ["rules/ONI/black"] },
   { label: "치유감소", type: "약화", desc: "걸린 동안 모든 회복·재생 감소 (로그 40%, 지속 6초)", users: [], more: "로그 적 베놈(잠자리) 독가스 · 패왕전 회복 감소 기술", words: ["anti", "healcut"], paths: ["rules/TERRAIN/corrode"] },
   { label: "적이 거는 상태이상 (로그)", type: "플레이어가 받음", desc: "땅 물고기 출혈 · 슬라임 부식(받는 피해↑) · 도플갱어 저주(끝나면 터짐) · 그림자 공포(공격 못 함) · 가디언 기절 · 성기사 속박 · 돌진 멧돼지 느림 · 베놈 독+치유감소", users: [], words: [], paths: ["rules/FOE_STATUS_RULES"] },

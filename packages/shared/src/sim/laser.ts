@@ -7,6 +7,7 @@ import { devilMul } from "./devilPerks";
 import { blocksShot } from "./layout";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, markDot, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid, weaponOf } from "./util";
+import { factionHit } from "./faction";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -153,6 +154,7 @@ export function beamHit(s: RunState, e: EnemyState, dmg: number, ticks: number):
   const melt = dmg * COMBAT_RULES.MELT_ADD * (e.melt ?? 0);
   e.hp -= dmg + melt;
   markDot(s, e, "rot", melt);
+  factionHit(s, e); // 테라코어 에너지
   e.hitFlash = Math.max(e.hitFlash, 2);
   if (hasPerk(p, "armorMelt")) e.melt = Math.min(R.MELT_MAX, (e.melt ?? 0) + 1);
   if (hasPerk(p, "heatBuildup")) {

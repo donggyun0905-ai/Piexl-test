@@ -49,7 +49,7 @@ export const BL_EFFECTS: Partial<Record<BlPassive & PassiveId, Names>> = {
   blFull: c("달빛 각성 +{more:sec}초", "Moonlight Awakening +{more:sec}s", "月光覚醒+{more:sec}秒"),
   blHunter: c("처치할 때 차는 성흔 {kill}배", "{kill}x Stigma on kills", "撃破時の聖痕{kill}倍"),
   blHalo: c("각성 달빛 폭발 범위 {r}배 · 피해 {mul}배", "Awakening burst: {r}x radius · {mul}x damage", "覚醒の月光爆発 範囲{r}倍・ダメージ{mul}倍"),
-  blLunar: c("각성 중 피해 +{mul:pct}% 더 · 달빛 산탄 +{more}", "+{mul:pct}% more damage while awakened · +{more} moon pellets", "覚醒中ダメージ+{mul:pct}%・月光散弾+{more}"),
+  blLunar: c("각성 중 피해 +{mul:pct}% 더 · 달빛이 한 번에 +{more}스택 더", "+{mul:pct}% more damage while awakened · Moonlight stacks +{more} more per hit", "覚醒中ダメージ+{mul:pct}%・月光が1回で+{more}スタック多く"),
   blBlood: c("초근접 처치 시 최대 체력 {heal:pct}% 회복", "Point-blank kills heal {heal:pct}% max HP", "至近距離撃破で最大体力{heal:pct}%回復"),
   blSilver: c("보스에게 피해 {mul}배", "{mul}x damage to bosses", "ボスへのダメージ{mul}倍"),
   blFlare: c("초근접으로 맞은 적 {slow:sec}초 느려짐", "Point-blank hits slow foes for {slow:sec}s", "至近距離で当たった敵が{slow:sec}秒鈍化"),

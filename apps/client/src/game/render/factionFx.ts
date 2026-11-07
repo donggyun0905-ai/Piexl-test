@@ -1,5 +1,5 @@
-// 진영 특징 그리기 (로그만): 효과 — 물결 콤보 물보라 · 타락 폭주 붉은 폭발 · 과열 배출 증기 폭발 · 과부하 연기 · 맹세 지킴(푸른 방패 문장)·깨짐(붉은 금) · 정령 자람 · 정령 탄 · 핵심 스킬 각성 금빛 · 금빛 빛기둥
-// 몸 둘레 — 비르디아 정령(싹·꽃·나무 정령 픽셀 그림) · 폭주 중 붉은 기운 · 열이 높으면 주황 아지랑이 · 콤보 높으면 물결 고리
+// 진영 특징 그리기 (로그만): 효과 — 물결 콤보 물보라 · 타락 폭주 붉은 폭발 · 테라코어 에너지 폭발 · 맹세 지킴(푸른 방패 문장)·깨짐(붉은 금) · 정령 자람 · 정령 탄 · 핵심 스킬 각성 금빛 · 금빛 빛기둥
+// 몸 둘레 — 비르디아 정령(싹·꽃·나무 정령 픽셀 그림) · 폭주 중 붉은 기운 · 에너지를 모으면 주황 맥동 · 콤보 높으면 물결 고리
 import type { EffectState, RunState } from "@pixel-rogue/shared";
 import { hpBarTop } from "./hpTop";
 import { drawSpirit } from "./spiritArt";
@@ -73,19 +73,12 @@ export function drawFactionBody(ctx: Ctx, s: RunState, a0: number, snap: Snap): 
     });
     demonFace(ctx, x, hpBarTop(p, y), t);
   }
-  if ((p.fcOver ?? 0) > 0) {
-    for (let k = 0; k < 4; k++) {
-      const f = ((t + k * 9) % 36) / 36;
-      ctx.fillStyle = `rgba(90,90,96,${0.5 * (1 - f)})`;
-      ctx.beginPath();
-      ctx.arc(x + Math.sin(k * 2.1 + t * 0.05) * 6, y - 14 - f * 16, 3 + f * 5, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  } else if ((p.fcHeat ?? 0) >= 60) additive(ctx, () => glow(ctx, x, y - 6, 18, HEAT, 0.2 + ((p.fcHeat ?? 0) - 60) / 200, 0));
+  // 테라코어: 에너지를 많이 모을수록 몸 둘레가 밝게 맥동 (대시하면 터짐)
+  if ((p.fcHeat ?? 0) >= 30) additive(ctx, () => glow(ctx, x, y - 6, 14 + (p.fcHeat ?? 0) / 10, HEAT, (0.15 + (p.fcHeat ?? 0) / 300) * (0.8 + 0.2 * Math.sin(t * 0.25)), 0));
   if ((p.fcCombo ?? 0) >= 50) additive(ctx, () => ring(ctx, x, y + 2, 12 + Math.sin(t * 0.15) * 2, alpha(SEA, 0.5), 1.5));
 }
 
-const FX = new Set(["fcTideUp", "fcRampage", "fcVent", "fcOverload", "fcOathKept", "fcOathBroken", "fcSpGrow", "fcSpHit", "fcSpThorn", "fcSpBite", "fcSpDive", "fcSpStomp", "fcSpFox", "fcSpEat", "fcCoreOn", "fcCorePillar", "fcCoreArt", "fcCoreBolt"]);
+const FX = new Set(["fcTideUp", "fcRampage", "fcVent", "fcOathKept", "fcOathBroken", "fcSpGrow", "fcSpHit", "fcSpThorn", "fcSpBite", "fcSpDive", "fcSpStomp", "fcSpFox", "fcSpEat", "fcCoreOn", "fcCorePillar", "fcCoreArt", "fcCoreBolt"]);
 /** 성국 추가 공격 색 (style: 베아트리스 태양 · 이안 보랏빛 실 · 가브리엘 중력 · 세레나 독 · 라파엘 하늘빛 · 유리엘 흰 금빛 · 미카엘라 은빛 칼날) */
 const ART = ["#ff9a2a", "#b06aff", "#8a7aff", "#9aff6a", "#8ae0ff", "#fff0b0", "#d8e0f0"];
 
@@ -123,9 +116,6 @@ export function drawFactionFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         shock(ctx, x, y, fx.size * easeOut(f), "#ffffff", fade * 0.9, 10);
         glow(ctx, x, y, fx.size * (0.4 + 0.6 * f), HEAT, 0.5 * fade, 0.6);
         sparks(ctx, x, y, 12, fx.size, f, HEAT, 7);
-        break;
-      case "fcOverload":
-        if (Math.floor(f * 12) % 2 === 0) glow(ctx, x, y - 6, 16, RED, 0.35, 0);
         break;
       case "fcOathKept":
         glow(ctx, x, y - 20 - f * 10, 14, BLUE, fade, 0.6);

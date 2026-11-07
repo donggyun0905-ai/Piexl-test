@@ -3,9 +3,9 @@ export const CHARACTER_TEXT_GABRIEL = {
   gabriel: { ko: "가브리엘", en: "Gabriel", ja: "ガブリエル" },
   bastion: { ko: "성벽의 해머", en: "Bastion Hammer", ja: "城壁のハンマー" },
   gabrielDesc: {
-    ko: "성국. '철옹의 방패'. 온몸을 단단한 빛의 갑옷으로 두른 절대 수호자. 강철과 중력을 다루며 전장의 최전선에서 적의 모든 공격을 반감하고 대지를 진동시켜 적을 압박함. 철옹: 받는 피해 절반 (맞아도 깜빡이는 무적 없음) · 공격력은 18에서 오르지 않고 넘는 만큼 최대 체력 · 누르고 있으면 3연격(내려찍기 · 휘두르기 → 대지 강타: 빛의 망치가 내리꽂혀 기절·압박) · 압박된 적은 느려짐 · 숫자 키 스킬 넷: 1 방패 돌진 · 2 중력 붕괴 · 3 성벽 · 4 불멸의 성벽",
-    en: "Holy Kingdom. 'The Iron Shield'. An absolute guardian clad head to toe in hard armor of light. Wielding steel and gravity on the front line, he halves every enemy attack and shakes the earth to press foes down. Ironclad: takes half damage (no blinking invulnerability after hits) · attack stays at 18 and any excess becomes max HP · hold for a 3-hit chain (overhead smash · sweep → Earth Slam: a hammer of light crashes down, stunning and Pressing) · Pressed foes are slowed · four number-key skills: 1 Shield Charge · 2 Gravity Collapse · 3 Bulwark · 4 Immortal Bastion",
-    ja: "聖国。「鉄壁の盾」。全身を固い光の鎧で包んだ絶対守護者。鋼と重力を操り、戦場の最前線で敵のあらゆる攻撃を半減し、大地を震わせて敵を圧迫する。鉄壁：受けるダメージ半分（被弾後の点滅無敵なし）· 攻撃力は18から上がらず超えた分は最大体力 · 押し続けると3連撃（振り下ろし · 薙ぎ払い → 大地強打：光のハンマーが叩きつけられ気絶・圧迫）· 圧迫された敵は遅くなる · 数字キーのスキル4つ：1 盾突進 · 2 重力崩壊 · 3 城壁 · 4 不滅の城壁",
+    ko: "철옹: 받는 피해 절반 (맞아도 깜빡이는 무적 없음) · 공격력은 18에서 오르지 않고 넘는 만큼 최대 체력 · 누르고 있으면 3연격(내려찍기 · 휘두르기 → 대지 강타: 빛의 망치가 내리꽂혀 기절·압박) · 압박된 적은 느려짐 · 숫자 키 스킬 넷: 1 방패 돌진 · 2 중력 붕괴 · 3 성벽 · 4 불멸의 성벽 · 성국. '철옹의 방패'. 온몸을 단단한 빛의 갑옷으로 두른 절대 수호자. 강철과 중력을 다루며 전장의 최전선에서 적의 모든 공격을 반감하고 대지를 진동시켜 적을 압박함.",
+    en: "Ironclad: takes half damage (no blinking invulnerability after hits) · attack stays at 18 and any excess becomes max HP · hold for a 3-hit chain (overhead smash · sweep → Earth Slam: a hammer of light crashes down, stunning and Pressing) · Pressed foes are slowed · four number-key skills: 1 Shield Charge · 2 Gravity Collapse · 3 Bulwark · 4 Immortal Bastion · Holy Kingdom. 'The Iron Shield'. An absolute guardian clad head to toe in hard armor of light. Wielding steel and gravity on the front line, he halves every enemy attack and shakes the earth to press foes down.",
+    ja: "鉄壁：受けるダメージ半分（被弾後の点滅無敵なし）· 攻撃力は18から上がらず超えた分は最大体力 · 押し続けると3連撃（振り下ろし · 薙ぎ払い → 大地強打：光のハンマーが叩きつけられ気絶・圧迫）· 圧迫された敵は遅くなる · 数字キーのスキル4つ：1 盾突進 · 2 重力崩壊 · 3 城壁 · 4 不滅の城壁 · 聖国。「鉄壁の盾」。全身を固い光の鎧で包んだ絶対守護者。鋼と重力を操り、戦場の最前線で敵のあらゆる攻撃を半減し、大地を震わせて敵を圧迫する。",
   },
   gbSkill1: { ko: "방패 돌진", en: "Shield Charge", ja: "盾突進" },
   gbSkill2: { ko: "중력 붕괴", en: "Gravity Collapse", ja: "重力崩壊" },

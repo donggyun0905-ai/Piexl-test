@@ -34,6 +34,7 @@ const SYSTEM: [RegExp, string][] = [
   [/^(ENEMIES|HAZARDS|FOE_STATUS|ELITE)/, "적 공통"],
   [/^ENDLESS/, "무한 모드"],
   [/^STIGMA/, "새벽의 성흔 성흔 게이지"],
+  [/^MOON/, "새벽의 성흔 달빛 상태이상"],
   [/^(COMBAT|PROJECTILES|PLAYER|ITEMS|LOOT|ROOMS|UTIL|PARTY|HERO|ARENA)/, "게임 공통"],
 ];
 

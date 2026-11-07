@@ -84,6 +84,7 @@ import { SHADES_RULES } from "./shades";
 import { SUMMONS_RULES } from "./summons";
 import { STATUS_RULES } from "./status";
 import { FOE_STATUS_RULES } from "./foeStatus";
+import { MOON_RULES } from "./moonlight";
 import { ALLY_MOVE_RULES } from "./allyMove";
 import { ELITE_RULES } from "./elite";
 import { GYM_RULES } from "./gym";
@@ -194,6 +195,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   SUMMONS_RULES,
   STATUS_RULES,
   FOE_STATUS_RULES,
+  MOON_RULES,
   ALLY_MOVE_RULES,
   ELITE_RULES,
   GYM_RULES,

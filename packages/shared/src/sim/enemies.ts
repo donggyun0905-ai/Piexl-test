@@ -22,6 +22,7 @@ import { eachSeat, nearestSeat, seatNo, useSeat } from "./party";
 import { dist2, enemyShot, keepInRoom, normalize, roomGrid } from "./util";
 import { furyTick, tabooUp } from "./taboo";
 import { timeSlowed } from "./punk";
+import { setActingFoe } from "./moonlight";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -45,6 +46,7 @@ export function updateEnemies(s: RunState): void {
   const back = seatNo(s);
   const fields = new Map<number, ReturnType<typeof distanceField>>();
   for (const e of s.enemies) {
+    setActingFoe(e);
     if (e.hitFlash > 0) e.hitFlash--;
     burrowed(e); // 땅속 땅 물고기는 아무것도 받지 않음
     knockTick(s, e);
@@ -192,6 +194,7 @@ export function updateEnemies(s: RunState): void {
       !!s.party,
     );
   }
+  setActingFoe(null);
   useSeat(s, back);
 
   s.enemies.push(...spawned);

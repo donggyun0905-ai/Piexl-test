@@ -8,6 +8,7 @@ import { pwGrid } from "./paewangGrid";
 import { tabooUp } from "./taboo";
 import { trialFoeHp } from "./trialFoes";
 import type { Body, DotKind, EffectState, EnemyState, PlayerState, ProjectileState, RunState } from "./types";
+import { moonOut } from "./moonlight";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -122,7 +123,7 @@ export function enemyShot(s: RunState, x: number, y: number, dx: number, dy: num
     // 금기: 빠른 탄
     vx: dx * speed * tabooUp(s, "bulletSpeed"),
     vy: dy * speed * tabooUp(s, "bulletSpeed"),
-    damage,
+    damage: damage * moonOut(), // 달빛 걸린 적이 쏜 탄은 약함
     ticksLeft: 240,
   };
   s.projectiles.push(pr);

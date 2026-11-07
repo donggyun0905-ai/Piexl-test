@@ -1,11 +1,11 @@
 // 블래스트(새벽의 성흔, 폭멸의 탄환): 누르고 있으면 산탄총 (탄창 5발 · 5발마다 확정 치명타 · 한 발씩 장전 · 대시 슬로우모션·파란 탄은 sim/blastMag). 초근접일수록 세고 크게 밀침 · 초근접 처치는 폭멸(몸이 터져 둘레 피해)
-// 맞힐수록 성흔(달빛의 힘)이 차고 가득 차면 달빛 각성(sim/stigma): 둘레 달빛 폭발 · 더 멀리·넓게·세게·빠르게 + 달빛 산탄. 수치 weaponsBlast.BLAST · 아이템 itemsBlast
+// 맞힐수록 성흔(달빛의 힘)이 차고 가득 차면 달빛 각성(sim/stigma): 둘레 달빛 폭발 · 더 멀리·넓게·세게·빠르게 + 모든 공격에 달빛 상태이상(sim/moonlight). 수치 weaponsBlast.BLAST · 아이템 itemsBlast
 import { TICK_RATE } from "../constants";
 import { BLAST_PERKS as K } from "../itemsBlast";
 import { BLAST as B } from "../weaponsBlast";
 import { STIGMA } from "../weaponsDawn";
 import { healPlayer } from "./combat";
-import { fan, inCircle, inCone, isBoss, strike, stun } from "./s2Kit";
+import { inCircle, inCone, isBoss, strike, stun } from "./s2Kit";
 import { addStigma, awaken, isAwake, stigmaTick } from "./stigma";
 import { hasShell, reload, slowTick, useShell } from "./blastMag";
 import { ignite } from "./status";
@@ -66,7 +66,7 @@ function pellet(s: RunState, e: EnemyState, reach: number, crit: boolean, blue: 
   return n;
 }
 
-/** 한 발: 앞 부채꼴 산탄 (각성 중: 더 멀리·넓게·세게 + 달빛 산탄) · 탄창 마지막(critEvery번째) 발은 확정 치명타 · 파란 탄 */
+/** 한 발: 앞 부채꼴 산탄 (각성 중: 더 멀리·넓게·세게, 맞힌 적에게 달빛 상태이상은 sim/moonlight) · 탄창 마지막(critEvery번째) 발은 확정 치명타 · 파란 탄 */
 function fire(s: RunState): boolean {
   const p = s.player;
   const { blue, crit } = useShell(p);
@@ -76,10 +76,6 @@ function fire(s: RunState): boolean {
   let n = 0;
   for (const e of inCone(s, reach, arc)) n += pellet(s, e, reach, crit, blue);
   addEffect(s, { kind: "blShotFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, arc, style: (aw ? 1 : 0) + (crit ? 2 : 0) + (blue ? 4 : 0), maxTicks: 16, follow: true });
-  if (aw) {
-    const k = B.moonN + (hasPerk(p, "blLunar") ? K.blLunar.more : 0);
-    fan(s, k, B.moonSpread, { damage: p.stats.damage * B.moonMul, spirit: "blMoon", r: 4, range: B.moonRange, pierce: 2 });
-  }
   if (n > 0) gain(s, n);
   return blue;
 }

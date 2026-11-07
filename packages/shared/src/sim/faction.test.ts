@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import type { CharacterId } from "../characters";
 import { FACTION_CORE, FACTION_HEAT, FACTION_OATH, FACTION_TAINT, FACTION_TIDE } from "../factionDefs";
 import { damageEnemy, damagePlayer, removeDead } from "./combat";
-import { factionDmgMul, factionHit, factionTick, tideMul, traitOf } from "./faction";
+import { factionDmgMul, factionHit, factionHurt, factionTick, tideMul, traitOf } from "./faction";
+import { beamHit } from "./laser";
+import { medicHit } from "./medicWeapons";
 import { factionGauge } from "./factionGauge";
 import { foeNoAttack } from "./foeStatus";
 import { createRun, type RunState } from "./index";
@@ -87,27 +89,34 @@ describe("진영 특징", () => {
     expect(s.player.fcRampage).toBe(FACTION_TAINT.rampageTicks);
   });
 
-  it("테라코어: 맞힐수록 열 · 가득이면 과부하(공격 불가) · 열이 높을 때 대시하면 배출", () => {
+  it("테라코어: 피해를 주거나 맞으면 에너지 · 저절로 안 빠짐 · 모은 뒤 대시하면 터짐", () => {
     const s = start("gunner");
     const e = enemy(1, 120, 100);
     s.enemies = [e];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 10; i++) {
       s.tick += 6;
       factionHit(s, e);
     }
-    expect(s.player.fcHeat).toBeCloseTo(30 * FACTION_HEAT.gain);
-    expect(factionDmgMul(s)).toBeGreaterThan(1);
-    for (let i = 0; i < 20; i++) {
-      s.tick += 6;
-      factionHit(s, e);
-    }
-    expect(s.player.fcOver).toBeGreaterThan(0);
-    expect(foeNoAttack(s.player)).toBe(true);
+    expect(s.player.fcHeat).toBeCloseTo(10 * FACTION_HEAT.gain);
+    factionHurt(s);
+    expect(s.player.fcHeat).toBeCloseTo(10 * FACTION_HEAT.gain + FACTION_HEAT.hurtGain);
+    expect(foeNoAttack(s.player)).toBe(false);
     s.player.dashTicks = 5;
     factionTick(s);
-    expect(s.player.fcHeat).toBeLessThan(FACTION_HEAT.ventFrom);
-    expect(s.player.fcOver).toBeUndefined();
+    expect(s.player.fcHeat).toBe(0);
     expect(e.hp).toBeLessThan(e.maxHp);
+  });
+
+  it("테라코어: 의사·기계공학자도 공격하면 에너지가 쌓임", () => {
+    for (const c of ["doctor", "engineer"] as const) {
+      const s = start(c);
+      const e = enemy(1, 120, 100);
+      s.enemies = [e];
+      s.tick += 6;
+      if (c === "doctor") medicHit(s, e, 5);
+      else beamHit(s, e, 5, 1);
+      expect(s.player.fcHeat).toBeCloseTo(FACTION_HEAT.gain);
+    }
   });
 
   it("아스칼론: 적이 있는 방에서 맹세 → 지키고 끝내면 영광 +1", () => {
@@ -162,10 +171,10 @@ describe("진영 특징", () => {
     expect(s.enemies[0]!.hp).toBeLessThan(s.enemies[0]!.maxHp);
   });
 
-  it("공용 피해 경로: 테라코어 열이 있으면 damageEnemy 피해가 늘어남", () => {
-    const a = start("gunner");
-    const b = start("gunner");
-    b.player.fcHeat = FACTION_HEAT.max - 1;
+  it("공용 피해 경로: 헬리오스 타락이 있으면 damageEnemy 피해가 늘어남", () => {
+    const a = start("brawler");
+    const b = start("brawler");
+    b.player.fcTaint = FACTION_TAINT.max - 1;
     const ea = enemy(1, 120, 100);
     const eb = enemy(1, 120, 100);
     a.enemies = [ea];

@@ -8,6 +8,7 @@ import { tickDamage, traceBeam } from "./laser";
 import { aimPoint, FLY_TICKS } from "./laserWeapons";
 import type { Device, EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
+import { factionHit } from "./faction";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -66,6 +67,7 @@ export function medicHit(s: RunState, e: EnemyState, dmg: number, leechMul = 1, 
   if ((p.shieldPts ?? 0) > 0 && hasPerk(p, "robust")) dmg *= R.ROBUST_MUL;
   e.hp -= dmg * devilMul(s, e); // 그림 리퍼 등 (combat.damageEnemy와 같게)
   if (flash) e.hitFlash = Math.max(e.hitFlash, 2);
+  factionHit(s, e); // 테라코어 에너지
   leechHeal(s, dmg * leechRate(p, leechMul));
 }
 

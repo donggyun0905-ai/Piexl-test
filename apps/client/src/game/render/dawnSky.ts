@@ -1,6 +1,6 @@
-// 새벽의 성흔 진영 특징: 성흔(달빛 각성)이 발동하면 화면 위로 하얀 달이 뜨고 달빛 줄기가 비치며, 화면 가장자리로 흰 깃털이 천천히 흩날림 (각성이 끝나 갈수록 흐려짐)
+// 새벽의 성흔 진영 특징: 성흔(달빛 각성)이 발동하면 맵 아래에서 달빛이 은은하게 올라오고, 화면 가장자리로 흰 깃털이 천천히 흩날림 (각성이 끝나 갈수록 흐려짐)
 import type { RunState } from "@pixel-rogue/shared";
-import { additive, glow, type Ctx } from "./pwFxBits";
+import { additive, type Ctx } from "./pwFxBits";
 
 /** 깃털 수 · 픽셀 모양 (1 = 깃대·흰 깃, 2 = 옅은 깃) */
 const FEATHERS = 18;
@@ -33,49 +33,34 @@ export function drawDawnSky(ctx: Ctx, s: RunState, scale: number): void {
   const H = ctx.canvas.height;
   const t = s.tick;
   const u = Math.max(2, Math.round(scale));
-  const mx = W * 0.8;
-  const my = H * 0.14;
-  const mr = Math.min(W, H) * 0.06;
   ctx.save();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   // 밤하늘처럼 살짝 푸르게 어둡게 (가운데는 그대로)
   const g = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.max(W, H) * 0.75);
   g.addColorStop(0, "rgba(10,16,40,0)");
-  g.addColorStop(1, `rgba(10,16,40,${0.45 * k})`);
+  g.addColorStop(1, `rgba(10,16,40,${0.35 * k})`);
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, W, H);
   additive(ctx, () => {
-    // 달빛 줄기: 달에서 아래 왼쪽으로 비스듬히 퍼짐 (천천히 흔들림)
-    for (let i = 0; i < 4; i++) {
-      const sway = Math.sin(t * 0.03 + i * 1.7) * W * 0.03;
-      const bx = W * (0.15 + i * 0.17) + sway;
-      const w = W * (0.05 + 0.02 * (i % 2));
-      const lg = ctx.createLinearGradient(mx, my, bx, H);
-      lg.addColorStop(0, `rgba(220,232,255,${0.22 * k})`);
-      lg.addColorStop(1, "rgba(220,232,255,0)");
-      ctx.fillStyle = lg;
-      ctx.beginPath();
-      ctx.moveTo(mx - mr * 0.4, my);
-      ctx.lineTo(mx + mr * 0.4, my);
-      ctx.lineTo(bx + w, H);
-      ctx.lineTo(bx - w, H);
-      ctx.closePath();
-      ctx.fill();
+    // 맵 아래에서 은은하게 올라오는 달빛 (천천히 숨 쉬듯)
+    const breath = 0.85 + 0.15 * Math.sin(t * 0.05);
+    const lg = ctx.createLinearGradient(0, H, 0, H * 0.55);
+    lg.addColorStop(0, `rgba(200,218,255,${0.26 * k * breath})`);
+    lg.addColorStop(1, "rgba(200,218,255,0)");
+    ctx.fillStyle = lg;
+    ctx.fillRect(0, H * 0.55, W, H * 0.45);
+    // 아래에서 위로 옅게 피어오르는 달빛 기둥 몇 줄 (좌우로 천천히 흔들림)
+    for (let i = 0; i < 5; i++) {
+      const bx = W * (0.1 + i * 0.2) + Math.sin(t * 0.02 + i * 1.9) * W * 0.04;
+      const w = W * (0.04 + 0.015 * (i % 2));
+      const top = H * (0.5 + 0.08 * Math.sin(t * 0.03 + i));
+      const cg = ctx.createLinearGradient(0, H, 0, top);
+      cg.addColorStop(0, `rgba(220,232,255,${0.16 * k * (0.7 + 0.3 * Math.sin(t * 0.04 + i * 2.3))})`);
+      cg.addColorStop(1, "rgba(220,232,255,0)");
+      ctx.fillStyle = cg;
+      ctx.fillRect(bx - w, top, w * 2, H - top);
     }
-    // 하얀 달: 둘레 빛 + 맥박
-    glow(ctx, mx, my, mr * 3.2, "#c8d8ff", 0.5 * k * (0.85 + 0.15 * Math.sin(t * 0.08)), 0.4);
   });
-  ctx.fillStyle = `rgba(250,252,255,${0.95 * k})`;
-  ctx.beginPath();
-  ctx.arc(mx, my, mr, 0, Math.PI * 2);
-  ctx.fill();
-  // 달 표면 무늬 (옅은 회청색 얼룩)
-  ctx.fillStyle = `rgba(190,202,228,${0.6 * k})`;
-  for (const [dx, dy, r] of [[-0.35, -0.2, 0.22], [0.25, 0.3, 0.16], [0.3, -0.35, 0.1]] as const) {
-    ctx.beginPath();
-    ctx.arc(mx + dx * mr, my + dy * mr, r * mr, 0, Math.PI * 2);
-    ctx.fill();
-  }
   // 깃털: 화면 가장자리 띠에서 천천히 떨어지며 좌우로 흔들림 (아래로 나가면 위에서 다시)
   const band = Math.min(W, H) * 0.16;
   for (let i = 0; i < FEATHERS; i++) {

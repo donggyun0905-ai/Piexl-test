@@ -18,7 +18,7 @@ import type { SerenaEnemyState, SerenaPlayerState } from "./snTypes";
 import type { RafaelPlayerState } from "./rfTypes";
 import type { YurielEnemyState, YurielPlayerState } from "./yrTypes";
 import type { MichaelaPlayerState } from "./mcTypes";
-import type { DawnPlayerState } from "./blastTypes";
+import type { DawnEnemyState, DawnPlayerState } from "./blastTypes";
 import type { FactionPlayerState } from "./factionTypes";
 import type { LeoEnemyState, LeoPlayerState } from "./leoTypes";
 import type { OnyxPlayerState } from "./onyxTypes";
@@ -122,4 +122,4 @@ export interface OriginShotState {
 }
 
 export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState, PungPlayerState, LeoPlayerState, OnyxPlayerState, FenrirPlayerState, EclipsePlayerState, ThorPlayerState, LeviaPlayerState, TailPlayerState, MadQueenPlayerState, HookPlayerState, OrcaPlayerState, WavePlayerState, MiryuPlayerState, BeatricePlayerState, IanPlayerState, GabrielPlayerState, SerenaPlayerState, RafaelPlayerState, YurielPlayerState, MichaelaPlayerState, DawnPlayerState, FactionPlayerState {}
-export interface AscalonEnemyState extends BeatriceEnemyState, IanEnemyState, GabrielEnemyState, SerenaEnemyState, YurielEnemyState, HiddenEnemyState, AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState, PungEnemyState, LeoEnemyState, HookEnemyState {}
+export interface AscalonEnemyState extends BeatriceEnemyState, IanEnemyState, GabrielEnemyState, SerenaEnemyState, YurielEnemyState, HiddenEnemyState, AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState, PungEnemyState, LeoEnemyState, HookEnemyState, DawnEnemyState {}

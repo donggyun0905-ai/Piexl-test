@@ -17,5 +17,11 @@ export interface DawnPlayerState {
   blDash?: boolean;
 }
 
+/** 달빛 상태이상 (sim/moonlight): 스택 1~5 · 남은 틱 */
+export interface DawnEnemyState {
+  moon?: number;
+  moonT?: number;
+}
+
 /** 효과: 산탄 부채꼴 (size = 거리, arc = cos, style 비트: 1 = 각성 · 2 = 치명타 탄 · 4 = 파란 탄) · 폭멸 (size = 반지름) · 각성 달빛 폭발 · 각성 중 몸 둘레 달빛 · 한 발 장전 · 대시 슬로우모션 시작 */
 export type DawnFx = "blShotFx" | "blBurstFx" | "blAwakeFx" | "blMoonAura" | "blLoadFx" | "blSlowFx";

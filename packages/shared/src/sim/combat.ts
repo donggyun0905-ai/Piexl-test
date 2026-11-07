@@ -28,6 +28,7 @@ import { swarmLucky } from "./swarmRules";
 import { SWARM_LEVELS } from "../swarmMaps";
 import { ultBoss } from "./bossKit";
 import { heal, leechHeal } from "./heal";
+import { moonOut } from "./moonlight";
 import { hatchSlimes } from "./critters";
 import { apostleKill } from "./apostleSouls";
 import { seatNo, useSeat } from "./party";
@@ -125,8 +126,8 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
     addEffect(s, { kind: "hit", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 6, maxTicks: 10 });
     return;
   }
-  // 금기 취약 · 광야의 새벽 줄임 · 무한 7층부터·시련 점수만큼 세짐
-  dmg *= endlessPow(s) * (envHit ? 1 : lateDmg(s)) * trialFoeDmg(p, s, from) * tabooUp(s, "frail") * (s.swarm ? SWARM.taken * (SWARM_LEVELS[s.swarm.level ?? 0]?.taken ?? 1) : 1);
+  // 금기 취약 · 광야의 새벽 · 무한 7층부터·시련 점수 · 달빛 걸린 적이면 약함
+  dmg *= moonOut() * endlessPow(s) * (envHit ? 1 : lateDmg(s)) * trialFoeDmg(p, s, from) * tabooUp(s, "frail") * (s.swarm ? SWARM.taken * (SWARM_LEVELS[s.swarm.level ?? 0]?.taken ?? 1) : 1);
   // 방패 자세: 가만히 서 있으면 받는 피해 절반
   let taken = hasPerk(p, "bulwarkStance") && p.stillTicks >= STILL_TICKS ? dmg * PERKS.bulwarkStance.taken : dmg;
   // 버티기(가라테): 받는 피해 절반, 받은 만큼 모아 되받아침
@@ -234,7 +235,7 @@ export function updatePending(s: RunState): void {
   for (const b of due) blastAt(s, b.x, b.y, b.radius, b.damage);
 }
 
-/** 쓰러진 적 정리: 처치 수·돈. 보스가 쓰러지면 보스가 부른 적도 같이 사라짐 (불려 나온 보스가 쓰러질 때는 아님) */
+/** 쓰러진 적 정리: 처치 수·돈. 보스가 쓰러지면 부른 적도 사라짐 (불려 나온 보스는 아님) */
 export function removeDead(s: RunState): void {
   if (!s.enemies.some((e) => e.hp <= 0)) return;
   // 라스트 보스는 궁극기를 쓰기 전에는 쓰러지지 않음 (체력 1)
@@ -254,7 +255,7 @@ export function removeDead(s: RunState): void {
     if (tabooN(s, "deathBurst") > 0 && e.kind !== "dummy") addHazard(s, e.x, e.y, ENEMIES[e.kind].contactDamage);
     // 협동: 마지막으로 때린 사람이 처치 효과·돈을 받음
     useSeat(s, e.lastHit ?? back);
-    // 보스가 부른 적(돈 없음)은 처치 수·쌓이는 힘(빛의 고리·경험치·영혼·진영 특징 등)에 안 넣음
+    // 보스가 부른 적(돈 없음)은 처치 수·쌓이는 힘(진영 특징 등)에 안 넣음
     const minion = e.noGold;
     if (!minion) s.kills++;
     else trialKill(s, e);

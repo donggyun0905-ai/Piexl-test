@@ -2,7 +2,6 @@
 // 베놈 독가스의 독·치유감소는 sim/terrain (p.poison·p.corrode). 남은 틱은 PlayerState의 db* 값 (화면 버프 창·머리 위 글자). 패왕전은 걸지 않음
 import type { EnemyKind } from "../content";
 import { statusImmune } from "./remnant";
-import { overheated } from "./faction";
 import type { PlayerState, RunState } from "./types";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -91,6 +90,6 @@ export const foeMoveMul = (p: PlayerState): number => ((p.dbStun ?? 0) > 0 || (p
 /** 대시 못 함 (기절·속박) */
 export const foeHeld = (p: PlayerState): boolean => (p.dbStun ?? 0) > 0 || (p.dbRoot ?? 0) > 0;
 /** 공격 못 함 (기절·공포 · 테라코어 과부하) */
-export const foeNoAttack = (p: PlayerState): boolean => (p.dbStun ?? 0) > 0 || (p.dbFear ?? 0) > 0 || overheated(p);
+export const foeNoAttack = (p: PlayerState): boolean => (p.dbStun ?? 0) > 0 || (p.dbFear ?? 0) > 0;
 /** 받는 피해 배율 (부식) */
 export const foeTakenMul = (p: PlayerState): number => ((p.dbRot ?? 0) > 0 ? R.ROT_TAKEN : 1);

@@ -8,6 +8,7 @@ import type { DotKind, EnemyState, RunState } from "./types";
 import { hasPerk, markDot } from "./util";
 import { setBurnMul, setPoisonMul } from "./buildSets";
 import { tideMul } from "./faction";
+import { moonTick } from "./moonlight";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -47,6 +48,7 @@ export function tickDots(s: RunState): void {
     }
   }
   for (const e of s.enemies) {
+    moonTick(e);
     if ((e.burnTicks ?? 0) > 0) e.burnTicks = (e.burnTicks ?? 0) - 1;
     if ((e.poisonTicks ?? 0) > 0) e.poisonTicks = (e.poisonTicks ?? 0) - 1;
   }

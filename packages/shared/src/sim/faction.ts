@@ -1,5 +1,5 @@
 // 진영 특징 시스템 (로그만 · 패왕전·대결 제외): 소속 찾기 · 맞힘·처치·맞음·틱 훅 · 피해 배율 (수치 factionDefs)
-// 탈라시아 물결 콤보 · 헬리오스 타락 스택(학살자 피의 학살과 폭주가 겹치지 않음) · 테라코어 과열은 여기 · 아스칼론 맹세 sim/factionOath · 비르디아 정령 sim/factionSpirit · 성국 핵심 스킬 sim/factionCore
+// 탈라시아 물결 콤보 · 헬리오스 타락 스택(학살자 피의 학살과 폭주가 겹치지 않음) · 테라코어 에너지(주고·맞으면 쌓임 → 대시로 터짐)는 여기 · 아스칼론 맹세 sim/factionOath · 비르디아 정령 sim/factionSpirit · 성국 핵심 스킬 sim/factionCore
 import type { CharacterId } from "../characters";
 import { FACTION_HEAT as H, FACTION_MEMBERS, FACTION_TAINT as T, FACTION_TIDE as W, type FactionTrait } from "../factionDefs";
 import { blastAt } from "./combat";
@@ -46,18 +46,11 @@ export function factionHit(s: RunState, e: EnemyState): void {
   } else if (tr === "terracore" && s.tick - (p.fcHeatT ?? -999) >= H.every) {
     p.fcHeatT = s.tick;
     p.fcHeat = Math.min(H.max, (p.fcHeat ?? 0) + H.gain);
-    if (p.fcHeat >= H.max) overload(s);
   }
 }
 
 /** 물 피해가 없는 캐릭터: 콤보가 높으면 작은 물 피해가 같이 (물 피해라 콤보 배율이 붙음) */
 const splash = (s: RunState, e: EnemyState) => dotDamage(s, e, "tide", s.player.stats.damage * W.splashMul);
-
-function overload(s: RunState): void {
-  const p = s.player;
-  p.fcOver = H.overloadTicks;
-  addEffect(s, { kind: "fcOverload", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 20, maxTicks: H.overloadTicks, follow: true });
-}
 
 /** 처치 (보스가 부른 졸개 빼고, combat.removeDead) */
 export function factionKill(s: RunState, e: EnemyState): void {
@@ -84,6 +77,7 @@ export function factionHurt(s: RunState): void {
   else if (tr === "helios" && !rampaging(p)) p.fcTaint = Math.max(0, (p.fcTaint ?? 0) - T.hurtLoss);
   else if (tr === "ascalon") oathHurt(s);
   else if (tr === "virdia") spiritHurt(s);
+  else if (tr === "terracore") p.fcHeat = Math.min(H.max, (p.fcHeat ?? 0) + H.hurtGain);
 }
 
 /** 틱마다 (baseStats.extraTick) */
@@ -101,36 +95,26 @@ export function factionTick(s: RunState): void {
   else if (tr === "seongguk") coreTick(s);
 }
 
-/** 테라코어: 식기 · 과부하 · 열이 높을 때 대시하면 배출 (증기 폭발) */
+/** 테라코어: 모아 둔 에너지가 충분할 때 대시하면 한꺼번에 터짐 (모은 만큼 넓고 셈) */
 function heatTick(s: RunState): void {
   const p = s.player;
   const dashing = p.dashTicks > 0;
-  if (dashing && !p.fcDash && (p.fcHeat ?? 0) >= H.ventFrom) {
-    blastAt(s, p.x, p.y, H.ventR, p.stats.damage * H.ventMul, { push: 10 });
+  const n = Math.min(H.max, p.fcHeat ?? 0);
+  if (dashing && !p.fcDash && n >= H.ventFrom) {
+    const k = n / H.max;
+    const r = H.ventR * (0.6 + 0.4 * k);
+    blastAt(s, p.x, p.y, r, p.stats.damage * H.ventMul * k, { push: 10 });
     p.fcHeat = 0;
-    delete p.fcOver;
-    addEffect(s, { kind: "fcVent", x: p.x, y: p.y, dirX: 0, dirY: 0, size: H.ventR, maxTicks: 26 });
+    addEffect(s, { kind: "fcVent", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, maxTicks: 26 });
   }
   p.fcDash = dashing;
-  if ((p.fcOver ?? 0) > 0) {
-    if (--p.fcOver! <= 0) {
-      delete p.fcOver;
-      p.fcHeat = H.afterOverload;
-    }
-    return;
-  }
-  if (H.cool > 0 && s.tick - (p.fcHeatT ?? -999) > H.coolDelay && (p.fcHeat ?? 0) > 0) p.fcHeat = Math.max(0, p.fcHeat! - H.cool);
 }
 
-/** 과부하 중이면 공격 못 함 (foeStatus.foeNoAttack) */
-export const overheated = (p: PlayerState) => (p.fcOver ?? 0) > 0;
-
-/** 주는 피해 배율 (classTaken.foeTaken): 타락 · 열 · 영광/깨진 맹세 · 각성 핵심 스킬 */
+/** 주는 피해 배율 (classTaken.foeTaken): 타락 · 영광/깨진 맹세 · 각성 핵심 스킬 */
 export function factionDmgMul(s: RunState): number {
   const tr = traitOf(s);
   const p = s.player;
   if (tr === "helios") return 1 + (rampaging(p) ? T.max : (p.fcTaint ?? 0)) * T.dmg;
-  if (tr === "terracore") return 1 + (Math.min(H.max, p.fcHeat ?? 0) / H.max) * H.dmg;
   if (tr === "ascalon") return oathDmgMul(p);
   if (tr === "seongguk") return coreDmgMul(p);
   if (tr === "virdia") return spiritDmgMul(p);

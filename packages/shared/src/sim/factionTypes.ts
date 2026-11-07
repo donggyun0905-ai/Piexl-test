@@ -12,9 +12,8 @@ export interface FactionPlayerState {
   /** 헬리오스 타락 스택 · 폭주 남은 틱 */
   fcTaint?: number;
   fcRampage?: number;
-  /** 테라코어 열 · 과부하 남은 틱 · 마지막으로 맞힌 틱 · 지난 틱 대시 중이었는지 */
+  /** 테라코어 에너지 · 마지막으로 피해를 줘 쌓은 틱 · 지난 틱 대시 중이었는지 */
   fcHeat?: number;
-  fcOver?: number;
   fcHeatT?: number;
   fcDash?: boolean;
   /** 아스칼론 영광 · 이번 방 맹세 (at 방 "층/방" · t 시작 틱 · x,y 들어선 자리 · n 어긴/센 횟수 · u 찬 사용 아이템 칸 · elite 먼저 쓰러뜨릴 적 · dash 지난 틱 대시 · done 방을 끝냄 · intro 카드가 떠 있는 남은 틱 · end 끝난 틱(화면 연출)) */
@@ -46,5 +45,5 @@ export interface FactionPlayerState {
   fcCoreT?: number;
 }
 
-/** 효과: 탈라시아 콤보 10단계마다 물보라 · 타락 폭주 시작 · 과열 배출 증기 폭발 · 과부하 연기 · 맹세 지킴 · 맹세 깨짐 · 정령 자람 · 정령 탄 맞음 · 핵심 스킬 각성 · 각성 핵심 스킬 금빛 빛기둥 */
-export type FactionFx = "fcTideUp" | "fcRampage" | "fcVent" | "fcOverload" | "fcOathKept" | "fcOathBroken" | "fcSpGrow" | "fcSpHit" | "fcSpThorn" | "fcSpBite" | "fcSpDive" | "fcSpStomp" | "fcSpFox" | "fcSpEat" | "fcCoreOn" | "fcCorePillar" | "fcCoreArt" | "fcCoreBolt";
+/** 효과: 탈라시아 콤보 10단계마다 물보라 · 타락 폭주 시작 · 에너지 폭발 · 맹세 지킴 · 맹세 깨짐 · 정령 자람 · 정령 탄 맞음 · 핵심 스킬 각성 · 각성 핵심 스킬 금빛 빛기둥 */
+export type FactionFx = "fcTideUp" | "fcRampage" | "fcVent" | "fcOathKept" | "fcOathBroken" | "fcSpGrow" | "fcSpHit" | "fcSpThorn" | "fcSpBite" | "fcSpDive" | "fcSpStomp" | "fcSpFox" | "fcSpEat" | "fcCoreOn" | "fcCorePillar" | "fcCoreArt" | "fcCoreBolt";

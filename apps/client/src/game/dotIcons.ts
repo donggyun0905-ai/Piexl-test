@@ -1,4 +1,4 @@
-// 상태이상 피해 숫자 왼쪽에 붙는 작은 도트 아이콘 (화면 전용): 출혈 핏방울 · 화상 불꽃 · 독 초록 물방울 둘 · 저주 해골 · 폭풍 소용돌이 · 부패 녹아내린 구슬 · 죽음 흰 해골 · 업화 푸른 불꽃
+// 상태이상 피해 숫자 왼쪽에 붙는 작은 도트 아이콘 (화면 전용): 출혈 핏방울 · 화상 불꽃 · 독 초록 물방울 둘 · 저주 해골 · 폭풍 소용돌이 · 부패 녹아내린 구슬 · 죽음 흰 해골 · 업화 푸른 불꽃 · 달빛 약점 공격 왼쪽 초승달
 import type { DotKind } from "@pixel-rogue/shared";
 
 /** 한 글자 = 한 점. 대문자는 바탕 색, 소문자 w는 반짝임 */
@@ -17,6 +17,7 @@ const ICONS: Record<DotKind, { rows: string[]; colors: Record<string, string> }>
   gold: { rows: [".YYY.", "YYwYY", "YYYYY", ".YYY."], colors: { Y: "#ffc830", w: "#fff4c0" } },
   radiance: { rows: ["..W..", "W.W.W", ".WWW.", "W.W.W", "..W.."], colors: { W: "#fff8d8" } },
   voidbolt: { rows: ["..PP", ".PP.", "PPPP", ".PP.", "PP.."], colors: { P: "#5a3a8a" } },
+  moon: { rows: [".WW..", "WW...", "Ww...", "WW...", ".WW.."], colors: { W: "#ffffff", w: "#c8d8ff" } },
 };
 const OUTLINE = "#1a1622";
 

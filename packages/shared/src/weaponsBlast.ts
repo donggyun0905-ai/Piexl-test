@@ -42,15 +42,11 @@ export const BLAST = {
   gainHit: 4,
   gainNear: 3,
   gainKill: 6,
-  /** 달빛 각성 중: 피해 배율 · 거리 배율 · 부채꼴(cos) · 공격 속도 배율 · 같이 나가는 달빛 산탄 수·퍼짐·피해·거리 */
+  /** 달빛 각성 중: 피해 배율 · 거리 배율 · 부채꼴(cos) · 공격 속도 배율 (각성 중 모든 공격에 달빛 상태이상: sim/moonlight MOON_RULES) */
   awakeMul: 1.4,
   awakeReach: 1.25,
   awakeArc: 0.45,
   awakeSpeed: 1.3,
-  moonN: 5,
-  moonSpread: 0.16,
-  moonMul: 0.5,
-  moonRange: 220,
   /** 각성하는 순간 둘레 달빛 폭발: 반지름 · 피해 배율 · 무적 틱 */
   awakeBurstR: 90,
   awakeBurstMul: 1.5,

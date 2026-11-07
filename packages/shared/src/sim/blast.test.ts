@@ -61,9 +61,8 @@ describe("블래스트", () => {
     }
     expect(stigmaGauge(s.player)!.awake).toBe(true);
     expect(s.effects.some((f) => f.kind === "blAwakeFx")).toBe(true);
-    const before = s.projectiles.length;
     shot(s);
-    expect(s.projectiles.length).toBeGreaterThan(before);
+    expect(s.enemies[0]!.moon).toBeGreaterThan(0);
     for (let i = 0; i < STIGMA.awakeTicks + 5; i++) stepSim(s, { ...FIRE, attack: false });
     expect(s.player.sgAwake).toBeUndefined();
     expect(s.player.sgGauge).toBe(0);

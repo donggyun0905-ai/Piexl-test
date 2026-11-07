@@ -37,7 +37,7 @@ interface FloatNumber {
 export type NumKind = "hit" | "crit" | DotKind;
 
 /** 상태이상 피해 숫자 색 */
-export const DOT_COLOR: Record<DotKind, string> = { bleed: "#ff4a4a", burn: "#ff9a2a", poison: "#7ae05a", curse: "#c08aff", storm: "#8ae8ff", rot: "#ff8a1a", death: "#120c16", hellfire: "#6ad8ff", shock: "#ffe04a", frost: "#9ae8ff", tide: "#3a9aff", gold: "#ffc830", radiance: "#fff8d8", voidbolt: "#8a5ab8" };
+export const DOT_COLOR: Record<DotKind, string> = { bleed: "#ff4a4a", burn: "#ff9a2a", poison: "#7ae05a", curse: "#c08aff", storm: "#8ae8ff", rot: "#ff8a1a", death: "#120c16", hellfire: "#6ad8ff", shock: "#ffe04a", frost: "#9ae8ff", tide: "#3a9aff", gold: "#ffc830", radiance: "#fff8d8", voidbolt: "#8a5ab8", moon: "#ffffff" };
 const DOT_KINDS = Object.keys(DOT_COLOR) as DotKind[];
 
 export interface DummyStats {

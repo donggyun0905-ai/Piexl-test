@@ -81,8 +81,8 @@ export const BLAST_PERKS = {
   blHunter: { kill: 2 },
   /** 달무리: 각성 폭발 반지름·피해 배율 */
   blHalo: { r: 1.4, mul: 2 },
-  /** 월광 산탄: 각성 중 피해 배율 더함 · 달빛 산탄 더함 */
-  blLunar: { mul: 0.25, more: 2 },
+  /** 월광 산탄: 각성 중 피해 배율 더함 · 한 번에 더 쌓이는 달빛 스택 */
+  blLunar: { mul: 0.25, more: 1 },
   /** 피의 사냥: 초근접 처치 회복 (최대 체력 대비) */
   blBlood: { heal: 0.03 },
   /** 은탄: 보스 피해 배율 */

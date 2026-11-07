@@ -3,9 +3,9 @@ export const CHARACTER_TEXT_IAN = {
   ian: { ko: "이안", en: "Ian", ja: "イアン" },
   causality: { ko: "인과의 펜", en: "Pen of Causality", ja: "因果のペン" },
   ianDesc: {
-    ko: "성국. '침묵의 서기관'. 신의 부름을 기다리며 적의 움직임과 마력을 '기록'하는 나이 든 서기관. 기록한 규칙을 강제로 속박하는 인과율 조작형 암살자. 누르고 있으면 3연격(펜 찌르기 · 펜 찌르기 → 강철 실 휘감기) · 맞힌 적에게 '기록'이 쌓여(최대 5) 5면 속박(멈춤 · 받는 피해 +20%) · 속박된 적을 찌르면 급소(180%) · 숫자 키 스킬 넷: 1 인과의 실 · 2 그림자 걸음 · 3 기록 집행 · 4 인과율 속박",
-    en: "Holy Kingdom. 'The Silent Scribe'. An old scribe who 'records' foes' movements and mana while awaiting the gods' call — a causality-bending assassin who forcibly binds the rules he has written. Hold for a 3-hit chain (pen thrust · pen thrust → steel thread lash) · foes hit gain 'Records' (up to 5); at 5 they are Bound (stopped · +20% damage taken) · stabbing a Bound foe hits a Vital Point (180%) · four number-key skills: 1 Thread of Causality · 2 Shadow Step · 3 Writ of Execution · 4 Law of Causality",
-    ja: "聖国。「沈黙の書記官」。神々の呼び声を待ちながら敵の動きと魔力を「記録」する老いた書記官。記した規則を強制的に束縛する因果律操作型の暗殺者。押し続けると3連撃（ペン突き · ペン突き → 鋼の糸の巻きつけ）· 当てた敵に「記録」が溜まり（最大5）5で束縛（停止 · 被ダメージ+20%）· 束縛された敵を突くと急所（180%）· 数字キーのスキル4つ：1 因果の糸 · 2 影歩き · 3 記録執行 · 4 因果律束縛",
+    ko: "누르고 있으면 3연격(펜 찌르기 · 펜 찌르기 → 강철 실 휘감기) · 맞힌 적에게 '기록'이 쌓여(최대 5) 5면 속박(멈춤 · 받는 피해 +20%) · 속박된 적을 찌르면 급소(180%) · 숫자 키 스킬 넷: 1 인과의 실 · 2 그림자 걸음 · 3 기록 집행 · 4 인과율 속박 · 성국. '침묵의 서기관'. 신의 부름을 기다리며 적의 움직임과 마력을 '기록'하는 나이 든 서기관. 기록한 규칙을 강제로 속박하는 인과율 조작형 암살자.",
+    en: "Hold for a 3-hit chain (pen thrust · pen thrust → steel thread lash) · foes hit gain 'Records' (up to 5); at 5 they are Bound (stopped · +20% damage taken) · stabbing a Bound foe hits a Vital Point (180%) · four number-key skills: 1 Thread of Causality · 2 Shadow Step · 3 Writ of Execution · 4 Law of Causality · Holy Kingdom. 'The Silent Scribe'. An old scribe who 'records' foes' movements and mana while awaiting the gods' call — a causality-bending assassin who forcibly binds the rules he has written.",
+    ja: "押し続けると3連撃（ペン突き · ペン突き → 鋼の糸の巻きつけ）· 当てた敵に「記録」が溜まり（最大5）5で束縛（停止 · 被ダメージ+20%）· 束縛された敵を突くと急所（180%）· 数字キーのスキル4つ：1 因果の糸 · 2 影歩き · 3 記録執行 · 4 因果律束縛 · 聖国。「沈黙の書記官」。神々の呼び声を待ちながら敵の動きと魔力を「記録」する老いた書記官。記した規則を強制的に束縛する因果律操作型の暗殺者。",
   },
   iaSkill1: { ko: "인과의 실", en: "Thread of Causality", ja: "因果の糸" },
   iaSkill2: { ko: "그림자 걸음", en: "Shadow Step", ja: "影歩き" },
