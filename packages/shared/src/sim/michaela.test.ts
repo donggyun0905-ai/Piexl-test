@@ -4,7 +4,11 @@ import { MICHAELA_PERKS as K } from "../itemsMichaela";
 import { createRun, stepSim, type RunState } from "./index";
 import { recalcStats } from "./items";
 import { enemy, FIRE } from "./perkTestUtil";
-import { comboMul, mcCooldown } from "./michaelaKit";
+import { comboMul, hold, mcCooldown } from "./michaelaKit";
+import { MC_SPEARS, MC_WEAPON_ELEM } from "../michaelaWeaponList";
+
+/** 그 속성의 검 번호 */
+const swordOf = (v: number) => MC_WEAPON_ELEM.findIndex((e, i) => i >= MC_SPEARS && e === v);
 
 const IDLE = { ...FIRE, attack: false };
 
@@ -53,7 +57,7 @@ describe("미카엘라", () => {
 
   it("몸에 닿으면 바꿔 듦 (콤보 · 폭발)", () => {
     const s = michaela();
-    s.player.mcBlades = [{ x: 100, y: 100, k: 1 }];
+    s.player.mcBlades = [{ x: 100, y: 100, w: 0, k: 1 }];
     run(s, 1);
     expect(s.player.mcHeld).toBe(1);
     expect(s.player.mcBlades.length).toBe(0);
@@ -72,7 +76,7 @@ describe("미카엘라", () => {
 
   it("대시하면 범위 안의 박힌 무기로 순간 이동해 바꿔 듦", () => {
     const s = michaela();
-    s.player.mcBlades = [{ x: 200, y: 100, k: 1 }];
+    s.player.mcBlades = [{ x: 200, y: 100, w: 0, k: 1 }];
     stepSim(s, { ...IDLE, dash: true, moveX: 1 });
     expect(s.player.x).toBe(200);
     expect(s.player.mcHeld).toBe(1);
@@ -104,26 +108,27 @@ describe("미카엘라", () => {
   it("속성: 빙결은 느려짐 · 자전은 옆 적에게 번개 · 비취는 독", () => {
     const s = michaela();
     s.enemies[0]!.rootTicks = 0;
-    s.player.mcElem = 1;
+    hold(s.player, swordOf(1));
     hit(s);
     expect(s.enemies[0]!.slowTicks ?? 0).toBeGreaterThan(0);
     const t = michaela();
     t.enemies.push({ ...enemy(2, 170, 100, 99999), rootTicks: 99999 });
-    t.player.mcElem = 5;
+    hold(t.player, swordOf(5));
     hit(t);
     expect(t.effects.some((f) => f.kind === "mcBoltFx")).toBe(true);
     expect(t.enemies[1]!.hp).toBeLessThan(t.enemies[1]!.maxHp);
     const u = michaela();
-    u.player.mcElem = 6;
+    hold(u.player, MC_WEAPON_ELEM.indexOf(6));
     hit(u);
     expect(u.enemies[0]!.poisonTicks ?? 0).toBeGreaterThan(0);
   });
 
   it("박힌 무기를 바꿔 들면 그 속성을 듦", () => {
     const s = michaela();
-    s.player.mcBlades = [{ x: 100, y: 100, k: 0, v: 4 }];
+    s.player.mcBlades = [{ x: 100, y: 100, w: swordOf(4), k: 0, v: 4 }];
     run(s, 1);
     expect(s.player.mcElem).toBe(4);
+    expect(s.player.mcWeapon).toBe(swordOf(4));
   });
 
   it("인도자의 기도: 스킬 대기 감소", () => {

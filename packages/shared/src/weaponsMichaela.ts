@@ -74,8 +74,7 @@ export const MICHAELA = {
   ultMul: 0.7,
 };
 
-/** 무기 속성 8가지 (박힌 무기·든 무기마다 하나, 시드로 정함): 0 성은 · 1 빙결 · 2 홍염 · 3 혈월 · 4 천광 · 5 자전 · 6 비취 · 7 청해. 맞힐 때·터질 때 속성 효과 */
-export const MC_ELEMS = 8;
+/** 무기 속성 8가지 (그림 무기마다 하나, michaelaWeaponList): 0 성은 · 1 빙결 · 2 홍염 · 3 혈월 · 4 천광 · 5 자전 · 6 비취 · 7 청해. 맞힐 때·터질 때 속성 효과 */
 export const MICHAELA_ELEM = {
   /** 성은(은빛 대검): 피해 배율 · 더 밀침 */
   silverMul: 1.25,

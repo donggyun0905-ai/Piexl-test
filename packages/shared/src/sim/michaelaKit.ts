@@ -1,6 +1,7 @@
-// 미카엘라 공용 도우미: 콤보 · 속성 맞히기 · 폭발·연쇄 · 박힌 무기 놓기·바꿔 들기 · 하늘에서 무기 떨어뜨리기 · 순간 이동 · 스킬 대기
+// 미카엘라 공용 도우미: 그림 무기(번호 → 종류·속성) · 콤보 · 속성 맞히기 · 폭발·연쇄 · 박힌 무기 놓기·바꿔 들기 · 하늘에서 무기 떨어뜨리기 · 순간 이동 · 스킬 대기
 import { MICHAELA_PERKS as K } from "../itemsMichaela";
-import { MC_ELEMS, MICHAELA as M, MICHAELA_ELEM as E } from "../weaponsMichaela";
+import { MICHAELA as M, MICHAELA_ELEM as E } from "../weaponsMichaela";
+import { MC_SPEARS, MC_WEAPON_ELEM } from "../michaelaWeaponList";
 import { createRng, deriveSeed } from "../rng";
 import type { McBlade } from "./mcTypes";
 import { alive, inCircle, isBoss, poison, strike } from "./s2Kit";
@@ -10,9 +11,24 @@ import { addEffect, hasPerk } from "./util";
 
 export const isMichaela = (p: PlayerState) => p.characterId === "michaela";
 
-/** 시드로 무기 속성 하나 (0~7) */
-export function pickElem(s: RunState, ...tag: (string | number)[]): number {
-  return Math.floor(createRng(deriveSeed(s.seed, "mcElem", s.tick, ...tag)).nextFloat() * MC_ELEMS);
+/** 그림 무기 번호 → 종류 (0 검 · 1 투창) · 속성 (0~7) */
+export const kindOf = (w: number) => (w < MC_SPEARS ? 1 : 0);
+export const elemOf = (w: number) => MC_WEAPON_ELEM[w] ?? 0;
+
+/** 시드로 그림 무기 하나 (kind를 주면 그 종류에서만) */
+export function pickWeapon(s: RunState, kind: number | null, ...tag: (string | number)[]): number {
+  const u = createRng(deriveSeed(s.seed, "mcWeapon", s.tick, ...tag)).nextFloat();
+  const n = MC_WEAPON_ELEM.length;
+  if (kind === 1) return Math.floor(u * MC_SPEARS);
+  if (kind === 0) return MC_SPEARS + Math.floor(u * (n - MC_SPEARS));
+  return Math.floor(u * n);
+}
+
+/** 그 그림 무기를 손에 듦 */
+export function hold(p: PlayerState, w: number): void {
+  p.mcWeapon = w;
+  p.mcHeld = kindOf(w);
+  p.mcElem = elemOf(w);
 }
 
 /** 콤보 피해 배율 */
@@ -77,9 +93,9 @@ export function explode(s: RunState, x: number, y: number, r: number, mul: numbe
 const maxBlades = (p: PlayerState) => M.maxBlades + (hasPerk(p, "mcHoard") ? K.mcHoard.max : 0);
 
 /** 무기를 땅에 박음 (가득 차면 가장 오래된 것을 뺌) · 바로 연쇄로 터지지 않게 잠깐 막음 */
-export function plant(s: RunState, x: number, y: number, k: number, v: number): void {
+export function plant(s: RunState, x: number, y: number, w: number): void {
   const list = (s.player.mcBlades ??= []);
-  list.push({ x, y, k, v, cd: s.tick + M.chainCd });
+  list.push({ x, y, w, k: kindOf(w), v: elemOf(w), cd: s.tick + M.chainCd });
   while (list.length > maxBlades(s.player)) list.shift();
 }
 
@@ -87,18 +103,19 @@ export function plant(s: RunState, x: number, y: number, k: number, v: number): 
 export function swapTo(s: RunState, b: McBlade): void {
   const p = s.player;
   p.mcBlades = (p.mcBlades ?? []).filter((o) => o !== b);
-  p.mcHeld = b.k;
-  p.mcElem = b.v ?? 0;
+  const w = b.w ?? (b.k ? 0 : MC_SPEARS);
+  hold(p, w);
   addCombo(p, 1 + (hasPerk(p, "mcDouble") ? K.mcDouble.more : 0));
-  addEffect(s, { kind: "mcSwapFx", x: b.x, y: b.y, dirX: 0, dirY: 0, size: M.swapR, style: p.mcElem * 2 + b.k, maxTicks: 16 });
-  explode(s, b.x, b.y, M.swapR, M.swapMul, p.mcElem);
+  addEffect(s, { kind: "mcSwapFx", x: b.x, y: b.y, dirX: 0, dirY: 0, size: M.swapR, style: w, maxTicks: 16 });
+  explode(s, b.x, b.y, M.swapR, M.swapMul, elemOf(w));
 }
 
 /** 박힌 무기로 순간 이동해 바꿔 들고 둘레를 벰 (그 무기의 속성으로) */
 export function blinkTo(s: RunState, b: McBlade, r: number, mul: number, inv: number): void {
   const p = s.player;
-  const v = b.v ?? 0;
-  addEffect(s, { kind: "mcBlinkFx", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, style: v * 2 + b.k, toX: b.x, toY: b.y, maxTicks: 14 });
+  const w = b.w ?? (b.k ? 0 : MC_SPEARS);
+  const v = elemOf(w);
+  addEffect(s, { kind: "mcBlinkFx", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, style: w, toX: b.x, toY: b.y, maxTicks: 14 });
   p.x = p.prevX = b.x;
   p.y = p.prevY = b.y;
   p.invulnTicks = Math.max(p.invulnTicks, inv);
@@ -107,9 +124,9 @@ export function blinkTo(s: RunState, b: McBlade, r: number, mul: number, inv: nu
 }
 
 /** 하늘(포탈)에서 무기를 떨어뜨림: t틱 뒤 (x,y)에 꽂혀 둘레 적을 치고 박힘 */
-export function dropBlade(s: RunState, x: number, y: number, t: number, k: number, v: number, mul: number): void {
-  (s.player.mcFalls ??= []).push({ x, y, t, k, v, mul });
-  addEffect(s, { kind: "mcFallFx", x, y, dirX: 0, dirY: 0, size: M.fallR, style: v * 2 + k, maxTicks: t });
+export function dropBlade(s: RunState, x: number, y: number, t: number, w: number, mul: number): void {
+  (s.player.mcFalls ??= []).push({ x, y, t, w, k: kindOf(w), v: elemOf(w), mul });
+  addEffect(s, { kind: "mcFallFx", x, y, dirX: 0, dirY: 0, size: M.fallR, style: w, maxTicks: t });
 }
 
 /** 스킬마다 대기 틱 (아이템 반영) */

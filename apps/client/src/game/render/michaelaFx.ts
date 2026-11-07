@@ -1,9 +1,9 @@
-// 미카엘라 기술 효과 — 공허의 인도자. 무기 속성(style = 속성 × 2 + 단계·종류)마다 날 모양·색이 다르고, 폭발 모양은 michaelaElem
+// 미카엘라 기술 효과 — 공허의 인도자. 무기는 사용자 그림에서 잘라 낸 그림(weapon) · 빛·꼬리 색은 그 무기 속성 색 · 폭발 모양은 michaelaElem
 // 검 베기(속성 색 초승달) · 창 찌르기(빛줄기) · 투척(날아가는 무기·빛 꼬리) · 폭발 · 떨어지는 무기(하늘에서 사선으로 꽂힘) · 포탈 · 바꿔 듦 · 순간 이동 · 무기고 · 자전 번개
 import type { EffectState } from "@pixel-rogue/shared";
 import { additive, alpha, beam, crescent, easeOut, shock, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
-import { blade, MC, palOf, portal } from "./michaelaArt";
+import { MC, palOf, palW, portal, weapon, WEAPON_N } from "./michaelaArt";
 import { bolt, elemBlast } from "./michaelaElem";
 
 const MC_FX = new Set(["mcSlashFx", "mcThrustFx", "mcThrowFx", "mcBlastFx", "mcFallFx", "mcPortalFx", "mcSwapFx", "mcBlinkFx", "mcUltFx", "mcBoltFx"]);
@@ -19,10 +19,13 @@ export function drawMichaelaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const seed = Math.abs(Math.round(fx.x * 7 + fx.y * 3));
   const tx = snap(fx.toX ?? fx.x);
   const ty = snap(fx.toY ?? fx.y);
+  // 베기·찌르기: style = 그림 무기 × 2 + 단계 · 투척·떨어짐·바꿔 듦·순간 이동: style = 그림 무기 · 폭발: style = 속성
   const st = fx.style ?? 0;
-  const v = Math.floor(st / 2);
-  const k = st % 2;
-  const P = palOf(v);
+  const pair = fx.kind === "mcSlashFx" || fx.kind === "mcThrustFx";
+  const w = pair ? Math.floor(st / 2) : st;
+  const k = pair ? st % 2 : 0;
+  const P = palW(w);
+  const spear = w < 21;
   switch (fx.kind) {
     case "mcSlashFx": {
       // 검 베기: 속성 색 초승달 (1타·2타 반대로 기울임) + 끝에 검 · 자전이면 번개가 따라감
@@ -31,9 +34,9 @@ export function drawMichaelaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       additive(ctx, () => {
         crescent(ctx, x, y, r, a + tilt, 1 * easeOut(Math.min(1, f * 1.8)) + 0.1, 8, P.glow, fade * 0.85);
         crescent(ctx, x, y, r * 0.8, a + tilt, 0.8 * easeOut(Math.min(1, f * 1.8)) + 0.1, 4, P.trim, fade * 0.6);
-        if (v === 5) bolt(ctx, x, y, x + Math.cos(sw) * r, y + Math.sin(sw) * r, P.glow, fade, seed);
+        if (P === palOf(5)) bolt(ctx, x, y, x + Math.cos(sw) * r, y + Math.sin(sw) * r, P.glow, fade, seed);
       });
-      blade(ctx, x + Math.cos(sw) * r, y + Math.sin(sw) * r, sw + Math.PI, 0, 12, fade, v);
+      weapon(ctx, x + Math.cos(sw) * r, y + Math.sin(sw) * r, sw + Math.PI, w, 34, fade);
       return true;
     }
     case "mcThrustFx": {
@@ -43,9 +46,9 @@ export function drawMichaelaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const ey = y + Math.sin(a) * r * kk;
       additive(ctx, () => {
         beam(ctx, x, y, ex, ey, 3, P.glow, fade);
-        if (v === 5) bolt(ctx, x, y, ex, ey, "#ffffff", fade, seed);
+        if (P === palOf(5)) bolt(ctx, x, y, ex, ey, "#ffffff", fade, seed);
       });
-      blade(ctx, ex, ey, a + Math.PI, 1, 18, fade, v);
+      weapon(ctx, ex, ey, a + Math.PI, w, 44, fade);
       return true;
     }
     case "mcThrowFx": {
@@ -55,7 +58,7 @@ export function drawMichaelaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const my = y + (ty - y) * kk;
       const back = Math.max(0, kk - 0.35);
       additive(ctx, () => beam(ctx, x + (tx - x) * back, y + (ty - y) * back, mx, my, 2.5, P.glow, 0.75 * fade));
-      blade(ctx, mx, my, a + Math.PI, k, 14, 1, v);
+      weapon(ctx, mx, my, a + Math.PI, w, spear ? 40 : 32, 1);
       return true;
     }
     case "mcBlastFx":
@@ -74,7 +77,7 @@ export function drawMichaelaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         ctx.stroke();
         beam(ctx, hx + 9, hy - 33, hx, hy, 1.5, P.glow, 0.5);
       });
-      blade(ctx, hx, hy, Math.atan2(-110, 30), k, 16, 1, v);
+      weapon(ctx, hx, hy, Math.atan2(-110, 30), w, spear ? 44 : 36, 1);
       return true;
     }
     case "mcPortalFx": {
@@ -85,7 +88,7 @@ export function drawMichaelaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     case "mcSwapFx": {
       // 바꿔 듦: 속성 색 고리 · 무기가 손으로 솟구침
       additive(ctx, () => shock(ctx, x, y, r * easeOut(f), P.glow, fade, 6));
-      blade(ctx, x, y - 4 - 16 * easeOut(f), Math.PI / 2, k, 14, fade, v);
+      weapon(ctx, x, y - 4 - 16 * easeOut(f), Math.PI / 2, w, spear ? 40 : 32, fade);
       return true;
     }
     case "mcBlinkFx": {
@@ -103,7 +106,7 @@ export function drawMichaelaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       portal(ctx, x, y - 60, r * easeOut(Math.min(1, f * 2)), f * 10, fade);
       for (let i = 0; i < 8; i++) {
         const an = f * 6 + (i / 8) * Math.PI * 2;
-        blade(ctx, x + Math.cos(an) * r, y - 60 + Math.sin(an) * r * 0.45, -Math.PI / 2, i % 2, 12, fade, i);
+        weapon(ctx, x + Math.cos(an) * r, y - 60 + Math.sin(an) * r * 0.45 + 12, -Math.PI / 2, (i * 5) % WEAPON_N, 30, fade);
       }
       return true;
     }

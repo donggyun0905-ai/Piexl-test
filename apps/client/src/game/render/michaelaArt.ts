@@ -1,5 +1,6 @@
 // 미카엘라 그림 도구: 무기 8속성(성은·빙결·홍염·혈월·천광·자전·비취·청해)의 검·투창 · 공허 포탈 (박힌 무기·떨어지는 무기·떠다니는 무기·효과가 같이 씀)
-// 사용자가 준 검·창 참고 그림에서 색 묶음과 분위기만 가져와 새로 그림 (모양을 그대로 따라 그리지 않음)
+// 무기 그림은 사용자가 준 검·창 그림에서 잘라 낸 sprites/michaela_weapons (weapon) · blade는 그림을 읽기 전 대신 쓰는 코드 그림
+import { MC_WEAPON_ELEM } from "@pixel-rogue/shared";
 import { additive, alpha, glow, type Ctx } from "./pwFxBits";
 
 export const MC = { silver: "#e8ecf8", steel: "#9aa4b8", gold: "#f2c14e", light: "#fff6c0", void: "#7a58d8", deep: "#2a1a58", violet: "#c8b0ff", orange: "#ff9a40" };
@@ -17,6 +18,30 @@ export const MC_PAL = [
 ] as const;
 
 export const palOf = (v: number | undefined) => MC_PAL[(v ?? 0) % MC_PAL.length]!;
+
+/** 사용자 그림에서 잘라 낸 무기 37개 (scripts/art/michaela_weapons.py → sprites/michaela_weapons: 칸 24×72, 날 끝이 위) */
+const CW = 24;
+const CH = 72;
+const img = new Image();
+img.src = `${import.meta.env.BASE_URL}sprites/michaela_weapons.png`;
+export const WEAPON_N = MC_WEAPON_ELEM.length;
+/** 그림 무기 번호 → 속성 색 묶음 */
+export const palW = (w: number | undefined) => palOf(MC_WEAPON_ELEM[w ?? 0]);
+
+/** 그림 무기 하나: (x,y) 날 끝에서 각 a 쪽으로 손잡이 · len 전체 길이 · glowA: 뒤에 속성 색 빛 (그림이 아직 안 읽혔으면 코드 그림으로) */
+export function weapon(ctx: Ctx, x: number, y: number, a: number, w: number, len: number, al: number, glowA = 0.35): void {
+  if (al <= 0) return;
+  const v = MC_WEAPON_ELEM[w] ?? 0;
+  if (glowA > 0) additive(ctx, () => glow(ctx, x + Math.cos(a) * len * 0.3, y + Math.sin(a) * len * 0.3, len * 0.45, palOf(v).glow, al * glowA));
+  if (!img.complete || !img.naturalWidth) return blade(ctx, x, y, a, w < 21 ? 1 : 0, len, al, v);
+  const sc = len / CH;
+  ctx.save();
+  ctx.globalAlpha *= al;
+  ctx.translate(x, y);
+  ctx.rotate(a - Math.PI / 2);
+  ctx.drawImage(img, w * CW, 0, CW, CH, (-CW * sc) / 2, -sc, CW * sc, CH * sc);
+  ctx.restore();
+}
 
 /** 투창 촉 모양 (속성마다): 가운데 (x,y) 끝, 방향 (c,s) */
 function spearHead(ctx: Ctx, x: number, y: number, c: number, s: number, v: number, col: string, trim: string): void {

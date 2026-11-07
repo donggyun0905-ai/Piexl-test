@@ -3,7 +3,7 @@
 import { isMichaela, MICHAELA, type RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
 import { additive, alpha, glow, type Ctx } from "./pwFxBits";
-import { blade, MC, palOf, portal } from "./michaelaArt";
+import { MC, palW, portal, weapon, WEAPON_N } from "./michaelaArt";
 
 /** 몸 뒤 */
 export function drawMichaelaBack(ctx: Ctx, s: RunState, a0: number, snap: Snap): void {
@@ -16,15 +16,15 @@ export function drawMichaelaBack(ctx: Ctx, s: RunState, a0: number, snap: Snap):
     const y = snap(b.y);
     const near = Math.hypot(b.x - px, b.y - py) <= MICHAELA.dashR;
     additive(ctx, () => {
-      glow(ctx, x, y, near ? 11 : 9, palOf(b.v).glow, near ? 0.55 + 0.2 * Math.sin(s.tick * 0.2) : 0.35);
-      ctx.strokeStyle = alpha(near ? MC.violet : palOf(b.v).trim, 0.6);
+      glow(ctx, x, y, near ? 11 : 9, palW(b.w).glow, near ? 0.55 + 0.2 * Math.sin(s.tick * 0.2) : 0.35);
+      ctx.strokeStyle = alpha(near ? MC.violet : palW(b.w).trim, 0.6);
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.ellipse(x, y, 5, 2.5, 0, 0, Math.PI * 2);
       ctx.stroke();
     });
     // 날 끝이 땅에 박히고 손잡이가 위로 비스듬히
-    blade(ctx, x, y, -Math.PI / 2 + (b.k ? 0.25 : -0.2), b.k, b.k ? 18 : 13, 1, b.v);
+    weapon(ctx, x, y + 3, -Math.PI / 2 + (b.k ? 0.18 : -0.15), b.w ?? 0, b.k ? 46 : 36, 1, 0);
   }
   if ((p.mcUlt ?? 0) > 0) portal(ctx, snap(px), snap(py) - 64, 34, s.tick * 0.08, Math.min(1, p.mcUlt! / 30));
 }
@@ -44,13 +44,12 @@ export function drawMichaelaAura(ctx: Ctx, s: RunState, a0: number, snap: Snap):
     const bx = x + Math.cos(an) * 20;
     const by = y + Math.sin(an) * 8 + bob;
     // 끝이 아래를 향해 떠 있음
-    blade(ctx, bx, by + 5, -Math.PI / 2, i % 2, 9, 0.85, i % 8);
+    weapon(ctx, bx, by + 8, -Math.PI / 2, (i * 7 + 3) % WEAPON_N, 22, 0.9, 0.2);
   }
   // 들고 있는 무기: 손 앞에 크게
   const k = p.mcHeld ?? 0;
   const hx = x + p.faceX * 12;
   const hy = y + p.faceY * 6;
-  additive(ctx, () => glow(ctx, hx, hy, 10, palOf(p.mcElem).glow, 0.45));
-  blade(ctx, hx, hy, Math.atan2(-p.faceY, -p.faceX), k, k ? 20 : 14, 1, p.mcElem);
+  weapon(ctx, hx, hy - 4, Math.atan2(-p.faceY + 0.6, -p.faceX), p.mcWeapon ?? 0, k ? 40 : 32, 1, 0.5);
   if (combo >= 10) additive(ctx, () => glow(ctx, x, y, 22, MC.violet, 0.25 + 0.1 * Math.sin(s.tick * 0.3)));
 }
