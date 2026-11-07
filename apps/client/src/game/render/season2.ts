@@ -47,6 +47,7 @@ import { drawRafaelFx } from "./rafaelFx";
 import { drawYurielFx } from "./yurielFx";
 import { drawMichaelaFx } from "./michaelaFx";
 import { drawLeviaShot } from "./leviaBody";
+import { drawBlastFx, drawBlastShot } from "./blastFx";
 import { drawCollectorFx, drawCollectorShot } from "./collector";
 import { drawSecretFx, drawSecretShot } from "./secret";
 import { drawAwakenFx } from "./awakenA";
@@ -63,7 +64,7 @@ const dirOf = (pr: ProjectileState) => {
 };
 
 export function drawS2Shot(ctx: Ctx, pr: ProjectileState, x: number, y: number, tick: number): boolean {
-  if (drawSlayerShot(ctx, pr, x, y, tick) || drawEaterShot(ctx, pr, x, y) || drawNeedleShot(ctx, pr, x, y) || drawTerraShot(ctx, pr, x, y, tick) || drawTerraShotB(ctx, pr, x, y, tick) || drawTerraShotC(ctx, pr, x, y) || drawTrackerShot(ctx, pr, x, y) || drawForgottenShot(ctx, pr, x, y) || drawRemnantShot(ctx, pr, x, y) || drawWandererShot(ctx, pr, x, y, tick) || drawSecretShot(ctx, pr, x, y, tick) || drawCollectorShot(ctx, pr, x, y, tick) || drawPungryuShot(ctx, pr, x, y) || drawThorkenShot(ctx, pr, x, y) || drawLeviaShot(ctx, pr, x, y)) return true;
+  if (drawSlayerShot(ctx, pr, x, y, tick) || drawEaterShot(ctx, pr, x, y) || drawNeedleShot(ctx, pr, x, y) || drawTerraShot(ctx, pr, x, y, tick) || drawTerraShotB(ctx, pr, x, y, tick) || drawTerraShotC(ctx, pr, x, y) || drawTrackerShot(ctx, pr, x, y) || drawForgottenShot(ctx, pr, x, y) || drawRemnantShot(ctx, pr, x, y) || drawWandererShot(ctx, pr, x, y, tick) || drawSecretShot(ctx, pr, x, y, tick) || drawCollectorShot(ctx, pr, x, y, tick) || drawPungryuShot(ctx, pr, x, y) || drawThorkenShot(ctx, pr, x, y) || drawLeviaShot(ctx, pr, x, y) || drawBlastShot(ctx, pr, x, y)) return true;
   const [dx, dy] = dirOf(pr);
   switch (pr.spirit) {
     case "gaiaArrow":
@@ -168,7 +169,7 @@ export function drawS2Shot(ctx: Ctx, pr: ProjectileState, x: number, y: number, 
 
 /** 모습 바꿈: 새 모습 색의 잎 고리가 퍼짐 */
 export function drawS2Fx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
-  if (fx.kind !== "gaiaSwap") return drawPungryuFx(ctx, fx, snap) || drawLeoFx(ctx, fx, snap) || drawOnyxFx(ctx, fx, snap) || drawFenrirFx(ctx, fx, snap) || drawEclipseFx(ctx, fx, snap) || drawThorkenFx(ctx, fx, snap) || drawLeviaFx(ctx, fx, snap) || drawTailFx(ctx, fx, snap) || drawMadQueenFx(ctx, fx, snap) || drawHookFx(ctx, fx, snap) || drawOrcaFx(ctx, fx, snap) || drawWaveFx(ctx, fx, snap) || drawMiryuFx(ctx, fx, snap) || drawBeatriceFx(ctx, fx, snap) || drawIanFx(ctx, fx, snap) || drawGabrielFx(ctx, fx, snap) || drawSerenaFx(ctx, fx, snap) || drawRafaelFx(ctx, fx, snap) || drawYurielFx(ctx, fx, snap) || drawMichaelaFx(ctx, fx, snap) || drawElderFx(ctx, fx, snap) || drawSpiritFx(ctx, fx, snap) || drawMorphFx(ctx, fx, snap) || drawClawFx(ctx, fx, snap) || drawPlagueFx(ctx, fx, snap) || drawSlayerFx(ctx, fx, snap) || drawEaterFx(ctx, fx, snap) || drawMukinFx(ctx, fx, snap) || drawSamyeolFx(ctx, fx, snap) || drawTerraFx(ctx, fx, snap) || drawTerraFxB(ctx, fx, snap) || drawTerraFxC(ctx, fx, snap) || drawRuneFx(ctx, fx, snap) || drawTrackerFx(ctx, fx, snap) || drawForgottenFx(ctx, fx, snap) || drawRemnantFx(ctx, fx, snap) || drawTrialFx(ctx, fx, snap) || drawAltarFx(ctx, fx, snap) || drawWandererFx(ctx, fx, snap) || drawSecretFx(ctx, fx, snap) || drawSilkFx(ctx, fx, snap) || drawCollectorFx(ctx, fx, snap) || drawVaultFx(ctx, fx, snap) || drawAwakenFx(ctx, fx, snap);
+  if (fx.kind !== "gaiaSwap") return drawPungryuFx(ctx, fx, snap) || drawLeoFx(ctx, fx, snap) || drawOnyxFx(ctx, fx, snap) || drawFenrirFx(ctx, fx, snap) || drawEclipseFx(ctx, fx, snap) || drawThorkenFx(ctx, fx, snap) || drawLeviaFx(ctx, fx, snap) || drawTailFx(ctx, fx, snap) || drawMadQueenFx(ctx, fx, snap) || drawHookFx(ctx, fx, snap) || drawOrcaFx(ctx, fx, snap) || drawWaveFx(ctx, fx, snap) || drawMiryuFx(ctx, fx, snap) || drawBeatriceFx(ctx, fx, snap) || drawIanFx(ctx, fx, snap) || drawGabrielFx(ctx, fx, snap) || drawSerenaFx(ctx, fx, snap) || drawRafaelFx(ctx, fx, snap) || drawYurielFx(ctx, fx, snap) || drawMichaelaFx(ctx, fx, snap) || drawBlastFx(ctx, fx, snap) || drawElderFx(ctx, fx, snap) || drawSpiritFx(ctx, fx, snap) || drawMorphFx(ctx, fx, snap) || drawClawFx(ctx, fx, snap) || drawPlagueFx(ctx, fx, snap) || drawSlayerFx(ctx, fx, snap) || drawEaterFx(ctx, fx, snap) || drawMukinFx(ctx, fx, snap) || drawSamyeolFx(ctx, fx, snap) || drawTerraFx(ctx, fx, snap) || drawTerraFxB(ctx, fx, snap) || drawTerraFxC(ctx, fx, snap) || drawRuneFx(ctx, fx, snap) || drawTrackerFx(ctx, fx, snap) || drawForgottenFx(ctx, fx, snap) || drawRemnantFx(ctx, fx, snap) || drawTrialFx(ctx, fx, snap) || drawAltarFx(ctx, fx, snap) || drawWandererFx(ctx, fx, snap) || drawSecretFx(ctx, fx, snap) || drawSilkFx(ctx, fx, snap) || drawCollectorFx(ctx, fx, snap) || drawVaultFx(ctx, fx, snap) || drawAwakenFx(ctx, fx, snap);
   const t = 1 - fx.ticks / fx.maxTicks;
   const r = fx.size * (0.4 + 0.6 * t);
   const x = snap(fx.x);

@@ -52,6 +52,15 @@ export const FACTION_TEXT: Record<FactionId, { name: L; tag: L; desc: L }> = {
       "消えない聖火を守る騎士と聖職者の国。聖国の戦士たちは反射的な打撃ではなく、磨き上げた技（スキル）で戦う。",
     ),
   },
+  dawn: {
+    name: c("새벽의 성흔", "Dawn Stigmata", "暁の聖痕"),
+    tag: c("악마 사냥꾼", "Demon Hunters", "悪魔狩り"),
+    desc: c(
+      "밤마다 기어 나오는 악마를 사냥하는 사냥꾼들. 몸에 새긴 성흔(달빛의 힘)이 싸울수록 차오르고, 가득 차면 달빛으로 깨어난다.",
+      "Hunters who stalk the demons that crawl out each night. The stigmata carved into their bodies — the power of moonlight — fills as they fight and, when full, awakens them in moonlight.",
+      "夜ごと這い出る悪魔を狩る狩人たち。身に刻んだ聖痕（月光の力）は戦うほど満ち、満ちれば月光に目覚める。",
+    ),
+  },
   thalassia: {
     name: c("탈라시아", "Thalassia", "タラシア"),
     tag: c("바다의 나라", "Sea Nation", "海の国"),

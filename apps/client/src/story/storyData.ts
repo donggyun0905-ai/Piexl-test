@@ -27,16 +27,18 @@ export function speakerSheet(s: Speaker): string | null {
   return s in CHARACTERS ? s : null;
 }
 
-export type FactionId = "ascalon" | "terracore" | "helios" | "virdia" | "thalassia" | "seongguk" | "akashic" | "outsider" | "archive";
+export type FactionId = "ascalon" | "terracore" | "helios" | "virdia" | "thalassia" | "seongguk" | "dawn" | "akashic" | "outsider" | "archive";
 
 /** 진영 색 · 소속 (그림 이름: 버려진 자들은 세 아이 따로) */
 export const FACTIONS: readonly { id: FactionId; color: string; members: readonly Speaker[] }[] = [
   { id: "ascalon", color: "#4a8aff", members: ["warden", "mage", "drifter", "general", "novice", "tracker", "forgotten", "remnant", "wanderer", "silk", "pungryu", "leo"] },
-  { id: "terracore", color: "#e8a040", members: ["gunner", "engineer", "doctor", "chronomancer", "titan", "automata", "rider", "bomber", "artifacter", "punk", "collector", "onyx"] },
+  { id: "terracore", color: "#a8723c", members: ["gunner", "engineer", "doctor", "chronomancer", "titan", "automata", "rider", "bomber", "artifacter", "punk", "collector", "onyx"] },
   { id: "helios", color: "#c83a4a", members: ["apostle", "bedouin", "brawler", "ninja", "raven", "cain", "jade", "oni", "plague", "slayer", "eater", "mukin", "samyeol", "eclipse"] },
   { id: "virdia", color: "#4ac86a", members: ["beast", "summoner", "elementalist", "mystic", "imugi", "idra", "byeonhui", "fly", "elder", "ren", "spiritist", "fenrir"] },
   { id: "thalassia", color: "#6ad4ff", members: ["thorken", "levia", "tail", "madQueen", "hook", "orca", "wave", "miryu"] },
-  { id: "seongguk", color: "#f4f4f8", members: ["beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela"] },
+  { id: "seongguk", color: "#ffd84a", members: ["beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela"] },
+  /** 새벽의 성흔: 악마 사냥꾼 (성흔 = 달빛의 힘, 게이지형) */
+  { id: "dawn", color: "#ffffff", members: ["blast"] },
   { id: "akashic", color: "#b89aff", members: ["scribe", "duck", "stargazer", "miner", "voyager", "zeus"] },
   /** 이방인: 세계의 틀을 벗어난 자들 */
   { id: "outsider", color: "#5ae0d0", members: ["pilgrim", "fallenKing"] },

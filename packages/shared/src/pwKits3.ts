@@ -159,4 +159,10 @@ export const PW_KITS_3: PwKits = {
     sk("mcArmory", "self", 14, "#ffd0a0", { radius: 110, fx: "wave", repeat: { n: 4, every: 8 }, hit: { dmg: 1 } }),
     sk("mcArmory", "self", 60, "#a080ff", { radius: 220, fx: "rain", repeat: { n: 16, every: 15 }, hit: { dmg: 0.7 } }),
   ),
+  blast: kit(1,
+    sk("blShotgun", "cone", 6, "#ffe0a0", { radius: 70, arc: 0.6, fx: "slash", hit: { dmg: 2, push: 14 } }),
+    sk("blShotgun", "dash", 9, "#f4f4ff", { range: 110, speed: 10, hit: { dmg: 1.2, push: 10 } }),
+    sk("blShotgun", "point", 11, "#ff8a5a", { range: 130, radius: 44, delay: 12, fx: "meteor", hit: { dmg: 1.8 } }),
+    sk("blShotgun", "self", 60, "#ffffff", { radius: 110, fx: "pillar", buff: { ticks: 6 * SEC, dmg: 1.4 }, hit: { dmg: 1.5, push: 12 } }),
+  ),
 };

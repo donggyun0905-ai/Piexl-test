@@ -123,3 +123,35 @@
   border-color: #ff6a6a;
   background: rgba(255, 80, 80, 0.25);
 }
+/* 새벽의 성흔: 성흔(달빛의 힘) 흰 게이지 · 각성 중 달빛으로 빛남 */
+.stigma-gauge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: 0 0 4px rgb(255 255 255 / 0.6);
+}
+.stigma-bar {
+  position: relative;
+  width: 140px;
+  height: 12px;
+  border: 1px solid #ffffff;
+  border-radius: 3px;
+  background: rgb(20 20 30 / 0.75);
+  overflow: hidden;
+}
+.stigma-bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(180deg, #ffffff, #d8dcf0);
+  transition: width 0.15s;
+}
+.stigma-gauge.awake .stigma-bar {
+  animation: stigma-glow 0.8s ease-in-out infinite;
+}
+@keyframes stigma-glow {
+  0%, 100% { box-shadow: 0 0 4px #ffffff; }
+  50% { box-shadow: 0 0 14px #ffffff, 0 0 4px #c8d8ff; }
+}

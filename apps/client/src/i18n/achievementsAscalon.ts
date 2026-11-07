@@ -22,6 +22,7 @@ export const ASCALON_ACHIEVEMENTS = {
   clearBeatrice: n(["심판의 불꽃", "Flame of Judgment", "審判の炎"], ["베아트리스로 클리어", "Clear as Beatrice", "ベアトリスでクリア"]),
   clearRafael: n(["폭풍의 사수", "The Storm Archer", "嵐の射手"], ["라파엘로 클리어", "Clear as Rafael", "ラファエルでクリア"]),
   clearYuriel: n(["단죄의 성녀", "The Saint of Judgment", "断罪の聖女"], ["유리엘로 클리어", "Clear as Yuriel", "ユリエルでクリア"]),
+  clearBlast: n(["폭멸의 탄환", "The Annihilating Round", "爆滅の弾丸"], ["블래스트로 클리어", "Clear as Blast", "ブラストでクリア"]),
   clearMichaela: n(["공허의 인도자", "The Void Guide", "虚空の導き手"], ["미카엘라로 클리어", "Clear as Michaela", "ミカエラでクリア"]),
   clearSerena: n(["환혹의 무희", "The Bewitching Dancer", "幻惑の舞姫"], ["세레나로 클리어", "Clear as Serena", "セレナでクリア"]),
   clearGabriel: n(["철옹의 방패", "The Iron Shield", "鉄壁の盾"], ["가브리엘로 클리어", "Clear as Gabriel", "ガブリエルでクリア"]),

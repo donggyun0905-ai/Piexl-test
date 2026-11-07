@@ -48,7 +48,7 @@ import { COLLECTOR_WEAPONS } from "./weaponsCollector";
 import { PUNGRYU_WEAPONS, type ScriptStyle } from "./weaponsPungryu";
 import { LEO_WEAPONS } from "./weaponsLeo";
 import { ONYX_WEAPONS } from "./weaponsOnyx";
-import { SEONGGUK_WEAPON_SET } from "./weaponsSeongguk"; import { FENRIR_WEAPONS } from "./weaponsFenrir"; import { ECLIPSE_WEAPONS } from "./weaponsEclipse"; import { THORKEN_WEAPONS, type FlailStyle } from "./weaponsThorken"; import { LEVIA_WEAPONS, type GemStyle } from "./weaponsLevia"; import { TAIL_WEAPONS, type SeaStyle } from "./weaponsTail"; import { MADQUEEN_WEAPONS, type FleetStyle } from "./weaponsMadQueen"; import { HOOK_WEAPONS, type HookStyle } from "./weaponsHook"; import { ORCA_WEAPONS, type OrcaStyle } from "./weaponsOrca"; import { WAVE_WEAPONS, type WaveStyle } from "./weaponsWave"; import { MIRYU_WEAPONS, type MiryuStyle } from "./weaponsMiryu";
+import { SEONGGUK_WEAPON_SET } from "./weaponsSeongguk"; import { DAWN_WEAPON_SET } from "./weaponsDawn"; import { FENRIR_WEAPONS } from "./weaponsFenrir"; import { ECLIPSE_WEAPONS } from "./weaponsEclipse"; import { THORKEN_WEAPONS, type FlailStyle } from "./weaponsThorken"; import { LEVIA_WEAPONS, type GemStyle } from "./weaponsLevia"; import { TAIL_WEAPONS, type SeaStyle } from "./weaponsTail"; import { MADQUEEN_WEAPONS, type FleetStyle } from "./weaponsMadQueen"; import { HOOK_WEAPONS, type HookStyle } from "./weaponsHook"; import { ORCA_WEAPONS, type OrcaStyle } from "./weaponsOrca"; import { WAVE_WEAPONS, type WaveStyle } from "./weaponsWave"; import { MIRYU_WEAPONS, type MiryuStyle } from "./weaponsMiryu";
 import { MINER_WEAPONS, type PickStyle } from "./weaponsMiner";
 import { VOYAGER_WEAPONS } from "./weaponsVoyager";
 import { ZEUS_WEAPONS, type ThunderStyle } from "./weaponsZeus";
@@ -57,7 +57,7 @@ import { FALLEN_KING_WEAPONS } from "./weaponsFallenKing";
 import { LUX_WEAPONS } from "./weaponsLux";
 
 /** 공격 방식 (laser·medic 누르는 동안 틱 피해 · combo 누를 때마다 다음 기술) */
-export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio" | "zwei" | "radiant" | "hoard" | "script" | "lion" | "gem" | "fang" | "solar" | "anchor" | "whale" | "shark" | "fleet" | "grapple" | "riptide" | "muse" | "flowblade" | "judgment" | "causality" | "bastion" | "nightmare" | "skybow" | "sanctum" | "armory";
+export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio" | "zwei" | "radiant" | "hoard" | "script" | "lion" | "gem" | "fang" | "solar" | "anchor" | "whale" | "shark" | "fleet" | "grapple" | "riptide" | "muse" | "flowblade" | "judgment" | "causality" | "bastion" | "nightmare" | "skybow" | "sanctum" | "armory" | "blast";
 export type { OrbitKind } from "./weaponsElemental";
 export type { LaserGear } from "./weaponsEngineer";
 export type { MedicGear } from "./weaponsDoctor";
@@ -262,7 +262,7 @@ export const WEAPONS = {
   ...WANDERER_WEAPONS,
   ...SILK_WEAPONS,
   ...COLLECTOR_WEAPONS,
-  ...PUNGRYU_WEAPONS, ...LEO_WEAPONS, ...ONYX_WEAPONS, ...FENRIR_WEAPONS, ...ECLIPSE_WEAPONS, ...THORKEN_WEAPONS, ...LEVIA_WEAPONS, ...TAIL_WEAPONS, ...MADQUEEN_WEAPONS, ...HOOK_WEAPONS, ...ORCA_WEAPONS, ...WAVE_WEAPONS, ...MIRYU_WEAPONS, ...SEONGGUK_WEAPON_SET,
+  ...PUNGRYU_WEAPONS, ...LEO_WEAPONS, ...ONYX_WEAPONS, ...FENRIR_WEAPONS, ...ECLIPSE_WEAPONS, ...THORKEN_WEAPONS, ...LEVIA_WEAPONS, ...TAIL_WEAPONS, ...MADQUEEN_WEAPONS, ...HOOK_WEAPONS, ...ORCA_WEAPONS, ...WAVE_WEAPONS, ...MIRYU_WEAPONS, ...SEONGGUK_WEAPON_SET, ...DAWN_WEAPON_SET,
   ...MINER_WEAPONS,
   ...VOYAGER_WEAPONS,
   ...ZEUS_WEAPONS,

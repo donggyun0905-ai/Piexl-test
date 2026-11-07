@@ -23,6 +23,7 @@ import { drawSerenaAura, drawSerenaBack } from "./serenaBody";
 import { drawRafaelAura, drawRafaelBack } from "./rafaelBody";
 import { drawYurielAura, drawYurielBack } from "./yurielBody";
 import { drawMichaelaAura, drawMichaelaBack } from "./michaelaBody";
+import { drawBlastAura } from "./blastBody";
 import { drawFallenWings } from "./fallenWings";
 
 type Ctx = CanvasRenderingContext2D;
@@ -151,6 +152,7 @@ export function drawForgottenAura(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawRafaelAura(ctx, s, alpha, snap);
   drawYurielAura(ctx, s, alpha, snap);
   drawMichaelaAura(ctx, s, alpha, snap);
+  drawBlastAura(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten" || (p.fgGod ?? 0) <= 0) return;
   const x = lerp(p.prevX, p.x, alpha);

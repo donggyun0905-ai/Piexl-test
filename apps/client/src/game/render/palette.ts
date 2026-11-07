@@ -80,6 +80,7 @@ export const C = {
   rafael: "#b0e8ff",
   yuriel: "#fff2c0",
   michaela: "#d8c8ff",
+  blast: "#e8e8f4",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",

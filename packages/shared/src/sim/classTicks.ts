@@ -53,6 +53,7 @@ import { serenaTick } from "./serena";
 import { rafaelTick } from "./rafael";
 import { yurielTick } from "./yuriel";
 import { michaelaTick } from "./michaela";
+import { blastTick } from "./blast";
 import { leoTick } from "./leo";
 import { onyxTick } from "./onyx";
 import { fenrirTick } from "./fenrir";
@@ -125,6 +126,7 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   skybow: rafaelTick,
   sanctum: yurielTick,
   armory: michaelaTick,
+  blast: blastTick,
   lion: leoTick,
   gem: onyxTick,
   fang: fenrirTick,

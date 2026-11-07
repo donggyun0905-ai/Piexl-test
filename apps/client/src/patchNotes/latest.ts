@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.77",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "새 소속 새벽의 성흔(악마 사냥꾼, 흰색) · 새 캐릭터 블래스트 '폭멸의 탄환': 근접한 악마들을 날려 버리는 화력 담당 (체력 115 · 공격력 15 · 방어력 2 · 이동 1.35, 여는 조건: 공격 속도 1.6 달성)",
+        "산탄총 두 발 → 펌프질 · 붙을수록 세고 크게 밀침 · 초근접으로 처치하면 폭멸(몸이 터져 둘레 피해)",
+        "새벽의 성흔은 스킬 대신 흰 성흔(달빛의 힘) 게이지: 맞히면 차고 가득 차면 6초 달빛 각성 (달빛 폭발 · 피해 1.4배 · 더 멀리·넓게·빠르게 · 달빛 산탄)",
+        "전용 아이템 20 (화력 · 폭멸 · 성흔 · 사냥꾼) · 산탄·폭멸·달빛 이펙트 · 효과음 · 그림 시트 · 패왕전 스킬",
+        "소속 색 바뀜: 성국 노랑 · 테라코어 갈색 · 아카식 레코드·서고의 감시자는 제 색 그대로 은은하게 빛남",
+      ],
+      en: [
+        "New faction Dawn Stigmata (demon hunters, white) · new character Blast 'The Annihilating Round': the firepower who blows nearby demons apart (HP 115 · Damage 15 · Defense 2 · Move 1.35, unlock: reach 1.6 attack speed)",
+        "Two shotgun blasts → pump · stronger and harder-hitting up close · point-blank kills annihilate (the body bursts, hurting those around)",
+        "Dawn Stigmata use a white Stigma (power of moonlight) gauge instead of skills: it fills as you hit and, when full, grants a 6s Moonlight Awakening (moonlight burst · 1.4x damage · longer, wider, faster shots · moon pellets)",
+        "20 exclusive items (Firepower · Annihilation · Stigma · Hunter) · shot, annihilation and moonlight effects · sounds · sprite sheet · Paewang skills",
+        "Faction colors changed: Holy Kingdom yellow · Terracore brown · Akashic Records and Archive Wardens keep their colors with a soft glow",
+      ],
+      ja: [
+        "新しい所属「暁の聖痕」（悪魔狩り、白）・新キャラクター ブラスト「爆滅の弾丸」：近づいた悪魔を吹き飛ばす火力担当（体力115・攻撃力15・防御力2・移動1.35、解放条件：攻撃速度1.6達成）",
+        "散弾銃2発→ポンプ・近いほど強く大きく押し出す・至近距離で倒すと爆滅（体が弾けて周囲にダメージ）",
+        "暁の聖痕はスキルの代わりに白い聖痕（月光の力）ゲージ：当てると満ち、満ちると6秒間の月光覚醒（月光爆発・ダメージ1.4倍・より遠く広く速く・月光散弾）",
+        "専用アイテム20（火力・爆滅・聖痕・狩人）・散弾・爆滅・月光エフェクト・効果音・スプライトシート・覇王戦スキル",
+        "所属の色を変更：聖国は黄色・テラコアは茶色・アカシックレコードと書庫の監視者は元の色のままほのかに光る",
+      ],
+    },
+  },
+  {
     version: "0.49.76",
     date: "2026-11-07",
     items: {

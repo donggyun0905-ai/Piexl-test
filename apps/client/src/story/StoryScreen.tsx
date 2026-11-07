@@ -45,7 +45,7 @@ export function StoryScreen({ lang, t, onBack }: Props) {
           {tab === "factions" && (
             <div className="story-cards">
               {FACTIONS.map((f) => (
-                <section key={f.id} className="story-card story-faction" style={{ borderColor: f.color, ["--fc" as string]: f.color }}>
+                <section key={f.id} className={`story-card story-faction ${f.id}`} style={{ borderColor: f.color, ["--fc" as string]: f.color }}>
                   <h3 style={{ color: f.color }}>
                     {FACTION_TEXT[f.id].name[lang]} <small>{FACTION_TEXT[f.id].tag[lang]}</small>
                   </h3>

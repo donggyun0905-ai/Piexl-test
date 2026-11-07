@@ -33,6 +33,7 @@ const SYSTEM: [RegExp, string][] = [
   [/^MINIONS/, "날벌레·가디언"],
   [/^(ENEMIES|HAZARDS|FOE_STATUS|ELITE)/, "적 공통"],
   [/^ENDLESS/, "무한 모드"],
+  [/^STIGMA/, "새벽의 성흔 성흔 게이지"],
   [/^(COMBAT|PROJECTILES|PLAYER|ITEMS|LOOT|ROOMS|UTIL|PARTY|HERO|ARENA)/, "게임 공통"],
 ];
 

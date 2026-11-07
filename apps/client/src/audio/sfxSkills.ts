@@ -18,6 +18,7 @@ import { serenaSounds } from "./serenaSounds";
 import { rafaelSounds } from "./rafaelSounds";
 import { yurielSounds } from "./yurielSounds";
 import { michaelaSounds } from "./michaelaSounds";
+import { blastSounds } from "./blastSounds";
 
 export const SKILL_SOUNDS = {
   // 터짐: 낮은 펑 · 떨어지는 운석: 쿵 + 우르르
@@ -241,6 +242,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   rafaelSounds(run, out, onShake);
   yurielSounds(run, out, onShake);
   michaelaSounds(run, out, onShake);
+  blastSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;
   for (const e of run.effects) {

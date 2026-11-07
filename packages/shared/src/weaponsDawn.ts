@@ -1,0 +1,12 @@
+// 새벽의 성흔(악마 사냥꾼) 무기 모음 + 공용 성흔 게이지 수치 (content가 커서 나눔 · 이름이 _WEAPONS로 끝나지 않게). 새벽의 성흔 캐릭터는 스킬 대신 성흔 게이지
+import { BLAST_WEAPONS } from "./weaponsBlast";
+
+export const DAWN_WEAPON_SET = { ...BLAST_WEAPONS };
+
+/** 성흔(달빛의 힘) 게이지 공용 수치: 맞히면 참 → 가득 차면 자동으로 달빛 각성 → 끝나면 0부터 (차는 양은 캐릭터마다) */
+export const STIGMA = {
+  /** 게이지 최대 */
+  max: 100,
+  /** 달빛 각성 틱 */
+  awakeTicks: 360,
+};

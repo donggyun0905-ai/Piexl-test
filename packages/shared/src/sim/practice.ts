@@ -44,7 +44,7 @@ import { resetMiryu } from "./miryu";
 import { resetBeatrice } from "./beatrice";
 import { resetIan } from "./ian";
 import { resetGabriel } from "./gabriel";
-import { resetSerena } from "./serena"; import { resetRafael } from "./rafael"; import { resetYuriel } from "./yuriel"; import { resetMichaela } from "./michaela";
+import { resetSerena } from "./serena"; import { resetRafael } from "./rafael"; import { resetYuriel } from "./yuriel"; import { resetMichaela } from "./michaela"; import { resetBlast } from "./blast";
 import { resetCollector } from "./collector";
 import { resetMiner } from "./miner";
 import { resetVoyager } from "./voyager";
@@ -262,7 +262,7 @@ export function practiceReset(s: RunState): void {
   resetIan(p);
   resetGabriel(p);
   resetSerena(p);
-  resetRafael(p); resetYuriel(p); resetMichaela(p);
+  resetRafael(p); resetYuriel(p); resetMichaela(p); resetBlast(p);
   resetCollector(p);
   resetMiner(p);
   resetVoyager(p);
