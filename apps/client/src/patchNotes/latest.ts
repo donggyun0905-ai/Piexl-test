@@ -4,6 +4,21 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.12",
+    date: "2026-11-08",
+    items: {
+      ko: [
+        "네일러: 4 심판의 못비 분신을 검은 그림자로 (발밑 검은 웅덩이·피어오르는 검은 기운) · 못 모양 다듬기 (가는 몸통이 끝으로 갈수록 뾰족 · 얇은 머리 · 한 덩어리 윤곽) · 3 저주의 도화선에 피 폭발 그림 (튐 → 퍼짐 → 크게 터짐 → 웅덩이) · 튀어 나간 못이 떨어진 자리마다 작은 피 폭발 · 못이 박힐 때·2 붉은 실 망치 원에도 피 폭발",
+      ],
+      en: [
+        "Nailer: 4 Nail Judgment clones are now black shadows (black pool underfoot, rising dark wisps) · refined nail shape (slim shaft tapering to a sharp tip, thin head, single outline) · 3 Cursed Fuse uses a blood burst sprite (spray → spread → big burst → pool) · each flung nail splashes a small blood burst where it lands · blood bursts also when nails stick and on 2 Red Thread's hammer ring",
+      ],
+      ja: [
+        "ネイラー：4 釘の審判の分身を黒い影に（足元の黒い溜まり・立ちのぼる黒い気配）· 釘の形を調整（細い胴が先へ行くほど尖る・薄い頭・ひとかたまりの輪郭）· 3 呪いの導火線に血の爆発の絵（飛び散り→広がり→大きく弾ける→血だまり）· 飛び出した釘の落ちた場所ごとに小さな血の爆発 · 釘が刺さる時・2 赤い糸の槌の円にも血の爆発",
+      ],
+    },
+  },
+  {
     version: "0.50.11",
     date: "2026-11-08",
     items: {

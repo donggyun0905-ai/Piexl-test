@@ -1,4 +1,4 @@
-// 네일러 그리기 (몸 둘레). 몸 뒤: 바닥에 박은 못에서 나에게 이어진 붉은 실 · 못비 중 양옆 분신(붉은 그림자 · 못 던지는 자세)
+// 네일러 그리기 (몸 둘레). 몸 뒤: 바닥에 박은 못에서 나에게 이어진 붉은 실 · 못비 중 양옆 검은 분신(못 던지는 자세)
 // 몸 위: 적 체력 줄 위 못 마크(못 ×개수) · 날아가는 못(꼬리) · 달빛 각성 흰 기운
 import { isNailer, NAILER, type RunState } from "@pixel-rogue/shared";
 import { drawCharacter } from "../sprites";
@@ -6,7 +6,7 @@ import { lerp, type Snap } from "./palette";
 import { additive, alpha, glow, type Ctx } from "./pwFxBits";
 import { nail, nailMark, NL } from "./nailerArt";
 
-/** 못비 분신: 양옆에 붉은 그림자 분신이 나와 나와 같은 쪽으로 못을 던짐 (던지는 순간 공격 자세) */
+/** 못비 분신: 양옆에 검은 그림자 분신(풍류사 분신술처럼 완전히 어두운 몸 · 발밑 검은 웅덩이 · 피어오르는 검은 기운)이 나와 같은 쪽으로 못을 던짐 (던지는 순간 공격 자세) */
 function clones(ctx: Ctx, s: RunState, x: number, y: number): void {
   const p = s.player;
   const u = p.nlUlt!;
@@ -15,14 +15,20 @@ function clones(ctx: Ctx, s: RunState, x: number, y: number): void {
   for (const [k, off] of [-NAILER.ultSide, NAILER.ultSide].entries()) {
     const cx = Math.round(x - p.faceY * off);
     const cy = Math.round(y + p.faceX * off);
-    // 발밑 붉은 연기 · 몸 둘레 붉은 기운
-    ctx.fillStyle = alpha(NL.blood, 0.45);
+    ctx.fillStyle = "rgba(6,6,10,0.6)";
     ctx.beginPath();
     ctx.ellipse(cx, cy + p.r + 2, p.r + 5, 3.5, 0, 0, Math.PI * 2);
     ctx.fill();
-    additive(ctx, () => glow(ctx, cx, cy - 8, 20, NL.red, 0.28 + 0.08 * Math.sin(s.tick * 0.4 + k)));
-    ctx.globalAlpha = 0.8;
-    ctx.filter = "grayscale(1) sepia(1) hue-rotate(-40deg) saturate(5) brightness(0.55) contrast(1.3)";
+    // 몸에서 피어오르는 검은 기운
+    ctx.fillStyle = "rgba(6,6,10,0.45)";
+    for (let i = 0; i < 4; i++) {
+      const t = ((s.tick * 0.04 + i * 0.25 + k * 0.1) % 1);
+      ctx.beginPath();
+      ctx.arc(cx - 8 + i * 5, cy - 4 - t * 22, 2.5 * (1 - t) + 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 0.92;
+    ctx.filter = "grayscale(1) brightness(0.12) contrast(1.6)";
     drawCharacter(ctx, "nailer", cx, cy, p.r, pose);
     ctx.filter = "none";
     ctx.globalAlpha = 1;

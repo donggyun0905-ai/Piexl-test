@@ -6,6 +6,22 @@ import type { Snap } from "./palette";
 import { drop, nail, NL } from "./nailerArt";
 
 const NL_FX = new Set(["nlSwingFx", "nlStickFx", "nlSmashFx", "nlAnchorFx", "nlPinFx", "nlCurseFx", "nlUltFx"]);
+/** 피 폭발 그림 (사용자 그림 · scripts/art/nailer_blood.py): 칸 128 × 4장면 (튐 → 퍼짐 → 크게 터짐 → 웅덩이) · 바닥은 칸 3/4 높이 */
+const BLOOD = new Image();
+BLOOD.src = `${import.meta.env.BASE_URL}sprites/nailer_blood.png`;
+const CELL = 128;
+
+/** 피 폭발 그림 한 장면 (바닥 x, y · 폭 w · f 0~1로 4장면을 차례로) */
+function bloodBurst(ctx: Ctx, x: number, y: number, w: number, f: number, al = 1): void {
+  if (!BLOOD.complete || BLOOD.naturalWidth === 0 || al <= 0) return;
+  const k = Math.min(3, Math.floor(f * 4));
+  const fade = k < 3 ? 1 : 1 - (f * 4 - 3);
+  ctx.save();
+  ctx.globalAlpha *= Math.max(0, Math.min(1, al * fade));
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(BLOOD, k * CELL, 0, CELL, CELL, Math.round(x - w / 2), Math.round(y - w * 0.75), Math.round(w), Math.round(w));
+  ctx.restore();
+}
 
 /** 핏방울이 둘레로 튀었다 떨어짐 (n개 · 퍼지는 거리 d · 0~1) */
 function splatter(ctx: Ctx, x: number, y: number, n: number, d: number, f: number, seed: number, up = 1): void {
@@ -78,7 +94,7 @@ function swing(ctx: Ctx, fx: EffectState, x: number, y: number, f: number): void
 /** 못이 박힘: 붉은 번쩍 · 핏방울 몇 개 */
 function stick(ctx: Ctx, fx: EffectState, x: number, y: number, f: number): void {
   additive(ctx, () => glow(ctx, x, y, 5 + fx.size * 0.8 * (1 - f), NL.red, 0.75 * (1 - f), 0.8));
-  splatter(ctx, x, y, 4, 12, f, Math.round(fx.x * 3 + fx.y), 0.6);
+  bloodBurst(ctx, x, y + fx.size * 0.4, 18 + fx.size * 0.6, Math.min(0.99, f * 1.6), 0.9);
 }
 
 /** 붉은 실 2번: 내려쳐 퍼지는 붉은 원 · 갈라짐 · 핏방울 */
@@ -107,7 +123,8 @@ function smash(ctx: Ctx, fx: EffectState, x: number, y: number, f: number): void
     shock(ctx, x, y, r, NL.red, 0.85 * (1 - f), 9);
     glow(ctx, x, y, fx.size * 0.55, NL.red, 0.6 * (1 - f), 0.6);
   });
-  splatter(ctx, x, y - 4, 14, fx.size * 0.9, f, seed);
+  bloodBurst(ctx, x, y + 4, fx.size * 1.3, f);
+  splatter(ctx, x, y - 4, 8, fx.size * 0.9, f, seed);
 }
 
 /** 바닥에 박은 못: 위에서 떨어져 꽂힘 · 붉은 고리 · 흙먼지 */
@@ -153,29 +170,35 @@ function curse(ctx: Ctx, fx: EffectState, x: number, y: number, f: number): void
     return;
   }
   const g = (f - 0.12) / 0.88;
-  // 피 안개 (보통 칠하기라 어둡게 남음)
-  const mist = ctx.createRadialGradient(x, y - 4, 0, x, y - 4, big * (0.4 + 0.6 * easeOut(g)));
-  mist.addColorStop(0, alpha(NL.gore, 0.75 * (1 - g)));
-  mist.addColorStop(0.6, alpha(NL.blood, 0.45 * (1 - g)));
-  mist.addColorStop(1, alpha(NL.blood, 0));
-  ctx.fillStyle = mist;
-  ctx.beginPath();
-  ctx.arc(x, y - 4, big, 0, Math.PI * 2);
-  ctx.fill();
   additive(ctx, () => {
-    shock(ctx, x, y - 2, big * easeOut(g), NL.red, 0.9 * (1 - g), 10);
-    glow(ctx, x, y - 4, big * 0.4, NL.curse, 0.5 * (1 - g), 0.7);
+    shock(ctx, x, y - 2, big * 0.7 * easeOut(Math.min(1, g * 2)), NL.red, 0.6 * Math.max(0, 1 - g * 2), 6);
+    glow(ctx, x, y - 6, big * 0.3, NL.red, 0.5 * Math.max(0, 1 - g * 1.5), 0.6);
   });
-  splatter(ctx, x, y - 6, Math.min(44, 12 + Math.round(n * 1.4)), big * 1.1, g, seed);
-  // 튀어 나가는 못 (빙글 돌며)
+  // 피 폭발 그림 (못 수만큼 크게)
+  bloodBurst(ctx, x, y + 6, big * 2.4, g);
+  splatter(ctx, x, y - 6, Math.min(24, 6 + Math.round(n * 0.8)), big * 1.1, g, seed);
+  // 튀어 나가는 못: 빙글 돌며 날아가 떨어진 자리마다 작은 피 폭발
   const m = Math.min(16, 4 + Math.floor(n / 2));
-  ctx.globalAlpha = Math.max(0, 1 - g);
   for (let k = 0; k < m; k++) {
     const a = rnd(seed, k + 50) * Math.PI * 2;
-    const d = big * (0.5 + rnd(k, 50) * 0.6) * easeOut(g);
-    nail(ctx, x + Math.cos(a) * d, y - 6 + Math.sin(a) * d * 0.7 + 20 * g * g, a + g * 6 * (k % 2 ? 1 : -1), 9);
+    const d = big * (0.6 + rnd(k, 50) * 0.7);
+    const t = Math.min(1, g * 1.8);
+    const hop = Math.sin(t * Math.PI) * 14;
+    const px = x + Math.cos(a) * d * easeOut(t);
+    const py = y - 6 + Math.sin(a) * d * 0.6 * easeOut(t) - hop + 6 * t;
+    if (t < 1) {
+      ctx.strokeStyle = alpha(NL.gore, 0.6);
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(px - Math.cos(a) * 8, py - Math.sin(a) * 5 + 2);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = Math.max(0, 1 - Math.max(0, g - 0.7) / 0.3);
+    nail(ctx, px, py, a + t * 7 * (k % 2 ? 1 : -1), 10);
+    ctx.globalAlpha = 1;
+    if (t >= 1) bloodBurst(ctx, px, py + 3, 22, Math.min(0.99, (g * 1.8 - 1) / 0.8 * 0.75 + 0.25));
   }
-  ctx.globalAlpha = 1;
 }
 
 /** 못비 던지기: 나와 양옆 분신 손끝(size 떨어진 곳)에서 번쩍 · 앞으로 짧은 바람 줄 */
