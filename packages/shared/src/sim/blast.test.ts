@@ -55,7 +55,10 @@ describe("블래스트", () => {
     expect(stigmaGauge(s.player)).toEqual({ v: 0, awake: false });
     shot(s);
     expect(s.player.sgGauge).toBe(B.gainHit + B.gainNear);
-    for (let i = 0; i < 40 && !s.player.sgAwake; i++) shot(s);
+    for (let i = 0; i < 40 && !s.player.sgAwake; i++) {
+      s.player.blAmmo = B.mag;
+      shot(s);
+    }
     expect(stigmaGauge(s.player)!.awake).toBe(true);
     expect(s.effects.some((f) => f.kind === "blAwakeFx")).toBe(true);
     const before = s.projectiles.length;
@@ -66,13 +69,34 @@ describe("블래스트", () => {
     expect(s.player.sgGauge).toBe(0);
   });
 
-  it("두 발 쏘고 펌프질이 더 김", () => {
+  it("탄창 5발 · 5번째 발은 확정 치명타 · 다 쓰면 못 쏨 → 한 발씩 장전", () => {
     const s = blast();
-    stepSim(s, FIRE);
-    const first = s.player.attackCooldown;
-    s.player.attackCooldown = 0;
-    stepSim(s, FIRE);
-    expect(s.player.attackCooldown).toBeGreaterThan(first);
+    s.enemies = [{ ...enemy(1, 120, 100, 9999999), rootTicks: 99999 }];
+    for (let i = 0; i < B.mag; i++) shot(s);
+    expect(s.player.blAmmo).toBe(0);
+    const fx = s.effects.filter((f) => f.kind === "blShotFx");
+    expect(fx.map((f) => ((f.style ?? 0) & 2) === 2)).toEqual([false, false, false, false, true]);
+    const n = s.effects.filter((f) => f.kind === "blShotFx").length;
+    shot(s);
+    expect(s.effects.filter((f) => f.kind === "blShotFx").length).toBe(n);
+    for (let i = 0; i < B.loadTicks + 2; i++) stepSim(s, FIRE);
+    expect(s.effects.some((f) => f.kind === "blLoadFx")).toBe(true);
+    // 한 발 장전되면 바로 쏨 (누르고 있으면) · 치명타 탄은 다시 5번째 발에서
+    expect(s.player.blAmmo).toBe(0);
+    expect(s.player.blShots).toBe(1);
+  });
+
+  it("대시: 슬로우모션 · 파란 탄 4발 · 다시 쓰기 대기", () => {
+    const s = blast();
+    stepSim(s, { ...FIRE, attack: false, dash: true });
+    expect(s.player.blSlow).toBeGreaterThan(0);
+    expect(s.player.blBlue).toBe(B.blueN);
+    shot(s);
+    expect(s.player.blBlue).toBe(B.blueN - 1);
+    expect(s.player.blAmmo ?? B.mag).toBe(B.mag);
+    for (let i = 0; i < B.slowTicks + 2; i++) stepSim(s, { ...FIRE, attack: false });
+    expect(s.player.blSlow).toBeUndefined();
+    expect(s.player.blSlowCd).toBeGreaterThan(0);
   });
 
   it("아이템: 남은 달빛은 각성 뒤 성흔이 남음", () => {

@@ -1,4 +1,4 @@
-// 블래스트(새벽의 성흔, 폭멸의 탄환): 누르고 있으면 산탄총 두 발 → 펌프질. 초근접일수록 세고 크게 밀침 · 초근접 처치는 폭멸(몸이 터져 둘레 피해)
+// 블래스트(새벽의 성흔, 폭멸의 탄환): 누르고 있으면 산탄총 (탄창 5발 · 5발마다 확정 치명타 · 한 발씩 장전 · 대시 슬로우모션·파란 탄은 sim/blastMag). 초근접일수록 세고 크게 밀침 · 초근접 처치는 폭멸(몸이 터져 둘레 피해)
 // 맞힐수록 성흔(달빛의 힘)이 차고 가득 차면 달빛 각성(sim/stigma): 둘레 달빛 폭발 · 더 멀리·넓게·세게·빠르게 + 달빛 산탄. 수치 weaponsBlast.BLAST · 아이템 itemsBlast
 import { TICK_RATE } from "../constants";
 import { BLAST_PERKS as K } from "../itemsBlast";
@@ -7,6 +7,7 @@ import { STIGMA } from "../weaponsDawn";
 import { healPlayer } from "./combat";
 import { fan, inCircle, inCone, isBoss, strike, stun } from "./s2Kit";
 import { addStigma, awaken, isAwake, stigmaTick } from "./stigma";
+import { hasShell, reload, slowTick, useShell } from "./blastMag";
 import { ignite } from "./status";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
@@ -35,8 +36,8 @@ function burst(s: RunState, x: number, y: number, depth: number): void {
   }
 }
 
-/** 한 적에게 산탄 (거리 d: 초근접일수록 셈) → 차는 성흔 */
-function pellet(s: RunState, e: EnemyState, reach: number): number {
+/** 한 적에게 산탄 (거리 d: 초근접일수록 셈 · crit: 확정 치명타) → 차는 성흔 */
+function pellet(s: RunState, e: EnemyState, reach: number, crit: boolean): number {
   const p = s.player;
   const aw = isAwake(p);
   const d = Math.max(0, Math.hypot(e.x - p.x, e.y - p.y) - e.r);
@@ -46,7 +47,9 @@ function pellet(s: RunState, e: EnemyState, reach: number): number {
     (aw ? B.awakeMul + (hasPerk(p, "blLunar") ? K.blLunar.mul : 0) : 1) * (isBoss(e) && hasPerk(p, "blSilver") ? K.blSilver.mul : 1);
   const dmg = p.stats.damage * m;
   const rc = hasPerk(p, "blRecoil");
+  if (crit) p.rmSure = true;
   strike(s, e, dmg, near ? B.nearPush * (rc ? K.blRecoil.push : 1) : B.farPush);
+  delete p.rmSure;
   let n = B.gainHit + (near ? B.gainNear : 0);
   if (hasPerk(p, "blDragon")) ignite(e, p.stats.damage * K.blDragon.burn);
   if (near && e.hp > 0) {
@@ -63,15 +66,16 @@ function pellet(s: RunState, e: EnemyState, reach: number): number {
   return n;
 }
 
-/** 한 발: 앞 부채꼴 산탄 (각성 중: 더 멀리·넓게·세게 + 달빛 산탄) · pump: 펌프 앞 마지막 발 (큰 불꽃) */
-function fire(s: RunState, pump: boolean): void {
+/** 한 발: 앞 부채꼴 산탄 (각성 중: 더 멀리·넓게·세게 + 달빛 산탄) · 탄창 마지막(critEvery번째) 발은 확정 치명타 · 파란 탄 */
+function fire(s: RunState): void {
   const p = s.player;
+  const { blue, crit } = useShell(p);
   const aw = isAwake(p);
   const reach = B.reach * (aw ? B.awakeReach : 1) * (hasPerk(p, "blChoke") ? K.blChoke.reach : 1);
   const arc = Math.min(aw ? B.awakeArc : B.arcCos, hasPerk(p, "blSpread") ? K.blSpread.arc : 1);
   let n = 0;
-  for (const e of inCone(s, reach, arc)) n += pellet(s, e, reach);
-  addEffect(s, { kind: "blShotFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, arc, style: (aw ? 1 : 0) + (pump ? 2 : 0), maxTicks: 16, follow: true });
+  for (const e of inCone(s, reach, arc)) n += pellet(s, e, reach, crit);
+  addEffect(s, { kind: "blShotFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, arc, style: (aw ? 1 : 0) + (crit ? 2 : 0) + (blue ? 4 : 0), maxTicks: 16, follow: true });
   if (aw) {
     const k = B.moonN + (hasPerk(p, "blLunar") ? K.blLunar.more : 0);
     fan(s, k, B.moonSpread, { damage: p.stats.damage * B.moonMul, spirit: "blMoon", r: 4, range: B.moonRange, pierce: 2 });
@@ -85,21 +89,17 @@ export function blastTick(s: RunState, want: boolean, speed: number): void {
   stigmaTick(p, hasPerk(p, "blRemain") ? K.blRemain.keep : 0);
   const aw = isAwake(p);
   if (aw && s.tick % 20 === 0) addEffect(s, { kind: "blMoonAura", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 26, maxTicks: 20, follow: true });
-  p.blGap = (p.blGap ?? 0) + (p.attackCooldown <= 0 ? 1 : 0);
-  if (p.blGap > B.stepGap) p.blStep = 0;
-  if (!want || p.attackCooldown > 0 || p.s2Rush) return;
-  const k = p.blStep ?? 0;
-  fire(s, k === B.stepTime.length - 1);
-  p.blStep = (k + 1) % B.stepTime.length;
-  p.blGap = 0;
-  const time = (B.stepTime[k] ?? 1) * (k === B.stepTime.length - 1 && hasPerk(p, "blPump") ? K.blPump.pump : 1);
-  p.attackCooldown = Math.max(1, Math.round((TICK_RATE / (speed * (aw ? B.awakeSpeed : 1))) * time));
+  slowTick(s);
+  reload(s, want);
+  if (!want || p.attackCooldown > 0 || p.s2Rush || !hasShell(p)) return;
+  fire(s);
+  p.attackCooldown = Math.max(1, Math.round((TICK_RATE / (speed * (aw ? B.awakeSpeed : 1))) * B.shotTime));
   p.attackCount++;
 }
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetBlast(p: RunState["player"]): void {
-  for (const k of ["sgGauge", "sgAwake", "sgAwakeMax", "blStep", "blGap"] as const) delete p[k];
+  for (const k of ["sgGauge", "sgAwake", "sgAwakeMax", "blAmmo", "blShots", "blLoad", "blBlue", "blSlow", "blSlowCd", "blFrozen", "blDash"] as const) delete p[k];
 }
 
 export const isBlast = (p: RunState["player"]) => p.characterId === "blast";

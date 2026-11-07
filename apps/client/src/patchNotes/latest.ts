@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.79",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "블래스트 탄창 5발: 5발마다 마지막 발은 확정 치명타 (체력 줄 위 새빨간 탄) · 쏘지 않을 때 한 발씩 장전하며 철컥 소리 · 한 발만 들어가도 바로 쏠 수 있지만 치명타 탄은 다시 5번째 발에서 (두 발 → 펌프질 방식은 없앰)",
+        "블래스트 대시 슬로우모션 (7초마다): 2초 동안 나를 포함한 모두가 느려지고 화면이 잿빛으로 · 파란 탄 4발이 바로 장전 (푸른 폭발) · 그동안 공격 속도와 탄은 그대로",
+        "아이템 바뀜: 빠른 펌프 → 빠른 장전 (한 발 장전 시간 -30%)",
+      ],
+      en: [
+        "Blast 5-shell magazine: every 5th shell is a guaranteed crit (bright red shell above the HP bar) · reloads one shell at a time with a click when not firing · you can fire as soon as one shell is in, but the crit shell comes again only on the 5th shot (the two-shots-then-pump pattern is gone)",
+        "Blast dash slow motion (every 7s): for 2s everyone including you slows down and the screen turns gray · 4 blue shells load instantly (blue blast) · your attack speed and shots stay the same",
+        "Item changed: Quick Pump → Quick Reload (-30% time to load each shell)",
+      ],
+      ja: [
+        "ブラストの弾倉5発：5発ごとに最後の1発は確定クリティカル（体力バーの上に真っ赤な弾）・撃たない間に1発ずつ装填しガチャッと音・1発入ればすぐ撃てるがクリティカル弾は再び5発目に（2発→ポンプ方式は廃止）",
+        "ブラストのダッシュスローモーション（7秒ごと）：2秒間、自分を含む全員が遅くなり画面が灰色に・青い弾4発が即装填（青い爆発）・その間も攻撃速度と弾はそのまま",
+        "アイテム変更：素早いポンプ → 素早い装填（1発の装填時間-30%）",
+      ],
+    },
+  },
+  {
     version: "0.49.78",
     date: "2026-11-07",
     items: {

@@ -25,7 +25,7 @@ export const BLAST_PASSIVES = {
   blRecoil: P("blRecoil", [{ stat: "maxHp", add: 10 }]),
   /** 넓은 산탄: 부채꼴이 넓어짐 */
   blSpread: P("blSpread", [{ stat: "range", add: 10 }]),
-  /** 빠른 펌프: 펌프질이 빨라짐 */
+  /** 빠른 장전: 한 발씩 장전이 빨라짐 */
   blPump: P("blPump", [{ stat: "attackSpeed", add: 0.05 }]),
   // ── 성흔 ──
   /** 달빛 탄피: 성흔이 더 빨리 참 */
@@ -71,8 +71,8 @@ export const BLAST_PERKS = {
   blRecoil: { push: 1.6, stun: 30 },
   /** 넓은 산탄: 부채꼴 cos (작을수록 넓음) */
   blSpread: { arc: 0.42 },
-  /** 빠른 펌프: 펌프 발 간격 배율 */
-  blPump: { pump: 0.7 },
+  /** 빠른 장전: 장전 틱 배율 */
+  blPump: { load: 0.7 },
   /** 달빛 탄피: 차는 양 배율 */
   blMoonlight: { gain: 1.3 },
   /** 보름달: 각성 틱 더함 */

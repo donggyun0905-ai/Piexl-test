@@ -1,8 +1,9 @@
-// 블래스트 효과 — 폭멸의 탄환. 산탄(총구 앞 주황·검붉은 폭발 그림 sprites/blast_fx + 퍼지는 산탄 줄기 · 각성 중엔 흰 달빛 더함) · 폭멸(검붉은 터짐·핏방울·뼛조각) · 달빛 각성(흰 충격파·초승달·달빛 기둥) · 각성 중 몸 둘레 달빛
+// 블래스트 효과 — 폭멸의 탄환. 산탄(총구 앞 주황·검붉은 폭발 그림 sprites/blast_fx · 치명타 탄은 크게 새빨갛게 · 파란 탄은 푸른 폭발 hook_fx + 퍼지는 산탄 줄기 · 각성 중엔 흰 달빛 더함) · 폭멸(검붉은 터짐·핏방울·뼛조각) · 달빛 각성(흰 충격파·초승달·달빛 기둥) · 각성 중 몸 둘레 달빛
 // 달빛 산탄(blMoon): 흰 초승달 탄과 푸른 꼬리
 import type { EffectState, ProjectileState } from "@pixel-rogue/shared";
 import { additive, alpha, beam, crescent, easeOut, glow, rnd, shock, sparks, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
+import { blastSprite as blueSprite } from "./hookArt";
 
 const FIRE = "#ffb84a";
 const MOON = "#ffffff";
@@ -32,15 +33,21 @@ function shot(ctx: Ctx, fx: EffectState, x: number, y: number, f: number): void 
   const st = fx.style ?? 0;
   const moon = (st & 1) === 1;
   const big = (st & 2) === 2;
-  const c = moon ? MOON : FIRE;
+  const blue = (st & 4) === 4;
+  const c = moon ? MOON : blue ? "#6ad8ff" : big ? "#ff3a2a" : FIRE;
   const mx = x + Math.cos(a) * 14;
   const my = y - 4 + Math.sin(a) * 14;
   const seed = Math.abs(Math.round(fx.x * 13 + fx.y * 7 + fx.maxTicks));
-  // 총구 앞 폭발: 번쩍 → 검붉은 연기 → 초승달 충격 → 흩어짐 (펌프 앞 마지막 발은 크게)
+  // 총구 앞 폭발: 번쩍 → 검붉은 연기 → 초승달 충격 → 흩어짐 (치명타 탄은 크게 + 새빨간 빛 · 파란 탄은 푸른 폭발)
   const frame = Math.min(3, Math.floor(f * 4));
-  const w = (big ? 84 : 62) * (moon ? 1.15 : 1);
+  const w = (big ? 92 : 62) * (moon ? 1.15 : 1);
   const push = frame >= 2 ? w * 0.15 * (frame - 1) : 0;
-  blastSprite(ctx, big ? 0 : 1, frame, mx + Math.cos(a) * push, my + Math.sin(a) * push, a, w, f < 0.75 ? 1 : 1 - (f - 0.75) / 0.25);
+  const fade = f < 0.75 ? 1 : 1 - (f - 0.75) / 0.25;
+  const bx = mx + Math.cos(a) * push;
+  const by = my + Math.sin(a) * push;
+  if (blue) blueSprite(ctx, big ? 0 : 1, frame, bx, by, a, w, fade);
+  else blastSprite(ctx, big ? 0 : 1, frame, bx, by, a, w, fade);
+  if (big) additive(ctx, () => glow(ctx, mx + Math.cos(a) * 20, my + Math.sin(a) * 20, 30 * (1 - f) + 6, "#ff2a1a", 0.9 * (1 - f), 0.8));
   additive(ctx, () => {
     glow(ctx, mx, my, 16 * (1 - f) + 4, c, 0.9 * (1 - f), 1);
     const n = moon ? 11 : 9;

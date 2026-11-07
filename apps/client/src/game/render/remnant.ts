@@ -1,5 +1,6 @@
 // 잔영 그리기: 그림자 칼 · 단검 내려찍기(위에서 내리꽂는 칼빛·끝 불똥) · 회피 성공(보라 충격파·잔상) · 연속 베기(큰 초승달 검격, 겹치면 밝아짐)
 // · 월식(검은 달 + 금빛 테) · 슬로우모션(발밑 문양·남은 시간 고리, 화면 가장자리 어둡게 + 위쪽 남은 시간 막대·칼 표시)
+import { drawBlastSlowmo } from "./blastBody";
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
 import { additive, alpha, crescent, easeOut, glow, rune, shock, sparks } from "./pwFxBits";
 import type { Snap } from "./palette";
@@ -52,6 +53,8 @@ export function drawRemnantAura(ctx: Ctx, s: RunState, snap: Snap): void {
 
 /** 슬로우모션 화면: 가장자리가 보랏빛으로 어두워지고, 위쪽 가운데 남은 시간 막대와 칼 표시 (누르라는 뜻으로 맥박) */
 export function drawRemnantSlowmo(ctx: Ctx, s: RunState, scale: number): void {
+  // 블래스트 대시 슬로우모션 화면도 같은 자리에서 (render/index가 커서 여기서 부름)
+  drawBlastSlowmo(ctx, s, scale);
   const p = s.player;
   if (p.characterId !== "remnant" || (!(p.rmSlow ?? 0) && !p.rmFlurry)) return;
   const W = ctx.canvas.width;
