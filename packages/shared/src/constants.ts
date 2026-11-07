@@ -1,5 +1,5 @@
 /** 게임 버전 (패치 노트 맨 위 버전과 같게 유지) */
-export const GAME_VERSION = "0.49.74";
+export const GAME_VERSION = "0.49.75";
 
 /** 한 칸(타일) 크기, 픽셀 */
 export const TILE_SIZE = 16;

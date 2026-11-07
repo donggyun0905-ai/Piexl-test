@@ -13,26 +13,13 @@ export const MICHAELA = {
   /** 기본 3연격 간격 (공격 간격 배율) · 공격할 수 있게 된 뒤 이 틱 동안 안 치면 처음으로 */
   stepTime: [0.6, 0.6, 1],
   comboGap: 70,
-  /** 검을 들었을 때 1·2타 베기: 거리 · 부채꼴(cos 이상) · 피해 배율 · 밀침 */
-  swordR: 56,
-  swordCos: 0.3,
-  swordMul: 1,
-  swordPush: 4,
-  /** 투창을 들었을 때 1·2타 찌르기: 길이 · 폭(절반) · 피해 배율 */
-  spearLen: 100,
-  spearW: 8,
-  spearMul: 1.1,
-  /** 3타 투척: 거리 · 폭(절반) · 처음 닿은 적 피해 배율 · 떨어진 자리에 박혀 폭발 */
+  /** 던지기 기술: 거리 · 폭(절반) · 처음 닿은 적 피해 배율 (떨어진 자리에 무기가 박히고 다른 종류의 새 무기를 꺼냄) */
   throwLen: 200,
   throwW: 6,
   throwMul: 1.2,
-  /** 폭발: 반지름 · 피해 배율 · 연쇄: 둘레 이 거리 안의 박힌 무기도 터짐 · 연쇄 사이 틱 · 연쇄 피해 배율 · 한 무기가 다시 터질 수 있기까지 틱 */
+  /** 일제 폭파 폭발: 반지름 · 차례로 터지는 사이 틱 */
   blastR: 40,
-  blastMul: 0.8,
-  chainR: 70,
   chainDelay: 6,
-  chainMul: 0.5,
-  chainCd: 60,
   /** 콤보: 최대 · 하나마다 피해 더함 · 바꾸거나 던지지 않으면 이 틱 뒤 0 */
   comboMax: 20,
   comboStep: 0.03,
@@ -43,15 +30,12 @@ export const MICHAELA = {
   rainEdge: 24,
   fallR: 16,
   fallMul: 0.5,
-  /** 줍기: 몸에서 이 거리 안이면 바꿔 듦 · 바꿀 때 폭발 반지름 · 피해 배율 */
+  /** 줍기: 몸에서 이 거리 안이면 바꿔 듦 → 그 무기의 기술 둘이 이 틱 사이로 나감 */
   pickR: 8,
-  swapR: 36,
-  swapMul: 0.6,
-  /** 대시: 이 거리 안의 박힌 무기로 순간 이동 (대시 쪽을 먼저, cos 이상) · 도착 베기 반지름 · 피해 배율 · 무적 틱 */
+  touchGap: 12,
+  /** 대시: 이 거리 안의 박힌 무기로 순간 이동 (대시 쪽을 먼저, cos 이상) · 무적 틱 */
   dashR: 150,
   dashCos: 0.3,
-  dashHitR: 50,
-  dashMul: 1.2,
   dashInv: 12,
   /** 스킬 대기 틱 (1 무기 비 · 2 칼날 교대 · 3 일제 폭파 · 4 무한의 무기고) */
   cooldowns: [480, 360, 840, 3600],
@@ -61,7 +45,7 @@ export const MICHAELA = {
   stormN: 6,
   stormDelay: 20,
   stormMul: 0.7,
-  /** 2 칼날 교대: 이 거리 안 가장 가까운 박힌 무기로 · 도착 피해 배율 · 콤보 더함 */
+  /** 2 칼날 교대: 이 거리 안 가장 가까운 박힌 무기로 (그 무기 기술 피해 배율) · 콤보 더함 */
   shiftR: 220,
   shiftMul: 1.5,
   shiftCombo: 2,
@@ -72,6 +56,67 @@ export const MICHAELA = {
   ultTicks: 480,
   ultEvery: 15,
   ultMul: 0.7,
+};
+
+/** 무기 기술 수치 (무기마다 어떤 기술을 쓰는지는 michaelaWeaponMoves) · 배율 1 = 공격력 100% */
+export const MICHAELA_MOVES = {
+  /** 베기: 앞 부채꼴 거리 · cos 이상 · 피해 배율 */
+  slashR: 60,
+  slashCos: 0.2,
+  slashMul: 1,
+  /** 내려찍기: 앞 거리 · 반지름 · 피해 배율 · 기절 틱 */
+  slamAt: 34,
+  slamR: 36,
+  slamMul: 1.4,
+  slamStun: 20,
+  /** 휘두르기: 넓은 부채꼴 거리 · cos 이상 · 피해 배율 · 밀침 */
+  sweepR: 72,
+  sweepCos: -0.3,
+  sweepMul: 1.1,
+  sweepPush: 12,
+  /** 회전 베기: 둘레 반지름 · 피해 배율 */
+  spinR: 62,
+  spinMul: 1.1,
+  /** 찌르기: 길이 · 폭(절반) · 피해 배율 */
+  thrustLen: 100,
+  thrustW: 8,
+  thrustMul: 1.2,
+  /** 돌진 찌르기: 앞으로 나아가는 거리 · 폭(절반) · 피해 배율 */
+  lungeDist: 70,
+  lungeW: 12,
+  lungeMul: 1.4,
+  /** 세 갈래 던지기: 양옆 각(cos·sin) · 한 갈래 피해 배율 (가운데만 박힘) */
+  fanC: 0.94,
+  fanS: 0.34,
+  fanMul: 0.8,
+  /** X 베기: 거리 · cos 이상 · 한 번 피해 배율 (두 번) */
+  crossR: 60,
+  crossCos: 0.3,
+  crossMul: 0.8,
+  /** 땅 가르기: 길이 · 폭(절반) · 피해 배율 · 느려짐 틱 */
+  quakeLen: 150,
+  quakeW: 16,
+  quakeMul: 1.3,
+  quakeSlow: 40,
+  /** 올려베기: 거리 · cos 이상 · 피해 배율 · 크게 밀침 */
+  riseR: 58,
+  riseCos: 0.4,
+  riseMul: 1.3,
+  risePush: 22,
+  /** 회오리: 둘레 반지름 · 한 번 피해 배율 · 횟수 · 사이 틱 */
+  whirlR: 70,
+  whirlMul: 0.55,
+  whirlN: 3,
+  whirlGap: 10,
+  /** 칼비: 앞 거리 · 퍼지는 반지름 · 수 · 피해 배율 (떨어진 무기는 박힘) */
+  skyAt: 90,
+  skyR: 50,
+  skyN: 3,
+  skyMul: 0.7,
+  /** 꿰뚫는 빛 창: 길이 · 폭(절반) · 피해 배율 (줄 위 모두) */
+  pierceLen: 260,
+  pierceW: 10,
+  pierceMul: 1.6,
 };
 
 /** 무기 속성 8가지 (그림 무기마다 하나, michaelaWeaponList): 0 성은 · 1 빙결 · 2 홍염 · 3 혈월 · 4 천광 · 5 자전 · 6 비취 · 7 청해. 맞힐 때·터질 때 속성 효과 */

@@ -34,5 +34,6 @@ export { YURIEL_PERKS } from "./itemsYuriel";
 export { MICHAELA } from "./weaponsMichaela";
 export { MICHAELA_PERKS } from "./itemsMichaela";
 export { MC_SPEARS, MC_WEAPON_ELEM } from "./michaelaWeaponList";
+export { MC_MOVE_IDS, MC_WEAPON_MOVES, type McMove } from "./michaelaWeaponMoves";
 export { WAVE_PERKS, WV_SKILLS, type WvSkill } from "./itemsWave";
 export { LUX } from "./weaponsLux";

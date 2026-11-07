@@ -1,7 +1,8 @@
-// 미카엘라 공용 도우미: 그림 무기(번호 → 종류·속성) · 콤보 · 속성 맞히기 · 폭발·연쇄 · 박힌 무기 놓기·바꿔 들기 · 하늘에서 무기 떨어뜨리기 · 순간 이동 · 스킬 대기
+// 미카엘라 공용 도우미: 그림 무기(번호 → 종류·속성) · 콤보 · 속성 맞히기 · 일제 폭파 폭발 · 박힌 무기 놓기·바꿔 들기(그 무기 기술 대기열) · 하늘에서 무기 떨어뜨리기 · 순간 이동 · 스킬 대기
 import { MICHAELA_PERKS as K } from "../itemsMichaela";
 import { MICHAELA as M, MICHAELA_ELEM as E } from "../weaponsMichaela";
 import { MC_SPEARS, MC_WEAPON_ELEM } from "../michaelaWeaponList";
+import { MC_WEAPON_MOVES } from "../michaelaWeaponMoves";
 import { createRng, deriveSeed } from "../rng";
 import type { McBlade } from "./mcTypes";
 import { alive, inCircle, isBoss, poison, strike } from "./s2Kit";
@@ -71,22 +72,15 @@ export function mcHit(s: RunState, e: EnemyState, mul: number, push = 0, v = 0):
   elemHit(s, e, v, dmg);
 }
 
-/** 폭발: (x,y) 둘레 적에게 피해(속성 v) · 둘레 박힌 무기가 있으면 잠시 뒤 연달아 터짐 (chain: 연쇄로 터진 폭발) */
-export function explode(s: RunState, x: number, y: number, r: number, mul: number, v: number, chain = false): void {
+/** 폭발 (3 일제 폭파): (x,y) 둘레 적에게 피해(속성 v) · 긴 도화선: 더 셈 · 파편: 출혈 */
+export function explode(s: RunState, x: number, y: number, r: number, mul: number, v: number): void {
   const p = s.player;
-  const rr = r * (hasPerk(p, "mcWide") ? K.mcWide.r : 1);
-  const m = mul * (hasPerk(p, "mcPowder") ? K.mcPowder.mul : 1) * (chain && hasPerk(p, "mcFuse") ? K.mcFuse.mul : 1);
-  for (const e of inCircle(s, x, y, rr)) {
+  const m = mul * (hasPerk(p, "mcFuse") ? K.mcFuse.mul : 1);
+  for (const e of inCircle(s, x, y, r)) {
     mcHit(s, e, m, 6, v);
     if (hasPerk(p, "mcShrapnel") && e.hp > 0) strike(s, e, p.stats.damage * m * K.mcShrapnel.mul, 0, "bleed");
   }
-  addEffect(s, { kind: "mcBlastFx", x, y, dirX: chain ? 1 : 0, dirY: 0, size: rr, style: v, maxTicks: 24 });
-  const cr = M.chainR * (hasPerk(p, "mcResonance") ? K.mcResonance.r : 1);
-  for (const b of p.mcBlades ?? []) {
-    if ((b.cd ?? 0) > s.tick || Math.hypot(b.x - x, b.y - y) > cr) continue;
-    b.cd = s.tick + M.chainCd;
-    (p.mcChains ??= []).push({ x: b.x, y: b.y, t: M.chainDelay, v: b.v ?? 0, mul: M.chainMul });
-  }
+  addEffect(s, { kind: "mcBlastFx", x, y, dirX: 0, dirY: 0, size: r, style: v, maxTicks: 24 });
 }
 
 /** 박힌 무기 최대 수 */
@@ -95,32 +89,31 @@ const maxBlades = (p: PlayerState) => M.maxBlades + (hasPerk(p, "mcHoard") ? K.m
 /** 무기를 땅에 박음 (가득 차면 가장 오래된 것을 뺌) · 바로 연쇄로 터지지 않게 잠깐 막음 */
 export function plant(s: RunState, x: number, y: number, w: number): void {
   const list = (s.player.mcBlades ??= []);
-  list.push({ x, y, w, k: kindOf(w), v: elemOf(w), cd: s.tick + M.chainCd });
+  list.push({ x, y, w, k: kindOf(w), v: elemOf(w) });
   while (list.length > maxBlades(s.player)) list.shift();
 }
 
-/** 박힌 무기를 바꿔 듦: 그 무기(종류·속성)를 들고 · 콤보 · 그 자리 폭발 (연쇄) */
-export function swapTo(s: RunState, b: McBlade): void {
+/** 박힌 무기를 바꿔 듦: 그 무기를 들고 · 콤보 · 그 무기의 기술 둘이 연달아 나감 (공명: 3연격 마지막 기술도) · mul: 그 기술 피해 배율 */
+export function swapTo(s: RunState, b: McBlade, mul = 1): void {
   const p = s.player;
   p.mcBlades = (p.mcBlades ?? []).filter((o) => o !== b);
   const w = b.w ?? (b.k ? 0 : MC_SPEARS);
   hold(p, w);
   addCombo(p, 1 + (hasPerk(p, "mcDouble") ? K.mcDouble.more : 0));
-  addEffect(s, { kind: "mcSwapFx", x: b.x, y: b.y, dirX: 0, dirY: 0, size: M.swapR, style: w, maxTicks: 16 });
-  explode(s, b.x, b.y, M.swapR, M.swapMul, elemOf(w));
+  addEffect(s, { kind: "mcSwapFx", x: b.x, y: b.y, dirX: 0, dirY: 0, size: 30, style: w, maxTicks: 16 });
+  const set = MC_WEAPON_MOVES[w] ?? MC_WEAPON_MOVES[0]!;
+  const list = hasPerk(p, "mcResonance") ? [...set.t, set.c[2]] : set.t;
+  p.mcQueue = list.map((m, i) => ({ t: i * M.touchGap, m, mul }));
 }
 
-/** 박힌 무기로 순간 이동해 바꿔 들고 둘레를 벰 (그 무기의 속성으로) */
-export function blinkTo(s: RunState, b: McBlade, r: number, mul: number, inv: number): void {
+/** 박힌 무기로 순간 이동해 바꿔 듦 (그 무기의 기술이 나감) */
+export function blinkTo(s: RunState, b: McBlade, mul: number, inv: number): void {
   const p = s.player;
-  const w = b.w ?? (b.k ? 0 : MC_SPEARS);
-  const v = elemOf(w);
-  addEffect(s, { kind: "mcBlinkFx", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, style: w, toX: b.x, toY: b.y, maxTicks: 14 });
+  addEffect(s, { kind: "mcBlinkFx", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 30, style: b.w ?? 0, toX: b.x, toY: b.y, maxTicks: 14 });
   p.x = p.prevX = b.x;
   p.y = p.prevY = b.y;
   p.invulnTicks = Math.max(p.invulnTicks, inv);
-  for (const e of inCircle(s, p.x, p.y, r)) mcHit(s, e, mul, 8, v);
-  swapTo(s, b);
+  swapTo(s, b, mul);
 }
 
 /** 하늘(포탈)에서 무기를 떨어뜨림: t틱 뒤 (x,y)에 꽂혀 둘레 적을 치고 박힘 */

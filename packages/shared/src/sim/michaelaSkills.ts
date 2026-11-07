@@ -1,4 +1,4 @@
-// 미카엘라 스킬 넷(1 무기 비 · 2 칼날 교대 · 3 일제 폭파 · 4 무한의 무기고) · 방에 들어설 때 무기 비 · 떨어지는 무기 · 연쇄 · 줍기 · 대시 순간 이동 (sim/michaela에서 부름)
+// 미카엘라 스킬 넷(1 무기 비 · 2 칼날 교대 · 3 일제 폭파 · 4 무한의 무기고) · 방에 들어설 때 무기 비 · 떨어지는 무기 · 일제 폭파 · 줍기(그 무기 기술) · 대시 순간 이동 (sim/michaela에서 부름)
 import { MICHAELA_PERKS as K } from "../itemsMichaela";
 import { MICHAELA as M } from "../weaponsMichaela";
 import { MC_WEAPON_ELEM } from "../michaelaWeaponList";
@@ -52,7 +52,7 @@ export function mcSkill(s: RunState, i: number): void {
     // 2 칼날 교대: 가장 가까운 박힌 무기로 (없으면 쓰지 않음)
     const b = nearBlade(s, M.shiftR);
     if (!b) return;
-    blinkTo(s, b, M.dashHitR, M.shiftMul, M.dashInv);
+    blinkTo(s, b, M.shiftMul, M.dashInv);
     addCombo(p, M.shiftCombo - 1);
   } else if (i === 0) {
     // 1 무기 비: 앞에 무기가 쏟아져 박힘
@@ -81,7 +81,7 @@ export function mcWorld(s: RunState): void {
     plant(s, f.x, f.y, f.w);
   }
   if (p.mcFalls) p.mcFalls = p.mcFalls.filter((f) => f.t > 0);
-  for (const c of p.mcChains ?? []) if (--c.t <= 0) explode(s, c.x, c.y, M.blastR, c.mul, c.v, true);
+  for (const c of p.mcChains ?? []) if (--c.t <= 0) explode(s, c.x, c.y, M.blastR, c.mul, c.v);
   if (p.mcChains) p.mcChains = p.mcChains.filter((c) => c.t > 0);
   if (!(p.mcUlt ?? 0)) return;
   p.mcUlt!--;
@@ -102,7 +102,7 @@ export function mcTouch(s: RunState): void {
     if (b) {
       p.dashTicks = 0;
       const v = hasPerk(p, "mcVoid");
-      blinkTo(s, b, M.dashHitR, M.dashMul * (v ? K.mcVoid.mul : 1), M.dashInv + (v ? K.mcVoid.inv : 0));
+      blinkTo(s, b, v ? K.mcVoid.mul : 1, M.dashInv + (v ? K.mcVoid.inv : 0));
     }
   }
   p.mcDash = dashing;

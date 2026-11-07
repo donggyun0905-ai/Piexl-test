@@ -1,13 +1,13 @@
 // 미카엘라 상태 타입 (sim/michaela). 모두 선택 값 (예전 저장에는 없음)
+import type { McMove } from "../michaelaWeaponMoves";
 
-/** 박힌 무기: 자리 · 그림 무기 번호(michaelaWeaponList) · 종류(0 검 · 1 투창) · 속성(0~7) · 다시 연쇄로 터질 수 있는 틱 */
+/** 박힌 무기: 자리 · 그림 무기 번호(michaelaWeaponList) · 종류(0 검 · 1 투창) · 속성(0~7) */
 export interface McBlade {
   x: number;
   y: number;
   w?: number;
   k: number;
   v?: number;
-  cd?: number;
 }
 
 /** 하늘(포탈)에서 떨어지는 무기: 자리 · 남은 틱 · 그림 무기 번호 · 종류 · 속성 · 피해 배율 */
@@ -21,7 +21,7 @@ export interface McFall {
   mul: number;
 }
 
-/** 곧 터질 연쇄 폭발: 자리 · 남은 틱 · 속성 · 피해 배율 */
+/** 곧 터질 일제 폭파: 자리 · 남은 틱 · 속성 · 피해 배율 */
 export interface McChain {
   x: number;
   y: number;
@@ -30,7 +30,16 @@ export interface McChain {
   mul: number;
 }
 
+/** 곧 나갈 무기 기술: 남은 틱 · 기술 · 피해 배율 */
+export interface McQueued {
+  t: number;
+  m: McMove;
+  mul: number;
+}
+
 export interface MichaelaPlayerState {
+  /** 곧 나갈 무기 기술 (무기에 닿았을 때 둘 · 회오리 이어 치기) */
+  mcQueue?: McQueued[];
   /** 다음 기본 공격 단계 (0~2) · 마지막 공격 뒤 틱 · 마지막 공격(그림) */
   mcStep?: number;
   mcGap?: number;
@@ -44,7 +53,7 @@ export interface MichaelaPlayerState {
   /** 콤보 · 남은 유지 틱 */
   mcCombo?: number;
   mcComboT?: number;
-  /** 박힌 무기 · 떨어지는 무기 · 곧 터질 연쇄 */
+  /** 박힌 무기 · 떨어지는 무기 · 곧 터질 일제 폭파 */
   mcBlades?: McBlade[];
   mcFalls?: McFall[];
   mcChains?: McChain[];
@@ -56,5 +65,5 @@ export interface MichaelaPlayerState {
   mcRoom?: string;
 }
 
-/** 효과 (베기·찌르기 style = 그림 무기 번호 × 2 + 단계 · 투척·떨어짐·바꿔 듦·순간 이동 style = 그림 무기 번호 · 폭발 style = 속성): 검 베기 · 창 찌르기 · 투척 · 폭발 · 떨어지는 무기 · 포탈 · 바꿔 듦 · 순간 이동 · 무기고(머리 위 포탈) · 자전 번개 */
-export type MichaelaFx = "mcSlashFx" | "mcThrustFx" | "mcThrowFx" | "mcBlastFx" | "mcFallFx" | "mcPortalFx" | "mcSwapFx" | "mcBlinkFx" | "mcUltFx" | "mcBoltFx";
+/** 효과: 무기 기술 (style = 기술 번호(MC_MOVE_IDS) × 64 + 그림 무기 번호) · 투척·떨어지는 무기·바꿔 듦·순간 이동 (style = 그림 무기 번호) · 일제 폭파 폭발 (style = 속성) · 포탈 · 무기고(머리 위 포탈) · 자전 번개 */
+export type MichaelaFx = "mcMoveFx" | "mcThrowFx" | "mcBlastFx" | "mcFallFx" | "mcPortalFx" | "mcSwapFx" | "mcBlinkFx" | "mcUltFx" | "mcBoltFx";

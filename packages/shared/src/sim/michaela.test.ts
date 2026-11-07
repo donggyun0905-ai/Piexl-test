@@ -5,6 +5,7 @@ import { createRun, stepSim, type RunState } from "./index";
 import { recalcStats } from "./items";
 import { enemy, FIRE } from "./perkTestUtil";
 import { comboMul, hold, mcCooldown } from "./michaelaKit";
+import { MC_MOVE_IDS } from "../michaelaWeaponMoves";
 import { MC_SPEARS, MC_WEAPON_ELEM } from "../michaelaWeaponList";
 
 /** 그 속성의 검 번호 */
@@ -42,44 +43,57 @@ describe("미카엘라", () => {
     expect((s.player.mcBlades ?? []).length).toBeGreaterThan(0);
   });
 
-  it("베기 둘 → 투척: 박혀 폭발 · 콤보 · 다른 무기를 듦", () => {
+  it("무기마다 다른 3연격 (은적 대검: 내려찍기 → 휘두르기 → 땅 가르기)", () => {
     const s = michaela();
+    hold(s.player, 21);
     hit(s);
     hit(s);
-    expect(s.player.mcCombo ?? 0).toBe(0);
+    hit(s);
+    const moves = s.effects.filter((f) => f.kind === "mcMoveFx").map((f) => MC_MOVE_IDS[Math.floor((f.style ?? 0) / 64)]);
+    expect(moves).toEqual(["slam", "sweep", "quake"]);
+    expect(s.effects.some((f) => f.kind === "mcBlastFx")).toBe(false);
+  });
+
+  it("창 3연격 끝 던지기: 박히고 콤보 · 다른 종류 새 무기를 듦", () => {
+    const s = michaela();
+    hold(s.player, 0);
+    hit(s);
+    hit(s);
     hit(s);
     expect(s.player.mcCombo).toBe(1);
-    expect(s.player.mcHeld).toBe(1);
-    expect(s.player.mcBlades?.length).toBe(1);
-    expect(s.effects.some((f) => f.kind === "mcBlastFx")).toBe(true);
+    expect(s.player.mcHeld).toBe(0);
+    expect(s.player.mcBlades?.[0]?.w).toBe(0);
     expect(comboMul(s.player)).toBeCloseTo(1 + M.comboStep);
   });
 
-  it("몸에 닿으면 바꿔 듦 (콤보 · 폭발)", () => {
+  it("몸에 닿으면 바꿔 들고 그 무기 기술 둘이 연달아 (대검: 내려찍기 → 휘두르기)", () => {
     const s = michaela();
-    s.player.mcBlades = [{ x: 100, y: 100, w: 0, k: 1 }];
+    s.player.mcBlades = [{ x: 100, y: 100, w: 21, k: 0 }];
     run(s, 1);
-    expect(s.player.mcHeld).toBe(1);
+    expect(s.player.mcWeapon).toBe(21);
     expect(s.player.mcBlades.length).toBe(0);
     expect(s.player.mcCombo).toBe(1);
+    run(s, M.touchGap + 1);
+    const moves = s.effects.filter((f) => f.kind === "mcMoveFx").map((f) => MC_MOVE_IDS[Math.floor((f.style ?? 0) / 64)]);
+    expect(moves).toEqual(["slam", "sweep"]);
+    expect(lost(s)).toBeGreaterThan(0);
   });
 
-  it("폭발 둘레의 박힌 무기가 연달아 터짐", () => {
+  it("회오리는 이어서 더 침", () => {
     const s = michaela();
-    s.player.mcBlades = [{ x: 160, y: 100, k: 0 }];
+    hold(s.player, 7);
     hit(s);
     hit(s);
     hit(s);
-    run(s, M.chainDelay + 1);
-    expect(s.effects.filter((f) => f.kind === "mcBlastFx" && f.dirX === 1).length).toBeGreaterThan(0);
+    expect(s.player.mcQueue?.length).toBe(2);
   });
 
   it("대시하면 범위 안의 박힌 무기로 순간 이동해 바꿔 듦", () => {
     const s = michaela();
-    s.player.mcBlades = [{ x: 200, y: 100, w: 0, k: 1 }];
+    s.player.mcBlades = [{ x: 200, y: 100, w: 21, k: 0 }];
     stepSim(s, { ...IDLE, dash: true, moveX: 1 });
     expect(s.player.x).toBe(200);
-    expect(s.player.mcHeld).toBe(1);
+    expect(s.player.mcWeapon).toBe(21);
   });
 
   it("스킬: 무기 비 · 칼날 교대 · 일제 폭파 · 무한의 무기고", () => {
@@ -88,8 +102,10 @@ describe("미카엘라", () => {
     run(s, M.stormDelay + 3 * M.stormN + 2);
     const n = (s.player.mcBlades ?? []).length;
     expect(n).toBeGreaterThan(0);
+    const near = [...s.player.mcBlades!].sort((a, b) => Math.hypot(a.x - 100, a.y - 100) - Math.hypot(b.x - 100, b.y - 100))[0]!;
     key(s, 2);
-    expect((s.player.mcBlades ?? []).length).toBe(n - 1);
+    expect(s.player.x).toBe(near.x);
+    s.player.mcQueue = [];
     const first = s.player.mcBlades![0]!;
     s.enemies[0]!.x = first.x;
     s.enemies[0]!.y = first.y;
