@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.6",
+    date: "2026-11-07",
+    items: {
+      ko: ["방 안 장애물 다듬기: 안쪽 벽(벽돌 줄·그림자) · 돌기둥(입체·이음매·금·이끼) · 구덩이(깊이·윗턱 돌)", "지형 함정 다듬기: 진흙(윤기·동심원·돌) · 용암(식은 바위 테·떠다니는 껍질·거품) · 물(깊이·가장자리 거품·반짝임) · 가시(쇠 발판·못·그늘진 가시)"],
+      en: ["Polished room obstacles: inner walls (bricks, shadows) · stone pillars (depth, seams, cracks, moss) · pits (depth, stone lip)", "Polished floor hazards: mud (sheen, ripples, stones) · lava (cooled rock rim, drifting crust, bubbles) · water (depth, foam edge, sparkles) · spikes (iron plate, rivets, shaded spikes)"],
+      ja: ["部屋の障害物を改善：内壁（レンガ・影）・石柱（立体・継ぎ目・ひび・苔）・穴（深さ・縁の石）", "地形の罠を改善：泥（つや・波紋・石）・溶岩（冷えた岩の縁・漂う殻・泡）・水（深さ・縁の泡・きらめき）・トゲ（鉄板・鋲・陰のあるトゲ）"],
+    },
+  },
+  {
     version: "0.50.5",
     date: "2026-11-07",
     items: {
