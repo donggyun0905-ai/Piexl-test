@@ -1,5 +1,6 @@
 // 상점 대신 나오는 작업대: 아티팩터는 모든 상점이 거대한 제작대(sim/afBench) · 추적자는 라스트 보스 층 상점이 튜닝소(sim/trTune)
 // 작업대 앞에서 F = 창 열기·닫기. 창에서 누른 것은 입력 menu (기능 × 4096 + a × 64 + b)로 와서 같은 결과가 나옴 (기록·협동)
+import { SPIRIT_OP, spiritMenu } from "./factionSpirit";
 import { ROUTE_OP, routeMenu } from "./routeGo";
 import type { StatMod } from "../stats";
 import { BENCH_OP, benchMods, benchUse } from "./afBench";
@@ -63,6 +64,8 @@ export function stationMenu(s: RunState, code: number): void {
   const op = Math.floor(code / 4096);
   const a = Math.floor(code / 64) % 64;
   const b = code % 64;
+  // 비르디아 공생 정령: 고르기 · 꾸러미 · 상자 · 여우 (sim/factionSpirit)
+  if (op >= SPIRIT_OP.pick && op <= SPIRIT_OP.fox) return spiritMenu(s, op, a);
   // 히든 아이템 고르는 창 (저주받은 주사위 · 테라포밍)
   if (op === 7 || op === 8) return hiddenPick(s, op, a);
   // 단련의 방 (sim/gym): 미니게임 결과 · 강화

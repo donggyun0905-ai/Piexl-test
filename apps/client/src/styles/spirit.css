@@ -1,0 +1,77 @@
+/* 비르디아 공생 정령 창 (game/SpiritWindows): 카드 3장 고르기 · 보관 꾸러미 · 상자 꾸러미 · 여우 바꾸기 버튼 */
+.sp-window {
+  position: fixed;
+  top: 42%;
+  left: 50%;
+  z-index: 6;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(720px, 94vw);
+  max-height: 76vh;
+  overflow: auto;
+  padding: 14px 16px;
+  border: 2px solid #4ac86a;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgb(14 36 22 / 0.97), rgb(8 20 12 / 0.97));
+  box-shadow: 0 0 26px rgb(106 224 122 / 0.35);
+  pointer-events: auto;
+  text-align: center;
+  color: #e8fff0;
+}
+.sp-window > b { color: #9aff9a; font-size: 18px; }
+.sp-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.sp-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 200px;
+  min-height: 190px;
+  margin: 0;
+  padding: 12px 10px;
+  border: 2px solid #3a8a4a;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #1e4a2a, #10261a);
+  color: #e8fff0;
+  line-height: 1.45;
+}
+.sp-card:hover { border-color: #9aff9a; transform: translateY(-3px); box-shadow: 0 0 16px rgb(154 255 154 / 0.4); }
+.sp-card strong { font-size: 17px; color: #ffffff; }
+.sp-card span { font-size: 13px; color: #cfe8d6; }
+.sp-card small { padding: 1px 8px; border-radius: 8px; background: rgb(0 0 0 / 0.35); font-size: 12px; }
+.sp-card.buff small { color: #ffd86a; }
+.sp-card.ally small { color: #ff9a6a; }
+.sp-card.gamble small { color: #d88aff; }
+.sp-card.pack small { color: #8ad8ff; }
+.sp-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.sp-items button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 92px;
+  margin: 0;
+  padding: 6px;
+  font-size: 12px;
+}
+.sp-esc { color: #8aa894; }
+.sp-later, .sp-fox {
+  pointer-events: auto;
+  margin: 0;
+  padding: 4px 10px;
+  border-color: #4ac86a;
+  color: #c8ffd0;
+}
+.sp-fox:disabled { opacity: 0.45; }

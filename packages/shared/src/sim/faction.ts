@@ -5,7 +5,7 @@ import { FACTION_HEAT as H, FACTION_MEMBERS, FACTION_TAINT as T, FACTION_TIDE as
 import { blastAt } from "./combat";
 import { coreDmgMul, coreTick } from "./factionCore";
 import { oathDmgMul, oathHurt, oathKill, oathTick } from "./factionOath";
-import { spiritKill, spiritTick } from "./factionSpirit";
+import { spiritDmgMul, spiritHurt, spiritKill, spiritSpeedMul, spiritTaken, spiritTick } from "./factionSpirit";
 import { dotDamage } from "./status";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
@@ -83,6 +83,7 @@ export function factionHurt(s: RunState): void {
   if (tr === "thalassia") delete p.fcCombo;
   else if (tr === "helios" && !rampaging(p)) p.fcTaint = Math.max(0, (p.fcTaint ?? 0) - T.hurtLoss);
   else if (tr === "ascalon") oathHurt(s);
+  else if (tr === "virdia") spiritHurt(s);
 }
 
 /** 틱마다 (baseStats.extraTick) */
@@ -132,15 +133,17 @@ export function factionDmgMul(s: RunState): number {
   if (tr === "terracore") return 1 + (Math.min(H.max, p.fcHeat ?? 0) / H.max) * H.dmg;
   if (tr === "ascalon") return oathDmgMul(p);
   if (tr === "seongguk") return coreDmgMul(p);
+  if (tr === "virdia") return spiritDmgMul(p);
   return 1;
 }
 
 /** 받는 피해 배율 (classTaken.classTaken): 타락 */
 export function factionTaken(s: RunState): number {
+  if (traitOf(s) === "virdia") return spiritTaken(s.player);
   if (traitOf(s) !== "helios") return 1;
   const p = s.player;
   return 1 + (rampaging(p) ? T.max : (p.fcTaint ?? 0)) * T.taken;
 }
 
-/** 공격 속도 배율 (player.attackSpeedNow): 타락 폭주 */
-export const factionSpeedMul = (p: PlayerState) => (rampaging(p) ? T.rampageSpeed : 1);
+/** 공격 속도 배율 (player.attackSpeedNow): 타락 폭주 · 햇살 정령 */
+export const factionSpeedMul = (p: PlayerState) => (rampaging(p) ? T.rampageSpeed : 1) * spiritSpeedMul(p);

@@ -1,6 +1,7 @@
 // 아래 장비 칸에 보낼 값 (gameLoop가 틱마다 만들어 바뀌었을 때만 보냄): 무기·사용 아이템·패시브 · 풋내기 레벨 · 추적자 스킬 대기 · 패왕전 스킬 · 판매 값 · 작업대 · 히든 고르는 창
 import { beatriceSkills, ianSkills, gabrielSkills, serenaSkills, rafaelSkills, yurielSkills, michaelaSkills, stigmaGauge, factionGauge, BLAST, expToNext, passiveTagAt, sellPrice, trackerSkills, trialNoItems, type RunState } from "@pixel-rogue/shared";
 import type { LoadoutView } from "./Loadout";
+import type { SpiritView } from "./SpiritWindows";
 import { pwSkillView } from "./pwSkillView";
 import { sellCodes } from "./SellBar";
 import { stationView } from "./stationView";
@@ -19,6 +20,19 @@ function blastSlide(run: RunState): { slide?: { cd: number; s: number; on: boole
   if (run.pvp || run.pw || p.characterId !== "blast") return {};
   const left = p.blSlowCd ?? 0;
   return { slide: { cd: Math.ceil((left / BLAST.slowCd) * 20) / 20, s: Math.ceil(left / 60), on: (p.blSlow ?? 0) > 0 } };
+}
+
+/** 비르디아 공생 정령 창 (로그만) */
+function spiritView(run: RunState): { spirit?: SpiritView } {
+  const p = run.player;
+  if (!factionGauge(run) || factionGauge(run)!.trait !== "virdia") return {};
+  const v: SpiritView = {
+    ...(p.fcSpPick ? { pick: [...p.fcSpPick] } : {}),
+    ...(p.fcBagOpen && p.fcBag ? { bag: [...p.fcBag], bagOpen: true } : {}),
+    ...(p.fcChest ? { chest: [...p.fcChest] } : {}),
+    ...(p.fcSp === "fox" ? { fox: p.fcFox ?? 0, near: run.nearPickupId > 0 } : {}),
+  };
+  return Object.keys(v).length ? { spirit: v } : {};
 }
 
 export function loadoutView(run: RunState, armed: Parameters<typeof pwSkillView>[1]): LoadoutView {
@@ -52,6 +66,7 @@ export function loadoutView(run: RunState, armed: Parameters<typeof pwSkillView>
     ...(run.prompt.kind === "trash" && run.prompt.confirm && !run.party ? { sell: sellCodes(p.passives.length).map((n) => sellPrice(run, n)) } : {}),
     ...(run.prompt.kind === "station" ? { station: stationView(run) } : {}),
     ...(p.hdPick ? { hdPick: p.hdPick } : {}),
+    ...spiritView(run),
     ...altarRes(run),
   };
 }

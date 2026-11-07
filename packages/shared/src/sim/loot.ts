@@ -1,4 +1,5 @@
 // 방에 아이템 놓기: 얻을 수 있는 아이템 목록 · 보물방 · 방 정리 보상(돈·사용 아이템·층 보상)
+import { spiritRoomClear } from "./factionSpirit";
 import { PERKS } from "../perks";
 import { ROOM_CX as CX, ROOM_CY as CY } from "../constants";
 import { WEAPON_IDS, WEAPONS, type CharacterId, type WeaponDef, type WeaponId, type WeaponKind } from "../content";
@@ -189,6 +190,8 @@ export function onRoomCleared(s: RunState, roomId: number): void {
   if ((type === "combat" || type === "elite" || type === "exit") && hasPerk(s.player, "regenCharm")) healPlayer(s, s.player.stats.maxHp * PERKS.regenCharm.heal);
   // 빌드 세트 빛 4 (sim/buildSetFx)
   if (type === "combat" || type === "elite" || type === "exit") setRoomClear(s);
+  // 비르디아 공생 정령: 끝낸 방 수 (꽃 회복·여우·보관 꾸러미)
+  if (type === "combat" || type === "elite" || type === "exit") spiritRoomClear(s);
   // 전투식량(거너): 전투가 끝나면 최대 체력의 10% 회복
   if ((type === "combat" || type === "elite" || type === "exit") && hasPerk(s.player, "ration")) healPlayer(s, s.player.stats.maxHp * 0.1);
   // 활빈당 깃발(풍류사)

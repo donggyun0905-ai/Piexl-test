@@ -9,14 +9,14 @@ const STAGE: TextKey[] = ["ftVirdiaStage0", "ftVirdiaStage1", "ftVirdiaStage2"];
 
 export function FactionGauge({ view, t }: { view: View; t: (k: TextKey) => string }) {
   const on = view.on && ON[view.trait];
-  const label = on ? t(ON[view.trait]!) : t(NAME[view.trait]);
+  const label = on ? t(ON[view.trait]!) : view.spirit ? t(`sp_${view.spirit}` as TextKey) : t(NAME[view.trait]);
   return (
     <span className={`faction-gauge ft-${view.trait}${view.on ? " on" : ""}`} title={t(TIP[view.trait])}>
       <b>{label}</b>
       <span className="faction-bar">
         <i style={{ width: `${Math.round(view.v * 100)}%` }} />
       </span>
-      <em>{view.trait === "virdia" ? t(STAGE[view.stage ?? 0]!) : view.n}</em>
+      <em>{view.trait === "virdia" ? `${t(STAGE[view.stage ?? 0]!)}${view.extra ? ` · ${view.extra}` : ""}` : view.n}</em>
       {view.oath && (
         <span className={`faction-oath ${view.oathState ?? "keep"}`}>
           {view.oathState === "kept" ? t("oathKept") : view.oathState === "broken" ? t("oathBroken") : t(`oath_${view.oath as OathKind}` as TextKey)}

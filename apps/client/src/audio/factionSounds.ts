@@ -3,7 +3,7 @@ import type { RunState } from "@pixel-rogue/shared";
 import type { Sfx } from "./sound";
 
 const SFX: Partial<Record<string, Sfx>> = {
-  fcTideUp: "twinkle", fcRampage: "power", fcVent: "rumble", fcOverload: "clank", fcOathKept: "chime", fcOathBroken: "sharp", fcSpGrow: "rustle", fcCoreOn: "awaken", fcCorePillar: "descend",
+  fcTideUp: "twinkle", fcRampage: "power", fcVent: "rumble", fcOverload: "clank", fcOathKept: "chime", fcOathBroken: "sharp", fcSpGrow: "rustle", fcSpThorn: "sharp", fcSpBite: "slice", fcSpDive: "power", fcSpStomp: "rumble", fcSpFox: "twinkle", fcSpEat: "pickup", fcCoreOn: "awaken", fcCorePillar: "descend",
 };
 const SHAKE: Partial<Record<string, number>> = { fcRampage: 2, fcVent: 2, fcCorePillar: 2 };
 

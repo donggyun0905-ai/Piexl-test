@@ -32,7 +32,7 @@ import { apostleMods, apostlePotion } from "./apostle";
 import { mukinPotion } from "./mukin";
 import { swarmMods } from "./swarmMods";
 import { goldLocked, noUseItems, oniConvert } from "./oniRules";
-import { buildSetMods } from "./buildSets";
+import { buildSetMods } from "./buildSets"; import { bagOpen, bagStore } from "./spiritPack";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -54,7 +54,7 @@ export const PICKUP_HOLD_TICKS = 30;
 export function recalcStats(s: RunState): void {
   const p = s.player;
   const oldMax = p.stats.maxHp;
-  // 풋내기 스탯·순례자 도감·왕 영혼·빌드 세트도 능력치 변화로 · 오니는 바꿔 셈 (oniRules)
+  // 풋내기 스탯·순례자 도감·왕 영혼·빌드 세트도 능력치로 · 오니는 oniRules
   p.mods = oniConvert(p, [...p.passives.flatMap((id): StatMod[] => [...PASSIVES[id].mods]), ...noviceMods(p), ...imugiMods(p), ...apostleMods(p), ...tabooMods(s), ...swarmMods(p), ...morphMods(p), ...eaterMods(p), ...automataMods(p), ...petMods(s), ...stationMods(s), ...secretMods(p), ...buildSetMods(s)]);
   p.stats = kingStats(p) ?? computeStats(baseStats(p.characterId, p.weaponId), p.mods);
   // 거너: 최대 체력 고정 (체력 아이템을 먹어도 그대로)
@@ -172,8 +172,8 @@ export function updateItems(s: RunState, input: TickInput): void {
       }
       continue;
     }
-    // 빈 칸에 들어가는 사용 아이템은 닿으면 바로. 꽉 찬 칸 바꾸기는 잠깐 서 있으면 가짐
-    // (F·버튼은 바로). 무기 바꾸기·층 보상은 서 있기로는 안 가짐 (F·버튼, 층 보상은 클릭도)
+    // 빈 칸 사용 아이템은 닿으면 바로 · 꽉 찬 칸 바꾸기는 잠깐 서 있으면
+    // (F·버튼은 바로). 무기 바꾸기·층 보상은 F·버튼으로만 (층 보상은 클릭도)
     // (레이드 아레나 보상은 F·버튼으로만 · 돈 주머니는 칸이 차도 바로 돈)
     // 금봉을 든 오니는 다른 무기를 못 잡음
     if (pk.kind === "weapon" && goldLocked(p)) continue;
@@ -223,8 +223,8 @@ function take(s: RunState, pk: Pickup): void {
     const item = pk.itemId as UseItemId;
     const empty = p.useSlots.indexOf(null);
     const slot = empty >= 0 ? empty : p.replaceSlot;
-    if (empty >= 0) {
-      p.useSlots[slot] = item;
+    if (empty >= 0 || bagStore(s, item)) {
+      if (empty >= 0) p.useSlots[slot] = item;
       remove((x) => x.id === pk.id);
     } else {
       // 칸이 다 찼으면 먼저 얻은 아이템과 바꿈
@@ -255,16 +255,16 @@ function take(s: RunState, pk: Pickup): void {
 function useSlot(s: RunState, slot: number, input: TickInput): void {
   const p = s.player;
   const item = p.useSlots[slot];
-  if (!item) return;
+  if (!item) return bagOpen(s);
   p.useSlots[slot] = null;
-  // 협동: 전투가 끝난 방에서 쓰러진 친구 옆이면 회복약으로 일으킴 (회복약 회복량만큼)
+  // 협동: 전투가 끝난 방에서 쓰러진 친구 옆이면 회복약으로 일으킴
   const down = (item === "potion" || item === "elixir") && s.rooms[s.roomId]!.cleared ? downedNear(s, R.REVIVE_REACH) : null;
   if (down) {
     down.hp = Math.max(1, healAmount(!!s.pvp, item as "potion" | "elixir", down.stats.maxHp));
     down.invulnTicks = 120;
     addEffect(s, { kind: "burst", x: down.x, y: down.y, dirX: 0, dirY: 0, size: 14, maxTicks: 16 });
   } else if (item === "potion" || item === "elixir") {
-    // 처방전(의사): 회복량 +30% · 의사는 넘친 만큼 보호막 · 악의 사도는 회복 대신 그만큼 피해
+    // 처방전(의사): 회복 +30% · 의사는 넘친 만큼 보호막 · 악의 사도는 회복 대신 피해
     // 금기: 쓴 약
     const amount = healAmount(!!s.pvp, item, p.stats.maxHp) * (hasPerk(p, "prescription") ? PRESCRIPTION_MUL : 1) * tabooDown(s, "bitterPotion");
     if (p.characterId === "apostle") apostlePotion(s, amount);

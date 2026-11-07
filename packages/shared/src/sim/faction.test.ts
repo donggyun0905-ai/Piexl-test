@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CharacterId } from "../characters";
-import { FACTION_CORE, FACTION_HEAT, FACTION_OATH, FACTION_SPIRIT, FACTION_TAINT, FACTION_TIDE } from "../factionDefs";
+import { FACTION_CORE, FACTION_HEAT, FACTION_OATH, FACTION_TAINT, FACTION_TIDE } from "../factionDefs";
 import { damageEnemy, damagePlayer, removeDead } from "./combat";
 import { factionDmgMul, factionHit, factionTick, tideMul, traitOf } from "./faction";
 import { factionGauge } from "./factionGauge";
@@ -138,16 +138,6 @@ describe("진영 특징", () => {
     for (let i = 0; i <= FACTION_OATH.hits; i++) hurt(s);
     expect(s.player.fcOath!.broken).toBe(true);
     expect(factionDmgMul(s)).toBeCloseTo(FACTION_OATH.brokenDmg);
-  });
-
-  it("비르디아: 정령이 가까운 적을 쏘고 처치 수로 자람", () => {
-    const s = start("beast");
-    const e = enemy(1, 130, 100);
-    s.enemies = [e];
-    factionTick(s);
-    expect(e.hp).toBeLessThan(e.maxHp);
-    kill(s, FACTION_SPIRIT.grow1);
-    expect(factionGauge(s)?.stage).toBe(1);
   });
 
   it("성국: 스킬을 정한 횟수만큼 쓰면 핵심 스킬 각성 → 쓰면 피해 증가", () => {

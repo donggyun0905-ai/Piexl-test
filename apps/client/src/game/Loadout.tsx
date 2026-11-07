@@ -2,6 +2,7 @@ import { NovicePanel, type NoviceView } from "./NovicePanel";
 import { SkillButtons } from "./SkillButtons";
 import { StigmaGauge } from "./StigmaGauge";
 import { FactionGauge } from "./FactionGauge";
+import { SpiritWindows, type SpiritView } from "./SpiritWindows";
 import { PwSkillBar, type PwSkillView } from "./PwSkillBar";
 import { SellBar } from "./SellBar";
 import { HiddenPicker } from "./HiddenPicker";
@@ -52,6 +53,8 @@ export interface LoadoutView {
   altarRes?: AltarResultView;
   /** 히든 아이템 고르는 창 (저주받은 주사위 · 테라포밍) */
   hdPick?: "curse" | "terra";
+  /** 비르디아 공생 정령 창 (고르기·꾸러미·상자·여우) */
+  spirit?: SpiritView;
 }
 
 /** PC 사용 아이템 키 표시 (controls의 USE_KEYS와 같게) */
@@ -60,7 +63,7 @@ export interface LoadoutView {
 export function loadoutKey(v: LoadoutView): string {
   const n = v.novice ? `|${v.novice.lv},${v.novice.exp},${v.novice.points}` : "";
   const pw = v.pw ? `|${v.pw.cds.join(",")}|${v.pw.armed}|${v.pw.silenced}` : "";
-  return `${v.weaponId}${v.forge ? JSON.stringify(v.forge) : ""}${v.tags?.join(",") ?? ""}|${v.slots.join(",")}${v.useOff ? "x" : ""}|${v.passives.join(",")}|${v.augs?.map((a) => a.passive + a.skills.join("+")).join(",") ?? ""}${n}|${v.skills?.join(",") ?? ""}${v.stigma ? `|${v.stigma.v}${v.stigma.awake ? "a" : ""}${JSON.stringify(v.stigma.slide ?? "")}` : ""}${v.faction ? `|${JSON.stringify(v.faction)}` : ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}|${v.altarRes?.tick ?? ""}`;
+  return `${v.weaponId}${v.forge ? JSON.stringify(v.forge) : ""}${v.tags?.join(",") ?? ""}|${v.slots.join(",")}${v.useOff ? "x" : ""}|${v.passives.join(",")}|${v.augs?.map((a) => a.passive + a.skills.join("+")).join(",") ?? ""}${n}|${v.skills?.join(",") ?? ""}${v.stigma ? `|${v.stigma.v}${v.stigma.awake ? "a" : ""}${JSON.stringify(v.stigma.slide ?? "")}` : ""}${v.faction ? `|${JSON.stringify(v.faction)}` : ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}|${v.spirit ? JSON.stringify(v.spirit) : ""}|${v.altarRes?.tick ?? ""}`;
 }
 
 interface Props {
@@ -115,6 +118,7 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
       {view.station && <StationWindow view={view.station} lang={lang} t={t} controls={controls} />}
       {view.altarRes && <AltarResult res={view.altarRes} lang={lang} t={t} />}
       {view.hdPick && <HiddenPicker pick={view.hdPick} lang={lang} t={t} controls={controls} />}
+      {view.spirit && <SpiritWindows view={view.spirit} lang={lang} t={t} controls={controls} />}
       {view.skills && <SkillButtons skills={view.skills} set={view.skillSet} core={view.faction?.on ? view.faction.core : undefined} t={t} controls={controls} />}
       {view.stigma && <StigmaGauge v={view.stigma.v} awake={view.stigma.awake} slide={view.stigma.slide} t={t} />}
       {view.faction && <FactionGauge view={view.faction} t={t} />}

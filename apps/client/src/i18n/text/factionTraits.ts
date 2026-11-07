@@ -58,10 +58,11 @@ export const FACTION_TRAIT_TEXT = {
   ftVirdiaStage1: { ko: "꽃", en: "Bloom", ja: "花" },
   ftVirdiaStage2: { ko: "나무 정령", en: "Treant", ja: "樹の精霊" },
   ftVirdiaTip: {
-    ko: "정령이 따라다니며 가까운 적을 쏨 · 처치 30번이면 꽃(처치할 때 조금 회복) · 80번이면 나무 정령(가끔 뿌리로 묶음) · 자랄수록 세짐",
-    en: "A spirit follows you and shoots nearby foes · after 30 kills it Blooms (small heal on kills) · after 80 it becomes a Treant (sometimes roots foes) · stronger as it grows",
-    ja: "精霊がついて回り近くの敵を撃つ・30体撃破で花（撃破時に少し回復）・80体で樹の精霊（時々根で拘束）・育つほど強くなる",
+    ko: "시작할 때 공생 정령 카드 3장 중 1장 (버프형·동행형·도박형·꾸러미형 10종) · 처치 30번이면 꽃, 80번이면 나무로 자라며 세짐",
+    en: "At the start, pick 1 of 3 Symbiote cards (10 kinds: buff, companion, gamble, bundle) · it grows into a Bloom at 30 kills and a Tree at 80, getting stronger",
+    ja: "開始時に共生精霊カード3枚から1枚（バフ型・同行型・ギャンブル型・包み型の10種）・30体撃破で花、80体で樹に育ち強くなる",
   },
+
   ftSeongguk: { ko: "핵심 스킬", en: "Core Skill", ja: "核心スキル" },
   ftSeonggukOn: { ko: "각성", en: "Awakened", ja: "覚醒" },
   ftSeonggukTip: {
