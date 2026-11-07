@@ -8,6 +8,12 @@ export const CHARACTER_TEXT_BLAST = {
     ja: "暁の聖痕。「爆滅の弾丸」。近づいた悪魔の四肢を見分けがつかないほど吹き飛ばす豪快な火力担当。押し続けると散弾銃・弾倉5発（5発ごとに最後の1発は確定クリティカル、真っ赤な弾）・撃たない間に1発ずつ装填（弾切れなら押し続けても、1発入ればすぐ撃てる）・ダッシュすると7秒ごとに長いスライディング（1.7秒）になり、その間自分を含む全員が遅くなり（灰色の画面）弾倉が青い弾4発に変わり、滑りながら攻撃速度そのままで撃つ・終わると元の弾倉に・近いほど強く大きく押し出す（遠いと35%まで弱まる）・至近距離で倒すと爆滅（体が弾けて周囲にダメージ）・スキルの代わりに聖痕（月光の力）ゲージ：当てるほど満ち、満ちると6秒間月光覚醒（月光爆発・ダメージ1.4倍・より遠く広く速く・月光散弾5発）",
   },
   sgGauge: { ko: "성흔", en: "Stigma", ja: "聖痕" },
+  blSlide: { ko: "슬라이딩", en: "Slide", ja: "スライディング" },
+  blSlideTip: {
+    ko: "대시하면 1.7초 슬라이딩 (모두 느려짐 · 파란 탄 4발 · 누르는 방향으로 이동) · 다시 쓰기까지 7초 (칸의 숫자가 남은 초)",
+    en: "Dash into a 1.7s slide (everything slows · 4 blue shells · steer with movement) · 7s until ready again (the number is seconds left)",
+    ja: "ダッシュで1.7秒スライディング（全員が遅くなる・青い弾4発・押した方向へ移動）・再使用まで7秒（枠の数字が残り秒）",
+  },
   sgGaugeTip: {
     ko: "성흔(달빛의 힘): 적을 맞히면 차고(초근접·처치는 더) 가득 차면 저절로 달빛 각성 · 각성이 끝나면 0부터",
     en: "Stigma (power of moonlight): fills as you hit foes (more at point-blank and on kills); when full you awaken in moonlight · starts over from 0 afterwards",

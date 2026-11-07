@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.1",
+    date: "2026-11-07",
+    items: {
+      ko: ["블래스트: 성흔 게이지 옆에 대시 슬라이딩 칸 (다시 쓰기까지 남은 초 · 준비되면 파란 테 · 미끄러지는 중 빛남)"],
+      en: ["Blast: a dash Slide slot next to the Stigma gauge (seconds until ready · blue border when ready · glows while sliding)"],
+      ja: ["ブラスト：聖痕ゲージの横にダッシュ・スライディング枠（再使用までの残り秒・準備できると青い枠・滑っている間は光る）"],
+    },
+  },
+  {
     version: "0.50.0",
     date: "2026-11-07",
     items: {

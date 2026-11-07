@@ -217,3 +217,23 @@
   0%, 100% { box-shadow: 0 0 4px #ffd84a; }
   50% { box-shadow: 0 0 16px #ffd84a, 0 0 4px #ffffff; }
 }
+/* 블래스트 대시 슬라이딩 칸: 대기 덮개 · 준비되면 파란 테 · 미끄러지는 중이면 파랗게 빛남 */
+.blast-slide {
+  border: 1px solid #3a4a6a;
+  border-radius: 4px;
+  background: rgb(16 20 32 / 0.85);
+  color: #c8e8ff;
+}
+.blast-slide.ready {
+  border-color: #6ad8ff;
+}
+.blast-slide.on {
+  border-color: #aae8ff;
+  box-shadow: 0 0 10px #6ad8ff;
+}
+.stigma-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+}
