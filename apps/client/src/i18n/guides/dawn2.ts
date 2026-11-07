@@ -1,4 +1,4 @@
-// 캐릭터 설명: 새벽의 성흔 (네일러) · 한·영·일 (수치는 weaponsNailer·itemsNailer·weaponsDawn과 맞춤, dawn이 커서 나눔)
+// 캐릭터 설명: 새벽의 성흔 (네일러 · 시저스) · 한·영·일 (수치는 weaponsNailer·itemsNailer·weaponsDawn과 맞춤, dawn이 커서 나눔)
 import type { CharacterId } from "@pixel-rogue/shared";
 
 type Guide = Partial<Record<CharacterId, readonly string[]>>;
@@ -16,6 +16,16 @@ export const GUIDE_KO_DAWN2: Guide = {
     "무기 1: 심판관의 망치와 못 · 무기 대신 아이템이 나옴",
     "전용 아이템 20: 못 5 (무거운 못 · 미늘 못 · 빠른 손목 · 흩뿌리는 못 · 깊은 못) · 망치 5 (대형 망치 · 넓은 내려치기 · 못 박기 · 머리 치기 · 울리는 쇠) · 심판 5 (붉은 실 · 단단한 고정 · 피의 원 · 깊은 저주 · 긴 도화선) · 사냥꾼 5 (못비 · 단 하나의 표적 · 달빛 못 · 눈가리개 붕대 · 끝없는 사냥)",
   ],
+  scissors: [
+    "새벽의 성흔 · 시저스 '단죄의 가위' · 악마의 목이나 인과율(운명의 실) 자체를 거대한 가위로 서슴없이 잘라 버리는 냉혹한 도살자 · 체력 105 · 공격력 16 · 방어력 1 · 이동 1.4 · 행운 2 · 스킬 없음(성흔 게이지)",
+    "가위질 (누르고 있으면) 두 박자: 열기 (앞 넓게 52 안 80%) → 닫기 (두 날이 앞에서 맞물리는 X자 절단 60 안 150%, 맞힌 적에게 운명의 실) · 0.8초 안 치면 다시 열기부터",
+    "운명의 실: 나와 적을 잇는 붉은 실 (최대 6 · 8초 · 가득이면 가장 오래된 실이 풀림) · 멀어질수록 팽팽해져 하얗게 빛남",
+    "실 끊기 (대시): 묶인 실을 모두 끊어 그 적을 벰 · 80% + 팽팽함(거리 60→180)에 따라 최대 +170% · 끊기는 실이 지나는 다른 적도 50%",
+    "단죄: 가위로 벨 때 체력 20% 이하인 보통 적은 목을 잘라 바로 처치 · 체력 30% 이하인 보스에게는 피해 1.4배",
+    "성흔 차는 양: 열기로 맞힌 적마다 2 · 닫기 4 · 끊은 실마다 5 · 단죄 10 (최대 100) · 달빛 각성 (6초): 둘레 90 달빛 폭발 150% · 잠깐 무적 · 피해 1.3배 · 가위 거리 1.35배 · 열기도 실을 묶음 · 1.5초마다 실을 저절로 끊음 · 모든 공격에 달빛 1스택",
+    "무기 1: 단죄의 쌍가위 · 무기 대신 아이템이 나옴",
+    "전용 아이템 20: 절단 5 (벼린 날 · 크게 벌린 날 · 맞물리는 날 · 녹슨 날 · 쌍날) · 실 5 (실타래 · 질긴 실 · 팽팽한 실 · 엮인 운명 · 얽매임) · 단죄 5 (목 사냥꾼 · 연쇄 단죄 · 거인 사냥 · 수확 · 공포) · 달빛 5 (달빛 실 · 보름달 · 초승달 날 · 달무리 가위 · 남은 달빛)",
+  ],
 };
 
 export const GUIDE_EN_DAWN2: Guide = {
@@ -31,6 +41,16 @@ export const GUIDE_EN_DAWN2: Guide = {
     "Weapon 1: Judge's Hammer & Nails · items drop instead of weapons",
     "Exclusive items 20: Nails 5 (Heavy Nail · Barbed Nail · Quick Wrist · Scattered Nails · Deep Nail) · Hammer 5 (Sledgehammer · Wide Slam · Drive It Home · Head Strike · Ringing Iron) · Judgment 5 (Crimson Thread · Firm Binding · Circle of Blood · Deep Curse · Long Fuse) · Hunter 5 (Nail Rain · The Only Target · Moonlit Nail · Blindfold Bandage · Relentless Hunt)",
   ],
+  scissors: [
+    "Dawn Stigmata · Scissors 'The Shears of Condemnation' · a ruthless butcher who snips through demons' necks and the very threads of fate with giant shears · HP 105 · ATK 16 · DEF 1 · Move 1.4 · Luck 2 · no skills (Stigma gauge)",
+    "Snipping (hold) in two beats: Open (wide front within 52 for 80%) → Close (the blades meet in an X cut within 60 for 150%, tying a thread of fate to each foe hit) · resets to Open after 0.8s without attacking",
+    "Threads of fate: red threads from you to foes (up to 6 · 8s · the oldest unties when full) · they grow taut and glow white as you move away",
+    "Thread Snap (dash): snaps every thread, cutting the tied foes · 80% + up to +170% by tautness (distance 60→180) · other foes along a snapping thread take 50%",
+    "Condemnation: normal foes at 20% HP or less are beheaded on the spot when cut · bosses at 30% HP or less take 1.4x",
+    "Stigma gain: 2 per foe hit by Open · 4 by Close · 5 per snapped thread · 10 per beheading (max 100) · Moonlight Awakening (6s): 150% burst within 90 · brief invulnerability · 1.3x damage · 1.35x shear reach · Open also ties threads · threads snap by themselves every 1.5s · every attack adds 1 Moonlight stack",
+    "Weapon 1: Shears of Condemnation · items drop instead of weapons",
+    "Exclusive items 20: Cutting 5 (Honed Edge · Wide-Open Blades · Meeting Blades · Rusted Edge · Twin Edges) · Thread 5 (Spool of Fate · Tough Thread · Taut Thread · Woven Fate · Entanglement) · Condemnation 5 (Headhunter · Chain Condemnation · Giant Hunt · Harvest · Dread) · Moonlight 5 (Moonlit Thread · Full Moon Shears · Crescent Edge · Haloed Shears · Lingering Moonlight)",
+  ],
 };
 
 export const GUIDE_JA_DAWN2: Guide = {
@@ -45,5 +65,15 @@ export const GUIDE_JA_DAWN2: Guide = {
     "聖痕の溜まる量：刺さった釘ごとに2 · 槌で当てた敵ごとに3 · 撃破+6（最大100）· 月光覚醒（6秒）：周囲90に月光爆発150% · 一瞬無敵 · 全ダメージ1.3倍 · 全ての攻撃に月光1スタック",
     "武器1：審判官の槌と釘 · 武器の代わりにアイテムが出る",
     "専用アイテム20：釘5（重い釘 · 返し釘 · 素早い手首 · 撒き釘 · 深い釘）· 槌5（大槌 · 広い打ち下ろし · 釘打ち · 脳天打ち · 響く鉄）· 審判5（紅の糸 · 固い縫い止め · 血の円 · 深い呪い · 長い導火線）· 狩人5（釘の雨 · ただ一つの標的 · 月光の釘 · 目隠しの包帯 · 終わらぬ狩り）",
+  ],
+  scissors: [
+    "暁の聖痕 · シザーズ「断罪の鋏」· 悪魔の首や因果律（運命の糸）そのものを巨大な鋏でためらいなく断ち切る冷酷な屠殺者 · 体力105 · 攻撃力16 · 防御力1 · 移動1.4 · 幸運2 · スキルなし（聖痕ゲージ）",
+    "鋏さばき（押し続けると）二拍子：開き（前方を広く52以内に80%）→ 閉じ（二枚の刃が前で噛み合うX字切断60以内に150%、当たった敵に運命の糸）· 0.8秒攻撃しないと開きから",
+    "運命の糸：自分と敵をつなぐ赤い糸（最大6本・8秒・満杯なら一番古い糸がほどける）· 離れるほど張り詰めて白く光る",
+    "糸断ち（ダッシュ）：結んだ糸を全て断ち切りその敵を斬る · 80%＋張り具合（距離60→180）で最大+170% · 断たれる糸が通る他の敵も50%",
+    "断罪：鋏で斬る時、体力20%以下の通常の敵は首を落として即撃破 · 体力30%以下のボスにはダメージ1.4倍",
+    "聖痕の溜まる量：開きで当てた敵ごとに2 · 閉じ4 · 断った糸ごとに5 · 断罪10（最大100）· 月光覚醒（6秒）：周囲90に月光爆発150% · 一瞬無敵 · ダメージ1.3倍 · 鋏の距離1.35倍 · 開きでも糸を結ぶ · 1.5秒ごとに糸が自動で切れる · 全ての攻撃に月光1スタック",
+    "武器1：断罪の双鋏 · 武器の代わりにアイテムが出る",
+    "専用アイテム20：切断5（研いだ刃 · 大きく開いた刃 · 噛み合う刃 · 錆びた刃 · 双刃）· 糸5（糸巻き · 丈夫な糸 · 張り詰めた糸 · 編まれた運命 · 絡みつき）· 断罪5（首狩り · 連鎖断罪 · 巨人狩り · 収穫 · 恐怖）· 月光5（月光の糸 · 満月の鋏 · 三日月の刃 · 月暈の鋏 · 残る月光）",
   ],
 };

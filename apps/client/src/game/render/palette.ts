@@ -82,6 +82,7 @@ export const C = {
   michaela: "#d8c8ff",
   blast: "#e8e8f4",
   nailer: "#c8303a",
+  scissors: "#c8b8e8",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",

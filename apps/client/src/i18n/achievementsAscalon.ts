@@ -24,6 +24,7 @@ export const ASCALON_ACHIEVEMENTS = {
   clearYuriel: n(["단죄의 성녀", "The Saint of Judgment", "断罪の聖女"], ["유리엘로 클리어", "Clear as Yuriel", "ユリエルでクリア"]),
   clearBlast: n(["폭멸의 탄환", "The Annihilating Round", "爆滅の弾丸"], ["블래스트로 클리어", "Clear as Blast", "ブラストでクリア"]),
   clearNailer: n(["못 박는 심판관", "The Nailing Judge", "釘打つ審判官"], ["네일러로 클리어", "Clear as Nailer", "ネイラーでクリア"]),
+  clearScissors: n(["단죄의 가위", "The Shears of Condemnation", "断罪の鋏"], ["시저스로 클리어", "Clear as Scissors", "シザーズでクリア"]),
   clearMichaela: n(["공허의 인도자", "The Void Guide", "虚空の導き手"], ["미카엘라로 클리어", "Clear as Michaela", "ミカエラでクリア"]),
   clearSerena: n(["환혹의 무희", "The Bewitching Dancer", "幻惑の舞姫"], ["세레나로 클리어", "Clear as Serena", "セレナでクリア"]),
   clearGabriel: n(["철옹의 방패", "The Iron Shield", "鉄壁の盾"], ["가브리엘로 클리어", "Clear as Gabriel", "ガブリエルでクリア"]),

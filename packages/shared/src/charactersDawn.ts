@@ -5,4 +5,6 @@ export const DAWN_CHARACTERS = {
   blast: { id: "blast", maxHp: 115, damage: 15, moveSpeed: 1.35, luck: 2, startWeapon: "blShotgun", defense: 2 },
   /** 새벽의 성흔: 네일러 망치 내려치기 · 못 박기·스택 · 스킬 넷 · 성흔 → 달빛 각성 (sim/nailer) */
   nailer: { id: "nailer", maxHp: 120, damage: 15, moveSpeed: 1.25, luck: 2, startWeapon: "nlHammer", defense: 2 },
+  /** 새벽의 성흔: 시저스 가위질(열기 → 닫기) · 운명의 실 → 대시로 끊기 · 단죄(목 자르기) · 성흔 → 달빛 각성 (sim/scissors) */
+  scissors: { id: "scissors", maxHp: 105, damage: 16, moveSpeed: 1.4, luck: 2, startWeapon: "sxShears", defense: 1 },
 } as const;

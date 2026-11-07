@@ -1,0 +1,24 @@
+// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스) — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
+import { kit, SEC, sk } from "./pwKitKit";
+import type { PwKits } from "./pwSkillTypes";
+
+export const PW_KITS_4: PwKits = {
+  blast: kit(1,
+    sk("blShotgun", "cone", 6, "#ffe0a0", { radius: 70, arc: 0.6, fx: "slash", hit: { dmg: 2, push: 14 } }),
+    sk("blShotgun", "dash", 9, "#f4f4ff", { range: 110, speed: 10, hit: { dmg: 1.2, push: 10 } }),
+    sk("blShotgun", "point", 11, "#ff8a5a", { range: 130, radius: 44, delay: 12, fx: "meteor", hit: { dmg: 1.8 } }),
+    sk("blShotgun", "self", 60, "#ffffff", { radius: 110, fx: "pillar", buff: { ticks: 6 * SEC, dmg: 1.4 }, hit: { dmg: 1.5, push: 12 } }),
+  ),
+  nailer: kit(1,
+    sk("nlHammer", "line", 3, "#e0e0e8", { range: 170, repeat: { n: 3, every: 5 }, hit: { dmg: 0.6 } }),
+    sk("nlHammer", "dash", 10, "#ff2a3a", { range: 140, speed: 10, hit: { dmg: 1.2, stun: 1 * SEC } }),
+    sk("nlHammer", "point", 12, "#c01a2a", { range: 160, radius: 40, delay: 36, fx: "pillar", hit: { dmg: 2.4 } }),
+    sk("nlHammer", "line", 60, "#ffffff", { range: 200, repeat: { n: 10, every: 6 }, hit: { dmg: 0.9 } }),
+  ),
+  scissors: kit(1,
+    sk("sxShears", "cone", 5, "#e8d8ff", { radius: 64, arc: 0.5, fx: "slash", hit: { dmg: 1.8, push: 6 } }),
+    sk("sxShears", "dash", 8, "#ff3a4a", { range: 130, speed: 11, fx: "slash", hit: { dmg: 1.6 } }),
+    sk("sxShears", "line", 11, "#ff5a6a", { range: 180, hit: { dmg: 2.2, slow: 1 * SEC } }),
+    sk("sxShears", "self", 60, "#ffffff", { radius: 110, fx: "pillar", buff: { ticks: 6 * SEC, dmg: 1.3 }, hit: { dmg: 1.5, push: 12 } }),
+  ),
+};

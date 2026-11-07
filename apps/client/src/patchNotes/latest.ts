@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.13",
+    date: "2026-11-08",
+    items: {
+      ko: [
+        "새벽의 성흔 새 캐릭터 시저스 '단죄의 가위' (스킬 없음, 성흔 게이지): 악마의 목과 운명의 실을 거대한 쌍가위로 잘라 버리는 냉혹한 도살자 · 체력 105 · 공격력 16 · 해금: 이동 속도 1.8 달성",
+        "가위질 두 박자: 열기(앞을 넓게) → 닫기(두 날이 맞물리는 X자 절단, 맞힌 적에게 운명의 실) · 운명의 실(최대 6, 8초): 대시하면 모두 끊겨 묶인 적을 벰 (멀어서 팽팽할수록 최대 250%) · 끊기는 실이 지나는 적도 벰",
+        "단죄: 체력 20% 이하인 보통 적은 목을 잘라 바로 처치 (머리 위 가위 표시) · 체력 30% 이하인 보스에게 1.4배 · 달빛 각성: 피해 1.3배·가위가 커짐·열기도 실을 묶음·1.5초마다 실을 저절로 끊음",
+        "전용 아이템 20 · 이펙트·효과음·그림 시트·패왕전 스킬",
+      ],
+      en: [
+        "New Dawn Stigmata character Scissors 'The Shears of Condemnation' (no skills, Stigma gauge): a ruthless butcher who snips demons' necks and the threads of fate with giant twin shears · HP 105 · ATK 16 · unlock: reach 1.8 move speed",
+        "Two-beat snipping: Open (wide front sweep) → Close (blades meet in an X cut, tying a thread of fate to each foe hit) · threads of fate (up to 6, 8s): dashing snaps them all, cutting the tied foes (up to 250% the farther and tauter) · foes along a snapping thread are cut too",
+        "Condemnation: normal foes at 20% HP or less are beheaded on the spot (shears mark overhead) · 1.4x to bosses at 30% HP or less · Moonlight Awakening: 1.3x damage, bigger shears, Open ties threads too, threads snap by themselves every 1.5s",
+        "20 exclusive items · effects, sounds, sprite sheet and Paewang skills",
+      ],
+      ja: [
+        "暁の聖痕の新キャラ シザーズ「断罪の鋏」（スキルなし、聖痕ゲージ）：悪魔の首と運命の糸を巨大な双鋏で断ち切る冷酷な屠殺者 · 体力105 · 攻撃力16 · 解放：移動速度1.8達成",
+        "二拍子の鋏さばき：開き（前方を広く）→ 閉じ（刃が噛み合うX字切断、当たった敵に運命の糸）· 運命の糸（最大6本、8秒）：ダッシュで全て断ち切り結んだ敵を斬る（離れて張るほど最大250%）· 断たれる糸が通る敵も斬る",
+        "断罪：体力20%以下の通常の敵は首を落として即撃破（頭上に鋏の印）· 体力30%以下のボスに1.4倍 · 月光覚醒：ダメージ1.3倍・鋏が大きく・開きでも糸を結ぶ・1.5秒ごとに糸が自動で切れる",
+        "専用アイテム20 · エフェクト・効果音・スプライトシート・覇王戦スキル",
+      ],
+    },
+  },
+  {
     version: "0.50.12",
     date: "2026-11-08",
     items: {

@@ -12,7 +12,7 @@ BLOOD.src = `${import.meta.env.BASE_URL}sprites/nailer_blood.png`;
 const CELL = 128;
 
 /** 피 폭발 그림 한 장면 (바닥 x, y · 폭 w · f 0~1로 4장면을 차례로) */
-function bloodBurst(ctx: Ctx, x: number, y: number, w: number, f: number, al = 1): void {
+export function bloodBurst(ctx: Ctx, x: number, y: number, w: number, f: number, al = 1): void {
   if (!BLOOD.complete || BLOOD.naturalWidth === 0 || al <= 0) return;
   const k = Math.min(3, Math.floor(f * 4));
   const fade = k < 3 ? 1 : 1 - (f * 4 - 3);

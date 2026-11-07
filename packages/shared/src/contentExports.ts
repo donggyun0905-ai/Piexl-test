@@ -35,6 +35,8 @@ export { MICHAELA } from "./weaponsMichaela";
 export { MICHAELA_PERKS } from "./itemsMichaela";
 export { NAILER } from "./weaponsNailer";
 export { NAILER_PERKS } from "./itemsNailer";
+export { SCISSORS } from "./weaponsScissors";
+export { SCISSORS_PERKS } from "./itemsScissors";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";
