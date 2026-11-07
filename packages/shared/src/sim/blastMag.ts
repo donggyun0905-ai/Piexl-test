@@ -66,5 +66,12 @@ export function blastSlowed(s: RunState, boss: boolean): boolean {
   return s.tick % (boss ? B.bossEvery : B.slowEvery) !== 0;
 }
 
-/** 대시 빠르기 배율 (슬라이딩 슬로우모션 중 길고 천천히 미끄러짐) */
-export const blastSlideMul = (p: PlayerState) => (p.characterId === "blast" && (p.blSlow ?? 0) > 0 ? B.slideMul : 1);
+/** 대시 빠르기 배율 (슬라이딩 슬로우모션 중 길고 천천히 미끄러짐) · 슬라이딩 중엔 누르는 방향으로 방향을 바꾸며 움직임 (이동 속도보다 느려지지 않음) */
+export function blastSlideMul(p: PlayerState, mx: number, my: number, dash: number): number {
+  if (p.characterId !== "blast" || !(p.blSlow ?? 0)) return 1;
+  const m = Math.hypot(mx, my);
+  if (m <= 0) return B.slideMul;
+  p.dashDirX = mx / m;
+  p.dashDirY = my / m;
+  return Math.max(B.slideMul, 1 / dash);
+}

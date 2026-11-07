@@ -24,6 +24,8 @@ export const BLAST = {
   shotSlow: 0.2,
   blueN: 4,
   blueTime: 0.3,
+  /** 파란 탄 피해 배율 (슬라이딩 중엔 공격을 맞지 않으니 약하게) */
+  blueMul: 0.6,
   /** 산탄: 닿는 거리 · 부채꼴(cos 이상) · 한 발 피해 배율 */
   reach: 130,
   arcCos: 0.6,

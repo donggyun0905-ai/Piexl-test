@@ -128,7 +128,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
   if (p.dashTicks > 0) {
     p.dashTicks--;
     // 베두인은 더 멀리 대시
-    const sp = p.stats.moveSpeed * DASH_SPEED_MUL * (p.characterId === "bedouin" ? BEDOUIN.dashReach : 1) * blastSlideMul(p);
+    const sp = p.stats.moveSpeed * DASH_SPEED_MUL * (p.characterId === "bedouin" ? BEDOUIN.dashReach : 1) * blastSlideMul(p, mx, my, DASH_SPEED_MUL);
     p.x += p.dashDirX * sp;
     p.y += p.dashDirY * sp;
   } else {

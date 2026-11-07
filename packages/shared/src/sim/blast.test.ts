@@ -109,6 +109,16 @@ describe("블래스트", () => {
     expect(s.player.blSlowCd).toBeGreaterThan(0);
   });
 
+  it("슬라이딩 중엔 누르는 방향으로 방향을 바꿔 움직임", () => {
+    const s = blast();
+    stepSim(s, { ...FIRE, attack: false, dash: true, moveX: 1 });
+    expect(s.player.blSlow).toBeGreaterThan(0);
+    const y0 = s.player.y;
+    for (let i = 0; i < 10; i++) stepSim(s, { ...FIRE, attack: false, moveY: 1 });
+    expect(s.player.dashDirY).toBe(1);
+    expect(s.player.y).toBeGreaterThan(y0 + 5);
+  });
+
   it("아이템: 남은 달빛은 각성 뒤 성흔이 남음", () => {
     const s = blast("blRemain");
     s.player.sgAwake = s.player.sgAwakeMax = 2;

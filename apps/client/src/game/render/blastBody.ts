@@ -2,6 +2,7 @@
 import { BLAST, isBlast, type RunState } from "@pixel-rogue/shared";
 import { hpBarTop } from "./hpTop";
 import { lerp, type Snap } from "./palette";
+import { drawDawnSky } from "./dawnSky";
 import { additive, crescent, glow, type Ctx } from "./pwFxBits";
 
 export function drawBlastAura(ctx: Ctx, s: RunState, a0: number, snap: Snap): void {
@@ -67,6 +68,8 @@ export function drawBlastAmmo(ctx: Ctx, s: RunState, a0: number, snap: Snap): vo
 
 /** 대시 슬로우모션 화면: 온 화면이 잿빛으로 (색을 빼고 가장자리 어둡게) · 위쪽 가운데 남은 시간 막대 (파란색) */
 export function drawBlastSlowmo(ctx: Ctx, s: RunState, scale: number): void {
+  // 새벽의 성흔: 성흔 각성 중 하얀 달·달빛·깃털 (진영 특징)
+  drawDawnSky(ctx, s, scale);
   const p = s.player;
   if (!isBlast(p) || !(p.blSlow ?? 0)) return;
   const W = ctx.canvas.width;

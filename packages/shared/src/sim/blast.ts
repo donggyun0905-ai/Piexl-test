@@ -36,15 +36,15 @@ function burst(s: RunState, x: number, y: number, depth: number): void {
   }
 }
 
-/** 한 적에게 산탄 (거리 d: 초근접일수록 셈 · crit: 확정 치명타) → 차는 성흔 */
-function pellet(s: RunState, e: EnemyState, reach: number, crit: boolean): number {
+/** 한 적에게 산탄 (거리 d: 초근접일수록 셈 · crit: 확정 치명타 · blue: 파란 탄은 약함) → 차는 성흔 */
+function pellet(s: RunState, e: EnemyState, reach: number, crit: boolean, blue: boolean): number {
   const p = s.player;
   const aw = isAwake(p);
   const d = Math.max(0, Math.hypot(e.x - p.x, e.y - p.y) - e.r);
   const near = d <= B.nearR;
   const t = near ? 0 : Math.min(1, (d - B.nearR) / Math.max(1, reach - B.nearR));
   const m = B.shotMul * (1 - t * (1 - B.farMul)) * (hasPerk(p, "blBuckshot") ? K.blBuckshot.mul : 1) * (near && hasPerk(p, "blSlug") ? K.blSlug.mul : 1) *
-    (aw ? B.awakeMul + (hasPerk(p, "blLunar") ? K.blLunar.mul : 0) : 1) * (isBoss(e) && hasPerk(p, "blSilver") ? K.blSilver.mul : 1);
+    (aw ? B.awakeMul + (hasPerk(p, "blLunar") ? K.blLunar.mul : 0) : 1) * (isBoss(e) && hasPerk(p, "blSilver") ? K.blSilver.mul : 1) * (blue ? B.blueMul : 1);
   const dmg = p.stats.damage * m;
   const rc = hasPerk(p, "blRecoil");
   if (crit) p.rmSure = true;
@@ -74,7 +74,7 @@ function fire(s: RunState): boolean {
   const reach = B.reach * (aw ? B.awakeReach : 1) * (hasPerk(p, "blChoke") ? K.blChoke.reach : 1);
   const arc = Math.min(aw ? B.awakeArc : B.arcCos, hasPerk(p, "blSpread") ? K.blSpread.arc : 1);
   let n = 0;
-  for (const e of inCone(s, reach, arc)) n += pellet(s, e, reach, crit);
+  for (const e of inCone(s, reach, arc)) n += pellet(s, e, reach, crit, blue);
   addEffect(s, { kind: "blShotFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, arc, style: (aw ? 1 : 0) + (crit ? 2 : 0) + (blue ? 4 : 0), maxTicks: 16, follow: true });
   if (aw) {
     const k = B.moonN + (hasPerk(p, "blLunar") ? K.blLunar.more : 0);
