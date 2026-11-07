@@ -29,20 +29,27 @@ function shell(ctx: Ctx, x: number, y: number, body: string, hi: string, base: s
   ctx.fillRect(x, y + 4, 3, 2);
 }
 
-/** 체력 줄 위 탄약: 파란 탄(대시) 먼저 · 탄창 5칸 (치명타로 나갈 발은 새빨갛게 빛남 · 빈 칸은 어둡게) · 장전 중이면 아래 금빛 줄이 참 */
+/** 체력 줄 위 탄약: 슬로우모션 중엔 파란 탄 4칸만 · 아니면 탄창 5칸 (치명타로 나갈 발은 새빨갛게 빛남 · 빈 칸은 어둡게) · 장전 중이면 아래 금빛 줄이 참 */
 export function drawBlastAmmo(ctx: Ctx, s: RunState, a0: number, snap: Snap): void {
   const p = s.player;
   if (!isBlast(p) || s.over) return;
   const x = snap(lerp(p.prevX, p.x, a0));
   const top = hpBarTop(p, snap(lerp(p.prevY, p.y, a0))) - 9;
-  const blue = p.blBlue ?? 0;
+  // 슬로우모션 중: 탄창 대신 파란 탄 4칸 (쏜 칸은 어둡게)
+  if ((p.blSlow ?? 0) > 0) {
+    const x1 = x - BLAST.blueN * 3 + 1;
+    for (let k = 0; k < BLAST.blueN; k++) {
+      if (k < (p.blBlue ?? 0)) shell(ctx, x1 + k * 6, top, "#2a8aff", "#aae8ff", "#c8e8ff");
+      else shell(ctx, x1 + k * 6, top, "#1a2a3a", "#1a2a3a", "#2a3a4a");
+    }
+    return;
+  }
   const ammo = p.blAmmo ?? BLAST.mag;
   const shots = p.blShots ?? 0;
-  const n = blue + BLAST.mag;
+  const n = BLAST.mag;
   const x0 = x - n * 3 + 1;
-  for (let k = 0; k < blue; k++) shell(ctx, x0 + k * 6, top, "#2a8aff", "#aae8ff", "#c8e8ff");
   for (let k = 0; k < BLAST.mag; k++) {
-    const sx = x0 + (blue + k) * 6;
+    const sx = x0 + k * 6;
     if (k >= ammo) {
       shell(ctx, sx, top, "#3a2a2a", "#3a2a2a", "#4a4030");
       continue;

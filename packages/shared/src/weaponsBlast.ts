@@ -14,14 +14,16 @@ export const BLAST = {
   shotTime: 0.6,
   loadTicks: 24,
   critEvery: 5,
-  /** 대시 슬로우모션 (로그만): 틱 · 다시 쓰기까지 틱 · 내 이동 배율 · 적이 쉬는 틱(일반 n틱 중 n-1 · 보스 n틱 중 n-1) · 적 탄 빠르기 배율 · 바로 장전되는 파란 탄 수 */
-  slowTicks: 120,
+  /** 대시 슬라이딩 슬로우모션 (로그만): 대시가 길어져 이 틱 동안 천천히 미끄러짐(그동안 모두 느려짐) · 다시 쓰기까지 틱 · 미끄러지는 빠르기 배율(보통 대시 대비)
+   *  적이 쉬는 틱(일반 n틱 중 n-1 · 보스 n틱 중 n-1) · 적 탄 빠르기 배율 · 바로 장전되는 파란 탄 수 · 파란 탄 쏘는 간격 배율 (미끄러지는 동안 다 쏘게) */
+  slowTicks: 100,
   slowCd: 420,
-  slowMove: 0.5,
-  slowEvery: 3,
-  bossEvery: 2,
-  shotSlow: 0.4,
+  slideMul: 0.25,
+  slowEvery: 5,
+  bossEvery: 3,
+  shotSlow: 0.2,
   blueN: 4,
+  blueTime: 0.3,
   /** 산탄: 닿는 거리 · 부채꼴(cos 이상) · 한 발 피해 배율 */
   reach: 130,
   arcCos: 0.6,

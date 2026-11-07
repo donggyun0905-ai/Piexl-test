@@ -29,7 +29,7 @@ import { classMoveMul, classSpeedMul, foeHeld, foeMoveMul, foeNoAttack, onyxDash
 import type { EnemyState, PlayerState, RunState, TickInput } from "./types";
 import { addEffect, shotDirs, DASH_COOLDOWN, DASH_SPEED_MUL, DASH_TICKS, dist2, hasPerk, keepInRoom, normalize, roomGrid, STILL_TICKS, weaponOf } from "./util";
 import { readAim } from "./tracker";
-import { tabooUp } from "./taboo";
+import { tabooUp } from "./taboo"; import { blastSlideMul } from "./blastMag";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -128,7 +128,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
   if (p.dashTicks > 0) {
     p.dashTicks--;
     // 베두인은 더 멀리 대시
-    const sp = p.stats.moveSpeed * DASH_SPEED_MUL * (p.characterId === "bedouin" ? BEDOUIN.dashReach : 1);
+    const sp = p.stats.moveSpeed * DASH_SPEED_MUL * (p.characterId === "bedouin" ? BEDOUIN.dashReach : 1) * blastSlideMul(p);
     p.x += p.dashDirX * sp;
     p.y += p.dashDirY * sp;
   } else {

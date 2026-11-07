@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.49.80",
+    date: "2026-11-07",
+    items: {
+      ko: [
+        "블래스트 대시 슬라이딩: 대시가 끝난 뒤 느려지던 것을, 대시 자체가 1.7초 동안 천천히 미끄러지는 슬라이딩이 되고 그동안 모두가 느려지게 (적은 더 느리게) · 미끄러지는 동안 파란 탄을 다 쏠 수 있음",
+        "슬로우모션 중엔 탄창 5발이 사라지고 파란 탄 4발로 바뀜 → 잿빛 화면이 끝나면 원래 탄창으로 돌아옴",
+      ],
+      en: [
+        "Blast dash slide: instead of slowing after the dash, the dash itself becomes a slow 1.7s slide during which everyone slows down (enemies even more) · you can fire all blue shells while sliding",
+        "During the slow motion the 5-shell magazine is replaced by 4 blue shells → the original magazine returns when the gray screen ends",
+      ],
+      ja: [
+        "ブラストのダッシュ・スライディング：ダッシュ後に遅くなっていたのを、ダッシュ自体が1.7秒のゆっくりしたスライディングになり、その間全員が遅くなるように（敵はさらに遅く）・滑りながら青い弾を撃ち切れる",
+        "スローモーション中は弾倉5発が消えて青い弾4発に → 灰色の画面が終わると元の弾倉に戻る",
+      ],
+    },
+  },
+  {
     version: "0.49.79",
     date: "2026-11-07",
     items: {

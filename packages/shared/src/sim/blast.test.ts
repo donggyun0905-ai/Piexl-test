@@ -86,16 +86,26 @@ describe("블래스트", () => {
     expect(s.player.blShots).toBe(1);
   });
 
-  it("대시: 슬로우모션 · 파란 탄 4발 · 다시 쓰기 대기", () => {
+  it("대시: 긴 슬라이딩 슬로우모션 · 탄창이 파란 탄 4발로 바뀌어 미끄러지는 동안 다 쏨 · 다시 쓰기 대기", () => {
     const s = blast();
+    s.enemies = [{ ...enemy(1, 160, 100, 9999999), rootTicks: 99999 }];
     stepSim(s, { ...FIRE, attack: false, dash: true });
     expect(s.player.blSlow).toBeGreaterThan(0);
+    expect(s.player.dashTicks).toBeGreaterThan(B.slowTicks - 3);
     expect(s.player.blBlue).toBe(B.blueN);
-    shot(s);
-    expect(s.player.blBlue).toBe(B.blueN - 1);
-    expect(s.player.blAmmo ?? B.mag).toBe(B.mag);
-    for (let i = 0; i < B.slowTicks + 2; i++) stepSim(s, { ...FIRE, attack: false });
-    expect(s.player.blSlow).toBeUndefined();
+    const x0 = s.player.x;
+    let ticks = 0;
+    while ((s.player.blSlow ?? 0) > 0 && ticks < 300) {
+      stepSim(s, FIRE);
+      ticks++;
+      if (s.player.blSlow) expect(s.player.blBlue).toBeGreaterThanOrEqual(0);
+    }
+    expect(ticks).toBeGreaterThan(B.blueN);
+    expect(s.player.blBlue).toBeUndefined();
+    // 슬로우모션 중엔 파란 탄만 쓰고, 끝나면 원래 탄창 그대로 (끝난 틱에 바로 한 발 쏠 수 있음)
+    expect(s.player.blAmmo ?? B.mag).toBeGreaterThanOrEqual(B.mag - 1);
+    expect(s.player.x).toBeGreaterThan(x0);
+    expect(s.player.dashTicks).toBeLessThanOrEqual(1);
     expect(s.player.blSlowCd).toBeGreaterThan(0);
   });
 

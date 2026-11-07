@@ -67,7 +67,7 @@ function pellet(s: RunState, e: EnemyState, reach: number, crit: boolean): numbe
 }
 
 /** 한 발: 앞 부채꼴 산탄 (각성 중: 더 멀리·넓게·세게 + 달빛 산탄) · 탄창 마지막(critEvery번째) 발은 확정 치명타 · 파란 탄 */
-function fire(s: RunState): void {
+function fire(s: RunState): boolean {
   const p = s.player;
   const { blue, crit } = useShell(p);
   const aw = isAwake(p);
@@ -81,6 +81,7 @@ function fire(s: RunState): void {
     fan(s, k, B.moonSpread, { damage: p.stats.damage * B.moonMul, spirit: "blMoon", r: 4, range: B.moonRange, pierce: 2 });
   }
   if (n > 0) gain(s, n);
+  return blue;
 }
 
 /** 틱마다 (산탄총을 들었을 때 player에서) */
@@ -92,8 +93,8 @@ export function blastTick(s: RunState, want: boolean, speed: number): void {
   slowTick(s);
   reload(s, want);
   if (!want || p.attackCooldown > 0 || p.s2Rush || !hasShell(p)) return;
-  fire(s);
-  p.attackCooldown = Math.max(1, Math.round((TICK_RATE / (speed * (aw ? B.awakeSpeed : 1))) * B.shotTime));
+  const blue = fire(s);
+  p.attackCooldown = Math.max(1, Math.round((TICK_RATE / (speed * (aw ? B.awakeSpeed : 1))) * (blue ? B.blueTime : B.shotTime)));
   p.attackCount++;
 }
 
