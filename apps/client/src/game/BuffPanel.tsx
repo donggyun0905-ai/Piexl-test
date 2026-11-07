@@ -4,6 +4,7 @@ import { evolvedAnimals, type AnimalKind, type RunState } from "@pixel-rogue/sha
 import type { Lang, TextKey } from "../i18n";
 import { EVO_DESC } from "../i18n/items/morphEvo";
 import { buffRows, type BuffRow } from "./buffView";
+import { factionBuffs } from "./factionBuffs";
 import { roomBuffs, type RoomBuff } from "./roomBuffs";
 
 /** 변희 각성 설명 "각성(전용 능력 3개): 하이울프 · 20%로 …" → [이름, 능력] */
@@ -26,7 +27,8 @@ export function BuffPanel({ run, t, lang }: { run: () => RunState | null; t: (k:
         // 변희: 한 번이라도 각성한 동물 (다른 동물을 들어도 그 각성 기술이 계속 나옴)
         const now = evolvedAnimals(r.player);
         setEvo((was) => (was.join() === now.join() ? was : now));
-        const got = roomBuffs(r.player, r.floor, lang, t);
+        // 진영 특징 줄이 맨 위 (로그만)
+        const got = [...factionBuffs(r, t), ...roomBuffs(r.player, r.floor, lang, t)];
         setRoom((was) => (JSON.stringify(was) === JSON.stringify(got) ? was : got));
       }
     }, 200);

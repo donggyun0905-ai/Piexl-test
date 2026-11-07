@@ -1,6 +1,7 @@
 // 진영 특징 그리기 (로그만): 효과 — 물결 콤보 물보라 · 타락 폭주 붉은 폭발 · 과열 배출 증기 폭발 · 과부하 연기 · 맹세 지킴(푸른 방패 문장)·깨짐(붉은 금) · 정령 자람 · 정령 탄 · 핵심 스킬 각성 금빛 · 금빛 빛기둥
 // 몸 둘레 — 비르디아 정령(싹·꽃·나무 정령 픽셀 그림) · 폭주 중 붉은 기운 · 열이 높으면 주황 아지랑이 · 콤보 높으면 물결 고리
 import type { EffectState, RunState } from "@pixel-rogue/shared";
+import { hpBarTop } from "./hpTop";
 import { lerp, type Snap } from "./palette";
 import { additive, alpha, beam, easeOut, glow, ring, shock, sparks, type Ctx } from "./pwFxBits";
 
@@ -32,6 +33,51 @@ function sprite(ctx: Ctx, rows: string[], x: number, y: number): void {
   }
 }
 
+/** 픽셀 글자 (1 = 칠함) */
+function pix(ctx: Ctx, rows: string[], x: number, y: number): void {
+  for (let r = 0; r < rows.length; r++) for (let c = 0; c < rows[r]!.length; c++) if (rows[r]![c] === "1") ctx.fillRect(x + c, y + r, 1, 1);
+}
+const HORN_L = ["0001", "0011", "0110", "1100", "1100", "0110"];
+const HORN_R = ["1000", "1100", "0110", "0011", "0011", "0110"];
+const EYE_X = ["101", "010", "101"];
+const EYE_O = ["111", "101", "111"];
+
+/** 헬리오스 폭주: 머리 위 검은 뿔(붉은 빛 테) · 얼굴에 검은 빛 x _ o 표정 (top = 그림 맨 위) */
+function demonFace(ctx: Ctx, x: number, top: number, t: number): void {
+  const hy = top - 4;
+  const fy = top + 8;
+  const pulse = 0.6 + 0.3 * Math.sin(t * 0.25);
+  additive(ctx, () => {
+    glow(ctx, x - 6, hy + 2, 7, RED, pulse, 0);
+    glow(ctx, x + 6, hy + 2, 7, RED, pulse, 0);
+    glow(ctx, x, fy + 2, 8, "#5a0a2a", 0.6, 0);
+  });
+  ctx.fillStyle = "#0a0006";
+  pix(ctx, HORN_L, x - 9, hy - 2);
+  pix(ctx, HORN_R, x + 5, hy - 2);
+  ctx.fillStyle = `rgba(10,0,8,${0.85 + 0.15 * Math.sin(t * 0.4)})`;
+  pix(ctx, EYE_X, x - 5, fy);
+  pix(ctx, EYE_O, x + 2, fy);
+  ctx.fillRect(x - 1, fy + 4, 3, 1);
+}
+
+/** 화면에 붙음: 헬리오스 폭주 중 화면 테두리가 붉게 일렁임 (blastBody.drawBlastSlowmo에서) */
+export function drawFactionScreen(ctx: Ctx, s: RunState): void {
+  const p = s.player;
+  if (!((p.fcRampage ?? 0) > 0) || s.over || s.pvp) return;
+  const W = ctx.canvas.width;
+  const H = ctx.canvas.height;
+  const k = Math.min(1, (p.fcRampage ?? 0) / 20) * (0.7 + 0.3 * Math.sin(s.tick * 0.12));
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  const g = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.38, W / 2, H / 2, Math.max(W, H) * 0.72);
+  g.addColorStop(0, "rgba(200,10,30,0)");
+  g.addColorStop(1, `rgba(200,10,30,${0.55 * k})`);
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  ctx.restore();
+}
+
 /** 몸 둘레 (forgotten.drawAuras에서) */
 export function drawFactionBody(ctx: Ctx, s: RunState, a0: number, snap: Snap): void {
   const p = s.player;
@@ -48,9 +94,10 @@ export function drawFactionBody(ctx: Ctx, s: RunState, a0: number, snap: Snap): 
   }
   if ((p.fcRampage ?? 0) > 0) {
     additive(ctx, () => {
-      glow(ctx, x, y - 6, 26, RED, 0.45 + 0.15 * Math.sin(t * 0.3), 0.2);
+      glow(ctx, x, y - 6, 26, RED, 0.35 + 0.1 * Math.sin(t * 0.3), 0.1);
       sparks(ctx, x, y - 6, 6, 18, (t % 20) / 20, RED, Math.floor(t / 20), 0.8);
     });
+    demonFace(ctx, x, hpBarTop(p, y), t);
   }
   if ((p.fcOver ?? 0) > 0) {
     for (let k = 0; k < 4; k++) {

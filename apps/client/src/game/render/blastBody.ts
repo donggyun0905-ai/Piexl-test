@@ -3,6 +3,7 @@ import { BLAST, isBlast, type RunState } from "@pixel-rogue/shared";
 import { hpBarTop } from "./hpTop";
 import { lerp, type Snap } from "./palette";
 import { drawDawnSky } from "./dawnSky";
+import { drawFactionScreen } from "./factionFx";
 import { additive, crescent, glow, type Ctx } from "./pwFxBits";
 
 export function drawBlastAura(ctx: Ctx, s: RunState, a0: number, snap: Snap): void {
@@ -70,6 +71,8 @@ export function drawBlastAmmo(ctx: Ctx, s: RunState, a0: number, snap: Snap): vo
 export function drawBlastSlowmo(ctx: Ctx, s: RunState, scale: number): void {
   // 새벽의 성흔: 성흔 각성 중 하얀 달·달빛·깃털 (진영 특징)
   drawDawnSky(ctx, s, scale);
+  // 헬리오스 타락 폭주: 화면 테두리 붉은 빛
+  drawFactionScreen(ctx, s);
   const p = s.player;
   if (!isBlast(p) || !(p.blSlow ?? 0)) return;
   const W = ctx.canvas.width;

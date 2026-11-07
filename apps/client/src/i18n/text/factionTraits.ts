@@ -1,5 +1,21 @@
 // 화면 글자: 진영 특징 시스템 (로그만) — 게이지 이름·설명 · 아스칼론 맹세 6종 · 비르디아 정령 단계 (game/FactionGauge)
 export const FACTION_TRAIT_TEXT = {
+  csTrait_ascalon: { ko: "진영 특징 · 맹세", en: "Faction trait · Oaths", ja: "陣営の特徴・誓い" },
+  csTrait_terracore: { ko: "진영 특징 · 과열", en: "Faction trait · Heat", ja: "陣営の特徴・過熱" },
+  csTrait_virdia: { ko: "진영 특징 · 공생 정령", en: "Faction trait · Symbiote", ja: "陣営の特徴・共生精霊" },
+  csTrait_helios: { ko: "진영 특징 · 타락", en: "Faction trait · Taint", ja: "陣営の特徴・堕落" },
+  csTrait_thalassia: { ko: "진영 특징 · 물결 콤보", en: "Faction trait · Tide Combo", ja: "陣営の特徴・波のコンボ" },
+  csTrait_seongguk: { ko: "진영 특징 · 스킬 · 핵심 스킬", en: "Faction trait · Skills · Core Skill", ja: "陣営の特徴・スキル・核心スキル" },
+  csTrait_dawn: { ko: "진영 특징 · 성흔", en: "Faction trait · Stigma", ja: "陣営の特徴・聖痕" },
+  bfFtThalassia: { ko: "물결 콤보 {n} · 물 피해 +{p}%", en: "Tide Combo {n} · water damage +{p}%", ja: "波のコンボ{n}・水ダメージ+{p}%" },
+  bfFtHelios: { ko: "타락 {n} · 주는 피해 +{p}% · 받는 피해 +{q}%", en: "Taint {n} · damage +{p}% · damage taken +{q}%", ja: "堕落{n}・与ダメージ+{p}%・被ダメージ+{q}%" },
+  bfFtHeliosOn: { ko: "폭주! 공격 속도 +30%", en: "Rampage! +30% attack speed", ja: "暴走！攻撃速度+30%" },
+  bfFtTerracore: { ko: "열 {n} · 피해 +{p}%", en: "Heat {n} · damage +{p}%", ja: "熱{n}・ダメージ+{p}%" },
+  bfFtTerracoreOn: { ko: "과부하! 공격 불가", en: "Overload! Can't attack", ja: "過負荷！攻撃不可" },
+  bfFtAscalon: { ko: "영광 {n} · 피해 +{p}%", en: "Glory {n} · damage +{p}%", ja: "栄光{n}・ダメージ+{p}%" },
+  bfFtVirdia: { ko: "공생 정령 · {s}", en: "Symbiote · {s}", ja: "共生精霊・{s}" },
+  bfFtSeongguk: { ko: "핵심 스킬 {n}/12", en: "Core Skill {n}/12", ja: "核心スキル{n}/12" },
+  bfFtSeonggukOn: { ko: "핵심 스킬 각성! 쓰면 추가 공격", en: "Core Skill awakened! Cast it for a bonus attack", ja: "核心スキル覚醒！使うと追加攻撃" },
   ftThalassia: { ko: "물결 콤보", en: "Tide Combo", ja: "波のコンボ" },
   ftThalassiaTip: {
     ko: "맞힐 때마다 콤보 +1, 맞으면 0으로 · 콤보 10마다 물 피해 +8% (최대 +80%) · 물 피해가 없는 매드퀸·후크는 콤보 20부터 맞힐 때 작은 물 피해가 같이",

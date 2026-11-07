@@ -21,6 +21,24 @@
 .cs-tabs button.akashic { border-bottom-color: #b89aff; }
 .cs-tabs button.outsider { border-bottom-color: #5ae0d0; }
 .cs-tabs button.archive { border-bottom-color: #ffb84a; }
+/* 진영 탭 아래 진영 특징 한 줄 (왼쪽 진영 색 줄) */
+.cs-trait {
+  width: min(980px, 100%);
+  margin: 6px 0 0;
+  padding: 6px 10px;
+  border-left: 4px solid var(--trait, #ffffff);
+  border-radius: 4px;
+  background: rgb(20 20 34 / 0.75);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.cs-trait b { color: var(--trait, #ffffff); margin-right: 6px; }
+.cs-trait.ascalon { --trait: #6aa0ff; }
+.cs-trait.terracore { --trait: #ff9a3a; }
+.cs-trait.virdia { --trait: #6ae07a; }
+.cs-trait.helios { --trait: #ff4a5a; }
+.cs-trait.thalassia { --trait: #6ad4ff; }
+.cs-trait.seongguk { --trait: #ffd84a; }
 /* 아카식 레코드·서고의 감시자: 제 색 그대로 은은하게 빛남 */
 .cs-tabs button.akashic { --glow: #b89aff; animation: cs-glow 2.4s ease-in-out infinite; }
 .cs-tabs button.archive { --glow: #ffb84a; animation: cs-glow 2.4s ease-in-out infinite; }

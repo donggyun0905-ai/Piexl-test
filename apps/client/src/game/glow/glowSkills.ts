@@ -103,14 +103,12 @@ export class GlowSkills {
     if ((p.darkTicks ?? 0) > 0 || p.trAmbush) parts.steady(p.x, p.y, 34, 0xffd9a0, 0.3);
   }
 
-  /** 바닥 무기·패시브는 은은한 빛이 맥박 치듯 · 사라지면(주움) 반짝 터짐 */
+  /** 바닥 무기·패시브 빛은 아이템 테두리에서 (drawPickup) · 여기서는 사라지면(주움) 반짝 터짐만 */
   private pickups(s: RunState, parts: GlowParts): void {
     const now = new Set<number>();
     for (const pk of s.rooms[s.roomId]?.pickups ?? []) {
       now.add(pk.id);
       if (!this.picks.has(pk.id)) this.picks.set(pk.id, { x: pk.x, y: pk.y, kind: pk.kind });
-      const glowy = pk.kind === "weapon" || pk.kind === "passive" || pk.kind === "use";
-      if (glowy && this.n % 24 === pk.id % 24) parts.spawn(pk.x, pk.y, { life: 0.8, s0: 10, s1: 16, color: pk.kind === "use" ? 0x7cf0ff : 0xffc53c, alpha: 0.45 });
     }
     for (const [id, pk] of this.picks) {
       if (now.has(id)) continue;

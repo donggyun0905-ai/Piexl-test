@@ -17,6 +17,17 @@ export const SELECT_TABS: readonly { id: FactionId; label: TextKey }[] = [
   { id: "archive", label: "csArchive" },
 ];
 
+/** 진영 탭 아래 진영 특징 한 줄 (로그 전용 공통 능력 · 새벽의 성흔은 성흔 게이지) */
+export const FACTION_TRAIT: Partial<Record<FactionId, { name: TextKey; tip: TextKey }>> = {
+  ascalon: { name: "csTrait_ascalon", tip: "ftAscalonTip" },
+  terracore: { name: "csTrait_terracore", tip: "ftTerracoreTip" },
+  virdia: { name: "csTrait_virdia", tip: "ftVirdiaTip" },
+  helios: { name: "csTrait_helios", tip: "ftHeliosTip" },
+  thalassia: { name: "csTrait_thalassia", tip: "ftThalassiaTip" },
+  seongguk: { name: "csTrait_seongguk", tip: "ftSeonggukTip" },
+  dawn: { name: "csTrait_dawn", tip: "sgGaugeTip" },
+};
+
 export function factionOf(c: CharacterId): FactionId {
   if (c === "abandoned") return "helios";
   return FACTIONS.find((f) => f.members.includes(c))?.id ?? "akashic";

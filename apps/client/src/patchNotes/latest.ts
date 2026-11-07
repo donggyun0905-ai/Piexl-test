@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.3",
+    date: "2026-11-07",
+    items: {
+      ko: ["헬리오스 폭주: 머리 위 검은 뿔 · 얼굴에 x _ o 표정 · 화면 테두리가 붉게 일렁임", "진영 특징 안내: 캐릭터 선택창 진영 탭 아래 한 줄 설명 · 왼쪽 버프 창 맨 위에 지금 진영 특징 값", "바닥 아이템 빛이 가운데가 아닌 아이템 테두리를 따라 은은하게"],
+      en: ["Helios Rampage: black horns above the head · an x _ o face · red glow around the screen edge", "Faction trait guide: one line under each faction tab in character select · current trait value at the top of the left buff panel", "Floor items now glow softly along their outline instead of from the center"],
+      ja: ["ヘリオス暴走：頭上に黒い角・顔に x _ o の表情・画面の縁が赤く揺らめく", "陣営の特徴の案内：キャラ選択の陣営タブの下に一行説明・左のバフ欄の一番上に今の特徴の値", "床のアイテムの光が中央ではなく輪郭に沿ってほのかに"],
+    },
+  },
+  {
     version: "0.50.2",
     date: "2026-11-07",
     items: {
