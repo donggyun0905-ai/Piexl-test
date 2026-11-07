@@ -104,9 +104,9 @@ export const MENU_TEXT = {
   showDamage: { ko: "피해 숫자 보기", en: "Show damage numbers", ja: "ダメージの数字を表示" },
   showHitbox: { ko: "맞는 범위 늘 보기", en: "Always show hitbox", ja: "当たり判定を常に表示" },
   screenShake: { ko: "화면 흔들림", en: "Screen shake", ja: "画面の揺れ" },
-  skillKeys: { ko: "스킬 키 (추적자·패왕전)", en: "Skill keys (Tracker · Champion Clash)", ja: "スキルキー（追跡者・覇王戦）" },
+  skillKeys: { ko: "스킬 키 (스킬형 캐릭터·패왕전)", en: "Skill keys (skill characters · Champion Clash)", ja: "スキルキー（スキル型キャラ・覇王戦）" },
   useKeys: { ko: "사용 아이템 키", en: "Item keys", ja: "使用アイテムキー" },
-  pressKey: { ko: "키를 누르세요", en: "Press a key", ja: "キーを押す" },
+  pressKey: { ko: "키·마우스 버튼", en: "Key or mouse button", ja: "キー・マウスボタン" },
   touchControls: { ko: "조작키 (모바일)", en: "Touch controls", ja: "タッチ操作" },
   editControls: { ko: "크기·위치 바꾸기", en: "Resize & move", ja: "大きさ・位置を変更" },
   editControlsHint: {

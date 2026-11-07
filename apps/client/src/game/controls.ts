@@ -1,5 +1,5 @@
 import { AIM_DIST_MAX, AIM_DIST_STEP, quantize, type TickInput } from "@pixel-rogue/shared";
-import { skillOf, useOf } from "../settings";
+import { mouseBound, skillOf, useOf } from "../settings";
 import { bindPan } from "./cameraPan";
 import { SkillArm } from "./skillArm";
 import type { ClickTarget } from "./clickTargets";
@@ -106,21 +106,14 @@ export class Controls {
       if (e.code === "KeyH") return opt.onToggleHitbox();
       if (e.code === "KeyG") return opt.onToggleRange();
       if (e.code === "KeyN") return opt.onToggleNames?.();
-      if (e.code === "KeyF") {
-        this.interactQueued = true;
-        return;
-      }
+      if (e.code === "KeyF") return void (this.interactQueued = true);
       if (e.code === "Space") {
         e.preventDefault(); // 페이지 스크롤·버튼 눌림 막기
         this.hitboxHeld = true;
         return;
       }
       // PC 사용 아이템 키: 설정의 두 키(기본 Q·E) · 숫자 1·2 (스킬이 있으면 숫자는 스킬)
-      const slot = useOf(e.code);
-      if (slot) {
-        this.useQueued = slot;
-        return;
-      }
+      if (useOf(e.code)) return void (this.useQueued = useOf(e.code));
       this.keys.add(e.code);
     });
     on(window, "keyup", (e) => {
@@ -148,13 +141,18 @@ export class Controls {
       },
       { passive: false },
     );
-    on(window, "mouseup", (e) => void (e.button === 0 ? (this.mouseAttack = false) : e.button === 2 && (this.dashHeld = false)));
+    // 옆 버튼에 키를 설정했으면 브라우저 뒤로·앞으로 가기를 막음
+    on(window, "mouseup", (e) => void (e.button === 0 ? (this.mouseAttack = false) : e.button === 2 ? (this.dashHeld = false) : mouseBound(e.button).some(Boolean) && e.preventDefault()));
 
     const zone = opt.zone;
     // 게임 중 우클릭은 어디서든 브라우저 메뉴 대신 대시 (좌클릭 공격을 누른 채로도) · 좌클릭은 mousedown으로 받음
     on(window, "contextmenu", (e) => e.preventDefault());
     on(window, "mousedown", (e) => {
       if (e.button === 2 && !zone.contains(e.target as Node) && !this.arm.cancel()) this.dashQueued = this.dashHeld = true;
+      // 설정에서 스킬·사용 아이템 키로 고른 마우스 휠 클릭·옆 버튼
+      const [sk, use] = mouseBound(e.button, this.skillKeys);
+      if (sk) this.skillQueued = this.arm.key(sk);
+      else if (use) this.useQueued = use;
     });
     on(zone, "mousedown", (e) => {
       if (e.button === 0) {

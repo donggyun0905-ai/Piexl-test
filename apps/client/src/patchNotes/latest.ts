@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.15",
+    date: "2026-11-08",
+    items: {
+      ko: ["설정 키 바꾸기: 스킬 키·사용 아이템 키에 마우스 휠 클릭(M3)·옆 버튼(M4·M5)도 넣을 수 있음 (왼쪽·오른쪽 클릭은 공격·대시라 제외) · 옆 버튼을 키로 쓰면 게임 중 브라우저 뒤로·앞으로 가기가 되지 않음"],
+      en: ["Key settings: skill and item keys can now use the mouse wheel click (M3) and side buttons (M4·M5) (left/right click stay attack/dash) · side buttons bound to keys no longer trigger browser back/forward in game"],
+      ja: ["キー設定：スキルキー・使用アイテムキーにマウスホイールクリック（M3）・サイドボタン（M4・M5）も設定可能（左・右クリックは攻撃・ダッシュのため除外）· サイドボタンをキーにするとゲーム中にブラウザの戻る・進むが起きない"],
+    },
+  },
+  {
     version: "0.50.14",
     date: "2026-11-08",
     items: {

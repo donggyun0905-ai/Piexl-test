@@ -76,9 +76,20 @@ export function useOf(code: string): number {
   return i >= 0 ? i + 1 : (({ Digit1: 1, Digit2: 2 }) as Record<string, number>)[code] ?? 0;
 }
 
-/** 키 코드 → 보이는 이름 (Digit1 → 1, KeyQ → Q, Numpad1 → Num1) */
+/** 마우스 버튼 → 키 칸에 넣는 코드 (휠 클릭 Mouse1 · 옆 버튼 뒤 Mouse3 · 앞 Mouse4) · 왼쪽·오른쪽 클릭은 공격·대시라 "" */
+export const mouseCode = (button: number) => (button === 1 || button === 3 || button === 4 ? `Mouse${button}` : "");
+
+/** 마우스 버튼에 설정한 [스킬 번호, 사용 아이템 칸] (0 = 없음 · skills: 스킬 키를 쓰는 캐릭터일 때만 스킬) */
+export function mouseBound(button: number, skills = true): [number, number] {
+  const c = mouseCode(button);
+  if (!c) return [0, 0];
+  const sk = skills ? current.skillKeys.indexOf(c) + 1 : 0;
+  return [sk, sk ? 0 : current.useKeys.indexOf(c) + 1];
+}
+
+/** 키 코드 → 보이는 이름 (Digit1 → 1, KeyQ → Q, Numpad1 → Num1 · 마우스 휠 클릭 M3 · 옆 버튼 M4·M5) */
 export function keyLabel(code: string): string {
-  return code.replace(/^Digit/, "").replace(/^Key/, "").replace(/^Numpad/, "Num").replace(/^Arrow/, "");
+  return code.replace(/^Mouse(\d)$/, (_, b: string) => `M${Number(b) + 1}`).replace(/^Digit/, "").replace(/^Key/, "").replace(/^Numpad/, "Num").replace(/^Arrow/, "");
 }
 
 function read(): Settings {
