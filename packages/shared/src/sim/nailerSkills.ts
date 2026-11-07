@@ -96,7 +96,7 @@ function tieSkill(s: RunState): void {
     if (e.hp > 0) strike(s, e, nlDmg(p, N.smashBleed * (big ? K.nlBleed.mul : 1)), 0, "bleed");
     nlGain(s, N.gainHit + nlAfter(s, e, had));
   }
-  addEffect(s, { kind: "nlSmashFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 26 });
+  addEffect(s, { kind: "nlSmashFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 34 });
   tie.ph = 2;
   rushTo(s, tie.ax, tie.ay, N.backStep, 0);
 }
@@ -158,7 +158,7 @@ export function detTick(s: RunState): void {
     const e = alive(s).find((f) => f.id === d.id);
     if (!e) continue;
     strike(s, e, nlDmg(p, d.n * per), 0, "curse");
-    addEffect(s, { kind: "nlCurseFx", x: e.x, y: e.y, dirX: 0, dirY: 0, size: d.n, maxTicks: 30 });
+    addEffect(s, { kind: "nlCurseFx", x: e.x, y: e.y, dirX: 0, dirY: 0, size: d.n, maxTicks: 46 });
     nlGain(s, nlAfter(s, e, d.n));
   }
   p.nlDets = list.filter((d) => d.t > 0);
@@ -175,7 +175,7 @@ function ultSkill(s: RunState): void {
   p.nlUlt = { id: e.id, n: N.ultVolleys + (hasPerk(p, "nlRain") ? K.nlRain.add : 0), t: 0, ax: p.x, ay: p.y };
 }
 
-/** 못비 한 틱: 제자리 · 노린 적이 죽으면 끝 · 나와 양옆에서 못이 한꺼번에 */
+/** 못비 한 틱: 제자리 · 노린 적이 죽으면 끝 · 나와 양옆 분신이 못을 한꺼번에 던짐 */
 export function ultTick(s: RunState): void {
   const p = s.player;
   const u = p.nlUlt;

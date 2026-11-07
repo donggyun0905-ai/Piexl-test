@@ -25,7 +25,7 @@ function swing(s: RunState): void {
     if (had >= K.nlStun.from && hasPerk(p, "nlStun")) stun(e, K.nlStun.ticks);
     n += N.gainHit + nlAfter(s, e, had);
   }
-  addEffect(s, { kind: "nlSwingFx", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 14 });
+  addEffect(s, { kind: "nlSwingFx", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 16 });
   nlGain(s, n);
 }
 
