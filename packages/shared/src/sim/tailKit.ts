@@ -5,14 +5,15 @@ import { damageEnemy } from "./combat";
 import { alive, isBoss } from "./s2Kit";
 import { statusHit } from "./statusHit";
 import type { DotKind, EnemyState, PlayerState, RunState } from "./types";
-import { dist2, hasPerk, normalize, weaponOf } from "./util";
+import { dist2, hasPerk, normalize, reachOf, weaponOf } from "./util";
 
 export const isTail = (p: PlayerState) => p.characterId === "tail";
 
 export const seaOf = (p: PlayerState): SeaStyle => weaponOf(p).shark ?? { sea: "tide" };
 
 /** 영역 바다 반지름 (바다 종류 · 깊은 바다) */
-export const seaR = (p: PlayerState) => T.seaR * (seaOf(p).r ?? 1) * (hasPerk(p, "tlDeep") ? K.tlDeep.r : 1);
+/** 발밑 바다 영역 반지름 (사거리 증가만큼 넓어짐 · 꼬리 공격은 그대로) */
+export const seaR = (p: PlayerState) => T.seaR * (seaOf(p).r ?? 1) * (hasPerk(p, "tlDeep") ? K.tlDeep.r : 1) * reachOf(p);
 
 /** 상어 크기 배율 (바다 종류) */
 export const sharkSize = (p: PlayerState) => seaOf(p).size ?? 1;

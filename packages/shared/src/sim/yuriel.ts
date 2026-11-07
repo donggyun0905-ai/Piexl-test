@@ -7,21 +7,22 @@ import { yrHeal, yrHit } from "./yurielKit";
 import { maceTick, ultTick, wardTick, yrSkill } from "./yurielSkills";
 import { inCircle, inCone, roomKey } from "./s2Kit";
 import type { RunState } from "./types";
-import { addEffect, hasPerk } from "./util";
+import { addEffect, hasPerk, reachOf } from "./util";
 
 /** 1·2타: 앞 부채꼴을 철퇴로 (k 0 · 1 반대쪽으로) */
 function swing(s: RunState, k: number): void {
   const p = s.player;
   const cos = hasPerk(p, "yrWrist") ? K.yrWrist.cos : Y.swingCos;
   const mul = Y.swingMul * (hasPerk(p, "yrHeavy") ? K.yrHeavy.mul : 1);
-  for (const e of inCone(s, Y.swingR, cos)) yrHit(s, e, mul, Y.swingPush);
-  addEffect(s, { kind: "yrSwingFx", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: Y.swingR, style: k, maxTicks: 16 });
+  const sr = Y.swingR * reachOf(p);
+  for (const e of inCone(s, sr, cos)) yrHit(s, e, mul, Y.swingPush);
+  addEffect(s, { kind: "yrSwingFx", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: sr, style: k, maxTicks: 16 });
 }
 
 /** 3타 사슬 철퇴 한 바퀴: 둘레 적을 모두 침 · 맞힌 적 수만큼 회복 (성수 세례: 단죄 하나 더) */
 function spin(s: RunState): void {
   const p = s.player;
-  const r = Y.spinR * (hasPerk(p, "yrChain") ? K.yrChain.r : 1);
+  const r = Y.spinR * (hasPerk(p, "yrChain") ? K.yrChain.r : 1) * reachOf(p);
   const hits = inCircle(s, p.x, p.y, r);
   const sin = 1 + (hasPerk(p, "yrBaptism") ? K.yrBaptism.more : 0);
   for (const e of hits) yrHit(s, e, Y.spinMul, Y.spinPush, sin);

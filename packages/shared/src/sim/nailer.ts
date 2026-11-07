@@ -8,13 +8,13 @@ import { detTick, nlSkill, throwTick, tieTick, ultTick } from "./nailerSkills";
 import { inCone, roomKey, strike, stun } from "./s2Kit";
 import { isAwake, stigmaTick } from "./stigma";
 import type { RunState } from "./types";
-import { addEffect, hasPerk } from "./util";
+import { addEffect, hasPerk, reachOf } from "./util";
 
 /** 망치 내려치기: 앞 부채꼴 (울리는 쇠·못 박기·머리 치기) */
 function swing(s: RunState): void {
   const p = s.player;
   const wide = hasPerk(p, "nlWide");
-  const r = N.swingR * (wide ? K.nlWide.r : 1);
+  const r = N.swingR * (wide ? K.nlWide.r : 1) * reachOf(p);
   const mul = N.swingMul * (hasPerk(p, "nlSledge") ? K.nlSledge.mul : 1);
   let n = 0;
   for (const e of inCone(s, r, wide ? K.nlWide.arc : N.swingCos)) {

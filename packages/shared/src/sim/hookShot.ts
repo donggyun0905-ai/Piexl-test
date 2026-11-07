@@ -10,12 +10,13 @@ import { alive, isBoss, stun } from "./s2Kit";
 import { ignite } from "./status";
 import { statusHit } from "./statusHit";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { addEffect, dist2, hasPerk, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid, weaponOf } from "./util";
+import { addEffect, dist2, hasPerk, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, reachOf, roomGrid, weaponOf } from "./util";
 
 export const isHook = (p: PlayerState) => p.characterId === "hook";
 export const hookOf = (p: PlayerState): HookStyle => weaponOf(p).hook ?? { hook: "rusty" };
 /** 갈고리 거리 (갈고리 · 닻사슬) */
-export const hookReach = (p: PlayerState) => H.reach * (hookOf(p).reach ?? 1) * (hasPerk(p, "hkChain") ? K.hkChain.reach : 1);
+/** 갈고리를 던지는 거리 (사거리 증가만큼 멀리 · 산탄총은 그대로) */
+export const hookReach = (p: PlayerState) => H.reach * (hookOf(p).reach ?? 1) * (hasPerk(p, "hkChain") ? K.hkChain.reach : 1) * reachOf(p);
 /** 한 번에 걸리는 적 수 */
 export const catchMax = (p: PlayerState) => H.catchMax + (hookOf(p).catch ?? 0) + (hasPerk(p, "hkGrapnel") ? K.hkGrapnel.catch : 0);
 /** 움직일 수 없는 적 (보스·허수아비): 끌려오지도 튕기지도 않음 */

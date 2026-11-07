@@ -8,12 +8,12 @@ import { snHit, thornTick } from "./serenaKit";
 import { charmTick, dashTick, orbTick, snSkill, whirlTick } from "./serenaSkills";
 import { inCone, roomKey } from "./s2Kit";
 import type { RunState } from "./types";
-import { addEffect, hasPerk } from "./util";
+import { addEffect, hasPerk, reachOf } from "./util";
 
 /** 1·2타: 앞 넓은 부채꼴을 채찍으로 (k 0 오른쪽에서 · 1 왼쪽에서) */
 function whip(s: RunState, k: number): void {
   const p = s.player;
-  const r = N.whipR * (hasPerk(p, "snLash") ? K.snLash.r : 1);
+  const r = N.whipR * (hasPerk(p, "snLash") ? K.snLash.r : 1) * reachOf(p);
   for (const e of inCone(s, r, N.whipCos)) snHit(s, e, N.whipMul);
   addEffect(s, { kind: "snWhipFx", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: r, style: k, maxTicks: 16 });
 }

@@ -8,18 +8,19 @@ import { btSkill, danceTick, execTick, judgeTick, solarOn, wavesTick } from "./b
 import { heal } from "./heal";
 import { inCircle, onSegment, roomKey } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
-import { addEffect, hasPerk } from "./util";
+import { addEffect, hasPerk, reachOf } from "./util";
 
 /** 기본 공격이 태양 검날로 강화되었을 때 더하는 화염 몫 */
 const fireOf = (p: PlayerState) => (solarOn(p) ? B.solarFire : 0);
 
 /** X자 가운데 (바라보는 쪽 앞) */
-const center = (p: PlayerState): [number, number] => [p.x + p.faceX * B.crossAt, p.y + p.faceY * B.crossAt];
+const center = (p: PlayerState): [number, number] => [p.x + p.faceX * B.crossAt * reachOf(p), p.y + p.faceY * B.crossAt * reachOf(p)];
 
 /** 대각선 칼선 하나 (side 1 = 왼쪽 위 → 오른쪽 아래, -1 = 오른쪽 위 → 왼쪽 아래 · 둘이 겹치면 X자) */
 export function strokeOf(p: PlayerState, side: number, len: number): [number, number, number, number] {
   const [cx, cy] = center(p);
-  const h = len * 0.7071;
+  // 사거리 증가만큼 칼선이 길어짐
+  const h = len * 0.7071 * reachOf(p);
   const fx = p.faceX * h;
   const fy = p.faceY * h;
   const nx = -p.faceY * h;
@@ -41,7 +42,7 @@ function slash(s: RunState, side: number, mul: number, len: number, kind: "btSla
 /** 3타: 앞에 생긴 X자를 다시 X로 베어 터뜨림 */
 function cross(s: RunState): void {
   const p = s.player;
-  const r = B.crossR * (hasPerk(p, "btBreaker") ? K.btBreaker.r : 1);
+  const r = B.crossR * (hasPerk(p, "btBreaker") ? K.btBreaker.r : 1) * reachOf(p);
   const [cx, cy] = center(p);
   for (const e of inCircle(s, cx, cy, r)) {
     btHit(s, e, B.crossMul, fireOf(p) * 1.5, B.crossPush);

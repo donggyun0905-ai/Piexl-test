@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.16",
+    date: "2026-11-08",
+    items: {
+      ko: [
+        "사거리 증가가 실제 공격에 닿도록 고침 (공격 범위·이펙트가 같이 늘어남): 리바이어 (창·고래 공격 전부) · 테일 (발밑 바다 영역, 꼬리 공격은 그대로) · 훅 (갈고리 던지는 거리, 산탄총은 그대로) · 미류 (평타 휩쓸기·회오리·일섬) · 베아트리스 (칼선·X자) · 세레나 (채찍·회오리·도는 사슬) · 미카엘라 (무기 기술 전부) · 유리엘 (철퇴·사슬 한 바퀴) · 네일러 (망치·던지는 못·붉은 원·도화선) · 시저스 (열기·닫기)",
+        "캐릭터 설명 끝에 '사거리 증가' 한 줄: 늘어남 · 늘어나지 않음 · 일부만 (무엇이 느는지)",
+      ],
+      en: [
+        "Range bonuses now actually reach (attack reach and effects grow together): Levia (all spear and whale attacks) · Tail (sea zone underfoot; tail strikes unchanged) · Hook (hook throw distance; shotgun unchanged) · Miryu (basic sweeps, whirl, flash) · Beatrice (slashes and X) · Serena (whips, whirl, orbiting chains) · Michaela (all weapon techniques) · Yuriel (flail and chain spin) · Nailer (hammer, thrown nails, red ring, fuse) · Scissors (Open and Close)",
+        "Each character description now ends with a 'Range bonus' line: grows · no effect · partly (what grows)",
+      ],
+      ja: [
+        "射程増加が実際の攻撃に届くよう修正（攻撃範囲とエフェクトが一緒に広がる）：リヴァイア（槍・クジラの攻撃すべて）· テイル（足元の海の領域、尾の攻撃はそのまま）· フック（鉤を投げる距離、散弾銃はそのまま）· ミリュウ（通常の薙ぎ・渦・一閃）· ベアトリス（斬撃線・X字）· セレナ（鞭・渦・回る鎖）· ミカエラ（武器の技すべて）· ユリエル（鉄槌・鎖の一回転）· ネイラー（槌・投げ釘・赤い円・導火線）· シザーズ（開き・閉じ）",
+        "キャラ説明の最後に「射程増加」の一行：広がる · 伸びない · 一部のみ（何が伸びるか）",
+      ],
+    },
+  },
+  {
     version: "0.50.15",
     date: "2026-11-08",
     items: {

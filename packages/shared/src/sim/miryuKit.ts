@@ -7,14 +7,16 @@ import type { MrStream } from "./miryuTypes";
 import { isBoss } from "./s2Kit";
 import { statusHit } from "./statusHit";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { addEffect, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
+import { addEffect, hasPerk, keepInRoom, normalize, roomGrid, weaponOf, reachOf as rangeMul } from "./util";
 
 export const isMiryu = (p: PlayerState) => p.characterId === "miryu";
 export const mrOf = (p: PlayerState): MiryuStyle => weaponOf(p).miryu ?? { miryu: "seiran" };
 /** 움직일 수 없는 적 (보스·허수아비): 실려 가지도 밀리지도 않음 */
 export const anchored = (e: EnemyState) => isBoss(e) || e.kind === "dummy";
 /** 베기 거리 */
-export const reachOf = (p: PlayerState) => M.reach * (mrOf(p).reach ?? 1);
+/** 대태도 닿는 거리 (사거리 증가만큼 늘어남) */
+export const reachOf = (p: PlayerState) => M.reach * (mrOf(p).reach ?? 1) * rangeMul(p);
+export { rangeMul };
 
 /** 바라보는 쪽(fx, fy)을 a만큼 돌린 방향 */
 export function turn(fx: number, fy: number, a: number): [number, number] {

@@ -8,14 +8,14 @@ import { cut, cutThreads, sxDmg, sxGain, threadsTick, tie } from "./scissorsKit"
 import { inCone, roomKey, strike } from "./s2Kit";
 import { isAwake, stigmaTick } from "./stigma";
 import type { RunState } from "./types";
-import { addEffect, hasPerk } from "./util";
+import { addEffect, hasPerk, reachOf } from "./util";
 
 /** 열기: 앞을 넓게 휘두름 (각성 중에는 실도 묶음) */
 function open(s: RunState): void {
   const p = s.player;
   const aw = isAwake(p);
   const wide = hasPerk(p, "sxWide");
-  const r = X.openR * (wide ? K.sxWide.r : 1) * (aw ? X.awakeReach : 1);
+  const r = X.openR * (wide ? K.sxWide.r : 1) * (aw ? X.awakeReach : 1) * reachOf(p);
   const arc = wide ? K.sxWide.arc : X.openCos;
   let n = 0;
   for (const e of inCone(s, r, arc)) {
@@ -30,7 +30,7 @@ function open(s: RunState): void {
 function close(s: RunState): void {
   const p = s.player;
   const aw = isAwake(p);
-  const r = X.closeR * (aw ? X.awakeReach : 1);
+  const r = X.closeR * (aw ? X.awakeReach : 1) * reachOf(p);
   const dmg = sxDmg(p, X.closeMul * (hasPerk(p, "sxSnap") ? K.sxSnap.mul : 1));
   let n = 0;
   for (const e of inCone(s, r, X.closeCos)) {

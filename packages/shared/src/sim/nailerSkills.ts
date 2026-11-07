@@ -5,7 +5,7 @@ import { NAILER as N } from "../weaponsNailer";
 import { addNails, nlAfter, nlCooldown, nlDmg, nlGain, throwNail } from "./nailerKit";
 import { alive, inCircle, rushTick, startRush, strike, stun } from "./s2Kit";
 import type { EnemyState, RunState } from "./types";
-import { addEffect, hasPerk } from "./util";
+import { addEffect, hasPerk, reachOf } from "./util";
 
 const RED = "#ff2a3a";
 
@@ -76,7 +76,7 @@ function tieSkill(s: RunState): void {
   const tie = p.nlTie;
   if (!tie) {
     if ((p.nlCd![1] ?? 0) > 0) return;
-    const e = nearest(s, N.tieReach);
+    const e = nearest(s, N.tieReach * reachOf(p));
     const chain = hasPerk(p, "nlChain") ? K.nlChain.mul : 1;
     p.nlTie = { ax: p.x, ay: p.y, t: N.tieWindow, ph: 0, ...(e ? { id: e.id } : {}) };
     addEffect(s, { kind: "nlAnchorFx", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 10, maxTicks: 24 });
@@ -89,7 +89,7 @@ function tieSkill(s: RunState): void {
   }
   if (tie.ph !== 1) return;
   const big = hasPerk(p, "nlBleed");
-  const r = N.smashR * (big ? K.nlBleed.r : 1);
+  const r = N.smashR * (big ? K.nlBleed.r : 1) * reachOf(p);
   for (const e of inCircle(s, p.x, p.y, r)) {
     const had = e.nlNails ?? 0;
     strike(s, e, nlDmg(p, N.smashMul), 6);
@@ -132,8 +132,8 @@ function curseSkill(s: RunState): void {
   const p = s.player;
   if ((p.nlCd![2] ?? 0) > 0) return;
   p.nlCd![2] = nlCooldown(p, 2);
-  for (const e of inCircle(s, p.x, p.y, N.plantR)) strike(s, e, nlDmg(p, N.plantMul), 4);
-  addEffect(s, { kind: "kgPlant", x: p.x + p.faceX * 8, y: p.y, dirX: 0, dirY: 0, size: N.plantR, maxTicks: 24, tint: RED });
+  for (const e of inCircle(s, p.x, p.y, N.plantR * reachOf(p))) strike(s, e, nlDmg(p, N.plantMul), 4);
+  addEffect(s, { kind: "kgPlant", x: p.x + p.faceX * 8, y: p.y, dirX: 0, dirY: 0, size: N.plantR * reachOf(p), maxTicks: 24, tint: RED });
   const keep = hasPerk(p, "nlFuse") ? K.nlFuse.keep : 0;
   for (const e of alive(s)) {
     const n = e.nlNails ?? 0;
@@ -169,7 +169,7 @@ export function detTick(s: RunState): void {
 function ultSkill(s: RunState): void {
   const p = s.player;
   if ((p.nlCd![3] ?? 0) > 0) return;
-  const e = nearest(s, N.ultReach);
+  const e = nearest(s, N.ultReach * reachOf(p));
   if (!e) return;
   p.nlCd![3] = nlCooldown(p, 3);
   p.nlUlt = { id: e.id, n: N.ultVolleys + (hasPerk(p, "nlRain") ? K.nlRain.add : 0), t: 0, ax: p.x, ay: p.y };

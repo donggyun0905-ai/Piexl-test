@@ -5,7 +5,7 @@ import { STIGMA } from "../weaponsDawn";
 import { alive, inCircle, strike } from "./s2Kit";
 import { addStigma, awaken, isAwake } from "./stigma";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { addEffect, hasPerk } from "./util";
+import { addEffect, hasPerk, reachOf } from "./util";
 
 export const isNailer = (p: PlayerState) => p.characterId === "nailer";
 
@@ -51,7 +51,7 @@ export function nailHit(s: RunState, e: EnemyState, mul: number): void {
 
 /** 못 하나를 (x, y)에서 (dx, dy) 쪽으로 던짐 (tg: 쫓는 적) */
 export function throwNail(p: PlayerState, x: number, y: number, dx: number, dy: number, speed: number, mul: number, k: number, tg?: number): void {
-  const t = Math.ceil((tg === undefined ? N.throwRange : N.ultReach * 1.5) / speed);
+  const t = Math.ceil((tg === undefined ? N.throwRange * reachOf(p) : N.ultReach * 1.5) / speed);
   (p.nlShots ??= []).push({ x, y, vx: dx * speed, vy: dy * speed, t, mul, k, ...(tg === undefined ? {} : { tg }) });
 }
 

@@ -4,7 +4,7 @@ import { SERENA as N } from "../weaponsSerena";
 import { orbCount, snCooldown, snHit, snOrbAt, addThorns } from "./serenaKit";
 import { alive, inCircle, inCone, isBoss, poison, rushTick, startRush, stun } from "./s2Kit";
 import type { RunState } from "./types";
-import { addEffect, hasPerk } from "./util";
+import { addEffect, hasPerk, reachOf } from "./util";
 
 /** 2 매혹: 둘레 적을 홀림 (멈춘 채 나에게 끌려옴 · 받는 피해 증가 · 가시) */
 function charm(s: RunState): void {
@@ -122,8 +122,9 @@ export function whirlTick(s: RunState): void {
   }
   p.snWhirl!--;
   p.snWhirlAt = N.whirlGap;
-  for (const e of inCircle(s, p.x, p.y, N.whirlR)) snHit(s, e, N.whirlMul, 1, N.whirlPush);
-  addEffect(s, { kind: "snWhirlFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: N.whirlR, style: p.snWhirl! % 2, maxTicks: 20 });
+  const wr = N.whirlR * reachOf(p);
+  for (const e of inCircle(s, p.x, p.y, wr)) snHit(s, e, N.whirlMul, 1, N.whirlPush);
+  addEffect(s, { kind: "snWhirlFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: wr, style: p.snWhirl! % 2, maxTicks: 20 });
   if (p.snWhirl! <= 0) {
     delete p.snWhirl;
     delete p.snWhirlAt;

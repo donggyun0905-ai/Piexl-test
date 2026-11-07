@@ -9,12 +9,12 @@ import { gemOf, lvHit, rollWhale, whaleDmg, whaleSize } from "./leviaKit";
 import { breach, launchWhale, onWhale, whaleCharge, whaleTick } from "./leviaWhale";
 import { fan, inCircle, inCone, roomKey, rushTick, startRush, stun } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
-import { addEffect, hasPerk } from "./util";
+import { addEffect, hasPerk, reachOf } from "./util";
 
 /** 1타: 창으로 앞을 크게 휘두름 · 고래가 날개로 더 넓게 같이 쓸어 줌 */
 function sweep(s: RunState, whale: boolean): void {
   const p = s.player;
-  const reach = L.sweepReach * (hasPerk(p, "lvCrest") ? K.lvCrest.reach : 1);
+  const reach = L.sweepReach * reachOf(p) * (hasPerk(p, "lvCrest") ? K.lvCrest.reach : 1);
   for (const e of inCone(s, reach, L.sweepArc)) lvHit(s, e, p.stats.damage * L.sweepMul, L.sweepPush);
   addEffect(s, { kind: "lvSwing", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, maxTicks: 14, follow: true });
   if (hasPerk(p, "lvSpray")) {
@@ -22,7 +22,7 @@ function sweep(s: RunState, whale: boolean): void {
     fan(s, k.n, k.spread, { damage: p.stats.damage * k.mul, spirit: "lvJet", r: 4, range: k.range, pierce: 2 });
   }
   if (!whale) return;
-  const fin = L.finReach * whaleSize(p);
+  const fin = L.finReach * reachOf(p) * whaleSize(p);
   for (const e of inCone(s, fin, L.finArc)) lvHit(s, e, whaleDmg(p, L.finMul), L.finPush, "tide", true);
   addEffect(s, { kind: "lvFin", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: fin, maxTicks: 22, follow: true });
 }
@@ -30,10 +30,11 @@ function sweep(s: RunState, whale: boolean): void {
 /** 2타: 창으로 앞을 길게 찌름 · 고래가 꼬리로 앞을 크게 휩쓸어 줌 */
 function thrust(s: RunState, whale: boolean): void {
   const p = s.player;
-  for (const e of inCone(s, L.thrustReach, L.thrustArc)) lvHit(s, e, p.stats.damage * L.thrustMul, L.thrustPush);
-  addEffect(s, { kind: "lvThrust", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: L.thrustReach, maxTicks: 12, follow: true });
+  const reach = L.thrustReach * reachOf(p);
+  for (const e of inCone(s, reach, L.thrustArc)) lvHit(s, e, p.stats.damage * L.thrustMul, L.thrustPush);
+  addEffect(s, { kind: "lvThrust", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, maxTicks: 12, follow: true });
   if (!whale) return;
-  const r = L.tailReach * whaleSize(p);
+  const r = L.tailReach * reachOf(p) * whaleSize(p);
   for (const e of inCone(s, r, L.tailArc)) lvHit(s, e, whaleDmg(p, L.tailMul), L.tailPush, "tide", true);
   addEffect(s, { kind: "lvTailSweep", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 22, follow: true, tint: String(s.tick % 2 ? 1 : -1) });
 }
@@ -42,12 +43,12 @@ function thrust(s: RunState, whale: boolean): void {
 function spin(s: RunState, whale: boolean): void {
   const p = s.player;
   const sp = hasPerk(p, "lvSpiral");
-  const reach = L.spinReach * (sp ? K.lvSpiral.reach : 1);
+  const reach = L.spinReach * reachOf(p) * (sp ? K.lvSpiral.reach : 1);
   for (const e of inCone(s, reach, -1)) lvHit(s, e, p.stats.damage * L.spinMul * (sp ? K.lvSpiral.mul : 1), 6);
   addEffect(s, { kind: "lvSpin", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, maxTicks: 14, follow: true });
   whaleCharge(s);
   if (!whale) return;
-  const r = L.orbitReach * whaleSize(p);
+  const r = L.orbitReach * reachOf(p) * whaleSize(p);
   for (const e of inCircle(s, p.x, p.y, r)) lvHit(s, e, whaleDmg(p, L.orbitMul), 10, "tide", true);
   addEffect(s, { kind: "lvOrbit", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 24, follow: true });
 }
@@ -69,12 +70,13 @@ function quake(s: RunState): void {
   const br = hasPerk(p, "lvBreaker");
   const arc = br ? K.lvBreaker.arc : L.quakeArc;
   const mul = L.quakeMul * (abyss ? L.abyssMul : 1) * (br ? K.lvBreaker.mul : 1);
-  for (const e of inCone(s, L.quakeReach, arc)) {
+  const reach = L.quakeReach * reachOf(p);
+  for (const e of inCone(s, reach, arc)) {
     lvHit(s, e, p.stats.damage * mul, L.quakePush);
     if (abyss) stun(e, L.abyssStun);
   }
-  addEffect(s, { kind: "lvQuake", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: L.quakeReach, maxTicks: 22, arc, tint: abyss ? "abyss" : undefined });
-  if (gemOf(p).gem === "king") breach(s, p.x + p.faceX * 34, p.y + p.faceY * 34);
+  addEffect(s, { kind: "lvQuake", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, maxTicks: 22, arc, tint: abyss ? "abyss" : undefined });
+  if (gemOf(p).gem === "king") breach(s, p.x + p.faceX * 34 * reachOf(p), p.y + p.faceY * 34 * reachOf(p));
   if (hasPerk(p, "lvSalt")) healPlayer(s, p.stats.maxHp * K.lvSalt.heal);
 }
 

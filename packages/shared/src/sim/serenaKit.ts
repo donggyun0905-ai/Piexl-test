@@ -4,7 +4,7 @@ import { SERENA as N } from "../weaponsSerena";
 import { rot } from "./orbit";
 import { inCircle, isBoss, strike } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { addEffect, hasPerk } from "./util";
+import { addEffect, hasPerk, reachOf } from "./util";
 
 const TAU = Math.PI * 2;
 
@@ -69,7 +69,7 @@ export function orbCount(p: PlayerState): number {
   return ((p.snUlt ?? 0) > 0 ? N.ultOrbN : N.orbN) + (hasPerk(p, "snChain") ? K.snChain.more : 0);
 }
 function orbRadius(p: PlayerState): number {
-  return N.orbR * ((p.snUlt ?? 0) > 0 ? N.ultOrbR : 1) * (hasPerk(p, "snReach") ? K.snReach.r : 1);
+  return N.orbR * ((p.snUlt ?? 0) > 0 ? N.ultOrbR : 1) * (hasPerk(p, "snReach") ? K.snReach.r : 1) * reachOf(p);
 }
 
 /** 도는 사슬 채찍 i의 비수 자리 (몸 둘레를 크게 돌며 안팎으로 휘저음, 화면도 같이 씀) */

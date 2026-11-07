@@ -7,7 +7,7 @@ import { createRng, deriveSeed } from "../rng";
 import { addCombo, dropBlade, hold, kindOf, mcHit, pickWeapon, plant } from "./michaelaKit";
 import { inCircle, inCone, onSegment, stun, strike } from "./s2Kit";
 import type { EnemyState, RunState } from "./types";
-import { addEffect, hasPerk, keepInRoom, roomGrid } from "./util";
+import { addEffect, hasPerk, keepInRoom, roomGrid, reachOf } from "./util";
 import { isWall } from "./waveKit";
 
 /** 기술 효과 하나 (그림: 기술 번호 × 64 + 그림 무기 번호) */
@@ -31,8 +31,8 @@ function hit(s: RunState, e: EnemyState, mul: number, push = 0): void {
   }
 }
 
-/** 넓은 폭심: 기술 범위 배율 */
-const wide = (s: RunState) => (hasPerk(s.player, "mcWide") ? K.mcWide.r : 1);
+/** 기술 범위 배율: 넓은 폭심 × 사거리 증가 (늘어난 만큼 닿고 이펙트도 그 크기·자리로) */
+const wide = (s: RunState) => (hasPerk(s.player, "mcWide") ? K.mcWide.r : 1) * reachOf(s.player);
 /** 검 기술이면 백은의 검, 창 기술이면 백금의 창 */
 const sword = (s: RunState) => (hasPerk(s.player, "mcSword") && (s.player.mcHeld ?? 0) === 0 ? K.mcSword.mul : 1);
 const lance = (s: RunState) => (hasPerk(s.player, "mcLance") && (s.player.mcHeld ?? 0) === 1 ? K.mcLance : { len: 1, mul: 1 });
@@ -82,8 +82,8 @@ export function doMove(s: RunState, m: McMove, mul = 1): void {
     for (const e of inCone(s, V.slashR * r, V.slashCos)) hit(s, e, V.slashMul * mul * sword(s), 4);
     fx(s, m, x, y - 4, V.slashR * r, x, y, 14);
   } else if (m === "slam") {
-    const cx = x + dx * V.slamAt;
-    const cy = y + dy * V.slamAt;
+    const cx = x + dx * V.slamAt * r;
+    const cy = y + dy * V.slamAt * r;
     for (const e of inCircle(s, cx, cy, V.slamR * r)) {
       hit(s, e, V.slamMul * mul * sword(s), 4);
       stun(e, V.slamStun);
@@ -134,8 +134,8 @@ export function doMove(s: RunState, m: McMove, mul = 1): void {
   } else if (m === "skyfall") {
     // 칼비: 앞에 무기가 쏟아져 꽂힘 (박혀 남음)
     const rng = createRng(deriveSeed(s.seed, "mcSky", s.tick));
-    const cx = x + dx * V.skyAt;
-    const cy = y + dy * V.skyAt;
+    const cx = x + dx * V.skyAt * r;
+    const cy = y + dy * V.skyAt * r;
     fx(s, m, cx, cy, V.skyR * r, x, y, 26);
     for (let i = 0; i < V.skyN; i++) {
       const a = rng.nextFloat() * Math.PI * 2;
