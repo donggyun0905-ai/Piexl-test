@@ -63,7 +63,7 @@ DASH_FLIP = {"morph-bear"}
 # 옅은 색이 많아 작게 줄이면 흐린 캐릭터: 시트 전체 대비·채도를 더 올림 (배율)
 CRISP: dict = {}  # 이클립스는 원본 색 그대로 (2026-11-05 사용자)
 # 다 맞춘 뒤에도 왼·오가 반대인 줄: 그 줄의 왼쪽·오른쪽 칸을 서로 바꿈 (1 공격 · 2 걷기 왼발 · 3 걷기 오른발, 오른쪽 그림 확인 2026-10-31)
-ROW_SWAP = {"blast": (4,), "nailer": (1, 2, 3), "scissors": (1, 2, 3), "hellfist": (1,), "hellfistDemon": (0, 1, 2, 3), "morph-snake": (1, 3), "morph-bat": (1, 3), "morph-boar-evo": (3,), "morph-snake-evo": (3,), "morph-wolf-evo": (1,), **{n: (4,) for n in ("pungryu", "collector", "samyeol", "silk", "voyager", "forgotten", "remnant", "tracker", "punk", "miner",
+ROW_SWAP = {"nailer": (1, 2, 3), "scissors": (2, 3), "hellfistDemon": (0, 2, 3), "morph-snake": (1, 3), "morph-bat": (1, 3), "morph-boar-evo": (3,), "morph-snake-evo": (3,), "morph-wolf-evo": (1,), **{n: (4,) for n in ("pungryu", "collector", "samyeol", "silk", "voyager", "forgotten", "remnant", "tracker", "punk", "miner",
                                        "rider", "mukin", "wanderer", "bomber", "artifacter", "automata", "eater", "zeus", "slayer", "slayer_rage", "tail")}}
 # 왼·오 칸이 둘 다 왼쪽을 보는 줄: 오른쪽은 왼쪽을 뒤집어 씀
 ROW_MIRROR = {"morph-spider": (2, 3), "hook": (2,)}

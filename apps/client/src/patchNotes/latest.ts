@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.20",
+    date: "2026-11-08",
+    items: {
+      ko: ["좌우 모습 고침: 블래스트 대시 · 시저스 공격 · 헬피스트 공격(평소·악마화 모습)이 반대쪽을 보던 것"],
+      en: ["Facing fixes: Blast's dash, Scissors' attack and Hellfist's attack (normal and demonized forms) no longer face the wrong way"],
+      ja: ["左右の向きを修正：ブラストのダッシュ・シザーズの攻撃・ヘルフィストの攻撃（通常・悪魔化の姿）が逆を向いていたのを修正"],
+    },
+  },
+  {
     version: "0.50.19",
     date: "2026-11-08",
     items: {
