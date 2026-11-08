@@ -17,9 +17,10 @@ const R = {
   GATES_HALF: 4,
   /** 문 체력 배율 (수문장 체력이 늘면 같이) */
   GATE_HP: 1,
-  /** 임프: 문마다 나오는 간격 틱 · 방에 최대 몇 마리 · 체력 배율 */
-  IMP_EVERY: 240,
-  IMP_MAX: 6,
+  /** 임프: 나오는 간격 틱 · 문 하나에서 한 번에 몇 마리 · 방에 최대 몇 마리 · 체력 배율 */
+  IMP_EVERY: 200,
+  IMP_PER: 2,
+  IMP_MAX: 10,
   IMP_HP: 1,
   /** 불붙은 임프: 붙으면 터지기까지 틱 · 범위 · 피해 배율 (보스 한 방 기준) */
   FIRE_FUSE: 30,
@@ -53,6 +54,8 @@ export { R as BOSS_GATEKEEPER_RULES };
 
 type Vec = readonly [number, number];
 const alive = (s: RunState, id: number) => s.enemies.find((x) => x.id === id && x.hp > 0);
+/** 열려 있는 문 (방금 연 문은 다음 틱에야 방에 들어가므로 연 틱에는 모두 열린 것으로) */
+const openOf = (s: RunState, e: EnemyState) => (e.gkGates ?? []).filter((g) => s.tick === e.gkOpenAt || alive(s, g.id));
 
 /** 수문장 받는 피해 배율 (부서진 문 수만큼, sim/classTaken) */
 export const gateTaken = (e: EnemyState) => (e.kind === "gatekeeper" ? 1 + (e.gkBroken ?? 0) * R.BREAK_TAKEN : 1);
@@ -87,6 +90,7 @@ function openGates(s: RunState, e: EnemyState, spawned: EnemyState[]): void {
   });
   e.gkBroken = 0;
   e.gkImp = R.IMP_EVERY / 2;
+  e.gkOpenAt = s.tick;
 }
 
 /** 문 · 임프 (bosses BOSS_AI): 문은 제자리 · 임프는 쫓아옴, 불붙은 임프는 붙으면 터짐 */
@@ -114,7 +118,7 @@ export function updateGateProp(s: RunState, e: EnemyState, go: Vec): void {
 /** 열린 문에서 임프 · 부서진 문 세기 (부서질 때마다 경직) */
 function gateTick(s: RunState, e: EnemyState, spawned: EnemyState[]): void {
   const gates = e.gkGates ?? [];
-  const open = gates.filter((g) => alive(s, g.id));
+  const open = openOf(s, e);
   const broken = gates.length - open.length;
   if (broken > (e.gkBroken ?? 0)) {
     e.gkBroken = broken;
@@ -125,12 +129,14 @@ function gateTick(s: RunState, e: EnemyState, spawned: EnemyState[]): void {
   e.gkImp = R.IMP_EVERY;
   const imps = s.enemies.filter((m) => m.kind === "imp" && m.hp > 0).length + spawned.filter((m) => m.kind === "imp").length;
   const mul = (e.maxHp / ENEMIES.gatekeeper.hp) * R.IMP_HP;
-  open.slice(0, Math.max(0, R.IMP_MAX - imps)).forEach((g) => {
-    const m = makeEnemy(s, "imp", g.x, g.y + 8, mul, 0);
-    m.noGold = true;
-    if (half(e)) m.fire = true;
-    spawned.push(m);
-  });
+  let room = R.IMP_MAX - imps;
+  for (const g of open)
+    for (let i = 0; i < R.IMP_PER && room > 0; i++, room--) {
+      const m = makeEnemy(s, "imp", g.x + (i % 2 ? 7 : -7), g.y + 8, mul, 0);
+      m.noGold = true;
+      if (half(e)) m.fire = true;
+      spawned.push(m);
+    }
 }
 
 export function updateGatekeeper(s: RunState, e: EnemyState, toP: Vec, go: Vec, spawned: EnemyState[]): void {
@@ -139,7 +145,7 @@ export function updateGatekeeper(s: RunState, e: EnemyState, toP: Vec, go: Vec, 
   // 처음 · 무릎에서 일어나면 문을 엶
   if (!e.gkGates) openGates(s, e, spawned);
   gateTick(s, e, spawned);
-  const open = (e.gkGates ?? []).filter((g) => alive(s, g.id));
+  const open = openOf(s, e);
   // 문이 다 부서지면 무릎 (공격 안 함)
   if (e.phase !== "act" && !open.length && (e.gkGates?.length ?? 0) > 0 && e.phase !== "blink") {
     e.phase = "act";

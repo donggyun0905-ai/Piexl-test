@@ -4,6 +4,8 @@ import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
 import { BOSS_MOON_EATER_RULES as ME } from "./bossMoonEater";
 import { BOSS_TWINS_RULES as TW } from "./bossTwins";
 import { makeEnemy } from "./util";
+import { startCage } from "./bossTwinsKit";
+import { startMoonfall } from "./bossMoonKit";
 
 /** 무적 플레이어 앞에 보스 하나 (방이 정리되지 않게) */
 function withBoss(kind: BossKind, seed = 4): RunState {
@@ -87,6 +89,41 @@ describe("시즌 3 단계별 보스", () => {
     const hp = s.player.hp;
     for (let i = 0; i < ME.ECLIPSE_WARN + 5 && s.player.hp === hp; i++) stepSim(s, EMPTY_INPUT);
     expect(s.player.hp).toBeLessThan(hp);
+  });
+
+  it("지옥문 수문장: 처음 들어가도 기절·무릎 없음 · 문이 늘어나지 않음 · 임프는 문마다 둘씩", () => {
+    const s = withBoss("gatekeeper");
+    play(s, 2);
+    const boss = one(s, "gatekeeper")[0]!;
+    expect(boss.stunTicks ?? 0).toBe(0);
+    expect(boss.gkBroken).toBe(0);
+    play(s, 600);
+    expect(one(s, "hellgate")).toHaveLength(3);
+    expect(boss.phase).not.toBe("act");
+    expect(one(s, "imp").length).toBeGreaterThanOrEqual(6);
+  });
+
+  it("쌍둥이 핏줄 감옥 · 달을 삼키는 자 월광 낙하: 대시 무적이어도 맞음", () => {
+    for (const k of ["twinlu", "mooneater"] as BossKind[]) {
+      const s = withBoss(k);
+      play(s, 3);
+      const boss = one(s, k)[0]!;
+      if (k === "twinlu") {
+        const re = one(s, "twinre")[0]!;
+        startCage(s, boss, re);
+        re.timer = boss.timer;
+      } else startMoonfall(boss);
+      // 가운데에 가만히 · 대시 무적을 계속 켬
+      const hp0 = s.player.hp;
+      const [px, py] = [s.player.x, s.player.y];
+      for (let i = 0; i < 260; i++) {
+        s.player.invulnTicks = 0;
+        s.player.dashTicks = 5;
+        [s.player.x, s.player.y] = [px, py];
+        stepSim(s, EMPTY_INPUT);
+      }
+      expect(s.player.hp).toBeLessThan(hp0);
+    }
   });
 
   it("같은 시드면 같은 결과 (세 보스)", () => {

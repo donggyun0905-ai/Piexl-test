@@ -9,6 +9,7 @@ import { half, hitDamage } from "./bossKit";
 import { throughDash } from "./bossGrip";
 import { damagePlayer } from "./combat";
 import { addShape } from "./hazards";
+import { moonfallTick, startMoonfall, startReap } from "./bossMoonKit";
 import { eachSeat } from "./party";
 import { addStigma, stigmaGauge } from "./stigma";
 import type { EnemyState, RunState } from "./types";
@@ -45,7 +46,7 @@ const R = {
   DEVOUR_HEAL: 0.05,
   DEVOUR_MOON: 0.5,
   /** 공격 사이 쉬는 틱 · 달이 가득할수록 줄어드는 비율 */
-  REST: 100,
+  REST: 70,
   REST_MOON: 0.3,
   /** 새벽의 성흔: 이 방에서 1초마다 주는 성흔 · 달 조각을 깨면 더하는 성흔 */
   DRAIN: 1,
@@ -133,7 +134,11 @@ export function updateMoonEater(s: RunState, e: EnemyState, toP: Vec, go: Vec, s
     if (e.timer > 0) return;
     e.count++;
     const pillar = nearestPillar(e);
-    if (e.count % 3 === 0 && pillar) {
+    // 차례: 그림자 손 → 초승달 낫 → 그림자 손 → 월광 낙하 · 기둥이 있으면 넷째마다 삼키기 (sim/bossMoonKit)
+    const pick = e.count % 4;
+    if (pick === 1) return void startReap(s, e, toP);
+    if (pick === 3) return startMoonfall(e);
+    if (pick === 0 && pillar) {
       e.phase = "swing";
       e.timer = R.DEVOUR_WARN;
       e.auxX = pillar.x;
@@ -187,7 +192,8 @@ export function updateMoonEater(s: RunState, e: EnemyState, toP: Vec, go: Vec, s
     e.timer = rest;
     return;
   }
-  if (e.phase === "summon" && e.timer <= 0) {
+  if (e.phase === "volley" && moonfallTick(s, e)) return;
+  if ((e.phase === "summon" || e.phase === "charge" || e.phase === "volley") && e.timer <= 0) {
     e.phase = "walk";
     e.timer = rest;
   }

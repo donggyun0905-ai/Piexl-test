@@ -8,7 +8,9 @@ import { PILGRIM_RULES } from "./pilgrim";
 import { ALLY_RULES } from "./allies";
 import { BOSS_GATEKEEPER_RULES } from "./bossGatekeeper";
 import { BOSS_TWINS_RULES } from "./bossTwins";
+import { BOSS_TWINS_KIT_RULES } from "./bossTwinsKit";
 import { BOSS_MOON_EATER_RULES } from "./bossMoonEater";
+import { BOSS_MOON_KIT_RULES } from "./bossMoonKit";
 import { ALLY_KIT_RULES } from "./allyKit";
 import { KING_FORM_RULES } from "./kingForm";
 import { KING_BLADE_RULES } from "./kingBlade";
@@ -123,7 +125,9 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   ALLY_RULES,
   BOSS_GATEKEEPER_RULES,
   BOSS_TWINS_RULES,
+  BOSS_TWINS_KIT_RULES,
   BOSS_MOON_EATER_RULES,
+  BOSS_MOON_KIT_RULES,
   ALLY_KIT_RULES,
   KING_FORM_RULES,
   KING_BLADE_RULES,

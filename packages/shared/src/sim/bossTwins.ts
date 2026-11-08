@@ -8,6 +8,7 @@ import { damagePlayer } from "./combat";
 import { addShape, inHazard } from "./hazards";
 import { eachSeat } from "./party";
 import type { EnemyState, RunState } from "./types";
+import { startCage, startCross, twinKitTick } from "./bossTwinsKit";
 import { addEffect, makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -23,7 +24,7 @@ const R = {
   LINE_DMG: 8,
   LINE_W: 3,
   /** 루 뛰어들기: 횟수 · 한 번 예고 틱 · 범위 · 뛰는 거리 · 피해 배율 */
-  LEAPS: 3,
+  LEAPS: 4,
   LEAP_WARN: 24,
   LEAP_R: 20,
   LEAP_DIST: 28,
@@ -42,7 +43,10 @@ const R = {
   SWAP_EVERY: 4,
   SWAP_EVERY_HALF: 2,
   /** 공격 사이 쉬는 틱 */
-  REST: 90,
+  REST: 70,
+  /** 루의 공격 고르기: 몇 번째마다 교차 돌진 · 핏줄 감옥 (나머지는 뛰어들기) */
+  CROSS_EVERY: 3,
+  CAGE_EVERY: 5,
 };
 export { R as BOSS_TWINS_RULES };
 
@@ -155,6 +159,8 @@ export function updateTwin(s: RunState, e: EnemyState, toP: Vec, go: Vec, spawne
     if (both) bloodLine(s, mid(), [m.x, m.y]);
   }
   if (e.kind === "twinre") orbsTick(s, e, lu);
+  // 교차 돌진 · 핏줄 감옥 (루가 정하고 레도 같이 움직임, sim/bossTwinsKit)
+  if (twinKitTick(s, e, m)) return;
   // 짝이 쓰러져 있으면 화가 나 공격 대기가 빨리 줆
   if (m && down(m) && s.tick % Math.max(1, Math.round(1 / (R.RAGE - 1))) === 0) e.timer--;
   const h = both || half(e);
@@ -182,6 +188,9 @@ export function updateTwin(s: RunState, e: EnemyState, toP: Vec, go: Vec, spawne
       }
       return;
     }
+    const pair = e.kind === "twinlu" && m && !down(m) && m.phase === "walk";
+    if (pair && e.count % R.CAGE_EVERY === 0) return startCage(s, e, m);
+    if (pair && e.count % R.CROSS_EVERY === 0) return startCross(s, e, m);
     if (e.kind === "twinlu") {
       e.phase = "charge";
       e.step = R.LEAPS;

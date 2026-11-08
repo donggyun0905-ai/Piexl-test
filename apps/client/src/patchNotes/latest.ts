@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.38",
+    date: "2026-11-09",
+    items: {
+      ko: [
+        "지옥문 수문장: 방에 들어가자마자 기절·무릎 꿇고 문이 복사되던 문제 고침 · 임프가 문마다 두 마리씩 (방에 최대 10마리)",
+        "피로 이어진 쌍둥이 강화: 체력 루 300 → 420 · 레 260 → 360 · 뛰어들기 3 → 4번 · 공격 사이 짧게 · 새 패턴 교차 돌진(사람 양옆으로 순간이동해 서로를 향해 꿰뚫음, 체력 절반 아래면 십자로 두 번) · 새 패턴 핏줄 감옥(원 안에서 핏줄이 빙빙 돎 · 대시 무적으로도 못 피함, 예고 동안 원 밖으로)",
+        "달을 삼키는 자 강화: 체력 650 → 900 · 공격 사이 짧게 · 새 패턴 초승달 낫(부채꼴 세 번) · 새 패턴 월광 낙하(선 자리에 달빛이 연달아 떨어짐 · 대시 무적으로도 못 피함, 계속 움직여야 함)",
+      ],
+      en: [
+        "Hellgate Keeper: fixed it being stunned and kneeling the moment you entered, and its gates duplicating · imps now come two per gate (up to 10 in the room)",
+        "Blood-bound twins buffed: HP Lu 300 → 420 · Re 260 → 360 · leaps 3 → 4 · shorter rests · new Cross Rush (they blink to either side of you and pierce toward each other; a second, crossing rush below half HP) · new Vein Cage (the vein spins inside a ring; dash invincibility won't save you, so leave the ring during the warning)",
+        "Moon Devourer buffed: HP 650 → 900 · shorter rests · new Crescent Reap (three sweeping cones) · new Moonfall (moonlight keeps falling where you stand; dash invincibility won't save you, so keep moving)",
+      ],
+      ja: [
+        "地獄門の門番：部屋に入った瞬間に気絶・膝つきして門が複製される問題を修正 · インプは門ごとに2体ずつ（部屋に最大10体）",
+        "血で繋がった双子を強化：体力 ルー300 → 420 · レー260 → 360 · 飛びかかり3 → 4回 · 攻撃間隔を短く · 新パターン交差突進（あなたの両側に瞬間移動して互いに向かって貫く、体力半分以下では十字に2回）· 新パターン血の檻（円の中で血の筋が回る · ダッシュ無敵でも避けられない、予告中に円の外へ）",
+        "月を呑む者を強化：体力650 → 900 · 攻撃間隔を短く · 新パターン三日月の鎌（扇形3回）· 新パターン月光落下（立っている場所に月光が次々と落ちる · ダッシュ無敵でも避けられない、動き続ける必要あり）",
+      ],
+    },
+  },
+  {
     version: "0.50.37",
     date: "2026-11-09",
     items: {
