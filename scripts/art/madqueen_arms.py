@@ -1,4 +1,4 @@
-# 매드퀸 무기 그림 3장(art/매드퀸) → apps/client/public/sprites/madQueen_arms.png
+# 매드퀸 무기 그림 3장(art/캐릭터/매드퀸) → apps/client/public/sprites/madQueen_arms.png
 # 줄: 0 미래형 대포 · 1 네온 터렛 · 2 에너지 하이브리드 날개 / 칸: 0 하늘 · 1 빨강 · 2 노랑 · 3 초록 (원본 2×2 순서 그대로)
 # 배경(가장자리에서 이어진 검정·흰색)을 지우고 덩어리마다 잘라 64칸에 맞춰 줄임. 그림은 모두 오른쪽을 봄
 import os
@@ -8,7 +8,7 @@ from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..", "..")
-SRC = os.path.join(ROOT, "art", "매드퀸")
+SRC = os.path.join(ROOT, "art", "캐릭터", "매드퀸")
 OUT = os.path.join(ROOT, "apps", "client", "public", "sprites", "madQueen_arms.png")
 CELL = 64
 FILES = [("미래형 대포 4색 스프라이트 시트.png", "dark"), ("사색 네온 터렛 픽셀아트 스프라이트 시트.png", "dark"), ("4색 에너지 하이브리드 무기 시트.png", "light")]

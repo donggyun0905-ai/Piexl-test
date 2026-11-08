@@ -1,4 +1,4 @@
-# 미카엘라 무기 그림: art/미카엘라의 창 모음(다운로드.jpg)·검 모음(다운로드 (1).jpg) → 무기 하나씩 잘라 apps/client/public/sprites/michaela_weapons.png
+# 미카엘라 무기 그림: art/캐릭터/미카엘라의 창 모음(다운로드.jpg)·검 모음(다운로드 (1).jpg) → 무기 하나씩 잘라 apps/client/public/sprites/michaela_weapons.png
 # 칸 하나 = 가로 CW × 세로 CH, 날 끝이 칸 맨 위(1px 아래) · 창 21개 다음 검 16개 차례 (python3 scripts/art/michaela_weapons.py)
 # 무기마다 그림 색으로 속성(0 성은 · 1 빙결 · 2 홍염 · 3 혈월 · 4 천광 · 5 자전 · 6 비취 · 7 청해)을 골라 packages/shared/src/michaelaWeaponList.ts에 씀
 import colorsys
@@ -9,8 +9,8 @@ from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..", "..")
-SPEARS = os.path.join(ROOT, "art", "미카엘라", "다운로드.jpg")
-SWORDS = os.path.join(ROOT, "art", "미카엘라", "다운로드 (1).jpg")
+SPEARS = os.path.join(ROOT, "art", "캐릭터", "미카엘라", "다운로드.jpg")
+SWORDS = os.path.join(ROOT, "art", "캐릭터", "미카엘라", "다운로드 (1).jpg")
 OUT = os.path.join(ROOT, "apps", "client", "public", "sprites", "michaela_weapons.png")
 LIST = os.path.join(ROOT, "packages", "shared", "src", "michaelaWeaponList.ts")
 CW, CH = 24, 72

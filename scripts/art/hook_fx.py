@@ -1,4 +1,4 @@
-# 훅 산탄총 발사 그림: art/훅의 푸른 폭발 시트 → apps/client/public/sprites/hook_fx.png
+# 훅 산탄총 발사 그림: art/캐릭터/훅의 푸른 폭발 시트 → apps/client/public/sprites/hook_fx.png
 # 줄 0: 큰 발사 4칸 (번쩍 → 연기 → 초승달 충격 → 흩어짐) · 줄 1: 둘째 총열 4칸 (줄기 → 연기)
 # 검은 배경은 밝기로 투명하게 바꿈 (빛이라 겹쳐 그리면 자연스러움). 칸마다 왼쪽 가운데 = 총구
 import os
@@ -7,7 +7,7 @@ from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..", "..")
-SRC = os.path.join(ROOT, "art", "훅", "차가운 푸른빛 픽셀 폭발 스프라이트 시트.png")
+SRC = os.path.join(ROOT, "art", "캐릭터", "훅", "차가운 푸른빛 픽셀 폭발 스프라이트 시트.png")
 OUT = os.path.join(ROOT, "apps", "client", "public", "sprites", "hook_fx.png")
 CELL = 128
 # 원본에서 잘라 낼 칸 (x0, x1) · 줄 (y0, y1): 잘라 보고 정함

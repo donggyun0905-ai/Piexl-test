@@ -1,7 +1,7 @@
 # 루나틱 이펙트 그림 (사용자 GPT 그림, 검은 배경 → 밝기를 투명도로, 빛이 부드럽게) → apps/client/public/sprites/{이름}.png
 # 8프레임(4×2) → 한 줄 8칸: lunatic_thrust 레이피어 찌르기 (칸 192×64, 왼쪽 = 칼끝이 나가는 자리 · 오른쪽 = 찌르는 쪽) · lunatic_slash 달빛 베기 (칸 128×128)
 #   모든 칸을 합친 테두리 상자로 자르고 같은 배율 (칸 안 자리를 지킴)
-# 실행: python3 scripts/art/lunatic_fx.py · 원본 scripts/art/src/{이름}.png (art/루나틱/)
+# 실행: python3 scripts/art/lunatic_fx.py · 원본 scripts/art/src/{이름}.png (art/캐릭터/루나틱/)
 import os
 import numpy as np
 from PIL import Image

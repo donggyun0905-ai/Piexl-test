@@ -1,4 +1,4 @@
-# 가브리엘 빛의 망치 그림: art/가브리엘의 황금빛 해머 충격파 → apps/client/public/sprites/gabriel_fx.png (256×256 한 장)
+# 가브리엘 빛의 망치 그림: art/캐릭터/가브리엘의 황금빛 해머 충격파 → apps/client/public/sprites/gabriel_fx.png (256×256 한 장)
 # 검은 배경은 밝기로 투명하게 바꿈 (빛이라 겹쳐 그리면 자연스러움). 아래쪽 가운데 = 망치가 땅을 치는 자리
 import os
 
@@ -8,7 +8,7 @@ from hook_fx import key
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..", "..")
-SRC = os.path.join(ROOT, "art", "가브리엘", "황금빛 천상의 해머 충격파.png")
+SRC = os.path.join(ROOT, "art", "캐릭터", "가브리엘", "황금빛 천상의 해머 충격파.png")
 OUT = os.path.join(ROOT, "apps", "client", "public", "sprites", "gabriel_fx.png")
 SIZE = 256
 
