@@ -75,7 +75,8 @@ function bigBow(ctx: Ctx, s: RunState, k: number): void {
     ctx.save();
     ctx.globalAlpha = k;
     ctx.translate(bx, by);
-    ctx.rotate(a + Math.PI / 2);
+    // 그림은 양끝이 위로 휜 모양: 휜 끝이 몸(화면 아래) 쪽을 향하게 뒤집어 세움 (2026-11-08 사용자 확인)
+    ctx.rotate(a - Math.PI / 2);
     ctx.drawImage(BZ_IMG.bigBow, -bw / 2, -bh / 2, bw, bh);
     ctx.globalCompositeOperation = "lighter";
     ctx.globalAlpha = 0.3 * k * pulse;

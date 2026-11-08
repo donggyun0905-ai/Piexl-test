@@ -107,4 +107,18 @@ describe("블루 플레임", () => {
     expect(s.player.bzWing).toBeUndefined();
     expect(foe(s).hp).toBeLessThanOrEqual(hp);
   });
+
+  it("푸른 날개를 가지면 공격하다 확률로 실제로 날개가 돋고 화살비가 나감", () => {
+    const s = bz(60 + 130, "bzWing");
+    let procs = 0;
+    let rain = 0;
+    for (let i = 0; i < 1500; i++) {
+      const had = s.player.bzWing;
+      stepSim(s, FIRE);
+      if (!had && s.player.bzWing) procs++;
+      rain += (s.player.bzStrikes ?? []).filter((b) => b.k === 3 && b.t === b.T - 1).length;
+    }
+    expect(procs).toBeGreaterThan(0);
+    expect(rain).toBe(procs * F.rainCount);
+  });
 });

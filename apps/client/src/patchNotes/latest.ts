@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.28",
+    date: "2026-11-08",
+    items: {
+      ko: ["블루 플레임 열화상 각성의 거대한 활이 위아래 반대로 보이던 것 고침"],
+      en: ["Fixed Blue Flame's giant bow appearing upside down during Thermal Awakening"],
+      ja: ["ブルーフレイムの熱感知覚醒で巨大な弓が上下逆に見えていたのを修正"],
+    },
+  },
+  {
     version: "0.50.27",
     date: "2026-11-08",
     items: {
