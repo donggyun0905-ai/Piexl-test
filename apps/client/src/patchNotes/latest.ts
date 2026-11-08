@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.32",
+    date: "2026-11-08",
+    items: {
+      ko: ["루나틱 찌르기 길이 2.5배 (52 → 130): 폭은 그대로 좁고 앞으로 길게 찌름"],
+      en: ["Lunatic's thrust length ×2.5 (52 → 130): still narrow, but reaches much farther ahead"],
+      ja: ["ルナティックの突きの長さ2.5倍（52 → 130）：幅は狭いまま、前へ長く突く"],
+    },
+  },
+  {
     version: "0.50.31",
     date: "2026-11-08",
     items: {

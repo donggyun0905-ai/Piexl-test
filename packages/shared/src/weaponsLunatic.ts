@@ -6,7 +6,7 @@ import type { WeaponDef } from "./content";
 
 export const LUNATIC_WEAPONS = {
   /** 월광의 세검: 달빛처럼 차갑고 아름다운 궤적으로 악마의 급소만 찌르는 새하얀 레이피어 */
-  lnRapier: { id: "lnRapier", kind: "moonRapier", damageMul: 1, attackSpeed: 1.5, range: 52, projectileSpeed: 8, exclusive: "lunatic" },
+  lnRapier: { id: "lnRapier", kind: "moonRapier", damageMul: 1, attackSpeed: 1.5, range: 130, projectileSpeed: 8, exclusive: "lunatic" },
 } as const satisfies Record<string, WeaponDef>;
 
 /** 루나틱 수치 (배율 1 = 100%, 시간은 틱(60 = 1초), 거리는 픽셀) */
@@ -14,7 +14,7 @@ export const LUNATIC = {
   /** 찌르기 간격 배율 (공격 속도 따름, 작을수록 빠름) */
   thrustTime: 0.42,
   /** 찌르기: 앞으로 닿는 길이 (사거리 증가 따름) · 폭(반) · 피해 배율 · 밀침 */
-  thrustLen: 52,
+  thrustLen: 130,
   thrustW: 9,
   thrustMul: 0.85,
   thrustPush: 1,

@@ -102,7 +102,7 @@ describe("루나틱", () => {
   });
 
   it("월광 검기(전용 아이템)는 멀리 있는 적도 꿰뚫음", () => {
-    const s = ln(160, "lnWave");
+    const s = ln(210, "lnWave");
     const hp = foe(s).hp;
     run(s, 40);
     expect(foe(s).hp).toBeLessThan(hp);
