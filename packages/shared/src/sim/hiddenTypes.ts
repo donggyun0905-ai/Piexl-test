@@ -1,6 +1,7 @@
 // 히든 상점(차원의 순례자)·히든 아이템 상태 (sim/pilgrim·hiddenPerks). 모두 선택 값 (예전 저장에는 없음)
 import type { CharacterId, WeaponId } from "../content";
 import type { GreatSpirit } from "../weaponsSpirit";
+import type { PlayerState } from "./types";
 
 /** 방에 와 있는 차원의 순례자: 방 · 포탈에서 나온 틱 · 물건을 펼쳤는지 */
 export interface PilgrimState {
@@ -56,6 +57,8 @@ export interface AllyState {
   moving: boolean;
   /** 가진 전용 패시브 수 (월계선) */
   perks: number;
+  /** 월계선: 진짜 그 캐릭터의 상태 (공격·기술을 그대로 돌림, sim/allyKit) · 없으면 예전 동료(휘두르기·탄) */
+  pl?: PlayerState;
   /** 거짓된 용사: 레벨 · 경험치 · 지난번 본 처치 수 */
   lv?: number;
   exp?: number;

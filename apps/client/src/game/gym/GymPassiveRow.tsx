@@ -43,7 +43,7 @@ export function GymPassiveRow({ id, lv, max, canUp, lang, t, onUp }: Props) {
   };
   return (
     <div className="gym-row passive" onPointerEnter={(e) => show(e.currentTarget)} onPointerLeave={() => setTip(null)}>
-      {tip && <ItemTip pos={tip} icon={{ kind: "passive", id }} name={itemName("passive", id, lang)} desc={itemDesc("passive", id, lang, t)} />}
+      {tip && <ItemTip pos={tip} icon={{ kind: "passive", id }} name={itemName("passive", id, lang)} desc={itemDesc("passive", id, lang, t)} nums />}
       <div className="gym-pinfo">
         <span className="gym-name">
           <ItemIcon item={{ kind: "passive", id }} size={18} /> {itemName("passive", id, lang)} <small>Lv {lv}/{max}</small>

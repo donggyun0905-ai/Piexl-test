@@ -1,10 +1,11 @@
 // 달빛 상태이상 (새벽의 성흔): 성흔 각성 중 모든 공격에 확정으로 1스택 (최대 5스택: 초승달 → 상현달 → 반달 → 하현달 → 보름달, 맞을 때마다 지속 시간 다시)
 // 걸린 적: 맞을 때 스택만큼 확률로 약점 공격 (루나틱은 달빛 없이도 기본 확률)(받은 피해의 50%를 한 번 더, 흰 숫자·초승달 표시) · 주는 피해 약화(확률 없이, 몸 닿기·쏜 탄·장판·직접 공격)
 import { createRng, deriveSeed } from "../rng";
-import type { EnemyState, RunState } from "./types";
-import { isAwake } from "./stigma";
+import type { EnemyState, PlayerState, RunState } from "./types";
+import { isAwake, stigmaGauge } from "./stigma";
 import { hasPerk, markDot } from "./util";
 import { BLAST_PERKS } from "../itemsBlast";
+import { LUNATIC_PERKS } from "../itemsLunatic";
 import { SILVER_BULLET } from "../weaponsSilverBullet";
 import { isLunatic, lnMiss, lnWeak, lnWeakChance } from "./lunaticWeak";
 
@@ -69,4 +70,16 @@ export function moonTick(e: EnemyState): void {
   if (--e.moonT! > 0) return;
   delete e.moon;
   delete e.moonT;
+}
+
+/** 화면용 (능력치 창): 약점 공격 확률·추가 피해 (새벽의 성흔 중 달빛을 거는 캐릭터만, 아니면 null) */
+export function weakView(p: PlayerState): { base: number; moonMin: number; moonMax: number; extra: number } | null {
+  if (!stigmaGauge(p) || p.characterId === "hellfist") return null;
+  const ln = isLunatic(p);
+  return {
+    base: ln ? lnWeakChance(p, 0) : 0,
+    moonMin: R.CHANCE_1,
+    moonMax: R.CHANCE_5,
+    extra: ln && hasPerk(p, "lnDeep") ? LUNATIC_PERKS.lnDeep.extra : R.EXTRA,
+  };
 }

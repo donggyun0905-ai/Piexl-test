@@ -24,25 +24,39 @@ const PREFIX: [RegExp, string][] = [
   [/^(REN)/, "ren"],
   [/^(GREAT_SPIRITS|SMALL_SPIRITS|SPIRIT)/, "spiritist"],
   [/^(MADQUEEN|MQ_)/, "madQueen"],
+  [/^CL_ARMS/, "collector"],
+  [/^SPEAR_COMBOS/, "general"],
+  [/^(STAR|COMBOS)$/, "brawler"],
+  [/^KING_(FORM|BLADE)/, "fallenKing"],
+  [/^AF_BENCH/, "artifacter"],
+  [/^TUNE$/, "tracker"],
+  [/^RUNE/, "mage"],
 ];
 
 /** 계산 파일 이름 → 분류 이름 (캐릭터가 아닌 것) */
 const SYSTEM: [RegExp, string][] = [
-  [/^BOSS/, "보스"],
+  [/^(BOSS|SAGE_|DEMIGOD|WORM_ULT)/, "보스"],
   [/^(CRITTERS|TD)/, "타워 디펜스 적"],
   [/^MINIONS/, "날벌레·가디언"],
   [/^(ENEMIES|HAZARDS|FOE_STATUS|ELITE)/, "적 공통"],
   [/^ENDLESS/, "무한 모드"],
   [/^STIGMA/, "새벽의 성흔 성흔 게이지"],
   [/^MOON/, "새벽의 성흔 달빛 상태이상"],
+  [/^DAWN_WEAPON_SET/, "새벽의 성흔 공용"],
+  [/^(STALKERS|NEW_FOES|HIDDEN_FOE|TRIAL_FOE|FOE_SCALE|ROOM_SPAWN|KNOCK)/, "적 공통"],
+  [/^(STATUS|TERRAIN|BASE_STATS|ORIGIN|ALLY|GYM|FORGE|FLOOR|INTRO|TABOOS|LOBBY_PETS|DEVIL_ROOM|SECRET_WALL|GAMBLE|AUCTION|HIDDEN|ROUTE_GO|TRIAL|SET_|BUILD_SETS|AWAKEN|FACTION_)/, "게임 공통"],
   [/^(COMBAT|PROJECTILES|PLAYER|ITEMS|LOOT|ROOMS|UTIL|PARTY|HERO|ARENA)/, "게임 공통"],
 ];
 
 /** 규칙 표가 어느 캐릭터 것인지 (캐릭터 id, 아니면 undefined) */
 export function ruleCharId(name: string): string | undefined {
   const base = name.replace(/_RULES$/, "");
-  const head = base.split("_")[0]!.toLowerCase();
-  if (ko(head) && ko(`${head}Desc`)) return head;
+  // 긴 이름부터 (SILVER_BULLET_PERKS → silverBullet · BLUE_FLAME → blueFlame · LUNATIC → lunatic)
+  const parts = base.toLowerCase().split("_");
+  for (let n = parts.length; n >= 1; n--) {
+    const id = parts.slice(0, n).map((w, i) => (i ? w.charAt(0).toUpperCase() + w.slice(1) : w)).join("");
+    if (ko(id) && ko(`${id}Desc`)) return id;
+  }
   for (const [re, id] of PREFIX) if (re.test(base)) return id;
   return undefined;
 }

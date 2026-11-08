@@ -4,92 +4,23 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
-    version: "0.50.35",
+    version: "0.50.36",
     date: "2026-11-08",
     items: {
       ko: [
-        "새벽의 성흔 새 캐릭터 크루세이더 '성십자가의 거인' (탱커, 스킬 없음, 성흔 게이지): 거대한 십자가를 둔기로 대지를 내리치는 거구 · 체력 175 · 공격력 18 · 방어력 4",
-        "내려찍기: 십자가를 머리 위로 들어 올렸다가 (버팀: 받는 피해 절반) 앞 땅을 내리찍음 (160% · 기절) → 땅이 십자가 모양으로 갈라져 마디마다 돌판이 솟음 (90%)",
-        "속죄의 무게: 받은 피해·맞힌 적만큼 차고 가득 차면 하늘에서 심판의 십자가 (260% · 긴 기절) · 대시는 성벽 돌진 (앞 적을 밀고 가 들이받기, 벽에 부딪히면 더 아픔)",
-        "성십자가 강림: 거대한 십자가 · 거인화 (받는 피해 -40%) · 내려찍을 때마다 심판 · 걸으면 땅이 울림 · 전용 아이템 20 (새 공격 방식: 여진 · 성주 · 가시 면류관 · 가시 후광 · 돌진 낙인 · 십자가 비 · 성묘)",
+        "설명 글 정리: 캐릭터·스킬·아이템 설명의 중요 낱말(상태이상·치명타·약점 공격·성흔·각성·대시·'이름' 등)은 노란 굵은 글씨 · 수치(30%·×1.35·2.5초 등)는 Shift를 누르는 동안만 보임 (안 누르면 늘어남 ↑ · 줄어듦 ↓ · ◇로 짧게) · 단련의 방·능력치 창은 늘 수치 · 터치 기기는 늘 수치",
+        "순례자의 월계선 동료: 이제 진짜 그 히든 캐릭터로 싸움 (그 캐릭터의 기본 공격·연계·패시브 기술·스킬 키·대시를 그대로 씀, 예전엔 휘두르기·탄만)",
+        "능력치 창: 새벽의 성흔(헬피스트 빼고)에 약점 공격 확률·달빛 스택 확률·약점 추가 피해 줄",
       ],
       en: [
-        "New Stigma of Dawn character Crusader 'Giant of the Holy Cross' (tank, no skills, Stigma gauge): a towering giant who strikes the earth with a colossal cross · HP 175 · Damage 18 · Defense 4",
-        "Slam: heave the cross overhead (Brace: half damage taken), then slam the ground ahead (160% · stun) → the ground splits in the shape of a cross, a stone slab bursting up at each joint (90%)",
-        "Weight of Penance: fills from damage taken and foes hit; when full, a Cross of Judgment falls from the sky (260% · long stun) · dashing is a Bulwark Charge (shove foes ahead and ram them, harder against walls)",
-        "Descent of the Holy Cross: a colossal cross · giant form (-40% damage taken) · every slam calls Judgment · footsteps shake the ground · 20 exclusive items (new attacks: Aftershock · Holy Pillars · Crown of Thorns · Thorned Halo · Charging Brand · Rain of Crosses · Holy Grave)",
+        "Cleaner descriptions: key words in character, skill and item descriptions (status effects, crit, weak-point, Stigma, Awakening, dash, 'names', etc.) are bold yellow · numbers (30%, ×1.35, 2.5s, etc.) show only while holding Shift (otherwise shortened to ↑ / ↓ / ◇) · the Training Room and stat panel always show numbers · touch devices always show numbers",
+        "Pilgrim's Laurel Ship ally: now fights as the real hidden character (its own basic attacks, combos, passive techniques, skill keys and dash, instead of just a swing or shot)",
+        "Stat panel: Stigma of Dawn characters (except Hellfist) show weak-point chance, Moonlight stack chance and weak-point bonus damage",
       ],
       ja: [
-        "夜明けの聖痕の新キャラクター、クルセイダー「聖十字の巨人」（タンク、スキルなし、聖痕ゲージ）：巨大な十字架を鈍器に大地を打つ巨漢 · 体力175・攻撃力18・防御力4",
-        "叩きつけ：十字架を頭上に持ち上げ（踏ん張り：被ダメージ半分）前方の地面を叩きつける（160%・気絶）→ 地面が十字架の形に裂け、節ごとに石板が突き出る（90%）",
-        "贖罪の重み：受けたダメージ・当てた敵の分だけ溜まり、満ちると空から審判の十字架（260%・長い気絶）· ダッシュは城壁突進（前の敵を押して体当たり、壁にぶつかるとさらに痛い）",
-        "聖十字架降臨：巨大な十字架 · 巨人化（被ダメージ-40%）· 叩きつけるたびに審判 · 歩くと地面が揺れる · 専用アイテム20（新しい攻撃：余震・聖柱・茨の冠・茨の後光・突進の烙印・十字架の雨・聖墓）",
-      ],
-    },
-  },
-  {
-    version: "0.50.34",
-    date: "2026-11-08",
-    items: {
-      ko: [
-        "새벽의 성흔 새 캐릭터 인시전 '쌍도끼의 도살자' (광전사, 스킬 없음, 성흔 게이지): 자비 없는 연타로 악마를 도륙내고 찢어발기는 콤보형 · 체력 130 · 공격력 13 · 해금: 공격 속도 2.2 달성",
-        "쌍도끼 네 박자: 오른 도끼 베기 → 왼 도끼 베기 (75%) → 쌍도끼 교차 베기 (115%) → 회오리 베기 (몸 둘레 140%) · 대시는 돌진 연참 (지나가는 적을 두 번 60%)",
-        "도륙 콤보: 맞힐 때마다 오르고 10마다 공격 속도 +5% · 피해 +4% (최대 6단계) · 2초 안 맞히면 끊기고 맞으면 반으로 · 30마다 다음 공격이 도살 도약 (적에게 뛰어들어 내려찍기 220% · 기절) · 화면 왼쪽 위 COMBO",
-        "광란 각성: 둘레 쌍도끼 강타 · 공격 속도 ×1.4 · 피해 ×1.2 · 콤보 두 배 · 안 끊김 · 전용 아이템 20 (새 공격 방식: 날아가는 초승달 · 피의 소용돌이 · 도륙 폭발 · 갈라진 땅 · 연속 도약 · 피의 길 · 학살)",
-      ],
-      en: [
-        "New Stigma of Dawn character Incision 'The Butcher of Twin Axes' (berserker, no skills, Stigma gauge): a combo fighter who butchers and tears demons apart with merciless blows · HP 130 · Damage 13 · Unlock: reach 2.2 attack speed",
-        "Four-beat twin axes: right-axe slash → left-axe slash (75%) → crossing twin-axe slash (115%) → whirlwind slash (all around, 140%) · dashing is a Rushing Cleave (cuts each foe on the path twice, 60%)",
-        "Carnage Combo: rises with every hit, +5% attack speed · +4% damage every 10 (up to 6 tiers) · breaks after 2s without a hit and halves when you're hit · every 30, your next attack is a Butcher's Leap (jump onto a foe and slam 220% · stun) · COMBO shown at the top left",
-        "Frenzy Awakening: twin-axe slam around you · ×1.4 attack speed · ×1.2 damage · double combo · never breaks · 20 exclusive items (new attacks: Flying Crescents · Blood Vortex · Carnage Burst · Split Earth · Chain Leap · Trail of Blood · Massacre)",
-      ],
-      ja: [
-        "夜明けの聖痕の新キャラクター、インシジョン「双斧の屠殺者」（狂戦士、スキルなし、聖痕ゲージ）：無慈悲な連打で悪魔を屠り引き裂くコンボ型 · 体力130・攻撃力13 · 解放：攻撃速度2.2達成",
-        "双斧の四拍子：右斧斬り → 左斧斬り（75%）→ 双斧交差斬り（115%）→ 旋風斬り（周囲140%）· ダッシュは突進連斬（通り道の敵を2回60%）",
-        "屠殺コンボ：当てるたびに上がり、10ごとに攻撃速度+5%・ダメージ+4%（最大6段階）· 2秒当てないと途切れ、被弾で半分に · 30ごとに次の攻撃が屠殺の跳躍（敵に飛び込んで叩きつけ220%・気絶）· 画面左上にCOMBO",
-        "狂乱覚醒：周囲に双斧の強打 · 攻撃速度×1.4 · ダメージ×1.2 · コンボ2倍 · 途切れない · 専用アイテム20（新しい攻撃：飛ぶ三日月・血の渦・屠殺の爆発・裂けた大地・連続跳躍・血の道・虐殺）",
-      ],
-    },
-  },
-  {
-    version: "0.50.33",
-    date: "2026-11-08",
-    items: {
-      ko: ["히든 아이템 이름 바꿈: 포탈건 → 귀환의 문 (아이콘도 돌 아치 안 푸른 소용돌이로)", "블리자드 랜스를 진짜 창 모양으로 다시 그림 (자루·코등이·마름모 창날) · 다섯 창이 체력 줄 위에 한 줄로 떠 있음"],
-      en: ["Hidden item renamed: Gate of Return (icon is now a blue swirl inside a stone arch)", "Redrew Blizzard Lance as real spears (shaft, guard, diamond blade) · the five lances now float in a row above your health bar"],
-      ja: ["ヒドゥンアイテムの名前を変更：帰還の門（アイコンも石のアーチの中の青い渦に）", "ブリザードランスを本物の槍の形に描き直し（柄・鍔・ひし形の穂先）· 5本の槍が体力バーの上に一列に浮かぶ"],
-    },
-  },
-  {
-    version: "0.50.32",
-    date: "2026-11-08",
-    items: {
-      ko: ["루나틱 찌르기 길이 2.5배 (52 → 130): 폭은 그대로 좁고 앞으로 길게 찌름"],
-      en: ["Lunatic's thrust length ×2.5 (52 → 130): still narrow, but reaches much farther ahead"],
-      ja: ["ルナティックの突きの長さ2.5倍（52 → 130）：幅は狭いまま、前へ長く突く"],
-    },
-  },
-  {
-    version: "0.50.31",
-    date: "2026-11-08",
-    items: {
-      ko: [
-        "새벽의 성흔 새 캐릭터 루나틱 '월광의 검사' (집단의 리더, 스킬 없음, 성흔 게이지): 달빛처럼 차갑고 아름다운 궤적으로 악마의 급소만 찌르는 고결한 검사 · 체력 115 · 공격력 15 · 해금: 공격 속도 2.5 달성 · 그림 시트·찌르기·달빛 베기 이펙트 (사용자 그림)",
-        "월광의 세검: 매우 빠른 찌르기 (85%) + 앞으로 약간 돌진 · 달빛이 없어도 약점 공격 30% · 대시하면 지나가는 길의 적을 찌름 (130%)",
-        "패시브 월광 표적: 가끔 적 머리 위에 조준점 → 약점 공격으로 맞히면 확정 치명타 + 빠른 달빛 베기 (220% · 달빛 2스택) · 약점이 아닌 그냥 공격으로 맞히면 조준점이 사라지고 다음 조준점을 기다림",
-        "만월 각성: 둘레 달빛 폭발 · 공격 속도 ×1.35 · 모든 적이 표적 · 전용 아이템 20 (새 공격 방식: 삼연 찌르기 · 월광 검기 · 이어지는 달빛 · 초승달 비 · 잔상 찌르기 · 초승달 회전 베기) · 효과음 · 패왕전 스킬",
-      ],
-      en: [
-        "New Stigma of Dawn character Lunatic 'The Moonlight Swordswoman' (the group's leader, no skills, Stigma gauge): a noble swordswoman who pierces only a demon's vitals with cold, beautiful moonlit arcs · HP 115 · Damage 15 · unlock: reach 2.5 attack speed · sprite sheet, thrust and Moonlight Slash effects (user art)",
-        "Moonlight Rapier: very fast thrusts (85%) with a slight forward lunge · 30% weak-point chance even without Moonlight · dashing stabs foes along the path (130%)",
-        "Passive Moonlight Mark: a crosshair sometimes appears above a foe → hitting it with a weak point is a guaranteed crit plus a swift Moonlight Slash (220% · 2 Moonlight stacks) · hitting it with a normal attack makes the crosshair vanish until the next one",
-        "Full Moon Awakening: moonlight burst around you · ×1.35 attack speed · every foe is marked · 20 exclusive items (new attacks: Triple Thrust · Moonlight Wave · Chained Moonlight · Crescent Rain · Afterimage Thrust · Crescent Spin) · sound effects · Paewang skills",
-      ],
-      ja: [
-        "夜明けの聖痕の新キャラ ルナティック『月光の剣士』（集団のリーダー、スキルなし、聖痕ゲージ）：月光のように冷たく美しい軌跡で悪魔の急所だけを突く高潔な剣士 · 体力115 · 攻撃力15 · 解放：攻撃速度2.5達成 · スプライト・突き・月光斬りのエフェクト（ユーザーの絵）",
-        "月光の細剣：とても速い突き（85%）+ 少し前へ踏み込む · 月光がなくても弱点攻撃30% · ダッシュすると通り道の敵を突く（130%）",
-        "パッシブ月光の標的：時々敵の頭上に照準 → 弱点攻撃で当てると確定クリティカル + 素早い月光斬り（220%・月光2スタック）· 弱点でない普通の攻撃で当てると照準が消え、次の照準を待つ",
-        "満月覚醒：周囲に月光の爆発 · 攻撃速度×1.35 · 全ての敵が標的 · 専用アイテム20（新しい攻撃：三連突き・月光の剣気・連なる月光・三日月の雨・残像突き・三日月回転斬り）· 効果音 · 覇王戦スキル",
+        "説明文の整理：キャラクター・スキル・アイテム説明の重要語（状態異常・クリティカル・弱点攻撃・聖痕・覚醒・ダッシュ・「名前」など）は黄色の太字 · 数値（30%・×1.35・2.5秒など）はShiftを押している間だけ表示（押さないと ↑ ・ ↓ ・ ◇ で短く）· 鍛錬の部屋・能力値画面は常に数値 · タッチ端末は常に数値",
+        "巡礼者の月桂船の仲間：本物のそのヒドゥンキャラクターとして戦うように（そのキャラクターの通常攻撃・連携・パッシブ技・スキルキー・ダッシュをそのまま使用、以前は振り・弾のみ）",
+        "能力値画面：夜明けの聖痕（ヘルフィスト以外）に弱点攻撃確率・月光スタック確率・弱点追加ダメージを表示",
       ],
     },
   },

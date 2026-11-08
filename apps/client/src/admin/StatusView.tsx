@@ -1,4 +1,4 @@
-// 상태이상 탭 (정리본): 위쪽 '한눈에 보기' 표(14종 + 피해 없는 상태이상: 아이콘·피해 숫자 색·성격·동작·거는 캐릭터·값 수) ·
+// 상태이상 탭 (정리본): 위쪽 '한눈에 보기' 표(16종 + 피해 없는 상태이상: 아이콘·피해 숫자 색·성격·동작·거는 캐릭터·값 수) ·
 // 하나를 고르면 설명 카드 + 그 상태이상에 쓰이는 값을 모든 묶음(무기·규칙·아이템 효과·적·보스)에서 모아 바로 고침
 // 값은 원래 묶음에 그대로 저장 (같은 값을 두 번 넣지 않음). 데이터는 statusInfo (문서 docs/STATUS.md)
 import type { BalanceSet, BalanceValues, DotKind } from "@pixel-rogue/shared";
@@ -58,7 +58,7 @@ export function StatusView({ set, draft, saved, onChange }: Props) {
   const rows = info ? rowsOf(set, info) : [];
   return (
     <div className="admin-table-wrap">
-      <p className="admin-hint">상태이상 14종과 피해 없는 상태이상을 정리했습니다. 하나를 누르면 그 상태이상에 쓰이는 값을 모두 고칠 수 있고, 원래 묶음(무기·규칙·아이템 효과)의 값이 바뀝니다.</p>
+      <p className="admin-hint">상태이상 16종과 피해 없는 상태이상을 정리했습니다. 하나를 누르면 그 상태이상에 쓰이는 값을 모두 고칠 수 있고, 원래 묶음(무기·규칙·아이템 효과)의 값이 바뀝니다.</p>
       <div className="admin-filter">
         <button type="button" className={pick < 0 ? "active" : undefined} onClick={() => setPick(-1)}>
           한눈에 보기

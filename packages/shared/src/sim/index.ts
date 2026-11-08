@@ -130,6 +130,7 @@ export { isYuriel, yurielSkills } from "./yuriel";
 export { isMichaela, michaelaSkills } from "./michaela";
 export { isBlast } from "./blast";
 export { stigmaGauge } from "./stigma";
+export { weakView } from "./moonlight";
 export { isNailer, nailerSkills, nailerStages } from "./nailer";
 export { isScissors } from "./scissors";
 export { isHellfist, rageMax, rageOf } from "./hellfist";

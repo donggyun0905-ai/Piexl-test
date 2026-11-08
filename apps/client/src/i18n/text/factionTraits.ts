@@ -10,6 +10,11 @@ export const FACTION_TRAIT_TEXT = {
   tfDawn: { ko: "맞히면 성흔이 차고 가득 차면 달빛 각성", en: "Hits fill the Stigma · Moonlight Awakening when full", ja: "当てると聖痕が溜まり、満タンで月光覚醒" },
   descMore: { ko: "자세히 ▾ (+{n})", en: "More ▾ (+{n})", ja: "詳しく ▾ (+{n})" },
   descLess: { ko: "접기 ▴", en: "Less ▴", ja: "閉じる ▴" },
+  // 능력치 창: 새벽의 성흔 약점 공격 (game/statsView)
+  statWeakChance: { ko: "약점 공격 확률", en: "Weak-point chance", ja: "弱点攻撃確率" },
+  statWeakMoon: { ko: "약점 확률 (달빛 1~5스택)", en: "Weak-point chance (Moonlight 1–5)", ja: "弱点確率（月光1〜5）" },
+  statWeakDamage: { ko: "약점 추가 피해", en: "Weak-point bonus damage", ja: "弱点追加ダメージ" },
+  descNumShift: { ko: "Shift를 누르면 수치", en: "Hold Shift for numbers", ja: "Shiftで数値を表示" },
   descShift: { ko: "Shift를 누르면 전체 (+{n}줄)", en: "Hold Shift for all (+{n})", ja: "Shiftで全部表示（+{n}行）" },
   csTrait_ascalon: { ko: "진영 특징 · 맹세", en: "Faction trait · Oaths", ja: "陣営の特徴・誓い" },
   csTrait_terracore: { ko: "진영 특징 · 에너지", en: "Faction trait · Energy", ja: "陣営の特徴・エネルギー" },

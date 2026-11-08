@@ -1,5 +1,5 @@
 // 능력치 보기: 지금 내 수치 (패시브·무기 반영). 설정의 '능력치 보기'를 켰을 때만 화면에 표시
-import { artChance, attackSpeedNow, classDamageMul, classMoveMul, trialMoveMul, critNow, eaterRegen, extraOf, mukinDef, mukinRegen, PERKS, petGold, withGymFx, petTaken, type PlayerState, riderSpeedMul, type RunState, type WeaponDef, WEAPONS } from "@pixel-rogue/shared";
+import { artChance, attackSpeedNow, classDamageMul, classMoveMul, trialMoveMul, critNow, eaterRegen, extraOf, mukinDef, mukinRegen, PERKS, petGold, withGymFx, petTaken, type PlayerState, riderSpeedMul, type RunState, type WeaponDef, WEAPONS, weakView } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 
 export interface StatRow {
@@ -31,6 +31,18 @@ function extraRows(p: PlayerState, t: (k: TextKey) => string): StatRow[] {
     ["statGoldGain", ex.goldGain, `+${pct(ex.goldGain)}`],
   ];
   return rows.filter(([, v]) => v > 0).map(([k, , value]) => ({ label: t(k), value }));
+}
+
+/** 새벽의 성흔 약점 공격: 기본 확률(루나틱) · 달빛 스택 확률 · 추가 피해 (sim/moonlight) */
+function weakRows(p: PlayerState, t: (k: TextKey) => string): StatRow[] {
+  const w = weakView(p);
+  if (!w) return [];
+  const pct = (v: number) => `${Math.round(v * 100)}%`;
+  return [
+    ...(w.base > 0 ? [{ label: t("statWeakChance"), value: pct(w.base) }] : []),
+    { label: t("statWeakMoon"), value: `${w.base > 0 ? "+" : ""}${pct(w.moonMin)}~${pct(w.moonMax)}` },
+    { label: t("statWeakDamage"), value: `+${pct(w.extra)}` },
+  ];
 }
 
 export function statRows(run: RunState, t: (k: TextKey) => string): StatRow[] {
@@ -69,6 +81,7 @@ export function statRows(run: RunState, t: (k: TextKey) => string): StatRow[] {
     ...extraRows(run.player, t),
     { label: t("statCritChance"), value: `${Math.round(crit.chance * 100)}%` },
     { label: t("statCritDamage"), value: `${Math.round(crit.mul * 100)}%` },
+    ...weakRows(run.player, t),
     // 로비 펫: 받는 피해 · 얻는 돈 · 되살아남
     ...(petTaken(run) < 1 ? [{ label: t("statPetTaken"), value: `-${Math.round((1 - petTaken(run)) * 100)}%` }] : []),
     ...(petGold(run) > 1 ? [{ label: t("statPetGold"), value: `+${Math.round((petGold(run) - 1) * 100)}%` }] : []),
