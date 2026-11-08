@@ -23,5 +23,5 @@ export interface HellfistPlayerState {
   hfCrack?: HfCrack;
 }
 
-/** 효과: 후리기 (size = 거리, arc = cos) · 내려찍기 (size = 거리, arc = cos) · 균열 파쇄 (나 자리·방향, size = 거리, arc = cos, width = 균열 모양 씨앗) · 검지 가리킴 (나 → 적 줄) · 허공검격 X자 (size = 줄 수, width = 크기) · 적혈 각성 지옥불 폭발 */
-export type HellfistFx = "hfJabFx" | "hfSmashFx" | "hfShatterFx" | "hfPointFx" | "hfClawFx" | "hfAwakeFx";
+/** 효과: 후리기 (size = 거리, arc = cos) · 내려찍기 (size = 거리, arc = cos) · 균열 파쇄 (나 자리·방향, size = 거리, arc = cos, width = 균열 모양 씨앗) · 허공검격 X자 (size = 줄 수, width = 크기) · 적혈 각성 지옥불 폭발 */
+export type HellfistFx = "hfJabFx" | "hfSmashFx" | "hfShatterFx" | "hfClawFx" | "hfAwakeFx";

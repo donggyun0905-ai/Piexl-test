@@ -1,12 +1,12 @@
-// 헬피스트 효과 — 적혈의 주먹. 후리기(주먹이 부채꼴을 따라 옆으로 휘둘러지는 붉은 궤적 · 끝 충격) · 내려찍기(앞 부채꼴 충격파 · 손톱 자국 · 튀는 불티, 갈라진 땅은 hellfistCrack)
-// 균열 파쇄(hellfistCrack: 금을 따라 붉은 유리가 깨짐) · 검지 가리킴(나 → 적 가는 붉은 선) · 허공검격(사용자 그림 X자 8프레임) · 적혈 각성(붉은 충격파 · 지옥불 기둥 · 불티)
+// 헬피스트 효과 — 적혈의 주먹. 후리기(부채꼴을 따라 옆으로 휘둘러지는 붉은 궤적 · 끝 충격) · 내려찍기(앞 부채꼴 충격파 · 손톱 자국 · 튀는 불티, 갈라진 땅은 hellfistCrack)
+// 균열 파쇄(hellfistCrack: 금을 따라 붉은 유리가 깨짐) · 허공검격(사용자 그림 X자 8프레임) · 적혈 각성(붉은 충격파 · 지옥불 기둥 · 불티)
 import type { EffectState } from "@pixel-rogue/shared";
 import { additive, alpha, beam, cone, crescent, easeOut, glow, rnd, shock, sparks, type Ctx } from "./pwFxBits";
 import { drawShatter } from "./hellfistCrack";
 import type { Snap } from "./palette";
 
 export const HF = { red: "#ff2a2a", deep: "#8a0a12", black: "#1a0608", ember: "#ff8a3a", white: "#ffffff" };
-const HF_FX = new Set(["hfJabFx", "hfSmashFx", "hfShatterFx", "hfPointFx", "hfClawFx", "hfAwakeFx"]);
+const HF_FX = new Set(["hfJabFx", "hfSmashFx", "hfShatterFx", "hfClawFx", "hfAwakeFx"]);
 const XSHEET = new Image();
 XSHEET.src = `${import.meta.env.BASE_URL}sprites/hellfist_x.png`;
 
@@ -33,25 +33,9 @@ function jab(ctx: Ctx, fx: EffectState, x: number, y: number, f: number): void {
   ctx.beginPath();
   ctx.arc(x, y, r - 2, Math.max(from, lead - 1), lead);
   ctx.stroke();
-  // 주먹 (궤적 맨 앞)
+  // 궤적 맨 앞 충격
   const fx2 = x + Math.cos(lead) * r;
   const fy2 = y + Math.sin(lead) * r;
-  for (let k = 1; k <= 3; k++) {
-    const b = lead - k * 0.12;
-    ctx.fillStyle = alpha(HF.red, al * (0.5 - k * 0.12));
-    ctx.fillRect(Math.round(x + Math.cos(b) * r) - 5, Math.round(y + Math.sin(b) * r) - 5, 10, 10);
-  }
-  // 악마 주먹 (검은 테 · 붉은 살 · 흰 마디 넷)
-  const X0 = Math.round(fx2);
-  const Y0 = Math.round(fy2);
-  ctx.fillStyle = alpha(HF.black, al);
-  ctx.fillRect(X0 - 6, Y0 - 6, 12, 12);
-  ctx.fillStyle = alpha(HF.red, al);
-  ctx.fillRect(X0 - 5, Y0 - 5, 10, 10);
-  ctx.fillStyle = alpha(HF.deep, al);
-  ctx.fillRect(X0 - 5, Y0 + 2, 10, 3);
-  ctx.fillStyle = alpha(HF.white, al);
-  for (let k = 0; k < 4; k++) ctx.fillRect(Math.round(fx2 + Math.cos(lead) * 4 + Math.cos(lead + 1.57) * (k * 2.6 - 4)), Math.round(fy2 + Math.sin(lead) * 4 + Math.sin(lead + 1.57) * (k * 2.6 - 4)), 2, 2);
   if (u > 0.85) additive(ctx, () => shock(ctx, fx2, fy2, 6 + 30 * (f - 0.47), HF.red, al, 5));
 }
 
@@ -77,19 +61,6 @@ function smash(ctx: Ctx, fx: EffectState, x: number, y: number, f: number): void
     beam(ctx, sx, sy, sx + fx.dirX * 12, sy + fx.dirY * 12, 2.5 * al + 0.5, HF.red, al);
   }
   sparks(ctx, hx, hy, 8, r * 0.5, f, HF.ember, Math.round(x + y), al);
-}
-
-/** 검지 가리킴: 손끝에서 적까지 가는 붉은 선이 빠르게 뻗었다 사라짐 */
-function point(ctx: Ctx, fx: EffectState, x: number, y: number, tx: number, ty: number, f: number): void {
-  const head = easeOut(Math.min(1, f * 3));
-  const ex = x + (tx - x) * head;
-  const ey = y + (ty - y) * head;
-  const al = (1 - f) * 0.9;
-  additive(ctx, () => {
-    beam(ctx, x, y, ex, ey, 1, HF.red, al);
-    glow(ctx, x, y, 6, HF.red, al, 1);
-    glow(ctx, ex, ey, 5, HF.red, al, 0.6);
-  });
 }
 
 /** 허공검격: 적 자리 공중에 X자 검격 (사용자 그림 sprites/hellfist_x, 8프레임: 작게 → 크게 → 검게 터짐) · width = 크기 */
@@ -128,7 +99,6 @@ export function drawHellfistFx(ctx: Ctx, fx: EffectState, snapPx: Snap): boolean
   if (fx.kind === "hfJabFx") jab(ctx, fx, x, y, f);
   else if (fx.kind === "hfSmashFx") smash(ctx, fx, x, y, f);
   else if (fx.kind === "hfShatterFx") drawShatter(ctx, { ...fx, x, y }, f);
-  else if (fx.kind === "hfPointFx") point(ctx, fx, x, y, snapPx(fx.toX ?? fx.x), snapPx(fx.toY ?? fx.y), f);
   else if (fx.kind === "hfClawFx") claw(ctx, fx, x, y, f);
   else awake(ctx, fx, x, y, f);
   return true;

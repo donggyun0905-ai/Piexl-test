@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.23",
+    date: "2026-11-08",
+    items: {
+      ko: ["헬피스트 이펙트 정리: 1타 후리기의 네모 주먹 그림 뺌 (붉은 궤적만) · 각성 중 허공검격 때 나와 적을 잇던 선 뺌"],
+      en: ["Hellfist effects tidied: removed the square fist from the Hook (red trail only) · removed the line linking you to foes during Air Slash"],
+      ja: ["ヘルフィストのエフェクト整理：1打目 振り抜きの四角い拳の絵を削除（赤い軌跡のみ）· 覚醒中の虚空剣撃で自分と敵をつないでいた線を削除"],
+    },
+  },
+  {
     version: "0.50.22",
     date: "2026-11-08",
     items: {

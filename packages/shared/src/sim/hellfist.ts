@@ -79,7 +79,6 @@ function claw(s: RunState): void {
       } else strike(s, e, per * lines * (echo ? K.hfEcho.mul : H.splashMul), 2);
       hits++;
     }
-    addEffect(s, { kind: "hfPointFx", x: p.x, y: p.y - 6, dirX: p.faceX, dirY: p.faceY, size: 1, toX: at.x, toY: at.y, maxTicks: 16 });
     addEffect(s, { kind: "hfClawFx", x: at.x, y: at.y, dirX: p.faceX, dirY: p.faceY, size: lines, width: at.r + splashR, maxTicks: 24 });
   }
   hfHit(s, hits, 0);
