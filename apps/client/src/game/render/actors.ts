@@ -3,7 +3,7 @@ import { hpBarTop } from "./hpTop";
 import { drawLuxFoe } from "./lux";
 import { additive, glow } from "./pwFxBits";
 import { drawSlash, enemyPose } from "./enemyPose";
-import { DASH_TICKS, inBush, inPlay, ENEMIES, isAlive, luxStage, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
+import { DASH_TICKS, inBush, inPlay, ENEMIES, isAlive, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
 import { breathe, footShadow, hitPop } from "./bodyMotion";
 import { drawCrate } from "./swarm";
 import { drawFighter } from "./paewang";
@@ -25,6 +25,7 @@ import { drawTagCue } from "./tagCue";
 import { drawSlayerGauge } from "./slayer";
 import { fenrirLift } from "./fenrirBits";
 import { drawEclipseGauge, eclipseLift, eclipseSheet } from "./eclipseAura";
+import { playerSheet } from "./playerSheet";
 
 export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   // 무리 여왕이 부른 기는 적은 인큐버스 그림
@@ -172,8 +173,8 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     // 혼돈의 영혼이 있으면 몸이 흐림
     if (s.enemies.some((e) => e.kind === "soul" && e.aux === 1 && e.hp > 0)) ctx.globalAlpha = 0.12;
     // 베두인: 차크람을 던지면 _bare 그림 (v2 시트는 빈손 그림이 없어 그대로)
-    // 오니 신인족: 긴 뿔의 날렵한 모습
-    const sheet = p.kingRoom !== undefined ? "crownKing" : p.characterId === "oni" && (p.oGod ?? 0) > 0 ? "oni_god" : p.characterId === "slayer" && (p.slRage ?? 0) > 0 ? "slayer_rage" : p.characterId === "lux" && luxStage(p) > 0 ? `lux${luxStage(p) + 1}` : (eclipseSheet(p) ?? sheetFor(p.characterId, p.lv, p.abM));
+    // 모습이 바뀌는 캐릭터 (오니 신인족 · 헬피스트 악마화 등): playerSheet
+    const sheet = playerSheet(p);
     // 베두인 무희의 춤: 대시하는 동안 몸이 한 바퀴 빙글 돎
     const twirl = p.characterId === "bedouin" && p.dashTicks > 0 && p.passives.includes("duneRush");
     if (twirl) {

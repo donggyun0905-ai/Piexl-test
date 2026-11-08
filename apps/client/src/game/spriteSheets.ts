@@ -93,6 +93,9 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   nailer: { size: 40, footPad: 2, src: 128, v2: true },
   /** 시저스 (새벽의 성흔 단죄의 가위, 라벤더 머리·가시 두건·붉은 장미·쌍가위) */
   scissors: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 헬피스트 (새벽의 성흔 적혈의 주먹, 흰 머리·검은 코트·붉은 악마 팔) · 적혈 각성 중 악마화 모습 (뿔·붉은 몸) */
+  hellfist: { size: 40, footPad: 2, src: 128, v2: true },
+  hellfistDemon: { size: 40, footPad: 2, src: 128, v2: true },
   /** 오토마타 자매 인형 (진홍빛, 사용자 그림 2026-11-04) */
   automataDoll: { size: 32, footPad: 2, src: 128, v2: true },
   // 히든 캐릭터도 일반 캐릭터와 같은 크기 (2026-10-31) · 빛의 사도는 칸에 여백이 많아 키를 맞춘 크기(성장 모습은 단계마다 커짐) · 차원의 순례자는 소녀 키를 일반 캐릭터에 맞춤 (큰 가방은 그만큼 같이 커서 칸이 큼)

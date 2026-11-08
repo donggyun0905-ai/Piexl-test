@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.19",
+    date: "2026-11-08",
+    items: {
+      ko: ["헬피스트 캐릭터 그림: 흰 머리·검은 코트·붉은 악마 팔 (서기·공격·걷기·맞음·쓰러짐·대시) · 적혈 각성 중에는 뿔이 돋고 온몸이 붉은 악마화 모습으로 바뀜", "블래스트·네일러·시저스가 가만히 서 있을 때 왼쪽·오른쪽 모습이 반대로 보이던 것 고침"],
+      en: ["Hellfist character art: white hair, black coat and a red demon arm (stand, attack, walk, hit, down, dash) · during Crimson Awakening he turns into a horned, crimson demonized form", "Fixed Blast, Nailer and Scissors facing the wrong way when standing still left or right"],
+      ja: ["ヘルフィストのキャラ絵：白い髪・黒いコート・赤い悪魔の腕（立ち・攻撃・歩き・被弾・ダウン・ダッシュ）· 赤血覚醒中は角が生え全身が赤い悪魔化の姿に変わる", "ブラスト・ネイラー・シザーズが立ち止まった時に左右の向きが逆だったのを修正"],
+    },
+  },
+  {
     version: "0.50.18",
     date: "2026-11-08",
     items: {
