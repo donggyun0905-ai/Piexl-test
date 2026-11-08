@@ -1,10 +1,11 @@
-// 헬피스트 갈라진 땅 (2타 내려찍기로 생겨 3타까지 남음, sim의 player.hfCrack) · 3타 균열 파쇄 (갈라진 금을 따라 붉은 유리가 깨져 튐)
+// 헬피스트 갈라진 땅 (2타 내려찍기로 생겨 3타까지 남음, sim의 player.hfCrack) · 3타 균열 파쇄 (금이 번쩍 → 붉은 유리 깨짐 그림)
 // 금 모양은 생긴 틱(씨앗)으로 정해 남아 있는 금과 깨지는 금이 같음 · 내려찍기 부채꼴(폭발 범위) 전체에 좌우로 넓게 퍼짐
 import type { EffectState, HfCrack } from "@pixel-rogue/shared";
 import { additive, alpha, easeOut, glow, rnd, type Ctx } from "./pwFxBits";
 
 const RED = "#ff2a2a";
-const GLASS = "#ff4a5a";
+const SHEET = new Image();
+SHEET.src = `${import.meta.env.BASE_URL}sprites/hellfist_shatter.png`;
 type Pt = [number, number];
 
 /** 금 줄들: 부채꼴 폭 전체에 굵은 금 + 곁가지 (지그재그) */
@@ -80,54 +81,28 @@ export function drawCrack(ctx: Ctx, c: HfCrack, age: number, left: number): void
   ctx.lineJoin = "miter";
 }
 
-/** 균열 파쇄: 금이 붉게 번쩍 → 금을 따라 붉은 유리 조각이 깨져 튀어 오르고 떨어짐 · 금은 같이 부서져 사라짐 */
+/** 균열 파쇄: 갈라진 금이 잠깐 붉게 번쩍 → 그 자리에 붉은 유리가 깨지는 그림 (사용자 그림 sprites/hellfist_shatter 8프레임: 금이 뻗고 → 유리 조각으로 흩어짐) */
 export function drawShatter(ctx: Ctx, fx: EffectState, f: number): void {
   const c = { x: fx.x, y: fx.y, dx: fx.dirX, dy: fx.dirY, r: fx.size, cos: fx.arc ?? 0.1, t: fx.width ?? 0 };
-  const lines = crackLines(c);
-  const flash = Math.max(0, 1 - f * 2.5);
-  // 깨지기 직전 붉게 달아오른 금
+  const flash = Math.max(0, 1 - f * 4);
   if (flash > 0) {
+    const lines = crackLines(c);
     ctx.lineCap = "round";
-    for (const line of lines) {
-      ctx.strokeStyle = alpha("#120406", flash);
-      ctx.lineWidth = 4;
-      partial(ctx, line, 1);
-    }
     additive(ctx, () => {
       for (const line of lines) {
         ctx.strokeStyle = alpha(RED, flash);
         ctx.lineWidth = 2.5;
         partial(ctx, line, 1);
       }
-      glow(ctx, c.x + c.dx * c.r * 0.5, c.y + c.dy * c.r * 0.5, c.r * 0.8, RED, flash * 0.7, 0.5);
     });
     ctx.lineCap = "butt";
   }
-  // 유리 조각: 금 마디마다 세모 조각이 튀어 오르며 돌고 떨어짐
-  const u = easeOut(f);
-  let k = 0;
-  for (const line of lines) {
-    for (let j = 1; j < line.length; j++, k++) {
-      const [ax, ay] = line[j - 1]!;
-      const [bx, by] = line[j]!;
-      const mx = (ax + bx) / 2;
-      const my = (ay + by) / 2;
-      const ang = rnd(k, c.t) * Math.PI * 2;
-      const sp = 6 + rnd(c.t, k) * 14;
-      const px = mx + Math.cos(ang) * sp * u;
-      const py = my + Math.sin(ang) * sp * 0.5 * u - 18 * Math.sin(Math.min(1, f * 1.4) * Math.PI) * (0.5 + rnd(k, 3));
-      const sz = 2 + rnd(k, 5) * 3;
-      const rot = ang + f * 6 * (rnd(k, 8) - 0.5);
-      const al = 1 - f;
-      ctx.fillStyle = alpha(GLASS, al * 0.85);
-      ctx.beginPath();
-      ctx.moveTo(px + Math.cos(rot) * sz, py + Math.sin(rot) * sz);
-      ctx.lineTo(px + Math.cos(rot + 2.3) * sz * 0.8, py + Math.sin(rot + 2.3) * sz * 0.8);
-      ctx.lineTo(px + Math.cos(rot + 4) * sz * 0.6, py + Math.sin(rot + 4) * sz * 0.6);
-      ctx.closePath();
-      ctx.fill();
-      ctx.fillStyle = `rgba(255,255,255,${al * 0.9})`;
-      ctx.fillRect(Math.round(px + Math.cos(rot) * sz * 0.5), Math.round(py + Math.sin(rot) * sz * 0.5), 1, 1);
-    }
-  }
+  if (!SHEET.complete || SHEET.naturalWidth === 0) return;
+  const cell = SHEET.naturalHeight;
+  const fr = Math.min(7, Math.floor(f * 8));
+  const w = c.r * 2.1;
+  const cx = c.x + c.dx * c.r * 0.5;
+  const cy = c.y + c.dy * c.r * 0.5;
+  additive(ctx, () => glow(ctx, cx, cy, c.r * 0.7, RED, 0.5 * (1 - f), 0.3));
+  ctx.drawImage(SHEET, fr * cell, 0, cell, cell, Math.round(cx - w / 2), Math.round(cy - w / 2), Math.round(w), Math.round(w));
 }

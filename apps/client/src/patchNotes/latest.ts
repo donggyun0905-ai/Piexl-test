@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.22",
+    date: "2026-11-08",
+    items: {
+      ko: ["헬피스트 3타 균열 파쇄 이펙트를 새 그림으로: 갈라진 땅 자리에서 붉게 빛나는 금이 뻗고 붉은 유리 조각으로 깨져 흩어짐 (사용자 그림)"],
+      en: ["Hellfist's Shatter effect redrawn: glowing red cracks spread over the cracked ground and burst into red glass shards (user artwork)"],
+      ja: ["ヘルフィストの3打目 亀裂破砕のエフェクトを新しい絵に：割れた地面の位置で赤く光る亀裂が伸び、赤いガラスの破片に砕け散る（ユーザーの絵）"],
+    },
+  },
+  {
     version: "0.50.21",
     date: "2026-11-08",
     items: {
