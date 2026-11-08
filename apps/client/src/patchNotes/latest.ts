@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.25",
+    date: "2026-11-08",
+    items: {
+      ko: ["실버불렛 그림 시트: 은발 땋은 머리·깃털 모자·검은 코트의 쌍권총 사냥꾼 (서기·쌍권총 사격·걷기·맞음·쓰러짐·대시, 사용자 그림)"],
+      en: ["Silver Bullet sprite sheet: a twin-pistol hunter with a silver braid, feathered hat and black coat (idle, firing, walking, hit, down and dash; user artwork)"],
+      ja: ["シルバーバレットのスプライト：銀髪の三つ編み・羽根付き帽子・黒いコートの双銃の狩人（立ち・双銃射撃・歩き・被弾・ダウン・ダッシュ、ユーザーの絵）"],
+    },
+  },
+  {
     version: "0.50.24",
     date: "2026-11-08",
     items: {
@@ -11,19 +20,19 @@ export const NOTES: PatchNote[] = [
         "새벽의 성흔 새 캐릭터 실버불렛 '은빛 집행자' (스킬 없음, 성흔 게이지): 쌍권총·은탄·성수 폭탄으로 전장을 누비는 정통파 엘리트 사냥꾼 · 체력 105 · 공격력 11 · 해금: 공격 속도 2 달성",
         "쌍권총: 한 번 공격에 은탄 두 발 (오른손 → 조금 뒤 왼손, 탕-탕) · 공격력은 낮고 빠름 · 모든 공격이 달빛 상태이상 · 8번째마다 성수 폭탄 (광역 정화)",
         "대시: 앞 장애물·기둥을 넘어가고 대시 순간 가까운 적에게 은탄 두 발 · 은탄 마크(체력 줄 위 ×개수)가 30이면 연사: 2초 동안 두 발씩 몰아 쏨 (성흔 안 참)",
-        "달빛 각성: 피해·공격 속도 1.3배 + 몸이 고정되고 앞에 흰 활 ) → 2.5초 동안 가운데 두 발·양끝 유도 두 발씩 매우 빠르게 · 전용 아이템 20 · 패왕전 스킬 넷 (그림 시트는 아직 기본 모습)",
+        "달빛 각성: 피해·공격 속도 1.3배 + 몸이 고정되고 앞에 흰 활 ) → 2.5초 동안 가운데 두 발·양끝 유도 두 발씩 매우 빠르게 · 전용 아이템 20 · 패왕전 스킬 넷",
       ],
       en: [
         "New Dawn Stigmata character Silver Bullet, 'the Silver Executioner' (no skills, Stigma gauge): an orthodox elite hunter with twin pistols, silver rounds and holy water bombs · HP 105 · Attack 11 · Unlock: reach 2 attack speed",
         "Twin pistols: two silver rounds per attack (right hand, then the left a beat later) · low damage, fast · every attack inflicts Moonlight · a holy water bomb every 8th attack (area purge)",
         "Dash: vault over obstacles and pillars ahead and fire two rounds at the nearest foe · at 30 Silver Marks (×count above the HP bar), Barrage: rapid pairs for 2s (no Stigma gain)",
-        "Moonlight Awakening: 1.3x damage & attack speed, and you are rooted behind a white bow ) firing two center rounds and two homing side rounds very fast for 2.5s · 20 exclusive items · 4 Paewang skills (sprite sheet still default)",
+        "Moonlight Awakening: 1.3x damage & attack speed, and you are rooted behind a white bow ) firing two center rounds and two homing side rounds very fast for 2.5s · 20 exclusive items · 4 Paewang skills",
       ],
       ja: [
         "夜明けの聖痕の新キャラ シルバーバレット「銀の執行者」（スキルなし、聖痕ゲージ）：双銃・銀弾・聖水爆弾で戦場を駆ける正統派エリート狩人 · 体力105 · 攻撃力11 · 解放：攻撃速度2達成",
         "双銃：一度の攻撃で銀弾2発（右手→少し遅れて左手）· 攻撃力は低く速い · 全ての攻撃が月光状態異常 · 8回ごとに聖水爆弾（広範囲浄化）",
         "ダッシュ：前の障害物・柱を飛び越え、ダッシュの瞬間 近い敵に銀弾2発 · 銀弾マーク（体力バーの上に×個数）が30で連射：2秒間2発ずつ撃ち込む（聖痕は溜まらない）",
-        "月光覚醒：ダメージ・攻撃速度1.3倍＋体が固定され前に白い弓 ) → 2.5秒間 中央2発・両端の誘導2発ずつ非常に速く · 専用アイテム20 · 覇王戦スキル4つ（スプライトはまだ基本の姿）",
+        "月光覚醒：ダメージ・攻撃速度1.3倍＋体が固定され前に白い弓 ) → 2.5秒間 中央2発・両端の誘導2発ずつ非常に速く · 専用アイテム20 · 覇王戦スキル4つ",
       ],
     },
   },
