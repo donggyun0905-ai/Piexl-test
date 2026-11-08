@@ -8,7 +8,7 @@ import type { Snap } from "./palette";
 
 const LN_FX = new Set(["lnThrustFx", "lnSlashFx", "lnDashFx", "lnAwakeFx", "lnCrescentFx", "lnRainFx", "lnAfterFx", "lnMarkFx"]);
 
-const img = (name: string) => {
+export const img = (name: string) => {
   const i = new Image();
   i.src = `${import.meta.env.BASE_URL}sprites/${name}.png`;
   return i;
@@ -17,8 +17,8 @@ const THRUST = img("lunatic_thrust");
 const SLASH = img("lunatic_slash");
 const ready = (i: HTMLImageElement) => i.complete && i.naturalWidth > 0;
 
-/** 8프레임 그림 한 칸 (칸 폭 = 그림 폭 / 8) · ax: 칸 안 기준점 (0 왼쪽 끝 · 0.5 가운데) · w 그릴 폭 · 돌림 a */
-function frame(ctx: Ctx, sheet: HTMLImageElement, k: number, x: number, y: number, w: number, a: number, ax: number, al = 1): void {
+/** 8프레임 그림 한 칸 (칸 폭 = 그림 폭 / 8) · ax: 칸 안 기준점 (0 왼쪽 끝 · 0.5 가운데) · w 그릴 폭 · 돌림 a · fy -1이면 위아래 뒤집기 (인시전 왼 도끼도 씀) */
+export function frame(ctx: Ctx, sheet: HTMLImageElement, k: number, x: number, y: number, w: number, a: number, ax: number, al = 1, fy = 1): void {
   if (!ready(sheet)) return;
   const cw = sheet.naturalWidth / 8;
   const ch = sheet.naturalHeight;
@@ -28,6 +28,7 @@ function frame(ctx: Ctx, sheet: HTMLImageElement, k: number, x: number, y: numbe
   ctx.globalCompositeOperation = "lighter";
   ctx.translate(x, y);
   ctx.rotate(a);
+  ctx.scale(1, fy);
   ctx.drawImage(sheet, Math.max(0, Math.min(7, k)) * cw, 0, cw, ch, -w * ax, -h / 2, w, h);
   ctx.restore();
 }

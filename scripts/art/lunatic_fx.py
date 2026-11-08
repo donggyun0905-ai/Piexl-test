@@ -10,16 +10,17 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SPRITES = os.path.join(HERE, "..", "..", "apps", "client", "public", "sprites")
 
 
-def load(name):
+def load(name, floor=18):
+    """floor: 이보다 어두우면 투명 (18보다 크면 그 위 밝기를 0~255로 다시 펴서, 원본의 어두운 회색 상자가 안 보이게)"""
     im = np.array(Image.open(os.path.join(HERE, "src", f"{name}.png")).convert("RGB")).astype(float)
     a = im.max(axis=2)
-    a = np.where(a < 18, 0, a)
+    a = np.where(a < floor, 0, a if floor <= 18 else (a - floor) * 255 / (255 - floor))
     rgb = np.clip(im * 255 / np.maximum(a, 1)[..., None], 0, 255)
     return np.dstack([rgb, a]).astype("uint8")
 
 
-def frames8(name, cw_out, ch_out):
-    rgba = load(name)
+def frames8(name, cw_out, ch_out, floor=18):
+    rgba = load(name, floor)
     H, W = rgba.shape[:2]
     cw, ch = W // 4, H // 2
     cells = [rgba[(k // 4) * ch:(k // 4 + 1) * ch, (k % 4) * cw:(k % 4 + 1) * cw] for k in range(8)]
@@ -54,5 +55,6 @@ def boxes8(name, boxes, cw_out, ch_out):
 # 찌르기 원본(1536×1024)의 프레임 자리 (4번째 칼빛이 칸 경계를 넘어 직접 정함)
 THRUST = [(90, 225, 263, 405), (352, 210, 593, 413), (660, 195, 998, 428), (1035, 172, 1530, 443),
           (37, 570, 413, 818), (450, 555, 743, 818), (795, 562, 1118, 810), (1192, 577, 1493, 795)]
-boxes8("lunatic_thrust", THRUST, 192, 64)
-frames8("lunatic_slash", 128, 128)
+if __name__ == "__main__":
+    boxes8("lunatic_thrust", THRUST, 192, 64)
+    frames8("lunatic_slash", 128, 128)

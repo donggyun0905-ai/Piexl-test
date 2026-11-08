@@ -30,6 +30,7 @@ import { drawHellfistAura, drawHellfistBack } from "./hellfistBody";
 import { drawSilverBulletAura } from "./silverBulletBody";
 import { drawBlueFlameAura, drawBlueFlameBack } from "./blueFlameBody";
 import { drawLunaticAura } from "./lunaticBody";
+import { drawIncisionAura } from "./incisionBody";
 import { drawFactionBody } from "./factionFx";
 import { drawFallenWings } from "./fallenWings";
 
@@ -171,6 +172,7 @@ export function drawForgottenAura(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawSilverBulletAura(ctx, s, alpha, snap);
   drawBlueFlameAura(ctx, s, alpha, snap);
   drawLunaticAura(ctx, s, alpha, snap);
+  drawIncisionAura(ctx, s, alpha, snap);
   drawFactionBody(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten" || (p.fgGod ?? 0) <= 0) return;

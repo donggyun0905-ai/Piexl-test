@@ -1,4 +1,4 @@
-// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱) — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
+// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전) — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
 import { kit, SEC, sk } from "./pwKitKit";
 import type { PwKits } from "./pwSkillTypes";
 
@@ -44,5 +44,11 @@ export const PW_KITS_4: PwKits = {
     sk("lnRapier", "dash", 7, "#cfe0ff", { range: 130, speed: 12, hit: { dmg: 1.4, push: 6 } }),
     sk("lnRapier", "point", 10, "#8a9aff", { range: 120, radius: 40, delay: 6, fx: "slash", hit: { dmg: 2.2, slow: 1 * SEC } }),
     sk("lnRapier", "self", 60, "#ffffff", { radius: 110, fx: "pillar", buff: { ticks: 6 * SEC, dmg: 1.4 }, hit: { dmg: 1.6, push: 12 } }),
+  ),
+  incision: kit(1,
+    sk("icAxes", "cone", 3, "#ff3a3a", { radius: 56, arc: 0.9, fx: "slash", repeat: { n: 2, every: 6 }, hit: { dmg: 0.9, push: 3 } }),
+    sk("icAxes", "dash", 7, "#ff5a5a", { range: 120, speed: 11, hit: { dmg: 1.3, push: 6 } }),
+    sk("icAxes", "point", 10, "#c81e1e", { range: 160, radius: 48, delay: 14, fx: "meteor", hit: { dmg: 2.2, stun: 0.5 * SEC } }),
+    sk("icAxes", "self", 60, "#ff2020", { radius: 110, fx: "pillar", buff: { ticks: 6 * SEC, dmg: 1.4 }, hit: { dmg: 1.7, push: 12 } }),
   ),
 };

@@ -15,4 +15,6 @@ export const DAWN_CHARACTERS = {
   blueFlame: { id: "blueFlame", maxHp: 100, damage: 14, moveSpeed: 1.3, luck: 2, startWeapon: "bzBow", defense: 1 },
   /** 새벽의 성흔(리더): 루나틱 월광의 세검(매우 빠른 찌르기 + 약간 돌진) · 기본 약점 공격 30% · 대시 찌르기 · 월광 표적 → 확정 치명타 달빛 베기 · 성흔 → 만월 각성 (sim/lunatic) */
   lunatic: { id: "lunatic", maxHp: 115, damage: 15, moveSpeed: 1.4, luck: 3, startWeapon: "lnRapier", defense: 2 },
+  /** 새벽의 성흔(광전사): 인시전 도살자의 쌍도끼 네 박자(오른·왼 베기 → 교차 → 회오리) · 도륙 콤보(단계마다 공격 속도·피해) · 콤보 30마다 도살 도약 · 돌진 연참 · 성흔 → 광란 각성 (sim/incision) */
+  incision: { id: "incision", maxHp: 130, damage: 13, moveSpeed: 1.35, luck: 1, startWeapon: "icAxes", defense: 2 },
 } as const;

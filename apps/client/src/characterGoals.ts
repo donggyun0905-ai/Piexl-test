@@ -89,6 +89,7 @@ export const CHARACTER_GOALS: Partial<Record<CharacterId, CharGoal>> = {
   silverBullet: { m: "attackSpeed", n: 2 },
   blueFlame: { m: "maxHp", n: 180 },
   lunatic: { m: "attackSpeed", n: 2.5 },
+  incision: { m: "attackSpeed", n: 2.2 },
   chronomancer: { a: "thrift" },
   fly: { f: "clear7" },
   elder: { c: "traps", n: 1000 },

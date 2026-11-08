@@ -92,6 +92,7 @@ export const ACCENT: Record<string, string> = {
   silverBullet: "#d8e0ec",
   blueFlame: "#2a7aff",
   lunatic: "#cfd8ff",
+  incision: "#ff4a4a",
   collector: "#5a8aff",
   mystic: "#ff6a8a",
   engineer: "#5ad0f0",

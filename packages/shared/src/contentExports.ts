@@ -45,6 +45,8 @@ export { BLUE_FLAME } from "./weaponsBlueFlame";
 export { BLUE_FLAME_PERKS } from "./itemsBlueFlame";
 export { LUNATIC } from "./weaponsLunatic";
 export { LUNATIC_PERKS } from "./itemsLunatic";
+export { INCISION } from "./weaponsIncision";
+export { INCISION_PERKS } from "./itemsIncision";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";

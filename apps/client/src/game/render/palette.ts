@@ -87,6 +87,7 @@ export const C = {
   silverBullet: "#d8e0ec",
   blueFlame: "#2a7aff",
   lunatic: "#cfd8ff",
+  incision: "#e83a3a",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",
