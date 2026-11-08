@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.39",
+    date: "2026-11-09",
+    items: {
+      ko: [
+        "달을 삼키는 자: 달이 빨리 참 (보름달까지 20초 → 11초, 체력 절반 아래 14초 → 8초) · 달 조각을 깨도 달은 조금만 줆 (25% → 10%) → 싸움 중에 월식이 꼭 옴",
+        "달을 삼키는 자 강화: 체력 900 → 1250 · 손·낫·낙하 피해 높임 · 월식 피해 최대 체력 40% → 50% · 붙어서 때리면 떠난 자리에 그림자가 터지고 멀리 나타남 (2.5초마다)",
+        "달을 삼키는 자 공격 범위 넓힘: 그림자 손 범위 13 → 20·흩어짐 46 → 64·개수 4 → 5 (절반 아래 6 → 8) · 초승달 낫 74 → 104 · 월광 낙하 15 → 22",
+      ],
+      en: [
+        "Moon Devourer: the moon fills faster (full moon in 20s → 11s, 14s → 8s below half HP) · breaking a shard only wanes it a little (25% → 10%), so the eclipse always comes during the fight",
+        "Moon Devourer buffed: HP 900 → 1250 · harder-hitting hands, reap and moonfall · eclipse deals 50% max HP (was 40%) · hug it and it bursts shadows where it stood and reappears far away (every 2.5s)",
+        "Moon Devourer attacks reach wider: shadow hands radius 13 → 20, spread 46 → 64, count 4 → 5 (6 → 8 below half) · Crescent Reap 74 → 104 · Moonfall 15 → 22",
+      ],
+      ja: [
+        "月を呑む者：月が早く満ちる（満月まで20秒 → 11秒、体力半分以下14秒 → 8秒）· 月の欠片を壊しても月は少しだけ欠ける（25% → 10%）→ 戦闘中に必ず月食が来る",
+        "月を呑む者を強化：体力900 → 1250 · 手・鎌・落下のダメージ上昇 · 月食ダメージ最大体力の40% → 50% · 張り付いて殴るといた場所に影が弾け、遠くに現れる（2.5秒ごと）",
+        "月を呑む者の攻撃範囲を拡大：影の手の範囲13 → 20・散らばり46 → 64・数4 → 5（半分以下6 → 8）· 三日月の鎌74 → 104 · 月光落下15 → 22",
+      ],
+    },
+  },
+  {
     version: "0.50.38",
     date: "2026-11-09",
     items: {

@@ -10,19 +10,19 @@ import type { EnemyState, RunState } from "./types";
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
   /** 초승달 낫: 범위 · 부채꼴 cos · 첫 예고 틱 · 다음 낫까지 틱 · 옆으로 트는 각도(라디안) · 피해 배율 */
-  REAP_R: 74,
+  REAP_R: 104,
   REAP_ARC: 0.55,
   REAP_WARN: 30,
   REAP_GAP: 16,
   REAP_TURN: 0.55,
-  REAP_MUL: 0.8,
+  REAP_MUL: 1.1,
   /** 월광 낙하: 떨어지는 수 (체력 절반 아래) · 간격 틱 · 예고 틱 · 범위 · 피해 배율 */
   FALLS: 8,
   FALLS_HALF: 11,
   FALL_GAP: 11,
   FALL_WARN: 30,
-  FALL_R: 15,
-  FALL_MUL: 0.55,
+  FALL_R: 22,
+  FALL_MUL: 0.75,
 };
 export { R as BOSS_MOON_KIT_RULES };
 

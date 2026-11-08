@@ -126,6 +126,18 @@ describe("시즌 3 단계별 보스", () => {
     }
   });
 
+  it("달을 삼키는 자: 달 조각을 다 깨도 몇 초 안에 월식이 옴", () => {
+    const s = withBoss("mooneater");
+    let eclipse = false;
+    for (let i = 0; i < 900 && !eclipse; i++) {
+      for (const e of s.enemies) if (e.kind === "moonshard") e.hp = 0;
+      stepSim(s, EMPTY_INPUT);
+      s.player.invulnTicks = 99999;
+      eclipse = one(s, "mooneater")[0]?.phase === "act";
+    }
+    expect(eclipse).toBe(true);
+  });
+
   it("같은 시드면 같은 결과 (세 보스)", () => {
     for (const k of ["gatekeeper", "twinlu", "mooneater"] as BossKind[]) {
       const go = () => {

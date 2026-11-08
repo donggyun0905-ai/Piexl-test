@@ -17,30 +17,30 @@ import { addEffect, keepInRoom, makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, R
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
-  /** 보름달까지 틱 (20초) · 체력 절반 아래 (14초) */
-  MOON_TICKS: 1200,
-  MOON_TICKS_HALF: 840,
+  /** 보름달까지 틱 (11초) · 체력 절반 아래 (8초) */
+  MOON_TICKS: 660,
+  MOON_TICKS_HALF: 480,
   /** 달 조각: 한 번에 떨어지는 수 · 체력 절반 아래 · 체력 배율 · 보스에서 떨어진 최소 거리 */
   SHARDS: 3,
   SHARDS_HALF: 4,
   SHARD_HP: 1,
   SHARD_AWAY: 50,
   /** 달 조각을 깨면: 달 게이지 줄어듦 · 기둥이 남는 틱 · 기둥 반지름 */
-  SHARD_CUT: 0.25,
+  SHARD_CUT: 0.1,
   PILLAR_TICKS: 300,
   PILLAR_R: 22,
   /** 월식 강타: 예고 틱 · 기둥 밖이면 최대 체력의 몇 % 피해 (대시로도 못 피함) */
   ECLIPSE_WARN: 90,
-  ECLIPSE_PCT: 0.4,
+  ECLIPSE_PCT: 0.5,
   /** 월식 뒤 그림자 수 (체력 절반 아래) */
   CLONES: 2,
   /** 그림자 손: 개수 · 체력 절반 아래 · 예고 틱 · 범위 · 피해 배율 · 퍼짐 */
-  HANDS: 4,
-  HANDS_HALF: 6,
+  HANDS: 5,
+  HANDS_HALF: 8,
   HAND_WARN: 42,
-  HAND_R: 13,
-  HAND_MUL: 0.8,
-  HAND_SPREAD: 46,
+  HAND_R: 20,
+  HAND_MUL: 1.1,
+  HAND_SPREAD: 64,
   /** 달 삼키기: 예고 틱 · 회복 (최대 체력의 몇 %) · 달빛이 걸려 있으면 회복 배율 */
   DEVOUR_WARN: 54,
   DEVOUR_HEAL: 0.05,
@@ -53,6 +53,13 @@ const R = {
   SHARD_STIGMA: 10,
   /** 지키는 거리 (이만큼 떨어져 맴돎) */
   KEEP: 70,
+  /** 붙으면 빠져나가기: 이 거리 안이면 · 다시 쓰기까지 틱 · 떨어져 나타나는 거리 · 떠난 자리 그림자 폭발 예고 틱·범위·피해 배율 */
+  BLINK_NEAR: 36,
+  BLINK_GAP: 150,
+  BLINK_DIST: 95,
+  BLINK_WARN: 20,
+  BLINK_R: 30,
+  BLINK_MUL: 1,
 };
 export { R as BOSS_MOON_EATER_RULES };
 
@@ -126,6 +133,17 @@ export function updateMoonEater(s: RunState, e: EnemyState, toP: Vec, go: Vec, s
     e.y += go[1] * ENEMIES.mooneater.speed * dir;
     e.dirX = toP[0];
     e.dirY = toP[1];
+    // 붙어서 때리면: 떠난 자리에 그림자가 터지고 멀리 나타남
+    if (d < R.BLINK_NEAR && s.tick >= (e.aux ?? 0)) {
+      e.aux = s.tick + R.BLINK_GAP;
+      addShape(s, R.BLINK_WARN, { x: e.x, y: e.y, radius: R.BLINK_R, damage: Math.round(hitDamage(s) * R.BLINK_MUL), by: "mooneater", fx: "shadowHand" });
+      addEffect(s, { kind: "burst", x: e.x, y: e.y, dirX: 0, dirY: 0, size: 16, maxTicks: 14, foe: true });
+      e.x = e.prevX = p.x - toP[0] * R.BLINK_DIST;
+      e.y = e.prevY = p.y - toP[1] * R.BLINK_DIST;
+      keepInRoom(e, roomGrid(s));
+      e.prevX = e.x;
+      e.prevY = e.y;
+    }
     if ((e.meMoon ?? 0) >= 1) {
       e.phase = "act";
       e.timer = R.ECLIPSE_WARN;
