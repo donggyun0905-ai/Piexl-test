@@ -84,7 +84,7 @@ export const BLUE_FLAME_PERKS = {
   /** 남는 불꽃: 청염 지속 배율 */
   bzLinger: { ticks: 1.6 },
   /** 푸른 날개: 공격마다 화살비 확률 */
-  bzWing: { chance: 0.12 },
+  bzWing: { chance: 0.2 },
   /** 영혼 소각: 청염 피해 배율 */
   bzSoul: { mul: 1.4 },
   /** 맹인의 감각: 차는 양 배율 */

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.30",
+    date: "2026-11-08",
+    items: {
+      ko: ["블루 플레임 전용 아이템 '푸른 날개' 발동 확률 12% → 20%"],
+      en: ["Blue Flame's exclusive item Blue Wings: trigger chance 12% → 20%"],
+      ja: ["ブルーフレイム専用アイテム「青い翼」の発動確率 12% → 20%"],
+    },
+  },
+  {
     version: "0.50.29",
     date: "2026-11-08",
     items: {
