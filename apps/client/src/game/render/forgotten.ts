@@ -26,7 +26,7 @@ import { drawMichaelaAura, drawMichaelaBack } from "./michaelaBody";
 import { drawBlastAmmo, drawBlastAura } from "./blastBody";
 import { drawNailerAura, drawNailerBack } from "./nailerBody";
 import { drawScissorsAura, drawScissorsBack } from "./scissorsBody";
-import { drawHellfistAura } from "./hellfistBody";
+import { drawHellfistAura, drawHellfistBack } from "./hellfistBody";
 import { drawFactionBody } from "./factionFx";
 import { drawFallenWings } from "./fallenWings";
 
@@ -111,6 +111,7 @@ export function drawForgottenBack(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawMichaelaBack(ctx, s, alpha, snap);
   drawNailerBack(ctx, s, alpha, snap);
   drawScissorsBack(ctx, s, alpha, snap);
+  drawHellfistBack(ctx, s, alpha, snap);
   drawFallenWings(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten") return;

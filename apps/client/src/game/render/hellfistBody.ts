@@ -1,8 +1,16 @@
-// 헬피스트 그리기 (몸 위): 악마화가 쌓일수록 왼쪽 팔 둘레에 붉은 기운이 짙어짐 · 적혈 각성 중 붉은 기운 · 올라가는 불티
-import { isHellfist, rageMax, rageOf, type RunState } from "@pixel-rogue/shared";
+// 헬피스트 그리기. 몸 뒤: 2타로 갈라진 땅 (3타까지 남음, hellfistCrack) · 몸 위: 악마화가 쌓일수록 왼쪽 팔 둘레에 붉은 기운이 짙어짐 · 적혈 각성 중 붉은 기운 · 올라가는 불티
+import { HELLFIST, isHellfist, rageMax, rageOf, type RunState } from "@pixel-rogue/shared";
+import { drawCrack } from "./hellfistCrack";
 import { lerp, type Snap } from "./palette";
 import { additive, glow, type Ctx } from "./pwFxBits";
 import { HF } from "./hellfistFx";
+
+/** 몸 뒤(바닥): 갈라진 땅 */
+export function drawHellfistBack(ctx: Ctx, s: RunState, _a0: number, snap: Snap): void {
+  const c = s.player.hfCrack;
+  if (!c || !isHellfist(s.player) || s.over) return;
+  drawCrack(ctx, { ...c, x: snap(c.x), y: snap(c.y) }, s.tick - c.t, HELLFIST.crackTicks - (s.tick - c.t));
+}
 
 export function drawHellfistAura(ctx: Ctx, s: RunState, a0: number, snap: Snap): void {
   const p = s.player;

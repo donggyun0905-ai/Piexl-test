@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.21",
+    date: "2026-11-08",
+    items: {
+      ko: [
+        "헬피스트 공격 바꿈: 1타 주먹 후리기 (부채꼴로 휘두르는 주먹 궤적) → 2타 내려찍기 (땅이 폭발 범위만큼 넓게 여러 갈래로 점점 벌어지며 갈라지고 2.5초 남음) → 3타 균열 파쇄 (갈라진 땅이 붉은 유리처럼 깨지며 그 위 적 160%)",
+        "허공 긁기 → 허공검격으로 이름 바꿈 · 성흔이 가득 찬 적혈 각성 중에만 기본 공격이 모두 허공검격 (검지로 가리킨 적 자리에 안쪽 검고 테두리 붉은 X자 검격, 사용자 그림)",
+      ],
+      en: [
+        "Hellfist attacks reworked: 1 Hook (a fist swung across a fan) → 2 Slam (the ground cracks wide across the blast area, many cracks spreading open over time, and stays for 2.5s) → 3 Shatter (the cracked ground breaks like red glass, 160% to foes on it)",
+        "Air Claw renamed Air Slash · now only during Crimson Awakening, when every basic attack becomes Air Slash (an X slash, black inside with a red rim, where the pointed foe stands)",
+      ],
+      ja: [
+        "ヘルフィストの攻撃を変更：1打目 拳の振り抜き（扇形に振る拳の軌跡）→ 2打目 叩きつけ（地面が爆発範囲ほど広く何筋にも徐々に開きながら割れ、2.5秒残る）→ 3打目 亀裂破砕（割れた地面が赤いガラスのように砕け、その上の敵に160%）",
+        "虚空掻き → 虚空剣撃に改名 · 聖痕が満ちた赤血覚醒中のみ通常攻撃が全て虚空剣撃（指した敵の位置に内側が黒く縁が赤いX字の斬撃）",
+      ],
+    },
+  },
+  {
     version: "0.50.20",
     date: "2026-11-08",
     items: {

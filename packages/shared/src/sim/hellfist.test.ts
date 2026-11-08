@@ -26,7 +26,7 @@ function hit(s: RunState): void {
 const foe = (s: RunState) => s.enemies[0]!;
 
 describe("헬피스트", () => {
-  it("찌르기 → 내려찍기 → 허공 긁기 세 박자", () => {
+  it("후리기 → 내려찍기 → 균열 파쇄 세 박자", () => {
     const s = hellfist();
     const seen: number[] = [];
     for (let i = 0; i < 4; i++) {
@@ -36,13 +36,26 @@ describe("헬피스트", () => {
     expect(seen).toEqual([0, 1, 2, 0]);
   });
 
-  it("허공 긁기는 멀리 있는 적도 가리켜 검격", () => {
+  it("내려찍으면 땅이 갈라져 남고 3타가 깨뜨려 그 위 적을 벰", () => {
+    const s = hellfist();
+    hit(s);
+    hit(s);
+    expect(s.player.hfCrack).toBeDefined();
+    const hp = foe(s).hp;
+    hit(s);
+    expect(s.player.hfCrack).toBeUndefined();
+    expect(foe(s).hp).toBeLessThan(hp);
+    expect(s.effects.some((e) => e.kind === "hfShatterFx")).toBe(true);
+  });
+
+  it("적혈 각성 중에는 기본 공격이 허공검격 (멀리 있는 적도 가리켜 X자 검격)", () => {
     const s = hellfist(60 + 150);
-    s.player.hfStep = 2;
+    s.player.sgAwake = s.player.sgAwakeMax = 300;
     const hp = foe(s).hp;
     hit(s);
     expect(foe(s).hp).toBeLessThan(hp);
     expect(s.effects.some((e) => e.kind === "hfClawFx")).toBe(true);
+    expect(s.player.hfLast!.k).toBe(3);
   });
 
   it("맞힐수록 악마화가 쌓여 사거리가 늘어남 · 한참 안 맞히면 빠짐", () => {

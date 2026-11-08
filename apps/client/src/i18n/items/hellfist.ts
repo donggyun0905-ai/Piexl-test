@@ -35,8 +35,8 @@ export const HF_PASSIVE_NAMES: Record<HfPassive & PassiveId, Names> = {
 };
 
 export const HF_EFFECTS: Partial<Record<HfPassive & PassiveId, Names>> = {
-  hfKnuckle: c("1타 찌르기 피해 {mul}배", "{mul}x Jab damage", "1打目の突きダメージ{mul}倍"),
-  hfDouble: c("1타 찌르기가 한 번 더 때림 ({mul:pct}%)", "Jab strikes once more ({mul:pct}%)", "1打目の突きがもう一度殴る（{mul:pct}%）"),
+  hfKnuckle: c("1타 후리기 피해 {mul}배", "{mul}x Hook damage", "1打目の振り抜きダメージ{mul}倍"),
+  hfDouble: c("1타 후리기가 한 번 더 때림 ({mul:pct}%)", "Hook strikes once more ({mul:pct}%)", "1打目の振り抜きがもう一度殴る（{mul:pct}%）"),
   hfCrush: c("2타 내려찍기 피해 {mul}배", "{mul}x Slam damage", "2打目の叩きつけダメージ{mul}倍"),
   hfQuake: c("2타 내려찍기에 맞은 적 {stun:sec}초 멈춤", "Slam stops foes for {stun:sec}s", "2打目の叩きつけで敵が{stun:sec}秒停止"),
   hfIron: c("2타 내려찍기 거리 {r}배 · 밀침 {push}배", "{r}x Slam reach · {push}x knockback", "2打目の叩きつけ距離{r}倍・押し出し{push}倍"),
@@ -45,11 +45,11 @@ export const HF_EFFECTS: Partial<Record<HfPassive & PassiveId, Names>> = {
   hfHold: c("악마화가 {hold:sec}초 동안 안 빠짐", "Demonization holds for {hold:sec}s", "悪魔化が{hold:sec}秒間減らない"),
   hfFeed: c("악마화가 한 번에 {add}씩 쌓임", "Demonization builds {add} at a time", "悪魔化が一度に{add}ずつ溜まる"),
   hfMaw: c("악마화가 가득이면 모든 피해 {mul}배", "{mul}x all damage at full Demonization", "悪魔化が最大なら全ダメージ{mul}倍"),
-  hfNail: c("허공 긁기 검격 +{add}줄", "+{add} Air Claw slash", "虚空掻きの斬撃+{add}本"),
-  hfAim: c("허공 긁기 대상 +{add}", "+{add} Air Claw target", "虚空掻きの対象+{add}"),
-  hfRend: c("허공 긁기에 맞은 적 출혈 ({mul:pct}%)", "Air Claw makes foes bleed ({mul:pct}%)", "虚空掻きで当たった敵が出血（{mul:pct}%）"),
-  hfFar: c("허공 긁기 가리키는 거리 {r}배", "{r}x Air Claw pointing range", "虚空掻きの指す距離{r}倍"),
-  hfEcho: c("허공 긁기 둘레 {r}배 · 둘레 적 피해 {mul:pct}%", "Air Claw splash {r}x wider · {mul:pct}% to nearby foes", "虚空掻きの周囲{r}倍・周囲の敵へ{mul:pct}%"),
+  hfNail: c("허공검격 +{add}줄", "+{add} Air Slash hit", "虚空剣撃+{add}本"),
+  hfAim: c("허공검격 대상 +{add}", "+{add} Air Slash target", "虚空剣撃の対象+{add}"),
+  hfRend: c("허공검격에 맞은 적 출혈 ({mul:pct}%)", "Air Slash makes foes bleed ({mul:pct}%)", "虚空剣撃で当たった敵が出血（{mul:pct}%）"),
+  hfFar: c("허공검격 가리키는 거리 {r}배", "{r}x Air Slash pointing range", "虚空剣撃の指す距離{r}倍"),
+  hfEcho: c("허공검격 둘레 {r}배 · 둘레 적 피해 {mul:pct}%", "Air Slash splash {r}x wider · {mul:pct}% to nearby foes", "虚空剣撃の周囲{r}倍・周囲の敵へ{mul:pct}%"),
   hfBlood: c("성흔이 {gain}배 빨리 참", "Stigma fills {gain}x faster", "聖痕が{gain}倍早く満ちる"),
   hfLong: c("적혈 각성 +{more:sec}초", "Crimson Awakening +{more:sec}s", "赤血覚醒+{more:sec}秒"),
   hfFrenzy: c("적혈 각성 중 공격 속도 {speed}배", "{speed}x attack speed while awakened", "赤血覚醒中の攻撃速度{speed}倍"),

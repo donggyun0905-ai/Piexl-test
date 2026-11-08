@@ -133,6 +133,7 @@ export { stigmaGauge } from "./stigma";
 export { isNailer, nailerSkills, nailerStages } from "./nailer";
 export { isScissors } from "./scissors";
 export { isHellfist, rageMax, rageOf } from "./hellfist";
+export type { HfCrack } from "./hfTypes";
 export { factionGauge, factionOfCharacter, type FactionGauge } from "./factionGauge";
 export { buffOn, SPIRIT_OP, spiritStage } from "./factionSpirit";
 export { coinTier } from "./spiritCoin";
