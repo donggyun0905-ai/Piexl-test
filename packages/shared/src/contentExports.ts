@@ -43,6 +43,8 @@ export { SILVER_BULLET } from "./weaponsSilverBullet";
 export { SILVER_BULLET_PERKS } from "./itemsSilverBullet";
 export { BLUE_FLAME } from "./weaponsBlueFlame";
 export { BLUE_FLAME_PERKS } from "./itemsBlueFlame";
+export { LUNATIC } from "./weaponsLunatic";
+export { LUNATIC_PERKS } from "./itemsLunatic";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";

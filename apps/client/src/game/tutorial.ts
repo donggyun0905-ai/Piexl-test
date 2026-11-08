@@ -86,6 +86,7 @@ const DEMO_WEAPONS: Record<CharacterId, [WeaponId, WeaponId] | null> = {
   hellfist: null,
   silverBullet: null,
   blueFlame: null,
+  lunatic: null,
   miner: ["mnTnt", "mnPit"],
   voyager: null,
   zeus: ["zsSky", "zsChain"],

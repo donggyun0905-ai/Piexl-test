@@ -135,6 +135,7 @@ export { isScissors } from "./scissors";
 export { isHellfist, rageMax, rageOf } from "./hellfist";
 export { isSilverBullet, markNeed } from "./silverBullet";
 export { bzRings, isBlueFlame } from "./blueFlame";
+export { isLunatic } from "./lunatic";
 export type { HfCrack } from "./hfTypes";
 export { factionGauge, factionOfCharacter, type FactionGauge } from "./factionGauge";
 export { buffOn, SPIRIT_OP, spiritStage } from "./factionSpirit";

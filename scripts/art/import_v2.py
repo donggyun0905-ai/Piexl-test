@@ -15,7 +15,7 @@ DARK = 42
 # 어두운 옷 캐릭터: 배경(완전한 검정)만 지우게 기준을 낮춤
 DARK_BY = {"plague": 12}
 # 검은 머리·옷이 많은 캐릭터: 바깥 테두리에서 이어진 거의 완전한 검정(밝기 FLOOD 이하)만 배경으로 지움 (몸 안 검은 머리가 지워지지 않게)
-FLOOD_BG = {"levia", "tail", "madQueen", "hook", "orca", "wave", "miryu", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "blast", "nailer", "scissors", "hellfist", "hellfistDemon", "silverBullet", "blueFlame", "thorken", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "pungryu", "duck", "fallenKing", "lux", "lux2", "lux3", "lux4", "wanderer", "eater", "slayer", "slayer_rage", "summoner", "mukin", "plague", "ren", "tracker", "remnant"}
+FLOOD_BG = {"levia", "tail", "madQueen", "hook", "orca", "wave", "miryu", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "blast", "nailer", "scissors", "hellfist", "hellfistDemon", "silverBullet", "blueFlame", "lunatic", "thorken", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "pungryu", "duck", "fallenKing", "lux", "lux2", "lux3", "lux4", "wanderer", "eater", "slayer", "slayer_rage", "summoner", "mukin", "plague", "ren", "tracker", "remnant"}
 FLOOD = 8
 PURE = 3
 POCKET = 300
@@ -36,7 +36,7 @@ FLIP_LEFT = {"warden", "mage", "drifter", "mystic", "engineer", "elementalist", 
              "rider", "ren", "mukin", "wanderer", "bomber", "samyeol", "artifacter", "miner", "plague", "silk", "automata", "voyager",
              "eater", "forgotten", "remnant", "elder", "spiritist", "zeus", "tracker", "punk", "fly", "slayer", "slayer_rage",
              # 히든·한정 마지막 6명 (2026-11-01)
-             "stargazer", "scribe", "duck", "pilgrim", "pungryu", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "thorken", "levia", "tail", "madQueen", "orca", "wave", "miryu", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "blast", "nailer", "scissors", "hellfist", "hellfistDemon", "silverBullet", "blueFlame", "automataDoll", "crownKing", "fallenKing", "lux", "lux2", "lux3", "lux4"}
+             "stargazer", "scribe", "duck", "pilgrim", "pungryu", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "thorken", "levia", "tail", "madQueen", "orca", "wave", "miryu", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "blast", "nailer", "scissors", "hellfist", "hellfistDemon", "silverBullet", "blueFlame", "lunatic", "automataDoll", "crownKing", "fallenKing", "lux", "lux2", "lux3", "lux4"}
 # 서기·걷기에서 오른쪽을 보는 원본 칸 (기본 3 = 넷째 칸, GPT가 셋째 칸에 오른쪽을 그린 캐릭터만)
 STAND_RIGHT = {"abandoned": 2, "abandoned2": 2, "fenrir": 2}
 # 서기·걷기에서 고른 칸이 왼쪽을 보는 캐릭터: 뒤집어서 오른쪽으로 (사용자 확인)
@@ -49,7 +49,7 @@ ATTACK_LR = {
     "imugi": ("2", "3"), "general": ("2", "3"), "apostle": ("2", "3"), "abandoned": ("2", "3"), "abandoned3": ("2", "3"),
     "bedouin": ("2", "2f"), "abandoned2": ("2", "2f"), "novice": ("2", "2f"), "summoner": ("3f", "3"),
     "novice10": ("2", "2f"), "novice15": ("2", "2f"), "novice20": ("2", "2f"), "morph-eagle": ("3f", "3"),
-    "morph-wolf": ("3f", "3"), "morph-bear": ("3f", "3"), "fenrir": ("1", "1f"), "eclipse": ("0", "0f"), "eclipseNight": ("0", "0f"), "thorken": ("2", "2f"), "levia": ("2", "2f"), "orca": ("2", "2f"), "wave": ("3", "3f"), "blast": ("3", "3f"), "beatrice": ("3", "3f"), "ian": ("3f", "3"),
+    "morph-wolf": ("3f", "3"), "morph-bear": ("3f", "3"), "fenrir": ("1", "1f"), "eclipse": ("0", "0f"), "eclipseNight": ("0", "0f"), "thorken": ("2", "2f"), "levia": ("2", "2f"), "orca": ("2", "2f"), "wave": ("3", "3f"), "blast": ("3", "3f"), "lunatic": ("2", "2f"), "beatrice": ("3", "3f"), "ian": ("3f", "3"),
     **{n: ("3f", "3") for n in ("ren", "spiritist", "elder")}, "morph-phoenix": ("3f", "3"), "morph-spider-evo": ("3f", "3"),
     # 각성 동물: 공격 줄 왼·오 칸이 바뀌어 있음
     **{f"morph-{a}-evo": ("2", "3") for a in ("bear", "boar", "eagle", "snake", "phoenix", "bat")},

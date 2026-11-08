@@ -24,6 +24,7 @@ import type { ScissorsPlayerState } from "./sxTypes";
 import type { HellfistPlayerState } from "./hfTypes";
 import type { SilverBulletEnemyState, SilverBulletPlayerState } from "./sbTypes";
 import type { BlueFlameEnemyState, BlueFlamePlayerState } from "./bzTypes";
+import type { LunaticEnemyState, LunaticPlayerState } from "./lnTypes";
 import type { FactionPlayerState } from "./factionTypes";
 import type { LeoEnemyState, LeoPlayerState } from "./leoTypes";
 import type { OnyxPlayerState } from "./onyxTypes";
@@ -126,5 +127,5 @@ export interface OriginShotState {
   hpCut?: number;
 }
 
-export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState, PungPlayerState, LeoPlayerState, OnyxPlayerState, FenrirPlayerState, EclipsePlayerState, ThorPlayerState, LeviaPlayerState, TailPlayerState, MadQueenPlayerState, HookPlayerState, OrcaPlayerState, WavePlayerState, MiryuPlayerState, BeatricePlayerState, IanPlayerState, GabrielPlayerState, SerenaPlayerState, RafaelPlayerState, YurielPlayerState, MichaelaPlayerState, DawnPlayerState, NailerPlayerState, ScissorsPlayerState, HellfistPlayerState, SilverBulletPlayerState, BlueFlamePlayerState, FactionPlayerState {}
-export interface AscalonEnemyState extends BeatriceEnemyState, IanEnemyState, GabrielEnemyState, SerenaEnemyState, YurielEnemyState, HiddenEnemyState, AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState, PungEnemyState, LeoEnemyState, HookEnemyState, DawnEnemyState, NailerEnemyState, SilverBulletEnemyState, BlueFlameEnemyState {}
+export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState, PungPlayerState, LeoPlayerState, OnyxPlayerState, FenrirPlayerState, EclipsePlayerState, ThorPlayerState, LeviaPlayerState, TailPlayerState, MadQueenPlayerState, HookPlayerState, OrcaPlayerState, WavePlayerState, MiryuPlayerState, BeatricePlayerState, IanPlayerState, GabrielPlayerState, SerenaPlayerState, RafaelPlayerState, YurielPlayerState, MichaelaPlayerState, DawnPlayerState, NailerPlayerState, ScissorsPlayerState, HellfistPlayerState, SilverBulletPlayerState, BlueFlamePlayerState, LunaticPlayerState, FactionPlayerState {}
+export interface AscalonEnemyState extends BeatriceEnemyState, IanEnemyState, GabrielEnemyState, SerenaEnemyState, YurielEnemyState, HiddenEnemyState, AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState, PungEnemyState, LeoEnemyState, HookEnemyState, DawnEnemyState, NailerEnemyState, SilverBulletEnemyState, BlueFlameEnemyState, LunaticEnemyState {}

@@ -13,4 +13,6 @@ export const DAWN_CHARACTERS = {
   silverBullet: { id: "silverBullet", maxHp: 105, damage: 11, moveSpeed: 1.4, luck: 2, startWeapon: "sbPistols", defense: 1 },
   /** 새벽의 성흔: 블루 플레임 청염의 활(세 겹 범위: 안쪽 불꽃 감옥 · 가운데 불꽃 기둥 · 바깥 화살) · 모든 공격 청염 · 성흔 → 열화상 각성 거대한 활 폭격 (sim/blueFlame) */
   blueFlame: { id: "blueFlame", maxHp: 100, damage: 14, moveSpeed: 1.3, luck: 2, startWeapon: "bzBow", defense: 1 },
+  /** 새벽의 성흔(리더): 루나틱 월광의 세검(매우 빠른 찌르기 + 약간 돌진) · 기본 약점 공격 30% · 대시 찌르기 · 월광 표적 → 확정 치명타 달빛 베기 · 성흔 → 만월 각성 (sim/lunatic) */
+  lunatic: { id: "lunatic", maxHp: 115, damage: 15, moveSpeed: 1.4, luck: 3, startWeapon: "lnRapier", defense: 2 },
 } as const;
