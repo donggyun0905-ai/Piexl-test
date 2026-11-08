@@ -25,6 +25,7 @@ export const ASCALON_ACHIEVEMENTS = {
   clearBlast: n(["폭멸의 탄환", "The Annihilating Round", "爆滅の弾丸"], ["블래스트로 클리어", "Clear as Blast", "ブラストでクリア"]),
   clearNailer: n(["못 박는 심판관", "The Nailing Judge", "釘打つ審判官"], ["네일러로 클리어", "Clear as Nailer", "ネイラーでクリア"]),
   clearScissors: n(["단죄의 가위", "The Shears of Condemnation", "断罪の鋏"], ["시저스로 클리어", "Clear as Scissors", "シザーズでクリア"]),
+  clearBlueFlame: n(["영혼을 태우는 불", "The Soul-Burning Flame", "魂を焼く炎"], ["블루 플레임으로 클리어", "Clear as Blue Flame", "ブルーフレイムでクリア"]),
   clearSilverBullet: n(["은빛 집행자", "The Silver Executioner", "銀の執行者"], ["실버불렛으로 클리어", "Clear as Silver Bullet", "シルバーバレットでクリア"]),
   clearHellfist: n(["적혈의 주먹", "The Crimson Blood Fist", "赤血の拳"], ["헬피스트로 클리어", "Clear as Hellfist", "ヘルフィストでクリア"]),
   clearMichaela: n(["공허의 인도자", "The Void Guide", "虚空の導き手"], ["미카엘라로 클리어", "Clear as Michaela", "ミカエラでクリア"]),

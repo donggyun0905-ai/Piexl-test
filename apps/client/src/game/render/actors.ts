@@ -145,6 +145,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
   // 패왕전: 경기장에 없는 사람(대기·쓰러짐)은 그리지 않음
   if (s.pvp && !inPlay(s, s.seat ?? 0)) return;
   if (s.party && !isAlive(p)) return drawDown(ctx, p, snap);
+  if (p.bzUlt) return; // 블루 플레임 열화상 각성: 몸이 사라짐
   const px = lerp(p.prevX, p.x, alpha);
   const py = lerp(p.prevY, p.y, alpha);
   // 잔영 연속 베기 중: 무적이지만 깜빡이지 않고 어두운 그림자 몸

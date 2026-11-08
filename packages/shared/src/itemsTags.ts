@@ -12,7 +12,7 @@ export const ELEMENT_TAGS: readonly ItemTag[] = ITEM_TAGS.slice(0, 9);
 const MEMBERS: Record<ItemTag, string> = {
   // 불 36
   fire:
-    "wideBlast igniteTip heatBuildup armorMelt sunWarrior scorchBlade warCry unbreakable overdriveCircuit " +
+    "bzDraw bzFletch bzSplit bzEmber bzPrison bzImplode bzPillar bzTwin bzBlaze bzLinger bzSoul bzGreat wideBlast igniteTip heatBuildup armorMelt sunWarrior scorchBlade warCry unbreakable overdriveCircuit " +
     "counterCoil oniHellBrand oniRedLotus oniBloodFlame phoenixFlare phoenixSun phoenixRebirth adFocus " +
     "adWarhead rdTank rdBurn bmPowder bmBurn afWide afPhoenix fgPulse fgAfter pgCampfire fkPlate fkPyre " +
     "fkLines fkRequiem clSunSword clKatana clSunStaff clRedAxe ifritClaw ecFlare ecCorona mqWarhead mqBarrage hkDoubleTap hkPowder ocFrenzy ocSpray btEmber btCore btScorch btFlare btBrand btNoon btUndying mcPowder mcWide mcFuse mcResonance blBuckshot blDragon blGore blChain",
@@ -33,7 +33,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "plContagion smVenom smMist smCloud smSilk smTang smBloom snVenom snQuiver snNumb",
   // 빛 65
   light:
-    "sbFocus sbEndless sbLunar hfLong hfBurst sxMoon sxCrescent sxHalo sxRemain nlMoon nlBlind nlFocus regenCharm goldPouch goddessBlessing starShower manaDrain jadeOrb lifeSiphon beautiful flashy ration " +
+    "bzSense bzEndless sbFocus sbEndless sbLunar hfLong hfBurst sxMoon sxCrescent sxHalo sxRemain nlMoon nlBlind nlFocus regenCharm goldPouch goddessBlessing starShower manaDrain jadeOrb lifeSiphon beautiful flashy ration " +
     "elite catNap purr woundSuture firstAid checkup prescription quickEcho eternity accumulate oasis " +
     "dragonBlood dragonEye brightStar longNight wideSky extraStar stardust zodiac parchment revision " +
     "scrapRepair chargeKnuckle idDew idGaiaGrace idFourSeasons idWorldHeart elExpand elTea rdShock " +
@@ -42,7 +42,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "clStarTome dryadOrb aphroditeMirror puBook fnHalo fnStar ecDawn tkBell tkLighthouse lvSalt lvBlowhole mqPrism btVerdict btWitness btGrace btMercy iaQuill iaAbsolute iaVerse iaCall gbLight gbImmortal gbFaith gbVow snEther snMuse snNight rfHalo rfWrath rfPrayer rfLance yrPyre yrBloom yrHeaven yrOrb yrThorn yrPrayer mcPrayer mcArsenal blMoonlight blFull blHalo blLunar blSilver blRemain",
   // 어둠 42
   dark:
-    "sbEngrave sbStorm sbRapid sbPure hfHold hfFeed hfMaw hfGrow hfSpread sxBind sxFear sxSpool nlCurse nlChain ambush volleyCharm strongman intimidate sharpClaws hunterInstinct shadowMark twinShadow moonlight " +
+    "bzCage bzSeal bzInner sbEngrave sbStorm sbRapid sbPure hfHold hfFeed hfMaw hfGrow hfSpread sxBind sxFear sxSpool nlCurse nlChain ambush volleyCharm strongman intimidate sharpClaws hunterInstinct shadowMark twinShadow moonlight " +
     "assassin desertMirage desertKing soulFeast longCurse inkWell preface oniEightHeads oniAbyssDrink " +
     "oniShadowSpread snakeCoil batSwarm elLinger elStaff plMask plBloodlet eaHunger eaShade mkRegen " +
     "mkPotion cyOptics cyEcho rmStep rmVanish rmHaste rmShroud clVoidSword clVoidStaff clClaw devilBlood " +
@@ -65,7 +65,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "oniGreatWave oniSprayChain oniDragonPalace tkBarnacle tkWhale tkTrident lvCrest lvSpiral lvBreaker lvCurrent lvSpray lvCall lvCalf lvBaleen lvPod lvKingWhale lvDeep lvSong tlDeep tlSchool tlJaws tlBreach tlRip mqFreedom hkChain hkFreedom ocUndertow ocEcho ocFin wvSpear wvGoddess wvWhale wvBubble wvClock wvCloud wvLotus wvFlood wvBalloon wvPearl wvHands wvFountain wvSkip wvSiren wvOctopus wvEye wvEbb wvTrail wvTsunami mrRipple mrCascade mrSky mrReturn mrBreath",
   // 날카로움 90
   sharp:
-    "sbQuick sbHollow sbPierce sbTriple sbBarrel sbSeek sbAgile hfKnuckle hfDouble hfCrush hfNail hfAim hfFar hfEcho sxEdge sxWide sxSnap sxTwin sxTaut sxWeave nlIron nlBarb nlSpread nlDeep nlSledge nlWide nlDrive nlEcho longGrip backQuiver steadyBreath spinCleave waveSlash echoBolt piercingBolt mach knockout focusFire " +
+    "bzWide bzKnock bzWing sbQuick sbHollow sbPierce sbTriple sbBarrel sbSeek sbAgile hfKnuckle hfDouble hfCrush hfNail hfAim hfFar hfEcho sxEdge sxWide sxSnap sxTwin sxTaut sxWeave nlIron nlBarb nlSpread nlDeep nlSledge nlWide nlDrive nlEcho longGrip backQuiver steadyBreath spinCleave waveSlash echoBolt piercingBolt mach knockout focusFire " +
     "allIn bigStar longEcho precision longWhip command duneRush farThrow spearMastery momentum dragonRage " +
     "dragonLance fallenGrail sinWeight thickNib sealStamp alleyBond tagStrike idSap idRoots idTwinStab " +
     "idBloomSwap wolfFang wolfPack eagleEye scorpPincer batEcho eleTrunk flyLonger flyDragonEye renOak " +

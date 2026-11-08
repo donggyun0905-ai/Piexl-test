@@ -11,4 +11,6 @@ export const DAWN_CHARACTERS = {
   hellfist: { id: "hellfist", maxHp: 125, damage: 16, moveSpeed: 1.3, luck: 1, startWeapon: "hfFist", defense: 2 },
   /** 새벽의 성흔: 실버불렛 쌍권총(은탄 두 발 · 성수 폭탄) · 대시로 장애물 넘기 · 은탄 마크 30 → 연사 · 성흔 → 달빛 각성 + 은빛 활 일제 사격 (sim/silverBullet) */
   silverBullet: { id: "silverBullet", maxHp: 105, damage: 11, moveSpeed: 1.4, luck: 2, startWeapon: "sbPistols", defense: 1 },
+  /** 새벽의 성흔: 블루 플레임 청염의 활(세 겹 범위: 안쪽 불꽃 감옥 · 가운데 불꽃 기둥 · 바깥 화살) · 모든 공격 청염 · 성흔 → 열화상 각성 거대한 활 폭격 (sim/blueFlame) */
+  blueFlame: { id: "blueFlame", maxHp: 100, damage: 14, moveSpeed: 1.3, luck: 2, startWeapon: "bzBow", defense: 1 },
 } as const;

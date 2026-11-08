@@ -213,8 +213,8 @@ export interface BuyLogEntry {
   itemId: string;
   price: number;
 }
-/** 상태이상 피해 종류: 출혈 · 화상 · 독 · 저주(수양 부적) */
-export type DotKind = "bleed" | "burn" | "poison" | "curse" | "storm" | "rot" | "death" | "hellfire" | "shock" | "frost" | "tide" | "gold" | "radiance" | "voidbolt" | "moon";
+/** 상태이상 피해 종류 (admin/statusInfo) */
+export type DotKind = "bleed" | "burn" | "poison" | "curse" | "storm" | "rot" | "death" | "hellfire" | "shock" | "frost" | "tide" | "gold" | "radiance" | "voidbolt" | "moon" | "blueflame";
 
 export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, PetRunState, PwRunState, TerrainRunState, HiddenRunState, RoomRunState {
   seed: number;

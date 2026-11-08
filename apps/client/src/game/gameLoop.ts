@@ -171,7 +171,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       const passive = run.prompt.kind === "gather" || run.prompt.kind === "revive" || (!!run.party && p.hp <= 0) || watchingSeat() !== undefined;
       o.setPrompt({ text, interact: action !== "" && !passive });
     }
-    const ambush = !!p.trAmbush;
+    const ambush = !!p.trAmbush || !!p.bzUlt; // 블루 플레임 열화상 각성도 직접 조준
     controls.fineAim = ambush || !!run.pvp;
     if (ambush && controls.autoAim) {
       controls.setAutoAim(false);

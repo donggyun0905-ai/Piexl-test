@@ -41,6 +41,8 @@ export { HELLFIST } from "./weaponsHellfist";
 export { HELLFIST_PERKS } from "./itemsHellfist";
 export { SILVER_BULLET } from "./weaponsSilverBullet";
 export { SILVER_BULLET_PERKS } from "./itemsSilverBullet";
+export { BLUE_FLAME } from "./weaponsBlueFlame";
+export { BLUE_FLAME_PERKS } from "./itemsBlueFlame";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";

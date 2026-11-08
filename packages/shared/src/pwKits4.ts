@@ -1,4 +1,4 @@
-// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛) — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
+// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임) — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
 import { kit, SEC, sk } from "./pwKitKit";
 import type { PwKits } from "./pwSkillTypes";
 
@@ -32,5 +32,11 @@ export const PW_KITS_4: PwKits = {
     sk("sbPistols", "dash", 8, "#ffffff", { range: 100, speed: 10, hit: { dmg: 1, push: 6 } }),
     sk("sbPistols", "point", 10, "#b8e0ff", { range: 140, radius: 46, delay: 14, fx: "meteor", hit: { dmg: 1.6 } }),
     sk("sbPistols", "line", 60, "#ffffff", { range: 220, repeat: { n: 10, every: 3 }, hit: { dmg: 0.6, push: 2 } }),
+  ),
+  blueFlame: kit(1,
+    sk("bzBow", "line", 4, "#3a8aff", { range: 170, hit: { dmg: 1.1, push: 3 } }),
+    sk("bzBow", "point", 8, "#2a6aff", { range: 120, radius: 30, delay: 10, fx: "pillar", hit: { dmg: 1.3, push: 6 } }),
+    sk("bzBow", "point", 12, "#6ac8ff", { range: 90, radius: 40, delay: 16, fx: "meteor", hit: { dmg: 1.6 } }),
+    sk("bzBow", "point", 60, "#1a4aff", { range: 220, radius: 50, delay: 14, fx: "meteor", repeat: { n: 5, every: 12 }, hit: { dmg: 1.4, push: 8 } }),
   ),
 };

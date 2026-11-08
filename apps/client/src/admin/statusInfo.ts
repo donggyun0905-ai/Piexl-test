@@ -36,6 +36,7 @@ export const STATUS_INFO: readonly StatusInfo[] = [
   { kind: "gold", label: "황금", type: "한 방 추가", desc: "가진 돈에 비례한 피해 (돈을 조금 씀)", users: ["oni"], words: [], paths: ["rules/ONI/gold"] },
   { kind: "radiance", label: "광휘", type: "한 방 추가", desc: "빛 피해 · 밀치기 (잊혀진 자는 걸린 동안 1초마다)", users: ["forgotten", "oni", "imugi", "mystic", "elementalist", "elder"], more: "보스 대천사", words: ["radiance", "radiant", "holy"], paths: ["rules/ONI/genesis"] },
   { kind: "moon", label: "달빛", type: "약화", desc: "최대 5스택(5초) · 걸린 적은 주는 피해 약화 · 맞을 때 스택만큼 확률로 약점 공격(받은 피해의 50% 더, 흰 숫자)", users: ["blast"], more: "성흔 각성 중 모든 공격에 확정", words: ["moon"], paths: ["rules/MOON"] },
+  { kind: "blueflame", label: "청염", type: "지속 피해", desc: "블루 플레임의 모든 공격에 걸림 · 2.5초 동안 0.5초마다 공격력의 32% (보통 화상 25%보다 셈) · 숫자는 아래 진한 파랑 → 위 옅은 파랑", users: ["blueFlame"], more: "전용 아이템 '남는 불꽃'·'영혼 소각'", words: ["blueflame", "bzFlame"] },
   { kind: "voidbolt", label: "공허탄", type: "한 방 추가", desc: "큰 한 방 피해 + 부채꼴로 퍼짐", users: ["oni", "scribe"], words: ["void", "voidbolt"], paths: ["rules/ONI/black"] },
   { label: "치유감소", type: "약화", desc: "걸린 동안 모든 회복·재생 감소 (로그 40%, 지속 6초)", users: [], more: "로그 적 베놈(잠자리) 독가스 · 패왕전 회복 감소 기술", words: ["anti", "healcut"], paths: ["rules/TERRAIN/corrode"] },
   { label: "적이 거는 상태이상 (로그)", type: "플레이어가 받음", desc: "땅 물고기 출혈 · 슬라임 부식(받는 피해↑) · 도플갱어 저주(끝나면 터짐) · 그림자 공포(공격 못 함) · 가디언 기절 · 성기사 속박 · 돌진 멧돼지 느림 · 베놈 독+치유감소", users: [], words: [], paths: ["rules/FOE_STATUS_RULES"] },

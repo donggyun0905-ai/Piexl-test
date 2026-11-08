@@ -98,6 +98,8 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   hellfistDemon: { size: 40, footPad: 2, src: 128, v2: true },
   /** 실버불렛 (새벽의 성흔 은빛 집행자, 은발 땋은 머리·깃털 모자·검은 코트·쌍권총) */
   silverBullet: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 블루 플레임 (새벽의 성흔 청염의 맹인, 검푸른 긴 머리·눈가리개·흰 코트·푸른 불꽃) */
+  blueFlame: { size: 40, footPad: 2, src: 128, v2: true },
   /** 오토마타 자매 인형 (진홍빛, 사용자 그림 2026-11-04) */
   automataDoll: { size: 32, footPad: 2, src: 128, v2: true },
   // 히든 캐릭터도 일반 캐릭터와 같은 크기 (2026-10-31) · 빛의 사도는 칸에 여백이 많아 키를 맞춘 크기(성장 모습은 단계마다 커짐) · 차원의 순례자는 소녀 키를 일반 캐릭터에 맞춤 (큰 가방은 그만큼 같이 커서 칸이 큼)

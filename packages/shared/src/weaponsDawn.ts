@@ -4,8 +4,9 @@ import { NAILER_WEAPONS } from "./weaponsNailer";
 import { SCISSORS_WEAPONS } from "./weaponsScissors";
 import { HELLFIST_WEAPONS } from "./weaponsHellfist";
 import { SILVER_BULLET_WEAPONS } from "./weaponsSilverBullet";
+import { BLUE_FLAME_WEAPONS } from "./weaponsBlueFlame";
 
-export const DAWN_WEAPON_SET = { ...BLAST_WEAPONS, ...NAILER_WEAPONS, ...SCISSORS_WEAPONS, ...HELLFIST_WEAPONS, ...SILVER_BULLET_WEAPONS };
+export const DAWN_WEAPON_SET = { ...BLAST_WEAPONS, ...NAILER_WEAPONS, ...SCISSORS_WEAPONS, ...HELLFIST_WEAPONS, ...SILVER_BULLET_WEAPONS, ...BLUE_FLAME_WEAPONS };
 
 /** 성흔(달빛의 힘) 게이지 공용 수치: 맞히면 참 → 가득 차면 자동으로 달빛 각성 → 끝나면 0부터 (차는 양은 캐릭터마다) */
 export const STIGMA = {

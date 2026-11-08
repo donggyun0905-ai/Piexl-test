@@ -3,7 +3,7 @@ import { HELLFIST, HELLFIST_PERKS, isHellfist, rageOf, type PlayerState } from "
 import type { TextKey } from "../i18n";
 import type { RoomBuff } from "./roomBuffs";
 
-const LABEL: Partial<Record<string, TextKey>> = { blast: "bfSgAwake", nailer: "bfNlAwake", scissors: "bfSxAwake", hellfist: "bfHfAwake", silverBullet: "bfSbAwake" };
+const LABEL: Partial<Record<string, TextKey>> = { blast: "bfSgAwake", nailer: "bfNlAwake", scissors: "bfSxAwake", hellfist: "bfHfAwake", silverBullet: "bfSbAwake", blueFlame: "bfBzAwake" };
 
 /** 헬피스트 악마화: 스택 · 늘어난 사거리 % */
 function rageBuff(p: PlayerState, t: (k: TextKey) => string): RoomBuff[] {

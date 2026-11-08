@@ -37,7 +37,7 @@ interface FloatNumber {
 export type NumKind = "hit" | "crit" | DotKind;
 
 /** 상태이상 피해 숫자 색 */
-export const DOT_COLOR: Record<DotKind, string> = { bleed: "#ff4a4a", burn: "#ff9a2a", poison: "#7ae05a", curse: "#c08aff", storm: "#8ae8ff", rot: "#ff8a1a", death: "#120c16", hellfire: "#6ad8ff", shock: "#ffe04a", frost: "#9ae8ff", tide: "#3a9aff", gold: "#ffc830", radiance: "#fff8d8", voidbolt: "#8a5ab8", moon: "#ffffff" };
+export const DOT_COLOR: Record<DotKind, string> = { bleed: "#ff4a4a", burn: "#ff9a2a", poison: "#7ae05a", curse: "#c08aff", storm: "#8ae8ff", rot: "#ff8a1a", death: "#120c16", hellfire: "#6ad8ff", shock: "#ffe04a", frost: "#9ae8ff", tide: "#3a9aff", gold: "#ffc830", radiance: "#fff8d8", voidbolt: "#8a5ab8", moon: "#ffffff", blueflame: "#3a8aff" };
 const DOT_KINDS = Object.keys(DOT_COLOR) as DotKind[];
 
 export interface DummyStats {
@@ -224,6 +224,13 @@ export class DamageTracker {
         const g = ctx.createLinearGradient(0, -6, 0, 0);
         g.addColorStop(0, "#fffbe0");
         g.addColorStop(1, "#ffb830");
+        ctx.fillStyle = g;
+      } else if (n.kind === "blueflame") {
+        // 청염(블루 플레임): 아래는 진한 파랑 → 위로 갈수록 옅게
+        const g = ctx.createLinearGradient(0, 0, 0, -6);
+        g.addColorStop(0, "#1238d8");
+        g.addColorStop(0.5, "#3a8aff");
+        g.addColorStop(1, "#c8f0ff");
         ctx.fillStyle = g;
       } else ctx.fillStyle = n.kind !== "hit" ? DOT_COLOR[n.kind] : "#ffffff";
       ctx.fillText(text, 0, 0);
