@@ -20,7 +20,7 @@ export interface HiddenRunState {
   pilgrimNpc?: PilgrimState;
   /** 이번 판 순례자를 만난 횟수 (로비 전시장 누적용) */
   pilgrimMet?: number;
-  /** 포탈건이 기억한 방 */
+  /** 귀환의 문이 기억한 방 */
   portalMark?: { floor: number; room: number };
   /** 능력치를 직접 정하는 판 (타워 디펜스: 레벨·보정을 능력치에 곱함) → 0.5초 안전망 재계산을 하지 않음 */
   fixedStats?: boolean;

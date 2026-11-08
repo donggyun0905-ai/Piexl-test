@@ -1,4 +1,4 @@
-// 패왕전 성장 대결 능력치 합: 장비(pwShop) + 중첩 + 조건 효과(녹색·포탈건·왕관·큐피트 느려짐) + 증강 (pwRules.PW_AUGS)
+// 패왕전 성장 대결 능력치 합: 장비(pwShop) + 중첩 + 조건 효과(녹색·귀환의 문·왕관·큐피트 느려짐) + 증강 (pwRules.PW_AUGS)
 // 결과는 pwGrow.growStats(체력·공격·속도·사거리)와 baseStats.extraOf(방어력·재생력·치명타·흡혈·예리함)가 씀
 import type { ExtraStats } from "../characters";
 import { PW_AUGS, PW_GROW, type PwAugId } from "../pwRules";

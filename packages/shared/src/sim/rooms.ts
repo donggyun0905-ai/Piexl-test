@@ -176,7 +176,7 @@ export function goThrough(s: RunState, lane: number): void {
   enterRoom(s, next);
 }
 
-/** 포탈건: 이 층의 다른 방으로 바로 감 (아래쪽 가운데에서 시작) */
+/** 귀환의 문: 이 층의 다른 방으로 바로 감 (아래쪽 가운데에서 시작) */
 export function warpRoom(s: RunState, roomId: number): void {
   s.rooms[s.roomId]!.enemies = s.enemies;
   placeParty(s, ROOM_MAX_Y - PLAYER_RADIUS - 10);

@@ -142,7 +142,7 @@ export function drawHiddenFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const x = snap(fx.x);
   const y = snap(fx.y);
   if (fx.kind === "hdGate" || fx.kind === "hdWarp") {
-    // 차원이동문·포탈건·테라포밍: 내 자리에 아이 키만 한 포탈이 열렸다 닫힘 (빨려 들어가는 빛)
+    // 차원이동문·귀환의 문·테라포밍: 내 자리에 아이 키만 한 포탈이 열렸다 닫힘 (빨려 들어가는 빛)
     drawPortal(ctx, x, y - 12, Math.min(1, f * 4, t * 3) * 0.6, fx.maxTicks - fx.ticks);
     additive(ctx, () => shock(ctx, x, y - 12, fx.size * (0.4 + t), fx.kind === "hdWarp" ? "#3ad0ff" : "#c8a8ff", t, 3));
     return true;

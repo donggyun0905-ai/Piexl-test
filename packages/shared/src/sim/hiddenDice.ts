@@ -1,4 +1,4 @@
-// 히든 사용 아이템 둘째 묶음 (itemsHidden): 운명의 주사위 · 저주받은 주사위(숫자 고르는 창) · 테라포밍(보스 고르는 창) · 포탈건
+// 히든 사용 아이템 둘째 묶음 (itemsHidden): 운명의 주사위 · 저주받은 주사위(숫자 고르는 창) · 테라포밍(보스 고르는 창) · 귀환의 문
 // 고르는 창은 입력 menu (기능 7 저주받은 주사위 숫자 · 8 테라포밍 보스 번호, sim/station.stationMenu가 넘김)
 import { BOSS_TIERS, type BossKind } from "../content";
 import { HIDDEN_PERKS as K } from "../itemsHidden";
@@ -110,7 +110,7 @@ export function hiddenPick(s: RunState, op: number, a: number): void {
 /** 이 층 보스 (테라포밍으로 바꿨으면 그 보스) */
 export const terraBoss = (s: RunState): BossKind | undefined => (s.terraBoss?.floor === s.floor ? (s.terraBoss.kind as BossKind) : undefined);
 
-/** 포탈건: 처음엔 이 방을 기억 (아이템 그대로), 다시 쓰면 기억한 방으로 감 (사라짐). 다른 층이면 새로 기억 */
+/** 귀환의 문: 처음엔 이 방을 기억 (아이템 그대로), 다시 쓰면 기억한 방으로 감 (사라짐). 다른 층이면 새로 기억 */
 export function portalGun(s: RunState, slot: number): void {
   const p = s.player;
   const m = s.portalMark;

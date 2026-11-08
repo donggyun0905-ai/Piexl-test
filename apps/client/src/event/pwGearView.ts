@@ -19,7 +19,7 @@ export function gearLines(id: string, t: (k: TextKey) => string): string[] {
   return out;
 }
 
-/** 그림·이름 종류: 패시브 이름표에 없으면 사용 아이템 이름표 (에테르 폭탄·포탈건 등) */
+/** 그림·이름 종류: 패시브 이름표에 없으면 사용 아이템 이름표 (에테르 폭탄·귀환의 문 등) */
 export function gearItem(id: string, lang: Lang): IconItem {
   return (itemName("passive", id, lang) === id ? { kind: "use", id } : { kind: "passive", id }) as IconItem;
 }

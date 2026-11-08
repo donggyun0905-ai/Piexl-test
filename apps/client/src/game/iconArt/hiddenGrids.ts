@@ -56,9 +56,10 @@ export const HIDDEN_GRIDS: Record<string, Grid> = {
     rows: ["............bB", "...........bBb", "..n.......bBb.", "..nn.....bBb..", ".nn.....bkb...", ".n.....bBb....", "......bkb.....", ".....bBb...h.h", "....bkb....hhh", "...bBb......h.", "..gBb.........", ".gBg..........", "gBg...........", ".g............"],
     pal: { b: "#8a5a2a", B: "#c89a5a", k: "#2a1a0a", g: "#e0b040", n: "#c8f0ff", h: "#ff8ab8" },
   },
+  // 귀환의 문: 돌 아치 안에 푸른 소용돌이
   portalGun: {
-    rows: ["..............", "..............", "...........cc.", "..........cWWc", ".kkkkkkkkcW.Wc", "kWWWWWWsbbcWWc", "kWwwwwwsbBbcc.", "kwwwwwwsbbb...", ".kkkGGkkkk....", "...kGGk.......", "...kggk.......", "...kggk.......", "....kk........", ".............."],
-    pal: { c: "#3ad0ff", W: "#e8e8f0", w: "#b0b8c8", s: "#3ad0ff", b: "#5a6272", B: "#8a94a8", k: "#1a1a2a", G: "#ff8a3a", g: "#c85a1a" },
+    rows: ["....kkkkkk....", "..kkSSSSSSkk..", ".kSSkkkkkkSSk.", ".kSkccccccKSk.", "kSkcCCCCCCcKSk", "kSkcCwwwwCcKSk", "kSkcCwWWwCcKSk", "kSkcCwWWwCcKSk", "kSkcCwwwwCcKSk", "kSkcCCCCCCcKSk", "kSkccccccccKSk", "kSSkkkkkkkkSSk", "kggggggggggggk", "kkkkkkkkkkkkkk"],
+    pal: { k: "#1a1a2a", S: "#8a8aa0", K: "#5a5a70", c: "#2a4a9a", C: "#3a7ad0", w: "#6ad0ff", W: "#e8f8ff", g: "#6a6a80" },
   },
   fateDice: { rows: DICE_ROWS, pal: { k: "#6a5a48", T: "#fffaf0", F: "#f2ecdc", S: "#c8c0a8", r: "#e03a3a", y: "#ffe080" } },
   cursedDice: { rows: DICE_ROWS, pal: { k: "#8a3aa8", T: "#4a2a5a", F: "#2a1a30", S: "#140a18", r: "#ff3a5a", y: "#c060ff" } },

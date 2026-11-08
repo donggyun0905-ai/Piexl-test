@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.33",
+    date: "2026-11-08",
+    items: {
+      ko: ["히든 아이템 이름 바꿈: 포탈건 → 귀환의 문 (아이콘도 돌 아치 안 푸른 소용돌이로)", "블리자드 랜스를 진짜 창 모양으로 다시 그림 (자루·코등이·마름모 창날) · 다섯 창이 체력 줄 위에 한 줄로 떠 있음"],
+      en: ["Hidden item renamed: Gate of Return (icon is now a blue swirl inside a stone arch)", "Redrew Blizzard Lance as real spears (shaft, guard, diamond blade) · the five lances now float in a row above your health bar"],
+      ja: ["ヒドゥンアイテムの名前を変更：帰還の門（アイコンも石のアーチの中の青い渦に）", "ブリザードランスを本物の槍の形に描き直し（柄・鍔・ひし形の穂先）· 5本の槍が体力バーの上に一列に浮かぶ"],
+    },
+  },
+  {
     version: "0.50.32",
     date: "2026-11-08",
     items: {

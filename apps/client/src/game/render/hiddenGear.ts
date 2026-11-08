@@ -1,22 +1,75 @@
-// 히든 아이템 둘째 묶음 그림: 등 뒤에 떠 있는 블리자드 랜스 다섯 · 날아가는 얼음 창 (떨어진 신의 날개는 render/fallenWings)
+// 히든 아이템 둘째 묶음 그림: 체력 줄 위에 떠 있는 블리자드 랜스 다섯 · 날아가는 얼음 창 (떨어진 신의 날개는 render/fallenWings)
 // · 운명의/저주받은 주사위(머리 위에서 굴러가다 멈춤) · 화려한 보물 상자 · 저주 · 빙결
 import { drawHiddenAir } from "./hiddenTrial";
 import type { EffectState, ProjectileState, RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
 import { additive, alpha, beam, glow, shock, sparks } from "./pwFxBits";
 import { drawAllies } from "./allies";
+import { hpBarTop } from "./hpTop";
 
 type Ctx = CanvasRenderingContext2D;
 const ICE = "#9ad8ff";
 const ICE_L = "#e8f8ff";
+const SHAFT = "#3a5a88";
+const SHAFT_L = "#c8e4ff";
 
-/** 얼음 창 하나 (끝 x, y · 방향 dx, dy · 길이) */
+/** 얼음 창 하나 (끝 x, y · 방향 dx, dy · 길이): 자루 · 코등이 · 마름모 창날 · 밑동 · 창끝 빛 */
 function lance(ctx: Ctx, x: number, y: number, dx: number, dy: number, len: number, a = 1): void {
-  additive(ctx, () => {
-    beam(ctx, x - dx * len, y - dy * len, x, y, 2.5, ICE, 0.55 * a);
-    beam(ctx, x - dx * len * 0.8, y - dy * len * 0.8, x, y, 1, ICE_L, 0.9 * a);
-    glow(ctx, x, y, 4, ICE, 0.7 * a, 1.2);
-  });
+  const nx = -dy;
+  const ny = dx;
+  const head = len * 0.42;
+  const neckX = x - dx * head;
+  const neckY = y - dy * head;
+  const bx = x - dx * len;
+  const by = y - dy * len;
+  ctx.save();
+  ctx.globalAlpha = a;
+  ctx.lineCap = "round";
+  // 자루 (어두운 얼음 + 밝은 줄)
+  ctx.strokeStyle = SHAFT;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(bx, by);
+  ctx.lineTo(neckX, neckY);
+  ctx.stroke();
+  ctx.strokeStyle = ICE;
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(bx + nx * 0.4, by + ny * 0.4);
+  ctx.lineTo(neckX + nx * 0.4, neckY + ny * 0.4);
+  ctx.stroke();
+  // 마름모 창날
+  const w = Math.max(1.8, len * 0.12);
+  const midX = x - dx * head * 0.55;
+  const midY = y - dy * head * 0.55;
+  ctx.fillStyle = ICE;
+  ctx.strokeStyle = ICE_L;
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(midX + nx * w, midY + ny * w);
+  ctx.lineTo(neckX, neckY);
+  ctx.lineTo(midX - nx * w, midY - ny * w);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  // 날 가운데 밝은 줄
+  ctx.strokeStyle = ICE_L;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(neckX, neckY);
+  ctx.stroke();
+  // 코등이 · 밑동
+  ctx.strokeStyle = SHAFT_L;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(neckX + nx * w * 0.9, neckY + ny * w * 0.9);
+  ctx.lineTo(neckX - nx * w * 0.9, neckY - ny * w * 0.9);
+  ctx.stroke();
+  ctx.fillStyle = SHAFT_L;
+  ctx.fillRect(bx - 1, by - 1, 2, 2);
+  ctx.restore();
+  additive(ctx, () => glow(ctx, x, y, 3.5, ICE, 0.6 * a, 1.2));
 }
 
 /** 몸 둘레 (플레이어 다음): 블리자드 랜스 */
@@ -29,13 +82,11 @@ export function drawHiddenGear(ctx: Ctx, s: RunState, a: number, snap: Snap): vo
   const x = snap(lerp(p.prevX, p.x, a));
   const y = snap(lerp(p.prevY, p.y, a));
   if (p.passives.includes("blizzardLance") && s.tick >= (p.lanceOut ?? 0)) {
-    // 등 뒤 부채꼴로 떠 있는 얼음 창 다섯 (끝이 위를 봄)
+    // 체력 줄 위에 한 줄로 떠 있는 얼음 창 다섯 (끝이 위를 봄)
+    const top = hpBarTop(p, y) - 3;
     for (let i = 0; i < 5; i++) {
-      const ang = -Math.PI / 2 + (i - 2) * 0.32;
-      const bob = Math.sin(s.tick * 0.08 + i) * 1.2;
-      const tx = x + Math.cos(ang) * 14;
-      const ty = y - 6 + Math.sin(ang) * 14 + bob;
-      lance(ctx, tx, ty, Math.cos(ang), Math.sin(ang), 8, 0.85);
+      const bob = Math.sin(s.tick * 0.08 + i) * 1;
+      lance(ctx, x + (i - 2) * 6, top - 16 + bob, 0, -1, 16, 0.95);
     }
   }
 }
@@ -44,7 +95,7 @@ export function drawHiddenGear(ctx: Ctx, s: RunState, a: number, snap: Snap): vo
 export function drawLanceShot(ctx: Ctx, pr: ProjectileState, x: number, y: number): boolean {
   if (!pr.lance) return false;
   const sp = Math.hypot(pr.vx, pr.vy) || 1;
-  lance(ctx, x, y, pr.vx / sp, pr.vy / sp, 12);
+  lance(ctx, x, y, pr.vx / sp, pr.vy / sp, 16);
   return true;
 }
 
