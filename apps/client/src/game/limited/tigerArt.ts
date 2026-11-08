@@ -89,6 +89,7 @@ export const ACCENT: Record<string, string> = {
   nailer: "#c8303a",
   scissors: "#c8b8e8",
   hellfist: "#d8202a",
+  silverBullet: "#d8e0ec",
   collector: "#5a8aff",
   mystic: "#ff6a8a",
   engineer: "#5ad0f0",

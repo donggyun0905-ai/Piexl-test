@@ -56,6 +56,7 @@ import { michaelaTick } from "./michaela";
 import { nailerTick } from "./nailer";
 import { scissorsTick } from "./scissors";
 import { hellfistTick } from "./hellfist";
+import { silverBulletTick } from "./silverBullet";
 import { blastTick } from "./blast";
 import { leoTick } from "./leo";
 import { onyxTick } from "./onyx";
@@ -132,6 +133,7 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   nail: nailerTick,
   shears: scissorsTick,
   hellArm: hellfistTick,
+  silverGun: silverBulletTick,
   blast: blastTick,
   lion: leoTick,
   gem: onyxTick,

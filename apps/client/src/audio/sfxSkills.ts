@@ -22,6 +22,7 @@ import { blastSounds } from "./blastSounds";
 import { nailerSounds } from "./nailerSounds";
 import { scissorsSounds } from "./scissorsSounds";
 import { hellfistSounds } from "./hellfistSounds";
+import { silverBulletSounds } from "./silverBulletSounds";
 import { factionSounds } from "./factionSounds";
 
 export const SKILL_SOUNDS = {
@@ -250,6 +251,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   nailerSounds(run, out, onShake);
   scissorsSounds(run, out, onShake);
   hellfistSounds(run, out, onShake);
+  silverBulletSounds(run, out, onShake);
   factionSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;

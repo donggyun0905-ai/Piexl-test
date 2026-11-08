@@ -1,4 +1,4 @@
-// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트) — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
+// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛) — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
 import { kit, SEC, sk } from "./pwKitKit";
 import type { PwKits } from "./pwSkillTypes";
 
@@ -26,5 +26,11 @@ export const PW_KITS_4: PwKits = {
     sk("hfFist", "cone", 8, "#c01a1a", { radius: 72, arc: 0.6, fx: "slash", hit: { dmg: 2, push: 14, stun: 0.5 * SEC } }),
     sk("hfFist", "point", 10, "#ff2a2a", { range: 190, radius: 30, delay: 6, fx: "slash", repeat: { n: 3, every: 4 }, hit: { dmg: 0.9 } }),
     sk("hfFist", "self", 60, "#ff4040", { radius: 110, fx: "pillar", buff: { ticks: 6 * SEC, dmg: 1.2 }, hit: { dmg: 1.6, push: 12 } }),
+  ),
+  silverBullet: kit(1,
+    sk("sbPistols", "line", 4, "#e8eef8", { range: 170, repeat: { n: 2, every: 5 }, hit: { dmg: 0.8, push: 3 } }),
+    sk("sbPistols", "dash", 8, "#ffffff", { range: 100, speed: 10, hit: { dmg: 1, push: 6 } }),
+    sk("sbPistols", "point", 10, "#b8e0ff", { range: 140, radius: 46, delay: 14, fx: "meteor", hit: { dmg: 1.6 } }),
+    sk("sbPistols", "line", 60, "#ffffff", { range: 220, repeat: { n: 10, every: 3 }, hit: { dmg: 0.6, push: 2 } }),
   ),
 };

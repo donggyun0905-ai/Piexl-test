@@ -9,4 +9,6 @@ export const DAWN_CHARACTERS = {
   scissors: { id: "scissors", maxHp: 105, damage: 16, moveSpeed: 1.4, luck: 2, startWeapon: "sxShears", defense: 1 },
   /** 새벽의 성흔: 헬피스트 주먹 세 박자(찌르기 → 악마 왼팔 내려찍기 → 검지로 허공 긁기) · 악마화(맞힐수록 사거리 증가) · 성흔 → 적혈 각성 (sim/hellfist) */
   hellfist: { id: "hellfist", maxHp: 125, damage: 16, moveSpeed: 1.3, luck: 1, startWeapon: "hfFist", defense: 2 },
+  /** 새벽의 성흔: 실버불렛 쌍권총(은탄 두 발 · 성수 폭탄) · 대시로 장애물 넘기 · 은탄 마크 30 → 연사 · 성흔 → 달빛 각성 + 은빛 활 일제 사격 (sim/silverBullet) */
+  silverBullet: { id: "silverBullet", maxHp: 105, damage: 11, moveSpeed: 1.4, luck: 2, startWeapon: "sbPistols", defense: 1 },
 } as const;

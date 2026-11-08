@@ -5,6 +5,7 @@ import type { EnemyState, RunState } from "./types";
 import { isAwake } from "./stigma";
 import { hasPerk, markDot } from "./util";
 import { BLAST_PERKS } from "../itemsBlast";
+import { SILVER_BULLET } from "../weaponsSilverBullet";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -44,7 +45,7 @@ export function applyMoon(e: EnemyState, n = 1): void {
 /** n스택일 때 약점 공격 확률 */
 export const chance = (n: number) => [0, R.CHANCE_1, R.CHANCE_2, R.CHANCE_3, R.CHANCE_4, R.CHANCE_5][Math.min(R.MAX, n)] ?? 0;
 
-/** 맞힌 뒤 (baseStats.onHitExtra): 걸려 있으면 약점 공격 확률 · 성흔 각성 중이면 확정으로 달빛 (헬피스트 빼고) */
+/** 맞힌 뒤 (baseStats.onHitExtra): 걸려 있으면 약점 공격 확률 · 성흔 각성 중이면 확정으로 달빛 (헬피스트 빼고 · 실버불렛은 늘) */
 export function moonHit(s: RunState, e: EnemyState, dmg: number): void {
   const n = e.moon ?? 0;
   if (n > 0 && e.hp > 0 && !e.immune && createRng(deriveSeed(s.seed, "moon", e.id, s.tick)).nextFloat() < chance(n)) {
@@ -52,8 +53,10 @@ export function moonHit(s: RunState, e: EnemyState, dmg: number): void {
     e.hp -= extra;
     markDot(s, e, "moon", extra);
   }
-  // 헬피스트 적혈 각성은 달빛 대신 공격 속도·회복 (sim/hellfist)
-  if (isAwake(s.player) && s.player.characterId !== "hellfist") applyMoon(e, 1 + (hasPerk(s.player, "blLunar") ? BLAST_PERKS.blLunar.more : 0));
+  // 헬피스트 적혈 각성은 달빛 대신 공격 속도·회복 (sim/hellfist) · 실버불렛은 각성 아니어도 모든 공격이 달빛 (각성 중엔 더)
+  const sb = s.player.characterId === "silverBullet";
+  if (sb) applyMoon(e, isAwake(s.player) ? SILVER_BULLET.awakeMoon : 1);
+  else if (isAwake(s.player) && s.player.characterId !== "hellfist") applyMoon(e, 1 + (hasPerk(s.player, "blLunar") ? BLAST_PERKS.blLunar.more : 0));
 }
 
 /** 틱마다 (status.tickDots): 시간이 다 되면 풀림 */

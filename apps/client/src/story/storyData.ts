@@ -38,7 +38,7 @@ export const FACTIONS: readonly { id: FactionId; color: string; members: readonl
   { id: "thalassia", color: "#6ad4ff", members: M.thalassia },
   { id: "seongguk", color: "#ffd84a", members: M.seongguk },
   /** 새벽의 성흔: 악마 사냥꾼 (성흔 = 달빛의 힘, 게이지형) */
-  { id: "dawn", color: "#ffffff", members: ["blast", "nailer", "scissors", "hellfist"] },
+  { id: "dawn", color: "#ffffff", members: ["blast", "nailer", "scissors", "hellfist", "silverBullet"] },
   { id: "akashic", color: "#b89aff", members: ["scribe", "duck", "stargazer", "miner", "voyager", "zeus"] },
   /** 이방인: 세계의 틀을 벗어난 자들 */
   { id: "outsider", color: "#5ae0d0", members: ["pilgrim", "fallenKing"] },

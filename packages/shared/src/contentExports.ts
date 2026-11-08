@@ -39,6 +39,8 @@ export { SCISSORS } from "./weaponsScissors";
 export { SCISSORS_PERKS } from "./itemsScissors";
 export { HELLFIST } from "./weaponsHellfist";
 export { HELLFIST_PERKS } from "./itemsHellfist";
+export { SILVER_BULLET } from "./weaponsSilverBullet";
+export { SILVER_BULLET_PERKS } from "./itemsSilverBullet";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";

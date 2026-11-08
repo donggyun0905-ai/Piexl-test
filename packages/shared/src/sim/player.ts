@@ -27,9 +27,9 @@ import { fireMedic } from "./medicWeapons";
 import { medicSpeedMul } from "./heal";
 import { classMoveMul, classSpeedMul, foeHeld, foeMoveMul, foeNoAttack, onyxDash, trialMoveMul } from "./moveMul";
 import type { EnemyState, PlayerState, RunState, TickInput } from "./types";
-import { addEffect, shotDirs, DASH_COOLDOWN, DASH_SPEED_MUL, DASH_TICKS, dist2, hasPerk, keepInRoom, normalize, roomGrid, STILL_TICKS, weaponOf } from "./util";
+import { addEffect, shotDirs, DASH_COOLDOWN, DASH_SPEED_MUL, DASH_TICKS, dist2, hasPerk, keepInRoom, normalize, STILL_TICKS, weaponOf } from "./util";
 import { readAim } from "./tracker";
-import { tabooUp } from "./taboo"; import { blastSlideMul } from "./blastMag";
+import { tabooUp } from "./taboo"; import { blastSlideMul } from "./blastMag"; import { vaultGrid } from "./silverBulletKit";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -139,7 +139,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
     p.x += mx * (ms + empty * foeMoveMul(p));
     p.y += my * (ms + empty * foeMoveMul(p));
   }
-  keepInRoom(p, roomGrid(s));
+  keepInRoom(p, vaultGrid(s));
   // 돌진 베기: 대시로 지나간 적에게 공격력 1.5배 피해 (한 대시에 한 번씩)
   if (p.dashTicks > 0 && hasPerk(p, "dashSlash")) {
     for (const e of s.enemies) {

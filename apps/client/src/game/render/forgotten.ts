@@ -27,6 +27,7 @@ import { drawBlastAmmo, drawBlastAura } from "./blastBody";
 import { drawNailerAura, drawNailerBack } from "./nailerBody";
 import { drawScissorsAura, drawScissorsBack } from "./scissorsBody";
 import { drawHellfistAura, drawHellfistBack } from "./hellfistBody";
+import { drawSilverBulletAura } from "./silverBulletBody";
 import { drawFactionBody } from "./factionFx";
 import { drawFallenWings } from "./fallenWings";
 
@@ -164,6 +165,7 @@ export function drawForgottenAura(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawNailerAura(ctx, s, alpha, snap);
   drawScissorsAura(ctx, s, alpha, snap);
   drawHellfistAura(ctx, s, alpha, snap);
+  drawSilverBulletAura(ctx, s, alpha, snap);
   drawFactionBody(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten" || (p.fgGod ?? 0) <= 0) return;
