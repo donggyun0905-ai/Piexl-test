@@ -121,4 +121,15 @@ describe("블루 플레임", () => {
     expect(procs).toBeGreaterThan(0);
     expect(rain).toBe(procs * F.rainCount);
   });
+
+  it("열화상 각성 중 대시하면 바로 풀리고 몸이 돌아옴", () => {
+    const s = bz(60 + 20);
+    s.player.sgGauge = STIGMA.max - 0.5;
+    run(s, F.prisonDelay + 2);
+    expect(s.player.bzUlt).toBe(true);
+    stepSim(s, { ...FIRE, attack: false, dash: true, moveX: 100 });
+    expect(s.player.bzUlt).toBeUndefined();
+    expect(s.player.sgAwake).toBeUndefined();
+    expect(s.player.sgGauge).toBe(0);
+  });
 });

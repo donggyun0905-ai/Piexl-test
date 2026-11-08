@@ -1,6 +1,6 @@
 // 블루 플레임(새벽의 성흔, 청염의 맹인): 누르고 있으면 푸른 불꽃 활 · 조준한 쪽 가장 가까운 적이 몸 둘레 세 겹 범위 중 어디냐에 따라
 // 안쪽 불꽃 감옥(가둠) · 가운데 불꽃 기둥 · 바깥 화살 (범위에 적이 없으면 조준한 쪽으로 화살) · 모든 공격이 청염 상태이상 (sim/blueFlameKit)
-// 성흔이 가득 차면 열화상 각성: 몸이 사라지고(무적·고정) 누른 곳에 거대한 화살 폭격 · 푸른 날개(전용 아이템): 확률로 날개가 돋고 머리 위 활들이 앞쪽 바닥에 화살비
+// 성흔이 가득 차면 열화상 각성: 몸이 사라지고(무적·고정) 누른 곳에 거대한 화살 폭격 (대시하면 풀림) · 푸른 날개(전용 아이템): 확률로 날개가 돋고 머리 위 활들이 앞쪽 바닥에 화살비
 // 수치 weaponsBlueFlame · 아이템 itemsBlueFlame
 import { TICK_RATE } from "../constants";
 import { BLUE_FLAME_PERKS as K } from "../itemsBlueFlame";
@@ -99,6 +99,11 @@ function wingTick(s: RunState): void {
 function ultTick(s: RunState, want: boolean, speed: number): boolean {
   const p = s.player;
   if (!p.bzUlt) return false;
+  // 대시하면 각성이 바로 풀림 (적을 다 잡고 기다리지 않게, 2026-11-08 사용자 지시)
+  if (p.dashTicks > 0 && isAwake(p)) {
+    for (const k of ["sgAwake", "sgAwakeMax"] as const) delete p[k];
+    p.sgGauge = 0;
+  }
   if (!isAwake(p)) {
     delete p.bzUlt;
     p.rootTicks = 0;

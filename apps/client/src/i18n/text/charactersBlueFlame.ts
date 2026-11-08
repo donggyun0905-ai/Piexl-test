@@ -7,7 +7,7 @@ export const CHARACTER_TEXT_BLUE_FLAME = {
     en: "A magic warrior who lost his sight but senses demonic malice as blue flames and burns their souls away (no skills) · three range rings around you are always shown · press to draw a bow of blue fire: if the nearest foe where you aim is in the inner ring, a Flame Prison (145%, traps); middle ring, a Flame Pillar (115%); outer ring, an arrow (90%) · every attack inflicts Blue Flame (32% every 0.5s, stronger than a normal burn) · full Stigma triggers Thermal Awakening: the screen goes black and only foes glow blue · your body vanishes, invulnerable · a giant bow at the bottom of the screen bombards where you aim (240%) · Tip: the closer the foe, the stronger the attack",
     ja: "視力を失った代わりに悪魔の邪悪な気配を青い炎として感じ取り、その魂を焼き尽くす魔法戦士（スキルなし）· 体の周りの三重の範囲が常に見える · 押すと青い炎の弓：狙った方向で一番近い敵が内側なら炎の牢獄（145%・閉じ込める）· 真ん中なら炎の柱（115%）· 外側なら矢（90%）· 全ての攻撃が青炎状態異常（0.5秒ごとに32%、通常の火傷より強い）· 聖痕が満ちると熱感知覚醒：画面が暗くなり敵だけが青く見える · 体は消えて無敵 · 画面下の巨大な弓で狙った場所を爆撃（240%）· コツ：近い敵ほど強い攻撃",
   },
-  bfBzAwake: { ko: "열화상 각성 {s}초: 몸이 사라지고 무적 · 누른 곳에 거대한 화살 폭격", en: "Thermal Awakening {s}s: body vanishes, invulnerable · giant arrows bombard where you aim", ja: "熱感知覚醒{s}秒：体が消えて無敵・狙った場所に巨大な矢の爆撃" },
+  bfBzAwake: { ko: "열화상 각성 {s}초: 몸이 사라지고 무적 · 누른 곳에 거대한 화살 폭격 · 대시하면 풀림", en: "Thermal Awakening {s}s: body vanishes, invulnerable · giant arrows bombard where you aim · dash to end", ja: "熱感知覚醒{s}秒：体が消えて無敵・狙った場所に巨大な矢の爆撃・ダッシュで解除" },
   pwSk_blueFlame1: { ko: "청염 화살", en: "Blue Flame Arrow", ja: "青炎の矢" },
   pwSk_blueFlame2: { ko: "불꽃 기둥", en: "Flame Pillar", ja: "炎の柱" },
   pwSk_blueFlame3: { ko: "불꽃 감옥", en: "Flame Prison", ja: "炎の牢獄" },

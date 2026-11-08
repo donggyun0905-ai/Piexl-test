@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.29",
+    date: "2026-11-08",
+    items: {
+      ko: ["블루 플레임 세 겹 범위: 안쪽 채움 색을 없애고 테두리만 더 옅게 표시 (적이 잘 보이게)", "블루 플레임 열화상 각성 중 대시하면 각성이 바로 풀리고 몸이 돌아옴 (적을 다 잡고 기다리지 않게)"],
+      en: ["Blue Flame's three range rings: removed the inner fill and show only fainter outlines (foes are easier to see)", "Dashing during Blue Flame's Thermal Awakening now ends it at once and brings your body back (no more waiting after clearing the room)"],
+      ja: ["ブルーフレイムの三重の範囲：内側の塗りをなくし、縁だけをより薄く表示（敵が見やすく）", "ブルーフレイムの熱感知覚醒中にダッシュするとすぐに覚醒が解けて体が戻る（敵を倒し切った後に待たなくてよい）"],
+    },
+  },
+  {
     version: "0.50.28",
     date: "2026-11-08",
     items: {

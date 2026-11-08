@@ -1,4 +1,4 @@
-// 블루 플레임 그리기 (몸 뒤 · 몸 위): 늘 보이는 세 겹 범위 (안쪽 진한 파랑 · 가운데 연한 파랑 · 바깥 더 연한 파랑) · 푸른 날개 (몸 뒤)
+// 블루 플레임 그리기 (몸 뒤 · 몸 위): 늘 보이는 세 겹 범위 테두리 (안쪽 진한 파랑 · 가운데 연한 파랑 · 바깥 더 연한 파랑) · 푸른 날개 (몸 뒤)
 // 적 머리 위 청염 표시 (아래 진한 파랑 → 위 옅게) · 날아가는 화살 · 머리 위에서 앞쪽 바닥으로 비스듬히 떨어지는 화살비 · 활 쏘기 (사용자 그림 8프레임) · 머리 위 활들
 // 그림: sprites/blueFlame_bow·bigArrow·wing ← scripts/art/blueFlame_fx.py · 각성(열화상)은 render/blueFlameUlt
 import { BLUE_FLAME, bzRings, isBlueFlame, type RunState } from "@pixel-rogue/shared";
@@ -43,16 +43,9 @@ export function arrowImg(ctx: Ctx, x: number, y: number, a: number, len: number,
 
 /** 세 겹 범위: 안쪽 원판·띠 둘 (옅은 채움) + 도트 테두리 */
 function rings(ctx: Ctx, s: RunState, x: number, y: number): void {
+  // 테두리만 옅게 (안쪽 채움 없음, 2026-11-08 사용자 지시: 안쪽 색이 적을 가림) · 안쪽일수록 진한 파랑
   const r = bzRings(s.player);
-  const fills: [number, number, string, number][] = [[0, r[0], BZ.deep, 0.14], [r[0], r[1], BZ.blue, 0.08], [r[1], r[2], BZ.light, 0.05]];
-  for (const [a, b, c, al] of fills) {
-    ctx.fillStyle = alpha(c, al);
-    ctx.beginPath();
-    ctx.arc(x, y, b, 0, Math.PI * 2);
-    if (a > 0) ctx.arc(x, y, a, 0, Math.PI * 2, true);
-    ctx.fill();
-  }
-  const edge: [number, string, number][] = [[r[0], BZ.blue, 0.55], [r[1], BZ.light, 0.42], [r[2], BZ.pale, 0.3]];
+  const edge: [number, string, number][] = [[r[0], BZ.blue, 0.3], [r[1], BZ.light, 0.22], [r[2], BZ.pale, 0.16]];
   for (const [rr, c, al] of edge) {
     ctx.fillStyle = alpha(c, al);
     for (const [px, py] of ringCells(Math.round(rr))) ctx.fillRect(x + px, y + py, 1, 1);
