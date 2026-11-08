@@ -52,6 +52,6 @@ export const SILVER_BULLET = {
   ultGap: 3,
   ultMul: 0.32,
   ultSpeed: 12,
-  ultSide: 14,
+  ultSide: 28,
   ultTurn: 0.25,
 };

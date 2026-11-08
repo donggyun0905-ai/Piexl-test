@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.26",
+    date: "2026-11-08",
+    items: {
+      ko: [
+        "실버불렛 각성 은빛 활을 새 그림으로: 흰 장식 초승달 활 ) (사용자 그림) · 전보다 약 2배 크게 펼쳐지며 빛남 · 양끝 유도탄이 커진 활 끝에서 나감",
+        "실버불렛 이펙트 다듬기: 은탄(금빛 탄피·은빛 몸·빛 꼬리) · 총구 별 섬광·불길·연기 · 맞을 때 은빛 고리·반짝임 · 성수 폭탄 빛 십자 기둥·유리 조각·고이는 성수 · 연사 조준 고리 회전 · 각성 초승달",
+      ],
+      en: [
+        "Silver Bullet's awakening bow redrawn: an ornate white crescent bow ) (user artwork), about twice as large and glowing · the homing side rounds now leave from the bigger bow's tips",
+        "Silver Bullet effects polished: silver rounds (gold casing, silver body, light trail) · star muzzle flash with flame and smoke · silver ring and sparkle on hit · holy water bomb with a cross of light, glass shards and a pool of holy water · rotating Barrage reticle · crescent moon on awakening",
+      ],
+      ja: [
+        "シルバーバレットの覚醒の銀の弓を新しい絵に：白い装飾の三日月の弓 )（ユーザーの絵）· 以前の約2倍の大きさで光る · 両端の誘導弾が大きくなった弓の端から出る",
+        "シルバーバレットのエフェクト調整：銀弾（金の薬莢・銀の弾体・光の尾）· 銃口の星の閃光・炎・煙 · 命中時の銀の輪・きらめき · 聖水爆弾の光の十字柱・ガラス片・溜まる聖水 · 連射の照準リングが回転 · 覚醒時の三日月",
+      ],
+    },
+  },
+  {
     version: "0.50.25",
     date: "2026-11-08",
     items: {

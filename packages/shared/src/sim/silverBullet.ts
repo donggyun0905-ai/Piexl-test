@@ -86,14 +86,14 @@ function ultTick(s: RunState): boolean {
   if (!p.sbUlt) return false;
   p.rootTicks = 1;
   if (p.sbUlt % B.ultGap === 0) {
-    const cx = p.x + p.faceX * 12;
-    const cy = p.y - 4 + p.faceY * 12;
+    const cx = p.x + p.faceX * 14;
+    const cy = p.y - 4 + p.faceY * 14;
     const seek = hasPerk(p, "sbSeek") ? { turn: K.sbSeek.turn } : {};
     for (const o of [-3, 3]) shoot(p, cx - p.faceY * o, cy + p.faceX * o, p.faceX, p.faceY, B.ultSpeed, B.ultMul, 4, seek);
     const foes = nearest(s, cx, cy, 2);
     for (const [i, side] of [1, -1].entries()) {
-      const tx = cx - p.faceY * B.ultSide * side - p.faceX * 5;
-      const ty = cy + p.faceX * B.ultSide * side - p.faceY * 5;
+      const tx = cx - p.faceY * B.ultSide * side - p.faceX * 10;
+      const ty = cy + p.faceX * B.ultSide * side - p.faceY * 10;
       // 양끝은 바깥쪽으로 비스듬히 나가 적을 쫓음
       const dx = p.faceX - p.faceY * side * 0.6;
       const dy = p.faceY + p.faceX * side * 0.6;
