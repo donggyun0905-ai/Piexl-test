@@ -33,7 +33,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "plContagion smVenom smMist smCloud smSilk smTang smBloom snVenom snQuiver snNumb",
   // 빛 65
   light:
-    "lnSense lnEndless lnFullMoon lnSlashBig lnSlashPow lnMoonRain lnCrescent bzSense bzEndless sbFocus sbEndless sbLunar hfLong hfBurst sxMoon sxCrescent sxHalo sxRemain nlMoon nlBlind nlFocus regenCharm goldPouch goddessBlessing starShower manaDrain jadeOrb lifeSiphon beautiful flashy ration " +
+    "crVerdict crHalo crSense crRain crGrave crEndless lnSense lnEndless lnFullMoon lnSlashBig lnSlashPow lnMoonRain lnCrescent bzSense bzEndless sbFocus sbEndless sbLunar hfLong hfBurst sxMoon sxCrescent sxHalo sxRemain nlMoon nlBlind nlFocus regenCharm goldPouch goddessBlessing starShower manaDrain jadeOrb lifeSiphon beautiful flashy ration " +
     "elite catNap purr woundSuture firstAid checkup prescription quickEcho eternity accumulate oasis " +
     "dragonBlood dragonEye brightStar longNight wideSky extraStar stardust zodiac parchment revision " +
     "scrapRepair chargeKnuckle idDew idGaiaGrace idFourSeasons idWorldHeart elExpand elTea rdShock " +
@@ -56,7 +56,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "fkCross fkMajesty clScythe devilMask devilReaper ecTotality btExecutor iaSeal iaReaper iaEcho gbCrush snFatal snBloom rfHunt rfBrand yrStigma",
   // 대지 37
   earth:
-    "whetstone dashSlash earthshaker perfectCircle steadfast surgery antibody sandstorm sandVeil redHare " +
+    "crHeavy crLong crAfter crPillar crRamSlam crRamWall whetstone dashSlash earthshaker perfectCircle steadfast surgery antibody sandstorm sandVeil redHare " +
     "warBanner hydraulicJoint aftershock bearQuake boarTusk boarStampede boarMud eleMammoth renSoil " +
     "renQuake renBindLong renEarth renBigger renCollapse mkMomentum mkShock mkTrample mkIron rdDouble " +
     "rdRam bmEcho bmFinale mnMole mnExpert clVineStaff clStoneHammer clCrescent fnRift ecMoonAxe gbQuake gbStun gbAfter gbWeight",
@@ -76,7 +76,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "relicPrism relicGreen sylphQuiver gnomeHammer puDog leFang lePride leKing oxPolish oxCrown oxResonance fnFang fnMoon ecSunspot tlFin mqTwin mrHorn iaVital iaNeedle iaSteel iaClause gbForge gbAegis gbGrav snEdge snBarb snThorn snLash snChain rfScope rfPierce rfHead rfSpotter rfShard yrHeavy yrNoMercy yrVerdict yrWrist yrChain mcSword mcLance mcJavelin mcHeavy mcShrapnel blSlug blChoke blShred blSpread",
   // 단단함 79
   tough:
-    "sbSplash hfIron hfQuake sxLong sxGiant sxFull nlStun nlBind nlFuse sturdyHeart furySeal secondWind ricochet splitHead counterGuard bulwarkStance arcaneShield " +
+    "crBrace crPenance crThorn crGiant crRamWide sbSplash hfIron hfQuake sxLong sxGiant sxFull nlStun nlBind nlFuse sturdyHeart furySeal secondWind ricochet splitHead counterGuard bulwarkStance arcaneShield " +
     "tempestBreath barrier domain highLens energyRecycle balance ironBody nineLives wildRoar healthCare " +
     "robust smokeVeil oldPact bondShield hiddenPower ironWall scaleArmor scaleGuard blackMass apostate " +
     "featherShield eldestShield streetScars armorPlate titanHull idSprout idAcorn idThornShield " +
@@ -86,7 +86,7 @@ const MEMBERS: Record<ItemTag, string> = {
     "zsNectar zsRetort pgPack pgSouvenir pgPostcard pgTent relicSilver relicWhite ironSkin puDisguise leArmor oxBulwark oxShard fnHowl fnVeteran ecCrown tkCoral lvShell lvFlag tlFreedom mqFlagship hkWreck hkRum ocFoam wvArmor wvMist mrScale mrParry btVow btSilver btBreaker iaLedger iaKnot gbPlate gbThorns gbIron gbBulwark gbTitan rfSteady yrBulwark yrSanct yrGuard yrVigil yrGrace yrTouch yrBaptism mcHoard blRecoil",
   // 바람 77
   wind:
-    "icRushPow icDouble icLeapOften icKeep lnLunge lnAfterimage lnChain nlQuick nlRain lightGloves windBoots featherTip hunterEye dashCloak heavyPlate returnFletch chaseSteps chainBurst " +
+    "crQuick crRamPow crRamGain icRushPow icDouble icLeapOften icKeep lnLunge lnAfterimage lnChain nlQuick nlRain lightGloves windBoots featherTip hunterEye dashCloak heavyPlate returnFletch chaseSteps chainBurst " +
     "overcharge mindEye yangForce cleanFreak bigger zone speedIsPower discipline rapidFire agility " +
     "overtreat doctorGown shadowRush silentStep haste clockwork mirageStep nomadSpirit cloudRide duckWalk " +
     "lastMag backAlleyRun oniTyphoonEye oniGale oniTwinWind idBreeze idPetal idSplitArrow idRootArrow " +

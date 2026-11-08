@@ -88,6 +88,7 @@ export const C = {
   blueFlame: "#2a7aff",
   lunatic: "#cfd8ff",
   incision: "#e83a3a",
+  crusader: "#f0d890",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",

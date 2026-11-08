@@ -11,7 +11,7 @@ export const TIERS: readonly { id: TierId; color: string; chars: readonly Charac
     color: "#ffa64a",
     chars: ["spiritist", "apostle", "ninja", "summoner", "wanderer", "punk", "imugi", "samyeol", "gunner", "bedouin", "elder", "plague", "chronomancer", "byeonhui"],
   },
-  { id: "mid", color: "#ffe066", chars: ["idra", "collector", "pungryu", "leo", "onyx", "fenrir", "eclipse", "thorken", "levia", "tail", "madQueen", "hook", "orca", "wave", "miryu", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "blast", "nailer", "scissors", "hellfist", "silverBullet", "blueFlame", "lunatic", "incision", "doctor", "engineer", "forgotten", "eater", "drifter", "beast", "remnant", "warden", "elementalist"] },
+  { id: "mid", color: "#ffe066", chars: ["idra", "collector", "pungryu", "leo", "onyx", "fenrir", "eclipse", "thorken", "levia", "tail", "madQueen", "hook", "orca", "wave", "miryu", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "blast", "nailer", "scissors", "hellfist", "silverBullet", "blueFlame", "lunatic", "incision", "crusader", "doctor", "engineer", "forgotten", "eater", "drifter", "beast", "remnant", "warden", "elementalist"] },
   { id: "meh", color: "#7ad0ff", chars: ["brawler", "fly", "ren", "rider", "titan", "bomber", "general", "mukin", "mage", "mystic"] },
   { id: "trash", color: "#a08ab8", chars: ["abandoned"] },
 ];

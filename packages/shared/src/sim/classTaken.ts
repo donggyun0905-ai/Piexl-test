@@ -44,6 +44,7 @@ export const foeTaken = (s: RunState, e: EnemyState) => evilTaken(s, e) * ianTak
 import { leoTaken } from "./leoPerks";
 import { factionDmgMul, factionHurt, factionTaken } from "./faction";
 import { onyxHurt, onyxTaken } from "./onyx";
+import { crusaderHurt, crusaderTaken } from "./crusaderKit";
 export { cloudEnv } from "./pungHooks";
 import type { EnemyState, RunState } from "./types";
 
@@ -51,7 +52,7 @@ import type { EnemyState, RunState } from "./types";
 export function classTaken(s: RunState, taken: number): number {
   const p = s.player;
   idraHurt(s);
-  return disguise(s, mukinTaken(p, taken * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p, !!s.pvp) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p) * leoTaken(s) * onyxTaken(p) * thorkenTaken(p) * leviaTaken(p) * tailTaken(p) * madQueenTaken(p) * hookTaken(p) * orcaTaken(p) * waveTaken(p) * miryuTaken(p) * beaTaken(p) * gabrielTaken(p, !!s.pvp) * yurielTaken(p, !!s.pvp) * foeTakenMul(p) * factionTaken(s)));
+  return disguise(s, mukinTaken(p, taken * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p, !!s.pvp) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p) * leoTaken(s) * onyxTaken(p) * thorkenTaken(p) * leviaTaken(p) * tailTaken(p) * madQueenTaken(p) * hookTaken(p) * orcaTaken(p) * waveTaken(p) * miryuTaken(p) * beaTaken(p) * gabrielTaken(p, !!s.pvp) * yurielTaken(p, !!s.pvp) * crusaderTaken(p) * foeTakenMul(p) * factionTaken(s)));
 }
 
 /** 맞은 뒤 무적: 용 염옥·갓이터 패링 궁극기 동안은 없음 · 묵인은 아주 짧게 · 때린 적의 상태이상 (foeStatus) */
@@ -67,4 +68,5 @@ export function afterHurt(s: RunState, from?: EnemyKind, env = false): void {
   zeusHurt(s);
   pilgrimHurt(s);
   factionHurt(s);
+  crusaderHurt(s);
 }

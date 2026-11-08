@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.35",
+    date: "2026-11-08",
+    items: {
+      ko: [
+        "새벽의 성흔 새 캐릭터 크루세이더 '성십자가의 거인' (탱커, 스킬 없음, 성흔 게이지): 거대한 십자가를 둔기로 대지를 내리치는 거구 · 체력 175 · 공격력 18 · 방어력 4",
+        "내려찍기: 십자가를 머리 위로 들어 올렸다가 (버팀: 받는 피해 절반) 앞 땅을 내리찍음 (160% · 기절) → 땅이 십자가 모양으로 갈라져 마디마다 돌판이 솟음 (90%)",
+        "속죄의 무게: 받은 피해·맞힌 적만큼 차고 가득 차면 하늘에서 심판의 십자가 (260% · 긴 기절) · 대시는 성벽 돌진 (앞 적을 밀고 가 들이받기, 벽에 부딪히면 더 아픔)",
+        "성십자가 강림: 거대한 십자가 · 거인화 (받는 피해 -40%) · 내려찍을 때마다 심판 · 걸으면 땅이 울림 · 전용 아이템 20 (새 공격 방식: 여진 · 성주 · 가시 면류관 · 가시 후광 · 돌진 낙인 · 십자가 비 · 성묘)",
+      ],
+      en: [
+        "New Stigma of Dawn character Crusader 'Giant of the Holy Cross' (tank, no skills, Stigma gauge): a towering giant who strikes the earth with a colossal cross · HP 175 · Damage 18 · Defense 4",
+        "Slam: heave the cross overhead (Brace: half damage taken), then slam the ground ahead (160% · stun) → the ground splits in the shape of a cross, a stone slab bursting up at each joint (90%)",
+        "Weight of Penance: fills from damage taken and foes hit; when full, a Cross of Judgment falls from the sky (260% · long stun) · dashing is a Bulwark Charge (shove foes ahead and ram them, harder against walls)",
+        "Descent of the Holy Cross: a colossal cross · giant form (-40% damage taken) · every slam calls Judgment · footsteps shake the ground · 20 exclusive items (new attacks: Aftershock · Holy Pillars · Crown of Thorns · Thorned Halo · Charging Brand · Rain of Crosses · Holy Grave)",
+      ],
+      ja: [
+        "夜明けの聖痕の新キャラクター、クルセイダー「聖十字の巨人」（タンク、スキルなし、聖痕ゲージ）：巨大な十字架を鈍器に大地を打つ巨漢 · 体力175・攻撃力18・防御力4",
+        "叩きつけ：十字架を頭上に持ち上げ（踏ん張り：被ダメージ半分）前方の地面を叩きつける（160%・気絶）→ 地面が十字架の形に裂け、節ごとに石板が突き出る（90%）",
+        "贖罪の重み：受けたダメージ・当てた敵の分だけ溜まり、満ちると空から審判の十字架（260%・長い気絶）· ダッシュは城壁突進（前の敵を押して体当たり、壁にぶつかるとさらに痛い）",
+        "聖十字架降臨：巨大な十字架 · 巨人化（被ダメージ-40%）· 叩きつけるたびに審判 · 歩くと地面が揺れる · 専用アイテム20（新しい攻撃：余震・聖柱・茨の冠・茨の後光・突進の烙印・十字架の雨・聖墓）",
+      ],
+    },
+  },
+  {
     version: "0.50.34",
     date: "2026-11-08",
     items: {

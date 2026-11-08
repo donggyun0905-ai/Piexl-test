@@ -47,6 +47,8 @@ export { LUNATIC } from "./weaponsLunatic";
 export { LUNATIC_PERKS } from "./itemsLunatic";
 export { INCISION } from "./weaponsIncision";
 export { INCISION_PERKS } from "./itemsIncision";
+export { CRUSADER } from "./weaponsCrusader";
+export { CRUSADER_PERKS } from "./itemsCrusader";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";

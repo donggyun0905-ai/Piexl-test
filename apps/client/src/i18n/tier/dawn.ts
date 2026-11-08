@@ -4,6 +4,7 @@ import type { CharacterId } from "@pixel-rogue/shared";
 type Reasons = Partial<Record<CharacterId, string>>;
 
 export const TIER_KO_DAWN: Reasons = {
+  crusader: "십자가를 들어 올려(버팀) 내려찍고 땅을 십자가 모양으로 가르는 새벽의 성흔 탱커. 맞을수록 속죄의 무게가 차 심판의 십자가가 떨어지고, 대시로 적을 벽까지 밀어붙임 (새 캐릭터, 아직 평가 전)",
   blast: "5발 탄창 산탄총(5발마다 확정 치명타)과 대시 슬로우모션으로 싸우는 근접 화력형 악마 사냥꾼. 붙을수록 세지고 초근접 처치는 몸째 터뜨림. 맞힐수록 성흔이 차 가득 차면 달빛 각성 (새 캐릭터, 아직 평가 전)",
   nailer: "망치와 못으로 싸우는 스킬형 악마 사냥꾼. 1·2로 적에게 못을 쌓고 3 저주의 도화선으로 한 번에 터뜨림. 4 못비 30개 뒤 터뜨리면 가장 셈 (새 캐릭터, 아직 평가 전)",
   scissors: "쌍가위로 열고 닫는 두 박자 가위질에 운명의 실을 묶고, 대시로 멀리서 실을 끊어 베는 악마 사냥꾼. 체력이 적은 적은 목을 잘라 단죄 (새 캐릭터, 아직 평가 전)",
@@ -15,6 +16,7 @@ export const TIER_KO_DAWN: Reasons = {
 };
 
 export const TIER_EN_DAWN: Reasons = {
+  crusader: "The Stigma of Dawn's tank: heaves the cross (Brace), slams it down and splits the ground in the shape of a cross. Taking hits fills the Weight of Penance for a Cross of Judgment, and the dash pins foes against walls (new character, not rated yet)",
   blast: "A close-range firepower demon hunter fighting with a 5-shell shotgun (every 5th a guaranteed crit) and dash slow motion. Stronger the closer she is, and point-blank kills blow enemies apart. Hits fill her Stigma; when full she awakens in moonlight (new character, not yet rated)",
   nailer: "A skill-based demon hunter with hammer and nails. Stack nails with 1 and 2, then pop them all at once with 3 Cursed Fuse. Popping right after the 30 nails of 4 hits hardest (new character, not rated yet)",
   scissors: "A demon hunter whose twin shears open and close in two beats, tying threads of fate, then dash away to snap the threads and cut from afar. Low-health foes are beheaded on the spot (new character, not rated yet)",
@@ -26,6 +28,7 @@ export const TIER_EN_DAWN: Reasons = {
 };
 
 export const TIER_JA_DAWN: Reasons = {
+  crusader: "聖痕のタンク。十字架を持ち上げ（踏ん張り）叩きつけ、地面を十字に裂く。被弾で贖罪の重みが溜まり審判の十字架、ダッシュで敵を壁まで押し込む",
   blast: "5発弾倉の散弾銃（5発ごとに確定クリティカル）とダッシュのスローモーションで戦う近接火力型の悪魔狩り。近いほど強く、至近距離で倒すと体ごと吹き飛ばす。当てるほど聖痕が満ち、満ちると月光覚醒（新キャラクター、評価前）",
   nailer: "槌と釘で戦うスキル型の悪魔狩り。1・2で敵に釘を溜め、3 呪いの導火線で一気に爆ぜさせる。4の釘30本のあとに爆ぜさせると最も強い（新キャラ、まだ評価前）",
   scissors: "双鋏を開いて閉じる二拍子の鋏さばきで運命の糸を結び、ダッシュで離れて糸を断ち切って斬る悪魔狩り。体力の少ない敵は首を落として断罪（新キャラ、まだ評価前）",

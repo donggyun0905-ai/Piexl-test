@@ -1,4 +1,4 @@
-// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전) — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
+// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전 · 크루세이더) — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
 import { kit, SEC, sk } from "./pwKitKit";
 import type { PwKits } from "./pwSkillTypes";
 
@@ -50,5 +50,11 @@ export const PW_KITS_4: PwKits = {
     sk("icAxes", "dash", 7, "#ff5a5a", { range: 120, speed: 11, hit: { dmg: 1.3, push: 6 } }),
     sk("icAxes", "point", 10, "#c81e1e", { range: 160, radius: 48, delay: 14, fx: "meteor", hit: { dmg: 2.2, stun: 0.5 * SEC } }),
     sk("icAxes", "self", 60, "#ff2020", { radius: 110, fx: "pillar", buff: { ticks: 6 * SEC, dmg: 1.4 }, hit: { dmg: 1.7, push: 12 } }),
+  ),
+  crusader: kit(1,
+    sk("crCross", "point", 3, "#ffe08a", { range: 70, radius: 40, delay: 12, fx: "meteor", hit: { dmg: 1.5, stun: 0.3 * SEC, push: 6 } }),
+    sk("crCross", "dash", 7, "#fff2c0", { range: 110, speed: 9, hit: { dmg: 1.4, push: 14, stun: 0.5 * SEC } }),
+    sk("crCross", "self", 12, "#ffd36a", { radius: 60, fx: "pillar", buff: { ticks: 3 * SEC, taken: 0.5 }, hit: { dmg: 1.2, push: 8 } }),
+    sk("crCross", "point", 60, "#fff6d0", { range: 160, radius: 80, delay: 24, fx: "meteor", buff: { ticks: 6 * SEC, taken: 0.6 }, hit: { dmg: 2.6, stun: 1 * SEC, push: 14 } }),
   ),
 };

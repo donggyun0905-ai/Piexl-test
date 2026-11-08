@@ -6,6 +6,7 @@ import { STIGMA } from "../weaponsDawn";
 import { traitOf } from "./faction";
 import { addPickup, passivePool, pickDistinct, usePool } from "./loot";
 import { awaken } from "./stigma";
+import { crGain } from "./crusaderKit";
 import type { RunState } from "./types";
 
 /** 정령 상태를 모두 지움 */
@@ -46,6 +47,8 @@ export function practiceFactionFill(s: RunState): void {
     if (p.fcSp === "coin") p.fcCoin = (p.fcCoin ?? 0) + SPIRIT_COIN.tier1;
   }
   if (p.characterId === "blast" || p.characterId === "nailer" || p.characterId === "scissors" || p.characterId === "hellfist" || p.characterId === "silverBullet" || p.characterId === "blueFlame" || p.characterId === "lunatic" || p.characterId === "incision") awaken(p, STIGMA.awakeTicks);
+  // 크루세이더: 강림 시작 효과(거대한 십자가)까지 보이게 성흔을 채워 각성
+  if (p.characterId === "crusader") crGain(s, STIGMA.max);
 }
 
 /** 스킬 대기 초기화: 이름이 Cd로 끝나는 대기 값(숫자·배열)을 모두 0 */

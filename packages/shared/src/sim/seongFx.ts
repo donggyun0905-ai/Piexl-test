@@ -14,6 +14,7 @@ import type { SilverBulletFx } from "./sbTypes";
 import type { BlueFlameFx } from "./bzTypes";
 import type { LunaticFx } from "./lnTypes";
 import type { IncisionFx } from "./icTypes";
+import type { CrusaderFx } from "./crTypes";
 import type { FactionFx } from "./factionTypes";
 
-export type SeongFx = BeatriceFx | IanFx | GabrielFx | SerenaFx | RafaelFx | YurielFx | MichaelaFx | DawnFx | NailerFx | ScissorsFx | HellfistFx | SilverBulletFx | BlueFlameFx | LunaticFx | IncisionFx | FactionFx;
+export type SeongFx = BeatriceFx | IanFx | GabrielFx | SerenaFx | RafaelFx | YurielFx | MichaelaFx | DawnFx | NailerFx | ScissorsFx | HellfistFx | SilverBulletFx | BlueFlameFx | LunaticFx | IncisionFx | CrusaderFx | FactionFx;

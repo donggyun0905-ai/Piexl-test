@@ -104,6 +104,8 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   lunatic: { size: 40, footPad: 2, src: 128, v2: true },
   /** 인시전 (새벽의 성흔 쌍도끼의 도살자 · 광전사, 백발 땋은 포니테일·붉은 리본·흰 털 어깨·검은 갑옷·붉은 망토·붉은 쌍도끼) */
   incision: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 크루세이더 (새벽의 성흔 성십자가의 거인 · 탱커, 흰 판금 갑옷·가시 후광·붉은 머리채·흰 털 망토·붉은 망토·금테 거대한 돌 십자가) · 덩치가 커서 칸이 큼 */
+  crusader: { size: 46, footPad: 2, src: 128, v2: true },
   /** 오토마타 자매 인형 (진홍빛, 사용자 그림 2026-11-04) */
   automataDoll: { size: 32, footPad: 2, src: 128, v2: true },
   // 히든 캐릭터도 일반 캐릭터와 같은 크기 (2026-10-31) · 빛의 사도는 칸에 여백이 많아 키를 맞춘 크기(성장 모습은 단계마다 커짐) · 차원의 순례자는 소녀 키를 일반 캐릭터에 맞춤 (큰 가방은 그만큼 같이 커서 칸이 큼)

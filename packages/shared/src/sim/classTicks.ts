@@ -60,6 +60,7 @@ import { silverBulletTick } from "./silverBullet";
 import { blueFlameTick } from "./blueFlame";
 import { lunaticTick } from "./lunatic";
 import { incisionTick } from "./incision";
+import { crusaderTick } from "./crusader";
 import { blastTick } from "./blast";
 import { leoTick } from "./leo";
 import { onyxTick } from "./onyx";
@@ -140,6 +141,7 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   blueFire: blueFlameTick,
   moonRapier: lunaticTick,
   twinAxe: incisionTick,
+  greatCross: crusaderTick,
   blast: blastTick,
   lion: leoTick,
   gem: onyxTick,

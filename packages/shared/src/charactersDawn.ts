@@ -17,4 +17,6 @@ export const DAWN_CHARACTERS = {
   lunatic: { id: "lunatic", maxHp: 115, damage: 15, moveSpeed: 1.4, luck: 3, startWeapon: "lnRapier", defense: 2 },
   /** 새벽의 성흔(광전사): 인시전 도살자의 쌍도끼 네 박자(오른·왼 베기 → 교차 → 회오리) · 도륙 콤보(단계마다 공격 속도·피해) · 콤보 30마다 도살 도약 · 돌진 연참 · 성흔 → 광란 각성 (sim/incision) */
   incision: { id: "incision", maxHp: 130, damage: 13, moveSpeed: 1.35, luck: 1, startWeapon: "icAxes", defense: 2 },
+  /** 새벽의 성흔(탱커): 크루세이더 성십자가 내려찍기(들어 올리는 동안 버팀) → 십자 균열 · 속죄의 무게 가득 → 심판의 십자가 · 성벽 돌진 · 성흔 → 성십자가 강림 각성 거인화 (sim/crusader) */
+  crusader: { id: "crusader", maxHp: 175, damage: 18, moveSpeed: 1.1, luck: 1, startWeapon: "crCross", defense: 4 },
 } as const;

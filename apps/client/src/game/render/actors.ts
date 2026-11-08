@@ -26,6 +26,7 @@ import { drawSlayerGauge } from "./slayer";
 import { fenrirLift } from "./fenrirBits";
 import { drawEclipseGauge, eclipseLift, eclipseSheet } from "./eclipseAura";
 import { playerSheet } from "./playerSheet";
+import { giantBody } from "./crusaderBody";
 
 export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   // 무리 여왕이 부른 기는 적은 인큐버스 그림
@@ -196,8 +197,10 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     // 패왕전: 편 색 외곽선
     if (s.pw && inBush(s.pw.arena, x, y)) ctx.globalAlpha *= 0.5;
     if (!hideBody && !p.mRaid) footShadow(ctx, x, y, p.r);
-    if (!hideBody && !p.mRaid && s.pvp) drawPwBody(ctx, s, ...look);
-    else if (!hideBody && !p.mRaid) breathe(ctx, x, y + p.r, s.tick, !moving && !pose.casting, () => drawBody(ctx, ...look));
+    giantBody(ctx, p, x, y + p.r, () => {
+      if (!hideBody && !p.mRaid && s.pvp) drawPwBody(ctx, s, ...look);
+      else if (!hideBody && !p.mRaid) breathe(ctx, x, y + p.r, s.tick, !moving && !pose.casting, () => drawBody(ctx, ...look));
+    });
     if (twirl) ctx.restore();
     ctx.filter = "none";
     ctx.globalAlpha = 1;
