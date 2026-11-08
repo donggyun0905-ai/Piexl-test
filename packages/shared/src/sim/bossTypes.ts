@@ -1,7 +1,8 @@
 // 새 보스용 상태 타입. 모두 선택 값 (예전 저장에는 없음)
 import type { BossKind } from "../content";
+import type { S3BossEnemyState } from "./s3BossTypes";
 
-export interface BossEnemyState {
+export interface BossEnemyState extends S3BossEnemyState {
   /** 보스 행동 안의 몇 번째 단계 (연속 베기·돌진 횟수 등) */
   step?: number;
   /** 보스가 잠깐 쓰는 값 (활잡이 뛰기 대기·검신 일섬 끝 자리 등) */

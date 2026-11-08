@@ -38,6 +38,8 @@ describe("방 모양", () => {
     expect(a.rooms.map((r) => r.shape)).toEqual(b.rooms.map((r) => r.shape));
     for (const r of a.rooms) {
       if (r.type === "combat" || r.type === "elite") expect(r.shape.id).toBeGreaterThanOrEqual(0);
+      // 시즌 2 새 보스방은 그 보스 벽 배치 (1000~)
+      else if (r.type === "exit") expect(r.shape.id === -1 || r.shape.id >= 1000).toBe(true);
       else expect(r.shape.id).toBe(-1);
     }
   });

@@ -40,8 +40,9 @@ import { snFoeTaken } from "./serenaKit";
 import { yrFoeTaken, yurielTaken } from "./yurielKit";
 import { evilTaken } from "./beatriceKit";
 /** 적이 받는 피해 배율 (베아트리스 악 · 이안 속박 · 가브리엘 압박 · 세레나 마비, combat.damageEnemy) */
-export const foeTaken = (s: RunState, e: EnemyState) => evilTaken(s, e) * ianTaken(s, e) * gbFoeTaken(s, e) * snFoeTaken(s, e) * yrFoeTaken(s, e) * factionDmgMul(s);
+export const foeTaken = (s: RunState, e: EnemyState) => evilTaken(s, e) * ianTaken(s, e) * gbFoeTaken(s, e) * snFoeTaken(s, e) * yrFoeTaken(s, e) * factionDmgMul(s) * gateTaken(e);
 import { leoTaken } from "./leoPerks";
+import { gateTaken } from "./bossGatekeeper";
 import { factionDmgMul, factionHurt, factionTaken } from "./faction";
 import { onyxHurt, onyxTaken } from "./onyx";
 import { crusaderHurt, crusaderTaken } from "./crusaderKit";

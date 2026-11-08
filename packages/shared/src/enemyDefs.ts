@@ -1,7 +1,8 @@
 // 적 정의 (졸개·보스·허수아비 수치, 층마다 보스). content에서 다시 내보냄
-import { createRng, deriveSeed } from "./rng";
+import { S3_ENEMIES, type S3BossKind, type S3PropKind } from "./enemyDefsS3";
+export type { S3BossKind, S3PropKind };
 
-export type MinionKind = "crawler" | "spitter" | "charger" | "mortar" | "gnat" | "guardian" | "paladin" | "tower" | "fort" | "ruinblade" | "chaosblade" | "soul" | "ghost" | StalkerKind | NewFoeKind | TdMinionKind;
+export type MinionKind = S3PropKind | "crawler" | "spitter" | "charger" | "mortar" | "gnat" | "guardian" | "paladin" | "tower" | "fort" | "ruinblade" | "chaosblade" | "soul" | "ghost" | StalkerKind | NewFoeKind | TdMinionKind;
 /** 시즌 2 새 몬스터 (sim/stalkers): 도플갱어 · 베놈 · 땅 물고기 · 그림자 */
 export type StalkerKind = "doppel" | "venom" | "landfish" | "lurker";
 /** 시즌 3 새 몬스터 (sim/newFoes): 폭발풍뎅이 · 스켈레톤 궁병 · 쇠사슬 간수 · 하이오크 */
@@ -9,7 +10,7 @@ export type NewFoeKind = "bombbug" | "skelarcher" | "chainward" | "highorc";
 /** 타워 디펜스에만 나오는 적 (sim/tdWaves) */
 export type TdMinionKind = "slime" | "runner" | "bat" | "beetle" | "golem" | "shaman" | "eggsac" | "wisp";
 /** 보스: 1·2층(1단계) 강철 거구·검은 기사·얍삽한 활잡이·두꺼비 왕·불도롱뇽 · 3·4층(2단계) 무리 여왕·세이렌·켄타우로스·하드플랜트·번개 해파리 · 5·6층(3단계) 공허의 눈·데스·검신·천사장·유령선 선장 */
-export type BossKind = "hulk" | "knight" | "archer" | "toad" | "salamander" | "brood" | "siren" | "centaur" | "plant" | "jelly" | "seer" | "reaper" | "swordgod" | "archangel" | "captain" | LastBossKind;
+export type BossKind = "hulk" | "knight" | "archer" | "toad" | "salamander" | "brood" | "siren" | "centaur" | "plant" | "jelly" | "seer" | "reaper" | "swordgod" | "archangel" | "captain" | S3BossKind | LastBossKind;
 /** 라스트 보스 (6층을 깬 뒤 골라서 도전, 7층 큰 보스방) */
 export type LastBossKind = "dragon" | "godeater" | "plight" | "pdark" | "umbra" | "demigod" | "sage";
 /** 고를 수 있는 라스트 보스 (태초의 빛을 고르면 태초의 어둠도 같이 나옴) */
@@ -127,6 +128,7 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   jelly: { kind: "jelly", hp: 560, radius: 11, speed: 0.3, contactDamage: 12, gold: 25, boss: true },
   /** 시즌 2 3단계 보스: 유령선 선장 (대포 줄 포격 · 닻 던져 끌기 · 밀물 · 물에 빠진 선원, sim/bossCaptain) */
   captain: { kind: "captain", hp: 660, radius: 10, speed: 0.4, contactDamage: 16, gold: 30, boss: true },
+  ...S3_ENEMIES,
   /** 라스트 보스: 멸망의 용 (sim/bossDragon) */
   /** 라스트 보스: 갓이터 (대검 두 자루를 먼저 부숴야 맞음, sim/bossHades·bossBlades) */
   godeater: { kind: "godeater", hp: 2800, radius: 24, speed: 0.3, contactDamage: 18, gold: 100, boss: true, parry: 0.4 },
@@ -154,15 +156,4 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   roc: { kind: "roc", hp: 2000, radius: 42, speed: 0, contactDamage: 14, gold: 0, boss: true },
 };
 
-/** 단계마다 나올 수 있는 보스 (1·2층 · 3·4층 · 5·6층) */
-export const BOSS_TIERS: readonly (readonly BossKind[])[] = [
-  ["hulk", "knight", "archer", "toad", "salamander"],
-  ["brood", "siren", "centaur", "plant", "jelly"],
-  ["seer", "reaper", "swordgod", "archangel", "captain"],
-];
-
-/** 층마다 나오는 보스: 그 단계 보스 중 시드로 하나 (무한 모드 7층부터는 모든 보스 중) */
-export function bossForFloor(floor: number, seed: number): BossKind {
-  const tier = floor > 6 ? BOSS_TIERS.flat() : BOSS_TIERS[Math.min(2, Math.floor((floor - 1) / 2))]!;
-  return tier[createRng(deriveSeed(seed, "bossKind", floor)).int(0, tier.length - 1)]!;
-}
+export { BOSS_TIERS, bossForFloor } from "./bossTiers";

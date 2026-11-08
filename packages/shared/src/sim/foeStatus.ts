@@ -55,11 +55,14 @@ const BY_FOE: Partial<Record<EnemyKind, [Field, keyof typeof R]>> = {
   charger: ["dbSlow", "SLOW_TICKS"],
   bombbug: ["dbBurn", "BURN_TICKS"],
   highorc: ["dbBleed", "BLEED_TICKS"],
+  // 시즌 3 단계별 보스: 쌍둥이 루 할퀴기·핏줄 출혈 · 달을 삼키는 자 그림자 손 속박
+  twinlu: ["dbBleed", "BLEED_TICKS"],
+  mooneater: ["dbRoot", "ROOT_TICKS"],
 };
 
-/** 몸에 닿았을 때 상태이상을 거는 적 (가디언은 돌진 중일 때만 기절 · 성기사는 빛기둥만 속박, 몸에 닿으면 없음) */
+/** 몸에 닿았을 때 상태이상을 거는 적 (가디언은 돌진 중일 때만 기절 · 성기사·달을 삼키는 자는 빛기둥·그림자 손만 속박, 몸에 닿으면 없음) */
 export const touchFoe = (e: { kind: EnemyKind; phase: string }): EnemyKind | undefined =>
-  e.kind === "paladin" || (e.kind === "guardian" && e.phase !== "charge") ? undefined : e.kind;
+  e.kind === "paladin" || e.kind === "mooneater" || (e.kind === "guardian" && e.phase !== "charge") ? undefined : e.kind;
 
 /** 맞은 뒤 (combat.damagePlayer 끝): 때린 적에 맞는 상태이상 (저주는 걸려 있으면 시간을 늘리지 않음 → 꼭 터짐) */
 export function afflict(s: RunState, from: EnemyKind | undefined): void {

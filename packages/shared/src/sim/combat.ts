@@ -1,6 +1,6 @@
 // 피해 주고받기·처치
+import { holdDown } from "./bossTwins";
 import { remnantDodge } from "./remnant";
-import { killGold } from "./loot";
 import { endlessPow } from "./endless";
 import { trialFoeDmg, trialKill } from "./trialFoes";
 import { knock as knockHit } from "./knock";
@@ -20,13 +20,12 @@ import { roleDmgMul } from "./pwMatchup";
 import { afterHurt, classTaken, cloudEnv, foeTaken } from "./classTaken";
 import { dodged, extraTaken, onHitExtra, sharpBonus } from "./baseStats";
 // 돈 얻기는 sim/loot (가질 수 있는 돈 한도)
-import { addGold } from "./loot";
+import { addGold, killGold } from "./loot";
 export { addGold };
 import { tickDots } from "./status";
 export { dotDamage, ignite } from "./status";
 import { swarmLucky } from "./swarmRules";
 import { SWARM_LEVELS } from "../swarmMaps";
-import { ultBoss } from "./bossKit";
 import { heal, leechHeal } from "./heal";
 import { moonOut } from "./moonlight";
 import { hatchSlimes } from "./critters";
@@ -238,8 +237,8 @@ export function updatePending(s: RunState): void {
 /** 쓰러진 적 정리: 처치 수·돈. 보스가 쓰러지면 부른 적도 사라짐 (불려 나온 보스는 아님) */
 export function removeDead(s: RunState): void {
   if (!s.enemies.some((e) => e.hp <= 0)) return;
-  // 라스트 보스는 궁극기를 쓰기 전에는 쓰러지지 않음 (체력 1)
-  for (const e of s.enemies) if (e.hp <= 0 && !e.ultDone && ultBoss(e)) e.hp = 1;
+  // 라스트 보스는 궁극기 전에 · 쌍둥이는 짝이 서 있으면 쓰러지지 않음 (sim/bossTwins)
+  holdDown(s);
   const bossDown = s.enemies.some((e) => e.hp <= 0 && ENEMIES[e.kind].boss && !e.noGold);
   const alive: EnemyState[] = [];
   const fallen: { x: number; y: number; seat: number }[] = [];

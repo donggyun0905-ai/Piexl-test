@@ -10,6 +10,11 @@ export const UMBRA_TEXT = {
   bossSalamander: { ko: "불도롱뇽", en: "Magma Salamander", ja: "火山サラマンダー" },
   bossJelly: { ko: "번개 해파리", en: "Storm Jellyfish", ja: "雷クラゲ" },
   bossCaptain: { ko: "유령선 선장", en: "Ghost Ship Captain", ja: "幽霊船の船長" },
+  // 시즌 3 단계별 보스
+  bossGatekeeper: { ko: "지옥문 수문장", en: "Hellgate Keeper", ja: "地獄門の門番" },
+  bossTwinLu: { ko: "쌍둥이 악마 루", en: "Twin Demon Lu", ja: "双子の悪魔ルー" },
+  bossTwinRe: { ko: "쌍둥이 악마 레", en: "Twin Demon Re", ja: "双子の悪魔レー" },
+  bossMoonEater: { ko: "달을 삼키는 자", en: "Moon Devourer", ja: "月を呑む者" },
   sageMaxStaff: { ko: "제천대성이 여의봉을 크기를 최대한 늘립니다!", en: "The Great Sage stretches his staff to its utmost size!", ja: "斉天大聖が如意棒を最大まで伸ばします！" },
   umbraSay0: { ko: "……어디 놀아 볼까.", en: "...Let us play.", ja: "……遊んでやろう。" },
   umbraSay1: { ko: "호오...", en: "Hoh...", ja: "ほう…" },

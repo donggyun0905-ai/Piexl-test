@@ -20,7 +20,9 @@ function thumbOf(group: string, id: string): Thumb | undefined {
   if (has(CHARACTERS, id)) return { char: id };
   if (ENEMY_SPRITES.includes(id)) return { enemy: id };
   // 보스 기술 수치 표 (BOSS_TOAD_RULES → toad)
-  const boss = /^BOSS_([A-Z]+)_RULES$/.exec(id)?.[1]?.toLowerCase();
+  // 두 낱말 보스(BOSS_MOON_EATER_RULES → mooneater) · 쌍둥이(BOSS_TWINS_RULES → 루)
+  const raw = /^BOSS_([A-Z_]+)_RULES$/.exec(id)?.[1]?.replace(/_/g, "").toLowerCase();
+  const boss = raw === "twins" ? "twinlu" : raw;
   if (boss && ENEMY_SPRITES.includes(boss)) return { enemy: boss };
   const owner = ruleCharId(id);
   if (owner && has(CHARACTERS, owner)) return { char: owner };

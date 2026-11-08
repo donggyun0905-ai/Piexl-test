@@ -24,6 +24,9 @@ import { updateRoc } from "./bossRoc";
 import { updateDemigod } from "./bossDemigod";
 import { updateSage } from "./bossSage";
 import { updateToad } from "./bossToad";
+import { updateGateProp, updateGatekeeper } from "./bossGatekeeper";
+import { updateTwin } from "./bossTwins";
+import { updateMoonEater, updateMoonShard } from "./bossMoonEater";
 import { updateSalamander } from "./bossSalamander";
 import { updateJelly } from "./bossJelly";
 import { updateCaptain } from "./bossCaptain";
@@ -59,6 +62,14 @@ const BOSS_AI: Partial<Record<EnemyState["kind"], BossAi>> = {
   salamander: (s, e, toP, go) => updateSalamander(s, e, toP, go),
   jelly: (s, e, toP, go) => updateJelly(s, e, toP, go),
   captain: updateCaptain,
+  // 시즌 3 단계별 보스 (문·임프·달 조각도 여기서)
+  gatekeeper: updateGatekeeper,
+  hellgate: (s, e, _toP, go) => updateGateProp(s, e, go),
+  imp: (s, e, _toP, go) => updateGateProp(s, e, go),
+  twinlu: updateTwin,
+  twinre: updateTwin,
+  mooneater: updateMoonEater,
+  moonshard: (_s, e) => updateMoonShard(e),
 };
 
 export function updateBoss(s: RunState, e: EnemyState, toP: readonly [number, number], go: readonly [number, number], spawned: EnemyState[]): void {

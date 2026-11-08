@@ -75,6 +75,7 @@ import { drawWandererAura, drawWandererGround } from "./wanderer";
 import { drawSilkAmmo, drawSilkStacks } from "./silk";
 import { drawSecretAura, drawSecretGround } from "./secret";
 import { drawBossBar, drawFx, drawProjectiles, drawReticleFor } from "./shots";
+import { drawS3Dark, drawS3Ground } from "./s3Bosses";
 
 export interface DrawOptions {
   /** 0~1: 이전 틱과 이번 틱 사이 위치 */
@@ -208,6 +209,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
     drawSecretGround(ctx, s, alpha, snap);
   });
   drawStatusGround(ctx, s, alpha, snap);
+  drawS3Ground(ctx, s, alpha, snap);
   drawEnemies(ctx, s, alpha, snap);
   drawStatusAir(ctx, s, alpha, snap);
   drawPilgrim(ctx, s, opt.pilgrimLine);
@@ -259,6 +261,8 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
   });
   drawProjectiles(ctx, s, alpha, snap);
   drawFx(ctx, s, alpha, snap);
+  // 달을 삼키는 자: 어둠 (효과 위, 화면 글자 아래)
+  drawS3Dark(ctx, s, alpha, snap);
   drawCurseText(ctx, s, opt.curseNames, alpha, snap);
   drawPrimevalOverlay(ctx, s, alpha, snap);
   drawVaultOverlay(ctx, s);

@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.37",
+    date: "2026-11-09",
+    items: {
+      ko: [
+        "시즌 3 새 단계별 보스 셋 (단계마다 하나씩 섞여 나옴): 1단계 지옥문 수문장 · 2단계 피로 이어진 쌍둥이 루·레 · 3단계 달을 삼키는 자",
+        "지옥문 수문장: 방 곳곳에 지옥문을 열고 그 사이를 넘나들며 내려찍음 · 열린 문에서 임프 · 쇠문짝 돌진 · 사슬로 끌어당기기 · 문을 부술 때마다 경직하고 받는 피해 증가, 다 부수면 무릎 꿇음 (체력 절반 아래: 문 넷·불붙은 임프)",
+        "피로 이어진 쌍둥이: 둘 사이 핏줄을 지나가면 출혈 · 루는 세 번 뛰어들며 할퀴기 · 레는 쫓아오는 피 구슬(루에게 닿으면 회복) · 가끔 자리 바꾸기 · 한쪽만 쓰러뜨리면 6초 뒤 다시 일어남 (협동은 4초) → 둘을 함께",
+        "달을 삼키는 자: 방이 어둡고 천장의 달이 차오름 · 달 조각을 깨면 달빛 기둥 · 보름달 월식은 기둥 안에서만 피함 · 그림자 손(속박) · 기둥 삼키기 · 새벽의 성흔은 이 방에서 성흔이 줄고 달 조각을 깨면 참",
+        "관리자 페이지: 새 보스 수치 모두 (보스 탭 · 지옥문·임프·달 조각은 적 탭) · 연습장 단계 보스 목록에도",
+      ],
+      en: [
+        "Three new Season 3 stage bosses (one mixed into each tier): Tier 1 Hellgate Keeper · Tier 2 the blood-bound twins Lu and Re · Tier 3 Moon Devourer",
+        "Hellgate Keeper: opens hell gates around the room and leaps between them to slam down · imps pour from open gates · iron-door charge · chain pull · every broken gate staggers it and raises the damage it takes; break them all and it kneels (below half HP: four gates, burning imps)",
+        "Blood-bound twins: crossing the blood vein between them makes you bleed · Lu leaps and claws three times · Re sends homing blood orbs (they heal Lu) · they sometimes swap places · fell only one and it rises after 6s (4s in co-op), so take them down together",
+        "Moon Devourer: the room goes dark as the moon waxes overhead · break moon shards to raise pillars of moonlight · only the pillars shelter you from the full-moon eclipse · shadow hands (root) · it devours pillars · Stigma of Dawn characters lose Stigma here and regain it by breaking shards",
+        "Admin page: every number of the new bosses (boss tab · gates, imps and moon shards in the enemy tab) · also in the practice stage-boss list",
+      ],
+      ja: [
+        "シーズン3の新しい段階ボス3体（段階ごとに1体ずつ混ざって登場）：1段階 地獄門の門番 · 2段階 血で繋がった双子ルー・レー · 3段階 月を呑む者",
+        "地獄門の門番：部屋のあちこちに地獄門を開き、その間を行き来して叩きつける · 開いた門からインプ · 鉄扉の突進 · 鎖で引き寄せ · 門を壊すたびによろめき被ダメージ増加、全部壊すと膝をつく（体力半分以下：門4つ・燃えるインプ）",
+        "血で繋がった双子：二人の間の血の筋を通ると出血 · ルーは3回飛びかかって引っかく · レーは追ってくる血の玉（ルーに触れると回復）· 時々位置を入れ替える · 片方だけ倒すと6秒後に起き上がる（協力は4秒）→ 二人一緒に",
+        "月を呑む者：部屋が暗くなり天井の月が満ちていく · 月の欠片を壊すと月光の柱 · 満月の月食は柱の中でだけ避けられる · 影の手（拘束）· 柱を呑む · 夜明けの聖痕はこの部屋で聖痕が減り、欠片を壊すと溜まる",
+        "管理者ページ：新ボスの数値すべて（ボスタブ · 門・インプ・月の欠片は敵タブ）· 練習場の段階ボス一覧にも",
+      ],
+    },
+  },
+  {
     version: "0.50.36",
     date: "2026-11-08",
     items: {

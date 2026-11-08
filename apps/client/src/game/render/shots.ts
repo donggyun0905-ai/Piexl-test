@@ -44,6 +44,7 @@ import { drawHiddenFx } from "./pilgrim";
 import { getSettings } from "../../settings";
 import { drawLanceShot } from "./hiddenGear";
 import { drawBaseShot, drawBlast, drawBurst, drawHit, drawSwing } from "./baseFx";
+import { drawS3Bar, drawS3Fx } from "./s3Bosses";
 
 export function drawProjectiles(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   for (const pr of s.projectiles) {
@@ -143,7 +144,7 @@ export function drawEffects(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       continue;
     }
     drawFxBloom(ctx, fx, px, py, snap);
-    if (drawOriginFx(ctx, fx, snap) || drawStationFx(ctx, fx, snap) || drawHiddenFx(ctx, fx, snap) || drawS2BossFx(ctx, s, fx, snap) || drawS1BossFx(ctx, s, fx, snap)) continue;
+    if (drawOriginFx(ctx, fx, snap) || drawStationFx(ctx, fx, snap) || drawHiddenFx(ctx, fx, snap) || drawS2BossFx(ctx, s, fx, snap) || drawS3Fx(ctx, fx, snap) || drawS1BossFx(ctx, s, fx, snap)) continue;
     if (drawPwSkillFx(ctx, fx, snap) || drawTintedFx(ctx, fx, px, py, snap) || drawCustomFx(ctx, fx, px, py, snap)) continue;
     if (drawLaserFx(ctx, s, fx, px, py, snap) || drawMedicFx(ctx, s, fx, px, py, snap)) continue;
     if (drawOrbitFx(ctx, fx, snap)) continue;
@@ -188,6 +189,8 @@ export function drawBossBar(ctx: CanvasRenderingContext2D, s: RunState): void {
   const by = Math.round(h * 0.04);
   // 검은 잔영: 짐승마다 따로 떨어진 같은 길이 막대 셋
   if (boss.kind === "umbra") return drawUmbraBar(ctx, s, boss, bx, by, bw, bh);
+  // 쌍둥이: 막대 둘 · 달을 삼키는 자: 아래에 천장의 달 (render/s3Bosses)
+  if (drawS3Bar(ctx, s, boss, bx, by, bw, bh)) return;
   ctx.fillStyle = "rgba(0,0,0,0.7)";
   ctx.fillRect(bx - 2, by - 2, bw + 4, bh + 4);
   ctx.fillStyle = C.bossCore;

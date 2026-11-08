@@ -4,6 +4,7 @@ import { drawHiddenFoe } from "./hiddenTrial";
 import { type EnemyState, type RunState } from "@pixel-rogue/shared";
 import { drawCharacter, drawEnemySprite, sheetFor } from "../sprites";
 import { C, type Snap } from "./palette";
+import { drawS3Actor } from "./s3Bosses";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -80,6 +81,8 @@ function drawBurrow(ctx: Ctx, s: RunState, e: EnemyState, x: number, y: number):
 
 /** 새 몬스터면 그리고 true (뛰어오른 땅 물고기·베놈은 보통 그림) */
 export function drawStalker(ctx: Ctx, s: RunState, e: EnemyState, x: number, y: number): boolean {
+  // 시즌 3 단계별 보스의 문·임프·달 조각·쓰러진 쌍둥이 (render/s3Bosses)
+  if (drawS3Actor(ctx, s, e, x, y)) return true;
   // 숨은 시련 구조물(성벽·살포기·해적선) · 독안개 속에 숨은 적 (render/hiddenTrial)
   if (drawHiddenFoe(ctx, s, e, x, y)) return true;
   if (e.kind === "doppel") return drawDoppel(ctx, s, e, x, y);

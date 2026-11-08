@@ -195,3 +195,6 @@ export { spikeState, makeTerrain, terrainIdle } from "./terrain";
 export type { TerrainState } from "./terrainTypes";
 export { luxShards, luxStage } from "./lux";
 export { archerAim, bugFuse, NEW_FOES_RULES, orcLethal, orcRage } from "./newFoes";
+export { BOSS_GATEKEEPER_RULES } from "./bossGatekeeper";
+export { BOSS_TWINS_RULES } from "./bossTwins";
+export { BOSS_MOON_EATER_RULES } from "./bossMoonEater";
