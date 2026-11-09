@@ -25,6 +25,8 @@ function goal(s: RunState): TextKey | null {
   const info = s.map.rooms[s.roomId];
   const st = s.rooms[s.roomId];
   if (!info || !st) return null;
+  // 레이드 준비 방·레이드 방: 방마다 할 일 (i18n/text/raidBoss)
+  if (s.raidBoss && s.roomId <= 4) return `raidGoal_${s.roomId}` as TextKey;
   if (!st.cleared && s.enemies.length > 0) return info.type === "exit" ? "goalBoss" : "goalClear";
   if (info.type === "exit") return "goalStairs";
   const special: Record<string, TextKey> = { shop: "goalShop", treasure: "goalTreasure", golden: "goalGolden", rest: "goalRest" };

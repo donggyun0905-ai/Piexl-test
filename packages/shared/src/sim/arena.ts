@@ -115,11 +115,12 @@ function arenaRewards(s: RunState, roomId: number): void {
 
 /** 보상 사용 아이템을 가짐: 두 개를 가지면 남은 것은 사라짐 (칸이 차서 바꾼 아이템은 묶음에서 빠짐) */
 export function arenaUsePick(s: RunState, pk: Pickup, swapped: boolean): void {
-  s.arenaPicks = (s.arenaPicks ?? 0) + 1;
+  // 레이드 무장실은 사람마다 셈 (sim/raid)
+  const n = s.raidBoss ? (s.player.raidUse = (s.player.raidUse ?? 0) + 1) : (s.arenaPicks = (s.arenaPicks ?? 0) + 1);
   if (swapped) pk.group = 0;
-  if (s.arenaPicks >= R.USE_PICKS) {
+  if (n >= R.USE_PICKS) {
     const room = s.rooms[s.roomId]!;
-    room.pickups = room.pickups.filter((x) => x.group !== ARENA_USE_GROUP);
+    room.pickups = room.pickups.filter((x) => x.group !== ARENA_USE_GROUP || x.owner !== pk.owner);
   }
 }
 

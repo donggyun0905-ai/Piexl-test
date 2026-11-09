@@ -11,7 +11,7 @@ import { ADMIN_PRACTICE, ADMIN_TD } from "./balance";
 import { useLang } from "./i18n";
 import { loadSavedRun, newSeedText, seedFromUrl, soloUnlocks } from "./records";
 import { TitleScreen } from "./TitleScreen";
-import { ArenaBoard, BattleScreen, CoopScreen, HallOfFame, PwFlow, ShopScreen, StoryScreen, SwarmGame, SwarmMaps, TdGame, TdScreen, TierScreen } from "./lazyScreens";
+import { ArenaBoard, BattleScreen, CoopScreen, HallOfFame, PwFlow, RaidFlow, ShopScreen, StoryScreen, SwarmGame, SwarmMaps, TdGame, TdScreen, TierScreen } from "./lazyScreens";
 
 type Screen =
   | { name: "title" }
@@ -26,6 +26,7 @@ type Screen =
   | { name: "tier" }
   | { name: "swarmSelect" }
   | { name: "paewang" }
+  | { name: "raid" }
   | { name: "swarmMap"; characterId: CharacterId }
   | { name: "swarm"; characterId: CharacterId; map: SwarmMapId; level: number; runKey: number }
   | { name: "td"; mapId: TdMapId; runKey: number }
@@ -150,6 +151,7 @@ export function App() {
   if (screen.name === "swarmSelect") return <CharacterSelect t={lang.t} showSeed={false} onBack={toTitle} onSelect={(characterId) => setScreen({ name: "swarmMap", characterId })} />;
   if (screen.name === "swarmMap") return <SwarmMaps t={lang.t} onPick={(map, level) => setScreen({ name: "swarm", characterId: screen.characterId, map, level, runKey: 0 })} onBack={() => setScreen({ name: "swarmSelect" })} />;
   if (screen.name === "paewang") return <PwFlow lang={lang.lang} setLang={lang.setLang} t={lang.t} onExit={toTitle} />;
+  if (screen.name === "raid") return <RaidFlow lang={lang.lang} setLang={lang.setLang} t={lang.t} onExit={toTitle} />;
   if (screen.name === "swarm") {
     const retry = () => setScreen({ ...screen, runKey: screen.runKey + 1 });
     const exit = () => setScreen({ name: "swarmMap", characterId: screen.characterId });
@@ -281,6 +283,7 @@ export function App() {
       onTierList={() => setScreen({ name: "tier" })}
       onSwarm={() => setScreen({ name: "swarmSelect" })}
       onPaewang={() => setScreen({ name: "paewang" })}
+      onRaid={() => setScreen({ name: "raid" })}
       onProfile={() => setScreen({ name: "profile", back: "title" })}
       onContinue={() => {
         const saved = loadSavedRun();

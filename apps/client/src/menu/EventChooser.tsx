@@ -9,10 +9,11 @@ interface Props {
   t: (key: TextKey) => string;
   onSwarm: () => void;
   onPaewang: () => void;
+  onRaid: () => void;
   onClose: () => void;
 }
 
-export function EventChooser({ t, onSwarm, onPaewang, onClose }: Props) {
+export function EventChooser({ t, onSwarm, onPaewang, onRaid, onClose }: Props) {
   const closeRef = useRef<HTMLButtonElement>(null);
   useEffect(() => closeRef.current?.focus(), []);
   const best = loadSwarmBest();
@@ -28,6 +29,7 @@ export function EventChooser({ t, onSwarm, onPaewang, onClose }: Props) {
             onClick={onSwarm}
           />
           <Choice icon="crown" title={t("paewang")} desc={t("paewangDesc")} onClick={onPaewang} />
+          <Choice icon="castle" title={t("raidEvent")} desc={t("raidEventDesc")} onClick={onRaid} />
         </div>
         <button ref={closeRef} type="button" className="ghost" onClick={onClose}>
           {t("close")}

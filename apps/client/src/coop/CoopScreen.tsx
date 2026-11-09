@@ -1,5 +1,5 @@
 // 협동: 입장(빠른 매칭 · 방 만들기 · 코드) → 대기실(배틀 대기실을 같이 씀, 방장과 직접 연결) → 게임
-import { RANK_MODE, type CharacterId, type RankChange, type RankQueue, type RoomView } from "@pixel-rogue/shared";
+import { RANK_MODE, type CharacterId, type RaidEventBoss, type RankChange, type RankQueue, type RoomView } from "@pixel-rogue/shared";
 import { useEffect, useRef, useState } from "react";
 import { apiPost } from "../api";
 import { BattleEntry } from "../battle/BattleEntry";
@@ -28,10 +28,11 @@ interface Props {
   /** 패왕전 랭크전 (빠른 매칭으로 바로 들어가고, 대결은 정해져 있음) · 끝나고 다시 찾기 */
   rank?: RankQueue;
   onAgain?: () => void;
+  raid?: RaidEventBoss; // 이벤트 '레이드' (방장이 시작하면 레이드 판, 빈자리는 AI)
   onExit: () => void;
 }
 
-export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false, rank, onAgain, onExit }: Props) {
+export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false, rank, onAgain, raid, onExit }: Props) {
   const [characterId, setCharacterId] = useState<CharacterId>(loadCharacter);
   const [room, setRoom] = useState<RoomView | null>(null);
   const [you, setYou] = useState("");
@@ -105,7 +106,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
 
   const quick = async (exclude?: string) => {
     setBusy(true);
-    const res = rank ? await apiPost<{ code: string }>("/api/match/rank", { exclude, kind: rank }) : await apiPost<{ code: string }>("/api/match/quick", { exclude, kind: "coop" });
+    const res = rank ? await apiPost<{ code: string }>("/api/match/rank", { exclude, kind: rank }) : await apiPost<{ code: string }>("/api/match/quick", { exclude, kind: raid ? "raid" : "coop" });
     if (res.ok && res.data) connect(res.data.code, "quick");
     else {
       setBusy(false);
@@ -127,12 +128,10 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
     setRoom(null);
     setBusy(false);
   };
-
   const hostPid = room?.hostPid ?? "";
   const isHost = !!you && hostPid === you;
   const seatPids = pwSeatPids(room);
   const pw = usePwRoom(wire, rank ? RANK_MODE[rank] : pwStart, isHost, () => (isHost ? (room?.players.map((p) => p.pid).filter((p) => p !== you) ?? []) : [hostPid]), you, seatPids);
-
   // 직접 연결: 방장이 바뀌면 새로 (손님은 방장하고만 연결)
   useEffect(() => {
     if (!conn || !you || !hostPid) return;
@@ -229,6 +228,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
         characterId={room.players.find((p) => p.pid === you)?.characterId ?? characterId}
         wire={wire.current}
         pw={pw.game}
+        raid={raid}
         lang={lang}
         t={t}
         onExit={() => {
@@ -289,8 +289,8 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
       t={t}
       busy={busy}
       error={error}
-      note={pwStart ? "pwMultiDesc" : "coopNote"}
-      quickDesc="coopQuickDesc"
+      note={pwStart ? "pwMultiDesc" : raid ? "raidNote" : "coopNote"}
+      quickDesc={raid ? "raidQuickDesc" : "coopQuickDesc"}
       onQuick={pwStart ? undefined : () => void quick()}
       onCreate={() => void create()}
       onJoin={(code) => connect(code)}

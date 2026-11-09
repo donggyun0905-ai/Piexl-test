@@ -3,6 +3,7 @@ import { cerbArena } from "./cerbKit";
 import { eliteWave, spawnEnemies } from "./roomSpawn";
 export { spawnEnemies } from "./roomSpawn";
 import { introRooms } from "./intro";
+import { raidBossRoom, raidBossSize, raidEnemies, raidMap, raidSpawn } from "./raid";
 import { PERKS } from "../perks";
 import { COOP_ROOM, ROOM_CX as CX, ROOM_CY as CY, setRoomSize } from "../constants";
 import { bossForFloor, type BossKind } from "../content";
@@ -65,7 +66,7 @@ export function continueToLastFloor(s: RunState, boss: BossKind): void {
 /** 층 시작: 지도 만들고 시작 방으로 */
 export function startFloor(s: RunState, floor: number): void {
   s.floor = floor;
-  s.map = s.arenaLv ? arenaMap(s) : s.lastBoss && floor === lastFloorOf(s) ? lastFloorMap(devilPact(s)) : generateFloor(s.seed, floor, s.customRooms);
+  s.map = s.raidBoss ? raidMap(s) : s.arenaLv ? arenaMap(s) : s.lastBoss && floor === lastFloorOf(s) ? lastFloorMap(devilPact(s)) : generateFloor(s.seed, floor, s.customRooms);
   s.rooms = s.map.rooms.map(() => ({ visited: false, cleared: false, pickups: [], enemies: null }));
   skipTrials(s);
   pickHidden(s);
@@ -86,8 +87,10 @@ function enterRoom(s: RunState, roomId: number): void {
   // 무한 모드 11층부터: 보스방이 큰 방 (17층부터 그 2배, sim/endless)
   const grow = exit ? endlessSize(s) : null;
   const big = (s.lastBoss !== undefined && exit) || arenaBig(s, roomId) || !!grow;
-  s.roomCols = grow?.cols ?? (big ? BIG_COLS : undefined);
-  s.roomRows = grow?.rows ?? (big ? BIG_ROWS : undefined);
+  // 레이드 방: 라스트 보스 방의 2배 (sim/raid)
+  const huge = raidBossRoom(s, roomId) ? raidBossSize() : null;
+  s.roomCols = huge?.cols ?? grow?.cols ?? (big ? BIG_COLS : undefined);
+  s.roomRows = huge?.rows ?? grow?.rows ?? (big ? BIG_ROWS : undefined);
   applyRoom(s);
   // 태초의 빛과 어둠: 큰 방에 상자 벽 6개
   s.arena = big && (s.lastBoss === "plight" || arenaPrimeval(s, roomId) || (exit && endlessPrimeval(s))) ? makeArena(s) : undefined;
@@ -113,7 +116,9 @@ function enterRoom(s: RunState, roomId: number): void {
     if (hasPerk(s.player, "arcaneShield")) s.player.shieldTicks = Math.max(s.player.shieldTicks, PERKS.arcaneShield.ticks);
   });
   if (st.enemies === null) {
-    st.enemies = s.arenaLv
+    st.enemies = s.raidBoss
+      ? raidEnemies(s, roomId)
+      : s.arenaLv
       ? arenaEnemies(s, roomId)
       : info.type === "combat" || info.type === "elite"
         ? roomId === pilgrimRoom(s) ? [] : hiddenAt(s, roomId) ? startHidden(s) : luxRoom(s, roomId, spawnEnemies(s, roomId, info.type === "elite"))
@@ -126,6 +131,7 @@ function enterRoom(s: RunState, roomId: number): void {
           : [];
     // 협동: 방 물건·쉼터 회복은 사람마다
     eachSeat(s, () => {
+      if (s.raidBoss) return raidSpawn(s, roomId);
       if (info.type === "treasure") spawnTreasure(s, roomId);
       else spawnSpecialRoom(s, info.type, roomId);
       if (info.type === "shop") spawnShop(s, roomId);
@@ -206,6 +212,7 @@ export function onStairs(s: RunState): boolean {
 
 /** 계단으로 다음 층 (마지막 층이면 클리어) */
 export function climb(s: RunState): void {
+  if (s.raidBoss) return;
   if (s.arenaLv) arenaNext(s, startFloor);
   else if (s.hero) heroNext(s, startFloor);
   else if (s.floor >= FLOOR_COUNT && !s.endless) {

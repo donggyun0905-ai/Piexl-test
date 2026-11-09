@@ -1,0 +1,54 @@
+// 화면 글자: 이벤트 '레이드' (5인 레이드 보스 · 보스 목록 · 준비하기 · 준비 방 안내)
+export const RAID_BOSS_TEXT = {
+  raidEvent: { ko: "레이드", en: "Raid", ja: "レイド" },
+  raidEventDesc: {
+    ko: "5명이 함께 거대한 레이드 보스에 도전 (빈자리는 AI 동료)",
+    en: "Five heroes take on a colossal raid boss (AI allies fill empty seats)",
+    ja: "5人で巨大なレイドボスに挑む (空き席はAIの仲間)",
+  },
+  raidListTitle: { ko: "레이드 보스", en: "Raid Bosses", ja: "レイドボス" },
+  raidSoon: { ko: "준비 중", en: "Coming soon", ja: "準備中" },
+  raid_lucifer: { ko: "루시퍼", en: "Lucifer", ja: "ルシファー" },
+  raidLuciferDesc: {
+    ko: "타락한 빛의 군주. 석화의 기둥과 절망의 검을 거느린 두 모습의 보스 (체력 줄 ×99 · 두 페이즈)",
+    en: "Lord of the fallen light. A two-form boss commanding petrified pillars and swords of despair (×99 health bars · two phases)",
+    ja: "堕ちた光の君主。石化の柱と絶望の剣を従える二つの姿のボス (体力ゲージ×99・2フェーズ)",
+  },
+  raidReady: { ko: "준비하기", en: "Get ready", ja: "準備する" },
+  raidWithFriends: { ko: "같이 하기", en: "Play together", ja: "一緒に遊ぶ" },
+  raidWithFriendsDesc: {
+    ko: "친구 초대(코드·링크) 또는 자동으로 다른 사람 찾기 · 모자란 자리는 AI",
+    en: "Invite friends (code or link) or find others automatically · empty seats become AI",
+    ja: "友達を招待 (コード・リンク) または自動で他の人を探す・足りない席はAI",
+  },
+  raidAiStart: { ko: "AI와 바로 시작", en: "Start now with AI", ja: "AIとすぐ始める" },
+  raidAiStartDesc: { ko: "나 + AI 동료 4명", en: "You + 4 AI allies", ja: "自分 + AIの仲間4人" },
+  raidNote: {
+    ko: "레이드 방: 최대 5명 · 방장이 시작하면 빈자리는 AI 동료가 채워요",
+    en: "Raid room: up to 5 players · when the host starts, AI allies fill empty seats",
+    ja: "レイド部屋: 最大5人・ホストが始めると空き席はAIの仲間が埋めます",
+  },
+  raidQuickDesc: {
+    ko: "레이드에 같이 갈 사람을 자동으로 찾아 같은 방에 모읍니다",
+    en: "Automatically finds others heading into the raid and gathers you in one room",
+    ja: "レイドに一緒に行く人を自動で探して同じ部屋に集めます",
+  },
+  raidAltarHint: { ko: "F: 이 성좌의 증강을 대가 없이 받기 (하나만)", en: "F: Take this constellation's augment for free (only one)", ja: "F: この星座の増強を代償なしで受け取る (ひとつだけ)" },
+  raidGoal_0: {
+    ko: "무장실: 무기 하나를 들고 사용 아이템 2개를 고른 뒤 위쪽 출구로",
+    en: "Armory: hold one weapon, pick 2 usable items, then take the top exit",
+    ja: "武装室: 武器をひとつ持ち、使用アイテムを2つ選んで上の出口へ",
+  },
+  raidGoal_1: { ko: "대장간: 999원으로 무기를 강화하고 위쪽 출구로", en: "Forge: upgrade your weapon with 999 gold, then the top exit", ja: "鍛冶場: 999ゴールドで武器を強化して上の出口へ" },
+  raidGoal_2: {
+    ko: "성좌의 방: 제단 8개 중 하나를 골라 F (모두 골라야 문이 열림)",
+    en: "Constellation hall: choose one of the 8 altars and press F (the door opens once everyone has chosen)",
+    ja: "星座の間: 8つの祭壇からひとつ選んでF (全員選ぶと扉が開く)",
+  },
+  raidGoal_3: {
+    ko: "단련의 방: 기구 앞에서 F → 포인트 30 찍기 · 다 되면 위쪽 출구로 레이드 방에",
+    en: "Training room: press F at the machine and spend 30 points · then the top exit leads to the raid",
+    ja: "鍛錬の間: 器具の前でF → ポイント30を割り振る・終わったら上の出口からレイドへ",
+  },
+  raidGoal_4: { ko: "레이드 방 (보스는 다음 업데이트에서 나와요)", en: "Raid arena (the boss arrives in the next update)", ja: "レイド部屋 (ボスは次のアップデートで登場)" },
+};

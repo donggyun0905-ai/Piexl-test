@@ -8,9 +8,10 @@ import type { RoutePlayerState } from "./routeGo";
 import type { HurtLogPlayerState } from "./hurtLog";
 import type { BuildSetPlayerState } from "./buildSets";
 import type { ForgePlayerState } from "./forge";
+import type { RaidPlayerState, RaidRunFields } from "./raidTypes";
 
-export interface RoomPlayerState extends BoonPlayerState, TrialPlayerState, AltarPlayerState, VaultPlayerState, RoutePlayerState, HurtLogPlayerState, BuildSetPlayerState, ForgePlayerState {}
-export interface RoomRunState extends TrialRunState, VaultRunState, HiddenTrialRunState {
+export interface RoomPlayerState extends BoonPlayerState, TrialPlayerState, AltarPlayerState, VaultPlayerState, RoutePlayerState, HurtLogPlayerState, BuildSetPlayerState, ForgePlayerState, RaidPlayerState {}
+export interface RoomRunState extends TrialRunState, VaultRunState, HiddenTrialRunState, RaidRunFields {
   /** 엘리트 방 라운드 (sim/roomSpawn.eliteWave): 층·방 · 지금 라운드 · 다음 무리까지 틱 */
   eliteWave?: { floor: number; room: number; n: number; t: number };
   /** 이 판에 함정(가시·용암)에 다친 횟수 (화면 캐릭터 해금 기록) */

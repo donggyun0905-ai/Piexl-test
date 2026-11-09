@@ -14,6 +14,8 @@ export interface MatchState {
   open: OpenRoom;
   /** 협동 빠른 매칭 방 (배틀과 따로) */
   openCoop?: OpenRoom;
+  /** 레이드 빠른 매칭 방 (방은 협동 방 그대로, 모으는 줄만 따로) */
+  openRaid?: OpenRoom;
   /** 패왕전 랭크전: 대결마다 모으는 중인 방 */
   rank?: Partial<Record<RankQueue, NonNullable<OpenRoom>>>;
   /** 로비 카드·타일 게임 빠른 시작: 게임마다 모으는 중인 방 */
@@ -30,8 +32,8 @@ export async function handleMatch(ctx: HubContext, action: string, request: Requ
   const body = (await readJson<{ exclude?: unknown; game?: unknown; kind?: unknown }>(request, 1024)) ?? {};
   const now = ctx.now();
   if (action === "quick") {
-    const coop = body.kind === "coop";
-    const key = coop ? "openCoop" : "open";
+    const coop = body.kind === "coop" || body.kind === "raid";
+    const key = body.kind === "raid" ? "openRaid" : coop ? "openCoop" : "open";
     const max = coop ? COOP_MAX_PLAYERS : BATTLE_MAX_PLAYERS;
     let o = ctx.match[key] ?? null;
     if (!o || now - o.createdAt > OPEN_MS || o.count >= max || o.code === body.exclude) {

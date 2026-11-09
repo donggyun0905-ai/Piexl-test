@@ -2,6 +2,7 @@
 import { ABANDONED_KIDS_RULES } from "./abandonedKids";
 import { ABANDONED_SHOW_RULES } from "./abandonedShow";
 import { ARENA_RULES } from "./arena";
+import { RAID_RULES } from "./raid";
 import { ORIGIN_RULES } from "./origin";
 import { AF_BENCH_RULES } from "./afBench";
 import { PILGRIM_RULES } from "./pilgrim";
@@ -133,6 +134,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   ABANDONED_KIDS_RULES,
   ABANDONED_SHOW_RULES,
   ARENA_RULES,
+  RAID_RULES,
   ORIGIN_RULES,
   AF_BENCH_RULES,
   PILGRIM_RULES,

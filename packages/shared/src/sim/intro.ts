@@ -34,6 +34,7 @@ export function introNext(runs: number): { room: IntroRoom; at: number } | null 
 
 /** 층 시작 (rooms.startFloor): 아직 안 열린 방은 전투방으로 */
 export function introRooms(s: RunState): void {
+  if (s.raidBoss) return;
   const lock: Record<string, IntroRoom> = { altar: "ALTAR", gym: "GYM", forge: "GYM", trial: "TRIAL" };
   for (const r of s.map.rooms) if (lock[r.type] && !introOpen(s, lock[r.type]!)) r.type = "combat";
 }

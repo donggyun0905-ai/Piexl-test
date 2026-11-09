@@ -18,6 +18,7 @@ import { GAMBLE_OP, gambleAt, gambleMenu } from "./gamble";
 import { AUCTION_OP, auctionAt, auctionMenu } from "./auction";
 import type { StationKind } from "./stationTypes";
 import { FORGE_OP, forgeMenu, forgeMods } from "./forge";
+import { raidAltarAt } from "./raid";
 import type { Pickup, RunState } from "./types";
 
 /** 튜닝소 기능 번호 (제작대 BENCH_OP 다음) */
@@ -50,6 +51,7 @@ export const bigReach = (pk: Pickup) => (pk.kind === "trial" || pk.kind === "alt
 export function stationAt(s: RunState, pk: Pickup, interact: boolean): void {
   if (s.prompt.kind !== "none" || !isStation(pk)) return;
   if (pk.kind === "trial" || pk.kind === "boon") return trialAt(s, pk, interact);
+  if (pk.kind === "altar" && s.raidBoss) return raidAltarAt(s, pk, interact);
   if (pk.kind === "altar" && !altarPending(s)) return;
   // 비밀의 방 (sim/devil·gamble·auction)
   if (pk.kind === "devil") return devilAt(s, pk, interact);

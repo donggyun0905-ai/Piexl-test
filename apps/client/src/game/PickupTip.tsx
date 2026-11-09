@@ -1,5 +1,5 @@
 // 바닥 아이템 설명: 마우스를 올린 아이템 위에 이름·값·설명·무기 비교 (경매장 무대 상품도)
-import { devilCost, type DevilId, type RunState, type WeaponId } from "@pixel-rogue/shared";
+import { ALTARS, devilCost, raidAltarOf, type DevilId, type RunState, type WeaponId } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { itemDesc, itemName } from "../i18n/items";
 import { pickupAt, pickupScreenPos } from "./clickTargets";
@@ -26,6 +26,9 @@ export function floorTipAt(run: RunState, canvas: HTMLCanvasElement, zoom: numbe
   const price = pk.price > 0 && pk.kind !== "trash" ? ` (${pk.price}G)` : "";
   const reward = pk.kind === "passive" && pk.group > 0 && pk.price === 0;
   const pos = pickupScreenPos(run, canvas, zoom, pk);
+  // 레이드 성좌의 방 제단: 성좌 이름 · 받는 증강 기술 둘
+  const star = pk.kind === "altar" ? raidAltarOf(pk) : undefined;
+  if (star) return { icon: null, name: t(`altar_${star}` as TextKey), desc: ALTARS[star].skills.map((k) => `${t(`swarmSkill_${k}` as TextKey)}: ${t(`swarmSkillDesc_${k}` as TextKey)}`).join("\n"), x: pos.x, y: pos.y, hint: t("raidAltarHint"), compare: null };
   return {
     icon: pk.kind === "coin" || pk.kind === "reroll" || pk.kind === "trash" || pk.kind === "bench" || pk.kind === "tune" || pk.kind === "gym" || pk.kind === "trial" || pk.kind === "boon" || pk.kind === "altar" || pk.kind === "gambler" || pk.kind === "auction" || pk.kind === "forge" ? null : ({ kind: pk.kind === "devil" ? "passive" : pk.kind, id: pk.itemId } as IconItem),
     name: `${itemName(pk.kind, pk.itemId, lang)}${price}`,

@@ -44,7 +44,8 @@ export function createRunTracker(solo: boolean, seedText: string, run: RunState,
       taken.observe(run);
       unlock.observe();
       noteRun(run);
-      for (const id of achievedIn(run, career)) {
+      // 레이드 이벤트는 업적을 주지 않음 (999원·전용 패시브를 받고 시작함)
+      for (const id of run.raidBoss ? [] : achievedIn(run, career)) {
         if (known.has(id)) continue;
         known.add(id);
         earned.push(id);
