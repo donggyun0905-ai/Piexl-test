@@ -76,6 +76,7 @@ import { drawSilkAmmo, drawSilkStacks } from "./silk";
 import { drawSecretAura, drawSecretGround } from "./secret";
 import { drawBossBar, drawFx, drawProjectiles, drawReticleFor } from "./shots";
 import { drawS3Dark, drawS3Ground } from "./s3Bosses";
+import { withFade } from "./fxFade";
 
 export interface DrawOptions {
   /** 0~1: 이전 틱과 이번 틱 사이 위치 */
@@ -154,7 +155,7 @@ function cursorWorld(ctx: CanvasRenderingContext2D, opt: DrawOptions, k: number,
   return { x: ((m.x - r.left) * (ctx.canvas.width / r.width)) / k + camX, y: ((m.y - r.top) * (ctx.canvas.height / r.height)) / k + camY };
 }
 
-/** 한 장면 그리기 · 단련의 방에서 강화한 패시브 효과(폭발 범위 등)도 오른 크기로 보이게 그 사람 기준으로 읽음 (sim/gymPerks) */
+/** 한 장면 그리기 · 단련한 패시브 효과도 그 사람 기준 크기로 (sim/gymPerks) */
 export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions): void {
   withGymFx(s, () => drawScene(ctx, s, opt));
 }
@@ -187,7 +188,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
   drawBeastGround(ctx, s);
   drawSageGround(ctx, s);
   opt.under?.(ctx, snap);
-  eachPerson(s, () => {
+  eachPerson(s, (me) => withFade(ctx, s, me, () => {
     drawDevices(ctx, s, snap);
     drawMedicGround(ctx, s, snap);
     drawOrbitField(ctx, s, alpha, snap);
@@ -207,7 +208,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
     drawDevilAura(ctx, s, snap);
     drawWandererGround(ctx, s, snap);
     drawSecretGround(ctx, s, alpha, snap);
-  });
+  }));
   drawStatusGround(ctx, s, alpha, snap);
   drawS3Ground(ctx, s, alpha, snap);
   drawEnemies(ctx, s, alpha, snap);
@@ -223,6 +224,8 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
     drawDucklings(ctx, s, alpha, snap);
     drawPlayer(ctx, s, alpha, snap, me && opt.showHitbox, isTiger(s) || tailShark(s.player) || (me && (opt.hidePlayer?.() ?? false)));
     drawSeatFront(ctx, s);
+    // 공격·장치: 설정 진하기
+    withFade(ctx, s, me, () => {
     drawEngineerGear(ctx, s, alpha, snap);
     drawOrbs(ctx, s, alpha, snap);
     drawBrawl(ctx, s, alpha, snap);
@@ -258,6 +261,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
     drawSilkAmmo(ctx, s, alpha, snap);
     drawSilkStacks(ctx, s, snap);
     drawSecretAura(ctx, s, alpha, snap, opt.fateName);
+    });
   });
   drawProjectiles(ctx, s, alpha, snap);
   drawFx(ctx, s, alpha, snap);

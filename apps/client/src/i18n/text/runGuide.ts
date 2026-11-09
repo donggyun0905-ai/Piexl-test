@@ -25,6 +25,8 @@ export const RUN_GUIDE_TEXT = {
   csDiff: l("난이도", "Difficulty", "難易度"),
   csRecommend: l("추천", "Easy pick", "おすすめ"),
   simpleView: l("간단한 화면 (다른 효과 흐리게)", "Simple view (dim other effects)", "シンプル画面（他のエフェクトを薄く）"),
+  fxMine: l("내 공격 이펙트 진하기 (%)", "My attack effects opacity (%)", "自分の攻撃エフェクトの濃さ (%)"),
+  fxOthers: l("다른 사람·AI 공격 이펙트 진하기 (%)", "Others' & AI attack effects opacity (%)", "他の人・AIの攻撃エフェクトの濃さ (%)"),
   glowFx: l("빛 효과 (처치 폭발·불티·탄 빛)", "Glow effects (kill bursts, sparks, shot trails)", "光のエフェクト（撃破の爆発・火花・弾の光）"),
   showGoal: l("지금 할 일 안내", "Show current goal", "今やることを表示"),
 };

@@ -42,12 +42,15 @@ import { drawAmbushShot, drawOriginFx } from "./origin";
 import { drawStationFx } from "./stationFx";
 import { drawHiddenFx } from "./pilgrim";
 import { getSettings } from "../../settings";
+import { fadeOf } from "./fxFade";
 import { drawLanceShot } from "./hiddenGear";
 import { drawBaseShot, drawBlast, drawBurst, drawHit, drawSwing } from "./baseFx";
 import { drawS3Bar, drawS3Fx } from "./s3Bosses";
 
 export function drawProjectiles(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   for (const pr of s.projectiles) {
+    // 사람이 쏜 탄은 설정 진하기 (render/fxFade)
+    ctx.globalAlpha = pr.fromPlayer ? fadeOf(s, pr.shooter) : 1;
     const x = snap(lerp(pr.prevX, pr.x, alpha));
     const y = snap(lerp(pr.prevY, pr.y, alpha));
     if (pr.fromPlayer) drawShotBloom(ctx, s, pr, x, y);
@@ -63,6 +66,7 @@ export function drawProjectiles(ctx: CanvasRenderingContext2D, s: RunState, alph
     if (drawCustomShot(ctx, pr.blast ? "shot:magic" : pr.fromPlayer ? "shot:player" : "shot:enemy", pr, x, y)) continue;
     drawBaseShot(ctx, pr, x, y, s.tick);
   }
+  ctx.globalAlpha = 1;
 }
 
 

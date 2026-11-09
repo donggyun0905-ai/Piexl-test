@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.49",
+    date: "2026-11-09",
+    items: {
+      ko: ["설정: 공격 이펙트 진하기(%)를 '내 것'과 '다른 사람·AI 것'으로 따로 조절 (0%면 안 보임) · 보스 공격·위험 표시는 그대로 보여서 협동·레이드에서 보스 패턴이 가려지지 않음"],
+      en: ["Settings: attack effect opacity (%) can be set separately for 'mine' and 'others & AI' (0% hides them) · boss attacks and danger marks stay fully visible so boss patterns are never hidden in co-op or raids"],
+      ja: ["設定：攻撃エフェクトの濃さ(%)を「自分」と「他の人・AI」で別々に調整 (0%で非表示) · ボスの攻撃・危険表示はそのままなので協力・レイドでボスのパターンが隠れない"],
+    },
+  },
+  {
     version: "0.50.48",
     date: "2026-11-09",
     items: {

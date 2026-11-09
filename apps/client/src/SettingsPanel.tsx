@@ -12,7 +12,7 @@ const hasTouch = typeof navigator !== "undefined" && navigator.maxTouchPoints > 
 export function SettingsPanel({ lang, t }: { lang: Lang; t: (key: TextKey) => string }) {
   const s = useSettings();
   const [editing, setEditing] = useState(false);
-  const volume = (key: "sfx" | "music", label: TextKey) => (
+  const volume = (key: "sfx" | "music" | "myFx" | "otherFx", label: TextKey) => (
     <label className="setting-row">
       <span>{t(label)}</span>
       <input
@@ -24,7 +24,7 @@ export function SettingsPanel({ lang, t }: { lang: Lang; t: (key: TextKey) => st
         onChange={(e) => {
           unlockAudio();
           setSettings({ [key]: Number(e.target.value) / 100 } as Partial<Settings>);
-          applyVolume();
+          if (key === "sfx" || key === "music") applyVolume();
         }}
         onPointerUp={() => key === "sfx" && play("coin")}
       />
@@ -49,6 +49,8 @@ export function SettingsPanel({ lang, t }: { lang: Lang; t: (key: TextKey) => st
       {toggle("showDamage", "showDamage")}
       {toggle("showHitbox", "showHitbox")}
       {toggle("simpleView", "simpleView")}
+      {volume("myFx", "fxMine")}
+      {volume("otherFx", "fxOthers")}
       {toggle("glowFx", "glowFx")}
       {toggle("showGoal", "showGoal")}
       <SkillKeysRow t={t} />
