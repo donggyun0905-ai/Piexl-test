@@ -1,4 +1,5 @@
 // 적 정의 (졸개·보스·허수아비 수치, 층마다 보스). content에서 다시 내보냄
+import { RAID_ENEMIES, type RaidFoeKind } from "./enemyDefsRaid";
 import { S3_ENEMIES, type CerbKind, type LevKind, type S3BossKind, type S3PropKind } from "./enemyDefsS3";
 export type { CerbKind, LevKind, S3BossKind, S3PropKind };
 export { CERB_TRIO } from "./enemyDefsS3";
@@ -26,7 +27,7 @@ export const UMBRA_BEASTS: readonly BeastKind[] = ["sandworm", "scorpion", "roc"
 /** 짐승마다 흰 보호막 (최대 체력에 곱함) */
 export const UMBRA_WARD: Partial<Record<BeastKind, number>> = { scorpion: 0.5 };
 /** 연습장 전용: 움직이지도 공격하지도 않는 허수아비 */
-export type EnemyKind = MinionKind | BossKind | BeastKind | CerbKind | LevKind | "dummy" | "fighter";
+export type EnemyKind = MinionKind | BossKind | BeastKind | CerbKind | LevKind | RaidFoeKind | "dummy" | "fighter";
 
 export interface EnemyDef {
   kind: EnemyKind;
@@ -132,6 +133,7 @@ export const ENEMIES: Record<EnemyKind, EnemyDef> = {
   /** 시즌 2 3단계 보스: 유령선 선장 (대포 줄 포격 · 닻 던져 끌기 · 밀물 · 물에 빠진 선원, sim/bossCaptain) */
   captain: { kind: "captain", hp: 660, radius: 10, speed: 0.4, contactDamage: 16, gold: 30, boss: true },
   ...S3_ENEMIES,
+  ...RAID_ENEMIES,
   /** 라스트 보스: 멸망의 용 (sim/bossDragon) */
   /** 라스트 보스: 갓이터 (대검 두 자루를 먼저 부숴야 맞음, sim/bossHades·bossBlades) */
   godeater: { kind: "godeater", hp: 2800, radius: 24, speed: 0.3, contactDamage: 18, gold: 100, boss: true, parry: 0.4 },

@@ -1,4 +1,5 @@
 // 게임 진행: 고정 간격 계산 + 화면 주사율에 맞춘 그리기 + HUD 갱신 (React 밖에서 돌림)
+import { raidZoom } from "./raidZoom";
 import { noteExhibits, noteRecords } from "../lobby/exhibits";
 import { applyRoom, ARENA_LEVELS, inPlay, FLOOR_COUNT, HERO_FLOORS, tabooPoints, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
@@ -232,6 +233,7 @@ export function startGameLoop(o: LoopOptions): () => void {
     if (steps === MAX_CATCH_UP) acc = 0;
     if (steps > 0) o.show?.(run);
     if (steps > 0) o.onAdvance?.(run);
+    raidZoom(controls, run);
     drawFrame(ctx, cam.view(run), {
       alpha: stopped || run.over ? 1 : acc / TICK_MS,
       showReticle: controls.touchAiming,

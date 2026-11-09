@@ -11,6 +11,7 @@ import { FLEE_COST } from "./util";
 import { tabooSum } from "./taboo";
 import { withGymFx } from "./gymPerks";
 import { raidHuman, raidInputs, raidLocked } from "./raid";
+import { raidAfter, raidLivesLeft } from "./raidLife";
 
 export interface PartyMember {
   characterId: CharacterId;
@@ -85,7 +86,8 @@ function tick(s: RunState, inputs: readonly TickInput[]): void {
   );
   stepWorld(s);
   eachSeat(s, () => checkDeath(s), true);
-  if (!allPlayers(s).some(isAlive)) s.over = true;
+  raidAfter(s);
+  if (!allPlayers(s).some(isAlive) && !raidLivesLeft(s)) s.over = true;
 }
 
 /** 출구·계단: 살아 있는 모두가 같은 출구(계단)에 서야 이동. 모이는 중이면 몇 명 왔는지 안내 */

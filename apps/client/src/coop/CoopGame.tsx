@@ -21,6 +21,7 @@ import { PwWatch } from "../event/PwWatch";
 import { RankOutcome } from "../event/RankResult";
 import { PwResult } from "../event/PwResult";
 import { savePwResult } from "../event/pwRecords";
+import { RaidOverlay } from "../event/RaidOverlay";
 
 interface Props {
   room: RoomView;
@@ -227,6 +228,7 @@ export function CoopGame({ room, you, characterId, wire, pw, raid, lang, t, onEx
           else s?.guest.show(r);
         }}
       />
+      {!ended && run.raidBoss && <RaidOverlay run={run} t={t} />}
       {!ended && !pw && <CoopParty run={run} members={members} extras={extras} t={t} onSignal={signal} />}
       {!ended && !pw && <CoopWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}
       {!ended && pw && run.pvp && <PwWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}

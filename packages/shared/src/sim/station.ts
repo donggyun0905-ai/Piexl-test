@@ -19,6 +19,7 @@ import { AUCTION_OP, auctionAt, auctionMenu } from "./auction";
 import type { StationKind } from "./stationTypes";
 import { FORGE_OP, forgeMenu, forgeMods } from "./forge";
 import { raidAltarAt } from "./raid";
+import { darkMods } from "./lucDark";
 import type { Pickup, RunState } from "./types";
 
 /** 튜닝소 기능 번호 (제작대 BENCH_OP 다음) */
@@ -92,7 +93,7 @@ export function stationMenu(s: RunState, code: number): void {
 }
 
 /** 작업대·히든 아이템이 바꾼 능력치 (recalcStats) */
-export const stationMods = (s: RunState): StatMod[] => [...benchMods(s.player), ...tuneMods(s.player), ...hiddenMods(s), ...gymMods(s.player), ...boonMods(s.player), ...forgeMods(s.player)];
+export const stationMods = (s: RunState): StatMod[] => [...benchMods(s.player), ...tuneMods(s.player), ...hiddenMods(s), ...gymMods(s.player), ...boonMods(s.player), ...forgeMods(s.player), ...darkMods(s.player)];
 
 /** 작업대에 돈 내기: 상점 구매 기록에도 남김 (일일 도전 진행 기록 검사가 쓴 돈을 맞춰 봄) */
 export function stationPay(s: RunState, kind: StationKind, op: number, cost: number): boolean {

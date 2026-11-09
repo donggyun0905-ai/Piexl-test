@@ -36,6 +36,9 @@ import { updateLeviathan } from "./bossLeviathan";
 import { updateLevWhale } from "./bossLevWhale";
 import { updateLevKing } from "./bossLevKing";
 import { updateAsmo } from "./bossAsmo";
+import { updateLucifer } from "./lucifer";
+import { updatePillar } from "./lucPillars";
+import { updateFlame, updateShade } from "./lucDark";
 import { makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
 /** 보스 체력 배율 (층마다 늘어남) */
@@ -87,6 +90,11 @@ const BOSS_AI: Partial<Record<EnemyState["kind"], BossAi>> = {
   levking: (s, e, toP, _go, spawned) => updateLevKing(s, e, toP, spawned),
   // 시즌 3 라스트 보스 아스모데우스의 화신체 (체력 줄 ×100, 세 모습)
   asmodeus: (s, e, toP) => updateAsmo(s, e, toP),
+  // 레이드 보스 루시퍼 · 석화의 기둥 · 악마의 불길 · 어둠의 세계 몬스터 (sim/lucifer·lucPillars·lucDark)
+  lucifer: (s, e, toP, _go, spawned) => updateLucifer(s, e, toP, spawned),
+  lucpillar: (s, e) => updatePillar(s, e),
+  lucflame: (s, e, toP) => updateFlame(s, e, toP),
+  lucshade: (s, e) => updateShade(s, e),
 };
 
 export function updateBoss(s: RunState, e: EnemyState, toP: readonly [number, number], go: readonly [number, number], spawned: EnemyState[]): void {

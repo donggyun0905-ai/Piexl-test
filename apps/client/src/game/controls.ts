@@ -177,7 +177,8 @@ export class Controls {
   setZoom(z: number): void {
     this.zoom = Math.min(ZOOM_MAX, Math.max(this.opt.zoom.min, z));
   }
-
+  /** 줄이는 한도 바꾸기 (레이드 방 game/raidZoom) */
+  setZoomMin(min: number): void { this.opt.zoom.min = min; }
   /** 풋내기 스탯 · 사용 아이템 쓰기 (화면 버튼). slot: 1·2 */
   queueStat(k: number): void { this.statQueued = k; }
   queueUse(slot: number): void { this.useQueued = slot; }

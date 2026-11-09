@@ -69,3 +69,62 @@ describe("레이드 준비", () => {
     eachSeat(s, () => expect(s.player.hp).toBeGreaterThan(0));
   });
 });
+
+describe("레이드 루시퍼 1페이즈", () => {
+  const fight = () => {
+    const s = make();
+    for (let i = 0; i < 4; i++) goThrough(s, 1);
+    return s;
+  };
+  it("레이드 방: 루시퍼 + 석화의 기둥 4개 · AI도 같이 싸움 · 결정성", () => {
+    const a = fight();
+    const b = fight();
+    expect(a.enemies.filter((e) => e.kind === "lucpillar")).toHaveLength(4);
+    expect(a.enemies.find((e) => e.kind === "lucifer")?.maxHp).toBe(88000);
+    for (let t = 0; t < 900; t++) {
+      stepParty(a, [EMPTY_INPUT]);
+      stepParty(b, [EMPTY_INPUT]);
+    }
+    expect(allPlayers(a).map((p) => [Math.round(p.x), Math.round(p.y), Math.round(p.hp)])).toEqual(allPlayers(b).map((p) => [Math.round(p.x), Math.round(p.y), Math.round(p.hp)]));
+    expect(a.raidBoss?.fight?.atkN).toBeGreaterThan(3);
+  });
+
+  it("1분마다 석화의 빔: 보호막 10000 (겹치지 않음)", () => {
+    const s = fight();
+    for (let t = 0; t < 3700; t++) stepParty(s, [EMPTY_INPUT]);
+    const boss = s.enemies.find((e) => e.kind === "lucifer")!;
+    expect(boss.ward ?? 0).toBeLessThanOrEqual(10000);
+    expect(boss.ward ?? 0).toBeGreaterThan(0);
+  });
+
+  it("기둥이 부서지면 기절 + 검기 5번 · 넷이면 흰색 돔 → 컷신", () => {
+    const s = fight();
+    for (const e of s.enemies) if (e.kind === "lucpillar") e.hp = 0;
+    for (let t = 0; t < 3; t++) stepParty(s, [EMPTY_INPUT]);
+    expect(s.raidBoss?.fight?.down).toBe(4);
+    expect(s.raidBoss?.fight?.slashN).toBe(5);
+    for (let t = 0; t < 1200 && !s.raidBoss?.fight?.cut; t++) stepParty(s, [EMPTY_INPUT]);
+    expect(s.raidBoss?.fight?.cut).toBe("pillars");
+  });
+
+  it("1페이즈 체력을 다 깎으면 변신 컷신 → 2페이즈 (넘친 피해 버림)", () => {
+    const s = fight();
+    const boss = s.enemies.find((e) => e.kind === "lucifer")!;
+    boss.hp = 40000;
+    stepParty(s, [EMPTY_INPUT]);
+    expect(boss.hp).toBe(44000);
+    expect(s.raidBoss?.fight?.cut).toBe("change");
+    for (let t = 0; t < 200; t++) stepParty(s, [EMPTY_INPUT]);
+    expect(s.raidBoss?.fight?.phase).toBe(2);
+  });
+
+  it("데스 카운트: 쓰러지면 다시 살아남 · 10번이면 끝", () => {
+    const s = fight();
+    s.player.hp = 0;
+    stepParty(s, [EMPTY_INPUT]);
+    expect(s.player.raidDeaths).toBe(1);
+    expect(s.over).toBe(false);
+    for (let t = 0; t < 200; t++) stepParty(s, [EMPTY_INPUT]);
+    expect(s.player.hp).toBeGreaterThan(0);
+  });
+});

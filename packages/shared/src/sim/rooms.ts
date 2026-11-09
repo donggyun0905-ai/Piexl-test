@@ -155,6 +155,8 @@ function enterRoom(s: RunState, roomId: number): void {
 /** 보스방 입장: 플레이어는 아래쪽 가운데, 보스는 위쪽 가운데에서 시작 (들어오자마자 맞지 않게) */
 function placeBossFight(s: RunState): void {
   placeParty(s, ROOM_MAX_Y - PLAYER_RADIUS - 16);
+  // 레이드: 루시퍼·기둥은 처음 자리 그대로 (sim/lucifer)
+  if (s.raidBoss) return;
   // 다시 들어온 경우: 불러낸 졸개는 치우고 보스는 처음 자리·걷기 상태로
   s.enemies = s.enemies.filter((e) => !e.noGold);
   s.enemies.forEach((e, i) => {

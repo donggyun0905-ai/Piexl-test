@@ -16,6 +16,8 @@ import { equipWeapon, recalcStats } from "./items";
 import { PLAIN_SHAPE } from "./layout";
 import { addPickup, weaponPool } from "./loot";
 import { xpOnly } from "./morphXp";
+import { lucCutting, spawnLucifer } from "./lucifer";
+import { raidBotInput } from "./raidBot";
 import { allPlayers, eachSeat } from "./party";
 import { createParty } from "./partyRun";
 import { RAID_ROOM, type RaidEventBoss } from "./raidTypes";
@@ -123,12 +125,14 @@ export const raidBossRoom = (s: RunState, roomId = s.roomId) => !!s.raidBoss && 
 export const raidBossSize = () => ({ cols: R.BOSS_COLS, rows: R.BOSS_ROWS });
 
 /** 방에 처음 들어갈 때 적 (준비 방은 없음 · 레이드 방은 보스) */
-export function raidEnemies(_s: RunState, _roomId: number): EnemyState[] {
-  return [];
+export function raidEnemies(s: RunState, roomId: number): EnemyState[] {
+  return roomId === RAID_ROOM.boss ? spawnLucifer(s) : [];
 }
 
 /** 방에 처음 들어갈 때 사람마다 물건 (rooms.enterRoom) */
 export function raidSpawn(s: RunState, roomId: number): void {
+  // AI 준비는 시작 때 정해 둠 (바닥 물건 없음, 돌아다니기만 sim/raidBot)
+  if (s.raidBoss?.ai[s.seat ?? 0]) return;
   if (roomId === RAID_ROOM.armory) {
     // 위: 이 캐릭터 무기 전부 (밟으면 바꿈) · 아래: 사용 아이템 하나씩 (둘을 가지면 나머지는 사라짐)
     const weapons = weaponPool(s, true);
@@ -169,11 +173,16 @@ export function raidAltarAt(s: RunState, pk: Pickup, interact: boolean): void {
 /** 고른 성좌 (그리기: 제단 group) */
 export const raidAltarOf = (pk: Pickup) => ALTAR_IDS[pk.group - 1];
 
-/** 한 틱 입력: 사람 자리는 받은 입력, AI 자리는 AI가 정함 (준비 방에서는 가만히) */
+/** 한 틱 입력: 사람 자리는 받은 입력, AI 자리는 AI가 정함 (sim/raidBot) · 컷신 동안은 모두 멈춤 */
 export function raidInputs(s: RunState, inputs: readonly TickInput[]): TickInput[] {
   const ai = s.raidBoss?.ai ?? [];
+  if (lucCutting(s)) return ai.map(() => EMPTY_INPUT);
   let k = 0;
-  return ai.map((isAi) => (isAi ? EMPTY_INPUT : (inputs[k++] ?? EMPTY_INPUT)));
+  const out = ai.map((isAi) => (isAi ? EMPTY_INPUT : (inputs[k++] ?? EMPTY_INPUT)));
+  eachSeat(s, (i) => {
+    if (ai[i]) out[i] = raidBotInput(s);
+  });
+  return out;
 }
 
 /** 사람 자리만 (출구에 모이기·잠김 계산) */

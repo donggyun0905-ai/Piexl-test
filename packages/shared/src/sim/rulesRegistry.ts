@@ -3,6 +3,12 @@ import { ABANDONED_KIDS_RULES } from "./abandonedKids";
 import { ABANDONED_SHOW_RULES } from "./abandonedShow";
 import { ARENA_RULES } from "./arena";
 import { RAID_RULES } from "./raid";
+import { LUC_RULES } from "./lucKit";
+import { LUC_ATTACK_RULES } from "./lucAttacks";
+import { LUC_PILLAR_RULES } from "./lucPillars";
+import { LUC_DARK_RULES } from "./lucDark";
+import { LUCIFER_RULES } from "./lucifer";
+import { RAID_LIFE_RULES } from "./raidLife";
 import { ORIGIN_RULES } from "./origin";
 import { AF_BENCH_RULES } from "./afBench";
 import { PILGRIM_RULES } from "./pilgrim";
@@ -135,6 +141,12 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   ABANDONED_SHOW_RULES,
   ARENA_RULES,
   RAID_RULES,
+  LUC_RULES,
+  LUC_ATTACK_RULES,
+  LUC_PILLAR_RULES,
+  LUC_DARK_RULES,
+  LUCIFER_RULES,
+  RAID_LIFE_RULES,
   ORIGIN_RULES,
   AF_BENCH_RULES,
   PILGRIM_RULES,

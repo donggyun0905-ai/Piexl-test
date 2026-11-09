@@ -1,0 +1,83 @@
+// 레이드 보스 루시퍼 공용: 수치 · 싸움 상태 · 사람 고르기 · 피해 주기 (대시 무적·어둠의 세계는 맞지 않음)
+import { createRng, deriveSeed, type Rng } from "../rng";
+import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
+import { damagePlayer } from "./combat";
+import { allPlayers, eachSeat } from "./party";
+import { dashDodged } from "./remnant";
+import type { LucFight } from "./lucTypes";
+import type { PlayerState, RunState } from "./types";
+
+/** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
+const R = {
+  /** 페이즈마다 체력 · 체력 줄 수 · 악마의 불길이 나오기 시작하는 줄 */
+  PHASE_HP: 44000,
+  LINES: 99,
+  FLAME_LINES: 30,
+  /** 기본 공격 사이 (틱) · 2페이즈 */
+  ATK_GAP: 110,
+  ATK_GAP_2: 80,
+  /** 피해: 어둠 불기둥 · 별 고리 · 가시 고리 · 지진파 · 검기 · X자 · 보라 구 · 어둠의 기둥 */
+  FIRE: 34,
+  MINE: 26,
+  CROWN: 38,
+  WAVE: 30,
+  SLASH: 60,
+  X: 40,
+  ORB: 44,
+  /** 흰색 돔 밖에 있던 사람이 받는 피해 (최대 체력 비율) */
+  DOME_CUT: 0.8,
+  /** 석화의 빔 간격 · 기둥이 남아 있으면 주는 보호막 (겹치지 않고 이 값으로 다시 채움) */
+  BEAM_GAP: 3600,
+  SHIELD: 10000,
+};
+export { R as LUC_RULES };
+
+/** 싸움 상태 (처음이면 만듦) */
+export function lucFight(s: RunState): LucFight {
+  const r = s.raidBoss!;
+  return (r.fight ??= { phase: 1, nextAtk: s.tick + 150, atkN: 0, pose: 0, poseEnd: 0, beamAt: s.tick + R.BEAM_GAP, down: 0, waves: [], mines: [], crowns: [], xs: [], orbs: [] });
+}
+
+/** 이 틱·이름으로 정해지는 랜덤 */
+export const lucRng = (s: RunState, tag: string, k = 0): Rng => createRng(deriveSeed(s.seed, "luc", tag, s.tick, k));
+
+/** 맞을 수 있는 사람 (살아 있고 어둠의 세계가 아님) [자리, 플레이어] */
+export function lucTargets(s: RunState): [number, PlayerState][] {
+  return allPlayers(s)
+    .map((p, i) => [i, p] as [number, PlayerState])
+    .filter(([, p]) => p.hp > 0 && !p.raidDark);
+}
+
+/** 조건에 맞는 사람마다 피해 (dodge: 대시 중이면 피함) */
+export function lucHurt(s: RunState, dmg: number, hit: (p: PlayerState, seat: number) => boolean, dodge = true): void {
+  eachSeat(
+    s,
+    (i) => {
+      const p = s.player;
+      if (p.raidDark || !hit(p, i)) return;
+      if (dodge && dashDodged(s)) return;
+      damagePlayer(s, dmg, "lucifer");
+    },
+    true,
+  );
+}
+
+/** 원 안인지 */
+export const near = (p: { x: number; y: number }, x: number, y: number, r: number) => (p.x - x) ** 2 + (p.y - y) ** 2 <= r * r;
+
+/** 방 안 무작위 자리 (벽에서 margin 떨어짐) */
+export function lucSpot(rng: Rng, margin = 40): [number, number] {
+  return [ROOM_MIN_X + margin + rng.nextFloat() * (ROOM_MAX_X - ROOM_MIN_X - 2 * margin), ROOM_MIN_Y + margin + rng.nextFloat() * (ROOM_MAX_Y - ROOM_MIN_Y - 2 * margin)];
+}
+
+/** 페이즈 안 남은 체력 줄 (1페이즈는 44000 위쪽만 셈) */
+export function lucLines(hp: number, phase: 1 | 2): number {
+  const left = phase === 1 ? hp - R.PHASE_HP : hp;
+  return Math.max(0, Math.ceil(left / (R.PHASE_HP / R.LINES) - 1e-6));
+}
+
+/** 그림 칸을 잠깐 바꿈 */
+export function lucPose(s: RunState, f: LucFight, pose: number, ticks = 40): void {
+  f.pose = pose;
+  f.poseEnd = s.tick + ticks;
+}

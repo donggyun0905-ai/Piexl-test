@@ -45,6 +45,8 @@ export function overheals(s: RunState): boolean {
 
 /** 체력 회복. 의사는 체력을 먼저 채우고 남는 양을 보호막으로 */
 export function heal(s: RunState, amount: number): void {
+  // 레이드 어둠의 세계: 치유 -100%
+  if (s.player.raidDark) return;
   const p = s.player;
   // 학살자: 회복이 듣지 않음 (피의 학살 흡혈만) · 끝없는 시련 중에는 모든 회복이 막힘
   if (p.characterId === "slayer" || trialNoHeal(s) || healBlocked(p)) return;
