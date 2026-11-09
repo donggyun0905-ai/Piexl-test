@@ -19,7 +19,7 @@ export function drawLucGround(ctx: Ctx, s: RunState, snap: Snap): void {
   // 루시퍼와 기둥을 잇는 사슬
   for (const e of s.enemies) {
     if (e.kind !== "lucpillar" || e.hp <= 0) continue;
-    chain(ctx, snap(boss.x), snap(boss.y - 30), snap(e.x), snap(e.y - 40), t);
+    chain(ctx, snap(boss.x), snap(boss.y - 30), snap(e.x), snap(e.y - 110), t);
   }
   // 석화의 빔 지진파 (돌빛 고리)
   for (const w of f.waves) {

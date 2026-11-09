@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.52",
+    date: "2026-11-09",
+    items: {
+      ko: ["레이드: 석화의 기둥·절망의 검을 루시퍼보다 크게 (맞는 범위도 넓어짐)"],
+      en: ["Raid: the petrified pillars and swords of despair are now bigger than Lucifer (larger hitboxes too)"],
+      ja: ["レイド：石化の柱・絶望の剣をルシファーより大きく (当たり判定も拡大)"],
+    },
+  },
+  {
     version: "0.50.51",
     date: "2026-11-09",
     items: {

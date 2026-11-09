@@ -8,9 +8,9 @@ import { lucBody, lucFx, lucProp } from "./lucArt";
 import { additive, glow } from "./pwFxBits";
 
 type Ctx = CanvasRenderingContext2D;
-/** 크게 (맵이 크니 다 크게, 2026-11-09 사용자 요청): 루시퍼 높이 · 기둥 높이 · 불길 너비 */
+/** 크게 (맵이 크니 다 크게 · 기둥·절망의 검은 루시퍼보다 크게, 2026-11-09 사용자 요청): 루시퍼 높이 · 기둥·검 높이 · 불길 너비 */
 const BODY_H = 220;
-const PILLAR_H = 124;
+const PILLAR_H = 260;
 const FLAME_W = 64;
 /** 줄 색 돌림 (보라부터) */
 const LINE_COLORS = ["#a040ff", "#c040e0", "#ff40a0", "#ff6040", "#ffb030", "#e0e040", "#60d060", "#30c0c0", "#4080ff", "#6050f0"];
@@ -23,7 +23,7 @@ export function drawLucActor(ctx: Ctx, s: RunState, e: EnemyState, x: number, y:
   if (e.kind === "lucifer") return drawBoss(ctx, s, e, x, y);
   if (e.kind === "lucpillar") {
     const bob = Math.sin(s.tick * 0.04 + e.id) * 3;
-    additive(ctx, () => glow(ctx, x, y - PILLAR_H * 0.4, 46, "#a050ff", 0.35 + 0.15 * Math.sin(s.tick * 0.07), 0.5));
+    additive(ctx, () => glow(ctx, x, y - PILLAR_H * 0.4, 100, "#a050ff", 0.35 + 0.15 * Math.sin(s.tick * 0.07), 0.5));
     if (!lucProp(ctx, "pillar.png", x, y + 18 + bob, PILLAR_H, e.hitFlash > 0 ? 0.7 : 1)) return false;
     return true;
   }
@@ -32,7 +32,7 @@ export function drawLucActor(ctx: Ctx, s: RunState, e: EnemyState, x: number, y:
     const f = s.raidBoss?.fight;
     const pat = f ? swordGlow(s, f, e.id) : -1;
     const bob = Math.sin(s.tick * 0.05 + e.id) * 4;
-    additive(ctx, () => glow(ctx, x, y - PILLAR_H * 0.45, pat >= 0 ? 70 : 40, pat >= 0 ? SWORD_COLORS[pat]! : "#c090ff", pat >= 0 ? 0.6 + 0.3 * Math.sin(s.tick * 0.4) : 0.3, 0.6));
+    additive(ctx, () => glow(ctx, x, y - PILLAR_H * 0.45, pat >= 0 ? 140 : 90, pat >= 0 ? SWORD_COLORS[pat]! : "#c090ff", pat >= 0 ? 0.6 + 0.3 * Math.sin(s.tick * 0.4) : 0.3, 0.6));
     return lucProp(ctx, "sword.png", x, y + 16 + bob, PILLAR_H, e.hitFlash > 0 ? 0.7 : 1);
   }
   if (e.kind === "lucflame") {
