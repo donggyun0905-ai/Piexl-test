@@ -23,6 +23,7 @@ export interface RaidRunFields {
 }
 
 export interface RaidPlayerState extends LucPlayerState {
-  /** 무장실에서 가진 사용 아이템 수 (둘이면 나머지는 사라짐) */
-  raidUse?: number;
+  /** 레이드 사용 아이템 칸마다 다시 쓸 수 있는 틱 · 대장간 처음부터 다시 쓴 수 (sim/raidPrep) */
+  raidCd?: number[];
+  raidResets?: number;
 }

@@ -41,7 +41,7 @@ import { trackerGuard, trackerTaken } from "./tracker";
 import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, keepInRoom, markCrit, normalize, roomGrid, RUSH_TICKS, STILL_TICKS } from "./util";
 import { raiseShield } from "./imugiMods";
 import { devilMul } from "./devilPerks";
-import { setDmgMul } from "./buildSets"; import { factionKill } from "./faction";
+import { setDmgMul } from "./buildSets"; import { factionKill } from "./faction"; import { raidGuard } from "./lucCover";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -115,7 +115,7 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
   const p = s.player;
   // 대시 중·무적·보호막이면 피해 없음 (잔영: 대시로 피하면 슬로우모션)
   if (p.dashTicks > 0 && !envHit) remnantDodge(s);
-  if (p.dashTicks > 0 || p.invulnTicks > 0 || p.shieldTicks > 0 || (p.raidDark && from !== "lucshade")) return;
+  if (p.dashTicks > 0 || p.invulnTicks > 0 || p.shieldTicks > 0 || raidGuard(s, from)) return;
   // 거인 패링: 피해 없이 그대로 에너지로 · 회피
   if (titanParried(s, dmg) || dodged(s)) return;
   // 서든데스: 한 대라도 맞으면 끝

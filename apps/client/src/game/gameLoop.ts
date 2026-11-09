@@ -1,7 +1,7 @@
 // 게임 진행: 고정 간격 계산 + 화면 주사율에 맞춘 그리기 + HUD 갱신 (React 밖에서 돌림)
 import { raidZoom } from "./raidZoom";
 import { noteExhibits, noteRecords } from "../lobby/exhibits";
-import { applyRoom, ARENA_LEVELS, inPlay, FLOOR_COUNT, HERO_FLOORS, tabooPoints, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
+import { applyRoom, ARENA_LEVELS, RAID_ROOM, inPlay, FLOOR_COUNT, HERO_FLOORS, tabooPoints, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import type { Controls } from "./controls";
 import { formatTime, pickupText, promptText } from "./hudText";
@@ -255,7 +255,7 @@ export function startGameLoop(o: LoopOptions): () => void {
         cam.drawFall(c, snap);
         if (tiger && onMe()) over(c, tiger, run, acc / TICK_MS, snap, run.tick);
         if (theme && onMe()) drawThemeOver(c, theme, run, acc / TICK_MS, snap);
-        if (getSettings().showDamage) damage.draw(c, run.tick, snap);
+        if (getSettings().showDamage) damage.draw(c, run.tick, snap, run.raidBoss && run.roomId === RAID_ROOM.boss ? 2 : 1);
         if (getSettings().showDamage) pwInfo.draw(c, run, snap);
         damage.drawDummy(c, run, dummyLabels, snap);
       },

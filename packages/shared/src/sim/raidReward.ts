@@ -36,8 +36,12 @@ export function goReward(s: RunState): void {
     recalcStats(s);
     p.hp = p.stats.maxHp;
   });
+  // 싸움 효과·장판·날개·돌기둥을 모두 치움 (보상 방에 남지 않게)
   s.hazards = [];
   s.projectiles = [];
+  s.effects = [];
+  const f = lucFight(s);
+  Object.assign(f, { waves: [], mines: [], crowns: [], xs: [], orbs: [], vines: [], wings: undefined, dark: undefined, dome: undefined, safe: undefined, slashAt: undefined, covers: undefined, p2: undefined });
   warpRoom(s, RAID_ROOM.reward);
 }
 

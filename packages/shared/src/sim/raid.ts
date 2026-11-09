@@ -15,7 +15,7 @@ import { GYM_STATS, gymBlocked } from "./gym";
 import { equipWeapon, recalcStats } from "./items";
 import { PLAIN_SHAPE } from "./layout";
 import { addPickup, weaponPool } from "./loot";
-import { xpOnly } from "./morphXp";
+import { spendStat } from "./novice";
 import { lucCutting, spawnLucifer } from "./lucifer";
 import { raidBotInput } from "./raidBot";
 import { spawnChest } from "./raidReward";
@@ -39,6 +39,11 @@ const R = {
   /** 레이드 방 크기 (칸): 라스트 보스 방(29×17)의 2배 */
   BOSS_COLS: 58,
   BOSS_ROWS: 34,
+  /** 전용 패시브 기준 개수 · 모자란 하나마다 더 주는 단련 포인트 */
+  PASSIVE_CAP: 30,
+  PER_PASSIVE: 3,
+  /** 풋내기(레벨로 크는 캐릭터)가 받는 레벨 (레벨마다 스탯 포인트 1) */
+  NOVICE_LV: 30,
 };
 export { R as RAID_RULES };
 
@@ -50,12 +55,14 @@ export interface RaidMember {
 
 const roomKey = (s: RunState) => s.floor * 1000 + s.roomId;
 
-/** 이 캐릭터 전용 패시브 전부 (변희 동물처럼 사냥으로만 얻는 것은 빼고) */
+/** 이 캐릭터 전용 패시브 전부 (변희 동물 능력처럼 사냥으로만 얻는 것도 모두 · 그 동물을 들었을 때만 효과) */
 export function raidOwnPassives(c: CharacterId): PassiveId[] {
-  return PASSIVE_IDS.filter((id) => {
-    const def = PASSIVES[id] as PassiveDef;
-    return def.exclusive === c && !xpOnly(def);
-  });
+  return PASSIVE_IDS.filter((id) => (PASSIVES[id] as PassiveDef).exclusive === c);
+}
+
+/** 단련 포인트: 기본 30 + 전용 패시브가 30개보다 적으면 모자란 하나마다 3 (2026-11-09 사용자 요청) */
+export function raidGymPts(c: CharacterId): number {
+  return R.GYM_PTS + Math.max(0, R.PASSIVE_CAP - raidOwnPassives(c).length) * R.PER_PASSIVE;
 }
 
 /** 무장실에 놓는 사용 아이템 (히든·돈주머니 빼고 하나씩) */
@@ -69,11 +76,14 @@ export function createRaid(seed: number, boss: RaidEventBoss, humans: readonly R
   const s = createParty(seed, members);
   s.raidBoss = { boss, ai: members.map((m) => !!m.ai) };
   s.big = true;
+  // 진영 특징(게이지·창·알림)은 레이드에서 끔 (2026-11-09 사용자 요청: 방해됨)
+  s.noFaction = true;
   eachSeat(s, (i) => {
     const p = s.player;
     p.passives = [...raidOwnPassives(p.characterId), "goddessBlessing"];
     p.useSlots = [null, null];
     s.gold = R.GOLD;
+    if (p.characterId === "novice") noviceLevel(s, !!s.raidBoss!.ai[i]);
     if (s.raidBoss!.ai[i]) aiKit(s, createRng(deriveSeed(seed, "raidAi", i)));
     recalcStats(s);
     p.hp = p.stats.maxHp;
@@ -83,6 +93,17 @@ export function createRaid(seed: number, boss: RaidEventBoss, humans: readonly R
   return s;
 }
 
+/** 풋내기: 레벨을 주고 스탯 포인트를 찍게 함 (AI는 시드로 찍음) */
+function noviceLevel(s: RunState, ai: boolean): void {
+  const p = s.player;
+  p.lv = R.NOVICE_LV;
+  p.exp = 0;
+  p.points = R.NOVICE_LV - 1;
+  const rng = createRng(deriveSeed(s.seed, "raidNovice", s.seat ?? 0));
+  if (ai) for (let n = p.points ?? 0; n > 0; n--) spendStat(s, rng.int(1, 9));
+  recalcStats(s);
+}
+
 /** AI 준비: 무기·사용 아이템 2개·성좌 증강·단련 포인트를 시드로 정해 둠 (준비 방에서는 따라만 다님) */
 function aiKit(s: RunState, rng: Rng): void {
   const p = s.player;
@@ -90,11 +111,10 @@ function aiKit(s: RunState, rng: Rng): void {
   if (weapons.length > 0) equipWeapon(s, rng.pick(weapons));
   const uses = raidUses();
   p.useSlots = [rng.pick(uses), rng.pick(uses)];
-  p.raidUse = R.USE_PICKS;
   giveAugment(s, rng, rng.int(0, ALTAR_IDS.length - 1), RAID_ROOM.altar);
   const g = (p.gym = { pts: 0, lv: {} as Record<string, number>, rooms: [1000 + RAID_ROOM.gym] });
   const can = GYM_STATS.filter((k) => !gymBlocked(p, k));
-  for (let n = 0; n < R.GYM_PTS; n++) {
+  for (let n = raidGymPts(p.characterId); n > 0; n--) {
     const k = rng.pick(can);
     if ((g.lv[k] ?? 0) < 10) g.lv[k] = (g.lv[k] ?? 0) + 1;
   }
@@ -117,8 +137,9 @@ function giveAugment(s: RunState, rng: Rng, idx: number, roomId: number): void {
 export function raidMap(s: RunState): FloorMap {
   const types: RoomType[] = ["start", "forge", "altar", "gym", "exit", "golden"];
   const rooms: RoomInfo[] = types.map((type, id) => ({ id, layer: id, lane: 1, type, exits: Array<number>(LANES).fill(-1), shape: PLAIN_SHAPE }));
-  // 준비 방 넷은 출구로 이어지고 · 보상 방은 루시퍼를 쓰러뜨리면 옮겨 감 (sim/raidReward)
+  // 준비 방 넷은 가운데 출구로 다음 방 · 왼쪽 출구로 앞 방 (왔다 갔다, 레이드 방에서는 못 돌아감) · 보상 방은 루시퍼를 쓰러뜨리면 옮겨 감 (sim/raidReward)
   for (let i = 0; i < RAID_ROOM.boss; i++) rooms[i]!.exits[1] = i + 1;
+  for (let i = 1; i < RAID_ROOM.boss; i++) rooms[i]!.exits[0] = i - 1;
   return { floor: s.floor, rooms, startId: 0, exitId: RAID_ROOM.boss, layers: rooms.length };
 }
 
@@ -133,10 +154,12 @@ export function raidEnemies(s: RunState, roomId: number): EnemyState[] {
 
 /** 방에 처음 들어갈 때 사람마다 물건 (rooms.enterRoom) */
 export function raidSpawn(s: RunState, roomId: number): void {
+  // 레이드 방: 사용 아이템 쿨타임을 처음으로 (sim/raidPrep)
+  if (roomId === RAID_ROOM.boss) s.player.raidCd = [];
   // AI 준비는 시작 때 정해 둠 (바닥 물건 없음, 돌아다니기만 sim/raidBot)
   if (s.raidBoss?.ai[s.seat ?? 0]) return;
   if (roomId === RAID_ROOM.armory) {
-    // 위: 이 캐릭터 무기 전부 (밟으면 바꿈) · 아래: 사용 아이템 하나씩 (둘을 가지면 나머지는 사라짐)
+    // 위: 이 캐릭터 무기 전부 (밟으면 바꿈) · 아래: 사용 아이템 하나씩 (두 칸, 밟으면 바꿈 · 사라지지 않음)
     const weapons = weaponPool(s, true);
     weapons.forEach((id, i) => addPickup(s, roomId, "weapon", id, CX + (i - (weapons.length - 1) / 2) * 22, CY - 34));
     const uses = raidUses();
@@ -155,21 +178,33 @@ export function raidSpawn(s: RunState, roomId: number): void {
     const p = s.player;
     const g = (p.gym ??= { pts: 0, lv: {}, rooms: [] });
     if (!g.rooms.includes(roomKey(s))) {
-      g.pts += R.GYM_PTS;
+      g.pts += raidGymPts(p.characterId);
       g.rooms.push(roomKey(s));
     }
     addPickup(s, roomId, "gym", "0", CX, CY - 8, 0);
   }
 }
 
-/** 성좌의 방 제단 앞: F = 그 성좌 증강을 받음 (한 사람에 하나) */
+/** 성좌의 방 제단 앞: F = 그 성좌 증강을 받음 (한 사람에 하나 · 다른 제단에서 F = 대가 없이 바꿈) */
 export function raidAltarAt(s: RunState, pk: Pickup, interact: boolean): void {
-  if (altarUsed(s) || pk.group < 1) return;
+  const idx = pk.group - 1;
+  const last = s.player.altar?.last;
+  if (pk.group < 1 || (altarUsed(s) && last?.id === ALTAR_IDS[idx])) return;
   s.prompt = { kind: "station", station: "altar", open: false };
   if (!interact) return;
-  const idx = pk.group - 1;
+  if (altarUsed(s) && last) dropAugment(s, last.id, last.keep);
   giveAugment(s, createRng(deriveSeed(s.seed, "raidAltar", s.seat ?? 0, idx)), idx, s.roomId);
   addEffect(s, { kind: "alChoose", x: pk.x, y: pk.y - 20, dirX: idx, dirY: 0, size: 80, maxTicks: 60, width: 1 });
+}
+
+/** 성좌 바꾸기: 앞서 받은 증강을 돌려놓음 */
+function dropAugment(s: RunState, id: string, keep?: PassiveId): void {
+  const p = s.player;
+  const k = (p.augments ?? []).findIndex((a) => a.alt === id && a.passive === keep);
+  if (k >= 0) p.augments!.splice(k, 1);
+  p.altar!.got?.pop();
+  p.altar!.rooms = p.altar!.rooms.filter((r) => r !== s.floor * 1000 + s.roomId);
+  recalcStats(s);
 }
 
 /** 고른 성좌 (그리기: 제단 group) */
@@ -190,9 +225,9 @@ export function raidInputs(s: RunState, inputs: readonly TickInput[]): TickInput
 /** 사람 자리만 (출구에 모이기·잠김 계산) */
 export const raidHuman = (s: RunState, i: number) => !s.raidBoss?.ai[i];
 
-/** 성좌의 방: 사람이 모두 성좌를 골라야 나갈 수 있음 */
-export function raidLocked(s: RunState): boolean {
-  if (!s.raidBoss || s.roomId !== RAID_ROOM.altar) return false;
+/** 성좌의 방: 사람이 모두 성좌를 골라야 다음 방으로 나갈 수 있음 (앞 방으로는 언제든) */
+export function raidLocked(s: RunState, lane = 1): boolean {
+  if (!s.raidBoss || s.roomId !== RAID_ROOM.altar || lane === 0) return false;
   const key = s.floor * 1000 + RAID_ROOM.altar;
   return allPlayers(s).some((p, i) => raidHuman(s, i) && !p.altar?.rooms.includes(key));
 }

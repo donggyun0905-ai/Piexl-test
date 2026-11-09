@@ -1,5 +1,6 @@
 // 레이드 방 화면 위: 컷신(전체 화면 그림, 그동안 게임은 멈춤) · 데스 카운트 · 다시 살아나기까지 · 관전 · 어둠의 세계·돔·검기 안내
-import { RAID_LIVES, RAID_ROOM, raidFighting, raidOut, stunWarn, TICK_RATE, type LucCut, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, RAID_LIVES, RAID_ROOM, raidFighting, raidOut, stunWarn, TICK_RATE, type LucCut, type RunState } from "@pixel-rogue/shared";
+import { watchingSeat } from "../game/camera";
 import { useEffect, useState } from "react";
 import type { TextKey } from "../i18n";
 import { useBoard } from "./PwBoard";
@@ -10,7 +11,7 @@ const RESPAWN = 180;
 /** 사슬 방향 (0 위 · 1 오른쪽 · 2 아래 · 3 왼쪽, sim/bossBinds) */
 const ARROWS = ["↑", "→", "↓", "←"];
 
-export function RaidOverlay({ run, t, names }: { run: RunState; t: (key: TextKey) => string; names?: readonly string[] }) {
+export function RaidOverlay({ run, t, names, me }: { run: RunState; t: (key: TextKey) => string; names?: readonly string[]; me?: number }) {
   const [, tick] = useState(0);
   const [board] = useBoard();
   useEffect(() => {
@@ -20,7 +21,9 @@ export function RaidOverlay({ run, t, names }: { run: RunState; t: (key: TextKey
   const f = run.raidBoss?.fight;
   if (run.raidBoss && run.roomId === RAID_ROOM.reward) return f?.opened !== undefined && !run.over ? <RaidCongrats t={t} /> : null;
   if (!raidFighting(run)) return null;
-  const p = run.player;
+  // 관전 중에도 데스·다시 살아나기는 내 것 (화면은 보는 사람 자리를 꺼내 놓음)
+  const p = (me !== undefined && allPlayers(run)[me]) || run.player;
+  const watching = watchingSeat() !== undefined;
   const deaths = p.raidDeaths ?? 0;
   const down = p.hp <= 0 && p.raidDownAt !== undefined;
   const wait = down ? Math.max(0, Math.ceil((RESPAWN - (run.tick - p.raidDownAt!)) / TICK_RATE)) : 0;
@@ -52,7 +55,10 @@ export function RaidOverlay({ run, t, names }: { run: RunState; t: (key: TextKey
         {raidOut(p) && <span className="danger">{t("raidOutText")}</span>}
         {(p.raidCut ?? 0) > 0 && <span className="danger">{t("raidCutText")}</span>}
       </div>
-      {board && !f?.cut && <RaidBoard run={run} names={names} t={t} float />}
+      {board && !f?.cut && <RaidBoard run={run} names={names} t={t} float me={me} />}
+      {/* 쓰러져 관전하는 동안: 오른쪽에 실시간 기록 · 화면 끌어 보기 안내 */}
+      {watching && !board && !f?.cut && <RaidBoard run={run} names={names} t={t} side me={me} />}
+      {watching && !f?.cut && <p className="raid-watch-pan">{t("raidWatchPan")}</p>}
       {note && !f?.cut && <div className={`raid-note ${p.raidDark ? "dark" : ""}`}>{note}</div>}
       {chain && !f?.cut && (
         <div className="raid-chain" aria-label={t("raidChainText")}>

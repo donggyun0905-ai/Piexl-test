@@ -179,8 +179,11 @@ export class DamageTracker {
     ctx.textBaseline = "alphabetic";
   }
 
-  draw(ctx: CanvasRenderingContext2D, tick: number, snap: Snap): void {
+  /** k: 숫자 크기 배율 (화면을 줄여 보는 레이드 방은 2배로 크게) */
+  draw(ctx: CanvasRenderingContext2D, tick: number, snap: Snap, k = 1): void {
     if (this.numbers.length === 0) return;
+    ctx.save();
+    ctx.scale(k, k);
     ctx.font = "bold 6px monospace";
     ctx.textAlign = "center";
     ctx.textBaseline = "bottom";
@@ -195,8 +198,8 @@ export class DamageTracker {
       const text = formatDamage(n.amount);
       // 빨리 튀어 나갔다 천천히 멈춤 · 숫자마다 정해 둔 방향으로 흩뿌려지며 위로 솟음 (겹쳐도 읽히게)
       const ease = 1 - (1 - Math.min(1, age * 1.6)) ** 3;
-      const x = snap(n.x + n.ox * ease);
-      const y = snap(n.y - 2 + n.oy * ease - RISE * age);
+      const x = snap(n.x + n.ox * ease) / k;
+      const y = snap(n.y - 2 + n.oy * ease - RISE * age) / k;
       ctx.globalAlpha = Math.min(1, 2 - age * 2) * (old ? 0.45 : 1);
       if (this.style && (n.kind === "hit" || n.kind === "crit")) {
         if (this.style === "tiger") drawTigerNumber(ctx, text, x, y, tick - n.born, n.kind === "crit");
@@ -243,6 +246,7 @@ export class DamageTracker {
       // 상태이상: 숫자 왼쪽에 핏방울·불꽃·독 거품·해골·폭풍·녹아내린 구슬·푸른 불꽃
       if (n.kind !== "hit") drawDotIcon(ctx, n.kind, Math.round(x - ctx.measureText(text).width / 2 - 2 - dotIconWidth(n.kind)), y - 6);
     }
+    ctx.restore();
     ctx.globalAlpha = 1;
     ctx.textAlign = "start";
     ctx.textBaseline = "alphabetic";

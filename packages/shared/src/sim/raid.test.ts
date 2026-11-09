@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { ENEMIES } from "../content";
 import { allPlayers, eachSeat, useSeat } from "./party";
 import { stepParty } from "./partyRun";
-import { createRaid, RAID_RULES, raidOwnPassives } from "./raid";
+import { createRaid, RAID_RULES, raidGymPts, raidOwnPassives } from "./raid";
 import { RAID_ROOM } from "./raidTypes";
 import { goThrough } from "./rooms";
 import { stationAt } from "./station";
@@ -55,11 +55,11 @@ describe("레이드 준비", () => {
     expect(s.player.altar?.last?.card).toBe(1);
   });
 
-  it("단련의 방: 포인트 30 (미니게임 없이 바로 강화)", () => {
+  it("단련의 방: 포인트 30 + 모자란 전용 패시브만큼 (미니게임 없이 바로 강화)", () => {
     const s = make();
     for (let i = 0; i < 3; i++) goThrough(s, 1);
     expect(s.roomId).toBe(RAID_ROOM.gym);
-    expect(s.player.gym?.pts).toBe(RAID_RULES.GYM_PTS);
+    expect(s.player.gym?.pts).toBe(raidGymPts("warden"));
   });
 
   it("레이드 방은 라스트 보스 방의 2배 크기 · 한 틱 진행이 됨", () => {

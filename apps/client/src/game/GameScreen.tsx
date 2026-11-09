@@ -107,23 +107,20 @@ export function GameScreen(props: GameScreenProps) {
     const run: RunState =
       withPet(sandbox ? (start.initialRun ?? createPracticeRun(characterId, mode === "practice" ? Date.now() % 1e6 : 1)) : (start.initialRun ?? createRun(parseSeed(seedText), characterId, start.unlocks, sudden, endless, arena, hero, mode === "solo" && !endless && !arena && !hero ? loadTaboo() : undefined, mode === "solo" && randomKitOn())), mode, !!arena);
     runRef.current = run;
-    // 개발 중: 콘솔에서 게임 상태
     if (import.meta.env.DEV) (window as unknown as { pixelRogueRun: RunState }).pixelRogueRun = run;
     const controls: Controls = new Controls({
       zone,
       sticks: sticks as { moveBase: HTMLElement; moveKnob: HTMLElement; aimBase: HTMLElement; aimKnob: HTMLElement },
       playerScreenPos: () => playerScreenPos(canvas, run, controls.zoom, cameraFor(run, controls.zoom)),
-      onEscape: () => (start.embedded ? undefined : run.prompt.kind === "station" && run.prompt.open ? controls.queueInteract() : toggleExit()), // Esc: 창 닫기·나가기
-      onPause: () => {
-        if (canPause) setOverlay((o) => (o === "pause" ? "none" : o === "none" ? "pause" : o));
-      },
+      onEscape: () => (start.embedded ? undefined : run.prompt.kind === "station" && run.prompt.open ? controls.queueInteract() : toggleExit()),
+      onPause: () => setOverlay((o) => (o === "pause" ? "none" : o === "none" ? "pause" : o)),
       onAutoAimChange: setAutoAim,
       onToggleStats: () => setSettings({ showStats: !getSettings().showStats }),
       onToggleHitbox: () => setSettings({ showHitbox: !getSettings().showHitbox }),
       onToggleRange: () => setSettings({ showRange: !getSettings().showRange }),
       onToggleNames: () => setSettings({ showNames: !getSettings().showNames }),
       onTouch: () => setTouchMode(true),
-      zoom: zoomFor(run),
+      zoom: zoomFor(run), pan: !!run.raidBoss,
       clickTarget: (x, y) => clickTargetAt(run, canvas, controls.zoom, x, y),
     });
     controlsRef.current = controls;
@@ -215,7 +212,8 @@ export function GameScreen(props: GameScreenProps) {
         t={t}
         touchMode={touchMode}
         autoAim={autoAim} manualOnly={pvp} pvp={pvp}
-        onPause={canPause ? () => setOverlay("pause") : null}
+        onPause={() => setOverlay("pause")}
+        live={!canPause}
         onAutoAim={(on) => controlsRef.current?.setAutoAim(on)}
         hpFillRef={hpFillRef}
         hpTextRef={hpTextRef}
@@ -259,9 +257,9 @@ export function GameScreen(props: GameScreenProps) {
         <PracticePanel run={getRun} loadout={loadout} characterId={characterId} lang={lang} t={t} onCharacter={props.onPracticeCharacter} />
       )}
       {loadout && <Loadout view={loadout} character={characterId} lang={lang} t={t} touchMode={touchMode} controls={() => controlsRef.current} />}
-      {pvp ? <PanHint t={t} touchMode={touchMode} /> : <p className={`game-hint ${touchMode ? "touch" : ""}`}>{t(touchMode ? "hintRotate" : "hintPc")}</p>}
+      {pvp || props.initialRun?.raidBoss ? <PanHint t={t} touchMode={touchMode} /> : <p className={`game-hint ${touchMode ? "touch" : ""}`}>{t(touchMode ? "hintRotate" : "hintPc")}</p>}
 
-      {/* 터치·마우스 입력 영역 (조이스틱은 드래그할 때만) */}
+      {/* 터치·마우스 입력 영역 */}
       <div ref={zoneRef} className="input-zone" />
       <div ref={moveBaseRef} className="stick-base" />
       <div ref={moveKnobRef} className="stick-knob" />
@@ -269,7 +267,7 @@ export function GameScreen(props: GameScreenProps) {
       <div ref={aimKnobRef} className="stick-knob aim" />
       {touchMode && loadout && (
         <TouchButtons
-          slots={loadout.slots} useOff={loadout.useOff}
+          slots={loadout.slots} useOff={loadout.useOff} cds={loadout.cds}
           lang={lang}
           t={t}
           controls={getControls}
@@ -292,6 +290,7 @@ export function GameScreen(props: GameScreenProps) {
           onRetry={props.onRetry}
           extra={canChallenge ? <LastBossChoice t={t} onChoose={challenge} /> : props.resultExtra}
           time={result ? formatTime(result.ticks) : ""}
+          live={!canPause}
         />
       )}
     </div>

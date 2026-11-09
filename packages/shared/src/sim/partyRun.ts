@@ -112,7 +112,7 @@ function partyRoom(s: RunState, inputOf: (i: number) => TickInput): void {
     useSeat(s, alive[0]!.i);
   };
 
-  if (raidLocked(s)) return;
+  if (raidLocked(s, alive[0]!.lane)) return;
   const lane = alive[0]!.lane;
   if (alive.some((a) => a.lane >= 0)) {
     if (!alive.every((a) => a.lane === lane)) return gather((a) => a.lane >= 0);

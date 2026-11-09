@@ -1,3 +1,4 @@
+import { UseCd } from "./UseCd";
 import { NovicePanel, type NoviceView } from "./NovicePanel";
 import { SkillButtons } from "./SkillButtons";
 import { StigmaGauge } from "./StigmaGauge";
@@ -26,6 +27,8 @@ export interface LoadoutView {
   slots: (UseItemId | null)[];
   /** 지금 사용 아이템을 못 씀 (끝없는 시련) */
   useOff?: boolean;
+  /** 레이드 쿨타임: 칸마다 [남은 초, 남은 비율] (sim/raidPrep) */
+  cds?: [number, number][];
   /** 대장간: 지금 무기 강화·암흑 강화·꼬리표 · 꼬리표를 바꾼 패시브 */
   forge?: { lv: number; dark: number; tag?: ItemTag };
   /** 대장간에서 꼬리표를 바꿨으면 패시브 차례대로 지금 꼬리표 */
@@ -65,7 +68,7 @@ export interface LoadoutView {
 export function loadoutKey(v: LoadoutView): string {
   const n = v.novice ? `|${v.novice.lv},${v.novice.exp},${v.novice.points}` : "";
   const pw = v.pw ? `|${v.pw.cds.join(",")}|${v.pw.armed}|${v.pw.silenced}` : "";
-  return `${v.weaponId}${v.forge ? JSON.stringify(v.forge) : ""}${v.tags?.join(",") ?? ""}|${v.slots.join(",")}${v.useOff ? "x" : ""}|${v.passives.join(",")}|${v.augs?.map((a) => a.passive + a.skills.join("+")).join(",") ?? ""}${n}|${v.skills?.join(",") ?? ""}${v.stages?.join("") ?? ""}${v.stigma ? `|${v.stigma.v}${v.stigma.awake ? "a" : ""}${JSON.stringify(v.stigma.slide ?? "")}` : ""}${v.faction ? `|${JSON.stringify(v.faction)}` : ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}|${v.spirit ? JSON.stringify(v.spirit) : ""}|${v.altarRes?.tick ?? ""}`;
+  return `${v.weaponId}${v.forge ? JSON.stringify(v.forge) : ""}${v.tags?.join(",") ?? ""}|${v.slots.join(",")}${v.useOff ? "x" : ""}${v.cds?.join(";") ?? ""}|${v.passives.join(",")}|${v.augs?.map((a) => a.passive + a.skills.join("+")).join(",") ?? ""}${n}|${v.skills?.join(",") ?? ""}${v.stages?.join("") ?? ""}${v.stigma ? `|${v.stigma.v}${v.stigma.awake ? "a" : ""}${JSON.stringify(v.stigma.slide ?? "")}` : ""}${v.faction ? `|${JSON.stringify(v.faction)}` : ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}|${v.spirit ? JSON.stringify(v.spirit) : ""}|${v.altarRes?.tick ?? ""}`;
 }
 
 interface Props {
@@ -152,6 +155,7 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
             >
               <kbd>{keyLabel(useKeys[i] ?? "")}</kbd> {id && <ItemIcon item={{ kind: "use", id }} size={20} />} {id ? itemName("use", id, lang) : t("empty")}
               {view.useOff && <i className="slot-x" aria-hidden="true">✕</i>}
+              <UseCd cd={view.cds?.[i]} />
             </button>
           ))}
         </span>

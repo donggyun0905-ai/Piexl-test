@@ -8,6 +8,7 @@ import { allPlayers, eachSeat } from "./party";
 import { RAID_ROOM } from "./raidTypes";
 import { goReward, rewardTick } from "./raidReward";
 import { raidLogHp } from "./raidStats";
+import { raidPrepTick } from "./raidPrep";
 import type { PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
 
@@ -31,6 +32,7 @@ export const RAID_LIVES = R.LIVES;
 /** 한 틱 뒤 (sim/partyRun): 쓰러짐·다시 살아남 · 어둠의 세계에서 돌아옴 · 컷신 무적 · 승패 */
 export function raidAfter(s: RunState): void {
   if (s.raidBoss && s.roomId === RAID_ROOM.reward) return rewardTick(s);
+  if (s.raidBoss) raidPrepTick(s);
   if (!raidFighting(s)) return;
   const cut = lucCutting(s);
   eachSeat(s, () => {

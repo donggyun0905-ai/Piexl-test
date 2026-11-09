@@ -29,6 +29,7 @@ export interface ControlsOptions {
   /** 처음 터치하면 모바일 화면(버튼·안내)으로 전환 */
   onTouch: () => void;
   zoom: { min: number; start: number }; // 확대 한도·처음 배율 (camera zoomFor)
+  pan?: boolean; // 화면 끌어 보기 (레이드)
   /** 누른 자리가 층 보상·미니맵 방이면 그 입력 (클릭·탭) */
   clickTarget: (x: number, y: number) => ClickTarget | null;
 }
@@ -66,7 +67,7 @@ export class Controls {
 
   constructor(private opt: ControlsOptions) {
     this.zoom = opt.zoom.start;
-    this.cleanup.push(bindPan(opt.zone, opt.zoom.min < 1, () => opt.playerScreenPos()?.scale ?? 1));
+    this.cleanup.push(bindPan(opt.zone, opt.zoom.min < 1 || !!opt.pan, () => opt.playerScreenPos()?.scale ?? 1));
     this.touch = new TouchSticks({
       zone: opt.zone,
       onTouch: () => (this.touched || ((this.touched = true), this.setAutoAim(true)), opt.onTouch()), // 처음 터치하면 모바일: 자동 공격 켬

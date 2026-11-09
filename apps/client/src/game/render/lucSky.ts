@@ -1,6 +1,6 @@
 // 레이드 보스 루시퍼 2페이즈 그리기 (sim/lucSwords·lucPhase2): 가시 덩굴 장판 · 맵 전체 기절 경고 · 낙하 검 어둠 · 날개(바닥·등) · 꺼진 바닥(하늘)
 // 효과: 절망의 검 패턴(레이드용 맵 잔패턴 그림) · 떨어지는 검 · 바닥이 꺼짐
-import { allPlayers, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, stunWarn, type EffectState, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, RAID_ROOM, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, stunWarn, type EffectState, type RunState } from "@pixel-rogue/shared";
 import { lucFx, lucMapFx, lucProp } from "./lucArt";
 import { SWORD_COLORS } from "./lucifer";
 import { additive, glow, shock } from "./pwFxBits";
@@ -13,7 +13,7 @@ const H = () => ROOM_MAX_Y - ROOM_MIN_Y;
 /** 바닥 (적·사람보다 아래) */
 export function drawLucSky(ctx: Ctx, s: RunState, snap: Snap): void {
   const f = s.raidBoss?.fight;
-  if (!f || f.phase !== 2) return;
+  if (!f || f.phase !== 2 || s.roomId !== RAID_ROOM.boss) return;
   const t = s.tick;
   // 하늘: 바닥이 꺼져 끝없는 어둠 + 흐르는 별
   if (f.p2 === "sky") {

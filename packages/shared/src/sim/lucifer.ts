@@ -9,6 +9,7 @@ import { phaseTwo, startPhase2 } from "./lucPhase2";
 import { darkTick, flameTick } from "./lucDark";
 import { LUC_RULES as L, lucFight, lucLines, lucRng, lucSpot, lucTargets, near } from "./lucKit";
 import { pillarTick, spawnPillars } from "./lucPillars";
+import { coverTick } from "./lucCover";
 import type { LucCut, LucFight } from "./lucTypes";
 import { eachSeat } from "./party";
 import type { EnemyState, RunState } from "./types";
@@ -35,6 +36,8 @@ const CUT_TICKS: Record<LucCut, number> = { pillars: R.CUT_PILLARS, change: R.CU
 /** 레이드 방에 처음 들어갈 때: 루시퍼(방 가운데) + 석화의 기둥 넷 */
 export function spawnLucifer(s: RunState): EnemyState[] {
   const boss = makeEnemy(s, "lucifer", (ROOM_MIN_X + ROOM_MAX_X) / 2, (ROOM_MIN_Y + ROOM_MAX_Y) / 2 + 10, 1, 0);
+  // 기둥이 남아 있는 동안 보호막 (처음부터 · 석화의 빔마다 다시 채움)
+  boss.ward = L.SHIELD;
   return [boss, ...spawnPillars(s, boss)];
 }
 
@@ -61,6 +64,7 @@ export function updateLucifer(s: RunState, e: EnemyState, toP: readonly [number,
     return;
   }
   e.immune = false;
+  coverTick(s);
   // 1페이즈 체력을 다 깎음 → 변신 (넘친 피해는 버림)
   if (f.phase === 1 && e.hp <= L.PHASE_HP) {
     e.hp = L.PHASE_HP;

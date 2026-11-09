@@ -45,6 +45,8 @@ interface Props {
   onRetry?: (sameSeed: boolean) => void;
   /** 결과 창에 덧붙일 내용 (일일 도전 순위 등) */
   extra?: ReactNode;
+  /** 멈추지 않는 판(협동·레이드): 일시정지 대신 '설정' 창 */
+  live?: boolean;
 }
 
 /** 시드 표시 + 공유 (모바일은 공유 창, PC는 주소 복사) */
@@ -75,7 +77,7 @@ export function SeedLine({ seedText, t }: { seedText: string; t: (key: TextKey) 
 }
 
 /** 일시정지 · 나가기 확인 · 결과 창 */
-export function GameOverlays({ overlay, result, time, seedText, lang, t, onClose, onExit, onRetry, extra }: Props) {
+export function GameOverlays({ overlay, result, time, seedText, lang, t, onClose, onExit, onRetry, extra, live }: Props) {
   if (result) {
     const s = result.score;
     return (
@@ -136,7 +138,7 @@ export function GameOverlays({ overlay, result, time, seedText, lang, t, onClose
     return (
       <div className="game-overlay">
         <div className="modal">
-          <h2>{t("paused")}</h2>
+          <h2>{t(live ? "settings" : "paused")}</h2>
           {seedText && <SeedLine seedText={seedText} t={t} />}
           <SettingsPanel lang={lang} t={t} />
           <button type="button" onClick={onClose}>

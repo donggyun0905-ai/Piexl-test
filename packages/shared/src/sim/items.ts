@@ -29,7 +29,7 @@ import { resetAbandoned } from "./abandoned";
 import { noviceMods, spendStat } from "./novice";
 import { imugiMods } from "./imugiMods";
 import { apostleMods, apostlePotion } from "./apostle";
-import { mukinPotion } from "./mukin";
+import { mukinPotion } from "./mukin"; import { spendUse } from "./raidPrep";
 import { swarmMods } from "./swarmMods";
 import { goldLocked, noUseItems, oniConvert } from "./oniRules";
 import { buildSetMods } from "./buildSets"; import { bagOpen, bagStore } from "./spiritPack"; import { coinEat } from "./spiritCoin";
@@ -172,8 +172,7 @@ export function updateItems(s: RunState, input: TickInput): void {
       }
       continue;
     }
-    // 빈 칸 사용 아이템은 닿으면 바로 · 꽉 찬 칸 바꾸기는 잠깐 서 있으면
-    // (F·버튼은 바로). 무기 바꾸기·층 보상은 F·버튼으로만 (층 보상은 클릭도)
+    // 빈 칸 사용 아이템은 닿으면 바로 · 꽉 찬 칸 바꾸기는 잠깐 서 있으면(F는 바로) · 무기·층 보상은 F로만
     // (레이드 아레나 보상은 F·버튼으로만 · 돈 주머니는 칸이 차도 바로 돈)
     // 금봉을 든 오니는 다른 무기를 못 잡음
     if (pk.kind === "weapon" && goldLocked(p)) continue;
@@ -255,7 +254,7 @@ function useSlot(s: RunState, slot: number, input: TickInput): void {
   const p = s.player;
   const item = p.useSlots[slot];
   if (!item) return bagOpen(s);
-  p.useSlots[slot] = null;
+  if (spendUse(s, slot, item)) return;
   // 협동: 전투가 끝난 방에서 쓰러진 친구 옆이면 회복약으로 일으킴
   const down = (item === "potion" || item === "elixir") && s.rooms[s.roomId]!.cleared ? downedNear(s, R.REVIVE_REACH) : null;
   if (down) {

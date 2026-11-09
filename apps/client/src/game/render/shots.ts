@@ -1,7 +1,7 @@
 // 투사체 · 효과(휘두르기·맞음·폭발) · 보스 체력 막대 · 모바일 조준점
 import { drawUmbraBar } from "./umbra";
 import { drawBossBarMarks } from "./bossBarMarks";
-import { allPlayers, ENEMIES, type ProjectileState, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, ENEMIES, RAID_ROOM, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { drawLaserFx } from "./beams";
 import { drawOrbitFx, drawOrbShot } from "./orbs";
 import { drawKiShot } from "./brawl";
@@ -156,7 +156,7 @@ export function drawEffects(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
     if (drawGunFx(ctx, fx, snap) || drawBeastFx(ctx, fx, snap) || drawSageFx(ctx, fx, snap) || drawBossFx(ctx, fx, snap) || drawTagFx(ctx, fx, snap) || drawTitanFx(ctx, fx, snap) || drawOniFx(ctx, fx, snap) || drawScribeFx(ctx, fx, snap) || drawS2Fx(ctx, fx, snap)) continue;
     if (fx.kind === "swing" && fx.width === 2) drawWhip(ctx, fx, snap(px), snap(py), t);
     else if (fx.kind === "swing") drawSwing(ctx, fx, snap(px), snap(py), t);
-    else if (fx.kind === "hit") drawHit(ctx, fx, snap, t);
+    else if (fx.kind === "hit") drawHit(ctx, fx, snap, t, s.raidBoss && s.roomId === RAID_ROOM.boss ? 2.2 : 1);
     else if (fx.kind === "bloom") drawBloom(ctx, fx, s.tick);
     else if (fx.kind === "blast") drawBlast(ctx, fx, snap, t);
     else drawBurst(ctx, fx, t);

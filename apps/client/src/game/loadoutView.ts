@@ -1,5 +1,5 @@
 // 아래 장비 칸에 보낼 값 (gameLoop가 틱마다 만들어 바뀌었을 때만 보냄): 무기·사용 아이템·패시브 · 풋내기 레벨 · 추적자 스킬 대기 · 패왕전 스킬 · 판매 값 · 작업대 · 히든 고르는 창
-import { coinTier, beatriceSkills, ianSkills, gabrielSkills, serenaSkills, rafaelSkills, yurielSkills, michaelaSkills, nailerSkills, nailerStages, stigmaGauge, factionGauge, BLAST, expToNext, passiveTagAt, sellPrice, trackerSkills, trialNoItems, type RunState } from "@pixel-rogue/shared";
+import { coinTier, beatriceSkills, ianSkills, gabrielSkills, serenaSkills, rafaelSkills, yurielSkills, michaelaSkills, nailerSkills, nailerStages, stigmaGauge, factionGauge, BLAST, expToNext, passiveTagAt, sellPrice, trackerSkills, trialNoItems, raidCdLeft, TICK_RATE, type RunState } from "@pixel-rogue/shared";
 import type { LoadoutView } from "./Loadout";
 import type { SpiritView } from "./SpiritWindows";
 import { pwSkillView } from "./pwSkillView";
@@ -43,6 +43,8 @@ export function loadoutView(run: RunState, armed: Parameters<typeof pwSkillView>
     slots: [...p.useSlots],
     // 끝없는 시련 등 사용 아이템을 못 쓰는 동안 (칸에 ✕)
     ...(trialNoItems(run) ? { useOff: true } : {}),
+    // 레이드: 칸마다 쿨타임 [남은 초, 비율 (5% 단위)]
+    ...(run.raidBoss ? { cds: p.useSlots.map((_, i): [number, number] => [Math.max(0, Math.ceil(((p.raidCd?.[i] ?? 0) - run.tick) / TICK_RATE)), Math.round(raidCdLeft(run, i) * 20) / 20]) } : {}),
     passives: [...p.passives],
     // 대장간 (sim/forge): 지금 무기 강화·암흑 강화·꼬리표 · 꼬리표를 바꾼 패시브
     ...(p.forge?.[p.weaponId] ? { forge: { lv: p.forge[p.weaponId]!.lv ?? 0, dark: p.forge[p.weaponId]!.dark ?? 0, ...(p.forge[p.weaponId]!.tag ? { tag: p.forge[p.weaponId]!.tag } : {}) } } : {}),

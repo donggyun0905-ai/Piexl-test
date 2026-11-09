@@ -1,6 +1,6 @@
 // 단련의 방 창 (기구 앞에서 F, game/StationWindow): 아직 이 방 기구를 안 썼으면 설명 + '시작하기' → 그 기구 미니게임 → 끝나면 점수로 포인트 → 강화 목록
 // 강화 목록: 능력치·무기 숙련·가진 패시브마다 단계 · 단계당 오르는 몫 · 지금까지 오른 몫 · '+' (남은 포인트 사용). 누른 것은 입력 menu (sim/gym)
-import { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymStep, menuCode, type GymStat } from "@pixel-rogue/shared";
+import { GYM_OFF, GYM_OP, GYM_RULES, GYM_STATS, gymStep, menuCode, RAID_OP, type GymStat } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../../i18n";
 import { GYM_DEVICE } from "../../i18n/items/station";
 import type { StationView } from "../stationView";
@@ -61,6 +61,8 @@ export function GymPanel({ gym, lang, t, send }: { gym: Gym; lang: Lang; t: (k: 
     play("gymUp");
     send(menuCode(GYM_OP.up, a));
   };
+  // 레이드: 잘못 찍은 포인트 되돌리기 (sim/raidPrep)
+  const down = gym.raid ? (a: number) => send(menuCode(RAID_OP.gymDown, a)) : undefined;
   const max = GYM_RULES.MAX_LV;
   return (
     <div className="gym-panel">
@@ -84,6 +86,11 @@ export function GymPanel({ gym, lang, t, send }: { gym: Gym; lang: Lang; t: (k: 
                 {off ? t("gymNoEffect") : `Lv ${lv}/${max} · ${t("gymPer")} ${fmt(k, gymStep(k))} · ${t("gymNow")} ${fmt(k, gymStep(k) * lv)}`}
                 {oni && ` · ${t("gymOni")}`}
               </small>
+              {down && (
+                <button type="button" className="gym-minus" aria-label={t("raidGymMinus")} disabled={lv <= 0} onClick={() => down(i)}>
+                  −
+                </button>
+              )}
               <button type="button" disabled={off || gym.pts <= 0 || lv >= max} onClick={() => up(i)}>
                 +
               </button>
@@ -91,7 +98,7 @@ export function GymPanel({ gym, lang, t, send }: { gym: Gym; lang: Lang; t: (k: 
           );
         })}
         {gym.passives.map((id, i) => (
-          <GymPassiveRow key={id} id={id} lv={gym.lv[`p:${id}`] ?? 0} max={max} canUp={gym.pts > 0} lang={lang} t={t} onUp={() => up(32 + i)} />
+          <GymPassiveRow key={id} id={id} lv={gym.lv[`p:${id}`] ?? 0} max={max} canUp={gym.pts > 0} lang={lang} t={t} onUp={() => up(32 + i)} onDown={down && (() => down(32 + i))} />
         ))}
       </div>
     </div>

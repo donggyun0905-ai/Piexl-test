@@ -1,9 +1,10 @@
 // 레이드 보스 루시퍼 바닥·위 그리기 (sim/lucifer·lucAttacks·lucPillars·lucDark): 사슬 · 지진파 · 별 고리 · 가시 고리 · 어둠의 기둥 · 흰색 돔
 // · 검기 경고(맵을 덮는 붉은 빛 + 빛나는 빈칸) · X자(점점 그려짐) · 보라 구(끌어당김) · 어둠의 세계(내 화면이 어두워짐) · 효과(lucFx)
-import { allPlayers, LUC_ATTACK_RULES as A, LUC_DARK_RULES as D, LUC_DOME_R, LUC_PILLAR_RULES as P, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, type EffectState, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, LUC_ATTACK_RULES as A, LUC_DARK_RULES as D, LUC_DOME_R, LUC_PILLAR_RULES as P, RAID_ROOM, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, type EffectState, type RunState } from "@pixel-rogue/shared";
 import { lucFx } from "./lucArt";
 import { drawLucSky, drawLucSkyFx, drawLucSkyOver } from "./lucSky";
 import { drawRaidReward } from "./raidReward";
+import { drawCoverTop } from "./lucArena";
 import { additive, glow, shock } from "./pwFxBits";
 import type { Snap } from "./palette";
 
@@ -62,9 +63,10 @@ export function drawLucGround(ctx: Ctx, s: RunState, snap: Snap): void {
 
 /** 위 (적·사람 위) */
 export function drawLucOver(ctx: Ctx, s: RunState, snap: Snap): void {
-  drawLucSkyOver(ctx, s);
   const f = s.raidBoss?.fight;
-  if (!f) return;
+  if (!f || s.roomId !== RAID_ROOM.boss) return;
+  drawCoverTop(ctx, s, snap);
+  drawLucSkyOver(ctx, s);
   const t = s.tick;
   const players = allPlayers(s);
   // 가시 고리: 머리 위 · 멈추면 두 번 깜빡임
@@ -212,6 +214,18 @@ export function drawLucFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     }
     case "quake":
       shock(ctx, x, y, fx.size * (0.5 + t * 2), "#d0b0ff", a * 0.7, 8);
+      break;
+    // 돌기둥 (sim/lucCover): 막음 · 부서짐(돌 조각이 튐) · 다시 생김
+    case "coverHit":
+      shock(ctx, x, y - 22, fx.size * (0.4 + t * 0.7), "#e8e0ff", a, 4);
+      break;
+    case "coverBreak":
+      shock(ctx, x, y - 20, fx.size * (0.6 + t * 1.6), "#b0a8d0", a, 7);
+      ctx.fillStyle = `rgba(110, 104, 134, ${a})`;
+      for (let k = 0; k < 8; k++) ctx.fillRect(x + Math.cos(k * 0.8) * fx.size * t * 1.6 - 3, y - 24 + Math.sin(k * 0.8) * fx.size * t * 1.2 + t * t * 30 - 3, 6, 6);
+      break;
+    case "coverUp":
+      shock(ctx, x, y - 20, fx.size * (1.4 - t), "#c080ff", a, 5);
       break;
     default:
       if (!drawLucSkyFx(ctx, fx, x, y, t, a)) additive(ctx, () => glow(ctx, x, y, fx.size, "#c070ff", a, 0.6));

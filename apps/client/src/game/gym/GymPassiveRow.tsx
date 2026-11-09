@@ -28,9 +28,11 @@ interface Props {
   lang: Lang;
   t: (k: TextKey) => string;
   onUp: () => void;
+  /** 레이드: 포인트 되돌리기 (−) */
+  onDown?: () => void;
 }
 
-export function GymPassiveRow({ id, lv, max, canUp, lang, t, onUp }: Props) {
+export function GymPassiveRow({ id, lv, max, canUp, lang, t, onUp, onDown }: Props) {
   const mods = ((PASSIVES[id] as PassiveDef).mods ?? []) as readonly StatMod[];
   const steps = gymPassiveStep(id);
   const fx = fxKeys(id);
@@ -60,6 +62,11 @@ export function GymPassiveRow({ id, lv, max, canUp, lang, t, onUp }: Props) {
         ))}
         {bad && <small className="gym-note">{t("gymPassiveBadNote")}</small>}
       </div>
+      {onDown && (
+        <button type="button" className="gym-minus" aria-label={t("raidGymMinus")} disabled={lv <= 0} onClick={onDown}>
+          −
+        </button>
+      )}
       <button type="button" disabled={!canUp || lv >= max} onClick={onUp}>
         +
       </button>

@@ -18,6 +18,7 @@ import { GAMBLE_OP, gambleAt, gambleMenu } from "./gamble";
 import { AUCTION_OP, auctionAt, auctionMenu } from "./auction";
 import type { StationKind } from "./stationTypes";
 import { FORGE_OP, forgeMenu, forgeMods } from "./forge";
+import { RAID_OP, raidPrepMenu } from "./raidPrep";
 import { raidAltarAt } from "./raid";
 import { darkMods } from "./lucDark";
 import type { Pickup, RunState } from "./types";
@@ -84,6 +85,8 @@ export function stationMenu(s: RunState, code: number): void {
   if (op === AUCTION_OP) return auctionMenu(s, a);
   // 대장간 (sim/forge)
   if (op >= FORGE_OP.up && op <= FORGE_OP.dark) return forgeMenu(s, op, a, b);
+  // 레이드 준비: 단련 되돌리기 · 대장간 처음부터 (sim/raidPrep)
+  if (op === RAID_OP.gymDown || op === RAID_OP.forgeReset) return raidPrepMenu(s, op, a);
   const kind = stationFor(s);
   const here = s.rooms[s.roomId]?.pickups.some((pk) => pk.kind === kind && (pk.owner === undefined || pk.owner === (s.seat ?? 0)));
   if (!kind || !here) return;

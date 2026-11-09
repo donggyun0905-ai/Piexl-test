@@ -36,8 +36,26 @@ export function drawRaidReward(ctx: Ctx, s: RunState, snap: Snap): void {
     ctx.fillStyle = "rgba(255, 210, 90, 0.5)";
     ctx.fillRect(cx - 4, y, 8, 8);
   }
+  // 벽 둘레 금테 (두 줄)
+  ctx.strokeStyle = "rgba(232, 184, 64, 0.55)";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(ROOM_MIN_X + 6, ROOM_MIN_Y + 6, ROOM_MAX_X - ROOM_MIN_X - 12, ROOM_MAX_Y - ROOM_MIN_Y - 12);
+  ctx.lineWidth = 1;
+  ctx.strokeRect(ROOM_MIN_X + 12, ROOM_MIN_Y + 12, ROOM_MAX_X - ROOM_MIN_X - 24, ROOM_MAX_Y - ROOM_MIN_Y - 24);
+  // 상자 받침: 세 단 대리석 계단 (금테)
+  for (let k = 2; k >= 0; k--) {
+    const w = 120 + k * 36;
+    const h = 46 + k * 14;
+    ctx.fillStyle = k % 2 ? "#2e1446" : "#3a1a58";
+    ctx.beginPath();
+    ctx.ellipse(cx, cy + 14, w / 2, h / 2, 0, 0, TAU);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255, 210, 90, 0.7)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
   // 상자 둘레 마법진
-  lucFx(ctx, 0, 0, 3, cx, cy + 10, 220, 0.45 + 0.15 * Math.sin(t * 0.05));
+  lucFx(ctx, 0, 0, 3, cx, cy + 10, 220, 0.35 + 0.1 * Math.sin(t * 0.05));
   // 빛기둥 여섯
   for (let k = 0; k < 6; k++) {
     const a = (k / 6) * TAU + t * 0.004;
@@ -63,8 +81,8 @@ export function drawRaidReward(ctx: Ctx, s: RunState, snap: Snap): void {
     ctx.fillStyle = "#ffd040";
     ctx.fillRect(x - 3 + sway / 2, ROOM_MIN_Y + 12, 6, 6);
   }
-  // 떠다니는 별빛
-  for (let i = 0; i < 40; i++) {
+  // 떠다니는 별빛 (은은하게)
+  for (let i = 0; i < 18; i++) {
     const x = ROOM_MIN_X + ((i * 97) % (ROOM_MAX_X - ROOM_MIN_X));
     const y = ROOM_MAX_Y - ((t * (0.3 + (i % 4) * 0.15) + i * 41) % (ROOM_MAX_Y - ROOM_MIN_Y));
     additive(ctx, () => glow(ctx, x, y, 2 + (i % 3), i % 3 ? "#ffc040" : "#a070ff", 0.5, 0.2));

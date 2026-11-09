@@ -24,10 +24,11 @@ export function drawSwing(ctx: Ctx, fx: EffectState, px: number, py: number, t: 
 }
 
 /** 맞음: 짧은 흰 섬광 + 네 갈래 빛살 + 튀는 불똥 (작은 것도 또렷하게) */
-export function drawHit(ctx: Ctx, fx: EffectState, snap: Snap, t: number): void {
+export function drawHit(ctx: Ctx, fx: EffectState, snap: Snap, t: number, k = 1): void {
   const x = snap(fx.x);
   const y = snap(fx.y);
-  const r = Math.max(3, fx.size) * (1.4 - 0.5 * t);
+  // k: 화면을 줄여 보는 레이드 방은 크게
+  const r = Math.max(3, fx.size) * (1.4 - 0.5 * t) * k;
   additive(ctx, () => {
     glow(ctx, x, y, r * 1.6, "#ffe8a0", t, 1.6);
     ctx.strokeStyle = `rgba(255,255,255,${t})`;

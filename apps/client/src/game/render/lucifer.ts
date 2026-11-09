@@ -1,12 +1,13 @@
 // 레이드 보스 루시퍼 몸·체력 막대 그리기 (sim/lucifer·lucPillars·lucDark, 그림 render/lucArt)
 // 몸: 1페이즈 여성형 · 2페이즈 남성형 (기본 공격마다 공격 모션 칸) · 석화의 기둥 · 악마의 불길 · 어둠의 세계 몬스터(빨려 간 사람에게만)
 // 체력 막대: 페이즈마다 줄 ×99 (줄마다 색) · 보호막(흰 막대) · 페이즈 이름
-import { allPlayers, LUC_RULES, lucLines, swordGlow, type EnemyState, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, LUC_GUARD_PCT, LUC_RULES, lucGuarded, lucLines, swordGlow, type EnemyState, type RunState } from "@pixel-rogue/shared";
 import { detectLang } from "../../i18n";
 import { TEXT } from "../../i18n/text";
 import { lucBody, lucFx, lucProp } from "./lucArt";
 import { drawChest } from "./raidReward";
 import { additive, glow } from "./pwFxBits";
+import { hitPop } from "./bodyMotion";
 
 type Ctx = CanvasRenderingContext2D;
 /** 크게 (맵이 크니 다 크게 · 기둥·절망의 검은 루시퍼보다 크게, 2026-11-09 사용자 요청): 루시퍼 높이 · 기둥·검 높이 · 불길 너비 */
@@ -19,8 +20,65 @@ const LINE_COLORS = ["#a040ff", "#c040e0", "#ff40a0", "#ff6040", "#ffb030", "#e0
 export const SWORD_COLORS = ["#ff3040", "#40a0ff", "#ffd040", "#ff7020", "#40d060", "#8a30ff"];
 const lineColor = (n: number) => LINE_COLORS[(((99 - n) % LINE_COLORS.length) + LINE_COLORS.length) % LINE_COLORS.length]!;
 
-/** 몸 대신 그림 (그렸으면 true · 남의 어둠의 세계 몬스터는 그리지 않음) */
+/** 몸 대신 그림 (그렸으면 true · 남의 어둠의 세계 몬스터는 그리지 않음) · 맞으면 흔들리고 부풀며 하얗게 번쩍 (타격감) · 기둥·검·몬스터는 머리 위 체력 줄 */
 export function drawLucActor(ctx: Ctx, s: RunState, e: EnemyState, x: number, y: number): boolean {
+  if (!LUC_KINDS.has(e.kind)) return false;
+  if (e.kind === "lucshade" && e.count !== (s.seat ?? 0)) return true;
+  const hf = Math.max(0, e.hitFlash);
+  const boss = e.kind === "lucifer";
+  const pop = hitPop(boss ? hf * 0.5 : hf * 2);
+  const jx = hf > 0 ? (hf % 2 ? 1 : -1) * hf * (boss ? 0.25 : 0.5) : 0;
+  ctx.save();
+  ctx.translate(x + jx, y);
+  ctx.scale(pop, 2 - pop);
+  ctx.translate(-x, -y);
+  const drawn = drawLucBody(ctx, s, e, x, y);
+  // 하얀 번쩍 (같은 그림을 더하기로 한 번 더)
+  if (drawn && hf > 0 && e.kind !== "lucifer") {
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = Math.min(1, hf / 6) * 0.55;
+    drawLucBody(ctx, s, e, x, y);
+  }
+  ctx.restore();
+  if (drawn && hf >= 5) additive(ctx, () => glow(ctx, x, y - (e.kind === "lucifer" ? 60 : e.kind === "lucflame" ? 10 : 80), e.kind === "lucflame" ? 26 : 70, "#ffffff", 0.35, 0.5));
+  if (drawn) drawFoeBar(ctx, s, e, x, y);
+  return drawn;
+}
+
+const LUC_KINDS = new Set<string>(["lucifer", "lucchest", "lucpillar", "lucsword", "lucflame", "lucshade"]);
+
+/** 기둥·검·몬스터 머리 위 체력 줄 (화면을 줄여 보니 두껍게) · 체력 숫자 */
+function drawFoeBar(ctx: Ctx, s: RunState, e: EnemyState, x: number, y: number): void {
+  if (e.kind === "lucifer" || e.kind === "lucchest" || e.hp <= 0) return;
+  const big = e.kind === "lucpillar" || e.kind === "lucsword";
+  const w = big ? 96 : 36;
+  const h = big ? 8 : 5;
+  const top = big ? y + 18 - PILLAR_H - 14 : y - 40;
+  const k = Math.max(0, Math.min(1, e.hp / e.maxHp));
+  ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+  ctx.fillRect(x - w / 2 - 2, top - 2, w + 4, h + 4);
+  ctx.fillStyle = "#3a1020";
+  ctx.fillRect(x - w / 2, top, w, h);
+  ctx.fillStyle = e.kind === "lucsword" ? "#c070ff" : big ? "#e0c8ff" : "#ff5a6a";
+  ctx.fillRect(x - w / 2, top, Math.max(1, Math.round(w * k)), h);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
+  ctx.fillRect(x - w / 2, top, Math.round(w * k), 1);
+  if (!big) return;
+  ctx.font = "bold 9px monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "bottom";
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "#000";
+  const n = `${Math.ceil(e.hp)} / ${e.maxHp}`;
+  ctx.strokeText(n, x, top - 3);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillText(n, x, top - 3);
+  ctx.textAlign = "start";
+  ctx.textBaseline = "alphabetic";
+  void s;
+}
+
+function drawLucBody(ctx: Ctx, s: RunState, e: EnemyState, x: number, y: number): boolean {
   if (e.kind === "lucifer") return drawBoss(ctx, s, e, x, y);
   if (e.kind === "lucchest") {
     drawChest(ctx, s, e, x, y);
@@ -45,7 +103,6 @@ export function drawLucActor(ctx: Ctx, s: RunState, e: EnemyState, x: number, y:
     return true;
   }
   if (e.kind === "lucshade") {
-    if (e.count !== (s.seat ?? 0)) return true;
     ctx.fillStyle = "rgba(20, 0, 30, 0.85)";
     ctx.beginPath();
     ctx.arc(x, y, e.r + 2, 0, Math.PI * 2);
@@ -74,8 +131,29 @@ function drawBoss(ctx: Ctx, s: RunState, e: EnemyState, x: number, y: number): b
   const flip = p2 && allPlayers(s).some((p) => p.hp > 0) && nearestX(s, e) < e.x;
   if (!lucBody(ctx, p2 ? "p2.png" : "p1.png", pose, x, y + 40 + bob, BODY_H, flip, stunned ? 0.75 : 1)) return false;
   if (e.hitFlash > 0) additive(ctx, () => glow(ctx, x, y - 50, 70, "#ffffff", 0.25, 0.6));
-  // 보호막: 흰 빛 테두리
-  if ((e.ward ?? 0) > 0) additive(ctx, () => glow(ctx, x, y - 60, 120, "#e8e0ff", 0.25 + 0.1 * Math.sin(s.tick * 0.1), 0.7));
+  // 보호막: 흰 빛 + 몸을 감싸는 빛 방울(육각 무늬 테두리) · 기둥·검이 남아 있으면 피해 감소 표시(푸른 고리)
+  if ((e.ward ?? 0) > 0) {
+    additive(ctx, () => glow(ctx, x, y - 60, 130, "#e8e0ff", 0.3 + 0.1 * Math.sin(s.tick * 0.1), 0.7));
+    ctx.strokeStyle = `rgba(230, 220, 255, ${0.55 + 0.25 * Math.sin(s.tick * 0.12)})`;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.ellipse(x, y - 60, 92, 118, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([10, 8]);
+    ctx.lineDashOffset = -s.tick * 0.6;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.ellipse(x, y - 60, 100, 126, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  if (lucGuarded(s)) {
+    ctx.strokeStyle = `rgba(120, 200, 255, ${0.35 + 0.2 * Math.sin(s.tick * 0.08)})`;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.ellipse(x, y + 34, 80, 22, 0, 0, Math.PI * 2);
+    ctx.stroke();
+  }
   // 기절: 머리 위 별
   if (stunned) for (let k = 0; k < 3; k++) lucFx(ctx, 0, 2, 0, x + Math.cos(s.tick * 0.08 + k * 2.1) * 30, y - BODY_H * 0.75, 26, 0.9);
   return true;
@@ -129,7 +207,7 @@ export function drawLucBar(ctx: Ctx, s: RunState, boss: EnemyState, bx: number, 
   ctx.fillStyle = lineColor(lines);
   ctx.fillText(n, bx + bw + 6, by + bh / 2);
   const pillars = s.enemies.filter((e) => e.kind === "lucpillar" && e.hp > 0).length;
-  const label = `${say(phase === 1 ? "lucPhase1" : "lucPhase2")}${phase === 1 && pillars > 0 ? ` · ${say("lucPillarsLeft").replace("{n}", String(pillars))}` : ""}${ward > 0 ? ` · ${say("lucShield")}` : ""}`;
+  const label = `${say(phase === 1 ? "lucPhase1" : "lucPhase2")}${phase === 1 && pillars > 0 ? ` · ${say("lucPillarsLeft").replace("{n}", String(pillars))}` : ""}${ward > 0 ? ` · ${say("lucShield")} ${Math.ceil(boss.ward ?? 0)}` : ""}${lucGuarded(s) ? ` · ${say("lucGuard").replace("{n}", String(LUC_GUARD_PCT()))}` : ""}`;
   ctx.font = `bold ${Math.max(8, Math.round(bh * 1.4))}px sans-serif`;
   ctx.textAlign = "center";
   ctx.textBaseline = "top";

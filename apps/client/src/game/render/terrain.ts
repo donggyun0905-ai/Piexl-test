@@ -1,4 +1,5 @@
 // 던전 지형 그리기 (sim/terrain, 독가스는 stalkers): 진흙(젖은 윤기·동심원·거품·돌) · 용암(식은 바위 테·녹은 돌·떠다니는 껍질·거품) · 얕은 물(깊이·가장자리 거품·물결·반짝임, 감전 예고 노랗게 깜빡 · 감전 중엔 번개) · 가시 함정(쇠 발판·못·예고 붉게 · 솟으면 그늘진 가시)
+import { drawLucArena } from "./lucArena";
 import { glowHintRect } from "../glow/glowHints";
 import { drawHiddenGround } from "./hiddenTrial";
 import { spikeState, terrainIdle, type RunState } from "@pixel-rogue/shared";
@@ -236,6 +237,8 @@ function drawSpikes(ctx: Ctx, r: Rect, state: 0 | 1 | 2, tick: number): void {
 
 /** 바닥 위 · 적과 플레이어 아래 */
 export function drawTerrain(ctx: Ctx, s: RunState, snap: Snap): void {
+  // 레이드 방 바닥 꾸밈·돌기둥 받침 (render/lucArena, 위험 표시보다 아래)
+  drawLucArena(ctx, s, snap);
   drawGas(ctx, s, snap);
   // 숨은 시련 바닥·독안개·숨 게이지 (render/hiddenTrial)
   drawHiddenGround(ctx, s);

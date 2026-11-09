@@ -9,19 +9,22 @@ interface Props {
   names?: readonly string[];
   t: (k: TextKey) => string;
   float?: boolean;
+  /** 관전 중 오른쪽에 작게 (실시간 기록) */
+  side?: boolean;
+  /** 내 자리 (관전 중에는 run.seat가 보는 사람 자리라 따로 받음) */
+  me?: number;
 }
 
-export function RaidBoard({ run, names, t, float = false }: Props) {
+export function RaidBoard({ run, names, t, float = false, side = false, me = run.seat ?? 0 }: Props) {
   const players = allPlayers(run);
-  const me = run.seat ?? 0;
   const rows = players.map((p, i) => ({ i, p, st: p.raidStat ?? { dealt: 0, boss: 0, adds: 0, taken: 0, healed: 0, max: 0 } }));
   rows.sort((a, b) => b.st.dealt - a.st.dealt || a.i - b.i);
   const top = (k: "dealt" | "taken" | "healed") => Math.max(1, ...rows.map((r) => r.st[k]));
   const total = Math.max(1, rows.reduce((a, r) => a + r.st.dealt, 0));
   const ai = run.raidBoss?.ai ?? [];
   return (
-    <div className={`raid-board ${float ? "float" : ""}`}>
-      <h3>{t("raidBoardTitle")}</h3>
+    <div className={`raid-board ${float ? "float" : ""}${side ? " side" : ""}`}>
+      <h3>{t(side ? "raidLiveBoard" : "raidBoardTitle")}</h3>
       <table>
         <thead>
           <tr>
