@@ -3,6 +3,7 @@
 import { allPlayers, LUC_ATTACK_RULES as A, LUC_DARK_RULES as D, LUC_DOME_R, LUC_PILLAR_RULES as P, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, type EffectState, type RunState } from "@pixel-rogue/shared";
 import { lucFx } from "./lucArt";
 import { drawLucSky, drawLucSkyFx, drawLucSkyOver } from "./lucSky";
+import { drawRaidReward } from "./raidReward";
 import { additive, glow, shock } from "./pwFxBits";
 import type { Snap } from "./palette";
 
@@ -11,6 +12,7 @@ const TAU = Math.PI * 2;
 
 /** 바닥 (적보다 아래) */
 export function drawLucGround(ctx: Ctx, s: RunState, snap: Snap): void {
+  drawRaidReward(ctx, s, snap);
   drawLucSky(ctx, s, snap);
   const f = s.raidBoss?.fight;
   const boss = s.enemies.find((e) => e.kind === "lucifer" && e.hp > 0);

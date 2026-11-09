@@ -54,6 +54,8 @@ export interface LucFight {
   wings?: number[][];
   fallAt?: number;
   spin?: number;
+  /** 보상 방 상자가 열린 틱 (sim/raidReward) */
+  opened?: number;
 }
 
 export interface LucPlayerState {

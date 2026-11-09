@@ -17,7 +17,7 @@ describe("레이드 준비", () => {
     expect(s.player.passives).toEqual([...raidOwnPassives("warden"), "goddessBlessing"]);
     expect(s.gold).toBe(RAID_RULES.GOLD);
     expect(s.player.useSlots).toEqual([null, null]);
-    expect(s.map.rooms.map((r) => r.type)).toEqual(["start", "forge", "altar", "gym", "exit"]);
+    expect(s.map.rooms.map((r) => r.type)).toEqual(["start", "forge", "altar", "gym", "exit", "golden"]);
   });
 
   it("같은 시드면 같은 AI (결정성)", () => {
@@ -151,7 +151,7 @@ describe("레이드 루시퍼 2페이즈", () => {
     expect(s.raidBoss?.fight?.p2).toBe("open");
   });
 
-  it("30줄 이하: 날개 → 바닥이 꺼지면 날개 없는 사람은 끝 · 체력 0이면 쓰러지는 컷신 → 승리", () => {
+  it("30줄 이하: 날개 → 바닥이 꺼지면 날개 없는 사람은 끝 · 체력 0이면 쓰러지는 컷신 → 보상 방 상자 → 승리", () => {
     const { s, boss } = phase2();
     for (const e of s.enemies) if (e.kind === "lucsword") e.hp = 0;
     for (let t = 0; t < 1400 && s.raidBoss?.fight?.p2 !== "open"; t++) stepParty(s, [EMPTY_INPUT]);
@@ -163,7 +163,16 @@ describe("레이드 루시퍼 2페이즈", () => {
     expect(s.raidBoss?.fight?.p2).toBe("sky");
     expect(s.player.hp).toBeGreaterThan(0);
     boss.hp = 0;
-    for (let t = 0; t < 200 && !s.over; t++) stepParty(s, [EMPTY_INPUT]);
+    for (let t = 0; t < 200 && s.roomId !== RAID_ROOM.reward; t++) stepParty(s, [EMPTY_INPUT]);
+    // 보상 방: 모두 살아나고 가운데 상자 · 부수면 열리고 잠시 뒤 승리
+    expect(s.roomId).toBe(RAID_ROOM.reward);
+    eachSeat(s, () => expect(s.player.hp).toBeGreaterThan(0));
+    const chest = s.enemies.find((e) => e.kind === "lucchest")!;
+    expect(chest).toBeDefined();
+    chest.hp = 0;
+    stepParty(s, [EMPTY_INPUT]);
+    expect(s.raidBoss?.fight?.opened).toBeDefined();
+    for (let t = 0; t < 600 && !s.over; t++) stepParty(s, [EMPTY_INPUT]);
     expect(s.won).toBe(true);
   });
 });

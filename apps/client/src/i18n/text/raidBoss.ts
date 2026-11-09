@@ -69,4 +69,9 @@ export const RAID_BOSS_TEXT = {
   raidWingText: { ko: "날개를 몸으로 닿아 다세요! {s}초 뒤 바닥이 꺼져요", en: "Touch a wing to put it on! The floor collapses in {s}s", ja: "翼に触れて装着! {s}秒後に床が崩れる" },
   raidStunText: { ko: "절망의 검이 맵 전체를 기절시킵니다!", en: "The swords of despair are about to stun everyone!", ja: "絶望の剣がマップ全体を気絶させる!" },
   raidGoalP2: { ko: "절망의 검부터 부수세요 (검이 빛나면 그 색의 패턴이 맵 곳곳에)", en: "Break the swords of despair first (a glowing sword casts its colored pattern across the map)", ja: "まず絶望の剣を壊そう (剣が光るとその色のパターンがマップ中に)" },
+  raidGoal_5: { ko: "보상 방: 가운데 큰 상자를 때려서 여세요!", en: "Reward room: strike the great chest to open it!", ja: "報酬の間: 中央の大きな宝箱を叩いて開けよう!" },
+  raidCongrats: { ko: "축하합니다!", en: "Congratulations!", ja: "おめでとうございます!" },
+  raidCongratsSub: { ko: "루시퍼를 쓰러뜨리고 보물 상자를 열었습니다", en: "You defeated Lucifer and opened the treasure chest", ja: "ルシファーを倒し、宝箱を開けました" },
+  raidRewardSoon: { ko: "(보상은 준비 중이에요)", en: "(Rewards coming soon)", ja: "(報酬は準備中です)" },
+  raidChestName: { ko: "루시퍼의 보물 상자", en: "Lucifer's Treasure Chest", ja: "ルシファーの宝箱" },
 };

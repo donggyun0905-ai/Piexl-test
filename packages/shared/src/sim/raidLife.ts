@@ -6,6 +6,7 @@ import { darkReturn } from "./lucDark";
 import { lucCutting } from "./lucifer";
 import { allPlayers, eachSeat } from "./party";
 import { RAID_ROOM } from "./raidTypes";
+import { goReward, rewardTick } from "./raidReward";
 import type { PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
 
@@ -28,6 +29,7 @@ export const RAID_LIVES = R.LIVES;
 
 /** 한 틱 뒤 (sim/partyRun): 쓰러짐·다시 살아남 · 어둠의 세계에서 돌아옴 · 컷신 무적 · 승패 */
 export function raidAfter(s: RunState): void {
+  if (s.raidBoss && s.roomId === RAID_ROOM.reward) return rewardTick(s);
   if (!raidFighting(s)) return;
   const cut = lucCutting(s);
   eachSeat(s, () => {
@@ -50,9 +52,7 @@ export function raidAfter(s: RunState): void {
     addEffect(s, { kind: "burst", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 20, maxTicks: 20 });
   });
   darkReturn(s);
-  // 루시퍼가 쓰러짐 → 승리 · 모두 데스 카운트를 다 씀 → 실패
-  if (!s.enemies.some((e) => e.kind === "lucifer" && e.hp > 0)) {
-    s.won = true;
-    s.over = true;
-  } else if (!allPlayers(s).some((p) => p.hp > 0 || !raidOut(p))) s.over = true;
+  // 루시퍼가 쓰러짐 → 보상 방 · 모두 데스 카운트를 다 씀 → 실패
+  if (!s.enemies.some((e) => e.kind === "lucifer" && e.hp > 0)) goReward(s);
+  else if (!allPlayers(s).some((p) => p.hp > 0 || !raidOut(p))) s.over = true;
 }

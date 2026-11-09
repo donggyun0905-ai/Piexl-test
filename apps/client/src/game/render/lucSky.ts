@@ -96,6 +96,9 @@ export function drawLucSkyFx(ctx: Ctx, fx: EffectState, x: number, y: number, t:
     case "fall":
       lucFx(ctx, 1, 2, 3, x, y - 10, 80 * (fx.from === "fall" ? 1 - t * 0.8 : 1 + t), a);
       return true;
+    case "chestOpen":
+      additive(ctx, () => glow(ctx, x, y, fx.size * (1 + t), "#ffd060", a * 0.6, 0.3));
+      return true;
     case "collapse":
       ctx.fillStyle = `rgba(0, 0, 0, ${0.7 * a})`;
       ctx.fillRect(ROOM_MIN_X, ROOM_MIN_Y, W(), H());

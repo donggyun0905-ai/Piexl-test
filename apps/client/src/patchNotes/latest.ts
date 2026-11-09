@@ -4,6 +4,21 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.51.0",
+    date: "2026-11-09",
+    items: {
+      ko: [
+        "새 이벤트 '레이드' 완성: 루시퍼를 쓰러뜨리면 모두 살아나 보상 방으로 · 보라·금빛 대리석 방에 붉은 융단 · 빛기둥 여섯과 깃발 · 가운데 큰 보물 상자를 함께 때려 열면 빛이 솟고 금화·색종이가 쏟아지며 모두에게 '축하합니다!' 창 (보상은 준비 중)",
+      ],
+      en: [
+        "New event 'Raid' complete: defeat Lucifer and everyone revives in the reward room · purple-and-gold marble hall with a red carpet, six pillars of light and banners · strike the great treasure chest together to open it — light bursts out, gold and confetti rain down, and everyone sees 'Congratulations!' (rewards coming soon)",
+      ],
+      ja: [
+        "新イベント「レイド」完成：ルシファーを倒すと全員復活して報酬の間へ · 紫と金の大理石の間に赤い絨毯 · 6本の光の柱と旗 · 中央の大きな宝箱をみんなで叩いて開けると光があふれ金貨と紙吹雪が降り、全員に「おめでとうございます！」 (報酬は準備中)",
+      ],
+    },
+  },
+  {
     version: "0.50.52",
     date: "2026-11-09",
     items: {

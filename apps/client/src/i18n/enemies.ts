@@ -16,6 +16,8 @@ export const BOSS_TEXT: Record<string, string> = {
   cerberus: "bossCerberus", cerbfist: "bossCerbFist", cerbflame: "bossCerbFlame", cerbblade: "bossCerbBlade",
   leviathan: "bossLeviathan", levwhale: "bossLevWhale", levking: "bossLevKing",
   asmodeus: "bossAsmodeus",
+  lucifer: "raid_lucifer",
+  lucchest: "raidChestName",
 };
 
 /** 보스가 아닌 적 이름 */

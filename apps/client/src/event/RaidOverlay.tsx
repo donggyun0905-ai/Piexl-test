@@ -1,5 +1,5 @@
 // 레이드 방 화면 위: 컷신(전체 화면 그림, 그동안 게임은 멈춤) · 데스 카운트 · 다시 살아나기까지 · 관전 · 어둠의 세계·돔·검기 안내
-import { RAID_LIVES, raidFighting, raidOut, stunWarn, TICK_RATE, type LucCut, type RunState } from "@pixel-rogue/shared";
+import { RAID_LIVES, RAID_ROOM, raidFighting, raidOut, stunWarn, TICK_RATE, type LucCut, type RunState } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 import type { TextKey } from "../i18n";
 
@@ -14,8 +14,9 @@ export function RaidOverlay({ run, t }: { run: RunState; t: (key: TextKey) => st
     const id = setInterval(() => tick((n) => n + 1), 100);
     return () => clearInterval(id);
   }, []);
-  if (!raidFighting(run)) return null;
   const f = run.raidBoss?.fight;
+  if (run.raidBoss && run.roomId === RAID_ROOM.reward) return f?.opened !== undefined && !run.over ? <RaidCongrats t={t} /> : null;
+  if (!raidFighting(run)) return null;
   const p = run.player;
   const deaths = p.raidDeaths ?? 0;
   const down = p.hp <= 0 && p.raidDownAt !== undefined;
@@ -62,5 +63,21 @@ export function RaidOverlay({ run, t }: { run: RunState; t: (key: TextKey) => st
         </div>
       )}
     </>
+  );
+}
+
+/** 보상 상자를 열었을 때: 축하 창 (보상은 아직 준비 중) · 색종이 */
+function RaidCongrats({ t }: { t: (key: TextKey) => string }) {
+  return (
+    <div className="raid-congrats" role="dialog" aria-label={t("raidCongrats")}>
+      {Array.from({ length: 40 }, (_, i) => (
+        <i key={i} style={{ left: `${(i * 37) % 100}%`, animationDelay: `${(i % 10) * 0.15}s`, background: ["#ffd040", "#ff60a0", "#60d0ff", "#a070ff", "#60e080"][i % 5] }} />
+      ))}
+      <div className="raid-congrats-box">
+        <h2>{t("raidCongrats")}</h2>
+        <p>{t("raidCongratsSub")}</p>
+        <small>{t("raidRewardSoon")}</small>
+      </div>
+    </div>
   );
 }

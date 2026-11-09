@@ -18,6 +18,7 @@ import { addPickup, weaponPool } from "./loot";
 import { xpOnly } from "./morphXp";
 import { lucCutting, spawnLucifer } from "./lucifer";
 import { raidBotInput } from "./raidBot";
+import { spawnChest } from "./raidReward";
 import { allPlayers, eachSeat } from "./party";
 import { createParty } from "./partyRun";
 import { RAID_ROOM, type RaidEventBoss } from "./raidTypes";
@@ -114,9 +115,10 @@ function giveAugment(s: RunState, rng: Rng, idx: number, roomId: number): void {
 
 /** 레이드 지도: 준비 방 넷 → 레이드 방 (한 줄로 이어짐) */
 export function raidMap(s: RunState): FloorMap {
-  const types: RoomType[] = ["start", "forge", "altar", "gym", "exit"];
+  const types: RoomType[] = ["start", "forge", "altar", "gym", "exit", "golden"];
   const rooms: RoomInfo[] = types.map((type, id) => ({ id, layer: id, lane: 1, type, exits: Array<number>(LANES).fill(-1), shape: PLAIN_SHAPE }));
-  for (let i = 0; i < rooms.length - 1; i++) rooms[i]!.exits[1] = i + 1;
+  // 준비 방 넷은 출구로 이어지고 · 보상 방은 루시퍼를 쓰러뜨리면 옮겨 감 (sim/raidReward)
+  for (let i = 0; i < RAID_ROOM.boss; i++) rooms[i]!.exits[1] = i + 1;
   return { floor: s.floor, rooms, startId: 0, exitId: RAID_ROOM.boss, layers: rooms.length };
 }
 
@@ -126,7 +128,7 @@ export const raidBossSize = () => ({ cols: R.BOSS_COLS, rows: R.BOSS_ROWS });
 
 /** 방에 처음 들어갈 때 적 (준비 방은 없음 · 레이드 방은 보스) */
 export function raidEnemies(s: RunState, roomId: number): EnemyState[] {
-  return roomId === RAID_ROOM.boss ? spawnLucifer(s) : [];
+  return roomId === RAID_ROOM.boss ? spawnLucifer(s) : roomId === RAID_ROOM.reward ? spawnChest(s) : [];
 }
 
 /** 방에 처음 들어갈 때 사람마다 물건 (rooms.enterRoom) */

@@ -97,6 +97,7 @@ const BOSS_AI: Partial<Record<EnemyState["kind"], BossAi>> = {
   lucflame: (s, e, toP) => updateFlame(s, e, toP),
   lucshade: (s, e) => updateShade(s, e),
   lucsword: (s, e) => updateSword(s, e),
+  lucchest: (_s, e) => void (e.timer = 0),
 };
 
 export function updateBoss(s: RunState, e: EnemyState, toP: readonly [number, number], go: readonly [number, number], spawned: EnemyState[]): void {

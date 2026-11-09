@@ -36,7 +36,7 @@ export function raidBotInput(s: RunState): TickInput {
   const i = seatNo(s);
   const p = s.player;
   if (p.hp <= 0) return EMPTY_INPUT;
-  return s.roomId === RAID_ROOM.boss ? fightInput(s, i) : prepInput(s, i);
+  return s.roomId >= RAID_ROOM.boss ? fightInput(s, i) : prepInput(s, i);
 }
 
 function prepInput(s: RunState, i: number): TickInput {

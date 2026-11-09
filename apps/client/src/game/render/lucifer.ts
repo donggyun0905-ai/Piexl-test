@@ -5,6 +5,7 @@ import { allPlayers, LUC_RULES, lucLines, swordGlow, type EnemyState, type RunSt
 import { detectLang } from "../../i18n";
 import { TEXT } from "../../i18n/text";
 import { lucBody, lucFx, lucProp } from "./lucArt";
+import { drawChest } from "./raidReward";
 import { additive, glow } from "./pwFxBits";
 
 type Ctx = CanvasRenderingContext2D;
@@ -21,6 +22,10 @@ const lineColor = (n: number) => LINE_COLORS[(((99 - n) % LINE_COLORS.length) + 
 /** 몸 대신 그림 (그렸으면 true · 남의 어둠의 세계 몬스터는 그리지 않음) */
 export function drawLucActor(ctx: Ctx, s: RunState, e: EnemyState, x: number, y: number): boolean {
   if (e.kind === "lucifer") return drawBoss(ctx, s, e, x, y);
+  if (e.kind === "lucchest") {
+    drawChest(ctx, s, e, x, y);
+    return true;
+  }
   if (e.kind === "lucpillar") {
     const bob = Math.sin(s.tick * 0.04 + e.id) * 3;
     additive(ctx, () => glow(ctx, x, y - PILLAR_H * 0.4, 100, "#a050ff", 0.35 + 0.15 * Math.sin(s.tick * 0.07), 0.5));

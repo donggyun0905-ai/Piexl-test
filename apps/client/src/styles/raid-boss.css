@@ -193,3 +193,52 @@
   color: #ffe060;
   text-shadow: 0 0 10px #ffb000;
 }
+/* 보상 상자를 열었을 때 축하 창 (event/RaidOverlay) */
+.raid-congrats {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+.raid-congrats i {
+  position: absolute;
+  top: -20px;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  animation: raid-confetti 2.6s linear infinite;
+}
+@keyframes raid-confetti {
+  to {
+    transform: translateY(110vh) rotate(720deg);
+  }
+}
+.raid-congrats-box {
+  padding: 24px 40px;
+  border: 3px solid #ffd040;
+  border-radius: 14px;
+  background: radial-gradient(ellipse at top, #4a1a6a, #1a0628 80%);
+  box-shadow: 0 0 40px #ffb000aa, inset 0 0 20px #ffd04055;
+  color: #fff6d8;
+  text-align: center;
+  animation: raid-pop 0.5s cubic-bezier(0.2, 1.6, 0.4, 1);
+}
+.raid-congrats-box h2 {
+  margin: 0 0 8px;
+  font-size: 44px;
+  color: #ffd040;
+  text-shadow: 0 0 14px #ff9000, 0 2px 0 #7a3a00;
+}
+.raid-congrats-box small {
+  opacity: 0.75;
+}
+@keyframes raid-pop {
+  from {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+}
