@@ -7,6 +7,9 @@ import { AF_BENCH_RULES } from "./afBench";
 import { PILGRIM_RULES } from "./pilgrim";
 import { ALLY_RULES } from "./allies";
 import { BOSS_GATEKEEPER_RULES } from "./bossGatekeeper";
+import { BOSS_CERBERUS_RULES } from "./bossCerberus";
+import { BOSS_CERB_TRIO_RULES } from "./bossCerbTrio";
+import { BOSS_CERB_KIT_RULES } from "./cerbKit";
 import { BOSS_TWINS_RULES } from "./bossTwins";
 import { BOSS_TWINS_KIT_RULES } from "./bossTwinsKit";
 import { BOSS_MOON_EATER_RULES } from "./bossMoonEater";
@@ -124,6 +127,9 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   PILGRIM_RULES,
   ALLY_RULES,
   BOSS_GATEKEEPER_RULES,
+  BOSS_CERBERUS_RULES,
+  BOSS_CERB_TRIO_RULES,
+  BOSS_CERB_KIT_RULES,
   BOSS_TWINS_RULES,
   BOSS_TWINS_KIT_RULES,
   BOSS_MOON_EATER_RULES,

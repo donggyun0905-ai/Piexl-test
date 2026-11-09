@@ -92,6 +92,8 @@ const THEMES: Record<string, FloorTheme> = {
   /** 시즌 3 피로 이어진 쌍둥이: 붉은 극장 바닥 · 핏방울 · 깨진 거울 반짝임 */
   twinlu: T("#2a1418", "#30161b", "#4a1a22", "#6a2430", "#4a1c24", "#6a2a34", "#14060a", "#4a0a14", [["bubble", "#c0102a"], ["star", "#e8d8e0"]], 0.2),
   /** 시즌 3 달을 삼키는 자: 어두운 바닥 · 희미한 달빛 무늬 */
+  /** 켈베로스: 지옥불 (검붉은 현무암·금 간 틈의 붉은 빛·불씨) */
+  cerberus: T("#1c0c0a", "#22100c", "#3a1410", "#5a1e16", "#4a1812", "#6a261c", "#0a0202", "#4a0804", [["crack", "#ff3a14"], ["ember", "#ff7a2a"]], 0.24),
   mooneater: T("#14121e", "#171523", "#26223a", "#3a3456", "#2a2640", "#3e3860", "#06040c", "#1a1630", [["star", "#c8d4ff"], ["feather", "#8a7ab8"]], 0.18),
   /** 유령선 선장: 썩은 갑판 (나무·뼈) */
   captain: T("#2a2420", "#302823", "#3a3230", "#544842", "#4a3a30", "#6a5446", "#0a0e14", "#16222e", [["crack", "#1a1410"], ["bone", "#b8c4b0"]], 0.22),
@@ -139,7 +141,7 @@ export function themeFor(s: RunState): FloorTheme {
   if (pa) return THEMES[PW_THEME[pa]]!;
   let boss: string | undefined;
   // 연습장에서 부른 시즌 2 라스트 보스도 그 맵
-  const s2 = s.enemies.find((e) => e.kind === "umbra" || e.kind === "demigod" || e.kind === "sage")?.kind;
+  const s2 = s.enemies.find((e) => e.kind === "umbra" || e.kind === "demigod" || e.kind === "sage" || e.kind === "cerberus")?.kind;
   if (s.lastBoss) boss = s.lastBoss === "pdark" ? "plight" : s.lastBoss;
   else if (s2) boss = s2;
   else if (s.arenaLv) boss = s.enemies.find((e) => ENEMIES[e.kind].boss)?.kind;

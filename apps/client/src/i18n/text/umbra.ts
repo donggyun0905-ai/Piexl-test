@@ -15,6 +15,11 @@ export const UMBRA_TEXT = {
   bossTwinLu: { ko: "쌍둥이 악마 루", en: "Twin Demon Lu", ja: "双子の悪魔ルー" },
   bossTwinRe: { ko: "쌍둥이 악마 레", en: "Twin Demon Re", ja: "双子の悪魔レー" },
   bossMoonEater: { ko: "달을 삼키는 자", en: "Moon Devourer", ja: "月を呑む者" },
+  // 시즌 3 라스트 보스 켈베로스와 갈라진 세 사람
+  bossCerberus: { ko: "켈베로스", en: "Cerberus", ja: "ケルベロス" },
+  bossCerbFist: { ko: "권귀", en: "Fist Fiend", ja: "拳鬼" },
+  bossCerbFlame: { ko: "염희", en: "Flame Maiden", ja: "炎姫" },
+  bossCerbBlade: { ko: "검귀", en: "Blade Fiend", ja: "剣鬼" },
   sageMaxStaff: { ko: "제천대성이 여의봉을 크기를 최대한 늘립니다!", en: "The Great Sage stretches his staff to its utmost size!", ja: "斉天大聖が如意棒を最大まで伸ばします！" },
   umbraSay0: { ko: "……어디 놀아 볼까.", en: "...Let us play.", ja: "……遊んでやろう。" },
   umbraSay1: { ko: "호오...", en: "Hoh...", ja: "ほう…" },

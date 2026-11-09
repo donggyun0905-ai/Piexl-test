@@ -196,5 +196,8 @@ export type { TerrainState } from "./terrainTypes";
 export { luxShards, luxStage } from "./lux";
 export { archerAim, bugFuse, NEW_FOES_RULES, orcLethal, orcRage } from "./newFoes";
 export { BOSS_GATEKEEPER_RULES } from "./bossGatekeeper";
+export { BOSS_CERBERUS_RULES, HEAD_OFS as CERB_HEADS, shieldLeft } from "./bossCerberus";
+export { BOSS_CERB_TRIO_RULES, pulling } from "./bossCerbTrio";
+export { BOSS_CERB_KIT_RULES, breathing, cellRect, erupting, fallTick, FLOOR_COLS, FLOOR_ROWS, swelling } from "./cerbKit";
 export { BOSS_TWINS_RULES } from "./bossTwins";
 export { BOSS_MOON_EATER_RULES } from "./bossMoonEater";

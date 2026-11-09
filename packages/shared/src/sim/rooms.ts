@@ -1,4 +1,5 @@
 // 방·층 이동: 방 들어가기(적 배치), 출구 잠김·억지로 나가기, 쉼터, 계단
+import { cerbArena } from "./cerbKit";
 import { eliteWave, spawnEnemies } from "./roomSpawn";
 export { spawnEnemies } from "./roomSpawn";
 import { introRooms } from "./intro";
@@ -90,6 +91,8 @@ function enterRoom(s: RunState, roomId: number): void {
   applyRoom(s);
   // 태초의 빛과 어둠: 큰 방에 상자 벽 6개
   s.arena = big && (s.lastBoss === "plight" || arenaPrimeval(s, roomId) || (exit && endlessPrimeval(s))) ? makeArena(s) : undefined;
+  // 켈베로스: 기둥 6개 (브레스를 피하는 곳)
+  if (big && exit && s.lastBoss === "cerberus") s.arena = cerbArena();
   s.projectiles = [];
   const info = s.map.rooms[roomId]!;
   const st = s.rooms[roomId]!;

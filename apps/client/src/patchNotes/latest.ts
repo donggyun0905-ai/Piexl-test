@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.42",
+    date: "2026-11-09",
+    items: {
+      ko: [
+        "시즌 3 라스트 보스 첫째 '켈베로스' (6층 클리어 뒤 도전 · 연습장): 기둥 6개와 용암 지대가 깔린 지옥불 방",
+        "페이즈 1: 네 사슬에 묶인 세 머리 지옥견, 흰 쉴드부터 깎음 · 왼쪽 머리 땅 가르기·용암 바위 · 가운데 머리 화염볼 5연발·지옥불 브레스(머리 빛이 세 번 깜박이면 기둥 뒤로, 대시로 못 피함) · 오른쪽 머리 검기·붉은 전역 검기 3연(대시로 넘기) · 세 머리 동시 공격 · 쉴드 66%·33%에서 용암 분출",
+        "페이즈 2: 쉴드가 깨지면 사슬이 끊기고 권귀(주먹)·염희(불)·검귀(대검)로 갈라짐, 체력은 각각 · 하나가 쓰러질 때마다 남은 사람이 빨라짐 · 무너지는 바닥(한 구역만 남음, 떨어지면 피해 20) · 바위 비(기절·화상) · 염희 빨아들이기 10초(기둥에 붙어 버티기, 닿으면 피해 50)",
+      ],
+      en: [
+        "Season 3's first final boss 'Cerberus' (challenge after clearing floor 6 · practice): a hellfire room with six pillars and lava pools",
+        "Phase 1: a three-headed hellhound bound by four chains; break its white shield first · left head ground splitter and lava boulders · middle head 5-fireball volley and Hellfire Breath (hide behind a pillar when the light above its head flashes three times; dashing won't save you) · right head sword waves and three red room-wide sword sweeps (dash through them) · all three heads at once · lava eruptions at 66% and 33% shield",
+        "Phase 2: the shield shatters, the chains snap, and it splits into the Fist Fiend, Flame Maiden and Blade Fiend, each with its own health · each fall enrages the rest · collapsing floor (only one section survives; falling deals 20) · boulder rain (stun and burn) · Flame Maiden's 10-second pull (cling to a pillar; touching her deals 50)",
+      ],
+      ja: [
+        "シーズン3最初のラストボス「ケルベロス」（6階クリア後に挑戦 · 練習場）：柱6本と溶岩地帯の地獄の炎の部屋",
+        "フェーズ1：四本の鎖に繋がれた三つ首の地獄犬、白いシールドから削る · 左の頭の地割り・溶岩の岩 · 中央の頭の火炎弾5連発・地獄の炎ブレス（頭上の光が3回点滅したら柱の陰へ、ダッシュでは避けられない） · 右の頭の剣気・赤い全域剣気3連（ダッシュで越える） · 三つの頭の同時攻撃 · シールド66%・33%で溶岩噴出",
+        "フェーズ2：シールドが砕けると鎖が切れ、拳鬼（拳）・炎姫（炎）・剣鬼（大剣）に分かれる、体力はそれぞれ · 一人倒れるたびに残りが速くなる · 崩れる床（一区画だけ残る、落ちると20ダメージ） · 岩の雨（気絶・火傷） · 炎姫の10秒吸い込み（柱にしがみついて耐える、触れると50ダメージ）",
+      ],
+    },
+  },
+  {
     version: "0.50.41",
     date: "2026-11-09",
     items: {

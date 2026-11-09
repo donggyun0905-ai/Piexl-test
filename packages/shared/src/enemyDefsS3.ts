@@ -5,8 +5,17 @@ import type { EnemyDef } from "./enemyDefs";
 export type S3PropKind = "hellgate" | "imp" | "moonshard";
 /** 시즌 3 단계별 보스: 지옥문 수문장(1단계) · 쌍둥이 루(2단계, 레는 루가 데려옴) · 달을 삼키는 자(3단계) */
 export type S3BossKind = "gatekeeper" | "twinlu" | "twinre" | "mooneater";
+/** 시즌 3 라스트 보스 켈베로스가 갈라진 세 사람: 권귀(주먹) · 염희(불) · 검귀(대검) (sim/bossCerbTrio) */
+export type CerbKind = "cerbfist" | "cerbflame" | "cerbblade";
+export const CERB_TRIO: readonly CerbKind[] = ["cerbfist", "cerbflame", "cerbblade"];
 
-export const S3_ENEMIES: Record<S3BossKind | S3PropKind, EnemyDef> = {
+export const S3_ENEMIES: Record<S3BossKind | S3PropKind | CerbKind | "cerberus", EnemyDef> = {
+  /** 시즌 3 라스트 보스 켈베로스: 네 사슬에 묶인 세 머리 지옥견 (움직이지 않음, 흰 쉴드부터 깎음) → 쉴드가 깨지면 세 사람으로 갈라짐. 체력 = 세 사람 체력의 합 (sim/bossCerberus) */
+  cerberus: { kind: "cerberus", hp: 6300, radius: 26, speed: 0, contactDamage: 20, gold: 100, boss: true },
+  /** 켈베로스 페이즈 2: 권귀 (주먹, 가까이 따라옴) · 염희 (불, 위쪽에서 마법) · 검귀 (대검, 돌진) */
+  cerbfist: { kind: "cerbfist", hp: 2200, radius: 12, speed: 0.6, contactDamage: 16, gold: 0, boss: true },
+  cerbflame: { kind: "cerbflame", hp: 1900, radius: 11, speed: 0.35, contactDamage: 14, gold: 0, boss: true },
+  cerbblade: { kind: "cerbblade", hp: 2200, radius: 12, speed: 0.55, contactDamage: 16, gold: 0, boss: true },
   /** 시즌 3 1단계 보스: 지옥문 수문장 (지옥문 셋을 열고 넘나듦 · 문을 부수면 약해짐 · 다 부수면 무릎, sim/bossGatekeeper) */
   gatekeeper: { kind: "gatekeeper", hp: 450, radius: 12, speed: 0.42, contactDamage: 15, gold: 20, boss: true },
   /** 시즌 3 2단계 보스: 쌍둥이 루 (흰 가면·근접) · 레 (검은 가면·원거리). 핏줄로 이어짐 · 한쪽만 쓰러뜨리면 다시 일어남 (sim/bossTwins) */

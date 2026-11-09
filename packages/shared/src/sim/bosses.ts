@@ -30,6 +30,8 @@ import { updateMoonEater, updateMoonShard } from "./bossMoonEater";
 import { updateSalamander } from "./bossSalamander";
 import { updateJelly } from "./bossJelly";
 import { updateCaptain } from "./bossCaptain";
+import { updateCerberus } from "./bossCerberus";
+import { updateCerbTrio } from "./bossCerbTrio";
 import { makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
 /** 보스 체력 배율 (층마다 늘어남) */
@@ -70,6 +72,11 @@ const BOSS_AI: Partial<Record<EnemyState["kind"], BossAi>> = {
   twinre: updateTwin,
   mooneater: updateMoonEater,
   moonshard: (_s, e) => updateMoonShard(e),
+  // 시즌 3 라스트 보스 켈베로스 (페이즈 2 세 사람)
+  cerberus: updateCerberus,
+  cerbfist: (s, e, toP) => updateCerbTrio(s, e, toP),
+  cerbflame: (s, e, toP) => updateCerbTrio(s, e, toP),
+  cerbblade: (s, e, toP) => updateCerbTrio(s, e, toP),
 };
 
 export function updateBoss(s: RunState, e: EnemyState, toP: readonly [number, number], go: readonly [number, number], spawned: EnemyState[]): void {
