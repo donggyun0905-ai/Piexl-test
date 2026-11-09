@@ -20,6 +20,10 @@ export const UMBRA_TEXT = {
   bossCerbFist: { ko: "권귀", en: "Fist Fiend", ja: "拳鬼" },
   bossCerbFlame: { ko: "염희", en: "Flame Maiden", ja: "炎姫" },
   bossCerbBlade: { ko: "검귀", en: "Blade Fiend", ja: "剣鬼" },
+  // 시즌 3 라스트 보스 레비아탄의 세 모습
+  bossLeviathan: { ko: "레비아탄", en: "Leviathan", ja: "リヴァイアサン" },
+  bossLevWhale: { ko: "심연고래 레비아탄", en: "Abyssal Leviathan", ja: "深淵鯨リヴァイアサン" },
+  bossLevKing: { ko: "해왕 레비아탄", en: "Sea King Leviathan", ja: "海王リヴァイアサン" },
   sageMaxStaff: { ko: "제천대성이 여의봉을 크기를 최대한 늘립니다!", en: "The Great Sage stretches his staff to its utmost size!", ja: "斉天大聖が如意棒を最大まで伸ばします！" },
   umbraSay0: { ko: "……어디 놀아 볼까.", en: "...Let us play.", ja: "……遊んでやろう。" },
   umbraSay1: { ko: "호오...", en: "Hoh...", ja: "ほう…" },

@@ -67,9 +67,11 @@ export function drawPrimeval(ctx: CanvasRenderingContext2D, s: RunState, snap: S
       // 불타는 충격파 고리 (가장자리 흰 불)
       additive(ctx, () => {
         // 켈베로스 전역 검기는 붉은 고리
+        // 레비아탄 고래의 지진은 푸른 고리
         const red = e.kind === "cerberus";
-        shock(ctx, snap(w.x), snap(w.y), w.r + 4, red ? "#ff1a2a" : "#ff963c", 0.95, red ? 16 : 12);
-        shock(ctx, snap(w.x), snap(w.y), w.r + 1, red ? "#ffb0b0" : "#fff0c8", 0.9, 4);
+        const blue = e.kind === "levwhale";
+        shock(ctx, snap(w.x), snap(w.y), w.r + 4, red ? "#ff1a2a" : blue ? "#2a8aff" : "#ff963c", 0.95, red || blue ? 16 : 12);
+        shock(ctx, snap(w.x), snap(w.y), w.r + 1, red ? "#ffb0b0" : blue ? "#c8f0ff" : "#fff0c8", 0.9, 4);
       });
     }
     for (const sw of e.sweeps ?? []) {

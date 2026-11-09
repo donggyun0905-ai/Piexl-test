@@ -15,8 +15,8 @@ import { addEffect, DIR16, enemyShot, makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MI
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
-  /** 쉴드 = 최대 체력(세 사람 체력의 합)의 몇 배 */
-  SHIELD: 0.7,
+  /** 쉴드 = 최대 체력(세 사람 체력의 합)의 몇 배 (5600 × 0.715 ≒ 4000 → 쉴드 + 세 사람 ≒ 9600, 멸망의 용과 같음) */
+  SHIELD: 0.715,
   /** 머리 공격 사이 틱 (쉴드 40% 아래면 GAP_FAST) */
   GAP: 75,
   GAP_FAST: 58,

@@ -1,7 +1,7 @@
 // 숨은 시련 그리기: 바닥(하이오크 부락 풀숲·어둠의 검은 땅·깊은 바다·비눗방울) · 구조물(성벽·독가스 살포기·해적선) · 독안개 · 숨 게이지
-import { hpBarTop } from "./hpTop";
-import { breathRatio, fogOn, hiddenOn, ROOM_HEIGHT, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, ROOM_WIDTH, SEA_BUBBLE_R, type EnemyState, type HiddenFort, type HiddenTrialState, type RunState } from "@pixel-rogue/shared";
-import { lerp, type Snap } from "./palette";
+import { breathRatio, fogOn, hiddenOn, ROOM_HEIGHT, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, ROOM_WIDTH, type EnemyState, type HiddenFort, type HiddenTrialState, type RunState } from "@pixel-rogue/shared";
+import type { Snap } from "./palette";
+import { drawAirGauge, drawBubbles, drawDeepSea } from "./seaWater";
 
 type Ctx = CanvasRenderingContext2D;
 const TAU = Math.PI * 2;
@@ -40,37 +40,8 @@ function drawGround(ctx: Ctx, s: RunState, h: HiddenTrialState): void {
     ctx.fillRect(0, 0, ROOM_WIDTH, ROOM_HEIGHT);
   } else if (h.kind === 5) {
     // 죽음의 바다: 깊은 물 · 내려오는 빛줄기 · 비눗방울
-    ctx.fillStyle = "rgba(6, 30, 70, 0.45)";
-    ctx.fillRect(0, 0, ROOM_WIDTH, ROOM_HEIGHT);
-    ctx.fillStyle = "rgba(160, 220, 255, 0.07)";
-    for (let i = 0; i < 4; i++) {
-      const x = ((i * 90 + s.tick * 0.2) % (ROOM_WIDTH + 40)) - 20;
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x + 14, 0);
-      ctx.lineTo(x + 44, ROOM_HEIGHT);
-      ctx.lineTo(x + 24, ROOM_HEIGHT);
-      ctx.fill();
-    }
-    drawBubbles(ctx, s, h);
-  }
-}
-
-function drawBubbles(ctx: Ctx, s: RunState, h: HiddenTrialState): void {
-  const r = SEA_BUBBLE_R();
-  for (const [x, y, until] of h.bubbles ?? []) {
-    const left = until - s.tick;
-    const a = Math.min(1, left / 30);
-    const rr = r + Math.sin((s.tick + x) * 0.15);
-    ctx.fillStyle = `rgba(170, 230, 255, ${0.22 * a})`;
-    ctx.strokeStyle = `rgba(230, 250, 255, ${0.85 * a})`;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(x, y, rr, 0, TAU);
-    ctx.fill();
-    ctx.stroke();
-    ctx.fillStyle = `rgba(255, 255, 255, ${0.8 * a})`;
-    ctx.fillRect(Math.round(x - rr * 0.45), Math.round(y - rr * 0.55), 3, 2);
+    drawDeepSea(ctx, s);
+    drawBubbles(ctx, s, h.bubbles ?? []);
   }
 }
 
@@ -275,18 +246,5 @@ function drawHiddenFog(ctx: Ctx, s: RunState): void {
 export function drawHiddenAir(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const h = hiddenOn(s);
   if (!h || h.kind !== 5) return;
-  const p = s.player;
-  const x = snap(lerp(p.prevX, p.x, alpha));
-  const y = hpBarTop(p, snap(lerp(p.prevY, p.y, alpha))) - 6;
-  const k = breathRatio(h);
-  ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
-  ctx.fillRect(x - 12, y - 1, 24, 4);
-  ctx.fillStyle = k > 0.25 ? "#6ad8ff" : Math.floor(s.tick / 6) % 2 ? "#ff5050" : "#ffd0d0";
-  ctx.fillRect(x - 11, y, Math.round(22 * k), 2);
-  // 작은 방울 표시
-  ctx.strokeStyle = "#d8f4ff";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.arc(x - 15, y + 1, 2, 0, TAU);
-  ctx.stroke();
+  drawAirGauge(ctx, s, breathRatio(h), alpha, snap);
 }

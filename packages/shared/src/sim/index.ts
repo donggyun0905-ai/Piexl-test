@@ -198,6 +198,11 @@ export { archerAim, bugFuse, NEW_FOES_RULES, orcLethal, orcRage } from "./newFoe
 export { BOSS_GATEKEEPER_RULES } from "./bossGatekeeper";
 export { BOSS_CERBERUS_RULES, HEAD_OFS as CERB_HEADS, shieldLeft } from "./bossCerberus";
 export { BOSS_CERB_TRIO_RULES, pulling } from "./bossCerbTrio";
+export { BOSS_LEVIATHAN_RULES, dragonLeft } from "./bossLeviathan";
+export { BOSS_LEV_WHALE_RULES, whaleUp } from "./bossLevWhale";
+export { BOSS_LEV_KING_RULES, inTide, levUlting } from "./bossLevKing";
+export { airLeft, BOSS_LEV_KIT_RULES, levDirector } from "./levKit";
+export type { LevTornado } from "./levTypes";
 export { BOSS_CERB_KIT_RULES, breathing, cellRect, erupting, fallTick, FLOOR_COLS, FLOOR_ROWS, swelling } from "./cerbKit";
 export { BOSS_TWINS_RULES } from "./bossTwins";
 export { BOSS_MOON_EATER_RULES } from "./bossMoonEater";

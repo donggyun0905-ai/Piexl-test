@@ -32,6 +32,9 @@ import { updateJelly } from "./bossJelly";
 import { updateCaptain } from "./bossCaptain";
 import { updateCerberus } from "./bossCerberus";
 import { updateCerbTrio } from "./bossCerbTrio";
+import { updateLeviathan } from "./bossLeviathan";
+import { updateLevWhale } from "./bossLevWhale";
+import { updateLevKing } from "./bossLevKing";
 import { makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
 /** 보스 체력 배율 (층마다 늘어남) */
@@ -77,6 +80,10 @@ const BOSS_AI: Partial<Record<EnemyState["kind"], BossAi>> = {
   cerbfist: (s, e, toP) => updateCerbTrio(s, e, toP),
   cerbflame: (s, e, toP) => updateCerbTrio(s, e, toP),
   cerbblade: (s, e, toP) => updateCerbTrio(s, e, toP),
+  // 시즌 3 라스트 보스 레비아탄 (심해룡 → 고래 → 해왕)
+  leviathan: updateLeviathan,
+  levwhale: (s, e, toP) => updateLevWhale(s, e, toP),
+  levking: (s, e, toP, _go, spawned) => updateLevKing(s, e, toP, spawned),
 };
 
 export function updateBoss(s: RunState, e: EnemyState, toP: readonly [number, number], go: readonly [number, number], spawned: EnemyState[]): void {

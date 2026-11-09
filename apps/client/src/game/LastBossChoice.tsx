@@ -10,6 +10,7 @@ const BOSSES: { kind: string; label: TextKey }[] = [
   { kind: "demigod", label: "bossDemigod" },
   { kind: "sage", label: "bossSage" },
   { kind: "cerberus", label: "bossCerberus" },
+  { kind: "leviathan", label: "bossLeviathan" },
 ];
 
 export function LastBossChoice({ t, onChoose }: { t: (key: TextKey) => string; onChoose: (boss: LastBossKind) => void }) {

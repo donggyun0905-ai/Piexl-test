@@ -90,7 +90,7 @@ export function updateEnemies(s: RunState): void {
       // 패왕전 AI 캐릭터: 움직임·공격은 sim/paewangAi (기절·둔화·속박은 여기서 줄고 그쪽에서 확인)
     } else if (e.kind === "gnat") updateGnat(s, e, go);
     else if (e.kind === "tower") updateTower(s, e);
-    else if (e.kind === "fort") e.timer = 0; // 숨은 시련 구조물: 가만히 (sim/hiddenKit)
+    else if (e.kind === "fort" || e.kind === "levprison") e.timer = 0; // 숨은 시련 구조물·레비아탄 물감옥: 가만히 (sim/hiddenKit·levKit)
     else if (e.kind === "ghost") updateGhost(s, e);
     else if (e.kind === "ruinblade" || e.kind === "chaosblade") updateBlade(s, e, toP);
     else if (e.kind === "guardian") updateGuardian(s, e, toP, e.aux ? guardSpot(s, e, go) : go);

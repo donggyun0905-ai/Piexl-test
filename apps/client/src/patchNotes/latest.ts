@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.44",
+    date: "2026-11-09",
+    items: {
+      ko: [
+        "시즌 3 라스트 보스 둘째 '레비아탄' (6층 클리어 뒤 도전 · 연습장), 체력은 세 모습을 합쳐 9600 (멸망의 용과 같음)",
+        "페이즈 1 심해룡: 방이 물속이라 숨 10초 (몬스터를 잡으면 비눗방울, 들어가면 숨이 참) · 바다 몬스터가 계속 나옴 · 휩쓸기 · 물기둥(기절·감속) · 물감옥(갇히면 숨이 두 배로 닳음, 때려서 깨기) · 토네이도(피해 없이 떠밈) · 유령선 선장이 왼쪽·오른쪽에서 번갈아 · 거대 물구슬 4번 낙하(줄어드는 고리에 맞춰 대시)",
+        "페이즈 2 심연고래: 수면 위로 올라와 늘 느려짐 · 고래는 물 아래 그림자로 돌다가 떠올라 공격(잠수 중 무적) · 물 탄환 · 푸른 지진 3번(대시로 넘기) · 물기둥 세 줄 · 맵 곳곳 물기둥 · 사슬 팔(기절 1.5초)",
+        "페이즈 3 해왕: 물이 빠진 바닥 · 물 채찍 2연 · 소용돌이 구슬 · 물의 용 · 썰물·밀물(방 반쪽이 잠김) · 바다의 메아리 · 삼지창 빛 · 체력 10% 아래 해일 승천(물이 다시 차고 숨 6초) 뒤 지쳐 받는 피해 1.5배",
+        "켈베로스 체력을 쉴드 + 세 사람 합쳐 9600으로 맞춤 (쉴드 약 4000 · 권귀 2000 · 염희 1600 · 검귀 2000)",
+      ],
+      en: [
+        "Season 3's second final boss 'Leviathan' (challenge after clearing floor 6 · practice); its three forms total 9600 health (same as the Dragon of Ruin)",
+        "Phase 1, Deep-Sea Dragon: the room is underwater with 10 seconds of air (kill monsters for air bubbles) · sea monsters keep coming · tail sweep · water pillars (stun and slow) · water prison (air drains twice as fast; break it) · tornadoes (push you around, no damage) · ghost-ship captains from the left and right in turn · a giant water orb drops 4 times (dash on the shrinking ring)",
+        "Phase 2, Abyssal Whale: you surface and are always slowed · the whale circles as a shadow beneath and breaches to attack (invulnerable while submerged) · water bullets · three blue quakes (dash through) · three lines of water pillars · pillars all over the map · chain arms (1.5s stun)",
+        "Phase 3, Sea King: on drained ground · double water whip · vortex orbs · water dragons · ebb and flood (half the room floods) · echoes of the sea · trident lights · below 10% health the Tidal Ascension (the room floods again, 6s of air), then he is exhausted and takes 1.5x damage",
+        "Cerberus health retuned so shield + three fiends total 9600 (shield ~4000 · Fist 2000 · Flame 1600 · Blade 2000)",
+      ],
+      ja: [
+        "シーズン3二体目のラストボス「リヴァイアサン」（6階クリア後に挑戦 · 練習場）、体力は三つの姿の合計で9600（滅びの竜と同じ）",
+        "フェーズ1 深海竜：部屋は水中で息は10秒（モンスターを倒すと泡、入ると息が回復） · 海のモンスターが出続ける · 薙ぎ払い · 水柱（気絶・減速） · 水牢（閉じ込められると息が倍速で減る、叩いて壊す） · 竜巻（ダメージなしで押し流す） · 幽霊船の船長が左右から交互に · 巨大な水球が4回落下（縮む輪に合わせてダッシュ）",
+        "フェーズ2 深淵鯨：水面に上がり常に減速 · 鯨は水面下の影として回り浮上して攻撃（潜水中は無敵） · 水弾 · 青い地震3回（ダッシュで越える） · 水柱3列 · マップ各所の水柱 · 鎖の腕（気絶1.5秒）",
+        "フェーズ3 海王：水の引いた床 · 水の鞭2連 · 渦の玉 · 水の竜 · 潮の満ち引き（部屋の半分が沈む） · 海のこだま · 三叉槍の光 · 体力10%以下で津波昇天（再び水が満ち息6秒）の後、疲れて被ダメージ1.5倍",
+        "ケルベロスの体力をシールド＋三人の合計9600に調整（シールド約4000 · 拳鬼2000 · 炎姫1600 · 剣鬼2000）",
+      ],
+    },
+  },
+  {
     version: "0.50.43",
     date: "2026-11-09",
     items: {

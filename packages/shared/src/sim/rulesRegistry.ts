@@ -10,6 +10,10 @@ import { BOSS_GATEKEEPER_RULES } from "./bossGatekeeper";
 import { BOSS_CERBERUS_RULES } from "./bossCerberus";
 import { BOSS_CERB_TRIO_RULES } from "./bossCerbTrio";
 import { BOSS_CERB_KIT_RULES } from "./cerbKit";
+import { BOSS_LEVIATHAN_RULES } from "./bossLeviathan";
+import { BOSS_LEV_WHALE_RULES } from "./bossLevWhale";
+import { BOSS_LEV_KING_RULES } from "./bossLevKing";
+import { BOSS_LEV_KIT_RULES } from "./levKit";
 import { BOSS_TWINS_RULES } from "./bossTwins";
 import { BOSS_TWINS_KIT_RULES } from "./bossTwinsKit";
 import { BOSS_MOON_EATER_RULES } from "./bossMoonEater";
@@ -130,6 +134,10 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   BOSS_CERBERUS_RULES,
   BOSS_CERB_TRIO_RULES,
   BOSS_CERB_KIT_RULES,
+  BOSS_LEVIATHAN_RULES,
+  BOSS_LEV_WHALE_RULES,
+  BOSS_LEV_KING_RULES,
+  BOSS_LEV_KIT_RULES,
   BOSS_TWINS_RULES,
   BOSS_TWINS_KIT_RULES,
   BOSS_MOON_EATER_RULES,

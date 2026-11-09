@@ -4,6 +4,8 @@ import { BOSS_MOON_EATER_RULES as ME, BOSS_TWINS_RULES as TW, ROOM_MAX_X, ROOM_M
 import { drawEnemySprite } from "../enemySprites";
 import { drawCerbActor, drawCerbBar } from "./cerberus";
 import { drawCerbGround, drawCerbOver } from "./cerberusGround";
+import { drawLevActor, drawLevBar } from "./leviathan";
+import { drawLevGround, drawLevOver } from "./leviathanGround";
 import { lerp, type Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
@@ -13,7 +15,7 @@ const bossOf = (s: RunState, kind: string) => s.enemies.find((e) => e.kind === k
 
 /** 몸 대신 그림 (그렸으면 true): 지옥문 · 임프 · 달 조각 · 쓰러진 쌍둥이 · 문 속에 들어간 수문장 */
 export function drawS3Actor(ctx: Ctx, s: RunState, e: EnemyState, x: number, y: number): boolean {
-  if (drawCerbActor(ctx, s, e, x, y)) return true;
+  if (drawCerbActor(ctx, s, e, x, y) || drawLevActor(ctx, s, e, x, y)) return true;
   if (e.kind === "hellgate") {
     const pulse = 0.5 + 0.5 * Math.sin(s.tick * 0.08 + e.id);
     ctx.save();
@@ -94,6 +96,7 @@ function vein(ctx: Ctx, ax: number, ay: number, bx: number, by: number, t: numbe
 /** 바닥 (적보다 먼저): 부서진 지옥문 · 달빛 기둥 · 쌍둥이 핏줄과 피 구슬 */
 export function drawS3Ground(ctx: Ctx, s: RunState, a: number, snap: Snap): void {
   drawCerbGround(ctx, s, snap);
+  drawLevGround(ctx, s, snap);
   const gk = s.enemies.find((e) => e.kind === "gatekeeper");
   for (const g of gk?.gkGates ?? []) if (!s.enemies.some((x) => x.id === g.id && x.hp > 0)) drawEnemySprite(ctx, "hellgate", snap(g.x), snap(g.y) - 8, 2, false);
   const me = s.enemies.find((e) => e.kind === "mooneater");
@@ -159,6 +162,7 @@ let dark: HTMLCanvasElement | null = null;
 /** 어둠 (달을 삼키는 자 방): 사람·기둥·조각 둘레만 밝음 · 월식 예고 중엔 붉게 */
 export function drawS3Dark(ctx: Ctx, s: RunState, a: number, snap: Snap): void {
   drawCerbOver(ctx, s);
+  drawLevOver(ctx, s, a, snap);
   const me = bossOf(s, "mooneater");
   if (!me?.meDark) return;
   const cv = ctx.canvas;
@@ -201,7 +205,7 @@ export function drawS3Dark(ctx: Ctx, s: RunState, a: number, snap: Snap): void {
 
 /** 체력 막대 자리 (화면 좌표): 쌍둥이는 둘로 나눔 · 달을 삼키는 자는 아래에 천장의 달. 다 그렸으면 true */
 export function drawS3Bar(ctx: Ctx, s: RunState, boss: EnemyState, bx: number, by: number, bw: number, bh: number): boolean {
-  if (drawCerbBar(ctx, s, boss, bx, by, bw, bh)) return true;
+  if (drawCerbBar(ctx, s, boss, bx, by, bw, bh) || drawLevBar(ctx, s, boss, bx, by, bw, bh)) return true;
   if (boss.kind === "mooneater") {
     const moon = boss.meMoon ?? 0;
     const f = boss.phase === "act" ? 4 : Math.min(3, Math.floor(moon * 4));

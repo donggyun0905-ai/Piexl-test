@@ -31,6 +31,9 @@ const R = {
   BLEED_EVERY: 30,
   /** 켈베로스 바위 비: 기절 틱 (1초, 화상도 같이) */
   CERB_STUN: 60,
+  /** 레비아탄: 물기둥 기절(0.8초, 느림도 같이) · 사슬 팔 기절(1.5초) */
+  LEV_STUN: 48,
+  LEV_CHAIN: 90,
 };
 export { R as FOE_STATUS_RULES };
 
@@ -63,9 +66,13 @@ const BY_FOE: Partial<Record<EnemyKind, [Field, keyof typeof R]>> = {
   // 켈베로스: 염희·지옥불은 화상 · 바위 비(켈베로스)는 기절 + 화상 (ALSO)
   cerbflame: ["dbBurn", "BURN_TICKS"],
   cerberus: ["dbStun", "CERB_STUN"],
+  // 레비아탄: 물기둥은 기절 + 느림 · 고래 사슬 팔 기절 1.5초 · 해왕 삼지창 마지막 기절 0.5초
+  leviathan: ["dbStun", "LEV_STUN"],
+  levwhale: ["dbStun", "LEV_CHAIN"],
+  levking: ["dbStun", "STUN_TICKS"],
 };
 /** 한 번에 둘을 거는 적: 덧붙이는 상태이상 */
-const ALSO: Partial<Record<EnemyKind, [Field, keyof typeof R]>> = { cerberus: ["dbBurn", "BURN_TICKS"] };
+const ALSO: Partial<Record<EnemyKind, [Field, keyof typeof R]>> = { cerberus: ["dbBurn", "BURN_TICKS"], leviathan: ["dbSlow", "SLOW_TICKS"] };
 
 /** 몸에 닿았을 때 상태이상을 거는 적 (가디언은 돌진 중일 때만 기절 · 성기사·달을 삼키는 자는 빛기둥·그림자 손만 속박, 몸에 닿으면 없음) */
 export const touchFoe = (e: { kind: EnemyKind; phase: string }): EnemyKind | undefined =>

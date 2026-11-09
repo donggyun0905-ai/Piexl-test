@@ -14,6 +14,7 @@ export const BOSS_TEXT: Record<string, string> = {
   toad: "bossToad", salamander: "bossSalamander", jelly: "bossJelly", captain: "bossCaptain",
   gatekeeper: "bossGatekeeper", twinlu: "bossTwinLu", twinre: "bossTwinRe", mooneater: "bossMoonEater",
   cerberus: "bossCerberus", cerbfist: "bossCerbFist", cerbflame: "bossCerbFlame", cerbblade: "bossCerbBlade",
+  leviathan: "bossLeviathan", levwhale: "bossLevWhale", levking: "bossLevKing",
 };
 
 /** 보스가 아닌 적 이름 */
