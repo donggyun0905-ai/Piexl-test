@@ -3,6 +3,7 @@ import { ENEMIES } from "../content";
 import { allPlayers, eachSeat, useSeat } from "./party";
 import { stepParty } from "./partyRun";
 import { createRaid, RAID_RULES, raidGymPts, raidOwnPassives } from "./raid";
+import { PCT_HP_RULES, pctHp } from "./pctHp";
 import { RAID_LIFE_RULES, raidTimeLeft } from "./raidLife";
 import { RAID_ROOM } from "./raidTypes";
 import { goThrough } from "./rooms";
@@ -131,6 +132,23 @@ describe("레이드 루시퍼 1페이즈", () => {
     expect(s.over).toBe(false);
     for (let t = 0; t < 200; t++) stepParty(s, [EMPTY_INPUT]);
     expect(s.player.hp).toBeGreaterThan(0);
+  });
+
+  it("루시퍼는 기절·공포·느려짐에 묶이지 않음 (계속 기절시켜도 공격·변신)", () => {
+    const s = fight();
+    const boss = s.enemies.find((e) => e.kind === "lucifer")!;
+    for (let t = 0; t < 400; t++) {
+      boss.stunTicks = boss.fearTicks = boss.sluggish = 30;
+      stepParty(s, [EMPTY_INPUT]);
+    }
+    expect(s.raidBoss!.fight!.atkN).toBeGreaterThan(0);
+  });
+
+  it("레이드 적의 % 피해 기준 체력은 9600까지 · 던전 적은 그대로", () => {
+    const s = fight();
+    const boss = s.enemies.find((e) => e.kind === "lucifer")!;
+    expect(pctHp(boss)).toBe(PCT_HP_RULES.RAID_CAP);
+    expect(pctHp({ ...boss, kind: "dragon", maxHp: 20000 })).toBe(20000);
   });
 
   it("제한 시간 20분: 다 지나면 실패 · 남은 시간이 줄어듦", () => {

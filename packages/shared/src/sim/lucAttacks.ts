@@ -135,7 +135,8 @@ export function lucAttackTick(s: RunState, f: LucFight): void {
 }
 
 /** X자 두 대각선(팔 길이 X_LEN) 위인지 */
-function onX(dx: number, dy: number, r: number): boolean {
+/** X자 두 대각선 위인지 (AI 피하기도 씀, sim/raidBot) */
+export function onX(dx: number, dy: number, r: number): boolean {
   const w = R.X_W + r;
   if (Math.abs(dx) > R.X_LEN || Math.abs(dy) > R.X_LEN) return false;
   // 대각선까지 거리 = |dx ∓ dy| / √2

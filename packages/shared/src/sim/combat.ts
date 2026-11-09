@@ -42,6 +42,7 @@ import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, keepInRoom, markCrit, norm
 import { raiseShield } from "./imugiMods";
 import { devilMul } from "./devilPerks";
 import { setDmgMul } from "./buildSets"; import { factionKill } from "./faction"; import { raidGuard } from "./lucCover";
+import { raidDmgMul } from "./raidTune";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -58,10 +59,10 @@ const R = {
 };
 export { R as COMBAT_RULES };
 
-
 export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: number, dirY: number, knock = true): void {
   // 차례가 아닌 천사장 탑: 맞지 않음
   if (e.immune || (e.pwNoSkill && s.pvp?.src)) return;
+  dmg *= raidDmgMul(s); // 레이드 캐릭터 배율
   // 받아 넘기기 (갓이터·대검): 확률로 피해 없음
   const parry = ENEMIES[e.kind].parry;
   if (parry && dmg > 0) {
@@ -71,7 +72,7 @@ export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: numbe
       return;
     }
   }
-  // 가디언 방패: 맞을 때마다 한 칸씩 깨지고, 다 깨지기 전에는 피해 없음
+  // 가디언 방패: 맞을 때마다 한 칸씩 깨지고, 다 깨지면 피해
   if ((e.shield ?? 0) > 0 && dmg > 0) {
     e.shield = (e.shield ?? 0) - 1;
     e.hitFlash = 3;
@@ -113,7 +114,7 @@ export function envDamage(s: RunState, dmg: number): void {
 
 export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
   const p = s.player;
-  // 대시 중·무적·보호막이면 피해 없음 (잔영: 대시로 피하면 슬로우모션)
+  // 대시 중·무적·보호막이면 피해 없음 (잔영 대시는 슬로우)
   if (p.dashTicks > 0 && !envHit) remnantDodge(s);
   if (p.dashTicks > 0 || p.invulnTicks > 0 || p.shieldTicks > 0 || raidGuard(s, from)) return;
   // 거인 패링: 피해 없이 그대로 에너지로 · 회피
@@ -254,7 +255,7 @@ export function removeDead(s: RunState): void {
     if (tabooN(s, "deathBurst") > 0 && e.kind !== "dummy") addHazard(s, e.x, e.y, ENEMIES[e.kind].contactDamage);
     // 협동: 마지막으로 때린 사람이 처치 효과·돈을 받음
     useSeat(s, e.lastHit ?? back);
-    // 보스가 부른 적(돈 없음)은 처치 수·쌓이는 힘(진영 특징 등)에 안 넣음
+    // 보스가 부른 적(돈 없음)은 처치 수·쌓이는 힘에 안 넣음
     const minion = e.noGold;
     if (!minion) s.kills++;
     else trialKill(s, e);
@@ -290,7 +291,7 @@ export function removeDead(s: RunState): void {
     if (morphKill(s, e)) recalcStats(s);
   }
   s.enemies = alive;
-  // 연쇄 폭발: 쓰러진 자리에서 작은 폭발 (쓰러진 적은 다음 틱에 정리돼 한 틱씩 이어짐)
+  // 연쇄 폭발: 쓰러진 자리에서 작은 폭발 (한 틱씩 이어짐)
   for (const f of fallen) {
     useSeat(s, f.seat);
     if (hasPerk(s.player, "chainBurst")) blastAt(s, f.x, f.y, PERKS.chainBurst.radius, s.player.stats.damage * PERKS.chainBurst.damage);

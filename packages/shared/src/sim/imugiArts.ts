@@ -8,6 +8,7 @@ import { statusHit } from "./statusHit";
 import { addEffect, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
 import { createRng, deriveSeed } from "../rng";
 import { raiseShield } from "./imugiMods";
+import { pctHp } from "./pctHp";
 
 const roll = (s: RunState, e: EnemyState) => createRng(deriveSeed(s.seed, "skyDragon", s.tick, e.id)).nextFloat();
 
@@ -87,7 +88,7 @@ export function pearlStrike(s: RunState, dmg: number): void {
   const eye = hasPerk(s.player, "dragonEye");
   for (const e of [...s.enemies]) {
     if (e.hp <= 0) continue;
-    const base = e.kind === "dummy" ? 1000 / K.dragonEye.bossDiv : ENEMIES[e.kind].boss ? e.maxHp / K.dragonEye.bossDiv : e.maxHp;
+    const base = e.kind === "dummy" ? 1000 / K.dragonEye.bossDiv : ENEMIES[e.kind].boss ? pctHp(e) / K.dragonEye.bossDiv : pctHp(e);
     const total = dmg * IMUGI.pearl.mul + (eye ? base * K.dragonEye.hp : 0);
     if (!eye) damageEnemy(s, e, total, 0, 0);
     else {
@@ -131,7 +132,7 @@ export function dragonDots(s: RunState, dmg: number): void {
       e.imVenomT = (e.imVenomT ?? 0) + 1;
       if (e.imVenomT % 60 === 0) {
         // 보스는 최대 체력의 1/5 기준 (연습장 허수아비는 체력 1000인 보스처럼)
-        const base = e.kind === "dummy" ? 1000 / IMUGI.venom.bossDiv : ENEMIES[e.kind].boss ? e.maxHp / IMUGI.venom.bossDiv : e.maxHp;
+        const base = e.kind === "dummy" ? 1000 / IMUGI.venom.bossDiv : ENEMIES[e.kind].boss ? pctHp(e) / IMUGI.venom.bossDiv : pctHp(e);
         dotDamage(s, e, "poison", base * IMUGI.venom.pct * (e.imVenomStacks ?? 1));
       }
       if (e.imVenom === 0) e.imVenomStacks = e.imVenomT = 0;

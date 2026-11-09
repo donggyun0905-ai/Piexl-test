@@ -9,6 +9,7 @@ import { dotDamage, healPlayer, ignite } from "./combat";
 import { alive, inCircle, inCone, poison, strike } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
+import { pctHp } from "./pctHp";
 
 const kindOf = (p: PlayerState): PlagueKind => weaponOf(p).plague ?? "swarm";
 const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.seed, tag, s.tick, n)).nextFloat();
@@ -29,7 +30,7 @@ function nearest(s: RunState, x: number, y: number, r: number, ok: (e: EnemyStat
 export function infect(s: RunState, e: EnemyState): void {
   if ((e.plague ?? 0) > 0) return;
   e.plague = P.plagueTicks;
-  e.plagueDmg = (boss(e) ? (e.kind === "dummy" ? 1000 : e.maxHp) / P.bossDiv : e.maxHp) * P.plaguePct;
+  e.plagueDmg = (boss(e) ? (e.kind === "dummy" ? 1000 : pctHp(e)) / P.bossDiv : pctHp(e)) * P.plaguePct;
   const p = s.player;
   const stuck = (p.plRats ?? []).filter((r) => r.on === e.id);
   for (const r of stuck) {
@@ -75,7 +76,7 @@ function attack(s: RunState, dmg: number): void {
       for (const e of inCone(s, w.range, P.gripArc)) {
         strike(s, e, dmg);
         if (e.hp <= 0 || roll(s, "grip", e.id) >= chance) continue;
-        const cut = boss(e) ? ((e.kind === "dummy" ? 1000 : e.maxHp) / P.gripBossDiv) * P.gripBossPct : e.hp;
+        const cut = boss(e) ? ((e.kind === "dummy" ? 1000 : pctHp(e)) / P.gripBossDiv) * P.gripBossPct : e.hp;
         dotDamage(s, e, "death", cut);
         addEffect(s, { kind: "plMark", x: e.x, y: e.y, dirX: 1, dirY: 0, size: e.r + 6, maxTicks: 26 });
       }

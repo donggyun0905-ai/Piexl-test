@@ -6,6 +6,7 @@ import { damageEnemy } from "./combat";
 import { bullet, fan, roll, shootPattern, SUPPORT_CHANCE, SUPPORT_TICKS } from "./gun";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, DIR16, dist2, hasPerk, markDot, normalize, weaponOf } from "./util";
+import { pctHp } from "./pctHp";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -137,7 +138,7 @@ export function updateBleed(s: RunState): void {
     e.bleedTicks = (e.bleedTicks ?? 0) - 1;
     if (pulse && e.hp > 0) {
       const before = e.hp;
-      damageEnemy(s, e, (e.kind === "dummy" ? R.DUMMY_BLEED_HP : e.maxHp) * R.BLEED_RATE, 0, 0);
+      damageEnemy(s, e, (e.kind === "dummy" ? R.DUMMY_BLEED_HP : pctHp(e)) * R.BLEED_RATE, 0, 0);
       markDot(s, e, "bleed", before - e.hp);
     }
   }

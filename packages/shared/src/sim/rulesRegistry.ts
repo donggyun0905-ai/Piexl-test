@@ -13,6 +13,8 @@ import { LUC_SWORD_RULES } from "./lucSwords";
 import { LUC_PHASE2_RULES } from "./lucPhase2";
 import { RAID_REWARD_RULES } from "./raidReward";
 import { RAID_LIFE_RULES } from "./raidLife";
+import { PCT_HP_RULES } from "./pctHp";
+import { RAID_TUNE_RULES } from "./raidTune";
 import { RAID_PREP_RULES } from "./raidPrep";
 import { LUC_COVER_RULES } from "./lucCover";
 import { LUC_DEADLY_RULES } from "./lucDeadly";
@@ -158,6 +160,8 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   LUC_PHASE2_RULES,
   RAID_REWARD_RULES,
   RAID_LIFE_RULES,
+  PCT_HP_RULES,
+  RAID_TUNE_RULES,
   RAID_PREP_RULES,
   LUC_COVER_RULES,
   LUC_DEADLY_RULES,
