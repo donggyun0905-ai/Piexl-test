@@ -1,6 +1,7 @@
 // 레이드 AI 동료 입력 (자리를 꺼내 놓은 상태에서 부름, s.player = 그 AI). 무작위는 판 시드로만
 // 준비 방: 무기·사용 아이템·대장간·제단·기구 앞을 차례로 들렀다가 출구 앞에서 기다림 (준비는 시작 때 정해 둠, 바닥 물건은 사람마다라 보이지 않음)
 // 레이드 방: 기둥·불길·루시퍼(어둠의 세계면 자기 몬스터)를 노리고, 위험 표시·가시 고리·검기 빈칸·흰색 돔·지진파를 피함
+import { deadlyBot } from "./lucDeadly";
 import { ALTAR_IDS } from "../altarDefs";
 import { ROOM_CX as CX, ROOM_CY as CY, ROOM_MIN_Y } from "../constants";
 import { createRng, deriveSeed } from "../rng";
@@ -118,10 +119,18 @@ function fightInput(s: RunState, i: number): TickInput {
     // 하늘 탄막: 가까이 오는 적 탄을 옆으로 피함
     if (f.p2 === "sky")
       for (const pr of s.projectiles) {
-        if (pr.fromPlayer || (pr.x - p.x) ** 2 + (pr.y - p.y) ** 2 > 36 * 36 || (p.x - pr.x) * pr.vx + (p.y - pr.y) * pr.vy <= 0) continue;
+        if (pr.fromPlayer || (pr.x - p.x) ** 2 + (pr.y - p.y) ** 2 > 20 * 20 || (p.x - pr.x) * pr.vx + (p.y - pr.y) * pr.vy <= 0) continue;
         [mx, my] = normalize(-pr.vy, pr.vx) ?? [1, 0];
         break;
       }
+  }
+  // 즉사 패턴: 살 곳으로 (시선은 등을 돌리고 공격을 멈춤, sim/lucDeadly)
+  const dk = deadlyBot(s, i);
+  if (dk) {
+    const far = dk[0] ** 2 + dk[1] ** 2 > 64;
+    const [ax, ay] = normalize(dk[2], dk[3]) ?? [1, 0];
+    const gaze = f?.dk?.kind === 0;
+    return toInput(far ? (normalize(dk[0], dk[1])?.[0] ?? 0) : 0, far ? (normalize(dk[0], dk[1])?.[1] ?? 0) : 0, { aimX: Math.round(ax * 100) * 10, aimY: Math.round(ay * 100) * 10, attack: !gaze && !!t, dash: false, autoAim: !gaze });
   }
   const aim = t ? (normalize(t.x - p.x, t.y - p.y) ?? [1, 0]) : [p.faceX, p.faceY];
   return toInput(mx, my, { aimX: Math.round(aim[0]! * 100) * 10, aimY: Math.round(aim[1]! * 100) * 10, attack: !!t, dash, autoAim: true });

@@ -46,7 +46,7 @@ import { gateTaken } from "./bossGatekeeper";
 import { levTaken } from "./bossLevKing";
 import { asmoTaken } from "./bossAsmoLord";
 import { darkTaken } from "./lucDark";
-import { lucGuardTaken } from "./lucCover";
+import { lucGuardTaken, lucP2Taken } from "./lucCover";
 import { factionDmgMul, factionHurt, factionTaken } from "./faction";
 import { onyxHurt, onyxTaken } from "./onyx";
 import { crusaderHurt, crusaderTaken } from "./crusaderKit";
@@ -57,7 +57,7 @@ import type { EnemyState, RunState } from "./types";
 export function classTaken(s: RunState, taken: number): number {
   const p = s.player;
   idraHurt(s);
-  return disguise(s, mukinTaken(p, taken * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p, !!s.pvp) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p) * leoTaken(s) * onyxTaken(p) * thorkenTaken(p) * leviaTaken(p) * tailTaken(p) * madQueenTaken(p) * hookTaken(p) * orcaTaken(p) * waveTaken(p) * miryuTaken(p) * beaTaken(p) * gabrielTaken(p, !!s.pvp) * yurielTaken(p, !!s.pvp) * crusaderTaken(p) * foeTakenMul(p) * factionTaken(s)));
+  return disguise(s, mukinTaken(p, taken * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p, !!s.pvp) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p) * leoTaken(s) * onyxTaken(p) * thorkenTaken(p) * leviaTaken(p) * tailTaken(p) * madQueenTaken(p) * hookTaken(p) * orcaTaken(p) * waveTaken(p) * miryuTaken(p) * beaTaken(p) * gabrielTaken(p, !!s.pvp) * yurielTaken(p, !!s.pvp) * crusaderTaken(p) * foeTakenMul(p) * factionTaken(s) * lucP2Taken(s)));
 }
 
 /** 맞은 뒤 무적: 용 염옥·갓이터 패링 궁극기 동안은 없음 · 묵인은 아주 짧게 · 때린 적의 상태이상 (foeStatus) */

@@ -9,8 +9,9 @@ import type { PlayerState, RunState } from "./types";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
-  /** 페이즈마다 체력 · 체력 줄 수 · 악마의 불길이 나오기 시작하는 줄 */
-  PHASE_HP: 44000,
+  /** 1페이즈 체력 · 2페이즈 체력 (enemyDefsRaid 루시퍼 체력 = 둘의 합) · 페이즈마다 체력 줄 수 · 악마의 불길이 나오기 시작하는 줄 */
+  P1_HP: 88000,
+  P2_HP: 160000,
   LINES: 99,
   FLAME_LINES: 30,
   /** 기본 공격 사이 (틱) · 2페이즈 */
@@ -99,10 +100,13 @@ export function lucSpot(rng: Rng, margin = 40): [number, number] {
   return [ROOM_MIN_X + margin + rng.nextFloat() * (ROOM_MAX_X - ROOM_MIN_X - 2 * margin), ROOM_MIN_Y + margin + rng.nextFloat() * (ROOM_MAX_Y - ROOM_MIN_Y - 2 * margin)];
 }
 
-/** 페이즈 안 남은 체력 줄 (1페이즈는 44000 위쪽만 셈) */
+/** 체력 줄 하나 크기 (페이즈마다 다름) · 이 페이즈 바닥 체력 (1페이즈는 2페이즈 체력 위쪽만 셈) */
+export const lucLineHp = (phase: 1 | 2) => (phase === 1 ? R.P1_HP : R.P2_HP) / R.LINES;
+export const lucBase = (phase: 1 | 2) => (phase === 1 ? R.P2_HP : 0);
+
+/** 페이즈 안 남은 체력 줄 */
 export function lucLines(hp: number, phase: 1 | 2): number {
-  const left = phase === 1 ? hp - R.PHASE_HP : hp;
-  return Math.max(0, Math.ceil(left / (R.PHASE_HP / R.LINES) - 1e-6));
+  return Math.max(0, Math.ceil((hp - lucBase(phase)) / lucLineHp(phase) - 1e-6));
 }
 
 /** 그림 칸을 잠깐 바꿈 */

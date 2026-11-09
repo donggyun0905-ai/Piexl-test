@@ -78,3 +78,13 @@
 .raid-board.side h3 {
   font-size: 12px;
 }
+/* 즉사 패턴 안내: 안전하면 초록 · 위험하면 붉게 깜빡 */
+.raid-note.dk-safe {
+  background: rgba(10, 60, 30, 0.85);
+  border-color: rgba(120, 255, 160, 0.8);
+  text-shadow: 0 2px 0 #000, 0 0 18px rgba(80, 255, 140, 0.8);
+}
+.raid-note.dk-danger {
+  background: rgba(110, 0, 20, 0.88);
+  border-color: rgba(255, 80, 110, 0.9);
+}

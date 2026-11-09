@@ -1,5 +1,5 @@
 // 레이드 방 화면 위: 컷신(전체 화면 그림, 그동안 게임은 멈춤) · 데스 카운트 · 다시 살아나기까지 · 관전 · 어둠의 세계·돔·검기 안내
-import { allPlayers, RAID_LIVES, RAID_ROOM, raidFighting, raidOut, stunWarn, TICK_RATE, type LucCut, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, deadlySafe, RAID_LIVES, RAID_ROOM, raidFighting, raidOut, stunWarn, TICK_RATE, type LucCut, type RunState } from "@pixel-rogue/shared";
 import { watchingSeat } from "../game/camera";
 import { useEffect, useState } from "react";
 import type { TextKey } from "../i18n";
@@ -28,7 +28,14 @@ export function RaidOverlay({ run, t, names, me }: { run: RunState; t: (key: Tex
   const down = p.hp <= 0 && p.raidDownAt !== undefined;
   const wait = down ? Math.max(0, Math.ceil((RESPAWN - (run.tick - p.raidDownAt!)) / TICK_RATE)) : 0;
   const wingLeft = f?.p2 === "wings" ? Math.max(0, Math.ceil(((f.fallAt ?? 0) - run.tick) / TICK_RATE)) : 0;
-  const note = p.raidDark
+  // 즉사 패턴 (sim/lucDeadly): 무엇을 해야 하는지 + 남은 초 + 지금 내가 안전한지
+  const boss = run.enemies.find((e) => e.kind === "lucifer" && e.hp > 0);
+  const dk = f?.dk && boss ? f.dk : undefined;
+  const dkSafe = dk && boss ? deadlySafe(run, dk, me ?? run.seat ?? 0, boss) : false;
+  const dkNote = dk ? `${t(`raidDk${dk.kind}` as TextKey).replace("{s}", String(Math.max(0, Math.ceil((dk.at - run.tick) / TICK_RATE))))} — ${t(dkSafe ? "raidDkSafe" : "raidDkDanger")}` : "";
+  const note = dkNote
+    ? dkNote
+    : p.raidDark
     ? t("raidDarkText")
     : f?.dome
       ? t("raidDomeText")
@@ -59,7 +66,7 @@ export function RaidOverlay({ run, t, names, me }: { run: RunState; t: (key: Tex
       {/* 쓰러져 관전하는 동안: 오른쪽에 실시간 기록 · 화면 끌어 보기 안내 */}
       {watching && !board && !f?.cut && <RaidBoard run={run} names={names} t={t} side me={me} />}
       {watching && !f?.cut && <p className="raid-watch-pan">{t("raidWatchPan")}</p>}
-      {note && !f?.cut && <div className={`raid-note ${p.raidDark ? "dark" : ""}`}>{note}</div>}
+      {note && !f?.cut && <div className={`raid-note ${p.raidDark && !dk ? "dark" : ""}${dk ? (dkSafe ? " dk-safe" : " dk-danger") : ""}`}>{note}</div>}
       {chain && !f?.cut && (
         <div className="raid-chain" aria-label={t("raidChainText")}>
           <small>{t("raidChainText")}</small>

@@ -7,6 +7,7 @@ import { noise, sfxOn, tone, type Sfx } from "./sound";
 const POWER: Partial<Record<string, number>> = {
   beam: 3, slash: 3, stunAll: 2, chestOpen: 3, quake: 2, domeHit: 3, swordCast: 2, swordfall: 2,
   fire: 1, mine: 1, orb: 2, crown: 1, x: 1, dark: 2, toDark: 2, fromDark: 1, flameIn: 1, rain: 1, spin: 2, sweep: 1,
+  dkGaze: 3, dkLight: 3, dkLink: 3, dkHug: 3, dkGazeEnd: 3, dkLightEnd: 3, dkLinkEnd: 3, dkHugEnd: 3, dkDie: 2,
   chainx: 1, ice: 1, gold: 1, meteor: 1, hand: 1, coverBreak: 1,
 };
 /** 소리마다 화음 바탕음 (Hz) */

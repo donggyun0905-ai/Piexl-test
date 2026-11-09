@@ -5,6 +5,7 @@ import { lucFx } from "./lucArt";
 import { drawLucSky, drawLucSkyFx, drawLucSkyOver } from "./lucSky";
 import { drawRaidReward } from "./raidReward";
 import { drawCoverTop } from "./lucArena";
+import { drawDeadlyFx, drawDeadlyGround, drawDeadlyOver } from "./lucDeadly";
 import { additive, glow, shock } from "./pwFxBits";
 import type { Snap } from "./palette";
 
@@ -18,6 +19,7 @@ export function drawLucGround(ctx: Ctx, s: RunState, snap: Snap): void {
   const f = s.raidBoss?.fight;
   const boss = s.enemies.find((e) => e.kind === "lucifer" && e.hp > 0);
   if (!f || !boss) return;
+  drawDeadlyGround(ctx, s, snap);
   const t = s.tick;
   // 루시퍼와 기둥을 잇는 사슬
   for (const e of s.enemies) {
@@ -66,6 +68,7 @@ export function drawLucOver(ctx: Ctx, s: RunState, snap: Snap): void {
   const f = s.raidBoss?.fight;
   if (!f || s.roomId !== RAID_ROOM.boss) return;
   drawCoverTop(ctx, s, snap);
+  drawDeadlyOver(ctx, s, snap);
   drawLucSkyOver(ctx, s);
   const t = s.tick;
   const players = allPlayers(s);
@@ -228,7 +231,7 @@ export function drawLucFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       shock(ctx, x, y - 20, fx.size * (1.4 - t), "#c080ff", a, 5);
       break;
     default:
-      if (!drawLucSkyFx(ctx, fx, x, y, t, a)) additive(ctx, () => glow(ctx, x, y, fx.size, "#c070ff", a, 0.6));
+      if (!drawDeadlyFx(ctx, fx, x, y, t, a) && !drawLucSkyFx(ctx, fx, x, y, t, a)) additive(ctx, () => glow(ctx, x, y, fx.size, "#c070ff", a, 0.6));
   }
   return true;
 }

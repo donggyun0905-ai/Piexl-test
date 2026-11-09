@@ -41,7 +41,7 @@ const R = {
   BOSS_ROWS: 34,
   /** 전용 패시브 기준 개수 · 모자란 하나마다 더 주는 단련 포인트 */
   PASSIVE_CAP: 30,
-  PER_PASSIVE: 3,
+  PER_PASSIVE: 1,
   /** 풋내기(레벨로 크는 캐릭터)가 받는 레벨 (레벨마다 스탯 포인트 1) */
   NOVICE_LV: 30,
 };
@@ -60,7 +60,7 @@ export function raidOwnPassives(c: CharacterId): PassiveId[] {
   return PASSIVE_IDS.filter((id) => (PASSIVES[id] as PassiveDef).exclusive === c);
 }
 
-/** 단련 포인트: 기본 30 + 전용 패시브가 30개보다 적으면 모자란 하나마다 3 (2026-11-09 사용자 요청) */
+/** 단련 포인트: 기본 30 + 전용 패시브가 30개보다 적으면 모자란 하나마다 1 (2026-11-10 사용자 요청: 3 → 1) */
 export function raidGymPts(c: CharacterId): number {
   return R.GYM_PTS + Math.max(0, R.PASSIVE_CAP - raidOwnPassives(c).length) * R.PER_PASSIVE;
 }

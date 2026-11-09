@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { lucCovers, LUC_COVER_RULES as C } from "./lucCover";
+import { deadlySafe, LUC_DEADLY_RULES } from "./lucDeadly";
+import { allPlayers } from "./party";
 import { LUC_RULES } from "./lucKit";
 import { damageEnemy, damagePlayer } from "./combat";
 import { stepParty } from "./partyRun";
@@ -19,8 +21,8 @@ const press = (input: Partial<TickInput>) => ({ ...EMPTY_INPUT, ...input });
 describe("레이드 준비 고치기", () => {
   it("전용 패시브가 30개보다 적으면 하나마다 단련 3 · 변희는 동물 능력도 모두", () => {
     expect(raidGymPts("collector")).toBe(30);
-    expect(raidGymPts("warden")).toBe(30 + 20 * 3);
-    expect(raidGymPts("novice")).toBe(30 + 30 * 3);
+    expect(raidGymPts("warden")).toBe(30 + 20);
+    expect(raidGymPts("novice")).toBe(30 + 30);
     expect(raidOwnPassives("byeonhui").length).toBe(30);
   });
 
@@ -103,14 +105,59 @@ describe("레이드 방 돌기둥·루시퍼 방어", () => {
     return s;
   };
 
-  it("처음부터 보호막 · 기둥이 남아 있으면 받는 피해 -25%", () => {
+  it("처음부터 보호막 · 기둥이 남아 있으면 피해 없음 · 2페이즈 검이 남아 있으면 -75%", () => {
     const s = fight();
     const boss = s.enemies.find((e) => e.kind === "lucifer")!;
     expect(boss.ward).toBe(LUC_RULES.SHIELD);
     boss.ward = 0;
     const hp = boss.hp;
     damageEnemy(s, boss, 100, 1, 0, false);
-    expect(hp - boss.hp).toBeCloseTo(75, 0);
+    expect(boss.hp).toBe(hp);
+    for (const e of s.enemies) if (e.kind === "lucpillar") e.hp = 0;
+    s.raidBoss!.fight!.phase = 2;
+    s.enemies.push({ ...s.enemies[0]!, kind: "lucsword", hp: 10, id: 999 });
+    damageEnemy(s, boss, 100, 1, 0, false);
+    expect(hp - boss.hp).toBeCloseTo(25, 0);
+  });
+
+  it("즉사 패턴: 1페이즈 빛(돌기둥 그림자) · 시선(등 돌리기) 차례로 · 살 곳이면 살고 아니면 쓰러짐", () => {
+    const s = fight();
+    const f = s.raidBoss!.fight!;
+    const boss = s.enemies.find((e) => e.kind === "lucifer")!;
+    for (let t = 0; t < LUC_DEADLY_RULES.FIRST + 2; t++) stepParty(s, [EMPTY_INPUT]);
+    expect(f.dk?.kind).toBe(1);
+    const d = f.dk!;
+    const c = lucCovers(s)[0]!;
+    const p = s.player;
+    // 그림자 안 (빛 방향으로 기둥 뒤)
+    [p.x, p.y] = [c[0]! + d.data[0]! * 40, c[1]! + d.data[1]! * 40];
+    p.invulnTicks = 0;
+    expect(deadlySafe(s, d, 0, boss)).toBe(true);
+    [p.x, p.y] = [c[0]! - d.data[0]! * 60, c[1]! - d.data[1]! * 60];
+    expect(deadlySafe(s, d, 0, boss)).toBe(false);
+    // 시선: 루시퍼를 보면 위험 · 등 돌리면 안전
+    const gaze = { kind: 0, at: 0, start: 0, data: [] };
+    [p.faceX, p.faceY] = [Math.sign(boss.x - p.x) || 1, 0];
+    p.faceY = 0;
+    expect(deadlySafe(s, gaze, 0, boss)).toBe(boss.x === p.x);
+    p.faceX = -p.faceX;
+    expect(deadlySafe(s, gaze, 0, boss)).toBe(true);
+  });
+
+  it("즉사 패턴: 2페이즈 사슬(짝과 붙기) · 품(루시퍼 곁)", () => {
+    const s = fight();
+    const boss = s.enemies.find((e) => e.kind === "lucifer")!;
+    const ps = allPlayers(s);
+    const link = { kind: 2, at: 0, start: 0, data: [0, 1] };
+    [ps[1]!.x, ps[1]!.y] = [ps[0]!.x + 20, ps[0]!.y];
+    expect(deadlySafe(s, link, 0, boss)).toBe(true);
+    ps[1]!.x = ps[0]!.x + 300;
+    expect(deadlySafe(s, link, 0, boss)).toBe(false);
+    const hug = { kind: 3, at: 0, start: 0, data: [] };
+    [ps[0]!.x, ps[0]!.y] = [boss.x + 40, boss.y];
+    expect(deadlySafe(s, hug, 0, boss)).toBe(true);
+    ps[0]!.x = boss.x + 400;
+    expect(deadlySafe(s, hug, 0, boss)).toBe(false);
   });
 
   it("돌기둥 옆이면 루시퍼 공격을 막고, 정해진 횟수면 부서졌다 다시 생김", () => {

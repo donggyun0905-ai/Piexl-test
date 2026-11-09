@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.51.4",
+    date: "2026-11-10",
+    items: {
+      ko: [
+        "레이드 밸런스: 루시퍼 체력 1페이즈 88,000 · 2페이즈 160,000 · 석화의 기둥 25,000 · 절망의 검 50,000 · 기둥이 남아 있으면 루시퍼에게 피해가 들어가지 않음 · 검이 남아 있으면 받는 피해 -75% · 2페이즈 루시퍼 공격력 1.5배",
+        "레이드 즉사 패턴 4가지 (대시로 못 피함, 화면 가운데에 할 일·남은 초·안전/위험 표시): 1페이즈 '석화의 시선'(루시퍼에게 등 돌리기) · '심판의 빛'(돌기둥 그림자 속으로) / 2페이즈 '영혼의 사슬'(묶인 짝 곁으로) · '왕좌의 품'(루시퍼 곁 초록 원으로)",
+        "레이드 단련 포인트: 전용 패시브가 모자란 하나마다 +3 → +1 · AI 동료가 하늘 탄막에서 탄만 피하다 루시퍼에게 다가가지 못하던 것 고침",
+      ],
+      en: [
+        "Raid balance: Lucifer HP 88,000 in phase 1 · 160,000 in phase 2 · petrified pillars 25,000 · swords of despair 50,000 · Lucifer is immune while pillars stand · takes 75% less damage while swords remain · hits 1.5× harder in phase 2",
+        "4 raid deadly patterns (can't be dashed; the task, seconds left and SAFE/DANGER are shown mid-screen): phase 1 'Petrifying Gaze' (turn your back) · 'Judgment Light' (hide in a stone column's shadow) / phase 2 'Soul Chain' (stay by your chained partner) · 'Embrace of the Throne' (rush into the green circle around Lucifer)",
+        "Raid gym points: +3 → +1 per missing exclusive passive · fixed AI allies only dodging shots in the sky phase and never closing in on Lucifer",
+      ],
+      ja: [
+        "レイドバランス: ルシファー体力 フェーズ1 88,000 · フェーズ2 160,000 · 石化の柱 25,000 · 絶望の剣 50,000 · 柱が残っているとルシファーにダメージが通らない · 剣が残っていると被ダメージ-75% · フェーズ2のルシファー攻撃力1.5倍",
+        "レイド即死パターン4種 (ダッシュでは避けられない、画面中央にやること・残り秒・安全/危険): フェーズ1「石化の視線」(背を向ける) · 「審判の光」(石柱の影へ) / フェーズ2「魂の鎖」(つながった相手のそばへ) · 「玉座の懐」(ルシファーのそばの緑の円へ)",
+        "レイド鍛錬ポイント: 足りない専用パッシブ1個ごと +3 → +1 · AIの仲間が空の弾幕で弾を避けるだけでルシファーに近づかなかったのを修正",
+      ],
+    },
+  },
+  {
     version: "0.51.3",
     date: "2026-11-10",
     items: {

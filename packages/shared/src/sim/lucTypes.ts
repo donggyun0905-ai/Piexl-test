@@ -1,4 +1,5 @@
 // 레이드 보스 루시퍼 싸움 상태 (sim/lucifer·lucAttacks·lucPillars·lucDark). 모두 레이드 상태(s.raidBoss.fight)에 둠
+import type { LucDeadly } from "./lucDeadly";
 
 /** 컷신 (전체 화면 그림, 그동안 모두 멈춤): 기둥 넷이 부서진 뒤 필살기 · 1→2페이즈 변신 · 2페이즈 필살기 · 쓰러짐 */
 export type LucCut = "pillars" | "change" | "p2" | "death";
@@ -54,6 +55,11 @@ export interface LucFight {
   wings?: number[][];
   fallAt?: number;
   spin?: number;
+  /** 즉사 패턴 (sim/lucDeadly): 지금 패턴 · 다음 시작 틱 · 쓴 수 · 이 페이즈에 맞춰 둠 */
+  dk?: LucDeadly;
+  dkAt?: number;
+  dkN?: number;
+  dkPhase?: number;
   /** 숨는 돌기둥 [x, y, 남은 횟수, 다시 생기는 틱] (sim/lucCover) */
   covers?: number[][];
   /** 보상 방 상자가 열린 틱 (sim/raidReward) */

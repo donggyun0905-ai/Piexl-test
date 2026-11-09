@@ -81,7 +81,7 @@ describe("레이드 루시퍼 1페이즈", () => {
     const a = fight();
     const b = fight();
     expect(a.enemies.filter((e) => e.kind === "lucpillar")).toHaveLength(4);
-    expect(a.enemies.find((e) => e.kind === "lucifer")?.maxHp).toBe(88000);
+    expect(a.enemies.find((e) => e.kind === "lucifer")?.maxHp).toBe(248000);
     for (let t = 0; t < 900; t++) {
       stepParty(a, [EMPTY_INPUT]);
       stepParty(b, [EMPTY_INPUT]);
@@ -114,9 +114,9 @@ describe("레이드 루시퍼 1페이즈", () => {
   it("1페이즈 체력을 다 깎으면 변신 컷신 → 2페이즈 (넘친 피해 버림)", () => {
     const s = fight();
     const boss = s.enemies.find((e) => e.kind === "lucifer")!;
-    boss.hp = 40000;
+    boss.hp = 150000;
     stepParty(s, [EMPTY_INPUT]);
-    expect(boss.hp).toBe(44000);
+    expect(boss.hp).toBe(160000);
     expect(s.raidBoss?.fight?.cut).toBe("change");
     for (let t = 0; t < 200; t++) stepParty(s, [EMPTY_INPUT]);
     expect(s.raidBoss?.fight?.phase).toBe(2);
@@ -138,7 +138,7 @@ describe("레이드 루시퍼 2페이즈", () => {
     const s = make();
     for (let i = 0; i < 4; i++) goThrough(s, 1);
     const boss = s.enemies.find((e) => e.kind === "lucifer")!;
-    boss.hp = 40000;
+    boss.hp = 150000;
     for (let t = 0; t < 200; t++) stepParty(s, [EMPTY_INPUT]);
     return { s, boss };
   };

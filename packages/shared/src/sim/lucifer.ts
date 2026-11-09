@@ -10,6 +10,7 @@ import { darkTick, flameTick } from "./lucDark";
 import { LUC_RULES as L, lucFight, lucLines, lucRng, lucSpot, lucTargets, near } from "./lucKit";
 import { pillarTick, spawnPillars } from "./lucPillars";
 import { coverTick } from "./lucCover";
+import { deadlyTick } from "./lucDeadly";
 import type { LucCut, LucFight } from "./lucTypes";
 import { eachSeat } from "./party";
 import type { EnemyState, RunState } from "./types";
@@ -52,6 +53,7 @@ export function startCut(s: RunState, f: LucFight, cut: LucCut): void {
   f.xs = [];
   f.orbs = [];
   f.waves = [];
+  f.dk = undefined;
 }
 
 export function updateLucifer(s: RunState, e: EnemyState, toP: readonly [number, number], spawned: EnemyState[]): void {
@@ -65,9 +67,10 @@ export function updateLucifer(s: RunState, e: EnemyState, toP: readonly [number,
   }
   e.immune = false;
   coverTick(s);
+  deadlyTick(s, f, e);
   // 1페이즈 체력을 다 깎음 → 변신 (넘친 피해는 버림)
-  if (f.phase === 1 && e.hp <= L.PHASE_HP) {
-    e.hp = L.PHASE_HP;
+  if (f.phase === 1 && e.hp <= L.P2_HP) {
+    e.hp = L.P2_HP;
     e.ward = 0;
     for (const o of s.enemies) if (o.kind === "lucpillar" || o.kind === "lucflame") o.hp = 0;
     return startCut(s, f, "change");

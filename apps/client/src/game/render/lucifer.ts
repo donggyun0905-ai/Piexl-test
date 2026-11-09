@@ -1,7 +1,7 @@
 // 레이드 보스 루시퍼 몸·체력 막대 그리기 (sim/lucifer·lucPillars·lucDark, 그림 render/lucArt)
 // 몸: 1페이즈 여성형 · 2페이즈 남성형 (기본 공격마다 공격 모션 칸) · 석화의 기둥 · 악마의 불길 · 어둠의 세계 몬스터(빨려 간 사람에게만)
 // 체력 막대: 페이즈마다 줄 ×99 (줄마다 색) · 보호막(흰 막대) · 페이즈 이름
-import { allPlayers, LUC_GUARD_PCT, LUC_RULES, lucGuarded, lucLines, swordGlow, type EnemyState, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, LUC_GUARD_PCT, LUC_RULES, lucBase, lucGuarded, lucLineHp, lucLines, swordGlow, type EnemyState, type RunState } from "@pixel-rogue/shared";
 import { detectLang } from "../../i18n";
 import { TEXT } from "../../i18n/text";
 import { lucBody, lucFx, lucProp } from "./lucArt";
@@ -179,8 +179,8 @@ export function drawLucBar(ctx: Ctx, s: RunState, boss: EnemyState, bx: number, 
   const f = s.raidBoss?.fight;
   const phase = f?.phase ?? 1;
   const lines = lucLines(boss.hp, phase);
-  const line = LUC_RULES.PHASE_HP / LUC_RULES.LINES;
-  const base = phase === 1 ? LUC_RULES.PHASE_HP : 0;
+  const line = lucLineHp(phase);
+  const base = lucBase(phase);
   const left = lines <= 0 ? 0 : (boss.hp - base - (lines - 1) * line) / line;
   ctx.fillStyle = "rgba(0,0,0,0.75)";
   ctx.fillRect(bx - 2, by - 2, bw + 4, bh + 4);
@@ -207,7 +207,7 @@ export function drawLucBar(ctx: Ctx, s: RunState, boss: EnemyState, bx: number, 
   ctx.fillStyle = lineColor(lines);
   ctx.fillText(n, bx + bw + 6, by + bh / 2);
   const pillars = s.enemies.filter((e) => e.kind === "lucpillar" && e.hp > 0).length;
-  const label = `${say(phase === 1 ? "lucPhase1" : "lucPhase2")}${phase === 1 && pillars > 0 ? ` · ${say("lucPillarsLeft").replace("{n}", String(pillars))}` : ""}${ward > 0 ? ` · ${say("lucShield")} ${Math.ceil(boss.ward ?? 0)}` : ""}${lucGuarded(s) ? ` · ${say("lucGuard").replace("{n}", String(LUC_GUARD_PCT()))}` : ""}`;
+  const label = `${say(phase === 1 ? "lucPhase1" : "lucPhase2")}${phase === 1 && pillars > 0 ? ` · ${say("lucPillarsLeft").replace("{n}", String(pillars))}` : ""}${ward > 0 ? ` · ${say("lucShield")} ${Math.ceil(boss.ward ?? 0)}` : ""}${lucGuarded(s) ? ` · ${LUC_GUARD_PCT(s) >= 100 ? say("lucImmune") : say("lucGuard").replace("{n}", String(LUC_GUARD_PCT(s)))}` : ""}`;
   ctx.font = `bold ${Math.max(8, Math.round(bh * 1.4))}px sans-serif`;
   ctx.textAlign = "center";
   ctx.textBaseline = "top";

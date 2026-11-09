@@ -15,6 +15,7 @@ import { RAID_REWARD_RULES } from "./raidReward";
 import { RAID_LIFE_RULES } from "./raidLife";
 import { RAID_PREP_RULES } from "./raidPrep";
 import { LUC_COVER_RULES } from "./lucCover";
+import { LUC_DEADLY_RULES } from "./lucDeadly";
 import { ORIGIN_RULES } from "./origin";
 import { AF_BENCH_RULES } from "./afBench";
 import { PILGRIM_RULES } from "./pilgrim";
@@ -159,6 +160,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   RAID_LIFE_RULES,
   RAID_PREP_RULES,
   LUC_COVER_RULES,
+  LUC_DEADLY_RULES,
   ORIGIN_RULES,
   AF_BENCH_RULES,
   PILGRIM_RULES,

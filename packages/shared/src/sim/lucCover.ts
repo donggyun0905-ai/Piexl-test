@@ -1,10 +1,11 @@
 // 레이드 방 숨는 돌기둥(엄폐물) · 루시퍼 방어 (2026-11-09 사용자 요청)
 // 돌기둥: 몸으로 지나갈 수 없고, 바로 옆에 붙어 있으면 루시퍼 쪽 공격(탄·위험 표시·기본 공격)을 막아 줌 · 막을 때마다 1회 → 정해진 횟수면 부서지고 잠시 뒤 다시 생김
-// 루시퍼 방어: 석화의 기둥(1페이즈)·절망의 검(2페이즈)이 하나라도 남아 있으면 루시퍼가 받는 피해 -25%
+// 루시퍼 방어: 석화의 기둥(1페이즈)이 남아 있으면 피해가 들어가지 않음 · 절망의 검(2페이즈)이 남아 있으면 받는 피해 -75% · 2페이즈는 루시퍼 쪽 공격이 더 아픔
 // 기둥·검·상자는 밀리지 않음 (pinned: 스스로 움직인 자리만 인정)
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import type { EnemyKind } from "../content";
 import { allPlayers } from "./party";
+import { RAID_ROOM } from "./raidTypes";
 import type { EnemyState, RunState } from "./types";
 import { addEffect } from "./util";
 
@@ -16,8 +17,11 @@ const R = {
   /** 부서지기까지 막는 횟수 · 다시 생기기까지 틱 */
   HITS: 6,
   RESPAWN: 1200,
-  /** 기둥·검이 남아 있을 때 루시퍼가 받는 피해 줄이기 (0.25 = 25%) */
-  GUARD: 0.25,
+  /** 루시퍼가 받는 피해 줄이기: 1페이즈 기둥이 남아 있을 때 (1 = 피해 없음) · 2페이즈 검이 남아 있을 때 (0.75 = 75%) */
+  P1_GUARD: 1,
+  P2_GUARD: 0.75,
+  /** 2페이즈: 사람이 받는 피해 배율 (루시퍼 공격력 업) */
+  P2_DMG: 1.5,
 };
 export { R as LUC_COVER_RULES };
 
@@ -89,15 +93,19 @@ export function raidGuard(s: RunState, from?: EnemyKind): boolean {
   return true;
 }
 
-/** 루시퍼가 받는 피해 배율 (classTaken.foeTaken): 기둥·검이 남아 있으면 -25% */
-export function lucGuardTaken(s: RunState, e: EnemyState): number {
-  if (e.kind !== "lucifer") return 1;
-  return s.enemies.some((o) => (o.kind === "lucpillar" || o.kind === "lucsword") && o.hp > 0) ? 1 - R.GUARD : 1;
-}
-
-/** 루시퍼 방어 중인지 (그리기) */
+/** 루시퍼 방어 중인지 (그리기): 기둥·검이 남아 있음 */
 export const lucGuarded = (s: RunState) => s.enemies.some((o) => (o.kind === "lucpillar" || o.kind === "lucsword") && o.hp > 0);
-export const LUC_GUARD_PCT = () => Math.round(R.GUARD * 100);
+/** 지금 줄어드는 비율 (1 = 피해 없음) */
+const guardNow = (s: RunState) => (lucGuarded(s) ? (s.raidBoss?.fight?.phase === 2 ? R.P2_GUARD : R.P1_GUARD) : 0);
+
+/** 루시퍼가 받는 피해 배율 (classTaken.foeTaken) */
+export function lucGuardTaken(s: RunState, e: EnemyState): number {
+  return e.kind === "lucifer" ? 1 - guardNow(s) : 1;
+}
+export const LUC_GUARD_PCT = (s: RunState) => Math.round(guardNow(s) * 100);
+
+/** 사람이 받는 피해 배율 (classTaken.classTaken): 2페이즈 레이드 방이면 더 아픔 */
+export const lucP2Taken = (s: RunState) => (s.raidBoss?.fight?.phase === 2 && s.roomId === RAID_ROOM.boss ? R.P2_DMG : 1);
 export const COVER_RADIUS = () => R.RADIUS;
 export const COVER_HITS = () => R.HITS;
 
