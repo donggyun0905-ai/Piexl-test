@@ -2,6 +2,7 @@
 import type { Lang } from "../index";
 import type { ChapterId, FactionId, OtherSpeaker, StoryBossId } from "../../story/storyData";
 import { S2_BOSS_STORY, S2_SPEAKERS, S2_SUMMARY, S2_TITLE } from "./world2";
+import { S3_SPEAKERS, S3_SUMMARY, S3_TITLE } from "./world3";
 
 type L = Record<Lang, string>;
 const c = (ko: string, en: string, ja: string): L => ({ ko, en, ja });
@@ -132,11 +133,13 @@ export const CHAPTER_TITLE: Record<ChapterId, L> = {
   ch2: c("슬며시 차오르는 악", "The Slowly Rising Evil", "忍び寄る悪"),
   ch3: c("버려진 자들", "The Abandoned", "捨てられた者たち"),
   ...S2_TITLE,
+  ...S3_TITLE,
 };
 
 /** 장 목록에 보이는 한 줄 줄거리 */
 export const CHAPTER_SUMMARY: Record<ChapterId, L> = {
   ...S2_SUMMARY,
+  ...S3_SUMMARY,
   ch1: c(
     "한 사냥꾼의 화살이 부른 용의 분노. 아스칼론과 비르디아가 서로 등을 돌리게 된 날, 그 뒤에는 검은 약 한 방울이 있었다.",
     "A hunter's arrow wakes a dragon's wrath. On the day Ascalon and Virdia turned their backs on each other, a single drop of black potion lay behind it all.",
@@ -157,6 +160,7 @@ export const CHAPTER_SUMMARY: Record<ChapterId, L> = {
 /** 캐릭터가 아닌 말하는 사람 이름 */
 export const SPEAKER_NAME: Record<OtherSpeaker, L> = {
   ...S2_SPEAKERS,
+  ...S3_SPEAKERS,
   raven: c("레이븐", "Raven", "レイヴン"),
   cain: c("카인", "Cain", "カイン"),
   jade: c("제이드", "Jade", "ジェイド"),

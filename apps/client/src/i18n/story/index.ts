@@ -1,4 +1,4 @@
-// 아카식 레코드 본문 모음 (장마다 한·영·일, 3장은 길어서 앞·뒤 파일로 나눔 · 시즌 2는 season2)
+// 아카식 레코드 본문 모음 (장마다 한·영·일, 3장은 길어서 앞·뒤 파일로 나눔 · 시즌 2는 season2 · 시즌 3은 season3)
 import type { Chapter, ChapterId } from "../../story/storyData";
 import { CH1_EN } from "./ch1.en";
 import { CH1_JA } from "./ch1.ja";
@@ -13,10 +13,12 @@ import { CH3B_EN } from "./ch3b.en";
 import { CH3B_JA } from "./ch3b.ja";
 import { CH3B_KO } from "./ch3b.ko";
 import { S2_CHAPTERS } from "./season2";
+import { S3_CHAPTERS } from "./season3";
 
 export const CHAPTER_TEXT: Record<ChapterId, Chapter> = {
   ch1: { ko: CH1_KO, en: CH1_EN, ja: CH1_JA },
   ch2: { ko: CH2_KO, en: CH2_EN, ja: CH2_JA },
   ch3: { ko: [...CH3A_KO, ...CH3B_KO], en: [...CH3A_EN, ...CH3B_EN], ja: [...CH3A_JA, ...CH3B_JA] },
   ...S2_CHAPTERS,
+  ...S3_CHAPTERS,
 };
