@@ -28,7 +28,7 @@
   - 랜덤은 시드로만 (`Math.random`으로 게임 결과를 정하지 않음)
 - 브랜치: `develop` → 테스트(`develop.pixel-rogue.pages.dev`, 서버 `pixel-rogue-beta`), `test` → 시험(`test.pixel-rogue-test.pages.dev`, 서버 `pixel-rogue-test.donggyun0905.workers.dev`·저장소 `donggyun0905-ai/Piexl-test`), `main` → 라이브(`pixel-toybox.pages.dev`, 서버 `pixel-toybox.donggyun0905.workers.dev`, 같은 저장소 `Piexl-test`, 2026-11-03 결정). 작업은 `develop`에서
 - 그림 규격: `docs/ART.md` (생성 AI로 캐릭터 그림 만들기: `docs/ART_AI.md` · 바꿀 그림 전체 목록: `docs/ART_LIST.md` · GPT 프롬프트: `docs/ART_PROMPTS.md`) · 빛 효과(PixiJS 층)로 이펙트 만들기: `docs/GLOW.md` · 공개 전 점검: `docs/LAUNCH.md` · 관리자 페이지(게임 수치 조정): `docs/ADMIN.md`
-- 패왕전 새 대결 유형 계획(시즌 3 뒤): `docs/PW_MODES.md` · 시즌 3 단계별 보스 구상: `docs/S3_BOSSES.md`
+- 패왕전 새 대결 유형 계획(시즌 3 뒤): `docs/PW_MODES.md` · 시즌 3 단계별 보스 구상: `docs/S3_BOSSES.md` · 시즌 3 최종보스 구상: `docs/S3_FINAL_BOSSES.md`
 - 게임 계획: `docs/PLAN.md` (고치면 맨 위 '마지막 수정' 날짜·시간 갱신)
 - 개발일지: `docs/devlog/YYYY-MM.md` (월별, 최신 달만 읽기). 날짜·시간(한국 시간)으로 기록. **쓰기 전에 적을 내용을 간략히 말하고, 사용자가 작성하라고 하면 작성**
 - 실제 서버 배포 순간 접속 중인 사람의 연결이 잠깐 끊김 → 서버 변경은 업로드 전에 알려 주기
