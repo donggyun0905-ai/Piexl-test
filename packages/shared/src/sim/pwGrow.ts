@@ -155,22 +155,33 @@ function giveGold(s: RunState, i: number, n: number, x: number, y: number): void
   useSeat(s, back);
 }
 
-/** 쓰러뜨린 것의 보상: 막타 친 자리는 돈·경험치, 그 근처 같은 편은 경험치 조금 (쟁탈전 병사는 돈도 일부, foeTeam = 쓰러진 쪽 편) */
-export function reward(s: RunState, killer: number | undefined, kind: keyof typeof PW_GROW.gold, x: number, y: number, foeTeam: number, victimLv = 1): void {
+/** 쓰러뜨린 것의 보상 (foeTeam = 쓰러진 쪽 편): 막타 친 자리는 돈 · 경험치는 막타 친 사람 + 범위 안 같은 편 + 도움 준 사람(assist)이 나눠 받음
+ * 쟁탈전 병사는 범위 안 같은 편도 돈 일부 · 상대 캐릭터 처치 도움은 처치 돈의 절반 */
+export function reward(s: RunState, killer: number | undefined, kind: keyof typeof PW_GROW.gold, x: number, y: number, foeTeam: number, victimLv = 1, assist: readonly number[] = []): void {
   const pv = s.pvp!;
   const [last, near] = PW_GROW.xp[kind]!;
   const extra = kind === "hero" ? PW_GROW.heroPerLv * (victimLv - 1) : 0;
-  const ok = (i: number) => pv.seats[i]!.team !== foeTeam;
-  if (killer !== undefined && ok(killer)) {
-    giveGold(s, killer, PW_GROW.gold[kind], x, y);
-    addXp(s, killer, last + extra);
-  }
+  const ok = (i: number) => pv.seats[i]!.team !== foeTeam && inPlay(s, i);
+  const inRange = (i: number) => {
+    const p = allPlayers(s)[i]!;
+    return (p.x - x) ** 2 + (p.y - y) ** 2 <= PW_GROW.near ** 2;
+  };
+  if (killer !== undefined && pv.seats[killer]!.team !== foeTeam) giveGold(s, killer, PW_GROW.gold[kind], x, y);
+  // 경험치 받는 사람: 막타 · 범위 안 같은 편 · 도움
+  const got = allPlayers(s)
+    .map((_, i) => i)
+    .filter((i) => ok(i) && (i === killer || inRange(i) || assist.includes(i)));
+  if (killer !== undefined && pv.seats[killer]!.team !== foeTeam && !got.includes(killer)) got.push(killer);
+  const each = got.length <= 1 ? last + extra : Math.max(near + extra / 3, Math.round(((last + extra) * PW_GROW.xpShare) / got.length));
+  for (const i of got) addXp(s, i, each);
   const share = kind === "minion" && PW_MODE[pv.mode].rule === "contest" ? Math.round(PW_GROW.gold.minion * PW_GROW.nearGold) : 0;
-  allPlayers(s).forEach((p, i) => {
-    if (i === killer || !ok(i) || !inPlay(s, i) || (p.x - x) ** 2 + (p.y - y) ** 2 > PW_GROW.near ** 2) return;
-    addXp(s, i, near + extra / 3);
-    if (share) giveGold(s, i, share, p.x, p.y);
-  });
+  const help = kind === "hero" ? Math.round(PW_GROW.gold.hero * PW_GROW.assistGold) : 0;
+  for (const i of got) {
+    if (i === killer) continue;
+    const p = allPlayers(s)[i]!;
+    if (help && assist.includes(i)) giveGold(s, i, help, p.x, p.y);
+    else if (share && inRange(i)) giveGold(s, i, share, p.x, p.y);
+  }
 }
 
 /** 상점·증강 입력 (집에서만 삼). 처리했으면 true */

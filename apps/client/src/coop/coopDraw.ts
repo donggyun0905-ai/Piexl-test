@@ -1,7 +1,6 @@
 // 협동 화면 위 그리기 (게임 좌표): 친구 이름표 · 출구 앞에 선 사람 점 · 빠른 신호 말풍선
 import { allPlayers, EXIT_X, isAlive, TILE_SIZE, type RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "../game/render/palette";
-import { drawRaidMe } from "../game/render/raidMarks";
 import { playersAtExits, seatColor, SIGNAL_MS, SIGNALS, type CoopExtras } from "./extras";
 
 export function drawCoopOverlay(
@@ -36,8 +35,6 @@ export function drawCoopOverlay(
     const x = snap(lerp(p.prevX, p.x, alpha));
     const y = snap(lerp(p.prevY, p.y, alpha));
     let top = y - p.r - 3;
-    // 레이드: 내 위치 (머리 위 화살표 · 발밑 고리)
-    if (i === me && isAlive(p)) drawRaidMe(ctx, s, x, y, p.r, top - 8);
     // 이름표 (나는 빼고)
     if (i !== me && names[i]) {
       ctx.font = "5px sans-serif";

@@ -8,6 +8,7 @@ import { drawLevActor, drawLevBar } from "./leviathan";
 import { drawLevGround, drawLevOver } from "./leviathanGround";
 import { drawAsmoActor, drawAsmoBar } from "./asmodeus";
 import { drawLucActor, drawLucBar } from "./lucifer";
+import { drawRaidMeMark, drawRaidMeRing } from "./raidMarks";
 import { drawLucFx, drawLucGround, drawLucOver } from "./lucGround";
 import { drawAsmoGround, drawAsmoOver } from "./asmodeusGround";
 import { lerp, type Snap } from "./palette";
@@ -103,6 +104,7 @@ export function drawS3Ground(ctx: Ctx, s: RunState, a: number, snap: Snap): void
   drawLevGround(ctx, s, snap);
   drawAsmoGround(ctx, s, snap);
   drawLucGround(ctx, s, snap);
+  drawRaidMeRing(ctx, s, a, snap);
   const gk = s.enemies.find((e) => e.kind === "gatekeeper");
   for (const g of gk?.gkGates ?? []) if (!s.enemies.some((x) => x.id === g.id && x.hp > 0)) drawEnemySprite(ctx, "hellgate", snap(g.x), snap(g.y) - 8, 2, false);
   const me = s.enemies.find((e) => e.kind === "mooneater");
@@ -172,6 +174,7 @@ export function drawS3Dark(ctx: Ctx, s: RunState, a: number, snap: Snap): void {
   drawLevOver(ctx, s, a, snap);
   drawAsmoOver(ctx, s);
   drawLucOver(ctx, s, snap);
+  drawRaidMeMark(ctx, s, a, snap);
   const me = bossOf(s, "mooneater");
   if (!me?.meDark) return;
   const cv = ctx.canvas;

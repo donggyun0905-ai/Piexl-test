@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.51.3",
+    date: "2026-11-10",
+    items: {
+      ko: [
+        "패왕전 쟁탈전·전쟁의 서막: 상대 캐릭터 처치를 도우면(이번 목숨에 때림) 처치 돈의 절반 · 경험치는 막타 친 사람 + 가까이 있던 같은 편 + 도운 사람이 나눠 받음 (아군 병사·포탑이 잡아도 근처면 받음 · 경험치 받는 범위 190 → 300)",
+        "레이드: 내 위치 표시를 크게 (머리 위에 떠서 흔들리는 빛나는 초록 보석 표지 · 발밑 초록 원판과 퍼지는 고리) · AI와 바로 시작한 판에서도 보이게 고침",
+      ],
+      en: [
+        "Paewang Divine Contest / Prelude to War: assisting a kill (hitting that enemy this life) pays half the kill gold · XP is split between the last hitter, nearby allies and assisters (you still get it when allied minions/towers take the kill · XP range 190 → 300)",
+        "Raid: much bigger 'you are here' marker (a glowing green gem bobbing over your head · green disc and spreading ring under your feet) · now also shown in AI-only runs",
+      ],
+      ja: [
+        "覇王戦 争奪戦・戦争の序幕: 相手キャラの撃破を手伝うと (この命の間に攻撃) 撃破ゴールドの半分 · 経験値はラストヒット・近くの味方・アシストした人で分け合う (味方の兵士・砲台が倒しても近くなら入る · 経験値範囲 190 → 300)",
+        "レイド: 自分の位置表示を大きく (頭上に浮かんで揺れる光る緑の宝石 · 足元に緑の円盤と広がる輪) · AIとすぐ始めた試合でも表示されるように修正",
+      ],
+    },
+  },
+  {
     version: "0.51.2",
     date: "2026-11-10",
     items: {
