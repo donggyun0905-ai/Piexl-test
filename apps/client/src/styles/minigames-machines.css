@@ -1,0 +1,194 @@
+/* 슬롯머신 캐비닛 (lobby/games/Slots) — 주사위·하이로우·타일은 minigames-dice.css */
+
+/* 슬롯: 금테 캐비닛 · 전구 간판(쉴 땐 깜빡, 돌 땐 달림, 이기면 번쩍) · 릴 3줄 창 + 가운데 줄 · 옆 손잡이 */
+.mg.slots {
+  border: 0;
+  background: none;
+  box-shadow: none;
+  padding: 4px;
+}
+.slot-machine {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px 16px;
+  border-radius: 26px 26px 14px 14px;
+  background: linear-gradient(160deg, #8a2a5a, #4a1030 55%, #2a0818);
+  border: 4px solid #e8b040;
+  box-shadow: inset 0 0 0 3px #6a3a10, inset 0 0 30px #000a, 0 16px 34px #000c, 0 0 40px #ff5ac855;
+}
+.slot-marquee {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  padding: 6px 12px;
+  border-radius: 14px;
+  background: linear-gradient(#2a0818, #1a0410);
+  box-shadow: inset 0 0 10px #000;
+}
+.bulbs {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.slot-marquee b {
+  line-height: 1.1;
+  color: #ff3a5a;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  text-shadow: 0 0 8px #ff3a5a, 2px 2px 0 #ffd860;
+}
+.bulb {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ffd860;
+  box-shadow: 0 0 8px #ffd860;
+  animation: bulb-blink 1.4s steps(1) infinite;
+}
+.slot-machine.running .bulb {
+  animation: bulb-blink 0.25s steps(1) infinite;
+}
+.slot-machine.won .bulb {
+  background: #fff;
+  animation: bulb-blink 0.12s steps(1) infinite;
+}
+@keyframes bulb-blink {
+  50% {
+    background: #6a3a10;
+    box-shadow: none;
+  }
+}
+.slot-window {
+  position: relative;
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 12px;
+  background: linear-gradient(#0a0206, #2a0a18);
+  box-shadow: inset 0 0 0 2px #e8b040, inset 0 0 18px #000;
+}
+.reel-col {
+  display: flex;
+  flex-direction: column;
+  width: 74px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: linear-gradient(#a8a090, #fffdf6 25%, #fffdf6 75%, #a8a090);
+  box-shadow: inset 0 6px 10px #0006, inset 0 -6px 10px #0006;
+}
+.reel-sym {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  font-size: 26px;
+  opacity: 0.45;
+  transform: scale(0.8);
+}
+.reel-sym.mid {
+  height: 58px;
+  font-size: 42px;
+  opacity: 1;
+  transform: none;
+}
+.reel-sym.seven {
+  color: #e8283a;
+  font-weight: 900;
+  font-family: Georgia, serif;
+  text-shadow: 2px 2px 0 #ffd860, 0 0 6px #ff3a5a88;
+}
+.reel-col.spin .reel-sym {
+  animation: reel-roll 0.08s linear infinite;
+  filter: blur(2.5px);
+}
+.payline {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  top: 50%;
+  height: 2px;
+  background: #ff3a5acc;
+  box-shadow: 0 0 6px #ff3a5a;
+  pointer-events: none;
+}
+.slot-machine.won .slot-window {
+  animation: slot-win 0.35s ease-in-out 6 alternate;
+}
+.slot-machine.jackpot {
+  animation: jackpot-shake 0.08s linear 10;
+}
+@keyframes jackpot-shake {
+  50% {
+    transform: translate(2px, -1px) rotate(0.4deg);
+  }
+}
+.slot-lever {
+  position: absolute;
+  right: -30px;
+  top: 70px;
+  width: 22px;
+  height: 120px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.slot-lever::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  bottom: 0;
+  width: 6px;
+  height: 100px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #888, #eee, #888);
+  transform-origin: bottom;
+  transition: transform 0.25s;
+}
+.slot-lever i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ff9aa8, #d0283a 55%, #6a0a14);
+  box-shadow: 0 3px 6px #0008;
+  transition: transform 0.25s;
+}
+.slot-lever.pulled::before {
+  transform: scaleY(-0.4);
+}
+.slot-lever.pulled i {
+  transform: translateY(120px);
+}
+.slot-spin {
+  width: 260px;
+  min-width: 220px;
+  border-radius: 999px;
+  background: linear-gradient(#ff5a6a, #c8283a);
+  border-color: #6a0a14;
+  color: #fff;
+  font-size: 18px;
+  box-shadow: 0 4px 0 #6a0a14, 0 0 18px #ff3a5a66;
+}
+.slot-pay {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 4px 12px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #0008;
+  color: #f2e6c8;
+  font-size: 13px;
+}
+.slot-pay span.seven b {
+  color: #ff3a5a;
+}

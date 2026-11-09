@@ -47,6 +47,10 @@
 @import "./minigames.css";
 @import "./minigames-pairs.css";
 @import "./minigames-look.css";
+@import "./minigames-stage.css";
+@import "./minigames-casino.css";
+@import "./minigames-machines.css";
+@import "./minigames-dice.css";
 @import "./coop.css";
 @import "./medals.css";
 @import "./taboo.css";

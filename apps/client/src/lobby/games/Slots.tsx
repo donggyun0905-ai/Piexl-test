@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { TextKey } from "../../i18n";
 import { addChips, loadChips } from "../chips";
 import { BetBar } from "./BetBar";
+import { WinFx } from "./WinFx";
 import { randInt } from "./util";
 
 const SYMBOLS = ["🍒", "🍋", "🔔", "⭐", "💎", "7"];
@@ -28,6 +29,8 @@ function payout(reels: number[]): number {
 export function Slots({ t }: { t: (k: TextKey) => string }) {
   const [chips, setChips] = useState(loadChips);
   const [bet, setBet] = useState(10);
+  const [fx, setFx] = useState({ n: 0, k: 0 });
+  const celebrate = (n: number) => setFx((f) => ({ n, k: f.k + 1 }));
   const [reels, setReels] = useState([5, 5, 5]);
   const [spinning, setSpinning] = useState(0);
   const [win, setWin] = useState<number | null>(null);
@@ -51,26 +54,73 @@ export function Slots({ t }: { t: (k: TextKey) => string }) {
         const got = payout(fin) * bet;
         setWin(got);
         setChips(addChips(got));
+        celebrate(got);
       }, 450 * k);
     }
   };
 
+  const jackpot = win !== null && win > 0 && reels.every((r) => r === 5);
   return (
     <div className="mg slots">
+      <WinFx key={fx.k} amount={fx.n} bet={bet} t={t} />
       <BetBar t={t} chips={chips} bet={bet} setBet={setBet} />
-      <div className={`slot-reels${win ? " won" : ""}`}>
-        {reels.map((r, i) => (
-          <span key={i} className={`reel${spinning && i >= 3 - spinning ? " spin" : ""}${SYMBOLS[r] === "7" ? " seven" : ""}`}>
-            <i>{SYMBOLS[r]}</i>
-          </span>
-        ))}
+      <div className={`slot-machine${spinning ? " running" : ""}${win ? " won" : ""}${jackpot ? " jackpot" : ""}`}>
+        <div className="slot-marquee">
+          <Bulbs from={0} />
+          <b>7 7 7</b>
+          <Bulbs from={7} />
+        </div>
+        <div className="slot-window">
+          {reels.map((r, i) => {
+            const spin = spinning > 0 && i >= 3 - spinning;
+            return (
+              <div key={i} className={`reel-col${spin ? " spin" : ""}`}>
+                {[-1, 0, 1].map((d) => {
+                  const s = (r + d + SYMBOLS.length) % SYMBOLS.length;
+                  return (
+                    <span key={d} className={`reel-sym${d === 0 ? " mid" : ""}${SYMBOLS[s] === "7" ? " seven" : ""}`}>
+                      {SYMBOLS[s]}
+                    </span>
+                  );
+                })}
+              </div>
+            );
+          })}
+          <i className="payline" />
+        </div>
+        <button type="button" className={`slot-lever${spinning ? " pulled" : ""}`} disabled={spinning > 0 || bet > chips} onClick={spin} aria-label={t("mgSpin")}>
+          <i />
+        </button>
       </div>
-      <button type="button" className="primary big" disabled={spinning > 0 || bet > chips} onClick={spin}>
+      <button type="button" className="primary big slot-spin" disabled={spinning > 0 || bet > chips} onClick={spin}>
         {t("mgSpin")}
       </button>
       {win !== null && <strong className={`mg-result ${win > 0 ? "win" : "lose"}`}>{win > 0 ? `+${win}` : t("mgMiss")}</strong>}
-      <p className="mg-note">{SYMBOLS.map((s, i) => `${s}${s}${s} ×${TRIPLE[i]}`).join(" · ")} · 🍒🍒 ×2 · 🍒 ×1</p>
+      <div className="slot-pay" aria-label={t("mgPaytable")}>
+        {SYMBOLS.map((s, i) => (
+          <span key={s} className={s === "7" ? "seven" : ""}>
+            <b>{`${s}${s}${s}`}</b> ×{TRIPLE[i]}
+          </span>
+        ))}
+        <span>
+          <b>🍒🍒</b> ×2
+        </span>
+        <span>
+          <b>🍒</b> ×1
+        </span>
+      </div>
       <p className="mg-note">{t("mgChipNote")}</p>
     </div>
+  );
+}
+
+/** 간판 전구 한 줄 (7개, 번갈아 깜빡임) */
+function Bulbs({ from }: { from: number }) {
+  return (
+    <span className="bulbs">
+      {Array.from({ length: 7 }, (_, i) => (
+        <i key={i} className="bulb" style={{ animationDelay: `${((from + i) % 2) * 0.35 + (from + i) * 0.04}s` }} />
+      ))}
+    </span>
   );
 }

@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { TextKey } from "../../i18n";
 import { addChips, loadChips } from "../chips";
 import { BetBar } from "./BetBar";
+import { WinFx } from "./WinFx";
 import { PlayingCard } from "./PlayingCard";
 import { randInt } from "./util";
 
@@ -11,6 +12,8 @@ const STEP = 1.5;
 export function HiLo({ t }: { t: (k: TextKey) => string }) {
   const [chips, setChips] = useState(loadChips);
   const [bet, setBet] = useState(10);
+  const [fx, setFx] = useState({ n: 0, k: 0 });
+  const celebrate = (n: number) => setFx((f) => ({ n, k: f.k + 1 }));
   const [card, setCard] = useState(7);
   // 무늬는 꾸밈 (숫자만 셈) · 지난 카드 몇 장
   const [suit, setSuit] = useState(0);
@@ -46,12 +49,14 @@ export function HiLo({ t }: { t: (k: TextKey) => string }) {
   };
   const cash = () => {
     setChips(addChips(pot));
+    if (pot > bet) celebrate(pot);
     setMsg(`+${pot}`);
     setPot(0);
   };
 
   return (
     <div className="mg hilo">
+      <WinFx key={fx.k} amount={fx.n} bet={bet} t={t} />
       <BetBar t={t} chips={chips} bet={bet} setBet={setBet} />
       <div className="hilo-card">
         {trail.length > 0 && (

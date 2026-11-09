@@ -4,6 +4,36 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.46",
+    date: "2026-11-09",
+    items: {
+      ko: [
+        "로비 게임기 8종 화면을 전체화면으로: 창 대신 화면 전체 무대(게임마다 다른 조명·분위기), 내용이 화면에 맞게 최대 4배까지 커짐 · 위 막대에 브라우저 전체화면 버튼",
+        "화질: 별사탕 상자·룬 블록이 커진 화면에 맞춰 선명하게 그려짐 (흐릿하던 문제 해결) · 별사탕은 반짝이는 입체 별, 룬 돌은 깎은 빗면·빛나는 룬 · 우물 벽돌",
+        "트럼프 카드를 새로 그림: 숫자마다 실제 카드처럼 무늬 배치 · J·Q·K는 위아래 대칭 왕실 인물(왕관·보석 관·깃 모자) · 에이스 · 뒷면 문장 · 조커 게임도 같은 카드와 광대 조커",
+        "카지노 꾸밈: 금액마다 색이 다른 카지노 칩 · 칩 더미 · 나무 테두리 펠트 테이블 · 이기면 동전·색종이가 쏟아지고 크게 이기면 '대박!'·'잭팟!'",
+        "슬롯머신: 전구 간판(돌 때 달리고 이기면 번쩍) · 릴 3줄 창과 가운데 줄 · 옆 손잡이를 당겨도 돌아감 · 배당표 · 잭팟이면 기계가 흔들림",
+        "주사위 대소: 3D 주사위가 굴러가며 빙글빙글 돌다가 나온 눈이 앞으로 · 숫자 타일: 상아 타일과 색 점",
+      ],
+      en: [
+        "All 8 lobby arcade games are now full screen: a full-screen stage with its own lighting per game instead of a small window, content scales up to 4x to fit · fullscreen button in the top bar",
+        "Sharper: Star Candy Box and Rune Drop now render at the enlarged size (no more blur) · glossy 3D candy stars, bevelled rune stones with glowing runes and a brick well",
+        "Playing cards redrawn: real pip layouts for each number · mirrored royal figures for J, Q, K (crown, tiara, feathered cap) · aces · crest card backs · the Joker game uses the same cards plus a jester Joker",
+        "Casino touches: colour-coded casino chips · chip stack · wood-rimmed felt tables · coins and confetti rain on a win, with 'BIG WIN!' and 'JACKPOT!' for large wins",
+        "Slot machine: light-bulb marquee (chases while spinning, flashes on a win) · three-row reel window with a payline · pull the side lever to spin · paytable · the cabinet shakes on a jackpot",
+        "Dice: 3D dice tumble and land with the rolled face forward · Number tiles: ivory tiles with colour dots",
+      ],
+      ja: [
+        "ロビーのゲーム機8種を全画面に：小さなウィンドウではなく画面いっぱいのステージ（ゲームごとに照明と雰囲気）、内容は画面に合わせて最大4倍に拡大 · 上のバーにブラウザ全画面ボタン",
+        "画質：星キャンディ箱・ルーンブロックが拡大後の大きさで鮮明に描かれる（ぼやけを解消） · つやのある立体的な星キャンディ、面取りした石と光るルーン · 井戸のレンガ",
+        "トランプを描き直し：数字ごとに本物のカードのようなマーク配置 · J・Q・Kは上下対称の王族（王冠・ティアラ・羽根帽子） · エース · 紋章入りの裏面 · ジョーカーゲームも同じカードと道化のジョーカー",
+        "カジノの演出：金額ごとに色の違うカジノチップ · チップの山 · 木枠のフェルトテーブル · 勝つとコインと紙吹雪、大勝ちで「大当たり！」「ジャックポット！」",
+        "スロットマシン：電球の看板（回転中は流れ、勝つと点滅） · 3段のリール窓と中央ライン · 横のレバーを引いても回る · 配当表 · ジャックポットで筐体が揺れる",
+        "サイコロ大小：3Dのサイコロが転がり、出た目が正面に · 数字タイル：象牙のタイルと色の点",
+      ],
+    },
+  },
+  {
     version: "0.50.45",
     date: "2026-11-09",
     items: {

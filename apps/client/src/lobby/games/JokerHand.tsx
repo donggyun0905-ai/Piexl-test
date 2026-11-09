@@ -1,8 +1,9 @@
 // 조커 게임 내 손 (혼자·같이 하기 공용): 방금 뽑은 카드를 보여 주고, 짝이 있으면 손의 짝을 눌러 버림
 import { JOKER, type JokerView } from "@pixel-rogue/shared";
 import type { TextKey } from "../../i18n";
+import { JokerCard } from "./PlayingCard";
 
-const face = (c: number) => (c === JOKER ? "🃏" : c);
+const face = (c: number) => <JokerCard n={c} joker={c === JOKER} />;
 
 export function JokerHand({ label, view, turn, onMatch }: { label: string; view: JokerView; turn: boolean; onMatch: ((index: number) => void) | null }) {
   const { hand, got, pending } = view;
@@ -10,14 +11,14 @@ export function JokerHand({ label, view, turn, onMatch }: { label: string; view:
     <div className={`seat mine${turn ? " turn" : ""}`}>
       <span>{label}</span>
       <div className="seat-cards">
-        {pending && got !== null && <span className="card got">{face(got)}</span>}
+        {pending && got !== null && <span className="card-btn got">{face(got)}</span>}
         {hand.map((c, k) =>
           pending && onMatch ? (
-            <button key={k} type="button" className={`card pairable${c === JOKER ? " joker" : ""}`} onClick={() => onMatch(k)}>
+            <button key={k} type="button" className="card-btn pairable" onClick={() => onMatch(k)}>
               {face(c)}
             </button>
           ) : (
-            <span key={k} className={`card${c === JOKER ? " joker" : ""}`}>
+            <span key={k} className="card-btn">
               {face(c)}
             </span>
           ),

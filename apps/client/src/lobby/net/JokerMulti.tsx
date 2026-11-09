@@ -2,6 +2,7 @@
 import type { JokerView } from "@pixel-rogue/shared";
 import { JokerHand, jokerNote } from "../games/JokerHand";
 import { seatName, type TableProps } from "./CardTable";
+import { CardBack } from "../games/PlayingCard";
 
 export function JokerMulti({ view, t, send }: TableProps) {
   const g = view.game_ as JokerView;
@@ -18,11 +19,11 @@ export function JokerMulti({ view, t, send }: TableProps) {
               <div className="seat-cards">
                 {Array.from({ length: n }, (_, k) =>
                   mine && !g.pending && i === g.from ? (
-                    <button key={k} type="button" className="card back pick" onClick={() => send({ t: "act", a: { pick: k } })}>
-                      ?
+                    <button key={k} type="button" className="card-btn pick" onClick={() => send({ t: "act", a: { pick: k } })}>
+                      <CardBack />
                     </button>
                   ) : (
-                    <span key={k} className="card back small" />
+                    <CardBack key={k} cls=" small" />
                   ),
                 )}
               </div>

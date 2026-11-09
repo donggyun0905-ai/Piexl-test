@@ -5,6 +5,7 @@ import { loadText, saveText } from "../../storage";
 import { addChips } from "../chips";
 import { burst, CELL, COLS, drawCandy, popsAlive, ROWS, type Gain, type Pop } from "./candyDraw";
 import { rand, randInt } from "./util";
+import { crispBegin, useCrispCanvas } from "./crisp";
 
 const TIME = 120;
 /** 이만큼 넘게 점수를 내면 칩 */
@@ -23,6 +24,11 @@ export function CandyBox({ t }: { t: (k: TextKey) => string }) {
   const [drag, setDrag] = useState<{ x0: number; y0: number; x1: number; y1: number } | null>(null);
   const fx = useRef<{ pops: Pop[]; gains: Gain[] }>({ pops: [], gains: [] });
   const over = left <= 0;
+  const scale = useRef(1);
+  const crisp = useCrispCanvas(ref, COLS * CELL, ROWS * CELL);
+  useEffect(() => {
+    scale.current = crisp;
+  }, [crisp]);
 
   useEffect(() => {
     if (over) {
@@ -52,6 +58,7 @@ export function CandyBox({ t }: { t: (k: TextKey) => string }) {
       const f = fx.current;
       f.pops = popsAlive(f.pops, now) as Pop[];
       f.gains = popsAlive(f.gains, now) as Gain[];
+      if (ctx) crispBegin(ctx, scale.current);
       if (ctx) drawCandy(ctx, view.current.grid, view.current.box, view.current.ok, f.pops, f.gains, now);
       id = requestAnimationFrame(frame);
     };

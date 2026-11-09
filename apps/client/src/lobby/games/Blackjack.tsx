@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { TextKey } from "../../i18n";
 import { addChips, loadChips } from "../chips";
 import { BetBar } from "./BetBar";
+import { WinFx } from "./WinFx";
 import { PlayingCard } from "./PlayingCard";
 import { shuffle } from "./util";
 
@@ -18,6 +19,8 @@ type Result = BjResult;
 export function Blackjack({ t }: { t: (k: TextKey) => string }) {
   const [chips, setChips] = useState(loadChips);
   const [bet, setBet] = useState(10);
+  const [fx, setFx] = useState({ n: 0, k: 0 });
+  const celebrate = (n: number) => setFx((f) => ({ n, k: f.k + 1 }));
   const [deck, setDeck] = useState<number[]>([]);
   const [me, setMe] = useState<number[]>([]);
   const [dealer, setDealer] = useState<number[]>([]);
@@ -29,6 +32,7 @@ export function Blackjack({ t }: { t: (k: TextKey) => string }) {
     setResult(r);
     const back = r === "blackjack" ? Math.floor(bet * 2.5) : r === "win" ? bet * 2 : r === "push" ? bet : 0;
     setChips(addChips(back));
+    if (r === "win" || r === "blackjack") celebrate(back);
   };
   const deal = () => {
     if (bet > chips) return;
@@ -72,6 +76,7 @@ export function Blackjack({ t }: { t: (k: TextKey) => string }) {
 
   return (
     <div className="mg blackjack">
+      <WinFx key={fx.k} amount={fx.n} bet={bet} t={t} />
       <BetBar t={t} chips={chips} bet={bet} setBet={setBet} />
       {me.length > 0 && (
         <>

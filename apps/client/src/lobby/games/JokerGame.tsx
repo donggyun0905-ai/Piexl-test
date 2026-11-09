@@ -6,6 +6,7 @@ import type { TextKey } from "../../i18n";
 import { addChips } from "../chips";
 import { JokerHand, jokerNote } from "./JokerHand";
 import { rng, WIN_CHIPS } from "./util";
+import { CardBack } from "./PlayingCard";
 
 const PLAYERS = 4;
 const deal = () => JOKER_RULES.start(PLAYERS, rng);
@@ -41,11 +42,11 @@ export function JokerGame({ t }: { t: (k: TextKey) => string }) {
               <div className="seat-cards">
                 {Array.from({ length: n }, (_, k) =>
                   myTurn && !v.pending && i === v.from ? (
-                    <button key={k} type="button" className="card back pick" onClick={() => play({ pick: k })}>
-                      ?
+                    <button key={k} type="button" className="card-btn pick" onClick={() => play({ pick: k })}>
+                      <CardBack />
                     </button>
                   ) : (
-                    <span key={k} className="card back small" />
+                    <CardBack key={k} cls=" small" />
                   ),
                 )}
               </div>

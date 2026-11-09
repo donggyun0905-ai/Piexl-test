@@ -71,28 +71,9 @@
 .lobby-grid {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
-.mini-backdrop {
-  z-index: 10;
-}
-.mini-game {
-  width: auto;
-  max-width: calc(100vw - 12px);
-  max-height: calc(100vh - 12px);
-  overflow: auto;
-  padding: 8px;
-}
-/* 게임 내용: 기본 너비 540, MiniGame이 화면에 맞게 최대 2.5배로 확대 */
+/* 미니 게임 무대는 minigames-stage.css · 게임 내용 기본 너비 540, MiniGame이 화면에 맞게 확대 */
 .mini-body {
   width: 540px;
-}
-.mini-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.mini-head h2 {
-  margin: 0;
-  color: var(--accent);
 }
 /* 전시장: 위 가운데 이름 · 전시물 가까이 가면 설명 상자 */
 .lobby-hall-title {

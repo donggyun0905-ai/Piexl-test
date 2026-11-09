@@ -6,6 +6,7 @@ import { loadText, saveText } from "../../storage";
 import { addChips } from "../chips";
 import { C, drawRune, SIDE } from "./runeDraw";
 import { fallEvery, H, newRune, runeAct, W, type RuneAct } from "./runeLogic";
+import { crispBegin, useCrispCanvas } from "./crisp";
 
 const BEST_KEY = "runeBest";
 const KEYS: Record<string, RuneAct> = { ArrowLeft: "l", ArrowRight: "r", ArrowUp: "rot", KeyX: "rot", ArrowDown: "down", Space: "drop" };
@@ -14,6 +15,11 @@ export function RuneDrop({ t }: { t: (k: TextKey) => string }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const game = useRef(newRune());
   const [view, setView] = useState({ lines: 0, points: 0, over: false });
+  const scale = useRef(1);
+  const crisp = useCrispCanvas(ref, W * C + SIDE, H * C);
+  useEffect(() => {
+    scale.current = crisp;
+  }, [crisp]);
   const sync = () => {
     const g = game.current;
     setView({ lines: g.lines, points: g.points, over: g.over });
@@ -55,6 +61,7 @@ export function RuneDrop({ t }: { t: (k: TextKey) => string }) {
     let id = 0;
     const frame = () => {
       const ctx = ref.current?.getContext("2d");
+      if (ctx) crispBegin(ctx, scale.current);
       if (ctx) drawRune(ctx, game.current, performance.now(), labelRef.current);
       id = requestAnimationFrame(frame);
     };
