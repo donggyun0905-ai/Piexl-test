@@ -17,7 +17,7 @@ const R = {
   DARK_SPEED: 0.85,
   DARK_GAP: 1200,
   DARK_LOCK: 60,
-  DARK_R: 26,
+  DARK_R: 52,
   /** 어둠의 세계 몬스터 수 · 몸 닿는 피해 · 떨어져 나오는 거리 */
   SHADES: 4,
   SHADE_HIT: 6,

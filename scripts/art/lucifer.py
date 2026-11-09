@@ -5,9 +5,8 @@
 # · fx.jpg 기본공격 모션 시트 · map1.jpg / map2.jpg 레이드용 맵 잔패턴 (검은 바탕 그대로, 화면에서 더하기로 그림)
 # · 컷신 GIF 4개는 그대로 복사 (cut_pillars · cut_p2 · cut_change · cut_death)
 import os
-import shutil
 
-from PIL import Image
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 from import_sheet import finish, shrink
 from import_v2 import pieces
@@ -46,6 +45,37 @@ def single(out, src, box):
     print(out, p.size)
 
 
+def cutscene(src, out, scale=3):
+    """컷신 GIF → 고화질 움직이는 WebP: 256색 점무늬(디더링)를 살짝 펴고 3배로 매끄럽게 키운 뒤 또렷하게 · 칸 사이 섞은 칸 · 가장자리는 검정으로 번지게 (화면 바탕 검정과 이어짐, 한 번만 재생)"""
+    im = Image.open(os.path.join(ROOT, src))
+    frames, durs = [], []
+    w, h = im.size
+    W, H = w * scale, h * scale
+    mask = Image.new("L", (W, H), 0)
+    ImageDraw.Draw(mask).rounded_rectangle((W * 0.06, H * 0.06, W * 0.94, H * 0.94), radius=int(min(W, H) * 0.12), fill=255)
+    mask = mask.filter(ImageFilter.GaussianBlur(min(W, H) * 0.05))
+    black = Image.new("RGB", (W, H), (0, 0, 0))
+    for i in range(im.n_frames):
+        im.seek(i)
+        f = im.convert("RGB").filter(ImageFilter.MedianFilter(3))
+        f = f.resize((W, H), Image.LANCZOS).filter(ImageFilter.UnsharpMask(radius=2, percent=80, threshold=2))
+        frames.append(Image.composite(f, black, mask))
+        durs.append(im.info.get("duration", 150))
+    # 칸 사이에 반씩 섞은 칸을 넣어 부드럽게 (마지막 칸은 그대로 멈춤)
+    smooth, sd = [], []
+    for i, f in enumerate(frames):
+        smooth.append(f)
+        if i + 1 < len(frames):
+            sd += [durs[i] // 2, 0]
+            smooth.append(Image.blend(f, frames[i + 1], 0.5))
+            sd[-1] = durs[i] - durs[i] // 2
+        else:
+            sd.append(durs[i] * 3)
+    frames, durs = smooth, sd
+    frames[0].save(os.path.join(OUT, out + ".webp"), save_all=True, append_images=frames[1:], duration=durs, loop=1, quality=84, method=4)
+    print(out, (W, H), len(frames))
+
+
 def plain(out, src, width):
     img = Image.open(os.path.join(ROOT, src)).convert("RGB")
     img = img.resize((width, round(img.height * width / img.width)), Image.LANCZOS)
@@ -63,5 +93,5 @@ if __name__ == "__main__":
     plain("fx.jpg", "루시퍼 기본공격모션.png", 1536)
     plain("map1.jpg", "레이드용 맵 잔패턴.png", 1536)
     plain("map2.jpg", "레이드용 맵 잔패턴 (2).png", 1536)
-    for src, out in [("기둥4개 부서진 이후 필살기 컷신.gif", "cut_pillars.gif"), ("2페이즈_필살기 컷신.gif", "cut_p2.gif"), ("페이즈1에서2로 변신.gif", "cut_change.gif"), ("피가다해_죽는모습.gif", "cut_death.gif")]:
-        shutil.copyfile(os.path.join(ROOT, src), os.path.join(OUT, out))
+    for src, out in [("기둥4개 부서진 이후 필살기 컷신.gif", "cut_pillars"), ("2페이즈_필살기 컷신.gif", "cut_p2"), ("페이즈1에서2로 변신.gif", "cut_change"), ("피가다해_죽는모습.gif", "cut_death")]:
+        cutscene(src, out)

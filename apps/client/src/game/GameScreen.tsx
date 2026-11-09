@@ -1,4 +1,5 @@
 import { continueToLastFloor, createPracticeRun, createRun, FLOOR_COUNT, parseSeed, VIEW_HEIGHT, VIEW_WIDTH, type LastBossKind, type RunState } from "@pixel-rogue/shared";
+import { useRaidFull } from "./raidFull";
 import { LastBossChoice } from "./LastBossChoice";
 import { beginRun, endRun } from "../balance";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -47,13 +48,13 @@ export function GameScreen(props: GameScreenProps) {
   const getControls = useCallback(() => controlsRef.current, []);
   const runRef = useRef<RunState | null>(null);
   const getRun = useCallback(() => runRef.current, []);
-  // 콜백이 바뀌어도 다시 시작 안 하게 ref로
   const cb = useRef(props);
   useLayoutEffect(() => {
     cb.current = props;
   });
   const pvp = mode === "paewang" || !!props.initialRun?.pvp; // 패왕전: 화면 꽉 채움
-  const [scale, wide] = useFitScale(wrapRef, pvp);
+  const full = useRaidFull(getRun) || pvp; // 레이드 방도 꽉 채움
+  const [scale, wide] = useFitScale(wrapRef, full);
   const dpr = window.devicePixelRatio || 1;
   const [overlay, setOverlay] = useState<Overlay>("none");
   const overlayRef = useRef<Overlay>("none");
@@ -83,13 +84,11 @@ export function GameScreen(props: GameScreenProps) {
   // 모바일 뒤로가기 → 나가기 확인
   const toggleExit = useCallback(() => setOverlay((o) => (o === "exit" || isInfo(o) ? "none" : "exit")), []);
   useBackButton(toggleExit);
-
   // 배틀 시간 끝: 바깥에서 판을 끝냄
   useEffect(() => {
     const run = runRef.current;
     if (props.forceEnd && run && !run.over) run.over = true;
   }, [props.forceEnd]);
-
   // 게임 진행
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -249,7 +248,7 @@ export function GameScreen(props: GameScreenProps) {
         />
         {stats && !pvp && <StatsPanel rows={stats} t={t} lang={lang} onInfo={props.embedded ? undefined : setOverlay} run={getRun} />}
         {!pvp && !props.embedded && <CharInfoHost run={getRun} character={characterId} lang={lang} t={t} open={overlay} onInfo={(k) => setOverlay((o) => infoNext(o, k))} />}
-        {mode !== "practice" && mode !== "swarm" && mode !== "paewang" && (
+        {mode !== "practice" && mode !== "swarm" && !full && (
           <RouteMap miniRef={miniRef} run={getRun} t={t} />
         )}
         {prompt.text && (!touchMode || !prompt.interact) && (
@@ -262,7 +261,7 @@ export function GameScreen(props: GameScreenProps) {
       {loadout && <Loadout view={loadout} character={characterId} lang={lang} t={t} touchMode={touchMode} controls={() => controlsRef.current} />}
       {pvp ? <PanHint t={t} touchMode={touchMode} /> : <p className={`game-hint ${touchMode ? "touch" : ""}`}>{t(touchMode ? "hintRotate" : "hintPc")}</p>}
 
-      {/* 터치·마우스 입력 영역 (화면 전체). 조이스틱은 드래그할 때만 보임 */}
+      {/* 터치·마우스 입력 영역 (조이스틱은 드래그할 때만) */}
       <div ref={zoneRef} className="input-zone" />
       <div ref={moveBaseRef} className="stick-base" />
       <div ref={moveKnobRef} className="stick-knob" />

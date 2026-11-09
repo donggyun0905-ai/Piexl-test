@@ -3,7 +3,7 @@ import { createRng, deriveSeed, type Rng } from "../rng";
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { damagePlayer } from "./combat";
 import { allPlayers, eachSeat } from "./party";
-import { dashDodged } from "./remnant";
+import { dashDodged, statusImmune } from "./remnant";
 import type { LucFight } from "./lucTypes";
 import type { PlayerState, RunState } from "./types";
 
@@ -14,16 +14,24 @@ const R = {
   LINES: 99,
   FLAME_LINES: 30,
   /** 기본 공격 사이 (틱) · 2페이즈 */
-  ATK_GAP: 110,
-  ATK_GAP_2: 80,
-  /** 피해: 어둠 불기둥 · 별 고리 · 가시 고리 · 지진파 · 검기 · X자 · 보라 구 · 어둠의 기둥 */
-  FIRE: 34,
-  MINE: 26,
-  CROWN: 38,
-  WAVE: 30,
-  SLASH: 60,
-  X: 40,
-  ORB: 44,
+  ATK_GAP: 85,
+  ATK_GAP_2: 65,
+  /** 피해: 어둠 불기둥 · 별 고리 · 가시 고리 · 지진파 · 검기 · X자 · 보라 구 */
+  FIRE: 42,
+  MINE: 32,
+  CROWN: 48,
+  WAVE: 36,
+  SLASH: 70,
+  X: 50,
+  ORB: 55,
+  /** 상태이상 틱: 화상 · 독 · 감속 · 기절 · 치유 감소(50%) */
+  BURN: 240,
+  POISON: 240,
+  SLOW: 150,
+  STUN: 45,
+  CUT: 360,
+  /** 치유 감소 배율 */
+  CUT_MUL: 0.5,
   /** 흰색 돔 밖에 있던 사람이 받는 피해 (최대 체력 비율) */
   DOME_CUT: 0.8,
   /** 석화의 빔 간격 · 기둥이 남아 있으면 주는 보호막 (겹치지 않고 이 값으로 다시 채움) */
@@ -48,15 +56,36 @@ export function lucTargets(s: RunState): [number, PlayerState][] {
     .filter(([, p]) => p.hp > 0 && !p.raidDark);
 }
 
-/** 조건에 맞는 사람마다 피해 (dodge: 대시 중이면 피함) */
-export function lucHurt(s: RunState, dmg: number, hit: (p: PlayerState, seat: number) => boolean, dodge = true): void {
+/** 상태이상: 화상 · 독 · 감속 · 기절 · 치유 감소 */
+export type LucStatus = "burn" | "poison" | "slow" | "stun" | "cut";
+
+/** 맞은 사람에게 상태이상 (상태이상 면역이면 없음) */
+export function lucStatus(p: PlayerState, st: LucStatus | undefined): void {
+  if (!st || statusImmune(p) || p.hp <= 0) return;
+  if (st === "burn") p.dbBurn = Math.max(p.dbBurn ?? 0, R.BURN);
+  else if (st === "poison") p.poison = Math.max(p.poison ?? 0, R.POISON);
+  else if (st === "slow") p.dbSlow = Math.max(p.dbSlow ?? 0, R.SLOW);
+  else if (st === "stun") p.dbStun = Math.max(p.dbStun ?? 0, R.STUN);
+  else p.raidCut = Math.max(p.raidCut ?? 0, R.CUT);
+}
+
+/** 위험 표시(sim/hazards)로 맞았을 때: 그 공격의 상태이상 (from 이름) */
+const HAZARD_STATUS: Record<string, LucStatus> = { fire: "burn", spin: "slow", sweep: "stun", rain: "poison", chainx: "slow", ice: "slow", gold: "cut", meteor: "burn", hand: "stun", swordfall: "burn" };
+export function hazardStatus(s: RunState, from: string | undefined): void {
+  if (s.raidBoss && from) lucStatus(s.player, HAZARD_STATUS[from]);
+}
+
+/** 조건에 맞는 사람마다 피해 + 상태이상 (dodge: 대시 중이면 피함) */
+export function lucHurt(s: RunState, dmg: number, hit: (p: PlayerState, seat: number) => boolean, dodge = true, st?: LucStatus): void {
   eachSeat(
     s,
     (i) => {
       const p = s.player;
       if (p.raidDark || !hit(p, i)) return;
       if (dodge && dashDodged(s)) return;
+      const hp = p.hp;
       damagePlayer(s, dmg, "lucifer");
+      if (p.hp < hp) lucStatus(p, st);
     },
     true,
   );

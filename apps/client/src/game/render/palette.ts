@@ -154,6 +154,7 @@ export const C = {
   lucpillar: "#9a6ad8",
   lucflame: "#c040ff",
   lucshade: "#2a1038",
+  lucsword: "#d0b0ff",
   cerbflame: "#ff5a1a",
   cerbblade: "#c8c8d8",
   hellgate: "#4a2a2a",

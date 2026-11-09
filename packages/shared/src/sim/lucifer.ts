@@ -4,6 +4,8 @@
 // 1페이즈 체력을 다 깎으면 변신 컷신 → 2페이즈 남성형 (움직이며 공격)
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { lucAttackTick, lucBasic } from "./lucAttacks";
+import { lucMelee } from "./lucMelee";
+import { phaseTwo, startPhase2 } from "./lucPhase2";
 import { darkTick, flameTick } from "./lucDark";
 import { LUC_RULES as L, lucFight, lucLines, lucRng, lucSpot, lucTargets, near } from "./lucKit";
 import { pillarTick, spawnPillars } from "./lucPillars";
@@ -15,10 +17,10 @@ import { addEffect, makeEnemy } from "./util";
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
   /** 컷신 길이 (틱): 기둥 필살기 · 변신 · 2페이즈 필살기 · 쓰러짐 */
-  CUT_PILLARS: 140,
-  CUT_CHANGE: 135,
-  CUT_P2: 125,
-  CUT_DEATH: 110,
+  CUT_PILLARS: 145,
+  CUT_CHANGE: 150,
+  CUT_P2: 130,
+  CUT_DEATH: 118,
   /** 흰색 돔: 나타나고 컷신까지 (2.5초) · 반지름 */
   DOME_WAIT: 150,
   DOME_R: 46,
@@ -55,7 +57,7 @@ export function updateLucifer(s: RunState, e: EnemyState, toP: readonly [number,
   if (f.poseEnd <= s.tick) f.pose = 0;
   if (f.cut) {
     e.immune = true;
-    if (s.tick >= (f.cutEnd ?? 0)) endCut(s, f, e);
+    if (s.tick >= (f.cutEnd ?? 0)) endCut(s, f, e, spawned);
     return;
   }
   e.immune = false;
@@ -66,10 +68,24 @@ export function updateLucifer(s: RunState, e: EnemyState, toP: readonly [number,
     for (const o of s.enemies) if (o.kind === "lucpillar" || o.kind === "lucflame") o.hp = 0;
     return startCut(s, f, "change");
   }
+  // 2페이즈 체력을 다 깎음 → 쓰러지는 컷신 (끝나면 쓰러짐, sim/bossTwins.holdDown이 체력 1로 붙잡아 둠)
+  if (f.phase === 2 && e.hp <= 1) {
+    e.hp = 1;
+    return startCut(s, f, "death");
+  }
   if (f.phase === 1) phaseOne(s, f, e, spawned);
-  else walk(e, toP, s);
+  else {
+    const cut = phaseTwo(s, f, e);
+    if (cut) return startCut(s, f, cut);
+    if (f.p2 !== "rain" && f.p2 !== "sky") walk(e, toP, s);
+  }
   lucAttackTick(s, f);
+  // 낙하 검 동안은 보스가 사라짐(몸에 닿지 않음) · 하늘에서는 탄막만
+  e.air = f.p2 === "rain";
+  if (f.p2 === "rain" || f.p2 === "sky") return;
+  e.immune = false;
   const stunned = (f.stunEnd ?? 0) > s.tick;
+  if (!stunned) lucMelee(s, f, e);
   if (!stunned && s.tick >= f.nextAtk && lucTargets(s).length > 0) {
     f.nextAtk = s.tick + (f.phase === 1 ? L.ATK_GAP : L.ATK_GAP_2);
     lucBasic(s, f);
@@ -100,7 +116,7 @@ function walk(e: EnemyState, toP: readonly [number, number], s: RunState): void 
   e.y += toP[1] * R.WALK * dir;
 }
 
-function endCut(s: RunState, f: LucFight, e: EnemyState): void {
+function endCut(s: RunState, f: LucFight, e: EnemyState, spawned: EnemyState[]): void {
   const cut = f.cut;
   f.cut = undefined;
   f.nextAtk = s.tick + 90;
@@ -126,6 +142,11 @@ function endCut(s: RunState, f: LucFight, e: EnemyState): void {
     f.stunEnd = undefined;
     f.slashAt = undefined;
     e.r = 30;
+    startPhase2(s, f, spawned);
+  }
+  if (cut === "death") {
+    e.ultDone = true;
+    e.hp = 0;
   }
 }
 

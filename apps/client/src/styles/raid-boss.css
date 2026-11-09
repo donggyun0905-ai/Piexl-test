@@ -104,12 +104,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(ellipse at center, #1a0628 0%, #000 75%);
+  background: #000;
   animation: raid-cut-in 0.25s ease-out;
 }
+/* 컷신 그림은 가장자리가 검정으로 번져 있어 바탕과 이어짐 · 화면 가득 */
 .raid-cut img {
-  width: min(100vw, 160vh);
-  max-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   object-fit: contain;
   image-rendering: auto;
 }
@@ -161,4 +162,34 @@
   to {
     transform: translateX(-50%) scale(1.05);
   }
+}
+/* 사슬 방향키 (화면 가운데 크게) */
+.raid-chain {
+  position: fixed;
+  left: 50%;
+  top: 38%;
+  transform: translateX(-50%);
+  z-index: 21;
+  padding: 10px 18px;
+  border: 2px solid #a070ff;
+  border-radius: 10px;
+  background: rgba(14, 4, 24, 0.85);
+  color: #fff;
+  text-align: center;
+  pointer-events: none;
+}
+.raid-chain div {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.raid-chain b {
+  font-size: 46px;
+  line-height: 1;
+  opacity: 0.45;
+}
+.raid-chain b.now {
+  opacity: 1;
+  color: #ffe060;
+  text-shadow: 0 0 10px #ffb000;
 }

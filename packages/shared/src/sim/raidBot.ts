@@ -6,6 +6,8 @@ import { ROOM_CX as CX, ROOM_CY as CY, ROOM_MIN_Y } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { ALTAR_Y } from "./altar";
 import { inSafe } from "./lucPillars";
+import { LUC_ATTACK_RULES as A } from "./lucAttacks";
+import { LUC_DARK_RULES as D } from "./lucDark";
 import { LUC_DOME_R } from "./lucifer";
 import { seatNo } from "./party";
 import { RAID_ROOM } from "./raidTypes";
@@ -59,9 +61,16 @@ function fightInput(s: RunState, i: number): TickInput {
   const p = s.player;
   const f = s.raidBoss!.fight;
   if (f?.cut) return EMPTY_INPUT;
+  // 사슬: 보이는 방향을 차례로 (한 틱 누르고 한 틱 뗌)
+  const seq = p.chains;
+  if (seq && seq.length > 0 && (p.chainTicks ?? 0) > 0) {
+    if (s.tick % 2 === 1 || roll(s, i, `c${seq.length}`) < 0.3) return EMPTY_INPUT;
+    const d = seq[0]!;
+    return toInput(d === 1 ? 1 : d === 3 ? -1 : 0, d === 2 ? 1 : d === 0 ? -1 : 0);
+  }
   // 노릴 적: 어둠의 세계면 내 몬스터 · 아니면 기둥 → 불길 → 루시퍼 (가까운 것)
   const foes = s.enemies.filter((e) => e.hp > 0 && (p.raidDark ? e.kind === "lucshade" && e.count === i : e.kind !== "lucshade"));
-  const rank = (k: string) => (k === "lucpillar" ? 0 : k === "lucflame" ? 1 : 2);
+  const rank = (k: string) => (k === "lucpillar" || k === "lucsword" ? 0 : k === "lucflame" ? 1 : 2);
   foes.sort((a, b) => rank(a.kind) - rank(b.kind) || (a.x - p.x) ** 2 + (a.y - p.y) ** 2 - ((b.x - p.x) ** 2 + (b.y - p.y) ** 2));
   const t = foes[0];
   let mx = 0;
@@ -87,10 +96,11 @@ function fightInput(s: RunState, i: number): TickInput {
   };
   for (const h of s.hazards ?? []) if (h.toX === undefined && h.tick - s.tick < 40) flee(h.x, h.y, h.radius, h.tick - s.tick < 10);
   if (f) {
-    for (const c of f.crowns) if (c[0] === i && c[4]) flee(c[2]!, c[3]! + 20, 26, c[1]! - s.tick < 10);
-    for (const m of f.mines) flee(m[0]!, m[1]!, 18, false);
+    for (const c of f.crowns) if (c[0] === i && c[4]) flee(c[2]!, c[3]! + 20, A.CROWN_R, c[1]! - s.tick < 10);
+    for (const m of f.mines) flee(m[0]!, m[1]!, A.MINE_TOUCH + 4, false);
+    for (const o of f.orbs) flee(o[0]!, o[1]!, A.ORB_R, o[2]! - s.tick < 12);
     const dk = f.dark?.[i];
-    if (dk && dk[2]! - s.tick < 60) flee(dk[0]!, dk[1]!, 30, dk[2]! - s.tick < 12);
+    if (dk && dk[2]! - s.tick < 60) flee(dk[0]!, dk[1]!, D.DARK_R + 4, dk[2]! - s.tick < 12);
     for (const w of f.waves) if (w[3] === 0 && Math.abs(Math.sqrt((p.x - w[0]!) ** 2 + (p.y - w[1]!) ** 2) - w[2]!) < 14) dash = true;
     // 검기 경고: 가장 가까운 빈칸으로 · 흰색 돔: 돔 안으로
     const goTo = (x: number, y: number) => ([mx, my] = normalize(x - p.x, y - p.y) ?? [0, 0]);
@@ -100,6 +110,18 @@ function fightInput(s: RunState, i: number): TickInput {
       goTo(f.safe[best]!, f.safe[best + 1]!);
     }
     if (f.dome && (p.x - f.dome[0]!) ** 2 + (p.y - f.dome[1]!) ** 2 > (LUC_DOME_R * 0.6) ** 2) goTo(f.dome[0]!, f.dome[1]!);
+    // 날개: 아직 없으면 가장 가까운 날개로
+    if (f.wings?.length && !p.raidWing) {
+      const w = [...f.wings].sort((a, b) => (a[0]! - p.x) ** 2 + (a[1]! - p.y) ** 2 - ((b[0]! - p.x) ** 2 + (b[1]! - p.y) ** 2))[0]!;
+      goTo(w[0]!, w[1]!);
+    }
+    // 하늘 탄막: 가까이 오는 적 탄을 옆으로 피함
+    if (f.p2 === "sky")
+      for (const pr of s.projectiles) {
+        if (pr.fromPlayer || (pr.x - p.x) ** 2 + (pr.y - p.y) ** 2 > 36 * 36 || (p.x - pr.x) * pr.vx + (p.y - pr.y) * pr.vy <= 0) continue;
+        [mx, my] = normalize(-pr.vy, pr.vx) ?? [1, 0];
+        break;
+      }
   }
   const aim = t ? (normalize(t.x - p.x, t.y - p.y) ?? [1, 0]) : [p.faceX, p.faceY];
   return toInput(mx, my, { aimX: Math.round(aim[0]! * 100) * 10, aimY: Math.round(aim[1]! * 100) * 10, attack: !!t, dash, autoAim: true });

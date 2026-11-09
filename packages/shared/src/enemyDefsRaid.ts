@@ -2,7 +2,7 @@
 import type { EnemyDef } from "./enemyDefs";
 
 /** 루시퍼 · 석화의 기둥 · 악마의 불길 · 어둠의 세계 몬스터 */
-export type RaidFoeKind = "lucifer" | "lucpillar" | "lucflame" | "lucshade";
+export type RaidFoeKind = "lucifer" | "lucpillar" | "lucflame" | "lucshade" | "lucsword";
 
 export const RAID_ENEMIES: Record<RaidFoeKind, EnemyDef> = {
   /** 레이드 보스 루시퍼: 체력 = 1페이즈 44000 + 2페이즈 44000 (페이즈마다 체력 줄 ×99), 움직이지 않음 (2페이즈는 sim/lucifer가 움직임) */
@@ -13,4 +13,6 @@ export const RAID_ENEMIES: Record<RaidFoeKind, EnemyDef> = {
   lucflame: { kind: "lucflame", hp: 1400, radius: 14, speed: 0.35, contactDamage: 14, gold: 0 },
   /** 어둠의 세계 몬스터 (빨려 간 사람만 보고 싸움) */
   lucshade: { kind: "lucshade", hp: 260, radius: 9, speed: 0.75, contactDamage: 0, gold: 0 },
+  /** 절망의 검 (2페이즈 4개): 유저 한 명씩 맡아 느리게 다가오며 빛나면 맵 곳곳에 패턴 (sim/lucSwords) */
+  lucsword: { kind: "lucsword", hp: 10000, radius: 20, speed: 0.12, contactDamage: 20, gold: 0 },
 };

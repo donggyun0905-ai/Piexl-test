@@ -33,6 +33,7 @@ export function raidAfter(s: RunState): void {
   eachSeat(s, () => {
     const p = s.player;
     if (cut) p.invulnTicks = Math.max(p.invulnTicks, 2);
+    if ((p.raidCut ?? 0) > 0) p.raidCut = p.raidCut! - 1;
     if (p.hp > 0) return;
     if (p.raidDownAt === undefined) {
       p.raidDownAt = s.tick;

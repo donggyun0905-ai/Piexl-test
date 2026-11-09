@@ -35,13 +35,34 @@ export interface LucFight {
   /** 컷신 · 끝 틱 */
   cut?: LucCut;
   cutEnd?: number;
+  /** 근접 견제(가까이 붙은 사람): 다음 틱 · 쓴 수 (sim/lucMelee) */
+  nextMelee?: number;
+  meleeN?: number;
   /** 다음 악마의 불길 틱 (1페이즈 30줄부터) */
   nextFlames?: number;
+  /** 2페이즈 차례: 절망의 검 → 낙하 검 → 사슬 → 1대5 → 날개 → 하늘 탄막 (sim/lucPhase2) */
+  p2?: "swords" | "rain" | "chain" | "open" | "wings" | "sky";
+  /** 절망의 검마다 [검 id, 패턴, 쓰는 틱] · 맵 전체 기절 틱 · 가시 덩굴 [x, y, 반지름, 사라지는 틱] */
+  swords?: number[][];
+  stunAt?: number;
+  vines?: number[][];
+  /** 낙하 검: 남은 번 · 다음 틱 · 사슬 끝 틱 */
+  rainN?: number;
+  rainAt?: number;
+  chainEnd?: number;
+  /** 날개 [x, y] · 바닥이 꺼지는 틱 · 탄막 각도 */
+  wings?: number[][];
+  fallAt?: number;
+  spin?: number;
 }
 
 export interface LucPlayerState {
   /** 어둠의 세계에 빨려 감 (몬스터를 다 잡으면 돌아옴) */
   raidDark?: boolean;
+  /** 치유 감소 50% 남은 틱 (sim/lucKit.lucStatus) */
+  raidCut?: number;
+  /** 날개를 달았음 (하늘 탄막에서 떨어지지 않음) */
+  raidWing?: boolean;
   /** 레이드 데스 카운트 · 쓰러진 틱 */
   raidDeaths?: number;
   raidDownAt?: number;

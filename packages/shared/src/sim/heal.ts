@@ -1,5 +1,6 @@
 // 회복: 모든 체력 회복이 지나는 길 (combat.healPlayer). 의사는 체력이 가득 차면 넘친 회복이 보호막이 됨 (초과 치료).
 // 의사 공격 회복(직접 피해의 일부)은 1초마다 상한이 있음
+import { LUC_RULES } from "./lucKit";
 import { trialNoHeal } from "./trialFoes";
 import { roleHealMul } from "./pwMatchup";
 import { plagueCut } from "./pwPassive";
@@ -47,6 +48,7 @@ export function overheals(s: RunState): boolean {
 export function heal(s: RunState, amount: number): void {
   // 레이드 어둠의 세계: 치유 -100%
   if (s.player.raidDark) return;
+  if ((s.player.raidCut ?? 0) > 0) amount *= LUC_RULES.CUT_MUL;
   const p = s.player;
   // 학살자: 회복이 듣지 않음 (피의 학살 흡혈만) · 끝없는 시련 중에는 모든 회복이 막힘
   if (p.characterId === "slayer" || trialNoHeal(s) || healBlocked(p)) return;

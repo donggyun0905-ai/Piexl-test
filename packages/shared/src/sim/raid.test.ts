@@ -128,3 +128,42 @@ describe("레이드 루시퍼 1페이즈", () => {
     expect(s.player.hp).toBeGreaterThan(0);
   });
 });
+
+describe("레이드 루시퍼 2페이즈", () => {
+  const phase2 = () => {
+    const s = make();
+    for (let i = 0; i < 4; i++) goThrough(s, 1);
+    const boss = s.enemies.find((e) => e.kind === "lucifer")!;
+    boss.hp = 40000;
+    for (let t = 0; t < 200; t++) stepParty(s, [EMPTY_INPUT]);
+    return { s, boss };
+  };
+  it("변신 뒤 절망의 검 4개 · 다 부수면 컷신 → 낙하 검 → 사슬 → 1대5", () => {
+    const { s } = phase2();
+    expect(s.raidBoss?.fight?.p2).toBe("swords");
+    expect(s.enemies.filter((e) => e.kind === "lucsword")).toHaveLength(4);
+    for (const e of s.enemies) if (e.kind === "lucsword") e.hp = 0;
+    for (let t = 0; t < 5; t++) stepParty(s, [EMPTY_INPUT]);
+    expect(s.raidBoss?.fight?.cut).toBe("p2");
+    for (let t = 0; t < 900 && s.raidBoss?.fight?.p2 !== "chain"; t++) stepParty(s, [EMPTY_INPUT]);
+    expect(s.raidBoss?.fight?.p2).toBe("chain");
+    for (let t = 0; t < 400; t++) stepParty(s, [EMPTY_INPUT]);
+    expect(s.raidBoss?.fight?.p2).toBe("open");
+  });
+
+  it("30줄 이하: 날개 → 바닥이 꺼지면 날개 없는 사람은 끝 · 체력 0이면 쓰러지는 컷신 → 승리", () => {
+    const { s, boss } = phase2();
+    for (const e of s.enemies) if (e.kind === "lucsword") e.hp = 0;
+    for (let t = 0; t < 1400 && s.raidBoss?.fight?.p2 !== "open"; t++) stepParty(s, [EMPTY_INPUT]);
+    boss.hp = 10000;
+    stepParty(s, [EMPTY_INPUT]);
+    expect(s.raidBoss?.fight?.p2).toBe("wings");
+    s.player.raidWing = true;
+    for (let t = 0; t < 700; t++) stepParty(s, [EMPTY_INPUT]);
+    expect(s.raidBoss?.fight?.p2).toBe("sky");
+    expect(s.player.hp).toBeGreaterThan(0);
+    boss.hp = 0;
+    for (let t = 0; t < 200 && !s.over; t++) stepParty(s, [EMPTY_INPUT]);
+    expect(s.won).toBe(true);
+  });
+});

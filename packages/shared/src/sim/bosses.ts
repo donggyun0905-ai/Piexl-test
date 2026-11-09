@@ -39,6 +39,7 @@ import { updateAsmo } from "./bossAsmo";
 import { updateLucifer } from "./lucifer";
 import { updatePillar } from "./lucPillars";
 import { updateFlame, updateShade } from "./lucDark";
+import { updateSword } from "./lucSwords";
 import { makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
 /** 보스 체력 배율 (층마다 늘어남) */
@@ -95,6 +96,7 @@ const BOSS_AI: Partial<Record<EnemyState["kind"], BossAi>> = {
   lucpillar: (s, e) => updatePillar(s, e),
   lucflame: (s, e, toP) => updateFlame(s, e, toP),
   lucshade: (s, e) => updateShade(s, e),
+  lucsword: (s, e) => updateSword(s, e),
 };
 
 export function updateBoss(s: RunState, e: EnemyState, toP: readonly [number, number], go: readonly [number, number], spawned: EnemyState[]): void {

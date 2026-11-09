@@ -8,6 +8,9 @@ import { LUC_ATTACK_RULES } from "./lucAttacks";
 import { LUC_PILLAR_RULES } from "./lucPillars";
 import { LUC_DARK_RULES } from "./lucDark";
 import { LUCIFER_RULES } from "./lucifer";
+import { LUC_MELEE_RULES } from "./lucMelee";
+import { LUC_SWORD_RULES } from "./lucSwords";
+import { LUC_PHASE2_RULES } from "./lucPhase2";
 import { RAID_LIFE_RULES } from "./raidLife";
 import { ORIGIN_RULES } from "./origin";
 import { AF_BENCH_RULES } from "./afBench";
@@ -146,6 +149,9 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   LUC_PILLAR_RULES,
   LUC_DARK_RULES,
   LUCIFER_RULES,
+  LUC_MELEE_RULES,
+  LUC_SWORD_RULES,
+  LUC_PHASE2_RULES,
   RAID_LIFE_RULES,
   ORIGIN_RULES,
   AF_BENCH_RULES,

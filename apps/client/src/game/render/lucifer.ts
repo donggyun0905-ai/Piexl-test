@@ -1,7 +1,7 @@
 // 레이드 보스 루시퍼 몸·체력 막대 그리기 (sim/lucifer·lucPillars·lucDark, 그림 render/lucArt)
 // 몸: 1페이즈 여성형 · 2페이즈 남성형 (기본 공격마다 공격 모션 칸) · 석화의 기둥 · 악마의 불길 · 어둠의 세계 몬스터(빨려 간 사람에게만)
 // 체력 막대: 페이즈마다 줄 ×99 (줄마다 색) · 보호막(흰 막대) · 페이즈 이름
-import { allPlayers, LUC_RULES, lucLines, type EnemyState, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, LUC_RULES, lucLines, swordGlow, type EnemyState, type RunState } from "@pixel-rogue/shared";
 import { detectLang } from "../../i18n";
 import { TEXT } from "../../i18n/text";
 import { lucBody, lucFx, lucProp } from "./lucArt";
@@ -14,6 +14,8 @@ const PILLAR_H = 124;
 const FLAME_W = 64;
 /** 줄 색 돌림 (보라부터) */
 const LINE_COLORS = ["#a040ff", "#c040e0", "#ff40a0", "#ff6040", "#ffb030", "#e0e040", "#60d060", "#30c0c0", "#4080ff", "#6050f0"];
+/** 절망의 검 패턴 색 (sim/lucSwords 차례): 붉은 사슬 · 얼음 · 금빛 검 · 불꽃 · 가시 덩굴 · 어둠의 손 */
+export const SWORD_COLORS = ["#ff3040", "#40a0ff", "#ffd040", "#ff7020", "#40d060", "#8a30ff"];
 const lineColor = (n: number) => LINE_COLORS[(((99 - n) % LINE_COLORS.length) + LINE_COLORS.length) % LINE_COLORS.length]!;
 
 /** 몸 대신 그림 (그렸으면 true · 남의 어둠의 세계 몬스터는 그리지 않음) */
@@ -24,6 +26,14 @@ export function drawLucActor(ctx: Ctx, s: RunState, e: EnemyState, x: number, y:
     additive(ctx, () => glow(ctx, x, y - PILLAR_H * 0.4, 46, "#a050ff", 0.35 + 0.15 * Math.sin(s.tick * 0.07), 0.5));
     if (!lucProp(ctx, "pillar.png", x, y + 18 + bob, PILLAR_H, e.hitFlash > 0 ? 0.7 : 1)) return false;
     return true;
+  }
+  if (e.kind === "lucsword") {
+    // 절망의 검: 빛나는 패턴 색으로 둘레가 밝아짐
+    const f = s.raidBoss?.fight;
+    const pat = f ? swordGlow(s, f, e.id) : -1;
+    const bob = Math.sin(s.tick * 0.05 + e.id) * 4;
+    additive(ctx, () => glow(ctx, x, y - PILLAR_H * 0.45, pat >= 0 ? 70 : 40, pat >= 0 ? SWORD_COLORS[pat]! : "#c090ff", pat >= 0 ? 0.6 + 0.3 * Math.sin(s.tick * 0.4) : 0.3, 0.6));
+    return lucProp(ctx, "sword.png", x, y + 16 + bob, PILLAR_H, e.hitFlash > 0 ? 0.7 : 1);
   }
   if (e.kind === "lucflame") {
     lucFx(ctx, 1, 4, 2 + (Math.floor(s.tick / 10) % 2), x, y - 14, FLAME_W, e.hitFlash > 0 ? 1 : 0.9);
@@ -43,6 +53,8 @@ export function drawLucActor(ctx: Ctx, s: RunState, e: EnemyState, x: number, y:
 
 function drawBoss(ctx: Ctx, s: RunState, e: EnemyState, x: number, y: number): boolean {
   const f = s.raidBoss?.fight;
+  // 낙하 검 동안은 사라짐
+  if (f?.p2 === "rain") return true;
   const p2 = f?.phase === 2;
   const pose = f && f.poseEnd > s.tick ? f.pose : 0;
   const bob = Math.sin(s.tick * 0.05) * 4;

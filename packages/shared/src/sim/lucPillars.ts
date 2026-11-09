@@ -24,7 +24,7 @@ const R = {
   SLASH_N: 5,
   SLASH_WARN: 100,
   SLASH_NEXT: 120,
-  SAFE_N: 4,
+  SAFE_N: 8,
   SAFE_HALF: 16,
 };
 export { R as LUC_PILLAR_RULES };
@@ -102,7 +102,7 @@ function waveTick(s: RunState, f: LucFight): void {
       if (Math.abs(d - w[2]!) > R.WAVE_W + p.r) return;
       w[4]! |= 1 << i;
       if (p.dashTicks > 0) return remnantDodgeAt(s, i);
-      lucHurt(s, L.WAVE, (_q, seat) => seat === i, false);
+      lucHurt(s, L.WAVE, (_q, seat) => seat === i, false, "slow");
     });
     return w[2]! < R.WAVE_MAX;
   });
@@ -133,7 +133,7 @@ export function inSafe(f: LucFight, x: number, y: number): boolean {
 function slashTick(s: RunState, f: LucFight): void {
   if (f.slashAt === undefined || s.tick < f.slashAt) return;
   // 빈칸 밖은 모두 맞음 (대시로도 못 피함)
-  lucHurt(s, L.SLASH, (p) => !inSafe(f, p.x, p.y), false);
+  lucHurt(s, L.SLASH, (p) => !inSafe(f, p.x, p.y), false, "cut");
   const cx = (ROOM_MIN_X + ROOM_MAX_X) / 2;
   const cy = (ROOM_MIN_Y + ROOM_MAX_Y) / 2;
   addEffect(s, { kind: "lucFx", from: "slash", x: cx, y: cy, dirX: f.slashSide ?? 0, dirY: 0, size: ROOM_MAX_X - ROOM_MIN_X, maxTicks: 30, foe: true });

@@ -62,3 +62,20 @@ export function lucProp(ctx: Ctx, name: string, x: number, footY: number, h: num
   ctx.restore();
   return true;
 }
+
+/** 레이드용 맵 잔패턴 (2) 시트 한 칸 (가로 3묶음 × 4칸, 8줄): group 0~2, row 0~7, frame 0~3 → (x, y) 가운데에 너비 w로 더하기 */
+export function lucMapFx(ctx: Ctx, group: number, row: number, frame: number, x: number, y: number, w: number, alpha = 1, angle = 0): void {
+  const im = lucImg("map2.jpg");
+  if (!im || alpha <= 0) return;
+  const cw = im.naturalWidth / 12;
+  const ch = im.naturalHeight / 8;
+  const sx = (group * 4 + Math.max(0, Math.min(3, Math.floor(frame)))) * cw;
+  ctx.save();
+  ctx.globalCompositeOperation = "lighter";
+  ctx.globalAlpha *= Math.min(1, alpha);
+  ctx.translate(x, y);
+  if (angle) ctx.rotate(angle);
+  ctx.imageSmoothingEnabled = true;
+  ctx.drawImage(im, sx, row * ch, cw, ch, -w / 2, -w / 2, w, w);
+  ctx.restore();
+}

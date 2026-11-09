@@ -6,6 +6,7 @@ import type { RunState } from "./types";
 import { eachSeat } from "./party";
 import { addEffect, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 import { moonOut } from "./moonlight";
+import { hazardStatus } from "./lucKit";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -65,8 +66,11 @@ export function updateHazards(s: RunState): void {
         const p = s.player;
         const hit = h.still ? (h.still === "black") === p.stillTicks < R.STILL_JUDGE : inHazard(h, p.x, p.y, p.r);
         if (hit && h.damage > 0) {
+          const hp = p.hp;
           if (h.noDodge) throughDash(s, () => damagePlayer(s, h.damage, h.by));
           else damagePlayer(s, h.damage, h.by);
+          // 레이드 루시퍼 공격의 상태이상 (sim/lucKit)
+          if (p.hp < hp) hazardStatus(s, h.from);
         }
       },
       !!s.party,

@@ -1,7 +1,8 @@
 // 레이드 보스 루시퍼 바닥·위 그리기 (sim/lucifer·lucAttacks·lucPillars·lucDark): 사슬 · 지진파 · 별 고리 · 가시 고리 · 어둠의 기둥 · 흰색 돔
 // · 검기 경고(맵을 덮는 붉은 빛 + 빛나는 빈칸) · X자(점점 그려짐) · 보라 구(끌어당김) · 어둠의 세계(내 화면이 어두워짐) · 효과(lucFx)
-import { allPlayers, LUC_ATTACK_RULES as A, LUC_DOME_R, LUC_PILLAR_RULES as P, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, type EffectState, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, LUC_ATTACK_RULES as A, LUC_DARK_RULES as D, LUC_DOME_R, LUC_PILLAR_RULES as P, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, type EffectState, type RunState } from "@pixel-rogue/shared";
 import { lucFx } from "./lucArt";
+import { drawLucSky, drawLucSkyFx, drawLucSkyOver } from "./lucSky";
 import { additive, glow, shock } from "./pwFxBits";
 import type { Snap } from "./palette";
 
@@ -10,6 +11,7 @@ const TAU = Math.PI * 2;
 
 /** 바닥 (적보다 아래) */
 export function drawLucGround(ctx: Ctx, s: RunState, snap: Snap): void {
+  drawLucSky(ctx, s, snap);
   const f = s.raidBoss?.fight;
   const boss = s.enemies.find((e) => e.kind === "lucifer" && e.hp > 0);
   if (!f || !boss) return;
@@ -29,7 +31,7 @@ export function drawLucGround(ctx: Ctx, s: RunState, snap: Snap): void {
     ctx.stroke();
   }
   // 별 고리 (닿으면 터짐)
-  for (const m of f.mines) lucFx(ctx, 0, 2, 1 + (Math.floor(t / 8 + m[0]!) % 3), snap(m[0]!), snap(m[1]!), 40, m[2]! - t < 30 ? (t % 6 < 3 ? 1 : 0.4) : 1);
+  for (const m of f.mines) lucFx(ctx, 0, 2, 1 + (Math.floor(t / 8 + m[0]!) % 3), snap(m[0]!), snap(m[1]!), A.MINE_TOUCH * 2.8, m[2]! - t < 30 ? (t % 6 < 3 ? 1 : 0.4) : 1);
   // 어둠의 기둥: 따라다니는 원 · 내리치기 1초 전 멈추고 붉게
   if (f.dark) {
     allPlayers(s).forEach((p, i) => {
@@ -39,9 +41,9 @@ export function drawLucGround(ctx: Ctx, s: RunState, snap: Snap): void {
       ctx.strokeStyle = lock ? (t % 8 < 4 ? "#ff3a6a" : "#ffffff") : "rgba(150, 60, 255, 0.7)";
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.arc(snap(d[0]!), snap(d[1]!), 26, 0, TAU);
+      ctx.arc(snap(d[0]!), snap(d[1]!), D.DARK_R, 0, TAU);
       ctx.stroke();
-      lucFx(ctx, 1, 6, lock ? 2 : 0, snap(d[0]!), snap(d[1]!) - 24, 52, lock ? 0.9 : 0.55);
+      lucFx(ctx, 1, 6, lock ? 2 : 0, snap(d[0]!), snap(d[1]!) - D.DARK_R, D.DARK_R * 2.2, lock ? 0.9 : 0.55);
     });
   }
   // 흰색 돔
@@ -58,6 +60,7 @@ export function drawLucGround(ctx: Ctx, s: RunState, snap: Snap): void {
 
 /** 위 (적·사람 위) */
 export function drawLucOver(ctx: Ctx, s: RunState, snap: Snap): void {
+  drawLucSkyOver(ctx, s);
   const f = s.raidBoss?.fight;
   if (!f) return;
   const t = s.tick;
@@ -73,7 +76,7 @@ export function drawLucOver(ctx: Ctx, s: RunState, snap: Snap): void {
       ctx.arc(snap(c[2]!), snap(c[3]! + 20), A.CROWN_R, 0, TAU);
       ctx.stroke();
     }
-    lucFx(ctx, 1, 3, 3, snap(c[2]!), snap(c[3]! - 8), 46, blink ? 1 : lock ? 0.35 : 0.85);
+    lucFx(ctx, 1, 3, 3, snap(c[2]!), snap(c[3]! - 8), A.CROWN_R * 1.8, blink ? 1 : lock ? 0.35 : 0.85);
   }
   // X자 (위험 표시 없이 점점 그려짐)
   for (const x of f.xs) {
@@ -90,7 +93,7 @@ export function drawLucOver(ctx: Ctx, s: RunState, snap: Snap): void {
   }
   // 보라 구: 끌어당기는 줄무늬
   for (const o of f.orbs) {
-    lucFx(ctx, 0, 5, 1 + (Math.floor(t / 10) % 2), snap(o[0]!), snap(o[1]!), 80);
+    lucFx(ctx, 0, 5, 1 + (Math.floor(t / 10) % 2), snap(o[0]!), snap(o[1]!), A.ORB_R * 1.4);
     for (const p of players) {
       if (p.hp <= 0 || p.raidDark) continue;
       ctx.strokeStyle = "rgba(190, 90, 255, 0.35)";
@@ -179,7 +182,7 @@ export function drawLucFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       break;
     }
     case "dark":
-      lucFx(ctx, 1, 6, 3, x, y - 30, 80, a);
+      lucFx(ctx, 1, 6, 3, x, y - fx.size, fx.size * 3, a);
       break;
     case "toDark":
     case "fromDark":
@@ -191,11 +194,25 @@ export function drawLucFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     case "rain":
       lucFx(ctx, 1, 1, 3, x, y - 20, 50, a);
       break;
+    case "spin":
+      // 회전 베기: 몸 둘레를 도는 검기 넷
+      for (let k = 0; k < 4; k++) {
+        const ang = t * Math.PI * 2 + (k * Math.PI) / 2;
+        lucFx(ctx, 1, 0, 3, x + Math.cos(ang) * fx.size * 0.6, y + Math.sin(ang) * fx.size * 0.6, fx.size * 0.9, a, ang + Math.PI / 2);
+      }
+      shock(ctx, x, y, fx.size * (0.7 + 0.3 * t), "#d080ff", a, 10);
+      break;
+    case "sweep": {
+      // 앞뒤 휘두르기: 그쪽으로 크게 휘두른 검기
+      const ang = Math.atan2(fx.dirY, fx.dirX);
+      lucFx(ctx, 1, 0, 3, x + fx.dirX * fx.size * 0.55, y + fx.dirY * fx.size * 0.55, fx.size * 1.2, a, ang);
+      break;
+    }
     case "quake":
       shock(ctx, x, y, fx.size * (0.5 + t * 2), "#d0b0ff", a * 0.7, 8);
       break;
     default:
-      additive(ctx, () => glow(ctx, x, y, fx.size, "#c070ff", a, 0.6));
+      if (!drawLucSkyFx(ctx, fx, x, y, t, a)) additive(ctx, () => glow(ctx, x, y, fx.size, "#c070ff", a, 0.6));
   }
   return true;
 }

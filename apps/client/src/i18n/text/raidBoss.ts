@@ -63,4 +63,10 @@ export const RAID_BOSS_TEXT = {
   raidSlashText: { ko: "검기! 빛나는 네모 칸 안으로", en: "Sword wave! Get into a glowing square", ja: "剣気! 光る四角の中へ" },
   raidWin: { ko: "루시퍼를 쓰러뜨렸습니다!", en: "Lucifer has fallen!", ja: "ルシファーを倒しました!" },
   raidLose: { ko: "레이드 실패", en: "Raid failed", ja: "レイド失敗" },
+  raidCutText: { ko: "치유 감소 -50%", en: "Healing -50%", ja: "回復減少 -50%" },
+  raidRainText: { ko: "떨어지는 절망의 검! 원을 피하세요", en: "Swords of despair are falling! Avoid the circles", ja: "絶望の剣が降ってくる! 円を避けて" },
+  raidChainText: { ko: "사슬! 방향키를 차례로 눌러 끊으세요", en: "Chained! Press the arrows in order to break free", ja: "鎖! 方向キーを順に押して断ち切ろう" },
+  raidWingText: { ko: "날개를 몸으로 닿아 다세요! {s}초 뒤 바닥이 꺼져요", en: "Touch a wing to put it on! The floor collapses in {s}s", ja: "翼に触れて装着! {s}秒後に床が崩れる" },
+  raidStunText: { ko: "절망의 검이 맵 전체를 기절시킵니다!", en: "The swords of despair are about to stun everyone!", ja: "絶望の剣がマップ全体を気絶させる!" },
+  raidGoalP2: { ko: "절망의 검부터 부수세요 (검이 빛나면 그 색의 패턴이 맵 곳곳에)", en: "Break the swords of despair first (a glowing sword casts its colored pattern across the map)", ja: "まず絶望の剣を壊そう (剣が光るとその色のパターンがマップ中に)" },
 };

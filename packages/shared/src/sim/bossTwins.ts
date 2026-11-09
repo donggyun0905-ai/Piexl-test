@@ -59,7 +59,7 @@ const mid = (): Vec => [(ROOM_MIN_X + ROOM_MAX_X) / 2, (ROOM_MIN_Y + ROOM_MAX_Y)
 
 /** 쓰러진 적 정리 전 (combat.removeDead): 라스트 보스는 궁극기를 쓰기 전에는 체력 1 · 쌍둥이 붙잡기 */
 export function holdDown(s: RunState): void {
-  for (const e of s.enemies) if (e.hp <= 0 && !e.ultDone && ultBoss(e)) e.hp = 1;
+  for (const e of s.enemies) if (e.hp <= 0 && !e.ultDone && (ultBoss(e) || e.kind === "lucifer")) e.hp = 1;
   twinHold(s);
 }
 

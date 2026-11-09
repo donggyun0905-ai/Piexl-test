@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.51",
+    date: "2026-11-09",
+    items: {
+      ko: [
+        "레이드 방은 화면을 꽉 채움 (미니맵 숨김 · 왼쪽 능력치 창은 꺼 두고 C로 켜고 끄기) · 루시퍼 기본 공격 크기 2배 · 검기 빈칸 2배(8칸) · 공격이 더 아프고 더 자주 옴",
+        "루시퍼 상태이상: 불기둥·불꽃 화상 · 별 고리·지진파·회전 베기·얼음 감속 · 가시 고리·앞뒤 휘두르기·어둠의 손 기절 · X자·검기·금빛 검 치유 감소 50% · 보라 구·화살비·가시 덩굴 독",
+        "근접 견제 2개: 가까이 붙으면 회전 베기(몸 둘레 큰 원) · 앞뒤 휘두르기(가까운 사람 쪽 → 반대쪽)",
+        "루시퍼 2페이즈: 절망의 검 4개(빛나는 색의 패턴 6가지: 붉은 X 사슬 · 얼음 가시 · 금빛 검 비 · 불꽃 분출 · 가시 덩굴 · 어둠의 손 · 15초마다 맵 전체 기절 0.5초) → 검을 다 부수면 컷신 → 사라진 보스와 떨어지는 검 → 모두 사슬(화면 가운데 큰 방향키를 차례로) → 1대5 → 30줄부터 날개를 줍고 바닥이 꺼지면 하늘 탄막 (날개가 없으면 떨어져 관전) → 쓰러지는 컷신",
+        "컷신을 고화질로 (3배 매끄럽게 키움 · 칸 사이를 부드럽게 · 가장자리가 검은 바탕과 이어져 화면 가득)",
+      ],
+      en: [
+        "The raid arena now fills the screen (minimap hidden · the left stats panel starts off, toggle with C) · Lucifer's basic attacks are twice as large · twice as many safe squares (8) for sword waves · attacks hit harder and come more often",
+        "Lucifer status effects: fire pillar/flames burn · star rings/shockwaves/spin slash/ice slow · thorn crown/double sweep/dark hands stun · X slashes/sword waves/golden swords heal -50% · purple orb/arrow rain/thorn vines poison",
+        "Two anti-melee moves: get close and Lucifer spins a huge slash around his body · or sweeps toward the nearest player and then behind",
+        "Lucifer phase 2: four swords of despair (6 colored patterns: red X chains · ice spikes · golden sword rain · fire eruptions · thorn vines · dark hands · map-wide 0.5s stun every 15s) → break them all for a cutscene → the boss vanishes while swords fall → everyone is chained (press the big arrows in order) → 1 vs 5 → from 30 bars grab wings before the floor collapses into a sky bullet hell (no wings = you fall and spectate) → defeat cutscene",
+        "Cutscenes in high quality (smoothly upscaled 3×, in-between frames, edges fade into the black background to fill the screen)",
+      ],
+      ja: [
+        "レイド部屋は画面いっぱいに (ミニマップ非表示 · 左の能力値パネルはオフで開始、Cで切り替え) · ルシファーの通常攻撃が2倍の大きさ · 剣気の安全マスが2倍(8マス) · 攻撃がより痛く頻繁に",
+        "ルシファーの状態異常：火柱・炎は火傷 · 星の輪・地震波・回転斬り・氷は減速 · 棘の輪・前後斬り・闇の手は気絶 · X字・剣気・金の剣は回復-50% · 紫の球・矢の雨・茨のつるは毒",
+        "近接けん制2種：近づくと体の周りを大きく回転斬り · 近い人の方へ斬ってから反対側へ",
+        "ルシファー フェーズ2：絶望の剣4本(光る色のパターン6種：赤いX鎖 · 氷の棘 · 金の剣の雨 · 炎の噴出 · 茨のつる · 闇の手 · 15秒ごとにマップ全体0.5秒気絶) → 全部壊すとカットシーン → ボスが消え剣が降る → 全員が鎖に(画面中央の大きな矢印を順に) → 1対5 → 30ゲージから翼を拾い床が崩れると空の弾幕 (翼がないと落ちて観戦) → 倒れるカットシーン",
+        "カットシーンを高画質に (3倍になめらかに拡大 · コマの間をなめらかに · 端が黒い背景とつながり画面いっぱい)",
+      ],
+    },
+  },
+  {
     version: "0.50.50",
     date: "2026-11-09",
     items: {
