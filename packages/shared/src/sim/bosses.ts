@@ -35,6 +35,7 @@ import { updateCerbTrio } from "./bossCerbTrio";
 import { updateLeviathan } from "./bossLeviathan";
 import { updateLevWhale } from "./bossLevWhale";
 import { updateLevKing } from "./bossLevKing";
+import { updateAsmo } from "./bossAsmo";
 import { makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
 /** 보스 체력 배율 (층마다 늘어남) */
@@ -84,6 +85,8 @@ const BOSS_AI: Partial<Record<EnemyState["kind"], BossAi>> = {
   leviathan: updateLeviathan,
   levwhale: (s, e, toP) => updateLevWhale(s, e, toP),
   levking: (s, e, toP, _go, spawned) => updateLevKing(s, e, toP, spawned),
+  // 시즌 3 라스트 보스 아스모데우스의 화신체 (체력 줄 ×100, 세 모습)
+  asmodeus: (s, e, toP) => updateAsmo(s, e, toP),
 };
 
 export function updateBoss(s: RunState, e: EnemyState, toP: readonly [number, number], go: readonly [number, number], spawned: EnemyState[]): void {

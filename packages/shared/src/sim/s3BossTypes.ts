@@ -1,8 +1,9 @@
 // 시즌 3 단계별 보스 상태 (지옥문 수문장 · 피로 이어진 쌍둥이 · 달을 삼키는 자). 모두 선택 값 (예전 저장에는 없음)
 import type { CerbEnemyState } from "./cerbTypes";
+import type { AsmoEnemyState } from "./asmoTypes";
 import type { LevEnemyState } from "./levTypes";
 
-export interface S3BossEnemyState extends CerbEnemyState, LevEnemyState {
+export interface S3BossEnemyState extends CerbEnemyState, LevEnemyState, AsmoEnemyState {
   /** 지옥문 수문장: 연 문 (자리·적 id, 부서진 문도 남겨 그림) · 지금 부서진 문 수 · 다음 임프까지 틱 */
   gkGates?: { x: number; y: number; id: number }[];
   gkBroken?: number;

@@ -3,6 +3,12 @@ import { ROOM_HEIGHT, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, ROOM_WIDTH
 import type { Snap } from "./palette";
 import { drawBossHit } from "./bossHits";
 import { s2HazardTint } from "./s2Bosses";
+
+/** 아스모데우스의 화신체 방: 위험 표시를 보라(강철 군주는 붉게) */
+const asmoTint = (s: RunState): string | null => {
+  const e = s.enemies.find((o) => o.kind === "asmodeus" && o.hp > 0);
+  return e ? (e.amForm === 3 || e.amUlt === 2 ? "255, 50, 80" : "170, 70, 255") : null;
+};
 import { drawMortarShell } from "./s1Bosses";
 import { additive, shock } from "./pwFxBits";
 
@@ -31,7 +37,7 @@ function sparkle(ctx: CanvasRenderingContext2D, x: number, y: number, r: number)
 /** 위험 표시: 원 안이 차오르다 터짐 · 부채꼴 · 선 (검기는 흰빛이 반짝이며 진해짐, 덩굴은 풀빛) */
 export function drawHazards(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   // 시즌 2 층 보스 방: 위험 표시를 그 보스 색으로 (진흙·불·전기·바다)
-  const s2 = s2HazardTint(s);
+  const s2 = s2HazardTint(s) ?? asmoTint(s);
   for (const h of s.hazards ?? []) {
     // 아직 깔리지 않은 것 (기억력 선)
     if (s.tick < h.start) continue;

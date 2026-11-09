@@ -96,6 +96,8 @@ const THEMES: Record<string, FloorTheme> = {
   cerberus: T("#1c0c0a", "#22100c", "#3a1410", "#5a1e16", "#4a1812", "#6a261c", "#0a0202", "#4a0804", [["crack", "#ff3a14"], ["ember", "#ff7a2a"]], 0.24),
   /** 레비아탄: 깊은 바다 바닥 (푸른 돌·물방울·조개 빛) */
   leviathan: T("#0c1a2c", "#0e1e32", "#14304a", "#1e4a6a", "#183a58", "#24527a", "#02060c", "#0a2a4a", [["bubble", "#7ad0ff"], ["star", "#c8f0ff"]], 0.22),
+  /** 아스모데우스의 화신체: 보랏빛 마궁 (검보라 돌·보라 별빛·붉은 금) */
+  asmodeus: T("#160c1e", "#1a0e24", "#2e163e", "#4a2264", "#3a1a4e", "#5a2a7a", "#06020a", "#3a0a4a", [["star", "#c88aff"], ["crack", "#ff3a7a"]], 0.2),
   mooneater: T("#14121e", "#171523", "#26223a", "#3a3456", "#2a2640", "#3e3860", "#06040c", "#1a1630", [["star", "#c8d4ff"], ["feather", "#8a7ab8"]], 0.18),
   /** 유령선 선장: 썩은 갑판 (나무·뼈) */
   captain: T("#2a2420", "#302823", "#3a3230", "#544842", "#4a3a30", "#6a5446", "#0a0e14", "#16222e", [["crack", "#1a1410"], ["bone", "#b8c4b0"]], 0.22),
@@ -143,7 +145,7 @@ export function themeFor(s: RunState): FloorTheme {
   if (pa) return THEMES[PW_THEME[pa]]!;
   let boss: string | undefined;
   // 연습장에서 부른 시즌 2 라스트 보스도 그 맵
-  const s2 = s.enemies.find((e) => e.kind === "umbra" || e.kind === "demigod" || e.kind === "sage" || e.kind === "cerberus" || e.kind === "leviathan")?.kind;
+  const s2 = s.enemies.find((e) => e.kind === "umbra" || e.kind === "demigod" || e.kind === "sage" || e.kind === "cerberus" || e.kind === "leviathan" || e.kind === "asmodeus")?.kind;
   if (s.lastBoss) boss = s.lastBoss === "pdark" ? "plight" : s.lastBoss;
   else if (s2) boss = s2;
   else if (s.arenaLv) boss = s.enemies.find((e) => ENEMIES[e.kind].boss)?.kind;

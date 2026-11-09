@@ -70,8 +70,10 @@ export function drawPrimeval(ctx: CanvasRenderingContext2D, s: RunState, snap: S
         // 레비아탄 고래의 지진은 푸른 고리
         const red = e.kind === "cerberus";
         const blue = e.kind === "levwhale";
-        shock(ctx, snap(w.x), snap(w.y), w.r + 4, red ? "#ff1a2a" : blue ? "#2a8aff" : "#ff963c", 0.95, red || blue ? 16 : 12);
-        shock(ctx, snap(w.x), snap(w.y), w.r + 1, red ? "#ffb0b0" : blue ? "#c8f0ff" : "#fff0c8", 0.9, 4);
+        // 아스모데우스: 보라 파동 (강철 군주 고리는 붉게)
+        const vio = e.kind === "asmodeus" && e.amForm !== 3;
+        shock(ctx, snap(w.x), snap(w.y), w.r + 4, red ? "#ff1a2a" : blue ? "#2a8aff" : vio ? "#a040ff" : e.kind === "asmodeus" ? "#ff2a4a" : "#ff963c", 0.95, red || blue || vio ? 16 : 12);
+        shock(ctx, snap(w.x), snap(w.y), w.r + 1, red ? "#ffb0b0" : blue ? "#c8f0ff" : vio ? "#f0d0ff" : "#fff0c8", 0.9, 4);
       });
     }
     for (const sw of e.sweeps ?? []) {

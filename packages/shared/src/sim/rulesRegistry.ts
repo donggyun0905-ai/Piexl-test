@@ -14,6 +14,12 @@ import { BOSS_LEVIATHAN_RULES } from "./bossLeviathan";
 import { BOSS_LEV_WHALE_RULES } from "./bossLevWhale";
 import { BOSS_LEV_KING_RULES } from "./bossLevKing";
 import { BOSS_LEV_KIT_RULES } from "./levKit";
+import { BOSS_ASMO_RULES } from "./bossAsmo";
+import { BOSS_ASMO_LUST_RULES } from "./bossAsmoLust";
+import { BOSS_ASMO_VOID_RULES } from "./bossAsmoVoid";
+import { BOSS_ASMO_LORD_RULES } from "./bossAsmoLord";
+import { BOSS_ASMO_KIT_RULES } from "./asmoKit";
+import { BOSS_ASMO_ULTS_RULES } from "./asmoUlts";
 import { BOSS_TWINS_RULES } from "./bossTwins";
 import { BOSS_TWINS_KIT_RULES } from "./bossTwinsKit";
 import { BOSS_MOON_EATER_RULES } from "./bossMoonEater";
@@ -138,6 +144,12 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   BOSS_LEV_WHALE_RULES,
   BOSS_LEV_KING_RULES,
   BOSS_LEV_KIT_RULES,
+  BOSS_ASMO_RULES,
+  BOSS_ASMO_LUST_RULES,
+  BOSS_ASMO_VOID_RULES,
+  BOSS_ASMO_LORD_RULES,
+  BOSS_ASMO_KIT_RULES,
+  BOSS_ASMO_ULTS_RULES,
   BOSS_TWINS_RULES,
   BOSS_TWINS_KIT_RULES,
   BOSS_MOON_EATER_RULES,

@@ -149,6 +149,7 @@ export const C = {
   levwhale: "#2a5ac8",
   levking: "#6a9ae8",
   levprison: "#7ad0ff",
+  asmodeus: "#7a2ab0",
   cerbflame: "#ff5a1a",
   cerbblade: "#c8c8d8",
   hellgate: "#4a2a2a",

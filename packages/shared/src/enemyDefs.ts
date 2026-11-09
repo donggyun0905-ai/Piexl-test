@@ -13,13 +13,13 @@ export type TdMinionKind = "slime" | "runner" | "bat" | "beetle" | "golem" | "sh
 /** 보스: 1·2층(1단계) 강철 거구·검은 기사·얍삽한 활잡이·두꺼비 왕·불도롱뇽 · 3·4층(2단계) 무리 여왕·세이렌·켄타우로스·하드플랜트·번개 해파리 · 5·6층(3단계) 공허의 눈·데스·검신·천사장·유령선 선장 */
 export type BossKind = "hulk" | "knight" | "archer" | "toad" | "salamander" | "brood" | "siren" | "centaur" | "plant" | "jelly" | "seer" | "reaper" | "swordgod" | "archangel" | "captain" | S3BossKind | LastBossKind;
 /** 라스트 보스 (6층을 깬 뒤 골라서 도전, 7층 큰 보스방) */
-export type LastBossKind = "dragon" | "godeater" | "plight" | "pdark" | "umbra" | "demigod" | "sage" | "cerberus" | "leviathan";
+export type LastBossKind = "dragon" | "godeater" | "plight" | "pdark" | "umbra" | "demigod" | "sage" | "cerberus" | "leviathan" | "asmodeus";
 /** 고를 수 있는 라스트 보스 (태초의 빛을 고르면 태초의 어둠도 같이 나옴) */
 export const LAST_BOSSES: readonly LastBossKind[] = ["dragon", "godeater", "plight"];
 /** 시즌 2 라스트 보스 (미리 만든 것: 6층 도전·연습장에서만, 무한·영웅의 길·타워 디펜스·레이드에는 아직 안 나옴) */
 export const S2_LAST_BOSSES: readonly LastBossKind[] = ["umbra", "demigod", "sage"];
-/** 시즌 3 라스트 보스 (6층 도전·연습장에서만): 켈베로스 · 레비아탄 (아스모데우스의 화신체는 나중에) */
-export const S3_LAST_BOSSES: readonly LastBossKind[] = ["cerberus", "leviathan"];
+/** 시즌 3 라스트 보스 (6층 도전·연습장에서만): 켈베로스 · 레비아탄 · 아스모데우스의 화신체 */
+export const S3_LAST_BOSSES: readonly LastBossKind[] = ["cerberus", "leviathan", "asmodeus"];
 /** 검은 잔영이 차례로 부르는 거대한 짐승 셋 (sim/bossUmbra) */
 export type BeastKind = "sandworm" | "scorpion" | "roc";
 export const UMBRA_BEASTS: readonly BeastKind[] = ["sandworm", "scorpion", "roc"];

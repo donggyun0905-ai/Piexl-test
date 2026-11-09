@@ -109,6 +109,7 @@ export const ENEMY_NAMES: Partial<Record<EnemyKind, TextKey>> = {
   sage: "bossSage",
   cerberus: "bossCerberus",
   leviathan: "bossLeviathan",
+  asmodeus: "bossAsmodeus",
 };
 
 const MINIONS: EnemyKind[] = ["crawler", "spitter", "charger", "mortar", "gnat", "guardian", "paladin", "slime", "runner", "bat", "beetle", "golem", "shaman", "eggsac", "wisp", "doppel", "venom", "landfish", "lurker", "bombbug", "skelarcher", "chainward", "highorc"];
@@ -117,5 +118,5 @@ const MINIONS: EnemyKind[] = ["crawler", "spitter", "charger", "mortar", "gnat",
 export const ENEMY_GROUPS: (Group<EnemyKind> & { floor: number })[] = [
   { key: "minion", title: "practiceMinions", open: true, list: MINIONS, floor: 1 },
   ...BOSS_TIERS.map((tier, i) => ({ key: `tier${i}`, title: `practiceTier${i + 1}` as TextKey, open: true, list: [...tier], floor: i * 2 + 1 })),
-  { key: "last", title: "practiceLast", open: true, list: ["dragon", "godeater", "plight", "umbra", "demigod", "sage", "cerberus", "leviathan"], floor: 7 },
+  { key: "last", title: "practiceLast", open: true, list: ["dragon", "godeater", "plight", "umbra", "demigod", "sage", "cerberus", "leviathan", "asmodeus"], floor: 7 },
 ];
