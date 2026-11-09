@@ -3,6 +3,7 @@ import { ENEMIES } from "../content";
 import { chessColor, chessSafe, startChess } from "./asmoKit";
 import { BOSS_ASMO_ULTS_RULES as U } from "./asmoUlts";
 import { asmoLines, lineHp } from "./bossAsmo";
+import { BOSS_ASMO_EXTRA_RULES as X } from "./bossAsmoExtra";
 import { asmoTaken, BOSS_ASMO_LORD_RULES as L } from "./bossAsmoLord";
 import { bouncePath } from "./bossAsmoLust";
 import { BOSS_ASMO_VOID_RULES as V, LASER_ZONES, laserVolley } from "./bossAsmoVoid";
@@ -139,6 +140,28 @@ describe("아스모데우스의 화신체", () => {
     const hp = p.hp;
     steps(run, 30, false);
     expect(p.hp).toBeLessThan(hp);
+  });
+
+  it("추가 패턴: 꽃잎 회오리는 큰 탄 · 강철 돌진은 예고선 끝으로 이동 · 칼날 폭풍은 고리 3번", () => {
+    const run = asmoRun();
+    const e = boss(run);
+    steps(run, 2);
+    e.amNextEx1 = run.tick;
+    steps(run, 2);
+    expect(e.amPetalEnd).toBeDefined();
+    steps(run, 20);
+    expect(run.projectiles.some((p) => !p.fromPlayer && p.r === X.PETAL_SIZE)).toBe(true);
+    e.amForm = 3;
+    steps(run, 1);
+    e.amNextEx1 = e.amNextEx2 = run.tick;
+    steps(run, 2);
+    const to = e.amCharge!;
+    expect(to).toBeDefined();
+    steps(run, X.CHARGE_WARN + 2);
+    expect(e.amCharge).toBeUndefined();
+    expect(Math.hypot(e.x - to[0], e.y - to[1])).toBeLessThan(2);
+    steps(run, X.BLADE_GAP * X.BLADES);
+    expect(e.amBladeAt).toBeUndefined();
   });
 
   it("전체를 돌려도 오류 없음 · 시드가 같으면 결과가 같음", () => {

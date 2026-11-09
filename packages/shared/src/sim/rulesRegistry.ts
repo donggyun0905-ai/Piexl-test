@@ -20,6 +20,7 @@ import { BOSS_ASMO_VOID_RULES } from "./bossAsmoVoid";
 import { BOSS_ASMO_LORD_RULES } from "./bossAsmoLord";
 import { BOSS_ASMO_KIT_RULES } from "./asmoKit";
 import { BOSS_ASMO_ULTS_RULES } from "./asmoUlts";
+import { BOSS_ASMO_EXTRA_RULES } from "./bossAsmoExtra";
 import { BOSS_TWINS_RULES } from "./bossTwins";
 import { BOSS_TWINS_KIT_RULES } from "./bossTwinsKit";
 import { BOSS_MOON_EATER_RULES } from "./bossMoonEater";
@@ -150,6 +151,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   BOSS_ASMO_LORD_RULES,
   BOSS_ASMO_KIT_RULES,
   BOSS_ASMO_ULTS_RULES,
+  BOSS_ASMO_EXTRA_RULES,
   BOSS_TWINS_RULES,
   BOSS_TWINS_KIT_RULES,
   BOSS_MOON_EATER_RULES,

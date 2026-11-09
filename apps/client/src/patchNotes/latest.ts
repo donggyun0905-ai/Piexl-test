@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.47",
+    date: "2026-11-09",
+    items: {
+      ko: [
+        "아스모데우스의 화신체 강화: 공격 범위가 넓어짐(베기·블랙홀·내려찍기·결정 창·고리·톱니 날·불꽃 담 등) · 보스 탄이 2배 크기 · 공격 사이가 짧아짐 · 블랙홀 4개",
+        "욕망의 화신 새 패턴: 불꽃 꽃잎 회오리(돌아가는 다섯 갈래 탄) · 불꽃 감옥(내 둘레 세 변에 불꽃 담 → 안쪽이 터짐, 열린 쪽으로 빠져나가기)",
+        "검은 해의 화신 새 패턴: 검은 별 비(방 곳곳과 내 자리에 차례로 떨어짐) · 교차 빛줄기(나를 지나는 십자 → 엑스자)",
+        "강철 군주의 화신 새 패턴: 강철 돌진(예고선 끝으로 순식간에 돌진, 끝에서 고리 파동) · 붉은 칼날 폭풍(틈이 엇갈리는 칼날 고리 3번)",
+      ],
+      en: [
+        "Avatar of Asmodeus buffed: wider attacks (slashes, black holes, slam, crystal spears, rings, saw blades, flame walls…) · boss bullets are twice as big · shorter gaps between attacks · 4 black holes",
+        "Avatar of Desire new patterns: Petal Whirl (five spinning bullet streams) · Flame Cage (flame walls on three sides around you, then the inside explodes — escape through the open side)",
+        "Avatar of the Black Sun new patterns: Black Star Rain (falls across the room and on you in turn) · Crossing Beams (a cross through you, then an X)",
+        "Avatar of the Iron Lord new patterns: Iron Charge (dashes instantly along the warning line, ring wave at the end) · Blade Storm (three blade rings with staggered gaps)",
+      ],
+      ja: [
+        "アスモデウスの化身体を強化：攻撃範囲が広く（斬撃・ブラックホール・叩きつけ・結晶の槍・リング・鋸刃・炎の壁など） · ボスの弾が2倍の大きさ · 攻撃の間隔が短く · ブラックホール4つ",
+        "欲望の化身の新パターン：花びらの渦（回る5本の弾） · 炎の檻（自分の周り三辺に炎の壁 → 内側が爆発、開いた側から脱出）",
+        "黒い太陽の化身の新パターン：黒い星の雨（部屋のあちこちと自分の位置に順に落ちる） · 交差する光（自分を通る十字 → X字）",
+        "鋼鉄君主の化身の新パターン：鋼鉄の突進（予告線の先へ一瞬で突進、終点でリング波） · 紅い刃の嵐（隙間がずれる刃のリング3回）",
+      ],
+    },
+  },
+  {
     version: "0.50.46",
     date: "2026-11-09",
     items: {

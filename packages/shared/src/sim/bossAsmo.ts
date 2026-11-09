@@ -4,6 +4,7 @@
 import { ENEMIES } from "../content";
 import { chessTick, trailTick, wallTick } from "./asmoKit";
 import { asmoUltTick, startAsmoUlt } from "./asmoUlts";
+import { extraTick } from "./bossAsmoExtra";
 import { hitDamage } from "./bossKit";
 import { lustTick } from "./bossAsmoLust";
 import { eatTick, voidTick } from "./bossAsmoVoid";
@@ -71,6 +72,7 @@ export function updateAsmo(s: RunState, e: EnemyState, toP: Vec): void {
     if (e.amForm === 1) lustTick(s, e, toP);
     else if (e.amForm === 2) voidTick(s, e, toP);
     else lordTick(s, e, toP);
+    extraTick(s, e);
   }
   e.amHpWas = e.hp;
 }

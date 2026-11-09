@@ -10,7 +10,7 @@ import { keepInRoom, roomGrid, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
   /** 불꽃 담: 굵기(반) · 닿으면 피해 · 피해 간격(틱) */
-  WALL_W: 5,
+  WALL_W: 7,
   WALL_DMG: 4,
   WALL_EVERY: 20,
   /** 결정 창 벽 반경 */
@@ -24,7 +24,7 @@ const R = {
   CHESS_MUL: 0.7,
   /** 욕망의 잔상: 따라오는 늦음(틱) · 닿는 거리 · 피해 · 피해 간격 */
   TRAIL_LAG: 90,
-  TRAIL_R: 8,
+  TRAIL_R: 12,
   TRAIL_DMG: 8,
   TRAIL_EVERY: 30,
   /** 매혹: 끌려가는 틱 · 보스 쪽으로 움직였다고 보는 빠르기 */

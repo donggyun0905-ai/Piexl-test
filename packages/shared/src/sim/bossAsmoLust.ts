@@ -13,30 +13,30 @@ import { addEffect, DIR16, enemyShot, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MI
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
   /** 공격 사이 틱 · 유지하는 거리 · 이동 빠르기 */
-  GAP: 150,
+  GAP: 128,
   KEEP: 60,
   SPEED: 0.6,
   /** 보라 불꽃 베기: 예고 · 반경 · 피해 배율 · 불꽃 담 길이(반) · 남는 틱 */
   SLASH_WARN: 30,
-  SLASH_R: 70,
+  SLASH_R: 96,
   SLASH_MUL: 1,
-  WALL_HALF: 60,
+  WALL_HALF: 80,
   WALL: 240,
   /** 꺾이는 마창: 예고 · 굵기(반) · 튕김 수 · 피해 배율 */
   LANCE_WARN: 48,
-  LANCE_W: 5,
+  LANCE_W: 9,
   BOUNCES: 2,
   LANCE_MUL: 1.1,
   /** 욕망의 구슬: 따라오는 틱 · 빠르기 · 닿으면 터지는 거리 · 탄 빠르기 · 불꽃 담을 지우는 반경 */
   ORB_LIFE: 180,
   ORB_SPEED: 0.7,
-  ORB_HIT: 12,
+  ORB_HIT: 18,
   ORB_SHOT: 1.4,
-  ORB_CLEAR: 46,
+  ORB_CLEAR: 56,
   /** 다섯 구슬: 깜빡이는 간격 · 날아오는 간격 · 보스 둘레 반경 · 빠르기 · 피해 배율 */
   FIVE_BLINK: 20,
   FIVE_GAP: 24,
-  FIVE_R: 30,
+  FIVE_R: 36,
   FIVE_SPEED: 2.4,
   FIVE_MUL: 1.4,
   /** 매혹의 눈: 처음 · 간격 · 예고(눈이 빛남) */
@@ -160,10 +160,10 @@ function orbTick(s: RunState, e: EnemyState): void {
   e.amOrb = undefined;
   for (let i = 0; i < 16; i += 2) {
     const v = DIR16[i]!;
-    Object.assign(enemyShot(s, o[0], o[1], v[0], v[1], R.ORB_SHOT, shotDamage(s)), { from: e.kind, look: "orbChaos", r: 3 });
+    Object.assign(enemyShot(s, o[0], o[1], v[0], v[1], R.ORB_SHOT, shotDamage(s)), { from: e.kind, look: "orbChaos", r: 6 });
   }
   clearWalls(e, o[0], o[1], R.ORB_CLEAR);
-  addEffect(s, { kind: "burst", x: o[0], y: o[1], dirX: 0, dirY: 0, size: 26, maxTicks: 18, foe: true });
+  addEffect(s, { kind: "burst", x: o[0], y: o[1], dirX: 0, dirY: 0, size: 40, maxTicks: 18, foe: true });
 }
 
 /** 다섯 구슬: 깜빡인 순서대로 하나씩 내 자리로 날아옴 */
@@ -179,5 +179,5 @@ function fiveTick(s: RunState, e: EnemyState): void {
   }
   const [x, y] = fiveSpot(e, k);
   const d = normalize(s.player.x - x, s.player.y - y) ?? [0, 1];
-  Object.assign(enemyShot(s, x, y, d[0], d[1], R.FIVE_SPEED, shotDamage(s) * R.FIVE_MUL), { from: e.kind, look: "orbChaos", r: 5 });
+  Object.assign(enemyShot(s, x, y, d[0], d[1], R.FIVE_SPEED, shotDamage(s) * R.FIVE_MUL), { from: e.kind, look: "orbChaos", r: 10 });
 }

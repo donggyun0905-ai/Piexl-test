@@ -65,4 +65,12 @@ export interface AsmoEnemyState {
   amNextSaw?: number;
   /** 화신의 기억 (30줄·15줄): 쓴 수 */
   amMemory?: number;
+  /** 추가 패턴 (sim/bossAsmoExtra): 시간표를 맞춘 모습 · 다음 첫·두 번째 패턴 */
+  amExForm?: 1 | 2 | 3;
+  amNextEx1?: number;
+  amNextEx2?: number;
+  /** 불꽃 꽃잎 회오리 끝 틱 · 강철 돌진 [끝 x, 끝 y, 돌진 틱, 처음 x, 처음 y] · 붉은 칼날 폭풍 시작 틱 */
+  amPetalEnd?: number;
+  amCharge?: [number, number, number, number, number];
+  amBladeAt?: number;
 }

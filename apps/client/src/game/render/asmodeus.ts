@@ -84,7 +84,7 @@ function drawFive(ctx: Ctx, s: RunState, e: EnemyState): void {
 function drawOrbs(ctx: Ctx, s: RunState, e: EnemyState): void {
   const o = e.amOrb;
   if (o) {
-    const r = 7 + Math.sin(s.tick * 0.2);
+    const r = 11 + Math.sin(s.tick * 0.2);
     additive(ctx, () => glow(ctx, o[0], o[1], r * 2.4, "#c050ff", 0.7, 0.3));
     ctx.strokeStyle = "rgba(240, 200, 255, 0.9)";
     ctx.lineWidth = 1.5;

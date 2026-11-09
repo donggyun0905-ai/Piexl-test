@@ -16,17 +16,17 @@ import { addEffect, DIR16, enemyShot, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_M
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
   /** 공격 사이 틱 · 떠다니는 빠르기 */
-  GAP: 180,
+  GAP: 156,
   SPEED: 0.4,
   /** 빨아들이고 내려찍기: 빨아들이는 틱 · 내려찍는 반경 · 피해 배율 */
   SUCK: 180,
-  SLAM_R: 46,
+  SLAM_R: 66,
   SLAM_MUL: 1.6,
   /** 블랙홀 터뜨리기: 수 · 첫 예고 · 사이 · 반경 · 피해 배율 · 탄 빠르기 */
-  HOLES: 3,
+  HOLES: 4,
   HOLE_WARN: 90,
   HOLE_GAP: 30,
-  HOLE_R: 34,
+  HOLE_R: 48,
   HOLE_MUL: 1.1,
   HOLE_SHOT: 1.3,
   /** 단 하나의 빈자리: 처음 · 간격 · 찾는 틱 · 반경 · 빈자리 밖 피해 배율 · 이 줄 아래면 한 번 더 · 두 번째 찾는 틱 */
@@ -60,7 +60,7 @@ export const LASER_ZONES = 5;
 /** 미니 블랙홀 k의 자리 (보스 둘레를 돎) */
 export function eatSpot(s: RunState, e: EnemyState, k: number): [number, number] {
   const v = rot(s.tick * 0.03 + (k * Math.PI * 2) / 3);
-  return [e.x + v[0] * 34, e.y + v[1] * 22];
+  return [e.x + v[0] * 44, e.y + v[1] * 28];
 }
 export const eating = (s: RunState, e: EnemyState) => e.amEatEnd !== undefined && s.tick < e.amEatEnd;
 
@@ -125,7 +125,7 @@ function holeTick(s: RunState, e: EnemyState): void {
     for (let i = 0; i < 16; i++) {
       if (i % 4 === 3) continue;
       const v = DIR16[i]!;
-      Object.assign(enemyShot(s, h[0], h[1], v[0], v[1], R.HOLE_SHOT, shotDamage(s)), { from: e.kind, look: "orbChaos", r: 3 });
+      Object.assign(enemyShot(s, h[0], h[1], v[0], v[1], R.HOLE_SHOT, shotDamage(s)), { from: e.kind, look: "orbChaos", r: 6 });
     }
   }
   if ((e.amHoles ?? []).every((h) => h[2] <= s.tick)) e.amHoles = undefined;
@@ -179,7 +179,7 @@ export function eatTick(s: RunState, e: EnemyState): void {
   for (let i = 0; i < n; i++) {
     const [x, y] = eatSpot(s, e, i % 3);
     const v = DIR16[rng.int(0, 15)]!;
-    Object.assign(enemyShot(s, x, y, v[0], v[1], 1 + rng.nextFloat() * 0.8, per), { from: e.kind, look: "orbChaos", r: 3 + Math.min(4, Math.round(per / 10)) });
+    Object.assign(enemyShot(s, x, y, v[0], v[1], 1 + rng.nextFloat() * 0.8, per), { from: e.kind, look: "orbChaos", r: 6 + Math.min(8, Math.round(per / 5)) });
   }
   for (let k = 0; k < 3; k++) {
     const [x, y] = eatSpot(s, e, k);

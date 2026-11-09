@@ -16,28 +16,28 @@ import { normalize } from "./util";
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
   /** 공격 사이 틱 · 걷는 빠르기 · 이만큼 가까우면 멈춤 */
-  GAP: 168,
+  GAP: 146,
   SPEED: 0.4,
   NEAR: 44,
   /** 붉은 베기 2연: 예고 · 두 번째 예고 · 반경 · 피해 배율 · 결정 조각 수 · 조각 예고 · 반경 */
   SLASH_WARN: 36,
   SLASH_WARN2: 60,
-  SLASH_R: 80,
+  SLASH_R: 108,
   SLASH_MUL: 1.2,
   SHARDS: 3,
   SHARD_WARN: 120,
-  SHARD_R: 14,
+  SHARD_R: 20,
   /** 붉은 고리 구슬: 날아가는 틱 · 고리 빠르기 · 고리 최대 반경 · 피해 배율 */
   RING_WAIT: 48,
   RING_SPEED: 1.6,
-  RING_MAX: 140,
+  RING_MAX: 200,
   RING_MUL: 1,
   /** 하늘 결정 창: 수 · 사이 거리 · 첫 예고 · 사이 틱 · 반경 · 피해 배율 · 벽으로 남는 틱 */
   SPEARS: 7,
-  SPEAR_STEP: 22,
+  SPEAR_STEP: 28,
   SPEAR_WARN: 40,
   SPEAR_GAP: 12,
-  SPEAR_R: 14,
+  SPEAR_R: 20,
   SPEAR_MUL: 1,
   SPEAR_BLOCK: 300,
   /** 강철의 몸: 처음 · 간격 · 길이 · 앞에서 받는 피해 배율 · 돌아보는 빠르기 (0~1) */
@@ -52,8 +52,8 @@ const R = {
   SAW: 480,
   SAWS: 6,
   SAW_IN: 24,
-  SAW_OUT: 120,
-  SAW_R: 9,
+  SAW_OUT: 150,
+  SAW_R: 14,
   SAW_DMG: 14,
   SAW_EVERY_HIT: 30,
   /** 화신의 기억: 줄 · 두 빛의 바닥 길이 · 그때 색 바뀌는 간격 · 레이저 사이 */

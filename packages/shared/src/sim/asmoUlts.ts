@@ -22,7 +22,7 @@ const R = {
   TIRED: 300,
   /** 검은 해: 빨아들이는 힘 · 핵 반경 · 핵 피해 · 나선 탄 간격 · 빠르기 · 파동 시작 · 파동 빠르기 · 파동 사이 */
   HOLE_PULL: 0.6,
-  CORE_R: 26,
+  CORE_R: 34,
   CORE_DMG: 8,
   SPIRAL_EVERY: 6,
   SPIRAL_SPEED: 1.1,
@@ -60,7 +60,7 @@ export function startAsmoUlt(s: RunState, e: EnemyState, k: 1 | 2 | 3, hp: numbe
   e.waves = [];
   e.amWalls = [];
   e.amBlocks = [];
-  e.amOrb = e.amFive = e.amCharmAt = e.amTrailEnd = e.amTrail = e.amChessEnd = e.amSuckEnd = e.amHoles = e.amSafe = e.amEatEnd = e.amLasers = e.amArmor = e.amSawAt = undefined;
+  e.amOrb = e.amFive = e.amCharmAt = e.amTrailEnd = e.amTrail = e.amChessEnd = e.amSuckEnd = e.amHoles = e.amSafe = e.amEatEnd = e.amLasers = e.amArmor = e.amSawAt = e.amPetalEnd = e.amCharge = e.amBladeAt = undefined;
 }
 
 export function asmoUltTick(s: RunState, e: EnemyState): void {
@@ -97,7 +97,7 @@ function blackSun(s: RunState, e: EnemyState, t: number): void {
       const rng = createRng(deriveSeed(s.seed, "asmoSunLine", e.id, t));
       for (let i = 0; i < 2; i++) {
         const v = rot(rng.int(0, 359) * (Math.PI / 180));
-        addShape(s, 60, { x: ROOM_CX + v[0] * 260, y: cy() + v[1] * 160, radius: 0, toX: ROOM_CX, toY: cy(), width: 7, damage: hitDamage(s) * 0.8, fx: "fake", from: "asmoline" });
+        addShape(s, 60, { x: ROOM_CX + v[0] * 260, y: cy() + v[1] * 160, radius: 0, toX: ROOM_CX, toY: cy(), width: 11, damage: hitDamage(s) * 0.8, fx: "fake", from: "asmoline" });
       }
     }
     return;
@@ -124,7 +124,7 @@ function spiral(s: RunState, e: EnemyState, t: number, n: number): void {
   const a = t * 0.04 + t * t * 0.00004;
   for (let i = 0; i < n; i++) {
     const v = rot(a + (i * Math.PI * 2) / n);
-    Object.assign(enemyShot(s, ROOM_CX + v[0] * R.CORE_R, cy() + v[1] * R.CORE_R, v[0], v[1], R.SPIRAL_SPEED, shotDamage(s)), { from: e.kind, look: "orbChaos", r: 3 });
+    Object.assign(enemyShot(s, ROOM_CX + v[0] * R.CORE_R, cy() + v[1] * R.CORE_R, v[0], v[1], R.SPIRAL_SPEED, shotDamage(s)), { from: e.kind, look: "orbChaos", r: 6 });
   }
 }
 
