@@ -14,6 +14,8 @@ export interface RaidState {
   ai: boolean[];
   /** 준비 방 AI 움직임: 자리마다 [갈 곳 차례, 기다린 틱] (sim/raidBot) */
   bot?: number[][];
+  /** 레이드 방에서 싸운 틱 (컷신 빼고, 제한 시간 sim/raidLife) */
+  fightTicks?: number;
   /** 레이드 방 싸움 (sim/lucifer) */
   fight?: LucFight;
 }

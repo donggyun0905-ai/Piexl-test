@@ -18,6 +18,8 @@ const R = {
   LIVES: 10,
   RESPAWN: 180,
   INVULN: 120,
+  /** 레이드 방 제한 시간 틱 (20분 · 컷신 동안은 멈춤) · 넘기면 실패 */
+  TIME_LIMIT: 20 * 60 * 60,
 };
 export { R as RAID_LIFE_RULES };
 
@@ -28,6 +30,8 @@ export const raidOut = (p: PlayerState) => (p.raidDeaths ?? 0) >= R.LIVES;
 /** 아직 다시 살아날 사람이 있는지 (모두 쓰러져도 판이 끝나지 않게) */
 export const raidLivesLeft = (s: RunState) => raidFighting(s) && allPlayers(s).some((p) => !raidOut(p));
 export const RAID_LIVES = R.LIVES;
+/** 레이드 방 남은 틱 (제한 시간) */
+export const raidTimeLeft = (s: RunState) => Math.max(0, R.TIME_LIMIT - (s.raidBoss?.fightTicks ?? 0));
 
 /** 한 틱 뒤 (sim/partyRun): 쓰러짐·다시 살아남 · 어둠의 세계에서 돌아옴 · 컷신 무적 · 승패 */
 export function raidAfter(s: RunState): void {
@@ -35,6 +39,7 @@ export function raidAfter(s: RunState): void {
   if (s.raidBoss) raidPrepTick(s);
   if (!raidFighting(s)) return;
   const cut = lucCutting(s);
+  if (!cut) s.raidBoss!.fightTicks = (s.raidBoss!.fightTicks ?? 0) + 1;
   eachSeat(s, () => {
     const p = s.player;
     raidLogHp(p);
@@ -56,7 +61,7 @@ export function raidAfter(s: RunState): void {
     addEffect(s, { kind: "burst", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 20, maxTicks: 20 });
   });
   darkReturn(s);
-  // 루시퍼가 쓰러짐 → 보상 방 · 모두 데스 카운트를 다 씀 → 실패
+  // 루시퍼가 쓰러짐 → 보상 방 · 모두 데스 카운트를 다 씀·제한 시간이 지남 → 실패
   if (!s.enemies.some((e) => e.kind === "lucifer" && e.hp > 0)) goReward(s);
-  else if (!allPlayers(s).some((p) => p.hp > 0 || !raidOut(p))) s.over = true;
+  else if (!allPlayers(s).some((p) => p.hp > 0 || !raidOut(p)) || raidTimeLeft(s) <= 0) s.over = true;
 }

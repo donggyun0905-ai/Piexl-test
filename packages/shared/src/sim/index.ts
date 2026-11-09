@@ -96,7 +96,7 @@ export { LUC_MELEE_RULES } from "./lucMelee";
 export { COVER_HITS, COVER_RADIUS, LUC_GUARD_PCT, lucCovers, lucGuarded } from "./lucCover";
 export { RAID_OP, raidCdLeft, raidResetsLeft } from "./raidPrep";
 export { deadlySafe, LUC_DEADLY_RULES, mateOf, type LucDeadly } from "./lucDeadly";
-export { RAID_LIFE_RULES, RAID_LIVES, raidFighting, raidOut } from "./raidLife";
+export { RAID_LIFE_RULES, RAID_LIVES, raidFighting, raidOut, raidTimeLeft } from "./raidLife";
 export type { LucCut, LucFight } from "./lucTypes";
 export { allPlayers, isAlive, PARTY_MAX, syncSeat, useSeat, type Seat as PartySeat } from "./party";
 export type { ElderSeal, S2Rush } from "./s2Types";

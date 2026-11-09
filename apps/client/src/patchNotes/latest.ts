@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.51.5",
+    date: "2026-11-10",
+    items: {
+      ko: [
+        "레이드: 레이드 방에 들어가면 제한 시간 20분 (컷신 동안은 멈춤, 화면 위에 남은 시간 · 1분 남으면 빨강) · 시간이 다 되면 레이드 실패",
+        "패왕전: 방 전체·맵 전체를 치는 공격(오닉스 칠보 광륜·보석, 매드퀸 일제사격 등)은 내 둘레 240 안 상대만 · 수풀·투명으로 안 보이는 상대는 맞지 않음 · 매드퀸 터렛·일제사격 포탄은 맵 아무 곳이 아니라 내 둘레에만 · 훅은 갈고리 밧줄을 탈 때 무적이 없어짐",
+        "패왕전 시즌 3 캐릭터 밸런스 (AI 1대1로 기존 캐릭터와 승률이 비슷하게, 공격력·받는 피해): 약하게 — 오닉스·베아트리스·펜리르·레오·루나틱·이클립스·크루세이더·테일·라파엘·매드퀸·토르켄·미카엘라·블래스트·훅·세레나·실버불렛·가브리엘·인시전 / 강하게 — 오르카·헬피스트·시저스·네일러·웨이브·이안",
+      ],
+      en: [
+        "Raid: a 20-minute time limit once you enter the raid room (paused during cutscenes; time left shown at the top, red under 1 minute) · the raid fails when time runs out",
+        "Paewang: room-wide / map-wide attacks (Onyx's halo and gems, Mad Queen's full salvo, etc.) only reach foes within 240 of you · foes hidden in bushes or invisible aren't hit · Mad Queen's turrets and salvo shells land around you instead of anywhere on the map · Hook no longer becomes invulnerable while riding the grapple rope",
+        "Paewang Season 3 balance (AI 1v1 win rates matched to older characters; damage and damage taken): weaker — Onyx, Beatrice, Fenrir, Leo, Lunatic, Eclipse, Crusader, Tail, Rafael, Mad Queen, Thorken, Michaela, Blast, Hook, Serena, Silver Bullet, Gabriel, Incision / stronger — Orca, Hellfist, Scissors, Nailer, Wave, Ian",
+      ],
+      ja: [
+        "レイド: レイド部屋に入ると制限時間20分 (カットシーン中は止まる、画面上に残り時間 · 残り1分で赤) · 時間切れでレイド失敗",
+        "覇王戦: 部屋全体・マップ全体を攻撃する技 (オニキスの光輪・宝石、マッドクイーンの一斉射撃など) は自分の周り240以内の相手だけ · 茂み・透明で見えない相手には当たらない · マッドクイーンのタレット・一斉射撃の砲弾はマップのどこかではなく自分の周りに · フックはフックのロープに乗る間の無敵がなくなった",
+        "覇王戦 シーズン3キャラのバランス (AI 1対1で既存キャラと勝率が近くなるよう、攻撃力・被ダメージ): 弱く — オニキス・ベアトリス・フェンリル・レオ・ルナティック・エクリプス・クルセイダー・テイル・ラファエル・マッドクイーン・トルケン・ミカエラ・ブラスト・フック・セレナ・シルバーバレット・ガブリエル・インシジョン / 強く — オルカ・ヘルフィスト・シザーズ・ネイラー・ウェーブ・イアン",
+      ],
+    },
+  },
+  {
     version: "0.51.4",
     date: "2026-11-10",
     items: {

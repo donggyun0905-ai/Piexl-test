@@ -1,13 +1,18 @@
 // 시즌 2 캐릭터 공용 도우미: 살아 있는 적 · 부채꼴·선·원 안의 적 · 맞히기 · 멈추기 · 탄 쏘기
 import { ENEMIES } from "../enemyDefs";
+import { PW } from "../paewangDefs";
 import { damageEnemy } from "./combat";
 import { statusHit } from "./statusHit";
 import type { S2Rush } from "./s2Types";
 import type { DotKind, EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, normalize, roomGrid } from "./util";
 
-/** 맞힐 수 있는 적 (상자·차례 아닌 탑 빼고) */
-export const alive = (s: RunState) => s.enemies.filter((e) => e.hp > 0 && !e.svBox && !e.immune);
+/** 맞힐 수 있는 적 (상자·차례 아닌 탑 빼고) · 패왕전은 수풀·투명으로 안 보이는 상대와 PW.reach보다 먼 상대도 빼고 (맵 전체 공격이 화면 밖까지 닿지 않게) */
+export const alive = (s: RunState) => {
+  const pv = !!s.pvp;
+  const p = s.player;
+  return s.enemies.filter((e) => e.hp > 0 && !e.svBox && !e.immune && (!pv || (!e.pwHid && dist2(e, p) <= (PW.reach + e.r) ** 2)));
+};
 export const isBoss = (e: EnemyState) => ENEMIES[e.kind].boss === true;
 /** 지금 방 ("층/방") */
 export const roomKey = (s: RunState) => `${s.floor}/${s.roomId}`;

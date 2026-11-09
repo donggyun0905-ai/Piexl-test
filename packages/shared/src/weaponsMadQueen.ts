@@ -74,6 +74,8 @@ export const MADQUEEN = {
   salvoR: 30,
   salvoMul: 2.4,
   salvoStun: 20,
+  /** 패왕전: 터렛·일제사격 아무 곳 포탄을 놓는 곳 = 맵 전체가 아니라 나 둘레 이 거리 안 */
+  pwPlace: 130,
   /** 적조: 화상 세기(포탄 피해 배율) · 산호: 독 세기(0.5초마다, 포탄 피해 배율) · 독 틱 */
   burnMul: 0.1,
   poisonMul: 0.04,

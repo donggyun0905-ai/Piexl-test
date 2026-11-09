@@ -80,7 +80,8 @@ function hookReel(s: RunState, h: HkHook): boolean {
 function ride(s: RunState, h: HkHook): boolean {
   const p = s.player;
   h.t++;
-  p.invulnTicks = Math.max(p.invulnTicks, 3);
+  // 밧줄 타는 동안 무적 (패왕전은 없음: 갈고리를 던질 때마다 무적이 되지 않게)
+  if (!s.pvp) p.invulnTicks = Math.max(p.invulnTicks, 3);
   if (h.k === 4) {
     p.x += h.dx;
     p.y += h.dy;

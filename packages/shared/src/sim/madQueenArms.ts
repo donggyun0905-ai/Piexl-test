@@ -2,7 +2,7 @@
 import { MADQUEEN_PERKS as K } from "../itemsMadQueen";
 import { MADQUEEN as Q } from "../weaponsMadQueen";
 import { blocksShot } from "./layout";
-import { boomR, explode, fleetOf } from "./madQueenKit";
+import { boomR, explode, fleetOf, mqSpot } from "./madQueenKit";
 import type { MqShell, MqTurret } from "./madQueenTypes";
 import { alive, stun } from "./s2Kit";
 import type { EnemyState, RunState } from "./types";
@@ -76,7 +76,7 @@ export function startSalvo(s: RunState, rnd: () => number): void {
   };
   for (const e of alive(s)) drop(e.x, e.y);
   const n = Math.round(Q.salvoShots * (barrage ? K.mqBarrage.shots : 1));
-  for (let i = 0; i < n; i++) drop(ROOM_MIN_X + 12 + rnd() * (ROOM_MAX_X - ROOM_MIN_X - 24), ROOM_MIN_Y + 12 + rnd() * (ROOM_MAX_Y - ROOM_MIN_Y - 24));
+  for (let i = 0; i < n; i++) drop(...mqSpot(s, rnd, 12, 12));
   p.mqSalvo = Q.salvoFall + Q.salvoSpread + 10;
   addEffect(s, { kind: "mqSalvo", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 60, maxTicks: 50, follow: true, style: fleetOf(p).color });
 }

@@ -3,6 +3,7 @@ import { ENEMIES } from "../content";
 import { allPlayers, eachSeat, useSeat } from "./party";
 import { stepParty } from "./partyRun";
 import { createRaid, RAID_RULES, raidGymPts, raidOwnPassives } from "./raid";
+import { RAID_LIFE_RULES, raidTimeLeft } from "./raidLife";
 import { RAID_ROOM } from "./raidTypes";
 import { goThrough } from "./rooms";
 import { stationAt } from "./station";
@@ -130,6 +131,18 @@ describe("레이드 루시퍼 1페이즈", () => {
     expect(s.over).toBe(false);
     for (let t = 0; t < 200; t++) stepParty(s, [EMPTY_INPUT]);
     expect(s.player.hp).toBeGreaterThan(0);
+  });
+
+  it("제한 시간 20분: 다 지나면 실패 · 남은 시간이 줄어듦", () => {
+    const s = fight();
+    const left = raidTimeLeft(s);
+    stepParty(s, [EMPTY_INPUT]);
+    expect(raidTimeLeft(s)).toBeLessThan(left);
+    expect(RAID_LIFE_RULES.TIME_LIMIT).toBe(20 * 60 * 60);
+    s.raidBoss!.fightTicks = RAID_LIFE_RULES.TIME_LIMIT - 1;
+    if (s.raidBoss!.fight) s.raidBoss!.fight.cut = undefined;
+    stepParty(s, [EMPTY_INPUT]);
+    expect(s.over).toBe(true);
   });
 });
 

@@ -6,7 +6,7 @@ import { ignite } from "./status";
 import { statusHit } from "./statusHit";
 import { damageEnemy } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
+import { addEffect, dist2, hasPerk, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, weaponOf } from "./util";
 
 export const isMadQueen = (p: PlayerState) => p.characterId === "madQueen";
 
@@ -28,6 +28,17 @@ export function wingPos(p: PlayerState, i: number): [number, number] {
   const side = i % 2 === 0 ? -1 : 1;
   const tier = i >> 1;
   return [p.x + side * (22 - tier * 2), p.y - 10 + tier * 12];
+}
+
+/** 터렛·일제사격 포탄을 놓을 아무 곳 (방 끝에서 px·py 안쪽) · 패왕전은 나 둘레 Q.pwPlace 안만 */
+export function mqSpot(s: RunState, rnd: () => number, px: number, py: number): [number, number] {
+  const p = s.player;
+  const r = s.pvp ? Q.pwPlace : Infinity;
+  const x0 = Math.max(ROOM_MIN_X + px, p.x - r);
+  const x1 = Math.min(ROOM_MAX_X - px, p.x + r);
+  const y0 = Math.max(ROOM_MIN_Y + py, p.y - r);
+  const y1 = Math.min(ROOM_MAX_Y - py, p.y + r);
+  return [x0 + rnd() * Math.max(0, x1 - x0), y0 + rnd() * Math.max(0, y1 - y0)];
 }
 
 /** 폭발 반지름 (함대 · 고폭 탄두) */

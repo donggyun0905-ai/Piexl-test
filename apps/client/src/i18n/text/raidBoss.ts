@@ -55,6 +55,7 @@ export const RAID_BOSS_TEXT = {
   lucPhase2: { ko: "루시퍼 · 2페이즈", en: "Lucifer · Phase 2", ja: "ルシファー · フェーズ2" },
   lucPillarsLeft: { ko: "석화의 기둥 {n}", en: "Petrified pillars {n}", ja: "石化の柱 {n}" },
   lucShield: { ko: "보호막", en: "Shield", ja: "シールド" },
+  raidTimeLeft: { ko: "남은 시간 {t}", en: "Time left {t}", ja: "残り時間 {t}" },
   raidDeaths: { ko: "데스 {n}/{max}", en: "Deaths {n}/{max}", ja: "デス {n}/{max}" },
   raidRespawn: { ko: "{s}초 뒤 다시 살아나요", en: "Back in {s}s", ja: "{s}秒後に復活" },
   raidOutText: { ko: "데스 카운트를 다 썼어요 · 관전 중", en: "Out of lives · spectating", ja: "デスカウントを使い切りました · 観戦中" },

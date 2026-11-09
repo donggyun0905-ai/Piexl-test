@@ -7,10 +7,10 @@ import { createRng, deriveSeed } from "../rng";
 import { MADQUEEN as Q } from "../weaponsMadQueen";
 import { bodyFits } from "./layout";
 import { armsTick, fireShell, startSalvo } from "./madQueenArms";
-import { boomR, cannonCount, cannonPos, fleetOf, mqHit, turretChance, wingChance, wingPos } from "./madQueenKit";
+import { boomR, cannonCount, cannonPos, fleetOf, mqHit, mqSpot, turretChance, wingChance, wingPos } from "./madQueenKit";
 import { alive, roomKey } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
-import { addEffect, dist2, hasPerk, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid } from "./util";
+import { addEffect, dist2, hasPerk, roomGrid } from "./util";
 
 /** 머리 위 대포마다 한 발: 바라보는 쪽으로 나란히 (땅 위 자리는 대포 줄을 옆으로 조금 벌림) · 둘째 대포부터 조금 약함 */
 function volley(s: RunState): void {
@@ -44,14 +44,15 @@ function wingBeams(s: RunState): void {
   }
 }
 
-/** 맵 아무 곳(빈 바닥, 나·다른 터렛과 조금 떨어진 곳)에 터렛을 놓음 */
+/** 맵 아무 곳(패왕전은 나 둘레, 빈 바닥, 나·다른 터렛과 조금 떨어진 곳)에 터렛을 놓음 */
 function placeTurret(s: RunState, rnd: () => number): void {
   const p = s.player;
   const g = roomGrid(s);
   const list = (p.mqTurrets ??= []);
   for (let k = 0; k < 16; k++) {
-    const x = ROOM_MIN_X + 16 + rnd() * (ROOM_MAX_X - ROOM_MIN_X - 32);
-    const y = ROOM_MIN_Y + 20 + rnd() * (ROOM_MAX_Y - ROOM_MIN_Y - 36);
+    // 아래쪽은 16 안쪽 (위 20 · 아래 16)
+    const [x, y0] = mqSpot(s, rnd, 16, 18);
+    const y = y0 + 2;
     if (g && !bodyFits(g, x, y, 9)) continue;
     if (dist2(p, { x, y }) < Q.turretGap ** 2 || list.some((u) => dist2(u, { x, y }) < Q.turretGap ** 2)) continue;
     list.push({ x, y, cd: 0, a: Math.PI, age: 0 });

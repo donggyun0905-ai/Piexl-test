@@ -1,5 +1,5 @@
 // 레이드 방 화면 위: 컷신(전체 화면 그림, 그동안 게임은 멈춤) · 데스 카운트 · 다시 살아나기까지 · 관전 · 어둠의 세계·돔·검기 안내
-import { allPlayers, deadlySafe, RAID_LIVES, RAID_ROOM, raidFighting, raidOut, stunWarn, TICK_RATE, type LucCut, type RunState } from "@pixel-rogue/shared";
+import { allPlayers, deadlySafe, RAID_LIVES, RAID_ROOM, raidFighting, raidOut, raidTimeLeft, stunWarn, TICK_RATE, type LucCut, type RunState } from "@pixel-rogue/shared";
 import { watchingSeat } from "../game/camera";
 import { useEffect, useState } from "react";
 import type { TextKey } from "../i18n";
@@ -48,6 +48,9 @@ export function RaidOverlay({ run, t, names, me }: { run: RunState; t: (key: Tex
             : f && stunWarn(run, f)
               ? t("raidStunText")
               : "";
+  // 제한 시간 (컷신 동안은 멈춤) · 1분 남으면 빨강
+  const left = Math.ceil(raidTimeLeft(run) / TICK_RATE);
+  const clock = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`;
   const chain = p.chains && p.chains.length > 0 && (p.chainTicks ?? 0) > 0 ? p.chains : null;
   return (
     <>
@@ -57,6 +60,7 @@ export function RaidOverlay({ run, t, names, me }: { run: RunState; t: (key: Tex
         </div>
       )}
       <div className="raid-hud">
+        <b className={left <= 60 ? "danger" : ""}>⏱ {t("raidTimeLeft").replace("{t}", clock)}</b>
         <b className={deaths >= RAID_LIVES - 2 ? "danger" : ""}>💀 {t("raidDeaths").replace("{n}", String(deaths)).replace("{max}", String(RAID_LIVES))}</b>
         {down && !raidOut(p) && <span>{t("raidRespawn").replace("{s}", String(wait))}</span>}
         {raidOut(p) && <span className="danger">{t("raidOutText")}</span>}
