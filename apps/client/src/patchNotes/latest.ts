@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.43",
+    date: "2026-11-09",
+    items: {
+      ko: ["켈베로스 강화: 화염볼·검기가 다른 라스트 보스의 큰 탄처럼 커지고(화염볼 반지름 4→9 · 검기는 거대 붉은 검기) 피해도 큰 공격 기준으로 오름 · 검귀의 부채꼴 검기·내려찍기 검기, 용암 분출 탄도 커지고 세짐"],
+      en: ["Cerberus buffed: fireballs and sword waves are now as large as other final bosses' big shots (fireball radius 4→9, giant red sword waves) and deal big-attack damage · Blade Fiend's fan and slam waves and lava-eruption shots are also larger and stronger"],
+      ja: ["ケルベロス強化：火炎弾と剣気が他のラストボスの大きな弾と同じく大きくなり（火炎弾の半径4→9 · 剣気は巨大な赤い剣気）、ダメージも大技基準に上昇 · 剣鬼の扇形剣気・叩きつけの剣気、溶岩噴出の弾も大きく強く"],
+    },
+  },
+  {
     version: "0.50.42",
     date: "2026-11-09",
     items: {

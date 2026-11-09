@@ -5,7 +5,7 @@
 import { CERB_TRIO, ENEMIES } from "../content";
 import { ROOM_CX } from "../constants";
 import { createRng, deriveSeed } from "../rng";
-import { hitDamage, shotDamage, turn } from "./bossKit";
+import { hitDamage, turn } from "./bossKit";
 import { addWave, updateWaves } from "./bossWaves";
 import { aimAt, breathBusy, breathTick, cerbLavaSet, floorBusy, floorHold, floorTick, growLava, lavaTick, startBreath, startErupt, startFloor, cellRect } from "./cerbKit";
 import { addShape } from "./hazards";
@@ -30,14 +30,19 @@ const R = {
   ROCK_WARN: 60,
   ROCK_R: 16,
   ROCK_SPREAD: 46,
-  /** 화염볼: 수 · 간격 · 빠르기 (세 머리 동시면 TRIPLE_FIRE발 · TRIPLE_FIRE_GAP 간격) */
+  /** 화염볼: 수 · 간격 · 빠르기 · 크기(반지름) · 피해(큰 공격 피해의 몇 배) (세 머리 동시면 TRIPLE_FIRE발 · TRIPLE_FIRE_GAP 간격) */
   FIRE: 5,
   FIRE_GAP: 12,
   FIRE_SPEED: 1.9,
+  FIRE_R: 9,
+  FIRE_MUL: 0.8,
   /** 검기: 수 · 간격 · 빠르기 */
   QI: 4,
   QI_GAP: 18,
   QI_SPEED: 2.1,
+  /** 검기(거대 붉은 검기) 크기(반지름) · 피해 (큰 공격 피해의 몇 배) */
+  QI_R: 10,
+  QI_MUL: 0.9,
   /** 전역 검기 3연 (붉은 원형 파동, 대시로 넘음): 수 · 간격 · 빠르기 · 피해 배율 · 오른쪽 머리 몇 번째마다 */
   SWEEPS: 3,
   SWEEP_GAP: 60,
@@ -201,14 +206,14 @@ function volleyTick(s: RunState, e: EnemyState): void {
   if ((e.cbFire ?? 0) > 0 && s.tick % (e.cbFireGap ?? R.FIRE_GAP) === 0) {
     const [ox, oy] = HEAD_OFS[1]!;
     const d = aimAt(s, e.x + ox, e.y + oy);
-    Object.assign(enemyShot(s, e.x + ox, e.y + oy + 6, d[0], d[1], R.FIRE_SPEED, shotDamage(s)), { from: "cerbflame", look: "fire", r: 4 });
+    Object.assign(enemyShot(s, e.x + ox, e.y + oy + 6, d[0], d[1], R.FIRE_SPEED, hitDamage(s) * R.FIRE_MUL), { from: "cerbflame", look: "fire", r: R.FIRE_R });
     e.cbFire!--;
   }
   if ((e.cbQi ?? 0) > 0 && s.tick % R.QI_GAP === 0) {
     const [ox, oy] = HEAD_OFS[2]!;
     const k = (e.cbQi ?? 0) - 2;
     const d = turn(aimAt(s, e.x + ox, e.y + oy), k % 2 === 0 ? 0 : k);
-    Object.assign(enemyShot(s, e.x + ox, e.y + oy + 6, d[0], d[1], R.QI_SPEED, shotDamage(s) * 1.2), { from: "cerbblade", look: "wave", r: 5 });
+    Object.assign(enemyShot(s, e.x + ox, e.y + oy + 6, d[0], d[1], R.QI_SPEED, hitDamage(s) * R.QI_MUL), { from: "cerbblade", look: "bigwave", r: R.QI_R });
     e.cbQi!--;
   }
 }

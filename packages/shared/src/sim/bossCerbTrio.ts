@@ -53,6 +53,9 @@ const R = {
   /** 검귀 부채꼴 검기: 간격 · 빠르기 */
   QI_GAP: 26,
   QI_SPEED: 2.2,
+  /** 검귀 검기(부채꼴·내려찍기 뒤 사방) 크기(반지름) · 피해 (큰 공격 피해의 몇 배) */
+  QI_R: 9,
+  QI_MUL: 0.8,
   /** 검귀 점프 내려찍기: 그림자가 따라오는 틱 · 따라오는 빠르기 · 멈춘 뒤 떨어지기까지 · 반경 */
   JUMP_FOLLOW: 90,
   JUMP_SPEED: 2.4,
@@ -191,13 +194,23 @@ function act(s: RunState, e: EnemyState, toP: Vec, move: number, rep: number): v
     e.auxY = ty;
     pose(s, e, 1, R.DASH_WARN);
   } else if (move === 1) {
-    fan(s, e, toP, rep === 1 ? [-3, -1, 1, 3] : [-2, -1, 0, 1, 2], R.QI_SPEED, { look: "wave", from: "cerbblade" });
+    const spread = rep === 1 ? [-3, -1, 1, 3] : [-2, -1, 0, 1, 2];
+    fan(s, e, toP, spread, R.QI_SPEED, { look: "bigwave", from: "cerbblade" });
+    bigQi(s, spread.length);
     pose(s, e, 2, 20);
   } else {
     // 점프 내려찍기: 하늘로 사라져 그림자가 따라옴 (무적)
     e.phase = "blink";
     e.aux = s.tick;
     pose(s, e, 3, R.JUMP_FOLLOW);
+  }
+}
+
+/** 방금 쏜 검기 n발을 거대 검기로 (크기·피해) */
+function bigQi(s: RunState, n: number, k = 1): void {
+  for (const pr of s.projectiles.slice(-n)) {
+    pr.r = R.QI_R * k;
+    pr.damage = hitDamage(s) * R.QI_MUL * k;
   }
 }
 
@@ -222,7 +235,8 @@ function bladeBusy(s: RunState, e: EnemyState, toP: Vec): boolean {
   else if (t >= R.JUMP_FOLLOW + R.JUMP_LAND) {
     e.immune = e.air = false;
     e.phase = "walk";
-    ring(s, e, 1, 0, 1.4, { look: "wave", from: "cerbblade" });
+    ring(s, e, 1, 0, 1.4, { look: "bigwave", from: "cerbblade" });
+    bigQi(s, 16, 0.75);
     pose(s, e, 2, 30);
   }
   return true;

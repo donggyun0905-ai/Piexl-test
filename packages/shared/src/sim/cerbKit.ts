@@ -21,6 +21,9 @@ const R = {
   ERUPT_EVERY: 20,
   RING_GAP: 24,
   RING_SPEED: 1.25,
+  /** 분출 탄 크기(반지름) · 피해 */
+  RING_R: 6,
+  RING_DMG: 13,
   /** 지옥불 브레스: 머리 빛이 깜박이는 예고 틱 · 뿜는 틱 · 기둥 그림자 밖이면 최대 체력의 몇 % 피해 (대시로 못 피함) */
   BREATH_WARN: 120,
   BREATH_TICKS: 90,
@@ -109,7 +112,7 @@ export function lavaTick(s: RunState, e: EnemyState): void {
     const y = (lava[i + 1]! + lava[i + 3]! / 2) * TILE_SIZE;
     for (let d = k % 2; d < 16; d += 2) {
       const v = DIR16[d]!;
-      Object.assign(enemyShot(s, x, y, v[0], v[1], R.RING_SPEED, R.ERUPT_DMG * 0.6), { from: "cerberus", look: "fire" });
+      Object.assign(enemyShot(s, x, y, v[0], v[1], R.RING_SPEED, R.RING_DMG), { from: "cerberus", look: "fire", r: R.RING_R });
     }
   }
   if (k === 0) for (let i = 0; i < lava.length; i += 4) addEffect(s, { kind: "burst", x: (lava[i]! + lava[i + 2]! / 2) * TILE_SIZE, y: (lava[i + 1]! + lava[i + 3]! / 2) * TILE_SIZE, dirX: 0, dirY: 0, size: 18, maxTicks: 20, foe: true });
