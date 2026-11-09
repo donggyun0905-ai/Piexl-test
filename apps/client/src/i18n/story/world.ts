@@ -113,9 +113,9 @@ export const BOSS_STORY: Record<StoryBossId, { name: L; desc: L }> = {
   godeater: {
     name: c("갓이터", "God Eater", "ゴッドイーター"),
     desc: c(
-      "헬리오스에서 태어난 존재. 하늘의 사도였던 이를 악으로 물들여 악의 사도로 만들었다.",
-      "A being born in Helios. It stained a former apostle of heaven with evil, making them the Apostle of Malice.",
-      "ヘリオスで生まれた存在。天の使徒だった者を悪に染め、悪の使徒にした。",
+      "헬리오스에서 태어난, 신을 먹는 존재. 아스모데우스의 보랏빛 악에 물들어 '천의 사도'에서 '악의 사도'가 된 이가 떠받드는 주인이다.",
+      "A god-devouring being born in Helios. It is the master revered by the one who, stained by Asmodeus's violet evil, fell from 'Apostle of Heaven' to 'Apostle of Malice'.",
+      "ヘリオスで生まれた、神を喰らう存在。アスモデウスの紫の悪に染まり「天の使徒」から「悪の使徒」となった者が仰ぐ主。",
     ),
   },
   primeval: {

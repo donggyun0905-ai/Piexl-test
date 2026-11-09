@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.50.41",
+    date: "2026-11-09",
+    items: {
+      ko: ["스토리 최종 보스 '갓이터' 설명을 7장에 맞게 고침 (천의 사도를 물들인 것은 아스모데우스, 갓이터는 악의 사도가 떠받드는 주인)"],
+      en: ["Story final boss 'God Eater' description updated to match Chapter 7 (Asmodeus stained the Apostle of Heaven; the God Eater is the master the Apostle of Malice reveres)"],
+      ja: ["ストーリーの最終ボス「ゴッドイーター」の説明を第7章に合わせて修正（天の使徒を染めたのはアスモデウス、ゴッドイーターは悪の使徒が仰ぐ主）"],
+    },
+  },
+  {
     version: "0.50.40",
     date: "2026-11-09",
     items: {
