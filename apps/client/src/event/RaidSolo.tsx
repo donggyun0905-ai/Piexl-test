@@ -6,6 +6,7 @@ import { GameScreen } from "../game/GameScreen";
 import type { Lang, TextKey } from "../i18n";
 import { loadAchievements } from "../records";
 import { RaidOverlay } from "./RaidOverlay";
+import { RaidBoard } from "./RaidBoard";
 
 interface Props {
   boss: RaidEventBoss;
@@ -31,6 +32,7 @@ export function RaidSolo({ boss, characterId, lang, t, onExit }: Props) {
       lang={lang}
       t={t}
       onExit={onExit}
+      resultExtra={<RaidBoard run={run} t={t} />}
       step={(r, input) => {
         stepParty(r, [input]);
         return true;

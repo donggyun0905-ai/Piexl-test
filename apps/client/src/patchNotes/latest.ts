@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.51.1",
+    date: "2026-11-10",
+    items: {
+      ko: [
+        "레이드: 석화의 기둥·절망의 검·악마의 불길에 처형·즉사 효과가 걸려 한 번에 사라지던 것 고침 (보스처럼 막음)",
+        "레이드 결과표: 끝나면 결과 창 아래에, 싸우는 중엔 Tab을 누르는 동안 · 팀원마다 준 피해(비율) · 루시퍼에게 · 기둥·검·몬스터에게 · 최대 한 방 · 받은 피해 · 회복 · 데스",
+      ],
+      en: [
+        "Raid: fixed execute/instant-kill effects wiping out petrified pillars, swords of despair and demon flames in one hit (now protected like bosses)",
+        "Raid board: shown under the results, or hold Tab during the fight · per teammate: damage (share) · to Lucifer · to pillars/swords/adds · biggest hit · damage taken · healed · deaths",
+      ],
+      ja: [
+        "レイド：石化の柱・絶望の剣・悪魔の炎に処刑・即死効果が入り一撃で消えていたのを修正 (ボスと同じく無効)",
+        "レイド結果表：終了時は結果画面の下に、戦闘中はTabを押している間 · 仲間ごとに与ダメージ(割合) · ルシファーへ · 柱・剣・モンスターへ · 最大の一撃 · 被ダメージ · 回復 · デス",
+      ],
+    },
+  },
+  {
     version: "0.51.0",
     date: "2026-11-09",
     items: {

@@ -74,4 +74,12 @@ export const RAID_BOSS_TEXT = {
   raidCongratsSub: { ko: "루시퍼를 쓰러뜨리고 보물 상자를 열었습니다", en: "You defeated Lucifer and opened the treasure chest", ja: "ルシファーを倒し、宝箱を開けました" },
   raidRewardSoon: { ko: "(보상은 준비 중이에요)", en: "(Rewards coming soon)", ja: "(報酬は準備中です)" },
   raidChestName: { ko: "루시퍼의 보물 상자", en: "Lucifer's Treasure Chest", ja: "ルシファーの宝箱" },
+  raidBoardTitle: { ko: "레이드 결과표 (Tab)", en: "Raid board (Tab)", ja: "レイド結果表 (Tab)" },
+  raidBoardDealt: { ko: "준 피해", en: "Damage", ja: "与ダメージ" },
+  raidBoardBoss: { ko: "루시퍼에게", en: "To Lucifer", ja: "ルシファーへ" },
+  raidBoardAdds: { ko: "기둥·검·몬스터", en: "Pillars/swords/adds", ja: "柱・剣・モンスター" },
+  raidBoardMax: { ko: "최대 한 방", en: "Biggest hit", ja: "最大の一撃" },
+  raidBoardTaken: { ko: "받은 피해", en: "Taken", ja: "被ダメージ" },
+  raidBoardHealed: { ko: "회복", en: "Healed", ja: "回復" },
+  raidBoardMe: { ko: "나", en: "Me", ja: "自分" },
 };

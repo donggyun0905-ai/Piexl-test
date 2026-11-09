@@ -65,6 +65,9 @@ export interface LucPlayerState {
   raidCut?: number;
   /** 날개를 달았음 (하늘 탄막에서 떨어지지 않음) */
   raidWing?: boolean;
+  /** 레이드 결과표 (sim/raidStats): 준 피해 · 루시퍼에게 · 기둥·검·몬스터에게 · 받은 피해 · 회복 · 가장 큰 한 방 · 지난 틱 체력 */
+  raidStat?: { dealt: number; boss: number; adds: number; taken: number; healed: number; max: number };
+  raidHpWas?: number;
   /** 레이드 데스 카운트 · 쓰러진 틱 */
   raidDeaths?: number;
   raidDownAt?: number;

@@ -22,6 +22,7 @@ import { RankOutcome } from "../event/RankResult";
 import { PwResult } from "../event/PwResult";
 import { savePwResult } from "../event/pwRecords";
 import { RaidOverlay } from "../event/RaidOverlay";
+import { RaidBoard } from "../event/RaidBoard";
 
 interface Props {
   room: RoomView;
@@ -215,7 +216,7 @@ export function CoopGame({ room, you, characterId, wire, pw, raid, lang, t, onEx
           if (r.pvp && !watching) savePwResult(r.pvp.mode, pvpResult(r, mySeat).won);
           if (r.pvp && rank && !watching) rank.report(r.pvp.winner ?? -1);
         }}
-        resultExtra={ended && !pw ? <CoopStats run={run} members={members} t={t} /> : null}
+        resultExtra={ended && !pw ? run.raidBoss ? <RaidBoard run={run} names={names} t={t} /> : <CoopStats run={run} members={members} t={t} /> : null}
         afterRun={ended && pw ? <PwResult run={run} me={mySeat} names={names} watching={watching} lang={lang} t={t} onExit={onExit} {...(rank ? { extra: <RankOutcome changes={rank.changes} me={you} t={t} />, onRetry: rank.again, retryLabel: t("rankTitle") } : {})} /> : undefined}
         overlay={pw ? undefined : (ctx, r, alpha, snap) => drawCoopOverlay(ctx, r, alpha, snap, namesRef.current, extras, t)}
         step={(r, input) => {
@@ -228,7 +229,7 @@ export function CoopGame({ room, you, characterId, wire, pw, raid, lang, t, onEx
           else s?.guest.show(r);
         }}
       />
-      {!ended && run.raidBoss && <RaidOverlay run={run} t={t} />}
+      {!ended && run.raidBoss && <RaidOverlay run={run} t={t} names={names} />}
       {!ended && !pw && <CoopParty run={run} members={members} extras={extras} t={t} onSignal={signal} />}
       {!ended && !pw && <CoopWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}
       {!ended && pw && run.pvp && <PwWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}

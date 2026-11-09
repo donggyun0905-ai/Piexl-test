@@ -2,14 +2,17 @@
 import { RAID_LIVES, RAID_ROOM, raidFighting, raidOut, stunWarn, TICK_RATE, type LucCut, type RunState } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 import type { TextKey } from "../i18n";
+import { useBoard } from "./PwBoard";
+import { RaidBoard } from "./RaidBoard";
 
 const CUT_GIF: Record<LucCut, string> = { pillars: "cut_pillars.webp", change: "cut_change.webp", p2: "cut_p2.webp", death: "cut_death.webp" };
 const RESPAWN = 180;
 /** 사슬 방향 (0 위 · 1 오른쪽 · 2 아래 · 3 왼쪽, sim/bossBinds) */
 const ARROWS = ["↑", "→", "↓", "←"];
 
-export function RaidOverlay({ run, t }: { run: RunState; t: (key: TextKey) => string }) {
+export function RaidOverlay({ run, t, names }: { run: RunState; t: (key: TextKey) => string; names?: readonly string[] }) {
   const [, tick] = useState(0);
+  const [board] = useBoard();
   useEffect(() => {
     const id = setInterval(() => tick((n) => n + 1), 100);
     return () => clearInterval(id);
@@ -49,6 +52,7 @@ export function RaidOverlay({ run, t }: { run: RunState; t: (key: TextKey) => st
         {raidOut(p) && <span className="danger">{t("raidOutText")}</span>}
         {(p.raidCut ?? 0) > 0 && <span className="danger">{t("raidCutText")}</span>}
       </div>
+      {board && !f?.cut && <RaidBoard run={run} names={names} t={t} float />}
       {note && !f?.cut && <div className={`raid-note ${p.raidDark ? "dark" : ""}`}>{note}</div>}
       {chain && !f?.cut && (
         <div className="raid-chain" aria-label={t("raidChainText")}>

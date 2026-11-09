@@ -7,6 +7,7 @@ import { lucCutting } from "./lucifer";
 import { allPlayers, eachSeat } from "./party";
 import { RAID_ROOM } from "./raidTypes";
 import { goReward, rewardTick } from "./raidReward";
+import { raidLogHp } from "./raidStats";
 import type { PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
 
@@ -34,6 +35,7 @@ export function raidAfter(s: RunState): void {
   const cut = lucCutting(s);
   eachSeat(s, () => {
     const p = s.player;
+    raidLogHp(p);
     if (cut) p.invulnTicks = Math.max(p.invulnTicks, 2);
     if ((p.raidCut ?? 0) > 0) p.raidCut = p.raidCut! - 1;
     if (p.hp > 0) return;
@@ -45,7 +47,7 @@ export function raidAfter(s: RunState): void {
     }
     if (raidOut(p) || s.tick - p.raidDownAt < R.RESPAWN) return;
     p.raidDownAt = undefined;
-    p.hp = p.stats.maxHp;
+    p.hp = p.raidHpWas = p.stats.maxHp;
     p.x = p.prevX = CX;
     p.y = p.prevY = ROOM_MAX_Y - 30;
     p.invulnTicks = R.INVULN;

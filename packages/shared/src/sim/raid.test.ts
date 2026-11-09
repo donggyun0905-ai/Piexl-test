@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { ENEMIES } from "../content";
 import { allPlayers, eachSeat, useSeat } from "./party";
 import { stepParty } from "./partyRun";
 import { createRaid, RAID_RULES, raidOwnPassives } from "./raid";
@@ -87,6 +88,9 @@ describe("레이드 루시퍼 1페이즈", () => {
     }
     expect(allPlayers(a).map((p) => [Math.round(p.x), Math.round(p.y), Math.round(p.hp)])).toEqual(allPlayers(b).map((p) => [Math.round(p.x), Math.round(p.y), Math.round(p.hp)]));
     expect(a.raidBoss?.fight?.atkN).toBeGreaterThan(3);
+    // 결과표: AI가 준 피해·받은 피해가 기록됨 · 기둥은 보스라 처형·즉사가 걸리지 않음
+    expect(allPlayers(a).some((p) => (p.raidStat?.dealt ?? 0) > 0)).toBe(true);
+    expect(ENEMIES.lucpillar.boss && ENEMIES.lucsword.boss).toBe(true);
   });
 
   it("1분마다 석화의 빔: 보호막 10000 (겹치지 않음)", () => {
