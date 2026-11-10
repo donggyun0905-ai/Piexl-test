@@ -13,9 +13,9 @@ export const CHARACTER_TEXT_JOKER = {
   joker: { ko: "조커", en: "Joker", ja: "ジョーカー" },
   jokerCard: { ko: "튕기는 카드", en: "Bouncing Cards", ja: "跳ねるカード" },
   jokerDesc: {
-    ko: "실베르의 카드 투척자 · 누르면 조준한 쪽으로 카드 한 장을 던짐 · 피해는 공격력과 상관없는 고정 4 · 카드는 벽에 끝없이 튕기고 튕길 때마다 피해 +4 · 판 위 카드가 15장을 넘으면 가장 먼저 던진 카드가 사라짐 · 투사체 속도가 빠를수록 빨리 튕겨 세짐 · 무기 셋(트럼프 카드 · 사신의 낫 · 장난감 총) · 전용 패시브 15개는 모두 새 기술과 능력치를 줌",
-    en: "Silber's card thrower · press to throw a card toward your aim · fixed 4 damage, unaffected by attack · cards bounce off walls forever, +4 damage per bounce · past 15 cards on the field, the oldest one vanishes · faster projectiles bounce sooner and hit harder · three weapons (Playing Cards · Reaper's Scythe · Toy Gun) · all 15 exclusive passives unlock a new skill and grant stats",
-    ja: "シルベルのカード投げ・押すと狙った方へカードを1枚投げる・ダメージは攻撃力と関係ない固定4・カードは壁で無限に跳ね、跳ねるたびにダメージ+4・場のカードが15枚を超えると最初に投げたカードが消える・弾速が速いほど早く跳ねて強くなる・武器3つ（トランプ・死神の鎌・おもちゃの銃）・専用パッシブ15個はすべて新しい技と能力値をくれる",
+    ko: "실베르의 카드 투척자 · 누르면 조준한 쪽으로 카드 한 장을 던짐 · 피해는 공격력과 상관없는 고정 4 · 카드는 벽에 끝없이 튕기고 튕길 때마다 피해 +4 (15번까지 · 다 쌓인 카드는 금색) · 판 위 카드가 15장을 넘으면 가장 먼저 던진 카드가 사라짐 · 투사체 속도가 빠를수록 빨리 튕겨 세짐 · 무기 셋(트럼프 카드 · 사신의 낫 · 장난감 총) · 전용 패시브 15개는 모두 새 기술과 능력치를 줌",
+    en: "Silber's card thrower · press to throw a card toward your aim · fixed 4 damage, unaffected by attack · cards bounce off walls forever, +4 damage per bounce (up to 15 bounces · maxed cards glow gold) · past 15 cards on the field, the oldest one vanishes · faster projectiles bounce sooner and hit harder · three weapons (Playing Cards · Reaper's Scythe · Toy Gun) · all 15 exclusive passives unlock a new skill and grant stats",
+    ja: "シルベルのカード投げ・押すと狙った方へカードを1枚投げる・ダメージは攻撃力と関係ない固定4・カードは壁で無限に跳ね、跳ねるたびにダメージ+4（15回まで・最大のカードは金色）・場のカードが15枚を超えると最初に投げたカードが消える・弾速が速いほど早く跳ねて強くなる・武器3つ（トランプ・死神の鎌・おもちゃの銃）・専用パッシブ15個はすべて新しい技と能力値をくれる",
   },
   jkWeaponCards: { ko: "트럼프 카드", en: "Playing Cards", ja: "トランプ" },
   bfJkCards: { ko: "판 위 카드 {n}/{m} · 가장 센 카드 {d}", en: "Cards on field {n}/{m} · strongest {d}", ja: "場のカード{n}/{m}・最強{d}" },

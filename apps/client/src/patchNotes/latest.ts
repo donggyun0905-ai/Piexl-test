@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.9",
+    date: "2026-11-10",
+    items: {
+      ko: ["조커: 튕길 때마다 피해 +4는 15번까지 (트럼프 카드·사신의 낫 최대 64 · 장난감 총 49 · 날 선 모서리면 94) · 다 쌓인 카드는 금색으로 빛남"],
+      en: ["Joker: the +4 damage per bounce now stops at 15 bounces (Playing Cards/Reaper's Scythe max 64 · Toy Gun 49 · 94 with Sharpened Edge) · maxed cards glow gold"],
+      ja: ["ジョーカー: 跳ねるたびのダメージ+4は15回まで（トランプ・死神の鎌は最大64・おもちゃの銃49・研いだ角なら94）・最大になったカードは金色に光る"],
+    },
+  },
+  {
     version: "0.52.8",
     date: "2026-11-10",
     items: {

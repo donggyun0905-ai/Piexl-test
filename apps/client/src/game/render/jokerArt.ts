@@ -1,6 +1,6 @@
 // 조커 그리기: 판 위를 튕겨 다니는 카드(트럼프 카드·사신의 낫·장난감 총 탄) · 머리 위 카드뽑기(뒷면 셋이 섞이다 한 장이 뒤집힘) · 효과 중 카드
 // 카드 그림은 사용자 그림 sprites/jokerCards.png (60×90 여섯 장: 뒷면 달·붉은 일식·세계수 → 앞면 달·붉은 일식·세계수). 효과는 render/jokerFx
-import { cardDamage, JOKER_DRAW, type JokerCard, type RunState } from "@pixel-rogue/shared";
+import { cardDamage, cardMaxed, JOKER_DRAW, type JokerCard, type RunState } from "@pixel-rogue/shared";
 import { additive, alpha, glow, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
 import { img } from "./lunaticFx";
@@ -31,7 +31,9 @@ export function drawDrawCard(ctx: Ctx, x: number, y: number, h: number, card: nu
 function card(ctx: Ctx, c: JokerCard, x: number, y: number, tick: number, power: number): void {
   const spin = (tick + c.id * 7) * 0.25;
   const hot = Math.min(1, power / 60);
-  additive(ctx, () => glow(ctx, x, y, c.r * 2.2 + hot * 6, c.ace ? JK.gold : c.w === 1 ? JK.neon : JK.edge, 0.25 + hot * 0.45, hot * 0.4));
+  // 튕긴 횟수 상한에 닿은 카드는 금색으로 빛남
+  const maxed = cardMaxed(c);
+  additive(ctx, () => glow(ctx, x, y, c.r * 2.2 + hot * 6, maxed || c.ace ? JK.gold : c.w === 1 ? JK.neon : JK.edge, maxed ? 0.75 : 0.25 + hot * 0.45, hot * 0.4));
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(spin);
@@ -61,7 +63,7 @@ function card(ctx: Ctx, c: JokerCard, x: number, y: number, tick: number, power:
     // 트럼프 카드 (에이스는 금테)
     const w = c.r * 1.3;
     const h = c.r * 1.9;
-    ctx.fillStyle = c.ace ? JK.gold : JK.edge;
+    ctx.fillStyle = c.ace || maxed ? JK.gold : JK.edge;
     ctx.fillRect(-w, -h, w * 2, h * 2);
     ctx.fillStyle = JK.paper;
     ctx.fillRect(-w + 1, -h + 1, w * 2 - 2, h * 2 - 2);

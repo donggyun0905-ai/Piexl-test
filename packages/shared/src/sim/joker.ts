@@ -21,8 +21,10 @@ const styleOf = (p: P) => JOKER_STYLE[(p.weaponId in JOKER_STYLE ? p.weaponId : 
 export const cardCap = (p: P) => J.max + (hasPerk(p, "jkSleeve") ? K.jkSleeve.more : 0);
 /** 튕길 때 느는 피해 */
 const gainOf = (p: P) => styleOf(p).gain + (hasPerk(p, "jkEdge") ? K.jkEdge.more : 0);
-/** 카드 한 장의 지금 피해 (처음 피해 + 튕긴 횟수 × 느는 양, 붉은 일식이면 처음 피해가 커짐) */
-export const cardDamage = (p: P, c: JokerCard) => cardBase(p, c.b) + gainOf(p) * c.n;
+/** 피해가 더는 늘지 않는 카드인지 (튕긴 횟수 상한에 닿음) */
+export const cardMaxed = (c: JokerCard) => c.n >= J.maxBounce;
+/** 카드 한 장의 지금 피해 (처음 피해 + 튕긴 횟수(상한까지) × 느는 양, 붉은 일식이면 처음 피해가 커짐) */
+export const cardDamage = (p: P, c: JokerCard) => cardBase(p, c.b) + gainOf(p) * Math.min(c.n, J.maxBounce);
 
 /** 방이 바뀌면 카드를 모두 거둠 */
 const roomKey = (s: RunState) => s.floor * 1000 + s.roomId;

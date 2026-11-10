@@ -154,7 +154,7 @@ export { bzRings, isBlueFlame } from "./blueFlame";
 export { isLunatic } from "./lunatic";
 export { comboTier, isIncision } from "./incision";
 export { isCrusader } from "./crusader";
-export { isJoker, cardCap, cardDamage } from "./joker";
+export { isJoker, cardCap, cardDamage, cardMaxed } from "./joker";
 export { moonHero, eclipseOn } from "./jokerDraw";
 export type { JokerCard } from "./jkTypes";
 export type { HfCrack } from "./hfTypes";

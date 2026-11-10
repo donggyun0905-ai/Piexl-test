@@ -42,8 +42,16 @@ describe("조커", () => {
     run(s, 600, EMPTY_INPUT);
     const c = cards(s)[0]!;
     expect(c.n).toBeGreaterThanOrEqual(2);
-    expect(cardDamage(s.player, c)).toBe(J.base + 4 * c.n);
+    expect(cardDamage(s.player, c)).toBe(J.base + 4 * Math.min(c.n, J.maxBounce));
     expect(cards(s).length).toBe(1);
+  });
+
+  it("튕길 때 느는 피해는 15번까지 (그 뒤로는 그대로)", () => {
+    const s = jk(null);
+    stepSim(s, FIRE);
+    const c = cards(s)[0]!;
+    c.n = J.maxBounce + 10;
+    expect(cardDamage(s.player, c)).toBe(J.base + 4 * J.maxBounce);
   });
 
   it("판 위 카드가 15장을 넘으면 가장 먼저 던진 카드가 사라짐 (마술사의 소매면 더 많이)", () => {
@@ -85,7 +93,7 @@ describe("조커", () => {
     stepSim(b, FIRE);
     run(b, 600, EMPTY_INPUT);
     const c = cards(b)[0]!;
-    expect(cardDamage(b.player, c)).toBe(J.base + 3 * c.n);
+    expect(cardDamage(b.player, c)).toBe(J.base + 3 * Math.min(c.n, J.maxBounce));
   });
 
   it("실베르 성장: 패시브를 가질 때마다 능력치가 더 오름", () => {
