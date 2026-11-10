@@ -42,6 +42,8 @@ const R: Record<string, number> = {
   shadowing: 1,
   /** 인형술사 */
   puppeteer: 1,
+  /** 래빗 */
+  rabbit: 1,
   /** 의사 */
   doctor: 1.25,
   /** 떠돌이 */

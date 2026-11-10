@@ -2,6 +2,7 @@
 // 신경 가속: 맞힐 때마다 게이지가 차고, 가득 차면 다음 대시에 켜짐 → 둘레의 시간이 느려지고(적·적 탄) 내 공격이 빨라지며 잔상이 남음
 // 수치는 weaponsPunk.PUNK, 아이템은 itemsPunk
 import { blastSlowed } from "./blastMag";
+import { rabbitSlowed } from "./rabbit";
 import { restoreShots, slowShots } from "./slowShots";
 import { remnantSlowed } from "./remnant";
 import { PW_PASSIVE } from "../paewangPassive";
@@ -142,7 +143,7 @@ export function punkMoveMul(p: PlayerState): number {
 
 /** 신경 가속 중(·잔영 회피 슬로우모션 중): 적이 이번 틱을 쉬는지 (일반 적은 네 틱 중 세 틱, 보스는 두 틱 중 한 틱 쉼) */
 export function timeSlowed(s: RunState, boss: boolean): boolean {
-  if (remnantSlowed(s, boss) || blastSlowed(s, boss)) return true;
+  if (remnantSlowed(s, boss) || blastSlowed(s, boss) || rabbitSlowed(s, boss)) return true;
   if (!punkAccel(s.player)) return false;
   return s.tick % (boss ? P.bossEvery : P.slowEvery) !== 0;
 }

@@ -35,6 +35,7 @@ import { drawCrusaderAura } from "./crusaderBody";
 import { drawJoker } from "./jokerArt";
 import { drawShadowingAir, drawShadowingGround } from "./shadowingArt";
 import { drawPuppetAir, drawPuppetGround } from "./puppetArt";
+import { drawRabbitGround } from "./rabbitArt";
 import { drawFactionBody } from "./factionFx";
 import { drawFallenWings } from "./fallenWings";
 
@@ -100,6 +101,7 @@ export function drawForgottenBack(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawPungryuBack(ctx, s, alpha, snap);
   drawShadowingGround(ctx, s, alpha, snap);
   drawPuppetGround(ctx, s, alpha, snap);
+  drawRabbitGround(ctx, s, alpha, snap);
   drawLeoBack(ctx, s, alpha, snap);
   drawOnyxBack(ctx, s, alpha, snap);
   drawFenrirBack(ctx, s, alpha, snap);

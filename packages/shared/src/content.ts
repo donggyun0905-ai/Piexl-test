@@ -56,8 +56,8 @@ import { PILGRIM_WEAPONS, type CurioStyle } from "./weaponsPilgrim";
 import { FALLEN_KING_WEAPONS } from "./weaponsFallenKing";
 import { LUX_WEAPONS } from "./weaponsLux";
 
-/** 공격 방식 (laser·medic 누르는 동안 틱 피해 · combo 누를 때마다 다음 기술) */
-export type WeaponKind = "melee" | "ranged" | "laser" | "orbit" | "combo" | "medic" | "gun" | "beast" | "shade" | "chrono" | "summon" | "chakram" | "spear" | "dragon" | "cross" | "star" | "quack" | "tag" | "titan" | "club" | "quill" | "gaia" | "morph" | "talon" | "formation" | "earthwood" | "pact" | "pest" | "scythe" | "maw" | "ram" | "needle" | "automaton" | "ride" | "bomb" | "repulse" | "cyber" | "snipe" | "light" | "phantom" | "katana" | "thread" | "pick" | "fate" | "thunder" | "curio" | "zwei" | "radiant" | "hoard" | "script" | "lion" | "gem" | "fang" | "solar" | "anchor" | "whale" | "shark" | "fleet" | "grapple" | "riptide" | "muse" | "flowblade" | "judgment" | "causality" | "bastion" | "nightmare" | "skybow" | "sanctum" | "armory" | "blast" | "nail" | "shears" | "hellArm" | "silverGun" | "blueFire" | "moonRapier" | "twinAxe" | "greatCross" | "jokerCard" | "inkBrush" | "puppetHand";
+import type { WeaponKind } from "./weaponKind";
+export type { WeaponKind };
 export type { OrbitKind } from "./weaponsElemental";
 export type { LaserGear } from "./weaponsEngineer";
 export type { MedicGear } from "./weaponsDoctor";

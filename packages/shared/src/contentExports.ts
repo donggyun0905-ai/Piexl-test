@@ -55,6 +55,8 @@ export { SHADOW_INK } from "./weaponsShadowing";
 export { SHADOWING_PERKS } from "./itemsShadowing";
 export { PUPPET_HAND } from "./weaponsPuppet";
 export { PP_DOLLS, PUPPET_PERKS } from "./itemsPuppet";
+export { RABBIT_HAMMER, RABBIT_ULT } from "./weaponsRabbit";
+export { RABBIT_PERKS } from "./itemsRabbit";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";

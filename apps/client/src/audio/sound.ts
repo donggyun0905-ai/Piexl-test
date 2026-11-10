@@ -8,6 +8,7 @@ import { GYM_SOUNDS, type GymSfx } from "./sfxGym";
 import { TRIAL_SOUNDS, type TrialSfx } from "./trialSound";
 import { ALTAR_SOUNDS, type AltarSfx } from "./altarSound";
 import { VAULT_SOUNDS, type VaultSfx } from "./vaultSound";
+import { RABBIT_SOUNDS, type RabbitSfx } from "./rabbitSounds";
 
 export type Sfx =
   | "swing"
@@ -62,7 +63,8 @@ export type Sfx =
   | GymSfx
   | TrialSfx
   | AltarSfx
-  | VaultSfx;
+  | VaultSfx
+  | RabbitSfx;
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;
@@ -171,6 +173,7 @@ const SOUNDS: Record<Sfx, () => void> = {
   ...TRIAL_SOUNDS,
   ...ALTAR_SOUNDS,
   ...VAULT_SOUNDS,
+  ...RABBIT_SOUNDS,
   blink: () => {
     tone({ type: "sine", from: 900, to: 120, dur: 0.12, vol: 0.12 });
     noise(0.1, 0.2, 1800);

@@ -1,4 +1,4 @@
-// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전 · 크루세이더) + 실베르 조커·쉐도잉·인형술사 — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
+// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전 · 크루세이더) + 실베르 조커·쉐도잉·인형술사·래빗 — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
 import { kit, SEC, sk } from "./pwKitKit";
 import type { PwKits } from "./pwSkillTypes";
 
@@ -77,5 +77,12 @@ export const PW_KITS_4: PwKits = {
     sk("ppHand", "line", 9, "#e8c890", { range: 170, hit: { dmg: 1.4, stun: 1 * SEC } }),
     sk("ppHand", "dash", 8, "#ff8a9a", { range: 110, speed: 10, hit: { dmg: 1 } }),
     sk("ppHand", "point", 60, "#c83a4a", { range: 160, radius: 100, delay: 30, fx: "pillar", hit: { dmg: 3, push: 12 } }),
+  ),
+  // 실베르 래빗: 망치 내리찍기 · 땅울림 파동 · 깡총 뛰기 · 초거대 망치
+  rabbit: kit(1,
+    sk("rbHammer", "point", 4, "#7dff4a", { range: 60, radius: 30, delay: 6, fx: "meteor", hit: { dmg: 1.3, push: 6 } }),
+    sk("rbHammer", "line", 9, "#a8ff6a", { range: 190, hit: { dmg: 1.4, stun: 1 * SEC } }),
+    sk("rbHammer", "dash", 8, "#ff8ac8", { range: 110, speed: 10, hit: { dmg: 1 } }),
+    sk("rbHammer", "point", 60, "#ff4aa8", { range: 160, radius: 110, delay: 30, fx: "pillar", hit: { dmg: 3, push: 16 } }),
   ),
 };

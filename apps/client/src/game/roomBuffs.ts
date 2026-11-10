@@ -13,6 +13,7 @@ import { michaelaBuffs } from "./michaelaBuffs";
 import { blastBuffs } from "./blastBuffs";
 import { jokerBuffs } from "./jokerBuffs";
 import { puppetBuffs, shadowingBuffs } from "./shadowingBuffs";
+import { rabbitBuffs } from "./rabbitBuffs";
 
 export interface RoomBuff {
   key: string;
@@ -70,6 +71,7 @@ export function roomBuffs(p: PlayerState, floor: number, lang: Lang, t: (k: Text
   out.push(...jokerBuffs(p, t));
   out.push(...shadowingBuffs(p, t));
   out.push(...puppetBuffs(p, t));
+  out.push(...rabbitBuffs(p, t));
   const stats = statSummary(p, t);
   if (stats) out.push({ key: "stats", label: t("bfRoomStats"), tip: stats.text, bad: stats.bad });
   (p.altar?.got ?? []).forEach((g, i) => {

@@ -97,6 +97,7 @@ export const ACCENT: Record<string, string> = {
   joker: "#c86bff",
   shadowing: "#9ab8ff",
   puppeteer: "#ff6a7a",
+  rabbit: "#8aff5a",
   collector: "#5a8aff",
   mystic: "#ff6a8a",
   engineer: "#5ad0f0",

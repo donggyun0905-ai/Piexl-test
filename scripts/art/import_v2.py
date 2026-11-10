@@ -15,7 +15,7 @@ DARK = 42
 # 어두운 옷 캐릭터: 배경(완전한 검정)만 지우게 기준을 낮춤
 DARK_BY = {"plague": 12}
 # 검은 머리·옷이 많은 캐릭터: 바깥 테두리에서 이어진 거의 완전한 검정(밝기 FLOOD 이하)만 배경으로 지움 (몸 안 검은 머리가 지워지지 않게)
-FLOOD_BG = {"levia", "tail", "madQueen", "hook", "orca", "wave", "miryu", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "blast", "nailer", "scissors", "hellfist", "hellfistDemon", "silverBullet", "blueFlame", "lunatic", "incision", "crusader", "joker", "shadowing", "puppeteer", "thorken", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "pungryu", "duck", "fallenKing", "lux", "lux2", "lux3", "lux4", "wanderer", "eater", "slayer", "slayer_rage", "summoner", "mukin", "plague", "ren", "tracker", "remnant"}
+FLOOD_BG = {"levia", "tail", "madQueen", "hook", "orca", "wave", "miryu", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "blast", "nailer", "scissors", "hellfist", "hellfistDemon", "silverBullet", "blueFlame", "lunatic", "incision", "crusader", "joker", "shadowing", "puppeteer", "rabbit", "thorken", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "pungryu", "duck", "fallenKing", "lux", "lux2", "lux3", "lux4", "wanderer", "eater", "slayer", "slayer_rage", "summoner", "mukin", "plague", "ren", "tracker", "remnant"}
 FLOOD = 8
 PURE = 3
 POCKET = 300

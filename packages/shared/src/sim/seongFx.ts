@@ -18,6 +18,7 @@ import type { CrusaderFx } from "./crTypes";
 import type { JokerFx } from "./jkTypes";
 import type { ShadowingFx } from "./sdTypes";
 import type { PuppetFx } from "./ppTypes";
+import type { RabbitFx } from "./rbTypes";
 import type { FactionFx } from "./factionTypes";
 
-export type SeongFx = BeatriceFx | IanFx | GabrielFx | SerenaFx | RafaelFx | YurielFx | MichaelaFx | DawnFx | NailerFx | ScissorsFx | HellfistFx | SilverBulletFx | BlueFlameFx | LunaticFx | IncisionFx | CrusaderFx | JokerFx | ShadowingFx | PuppetFx | FactionFx;
+export type SeongFx = BeatriceFx | IanFx | GabrielFx | SerenaFx | RafaelFx | YurielFx | MichaelaFx | DawnFx | NailerFx | ScissorsFx | HellfistFx | SilverBulletFx | BlueFlameFx | LunaticFx | IncisionFx | CrusaderFx | JokerFx | ShadowingFx | PuppetFx | RabbitFx | FactionFx;

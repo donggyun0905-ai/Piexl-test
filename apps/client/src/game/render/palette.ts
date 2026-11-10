@@ -92,6 +92,7 @@ export const C = {
   joker: "#c86bff",
   shadowing: "#7a9aff",
   puppeteer: "#e8304a",
+  rabbit: "#ff7ac0",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",
