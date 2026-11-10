@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ENEMIES } from "../content";
+import { ROOM_CY as CY } from "../constants";
 import { allPlayers, eachSeat, useSeat } from "./party";
 import { stepParty } from "./partyRun";
 import { createRaid, RAID_RULES, raidGymPts, raidOwnPassives } from "./raid";
@@ -70,6 +71,8 @@ describe("레이드 준비", () => {
     expect(s.roomCols).toBe(RAID_RULES.BOSS_COLS);
     stepParty(s, [EMPTY_INPUT]);
     eachSeat(s, () => expect(s.player.hp).toBeGreaterThan(0));
+    // 모두 아래쪽 가운데에 새로 태어남 (쓰러졌던 사람도 방 안에서 움직일 수 있게)
+    eachSeat(s, () => expect(s.player.y).toBeGreaterThan(CY));
   });
 });
 
@@ -211,11 +214,16 @@ describe("레이드 루시퍼 2페이즈", () => {
     for (let t = 0; t < 700; t++) stepParty(s, [EMPTY_INPUT]);
     expect(s.raidBoss?.fight?.p2).toBe("sky");
     expect(s.player.hp).toBeGreaterThan(0);
+    // 바닥이 꺼지면 효과·장판·돌기둥·다른 적이 모두 사라짐
+    expect(s.enemies.every((e) => e.kind === "lucifer")).toBe(true);
+    expect(s.raidBoss?.fight?.covers ?? []).toHaveLength(0);
     boss.hp = 0;
     for (let t = 0; t < 200 && s.roomId !== RAID_ROOM.reward; t++) stepParty(s, [EMPTY_INPUT]);
     // 보상 방: 모두 살아나고 가운데 상자 · 부수면 열리고 잠시 뒤 승리
     expect(s.roomId).toBe(RAID_ROOM.reward);
     eachSeat(s, () => expect(s.player.hp).toBeGreaterThan(0));
+    // 모두 아래쪽 가운데에 새로 태어남 (쓰러졌던 사람도 방 안에서 움직일 수 있게)
+    eachSeat(s, () => expect(s.player.y).toBeGreaterThan(CY));
     const chest = s.enemies.find((e) => e.kind === "lucchest")!;
     expect(chest).toBeDefined();
     chest.hp = 0;

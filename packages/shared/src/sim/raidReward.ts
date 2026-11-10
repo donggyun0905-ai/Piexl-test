@@ -1,8 +1,8 @@
 // 레이드 보상 방 (루시퍼를 쓰러뜨린 뒤): 모두 살아나 화려한 방으로 · 가운데 큰 상자를 때려서 열면 모두에게 "축하합니다!" (보상은 아직 준비 중)
 // 상자가 열리고 잠시 뒤 레이드 승리로 끝남
-import { ROOM_CX as CX, ROOM_CY as CY } from "../constants";
+import { ROOM_CX as CX, ROOM_CY as CY, ROOM_MAX_Y } from "../constants";
 import { recalcStats } from "./items";
-import { lucFight } from "./lucKit";
+import { lucClearField, lucFight } from "./lucKit";
 import { eachSeat } from "./party";
 import { RAID_ROOM } from "./raidTypes";
 import { warpRoom } from "./rooms";
@@ -37,12 +37,18 @@ export function goReward(s: RunState): void {
     p.hp = p.stats.maxHp;
   });
   // 싸움 효과·장판·날개·돌기둥을 모두 치움 (보상 방에 남지 않게)
-  s.hazards = [];
-  s.projectiles = [];
-  s.effects = [];
-  const f = lucFight(s);
-  Object.assign(f, { waves: [], mines: [], crowns: [], xs: [], orbs: [], vines: [], wings: undefined, dark: undefined, dome: undefined, safe: undefined, slashAt: undefined, covers: undefined, p2: undefined });
+  lucClearField(s);
+  lucFight(s).p2 = undefined;
   warpRoom(s, RAID_ROOM.reward);
+  // 모두 아래쪽 가운데에 새로 태어남 (쓰러졌던 사람이 큰 방 자리 그대로 벽 구석에 끼지 않게, 2026-11-10 사용자 요청)
+  eachSeat(s, (i) => {
+    const p = s.player;
+    p.x = p.prevX = CX + (i - 2) * 26;
+    p.y = p.prevY = ROOM_MAX_Y - 30;
+    p.dashTicks = 0;
+    p.invulnTicks = 60;
+    addEffect(s, { kind: "burst", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 20, maxTicks: 20 });
+  });
 }
 
 /** 보상 방 틱: 상자가 부서지면 열림 → 잠시 뒤 승리 */

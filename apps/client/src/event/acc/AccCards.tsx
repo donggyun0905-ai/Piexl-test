@@ -52,9 +52,7 @@ function AccCards({ t, cards, onClose }: { t: T; cards: AccItem[]; onClose: () =
             <button key={c.uid} type="button" className={`acc-card${open[i] ? " open" : ""} s${c.star}${c.legend !== undefined ? " leg" : ""}`} style={{ animationDelay: `${i * 0.06}s` }} onClick={() => flip(i)}>
               <span className="acc-card-in">
                 <span className="acc-card-back">
-                  <i>
-                    <b>✦</b>
-                  </i>
+                  <i />
                 </span>
                 <span className="acc-card-face">
                   <i className="acc-card-art" style={iconStyle(c)} />

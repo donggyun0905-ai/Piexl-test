@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.1",
+    date: "2026-11-10",
+    items: {
+      ko: [
+        "레이드 보상 방: 쓰러졌다가 동료가 깨 줘서 넘어온 사람도 모두 아래쪽 가운데에 새로 태어나 움직일 수 있게 (벽 구석에 끼던 문제 고침)",
+        "레이드 2페이즈: 바닥이 꺼지면 남아 있던 효과·장판·탄·돌기둥·기둥·몬스터·방 꾸밈을 모두 지움 (하늘에는 루시퍼와 탄막만)",
+      ],
+      en: [
+        "Raid reward room: players who were down when allies cleared the raid now respawn at the bottom center and can move (no more getting stuck in a wall corner)",
+        "Raid phase 2: when the floor collapses, all leftover effects, zones, shots, stone columns, pillars, monsters and room decorations are cleared (only Lucifer and his barrage remain in the sky)",
+      ],
+      ja: [
+        "レイド報酬部屋: 倒れていて仲間がクリアしてくれた人も、全員下の中央に復活して動けるように（壁の隅に挟まる問題を修正）",
+        "レイドフェーズ2: 床が崩れると残っていたエフェクト・床・弾・石柱・柱・モンスター・部屋の飾りをすべて消去（空にはルシファーと弾幕だけ）",
+      ],
+    },
+  },
+  {
     version: "0.52.0",
     date: "2026-11-10",
     items: {

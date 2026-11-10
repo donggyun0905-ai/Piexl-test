@@ -4,7 +4,7 @@
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { chainPlayer } from "./bossBinds";
 import { addShape } from "./hazards";
-import { lucLines, lucRng, lucSpot, lucTargets, near } from "./lucKit";
+import { lucClearField, lucLines, lucRng, lucSpot, lucTargets, near } from "./lucKit";
 import { spawnSwords, swordTick } from "./lucSwords";
 import type { LucFight } from "./lucTypes";
 import { allPlayers, eachSeat } from "./party";
@@ -100,6 +100,9 @@ function wingTick(s: RunState, f: LucFight): void {
     addEffect(s, { kind: "lucFx", from: "wingOn", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 30, maxTicks: 30, foe: true });
   });
   if (s.tick < (f.fallAt ?? 0)) return;
+  // 바닥이 꺼짐: 남은 효과·장판·탄·돌기둥·기둥·졸개를 모두 치움 (2026-11-10 사용자 요청)
+  lucClearField(s);
+  s.enemies = s.enemies.filter((e) => e.kind === "lucifer");
   f.p2 = "sky";
   f.wings = [];
   f.spin = 0;

@@ -15,7 +15,8 @@ const inBoss = (s: RunState) => !!s.raidBoss && s.roomId === RAID_ROOM.boss;
 
 /** 바닥 꾸밈 (방 바탕 위 · 적·사람보다 아래) */
 export function drawLucArena(ctx: Ctx, s: RunState, snap: Snap): void {
-  if (!inBoss(s)) return;
+  // 바닥이 꺼진 하늘에서는 꾸밈(화로·깃발·기둥·잿가루·돌기둥)을 그리지 않음
+  if (!inBoss(s) || s.raidBoss?.fight?.p2 === "sky") return;
   const t = s.tick;
   const p2 = s.raidBoss?.fight?.phase === 2;
   const W = ROOM_MAX_X - ROOM_MIN_X;
@@ -153,7 +154,7 @@ function drawCoverBase(ctx: Ctx, s: RunState, snap: Snap): void {
 
 /** 돌기둥 몸 (사람·적 위): 뒤에 사람이 있으면 흐리게 · 금 간 정도 · 남은 횟수 칸 */
 export function drawCoverTop(ctx: Ctx, s: RunState, snap: Snap): void {
-  if (!inBoss(s)) return;
+  if (!inBoss(s) || s.raidBoss?.fight?.p2 === "sky") return;
   const R = COVER_RADIUS();
   const max = COVER_HITS();
   const players = allPlayers(s);

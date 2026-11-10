@@ -114,3 +114,11 @@ export function lucPose(s: RunState, f: LucFight, pose: number, ticks = 40): voi
   f.pose = pose;
   f.poseEnd = s.tick + ticks;
 }
+
+/** 싸움 효과·장판·탄·돌기둥을 모두 치움 (바닥이 꺼질 때 · 보상 방으로 갈 때) */
+export function lucClearField(s: RunState): void {
+  s.hazards = [];
+  s.projectiles = [];
+  s.effects = [];
+  Object.assign(lucFight(s), { waves: [], mines: [], crowns: [], xs: [], orbs: [], vines: [], wings: undefined, dark: undefined, dome: undefined, safe: undefined, slashAt: undefined, covers: [] });
+}
