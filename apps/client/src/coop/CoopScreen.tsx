@@ -123,11 +123,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
       setError(t("errOffline"));
     }
   };
-  const leave = () => {
-    setConn(null);
-    setRoom(null);
-    setBusy(false);
-  };
+  const leave = () => (setConn(null), setRoom(null), setBusy(false));
   const hostPid = room?.hostPid ?? "";
   const isHost = !!you && hostPid === you;
   const seatPids = pwSeatPids(room);
@@ -201,6 +197,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
   }, [initialCode, askName]);
 
   const serverNow = now + offset;
+  const title = pwStart || rank ? "paewang" : raid ? "raidEvent" : "coop";
   const inGame = !!room && room.phase !== "lobby" && serverNow >= room.startAt;
   useRankDraft(!!rank && isHost && room?.phase === "playing" && !inGame, pw, () => conn?.send({ t: "draftdone" }));
   // 판이 끝나 대기실로 돌아오면 지난 판 메시지는 버림
@@ -266,7 +263,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
         }}
         onStart={() => pw.canStart && conn?.send({ t: "start" })}
         onChat={(text) => conn?.send({ t: "chat", text })}
-        onLeave={rank ? onExit : leave}
+        onLeave={rank ? onExit : leave} title={title}
         badge={(pid) => {
           // 방장과 나 사이의 직접 연결 상태 (방장 화면에서는 손님마다)
           const peer = isHost ? pid : pid === hostPid ? pid : "";
@@ -290,7 +287,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
       busy={busy}
       error={error}
       note={pwStart ? "pwMultiDesc" : raid ? "raidNote" : "coopNote"}
-      quickDesc={raid ? "raidQuickDesc" : "coopQuickDesc"}
+      quickDesc={raid ? "raidQuickDesc" : "coopQuickDesc"} title={title}
       onQuick={pwStart ? undefined : () => void quick()}
       onCreate={() => void create()}
       onJoin={(code) => connect(code)}

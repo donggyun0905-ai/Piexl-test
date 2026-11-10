@@ -2,6 +2,7 @@
 import { allPlayers, isAlive, type RunState } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 import type { TextKey } from "../i18n";
+import { TdPortrait } from "../td/TdScreen";
 import { seatColor, SIGNALS, type CoopExtras } from "./extras";
 
 export interface Member {
@@ -36,11 +37,12 @@ export function CoopParty({ run, members, extras, t, onSignal }: Props) {
           const ms = m ? extras.rtt.get(m.pid) : undefined;
           const tag = m && !m.connected ? t("coopOffline") : !isAlive(p) ? t("coopDownTag") : ms !== undefined ? `${Math.round(ms)}ms` : "";
           return (
-            <li key={i} className={`${i === me ? "me" : ""} ${isAlive(p) ? "" : "down"}`}>
-              <span className="dot" style={{ background: seatColor(i) }} />
+            <li key={i} className={`${i === me ? "me" : ""} ${isAlive(p) ? "" : "down"}`} style={{ borderLeftColor: seatColor(i) }}>
+              <TdPortrait id={p.characterId} size={22} />
               <span className="name">{m?.name ?? "?"}</span>
-              <span className="bar">
+              <span className={`bar${ratio < 0.3 ? " low" : ""}`}>
                 <span style={{ width: `${ratio * 100}%` }} />
+                <b>{Math.ceil(Math.max(0, p.hp))}</b>
               </span>
               <span className={`tag ${ms !== undefined && ms > 200 ? "slow" : ""}`}>{tag}</span>
             </li>

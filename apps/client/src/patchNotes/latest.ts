@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.3",
+    date: "2026-11-10",
+    items: {
+      ko: [
+        "같이 하기·협동 화면 새 단장: 입장 화면에 제목과 캐릭터 그림 카드 · 대기실은 위에 제목·방 코드, 사람마다 움직이는 캐릭터 그림 자리 카드(빈 자리를 누르면 초대), 진영 탭이 있는 그림 캐릭터 고르기, 아래 고정된 나가기·시작 줄",
+        "협동 게임 중 파티 창: 캐릭터 얼굴 · 자리 색 줄 · 체력 숫자가 보이는 둥근 체력 막대 · 결과 표도 다듬음",
+      ],
+      en: [
+        "Play Together / Co-op screens redesigned: entry screen with a title and character art cards · the room now shows the title and room code on top, a seat card with an animated character for each player (tap an empty seat to invite), a character picker with faction tabs and art, and a fixed Leave/Start bar at the bottom",
+        "Co-op party panel in game: character faces, seat color stripes and rounded HP bars with numbers · the results table was polished too",
+      ],
+      ja: [
+        "みんなで遊ぶ・協力プレイの画面を一新: 入場画面にタイトルとキャラ絵カード · 待機室は上にタイトル・部屋コード、プレイヤーごとに動くキャラ絵の席カード（空き席を押すと招待）、陣営タブ付きの絵で選ぶキャラ選択、下に固定の退出・開始バー",
+        "協力プレイ中のパーティ欄: キャラの顔・席の色の帯・数字つきの丸い体力バー · 結果表も整えました",
+      ],
+    },
+  },
+  {
     version: "0.52.2",
     date: "2026-11-10",
     items: {
