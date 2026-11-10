@@ -1,6 +1,7 @@
 // 게임 상태가 바뀐 것을 보고 빛 효과를 만듦: 적 맞음 불티 · 치명타 별빛 · 처치 폭발·충격파 · 보스 처치 큰 빛 · 탄 꼬리 빛 · 큰 공격 빛 · 내가 맞으면 붉은 테두리
-import { ENEMIES, type EffectState, type RunState } from "@pixel-rogue/shared";
+import { ENEMIES, type RunState } from "@pixel-rogue/shared";
 import type { GlowCues } from "./glowCanvas";
+import { FxSeen } from "./fxSeen";
 import { BIG_FX } from "./glowKinds";
 import { hexColor, type GlowParts } from "./glowParts";
 
@@ -24,7 +25,7 @@ export class GlowWatch {
   private hp = new Map<number, number>();
   private crit = new Map<number, number>();
   private last = new Map<number, { x: number; y: number; r: number; kind: string; boss: boolean }>();
-  private seenFx = new WeakSet<EffectState>();
+  private seenFx = new FxSeen();
   private kills = -1;
   private room = -1;
   private myHp = -1;
@@ -113,9 +114,7 @@ export class GlowWatch {
   }
 
   private bigFx(s: RunState, parts: GlowParts): void {
-    for (const fx of s.effects) {
-      if (this.seenFx.has(fx)) continue;
-      this.seenFx.add(fx);
+    for (const fx of this.seenFx.fresh(s)) {
       if (!BIG_FX.has(fx.kind)) continue;
       const size = Math.max(6, Math.min(80, fx.size || 10));
       const color = hexColor(fx.tint, 0xffb347);

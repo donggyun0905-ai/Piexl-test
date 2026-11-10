@@ -1,7 +1,8 @@
 // 게임 화면 빛 (2): 각성·필살기·궁극기 · 보스 궁극기 기 모음 · 회복·보호막 · 돈 줍기 · 바닥 아이템 빛 · 아이템 주움 · 용암 불티
 // 상태를 읽기만 함 (glowWatch와 같은 방식). 꾸밈이라 Math.random을 씀
-import type { EffectState, RunState } from "@pixel-rogue/shared";
+import type { RunState } from "@pixel-rogue/shared";
 import type { GlowCues } from "./glowCanvas";
+import { FxSeen } from "./fxSeen";
 import { ULT_FX } from "./glowKinds";
 import type { GlowParts } from "./glowParts";
 
@@ -21,7 +22,7 @@ const motifColor = (m: string | undefined): number => {
 };
 
 export class GlowSkills {
-  private seen = new WeakSet<EffectState>();
+  private seen = new FxSeen();
   private ult = new Map<number, number>();
   private picks = new Map<number, { x: number; y: number; kind: string }>();
   private room = -1;
@@ -49,9 +50,7 @@ export class GlowSkills {
 
   /** 각성·필살기: 꼬리표 색 빛기둥 + 고리 + 위로 솟는 불티 */
   private effects(s: RunState, parts: GlowParts, cues: GlowCues): void {
-    for (const fx of s.effects) {
-      if (this.seen.has(fx)) continue;
-      this.seen.add(fx);
+    for (const fx of this.seen.fresh(s)) {
       if (fx.kind === "coinGet") {
         parts.burst(fx.x, fx.y, 6, 70, GOLD, 0.4, 1.6);
         continue;

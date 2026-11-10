@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.2",
+    date: "2026-11-10",
+    items: {
+      ko: [
+        "같이 하기: 다른 사람(과 내) 스킬 빛 효과가 끝나도 계속 다시 번쩍여 안 꺼지던 문제 고침",
+        "같이 하기 렉 줄임: 화면에 보여 줄 짐작 계산을 틱마다 처음부터 다시 하지 않고 한 틱씩 이어서 함 (남의 입력이 크게 달라질 때만 다시 맞춤)",
+      ],
+      en: [
+        "Co-op: fixed skill glow effects (yours and other players') flashing again and again and never fading out",
+        "Co-op lag reduced: the predicted screen now advances one tick at a time instead of re-simulating from scratch every tick (it only re-syncs when another player's input really changes)",
+      ],
+      ja: [
+        "一緒に遊ぶ: 他の人（と自分）のスキルの光エフェクトが終わっても何度も光り直して消えなかった問題を修正",
+        "一緒に遊ぶのラグを軽減: 画面に映す予測計算を毎ティック最初からやり直さず、1ティックずつ進めるように（他の人の入力が大きく変わったときだけ合わせ直し）",
+      ],
+    },
+  },
+  {
     version: "0.52.1",
     date: "2026-11-10",
     items: {
