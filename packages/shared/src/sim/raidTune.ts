@@ -36,6 +36,8 @@ const R: Record<string, number> = {
   collector: 0.74,
   /** 크루세이더 */
   crusader: 1,
+  /** 조커 */
+  joker: 1,
   /** 의사 */
   doctor: 1.25,
   /** 떠돌이 */

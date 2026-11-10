@@ -32,7 +32,7 @@ import { apostleMods, apostlePotion } from "./apostle";
 import { mukinPotion } from "./mukin"; import { spendUse } from "./raidPrep";
 import { swarmMods } from "./swarmMods";
 import { goldLocked, noUseItems, oniConvert } from "./oniRules";
-import { buildSetMods } from "./buildSets"; import { bagOpen, bagStore } from "./spiritPack"; import { coinEat } from "./spiritCoin";
+import { buildSetMods } from "./buildSets"; import { growthMods } from "./factionGrowth"; import { bagOpen, bagStore } from "./spiritPack"; import { coinEat } from "./spiritCoin";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -54,10 +54,10 @@ export const PICKUP_HOLD_TICKS = 30;
 export function recalcStats(s: RunState): void {
   const p = s.player;
   const oldMax = p.stats.maxHp;
-  // 풋내기 스탯·순례자 도감·왕 영혼·빌드 세트도 능력치로 · 오니는 oniRules
-  p.mods = oniConvert(p, [...p.passives.flatMap((id): StatMod[] => [...PASSIVES[id].mods]), ...noviceMods(p), ...imugiMods(p), ...apostleMods(p), ...tabooMods(s), ...swarmMods(p), ...morphMods(p), ...eaterMods(p), ...automataMods(p), ...petMods(s), ...stationMods(s), ...secretMods(p), ...buildSetMods(s)]);
+  // 풋내기·도감·왕 영혼·세트·실베르 성장도 능력치로 · 오니는 oniRules
+  p.mods = oniConvert(p, [...p.passives.flatMap((id): StatMod[] => [...PASSIVES[id].mods]), ...noviceMods(p), ...imugiMods(p), ...apostleMods(p), ...tabooMods(s), ...swarmMods(p), ...morphMods(p), ...eaterMods(p), ...automataMods(p), ...petMods(s), ...stationMods(s), ...secretMods(p), ...buildSetMods(s), ...growthMods(s)]);
   p.stats = kingStats(p) ?? computeStats(baseStats(p.characterId, p.weaponId), p.mods);
-  // 거너: 최대 체력 고정 (체력 아이템을 먹어도 그대로)
+  // 거너: 최대 체력 고정
   const fixed = p.curseHp ?? (CHARACTERS[p.characterId] as CharacterDef).fixedHp;
   if (fixed) p.stats.maxHp = fixed;
   // 패왕전: 모두 최대 체력 ×10, AI는 모드 보정

@@ -3,6 +3,7 @@ import type { WeaponId } from "./content";
 import { THALASSIA_CHARACTERS } from "./charactersThalassia";
 import { SEONGGUK_CHARACTERS } from "./charactersSeongguk";
 import { DAWN_CHARACTERS } from "./charactersDawn";
+import { SILBER_CHARACTERS } from "./charactersSilber";
 
 /** 전용 무기·아이템을 가질 수 있는 캐릭터 (content.WeaponDef.exclusive · items.PassiveDef.exclusive) */
 export type { ExclusiveId } from "./characterIds";
@@ -118,6 +119,7 @@ export const CHARACTERS = {
   ...THALASSIA_CHARACTERS,
   ...SEONGGUK_CHARACTERS,
   ...DAWN_CHARACTERS,
+  ...SILBER_CHARACTERS,
   /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 대시는 땅굴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },
   /** 운명의 여행자 (히든, 시즌 2): 모아 쏘는 활 · 모래시계 주사위 운명 (sim/voyager) */

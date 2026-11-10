@@ -9,6 +9,7 @@ const FACTION_LINES: [TextKey, TextKey][] = [
   ["csVirdia", "tfVirdia"],
   ["csHelios", "tfHelios"],
   ["csThalassia", "tfThalassia"],
+  ["csSilber", "tfSilber"],
   ["csSeongguk", "tfSeongguk"],
   ["csDawn", "tfDawn"],
 ];

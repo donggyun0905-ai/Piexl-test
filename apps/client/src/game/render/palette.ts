@@ -89,6 +89,7 @@ export const C = {
   lunatic: "#cfd8ff",
   incision: "#e83a3a",
   crusader: "#f0d890",
+  joker: "#c86bff",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",

@@ -2,6 +2,8 @@
 import { FACTION_CORE, FACTION_HEAT, FACTION_OATH, FACTION_TAINT, FACTION_TIDE, type FactionTrait } from "../factionDefs";
 import { SPIRIT_GROW, SPIRIT_PACK, type SpiritId } from "../spiritDefs";
 import { traitOf } from "./faction";
+import { growthCount } from "./factionGrowth";
+import { FACTION_GROWTH } from "../factionDefs";
 import { coreAwake, coreSkillOf } from "./factionCore";
 import { spiritStage } from "./factionSpirit";
 import type { OathKind } from "./factionTypes";
@@ -59,6 +61,10 @@ export function factionGauge(s: RunState): FactionGauge | null {
       const extra =
         sp === "fox" ? `${p.fcFox ?? 0}` : sp === "coin" ? `${p.fcCoin ?? 0}` : sp === "bag" ? `${p.fcBag?.length ?? 0}/${SPIRIT_PACK.bagMax}` : sp === "chest" ? `${p.fcChestN ?? 0}/${SPIRIT_PACK.chestEvery}` : sp === "glutton" ? `${p.fcGlut ?? 0}/${SPIRIT_PACK.gluttonEvery}` : undefined;
       return { trait, v: r2(v), n: k, stage, ...(sp ? { spirit: sp } : {}), ...(extra ? { extra } : {}) };
+    }
+    case "silber": {
+      const n = growthCount(s);
+      return { trait, v: r2(n / FACTION_GROWTH.cap), n, on: n > 0 };
     }
     case "seongguk": {
       const n = p.fcUses ?? 0;

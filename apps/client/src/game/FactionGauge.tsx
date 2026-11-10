@@ -2,9 +2,9 @@
 import type { FactionGauge as View, OathKind } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 
-const NAME: Record<View["trait"], TextKey> = { thalassia: "ftThalassia", helios: "ftHelios", terracore: "ftTerracore", ascalon: "ftAscalon", virdia: "ftVirdia", seongguk: "ftSeongguk" };
+const NAME: Record<View["trait"], TextKey> = { thalassia: "ftThalassia", helios: "ftHelios", terracore: "ftTerracore", ascalon: "ftAscalon", virdia: "ftVirdia", seongguk: "ftSeongguk", silber: "ftSilber" };
 const ON: Partial<Record<View["trait"], TextKey>> = { helios: "ftHeliosOn", terracore: "ftTerracoreOn", seongguk: "ftSeonggukOn" };
-const TIP: Record<View["trait"], TextKey> = { thalassia: "ftThalassiaTip", helios: "ftHeliosTip", terracore: "ftTerracoreTip", ascalon: "ftAscalonTip", virdia: "ftVirdiaTip", seongguk: "ftSeonggukTip" };
+const TIP: Record<View["trait"], TextKey> = { thalassia: "ftThalassiaTip", helios: "ftHeliosTip", terracore: "ftTerracoreTip", ascalon: "ftAscalonTip", virdia: "ftVirdiaTip", seongguk: "ftSeonggukTip", silber: "ftSilberTip" };
 const STAGE: TextKey[] = ["ftVirdiaStage0", "ftVirdiaStage1", "ftVirdiaStage2", "ftVirdiaStage3"];
 
 export function FactionGauge({ view, t }: { view: View; t: (k: TextKey) => string }) {

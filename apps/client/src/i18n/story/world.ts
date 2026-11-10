@@ -71,6 +71,15 @@ export const FACTION_TEXT: Record<FactionId, { name: L; tag: L; desc: L }> = {
       "果てしない海と海岸を抱く自由と解放の国。誰の旗の下にも縛られない船乗りたちが、波と嵐を友に生きる。",
     ),
   },
+  silber: {
+    name: c("실베르", "Silber", "シルベル"),
+    tag: c("북부 수호국", "Warden of the North", "北部守護国"),
+    desc: c(
+      "몬스터들이 강해지기 이전부터 강대한 몬스터들이 살던 북부를 지켜 온 나라. 처음엔 약해 보여도 싸울수록 하나씩 배우며 강해진다.",
+      "A nation that has guarded the North, home of mighty monsters long before monsters grew strong. They may look weak at first, but they grow stronger with every lesson of battle.",
+      "魔物が強くなる以前から強大な魔物が棲む北部を守り続けてきた国。最初は弱く見えても、戦うほどに一つずつ学び強くなる。",
+    ),
+  },
   akashic: {
     name: c("아카식 레코드", "Akashic Records", "アカシックレコード"),
     tag: c("기록자", "Chroniclers", "記録者"),

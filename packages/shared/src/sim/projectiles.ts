@@ -145,8 +145,12 @@ export function updateProjectiles(s: RunState, frozen = false): void {
   removeDead(s);
 }
 
-/** 튕김: 방 벽 밖으로 나가거나 방 안 벽·기둥에 들어가면 되돌리고 방향을 뒤집음 */
 function bounce(pr: ProjectileState, g: TileGrid | null): void {
+  if (bounceOff(pr, g)) pr.bounces = (pr.bounces ?? 1) - 1;
+}
+
+/** 튕김: 방 벽 밖으로 나가거나 방 안 벽·기둥에 들어가면 되돌리고 방향을 뒤집음 (튕겼으면 true, 조커 카드도 씀) */
+export function bounceOff(pr: { x: number; y: number; vx: number; vy: number }, g: TileGrid | null): boolean {
   let hit = false;
   if (g && blocksShot(g, pr.x, pr.y)) {
     const px = pr.x - pr.vx;
@@ -170,7 +174,7 @@ function bounce(pr: ProjectileState, g: TileGrid | null): void {
     pr.vy = -pr.vy;
     hit = true;
   }
-  if (hit) pr.bounces = (pr.bounces ?? 1) - 1;
+  return hit;
 }
 
 /** 추적 깃털: 가까운 적 쪽으로 속도 방향을 조금 돌림 (속력은 그대로) */

@@ -32,6 +32,7 @@ import { drawBlueFlameAura, drawBlueFlameBack } from "./blueFlameBody";
 import { drawLunaticAura } from "./lunaticBody";
 import { drawIncisionAura } from "./incisionBody";
 import { drawCrusaderAura } from "./crusaderBody";
+import { drawJoker } from "./jokerArt";
 import { drawFactionBody } from "./factionFx";
 import { drawFallenWings } from "./fallenWings";
 
@@ -175,6 +176,7 @@ export function drawForgottenAura(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawLunaticAura(ctx, s, alpha, snap);
   drawIncisionAura(ctx, s, alpha, snap);
   drawCrusaderAura(ctx, s, alpha, snap);
+  drawJoker(ctx, s, alpha, snap);
   drawFactionBody(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten" || (p.fgGod ?? 0) <= 0) return;

@@ -2,7 +2,7 @@
 // 새벽의 성흔 성흔 게이지는 weaponsDawn.STIGMA · 진영 소속은 FACTION_MEMBERS (화면 story/storyData도 이것을 씀)
 import type { CharacterId } from "./characters";
 
-export type FactionTrait = "ascalon" | "terracore" | "virdia" | "helios" | "seongguk" | "thalassia";
+export type FactionTrait = "ascalon" | "terracore" | "virdia" | "helios" | "seongguk" | "thalassia" | "silber";
 
 /** 진영 소속 (특징 시스템이 붙는 진영만 · 버려진 자들은 헬리오스) */
 export const FACTION_MEMBERS: Record<FactionTrait, readonly CharacterId[]> = {
@@ -11,7 +11,21 @@ export const FACTION_MEMBERS: Record<FactionTrait, readonly CharacterId[]> = {
   helios: ["apostle", "bedouin", "brawler", "ninja", "abandoned", "oni", "plague", "slayer", "eater", "mukin", "samyeol", "eclipse"],
   virdia: ["beast", "summoner", "elementalist", "mystic", "imugi", "idra", "byeonhui", "fly", "elder", "ren", "spiritist", "fenrir"],
   thalassia: ["thorken", "levia", "tail", "madQueen", "hook", "orca", "wave", "miryu"],
+  silber: ["joker"],
   seongguk: ["beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela"],
+};
+
+/** 실베르 성장: 패시브(공용·전용 모두)를 하나 가질 때마다 능력치가 더 오름 (sim/factionGrowth) */
+export const FACTION_GROWTH = {
+  /** 패시브 하나당 최대 체력 더함 */
+  hp: 3,
+  /** 패시브 하나당 공격력·공격 속도·이동 속도·투사체 속도 증가 (0.02 = +2%) */
+  dmg: 0.02,
+  atkSpd: 0.02,
+  move: 0.01,
+  shot: 0.02,
+  /** 이만큼 넘는 패시브는 더 세지 않음 */
+  cap: 30,
 };
 
 /** 탈라시아 물결 콤보: 맞히면 +1 (every 틱에 한 번까지, 여럿 맞혀도 1) · 맞으면 0 */

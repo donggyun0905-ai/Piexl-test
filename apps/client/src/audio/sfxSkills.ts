@@ -28,6 +28,7 @@ import { blueFlameSounds } from "./blueFlameSounds";
 import { lunaticSounds } from "./lunaticSounds";
 import { incisionSounds } from "./incisionSounds";
 import { crusaderSounds } from "./crusaderSounds";
+import { jokerSounds } from "./jokerSounds";
 import { factionSounds } from "./factionSounds";
 
 export const SKILL_SOUNDS = {
@@ -262,6 +263,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   lunaticSounds(run, out, onShake);
   incisionSounds(run, out, onShake);
   crusaderSounds(run, out, onShake);
+  jokerSounds(run, out, onShake);
   factionSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;

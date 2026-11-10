@@ -1,4 +1,4 @@
-// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전 · 크루세이더) — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
+// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전 · 크루세이더) + 실베르 조커 — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
 import { kit, SEC, sk } from "./pwKitKit";
 import type { PwKits } from "./pwSkillTypes";
 
@@ -56,5 +56,12 @@ export const PW_KITS_4: PwKits = {
     sk("crCross", "dash", 7, "#fff2c0", { range: 110, speed: 9, hit: { dmg: 1.4, push: 14, stun: 0.5 * SEC } }),
     sk("crCross", "self", 12, "#ffd36a", { radius: 60, fx: "pillar", buff: { ticks: 3 * SEC, taken: 0.5 }, hit: { dmg: 1.2, push: 8 } }),
     sk("crCross", "point", 60, "#fff6d0", { range: 160, radius: 80, delay: 24, fx: "meteor", buff: { ticks: 6 * SEC, taken: 0.6 }, hit: { dmg: 2.6, stun: 1 * SEC, push: 14 } }),
+  ),
+  // 실베르 조커: 카드 부채 · 뒤로 빠지며 카드 · 카드 비 · 카드뽑기(붉은 일식처럼 셈)
+  joker: kit(1,
+    sk("jkCards", "line", 3, "#c86bff", { range: 200, repeat: { n: 3, every: 4 }, hit: { dmg: 0.6 } }),
+    sk("jkCards", "dash", 8, "#b8ff3a", { range: 110, speed: 10, hit: { dmg: 1 } }),
+    sk("jkCards", "point", 11, "#ff3a6a", { range: 170, radius: 46, delay: 18, fx: "meteor", hit: { dmg: 2 } }),
+    sk("jkCards", "self", 60, "#e0c0ff", { radius: 100, fx: "pillar", buff: { ticks: 6 * SEC, dmg: 1.4 }, hit: { dmg: 1.4, push: 10 } }),
   ),
 };

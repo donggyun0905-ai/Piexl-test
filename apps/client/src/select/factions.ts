@@ -12,6 +12,7 @@ export const SELECT_TABS: readonly { id: FactionId; label: TextKey }[] = [
   { id: "thalassia", label: "csThalassia" },
   { id: "seongguk", label: "csSeongguk" },
   { id: "dawn", label: "csDawn" },
+  { id: "silber", label: "csSilber" },
   { id: "akashic", label: "csAkashic" },
   { id: "outsider", label: "csOutsider" },
   { id: "archive", label: "csArchive" },
@@ -26,6 +27,7 @@ export const FACTION_TRAIT: Partial<Record<FactionId, { name: TextKey; tip: Text
   thalassia: { name: "csTrait_thalassia", tip: "ftThalassiaTip" },
   seongguk: { name: "csTrait_seongguk", tip: "ftSeonggukTip" },
   dawn: { name: "csTrait_dawn", tip: "sgGaugeTip" },
+  silber: { name: "csTrait_silber", tip: "ftSilberTip" },
 };
 
 export function factionOf(c: CharacterId): FactionId {

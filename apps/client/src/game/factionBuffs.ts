@@ -1,10 +1,10 @@
 // 버프 창: 진영 특징 줄 (로그만 · 진영 이름 · 지금 값 · 마우스를 올리면 설명)
-import { FACTION_HEAT, FACTION_OATH, FACTION_TAINT, FACTION_TIDE, factionGauge, type RunState } from "@pixel-rogue/shared";
+import { FACTION_GROWTH, FACTION_HEAT, FACTION_OATH, FACTION_TAINT, FACTION_TIDE, factionGauge, type RunState } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 import type { RoomBuff } from "./roomBuffs";
 
-const FACTION: Record<string, TextKey> = { thalassia: "csThalassia", helios: "csHelios", terracore: "csTerracore", ascalon: "csAscalon", virdia: "csVirdia", seongguk: "csSeongguk" };
-const TIP: Record<string, TextKey> = { thalassia: "ftThalassiaTip", helios: "ftHeliosTip", terracore: "ftTerracoreTip", ascalon: "ftAscalonTip", virdia: "ftVirdiaTip", seongguk: "ftSeonggukTip" };
+const FACTION: Record<string, TextKey> = { thalassia: "csThalassia", helios: "csHelios", terracore: "csTerracore", ascalon: "csAscalon", virdia: "csVirdia", seongguk: "csSeongguk", silber: "csSilber" };
+const TIP: Record<string, TextKey> = { thalassia: "ftThalassiaTip", helios: "ftHeliosTip", terracore: "ftTerracoreTip", ascalon: "ftAscalonTip", virdia: "ftVirdiaTip", seongguk: "ftSeonggukTip", silber: "ftSilberTip" };
 const STAGE: TextKey[] = ["ftVirdiaStage0", "ftVirdiaStage1", "ftVirdiaStage2", "ftVirdiaStage3"];
 
 function line(run: RunState, t: (k: TextKey) => string): string | null {
@@ -25,6 +25,8 @@ function line(run: RunState, t: (k: TextKey) => string): string | null {
       return t("bfFtVirdia").replace("{s}", t(STAGE[g.stage ?? 0]!));
     case "seongguk":
       return g.on ? t("bfFtSeonggukOn") : fill("bfFtSeongguk");
+    case "silber":
+      return fill("bfFtSilber", g.n * FACTION_GROWTH.dmg * 100);
   }
 }
 
