@@ -90,6 +90,7 @@ export const C = {
   incision: "#e83a3a",
   crusader: "#f0d890",
   joker: "#c86bff",
+  shadowing: "#7a9aff",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",

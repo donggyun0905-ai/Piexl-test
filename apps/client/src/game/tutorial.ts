@@ -90,6 +90,7 @@ const DEMO_WEAPONS: Record<CharacterId, [WeaponId, WeaponId] | null> = {
   incision: null,
   crusader: null,
   joker: null,
+  shadowing: null,
   miner: ["mnTnt", "mnPit"],
   voyager: null,
   zeus: ["zsSky", "zsChain"],

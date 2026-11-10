@@ -157,6 +157,8 @@ export { isCrusader } from "./crusader";
 export { isJoker, cardCap, cardDamage, cardMaxed } from "./joker";
 export { moonHero, eclipseOn } from "./jokerDraw";
 export type { JokerCard } from "./jkTypes";
+export { brushReach, inkOf, isShadowing } from "./shadowing";
+export { SD_ROW, type InkSpirit, type InkStroke, type InkZone } from "./sdTypes";
 export type { HfCrack } from "./hfTypes";
 export { factionGauge, factionOfCharacter, type FactionGauge } from "./factionGauge";
 export { buffOn, SPIRIT_OP, spiritStage } from "./factionSpirit";

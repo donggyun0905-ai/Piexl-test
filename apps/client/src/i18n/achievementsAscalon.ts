@@ -28,6 +28,7 @@ export const ASCALON_ACHIEVEMENTS = {
   clearBlueFlame: n(["영혼을 태우는 불", "The Soul-Burning Flame", "魂を焼く炎"], ["블루 플레임으로 클리어", "Clear as Blue Flame", "ブルーフレイムでクリア"]),
   clearLunatic: n(["월광의 리더", "Leader of the Moonlight", "月光の指導者"], ["루나틱으로 클리어", "Clear as Lunatic", "ルナティックでクリア"]),
   clearIncision: n(["도살자", "The Butcher", "屠殺者"], ["인시전으로 클리어", "Clear as Incision", "インシジョンでクリア"]),
+  clearShadowing: n(["먹으로 그린 세계", "A World Painted in Ink", "墨で描いた世界"], ["쉐도잉으로 클리어", "Clear as Shadowing", "シャドーイングでクリア"]),
   clearJoker: n(["카드는 끝없이 튕긴다", "The Cards Never Stop", "カードは跳ね続ける"], ["조커로 클리어", "Clear as Joker", "ジョーカーでクリア"]),
   clearCrusader: n(["성십자가의 거인", "Giant of the Holy Cross", "聖十字の巨人"], ["크루세이더로 클리어", "Clear as Crusader", "クルセイダーでクリア"]),
   clearSilverBullet: n(["은빛 집행자", "The Silver Executioner", "銀の執行者"], ["실버불렛으로 클리어", "Clear as Silver Bullet", "シルバーバレットでクリア"]),

@@ -51,6 +51,8 @@ export { CRUSADER } from "./weaponsCrusader";
 export { CRUSADER_PERKS } from "./itemsCrusader";
 export { JOKER_CARD, JOKER_DRAW, JOKER_MOON, JOKER_STYLE, MOON_HEROES, type MoonHero } from "./weaponsJoker";
 export { JOKER_PERKS } from "./itemsJoker";
+export { SHADOW_INK } from "./weaponsShadowing";
+export { SHADOWING_PERKS } from "./itemsShadowing";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";

@@ -31,6 +31,7 @@ import { activeFx } from "../shop/effects";
 import { watchingSeat } from "./camera";
 import { createGlowLayer } from "./glow/glowLayer";
 import { skinGlow } from "./glow/glowSkin";
+import { setBrushCursor } from "./shadowingBuffs";
 
 /** 숫자 키 스킬이 있는 캐릭터 (추적자 · 성국 · 네일러) */
 const SKILL_CHARS = new Set(["tracker", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "nailer"]);
@@ -90,6 +91,7 @@ export function startGameLoop(o: LoopOptions): () => void {
   }
   /** 추적자 암습 저격 동안 자동 공격을 잠깐 끔 (끝나면 다시 켬) */
   let autoBack = false;
+  let brushCursor = false;
   let acc = 0;
   let last = performance.now();
   let frame = 0;
@@ -173,7 +175,9 @@ export function startGameLoop(o: LoopOptions): () => void {
       o.setPrompt({ text, interact: action !== "" && !passive });
     }
     const ambush = !!p.trAmbush || !!p.bzUlt; // 블루 플레임 열화상 각성도 직접 조준
-    controls.fineAim = ambush || !!run.pvp;
+    const brush = p.characterId === "shadowing" && !run.pvp;
+    controls.fineAim = ambush || !!run.pvp || brush;
+    brushCursor = setBrushCursor(brush, brushCursor);
     if (ambush && controls.autoAim) {
       controls.setAutoAim(false);
       autoBack = true;

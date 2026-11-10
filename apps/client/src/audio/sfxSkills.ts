@@ -29,6 +29,7 @@ import { lunaticSounds } from "./lunaticSounds";
 import { incisionSounds } from "./incisionSounds";
 import { crusaderSounds } from "./crusaderSounds";
 import { jokerSounds } from "./jokerSounds";
+import { shadowingSounds } from "./shadowingSounds";
 import { factionSounds } from "./factionSounds";
 
 export const SKILL_SOUNDS = {
@@ -264,6 +265,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   incisionSounds(run, out, onShake);
   crusaderSounds(run, out, onShake);
   jokerSounds(run, out, onShake);
+  shadowingSounds(run, out, onShake);
   factionSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;

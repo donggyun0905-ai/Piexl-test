@@ -33,6 +33,7 @@ import { drawLunaticAura } from "./lunaticBody";
 import { drawIncisionAura } from "./incisionBody";
 import { drawCrusaderAura } from "./crusaderBody";
 import { drawJoker } from "./jokerArt";
+import { drawShadowingAir, drawShadowingGround } from "./shadowingArt";
 import { drawFactionBody } from "./factionFx";
 import { drawFallenWings } from "./fallenWings";
 
@@ -96,6 +97,7 @@ export function drawForgottenShot(ctx: Ctx, pr: ProjectileState, x: number, y: n
 export function drawForgottenBack(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   // 풍류사: 구름 자국·먹물·발밑 구름 (render/pungryuBody)
   drawPungryuBack(ctx, s, alpha, snap);
+  drawShadowingGround(ctx, s, alpha, snap);
   drawLeoBack(ctx, s, alpha, snap);
   drawOnyxBack(ctx, s, alpha, snap);
   drawFenrirBack(ctx, s, alpha, snap);
@@ -177,6 +179,7 @@ export function drawForgottenAura(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawIncisionAura(ctx, s, alpha, snap);
   drawCrusaderAura(ctx, s, alpha, snap);
   drawJoker(ctx, s, alpha, snap);
+  drawShadowingAir(ctx, s, alpha, snap);
   drawFactionBody(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten" || (p.fgGod ?? 0) <= 0) return;

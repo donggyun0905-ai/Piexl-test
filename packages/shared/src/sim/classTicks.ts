@@ -74,6 +74,7 @@ import { pilgrimTick } from "./pgHero";
 import { kingTick } from "./kingBlade";
 import { luxTick } from "./lux";
 import { jokerTick } from "./joker";
+import { shadowingTick } from "./shadowing";
 import type { RunState } from "./types";
 
 export { pwBasicTick } from "./pwBasic";
@@ -156,4 +157,5 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   zwei: kingTick,
   radiant: luxTick,
   jokerCard: jokerTick,
+  inkBrush: shadowingTick,
 };

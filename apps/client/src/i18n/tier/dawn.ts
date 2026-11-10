@@ -1,9 +1,10 @@
-// 티어표 이유: 새벽의 성흔 캐릭터 + 실베르 조커 (한·영·일, ko·en·ja가 커서 나눔)
+// 티어표 이유: 새벽의 성흔 캐릭터 + 실베르 조커·쉐도잉 (한·영·일, ko·en·ja가 커서 나눔)
 import type { CharacterId } from "@pixel-rogue/shared";
 
 type Reasons = Partial<Record<CharacterId, string>>;
 
 export const TIER_KO_DAWN: Reasons = {
+  shadowing: "실베르의 그림을 그리는 정령 소녀. 마우스로 바닥에 직접 먹 획을 그려 싸우는 독특한 방식이라 손이 바빠야 세지만, 닫힌 원 봉인과 일필 베기를 익히고 전용 패시브 20개가 쌓이면 그린 그림마다 용·학·달·유성이 쏟아짐 (새 캐릭터, 아직 평가 전)",
   joker: "실베르의 카드 투척자. 고정 피해 4짜리 카드가 벽에 튕길 때마다 4씩 세지는 독특한 방식이라 처음엔 약하지만, 투사체 속도와 패시브가 쌓일수록 판 위 15장이 무섭게 강해짐.",
   crusader: "십자가를 들어 올려(버팀) 내려찍고 땅을 십자가 모양으로 가르는 새벽의 성흔 탱커. 맞을수록 속죄의 무게가 차 심판의 십자가가 떨어지고, 대시로 적을 벽까지 밀어붙임 (새 캐릭터, 아직 평가 전)",
   blast: "5발 탄창 산탄총(5발마다 확정 치명타)과 대시 슬로우모션으로 싸우는 근접 화력형 악마 사냥꾼. 붙을수록 세지고 초근접 처치는 몸째 터뜨림. 맞힐수록 성흔이 차 가득 차면 달빛 각성 (새 캐릭터, 아직 평가 전)",
@@ -17,6 +18,7 @@ export const TIER_KO_DAWN: Reasons = {
 };
 
 export const TIER_EN_DAWN: Reasons = {
+  shadowing: "Silber's painting spirit girl. She fights by painting ink strokes on the floor with your mouse, so she needs busy hands, but once you master Seal loops and One-Stroke Slashes and stack her 20 exclusive passives, every drawing unleashes dragons, cranes, moons and meteors (new character, not rated yet)",
   joker: "Silber's card thrower. Cards deal a fixed 4 and grow +4 with every wall bounce, so he starts weak, but with projectile speed and passives his 15 cards on the field become fearsome.",
   crusader: "The Stigma of Dawn's tank: heaves the cross (Brace), slams it down and splits the ground in the shape of a cross. Taking hits fills the Weight of Penance for a Cross of Judgment, and the dash pins foes against walls (new character, not rated yet)",
   blast: "A close-range firepower demon hunter fighting with a 5-shell shotgun (every 5th a guaranteed crit) and dash slow motion. Stronger the closer she is, and point-blank kills blow enemies apart. Hits fill her Stigma; when full she awakens in moonlight (new character, not yet rated)",
@@ -30,6 +32,7 @@ export const TIER_EN_DAWN: Reasons = {
 };
 
 export const TIER_JA_DAWN: Reasons = {
+  shadowing: "シルベルの絵を描く精霊の少女。マウスで床に直接墨の線を描いて戦う独特な方式で手が忙しいが、閉じた円の封印と一筆斬りを覚え、専用パッシブ20個が積み重なると描くたびに龍・鶴・月・流星が降り注ぐ（新キャラ、まだ評価前）",
   joker: "シルベルのカード投げ。固定4のカードが壁で跳ねるたびに4ずつ強くなる独特な方式で最初は弱いが、弾速とパッシブが積み重なるほど場の15枚が恐ろしく強くなる。",
   crusader: "聖痕のタンク。十字架を持ち上げ（踏ん張り）叩きつけ、地面を十字に裂く。被弾で贖罪の重みが溜まり審判の十字架、ダッシュで敵を壁まで押し込む",
   blast: "5発弾倉の散弾銃（5発ごとに確定クリティカル）とダッシュのスローモーションで戦う近接火力型の悪魔狩り。近いほど強く、至近距離で倒すと体ごと吹き飛ばす。当てるほど聖痕が満ち、満ちると月光覚醒（新キャラクター、評価前）",

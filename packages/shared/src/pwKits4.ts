@@ -1,4 +1,4 @@
-// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전 · 크루세이더) + 실베르 조커 — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
+// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전 · 크루세이더) + 실베르 조커·쉐도잉 — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
 import { kit, SEC, sk } from "./pwKitKit";
 import type { PwKits } from "./pwSkillTypes";
 
@@ -63,5 +63,12 @@ export const PW_KITS_4: PwKits = {
     sk("jkCards", "dash", 8, "#b8ff3a", { range: 110, speed: 10, hit: { dmg: 1 } }),
     sk("jkCards", "point", 11, "#ff3a6a", { range: 170, radius: 46, delay: 18, fx: "meteor", hit: { dmg: 2 } }),
     sk("jkCards", "self", 60, "#e0c0ff", { radius: 100, fx: "pillar", buff: { ticks: 6 * SEC, dmg: 1.4 }, hit: { dmg: 1.4, push: 10 } }),
+  ),
+  // 실베르 쉐도잉: 일필 베기 · 봉인 원 · 학 · 수묵 산수화(먹의 용)
+  shadowing: kit(1,
+    sk("sdBrush", "line", 4, "#9ab8ff", { range: 180, hit: { dmg: 1.2 } }),
+    sk("sdBrush", "point", 9, "#c8a0ff", { range: 160, radius: 50, delay: 12, fx: "meteor", hit: { dmg: 1.4, stun: 1 * SEC } }),
+    sk("sdBrush", "dash", 8, "#e8f0ff", { range: 110, speed: 10, hit: { dmg: 1 } }),
+    sk("sdBrush", "point", 60, "#7a9aff", { range: 170, radius: 100, delay: 30, fx: "pillar", hit: { dmg: 3, push: 12 } }),
   ),
 };
