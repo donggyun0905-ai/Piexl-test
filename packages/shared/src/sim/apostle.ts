@@ -13,6 +13,7 @@ import { addEffect, dist2, hasPerk, weaponOf } from "./util";
 import { recalcStats } from "./items";
 import type { StatMod } from "../stats";
 import { createRng, deriveSeed } from "../rng";
+import { pctHp } from "./pctHp";
 
 const roll = (s: RunState, label: string, id = 0) => createRng(deriveSeed(s.seed, label, s.tick, id)).nextFloat();
 
@@ -147,7 +148,7 @@ export function doomTick(s: RunState): void {
     const e = s.enemies.find((x) => x.id === d.id && x.hp > 0);
     if (!e) continue;
     // 보스는 최대 체력의 1/5 기준 (연습장 허수아비는 체력 1000인 보스처럼)
-    const base = e.kind === "dummy" ? 1000 / APOSTLE.mask.bossDiv : ENEMIES[e.kind].boss ? e.maxHp / APOSTLE.mask.bossDiv : e.maxHp;
+    const base = e.kind === "dummy" ? 1000 / APOSTLE.mask.bossDiv : ENEMIES[e.kind].boss ? pctHp(e) / APOSTLE.mask.bossDiv : pctHp(e);
     dotDamage(s, e, "death", base * APOSTLE.mask.pct + d.dmg * APOSTLE.mask.mul);
     if (ENEMIES[e.kind].boss && roll(s, "bossSoul", e.id) < APOSTLE.bossSoul) addSoul(s, e.x + e.r + 10, e.y);
   }

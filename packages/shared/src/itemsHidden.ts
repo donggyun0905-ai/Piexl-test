@@ -43,7 +43,7 @@ export const HIDDEN_USES = {
   forbiddenScroll: { id: "forbiddenScroll", damage: 60, count: 14, radius: 30, fuse: 50, gap: 6 },
   /** 차원이동문: 이 층을 건너뛰고 다음 층 (마지막 층이면 클리어) */
   dimensionGate: { id: "dimensionGate" },
-  /** 포탈건: 처음 쓰면 이 방을 기억 (아이템은 남음), 다시 쓰면 그 방으로 (같은 층만, 쓰면 사라짐) */
+  /** 귀환의 문: 처음 쓰면 이 방을 기억 (아이템은 남음), 다시 쓰면 그 방으로 (같은 층만, 쓰면 사라짐) */
   portalGun: { id: "portalGun" },
   /** 운명의 주사위: 1~6 (sim/hiddenDice) */
   fateDice: { id: "fateDice" },

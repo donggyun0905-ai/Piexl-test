@@ -1,7 +1,7 @@
 // 협동 한 판: 방장은 게임을 진행하며 입력을 나눠 주고, 손님은 받은 입력으로 같이 진행.
 // 방장이 나가면 서버가 정한 다음 사람이 지금 상태 그대로 이어서 방장이 됨
 import { usePwBalanceRun } from "../balance";
-import { createParty, createPvp, parseSeed, pvpResult, rankSeats, type CharacterId, type RankChange, type RoomView, type RunState } from "@pixel-rogue/shared";
+import { createParty, createPvp, createRaid, parseSeed, type RaidEventBoss, pvpResult, rankSeats, type CharacterId, type RankChange, type RoomView, type RunState } from "@pixel-rogue/shared";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { GameScreen } from "../game/GameScreen";
 import type { Lang, TextKey } from "../i18n";
@@ -21,6 +21,10 @@ import { PwWatch } from "../event/PwWatch";
 import { RankOutcome } from "../event/RankResult";
 import { PwResult } from "../event/PwResult";
 import { savePwResult } from "../event/pwRecords";
+import { RaidOverlay } from "../event/RaidOverlay";
+import { RaidBoard } from "../event/RaidBoard";
+import { RaidRewardCards } from "../event/acc/AccCards";
+import { myAccTotals } from "../event/acc/accStore";
 
 interface Props {
   room: RoomView;
@@ -29,6 +33,8 @@ interface Props {
   wire: CoopWire;
   /** 패왕전 같이 하기 (없으면 협동) */
   pw?: PwRoomGame | null;
+  /** 이벤트 '레이드' (빈자리는 AI, sim/raid) */
+  raid?: RaidEventBoss;
   lang: Lang;
   t: (key: TextKey) => string;
   onExit: () => void;
@@ -40,7 +46,7 @@ interface Props {
 
 type Sync = { host: HostSync; guest: null } | { host: null; guest: GuestSync };
 
-export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, onBackRoom, rank }: Props) {
+export function CoopGame({ room, you, characterId, wire, pw, raid, lang, t, onExit, onBackRoom, rank }: Props) {
   const hostPid = room.hostPid;
   const isHost = hostPid === you;
   const hostRef = useRef(hostPid);
@@ -72,6 +78,7 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
     const members = seatsRef.current.map((pid) => ({
       characterId: room.players.find((p) => p.pid === pid)?.characterId ?? "warden",
       unlocks: pid === you ? loadAchievements() : (wire.unlocks.get(pid) ?? []),
+      acc: pid === you ? myAccTotals() : wire.acc.get(pid),
     }));
     // 패왕전: 사람은 앞 자리, 나머지는 AI (모드·장비는 대기실에서)
     // 경기장: 방장이 고른 곳 (랭크전·무작위는 판 시드로 정함)
@@ -83,6 +90,7 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
         : seatsRef.current.map((pid, i) => (pid ? { characterId: members[i]!.characterId, loadout: loOf(pid) } : null));
       return createPvp(parseSeed(room.seedText), pw.mode, humans, (!room.rank && pw.map) || undefined);
     }
+    if (raid) return createRaid(parseSeed(room.seedText), raid, members);
     return createParty(parseSeed(room.seedText), members);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -92,6 +100,8 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
     const p = room.players.find((x) => x.pid === pid);
     return { pid, name: p?.name ?? "?", connected: p?.connected ?? false };
   });
+  // 레이드: 사람 뒤 자리는 AI 동료
+  for (let i = members.length; i < (run.raidBoss?.ai.length ?? 0); i++) members.push({ pid: "", name: "AI", connected: true });
   const names = members.map((m) => (m.pid ? m.name : "AI"));
   const watching = !seatsRef.current.includes(you);
   const mySeat = Math.max(0, seatsRef.current.indexOf(you));
@@ -209,7 +219,7 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
           if (r.pvp && !watching) savePwResult(r.pvp.mode, pvpResult(r, mySeat).won);
           if (r.pvp && rank && !watching) rank.report(r.pvp.winner ?? -1);
         }}
-        resultExtra={ended && !pw ? <CoopStats run={run} members={members} t={t} /> : null}
+        resultExtra={ended && !pw ? run.raidBoss ? <RaidBoard run={run} names={names} t={t} /> : <CoopStats run={run} members={members} t={t} /> : null}
         afterRun={ended && pw ? <PwResult run={run} me={mySeat} names={names} watching={watching} lang={lang} t={t} onExit={onExit} {...(rank ? { extra: <RankOutcome changes={rank.changes} me={you} t={t} />, onRetry: rank.again, retryLabel: t("rankTitle") } : {})} /> : undefined}
         overlay={pw ? undefined : (ctx, r, alpha, snap) => drawCoopOverlay(ctx, r, alpha, snap, namesRef.current, extras, t)}
         step={(r, input) => {
@@ -222,6 +232,8 @@ export function CoopGame({ room, you, characterId, wire, pw, lang, t, onExit, on
           else s?.guest.show(r);
         }}
       />
+      {!ended && run.raidBoss && <RaidOverlay run={run} t={t} names={names} me={mySeat} />}
+      {run.raidBoss && <RaidRewardCards run={run} t={t} me={mySeat} />}
       {!ended && !pw && <CoopParty run={run} members={members} extras={extras} t={t} onSignal={signal} />}
       {!ended && !pw && <CoopWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}
       {!ended && pw && run.pvp && <PwWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}

@@ -1,6 +1,6 @@
 // 피해 주고받기·처치
+import { holdDown } from "./bossTwins";
 import { remnantDodge } from "./remnant";
-import { killGold } from "./loot";
 import { endlessPow } from "./endless";
 import { trialFoeDmg, trialKill } from "./trialFoes";
 import { knock as knockHit } from "./knock";
@@ -17,17 +17,17 @@ import { titanParried } from "./titan";
 import { hpLost } from "./hurtLog";
 import { logHit } from "./pvpRecap";
 import { roleDmgMul } from "./pwMatchup";
-import { afterHurt, classTaken, cloudEnv } from "./classTaken";
+import { afterHurt, classTaken, cloudEnv, foeTaken } from "./classTaken";
 import { dodged, extraTaken, onHitExtra, sharpBonus } from "./baseStats";
 // 돈 얻기는 sim/loot (가질 수 있는 돈 한도)
-import { addGold } from "./loot";
+import { addGold, killGold } from "./loot";
 export { addGold };
 import { tickDots } from "./status";
 export { dotDamage, ignite } from "./status";
 import { swarmLucky } from "./swarmRules";
 import { SWARM_LEVELS } from "../swarmMaps";
-import { ultBoss } from "./bossKit";
 import { heal, leechHeal } from "./heal";
+import { moonOut } from "./moonlight";
 import { hatchSlimes } from "./critters";
 import { apostleKill } from "./apostleSouls";
 import { seatNo, useSeat } from "./party";
@@ -41,7 +41,8 @@ import { trackerGuard, trackerTaken } from "./tracker";
 import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, keepInRoom, markCrit, normalize, roomGrid, RUSH_TICKS, STILL_TICKS } from "./util";
 import { raiseShield } from "./imugiMods";
 import { devilMul } from "./devilPerks";
-import { setDmgMul } from "./buildSets";
+import { setDmgMul } from "./buildSets"; import { factionKill } from "./faction"; import { raidGuard } from "./lucCover";
+import { raidDmgMul } from "./raidTune";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -58,10 +59,10 @@ const R = {
 };
 export { R as COMBAT_RULES };
 
-
 export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: number, dirY: number, knock = true): void {
   // 차례가 아닌 천사장 탑: 맞지 않음
   if (e.immune || (e.pwNoSkill && s.pvp?.src)) return;
+  dmg *= raidDmgMul(s); // 레이드 캐릭터 배율
   // 받아 넘기기 (갓이터·대검): 확률로 피해 없음
   const parry = ENEMIES[e.kind].parry;
   if (parry && dmg > 0) {
@@ -71,7 +72,7 @@ export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: numbe
       return;
     }
   }
-  // 가디언 방패: 맞을 때마다 한 칸씩 깨지고, 다 깨지기 전에는 피해 없음
+  // 가디언 방패: 맞을 때마다 한 칸씩 깨지고, 다 깨지면 피해
   if ((e.shield ?? 0) > 0 && dmg > 0) {
     e.shield = (e.shield ?? 0) - 1;
     e.hitFlash = 3;
@@ -84,8 +85,8 @@ export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: numbe
   if (roll.crit) markCrit(s, e);
   // 풍뎅이 부적(베두인) · 악마의 거래 (sim/devilPerks)
   dmg *= devilMul(s, e) * setDmgMul(s, e);
-  // 탐식(악의 사도)·예리함·각주(서기관): 방어가 깎이거나 기록이 새겨진 적은 더 아픔
-  dmg *= (1 + (e.apDef ?? 0) + inkTaken(s.player, e) + sharpBonus(s, e)) * trackerTaken(e);
+  // 탐식·예리함·각주(서기관): 방어가 깎이거나 기록이 새겨진 적은 더 아픔
+  dmg *= (1 + (e.apDef ?? 0) + inkTaken(s.player, e) + sharpBonus(s, e)) * trackerTaken(e) * foeTaken(s, e);
   let hurt = (e.melt ? dmg * (1 + R.MELT_ADD * e.melt) : dmg) * roleDmgMul(s, e); // 패왕전 역할 상성
   // 흰 보호막(거대 전갈): 체력보다 먼저 깎임
   if ((e.ward ?? 0) > 0 && hurt > 0) {
@@ -113,9 +114,9 @@ export function envDamage(s: RunState, dmg: number): void {
 
 export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
   const p = s.player;
-  // 대시 중·무적·보호막이면 피해 없음 (잔영: 대시로 피하면 슬로우모션)
+  // 대시 중·무적·보호막이면 피해 없음 (잔영 대시는 슬로우)
   if (p.dashTicks > 0 && !envHit) remnantDodge(s);
-  if (p.dashTicks > 0 || p.invulnTicks > 0 || p.shieldTicks > 0) return;
+  if (p.dashTicks > 0 || p.invulnTicks > 0 || p.shieldTicks > 0 || raidGuard(s, from)) return;
   // 거인 패링: 피해 없이 그대로 에너지로 · 회피
   if (titanParried(s, dmg) || dodged(s)) return;
   // 서든데스: 한 대라도 맞으면 끝
@@ -125,8 +126,8 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
     addEffect(s, { kind: "hit", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 6, maxTicks: 10 });
     return;
   }
-  // 금기 취약 · 광야의 새벽 줄임 · 무한 7층부터·시련 점수만큼 세짐
-  dmg *= endlessPow(s) * (envHit ? 1 : lateDmg(s)) * trialFoeDmg(p, s, from) * tabooUp(s, "frail") * (s.swarm ? SWARM.taken * (SWARM_LEVELS[s.swarm.level ?? 0]?.taken ?? 1) : 1);
+  // 금기 취약 · 광야의 새벽 · 무한 7층부터·시련 점수 · 달빛 걸린 적이면 약함
+  dmg *= moonOut() * endlessPow(s) * (envHit ? 1 : lateDmg(s)) * trialFoeDmg(p, s, from) * tabooUp(s, "frail") * (s.swarm ? SWARM.taken * (SWARM_LEVELS[s.swarm.level ?? 0]?.taken ?? 1) : 1);
   // 방패 자세: 가만히 서 있으면 받는 피해 절반
   let taken = hasPerk(p, "bulwarkStance") && p.stillTicks >= STILL_TICKS ? dmg * PERKS.bulwarkStance.taken : dmg;
   // 버티기(가라테): 받는 피해 절반, 받은 만큼 모아 되받아침
@@ -154,7 +155,7 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
   if ((p.shieldPts ?? 0) > 0) {
     const used = Math.min(p.shieldPts ?? 0, taken);
     p.shieldPts = (p.shieldPts ?? 0) - used;
-    // 항체 반응: 막은 피해를 모아 두었다가 주변 적에게 돌려줌 (sim/medicGear)
+    // 항체 반응: 막은 피해를 모아 주변 적에게 돌려줌 (sim/medicGear)
     if (hasPerk(p, "antibody")) p.antiStore = (p.antiStore ?? 0) + used * R.ANTIBODY_MUL;
     taken -= used;
   }
@@ -162,7 +163,7 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
   hpLost(s, dmg, taken, from, envHit);
   if (s.party) p.hurt = (p.hurt ?? 0) + taken;
   s.roomDamaged = true;
-  // 배수의 진: 체력이 30% 이하면 무적 시간 2배 · 패왕전은 맞은 뒤 무적 없음
+  // 배수의 진: 체력 30% 이하면 무적 시간 2배 · 패왕전은 맞은 뒤 무적 없음
   p.invulnTicks = s.pvp ? 0 : Math.round(HIT_INVULN_TICKS * (hasPerk(p, "lastStand") && p.hp <= p.stats.maxHp * PERKS.lastStand.below ? PERKS.lastStand.invuln : 1) * tabooDown(s, "shortInvuln"));
   // 결벽증: 맞으면 잠깐 빨라짐
   if (hasPerk(p, "cleanFreak")) p.rushTicks = RUSH_TICKS;
@@ -174,7 +175,7 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
   }
   // 결계: 맞은 뒤 3초 무적
   if (hasPerk(p, "barrier")) p.invulnTicks = R.BARRIER_TICKS;
-  afterHurt(s, from);
+  afterHurt(s, from, envHit);
   // 야성의 포효: 둘레 적을 밀어내며 피해, 3초 동안 고양이 피해 증가
   if (hasPerk(p, "wildRoar")) {
     p.roarTicks = R.ROAR_TICKS;
@@ -234,11 +235,11 @@ export function updatePending(s: RunState): void {
   for (const b of due) blastAt(s, b.x, b.y, b.radius, b.damage);
 }
 
-/** 쓰러진 적 정리: 처치 수·돈. 보스가 쓰러지면 보스가 부른 적도 같이 사라짐 (불려 나온 보스가 쓰러질 때는 아님) */
+/** 쓰러진 적 정리: 처치 수·돈. 보스가 쓰러지면 부른 적도 사라짐 (불려 나온 보스는 아님) */
 export function removeDead(s: RunState): void {
   if (!s.enemies.some((e) => e.hp <= 0)) return;
-  // 라스트 보스는 궁극기를 쓰기 전에는 쓰러지지 않음 (체력 1로 남아 다음 틱에 궁극기)
-  for (const e of s.enemies) if (e.hp <= 0 && !e.ultDone && ultBoss(e)) e.hp = 1;
+  // 라스트 보스는 궁극기 전에 · 쌍둥이는 짝이 서 있으면 쓰러지지 않음 (sim/bossTwins)
+  holdDown(s);
   const bossDown = s.enemies.some((e) => e.hp <= 0 && ENEMIES[e.kind].boss && !e.noGold);
   const alive: EnemyState[] = [];
   const fallen: { x: number; y: number; seat: number }[] = [];
@@ -254,11 +255,12 @@ export function removeDead(s: RunState): void {
     if (tabooN(s, "deathBurst") > 0 && e.kind !== "dummy") addHazard(s, e.x, e.y, ENEMIES[e.kind].contactDamage);
     // 협동: 마지막으로 때린 사람이 처치 효과·돈을 받음
     useSeat(s, e.lastHit ?? back);
-    // 보스가 부른 적(돈 없음)은 처치 수·쌓이는 힘(빛의 고리·잔영·경험치·먹은 영혼 등)에 넣지 않음
+    // 보스가 부른 적(돈 없음)은 처치 수·쌓이는 힘에 안 넣음
     const minion = e.noGold;
     if (!minion) s.kills++;
     else trialKill(s, e);
     if (!minion) relicKill(s, e);
+    if (!minion) factionKill(s, e);
     hatchSlimes(s, e, alive);
     const p = s.player;
     if (s.party && !minion) p.kills = (p.kills ?? 0) + 1;
@@ -289,7 +291,7 @@ export function removeDead(s: RunState): void {
     if (morphKill(s, e)) recalcStats(s);
   }
   s.enemies = alive;
-  // 연쇄 폭발: 쓰러진 자리에서 작은 폭발 (이것으로 쓰러진 적은 다음 틱에 정리돼 한 틱씩 이어짐)
+  // 연쇄 폭발: 쓰러진 자리에서 작은 폭발 (한 틱씩 이어짐)
   for (const f of fallen) {
     useSeat(s, f.seat);
     if (hasPerk(s.player, "chainBurst")) blastAt(s, f.x, f.y, PERKS.chainBurst.radius, s.player.stats.damage * PERKS.chainBurst.damage);

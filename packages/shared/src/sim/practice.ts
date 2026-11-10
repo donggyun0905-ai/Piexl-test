@@ -1,6 +1,6 @@
 // 연습장: 문 없는 방 하나에서 아이템을 마음대로 가져 보고 적을 불러 시험함 (기록·업적 없음)
 import { ROOM_CX, ROOM_HEIGHT, ROOM_MAX_Y, ROOM_MIN_Y, ROOM_WIDTH } from "../constants";
-import { CHARACTERS, ENEMIES, LAST_BOSSES, S2_LAST_BOSSES, type CharacterId, type EnemyKind, type WeaponId } from "../content";
+import { CHARACTERS, ENEMIES, LAST_BOSSES, S2_LAST_BOSSES, S3_LAST_BOSSES, type CharacterId, type EnemyKind, type WeaponId } from "../content";
 import { PASSIVES, type PassiveDef, type PassiveId, type UseItemId } from "../items";
 import { resetCombo } from "./brawl";
 import { resetGeneral } from "./general";
@@ -35,6 +35,16 @@ import { resetFenrir } from "./fenrir";
 import { resetEclipse } from "./eclipse";
 import { resetThorken } from "./thorken";
 import { resetLevia } from "./levia";
+import { resetTail } from "./tail";
+import { resetMadQueen } from "./madQueen";
+import { resetHook } from "./hook";
+import { resetOrca } from "./orca";
+import { resetWave } from "./wave";
+import { resetMiryu } from "./miryu";
+import { resetBeatrice } from "./beatrice";
+import { resetIan } from "./ian";
+import { resetGabriel } from "./gabriel";
+import { resetSerena } from "./serena"; import { resetRafael } from "./rafael"; import { resetYuriel } from "./yuriel"; import { resetMichaela } from "./michaela"; import { resetNailer } from "./nailer"; import { resetScissors } from "./scissors"; import { resetHellfist } from "./hellfist"; import { resetSilverBullet } from "./silverBullet"; import { resetBlueFlame } from "./blueFlame"; import { resetLunatic } from "./lunatic"; import { resetIncision } from "./incision"; import { resetCrusader } from "./crusader"; import { resetBlast } from "./blast";
 import { resetCollector } from "./collector";
 import { resetMiner } from "./miner";
 import { resetVoyager } from "./voyager";
@@ -54,7 +64,7 @@ import { createRun } from "./run";
 import type { RunState } from "./types";
 import { keepInRoom, makeEnemy } from "./util";
 import { applyRoom, BIG_COLS, BIG_ROWS } from "./rooms";
-import { makeArena } from "./bossPrimeval";
+import { lastArena } from "./cerbKit";
 import { bossHpMul } from "./bosses";
 import { depth } from "./hero";
 import { practiceRoomOff } from "./practiceRoom";
@@ -65,9 +75,9 @@ export type PracticeItem =
   | { kind: "passive"; id: PassiveId }
   | { kind: "use"; id: UseItemId };
 
-/** 연습장 시작: 출구가 모두 막힌 시작 방 하나 */
-export function createPracticeRun(characterId: CharacterId): RunState {
-  const s = createRun(1, characterId);
+/** 연습장 시작: 출구가 모두 막힌 시작 방 하나 (seed: 화면은 들어갈 때마다 다르게 → 공생 정령 카드 등이 바뀜) */
+export function createPracticeRun(characterId: CharacterId, seed = 1): RunState {
+  const s = createRun(seed, characterId);
   const room = s.map.rooms[s.map.startId]!;
   room.exits = room.exits.map(() => -1);
   // 허수아비 아래에서 시작 (보통 판은 아래쪽 벽 옆)
@@ -145,12 +155,12 @@ export function practiceRemoveUse(s: RunState, id: UseItemId): void {
 export function practiceSpawn(s: RunState, kind: EnemyKind): void {
   const p = s.player;
   // 라스트 보스: 실제와 같은 큰 방에서 (태초의 빛과 어둠은 상자 벽 방에 둘이 같이)
-  if ([...LAST_BOSSES, ...S2_LAST_BOSSES].includes(kind as never) || kind === "pdark") {
+  if ([...LAST_BOSSES, ...S2_LAST_BOSSES, ...S3_LAST_BOSSES].includes(kind as never) || kind === "pdark") {
     practiceClearEnemies(s);
     s.roomCols = BIG_COLS;
     s.roomRows = BIG_ROWS;
     applyRoom(s);
-    if (kind === "plight" || kind === "pdark") s.arena = makeArena(s);
+    s.arena = lastArena(s, kind);
     p.x = p.prevX = ROOM_CX;
     p.y = p.prevY = ROOM_MAX_Y - p.r - 16;
     const pair = kind === "plight" || kind === "pdark" ? (["plight", "pdark"] as const) : [kind];
@@ -242,6 +252,17 @@ export function practiceReset(s: RunState): void {
   resetEclipse(p);
   resetThorken(p);
   resetLevia(p);
+  resetTail(p);
+  resetMadQueen(p);
+  resetHook(p);
+  resetOrca(p);
+  resetWave(p);
+  resetMiryu(p);
+  resetBeatrice(p);
+  resetIan(p);
+  resetGabriel(p);
+  resetSerena(p);
+  resetRafael(p); resetYuriel(p); resetMichaela(p); resetNailer(p); resetScissors(p); resetHellfist(p); resetSilverBullet(p); resetBlueFlame(p); resetLunatic(p); resetIncision(p); resetCrusader(p); resetBlast(p);
   resetCollector(p);
   resetMiner(p);
   resetVoyager(p);

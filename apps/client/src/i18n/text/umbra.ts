@@ -10,6 +10,26 @@ export const UMBRA_TEXT = {
   bossSalamander: { ko: "불도롱뇽", en: "Magma Salamander", ja: "火山サラマンダー" },
   bossJelly: { ko: "번개 해파리", en: "Storm Jellyfish", ja: "雷クラゲ" },
   bossCaptain: { ko: "유령선 선장", en: "Ghost Ship Captain", ja: "幽霊船の船長" },
+  // 시즌 3 단계별 보스
+  bossGatekeeper: { ko: "지옥문 수문장", en: "Hellgate Keeper", ja: "地獄門の門番" },
+  bossTwinLu: { ko: "쌍둥이 악마 루", en: "Twin Demon Lu", ja: "双子の悪魔ルー" },
+  bossTwinRe: { ko: "쌍둥이 악마 레", en: "Twin Demon Re", ja: "双子の悪魔レー" },
+  bossMoonEater: { ko: "달을 삼키는 자", en: "Moon Devourer", ja: "月を呑む者" },
+  // 시즌 3 라스트 보스 켈베로스와 갈라진 세 사람
+  bossCerberus: { ko: "켈베로스", en: "Cerberus", ja: "ケルベロス" },
+  bossCerbFist: { ko: "권귀", en: "Fist Fiend", ja: "拳鬼" },
+  bossCerbFlame: { ko: "염희", en: "Flame Maiden", ja: "炎姫" },
+  bossCerbBlade: { ko: "검귀", en: "Blade Fiend", ja: "剣鬼" },
+  // 시즌 3 라스트 보스 레비아탄의 세 모습
+  bossLeviathan: { ko: "레비아탄", en: "Leviathan", ja: "リヴァイアサン" },
+  bossLevWhale: { ko: "심연고래 레비아탄", en: "Abyssal Leviathan", ja: "深淵鯨リヴァイアサン" },
+  bossLevKing: { ko: "해왕 레비아탄", en: "Sea King Leviathan", ja: "海王リヴァイアサン" },
+  // 시즌 3 라스트 보스 아스모데우스의 화신체 (체력 줄 100~76 · 75~51 · 50~0 모습 이름은 막대 위에)
+  bossAsmodeus: { ko: "아스모데우스의 화신체", en: "Avatar of Asmodeus", ja: "アスモデウスの化身" },
+  asmoLust: { ko: "욕망의 화신", en: "Avatar of Desire", ja: "欲望の化身" },
+  asmoVoid: { ko: "검은 해의 화신", en: "Avatar of the Black Sun", ja: "黒い太陽の化身" },
+  asmoLord: { ko: "강철 군주의 화신", en: "Avatar of the Iron Lord", ja: "鋼鉄君主の化身" },
+  asmoStopHit: { ko: "공격을 멈추세요!", en: "Stop attacking!", ja: "攻撃をやめて！" },
   sageMaxStaff: { ko: "제천대성이 여의봉을 크기를 최대한 늘립니다!", en: "The Great Sage stretches his staff to its utmost size!", ja: "斉天大聖が如意棒を最大まで伸ばします！" },
   umbraSay0: { ko: "……어디 놀아 볼까.", en: "...Let us play.", ja: "……遊んでやろう。" },
   umbraSay1: { ko: "호오...", en: "Hoh...", ja: "ほう…" },

@@ -1,18 +1,18 @@
-/* 함께 하기 입장·대기실·채팅·일일 도전 닉네임 줄 */
+/* 함께 하기·협동 입장 (battle/BattleEntry · coop/CoopNameAsk): 제목 · 닉네임 · 둥근 카드 둘(위에 캐릭터 그림 줄) */
 .entry-screen {
   min-height: 100%;
-  width: min(720px, 100%);
+  width: min(760px, 100%);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 14px;
-  padding: 60px 16px 24px;
+  gap: 16px;
+  padding: 56px 16px 24px;
 }
 .entry-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 16px;
 }
 @media (max-width: 640px) {
   .entry-columns {
@@ -20,22 +20,45 @@
   }
 }
 .entry-panel {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 16px;
-  background: var(--panel);
+  padding: 16px 18px 18px;
+  background: linear-gradient(180deg, #2a2340 0%, var(--panel) 46%);
   border: 2px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.35);
 }
 .entry-panel.quick {
   border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgb(242 193 78 / 0.25), 0 8px 28px rgb(242 193 78 / 0.12);
 }
 .entry-panel h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
+}
+.entry-panel .hint {
+  margin: 0;
 }
 .entry-panel .big {
   margin-top: auto;
+}
+.entry-panel button,
+.entry-panel input {
+  border-radius: 8px;
+}
+.entry-art {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 2px;
+  height: 72px;
+  margin: -6px 0 2px;
+  background: radial-gradient(ellipse at 50% 85%, rgb(255 255 255 / 0.08), transparent 65%);
+}
+.entry-art canvas {
+  filter: drop-shadow(0 3px 2px rgb(0 0 0 / 0.5));
 }
 .entry-divider {
   display: flex;
@@ -69,63 +92,7 @@
   font-size: 14px;
 }
 
-/* ───────── 대기실 ───────── */
-.lobby-screen {
-  min-height: 100%;
-  width: min(1100px, 100%);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1.2fr 1fr;
-  align-items: start;
-  gap: 24px;
-  padding: 60px 16px 24px;
-}
-@media (max-width: 900px) {
-  .lobby-screen {
-    grid-template-columns: 1fr;
-    width: min(480px, 100%);
-    gap: 16px;
-  }
-}
-.lobby-code {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 16px;
-  background: var(--panel);
-  border: 2px solid var(--line);
-  text-align: center;
-}
-.room-code-value {
-  font-size: 40px;
-  letter-spacing: 6px;
-  color: var(--accent);
-  text-shadow: 2px 2px 0 #000;
-  -webkit-user-select: text;
-  user-select: text;
-}
-.room-code-actions {
-  display: flex;
-  gap: 6px;
-}
-.lobby-status {
-  font-size: 18px;
-}
-.lobby-main {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.lobby-characters,
-.lobby-countdown {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.lobby-countdown {
-  align-items: center;
-}
+/* 대기실 남은 시간 (패왕전 소식판 등에서도 씀) */
 .countdown {
   margin: 0;
   font-size: 48px;
@@ -148,57 +115,11 @@
   color: var(--accent);
   background: #2a2338;
 }
-.player-list h3 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0 0 6px;
-  font-size: 14px;
-  color: var(--muted);
-}
-.seats {
-  display: inline-flex;
-  gap: 3px;
-  margin-left: auto;
-}
-.seats span {
-  width: 8px;
-  height: 8px;
-  border: 1px dashed var(--line);
-}
-.seats span.on {
-  background: var(--accent);
-  border: 1px solid var(--accent);
-}
-.player-list ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.player-list li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  background: var(--panel);
-  border: 2px solid var(--line);
-}
-.player-list li.mine {
-  border-color: var(--accent);
-}
-.player-list .nickname {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 .badge {
   font-size: 11px;
   font-weight: 700;
-  padding: 1px 5px;
+  padding: 1px 6px;
+  border-radius: 999px;
   flex: none;
 }
 .badge.host {
@@ -221,7 +142,10 @@
   gap: 6px;
 }
 .lobby-chat-log {
+  flex: 1;
+  min-height: 160px;
   height: 260px;
+  border-radius: 10px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -249,7 +173,8 @@
   color: var(--muted);
 }
 .chat-line span {
-  padding: 4px 8px;
+  padding: 4px 10px;
+  border-radius: 10px;
   background: var(--bg);
   border: 1px solid var(--line);
   max-width: 90%;

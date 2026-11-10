@@ -27,8 +27,8 @@
   - 메시지는 묶어서 보낸다 (받는 메시지 수 = 비용). 저장은 값이 바뀔 때만
   - 랜덤은 시드로만 (`Math.random`으로 게임 결과를 정하지 않음)
 - 브랜치: `develop` → 테스트(`develop.pixel-rogue.pages.dev`, 서버 `pixel-rogue-beta`), `test` → 시험(`test.pixel-rogue-test.pages.dev`, 서버 `pixel-rogue-test.donggyun0905.workers.dev`·저장소 `donggyun0905-ai/Piexl-test`), `main` → 라이브(`pixel-toybox.pages.dev`, 서버 `pixel-toybox.donggyun0905.workers.dev`, 같은 저장소 `Piexl-test`, 2026-11-03 결정). 작업은 `develop`에서
-- 그림 규격: `docs/ART.md` (생성 AI로 캐릭터 그림 만들기: `docs/ART_AI.md` · 바꿀 그림 전체 목록: `docs/ART_LIST.md` · GPT 프롬프트: `docs/ART_PROMPTS.md`) · 공개 전 점검: `docs/LAUNCH.md` · 관리자 페이지(게임 수치 조정): `docs/ADMIN.md`
-- 패왕전 새 대결 유형 계획(시즌 3 뒤): `docs/PW_MODES.md`
+- 그림 규격: `docs/ART.md` (생성 AI로 캐릭터 그림 만들기: `docs/ART_AI.md` · 바꿀 그림 전체 목록: `docs/ART_LIST.md` · GPT 프롬프트: `docs/ART_PROMPTS.md`) · 빛 효과(PixiJS 층)로 이펙트 만들기: `docs/GLOW.md` · 공개 전 점검: `docs/LAUNCH.md` · 관리자 페이지(게임 수치 조정): `docs/ADMIN.md`
+- 패왕전 새 대결 유형 계획(시즌 3 뒤): `docs/PW_MODES.md` · 시즌 3 단계별 보스 구상: `docs/S3_BOSSES.md` · 시즌 3 최종보스 구상: `docs/S3_FINAL_BOSSES.md` (레비아탄 `docs/S3_LEVIATHAN.md` · 아스모데우스의 화신체 `docs/S3_ASMODEUS.md`)
 - 게임 계획: `docs/PLAN.md` (고치면 맨 위 '마지막 수정' 날짜·시간 갱신)
 - 개발일지: `docs/devlog/YYYY-MM.md` (월별, 최신 달만 읽기). 날짜·시간(한국 시간)으로 기록. **쓰기 전에 적을 내용을 간략히 말하고, 사용자가 작성하라고 하면 작성**
 - 실제 서버 배포 순간 접속 중인 사람의 연결이 잠깐 끊김 → 서버 변경은 업로드 전에 알려 주기
@@ -49,6 +49,7 @@
 - 큰 데이터(방 모양 틀·아이템 이름 등)는 규칙 코드와 다른 파일에 둔다
 - 수정 전에 필요한 파일만 연다: `docs/MAP.md`에서 grep으로 찾고, 큰 파일은 `grep`으로 위치를 찾아 그 부분만 읽기
 - 게임 계산(`packages/shared/src/sim`)을 고칠 때는 시드 결정성을 지킨다 (`Math.random`·시간 금지). 동작을 바꾸지 않는 정리는 버전을 올리지 않고 패치 노트에도 적지 않는다
+- **사거리 증가는 반드시 공격에 반영** (2026-11-08 사용자 지시): 고정 거리(`*R`·`*Reach`·`*Len`·앞 거리)로 때리는 공격은 `sim/util`의 `reachOf(p)`(지금 사거리 ÷ 무기 기본 사거리)를 곱해 실제로 더 멀리 닿게 하고, 이펙트도 늘어난 크기·자리에서 뜨게 (이펙트 `size`·자리에 같은 값). 너무 커서 이상하면 늘어난 범위 안의 마우스 자리에 이펙트. 일부러 안 늘리는 공격은 `i18n/guides/rangeRule`에 적어 설명에 보이게
 - 새 게임 계산 코드에는 `Math.sin/cos` 대신 `sim/orbit`의 `rot`(테일러 급수) 사용 (기기마다 같은 결과)
 - 새 캐릭터를 넣을 때는 바로 앞에 넣은 캐릭터 커밋을 `git show --stat`로 보고 같은 곳들에 똑같이 등록 (무기·아이템 표, 상태 타입, 틱 표, 글자 한·영·일, 아이콘, 그리기, 소리, 설명, 업적, 스토리, 상점 스킨, 그림 시트·테마 스킨 9·한정 스킨, 테스트, 버전·패치 노트, `docs/MAP.md`)
 - 새 캐릭터는 **관리자 페이지(어드민)에서도 다른 캐릭터와 똑같이 모두 고칠 수 있게** 만든다 (2026-10-30 사용자 지시): 무기·아이템 수치 파일을 `balanceTables`의 `MODULES`에 등록, 계산 파일 숫자는 `const R = {...}`→`*_RULES`로 `sim/rulesRegistry`에, 수치마다 위에 한국어 `/** 설명 */`, 캐릭터 분류 이름이 맞게 뜨는지·어드민 연습장에서 고를 수 있는지 확인 (`docs/ADMIN.md`)

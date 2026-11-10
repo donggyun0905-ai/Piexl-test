@@ -8,6 +8,7 @@ import { pwGrid } from "./paewangGrid";
 import { tabooUp } from "./taboo";
 import { trialFoeHp } from "./trialFoes";
 import type { Body, DotKind, EffectState, EnemyState, PlayerState, ProjectileState, RunState } from "./types";
+import { moonOut } from "./moonlight";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -82,6 +83,13 @@ export function weaponOf(p: PlayerState): WeaponDef {
   return WEAPONS[p.weaponId];
 }
 
+/** 사거리 배율: 지금 사거리 ÷ 무기 기본 사거리 (사거리 증가 아이템을 먹으면 1보다 큼, 0.5~)
+ * 고정 거리로 때리는 캐릭터는 공격 범위·이펙트 크기·이펙트 자리에 이 배율을 곱해 사거리 증가가 실제로 닿게 함 (docs/MAP.md 규칙) */
+export function reachOf(p: PlayerState): number {
+  const base = WEAPONS[p.weaponId]?.range ?? p.stats.range;
+  return Math.max(0.5, p.stats.range / Math.max(1, base));
+}
+
 /** 치명타 표시: 적이 맞은 틱(피해 숫자) · 판 전체 수(소리). 화면용이라 게임 결과에는 영향 없음 */
 export function markCrit(s: RunState, e: EnemyState): void {
   e.critTick = s.tick;
@@ -122,7 +130,7 @@ export function enemyShot(s: RunState, x: number, y: number, dx: number, dy: num
     // 금기: 빠른 탄
     vx: dx * speed * tabooUp(s, "bulletSpeed"),
     vy: dy * speed * tabooUp(s, "bulletSpeed"),
-    damage,
+    damage: damage * moonOut(), // 달빛 걸린 적이 쏜 탄은 약함
     ticksLeft: 240,
   };
   s.projectiles.push(pr);

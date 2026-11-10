@@ -12,6 +12,12 @@ export const BOSS_TEXT: Record<string, string> = {
   plant: "bossPlant", reaper: "bossReaper", swordgod: "bossSwordGod", archangel: "bossAngel", dragon: "bossDragon", godeater: "bossGodEater", plight: "bossLight", pdark: "bossDark",
   umbra: "bossUmbra", sandworm: "bossSandworm", scorpion: "bossScorpion", roc: "bossRoc", demigod: "bossDemigod", sage: "bossSage",
   toad: "bossToad", salamander: "bossSalamander", jelly: "bossJelly", captain: "bossCaptain",
+  gatekeeper: "bossGatekeeper", twinlu: "bossTwinLu", twinre: "bossTwinRe", mooneater: "bossMoonEater",
+  cerberus: "bossCerberus", cerbfist: "bossCerbFist", cerbflame: "bossCerbFlame", cerbblade: "bossCerbBlade",
+  leviathan: "bossLeviathan", levwhale: "bossLevWhale", levking: "bossLevKing",
+  asmodeus: "bossAsmodeus",
+  lucifer: "raid_lucifer",
+  lucchest: "raidChestName",
 };
 
 /** 보스가 아닌 적 이름 */
@@ -45,6 +51,9 @@ const NAMES: Record<string, Names> = {
   skelarcher: n("스켈레톤 궁병", "Skeleton Archer", "スケルトン弓兵"),
   chainward: n("쇠사슬 간수", "Chain Warden", "鎖の看守"),
   highorc: n("하이오크", "High Orc", "ハイオーク"),
+  hellgate: n("지옥문", "Hell Gate", "地獄門"),
+  imp: n("임프", "Imp", "インプ"),
+  moonshard: n("달 조각", "Moon Shard", "月の欠片"),
   incubus: n("인큐버스", "Incubus", "インキュバス"),
   ruinblade: n("파괴의 검", "Blade of Ruin", "破壊の剣"),
   chaosblade: n("혼돈의 검", "Blade of Chaos", "混沌の剣"),

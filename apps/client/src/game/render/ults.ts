@@ -2,6 +2,7 @@
 import { cageRect, PARRY_TICKS, HELL_CHARGE, HELL_COLS, HELL_ROWS, HELL_SHOW, HELL_WAVES, hellCell, type RunState } from "@pixel-rogue/shared";
 import { additive, beam, glow, shock } from "./pwFxBits";
 import type { Snap } from "./palette";
+import { drawBlueFlameUlt } from "./blueFlameUlt";
 
 const TAU = Math.PI * 2;
 /** 장면 사이 잠깐 비우는 틱 (같은 모양이 이어져도 바뀐 걸 알게) */
@@ -81,6 +82,7 @@ function drawParry(ctx: CanvasRenderingContext2D, s: RunState, snap: Snap, l: nu
 
 /** 맨 위에: 용 입에서 커지는 염옥 불덩이 · 갓이터 패링 작은 방 밖 어둠 */
 export function drawUltOverlay(ctx: CanvasRenderingContext2D, s: RunState, snap: Snap): void {
+  drawBlueFlameUlt(ctx, s, snap);
   for (const e of s.enemies) {
     if (e.ultAt === undefined) continue;
     const t = s.tick - e.ultAt;

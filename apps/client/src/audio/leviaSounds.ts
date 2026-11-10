@@ -2,7 +2,7 @@
 import type { RunState } from "@pixel-rogue/shared";
 import type { Sfx } from "./sound";
 
-const SFX: Partial<Record<string, Sfx>> = { lvSwing: "pwSlash", lvSpin: "pwSpin", lvFin: "lvWhale", lvOrbit: "lvWhale", lvCharge: "pwWave", lvQuake: "pwBurst", lvBreach: "pwMeteor", lvBolt: "zap", lvSong: "chime", lvGush: "pwWave", lvBurst: "pwBurst" };
+const SFX: Partial<Record<string, Sfx>> = { lvSwing: "pwSlash", lvThrust: "pwSlash", lvTailSweep: "lvWhale", lvSpin: "pwSpin", lvFin: "lvWhale", lvOrbit: "lvWhale", lvCharge: "pwWave", lvQuake: "pwBurst", lvBreach: "pwMeteor", lvBolt: "zap", lvSong: "chime", lvGush: "pwWave", lvBurst: "pwBurst" };
 
 export function leviaSounds(run: RunState, out: Sfx[], onShake: (power: number) => void): void {
   const p = run.player;

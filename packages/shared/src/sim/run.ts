@@ -7,6 +7,7 @@
 import { START_GOLD } from "./loot";
 import { PERKS } from "../perks";
 import { petRevive } from "./lobbyPet";
+import { accSave } from "./accStats";
 import { artifacterRevive } from "./artifacter";
 import { slayerSave } from "./slayer";
 import { fenrirSave } from "./fenrirStats";
@@ -44,6 +45,7 @@ import { trialTick } from "./trialRun";
 import { hiddenTick } from "./hiddenTrial";
 import { trialRevive } from "./trialRewards";
 import { splicePassives } from "./retag";
+import { oathHold } from "./factionOath";
 
 // ───────── 시작 ─────────
 
@@ -184,8 +186,9 @@ export function stepWorld(s: RunState): void {
   // 지형: 진흙·물에서 느려짐 · 용암 · 가시 · 감전 (사람마다)
   updateTerrain(s);
   // 얼음 시계: 적·적 탄이 멈춤 (라스트 보스 궁극기 동안은 멈추지 않음)
-  const frozen = s.freezeTicks > 0 && !s.enemies.some(ultBusy);
-  if (frozen) s.freezeTicks--;
+  // 아스칼론 맹세 카드가 떠 있는 동안도 멈춤 (sim/factionOath)
+  const frozen = (s.freezeTicks > 0 || oathHold(s)) && !s.enemies.some(ultBusy);
+  if (frozen && s.freezeTicks > 0) s.freezeTicks--;
   else {
     // 잔영 분신이 있으면 적은 분신을 쫓음
     updateEnemies(s);
@@ -233,6 +236,8 @@ export function checkDeath(s: RunState): boolean {
   slayerSave(s);
   fenrirSave(s);
   if (p.hp <= 0) petRevive(s);
+  // 레이드 장신구: 버티기 · 부활
+  if (p.hp <= 0) accSave(s);
   trialRevive(s);
   artifacterRevive(s);
   // 관리자 티어 플레잉: 로그(1~6층)에서는 쓰러져도 체력 가득으로 되살아나고 횟수만 셈 (라스트 보스는 쓰러지면 끝)

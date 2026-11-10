@@ -173,6 +173,19 @@
 .story-faction {
   background: linear-gradient(90deg, color-mix(in srgb, var(--fc) 22%, transparent), rgba(20, 16, 28, 0.85) 45%);
 }
+/* 아카식 레코드·서고의 감시자: 제 색 그대로 은은하게 빛남 */
+.story-faction.akashic,
+.story-faction.archive {
+  animation: story-glow 2.4s ease-in-out infinite;
+}
+.story-faction.akashic h3,
+.story-faction.archive h3 {
+  text-shadow: 0 0 6px var(--fc), 0 0 12px var(--fc);
+}
+@keyframes story-glow {
+  0%, 100% { box-shadow: 0 0 4px color-mix(in srgb, var(--fc) 40%, transparent); }
+  50% { box-shadow: 0 0 16px var(--fc); }
+}
 .story-chapter {
   position: relative;
   overflow: hidden;

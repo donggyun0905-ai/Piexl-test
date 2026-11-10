@@ -12,12 +12,40 @@
   border-bottom-width: 3px;
 }
 .cs-tabs button.ascalon { border-bottom-color: #4a8aff; }
-.cs-tabs button.terracore { border-bottom-color: #e8a040; }
+.cs-tabs button.terracore { border-bottom-color: #a8723c; }
 .cs-tabs button.virdia { border-bottom-color: #4ac86a; }
 .cs-tabs button.helios { border-bottom-color: #c83a4a; }
+.cs-tabs button.thalassia { border-bottom-color: #6ad4ff; }
+.cs-tabs button.seongguk { border-bottom-color: #ffd84a; }
+.cs-tabs button.dawn { border-bottom-color: #ffffff; }
 .cs-tabs button.akashic { border-bottom-color: #b89aff; }
 .cs-tabs button.outsider { border-bottom-color: #5ae0d0; }
 .cs-tabs button.archive { border-bottom-color: #ffb84a; }
+/* 진영 탭 아래 진영 특징 한 줄 (왼쪽 진영 색 줄) */
+.cs-trait {
+  width: min(980px, 100%);
+  margin: 6px 0 0;
+  padding: 6px 10px;
+  border-left: 4px solid var(--trait, #ffffff);
+  border-radius: 4px;
+  background: rgb(20 20 34 / 0.75);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.cs-trait b { color: var(--trait, #ffffff); margin-right: 6px; }
+.cs-trait.ascalon { --trait: #6aa0ff; }
+.cs-trait.terracore { --trait: #ff9a3a; }
+.cs-trait.virdia { --trait: #6ae07a; }
+.cs-trait.helios { --trait: #ff4a5a; }
+.cs-trait.thalassia { --trait: #6ad4ff; }
+.cs-trait.seongguk { --trait: #ffd84a; }
+/* 아카식 레코드·서고의 감시자: 제 색 그대로 은은하게 빛남 */
+.cs-tabs button.akashic { --glow: #b89aff; animation: cs-glow 2.4s ease-in-out infinite; }
+.cs-tabs button.archive { --glow: #ffb84a; animation: cs-glow 2.4s ease-in-out infinite; }
+@keyframes cs-glow {
+  0%, 100% { box-shadow: 0 3px 6px -2px var(--glow); text-shadow: 0 0 3px var(--glow); }
+  50% { box-shadow: 0 4px 14px 0 var(--glow); text-shadow: 0 0 8px var(--glow); }
+}
 .cs-tabs button.on {
   color: #1a1622;
   background: #ffd860;

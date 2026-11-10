@@ -11,6 +11,7 @@ export const ShopScreen = lazy(() => import("./shop/ShopScreen").then((m) => ({ 
 export const SwarmGame = lazy(() => import("./event/SwarmGame").then((m) => ({ default: m.SwarmGame })));
 export const SwarmMaps = lazy(() => import("./event/SwarmMaps").then((m) => ({ default: m.SwarmMaps })));
 export const PwFlow = lazy(() => import("./event/PwFlow").then((m) => ({ default: m.PwFlow })));
+export const RaidFlow = lazy(() => import("./event/RaidFlow").then((m) => ({ default: m.RaidFlow })));
 export const StoryScreen = lazy(() => import("./story/StoryScreen").then((m) => ({ default: m.StoryScreen })));
 export const TierScreen = lazy(() => import("./archive/TierScreen").then((m) => ({ default: m.TierScreen })));
 export const LobbyMode = lazy(() => import("./lobby/LobbyMode").then((m) => ({ default: m.LobbyMode })));

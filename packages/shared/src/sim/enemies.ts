@@ -22,6 +22,7 @@ import { eachSeat, nearestSeat, seatNo, useSeat } from "./party";
 import { dist2, enemyShot, keepInRoom, normalize, roomGrid } from "./util";
 import { furyTick, tabooUp } from "./taboo";
 import { timeSlowed } from "./punk";
+import { setActingFoe } from "./moonlight";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -45,6 +46,7 @@ export function updateEnemies(s: RunState): void {
   const back = seatNo(s);
   const fields = new Map<number, ReturnType<typeof distanceField>>();
   for (const e of s.enemies) {
+    setActingFoe(e);
     if (e.hitFlash > 0) e.hitFlash--;
     burrowed(e); // 땅속 땅 물고기는 아무것도 받지 않음
     knockTick(s, e);
@@ -72,12 +74,15 @@ export function updateEnemies(s: RunState): void {
     const y0 = e.y;
     // 라스트 보스 궁극기는 기절·위압에 멈추지 않음
     // 검은 잔영(지켜보기만 함)도
-    if (ultBusy(e) || e.kind === "umbra") e.stunTicks = e.fearTicks = 0;
+    // 레이드 보스 루시퍼도 (기절에 묶이면 공격·변신을 못 함)
+    const steady = e.kind === "lucifer";
+    if (ultBusy(e) || e.kind === "umbra" || steady) e.stunTicks = e.fearTicks = 0;
+    if (steady) e.sluggish = 0;
     // 얼음 부적·유압 해머: 경직된 적은 움직이지도 공격하지도 않음 (몸에 닿으면 피해는 그대로)
     // 느려짐(토룡·교만): 움직임과 공격이 모두 느림 (일반 적은 두 틱에 한 번, 보스는 네 틱에 한 번 쉼)
     if ((e.sluggish ?? 0) > 0) e.sluggish = (e.sluggish ?? 0) - 1;
     if ((e.stunTicks ?? 0) > 0) e.stunTicks = (e.stunTicks ?? 0) - 1;
-    else if (((e.sluggish ?? 0) > 0 && s.tick % (def.boss ? 4 : 2) === 0) || timeSlowed(s, !!def.boss)) {
+    else if (!steady && (((e.sluggish ?? 0) > 0 && s.tick % (def.boss ? 4 : 2) === 0) || timeSlowed(s, !!def.boss))) {
       // 이번 틱은 쉼 (펑크 신경 가속: 시간이 느려져 더 자주 쉼)
     } else if ((e.fearTicks ?? 0) > 0) {
       // 위압: 플레이어 반대쪽으로 도망
@@ -88,7 +93,7 @@ export function updateEnemies(s: RunState): void {
       // 패왕전 AI 캐릭터: 움직임·공격은 sim/paewangAi (기절·둔화·속박은 여기서 줄고 그쪽에서 확인)
     } else if (e.kind === "gnat") updateGnat(s, e, go);
     else if (e.kind === "tower") updateTower(s, e);
-    else if (e.kind === "fort") e.timer = 0; // 숨은 시련 구조물: 가만히 (sim/hiddenKit)
+    else if (e.kind === "fort" || e.kind === "levprison") e.timer = 0; // 숨은 시련 구조물·레비아탄 물감옥: 가만히 (sim/hiddenKit·levKit)
     else if (e.kind === "ghost") updateGhost(s, e);
     else if (e.kind === "ruinblade" || e.kind === "chaosblade") updateBlade(s, e, toP);
     else if (e.kind === "guardian") updateGuardian(s, e, toP, e.aux ? guardSpot(s, e, go) : go);
@@ -192,6 +197,7 @@ export function updateEnemies(s: RunState): void {
       !!s.party,
     );
   }
+  setActingFoe(null);
   useSeat(s, back);
 
   s.enemies.push(...spawned);

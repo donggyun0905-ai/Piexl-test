@@ -1,4 +1,4 @@
-# 새 방 소품 그림 (사용자 GPT 원본 art/…) → apps/client/public/sprites/props/{이름}.webp  (python3 scripts/art/room_props.py)
+# 새 방 소품 그림 (사용자 GPT 원본 art/방/…) → apps/client/public/sprites/props/{이름}.webp  (python3 scripts/art/room_props.py)
 # 검은 배경 지우기(key) 또는 그대로 두기(glow: 게임에서 더하기로 그려 검정이 사라짐) · 가로로 나란한 여러 모습을 칸으로 나눔(같은 높이·바닥선)
 # · 게임에서 그릴 크기의 4배로 줄임. 게임 쪽 이름·칸 수는 render/propArt.ts의 PROPS와 같아야 함
 import os
@@ -6,7 +6,7 @@ import os
 from PIL import Image
 
 ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
-ART = os.path.join(ROOT, "art")
+ART = os.path.join(ROOT, "art", "방")
 OUT = os.path.join(ROOT, "apps", "client", "public", "sprites", "props")
 SCALE = 4
 

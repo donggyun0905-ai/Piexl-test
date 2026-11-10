@@ -14,7 +14,7 @@ import { setRandomKit } from "./taboo/tabooStore";
 import { TEST_OPEN } from "./testFlags";
 import { hallUnlocked } from "./lobby/exhibits";
 import { CharPickDialog, skinName } from "./select/CharPickDialog";
-import { factionOf, SELECT_TABS } from "./select/factions";
+import { FACTION_TRAIT, factionOf, SELECT_TABS } from "./select/factions";
 import type { FactionId } from "./story/storyData";
 import { addPlay, cardOf, frameOf, masteryLevel, playsOf } from "./mastery/mastery";
 
@@ -104,6 +104,11 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
         ))}
         <input type="search" value={find} placeholder={t("csSearch")} onChange={(e) => setFind(e.target.value)} />
       </div>
+      {tab && FACTION_TRAIT[tab] && (
+        <p className={`cs-trait ${tab}`}>
+          <b>{t(FACTION_TRAIT[tab]!.name)}</b> {t(FACTION_TRAIT[tab]!.tip)}
+        </p>
+      )}
       <div className="select-list">
         {list.length === 0 && <p className="cs-empty">{t(tab === "archive" && !q ? "csArchiveSoon" : "csEmpty")}</p>}
         {list.map((id) => {

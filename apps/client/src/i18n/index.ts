@@ -11,7 +11,7 @@ export const LANGS: { id: Lang; label: string }[] = [
 
 export type TextKey = keyof typeof TEXT;
 
-function detectLang(): Lang {
+export function detectLang(): Lang {
   const saved = loadText("lang");
   if (saved === "ko" || saved === "en" || saved === "ja") return saved;
   const nav = typeof navigator === "undefined" ? "" : navigator.language.toLowerCase();

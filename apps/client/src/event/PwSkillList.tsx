@@ -6,6 +6,7 @@ import { itemName } from "../i18n/items";
 import { PW_PASSIVE_TEXT } from "../i18n/text/pwPassives";
 import { keyLabel, useSettings } from "../settings";
 import { skillLines, skillName } from "./pwSkillText";
+import { RichText } from "../game/RichText";
 
 /** 패왕전에서만 바꾼 패시브 · 기본 공격 설명 */
 const PAS: Partial<Record<CharacterId, TextKey>> = { novice: "pwPasNovice", rider: "pwPasRider", fly: "pwPasFly" };
@@ -34,7 +35,9 @@ export function PwSkillList({ characterId, lang, t }: { characterId: CharacterId
         <span className="pw-skill-badge">P</span>
         <span>
           <b>{t("pwSkPassive")}</b>
-          <small>{t(pwPassiveKey(characterId))}</small>
+          <small>
+            <RichText text={t(pwPassiveKey(characterId))} />
+          </small>
         </span>
       </div>
       {kit?.skills.map((def, k) => (

@@ -1,5 +1,6 @@
 // 패왕전 받은 피해 정리 (쓰러졌을 때 화면이 보여 줌): 누가 · 무엇으로(평타·스킬 1~4·소환·지속 피해·지형) · 합 · 가장 큰 한 방 · 준 피해 · 받은 회복
 // 그림자 적이 맞을 때 날것 피해를 적어 두고(logHit), 사람에게 넘길 때(transfer) 실제로 줄어든 체력을 그 비율로 나눔
+import { raidLogHit } from "./raidStats";
 import { seatNo } from "./party";
 import type { EnemyState, RunState } from "./types";
 
@@ -34,6 +35,7 @@ export function recapHeal(s: RunState, seat: number, amt: number): void {
 
 /** 그림자 적이 맞음 (지금 자리 = 때린 사람, 출처는 pv.src) */
 export function logHit(s: RunState, e: EnemyState, amt: number): void {
+  if (s.raidBoss) return raidLogHit(s, e, amt);
   const pv = s.pvp;
   if (!pv || amt <= 0) return;
   const to = pv.proxies.indexOf(e);

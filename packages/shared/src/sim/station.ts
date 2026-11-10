@@ -1,5 +1,6 @@
 // 상점 대신 나오는 작업대: 아티팩터는 모든 상점이 거대한 제작대(sim/afBench) · 추적자는 라스트 보스 층 상점이 튜닝소(sim/trTune)
 // 작업대 앞에서 F = 창 열기·닫기. 창에서 누른 것은 입력 menu (기능 × 4096 + a × 64 + b)로 와서 같은 결과가 나옴 (기록·협동)
+import { SPIRIT_OP, spiritMenu } from "./factionSpirit";
 import { ROUTE_OP, routeMenu } from "./routeGo";
 import type { StatMod } from "../stats";
 import { BENCH_OP, benchMods, benchUse } from "./afBench";
@@ -9,6 +10,7 @@ import { tuneMods, tuneSwap, tuneUp } from "./trTune";
 import { hiddenMods } from "./hiddenPerks";
 import { hiddenPick } from "./hiddenDice";
 import { GYM_OP, gymMenu, gymMods } from "./gym";
+import { accMods } from "./accStats";
 import { boonMods } from "./boons";
 import { TRIAL_OP, trialAt, trialMenu } from "./trial";
 import { ALTAR_OP, altarMenu, altarPending } from "./altar";
@@ -17,6 +19,9 @@ import { GAMBLE_OP, gambleAt, gambleMenu } from "./gamble";
 import { AUCTION_OP, auctionAt, auctionMenu } from "./auction";
 import type { StationKind } from "./stationTypes";
 import { FORGE_OP, forgeMenu, forgeMods } from "./forge";
+import { RAID_OP, raidPrepMenu } from "./raidPrep";
+import { raidAltarAt } from "./raid";
+import { darkMods } from "./lucDark";
 import type { Pickup, RunState } from "./types";
 
 /** 튜닝소 기능 번호 (제작대 BENCH_OP 다음) */
@@ -49,6 +54,7 @@ export const bigReach = (pk: Pickup) => (pk.kind === "trial" || pk.kind === "alt
 export function stationAt(s: RunState, pk: Pickup, interact: boolean): void {
   if (s.prompt.kind !== "none" || !isStation(pk)) return;
   if (pk.kind === "trial" || pk.kind === "boon") return trialAt(s, pk, interact);
+  if (pk.kind === "altar" && s.raidBoss) return raidAltarAt(s, pk, interact);
   if (pk.kind === "altar" && !altarPending(s)) return;
   // 비밀의 방 (sim/devil·gamble·auction)
   if (pk.kind === "devil") return devilAt(s, pk, interact);
@@ -63,6 +69,8 @@ export function stationMenu(s: RunState, code: number): void {
   const op = Math.floor(code / 4096);
   const a = Math.floor(code / 64) % 64;
   const b = code % 64;
+  // 비르디아 공생 정령: 고르기 · 꾸러미 · 상자 · 여우 (sim/factionSpirit)
+  if (op >= SPIRIT_OP.pick && op <= SPIRIT_OP.coin) return spiritMenu(s, op, a);
   // 히든 아이템 고르는 창 (저주받은 주사위 · 테라포밍)
   if (op === 7 || op === 8) return hiddenPick(s, op, a);
   // 단련의 방 (sim/gym): 미니게임 결과 · 강화
@@ -78,6 +86,8 @@ export function stationMenu(s: RunState, code: number): void {
   if (op === AUCTION_OP) return auctionMenu(s, a);
   // 대장간 (sim/forge)
   if (op >= FORGE_OP.up && op <= FORGE_OP.dark) return forgeMenu(s, op, a, b);
+  // 레이드 준비: 단련 되돌리기 · 대장간 처음부터 (sim/raidPrep)
+  if (op === RAID_OP.gymDown || op === RAID_OP.forgeReset) return raidPrepMenu(s, op, a);
   const kind = stationFor(s);
   const here = s.rooms[s.roomId]?.pickups.some((pk) => pk.kind === kind && (pk.owner === undefined || pk.owner === (s.seat ?? 0)));
   if (!kind || !here) return;
@@ -87,7 +97,7 @@ export function stationMenu(s: RunState, code: number): void {
 }
 
 /** 작업대·히든 아이템이 바꾼 능력치 (recalcStats) */
-export const stationMods = (s: RunState): StatMod[] => [...benchMods(s.player), ...tuneMods(s.player), ...hiddenMods(s), ...gymMods(s.player), ...boonMods(s.player), ...forgeMods(s.player)];
+export const stationMods = (s: RunState): StatMod[] => [...benchMods(s.player), ...tuneMods(s.player), ...hiddenMods(s), ...gymMods(s.player), ...boonMods(s.player), ...forgeMods(s.player), ...darkMods(s.player), ...accMods(s.player)];
 
 /** 작업대에 돈 내기: 상점 구매 기록에도 남김 (일일 도전 진행 기록 검사가 쓴 돈을 맞춰 봄) */
 export function stationPay(s: RunState, kind: StationKind, op: number, cost: number): boolean {

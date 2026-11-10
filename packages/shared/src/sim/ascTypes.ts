@@ -5,6 +5,29 @@ import type { SecretEnemyState, SecretPlayerState } from "./secretTypes";
 import type { PungEnemyState, PungPlayerState } from "./pungTypes";
 import type { ThorPlayerState } from "./thorkenTypes";
 import type { LeviaPlayerState } from "./leviaTypes";
+import type { TailPlayerState } from "./tailTypes";
+import type { MadQueenPlayerState } from "./madQueenTypes";
+import type { HookEnemyState, HookPlayerState } from "./hookTypes";
+import type { OrcaPlayerState } from "./orcaTypes";
+import type { WavePlayerState } from "./waveTypes";
+import type { MiryuPlayerState } from "./miryuTypes";
+import type { BeatriceEnemyState, BeatricePlayerState } from "./btTypes";
+import type { IanEnemyState, IanPlayerState } from "./iaTypes";
+import type { GabrielEnemyState, GabrielPlayerState } from "./gbTypes";
+import type { SerenaEnemyState, SerenaPlayerState } from "./snTypes";
+import type { RafaelPlayerState } from "./rfTypes";
+import type { YurielEnemyState, YurielPlayerState } from "./yrTypes";
+import type { MichaelaPlayerState } from "./mcTypes";
+import type { DawnEnemyState, DawnPlayerState } from "./blastTypes";
+import type { NailerEnemyState, NailerPlayerState } from "./nlTypes";
+import type { ScissorsPlayerState } from "./sxTypes";
+import type { HellfistPlayerState } from "./hfTypes";
+import type { SilverBulletEnemyState, SilverBulletPlayerState } from "./sbTypes";
+import type { BlueFlameEnemyState, BlueFlamePlayerState } from "./bzTypes";
+import type { LunaticEnemyState, LunaticPlayerState } from "./lnTypes";
+import type { IncisionPlayerState } from "./icTypes";
+import type { CrusaderPlayerState } from "./crTypes";
+import type { FactionPlayerState } from "./factionTypes";
 import type { LeoEnemyState, LeoPlayerState } from "./leoTypes";
 import type { OnyxPlayerState } from "./onyxTypes";
 import type { FenrirPlayerState } from "./fenrirTypes";
@@ -106,5 +129,5 @@ export interface OriginShotState {
   hpCut?: number;
 }
 
-export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState, PungPlayerState, LeoPlayerState, OnyxPlayerState, FenrirPlayerState, EclipsePlayerState, ThorPlayerState, LeviaPlayerState {}
-export interface AscalonEnemyState extends HiddenEnemyState, AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState, PungEnemyState, LeoEnemyState {}
+export interface AscalonPlayerState extends HiddenPlayerState, StationPlayerState, OriginPlayerState, AscPlayerState, ForgottenPlayerState, RemnantPlayerState, WandererPlayerState, SilkPlayerState, SecretPlayerState, PungPlayerState, LeoPlayerState, OnyxPlayerState, FenrirPlayerState, EclipsePlayerState, ThorPlayerState, LeviaPlayerState, TailPlayerState, MadQueenPlayerState, HookPlayerState, OrcaPlayerState, WavePlayerState, MiryuPlayerState, BeatricePlayerState, IanPlayerState, GabrielPlayerState, SerenaPlayerState, RafaelPlayerState, YurielPlayerState, MichaelaPlayerState, DawnPlayerState, NailerPlayerState, ScissorsPlayerState, HellfistPlayerState, SilverBulletPlayerState, BlueFlamePlayerState, LunaticPlayerState, IncisionPlayerState, CrusaderPlayerState, FactionPlayerState {}
+export interface AscalonEnemyState extends BeatriceEnemyState, IanEnemyState, GabrielEnemyState, SerenaEnemyState, YurielEnemyState, HiddenEnemyState, AscEnemyState, ForgottenEnemyState, WandererEnemyState, SilkEnemyState, SecretEnemyState, PungEnemyState, LeoEnemyState, HookEnemyState, DawnEnemyState, NailerEnemyState, SilverBulletEnemyState, BlueFlameEnemyState, LunaticEnemyState {}

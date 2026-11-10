@@ -19,12 +19,14 @@ export interface TkVortex {
 }
 
 export interface ThorPlayerState {
-  /** 철구공: 0 손에 · 1 날아가는 중 · 2 사슬 끝에 나가 있음 · 자리 */
+  /** 철구공: 0 손에 · 1 날아가는 중 · 2 사슬 끝에 나가 있음 · 3 감아 들이는 중 · 자리 */
   tkMode?: number;
   tkBx?: number;
   tkBy?: number;
   /** 던지기: 출발·도착 자리 · 남은 틱 */
   tkFly?: { x0: number; y0: number; x1: number; y1: number; t: number };
+  /** 감아 들이기: 남은 틱 · 돌아오며 맞은 적 */
+  tkRet?: { t: number; hit: number[] };
   /** 지금 휘두르는 중 · 다음 휘두르는 쪽(1/-1) · 휘두른 수(간헐천) */
   tkSweep?: TkSweep;
   tkDir?: number;

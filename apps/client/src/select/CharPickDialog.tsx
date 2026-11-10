@@ -9,6 +9,8 @@ import { parseSkin } from "../shop/skins";
 import { THEME_KEY } from "../shop/SkinTab";
 import { equippedSkin } from "../shop/wallet";
 import { CHAR_DESC } from "./charDesc";
+import { FoldDesc } from "../game/FoldDesc";
+import { rangeLine } from "../i18n/guides/rangeRule";
 import { cardOf, frameOf, masteryLevel, MASTERY_AT, playsOf, toNext } from "../mastery/mastery";
 
 
@@ -45,7 +47,7 @@ interface Props {
   onClose: () => void;
 }
 
-export function CharPickDialog({ t, c, onGo, onClose }: Props) {
+export function CharPickDialog({ t, lang = "ko", c, onGo, onClose }: Props) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
@@ -76,7 +78,7 @@ export function CharPickDialog({ t, c, onGo, onClose }: Props) {
             <h2>{t(c as TextKey)}</h2>
             <small className="cs-skin">{skinName(t, c)}</small>
             <MasteryLine t={t} c={c} />
-            <p className="cs-pick-desc">{t(CHAR_DESC[c])}</p>
+            <FoldDesc className="cs-pick-desc" text={`${t(CHAR_DESC[c])} · ${rangeLine(c, lang)}`} />
             <h3>{t("csStats")}</h3>
             <dl className="cs-pick-stats">
               {stats.map(([k, v]) => (

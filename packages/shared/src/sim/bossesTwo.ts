@@ -1,4 +1,5 @@
 // 2단계(3·4층) 새 보스: 세이렌 · 켄타우로스 · 하드플랜트. 체력 절반 아래면 더 빠르고 공격이 늘어남
+import { BOSS_CERB_TRIO_RULES } from "./bossCerbTrio";
 import { ENEMIES } from "../content";
 import { fan, half, hitDamage, keepAway, ring, shotDamage, turn } from "./bossKit";
 import { addShape } from "./hazards";
@@ -62,7 +63,9 @@ export function lureMove(s: RunState, mx: number, my: number): [number, number] 
   p.lureTicks = (p.lureTicks ?? 0) - 1;
   const siren = s.enemies.find((e) => (p.lureId ? e.id === p.lureId : e.kind === "siren") && e.hp > 0);
   const d = siren ? normalize(siren.x - p.x, siren.y - p.y) : null;
-  return d ? [d[0] * R.LURE_SPEED, d[1] * R.LURE_SPEED] : [mx, my];
+  // 염희(켈베로스) 빨아들이기는 더 셈 (걸어서 못 버팀, 기둥에 막히면 버팀)
+  const k = siren?.kind === "cerbflame" ? BOSS_CERB_TRIO_RULES.PULL_SPEED : R.LURE_SPEED;
+  return d ? [d[0] * k, d[1] * k] : [mx, my];
 }
 
 /** 켄타우로스: 1) 돌진 → 찌르기 3번 2) 사방으로 창 던지기 3) 크게 휘두르며 동시에 길게 찌르기, 차례로 반복 */

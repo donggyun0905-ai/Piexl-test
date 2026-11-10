@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { ItemIcon, type IconItem } from "./itemIcon";
 import { passiveTag, type ItemTag } from "@pixel-rogue/shared";
 import { TagChip } from "./build/TagChip";
+import { TipDesc } from "./FoldDesc";
 
 const TIP_HALF_WIDTH = 132;
 /** 이보다 위쪽이면 말풍선을 아래로 띄움 */
@@ -46,10 +47,12 @@ interface Props {
   tag?: ItemTag;
   /** 같은 패시브 여럿이 저마다 다른 꼬리표일 때 (대장간, 겹치지 않게 모두 보임) */
   tags?: ItemTag[];
+  /** 수치를 늘 보여 줌 (단련의 방 · 아니면 Shift를 누를 때만) */
+  nums?: boolean;
 }
 
 /** 말풍선은 body에 그림: 감싼 창이 transform·스크롤을 가지면 fixed가 그 창 안에 붙어 창이 커졌다 줄었다 흔들림 (패왕전 Tab 점수판) */
-export function ItemTip({ pos, icon, name, desc, children, tag, tags }: Props) {
+export function ItemTip({ pos, icon, name, desc, children, tag, tags, nums }: Props) {
   const one = tag ?? (icon?.kind === "passive" ? passiveTag(icon.id) : undefined);
   const shown = tags?.length ? [...new Set(tags)] : one ? [one] : [];
   return createPortal(
@@ -59,7 +62,7 @@ export function ItemTip({ pos, icon, name, desc, children, tag, tags }: Props) {
         {name}
         {shown.map((g) => <TagChip key={g} tag={g} />)}
       </div>
-      <div>{desc}</div>
+      <TipDesc text={desc} nums={nums} />
       {children}
     </div>,
     document.body,

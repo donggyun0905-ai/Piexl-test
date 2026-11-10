@@ -61,14 +61,29 @@ export function drawCandy(
   bg.addColorStop(1, "#5a3218");
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, w, h);
-  ctx.fillStyle = "#0000001a";
-  for (let i = 0; i < COLS * ROWS; i++) {
+  // 나뭇결 · 칸마다 오목한 홈 (아래쪽이 밝아 파인 느낌)
+  ctx.strokeStyle = "#00000014";
+  ctx.lineWidth = 0.5;
+  for (let y = 3; y < h; y += 5) {
     ctx.beginPath();
-    ctx.arc((i % COLS) * CELL + CELL / 2, Math.floor(i / COLS) * CELL + CELL / 2 + 1, 10, 0, Math.PI * 2);
+    ctx.moveTo(0, y);
+    for (let x = 0; x <= w; x += 16) ctx.lineTo(x, y + Math.sin(x / 23 + y) * 1.2);
+    ctx.stroke();
+  }
+  for (let i = 0; i < COLS * ROWS; i++) {
+    const cx = (i % COLS) * CELL + CELL / 2;
+    const cy = Math.floor(i / COLS) * CELL + CELL / 2 + 1;
+    const hole = ctx.createRadialGradient(cx, cy - 3, 2, cx, cy, 10.5);
+    hole.addColorStop(0, "#00000038");
+    hole.addColorStop(0.8, "#00000020");
+    hole.addColorStop(1, "#ffffff14");
+    ctx.fillStyle = hole;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 10.5, 0, Math.PI * 2);
     ctx.fill();
   }
   const inBox = (i: number) => !!box && i % COLS >= box.c0 && i % COLS <= box.c1 && Math.floor(i / COLS) >= box.r0 && Math.floor(i / COLS) <= box.r1;
-  ctx.font = "bold 12px monospace";
+  ctx.font = "900 11px system-ui, sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   grid.forEach((v, i) => {
@@ -79,17 +94,36 @@ export function drawCandy(
     const lit = inBox(i);
     // 살짝 흔들리며 반짝 (선택되면 튀어 오름)
     const bob = lit ? -2 : Math.sin(now / 600 + i) * 0.4;
-    star(ctx, x, y + bob, lit ? 11.5 : 10.5);
-    ctx.fillStyle = lit && ok ? "#fff6a0" : fill;
+    const r = lit ? 11.5 : 10.5;
+    // 그림자 → 둥글게 빛나는 몸 (위 밝고 아래 진함) → 테두리 → 반짝 점
+    ctx.fillStyle = "#00000040";
+    star(ctx, x + 0.8, y + bob + 1.6, r);
+    ctx.fill();
+    const g = ctx.createRadialGradient(x - 3, y - 4 + bob, 1, x, y + bob, r);
+    g.addColorStop(0, "#ffffff");
+    g.addColorStop(0.25, lit && ok ? "#fff6a0" : fill);
+    g.addColorStop(1, edge);
+    star(ctx, x, y + bob, r);
+    ctx.fillStyle = g;
     ctx.fill();
     ctx.strokeStyle = edge;
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 1.2;
     ctx.stroke();
-    ctx.fillStyle = "#ffffff99";
+    if (lit) {
+      ctx.strokeStyle = ok ? "#fff6a0" : "#ffffffaa";
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+    ctx.fillStyle = "#ffffffcc";
     ctx.beginPath();
-    ctx.arc(x - 3.5, y - 3.5 + bob, 2.5, 0, Math.PI * 2);
+    ctx.ellipse(x - 3.5, y - 4 + bob, 2.6, 1.6, -0.6, 0, Math.PI * 2);
     ctx.fill();
-    ctx.lineWidth = 3;
+    ctx.fillStyle = "#ffffff66";
+    ctx.beginPath();
+    ctx.arc(x + 4, y + 3.5 + bob, 1, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.lineWidth = 2.6;
+    ctx.lineJoin = "round";
     ctx.strokeStyle = edge;
     ctx.strokeText(String(v), x, y + 1 + bob);
     ctx.fillStyle = "#fff";
@@ -117,7 +151,7 @@ export function drawCandy(
     star(ctx, p.x + p.vx * k * 30, p.y + p.vy * k * 30 + k * k * 14, 3 * (1 - k) + 1);
     ctx.fill();
   }
-  ctx.font = "bold 16px monospace";
+  ctx.font = "900 16px system-ui, sans-serif";
   for (const g of gains) {
     const k = (now - g.at) / (POP_MS * 1.5);
     if (k >= 1) continue;

@@ -2,7 +2,8 @@
 // 손님은 조금 앞서 가며 입력을 미리 보내므로 보통 바로 확정됨. 늦는 손님은 DEADLINE까지만 기다리고
 // 그 뒤엔 그 사람의 마지막 입력으로 확정 (그 손님 화면은 확정을 받아 고쳐짐)
 import { EMPTY_INPUT, stepParty, syncSeat, type RunState, type TickInput } from "@pixel-rogue/shared";
-import { HASH_EVERY, held, packInput, SEND_EVERY, showPredicted, stateHash, unpackInput, type CoopMsg } from "./lockstep";
+import { HASH_EVERY, held, packInput, SEND_EVERY, stateHash, unpackInput, type CoopMsg } from "./lockstep";
+import { Predictor } from "./predict";
 
 /** 손님 입력을 기다리는 최대 틱 (0.3초) */
 const DEADLINE = 18;
@@ -25,6 +26,7 @@ export class HostSync {
   private from = 0;
   /** 게임 중에 들어와 보기만 하는 사람 (확정 입력만 받음) */
   private watchers = new Set<string>();
+  private predict = new Predictor();
 
   constructor(
     readonly confirmed: RunState,
@@ -71,7 +73,7 @@ export class HostSync {
 
   /** 화면: 확정 + 지금 틱까지 짐작 (프레임마다 한 번) */
   show = (display: RunState): void => {
-    showPredicted(display, this.confirmed, this.tickNow, (t) => this.seats.map((_, i) => this.ins[i]!.get(t) ?? held(this.last[i]!)));
+    this.predict.show(display, this.confirmed, this.tickNow, (t) => this.seats.map((_, i) => this.ins[i]!.get(t) ?? held(this.last[i]!)));
   };
 
   /** 확정 입력: 받은 것, 끊긴 손님·마감 지난 틱은 마지막 입력. 아직 기다려야 하면 null */
@@ -93,6 +95,7 @@ export class HostSync {
       }
       if (inputs.length < this.seats.length) break;
       stepParty(this.confirmed, inputs);
+      this.predict.confirmed(t, inputs);
       this.last = inputs;
       for (const m of this.ins) m.delete(t);
       if (this.frames.length === 0) this.from = t;

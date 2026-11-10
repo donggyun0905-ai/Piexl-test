@@ -1,7 +1,7 @@
 // 대장간 창 (대장장이 앞 F, sim/forge): 지금 무기(노란 별 강화 · 보라 별 암흑 강화 · 꼬리표) + 무기 강화 · 꼬리표 변환 · 암흑 강화
 // 누른 것은 입력 menu (FORGE_OP) · 결과 연출은 StationResultFx
 import { useState } from "react";
-import { FORGE_OP, FORGE_RULES as F, ITEM_TAGS, menuCode } from "@pixel-rogue/shared";
+import { FORGE_OP, FORGE_RULES as F, ITEM_TAGS, menuCode, RAID_OP } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../../i18n";
 import { itemName } from "../../i18n/items";
 import { ItemIcon } from "../itemIcon";
@@ -79,6 +79,12 @@ export function ForgePanel({ view, forge, lang, t, send }: Props) {
           ))}
         </div>
       </section>
+      {/* 레이드 대장간: 999원으로 처음부터 다시 (3번까지, sim/raidPrep) */}
+      {forge.resets !== undefined && (
+        <button type="button" className="forge-btn forge-reset" disabled={forge.resets <= 0} onClick={() => send(menuCode(RAID_OP.forgeReset, 0))}>
+          {t("raidForgeReset").replace("{n}", String(forge.resets))}
+        </button>
+      )}
       <StationResultFx last={view.last} lang={lang} t={t} />
     </div>
   );

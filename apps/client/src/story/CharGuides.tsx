@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { charGuide } from "../i18n/guides";
 import { TdPortrait } from "../td/TdScreen";
+import { RichText } from "../game/RichText";
 
 export function CharGuides({ lang, t }: { lang: Lang; t: (k: TextKey) => string }) {
   const [open, setOpen] = useState<CharacterId | null>(null);
@@ -19,7 +20,9 @@ export function CharGuides({ lang, t }: { lang: Lang; t: (k: TextKey) => string 
           {open === c && (
             <ul>
               {charGuide(c, lang).map((line) => (
-                <li key={line}>{line}</li>
+                <li key={line}>
+                  <RichText text={line} />
+                </li>
               ))}
             </ul>
           )}

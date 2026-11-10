@@ -1,16 +1,17 @@
 // 리바이어 기술 효과 — 속이 뻥 뚫리는 바다 느낌 (맑은 하늘색 물살 · 흰 거품 · 푸른 고래)
-// 1타 창 휘두르기 · 고래 날개 쓸기 · 2타 회전 · 고래 한 바퀴 · 대돌격 출발 · 3타 충격파 · 고래 도약 · 번개 · 노래 · 물뿜기 · 산호 터짐
+// 1타 창 휘두르기 · 고래 날개 쓸기 · 2타 찌르기 · 고래 꼬리 휩쓸기 · 3타 회전 · 고래 한 바퀴 · 대돌격 출발 · 4타 충격파 · 고래 도약 · 번개 · 노래 · 물뿜기 · 산호 터짐
+// 창 자체는 그리지 않음 (캐릭터 그림이 든 창) · 물살 자국만
 import type { EffectState } from "@pixel-rogue/shared";
 import { additive, alpha, crescent, easeOut, glow, rnd, shock, sparks, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
 import { bolt, droplets } from "./thorkenFx";
 import { bubbles, caustic, glint, glints, rainbow, rays } from "./seaLight";
-import { CYAN, FOAM, SEA, spearShape, whaleShape } from "./leviaWhale";
+import { CYAN, FOAM, SEA, whaleShape } from "./leviaWhale";
 
 const TAU = Math.PI * 2;
-const LV_FX = new Set(["lvSwing", "lvFin", "lvSpin", "lvOrbit", "lvCharge", "lvQuake", "lvBreach", "lvBolt", "lvSong", "lvGush", "lvBurst"]);
+const LV_FX = new Set(["lvSwing", "lvFin", "lvThrust", "lvTailSweep", "lvSpin", "lvOrbit", "lvCharge", "lvQuake", "lvBreach", "lvBolt", "lvSong", "lvGush", "lvBurst"]);
 
-/** 휘두르는 창 (face 쪽을 가운데로 half만큼 양옆, k = 0~1 진행): 물살 초승달 + 잔상 + 창 */
+/** 창이 휘둘러진 자리 (face 쪽을 가운데로 half만큼 양옆, k = 0~1 진행): 물살 초승달 + 끝에 물보라 + 반짝임 */
 function spearSweep(ctx: Ctx, x: number, y: number, face: number, half: number, k: number, reach: number, fade: number): void {
   const at = (u: number) => face - half + half * 2 * u;
   additive(ctx, () => {
@@ -26,8 +27,44 @@ function spearSweep(ctx: Ctx, x: number, y: number, face: number, half: number, 
     const a = at(u);
     glint(ctx, x + Math.cos(a) * reach * (0.9 + (i % 2) * 0.12), y + Math.sin(a) * reach * (0.9 + (i % 2) * 0.12), 2 + (i % 3), FOAM, fade * (0.4 + u * 0.6));
   }
-  for (let i = 3; i >= 1; i--) spearShape(ctx, x, y, at(Math.max(0, k - i * 0.08)), reach, 0.15 * (4 - i) * fade);
-  spearShape(ctx, x, y, at(k), reach, fade);
+  // 휘두르는 끝: 물보라 머리
+  const a = at(k);
+  additive(ctx, () => glow(ctx, x + Math.cos(a) * reach, y + Math.sin(a) * reach, 9, CYAN, 0.8 * fade, 0.8));
+  glint(ctx, x + Math.cos(a) * reach, y + Math.sin(a) * reach, 4 * fade, FOAM, fade);
+}
+
+/** 2타 찌르기: 앞으로 길게 뻗는 물의 창 (소용돌이치는 거품 줄 + 끝 물보라) */
+function thrustFx(ctx: Ctx, x: number, y: number, dx: number, dy: number, reach: number, f: number, seed: number): void {
+  const k = easeOut(Math.min(1, f / 0.35));
+  const fade = f < 0.5 ? 1 : 1 - (f - 0.5) / 0.5;
+  const nx = -dy;
+  const ny = dx;
+  const tx = x + dx * reach * k;
+  const ty = y + dy * reach * k;
+  additive(ctx, () => {
+    for (const [c, w, al] of [[SEA, 9, 0.35], [CYAN, 4, 0.8], [FOAM, 1.5, 0.95]] as const) {
+      ctx.strokeStyle = alpha(c, al * fade);
+      ctx.lineWidth = w * (1 - f * 0.5);
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(x + dx * 6, y + dy * 6);
+      ctx.lineTo(tx, ty);
+      ctx.stroke();
+    }
+    ctx.lineCap = "butt";
+    glow(ctx, tx, ty, 14, CYAN, 0.9 * fade, 1);
+  });
+  // 창을 감아 도는 거품 나선
+  for (let i = 0; i < 14; i++) {
+    const u = i / 14;
+    const off = Math.sin(u * 12 + f * 10) * 4 * (1 - u * 0.5);
+    ctx.fillStyle = alpha(i % 2 ? FOAM : CYAN, fade * (0.4 + u * 0.6));
+    ctx.fillRect(Math.round(x + dx * reach * k * u + nx * off), Math.round(y + dy * reach * k * u + ny * off), 2, 2);
+  }
+  // 끝: 앞으로 터지는 물보라 고리
+  additive(ctx, () => crescent(ctx, tx - dx * 4, ty - dy * 4, 10 + f * 10, Math.atan2(dy, dx), 1.1, 3, FOAM, 0.8 * fade));
+  droplets(ctx, tx, ty, 14, f, seed, 8);
+  glint(ctx, tx, ty, 6 * fade, "#ffffff", fade);
 }
 
 /** 고래가 몸을 돌며 지나감 (가운데 x·y, 반지름 r, 각 a0 → a1, k = 진행) · 지나간 길에 물 띠 */
@@ -63,6 +100,17 @@ export function drawLeviaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       spearSweep(ctx, x, y, face, 1.4, easeOut(Math.min(1, f / 0.5)), fx.size, fade);
       droplets(ctx, x + fx.dirX * fx.size * 0.8, y + fx.dirY * fx.size * 0.8, fx.size * 0.5, f, seed, 8);
       return true;
+    case "lvThrust":
+      thrustFx(ctx, x, y, fx.dirX, fx.dirY, fx.size, f, seed);
+      return true;
+    case "lvTailSweep": {
+      // 고래가 앞쪽을 크게 휘감으며 꼬리로 휩쓸고 지나감 (tint: 도는 쪽) + 뒤따르는 큰 물결
+      const dir = fx.tint === "-1" ? -1 : 1;
+      const k = easeOut(Math.min(1, f / 0.7));
+      whaleArc(ctx, x, y, fx.size * 0.68, face - dir * 1.7, face + dir * 1.7, k, fade, tick);
+      additive(ctx, () => crescent(ctx, x, y, fx.size * (0.85 + f * 0.2), face, 1.6 * k, 5, FOAM, 0.5 * fade));
+      return true;
+    }
     case "lvFin":
       // 고래가 앞쪽을 크게 날개로 쓸고 지나감
       whaleArc(ctx, x, y, fx.size * 0.72, face - 1.9, face + 1.9, easeOut(Math.min(1, f / 0.7)), fade, tick);

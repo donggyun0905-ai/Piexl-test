@@ -1,7 +1,8 @@
 // 협동 손님: 방장이 확정한 입력으로 확정 상태를 계산하고, 내 입력은 바로 반영해 지금 틱까지 짐작해 보여 줌.
 // 내 입력이 방장에게 제때 닿게 방장보다 (왕복 시간의 절반 + 조금) 앞서 감
 import { EMPTY_INPUT, stepParty, TICK_MS, useSeat, type RunState, type TickInput } from "@pixel-rogue/shared";
-import { HASH_EVERY, held, MAX_AHEAD, packInput, SEND_EVERY, replaceRun, showPredicted, stateHash, unpackInput, type CoopMsg } from "./lockstep";
+import { HASH_EVERY, held, MAX_AHEAD, packInput, SEND_EVERY, replaceRun, stateHash, unpackInput, type CoopMsg } from "./lockstep";
+import { Predictor } from "./predict";
 
 /** 방장보다 더 앞서 가는 여유 틱 */
 const MARGIN = 2;
@@ -28,6 +29,7 @@ export class GuestSync {
   /** 아직 안 보낸 내 입력 (outFrom 틱부터) */
   private out: number[][] = [];
   private outFrom = 0;
+  private predict = new Predictor();
 
   constructor(
     private send: (msg: CoopMsg) => void,
@@ -45,6 +47,7 @@ export class GuestSync {
     // 확정 상태도 내 자리를 꺼내 놓음 (짐작 계산·화면이 내 자리 기준)
     useSeat(msg.s, msg.seat);
     this.confirmed = msg.s;
+    this.predict.reset();
     this.last = (msg.s.party ?? []).map(() => EMPTY_INPUT);
     this.hostAt = msg.at;
     this.hostAtTime = performance.now();
@@ -65,6 +68,7 @@ export class GuestSync {
       if (t <= c.tick) return;
       const inputs = frame.map(unpackInput);
       stepParty(c, inputs);
+      this.predict.confirmed(t, inputs);
       this.last = inputs;
       this.mine.delete(t);
     });
@@ -119,7 +123,7 @@ export class GuestSync {
   show = (display: RunState): void => {
     const c = this.confirmed;
     if (!c || this.seat < 0) return;
-    showPredicted(display, c, this.tickNow, (t) => this.last.map((x, i) => (i === this.seat && !this.watch ? (this.mine.get(t) ?? held(x)) : held(x))));
+    this.predict.show(display, c, this.tickNow, (t) => this.last.map((x, i) => (i === this.seat && !this.watch ? (this.mine.get(t) ?? held(x)) : held(x))));
   };
 }
 

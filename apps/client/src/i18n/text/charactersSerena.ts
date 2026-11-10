@@ -1,0 +1,25 @@
+// 화면 글자: 성국 세레나(환혹의 무희) 이름·설명 · 스킬 이름·설명 · 버프 창 (charactersSeongguk가 커서 나눔)
+export const CHARACTER_TEXT_SERENA = {
+  serena: { ko: "세레나", en: "Serena", ja: "セレナ" },
+  nightmare: { ko: "악몽의 채찍", en: "Nightmare Whip", ja: "悪夢の鞭" },
+  serenaDesc: {
+    ko: "비수 달린 사슬 채찍 둘이 늘 몸 둘레를 크게 돌며 적 사이를 휘저음 · 피해는 낮지만 기본 치명타 25% · 맞힐 때마다 빛 피해 추가 · 누르고 있으면 3연격(채찍 휘두르기 둘 → 환혹의 회오리: 여러 사슬 채찍이 둘레를 연달아 휘저음) · 맞힌 적에 가시(가득 차면 마비) · 숫자 키 스킬 넷: 1 환혹의 스텝 · 2 매혹 · 3 맹독 비수 · 4 환혹의 무도 · 성국. '환혹의 무희'. 춤추듯 휘날리는 강철 가시 채찍과 맹독성 에테르 비수를 다루는 무희. 전장에 빛의 강철 가시를 퍼뜨려 적의 감각을 마비시키고 우아하게 서서히 말려 죽이는 전술가.",
+    en: "Two dagger-tipped chain whips always circle wide around her, lashing between foes · low damage but a 25% base crit · bonus light damage on every hit · hold for a 3-hit chain (two whip lashes → Bewitching Whirl: many chain whips sweep around her in a row) · hits plant thorns (a full set Numbs) · four number-key skills: 1 Bewitching Step · 2 Allure · 3 Venom Daggers · 4 Dance of Bewitchment · Holy Kingdom. 'The Bewitching Dancer'. A dancer wielding a steel thorn whip that flutters like a dance and venomous ether daggers. A tactician who scatters thorns of steel and light across the field, numbs her foes' senses and gracefully wears them down.",
+    ja: "短剣付きの鎖鞭2本がいつも体の周りを大きく回り敵の間を薙ぐ · ダメージは低いが基本会心25% · 当てるたびに光ダメージ追加 · 押し続けると3連撃（鞭の振り2回 → 幻惑の旋風：多くの鎖鞭が周りを続けて薙ぐ）· 当てた敵に棘（満タンで麻痺）· 数字キーのスキル4つ：1 幻惑のステップ · 2 魅惑 · 3 猛毒の短剣 · 4 幻惑の舞 · 聖国。「幻惑の舞姫」。舞うようにはためく鋼の棘の鞭と猛毒のエーテルの短剣を操る舞姫。戦場に光の鋼の棘をまき散らして敵の感覚を麻痺させ、優雅にじわじわと追い詰める戦術家。",
+  },
+  snSkill1: { ko: "환혹의 스텝", en: "Bewitching Step", ja: "幻惑のステップ" },
+  snSkill2: { ko: "매혹", en: "Allure", ja: "魅惑" },
+  snSkill3: { ko: "맹독 비수", en: "Venom Daggers", ja: "猛毒の短剣" },
+  snSkill4: { ko: "환혹의 무도", en: "Dance of Bewitchment", ja: "幻惑の舞" },
+  snSkillTip1: { ko: "바라보는 쪽으로 세 번 연달아 미끄러짐 (무적, 한 번 55%) · 돌진마다 몸 둘레를 사슬이 기울어진 고리로 휘돎 (1번 / 연한 회색 · 2번 - 연한 노랑 · 3번 \\ 연한 분홍, 40%) · 지나간 적에 가시 · 대기 10초", en: "Glide where you face three times in a row (invulnerable, 55% each) · each dash whirls a chain around you on a tilted ring (1st / pale gray · 2nd - pale yellow · 3rd \\ pale pink, 40%) · thorns on foes passed · 10s cooldown", ja: "向いている方へ3回続けて滑る（無敵、1回55%）· 突進ごとに体の周りを鎖が傾いた輪で回る（1回目 / 淡い灰色 · 2回目 - 淡い黄色 · 3回目 \\ 淡いピンク、40%）· 通った敵に棘 · 待機10秒" },
+  snSkillTip2: { ko: "둘레 적을 홀림 (50%) · 2초 동안 멈춘 채 나에게 천천히 끌려옴 (보스는 느려지기만) · 받는 피해 +25% · 가시 +2 · 대기 14초", en: "Bewitch nearby foes (50%) · for 2s they stand entranced and are slowly drawn to you (bosses are only slowed) · +25% damage taken · +2 thorns · 14s cooldown", ja: "周りの敵を魅了する（50%）· 2秒間立ち止まったまま自分へゆっくり引き寄せられる（ボスは遅くなるだけ）· 受けるダメージ+25% · 棘+2 · 待機14秒" },
+  snSkillTip3: { ko: "앞 부채꼴로 맹독 에테르 비수를 흩뿌림 (120%) · 맞은 적에 가시 +3 · 3초 동안 독 · 대기 10초", en: "Fling venomous ether daggers in a cone ahead (120%) · +3 thorns · poisoned for 3s · 10s cooldown", ja: "前方の扇形に猛毒のエーテル短剣をまき散らす（120%）· 当たった敵に棘+3 · 3秒間毒 · 待機10秒" },
+  snSkillTip4: { ko: "궁극기: 8초 동안 도는 사슬 채찍이 여섯으로 늘어 발밑 꽃의 테두리를 따라 크게 돌고 피해 2배 · 방의 모든 적에 가시 +2 · 그동안 1·2타에도 환혹의 회오리 · 대기 60초", en: "Ultimate: for 8s your orbiting chain whips become six, tracing the outline of the flower at your feet, and deal 2x damage · +2 thorns on every foe in the room · meanwhile hits 1 and 2 also trigger a Bewitching Whirl · 60s cooldown", ja: "必殺技：8秒間、周回する鎖鞭が6本に増えて足元の花の縁に沿って大きく回りダメージ2倍 · 部屋の全ての敵に棘+2 · その間1・2撃目にも幻惑の旋風 · 待機60秒" },
+  pwSk_serena1: { ko: "환혹의 스텝", en: "Bewitching Step", ja: "幻惑のステップ" },
+  pwSk_serena2: { ko: "매혹", en: "Allure", ja: "魅惑" },
+  pwSk_serena3: { ko: "맹독 비수", en: "Venom Daggers", ja: "猛毒の短剣" },
+  pwSk_serena4: { ko: "환혹의 무도", en: "Dance of Bewitchment", ja: "幻惑の舞" },
+  bfSnCrit: { ko: "무희: 기본 치명타 25% · 빛 피해 추가", en: "Dancer: 25% base crit · bonus light damage", ja: "舞姫：基本会心25% · 光ダメージ追加" },
+  bfSnUlt: { ko: "환혹의 무도 {s}초: 사슬 채찍 여섯", en: "Dance of Bewitchment {s}s: six chain whips", ja: "幻惑の舞{s}秒：鎖鞭6本" },
+  cg_serena: { ko: "이동 속도 {n} 달성", en: "Reach {n} move speed", ja: "移動速度{n}達成" },
+};

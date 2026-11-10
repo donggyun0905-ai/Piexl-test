@@ -1,0 +1,280 @@
+/* 카지노 게임 꾸밈 (lobby/games): SVG 트럼프 카드 · 카지노 칩 · 이김 효과 · 펠트 테이블 · 슬롯 캐비닛 · 3D 주사위 */
+.mg {
+  position: relative;
+}
+
+/* 펠트 테이블: 나무 테두리 + 금줄 + 천 결 + 가운데 장식 고리 */
+.mg.blackjack,
+.mg.hilo,
+.mg.dice,
+.mg.joker,
+.mg.tiles,
+.mg.card-table {
+  border: 6px solid #4a2c14;
+  border-radius: 22px;
+  background:
+    radial-gradient(ellipse 46% 34% at 50% 52%, #0000 96%, #ffd86030 97%, #0000 99%),
+    repeating-linear-gradient(45deg, #ffffff05 0 1px, #0000 1px 3px),
+    radial-gradient(ellipse at 50% 30%, #2f8a52 0%, #1d5634 60%, #0f3420 100%);
+  box-shadow:
+    inset 0 0 0 2px #c8a050,
+    inset 0 0 40px #000a,
+    0 0 0 2px #2a180a,
+    0 14px 30px #000a;
+}
+.mg.dice,
+.mg.joker {
+  background:
+    radial-gradient(ellipse 46% 34% at 50% 52%, #0000 96%, #ffd86030 97%, #0000 99%),
+    repeating-linear-gradient(45deg, #ffffff05 0 1px, #0000 1px 3px),
+    radial-gradient(ellipse at 50% 30%, #8a2a3a 0%, #5a1624 60%, #300a12 100%);
+}
+.mg.tiles {
+  background:
+    repeating-linear-gradient(45deg, #ffffff05 0 1px, #0000 1px 3px),
+    radial-gradient(ellipse at 50% 30%, #2a6a8e 0%, #1a4262 70%, #0c2236 100%);
+}
+
+/* 트럼프 카드 (SVG): 크기만 정하고 그림은 PlayingCard */
+.pcard {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 64px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  box-shadow: 0 2px 0 #0005, 0 6px 10px #0006;
+  animation: pcard-in 0.35s cubic-bezier(0.2, 1.4, 0.4, 1);
+  vertical-align: middle;
+}
+.pcard svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.mg.blackjack .pcard:not(.small),
+.card-table .pcard:not(.small) {
+  width: 58px;
+  height: 81px;
+}
+.pcard.big {
+  width: 84px;
+  height: 118px;
+}
+.pcard.small {
+  width: 18px;
+  height: 25px;
+  box-shadow: 0 1px 2px #0008;
+  animation: none;
+}
+.pcard.back {
+  background: none;
+  box-shadow: 0 2px 0 #0005, 0 6px 10px #0006;
+}
+.pcard.small.back {
+  box-shadow: 0 1px 2px #0008;
+}
+.mg-hand .pcard + .pcard {
+  margin-left: -8px;
+}
+.mg-hand {
+  gap: 8px;
+}
+.mg-hand > span:first-child {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #0007;
+  color: #f2e6c8;
+  font-weight: 700;
+}
+/* 조커 게임: 카드 단추 · 짝 빛 · 방금 뽑은 카드 */
+.card-btn {
+  display: inline-block;
+  padding: 0;
+  border: 0;
+  background: none;
+  line-height: 0;
+}
+.card-btn.pick {
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.card-btn.pick:hover {
+  transform: translateY(-6px) rotate(-3deg);
+}
+.card-btn.pairable {
+  cursor: pointer;
+  border-radius: 6px;
+  box-shadow: 0 0 0 2px #ffd860, 0 0 12px #ffd860aa;
+  animation: card-glow 0.8s ease-in-out infinite alternate;
+}
+.card-btn.got .pcard {
+  box-shadow: 0 0 0 3px var(--accent), 0 0 16px #ffd860;
+  transform: translateY(-6px);
+}
+.seat-cards {
+  gap: 3px;
+}
+.seat-cards .pcard.small + .pcard.small {
+  margin-left: -9px;
+}
+.seat {
+  border: 1px solid #ffffff22;
+  background: linear-gradient(#0008, #0004);
+  box-shadow: inset 0 1px 0 #ffffff14;
+}
+.seat.turn {
+  border-color: var(--accent);
+  box-shadow: 0 0 14px #ffd86066, inset 0 1px 0 #ffffff14;
+}
+
+/* 카지노 칩: 금액마다 색 · 테두리 줄무늬 · 고르면 들림 */
+.mg-bet {
+  gap: 8px;
+}
+.mg-chips {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 6px;
+  border-radius: 999px;
+  background: #0008;
+  color: #f2e6c8;
+}
+.mg-chips b {
+  font-size: 17px;
+}
+.chip-stack {
+  position: relative;
+  width: 26px;
+  height: 34px;
+}
+.chip-disc {
+  position: absolute;
+  left: 0;
+  width: 26px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--chip);
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--chip) 55%, #000), inset 0 0 0 2px #fff6;
+}
+.chip {
+  --chip: #2a6ad0;
+  position: relative;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, var(--chip) 0 52%, #fff 53% 56%, #0000 57%),
+    repeating-conic-gradient(var(--chip) 0 22.5deg, #fffdf0 22.5deg 45deg);
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--chip) 50%, #000), 0 6px 10px #0008, inset 0 0 0 2px #0003;
+  color: #fff;
+  font-weight: 900;
+  font-size: 13px;
+  text-shadow: 0 1px 0 #0008;
+  transition: transform 0.12s;
+}
+.chip span {
+  position: relative;
+}
+.chip:hover:not(:disabled) {
+  transform: translateY(-3px);
+}
+.chip.active {
+  transform: translateY(-7px);
+  box-shadow: 0 0 0 3px #ffd860, 0 0 16px #ffd860, 0 10px 14px #0008;
+}
+.chip:disabled {
+  filter: grayscale(0.8) brightness(0.6);
+}
+.c10 {
+  --chip: #2a6ad0;
+}
+.c50 {
+  --chip: #d0283a;
+}
+.c100 {
+  --chip: #1e8a4a;
+}
+.c500 {
+  --chip: #7a3ab0;
+}
+
+/* 이김 효과: 동전·색종이가 쏟아짐 · 큰 승리 글자 */
+.win-fx {
+  position: absolute;
+  inset: -40px 0 0;
+  z-index: 5;
+  overflow: hidden;
+  pointer-events: none;
+}
+.fx-coin,
+.fx-confetti {
+  position: absolute;
+  top: -20px;
+  animation: fx-fall linear forwards;
+  opacity: 0;
+}
+.fx-coin {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff6c8, #f2c14e 45%, #b0761e);
+  box-shadow: inset 0 0 0 2px #c8862a, 0 0 6px #ffd86088;
+}
+.fx-confetti {
+  width: 7px;
+  height: 11px;
+  border-radius: 2px;
+}
+@keyframes fx-fall {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0);
+  }
+  100% {
+    opacity: 0.2;
+    transform: translate(var(--drift), 560px) rotate(var(--spin));
+  }
+}
+.win-banner {
+  position: absolute;
+  top: 34%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 6px 22px;
+  border-radius: 14px;
+  background: linear-gradient(#3a1a00e0, #1a0a00e0);
+  border: 2px solid #ffd860;
+  color: #ffe890;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-shadow: 0 0 12px #ffb000, 0 3px 0 #8a4a00;
+  white-space: nowrap;
+  animation: banner-pop 1.6s ease-out forwards;
+}
+@keyframes banner-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.4);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -70%) scale(1.05);
+  }
+}
+.mg-result.win {
+  color: #ffe890;
+  text-shadow: 0 0 10px #ffb000;
+}

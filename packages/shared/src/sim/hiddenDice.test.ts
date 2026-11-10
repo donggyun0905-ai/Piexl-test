@@ -49,7 +49,7 @@ describe("히든 아이템 둘째 묶음", () => {
     expect(terraBoss(s)).toBeUndefined();
   });
 
-  it("포탈건: 처음엔 방을 기억하고 아이템이 남음 · 다시 쓰면 그 방으로", () => {
+  it("귀환의 문: 처음엔 방을 기억하고 아이템이 남음 · 다시 쓰면 그 방으로", () => {
     const s = createRun(1, "warden");
     const home = s.roomId;
     hiddenUse(s, "portalGun", 0);

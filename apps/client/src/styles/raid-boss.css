@@ -1,0 +1,195 @@
+/* 이벤트 '레이드': 보스 목록 · 준비하기 (event/RaidFlow) */
+.raid-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 16px;
+  background: radial-gradient(ellipse at 50% 30%, #3a1458 0%, #14071f 55%, #07030c 100%);
+  color: #f1e6ff;
+}
+.raid-screen h2 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 12px #b04cff, 0 0 2px #fff;
+}
+.raid-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+.raid-card {
+  width: 220px;
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px;
+  border: 2px solid #7a3cc0;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #1c0a2c, #2c0f44);
+  color: inherit;
+  cursor: pointer;
+  box-shadow: 0 0 18px #6a20b066;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.raid-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 28px #b04cffaa;
+}
+.raid-card img {
+  width: 100%;
+  height: 190px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 8px #c060ff);
+}
+.raid-card strong {
+  font-size: 18px;
+}
+.raid-card.soon {
+  cursor: default;
+  opacity: 0.45;
+  border-style: dashed;
+  justify-content: center;
+}
+.raid-card.soon span {
+  font-size: 64px;
+  color: #6a4a8a;
+}
+.raid-hero {
+  width: min(420px, 90vw);
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 18px #c060ff);
+  animation: raid-float 4s ease-in-out infinite;
+}
+@keyframes raid-float {
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.raid-desc {
+  max-width: 520px;
+  margin: 0;
+  text-align: center;
+  color: #d4c0ee;
+}
+.raid-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+.raid-actions button {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 240px;
+  padding: 12px 16px;
+}
+.raid-actions small {
+  opacity: 0.8;
+}
+
+/* 레이드 방: 컷신 · 데스 카운트 · 안내 (event/RaidOverlay) */
+.raid-cut {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  animation: raid-cut-in 0.25s ease-out;
+}
+/* 컷신 그림은 가장자리가 검정으로 번져 있어 바탕과 이어짐 · 화면 가득 */
+.raid-cut img {
+  width: 100vw;
+  height: 100vh;
+  object-fit: contain;
+  image-rendering: auto;
+}
+@keyframes raid-cut-in {
+  from {
+    opacity: 0;
+  }
+}
+.raid-hud {
+  position: fixed;
+  left: 12px;
+  top: 44px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: rgba(20, 6, 30, 0.7);
+  color: #f0e0ff;
+  font-size: 14px;
+  pointer-events: none;
+}
+.raid-hud .danger {
+  color: #ff6a8a;
+}
+.raid-note {
+  position: fixed;
+  left: 50%;
+  top: 22%;
+  transform: translateX(-50%);
+  z-index: 20;
+  max-width: 80vw;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(60, 10, 40, 0.8);
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  pointer-events: none;
+  animation: raid-pulse 0.8s ease-in-out infinite alternate;
+}
+.raid-note.dark {
+  background: rgba(10, 0, 20, 0.85);
+  color: #d8b0ff;
+  animation: none;
+}
+@keyframes raid-pulse {
+  to {
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+/* 사슬 방향키 (화면 가운데 크게) */
+.raid-chain {
+  position: fixed;
+  left: 50%;
+  top: 38%;
+  transform: translateX(-50%);
+  z-index: 21;
+  padding: 10px 18px;
+  border: 2px solid #a070ff;
+  border-radius: 10px;
+  background: rgba(14, 4, 24, 0.85);
+  color: #fff;
+  text-align: center;
+  pointer-events: none;
+}
+.raid-chain div {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.raid-chain b {
+  font-size: 46px;
+  line-height: 1;
+  opacity: 0.45;
+}
+.raid-chain b.now {
+  opacity: 1;
+  color: #ffe060;
+  text-shadow: 0 0 10px #ffb000;
+}

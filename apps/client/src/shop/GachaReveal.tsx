@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { TextKey } from "../i18n";
 import { GachaPack } from "./GachaPack";
+import { useGachaGlow } from "./gachaGlow";
 import { Prize, prizeGlow } from "./GachaPrize";
 import type { GachaPrize } from "./wallet";
 
@@ -18,6 +19,7 @@ function Card({ p, i, big, state, onPick, t }: { p: GachaPrize; i: number; big: 
       type="button"
       className={`gacha-card ${prizeGlow(p)} ${state}${big ? " big" : ""}`}
       style={{ animationDelay: `${i * 70}ms` }}
+      data-card={i}
       onClick={() => onPick(i)}
       disabled={state !== "back"}
     >
@@ -38,12 +40,17 @@ export function GachaReveal({ prizes, t, onClose }: { prizes: GachaPrize[]; t: (
   const [opened, setOpened] = useState(false);
   const [states, setStates] = useState<("back" | "glow" | "front")[]>(() => prizes.map(() => "back"));
   const timers = useRef<number[]>([]);
+  const stage = useRef<HTMLDivElement>(null);
+  const burst = useGachaGlow(stage);
   useEffect(() => () => timers.current.forEach((id) => window.clearTimeout(id)), []);
 
   const later = (ms: number, fn: () => void) => timers.current.push(window.setTimeout(fn, ms));
   const set = (i: number, v: "back" | "glow" | "front") => setStates((s) => s.map((x, k) => (k === i ? v : x)));
   const pick = (i: number, wait = 0) => {
-    later(wait, () => set(i, "glow"));
+    later(wait, () => {
+      set(i, "glow");
+      burst(stage.current?.querySelector(`[data-card="${i}"]`) ?? null, prizeGlow(prizes[i]!));
+    });
     later(wait + GLOW_MS, () => set(i, "front"));
   };
   const flipAll = () => {
@@ -59,9 +66,12 @@ export function GachaReveal({ prizes, t, onClose }: { prizes: GachaPrize[]; t: (
   const done = states.every((s) => s === "front");
 
   return (
-    <div className="gacha-stage" role="dialog" aria-modal="true">
+    <div ref={stage} className="gacha-stage" role="dialog" aria-modal="true">
       {!opened ? (
-        <GachaPack fancy={!big} count={prizes.length} t={t} onOpen={() => setOpened(true)} />
+        <GachaPack fancy={!big} count={prizes.length} t={t} onOpen={() => {
+            burst(null, "open");
+            setOpened(true);
+          }} />
       ) : (
         <div className="gacha-table">
           <div className={`gacha-cards${big ? " single" : ""}`}>{main.map(card)}</div>

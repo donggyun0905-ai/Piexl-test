@@ -1,0 +1,25 @@
+// 화면 글자: 성국 라파엘(폭풍의 사수) 이름·설명 · 스킬 이름·설명 · 버프 창 (charactersSeongguk가 커서 나눔)
+export const CHARACTER_TEXT_RAFAEL = {
+  rafael: { ko: "라파엘", en: "Rafael", ja: "ラファエル" },
+  skybow: { ko: "천공의 대궁", en: "Skybow", ja: "天空の大弓" },
+  rafaelDesc: {
+    ko: "멀리 있는 적일수록 피해 증가(최대 +60%) · 방에서 가장 강한 적에 표적(받는 피해 +25%, 쓰러뜨리면 스킬 대기 30% 감소) · 누르고 있으면 3연격(화살 둘 → 저격: 표적을 향해 모든 적을 꿰뚫음) · 숫자 키 스킬 넷: 1 바람 걸음 · 2 폭풍 화살비 · 3 에테르 스코프 · 4 천공의 빛 화살 · 성국. '폭풍의 사수'. 온몸을 로브로 감싼 천공의 저격수. 에테르 스코프를 단 거대한 마도공학 복합 대궁으로 수 킬로미터 밖에서 아군의 시야를 빌려 적의 수뇌부를 정확히 저격하는 초장거리 화력 지원. 아주 커다란 빛의 화살도 가지고 있다고 함.",
+    en: "Damage grows with distance (up to +60%) · marks the strongest foe in the room (+25% damage taken; killing it cuts skill cooldowns by 30%) · hold for a 3-hit chain (two arrows → Snipe: pierces every foe toward the mark) · four number-key skills: 1 Wind Step · 2 Storm Volley · 3 Ether Scope · 4 Arrow of Heaven · Holy Kingdom. 'The Storm Archer'. A sniper of the heavens wrapped head to toe in a robe. With a giant magitech compound bow fitted with an ether scope, he borrows his allies' sight to snipe enemy commanders from kilometers away — ultra-long-range fire support. He is said to carry an enormous arrow of light as well.",
+    ja: "遠い敵ほどダメージ増加（最大+60%）· 部屋で最も強い敵に標的（受けるダメージ+25%、倒すとスキル待機30%減少）· 押し続けると3連撃（矢2本 → 狙撃：標的へ向けて全ての敵を貫く）· 数字キーのスキル4つ：1 風の歩み · 2 嵐の矢の雨 · 3 エーテルスコープ · 4 天空の光の矢 · 聖国。「嵐の射手」。全身をローブで包んだ天空の狙撃手。エーテルスコープ付きの巨大な魔導工学複合大弓で、数キロ先から味方の視界を借りて敵の首脳を正確に狙撃する超長距離火力支援。とても大きな光の矢も持っているという。",
+  },
+  rfSkill1: { ko: "바람 걸음", en: "Wind Step", ja: "風の歩み" },
+  rfSkill2: { ko: "폭풍 화살비", en: "Storm Volley", ja: "嵐の矢の雨" },
+  rfSkill3: { ko: "에테르 스코프", en: "Ether Scope", ja: "エーテルスコープ" },
+  rfSkill4: { ko: "천공의 빛 화살", en: "Arrow of Heaven", ja: "天空の光の矢" },
+  rfSkillTip1: { ko: "떠난 자리에 돌풍을 일으켜 둘레 적을 밀쳐내며 (60%) 뒤로 뛰어 물러남 (무적) · 다음 공격이 저격 · 대기 8초", en: "Leap backward (invulnerable), leaving a gust that knocks nearby foes away (60%) · your next attack is a Snipe · 8s cooldown", ja: "離れた場所に突風を起こして周りの敵を押し出し（60%）後ろへ跳び退く（無敵）· 次の攻撃が狙撃 · 待機8秒" },
+  rfSkillTip2: { ko: "표적(없으면 앞) 자리에 0.5초 뒤 화살비가 6번 쏟아짐 (한 번 40%, 느려짐) · 대기 12초", en: "After 0.5s, arrows pour down six times on the mark (or ahead) (40% each, slow) · 12s cooldown", ja: "標的（いなければ前方）の位置に0.5秒後、矢の雨が6回降り注ぐ（1回40%、鈍足）· 待機12秒" },
+  rfSkillTip3: { ko: "5초 동안 모든 기본 공격이 저격 (피해·거리 1.3배) · 대기 16초", en: "For 5s every basic attack is a Snipe (1.3x damage and range) · 16s cooldown", ja: "5秒間、全ての通常攻撃が狙撃（ダメージ・距離1.3倍）· 待機16秒" },
+  rfSkillTip4: { ko: "궁극기: 0.75초 동안 활을 크게 당겨 (무적) 표적을 향해 방을 가로지르는 거대한 빛의 화살 (600%, 모두 꿰뚫음) · 끝에서 폭발 (200%) · 대기 60초", en: "Ultimate: draw the bow wide for 0.75s (invulnerable), then loose a giant arrow of light across the room toward the mark (600%, pierces all) · explodes at the end (200%) · 60s cooldown", ja: "必殺技：0.75秒間弓を大きく引き（無敵）、標的へ向けて部屋を貫く巨大な光の矢（600%、全て貫通）· 終点で爆発（200%）· 待機60秒" },
+  pwSk_rafael1: { ko: "바람 걸음", en: "Wind Step", ja: "風の歩み" },
+  pwSk_rafael2: { ko: "폭풍 화살비", en: "Storm Volley", ja: "嵐の矢の雨" },
+  pwSk_rafael3: { ko: "에테르 스코프", en: "Ether Scope", ja: "エーテルスコープ" },
+  pwSk_rafael4: { ko: "천공의 빛 화살", en: "Arrow of Heaven", ja: "天空の光の矢" },
+  bfRfFar: { ko: "초장거리: 멀수록 피해 증가 · 표적", en: "Ultra range: more damage the farther · Mark", ja: "超長距離：遠いほどダメージ増加 · 標的" },
+  bfRfScope: { ko: "에테르 스코프 {s}초: 모든 공격 저격", en: "Ether Scope {s}s: every attack snipes", ja: "エーテルスコープ{s}秒：全攻撃が狙撃" },
+  cg_rafael: { ko: "공격 속도 {n} 달성", en: "Reach {n} attack speed", ja: "攻撃速度{n}達成" },
+};

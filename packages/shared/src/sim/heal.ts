@@ -1,5 +1,6 @@
 // 회복: 모든 체력 회복이 지나는 길 (combat.healPlayer). 의사는 체력이 가득 차면 넘친 회복이 보호막이 됨 (초과 치료).
 // 의사 공격 회복(직접 피해의 일부)은 1초마다 상한이 있음
+import { LUC_RULES } from "./lucKit";
 import { trialNoHeal } from "./trialFoes";
 import { roleHealMul } from "./pwMatchup";
 import { plagueCut } from "./pwPassive";
@@ -12,6 +13,7 @@ import { tabooDown } from "./taboo";
 import { TERRAIN } from "../terrainDefs";
 import { PW } from "../paewangDefs";
 import { setHealMul } from "./buildSets";
+import { healBlocked } from "./beatriceKit";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -44,9 +46,12 @@ export function overheals(s: RunState): boolean {
 
 /** 체력 회복. 의사는 체력을 먼저 채우고 남는 양을 보호막으로 */
 export function heal(s: RunState, amount: number): void {
+  // 레이드 어둠의 세계: 치유 -100%
+  if (s.player.raidDark) return;
+  if ((s.player.raidCut ?? 0) > 0) amount *= LUC_RULES.CUT_MUL;
   const p = s.player;
   // 학살자: 회복이 듣지 않음 (피의 학살 흡혈만) · 끝없는 시련 중에는 모든 회복이 막힘
-  if (p.characterId === "slayer" || trialNoHeal(s)) return;
+  if (p.characterId === "slayer" || trialNoHeal(s) || healBlocked(p)) return;
   // 금기: 메마른 몸 (모든 회복 감소)
   amount *= tabooDown(s, "lessHeal") * setHealMul(p);
   // 부식독 (베놈 독가스): 회복·재생 감소

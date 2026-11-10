@@ -17,7 +17,7 @@ import { SIN_DESC } from "./apostle";
 import { STAR_DESC } from "./star";
 import { DUCK_DESC, type DuckWeapon } from "./duck";
 import { EVO_DESC } from "./morphEvo";
-import { ANIMAL_DESC, autoDesc, bombDesc, cyberDesc, FORMATION_DESC, GAIA_DESC, GREAT_DESC, MAW_DESC, needleDesc, PLAGUE_DESC, ramDesc, REPULSOR_DESC, rideDesc, REN_DESC, scytheDesc, SNIPER_DESC, TALON_DESC, lightDesc, phantomDesc, katanaDesc, silkDesc, scriptDesc, lionDesc, gemDesc, fangDesc, solarDesc, flailDesc, seaDesc, pickDesc, FATE_DESC, zeusDesc, curioDesc } from "./season2";
+import { ANIMAL_DESC, autoDesc, bombDesc, cyberDesc, FORMATION_DESC, GAIA_DESC, GREAT_DESC, MAW_DESC, needleDesc, PLAGUE_DESC, ramDesc, REPULSOR_DESC, rideDesc, REN_DESC, scytheDesc, SNIPER_DESC, TALON_DESC, lightDesc, phantomDesc, katanaDesc, silkDesc, scriptDesc, lionDesc, gemDesc, fangDesc, solarDesc, flailDesc, seaDesc, sharkDesc, fleetDesc, grappleDesc, riptideDesc, museDesc, flowDesc, pickDesc, FATE_DESC, zeusDesc, curioDesc } from "./season2";
 import { WORD_DESC } from "./scribe";
 import { tagDesc } from "./abandoned";
 import { titanDesc } from "./titan";
@@ -149,6 +149,12 @@ export function itemDesc(kind: ItemKind, id: string, lang: Lang, t: (k: TextKey)
       w.kind === "solar" ? solarDesc(lang) : "",
       w.flail ? flailDesc(w.flail, lang) : "",
       w.sea ? seaDesc(w.sea, lang) : "",
+      w.shark ? sharkDesc(w.shark, lang) : "",
+      w.fleet ? fleetDesc(w.fleet, lang) : "",
+      w.hook ? grappleDesc(w.hook, lang) : "",
+      w.orca ? riptideDesc(w.orca, lang) : "",
+      w.wave ? museDesc(w.wave, lang) : "",
+      w.miryu ? flowDesc(w.miryu, lang) : "",
       w.pick ? pickDesc(w.pick, lang) : "",
       w.kind === "fate" ? FATE_DESC[lang] : "",
       w.zeus ? zeusDesc(w.zeus, lang) : "",
@@ -179,7 +185,9 @@ function passiveDesc(id: string, def: PassiveDef, lang: Lang, t: (k: TextKey) =>
     const tag = def.exclusive ? `[${t(def.exclusive)} ${t("exclusiveTag")}] ` : "";
     // 수집가 수집 무기: 콤보 기술 + 작은 능력치
     if (id in CL_ARMS) return `${tag}${collectorArmDesc(id as ClArmId, lang)} · ${modsText(def, t)}`;
-    return tag + fill(EFFECT_DESC[id as PassiveId]?.[lang] ?? "", (PERKS as Record<string, Record<string, number>>)[id]);
+    const body = tag + fill(EFFECT_DESC[id as PassiveId]?.[lang] ?? "", (PERKS as Record<string, Record<string, number>>)[id]);
+    // 웨이브 기술: 작은 능력치도 같이
+    return def.exclusive === "wave" || def.exclusive === "beatrice" || def.exclusive === "ian" || def.exclusive === "gabriel" || def.exclusive === "serena" || def.exclusive === "rafael" || def.exclusive === "yuriel" || def.exclusive === "michaela" ? `${body} · ${modsText(def, t)}` : body;
   }
   return modsText(def, t);
 }

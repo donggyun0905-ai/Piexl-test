@@ -47,7 +47,7 @@ export type GymStat = (typeof GYM_STATS)[number];
 export const GYM_OFF: readonly GymStat[] = ["lifesteal"];
 /** 입력 menu 기능 번호: 미니게임 결과 (a = 기구, b = 점수 ÷ 20) · 강화 (a = 항목) */
 export const GYM_OP = { result: 9, up: 10 } as const;
-const PASSIVE_AT = 32;
+export const PASSIVE_AT = 32;
 
 /** 이 캐릭터에게는 효과가 없어 막은 능력치 (2026-11-01 전체 캐릭터 점검):
  *  최대 체력 고정(거너·저주받은 주사위 체력) · 공격 간격이 무기에 고정(버려진 자들·잔영)이거나 차크람이 돌아와야 다시 던짐(베두인) ·

@@ -1,4 +1,4 @@
-// 스토리 (시즌 1·2): 탭 넷 — 진영 · 최종 보스 · 아카식 레코드(장 목록 → 책처럼 쪽 넘기며 읽기) · 캐릭터(자세한 설명, CharGuides)
+// 스토리 (시즌 1~3): 탭 넷 — 진영 · 최종 보스 · 아카식 레코드(장 목록 → 책처럼 쪽 넘기며 읽기) · 캐릭터(자세한 설명, CharGuides)
 import { Fragment, useEffect, useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { EnemyPortrait } from "../codex/EnemyPortrait";
@@ -45,7 +45,7 @@ export function StoryScreen({ lang, t, onBack }: Props) {
           {tab === "factions" && (
             <div className="story-cards">
               {FACTIONS.map((f) => (
-                <section key={f.id} className="story-card story-faction" style={{ borderColor: f.color, ["--fc" as string]: f.color }}>
+                <section key={f.id} className={`story-card story-faction ${f.id}`} style={{ borderColor: f.color, ["--fc" as string]: f.color }}>
                   <h3 style={{ color: f.color }}>
                     {FACTION_TEXT[f.id].name[lang]} <small>{FACTION_TEXT[f.id].tag[lang]}</small>
                   </h3>
@@ -66,7 +66,7 @@ export function StoryScreen({ lang, t, onBack }: Props) {
             <div className="story-cards">
               {STORY_BOSSES.map((b, i) => (
                 <Fragment key={b.id}>
-                  {(i === 0 || STORY_BOSSES[i - 1]!.season !== b.season) && <h4 className="story-season">{t(b.season === 1 ? "storyS1" : "storyS2")}</h4>}
+                  {(i === 0 || STORY_BOSSES[i - 1]!.season !== b.season) && <h4 className="story-season">{t(`storyS${b.season}` as TextKey)}</h4>}
                   <section className="story-card story-boss">
                     <EnemyPortrait kind={b.kind} size={72} />
                     <div>
@@ -82,7 +82,7 @@ export function StoryScreen({ lang, t, onBack }: Props) {
             <div className="story-cards">
               {CHAPTERS.map((ch, i) => (
                 <Fragment key={ch.id}>
-                  {(i === 0 || CHAPTERS[i - 1]!.season !== ch.season) && <h4 className="story-season">{t(ch.season === 1 ? "storyS1" : "storyS2")}</h4>}
+                  {(i === 0 || CHAPTERS[i - 1]!.season !== ch.season) && <h4 className="story-season">{t(`storyS${ch.season}` as TextKey)}</h4>}
                   <section className="story-card story-chapter">
                     <span className="story-chapter-no">{i + 1}</span>
                     <h3>

@@ -61,6 +61,51 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   thorken: { size: 46, footPad: 2, src: 128, v2: true },
   /** 리바이어 (머리 위 물결 왕관·긴 창까지 그림이라 칸을 조금 크게) */
   levia: { size: 44, footPad: 2, src: 128, v2: true },
+  /** 테일 (상어 소녀, 긴 꼬리·물결까지 그림이라 칸을 조금 크게) */
+  tail: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 매드퀸 (해군 제독, 긴 머리·코트 자락) */
+  madQueen: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 훅 (해적, 등에 큰 갈고리·깃털 모자) */
+  hook: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 오르카 (격투가, 금발·푸른 불꽃 팔·금빛 허리띠) */
+  orca: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 웨이브 (은발 포니테일·흰 후드·서핑보드) */
+  wave: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 미류 (해룡 수인, 은발·푸른 용 뿔·대태도) */
+  miryu: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 베아트리스 (성국 성기사, 금발·후광·백은 갑옷·붉은 망토·쌍검) */
+  beatrice: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 이안 (성국 침묵의 서기관, 은발 노인·안경·백금 로브·펜·등불) */
+  ian: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 가브리엘 (성국 철옹의 방패, 금발·가시 후광·백은 갑옷·푸른 망토·타일 방패·단조 해머) */
+  gabriel: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 세레나 (성국 환혹의 무희, 은발·가시 후광·백합·금빛 무희 옷·가시 사슬 채찍) */
+  serena: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 라파엘 (성국 폭풍의 사수, 흰 로브·가시 후광·에테르 스코프 대궁) */
+  rafael: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 유리엘 (성국 단죄의 성녀, 빛의 성복·후광·성수 수정구 & 사슬 철퇴) */
+  yuriel: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 미카엘라 (성국 공허의 인도자, 빛의 성복·후광·떠다니는 투창과 검) */
+  michaela: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 블래스트 (새벽의 성흔 악마 사냥꾼, 흰 머리·고글·붉은 코트·산탄총) */
+  blast: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 네일러 (새벽의 성흔 못 박는 심판관, 은발·눈 붕대·가시 왕관·못 박힌 누더기·십자 해머) */
+  nailer: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 시저스 (새벽의 성흔 단죄의 가위, 라벤더 머리·가시 두건·붉은 장미·쌍가위) */
+  scissors: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 헬피스트 (새벽의 성흔 적혈의 주먹, 흰 머리·검은 코트·붉은 악마 팔) · 적혈 각성 중 악마화 모습 (뿔·붉은 몸) */
+  hellfist: { size: 40, footPad: 2, src: 128, v2: true },
+  hellfistDemon: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 실버불렛 (새벽의 성흔 은빛 집행자, 은발 땋은 머리·깃털 모자·검은 코트·쌍권총) */
+  silverBullet: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 블루 플레임 (새벽의 성흔 청염의 맹인, 검푸른 긴 머리·눈가리개·흰 코트·푸른 불꽃) */
+  blueFlame: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 루나틱 (새벽의 성흔 월광의 검사 · 리더, 은빛 긴 머리·초승달 머리 장식·흰 갑옷·남색 망토·새하얀 레이피어) */
+  lunatic: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 인시전 (새벽의 성흔 쌍도끼의 도살자 · 광전사, 백발 땋은 포니테일·붉은 리본·흰 털 어깨·검은 갑옷·붉은 망토·붉은 쌍도끼) */
+  incision: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 크루세이더 (새벽의 성흔 성십자가의 거인 · 탱커, 흰 판금 갑옷·가시 후광·붉은 머리채·흰 털 망토·붉은 망토·금테 거대한 돌 십자가) · 덩치가 커서 칸이 큼 */
+  crusader: { size: 46, footPad: 2, src: 128, v2: true },
   /** 오토마타 자매 인형 (진홍빛, 사용자 그림 2026-11-04) */
   automataDoll: { size: 32, footPad: 2, src: 128, v2: true },
   // 히든 캐릭터도 일반 캐릭터와 같은 크기 (2026-10-31) · 빛의 사도는 칸에 여백이 많아 키를 맞춘 크기(성장 모습은 단계마다 커짐) · 차원의 순례자는 소녀 키를 일반 캐릭터에 맞춤 (큰 가방은 그만큼 같이 커서 칸이 큼)

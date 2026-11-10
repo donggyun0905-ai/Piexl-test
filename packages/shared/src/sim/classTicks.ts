@@ -40,6 +40,28 @@ import { silkTick } from "./silk";
 import { pungryuTick } from "./pungryu";
 import { thorkenTick } from "./thorken";
 import { leviaTick } from "./levia";
+import { tailTick } from "./tail";
+import { madQueenTick } from "./madQueen";
+import { hookTick } from "./hook";
+import { orcaTick } from "./orca";
+import { waveTick } from "./wave";
+import { miryuTick } from "./miryu";
+import { beatriceTick } from "./beatrice";
+import { ianTick } from "./ian";
+import { gabrielTick } from "./gabriel";
+import { serenaTick } from "./serena";
+import { rafaelTick } from "./rafael";
+import { yurielTick } from "./yuriel";
+import { michaelaTick } from "./michaela";
+import { nailerTick } from "./nailer";
+import { scissorsTick } from "./scissors";
+import { hellfistTick } from "./hellfist";
+import { silverBulletTick } from "./silverBullet";
+import { blueFlameTick } from "./blueFlame";
+import { lunaticTick } from "./lunatic";
+import { incisionTick } from "./incision";
+import { crusaderTick } from "./crusader";
+import { blastTick } from "./blast";
 import { leoTick } from "./leo";
 import { onyxTick } from "./onyx";
 import { fenrirTick } from "./fenrir";
@@ -99,6 +121,28 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   script: pungryuTick,
   anchor: thorkenTick,
   whale: leviaTick,
+  shark: tailTick,
+  fleet: madQueenTick,
+  grapple: hookTick,
+  riptide: orcaTick,
+  muse: waveTick,
+  flowblade: miryuTick,
+  judgment: beatriceTick,
+  causality: ianTick,
+  bastion: gabrielTick,
+  nightmare: serenaTick,
+  skybow: rafaelTick,
+  sanctum: yurielTick,
+  armory: michaelaTick,
+  nail: nailerTick,
+  shears: scissorsTick,
+  hellArm: hellfistTick,
+  silverGun: silverBulletTick,
+  blueFire: blueFlameTick,
+  moonRapier: lunaticTick,
+  twinAxe: incisionTick,
+  greatCross: crusaderTick,
+  blast: blastTick,
   lion: leoTick,
   gem: onyxTick,
   fang: fenrirTick,

@@ -1,7 +1,9 @@
 // 방·층 이동: 방 들어가기(적 배치), 출구 잠김·억지로 나가기, 쉼터, 계단
+import { cerbArena } from "./cerbKit";
 import { eliteWave, spawnEnemies } from "./roomSpawn";
 export { spawnEnemies } from "./roomSpawn";
 import { introRooms } from "./intro";
+import { raidBossRoom, raidBossSize, raidEnemies, raidMap, raidSpawn } from "./raid";
 import { PERKS } from "../perks";
 import { COOP_ROOM, ROOM_CX as CX, ROOM_CY as CY, setRoomSize } from "../constants";
 import { bossForFloor, type BossKind } from "../content";
@@ -64,7 +66,7 @@ export function continueToLastFloor(s: RunState, boss: BossKind): void {
 /** 층 시작: 지도 만들고 시작 방으로 */
 export function startFloor(s: RunState, floor: number): void {
   s.floor = floor;
-  s.map = s.arenaLv ? arenaMap(s) : s.lastBoss && floor === lastFloorOf(s) ? lastFloorMap(devilPact(s)) : generateFloor(s.seed, floor, s.customRooms);
+  s.map = s.raidBoss ? raidMap(s) : s.arenaLv ? arenaMap(s) : s.lastBoss && floor === lastFloorOf(s) ? lastFloorMap(devilPact(s)) : generateFloor(s.seed, floor, s.customRooms);
   s.rooms = s.map.rooms.map(() => ({ visited: false, cleared: false, pickups: [], enemies: null }));
   skipTrials(s);
   pickHidden(s);
@@ -85,11 +87,15 @@ function enterRoom(s: RunState, roomId: number): void {
   // 무한 모드 11층부터: 보스방이 큰 방 (17층부터 그 2배, sim/endless)
   const grow = exit ? endlessSize(s) : null;
   const big = (s.lastBoss !== undefined && exit) || arenaBig(s, roomId) || !!grow;
-  s.roomCols = grow?.cols ?? (big ? BIG_COLS : undefined);
-  s.roomRows = grow?.rows ?? (big ? BIG_ROWS : undefined);
+  // 레이드 방: 라스트 보스 방의 2배 (sim/raid)
+  const huge = raidBossRoom(s, roomId) ? raidBossSize() : null;
+  s.roomCols = huge?.cols ?? grow?.cols ?? (big ? BIG_COLS : undefined);
+  s.roomRows = huge?.rows ?? grow?.rows ?? (big ? BIG_ROWS : undefined);
   applyRoom(s);
   // 태초의 빛과 어둠: 큰 방에 상자 벽 6개
   s.arena = big && (s.lastBoss === "plight" || arenaPrimeval(s, roomId) || (exit && endlessPrimeval(s))) ? makeArena(s) : undefined;
+  // 켈베로스: 기둥 6개 (브레스를 피하는 곳)
+  if (big && exit && s.lastBoss === "cerberus") s.arena = cerbArena();
   s.projectiles = [];
   const info = s.map.rooms[roomId]!;
   const st = s.rooms[roomId]!;
@@ -110,7 +116,9 @@ function enterRoom(s: RunState, roomId: number): void {
     if (hasPerk(s.player, "arcaneShield")) s.player.shieldTicks = Math.max(s.player.shieldTicks, PERKS.arcaneShield.ticks);
   });
   if (st.enemies === null) {
-    st.enemies = s.arenaLv
+    st.enemies = s.raidBoss
+      ? raidEnemies(s, roomId)
+      : s.arenaLv
       ? arenaEnemies(s, roomId)
       : info.type === "combat" || info.type === "elite"
         ? roomId === pilgrimRoom(s) ? [] : hiddenAt(s, roomId) ? startHidden(s) : luxRoom(s, roomId, spawnEnemies(s, roomId, info.type === "elite"))
@@ -123,6 +131,7 @@ function enterRoom(s: RunState, roomId: number): void {
           : [];
     // 협동: 방 물건·쉼터 회복은 사람마다
     eachSeat(s, () => {
+      if (s.raidBoss) return raidSpawn(s, roomId);
       if (info.type === "treasure") spawnTreasure(s, roomId);
       else spawnSpecialRoom(s, info.type, roomId);
       if (info.type === "shop") spawnShop(s, roomId);
@@ -146,6 +155,8 @@ function enterRoom(s: RunState, roomId: number): void {
 /** 보스방 입장: 플레이어는 아래쪽 가운데, 보스는 위쪽 가운데에서 시작 (들어오자마자 맞지 않게) */
 function placeBossFight(s: RunState): void {
   placeParty(s, ROOM_MAX_Y - PLAYER_RADIUS - 16);
+  // 레이드: 루시퍼·기둥은 처음 자리 그대로 (sim/lucifer)
+  if (s.raidBoss) return;
   // 다시 들어온 경우: 불러낸 졸개는 치우고 보스는 처음 자리·걷기 상태로
   s.enemies = s.enemies.filter((e) => !e.noGold);
   s.enemies.forEach((e, i) => {
@@ -176,7 +187,7 @@ export function goThrough(s: RunState, lane: number): void {
   enterRoom(s, next);
 }
 
-/** 포탈건: 이 층의 다른 방으로 바로 감 (아래쪽 가운데에서 시작) */
+/** 귀환의 문: 이 층의 다른 방으로 바로 감 (아래쪽 가운데에서 시작) */
 export function warpRoom(s: RunState, roomId: number): void {
   s.rooms[s.roomId]!.enemies = s.enemies;
   placeParty(s, ROOM_MAX_Y - PLAYER_RADIUS - 10);
@@ -203,6 +214,7 @@ export function onStairs(s: RunState): boolean {
 
 /** 계단으로 다음 층 (마지막 층이면 클리어) */
 export function climb(s: RunState): void {
+  if (s.raidBoss) return;
   if (s.arenaLv) arenaNext(s, startFloor);
   else if (s.hero) heroNext(s, startFloor);
   else if (s.floor >= FLOOR_COUNT && !s.endless) {

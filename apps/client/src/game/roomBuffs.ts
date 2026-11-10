@@ -1,8 +1,16 @@
 // 로그 버프 창 '방에서 얻은 것' (BuffPanel): 제단에서 고른 카드 · 패시브에 새겨진 증강 기술 · 방에서 바뀐 능력치(시련·제단·도박꾼·악마 합계)
 // · 상태이상 면역 · 되살아남 · 악마와의 거래 · 이번 층 시련 저주. 줄마다 마우스를 올리면 설명 (tip)
-import type { PlayerState } from "@pixel-rogue/shared";
+import { ownSkills, waveSetBonus, WAVE, type PlayerState } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { itemName } from "../i18n/items";
+import { beatriceBuffs } from "./beatriceBuffs";
+import { ianBuffs } from "./ianBuffs";
+import { gabrielBuffs } from "./gabrielBuffs";
+import { serenaBuffs } from "./serenaBuffs";
+import { rafaelBuffs } from "./rafaelBuffs";
+import { yurielBuffs } from "./yurielBuffs";
+import { michaelaBuffs } from "./michaelaBuffs";
+import { blastBuffs } from "./blastBuffs";
 
 export interface RoomBuff {
   key: string;
@@ -47,6 +55,16 @@ function statSummary(p: PlayerState, t: (k: TextKey) => string): { text: string;
 export function roomBuffs(p: PlayerState, floor: number, lang: Lang, t: (k: TextKey) => string): RoomBuff[] {
   const out: RoomBuff[] = [];
   const skill = (k: string) => `${t(`swarmSkill_${k}` as TextKey)}: ${t(`swarmSkillDesc_${k}` as TextKey)}`;
+  const wv = waveSetBonus(p);
+  if (wv > 0) out.push({ key: "waveSet", label: t("bfWaveSet").replace("{n}", String(ownSkills(p).length)).replaceAll("{b}", String(wv * WAVE.setAtk)), tip: t("bfWaveSetTip") });
+  out.push(...beatriceBuffs(p, t));
+  out.push(...ianBuffs(p, t));
+  out.push(...gabrielBuffs(p, t));
+  out.push(...serenaBuffs(p, t));
+  out.push(...rafaelBuffs(p, t));
+  out.push(...yurielBuffs(p, t));
+  out.push(...michaelaBuffs(p, t));
+  out.push(...blastBuffs(p, t));
   const stats = statSummary(p, t);
   if (stats) out.push({ key: "stats", label: t("bfRoomStats"), tip: stats.text, bad: stats.bad });
   (p.altar?.got ?? []).forEach((g, i) => {

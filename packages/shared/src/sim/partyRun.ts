@@ -10,6 +10,8 @@ import { EMPTY_INPUT, type RunState, type TickInput } from "./types";
 import { FLEE_COST } from "./util";
 import { tabooSum } from "./taboo";
 import { withGymFx } from "./gymPerks";
+import { raidHuman, raidInputs, raidLocked } from "./raid";
+import { raidAfter, raidLivesLeft } from "./raidLife";
 
 export interface PartyMember {
   characterId: CharacterId;
@@ -46,6 +48,8 @@ export function stepParty(s: RunState, inputs: readonly TickInput[]): void {
   // 패왕전을 같이 하는 판 (협동 방·진행 맞추기를 그대로 씀)
   if (s.pvp) return stepPvp(s, inputs);
   if (s.over) return;
+  // 레이드: AI 자리 입력을 채움 (sim/raid)
+  if (s.raidBoss) inputs = raidInputs(s, inputs);
   applyRoom(s);
   const view = seatNo(s);
   useSeat(s, 0);
@@ -82,7 +86,8 @@ function tick(s: RunState, inputs: readonly TickInput[]): void {
   );
   stepWorld(s);
   eachSeat(s, () => checkDeath(s), true);
-  if (!allPlayers(s).some(isAlive)) s.over = true;
+  raidAfter(s);
+  if (!allPlayers(s).some(isAlive) && !raidLivesLeft(s)) s.over = true;
 }
 
 /** 출구·계단: 살아 있는 모두가 같은 출구(계단)에 서야 이동. 모이는 중이면 몇 명 왔는지 안내 */
@@ -93,7 +98,7 @@ function partyRoom(s: RunState, inputOf: (i: number) => TickInput): void {
     s.prompt = { kind: "none" };
   });
   const alive: { i: number; lane: number; stairs: boolean }[] = [];
-  eachSeat(s, (i) => alive.push({ i, lane: touchingExit(s), stairs: onStairs(s) }), true);
+  eachSeat(s, (i) => raidHuman(s, i) && alive.push({ i, lane: touchingExit(s), stairs: onStairs(s) }), true);
   const need = alive.length;
   if (need === 0) return;
   const players = allPlayers(s);
@@ -107,6 +112,7 @@ function partyRoom(s: RunState, inputOf: (i: number) => TickInput): void {
     useSeat(s, alive[0]!.i);
   };
 
+  if (raidLocked(s, alive[0]!.lane)) return;
   const lane = alive[0]!.lane;
   if (alive.some((a) => a.lane >= 0)) {
     if (!alive.every((a) => a.lane === lane)) return gather((a) => a.lane >= 0);
@@ -115,6 +121,8 @@ function partyRoom(s: RunState, inputOf: (i: number) => TickInput): void {
       if (push) goThrough(s, lane);
       return;
     }
+    // 레이드: 잠긴 방(성좌를 아직 안 고름)은 못 나감
+    if (s.raidBoss) return;
     // 잠긴 출구: 모두 각자 체력을 내야 나갈 수 있음 (한 명이라도 모자라면 불가)
     const costs = alive.map((a) => Math.ceil(players[a.i]!.stats.maxHp * (FLEE_COST + tabooSum(s, "fleeCost"))));
     alive.forEach((a, k) => {

@@ -2,6 +2,7 @@
 import type { Lang } from "../index";
 import type { ChapterId, FactionId, OtherSpeaker, StoryBossId } from "../../story/storyData";
 import { S2_BOSS_STORY, S2_SPEAKERS, S2_SUMMARY, S2_TITLE } from "./world2";
+import { S3_SPEAKERS, S3_SUMMARY, S3_TITLE } from "./world3";
 
 type L = Record<Lang, string>;
 const c = (ko: string, en: string, ja: string): L => ({ ko, en, ja });
@@ -41,6 +42,24 @@ export const FACTION_TEXT: Record<FactionId, { name: L; tag: L; desc: L }> = {
       "수인과 엘프 등 자연과 함께 사는 이들의 나라. 오해로 아스칼론과 적이 되었다.",
       "A land of beastfolk, elves and others who live alongside nature. A misunderstanding made it Ascalon's enemy.",
       "獣人やエルフなど、自然と共に生きる者たちの国。誤解からアスカロンと敵対している。",
+    ),
+  },
+  seongguk: {
+    name: c("성국", "Holy Kingdom", "聖国"),
+    tag: c("성스러운 나라", "Holy Nation", "聖なる国"),
+    desc: c(
+      "꺼지지 않는 성화를 지키는 기사와 성직자의 나라. 성국의 전사들은 저절로 휘두르는 힘 대신 갈고닦은 기술(스킬)로 싸운다.",
+      "A nation of knights and clergy guarding an undying sacred flame. Its warriors fight not with reflexive strikes but with honed techniques (skills).",
+      "消えない聖火を守る騎士と聖職者の国。聖国の戦士たちは反射的な打撃ではなく、磨き上げた技（スキル）で戦う。",
+    ),
+  },
+  dawn: {
+    name: c("새벽의 성흔", "Dawn Stigmata", "暁の聖痕"),
+    tag: c("악마 사냥꾼", "Demon Hunters", "悪魔狩り"),
+    desc: c(
+      "밤마다 기어 나오는 악마를 사냥하는 사냥꾼들. 몸에 새긴 성흔(달빛의 힘)이 싸울수록 차오르고, 가득 차면 달빛으로 깨어난다.",
+      "Hunters who stalk the demons that crawl out each night. The stigmata carved into their bodies — the power of moonlight — fills as they fight and, when full, awakens them in moonlight.",
+      "夜ごと這い出る悪魔を狩る狩人たち。身に刻んだ聖痕（月光の力）は戦うほど満ち、満ちれば月光に目覚める。",
     ),
   },
   thalassia: {
@@ -94,9 +113,9 @@ export const BOSS_STORY: Record<StoryBossId, { name: L; desc: L }> = {
   godeater: {
     name: c("갓이터", "God Eater", "ゴッドイーター"),
     desc: c(
-      "헬리오스에서 태어난 존재. 하늘의 사도였던 이를 악으로 물들여 악의 사도로 만들었다.",
-      "A being born in Helios. It stained a former apostle of heaven with evil, making them the Apostle of Malice.",
-      "ヘリオスで生まれた存在。天の使徒だった者を悪に染め、悪の使徒にした。",
+      "헬리오스에서 태어난, 신을 먹는 존재. 아스모데우스의 보랏빛 악에 물들어 '천의 사도'에서 '악의 사도'가 된 이가 떠받드는 주인이다.",
+      "A god-devouring being born in Helios. It is the master revered by the one who, stained by Asmodeus's violet evil, fell from 'Apostle of Heaven' to 'Apostle of Malice'.",
+      "ヘリオスで生まれた、神を喰らう存在。アスモデウスの紫の悪に染まり「天の使徒」から「悪の使徒」となった者が仰ぐ主。",
     ),
   },
   primeval: {
@@ -114,11 +133,13 @@ export const CHAPTER_TITLE: Record<ChapterId, L> = {
   ch2: c("슬며시 차오르는 악", "The Slowly Rising Evil", "忍び寄る悪"),
   ch3: c("버려진 자들", "The Abandoned", "捨てられた者たち"),
   ...S2_TITLE,
+  ...S3_TITLE,
 };
 
 /** 장 목록에 보이는 한 줄 줄거리 */
 export const CHAPTER_SUMMARY: Record<ChapterId, L> = {
   ...S2_SUMMARY,
+  ...S3_SUMMARY,
   ch1: c(
     "한 사냥꾼의 화살이 부른 용의 분노. 아스칼론과 비르디아가 서로 등을 돌리게 된 날, 그 뒤에는 검은 약 한 방울이 있었다.",
     "A hunter's arrow wakes a dragon's wrath. On the day Ascalon and Virdia turned their backs on each other, a single drop of black potion lay behind it all.",
@@ -139,6 +160,7 @@ export const CHAPTER_SUMMARY: Record<ChapterId, L> = {
 /** 캐릭터가 아닌 말하는 사람 이름 */
 export const SPEAKER_NAME: Record<OtherSpeaker, L> = {
   ...S2_SPEAKERS,
+  ...S3_SPEAKERS,
   raven: c("레이븐", "Raven", "レイヴン"),
   cain: c("카인", "Cain", "カイン"),
   jade: c("제이드", "Jade", "ジェイド"),

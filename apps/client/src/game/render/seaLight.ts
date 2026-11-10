@@ -71,7 +71,7 @@ export function rays(ctx: Ctx, x: number, y: number, r: number, n: number, a: nu
 }
 
 /** 올라가는 거품 (f: 0~1 진행): 속이 빈 작은 동그라미 + 반짝 점 */
-export function bubbles(ctx: Ctx, x: number, y: number, r: number, f: number, seed: number, n = 6, a = 1): void {
+export function bubbles(ctx: Ctx, x: number, y: number, r: number, f: number, seed: number, n = 6, a = 1, color = "#c8f6ff"): void {
   ctx.lineWidth = 1;
   for (let k = 0; k < n; k++) {
     const u = (f + rnd(seed, k)) % 1;
@@ -79,7 +79,7 @@ export function bubbles(ctx: Ctx, x: number, y: number, r: number, f: number, se
     const by = y - u * r * 1.2;
     const br = 1 + rnd(seed, k + 3) * 2;
     const fa = a * (1 - u);
-    ctx.strokeStyle = alpha("#c8f6ff", fa * 0.9);
+    ctx.strokeStyle = alpha(color, fa * 0.9);
     ctx.beginPath();
     ctx.arc(bx, by, br, 0, TAU);
     ctx.stroke();
@@ -89,10 +89,10 @@ export function bubbles(ctx: Ctx, x: number, y: number, r: number, f: number, se
 }
 
 /** 물결 빛무늬 (물속에 비친 햇빛처럼 일렁이는 밝은 줄, 타원 안) */
-export function caustic(ctx: Ctx, x: number, y: number, r: number, tick: number, a: number): void {
+export function caustic(ctx: Ctx, x: number, y: number, r: number, tick: number, a: number, color = "#bff4ff"): void {
   if (a <= 0.02) return;
   additive(ctx, () => {
-    ctx.strokeStyle = alpha("#bff4ff", a);
+    ctx.strokeStyle = alpha(color, a);
     ctx.lineWidth = 1;
     for (let k = 0; k < 4; k++) {
       ctx.beginPath();

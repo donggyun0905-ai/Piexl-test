@@ -4,51 +4,54 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
-    version: "0.49.34",
-    date: "2026-11-05",
-    items: {
-      ko: ["탈라시아 이펙트 다듬기: 리바이어 고래가 은은한 바다빛·등에 일렁이는 햇빛 무늬·반짝임을 띠고, 창끝·충격파·고래 도약에 빛기둥·빛줄기·물보라 무지개 · 토르켄 철구공 빛 테두리·반짝임, 천둥 빛줄기, 닻이 지나간 길의 금빛 반짝임, 물기둥 무지개, 태풍 속 물빛 무늬"],
-      en: ["Thalassia effects polished: Levia's whales now glow with sea light, shimmering sunlight ripples and sparkles, with light pillars, rays and spray rainbows on the spear tip, shockwave and whale breach · Thorken's iron ball gets a glowing rim and sparkle, thunder gets light rays, the anchor leaves golden glints, geysers show rainbows, and typhoons shimmer"],
-      ja: ["タラシアのエフェクトを磨き上げ：リヴァイアのクジラが淡い海の光・背中に揺れる陽光の模様・きらめきをまとい、穂先・衝撃波・クジラの跳躍に光の柱・光の筋・しぶきの虹 · トルケンの鉄球に光の縁ときらめき、雷に光の筋、錨が通った跡に金色のきらめき、水柱に虹、台風の中に水の光模様"],
-    },
-  },
-  {
-    version: "0.49.33",
-    date: "2026-11-05",
+    version: "0.52.5",
+    date: "2026-11-10",
     items: {
       ko: [
-        "탈라시아 새 캐릭터 리바이어: 고래와 함께 자유로운 바다를 누비는 창술사 (체력 105 · 공격력 12 · 이동 1.35, 여는 조건: 이동 속도 1.8 달성)",
-        "리바이어: 바다의 창 3단 콤보 · 1타 앞 휘두르기 → 2타 한 바퀴 돌고 앞으로 커다란 고래 대돌격 → 3타 앞으로 돌진하고 부채꼴 충격파 · 타마다 확률로 고래가 같이 나와 날개로 넓게 쓸고 · 몸을 감아 한 바퀴 돌고 · 같이 돌진함 (안 나올수록 다음엔 잘 나옴)",
-        "리바이어: 무기는 창에 박는 힘의 보석 10 (아쿠아마린·해류 사파이어·뇌명 토파즈·산호석·밀물 월장석·심해석·빙정·쌍둥이 진주·해풍석·리바이어던의 눈) · 전용 아이템 20 (창 10 · 고래 10) · 푸른 고래·물살·물보라 이펙트 · 고래 울음 · 그림 시트 · 패왕전 스킬 4",
+        "레이드 장비창: 창을 좌우로 넓히고 '장비 능력치 합계'(왼쪽)와 '세트 효과'(오른쪽)를 나란히 놓아 줄이 많아져도 덜 길어지게",
+        "추가 능력치 색: 범위에서 가장 높은 값은 금색 · 상위 보라 · 중위 흰색 · 하위 하늘색 · 최하위 회색 (장신구 설명 아래에 색 뜻)",
+        "레이드 성공 보상: 보상 상자를 열면 로비 칩 30,000개",
+        "레이드 랭킹: 보스를 잡기까지 걸린 시간(컷신 빼고)으로 서버 순위표 · 사람마다 가장 빠른 기록 · 같이 싸운 캐릭터·사람 수 표시 · 레이드 화면의 '레이드 랭킹' 버튼",
       ],
       en: [
-        "New Thalassia character Levia: a spear dancer roaming the free sea with the whales (105 HP · 12 attack · 1.35 move; unlock: reach 1.8 move speed)",
-        "Levia: a 3-hit sea-spear combo · 1st a forward sweep → 2nd a full spin, then a giant whale charges forward → 3rd a lunge ending in a fan-shaped shockwave · each hit may bring a whale that sweeps wide with its fins, coils around you, or lunges beside you (more likely the longer it stays away)",
-        "Levia: weapons are 10 power gems set in the spear (Aquamarine, Current Sapphire, Thunder Topaz, Coral Stone, Tide Moonstone, Abyss Stone, Ice Crystal, Twin Pearls, Sea Breeze Stone, Eye of the Leviathan) · 20 exclusive items (10 spear · 10 whale) · blue whale, water and splash effects · whale song · sprite sheet · 4 Paewang skills",
+        "Raid gear window: wider, with 'Total from gear' (left) and 'Set bonus' (right) side by side so it stays shorter as stats pile up",
+        "Bonus stat colors: the max value of its range is gold · high purple · mid white · low sky blue · lowest gray (legend under the item details)",
+        "Raid clear reward: opening the reward chest gives 30,000 lobby chips",
+        "Raid ranking: an online leaderboard by time to defeat the boss (cutscenes excluded) · best time per player · shows party characters and player count · 'Raid ranking' button in the raid menu",
       ],
       ja: [
-        "タラシアの新キャラクター、リヴァイア：クジラと共に自由な海を駆ける槍使い（体力105 · 攻撃力12 · 移動1.35、解放条件：移動速度1.8達成）",
-        "リヴァイア：海の槍の3段コンボ · 1段目 前へ薙ぎ払い → 2段目 一回転して前へ巨大なクジラ大突撃 → 3段目 前へ突進して扇形の衝撃波 · 各段で確率でクジラが現れ、ヒレで広く薙ぎ・体を巻いて一回転し・一緒に突進する（出ないほど次は出やすい）",
-        "リヴァイア：武器は槍にはめる力の宝石10（アクアマリン・海流のサファイア・雷鳴のトパーズ・珊瑚石・満ち潮のムーンストーン・深海石・氷晶・双子の真珠・海風石・リヴァイアサンの瞳）· 専用アイテム20（槍10 · クジラ10）· 青いクジラ・水流・水しぶきのエフェクト · クジラの歌 · スプライトシート · 覇王戦スキル4",
+        "レイド装備画面: 横に広げ、「装備能力の合計」（左）と「セット効果」（右）を並べて、行が増えても縦に長くなりにくく",
+        "追加能力の色: 範囲の最高値は金 · 上位は紫 · 中位は白 · 下位は水色 · 最下位は灰色（アクセサリー説明の下に色の意味）",
+        "レイド成功報酬: 報酬の箱を開けるとロビーチップ 30,000枚",
+        "レイドランキング: ボスを倒すまでの時間（カットシーン除く）のサーバー順位表 · 一人一つの最速記録 · 一緒に戦ったキャラ・人数を表示 · レイド画面の「レイドランキング」ボタン",
       ],
     },
   },
   {
-    version: "0.49.32",
-    date: "2026-11-05",
+    version: "0.52.4",
+    date: "2026-11-10",
     items: {
-      ko: ["캐릭터 선택창: 게임에서 크게 그리는 캐릭터(토르켄·이클립스·펜리르)의 그림이 칸보다 커서 잘리고 더 늘어나 흐리게 보이던 것 고침 · 이제 닻·광륜까지 다 보이고 다른 캐릭터와 같은 또렷함"],
-      en: ["Character select: characters drawn larger in game (Thorken, Eclipse, Fenrir) no longer get cropped and over-stretched (blurry) in their cards · the anchor and halo now fit and look as crisp as everyone else"],
-      ja: ["キャラクター選択：ゲームで大きく描くキャラクター（トルケン・エクリプス・フェンリル）の絵が枠より大きく切れて引き伸ばされ、ぼやけて見えていたのを修正 · 錨や光輪まで全部見え、他のキャラと同じくっきりさに"],
+      ko: ["레이드 장신구 승급 추가: 1성 → 2성(같은 종류 1성 2개) · 2성 → 3성(같은 종류 2성 3개). 이제 1성부터 5성까지 모두 승급할 수 있어요"],
+      en: ["Raid accessory promotion extended: 1★→2★ (two 1★ of the same type) · 2★→3★ (three 2★ of the same type). Every star from 1★ to 5★ can now be promoted"],
+      ja: ["レイドアクセサリーの昇級を追加: 1★→2★（同じ種類の1★を2つ）· 2★→3★（同じ種類の2★を3つ）。1★から5★まですべて昇級できます"],
     },
   },
   {
-    version: "0.49.31",
-    date: "2026-11-05",
+    version: "0.52.3",
+    date: "2026-11-10",
     items: {
-      ko: ["토르켄: 닻을 휘두를 때마다 커다란 금빛 닻 모양이 몸 둘레로 부채꼴을 그리며 휙 돌아감 (잔상 셋 + 뒤따르는 물살)"],
-      en: ["Thorken: every anchor swing now shows a big golden anchor sweeping around you in an arc (three afterimages + a trailing water wake)"],
-      ja: ["トルケン：錨を振るたび、大きな金色の錨の形が体の周りを扇形にぶんと回る（残像3つ + 後を追う水流）"],
+      ko: [
+        "같이 하기·협동 화면 새 단장: 입장 화면에 제목과 캐릭터 그림 카드 · 대기실은 위에 제목·방 코드, 사람마다 움직이는 캐릭터 그림 자리 카드(빈 자리를 누르면 초대), 진영 탭이 있는 그림 캐릭터 고르기, 아래 고정된 나가기·시작 줄",
+        "협동 게임 중 파티 창: 캐릭터 얼굴 · 자리 색 줄 · 체력 숫자가 보이는 둥근 체력 막대 · 결과 표도 다듬음",
+      ],
+      en: [
+        "Play Together / Co-op screens redesigned: entry screen with a title and character art cards · the room now shows the title and room code on top, a seat card with an animated character for each player (tap an empty seat to invite), a character picker with faction tabs and art, and a fixed Leave/Start bar at the bottom",
+        "Co-op party panel in game: character faces, seat color stripes and rounded HP bars with numbers · the results table was polished too",
+      ],
+      ja: [
+        "みんなで遊ぶ・協力プレイの画面を一新: 入場画面にタイトルとキャラ絵カード · 待機室は上にタイトル・部屋コード、プレイヤーごとに動くキャラ絵の席カード（空き席を押すと招待）、陣営タブ付きの絵で選ぶキャラ選択、下に固定の退出・開始バー",
+        "協力プレイ中のパーティ欄: キャラの顔・席の色の帯・数字つきの丸い体力バー · 結果表も整えました",
+      ],
     },
   },
 ];

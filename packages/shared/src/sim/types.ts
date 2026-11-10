@@ -213,8 +213,8 @@ export interface BuyLogEntry {
   itemId: string;
   price: number;
 }
-/** 상태이상 피해 종류: 출혈 · 화상 · 독 · 저주(수양 부적) */
-export type DotKind = "bleed" | "burn" | "poison" | "curse" | "storm" | "rot" | "death" | "hellfire" | "shock" | "frost" | "tide" | "gold" | "radiance" | "voidbolt";
+/** 상태이상 피해 종류 (admin/statusInfo) */
+export type DotKind = "bleed" | "burn" | "poison" | "curse" | "storm" | "rot" | "death" | "hellfire" | "shock" | "frost" | "tide" | "gold" | "radiance" | "voidbolt" | "moon" | "blueflame";
 
 export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, PetRunState, PwRunState, TerrainRunState, HiddenRunState, RoomRunState {
   seed: number;
@@ -266,6 +266,8 @@ export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, Pe
   endless?: boolean;
   /** 영웅의 길 (13단계, sim/hero) */
   hero?: boolean;
+  /** 진영 특징 끔 (시험용) */
+  noFaction?: boolean;
   /** 6층을 깬 뒤 도전한 라스트 보스 (7층) */
   lastBoss?: BossKind;
   /** 관리자 티어 플레잉 판: 로그에서 쓰러진 횟수 (쓰러지면 되살아남, sim/run.checkDeath) · 로그를 깬 틱 */

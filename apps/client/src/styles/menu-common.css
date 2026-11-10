@@ -15,29 +15,29 @@
   line-height: 1.5;
   color: var(--muted);
 }
-:is(.title-screen, .entry-screen, .lobby-screen, .chooser, .modal) button {
+:is(.title-screen, .entry-screen, .room-screen, .chooser, .modal) button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 }
-:is(.title-screen, .entry-screen, .lobby-screen, .chooser, .topbar, .modal) button.small {
+:is(.title-screen, .entry-screen, .room-screen, .chooser, .topbar, .modal) button.small {
   margin-left: 0;
   padding: 4px 12px;
   font-size: 13px;
 }
-:is(.title-screen, .entry-screen, .lobby-screen, .chooser, .modal) button.primary {
+:is(.title-screen, .entry-screen, .room-screen, .chooser, .modal) button.primary {
   background: var(--accent);
   border-color: var(--accent);
   color: #1a1422;
   font-weight: 700;
   box-shadow: 0 3px 0 #9c7a24;
 }
-:is(.title-screen, .entry-screen, .lobby-screen, .chooser, .modal) button.primary:disabled {
+:is(.title-screen, .entry-screen, .room-screen, .chooser, .modal) button.primary:disabled {
   opacity: 0.45;
   color: #1a1422;
 }
-:is(.title-screen, .entry-screen, .lobby-screen) button.secondary {
+:is(.title-screen, .entry-screen, .room-screen) button.secondary {
   border-color: var(--accent);
   color: var(--accent);
 }

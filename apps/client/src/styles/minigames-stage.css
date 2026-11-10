@@ -1,0 +1,154 @@
+/* 미니 게임 무대 (lobby/MiniGame): 화면 전체 · 게임마다 다른 방 분위기(조명·빛 방울·바닥) · 위 막대 */
+.mini-stage {
+  --room: #1a1024;
+  --room2: #08040c;
+  --lamp: #ffd86055;
+  --dot: #ffd86022;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 0%, var(--lamp), #0000 70%),
+    radial-gradient(ellipse 120% 80% at 50% 110%, #0009, #0000 60%),
+    linear-gradient(var(--room), var(--room2));
+  animation: mini-in 0.25s ease-out;
+}
+@keyframes mini-in {
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+}
+/* 흐릿한 빛 방울 (천천히 떠다님) */
+.mini-glow {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 30%, var(--dot) 0 22px, #0000 60px),
+    radial-gradient(circle at 85% 22%, var(--dot) 0 30px, #0000 80px),
+    radial-gradient(circle at 70% 78%, var(--dot) 0 18px, #0000 56px),
+    radial-gradient(circle at 25% 82%, var(--dot) 0 26px, #0000 70px),
+    radial-gradient(circle at 50% 50%, #ffffff06 0 2px, #0000 3px) 0 0 / 36px 36px;
+  animation: mini-drift 18s ease-in-out infinite alternate;
+}
+@keyframes mini-drift {
+  to {
+    transform: translate(3%, -2%) scale(1.05);
+  }
+}
+.mini-bar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: linear-gradient(#000c, #0006);
+  border-bottom: 1px solid #ffd86044;
+  box-shadow: 0 6px 18px #0006;
+}
+.mini-bar h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: 1px;
+  background: linear-gradient(#fff6c8, #f2c14e 55%, #c8862a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 0 #0008);
+}
+.mini-icon {
+  -webkit-text-fill-color: initial;
+  color: #fff;
+  font-size: 26px;
+}
+.mini-bar .mp-tabs {
+  margin: 0;
+}
+.mini-tools {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+.mini-tools button {
+  white-space: nowrap;
+}
+.mini-close {
+  border-color: #e0606a88;
+}
+.mini-area {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+}
+.mini-body {
+  margin: auto;
+}
+@media (max-width: 600px) {
+  .mini-tools span,
+  .mini-bar h2 {
+    font-size: 16px;
+  }
+  .mini-tools span {
+    display: none;
+  }
+}
+
+/* 게임마다 방 분위기: 카지노(붉은 와인빛) · 블랙잭·하이로우(초록 조명) · 슬롯(네온) · 타일(바다빛) · 별사탕(분홍) · 룬(석실) */
+.mini-blackjack,
+.mini-hilo {
+  --room: #12201a;
+  --room2: #050a08;
+  --lamp: #ffe8a055;
+  --dot: #ffd86018;
+}
+.mini-dice,
+.mini-joker {
+  --room: #2a0e16;
+  --room2: #0a0306;
+  --lamp: #ff9a6a44;
+  --dot: #ff7a9a1c;
+}
+.mini-slots {
+  --room: #1e0a2e;
+  --room2: #06020c;
+  --lamp: #ff5ac855;
+  --dot: #6ae0ff22;
+}
+.mini-tiles {
+  --room: #0c1e30;
+  --room2: #02080e;
+  --lamp: #6ac8ff44;
+  --dot: #6ae0ff18;
+}
+.mini-apples {
+  --room: #3a1a2a;
+  --room2: #12060c;
+  --lamp: #ffb0d066;
+  --dot: #ffe45a22;
+}
+.mini-blocks {
+  --room: #16101e;
+  --room2: #040208;
+  --lamp: #c89aff33;
+  --dot: #c89aff14;
+}
+.mini-pets {
+  --room: #1e1a2e;
+  --room2: #0a0814;
+  --lamp: #ff9ac844;
+  --dot: #ff9ac818;
+}

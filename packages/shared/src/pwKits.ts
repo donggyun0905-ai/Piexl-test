@@ -3,9 +3,10 @@ import type { CharacterId } from "./characters";
 import { PW_KITS_1 } from "./pwKits1";
 import { PW_KITS_2 } from "./pwKits2";
 import { PW_KITS_3 } from "./pwKits3";
+import { PW_KITS_4 } from "./pwKits4";
 import type { PwKit, PwKits } from "./pwSkillTypes";
 
-export const PW_KITS: PwKits = { ...PW_KITS_1, ...PW_KITS_2, ...PW_KITS_3 };
+export const PW_KITS: PwKits = { ...PW_KITS_1, ...PW_KITS_2, ...PW_KITS_3, ...PW_KITS_4 };
 
 /** 캐릭터마다 스킬 그림 느낌 (그림만, 계산과 상관없음) */
 export const PW_MOTIF: Partial<Record<CharacterId, string>> = {
@@ -13,7 +14,7 @@ export const PW_MOTIF: Partial<Record<CharacterId, string>> = {
   elementalist: "elements", engineer: "lightning", punk: "lightning",
   gunner: "tech", automata: "tech", artifacter: "tech", rider: "tech", tracker: "tech",
   plague: "poison", samyeol: "poison",
-  ninja: "shadow", remnant: "shadow", mukin: "shadow", silk: "shadow", pungryu: "wind", leo: "lightning", onyx: "elements", fenrir: "wind", eclipse: "fire", thorken: "lightning", levia: "wind", byeonhui: "shadow",
+  ninja: "shadow", remnant: "shadow", mukin: "shadow", silk: "shadow", pungryu: "wind", leo: "lightning", onyx: "elements", fenrir: "wind", eclipse: "fire", thorken: "lightning", levia: "wind", tail: "blood", madQueen: "tech", hook: "wind", orca: "impact", wave: "wind", miryu: "blade", beatrice: "fire", ian: "shadow", gabriel: "impact", serena: "holy", rafael: "wind", yuriel: "holy", michaela: "blade", nailer: "blood", scissors: "blade", hellfist: "blood", silverBullet: "holy", blueFlame: "fire", lunatic: "holy", incision: "blood", crusader: "impact", blast: "impact", byeonhui: "shadow",
   forgotten: "holy", apostle: "holy", warden: "holy", doctor: "holy",
   slayer: "blood", eater: "blood",
   elder: "nature", idra: "nature", ren: "nature",

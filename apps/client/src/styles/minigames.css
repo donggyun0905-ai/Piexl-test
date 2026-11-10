@@ -156,7 +156,6 @@ button.tile.sel {
 }
 .blocks-canvas {
   height: 340px;
-  image-rendering: pixelated;
 }
 .joker-seats {
   display: flex;

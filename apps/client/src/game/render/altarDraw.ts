@@ -1,7 +1,7 @@
 // 제단의 방 그림: 성좌가 방을 감쌀 만큼 크게 떠 있음(render/altarFigures·altarFigures2) · 바닥에 물결 무늬·성좌마다 떠도는 것
 // (고래 거품 · 거북 불씨 · 매 번개 불꽃 · 바람 줄 · 빛·어둠 구슬 · 잎 · 마법 문자 · 지지직 조각) · 앞쪽 제단 · 카드를 고른 효과
 // 바닥·벽 색은 render/floorThemes가 성좌마다 (ALTAR_LOOK)
-import { ALTAR_IDS, ALTAR_Y, altarOf, altarUsed, ROOM_WIDTH, type AltarId, type EffectState, type Pickup, type RunState } from "@pixel-rogue/shared";
+import { ALTAR_IDS, ALTAR_Y, altarOf, altarUsed, raidAltarOf, ROOM_WIDTH, type AltarId, type EffectState, type Pickup, type RunState } from "@pixel-rogue/shared";
 import { drawHawk, drawTurtle, drawWhale, drawWind } from "./altarFigures";
 import { drawSion, drawSylvester, drawUnknown, drawWitch } from "./altarFigures2";
 import { ALTAR_LOOK } from "./altarLook";
@@ -68,6 +68,8 @@ export function drawAltarRoom(ctx: Ctx, s: RunState, cx: number, cy: number): vo
     for (let x = 0; x <= ROOM_WIDTH; x += 12) ctx.lineTo(x, yy + Math.sin(x / 30 + t / 40 + k) * 3);
     ctx.stroke();
   }
+  // 레이드 성좌의 방: 거대한 성좌 대신 제단마다 작은 성좌 (drawAltarStand)
+  if (s.raidBoss) return;
   additive(ctx, () => rune(ctx, cx, ALTAR_Y + 30, 46, L.main, altarUsed(s) ? 0.3 : 0.7, t * 0.006));
   // 거대한 성좌 (반투명, 방 위쪽 절반을 감쌈) · 그림은 더하기로 (검은 바탕이 사라짐), 별이 반짝이듯 밝기가 숨 쉼
   const fy = cy - 4;
@@ -102,10 +104,12 @@ function figure(ctx: Ctx, id: AltarId, cx: number, fy: number, used: boolean, t:
 
 /** 제단: 빛나는 돌 받침 + 성좌 문양 (다 고르면 빛이 꺼짐) */
 export function drawAltarStand(ctx: Ctx, s: RunState, pk: Pickup, x: number, y: number): void {
-  const id = altarOf(s);
+  // 레이드 성좌의 방: 제단마다 성좌 (group = 성좌 차례 + 1)
+  const id = raidAltarOf(pk) ?? altarOf(s);
   const L = ALTAR_LOOK[id];
   const on = !altarUsed(s);
   const t = s.tick;
+  if (pk.group > 0) raidStar(ctx, id, x, y, on, t);
   if (on) additive(ctx, () => glow(ctx, x, y - 10, 30, L.main, 0.6 + 0.2 * Math.sin(t / 12), 0.6));
   // 그림(sprites/props/altarStand, 별빛 구슬이 도는 제단)이 있으면 그것을 (구슬이 살짝 떠오름)
   if (drawProp(ctx, "altarStand", 0, x, y + 4, { h: 40, alpha: on ? 1 : 0.7 })) {
@@ -149,4 +153,23 @@ export function drawAugments(ctx: Ctx, s: RunState, snap: Snap): void {
   const p = s.player;
   if (s.swarm || s.trialRun?.room === s.roomId || !p.augments?.some((a) => a.skills.includes("blades") && p.passives.includes(a.passive))) return;
   drawBlades(ctx, s.tick, p, snap);
+}
+
+/** 레이드 제단 위 작은 성좌 + 이름 (고른 뒤에는 흐리게) */
+function raidStar(ctx: Ctx, id: AltarId, x: number, y: number, on: boolean, t: number): void {
+  const fy = y - 38 + Math.sin(t / 50 + x) * 2;
+  if (!drawProp(ctx, STAR_ART[id], 0, x, fy, { w: 58, center: true, add: true, alpha: on ? 0.8 : 0.3 })) {
+    ctx.save();
+    ctx.globalAlpha = on ? 0.9 : 0.35;
+    ctx.translate(x, fy);
+    ctx.scale(0.22, 0.22);
+    ctx.translate(-x, -fy);
+    FIGURE[id](ctx, x, fy, ROOM_WIDTH, t);
+    ctx.restore();
+  }
+  ctx.font = "bold 7px sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillStyle = alpha(ALTAR_LOOK[id].glow, on ? 1 : 0.4);
+  ctx.fillText(ALTAR_LOOK[id].sigil, x, y + 12);
+  ctx.textAlign = "start";
 }

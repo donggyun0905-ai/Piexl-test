@@ -3,6 +3,7 @@ import type { Lang } from "../index";
 // 화면 글자: 협동 (입장·대기실 연결 상태·게임 중 안내)
 export const COOP_TEXT = {
   coop: { ko: "협동", en: "Co-op", ja: "協力プレイ" },
+  roomSeatOpen: { ko: "빈 자리", en: "Open seat", ja: "空き席" },
   coopRoom: { ko: "협동 방", en: "Co-op room", ja: "協力部屋" },
   coopQuickDesc: {
     ko: "협동할 사람을 자동으로 찾아 같은 방에 모읍니다. 두 명이 모이면 잠시 뒤 시작해요.",

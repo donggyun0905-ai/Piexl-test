@@ -1,6 +1,7 @@
 // 히든 아이템 동료 (p.allies): 순례자의 월계선 = 무작위 히든 캐릭터 · 거짓된 용사 = 풋내기 (레벨이 오르면 능력치를 무작위로 고름)
 // 동료는 체력이 있고 적 몸박치기·적 탄에 맞음. 가까이 가면 '체력 먹이기 F' → 내 회복약(포션·엘릭서)을 먹임
-// 무기는 그 캐릭터 무기 중 무작위 (사거리가 길면 탄, 짧으면 휘두르기). 월계선 동료는 그 캐릭터 전용 패시브를 모두 가진 만큼 셈
+// 무기는 그 캐릭터 무기 중 무작위. 월계선 동료는 진짜 그 캐릭터로 싸움 (공격·기술·스킬 그대로, sim/allyKit) · 전용 패시브를 모두 가진 만큼 공격력 +
+// 거짓된 용사는 사거리가 길면 탄, 짧으면 휘두르기
 import { baseStats, CHARACTERS, HIDDEN_CHARACTERS, WEAPON_IDS, WEAPONS, type CharacterId, type WeaponDef, type WeaponId } from "../content";
 import { ENEMIES } from "../enemyDefs";
 import { PASSIVE_IDS, PASSIVES, type PassiveDef } from "../items";
@@ -11,6 +12,7 @@ import type { AllyState } from "./hiddenTypes";
 import type { RunState, TickInput } from "./types";
 import { addEffect, keepInRoom, normalize, roomGrid } from "./util";
 import { allyGoal, allyStep, allyTerrain } from "./allyMove";
+import { laurelPlayer, laurelTick } from "./allyKit";
 
 const R = {
   /** 월계선 동료: 체력 배율 · 전용 패시브 하나마다 공격력 + */
@@ -49,7 +51,10 @@ export function addAlly(s: RunState, kind: AllyState["kind"]): void {
   const weapon: WeaponId = own.length ? rng.pick(own) : CHARACTERS[char].startWeapon;
   const st = baseStats(char, weapon);
   const perks = kind === "laurel" ? PASSIVE_IDS.filter((id) => (PASSIVES[id] as PassiveDef).exclusive === char).length : 0;
-  const maxHp = Math.round(st.maxHp * (kind === "laurel" ? R.laurelHp : R.heroHp));
+  const dmgMul = 1 + perks * R.perPassive;
+  // 월계선: 진짜 그 캐릭터 (sim/allyKit)
+  const pl = kind === "laurel" ? laurelPlayer(char, weapon, p.x - 14, p.y + 6, R.laurelHp, dmgMul) : undefined;
+  const maxHp = pl ? pl.stats.maxHp : Math.round(st.maxHp * R.heroHp);
   p.allies.push({
     kind,
     char,
@@ -60,7 +65,7 @@ export function addAlly(s: RunState, kind: AllyState["kind"]): void {
     prevY: p.y + 6,
     hp: maxHp,
     maxHp,
-    dmg: st.damage * (1 + perks * R.perPassive),
+    dmg: st.damage * dmgMul,
     range: Math.max(24, st.range),
     rate: Math.max(6, Math.round(60 / Math.max(0.2, st.attackSpeed))),
     speed: st.moveSpeed * R.speed,
@@ -70,6 +75,7 @@ export function addAlly(s: RunState, kind: AllyState["kind"]): void {
     faceY: 0,
     moving: false,
     perks,
+    ...(pl ? { pl } : {}),
     ...(kind === "hero" ? { lv: 1, exp: 0, seenKills: s.kills } : {}),
     // 쓰러졌던 거짓된 용사: 쓰러지기 전 레벨·능력치 그대로 (체력은 가득)
     ...(kind === "hero" && p.heroKeep ? { ...p.heroKeep, hp: p.heroKeep.maxHp } : {}),
@@ -98,7 +104,7 @@ export function alliesTick(s: RunState): void {
     p.allyAt = at;
     allyFollow(s);
   }
-  for (const a of p.allies) {
+  for (const [n, a] of p.allies.entries()) {
     a.prevX = a.x;
     a.prevY = a.y;
     if (a.hurt > 0) a.hurt--;
@@ -107,7 +113,7 @@ export function alliesTick(s: RunState): void {
     const e = nearestEnemy(s, a);
     // 목표 자리 (sim/allyMove): 적과 알맞은 거리 · 다쳤으면 내 뒤 · 위험(터질 표시·적 탄·적 몸)은 먼저 피함 · 벽·기둥에 막힘
     const [tx, ty] = allyGoal(s, a, e, [p.x - p.faceX * R.follow, p.y - p.faceY * R.follow], a.range >= R.shootRange);
-    if (e) {
+    if (e && !a.pl) {
       const dir = normalize(e.x - a.x, e.y - a.y) ?? [1, 0];
       a.faceX = dir[0];
       a.faceY = dir[1];
@@ -116,6 +122,8 @@ export function alliesTick(s: RunState): void {
     const x0 = a.x;
     const y0 = a.y;
     allyStep(s, a, tx, ty);
+    // 월계선: 그 캐릭터 계산을 그대로 (공격·기술·스킬·대시)
+    if (a.pl) laurelTick(s, a, e, n);
     if (!e && a.moving) [a.faceX, a.faceY] = normalize(a.x - x0, a.y - y0) ?? [a.faceX, a.faceY];
     allyTerrain(s, a);
     hurt(s, a);

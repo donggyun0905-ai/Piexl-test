@@ -1,0 +1,90 @@
+/* 레이드 고치기 (2026-11-09): 위험 알림 3배 · 단련 되돌리기(−) · 대장간 처음부터 다시 · 사용 아이템 쿨타임 · 관전 안내 */
+.raid-note {
+  top: 18%;
+  padding: 14px 28px;
+  border: 2px solid rgba(255, 120, 160, 0.7);
+  border-radius: 14px;
+  font-size: clamp(26px, 6.4vw, 50px);
+  line-height: 1.2;
+  text-shadow: 0 2px 0 #000, 0 0 18px rgba(255, 60, 120, 0.8);
+  letter-spacing: 0.02em;
+}
+.raid-note.dark {
+  border-color: rgba(190, 120, 255, 0.6);
+  text-shadow: 0 2px 0 #000, 0 0 18px rgba(160, 80, 255, 0.8);
+}
+.gym-row:has(.gym-minus) {
+  grid-template-columns: 1fr auto auto;
+}
+.gym-row button.gym-minus {
+  grid-column: 2;
+  background: #3a2440;
+}
+.gym-row:has(.gym-minus) button:not(.gym-minus) {
+  grid-column: 3;
+}
+.forge-reset {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  background: #4a2030;
+}
+/* 사용 아이템 쿨타임: 칸 위를 어둡게 덮고 남은 초 */
+.use-cd {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72) var(--cd), rgba(0, 0, 0, 0.25) var(--cd));
+  color: #fff;
+  font: bold 13px monospace;
+  text-shadow: 0 1px 0 #000;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.raid-watch-pan {
+  position: fixed;
+  left: 50%;
+  bottom: 86px;
+  transform: translateX(-50%);
+  z-index: 19;
+  max-width: 90vw;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(10, 6, 20, 0.75);
+  color: #d8d0f0;
+  font-size: 12px;
+  text-align: center;
+  pointer-events: none;
+}
+.loadout-slots .slot {
+  position: relative;
+}
+.use-cd {
+  font-style: normal;
+}
+/* 관전 중 실시간 기록 (오른쪽 작게) */
+.raid-board.side {
+  position: fixed;
+  right: 8px;
+  top: 64px;
+  z-index: 18;
+  max-width: min(460px, 60vw);
+  padding: 6px 8px;
+  font-size: 11px;
+  opacity: 0.92;
+  pointer-events: none;
+}
+.raid-board.side h3 {
+  font-size: 12px;
+}
+/* 즉사 패턴 안내: 안전하면 초록 · 위험하면 붉게 깜빡 */
+.raid-note.dk-safe {
+  background: rgba(10, 60, 30, 0.85);
+  border-color: rgba(120, 255, 160, 0.8);
+  text-shadow: 0 2px 0 #000, 0 0 18px rgba(80, 255, 140, 0.8);
+}
+.raid-note.dk-danger {
+  background: rgba(110, 0, 20, 0.88);
+  border-color: rgba(255, 80, 110, 0.9);
+}

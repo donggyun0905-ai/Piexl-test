@@ -1,0 +1,26 @@
+// 화면 글자: 성국 유리엘(단죄의 성녀) 이름·설명 · 스킬 이름·설명 · 버프 창 (charactersSeongguk가 커서 나눔)
+export const CHARACTER_TEXT_YURIEL = {
+  yuriel: { ko: "유리엘", en: "Yuriel", ja: "ユリエル" },
+  sanctum: { ko: "성수의 철퇴", en: "Sacred Flail", ja: "聖水の鉄槌" },
+  yurielDesc: {
+    ko: "맞힌 적에게 단죄가 쌓이고 5개면 정화의 빛이 터짐(200% 빛 피해 · 체력 3% 회복) · 결계 안에서 받는 피해 -30% · 1초마다 체력 2% 회복 · 안의 적은 느려지고 받는 피해 +15% · 누르고 있으면 3연격(철퇴 휘두르기 둘 → 사슬 철퇴 한 바퀴: 맞힌 적 하나마다 체력 1% 회복) · 숫자 키 스킬 넷: 1 정화의 빛 · 2 집행의 철퇴 · 3 수호 결계 · 4 성녀의 단죄 · 성국. '단죄의 성녀'. 빛의 성복을 입은 성국의 수호자. 성스러운 성수가 담긴 수정구와 사슬이 달린 집행의 철퇴로 정화의 빛과 결계를 다룸. 강력한 신성력과 치유, 광역 결계로 버티며 이단자에게는 자비 없는 철퇴를 내리꽂음.",
+    en: "Hits stack Sin on foes; at 5 it bursts into Purging Light (200% light damage · heals 3% HP) · inside a ward: -30% damage taken · heal 2% HP each second · foes inside are slowed and take +15% damage · hold for a 3-hit chain (two flail swings → chain spin: heals 1% HP per foe hit) · four number-key skills: 1 Light of Purification · 2 Flail of Execution · 3 Guardian Ward · 4 Saint's Judgment · Holy Kingdom. 'The Saint of Judgment'. A guardian of the Holy Kingdom in vestments of light. She wields an orb of holy water and a chained Flail of Execution, commanding purifying light and wards. She endures with mighty divine power, healing and wide wards, and brings the flail down on heretics without mercy.",
+    ja: "当てた敵に断罪が溜まり、5つで浄化の光が炸裂（200%光ダメージ・体力3%回復）· 結界の中では受けるダメージ-30% · 1秒ごとに体力2%回復 · 中の敵は鈍足になり被ダメージ+15% · 押し続けると3連撃（鉄槌の振り2回 → 鎖の一回転：当てた敵1体ごとに体力1%回復）· 数字キーのスキル4つ：1 浄化の光 · 2 執行の鉄槌 · 3 守護結界 · 4 聖女の断罪 · 聖国。「断罪の聖女」。光の聖衣をまとう聖国の守護者。聖水を湛えた水晶球と鎖付きの執行の鉄槌で浄化の光と結界を操る。強大な神聖力と治癒、広域結界で耐え抜き、異端者には慈悲なき鉄槌を振り下ろす。",
+  },
+  yrSkill1: { ko: "정화의 빛", en: "Light of Purification", ja: "浄化の光" },
+  yrSkill2: { ko: "집행의 철퇴", en: "Flail of Execution", ja: "執行の鉄槌" },
+  yrSkill3: { ko: "수호 결계", en: "Guardian Ward", ja: "守護結界" },
+  yrSkill4: { ko: "성녀의 단죄", en: "Saint's Judgment", ja: "聖女の断罪" },
+  yrSkillTip1: { ko: "수정구의 성수가 둘레로 퍼져 적에게 빛 피해 (80%, 단죄 +2) · 체력 12% 회복 · 대기 8초", en: "Holy water from the orb spreads around you: light damage (80%, +2 Sin) · heal 12% HP · 8s cooldown", ja: "水晶球の聖水が周りに広がり敵に光ダメージ（80%、断罪+2）· 体力12%回復 · 待機8秒" },
+  yrSkillTip2: { ko: "사슬 철퇴를 앞으로 던져 떨어진 자리의 적을 나에게 끌어당기며 내리침 (180%, 기절 0.6초, 단죄 +2) · 대기 10초", en: "Hurl the chained flail ahead; it slams down and drags foes toward you (180%, 0.6s stun, +2 Sin) · 10s cooldown", ja: "鎖の鉄槌を前へ投げ、落ちた場所の敵を引き寄せながら叩きつける（180%、気絶0.6秒、断罪+2）· 待機10秒" },
+  yrSkillTip3: { ko: "내 자리에 6초 동안 결계 · 안에서 받는 피해 -30% · 1초마다 체력 2% 회복 · 안의 적은 느려지고 받는 피해 +15% · 0.5초마다 빛 피해 (30%) · 대기 16초", en: "A ward at your spot for 6s · inside: -30% damage taken · heal 2% HP each second · foes inside are slowed, take +15% damage and light damage every 0.5s (30%) · 16s cooldown", ja: "自分の位置に6秒間結界 · 中では受けるダメージ-30% · 1秒ごとに体力2%回復 · 中の敵は鈍足・被ダメージ+15% · 0.5秒ごとに光ダメージ（30%）· 待機16秒" },
+  yrSkillTip4: { ko: "궁극기: 0.66초 기도 (무적) 뒤 하늘에서 빛의 철퇴가 방의 모든 적에게 내리꽂힘 (300% 빛 피해 · 단죄 가득 → 정화) · 체력 40% 회복 · 8초 동안 성녀 강림 (몸 둘레 결계 · 단죄 두 배) · 대기 60초", en: "Ultimate: pray for 0.66s (invulnerable), then flails of light crash down on every foe in the room (300% light damage · Sin filled → Purge) · heal 40% HP · Saint's Descent for 8s (a ward around you · double Sin) · 60s cooldown", ja: "必殺技：0.66秒祈り（無敵）の後、天から光の鉄槌が部屋の全ての敵に降り注ぐ（300%光ダメージ・断罪満タン → 浄化）· 体力40%回復 · 8秒間聖女降臨（体の周りに結界・断罪2倍）· 待機60秒" },
+  pwSk_yuriel1: { ko: "정화의 빛", en: "Light of Purification", ja: "浄化の光" },
+  pwSk_yuriel2: { ko: "집행의 철퇴", en: "Flail of Execution", ja: "執行の鉄槌" },
+  pwSk_yuriel3: { ko: "수호 결계", en: "Guardian Ward", ja: "守護結界" },
+  pwSk_yuriel4: { ko: "성녀의 단죄", en: "Saint's Judgment", ja: "聖女の断罪" },
+  bfYrSin: { ko: "단죄: 5개면 정화의 빛", en: "Sin: Purging Light at 5", ja: "断罪：5つで浄化の光" },
+  bfYrWard: { ko: "결계 {s}초: 받는 피해 감소·회복", en: "Ward {s}s: less damage taken · healing", ja: "結界{s}秒：被ダメージ減少・回復" },
+  bfYrSaint: { ko: "성녀 강림 {s}초: 단죄 두 배", en: "Saint's Descent {s}s: double Sin", ja: "聖女降臨{s}秒：断罪2倍" },
+  cg_yuriel: { ko: "최대 체력 {n} 달성", en: "Reach {n} max HP", ja: "最大体力{n}達成" },
+};

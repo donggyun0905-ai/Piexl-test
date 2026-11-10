@@ -2,6 +2,17 @@
 import type { TextKey } from "../i18n";
 import { TUTORIAL_STEPS, type TutorialStepId } from "./tutorial";
 
+/** 마지막 단계: 진영마다 공통 특징 한 줄 (로그) */
+const FACTION_LINES: [TextKey, TextKey][] = [
+  ["csAscalon", "tfAscalon"],
+  ["csTerracore", "tfTerracore"],
+  ["csVirdia", "tfVirdia"],
+  ["csHelios", "tfHelios"],
+  ["csThalassia", "tfThalassia"],
+  ["csSeongguk", "tfSeongguk"],
+  ["csDawn", "tfDawn"],
+];
+
 const TEXT: Record<TutorialStepId, TextKey> = {
   move: "tutorialMove",
   attack: "tutorialAttack",
@@ -31,6 +42,18 @@ export function TutorialBanner({ step, t, touchMode, onSkip, onExit }: Props) {
       </small>
       <p>{t(TEXT[step])}</p>
       {step === "item" && touchMode && <p className="tutorial-sub">{t("tutorialItemTouch")}</p>}
+      {last && (
+        <div className="tutorial-factions">
+          <b>{t("tutorialFactions")}</b>
+          <ul>
+            {FACTION_LINES.map(([name, line]) => (
+              <li key={name}>
+                <strong>{t(name)}</strong> {t(line)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="tutorial-actions">
         {!last && (
           <button type="button" onClick={onSkip}>

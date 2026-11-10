@@ -57,6 +57,15 @@ export function drawPickup(ctx: CanvasRenderingContext2D, pk: Pickup, tick: numb
   const icon = iconCanvas({ kind: pk.kind, id: pk.itemId } as IconItem);
   ctx.fillStyle = "rgba(0,0,0,0.45)";
   ctx.fillRect(x - 6, y + 6, 12, 2);
+  // 무기·패시브·사용 아이템: 그림 테두리를 따라 은은한 빛 (맥박 치듯 · 사용 아이템은 하늘색)
+  if (pk.kind === "weapon" || pk.kind === "passive" || pk.kind === "use") {
+    const a = 0.45 + 0.25 * Math.sin((tick + pk.id * 11) / 14);
+    ctx.save();
+    ctx.shadowColor = pk.kind === "use" ? `rgba(124,240,255,${a})` : `rgba(255,197,60,${a})`;
+    ctx.shadowBlur = 6;
+    ctx.drawImage(icon, x - 8, y - 8);
+    ctx.restore();
+  }
   ctx.drawImage(icon, x - 8, y - 8);
   ctx.globalAlpha = 1;
   if (hold > 0) {

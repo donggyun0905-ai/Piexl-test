@@ -95,15 +95,19 @@ export function settleDeaths(s: RunState): void {
     const k = seat.by !== undefined ? pv.seats[seat.by] : undefined;
     if (k && seat.by !== i) k.kills++;
     // 도움: 이번 목숨에 이 사람을 때린 다른 상대 (처치자 빼고, 자리마다 한 번)
+    const helped: number[] = [];
     for (const by of new Set((seat.recv ?? []).map((r) => r.by))) {
       const a = pv.seats[by];
-      if (a && by !== seat.by && by !== i && a.team !== seat.team) a.assists = (a.assists ?? 0) + 1;
+      if (a && by !== seat.by && by !== i && a.team !== seat.team) {
+        a.assists = (a.assists ?? 0) + 1;
+        helped.push(by);
+      }
     }
     if (i === 0 && (pv.mode === "brawl" || pv.mode === "giganto")) pv.place = pv.seats.filter((x, j) => j !== i && inPlay(s, j)).length + 1;
     // 점령전: 잠시 뒤 집에서 다시
     if (PW_MODE[pv.mode].rule === "giganto") gigaDeath(s);
     else if (PW_MODE[pv.mode].rule) seat.back = s.tick + respawnTicks(s);
-    if (isGrow(s)) reward(s, seat.by, "hero", s.player.x, s.player.y, seat.team, s.player.pwLv);
+    if (isGrow(s)) reward(s, seat.by, "hero", s.player.x, s.player.y, seat.team, s.player.pwLv, helped);
     else if (pv.mode === "gungame") {
       seat.back = s.tick + PW.respawn;
       if (k && seat.by !== undefined) levelUp(s, seat.by);

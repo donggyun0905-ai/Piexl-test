@@ -113,7 +113,7 @@ function gearSig(p: PlayerState): number {
   return n;
 }
 
-/** 틱마다 (자리마다): 중첩 끝 · 녹색·포탈건·왕관 · 수정구 회복 · 화상·회오리·독 · 저주받은 주사위 영역. 능력치가 바뀌면 다시 계산 */
+/** 틱마다 (자리마다): 중첩 끝 · 녹색·귀환의 문·왕관 · 수정구 회복 · 화상·회오리·독 · 저주받은 주사위 영역. 능력치가 바뀌면 다시 계산 */
 export function gearTick(s: RunState): void {
   const pv = s.pvp!;
   eachSeat(s, (i) => {

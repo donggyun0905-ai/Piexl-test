@@ -27,6 +27,8 @@ interface Props {
   /** 패왕전: 필요 없는 정보·버튼 숨김 */
   pvp?: boolean;
   onPause: (() => void) | null;
+  /** 멈추지 않는 판: 일시정지 대신 설정 버튼 (⚙) */
+  live?: boolean;
   onAutoAim: (on: boolean) => void;
   hpFillRef: RefObject<HTMLDivElement | null>;
   hpTextRef: RefObject<HTMLSpanElement | null>;
@@ -42,14 +44,14 @@ function Toggle({ on, label, keyName, touchMode, t, onClick }: { on: boolean; la
   );
 }
 
-export function GameHud({ t, touchMode, autoAim, manualOnly, pvp, onPause, onAutoAim, hpFillRef, hpTextRef, infoRef }: Props) {
+export function GameHud({ t, touchMode, autoAim, manualOnly, pvp, onPause, live, onAutoAim, hpFillRef, hpTextRef, infoRef }: Props) {
   const { showStats, showHitbox, showRange, showNames } = useSettings();
   const toggle = { touchMode, t };
   return (
     <div className="hud">
       {onPause && (
-        <button type="button" className="hud-btn" aria-label={t("pause")} onClick={onPause}>
-          II
+        <button type="button" className="hud-btn" aria-label={t(live ? "settings" : "pause")} onClick={onPause}>
+          {live ? "⚙" : "II"}
         </button>
       )}
       <div className="hp">

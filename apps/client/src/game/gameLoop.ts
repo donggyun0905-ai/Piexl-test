@@ -1,6 +1,7 @@
 // 게임 진행: 고정 간격 계산 + 화면 주사율에 맞춘 그리기 + HUD 갱신 (React 밖에서 돌림)
+import { raidZoom } from "./raidZoom";
 import { noteExhibits, noteRecords } from "../lobby/exhibits";
-import { applyRoom, ARENA_LEVELS, inPlay, FLOOR_COUNT, HERO_FLOORS, tabooPoints, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
+import { applyRoom, ARENA_LEVELS, RAID_ROOM, inPlay, FLOOR_COUNT, HERO_FLOORS, tabooPoints, stepSim, TICK_MS, type RunState, type TickInput } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import type { Controls } from "./controls";
 import { formatTime, pickupText, promptText } from "./hudText";
@@ -28,6 +29,11 @@ import { roar } from "../audio/tigerSound";
 import { fanfare } from "../audio/victorySound";
 import { activeFx } from "../shop/effects";
 import { watchingSeat } from "./camera";
+import { createGlowLayer } from "./glow/glowLayer";
+import { skinGlow } from "./glow/glowSkin";
+
+/** 숫자 키 스킬이 있는 캐릭터 (추적자 · 성국 · 네일러) */
+const SKILL_CHARS = new Set(["tracker", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "nailer"]);
 
 /** 한 번에 따라잡는 최대 틱 수 (탭을 오래 비웠다 돌아올 때 멈춤 방지) */
 const MAX_CATCH_UP = 10;
@@ -72,9 +78,9 @@ export function startGameLoop(o: LoopOptions): () => void {
   const texts = frameTexts(t, lang);
   // 쓰러질 때 느린 다시 보기·쓰러지는 몸 (혼자 하기 던전)
   const cam = new DeathCam(!run.pvp && !run.party && !o.practice, drawPlayer);
-  // 추적자는 숫자 1·2·3이 스킬 (아이템은 Q·E)
+  // 추적자는 숫자 1·2·3, 성국(베아트리스·이안·가브리엘·세레나·라파엘·유리엘·미카엘라)은 1~4가 스킬 (아이템은 Q·E)
   // 패왕전은 숫자 1~4가 스킬 (조준 모드)
-  controls.skillKeys = run.player.characterId === "tracker" || !!run.pvp;
+  controls.skillKeys = SKILL_CHARS.has(run.player.characterId) || !!run.pvp;
   controls.clickSkill = run.player.characterId === "remnant" && !run.pvp && !run.pw;
   controls.arm.on = !!run.pvp;
   // 패왕전은 자동 공격 없이 직접 조준만
@@ -87,6 +93,7 @@ export function startGameLoop(o: LoopOptions): () => void {
   let acc = 0;
   let last = performance.now();
   let frame = 0;
+  const glow = createGlowLayer(ctx.canvas);
   let shownHp = "";
   let shownInfo = "";
   let shownPrompt = "";
@@ -108,6 +115,8 @@ export function startGameLoop(o: LoopOptions): () => void {
   // 이벤트 상점 테마 효과 (칸마다 다른 세트)
   const th = fx.themes;
   const theme = th.hit || th.idle || th.walk ? new ThemeFx({ ...hooks, roar: victory ? fanfare : () => {}, on: { hit: !!th.hit, idle: !!th.idle, walk: !!th.walk, rest: false } }, th) : null;
+  if (tiger) glow.addWatch(skinGlow(tiger));
+  if (theme) glow.addWatch(skinGlow(theme));
   // 내 자리에서만 (관전으로 다른 사람을 볼 때는 내 스킨 효과를 그리지 않음). 손님은 상태를 처음 받을 때 자리가 정해짐
   let mySeat: number | undefined;
   // 패왕전에서 쓰러져 관전 중이면 내 스킨 효과(대기 장면 포함)를 아예 그리지 않음
@@ -163,7 +172,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       const passive = run.prompt.kind === "gather" || run.prompt.kind === "revive" || (!!run.party && p.hp <= 0) || watchingSeat() !== undefined;
       o.setPrompt({ text, interact: action !== "" && !passive });
     }
-    const ambush = !!p.trAmbush;
+    const ambush = !!p.trAmbush || !!p.bzUlt; // 블루 플레임 열화상 각성도 직접 조준
     controls.fineAim = ambush || !!run.pvp;
     if (ambush && controls.autoAim) {
       controls.setAutoAim(false);
@@ -224,6 +233,7 @@ export function startGameLoop(o: LoopOptions): () => void {
     if (steps === MAX_CATCH_UP) acc = 0;
     if (steps > 0) o.show?.(run);
     if (steps > 0) o.onAdvance?.(run);
+    raidZoom(controls, run);
     drawFrame(ctx, cam.view(run), {
       alpha: stopped || run.over ? 1 : acc / TICK_MS,
       showReticle: controls.touchAiming,
@@ -245,12 +255,13 @@ export function startGameLoop(o: LoopOptions): () => void {
         cam.drawFall(c, snap);
         if (tiger && onMe()) over(c, tiger, run, acc / TICK_MS, snap, run.tick);
         if (theme && onMe()) drawThemeOver(c, theme, run, acc / TICK_MS, snap);
-        if (getSettings().showDamage) damage.draw(c, run.tick, snap);
+        if (getSettings().showDamage) damage.draw(c, run.tick, snap, run.raidBoss && run.roomId === RAID_ROOM.boss ? 2 : 1);
         if (getSettings().showDamage) pwInfo.draw(c, run, snap);
         damage.drawDummy(c, run, dummyLabels, snap);
       },
       modeOverlay: o.overlay,
     });
+    glow.frame(cam.view(run), controls.zoom, stopped || run.over ? 1 : acc / TICK_MS, stopped);
     updateHud();
     // 라스트 보스 도전으로 판이 다시 이어지면 끝 처리도 다시
     if (!run.over) overShown = false;
@@ -262,7 +273,10 @@ export function startGameLoop(o: LoopOptions): () => void {
     frame = requestAnimationFrame(loop);
   };
   frame = requestAnimationFrame(loop);
-  return () => cancelAnimationFrame(frame);
+  return () => {
+    cancelAnimationFrame(frame);
+    glow.destroy();
+  };
 }
 
 /** 캔버스 위 플레이어 화면 위치와 게임 1픽셀의 화면 크기 (마우스 조준 계산용) */

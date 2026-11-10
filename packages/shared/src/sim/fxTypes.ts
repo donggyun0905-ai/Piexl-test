@@ -1,4 +1,7 @@
 // 효과(그리기 전용)·위험 표시·잠시 뒤 폭발 타입
+import type { SeaFx } from "./waveTypes";
+import type { MiryuFx } from "./miryuTypes";
+import type { SeongFx } from "./seongFx";
 import type { EnemyKind } from "../content";
 
 /**
@@ -45,8 +48,8 @@ export type EclipseFx = "ecSlash" | "ecCross" | "ecHew" | "ecSpin" | "ecDash" | 
 /** 토르켄 (sim/thorken·thorkenBall·thorkenStorm) */
 export type ThorFx = "tkAnchor" | "tkSweep" | "tkThrow" | "tkClap" | "tkSplash" | "tkReel" | "tkStormCall" | "tkBolt" | "tkBell" | "tkTide" | "tkVolt" | "tkGeyser" | "tkFrost";
 /** 리바이어 (sim/levia·leviaWhale): 1타 창·고래 날개 · 2타 회전·고래 감기·대돌격 · 3타 충격파 · 고래 도약 · 번개 · 노래 · 물뿜기 · 산호 터짐 */
-export type LeviaFx = "lvSwing" | "lvFin" | "lvSpin" | "lvOrbit" | "lvCharge" | "lvQuake" | "lvBreach" | "lvBolt" | "lvSong" | "lvGush" | "lvBurst";
-export type SecretFx = ThorFx | LeviaFx | VoyagerFx | ZeusFx | PilgrimFx | PungFx | LeoFx | OnyxFx | FenrirFx | EclipseFx | "clMove" | "mnSwing" | "mnCrack" | "mnErupt" | "mnRock" | "mnCave" | "mnBoom" | "mnShatter" | "mnFall" | "mnDig" | "mnBurst" | "mnPull" | "mnGem" | "mnPillar" | "mnCanary";
+export type LeviaFx = "lvSwing" | "lvFin" | "lvThrust" | "lvTailSweep" | "lvSpin" | "lvOrbit" | "lvCharge" | "lvQuake" | "lvBreach" | "lvBolt" | "lvSong" | "lvGush" | "lvBurst";
+export type SecretFx = ThorFx | LeviaFx | SeaFx | MiryuFx | SeongFx | VoyagerFx | ZeusFx | PilgrimFx | PungFx | LeoFx | OnyxFx | FenrirFx | EclipseFx | "clMove" | "mnSwing" | "mnCrack" | "mnErupt" | "mnRock" | "mnCave" | "mnBoom" | "mnShatter" | "mnFall" | "mnDig" | "mnBurst" | "mnPull" | "mnGem" | "mnPillar" | "mnCanary";
 /** 떠돌이 기습 쏨·맞음 · 파수꾼 반격 베기 (sim/origin) · 작업대 성공·실패·파괴 (sim/station) */
 /** 히든 아이템·순례자 (sim/hiddenPerks·hiddenUse·pilgrim) */
 export type HiddenFx = "hdDice" | "hdChest" | "hdCurse" | "hdFreeze" | "hdWarp" | "hdQuake" | "hdMirror" | "hdLeaf" | "hdAether" | "hdMeteor" | "hdScroll" | "hdGate" | "hdPortal" | "hdShow" | "hdText";
@@ -58,7 +61,7 @@ export type OriginFx = "ogShot" | "ogHit" | "ogCounter" | "stOk" | "stFail" | "s
 /** 비밀의 방 (sim/secret·devil·gamble·auction): 벽 무너짐 · 악마 거래·거절 · 절규 범위 · 리퍼 낫 · 야바위 당첨·꽝 · 경매 입찰·낙찰·돈 날림 */
 export type VaultFx = "srCrumble" | "srDeal" | "srRefuse" | "srScream" | "srScythe" | "srWin" | "srLose" | "srBid" | "srSold" | "srMoney";
 export type EffectKind = VaultFx | OriginFx | KingFx | HiddenFx | ImugiFx | ApostleFx | DuckFx | SecretFx | "stPlace" | "stComet" | "stBurst" | "coinGet" | "sandspin" | "thrust" | "legend" | "swing" | "hit" | "burst" | "blast" | "beam" | "bolt" | "flame" | "mark" | "ring" | "bloom" | "streak" | "verdant" | "slam" | "cleave" | "ghostgun" | "lob" | "scratch" | "tigerScratch" | "tagSwap" | "tagSpecial" | "titanSlam" | "titanSmash" | "titanDrill" | "titanParry" | TagFx | OniFx | "catnip" | "scWord" | "gaiaSwap" | "elPillar" | "elWalls" | "elSword" | "elFist" | "renSlam" | "renRock" | "renHead" | "renStone" | "renDrop" | "renCrush" | "mRaid" | "mEvo" | "bearSwipe" | "flyRake" | "spBeam" | "gsCast" | "plBurst" | "plMark" | "plSwarmBite" | "plPuff" | "plGrip" | "slSlash" | "slChop" | "slSpin" | "slBurst" | "slLine" | "slRage" | "slX" | "slNova" | "slReap" | "slSky" | "slRaid" | "slGrand" | "eaSlash" | "eaBite" | "eaAbyss" | "eaSpear" | "eaX" | "eaLurk" | "eaEat" | "mkGuard" | "smGas" | "smBurst" | "adBeam" | "adLaunch" | "adSat" | "adSword" | "rdPulse" | "rdSmash" | "rdStab" | "rdSpin" | "rdFlame" | "rdLance" | "rdCut" | "bmBoom" | "bmStar" | "afBlast" | "afMuzzle" | "afCraft" | "cySlash" | "cyWire" | "cyMantis" | "cyPunch" | "cySpin" | "cyHack" | "cyEmp" | "cyAccel" | "gsFist" | "gsCube" | "gsChant" | "gsArrow" | "gsBeam" | "gsGas" | "gsRune" | "mgSpell" | "chCollapse" | "trSnipe" | "trBeam" | "trSkill" | "fgCross" | "fgFlash" | "fgBeam" | "fgNova" | "fgSlash" | "fgPillar" | "fgAwaken" | "rmStab" | "rmDodge" | "rmFlurry" | "rmEclipse" | "trWake" | "trCurse" | "trChest" | "trOpen" | "trSpawn" | "alChoose" | "wdSlash" | "wdIai" | "wdCut" | "wdPull" | "wdTempest" | "wdSharp" | "skLine" | "skRend" | "skBleed" | "skReload" | "elLight" | "elBang" | "elWell" | "pwFx" | "pwWarn" | "awaken" | BossFx | MedicFx;
-export type BossFx = "staff" | "staffSpin" | "bslash" | "stab" | "vine" | "gleam" | "rgleam" | "holy" | "pillar" | "meteor" | "dark" | "fake" | "scythe" | "spike" | "parry" | "memory";
+export type BossFx = "staff" | "staffSpin" | "bslash" | "stab" | "vine" | "gleam" | "rgleam" | "holy" | "pillar" | "meteor" | "dark" | "fake" | "scythe" | "spike" | "parry" | "memory" | "shadowHand" | "lucFx";
 
 /** 그리기 전용 효과 (게임 결과에는 영향 없음) */
 export interface EffectState {

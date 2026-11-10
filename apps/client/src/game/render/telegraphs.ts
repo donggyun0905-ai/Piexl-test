@@ -7,7 +7,7 @@ import { drawGuardianWarn } from "./minions";
 type Ctx = CanvasRenderingContext2D;
 
 /** 곧 탄·소환·범위 공격을 쓰기 전 몸 둘레 고리가 줄어드는 보스 */
-const RING_WARN = new Set<string>(["brood", "seer", "archer", "siren", "plant", "reaper", "archangel", "toad", "salamander", "jelly", "captain"]);
+const RING_WARN = new Set<string>(["gatekeeper", "twinlu", "twinre", "mooneater", "brood", "seer", "archer", "siren", "plant", "reaper", "archangel", "toad", "salamander", "jelly", "captain"]);
 
 /** 협동: 적이 노리는 가장 가까운 살아 있는 사람 (혼자면 나) */
 function nearest(s: RunState, e: EnemyState): PlayerState {

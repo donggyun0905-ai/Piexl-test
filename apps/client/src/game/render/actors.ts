@@ -3,7 +3,7 @@ import { hpBarTop } from "./hpTop";
 import { drawLuxFoe } from "./lux";
 import { additive, glow } from "./pwFxBits";
 import { drawSlash, enemyPose } from "./enemyPose";
-import { DASH_TICKS, inBush, inPlay, ENEMIES, isAlive, luxStage, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
+import { DASH_TICKS, inBush, inPlay, ENEMIES, isAlive, morphEvolved, WEAPONS, type WeaponDef, type CharacterId, type EnemyState, type PlayerState, type RunState } from "@pixel-rogue/shared";
 import { breathe, footShadow, hitPop } from "./bodyMotion";
 import { drawCrate } from "./swarm";
 import { drawFighter } from "./paewang";
@@ -18,12 +18,15 @@ import { drawNewFoeMark } from "./newFoes";
 import { drawCharacter, drawEnemySprite, drawSprite, enemyFrames, hasV2, isCasting, isHurt, sheetFor, type CharacterPose } from "../sprites";
 import { C, CHARM_INK, lerp, type Snap } from "./palette";
 import { drawMinionDetail } from "./minions";
+import { drawMoonMarks } from "./moonMarks";
 import { drawBossStatus, drawHitSpot } from "./bossLook";
 import { drawParryCd } from "./titan";
 import { drawTagCue } from "./tagCue";
 import { drawSlayerGauge } from "./slayer";
 import { fenrirLift } from "./fenrirBits";
 import { drawEclipseGauge, eclipseLift, eclipseSheet } from "./eclipseAura";
+import { playerSheet } from "./playerSheet";
+import { giantBody } from "./crusaderBody";
 
 export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap): void {
   // 무리 여왕이 부른 기는 적은 인큐버스 그림
@@ -107,6 +110,7 @@ export function drawEnemies(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       ctx.fillStyle = "#e0606a";
       ctx.fillRect(x - e.r, y - e.r - 4, Math.max(1, Math.round((size * e.hp) / e.maxHp)), 2);
     }
+    drawMoonMarks(ctx, e, x, y, s.tick);
     drawMinionDetail(ctx, s, e, x, y);
     drawStuckCharms(ctx, e, x, y);
     if (e.id === s.autoTargetId) drawTargetMark(ctx, x, y, e.r + 3);
@@ -142,13 +146,14 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
   // 패왕전: 경기장에 없는 사람(대기·쓰러짐)은 그리지 않음
   if (s.pvp && !inPlay(s, s.seat ?? 0)) return;
   if (s.party && !isAlive(p)) return drawDown(ctx, p, snap);
+  if (p.bzUlt) return; // 블루 플레임 열화상 각성: 몸이 사라짐
   const px = lerp(p.prevX, p.x, alpha);
   const py = lerp(p.prevY, p.y, alpha);
   // 잔영 연속 베기 중: 무적이지만 깜빡이지 않고 어두운 그림자 몸
   const shade = !!p.rmFlurry;
   const blink = !shade && !s.pvp && p.invulnTicks > 0 && Math.floor(p.invulnTicks / 3) % 2 === 0;
   const moving = p.x !== p.prevX || p.y !== p.prevY;
-  // 기계공학자 레이저는 공격 횟수가 늘지 않음 → 몸에서 나가는 레이저가 있으면 공격 자세
+  // 기계공학자 레이저: 몸에서 나가는 레이저가 있으면 공격 자세
   const beaming = p.characterId === "engineer" && s.effects.some((f) => f.kind === "beam" && Math.abs(f.x - p.x) < 12 && Math.abs(f.y - p.y) < 12);
   const pose = { faceX: p.faceX, faceY: p.faceY, moving, casting: beaming || isCasting(s.tick, p.attackCount), step: Math.floor(s.tick / 8), hurt: isHurt(p.characterId, s.tick, p.hp), dash: p.dashTicks > 0 || !!p.oxFly };
   if (p.dashTicks > 0) {
@@ -169,9 +174,9 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     if (!hideBody) drawAimMark(ctx, x, y, p.r, p.faceX, p.faceY);
     // 혼돈의 영혼이 있으면 몸이 흐림
     if (s.enemies.some((e) => e.kind === "soul" && e.aux === 1 && e.hp > 0)) ctx.globalAlpha = 0.12;
-    // 베두인: 차크람을 던지면 _bare 그림 (새 그림 시트 v2는 빈손 그림이 아직 없어 그대로)
-    // 오니 신인족: 긴 뿔의 날렵한 모습
-    const sheet = p.kingRoom !== undefined ? "crownKing" : p.characterId === "oni" && (p.oGod ?? 0) > 0 ? "oni_god" : p.characterId === "slayer" && (p.slRage ?? 0) > 0 ? "slayer_rage" : p.characterId === "lux" && luxStage(p) > 0 ? `lux${luxStage(p) + 1}` : (eclipseSheet(p) ?? sheetFor(p.characterId, p.lv, p.abM));
+    // 베두인: 차크람을 던지면 _bare 그림 (v2 시트는 빈손 그림이 없어 그대로)
+    // 모습이 바뀌는 캐릭터 (오니 신인족 · 헬피스트 악마화 등): playerSheet
+    const sheet = playerSheet(p);
     // 베두인 무희의 춤: 대시하는 동안 몸이 한 바퀴 빙글 돎
     const twirl = p.characterId === "bedouin" && p.dashTicks > 0 && p.passives.includes("duneRush");
     if (twirl) {
@@ -192,8 +197,10 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     // 패왕전: 편 색 외곽선
     if (s.pw && inBush(s.pw.arena, x, y)) ctx.globalAlpha *= 0.5;
     if (!hideBody && !p.mRaid) footShadow(ctx, x, y, p.r);
-    if (!hideBody && !p.mRaid && s.pvp) drawPwBody(ctx, s, ...look);
-    else if (!hideBody && !p.mRaid) breathe(ctx, x, y + p.r, s.tick, !moving && !pose.casting, () => drawBody(ctx, ...look));
+    giantBody(ctx, p, x, y + p.r, () => {
+      if (!hideBody && !p.mRaid && s.pvp) drawPwBody(ctx, s, ...look);
+      else if (!hideBody && !p.mRaid) breathe(ctx, x, y + p.r, s.tick, !moving && !pose.casting, () => drawBody(ctx, ...look));
+    });
     if (twirl) ctx.restore();
     ctx.filter = "none";
     ctx.globalAlpha = 1;
@@ -246,7 +253,7 @@ export function drawBody(ctx: CanvasRenderingContext2D, id: CharacterId, x: numb
 /** 적 몸에 붙은 부적 자리 (최대 4장: 위 왼쪽·오른쪽, 아래 왼쪽·오른쪽) */
 const STUCK_AT: readonly (readonly [number, number])[] = [[-1, -1], [1, -1], [-1, 1], [1, 1]];
 
-/** 적에게 붙은 부적 (수양은 도트 장 수, 나머지는 추가 효과까지 모은 수. 터지면 떨어져 안 보임) */
+/** 적에게 붙은 부적 (수양은 도트 장 수, 나머지는 추가 효과까지 모은 수) */
 function drawStuckCharms(ctx: CanvasRenderingContext2D, e: EnemyState, x: number, y: number): void {
   const seal = (e.seal ?? 0) > 0;
   const n = Math.min(STUCK_AT.length, seal ? (e.seal ?? 0) : (e.charms ?? 0));

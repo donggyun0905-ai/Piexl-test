@@ -10,6 +10,7 @@ import { enemy, FIRE } from "./perkTestUtil";
 /** 시간술사로 시작해 무기·아이템을 가진 채, 적 없는 방 (오른쪽을 봄) */
 function chrono(weapon: WeaponId = "pocketwatch", ...perks: PassiveId[]): RunState {
   const s = createRun(3, "chronomancer");
+  s.noFaction = true;
   s.player.weaponId = weapon;
   s.player.passives.push(...perks);
   recalcStats(s);

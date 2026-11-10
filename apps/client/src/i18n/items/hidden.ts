@@ -52,7 +52,7 @@ export const HIDDEN_USE_NAMES = {
   aetherBomb: { ko: "에테르 폭탄", en: "Aether Bomb", ja: "エーテル爆弾" },
   forbiddenScroll: { ko: "대마법사의 금지된 주문서", en: "Archmage's Forbidden Scroll", ja: "大魔法使いの禁じられた呪文書" },
   dimensionGate: { ko: "차원이동문", en: "Dimension Gate", ja: "次元移動門" },
-  portalGun: { ko: "포탈건", en: "Portal Gun", ja: "ポータルガン" },
+  portalGun: { ko: "귀환의 문", en: "Gate of Return", ja: "帰還の門" },
   fateDice: { ko: "운명의 주사위", en: "Dice of Fate", ja: "運命のサイコロ" },
   cursedDice: { ko: "저주받은 주사위", en: "Cursed Dice", ja: "呪われたサイコロ" },
   terraform: { ko: "테라포밍", en: "Terraforming", ja: "テラフォーミング" },

@@ -45,3 +45,28 @@
   color: #e05a5a;
 }
 
+/* 긴 설명을 줄마다 (game/FoldDesc): 점 목록 · 요령 줄은 초록 · 접기 버튼 · Shift 안내 */
+.fold-lines {
+  margin: 2px 0 0;
+  padding-left: 14px;
+  line-height: 1.45;
+}
+.fold-lines li { margin: 1px 0; }
+.fold-lines li::marker { color: var(--accent, #f2c14e); }
+.fold-lines li.fold-tip { color: #9aff9a; }
+.fold-more {
+  margin: 4px 0 0;
+  padding: 2px 10px;
+  font-size: 12px;
+}
+.fold-hint {
+  display: block;
+  margin-top: 3px;
+  color: #a0a0b8;
+  font-size: 11px;
+}
+/* 설명 글 꾸미기 (game/RichText): 중요 낱말 · Shift로 보이는 수치 · 수치 안내 */
+.desc-kw { color: #ffd77a; font-weight: 800; }
+.desc-num { color: #8fe3ff; font-weight: 700; }
+.desc-num-hint { display: block; margin-top: 2px; color: #8a93a8; font-size: 0.8em; }
+.desc-hid { color: #6f7890; font-size: 0.75em; }

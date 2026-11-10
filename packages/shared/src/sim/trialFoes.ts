@@ -4,6 +4,7 @@
 import { ENEMIES } from "../enemyDefs";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { hiddenDmg, hiddenKill } from "./hiddenFoes";
+import { levKill } from "./levKit";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -29,7 +30,10 @@ export const trialFoeDmg = (p: PlayerState, s?: RunState, from?: string) => (1 +
 /** 시련 몬스터 처치 (combat): 잡은 수 · 1·3·4 시련이면 느려짐을 쌓음 · 시련의 방이 아니면 숨은 시련 (바다 비눗방울) */
 export function trialKill(s: RunState, e: EnemyState): void {
   const run = s.trialRun;
-  if (!run) return hiddenKill(s, e);
+  if (!run) {
+    levKill(s, e);
+    return hiddenKill(s, e);
+  }
   run.got = (run.got ?? 0) + 1;
   if (run.kind === 2) return;
   run.slow = (run.slow ?? 0) + (ENEMIES[e.kind].boss === true ? R.SLOW_BOSS : R.SLOW_KILL);

@@ -11,7 +11,7 @@ import { pickGuideRoom } from "./roomPick";
 
 /** 방 종류 → 방 설명 창의 방 (없으면 카드 없음) */
 function roomKind(s: RunState): PracticeRoom | null {
-  if (crackHere(s)) return "crack";
+  if (crackHere(s) || s.raidBoss) return s.raidBoss ? null : "crack";
   const info = s.map.rooms[s.roomId];
   if (!info) return null;
   if (info.type === "shop") return info.heaven ? "heaven" : "shop";
@@ -25,6 +25,9 @@ function goal(s: RunState): TextKey | null {
   const info = s.map.rooms[s.roomId];
   const st = s.rooms[s.roomId];
   if (!info || !st) return null;
+  // 레이드 준비 방·레이드 방: 방마다 할 일 (i18n/text/raidBoss)
+  if (s.raidBoss && s.roomId === 5) return "raidGoal_5";
+  if (s.raidBoss && s.roomId <= 4) return s.raidBoss.fight?.phase === 2 ? "raidGoalP2" : (`raidGoal_${s.roomId}` as TextKey);
   if (!st.cleared && s.enemies.length > 0) return info.type === "exit" ? "goalBoss" : "goalClear";
   if (info.type === "exit") return "goalStairs";
   const special: Record<string, TextKey> = { shop: "goalShop", treasure: "goalTreasure", golden: "goalGolden", rest: "goalRest" };

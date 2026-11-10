@@ -1,8 +1,23 @@
-// 함께 하기 입장 화면: 닉네임 → 빠른 매칭 | 친구와 하기 (방 만들기 · 코드로 들어가기)
+// 함께 하기·협동 입장 화면: 제목 · 닉네임 → 빠른 매칭 | 친구와 하기 (방 만들기 · 코드로 들어가기). 카드 위에 캐릭터 그림 줄
 import { useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { NicknameBar } from "../menu/NicknameBar";
 import { TopBar } from "../menu/TopBar";
+import { SkinPreview } from "../shop/SkinPreview";
+
+/** 카드 위 꾸밈 그림 (빠른 매칭 · 친구와 하기) */
+const QUICK_ART = ["warden", "mage", "gunner"];
+const FRIEND_ART = ["drifter", "doctor", "beast"];
+
+function Art({ ids }: { ids: string[] }) {
+  return (
+    <span className="entry-art" aria-hidden="true">
+      {ids.map((id) => (
+        <SkinPreview key={id} sheet={id} size={64} />
+      ))}
+    </span>
+  );
+}
 
 interface Props {
   lang: Lang;
@@ -19,9 +34,11 @@ interface Props {
   onCreate: () => void;
   onJoin: (code: string) => void;
   onBack: () => void;
+  /** 위 제목 (함께 하기·협동·레이드·패왕전) */
+  title?: TextKey;
 }
 
-export function BattleEntry({ lang, setLang, t, busy, error, onQuick, quickDesc = "quickMatchDesc", note = "battleNote", onCreate, onJoin, onBack }: Props) {
+export function BattleEntry({ lang, setLang, t, busy, error, onQuick, quickDesc = "quickMatchDesc", note = "battleNote", onCreate, onJoin, onBack, title = "playTogether" }: Props) {
   const [code, setCode] = useState("");
   const locked = busy;
 
@@ -29,12 +46,17 @@ export function BattleEntry({ lang, setLang, t, busy, error, onQuick, quickDesc 
     <>
       <TopBar lang={lang} setLang={setLang} t={t} />
       <main className="entry-screen">
+        <header className="room-title entry-title">
+          <h1>{t(title)}</h1>
+          <p className="hint">{t(note)}</p>
+        </header>
         <NicknameBar t={t} disabled={busy} />
 
         <div className="entry-columns">
           {/* 혼자 온 사람이 가장 많이 쓰는 빠른 매칭을 먼저 */}
           {onQuick && (
           <section className="entry-panel quick">
+            <Art ids={QUICK_ART} />
             <h2>{t("quickMatch")}</h2>
             <p className="hint">{t(quickDesc)}</p>
             <button type="button" className="primary big" disabled={locked} onClick={onQuick}>
@@ -44,6 +66,7 @@ export function BattleEntry({ lang, setLang, t, busy, error, onQuick, quickDesc 
           )}
 
           <section className="entry-panel">
+            <Art ids={FRIEND_ART} />
             <h2>{t("friendsTitle")}</h2>
             <p className="hint">{t("friendsDesc")}</p>
             <button type="button" className="outline" disabled={locked} onClick={onCreate}>
@@ -77,7 +100,6 @@ export function BattleEntry({ lang, setLang, t, busy, error, onQuick, quickDesc 
           </section>
         </div>
 
-        <p className="hint entry-note">{t(note)}</p>
         <p className="status-line" aria-live="polite">
           {busy ? t("connecting") : error ? <span className="form-error">{error}</span> : null}
         </p>

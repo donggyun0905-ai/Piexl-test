@@ -1,4 +1,5 @@
 import { continueToLastFloor, createPracticeRun, createRun, FLOOR_COUNT, parseSeed, VIEW_HEIGHT, VIEW_WIDTH, type LastBossKind, type RunState } from "@pixel-rogue/shared";
+import { useRaidFull } from "./raidFull";
 import { LastBossChoice } from "./LastBossChoice";
 import { beginRun, endRun } from "../balance";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -47,13 +48,13 @@ export function GameScreen(props: GameScreenProps) {
   const getControls = useCallback(() => controlsRef.current, []);
   const runRef = useRef<RunState | null>(null);
   const getRun = useCallback(() => runRef.current, []);
-  // 콜백이 바뀌어도 다시 시작 안 하게 ref로
   const cb = useRef(props);
   useLayoutEffect(() => {
     cb.current = props;
   });
-  const pvp = mode === "paewang" || !!props.initialRun?.pvp; // 패왕전: 화면 꽉 채움 · 필요 없는 정보 숨김
-  const [scale, wide] = useFitScale(wrapRef, pvp);
+  const pvp = mode === "paewang" || !!props.initialRun?.pvp; // 패왕전: 화면 꽉 채움
+  const full = useRaidFull(getRun) || pvp; // 레이드 방도 꽉 채움
+  const [scale, wide] = useFitScale(wrapRef, full);
   const dpr = window.devicePixelRatio || 1;
   const [overlay, setOverlay] = useState<Overlay>("none");
   const overlayRef = useRef<Overlay>("none");
@@ -83,13 +84,11 @@ export function GameScreen(props: GameScreenProps) {
   // 모바일 뒤로가기 → 나가기 확인
   const toggleExit = useCallback(() => setOverlay((o) => (o === "exit" || isInfo(o) ? "none" : "exit")), []);
   useBackButton(toggleExit);
-
   // 배틀 시간 끝: 바깥에서 판을 끝냄
   useEffect(() => {
     const run = runRef.current;
     if (props.forceEnd && run && !run.over) run.over = true;
   }, [props.forceEnd]);
-
   // 게임 진행
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -106,25 +105,22 @@ export function GameScreen(props: GameScreenProps) {
     const start = cb.current;
     beginRun(start.balance);
     const run: RunState =
-      withPet(sandbox ? (start.initialRun ?? createPracticeRun(characterId)) : (start.initialRun ?? createRun(parseSeed(seedText), characterId, start.unlocks, sudden, endless, arena, hero, mode === "solo" && !endless && !arena && !hero ? loadTaboo() : undefined, mode === "solo" && randomKitOn())), mode, !!arena);
+      withPet(sandbox ? (start.initialRun ?? createPracticeRun(characterId, mode === "practice" ? Date.now() % 1e6 : 1)) : (start.initialRun ?? createRun(parseSeed(seedText), characterId, start.unlocks, sudden, endless, arena, hero, mode === "solo" && !endless && !arena && !hero ? loadTaboo() : undefined, mode === "solo" && randomKitOn())), mode, !!arena);
     runRef.current = run;
-    // 개발 중: 콘솔에서 게임 상태
     if (import.meta.env.DEV) (window as unknown as { pixelRogueRun: RunState }).pixelRogueRun = run;
     const controls: Controls = new Controls({
       zone,
       sticks: sticks as { moveBase: HTMLElement; moveKnob: HTMLElement; aimBase: HTMLElement; aimKnob: HTMLElement },
       playerScreenPos: () => playerScreenPos(canvas, run, controls.zoom, cameraFor(run, controls.zoom)),
-      onEscape: () => (start.embedded ? undefined : run.prompt.kind === "station" && run.prompt.open ? controls.queueInteract() : toggleExit()), // Esc: 작업대 창 닫기 또는 나가기 확인
-      onPause: () => {
-        if (canPause) setOverlay((o) => (o === "pause" ? "none" : o === "none" ? "pause" : o));
-      },
+      onEscape: () => (start.embedded ? undefined : run.prompt.kind === "station" && run.prompt.open ? controls.queueInteract() : toggleExit()),
+      onPause: () => setOverlay((o) => (o === "pause" ? "none" : o === "none" ? "pause" : o)),
       onAutoAimChange: setAutoAim,
       onToggleStats: () => setSettings({ showStats: !getSettings().showStats }),
       onToggleHitbox: () => setSettings({ showHitbox: !getSettings().showHitbox }),
       onToggleRange: () => setSettings({ showRange: !getSettings().showRange }),
       onToggleNames: () => setSettings({ showNames: !getSettings().showNames }),
       onTouch: () => setTouchMode(true),
-      zoom: zoomFor(run),
+      zoom: zoomFor(run), pan: !!run.raidBoss,
       clickTarget: (x, y) => clickTargetAt(run, canvas, controls.zoom, x, y),
     });
     controlsRef.current = controls;
@@ -216,7 +212,8 @@ export function GameScreen(props: GameScreenProps) {
         t={t}
         touchMode={touchMode}
         autoAim={autoAim} manualOnly={pvp} pvp={pvp}
-        onPause={canPause ? () => setOverlay("pause") : null}
+        onPause={() => setOverlay("pause")}
+        live={!canPause}
         onAutoAim={(on) => controlsRef.current?.setAutoAim(on)}
         hpFillRef={hpFillRef}
         hpTextRef={hpTextRef}
@@ -249,7 +246,7 @@ export function GameScreen(props: GameScreenProps) {
         />
         {stats && !pvp && <StatsPanel rows={stats} t={t} lang={lang} onInfo={props.embedded ? undefined : setOverlay} run={getRun} />}
         {!pvp && !props.embedded && <CharInfoHost run={getRun} character={characterId} lang={lang} t={t} open={overlay} onInfo={(k) => setOverlay((o) => infoNext(o, k))} />}
-        {mode !== "practice" && mode !== "swarm" && mode !== "paewang" && (
+        {mode !== "practice" && mode !== "swarm" && !full && (
           <RouteMap miniRef={miniRef} run={getRun} t={t} />
         )}
         {prompt.text && (!touchMode || !prompt.interact) && (
@@ -260,9 +257,9 @@ export function GameScreen(props: GameScreenProps) {
         <PracticePanel run={getRun} loadout={loadout} characterId={characterId} lang={lang} t={t} onCharacter={props.onPracticeCharacter} />
       )}
       {loadout && <Loadout view={loadout} character={characterId} lang={lang} t={t} touchMode={touchMode} controls={() => controlsRef.current} />}
-      {pvp ? <PanHint t={t} touchMode={touchMode} /> : <p className={`game-hint ${touchMode ? "touch" : ""}`}>{t(touchMode ? "hintRotate" : "hintPc")}</p>}
+      {pvp || props.initialRun?.raidBoss ? <PanHint t={t} touchMode={touchMode} /> : <p className={`game-hint ${touchMode ? "touch" : ""}`}>{t(touchMode ? "hintRotate" : "hintPc")}</p>}
 
-      {/* 터치·마우스 입력 영역 (화면 전체). 조이스틱은 드래그할 때만 보임 */}
+      {/* 터치·마우스 입력 영역 */}
       <div ref={zoneRef} className="input-zone" />
       <div ref={moveBaseRef} className="stick-base" />
       <div ref={moveKnobRef} className="stick-knob" />
@@ -270,7 +267,7 @@ export function GameScreen(props: GameScreenProps) {
       <div ref={aimKnobRef} className="stick-knob aim" />
       {touchMode && loadout && (
         <TouchButtons
-          slots={loadout.slots} useOff={loadout.useOff}
+          slots={loadout.slots} useOff={loadout.useOff} cds={loadout.cds}
           lang={lang}
           t={t}
           controls={getControls}
@@ -293,6 +290,7 @@ export function GameScreen(props: GameScreenProps) {
           onRetry={props.onRetry}
           extra={canChallenge ? <LastBossChoice t={t} onChoose={challenge} /> : props.resultExtra}
           time={result ? formatTime(result.ticks) : ""}
+          live={!canPause}
         />
       )}
     </div>

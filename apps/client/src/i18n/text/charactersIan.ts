@@ -1,0 +1,25 @@
+// 화면 글자: 성국 이안(침묵의 서기관) 이름·설명 · 스킬 이름·설명 · 버프 창 (charactersSeongguk가 커서 나눔)
+export const CHARACTER_TEXT_IAN = {
+  ian: { ko: "이안", en: "Ian", ja: "イアン" },
+  causality: { ko: "인과의 펜", en: "Pen of Causality", ja: "因果のペン" },
+  ianDesc: {
+    ko: "누르고 있으면 3연격(펜 찌르기 · 펜 찌르기 → 강철 실 휘감기) · 맞힌 적에게 '기록'이 쌓여(최대 5) 5면 속박(멈춤 · 받는 피해 +20%) · 속박된 적을 찌르면 급소(180%) · 숫자 키 스킬 넷: 1 인과의 실 · 2 그림자 걸음 · 3 기록 집행 · 4 인과율 속박 · 성국. '침묵의 서기관'. 신의 부름을 기다리며 적의 움직임과 마력을 '기록'하는 나이 든 서기관. 기록한 규칙을 강제로 속박하는 인과율 조작형 암살자.",
+    en: "Hold for a 3-hit chain (pen thrust · pen thrust → steel thread lash) · foes hit gain 'Records' (up to 5); at 5 they are Bound (stopped · +20% damage taken) · stabbing a Bound foe hits a Vital Point (180%) · four number-key skills: 1 Thread of Causality · 2 Shadow Step · 3 Writ of Execution · 4 Law of Causality · Holy Kingdom. 'The Silent Scribe'. An old scribe who 'records' foes' movements and mana while awaiting the gods' call — a causality-bending assassin who forcibly binds the rules he has written.",
+    ja: "押し続けると3連撃（ペン突き · ペン突き → 鋼の糸の巻きつけ）· 当てた敵に「記録」が溜まり（最大5）5で束縛（停止 · 被ダメージ+20%）· 束縛された敵を突くと急所（180%）· 数字キーのスキル4つ：1 因果の糸 · 2 影歩き · 3 記録執行 · 4 因果律束縛 · 聖国。「沈黙の書記官」。神々の呼び声を待ちながら敵の動きと魔力を「記録」する老いた書記官。記した規則を強制的に束縛する因果律操作型の暗殺者。",
+  },
+  iaSkill1: { ko: "인과의 실", en: "Thread of Causality", ja: "因果の糸" },
+  iaSkill2: { ko: "그림자 걸음", en: "Shadow Step", ja: "影歩き" },
+  iaSkill3: { ko: "기록 집행", en: "Writ of Execution", ja: "記録執行" },
+  iaSkill4: { ko: "인과율 속박", en: "Law of Causality", ja: "因果律束縛" },
+  iaSkillTip1: { ko: "앞으로 강철 실 (꿰뚫음, 120%) · 맞은 적을 끌어당기고 기록 +2 · 대기 10초", en: "A steel thread forward (pierces, 120%) · pulls foes hit and gives +2 Records · 10s cooldown", ja: "前方に鋼の糸（貫通、120%）· 当たった敵を引き寄せ記録+2 · 待機10秒" },
+  iaSkillTip2: { ko: "그림자가 되어 바라보는 쪽으로 미끄러지며 찌름 (100%, 무적, 기록 +1) · 다음 기본 공격이 급소 · 대기 6초", en: "Glide as a shadow where you face, stabbing on the way (100%, invulnerable, +1 Record) · next basic attack hits a Vital Point · 6s cooldown", ja: "影となって向いている方へ滑りながら突く（100%、無敵、記録+1）· 次の通常攻撃が急所 · 待機6秒" },
+  iaSkillTip3: { ko: "방의 모든 적: 기록 하나마다 50% 피해 (속박된 적은 기록 5로 침, 급소) · 기록을 지움 · 대기 12초", en: "Every foe in the room: 50% damage per Record (Bound foes count as 5, Vital Point) · clears Records · 12s cooldown", ja: "部屋の全ての敵：記録1つごとに50%ダメージ（束縛中の敵は記録5扱い、急所）· 記録を消す · 待機12秒" },
+  iaSkillTip4: { ko: "궁극기: 방의 모든 적을 5초 동안 속박 · 그동안 이안이 준 피해의 40%를 기록해 두었다가 끝날 때 되돌려 터뜨림 · 대기 45초", en: "Ultimate: Binds every foe in the room for 5s · records 40% of the damage Ian deals meanwhile and returns it as a burst at the end · 45s cooldown", ja: "必殺技：部屋の全ての敵を5秒間束縛 · その間イアンが与えたダメージの40%を記録し、終了時に跳ね返して炸裂 · 待機45秒" },
+  pwSk_ian1: { ko: "인과의 실", en: "Thread of Causality", ja: "因果の糸" },
+  pwSk_ian2: { ko: "그림자 걸음", en: "Shadow Step", ja: "影歩き" },
+  pwSk_ian3: { ko: "기록 집행", en: "Writ of Execution", ja: "記録執行" },
+  pwSk_ian4: { ko: "인과율 속박", en: "Law of Causality", ja: "因果律束縛" },
+  bfIaAmbush: { ko: "급소 준비: 다음 기본 공격이 급소", en: "Vital ready: next basic attack hits a Vital Point", ja: "急所準備：次の通常攻撃が急所" },
+  bfIaLaw: { ko: "인과율 속박 {s}초: 준 피해를 기록 중", en: "Law of Causality {s}s: recording damage dealt", ja: "因果律束縛{s}秒：与えたダメージを記録中" },
+  cg_ian: { ko: "공격 속도 {n} 달성", en: "Reach {n} attack speed", ja: "攻撃速度{n}達成" },
+};

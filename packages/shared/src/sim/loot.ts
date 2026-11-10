@@ -1,7 +1,9 @@
 // 방에 아이템 놓기: 얻을 수 있는 아이템 목록 · 보물방 · 방 정리 보상(돈·사용 아이템·층 보상)
+import { spiritRoomClear } from "./factionSpirit";
+import { NATIVE_KIND } from "./nativeKind";
 import { PERKS } from "../perks";
 import { ROOM_CX as CX, ROOM_CY as CY } from "../constants";
-import { WEAPON_IDS, WEAPONS, type CharacterId, type WeaponDef, type WeaponId, type WeaponKind } from "../content";
+import { WEAPON_IDS, WEAPONS, type CharacterId, type WeaponDef, type WeaponId } from "../content";
 import { HIDDEN_USE_IDS } from "../itemsHidden";
 import { HEAL_ITEMS, PASSIVE_IDS, PASSIVES, USE_ITEM_IDS, type PassiveDef, type PassiveId, type UseItemId } from "../items";
 import { createRng, deriveSeed, type Rng } from "../rng";
@@ -99,8 +101,6 @@ export function seatSalt(s: RunState): (string | number)[] {
   return s.party ? ["seat", seatNo(s)] : [];
 }
 
-/** 캐릭터가 쓰는 공격 방식: 공용 무기는 이 방식만 얻을 수 있음 (전용 아이템 효과가 맞게). 음양사는 부적(전용 무기)만 */
-const NATIVE_KIND: Record<CharacterId, WeaponKind | null> = { warden: "melee", drifter: "ranged", mage: "ranged", mystic: null, engineer: "laser", elementalist: null, brawler: null, doctor: "medic", gunner: null, beast: null, ninja: null, chronomancer: null, summoner: null, novice: null, bedouin: null, general: null, imugi: null, apostle: null, stargazer: null, duck: null, abandoned: null, titan: null, oni: null, scribe: null, idra: null, byeonhui: null, fly: null, elder: null, ren: null, spiritist: null, plague: null, slayer: null, eater: null, mukin: null, samyeol: null, automata: null, rider: null, bomber: null, artifacter: null, punk: null, collector: null, tracker: null, forgotten: null, remnant: null, wanderer: null, silk: null, pungryu: null, leo: null, onyx: null, fenrir: null, eclipse: null, thorken: null, levia: null, miner: null, voyager: null, zeus: null, pilgrim: null, fallenKing: null, lux: null };
 
 /** 이 캐릭터가 얻을 수 있는 무기 (자기 전용 + 자기 공격 방식의 공용, 지금 든 무기 제외, 해금된 것만 · all이면 해금과 상관없이) */
 export function weaponPool(s: RunState, all = false): WeaponId[] {
@@ -189,6 +189,8 @@ export function onRoomCleared(s: RunState, roomId: number): void {
   if ((type === "combat" || type === "elite" || type === "exit") && hasPerk(s.player, "regenCharm")) healPlayer(s, s.player.stats.maxHp * PERKS.regenCharm.heal);
   // 빌드 세트 빛 4 (sim/buildSetFx)
   if (type === "combat" || type === "elite" || type === "exit") setRoomClear(s);
+  // 비르디아 공생 정령: 끝낸 방 수 (꽃 회복·여우·보관 꾸러미)
+  if (type === "combat" || type === "elite" || type === "exit") spiritRoomClear(s);
   // 전투식량(거너): 전투가 끝나면 최대 체력의 10% 회복
   if ((type === "combat" || type === "elite" || type === "exit") && hasPerk(s.player, "ration")) healPlayer(s, s.player.stats.maxHp * 0.1);
   // 활빈당 깃발(풍류사)

@@ -8,17 +8,17 @@ export const LEVIA_PASSIVES = {
   // ── 캐릭터 10 ──
   /** 물마루: 1타 휘두르기가 더 넓음 */
   lvCrest: P("lvCrest"),
-  /** 나선 물결: 2타 한 바퀴 휘두르기 피해·범위 + */
+  /** 나선 물결: 3타 한 바퀴 휘두르기 피해·범위 + */
   lvSpiral: P("lvSpiral"),
-  /** 쇄파: 3타 충격파 피해 + · 부채꼴이 넓어짐 */
+  /** 쇄파: 4타 충격파 피해 + · 부채꼴이 넓어짐 */
   lvBreaker: P("lvBreaker"),
-  /** 파도타기: 3타 돌진이 멀리 가고 그동안 무적 */
+  /** 파도타기: 4타 돌진이 멀리 가고 그동안 무적 */
   lvSurf: P("lvSurf"),
-  /** 역류: 2타 고래 대돌격이 더 크고 멀리 감 */
+  /** 역류: 3타 고래 대돌격이 더 크고 멀리 감 */
   lvCurrent: P("lvCurrent"),
-  /** 닻 없는 배: 대시한 뒤 다음 공격이 곧바로 3타 돌진 (콤보 건너뛰기) */
+  /** 닻 없는 배: 대시한 뒤 다음 공격이 곧바로 4타 돌진 (콤보 건너뛰기) */
   lvAnchorless: P("lvAnchorless", [{ stat: "moveSpeed", add: 0.08 }]),
-  /** 소금 바람: 3타를 끝낼 때마다 체력 회복 */
+  /** 소금 바람: 4타를 끝낼 때마다 체력 회복 */
   lvSalt: P("lvSalt"),
   /** 소라 갑옷: 최대 체력 + · 받는 피해 줄어듦 */
   lvShell: P("lvShell", [{ stat: "maxHp", add: 25 }]),
@@ -53,7 +53,7 @@ export const LEVIA_PASSIVES = {
 export const LEVIA_PERKS = {
   /** 물마루: 1타 거리 배율 */
   lvCrest: { reach: 1.35 },
-  /** 나선 물결: 2타 회전 피해 배율 · 거리 배율 */
+  /** 나선 물결: 3타 회전 피해 배율 · 거리 배율 */
   lvSpiral: { mul: 1.5, reach: 1.25 },
   /** 쇄파: 충격파 피해 배율 · 부채꼴(cos) */
   lvBreaker: { mul: 1.4, arc: 0 },
@@ -61,7 +61,7 @@ export const LEVIA_PERKS = {
   lvSurf: { rush: 1.4 },
   /** 역류: 대돌격 거리 배율 · 크기 배율 */
   lvCurrent: { range: 1.35, r: 1.35 },
-  /** 닻 없는 배: 대시 뒤 3타로 이어지는 틱 */
+  /** 닻 없는 배: 대시 뒤 4타로 이어지는 틱 */
   lvAnchorless: { ticks: 60 },
   /** 소금 바람: 회복 (최대 체력 비율) */
   lvSalt: { heal: 0.02 },

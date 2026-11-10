@@ -2,10 +2,46 @@
 import { ABANDONED_KIDS_RULES } from "./abandonedKids";
 import { ABANDONED_SHOW_RULES } from "./abandonedShow";
 import { ARENA_RULES } from "./arena";
+import { RAID_RULES } from "./raid";
+import { LUC_RULES } from "./lucKit";
+import { LUC_ATTACK_RULES } from "./lucAttacks";
+import { LUC_PILLAR_RULES } from "./lucPillars";
+import { LUC_DARK_RULES } from "./lucDark";
+import { LUCIFER_RULES } from "./lucifer";
+import { LUC_MELEE_RULES } from "./lucMelee";
+import { LUC_SWORD_RULES } from "./lucSwords";
+import { LUC_PHASE2_RULES } from "./lucPhase2";
+import { RAID_REWARD_RULES } from "./raidReward";
+import { RAID_LIFE_RULES } from "./raidLife";
+import { PCT_HP_RULES } from "./pctHp";
+import { RAID_TUNE_RULES } from "./raidTune";
+import { RAID_PREP_RULES } from "./raidPrep";
+import { LUC_COVER_RULES } from "./lucCover";
+import { LUC_DEADLY_RULES } from "./lucDeadly";
 import { ORIGIN_RULES } from "./origin";
 import { AF_BENCH_RULES } from "./afBench";
 import { PILGRIM_RULES } from "./pilgrim";
 import { ALLY_RULES } from "./allies";
+import { BOSS_GATEKEEPER_RULES } from "./bossGatekeeper";
+import { BOSS_CERBERUS_RULES } from "./bossCerberus";
+import { BOSS_CERB_TRIO_RULES } from "./bossCerbTrio";
+import { BOSS_CERB_KIT_RULES } from "./cerbKit";
+import { BOSS_LEVIATHAN_RULES } from "./bossLeviathan";
+import { BOSS_LEV_WHALE_RULES } from "./bossLevWhale";
+import { BOSS_LEV_KING_RULES } from "./bossLevKing";
+import { BOSS_LEV_KIT_RULES } from "./levKit";
+import { BOSS_ASMO_RULES } from "./bossAsmo";
+import { BOSS_ASMO_LUST_RULES } from "./bossAsmoLust";
+import { BOSS_ASMO_VOID_RULES } from "./bossAsmoVoid";
+import { BOSS_ASMO_LORD_RULES } from "./bossAsmoLord";
+import { BOSS_ASMO_KIT_RULES } from "./asmoKit";
+import { BOSS_ASMO_ULTS_RULES } from "./asmoUlts";
+import { BOSS_ASMO_EXTRA_RULES } from "./bossAsmoExtra";
+import { BOSS_TWINS_RULES } from "./bossTwins";
+import { BOSS_TWINS_KIT_RULES } from "./bossTwinsKit";
+import { BOSS_MOON_EATER_RULES } from "./bossMoonEater";
+import { BOSS_MOON_KIT_RULES } from "./bossMoonKit";
+import { ALLY_KIT_RULES } from "./allyKit";
 import { KING_FORM_RULES } from "./kingForm";
 import { KING_BLADE_RULES } from "./kingBlade";
 import { BASE_STATS_RULES } from "./baseStats";
@@ -84,6 +120,7 @@ import { SHADES_RULES } from "./shades";
 import { SUMMONS_RULES } from "./summons";
 import { STATUS_RULES } from "./status";
 import { FOE_STATUS_RULES } from "./foeStatus";
+import { MOON_RULES } from "./moonlight";
 import { ALLY_MOVE_RULES } from "./allyMove";
 import { ELITE_RULES } from "./elite";
 import { GYM_RULES } from "./gym";
@@ -112,10 +149,46 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   ABANDONED_KIDS_RULES,
   ABANDONED_SHOW_RULES,
   ARENA_RULES,
+  RAID_RULES,
+  LUC_RULES,
+  LUC_ATTACK_RULES,
+  LUC_PILLAR_RULES,
+  LUC_DARK_RULES,
+  LUCIFER_RULES,
+  LUC_MELEE_RULES,
+  LUC_SWORD_RULES,
+  LUC_PHASE2_RULES,
+  RAID_REWARD_RULES,
+  RAID_LIFE_RULES,
+  PCT_HP_RULES,
+  RAID_TUNE_RULES,
+  RAID_PREP_RULES,
+  LUC_COVER_RULES,
+  LUC_DEADLY_RULES,
   ORIGIN_RULES,
   AF_BENCH_RULES,
   PILGRIM_RULES,
   ALLY_RULES,
+  BOSS_GATEKEEPER_RULES,
+  BOSS_CERBERUS_RULES,
+  BOSS_CERB_TRIO_RULES,
+  BOSS_CERB_KIT_RULES,
+  BOSS_LEVIATHAN_RULES,
+  BOSS_LEV_WHALE_RULES,
+  BOSS_LEV_KING_RULES,
+  BOSS_LEV_KIT_RULES,
+  BOSS_ASMO_RULES,
+  BOSS_ASMO_LUST_RULES,
+  BOSS_ASMO_VOID_RULES,
+  BOSS_ASMO_LORD_RULES,
+  BOSS_ASMO_KIT_RULES,
+  BOSS_ASMO_ULTS_RULES,
+  BOSS_ASMO_EXTRA_RULES,
+  BOSS_TWINS_RULES,
+  BOSS_TWINS_KIT_RULES,
+  BOSS_MOON_EATER_RULES,
+  BOSS_MOON_KIT_RULES,
+  ALLY_KIT_RULES,
   KING_FORM_RULES,
   KING_BLADE_RULES,
   BASE_STATS_RULES,
@@ -194,6 +267,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   SUMMONS_RULES,
   STATUS_RULES,
   FOE_STATUS_RULES,
+  MOON_RULES,
   ALLY_MOVE_RULES,
   ELITE_RULES,
   GYM_RULES,

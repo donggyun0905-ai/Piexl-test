@@ -1,5 +1,5 @@
 // 한 프레임 그리기: 방 → 위험 → 궁극기 바닥 → 사거리 → 예고선 → 장치(포탑·지뢰) → 의사 바닥(가스·알약·봉합 실) → 원소술사 장판 → 악의 사도 장판·영혼 → 적 → 플레이어(+드론·보호막·회전체·고양이·덮치기 호랑이·닌자 그림자·시간술사 잔상·베두인 차크람·이무기 오라) → 의사 공중(탄·키트·구급차) → 투사체 → 효과 → 라스트 보스 어둠·궁극기 → 이무기 용·브레스 → 피해 숫자 → 보스 막대 → 조준점 (이 순서가 겹침 순서)
-import { applyRoom, useSeat, withGymFx, type RunState, type TagSpecialKind } from "@pixel-rogue/shared";
+import { applyRoom, tailShark, useSeat, withGymFx, type RunState, type TagSpecialKind } from "@pixel-rogue/shared";
 import { cameraFor } from "../camera";
 import { drawRangeRing } from "../rangeRing";
 import { drawEnemies, drawPlayer } from "./actors";
@@ -12,7 +12,7 @@ import { drawStatusAir, drawStatusGround } from "./statusMarks";
 import { drawGunner } from "./guns";
 import { drawPets } from "./pets";
 import { drawBeastTiger, isTiger } from "./beastTiger";
-import { drawTagHud, drawTagKids } from "./abandoned";
+import { drawTagKids } from "./abandoned";
 import { drawTitanArm } from "./titan";
 import { drawOni, drawOniGround } from "./oni";
 import { drawDucklings } from "./duck";
@@ -22,9 +22,9 @@ import { drawSummons } from "./summon";
 import { drawBedouin } from "./bedouin";
 import { drawLegendName } from "./general";
 import { drawImugi, drawImugiOverlay } from "./imugi";
-import { drawComboHud, drawImugiBody } from "./imugiAura";
-import { drawApostleGround, drawSoulHud } from "./apostle";
-import { drawEaterHud } from "./eaterHud";
+import { drawImugiBody } from "./imugiAura";
+import { drawScreenHuds } from "./screenHud";
+import { drawApostleGround } from "./apostle";
 import { drawStarGround, drawStarNodes } from "./star";
 import { drawPrimeval, drawPrimevalOverlay } from "./primeval";
 import { drawUltGround, drawUltOverlay } from "./ults";
@@ -54,8 +54,7 @@ import { drawTerraAuraB, drawTerraGroundB } from "./terra2b";
 import { drawTerraAuraC } from "./terra2c";
 import { drawGreatSpirit, drawSpiritKin } from "./spirits";
 import { drawCurseText } from "./curseText";
-import { drawHaloHud } from "./forgottenHalo";
-import { drawPilgrim, drawRelicHud } from "./pilgrim";
+import { drawPilgrim } from "./pilgrim";
 import { drawHiddenGear } from "./hiddenGear";
 import { drawOriginAura } from "./origin";
 import { drawRunPet } from "./runPet";
@@ -76,6 +75,8 @@ import { drawWandererAura, drawWandererGround } from "./wanderer";
 import { drawSilkAmmo, drawSilkStacks } from "./silk";
 import { drawSecretAura, drawSecretGround } from "./secret";
 import { drawBossBar, drawFx, drawProjectiles, drawReticleFor } from "./shots";
+import { drawS3Dark, drawS3Ground } from "./s3Bosses";
+import { withFade } from "./fxFade";
 
 export interface DrawOptions {
   /** 0~1: 이전 틱과 이번 틱 사이 위치 */
@@ -154,7 +155,7 @@ function cursorWorld(ctx: CanvasRenderingContext2D, opt: DrawOptions, k: number,
   return { x: ((m.x - r.left) * (ctx.canvas.width / r.width)) / k + camX, y: ((m.y - r.top) * (ctx.canvas.height / r.height)) / k + camY };
 }
 
-/** 한 장면 그리기 · 단련의 방에서 강화한 패시브 효과(폭발 범위 등)도 오른 크기로 보이게 그 사람 기준으로 읽음 (sim/gymPerks) */
+/** 한 장면 그리기 · 단련한 패시브 효과도 그 사람 기준 크기로 (sim/gymPerks) */
 export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions): void {
   withGymFx(s, () => drawScene(ctx, s, opt));
 }
@@ -187,7 +188,7 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
   drawBeastGround(ctx, s);
   drawSageGround(ctx, s);
   opt.under?.(ctx, snap);
-  eachPerson(s, () => {
+  eachPerson(s, (me) => withFade(ctx, s, me, () => {
     drawDevices(ctx, s, snap);
     drawMedicGround(ctx, s, snap);
     drawOrbitField(ctx, s, alpha, snap);
@@ -207,8 +208,9 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
     drawDevilAura(ctx, s, snap);
     drawWandererGround(ctx, s, snap);
     drawSecretGround(ctx, s, alpha, snap);
-  });
+  }));
   drawStatusGround(ctx, s, alpha, snap);
+  drawS3Ground(ctx, s, alpha, snap);
   drawEnemies(ctx, s, alpha, snap);
   drawStatusAir(ctx, s, alpha, snap);
   drawPilgrim(ctx, s, opt.pilgrimLine);
@@ -220,8 +222,10 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
   eachPerson(s, (me) => {
     // 새끼 오리는 오리 뒤에 (오리를 가리지 않게)
     drawDucklings(ctx, s, alpha, snap);
-    drawPlayer(ctx, s, alpha, snap, me && opt.showHitbox, isTiger(s) || (me && (opt.hidePlayer?.() ?? false)));
+    drawPlayer(ctx, s, alpha, snap, me && opt.showHitbox, isTiger(s) || tailShark(s.player) || (me && (opt.hidePlayer?.() ?? false)));
     drawSeatFront(ctx, s);
+    // 공격·장치: 설정 진하기
+    withFade(ctx, s, me, () => {
     drawEngineerGear(ctx, s, alpha, snap);
     drawOrbs(ctx, s, alpha, snap);
     drawBrawl(ctx, s, alpha, snap);
@@ -257,9 +261,12 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
     drawSilkAmmo(ctx, s, alpha, snap);
     drawSilkStacks(ctx, s, snap);
     drawSecretAura(ctx, s, alpha, snap, opt.fateName);
+    });
   });
   drawProjectiles(ctx, s, alpha, snap);
   drawFx(ctx, s, alpha, snap);
+  // 달을 삼키는 자: 어둠 (효과 위, 화면 글자 아래)
+  drawS3Dark(ctx, s, alpha, snap);
   drawCurseText(ctx, s, opt.curseNames, alpha, snap);
   drawPrimevalOverlay(ctx, s, alpha, snap);
   drawVaultOverlay(ctx, s);
@@ -287,10 +294,5 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
   drawRoomNotice(ctx, s, opt.pixelScale, opt.trialText, (k, id) => (k === "passive" ? opt.passiveName?.(id) : opt.useName?.(id)) ?? id);
   if (opt.showReticle && !s.over) drawReticleFor(ctx, s, alpha, snap);
   // 화면에 붙는 글자 (카메라와 상관없이 왼쪽 위)
-  drawComboHud(ctx, s, opt.pixelScale);
-  drawHaloHud(ctx, s, opt.pixelScale);
-  drawRelicHud(ctx, s, opt.pixelScale);
-  drawSoulHud(ctx, s, opt.pixelScale);
-  drawEaterHud(ctx, s, opt.pixelScale);
-  drawTagHud(ctx, s, opt.pixelScale, opt.tagName);
+  drawScreenHuds(ctx, s, opt.pixelScale, opt.tagName);
 }

@@ -1,8 +1,39 @@
-/* 스킬 버튼 셋 (추적자: PC 1·2·3 키 · 남은 대기 가림) · 상점 판매 줄 */
+/* 스킬 버튼 (추적자 셋 · 베아트리스 넷: PC 숫자 키 · 남은 대기 가림 · 마우스를 올리면 설명) · 상점 판매 줄 */
 .skill-buttons {
   display: flex;
   gap: 6px;
   pointer-events: auto;
+}
+/* 스킬 칸 하나 + 마우스를 올리면 위에 뜨는 설명 (칸은 대기 덮개 때문에 잘려서 바깥에 띄움) */
+.skill-slot {
+  position: relative;
+  display: flex;
+}
+.skill-tip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  z-index: 6;
+  width: 240px;
+  transform: translateX(-50%);
+  padding: 6px 8px;
+  border: 1px solid #6a5aa0;
+  border-radius: 6px;
+  background: rgb(16 12 26 / 0.97);
+  color: #f0e8ff;
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: left;
+  pointer-events: none;
+}
+.skill-tip b {
+  color: var(--accent);
+}
+@media (hover: hover) {
+  .skill-slot:hover .skill-tip {
+    display: block;
+  }
 }
 .skill-btn {
   position: relative;
@@ -33,6 +64,16 @@
 }
 .skill-btn b {
   font-size: 16px;
+}
+/* 여러 번 누르는 스킬의 다음 단계 (네일러 못 던지기 1~3 · 붉은 실 2) */
+.skill-btn .skill-stage {
+  position: absolute;
+  top: 1px;
+  right: 3px;
+  font-style: normal;
+  font-weight: bold;
+  color: #ff5a64;
+  text-shadow: 0 0 3px #000;
 }
 @media (pointer: coarse) {
   .skill-btn {
@@ -91,4 +132,137 @@
 .sell-item.armed {
   border-color: #ff6a6a;
   background: rgba(255, 80, 80, 0.25);
+}
+/* 새벽의 성흔: 성흔(달빛의 힘) 흰 게이지 · 각성 중 달빛으로 빛남 */
+.stigma-gauge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: 0 0 4px rgb(255 255 255 / 0.6);
+}
+.stigma-bar {
+  position: relative;
+  width: 140px;
+  height: 12px;
+  border: 1px solid #ffffff;
+  border-radius: 3px;
+  background: rgb(20 20 30 / 0.75);
+  overflow: hidden;
+}
+.stigma-bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(180deg, #ffffff, #d8dcf0);
+  transition: width 0.15s;
+}
+.stigma-gauge.awake .stigma-bar {
+  animation: stigma-glow 0.8s ease-in-out infinite;
+}
+@keyframes stigma-glow {
+  0%, 100% { box-shadow: 0 0 4px #ffffff; }
+  50% { box-shadow: 0 0 14px #ffffff, 0 0 4px #c8d8ff; }
+}
+/* 헬피스트: 흰 테두리 검은 글자 · 검은 막대에 흰색이 차오름 · 각성 중 붉게 빛남 */
+.stigma-gauge.hell {
+  color: #000000;
+  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 0 -1px 0 #fff, 0 1px 0 #fff, -1px 0 0 #fff, 1px 0 0 #fff;
+}
+.stigma-gauge.hell .stigma-bar {
+  border: 2px solid #ffffff;
+  background: #000000;
+}
+.stigma-gauge.hell .stigma-bar i {
+  background: #ffffff;
+}
+.stigma-gauge.hell.awake .stigma-bar {
+  animation-name: stigma-hell;
+}
+@keyframes stigma-hell {
+  0%, 100% { box-shadow: 0 0 4px #ff2a2a; }
+  50% { box-shadow: 0 0 14px #ff2a2a, 0 0 4px #ffffff; }
+}
+/* 진영 특징 게이지 (로그): 진영 색 막대 · 켜지면 빛남 · 아스칼론 맹세 글자 */
+.faction-gauge {
+  --fc: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+  color: var(--fc);
+  font-weight: 700;
+  text-shadow: 0 0 4px rgb(0 0 0 / 0.8);
+}
+.ft-thalassia { --fc: #6ad4ff; }
+.ft-helios { --fc: #ff4a5a; }
+.ft-terracore { --fc: #ff9a3a; }
+.ft-ascalon { --fc: #6aa0ff; }
+.ft-virdia { --fc: #6ae07a; }
+.ft-seongguk { --fc: #ffd84a; }
+.faction-bar {
+  position: relative;
+  width: 110px;
+  height: 10px;
+  border: 1px solid var(--fc);
+  border-radius: 3px;
+  background: rgb(20 20 30 / 0.75);
+  overflow: hidden;
+}
+.faction-bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--fc);
+  transition: width 0.15s;
+}
+.faction-gauge em {
+  min-width: 2ch;
+  font-style: normal;
+}
+.faction-gauge.on .faction-bar {
+  animation: faction-glow 0.7s ease-in-out infinite;
+}
+.ft-terracore.on .faction-bar i { background: #ff3a1a; }
+@keyframes faction-glow {
+  0%, 100% { box-shadow: 0 0 3px var(--fc); }
+  50% { box-shadow: 0 0 12px var(--fc); }
+}
+.faction-oath {
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  background: rgb(20 30 60 / 0.8);
+  color: #c8d8ff;
+}
+.faction-oath.kept { color: #8aff9a; }
+.faction-oath.broken { color: #ff7a7a; }
+/* 성국 핵심 스킬 각성: 칸이 금빛으로 빛남 */
+.skill-btn.core-awake {
+  border-color: #ffd84a;
+  animation: faction-core 0.9s ease-in-out infinite;
+}
+@keyframes faction-core {
+  0%, 100% { box-shadow: 0 0 4px #ffd84a; }
+  50% { box-shadow: 0 0 16px #ffd84a, 0 0 4px #ffffff; }
+}
+/* 블래스트 대시 슬라이딩 칸: 대기 덮개 · 준비되면 파란 테 · 미끄러지는 중이면 파랗게 빛남 */
+.blast-slide {
+  border: 1px solid #3a4a6a;
+  border-radius: 4px;
+  background: rgb(16 20 32 / 0.85);
+  color: #c8e8ff;
+}
+.blast-slide.ready {
+  border-color: #6ad8ff;
+}
+.blast-slide.on {
+  border-color: #aae8ff;
+  box-shadow: 0 0 10px #6ad8ff;
+}
+.stigma-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
 }

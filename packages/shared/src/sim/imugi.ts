@@ -9,6 +9,7 @@ import { recalcStats } from "./items";
 import { raiseShield } from "./imugiMods";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, ROOM_MAX_Y, ROOM_MIN_Y, weaponOf } from "./util";
+import { pctHp } from "./pctHp";
 
 /** 이번 공격 피해: 공격력 + 토룡이면 토룡으로 채운 보호막의 50% (오라·용 보호막은 빼고) */
 function power(p: PlayerState): number {
@@ -114,7 +115,7 @@ function ultTick(s: RunState): void {
     if (e.hp <= 0 || u.hit.includes(e.id) || e.y < u.y) continue;
     u.hit.push(e.id);
     // 공격력 450% + 적 최대 체력의 20% (보스는 1/5 기준, 연습장 허수아비는 체력 1000인 보스처럼) · 천둥 울음·쌍룡 두 번째는 둘 다 같은 배율
-    const base = e.kind === "dummy" ? 1000 / IMUGI.ultBossDiv : ENEMIES[e.kind].boss ? e.maxHp / IMUGI.ultBossDiv : e.maxHp;
+    const base = e.kind === "dummy" ? 1000 / IMUGI.ultBossDiv : ENEMIES[e.kind].boss ? pctHp(e) / IMUGI.ultBossDiv : pctHp(e);
     damageEnemy(s, e, (p.stats.damage * IMUGI.ultMul + base * IMUGI.ultHp) * (u.mul / IMUGI.ultMul), 0, -1);
   }
   if (u.y > ROOM_MIN_Y - IMUGI.ultMargin) return;

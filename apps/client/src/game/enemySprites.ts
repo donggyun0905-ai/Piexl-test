@@ -11,6 +11,14 @@ export const ENEMY_SPRITES: readonly string[] = [
   "slime", "runner", "bat", "beetle", "golem", "shaman", "eggsac", "wisp", "doppel", "venom", "landfish", "lurker", "bombbug", "skelarcher", "chainward", "highorc",
   // 서큐버스(무리 여왕)가 부른 졸개
   "incubus",
+  // 시즌 3 단계별 보스·소품 (scripts/art/s3_bosses: 지옥문 3칸 닫힘·열림·부서짐 · 임프 걷기 2·불붙음 2 · 달 5단계 · 그림자 손 3 · 달 조각/기둥)
+  "gatekeeper", "twinlu", "twinre", "mooneater", "hellgate", "imp", "moonphase", "shadowhand", "moonaltar",
+  // 시즌 3 라스트 보스 켈베로스와 세 사람 (scripts/art/cerberus: 서기 · 공격 모습 셋)
+  "cerberus", "cerbfist", "cerbflame", "cerbblade",
+  // 시즌 3 라스트 보스 레비아탄 심해룡·심연고래·해왕 (scripts/art/leviathan: 5칸)
+  "leviathan", "levwhale", "levking",
+  // 시즌 3 라스트 보스 아스모데우스의 화신체 욕망·검은 해·강철 군주 (scripts/art/asmodeus: 5칸)
+  "asmodeus", "asmovoid", "asmolord",
 ];
 const enemyImages = new Map<string, HTMLImageElement>();
 for (const name of ENEMY_SPRITES) {
@@ -63,8 +71,10 @@ export function shapeSprite(kind: string, color: string): HTMLCanvasElement | un
 /** 2배 촘촘하게 다시 그린 몬스터 (그림 칸 ÷ 이 값 = 게임 크기) */
 /** 일반 몬스터 20종은 2배 (원래 그림 그대로 촘촘하게, scripts/art/hd_monsters_2x, 2026-10-31) */
 const HD2 = "crawler spitter mortar charger gnat guardian paladin slime runner bat beetle golem shaman eggsac wisp venom landfish lurker soul doppel bombbug skelarcher chainward".split(" ");
+/** 시즌 3 단계별 보스·소품은 4배 (scripts/art/s3_bosses) */
+const S3 = "gatekeeper twinlu twinre mooneater hellgate imp moonphase shadowhand moonaltar cerberus cerbfist cerbflame cerbblade leviathan levwhale levking asmodeus asmovoid asmolord".split(" ");
 /** 하이오크는 큰 도트 48칸의 2배 (scripts/art/highorc_sprite, 칸: 걷기 2 · 도끼 치켜듦) */
-export const ENEMY_SRC: Readonly<Record<string, number>> = { highorc: 2, hulk: 2, seer: 2, tower: 2, brood: 4, dragon: 4, ...Object.fromEntries(HD2.map((k) => [k, 2])) };
+export const ENEMY_SRC: Readonly<Record<string, number>> = { highorc: 2, hulk: 2, seer: 2, tower: 2, brood: 4, dragon: 4, ...Object.fromEntries(S3.map((k) => [k, 4])), ...Object.fromEntries(HD2.map((k) => [k, 2])) };
 
 /** 몬스터 그림 한 칸 크기 (게임 크기, 아직 못 불러왔으면 undefined) */
 export const enemyCell = (kind: string): number | undefined => {

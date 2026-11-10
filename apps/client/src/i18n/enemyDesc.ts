@@ -1,11 +1,13 @@
 // 적 한 줄 설명 (한·영·일, 도감·적 정보) · 이름은 enemies.ts
 import type { Lang } from "./index";
+import { DESC_S3 } from "./enemyDescS3";
 
 type Names = Record<Lang, string>;
 const n = (ko: string, en: string, ja: string): Names => ({ ko, en, ja });
 
 /** 한 줄 설명 */
 export const DESC: Record<string, Names> = {
+  ...DESC_S3,
   dummy: n("연습장에서 마음껏 때려 보는 허수아비", "A scarecrow to hit freely in practice", "練習場で思いきり叩けるかかし"),
   fighter: n("패왕전에서 겨루는 AI 캐릭터", "An AI character you face in the Champion Clash", "覇王戦で戦うAIキャラクター"),
   crawler: n("다가와서 몸으로 부딪힘", "Crawls close and rams you", "近づいて体当たりする"),

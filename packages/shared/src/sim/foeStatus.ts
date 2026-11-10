@@ -29,6 +29,11 @@ const R = {
   BURN_DMG: 3,
   /** 출혈·화상 피해 간격 (0.5초) */
   BLEED_EVERY: 30,
+  /** 켈베로스 바위 비: 기절 틱 (1초, 화상도 같이) */
+  CERB_STUN: 60,
+  /** 레비아탄: 물기둥 기절(0.8초, 느림도 같이) · 사슬 팔 기절(1.5초) */
+  LEV_STUN: 48,
+  LEV_CHAIN: 90,
 };
 export { R as FOE_STATUS_RULES };
 
@@ -55,11 +60,23 @@ const BY_FOE: Partial<Record<EnemyKind, [Field, keyof typeof R]>> = {
   charger: ["dbSlow", "SLOW_TICKS"],
   bombbug: ["dbBurn", "BURN_TICKS"],
   highorc: ["dbBleed", "BLEED_TICKS"],
+  // 시즌 3 단계별 보스: 쌍둥이 루 할퀴기·핏줄 출혈 · 달을 삼키는 자 그림자 손 속박
+  twinlu: ["dbBleed", "BLEED_TICKS"],
+  mooneater: ["dbRoot", "ROOT_TICKS"],
+  // 켈베로스: 염희·지옥불은 화상 · 바위 비(켈베로스)는 기절 + 화상 (ALSO)
+  cerbflame: ["dbBurn", "BURN_TICKS"],
+  cerberus: ["dbStun", "CERB_STUN"],
+  // 레비아탄: 물기둥은 기절 + 느림 · 고래 사슬 팔 기절 1.5초 · 해왕 삼지창 마지막 기절 0.5초
+  leviathan: ["dbStun", "LEV_STUN"],
+  levwhale: ["dbStun", "LEV_CHAIN"],
+  levking: ["dbStun", "STUN_TICKS"],
 };
+/** 한 번에 둘을 거는 적: 덧붙이는 상태이상 */
+const ALSO: Partial<Record<EnemyKind, [Field, keyof typeof R]>> = { cerberus: ["dbBurn", "BURN_TICKS"], leviathan: ["dbSlow", "SLOW_TICKS"] };
 
-/** 몸에 닿았을 때 상태이상을 거는 적 (가디언은 돌진 중일 때만 기절 · 성기사는 빛기둥만 속박, 몸에 닿으면 없음) */
+/** 몸에 닿았을 때 상태이상을 거는 적 (가디언은 돌진 중일 때만 기절 · 성기사·달을 삼키는 자는 빛기둥·그림자 손만 속박, 몸에 닿으면 없음) */
 export const touchFoe = (e: { kind: EnemyKind; phase: string }): EnemyKind | undefined =>
-  e.kind === "paladin" || (e.kind === "guardian" && e.phase !== "charge") ? undefined : e.kind;
+  e.kind === "paladin" || e.kind === "mooneater" || (e.kind === "guardian" && e.phase !== "charge") ? undefined : e.kind;
 
 /** 맞은 뒤 (combat.damagePlayer 끝): 때린 적에 맞는 상태이상 (저주는 걸려 있으면 시간을 늘리지 않음 → 꼭 터짐) */
 export function afflict(s: RunState, from: EnemyKind | undefined): void {
@@ -69,6 +86,8 @@ export function afflict(s: RunState, from: EnemyKind | undefined): void {
   const [field, ticks] = row;
   if (field === "dbCurse" && (p.dbCurse ?? 0) > 0) return;
   p[field] = Math.max(p[field] ?? 0, R[ticks]);
+  const also = ALSO[from];
+  if (also) p[also[0]] = Math.max(p[also[0]] ?? 0, R[also[1]]);
 }
 
 /** 틱마다 (자리마다, terrain에서): 시간 줄이기 → 이번 틱에 받을 피해 (출혈 0.5초마다 · 저주가 끝나는 틱) */
@@ -89,7 +108,7 @@ export function tickFoeStatus(p: PlayerState, depth: number): number {
 export const foeMoveMul = (p: PlayerState): number => ((p.dbStun ?? 0) > 0 || (p.dbRoot ?? 0) > 0 ? 0 : (p.dbSlow ?? 0) > 0 ? R.SLOW_MUL : 1);
 /** 대시 못 함 (기절·속박) */
 export const foeHeld = (p: PlayerState): boolean => (p.dbStun ?? 0) > 0 || (p.dbRoot ?? 0) > 0;
-/** 공격 못 함 (기절·공포) */
+/** 공격 못 함 (기절·공포 · 테라코어 과부하) */
 export const foeNoAttack = (p: PlayerState): boolean => (p.dbStun ?? 0) > 0 || (p.dbFear ?? 0) > 0;
 /** 받는 피해 배율 (부식) */
 export const foeTakenMul = (p: PlayerState): number => ((p.dbRot ?? 0) > 0 ? R.ROT_TAKEN : 1);

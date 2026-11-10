@@ -6,6 +6,7 @@ import { charGuide } from "../i18n/guides";
 import { itemDesc, itemName } from "../i18n/items";
 import { GameScreen } from "./GameScreen";
 import { ItemIcon } from "./itemIcon";
+import { RichText } from "./RichText";
 
 interface Props {
   character: CharacterId;
@@ -47,7 +48,9 @@ export default function CharInfo({ character, lang, t, onClose }: Props) {
         <section className="ci-left">
           <ul className="ci-guide">
             {charGuide(character, lang).map((line) => (
-              <li key={line}>{line}</li>
+              <li key={line}>
+                <RichText text={line} />
+              </li>
             ))}
           </ul>
           <h4>{t("ciWeapons")}</h4>

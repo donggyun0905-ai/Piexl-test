@@ -37,7 +37,7 @@ interface FloatNumber {
 export type NumKind = "hit" | "crit" | DotKind;
 
 /** 상태이상 피해 숫자 색 */
-export const DOT_COLOR: Record<DotKind, string> = { bleed: "#ff4a4a", burn: "#ff9a2a", poison: "#7ae05a", curse: "#c08aff", storm: "#8ae8ff", rot: "#ff8a1a", death: "#120c16", hellfire: "#6ad8ff", shock: "#ffe04a", frost: "#9ae8ff", tide: "#3a9aff", gold: "#ffc830", radiance: "#fff8d8", voidbolt: "#8a5ab8" };
+export const DOT_COLOR: Record<DotKind, string> = { bleed: "#ff4a4a", burn: "#ff9a2a", poison: "#7ae05a", curse: "#c08aff", storm: "#8ae8ff", rot: "#ff8a1a", death: "#120c16", hellfire: "#6ad8ff", shock: "#ffe04a", frost: "#9ae8ff", tide: "#3a9aff", gold: "#ffc830", radiance: "#fff8d8", voidbolt: "#8a5ab8", moon: "#ffffff", blueflame: "#3a8aff" };
 const DOT_KINDS = Object.keys(DOT_COLOR) as DotKind[];
 
 export interface DummyStats {
@@ -179,8 +179,11 @@ export class DamageTracker {
     ctx.textBaseline = "alphabetic";
   }
 
-  draw(ctx: CanvasRenderingContext2D, tick: number, snap: Snap): void {
+  /** k: 숫자 크기 배율 (화면을 줄여 보는 레이드 방은 2배로 크게) */
+  draw(ctx: CanvasRenderingContext2D, tick: number, snap: Snap, k = 1): void {
     if (this.numbers.length === 0) return;
+    ctx.save();
+    ctx.scale(k, k);
     ctx.font = "bold 6px monospace";
     ctx.textAlign = "center";
     ctx.textBaseline = "bottom";
@@ -195,8 +198,8 @@ export class DamageTracker {
       const text = formatDamage(n.amount);
       // 빨리 튀어 나갔다 천천히 멈춤 · 숫자마다 정해 둔 방향으로 흩뿌려지며 위로 솟음 (겹쳐도 읽히게)
       const ease = 1 - (1 - Math.min(1, age * 1.6)) ** 3;
-      const x = snap(n.x + n.ox * ease);
-      const y = snap(n.y - 2 + n.oy * ease - RISE * age);
+      const x = snap(n.x + n.ox * ease) / k;
+      const y = snap(n.y - 2 + n.oy * ease - RISE * age) / k;
       ctx.globalAlpha = Math.min(1, 2 - age * 2) * (old ? 0.45 : 1);
       if (this.style && (n.kind === "hit" || n.kind === "crit")) {
         if (this.style === "tiger") drawTigerNumber(ctx, text, x, y, tick - n.born, n.kind === "crit");
@@ -225,6 +228,13 @@ export class DamageTracker {
         g.addColorStop(0, "#fffbe0");
         g.addColorStop(1, "#ffb830");
         ctx.fillStyle = g;
+      } else if (n.kind === "blueflame") {
+        // 청염(블루 플레임): 아래는 진한 파랑 → 위로 갈수록 옅게
+        const g = ctx.createLinearGradient(0, 0, 0, -6);
+        g.addColorStop(0, "#1238d8");
+        g.addColorStop(0.5, "#3a8aff");
+        g.addColorStop(1, "#c8f0ff");
+        ctx.fillStyle = g;
       } else ctx.fillStyle = n.kind !== "hit" ? DOT_COLOR[n.kind] : "#ffffff";
       ctx.fillText(text, 0, 0);
       // 막 나왔을 때 하얗게 번쩍
@@ -236,6 +246,7 @@ export class DamageTracker {
       // 상태이상: 숫자 왼쪽에 핏방울·불꽃·독 거품·해골·폭풍·녹아내린 구슬·푸른 불꽃
       if (n.kind !== "hit") drawDotIcon(ctx, n.kind, Math.round(x - ctx.measureText(text).width / 2 - 2 - dotIconWidth(n.kind)), y - 6);
     }
+    ctx.restore();
     ctx.globalAlpha = 1;
     ctx.textAlign = "start";
     ctx.textBaseline = "alphabetic";

@@ -5,6 +5,8 @@ import type { Hazard } from "./fxTypes";
 import type { RunState } from "./types";
 import { eachSeat } from "./party";
 import { addEffect, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { moonOut } from "./moonlight";
+import { hazardStatus } from "./lucKit";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -18,14 +20,14 @@ export const HAZARD_WARN_TICKS = 50;
 export const HAZARD_RADIUS = 22;
 
 export function addHazard(s: RunState, x: number, y: number, damage: number, from?: string): void {
-  (s.hazards ??= []).push({ tick: s.tick + HAZARD_WARN_TICKS, start: s.tick, x, y, radius: HAZARD_RADIUS, damage, ...(from ? { from } : {}) });
+  (s.hazards ??= []).push({ tick: s.tick + HAZARD_WARN_TICKS, start: s.tick, x, y, radius: HAZARD_RADIUS, damage: damage * moonOut(), ...(from ? { from } : {}) });
 }
 
 /** 모양 있는 위험 표시 (warn틱 뒤 터짐, appear틱 뒤부터 보임) */
 export function addShape(s: RunState, warn: number, h: Omit<Hazard, "tick" | "start">, appear = 0): void {
   // 선 끝은 방 안까지만
   const to = h.toX !== undefined && h.toY !== undefined ? { toX: Math.max(ROOM_MIN_X, Math.min(ROOM_MAX_X, h.toX)), toY: Math.max(ROOM_MIN_Y, Math.min(ROOM_MAX_Y, h.toY)) } : {};
-  (s.hazards ??= []).push({ tick: s.tick + warn, start: s.tick + appear, ...h, ...to });
+  (s.hazards ??= []).push({ tick: s.tick + warn, start: s.tick + appear, ...h, ...to, damage: h.damage * moonOut() }); // 달빛 걸린 적이 만든 장판은 약함
 }
 
 /** 플레이어(반지름 r)가 범위 안인지 */
@@ -64,8 +66,11 @@ export function updateHazards(s: RunState): void {
         const p = s.player;
         const hit = h.still ? (h.still === "black") === p.stillTicks < R.STILL_JUDGE : inHazard(h, p.x, p.y, p.r);
         if (hit && h.damage > 0) {
+          const hp = p.hp;
           if (h.noDodge) throughDash(s, () => damagePlayer(s, h.damage, h.by));
           else damagePlayer(s, h.damage, h.by);
+          // 레이드 루시퍼 공격의 상태이상 (sim/lucKit)
+          if (p.hp < hp) hazardStatus(s, h.from);
         }
       },
       !!s.party,

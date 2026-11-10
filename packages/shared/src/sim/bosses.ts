@@ -24,9 +24,23 @@ import { updateRoc } from "./bossRoc";
 import { updateDemigod } from "./bossDemigod";
 import { updateSage } from "./bossSage";
 import { updateToad } from "./bossToad";
+import { updateGateProp, updateGatekeeper } from "./bossGatekeeper";
+import { updateTwin } from "./bossTwins";
+import { updateMoonEater, updateMoonShard } from "./bossMoonEater";
 import { updateSalamander } from "./bossSalamander";
 import { updateJelly } from "./bossJelly";
 import { updateCaptain } from "./bossCaptain";
+import { updateCerberus } from "./bossCerberus";
+import { updateCerbTrio } from "./bossCerbTrio";
+import { updateLeviathan } from "./bossLeviathan";
+import { updateLevWhale } from "./bossLevWhale";
+import { updateLevKing } from "./bossLevKing";
+import { updateAsmo } from "./bossAsmo";
+import { updateLucifer } from "./lucifer";
+import { pinned } from "./lucCover";
+import { updatePillar } from "./lucPillars";
+import { updateFlame, updateShade } from "./lucDark";
+import { updateSword } from "./lucSwords";
 import { makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 
 /** 보스 체력 배율 (층마다 늘어남) */
@@ -59,6 +73,32 @@ const BOSS_AI: Partial<Record<EnemyState["kind"], BossAi>> = {
   salamander: (s, e, toP, go) => updateSalamander(s, e, toP, go),
   jelly: (s, e, toP, go) => updateJelly(s, e, toP, go),
   captain: updateCaptain,
+  // 시즌 3 단계별 보스 (문·임프·달 조각도 여기서)
+  gatekeeper: updateGatekeeper,
+  hellgate: (s, e, _toP, go) => updateGateProp(s, e, go),
+  imp: (s, e, _toP, go) => updateGateProp(s, e, go),
+  twinlu: updateTwin,
+  twinre: updateTwin,
+  mooneater: updateMoonEater,
+  moonshard: (_s, e) => updateMoonShard(e),
+  // 시즌 3 라스트 보스 켈베로스 (페이즈 2 세 사람)
+  cerberus: updateCerberus,
+  cerbfist: (s, e, toP) => updateCerbTrio(s, e, toP),
+  cerbflame: (s, e, toP) => updateCerbTrio(s, e, toP),
+  cerbblade: (s, e, toP) => updateCerbTrio(s, e, toP),
+  // 시즌 3 라스트 보스 레비아탄 (심해룡 → 고래 → 해왕)
+  leviathan: updateLeviathan,
+  levwhale: (s, e, toP) => updateLevWhale(s, e, toP),
+  levking: (s, e, toP, _go, spawned) => updateLevKing(s, e, toP, spawned),
+  // 시즌 3 라스트 보스 아스모데우스의 화신체 (체력 줄 ×100, 세 모습)
+  asmodeus: (s, e, toP) => updateAsmo(s, e, toP),
+  // 레이드 보스 루시퍼 · 석화의 기둥 · 악마의 불길 · 어둠의 세계 몬스터 (sim/lucifer·lucPillars·lucDark)
+  lucifer: (s, e, toP, _go, spawned) => pinned(e, () => updateLucifer(s, e, toP, spawned)),
+  lucpillar: (s, e) => pinned(e, () => updatePillar(s, e)),
+  lucflame: (s, e, toP) => updateFlame(s, e, toP),
+  lucshade: (s, e) => updateShade(s, e),
+  lucsword: (s, e) => pinned(e, () => updateSword(s, e)),
+  lucchest: (_s, e) => pinned(e, () => void (e.timer = 0)),
 };
 
 export function updateBoss(s: RunState, e: EnemyState, toP: readonly [number, number], go: readonly [number, number], spawned: EnemyState[]): void {

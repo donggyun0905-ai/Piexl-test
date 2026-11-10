@@ -7,13 +7,13 @@ export const NOTES: PatchNote[] = [
     date: "2026-10-29",
     items: {
       ko: [
-        "히든 아이템 둘째 묶음 7개: 포탈건(쓴 방을 기억 → 다시 쓰면 그 방으로) · 블리자드 랜스(등 뒤 얼음 창 다섯, 공격마다 30%로 한 줄 돌진·20% 빙결) · 떨어진 신의 날개(몸 좌우 반투명 날개, 이동 속도 + · 몸박치기에 안 맞음) · 운명의 주사위(머리 위 주사위 1~6 운명) · 저주받은 주사위(숫자를 고르고 굴림: 맞히면 화려한 보물 상자, 틀리면 저주) · 애호의 피리(로비 동물 모두 같이 다님) · 테라포밍(이 층 보스·맵을 고른 보스로)",
+        "히든 아이템 둘째 묶음 7개: 귀환의 문(쓴 방을 기억 → 다시 쓰면 그 방으로) · 블리자드 랜스(등 뒤 얼음 창 다섯, 공격마다 30%로 한 줄 돌진·20% 빙결) · 떨어진 신의 날개(몸 좌우 반투명 날개, 이동 속도 + · 몸박치기에 안 맞음) · 운명의 주사위(머리 위 주사위 1~6 운명) · 저주받은 주사위(숫자를 고르고 굴림: 맞히면 화려한 보물 상자, 틀리면 저주) · 애호의 피리(로비 동물 모두 같이 다님) · 테라포밍(이 층 보스·맵을 고른 보스로)",
       ],
       en: [
-        "Second batch of 7 hidden items: Portal Gun (marks a room, use again to return) · Blizzard Lance (five ice lances on your back; 30% per attack to charge in a line, 20% to freeze) · Fallen God's Wings (floating translucent wings, more speed, immune to contact hits) · Fate Dice (a 1-6 fate over your head) · Cursed Dice (pick a number and roll: hit it for a dazzling treasure chest, miss for a curse) · Flute of Fondness (every lobby pet comes along) · Terraform (choose this floor's boss and map)",
+        "Second batch of 7 hidden items: Gate of Return (marks a room, use again to return) · Blizzard Lance (five ice lances on your back; 30% per attack to charge in a line, 20% to freeze) · Fallen God's Wings (floating translucent wings, more speed, immune to contact hits) · Fate Dice (a 1-6 fate over your head) · Cursed Dice (pick a number and roll: hit it for a dazzling treasure chest, miss for a curse) · Flute of Fondness (every lobby pet comes along) · Terraform (choose this floor's boss and map)",
       ],
       ja: [
-        "ヒドゥンアイテム第2弾7個: ポータルガン (使った部屋を記憶 → もう一度使うとその部屋へ) · ブリザードランス (背中に氷の槍5本、攻撃ごとに30%で一列突進・20%で凍結) · 堕ちた神の翼 (体の左右に浮かぶ半透明の翼、移動速度+ · 体当たりを受けない) · 運命のサイコロ (頭上のサイコロ1〜6の運命) · 呪われたサイコロ (数字を選んで振る: 当たれば豪華な宝箱、外れると呪い) · 愛護の笛 (ロビーの動物みんなが一緒に) · テラフォーミング (この階のボス・マップを選んだボスに)",
+        "ヒドゥンアイテム第2弾7個: 帰還の門 (使った部屋を記憶 → もう一度使うとその部屋へ) · ブリザードランス (背中に氷の槍5本、攻撃ごとに30%で一列突進・20%で凍結) · 堕ちた神の翼 (体の左右に浮かぶ半透明の翼、移動速度+ · 体当たりを受けない) · 運命のサイコロ (頭上のサイコロ1〜6の運命) · 呪われたサイコロ (数字を選んで振る: 当たれば豪華な宝箱、外れると呪い) · 愛護の笛 (ロビーの動物みんなが一緒に) · テラフォーミング (この階のボス・マップを選んだボスに)",
       ],
     },
   },

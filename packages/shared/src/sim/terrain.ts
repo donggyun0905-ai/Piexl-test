@@ -18,7 +18,7 @@ const KINDS: readonly TerrainKind[] = ["mud", "lava", "water", "spikes"];
 
 /** 지형이 생기는 판인지 (보통 던전·무한·협동. 레이드·영웅의 길·아레나·패왕전·광야·타워 디펜스는 없음) */
 function terrainRun(s: RunState): boolean {
-  return !s.arenaLv && !s.hero && !s.pvp && !s.swarm && !s.lastBoss && s.floor <= 6;
+  return !s.arenaLv && !s.raidBoss && !s.hero && !s.pvp && !s.swarm && !s.lastBoss && s.floor <= 6;
 }
 
 /** 함정(가시·용암)에 다침: 피해 + 판 기록 (캐릭터 해금 '함정에 1000번') */
