@@ -1,4 +1,4 @@
-// 장비창 (레이드 창의 '장비창' 버튼): 반지 3·목걸이·귀걸이·브로치 칸(점선, 무엇을 끼는 칸인지 글자) · 가진 장신구 · 자세히 · 합계 · 세트
+// 장비창 (시험 서버는 accTest로 모두 채움) (레이드 창의 '장비창' 버튼): 반지 3·목걸이·귀걸이·브로치 칸(점선, 무엇을 끼는 칸인지 글자) · 가진 장신구 · 자세히 · 합계 · 세트
 // 위쪽 승급·강화·재설정 버튼 → AccForge 창. Esc·바깥 누르면 닫힘
 import { ACC_SLOTS, accOf, accTotals, canEquip, equip, equipped, isEquipped, setCounts, type AccItem } from "@pixel-rogue/shared";
 import { useState } from "react";
@@ -7,11 +7,14 @@ import { loadChips } from "../../lobby/chips";
 import { AccForge, type ForgeMode } from "./AccForge";
 import { AccIcon, AccInfo, SetInfo, StatLines } from "./AccParts";
 import { iconStyle, useAccEsc, useBag } from "./accStore";
+import { fillAll, testFillOnce } from "./accTest";
+import { TEST_OPEN } from "../../testFlags";
 
 type T = (key: TextKey) => string;
 const order = (a: AccItem, b: AccItem) => (b.legend !== undefined ? 1 : 0) - (a.legend !== undefined ? 1 : 0) || b.star - a.star || b.lv - a.lv || a.kind.localeCompare(b.kind) || a.set - b.set;
 
 export function AccWindow({ t, onClose }: { t: T; onClose: () => void }) {
+  useState(testFillOnce);
   const [bag, change] = useBag();
   const [pick, setPick] = useState<number | null>(null);
   const [slot, setSlot] = useState<number | null>(null);
@@ -61,6 +64,11 @@ export function AccWindow({ t, onClose }: { t: T; onClose: () => void }) {
             <button type="button" className="acc-tool reroll" onClick={() => setForge("reroll")}>
               ⟳ {t("accReroll")}
             </button>
+            {TEST_OPEN && (
+              <button type="button" className="acc-tool" onClick={() => change(fillAll)}>
+                {t("accTestFill")}
+              </button>
+            )}
             <button type="button" className="ghost" onClick={onClose}>
               {t("accClose")}
             </button>

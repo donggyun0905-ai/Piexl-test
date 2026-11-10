@@ -29,6 +29,7 @@ export const ACC_TEXT = {
   accLegend: l("전설", "Legendary", "伝説"),
   accBase: l("기본 능력치", "Base stats", "基本能力"),
   accOpts: l("추가 능력치", "Bonus stats", "追加能力"),
+  accTestFill: l("시험: 모두 다시 받기", "Test: refill all", "テスト: すべて再取得"),
   accTier4: l("최고", "Max", "最高"),
   accTier3: l("상위", "High", "上位"),
   accTier2: l("중위", "Mid", "中位"),
