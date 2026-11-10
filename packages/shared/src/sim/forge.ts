@@ -119,6 +119,8 @@ export function forgeMenu(s: RunState, op: number, a: number, b: number): void {
     } else {
       // 파괴: 그 무기 기록을 지우고 맨손 (휴지통에 버린 것과 같음)
       delete p.forge[w];
+      // 레이드: 대장간 처음부터 다시 하면 이 무기를 돌려받게 기억 (sim/raidPrep)
+      if (s.raidBoss) p.raidLostWeapon ??= w;
       equipWeapon(s, EMPTY_HANDS);
       result(s, op, 2, w);
     }

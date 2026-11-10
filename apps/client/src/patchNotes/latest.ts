@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.6",
+    date: "2026-11-10",
+    items: {
+      ko: ["레이드 대장간: 암흑 강화로 무기가 부서진 뒤 '처음부터 다시'를 누르면 부서진 무기를 돌려받음 (대장간에 처음 들어온 것처럼 강화·돈·무기 모두 되돌림)"],
+      en: ["Raid forge: after a Dark Enhance destroys your weapon, 'Start over' now gives the weapon back (weapon, upgrades and gold reset as if you just entered the forge)"],
+      ja: ["レイドの鍛冶場: 暗黒強化で武器が壊れた後「最初からやり直す」を押すと壊れた武器が戻ります（鍛冶場に入った直後のように武器・強化・お金をすべて戻す）"],
+    },
+  },
+  {
     version: "0.52.5",
     date: "2026-11-10",
     items: {
