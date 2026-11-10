@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.7",
+    date: "2026-11-10",
+    items: {
+      ko: ["레이드 풋내기: 전용 패시브가 모자란 만큼 주던 단련 포인트 보충을 없앰 (레벨업 스탯 포인트 29개가 대신 · 단련은 기본 30)"],
+      en: ["Raid Novice: no longer gets the extra training points for missing exclusive passives (its 29 level-up stat points take their place · training stays at the base 30)"],
+      ja: ["レイドの新米: 専用パッシブ不足分の鍛錬ポイント補充をなくしました（レベルアップのステータスポイント29が代わり · 鍛錬は基本の30）"],
+    },
+  },
+  {
+    version: "0.52.6",
+    date: "2026-11-10",
+    items: {
+      ko: ["레이드 대장간: 암흑 강화로 무기가 부서진 뒤 '처음부터 다시'를 누르면 부서진 무기를 돌려받음 (대장간에 처음 들어온 것처럼 강화·돈·무기 모두 되돌림)"],
+      en: ["Raid forge: after a Dark Enhance destroys your weapon, 'Start over' now gives the weapon back (weapon, upgrades and gold reset as if you just entered the forge)"],
+      ja: ["レイドの鍛冶場: 暗黒強化で武器が壊れた後「最初からやり直す」を押すと壊れた武器が戻ります（鍛冶場に入った直後のように武器・強化・お金をすべて戻す）"],
+    },
+  },
+  {
     version: "0.52.5",
     date: "2026-11-10",
     items: {

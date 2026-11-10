@@ -1,4 +1,5 @@
 // 이벤트 '레이드' (5인 레이드 보스) 상태 (sim/raid)
+import type { WeaponId } from "../content";
 import type { LucFight, LucPlayerState } from "./lucTypes";
 
 /** 레이드 보스 (지금은 루시퍼 하나) */
@@ -28,4 +29,6 @@ export interface RaidPlayerState extends LucPlayerState {
   /** 레이드 사용 아이템 칸마다 다시 쓸 수 있는 틱 · 대장간 처음부터 다시 쓴 수 (sim/raidPrep) */
   raidCd?: number[];
   raidResets?: number;
+  /** 레이드 대장간 암흑 강화로 부서진 무기 (처음부터 다시 하면 돌려받음, sim/forge·raidPrep) */
+  raidLostWeapon?: WeaponId;
 }

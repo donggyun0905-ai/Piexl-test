@@ -8,6 +8,8 @@ import { stepParty } from "./partyRun";
 import { createRaid, raidGymPts, raidLocked, raidOwnPassives, type RaidMember } from "./raid";
 import { RAID_OP, RAID_PREP_RULES as P, raidCdLeft } from "./raidPrep";
 import { RAID_ROOM } from "./raidTypes";
+import { FORGE_OP } from "./forge";
+import { EMPTY_HANDS } from "./shop";
 import { goThrough } from "./rooms";
 import { stationAt, stationMenu } from "./station";
 import { EMPTY_INPUT, type RunState, type TickInput } from "./types";
@@ -19,10 +21,10 @@ const go = (s: RunState, n: number) => {
 const press = (input: Partial<TickInput>) => ({ ...EMPTY_INPUT, ...input });
 
 describe("레이드 준비 고치기", () => {
-  it("전용 패시브가 30개보다 적으면 하나마다 단련 3 · 변희는 동물 능력도 모두", () => {
+  it("전용 패시브가 30개보다 적으면 하나마다 단련 1 · 풋내기는 보충 없음 · 변희는 동물 능력도 모두", () => {
     expect(raidGymPts("collector")).toBe(30);
     expect(raidGymPts("warden")).toBe(30 + 20);
-    expect(raidGymPts("novice")).toBe(30 + 30);
+    expect(raidGymPts("novice")).toBe(30); // 풋내기는 보충 없음 (레벨업 스탯이 대신)
     expect(raidOwnPassives("byeonhui").length).toBe(30);
   });
 
@@ -73,6 +75,19 @@ describe("레이드 준비 고치기", () => {
     stationMenu(s, RAID_OP.gymDown * 4096 + 0 * 64);
     expect(g.pts).toBe(pts);
     expect(g.lv.damage).toBeUndefined();
+  });
+
+  it("대장간 처음부터 다시: 암흑 강화로 부서진 무기를 돌려받음", () => {
+    const s = make();
+    go(s, 1);
+    const w = s.player.weaponId;
+    s.gold = 1e6;
+    for (let k = 0; k < 40 && s.player.weaponId === w; k++) stationMenu(s, FORGE_OP.dark * 4096);
+    expect(s.player.weaponId).toBe(EMPTY_HANDS);
+    stationMenu(s, RAID_OP.forgeReset * 4096);
+    expect(s.player.weaponId).toBe(w);
+    expect(s.player.forge).toBeUndefined();
+    expect(s.gold).toBe(P.FORGE_GOLD);
   });
 
   it("단련의 방 샌드백: 쓰러지지 않음", () => {

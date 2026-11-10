@@ -1,11 +1,12 @@
 // 레이드 준비·사용 아이템 (2026-11-09 사용자 요청)
 // 사용 아이템: 써도 사라지지 않고 쿨타임 (회복약 10초 · 영약 1분 · 보호막 15초 · 얼음 세계 1분 · 폭탄 10초, 폭탄은 레이드용 큰 피해)
-// 준비: 단련 포인트 되돌리기 · 대장간 처음부터 다시(999원, 3번) · 단련의 방 샌드백(딜 시험, 쓰러지지 않음)
+// 준비: 단련 포인트 되돌리기 · 대장간 처음부터 다시(999원, 3번, 암흑 강화로 부서진 무기도 돌려받음) · 단련의 방 샌드백(딜 시험, 쓰러지지 않음)
 import { ROOM_CX as CX, ROOM_CY as CY } from "../constants";
 import type { UseItemId } from "../items";
 import { damageEnemy, removeDead } from "./combat";
 import { GYM_STATS, gymPassives, PASSIVE_AT } from "./gym";
-import { recalcStats } from "./items";
+import { equipWeapon, recalcStats } from "./items";
+import { EMPTY_HANDS } from "./shop";
 import { RAID_ROOM } from "./raidTypes";
 import type { RunState } from "./types";
 import { accItemReset } from "./accStats";
@@ -93,6 +94,9 @@ export function raidPrepMenu(s: RunState, op: number, a: number): void {
     p.retag = undefined;
     p.forgeFree = undefined;
     p.forgePaid = undefined;
+    // 암흑 강화로 부서진 무기를 돌려받음 (대장간에 처음 들어온 것처럼, 그 뒤 다른 무기를 들었으면 그대로)
+    if (p.raidLostWeapon && p.weaponId === EMPTY_HANDS) equipWeapon(s, p.raidLostWeapon);
+    p.raidLostWeapon = undefined;
     s.gold = R.FORGE_GOLD;
     recalcStats(s);
     addEffect(s, { kind: "burst", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 20, maxTicks: 20 });
