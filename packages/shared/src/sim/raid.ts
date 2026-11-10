@@ -63,8 +63,10 @@ export function raidOwnPassives(c: CharacterId): PassiveId[] {
   return PASSIVE_IDS.filter((id) => (PASSIVES[id] as PassiveDef).exclusive === c);
 }
 
-/** 단련 포인트: 기본 30 + 전용 패시브가 30개보다 적으면 모자란 하나마다 1 (2026-11-10 사용자 요청: 3 → 1) */
+/** 단련 포인트: 기본 30 + 전용 패시브가 30개보다 적으면 모자란 하나마다 1 (2026-11-10 사용자 요청: 3 → 1)
+ *  풋내기는 보충 없음: 레벨업 스탯 포인트가 패시브 대신 (2026-11-10 사용자 요청, 둘 다 받으면 너무 셈) */
 export function raidGymPts(c: CharacterId): number {
+  if (c === "novice") return R.GYM_PTS;
   return R.GYM_PTS + Math.max(0, R.PASSIVE_CAP - raidOwnPassives(c).length) * R.PER_PASSIVE;
 }
 
@@ -84,7 +86,6 @@ export function createRaid(seed: number, boss: RaidEventBoss, humans: readonly R
   eachSeat(s, (i) => {
     const p = s.player;
     p.passives = [...raidOwnPassives(p.characterId), "goddessBlessing"];
-    if (members[i]!.acc) p.acc = { ...members[i]!.acc };
     if (members[i]!.acc) p.acc = { ...members[i]!.acc };
     p.useSlots = [null, null];
     s.gold = R.GOLD;

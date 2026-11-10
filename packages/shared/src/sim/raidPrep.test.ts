@@ -21,10 +21,10 @@ const go = (s: RunState, n: number) => {
 const press = (input: Partial<TickInput>) => ({ ...EMPTY_INPUT, ...input });
 
 describe("레이드 준비 고치기", () => {
-  it("전용 패시브가 30개보다 적으면 하나마다 단련 3 · 변희는 동물 능력도 모두", () => {
+  it("전용 패시브가 30개보다 적으면 하나마다 단련 1 · 풋내기는 보충 없음 · 변희는 동물 능력도 모두", () => {
     expect(raidGymPts("collector")).toBe(30);
     expect(raidGymPts("warden")).toBe(30 + 20);
-    expect(raidGymPts("novice")).toBe(30 + 30);
+    expect(raidGymPts("novice")).toBe(30); // 풋내기는 보충 없음 (레벨업 스탯이 대신)
     expect(raidOwnPassives("byeonhui").length).toBe(30);
   });
 
