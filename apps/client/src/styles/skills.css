@@ -268,7 +268,7 @@
   pointer-events: auto;
 }
 
-/* 쉐도잉: 화면 커서 대신 게임 안 붓 그림 (render/shadowingArt) */
+/* 쉐도잉·인형술사: 화면 커서 대신 게임 안 붓·손 그림 (render/shadowingArt·puppetArt) */
 .game-screen.brush-cursor .game-canvas-wrap,
 .game-screen.brush-cursor .input-zone {
   cursor: none;

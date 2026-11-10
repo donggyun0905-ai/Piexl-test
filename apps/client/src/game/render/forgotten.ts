@@ -34,6 +34,7 @@ import { drawIncisionAura } from "./incisionBody";
 import { drawCrusaderAura } from "./crusaderBody";
 import { drawJoker } from "./jokerArt";
 import { drawShadowingAir, drawShadowingGround } from "./shadowingArt";
+import { drawPuppetAir, drawPuppetGround } from "./puppetArt";
 import { drawFactionBody } from "./factionFx";
 import { drawFallenWings } from "./fallenWings";
 
@@ -98,6 +99,7 @@ export function drawForgottenBack(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   // 풍류사: 구름 자국·먹물·발밑 구름 (render/pungryuBody)
   drawPungryuBack(ctx, s, alpha, snap);
   drawShadowingGround(ctx, s, alpha, snap);
+  drawPuppetGround(ctx, s, alpha, snap);
   drawLeoBack(ctx, s, alpha, snap);
   drawOnyxBack(ctx, s, alpha, snap);
   drawFenrirBack(ctx, s, alpha, snap);
@@ -180,6 +182,7 @@ export function drawForgottenAura(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawCrusaderAura(ctx, s, alpha, snap);
   drawJoker(ctx, s, alpha, snap);
   drawShadowingAir(ctx, s, alpha, snap);
+  drawPuppetAir(ctx, s, alpha, snap);
   drawFactionBody(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten" || (p.fgGod ?? 0) <= 0) return;

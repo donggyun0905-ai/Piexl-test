@@ -1,4 +1,4 @@
-// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전 · 크루세이더) + 실베르 조커·쉐도잉 — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
+// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전 · 크루세이더) + 실베르 조커·쉐도잉·인형술사 — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
 import { kit, SEC, sk } from "./pwKitKit";
 import type { PwKits } from "./pwSkillTypes";
 
@@ -70,5 +70,12 @@ export const PW_KITS_4: PwKits = {
     sk("sdBrush", "point", 9, "#c8a0ff", { range: 160, radius: 50, delay: 12, fx: "meteor", hit: { dmg: 1.4, stun: 1 * SEC } }),
     sk("sdBrush", "dash", 8, "#e8f0ff", { range: 110, speed: 10, hit: { dmg: 1 } }),
     sk("sdBrush", "point", 60, "#7a9aff", { range: 170, radius: 100, delay: 30, fx: "pillar", hit: { dmg: 3, push: 12 } }),
+  ),
+  // 실베르 인형술사: 실 내리치기 · 실 당기기 · 미니 인형 돌진 · 거대 인형 친구 내려찍기
+  puppeteer: kit(1,
+    sk("ppHand", "point", 4, "#ff4a5a", { range: 150, radius: 26, delay: 6, fx: "meteor", hit: { dmg: 1.2 } }),
+    sk("ppHand", "line", 9, "#e8c890", { range: 170, hit: { dmg: 1.4, stun: 1 * SEC } }),
+    sk("ppHand", "dash", 8, "#ff8a9a", { range: 110, speed: 10, hit: { dmg: 1 } }),
+    sk("ppHand", "point", 60, "#c83a4a", { range: 160, radius: 100, delay: 30, fx: "pillar", hit: { dmg: 3, push: 12 } }),
   ),
 };

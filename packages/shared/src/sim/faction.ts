@@ -1,5 +1,6 @@
 // 진영 특징 시스템 (로그만 · 패왕전·대결 제외): 소속 찾기 · 맞힘·처치·맞음·틱 훅 · 피해 배율 (수치 factionDefs)
 // 탈라시아 물결 콤보 · 헬리오스 타락 스택(학살자 피의 학살과 폭주가 겹치지 않음) · 테라코어 에너지(주고·맞으면 쌓임 → 대시로 터짐)는 여기 · 아스칼론 맹세 sim/factionOath · 비르디아 정령 sim/factionSpirit · 성국 핵심 스킬 sim/factionCore
+import { puppetKill } from "./puppetCorpse";
 import type { CharacterId } from "../characters";
 import { FACTION_HEAT as H, FACTION_MEMBERS, FACTION_TAINT as T, FACTION_TIDE as W, type FactionTrait } from "../factionDefs";
 import { blastAt } from "./combat";
@@ -61,6 +62,7 @@ export function factionKill(s: RunState, e: EnemyState): void {
     if (p.fcTaint >= T.max && !ownRage(p)) rampage(s);
   } else if (tr === "virdia") spiritKill(s);
   else if (tr === "ascalon") oathKill(s, e);
+  puppetKill(s, e);
 }
 
 function rampage(s: RunState): void {

@@ -53,6 +53,7 @@ import { onyxHurt, onyxTaken } from "./onyx";
 import { crusaderHurt, crusaderTaken } from "./crusaderKit";
 import { jokerTaken } from "./jokerDraw";
 import { shadowingTaken } from "./shadowing";
+import { puppetHurt } from "./puppet";
 export { cloudEnv } from "./pungHooks";
 import type { EnemyState, RunState } from "./types";
 
@@ -60,6 +61,7 @@ import type { EnemyState, RunState } from "./types";
 export function classTaken(s: RunState, taken: number): number {
   const p = s.player;
   idraHurt(s);
+  puppetHurt(s);
   return disguise(s, mukinTaken(p, taken * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p, !!s.pvp) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p) * leoTaken(s) * onyxTaken(p) * thorkenTaken(p) * leviaTaken(p) * tailTaken(p) * madQueenTaken(p) * hookTaken(p) * orcaTaken(p) * waveTaken(p) * miryuTaken(p) * beaTaken(p) * gabrielTaken(p, !!s.pvp) * yurielTaken(p, !!s.pvp) * crusaderTaken(p) * jokerTaken(p) * shadowingTaken(p) * foeTakenMul(p) * factionTaken(s) * lucP2Taken(s) * accTaken(s)));
 }
 

@@ -159,6 +159,8 @@ export { moonHero, eclipseOn } from "./jokerDraw";
 export type { JokerCard } from "./jkTypes";
 export { brushReach, inkOf, isShadowing } from "./shadowing";
 export { SD_ROW, type InkSpirit, type InkStroke, type InkZone } from "./sdTypes";
+export { crownCap, handReach, handSize, isPuppeteer } from "./puppet";
+export type { PuppetAlly, PuppetBody, PuppetDoll, PuppetSpot } from "./ppTypes";
 export type { HfCrack } from "./hfTypes";
 export { factionGauge, factionOfCharacter, type FactionGauge } from "./factionGauge";
 export { buffOn, SPIRIT_OP, spiritStage } from "./factionSpirit";

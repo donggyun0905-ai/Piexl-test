@@ -53,6 +53,8 @@ export { JOKER_CARD, JOKER_DRAW, JOKER_MOON, JOKER_STYLE, MOON_HEROES, type Moon
 export { JOKER_PERKS } from "./itemsJoker";
 export { SHADOW_INK } from "./weaponsShadowing";
 export { SHADOWING_PERKS } from "./itemsShadowing";
+export { PUPPET_HAND } from "./weaponsPuppet";
+export { PP_DOLLS, PUPPET_PERKS } from "./itemsPuppet";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";

@@ -110,6 +110,8 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   joker: { size: 40, footPad: 2, src: 128, v2: true },
   /** 쉐도잉 (실베르 그림을 그리는 정령 소녀, 은빛 머리·남색 모자와 망토·푸른 영혼 손·보석 붓) */
   shadowing: { size: 38, footPad: 2, src: 128, v2: true },
+  /** 인형술사 (실베르 붉은 실로 인형을 부리는 소녀, 검은 긴 머리·하얀 손 둘·매달린 나무 인형) */
+  puppeteer: { size: 40, footPad: 2, src: 128, v2: true },
   /** 오토마타 자매 인형 (진홍빛, 사용자 그림 2026-11-04) */
   automataDoll: { size: 32, footPad: 2, src: 128, v2: true },
   // 히든 캐릭터도 일반 캐릭터와 같은 크기 (2026-10-31) · 빛의 사도는 칸에 여백이 많아 키를 맞춘 크기(성장 모습은 단계마다 커짐) · 차원의 순례자는 소녀 키를 일반 캐릭터에 맞춤 (큰 가방은 그만큼 같이 커서 칸이 큼)

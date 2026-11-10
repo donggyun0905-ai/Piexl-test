@@ -75,6 +75,7 @@ import { kingTick } from "./kingBlade";
 import { luxTick } from "./lux";
 import { jokerTick } from "./joker";
 import { shadowingTick } from "./shadowing";
+import { puppetTick } from "./puppet";
 import type { RunState } from "./types";
 
 export { pwBasicTick } from "./pwBasic";
@@ -158,4 +159,5 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   radiant: luxTick,
   jokerCard: jokerTick,
   inkBrush: shadowingTick,
+  puppetHand: puppetTick,
 };

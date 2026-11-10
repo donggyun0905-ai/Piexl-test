@@ -23,6 +23,7 @@ import { dist2, enemyShot, keepInRoom, normalize, roomGrid } from "./util";
 import { furyTick, tabooUp } from "./taboo";
 import { timeSlowed } from "./punk";
 import { setActingFoe } from "./moonlight";
+import { puppetDecoy } from "./puppetFriends";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -60,7 +61,8 @@ export function updateEnemies(s: RunState): void {
     }
     // 협동: 가장 가까운 살아 있는 사람을 쫓음 (그 사람 자리를 꺼내 놓고 계산)
     if (s.party) useSeat(s, nearestSeat(s, e));
-    const p = s.player;
+    // 인형술사 분신: 적이 모두 분신을 쫓음 (몸에 닿는 피해는 진짜 플레이어)
+    const p = puppetDecoy(s) ?? s.player;
     const ti = seatNo(s);
     if (g && !fields.has(ti)) fields.set(ti, distanceField(g, p.x, p.y));
     const field = fields.get(ti) ?? null;

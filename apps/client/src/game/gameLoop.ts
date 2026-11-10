@@ -175,7 +175,7 @@ export function startGameLoop(o: LoopOptions): () => void {
       o.setPrompt({ text, interact: action !== "" && !passive });
     }
     const ambush = !!p.trAmbush || !!p.bzUlt; // 블루 플레임 열화상 각성도 직접 조준
-    const brush = p.characterId === "shadowing" && !run.pvp;
+    const brush = (p.characterId === "shadowing" || p.characterId === "puppeteer") && !run.pvp;
     controls.fineAim = ambush || !!run.pvp || brush;
     brushCursor = setBrushCursor(brush, brushCursor);
     if (ambush && controls.autoAim) {

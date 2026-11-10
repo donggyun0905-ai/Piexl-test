@@ -40,6 +40,8 @@ const R: Record<string, number> = {
   joker: 1,
   /** 쉐도잉 */
   shadowing: 1,
+  /** 인형술사 */
+  puppeteer: 1,
   /** 의사 */
   doctor: 1.25,
   /** 떠돌이 */

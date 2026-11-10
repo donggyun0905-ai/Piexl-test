@@ -33,6 +33,8 @@ let acting: EnemyState | null = null;
 export const setActingFoe = (e: EnemyState | null) => {
   acting = e;
 };
+/** 지금 행동 중인 적 (인형술사: 조종 중인 적이 나를 때렸는지) */
+export const actingFoe = () => acting;
 
 /** 이 적이 주는 피해 배율 (달빛이 걸려 있으면 약화) */
 export const moonOut = (e: EnemyState | null | undefined = acting) => ((e?.moon ?? 0) > 0 ? R.WEAKEN : 1);
