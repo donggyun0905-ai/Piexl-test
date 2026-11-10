@@ -10,6 +10,7 @@ import { handlePlayer } from "./player";
 import { CLOUD_SCHEMA, handleCloud } from "./cloudSave";
 import { handleRaid } from "./raidApi";
 import { handleArena } from "./arenaApi";
+import { ERAID_SCHEMA, handleEraid } from "./eraidApi";
 import { CLEAR_SCHEMA, handleClear } from "./clearStats";
 import { handleTier, TIER_SCHEMA } from "./tierApi";
 import { handleRank, handleRankApply, RANK_SCHEMA } from "./rankApi";
@@ -61,6 +62,8 @@ const SCHEMA = [
   `CREATE TABLE IF NOT EXISTS arena (
     user TEXT PRIMARY KEY, nickname TEXT NOT NULL, level INTEGER NOT NULL, ticks INTEGER NOT NULL, character TEXT NOT NULL, finished INTEGER NOT NULL)`,
   `CREATE INDEX IF NOT EXISTS arena_rank ON arena (level DESC, ticks ASC, finished ASC)`,
+  // 레이드(이벤트 보스) 랭킹: 보스별 사람마다 가장 빠른 시간
+  ...ERAID_SCHEMA,
   ...BALANCE_SCHEMA,
   // 캐릭터별 클리어 시간 (횟수·합계·가장 빠른 시간)
   ...CLEAR_SCHEMA,
@@ -114,6 +117,7 @@ export async function routeHub(ctx: HubContext, request: Request): Promise<Respo
   if (path.startsWith("/api/cloud/")) return handleCloud(ctx, path.slice("/api/cloud/".length), request);
   if (path.startsWith("/api/daily/")) return handleDaily(ctx, path.slice("/api/daily/".length), request);
   if (path.startsWith("/api/raid/")) return handleRaid(ctx, path.slice("/api/raid/".length), request);
+  if (path.startsWith("/api/eraid/")) return handleEraid(ctx, path.slice("/api/eraid/".length), request);
   if (path.startsWith("/api/arena/")) return handleArena(ctx, path.slice("/api/arena/".length), request);
   if (path === "/api/balance" && request.method === "GET") return handleBalance(ctx, request);
   if (path === "/api/maps" && request.method === "GET") return handleMaps(ctx);

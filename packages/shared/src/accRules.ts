@@ -80,6 +80,14 @@ export function optValue(o: [number, number]): AccTotals {
   const v = (lo: number, hi: number) => round(lo + (hi - lo) * o[1]);
   return { [d.stat]: v(d.lo, d.hi), ...(d.stat2 ? { [d.stat2]: v(d.lo2!, d.hi2!) } : {}) };
 }
+/** 추가 능력치 한 줄이 범위에서 어디쯤인지: 4 최고 · 3 상위 · 2 중위 · 1 하위 · 0 최하위 (범위가 없는 줄은 최고) */
+export function optTier(o: [number, number]): 0 | 1 | 2 | 3 | 4 {
+  const d = ACC_OPTIONS[o[0]];
+  if (!d || d.lo === d.hi) return 4;
+  const r = o[1];
+  if (round(d.lo + (d.hi - d.lo) * r) >= round(d.hi)) return 4;
+  return r >= 0.75 ? 3 : r >= 0.4 ? 2 : r >= 0.15 ? 1 : 0;
+}
 const round = (v: number) => (Math.abs(v) < 1 ? Math.round(v * 1000) / 1000 : Math.round(v * 100) / 100);
 
 /** 장착한 장신구의 세트 수 (전설은 고른 세트로, 그 세트를 1개 이상 꼈을 때만) */

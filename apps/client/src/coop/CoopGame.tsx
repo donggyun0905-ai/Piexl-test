@@ -233,7 +233,7 @@ export function CoopGame({ room, you, characterId, wire, pw, raid, lang, t, onEx
         }}
       />
       {!ended && run.raidBoss && <RaidOverlay run={run} t={t} names={names} me={mySeat} />}
-      {run.raidBoss && <RaidRewardCards run={run} t={t} />}
+      {run.raidBoss && <RaidRewardCards run={run} t={t} me={mySeat} />}
       {!ended && !pw && <CoopParty run={run} members={members} extras={extras} t={t} onSignal={signal} />}
       {!ended && !pw && <CoopWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}
       {!ended && pw && run.pvp && <PwWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}

@@ -1,5 +1,5 @@
 // 장신구 조각: 아이콘(별·강화 단계) · 자세히(기본·추가 능력치·세트 효과) · 별 줄
-import { ACC_SET_BONUS, accBase, optValue, type AccItem, type AccStat, type AccTotals } from "@pixel-rogue/shared";
+import { ACC_SET_BONUS, accBase, optTier, optValue, type AccItem, type AccStat, type AccTotals } from "@pixel-rogue/shared";
 import type { TextKey } from "../../i18n";
 import { accName, iconStyle, statLine, totalsLines } from "./accStore";
 
@@ -53,13 +53,14 @@ export function AccInfo({ t, it }: { t: T; it: AccItem }) {
       <h4>{t("accOpts")}</h4>
       <ul className="acc-lines opt">
         {it.opts.map((o, i) => (
-          <li key={i}>
+          <li key={i} className={`tier${optTier(o)}`} title={t(`accTier${optTier(o)}` as TextKey)}>
             {Object.entries(optValue(o))
               .map(([k, v]) => statLine(t, k as AccStat, v))
               .join(" · ")}
           </li>
         ))}
       </ul>
+      <TierKey t={t} />
       {it.set >= 0 && <SetInfo t={t} set={it.set} />}
     </div>
   );
@@ -84,5 +85,18 @@ export function SetInfo({ t, set, have }: { t: T; set: number; have?: number }) 
         ))}
       </ul>
     </div>
+  );
+}
+
+/** 추가 능력치 색 뜻 (최고 · 상위 · 중위 · 하위 · 최하위) */
+export function TierKey({ t }: { t: T }) {
+  return (
+    <p className="acc-tier-key">
+      {[4, 3, 2, 1, 0].map((n) => (
+        <span key={n} className={`tier${n}`}>
+          ● {t(`accTier${n}` as TextKey)}
+        </span>
+      ))}
+    </p>
   );
 }

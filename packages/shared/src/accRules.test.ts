@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ACC_RULES, type AccItem } from "./accDefs";
-import { accBase, accTotals, addAcc, canEquip, emptyBag, enhance, enhanceCost, enhanceRate, equip, fixBag, promote, rollCards, setCounts } from "./accRules";
+import { accBase, accTotals, addAcc, canEquip, emptyBag, enhance, enhanceCost, enhanceRate, equip, fixBag, optTier, promote, rollCards, setCounts } from "./accRules";
 import { createRng } from "./rng";
 import { createRaid } from "./sim/raid";
 import { allPlayers } from "./sim/party";
@@ -88,5 +88,9 @@ describe("레이드 장신구", () => {
     const bag = fixBag({ items: [{ ...item({}), uid: 4 }], slots: [4, 9, null, null, null, null], next: 1 });
     expect(bag.slots).toEqual([4, null, null, null, null, null]);
     expect(bag.next).toBe(5);
+  });
+  it("추가 능력치 등급: 범위 끝이면 최고 · 0.75↑ 상위 · 0.4↑ 중위 · 0.15↑ 하위 · 그 아래 최하위 · 범위 없는 줄은 최고", () => {
+    expect([1, 0.8, 0.5, 0.2, 0].map((r) => optTier([0, r]))).toEqual([4, 3, 2, 1, 0]);
+    expect(optTier([15, 0])).toBe(4);
   });
 });

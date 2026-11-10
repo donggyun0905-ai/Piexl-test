@@ -96,7 +96,7 @@ export default {
       return withHeaders(await cachedBoard(request, env, seconds), cors);
     }
     // 순위표·관리자 티어표는 잠깐 저장해 둔 값을 줌 (Durable Object 요청 줄이기)
-    if (["/api/daily/board", "/api/raid/board", "/api/arena/board", "/api/rank/board", "/api/tier", "/api/maps"].includes(url.pathname) && request.method === "GET") {
+    if (["/api/daily/board", "/api/raid/board", "/api/eraid/board", "/api/arena/board", "/api/rank/board", "/api/tier", "/api/maps"].includes(url.pathname) && request.method === "GET") {
       return withHeaders(await cachedBoard(request, env), cors);
     }
     // 배틀 방 웹소켓: /battle/<코드>?mode=quick|private

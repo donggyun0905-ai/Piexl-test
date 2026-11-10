@@ -1,9 +1,13 @@
 // 레이드 보상: 보상 방 상자가 열리면 큰 창 + 뒤집힌 카드 10장 (누르면 한 장씩 뒤집힘, 1~3성 · 아주 드물게 전설)
 // 판마다 한 번만 뽑고 바로 가방에 넣음 (창을 닫아도 그대로) · 판이 끝나도 닫을 때까지 떠 있음
-import { addAcc, rollCards, type AccItem, type RunState } from "@pixel-rogue/shared";
+// 같이: 레이드 성공 로비 칩(ACC_RULES.clearChips) · 랭킹에 걸린 시간 보내기 (event/raidRank)
+import { ACC_RULES, addAcc, rollCards, type AccItem, type RunState } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 import type { TextKey } from "../../i18n";
 import { play } from "../../audio/sound";
+import { raidTime } from "../../daily/raidTime";
+import { addChips } from "../../lobby/chips";
+import { submitRaidClear } from "../raidRank";
 import { Stars } from "./AccParts";
 import { accName, accRnd, iconStyle, loadBag, saveBag, useAccEsc } from "./accStore";
 
@@ -11,9 +15,10 @@ type T = (key: TextKey) => string;
 /** 이미 뽑은 판 (같은 판에서 다시 뽑지 않게) */
 const rolled = new Set<string>();
 
-/** 판을 지켜보다가 상자가 열리면 카드 창 (RaidSolo·CoopGame에서 늘 그림) */
-export function RaidRewardCards({ run, t }: { run: RunState; t: T }) {
+/** 판을 지켜보다가 상자가 열리면 카드 창 (RaidSolo·CoopGame에서 늘 그림, me: 내 자리) */
+export function RaidRewardCards({ run, t, me = 0 }: { run: RunState; t: T; me?: number }) {
   const [cards, setCards] = useState<AccItem[] | null>(null);
+  const [rank, setRank] = useState("");
   useEffect(() => {
     const id = setInterval(() => {
       const f = run.raidBoss?.fight;
@@ -24,15 +29,20 @@ export function RaidRewardCards({ run, t }: { run: RunState; t: T }) {
       const bag = loadBag();
       const got = addAcc(bag, rollCards(accRnd));
       saveBag(bag);
+      addChips(ACC_RULES.clearChips);
       setCards(got);
+      setRank("");
+      void submitRaidClear(run, me).then((r) => {
+        if (r) setRank(t(r.rank ? "accRankMine" : "accRankMineOut").replace("{t}", raidTime(r.ticks)).replace("{r}", String(r.rank)));
+      });
     }, 200);
     return () => clearInterval(id);
-  }, [run]);
+  }, [run, me, t]);
   if (!cards) return null;
-  return <AccCards t={t} cards={cards} onClose={() => setCards(null)} />;
+  return <AccCards t={t} cards={cards} rank={rank} onClose={() => setCards(null)} />;
 }
 
-function AccCards({ t, cards, onClose }: { t: T; cards: AccItem[]; onClose: () => void }) {
+function AccCards({ t, cards, rank, onClose }: { t: T; cards: AccItem[]; rank: string; onClose: () => void }) {
   const [open, setOpen] = useState<boolean[]>(() => cards.map(() => false));
   useAccEsc(onClose);
   const flip = (i: number) => {
@@ -46,6 +56,8 @@ function AccCards({ t, cards, onClose }: { t: T; cards: AccItem[]; onClose: () =
     <div className="acc-back cards" role="dialog" aria-label={t("accCardsTitle")}>
       <div className="acc-cards-win">
         <h2>{t("accCardsTitle")}</h2>
+        <p className="acc-clear-chips">🪙 {t("accClearChips").replace("{n}", ACC_RULES.clearChips.toLocaleString())}</p>
+        {rank && <p className="acc-clear-rank">🏆 {rank}</p>}
         <p>{t(all ? "accCardsDone" : "accCardsHint")}</p>
         <div className="acc-cards">
           {cards.map((c, i) => (

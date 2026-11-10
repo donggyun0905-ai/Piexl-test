@@ -80,11 +80,20 @@ export function AccWindow({ t, onClose }: { t: T; onClose: () => void }) {
                 );
               })}
             </div>
-            <h4>{t("accTotal")}</h4>
-            <StatLines t={t} tot={accTotals(worn)} />
-            {sets.map((x) => (
-              <SetInfo key={x.i} t={t} set={x.i} have={x.n} />
-            ))}
+            {/* 합계(왼쪽) · 세트 효과(오른쪽): 줄이 많아져도 창이 위아래로 덜 길어지게 */}
+            <div className="acc-sum">
+              <div>
+                <h4>{t("accTotal")}</h4>
+                <StatLines t={t} tot={accTotals(worn)} />
+              </div>
+              <div>
+                <h4>{t("accSetBonus")}</h4>
+                {sets.length === 0 && <p className="acc-empty">-</p>}
+                {sets.map((x) => (
+                  <SetInfo key={x.i} t={t} set={x.i} have={x.n} />
+                ))}
+              </div>
+            </div>
           </section>
           <section className="acc-mid">
             <h4>{t("accBag")} ({bag.items.length})</h4>
