@@ -42,6 +42,19 @@ describe("레이드 장신구", () => {
     expect(t!.star).toBe(5);
   });
 
+  it("승급: 1성 + 같은 종류 1성 2개 → 2성 · 2성 + 같은 종류 2성 3개 → 3성 (별이 다른 재료는 안 됨)", () => {
+    const bag = emptyBag();
+    const [t, a, b, c] = addAcc(bag, [item({ star: 1 }), item({ star: 1, set: 1 }), item({ star: 1, set: 2 }), item({ star: 2, set: 3 })]);
+    expect(promote(bag, t!.uid, [a!.uid, c!.uid])).toBe(false);
+    expect(promote(bag, t!.uid, [a!.uid, b!.uid])).toBe(true);
+    expect(t!.star).toBe(2);
+    const two = addAcc(bag, [item({ star: 2, set: 4 }), item({ star: 2, set: 5 })]);
+    expect(promote(bag, t!.uid, [c!.uid, two[0]!.uid])).toBe(false);
+    expect(promote(bag, t!.uid, [c!.uid, ...two.map((x) => x.uid)])).toBe(true);
+    expect(t!.star).toBe(3);
+    expect(bag.items).toHaveLength(1);
+  });
+
   it("강화: 5성만 · 비용 1만→5만→10만→15만 · 확률 100·85·…·20% 고정 · 실패하면 단계 하락 · 브로치 10강 40%", () => {
     expect([0, 1, 2, 3, 4].map(enhanceCost)).toEqual([10000, 50000, 100000, 150000, 200000]);
     expect([0, 5, 6, 9].map(enhanceRate)).toEqual([1, 0.25, 0.2, 0.2]);

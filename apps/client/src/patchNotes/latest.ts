@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.4",
+    date: "2026-11-10",
+    items: {
+      ko: ["레이드 장신구 승급 추가: 1성 → 2성(같은 종류 1성 2개) · 2성 → 3성(같은 종류 2성 3개). 이제 1성부터 5성까지 모두 승급할 수 있어요"],
+      en: ["Raid accessory promotion extended: 1★→2★ (two 1★ of the same type) · 2★→3★ (three 2★ of the same type). Every star from 1★ to 5★ can now be promoted"],
+      ja: ["レイドアクセサリーの昇級を追加: 1★→2★（同じ種類の1★を2つ）· 2★→3★（同じ種類の2★を3つ）。1★から5★まですべて昇級できます"],
+    },
+  },
+  {
     version: "0.52.3",
     date: "2026-11-10",
     items: {

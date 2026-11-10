@@ -106,10 +106,13 @@ export function accTotals(items: readonly AccItem[]): AccTotals {
   return out;
 }
 
-/** 승급에 필요한 것: 재료 수와 재료 조건 (4성: 같은 종류 3성 · 5성: 같은 장신구 4성). 할 수 없으면 null */
+/** 승급에 필요한 것: 재료 수와 재료 조건 (2·3·4성: 같은 종류의 한 단계 아래와 같은 별 · 5성: 같은 장신구 4성). 할 수 없으면 null */
 export function promoNeed(it: AccItem): { count: number; ok: (m: AccItem) => boolean } | null {
-  if (it.legend !== undefined || it.star < 3 || it.star >= 5) return null;
-  if (it.star === 3) return { count: R.promo4, ok: (m) => m.uid !== it.uid && m.legend === undefined && m.star === 3 && m.kind === it.kind };
+  if (it.legend !== undefined || it.star < 1 || it.star >= 5) return null;
+  if (it.star <= 3) {
+    const count = it.star === 1 ? R.promo2 : it.star === 2 ? R.promo3 : R.promo4;
+    return { count, ok: (m) => m.uid !== it.uid && m.legend === undefined && m.star === it.star && m.kind === it.kind };
+  }
   return { count: R.promo5, ok: (m) => m.uid !== it.uid && m.star === 4 && accKey(m) === accKey(it) };
 }
 
