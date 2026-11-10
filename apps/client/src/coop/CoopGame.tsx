@@ -23,6 +23,8 @@ import { PwResult } from "../event/PwResult";
 import { savePwResult } from "../event/pwRecords";
 import { RaidOverlay } from "../event/RaidOverlay";
 import { RaidBoard } from "../event/RaidBoard";
+import { RaidRewardCards } from "../event/acc/AccCards";
+import { myAccTotals } from "../event/acc/accStore";
 
 interface Props {
   room: RoomView;
@@ -76,6 +78,7 @@ export function CoopGame({ room, you, characterId, wire, pw, raid, lang, t, onEx
     const members = seatsRef.current.map((pid) => ({
       characterId: room.players.find((p) => p.pid === pid)?.characterId ?? "warden",
       unlocks: pid === you ? loadAchievements() : (wire.unlocks.get(pid) ?? []),
+      acc: pid === you ? myAccTotals() : wire.acc.get(pid),
     }));
     // 패왕전: 사람은 앞 자리, 나머지는 AI (모드·장비는 대기실에서)
     // 경기장: 방장이 고른 곳 (랭크전·무작위는 판 시드로 정함)
@@ -230,6 +233,7 @@ export function CoopGame({ room, you, characterId, wire, pw, raid, lang, t, onEx
         }}
       />
       {!ended && run.raidBoss && <RaidOverlay run={run} t={t} names={names} me={mySeat} />}
+      {run.raidBoss && <RaidRewardCards run={run} t={t} />}
       {!ended && !pw && <CoopParty run={run} members={members} extras={extras} t={t} onSignal={signal} />}
       {!ended && !pw && <CoopWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}
       {!ended && pw && run.pvp && <PwWatch run={run} me={mySeat} names={names} watching={watching} t={t} />}

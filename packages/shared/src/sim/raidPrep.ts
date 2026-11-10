@@ -8,6 +8,7 @@ import { GYM_STATS, gymPassives, PASSIVE_AT } from "./gym";
 import { recalcStats } from "./items";
 import { RAID_ROOM } from "./raidTypes";
 import type { RunState } from "./types";
+import { accItemReset } from "./accStats";
 import { addEffect, makeEnemy } from "./util";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -49,7 +50,8 @@ export function spendUse(s: RunState, slot: number, item: UseItemId): boolean {
   }
   const cd = (p.raidCd ??= []);
   if (s.tick < (cd[slot] ?? 0)) return true;
-  cd[slot] = s.tick + raidCdOf(item);
+  // 장신구: 확률로 쿨타임 바로 끝 (얼음 세계 빼고)
+  cd[slot] = accItemReset(s, item) ? s.tick : s.tick + raidCdOf(item);
   if (item !== "bomb") return false;
   for (const e of s.enemies) {
     const dx = e.x - p.x;

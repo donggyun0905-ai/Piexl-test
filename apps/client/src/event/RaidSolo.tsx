@@ -8,6 +8,8 @@ import type { Lang, TextKey } from "../i18n";
 import { loadAchievements } from "../records";
 import { RaidOverlay } from "./RaidOverlay";
 import { RaidBoard } from "./RaidBoard";
+import { RaidRewardCards } from "./acc/AccCards";
+import { myAccTotals } from "./acc/accStore";
 
 interface Props {
   boss: RaidEventBoss;
@@ -21,7 +23,7 @@ interface Props {
 export function RaidSolo({ boss, characterId, lang, t, onExit }: Props) {
   usePwBalanceRun();
   // 판 시드: 판마다 다르게 (판 안의 계산은 이 시드로만)
-  const [run] = useState(() => createRaid(Math.floor(Math.random() * 0x7fffffff), boss, [{ characterId, unlocks: loadAchievements() }]));
+  const [run] = useState(() => createRaid(Math.floor(Math.random() * 0x7fffffff), boss, [{ characterId, unlocks: loadAchievements(), acc: myAccTotals() }]));
   return (
     <>
     <GameScreen
@@ -41,6 +43,7 @@ export function RaidSolo({ boss, characterId, lang, t, onExit }: Props) {
     />
     <RaidOverlay run={run} t={t} me={0} />
     <SoloWatch run={run} t={t} />
+    <RaidRewardCards run={run} t={t} />
     </>
   );
 }

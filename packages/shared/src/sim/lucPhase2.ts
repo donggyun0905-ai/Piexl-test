@@ -105,9 +105,11 @@ function wingTick(s: RunState, f: LucFight): void {
   f.spin = 0;
   eachSeat(s, () => {
     const p = s.player;
-    if (p.raidWing) return;
+    // 쓰러져 다시 살아나길 기다리는 사람은 떨어지지 않음 (살아나면 날개를 달고 나옴, skyTick)
+    if (p.raidWing || p.hp <= 0) return;
     // 날개를 못 단 사람: 떨어짐 (데스 카운트와 상관없이 끝 → 관전)
     p.hp = 0;
+    p.raidDownAt = s.tick;
     p.raidDeaths = RAID_LIVES;
     addEffect(s, { kind: "lucFx", from: "fall", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 30, maxTicks: 40, foe: true });
   });

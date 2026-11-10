@@ -4,6 +4,36 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.0",
+    date: "2026-11-10",
+    items: {
+      ko: [
+        "레이드 장신구: 레이드 창의 '장비창'에서 반지 3·목걸이·귀걸이·브로치를 낌 (점선 칸마다 끼는 종류 표시 · 같은 장신구는 하나만) · 레이드에서만 효과",
+        "장신구 45개: 세트 10개(제국의 보물·영광의 달빛·어둠의 인장·승리의 축복·불굴의 의지·자유의 날개·악마의 서약·응축된 대자연·예리한 달빛·꽃의 화답) × 반지·목걸이·귀걸이·브로치 + 전설 5개(창공의 약속·혼돈의 결정체, 장착한 세트 중 골라 그 세트로 셈) · 같은 세트 2·3·4개 세트 효과",
+        "레이드 보상: 루시퍼를 쓰러뜨리고 보상 상자를 열면 카드 10장 (눌러서 한 장씩 뒤집기 · 1성 63%·2성 32%·3성 5% · 아주 드물게 5성 전설)",
+        "승급(3성→4성: 같은 종류 3성 4개 · 4성→5성: 같은 장신구 4성 3개) · 강화(5성만, 로비 칩 1만·5만·10만부터 5만씩 · 확률 100·85·70·55·40·25·20% · 실패하면 한 단계 내려감 · 최대 10강) · 재설정(추가 능력치 3줄 모두 다시, 1만 칩)",
+        "레이드: 2페이즈 바닥이 꺼질 때 쓰러져 다시 살아나길 기다리던 사람(나·AI)도 끝나 버려 관전 대신 바로 결과 창이 뜨던 문제 고침 (살아나면 날개를 달고 나옴)",
+        "레이드: 내 위치 표시(초록 삼각형·발밑 원)를 절반 크기로 · 숨는 돌기둥을 새 석조 기둥 그림으로",
+      ],
+      en: [
+        "Raid accessories: equip 3 rings, a necklace, earrings and a brooch from 'Gear' in the raid menu (each dashed slot shows its type · only one of the same accessory) · raid only",
+        "45 accessories: 10 sets (Imperial Treasure, Glorious Moonlight, Seal of Darkness, Blessing of Victory, Indomitable Will, Wings of Freedom, Demon's Oath, Condensed Nature, Keen Moonlight, Flower's Reply) × ring / necklace / earrings / brooch + 5 legendaries (Promise of the Sky, Crystal of Chaos — count as any equipped set you choose) · 2/3/4-piece set bonuses",
+        "Raid rewards: defeat Lucifer and open the reward chest for 10 cards (tap to flip one by one · 1★ 63% · 2★ 32% · 3★ 5% · very rarely a 5★ legendary)",
+        "Promote (3★→4★: four 3★ of the same type · 4★→5★: three 4★ of the same accessory) · Enhance (5★ only, lobby chips 10k, 50k, 100k then +50k · 100/85/70/55/40/25/20% · failure drops a level · max +10) · Reroll (all 3 bonus lines, 10k chips)",
+        "Raid: fixed players (you or AI) who were down waiting to respawn when the phase-2 floor collapsed being knocked out for good, so the result window showed instead of spectating (they now respawn with wings)",
+        "Raid: your position marker (green triangle and ring) is half the size · hiding stone columns use the new stone pillar art",
+      ],
+      ja: [
+        "レイドアクセサリー: レイド画面の「装備」で指輪3・ネックレス・イヤリング・ブローチを装備（点線の枠ごとに種類を表示 · 同じアクセサリーは1つだけ）· レイドのみ効果",
+        "アクセサリー45種: セット10種（帝国の秘宝・栄光の月光・闇の刻印・勝利の祝福・不屈の意志・自由の翼・悪魔の誓約・凝縮された大自然・鋭き月光・花の返歌）× 指輪・ネックレス・イヤリング・ブローチ + 伝説5種（蒼穹の約束・混沌の結晶、装備中のセットから選んで数える）· 同じセット2・3・4個でセット効果",
+        "レイド報酬: ルシファーを倒して報酬箱を開けるとカード10枚（タップで1枚ずつめくる · 1★63%・2★32%・3★5% · ごくまれに5★伝説）",
+        "昇級（3★→4★: 同じ種類の3★を4つ · 4★→5★: 同じアクセサリーの4★を3つ）· 強化（5★のみ、ロビーチップ1万・5万・10万から5万ずつ · 確率100・85・70・55・40・25・20% · 失敗で1段階下がる · 最大+10）· 再設定（追加能力3行をすべて、1万チップ）",
+        "レイド: フェーズ2の床が崩れる時、倒れて復活待ちだった人（自分・AI）まで脱落し、観戦の代わりにすぐ結果画面が出ていた問題を修正（復活すると翼をつけて出る）",
+        "レイド: 自分の位置表示（緑の三角・足元の円）を半分の大きさに · 隠れる石柱を新しい石柱の絵に",
+      ],
+    },
+  },
+  {
     version: "0.51.6",
     date: "2026-11-10",
     items: {

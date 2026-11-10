@@ -1,7 +1,7 @@
 # 레이드 보스 루시퍼 그림 (원본 art/레이드보스/루시퍼/) → public/raid/lucifer/
 # (python3 scripts/art/lucifer.py)
 # · p1.png / p2.png: 1페이즈(여성형)·2페이즈(남성형) 가로 5칸 = 서기 + 공격 모션 4 (검은 바탕은 테두리에서 이어진 것만 지움)
-# · pillar.png 석화의 기둥 · sword.png 절망의 검 · portrait.png 메뉴용 (1페이즈 서기)
+# · pillar.png 석화의 기둥 · column.png 숨는 돌기둥 · sword.png 절망의 검 · portrait.png 메뉴용 (1페이즈 서기)
 # · fx.jpg 기본공격 모션 시트 · map1.jpg / map2.jpg 레이드용 맵 잔패턴 (검은 바탕 그대로, 화면에서 더하기로 그림)
 # · 컷신 GIF 4개는 그대로 복사 (cut_pillars · cut_p2 · cut_change · cut_death)
 import os
@@ -89,6 +89,8 @@ if __name__ == "__main__":
     body_sheet("p2.png", "루시퍼_페이즈2.png", "루시퍼_페이즈2_공격모션.png")
     single("pillar.png", "석화의 기둥.png", 360)
     single("sword.png", "절망의검.png", 360)
+    # 숨는 돌기둥 (2026-11-10 사용자 그림)
+    single("column.png", "정교한 픽셀 아트 석조 기둥.png", 240)
     single("portrait.png", "루시퍼_페이즈1.png", 360)
     plain("fx.jpg", "루시퍼 기본공격모션.png", 1536)
     plain("map1.jpg", "레이드용 맵 잔패턴.png", 1536)

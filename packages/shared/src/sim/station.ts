@@ -10,6 +10,7 @@ import { tuneMods, tuneSwap, tuneUp } from "./trTune";
 import { hiddenMods } from "./hiddenPerks";
 import { hiddenPick } from "./hiddenDice";
 import { GYM_OP, gymMenu, gymMods } from "./gym";
+import { accMods } from "./accStats";
 import { boonMods } from "./boons";
 import { TRIAL_OP, trialAt, trialMenu } from "./trial";
 import { ALTAR_OP, altarMenu, altarPending } from "./altar";
@@ -96,7 +97,7 @@ export function stationMenu(s: RunState, code: number): void {
 }
 
 /** 작업대·히든 아이템이 바꾼 능력치 (recalcStats) */
-export const stationMods = (s: RunState): StatMod[] => [...benchMods(s.player), ...tuneMods(s.player), ...hiddenMods(s), ...gymMods(s.player), ...boonMods(s.player), ...forgeMods(s.player), ...darkMods(s.player)];
+export const stationMods = (s: RunState): StatMod[] => [...benchMods(s.player), ...tuneMods(s.player), ...hiddenMods(s), ...gymMods(s.player), ...boonMods(s.player), ...forgeMods(s.player), ...darkMods(s.player), ...accMods(s.player)];
 
 /** 작업대에 돈 내기: 상점 구매 기록에도 남김 (일일 도전 진행 기록 검사가 쓴 돈을 맞춰 봄) */
 export function stationPay(s: RunState, kind: StationKind, op: number, cost: number): boolean {

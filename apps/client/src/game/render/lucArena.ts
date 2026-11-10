@@ -2,13 +2,14 @@
 // 숨는 돌기둥 (sim/lucCover): 바닥(그림자·받침·부서진 돌 더미·다시 생기는 고리) · 위(기둥 몸 — 뒤에 사람이 있으면 흐리게 · 남은 횟수 칸)
 import { allPlayers, COVER_HITS, COVER_RADIUS, lucCovers, RAID_ROOM, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, type RunState } from "@pixel-rogue/shared";
 import { additive, glow } from "./pwFxBits";
+import { lucProp } from "./lucArt";
 import type { Snap } from "./palette";
 
 type Ctx = CanvasRenderingContext2D;
 const TAU = Math.PI * 2;
 const TILE = 32;
-/** 돌기둥 몸 높이 */
-const COL_H = 46;
+/** 돌기둥 몸 높이 (석조 기둥 그림 column.png, 2026-11-10) */
+const COL_H = 60;
 
 const inBoss = (s: RunState) => !!s.raidBoss && s.roomId === RAID_ROOM.boss;
 
@@ -75,7 +76,7 @@ export function drawLucArena(ctx: Ctx, s: RunState, snap: Snap): void {
     ctx.fillStyle = p2 ? "#ff6040" : "#c080ff";
     ctx.fillRect(x - 3 + sway / 2, ROOM_MIN_Y + 16, 6, 6);
   }
-  // 옆 벽: 부러진 기둥 그루터기
+  // 옆 벽: 작은 석조 기둥 (그림이 없으면 그루터기)
   for (let k = 0; k < 4; k++) {
     const y = ROOM_MIN_Y + ((k + 0.5) / 4) * H;
     for (const x of [ROOM_MIN_X + 14, ROOM_MAX_X - 14]) {
@@ -83,6 +84,7 @@ export function drawLucArena(ctx: Ctx, s: RunState, snap: Snap): void {
       ctx.beginPath();
       ctx.ellipse(x, y + 8, 14, 5, 0, 0, TAU);
       ctx.fill();
+      if (lucProp(ctx, "column.png", x, y + 10, 40, 0.9)) continue;
       ctx.fillStyle = "#3a3448";
       ctx.fillRect(x - 10, y - 14, 20, 22);
       ctx.fillStyle = "#4e4660";
@@ -162,19 +164,8 @@ export function drawCoverTop(ctx: Ctx, s: RunState, snap: Snap): void {
     const behind = players.some((p) => p.hp > 0 && p.y < y && p.y > y - COL_H - 10 && Math.abs(p.x - x) < R + 8);
     ctx.save();
     ctx.globalAlpha = behind ? 0.45 : 1;
-    // 몸: 돌 원기둥 (밝은 왼쪽 · 어두운 오른쪽) · 위 머리돌 · 보라 룬
-    ctx.fillStyle = "#5a5470";
-    ctx.fillRect(x - R, y - COL_H, R * 2, COL_H);
-    ctx.fillStyle = "#6e6886";
-    ctx.fillRect(x - R, y - COL_H, R * 0.7, COL_H);
-    ctx.fillStyle = "#423c56";
-    ctx.fillRect(x + R * 0.4, y - COL_H, R * 0.6, COL_H);
-    ctx.fillStyle = "#7a7494";
-    ctx.fillRect(x - R - 3, y - COL_H - 6, R * 2 + 6, 7);
-    ctx.fillRect(x - R - 2, y - 4, R * 2 + 4, 5);
-    ctx.fillStyle = `rgba(190, 120, 255, ${0.5 + 0.3 * Math.sin(s.tick * 0.06 + c[0]!)})`;
-    ctx.fillRect(x - 2, y - COL_H + 12, 4, 10);
-    ctx.fillRect(x - 5, y - COL_H + 15, 10, 3);
+    // 몸: 석조 기둥 그림 (없으면 돌 원기둥: 밝은 왼쪽 · 어두운 오른쪽 · 위 머리돌 · 보라 룬)
+    if (!lucProp(ctx, "column.png", x, y + 6, COL_H + 6)) drawColumnBody(ctx, s, x, y, R, c[0]!);
     // 금: 맞은 만큼
     ctx.strokeStyle = "#1a1624";
     ctx.lineWidth = 1.5;
@@ -198,4 +189,20 @@ export function drawCoverTop(ctx: Ctx, s: RunState, snap: Snap): void {
       ctx.fillRect(left + k * (w + 1), y - COL_H - 14, w, 4);
     }
   }
+}
+
+/** 그림을 못 불러왔을 때 돌기둥 몸 */
+function drawColumnBody(ctx: Ctx, s: RunState, x: number, y: number, R: number, seed: number): void {
+  ctx.fillStyle = "#5a5470";
+  ctx.fillRect(x - R, y - COL_H, R * 2, COL_H);
+  ctx.fillStyle = "#6e6886";
+  ctx.fillRect(x - R, y - COL_H, R * 0.7, COL_H);
+  ctx.fillStyle = "#423c56";
+  ctx.fillRect(x + R * 0.4, y - COL_H, R * 0.6, COL_H);
+  ctx.fillStyle = "#7a7494";
+  ctx.fillRect(x - R - 3, y - COL_H - 6, R * 2 + 6, 7);
+  ctx.fillRect(x - R - 2, y - 4, R * 2 + 4, 5);
+  ctx.fillStyle = `rgba(190, 120, 255, ${0.5 + 0.3 * Math.sin(s.tick * 0.06 + seed)})`;
+  ctx.fillRect(x - 2, y - COL_H + 12, 4, 10);
+  ctx.fillRect(x - 5, y - COL_H + 15, 10, 3);
 }

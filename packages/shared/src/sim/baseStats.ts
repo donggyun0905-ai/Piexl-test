@@ -23,6 +23,7 @@ import { moonHit } from "./moonlight";
 import { fenrirDodged, fenrirExtras } from "./fenrirStats";
 import { eclipseExtras } from "./eclipseStats";
 import { waveExtras } from "./wave";
+import { accExtras, accOnHit, accTick } from "./accStats";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -59,9 +60,11 @@ export function extraOf(p: PlayerState): ExtraStats {
   const ecl = eclipseExtras(p);
   // 웨이브 물의 기술 5개마다 방어력 (sim/wave)
   const wv = waveExtras(p);
-  if (!add && !grow && !lux && !gym && !boon && !devil && !set && !fen && !ecl && !wv) return base;
+  // 레이드 장신구 (sim/accStats)
+  const acc = accExtras(p);
+  if (!add && !grow && !lux && !gym && !boon && !devil && !set && !fen && !ecl && !wv && !acc) return base;
   const out = { ...base };
-  for (const a of [add, grow, lux, gym, boon, devil, set, fen, ecl, wv]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
+  for (const a of [add, grow, lux, gym, boon, devil, set, fen, ecl, wv, acc]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
   return out;
 }
 
@@ -96,6 +99,7 @@ export function onHitExtra(s: RunState, e: EnemyState, dmg: number): void {
   factionHit(s, e);
   moonHit(s, e, dmg);
   setOnHit(s, e, dmg);
+  accOnHit(s, e, dmg);
   if (ex.lifesteal > 0) healPlayer(s, dmg * ex.lifesteal);
   // 예리함 (방랑객 숫돌: 더 자주) · 터지면 칼빛 효과
   const sharp = ex.sharpness + (hasPerk(s.player, "wdHone") ? WANDERER_PERKS.wdHone.add : 0);
@@ -119,4 +123,5 @@ export function extraTick(s: RunState): void {
   if (ex.sharpness > 0 && weaponOf(p).kind !== "gun") updateBleed(s);
   setTick(s, bleeds);
   factionTick(s);
+  accTick(s);
 }

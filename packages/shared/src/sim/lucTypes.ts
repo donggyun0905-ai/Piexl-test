@@ -1,4 +1,5 @@
 // 레이드 보스 루시퍼 싸움 상태 (sim/lucifer·lucAttacks·lucPillars·lucDark). 모두 레이드 상태(s.raidBoss.fight)에 둠
+import type { AccPlayerState } from "./accStats";
 import type { LucDeadly } from "./lucDeadly";
 
 /** 컷신 (전체 화면 그림, 그동안 모두 멈춤): 기둥 넷이 부서진 뒤 필살기 · 1→2페이즈 변신 · 2페이즈 필살기 · 쓰러짐 */
@@ -66,7 +67,8 @@ export interface LucFight {
   opened?: number;
 }
 
-export interface LucPlayerState {
+/** 레이드 장신구 상태 (sim/accStats)도 같이 */
+export interface LucPlayerState extends AccPlayerState {
   /** 어둠의 세계에 빨려 감 (몬스터를 다 잡으면 돌아옴) */
   raidDark?: boolean;
   /** 치유 감소 50% 남은 틱 (sim/lucKit.lucStatus) */

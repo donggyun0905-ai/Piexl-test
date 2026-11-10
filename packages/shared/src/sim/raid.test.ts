@@ -186,6 +186,20 @@ describe("레이드 루시퍼 2페이즈", () => {
     expect(s.raidBoss?.fight?.p2).toBe("open");
   });
 
+  it("바닥이 꺼질 때 쓰러져 다시 살아나길 기다리던 사람은 끝나지 않음 (살아나면 날개)", () => {
+    const { s, boss } = phase2();
+    for (const e of s.enemies) if (e.kind === "lucsword") e.hp = 0;
+    for (let t = 0; t < 1400 && s.raidBoss?.fight?.p2 !== "open"; t++) stepParty(s, [EMPTY_INPUT]);
+    boss.hp = 10000;
+    stepParty(s, [EMPTY_INPUT]);
+    for (let t = 0; t < 700 && s.raidBoss?.fight?.p2 !== "sky"; t++) {
+      if (s.raidBoss!.fight!.fallAt! - s.tick < 3) s.player.hp = 0;
+      stepParty(s, [EMPTY_INPUT]);
+    }
+    expect(s.raidBoss?.fight?.p2).toBe("sky");
+    expect(s.player.raidDeaths ?? 0).toBeLessThan(RAID_LIFE_RULES.LIVES);
+  });
+
   it("30줄 이하: 날개 → 바닥이 꺼지면 날개 없는 사람은 끝 · 체력 0이면 쓰러지는 컷신 → 보상 방 상자 → 승리", () => {
     const { s, boss } = phase2();
     for (const e of s.enemies) if (e.kind === "lucsword") e.hp = 0;

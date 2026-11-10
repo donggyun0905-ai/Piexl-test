@@ -7,6 +7,7 @@
 import { START_GOLD } from "./loot";
 import { PERKS } from "../perks";
 import { petRevive } from "./lobbyPet";
+import { accSave } from "./accStats";
 import { artifacterRevive } from "./artifacter";
 import { slayerSave } from "./slayer";
 import { fenrirSave } from "./fenrirStats";
@@ -235,6 +236,8 @@ export function checkDeath(s: RunState): boolean {
   slayerSave(s);
   fenrirSave(s);
   if (p.hp <= 0) petRevive(s);
+  // 레이드 장신구: 버티기 · 부활
+  if (p.hp <= 0) accSave(s);
   trialRevive(s);
   artifacterRevive(s);
   // 관리자 티어 플레잉: 로그(1~6층)에서는 쓰러져도 체력 가득으로 되살아나고 횟수만 셈 (라스트 보스는 쓰러지면 끝)

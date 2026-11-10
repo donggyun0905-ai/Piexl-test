@@ -1,6 +1,6 @@
 // 레이드: 내 캐릭터 표시 (늘 보임, 2026-11-10 사용자 요청: 위에 크게 · 바닥에 동그란 원)
 // 머리 위: 크게 떠서 위아래로 흔들리는 빛나는 역삼각 보석 표지 (테두리·안쪽 빛·도는 반짝임) · 발밑: 반투명 원판 + 굵은 고리 + 퍼지는 고리
-// 레이드 방은 화면을 절반으로 줄여 보니 더 크게 (render/s3Bosses가 바닥·위에서 부름)
+// 2026-11-10 사용자 요청: 너무 커서 표지·원 모두 절반으로 · 레이드 방은 화면을 절반으로 줄여 보니 더 크게 (render/s3Bosses가 바닥·위에서 부름)
 import { lerp, type Snap } from "./palette";
 import { RAID_ROOM, type RunState } from "@pixel-rogue/shared";
 import { additive, glow } from "./pwFxBits";
@@ -8,7 +8,7 @@ import { additive, glow } from "./pwFxBits";
 type Ctx = CanvasRenderingContext2D;
 const COLOR = "#4af07a";
 
-const sizeOf = (s: RunState) => (s.roomId === RAID_ROOM.boss ? 3 : 1.7);
+const sizeOf = (s: RunState) => (s.roomId === RAID_ROOM.boss ? 1.5 : 0.85);
 function me(s: RunState, a: number, snap: Snap): { x: number; y: number; r: number } | null {
   const p = s.player;
   if (!s.raidBoss || p.hp <= 0 || s.over) return null;
@@ -21,7 +21,7 @@ export function drawRaidMeRing(ctx: Ctx, s: RunState, a: number, snap: Snap): vo
   if (!m) return;
   const k = sizeOf(s);
   const t = s.tick;
-  const R = m.r + 7 * k;
+  const R = m.r / 2 + 7 * k;
   const y = m.y + m.r * 0.5;
   ctx.save();
   ctx.fillStyle = "rgba(74, 240, 122, 0.22)";
@@ -49,7 +49,7 @@ export function drawRaidMeMark(ctx: Ctx, s: RunState, a: number, snap: Snap): vo
   const t = s.tick;
   const w = 9 * k;
   const h = 14 * k;
-  const cy = m.y - m.r - 22 * k + Math.sin(t / 10) * 3 * k;
+  const cy = m.y - m.r - 6 - 22 * k + Math.sin(t / 10) * 3 * k;
   additive(ctx, () => glow(ctx, m.x, cy, w * 2.2, COLOR, 0.45, 0.4));
   // 역삼각 보석: 어두운 테두리 → 초록 몸 → 밝은 왼쪽 면
   const gem = (pad: number, col: string) => {

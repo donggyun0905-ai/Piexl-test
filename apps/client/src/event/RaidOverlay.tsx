@@ -19,7 +19,8 @@ export function RaidOverlay({ run, t, names, me }: { run: RunState; t: (key: Tex
     return () => clearInterval(id);
   }, []);
   const f = run.raidBoss?.fight;
-  if (run.raidBoss && run.roomId === RAID_ROOM.reward) return f?.opened !== undefined && !run.over ? <RaidCongrats t={t} /> : null;
+  // 보상 방: 상자를 열면 장신구 카드 창 (acc/AccCards, 판 밖에서 그림)
+  if (run.raidBoss && run.roomId === RAID_ROOM.reward) return null;
   if (!raidFighting(run)) return null;
   // 관전 중에도 데스·다시 살아나기는 내 것 (화면은 보는 사람 자리를 꺼내 놓음)
   const p = (me !== undefined && allPlayers(run)[me]) || run.player;
@@ -84,21 +85,5 @@ export function RaidOverlay({ run, t, names, me }: { run: RunState; t: (key: Tex
         </div>
       )}
     </>
-  );
-}
-
-/** 보상 상자를 열었을 때: 축하 창 (보상은 아직 준비 중) · 색종이 */
-function RaidCongrats({ t }: { t: (key: TextKey) => string }) {
-  return (
-    <div className="raid-congrats" role="dialog" aria-label={t("raidCongrats")}>
-      {Array.from({ length: 40 }, (_, i) => (
-        <i key={i} style={{ left: `${(i * 37) % 100}%`, animationDelay: `${(i % 10) * 0.15}s`, background: ["#ffd040", "#ff60a0", "#60d0ff", "#a070ff", "#60e080"][i % 5] }} />
-      ))}
-      <div className="raid-congrats-box">
-        <h2>{t("raidCongrats")}</h2>
-        <p>{t("raidCongratsSub")}</p>
-        <small>{t("raidRewardSoon")}</small>
-      </div>
-    </div>
   );
 }

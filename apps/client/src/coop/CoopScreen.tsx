@@ -7,11 +7,10 @@ import { BattleLobby } from "../battle/BattleLobby";
 import { BattleConnection } from "../battle/connection";
 import type { Lang, TextKey } from "../i18n";
 import { loadNickname } from "../player";
-import { loadAchievements } from "../records";
 import { loadText, saveText } from "../storage";
 import { RankFinding } from "../event/RankResult";
 import { CoopGame } from "./CoopGame";
-import { ERRORS, loadCharacter, type CoopWire } from "./coopWire";
+import { ERRORS, hiMsg, loadCharacter, takeHi, type CoopWire } from "./coopWire";
 export type { CoopWire } from "./coopWire";
 import { pwDrafting, PwRoomDraft, PwRoomPanel, pwSeatPids, usePwRoom, useRankDraft } from "../event/PwRoom";
 import { CoopNameAsk } from "./CoopNameAsk";
@@ -50,6 +49,7 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
   const wire = useRef<CoopWire>({
     net: null,
     unlocks: new Map(),
+    acc: new Map(),
     pending: [],
     onMessage: (pid, msg) => {
       if (msg.t === "state" || msg.t === "ticks") wire.current.pending.push({ pid, msg });
@@ -143,13 +143,13 @@ export function CoopScreen({ lang, setLang, t, initialCode, pw: pwStart = false,
       net = new PeerNet(ice, (to, data) => conn.send({ t: "signal", to, data }), {
         onOpen: (pid) => {
           setLinked((s) => new Set(s).add(pid));
-          if (pid === hostPid && !isHost) net?.send(pid, { t: "hi", unlocks: loadAchievements() } satisfies CoopMsg);
+          if (pid === hostPid && !isHost) net?.send(pid, hiMsg());
           w.onOpen(pid);
           w.onPwOpen?.(pid);
         },
         onMessage: (pid, msg) => {
           const m = msg as CoopMsg;
-          if (m.t === "hi" && Array.isArray(m.unlocks)) w.unlocks.set(pid, m.unlocks.map(String));
+          if (m.t === "hi") takeHi(w, pid, m);
           if (m.t === "pwm" || m.t === "pwlo" || m.t === "pwd" || m.t === "pwda") return w.onPw?.(pid, m);
           w.onMessage(pid, m);
         },

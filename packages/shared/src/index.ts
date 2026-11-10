@@ -35,6 +35,8 @@ export * from "./tdMaps";
 export * from "./cards/index";
 export * from "./taboo";
 export * from "./petDefs";
+export * from "./accDefs";
+export * from "./accRules";
 export * from "./voyagerFates";
 export * from "./customMaps";
 export * from "./customMapUse";

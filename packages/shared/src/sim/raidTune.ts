@@ -1,6 +1,7 @@
 // 레이드 한정 캐릭터 피해 배율 (던전·패왕전에는 없음, 1 = 그대로). 2026-11-10 AI 레이드 1페이즈 3분 측정(동료: 떠돌이·마법사·기계공학자·의사)으로,
 // 중간값의 1.6배를 넘는 캐릭터는 그쪽으로 내리고 0.6배보다 낮은 캐릭터는 조금 올림 (combat.damageEnemy가 레이드에서만 곱함)
 import { RAID_ROOM } from "./raidTypes";
+import { accDealt } from "./accStats";
 import type { RunState } from "./types";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry): 캐릭터마다 레이드에서 주는 피해 배율 */
@@ -153,4 +154,5 @@ const R: Record<string, number> = {
 export { R as RAID_TUNE_RULES };
 
 /** 지금 꺼내 놓은 사람이 주는 피해 배율 (레이드 방에서만, 나머지는 1) */
-export const raidDmgMul = (s: RunState): number => (s.raidBoss && s.roomId === RAID_ROOM.boss ? (R[s.player.characterId] ?? 1) : 1);
+/** 레이드 장신구 주는 피해(sim/accStats)도 같이 곱함 */
+export const raidDmgMul = (s: RunState): number => (s.raidBoss && s.roomId === RAID_ROOM.boss ? (R[s.player.characterId] ?? 1) : 1) * accDealt(s);

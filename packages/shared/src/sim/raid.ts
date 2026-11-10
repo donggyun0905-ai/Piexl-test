@@ -2,6 +2,7 @@
 // 준비: 무장실(무기 하나·사용 아이템 2개) → 대장간(999원) → 성좌의 방(제단 8개 중 하나, 가운데 카드 증강을 대가 없이) → 단련의 방(포인트 30) → 레이드 방 → 보상 방
 // 시작할 때 고른 캐릭터의 전용 패시브 전부 + 여신의 축복 (일반 패시브는 없음)
 import { ALTAR_IDS, ALTARS } from "../altarDefs";
+import type { AccTotals } from "../accRules";
 import { CHARACTER_IDS, type CharacterId } from "../content";
 import { ROOM_CX as CX, ROOM_CY as CY } from "../constants";
 import { PASSIVE_IDS, PASSIVES, USE_ITEM_IDS, type PassiveDef, type PassiveId, type UseItemId } from "../items";
@@ -51,6 +52,8 @@ export interface RaidMember {
   characterId: CharacterId;
   unlocks: readonly string[];
   ai?: boolean;
+  /** 장착한 장신구 능력치 합계 (accRules.accTotals) */
+  acc?: AccTotals;
 }
 
 const roomKey = (s: RunState) => s.floor * 1000 + s.roomId;
@@ -81,6 +84,8 @@ export function createRaid(seed: number, boss: RaidEventBoss, humans: readonly R
   eachSeat(s, (i) => {
     const p = s.player;
     p.passives = [...raidOwnPassives(p.characterId), "goddessBlessing"];
+    if (members[i]!.acc) p.acc = { ...members[i]!.acc };
+    if (members[i]!.acc) p.acc = { ...members[i]!.acc };
     p.useSlots = [null, null];
     s.gold = R.GOLD;
     if (p.characterId === "novice") noviceLevel(s, !!s.raidBoss!.ai[i]);
