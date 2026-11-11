@@ -90,6 +90,7 @@ import { BOSS_JELLY_RULES } from "./bossJelly";
 import { BOSS_CAPTAIN_RULES } from "./bossCaptain";
 import { DUCKLINGS_RULES } from "./ducklings";
 import { ENEMIES_RULES } from "./enemies";
+import { CC_GUARD_RULES } from "./ccGuard";
 import { GUN_RULES } from "./gun";
 import { GUN_EXTRAS_RULES } from "./gunExtras";
 import { HAZARDS_RULES } from "./hazards";
@@ -237,6 +238,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   BOSS_CAPTAIN_RULES,
   DUCKLINGS_RULES,
   ENEMIES_RULES,
+  CC_GUARD_RULES,
   GUN_RULES,
   GUN_EXTRAS_RULES,
   HAZARDS_RULES,

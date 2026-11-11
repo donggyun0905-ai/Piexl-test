@@ -4,6 +4,7 @@
 import { ENEMIES } from "../enemyDefs";
 import { createRng, deriveSeed } from "../rng";
 import { half, hitDamage } from "./bossKit";
+import { bossSelfStun } from "./ccGuard";
 import { addShape, inHazard } from "./hazards";
 import { eachSeat } from "./party";
 import { dashDodged } from "./remnant";
@@ -122,7 +123,7 @@ function gateTick(s: RunState, e: EnemyState, spawned: EnemyState[]): void {
   const broken = gates.length - open.length;
   if (broken > (e.gkBroken ?? 0)) {
     e.gkBroken = broken;
-    e.stunTicks = Math.max(e.stunTicks ?? 0, R.BREAK_STUN);
+    bossSelfStun(s, e, R.BREAK_STUN);
     addEffect(s, { kind: "burst", x: e.x, y: e.y - 8, dirX: 0, dirY: 0, size: 18, maxTicks: 18, foe: true });
   }
   if (!open.length || --e.gkImp! > 0) return;

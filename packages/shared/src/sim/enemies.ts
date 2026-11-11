@@ -24,6 +24,7 @@ import { furyTick, tabooUp } from "./taboo";
 import { timeSlowed } from "./punk";
 import { setActingFoe } from "./moonlight";
 import { puppetDecoy } from "./puppetFriends";
+import { bossCcGuard } from "./ccGuard";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -80,6 +81,7 @@ export function updateEnemies(s: RunState): void {
     const steady = e.kind === "lucifer";
     if (ultBusy(e) || e.kind === "umbra" || steady) e.stunTicks = e.fearTicks = 0;
     if (steady) e.sluggish = 0;
+    if (def.boss && e.kind !== "fighter") bossCcGuard(s, e);
     // 얼음 부적·유압 해머: 경직된 적은 움직이지도 공격하지도 않음 (몸에 닿으면 피해는 그대로)
     // 느려짐(토룡·교만): 움직임과 공격이 모두 느림 (일반 적은 두 틱에 한 번, 보스는 네 틱에 한 번 쉼)
     if ((e.sluggish ?? 0) > 0) e.sluggish = (e.sluggish ?? 0) - 1;

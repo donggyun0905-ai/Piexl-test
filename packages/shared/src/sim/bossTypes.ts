@@ -3,6 +3,9 @@ import type { BossKind } from "../content";
 import type { S3BossEnemyState } from "./s3BossTypes";
 
 export interface BossEnemyState extends S3BossEnemyState {
+  /** 보스 상태이상(기절·속박·공포·느려짐) 쿨타임: 지금 걸린 것이 끝나는 틱 · 다음에 다시 걸릴 수 있는 틱 (sim/ccGuard) */
+  ccEnd?: number;
+  ccNext?: number;
   /** 보스 행동 안의 몇 번째 단계 (연속 베기·돌진 횟수 등) */
   step?: number;
   /** 보스가 잠깐 쓰는 값 (활잡이 뛰기 대기·검신 일섬 끝 자리 등) */

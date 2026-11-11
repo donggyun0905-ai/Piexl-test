@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.24",
+    date: "2026-11-11",
+    items: {
+      ko: ["모든 보스(일반·레이드·최종보스): 기절·속박·공포·느려짐이 한 번 걸리면 1분 동안 다시 걸리지 않음 (걸린 동안 더 늘어나지도 않음)"],
+      en: ["All bosses (regular, raid and final): once stunned, rooted, feared or slowed, they can't be hit by those effects again for 1 minute (and the current one can't be extended)"],
+      ja: ["すべてのボス（通常・レイド・最終ボス）：気絶・拘束・恐怖・鈍化に一度かかると1分間は再びかからない（かかっている間に延長もされない）"],
+    },
+  },
+  {
     version: "0.52.23",
     date: "2026-11-11",
     items: {

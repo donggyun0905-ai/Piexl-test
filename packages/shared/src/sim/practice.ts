@@ -200,7 +200,7 @@ export function practiceReset(s: RunState): void {
   const p = s.player;
   practiceClearEnemies(s);
   for (const e of s.enemies) {
-    e.hp = e.maxHp;
+    e.hp = e.maxHp; e.ccEnd = e.ccNext = undefined;
     e.heat = e.melt = e.stunTicks = e.slowTicks = e.fearTicks = e.rootTicks = e.bleedTicks = e.poisonTicks = e.burnTicks = 0;
   }
   s.effects = [];
