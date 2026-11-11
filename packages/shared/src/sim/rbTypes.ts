@@ -31,6 +31,8 @@ export interface RabbitUlt {
   t: number;
   hits: number;
   dmg: number;
+  /** 마지막으로 나눠 때린 틱 (화면이 60연타 피해 숫자를 하나씩 따로 띄움) */
+  hitAt?: number;
 }
 
 export interface RabbitPlayerState {

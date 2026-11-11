@@ -56,6 +56,7 @@ export function ultTick(s: RunState): void {
 /** 한 번 나눠 때림: 방 안 적 모두 (보스는 조금 덜) */
 function hitAll(s: RunState, n: number): void {
   const u = s.player.rbUlt!;
+  u.hitAt = s.tick;
   for (const e of s.enemies) {
     if (!alive(e)) continue;
     damageEnemyLite(s, e, u.dmg * (ENEMIES[e.kind].boss ? U.bossMul : 1), 1, 0);

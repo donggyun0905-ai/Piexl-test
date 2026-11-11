@@ -14,7 +14,9 @@ import type { Snap } from "./render/palette";
 const LIFE = 30;
 const RISE = 10;
 const MAX_NUMBERS = 30;
-/** 빙설 궁극기 60연타: 한 대마다 따로 띄움 (합치지 않음) · 그 적에게 남기는 수 · 전체 최대 수 */
+/** 이번 틱에 60연타 필살기(빙설 빙설창 · 래빗 슈퍼 럭키)로 맞았는지 */
+const rapidHit = (s: RunState, id: number) => (s.player.bsUlt?.hitId === id && s.player.bsUlt.hitAt === s.tick) || s.player.rbUlt?.hitAt === s.tick;
+/** 60연타 필살기: 한 대마다 따로 띄움 (합치지 않음) · 그 적에게 남기는 수 · 전체 최대 수 */
 const RAPID_PER_ENEMY = 40;
 const RAPID_MAX = 80;
 const PER_ENEMY = 3;
@@ -85,7 +87,7 @@ export class DamageTracker {
       this.hp.set(e.id, e.hp);
       const crit = e.critTick !== undefined && e.critTick !== this.crits.get(e.id);
       if (e.critTick !== undefined) this.crits.set(e.id, e.critTick);
-      if (before !== undefined && before > e.hp) this.split(s, e, before - Math.max(0, e.hp), crit, s.player.bsUlt?.hitId === e.id && s.player.bsUlt.hitAt === s.tick);
+      if (before !== undefined && before > e.hp) this.split(s, e, before - Math.max(0, e.hp), crit, rapidHit(s, e.id));
     }
     // 이번 틱에 쓰러진 적: 남아 있던 체력만큼
     for (const [id, before] of this.hp) {

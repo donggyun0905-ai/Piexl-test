@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.22",
+    date: "2026-11-11",
+    items: {
+      ko: ["래빗 슈퍼 럭키: 초거대 망치 60연타 피해 숫자가 합쳐지지 않고 한 대마다 따로 떠오름"],
+      en: ["Rabbit Super Lucky: the colossal hammer's 60-hit combo now shows a separate damage number for every hit"],
+      ja: ["ラビット・スーパーラッキー：超巨大ハンマーの60連打のダメージ数字が一発ごとに表示される"],
+    },
+  },
+  {
     version: "0.52.21",
     date: "2026-11-11",
     items: {
