@@ -35,13 +35,14 @@ function setBow(s: RunState): void {
   addEffect(s, { kind: "bsBowSet", x, y: p.y, dirX: side, dirY: 0, size: 20, maxTicks: 20 });
 }
 
-/** 빙설무장-창: 머리 위 부채 모양으로 n개가 차례로 생겼다가 한꺼번에 날아감 */
+/** 빙설무장-창: 머리 위에 넓게 벌어져 n개가 차례로 생긴 뒤 한 개씩 연발로 날아감 */
 function lances(p: P, n: number): void {
-  const t0 = -((n - 1) * K.bsLance.every + K.bsLance.wait);
+  const ready = (n - 1) * K.bsLance.every + K.bsLance.wait;
   for (let i = 0; i < n; i++) {
     const u = i - (n - 1) / 2;
-    const ox = u * 7;
-    const oy = -20 + Math.abs(u) * 2;
+    const ox = u * K.bsLance.space;
+    const oy = -22 + Math.abs(u) * 3;
+    const t0 = -(ready + i * K.bsLance.gap);
     const speed = K.bsLance.speed * Math.max(0.5, p.stats.projectileSpeed / 4);
     pushShot(p, { x: p.x + ox, y: p.y + oy, dx: p.faceX, dy: p.faceY, r: K.bsLance.r, dmg: p.stats.damage * K.bsLance.mul, kind: 1, age: t0, life: Math.round((p.stats.range * 1.4) / speed) + 10, speed, pierce: 0, hit: [], ox, oy, t0, at: i * K.bsLance.every });
   }

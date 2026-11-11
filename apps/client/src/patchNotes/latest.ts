@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.23",
+    date: "2026-11-11",
+    items: {
+      ko: [
+        "빙설 빙설무장-창: 머리 위 창 사이를 넓게 벌리고, 한꺼번에가 아니라 한 개씩 연발로 날아감 (0.1초 간격)",
+        "빙설 얼음가루(속): 쉬는 시간 3초 → 1.5초 · 얼음가루(강): 5초 → 3초",
+        "빙설 빙격: 빙산처럼 크기 3배 (반지름 22 → 66) · 몸에 겹치지 않게 조금 더 앞에서 솟음 (40 → 70)",
+      ],
+      en: [
+        "Bingseol Frost Arms: Spears: the spears above your head are spread wider apart and fire one at a time in a volley instead of all at once (every 0.1s)",
+        "Bingseol Ice Dust: Swift cooldown 3s → 1.5s · Ice Dust: Strong 5s → 3s",
+        "Bingseol Ice Strike: three times bigger, like an iceberg (radius 22 → 66) · rises a bit farther ahead so it doesn't cover you (40 → 70)",
+      ],
+      ja: [
+        "氷雪・氷雪武装・槍：頭上の槍の間隔を広げ、まとめてではなく1本ずつ連発で飛ぶ（0.1秒間隔）",
+        "氷雪・氷の粉（速）：休む時間3秒→1.5秒・氷の粉（強）：5秒→3秒",
+        "氷雪・氷撃：氷山のように大きさ3倍（半径22→66）・体に重ならないよう少し前でそびえる（40→70）",
+      ],
+    },
+  },
+  {
     version: "0.52.22",
     date: "2026-11-11",
     items: {

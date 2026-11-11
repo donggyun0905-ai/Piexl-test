@@ -37,16 +37,16 @@ export const BINGSEOL_PERKS = {
   bsUlt: { chance: 0.03, charge: 180, speed: 6, r: 14, hits: 60, pause: 60, mul: 9, bossMul: 0.6, shotSlow: 0.25 },
   /** 빙설무장-활: 공격마다 확률 · 맵에 가장 많이 · 몸에서 떨어진 거리 · 서 있는 틱 · 몇 틱마다 화살 · 찾는 거리 · 화살 피해 배율 · 화살 빠르기 */
   bsBow: { chance: 0.12, max: 2, side: 24, life: 600, every: 30, dist: 170, mul: 0.8, speed: 6 },
-  /** 빙설무장-창: 공격마다 확률 · 창 수(가장 적게·많게) · 하나씩 생기는 틱 · 다 생긴 뒤 날아가기까지 틱 · 피해 배율 · 빠르기 · 반지름 */
-  bsLance: { chance: 0.45, min: 4, max: 7, every: 4, wait: 8, mul: 0.6, speed: 6, r: 5 },
+  /** 빙설무장-창: 공격마다 확률 · 창 수(가장 적게·많게) · 하나씩 생기는 틱 · 다 생긴 뒤 첫 창이 날아가기까지 틱 · 한 개씩 연발로 쏘는 간격(틱) · 창 사이 거리 · 피해 배율 · 빠르기 · 반지름 */
+  bsLance: { chance: 0.45, min: 4, max: 7, every: 4, wait: 8, gap: 6, space: 13, mul: 0.6, speed: 6, r: 5 },
   /** 얼음가루: 공격마다 생기는 수(가장 적게·많게) · 맵에 가장 많이 · 고정 피해 · 반지름 · 사는 틱 */
   bsDust: { min: 3, max: 5, cap: 30, dmg: 2, r: 3, life: 600 },
   /** 얼음가루(속): 모이는 얼음가루 수 · 연속 수 · 쉬는 틱 · 피해 배율 · 터지는 반지름 · 빠르기 · 찾는 거리 · 모이는 틱 */
-  bsHoming: { need: 5, chain: 3, cd: 180, mul: 1.3, r: 22, speed: 4, dist: 220, gather: 14 },
+  bsHoming: { need: 5, chain: 3, cd: 90, mul: 1.3, r: 22, speed: 4, dist: 220, gather: 14 },
   /** 얼음가루(강): 모이는 얼음가루 수 · 연속 수 · 쉬는 틱 · 피해 배율 · 빠르기 · 반지름 · 사는 틱 · 모이는 틱 */
-  bsRapid: { need: 10, chain: 1, cd: 300, mul: 3.5, speed: 7, r: 8, life: 60, gather: 16 },
+  bsRapid: { need: 10, chain: 1, cd: 180, mul: 3.5, speed: 7, r: 8, life: 60, gather: 16 },
   /** 빙격: 공격마다 확률 · 솟는 거리(사거리만큼) · 반지름 · 피해 배율 · 구속 틱 · 보스 느려지는 틱 */
-  bsSpike: { chance: 0.25, dist: 40, r: 22, mul: 1.6, stun: 60, bossSlow: 120 },
+  bsSpike: { chance: 0.25, dist: 70, r: 66, mul: 1.6, stun: 60, bossSlow: 120 },
   /** 영역강화: 결정 수 · 방어력 · 도는 빠르기(틱마다 라디안) · 결정 반지름 · 몇 틱마다 피해 · 피해 배율 · 공격마다 얼음가루 확률 · 얼음가루 수(가장 적게·많게) */
   bsWall: { n: 5, defense: 10, spin: 0.012, r: 9, every: 45, mul: 0.5, dustChance: 0.4, dustMin: 1, dustMax: 3 },
   /** 눈보라 확장: 영역 크기 배율 · 몇 틱마다 냉기 피해 · 피해 배율 */

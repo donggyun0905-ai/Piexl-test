@@ -44,9 +44,9 @@ export const BS_EFFECTS: Partial<Record<BsPassive & PassiveId, Names>> = {
     "新技：攻撃ごとに{chance:pct}%の確率で体の左右に大きな氷の弓を立てる（マップに{max}個まで、{life:sec}秒）・弓は{every:sec}秒ごとに周りの敵へ矢を放ち攻撃力の{mul:pct}%",
   ),
   bsLance: c(
-    "새 기술: 공격마다 {chance:pct}% 확률로 머리 위에 얼음 창 {min}~{max}개가 하나씩 차례로 생겨 앞으로 날아감 · 창마다 처음 맞힌 적에게 공격력의 {mul:pct}% (관통 없음)",
-    "New skill: each attack has a {chance:pct}% chance to form {min}-{max} ice spears above your head one by one, then launch them forward · each spear hits the first foe for {mul:pct}% of damage (no pierce)",
-    "新技：攻撃ごとに{chance:pct}%の確率で頭上に氷の槍が{min}～{max}本ひとつずつ現れ前へ飛ぶ・槍ごとに最初に当たった敵へ攻撃力の{mul:pct}%（貫通なし）",
+    "새 기술: 공격마다 {chance:pct}% 확률로 머리 위에 얼음 창 {min}~{max}개가 넓게 벌어져 하나씩 차례로 생긴 뒤 {gap:sec}초 간격으로 한 개씩 연발로 날아감 · 창마다 처음 맞힌 적에게 공격력의 {mul:pct}% (관통 없음)",
+    "New skill: each attack has a {chance:pct}% chance to form {min}-{max} widely spaced ice spears above your head one by one, then fire them forward one at a time every {gap:sec}s · each spear hits the first foe for {mul:pct}% of damage (no pierce)",
+    "新技：攻撃ごとに{chance:pct}%の確率で頭上に氷の槍が{min}～{max}本、間隔を広げてひとつずつ現れ、{gap:sec}秒間隔で1本ずつ連発で前へ飛ぶ・槍ごとに最初に当たった敵へ攻撃力の{mul:pct}%（貫通なし）",
   ),
   bsDust: c(
     "새 기술: 공격마다 얼음가루 {min}~{max}개가 얼음 영역 안에 흩날림 (맵에 {cap}개까지, {life:sec}초) · 닿은 적에게 고정 피해 {dmg}",
