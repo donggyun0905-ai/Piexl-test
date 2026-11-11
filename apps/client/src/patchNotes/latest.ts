@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.13",
+    date: "2026-11-11",
+    items: {
+      ko: ["고침: 캐릭터 설명 창(I) 등 빛 효과가 있는 창을 열었다 닫으면 가끔 게임 화면이 멈추고 캐릭터가 움직이지 않던 문제"],
+      en: ["Fix: closing the character info window (I) or other windows with glow effects could sometimes freeze the game screen and stop your character from moving"],
+      ja: ["修正：キャラクター説明ウィンドウ（I）など光エフェクトのある画面を開いて閉じると、まれにゲーム画面が止まりキャラクターが動かなくなる問題"],
+    },
+  },
+  {
     version: "0.52.12",
     date: "2026-11-11",
     items: {

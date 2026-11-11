@@ -15,6 +15,9 @@ export interface GlowCues {
 /** 설정에서 켜 두었는지 */
 export const glowWanted = (): boolean => getSettings().glowFx;
 
+/** 앱 지우기 옵션: true를 넘기면 PixiJS 전역 공용 자원까지 지워, 같이 떠 있는 다른 빛 층(게임 화면 등)이 그리다 오류로 멈춤 */
+const KEEP_SHARED = { removeView: true, releaseGlobalResources: false };
+
 export class GlowCanvas {
   /** 준비되면 생김 (그 전에는 null: 효과를 만들지 않고 넘어감) */
   parts: GlowParts | null = null;
@@ -60,7 +63,7 @@ export class GlowCanvas {
       const a = new P.Application();
       await a.init({ backgroundAlpha: 0, antialias: false, autoStart: false, preference: "webgl", width: 16, height: 16 });
       if (this.dead) {
-        a.destroy(true);
+        a.destroy(KEEP_SHARED);
         return;
       }
       a.canvas.className = this.className;
@@ -107,14 +110,23 @@ export class GlowCanvas {
     this.hurtSp!.height = this.flashSp!.height = h;
     this.hurtSp!.alpha = c.hurt * 0.75;
     this.flashSp!.alpha = c.flash * c.flash * 0.6;
-    a.render();
+    try {
+      a.render();
+    } catch {
+      // 빛 층 오류로 게임 화면이 멈추지 않게: 이 빛 층만 끔
+      this.destroy();
+    }
   }
 
   destroy(): void {
     this.dead = true;
     if (this.app) {
+      const vignette = this.hurtSp?.texture;
       this.app.canvas.remove();
-      this.app.destroy(true, { children: true, texture: true });
+      // texture: true면 공용 흰 그림(Texture.WHITE)까지 지워짐 → 이 층이 만든 그림만 따로 지움
+      this.app.destroy(KEEP_SHARED, { children: true });
+      vignette?.destroy(true);
+      this.parts?.destroy();
     }
     this.app = null;
     this.parts = null;

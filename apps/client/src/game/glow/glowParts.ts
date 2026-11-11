@@ -101,6 +101,12 @@ export class GlowParts {
     this.tex = makeTextures(P);
   }
 
+  /** 이 층이 만든 그림만 지움 (공용 흰 그림 등은 다른 빛 층이 같이 씀) */
+  destroy(): void {
+    this.tex.dot.destroy(true);
+    this.tex.ring.destroy(true);
+  }
+
   /** 지금 조각 수 */
   get count(): number {
     return this.live.length;
