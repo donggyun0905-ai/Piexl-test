@@ -2,7 +2,7 @@
 export const FACTION_TRAIT_TEXT = {
   tutorialFactions: { ko: "캐릭터는 진영마다 공통 특징이 있어요 (아래 게이지 · 왼쪽 버프 창)", en: "Each faction shares a trait (bottom gauge · left buff panel)", ja: "キャラは陣営ごとに共通の特徴があります（下のゲージ・左のバフ欄）" },
   tfAscalon: { ko: "방마다 맹세 · 지키면 영광(피해 증가)", en: "An oath each room · keep it for Glory (more damage)", ja: "部屋ごとに誓い・守ると栄光（ダメージ上昇）" },
-  tfTerracore: { ko: "주거나 맞을 때 에너지가 쌓임 · 대시하면 모은 만큼 터짐", en: "Dealing or taking damage stores Energy · dash to release it in a blast", ja: "与えても受けてもエネルギーが溜まる・ダッシュで溜めた分だけ爆発" },
+  tfTerracore: { ko: "주거나 맞을 때 에너지가 쌓임 · 가득 차면 저절로 크게 터짐", en: "Dealing or taking damage stores Energy · it bursts on its own when full", ja: "与えても受けてもエネルギーが溜まる・満タンで自動的に大爆発" },
   tfVirdia: { ko: "시작할 때 공생 정령 하나를 골라 함께 다님", en: "Pick a Symbiote at the start to travel with you", ja: "開始時に共生精霊を1体選んで連れて歩く" },
   tfHelios: { ko: "처치로 타락이 쌓여 세지고 가득 차면 폭주", en: "Kills stack Taint for power · Rampage when full", ja: "撃破で堕落が溜まり強くなり、満タンで暴走" },
   tfThalassia: { ko: "맞히면 물결 콤보 · 안 맞을수록 물 피해 증가", en: "Hits build a Tide Combo · stay unhit for more water damage", ja: "当てると波のコンボ・被弾しないほど水ダメージ上昇" },
@@ -26,8 +26,7 @@ export const FACTION_TRAIT_TEXT = {
   bfFtThalassia: { ko: "물결 콤보 {n} · 물 피해 +{p}%", en: "Tide Combo {n} · water damage +{p}%", ja: "波のコンボ{n}・水ダメージ+{p}%" },
   bfFtHelios: { ko: "타락 {n} · 주는 피해 +{p}% · 받는 피해 +{q}%", en: "Taint {n} · damage +{p}% · damage taken +{q}%", ja: "堕落{n}・与ダメージ+{p}%・被ダメージ+{q}%" },
   bfFtHeliosOn: { ko: "폭주! 공격 속도 +30%", en: "Rampage! +30% attack speed", ja: "暴走！攻撃速度+30%" },
-  bfFtTerracore: { ko: "에너지 {n} · {p}부터 대시로 터짐", en: "Energy {n} · dash to release from {p}", ja: "エネルギー{n}・{p}からダッシュで爆発" },
-  bfFtTerracoreOn: { ko: "에너지 {n} · 대시하면 터짐!", en: "Energy {n} · dash to release!", ja: "エネルギー{n}・ダッシュで爆発！" },
+  bfFtTerracore: { ko: "에너지 {n}/{p} · 가득 차면 터짐", en: "Energy {n}/{p} · bursts when full", ja: "エネルギー{n}/{p}・満タンで爆発" },
   bfFtAscalon: { ko: "영광 {n} · 피해 +{p}%", en: "Glory {n} · damage +{p}%", ja: "栄光{n}・ダメージ+{p}%" },
   bfFtVirdia: { ko: "공생 정령 · {s}", en: "Symbiote · {s}", ja: "共生精霊・{s}" },
   bfFtSeongguk: { ko: "핵심 스킬 {n}/12", en: "Core Skill {n}/12", ja: "核心スキル{n}/12" },
@@ -46,11 +45,10 @@ export const FACTION_TRAIT_TEXT = {
     ja: "撃破ごとに堕落+1（最大30）、被弾で-1・1ごとに与ダメージ+1%、被ダメージ+0.5%・30で6秒暴走（攻撃速度+30%）、その後15に・スレイヤーは血の殺戮と暴走が重ならない",
   },
   ftTerracore: { ko: "에너지", en: "Energy", ja: "エネルギー" },
-  ftTerracoreOn: { ko: "방출 가능", en: "Ready", ja: "放出可能" },
   ftTerracoreTip: {
-    ko: "모아 둔 에너지를 대시로 터뜨림: 적에게 피해를 줄 때·맞을 때 운동 에너지가 쌓이고 저절로는 안 빠짐 · 30 이상에서 대시하면 둘레로 터짐 (모은 만큼 넓고 셈, 가득이면 공격력 250%)",
-    en: "Release stored energy with a dash: dealing or taking damage stores kinetic Energy, which never drains on its own · dash at 30+ to release it around you (bigger and stronger the more you stored, 250% attack when full)",
-    ja: "溜めたエネルギーをダッシュで解放：敵にダメージを与えたとき・受けたときに運動エネルギーが溜まり、自然には減らない・30以上でダッシュすると周囲に爆発（溜めた分だけ広く強い、満タンで攻撃力250%）",
+    ko: "모아 둔 에너지가 가득 차면 터짐: 적에게 피해를 줄 때·맞을 때 운동 에너지가 쌓이고 저절로는 안 빠짐 · 100이 되면 저절로 둘레 넓게(반지름 110) 터짐 (공격력 400%) → 0부터 다시",
+    en: "Stored energy bursts when full: dealing or taking damage stores kinetic Energy, which never drains on its own · at 100 it bursts on its own in a wide ring around you (radius 110 · 400% attack) → back to 0",
+    ja: "溜めたエネルギーが満タンで爆発：敵にダメージを与えたとき・受けたときに運動エネルギーが溜まり、自然には減らない・100になると自動的に周囲へ広く（半径110）爆発（攻撃力400%）→0からやり直し",
   },
   ftAscalon: { ko: "영광", en: "Glory", ja: "栄光" },
   ftAscalonTip: {

@@ -18,7 +18,7 @@ function line(run: RunState, t: (k: TextKey) => string): string | null {
     case "helios":
       return g.on ? t("bfFtHeliosOn") : fill("bfFtHelios", g.n * FACTION_TAINT.dmg * 100, g.n * FACTION_TAINT.taken * 100);
     case "terracore":
-      return g.on ? t("bfFtTerracoreOn").replace("{n}", n) : fill("bfFtTerracore", FACTION_HEAT.ventFrom);
+      return fill("bfFtTerracore", FACTION_HEAT.max);
     case "ascalon":
       return fill("bfFtAscalon", g.n * FACTION_OATH.gloryDmg * 100);
     case "virdia":

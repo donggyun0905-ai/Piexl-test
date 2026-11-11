@@ -43,7 +43,7 @@ export function factionGauge(s: RunState): FactionGauge | null {
     }
     case "terracore": {
       const n = Math.round(p.fcHeat ?? 0);
-      return { trait, v: r2(n / FACTION_HEAT.max), n, on: n >= FACTION_HEAT.ventFrom };
+      return { trait, v: r2(n / FACTION_HEAT.max), n, on: false };
     }
     case "ascalon": {
       const o = p.fcOath;

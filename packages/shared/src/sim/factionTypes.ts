@@ -15,7 +15,6 @@ export interface FactionPlayerState {
   /** 테라코어 에너지 · 마지막으로 피해를 줘 쌓은 틱 · 지난 틱 대시 중이었는지 */
   fcHeat?: number;
   fcHeatT?: number;
-  fcDash?: boolean;
   /** 아스칼론 영광 · 이번 방 맹세 (at 방 "층/방" · t 시작 틱 · x,y 들어선 자리 · n 어긴/센 횟수 · u 찬 사용 아이템 칸 · elite 먼저 쓰러뜨릴 적 · dash 지난 틱 대시 · done 방을 끝냄 · intro 카드가 떠 있는 남은 틱 · end 끝난 틱(화면 연출)) */
   fcGlory?: number;
   fcOath?: { kind: OathKind; at: string; t: number; x: number; y: number; n: number; u?: number; elite?: number; dash?: boolean; broken?: boolean; kept?: boolean; done?: boolean; intro?: number; end?: number };

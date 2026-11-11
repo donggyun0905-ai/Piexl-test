@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.16",
+    date: "2026-11-11",
+    items: {
+      ko: ["테라코어 특징 '에너지': 대시로 터뜨리던 것을 에너지가 100이 되면 저절로 터지게 바꿈 (대시가 없는 거인·오닉스도 이제 터짐) · 폭발이 더 넓고 셈 (반지름 70 → 110 · 공격력 250% → 400%)"],
+      en: ["Terracore trait 'Energy': instead of releasing it with a dash, it now bursts on its own at 100 (Titan and Onyx, who have no dash, can now trigger it too) · the burst is wider and stronger (radius 70 → 110 · 250% → 400% attack)"],
+      ja: ["テラコアの特徴『エネルギー』：ダッシュで解放していたのを、100になると自動的に爆発するように変更（ダッシュのない巨人・オニキスも爆発するように）・爆発がより広く強く（半径70→110・攻撃力250%→400%）"],
+    },
+  },
+  {
     version: "0.52.15",
     date: "2026-11-11",
     items: {

@@ -73,7 +73,7 @@ export function drawFactionBody(ctx: Ctx, s: RunState, a0: number, snap: Snap): 
     });
     demonFace(ctx, x, hpBarTop(p, y), t);
   }
-  // 테라코어: 에너지를 많이 모을수록 몸 둘레가 밝게 맥동 (대시하면 터짐)
+  // 테라코어: 에너지를 많이 모을수록 몸 둘레가 밝게 맥동 (가득 차면 저절로 터짐)
   if ((p.fcHeat ?? 0) >= 30) additive(ctx, () => glow(ctx, x, y - 6, 14 + (p.fcHeat ?? 0) / 10, HEAT, (0.15 + (p.fcHeat ?? 0) / 300) * (0.8 + 0.2 * Math.sin(t * 0.25)), 0));
   if ((p.fcCombo ?? 0) >= 50) additive(ctx, () => ring(ctx, x, y + 2, 12 + Math.sin(t * 0.15) * 2, alpha(SEA, 0.5), 1.5));
 }

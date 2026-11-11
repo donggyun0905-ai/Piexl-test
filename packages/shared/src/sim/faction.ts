@@ -99,19 +99,13 @@ export function factionTick(s: RunState): void {
   else if (tr === "seongguk") coreTick(s);
 }
 
-/** 테라코어: 모아 둔 에너지가 충분할 때 대시하면 한꺼번에 터짐 (모은 만큼 넓고 셈) */
+/** 테라코어: 에너지가 가득 차면 저절로 둘레로 크게 터짐 (대시가 없는 거인·오닉스도 똑같이) */
 function heatTick(s: RunState): void {
   const p = s.player;
-  const dashing = p.dashTicks > 0;
-  const n = Math.min(H.max, p.fcHeat ?? 0);
-  if (dashing && !p.fcDash && n >= H.ventFrom) {
-    const k = n / H.max;
-    const r = H.ventR * (0.6 + 0.4 * k);
-    blastAt(s, p.x, p.y, r, p.stats.damage * H.ventMul * k, { push: 10 });
-    p.fcHeat = 0;
-    addEffect(s, { kind: "fcVent", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, maxTicks: 26 });
-  }
-  p.fcDash = dashing;
+  if ((p.fcHeat ?? 0) < H.max) return;
+  blastAt(s, p.x, p.y, H.ventR, p.stats.damage * H.ventMul, { push: 10 });
+  p.fcHeat = 0;
+  addEffect(s, { kind: "fcVent", x: p.x, y: p.y, dirX: 0, dirY: 0, size: H.ventR, maxTicks: 26 });
 }
 
 /** 주는 피해 배율 (classTaken.foeTaken): 타락 · 영광/깨진 맹세 · 각성 핵심 스킬 */

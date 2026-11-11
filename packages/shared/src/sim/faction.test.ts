@@ -89,7 +89,7 @@ describe("진영 특징", () => {
     expect(s.player.fcRampage).toBe(FACTION_TAINT.rampageTicks);
   });
 
-  it("테라코어: 피해를 주거나 맞으면 에너지 · 저절로 안 빠짐 · 모은 뒤 대시하면 터짐", () => {
+  it("테라코어: 피해를 주거나 맞으면 에너지 · 저절로 안 빠짐 · 가득 차면 저절로 터짐", () => {
     const s = start("gunner");
     const e = enemy(1, 120, 100);
     s.enemies = [e];
@@ -101,7 +101,9 @@ describe("진영 특징", () => {
     factionHurt(s);
     expect(s.player.fcHeat).toBeCloseTo(10 * FACTION_HEAT.gain + FACTION_HEAT.hurtGain);
     expect(foeNoAttack(s.player)).toBe(false);
-    s.player.dashTicks = 5;
+    factionTick(s);
+    expect(e.hp).toBe(e.maxHp);
+    s.player.fcHeat = FACTION_HEAT.max;
     factionTick(s);
     expect(s.player.fcHeat).toBe(0);
     expect(e.hp).toBeLessThan(e.maxHp);
