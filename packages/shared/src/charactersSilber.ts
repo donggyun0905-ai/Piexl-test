@@ -11,4 +11,6 @@ export const SILBER_CHARACTERS = {
   rabbit: { id: "rabbit", maxHp: 95, damage: 9, moveSpeed: 1.2, luck: 2, startWeapon: "rbHammer" },
   /** 실베르: 백령 대태도 하나 · 앞 부채꼴 베기 · 처치하면 영혼 게이지 → 3칸부터 유령팔 참격 · 전용 패시브 20 (혼령참·(진)대태도 등, sim/baekryeong) */
   baekryeong: { id: "baekryeong", maxHp: 100, damage: 9, moveSpeed: 1.2, luck: 1, startWeapon: "byBlade" },
+  /** 실베르: 빙설 얼음 칼날 무기 10 · 몸 둘레 얼음 영역(안의 적 느려짐) · 전용 패시브 10 (빙설창·빙설무장·얼음가루 등, sim/bingseol) */
+  bingseol: { id: "bingseol", maxHp: 95, damage: 8, moveSpeed: 1.2, luck: 1, startWeapon: "bsBlade" },
 } as const;

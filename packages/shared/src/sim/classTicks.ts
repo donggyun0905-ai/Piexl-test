@@ -78,6 +78,7 @@ import { shadowingTick } from "./shadowing";
 import { puppetTick } from "./puppet";
 import { rabbitTick } from "./rabbit";
 import { baekTick } from "./baekryeong";
+import { bingseolTick } from "./bingseol";
 import type { RunState } from "./types";
 
 export { pwBasicTick } from "./pwBasic";
@@ -164,4 +165,5 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   puppetHand: puppetTick,
   rabbitHammer: rabbitTick,
   soulBlade: baekTick,
+  frostBlade: bingseolTick,
 };

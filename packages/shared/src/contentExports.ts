@@ -59,6 +59,8 @@ export { RABBIT_HAMMER, RABBIT_ULT } from "./weaponsRabbit";
 export { RABBIT_PERKS } from "./itemsRabbit";
 export { BAEK_ARM, BAEK_BLADE, BAEK_SOUL } from "./weaponsBaekryeong";
 export { BAEK_PERKS } from "./itemsBaekryeong";
+export { BINGSEOL_WEAPONS, BS_FIELD, BS_SHOT, BS_STYLE } from "./weaponsBingseol";
+export { BINGSEOL_PERKS } from "./itemsBingseol";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";

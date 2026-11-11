@@ -28,6 +28,7 @@ export const ASCALON_ACHIEVEMENTS = {
   clearBlueFlame: n(["영혼을 태우는 불", "The Soul-Burning Flame", "魂を焼く炎"], ["블루 플레임으로 클리어", "Clear as Blue Flame", "ブルーフレイムでクリア"]),
   clearLunatic: n(["월광의 리더", "Leader of the Moonlight", "月光の指導者"], ["루나틱으로 클리어", "Clear as Lunatic", "ルナティックでクリア"]),
   clearIncision: n(["도살자", "The Butcher", "屠殺者"], ["인시전으로 클리어", "Clear as Incision", "インシジョンでクリア"]),
+  clearBingseol: n(["눈꽃이 지나간 자리", "Where the Snowflakes Passed", "雪花の通った跡"], ["빙설로 클리어", "Clear as Bingseol", "氷雪でクリア"]),
   clearBaekryeong: n(["백귀를 거느린 자", "Leader of the Hundred Spirits", "百鬼を率いる者"], ["백령으로 클리어", "Clear as Baekryeong", "白霊でクリア"]),
   clearRabbit: n(["오늘도 럭키!", "Lucky Again Today!", "今日もラッキー！"], ["래빗으로 클리어", "Clear as Rabbit", "ラビットでクリア"]),
   clearPuppeteer: n(["실이 이어진 무대", "Strings on Stage", "糸でつながる舞台"], ["인형술사로 클리어", "Clear as Puppeteer", "人形使いでクリア"]),

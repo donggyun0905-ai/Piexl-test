@@ -1,4 +1,4 @@
-// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전 · 크루세이더) + 실베르 조커·쉐도잉·인형술사·래빗·백령 — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
+// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전 · 크루세이더) + 실베르 조커·쉐도잉·인형술사·래빗·백령·빙설 — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
 import { kit, SEC, sk } from "./pwKitKit";
 import type { PwKits } from "./pwSkillTypes";
 
@@ -77,6 +77,13 @@ export const PW_KITS_4: PwKits = {
     sk("ppHand", "line", 9, "#e8c890", { range: 170, hit: { dmg: 1.4, stun: 1 * SEC } }),
     sk("ppHand", "dash", 8, "#ff8a9a", { range: 110, speed: 10, hit: { dmg: 1 } }),
     sk("ppHand", "point", 60, "#c83a4a", { range: 160, radius: 100, delay: 30, fx: "pillar", hit: { dmg: 3, push: 12 } }),
+  ),
+  // 실베르 빙설: 얼음칼 베기 · 얼음 창 연발 · 미끄러지기 · 빙설창
+  bingseol: kit(1,
+    sk("bsBlade", "cone", 4, "#8ad8ff", { radius: 56, arc: 0.9, fx: "slash", hit: { dmg: 1.2, slow: 1 * SEC } }),
+    sk("bsBlade", "line", 8, "#c8f0ff", { range: 210, hit: { dmg: 1.4, slow: 2 * SEC } }),
+    sk("bsBlade", "dash", 8, "#e8f8ff", { range: 110, speed: 10, hit: { dmg: 1 } }),
+    sk("bsBlade", "point", 60, "#3a9aff", { range: 170, radius: 110, delay: 30, fx: "pillar", hit: { dmg: 3, stun: 1 * SEC } }),
   ),
   // 실베르 백령: 대태도 베기 · 유령팔 참격 · 유령 걸음 · (진)대태도-랑
   baekryeong: kit(1,

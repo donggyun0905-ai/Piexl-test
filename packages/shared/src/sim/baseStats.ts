@@ -16,6 +16,7 @@ import { kingExtras } from "./kingForm";
 import { growExtras } from "./pwGearStat";
 import { luxExtras } from "./lux";
 import { devilExtras } from "./devilPerks";
+import { bsExtras } from "./bsKit";
 import { setExtras, setTaken } from "./buildSets";
 import { setOnHit, setTick } from "./buildSetFx";
 import { factionHit, factionTick } from "./faction";
@@ -62,9 +63,11 @@ export function extraOf(p: PlayerState): ExtraStats {
   const wv = waveExtras(p);
   // 레이드 장신구 (sim/accStats)
   const acc = accExtras(p);
-  if (!add && !grow && !lux && !gym && !boon && !devil && !set && !fen && !ecl && !wv && !acc) return base;
+  // 빙설 영역강화 방어력 (sim/bsKit)
+  const ice = bsExtras(p);
+  if (!add && !grow && !lux && !gym && !boon && !devil && !set && !fen && !ecl && !wv && !acc && !ice) return base;
   const out = { ...base };
-  for (const a of [add, grow, lux, gym, boon, devil, set, fen, ecl, wv, acc]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
+  for (const a of [add, grow, lux, gym, boon, devil, set, fen, ecl, wv, acc, ice]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
   return out;
 }
 

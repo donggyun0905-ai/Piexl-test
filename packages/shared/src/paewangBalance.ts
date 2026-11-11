@@ -85,6 +85,7 @@ export const PW_CHAR: Partial<Record<CharacterId, PwCharTune>> = {
   puppeteer: { hp: 1, dmg: 1, taken: 1 },
   rabbit: { hp: 1, dmg: 1, taken: 1 },
   baekryeong: { hp: 1, dmg: 1, taken: 1 },
+  bingseol: { hp: 1, dmg: 1, taken: 1 },
   slayer: { hp: 0.52, dmg: 0.5, taken: 0.23 },
   spiritist: { hp: 0.84, dmg: 0.92, taken: 0.66 },
   summoner: { hp: 1.08, dmg: 1.21, taken: 0.64 },

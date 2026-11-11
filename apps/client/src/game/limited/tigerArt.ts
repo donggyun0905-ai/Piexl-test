@@ -99,6 +99,7 @@ export const ACCENT: Record<string, string> = {
   puppeteer: "#ff6a7a",
   rabbit: "#8aff5a",
   baekryeong: "#5ad8ff",
+  bingseol: "#bfe8ff",
   collector: "#5a8aff",
   mystic: "#ff6a8a",
   engineer: "#5ad0f0",

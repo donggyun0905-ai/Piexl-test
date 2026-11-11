@@ -33,6 +33,7 @@ import { shadowingSounds } from "./shadowingSounds";
 import { puppetSounds } from "./puppetSounds";
 import { rabbitSounds } from "./rabbitSounds";
 import { baekSounds } from "./baekSounds";
+import { bingseolSounds } from "./bingseolSounds";
 import { factionSounds } from "./factionSounds";
 
 export const SKILL_SOUNDS = {
@@ -272,6 +273,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   puppetSounds(run, out, onShake);
   rabbitSounds(run, out, onShake);
   baekSounds(run, out, onShake);
+  bingseolSounds(run, out, onShake);
   factionSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;
