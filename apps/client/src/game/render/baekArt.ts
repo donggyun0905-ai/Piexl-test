@@ -67,7 +67,7 @@ export function drawBaekGround(ctx: Ctx, s: RunState, _a: number, snap: Snap): v
     const y = snap(sh.y);
     const f = sh.age / sh.life;
     const a = f > 0.75 ? (1 - f) / 0.25 : 1;
-    if (sh.kind === 0) slashPic(ctx, Math.min(3, 1 + Math.floor(f * 4)), x, y, sh.r, sh.dx, sh.dy, a);
+    if (sh.kind === 0) slashPic(ctx, Math.min(3, Math.floor(f * 4)), x, y, sh.r, sh.dx, sh.dy, a);
     else {
       // 망령: 옆으로 날아가는 그림(2칸)을 진행 방향으로 · 왼쪽이면 뒤집음
       additive(ctx, () => glow(ctx, x, y, sh.r * 1.4, BY.pale, 0.3 * a));

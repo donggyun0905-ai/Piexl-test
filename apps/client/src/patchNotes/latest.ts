@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.18",
+    date: "2026-11-11",
+    items: {
+      ko: ["백령 위백도: 검무 소용돌이가 빙글빙글 돌지 않고, 망령에 닿은 순간부터 그림 1→2→3→4칸이 영상처럼 차례로 한 번 재생됨 (추가 피해 3번 동안) · 유령팔 에너지 참격도 1칸부터 4칸까지 차례로 커지며 날아감"],
+      en: ["Baekryeong Whirling Blades: the sword-dance whirl no longer spins; from the moment a wraith hits, frames 1→2→3→4 play once in order like a clip (over the 3 extra hits) · ghost arm energy slashes also grow through frames 1 to 4 as they fly"],
+      ja: ["白霊・威白刀：剣舞の渦がくるくる回らず、亡霊が触れた瞬間から絵の1→2→3→4コマが映像のように順に一度だけ再生（追加3回の間）・幽霊の腕のエネルギー斬撃も1コマから4コマまで順に大きくなって飛ぶ"],
+    },
+  },
+  {
     version: "0.52.17",
     date: "2026-11-11",
     items: {

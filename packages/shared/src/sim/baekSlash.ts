@@ -81,6 +81,8 @@ function shotStep(s: RunState, sh: BaekShot): boolean {
     if (sh.kind === 1 && hasPerk(p, "byWhirl") && !(p.byWhirls ?? []).some((w) => w.id === e.id)) {
       const w: BaekWhirl = { id: e.id, x: e.x, y: e.y, left: K.byWhirl.hits, age: 0, r: K.byWhirl.r * Math.max(1, armScale(p)), dmg: p.stats.damage * K.byWhirl.mul * hauntMul(p) };
       (p.byWhirls ??= []).push(w);
+      // 소용돌이 그림은 한 번만: 추가 피해가 다 끝날 때까지 1→4칸을 차례로 재생
+      addEffect(s, { kind: "byWhirl", x: e.x, y: e.y, dirX: 0, dirY: 0, size: w.r, maxTicks: K.byWhirl.hits * K.byWhirl.every + 6 });
     }
   }
   return sh.age < sh.life;
@@ -98,7 +100,6 @@ function whirlStep(s: RunState, w: BaekWhirl): boolean {
     if (!alive(e) || (e.x - w.x) ** 2 + (e.y - w.y) ** 2 > (w.r + e.r) ** 2) continue;
     damageEnemyLite(s, e, w.dmg, 0, 0);
   }
-  addEffect(s, { kind: "byWhirl", x: w.x, y: w.y, dirX: 0, dirY: 0, size: w.r, style: K.byWhirl.hits - w.left, maxTicks: 16 });
   w.left--;
   return w.left > 0;
 }

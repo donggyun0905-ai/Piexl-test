@@ -37,7 +37,9 @@ export function drawBaekFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       return true;
     }
     case "byWhirl": {
-      additive(ctx, () => byPic(ctx, 1, Math.min(3, Math.floor(f * 4)), x, y, fx.size * 2.6, a, (fx.style ?? 0) * 0.9 + f * 2));
+      // 검무 소용돌이: 그림 1→2→3→4칸을 영상처럼 차례로 (돌리지 않음) · 마지막 칸에서만 옅어짐
+      const frame = Math.min(3, Math.floor(f * 4));
+      additive(ctx, () => byPic(ctx, 1, frame, x, y, fx.size * 2.6, f > 0.85 ? (1 - f) / 0.15 : 1));
       return true;
     }
     case "byGreat": {
