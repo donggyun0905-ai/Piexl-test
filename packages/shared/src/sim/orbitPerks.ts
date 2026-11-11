@@ -1,4 +1,5 @@
 // 원소술사 회전체에 붙는 아이템 효과: 일렉트로닉 전깃줄 · 펫 유도탄 · 강철 구슬·지키는 검 막기·행운 튕기기 · 원소술사 탄
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { damageEnemy } from "./combat";
@@ -22,7 +23,7 @@ const near2 = (a: { x: number; y: number }, b: { x: number; y: number }) => (a.x
 /** 일렉트로닉: 같은 고리의 이웃한 회전체 사이 전깃줄 */
 export function wires(s: RunState, bodies: OrbBody[], dmg: number): void {
   const p = s.player;
-  if (!hasPerk(p, "electronic")) return;
+  if (!hasPerk(p, "electronic")) return; return srcRun(s, "electronic", () => {
   p.wireCd = Math.max(0, (p.wireCd ?? 0) - 1);
   if (p.wireCd > 0) return;
   p.wireCd = R.WIRE_TICKS;
@@ -34,7 +35,7 @@ export function wires(s: RunState, bodies: OrbBody[], dmg: number): void {
       damageEnemy(s, e, (dmg * R.WIRE_DPS * R.WIRE_TICKS) / TICK_RATE, 0, 0);
     }
   }
-}
+}); }
 
 /** 전깃줄로 이을 쌍: 같은 고리에서 이웃한 것끼리 (펫 제외) */
 export function wirePairs(bodies: OrbBody[]): [OrbBody, OrbBody][] {

@@ -1,5 +1,7 @@
 // 레이저 (기계공학자) 핵심: 조사 간격·피해 · 빔 따라가기(벽·첫 적에서 멈춤) · 맞히기 · 전용 아이템 효과.
 // 무기마다 공격 방식은 laserWeapons, 틱마다 장치(포탑·지뢰 등) 처리는 laserGear
+import { srcRun } from "./dmgSrc";
+import { logDmg } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../content";
 import { blastAt, COMBAT_RULES } from "./combat";
@@ -153,17 +155,18 @@ export function beamHit(s: RunState, e: EnemyState, dmg: number, ticks: number):
   // 장갑 용해로 더 들어간 몫은 부식 피해 (부식 색 숫자)
   const melt = dmg * COMBAT_RULES.MELT_ADD * (e.melt ?? 0);
   e.hp -= dmg + melt;
+  logDmg(s, e, dmg);
   markDot(s, e, "rot", melt);
   factionHit(s, e); // 테라코어 에너지
   e.hitFlash = Math.max(e.hitFlash, 2);
   if (hasPerk(p, "armorMelt")) e.melt = Math.min(R.MELT_MAX, (e.melt ?? 0) + 1);
-  if (hasPerk(p, "heatBuildup")) {
+  if (hasPerk(p, "heatBuildup")) srcRun(s, "heatBuildup", () => {
     e.heat = (e.heat ?? 0) + ticks * (weaponOf(p).gear === "cutter" ? R.CUTTER_HEAT : 1);
     if (e.heat >= R.HEAT_FULL) {
       e.heat = 0;
       blastAt(s, e.x, e.y, R.HEAT_RADIUS, p.stats.damage * R.HEAT_MUL);
     }
-  }
+  });
 }
 
 export function beamFx(s: RunState, x: number, y: number, toX: number, toY: number, width: number, ticks: number, follow = false): void {

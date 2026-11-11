@@ -10,6 +10,7 @@ import { drawRoomFeatures } from "../roomFeatures";
 import { C, type Snap } from "./palette";
 import { drawDeco, themeFor, type FloorTheme } from "./floorThemes";
 import { drawShapeTiles } from "./obstacles";
+import { isNewbie, recRate } from "../../archive/buildData";
 
 /** 보이는 칸 범위 (화면 밖 칸은 그리지 않음: 큰 경기장) · view = [왼쪽 x, 위 y, 너비, 높이] (게임 픽셀) */
 type View = readonly [number, number, number, number];
@@ -76,6 +77,8 @@ export function drawPickups(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
       continue;
     }
     drawPickup(ctx, pk, s.tick, pk.id === s.nearPickupId, hold, (pk.kind === "gym" && !gymUsed(s)) || (pk.kind === "trial" && (!trialUsed(s) || !!s.trialRun)));
+    // 입문 추천: 이 캐릭터로 많이 고르는 패시브 위에 ★ (archive/buildData)
+    if (pk.kind === "passive" && isNewbie() && recRate(s.player.characterId, pk.itemId) !== null) drawRecStar(ctx, pk.x, pk.y - 13 + Math.sin(s.tick / 12), s.tick);
     if (pk.price > 0 && pk.kind !== "coin" && pk.kind !== "trash") drawPrice(ctx, pk.x, pk.y + 14, pk.price, s.gold >= pk.price);
   }
 
@@ -84,6 +87,17 @@ export function drawPickups(ctx: CanvasRenderingContext2D, s: RunState, alpha: n
 }
 
 /** 방 안 벽·기둥·구덩이 (테두리 벽은 위에서 그림) */
+/** 추천 ★ (반짝임) */
+function drawRecStar(ctx: CanvasRenderingContext2D, x: number, y: number, tick: number): void {
+  ctx.font = "8px monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = "#000";
+  ctx.fillText("★", x + 0.5, y + 0.5);
+  ctx.fillStyle = tick % 40 < 20 ? "#ffd040" : "#fff6c0";
+  ctx.fillText("★", x, y);
+}
+
 /** 상점 가격 (작은 글자) */
 function drawPrice(ctx: CanvasRenderingContext2D, x: number, y: number, price: number, afford: boolean): void {
   ctx.font = "6px monospace";

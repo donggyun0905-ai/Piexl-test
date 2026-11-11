@@ -1,5 +1,6 @@
 // 에테르 광부 땅 위의 것들: 원석 모으기 · 광산 붕괴 바위 · 에테르 결정(깨면 파편) · 땅 갈라짐 · 다이너마이트 · 구덩이
 // 수치는 weaponsMiner.MINER, 아이템은 itemsMiner
+import { srcRun } from "./dmgSrc";
 import { MINER_PERKS as K } from "../itemsMiner";
 import { MINER as M } from "../weaponsMiner";
 import { createRng, deriveSeed } from "../rng";
@@ -22,7 +23,7 @@ export function gainOre(s: RunState, n: number): void {
   n *= (hasPerk(p, "mnVein") ? K.mnVein.mul : 1) * (weaponOf(p).pick?.mode === "drill" ? 2 : 1);
   p.mnOre = (p.mnOre ?? 0) + n;
   p.mnTotal = (p.mnTotal ?? 0) + n;
-  if (hasPerk(p, "mnGold")) addGold(s, n * K.mnGold.gold);
+  if (hasPerk(p, "mnGold")) srcRun(s, "mnGold", () => addGold(s, n * K.mnGold.gold));
   const need = caveNeed(s);
   if (p.mnOre < need) return;
   p.mnOre -= need;
@@ -71,7 +72,7 @@ export function shatter(s: RunState, n: GroundMark): void {
     const [dx, dy] = rot((i * Math.PI * 2) / k + s.tick * 0.1);
     s.projectiles.push({ id: s.nextId++, fromPlayer: true, x: n.x, y: n.y, prevX: n.x, prevY: n.y, r: 3, vx: dx * 3.2, vy: dy * 3.2, damage: p.stats.damage * M.shardMul, ticksLeft: 30, spirit: "mnShard", pierce: 2, hitIds: [] });
   }
-  if (hasPerk(p, "mnChain")) blastAt(s, n.x, n.y, K.mnChain.r, p.stats.damage * K.mnChain.mul);
+  if (hasPerk(p, "mnChain")) srcRun(s, "mnChain", () => blastAt(s, n.x, n.y, K.mnChain.r, p.stats.damage * K.mnChain.mul));
   addEffect(s, { kind: "mnShatter", x: n.x, y: n.y, dirX: 0, dirY: 0, size: 14, maxTicks: 18 });
   gainOre(s, M.nodeOre);
 }

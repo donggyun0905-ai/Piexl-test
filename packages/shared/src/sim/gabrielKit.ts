@@ -1,4 +1,5 @@
 // 가브리엘 공용 도우미: 맞히기(성채의 위엄) · 압박 · 빛의 망치 떨어뜨리기 · 철옹(받는 피해) · 맞음·처치 · 스킬 대기
+import { srcRun } from "./dmgSrc";
 import { GABRIEL_PERKS as K } from "../itemsGabriel";
 import { GABRIEL as G } from "../weaponsGabriel";
 import { inCircle, isBoss, stun, strike } from "./s2Kit";
@@ -62,13 +63,13 @@ export function gabrielHurt(s: RunState, env: boolean): void {
   const p = s.player;
   if (!isGabriel(p)) return;
   p.invulnTicks = Math.min(p.invulnTicks, G.hurtTicks);
-  if (env || !hasPerk(p, "gbThorns")) return;
+  if (env || !hasPerk(p, "gbThorns")) return; return srcRun(s, "gbThorns", () => {
   for (const e of inCircle(s, p.x, p.y, K.gbThorns.r)) {
     strike(s, e, p.stats.maxHp * K.gbThorns.hpMul, 8);
     press(s, e);
   }
   addEffect(s, { kind: "gbThorn", x: p.x, y: p.y, dirX: 0, dirY: 0, size: K.gbThorns.r, maxTicks: 20 });
-}
+}); }
 
 /** 처치할 때 (hiddenPerks.relicKill): 압괴 */
 export function gabrielKill(s: RunState, e: EnemyState): void {

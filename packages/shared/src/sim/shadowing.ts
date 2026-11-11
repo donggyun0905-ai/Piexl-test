@@ -1,6 +1,7 @@
 // 쉐도잉(실베르): 누르고 있는 동안 붓 끝(마우스 자리, 붓이 닿는 거리까지)을 따라 바닥에 먹 획을 그림. 획에 닿은 적은 계속 피해
 // 다 그리면(손을 떼면) 모양에 따라 기술: 닫힌 원 = 봉인(안의 적 큰 피해·묶음) · 곧은 줄 = 일필 베기 · 그 밖은 그냥 획
 // 잉크를 써서 그리고, 쉬면 다시 참 (공격 속도 배율). 방을 나가면 획을 모두 지움. 전용 패시브 효과는 sim/shadowingArts
+import { srcRun } from "./dmgSrc";
 import { SHADOW_INK as SD } from "../weaponsShadowing";
 import { SHADOWING_PERKS as K } from "../itemsShadowing";
 import { rot } from "./orbit";
@@ -146,13 +147,13 @@ const hitBefore = (k: InkStroke, id: number) => {
 /** 날개: 대시하는 동안 지나간 길을 따라 잉크 없이 획이 그려짐 */
 function wingsTick(s: RunState): void {
   const p = s.player;
-  if (!hasPerk(p, "sdWings")) return;
+  if (!hasPerk(p, "sdWings")) return; return srcRun(s, "sdWings", () => {
   const w = p.sdStrokes?.find((k) => k.end < 0 && k.wing);
   if (p.dashTicks > 0) {
     if (!w) newStroke(p, p.x, p.y, true);
     else if (Math.hypot(p.x - w.pts[w.pts.length - 2]!, p.y - w.pts[w.pts.length - 1]!) >= K.sdWings.seg && w.pts.length < SD.maxPts * 2) w.pts.push(p.x, p.y);
   } else if (w) finishStroke(s, w);
-}
+}); }
 
 /** 틱마다 (쉐도잉 붓을 들었을 때 player에서) */
 export function shadowingTick(s: RunState, want: boolean, speed: number): void {

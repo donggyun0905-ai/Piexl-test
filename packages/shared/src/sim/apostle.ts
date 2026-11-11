@@ -1,4 +1,5 @@
 // 악의 사도: 하늘에서 뒤집힌 십자가 (짓누르기 · 일곱 죄는 장판) · 사탄의 가면 · 역천의 베드로 · 쓰러진 적의 영혼을 먹어 회복 (회복약은 오히려 피해)
+import { srcRun } from "./dmgSrc";
 import { manualAim } from "./pwBasic";
 import { TICK_RATE } from "../constants";
 import { CHARACTERS } from "../content";
@@ -135,7 +136,7 @@ function eatSoul(s: RunState, x: number, y: number, light?: boolean): void {
     recalcStats(s);
   }
   if (hasPerk(p, "bloodPact")) p.hasteTicks = Math.max(p.hasteTicks ?? 0, K.bloodPact.ticks);
-  if (hasPerk(p, "soulBurst")) blastAt(s, x, y, K.soulBurst.radius, power(p) * K.soulBurst.mul);
+  if (hasPerk(p, "soulBurst")) srcRun(s, "soulBurst", () => blastAt(s, x, y, K.soulBurst.radius, power(p) * K.soulBurst.mul));
   addEffect(s, { kind: "apSoul", x, y, dirX: 0, dirY: 0, size: 8, maxTicks: 18 });
 }
 

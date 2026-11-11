@@ -1,5 +1,6 @@
 // 크루세이더 성벽 돌진 (대시): 십자가를 앞으로 내밀고 돌진 → 앞에 닿은 적을 잡아 밀고 감 (보스는 한 번 피해만)
 // 밀던 적이 벽·기둥에 막히면 벽 충돌 (더 큰 피해·긴 기절) · 대시가 끝나면 잡은 적을 모두 들이받음 · 돌진 낙인 (앞 땅에 작은 십자 균열)
+import { srcRun } from "./dmgSrc";
 import { CRUSADER_PERKS as K } from "../itemsCrusader";
 import { CRUSADER as C } from "../weaponsCrusader";
 import { addCrack, addWeight, crHits, crStrike } from "./crusaderKit";
@@ -79,10 +80,10 @@ export function ramTick(s: RunState): void {
   }
   crHits(s, n);
   if (n) addEffect(s, { kind: "crRamEndFx", x: p.x + dx * 14, y: p.y + dy * 14, dirX: dx, dirY: dy, size: 26, maxTicks: 22 });
-  if (hasPerk(p, "crRamSlam")) {
+  if (hasPerk(p, "crRamSlam")) srcRun(s, "crRamSlam", () => {
     const r = K.crRamSlam;
     const d = C.slamFwd * 0.6 * reachOf(p);
     addCrack(p, { x: p.x + dx * d, y: p.y + dy * d, dx, dy, n: [r.long, r.side, r.side, 0], mul: C.segMul * r.mul });
     addEffect(s, { kind: "crSlamFx", x: p.x + dx * d, y: p.y + dy * d, dirX: dx, dirY: dy, size: C.slamR * 0.6 * reachOf(p), maxTicks: 22, width: 1 });
-  }
+  });
 }

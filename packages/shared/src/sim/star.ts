@@ -1,4 +1,5 @@
 // 별지기(히든): 공격하면 그 자리에 별을 박음 · 가까운 별끼리 빛줄기로 이어져 닿는 적을 태움 · 별이 가득 차면 별자리 완성, 모든 별이 터짐
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../enemyDefs";
 import { STAR_PERKS as K } from "../itemsStar";
@@ -60,10 +61,10 @@ export function starTick(s: RunState, want: boolean, speed: number): void {
     place(s, x + p.faceY * h, y - p.faceX * h);
   } else place(s, x, y);
   if (st === "meteor") meteors(s, x, y);
-  if (hasPerk(p, "starfall") && roll(s, "starfall") < K.starfall.chance) {
+  if (hasPerk(p, "starfall") && roll(s, "starfall") < K.starfall.chance) srcRun(s, "starfall", () => {
     const a = roll(s, "starfallAt") * Math.PI * 2;
     place(s, x + Math.cos(a) * K.starfall.spread, y + Math.sin(a) * K.starfall.spread);
-  }
+  });
   if ((p.stStars ?? []).length >= starMax(p)) burst(s);
 }
 

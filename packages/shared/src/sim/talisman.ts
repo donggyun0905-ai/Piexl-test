@@ -1,5 +1,7 @@
 // 음양사 부적: 쏠 때 붙이는 값 · 적에게 붙은 수 세기·추가 효과 · 음양사 전용 아이템 (마음가짐·옥구슬·반야·사인·영역·흡생) · 수양 도트·땅 주변 피해
 // 확률은 시드·틱·적 id로 만든 랜덤 (Math.random 없음)
+import { srcRun } from "./dmgSrc";
+import { logDmg } from "./dmgSrc";
 import { ENEMIES, type CharmKind, type WeaponDef } from "../content";
 import { PERKS } from "../perks";
 import { createRng, deriveSeed } from "../rng";
@@ -135,8 +137,8 @@ export function afterCharmAttack(s: RunState, first: number, dmg: number): void 
   if (hasPerk(p, "prajna") && roll(s, "prajna") < R.PRAJNA_CHANCE) main.charged = true;
   const x = p.x + p.faceX * (p.r + 2);
   const y = p.y + p.faceY * (p.r + 2);
-  if (hasPerk(p, "resolve") && roll(s, "resolve") < R.RESOLVE_CHANCE) spiritShot(s, s.projectiles, x, y, p.faceX, p.faceY, dmg * R.RESOLVE_MUL, "seek");
-  if (hasPerk(p, "jadeOrb")) spiritShot(s, s.projectiles, x, y, p.faceX, p.faceY, dmg * R.ORB_MUL, "orb");
+  if (hasPerk(p, "resolve") && roll(s, "resolve") < R.RESOLVE_CHANCE) srcRun(s, "resolve", () => spiritShot(s, s.projectiles, x, y, p.faceX, p.faceY, dmg * R.RESOLVE_MUL, "seek"));
+  if (hasPerk(p, "jadeOrb")) srcRun(s, "jadeOrb", () => spiritShot(s, s.projectiles, x, y, p.faceX, p.faceY, dmg * R.ORB_MUL, "orb"));
 }
 
 /** 부적이 적에게 맞음: 적에게 붙여 세기 → 피해 → 추가 효과. out: 이번 틱에 새로 생기는 탄 */
@@ -226,6 +228,7 @@ export function updateSeals(s: RunState): void {
     if ((e.sealTicks ?? 0) <= 0) continue;
     if (pulse && e.hp > 0 && !e.immune) {
       e.hp -= (e.sealDmg ?? 0) * (e.seal ?? 0);
+      logDmg(s, e, (e.sealDmg ?? 0) * (e.seal ?? 0));
       e.hitFlash = 3;
       markDot(s, e, "curse", (e.sealDmg ?? 0) * (e.seal ?? 0));
     }

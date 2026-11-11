@@ -1,5 +1,6 @@
 // 차원의 순례자 배낭: 수집 도감(들어 본 순례자 무기 → 공격력) · 맞히기(열쇠고리·처치 효과: 기념품·차원 도장) · 땅에 놓인 것(깃발·태엽 폭탄·별·차원의 문)
 // · 탄이 맞았을 때(씨앗 회복·별 가루) · 받는 피해(우산·그림엽서) · 맞은 뒤(텐트). 수치는 weaponsPilgrim.PILGRIM, 아이템은 itemsPilgrim
+import { srcRun } from "./dmgSrc";
 import { WEAPONS, type WeaponId } from "../content";
 import { PILGRIM_PERKS as K } from "../itemsPilgrim";
 import { createRng, deriveSeed } from "../rng";
@@ -55,14 +56,14 @@ function onKill(s: RunState, e: EnemyState): void {
     healPlayer(s, K.pgSouvenir.heal);
     addEffect(s, { kind: "pgHeal", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 10, maxTicks: 20 });
   }
-  if (!hasPerk(p, "pgStamp")) return;
+  if (!hasPerk(p, "pgStamp")) return; return srcRun(s, "pgStamp", () => {
   p.pgStamps = (p.pgStamps ?? 0) + 1;
   if (p.pgStamps < K.pgStamp.need) return;
   p.pgStamps = 0;
   const left = PG_IDS.filter((id) => !p.pgBook?.includes(id) && id !== p.weaponId);
   const id = left[Math.floor(pgRnd(s, "stamp") * left.length)];
   if (id) addPickup(s, s.roomId, "weapon", id, e.x, e.y);
-}
+}); }
 
 /** 땅에 놓기 (kind: flag 깃발 · gate 차원의 문 · gear 태엽 폭탄 · meteor 별) */
 export function placeMark(s: RunState, kind: string, x: number, y: number, r: number, dmg: number, t: number): void {
@@ -98,11 +99,11 @@ export function marksTick(s: RunState): void {
 export function pilgrimShotHit(s: RunState, pr: ProjectileState, e: EnemyState): void {
   const p = s.player;
   if (pr.spirit === "pgSeed") healPlayer(s, p.stats.maxHp * P.seedHeal);
-  if (isBoss(e) && hasPerk(p, "pgKeyring")) strike(s, e, pr.damage * (K.pgKeyring.mul - 1));
-  if (hasPerk(p, "pgStarDust")) {
+  if (isBoss(e) && hasPerk(p, "pgKeyring")) srcRun(s, "pgKeyring", () => strike(s, e, pr.damage * (K.pgKeyring.mul - 1)));
+  if (hasPerk(p, "pgStarDust")) srcRun(s, "pgStarDust", () => {
     for (const f of inCircle(s, e.x, e.y, K.pgStarDust.r)) if (f !== e) hitE(s, f, pr.damage * K.pgStarDust.mul);
     addEffect(s, { kind: "pgRing", x: e.x, y: e.y, dirX: 0, dirY: 0, size: K.pgStarDust.r, maxTicks: 10, tint: "#ffe8a0" });
-  }
+  });
   if (e.hp <= 0) onKill(s, e);
 }
 

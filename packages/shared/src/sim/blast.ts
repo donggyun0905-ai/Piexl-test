@@ -1,5 +1,6 @@
 // 블래스트(새벽의 성흔, 폭멸의 탄환): 누르고 있으면 산탄총 (탄창 5발 · 5발마다 확정 치명타 · 한 발씩 장전 · 대시 슬로우모션·파란 탄은 sim/blastMag). 초근접일수록 세고 크게 밀침 · 초근접 처치는 폭멸(몸이 터져 둘레 피해)
 // 맞힐수록 성흔(달빛의 힘)이 차고 가득 차면 달빛 각성(sim/stigma): 둘레 달빛 폭발 · 더 멀리·넓게·세게·빠르게 + 모든 공격에 달빛 상태이상(sim/moonlight). 수치 weaponsBlast.BLAST · 아이템 itemsBlast
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { BLAST_PERKS as K } from "../itemsBlast";
 import { BLAST as B } from "../weaponsBlast";
@@ -32,7 +33,7 @@ function burst(s: RunState, x: number, y: number, depth: number): void {
   addEffect(s, { kind: "blBurstFx", x, y, dirX: 0, dirY: 0, size: r, maxTicks: 22 });
   for (const e of inCircle(s, x, y, r)) {
     strike(s, e, dmg, 8);
-    if (e.hp <= 0 && depth < 1 && hasPerk(p, "blChain")) burst(s, e.x, e.y, depth + 1);
+    if (e.hp <= 0 && depth < 1 && hasPerk(p, "blChain")) srcRun(s, "blChain", () => burst(s, e.x, e.y, depth + 1));
   }
 }
 
@@ -53,7 +54,7 @@ function pellet(s: RunState, e: EnemyState, reach: number, crit: boolean, blue: 
   let n = B.gainHit + (near ? B.gainNear : 0);
   if (hasPerk(p, "blDragon")) ignite(e, p.stats.damage * K.blDragon.burn);
   if (near && e.hp > 0) {
-    if (hasPerk(p, "blShred")) strike(s, e, dmg * K.blShred.mul, 0, "bleed");
+    if (hasPerk(p, "blShred")) srcRun(s, "blShred", () => strike(s, e, dmg * K.blShred.mul, 0, "bleed"));
     if (hasPerk(p, "blFlare") && !isBoss(e)) e.slowTicks = Math.max(e.slowTicks ?? 0, K.blFlare.slow);
     if (rc) stun(e, K.blRecoil.stun);
   }

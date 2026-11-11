@@ -1,6 +1,7 @@
 // 묵인(헬리오스): 거대한 몸. 방어력(받는 피해를 그 %만큼 무시, 한 번에 적어도 1은 받음) · 맞아도 무적이 거의 없음
 // 공격은 몸으로 들이받는 돌진, 피해는 방어력의 300% · 재생력 10 (10초마다 그만큼) · 회복약은 천천히 차오름
 // 수치는 weaponsMukin.MUKIN, 아이템은 itemsMukin
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { MUKIN_PERKS as K } from "../itemsMukin";
 import { MUKIN as M } from "../weaponsMukin";
@@ -62,7 +63,7 @@ function ramEnd(s: RunState): void {
   const st = weaponOf(p).ram;
   const def = mukinDef(p);
   if (st?.blast) blastAt(s, p.x, p.y, st.blast, def * M.blastMul * weaponOf(p).damageMul, { push: 8 });
-  if (hasPerk(p, "mkTrample")) blastAt(s, p.x, p.y, K.mkTrample.r, def * M.blastMul, { push: 6 });
+  if (hasPerk(p, "mkTrample")) srcRun(s, "mkTrample", () => blastAt(s, p.x, p.y, K.mkTrample.r, def * M.blastMul, { push: 6 }));
   if (st?.trail) for (const k of [0.25, 0.5, 0.75]) blastAt(s, n.sx + (p.x - n.sx) * k, n.sy + (p.y - n.sy) * k, 16, def * 0.6);
   if (st?.guard) {
     p.mkGuard = M.guardTicks;

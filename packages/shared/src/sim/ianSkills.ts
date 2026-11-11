@@ -1,4 +1,5 @@
 // 이안 스킬 넷(1 인과의 실 · 2 그림자 걸음 · 3 기록 집행 · 4 인과율 속박) · 날아가는 실 · 인과 되돌림 (sim/ian에서 부름)
+import { srcRun } from "./dmgSrc";
 import { IAN_PERKS as K } from "../itemsIan";
 import { IAN as I } from "../weaponsIan";
 import { addRec, bind, iaCooldown, iaHit } from "./ianKit";
@@ -37,12 +38,12 @@ export function iaSkill(s: RunState, i: number): void {
   cd[i] = iaCooldown(p, i);
   if (i === 0) {
     thread(s, p.faceX, p.faceY);
-    if (hasPerk(p, "iaSpool")) {
+    if (hasPerk(p, "iaSpool")) srcRun(s, "iaSpool", () => {
       for (const a of [K.iaSpool.spread, -K.iaSpool.spread]) {
         const [c, sn] = rot(a);
         thread(s, p.faceX * c - p.faceY * sn, p.faceX * sn + p.faceY * c);
       }
-    }
+    });
   } else if (i === 1) {
     const far = hasPerk(p, "iaShadow") ? K.iaShadow.dash : 1;
     startRush(p, { t: I.stepTicks, dx: p.faceX, dy: p.faceY, step: I.stepDist * far, dmg: p.stats.damage * I.stepMul, push: 0, invuln: true, tint: "#6a4aff", w: I.stepW });

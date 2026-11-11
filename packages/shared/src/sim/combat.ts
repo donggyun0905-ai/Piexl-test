@@ -1,4 +1,5 @@
 // 피해 주고받기·처치
+import { srcRun } from "./dmgSrc";
 import { holdDown } from "./bossTwins";
 import { remnantDodge } from "./remnant";
 import { endlessPow } from "./endless";
@@ -15,7 +16,7 @@ import { ENEMIES, type EnemyKind } from "../content";
 import { SWARM } from "../swarmDefs";
 import { titanParried } from "./titan";
 import { hpLost } from "./hurtLog";
-import { logHit } from "./pvpRecap";
+import { logHit } from "./pvpRecap"; import { updatePending } from "./pending";
 import { roleDmgMul } from "./pwMatchup";
 import { afterHurt, classTaken, cloudEnv, foeTaken } from "./classTaken";
 import { dodged, extraTaken, onHitExtra, sharpBonus } from "./baseStats";
@@ -177,10 +178,10 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
   if (hasPerk(p, "barrier")) p.invulnTicks = R.BARRIER_TICKS;
   afterHurt(s, from, envHit);
   // 야성의 포효: 둘레 적을 밀어내며 피해, 3초 동안 고양이 피해 증가
-  if (hasPerk(p, "wildRoar")) {
+  if (hasPerk(p, "wildRoar")) srcRun(s, "wildRoar", () => {
     p.roarTicks = R.ROAR_TICKS;
     blastAt(s, p.x, p.y, 30, p.stats.damage, { push: 10 });
-  }
+  });
   addEffect(s, { kind: "hit", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 6, maxTicks: 10 });
   // 파수꾼 반격 준비 · 반격의 방패 충격파 (sim/origin)
   readyCounter(s, taken);
@@ -227,14 +228,6 @@ export function updateDelayed(s: RunState): void {
   removeDead(s);
 }
 
-/** 때가 된 잠시 뒤 폭발 터뜨리기 */
-export function updatePending(s: RunState): void {
-  if (s.pendingBlasts.length === 0) return;
-  const due = s.pendingBlasts.filter((b) => b.tick <= s.tick);
-  s.pendingBlasts = s.pendingBlasts.filter((b) => b.tick > s.tick);
-  for (const b of due) blastAt(s, b.x, b.y, b.radius, b.damage);
-}
-
 /** 쓰러진 적 정리: 처치 수·돈. 보스가 쓰러지면 부른 적도 사라짐 (불려 나온 보스는 아님) */
 export function removeDead(s: RunState): void {
   if (!s.enemies.some((e) => e.hp <= 0)) return;
@@ -276,7 +269,7 @@ export function removeDead(s: RunState): void {
     // 생선 간식: 처치하면 고양이가 빨라짐
     if (hasPerk(p, "fishTreat")) p.frenzyTicks = R.ROAR_TICKS;
     // 응급 처치: 처치하면 체력 1 (의사 공격 회복 상한에 포함)
-    if (hasPerk(p, "firstAid") && swarmLucky(s, "aid", e.id)) leechHeal(s, R.FIRST_AID_HEAL);
+    if (hasPerk(p, "firstAid") && swarmLucky(s, "aid", e.id)) srcRun(s, "firstAid", () => leechHeal(s, R.FIRST_AID_HEAL));
     if (hasPerk(p, "energyRecycle") && swarmLucky(s, "recycle", e.id)) raiseShield(p, R.RECYCLE_BARRIER, p.stats.maxHp * R.RECYCLE_MAX);
     scribeKill(s, e);
     minerKill(s, e);
@@ -294,7 +287,7 @@ export function removeDead(s: RunState): void {
   // 연쇄 폭발: 쓰러진 자리에서 작은 폭발 (한 틱씩 이어짐)
   for (const f of fallen) {
     useSeat(s, f.seat);
-    if (hasPerk(s.player, "chainBurst")) blastAt(s, f.x, f.y, PERKS.chainBurst.radius, s.player.stats.damage * PERKS.chainBurst.damage);
+    if (hasPerk(s.player, "chainBurst")) srcRun(s, "chainBurst", () => blastAt(s, f.x, f.y, PERKS.chainBurst.radius, s.player.stats.damage * PERKS.chainBurst.damage));
   }
   useSeat(s, back);
 }

@@ -1,6 +1,7 @@
 // 변희(비르디아, 만물의 소녀): 든 무기의 동물로 변해 그 동물처럼 싸움. 동물마다 공격이 다르고, 아이템 셋이 그 동물만 강하게 함
 // 늑대 물기 · 곰 할퀴기 · 독수리 깃털 · 뱀 독 물기 · 멧돼지 돌진 · 전갈 꼬리 · 박쥐 음파 · 코끼리 짓밟기 · 거미 거미줄 · 불사조 불덩이
 // 수치는 weaponsMorph.MORPH, 아이템은 itemsMorph
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { MORPH_PERKS as K } from "../itemsMorph";
 import { MORPH as M } from "../weaponsMorph";
@@ -47,19 +48,19 @@ function attack(s: RunState, dmg: number): void {
       const mul = hasPerk(p, "bearRage") && p.hp <= p.stats.maxHp * K.bearRage.below ? K.bearRage.damage : 1;
       for (const e of inCone(s, reach, M.bearArc)) strike(s, e, dmg * mul, M.bearPush);
       addEffect(s, { kind: "bearSwipe", ...fx, x: p.x + p.faceX * reach * 0.5, y: p.y + p.faceY * reach * 0.5, size: reach * 0.6, maxTicks: 16 });
-      if (hasPerk(p, "bearQuake") && every(p, K.bearQuake.every)) blastAt(s, p.x, p.y, K.bearQuake.r, dmg * K.bearQuake.mul, { push: 8 });
+      if (hasPerk(p, "bearQuake") && every(p, K.bearQuake.every)) srcRun(s, "bearQuake", () => blastAt(s, p.x, p.y, K.bearQuake.r, dmg * K.bearQuake.mul, { push: 8 }));
       return;
     }
     case "eagle": {
       const n = hasPerk(p, "eagleStorm") ? K.eagleStorm.feathers : M.feathers;
       fan(s, n, M.featherSpread, { damage: dmg, spirit: "eagleFeather", range: reach });
-      if (hasPerk(p, "eagleDive") && every(p, K.eagleDive.every)) {
+      if (hasPerk(p, "eagleDive") && every(p, K.eagleDive.every)) srcRun(s, "eagleDive", () => {
         const e = nearest(s, reach);
         if (e) {
           for (const t of inCircle(s, e.x, e.y, K.eagleDive.r)) strike(s, t, dmg * K.eagleDive.mul);
           addEffect(s, { kind: "streak", ...fx, size: 3, toX: e.x, toY: e.y, maxTicks: 12 });
         }
-      }
+      });
       return;
     }
     case "snake": {
@@ -70,7 +71,7 @@ function attack(s: RunState, dmg: number): void {
         if (hasPerk(p, "snakeCoil")) root(e, K.snakeCoil.ticks);
       }
       addEffect(s, { kind: "thrust", ...fx, size: reach, toX: p.x + p.faceX * reach, toY: p.y + p.faceY * reach, width: 3, maxTicks: 8, tint: "#7ae05a" });
-      if (hasPerk(p, "snakeSpit") && every(p, K.snakeSpit.every)) shoot(s, 0, { damage: dmg * K.snakeSpit.mul, spirit: "venomSpit", range: K.snakeSpit.range, speed: 3.5 });
+      if (hasPerk(p, "snakeSpit") && every(p, K.snakeSpit.every)) srcRun(s, "snakeSpit", () => shoot(s, 0, { damage: dmg * K.snakeSpit.mul, spirit: "venomSpit", range: K.snakeSpit.range, speed: 3.5 }));
       return;
     }
     case "boar": {
@@ -106,7 +107,7 @@ function attack(s: RunState, dmg: number): void {
       leech(s, dealt);
       addEffect(s, { kind: "quack", ...fx, size: reach, width: M.sonicArc, maxTicks: 12, tint: "#c08aff" });
       if (hasPerk(p, "batEcho")) s.pendingBlasts.push({ tick: s.tick + K.batEcho.delay, x: p.x + p.faceX * reach * 0.7, y: p.y + p.faceY * reach * 0.7, radius: K.batEcho.r, damage: dmg });
-      if (hasPerk(p, "batSwarm") && every(p, K.batSwarm.every)) fan(s, K.batSwarm.bats, 0.4, { damage: dmg * K.batSwarm.mul, spirit: "batling", range: reach * 2, speed: 2.6 });
+      if (hasPerk(p, "batSwarm") && every(p, K.batSwarm.every)) srcRun(s, "batSwarm", () => fan(s, K.batSwarm.bats, 0.4, { damage: dmg * K.batSwarm.mul, spirit: "batling", range: reach * 2, speed: 2.6 }));
       return;
     }
     case "elephant": {
@@ -126,11 +127,11 @@ function attack(s: RunState, dmg: number): void {
     }
     case "phoenix": {
       shoot(s, 0, { damage: dmg, spirit: "phoenixFire", r: 3.5, range: reach });
-      if (hasPerk(p, "phoenixSun") && every(p, K.phoenixSun.every)) {
+      if (hasPerk(p, "phoenixSun") && every(p, K.phoenixSun.every)) srcRun(s, "phoenixSun", () => {
         blastAt(s, p.x, p.y, K.phoenixSun.r, dmg * K.phoenixSun.mul);
         for (const e of inCircle(s, p.x, p.y, K.phoenixSun.r)) ignite(e, dmg);
         addEffect(s, { kind: "oFlame", x: p.x, y: p.y, dirX: 0, dirY: -1, size: K.phoenixSun.r, width: -1, maxTicks: 22 });
-      }
+      });
       return;
     }
   }

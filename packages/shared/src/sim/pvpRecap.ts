@@ -2,6 +2,7 @@
 // 그림자 적이 맞을 때 날것 피해를 적어 두고(logHit), 사람에게 넘길 때(transfer) 실제로 줄어든 체력을 그 비율로 나눔
 import { raidLogHit } from "./raidStats";
 import { seatNo } from "./party";
+import { logDmg } from "./dmgSrc";
 import type { EnemyState, RunState } from "./types";
 
 /** 피해 출처: 0 평타 · 1~4 스킬 · 5 소환한 것 · 6 지속 피해(독·불) · 7 지형(함정·용암·가시, 때린 사람 -1) */
@@ -35,6 +36,7 @@ export function recapHeal(s: RunState, seat: number, amt: number): void {
 
 /** 그림자 적이 맞음 (지금 자리 = 때린 사람, 출처는 pv.src) */
 export function logHit(s: RunState, e: EnemyState, amt: number): void {
+  logDmg(s, e, amt);
   if (s.raidBoss) return raidLogHit(s, e, amt);
   const pv = s.pvp;
   if (!pv || amt <= 0) return;

@@ -2,6 +2,7 @@
 // 대시(무적) 중에 적 공격이 닿으면(대시가 아니었으면 맞았을 공격) 회피 성공 → 슬로우모션(적·적 탄만 느려짐)
 // 슬로우모션 안에 직접 클릭하면(자동 공격과 따로, 입력 skill) 확정 치명타 연속 베기(큰 검격, 여러 적) → 끝나면 슬로우모션 끝
 // 수치는 weaponsRemnant.REMNANT, 아이템은 itemsRemnant
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { REMNANT_PERKS as K } from "../itemsRemnant";
 import { REMNANT as R, type PhantomStyle } from "../weaponsRemnant";
@@ -123,7 +124,7 @@ function flurryCut(s: RunState, i: number, n: number): void {
 function update(s: RunState): void {
   const p = s.player;
   cleanse(p);
-  if (hasPerk(p, "rmBlood")) updateBleed(s);
+  if (hasPerk(p, "rmBlood")) srcRun(s, "rmBlood", () => updateBleed(s));
   const click = (p.trKey ?? 0) > 0 && !s.pvp && !s.pw;
   if (p.rmFlurry) {
     p.invulnTicks = Math.max(p.invulnTicks, 2);

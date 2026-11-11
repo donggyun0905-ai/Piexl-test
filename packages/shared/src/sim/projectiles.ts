@@ -8,6 +8,7 @@ import { renBlock } from "./ren";
 import { ENEMIES } from "../content";
 import { starHit } from "./ninja";
 import { echoHit } from "./chrono";
+import { setSrc } from "./dmgSrc";
 import { blastAt, damageEnemy, damagePlayer, dotDamage, healPlayer, ignite, removeDead } from "./combat";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 import { summonShot } from "./summonTypes";
@@ -42,6 +43,7 @@ export function updateProjectiles(s: RunState, frozen = false): void {
   /** 방 안 벽·기둥 (탄을 막음, 구덩이는 넘어감) */
   const g = roomGrid(s);
   for (const pr of s.projectiles) {
+    setSrc(pr.src);
     if (frozen && !pr.fromPlayer) {
       keep.push(pr);
       continue;
@@ -140,6 +142,7 @@ export function updateProjectiles(s: RunState, frozen = false): void {
     }
     if (!gone) keep.push(pr);
   }
+  setSrc();
   useSeat(s, back);
   s.projectiles = [...keep, ...spawned];
   removeDead(s);

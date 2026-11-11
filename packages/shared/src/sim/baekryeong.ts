@@ -1,5 +1,6 @@
 // 백령(실베르): 누르면 바라보는 쪽 앞을 대태도로 부채꼴 베기 · 적을 처치하면 영혼이 저절로 쌓임(sim/baekSoul)
 // 게이지 3칸부터 머리 위 유령팔이 벨 때마다 에너지 참격(sim/baekSlash) · (진)대태도(sim/baekSword)
+import { srcRun } from "./dmgSrc";
 import { BAEK_PERKS as K } from "../itemsBaekryeong";
 import { BAEK_BLADE as B } from "../weaponsBaekryeong";
 import { hauntMul, isBaek, soulFire } from "./baekKit";
@@ -79,7 +80,7 @@ export function baekTick(s: RunState, want: boolean, speed: number): void {
   shotsTick(s);
   swordsTick(s);
   // 청혼불: 청염 걸린 적 0.5초마다 피해 (블루 플레임과 같은 계산)
-  if (hasPerk(p, "byFlame")) flameTick(s);
+  if (hasPerk(p, "byFlame")) srcRun(s, "byFlame", () => flameTick(s));
 }
 
 /** 받는 피해 배율 (혼의 가호) */

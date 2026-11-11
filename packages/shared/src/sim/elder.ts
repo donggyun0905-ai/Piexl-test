@@ -1,5 +1,6 @@
 // 장로(비르디아): 진법. 공격하면 적 자리(없으면 바라보는 쪽)에 네모난 진을 깔고, 잠시 뒤 진이 발동. 한 번에 깔린 진은 셋까지 (오래된 것부터 사라짐)
 // 진마다: 덩굴 강타 · 불기둥 · 양쪽 벽 · 함정 구멍 · 떨어지는 검 · 번개 · 얼음 · 빨아들이는 바람 · 바위 주먹 · 천원진. 수치는 weaponsElder, 아이템은 itemsElder
+import { srcRun } from "./dmgSrc";
 import { manualAim } from "./pwBasic";
 import { TICK_RATE } from "../constants";
 import { ELDER_PERKS as K } from "../itemsElder";
@@ -166,14 +167,14 @@ function cast(s: RunState): void {
   const e = aim ? undefined : target(s);
   const reach = p.stats.range * 0.6;
   place(s, kind, aim ? aim.x : e ? e.x : p.x + p.faceX * reach, aim ? aim.y : e ? e.y : p.y + p.faceY * reach);
-  if (!aim && hasPerk(p, "elDouble") && p.eCasts % K.elDouble.every === 0) {
+  if (!aim && hasPerk(p, "elDouble") && p.eCasts % K.elDouble.every === 0) srcRun(s, "elDouble", () => {
     const o = target(s, e);
     if (o) place(s, kind, o.x, o.y);
-  }
-  if (hasPerk(p, "elStaff")) {
+  });
+  if (hasPerk(p, "elStaff")) srcRun(s, "elStaff", () => {
     for (const t of alive(s)) if (dist2(t, p) <= (K.elStaff.r + t.r) ** 2) strike(s, t, p.stats.damage * K.elStaff.mul, K.elStaff.push);
     addEffect(s, { kind: "swing", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: K.elStaff.r, maxTicks: 8, tint: "#c8a060" });
-  }
+  });
 }
 
 /** 틱마다 (진법 무기를 들었을 때 player에서) */

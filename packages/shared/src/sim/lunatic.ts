@@ -1,6 +1,7 @@
 // 루나틱(새벽의 성흔, 월광의 검사 · 리더): 누르고 있으면 새하얀 레이피어로 매우 빠르게 찌름 (앞으로 약간 돌진) · 달빛이 없어도 약점 공격 30% (sim/lunaticWeak)
 // 대시: 지나가는 길의 적을 찌름 · 월광 표적(머리 위 조준점)에 약점이 터지면 확정 치명타 + 빠른 달빛 베기 (달빛 상태이상 피해, sim/lunaticKit)
 // 성흔이 가득 차면 만월 각성: 공격 속도 증가 · 모든 적이 표적 · 수치 weaponsLunatic · 아이템 itemsLunatic (삼연 찌르기·월광 검기·잔상 찌르기·초승달 회전 베기 등)
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { LUNATIC_PERKS as K } from "../itemsLunatic";
 import { LUNATIC as L } from "../weaponsLunatic";
@@ -46,17 +47,17 @@ function thrust(s: RunState): void {
   p.lnCount = (p.lnCount ?? 0) + 1;
   const mul = L.thrustMul * (hasPerk(p, "lnLunge") ? K.lnLunge.mul : 1);
   thrustDir(s, p.faceX, p.faceY, mul);
-  if (hasPerk(p, "lnFlurry") && p.lnCount % K.lnFlurry.every === 0) {
+  if (hasPerk(p, "lnFlurry") && p.lnCount % K.lnFlurry.every === 0) srcRun(s, "lnFlurry", () => {
     for (const a of [-0.38, 0.38]) {
       const [c, sn] = rot(a);
       thrustDir(s, p.faceX * c - p.faceY * sn, p.faceX * sn + p.faceY * c, mul * K.lnFlurry.mul);
     }
-  }
-  if (isAwake(p) && hasPerk(p, "lnCrescent") && p.lnCount % K.lnCrescent.every === 0) {
+  });
+  if (isAwake(p) && hasPerk(p, "lnCrescent") && p.lnCount % K.lnCrescent.every === 0) srcRun(s, "lnCrescent", () => {
     const r = K.lnCrescent.r * reachOf(p);
     for (const e of inCircle(s, p.x, p.y, r)) lnHit(s, e, K.lnCrescent.mul, 4);
     addEffect(s, { kind: "lnCrescentFx", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 16, follow: true });
-  }
+  });
 }
 
 /** 대시 찌르기: 대시 동안 몸 둘레 적을 한 번씩 찌름 · 끝나면 잔상 찌르기 */

@@ -7,6 +7,7 @@ import type { IconItem } from "./itemIcon";
 import { ItemTip } from "./ItemTip";
 import { compareWeapon, type WeaponCompare } from "./weaponCompare";
 import { auctionTipAt } from "./vault/auctionText";
+import { recRate } from "../archive/buildData";
 
 export interface FloorTip {
   icon: IconItem | null;
@@ -26,6 +27,8 @@ export function floorTipAt(run: RunState, canvas: HTMLCanvasElement, zoom: numbe
   const price = pk.price > 0 && pk.kind !== "trash" ? ` (${pk.price}G)` : "";
   const reward = pk.kind === "passive" && pk.group > 0 && pk.price === 0;
   const pos = pickupScreenPos(run, canvas, zoom, pk);
+  const rec = pk.kind === "passive" ? recRate(run.player.characterId, pk.itemId) : null;
+  const recLine = rec === null ? "" : t("tipRecommend").replace("{p}", String(Math.round(rec * 100)));
   // 레이드 성좌의 방 제단: 성좌 이름 · 받는 증강 기술 둘
   const star = pk.kind === "altar" ? raidAltarOf(pk) : undefined;
   if (star) return { icon: null, name: t(`altar_${star}` as TextKey), desc: ALTARS[star].skills.map((k) => `${t(`swarmSkill_${k}` as TextKey)}: ${t(`swarmSkillDesc_${k}` as TextKey)}`).join("\n"), x: pos.x, y: pos.y, hint: t("raidAltarHint"), compare: null };
@@ -35,7 +38,7 @@ export function floorTipAt(run: RunState, canvas: HTMLCanvasElement, zoom: numbe
     desc: itemDesc(pk.kind, pk.itemId, lang, t, pk.kind === "devil" ? devilCost(pk.itemId as DevilId, run.player) : undefined),
     x: pos.x,
     y: pos.y,
-    hint: reward ? t("tipClickPick") : pk.kind === "weapon" && pk.price === 0 ? t("tipPressF") : "",
+    hint: [recLine, reward ? t("tipClickPick") : pk.kind === "weapon" && pk.price === 0 ? t("tipPressF") : ""].filter(Boolean).join("\n"),
     compare: pk.kind === "weapon" ? compareWeapon(run, pk.itemId as WeaponId, lang, t) : null,
   };
 }

@@ -3,10 +3,11 @@ import { damageEnemy } from "./combat";
 import { tideMul } from "./faction";
 import type { DotKind, EnemyState, RunState } from "./types";
 import { markDot } from "./util";
+import { muteDot } from "./dmgSrc";
 
 export function statusHit(s: RunState, e: EnemyState, kind: DotKind, dmg: number, dirX = 0, dirY = 0, knock = true): void {
   const before = e.hp;
   // 탈라시아 물결 콤보: 물 피해 증가 (sim/faction)
   damageEnemy(s, e, kind === "tide" ? dmg * tideMul(s) : dmg, dirX, dirY, knock);
-  markDot(s, e, kind, before - e.hp);
+  muteDot(() => markDot(s, e, kind, before - e.hp));
 }

@@ -1,6 +1,7 @@
 // 백령 (진)대태도: 유령팔이 벨 때 확률로 푸른 불꽃의 큰 대태도가 하늘에서 떨어져 아래 둘레에 피해
 // (진)대태도-랑: 떨어진 곳 뒤로(바라보는 쪽) 맵 끝까지 대태도가 하나씩 이어 떨어짐
 // (진)대태도-백: 유령팔이 벨 때 확률로 범위 끝에 대태도가 꽂혀 가만히 있고, 둘레 범위 안 적에게 몇 틱마다 번개
+import { srcRun } from "./dmgSrc";
 import { BAEK_PERKS as K } from "../itemsBaekryeong";
 import { BAEK_BLADE as B } from "../weaponsBaekryeong";
 import { armScale, hauntMul, soulFire } from "./baekKit";
@@ -51,13 +52,13 @@ export function armSwords(s: RunState, r1: number, r2: number): void {
   }
   // (진)대태도-백: 맵에 하나만 (꽂힌 대태도가 사라져야 다시 확률로 생김)
   const list = (p.bySwords ??= []);
-  if (hasPerk(p, "byGreatWhite") && !list.some((w) => w.kind === 1) && r2 < K.byGreatWhite.chance) {
+  if (hasPerk(p, "byGreatWhite") && !list.some((w) => w.kind === 1) && r2 < K.byGreatWhite.chance) srcRun(s, "byGreatWhite", () => {
     const d = B.reach * reachOf(p) * 1.6;
     const x = Math.min(ROOM_MAX_X, Math.max(ROOM_MIN_X, p.x + p.faceX * d));
     const y = Math.min(ROOM_MAX_Y, Math.max(ROOM_MIN_Y, p.y + p.faceY * d));
     list.push({ x, y, kind: 1, age: 0, life: K.byGreatWhite.life, r: K.byGreatWhite.r * size, dmg: p.stats.damage * K.byGreatWhite.mul * hauntMul(p) });
     addEffect(s, { kind: "byGreat", x, y, dirX: 0, dirY: 0, size: K.byGreatWhite.r * size * 0.6, style: 1, maxTicks: 24 });
-  }
+  });
 }
 
 /** 틱마다: 떨어지는 대태도 쾅 · 꽂힌 대태도 번개 */

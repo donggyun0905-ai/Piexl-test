@@ -1,6 +1,7 @@
 // 이터(헬리오스): 이빨 달린 그림자. 누를 때마다 열 가지 공격 중 하나가 확률로 나옴 (넓고 세지만 느림)
 // 쓰러뜨린 적은 '먹은' 것으로 세고, 먹을 때마다 재생력 +0.1 (상한 20, 10초마다 그만큼 회복)
 // 수치는 weaponsEater.EATER, 아이템은 itemsEater
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { EATER_PERKS as K } from "../itemsEater";
 import { createRng, deriveSeed } from "../rng";
@@ -182,7 +183,7 @@ export function eaterTick(s: RunState, want: boolean, speed: number): void {
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
   mawMove(s, pick(s, p, p.attackCount));
-  if (hasPerk(p, "eaEcho") && roll(s, "echo", p.attackCount) < K.eaEcho.chance) mawMove(s, pick(s, p, -p.attackCount));
+  if (hasPerk(p, "eaEcho") && roll(s, "echo", p.attackCount) < K.eaEcho.chance) srcRun(s, "eaEcho", () => mawMove(s, pick(s, p, -p.attackCount)));
 }
 
 /** 연습장 등에서 다시 시작할 때 */

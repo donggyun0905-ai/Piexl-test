@@ -1,4 +1,5 @@
 // 악마의 거래 패시브 효과 (itemsDevil): 방어력(악마의 피·붉은 반점) · 맞힐 때(절규 범위·리퍼 낫) · 주는 피해 배율(십자가 보스·리퍼) · 틱마다(사탄의 가면 오라)
+import { srcRun } from "./dmgSrc";
 import type { ExtraStats } from "../characters";
 import { ENEMIES } from "../enemyDefs";
 import { DEVIL_PERKS as K } from "../itemsDevil";
@@ -33,10 +34,10 @@ export function devilMul(s: RunState, e: EnemyState): number {
 /** 맞힐 때 (hiddenPerks.hiddenOnHit 안, 거기서 난 피해로는 다시 안 터짐): 절규 범위 · 리퍼 낫 */
 export function devilOnHit(s: RunState, e: EnemyState, dmg: number): void {
   const p = s.player;
-  if (hasPerk(p, "devilScream") && e.hp > 0) {
+  if (hasPerk(p, "devilScream") && e.hp > 0) srcRun(s, "devilScream", () => {
     blastAt(s, e.x, e.y, K.devilScream.r, dmg * K.devilScream.mul, { exclude: e });
     addEffect(s, { kind: "srScream", x: e.x, y: e.y, dirX: 0, dirY: 0, size: K.devilScream.r, maxTicks: 12 });
-  }
+  });
   if (hasPerk(p, "devilReaper") && createRng(deriveSeed(s.seed, "reaper", s.tick, e.id)).nextFloat() < K.devilReaper.fx) {
     addEffect(s, { kind: "srScythe", x: e.x, y: e.y, dirX: p.faceX, dirY: p.faceY, size: e.r + 10, maxTicks: 16 });
   }
@@ -45,7 +46,7 @@ export function devilOnHit(s: RunState, e: EnemyState, dmg: number): void {
 /** 틱마다 (사람마다): 사탄의 가면 — 주기마다 가까운 적에게 죽음의 오라 (오라가 다 오르면 피해, 악의 사도 사탄의 가면과 같은 계산) */
 export function devilTick(s: RunState): void {
   const p = s.player;
-  if (!hasPerk(p, "devilMask") || p.hp <= 0) return;
+  if (!hasPerk(p, "devilMask") || p.hp <= 0) return; return srcRun(s, "devilMask", () => {
   // 악의 사도 무기를 든 동안은 그 무기가 오라를 처리함 (두 번 터지지 않게)
   if (weaponOf(p).kind !== "cross") doomTick(s);
   if (s.tick % K.devilMask.every !== 0) return;
@@ -55,4 +56,4 @@ export function devilTick(s: RunState): void {
     (p.apDooms ??= []).push({ id: e.id, left: m.rise, dmg: p.stats.damage });
     addEffect(s, { kind: "apAura", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 4, maxTicks: m.rise + 8, tint: SIN_COLORS.mask });
   }
-}
+}); }

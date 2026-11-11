@@ -1,5 +1,6 @@
 // 훅 더블배럴 산탄총 (sim/hook가 씀): 초근접 부채꼴 발사 · 끌려온 적은 걸린 자리 쯤으로 튕겨 날아감 · 벽에 부딪히면 난파
 // 공용 도우미: 갈고리 종류 · 거리 · 걸리는 수 · 맞히기 · 받는 피해
+import { srcRun } from "./dmgSrc";
 import { HOOK_PERKS as K } from "../itemsHook";
 import { HOOK as H, type HookStyle } from "../weaponsHook";
 import { damageEnemy, healPlayer } from "./combat";
@@ -74,7 +75,7 @@ export function blast(s: RunState, dx: number, dy: number, caught: readonly HkCa
       stormBolt(s, e, base);
     }
     if (hasPerk(p, "hkJolly")) e.slowTicks = Math.max(e.slowTicks ?? 0, K.hkJolly.slow);
-    if (held && e.hp <= 0 && hasPerk(p, "hkPlunder")) addGold(s, K.hkPlunder.gold);
+    if (held && e.hp <= 0 && hasPerk(p, "hkPlunder")) srcRun(s, "hkPlunder", () => addGold(s, K.hkPlunder.gold));
     if (anchored(e) || e.hp <= 0) continue;
     // 걸린 적은 걸린 자리로 · 아닌 적은 쏜 쪽으로 밀려남 (역조는 더 멀리)
     const [ux, uy] = normalize(ox, oy) ?? [dx, dy];

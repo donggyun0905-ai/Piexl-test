@@ -1,4 +1,5 @@
 // 네일러 공용 도우미: 피해(각성 배율) · 성흔 → 달빛 각성 · 못 박기 · 날아가는 못 · 스킬 대기·화면용 값
+import { srcRun } from "./dmgSrc";
 import { NAILER_PERKS as K } from "../itemsNailer";
 import { NAILER as N } from "../weaponsNailer";
 import { STIGMA } from "../weaponsDawn";
@@ -44,7 +45,7 @@ export function nailHit(s: RunState, e: EnemyState, mul: number): void {
   const dmg = nlDmg(p, mul * (hasPerk(p, "nlIron") ? K.nlIron.mul : 1));
   strike(s, e, dmg, 2);
   addNails(s, e, 1);
-  if (hasPerk(p, "nlBarb") && e.hp > 0) strike(s, e, dmg * K.nlBarb.mul, 0, "bleed");
+  if (hasPerk(p, "nlBarb") && e.hp > 0) srcRun(s, "nlBarb", () => strike(s, e, dmg * K.nlBarb.mul, 0, "bleed"));
   addEffect(s, { kind: "nlStickFx", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r, maxTicks: 12 });
   nlGain(s, N.gainNail + nlAfter(s, e, had));
 }

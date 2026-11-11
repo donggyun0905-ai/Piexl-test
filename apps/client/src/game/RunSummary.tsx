@@ -1,5 +1,6 @@
 // 결과 창의 한 판 요약: 마지막 장비(아이콘) · 피해 · 돈 · 보스 · 층 도착 · 쓰러진 곳
-import type { RoomType } from "@pixel-rogue/shared";
+import type { ReactNode } from "react";
+import type { PassiveId, RoomType } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { enemyName } from "../i18n/enemies";
 import { itemName } from "../i18n/items";
@@ -31,9 +32,33 @@ const KIND_KEY: Record<NumKind, TextKey> = { hit: "sumHit", crit: "sumCrit", ble
 const KIND_COLOR: Record<NumKind, string> = { ...DOT_COLOR, hit: "#e8e4f0", crit: "#ffd060", death: "#8a7a9a" };
 const num = (v: number) => Math.round(v).toLocaleString();
 
+/** 막대 표: 이름(아이콘) · 막대(가장 큰 줄 기준) · 피해량 · 비율(이 표 합계 기준) */
+function DamageBars({ title, note, rows }: { title: string; note?: string; rows: { key: string; name: string; color: string; v: number; icon?: ReactNode }[] }) {
+  const sum = rows.reduce((a, r) => a + r.v, 0);
+  if (rows.length === 0 || sum <= 0) return null;
+  return (
+    <div className="sum-detail">
+      <small>{title}</small>
+      {rows.map((r) => (
+        <div key={r.key} className="sum-bar" title={r.name}>
+          <span style={{ color: r.color }}>
+            {r.icon}
+            {r.name}
+          </span>
+          <i>
+            <b style={{ width: `${(r.v / (rows[0]?.v || 1)) * 100}%`, background: r.color }} />
+          </i>
+          <span>{num(r.v)}</span>
+          <span>{Math.round((r.v / sum) * 1000) / 10}%</span>
+        </div>
+      ))}
+      {note && <small className="sum-note">{note}</small>}
+    </div>
+  );
+}
+
 export function RunSummary({ d, t, lang }: { d: RunSummaryData; t: (k: TextKey) => string; lang: Lang }) {
   const total = Object.values(d.dealt).reduce((a, b) => a + (b ?? 0), 0);
-  const pct = (v = 0) => (total > 0 ? `${Math.round((v / total) * 1000) / 10}%` : "0%");
   const rows = (Object.entries(d.dealt) as [NumKind, number][]).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
   return (
     <details className="run-summary" open>
@@ -74,21 +99,17 @@ export function RunSummary({ d, t, lang }: { d: RunSummaryData; t: (k: TextKey) 
           {d.bossKills} ({d.flawless})
         </dd>
       </dl>
-      {rows.length > 0 && (
-        <div className="sum-detail">
-          <small>{t("sumDetail")}</small>
-          {rows.map(([k, v]) => (
-            <div key={k} className="sum-bar">
-              <span style={{ color: KIND_COLOR[k] }}>{t(KIND_KEY[k])}</span>
-              <i>
-                <b style={{ width: `${(v / (rows[0]?.[1] ?? 1)) * 100}%`, background: KIND_COLOR[k] }} />
-              </i>
-              <span>{num(v)}</span>
-              <span>{pct(v)}</span>
-            </div>
-          ))}
-        </div>
-      )}
+      <DamageBars title={t("sumDetail")} rows={rows.map(([k, v]) => ({ key: k, name: t(KIND_KEY[k]), color: KIND_COLOR[k], v }))} />
+      <DamageBars
+        title={t("sumSources")}
+        note={t("sumSourcesNote")}
+        rows={(d.sources ?? []).slice(0, 14).map(([k, v]) => {
+          const dot = k.startsWith("d:") ? (k.slice(2) as NumKind) : null;
+          if (dot) return { key: k, name: t(KIND_KEY[dot]), color: KIND_COLOR[dot], v };
+          if (k === "") return { key: k, name: `${itemName("weapon", d.weapon, lang)} · ${t("sumSrcBase")}`, color: "#e8e4f0", v, icon: <ItemIcon item={{ kind: "weapon", id: d.weapon }} size={16} /> };
+          return { key: k, name: itemName("passive", k as PassiveId, lang), color: "#7ad0ff", v, icon: <ItemIcon item={{ kind: "passive", id: k as PassiveId }} size={16} /> };
+        })}
+      />
       {d.floors.length > 1 && (
         <div className="sum-floors">
           <small>{t("sumFloors")}</small>

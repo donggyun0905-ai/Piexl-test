@@ -2,6 +2,7 @@
 // → 앞 땅을 내리찍음 (찍은 자리 둘레 피해·기절) → 땅이 십자가 모양으로 갈라져 나감 (앞 긴 팔 · 양옆 · 뒤, 마디마다 차례로 돌판이 솟음)
 // 속죄의 무게 (받은 피해·맞힌 적) 가득 → 그 내려찍기에 하늘에서 심판의 십자가 · 대시는 성벽 돌진 (sim/crusaderRam)
 // 성흔이 가득 차면 성십자가 강림: 거인화 (받는 피해 감소 · 내려찍을 때마다 심판의 십자가 · 걸으면 땅이 울림). 수치 weaponsCrusader.CRUSADER · 아이템 itemsCrusader
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { CRUSADER_PERKS as K } from "../itemsCrusader";
@@ -57,7 +58,7 @@ function awakeTick(s: RunState): void {
       addEffect(s, { kind: "crStepFx", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, maxTicks: 18 });
     }
   }
-  if (!hasPerk(p, "crRain")) return;
+  if (!hasPerk(p, "crRain")) return; return srcRun(s, "crRain", () => {
   p.crRainT = (p.crRainT ?? K.crRain.every) - 1;
   if (p.crRainT > 0) return;
   p.crRainT = K.crRain.every;
@@ -65,7 +66,7 @@ function awakeTick(s: RunState): void {
   const near = alive(s).filter((e) => (e.x - p.x) ** 2 + (e.y - p.y) ** 2 <= reach * reach);
   const e = near[Math.floor(createRng(deriveSeed(s.seed, "crRain", s.tick)).nextFloat() * near.length)];
   if (e) addZone(p, { k: 3, x: e.x, y: e.y, t: Math.round(C.judgeFall * 0.75), r: K.crRain.r * reachOf(p), mul: K.crRain.mul });
-}
+}); }
 
 /** 틱마다 (성십자가를 들었을 때 player에서) */
 export function crusaderTick(s: RunState, want: boolean, speed: number): void {

@@ -1,4 +1,5 @@
 // 미카엘라 공용 도우미: 그림 무기(번호 → 종류·속성) · 콤보 · 속성 맞히기 · 일제 폭파 폭발 · 박힌 무기 놓기·바꿔 들기(그 무기 기술 대기열) · 하늘에서 무기 떨어뜨리기 · 순간 이동 · 스킬 대기
+import { srcRun } from "./dmgSrc";
 import { MICHAELA_PERKS as K } from "../itemsMichaela";
 import { MICHAELA as M, MICHAELA_ELEM as E } from "../weaponsMichaela";
 import { MC_SPEARS, MC_WEAPON_ELEM } from "../michaelaWeaponList";
@@ -78,7 +79,7 @@ export function explode(s: RunState, x: number, y: number, r: number, mul: numbe
   const m = mul * (hasPerk(p, "mcFuse") ? K.mcFuse.mul : 1);
   for (const e of inCircle(s, x, y, r)) {
     mcHit(s, e, m, 6, v);
-    if (hasPerk(p, "mcShrapnel") && e.hp > 0) strike(s, e, p.stats.damage * m * K.mcShrapnel.mul, 0, "bleed");
+    if (hasPerk(p, "mcShrapnel") && e.hp > 0) srcRun(s, "mcShrapnel", () => strike(s, e, p.stats.damage * m * K.mcShrapnel.mul, 0, "bleed"));
   }
   addEffect(s, { kind: "mcBlastFx", x, y, dirX: 0, dirY: 0, size: r, style: v, maxTicks: 24 });
 }

@@ -1,5 +1,6 @@
 // 서기관(히든, 아카식 레코드): 깃펜으로 잉크 탄을 쏘아 맞은 적에게 기록(잉크)을 새김 · 몇 번째 공격마다 무기의 글자가 써지며 발동
 // 글자: 검 · 폭 · 봉 · 뢰 · 빙 · 염 · 재 · 성 · 멸 · 원본(차례로 모두). 수치는 weaponsScribe.SCRIBE, 아이템은 itemsScribe
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../enemyDefs";
 import { createRng, deriveSeed } from "../rng";
@@ -177,7 +178,7 @@ export function scribeTick(s: RunState, want: boolean, speed: number): void {
   if (!first && p.writes % every !== 0) return;
   const word = weaponOf(p).word ?? "blade";
   write(s, word, 1);
-  if (hasPerk(p, "revision")) write(s, word, K.revision.power);
+  if (hasPerk(p, "revision")) srcRun(s, "revision", () => write(s, word, K.revision.power));
 }
 
 /** 연습장 등에서 다시 시작할 때 */

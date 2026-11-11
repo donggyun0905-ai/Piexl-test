@@ -1,6 +1,7 @@
 // 잊혀진 자(아스칼론, 시즌 2): 옛 신의 마지막 후손, 반신. 빛으로 싸움 (무기 10: 빛 탄·빛줄기·터짐·떨어지는 빛 십자가·빛 베기)
 // 적을 맞힐 때마다 빛의 고리가 차고(맞으면 깎임), 가득 차면 10초 동안 신족: 공격 속도 2배 + 둘레 적을 빛기둥이 저절로 침 (공격력 30%)
 // 수치는 weaponsForgotten.FORGOTTEN, 아이템은 itemsForgotten
+import { srcRun } from "./dmgSrc";
 import { PW_PASSIVE } from "../paewangPassive";
 import { TICK_RATE } from "../constants";
 import { FORGOTTEN_PERKS as K } from "../itemsForgotten";
@@ -119,10 +120,10 @@ function cast(s: RunState): void {
   if (st.ring) for (let i = 0; i < st.ring; i++) shoot(s, (i / st.ring) * Math.PI * 2, { damage: dmg * 0.6, spirit: "fgBolt", r: F.boltR, range: p.stats.range });
   // 성흔: 몇 번째 공격마다 가까운 적 위로 십자가
   p.fgCount = (p.fgCount ?? 0) + 1;
-  if (hasPerk(p, "fgCross") && p.fgCount % K.fgCross.every === 0) {
+  if (hasPerk(p, "fgCross") && p.fgCount % K.fgCross.every === 0) srcRun(s, "fgCross", () => {
     const e = nearest(s, p.stats.range * 1.3);
     if (e) dropCross(s, e.x, e.y, K.fgCross.r, dmg * K.fgCross.mul, K.fgCross.delay);
-  }
+  });
 }
 
 /** 신족이 됨 */
@@ -152,10 +153,10 @@ function update(s: RunState): void {
   if ((p.fgGod ?? 0) > 0) {
     if ((p.fgGod ?? 0) % F.pillarGap === 0) pillars(s);
     p.fgGod = (p.fgGod ?? 0) - 1;
-    if (p.fgGod <= 0 && hasPerk(p, "fgAfter")) {
+    if (p.fgGod <= 0 && hasPerk(p, "fgAfter")) srcRun(s, "fgAfter", () => {
       for (const e of inCircle(s, p.x, p.y, K.fgAfter.r)) hit(s, e, p.stats.damage * K.fgAfter.mul);
       addEffect(s, { kind: "fgNova", x: p.x, y: p.y, dirX: 0, dirY: 0, size: K.fgAfter.r, maxTicks: 24 });
-    }
+    });
   }
   if (p.fgFalls?.length) {
     for (const f of p.fgFalls) {

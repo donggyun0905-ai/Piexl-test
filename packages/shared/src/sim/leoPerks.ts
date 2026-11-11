@@ -1,5 +1,6 @@
 // 레오 전용 아이템 효과: 뇌광 도약(대시) · 번개 갈기 · 뇌운 · 황금 갑주(받는 피해·방전)
 // 사자의 긍지·연쇄 뇌전·번개 송곳니·천뢰 보석·우레 포효·백수의 왕은 sim/leo 안에서
+import { srcRun } from "./dmgSrc";
 import { LEO_PERKS as K } from "../itemsLeo";
 import { createRng, deriveSeed } from "../rng";
 import { addMark, charge, isLeo, leoPower, skyBolt } from "./leo";
@@ -12,7 +13,7 @@ export function leoDash(s: RunState): void {
   const p = s.player;
   const start = p.dashTicks > 0 && !p.leDashing;
   p.leDashing = p.dashTicks > 0;
-  if (!start || !hasPerk(p, "lePounce")) return;
+  if (!start || !hasPerk(p, "lePounce")) return; return srcRun(s, "lePounce", () => {
   const e = alive(s)
     .filter((o) => dist2(o, p) <= K.lePounce.reach ** 2 && (o.x - p.x) * p.dashDirX + (o.y - p.y) * p.dashDirY > 0)
     .sort((a, b) => dist2(a, p) - dist2(b, p) || a.id - b.id)[0];
@@ -35,24 +36,24 @@ export function leoDash(s: RunState): void {
   }
   if (hits) charge(s, hits * 4);
   addEffect(s, { kind: "lePounce", x: fromX, y: fromY, dirX: p.faceX, dirY: p.faceY, size: K.lePounce.r, toX: p.x, toY: p.y, maxTicks: 20 });
-}
+}); }
 
 /** 번개 갈기: 몸 둘레 적에게 정전기 */
 export function leoMane(s: RunState): void {
   const p = s.player;
-  if (!hasPerk(p, "leMane")) return;
+  if (!hasPerk(p, "leMane")) return; return srcRun(s, "leMane", () => {
   p.leMane = (p.leMane ?? K.leMane.gap) - 1;
   if (p.leMane > 0) return;
   p.leMane = K.leMane.gap;
   const near = inCircle(s, p.x, p.y, K.leMane.r);
   for (const e of near) strike(s, e, leoPower(s) * K.leMane.mul, 0, "shock");
   if (near.length) addEffect(s, { kind: "leSpark", x: p.x, y: p.y - 4, dirX: 0, dirY: 0, size: K.leMane.r, maxTicks: 12 });
-}
+}); }
 
 /** 뇌운: 몇 초마다 방 어딘가의 적 하나에게 낙뢰 (시드로 고름) */
 export function leoStorm(s: RunState): void {
   const p = s.player;
-  if (!hasPerk(p, "leStorm")) return;
+  if (!hasPerk(p, "leStorm")) return; return srcRun(s, "leStorm", () => {
   p.leStorm = (p.leStorm ?? K.leStorm.gap) - 1;
   if (p.leStorm > 0) return;
   const list = alive(s).sort((a, b) => a.id - b.id);
@@ -63,7 +64,7 @@ export function leoStorm(s: RunState): void {
   p.leStorm = K.leStorm.gap;
   const e = list[Math.floor(createRng(deriveSeed(s.seed, "leStorm", s.tick)).nextFloat() * list.length)]!;
   skyBolt(s, e, leoPower(s) * K.leStorm.mul, "storm");
-}
+}); }
 
 /** 황금 갑주: 받는 피해 배율 (classTaken) · 맞으면 둘레에 방전 */
 export function leoTaken(s: RunState): number {

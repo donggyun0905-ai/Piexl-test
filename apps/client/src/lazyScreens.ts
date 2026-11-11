@@ -13,6 +13,7 @@ export const SwarmMaps = lazy(() => import("./event/SwarmMaps").then((m) => ({ d
 export const PwFlow = lazy(() => import("./event/PwFlow").then((m) => ({ default: m.PwFlow })));
 export const RaidFlow = lazy(() => import("./event/RaidFlow").then((m) => ({ default: m.RaidFlow })));
 export const StoryScreen = lazy(() => import("./story/StoryScreen").then((m) => ({ default: m.StoryScreen })));
+export const BuildScreen = lazy(() => import("./archive/BuildScreen").then((m) => ({ default: m.BuildScreen })));
 export const TierScreen = lazy(() => import("./archive/TierScreen").then((m) => ({ default: m.TierScreen })));
 export const LobbyMode = lazy(() => import("./lobby/LobbyMode").then((m) => ({ default: m.LobbyMode })));
 export const PatchNotesList = lazy(() => import("./menu/PatchNotesList").then((m) => ({ default: m.PatchNotesList })));

@@ -1,6 +1,7 @@
 // 토르켄(탈라시아): 닻 + 사슬로 이은 철구공. 처음 누르면 철구공을 던짐(떨어진 자리에 천둥)
 // 그 뒤 누를 때마다 닻을 크게 휘두르고, 사슬 끝 철구공이 같이 휩쓸려 크게 돎 (sim/thorkenBall)
 // 대시하면 철구공을 감아 들임 → 다시 던질 수 있음. 폭풍 게이지가 차면 다음 휘두르기에 태풍 + 천둥 (sim/thorkenStorm)
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { THORKEN_PERKS as K } from "../itemsThorken";
 import { THORKEN as T } from "../weaponsThorken";
@@ -32,10 +33,10 @@ function swingAnchor(s: RunState): void {
   for (const e of hits) tkHit(s, e, p.stats.damage * T.anchorMul, T.anchorPush);
   addGauge(p, hits.length * T.gaugeAnchor);
   addEffect(s, { kind: "tkAnchor", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: T.anchorReach, maxTicks: 14, tint: String(p.tkDir ?? 1) });
-  if (hasPerk(p, "tkTrident")) {
+  if (hasPerk(p, "tkTrident")) srcRun(s, "tkTrident", () => {
     const k = K.tkTrident;
     for (let i = 0; i < k.n; i++) shoot(s, (i - (k.n - 1) / 2) * k.spread, { damage: p.stats.damage * k.mul, spirit: "tkWater", r: 4, range: k.range, pierce: 2 });
-  }
+  });
 }
 
 /** 방이 바뀌면 철구공은 손에 · 태풍·소용돌이는 사라짐 */

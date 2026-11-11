@@ -1,5 +1,6 @@
 // 인시전 공용 도우미: 도륙 콤보 (단계 · 끊김 · 맞으면 잃음 · 도약 준비 · 도륙 폭발) · 맞힘(성흔·회복) · 광란 각성 · 학살
 // 날아가는 초승달 · 피의 길·갈라진 땅 · 피의 소용돌이 (도약은 sim/incisionLeap)
+import { srcRun } from "./dmgSrc";
 import { INCISION_PERKS as K } from "../itemsIncision";
 import { INCISION as I } from "../weaponsIncision";
 import { STIGMA } from "../weaponsDawn";
@@ -39,13 +40,13 @@ export function icGain(s: RunState, n: number): void {
 let carnage = false;
 function onKill(s: RunState, e: EnemyState): void {
   const p = s.player;
-  if (carnage || !isAwake(p) || !hasPerk(p, "icCarnage")) return;
+  if (carnage || !isAwake(p) || !hasPerk(p, "icCarnage")) return; return srcRun(s, "icCarnage", () => {
   carnage = true;
   const r = K.icCarnage.r * reachOf(p);
   for (const f of inCircle(s, e.x, e.y, r)) strike(s, f, icDmg(p, K.icCarnage.mul), 4, "bleed");
   addEffect(s, { kind: "icCarnageFx", tint: "#ff2a2a", x: e.x, y: e.y, dirX: 0, dirY: 0, size: r, maxTicks: 20 });
   carnage = false;
-}
+}); }
 
 /** 인시전 공격 맞힘: 피해 · 처치면 성흔·학살 */
 export function icStrike(s: RunState, e: EnemyState, mul: number, push = 0): void {
@@ -69,11 +70,11 @@ export function addCombo(s: RunState, n: number): void {
   if (Math.floor(p.icCombo / I.comboStep) > Math.floor(before / I.comboStep) && comboTier(p) > 0) {
     addEffect(s, { kind: "icTierFx", x: p.x, y: p.y, dirX: 0, dirY: 0, size: comboTier(p), maxTicks: 24, follow: true });
   }
-  if (hasPerk(p, "icBurst") && Math.floor(p.icCombo / K.icBurst.every) > Math.floor(before / K.icBurst.every)) {
+  if (hasPerk(p, "icBurst") && Math.floor(p.icCombo / K.icBurst.every) > Math.floor(before / K.icBurst.every)) srcRun(s, "icBurst", () => {
     const r = K.icBurst.r * reachOf(p);
     for (const e of inCircle(s, p.x, p.y, r)) icStrike(s, e, K.icBurst.mul, 6);
     addEffect(s, { kind: "icBurstFx", tint: "#ff2a2a", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, maxTicks: 22, follow: true });
-  }
+  });
   p.icNextLeap ??= leapEvery(p);
   if (p.icCombo >= p.icNextLeap) {
     p.icLeapReady = true;

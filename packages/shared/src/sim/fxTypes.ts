@@ -133,6 +133,7 @@ export interface Hazard {
 
 /** 잠시 뒤 터지는 폭발 (메아리 폭발) */
 export interface PendingBlast {
+  src?: string;
   tick: number;
   x: number;
   y: number;

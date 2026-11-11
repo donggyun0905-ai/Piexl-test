@@ -1,4 +1,5 @@
 // 리바이어 고래: 고래 대돌격(날아가는 큰 고래) · 해류 웅덩이 · 고래가 나올 때 아이템 반응 · 고래 도약
+import { srcRun } from "./dmgSrc";
 import { LEVIA_PERKS as K } from "../itemsLevia";
 import { LEVIA as L } from "../weaponsLevia";
 import { nearest } from "./brawlMoves";
@@ -59,19 +60,19 @@ export function onWhale(s: RunState): void {
     for (const e of inCircle(s, p.x, p.y, K.lvSong.r)) stun(e, K.lvSong.stun);
     addEffect(s, { kind: "lvSong", x: p.x, y: p.y, dirX: 0, dirY: 0, size: K.lvSong.r, maxTicks: 30 });
   }
-  if (hasPerk(p, "lvCalf")) {
+  if (hasPerk(p, "lvCalf")) srcRun(s, "lvCalf", () => {
     const e = nearest(s, K.lvCalf.range);
     const len = e ? Math.hypot(e.x - p.x, e.y - p.y) || 1 : 1;
     const dx = e ? (e.x - p.x) / len : p.faceX;
     const dy = e ? (e.y - p.y) / len : p.faceY;
     launchWhale(s, dx, dy, { t: Math.ceil(K.lvCalf.range / 4), sp: 4, r: K.lvCalf.r * whaleSize(p), dmg: whaleDmg(p, K.lvCalf.mul), calf: true });
-  }
-  if (hasPerk(p, "lvBlowhole")) {
+  });
+  if (hasPerk(p, "lvBlowhole")) srcRun(s, "lvBlowhole", () => {
     const k = K.lvBlowhole;
     for (const e of inCircle(s, p.x, p.y, k.r)) lvHit(s, e, whaleDmg(p, k.mul), 6, "tide", true);
     healPlayer(s, p.stats.maxHp * k.heal);
     addEffect(s, { kind: "lvGush", x: p.x, y: p.y, dirX: 0, dirY: 0, size: k.r, maxTicks: 30 });
-  }
+  });
 }
 
 /** 고래 도약 (리바이어던의 눈): 바다에서 솟구쳐 (x, y)에 내리찍음 */

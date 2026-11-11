@@ -1,4 +1,4 @@
-// 메인의 '아카이브'를 누르면 뜨는 메뉴 창: 스토리 · 티어표
+// 메인의 '아카이브'를 누르면 뜨는 메뉴 창: 스토리 · 티어표 · 빌드 통계
 import { useEffect, useRef } from "react";
 import type { TextKey } from "../i18n";
 import { Choice } from "./SoloChooser";
@@ -7,10 +7,11 @@ interface Props {
   t: (key: TextKey) => string;
   onStory: () => void;
   onTierList: () => void;
+  onBuilds: () => void;
   onClose: () => void;
 }
 
-export function ArchiveChooser({ t, onStory, onTierList, onClose }: Props) {
+export function ArchiveChooser({ t, onStory, onTierList, onBuilds, onClose }: Props) {
   const closeRef = useRef<HTMLButtonElement>(null);
   useEffect(() => closeRef.current?.focus(), []);
   return (
@@ -20,6 +21,7 @@ export function ArchiveChooser({ t, onStory, onTierList, onClose }: Props) {
         <div className="choices">
           <Choice icon="book" title={t("story")} desc={t("archiveStoryDesc")} onClick={onStory} />
           <Choice icon="trophy" title={t("tierList")} desc={t("tierListDesc")} onClick={onTierList} />
+          <Choice icon="book" title={t("buildStats")} desc={t("buildStatsDesc")} onClick={onBuilds} />
         </div>
         <button ref={closeRef} type="button" className="ghost" onClick={onClose}>
           {t("close")}

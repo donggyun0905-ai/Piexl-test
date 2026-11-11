@@ -1,4 +1,5 @@
 // 베아트리스 공용 도우미: 화염 계수 · 맞히기(물리 + 화염) · 악 · 화상 · 받는 피해 · 회복 불가 · 스킬 대기
+import { srcRun } from "./dmgSrc";
 import { BEATRICE_PERKS as K } from "../itemsBeatrice";
 import { createRng, deriveSeed } from "../rng";
 import { BEATRICE as B } from "../weaponsBeatrice";
@@ -79,7 +80,7 @@ export function addEvil(s: RunState, e: EnemyState, n: number): void {
   const ex = hasPerk(p, "btExecutor");
   (p.btExecs ??= []).push({ id: e.id, left: B.execN + (ex ? K.btExecutor.more : 0), gap: 0, mul: ex ? K.btExecutor.mul : 1 });
   addPurge(s, B.evilMax);
-  if (hasPerk(p, "btOath")) heal(s, p.stats.maxHp * K.btOath.heal);
+  if (hasPerk(p, "btOath")) srcRun(s, "btOath", () => heal(s, p.stats.maxHp * K.btOath.heal));
   if (hasPerk(p, "btWitness")) for (const o of inCircle(s, e.x, e.y, K.btWitness.r)) if (o !== e) addEvil(s, o, K.btWitness.evil);
 }
 

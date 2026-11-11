@@ -1,5 +1,6 @@
 // 장수: 누를 때마다 콤보가 끊기지 않고 이어짐 (찌르기·휘두르기·돌진 내리꽂기, 무기마다 다른 표 weaponsGeneral.SPEAR_COMBOS)
 // 묶음 끝마다 조금 쉼 · 콤보 마지막에 숨겨진 힘이면 필살기(generalLegends) · 전용 아이템 효과
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { GENERAL_PERKS as K } from "../itemsGeneral";
 import { GENERAL, SPEAR_COMBOS, type SpearMove } from "../weaponsGeneral";
@@ -78,7 +79,7 @@ export function generalTick(s: RunState, want: boolean, speed: number): void {
   if (i === list.length - 1) {
     if (hasPerk(p, "warCry")) p.warCryTicks = K.warCry.ticks;
     if (hasPerk(p, "loyalty")) healPlayer(s, p.stats.maxHp * K.loyalty.heal);
-    if (hasPerk(p, "hiddenPower") && w.legend) useLegend(s, w.legend, p.stats.damage);
+    if (hasPerk(p, "hiddenPower") && w.legend) srcRun(s, "hiddenPower", () => useLegend(s, w.legend!, p.stats.damage));
   }
 }
 

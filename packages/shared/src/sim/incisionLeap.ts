@@ -1,5 +1,6 @@
 // 인시전 도살 도약: 콤보가 쌓이면 다음 공격 대신 조준한 쪽 가장 가까운 적에게 뛰어올라(공중 무적) 내려찍음
 // 착지 둘레 피해 + 기절 · 갈라진 땅 (남아서 벰) · 연속 도약 (가까운 다른 적에게 한 번 더)
+import { srcRun } from "./dmgSrc";
 import { INCISION_PERKS as K } from "../itemsIncision";
 import { INCISION as I } from "../weaponsIncision";
 import { addCombo, addZone, icGain, icStrike, nearest } from "./incisionKit";
@@ -47,10 +48,10 @@ function land(s: RunState): void {
   if (hasPerk(p, "icQuake")) addZone(p, { k: 1, x0: p.x, y0: p.y, x: p.x, y: p.y, t: K.icQuake.ticks, mul: K.icQuake.mul, r, next: K.icQuake.every });
   addCombo(s, hit.length);
   icGain(s, I.gainLeap);
-  if (l.second || !hasPerk(p, "icDouble")) return;
+  if (l.second || !hasPerk(p, "icDouble")) return; return srcRun(s, "icDouble", () => {
   const e = nearest(s, p.x, p.y, K.icDouble.reach * reachOf(p), l.tg);
   if (e) startLeap(s, true, { x: e.x, y: e.y, id: e.id });
-}
+}); }
 
 /** 도약 한 틱: 공중에서 착지 자리로 날아감 (무적, 노린 적을 따라감) · 다 오면 착지. 날고 있으면 true */
 export function leapTick(s: RunState): boolean {

@@ -1,5 +1,6 @@
 // 렌(비르디아): 맨손으로 거대한 토목을 부림. 공격마다 차례로 타격 → 묶기 → 날려버리기 → 짓뭉개기 → 가두기 (넓고 세지만 느림)
 // 둘레를 도는 수호 토목: 부딪힌 적에게 조금씩 피해 · 원거리 탄은 확률로 막음 (몸으로 부딪히는 공격은 못 막음). 수치는 weaponsRen.REN, 아이템은 itemsRen
+import { srcRun } from "./dmgSrc";
 import { PW_PASSIVE } from "../paewangPassive";
 import { TICK_RATE } from "../constants";
 import { REN_PERKS as K } from "../itemsRen";
@@ -73,10 +74,10 @@ function jails(s: RunState): void {
   for (const e of s.enemies) {
     if (!e.renJail) continue;
     e.renJail--;
-    if (hasPerk(p, "renPrisonDmg") && e.renJail % 30 === 0) dotDamage(s, e, "rot", p.stats.damage * K.renPrisonDmg.per);
+    if (hasPerk(p, "renPrisonDmg") && e.renJail % 30 === 0) srcRun(s, "renPrisonDmg", () => dotDamage(s, e, "rot", p.stats.damage * K.renPrisonDmg.per));
     if (e.renJail > 0) continue;
     delete e.renJail;
-    if (hasPerk(p, "renBurstPrison")) blastAt(s, e.x, e.y, K.renBurstPrison.r, p.stats.damage * K.renBurstPrison.mul, { push: 8 });
+    if (hasPerk(p, "renBurstPrison")) srcRun(s, "renBurstPrison", () => blastAt(s, e.x, e.y, K.renBurstPrison.r, p.stats.damage * K.renBurstPrison.mul, { push: 8 }));
   }
 }
 
@@ -105,9 +106,9 @@ export function renTick(s: RunState, want: boolean, speed: number): void {
   earthAttack(s, at.x, at.y);
   p.rMove = (i + 1) % REN_MOVES.length;
   // 대지 붕괴: 한 바퀴를 다 돌면 사거리 안 모든 적에게
-  if (p.rMove === 0 && hasPerk(p, "renCollapse")) {
+  if (p.rMove === 0 && hasPerk(p, "renCollapse")) srcRun(s, "renCollapse", () => {
     for (const e of alive(s).filter((t) => dist2(t, p) <= p.stats.range ** 2)) slam(s, "crush", e.x, e.y, K.renCollapse.mul / R.mul.crush);
-  }
+  });
 }
 
 /** 연습장 등에서 다시 시작할 때 */

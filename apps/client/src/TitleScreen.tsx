@@ -39,12 +39,13 @@ interface Props {
   onStory: () => void;
   /** 티어표 (아카이브 메뉴) */
   onTierList: () => void;
+  onBuilds: () => void;
 }
 
 type Popup = "none" | "solo" | "events" | "archive" | "notes" | "achievements" | "records" | "codex";
 
 /** 메인 화면: 로고 · 닉네임 · 큰 버튼 3개(혼자 하기 · 일일 도전 · 함께 하기) · 아래 링크 · 위쪽 설정 */
-export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily, onBattle, onCoop, onPractice, onTutorial, onTowerDefense, onProfile, onShop, onSwarm, onPaewang, onRaid, onStory, onTierList }: Props) {
+export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily, onBattle, onCoop, onPractice, onTutorial, onTowerDefense, onProfile, onShop, onSwarm, onPaewang, onRaid, onStory, onTierList, onBuilds }: Props) {
   const [popup, setPopup] = useState<Popup>("none");
   const [saved] = useState(loadSavedRun);
   const [best] = useState(loadBest);
@@ -165,7 +166,7 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
         />
       )}
       {popup === "events" && <EventChooser t={t} onSwarm={onSwarm} onPaewang={onPaewang} onRaid={onRaid} onClose={close} />}
-      {popup === "archive" && <ArchiveChooser t={t} onStory={onStory} onTierList={onTierList} onClose={close} />}
+      {popup === "archive" && <ArchiveChooser t={t} onStory={onStory} onTierList={onTierList} onBuilds={onBuilds} onClose={close} />}
       {popup === "notes" && (
         <Modal title={t("patchNotes")} t={t} onClose={close}>
           <Suspense fallback={null}>

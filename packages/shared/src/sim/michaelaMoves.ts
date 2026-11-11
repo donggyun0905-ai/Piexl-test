@@ -1,5 +1,6 @@
 // 미카엘라 무기 기술 14가지 (무기마다 어떤 기술을 쓰는지는 michaelaWeaponMoves): 베기 · 내려찍기 · 휘두르기 · 회전 베기 · 찌르기 · 돌진 찌르기 · 던지기 · 세 갈래 던지기
 // X 베기 · 땅 가르기 · 올려베기 · 회오리 · 칼비 · 꿰뚫는 빛 창. 맞히면 그 무기 속성 효과 (sim/michaelaKit.mcHit) · 수치는 MICHAELA_MOVES (관리자에서 바꿈)
+import { srcRun } from "./dmgSrc";
 import { MICHAELA_PERKS as K } from "../itemsMichaela";
 import { MICHAELA as M, MICHAELA_MOVES as V } from "../weaponsMichaela";
 import { MC_MOVE_IDS, type McMove } from "../michaelaWeaponMoves";
@@ -23,7 +24,7 @@ function hit(s: RunState, e: EnemyState, mul: number, push = 0): void {
   const m = mul * (hasPerk(p, "mcPowder") ? K.mcPowder.mul : 1);
   const was = e.hp > 0;
   mcHit(s, e, m, push, p.mcElem ?? 0);
-  if (hasPerk(p, "mcShrapnel") && e.hp > 0) strike(s, e, p.stats.damage * m * K.mcShrapnel.mul, 0, "bleed");
+  if (hasPerk(p, "mcShrapnel") && e.hp > 0) srcRun(s, "mcShrapnel", () => strike(s, e, p.stats.damage * m * K.mcShrapnel.mul, 0, "bleed"));
   // 2 칼날 교대로 잡은 무기로 제한 시간 안에 잡으면 2번 대기 초기화
   if (was && e.hp <= 0 && (p.mcShiftT ?? 0) > 0 && p.mcCd) {
     p.mcCd[1] = 0;
@@ -65,7 +66,7 @@ function throwMove(s: RunState, fan: boolean, mul: number): void {
   const turn = (c: number, sn: number): [number, number] => [fx0 * c - fy0 * sn, fx0 * sn + fy0 * c];
   throwOne(s, fx0, fy0, mul * (fan ? V.fanMul : M.throwMul), true);
   if (fan) for (const sn of [V.fanS, -V.fanS]) throwOne(s, ...turn(V.fanC, sn), mul * V.fanMul, false);
-  if (hasPerk(p, "mcEcho") && createRng(deriveSeed(s.seed, "mcEcho", s.tick)).nextFloat() < K.mcEcho.chance) throwOne(s, ...turn(K.mcEcho.c, K.mcEcho.s), mul * M.throwMul, false);
+  if (hasPerk(p, "mcEcho") && createRng(deriveSeed(s.seed, "mcEcho", s.tick)).nextFloat() < K.mcEcho.chance) srcRun(s, "mcEcho", () => throwOne(s, ...turn(K.mcEcho.c, K.mcEcho.s), mul * M.throwMul, false));
   addCombo(p, 1);
   hold(p, pickWeapon(s, 1 - kindOf(p.mcWeapon ?? 0), "draw"));
 }

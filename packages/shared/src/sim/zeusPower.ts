@@ -1,5 +1,6 @@
 // 제우스 신의 힘: 번개로 지지기(감전 쌓기·과부하) · 옮겨 붙는 번개 · 천벌 게이지 → 제우스 강림(무적·공격 두 배·방 곳곳 벼락)
 // 폭풍 구름 · 구전 지지기 · 번개 걸음(대시) · 아이기스(받는 피해) · 응징(맞으면 벼락)
+import { srcRun } from "./dmgSrc";
 import { createRng, deriveSeed } from "../rng";
 import { ZEUS_PERKS as K } from "../itemsZeus";
 import { ZEUS as Z } from "../weaponsZeus";
@@ -22,11 +23,11 @@ export function zap(s: RunState, e: EnemyState, dmg: number): void {
   strike(s, e, d, 0, "shock");
   e.zsShock = Math.min(Z.shockMax, (e.zsShock ?? 0) + 1);
   if (!p.zsGod) p.zsWrath = (p.zsWrath ?? 0) + (hasPerk(p, "zsWrath") ? K.zsWrath.mul : 1);
-  if (e.zsShock >= Z.shockMax && hasPerk(p, "zsOverload")) {
+  if (e.zsShock >= Z.shockMax && hasPerk(p, "zsOverload")) srcRun(s, "zsOverload", () => {
     e.zsShock = 0;
     blastAt(s, e.x, e.y, K.zsOverload.r, p.stats.damage * K.zsOverload.mul, { exclude: e });
     addEffect(s, { kind: "zsOverload", x: e.x, y: e.y, dirX: 0, dirY: 0, size: K.zsOverload.r, maxTicks: 18 });
-  }
+  });
 }
 
 /** 하늘에서 내리치는 벼락 (r가 있으면 둘레도) */
@@ -122,7 +123,7 @@ export const zeusTaken = (p: PlayerState) => (p.characterId === "zeus" && weapon
 /** 맞은 뒤: 응징 (확률로 적 셋에게 벼락) · combat afterHurt */
 export function zeusHurt(s: RunState): void {
   const p = s.player;
-  if (!hasPerk(p, "zsRetort") || rnd(s, "retort") >= K.zsRetort.chance) return;
+  if (!hasPerk(p, "zsRetort") || rnd(s, "retort") >= K.zsRetort.chance) return; return srcRun(s, "zsRetort", () => {
   const foes = alive(s);
   for (let i = 0; i < K.zsRetort.n && foes.length; i++) skyBolt(s, foes[Math.floor(rnd(s, "rt", i) * foes.length)]!, p.stats.damage * K.zsRetort.mul);
-}
+}); }

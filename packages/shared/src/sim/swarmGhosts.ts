@@ -2,7 +2,8 @@
 // 공격자마다 run.player·탄·장치·효과를 꺼내 놓고 기존 계산을 그대로 돌림 (타워 디펜스 tdTowers와 같은 방식)
 import type { WeaponId } from "../content";
 import { recallChakram } from "./bedouin";
-import { removeDead, updatePending } from "./combat";
+import { removeDead } from "./combat";
+import { updatePending } from "./pending";
 import { equipWeapon, recalcStats } from "./items";
 import { updateLaserGear } from "./laserGear";
 import { updateMedicGear } from "./medicGear";

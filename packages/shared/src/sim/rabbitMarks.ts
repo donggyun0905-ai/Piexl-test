@@ -1,5 +1,6 @@
 // 래빗 내리찍은 뒤 효과와 바닥 것: 땅울림 파동(맵 끝까지, 세 갈래)·여진 · 토끼인장 · 유령 망치 · 갈라진 땅 · 별사탕
 // 파동은 내리찍은 자리에서 땅울림이 다 커진 뒤(그림 1~3번째 칸) 4번째 칸 크기로 바라보는 쪽 맵 끝까지 나아감
+import { srcRun } from "./dmgSrc";
 import { RABBIT_PERKS as K } from "../itemsRabbit";
 import { createRng, deriveSeed } from "../rng";
 import { RABBIT_HAMMER as H } from "../weaponsRabbit";
@@ -19,11 +20,11 @@ export function slamExtras(s: RunState, x: number, y: number, hit: EnemyState[])
   const marks = (p.rbMarks ??= []);
   if (hasPerk(p, "rbSeal") && rng.nextFloat() < K.rbSeal.chance * luckMul(p)) marks.push({ x, y, kind: 0, age: 0, life: K.rbSeal.delay, r: K.rbSeal.r * size, dmg: p.stats.damage * K.rbSeal.mul });
   if (hasPerk(p, "rbCrack")) marks.push({ x, y, kind: 2, age: 0, life: K.rbCrack.ticks, r: H.slamR * size * K.rbCrack.size, dmg: p.stats.damage * K.rbCrack.mul });
-  if (hasPerk(p, "rbGhost") && rng.nextFloat() < K.rbGhost.chance * luckMul(p)) {
+  if (hasPerk(p, "rbGhost") && rng.nextFloat() < K.rbGhost.chance * luckMul(p)) srcRun(s, "rbGhost", () => {
     const e = farFoe(s, x, y, hit.map((h) => h.id));
     if (e) marks.push({ x: e.x, y: e.y, kind: 1, age: 0, life: K.rbGhost.delay, r: K.rbGhost.r * size, dmg: p.stats.damage * H.mul * K.rbGhost.mul * megaMul(p) });
-  }
-  if (hasPerk(p, "rbStar") && rng.nextFloat() < K.rbStar.chance * luckMul(p)) stars(s, x, y);
+  });
+  if (hasPerk(p, "rbStar") && rng.nextFloat() < K.rbStar.chance * luckMul(p)) srcRun(s, "rbStar", () => stars(s, x, y));
 }
 
 /** 찍은 자리에서 가까운 (이미 맞은 적 빼고) 적 */
@@ -91,7 +92,7 @@ function waveStep(s: RunState, w: NonNullable<RunState["player"]["rbWaves"]>[num
   }
   if (!out) return true;
   w.end = true;
-  if (hasPerk(s.player, "rbAfter")) rbArea(s, w.x, w.y, K.rbAfter.r * hammerSize(s.player), s.player.stats.damage * K.rbAfter.mul, "rbAfter");
+  if (hasPerk(s.player, "rbAfter")) srcRun(s, "rbAfter", () => rbArea(s, w.x, w.y, K.rbAfter.r * hammerSize(s.player), s.player.stats.damage * K.rbAfter.mul, "rbAfter"));
   return true;
 }
 

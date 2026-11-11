@@ -1,5 +1,6 @@
 // 격투가 콤보: 누를 때마다 다음 기술 · 잠깐 쉬면 처음부터 · 연속 공격·모으기·에너지파 게이지 · 붙잡은 적 들기 · 고정 도트 · 전용 아이템(존·금강불괴·마하·차력쇼·혈마·속도는 곧 힘)
 // 기술 하나하나는 brawlMoves
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { COMBOS, type ComboMove } from "../combos";
 import { createRng, deriveSeed } from "../rng";
@@ -90,10 +91,10 @@ export function comboTick(s: RunState, want: boolean, speed: number): void {
   if (!want || p.attackCooldown > 0 || list.length === 0) return;
   let i = (p.comboStep ?? 0) % list.length;
   // 마하: 첫 기술을 바로 끝내고 두 번째부터
-  if (i === 0 && list.length > 1 && hasPerk(p, "mach")) {
+  if (i === 0 && list.length > 1 && hasPerk(p, "mach")) srcRun(s, "mach", () => {
     perform(s, list[0]!, 0);
     i = 1;
-  }
+  });
   const m = list[i]!;
   p.comboHit = false;
   perform(s, m, i);

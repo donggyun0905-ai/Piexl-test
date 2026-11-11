@@ -1,5 +1,6 @@
 // 원소술사 회전체: 도는 자리 계산(삼각함수 없이 사칙연산만) · 닿으면 때리기 · 원소·행성 효과 · 날아가 때리는 검·별 · 은하수 장판·중력 둔화
 // 공격 키로 쓰는 것(강철 총알·트리거·중력 내려찍기·갓 핸드)은 orbitAttack, 전깃줄·펫·탄 막기는 orbitPerks
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { blastAt, damageEnemy, ignite } from "./combat";
@@ -189,9 +190,9 @@ function orbEffect(s: RunState, b: OrbBody, e: EnemyState, dmg: number): void {
   else if (b.tag === "star") weaponDot(s, e, "storm", dmg);
   else if (b.tag === "light") lightEffect(s, e, dmg, roll(s, "lightBurst", e.id));
   // 화려하게: 가끔 원소 효과 하나 더
-  if (hasPerk(s.player, "flashy") && roll(s, "flashy", e.id) < V.FLASHY_CHANCE) {
+  if (hasPerk(s.player, "flashy") && roll(s, "flashy", e.id) < V.FLASHY_CHANCE) srcRun(s, "flashy", () => {
     elementEffect(s, e, ELEMENTS[Math.floor(roll(s, "flashyEl", e.id) * ELEMENTS.length)]!, dmg, dir[0], dir[1]);
-  }
+  });
 }
 
 /** 회전체 틱 피해: 0.15초마다 공격력 × 공격 속도 × 0.15 (밀지 않음) */

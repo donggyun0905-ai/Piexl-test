@@ -1,6 +1,7 @@
 // 버려진 자들: 한 캐릭터 안의 세 아이(P1 방패 · P2 총 · P3 검). 대시 버튼 = 탭(다음 아이와 자리를 바꿔 교대, 조합대로 맞게 누르면 짧은 무적)
 // 나와 있지 않은 두 아이는 곁에서 따로 싸움(abandonedKids). 아이마다 자기 콤보 순번을 기억. 무기의 조합(3단계)대로 치고 탭하면 단계 끝(P3)에 두 아이가 특수기(abandonedShow)
 // 차례를 다 치면 탭을 기다리고, 탭을 잘못 누르면 조합·콤보가 모두 처음으로 돌아가고 P1로 강제 교대 (무적 없음). 공격 속도는 오르지 않음 (무기 값 그대로). 기술은 abandonedMoves, 무기 표는 weaponsAbandoned
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ABANDONED_PERKS as K } from "../itemsAbandoned";
 import { ABANDONED as A, TAG_SETS, type TagMoveKind, type TagSet } from "../weaponsAbandoned";
@@ -86,10 +87,10 @@ export function abandonedTag(s: RunState): number {
   p.abM = (from + 1) % 3;
   p.abSeg = 0;
   p.invulnTicks = Math.max(p.invulnTicks, hasPerk(p, "quickSwap") ? K.quickSwap.ticks : A.tagInvuln);
-  if (hasPerk(p, "tagStrike")) {
+  if (hasPerk(p, "tagStrike")) srcRun(s, "tagStrike", () => {
     const kind: TagMoveKind = p.abM === 0 ? "bash" : p.abM === 1 ? "shot" : "slash";
     doTagMove(s, { kind, mul: 1 }, p.stats.damage * K.tagStrike.mul * buff(p));
-  }
+  });
   addEffect(s, { kind: "tagSwap", x: p.x, y: p.y, dirX: p.abM, dirY: 0, size: 10, maxTicks: 14 });
   return 0;
 }

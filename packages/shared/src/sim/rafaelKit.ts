@@ -1,4 +1,5 @@
 // 라파엘 공용 도우미: 맞히기(초장거리·표적·숨 고르기·후광·파편) · 표적 고르기 · 줄 위의 적 · 처치(스킬 대기 감소) · 스킬 대기
+import { srcRun } from "./dmgSrc";
 import { RAFAEL_PERKS as K } from "../itemsRafael";
 import { RAFAEL as F } from "../weaponsRafael";
 import { alive, inCircle, isBoss, onSegment, strike } from "./s2Kit";
@@ -25,12 +26,12 @@ export function rfHit(s: RunState, e: EnemyState, mul: number, push = 0): void {
   const steady = hasPerk(p, "rfSteady") && (p.rfStill ?? 0) >= K.rfSteady.still ? K.rfSteady.mul : 1;
   const dmg = p.stats.damage * mul * farMul(p, e) * markMul * steady;
   strike(s, e, dmg, push);
-  if (hasPerk(p, "rfHalo") && e.hp > 0) strike(s, e, dmg * K.rfHalo.mul, 0, "radiance");
+  if (hasPerk(p, "rfHalo") && e.hp > 0) srcRun(s, "rfHalo", () => strike(s, e, dmg * K.rfHalo.mul, 0, "radiance"));
   if (!mark) return;
   addEffect(s, { kind: "rfMarkFx", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 6, maxTicks: 14 });
-  if (!hasPerk(p, "rfShard")) return;
+  if (!hasPerk(p, "rfShard")) return; return srcRun(s, "rfShard", () => {
   for (const o of inCircle(s, e.x, e.y, K.rfShard.r)) if (o !== e) strike(s, o, dmg * K.rfShard.mul);
-}
+}); }
 
 /** 내 자리에서 (dx,dy) 쪽 줄 위의 적 (가까운 순) */
 export function onRay(s: RunState, dx: number, dy: number, len: number, w: number): EnemyState[] {

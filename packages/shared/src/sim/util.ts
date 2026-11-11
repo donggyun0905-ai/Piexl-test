@@ -9,6 +9,7 @@ import { tabooUp } from "./taboo";
 import { trialFoeHp } from "./trialFoes";
 import type { Body, DotKind, EffectState, EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { moonOut } from "./moonlight";
+import { logDot } from "./dmgSrc";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -99,6 +100,7 @@ export function markCrit(s: RunState, e: EnemyState): void {
 /** 상태이상 피해 기록 (화면 피해 숫자 색용, 게임 결과에는 영향 없음) */
 export function markDot(s: RunState, e: EnemyState, kind: DotKind, amount: number): void {
   if (amount <= 0) return;
+  logDot(s, e, kind, amount);
   if (e.dotTick !== s.tick) {
     e.dotTick = s.tick;
     e.dotAmt = {};

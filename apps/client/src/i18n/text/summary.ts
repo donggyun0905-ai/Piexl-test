@@ -11,6 +11,13 @@ export const SUMMARY_TEXT = {
   sumPoison: { ko: "독", en: "Poison", ja: "毒" },
   sumCurse: { ko: "저주", en: "Curse", ja: "呪い" },
   sumDetail: { ko: "피해 상세 (종류별 · 많이 준 순서)", en: "Damage breakdown (by type · highest first)", ja: "ダメージ内訳（種類別・多い順）" },
+  sumSources: { ko: "피해 출처 (무엇이 얼마나 줬는지)", en: "Damage sources (what dealt how much)", ja: "ダメージの出どころ（何がどれだけ与えたか）" },
+  sumSrcBase: { ko: "기본 기술", en: "base skills", ja: "基本技" },
+  sumSourcesNote: {
+    ko: "직접 피해를 주는 패시브만 따로 나옵니다 · 능력치를 올려 주는 패시브와 아직 나누지 못한 기술은 무기 줄에 합쳐집니다",
+    en: "Only passives that deal damage themselves get their own row · stat-boosting passives and skills not split yet are counted in the weapon row",
+    ja: "直接ダメージを与えるパッシブだけ別に表示 · 能力値を上げるパッシブと、まだ分けていない技は武器の行に合算",
+  },
   sumHit: { ko: "보통 공격", en: "Normal hits", ja: "通常攻撃" },
   sumDotStorm: { ko: "폭풍", en: "Storm", ja: "嵐" },
   sumDotRot: { ko: "부식", en: "Rot", ja: "腐食" },

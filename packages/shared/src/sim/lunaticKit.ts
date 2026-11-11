@@ -1,4 +1,5 @@
 // 루나틱 공용 도우미: 맞힘(성흔) · 성흔 → 만월 각성 · 월광 표적(조준점) 띄우기 · 곧 들어갈 공격(달빛 베기·초승달 비·잔상 찌르기) · 월광 검기
+import { srcRun } from "./dmgSrc";
 import { createRng, deriveSeed } from "../rng";
 import { LUNATIC_PERKS as K } from "../itemsLunatic";
 import { LUNATIC as L } from "../weaponsLunatic";
@@ -62,13 +63,13 @@ function slash(s: RunState, b: LnStrike): void {
   delete p.rmSure;
   setSlashing(false);
   lnGain(s, L.gainSlash);
-  if (!b.chain && hasPerk(p, "lnChain")) {
+  if (!b.chain && hasPerk(p, "lnChain")) srcRun(s, "lnChain", () => {
     const next = alive(s)
       .filter((e) => e.id !== b.tg && (e.x - b.x) ** 2 + (e.y - b.y) ** 2 <= (K.lnChain.reach * reachOf(p)) ** 2)
       .sort((a, c) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2 - ((c.x - b.x) ** 2 + (c.y - b.y) ** 2) || a.id - c.id)[0];
     if (next) addStrike(p, { ...b, x0: b.x, y0: b.y, x: next.x, y: next.y, t: L.slashDelay + 4, mul: b.mul * K.lnChain.mul, tg: next.id, chain: true });
-  }
-  if (!hasPerk(p, "lnMoonRain")) return;
+  });
+  if (!hasPerk(p, "lnMoonRain")) return; return srcRun(s, "lnMoonRain", () => {
   const m = K.lnMoonRain;
   const rng = createRng(deriveSeed(s.seed, "lnRain", s.tick, b.tg ?? 0));
   for (let i = 0; i < m.n; i++) {
@@ -76,7 +77,7 @@ function slash(s: RunState, b: LnStrike): void {
     const d = m.spread * reachOf(p) * (0.6 + rng.nextFloat() * 0.4);
     addStrike(p, { k: 1, x0: b.x, y0: b.y - 40, x: b.x + nx * d, y: b.y + ny * d, t: m.delay + i * 3, mul: m.mul, r: m.r });
   }
-}
+}); }
 
 /** 선분 (x0,y0)→(x,y) 둘레 w 안 적 */
 function onSegment(s: RunState, b: LnStrike): EnemyState[] {

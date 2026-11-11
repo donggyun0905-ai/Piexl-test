@@ -1,4 +1,5 @@
 // 이무기: 찌르기 + 휘두르기를 한 번에 · 맞힐 때마다 콤보 (72 오라, 108 용이 됨: 용이 맵을 지나가고 8초 동안 몸이 더 강해짐, 20부터 다시) · 여의주는 방 안 모든 적에게 번개
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../enemyDefs";
 import { IMUGI_PERKS as K } from "../itemsImugi";
@@ -125,7 +126,7 @@ function ultTick(s: RunState): void {
 
 /** 운룡: 대시하면 콤보 (player에서 대시를 시작할 때) */
 export function imugiDash(s: RunState): void {
-  if (hasPerk(s.player, "cloudRide")) addCombo(s, K.cloudRide.combo);
+  if (hasPerk(s.player, "cloudRide")) srcRun(s, "cloudRide", () => addCombo(s, K.cloudRide.combo));
 }
 
 /** 연습장 초기화 */

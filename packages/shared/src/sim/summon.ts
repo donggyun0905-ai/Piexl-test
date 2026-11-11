@@ -1,4 +1,5 @@
 // 소환술사 본인: 채찍으로 앞을 길게 침. 맞힌 적 수가 무기마다 정한 만큼 쌓이면 소환수가 나옴 (움직임·공격은 summons)
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { SUMMON_PERKS } from "../itemsSummon";
 import { createRng, deriveSeed } from "../rng";
@@ -53,7 +54,7 @@ export function chargeSummon(s: RunState, n: number): void {
   while (p.summonCharge >= every) {
     p.summonCharge -= every;
     summon(s);
-    if (hasPerk(p, "twinSummon") && createRng(deriveSeed(s.seed, "twinSummon", s.tick, p.summonCharge)).nextFloat() < SUMMON_PERKS.twinSummon.chance) summon(s);
+    if (hasPerk(p, "twinSummon") && createRng(deriveSeed(s.seed, "twinSummon", s.tick, p.summonCharge)).nextFloat() < SUMMON_PERKS.twinSummon.chance) srcRun(s, "twinSummon", () => summon(s));
   }
 }
 

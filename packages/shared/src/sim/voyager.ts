@@ -1,6 +1,7 @@
 // 운명의 여행자(히든, 시즌 2): 운명의 활로 모아 쏘는 강한 한 발. 모래시계가 다 차면 뒤집히며 주사위를 굴려 운명(버프·기술·능력)이 바뀜
 // 주사위 하나면 첫 눈의 줄(6칸)에서 시드로 한 칸, 두 개의 주사위면 (첫 눈, 둘째 눈) 칸 그대로 · 눈의 합만큼 한 발이 세짐
 // 수치는 weaponsVoyager.VOYAGER, 운명 표는 voyagerFates, 기술은 voyagerSkills, 능력은 voyagerAbilities
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { VOYAGER_PERKS as K } from "../itemsVoyager";
 import { createRng, deriveSeed } from "../rng";
@@ -93,7 +94,7 @@ function loose(s: RunState, frac: number): void {
   }
   fireSkill(s, dmg, full);
   // 화살통: 끝까지 모은 한 발이 하나 더
-  if (full && hasPerk(p, "vyQuiver")) fireSkill(s, dmg * 0.6, false, K.vyQuiver.spread);
+  if (full && hasPerk(p, "vyQuiver")) srcRun(s, "vyQuiver", () => fireSkill(s, dmg * 0.6, false, K.vyQuiver.spread));
   addEffect(s, { kind: "vyLoose", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: 6 + frac * 10, maxTicks: 12 });
 }
 

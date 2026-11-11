@@ -2,6 +2,7 @@
 // 1 암습 저격: 보호막 20, 화면이 어두워진 채 5초 동안 직접 조준해 쏨 (조준경 가운데 작은 원 안의 적만 맞음, 한 발 200%, 다시 누르면 끝 · 일찍 끝내면 남은 시간만큼 대기가 줄어듦) · 대기 10초
 // 2 강력한 한방: 모으는 동안 앞에 탄을 막는 벽 → 방을 꿰뚫는 한 줄 (공격력 1000% + 최대 체력 20%, 보스는 그 1/5) · 대기 60초
 // 3 연발사격: 조준 없이 10발을 흩뿌려 쏨 · 대기 3초. 세 스킬은 서로 쓰는 도중에도 같이 쓸 수 있음. 수치는 weaponsTracker.TRACKER, 아이템은 itemsTracker
+import { srcRun } from "./dmgSrc";
 import { tuneVal } from "./trTune";
 import { TICK_RATE } from "../constants";
 import { TRACKER_PERKS as K } from "../itemsTracker";
@@ -56,14 +57,14 @@ export function trackerShotHit(s: RunState, pr: ProjectileState, e: EnemyState):
   const p = s.player;
   if (p.characterId !== "tracker") return;
   marked(p, e);
-  if (pr.spirit !== "trBullet" || !hasPerk(p, "trRicochet")) return;
+  if (pr.spirit !== "trBullet" || !hasPerk(p, "trRicochet")) return; return srcRun(s, "trRicochet", () => {
   const next = alive(s)
     .filter((o) => o !== e && dist2(o, e) <= K.trRicochet.reach ** 2)
     .sort((a, b) => dist2(a, e) - dist2(b, e) || a.id - b.id)[0];
   if (!next) return;
   const d = normalize(next.x - e.x, next.y - e.y) ?? [1, 0];
   s.projectiles.push({ id: s.nextId++, fromPlayer: true, x: e.x, y: e.y, prevX: e.x, prevY: e.y, r: 2, vx: d[0] * 6, vy: d[1] * 6, damage: pr.damage * K.trRicochet.mul, ticksLeft: 20, spirit: "trRico", hitIds: [e.id], pierce: 0 });
-}
+}); }
 
 /** 암습 저격 한 발: 누른 곳(조준경 가운데)의 작은 원 안에 몸 가운데가 들어온 적만 맞음 (자동 조준 없음) */
 function ambushShot(s: RunState): void {

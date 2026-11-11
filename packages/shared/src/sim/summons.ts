@@ -1,4 +1,5 @@
 // 소환수 움직임·공격: 달려가 치기(해골·늑대·박쥐·골렘) · 거리를 두고 쏘기(임프·궁수·용) · 자폭(불꽃 정령) · 제자리(독버섯) · 내 둘레(요정)
+import { srcRun } from "./dmgSrc";
 import { ENEMIES } from "../content";
 import { SUMMON_PERKS } from "../itemsSummon";
 import { SUMMON_STATS, type SummonStat } from "../weaponsSummon";
@@ -49,7 +50,7 @@ function hitBy(s: RunState, m: Summoned, e: EnemyState, dmg: number): void {
   if (hasPerk(p, "command") && dist2(m, p) <= SUMMON_PERKS.command.radius ** 2) d *= SUMMON_PERKS.command.damage;
   const dir = normalize(e.x - m.x, e.y - m.y) ?? [1, 0];
   damageEnemy(s, e, d, dir[0], dir[1], false);
-  if (e.hp <= 0 && hasPerk(p, "soulHarvest")) chargeSummon(s, 1);
+  if (e.hp <= 0 && hasPerk(p, "soulHarvest")) srcRun(s, "soulHarvest", () => chargeSummon(s, 1));
 }
 
 function shoot(s: RunState, m: Summoned, e: EnemyState, dmg: number, extra: Partial<ProjectileState>): void {
@@ -89,7 +90,7 @@ export function updateSummons(s: RunState): void {
   }
   spread(s, p.summons.filter((m) => !gone.includes(m)));
   if (gone.length) {
-    for (const m of gone) if (hasPerk(p, "sacrifice") && m.kind !== "flame" && m.life <= 0) blastAt(s, m.x, m.y, SUMMON_PERKS.sacrifice.radius, p.stats.damage * SUMMON_PERKS.sacrifice.damage, { still: true });
+    for (const m of gone) if (hasPerk(p, "sacrifice") && m.kind !== "flame" && m.life <= 0) srcRun(s, "sacrifice", () => blastAt(s, m.x, m.y, SUMMON_PERKS.sacrifice.radius, p.stats.damage * SUMMON_PERKS.sacrifice.damage, { still: true }));
     p.summons = p.summons.filter((m) => !gone.includes(m));
   }
 }

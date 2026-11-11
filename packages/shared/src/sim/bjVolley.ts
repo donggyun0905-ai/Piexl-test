@@ -1,4 +1,5 @@
 // 백인장 때리기: 한 대 · 범위 · 나눠 때리는 기술(난무·회전참·폭우·침격·감옥·팔연참·종언)을 틱마다 한 대씩 · 출혈·죽음 상태이상
+import { logDmg } from "./dmgSrc";
 import { BJ_PERKS as K } from "../itemsBaekinjang";
 import { ENEMIES } from "../content";
 import { bjAlive, bjNearest } from "./bjKit";
@@ -115,6 +116,7 @@ function endTick(s: RunState): void {
     if (sum <= 0 || !bjAlive(e)) continue;
     addEffect(s, { kind: "bjCross", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 26, maxTicks: 24 });
     e.hp -= sum;
+    logDmg(s, e, sum);
     e.hitFlash = 6;
   }
 }

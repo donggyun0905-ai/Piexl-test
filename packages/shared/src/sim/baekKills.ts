@@ -1,4 +1,5 @@
 // 백령 처치 처리 (baekSoul이 적어 둔 처치를 틱마다): 영혼 쌓기·게이지 칸 · 혼 흡수 · 혼등 날리기
+import { srcRun } from "./dmgSrc";
 import { ENEMIES } from "../enemyDefs";
 import { BAEK_PERKS as K } from "../itemsBaekryeong";
 import { createRng, deriveSeed } from "../rng";
@@ -21,7 +22,7 @@ export function soulTick(s: RunState): void {
     addEffect(s, { kind: "bySoul", x, y, toX: p.x, toY: p.y, dirX: 0, dirY: 0, size: 4, maxTicks: 24 });
     const rng = createRng(deriveSeed(s.seed, "byKill", s.tick, id));
     if (hasPerk(p, "byDrain") && rng.nextFloat() < K.byDrain.chance) healPlayer(s, K.byDrain.heal);
-    if (hasPerk(p, "byWisp") && rng.nextFloat() < K.byWisp.chance) wisp(s, x, y);
+    if (hasPerk(p, "byWisp") && rng.nextFloat() < K.byWisp.chance) srcRun(s, "byWisp", () => wisp(s, x, y));
   }
 }
 

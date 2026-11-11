@@ -95,6 +95,8 @@ export default {
       const seconds = url.searchParams.has("v") ? VERSION_CACHE_SECONDS : BOARD_CACHE_SECONDS;
       return withHeaders(await cachedBoard(request, env, seconds), cors);
     }
+    // 빌드 통계 (아카이브·입문 추천): 10분 동안 저장해 둔 값
+    if (url.pathname === "/api/stats/build" && request.method === "GET") return withHeaders(await cachedBoard(request, env, 600), cors);
     // 순위표·관리자 티어표는 잠깐 저장해 둔 값을 줌 (Durable Object 요청 줄이기)
     if (["/api/daily/board", "/api/raid/board", "/api/eraid/board", "/api/arena/board", "/api/rank/board", "/api/tier", "/api/maps"].includes(url.pathname) && request.method === "GET") {
       return withHeaders(await cachedBoard(request, env), cors);

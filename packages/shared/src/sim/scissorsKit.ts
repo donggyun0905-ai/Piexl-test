@@ -1,4 +1,5 @@
 // 시저스 공용 도우미: 피해(각성 배율) · 성흔 → 달빛 각성 · 단죄(목 자르기) · 운명의 실 묶기·끊기
+import { srcRun } from "./dmgSrc";
 import { SCISSORS_PERKS as K } from "../itemsScissors";
 import { SCISSORS as X } from "../weaponsScissors";
 import { STIGMA } from "../weaponsDawn";
@@ -34,9 +35,9 @@ function executed(s: RunState, e: EnemyState, depth: number): void {
   addEffect(s, { kind: "sxExecFx", x: e.x, y: e.y, dirX: p.faceX, dirY: p.faceY, size: e.r, maxTicks: 36 });
   if (hasPerk(p, "sxHarvest")) healPlayer(s, p.stats.maxHp * K.sxHarvest.heal);
   if (hasPerk(p, "sxFear")) for (const f of inCircle(s, e.x, e.y, K.sxFear.r)) stun(f, K.sxFear.stun);
-  if (!hasPerk(p, "sxChain") || depth > 0) return;
+  if (!hasPerk(p, "sxChain") || depth > 0) return; return srcRun(s, "sxChain", () => {
   for (const f of inCircle(s, e.x, e.y, K.sxChain.r)) cut(s, f, sxDmg(p, K.sxChain.mul), 4, depth + 1);
-}
+}); }
 
 /** 가위로 벰: 체력이 적은 보통 적은 목을 잘라 바로 처치 · 체력이 적은 보스는 더 셈 → 차는 성흔 */
 export function cut(s: RunState, e: EnemyState, dmg: number, push = 0, depth = 0): number {

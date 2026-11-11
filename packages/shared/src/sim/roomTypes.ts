@@ -1,5 +1,6 @@
 // 특별한 방에서 생기는 상태 모음 (types.PlayerState·RunState가 이어받음): 받은·빼앗긴 능력치(boons) · 시련의 방(trialTypes) · 제단의 방(altar) · 비밀의 방(vaultTypes)
 import type { AltarPlayerState } from "./altar";
+import type { DmgSrcPlayerState } from "./dmgSrc";
 import type { BoonPlayerState } from "./boons";
 import type { VaultPlayerState, VaultRunState } from "./vaultTypes";
 import type { TrialPlayerState, TrialRunState } from "./trialTypes";
@@ -10,7 +11,7 @@ import type { BuildSetPlayerState } from "./buildSets";
 import type { ForgePlayerState } from "./forge";
 import type { RaidPlayerState, RaidRunFields } from "./raidTypes";
 
-export interface RoomPlayerState extends BoonPlayerState, TrialPlayerState, AltarPlayerState, VaultPlayerState, RoutePlayerState, HurtLogPlayerState, BuildSetPlayerState, ForgePlayerState, RaidPlayerState {}
+export interface RoomPlayerState extends DmgSrcPlayerState, BoonPlayerState, TrialPlayerState, AltarPlayerState, VaultPlayerState, RoutePlayerState, HurtLogPlayerState, BuildSetPlayerState, ForgePlayerState, RaidPlayerState {}
 export interface RoomRunState extends TrialRunState, VaultRunState, HiddenTrialRunState, RaidRunFields {
   /** 엘리트 방 라운드 (sim/roomSpawn.eliteWave): 층·방 · 지금 라운드 · 다음 무리까지 틱 */
   eliteWave?: { floor: number; room: number; n: number; t: number };

@@ -1,5 +1,6 @@
 // 기계공학자 무기마다 공격 방식: 무기를 바꾸면 공격이 그 무기의 공격으로 바뀜 (전용 아이템 효과는 모든 공격에 적용).
 // 레이저 발사기·집속 렌즈 캐논·과부하 리액터는 레이저, 나머지는 각자 다른 공격
+import { srcRun } from "./dmgSrc";
 import { ENEMIES } from "../content";
 import { removeDead } from "./combat";
 import { beamHit, beamWidth, emitBeam, lensArea, nearestOthers, prismArea, supportBeam, REACTOR_BOOST, REACTOR_FULL, tickDamage, trackTarget, traceBeam, wallDistance, zapArea } from "./laser";
@@ -109,7 +110,7 @@ export function fireLaser(s: RunState, speed: number, interval: number): void {
     emitBeam(s, p.x, p.y, p.faceX, p.faceY, p.stats.range, dmg, interval, { hit: [], track: true, follow: true, single: w.gear === "focus" });
   }
   // 빔 스플리터: 주 공격이 레이저가 아닌 무기는 가까운 적에게 보조 레이저
-  if (hasPerk(p, "beamSplitter") && w.gear && NON_BEAM.has(w.gear)) supportBeam(s, dmg, interval);
+  if (hasPerk(p, "beamSplitter") && w.gear && NON_BEAM.has(w.gear)) srcRun(s, "beamSplitter", () => supportBeam(s, dmg, interval));
   removeDead(s);
 }
 

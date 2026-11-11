@@ -1,5 +1,6 @@
 // 거너 총: 탄창·장전(샷건은 쏘면서 한 발씩) · 미니건 예열 · 고장(폐급) · 치명타 · 쏘는 모양(권총·저격·샷건·총검·쌍권총·기관단총·미니건)
 // 드론·지원 드론·건 마스터·출혈·특수용병 콤보·수류탄은 gunExtras
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import type { WeaponDef } from "../content";
 import { createRng, deriveSeed } from "../rng";
@@ -150,7 +151,7 @@ export function gunTick(s: RunState, want: boolean, speed: number): void {
     if (w.gun !== "shotgun" && p.ammo <= 0) p.reloadLeft = reloadTicksOf(p, w);
   }
   if (hasPerk(p, "supportFire") && roll(s, "support") < SUPPORT_CHANCE) addSupport(p, 1);
-  if (hasPerk(p, "gunMaster") && roll(s, "ghost") < R.GHOST_CHANCE) ghostFire(s);
+  if (hasPerk(p, "gunMaster") && roll(s, "ghost") < R.GHOST_CHANCE) srcRun(s, "gunMaster", () => ghostFire(s));
   if (hasPerk(p, "scrapGun") && roll(s, "jam") < R.JAM_CHANCE) p.jamTicks = R.JAM_TICKS;
 }
 

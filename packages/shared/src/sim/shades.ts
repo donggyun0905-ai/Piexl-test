@@ -1,5 +1,6 @@
 // 닌자 그림자: 표식이 다 차면 그 적의 그림자에서 분신이 튀어나와 벰. 무기마다 모양이 다름 (뒤에서 베기 · X자 · 땅 가시 · 환영진 9점 돌진)
 // 환영진: 표식이 찬 적을 가운데로, 내 공격 범위(사거리)의 절반만 한 원 위 9곳에 그림자가 생겨 가운데로 돌진 (지나가며 베고 가운데를 내려침)
+import { srcRun } from "./dmgSrc";
 import { ENEMIES } from "../content";
 import { NINJA_PERKS } from "../itemsNinja";
 import { damageEnemy } from "./combat";
@@ -48,7 +49,7 @@ export function markEnemy(s: RunState, e: EnemyState, n = 1): void {
   if (e.marks < need) return;
   e.marks = 0;
   summon(s, e, 1, 0, 0);
-  if (hasPerk(p, "twinShadow")) summon(s, e, NINJA_PERKS.twinShadow.damage, 1, 0);
+  if (hasPerk(p, "twinShadow")) srcRun(s, "twinShadow", () => summon(s, e, NINJA_PERKS.twinShadow.damage, 1, 0));
 }
 
 function shade(kind: Shade["kind"], x: number, y: number, tx: number, ty: number, dmg: number, target: number, life: number, chain: number): Shade {
@@ -95,10 +96,10 @@ function shadowHit(s: RunState, sh: Shade, e: EnemyState, dmg: number): void {
   damageEnemy(s, e, d, dir[0], dir[1]);
   if (hasPerk(p, "shadowRush")) p.kageTicks = NINJA_PERKS.shadowRush.ticks;
   // 그림자 연쇄: 쓰러뜨리면 가까운 적에게 옮겨 붙음
-  if (e.hp <= 0 && hasPerk(p, "shadowChain") && sh.chain < NINJA_PERKS.shadowChain.hits) {
+  if (e.hp <= 0 && hasPerk(p, "shadowChain") && sh.chain < NINJA_PERKS.shadowChain.hits) srcRun(s, "shadowChain", () => {
     const next = nearestOther(s, e, NINJA_PERKS.shadowChain.radius);
     if (next) summon(s, next, 1, 0, sh.chain + 1);
-  }
+  });
 }
 
 function nearestOther(s: RunState, from: EnemyState, radius: number): EnemyState | null {

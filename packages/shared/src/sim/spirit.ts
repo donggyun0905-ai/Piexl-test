@@ -1,6 +1,7 @@
 // 정령사(비르디아): 본인은 매직 미사일만, 곁의 작은 정령 셋과 대정령(무기)이 싸움
 // 작은 정령은 30초마다 가장 오래된 하나가 떠나고 열두 종류 중 무작위(시드)로 새 정령이 옴. 대정령 공격은 spiritGreat
 // 수치는 weaponsSpirit.SPIRIT, 아이템은 itemsSpirit
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { SPIRIT_PERKS as K } from "../itemsSpirit";
 import { createRng, deriveSeed } from "../rng";
@@ -111,10 +112,10 @@ function smallTick(s: RunState): void {
   if (p.spSwap >= (hasPerk(p, "spLonger") ? K.spLonger.ticks : P.swapTicks) && !s.pvp) {
     p.spSwap = 0;
     const gone = p.spirits?.shift();
-    if (gone && hasPerk(p, "spFarewell")) {
+    if (gone && hasPerk(p, "spFarewell")) srcRun(s, "spFarewell", () => {
       const at = spiritSpot(p, 0, maxSmall(p), s.tick);
       blastAt(s, at.x, at.y, K.spFarewell.r, p.stats.damage * K.spFarewell.mul);
-    }
+    });
     summon(s);
   }
   const list = p.spirits ?? [];

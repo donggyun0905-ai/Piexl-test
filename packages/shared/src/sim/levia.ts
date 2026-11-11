@@ -1,6 +1,7 @@
 // 리바이어(탈라시아): 바다의 창 4단 콤보 + 확률로 같이 나오는 고래 (sim/leviaWhale)
 // 1타 앞 휘두르기(고래: 날개로 더 넓게 쓸기) → 2타 찌르기(고래: 꼬리로 앞을 크게 휩쓸기) → 3타 한 바퀴 + 고래 대돌격(고래: 몸을 감아 한 바퀴 더 넓게)
 // → (0.5초 만에 바로) 4타 앞으로 돌진 + 부채꼴 충격파(고래: 같이 돌진). 멈추면 1타부터 · 고래가 안 나올수록 다음엔 잘 나옴
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { LEVIA_PERKS as K } from "../itemsLevia";
 import { LEVIA as L } from "../weaponsLevia";
@@ -17,10 +18,10 @@ function sweep(s: RunState, whale: boolean): void {
   const reach = L.sweepReach * reachOf(p) * (hasPerk(p, "lvCrest") ? K.lvCrest.reach : 1);
   for (const e of inCone(s, reach, L.sweepArc)) lvHit(s, e, p.stats.damage * L.sweepMul, L.sweepPush);
   addEffect(s, { kind: "lvSwing", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, maxTicks: 14, follow: true });
-  if (hasPerk(p, "lvSpray")) {
+  if (hasPerk(p, "lvSpray")) srcRun(s, "lvSpray", () => {
     const k = K.lvSpray;
     fan(s, k.n, k.spread, { damage: p.stats.damage * k.mul, spirit: "lvJet", r: 4, range: k.range, pierce: 2 });
-  }
+  });
   if (!whale) return;
   const fin = L.finReach * reachOf(p) * whaleSize(p);
   for (const e of inCone(s, fin, L.finArc)) lvHit(s, e, whaleDmg(p, L.finMul), L.finPush, "tide", true);

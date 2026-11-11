@@ -9,6 +9,8 @@ export interface RunSummaryData {
   passives: [PassiveId, number][];
   uses: UseItemId[];
   dealt: Partial<Record<NumKind, number>>;
+  /** 피해 출처마다 합 (sim/dmgSrc: "" 무기·기본 기술 · "d:종류" 상태이상 · 그 밖은 패시브 id), 많이 준 순서 */
+  sources: [string, number][];
   best: number;
   taken: number;
   goldEarned: number;
@@ -42,6 +44,7 @@ export function buildSummary(s: RunState, dmg: DamageTracker | undefined, taken:
     passives: [...counts.entries()],
     uses: p.useSlots.filter((u): u is UseItemId => u !== null),
     dealt: { ...(dmg?.dealt ?? {}) },
+    sources: Object.entries(p.dmgBy ?? {}).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]),
     best: dmg?.best ?? 0,
     taken: Math.round(taken),
     goldEarned: s.goldEarned,

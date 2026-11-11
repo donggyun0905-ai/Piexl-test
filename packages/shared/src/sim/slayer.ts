@@ -1,6 +1,7 @@
 // 학살자(헬리오스): 피에 젖은 대낫. 한 번 누르면 5연속 콤보가 매우 빠르게 나가고, 기술마다 체력 5를 씀 (회복약·회복은 듣지 않음)
 // 체력이 낮을수록 공격력 ↑ · 맞히면 게이지가 차고 가득 차면 10초 '피의 학살'(흡혈 10% · 공격력·공격 속도 +25% · 이동 속도 +0.5)
 // 공용 아이템은 나오지 않음 (sim/loot). 기술은 slayerMoves, 수치는 weaponsSlayer.SLAYER, 아이템은 itemsSlayer
+import { srcRun } from "./dmgSrc";
 import { trialNoHeal } from "./trialFoes";
 import { TICK_RATE } from "../constants";
 import { SLAYER_PERKS as K } from "../itemsSlayer";
@@ -33,7 +34,7 @@ export function slayerOnHit(s: RunState, e: EnemyState, dmg: number): void {
   }
   if (e.hp > 0) return;
   if (!raging(p) && hasPerk(p, "slGrin")) p.slGauge = Math.min(S.gaugeMax, (p.slGauge ?? 0) + K.slGrin.gauge);
-  if (raging(p) && hasPerk(p, "slMassacre")) blastAt(s, e.x, e.y, K.slMassacre.r, power(p) * K.slMassacre.mul);
+  if (raging(p) && hasPerk(p, "slMassacre")) srcRun(s, "slMassacre", () => blastAt(s, e.x, e.y, K.slMassacre.r, power(p) * K.slMassacre.mul));
 }
 
 const hit = (s: RunState) => (e: EnemyState, dmg: number, push = 0) => {

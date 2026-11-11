@@ -133,6 +133,7 @@ export interface ProjectileState extends Body, GunShotState, BeastShotState, Orb
   vx: number;
   vy: number;
   damage: number;
+  src?: string;
   ticksLeft: number;
   /** 마법탄: 맞으면 이 반경 안 다른 적에게 절반 피해 (없으면 한 적만) */
   blast?: number;

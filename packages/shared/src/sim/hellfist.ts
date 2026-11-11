@@ -2,6 +2,7 @@
 // 1 주먹 후리기(앞 부채꼴) → 2 악마 왼팔 내려찍기(앞 부채꼴 충격 · 땅이 갈라져 남음) → 3 균열 파쇄(갈라진 땅이 붉은 유리처럼 깨지며 그 위 적을 벰)
 // 성흔이 가득 찬 적혈 각성 중에는 기본 공격이 모두 허공검격 (왼손 검지로 적을 가리키고 공중을 그으면 그 적 자리에 X자 검격 · 적 여럿)
 // 맞힐수록 악마화가 쌓여 팔이 자라 모든 공격이 더 멀리 닿음 (sim/hellfistKit) · 수치 weaponsHellfist.HELLFIST · 아이템 itemsHellfist
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { HELLFIST_PERKS as K } from "../itemsHellfist";
 import { HELLFIST as H } from "../weaponsHellfist";
@@ -20,7 +21,7 @@ function jab(s: RunState): void {
   const hit = inCone(s, r, H.jabCos);
   for (const e of hit) {
     strike(s, e, dmg, H.jabPush);
-    if (hasPerk(p, "hfDouble") && e.hp > 0) strike(s, e, dmg * K.hfDouble.mul);
+    if (hasPerk(p, "hfDouble") && e.hp > 0) srcRun(s, "hfDouble", () => strike(s, e, dmg * K.hfDouble.mul));
   }
   addEffect(s, { kind: "hfJabFx", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: r, arc: H.jabCos, maxTicks: 14, follow: true });
   hfHit(s, hit.length, H.gainJab);
@@ -75,7 +76,7 @@ function claw(s: RunState): void {
     for (const e of inCircle(s, at.x, at.y, splashR)) {
       if (e.id === at.id) {
         for (let i = 0; i < lines && e.hp > 0; i++) strike(s, e, per, i === lines - 1 ? 3 : 0);
-        if (hasPerk(p, "hfRend") && e.hp > 0) strike(s, e, per * lines * K.hfRend.mul, 0, "bleed");
+        if (hasPerk(p, "hfRend") && e.hp > 0) srcRun(s, "hfRend", () => strike(s, e, per * lines * K.hfRend.mul, 0, "bleed"));
       } else strike(s, e, per * lines * (echo ? K.hfEcho.mul : H.splashMul), 2);
       hits++;
     }

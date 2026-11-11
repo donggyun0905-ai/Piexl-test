@@ -11,7 +11,7 @@ import { ADMIN_PRACTICE, ADMIN_TD } from "./balance";
 import { useLang } from "./i18n";
 import { loadSavedRun, newSeedText, seedFromUrl, soloUnlocks } from "./records";
 import { TitleScreen } from "./TitleScreen";
-import { ArenaBoard, BattleScreen, CoopScreen, HallOfFame, PwFlow, RaidFlow, ShopScreen, StoryScreen, SwarmGame, SwarmMaps, TdGame, TdScreen, TierScreen } from "./lazyScreens";
+import { ArenaBoard, BattleScreen, BuildScreen, CoopScreen, HallOfFame, PwFlow, RaidFlow, ShopScreen, StoryScreen, SwarmGame, SwarmMaps, TdGame, TdScreen, TierScreen } from "./lazyScreens";
 
 type Screen =
   | { name: "title" }
@@ -24,6 +24,7 @@ type Screen =
   | { name: "shop" }
   | { name: "story" }
   | { name: "tier" }
+  | { name: "builds" }
   | { name: "swarmSelect" }
   | { name: "paewang" }
   | { name: "raid" }
@@ -159,6 +160,7 @@ export function App() {
   }
   if (screen.name === "shop") return <ShopScreen lang={lang.lang} t={lang.t} onBack={toTitle} />;
   if (screen.name === "story") return <StoryScreen lang={lang.lang} t={lang.t} onBack={toTitle} />;
+  if (screen.name === "builds") return <BuildScreen lang={lang.lang} t={lang.t} onBack={toTitle} />;
   if (screen.name === "tier") return <TierScreen lang={lang.lang} t={lang.t} onBack={toTitle} />;
   if (screen.name === "tdMaps") return <TdScreen t={lang.t} onPick={(mapId) => setScreen({ name: "td", mapId, runKey: 0 })} onBack={toTitle} />;
   if (screen.name === "practice") {
@@ -281,6 +283,7 @@ export function App() {
       onShop={() => setScreen({ name: "shop" })}
       onStory={() => setScreen({ name: "story" })}
       onTierList={() => setScreen({ name: "tier" })}
+      onBuilds={() => setScreen({ name: "builds" })}
       onSwarm={() => setScreen({ name: "swarmSelect" })}
       onPaewang={() => setScreen({ name: "paewang" })}
       onRaid={() => setScreen({ name: "raid" })}

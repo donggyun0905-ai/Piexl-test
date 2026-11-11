@@ -1,5 +1,6 @@
 // 시간술사: 본인 공격은 약하고(70%), 잠시 뒤(1초) 공격한 그 자리에서 반투명한 잔상이 더 세게(120%) 한 번 더 함.
 // 움직이며 싸우면 지나온 자리마다 공격이 다시 터짐. 무기마다 공격 방식이 다름 (weaponsChrono)
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../content";
 import { CHRONO_PERKS } from "../itemsChrono";
@@ -194,7 +195,7 @@ function updateEchoes(s: RunState): void {
   const w = weaponOf(p);
   for (const e of due) {
     attack(s, e, e.mul, true);
-    if (hasPerk(p, "echoBurst")) blastAt(s, e.x, e.y, CHRONO_PERKS.echoBurst.radius, p.stats.damage * CHRONO_PERKS.echoBurst.damage);
+    if (hasPerk(p, "echoBurst")) srcRun(s, "echoBurst", () => blastAt(s, e.x, e.y, CHRONO_PERKS.echoBurst.radius, p.stats.damage * CHRONO_PERKS.echoBurst.damage));
     const again =
       (w.chrono === "paradox" && e.depth < R.PARADOX_DEPTH) ||
       (hasPerk(p, "doubleEcho") && createRng(deriveSeed(s.seed, "echo", s.tick, e.depth, e.x)).nextFloat() < CHRONO_PERKS.doubleEcho.chance);

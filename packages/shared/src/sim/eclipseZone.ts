@@ -1,4 +1,5 @@
 // 이클립스 틱마다 도는 것: 맞힘(게이지) · 날아가는 검격 · 블랙홀 · 그림자 돌진 · 영역(이글거리는 영역 + 치유의 빛 / 죽음의 영역)
+import { srcRun } from "./dmgSrc";
 import { ECLIPSE_PERKS as K } from "../itemsEclipse";
 import { ECLIPSE as E } from "../weaponsEclipse";
 import { heal } from "./heal";
@@ -112,14 +113,14 @@ function zoneTick(s: RunState): void {
 /** 모습이 바뀌는 순간 (개기일식: 둘레 적에게 큰 피해) */
 export function totality(s: RunState): void {
   const p = s.player;
-  if (!hasPerk(p, "ecTotality")) return;
+  if (!hasPerk(p, "ecTotality")) return; return srcRun(s, "ecTotality", () => {
   const k = K.ecTotality;
   for (const e of inCircle(s, p.x, p.y, k.r)) {
     ecHit(s, e, eclipsePower(p) * k.mul, 8, false);
     if (!isBoss(e) && e.kind !== "dummy") e.stunTicks = Math.max(e.stunTicks ?? 0, k.stun);
   }
   addEffect(s, { kind: "ecTotal", x: p.x, y: p.y, dirX: 0, dirY: 0, size: k.r, maxTicks: 30, width: p.ecNight ? 1 : 0 });
-}
+}); }
 
 export function eclipseWorld(s: RunState): void {
   cutTick(s);

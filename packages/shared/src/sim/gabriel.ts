@@ -1,5 +1,6 @@
 // 가브리엘(성국, 철옹의 방패): 누르고 있으면 3연격 (내려찍기 · 휘두르기 → 대지 강타: 빛의 망치가 내리꽂혀 기절·압박)
 // 철옹: 받는 피해 절반 (sim/gabrielKit). 스킬 넷은 숫자 키(sim/gabrielSkills) · 궁극기 중 기본 공격마다 거대한 빛의 망치가 함께 휘둘러짐
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { GABRIEL_PERKS as K } from "../itemsGabriel";
 import { GABRIEL as G } from "../weaponsGabriel";
@@ -34,7 +35,7 @@ function slam(s: RunState): void {
   }
   addEffect(s, { kind: "gbSlam", x, y, dirX: 0, dirY: 0, size: r, maxTicks: 26 });
   addEffect(s, { kind: "gbHammer", x, y, dirX: 0, dirY: 0, size: r, maxTicks: 22 });
-  if (hasPerk(p, "gbAfter")) dropHammer(s, x, y, K.gbAfter.delay, r, p.stats.damage * mul * K.gbAfter.mul);
+  if (hasPerk(p, "gbAfter")) srcRun(s, "gbAfter", () => dropHammer(s, x, y, K.gbAfter.delay, r, p.stats.damage * mul * K.gbAfter.mul));
 }
 
 /** 방이 바뀌면 떨어지는 망치·영역을 거둠 · 수호자의 맹세 보호막 */

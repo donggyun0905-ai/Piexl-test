@@ -1,6 +1,7 @@
 // 실버불렛(새벽의 성흔, 은빛 집행자): 누르고 있으면 쌍권총 (한 번에 은탄 두 발: 오른손 → 조금 뒤 왼손 · 공격력 낮고 빠름 · 모든 공격이 달빛 상태이상 sim/moonlight)
 // 기본 공격 몇 번마다 성수 폭탄(광역 정화) · 대시: 장애물을 넘고 가까운 적에게 은탄 두 발 · 은탄 마크가 30이면 연사 2초 (성흔 안 참)
 // 성흔이 가득 차면 달빛 각성: 버프 + 몸이 고정되고 앞에 흰 활 ) → 가운데 두 발·양끝 유도 두 발씩 매우 빠르게 (sim/silverBulletKit) · 수치 weaponsSilverBullet · 아이템 itemsSilverBullet
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { SILVER_BULLET_PERKS as K } from "../itemsSilverBullet";
 import { SILVER_BULLET as B } from "../weaponsSilverBullet";
@@ -47,7 +48,7 @@ function dashTick(s: RunState): void {
     const n = (B.dashShots + (hasPerk(p, "sbAgile") ? K.sbAgile.add : 0)) / 2;
     const foes = nearest(s, p.x, p.y, n);
     for (let i = 0; i < n; i++) pair(s, foes[i % Math.max(1, foes.length)], 2, B.barrageSpeed, B.dashMul);
-    if (hasPerk(p, "sbSplash")) throwBomb(s, p.x, p.y, B.bombMul * K.sbSplash.mul, 1);
+    if (hasPerk(p, "sbSplash")) srcRun(s, "sbSplash", () => throwBomb(s, p.x, p.y, B.bombMul * K.sbSplash.mul, 1));
   }
   p.sbDash = dashing;
 }
@@ -73,10 +74,10 @@ function barrageTick(s: RunState): boolean {
   if (b.t % gap === 0) pair(s, e, 3, B.barrageSpeed, B.barrageMul);
   if (--b.t > 0) return true;
   delete p.sbBarrage;
-  if (e && hasPerk(p, "sbBurst")) {
+  if (e && hasPerk(p, "sbBurst")) srcRun(s, "sbBurst", () => {
     for (const f of inCircle(s, e.x, e.y, K.sbBurst.r)) strike(s, f, sbDmg(p, K.sbBurst.mul), 6, "radiance");
     addEffect(s, { kind: "sbBurstFx", x: e.x, y: e.y, dirX: 0, dirY: 0, size: K.sbBurst.r, maxTicks: 22 });
-  }
+  });
   return true;
 }
 
@@ -129,7 +130,7 @@ export function silverBulletTick(s: RunState, want: boolean, speed: number): voi
   fireHand(s, 0);
   p.sbLeft = B.offTicks;
   p.sbCount = (p.sbCount ?? 0) + 1;
-  if (hasPerk(p, "sbTriple") && p.sbCount % K.sbTriple.every === 0) pair(s, nearest(s, p.x, p.y, 1)[0], 0, B.shotSpeed, B.shotMul);
+  if (hasPerk(p, "sbTriple") && p.sbCount % K.sbTriple.every === 0) srcRun(s, "sbTriple", () => pair(s, nearest(s, p.x, p.y, 1)[0], 0, B.shotSpeed, B.shotMul));
   if (p.sbCount % (hasPerk(p, "sbBelt") ? K.sbBelt.every : B.bombEvery) === 0) throwBomb(s, p.x, p.y - 4, B.bombMul);
   const fast = isAwake(p) ? B.awakeSpeed : 1;
   p.attackCooldown = Math.max(1, Math.round((TICK_RATE / (speed * fast)) * B.shotTime * (hasPerk(p, "sbQuick") ? K.sbQuick.time : 1)));

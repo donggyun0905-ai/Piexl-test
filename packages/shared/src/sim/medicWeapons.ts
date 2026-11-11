@@ -1,5 +1,6 @@
 // 의사 무기마다 공격 방식: 무기를 바꾸면 공격이 그 무기의 공격으로 바뀜 (틱 피해는 기계공학자 레이저와 같은 방식).
 // 직접 피해의 일부만큼 회복 (sim/heal). 날아가는 탄·장판·바늘·알약·구급차의 틱마다 처리는 medicGear
+import { logDmg } from "./dmgSrc";
 import { ENEMIES } from "../content";
 import { removeDead } from "./combat";
 import { devilMul } from "./devilPerks";
@@ -65,6 +66,7 @@ export function medicHit(s: RunState, e: EnemyState, dmg: number, leechMul = 1, 
   const p = s.player;
   if (e.immune) return;
   if ((p.shieldPts ?? 0) > 0 && hasPerk(p, "robust")) dmg *= R.ROBUST_MUL;
+  logDmg(s, e, dmg * devilMul(s, e));
   e.hp -= dmg * devilMul(s, e); // 그림 리퍼 등 (combat.damageEnemy와 같게)
   if (flash) e.hitFlash = Math.max(e.hitFlash, 2);
   factionHit(s, e); // 테라코어 에너지

@@ -1,6 +1,7 @@
 // 미류(탈라시아, 해룡 수인): 누르고 있으면 대태도 3연격 (물결 가르기 → 역류 베기 → 해룡 일섬, sim/miryuCuts)
 // 벤 자리는 흐르는 물길 · 벤 직후·대시 중 적 탄을 흘려 물방울로 모음 · 해류 게이지가 차면 다음 베기가 '천류 해방' (sim/miryuFlow)
 // 대시해도 연격이 이어짐 (물 흐르듯) · 물줄기 걸음은 대시한 길이 물길
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { MIRYU as M } from "../weaponsMiryu";
 import { flash, sweep, whirlCut } from "./miryuCuts";
@@ -30,11 +31,11 @@ function moveCheck(s: RunState): void {
   }
   if (!dashing && p.mrDash) {
     const [x, y] = p.mrDash;
-    if (hasPerk(p, "mrCourse") && Math.hypot(p.x - x, p.y - y) > 12) {
+    if (hasPerk(p, "mrCourse") && Math.hypot(p.x - x, p.y - y) > 12) srcRun(s, "mrCourse", () => {
       const pts: [number, number][] = [];
       for (let i = 0; i <= 4; i++) pts.push([x + (p.x - x) * (i / 4), y + (p.y - y) * (i / 4)]);
       addStream(s, pts);
-    }
+    });
     delete p.mrDash;
   }
   if (mrOf(p).miryu !== "formless" || s.tick % M.trailEvery !== 0) return;

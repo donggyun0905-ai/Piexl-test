@@ -2,6 +2,7 @@
 // 공격: 칠보 광륜 — 가운데 자수정에서 방 안 모든 적에게 빛줄기 (쏘는 동안 몸을 못 움직임)
 // 대시: 하늘을 나는 부스트. 한 번 누르면 비행(빠르게 계속 이동, 무적 아님) · 다시 누르면 내려앉음
 // 날아오를 때·내려앉을 때·비행 중 일정 간격마다 보석 7개가 저마다 확률로 반응해 공격 (sim/onyxGems). 수치는 weaponsOnyx, 아이템은 itemsOnyx
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ONYX_PERKS as K } from "../itemsOnyx";
 import { createRng, deriveSeed } from "../rng";
@@ -44,12 +45,12 @@ function land(s: RunState): void {
   const p = s.player;
   p.oxFly = false;
   addEffect(s, { kind: "oxLand", x: p.x, y: p.y + p.r, dirX: 0, dirY: 0, size: hasPerk(p, "oxLanding") ? K.oxLanding.r : 24, maxTicks: 30, width: hasPerk(p, "oxLanding") ? 1 : 0 });
-  if (hasPerk(p, "oxLanding")) {
+  if (hasPerk(p, "oxLanding")) srcRun(s, "oxLanding", () => {
     for (const e of inCircle(s, p.x, p.y, K.oxLanding.r)) {
       strike(s, e, p.stats.damage * K.oxLanding.mul, 12);
       stun(e, K.oxLanding.stun);
     }
-  }
+  });
   rollGems(s, "down");
 }
 
@@ -86,24 +87,24 @@ function halo(s: RunState): void {
     addEffect(s, { kind: "oxBeam", x: p.x, y: p.y - 10, dirX: 0, dirY: 0, size: 3, toX: e.x, toY: e.y, maxTicks: 20 });
   }
   addEffect(s, { kind: "oxHalo", x: p.x, y: p.y - 10, dirX: 0, dirY: 0, size: 22, maxTicks: 26 });
-  if (hasPerk(p, "oxPrism")) {
+  if (hasPerk(p, "oxPrism")) srcRun(s, "oxPrism", () => {
     const g = ONYX_GEM_IDS[Math.floor(createRng(deriveSeed(s.seed, "oxPrism", s.tick)).nextFloat() * ONYX_GEM_IDS.length)]!;
     fireGem(s, g);
     p.oxLit = 1 << ONYX_GEM_IDS.indexOf(g);
     p.oxLitAt = s.tick;
-  }
+  });
 }
 
 /** 보석 꼬리: 날아가는 동안 몸 둘레 적에게 보석 가루 */
 function trail(s: RunState): void {
   const p = s.player;
-  if (!p.oxFly || !hasPerk(p, "oxTrail")) return;
+  if (!p.oxFly || !hasPerk(p, "oxTrail")) return; return srcRun(s, "oxTrail", () => {
   p.oxTrail = (p.oxTrail ?? K.oxTrail.gap) - 1;
   if (p.oxTrail > 0) return;
   p.oxTrail = K.oxTrail.gap;
   for (const e of inCircle(s, p.x, p.y, K.oxTrail.r)) strike(s, e, p.stats.damage * K.oxTrail.mul, 2);
   addEffect(s, { kind: "oxDust", x: p.x, y: p.y, dirX: p.dashDirX, dirY: p.dashDirY, size: K.oxTrail.r, maxTicks: 30 });
-}
+}); }
 
 /** 틱마다 (칠보 광륜을 들었을 때 player에서) */
 export function onyxTick(s: RunState, want: boolean, speed: number): void {

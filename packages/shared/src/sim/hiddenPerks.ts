@@ -1,5 +1,7 @@
 // 히든 패시브 효과 (itemsHidden): 금기된 아티팩트 7색(처치마다 쌓임) · 이프리트의 발톱 · 실피드의 화살통 · 노움의 망치 · 드라이어드의 수정구 · 아프로디테의 거울 · 떨어진 신의 파편
 // 맞힐 때(onHitExtra) · 처치할 때(removeDead) · 맞을 때(origin.readyCounter) · 틱마다(origin.tickOrigin)
+import { srcRun } from "./dmgSrc";
+import { logDmg } from "./dmgSrc";
 import type { ExtraStats } from "../characters";
 import { HIDDEN_PERKS as K } from "../itemsHidden";
 import { createRng, deriveSeed } from "../rng";
@@ -115,10 +117,10 @@ export function hiddenOnHit(s: RunState, e: EnemyState, dmg: number): void {
     (p.oStorms ??= []).push({ x: e.x, y: e.y, prevX: e.x, prevY: e.y, ticks: K.sylphQuiver.ticks, dmg: p.stats.damage * K.sylphQuiver.mul, cd: 0 });
   }
   if (hasPerk(p, "blizzardLance") && s.tick >= (p.lanceAt ?? 0) && roll(s, "lance", e.id) < K.blizzardLance.chance) launchLances(s, e);
-  if (hasPerk(p, "gnomeHammer") && e.hp > 0) {
+  if (hasPerk(p, "gnomeHammer") && e.hp > 0) srcRun(s, "gnomeHammer", () => {
     blastAt(s, e.x, e.y, K.gnomeHammer.r, dmg * K.gnomeHammer.mul, { exclude: e });
     addEffect(s, { kind: "hdQuake", x: e.x, y: e.y, dirX: 0, dirY: 0, size: K.gnomeHammer.r, maxTicks: 12 });
-  }
+  });
   devilOnHit(s, e, dmg);
   busy = false;
 }
@@ -146,13 +148,14 @@ export function lanceHit(s: RunState, e: EnemyState): void {
   if (e.hp <= 0 || roll(s, "freeze", e.id) >= k.freeze) return;
   stun(e, k.freezeTicks);
   e.hp -= s.player.stats.damage * k.freezeMul;
+  logDmg(s, e, s.player.stats.damage * k.freezeMul, "blizzardLance");
   addEffect(s, { kind: "hdFreeze", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 6, maxTicks: k.freezeTicks });
 }
 
 /** 맞을 때: 아프로디테의 거울 (앞쪽으로 받은 피해 2배 빛 레이저) */
 export function hiddenHurt(s: RunState, taken: number): void {
   const p = s.player;
-  if (!hasPerk(p, "aphroditeMirror") || taken <= 0 || roll(s, "mirror", 0) >= K.aphroditeMirror.chance) return;
+  if (!hasPerk(p, "aphroditeMirror") || taken <= 0 || roll(s, "mirror", 0) >= K.aphroditeMirror.chance) return; return srcRun(s, "aphroditeMirror", () => {
   const { len, width, mul } = K.aphroditeMirror;
   for (const e of s.enemies) {
     if (e.hp <= 0) continue;
@@ -163,7 +166,7 @@ export function hiddenHurt(s: RunState, taken: number): void {
     if (along > 0 && along < len && side < width + e.r) damageEnemy(s, e, taken * mul, p.faceX, p.faceY);
   }
   addEffect(s, { kind: "hdMirror", x: p.x + p.faceX * 10, y: p.y - 4 + p.faceY * 10, dirX: p.faceX, dirY: p.faceY, size: len, maxTicks: 24, width });
-}
+}); }
 
 /** 틱마다: 드라이어드의 수정구 · 오니가 아닐 때 실피드 회오리 */
 export function hiddenTick(s: RunState): void {

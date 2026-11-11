@@ -1,5 +1,6 @@
 // 오니 방망이 추가 공격 (무기마다 하나, 휘두른 공격이 맞았을 때 확률로). 피해는 속성 피해(색 숫자) dotDamage
 // 스킬 공격력 = 지금 공격력 · 효과 범위는 사거리 아이템만큼 (p.oReach)
+import { srcRun } from "./dmgSrc";
 import { ENEMIES } from "../enemyDefs";
 import { ONI_PERKS as K } from "../itemsOni";
 import { ONI, type ClubArt } from "../weaponsOni";
@@ -56,13 +57,13 @@ function boltFan(s: RunState, art: ClubArt, dx: number, dy: number, dmg: number,
   for (const e of hit) {
     dotDamage(s, e, kind, dmg * (cloud ? K.oniThunderCloud.damage : 1));
     after?.(e);
-    if (art === "thunder" && hasPerk(p, "oniChainBolt")) {
+    if (art === "thunder" && hasPerk(p, "oniChainBolt")) srcRun(s, "oniChainBolt", () => {
       const o = inCircle(s, e.x, e.y, K.oniChainBolt.reach).find((x) => x !== e);
       if (o) {
         dotDamage(s, o, "shock", p.stats.damage * K.oniChainBolt.mul);
         addEffect(s, { kind: "oSplash", x: e.x, y: e.y, dirX: 0, dirY: 0, size: 2, toX: o.x, toY: o.y, maxTicks: 10, tint: CLUB_TINT.thunder });
       }
-    }
+    });
   }
   addEffect(s, { kind: "oBolt", x: p.x, y: p.y - 4, dirX: dx, dirY: dy, size: r, width: ONI.thunder.fanCos, maxTicks: 16, tint: CLUB_TINT[art] });
 }

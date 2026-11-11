@@ -1,4 +1,5 @@
 // 빙설 전용 아이템 기술: 공격할 때(궁극기·활·창·얼음가루·빙격·영역강화 얼음가루) · 틱마다(얼음가루 닿기·모여 유도/급속 얼음·활 화살·영역강화 결정)
+import { srcRun } from "./dmgSrc";
 import { ENEMIES } from "../enemyDefs";
 import { BINGSEOL_PERKS as K } from "../itemsBingseol";
 import { createRng, deriveSeed } from "../rng";
@@ -17,11 +18,11 @@ type P = RunState["player"];
 export function onAttack(s: RunState): void {
   const p = s.player;
   const rng = createRng(deriveSeed(s.seed, "bsAtk", s.tick, p.attackCount));
-  if (hasPerk(p, "bsUlt") && !p.bsUlt && rng.nextFloat() < K.bsUlt.chance) startUlt(s);
+  if (hasPerk(p, "bsUlt") && !p.bsUlt && rng.nextFloat() < K.bsUlt.chance) srcRun(s, "bsUlt", () => startUlt(s));
   if (hasPerk(p, "bsBow") && rng.nextFloat() < K.bsBow.chance && (p.bsBows ?? []).length < K.bsBow.max) setBow(s);
   if (hasPerk(p, "bsLance") && rng.nextFloat() < K.bsLance.chance) lances(p, rng.int(K.bsLance.min, K.bsLance.max));
   if (hasPerk(p, "bsDust")) addDust(p, rng.int(K.bsDust.min, K.bsDust.max), rng);
-  if (hasPerk(p, "bsSpike") && rng.nextFloat() < K.bsSpike.chance) spike(s);
+  if (hasPerk(p, "bsSpike") && rng.nextFloat() < K.bsSpike.chance) srcRun(s, "bsSpike", () => spike(s));
   if (hasPerk(p, "bsWall") && rng.nextFloat() < K.bsWall.dustChance) addDust(p, rng.int(K.bsWall.dustMin, K.bsWall.dustMax), rng);
 }
 
@@ -158,7 +159,7 @@ export function wallSpots(p: P): [number, number][] {
 /** 영역강화: 결정이 돌며 닿은 적 탄을 막고 주기적으로 둘레 적에게 피해 */
 function wallTick(s: RunState): void {
   const p = s.player;
-  if (!hasPerk(p, "bsWall")) return;
+  if (!hasPerk(p, "bsWall")) return; return srcRun(s, "bsWall", () => {
   p.bsSpin = ((p.bsSpin ?? 0) + K.bsWall.spin) % (Math.PI * 2);
   const spots = wallSpots(p);
   const r = K.bsWall.r;
@@ -179,7 +180,7 @@ function wallTick(s: RunState): void {
     }
     if (hit) addEffect(s, { kind: "bsWallHit", x, y, dirX: 0, dirY: 0, size: r * 1.6, maxTicks: 14 });
   }
-}
+}); }
 
 /** 틱마다 */
 export function armsTick(s: RunState): void {

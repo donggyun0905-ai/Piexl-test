@@ -1,6 +1,7 @@
 // 레오(아스칼론, 영물): 뇌전의 사자. 발톱으로 앞을 할퀴고(세 번째마다 번개 물기) 맞힌 적에 뇌인(번개 표식)을 새김
 // 맞힐 때마다 전하가 차고, 가득하면 사자후: 방 안 모든 적에게 낙뢰(뇌인 겹마다 더 아픔) + 기절
 // 머리 가운데 보석이 몇 초마다 가장 먼 적에게 낙뢰 (방 전체 장악). 수치는 weaponsLeo.LEO, 아이템은 itemsLeo·sim/leoPerks
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { LEO_PERKS as K } from "../itemsLeo";
 import { LEO as L } from "../weaponsLeo";
@@ -104,7 +105,7 @@ function swipe(s: RunState): void {
     for (const e of inCone(s, p.stats.range, L.arcCos)) {
       strike(s, e, dmg * (1 + L.markMul * (e.leMark ?? 0)));
       addMark(p, e);
-      if (hasPerk(p, "leChain")) chain(s, e, dmg);
+      if (hasPerk(p, "leChain")) srcRun(s, "leChain", () => chain(s, e, dmg));
       hits++;
     }
     addEffect(s, { kind: "leClaw", x: p.x, y: p.y - 3, dirX: p.faceX, dirY: p.faceY, size: p.stats.range, maxTicks: 12, width: p.leHits % 2 });

@@ -1,0 +1,86 @@
+/* 아카이브 빌드 통계 (archive/BuildScreen) */
+.build-faces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  max-height: 190px;
+  overflow-y: auto;
+  padding: 4px;
+  border: 2px solid var(--line);
+}
+.build-faces .tier-face.active {
+  border-color: var(--accent);
+}
+.build-body h3 small,
+.build-cols h4 small {
+  margin-left: 8px;
+  font-weight: normal;
+  opacity: 0.7;
+  font-size: 0.75rem;
+}
+.build-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+.build-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.build-row {
+  display: grid;
+  grid-template-columns: 1.6em 28px minmax(0, 1fr) 70px 3em 3em;
+  gap: 6px;
+  align-items: center;
+  width: 100%;
+  padding: 3px 4px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.build-row:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+.build-row.top .build-rank {
+  color: var(--accent);
+  font-weight: bold;
+}
+.build-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.build-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.build-bar b {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+.build-num {
+  text-align: right;
+}
+.build-num.win {
+  opacity: 0.75;
+}
+.build-num.win.good {
+  color: #7ae05a;
+  opacity: 1;
+}
+.build-desc {
+  margin: 2px 0 6px 2.2em;
+  font-size: 0.78rem;
+  opacity: 0.85;
+  white-space: pre-line;
+}
+.build-empty {
+  opacity: 0.7;
+  padding: 12px 0;
+}

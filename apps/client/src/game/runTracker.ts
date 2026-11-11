@@ -24,6 +24,7 @@ export function createRunTracker(solo: boolean, seedText: string, run: RunState,
   let savedKey = "";
   let historyAdded = false;
   let clearSent = false;
+  let buildSent = false;
   const taken = new TakenTracker();
   const unlock = createUnlockRun(run);
   if (solo) startRaidLog(run);
@@ -117,6 +118,11 @@ export function createRunTracker(solo: boolean, seedText: string, run: RunState,
       if (solo && run.won && !clearSent && !run.lastBoss && !run.endless && !run.arenaLv && !run.taboo && !run.randomKit && !run.sudden) {
         clearSent = true;
         void apiPost("/api/stats/clear", { player: getPlayerId(), character: run.player.characterId, ticks: run.tick, ...(run.hero ? { mode: "hero" } : {}) });
+      }
+      // 빌드 통계 (아카이브·추천 표시): 2층 이상 간 판의 마지막 장비를 한 번 (규칙이 다른 판은 빼고)
+      if (solo && !buildSent && (run.won || run.floor >= 2) && !run.endless && !run.arenaLv && !run.taboo && !run.randomKit && !run.sudden && !run.hero) {
+        buildSent = true;
+        void apiPost("/api/stats/build", { player: getPlayerId(), character: run.player.characterId, weapon: run.player.weaponId, passives: [...new Set(run.player.passives)], won: run.won });
       }
       return { won: run.won, floor: run.floor, kills: run.kills, ticks: run.tick, score, newBest, achievements: [...earned], arenaLevel, summary };
     },

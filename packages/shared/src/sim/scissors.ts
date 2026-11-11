@@ -1,6 +1,7 @@
 // 시저스(새벽의 성흔, 단죄의 가위): 누르고 있으면 가위질 두 박자 (열기: 넓게 휘두름 → 닫기: 두 날이 맞물리는 X자 절단 · 맞힌 적에게 운명의 실)
 // 대시하면 묶인 운명의 실을 모두 끊어 벰 (팽팽할수록 셈 · 실이 지나는 적도) · 체력이 적은 적은 목을 잘라 단죄 (sim/scissorsKit)
 // 맞힐수록 성흔이 차고 가득 차면 달빛 각성 (sim/stigma): 피해 1.3배 · 가위가 커짐 · 열기도 실을 묶음 · 실을 저절로 끊음. 수치 weaponsScissors.SCISSORS · 아이템 itemsScissors
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { SCISSORS_PERKS as K } from "../itemsScissors";
 import { SCISSORS as X } from "../weaponsScissors";
@@ -37,8 +38,8 @@ function close(s: RunState): void {
     n += cut(s, e, dmg, X.closePush) + X.gainClose;
     if (e.hp <= 0) continue;
     tie(s, e);
-    if (hasPerk(p, "sxRust")) strike(s, e, dmg * K.sxRust.mul, 0, "bleed");
-    if (hasPerk(p, "sxTwin")) n += cut(s, e, dmg * K.sxTwin.mul);
+    if (hasPerk(p, "sxRust")) srcRun(s, "sxRust", () => strike(s, e, dmg * K.sxRust.mul, 0, "bleed"));
+    if (hasPerk(p, "sxTwin")) srcRun(s, "sxTwin", () => n += cut(s, e, dmg * K.sxTwin.mul));
   }
   addEffect(s, { kind: "sxCloseFx", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: r, style: aw ? 1 : 0, maxTicks: 16, follow: true });
   sxGain(s, n);
