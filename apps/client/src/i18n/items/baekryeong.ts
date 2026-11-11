@@ -35,7 +35,7 @@ export const BY_PASSIVE_NAMES: Record<ByPassive & PassiveId, Names> = {
 };
 
 export const BY_EFFECTS: Partial<Record<ByPassive & PassiveId, Names>> = {
-  byWraith: c("새 기술: 유령팔 참격에 망령 {n}개가 같이 날아가 닿은 적마다 공격력의 {mul:pct}% (영혼 게이지 3칸부터)", "New skill: a wraith flies along with each ghost arm slash, dealing {mul:pct}% of damage to every foe it touches (from 3 soul bars)", "新技：幽霊の腕の斬撃と一緒に亡霊が飛び、触れた敵ごとに攻撃力の{mul:pct}%（魂ゲージ3本から）"),
+  byWraith: c("새 기술: 유령팔 참격마다 {chance:pct}% 확률로 망령 {n}개가 같이 날아가 닿은 적마다 공격력의 {mul:pct}% (영혼 게이지 3칸부터)", "New skill: each ghost arm slash has a {chance:pct}% chance to send a wraith flying along with it, dealing {mul:pct}% of damage to every foe it touches (from 3 soul bars)", "新技：幽霊の腕の斬撃ごとに{chance:pct}%の確率で亡霊が飛び、触れた敵ごとに攻撃力の{mul:pct}%（魂ゲージ3本から）"),
   byTrinity: c("새 기술: 혼령참 망령이 {n}개로 늘어 양옆으로 벌어져 날아감", "New skill: Wraith Slash sends {n} wraiths, fanning out to both sides", "新技：霊斬の亡霊が{n}体に増え、左右に広がって飛ぶ"),
   byWhirl: c("새 기술: 망령에 닿은 적에게 검무 소용돌이가 일어 {every:sec}초마다 {hits}번 더 공격력의 {mul:pct}% (반지름 {r})", "New skill: foes touched by a wraith are caught in a whirling sword dance, taking {hits} more hits of {mul:pct}% of damage every {every:sec}s (radius {r})", "新技：亡霊に触れた敵に剣舞の渦が起き、{every:sec}秒ごとにさらに{hits}回、攻撃力の{mul:pct}%（半径{r}）"),
   byGreat: c("새 기술: 유령팔이 벨 때 {chance:pct}% 확률로 푸른 불꽃의 큰 대태도가 하늘에서 앞쪽 적 위로 떨어져 아래 반지름 {r} 안에 공격력의 {mul:pct}%", "New skill: ghost arm cuts have a {chance:pct}% chance to drop a huge blue-flamed odachi from the sky onto a foe ahead, dealing {mul:pct}% of damage within radius {r}", "新技：幽霊の腕が斬る時{chance:pct}%の確率で青い炎の大きな大太刀が空から前の敵の上に落ち、下の半径{r}内に攻撃力の{mul:pct}%"),

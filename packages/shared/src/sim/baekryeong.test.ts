@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, onTestFinished } from "vitest";
 import { BAEK_PASSIVES, BAEK_PERKS as K } from "../itemsBaekryeong";
 import { BAEK_BLADE as B, BAEK_SOUL as S } from "../weaponsBaekryeong";
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
@@ -100,7 +100,22 @@ describe("백령", () => {
     expect(s.enemies[0]!.hp).toBeLessThan(99999);
   });
 
+  it("혼령참: 확률로 나감 (0%면 안 나감)", () => {
+    const old = K.byWraith.chance;
+    K.byWraith.chance = 0;
+    try {
+      const none = by([], 3, "byWraith");
+      stepSim(none, hit);
+      expect(none.player.byShots!.filter((sh) => sh.kind === 1).length).toBe(0);
+    } finally {
+      K.byWraith.chance = old;
+    }
+  });
+
   it("혼령참 망령 하나 · 삼위령이면 셋 · 위백도는 망령에 닿은 적에게 소용돌이 3번", () => {
+    const old = K.byWraith.chance;
+    K.byWraith.chance = 1;
+    onTestFinished(() => void (K.byWraith.chance = old));
     const one = by([], 3, "byWraith");
     stepSim(one, hit);
     expect(one.player.byShots!.filter((sh) => sh.kind === 1).length).toBe(1);

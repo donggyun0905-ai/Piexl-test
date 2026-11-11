@@ -6,7 +6,7 @@ import type { StatMod } from "./stats";
 const P = <T extends string>(id: T, mods: StatMod[] = []) => ({ id, mods, exclusive: "baekryeong" as const, effect: true as const });
 
 export const BAEK_PASSIVES = {
-  /** 혼령참: 유령팔 참격에 망령이 같이 날아감 */
+  /** 혼령참: 유령팔 참격에 확률로 망령이 같이 날아감 */
   byWraith: P("byWraith", [{ stat: "damage", mul: 1.06 }]),
   /** 삼위령: 날아가는 망령이 셋 */
   byTrinity: P("byTrinity", [{ stat: "range", mul: 1.05 }]),
@@ -50,8 +50,8 @@ export const BAEK_PASSIVES = {
 
 /** 전용 아이템 수치 (피해 배율은 공격력 ×, 시간은 틱, 거리는 픽셀, 확률은 0~1) */
 export const BAEK_PERKS = {
-  /** 혼령참: 망령 수 · 피해 배율 · 한 틱에 나아가는 거리 · 사는 틱 · 반지름 */
-  byWraith: { n: 1, mul: 0.7, speed: 4, life: 50, r: 10 },
+  /** 혼령참: 참격마다 망령이 나갈 확률 · 망령 수 · 피해 배율 · 한 틱에 나아가는 거리 · 사는 틱 · 반지름 */
+  byWraith: { chance: 0.35, n: 1, mul: 0.7, speed: 4, life: 50, r: 10 },
   /** 삼위령: 망령 수 · 벌어지는 각도(라디안) */
   byTrinity: { n: 3, spread: 0.35 },
   /** 위백도: 추가 피해 수 · 몇 틱마다 · 피해 배율 · 소용돌이 반지름 */

@@ -29,13 +29,13 @@ function push(p: P, shot: BaekShot): void {
 }
 
 /** 참격 하나 (wait 틱 뒤에 나감) */
-function slashOut(p: P, wait: number): void {
+function slashOut(p: P, wait: number, wraith: boolean): void {
   const size = slashSize(p);
   const x = p.x + p.faceX * 10;
   const y = p.y + p.faceY * 10;
   push(p, { x, y, dx: p.faceX, dy: p.faceY, r: A.r * size, dmg: p.stats.damage * A.mul * hauntMul(p), kind: 0, age: -wait, life: A.life, speed: A.speed * reachOf(p), hit: [] });
-  if (!hasPerk(p, "byWraith")) return;
-  // 혼령참: 망령이 참격과 같이 날아감 (삼위령이면 셋, 양옆으로 벌어짐)
+  if (!wraith || !hasPerk(p, "byWraith")) return;
+  // 혼령참: 확률로 망령이 참격과 같이 날아감 (삼위령이면 셋, 양옆으로 벌어짐)
   const n = hasPerk(p, "byTrinity") ? K.byTrinity.n : K.byWraith.n;
   for (let i = 0; i < n; i++) {
     const [dx, dy] = turn(p, n === 1 ? 0 : (i - (n - 1) / 2) * K.byTrinity.spread);
@@ -48,9 +48,11 @@ export function armSwing(s: RunState): void {
   const p = s.player;
   if (armScale(p) <= 0) return;
   p.byArmAt = s.tick;
-  slashOut(p, 0);
   const rng = createRng(deriveSeed(s.seed, "byArm", s.tick, p.attackCount));
-  if (hasPerk(p, "byTwin") && rng.nextFloat() < K.byTwin.chance) slashOut(p, K.byTwin.delay);
+  // 혼령참은 참격마다 따로 굴림 (이연참 참격에도)
+  const wraith = () => createRng(deriveSeed(s.seed, "byWraith", s.tick, p.attackCount, p.byShots?.length ?? 0)).nextFloat() < K.byWraith.chance;
+  slashOut(p, 0, wraith());
+  if (hasPerk(p, "byTwin") && rng.nextFloat() < K.byTwin.chance) slashOut(p, K.byTwin.delay, wraith());
   armSwords(s, rng.nextFloat(), rng.nextFloat());
 }
 
