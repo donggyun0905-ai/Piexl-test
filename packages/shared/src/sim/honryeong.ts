@@ -1,6 +1,7 @@
 // 혼령(실베르): 누르면 곰방대에서 보랏빛 연기용을 앞으로 내뿜음 (앞 줄 위 적 모두, 무기마다 길이·속성 weaponsHonryeong.HR_STYLE)
 // 공격할 때마다 방 어딘가에 연기 구름 (30개까지·10초) → 구름 안이면 은신: 적이 쫓아오지만 내 자리를 정확히 겨누지 못함 (sim/enemies가 hrLure로 목표를 바꿈)
-// 공격마다 전용 아이템 소환(sim/hrBeasts 늑대·범·분신 · sim/hrSpirits 부엉이·용) · 구름 효과(혼-귀 공포·짙은 연기·깊은 들숨)
+// 공격마다 전용 아이템 소환(sim/hrBeasts 늑대·범·분신 · sim/hrSpirits 부엉이·용) · 구름 효과(혼-귀 공포(보스 제외)·짙은 연기·깊은 들숨)
+import { ENEMIES } from "../enemyDefs";
 import { HONRYEONG_PERKS as K } from "../itemsHonryeong";
 import { HR_CLOUD as C } from "../weaponsHonryeong";
 import { healPlayer } from "./combat";
@@ -71,7 +72,7 @@ function cloudsTick(s: RunState): void {
   for (const e of s.enemies) {
     if (!alive(e) || !inCloud(p, e.x, e.y, e.r)) continue;
     if (dot) hrHit(s, e, p.stats.damage * K.hrThick.dot, 0, 0);
-    if (fear && e.hp > 0 && (e.fearTicks ?? 0) <= 0 && hrRoll(s, "hrFear") < K.hrFear.chance) {
+    if (fear && e.hp > 0 && !ENEMIES[e.kind].boss && (e.fearTicks ?? 0) <= 0 && hrRoll(s, "hrFear") < K.hrFear.chance) {
       e.fearTicks = K.hrFear.ticks;
       addEffect(s, { kind: "hrFear", x: e.x, y: e.y - e.r, dirX: 0, dirY: 0, size: e.r, maxTicks: 30 });
     }

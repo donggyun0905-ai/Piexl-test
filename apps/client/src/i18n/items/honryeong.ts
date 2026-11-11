@@ -54,9 +54,9 @@ export const HR_EFFECTS: Partial<Record<HrPassive & PassiveId, Names>> = {
     "新技：攻撃ごとに{chance:pct}%の確率で部屋を覆う巨大な煙の龍が左端から右端へ通り抜ける・部屋のすべての敵を{hits}回別々に攻撃（合計で攻撃力の{mul:pct}%、ボスはその{bossMul:pct}%）",
   ),
   hrDecoy: c(
-    "새 기술: 공격마다 {chance:pct}% 확률로 혼령 분신을 그 자리에 세움 (맵에 {max}명까지, {life:sec}초) · 공격하지 않는 인형이지만 적이 분신을 쫓음 · 체력({hp})이 다하면 연기가 터져 둘레 적에게 공격력의 {mul:pct}%",
-    "New skill: each attack has a {chance:pct}% chance to leave a spirit shade where you stand (up to {max}, {life:sec}s) · it never attacks, but foes chase it · when its HP ({hp}) runs out it bursts into smoke for {mul:pct}% of damage around it",
-    "新技：攻撃ごとに{chance:pct}%の確率で魂霊の分身をその場に立たせる（マップに{max}体まで、{life:sec}秒）・攻撃しない人形だが敵が分身を追う・体力（{hp}）が尽きると煙が弾けて周りの敵へ攻撃力の{mul:pct}%",
+    "새 기술: 공격마다 {chance:pct}% 확률로 혼령 분신을 방 어딘가에 세움 (맵에 {max}명까지, {life:sec}초) · 공격하지 않는 인형이지만 적이 분신을 쫓음 · 체력({hp})이 다하면 연기가 터져 둘레 적에게 공격력의 {mul:pct}%",
+    "New skill: each attack has a {chance:pct}% chance to raise a spirit shade somewhere in the room (up to {max}, {life:sec}s) · it never attacks, but foes chase it · when its HP ({hp}) runs out it bursts into smoke for {mul:pct}% of damage around it",
+    "新技：攻撃ごとに{chance:pct}%の確率で魂霊の分身を部屋のどこかに立たせる（マップに{max}体まで、{life:sec}秒）・攻撃しない人形だが敵が分身を追う・体力（{hp}）が尽きると煙が弾けて周りの敵へ攻撃力の{mul:pct}%",
   ),
   hrHunt: c(
     "새 능력: 내가 구름 안에서 은신하면 소환수도 은신해 적 몸에 닿아도 피해를 받지 않음 · 은신한 늑대는 적마다 첫 타격이 확정 치명타({crit}배)에 출혈 · 은신한 범은 {size}배 커지고 공격력·체력 {mul}배 · 부엉이는 앉지 않고 방 어디든 계속 날아다니며 공격",
@@ -64,9 +64,9 @@ export const HR_EFFECTS: Partial<Record<HrPassive & PassiveId, Names>> = {
     "新能力：雲の中で隠れると召喚獣も隠れ、敵に触れてもダメージを受けない・隠れた狼は敵ごとに最初の一撃が確定クリティカル（{crit}倍）で出血・隠れた虎は{size}倍に大きくなり攻撃力・体力{mul}倍・フクロウは止まらず部屋のどこでも飛び続けて攻撃",
   ),
   hrFear: c(
-    "새 능력: 연기 구름 안에 들어온 적은 {every:sec}초마다 {chance:pct}% 확률로 겁에 질려 {ticks:sec}초 동안 공포 (도망침)",
-    "New ability: foes inside a smoke cloud have a {chance:pct}% chance every {every:sec}s to be terrified for {ticks:sec}s (they flee)",
-    "新能力：煙の雲に入った敵は{every:sec}秒ごとに{chance:pct}%の確率で怯え、{ticks:sec}秒間恐怖（逃げる）",
+    "새 능력: 연기 구름 안에 들어온 적은 {every:sec}초마다 {chance:pct}% 확률로 겁에 질려 {ticks:sec}초 동안 공포 (도망침 · 보스 제외)",
+    "New ability: foes inside a smoke cloud have a {chance:pct}% chance every {every:sec}s to be terrified for {ticks:sec}s (they flee · bosses excluded)",
+    "新能力：煙の雲に入った敵は{every:sec}秒ごとに{chance:pct}%の確率で怯え、{ticks:sec}秒間恐怖（逃げる・ボスを除く）",
   ),
   hrThick: c(
     "새 능력: 은신 동안 혼령과 소환수의 피해 {mul}배 · 구름 안의 적은 {every:sec}초마다 공격력의 {dot:pct}% 연기 피해",

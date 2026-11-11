@@ -149,6 +149,8 @@ describe("혼령", () => {
       const d = s.player.hrDecoys![0]!;
       expect(hrLure(s, s.enemies[0]!)).toBe(d);
       s.player.hrCd = 9999;
+      d.x = 84;
+      d.y = 100;
       d.hp = 0;
       const hp = s.enemies[0]!.hp;
       idle(s, 1);

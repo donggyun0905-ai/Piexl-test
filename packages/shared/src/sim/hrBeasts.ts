@@ -1,9 +1,10 @@
-// 혼령 소환수 (몸이 있는 것): 혼-랑 늑대(체력 낮음·공격력 높음) · 혼-범(체력·공격력 높음) · 혼-영 분신(가만히 서서 적을 끌어들임, 쓰러지면 연기가 터짐)
+// 혼령 소환수 (몸이 있는 것): 혼-랑 늑대(체력 낮음·공격력 높음) · 혼-범(체력·공격력 높음) · 혼-영 분신(방 어딘가에 가만히 서서 적을 끌어들임, 쓰러지면 연기가 터짐)
 // 늑대·범은 내 둘레를 따라다니다 보는 거리 안 적에게 달려가 공격 · 적 몸에 닿으면 피해를 받음 (은신 중이면 안 받음) · 방을 옮기면 같이 옴
 // 혼령사냥(내가 은신 중): 늑대 첫 타격 확정 치명타·출혈 · 범 1.5배 커지고 공격력·체력 늘어남
+import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { HONRYEONG_PERKS as K } from "../itemsHonryeong";
 import { applyBleed } from "./gunExtras";
-import { hasHr, hrArea, hrHit, hrRoll, huntOn, petHp, petMul } from "./hrKit";
+import { hasHr, hrArea, hrHit, hrRng, hrRoll, huntOn, petHp, petMul } from "./hrKit";
 import type { HrBeast, HrDecoy } from "./hrTypes";
 import { bodyHurt, bodyStep, bringNear, foeNear } from "./puppetAllies";
 import type { RunState } from "./types";
@@ -36,7 +37,13 @@ export function summonOnAttack(s: RunState): void {
   if (hasHr(p, "hrTiger") && count(1) < K.hrTiger.max && hrRoll(s, "hrTiger") < chance(p, K.hrTiger.chance)) spawnBeast(s, 1, 0);
   if (hasHr(p, "hrDecoy") && (p.hrDecoys?.length ?? 0) < K.hrDecoy.max && hrRoll(s, "hrDecoy") < chance(p, K.hrDecoy.chance)) {
     const hp = Math.round(K.hrDecoy.hp * petHp(p));
-    const d: HrDecoy = { id: nextId(p), x: p.x, y: p.y, prevX: p.x, prevY: p.y, hp, maxHp: hp, r: p.r, cd: 0, hurt: 20, face: p.faceX < 0 ? -1 : 1, swing: 0, left: K.hrDecoy.life };
+    const rng = hrRng(s, "hrDecoyAt");
+    const x = ROOM_MIN_X + 12 + rng.nextFloat() * Math.max(1, ROOM_MAX_X - ROOM_MIN_X - 24);
+    const y = ROOM_MIN_Y + 12 + rng.nextFloat() * Math.max(1, ROOM_MAX_Y - ROOM_MIN_Y - 24);
+    const d: HrDecoy = { id: nextId(p), x, y, prevX: x, prevY: y, hp, maxHp: hp, r: p.r, cd: 0, hurt: 20, face: p.faceX < 0 ? -1 : 1, swing: 0, left: K.hrDecoy.life };
+    keepInRoom(d, roomGrid(s));
+    d.prevX = d.x;
+    d.prevY = d.y;
     (p.hrDecoys ??= []).push(d);
     addEffect(s, { kind: "hrPuff", x: d.x, y: d.y, dirX: 0, dirY: 0, size: 16, style: 1, maxTicks: 20 });
   }

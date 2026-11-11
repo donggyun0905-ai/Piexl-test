@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.32",
+    date: "2026-11-11",
+    items: {
+      ko: ["혼령: 대시 자세·기본 공격 연기용 그림의 좌우가 반대이던 것 고침 · 늑대는 맵에 2마리, 범은 1마리까지 · 혼-영 분신이 방의 무작위 자리에 생김 · 혼-귀 공포는 보스에게 안 걸림"],
+      en: ["Honryeong: fixed the dash pose and the basic smoke dragon being mirrored · up to 2 wolves and 1 tiger on the map · Spirit: Shade decoys appear at a random spot in the room · Spirit: Ghost fear no longer affects bosses"],
+      ja: ["魂霊：ダッシュの姿勢と通常攻撃の煙の龍が左右逆だったのを修正・狼はマップに2匹、虎は1匹まで・魂・影の分身が部屋のランダムな場所に現れる・魂・鬼の恐怖はボスにかからない"],
+    },
+  },
+  {
     version: "0.52.31",
     date: "2026-11-11",
     items: {

@@ -14,11 +14,11 @@ export const HONRYEONG_PASSIVES = {
   hrOwl: P("hrOwl", [{ stat: "range", mul: 1.06 }]),
   /** 혼-룡: 공격마다 낮은 확률로 방을 덮는 거대한 연기 용이 왼쪽 끝에서 오른쪽 끝으로 지나가며 모든 적을 60번 때림 */
   hrDragon: P("hrDragon", [{ stat: "damage", mul: 1.1 }]),
-  /** 혼-영: 공격마다 확률로 혼령 분신을 그 자리에 세움 (맵에 넷까지) · 적이 분신을 쫓음 · 쓰러지면 연기가 터져 피해 */
+  /** 혼-영: 공격마다 확률로 혼령 분신을 방 어딘가에 세움 (맵에 넷까지) · 적이 분신을 쫓음 · 쓰러지면 연기가 터져 피해 */
   hrDecoy: P("hrDecoy", [{ stat: "maxHp", add: 20 }]),
   /** 혼령사냥: 내가 은신하면 소환수도 은신 · 늑대 첫 타격 확정 치명타·출혈 · 범 1.5배 커지고 공격력·체력 늘어남 · 부엉이는 앉지 않고 계속 날며 공격 */
   hrHunt: P("hrHunt", [{ stat: "attackSpeed", add: 0.06 }]),
-  /** 혼-귀: 구름 안에 들어온 적이 확률로 공포에 질림 */
+  /** 혼-귀: 구름 안에 들어온 적이 확률로 공포에 질림 (보스 제외) */
   hrFear: P("hrFear", [{ stat: "luck", add: 2 }]),
   /** 짙은 연기: 은신 동안 혼령의 피해가 커지고 구름 안 적이 연기 피해를 받음 */
   hrThick: P("hrThick", [{ stat: "damage", mul: 1.05 }]),
@@ -31,9 +31,9 @@ export const HONRYEONG_PASSIVES = {
 /** 전용 아이템 수치 (피해 배율은 공격력 ×, 시간은 틱(60 = 1초), 거리는 픽셀, 확률은 0~1) */
 export const HONRYEONG_PERKS = {
   /** 혼-랑: 공격마다 확률 · 한 번에 부르는 수 · 맵에 가장 많이 · 체력 · 피해 배율 · 공격 간격 틱 · 걷는 빠르기 · 몸 반지름 · 적을 보는 거리 · 사는 틱 */
-  hrWolf: { chance: 0.15, n: 2, max: 6, hp: 12, mul: 1.4, rate: 40, speed: 1.9, r: 6, sight: 160, life: 1200 },
+  hrWolf: { chance: 0.15, n: 2, max: 2, hp: 12, mul: 1.4, rate: 40, speed: 1.9, r: 6, sight: 160, life: 1200 },
   /** 혼-범: 공격마다 확률 · 맵에 가장 많이 · 체력 · 피해 배율 · 공격 간격 틱 · 걷는 빠르기 · 몸 반지름 · 적을 보는 거리 · 사는 틱 · 할퀴는 반지름 */
-  hrTiger: { chance: 0.08, max: 2, hp: 90, mul: 2.4, rate: 55, speed: 1.4, r: 9, sight: 160, life: 1500, reach: 18 },
+  hrTiger: { chance: 0.08, max: 1, hp: 90, mul: 2.4, rate: 55, speed: 1.4, r: 9, sight: 160, life: 1500, reach: 18 },
   /** 혼-효: 공격마다 확률 · 맵에 가장 많이 · 적을 찾는 거리(사거리만큼) · 낙하 피해 배율 · 낙하 반지름 · 다음 낙하까지 틱 · 날아가는 틱 */
   hrOwl: { chance: 0.1, max: 2, range: 110, mul: 1.5, r: 24, rate: 70, fly: 24 },
   /** 혼-룡: 공격마다 확률 · 때리는 수 · 몇 틱마다 한 번 · 적 하나에 주는 피해 배율(모두 합쳐) · 보스 피해 배율 */

@@ -1,13 +1,13 @@
 # 혼령 그림 (python3 scripts/art/honryeong.py) — 원본 art/캐릭터/혼령
-# · honryeongFx.png (256칸 4×4, 투명 바탕): 0줄 기본 공격 연기용(탄생과 소멸) 4칸 · 1줄 혼-룡 질주 4칸 · 2·3줄 연기 구름 8개
+# · honryeongFx.png (256칸 4×4, 투명 바탕): 0줄 기본 공격 연기용(탄생과 소멸) 4칸(원본은 왼쪽을 봐서 좌우로 뒤집음) · 1줄 혼-룡 질주 4칸 · 2·3줄 연기 구름 8개
 # · honryeongPets.png (128칸 4×10, 칸 순서 앞·뒤·왼·오): 0·1줄 늑대 걷기 · 2줄 늑대 공격 · 3·4줄 범 걷기 · 5줄 범 공격
 #   6줄 부엉이 앉음 · 7줄 부엉이 낙하 공격 · 8·9줄 부엉이 날기
 #   검은 바탕만 지움 (연기 테두리 어두운 보라는 남김) · 칸 번호는 화면 render/honryeongArt와 같게
-# 캐릭터 몸 시트는 import_v2.py honryeong (src/honryeong-1~3.png: 서기·공격 · 걷기 · 맞음·쓰러짐·대시)
+# 캐릭터 몸 시트는 import_v2.py honryeong (src/honryeong-1~3.png: 서기·공격 · 걷기 · 맞음·쓰러짐·대시, 3번은 원본의 대시 두 칸을 맞바꿔 둠)
 import os
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageOps
 
 from puppeteer import trim
 from s2_common import SPRITES
@@ -43,7 +43,7 @@ def sheet(name, cell, rows, same):
 
 def main():
     clouds = grid(key("보라빛 픽셀 구름 스프라이트 시트.png"), 4, 2)
-    sheet("honryeongFx.png", 256, [grid(key("보랏빛 연기용의 탄생과 소멸.png"), 4, 1)[0], grid(key("라벤더 구름 용의 질주 스프라이트.png"), 4, 1)[0], *clouds], lambda r: r < 2)
+    sheet("honryeongFx.png", 256, [[ImageOps.mirror(p) for p in grid(key("보랏빛 연기용의 탄생과 소멸.png"), 4, 1)[0]], grid(key("라벤더 구름 용의 질주 스프라이트.png"), 4, 1)[0], *clouds], lambda r: r < 2)
     wolf = grid(key("보랏빛 연기 늑대 걷기 스프라이트.png"), 4, 2) + [grid(key("보라빛 연무 늑대 스프라이트 시트.png"), 4, 2)[1]]
     tiger = grid(key("연기 호랑이 걷기 애니메이션 시트.png"), 4, 2) + [grid(key("보랏빛 연무 호랑이 스프라이트 시트.png"), 4, 2)[1]]
     owl = grid(key("보랏빛 연무 올빼미 스프라이트 시트.png"), 4, 2) + grid(key("보랏빛 연무 올빼미 비행 스프라이트 시트.png"), 4, 2)
