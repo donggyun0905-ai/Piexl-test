@@ -3,7 +3,7 @@
 // (진)대태도-백: 유령팔이 벨 때 확률로 범위 끝에 대태도가 꽂혀 가만히 있고, 둘레 범위 안 적에게 몇 틱마다 번개
 import { BAEK_PERKS as K } from "../itemsBaekryeong";
 import { BAEK_BLADE as B } from "../weaponsBaekryeong";
-import { armScale, hauntMul } from "./baekKit";
+import { armScale, hauntMul, soulFire } from "./baekKit";
 import { alive, damageEnemyLite } from "./shadowingSpirits";
 import type { BaekSword } from "./byTypes";
 import type { EnemyState, RunState } from "./types";
@@ -45,17 +45,16 @@ export function armSwords(s: RunState, r1: number, r2: number): void {
         const wx = x + p.faceX * K.byGreatWolf.gap * size * i;
         const wy = y + p.faceY * K.byGreatWolf.gap * size * i;
         if (!inRoom(wx, wy)) break;
-        list.push({ x: wx, y: wy, kind: 0, age: 0, life: K.byGreat.delay + K.byGreatWolf.every * i, r: K.byGreat.r * size * 0.85, dmg: dmg * K.byGreatWolf.mul });
+        list.push({ x: wx, y: wy, kind: 0, age: 0, life: K.byGreat.delay + K.byGreatWolf.every * i, r: K.byGreat.r * size * K.byGreatWolf.size, dmg: dmg * K.byGreatWolf.mul });
       }
     }
   }
-  if (hasPerk(p, "byGreatWhite") && r2 < K.byGreatWhite.chance) {
+  // (진)대태도-백: 맵에 하나만 (꽂힌 대태도가 사라져야 다시 확률로 생김)
+  const list = (p.bySwords ??= []);
+  if (hasPerk(p, "byGreatWhite") && !list.some((w) => w.kind === 1) && r2 < K.byGreatWhite.chance) {
     const d = B.reach * reachOf(p) * 1.6;
     const x = Math.min(ROOM_MAX_X, Math.max(ROOM_MIN_X, p.x + p.faceX * d));
     const y = Math.min(ROOM_MAX_Y, Math.max(ROOM_MIN_Y, p.y + p.faceY * d));
-    const list = (p.bySwords ??= []);
-    const planted = list.filter((w) => w.kind === 1);
-    if (planted.length >= K.byGreatWhite.max) list.splice(list.indexOf(planted[0]!), 1);
     list.push({ x, y, kind: 1, age: 0, life: K.byGreatWhite.life, r: K.byGreatWhite.r * size, dmg: p.stats.damage * K.byGreatWhite.mul * hauntMul(p) });
     addEffect(s, { kind: "byGreat", x, y, dirX: 0, dirY: 0, size: K.byGreatWhite.r * size * 0.6, style: 1, maxTicks: 24 });
   }
@@ -75,6 +74,7 @@ function swordStep(s: RunState, w: BaekSword): boolean {
       if (!alive(e) || (e.x - w.x) ** 2 + (e.y - w.y) ** 2 > (w.r + e.r) ** 2) continue;
       const d = normalize(e.x - w.x, e.y - w.y) ?? [0, 0];
       damageEnemyLite(s, e, w.dmg, d[0], d[1]);
+      soulFire(s.player, e);
     }
     addEffect(s, { kind: "byGreat", x: w.x, y: w.y, dirX: 0, dirY: 0, size: w.r, style: 0, maxTicks: 30 });
     return false;
@@ -83,6 +83,7 @@ function swordStep(s: RunState, w: BaekSword): boolean {
     for (const e of s.enemies) {
       if (!alive(e) || (e.x - w.x) ** 2 + (e.y - w.y) ** 2 > (w.r + e.r) ** 2) continue;
       damageEnemyLite(s, e, w.dmg, 0, 0);
+      soulFire(s.player, e);
       addEffect(s, { kind: "byBolt", x: w.x, y: w.y - 20, toX: e.x, toY: e.y, dirX: 0, dirY: 0, size: 3, maxTicks: 12 });
     }
   }

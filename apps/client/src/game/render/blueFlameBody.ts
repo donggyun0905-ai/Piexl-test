@@ -87,8 +87,10 @@ export function drawBlueFlameBack(ctx: Ctx, s: RunState, a0: number, snap: Snap)
 /** 몸 위: 청염 표시 · 날아가는 화살·화살비 · 활 쏘기 · 머리 위 활들 */
 export function drawBlueFlameAura(ctx: Ctx, s: RunState, a0: number, snap: Snap): void {
   const p = s.player;
-  if (!isBlueFlame(p) || s.over) return;
-  for (const e of s.enemies) if ((e.bzFlameT ?? 0) > 0 && e.hp > 0) flameMark(ctx, snap(e.x) - 2, snap(e.y) - e.r - 16, s.tick + e.id);
+  if (s.over) return;
+  // 청염 표시: 블루 플레임 · 백령(청혼불)
+  if (isBlueFlame(p) || p.characterId === "baekryeong") for (const e of s.enemies) if ((e.bzFlameT ?? 0) > 0 && e.hp > 0) flameMark(ctx, snap(e.x) - 2, snap(e.y) - e.r - 16, s.tick + e.id);
+  if (!isBlueFlame(p)) return;
   for (const b of p.bzStrikes ?? []) {
     const f = 1 - b.t / b.T;
     if (b.k === 2) {

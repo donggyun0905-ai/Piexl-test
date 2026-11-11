@@ -2,7 +2,8 @@
 // 가벼운 것만 불러옴 (sim/faction이 baekSoul을 거쳐 부르므로 순환 import를 피함)
 import { BAEK_PERKS as K } from "../itemsBaekryeong";
 import { BAEK_SOUL as S } from "../weaponsBaekryeong";
-import type { RunState } from "./types";
+import { BLUE_FLAME as F } from "../weaponsBlueFlame";
+import type { EnemyState, RunState } from "./types";
 
 type P = RunState["player"];
 
@@ -42,3 +43,10 @@ export function addSouls(p: P, n: number): number {
 
 /** 피해 배율 (원혼: 게이지 칸마다) */
 export const hauntMul = (p: P) => 1 + (has(p, "byHaunt") ? (p.byLv ?? 0) * K.byHaunt.per : 0);
+
+/** 청혼불: 맞은 적에게 청염 상태이상 (블루 플레임과 같은 푸른 불꽃 · 지속 다시, 한 번 피해는 센 쪽) */
+export function soulFire(p: P, e: EnemyState): void {
+  if (!has(p, "byFlame") || e.hp <= 0) return;
+  e.bzFlameT = F.flameTicks;
+  e.bzFlameDmg = Math.max(e.bzFlameDmg ?? 0, p.stats.damage * K.byFlame.mul);
+}

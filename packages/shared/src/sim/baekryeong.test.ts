@@ -142,6 +142,31 @@ describe("백령", () => {
     });
   });
 
+  it("(진)대태도-백은 맵에 하나만 · 사라지면 다시 생김", () => {
+    sure(["byGreatWhite"], () => {
+      const s = by([], 3, "byGreatWhite");
+      for (let i = 0; i < 5; i++) {
+        stepSim(s, hit);
+        idle(s, 40);
+      }
+      expect(s.player.bySwords!.filter((w) => w.kind === 1).length).toBe(1);
+      idle(s, K.byGreatWhite.life);
+      expect(s.player.bySwords!.filter((w) => w.kind === 1).length).toBe(0);
+      stepSim(s, hit);
+      expect(s.player.bySwords!.filter((w) => w.kind === 1).length).toBe(1);
+    });
+  });
+
+  it("청혼불: 기본 베기·참격 모두 청염 상태이상을 걸고 0.5초마다 피해", () => {
+    const s = by([[80 + B.reach - 4, 100], [80 + B.reach + 50, 100]], 3, "byFlame");
+    stepSim(s, hit);
+    idle(s, 30);
+    expect(s.enemies.every((e) => (e.bzFlameT ?? 0) > 0)).toBe(true);
+    const hp = s.enemies[1]!.hp;
+    idle(s, 31);
+    expect(s.enemies[1]!.hp).toBeLessThan(hp);
+  });
+
   it("이연참: 참격이 한 번 더", () => {
     sure(["byTwin"], () => {
       const s = by([], 3, "byTwin");

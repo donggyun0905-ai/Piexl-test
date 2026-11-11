@@ -3,7 +3,7 @@
 import { BAEK_PERKS as K } from "../itemsBaekryeong";
 import { createRng, deriveSeed } from "../rng";
 import { BAEK_ARM as A } from "../weaponsBaekryeong";
-import { armScale, hauntMul } from "./baekKit";
+import { armScale, hauntMul, soulFire } from "./baekKit";
 import { armSwords } from "./baekSword";
 import { rot } from "./orbit";
 import { alive, damageEnemyLite } from "./shadowingSpirits";
@@ -76,6 +76,7 @@ function shotStep(s: RunState, sh: BaekShot): boolean {
     if (!alive(e) || sh.hit.includes(e.id) || (e.x - sh.x) ** 2 + (e.y - sh.y) ** 2 > (sh.r + e.r) ** 2) continue;
     sh.hit.push(e.id);
     damageEnemyLite(s, e, sh.dmg, sh.dx, sh.dy);
+    soulFire(p, e);
     if (hasPerk(p, "byFrost")) e.slowTicks = Math.max(e.slowTicks ?? 0, K.byFrost.slow);
     // 위백도: 망령에 닿은 적에게 검무 소용돌이 (추가 피해 3번)
     if (sh.kind === 1 && hasPerk(p, "byWhirl") && !(p.byWhirls ?? []).some((w) => w.id === e.id)) {
@@ -99,6 +100,7 @@ function whirlStep(s: RunState, w: BaekWhirl): boolean {
   for (const e of s.enemies) {
     if (!alive(e) || (e.x - w.x) ** 2 + (e.y - w.y) ** 2 > (w.r + e.r) ** 2) continue;
     damageEnemyLite(s, e, w.dmg, 0, 0);
+    soulFire(s.player, e);
   }
   w.left--;
   return w.left > 0;

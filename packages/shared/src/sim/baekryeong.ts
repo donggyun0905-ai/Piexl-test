@@ -2,12 +2,12 @@
 // 게이지 3칸부터 머리 위 유령팔이 벨 때마다 에너지 참격(sim/baekSlash) · (진)대태도(sim/baekSword)
 import { BAEK_PERKS as K } from "../itemsBaekryeong";
 import { BAEK_BLADE as B } from "../weaponsBaekryeong";
-import { hauntMul, isBaek } from "./baekKit";
+import { hauntMul, isBaek, soulFire } from "./baekKit";
 import { armSwing, shotsTick } from "./baekSlash";
 import { soulTick } from "./baekKills";
 import { swordsTick } from "./baekSword";
 import { alive, damageEnemyLite } from "./shadowingSpirits";
-import { ignite } from "./status";
+import { flameTick } from "./blueFlameKit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, normalize, reachOf } from "./util";
 
@@ -35,7 +35,7 @@ function cut(s: RunState): void {
     const d = normalize(dx, dy) ?? [p.faceX, p.faceY];
     const low = hasPerk(p, "byReaper") && e.hp < e.maxHp * K.byReaper.below;
     damageEnemyLite(s, e, dmg * (low ? K.byReaper.mul : 1), d[0], d[1]);
-    if (hasPerk(p, "byFlame") && e.hp > 0) ignite(e, p.stats.damage * K.byFlame.burn);
+    soulFire(p, e);
   }
   addEffect(s, { kind: "bySlash", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, maxTicks: 14 });
 }
@@ -70,6 +70,7 @@ export function baekTick(s: RunState, want: boolean, speed: number): void {
       if (!alive(e) || (e.x - p.x) ** 2 + (e.y - p.y) ** 2 > (r + e.r) ** 2) continue;
       const d = normalize(e.x - p.x, e.y - p.y) ?? [0, 0];
       damageEnemyLite(s, e, p.stats.damage * K.byStep.mul * hauntMul(p), d[0], d[1]);
+      soulFire(p, e);
     }
     addEffect(s, { kind: "byStep", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, maxTicks: 22 });
   }
@@ -77,6 +78,8 @@ export function baekTick(s: RunState, want: boolean, speed: number): void {
   soulTick(s);
   shotsTick(s);
   swordsTick(s);
+  // 청혼불: 청염 걸린 적 0.5초마다 피해 (블루 플레임과 같은 계산)
+  if (hasPerk(p, "byFlame")) flameTick(s);
 }
 
 /** 받는 피해 배율 (혼의 가호) */

@@ -3,7 +3,7 @@ import { ENEMIES } from "../enemyDefs";
 import { BAEK_PERKS as K } from "../itemsBaekryeong";
 import { createRng, deriveSeed } from "../rng";
 import { BAEK_SOUL as S } from "../weaponsBaekryeong";
-import { addSouls, hauntMul } from "./baekKit";
+import { addSouls, hauntMul, soulFire } from "./baekKit";
 import { healPlayer } from "./combat";
 import { alive, damageEnemyLite } from "./shadowingSpirits";
 import type { EnemyState, RunState } from "./types";
@@ -40,5 +40,6 @@ function wisp(s: RunState, x: number, y: number): void {
   if (!best) return;
   const d = normalize(best.x - x, best.y - y) ?? [0, 0];
   damageEnemyLite(s, best, p.stats.damage * K.byWisp.mul * hauntMul(p), d[0], d[1]);
+  soulFire(p, best);
   addEffect(s, { kind: "byWisp", x, y, toX: best.x, toY: best.y, dirX: d[0], dirY: d[1], size: 5, maxTicks: 18 });
 }

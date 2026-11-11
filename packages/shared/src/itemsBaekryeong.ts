@@ -28,7 +28,7 @@ export const BAEK_PASSIVES = {
   byWide: P("byWide", [{ stat: "damage", mul: 1.05 }]),
   /** 이연참: 유령팔 참격이 확률로 한 번 더 */
   byTwin: P("byTwin", [{ stat: "attackSpeed", add: 0.06 }]),
-  /** 청혼불: 베인 적이 푸른 불에 탐 */
+  /** 청혼불: 백령의 모든 공격에 맞은 적에게 청염 상태이상 */
   byFlame: P("byFlame", [{ stat: "damage", mul: 1.05 }]),
   /** 유령 걸음: 대시가 끝난 자리에 혼불이 터짐 */
   byStep: P("byStep", [{ stat: "moveSpeed", add: 0.08 }]),
@@ -57,11 +57,11 @@ export const BAEK_PERKS = {
   /** 위백도: 추가 피해 수 · 몇 틱마다 · 피해 배율 · 소용돌이 반지름 */
   byWhirl: { hits: 3, every: 8, mul: 0.35, r: 22 },
   /** (진)대태도: 확률 · 떨어지기까지 틱 · 반지름 · 피해 배율 */
-  byGreat: { chance: 0.25, delay: 18, r: 40, mul: 2.2 },
-  /** (진)대태도-랑: 다음 대태도까지 거리 · 몇 틱마다 하나씩 · 피해 배율(대태도의) · 가장 많이 이어지는 수 */
-  byGreatWolf: { gap: 56, every: 7, mul: 0.8, max: 14 },
-  /** (진)대태도-백: 확률 · 꽂혀 있는 틱 · 범위 반지름 · 몇 틱마다 번개 · 피해 배율 · 한 번에 있는 수 */
-  byGreatWhite: { chance: 0.2, life: 300, r: 56, every: 30, mul: 0.5, max: 3 },
+  byGreat: { chance: 0.25, delay: 18, r: 20, mul: 2.2 },
+  /** (진)대태도-랑: 다음 대태도까지 거리 · 몇 틱마다 하나씩 · 피해 배율(대태도의) · 범위 배율(대태도의) · 가장 많이 이어지는 수 */
+  byGreatWolf: { gap: 22, every: 5, mul: 0.8, size: 0.7, max: 30 },
+  /** (진)대태도-백: 확률 · 꽂혀 있는 틱 · 범위 반지름 · 몇 틱마다 번개 · 피해 배율 (맵에 하나만, 사라져야 다시 생김) */
+  byGreatWhite: { chance: 0.2, life: 300, r: 56, every: 30, mul: 0.5 },
   /** 영혼 포식: 처치마다 더 쌓이는 영혼 */
   byFeast: { extra: 1 },
   /** 혼 흡수: 확률 · 회복 */
@@ -72,8 +72,8 @@ export const BAEK_PERKS = {
   byWide: { size: 1.3 },
   /** 이연참: 확률 · 한 번 더 나가기까지 틱 */
   byTwin: { chance: 0.3, delay: 8 },
-  /** 청혼불: 불 피해 기준 배율 (공격력 ×) */
-  byFlame: { burn: 1 },
+  /** 청혼불: 청염 상태이상 한 번 피해 배율 (공격력 ×, 블루 플레임과 같은 청염: 0.5초마다 · 2.5초) */
+  byFlame: { mul: 0.32 },
   /** 유령 걸음: 반지름 · 피해 배율 */
   byStep: { r: 40, mul: 1 },
   /** 혼의 가호: 받는 피해 배율 */

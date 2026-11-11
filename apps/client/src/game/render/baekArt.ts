@@ -59,7 +59,7 @@ export function drawBaekGround(ctx: Ctx, s: RunState, _a: number, snap: Snap): v
     ctx.fill();
     ring(ctx, x, y, w.r, fade(BY.blue, 0.25 + f * 0.3), 1);
     const left = w.life - w.age;
-    if (left < 10) swordPic(ctx, x, y - left * 14, w.r * 2.2, Math.min(1, (10 - left) / 3));
+    if (left < 10) swordPic(ctx, x, y - left * 14, w.r * 4.4, Math.min(1, (10 - left) / 3));
   }
   for (const sh of p.byShots ?? []) {
     if (sh.age <= 0) continue;

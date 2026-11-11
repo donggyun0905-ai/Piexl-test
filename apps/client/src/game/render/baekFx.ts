@@ -50,7 +50,7 @@ export function drawBaekFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
         return true;
       }
       // 떨어진 대태도: 칼이 박혔다 옅어짐 · 푸른 불 고리가 퍼짐
-      swordPic(ctx, x, y + 6, fx.size * 2.2, 1 - f);
+      swordPic(ctx, x, y + 6, fx.size * 4.4, 1 - f);
       additive(ctx, () => glow(ctx, x, y, fx.size * 1.1, BY.blue, 0.85 * a, 0.4));
       shock(ctx, x, y, fx.size * easeOut(f), BY.blue, a, 6);
       sparks(ctx, x, y, 14, fx.size * 1.3, f, BY.pale, 9, a);

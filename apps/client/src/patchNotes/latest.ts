@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.19",
+    date: "2026-11-11",
+    items: {
+      ko: [
+        "백령 (진)대태도: 떨어지는 범위를 절반으로 (반지름 40 → 20, 검 그림 크기는 그대로)",
+        "백령 (진)대태도 - 랑: 이어 떨어지는 대태도 범위를 더 작게 (대태도의 85% → 70%) · 간격을 촘촘하게 (56 → 22, 더 빠르게) · 맵 끝 가까이에서 터져도 검이 여러 개 이어 보임",
+        "백령 (진)대태도 - 백: 꽂힌 대태도는 맵에 하나만 (사라진 뒤에 다시 확률로 생김)",
+        "백령 청혼불: 화상 대신 블루 플레임과 같은 청염 상태이상 (적 머리 위 푸른 불꽃 · 2.5초 동안 0.5초마다 공격력의 32%) · 기본 베기뿐 아니라 참격·망령·소용돌이·대태도·번개·유령 걸음·혼등 모든 공격에 걸림",
+      ],
+      en: [
+        "Baekryeong True Odachi: impact area halved (radius 40 → 20, sword art unchanged)",
+        "Baekryeong True Odachi: Wolf: the trailing odachi hit a smaller area (85% → 70% of the odachi) · tighter spacing (56 → 22, and faster) · several swords now line up even when it triggers near the map edge",
+        "Baekryeong True Odachi: White: only one planted odachi on the map at a time (it can appear again by chance once it fades)",
+        "Baekryeong Blue Soulfire: instead of a regular burn, it now applies the same Blue Flame status as Blue Flame (blue flame above the foe · 32% of damage every 0.5s for 2.5s) · applies on every attack, not just cuts: slashes, wraiths, whirls, odachi, lightning, Ghost Step and Soul Lantern",
+      ],
+      ja: [
+        "白霊（真）大太刀：落ちる範囲を半分に（半径40→20、剣の絵の大きさはそのまま）",
+        "白霊（真）大太刀・狼：続けて落ちる大太刀の範囲をさらに小さく（大太刀の85%→70%）・間隔を細かく（56→22、より速く）・マップの端近くで起きても剣が何本も続いて見える",
+        "白霊（真）大太刀・白：刺さった大太刀はマップにひとつだけ（消えた後にまた確率で現れる）",
+        "白霊・青い魂火：普通の火傷ではなくブルーフレームと同じ青炎の状態異常（敵の頭上に青い炎・2.5秒間0.5秒ごとに攻撃力の32%）・基本の斬りだけでなく斬撃・亡霊・渦・大太刀・雷・幽霊の歩み・魂灯のすべての攻撃でかかる",
+      ],
+    },
+  },
+  {
     version: "0.52.18",
     date: "2026-11-11",
     items: {
