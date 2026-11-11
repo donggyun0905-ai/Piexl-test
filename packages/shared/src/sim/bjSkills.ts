@@ -26,7 +26,7 @@ export function bjSkill(s: RunState, i: number): void {
   const dmg = p.stats.damage;
   if (id === "bjEnd") {
     bjVolley(s, { kind: "end", x: p.x, y: p.y, dx: 0, dy: 0, r: 0, dmg: dmg * K.bjEnd.mul, n: K.bjEnd.hits, every: 1 });
-    addEffect(s, { kind: "bjEnd", x: p.x, y: p.y - 6, dirX: 0, dirY: 0, size: 60, maxTicks: K.bjEnd.hits });
+    addEffect(s, { kind: "bjEnd", x: p.x, y: p.y - 6, dirX: 0, dirY: 0, size: 60, maxTicks: K.bjEnd.hits + K.bjEnd.fly });
     cd[i] = K.bjEnd.cd;
     return;
   }

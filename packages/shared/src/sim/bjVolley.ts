@@ -65,13 +65,15 @@ function once(s: RunState, v: BjVolley): void {
     line(s, p.x, p.y - 14, e);
     bjHit(s, e, v.dmg);
   } else {
-    // 종언: 살아 있는 적에게 차례로 한 기씩
+    // 종언: 날개에서 미니 드론 한 기가 살아 있는 적에게 차례로 날아감 (꽂힐 때 피해)
     const foes = s.enemies.filter(bjAlive);
-    const e = foes[(v.n - v.left) % Math.max(1, foes.length)];
+    const i = v.n - v.left;
+    const e = foes[i % Math.max(1, foes.length)];
     if (!e) return;
-    const side = (v.n - v.left) % 2 ? 1 : -1;
-    line(s, p.x + side * 18, p.y - 12, e, 10);
-    e.bjSum = (e.bjSum ?? 0) + bjHit(s, e, v.dmg);
+    const side = i % 2 ? 1 : -1;
+    const fly = K.bjEnd.fly;
+    (p.bjShots ??= []).push({ id: e.id, at: s.tick + fly, dmg: v.dmg });
+    addEffect(s, { kind: "bjEndDrone", x: p.x + side * (14 + (i % 5) * 4), y: p.y - 10 - (i % 3) * 6, dirX: side, dirY: 0, size: 14, toX: e.x, toY: e.y, style: i % 7, maxTicks: fly });
   }
 }
 
@@ -89,16 +91,31 @@ function finish(s: RunState, v: BjVolley): void {
       e.bjDeathDmg = (base * R.pct) / (isBoss(e) ? R.bossDiv : 1);
       bjHit(s, e, p.stats.damage * R.star);
     }
-  } else if (v.kind === "end") {
-    // 맞고도 살아남은 적: 붉은 십자와 함께 쌓인 피해를 한 번 더
-    for (const e of s.enemies) {
-      const sum = e.bjSum ?? 0;
-      delete e.bjSum;
-      if (sum <= 0 || !bjAlive(e)) continue;
-      addEffect(s, { kind: "bjCross", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 26, maxTicks: 24 });
-      e.hp -= sum;
-      e.hitFlash = 6;
+  } else if (v.kind === "end") p.bjEndAt = s.tick + K.bjEnd.fly + 1; // 마지막 드론이 꽂힌 뒤에 십자
+}
+
+/** 종언: 날아간 드론이 꽂힘 · 다 꽂힌 뒤 맞고도 살아남은 적에게 붉은 십자와 함께 쌓인 피해를 한 번 더 */
+function endTick(s: RunState): void {
+  const p = s.player;
+  if (p.bjShots?.length) {
+    for (const h of p.bjShots) {
+      if (h.at > s.tick) continue;
+      const e = s.enemies.find((x) => x.id === h.id);
+      if (!e || !bjAlive(e)) continue;
+      e.bjSum = (e.bjSum ?? 0) + bjHit(s, e, h.dmg);
+      addEffect(s, { kind: "bjDroneHit", x: e.x, y: e.y, dirX: 0, dirY: 0, size: 6, maxTicks: 8 });
     }
+    p.bjShots = p.bjShots.filter((h) => h.at > s.tick);
+  }
+  if (p.bjEndAt === undefined || s.tick < p.bjEndAt) return;
+  delete p.bjEndAt;
+  for (const e of s.enemies) {
+    const sum = e.bjSum ?? 0;
+    delete e.bjSum;
+    if (sum <= 0 || !bjAlive(e)) continue;
+    addEffect(s, { kind: "bjCross", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 26, maxTicks: 24 });
+    e.hp -= sum;
+    e.hitFlash = 6;
   }
 }
 
@@ -114,6 +131,7 @@ export function volleyTick(s: RunState): void {
     }
     p.bjVolleys = p.bjVolleys.filter((v) => v.left > 0);
   }
+  endTick(s);
   for (const e of s.enemies) {
     if ((e.bjBleed ?? 0) > 0 && e.hp > 0 && --e.bjBleed! % 30 === 0) dotDamage(s, e, "bleed", e.bjBleedDmg ?? 0);
     if ((e.bjDeath ?? 0) > 0 && e.hp > 0 && --e.bjDeath! % 60 === 0) dotDamage(s, e, "death", e.bjDeathDmg ?? 0);

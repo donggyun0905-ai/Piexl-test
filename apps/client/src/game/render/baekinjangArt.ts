@@ -43,6 +43,18 @@ export function bjLaser(ctx: Ctx, ax: number, ay: number, bx: number, by: number
   });
 }
 
+/** 미니 창 드론 그림 한 기 (x, y 가운데 · 각도 · 길이 w) */
+export function bjDronePic(ctx: Ctx, x: number, y: number, angle: number, w = 14, a = 1): void {
+  if (!ok(DRONE)) return;
+  ctx.save();
+  ctx.globalAlpha *= a;
+  ctx.translate(x, y);
+  ctx.rotate(angle);
+  ctx.imageSmoothingEnabled = true;
+  ctx.drawImage(DRONE, -w / 2, -w * 0.27, w, w * 0.54);
+  ctx.restore();
+}
+
 /** 드론이 지나온 자리 (화면에서만 기억: 틱마다 한 점, 14점까지) */
 const trails: { x: number; y: number }[][] = [];
 let trailTick = -1;
@@ -72,13 +84,7 @@ export function drawBaekinjangAir(ctx: Ctx, s: RunState, alpha: number, snap: Sn
     const y = snap(d.y - d.vy * (1 - alpha));
     const moving = d.vx * d.vx + d.vy * d.vy > 0.3;
     additive(ctx, () => glow(ctx, x, y, 5, BJ.red, 0.5, 0.3));
-    if (!ok(DRONE)) return;
-    ctx.save();
-    ctx.translate(x, y + (moving ? 0 : Math.sin((s.tick + i * 13) * 0.1) * 1.5));
-    ctx.rotate(moving ? Math.atan2(d.vy, d.vx) : -Math.PI / 2);
-    ctx.imageSmoothingEnabled = true;
-    ctx.drawImage(DRONE, -7, -3.8, 14, 7.6);
-    ctx.restore();
+    bjDronePic(ctx, x, y + (moving ? 0 : Math.sin((s.tick + i * 13) * 0.1) * 1.5), moving ? Math.atan2(d.vy, d.vx) : -Math.PI / 2);
   });
   for (const e of s.enemies) {
     if (e.hp <= 0 || !bjMarked(s, e)) continue;

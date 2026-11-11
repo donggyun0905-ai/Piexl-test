@@ -3,9 +3,9 @@
 import type { EffectState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
 import { additive, easeOut, glow, shock, sparks, type Ctx } from "./pwFxBits";
-import { BJ, bjLaser, bjPic, ROW } from "./baekinjangArt";
+import { BJ, bjDronePic, bjLaser, bjPic, ROW } from "./baekinjangArt";
 
-const EXTRA = new Set(["bjCross", "bjLine", "bjDroneHit", "bjWane"]);
+const EXTRA = new Set(["bjCross", "bjLine", "bjDroneHit", "bjWane", "bjEndDrone"]);
 
 export function drawBaekinjangFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const row = ROW[fx.kind as keyof typeof ROW];
@@ -23,6 +23,25 @@ export function drawBaekinjangFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean
       bjLaser(ctx, x, y, snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y), 1 - f, fx.size);
       if (f < 0.4) additive(ctx, () => glow(ctx, snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y), 7, BJ.light, 0.8, 0.3));
       return true;
+    case "bjEndDrone": {
+      // 종언의 미니 드론 한 기: 날개에서 옆으로 퍼졌다가 휘어 들어가 적에게 꽂힘 · 뒤에 붉은 레이저 자국
+      const tx = snap(fx.toX ?? fx.x);
+      const ty = snap(fx.toY ?? fx.y);
+      const bend = ((fx.style ?? 0) - 3) * 9 + fx.dirX * 26;
+      const at = (t: number): [number, number] => {
+        const k = t * t * (3 - 2 * t);
+        const arc = Math.sin(t * Math.PI);
+        return [x + (tx - x) * k + bend * arc, y + (ty - y) * k - 16 * arc];
+      };
+      const [cx, cy] = at(f);
+      const [bx, by] = at(Math.max(0, f - 0.12));
+      const [ax, ay] = at(Math.max(0, f - 0.3));
+      bjLaser(ctx, ax, ay, bx, by, 0.35, 1);
+      bjLaser(ctx, bx, by, cx, cy, 0.8, 1.2);
+      additive(ctx, () => glow(ctx, cx, cy, 5, BJ.red, 0.6, 0.3));
+      bjDronePic(ctx, cx, cy, Math.atan2(cy - by, cx - bx), fx.size);
+      return true;
+    }
     case "bjWane": {
       // 잔월: 초승달 검격 한 칸이 앞으로 날아가며 옅어짐
       const k = easeOut(f);

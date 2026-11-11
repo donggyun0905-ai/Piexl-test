@@ -136,13 +136,16 @@ describe("백인장", () => {
     expect(s.enemies[1]!.bjDeathDmg).toBeCloseTo((HP * K.bjReaper.pct) / K.bjReaper.bossDiv, 3);
   });
 
-  it("종언의 붉은 날개: 180번 찌르고 살아남은 적에게 쌓인 피해를 한 번 더", () => {
+  it("종언의 붉은 날개: 미니 드론 180기가 날아가 찌르고 살아남은 적에게 쌓인 피해를 한 번 더", () => {
     const s = bj([[150, 100], [60, 160]], "bjEnd");
-    noDrone(() => idle(s, K.bjEnd.hits - 1, 4));
-    const before = lost(s, 0);
-    expect(s.enemies[0]!.bjSum).toBeCloseTo(before, 3);
-    noDrone(() => idle(s, 2));
-    expect(lost(s, 0)).toBeCloseTo(before * 2 + 0, 0);
+    // 드론은 날아가 꽂힐 때 피해 (쏜 직후에는 아직 안 맞음)
+    noDrone(() => idle(s, K.bjEnd.fly - 1, 4));
+    expect(lost(s, 0)).toBe(0);
+    expect(fx(s, "bjEndDrone")).toBeGreaterThan(0);
+    noDrone(() => idle(s, K.bjEnd.hits - K.bjEnd.fly + 4));
+    expect(s.enemies[0]!.bjSum).toBeCloseTo(lost(s, 0), 3);
+    noDrone(() => idle(s, K.bjEnd.fly + 2));
+    expect(lost(s, 0)).toBeCloseTo(s.player.stats.damage * K.bjEnd.mul * (K.bjEnd.hits / 2) * 2, 0);
     expect(fx(s, "bjCross")).toBe(2);
     expect(s.enemies[0]!.bjSum).toBeUndefined();
   });

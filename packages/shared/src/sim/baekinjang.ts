@@ -93,6 +93,8 @@ export function baekinjangTick(s: RunState, want: boolean, speed: number): void 
   if (p.bjRoom !== key) {
     p.bjRoom = key;
     p.bjVolleys = [];
+    p.bjShots = [];
+    delete p.bjEndAt;
     delete p.bjRush;
     resetDrones(s);
   }
@@ -114,5 +116,5 @@ export function baekinjangTick(s: RunState, want: boolean, speed: number): void 
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetBaekinjang(p: P): void {
-  for (const k of ["bjCd", "bjRoom", "bjAtkAt", "bjStep", "bjDrones", "bjVolleys", "bjRush", "bjSkillCd", "bjRolls", "bjHaste"] as const) delete p[k];
+  for (const k of ["bjCd", "bjRoom", "bjAtkAt", "bjStep", "bjDrones", "bjVolleys", "bjRush", "bjSkillCd", "bjRolls", "bjHaste", "bjShots", "bjEndAt"] as const) delete p[k];
 }

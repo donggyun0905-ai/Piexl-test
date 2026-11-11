@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.35",
+    date: "2026-11-12",
+    items: {
+      ko: ["백인장 종언의 붉은 날개: 레이저 선 대신 기본 패시브의 미니 창 드론 그림 180기가 날개에서 실제로 날아가 적에게 꽂힘 (붉은 레이저 자국을 남기고, 꽂히는 순간 피해)"],
+      en: ["Baekinjang, Red Wings of the End: instead of laser lines, 180 mini lance drones (the base passive's drone art) actually fly out of the wings and stab foes (trailing red lasers, damage on impact)"],
+      ja: ["百人長・終焉の赤い翼：レーザーの線の代わりに、基本パッシブのミニ槍ドローン180機が実際に翼から飛んで敵に刺さる（赤いレーザーの跡を残し、刺さった瞬間にダメージ）"],
+    },
+  },
+  {
     version: "0.52.34",
     date: "2026-11-12",
     items: {
