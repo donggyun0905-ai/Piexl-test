@@ -2,10 +2,10 @@
 // 그림 sprites/honryeongFx.png (256칸 4×4: 0줄 연기용 4 · 1줄 혼-룡 4 · 2·3줄 구름 8)
 // sprites/honryeongPets.png (128칸 4×10, 칸 순서 앞·뒤·왼·오: 0·1 늑대 걷기 · 2 늑대 공격 · 3·4 범 걷기 · 5 범 공격 · 6 부엉이 앉음 · 7 낙하 · 8·9 날기) — scripts/art/honryeong.py
 import { dragonTicks, HONRYEONG_PERKS, HR_CLOUD, huntOn, ROOM_HEIGHT, ROOM_WIDTH, type HrBeast, type HrOwl, type RunState } from "@pixel-rogue/shared";
-import { drawCharacter } from "../sprites";
+import { drawCharacter, sheetFor } from "../sprites";
 import { img } from "./lunaticFx";
 import { lerp, type Snap } from "./palette";
-import { additive, alpha as fade, glow, ring, type Ctx } from "./pwFxBits";
+import { additive, glow, type Ctx } from "./pwFxBits";
 
 export const HR = { smoke: "#b48aff", deep: "#5a3aa8", pale: "#e8dcff", white: "#f8f4ff" };
 const FX = img("honryeongFx");
@@ -95,7 +95,7 @@ export function drawHonryeongGround(ctx: Ctx, s: RunState, alpha: number, snap: 
   for (const o of p.hrOwls ?? []) if (o.t <= 0) drawOwl(ctx, o, snap(o.x), snap(o.y), s);
 }
 
-/** 몸 위: 나는 부엉이 · 구름(다 차면 방을 덮음, 내가 든 구름은 옅게) · 혼-룡 · 은신 표시 */
+/** 몸 위: 나는 부엉이 · 구름(다 차면 방을 덮음, 내 몸 가까울수록 옅게) · 혼-룡 · 은신(몸에 빛나는 테두리) */
 export function drawHonryeongAir(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const p = s.player;
   if (p.characterId !== "honryeong") return;
@@ -105,9 +105,10 @@ export function drawHonryeongAir(ctx: Ctx, s: RunState, alpha: number, snap: Sna
   for (const c of p.hrClouds ?? []) {
     const born = Math.min(1, c.age / 20);
     const gone = Math.min(1, (HR_CLOUD.life - c.age) / 60);
-    const mine = (c.x - p.x) ** 2 + (c.y - p.y) ** 2 <= c.r * c.r;
+    // 내 몸 가까운 구름일수록 옅게 (캐릭터가 잘 보이게)
+    const near = Math.min(1, Math.hypot(c.x - p.x, c.y - p.y) / (c.r * 2.2));
     const bob = Math.sin((s.tick + c.x * 3) * 0.03) * 1.5;
-    hrPic(ctx, 2 + (c.pic >> 2), c.pic & 3, snap(c.x), snap(c.y) + bob, c.r * 3 * (0.7 + 0.3 * born), (mine ? 0.4 : 0.66) * born * gone);
+    hrPic(ctx, 2 + (c.pic >> 2), c.pic & 3, snap(c.x), snap(c.y) + bob, c.r * 2.5 * (0.7 + 0.3 * born), (0.14 + 0.36 * near) * born * gone);
   }
   const d = p.hrDragon;
   if (d) {
@@ -119,7 +120,14 @@ export function drawHonryeongAir(ctx: Ctx, s: RunState, alpha: number, snap: Sna
     hrPic(ctx, 1, Math.floor(d.t / 8) % 4, x, ROOM_HEIGHT / 2 + Math.sin(d.t * 0.12) * 6, w, 0.9);
   }
   if (p.hrHidden) {
-    ring(ctx, px, py, 9 + Math.sin(s.tick * 0.1) * 1.5, fade(HR.pale, 0.7), 1);
-    additive(ctx, () => glow(ctx, px, py, 12, HR.smoke, 0.3));
+    // 은신: 구름 위에 몸을 한 번 더 그려 빛나는 테두리 (몸 둘레로 빛이 번짐)
+    const moving = Math.abs(p.x - p.prevX) + Math.abs(p.y - p.prevY) > 0.01;
+    const pose = { faceX: p.faceX, faceY: p.faceY, moving, casting: false, step: Math.floor(s.tick / 8), dash: p.dashTicks > 0 };
+    ctx.save();
+    ctx.shadowColor = HR.white;
+    ctx.shadowBlur = 5 + Math.sin(s.tick * 0.12) * 2;
+    for (let i = 0; i < 2; i++) if (!drawCharacter(ctx, sheetFor(p.characterId), px, py, p.r, pose)) drawCharacter(ctx, p.characterId, px, py, p.r, pose);
+    ctx.restore();
+    additive(ctx, () => glow(ctx, px, py, 14, HR.smoke, 0.25));
   }
 }

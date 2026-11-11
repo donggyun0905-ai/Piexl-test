@@ -56,7 +56,7 @@ export const HR_CLOUD = {
   cap: 30,
   life: 600,
   tries: 14,
-  cover: 1.3,
+  cover: 1.1,
   lure: 46,
   poison: 0.2,
 };

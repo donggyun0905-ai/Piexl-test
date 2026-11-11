@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.31",
+    date: "2026-11-11",
+    items: {
+      ko: ["혼령: 연기 구름을 작고 옅게 · 내 몸 가까운 구름은 더 투명하게 · 은신하면 캐릭터가 구름 위로 빛나는 테두리와 함께 보임"],
+      en: ["Honryeong: smoke clouds are smaller and fainter · clouds near you are more transparent · while hidden, your character shows above the clouds with a glowing outline"],
+      ja: ["魂霊：煙の雲を小さく薄く・自分の近くの雲はさらに透明に・隠密中はキャラクターが雲の上に光る縁取りつきで見える"],
+    },
+  },
+  {
     version: "0.52.30",
     date: "2026-11-11",
     items: {
