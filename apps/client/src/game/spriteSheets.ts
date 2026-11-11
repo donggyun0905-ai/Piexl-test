@@ -120,6 +120,7 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   bingseol: { size: 44, footPad: 2, src: 128, v2: true },
   /** 아수라 (실베르 귀신 주먹 6개의 싸움꾼, 금발·남색 코트·등 뒤 귀신 팔) */
   asura: { size: 46, footPad: 2, src: 128, v2: true },
+  baekinjang: { size: 50, footPad: 2, src: 128, v2: true },
   /** 혼령 (실베르 곰방대 연기의 여인, 은발·보랏빛 기모노) */
   honryeong: { size: 46, footPad: 2, src: 128, v2: true },
   /** 아수라 분노의 팔 (붉은 귀신 팔, scripts/art/asura.py red) */

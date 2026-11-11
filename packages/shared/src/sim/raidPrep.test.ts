@@ -139,7 +139,8 @@ describe("레이드 방 돌기둥·루시퍼 방어", () => {
     const s = fight();
     const f = s.raidBoss!.fight!;
     const boss = s.enemies.find((e) => e.kind === "lucifer")!;
-    for (let t = 0; t < LUC_DEADLY_RULES.FIRST + 2; t++) stepParty(s, [EMPTY_INPUT]);
+    // 다른 큰 패턴(돔·검기)과 겹치면 그 패턴이 끝난 뒤에 시작함
+    for (let t = 0; t < LUC_DEADLY_RULES.FIRST + 900 && !(t > LUC_DEADLY_RULES.FIRST && f.dk); t++) stepParty(s, [EMPTY_INPUT]);
     expect(f.dk?.kind).toBe(1);
     const d = f.dk!;
     const c = lucCovers(s)[0]!;

@@ -113,4 +113,11 @@ export const PW_KITS_4: PwKits = {
     sk("hrPipe", "dash", 9, "#d8c0ff", { range: 110, speed: 10, hit: { dmg: 0.8 } }),
     sk("hrPipe", "point", 60, "#a070ff", { range: 170, radius: 120, delay: 30, fx: "pillar", hit: { dmg: 3.2, slow: 2 * SEC } }),
   ),
+  // 실베르 백인장: 혈월 쌍검격 · 관통 나선창 · 섬광 돌진베기 · 종언의 붉은 날개
+  baekinjang: kit(1,
+    sk("bjBlades", "cone", 4, "#ff3a4a", { radius: 62, arc: 0.9, fx: "slash", hit: { dmg: 1.2 } }),
+    sk("bjBlades", "line", 8, "#ff6a7a", { range: 230, hit: { dmg: 1.7 } }),
+    sk("bjBlades", "dash", 8, "#c81a2a", { range: 120, speed: 11, hit: { dmg: 1.1 } }),
+    sk("bjBlades", "point", 60, "#ff2a3a", { range: 160, radius: 115, delay: 30, fx: "pillar", hit: { dmg: 3.2 } }),
+  ),
 };

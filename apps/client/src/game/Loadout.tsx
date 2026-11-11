@@ -41,7 +41,7 @@ export interface LoadoutView {
   /** 스킬이 있는 캐릭터(추적자): 스킬마다 남은 대기 0~1 */
   skills?: number[];
   /** 스킬 이름 묶음 (없으면 칸 수로: 셋 추적자 · 넷 베아트리스) */
-  skillSet?: "ia" | "gb" | "sn" | "rf" | "yr" | "mc" | "nl";
+  skillSet?: "ia" | "gb" | "sn" | "rf" | "yr" | "mc" | "nl" | "bj";
   /** 여러 번 누르는 스킬의 다음 단계 (네일러, 0 = 처음) */
   stages?: number[];
   /** 새벽의 성흔: 성흔 게이지 0~1 · 달빛 각성 중 */

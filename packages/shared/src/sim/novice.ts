@@ -15,6 +15,7 @@ import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, markCrit } from "./util";
 import { extraOf } from "./baseStats";
 import { PW_PASSIVE } from "../paewangPassive";
+import { bjCritAdd } from "./bjKit";
 import { eclipseNoCrit } from "./eclipseStats";
 import { serenaCrit } from "./serenaCrit";
 
@@ -132,10 +133,12 @@ export function rollCrit(s: RunState, e: EnemyState, dmg: number): { dmg: number
   // 잔영: 그림자에서 친 뒤치기는 반드시 치명타
   if (eclipseNoCrit(p)) return { dmg, crit: false };
   if (p.rmSure && dmg > 0) return { dmg: dmg * Math.max(1.5, ex.critDamage), crit: true };
-  if ((p.characterId !== "novice" && !tang && wake <= 0 && pet <= 0 && ex.critChance <= 0) || dmg <= 0) return { dmg, crit: false };
+  // 백인장 적안 표식: 표식 붙은 적은 치명타로 맞을 확률이 오름 (sim/bjKit)
+  const mark = bjCritAdd(s, e);
+  if ((p.characterId !== "novice" && !tang && wake <= 0 && pet <= 0 && ex.critChance <= 0 && mark <= 0) || dmg <= 0) return { dmg, crit: false };
   p.critRolls = (p.critRolls ?? 0) + 1;
   const c = critNow(s);
-  const crit = createRng(deriveSeed(s.seed, "ncrit", e.id, p.critRolls)).nextFloat() < c.chance;
+  const crit = createRng(deriveSeed(s.seed, "ncrit", e.id, p.critRolls)).nextFloat() < c.chance + mark;
   return { dmg: crit ? dmg * c.mul : dmg, crit };
 }
 

@@ -40,16 +40,16 @@ const MEMBERS: Record<ItemTag, string> = {
     "rdRepair afTattoo afInfinity fgMemory fgPillar fgMany fgShine fgCross fgHeal vyKeepFate vyQuiver " +
     "vyBlessing vyHomeward pgStarDust pgKeyring lxShard lxHalo lxGrace lxMore lxWide lxTattoo clHolySword " +
     "clStarTome dryadOrb aphroditeMirror puBook fnHalo fnStar ecDawn tkBell tkLighthouse lvSalt lvBlowhole mqPrism btVerdict btWitness btGrace btMercy iaQuill iaAbsolute iaVerse iaCall gbLight gbImmortal gbFaith gbVow snEther snMuse snNight rfHalo rfWrath rfPrayer rfLance yrPyre yrBloom yrHeaven yrOrb yrThorn yrPrayer mcPrayer mcArsenal blMoonlight blFull blHalo blLunar blSilver blRemain sdLotus sdGate sdStar ppDollPrincess rbCarrot rbMoon rbStar byCall",
-  // 어둠 42
+  // 어둠 43
   dark:
-    "asField asDemon asUlt asGate asFlying lnMarkFast lnTwinMark lnExecute bzCage bzSeal bzInner sbEngrave sbStorm sbRapid sbPure hfHold hfFeed hfMaw hfGrow hfSpread sxBind sxFear sxSpool nlCurse nlChain ambush volleyCharm strongman intimidate sharpClaws hunterInstinct shadowMark twinShadow moonlight " +
+    "bjEye asField asDemon asUlt asGate asFlying lnMarkFast lnTwinMark lnExecute bzCage bzSeal bzInner sbEngrave sbStorm sbRapid sbPure hfHold hfFeed hfMaw hfGrow hfSpread sxBind sxFear sxSpool nlCurse nlChain ambush volleyCharm strongman intimidate sharpClaws hunterInstinct shadowMark twinShadow moonlight " +
     "assassin desertMirage desertKing soulFeast longCurse inkWell preface oniEightHeads oniAbyssDrink " +
     "oniShadowSpread snakeCoil batSwarm elLinger elStaff plMask plBloodlet eaHunger eaShade mkRegen " +
     "mkPotion cyOptics cyEcho rmStep rmVanish rmHaste rmShroud clVoidSword clVoidStaff clClaw devilBlood " +
     "devilSpots devilScream devilCross puInk ecUmbra ecHorizon hkJolly btSin btGrudge btTotality iaChain iaSilence iaShadow iaLaw gbPull gbOrbit snMirage snPerfume rfFocus yrInquest mcVoid mcBlink jkSplit sdVortex sdGhost sdMoon ppDollSpiral ppBlack rbGhost byWraith byTrinity byHaunt byPossess hrFear hrDragon",
-  // 죽음 44
+  // 죽음 45
   death:
-    "executioner lastStand yinForce deathSeal focusCoil overclock heatHaze whirlRing armorPierce " +
+    "bjReaper executioner lastStand yinForce deathSeal focusCoil overclock heatHaze whirlRing armorPierce " +
     "martialSoul soulMagnet bloodPact soulBurst malice censor forbiddenBook wolfHowl bearRage flyRecharge " +
     "flyHunt renPrisonDmg renCrushStun plGland plBurrow plBlackDeath plReaper slBerserk slCrimson slHound " +
     "slLastBreath eaDevour eaFeast smReaper smKiss trSilencer trHeadshot rmExecute rmFrenzy fkHarvest " +
@@ -63,9 +63,9 @@ const MEMBERS: Record<ItemTag, string> = {
   // 물 3
   water:
     "oniGreatWave oniSprayChain oniDragonPalace tkBarnacle tkWhale tkTrident lvCrest lvSpiral lvBreaker lvCurrent lvSpray lvCall lvCalf lvBaleen lvPod lvKingWhale lvDeep lvSong tlDeep tlSchool tlJaws tlBreach tlRip mqFreedom hkChain hkFreedom ocUndertow ocEcho ocFin wvSpear wvGoddess wvWhale wvBubble wvClock wvCloud wvLotus wvFlood wvBalloon wvPearl wvHands wvFountain wvSkip wvSiren wvOctopus wvEye wvEbb wvTrail wvTsunami mrRipple mrCascade mrSky mrReturn mrBreath sdScroll",
-  // 날카로움 90
+  // 날카로움 96
   sharp:
-    "asIron asReach asRapid asBarrage asFury icHeavy icWide icSwift icThrow icLeapBig icLeapPow icRampage lnSwift lnPierce lnFlurry lnWave lnEye lnDeep lnDashPow bzWide bzKnock bzWing sbQuick sbHollow sbPierce sbTriple sbBarrel sbSeek sbAgile hfKnuckle hfDouble hfCrush hfNail hfAim hfFar hfEcho sxEdge sxWide sxSnap sxTwin sxTaut sxWeave nlIron nlBarb nlSpread nlDeep nlSledge nlWide nlDrive nlEcho longGrip backQuiver steadyBreath spinCleave waveSlash echoBolt piercingBolt mach knockout focusFire " +
+    "bjFlurry bjSpin bjRain bjNeedle bjSpear bjEnd asIron asReach asRapid asBarrage asFury icHeavy icWide icSwift icThrow icLeapBig icLeapPow icRampage lnSwift lnPierce lnFlurry lnWave lnEye lnDeep lnDashPow bzWide bzKnock bzWing sbQuick sbHollow sbPierce sbTriple sbBarrel sbSeek sbAgile hfKnuckle hfDouble hfCrush hfNail hfAim hfFar hfEcho sxEdge sxWide sxSnap sxTwin sxTaut sxWeave nlIron nlBarb nlSpread nlDeep nlSledge nlWide nlDrive nlEcho longGrip backQuiver steadyBreath spinCleave waveSlash echoBolt piercingBolt mach knockout focusFire " +
     "allIn bigStar longEcho precision longWhip command duneRush farThrow spearMastery momentum dragonRage " +
     "dragonLance fallenGrail sinWeight thickNib sealStamp alleyBond tagStrike idSap idRoots idTwinStab " +
     "idBloomSwap wolfFang wolfPack eagleEye scorpPincer batEcho eleTrunk flyLonger flyDragonEye renOak " +
@@ -84,9 +84,9 @@ const MEMBERS: Record<ItemTag, string> = {
     "spRibbon spShield mkPlate mkBulk mkSpikes mkMeditate adWide adShield rdSlip rdGear bmMore bmSuit " +
     "afShield afGolem cyLeech cySkin trMark trCamo fgEcho fgBless mnHelmet mnMuscle mnCanary mnChain " +
     "zsNectar zsRetort pgPack pgSouvenir pgPostcard pgTent relicSilver relicWhite ironSkin puDisguise leArmor oxBulwark oxShard fnHowl fnVeteran ecCrown tkCoral lvShell lvFlag tlFreedom mqFlagship hkWreck hkRum ocFoam wvArmor wvMist mrScale mrParry btVow btSilver btBreaker iaLedger iaKnot gbPlate gbThorns gbIron gbBulwark gbTitan rfSteady yrBulwark yrSanct yrGuard yrVigil yrGrace yrTouch yrBaptism mcHoard blRecoil jkGuard sdChain sdThorn ppDollRibbon rbHeavy rbFluff byGuard bsWall hrBreath",
-  // 바람 77
+  // 바람 79
   wind:
-    "asStep crQuick crRamPow crRamGain icRushPow icDouble icLeapOften icKeep lnLunge lnAfterimage lnChain nlQuick nlRain lightGloves windBoots featherTip hunterEye dashCloak heavyPlate returnFletch chaseSteps chainBurst " +
+    "bjDash bjShock asStep crQuick crRamPow crRamGain icRushPow icDouble icLeapOften icKeep lnLunge lnAfterimage lnChain nlQuick nlRain lightGloves windBoots featherTip hunterEye dashCloak heavyPlate returnFletch chaseSteps chainBurst " +
     "overcharge mindEye yangForce cleanFreak bigger zone speedIsPower discipline rapidFire agility " +
     "overtreat doctorGown shadowRush silentStep haste clockwork mirageStep nomadSpirit cloudRide duckWalk " +
     "lastMag backAlleyRun oniTyphoonEye oniGale oniTwinWind idBreeze idPetal idSplitArrow idRootArrow " +
@@ -107,9 +107,9 @@ const MEMBERS: Record<ItemTag, string> = {
     "genesis pet supportFire extraCat packLeader fishTreat horde lash empower sacrifice returnWind " +
     "quickCatch extraDuckling loudQuack duckFamily breadSnack echoQuack braveDuckling spBond spLonger " +
     "spFury spAwaken spFarewell spHarmony adCall adFourth petFlute falseHero puClone mqRig mqSquadron hkGrapnel ocBreath ocLiberty wvButterfly wvMirror wvSchool wvRope sdDragon ppGolem ppCrown ppDance rbSeal byWisp hrWolf hrTiger hrOwl hrDecoy hrPact",
-  // 피 27
+  // 피 28
   blood:
-    "asRage asSoul icSense icEndless icDrink icBurst icCarnage icTrail icVortex icIron icQuake sbBurst sbFlask sbBless sbBelt sbPurify hfRend hfBlood hfFrenzy hfLeech sxRust sxHead sxHarvest sxChain nlBleed nlRelent seekerFeather huntFrenzy lifeLeech rage drunkenFist bloodDemon bleed bloodBlade loyalty rustyEdge " +
+    "bjPrison asRage asSoul icSense icEndless icDrink icBurst icCarnage icTrail icVortex icIron icQuake sbBurst sbFlask sbBless sbBelt sbPurify hfRend hfBlood hfFrenzy hfLeech sxRust sxHead sxHarvest sxChain nlBleed nlRelent seekerFeather huntFrenzy lifeLeech rage drunkenFist bloodDemon bleed bloodBlade loyalty rustyEdge " +
     "grewTogether batDrain slPact slThirst slNumb slMassacre rmBlood wdDeep wdRain skFrenzy skBlood " +
     "clBloodSword clChainCleaver clBloodBow clCrossbow clRedSpear clBloodHammer fnHunt tlBlood tlFeast btOath mcFrenzy mcMadness blBlood blHunter blNight jkHeart ppStitch",
 };

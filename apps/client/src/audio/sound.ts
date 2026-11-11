@@ -12,6 +12,7 @@ import { RABBIT_SOUNDS, type RabbitSfx } from "./rabbitSounds";
 import { BAEK_SOUNDS, type BaekSfx } from "./baekSounds";
 import { BINGSEOL_SOUNDS, type BingseolSfx } from "./bingseolSounds";
 import { ASURA_SOUNDS, type AsuraSfx } from "./asuraSounds";
+import { BAEKINJANG_SOUNDS, type BaekinjangSfx } from "./baekinjangSounds";
 import { HONRYEONG_SOUNDS, type HonryeongSfx } from "./honryeongSounds";
 
 export type Sfx =
@@ -72,6 +73,7 @@ export type Sfx =
   | BaekSfx
   | BingseolSfx
   | AsuraSfx
+  | BaekinjangSfx
   | HonryeongSfx;
 
 let ctx: AudioContext | null = null;
@@ -185,6 +187,7 @@ const SOUNDS: Record<Sfx, () => void> = {
   ...BAEK_SOUNDS,
   ...BINGSEOL_SOUNDS,
   ...ASURA_SOUNDS,
+  ...BAEKINJANG_SOUNDS,
   ...HONRYEONG_SOUNDS,
   blink: () => {
     tone({ type: "sine", from: 900, to: 120, dur: 0.12, vol: 0.12 });

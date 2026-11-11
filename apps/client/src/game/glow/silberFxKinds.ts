@@ -25,5 +25,7 @@ export const SILBER_FX: Record<string, readonly [number, 1 | 2 | 3 | 4]> = {
   // 빙설: 베기·찌르기·몸 둘레 · 터짐 · 빙각 · 얼음가루 모임 · 궁극기 한 대 · 활 · 결정 · 탄 막음
   bsSlash: [G.ice, 1], bsThrust: [G.ice, 1], bsSpin: [G.ice, 2], bsBurst: [G.ice, 2], bsSpike: [G.frost, 3], bsGather: [G.ice, 1], bsUltHit: [G.frost, 1], bsBowSet: [G.ice, 2], bsWallHit: [G.ice, 1], bsBlock: [G.frost, 1],
   // 아수라: 기본 펀치 · 연속 펀치 · 파동 · 악귀 · 각성 1·2타 · 3타 · 4타 · 육비 난무
+  // 백인장: 쌍검격 · 난무 · 회전참 · 돌진베기 · 폭우 · 나선창 · 충격파 · 표식 · 감옥 · 팔연참 · 종언 · 붉은 십자
+  bjSlash: [G.crimson, 1], bjFlurry: [G.crimson, 2], bjSpin: [G.crimson, 2], bjDash: [G.red, 2], bjRain: [G.crimson, 2], bjSpear: [G.red, 3], bjShock: [G.crimson, 3], bjEye: [G.red, 2], bjPrison: [G.crimson, 2], bjReaper: [G.crimson, 3], bjEnd: [G.red, 4], bjCross: [G.red, 4],
   asPunch: [G.blue, 1], asRapid: [G.blue, 1], asWave: [G.light, 2], asDemon: [G.crimson, 2], asAwk12: [G.blue, 2], asAwk3: [G.blue, 2], asAwk4: [G.light, 3], asFistHit: [G.blue, 1],
 };

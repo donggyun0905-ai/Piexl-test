@@ -96,6 +96,7 @@ export const C = {
   baekryeong: "#3ac8ff",
   bingseol: "#8ad8ff",
   asura: "#4a6aff",
+  baekinjang: "#ff2a3a",
   honryeong: "#b48aff",
   miner: "#5ad8e8",
   voyager: "#e8b040",
