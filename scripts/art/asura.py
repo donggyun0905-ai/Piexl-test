@@ -28,5 +28,36 @@ def main():
     print("asuraFx.png", sheet.size, [len(r) for r in rows])
 
 
+
+
+# ── 분노의 팔: 붉은 그림 (python3 scripts/art/asura.py red) ──
+# asuraFxRed.png = 효과 시트의 파랑·빨강을 맞바꿈 (푸른 빛 → 붉은 빛)
+# asuraRed.png = 몸 시트에서 푸른 귀신 팔(채도 있는 파랑·남색)만 붉게 (머리·피부·금장식은 그대로)
+def red():
+    import numpy as np
+
+    fx = np.asarray(Image.open(os.path.join(SPRITES, "asuraFx.png")).convert("RGBA")).copy()
+    fx[..., [0, 2]] = fx[..., [2, 0]]
+    Image.fromarray(fx, "RGBA").save(os.path.join(SPRITES, "asuraFxRed.png"), optimize=True)
+    body = Image.open(os.path.join(SPRITES, "asura.png")).convert("RGBA")
+    hsv = np.asarray(body.convert("RGB").convert("HSV")).astype(np.int32)
+    rgba = np.asarray(body).copy()
+    h, s = hsv[..., 0], hsv[..., 1]
+    # 파랑~보라 (PIL 색상 0~255: 약 150~200) · 채도 있음
+    # 팔과 코트가 같은 남색이라 자리로도 나눔: 칸(128) 안에서 머리 위쪽 · 몸 가운데에서 좌우로 먼 곳 = 팔
+    ys, xs = np.mgrid[0 : rgba.shape[0], 0 : rgba.shape[1]]
+    cy, cx = ys % 128, xs % 128
+    arm = (cy < 50) | (np.abs(cx - 64) > 22)
+    blue = (h >= 145) & (h <= 205) & (s >= 70) & (rgba[..., 3] > 0) & arm
+    r, b = rgba[..., 0].copy(), rgba[..., 2].copy()
+    rgba[..., 0] = np.where(blue, b, r)
+    rgba[..., 2] = np.where(blue, (r * 0.6).astype(np.uint8), b)
+    rgba[..., 1] = np.where(blue, (rgba[..., 1] * 0.55).astype(np.uint8), rgba[..., 1])
+    Image.fromarray(rgba, "RGBA").save(os.path.join(SPRITES, "asuraRed.png"), optimize=True)
+    print("asuraFxRed.png · asuraRed.png", int(blue.sum()), "px")
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+
+    red() if sys.argv[1:] == ["red"] else main()

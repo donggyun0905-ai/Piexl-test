@@ -5,10 +5,22 @@ import { img } from "./lunaticFx";
 import { lerp, type Snap } from "./palette";
 import { additive, alpha as fade, glow, ring, shock, type Ctx } from "./pwFxBits";
 
-export const AS = { blue: "#4a6aff", navy: "#1a2270", light: "#a8c0ff", red: "#ff3a3a" };
-const FX = img("asuraFx");
+const BLUE = { blue: "#4a6aff", navy: "#1a2270", light: "#a8c0ff", red: "#ff3a3a" };
+/** 분노의 팔: 귀신 팔·효과가 붉게 (그림은 asuraFxRed, scripts/art/asura.py red) */
+const RED = { blue: "#ff3a3a", navy: "#5a0a14", light: "#ffb0a0", red: "#ff8a2a" };
+/** 지금 색 (분노의 팔이면 붉게, drawAsuraGround가 화면마다 맞춤) */
+export const AS = { ...BLUE };
+const BLUE_FX = img("asuraFx");
+const RED_FX = img("asuraFxRed");
+let FX = BLUE_FX;
 const C = 256;
 const ready = () => FX.complete && FX.naturalWidth > 0;
+
+/** 분노의 팔이면 붉은 색·그림으로 */
+function setRed(red: boolean): void {
+  FX = red ? RED_FX : BLUE_FX;
+  Object.assign(AS, red ? RED : BLUE);
+}
 
 /** 빛 그림 한 칸 (row 줄, col 칸) → (x, y) 가운데, 너비 w, 각도 (더해 그림) · flip = 좌우 뒤집기 */
 export function asPic(ctx: Ctx, row: number, col: number, x: number, y: number, w: number, a = 1, angle = 0, flip = false): void {
@@ -41,10 +53,11 @@ function drawField(ctx: Ctx, s: RunState, x: number, y: number): void {
   }
 }
 
-/** 바닥: 귀진 · 각성(등 뒤, 4칸이 나온 뒤 마지막 두 칸을 오가며 빛남) · 날아가는 주먹 */
+/** 바닥: 귀진 · 분노의 팔 붉은 색 · 각성(등 뒤, 4칸이 나온 뒤 마지막 두 칸을 오가며 빛남) · 날아가는 주먹 */
 export function drawAsuraGround(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const p = s.player;
   if (p.characterId !== "asura") return;
+  setRed(p.passives.includes("asRage" as never));
   const px = snap(lerp(p.prevX, p.x, alpha));
   const py = snap(lerp(p.prevY, p.y, alpha));
   if (p.passives.includes("asField" as never)) drawField(ctx, s, px, py);

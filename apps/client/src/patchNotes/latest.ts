@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.28",
+    date: "2026-11-11",
+    items: {
+      ko: ["아수라 분노의 팔: 가지면 귀신 팔과 모든 효과가 붉게 변함 · 때릴 때마다 체력 1을 내줌 (체력 5부터는 안 깎임) · 피해 1.3배 조건 체력 50% → 30% 아래"],
+      en: ["Asura Arms of Wrath: her spectral arms and all effects turn red · each attack costs 1 HP (stops at 5 HP) · the x1.3 damage now needs HP below 30% (was 50%)"],
+      ja: ["阿修羅・憤怒の腕：取ると鬼神の腕とすべてのエフェクトが赤く変わる・攻撃するたびに体力1を払う（体力5からは減らない）・ダメージ1.3倍の条件が体力50%→30%未満"],
+    },
+  },
+  {
     version: "0.52.27",
     date: "2026-11-11",
     items: {

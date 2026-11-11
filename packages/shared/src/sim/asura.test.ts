@@ -124,6 +124,24 @@ describe("아수라", () => {
     expect(lost(s)).toBeGreaterThan(0);
   });
 
+  it("분노의 팔: 때릴 때마다 체력 1 (5에서 멈춤) · 30% 아래면 피해 커짐", () => {
+    const s = as(undefined, "asRage");
+    s.player.hp = K.asRage.floor + 1;
+    odds({ asUlt: 0 }, () => {
+      stepSim(s, hit);
+      expect(s.player.hp).toBe(K.asRage.floor);
+      idle(s, F.cd);
+      stepSim(s, hit);
+    });
+    expect(s.player.hp).toBe(K.asRage.floor);
+    const full = as(undefined, "asRage");
+    const before = full.player.hp;
+    odds({ asUlt: 0 }, () => stepSim(full, hit));
+    expect(full.player.hp).toBe(before - K.asRage.cost);
+    // s는 두 번 침
+    expect(lost(s) / 2 / lost(full)).toBeCloseTo(K.asRage.mul, 1);
+  });
+
   it("귀신 걸음: 대시 뒤 다음 주먹이 넓게 · 귀갑: 받는 피해 줄어듦", () => {
     const s = as([[80 + F.reach * 2, 100 + F.r * 1.6]], "asStep");
     s.player.asDash = true;

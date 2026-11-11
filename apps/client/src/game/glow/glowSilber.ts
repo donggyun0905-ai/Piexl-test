@@ -17,7 +17,9 @@ export class GlowSilber {
     for (const fx of this.seen.fresh(s)) {
       const k = SILBER_FX[fx.kind];
       if (!k) continue;
-      const [color, power] = k;
+      const [blue, power] = k;
+      // 아수라 분노의 팔: 빛도 붉게
+      const color = fx.kind.startsWith("as") && s.player.passives.includes("asRage" as never) ? G.crimson : blue;
       const size = Math.max(5, Math.min(90, fx.size || 10));
       // 홈런 내리찍기는 크게
       const p = fx.kind === "rbSlam" && fx.style === 1 ? 3 : power;
@@ -51,16 +53,19 @@ export class GlowSilber {
     };
     switch (p.characterId) {
       case "asura": {
+        const red = p.passives.includes("asRage" as never);
+        const B = red ? G.crimson : G.blue;
+        const L = red ? G.red : G.light;
         if ((p.asAwake ?? 0) > 0) {
           // 각성: 등 뒤에 은은한 남색 빛 (몸을 가리지 않게 약하게) · 시작하는 순간만 크게
-          put(p.x, p.y - 22, 44 * (0.85 + 0.15 * Math.sin(s.tick * 0.15)), G.blue, 0.18);
+          put(p.x, p.y - 22, 44 * (0.85 + 0.15 * Math.sin(s.tick * 0.15)), B, 0.18);
           if (p.asAwakeAt !== undefined && p.asAwakeAt !== this.awake && s.tick - p.asAwakeAt < 3) {
             this.awake = p.asAwakeAt;
-            this.ult(parts, p.x, p.y, 40, G.blue, cues);
+            this.ult(parts, p.x, p.y, 40, B, cues);
           }
         }
-        for (const f of p.asFists ?? []) put(f.x, f.y, 18, G.blue, 0.7);
-        if (p.passives.includes("asField" as never)) for (const e of s.enemies) if (e.hp > 0 && asMarked(s, e)) put(e.x, e.y - e.r - 7, 9, G.light, 0.55);
+        for (const f of p.asFists ?? []) put(f.x, f.y, 18, B, 0.7);
+        if (p.passives.includes("asField" as never)) for (const e of s.enemies) if (e.hp > 0 && asMarked(s, e)) put(e.x, e.y - e.r - 7, 9, L, 0.55);
         return;
       }
       case "bingseol": {

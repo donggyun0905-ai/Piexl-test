@@ -49,7 +49,7 @@ export const AS_EFFECTS: Partial<Record<AsPassive & PassiveId, Names>> = {
   asWeight: c("능력: 각성 4타 기절이 {stun:sec}초로 길어지고 {size}배 넓게 내리침", "Ability: awakened strike 4 stuns for {stun:sec}s and slams {size}x wider", "能力：覚醒4打の気絶が{stun:sec}秒に伸び、{size}倍広く叩きつける"),
   asPress: c("능력: 파동 피해 {mul}배 · 파동에 맞은 적이 밀려남", "Ability: shockwave damage x{mul} · shockwaves knock foes back", "能力：波動ダメージ{mul}倍・波動に当たった敵が押し出される"),
   asHell: c("능력: 악귀가 터진 적이 불탐", "Ability: foes hit by Fiend bursts catch fire", "能力：悪鬼が弾けた敵が燃える"),
-  asRage: c("능력: 체력이 {below:pct}% 아래면 아수라의 피해 {mul}배", "Ability: below {below:pct}% HP, Asura deals x{mul} damage", "能力：体力が{below:pct}%未満なら阿修羅のダメージ{mul}倍"),
+  asRage: c("능력: 귀신 팔과 효과가 붉게 변함 · 때릴 때마다 체력 {cost}을 내줌 (체력 {floor}부터는 안 깎임) · 체력이 {below:pct}% 아래면 아수라의 피해 {mul}배", "Ability: spectral arms and effects turn red · each attack costs {cost} HP (stops at {floor} HP) · below {below:pct}% HP, Asura deals x{mul} damage", "能力：鬼神の腕とエフェクトが赤く変わる・攻撃するたびに体力{cost}を払う（体力{floor}からは減らない）・体力が{below:pct}%未満なら阿修羅のダメージ{mul}倍"),
   asShell: c("능력: 받는 피해 ×{taken}", "Ability: damage taken x{taken}", "能力：受けるダメージ×{taken}"),
   asBarrage: c("능력: 연발 확률이 {chance:pct}%로 오르고 {hits}번 때림", "Ability: Flurry chance rises to {chance:pct}% and hits {hits} times", "能力：連発の確率が{chance:pct}%に上がり{hits}回打つ"),
   asFlying: c("새 기술: 공격마다 귀신 주먹 하나가 가까운 적(거리 {dist} 안)에게 날아가 공격력의 {mul:pct}%", "New skill: each attack sends a spectral fist flying at the nearest foe (within {dist}) for {mul:pct}% of damage", "新技：攻撃ごとに鬼神の拳ひとつが近くの敵（距離{dist}以内）へ飛んで攻撃力の{mul:pct}%"),

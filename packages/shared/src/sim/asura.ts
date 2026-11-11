@@ -43,6 +43,8 @@ export function asuraTick(s: RunState, want: boolean, speed: number): void {
     p.attackCount++;
     p.asAtkAt = s.tick;
     p.asHits = (p.asHits ?? 0) + 1;
+    // 분노의 팔: 때릴 때마다 체력을 내줌 (floor부터는 안 깎임)
+    if (hasAs(p, "asRage") && p.hp > K.asRage.floor) p.hp = Math.max(K.asRage.floor, p.hp - K.asRage.cost);
     if ((p.asAwake ?? 0) > 0) p.asCd = awakeStrike(s, spd);
     else {
       p.asCd = Math.max(6, Math.round(F.cd / Math.max(0.3, spd)));

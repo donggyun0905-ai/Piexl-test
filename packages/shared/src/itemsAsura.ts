@@ -34,7 +34,7 @@ export const ASURA_PASSIVES = {
   asPress: P("asPress", [{ stat: "range", mul: 1.05 }]),
   /** 업화: 악귀가 터진 적이 불탐 */
   asHell: P("asHell", [{ stat: "damage", mul: 1.05 }]),
-  /** 분노의 팔: 체력이 절반 아래면 피해가 커짐 */
+  /** 분노의 팔: 귀신 팔이 붉어짐 · 때릴 때마다 체력 1 (5에서 멈춤) · 체력이 30% 아래면 피해가 커짐 */
   asRage: P("asRage", [{ stat: "maxHp", add: 10 }]),
   /** 귀갑: 받는 피해가 줄어듦 */
   asShell: P("asShell", [{ stat: "maxHp", add: 20 }]),
@@ -76,8 +76,8 @@ export const ASURA_PERKS = {
   asPress: { mul: 1.5 },
   /** 업화: 불타는 피해 (악귀 추가 피해의 배율) */
   asHell: { burn: 1 },
-  /** 분노의 팔: 체력 비율 아래 · 피해 배율 */
-  asRage: { below: 0.5, mul: 1.3 },
+  /** 분노의 팔: 체력 비율 아래 · 피해 배율 · 때릴 때마다 잃는 체력 · 이 체력부터는 안 깎임 */
+  asRage: { below: 0.3, mul: 1.3, cost: 1, floor: 5 },
   /** 귀갑: 받는 피해 배율 */
   asShell: { taken: 0.85 },
   /** 마수 연타: 연발 확률 · 때리는 수 */
