@@ -41,6 +41,13 @@ export interface AsWave {
   size: number;
 }
 
+/** 이번 틱에 아수라가 준 한 대 (화면이 피해 숫자를 한 대마다 따로 띄움, 게임 계산에는 안 씀) */
+export interface AsHitLog {
+  id: number;
+  amt: number;
+  crit: boolean;
+}
+
 export interface AsuraPlayerState {
   /** 다시 공격까지 · 방 · 마지막으로 친 틱(그림) · 친 수(그림 칸 고르기) */
   asCd?: number;
@@ -64,6 +71,9 @@ export interface AsuraPlayerState {
   /** 귀신 걸음: 다음 주먹이 크게 · 지난 틱에 대시 중이었는지 */
   asStepBig?: boolean;
   asDash?: boolean;
+  /** 이번 틱에 준 한 대 한 대 · 그 틱 (화면 피해 숫자용) */
+  asLog?: AsHitLog[];
+  asLogT?: number;
   /** 악귀·각성 확률 굴린 수 (시드) */
   asRolls?: number;
 }

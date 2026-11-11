@@ -15,14 +15,31 @@ export function asRoll(s: RunState, tag: string): number {
   return createRng(deriveSeed(s.seed, tag, s.tick, p.asRolls)).nextFloat();
 }
 
+/** 피해 한 대 + 화면용 기록 (한 대마다 따로 피해 숫자) */
+function strike(s: RunState, e: EnemyState, dmg: number, dx: number, dy: number, knock: boolean): void {
+  const p = s.player;
+  if (p.asLogT !== s.tick) {
+    p.asLogT = s.tick;
+    p.asLog = [];
+  }
+  const hp = e.hp;
+  const c0 = e.critTick;
+  e.critTick = undefined;
+  damageEnemy(s, e, dmg, dx, dy, knock);
+  const crit = e.critTick === s.tick;
+  if (!crit) e.critTick = c0;
+  const amt = hp - Math.max(0, e.hp);
+  if (amt > 0) p.asLog!.push({ id: e.id, amt, crit });
+}
+
 /** 한 대: 피해 · 악귀(확률로 붉게 터지며 추가 피해, 업화면 불탐) */
 function hitOnce(s: RunState, e: EnemyState, dmg: number, dx: number, dy: number, knock: boolean): void {
   if (!alive(e)) return;
   const p = s.player;
-  damageEnemy(s, e, dmg, dx, dy, knock);
+  strike(s, e, dmg, dx, dy, knock);
   if (!hasAs(p, "asDemon") || !alive(e) || asRoll(s, "asDemon") >= K.asDemon.chance) return;
   const extra = dmg * K.asDemon.mul;
-  damageEnemy(s, e, extra, dx, dy, false);
+  strike(s, e, extra, dx, dy, false);
   addEffect(s, { kind: "asDemon", x: e.x, y: e.y - e.r * 0.4, dirX: dx, dirY: dy, size: e.r + 8, maxTicks: 14 });
   if (hasAs(p, "asHell")) ignite(e, extra * K.asHell.burn);
 }

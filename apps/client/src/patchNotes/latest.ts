@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.29",
+    date: "2026-11-11",
+    items: {
+      ko: ["아수라 피해 숫자: 합쳐지지 않고 한 대마다 따로 뜸 (분쇄 6번·연발·악귀 추가 피해·파동 등 모두)"],
+      en: ["Asura damage numbers: every single hit now shows its own number instead of being merged (Pulverize's 6 hits, Flurry, Fiend bonus damage, Shockwave and more)"],
+      ja: ["阿修羅のダメージ数字：まとめずに一発ごとに別々に表示（粉砕6回・連発・悪鬼の追加ダメージ・波動など全部）"],
+    },
+  },
+  {
     version: "0.52.28",
     date: "2026-11-11",
     items: {

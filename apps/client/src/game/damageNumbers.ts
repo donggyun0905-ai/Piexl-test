@@ -18,6 +18,8 @@ const MAX_NUMBERS = 30;
 const rapidHit = (s: RunState, id: number) => (s.player.bsUlt?.hitId === id && s.player.bsUlt.hitAt === s.tick) || s.player.rbUlt?.hitAt === s.tick;
 /** 60연타 필살기: 한 대마다 따로 띄움 (합치지 않음) · 그 적에게 남기는 수 · 전체 최대 수 */
 const RAPID_PER_ENEMY = 40;
+/** 아수라: 이번 틱에 그 적에게 준 한 대 한 대 (모두 따로 띄움, sim/asHit) */
+const asuraHits = (s: RunState, id: number) => (s.player.asLogT === s.tick ? (s.player.asLog ?? []).filter((h) => h.id === id) : []);
 const RAPID_MAX = 80;
 const PER_ENEMY = 3;
 /** 숫자가 뜬 뒤 이만큼(틱) 안에 같은 적이 또 맞으면 합침 (한꺼번에 맞은 빔·폭발 등이 겹치지 않게) */
@@ -58,6 +60,8 @@ export class DamageTracker {
   private crits = new Map<number, number>();
   /** 적마다 마지막으로 본 상태이상 피해 틱 */
   private dots = new Map<number, number>();
+  /** 적마다 지난 틱 숫자 자리 (쓰러진 적 위에 띄우려고) */
+  private last = new Map<number, { x: number; y: number }>();
   private where = "";
   private numbers: FloatNumber[] = [];
   /** 지금까지 띄운 숫자 수 (흩뿌리는 방향을 조금씩 바꿈) */
@@ -78,6 +82,7 @@ export class DamageTracker {
       this.hp.clear();
       this.crits.clear();
       this.dots.clear();
+      this.last.clear();
       this.numbers = [];
     }
     const seen = new Set<number>();
@@ -87,7 +92,13 @@ export class DamageTracker {
       this.hp.set(e.id, e.hp);
       const crit = e.critTick !== undefined && e.critTick !== this.crits.get(e.id);
       if (e.critTick !== undefined) this.crits.set(e.id, e.critTick);
-      if (before !== undefined && before > e.hp) this.split(s, e, before - Math.max(0, e.hp), crit, rapidHit(s, e.id));
+      this.last.set(e.id, { x: e.x, y: e.y - e.r });
+      if (before === undefined || before <= e.hp) continue;
+      let lost = before - Math.max(0, e.hp);
+      const each = asuraHits(s, e.id);
+      for (const h of each) this.hit(s, e.id, e.x, e.y - e.r, h.amt, e.kind === "dummy" && !e.svBox, h.crit ? "crit" : "hit", true);
+      for (const h of each) lost -= h.amt;
+      if (lost > 0.001) this.split(s, e, lost, crit && !each.some((h) => h.crit), rapidHit(s, e.id));
     }
     // 이번 틱에 쓰러진 적: 남아 있던 체력만큼
     for (const [id, before] of this.hp) {
@@ -95,8 +106,14 @@ export class DamageTracker {
       this.hp.delete(id);
       this.crits.delete(id);
       this.dots.delete(id);
+      const last = this.last.get(id);
+      this.last.delete(id);
+      // 아수라가 이번 틱에 쓰러뜨렸으면 한 대마다 따로
+      const each = asuraHits(s, id);
+      if (each.length && last) for (const h of each) this.hit(s, id, last.x, last.y, h.amt, false, h.crit ? "crit" : "hit", true);
       const n = [...this.numbers].reverse().find((x) => x.enemyId === id);
-      if (before > 0 && n) n.amount += before;
+      const rest = before - each.reduce((a, h) => a + h.amt, 0);
+      if (rest > 0.001 && n) n.amount += rest;
     }
     this.numbers = this.numbers.filter((n) => s.tick - n.born < LIFE);
   }

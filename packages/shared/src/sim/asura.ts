@@ -63,5 +63,5 @@ export function asuraTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetAsura(p: P): void {
-  for (const k of ["asCd", "asRoom", "asAtkAt", "asHits", "asSplit", "asRapids", "asFists", "asWaves", "asAwake", "asAwakeAt", "asStep", "asPound", "asPoundCd", "asFury", "asFuryAt", "asStepBig", "asDash", "asRolls"] as const) delete p[k];
+  for (const k of ["asCd", "asRoom", "asAtkAt", "asHits", "asSplit", "asRapids", "asFists", "asWaves", "asAwake", "asAwakeAt", "asStep", "asPound", "asPoundCd", "asFury", "asFuryAt", "asStepBig", "asDash", "asRolls", "asLog", "asLogT"] as const) delete p[k];
 }
