@@ -85,6 +85,8 @@ function pauseTick(s: RunState): void {
     const dmg = u.dmg * (ENEMIES[e.kind].boss ? U.bossMul : 1);
     while (u.hits < due && alive(e)) {
       u.hits++;
+      u.hitId = e.id;
+      u.hitAt = s.tick;
       iceHit(s, e, dmg, u.dx, u.dy);
       if (u.hits % 3 === 0) addEffect(s, { kind: "bsUltHit", x: e.x, y: e.y, dirX: u.dx, dirY: u.dy, size: e.r, style: u.hits, maxTicks: 10 });
     }

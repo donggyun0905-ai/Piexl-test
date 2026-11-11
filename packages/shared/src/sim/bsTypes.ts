@@ -56,6 +56,9 @@ export interface BsUlt {
   hits: number;
   done: number[];
   dmg: number;
+  /** 마지막으로 때린 적·틱 (화면이 60연타 피해 숫자를 하나씩 따로 띄움) */
+  hitId?: number;
+  hitAt?: number;
 }
 
 export interface BingseolPlayerState {

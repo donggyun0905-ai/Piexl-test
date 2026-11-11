@@ -166,7 +166,7 @@ describe("빙설", () => {
       idle(s, K.bsUlt.charge - 2);
       expect(s.player.bsUlt!.pause).toBe(0);
       let paused = false;
-      for (let i = 0; i < 200 && s.player.bsUlt; i++) {
+      for (let i = 0; i < 400 && s.player.bsUlt; i++) {
         idle(s, 1);
         if ((s.player.bsUlt?.pause ?? 0) > 0) paused = true;
       }

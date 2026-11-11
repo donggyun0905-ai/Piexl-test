@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.21",
+    date: "2026-11-11",
+    items: {
+      ko: ["빙설 궁극기 빙설창: 60연타 피해 숫자가 합쳐지지 않고 한 대마다 따로 떠오름 · 적마다 멈추는 슬로우 모션을 0.5초 → 1초로 (한 틱에 한 번씩 60번)"],
+      en: ["Bingseol Frostsnow Lance: its 60-hit combo now shows a separate damage number for every hit instead of merging them · slow-motion stop at each foe lengthened from 0.5s to 1s (one hit per tick, 60 hits)"],
+      ja: ["氷雪・奥義氷雪槍：60連打のダメージ数字がまとめられず一発ごとに表示される・敵ごとに止まるスローモーションを0.5秒→1秒に（1ティックに1回ずつ60回）"],
+    },
+  },
+  {
     version: "0.52.20",
     date: "2026-11-11",
     items: {

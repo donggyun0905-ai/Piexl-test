@@ -14,6 +14,9 @@ import type { Snap } from "./render/palette";
 const LIFE = 30;
 const RISE = 10;
 const MAX_NUMBERS = 30;
+/** 빙설 궁극기 60연타: 한 대마다 따로 띄움 (합치지 않음) · 그 적에게 남기는 수 · 전체 최대 수 */
+const RAPID_PER_ENEMY = 40;
+const RAPID_MAX = 80;
 const PER_ENEMY = 3;
 /** 숫자가 뜬 뒤 이만큼(틱) 안에 같은 적이 또 맞으면 합침 (한꺼번에 맞은 빔·폭발 등이 겹치지 않게) */
 const MERGE_TICKS = 4;
@@ -82,7 +85,7 @@ export class DamageTracker {
       this.hp.set(e.id, e.hp);
       const crit = e.critTick !== undefined && e.critTick !== this.crits.get(e.id);
       if (e.critTick !== undefined) this.crits.set(e.id, e.critTick);
-      if (before !== undefined && before > e.hp) this.split(s, e, before - Math.max(0, e.hp), crit);
+      if (before !== undefined && before > e.hp) this.split(s, e, before - Math.max(0, e.hp), crit, s.player.bsUlt?.hitId === e.id && s.player.bsUlt.hitAt === s.tick);
     }
     // 이번 틱에 쓰러진 적: 남아 있던 체력만큼
     for (const [id, before] of this.hp) {
@@ -97,7 +100,7 @@ export class DamageTracker {
   }
 
   /** 이번 틱에 준 체력을 상태이상 종류별 · 나머지(보통·치명타)로 나눠 띄움 */
-  private split(s: RunState, e: EnemyState, amount: number, crit: boolean): void {
+  private split(s: RunState, e: EnemyState, amount: number, crit: boolean, rapid = false): void {
     let left = amount;
     if (e.dotTick !== undefined && e.dotTick !== this.dots.get(e.id)) {
       this.dots.set(e.id, e.dotTick);
@@ -108,12 +111,12 @@ export class DamageTracker {
         left -= a;
       }
     }
-    if (left > 0.001) this.hit(s, e.id, e.x, e.y - e.r, left, e.kind === "dummy" && !e.svBox, crit ? "crit" : "hit");
+    if (left > 0.001) this.hit(s, e.id, e.x, e.y - e.r, left, e.kind === "dummy" && !e.svBox, crit ? "crit" : "hit", rapid);
   }
 
-  private hit(s: RunState, id: number, x: number, y: number, amount: number, isDummy: boolean, kind: NumKind): void {
+  private hit(s: RunState, id: number, x: number, y: number, amount: number, isDummy: boolean, kind: NumKind, rapid = false): void {
     // 치명타·상태이상은 따로 띄움 (같은 종류끼리만 합침, 상태이상 숫자는 조금 옆에)
-    const recent = this.numbers.find((n) => n.enemyId === id && n.kind === kind && s.tick - n.born < MERGE_TICKS);
+    const recent = rapid ? undefined : this.numbers.find((n) => n.enemyId === id && n.kind === kind && s.tick - n.born < MERGE_TICKS);
     if (recent) recent.amount += amount;
     else {
       // 이 적에게 아직 떠 있는 숫자 수만큼 황금각으로 돌려 사방으로 흩뿌림 (멀리·높이도 조금씩 다르게)
@@ -121,10 +124,11 @@ export class DamageTracker {
       const ang = slot * 2.4 + id;
       const far = 7 + (slot % 3) * 5;
       this.numbers.push({ enemyId: id, x, y, amount, born: s.tick, kind, ox: Math.cos(ang) * far, oy: -Math.abs(Math.sin(ang)) * far * 0.7 - (slot % 4) * 3 });
-      if (this.numbers.length > MAX_NUMBERS) this.numbers.shift();
+      if (this.numbers.length > (rapid ? RAPID_MAX : MAX_NUMBERS)) this.numbers.shift();
       // 같은 적의 오래된 숫자는 최근 몇 개만
       const mine = this.numbers.filter((n) => n.enemyId === id);
-      if (mine.length > PER_ENEMY) this.numbers = this.numbers.filter((n) => !mine.slice(0, mine.length - PER_ENEMY).includes(n));
+      const keep = rapid ? RAPID_PER_ENEMY : PER_ENEMY;
+      if (mine.length > keep) this.numbers = this.numbers.filter((n) => !mine.slice(0, mine.length - keep).includes(n));
     }
     if (!isDummy) {
       this.dealt[kind] = (this.dealt[kind] ?? 0) + amount;

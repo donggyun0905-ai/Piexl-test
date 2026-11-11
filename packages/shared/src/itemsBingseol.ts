@@ -34,7 +34,7 @@ export const BINGSEOL_PERKS = {
    * 궁극기-빙설창: 공격마다 확률 · 기 모으는 틱 · 한 틱에 나아가는 거리 · 반지름
    * 적 하나에 멈춰 때리는 수 · 그 동안 틱(슬로우 모션) · 적 하나에 주는 피해 배율(모두 합쳐) · 보스 피해 배율 · 슬로우 동안 적 탄 빠르기
    */
-  bsUlt: { chance: 0.03, charge: 180, speed: 6, r: 14, hits: 60, pause: 30, mul: 9, bossMul: 0.6, shotSlow: 0.25 },
+  bsUlt: { chance: 0.03, charge: 180, speed: 6, r: 14, hits: 60, pause: 60, mul: 9, bossMul: 0.6, shotSlow: 0.25 },
   /** 빙설무장-활: 공격마다 확률 · 맵에 가장 많이 · 몸에서 떨어진 거리 · 서 있는 틱 · 몇 틱마다 화살 · 찾는 거리 · 화살 피해 배율 · 화살 빠르기 */
   bsBow: { chance: 0.12, max: 2, side: 24, life: 600, every: 30, dist: 170, mul: 0.8, speed: 6 },
   /** 빙설무장-창: 공격마다 확률 · 창 수(가장 적게·많게) · 하나씩 생기는 틱 · 다 생긴 뒤 날아가기까지 틱 · 피해 배율 · 빠르기 · 반지름 */
