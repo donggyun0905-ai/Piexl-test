@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.34",
+    date: "2026-11-12",
+    items: {
+      ko: ["백인장: 전용 패시브 9개 추가 (모두 20개) — 편대 증설(드론 8기) · 과열 드릴(드론이 더 세게·자주) · 혈흔(드론에 찔리면 출혈) · 표적 공유(표식 붙은 적을 드론 전부가 노림·2배) · 연환(콤보를 끝내면 5초 공격 속도 +30%) · 잔월(기본 검격이 날아가 한 번 더 벰) · 날개 과부하(확률 기술 +5%p) · 사신의 계약(표식·출혈·죽음 걸린 적 처치 시 회복·스킬 대기 감소) · 강철 날개(받는 피해 -12%·돌진베기 뒤 잠깐 무적)"],
+      en: ["Baekinjang: 9 more exclusive passives (20 in all) — Expanded Squadron (8 drones) · Overheated Drills (drones hit harder and more often) · Bloodstain (drone stabs cause bleeding) · Shared Target (all drones hunt the marked foe · 2x) · Unbroken Chain (+30% attack speed for 5s after finishing the combo) · Waning Moon (the basic slash flies on and cuts once more) · Wing Overload (+5%p to chance skills) · Reaper's Pact (killing a marked, bleeding or Death-struck foe heals and cuts skill cooldowns) · Steel Wings (-12% damage taken · brief invulnerability after the rush)"],
+      ja: ["百人長：専用パッシブを9個追加（全部で20個）— 編隊増設（ドローン8機）・過熱ドリル（ドローンがより強く頻繁に）・血痕（ドローンに刺されると出血）・標的共有（刻印の敵を全機が狙う・2倍）・連環（コンボを決めると5秒攻撃速度+30%）・残月（通常の斬撃が飛んでもう一度斬る）・翼の過負荷（確率技+5%p）・死神の契約（刻印・出血・死の敵を倒すと回復・スキル待機減少）・鋼鉄の翼（被ダメージ-12%・突進斬り後に少し無敵）"],
+    },
+  },
+  {
     version: "0.52.33",
     date: "2026-11-12",
     items: {

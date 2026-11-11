@@ -26,6 +26,9 @@ export const bjTaken = (s: RunState, e: EnemyState) => (bjMarked(s, e) ? 1 + K.b
 /** 표식 붙은 적이 치명타로 맞을 확률 증가 */
 export const bjCritAdd = (s: RunState, e: EnemyState) => (bjMarked(s, e) ? K.bjEye.crit : 0);
 
+/** 백인장이 받는 피해 배율 (강철 날개) */
+export const bjHurtMul = (p: P) => (isBaekinjang(p) && hasBj(p, "bjSteel") ? K.bjSteel.taken : 1);
+
 /** 가장 가까운 적 (x·y에서 dist 안, 바라보는 쪽을 조금 먼저) */
 export function bjNearest(s: RunState, x: number, y: number, dist: number, fx = 0, fy = 0): EnemyState | null {
   let best: EnemyState | null = null;

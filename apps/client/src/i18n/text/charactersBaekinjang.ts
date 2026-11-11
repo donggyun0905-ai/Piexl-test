@@ -3,9 +3,9 @@ export const CHARACTER_TEXT_BAEKINJANG = {
   baekinjang: { ko: "백인장", en: "Baekinjang", ja: "百人長" },
   bloodBlades: { ko: "혈월 쌍검", en: "Blood Moon Twin Blades", ja: "血月の双剣" },
   baekinjangDesc: {
-    ko: "실베르의 기계 날개 기사 · 양손 단검으로 앞을 X자로 벰 (혈월 쌍검격) · 늘 미니 창 드론 5기가 붉은 레이저를 남기며 적을 쫓아가 찌르고 돌아와 다시 찌름 · 전용 패시브로 콤보(적색 난무 → 선혈 회전참 → 섬광 돌진베기), 확률 원거리 기술 4개, 숫자 키 스킬 4개(궁극기 종언의 붉은 날개)가 열림",
-    en: "Silber's mech-winged knight · twin daggers carve an X ahead (Blood Moon Twin Slash) · five mini lance drones always chase foes, trailing red lasers, stab, fly past and come back to stab again · exclusive passives unlock a combo (Crimson Flurry → Bloodspin Slash → Flash Rush Slash), four chance-based ranged skills and four number-key skills (ultimate: Red Wings of the End)",
-    ja: "シルベルの機械翼の騎士・両手の短剣で前をX字に斬る（血月双剣撃）・常にミニ槍ドローン5機が赤いレーザーを残して敵を追い、刺して通り過ぎ、戻ってまた刺す・専用パッシブでコンボ（赤色乱舞→鮮血回転斬→閃光突進斬り）、確率発動の遠距離技4つ、数字キースキル4つ（究極技・終焉の赤い翼）が解放される",
+    ko: "실베르의 기계 날개 기사 · 양손 단검으로 앞을 X자로 벰 (혈월 쌍검격) · 늘 미니 창 드론 5기가 붉은 레이저를 남기며 적을 쫓아가 찌르고 돌아와 다시 찌름 · 전용 패시브 20개: 콤보(적색 난무 → 선혈 회전참 → 섬광 돌진베기), 확률 원거리 기술 4개, 숫자 키 스킬 4개(궁극기 종언의 붉은 날개), 드론·콤보·생존 보조 9개",
+    en: "Silber's mech-winged knight · twin daggers carve an X ahead (Blood Moon Twin Slash) · five mini lance drones always chase foes, trailing red lasers, stab, fly past and come back to stab again · 20 exclusive passives: a combo (Crimson Flurry → Bloodspin Slash → Flash Rush Slash), four chance-based ranged skills, four number-key skills (ultimate: Red Wings of the End) and nine drone, combo and survival boosts",
+    ja: "シルベルの機械翼の騎士・両手の短剣で前をX字に斬る（血月双剣撃）・常にミニ槍ドローン5機が赤いレーザーを残して敵を追い、刺して通り過ぎ、戻ってまた刺す・専用パッシブ20個：コンボ（赤色乱舞→鮮血回転斬→閃光突進斬り）、確率発動の遠距離技4つ、数字キースキル4つ（究極技・終焉の赤い翼）、ドローン・コンボ・生存の補助9つ",
   },
   bjSkill1: { ko: "적안 표식", en: "Red Eye Mark", ja: "赤眼の刻印" },
   bjSkill2: { ko: "혈철 감옥", en: "Blood Iron Prison", ja: "血鉄の牢獄" },

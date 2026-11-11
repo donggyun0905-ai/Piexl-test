@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { BAEKINJANG_PASSIVES, BJ_PERKS as K } from "../itemsBaekinjang";
 import { BJ_BLADES as F, BJ_DRONE as D } from "../weaponsBaekinjang";
 import { bjSkills } from "./bjSkills";
-import { foeTaken } from "./classTaken";
+import { classTaken, foeTaken } from "./classTaken";
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
 import { recalcStats } from "./items";
 import { enemy } from "./perkTestUtil";
@@ -37,8 +37,8 @@ const lost = (s: RunState, i = 0) => HP - s.enemies[i]!.hp;
 const fx = (s: RunState, kind: string) => s.effects.filter((e) => e.kind === kind).length;
 
 describe("백인장", () => {
-  it("전용 패시브 11개 (모두 효과 아이템)", () => {
-    expect(Object.keys(BAEKINJANG_PASSIVES).length).toBe(11);
+  it("전용 패시브 20개 (모두 효과 아이템)", () => {
+    expect(Object.keys(BAEKINJANG_PASSIVES).length).toBe(20);
     expect(Object.values(BAEKINJANG_PASSIVES).every((v) => v.exclusive === "baekinjang" && v.effect)).toBe(true);
   });
 
@@ -145,6 +145,36 @@ describe("백인장", () => {
     expect(lost(s, 0)).toBeCloseTo(before * 2 + 0, 0);
     expect(fx(s, "bjCross")).toBe(2);
     expect(s.enemies[0]!.bjSum).toBeUndefined();
+  });
+
+  it("보조 패시브: 편대 증설 8기 · 과열 드릴·혈흔 · 표적 공유 · 잔월 · 강철 날개 · 사신의 계약", () => {
+    const s = bj([[200, 100]], "bjFleet", "bjStain");
+    idle(s, 80);
+    expect(s.player.bjDrones!.length).toBe(K.bjFleet.n);
+    expect(s.enemies[0]!.bjBleed).toBeGreaterThan(0);
+    const dps = (...perks: string[]) => {
+      const t = bj([[200, 100]], ...perks);
+      if (perks.includes("bjShare")) t.enemies[0]!.bjMark = 99999;
+      idle(t, 240);
+      return lost(t);
+    };
+    const base = dps();
+    expect(dps("bjHeat")).toBeGreaterThan(base * 1.5);
+    expect(dps("bjShare")).toBeGreaterThan(base * 1.6);
+    const w = bj([[80 + F.reach + 80, 100]], "bjWane");
+    noDrone(() => stepSim(w, hit));
+    expect(lost(w)).toBeCloseTo(w.player.stats.damage * K.bjWane.mul, 3);
+    expect(fx(w, "bjWane")).toBe(1);
+    const g = bj([], "bjSteel");
+    expect(classTaken(g, 100) / classTaken(bj([]), 100)).toBeCloseTo(K.bjSteel.taken, 5);
+    const k = bj([[105, 100]], "bjPact", "bjEye");
+    k.enemies[0]!.hp = k.enemies[0]!.maxHp = 5;
+    k.player.hp = 50;
+    k.player.bjSkillCd = [0, 300, 0, 0];
+    k.enemies[0]!.bjMark = 99999;
+    noDrone(() => stepSim(k, hit));
+    expect(k.player.hp).toBeGreaterThan(50);
+    expect(k.player.bjSkillCd![1]).toBeLessThanOrEqual(300 - K.bjPact.cut);
   });
 
   it("같은 시드·입력이면 같은 결과", () => {

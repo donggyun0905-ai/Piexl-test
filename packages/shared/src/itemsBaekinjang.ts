@@ -1,4 +1,4 @@
-// 백인장 전용 아이템: 콤보 3(적색 난무·선혈 회전참·섬광 돌진베기) · 확률 원거리 기술 4 · 스킬 개방 4(숫자 키 1~4)
+// 백인장 전용 아이템 20: 콤보 3(적색 난무·선혈 회전참·섬광 돌진베기) · 확률 원거리 기술 4 · 스킬 개방 4(숫자 키 1~4) · 보조 9(드론 4·콤보 2·확률 1·스킬/생존 2)
 // 효과는 sim/baekinjang·bjCombo·bjProcs·bjSkills·bjVolley. 수치는 BJ_PERKS
 import type { PassiveDef } from "./items";
 import type { StatMod } from "./stats";
@@ -28,6 +28,24 @@ export const BAEKINJANG_PASSIVES = {
   bjReaper: P("bjReaper", [{ stat: "damage", mul: 1.08 }]),
   /** 종언의 붉은 날개 (스킬 4·궁극기): 미니 드론 180기가 180번 찌름 · 끝에 살아남은 적에게 쌓인 피해를 한 번 더 */
   bjEnd: P("bjEnd", [{ stat: "damage", mul: 1.1 }]),
+  /** 편대 증설: 미니 창 드론이 늘어남 */
+  bjFleet: P("bjFleet", [{ stat: "attackSpeed", add: 0.05 }]),
+  /** 과열 드릴: 드론이 더 세게·더 자주 찌름 */
+  bjHeat: P("bjHeat", [{ stat: "damage", mul: 1.05 }]),
+  /** 혈흔: 드론에 찔린 적은 출혈 */
+  bjStain: P("bjStain", [{ stat: "luck", add: 2 }]),
+  /** 표적 공유: 적안 표식이 붙은 적을 드론 전부가 먼저 노리고 더 세게 찌름 */
+  bjShare: P("bjShare", [{ stat: "range", mul: 1.05 }]),
+  /** 연환: 섬광 돌진베기까지 콤보를 끝내면 잠깐 공격이 빨라짐 */
+  bjChain: P("bjChain", [{ stat: "attackSpeed", add: 0.05 }]),
+  /** 잔월: 기본 공격의 검격이 앞으로 날아가 줄 위의 적을 한 번 더 벰 */
+  bjWane: P("bjWane", [{ stat: "range", mul: 1.06 }]),
+  /** 날개 과부하: 확률 원거리 기술 4종이 더 자주 나감 */
+  bjOverload: P("bjOverload", [{ stat: "damage", mul: 1.05 }]),
+  /** 사신의 계약: 표식·출혈·죽음이 걸린 적을 처치하면 체력 회복 · 스킬 대기 감소 */
+  bjPact: P("bjPact", [{ stat: "maxHp", add: 15 }]),
+  /** 강철 날개: 받는 피해 감소 · 섬광 돌진베기가 끝난 뒤 잠깐 더 무적 */
+  bjSteel: P("bjSteel", [{ stat: "maxHp", add: 20 }]),
 } as const satisfies Record<string, PassiveDef>;
 
 /** 전용 아이템 수치 (피해 배율은 공격력 ×, 시간은 틱(60 = 1초), 거리는 픽셀, 확률은 0~1) */
@@ -54,4 +72,22 @@ export const BJ_PERKS = {
   bjReaper: { cd: 1200, dist: 220, r: 60, mul: 0.7, hits: 8, every: 4, star: 2, death: 300, pct: 0.02, bossDiv: 2 },
   /** 종언의 붉은 날개: 대기 틱 · 한 번 피해 배율 · 때리는 수 (한 틱에 한 번) */
   bjEnd: { cd: 3600, mul: 0.12, hits: 180 },
+  /** 편대 증설: 드론 수 */
+  bjFleet: { n: 8 },
+  /** 과열 드릴: 한 번 찌르는 피해 배율 · 다시 찌르기까지 틱 */
+  bjHeat: { mul: 0.2, cd: 21 },
+  /** 혈흔: 출혈 틱 · 0.5초 피해 배율 */
+  bjStain: { ticks: 180, mul: 0.1 },
+  /** 표적 공유: 표식 붙은 적에게 드론 피해 배율 */
+  bjShare: { mul: 2 },
+  /** 연환: 지속 틱 · 공격 속도 배율 */
+  bjChain: { ticks: 300, speed: 1.3 },
+  /** 잔월: 날아가는 거리 · 맞히는 너비 · 피해 배율 */
+  bjWane: { len: 110, w: 12, mul: 0.6 },
+  /** 날개 과부하: 확률 기술마다 더하는 확률 */
+  bjOverload: { add: 0.05 },
+  /** 사신의 계약: 회복량 · 줄어드는 스킬 대기 틱 */
+  bjPact: { heal: 2, cut: 60 },
+  /** 강철 날개: 받는 피해 배율 · 돌진베기 뒤 무적 틱 */
+  bjSteel: { taken: 0.88, invuln: 30 },
 };

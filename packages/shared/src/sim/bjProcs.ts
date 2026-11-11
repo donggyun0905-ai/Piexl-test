@@ -12,13 +12,14 @@ export function bjProcs(s: RunState): void {
   const k = reachOf(p);
   const [dx, dy] = [p.faceX, p.faceY];
   const dmg = p.stats.damage;
-  if (hasBj(p, "bjRain") && bjRoll(s, "bjRain") < K.bjRain.chance) {
+  const more = hasBj(p, "bjOverload") ? K.bjOverload.add : 0;
+  if (hasBj(p, "bjRain") && bjRoll(s, "bjRain") < K.bjRain.chance + more) {
     const R = K.bjRain;
     const len = R.len * k;
     bjVolley(s, { kind: "rain", x: p.x, y: p.y, dx, dy, r: len, dmg: dmg * R.mul, n: R.hits, every: R.every });
     addEffect(s, { kind: "bjRain", x: p.x + dx * len * 0.5, y: p.y + dy * len * 0.5, dirX: dx, dirY: dy, size: len * 0.6, maxTicks: R.hits * R.every + 6 });
   }
-  if (hasBj(p, "bjNeedle") && bjRoll(s, "bjNeedle") < K.bjNeedle.chance) {
+  if (hasBj(p, "bjNeedle") && bjRoll(s, "bjNeedle") < K.bjNeedle.chance + more) {
     const N = K.bjNeedle;
     const e = bjNearest(s, p.x, p.y, N.dist * k, dx, dy);
     if (e) {
@@ -26,14 +27,14 @@ export function bjProcs(s: RunState): void {
       addEffect(s, { kind: "bjNeedle", x: p.x + dx * 26, y: p.y + dy * 26 - 8, dirX: dx, dirY: dy, size: 30, maxTicks: 20 });
     }
   }
-  if (hasBj(p, "bjSpear") && bjRoll(s, "bjSpear") < K.bjSpear.chance) {
+  if (hasBj(p, "bjSpear") && bjRoll(s, "bjSpear") < K.bjSpear.chance + more) {
     const S = K.bjSpear;
     const len = S.len * k;
     const [tx, ty] = [p.x + dx * len, p.y + dy * len];
     for (const e of onSegment(s, p.x, p.y, tx, ty, S.w)) bjHit(s, e, dmg * S.mul, true);
     addEffect(s, { kind: "bjSpear", x: p.x, y: p.y, dirX: dx, dirY: dy, size: len, toX: tx, toY: ty, maxTicks: 20 });
   }
-  if (hasBj(p, "bjShock") && bjRoll(s, "bjShock") < K.bjShock.chance) {
+  if (hasBj(p, "bjShock") && bjRoll(s, "bjShock") < K.bjShock.chance + more) {
     const r = K.bjShock.r * k;
     bjArea(s, p.x, p.y, r, dmg * K.bjShock.mul, { knock: true });
     addEffect(s, { kind: "bjShock", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, maxTicks: 20 });

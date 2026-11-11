@@ -5,7 +5,7 @@ import type { Snap } from "./palette";
 import { additive, easeOut, glow, shock, sparks, type Ctx } from "./pwFxBits";
 import { BJ, bjLaser, bjPic, ROW } from "./baekinjangArt";
 
-const EXTRA = new Set(["bjCross", "bjLine", "bjDroneHit"]);
+const EXTRA = new Set(["bjCross", "bjLine", "bjDroneHit", "bjWane"]);
 
 export function drawBaekinjangFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const row = ROW[fx.kind as keyof typeof ROW];
@@ -23,6 +23,12 @@ export function drawBaekinjangFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean
       bjLaser(ctx, x, y, snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y), 1 - f, fx.size);
       if (f < 0.4) additive(ctx, () => glow(ctx, snap(fx.toX ?? fx.x), snap(fx.toY ?? fx.y), 7, BJ.light, 0.8, 0.3));
       return true;
+    case "bjWane": {
+      // 잔월: 초승달 검격 한 칸이 앞으로 날아가며 옅어짐
+      const k = easeOut(f);
+      bjPic(ctx, ROW.bjSlash, 1, x + (snap(fx.toX ?? fx.x) - x) * k, y + (snap(fx.toY ?? fx.y) - y) * k, fx.size * 2.4, 1 - f * 0.8, ang + Math.PI / 2);
+      return true;
+    }
     case "bjDroneHit":
       sparks(ctx, x, y, 4, fx.size * (0.6 + f), f, BJ.light, fx.ticks, a);
       return true;

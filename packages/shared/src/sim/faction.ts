@@ -3,6 +3,7 @@
 import { puppetKill } from "./puppetCorpse";
 import { rabbitKill } from "./rabbitCarrot";
 import { asuraKill } from "./asSoul";
+import { bjKill } from "./bjSoul";
 import { baekKill } from "./baekSoul";
 import type { CharacterId } from "../characters";
 import { FACTION_HEAT as H, FACTION_MEMBERS, FACTION_TAINT as T, FACTION_TIDE as W, type FactionTrait } from "../factionDefs";
@@ -68,6 +69,7 @@ export function factionKill(s: RunState, e: EnemyState): void {
   puppetKill(s, e);
   rabbitKill(s, e);
   asuraKill(s, e);
+  bjKill(s, e);
   baekKill(s, e);
 }
 

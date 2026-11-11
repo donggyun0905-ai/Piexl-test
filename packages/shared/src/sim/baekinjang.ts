@@ -37,6 +37,13 @@ function attack(s: RunState): number {
     bjArea(s, x, y, r, dmg * F.mul);
     bjArea(s, x, y, r, dmg * F.mul);
     addEffect(s, { kind: "bjSlash", x, y, dirX: dx, dirY: dy, size: r, maxTicks: 14 });
+    if (hasBj(p, "bjWane")) {
+      // 잔월: 검격이 앞으로 날아가 줄 위의 적을 한 번 더
+      const W = K.bjWane;
+      const [tx, ty] = [x + dx * W.len * k, y + dy * W.len * k];
+      for (const e of onSegment(s, x, y, tx, ty, W.w * k)) bjHit(s, e, dmg * W.mul);
+      addEffect(s, { kind: "bjWane", x, y, dirX: dx, dirY: dy, size: r * 0.8, toX: tx, toY: ty, maxTicks: 14 });
+    }
     return F.cd;
   }
   if (st === 1) {
@@ -73,6 +80,8 @@ function rushTick(s: RunState): void {
     bjHit(s, e, r.dmg, true);
   }
   if (--r.t > 0) return;
+  if (hasBj(p, "bjSteel")) p.invulnTicks = Math.max(p.invulnTicks, K.bjSteel.invuln);
+  if (hasBj(p, "bjChain")) p.bjHaste = s.tick + K.bjChain.ticks;
   addEffect(s, { kind: "bjDash", x: r.sx, y: r.sy, dirX: r.dx, dirY: r.dy, size: 22, toX: p.x, toY: p.y, maxTicks: 18 });
   delete p.bjRush;
 }
@@ -93,7 +102,7 @@ export function baekinjangTick(s: RunState, want: boolean, speed: number): void 
   if ((p.bjCd ?? 0) > 0) p.bjCd = (p.bjCd ?? 0) - 1;
   if (want && (p.bjCd ?? 0) <= 0 && !p.bjRush) {
     p.attackCount++;
-    p.bjCd = Math.max(6, Math.round(attack(s) / Math.max(0.3, speed)));
+    p.bjCd = Math.max(6, Math.round(attack(s) / Math.max(0.3, speed * ((p.bjHaste ?? 0) > s.tick ? K.bjChain.speed : 1))));
     bjProcs(s);
   }
   rushTick(s);
@@ -105,5 +114,5 @@ export function baekinjangTick(s: RunState, want: boolean, speed: number): void 
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetBaekinjang(p: P): void {
-  for (const k of ["bjCd", "bjRoom", "bjAtkAt", "bjStep", "bjDrones", "bjVolleys", "bjRush", "bjSkillCd", "bjRolls"] as const) delete p[k];
+  for (const k of ["bjCd", "bjRoom", "bjAtkAt", "bjStep", "bjDrones", "bjVolleys", "bjRush", "bjSkillCd", "bjRolls", "bjHaste"] as const) delete p[k];
 }

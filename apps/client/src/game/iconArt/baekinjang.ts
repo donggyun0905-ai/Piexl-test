@@ -1,4 +1,4 @@
-// 실베르 백인장 아이콘: 붉은 초승달 검격·은빛 드릴·기계 날개 · 무기 1 (혈월 쌍검) · 전용 아이템 11
+// 실베르 백인장 아이콘: 붉은 초승달 검격·은빛 드릴·기계 날개 · 무기 1 (혈월 쌍검) · 전용 아이템 20
 import type { Pen } from "./pen";
 
 const RED = "#ff2a3a";
@@ -37,4 +37,13 @@ export const BJ_PASSIVE_ART = {
   bjPrison: (g: Pen) => g.line(3, 4, 3, 14, STEEL).line(6, 3, 6, 14, STEEL).line(10, 3, 10, 14, STEEL).line(13, 4, 13, 14, STEEL).line(2, 14, 14, 14, RED).line(3, 8, 13, 10, DEEP).px(8, 1, RED),
   bjReaper: (g: Pen) => g.line(8, 1, 8, 15, RED).line(1, 8, 15, 8, RED).line(3, 3, 13, 13, LIGHT).line(13, 3, 3, 13, LIGHT).disc(8, 8, 1, WHITE),
   bjEnd: (g: Pen) => wings(wings(g, 8, 5), 8, 9, DEEP).line(8, 1, 8, 15, WHITE).line(5, 5, 11, 5, LIGHT),
+  bjFleet: (g: Pen) => drill(drill(drill(drill(g, 1, 3), 9, 3), 1, 8), 9, 8).line(3, 13, 12, 13, RED).px(8, 11, WHITE),
+  bjHeat: (g: Pen) => drill(g, 5, 9).line(4, 2, 5, 5, RED).line(8, 1, 8, 5, LIGHT).line(12, 2, 11, 5, RED).line(2, 13, 13, 13, DEEP),
+  bjStain: (g: Pen) => g.disc(8, 10, 3, RED).line(8, 2, 6, 7, RED).line(8, 2, 10, 7, RED).px(7, 9, WHITE).px(3, 13, DEEP).px(13, 12, DEEP),
+  bjShare: (g: Pen) => drill(drill(g.ring(11, 8, 3, RED).px(11, 8, WHITE), 1, 4), 1, 12).line(6, 5, 8, 7, LIGHT).line(6, 11, 8, 9, LIGHT),
+  bjChain: (g: Pen) => g.ring(4, 8, 3, RED).ring(8, 8, 3, LIGHT).ring(12, 8, 3, RED).line(1, 13, 14, 13, DEEP).px(15, 13, WHITE),
+  bjWane: (g: Pen) => moon(moon(g, 3, 8, 5, DEEP), 9, 8, 6).line(13, 8, 15, 8, WHITE).px(14, 5, LIGHT).px(14, 11, LIGHT),
+  bjOverload: (g: Pen) => wings(g, 8, 8).line(9, 1, 6, 7, WHITE).line(6, 7, 10, 8, WHITE).line(10, 8, 7, 14, WHITE),
+  bjPact: (g: Pen) => g.line(11, 2, 5, 14, STEEL).line(11, 2, 5, 3, RED).line(5, 3, 2, 6, RED).disc(11, 11, 2, RED).px(11, 11, WHITE),
+  bjSteel: (g: Pen) => wings(g.rect(6, 5, 5, 7, DARK).line(6, 5, 10, 5, STEEL).line(8, 6, 8, 10, LIGHT), 8, 8, STEEL),
 };

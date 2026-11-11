@@ -51,6 +51,8 @@ export interface BaekinjangPlayerState {
   bjRush?: BjRush;
   /** 스킬 1~4 남은 대기 틱 */
   bjSkillCd?: number[];
+  /** 연환: 공격이 빨라지는 마지막 틱 */
+  bjHaste?: number;
   /** 확률 굴린 수 (시드) */
   bjRolls?: number;
 }
@@ -68,5 +70,5 @@ export interface BaekinjangEnemyState {
   bjSum?: number;
 }
 
-/** 효과: 혈월 쌍검격 · 적색 난무 · 선혈 회전참 · 섬광 돌진베기 · 붉은 날개 폭우 · 추적 침격 · 관통 나선창 · 기계익 충격파 · 적안 표식 · 혈철 감옥 · 사신의 팔연참 · 종언의 붉은 날개 · 붉은 십자 · 붉은 레이저 선 · 드론 찌름 */
-export type BaekinjangFx = "bjSlash" | "bjFlurry" | "bjSpin" | "bjDash" | "bjRain" | "bjNeedle" | "bjSpear" | "bjShock" | "bjEye" | "bjPrison" | "bjReaper" | "bjEnd" | "bjCross" | "bjLine" | "bjDroneHit";
+/** 효과: 혈월 쌍검격 · 적색 난무 · 선혈 회전참 · 섬광 돌진베기 · 붉은 날개 폭우 · 추적 침격 · 관통 나선창 · 기계익 충격파 · 적안 표식 · 혈철 감옥 · 사신의 팔연참 · 종언의 붉은 날개 · 붉은 십자 · 붉은 레이저 선 · 드론 찌름 · 잔월(날아가는 검격) */
+export type BaekinjangFx = "bjSlash" | "bjFlurry" | "bjSpin" | "bjDash" | "bjRain" | "bjNeedle" | "bjSpear" | "bjShock" | "bjEye" | "bjPrison" | "bjReaper" | "bjEnd" | "bjCross" | "bjLine" | "bjDroneHit" | "bjWane";
