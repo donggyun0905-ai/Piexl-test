@@ -1,6 +1,6 @@
 // 비밀의 방 소리: 벽 무너짐(돌 구르는 굉음) · 악마 거래(낮은 울림 + 비명 같은 미끄럼)·거절 · 절규(짧은 파열) · 야바위 섞기(탁탁)·당첨(금화 쏟아짐)·꽝(낮은 부웅)
 // · 경매 입찰(띠링)·낙찰(망치 쾅 + 종)·돈 날림(바스락) · 방 곡: 악마(어두운 오르간) · 도박꾼(흥겨운 스윙) · 경매장(점잖은 왈츠)
-import { GAMBLE, gambleNow, type RunState } from "@pixel-rogue/shared";
+import { GAMBLE, gambleNow, gambleTrick, type RunState } from "@pixel-rogue/shared";
 import { beatOf, type Song } from "./altarSound";
 import { noise, tone } from "./sound";
 
@@ -45,6 +45,15 @@ export const VAULT_SOUNDS = {
     noise(0.45, 0.07, 4500);
     for (let i = 0; i < 6; i++) tone({ type: "square", from: 2400 + (i % 3) * 400, dur: 0.03, vol: 0.03, delay: i * 0.07 });
   },
+  // 야바위 방해: 연막 · 카드 뿌리기 · 금화 폭죽
+  vaultSmoke: () => noise(0.7, 0.3, 400),
+  vaultCards: () => {
+    noise(0.4, 0.14, 3000);
+    for (let i = 0; i < 6; i++) tone({ type: "square", from: 900, to: 500, dur: 0.03, vol: 0.05, delay: i * 0.06 });
+  },
+  vaultCoins: () => {
+    for (let i = 0; i < 6; i++) tone({ type: "square", from: 1400 + i * 180, to: 1900 + i * 180, dur: 0.07, vol: 0.09, delay: i * 0.05 });
+  },
 };
 export type VaultSfx = keyof typeof VAULT_SOUNDS;
 
@@ -57,14 +66,17 @@ const BEATS = Object.fromEntries(Object.entries(SONGS).map(([id, song]) => [id, 
 /** 비밀의 방 곡 (audio/roomMusic이 켜고 끔) */
 export const vaultMusic = (type: string) => BEATS[type as keyof typeof SONGS] ?? null;
 
-/** 소리 낼 것 (audio/runSounds가 틱마다 비교): 이번 틱에 새로 생긴 효과 · 야바위 섞은 횟수 */
+/** 소리 낼 것 (audio/runSounds가 틱마다 비교): 이번 틱에 새로 생긴 효과 · 야바위 섞은 횟수 · 야바위 방해 (몇 번째 × 3 + 종류, 없으면 -1) */
 export interface VaultSeen {
   fx: string;
   cups: number;
+  trick: number;
 }
 export function vaultSeen(s: RunState): VaultSeen {
   const g = gambleNow(s);
+  const tr = g ? gambleTrick(g, s.tick) : null;
   return {
+    trick: tr ? tr.n * 3 + tr.kind : -1,
     fx: [...new Set(s.effects.filter((f) => f.kind.startsWith("sr") && f.ticks >= f.maxTicks - 1).map((f) => f.kind))].join(","),
     cups: g && g.pick === undefined ? Math.min(GAMBLE.swaps, Math.floor((s.tick - (g.at ?? 0) - GAMBLE.show) / GAMBLE.swapTicks)) : -1,
   };
@@ -74,5 +86,6 @@ const CUES = [["srCrumble", "vaultCrumble"], ["srDeal", "vaultDeal"], ["srRefuse
 export function vaultCues(now: VaultSeen, seen: VaultSeen | undefined): VaultSfx[] {
   const out: VaultSfx[] = CUES.filter(([k]) => now.fx.includes(k)).map(([, sfx]) => sfx);
   if (now.cups >= 0 && now.cups !== seen?.cups && now.cups < GAMBLE.swaps) out.push("vaultShuffle");
+  if (now.trick >= 0 && now.trick !== seen?.trick) out.push((["vaultSmoke", "vaultCards", "vaultCoins"] as const)[now.trick % 3]!);
   return out;
 }

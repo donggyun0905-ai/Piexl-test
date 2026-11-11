@@ -51,7 +51,7 @@ export { awakened } from "./buildAwaken";
 export { FORGE_OP, FORGE_RULES, forgeChance, forgeCost, forgeOf, type ForgeMark } from "./forge";
 export { crackHere, crackSpot } from "./vault";
 export { devilCost, devilPact, offerY, statueY } from "./devil";
-export { CUP_GAP, CUP_PAIRS, cupState, cupY, GAMBLE_OP, TABLE as GAMBLE_TABLE, gambleDone, gamblerY, gambleNow, gambleUsed } from "./gamble";
+export { CUP_GAP, CUP_PAIRS, cupState, cupY, GAMBLE_OP, TABLE as GAMBLE_TABLE, gambleDone, gamblerY, gambleNow, gambleTrick, gambleUsed } from "./gamble";
 export { AUCTION_OP, auctionHere, goingStage, HOST_DX, hostY, LOT_GAP, lotHidden, lotY, mySeatY, nextBid, SHADOW_SEATS } from "./auction";
 export type { AuctionLot, AuctionState } from "./vaultTypes";
 export { runSkill } from "./swarmEvo";

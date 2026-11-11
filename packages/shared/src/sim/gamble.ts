@@ -48,6 +48,21 @@ export function cupState(g: Gamble, tick: number): { slots: number[]; pair: read
   return { slots, pair, f: pair ? (t % GAMBLE.swapTicks) / GAMBLE.swapTicks : 0, show: false };
 }
 
+/** 섞는 동안 방해가 시작되는 때 (섞는 시간에 대한 비율) */
+const TRICK_AT = [0.14, 0.44, 0.74];
+/** 섞는 동안 방해 3번 (눈속임 · 화면·소리 전용, 결과는 안 바뀜): n = 몇 번째 · kind = 0 연막 · 1 카드 뿌리기 · 2 금화 폭죽 (판마다 순서가 다름) · f = 진행 0~1 */
+export function gambleTrick(g: Gamble, tick: number): { n: number; kind: number; f: number } | null {
+  const swaps = g.swaps ?? [];
+  const t = tick - (g.at ?? 0) - GAMBLE.show;
+  const total = swaps.length * GAMBLE.swapTicks;
+  if (g.pick !== undefined || t < 0 || t >= total) return null;
+  for (let n = 0; n < TRICK_AT.length; n++) {
+    const f = (t - Math.floor(total * TRICK_AT[n]!)) / GAMBLE.trickTicks;
+    if (f >= 0 && f < 1) return { n, kind: (n + (swaps[0] ?? 0) + (g.prize ?? 0)) % 3, f };
+  }
+  return null;
+}
+
 /** 탁자 앞(아래)에 F 자리 (도박꾼은 탁자 너머에 있음) */
 export function spawnGamble(s: RunState, roomId: number): void {
   addPickup(s, roomId, "gambler", "0", CX, cupY() + TABLE.front, 0);

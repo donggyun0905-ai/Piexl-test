@@ -6,7 +6,7 @@ import { auctionHere } from "./auction";
 import { extraOf } from "./baseStats";
 import { devilCost, devilPact } from "./devil";
 import { devilMul } from "./devilPerks";
-import { cupState, cupY, GAMBLE_OP, gambleDone, gambleNow, TABLE as GAMBLE_TABLE } from "./gamble";
+import { cupState, cupY, GAMBLE_OP, gambleDone, gambleNow, gambleTrick, TABLE as GAMBLE_TABLE } from "./gamble";
 import { CX } from "./loot";
 import { openChest } from "./trialRewards";
 import { enemy } from "./perkTestUtil";
@@ -156,6 +156,20 @@ describe("악마의 방", () => {
 });
 
 describe("도박꾼의 방", () => {
+  it("섞는 동안(4초 넘게) 방해가 3번, 종류가 모두 다름 · 다 섞이면 없음", () => {
+    const s = inRoom("gamble");
+    menu(s, menuCode(GAMBLE_OP, 0));
+    const g = gambleNow(s)!;
+    expect(gambleDone(g) - g.at! - GAMBLE.show).toBeGreaterThanOrEqual(4 * 60);
+    const seen = new Map<number, number>();
+    for (let t = g.at!; t < gambleDone(g); t++) {
+      const tr = gambleTrick(g, t);
+      if (tr) seen.set(tr.n, tr.kind);
+    }
+    expect(seen.size).toBe(3);
+    expect(new Set(seen.values()).size).toBe(3);
+    expect(gambleTrick(g, gambleDone(g))).toBeNull();
+  });
   it("다 섞인 뒤 당첨 상자를 고르면 패시브 5 · 300원 · 능력치 상자 2", () => {
     const s = inRoom("gamble");
     menu(s, menuCode(GAMBLE_OP, 0));

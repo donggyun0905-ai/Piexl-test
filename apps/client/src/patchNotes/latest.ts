@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.36",
+    date: "2026-11-12",
+    items: {
+      ko: [
+        "도박꾼의 야바위: 섞는 시간이 3초 길어짐 (10번 → 28번) · 섞는 동안 방해 3번 — 연막이 탁자를 덮음 · 도박꾼이 카드를 뿌림 · 방 한쪽에서 금화 폭죽 (판마다 순서가 다름)",
+        "결과 창 요약: 피해 상세 추가 — 보통 공격 · 치명타 · 상태이상 종류 전부를 많이 준 순서로, 피해량 · 비율 · 막대로 보여 줌",
+      ],
+      en: [
+        "Gambler's shell game: shuffling lasts 3 seconds longer (10 → 28 swaps) · three distractions during the shuffle — smoke covers the table · the gambler throws cards · a coin burst goes off at one side of the room (order differs each game)",
+        "Result summary: damage breakdown added — normal hits, criticals and every status type, highest first, with amount, share and a bar",
+      ],
+      ja: [
+        "ギャンブラーのシェルゲーム：混ぜる時間が3秒長く（10回 → 28回）・混ぜている間に妨害が3回 — 煙幕がテーブルを覆う・ギャンブラーがカードをばらまく・部屋の片側で金貨の花火（毎回順番が変わる）",
+        "結果画面のまとめ：ダメージ内訳を追加 — 通常攻撃・クリティカル・すべての状態異常を多い順に、ダメージ量・割合・バーで表示",
+      ],
+    },
+  },
+  {
     version: "0.52.35",
     date: "2026-11-12",
     items: {

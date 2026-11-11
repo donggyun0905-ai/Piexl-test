@@ -3,7 +3,7 @@ import type { RoomType } from "@pixel-rogue/shared";
 import type { Lang, TextKey } from "../i18n";
 import { enemyName } from "../i18n/enemies";
 import { itemName } from "../i18n/items";
-import { DOT_COLOR } from "./damageNumbers";
+import { DOT_COLOR, type NumKind } from "./damageNumbers";
 import { formatTime } from "./hudText";
 import { ItemIcon } from "./itemIcon";
 import type { RunSummaryData } from "./runSummary";
@@ -26,12 +26,15 @@ const ROOM_KEY: Record<RoomType, TextKey> = {
   exit: "sumRoomExit",
   golden: "sumRoomGolden",
 };
-const DOT_KEY = { bleed: "sumBleed", burn: "sumBurn", poison: "sumPoison", curse: "sumCurse" } as const;
+/** 피해 상세 줄: 종류마다 글자 · 막대 색 (보통 공격 · 치명타 · 상태이상 전부) */
+const KIND_KEY: Record<NumKind, TextKey> = { hit: "sumHit", crit: "sumCrit", bleed: "sumBleed", burn: "sumBurn", poison: "sumPoison", curse: "sumCurse", storm: "sumDotStorm", rot: "sumDotRot", death: "sumDotDeath", hellfire: "sumDotHellfire", shock: "sumDotShock", frost: "sumDotFrost", tide: "sumDotTide", gold: "sumDotGold", radiance: "sumDotRadiance", voidbolt: "sumDotVoid", moon: "sumDotMoon", blueflame: "sumDotBlueflame" };
+const KIND_COLOR: Record<NumKind, string> = { ...DOT_COLOR, hit: "#e8e4f0", crit: "#ffd060", death: "#8a7a9a" };
 const num = (v: number) => Math.round(v).toLocaleString();
 
 export function RunSummary({ d, t, lang }: { d: RunSummaryData; t: (k: TextKey) => string; lang: Lang }) {
   const total = Object.values(d.dealt).reduce((a, b) => a + (b ?? 0), 0);
-  const pct = (v = 0) => (total > 0 ? `${Math.round((v / total) * 100)}%` : "0%");
+  const pct = (v = 0) => (total > 0 ? `${Math.round((v / total) * 1000) / 10}%` : "0%");
+  const rows = (Object.entries(d.dealt) as [NumKind, number][]).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
   return (
     <details className="run-summary" open>
       <summary>{t("sumTitle")}</summary>
@@ -60,20 +63,6 @@ export function RunSummary({ d, t, lang }: { d: RunSummaryData; t: (k: TextKey) 
         <dd>{num(total)}</dd>
         <dt>{t("sumBest")}</dt>
         <dd>{num(d.best)}</dd>
-        {(d.dealt.crit ?? 0) > 0 && (
-          <>
-            <dt>{t("sumCrit")}</dt>
-            <dd className="sum-crit">{pct(d.dealt.crit)}</dd>
-          </>
-        )}
-        {(Object.keys(DOT_KEY) as (keyof typeof DOT_KEY)[]).map((k) =>
-          (d.dealt[k] ?? 0) > 0 ? (
-            <div key={k} className="sum-row">
-              <dt style={{ color: DOT_COLOR[k] }}>{t(DOT_KEY[k])}</dt>
-              <dd>{pct(d.dealt[k])}</dd>
-            </div>
-          ) : null,
-        )}
         <dt>{t("sumTaken")}</dt>
         <dd>{num(d.taken)}</dd>
         <dt>{t("sumGold")}</dt>
@@ -85,6 +74,21 @@ export function RunSummary({ d, t, lang }: { d: RunSummaryData; t: (k: TextKey) 
           {d.bossKills} ({d.flawless})
         </dd>
       </dl>
+      {rows.length > 0 && (
+        <div className="sum-detail">
+          <small>{t("sumDetail")}</small>
+          {rows.map(([k, v]) => (
+            <div key={k} className="sum-bar">
+              <span style={{ color: KIND_COLOR[k] }}>{t(KIND_KEY[k])}</span>
+              <i>
+                <b style={{ width: `${(v / (rows[0]?.[1] ?? 1)) * 100}%`, background: KIND_COLOR[k] }} />
+              </i>
+              <span>{num(v)}</span>
+              <span>{pct(v)}</span>
+            </div>
+          ))}
+        </div>
+      )}
       {d.floors.length > 1 && (
         <div className="sum-floors">
           <small>{t("sumFloors")}</small>

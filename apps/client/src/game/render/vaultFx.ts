@@ -3,6 +3,7 @@
 // 악마의 거래 오라 (붉은 반점 검정 · 절규 파랑 · 십자가 빨강 · 리퍼 몸 뒤 낫) · 악마의 방 석상은 어둠 위에 (drawVaultOverlay)
 import { ROOM_HEIGHT, ROOM_WIDTH, type EffectState, type RunState } from "@pixel-rogue/shared";
 import { drawDevilStatue } from "./vaultDraw";
+import { drawGambleTricks } from "./gambleTricks";
 import { seatPos } from "./auctionDraw";
 import { additive, alpha, crescent, easeOut, glow, rnd, shock, sparks } from "./pwFxBits";
 import type { Snap } from "./palette";
@@ -161,7 +162,9 @@ export function drawDevilAura(ctx: Ctx, s: RunState, snap: Snap): void {
   if (p.passives.includes("devilReaper")) crescent(ctx, x - 8, y - 6, 9, -2.2 + Math.sin(t / 30) * 0.2, 1.3, 2, "#140a18", 0.85);
 }
 
-/** 어둠 위에: 악마의 방 석상 (붉은 눈·촛불이 어둠 속에 보임) */
+/** 어둠 위에: 악마의 방 석상 (붉은 눈·촛불이 어둠 속에 보임) · 야바위 방해 (상자를 가림) */
 export function drawVaultOverlay(ctx: Ctx, s: RunState): void {
-  if (s.map.rooms[s.roomId]?.type === "devil") drawDevilStatue(ctx, s, ROOM_WIDTH / 2);
+  const type = s.map.rooms[s.roomId]?.type;
+  if (type === "devil") drawDevilStatue(ctx, s, ROOM_WIDTH / 2);
+  else if (type === "gamble") drawGambleTricks(ctx, s, ROOM_WIDTH / 2);
 }

@@ -51,8 +51,26 @@
 .sum-row {
   display: contents;
 }
-.sum-crit {
-  color: #ffd060;
+.sum-detail {
+  margin-top: 8px;
+}
+.sum-bar {
+  display: grid;
+  grid-template-columns: 5.5em 1fr auto 3.4em;
+  gap: 6px;
+  align-items: center;
+  font-size: 12px;
+}
+.sum-bar i {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.sum-bar b {
+  display: block;
+  height: 100%;
+}
+.sum-bar span:nth-child(n + 3) {
+  text-align: right;
 }
 .sum-floors div {
   display: flex;
