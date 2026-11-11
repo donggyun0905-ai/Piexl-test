@@ -1,6 +1,6 @@
 # 빛 효과 층 (PixiJS·WebGL) 안내
 
-마지막 수정: 2026-11-05 15:46 (한국 시간)
+마지막 수정: 2026-11-11 16:50 (한국 시간)
 
 게임 화면은 Canvas 2D로 그리고, 그 **바로 위에 PixiJS(WebGL) 투명 캔버스 한 장**을 겹쳐 "빛나는 것"만 그린다 (0.49.36부터).
 디자인·이펙트를 만들 때 "이건 Canvas 2D로 그릴까, 빛 층으로 그릴까"를 정하는 기준과 쓰는 법을 적는다.
@@ -14,6 +14,7 @@
 | `game/glow/glowLayer.ts` | 게임 화면: 게임 카메라에 맞춰 그림 · `addWatch`로 상태 보기 더함 (`gameLoop`에서 만듦) |
 | `game/glow/glowWatch.ts` | 맞힘 불티·치명타 별빛 · 처치 폭발·보스 처치 번쩍 · 탄 꼬리(내 편 하늘색·적 붉게·보스 탄 크게) · 큰 공격(`BIG_FX`) · 내가 맞음 |
 | `game/glow/glowSkills.ts` | 각성(꼬리표 색)·필살기(`ULT_FX`) · 보스 궁극기 기 모음 · 회복·보호막·돈 · 바닥 아이템 빛·주움 · 용암 불티 · 어두운 장면 등불 |
+| `game/glow/glowSilber.ts` · `silberFxKinds.ts` | 크루세이더 뒤 실베르 캐릭터(조커·쉐도잉·인형술사·래빗·백령·빙설·아수라): 효과마다 색·세기 1~4 표 · 늘 켜진 빛(아수라 각성·날아가는 주먹·표식, 빙설 궁극기, 조커 카드, 쉐도잉 영혼, 백령 검기, 래빗 땅울림) — **새 실베르 캐릭터는 이 표에 효과 이름·색·세기를 더함** |
 | `game/glow/glowKinds.ts` | 크게 빛날 효과 이름 `BIG_FX`(빛·고리·불티)·`ULT_FX`(빛기둥·번쩍) — **새 캐릭터 큰 기술은 여기에 이름만 더함** |
 | `game/glow/glowHints.ts` | Canvas 2D → 빛 층 다리: `glowHint(ctx, x, y, 지름, 색)`·`glowHintRect` — 빛 층이 돌고 있으면 true(그리는 쪽은 `shadowBlur` 생략), 아니면 false(예전처럼 번짐) |
 | `game/glow/glowSkin.ts` | 한정 스킨·상점 이벤트 효과 조각(`limited/tigerFx`의 `parts`)에 빛을 더함 |

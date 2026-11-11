@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.26",
+    date: "2026-11-11",
+    items: {
+      ko: [
+        "빛 효과: 조커·쉐도잉·인형술사·래빗·백령·빙설·아수라의 기술에도 빛 층이 붙음 (캐릭터 색으로 빛·고리·불티 · 큰 기술은 더 크게 · 필살기는 빛기둥과 살짝 번쩍) · 날아가는 카드·영혼·검기·땅울림·빙설창도 은은하게 빛남",
+        "아수라 효과 다듬기: 파동은 두 겹 초승달 물결 · 악귀는 붉은 충격 고리와 가시 불티 · 3타·4타는 바닥 충격 고리 · 귀진은 둘레를 도는 귀신 손 빛 6개 · 각성은 시작할 때 빛기둥, 그동안 등 뒤에 은은한 빛",
+      ],
+      en: [
+        "Glow effects: Joker, Shadowing, Puppeteer, Rabbit, Baekryeong, Bingseol and Asura skills now light up on the glow layer (glow, rings and sparks in each character's color · bigger for big skills · ultimates get a light pillar and a soft flash) · flying cards, spirits, sword waves, quakes and the Frostsnow Lance glow softly too",
+        "Asura effects polished: Shockwave is a double crescent ripple · Fiend bursts with a red shock ring and spiky sparks · strikes 3 and 4 leave ground shock rings · Spirit Domain has six glowing spirit hands circling its edge · awakening starts with a light pillar and keeps a soft glow at her back",
+      ],
+      ja: [
+        "光の演出：ジョーカー・シャドウイング・人形使い・ラビット・白霊・氷雪・阿修羅の技にも光の層が付く（キャラクターの色で光・輪・火花・大技はより大きく・必殺技は光の柱と軽い閃光）・飛ぶカード・魂・剣気・地響き・氷雪槍もほのかに光る",
+        "阿修羅の演出を調整：波動は二重の三日月の波・悪鬼は赤い衝撃の輪とトゲの火花・3打・4打は床に衝撃の輪・鬼陣は縁を回る鬼神の手の光6つ・覚醒は始まりに光の柱、その間は背中にほのかな光",
+      ],
+    },
+  },
+  {
     version: "0.52.25",
     date: "2026-11-11",
     items: {

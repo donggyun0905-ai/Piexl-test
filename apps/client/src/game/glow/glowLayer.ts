@@ -1,5 +1,5 @@
 // 게임 화면 빛 층: 게임 캔버스(Canvas 2D) 바로 위에 GlowCanvas를 겹치고, 게임 카메라에 맞춰 효과를 그림
-// 상태 보기: 기본(glowWatch: 맞힘·처치·탄·큰 공격) + 각성·궁극기·지형·아이템(glowSkills) + 스킨 효과(glowSkin, addWatch로 붙임)
+// 상태 보기: 기본(glowWatch: 맞힘·처치·탄·큰 공격) + 각성·궁극기·지형·아이템(glowSkills) + 실베르 캐릭터(glowSilber) + 스킨 효과(glowSkin, addWatch로 붙임)
 import type { RunState } from "@pixel-rogue/shared";
 import { cameraFor } from "../camera";
 import { viewW } from "../viewSize";
@@ -7,6 +7,7 @@ import { GlowCanvas, type GlowCues } from "./glowCanvas";
 import { setGlowActive, takeGlowHints } from "./glowHints";
 import { hexColor } from "./glowParts";
 import type { GlowParts } from "./glowParts";
+import { GlowSilber } from "./glowSilber";
 import { GlowSkills } from "./glowSkills";
 import { GlowWatch } from "./glowWatch";
 
@@ -25,6 +26,7 @@ export function createGlowLayer(game: HTMLCanvasElement): GlowLayer {
   const glow = new GlowCanvas(game);
   const watch = new GlowWatch();
   const skills = new GlowSkills();
+  const silber = new GlowSilber();
   const extra: GlowWatcher[] = [];
   return {
     frame(view, zoom, alpha, stopped) {
@@ -36,6 +38,7 @@ export function createGlowLayer(game: HTMLCanvasElement): GlowLayer {
       if (!stopped) {
         watch.observe(view, glow.parts, glow.cues);
         skills.observe(view, glow.parts, glow.cues);
+        silber.observe(view, glow.parts, glow.cues);
         for (const x of extra) x(view, glow.parts, glow.cues);
       }
       const cam = cameraFor(view, zoom, alpha);
