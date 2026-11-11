@@ -63,6 +63,8 @@ export { BINGSEOL_WEAPONS, BS_FIELD, BS_SHOT, BS_STYLE } from "./weaponsBingseol
 export { BINGSEOL_PERKS } from "./itemsBingseol";
 export { ASURA_AWAKE, ASURA_FIST, ASURA_WEAPONS } from "./weaponsAsura";
 export { ASURA_PERKS } from "./itemsAsura";
+export { HONRYEONG_WEAPONS, HR_CLOUD, HR_STYLE } from "./weaponsHonryeong";
+export { HONRYEONG_PERKS } from "./itemsHonryeong";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";

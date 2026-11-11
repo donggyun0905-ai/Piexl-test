@@ -39,6 +39,7 @@ import { drawRabbitGround } from "./rabbitArt";
 import { drawBaekAir, drawBaekGround } from "./baekArt";
 import { drawBingseolAir, drawBingseolGround } from "./bingseolArt";
 import { drawAsuraAir, drawAsuraGround } from "./asuraArt";
+import { drawHonryeongAir, drawHonryeongGround } from "./honryeongArt";
 import { drawFactionBody } from "./factionFx";
 import { drawFallenWings } from "./fallenWings";
 
@@ -108,6 +109,7 @@ export function drawForgottenBack(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawBaekGround(ctx, s, alpha, snap);
   drawBingseolGround(ctx, s, alpha, snap);
   drawAsuraGround(ctx, s, alpha, snap);
+  drawHonryeongGround(ctx, s, alpha, snap);
   drawLeoBack(ctx, s, alpha, snap);
   drawOnyxBack(ctx, s, alpha, snap);
   drawFenrirBack(ctx, s, alpha, snap);
@@ -194,6 +196,7 @@ export function drawForgottenAura(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawBaekAir(ctx, s, alpha, snap);
   drawBingseolAir(ctx, s, alpha, snap);
   drawAsuraAir(ctx, s, alpha, snap);
+  drawHonryeongAir(ctx, s, alpha, snap);
   drawFactionBody(ctx, s, alpha, snap);
   const p = s.player;
   if (p.characterId !== "forgotten" || (p.fgGod ?? 0) <= 0) return;

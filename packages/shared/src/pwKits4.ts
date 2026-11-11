@@ -106,4 +106,11 @@ export const PW_KITS_4: PwKits = {
     sk("asFist", "dash", 8, "#2a3aa8", { range: 110, speed: 10, hit: { dmg: 1 } }),
     sk("asFist", "point", 60, "#3a5aff", { range: 150, radius: 110, delay: 30, fx: "pillar", hit: { dmg: 3, stun: 1.5 * SEC } }),
   ),
+  // 실베르 혼령: 연기용 · 혼령 늑대 · 연기 걸음 · 혼-룡
+  honryeong: kit(1,
+    sk("hrPipe", "cone", 4, "#b48aff", { radius: 80, arc: 0.5, fx: "slash", hit: { dmg: 1.1 } }),
+    sk("hrPipe", "line", 8, "#8a5ae0", { range: 220, hit: { dmg: 1.6, slow: 1 * SEC } }),
+    sk("hrPipe", "dash", 9, "#d8c0ff", { range: 110, speed: 10, hit: { dmg: 0.8 } }),
+    sk("hrPipe", "point", 60, "#a070ff", { range: 170, radius: 120, delay: 30, fx: "pillar", hit: { dmg: 3.2, slow: 2 * SEC } }),
+  ),
 };

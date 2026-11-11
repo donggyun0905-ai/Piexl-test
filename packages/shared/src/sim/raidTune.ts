@@ -50,6 +50,7 @@ const R: Record<string, number> = {
   bingseol: 1,
   /** 아수라 */
   asura: 1,
+  honryeong: 1,
   /** 의사 */
   doctor: 1.25,
   /** 떠돌이 */

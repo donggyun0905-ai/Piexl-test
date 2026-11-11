@@ -9,4 +9,6 @@ export { wallSpots } from "./bsArms";
 export { ULT_LIFT } from "./bsUlt";
 export { asFieldR, asMarked, isAsura } from "./asura";
 export type { AsFist, AsRapid } from "./asTypes";
+export { cloudR, dragonTicks, huntOn, isHonryeong } from "./honryeong";
+export type { HrBeast, HrCloud, HrDecoy, HrDragon, HrOwl } from "./hrTypes";
 export type { BsBow, BsDust, BsShot, BsUlt } from "./bsTypes";

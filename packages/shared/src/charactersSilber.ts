@@ -14,5 +14,7 @@ export const SILBER_CHARACTERS = {
   /** 실베르: 빙설 얼음 칼날 무기 10 · 몸 둘레 얼음 영역(안의 적 느려짐) · 전용 패시브 10 (빙설창·빙설무장·얼음가루 등, sim/bingseol) */
   bingseol: { id: "bingseol", maxHp: 95, damage: 8, moveSpeed: 1.2, luck: 1, startWeapon: "bsBlade" },
   /** 실베르: 아수라 맨손 하나 · 귀신의 주먹 6개와 자기 주먹으로 넓게 침(피해는 약함) · 전용 패시브 20 (분쇄·귀진·파동·아수라 각성·연발·악귀 등, sim/asura) */
+  /** 실베르: 혼령 곰방대 10개 · 연기용을 내뿜고 공격마다 방에 연기 구름 → 구름 안이면 은신 · 전용 패시브로 연기 혼령(늑대·범·부엉이·용·분신)을 부림 */
+  honryeong: { id: "honryeong", maxHp: 90, damage: 8, moveSpeed: 1.2, luck: 1, startWeapon: "hrPipe" },
   asura: { id: "asura", maxHp: 105, damage: 8, moveSpeed: 1.2, luck: 1, startWeapon: "asFist" },
 } as const;

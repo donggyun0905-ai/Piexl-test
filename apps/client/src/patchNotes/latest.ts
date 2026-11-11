@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.30",
+    date: "2026-11-11",
+    items: {
+      ko: [
+        "새 캐릭터 혼령 (실베르): 곰방대를 피우는 여인 · 곰방대에서 보랏빛 연기용을 앞으로 내뿜어 공격 · 공격할 때마다 방 어딘가에 연기 구름이 생김 (30개까지 · 10초 · 같은 곳에 겹치지 않음 · 다 차면 방을 덮음) · 구름 안에 들어가면 은신: 적이 쫓아오지만 내 자리를 정확히 겨누지 못함",
+        "혼령 무기 10: 곰방대 · 불씨(화상) · 서리(느려짐) · 독초(중독) · 약초(회복) · 뇌전(기절) · 혈연초(출혈) · 장죽 · 단죽 · 몽환(구름 둘)",
+        "혼령 전용 패시브 10 (모두 새 기술·능력 + 능력치): 혼-랑(늑대 둘) · 혼-범(범) · 혼-효(앉아 있다 낙하 공격하는 부엉이) · 혼-룡(방을 덮는 용이 지나가며 60번 따로 때림) · 혼-영(적을 끌어들이고 쓰러지면 터지는 분신) · 혼령사냥(은신하면 소환수도 은신 · 늑대 확정 치명타·출혈 · 범 1.5배 · 부엉이 계속 날며 공격) · 혼-귀(구름 안 적 공포) · 짙은 연기 · 혼의 계약 · 깊은 들숨",
+      ],
+      en: [
+        "New character Honryeong (Silber): a pipe-smoking lady · breathes a violet smoke dragon forward from her pipe · every attack leaves a smoke cloud somewhere in the room (up to 30 · 10s · never on top of another · a full set covers the room) · stand inside a cloud to hide: foes still chase you but cannot aim at you precisely",
+        "10 Honryeong weapons: Long Pipe · Ember (burn) · Frost (slow) · Poison Herb (poison) · Healing Herb (heal) · Thunder (stun) · Bloodleaf (bleed) · Great Pipe · Short Pipe · Dream (two clouds)",
+        "10 Honryeong passives (each a new skill or ability + stats): Spirit: Wolf (two wolves) · Spirit: Tiger · Spirit: Owl (perches, then dive-bombs) · Spirit: Dragon (a room-covering dragon that hits 60 separate times) · Spirit: Shade (a decoy that draws foes and bursts when it falls) · Spirit Hunt (summons hide when you hide · wolf guaranteed crit and bleed · tiger x1.5 · owls keep flying and attacking) · Spirit: Ghost (fear inside clouds) · Thick Smoke · Spirit Pact · Deep Breath",
+      ],
+      ja: [
+        "新キャラクター魂霊（シルベル）：キセルを吸う女性・キセルから紫の煙の龍を前方へ吹き出して攻撃・攻撃するたびに部屋のどこかに煙の雲ができる（30個まで・10秒・同じ場所には重ならない・全部そろうと部屋を覆う）・雲の中に入ると隠密：敵は追ってくるが正確に狙えない",
+        "魂霊の武器10：キセル・火種（火傷）・霜（鈍化）・毒草（毒）・薬草（回復）・雷電（気絶）・血煙草（出血）・長ギセル・短ギセル・夢幻（雲ふたつ）",
+        "魂霊の専用パッシブ10（すべて新しい技・能力＋能力値）：魂・狼（狼2匹）・魂・虎・魂・梟（止まってから急降下攻撃するフクロウ）・魂・龍（部屋を覆う龍が通り抜け60回別々に攻撃）・魂・影（敵を引きつけ、倒れると弾ける分身）・魂霊狩り（隠れると召喚獣も隠れる・狼の確定クリティカル・出血・虎1.5倍・フクロウは飛び続けて攻撃）・魂・鬼（雲の中の敵に恐怖）・濃い煙・魂の契約・深い一服",
+      ],
+    },
+  },
+  {
     version: "0.52.29",
     date: "2026-11-11",
     items: {

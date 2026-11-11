@@ -11,7 +11,7 @@ export const FACTION_MEMBERS: Record<FactionTrait, readonly CharacterId[]> = {
   helios: ["apostle", "bedouin", "brawler", "ninja", "abandoned", "oni", "plague", "slayer", "eater", "mukin", "samyeol", "eclipse"],
   virdia: ["beast", "summoner", "elementalist", "mystic", "imugi", "idra", "byeonhui", "fly", "elder", "ren", "spiritist", "fenrir"],
   thalassia: ["thorken", "levia", "tail", "madQueen", "hook", "orca", "wave", "miryu"],
-  silber: ["joker", "shadowing", "puppeteer", "rabbit", "baekryeong", "bingseol", "asura"],
+  silber: ["joker", "shadowing", "puppeteer", "rabbit", "baekryeong", "bingseol", "asura", "honryeong"],
   seongguk: ["beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela"],
 };
 
