@@ -7,9 +7,11 @@ import { CL_ARMS, type ClArmId } from "../itemsCollector";
 import { armMove } from "./collectorMoves";
 import { COLLECTOR as R } from "../weaponsCollector";
 import { nearest } from "./brawlMoves";
-import { inCone, strike } from "./s2Kit";
+import { inCone, strike as strike_ } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const strike = srcFn("collector", () => strike_);
 
 export const isCollector = (p: PlayerState) => p.characterId === "collector";
 const isArm = (id: string): id is ClArmId => id in CL_ARMS;

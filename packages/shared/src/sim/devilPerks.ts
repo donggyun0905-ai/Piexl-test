@@ -1,5 +1,5 @@
 // 악마의 거래 패시브 효과 (itemsDevil): 방어력(악마의 피·붉은 반점) · 맞힐 때(절규 범위·리퍼 낫) · 주는 피해 배율(십자가 보스·리퍼) · 틱마다(사탄의 가면 오라)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import type { ExtraStats } from "../characters";
 import { ENEMIES } from "../enemyDefs";
 import { DEVIL_PERKS as K } from "../itemsDevil";
@@ -8,9 +8,10 @@ import { PASSIVES, type PassiveDef } from "../items";
 import { createRng, deriveSeed } from "../rng";
 import { APOSTLE, SIN_COLORS } from "../weaponsApostle";
 import { doomTick } from "./apostle";
-import { blastAt } from "./combat";
+import { blastAt as blastAt_ } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, weaponOf } from "./util";
+const blastAt = srcFn("devilPerks", () => blastAt_);
 
 /** 공격력을 올리는 패시브 수 (붉은 반점) */
 const damageItems = (p: PlayerState) => p.passives.filter((id) => (PASSIVES[id] as PassiveDef).mods.some((m) => m.stat === "damage")).length;

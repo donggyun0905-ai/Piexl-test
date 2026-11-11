@@ -3,11 +3,13 @@
 // - 파수꾼 반격: 맞은 뒤 잠깐 안의 첫 휘두르기가 한 바퀴 베기 + 1.5배. 패시브 '반격의 방패'가 있으면 2배 + 더 넓게 (맞을 때 충격파는 그대로)
 import { ENEMIES } from "../content";
 import { PERKS } from "../perks";
-import { blastAt } from "./combat";
+import { blastAt as blastAt_ } from "./combat";
 import { addEffect, hasPerk } from "./util";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { hiddenHurt, hiddenTick } from "./hiddenPerks";
 import { pilgrimTick } from "./pilgrim";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("origin", () => blastAt_);
 
 const R = {
   /** 떠돌이: 대시 뒤 이 틱 안의 첫 공격 · 배율 */

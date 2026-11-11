@@ -1,13 +1,14 @@
 // 제우스 신의 힘: 번개로 지지기(감전 쌓기·과부하) · 옮겨 붙는 번개 · 천벌 게이지 → 제우스 강림(무적·공격 두 배·방 곳곳 벼락)
 // 폭풍 구름 · 구전 지지기 · 번개 걸음(대시) · 아이기스(받는 피해) · 응징(맞으면 벼락)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { createRng, deriveSeed } from "../rng";
 import { ZEUS_PERKS as K } from "../itemsZeus";
 import { ZEUS as Z } from "../weaponsZeus";
-import { blastAt } from "./combat";
-import { alive, inCircle, isBoss, onSegment, strike } from "./s2Kit";
+import { blastAt as blastAt_ } from "./combat";
+import { alive, inCircle, isBoss, onSegment, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, hasPerk, weaponOf } from "./util";
+const blastAt = srcFn("zeusPower", () => blastAt_), strike = srcFn("zeusPower", () => strike_);
 
 const rnd = (s: RunState, ...tags: (string | number)[]) => createRng(deriveSeed(s.seed, "zs", s.tick, ...tags)).nextFloat();
 

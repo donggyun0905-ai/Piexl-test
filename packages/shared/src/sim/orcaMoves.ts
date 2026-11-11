@@ -2,15 +2,17 @@
 // 공용 도우미: 권갑 종류 · 맞히기 · 해방 게이지 · 받는 피해
 import { ORCA_PERKS as K } from "../itemsOrca";
 import { ORCA as O, type OrcaStyle } from "../weaponsOrca";
-import { damageEnemy, healPlayer } from "./combat";
+import { damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import { blocksShot } from "./layout";
 import { rot } from "./orbit";
 import { isFree, startFree, tint, wide, zap } from "./orcaFree";
 import type { OcShark } from "./orcaTypes";
 import { alive, isBoss, stun } from "./s2Kit";
-import { statusHit } from "./statusHit";
+import { statusHit as statusHit_ } from "./statusHit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("orcaMoves", () => damageEnemy_), statusHit = srcFn("orcaMoves", () => statusHit_);
 
 export const isOrca = (p: PlayerState) => p.characterId === "orca";
 export const orcaOf = (p: PlayerState): OrcaStyle => weaponOf(p).orca ?? { orca: "tide" };

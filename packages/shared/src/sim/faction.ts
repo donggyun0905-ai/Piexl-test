@@ -7,13 +7,15 @@ import { bjKill } from "./bjSoul";
 import { baekKill } from "./baekSoul";
 import type { CharacterId } from "../characters";
 import { FACTION_HEAT as H, FACTION_MEMBERS, FACTION_TAINT as T, FACTION_TIDE as W, type FactionTrait } from "../factionDefs";
-import { blastAt } from "./combat";
+import { blastAt as blastAt_ } from "./combat";
 import { coreDmgMul, coreTick } from "./factionCore";
 import { oathDmgMul, oathHurt, oathKill, oathTick } from "./factionOath";
 import { spiritDmgMul, spiritHurt, spiritKill, spiritSpeedMul, spiritTaken, spiritTick } from "./factionSpirit";
 import { dotDamage } from "./status";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("faction", () => blastAt_);
 
 const BY = new Map<CharacterId, FactionTrait>();
 for (const [f, list] of Object.entries(FACTION_MEMBERS) as [FactionTrait, readonly CharacterId[]][]) for (const c of list) BY.set(c, f);

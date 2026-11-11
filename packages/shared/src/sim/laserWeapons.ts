@@ -1,11 +1,12 @@
 // 기계공학자 무기마다 공격 방식: 무기를 바꾸면 공격이 그 무기의 공격으로 바뀜 (전용 아이템 효과는 모든 공격에 적용).
 // 레이저 발사기·집속 렌즈 캐논·과부하 리액터는 레이저, 나머지는 각자 다른 공격
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { ENEMIES } from "../content";
-import { removeDead } from "./combat";
+import { removeDead as removeDead_ } from "./combat";
 import { beamHit, beamWidth, emitBeam, lensArea, nearestOthers, prismArea, supportBeam, REACTOR_BOOST, REACTOR_FULL, tickDamage, trackTarget, traceBeam, wallDistance, zapArea } from "./laser";
 import type { Device, PlayerState, RunState } from "./types";
 import { addEffect, DIR16, hasPerk, normalize, weaponOf } from "./util";
+const removeDead = srcFn("laserWeapons", () => removeDead_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

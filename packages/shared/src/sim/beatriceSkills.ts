@@ -1,11 +1,13 @@
 // 베아트리스 스킬 넷(1 태양 검날 · 2 일식의 춤 · 3 태양의 낙인 · 4 자애) · 처단 · 심판 · 낙인 검기 (sim/beatrice에서 부름)
 import { BEATRICE_PERKS as K } from "../itemsBeatrice";
 import { BEATRICE as B } from "../weaponsBeatrice";
-import { addBurn, addEvil, btCooldown, btHit } from "./beatriceKit";
+import { addBurn, addEvil, btCooldown, btHit as btHit_ } from "./beatriceKit";
 import { rot } from "./orbit";
-import { alive, onSegment, rushTick, startRush } from "./s2Kit";
+import { alive, onSegment, rushTick as rushTick_, startRush } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+import { srcFn } from "./dmgSrc";
+const btHit = srcFn("beatriceSkills", () => btHit_), rushTick = srcFn("beatriceSkills", () => rushTick_);
 
 /** 태양 검날이 켜져 있는지 (자애 중에는 늘 켜짐) */
 export const solarOn = (p: PlayerState) => (p.btSolar ?? 0) > 0 || (p.btGrace ?? 0) > 0;

@@ -1,15 +1,16 @@
 // 시저스(새벽의 성흔, 단죄의 가위): 누르고 있으면 가위질 두 박자 (열기: 넓게 휘두름 → 닫기: 두 날이 맞물리는 X자 절단 · 맞힌 적에게 운명의 실)
 // 대시하면 묶인 운명의 실을 모두 끊어 벰 (팽팽할수록 셈 · 실이 지나는 적도) · 체력이 적은 적은 목을 잘라 단죄 (sim/scissorsKit)
 // 맞힐수록 성흔이 차고 가득 차면 달빛 각성 (sim/stigma): 피해 1.3배 · 가위가 커짐 · 열기도 실을 묶음 · 실을 저절로 끊음. 수치 weaponsScissors.SCISSORS · 아이템 itemsScissors
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { SCISSORS_PERKS as K } from "../itemsScissors";
 import { SCISSORS as X } from "../weaponsScissors";
-import { cut, cutThreads, sxDmg, sxGain, threadsTick, tie } from "./scissorsKit";
-import { inCone, roomKey, strike } from "./s2Kit";
+import { cut as cut_, cutThreads as cutThreads_, sxDmg, sxGain as sxGain_, threadsTick, tie } from "./scissorsKit";
+import { inCone, roomKey, strike as strike_ } from "./s2Kit";
 import { isAwake, stigmaTick } from "./stigma";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
+const cut = srcFn("scissors", () => cut_), cutThreads = srcFn("scissors", () => cutThreads_), sxGain = srcFn("scissors", () => sxGain_), strike = srcFn("scissors", () => strike_);
 
 /** 열기: 앞을 넓게 휘두름 (각성 중에는 실도 묶음) */
 function open(s: RunState): void {

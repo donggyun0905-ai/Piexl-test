@@ -2,9 +2,11 @@
 import { dashDodged } from "./remnant";
 import { ENEMIES } from "../content";
 import { renMelee } from "./ren";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, DIR16, dist2, normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("minions", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

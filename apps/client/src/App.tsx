@@ -36,7 +36,7 @@ type Screen =
   | { name: "practiceSelect" }
   | { name: "tutorialSelect" }
   | { name: "tutorial"; characterId: CharacterId }
-  | { name: "practice"; characterId: CharacterId; runKey: number }
+  | { name: "practice"; characterId: CharacterId; runKey: number; initialRun?: RunState }
   | { name: "dailySelect"; start: DailyStart }
   | { name: "dailyGame"; start: DailyStart; characterId: CharacterId }
   | { name: "game"; characterId: CharacterId; seedText: string; initialRun?: RunState; runKey: number; endless?: boolean; arena?: boolean; hero?: boolean };
@@ -160,7 +160,7 @@ export function App() {
   }
   if (screen.name === "shop") return <ShopScreen lang={lang.lang} t={lang.t} onBack={toTitle} />;
   if (screen.name === "story") return <StoryScreen lang={lang.lang} t={lang.t} onBack={toTitle} />;
-  if (screen.name === "builds") return <BuildScreen lang={lang.lang} t={lang.t} onBack={toTitle} />;
+  if (screen.name === "builds") return <BuildScreen lang={lang.lang} t={lang.t} onBack={toTitle} onTry={(characterId, initialRun) => setScreen({ name: "practice", characterId, runKey: 0, initialRun })} />;
   if (screen.name === "tier") return <TierScreen lang={lang.lang} t={lang.t} onBack={toTitle} />;
   if (screen.name === "tdMaps") return <TdScreen t={lang.t} onPick={(mapId) => setScreen({ name: "td", mapId, runKey: 0 })} onBack={toTitle} />;
   if (screen.name === "practice") {
@@ -169,6 +169,7 @@ export function App() {
         key={screen.runKey}
         mode="practice"
         characterId={screen.characterId}
+        initialRun={screen.initialRun}
         seedText=""
         unlocks={[]}
         lang={lang.lang}

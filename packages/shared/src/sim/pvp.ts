@@ -32,8 +32,10 @@ import { gigaSteer } from "./pwGigaBot";
 import { pingMenu } from "./pwPing";
 import { growTick } from "./pwGrowTick";
 import { applyRoom } from "./rooms";
-import { stepPlayer } from "./run";
+import { stepPlayer as stepPlayer_ } from "./run";
 import { EMPTY_INPUT, type RunState, type TickInput } from "./types";
+import { srcFn } from "./dmgSrc";
+const stepPlayer = srcFn("pvp", () => stepPlayer_);
 
 /** 사람 한 명: 고른 캐릭터·준비방 장비 (데스매치는 무시하고 무작위) */
 export interface PwHuman {

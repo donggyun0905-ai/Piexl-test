@@ -3,14 +3,16 @@
 import { ROOM_WIDTH } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { FATES, type AbilityKind } from "../voyagerFates";
-import { addGold, blastAt, healPlayer } from "./combat";
+import { addGold, blastAt as blastAt_, healPlayer } from "./combat";
 import { nearest } from "./brawlMoves";
 import { rot } from "./orbit";
-import { alive, inCircle, isBoss, strike, stun } from "./s2Kit";
+import { alive, inCircle, isBoss, strike as strike_, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, keepInRoom, normalize, roomGrid } from "./util";
 import { drop } from "./voyagerSkills";
 import { raiseShield } from "./imugiMods";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("voyagerAbilities", () => blastAt_), strike = srcFn("voyagerAbilities", () => strike_);
 
 /** 지금 켜진 능력 값 (지금 운명 · 붙잡은 운명 중 그 종류, 없으면 null) */
 export function abilityVal(s: RunState, kind: AbilityKind): number | null {

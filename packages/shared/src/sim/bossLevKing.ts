@@ -5,12 +5,14 @@ import { ROOM_CX } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { hitDamage, turn } from "./bossKit";
 import { levPose } from "./bossLeviathan";
-import { envDamage } from "./combat";
+import { envDamage as envDamage_ } from "./combat";
 import { addShape } from "./hazards";
 import { addBubble, addTornado, dive, ghostShip, levDirector, setWater } from "./levKit";
 import { eachSeat } from "./party";
 import type { EnemyState, RunState } from "./types";
 import { enemyShot, keepInRoom, normalize, roomGrid, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { srcFn } from "./dmgSrc";
+const envDamage = srcFn("bossLevKing", () => envDamage_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

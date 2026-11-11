@@ -1,14 +1,15 @@
 // 비르디아 동행형 정령 (sim/factionSpirit가 부름): 내 곁이 아닌 따로 움직이며 싸움 (맞지 않음 · 방이 바뀌면 내 옆으로)
 // 숲늑대: 가까운 적에게 달려가 물어뜯음 · 부엉이: 내 둘레를 날며 깃털을 날림(궁극체는 가장 튼튼한 적에게 급강하 폭발) · 이끼 골렘: 느리게 걸어가 땅을 내려찍어 둘레 피해(궁극체는 + 속박)
 // 유년기는 고정 피해 1 · 단계마다 간격·피해가 다름 (수치 spiritDefs.SPIRIT_ALLY)
-import { logDmg } from "./dmgSrc";
+import { logDmg, srcFn } from "./dmgSrc";
 import { ENEMIES } from "../content";
 import { SPIRIT_ALLY as A } from "../spiritDefs";
-import { blastAt, damageEnemy } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_ } from "./combat";
 import { spiritStage } from "./factionSpirit";
 import { rot } from "./orbit";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, keepInRoom, normalize, roomGrid } from "./util";
+const blastAt = srcFn("spiritAllies", () => blastAt_), damageEnemy = srcFn("spiritAllies", () => damageEnemy_);
 
 const live = (s: RunState) => s.enemies.filter((e) => e.hp > 0 && !e.immune);
 function nearestTo(s: RunState, x: number, y: number): EnemyState | null {

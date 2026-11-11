@@ -1,11 +1,13 @@
 // 가브리엘 스킬 넷(1 방패 돌진 · 2 중력 붕괴(sim/gabrielShield) · 3 성벽 · 4 불멸의 성벽) · 떨어지는 빛의 망치 · 궁극기 영역·보호막 (sim/gabriel에서 부름)
 import { GABRIEL_PERKS as K } from "../itemsGabriel";
 import { GABRIEL as G } from "../weaponsGabriel";
-import { dropHammer, gbCooldown, gbHit, press, quake } from "./gabrielKit";
+import { dropHammer, gbCooldown, gbHit as gbHit_, press, quake as quake_ } from "./gabrielKit";
 import { setShield, startWell } from "./gabrielShield";
-import { inCircle, inCone, rushTick, startRush, strike, stun } from "./s2Kit";
+import { inCircle, inCone, rushTick as rushTick_, startRush, strike as strike_, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+import { srcFn } from "./dmgSrc";
+const gbHit = srcFn("gabrielSkills", () => gbHit_), quake = srcFn("gabrielSkills", () => quake_), rushTick = srcFn("gabrielSkills", () => rushTick_), strike = srcFn("gabrielSkills", () => strike_);
 
 /** 궁극기 영역 안 보호막 한도 */
 const ultCap = (s: RunState) => G.ultShield + (hasPerk(s.player, "gbImmortal") ? K.gbImmortal.shield : 0);

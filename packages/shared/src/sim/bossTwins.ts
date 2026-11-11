@@ -4,12 +4,14 @@
 // 체력 합이 절반 아래면 방 가운데 고정점에서 핏줄 하나 더 · 구슬 늘고 자리 바꾸기 자주
 import { ENEMIES } from "../enemyDefs";
 import { half, hitDamage, ultBoss } from "./bossKit";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { addShape, inHazard } from "./hazards";
 import { eachSeat } from "./party";
 import type { EnemyState, RunState } from "./types";
 import { startCage, startCross, twinKitTick } from "./bossTwinsKit";
 import { addEffect, makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("bossTwins", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

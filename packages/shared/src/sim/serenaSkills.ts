@@ -1,10 +1,12 @@
 // 세레나 스킬 넷(1 환혹의 스텝 · 2 매혹 · 3 맹독 비수 · 4 환혹의 무도) · 매혹 · 도는 사슬 채찍 · 환혹의 회오리 (sim/serena에서 부름)
 import { SERENA_PERKS as K } from "../itemsSerena";
 import { SERENA as N } from "../weaponsSerena";
-import { orbCount, snCooldown, snHit, snOrbAt, addThorns } from "./serenaKit";
-import { alive, inCircle, inCone, isBoss, poison, rushTick, startRush, stun } from "./s2Kit";
+import { orbCount, snCooldown, snHit as snHit_, snOrbAt, addThorns } from "./serenaKit";
+import { alive, inCircle, inCone, isBoss, poison, rushTick as rushTick_, startRush, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const snHit = srcFn("serenaSkills", () => snHit_), rushTick = srcFn("serenaSkills", () => rushTick_);
 
 /** 2 매혹: 둘레 적을 홀림 (멈춘 채 나에게 끌려옴 · 받는 피해 증가 · 가시) */
 function charm(s: RunState): void {

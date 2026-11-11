@@ -4,9 +4,11 @@
 import { TICK_RATE } from "../constants";
 import { FALLEN_KING_PERKS as K } from "../itemsFallenKing";
 import { healPlayer } from "./combat";
-import { alive, inCircle, inCone, onSegment, strike } from "./s2Kit";
+import { alive, inCircle, inCone, onSegment, strike as strike_ } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+import { srcFn } from "./dmgSrc";
+const strike = srcFn("kingBlade", () => strike_);
 
 const R = {
   /** 단계마다 공격력 배율: X자 베기 · 검기 · 내리꽂기 · 불기둥 */

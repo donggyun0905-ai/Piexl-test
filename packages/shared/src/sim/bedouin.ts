@@ -5,7 +5,7 @@ import { TICK_RATE } from "../constants";
 import { BEDOUIN_PERKS as K } from "../itemsBedouin";
 import { createRng, deriveSeed } from "../rng";
 import { BEDOUIN } from "../weaponsBedouin";
-import { damageEnemy, healPlayer, ignite } from "./combat";
+import { damageEnemy as damageEnemy_, healPlayer, ignite } from "./combat";
 import { blocksShot } from "./layout";
 import type { ThrownChakram } from "./bedouinTypes";
 import { ghostTick } from "./bedouinGhosts";
@@ -14,6 +14,8 @@ import { addEffect, dist2, hasPerk, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_
 import { setDashMul } from "./buildSets";
 import { fenrirDashMul } from "./fenrirStats";
 import { accDash } from "./accStats";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("bedouin", () => damageEnemy_);
 
 const where = (s: RunState) => `${s.floor}/${s.roomId}`;
 const roll = (s: RunState, label: string) => createRng(deriveSeed(s.seed, label, s.tick)).nextFloat();

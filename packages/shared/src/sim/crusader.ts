@@ -2,17 +2,18 @@
 // → 앞 땅을 내리찍음 (찍은 자리 둘레 피해·기절) → 땅이 십자가 모양으로 갈라져 나감 (앞 긴 팔 · 양옆 · 뒤, 마디마다 차례로 돌판이 솟음)
 // 속죄의 무게 (받은 피해·맞힌 적) 가득 → 그 내려찍기에 하늘에서 심판의 십자가 · 대시는 성벽 돌진 (sim/crusaderRam)
 // 성흔이 가득 차면 성십자가 강림: 거인화 (받는 피해 감소 · 내려찍을 때마다 심판의 십자가 · 걸으면 땅이 울림). 수치 weaponsCrusader.CRUSADER · 아이템 itemsCrusader
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { CRUSADER_PERKS as K } from "../itemsCrusader";
 import { CRUSADER as C } from "../weaponsCrusader";
-import { addCrack, addWeight, addZone, cracksTick, crHits, crStrike, dropJudge, haloTick, throwHalo, weightFull, zonesTick } from "./crusaderKit";
+import { addCrack, addWeight, addZone, cracksTick as cracksTick_, crHits as crHits_, crStrike as crStrike_, dropJudge, haloTick as haloTick_, throwHalo, weightFull, zonesTick as zonesTick_ } from "./crusaderKit";
 import { ramTick } from "./crusaderRam";
 import { alive, inCircle, roomKey, stun } from "./s2Kit";
 import { isAwake, stigmaTick } from "./stigma";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
+const cracksTick = srcFn("crusader", () => cracksTick_), crHits = srcFn("crusader", () => crHits_), crStrike = srcFn("crusader", () => crStrike_), haloTick = srcFn("crusader", () => haloTick_), zonesTick = srcFn("crusader", () => zonesTick_);
 
 /** 내려찍기: 앞 땅 둘레 피해·기절 · 십자 균열 · 무게 가득(또는 강림 중)이면 심판의 십자가 · 여진 · 가시 후광 */
 function slam(s: RunState): void {

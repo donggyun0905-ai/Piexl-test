@@ -8,12 +8,14 @@ import { addBlock, addWall, pullTo } from "./asmoKit";
 import { hitDamage, shotDamage } from "./bossKit";
 import { HELL_COLS, HELL_ROWS, hellCell } from "./bossUlts";
 import { addWave } from "./bossWaves";
-import { envDamage } from "./combat";
+import { envDamage as envDamage_ } from "./combat";
 import { addShape } from "./hazards";
 import { rot } from "./orbit";
 import { eachSeat } from "./party";
 import type { EnemyState, RunState } from "./types";
 import { enemyShot, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { srcFn } from "./dmgSrc";
+const envDamage = srcFn("asmoUlts", () => envDamage_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

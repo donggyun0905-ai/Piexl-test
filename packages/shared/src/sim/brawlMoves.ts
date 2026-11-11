@@ -3,9 +3,11 @@
 import { ENEMIES } from "../content";
 import type { ComboMove } from "../combos";
 import { createRng, deriveSeed } from "../rng";
-import { damageEnemy, healPlayer } from "./combat";
+import { damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("brawlMoves", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

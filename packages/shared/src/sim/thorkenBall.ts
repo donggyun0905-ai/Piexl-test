@@ -4,10 +4,12 @@ import { THORKEN as T } from "../weaponsThorken";
 import { healPlayer } from "./combat";
 import { rot } from "./orbit";
 import { alive, inCircle, shoot } from "./s2Kit";
-import { addGauge, ballBlocked, chainLen, flailOf, tkHit } from "./thorkenKit";
+import { addGauge, ballBlocked, chainLen, flailOf, tkHit as tkHit_ } from "./thorkenKit";
 import { addWhirl, clap } from "./thorkenStorm";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2 } from "./util";
+import { srcFn } from "./dmgSrc";
+const tkHit = srcFn("thorkenBall", () => tkHit_);
 
 const TAU = Math.PI * 2;
 

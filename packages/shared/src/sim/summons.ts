@@ -1,13 +1,14 @@
 // 소환수 움직임·공격: 달려가 치기(해골·늑대·박쥐·골렘) · 거리를 두고 쏘기(임프·궁수·용) · 자폭(불꽃 정령) · 제자리(독버섯) · 내 둘레(요정)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { ENEMIES } from "../content";
 import { SUMMON_PERKS } from "../itemsSummon";
 import { SUMMON_STATS, type SummonStat } from "../weaponsSummon";
-import { blastAt, damageEnemy } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_ } from "./combat";
 import { chargeSummon } from "./summon";
 import type { Summoned } from "./summonTypes";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, DIR16, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
+const blastAt = srcFn("summons", () => blastAt_), damageEnemy = srcFn("summons", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

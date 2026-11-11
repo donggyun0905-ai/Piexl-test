@@ -1,15 +1,16 @@
 // 묵인(헬리오스): 거대한 몸. 방어력(받는 피해를 그 %만큼 무시, 한 번에 적어도 1은 받음) · 맞아도 무적이 거의 없음
 // 공격은 몸으로 들이받는 돌진, 피해는 방어력의 300% · 재생력 10 (10초마다 그만큼) · 회복약은 천천히 차오름
 // 수치는 weaponsMukin.MUKIN, 아이템은 itemsMukin
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { MUKIN_PERKS as K } from "../itemsMukin";
 import { MUKIN as M } from "../weaponsMukin";
 import { nearest } from "./brawlMoves";
-import { blastAt, healPlayer } from "./combat";
-import { rushTick, startRush, stun } from "./s2Kit";
+import { blastAt as blastAt_, healPlayer } from "./combat";
+import { rushTick as rushTick_, startRush, stun } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, STILL_TICKS, weaponOf } from "./util";
+const blastAt = srcFn("mukin", () => blastAt_), rushTick = srcFn("mukin", () => rushTick_);
 
 /** 지금 방어력 (철판 · 묵상 · 요새 돌진, 상한 90) */
 export function mukinDef(p: PlayerState): number {

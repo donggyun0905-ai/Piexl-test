@@ -7,11 +7,13 @@ import { createRng, deriveSeed } from "../rng";
 import { throughDash } from "./bossGrip";
 import { fan, hitDamage, ring } from "./bossKit";
 import { cerbDirector, floorBusy } from "./cerbKit";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { addShape } from "./hazards";
 import { eachSeat } from "./party";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, DIR16, keepInRoom, normalize, roomGrid, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("bossCerbTrio", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

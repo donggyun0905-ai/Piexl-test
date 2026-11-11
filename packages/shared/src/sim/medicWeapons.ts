@@ -1,8 +1,8 @@
 // 의사 무기마다 공격 방식: 무기를 바꾸면 공격이 그 무기의 공격으로 바뀜 (틱 피해는 기계공학자 레이저와 같은 방식).
 // 직접 피해의 일부만큼 회복 (sim/heal). 날아가는 탄·장판·바늘·알약·구급차의 틱마다 처리는 medicGear
-import { logDmg } from "./dmgSrc";
+import { logDmg, srcFn } from "./dmgSrc";
 import { ENEMIES } from "../content";
-import { removeDead } from "./combat";
+import { removeDead as removeDead_ } from "./combat";
 import { devilMul } from "./devilPerks";
 import { leechHeal, leechRate } from "./heal";
 import { tickDamage, traceBeam } from "./laser";
@@ -10,6 +10,7 @@ import { aimPoint, FLY_TICKS } from "./laserWeapons";
 import type { Device, EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
 import { factionHit } from "./faction";
+const removeDead = srcFn("medicWeapons", () => removeDead_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

@@ -5,13 +5,15 @@ import { ROOM_CX, ROOM_CY, ROOM_HEIGHT, ROOM_WIDTH, TICK_RATE, TILE_SIZE } from 
 import { PW_ARENAS } from "../paewangMaps";
 import { PW, PW_MODE } from "../paewangDefs";
 import { createRng, deriveSeed } from "../rng";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { eachSeat } from "./party";
 import { recapEnv } from "./pvpRecap";
 import { inPlay } from "./pvpWorld";
 import type { RunState, TickInput } from "./types";
 import { rot } from "./orbit";
 import { normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("pvpZone", () => damagePlayer_);
 
 /** 지금 판이 시작한 틱 (3·2·1이 끝난 때) */
 export const roundStart = (s: RunState) => s.pvp!.readyAt ?? PW.ready;

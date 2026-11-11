@@ -5,9 +5,11 @@ import { ABANDONED as A, type TagSpecial, type TagSpecialKind } from "../weapons
 import { bullet, shove } from "./abandonedMoves";
 import { kidsOf } from "./abandonedKids";
 import type { TagKid, TagShow } from "./abandonedTypes";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, normalize, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("abandonedShow", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const V = {

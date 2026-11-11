@@ -2,11 +2,13 @@
 // 그림 줄 번호(row)는 sdTypes.SD_ROW. 그리기는 화면 render/shadowingFx
 import { ENEMIES } from "../enemyDefs";
 import { SHADOWING_PERKS as K } from "../itemsShadowing";
-import { damageEnemy, healPlayer } from "./combat";
+import { damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import type { InkSpirit, InkZone } from "./sdTypes";
 import { ignite } from "./status";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, normalize, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("shadowingSpirits", () => damageEnemy_);
 
 /** 맞힐 수 있는 적인지 */
 export const alive = (e: EnemyState) => e.hp > 0 && !e.immune && !e.pwHid;

@@ -2,13 +2,15 @@
 // 버프형(햇살·꽃·가시)은 여기: 20초마다 10초 켜짐 · 동행형 sim/spiritAllies · 구미호·꾸러미형 sim/spiritPack · 코인 정령 sim/spiritCoin (수치 spiritDefs) · 도박형·꾸러미형은 처음부터 궁극체
 import { createRng, deriveSeed } from "../rng";
 import { SPIRIT_BUFF as B, SPIRIT_GROW as G, SPIRIT_IDS, SPIRIT_KIND, type SpiritId } from "../spiritDefs";
-import { blastAt, healPlayer } from "./combat";
+import { blastAt as blastAt_, healPlayer } from "./combat";
 import { pickDistinct } from "./loot";
 import { allyTick } from "./spiritAllies";
 import { packMenu, packRoomClear, packTick } from "./spiritPack";
 import { coinMenu } from "./spiritCoin";
 import type { PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("factionSpirit", () => blastAt_);
 
 /** 창 버튼 기능 번호 (station.stationMenu): 정령 고르기 · 꾸러미 꺼내기/닫기 · 상자 고르기 · 구미호 바꾸기(5번 키) · 코인 상자 받기(5번 키) */
 export const SPIRIT_OP = { pick: 20, bag: 21, chest: 22, fox: 23, coin: 24 } as const;

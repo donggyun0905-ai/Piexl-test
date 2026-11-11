@@ -5,7 +5,9 @@ import { alive, isBoss, onSegment, stun } from "./s2Kit";
 import type { WvBit } from "./waveTypes";
 import type { RunState } from "./types";
 import { addEffect, dist2, normalize } from "./util";
-import { addBit, big, burstAt, densest, dmgOf, foeById, isWall, nearest, steer, turnDir, wvHit } from "./waveKit";
+import { addBit, big, burstAt as burstAt_, densest, dmgOf, foeById, isWall, nearest, steer, turnDir, wvHit as wvHit_ } from "./waveKit";
+import { srcFn } from "./dmgSrc";
+const burstAt = srcFn("waveSkillsA", () => burstAt_), wvHit = srcFn("waveSkillsA", () => wvHit_);
 
 export type SkillCast = (s: RunState, m: number) => void;
 export type BitStep = (s: RunState, b: WvBit) => boolean;

@@ -6,10 +6,12 @@
 import { CL_ARMS, type ClArmId } from "../itemsCollector";
 import { healPlayer } from "./combat";
 import { applyBleed } from "./gunExtras";
-import { inCircle, inCone, isBoss, onSegment, root, shoot, strike, stun } from "./s2Kit";
+import { inCircle, inCone, isBoss, onSegment, root, shoot, strike as strike_, stun } from "./s2Kit";
 import { ignite } from "./status";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 import { addEffect, keepInRoom, normalize, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const strike = srcFn("collectorMoves", () => strike_);
 
 type Vis = "arc" | "streak" | "spin" | "thrust" | "slam" | "spikes" | "claw" | "beam" | "charge" | "fist" | "shock" | "pillar" | "vortex" | "vines" | "flash";
 

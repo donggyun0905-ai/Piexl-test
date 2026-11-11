@@ -1,15 +1,16 @@
 // 레이저 (기계공학자) 핵심: 조사 간격·피해 · 빔 따라가기(벽·첫 적에서 멈춤) · 맞히기 · 전용 아이템 효과.
 // 무기마다 공격 방식은 laserWeapons, 틱마다 장치(포탑·지뢰 등) 처리는 laserGear
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { logDmg } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../content";
-import { blastAt, COMBAT_RULES } from "./combat";
+import { blastAt as blastAt_, COMBAT_RULES } from "./combat";
 import { devilMul } from "./devilPerks";
 import { blocksShot } from "./layout";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, markDot, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid, weaponOf } from "./util";
 import { factionHit } from "./faction";
+const blastAt = srcFn("laser", () => blastAt_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

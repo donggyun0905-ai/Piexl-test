@@ -6,10 +6,12 @@ import { FENRIR_PERKS as K } from "../itemsFenrir";
 import { FENRIR as F } from "../weaponsFenrir";
 import { rot } from "./orbit";
 import { comboStep } from "./comboStep";
-import { alive, inCircle, inCone, onSegment, strike, stun } from "./s2Kit";
+import { alive, inCircle, inCone, onSegment, strike as strike_, stun } from "./s2Kit";
 import type { FenrirWave } from "./fenrirTypes";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { srcFn } from "./dmgSrc";
+const strike = srcFn("fenrir", () => strike_);
 
 export { isFenrir } from "./fenrirStats";
 const TAU = 6.283185307179586;

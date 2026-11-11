@@ -2,20 +2,22 @@
 // 공격자마다 run.player·탄·장치·효과를 꺼내 놓고 기존 계산을 그대로 돌림 (타워 디펜스 tdTowers와 같은 방식)
 import type { WeaponId } from "../content";
 import { recallChakram } from "./bedouin";
-import { removeDead } from "./combat";
-import { updatePending } from "./pending";
+import { removeDead as removeDead_ } from "./combat";
+import { updatePending as updatePending_ } from "./pending";
 import { equipWeapon, recalcStats } from "./items";
 import { updateLaserGear } from "./laserGear";
 import { updateMedicGear } from "./medicGear";
 import { updateOrbit } from "./orbit";
-import { updatePlayer } from "./player";
-import { updateProjectiles } from "./projectiles";
+import { updatePlayer as updatePlayer_ } from "./player";
+import { updateProjectiles as updateProjectiles_ } from "./projectiles";
 import { newPlayer } from "./run";
 import type { SwarmWeapon } from "./swarmTypes";
 import { evoNova } from "./swarmEvo";
 import { updateCharms } from "./talisman";
 import type { TdAttacker } from "./tdTypes";
 import type { PlayerState, RunState, TickInput } from "./types";
+import { srcFn } from "./dmgSrc";
+const removeDead = srcFn("swarmGhosts", () => removeDead_), updatePending = srcFn("swarmGhosts", () => updatePending_), updatePlayer = srcFn("swarmGhosts", () => updatePlayer_), updateProjectiles = srcFn("swarmGhosts", () => updateProjectiles_);
 
 /** 공격자 하나를 run에 꺼내 놓고 fn (끝나면 탄·장치·효과를 공격자에게 돌려놓고 본인을 다시) */
 export function withGhost(s: RunState, a: TdAttacker, fn: () => void): void {

@@ -1,10 +1,12 @@
 // 로비 펫 능력 (한 판에 한 마리, RunState.pet): 같이 싸움(고양이·강아지) · 받는 피해 · 이동 속도 · 치명타 · 사거리 · 돈 · 목숨 +1
 import { LOBBY_PETS as L } from "../petDefs";
 import type { StatMod } from "../stats";
-import { alive, strike } from "./s2Kit";
+import { alive, strike as strike_ } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, dist2, hasPerk } from "./util";
 import type { LobbyPetId } from "../petDefs";
+import { srcFn } from "./dmgSrc";
+const strike = srcFn("lobbyPet", () => strike_);
 
 /** 이 펫이 같이 있는지 (애호의 피리: 로비 펫 모두) */
 const has = (s: RunState, id: LobbyPetId) => s.pet === id || hasPerk(s.player, "petFlute");

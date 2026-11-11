@@ -1,15 +1,16 @@
 // 별지기(히든): 공격하면 그 자리에 별을 박음 · 가까운 별끼리 빛줄기로 이어져 닿는 적을 태움 · 별이 가득 차면 별자리 완성, 모든 별이 터짐
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../enemyDefs";
 import { STAR_PERKS as K } from "../itemsStar";
 import { STAR, STAR_COLORS, type StarStyle } from "../weaponsStar";
 import { createRng, deriveSeed } from "../rng";
-import { damageEnemy, healPlayer, ignite } from "./combat";
+import { damageEnemy as damageEnemy_, healPlayer, ignite } from "./combat";
 import type { StarNode } from "./starTypes";
 import type { EnemyState, PlayerState, RunState } from "./types";
-import { statusHit } from "./statusHit";
+import { statusHit as statusHit_ } from "./statusHit";
 import { addEffect, dist2, hasPerk, segDist2, weaponOf } from "./util";
+const damageEnemy = srcFn("star", () => damageEnemy_), statusHit = srcFn("star", () => statusHit_);
 
 const styleOf = (p: PlayerState): StarStyle => weaponOf(p).star ?? "plain";
 const roomKey = (s: RunState) => `${s.floor}/${s.roomId}`;

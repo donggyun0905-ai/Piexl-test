@@ -1,15 +1,16 @@
 // 음양사 부적: 쏠 때 붙이는 값 · 적에게 붙은 수 세기·추가 효과 · 음양사 전용 아이템 (마음가짐·옥구슬·반야·사인·영역·흡생) · 수양 도트·땅 주변 피해
 // 확률은 시드·틱·적 id로 만든 랜덤 (Math.random 없음)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { logDmg } from "./dmgSrc";
 import { ENEMIES, type CharmKind, type WeaponDef } from "../content";
 import { PERKS } from "../perks";
 import { createRng, deriveSeed } from "../rng";
-import { blastAt, damageEnemy, healPlayer, ignite } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_, healPlayer, ignite } from "./combat";
 import { seatNo } from "./party";
 import type { EnemyState, ProjectileState, RunState } from "./types";
-import { statusHit } from "./statusHit";
+import { statusHit as statusHit_ } from "./statusHit";
 import { addEffect, dist2, hasPerk, keepInRoom, markDot, normalize, roomGrid } from "./util";
+const blastAt = srcFn("talisman", () => blastAt_), damageEnemy = srcFn("talisman", () => damageEnemy_), statusHit = srcFn("talisman", () => statusHit_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

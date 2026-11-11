@@ -1,9 +1,11 @@
 // 야수의 고양이: 가까운 적에게 달려가 할퀴고, 적이 없으면 주인 곁을 따라다님. 사자는 크고 느리지만 둘레까지 물어뜯고, 그림자 고양이는 적 옆으로 순간이동
 import type { PetKind } from "../content";
 import type { Pet } from "./beastTypes";
-import { blastAt, damageEnemy, healPlayer } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, DIR16, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("pets", () => blastAt_), damageEnemy = srcFn("pets", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

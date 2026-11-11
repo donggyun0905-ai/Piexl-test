@@ -1,10 +1,12 @@
 // 라파엘 스킬 넷(1 바람 걸음 · 2 폭풍 화살비 · 3 에테르 스코프 · 4 천공의 빛 화살) · 화살비 · 빛 화살 모으기 (sim/rafael에서 부름)
 import { RAFAEL_PERKS as K } from "../itemsRafael";
 import { RAFAEL as F } from "../weaponsRafael";
-import { aimAt, isMark, onRay, rfCooldown, rfHit } from "./rafaelKit";
-import { inCircle, rushTick, startRush } from "./s2Kit";
+import { aimAt, isMark, onRay, rfCooldown, rfHit as rfHit_ } from "./rafaelKit";
+import { inCircle, rushTick as rushTick_, startRush } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+import { srcFn } from "./dmgSrc";
+const rfHit = srcFn("rafaelSkills", () => rfHit_), rushTick = srcFn("rafaelSkills", () => rushTick_);
 
 /** 1 바람 걸음: 뒤로 뛰며 떠난 자리에 돌풍 (밀쳐냄) · 다음 공격이 저격 */
 function windStep(s: RunState): void {

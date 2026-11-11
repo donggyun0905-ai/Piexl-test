@@ -8,7 +8,7 @@ import { gearSave } from "./pwGear";
 import { homeOf, isGrow, respawnTicks, reward } from "./pwGrow";
 import { PW_ARENAS } from "../paewangMaps";
 import { checkDeath } from "./run";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { inRect, spotXY } from "./paewangGrid";
 import { gunSwap } from "./paewangKit";
 import { allPlayers, eachSeat, useSeat } from "./party";
@@ -19,6 +19,8 @@ import { timeWinner } from "./pvpZone";
 import { clearSkills } from "./pwSkill";
 import type { RunState } from "./types";
 import { addEffect } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("pvpFlow", () => damagePlayer_);
 
 /** 전투에 나설 때: 체력 가득 + 보호막 */
 export function freshStart(s: RunState): void {

@@ -2,15 +2,16 @@
 // 공격: 칠보 광륜 — 가운데 자수정에서 방 안 모든 적에게 빛줄기 (쏘는 동안 몸을 못 움직임)
 // 대시: 하늘을 나는 부스트. 한 번 누르면 비행(빠르게 계속 이동, 무적 아님) · 다시 누르면 내려앉음
 // 날아오를 때·내려앉을 때·비행 중 일정 간격마다 보석 7개가 저마다 확률로 반응해 공격 (sim/onyxGems). 수치는 weaponsOnyx, 아이템은 itemsOnyx
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ONYX_PERKS as K } from "../itemsOnyx";
 import { createRng, deriveSeed } from "../rng";
 import { ONYX as O, ONYX_GEM_IDS } from "../weaponsOnyx";
 import { fireGem, rollGems } from "./onyxGems";
-import { alive, inCircle, strike, stun } from "./s2Kit";
+import { alive, inCircle, strike as strike_, stun } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
+const strike = srcFn("onyx", () => strike_);
 
 export const isOnyx = (p: PlayerState) => p.characterId === "onyx";
 

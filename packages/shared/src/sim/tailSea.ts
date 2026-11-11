@@ -5,10 +5,12 @@ import { createRng, deriveSeed } from "../rng";
 import { TAIL as T } from "../weaponsTail";
 import { rot } from "./orbit";
 import { inCircle, isBoss, onSegment, stun } from "./s2Kit";
-import { inSea, seaOf, sharkDmg, sharkSize, tlHit } from "./tailKit";
+import { inSea, seaOf, sharkDmg, sharkSize, tlHit as tlHit_ } from "./tailKit";
 import type { TlShark } from "./tailTypes";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk } from "./util";
+import { srcFn } from "./dmgSrc";
+const tlHit = srcFn("tailSea", () => tlHit_);
 
 /** 다음 상어까지 틱 (바다 종류 · 상어 떼 · 공격 속도) */
 function interval(s: RunState, speed: number): number {

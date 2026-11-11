@@ -4,12 +4,14 @@ import { MIRYU_PERKS as K } from "../itemsMiryu";
 import { MIRYU as M } from "../weaponsMiryu";
 import { healPlayer } from "./combat";
 import { dropMax } from "./miryuCuts";
-import { anchored, gain, mrHit, mrOf, nearStream, reachOf, turn } from "./miryuKit";
+import { anchored, gain, mrHit as mrHit_, mrOf, nearStream, reachOf, turn } from "./miryuKit";
 import type { MrStream } from "./miryuTypes";
 import { blocksShot } from "./layout";
 import { alive, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const mrHit = srcFn("miryuFlow", () => mrHit_);
 
 /** 물길이 사라질 때: 빙류는 얼음으로 깨지고, 폭포 아이템은 무너져 내림 (적마다 한 번) */
 function streamEnd(s: RunState, w: MrStream): void {

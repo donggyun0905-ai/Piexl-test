@@ -2,11 +2,13 @@
 // 혼령사냥이 있으면 부엉이는 앉지 않고 방 어디든 계속 날아다니며 공격 · 혼-룡: 방을 덮는 용이 왼쪽에서 오른쪽으로 지나가며 모든 적을 60번 때림
 import { ENEMIES } from "../enemyDefs";
 import { HONRYEONG_PERKS as K } from "../itemsHonryeong";
-import { hasHr, hrArea, hrHit, hrRoll, petMul } from "./hrKit";
+import { hasHr, hrArea as hrArea_, hrHit as hrHit_, hrRoll, petMul } from "./hrKit";
 import { foeNear } from "./puppetAllies";
 import { alive } from "./shadowingSpirits";
 import type { RunState } from "./types";
 import { addEffect, reachOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const hrArea = srcFn("hrSpirits", () => hrArea_), hrHit = srcFn("hrSpirits", () => hrHit_);
 
 /** 용이 지나가는 틱 (화면도 씀) */
 export const dragonTicks = () => K.hrDragon.hits * K.hrDragon.every;

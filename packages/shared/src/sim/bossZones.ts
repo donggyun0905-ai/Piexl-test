@@ -3,9 +3,11 @@
 import { dashDodged } from "./remnant";
 import { ROOM_CX, ROOM_CY } from "../constants";
 import { createRng, deriveSeed } from "../rng";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("bossZones", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

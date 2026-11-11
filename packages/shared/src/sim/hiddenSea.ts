@@ -5,7 +5,7 @@ import { ROOM_CX, ROOM_HEIGHT, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, R
 import { ENEMIES } from "../enemyDefs";
 import { createRng, deriveSeed } from "../rng";
 import { spawnBoss } from "./bosses";
-import { envDamage } from "./combat";
+import { envDamage as envDamage_ } from "./combat";
 import { minionKinds } from "./critters";
 import { depth } from "./hero";
 import { SEA_BUBBLE_R } from "./hiddenFoes";
@@ -13,6 +13,8 @@ import { fortTick, hNote, hSpawn, makeFort } from "./hiddenKit";
 import type { HiddenTrialState } from "./hiddenTrialTypes";
 import type { EnemyState, RunState } from "./types";
 import { addEffect } from "./util";
+import { srcFn } from "./dmgSrc";
+const envDamage = srcFn("hiddenSea", () => envDamage_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

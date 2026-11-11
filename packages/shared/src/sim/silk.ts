@@ -11,10 +11,12 @@ import { nearest } from "./brawlMoves";
 import { healPlayer } from "./combat";
 import { applyBleed, updateBleed } from "./gunExtras";
 import { rot } from "./orbit";
-import { inCircle, onSegment, stun, strike } from "./s2Kit";
+import { inCircle, onSegment, stun, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, normalize, weaponOf } from "./util";
 import { baseStats } from "../content";
+import { srcFn } from "./dmgSrc";
+const strike = srcFn("silk", () => strike_);
 
 const styleOf = (p: PlayerState): SilkStyle => weaponOf(p).silk ?? { n: 1, spread: 0, stacks: 5, rendMul: 2.5, ammo: 100 };
 const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.seed, tag, s.tick, n)).nextFloat();

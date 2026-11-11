@@ -2,10 +2,12 @@
 // 벨 때마다: 벤 자리에 흐르는 물길 · 닿지 않은 먼 적은 휘는 칼날이 벰 · 잠깐 적 탄을 흘려 받음 · 일섬은 모은 물방울을 물칼날로 되돌림
 import { MIRYU_PERKS as K } from "../itemsMiryu";
 import { MIRYU as M } from "../weaponsMiryu";
-import { addStream, anchored, gain, mrHit, mrOf, rangeMul, reachOf, turn } from "./miryuKit";
+import { addStream, anchored, gain, mrHit as mrHit_, mrOf, rangeMul, reachOf, turn } from "./miryuKit";
 import { alive, onSegment } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const mrHit = srcFn("miryuCuts", () => mrHit_);
 
 /** 흐르는 쪽으로 실어 보냄 (보스·허수아비는 안 움직임) */
 function carry(s: RunState, e: EnemyState, dx: number, dy: number, n: number): void {

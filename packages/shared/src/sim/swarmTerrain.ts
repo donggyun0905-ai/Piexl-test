@@ -1,10 +1,12 @@
 // 광야의 새벽 맵 땅: 나를 돕는 미사일 타워(가까운 적에게 유도 미사일) · 진흙(느려짐) · 용암(데임). 맵 정의는 swarmMaps
 import { TICK_RATE, TILE_SIZE } from "../constants";
 import { swarmMapDef, SWARM_TERRAIN as T } from "../swarmMaps";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { swarmMinutes } from "./swarmSpawn";
 import type { EnemyState, RunState } from "./types";
 import { dist2, normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("swarmTerrain", () => damagePlayer_);
 
 const inRect = (x: number, y: number, [c, r, w, h]: readonly [number, number, number, number]) =>
   x >= c * TILE_SIZE && x < (c + w) * TILE_SIZE && y >= r * TILE_SIZE && y < (r + h) * TILE_SIZE;

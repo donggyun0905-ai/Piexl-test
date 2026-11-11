@@ -6,9 +6,11 @@ import { STIGMA } from "../weaponsDawn";
 import { traitOf } from "./faction";
 import { addPickup, passivePool, pickDistinct, usePool } from "./loot";
 import { awaken } from "./stigma";
-import { crGain } from "./crusaderKit";
+import { crGain as crGain_ } from "./crusaderKit";
 import { drawNow } from "./jokerDraw";
 import type { RunState } from "./types";
+import { srcFn } from "./dmgSrc";
+const crGain = srcFn("practiceFaction", () => crGain_);
 
 /** 정령 상태를 모두 지움 */
 function clearSpirit(s: RunState): void {

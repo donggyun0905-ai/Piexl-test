@@ -3,11 +3,13 @@
 // 검이 남아 있으면 15초마다 맵 전체 기절 0.5초 (1초 전 경고)
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { addShape } from "./hazards";
-import { lucHurt, lucRng, lucSpot, lucStatus, lucTargets, near } from "./lucKit";
+import { lucHurt as lucHurt_, lucRng, lucSpot, lucStatus, lucTargets, near } from "./lucKit";
 import type { LucFight } from "./lucTypes";
 import { allPlayers, eachSeat } from "./party";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, makeEnemy } from "./util";
+import { srcFn } from "./dmgSrc";
+const lucHurt = srcFn("lucSwords", () => lucHurt_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

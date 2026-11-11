@@ -3,13 +3,15 @@ import { TILE_SIZE } from "../constants";
 import { PW } from "../paewangDefs";
 import type { PwArenaDef } from "../paewangMapKit";
 import { TERRAIN } from "../terrainDefs";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { eachSeat } from "./party";
 import { inPlay } from "./pvpWorld";
 import { recapEnv } from "./pvpRecap";
 import { spikeState } from "./terrain";
 import type { TerrainRect, TerrainState } from "./terrainTypes";
 import type { RunState } from "./types";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("pvpTerrain", () => damagePlayer_);
 
 /** 칸 네모 → 픽셀 네모 */
 const px = (list: PwArenaDef["mud"]): TerrainRect[] => (list ?? []).map(([c, r, w, h]) => [c * TILE_SIZE, r * TILE_SIZE, w * TILE_SIZE, h * TILE_SIZE]);

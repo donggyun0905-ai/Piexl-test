@@ -1,9 +1,11 @@
 // 마법사 마법 문양: 지금 무기 공격은 매직 미사일 같은 일반 공격(약하게), 공격할 때마다 발밑 마법진에 한 획씩 새겨지고
 // 다 새겨지면 무기에 맞는 큰 마법이 가까운 적에게 떨어짐 (불꽃 폭발·번개·얼음·혜성·별비·그림자·공허 등)
 import { ENEMIES, type WeaponId } from "../content";
-import { blastAt, dotDamage, ignite } from "./combat";
+import { blastAt as blastAt_, dotDamage, ignite } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, normalize, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("rune", () => blastAt_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

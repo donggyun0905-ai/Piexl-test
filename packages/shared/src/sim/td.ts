@@ -3,7 +3,7 @@
 // 파일: tdTypes(상태) · tdTowers(타워·레벨·공격) · tdWaves(적·길·보스 기술) · tdDefs·tdMaps(수치·맵)
 import { TD_ROUNDS, TD_RULES, tdRoundGold } from "../tdDefs";
 import { TD_COLS, TD_ROWS, tdMapDef, type TdMapId } from "../tdMaps";
-import { updateDelayed } from "./combat";
+import { updateDelayed as updateDelayed_ } from "./combat";
 import { updateBleed } from "./gunExtras";
 import { decaySlow } from "./laserGear";
 import { PLAIN_SHAPE } from "./layout";
@@ -16,6 +16,8 @@ import type { TdState } from "./tdTypes";
 import { buildSpawns, hatch, isFinal, spawnFinal, spawnTd, updateTdEnemies } from "./tdWaves";
 import type { EnemyKind } from "../content";
 import type { EffectState } from "./types";
+import { srcFn } from "./dmgSrc";
+const updateDelayed = srcFn("td", () => updateDelayed_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

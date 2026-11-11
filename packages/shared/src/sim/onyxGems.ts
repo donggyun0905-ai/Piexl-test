@@ -4,10 +4,12 @@ import { ONYX_PERKS as K } from "../itemsOnyx";
 import { createRng, deriveSeed } from "../rng";
 import { ONYX as O, ONYX_GEM_IDS, ONYX_GEMS as G, type OnyxGem } from "../weaponsOnyx";
 import { healPlayer } from "./combat";
-import { alive, isBoss, inCircle, inLine, poison, strike, stun } from "./s2Kit";
+import { alive, isBoss, inCircle, inLine, poison, strike as strike_, stun } from "./s2Kit";
 import type { OnyxFx } from "./fxTypes";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const strike = srcFn("onyxGems", () => strike_);
 
 /** 보석 피해 기준 (보석 왕관 +) */
 const power = (s: RunState) => s.player.stats.damage * (hasPerk(s.player, "oxCrown") ? K.oxCrown.mul : 1);

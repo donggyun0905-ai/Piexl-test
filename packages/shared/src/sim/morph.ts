@@ -1,15 +1,16 @@
 // 변희(비르디아, 만물의 소녀): 든 무기의 동물로 변해 그 동물처럼 싸움. 동물마다 공격이 다르고, 아이템 셋이 그 동물만 강하게 함
 // 늑대 물기 · 곰 할퀴기 · 독수리 깃털 · 뱀 독 물기 · 멧돼지 돌진 · 전갈 꼬리 · 박쥐 음파 · 코끼리 짓밟기 · 거미 거미줄 · 불사조 불덩이
 // 수치는 weaponsMorph.MORPH, 아이템은 itemsMorph
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { MORPH_PERKS as K } from "../itemsMorph";
 import { MORPH as M } from "../weaponsMorph";
-import { blastAt, damageEnemy, healPlayer, ignite } from "./combat";
-import { alive, fan, inCircle, inCone, inLine, poison, root, rushTick, shoot, startRush, stun, strike } from "./s2Kit";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_, healPlayer, ignite } from "./combat";
+import { alive, fan, inCircle, inCone, inLine, poison, root, rushTick as rushTick_, shoot, startRush, stun, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, weaponOf } from "./util";
 import { evoSkill, evoTaken, evoTakenPvp, heatTick, raidTick } from "./morphEvo";
+const blastAt = srcFn("morph", () => blastAt_), damageEnemy = srcFn("morph", () => damageEnemy_), rushTick = srcFn("morph", () => rushTick_), strike = srcFn("morph", () => strike_);
 
 const animalOf = (p: PlayerState) => (p.characterId === "byeonhui" ? weaponOf(p).animal : undefined);
 

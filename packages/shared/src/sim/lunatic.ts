@@ -1,16 +1,17 @@
 // 루나틱(새벽의 성흔, 월광의 검사 · 리더): 누르고 있으면 새하얀 레이피어로 매우 빠르게 찌름 (앞으로 약간 돌진) · 달빛이 없어도 약점 공격 30% (sim/lunaticWeak)
 // 대시: 지나가는 길의 적을 찌름 · 월광 표적(머리 위 조준점)에 약점이 터지면 확정 치명타 + 빠른 달빛 베기 (달빛 상태이상 피해, sim/lunaticKit)
 // 성흔이 가득 차면 만월 각성: 공격 속도 증가 · 모든 적이 표적 · 수치 weaponsLunatic · 아이템 itemsLunatic (삼연 찌르기·월광 검기·잔상 찌르기·초승달 회전 베기 등)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { LUNATIC_PERKS as K } from "../itemsLunatic";
 import { LUNATIC as L } from "../weaponsLunatic";
-import { addWave, lnHit, marksTick, strikesTick, wavesTick } from "./lunaticKit";
+import { addWave, lnHit as lnHit_, marksTick, strikesTick, wavesTick as wavesTick_ } from "./lunaticKit";
 import { rot } from "./orbit";
 import { inCircle, inLine, roomKey } from "./s2Kit";
 import { isAwake, stigmaTick } from "./stigma";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, reachOf, roomGrid } from "./util";
+const lnHit = srcFn("lunatic", () => lnHit_), wavesTick = srcFn("lunatic", () => wavesTick_);
 
 /** 찌르기 길이 (사거리 증가·긴 칼날 따름) */
 const lenOf = (s: RunState) => L.thrustLen * reachOf(s.player) * (hasPerk(s.player, "lnPierce") ? K.lnPierce.len : 1);

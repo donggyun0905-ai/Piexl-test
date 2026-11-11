@@ -2,13 +2,15 @@
 // 나머지 무기(원소구슬·빛·은하수·행성·검·별)는 공격 키 없이 회전체가 알아서 때림 (orbit)
 import { ENEMIES } from "../content";
 import { createRng, deriveSeed } from "../rng";
-import { blastAt, damageEnemy } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_ } from "./combat";
 import { orbCount } from "./orbit";
 import { CRIT_MUL } from "./orbitBlades";
 import { orbShot } from "./orbitPerks";
 import type { EnemyState, RunState } from "./types";
 import { weaponDot } from "./orbitElements";
 import { addEffect, dist2, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("orbitAttack", () => blastAt_), damageEnemy = srcFn("orbitAttack", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

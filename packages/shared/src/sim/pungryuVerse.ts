@@ -5,9 +5,11 @@ import { rot } from "./orbit";
 import { puPower } from "./pungryuKit";
 import { alive, inCircle, inCone, inLine, stun } from "./s2Kit";
 import { ignite } from "./status";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("pungryuVerse", () => damageEnemy_);
 
 /** 풍류사 공격 한 번 (서리 맞은 적은 더 아픔) */
 export function puHit(s: RunState, e: EnemyState, dmg: number, push = 0): void {

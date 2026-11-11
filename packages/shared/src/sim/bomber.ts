@@ -1,6 +1,6 @@
 // 붐버(테라코어, 시즌 2): "폭발은 예술이다". 던지고·붙이고·깔고·쏘아 올려 터뜨림
 // 예술 연쇄: 1초 안에 또 터지면 한 칸씩 쌓여 폭발이 커짐 · 터져 쓰러진 적 자리에 여진. 수치는 weaponsBomber.BOMBER, 아이템은 itemsBomber
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { PW_PASSIVE } from "../paewangPassive";
 import { manualAim } from "./pwBasic";
 import { TICK_RATE } from "../constants";
@@ -8,7 +8,7 @@ import { BOMBER_PERKS as K } from "../itemsBomber";
 import { createRng, deriveSeed } from "../rng";
 import { BOMBER as B, type BombMode, type BombStyle } from "../weaponsBomber";
 import { nearest } from "./brawlMoves";
-import { blastAt, damagePlayer, ignite } from "./combat";
+import { blastAt as blastAt_, damagePlayer as damagePlayer_, ignite } from "./combat";
 import { addFlame } from "./flames";
 import { placeMine, updateMines } from "./bomberMines";
 import { backMissiles } from "./missiles";
@@ -16,6 +16,7 @@ import { alive, inCircle } from "./s2Kit";
 import type { Bomb } from "./tcTypes";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, weaponOf } from "./util";
+const blastAt = srcFn("bomber", () => blastAt_), damagePlayer = srcFn("bomber", () => damagePlayer_);
 
 const styleOf = (p: PlayerState): BombStyle => weaponOf(p).bomb ?? { mode: "lob", r: 20, fuse: 24 };
 const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.seed, tag, s.tick, n)).nextFloat();

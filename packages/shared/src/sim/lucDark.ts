@@ -7,9 +7,11 @@ import { addShape } from "./hazards";
 import { lucRng, lucSpot, lucTargets, near } from "./lucKit";
 import type { LucFight } from "./lucTypes";
 import { allPlayers, eachSeat } from "./party";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, enemyShot, makeEnemy } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("lucDark", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

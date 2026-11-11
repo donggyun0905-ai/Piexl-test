@@ -1,15 +1,16 @@
 // 미카엘라 무기 기술 14가지 (무기마다 어떤 기술을 쓰는지는 michaelaWeaponMoves): 베기 · 내려찍기 · 휘두르기 · 회전 베기 · 찌르기 · 돌진 찌르기 · 던지기 · 세 갈래 던지기
 // X 베기 · 땅 가르기 · 올려베기 · 회오리 · 칼비 · 꿰뚫는 빛 창. 맞히면 그 무기 속성 효과 (sim/michaelaKit.mcHit) · 수치는 MICHAELA_MOVES (관리자에서 바꿈)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { MICHAELA_PERKS as K } from "../itemsMichaela";
 import { MICHAELA as M, MICHAELA_MOVES as V } from "../weaponsMichaela";
 import { MC_MOVE_IDS, type McMove } from "../michaelaWeaponMoves";
 import { createRng, deriveSeed } from "../rng";
-import { addCombo, dropBlade, hold, kindOf, mcHit, pickWeapon, plant } from "./michaelaKit";
-import { inCircle, inCone, onSegment, stun, strike } from "./s2Kit";
+import { addCombo, dropBlade, hold, kindOf, mcHit as mcHit_, pickWeapon, plant } from "./michaelaKit";
+import { inCircle, inCone, onSegment, stun, strike as strike_ } from "./s2Kit";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, roomGrid, reachOf } from "./util";
 import { isWall } from "./waveKit";
+const mcHit = srcFn("michaelaMoves", () => mcHit_), strike = srcFn("michaelaMoves", () => strike_);
 
 /** 기술 효과 하나 (그림: 기술 번호 × 64 + 그림 무기 번호) */
 function fx(s: RunState, m: McMove, x: number, y: number, size: number, toX = x, toY = y, ticks = 16): void {

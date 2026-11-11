@@ -4,12 +4,14 @@ import { MICHAELA as M } from "../weaponsMichaela";
 import { MC_WEAPON_ELEM } from "../michaelaWeaponList";
 import { ROOM_CX, ROOM_CY } from "../constants";
 import { createRng, deriveSeed } from "../rng";
-import { addCombo, blinkTo, dropBlade, explode, mcCooldown, mcHit, pickWeapon, plant, swapTo } from "./michaelaKit";
+import { addCombo, blinkTo as blinkTo_, dropBlade, explode as explode_, mcCooldown, mcHit as mcHit_, pickWeapon, plant, swapTo as swapTo_ } from "./michaelaKit";
 import type { McBlade } from "./mcTypes";
 import { alive, inCircle } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 import { isWall } from "./waveKit";
+import { srcFn } from "./dmgSrc";
+const blinkTo = srcFn("michaelaSkills", () => blinkTo_), explode = srcFn("michaelaSkills", () => explode_), mcHit = srcFn("michaelaSkills", () => mcHit_), swapTo = srcFn("michaelaSkills", () => swapTo_);
 
 /** (x,y) 둘레 반지름 r 안 아무 데나 n개 떨어뜨림 (벽은 피함, 시드로 자리 · gap 틱씩 차례로) */
 function rainAround(s: RunState, tag: string, x: number, y: number, r: number, n: number, delay: number, mul: number, gap = 3): void {

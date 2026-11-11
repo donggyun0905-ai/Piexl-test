@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { damageEnemy, dotDamage } from "./combat";
-import { srcRun } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 import { drifter, enemy, FIRE, run } from "./perkTestUtil";
 import { statusHit } from "./statusHit";
 
@@ -20,13 +20,11 @@ describe("피해 출처 기록", () => {
     expect(by["d:burn"]).toBeGreaterThan(0);
     expect(sum(by)).toBeCloseTo(9999 - e.hp, 5);
   });
-  it("색만 입힌 직접 타격(statusHit)은 한 번만 셈 · 허수아비는 안 셈", () => {
+  it("색만 입힌 직접 타격(statusHit)은 한 번만 셈", () => {
     const s = drifter();
     const e = enemy(1, s.player.x + 20, s.player.y);
-    const d = { ...enemy(2, s.player.x + 20, s.player.y), kind: "dummy" as const };
-    s.enemies = [e, d];
+    s.enemies = [e];
     statusHit(s, e, "shock", 5);
-    damageEnemy(s, d, 5, 1, 0);
     expect(sum(s.player.dmgBy)).toBeCloseTo(9999 - e.hp, 5);
   });
   it("구간 안에서 쏜 내 탄은 출처를 달고 가서 맞을 때 그 출처로 셈", () => {
@@ -37,6 +35,19 @@ describe("피해 출처 기록", () => {
     expect(s.projectiles.at(-1)!.src).toBe("echo");
     run(s, 30);
     expect(s.player.dmgBy?.echo).toBeGreaterThan(0);
+  });
+  it("파일로 묶은 피해 함수는 f:파일로 · 패시브 구간 안이면 패시브가 먼저 · 안쪽 파일이 이김", () => {
+    const s = drifter();
+    const e = enemy(1, s.player.x + 20, s.player.y);
+    s.enemies = [e];
+    const inner = srcFn("inner", () => damageEnemy);
+    const outer = srcFn("outer", () => (dmg: number) => inner(s, e, dmg, 1, 0));
+    outer(4);
+    srcRun(s, "echo", () => outer(4));
+    const by = s.player.dmgBy!;
+    expect(by["f:inner"]).toBeGreaterThan(0);
+    expect(by["f:outer"]).toBeUndefined();
+    expect(by.echo).toBeGreaterThan(0);
   });
   it("그냥 공격하면 기본(무기)에 쌓임", () => {
     const s = drifter();

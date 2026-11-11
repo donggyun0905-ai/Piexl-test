@@ -4,11 +4,13 @@ import { ENEMIES } from "../enemyDefs";
 import type { ItemTag } from "../itemsTags";
 import { createRng, deriveSeed } from "../rng";
 import type { AwField } from "./buildAwaken";
-import { damageEnemy, healPlayer } from "./combat";
+import { damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import { raiseShield } from "./imugiMods";
 import { ignite } from "./status";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, DIR16 } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("awakenCasts", () => damageEnemy_);
 
 type Opt = { toX?: number; toY?: number; width?: number };
 const boss = (e: EnemyState) => !!ENEMIES[e.kind].boss;

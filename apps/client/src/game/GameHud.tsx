@@ -10,6 +10,7 @@ import { BuffPanel } from "./BuffPanel";
 import { SetPanel } from "./build/SetPanel";
 import { RunGuide } from "./RunGuide";
 import type { StatRow } from "./statsView";
+import { SrcPanel } from "./SourcePanel";
 import type { Controls } from "./controls";
 import type { GameScreenProps } from "./gameScreenProps";
 import { isInfo, type Overlay } from "./GameOverlays";
@@ -94,6 +95,7 @@ export function StatsPanel({ rows, t, lang, onInfo, run }: { rows: StatRow[]; t?
           </button>
         </>
       )}
+      {run && t && <SrcPanel run={run} t={t} lang={lang ?? "ko"} />}
       {run && t && <SetPanel run={run} t={t} lang={lang ?? "ko"} />}
       {run && t && <BuffPanel run={run} t={t} lang={lang ?? "ko"} />}
     </div>

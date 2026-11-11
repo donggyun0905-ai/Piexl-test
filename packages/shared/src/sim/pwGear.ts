@@ -4,13 +4,15 @@ import { PW } from "../paewangDefs";
 import { PW_GROW } from "../pwRules";
 import { PW_GEAR_FX as F } from "../pwShop";
 import { createRng, deriveSeed } from "../rng";
-import { damagePlayer, healPlayer } from "./combat";
+import { damagePlayer as damagePlayer_, healPlayer } from "./combat";
 import { recalcStats } from "./items";
 import { allPlayers, eachSeat, seatNo, useSeat } from "./party";
 import { inPlay } from "./pvpWorld";
 import { stk } from "./pwGearStat";
 import type { PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("pwGear", () => damagePlayer_);
 
 const has = (p: PlayerState, id: string) => !!p.pwGear?.includes(id);
 const fxOf = (p: PlayerState) => (p.pwFx ??= {});

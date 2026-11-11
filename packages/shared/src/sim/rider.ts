@@ -3,11 +3,13 @@
 import { TICK_RATE } from "../constants";
 import { RIDER_PERKS as K } from "../itemsRider";
 import { RIDER as R, type RideStyle } from "../weaponsRider";
-import { blastAt, damageEnemy, damagePlayer, healPlayer, ignite } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_, damagePlayer as damagePlayer_, healPlayer, ignite } from "./combat";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, weaponOf } from "./util";
 import { addFlame } from "./flames";
-import { alive, fan, inCircle, inCone, inLine, shoot, startRush, rushTick, stun, strike } from "./s2Kit";
+import { alive, fan, inCircle, inCone, inLine, shoot, startRush, rushTick as rushTick_, stun, strike as strike_ } from "./s2Kit";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("rider", () => blastAt_), damageEnemy = srcFn("rider", () => damageEnemy_), damagePlayer = srcFn("rider", () => damagePlayer_), rushTick = srcFn("rider", () => rushTick_), strike = srcFn("rider", () => strike_);
 
 const styleOf = (p: PlayerState): RideStyle => weaponOf(p).ride ?? { move: "smash", reach: 30 };
 /** 이번 틱에 움직인 거리 */

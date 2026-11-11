@@ -5,8 +5,10 @@ import { rot } from "./orbit";
 import { alive, isBoss, onSegment, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { dist2, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
-import { addBit, anchored, big, burstAt, densest, dmgOf, foeById, isWall, moveFoe, nearest, steer, strongest, turnDir, wvHit } from "./waveKit";
+import { addBit, anchored, big, burstAt as burstAt_, densest, dmgOf, foeById, isWall, moveFoe, nearest, steer, strongest, turnDir, wvHit as wvHit_ } from "./waveKit";
 import { wvFx as fx, type BitStep, type SkillCast } from "./waveSkillsA";
+import { srcFn } from "./dmgSrc";
+const burstAt = srcFn("waveSkillsE", () => burstAt_), wvHit = srcFn("waveSkillsE", () => wvHit_);
 
 const TAU = Math.PI * 2;
 

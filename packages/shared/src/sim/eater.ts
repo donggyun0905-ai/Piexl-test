@@ -1,18 +1,19 @@
 // 이터(헬리오스): 이빨 달린 그림자. 누를 때마다 열 가지 공격 중 하나가 확률로 나옴 (넓고 세지만 느림)
 // 쓰러뜨린 적은 '먹은' 것으로 세고, 먹을 때마다 재생력 +0.1 (상한 20, 10초마다 그만큼 회복)
 // 수치는 weaponsEater.EATER, 아이템은 itemsEater
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { EATER_PERKS as K } from "../itemsEater";
 import { createRng, deriveSeed } from "../rng";
 import { EATER as E, type MawMove } from "../weaponsEater";
 import { nearest } from "./brawlMoves";
 import { healPlayer } from "./combat";
-import { inCircle, inCone, isBoss, onSegment, shoot, startRush, rushTick, strike } from "./s2Kit";
+import { inCircle, inCone, isBoss, onSegment, shoot, startRush, rushTick as rushTick_, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
 import { recalcStats } from "./items";
 import type { StatMod } from "../stats";
+const rushTick = srcFn("eater", () => rushTick_), strike = srcFn("eater", () => strike_);
 
 const MOVES = Object.keys(E.moves) as MawMove[];
 const BITES: readonly MawMove[] = ["bite", "abyss", "triBite", "lurker"];

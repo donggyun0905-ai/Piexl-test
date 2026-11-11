@@ -1,12 +1,13 @@
 // 이클립스 틱마다 도는 것: 맞힘(게이지) · 날아가는 검격 · 블랙홀 · 그림자 돌진 · 영역(이글거리는 영역 + 치유의 빛 / 죽음의 영역)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { ECLIPSE_PERKS as K } from "../itemsEclipse";
 import { ECLIPSE as E } from "../weaponsEclipse";
 import { heal } from "./heal";
-import { alive, inCircle, isBoss, onSegment, strike } from "./s2Kit";
+import { alive, inCircle, isBoss, onSegment, strike as strike_ } from "./s2Kit";
 import { eclipseDmgMul, zoneR } from "./eclipseStats";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, roomGrid } from "./util";
+const strike = srcFn("eclipseZone", () => strike_);
 
 /** 지금 모습의 공격력 */
 export const eclipsePower = (p: PlayerState) => p.stats.damage * eclipseDmgMul(p);

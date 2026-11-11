@@ -3,11 +3,13 @@
 import { TICK_RATE } from "../constants";
 import { YURIEL_PERKS as K } from "../itemsYuriel";
 import { YURIEL as Y } from "../weaponsYuriel";
-import { yrHeal, yrHit } from "./yurielKit";
+import { yrHeal, yrHit as yrHit_ } from "./yurielKit";
 import { maceTick, ultTick, wardTick, yrSkill } from "./yurielSkills";
 import { inCircle, inCone, roomKey } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const yrHit = srcFn("yuriel", () => yrHit_);
 
 /** 1·2타: 앞 부채꼴을 철퇴로 (k 0 · 1 반대쪽으로) */
 function swing(s: RunState, k: number): void {

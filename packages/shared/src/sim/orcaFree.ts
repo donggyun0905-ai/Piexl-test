@@ -3,9 +3,11 @@ import { ORCA_PERKS as K } from "../itemsOrca";
 import { ORCA as O } from "../weaponsOrca";
 import { blocksShot } from "./layout";
 import { alive, onSegment, stun } from "./s2Kit";
-import { statusHit } from "./statusHit";
+import { statusHit as statusHit_ } from "./statusHit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const statusHit = srcFn("orcaFree", () => statusHit_);
 
 export const isFree = (p: PlayerState) => (p.ocFree ?? 0) > 0;
 /** 해방 중 효과는 진한 파랑 (화면이 tint로 색을 바꿈) */

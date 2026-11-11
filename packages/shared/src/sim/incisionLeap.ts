@@ -1,12 +1,13 @@
 // 인시전 도살 도약: 콤보가 쌓이면 다음 공격 대신 조준한 쪽 가장 가까운 적에게 뛰어올라(공중 무적) 내려찍음
 // 착지 둘레 피해 + 기절 · 갈라진 땅 (남아서 벰) · 연속 도약 (가까운 다른 적에게 한 번 더)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { INCISION_PERKS as K } from "../itemsIncision";
 import { INCISION as I } from "../weaponsIncision";
-import { addCombo, addZone, icGain, icStrike, nearest } from "./incisionKit";
+import { addCombo as addCombo_, addZone, icGain as icGain_, icStrike as icStrike_, nearest } from "./incisionKit";
 import { alive, inCircle, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, reachOf, roomGrid } from "./util";
+const addCombo = srcFn("incisionLeap", () => addCombo_), icGain = srcFn("incisionLeap", () => icGain_), icStrike = srcFn("incisionLeap", () => icStrike_);
 
 /** 도약 착지 반지름 */
 const leapR = (s: RunState) => I.leapR * reachOf(s.player) * (hasPerk(s.player, "icLeapBig") ? K.icLeapBig.r : 1);

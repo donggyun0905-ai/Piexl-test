@@ -8,9 +8,11 @@ import { FLY as F, type TalonStyle } from "../weaponsFly";
 import { healPlayer } from "./combat";
 import { raidTick, startRaid } from "./morphEvo";
 import { createRng, deriveSeed } from "../rng";
-import { alive, fan, inCone, onSegment, poison, rushTick, shoot, startRush, stun, strike } from "./s2Kit";
+import { alive, fan, inCone, onSegment, poison, rushTick as rushTick_, shoot, startRush, stun, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const rushTick = srcFn("fly", () => rushTick_), strike = srcFn("fly", () => strike_);
 
 const styleOf = (p: PlayerState): TalonStyle => weaponOf(p).talon ?? "glass";
 

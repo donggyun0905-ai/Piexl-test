@@ -7,7 +7,7 @@ import { CHARACTERS, ENEMIES, type CharacterId } from "../content";
 import { createRng, deriveSeed } from "../rng";
 import { SWARM, type SwarmDropKind } from "../swarmDefs";
 import { recallChakram } from "./bedouin";
-import { addGold, blastAt, healPlayer } from "./combat";
+import { addGold, blastAt as blastAt_, healPlayer } from "./combat";
 import { PLAIN_SHAPE } from "./layout";
 import { applyRoom } from "./rooms";
 import { checkDeath, createRun, stepSim } from "./run";
@@ -21,6 +21,8 @@ import { gainXp, makeChoices, openChest, startWeapon } from "./swarmLevel";
 import { swarmMinutes, updateSpawns } from "./swarmSpawn";
 import type { EnemyState, RunState, TickInput } from "./types";
 import { dist2, normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("swarm", () => blastAt_);
 
 export function createSwarm(seed: number, c: CharacterId, map: SwarmMapId = "plains", level = 0): RunState {
   const s = createRun(seed, c);

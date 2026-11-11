@@ -1,10 +1,12 @@
 // 유리엘 스킬 넷(1 정화의 빛 · 2 집행의 철퇴 · 3 수호 결계 · 4 성녀의 단죄) · 결계 · 날아가는 철퇴 · 내리꽂힘 (sim/yuriel에서 부름)
 import { YURIEL_PERKS as K } from "../itemsYuriel";
 import { YURIEL as Y } from "../weaponsYuriel";
-import { addSin, isYuriel, wardR, wards, yrCooldown, yrHeal, yrHit } from "./yurielKit";
+import { addSin, isYuriel, wardR, wards, yrCooldown, yrHeal, yrHit as yrHit_ } from "./yurielKit";
 import { alive, inCircle, isBoss, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+import { srcFn } from "./dmgSrc";
+const yrHit = srcFn("yurielSkills", () => yrHit_);
 
 /** 1 정화의 빛: 수정구의 성수가 둘레로 퍼짐 (빛 피해 · 단죄 +2) · 체력 회복 */
 function holyLight(s: RunState): void {

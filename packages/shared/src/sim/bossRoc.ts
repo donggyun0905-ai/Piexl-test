@@ -4,12 +4,14 @@
 import { dashDodged } from "./remnant";
 import { createRng, deriveSeed } from "../rng";
 import { half, hitDamage } from "./bossKit";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { addShape } from "./hazards";
 import { ultReady } from "./bossUlts";
 import { startRocUlt, updateRocUlt } from "./beastUlts";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, DIR16, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("bossRoc", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

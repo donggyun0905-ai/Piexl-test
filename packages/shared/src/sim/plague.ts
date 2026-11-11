@@ -6,10 +6,12 @@ import { PLAGUE_PERKS as K } from "../itemsPlague";
 import { createRng, deriveSeed } from "../rng";
 import { PLAGUE as P, type PlagueKind } from "../weaponsPlague";
 import { dotDamage, healPlayer, ignite } from "./combat";
-import { alive, inCircle, inCone, poison, strike } from "./s2Kit";
+import { alive, inCircle, inCone, poison, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
 import { pctHp } from "./pctHp";
+import { srcFn } from "./dmgSrc";
+const strike = srcFn("plague", () => strike_);
 
 const kindOf = (p: PlayerState): PlagueKind => weaponOf(p).plague ?? "swarm";
 const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.seed, tag, s.tick, n)).nextFloat();

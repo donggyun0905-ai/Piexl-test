@@ -2,11 +2,13 @@
 import { MADQUEEN_PERKS as K } from "../itemsMadQueen";
 import { MADQUEEN as Q } from "../weaponsMadQueen";
 import { blocksShot } from "./layout";
-import { boomR, explode, fleetOf, mqSpot } from "./madQueenKit";
+import { boomR, explode as explode_, fleetOf, mqSpot } from "./madQueenKit";
 import type { MqShell, MqTurret } from "./madQueenTypes";
 import { alive, stun } from "./s2Kit";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const explode = srcFn("madQueenArms", () => explode_);
 
 /** 포탄 하나를 쏨 (땅 위 x,y에서 dx,dy 쪽 · 그림은 높이 h의 포구에서 나옴) */
 export function fireShell(s: RunState, x: number, y: number, dx: number, dy: number, o: { sp: number; range: number; r: number; boom: number; dmg: number; src: 0 | 1; h: number }): void {

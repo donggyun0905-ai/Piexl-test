@@ -1,15 +1,16 @@
 // 에테르 광부 땅 위의 것들: 원석 모으기 · 광산 붕괴 바위 · 에테르 결정(깨면 파편) · 땅 갈라짐 · 다이너마이트 · 구덩이
 // 수치는 weaponsMiner.MINER, 아이템은 itemsMiner
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { MINER_PERKS as K } from "../itemsMiner";
 import { MINER as M } from "../weaponsMiner";
 import { createRng, deriveSeed } from "../rng";
-import { addGold, blastAt } from "./combat";
+import { addGold, blastAt as blastAt_ } from "./combat";
 import { rot } from "./orbit";
-import { alive, inCircle, isBoss, onSegment, strike } from "./s2Kit";
+import { alive, inCircle, isBoss, onSegment, strike as strike_ } from "./s2Kit";
 import type { GroundMark } from "./secretTypes";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, hasPerk, weaponOf } from "./util";
+const blastAt = srcFn("minerGround", () => blastAt_), strike = srcFn("minerGround", () => strike_);
 
 const rng = (s: RunState, ...tags: (string | number)[]) => createRng(deriveSeed(s.seed, "miner", s.tick, ...tags));
 

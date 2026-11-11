@@ -2,11 +2,13 @@
 import { TICK_RATE } from "../constants";
 import { WEAPONS, type WeaponDef } from "../content";
 import { dashTo, lunge, strike } from "./brawlMoves";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import { bullet, fan, roll, shootPattern, SUPPORT_CHANCE, SUPPORT_TICKS } from "./gun";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, DIR16, dist2, hasPerk, markDot, normalize, weaponOf } from "./util";
 import { pctHp } from "./pctHp";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("gunExtras", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

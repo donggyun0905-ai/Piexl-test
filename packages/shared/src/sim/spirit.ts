@@ -1,17 +1,18 @@
 // 정령사(비르디아): 본인은 매직 미사일만, 곁의 작은 정령 셋과 대정령(무기)이 싸움
 // 작은 정령은 30초마다 가장 오래된 하나가 떠나고 열두 종류 중 무작위(시드)로 새 정령이 옴. 대정령 공격은 spiritGreat
 // 수치는 weaponsSpirit.SPIRIT, 아이템은 itemsSpirit
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { SPIRIT_PERKS as K } from "../itemsSpirit";
 import { createRng, deriveSeed } from "../rng";
 import { SMALL_SPIRITS, SPIRIT as P, type SmallSpirit } from "../weaponsSpirit";
-import { blastAt, healPlayer, ignite } from "./combat";
-import { alive, fan, inCircle, poison, root, stun, strike } from "./s2Kit";
+import { blastAt as blastAt_, healPlayer, ignite } from "./combat";
+import { alive, fan, inCircle, poison, root, stun, strike as strike_ } from "./s2Kit";
 import { greatTick, harmonyMul } from "./spiritGreat";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, roomGrid, weaponOf } from "./util";
 import { raiseShield } from "./imugiMods";
+const blastAt = srcFn("spirit", () => blastAt_), strike = srcFn("spirit", () => strike_);
 
 /** 정령 빛깔 (효과 · 그리기) */
 export const SPIRIT_TINT: Record<SmallSpirit, string> = {

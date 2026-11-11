@@ -1,5 +1,5 @@
 // 적이 남기는 위험 표시: 미리 보이고, 정해진 틱에 범위 안 플레이어에게 피해 (원 · 부채꼴 · 선). 대시 중이면 피함
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { throughDash } from "./bossGrip";
 import type { Hazard } from "./fxTypes";
 import type { RunState } from "./types";
@@ -7,6 +7,8 @@ import { eachSeat } from "./party";
 import { addEffect, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 import { moonOut } from "./moonlight";
 import { hazardStatus } from "./lucKit";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("hazards", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

@@ -9,11 +9,13 @@ import { inPlay } from "./pvpWorld";
 import { onSegment } from "./s2Kit";
 import { recapHeal } from "./pvpRecap";
 import { growSkillDmg, growSkillHeal } from "./pwGearStat";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
 import { plagueCut } from "./pwPassive";
 import { PW_PASSIVE } from "../paewangPassive";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("pwSkillHit", () => damageEnemy_);
 
 /** 스킬 그림 모양 순서 (EffectState.style) */
 export const PW_FX_STYLES = ["burst", "meteor", "pillar", "rain", "beam", "wave", "slash", "spin", "dash", "blink", "aura", "field", "heal", "net", "summon"] as const;

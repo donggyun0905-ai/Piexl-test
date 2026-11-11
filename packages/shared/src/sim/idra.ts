@@ -1,15 +1,16 @@
 // 이드라(비르디아, 세계수의 아이): 가이아 하나가 대시 키로 대궁 → 단검 → 방패 → 채찍 차례로 바뀜 (바꿀 때 변환 일격, 대시는 그대로)
 // 대궁: 느리고 센 관통 화살 · 단검: 아주 빠른 찌르기, 다섯 번째마다 우드브레이커 일격(묶음) · 방패: 앞쪽 반원 강타·밀침·보호막, 받는 피해 감소
 // 채찍: 앞으로 뻗는 가시 채찍(한 줄의 적 모두, 독). 수치는 weaponsIdra.IDRA, 아이템은 itemsIdra
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { IDRA_PERKS as K } from "../itemsIdra";
 import { GAIA_FORMS, IDRA as I } from "../weaponsIdra";
-import { blastAt, healPlayer } from "./combat";
-import { fan, inCone, inLine, poison, root, roomKey, strike } from "./s2Kit";
+import { blastAt as blastAt_, healPlayer } from "./combat";
+import { fan, inCone, inLine, poison, root, roomKey, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, DASH_TICKS, hasPerk } from "./util";
 import { raiseShield } from "./imugiMods";
+const blastAt = srcFn("idra", () => blastAt_), strike = srcFn("idra", () => strike_);
 
 const formOf = (p: PlayerState) => GAIA_FORMS[p.gForm ?? 0] ?? "bow";
 

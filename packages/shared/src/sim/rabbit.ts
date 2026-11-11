@@ -1,17 +1,18 @@
 // 래빗(실베르): 누르면 바라보는 쪽 앞에 토끼 망치를 내리찍어 땅울림(원) 피해 · 밀침
 // 전용 패시브: 땅울림 파동·토끼인장·유령 망치·갈라진 땅은 sim/rabbitMarks · 슈퍼 럭키(초거대 망치)는 sim/rabbitUlt
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { ENEMIES } from "../enemyDefs";
 import { RABBIT_PASSIVES, RABBIT_PERKS as K } from "../itemsRabbit";
 import { createRng, deriveSeed } from "../rng";
 import { RABBIT_HAMMER as H, RABBIT_ULT as U } from "../weaponsRabbit";
 import { KNOCK_RULES as KB } from "./knock";
-import { hammerReach, hammerSize, luckMul, megaMul, rbArea } from "./rabbitKit";
+import { hammerReach, hammerSize, luckMul, megaMul, rbArea as rbArea_ } from "./rabbitKit";
 import { marksTick, slamExtras } from "./rabbitMarks";
 import { startUlt, ultTick } from "./rabbitUlt";
 import { alive, damageEnemyLite } from "./shadowingSpirits";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, hasPerk, normalize } from "./util";
+const rbArea = srcFn("rabbit", () => rbArea_);
 
 type P = RunState["player"];
 

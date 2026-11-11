@@ -3,10 +3,12 @@ import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../content";
 import { TIGER } from "../weaponsBeast";
 import { lunge } from "./brawlMoves";
-import { damageEnemy, healPlayer } from "./combat";
+import { damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import { instinct, updatePets } from "./pets";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("beast", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

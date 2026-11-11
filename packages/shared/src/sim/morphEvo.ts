@@ -9,10 +9,12 @@ import { createRng, deriveSeed } from "../rng";
 import type { StatMod } from "../stats";
 import type { AnimalKind } from "../weaponsMorph";
 import { healPlayer, ignite } from "./combat";
-import { alive, inCircle, inCone, inLine, poison, root, stun, strike } from "./s2Kit";
+import { alive, inCircle, inCone, inLine, poison, root, stun, strike as strike_ } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, weaponOf } from "./util";
 import { addFlame } from "./flames";
+import { srcFn } from "./dmgSrc";
+const strike = srcFn("morphEvo", () => strike_);
 
 /** 각성 수치: 능력치 · 기술 확률 · 공중 습격(내리긋기 수·한 번 틱·폭·피해 배율) */
 /** 방어력은 묵인과 같은 방식 (받는 피해 × (1 - 방어력/100)) · 불사조 열기: 지속 틱 · 반경 · 불꽃이 겹치는 간격 · 화상 배율 */

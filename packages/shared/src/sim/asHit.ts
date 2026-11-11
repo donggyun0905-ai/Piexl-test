@@ -2,11 +2,13 @@
 import { ASURA_PERKS as K } from "../itemsAsura";
 import { createRng, deriveSeed } from "../rng";
 import { asDmgMul, hasAs } from "./asKit";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import { alive } from "./shadowingSpirits";
 import { ignite } from "./status";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("asHit", () => damageEnemy_);
 
 /** 시드 확률 (굴릴 때마다 다른 값) */
 export function asRoll(s: RunState, tag: string): number {

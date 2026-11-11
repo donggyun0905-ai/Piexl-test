@@ -3,12 +3,14 @@
 import { dashDodged } from "./remnant";
 import { ROOM_COLS, ROOM_ROWS } from "../constants";
 import { createRng, deriveSeed } from "../rng";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { TILE_FLOOR, TILE_WALL, type TileGrid } from "./layout";
 import type { EnemyState, RunState } from "./types";
 import { depth } from "./hero";
 import { addEffect, dist2, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 import { addShape } from "./hazards";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("bossPrimeval", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

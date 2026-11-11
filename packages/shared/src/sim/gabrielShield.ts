@@ -1,11 +1,13 @@
 // 가브리엘 보호막 기술: 보호막 주기(겹쳐 쌓이지 않음) · 2 중력 붕괴(나에게 끌어모았다가 보호막을 터뜨려 피해) · 3 성벽 미니 망치(몸 둘레를 돎, 보호막이 사라지면 같이 사라짐)
 import { GABRIEL_PERKS as K } from "../itemsGabriel";
 import { GABRIEL as G } from "../weaponsGabriel";
-import { gbHit, press } from "./gabrielKit";
+import { gbHit as gbHit_, press } from "./gabrielKit";
 import { rot } from "./orbit";
-import { alive, inCircle, isBoss, strike, stun } from "./s2Kit";
+import { alive, inCircle, isBoss, strike as strike_, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+import { srcFn } from "./dmgSrc";
+const gbHit = srcFn("gabrielShield", () => gbHit_), strike = srcFn("gabrielShield", () => strike_);
 
 const TAU = Math.PI * 2;
 

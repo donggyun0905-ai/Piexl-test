@@ -1,12 +1,13 @@
 // 레오 전용 아이템 효과: 뇌광 도약(대시) · 번개 갈기 · 뇌운 · 황금 갑주(받는 피해·방전)
 // 사자의 긍지·연쇄 뇌전·번개 송곳니·천뢰 보석·우레 포효·백수의 왕은 sim/leo 안에서
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { LEO_PERKS as K } from "../itemsLeo";
 import { createRng, deriveSeed } from "../rng";
 import { addMark, charge, isLeo, leoPower, skyBolt } from "./leo";
-import { alive, inCircle, strike, stun } from "./s2Kit";
+import { alive, inCircle, strike as strike_, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, roomGrid } from "./util";
+const strike = srcFn("leoPerks", () => strike_);
 
 /** 뇌광 도약: 대시를 시작한 틱에 앞쪽(대시 방향) 가까운 적 곁으로 뛰어들어 내려침 */
 export function leoDash(s: RunState): void {

@@ -1,17 +1,18 @@
 // 훅 더블배럴 산탄총 (sim/hook가 씀): 초근접 부채꼴 발사 · 끌려온 적은 걸린 자리 쯤으로 튕겨 날아감 · 벽에 부딪히면 난파
 // 공용 도우미: 갈고리 종류 · 거리 · 걸리는 수 · 맞히기 · 받는 피해
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { HOOK_PERKS as K } from "../itemsHook";
 import { HOOK as H, type HookStyle } from "../weaponsHook";
-import { damageEnemy, healPlayer } from "./combat";
+import { damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import type { HkCaught } from "./hookTypes";
 import { bodyFits } from "./layout";
 import { addGold } from "./loot";
 import { alive, isBoss, stun } from "./s2Kit";
 import { ignite } from "./status";
-import { statusHit } from "./statusHit";
+import { statusHit as statusHit_ } from "./statusHit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, reachOf, roomGrid, weaponOf } from "./util";
+const damageEnemy = srcFn("hookShot", () => damageEnemy_), statusHit = srcFn("hookShot", () => statusHit_);
 
 export const isHook = (p: PlayerState) => p.characterId === "hook";
 export const hookOf = (p: PlayerState): HookStyle => weaponOf(p).hook ?? { hook: "rusty" };

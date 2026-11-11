@@ -2,11 +2,13 @@
 // 기둥 넷이 부서진 뒤 더해짐: X자(위험 표시 없음, 다 그려지면 판정) · 보라 구(경고 없이 나타나 끌어당긴 뒤 터짐)
 // 상태이상: 불기둥 화상 · 별 고리 감속 · 가시 고리 기절 · X자 치유 감소 50% · 보라 구 독
 import { addShape } from "./hazards";
-import { LUC_RULES as L, lucHurt, lucPose, lucRng, lucSpot, lucTargets, near } from "./lucKit";
+import { LUC_RULES as L, lucHurt as lucHurt_, lucPose, lucRng, lucSpot, lucTargets, near } from "./lucKit";
 import type { LucFight } from "./lucTypes";
 import { allPlayers } from "./party";
 import type { RunState } from "./types";
 import { addEffect } from "./util";
+import { srcFn } from "./dmgSrc";
+const lucHurt = srcFn("lucAttacks", () => lucHurt_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) · 크기는 큰 레이드 방에 맞춰 2배 (2026-11-09 사용자 요청) */
 const R = {

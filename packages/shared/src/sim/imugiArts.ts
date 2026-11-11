@@ -2,13 +2,15 @@
 import { ENEMIES } from "../enemyDefs";
 import { IMUGI_PERKS as K } from "../itemsImugi";
 import { IMUGI, DRAGON_COLORS, type DragonArt } from "../weaponsImugi";
-import { blastAt, damageEnemy, dotDamage } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_, dotDamage } from "./combat";
 import type { EnemyState, RunState } from "./types";
-import { statusHit } from "./statusHit";
+import { statusHit as statusHit_ } from "./statusHit";
 import { addEffect, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
 import { createRng, deriveSeed } from "../rng";
 import { raiseShield } from "./imugiMods";
 import { pctHp } from "./pctHp";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("imugiArts", () => blastAt_), damageEnemy = srcFn("imugiArts", () => damageEnemy_), statusHit = srcFn("imugiArts", () => statusHit_);
 
 const roll = (s: RunState, e: EnemyState) => createRng(deriveSeed(s.seed, "skyDragon", s.tick, e.id)).nextFloat();
 

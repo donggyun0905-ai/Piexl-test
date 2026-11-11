@@ -5,13 +5,15 @@ import { TICK_RATE } from "../constants";
 import { JOKER_PERKS as K } from "../itemsJoker";
 import { deriveSeed, createRng } from "../rng";
 import { JOKER_CARD as J, JOKER_STYLE, type JokerWeaponId } from "../weaponsJoker";
-import { blastAt, damageEnemy, healPlayer } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import { cardBase, cardMul, drawGain, drawTick } from "./jokerDraw";
 import type { JokerCard } from "./jkTypes";
 import { bounceOff } from "./projectiles";
 import { ignite } from "./status";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("joker", () => blastAt_), damageEnemy = srcFn("joker", () => damageEnemy_);
 
 type P = RunState["player"];
 const WEAPON_IDS: readonly JokerWeaponId[] = ["jkCards", "jkScythe", "jkToyGun"];

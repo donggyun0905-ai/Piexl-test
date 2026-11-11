@@ -1,14 +1,15 @@
 // 거너 총: 탄창·장전(샷건은 쏘면서 한 발씩) · 미니건 예열 · 고장(폐급) · 치명타 · 쏘는 모양(권총·저격·샷건·총검·쌍권총·기관단총·미니건)
 // 드론·지원 드론·건 마스터·출혈·특수용병 콤보·수류탄은 gunExtras
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import type { WeaponDef } from "../content";
 import { createRng, deriveSeed } from "../rng";
-import { blastAt } from "./combat";
+import { blastAt as blastAt_ } from "./combat";
 import { strike } from "./brawlMoves";
 import { addSupport, droneStep, ghostFire, mercStep, throwGrenade, updateBleed } from "./gunExtras";
 import type { PlayerState, ProjectileState, RunState } from "./types";
 import { DASH_TICKS, hasPerk, weaponOf } from "./util";
+const blastAt = srcFn("gun", () => blastAt_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

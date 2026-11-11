@@ -5,10 +5,10 @@ import { PW_CHAR } from "../paewangBalance";
 import { PW, PW_MODE } from "../paewangDefs";
 import { PW_GIGA } from "../pwRules";
 import { warEarly, warRole } from "./pwWarBot";
-import { damagePlayer, removeDead } from "./combat";
-import { updatePending } from "./pending";
+import { damagePlayer as damagePlayer_, removeDead as removeDead_ } from "./combat";
+import { updatePending as updatePending_ } from "./pending";
 import { allPlayers, eachSeat, isAlive, seatNo, useSeat } from "./party";
-import { updateProjectiles } from "./projectiles";
+import { updateProjectiles as updateProjectiles_ } from "./projectiles";
 import { updateEffects } from "./run";
 import { tickDots } from "./status";
 import { updateCharms } from "./talisman";
@@ -19,6 +19,8 @@ import { buffMul, pwHidden } from "./pwSkillHit";
 import { practiceSafe } from "./pvpPractice";
 import { recapTake } from "./pvpRecap";
 import { gearHits } from "./pwGear";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("pvpWorld", () => damagePlayer_), removeDead = srcFn("pvpWorld", () => removeDead_), updatePending = srcFn("pvpWorld", () => updatePending_), updateProjectiles = srcFn("pvpWorld", () => updateProjectiles_);
 
 /** 경기장에 나와 살아 있는 자리인지 */
 export function inPlay(s: RunState, i: number): boolean {

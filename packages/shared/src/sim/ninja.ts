@@ -1,10 +1,12 @@
 // 닌자 본인 공격: 수리검·쿠나이·부채 수리검·풍마 수리검·꿰매기 바늘 던지기 · 사슬낫·닌자도 베기 · 연막탄 · 분신술. 그림자는 shades
 import { TICK_RATE } from "../constants";
 import { NINJA_PERKS } from "../itemsNinja";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import { addSmoke, markEnemy, updateShades } from "./shades";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, shotDirs, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("ninja", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

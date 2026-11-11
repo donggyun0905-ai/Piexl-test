@@ -8,12 +8,14 @@ import type { PassiveId } from "../items";
 import { createRng, deriveSeed } from "../rng";
 import { ARTIFACTER as A } from "../weaponsArtifacter";
 import { nearest } from "./brawlMoves";
-import { blastAt } from "./combat";
+import { blastAt as blastAt_ } from "./combat";
 import { recalcStats } from "./items";
 import { passivePool } from "./loot";
 import { inCircle, isBoss, shoot, stun } from "./s2Kit";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("artifacter", () => blastAt_);
 
 /** 반발 보호막 · 수호 골렘 문신: 받는 피해 (classTaken) */
 export function artifacterTaken(p: PlayerState): number {

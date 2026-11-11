@@ -3,12 +3,14 @@
 import { dashDodged } from "./remnant";
 import { pinchPlayer } from "./bossGrip";
 import { shotDamage } from "./bossKit";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { inHazard } from "./hazards";
 import { rot } from "./orbit";
 import { hz, later, sageDmg, sageRange } from "./sageKit";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, enemyShot, normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("sageBody", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

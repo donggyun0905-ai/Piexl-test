@@ -1,9 +1,11 @@
 // 원소술사 원소(불·물·땅·번개·풀)와 행성 8개의 효과 (피해는 orbit에서 따로)
 import { ENEMIES } from "../content";
-import { blastAt, dotDamage, healPlayer, ignite } from "./combat";
+import { blastAt as blastAt_, dotDamage, healPlayer, ignite } from "./combat";
 import type { DotKind, EnemyState, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, roomGrid } from "./util";
 import { raiseShield } from "./imugiMods";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("orbitElements", () => blastAt_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

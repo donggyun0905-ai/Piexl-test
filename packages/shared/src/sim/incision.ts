@@ -5,13 +5,15 @@
 import { TICK_RATE } from "../constants";
 import { INCISION_PERKS as K } from "../itemsIncision";
 import { INCISION as I } from "../weaponsIncision";
-import { addCombo, addWave, addZone, comboSpeed, comboTick, icStrike, swingReach, vortexTick, wavesTick, whirlR, zonesTick } from "./incisionKit";
+import { addCombo as addCombo_, addWave, addZone, comboSpeed, comboTick, icStrike as icStrike_, swingReach, vortexTick as vortexTick_, wavesTick as wavesTick_, whirlR, zonesTick as zonesTick_ } from "./incisionKit";
 import { leapTick, startLeap } from "./incisionLeap";
 import { rot } from "./orbit";
 import { inCircle, inCone, roomKey } from "./s2Kit";
 import { isAwake, stigmaTick } from "./stigma";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+import { srcFn } from "./dmgSrc";
+const addCombo = srcFn("incision", () => addCombo_), icStrike = srcFn("incision", () => icStrike_), vortexTick = srcFn("incision", () => vortexTick_), wavesTick = srcFn("incision", () => wavesTick_), zonesTick = srcFn("incision", () => zonesTick_);
 
 /** 네 박자 피해 배율 (무거운 도끼날) */
 const beatMul = (s: RunState, mul: number) => mul * (hasPerk(s.player, "icHeavy") ? K.icHeavy.mul : 1);

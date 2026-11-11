@@ -9,12 +9,14 @@ import { addShape } from "./hazards";
 import type { EnemyState, RunState } from "./types";
 import { depth } from "./hero";
 import { DIR16, enemyShot, keepInRoom, makeEnemy, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid } from "./util";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { chainPlayer } from "./bossBinds";
 import { closeZones, updateZones } from "./bossZones";
 import { ultReady } from "./bossUlts";
 import { startCage, updateCage } from "./bossCage";
 import { ROOM_CX, ROOM_CY } from "../constants";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("bossHades", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

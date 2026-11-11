@@ -3,12 +3,14 @@
 import { TICK_RATE } from "../constants";
 import { BEATRICE_PERKS as K } from "../itemsBeatrice";
 import { BEATRICE as B } from "../weaponsBeatrice";
-import { addBurn, btHit, btRegen, burnTick } from "./beatriceKit";
+import { addBurn, btHit as btHit_, btRegen, burnTick as burnTick_ } from "./beatriceKit";
 import { btSkill, danceTick, execTick, judgeTick, solarOn, wavesTick } from "./beatriceSkills";
 import { heal } from "./heal";
 import { inCircle, onSegment, roomKey } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const btHit = srcFn("beatrice", () => btHit_), burnTick = srcFn("beatrice", () => burnTick_);
 
 /** 기본 공격이 태양 검날로 강화되었을 때 더하는 화염 몫 */
 const fireOf = (p: PlayerState) => (solarOn(p) ? B.solarFire : 0);

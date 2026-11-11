@@ -1,9 +1,11 @@
 // 오리의 새끼 오리: 주인 뒤에 한 줄로 따라오며 닿은 적 탄을 막고, 주인이 꽥 하면 가까운 적에게 같이 꽥
 import { DUCK } from "../weaponsDuck";
 import { DUCK_PERKS as K } from "../itemsDuck";
-import { damageEnemy, healPlayer } from "./combat";
+import { damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("ducklings", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

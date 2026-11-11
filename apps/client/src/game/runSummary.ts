@@ -1,6 +1,7 @@
 // 한 판 요약 자료: 마지막 장비 · 준 피해(종류별) · 받은 피해 · 돈 · 보스 · 층 도착 · 쓰러진 곳 (그리기는 RunSummary)
 import { ENEMIES, type CharacterId, type PassiveId, type RoomType, type RunState, type UseItemId, type WeaponId } from "@pixel-rogue/shared";
 import type { DamageTracker, NumKind } from "./damageNumbers";
+import { srcRows } from "./srcNames";
 
 export interface RunSummaryData {
   character: CharacterId;
@@ -9,7 +10,7 @@ export interface RunSummaryData {
   passives: [PassiveId, number][];
   uses: UseItemId[];
   dealt: Partial<Record<NumKind, number>>;
-  /** 피해 출처마다 합 (sim/dmgSrc: "" 무기·기본 기술 · "d:종류" 상태이상 · 그 밖은 패시브 id), 많이 준 순서 */
+  /** 피해 출처마다 합 (sim/dmgSrc: "" 무기·기본 공격 · "d:종류" 상태이상 · "f:파일" 캐릭터 기술(이름 game/srcNames) · 그 밖은 패시브 id), 많이 준 순서 */
   sources: [string, number][];
   best: number;
   taken: number;
@@ -44,7 +45,7 @@ export function buildSummary(s: RunState, dmg: DamageTracker | undefined, taken:
     passives: [...counts.entries()],
     uses: p.useSlots.filter((u): u is UseItemId => u !== null),
     dealt: { ...(dmg?.dealt ?? {}) },
-    sources: Object.entries(p.dmgBy ?? {}).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]),
+    sources: srcRows(p.dmgBy),
     best: dmg?.best ?? 0,
     taken: Math.round(taken),
     goldEarned: s.goldEarned,

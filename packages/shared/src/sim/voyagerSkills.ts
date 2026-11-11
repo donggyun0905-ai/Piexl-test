@@ -4,12 +4,14 @@ import { ROOM_WIDTH } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { FATES } from "../voyagerFates";
 import { VOYAGER as V } from "../weaponsVoyager";
-import { blastAt } from "./combat";
+import { blastAt as blastAt_ } from "./combat";
 import { rot } from "./orbit";
-import { alive, inLine, shoot, strike } from "./s2Kit";
+import { alive, inLine, shoot, strike as strike_ } from "./s2Kit";
 import type { ProjectileState, RunState } from "./types";
 import { addEffect } from "./util";
 import { buffVal } from "./voyager";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("voyagerSkills", () => blastAt_), strike = srcFn("voyagerSkills", () => strike_);
 
 type Extra = Partial<Pick<ProjectileState, "homing" | "seek" | "bounces" | "back" | "span" | "split" | "ghost" | "pierce" | "slow">>;
 

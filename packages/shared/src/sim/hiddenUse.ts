@@ -1,7 +1,7 @@
 // 히든 사용 아이템 효과 (itemsHidden.HIDDEN_USES, sim/items.useSlot이 부름): 에테르 폭탄 · 대마법사의 금지된 주문서 · 차원이동문 · 둘째 묶음은 sim/hiddenDice
 import { HIDDEN_USES as U } from "../itemsHidden";
 import { createRng, deriveSeed } from "../rng";
-import { blastAt, removeDead } from "./combat";
+import { blastAt as blastAt_, removeDead as removeDead_ } from "./combat";
 import { climb } from "./rooms";
 import { fateDice, portalGun } from "./hiddenDice";
 import { addAlly } from "./allies";
@@ -9,6 +9,8 @@ import { kingStart } from "./kingForm";
 import { cupidStart } from "./spiritGreat";
 import type { RunState } from "./types";
 import { addEffect, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("hiddenUse", () => blastAt_), removeDead = srcFn("hiddenUse", () => removeDead_);
 
 /** 히든 사용 아이템 하나 쓰기 (다른 아이템이면 아무 일 없음) */
 export function hiddenUse(s: RunState, item: string, slot: number): void {

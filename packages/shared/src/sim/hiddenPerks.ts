@@ -1,12 +1,12 @@
 // 히든 패시브 효과 (itemsHidden): 금기된 아티팩트 7색(처치마다 쌓임) · 이프리트의 발톱 · 실피드의 화살통 · 노움의 망치 · 드라이어드의 수정구 · 아프로디테의 거울 · 떨어진 신의 파편
 // 맞힐 때(onHitExtra) · 처치할 때(removeDead) · 맞을 때(origin.readyCounter) · 틱마다(origin.tickOrigin)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { logDmg } from "./dmgSrc";
 import type { ExtraStats } from "../characters";
 import { HIDDEN_PERKS as K } from "../itemsHidden";
 import { createRng, deriveSeed } from "../rng";
 import type { StatMod } from "../stats";
-import { blastAt, damageEnemy, healPlayer } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import { recalcStats } from "./items";
 import { addAlly, alliesTick } from "./allies";
 import { kingFormTick } from "./kingForm";
@@ -14,8 +14,8 @@ import { kingKill } from "./fallenKing";
 import { luxKill } from "./luxFoes";
 import { beaKill } from "./beatriceKit";
 import { ianKill } from "./ianKit";
-import { gabrielKill } from "./gabrielKit";
-import { serenaKill } from "./serenaKit";
+import { gabrielKill as gabrielKill_ } from "./gabrielKit";
+import { serenaKill as serenaKill_ } from "./serenaKit";
 import { rafaelKill } from "./rafaelKit";
 import { cupidTick } from "./spiritGreat";
 import { storms } from "./oni";
@@ -24,6 +24,7 @@ import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
 import { devilOnHit } from "./devilPerks";
 import { setKill } from "./buildSetFx";
+const blastAt = srcFn("hiddenPerks", () => blastAt_), damageEnemy = srcFn("hiddenPerks", () => damageEnemy_), gabrielKill = srcFn("hiddenPerks", () => gabrielKill_), serenaKill = srcFn("hiddenPerks", () => serenaKill_);
 
 /** 아티팩트 색 (스택 창 차례) */
 export const RELICS = ["relicRed", "relicBlue", "relicSilver", "relicGold", "relicPrism", "relicWhite", "relicGreen"] as const;

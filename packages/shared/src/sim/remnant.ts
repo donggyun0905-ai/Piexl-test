@@ -2,17 +2,18 @@
 // 대시(무적) 중에 적 공격이 닿으면(대시가 아니었으면 맞았을 공격) 회피 성공 → 슬로우모션(적·적 탄만 느려짐)
 // 슬로우모션 안에 직접 클릭하면(자동 공격과 따로, 입력 skill) 확정 치명타 연속 베기(큰 검격, 여러 적) → 끝나면 슬로우모션 끝
 // 수치는 weaponsRemnant.REMNANT, 아이템은 itemsRemnant
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { REMNANT_PERKS as K } from "../itemsRemnant";
 import { REMNANT as R, type PhantomStyle } from "../weaponsRemnant";
 import { nearest } from "./brawlMoves";
 import { healPlayer } from "./combat";
 import { applyBleed, updateBleed } from "./gunExtras";
-import { inCircle, inCone, poison, shoot, strike, stun } from "./s2Kit";
+import { inCircle, inCone, poison, shoot, strike as strike_, stun } from "./s2Kit";
 import { restoreShots, slowShots } from "./slowShots";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
+const strike = srcFn("remnant", () => strike_);
 
 const styleOf = (p: PlayerState): PhantomStyle => weaponOf(p).phantom ?? { reach: 20, arc: 0.4, slow: 90, flurryMul: 1.6, flurryReach: 46 };
 const isRemnant = (p: PlayerState) => p.characterId === "remnant";

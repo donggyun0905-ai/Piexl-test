@@ -4,11 +4,13 @@
 import { TICK_RATE } from "../constants";
 import { SERENA_PERKS as K } from "../itemsSerena";
 import { SERENA as N } from "../weaponsSerena";
-import { snHit, thornTick } from "./serenaKit";
+import { snHit as snHit_, thornTick as thornTick_ } from "./serenaKit";
 import { charmTick, dashTick, orbTick, snSkill, whirlTick } from "./serenaSkills";
 import { inCone, roomKey } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const snHit = srcFn("serena", () => snHit_), thornTick = srcFn("serena", () => thornTick_);
 
 /** 1·2타: 앞 넓은 부채꼴을 채찍으로 (k 0 오른쪽에서 · 1 왼쪽에서) */
 function whip(s: RunState, k: number): void {

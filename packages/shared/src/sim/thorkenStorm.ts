@@ -1,12 +1,14 @@
 // 토르켄 태풍·천둥·소용돌이: 던진 철구공이 떨어진 자리 천둥 · 게이지가 차면 태풍(철구공을 따라 움직임) + 하늘에서 천둥
 import { THORKEN_PERKS as K } from "../itemsThorken";
 import { THORKEN as T } from "../weaponsThorken";
-import { addGauge, pullTo, tkHit } from "./thorkenKit";
+import { addGauge, pullTo, tkHit as tkHit_ } from "./thorkenKit";
 import type { TkVortex } from "./thorkenTypes";
 import { rot } from "./orbit";
 import { alive, inCircle, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, dist2, hasPerk } from "./util";
+import { srcFn } from "./dmgSrc";
+const tkHit = srcFn("thorkenStorm", () => tkHit_);
 
 /** (x, y)에 천둥 한 번 (둘레 r · 기절) */
 export function clap(s: RunState, x: number, y: number, r: number, dmg: number, stunT: number): number {

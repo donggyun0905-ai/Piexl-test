@@ -3,12 +3,14 @@
 // 기둥이 부서질 때마다: 루시퍼 기절 + 검기 5번 (왼쪽·오른쪽·위에서 맵을 덮음, 작은 네모 빈칸만 안전)
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { ENEMIES } from "../content";
-import { LUC_RULES as L, lucHurt, lucPose, lucRng, lucSpot } from "./lucKit";
+import { LUC_RULES as L, lucHurt as lucHurt_, lucPose, lucRng, lucSpot } from "./lucKit";
 import type { LucFight } from "./lucTypes";
 import { allPlayers } from "./party";
 import { remnantDodge } from "./remnant";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, makeEnemy } from "./util";
+import { srcFn } from "./dmgSrc";
+const lucHurt = srcFn("lucPillars", () => lucHurt_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

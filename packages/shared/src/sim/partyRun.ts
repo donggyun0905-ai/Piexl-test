@@ -5,13 +5,15 @@ import { updateItems } from "./items";
 import { allyFeed } from "./allies";
 import { allPlayers, eachSeat, isAlive, seatNo, seatOf, useSeat } from "./party";
 import { applyRoom, checkCleared, climb, goThrough, onStairs, startFloor, touchingExit } from "./rooms";
-import { checkDeath, createRun, newPlayer, stepPlayer, stepWorld } from "./run";
+import { checkDeath, createRun, newPlayer, stepPlayer as stepPlayer_, stepWorld as stepWorld_ } from "./run";
 import { EMPTY_INPUT, type RunState, type TickInput } from "./types";
 import { FLEE_COST } from "./util";
 import { tabooSum } from "./taboo";
 import { withGymFx } from "./gymPerks";
 import { raidHuman, raidInputs, raidLocked } from "./raid";
 import { raidAfter, raidLivesLeft } from "./raidLife";
+import { srcFn } from "./dmgSrc";
+const stepPlayer = srcFn("partyRun", () => stepPlayer_), stepWorld = srcFn("partyRun", () => stepWorld_);
 
 export interface PartyMember {
   characterId: CharacterId;

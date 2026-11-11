@@ -7,9 +7,11 @@ import { characterWeapons } from "./loot";
 import { evoSkill2, type SwarmSkill2 } from "./swarmEvoNew";
 import { createRng, deriveSeed } from "../rng";
 import { SWARM } from "../swarmDefs";
-import { blastAt, dotDamage } from "./combat";
+import { blastAt as blastAt_, dotDamage } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("swarmEvo", () => blastAt_);
 
 export type SwarmSkill = "storm" | "comet" | "frost" | "blades" | "barrage" | "nova" | SwarmSkill2;
 /** 기술 16가지 (비슷한 것끼리 떨어지게 섞은 순서) */

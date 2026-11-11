@@ -3,10 +3,12 @@
 import { createRng, deriveSeed } from "../rng";
 import { hitDamage, ring } from "./bossKit";
 import { addShape } from "./hazards";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { depth } from "./hero";
 import { addEffect, DIR16, makeEnemy, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("bossBlades", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

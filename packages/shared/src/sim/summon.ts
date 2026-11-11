@@ -1,13 +1,14 @@
 // 소환술사 본인: 채찍으로 앞을 길게 침. 맞힌 적 수가 무기마다 정한 만큼 쌓이면 소환수가 나옴 (움직임·공격은 summons)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { SUMMON_PERKS } from "../itemsSummon";
 import { createRng, deriveSeed } from "../rng";
 import { SUMMON_STATS } from "../weaponsSummon";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import { updateSummons } from "./summons";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, weaponOf } from "./util";
+const damageEnemy = srcFn("summon", () => damageEnemy_);
 
 /** 소환수가 남는 틱 (12초, 불꽃 정령은 터지면 끝) */
 export const SUMMON_LIFE = 720;

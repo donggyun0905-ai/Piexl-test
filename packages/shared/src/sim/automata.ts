@@ -11,9 +11,11 @@ import { nearest } from "./brawlMoves";
 import { recalcStats } from "./items";
 import { backMissiles } from "./missiles";
 import { roamStep } from "./roam";
-import { alive, inCone, onSegment, root, strike } from "./s2Kit";
+import { alive, inCone, onSegment, root, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, markCrit, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const strike = srcFn("automata", () => strike_);
 
 const styleOf = (p: PlayerState): AutoStyle => weaponOf(p).auto ?? { beams: 1, spread: 0, width: 3 };
 const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.seed, tag, s.tick, n)).nextFloat();

@@ -1,5 +1,5 @@
 // 악의 사도: 하늘에서 뒤집힌 십자가 (짓누르기 · 일곱 죄는 장판) · 사탄의 가면 · 역천의 베드로 · 쓰러진 적의 영혼을 먹어 회복 (회복약은 오히려 피해)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { manualAim } from "./pwBasic";
 import { TICK_RATE } from "../constants";
 import { CHARACTERS } from "../content";
@@ -8,13 +8,14 @@ import { APOSTLE_PERKS as K } from "../itemsApostle";
 import { APOSTLE, SIN_COLORS } from "../weaponsApostle";
 import { fieldTick } from "./apostleFields";
 import { addSoul, soulWhere } from "./apostleSouls";
-import { blastAt, damageEnemy, dotDamage, healPlayer } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_, dotDamage, healPlayer } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, weaponOf } from "./util";
 import { recalcStats } from "./items";
 import type { StatMod } from "../stats";
 import { createRng, deriveSeed } from "../rng";
 import { pctHp } from "./pctHp";
+const blastAt = srcFn("apostle", () => blastAt_), damageEnemy = srcFn("apostle", () => damageEnemy_);
 
 const roll = (s: RunState, label: string, id = 0) => createRng(deriveSeed(s.seed, label, s.tick, id)).nextFloat();
 

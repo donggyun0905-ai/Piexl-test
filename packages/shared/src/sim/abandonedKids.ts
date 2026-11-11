@@ -2,10 +2,12 @@
 // 탭하면 들어오는 아이와 자리를 바꿈. 특수기 연출 중에는 abandonedShow가 움직임
 import { ABANDONED as A } from "../weaponsAbandoned";
 import { bullet } from "./abandonedMoves";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import type { TagKid } from "./abandonedTypes";
 import type { EnemyState, RunState } from "./types";
 import { dist2, keepInRoom, normalize, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("abandonedKids", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

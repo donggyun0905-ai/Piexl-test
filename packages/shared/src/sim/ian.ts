@@ -3,11 +3,13 @@
 import { TICK_RATE } from "../constants";
 import { IAN_PERKS as K } from "../itemsIan";
 import { IAN as I } from "../weaponsIan";
-import { addRec, iaHit } from "./ianKit";
+import { addRec, iaHit as iaHit_ } from "./ianKit";
 import { iaSkill, lawTick, stepTick, threadsTick } from "./ianSkills";
 import { inCone, inLine, roomKey } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+import { srcFn } from "./dmgSrc";
+const iaHit = srcFn("ian", () => iaHit_);
 
 /** 이번 기본 공격이 급소인지 (그림자 걸음 뒤 · 침묵의 서약) — 쓰면 지움 */
 function takeAmbush(s: RunState): boolean {

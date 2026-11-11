@@ -2,7 +2,7 @@
 // 남은 줄 100~76 욕망의 화신 (sim/bossAsmoLust) → 75~51 검은 해의 화신 (bossAsmoVoid) → 50~0 강철 군주의 화신 (bossAsmoLord)
 // 변신할 때(75줄·50줄)마다 궁극기, 10줄에서 마지막 궁극기 (sim/asmoUlts, 끝날 때까지 무적 · 넘친 피해는 버림)
 import { ENEMIES } from "../content";
-import { chessTick, trailTick, wallTick } from "./asmoKit";
+import { chessTick as chessTick_, trailTick as trailTick_, wallTick as wallTick_ } from "./asmoKit";
 import { asmoUltTick, startAsmoUlt } from "./asmoUlts";
 import { extraTick } from "./bossAsmoExtra";
 import { hitDamage } from "./bossKit";
@@ -11,6 +11,8 @@ import { eatTick, voidTick } from "./bossAsmoVoid";
 import { lordTick } from "./bossAsmoLord";
 import { updateWaves } from "./bossWaves";
 import type { EnemyState, RunState } from "./types";
+import { srcFn } from "./dmgSrc";
+const chessTick = srcFn("bossAsmo", () => chessTick_), trailTick = srcFn("bossAsmo", () => trailTick_), wallTick = srcFn("bossAsmo", () => wallTick_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

@@ -1,14 +1,15 @@
 // 라파엘(성국, 폭풍의 사수): 누르고 있으면 3연격 (화살 둘 → 저격: 표적을 향해 모든 적을 꿰뚫는 굵은 화살)
 // 화살은 바로 닿는 줄 판정 · 멀리 있는 적일수록 피해 증가 · 방에서 가장 강한 적에 표적 (sim/rafaelKit) · 스킬 넷은 숫자 키(sim/rafaelSkills)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { RAFAEL_PERKS as K } from "../itemsRafael";
 import { RAFAEL as F } from "../weaponsRafael";
-import { aimAt, onRay, pickMarks, rfHit } from "./rafaelKit";
+import { aimAt, onRay, pickMarks, rfHit as rfHit_ } from "./rafaelKit";
 import { chargeTick, rfSkill, stepTick, stormTick } from "./rafaelSkills";
 import { roomKey } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+const rfHit = srcFn("rafael", () => rfHit_);
 
 /** 1·2타 화살: 앞으로 곧게 날아가 처음 닿은 적 (관통 화살촉: 하나 더) */
 function arrow(s: RunState): void {

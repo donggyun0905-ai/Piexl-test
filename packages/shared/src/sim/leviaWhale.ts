@@ -1,15 +1,16 @@
 // 리바이어 고래: 고래 대돌격(날아가는 큰 고래) · 해류 웅덩이 · 고래가 나올 때 아이템 반응 · 고래 도약
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { LEVIA_PERKS as K } from "../itemsLevia";
 import { LEVIA as L } from "../weaponsLevia";
 import { nearest } from "./brawlMoves";
 import { healPlayer } from "./combat";
 import { rot } from "./orbit";
-import { gemOf, lvHit, whaleDmg, whaleSize } from "./leviaKit";
+import { gemOf, lvHit as lvHit_, whaleDmg, whaleSize } from "./leviaKit";
 import type { LvWhale } from "./leviaTypes";
 import { alive, inCircle, isBoss, onSegment, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, roomGrid } from "./util";
+const lvHit = srcFn("leviaWhale", () => lvHit_);
 
 /** 고래 하나를 (dx, dy) 쪽으로 내보냄 */
 export function launchWhale(s: RunState, dx: number, dy: number, w: Omit<LvWhale, "x" | "y" | "dx" | "dy" | "hit">): void {

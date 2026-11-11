@@ -1,15 +1,16 @@
 // 가브리엘(성국, 철옹의 방패): 누르고 있으면 3연격 (내려찍기 · 휘두르기 → 대지 강타: 빛의 망치가 내리꽂혀 기절·압박)
 // 철옹: 받는 피해 절반 (sim/gabrielKit). 스킬 넷은 숫자 키(sim/gabrielSkills) · 궁극기 중 기본 공격마다 거대한 빛의 망치가 함께 휘둘러짐
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { GABRIEL_PERKS as K } from "../itemsGabriel";
 import { GABRIEL as G } from "../weaponsGabriel";
-import { dropHammer, gbHit, press } from "./gabrielKit";
+import { dropHammer, gbHit as gbHit_, press } from "./gabrielKit";
 import { miniTick, wellTick } from "./gabrielShield";
 import { bashTick, dropsTick, gbSkill, ultHammer, ultTick } from "./gabrielSkills";
 import { inCircle, inCone, roomKey, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+const gbHit = srcFn("gabriel", () => gbHit_);
 
 /** 1·2타: 앞 부채꼴을 망치로 (k 0 내려찍기 · 1 휘두르기) */
 function swing(s: RunState, k: number): void {

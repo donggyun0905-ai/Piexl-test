@@ -1,6 +1,6 @@
 // 차원의 순례자 배낭: 수집 도감(들어 본 순례자 무기 → 공격력) · 맞히기(열쇠고리·처치 효과: 기념품·차원 도장) · 땅에 놓인 것(깃발·태엽 폭탄·별·차원의 문)
 // · 탄이 맞았을 때(씨앗 회복·별 가루) · 받는 피해(우산·그림엽서) · 맞은 뒤(텐트). 수치는 weaponsPilgrim.PILGRIM, 아이템은 itemsPilgrim
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { WEAPONS, type WeaponId } from "../content";
 import { PILGRIM_PERKS as K } from "../itemsPilgrim";
 import { createRng, deriveSeed } from "../rng";
@@ -8,10 +8,11 @@ import type { StatMod } from "../stats";
 import { PILGRIM as P } from "../weaponsPilgrim";
 import { healPlayer } from "./combat";
 import { addPickup } from "./loot";
-import { inCircle, isBoss, strike } from "./s2Kit";
+import { inCircle, isBoss, strike as strike_ } from "./s2Kit";
 import type { GroundMark } from "./secretTypes";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, hasPerk, weaponOf } from "./util";
+const strike = srcFn("pgBag", () => strike_);
 
 /** 순례자 무기 (도감 순서) */
 export const PG_IDS = (Object.keys(WEAPONS) as WeaponId[]).filter((id) => (WEAPONS[id] as { curio?: unknown }).curio);

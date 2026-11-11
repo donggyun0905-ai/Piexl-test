@@ -7,9 +7,11 @@ import { ENEMIES } from "../content";
 import { createRng, deriveSeed } from "../rng";
 import { hitDamage } from "./bossKit";
 import { addShape } from "./hazards";
-import { airTick, dive, foeTick, prisonTick, setWater, startPrison, tornTick } from "./levKit";
+import { airTick as airTick_, dive, foeTick, prisonTick, setWater, startPrison, tornTick } from "./levKit";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, DIR16, makeEnemy, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { srcFn } from "./dmgSrc";
+const airTick = srcFn("bossLeviathan", () => airTick_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

@@ -6,12 +6,14 @@ import { TICK_RATE } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { MINER_PERKS as K } from "../itemsMiner";
 import { MINER as M, type PickStyle } from "../weaponsMiner";
-import { blastAt } from "./combat";
+import { blastAt as blastAt_ } from "./combat";
 import { nearest } from "./brawlMoves";
 import { addCrack, finish, gainOre, groundTick, hitNodes } from "./minerGround";
-import { alive, inCircle, inCone, isBoss, shoot, strike, stun } from "./s2Kit";
+import { alive, inCircle, inCone, isBoss, shoot, strike as strike_, stun } from "./s2Kit";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("miner", () => blastAt_), strike = srcFn("miner", () => strike_);
 
 const styleOf = (p: PlayerState): PickStyle => weaponOf(p).pick ?? { mode: "swing", reach: 30, arc: 0.1, crack: 3 };
 const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.seed, "mn", tag, s.tick, n)).nextFloat();

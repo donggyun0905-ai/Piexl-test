@@ -3,7 +3,7 @@
 // 준비: 단련 포인트 되돌리기 · 대장간 처음부터 다시(999원, 3번, 암흑 강화로 부서진 무기도 돌려받음) · 단련의 방 샌드백(딜 시험, 쓰러지지 않음)
 import { ROOM_CX as CX, ROOM_CY as CY } from "../constants";
 import type { UseItemId } from "../items";
-import { damageEnemy, removeDead } from "./combat";
+import { damageEnemy as damageEnemy_, removeDead as removeDead_ } from "./combat";
 import { GYM_STATS, gymPassives, PASSIVE_AT } from "./gym";
 import { equipWeapon, recalcStats } from "./items";
 import { EMPTY_HANDS } from "./shop";
@@ -11,6 +11,8 @@ import { RAID_ROOM } from "./raidTypes";
 import type { RunState } from "./types";
 import { accItemReset } from "./accStats";
 import { addEffect, makeEnemy } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("raidPrep", () => damageEnemy_), removeDead = srcFn("raidPrep", () => removeDead_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

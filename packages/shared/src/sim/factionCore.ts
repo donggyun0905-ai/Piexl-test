@@ -3,7 +3,7 @@
 import type { CharacterId } from "../characters";
 import { FACTION_CORE as C, FACTION_CORE_SKILL } from "../factionDefs";
 import { beatriceSkills } from "./beatriceKit";
-import { blastAt } from "./combat";
+import { blastAt as blastAt_ } from "./combat";
 import { coreArt } from "./factionCoreArts";
 import { gabrielSkills } from "./gabrielKit";
 import { ianSkills } from "./ianKit";
@@ -13,6 +13,8 @@ import { serenaSkills } from "./serenaKit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
 import { yurielSkills } from "./yurielKit";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("factionCore", () => blastAt_);
 
 const COOLDOWNS: Partial<Record<CharacterId, (p: PlayerState) => number[]>> = {
   beatrice: beatriceSkills, ian: ianSkills, gabriel: gabrielSkills, serena: serenaSkills, rafael: rafaelSkills, yuriel: yurielSkills, michaela: michaelaSkills,

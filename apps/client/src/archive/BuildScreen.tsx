@@ -1,6 +1,6 @@
 // 빌드 통계 (아카이브): 캐릭터를 고르면 다른 사람들이 그 캐릭터로 많이 쓴 무기·패시브 (고른 비율 · 그 판의 클리어율)
 // 자료는 혼자 하기 한 판이 끝날 때마다 모임 (서버 buildStats) · 열려 있는 캐릭터만 보임
-import { CHARACTER_IDS, type CharacterId, type PassiveId, type WeaponId } from "@pixel-rogue/shared";
+import { CHARACTER_IDS, createPracticeRun, practiceGive, type CharacterId, type PassiveId, type RunState, type WeaponId } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 import { characterOpen } from "../characterGoals";
 import { ItemIcon } from "../game/itemIcon";
@@ -15,10 +15,12 @@ interface Props {
   lang: Lang;
   t: (k: TextKey) => string;
   onBack: () => void;
+  /** 연습장에서 써 보기: 그 캐릭터가 이 무기·패시브를 든 채로 시작하는 연습장 판 */
+  onTry: (c: CharacterId, run: RunState) => void;
 }
 const pct = (v: number) => `${Math.round(v * 100)}%`;
 
-function Rows({ kind, rows, lang, t }: { kind: "weapon" | "passive"; rows: PickRow[]; lang: Lang; t: (k: TextKey) => string }) {
+function Rows({ kind, rows, lang, t, onTry }: { kind: "weapon" | "passive"; rows: PickRow[]; lang: Lang; t: (k: TextKey) => string; onTry: (id: string) => void }) {
   const [open, setOpen] = useState<string | null>(null);
   if (rows.length === 0) return <p className="build-empty">{t("buildNone")}</p>;
   return (
@@ -35,14 +37,21 @@ function Rows({ kind, rows, lang, t }: { kind: "weapon" | "passive"; rows: PickR
             <span className="build-num">{pct(r.rate)}</span>
             <span className={`build-num win${r.win >= 0.5 ? " good" : ""}`}>{r.n >= 3 ? pct(r.win) : "-"}</span>
           </button>
-          {open === r.id && <p className="build-desc">{itemDesc(kind, r.id, lang, t)}</p>}
+          {open === r.id && (
+            <p className="build-desc">
+              {itemDesc(kind, r.id, lang, t)}
+              <button type="button" className="secondary build-try" onClick={() => onTry(r.id)}>
+                {t("buildTry")}
+              </button>
+            </p>
+          )}
         </li>
       ))}
     </ol>
   );
 }
 
-export function BuildScreen({ lang, t, onBack }: Props) {
+export function BuildScreen({ lang, t, onBack, onTry }: Props) {
   const chars = [...new Set<CharacterId>([...CHARACTER_IDS, ...hallUnlocked(), ...ownedLimited()])].filter((c) => characterOpen(c));
   const [who, setWho] = useState<CharacterId | null>(chars[0] ?? null);
   const [by, setBy] = useState<"rate" | "win">("rate");
@@ -58,6 +67,12 @@ export function BuildScreen({ lang, t, onBack }: Props) {
   }, [who]);
   const data = got && got.c === who ? got.d : "loading";
   const d = data === "loading" ? null : data;
+  const tryIt = (kind: "weapon" | "passive") => (id: string) => {
+    if (!who) return;
+    const run = createPracticeRun(who, Date.now() % 1e6);
+    practiceGive(run, kind === "weapon" ? { kind, id: id as WeaponId } : { kind, id: id as PassiveId });
+    onTry(who, run);
+  };
   return (
     <main className="story-screen build-screen" onKeyDown={(e) => e.key === "Escape" && onBack()}>
       <header className="story-head">
@@ -100,13 +115,13 @@ export function BuildScreen({ lang, t, onBack }: Props) {
                   <h4>
                     {t("buildWeapons")} <small>{t("buildCols")}</small>
                   </h4>
-                  <Rows kind="weapon" rows={picks(d, "weapons", by).slice(0, 6)} lang={lang} t={t} />
+                  <Rows kind="weapon" rows={picks(d, "weapons", by).slice(0, 6)} lang={lang} t={t} onTry={tryIt("weapon")} />
                 </div>
                 <div>
                   <h4>
                     {t("buildPassives")} <small>{t("buildCols")}</small>
                   </h4>
-                  <Rows kind="passive" rows={picks(d, "passives", by).slice(0, 20)} lang={lang} t={t} />
+                  <Rows kind="passive" rows={picks(d, "passives", by).slice(0, 20)} lang={lang} t={t} onTry={tryIt("passive")} />
                 </div>
               </div>
             </>

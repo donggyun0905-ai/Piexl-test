@@ -2,9 +2,11 @@
 // 베아트리스 태양 고리 3겹(불탐) · 이안 인과의 실이 가까운 적들을 묶음 · 가브리엘 끌어당겨 내려찍기 · 세레나 사방 독 비수 · 라파엘 빛 화살 비 · 유리엘 앞쪽 세 갈래 철퇴 충격파 · 미카엘라 적마다 무기가 떨어져 폭발
 import { FACTION_CORE_ART as A } from "../factionDefs";
 import { ignite } from "./status";
-import { alive, inCircle, inCone, isBoss, strike, stun } from "./s2Kit";
+import { alive, inCircle, inCone, isBoss, strike as strike_, stun } from "./s2Kit";
 import type { EnemyState, RunState } from "./types";
 import { addEffect } from "./util";
+import { srcFn } from "./dmgSrc";
+const strike = srcFn("factionCoreArts", () => strike_);
 
 const STYLE: Record<string, number> = { beatrice: 0, ian: 1, gabriel: 2, serena: 3, rafael: 4, yuriel: 5, michaela: 6 };
 const dist2 = (s: RunState, e: EnemyState) => (e.x - s.player.x) ** 2 + (e.y - s.player.y) ** 2;

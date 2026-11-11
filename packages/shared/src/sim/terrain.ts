@@ -5,7 +5,7 @@ import { tileRuns } from "../customMaps";
 import { bossForFloor, type BossKind } from "../content";
 import { createRng, deriveSeed } from "../rng";
 import { TERRAIN, TERRAIN_BY_BOSS, type TerrainKind } from "../terrainDefs";
-import { envDamage } from "./combat";
+import { envDamage as envDamage_ } from "./combat";
 import { depth } from "./hero";
 import { shapeGrid, tileAt, TILE_FLOOR } from "./layout";
 import { eachSeat } from "./party";
@@ -13,6 +13,8 @@ import { statusImmune } from "./remnant";
 import { tickFoeStatus } from "./foeStatus";
 import type { TerrainRect, TerrainState } from "./terrainTypes";
 import type { RunState } from "./types";
+import { srcFn } from "./dmgSrc";
+const envDamage = srcFn("terrain", () => envDamage_);
 
 const KINDS: readonly TerrainKind[] = ["mud", "lava", "water", "spikes"];
 

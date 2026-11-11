@@ -2,12 +2,14 @@
 // (던진 것이 날아가는 건 laserGear가 같이 처리)
 import { ENEMIES } from "../content";
 import { createRng, deriveSeed } from "../rng";
-import { damageEnemy, healPlayer, removeDead } from "./combat";
+import { damageEnemy as damageEnemy_, healPlayer, removeDead as removeDead_ } from "./combat";
 import { blocksShot } from "./layout";
 import { PRESCRIPTION_MUL } from "./items";
 import { AMB_TICKS, areaMul, GAS_LIFE, medicHit, medicPeriod, reachMul, SUTURE_TICKS } from "./medicWeapons";
 import type { Device, EnemyState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, markDot, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("medicGear", () => damageEnemy_), removeDead = srcFn("medicGear", () => removeDead_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

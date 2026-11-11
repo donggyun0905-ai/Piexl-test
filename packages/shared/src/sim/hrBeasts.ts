@@ -4,11 +4,13 @@
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { HONRYEONG_PERKS as K } from "../itemsHonryeong";
 import { applyBleed } from "./gunExtras";
-import { hasHr, hrArea, hrHit, hrRng, hrRoll, huntOn, petHp, petMul } from "./hrKit";
+import { hasHr, hrArea as hrArea_, hrHit as hrHit_, hrRng, hrRoll, huntOn, petHp, petMul } from "./hrKit";
 import type { HrBeast, HrDecoy } from "./hrTypes";
 import { bodyHurt, bodyStep, bringNear, foeNear } from "./puppetAllies";
 import type { RunState } from "./types";
 import { addEffect, keepInRoom, markCrit, normalize, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const hrArea = srcFn("hrBeasts", () => hrArea_), hrHit = srcFn("hrBeasts", () => hrHit_);
 
 type P = RunState["player"];
 

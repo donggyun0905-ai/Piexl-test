@@ -1,10 +1,12 @@
 // 기계공학자 장치, 틱마다: 리액터 과열 · 포탑·해머·지뢰·위성 포 준비 · 던진 포탑·지뢰 날아가기 · 포탑 조사 · 지뢰 터짐 · 위성 포 낙하 · 자기장 끌어당기기
 import { ENEMIES } from "../content";
-import { removeDead } from "./combat";
+import { removeDead as removeDead_ } from "./combat";
 import { beamInterval, lensArea, REACTOR_OVERHEAT, zapArea } from "./laser";
 import { gearPeriod, mineBlast, ORBITAL_RADIUS, turretShot } from "./laserWeapons";
 import type { Device, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, roomGrid, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const removeDead = srcFn("laserGear", () => removeDead_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

@@ -1,16 +1,17 @@
 // 렌(비르디아): 맨손으로 거대한 토목을 부림. 공격마다 차례로 타격 → 묶기 → 날려버리기 → 짓뭉개기 → 가두기 (넓고 세지만 느림)
 // 둘레를 도는 수호 토목: 부딪힌 적에게 조금씩 피해 · 원거리 탄은 확률로 막음 (몸으로 부딪히는 공격은 못 막음). 수치는 weaponsRen.REN, 아이템은 itemsRen
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { PW_PASSIVE } from "../paewangPassive";
 import { TICK_RATE } from "../constants";
 import { REN_PERKS as K } from "../itemsRen";
 import { createRng, deriveSeed } from "../rng";
 import { REN as R, REN_MOVES, type RenMove } from "../weaponsRen";
-import { blastAt, dotDamage, healPlayer } from "./combat";
-import { alive, inCircle, isBoss, root, stun, strike } from "./s2Kit";
+import { blastAt as blastAt_, dotDamage, healPlayer } from "./combat";
+import { alive, inCircle, isBoss, root, stun, strike as strike_ } from "./s2Kit";
 import { earthAttack, earthTick } from "./renEarth";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk } from "./util";
+const blastAt = srcFn("ren", () => blastAt_), strike = srcFn("ren", () => strike_);
 
 /** 수호 토목 수 · 자리 (그리기도 씀) */
 export const renGuards = (p: PlayerState) => R.guards + (hasPerk(p, "renGuardPlus") ? K.renGuardPlus.guards : 0);

@@ -1,15 +1,16 @@
 // 원소술사 회전체: 도는 자리 계산(삼각함수 없이 사칙연산만) · 닿으면 때리기 · 원소·행성 효과 · 날아가 때리는 검·별 · 은하수 장판·중력 둔화
 // 공격 키로 쓰는 것(강철 총알·트리거·중력 내려찍기·갓 핸드)은 orbitAttack, 전깃줄·펫·탄 막기는 orbitPerks
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { createRng, deriveSeed } from "../rng";
-import { blastAt, damageEnemy, ignite } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_, ignite } from "./combat";
 import { elementEffect, ELEMENTS, lightEffect, planetEffect, PLANETS, weaponDot, type Element, type Planet } from "./orbitElements";
 import { updateHand } from "./orbitAttack";
 import { flyK, flyStrikers, pickTarget } from "./orbitBlades";
 import { guard, pet, wires } from "./orbitPerks";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, segDist2, weaponOf } from "./util";
+const blastAt = srcFn("orbit", () => blastAt_), damageEnemy = srcFn("orbit", () => damageEnemy_);
 
 export { segDist2 } from "./util";
 

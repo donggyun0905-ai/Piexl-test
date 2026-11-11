@@ -2,10 +2,12 @@
 import { ENEMIES } from "../enemyDefs";
 import { APOSTLE, SIN_COLORS } from "../weaponsApostle";
 import type { SinField } from "./apostleTypes";
-import { damageEnemy, dotDamage, healPlayer, ignite } from "./combat";
+import { damageEnemy as damageEnemy_, dotDamage, healPlayer, ignite } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, roomGrid } from "./util";
 import { createRng, deriveSeed } from "../rng";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("apostleFields", () => damageEnemy_);
 
 const inside = (f: SinField, e: EnemyState) => e.hp > 0 && dist2(e, f) <= (f.r + e.r) ** 2;
 /** 장판마다 몇 틱에 한 번 (탐식은 빠르게, 탐욕은 느리게, 색욕은 매우 빠르게) */

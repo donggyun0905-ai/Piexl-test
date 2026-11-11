@@ -2,10 +2,12 @@
 // 3 저주의 도화선(내 자리에 못 → 못이 박힌 모든 적에게 도화선 → 못 하나마다 공격력 33%를 한 덩어리로) · 4 심판의 못비(제자리에서 한 적에게 못 셋씩 10번)
 import { NAILER_PERKS as K } from "../itemsNailer";
 import { NAILER as N } from "../weaponsNailer";
-import { addNails, nlAfter, nlCooldown, nlDmg, nlGain, throwNail } from "./nailerKit";
-import { alive, inCircle, rushTick, startRush, strike, stun } from "./s2Kit";
+import { addNails, nlAfter, nlCooldown, nlDmg, nlGain as nlGain_, throwNail } from "./nailerKit";
+import { alive, inCircle, rushTick as rushTick_, startRush, strike as strike_, stun } from "./s2Kit";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const nlGain = srcFn("nailerSkills", () => nlGain_), rushTick = srcFn("nailerSkills", () => rushTick_), strike = srcFn("nailerSkills", () => strike_);
 
 const RED = "#ff2a3a";
 

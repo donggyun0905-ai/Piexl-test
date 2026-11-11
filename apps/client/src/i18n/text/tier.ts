@@ -21,6 +21,7 @@ export const TIER_TEXT = {
   buildLoading: { ko: "불러오는 중…", en: "Loading…", ja: "読み込み中…" },
   buildNoData: { ko: "아직 모인 기록이 없습니다 · 이 캐릭터로 한 판 해 보세요", en: "No records yet · play a run with this character", ja: "まだ記録がありません · このキャラで遊んでみてください" },
   buildOffline: { ko: "서버에 연결할 수 없습니다", en: "Cannot reach the server", ja: "サーバーに接続できません" },
+  buildTry: { ko: "연습장에서 써 보기", en: "Try it in the practice room", ja: "練習場で試す" },
   buildNone: { ko: "기록 없음", en: "No records", ja: "記録なし" },
   tipRecommend: { ko: "★ 이 캐릭터로 많이 고르는 패시브 (고른 비율 {p}%)", en: "★ Popular with this character (picked in {p}% of runs)", ja: "★ このキャラでよく選ばれるパッシブ（選択率{p}%）" },
   tierList: { ko: "티어표", en: "Tier List", ja: "ティア表" },

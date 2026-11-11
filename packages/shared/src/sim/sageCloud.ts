@@ -2,11 +2,13 @@
 // 따라붙는 번개 셋 · 둘레 번개 여덟 · 가로지르는 돌진 · 방 전체 번개비 · 둘러싸는 번개 · 들이받기 추격 · 번개 줄기 · 지그재그 돌진 · 떨어지는 번개 · 느린 전기 구슬
 // 타고 있으면 근두운이 움직일 때 제천대성도 같이 움직임 (bossSage)
 import { shotDamage } from "./bossKit";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { rot } from "./orbit";
 import { hz, sageDmg, sageRange, sageRng } from "./sageKit";
 import type { EnemyState, RunState } from "./types";
 import { enemyShot, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("sageCloud", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

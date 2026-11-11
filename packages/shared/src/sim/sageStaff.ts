@@ -4,11 +4,13 @@
 import { shotDamage } from "./bossKit";
 import { throughDash } from "./bossGrip";
 import { addWave } from "./bossWaves";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { rot } from "./orbit";
 import { hz, later, sageDmg, sageRange, sageRng } from "./sageKit";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, enemyShot, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("sageStaff", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

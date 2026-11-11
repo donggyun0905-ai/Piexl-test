@@ -4,12 +4,14 @@
 import { TICK_RATE } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { SWARM, type SwarmDropKind } from "../swarmDefs";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { addShape } from "./hazards";
 import { minionKinds } from "./critters";
 import { swarmMinutes } from "./swarmSpawn";
 import type { RunState } from "./types";
 import { DIR16, dist2, keepInRoom, makeEnemy, roomGrid, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("swarmEvents", () => damagePlayer_);
 
 const E = SWARM.events;
 const KINDS = ["ring", "meteor", "rescue", "zone"] as const;

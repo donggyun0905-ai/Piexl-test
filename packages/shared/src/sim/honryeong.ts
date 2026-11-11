@@ -7,12 +7,14 @@ import { HR_CLOUD as C } from "../weaponsHonryeong";
 import { healPlayer } from "./combat";
 import { applyBleed, updateBleed } from "./gunExtras";
 import { beastsTick, summonOnAttack } from "./hrBeasts";
-import { addCloud, hasHr, hrHit, hrRoll, inCloud, styleOf } from "./hrKit";
+import { addCloud, hasHr, hrHit as hrHit_, hrRoll, inCloud, styleOf } from "./hrKit";
 import { spiritsOnAttack, spiritsTick } from "./hrSpirits";
 import { alive } from "./shadowingSpirits";
 import { ignite } from "./status";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, reachOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const hrHit = srcFn("honryeong", () => hrHit_);
 
 type P = RunState["player"];
 

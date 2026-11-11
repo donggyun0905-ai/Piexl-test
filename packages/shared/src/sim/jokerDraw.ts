@@ -3,9 +3,11 @@
 // 결과는 시드로만 정함 (화면·서버 같게). 수치 weaponsJoker.JOKER_DRAW·JOKER_MOON
 import { createRng, deriveSeed } from "../rng";
 import { JOKER_DRAW as D, JOKER_MOON as M, MOON_HEROES } from "../weaponsJoker";
-import { blastAt, damageEnemy, healPlayer } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("jokerDraw", () => blastAt_), damageEnemy = srcFn("jokerDraw", () => damageEnemy_);
 
 type P = RunState["player"];
 const MOON = 0;

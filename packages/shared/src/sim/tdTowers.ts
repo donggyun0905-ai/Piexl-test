@@ -6,22 +6,24 @@ import type { PassiveId } from "../items";
 import { createRng, deriveSeed } from "../rng";
 import { TD_RULES, TD_TOWERS, tdLevelCost, tdPassivePool } from "../tdDefs";
 import { TD_GROUND, tdMapDef, tdTiles, type TdMapDef, type TdMapId } from "../tdMaps";
-import { removeDead } from "./combat";
-import { updatePending } from "./pending";
+import { removeDead as removeDead_ } from "./combat";
+import { updatePending as updatePending_ } from "./pending";
 import { equipWeapon, recalcStats } from "./items";
 import { updateLaserGear } from "./laserGear";
 import { characterWeapons, pickDistinct } from "./loot";
 import { updateMedicGear } from "./medicGear";
 import { updateOrbit } from "./orbit";
-import { updatePlayer } from "./player";
+import { updatePlayer as updatePlayer_ } from "./player";
 import { recallChakram } from "./bedouin";
-import { updateProjectiles } from "./projectiles";
+import { updateProjectiles as updateProjectiles_ } from "./projectiles";
 import { newPlayer } from "./run";
 import { updateCharms } from "./talisman";
 import { charFree, towerMaxHp } from "./tdHealth";
 import type { TdAttacker, TdState, TdTower, TdUpgrade } from "./tdTypes";
 import { AIM_DIST_MAX, AIM_DIST_STEP, EMPTY_INPUT, type EnemyState, type RunState, type TickInput } from "./types";
 import { dist2 } from "./util";
+import { srcFn } from "./dmgSrc";
+const removeDead = srcFn("tdTowers", () => removeDead_), updatePending = srcFn("tdTowers", () => updatePending_), updatePlayer = srcFn("tdTowers", () => updatePlayer_), updateProjectiles = srcFn("tdTowers", () => updateProjectiles_);
 
 /**
  * 타워 조준: 사거리 안에서 길을 가장 많이 간 적을 겨누고 공격 (없으면 쉼).

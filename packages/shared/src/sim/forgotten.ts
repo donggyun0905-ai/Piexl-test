@@ -1,7 +1,7 @@
 // 잊혀진 자(아스칼론, 시즌 2): 옛 신의 마지막 후손, 반신. 빛으로 싸움 (무기 10: 빛 탄·빛줄기·터짐·떨어지는 빛 십자가·빛 베기)
 // 적을 맞힐 때마다 빛의 고리가 차고(맞으면 깎임), 가득 차면 10초 동안 신족: 공격 속도 2배 + 둘레 적을 빛기둥이 저절로 침 (공격력 30%)
 // 수치는 weaponsForgotten.FORGOTTEN, 아이템은 itemsForgotten
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { PW_PASSIVE } from "../paewangPassive";
 import { TICK_RATE } from "../constants";
 import { FORGOTTEN_PERKS as K } from "../itemsForgotten";
@@ -10,9 +10,10 @@ import { FORGOTTEN as F, type LightStyle } from "../weaponsForgotten";
 import { nearest } from "./brawlMoves";
 import { dotDamage, healPlayer } from "./combat";
 import { rot } from "./orbit";
-import { alive, inCircle, inCone, inLine, shoot, strike } from "./s2Kit";
+import { alive, inCircle, inCone, inLine, shoot, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, weaponOf } from "./util";
+const strike = srcFn("forgotten", () => strike_);
 
 const styleOf = (p: PlayerState): LightStyle => weaponOf(p).light ?? { pattern: "bolt", n: 2, spread: 0.12 };
 const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.seed, tag, s.tick, n)).nextFloat();

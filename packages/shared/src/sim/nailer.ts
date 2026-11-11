@@ -3,12 +3,14 @@
 import { TICK_RATE } from "../constants";
 import { NAILER_PERKS as K } from "../itemsNailer";
 import { NAILER as N } from "../weaponsNailer";
-import { addNails, nlAfter, nlDmg, nlGain, shotsTick } from "./nailerKit";
+import { addNails, nlAfter, nlDmg, nlGain as nlGain_, shotsTick as shotsTick_ } from "./nailerKit";
 import { detTick, nlSkill, throwTick, tieTick, ultTick } from "./nailerSkills";
-import { inCone, roomKey, strike, stun } from "./s2Kit";
+import { inCone, roomKey, strike as strike_, stun } from "./s2Kit";
 import { isAwake, stigmaTick } from "./stigma";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const nlGain = srcFn("nailer", () => nlGain_), shotsTick = srcFn("nailer", () => shotsTick_), strike = srcFn("nailer", () => strike_);
 
 /** 망치 내려치기: 앞 부채꼴 (울리는 쇠·못 박기·머리 치기) */
 function swing(s: RunState): void {

@@ -36,7 +36,7 @@ import { waveTaken } from "./waveSkillsD";
 import { miryuTaken } from "./miryu";
 import { beaHurt, beaTaken } from "./beatriceKit";
 import { ianHurt, ianTaken } from "./ianKit";
-import { gabrielHurt, gabrielTaken, gbFoeTaken } from "./gabrielKit";
+import { gabrielHurt as gabrielHurt_, gabrielTaken, gbFoeTaken } from "./gabrielKit";
 import { snFoeTaken } from "./serenaKit";
 import { yrFoeTaken, yurielTaken } from "./yurielKit";
 import { evilTaken } from "./beatriceKit";
@@ -50,7 +50,7 @@ import { darkTaken } from "./lucDark";
 import { lucGuardTaken, lucP2Taken } from "./lucCover";
 import { factionDmgMul, factionHurt, factionTaken } from "./faction";
 import { onyxHurt, onyxTaken } from "./onyx";
-import { crusaderHurt, crusaderTaken } from "./crusaderKit";
+import { crusaderHurt as crusaderHurt_, crusaderTaken } from "./crusaderKit";
 import { jokerTaken } from "./jokerDraw";
 import { shadowingTaken } from "./shadowing";
 import { puppetHurt } from "./puppet";
@@ -60,6 +60,8 @@ import { asuraHurtMul, asuraTaken } from "./asKit";
 import { bjHurtMul, bjTaken } from "./bjKit";
 export { cloudEnv } from "./pungHooks";
 import type { EnemyState, RunState } from "./types";
+import { srcFn } from "./dmgSrc";
+const gabrielHurt = srcFn("classTaken", () => gabrielHurt_), crusaderHurt = srcFn("classTaken", () => crusaderHurt_);
 
 /** 버려진 자들 막기·맏이의 방패 · 거인(탱커·장갑판·방벽·자이로) · 오니 · 이드라 방패 · 변희 동물 · 장로 결계 · 정령사 아이언하이드 · 역병의사 가면 · 이터 그림자 몸 · 묵인 방어력(적어도 1). 받는 피해를 돌려줌 */
 export function classTaken(s: RunState, taken: number): number {

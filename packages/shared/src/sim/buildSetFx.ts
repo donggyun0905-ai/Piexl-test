@@ -5,11 +5,13 @@ import { ENEMIES } from "../enemyDefs";
 import { createRng, deriveSeed } from "../rng";
 import { tier } from "./buildSets";
 import { awakenTick } from "./buildAwaken";
-import { blastAt, damageEnemy, healPlayer } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import { applyBleed, updateBleed } from "./gunExtras";
 import { ignite } from "./status";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2 } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("buildSetFx", () => blastAt_), damageEnemy = srcFn("buildSetFx", () => damageEnemy_);
 
 const roll = (s: RunState, tag: string, id: number) => createRng(deriveSeed(s.seed, "set", tag, s.tick, id)).nextFloat();
 const boss = (e: EnemyState) => !!ENEMIES[e.kind].boss;

@@ -1,11 +1,12 @@
 // 원소술사 회전체에 붙는 아이템 효과: 일렉트로닉 전깃줄 · 펫 유도탄 · 강철 구슬·지키는 검 막기·행운 튕기기 · 원소술사 탄
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { createRng, deriveSeed } from "../rng";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import { segDist2, type OrbBody } from "./orbit";
 import type { ProjectileState, RunState } from "./types";
 import { addEffect, hasPerk, normalize, weaponOf } from "./util";
+const damageEnemy = srcFn("orbitPerks", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

@@ -6,10 +6,12 @@ import { TITAN_PERKS as K } from "../itemsTitan";
 import { PW } from "../paewangDefs";
 import { TITAN, type SmashKind } from "../weaponsTitan";
 import { bullet } from "./abandonedMoves";
-import { blastAt, healPlayer } from "./combat";
+import { blastAt as blastAt_, healPlayer } from "./combat";
 import { burst, sweep, thrustLine } from "./generalMoves";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("titan", () => blastAt_);
 
 /** 강타에 필요한 에너지 */
 export const energyNeed = (p: PlayerState) => TITAN.energyMax * (hasPerk(p, "bigCapacitor") ? K.bigCapacitor.need : 1);

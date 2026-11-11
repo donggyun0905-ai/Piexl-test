@@ -5,12 +5,14 @@ import { dashDodged } from "./remnant";
 import { createRng, deriveSeed } from "../rng";
 import { half, hitDamage } from "./bossKit";
 import { pinchPlayer, poisonPlayer } from "./bossGrip";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { ultReady } from "./bossUlts";
 import { startScorpionUlt, updateScorpionUlt } from "./beastUlts";
 import { addShape, inHazard } from "./hazards";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2 } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("bossScorpion", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

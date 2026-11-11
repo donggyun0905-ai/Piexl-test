@@ -4,8 +4,10 @@ import { rot } from "./orbit";
 import { alive, isBoss, onSegment, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { dist2, keepInRoom, normalize, roomGrid } from "./util";
-import { addBit, anchored, big, burstAt, clampIn, dmgOf, foeById, isWall, nearest, wvHit } from "./waveKit";
+import { addBit, anchored, big, burstAt as burstAt_, clampIn, dmgOf, foeById, isWall, nearest, wvHit as wvHit_ } from "./waveKit";
 import { wvFx as fx, type BitStep, type SkillCast } from "./waveSkillsA";
+import { srcFn } from "./dmgSrc";
+const burstAt = srcFn("waveSkillsC", () => burstAt_), wvHit = srcFn("waveSkillsC", () => wvHit_);
 
 export const CASTS_C: Record<string, SkillCast> = {
   wvSurf: (s, m) => {

@@ -1,16 +1,17 @@
 // 이무기: 찌르기 + 휘두르기를 한 번에 · 맞힐 때마다 콤보 (72 오라, 108 용이 됨: 용이 맵을 지나가고 8초 동안 몸이 더 강해짐, 20부터 다시) · 여의주는 방 안 모든 적에게 번개
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../enemyDefs";
 import { IMUGI_PERKS as K } from "../itemsImugi";
 import { DRAGON_COLORS, IMUGI, type DragonArt } from "../weaponsImugi";
-import { damageEnemy, healPlayer } from "./combat";
+import { damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import { dragonArt, dragonDots, pearlStrike } from "./imugiArts";
 import { recalcStats } from "./items";
 import { raiseShield } from "./imugiMods";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, ROOM_MAX_Y, ROOM_MIN_Y, weaponOf } from "./util";
 import { pctHp } from "./pctHp";
+const damageEnemy = srcFn("imugi", () => damageEnemy_);
 
 /** 이번 공격 피해: 공격력 + 토룡이면 토룡으로 채운 보호막의 50% (오라·용 보호막은 빼고) */
 function power(p: PlayerState): number {

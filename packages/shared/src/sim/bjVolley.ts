@@ -1,14 +1,15 @@
 // 백인장 때리기: 한 대 · 범위 · 나눠 때리는 기술(난무·회전참·폭우·침격·감옥·팔연참·종언)을 틱마다 한 대씩 · 출혈·죽음 상태이상
-import { logDmg } from "./dmgSrc";
+import { logDmg, srcFn } from "./dmgSrc";
 import { BJ_PERKS as K } from "../itemsBaekinjang";
 import { ENEMIES } from "../content";
 import { bjAlive, bjNearest } from "./bjKit";
 import type { BjVolley } from "./bjTypes";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import { pctHp } from "./pctHp";
 import { dotDamage } from "./status";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, normalize } from "./util";
+const damageEnemy = srcFn("bjVolley", () => damageEnemy_);
 
 const isBoss = (e: EnemyState) => ENEMIES[e.kind].boss === true || e.kind === "dummy";
 

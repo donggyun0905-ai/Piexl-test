@@ -2,9 +2,11 @@
 // 부채 사격 · 연쇄 번개 · 블랙홀(빨아들였다 터짐) · 빛기둥 · 돌아오는 부메랑. 지금 run.player 기준 (swarmEvo가 나눠 부름)
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { ENEMIES } from "../content";
-import { blastAt, dotDamage, ignite } from "./combat";
+import { blastAt as blastAt_, dotDamage, ignite } from "./combat";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("swarmEvoNew", () => blastAt_);
 
 export type SwarmSkill2 = "wave" | "bounce" | "lance" | "cleave" | "curse" | "fan" | "chain" | "vortex" | "pillar" | "boomerang";
 

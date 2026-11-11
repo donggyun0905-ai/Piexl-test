@@ -1,7 +1,9 @@
 // 보스가 바닥을 쳐서 퍼지는 원형 파동: 원이 바깥으로 커지며 지나가고, 고리에 닿으면 피해 (대시 무적으로 넘어감)
 import { dashDodged } from "./remnant";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import type { EnemyState, RunState } from "./types";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("bossWaves", () => damagePlayer_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

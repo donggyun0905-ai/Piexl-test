@@ -11,13 +11,15 @@ import type { ExtraStats } from "../characters";
 import type { StatMod } from "../stats";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk } from "./util";
-import { addBit, big, burstAt, dmgOf, isWall, turnDir, waveOf, wvHit } from "./waveKit";
+import { addBit, big, burstAt as burstAt_, dmgOf, isWall, turnDir, waveOf, wvHit as wvHit_ } from "./waveKit";
 import { wvFx as fx } from "./waveSkillsA";
 import { floodTick, surfTick } from "./waveSkillsC";
 import { mistTick } from "./waveSkillsD";
 import { wingsTick } from "./waveSkillsE";
 import { WAVE_CASTS, WAVE_STEPS } from "./waveTable";
 import type { WvBit } from "./waveTypes";
+import { srcFn } from "./dmgSrc";
+const burstAt = srcFn("wave", () => burstAt_), wvHit = srcFn("wave", () => wvHit_);
 
 /** 가진 기술 */
 export const ownSkills = (p: PlayerState): WvSkill[] => WV_SKILLS.filter((k) => hasPerk(p, k));

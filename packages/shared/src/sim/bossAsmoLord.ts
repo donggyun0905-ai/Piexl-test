@@ -6,12 +6,14 @@ import { asmoLines, asmoPose, asmoTired } from "./bossAsmo";
 import { startLasers } from "./bossAsmoVoid";
 import { hitDamage } from "./bossKit";
 import { addWave } from "./bossWaves";
-import { envDamage } from "./combat";
+import { envDamage as envDamage_ } from "./combat";
 import { addShape } from "./hazards";
 import { rot } from "./orbit";
 import { eachSeat } from "./party";
 import type { EnemyState, RunState } from "./types";
 import { normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const envDamage = srcFn("bossAsmoLord", () => envDamage_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

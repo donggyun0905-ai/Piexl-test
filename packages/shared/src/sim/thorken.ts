@@ -1,16 +1,17 @@
 // 토르켄(탈라시아): 닻 + 사슬로 이은 철구공. 처음 누르면 철구공을 던짐(떨어진 자리에 천둥)
 // 그 뒤 누를 때마다 닻을 크게 휘두르고, 사슬 끝 철구공이 같이 휩쓸려 크게 돎 (sim/thorkenBall)
 // 대시하면 철구공을 감아 들임 → 다시 던질 수 있음. 폭풍 게이지가 차면 다음 휘두르기에 태풍 + 천둥 (sim/thorkenStorm)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { THORKEN_PERKS as K } from "../itemsThorken";
 import { THORKEN as T } from "../weaponsThorken";
 import { inCone, roomKey, shoot } from "./s2Kit";
 import { ballHits, sweepTick, startSweep } from "./thorkenBall";
-import { addGauge, chainLen, lastFree, tkHit } from "./thorkenKit";
+import { addGauge, chainLen, lastFree, tkHit as tkHit_ } from "./thorkenKit";
 import { callStorm, landClap, stormTick } from "./thorkenStorm";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+const tkHit = srcFn("thorken", () => tkHit_);
 
 /** 철구공 던지기: 바라보는 쪽으로 사슬 끝까지 (벽·기둥에 부딪히면 그 앞에서 멈춤) */
 function throwBall(s: RunState): void {

@@ -1,20 +1,21 @@
 // 운명의 여행자(히든, 시즌 2): 운명의 활로 모아 쏘는 강한 한 발. 모래시계가 다 차면 뒤집히며 주사위를 굴려 운명(버프·기술·능력)이 바뀜
 // 주사위 하나면 첫 눈의 줄(6칸)에서 시드로 한 칸, 두 개의 주사위면 (첫 눈, 둘째 눈) 칸 그대로 · 눈의 합만큼 한 발이 세짐
 // 수치는 weaponsVoyager.VOYAGER, 운명 표는 voyagerFates, 기술은 voyagerSkills, 능력은 voyagerAbilities
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { VOYAGER_PERKS as K } from "../itemsVoyager";
 import { createRng, deriveSeed } from "../rng";
 import { FATES, type BuffKind } from "../voyagerFates";
 import { VOYAGER as V } from "../weaponsVoyager";
 import { nearest } from "./brawlMoves";
-import { blastAt, healPlayer } from "./combat";
-import { alive, isBoss, strike, stun } from "./s2Kit";
+import { blastAt as blastAt_, healPlayer } from "./combat";
+import { alive, isBoss, strike as strike_, stun } from "./s2Kit";
 import type { VoyagerFateState } from "./secretTypes";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, hasPerk, normalize } from "./util";
 import { abilityTick, abilityVal } from "./voyagerAbilities";
 import { fireSkill, tickVolley } from "./voyagerSkills";
+const blastAt = srcFn("voyager", () => blastAt_), strike = srcFn("voyager", () => strike_);
 
 const isVoyager = (p: PlayerState) => p.characterId === "voyager";
 /** 배율처럼 곱하는 버프 (축복이면 늘어난 만큼 두 배) */

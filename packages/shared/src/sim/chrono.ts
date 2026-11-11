@@ -1,14 +1,15 @@
 // 시간술사: 본인 공격은 약하고(70%), 잠시 뒤(1초) 공격한 그 자리에서 반투명한 잔상이 더 세게(120%) 한 번 더 함.
 // 움직이며 싸우면 지나온 자리마다 공격이 다시 터짐. 무기마다 공격 방식이 다름 (weaponsChrono)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../content";
 import { CHRONO_PERKS } from "../itemsChrono";
 import { createRng, deriveSeed } from "../rng";
 import type { Echo } from "./chronoTypes";
-import { blastAt, damageEnemy, healPlayer } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, shotDirs, weaponOf } from "./util";
+const blastAt = srcFn("chrono", () => blastAt_), damageEnemy = srcFn("chrono", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

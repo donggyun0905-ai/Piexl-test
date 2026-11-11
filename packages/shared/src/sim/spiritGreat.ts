@@ -2,10 +2,12 @@
 import { SPIRIT_PERKS as K } from "../itemsSpirit";
 import { createRng, deriveSeed } from "../rng";
 import { GREAT_SPIRITS, SPIRIT as P, type GreatSpirit } from "../weaponsSpirit";
-import { blastAt, healPlayer } from "./combat";
-import { alive, inCircle, inLine, onSegment, poison, root, stun, strike } from "./s2Kit";
+import { blastAt as blastAt_, healPlayer } from "./combat";
+import { alive, inCircle, inLine, onSegment, poison, root, stun, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("spiritGreat", () => blastAt_), strike = srcFn("spiritGreat", () => strike_);
 
 /** 대정령 순번 (그리기: 효과 dirX) */
 export const GREAT_INDEX: Record<GreatSpirit, number> = { titanCore: 0, ironHide: 1, chronoSpire: 2, nightWeaver: 3, umbra: 4, venomHide: 5, idra: 6, briarHeart: 7, sylvanGuard: 8, abyssRuin: 9 };

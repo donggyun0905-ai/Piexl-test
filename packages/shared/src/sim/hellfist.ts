@@ -2,16 +2,17 @@
 // 1 주먹 후리기(앞 부채꼴) → 2 악마 왼팔 내려찍기(앞 부채꼴 충격 · 땅이 갈라져 남음) → 3 균열 파쇄(갈라진 땅이 붉은 유리처럼 깨지며 그 위 적을 벰)
 // 성흔이 가득 찬 적혈 각성 중에는 기본 공격이 모두 허공검격 (왼손 검지로 적을 가리키고 공중을 그으면 그 적 자리에 X자 검격 · 적 여럿)
 // 맞힐수록 악마화가 쌓여 팔이 자라 모든 공격이 더 멀리 닿음 (sim/hellfistKit) · 수치 weaponsHellfist.HELLFIST · 아이템 itemsHellfist
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { HELLFIST_PERKS as K } from "../itemsHellfist";
 import { HELLFIST as H } from "../weaponsHellfist";
 import { clawTargets, hfDmg, hfHit, hfReach, rageTick } from "./hellfistKit";
-import { alive, inCircle, inCone, strike, stun } from "./s2Kit";
+import { alive, inCircle, inCone, strike as strike_, stun } from "./s2Kit";
 import { isAwake, stigmaTick } from "./stigma";
 import type { HfCrack } from "./hfTypes";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+const strike = srcFn("hellfist", () => strike_);
 
 /** 1타: 주먹으로 앞을 후려침 (쌍주먹: 한 번 더) */
 function jab(s: RunState): void {

@@ -1,10 +1,11 @@
 // 피해 출처 기록 (결과 창 '피해 출처'): 적 체력을 깎을 때마다 "지금 무엇이 때리는 중인지"로 나눠 사람마다 더해 둠 (p.dmgBy)
 // 출처 = 패시브 id (그 패시브를 가졌을 때만 도는 코드 구간을 srcRun으로 감쌈) · 상태이상은 "d:종류" · 감싸지 않은 곳은 ""(무기·기본 기술)
+// 캐릭터 기술·기본 패시브: 파일마다 피해 함수를 srcFn으로 묶어 "f:파일"로 셈 (패시브 구간이 먼저 · 가장 안쪽 파일이 이김 · 이름은 화면 game/srcNames)
 // 구간 안에서 쏜 내 탄·잠시 뒤 폭발은 출처를 달고 가서(src) 맞을 때 그 출처로 셈 · 게임 결과에는 영향 없음 (기록만)
 import type { DotKind, EnemyState, RunState } from "./types";
 
 export interface DmgSrcPlayerState {
-  /** 출처마다 준 피해 합 (허수아비·패왕전 제외) */
+  /** 출처마다 준 피해 합 (패왕전 제외 · 연습장 허수아비는 셈: 능력치 칸에서 바로 확인) */
   dmgBy?: Record<string, number>;
 }
 
@@ -29,6 +30,21 @@ export function srcRun<T>(s: RunState, id: string, fn: () => T): T {
   }
 }
 
+/** 이 파일에서 부르는 피해 함수 묶기: 패시브 구간 밖이면 "f:파일"로 (get: 순환 가져오기라도 안전하게 부를 때 꺼냄) */
+export function srcFn<T extends (...a: never[]) => unknown>(file: string, get: () => T): T {
+  const key = `f:${file}`;
+  return ((...a: never[]) => {
+    if (cur !== undefined && !cur.startsWith("f:")) return get()(...a);
+    const was = cur;
+    cur = key;
+    try {
+      return get()(...a);
+    } finally {
+      cur = was;
+    }
+  }) as T;
+}
+
 /** 탄·잠시 뒤 폭발이 맞을 차례: 달고 온 출처로 (없으면 기본) */
 export function srcAs<T>(id: string | undefined, fn: () => T): T {
   const was = cur;
@@ -43,7 +59,7 @@ export const setSrc = (id?: string) => void (cur = id);
 
 /** 적이 잃은 체력 적기 (key가 없으면 지금 출처) */
 export function logDmg(s: RunState, e: EnemyState, amt: number, key?: string): void {
-  if (!(amt > 0) || s.pvp || e.kind === "dummy") return;
+  if (!(amt > 0) || s.pvp) return;
   const by = (s.player.dmgBy ??= {});
   const k = key ?? cur ?? "";
   by[k] = (by[k] ?? 0) + amt;

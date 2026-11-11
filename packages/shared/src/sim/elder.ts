@@ -1,16 +1,17 @@
 // 장로(비르디아): 진법. 공격하면 적 자리(없으면 바라보는 쪽)에 네모난 진을 깔고, 잠시 뒤 진이 발동. 한 번에 깔린 진은 셋까지 (오래된 것부터 사라짐)
 // 진마다: 덩굴 강타 · 불기둥 · 양쪽 벽 · 함정 구멍 · 떨어지는 검 · 번개 · 얼음 · 빨아들이는 바람 · 바위 주먹 · 천원진. 수치는 weaponsElder, 아이템은 itemsElder
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { manualAim } from "./pwBasic";
 import { TICK_RATE } from "../constants";
 import { ELDER_PERKS as K } from "../itemsElder";
 import { createRng, deriveSeed } from "../rng";
 import { ELDER as L, FORMATIONS, type FormationKind } from "../weaponsElder";
-import { blastAt, healPlayer, ignite } from "./combat";
-import { alive, roomKey, stun, strike } from "./s2Kit";
+import { blastAt as blastAt_, healPlayer, ignite } from "./combat";
+import { alive, roomKey, stun, strike as strike_ } from "./s2Kit";
 import type { ElderSeal } from "./s2Types";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, roomGrid, STILL_TICKS, weaponOf } from "./util";
+const blastAt = srcFn("elder", () => blastAt_), strike = srcFn("elder", () => strike_);
 
 /** 네모난 진 안의 적 */
 const inSeal = (s: RunState, g: ElderSeal) => alive(s).filter((e) => Math.abs(e.x - g.x) <= g.r + e.r && Math.abs(e.y - g.y) <= g.r + e.r);

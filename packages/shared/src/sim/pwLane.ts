@@ -4,7 +4,7 @@
 import { TICK_RATE } from "../constants";
 import { PW_ARENAS } from "../paewangMaps";
 import { PW_UNIT } from "../pwRules";
-import { damagePlayer } from "./combat";
+import { damagePlayer as damagePlayer_ } from "./combat";
 import { spotXY } from "./paewangGrid";
 import { allPlayers, seatNo, useSeat } from "./party";
 import { inPlay } from "./pvpWorld";
@@ -13,6 +13,8 @@ import { giantSkill } from "./gigaGiants";
 import type { PwUnit, PwUnitKind } from "./pwGrowTypes";
 import type { RunState } from "./types";
 import { addEffect, makeEnemy } from "./util";
+import { srcFn } from "./dmgSrc";
+const damagePlayer = srcFn("pwLane", () => damagePlayer_);
 
 /** 그림 (던전 몬스터 그림을 씀) */
 const LOOK: Record<PwUnitKind, string> = { minion: "paladin", archer: "spitter", tower: "tower", boss: "hulk", jungle: "charger", elite: "knight", dragon: "dragon", godeater: "godeater", giantRed: "hulk", giantBlue: "hulk", giantWhite: "hulk", goblin: "charger" };

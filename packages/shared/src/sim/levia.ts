@@ -1,16 +1,17 @@
 // 리바이어(탈라시아): 바다의 창 4단 콤보 + 확률로 같이 나오는 고래 (sim/leviaWhale)
 // 1타 앞 휘두르기(고래: 날개로 더 넓게 쓸기) → 2타 찌르기(고래: 꼬리로 앞을 크게 휩쓸기) → 3타 한 바퀴 + 고래 대돌격(고래: 몸을 감아 한 바퀴 더 넓게)
 // → (0.5초 만에 바로) 4타 앞으로 돌진 + 부채꼴 충격파(고래: 같이 돌진). 멈추면 1타부터 · 고래가 안 나올수록 다음엔 잘 나옴
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { LEVIA_PERKS as K } from "../itemsLevia";
 import { LEVIA as L } from "../weaponsLevia";
 import { healPlayer } from "./combat";
-import { gemOf, lvHit, rollWhale, whaleDmg, whaleSize } from "./leviaKit";
+import { gemOf, lvHit as lvHit_, rollWhale, whaleDmg, whaleSize } from "./leviaKit";
 import { breach, launchWhale, onWhale, whaleCharge, whaleTick } from "./leviaWhale";
-import { fan, inCircle, inCone, roomKey, rushTick, startRush, stun } from "./s2Kit";
+import { fan, inCircle, inCone, roomKey, rushTick as rushTick_, startRush, stun } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
+const lvHit = srcFn("levia", () => lvHit_), rushTick = srcFn("levia", () => rushTick_);
 
 /** 1타: 창으로 앞을 크게 휘두름 · 고래가 날개로 더 넓게 같이 쓸어 줌 */
 function sweep(s: RunState, whale: boolean): void {

@@ -1,13 +1,14 @@
 // 풍류사 전용 아이템 효과: 축지법(순간이동 대시) · 분신술(따로 돌아다니며 공격) · 오색 구름 자국 · 먹물 웅덩이 · 풍류 피리
 // 둔갑술·의적 주머니 돈·활빈당 깃발·구름 지형 피해는 sim/pungHooks (다른 파일에 거는 갈고리)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { PUNGRYU_PERKS as K } from "../itemsPungryu";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import { letterFrom, puPower } from "./pungryuKit";
 import { roamStep } from "./roam";
 import { inCircle, isBoss } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, dist2, DASH_SPEED_MUL, DASH_TICKS, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
+const damageEnemy = srcFn("pungryuPerks", () => damageEnemy_);
 
 /** 축지법: 대시를 시작한 틱에 그 쪽으로 한 번에 옮겨 감 (벽에 막히면 거기까지), 다음 글자 2배 */
 export function puDash(s: RunState): void {

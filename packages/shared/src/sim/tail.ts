@@ -6,10 +6,12 @@ import { TAIL_PERKS as K } from "../itemsTail";
 import { TAIL as T } from "../weaponsTail";
 import { healPlayer } from "./combat";
 import { inCircle, inCone, roomKey, stun } from "./s2Kit";
-import { biteDmg, tlHit } from "./tailKit";
+import { biteDmg, tlHit as tlHit_ } from "./tailKit";
 import { seaTick } from "./tailSea";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const tlHit = srcFn("tail", () => tlHit_);
 
 /** 1·2타: 꼬리를 위→아래(up=false) · 아래→위(up=true)로 휘두름 */
 function swipe(s: RunState, up: boolean): void {

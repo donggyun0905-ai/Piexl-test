@@ -1,12 +1,13 @@
 // 크루세이더 성벽 돌진 (대시): 십자가를 앞으로 내밀고 돌진 → 앞에 닿은 적을 잡아 밀고 감 (보스는 한 번 피해만)
 // 밀던 적이 벽·기둥에 막히면 벽 충돌 (더 큰 피해·긴 기절) · 대시가 끝나면 잡은 적을 모두 들이받음 · 돌진 낙인 (앞 땅에 작은 십자 균열)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { CRUSADER_PERKS as K } from "../itemsCrusader";
 import { CRUSADER as C } from "../weaponsCrusader";
-import { addCrack, addWeight, crHits, crStrike } from "./crusaderKit";
+import { addCrack, addWeight, crHits as crHits_, crStrike as crStrike_ } from "./crusaderKit";
 import { alive, isBoss, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, reachOf, roomGrid } from "./util";
+const crHits = srcFn("crusaderRam", () => crHits_), crStrike = srcFn("crusaderRam", () => crStrike_);
 
 /** 벽에 부딪힘: 큰 피해 · 긴 기절 */
 function wallHit(s: RunState, id: number): void {

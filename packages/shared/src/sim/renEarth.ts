@@ -4,9 +4,11 @@ import { REN_PERKS as K } from "../itemsRen";
 import { PASSIVES, type PassiveDef } from "../items";
 import { createRng, deriveSeed } from "../rng";
 import { REN_EARTH as E } from "../weaponsRen";
-import { alive, inCircle, inCone, onSegment, strike, stun } from "./s2Kit";
+import { alive, inCircle, inCone, onSegment, strike as strike_, stun } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk } from "./util";
+import { srcFn } from "./dmgSrc";
+const strike = srcFn("renEarth", () => strike_);
 
 /** 열린 단계 수: 렌 전용 아이템 3개마다 하나 */
 export function earthTiers(p: PlayerState): number {

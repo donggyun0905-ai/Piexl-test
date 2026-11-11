@@ -7,12 +7,14 @@ import { ENEMIES } from "../enemyDefs";
 import { PASSIVE_IDS, PASSIVES, type PassiveDef } from "../items";
 import { healAmount } from "../pwItems";
 import { createRng, deriveSeed } from "../rng";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import type { AllyState } from "./hiddenTypes";
 import type { RunState, TickInput } from "./types";
 import { addEffect, keepInRoom, normalize, roomGrid } from "./util";
 import { allyGoal, allyStep, allyTerrain } from "./allyMove";
-import { laurelPlayer, laurelTick } from "./allyKit";
+import { laurelPlayer, laurelTick as laurelTick_ } from "./allyKit";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("allies", () => damageEnemy_), laurelTick = srcFn("allies", () => laurelTick_);
 
 const R = {
   /** 월계선 동료: 체력 배율 · 전용 패시브 하나마다 공격력 + */

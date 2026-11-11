@@ -6,11 +6,13 @@ import { TICK_RATE } from "../constants";
 import { ONI_PERKS as K } from "../itemsOni";
 import { ONI } from "../weaponsOni";
 import { artChance, CLUB_TINT, clubArt, inCircle } from "./oniArts";
-import { damageEnemy, dotDamage, healPlayer } from "./combat";
+import { damageEnemy as damageEnemy_, dotDamage, healPlayer } from "./combat";
 import { recalcStats } from "./items";
 import { createRng, deriveSeed } from "../rng";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("oni", () => damageEnemy_);
 
 /** 방망이 휘두르기: 앞 부채꼴 안 적에게 공격력만큼 · 맞은 적 (가까운 순) */
 function swing(s: RunState): EnemyState[] {

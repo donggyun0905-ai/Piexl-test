@@ -2,10 +2,12 @@
 // 웨폰 마스터 검은 자유롭게 날아다님: 휘어지며 날아가 적을 꿰뚫고 지나쳐, 크게 돌아 다시 꿰뚫기를 되풀이한 뒤 돌아옴 (꿰뚫을 때마다 다음 적을 노림)
 // 불: 세게 3번 · 물: 약하게 여러 번 · 번개: 빠르게 약하게 5번(치명타) · 땅·풀 검은 날아가지 않고 몸 둘레를 돌며 탄을 막음(orbit·orbitPerks)
 import { createRng, deriveSeed } from "../rng";
-import { blastAt } from "./combat";
+import { blastAt as blastAt_ } from "./combat";
 import { orbHit, type OrbBody } from "./orbit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, markCrit, normalize } from "./util";
+import { srcFn } from "./dmgSrc";
+const blastAt = srcFn("orbitBlades", () => blastAt_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {

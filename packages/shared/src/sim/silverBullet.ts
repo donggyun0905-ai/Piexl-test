@@ -1,15 +1,16 @@
 // 실버불렛(새벽의 성흔, 은빛 집행자): 누르고 있으면 쌍권총 (한 번에 은탄 두 발: 오른손 → 조금 뒤 왼손 · 공격력 낮고 빠름 · 모든 공격이 달빛 상태이상 sim/moonlight)
 // 기본 공격 몇 번마다 성수 폭탄(광역 정화) · 대시: 장애물을 넘고 가까운 적에게 은탄 두 발 · 은탄 마크가 30이면 연사 2초 (성흔 안 참)
 // 성흔이 가득 차면 달빛 각성: 버프 + 몸이 고정되고 앞에 흰 활 ) → 가운데 두 발·양끝 유도 두 발씩 매우 빠르게 (sim/silverBulletKit) · 수치 weaponsSilverBullet · 아이템 itemsSilverBullet
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { SILVER_BULLET_PERKS as K } from "../itemsSilverBullet";
 import { SILVER_BULLET as B } from "../weaponsSilverBullet";
-import { alive, inCircle, roomKey, strike } from "./s2Kit";
+import { alive, inCircle, roomKey, strike as strike_ } from "./s2Kit";
 import { isAwake, stigmaTick } from "./stigma";
-import { bombsTick, markNeed, sbDmg, shoot, shotsTick, throwBomb } from "./silverBulletKit";
+import { bombsTick as bombsTick_, markNeed, sbDmg, shoot, shotsTick, throwBomb } from "./silverBulletKit";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+const strike = srcFn("silverBullet", () => strike_), bombsTick = srcFn("silverBullet", () => bombsTick_);
 
 /** 손 자리: side 1 오른손 · -1 왼손 (바라보는 쪽 기준) */
 const gun = (s: RunState, side: number) => ({ x: s.player.x - s.player.faceY * B.gunSide * side, y: s.player.y - 4 + s.player.faceX * B.gunSide * side });

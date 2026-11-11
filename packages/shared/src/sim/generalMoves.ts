@@ -2,10 +2,12 @@
 import { GENERAL_PERKS as K } from "../itemsGeneral";
 import { GENERAL } from "../weaponsGeneral";
 import { ENEMIES } from "../enemyDefs";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import { applyBleed } from "./gunExtras";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("generalMoves", () => damageEnemy_);
 
 /** 적 하나 맞힘: 보스 추가 피해 · 찌르기 출혈 · 쓰러뜨리면 명장의 기세 */
 export function spearHit(s: RunState, e: EnemyState, dmg: number, dx: number, dy: number, stab = false): void {

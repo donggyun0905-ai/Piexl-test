@@ -3,11 +3,13 @@ import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../enemyDefs";
 import { DUCK_PERKS as K } from "../itemsDuck";
 import { DUCK } from "../weaponsDuck";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import { echoQuack, updateDucklings } from "./ducklings";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, roomGrid, shotDirs, weaponOf } from "./util";
 import { raiseShield } from "./imugiMods";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("duck", () => damageEnemy_);
 
 /** 공격력 (오리 가족: 새끼 오리 수만큼 더 셈 · 백조의 노래: 잃은 체력만큼 더 셈) */
 export function duckPower(p: PlayerState): number {

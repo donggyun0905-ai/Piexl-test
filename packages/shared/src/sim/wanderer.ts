@@ -1,15 +1,16 @@
 // 방랑객(아스칼론, 시즌 2): 카타나를 든 떠돌이 무사. 기본 예리함 25% (맞히면 확률로 방어 -25% + 출혈, baseStats)
 // 무기마다: 앞쪽 베기(사거리 안 적에게 바로 일직선 칼선) · 발도 · 무심의 원(가만히 서면 원에 들어온 적을 바로 벰, 대시하면 원 안 적이 멈추고 크게 베임) · 칼날 폭풍 · 천검란(게이지 → 방 전체 칼날 폭풍) · 달빛 일섬(2초 뒤 베임)
 // 수치는 weaponsWanderer.WANDERER, 아이템은 itemsWanderer
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { WANDERER_PERKS as K } from "../itemsWanderer";
 import { WANDERER as W, type KatanaStyle } from "../weaponsWanderer";
 import { nearest } from "./brawlMoves";
 import { applyBleed } from "./gunExtras";
-import { alive, inCircle, inCone, inLine, onSegment, shoot, strike, stun } from "./s2Kit";
+import { alive, inCircle, inCone, inLine, onSegment, shoot, strike as strike_, stun } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, normalize, roomGrid, STILL_TICKS, weaponOf } from "./util";
+const strike = srcFn("wanderer", () => strike_);
 
 const styleOf = (p: PlayerState): KatanaStyle => weaponOf(p).katana ?? { mode: "slash", reach: 34, arc: 0.2 };
 const isWanderer = (p: PlayerState) => p.characterId === "wanderer";

@@ -2,16 +2,17 @@
 // 1 암습 저격: 보호막 20, 화면이 어두워진 채 5초 동안 직접 조준해 쏨 (조준경 가운데 작은 원 안의 적만 맞음, 한 발 200%, 다시 누르면 끝 · 일찍 끝내면 남은 시간만큼 대기가 줄어듦) · 대기 10초
 // 2 강력한 한방: 모으는 동안 앞에 탄을 막는 벽 → 방을 꿰뚫는 한 줄 (공격력 1000% + 최대 체력 20%, 보스는 그 1/5) · 대기 60초
 // 3 연발사격: 조준 없이 10발을 흩뿌려 쏨 · 대기 3초. 세 스킬은 서로 쓰는 도중에도 같이 쓸 수 있음. 수치는 weaponsTracker.TRACKER, 아이템은 itemsTracker
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { tuneVal } from "./trTune";
 import { TICK_RATE } from "../constants";
 import { TRACKER_PERKS as K } from "../itemsTracker";
 import { createRng, deriveSeed } from "../rng";
 import { TRACKER as T } from "../weaponsTracker";
-import { alive, inLine, isBoss, shoot, strike } from "./s2Kit";
+import { alive, inLine, isBoss, shoot, strike as strike_ } from "./s2Kit";
 import { AIM_DIST_STEP, type TickInput } from "./inputTypes";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
+const strike = srcFn("tracker", () => strike_);
 
 /** 입력 중 이 틱에 쓰는 것을 담아 둠: 누른 곳까지 거리(레이저·의사·거너·저격) · 누른 스킬 키 (player에서 부름) */
 export function readAim(p: PlayerState, input: TickInput): void {

@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.38",
+    date: "2026-11-12",
+    items: {
+      ko: [
+        "피해 출처 2차: 캐릭터 스킬·소환수·기본 패시브·장치·진영 특징·세트 효과 등을 무기 줄에서 빼서 따로 표시 (예: 스킬 · 소환수 · 고양이 · 회전체 · 마법 문양 · 그림자 분신 · 일곱 죄의 장판 · 공생 정령 · 로비 펫) — 무기 줄에는 기본 공격만 남음",
+        "게임 중 능력치 칸에 '피해 출처' 버튼: 누르면 지금까지 무엇이 얼마나 줬는지 펼쳐짐 (1초마다 갱신)",
+        "아카이브 빌드 통계: 무기·패시브 줄을 펼치면 '연습장에서 써 보기' — 그 캐릭터가 그걸 든 채로 연습장이 열림",
+      ],
+      en: [
+        "Damage sources, stage 2: character skills, summons, base passives, devices, faction traits, set effects and more are split out of the weapon row (e.g. Skills · Summons · Cats · Orbiters · Magic rune · Shadow clones · Seven Sins fields · Symbiotic spirit · Lobby pet) — the weapon row now holds basic attacks only",
+        "In-game stats column: new 'Damage sources' button that unfolds what has dealt how much so far (refreshes every second)",
+        "Archive Build Stats: open a weapon or passive row for 'Try it in the practice room' — the practice room opens with that character already holding it",
+      ],
+      ja: [
+        "ダメージの出どころ 第2弾：キャラのスキル・召喚獣・基本パッシブ・装置・陣営特性・セット効果などを武器の行から分けて表示（例：スキル · 召喚獣 · 猫 · 回転体 · 魔法紋 · 影分身 · 七つの罪の領域 · 共生精霊 · ロビーペット）— 武器の行は通常攻撃だけに",
+        "ゲーム中の能力値欄に「ダメージの出どころ」ボタン：押すとこれまで何がどれだけ与えたかが開く（1秒ごとに更新）",
+        "アーカイブのビルド統計：武器・パッシブの行を開くと「練習場で試す」— そのキャラがそれを持った状態で練習場が開く",
+      ],
+    },
+  },
+  {
     version: "0.52.37",
     date: "2026-11-12",
     items: {

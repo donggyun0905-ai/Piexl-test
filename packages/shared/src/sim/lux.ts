@@ -7,10 +7,12 @@ import { LUX } from "../weaponsLux";
 import { LUX_PERKS as K } from "../itemsLux";
 import type { ExtraStats } from "../characters";
 import type { StatMod } from "../stats";
-import { alive, onSegment, strike } from "./s2Kit";
+import { alive, onSegment, strike as strike_ } from "./s2Kit";
 import type { LuxCross } from "./luxTypes";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+import { srcFn } from "./dmgSrc";
+const strike = srcFn("lux", () => strike_);
 
 export const isLux = (p: PlayerState) => p.characterId === "lux";
 

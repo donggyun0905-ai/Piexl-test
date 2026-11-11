@@ -1,12 +1,13 @@
 // 이안 스킬 넷(1 인과의 실 · 2 그림자 걸음 · 3 기록 집행 · 4 인과율 속박) · 날아가는 실 · 인과 되돌림 (sim/ian에서 부름)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { IAN_PERKS as K } from "../itemsIan";
 import { IAN as I } from "../weaponsIan";
-import { addRec, bind, iaCooldown, iaHit } from "./ianKit";
+import { addRec, bind, iaCooldown, iaHit as iaHit_ } from "./ianKit";
 import { rot } from "./orbit";
-import { alive, onSegment, rushTick, startRush, strike } from "./s2Kit";
+import { alive, onSegment, rushTick as rushTick_, startRush, strike as strike_ } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
+const iaHit = srcFn("ianSkills", () => iaHit_), rushTick = srcFn("ianSkills", () => rushTick_), strike = srcFn("ianSkills", () => strike_);
 
 /** 인과의 실 한 가닥 (dx, dy 방향) */
 function thread(s: RunState, dx: number, dy: number): void {

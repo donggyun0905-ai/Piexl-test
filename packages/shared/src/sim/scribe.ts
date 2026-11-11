@@ -1,16 +1,17 @@
 // 서기관(히든, 아카식 레코드): 깃펜으로 잉크 탄을 쏘아 맞은 적에게 기록(잉크)을 새김 · 몇 번째 공격마다 무기의 글자가 써지며 발동
 // 글자: 검 · 폭 · 봉 · 뢰 · 빙 · 염 · 재 · 성 · 멸 · 원본(차례로 모두). 수치는 weaponsScribe.SCRIBE, 아이템은 itemsScribe
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../enemyDefs";
 import { createRng, deriveSeed } from "../rng";
 import { SCRIBE_PERKS as K } from "../itemsScribe";
 import { SCRIBE as S, type ScribeWord } from "../weaponsScribe";
-import { blastAt, damageEnemy, healPlayer, ignite } from "./combat";
+import { blastAt as blastAt_, damageEnemy as damageEnemy_, healPlayer, ignite } from "./combat";
 import type { DotKind, EnemyState, PlayerState, RunState } from "./types";
-import { statusHit } from "./statusHit";
+import { statusHit as statusHit_ } from "./statusHit";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
 import { raiseShield } from "./imugiMods";
+const blastAt = srcFn("scribe", () => blastAt_), damageEnemy = srcFn("scribe", () => damageEnemy_), statusHit = srcFn("scribe", () => statusHit_);
 
 /** 아카식 원본이 차례로 쓰는 글자 */
 const ORIGIN: readonly ScribeWord[] = ["blade", "burst", "seal", "bolt", "frost", "flame", "recall", "star", "void"];

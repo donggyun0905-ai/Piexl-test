@@ -7,10 +7,12 @@ import { createRng, deriveSeed } from "../rng";
 import { MADQUEEN as Q } from "../weaponsMadQueen";
 import { bodyFits } from "./layout";
 import { armsTick, fireShell, startSalvo } from "./madQueenArms";
-import { boomR, cannonCount, cannonPos, fleetOf, mqHit, mqSpot, turretChance, wingChance, wingPos } from "./madQueenKit";
+import { boomR, cannonCount, cannonPos, fleetOf, mqHit as mqHit_, mqSpot, turretChance, wingChance, wingPos } from "./madQueenKit";
 import { alive, roomKey } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const mqHit = srcFn("madQueen", () => mqHit_);
 
 /** 머리 위 대포마다 한 발: 바라보는 쪽으로 나란히 (땅 위 자리는 대포 줄을 옆으로 조금 벌림) · 둘째 대포부터 조금 약함 */
 function volley(s: RunState): void {

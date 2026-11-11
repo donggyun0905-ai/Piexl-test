@@ -3,7 +3,7 @@
 import { PW } from "../paewangDefs";
 import { kitOf } from "../pwKits";
 import type { TickInput } from "./inputTypes";
-import { damageEnemy } from "./combat";
+import { damageEnemy as damageEnemy_ } from "./combat";
 import { recalcStats } from "./items";
 import { PW_SRC_SUMMON, recapHeal } from "./pvpRecap";
 import { seatNo } from "./party";
@@ -11,6 +11,8 @@ import { castSkill, skillDef, stepCast } from "./pwSkill";
 import { castFx, PW_FX_STYLES, skillPow } from "./pwSkillHit";
 import type { RunState } from "./types";
 import { addEffect, keepInRoom, roomGrid } from "./util";
+import { srcFn } from "./dmgSrc";
+const damageEnemy = srcFn("pwSkillRun", () => damageEnemy_);
 
 /** 능력치를 바꾸는 버프 수 (바뀌면 다시 계산) */
 const statBuffs = (s: RunState) => (s.player.pwBuffs ?? []).filter((b) => b.dmg || b.move || b.rate).length;

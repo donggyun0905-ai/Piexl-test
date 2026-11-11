@@ -1,14 +1,15 @@
 // 래빗 내리찍은 뒤 효과와 바닥 것: 땅울림 파동(맵 끝까지, 세 갈래)·여진 · 토끼인장 · 유령 망치 · 갈라진 땅 · 별사탕
 // 파동은 내리찍은 자리에서 땅울림이 다 커진 뒤(그림 1~3번째 칸) 4번째 칸 크기로 바라보는 쪽 맵 끝까지 나아감
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcFn } from "./dmgSrc";
 import { RABBIT_PERKS as K } from "../itemsRabbit";
 import { createRng, deriveSeed } from "../rng";
 import { RABBIT_HAMMER as H } from "../weaponsRabbit";
 import { rot } from "./orbit";
-import { hammerSize, luckMul, megaMul, rbArea } from "./rabbitKit";
+import { hammerSize, luckMul, megaMul, rbArea as rbArea_ } from "./rabbitKit";
 import { alive, damageEnemyLite } from "./shadowingSpirits";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, hasPerk, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
+const rbArea = srcFn("rabbitMarks", () => rbArea_);
 
 /** 내리찍기를 마쳤을 때 (망치로 직접 찍은 곳만): 파동 · 토끼인장 · 갈라진 땅 · 유령 망치 · 별사탕 */
 export function slamExtras(s: RunState, x: number, y: number, hit: EnemyState[]): void {
