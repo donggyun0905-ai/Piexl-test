@@ -44,6 +44,8 @@ const R: Record<string, number> = {
   puppeteer: 1,
   /** 래빗 */
   rabbit: 1,
+  /** 백령 */
+  baekryeong: 1,
   /** 의사 */
   doctor: 1.25,
   /** 떠돌이 */

@@ -1,9 +1,10 @@
-// 티어표 이유: 새벽의 성흔 캐릭터 + 실베르 조커·쉐도잉·인형술사·래빗 (한·영·일, ko·en·ja가 커서 나눔)
+// 티어표 이유: 새벽의 성흔 캐릭터 + 실베르 조커·쉐도잉·인형술사·래빗·백령 (한·영·일, ko·en·ja가 커서 나눔)
 import type { CharacterId } from "@pixel-rogue/shared";
 
 type Reasons = Partial<Record<CharacterId, string>>;
 
 export const TIER_KO_DAWN: Reasons = {
+  baekryeong: "실베르의 영혼과 대태도를 다루는 오니 소녀. 처음엔 앞을 베기만 하는 단순한 근접형이지만, 처치로 영혼 게이지 3칸을 채우면 머리 위 유령팔이 벨 때마다 에너지 참격을 날리고, 망령·검무 소용돌이·하늘에서 떨어지는 (진)대태도가 쌓이면 방 끝까지 쓸어 냄 (새 캐릭터, 아직 평가 전)",
   rabbit: "실베르의 망치를 든 유령 소녀. 앞에 망치를 내리찍는 단순한 근접형이라 쉽지만, 땅울림 파동·토끼인장·홈런이 쌓이고 전용 아이템 7개부터 슈퍼 럭키 초거대 망치가 터지면 방 하나를 통째로 쓸어 냄 (새 캐릭터, 아직 평가 전)",
   shadowing: "실베르의 그림을 그리는 정령 소녀. 마우스로 바닥에 직접 먹 획을 그려 싸우는 독특한 방식이라 손이 바빠야 세지만, 닫힌 원 봉인과 일필 베기를 익히고 전용 패시브 20개가 쌓이면 그린 그림마다 용·학·달·유성이 쏟아짐 (새 캐릭터, 아직 평가 전)",
   puppeteer: "실베르의 붉은 실로 인형을 부리는 소녀. 짧게 클릭해 실을 내리치고 꾹 눌러 적을 조종해 나무 왕관 아군으로 만드는 방식이라 손이 바쁘지만, 아군 셋·미니 인형·거대 인형 친구가 쌓이면 혼자서 군단이 됨 (새 캐릭터, 아직 평가 전)",
@@ -20,6 +21,7 @@ export const TIER_KO_DAWN: Reasons = {
 };
 
 export const TIER_EN_DAWN: Reasons = {
+  baekryeong: "Silber's oni girl who wields souls and an odachi. She starts as a simple melee cutter, but once kills fill three soul bars a ghost arm above her head adds an energy slash to every cut, and with wraiths, sword-dance whirls and True Odachi raining from the sky she sweeps to the far end of the room (new character, not rated yet)",
   rabbit: "Silber's hammer-wielding ghost girl. A simple melee slammer that is easy to pick up, but once quakes, bunny seals and home runs stack up and Super Lucky's colossal hammer kicks in at 7 Rabbit items, she sweeps whole rooms at once (new character, not rated yet)",
   shadowing: "Silber's painting spirit girl. She fights by painting ink strokes on the floor with your mouse, so she needs busy hands, but once you master Seal loops and One-Stroke Slashes and stack her 20 exclusive passives, every drawing unleashes dragons, cranes, moons and meteors (new character, not rated yet)",
   puppeteer: "Silber's girl who works dolls on red strings. You tap to whip threads and hold to take control of foes, turning them into crowned allies, so your hands stay busy, but with three allies, mini dolls and a giant doll friend she becomes an army on her own (new character, not rated yet)",
@@ -36,6 +38,7 @@ export const TIER_EN_DAWN: Reasons = {
 };
 
 export const TIER_JA_DAWN: Reasons = {
+  baekryeong: "シルベルの魂と大太刀を操る鬼の少女。最初は前を斬るだけの単純な近接型だが、倒して魂ゲージを3本ためると頭上の幽霊の腕が斬るたびにエネルギーの斬撃を飛ばし、亡霊・剣舞の渦・空から落ちる（真）大太刀が積み重なると部屋の端まで一掃する（新キャラ、まだ評価前）",
   rabbit: "シルベルのハンマーを持つ幽霊の少女。前にハンマーを叩きつける単純な近接型で扱いやすいが、地響きの波・うさぎの印・ホームランが積み重なり、専用アイテム7個からスーパーラッキーの超巨大ハンマーが出ると部屋ひとつを丸ごと一掃する（新キャラ、まだ評価前）",
   shadowing: "シルベルの絵を描く精霊の少女。マウスで床に直接墨の線を描いて戦う独特な方式で手が忙しいが、閉じた円の封印と一筆斬りを覚え、専用パッシブ20個が積み重なると描くたびに龍・鶴・月・流星が降り注ぐ（新キャラ、まだ評価前）",
   puppeteer: "シルベルの赤い糸で人形を操る少女。短くクリックで糸を叩きつけ、長押しで敵を操って木の冠の味方にする方式で手が忙しいが、味方3体・ミニ人形・巨大人形の友達がそろうと一人で軍団になる（新キャラ、まだ評価前）",

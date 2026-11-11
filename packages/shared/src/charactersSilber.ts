@@ -9,4 +9,6 @@ export const SILBER_CHARACTERS = {
   puppeteer: { id: "puppeteer", maxHp: 90, damage: 7, moveSpeed: 1.2, luck: 1, startWeapon: "ppHand" },
   /** 실베르: 래빗 토끼 망치 하나 · 앞에 내리찍어 땅울림 · 전용 패시브 20 (땅울림 파동·토끼인장·홈런·슈퍼 럭키 등, sim/rabbit) */
   rabbit: { id: "rabbit", maxHp: 95, damage: 9, moveSpeed: 1.2, luck: 2, startWeapon: "rbHammer" },
+  /** 실베르: 백령 대태도 하나 · 앞 부채꼴 베기 · 처치하면 영혼 게이지 → 3칸부터 유령팔 참격 · 전용 패시브 20 (혼령참·(진)대태도 등, sim/baekryeong) */
+  baekryeong: { id: "baekryeong", maxHp: 100, damage: 9, moveSpeed: 1.2, luck: 1, startWeapon: "byBlade" },
 } as const;

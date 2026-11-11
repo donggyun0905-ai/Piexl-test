@@ -57,6 +57,8 @@ export { PUPPET_HAND } from "./weaponsPuppet";
 export { PP_DOLLS, PUPPET_PERKS } from "./itemsPuppet";
 export { RABBIT_HAMMER, RABBIT_ULT } from "./weaponsRabbit";
 export { RABBIT_PERKS } from "./itemsRabbit";
+export { BAEK_ARM, BAEK_BLADE, BAEK_SOUL } from "./weaponsBaekryeong";
+export { BAEK_PERKS } from "./itemsBaekryeong";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";
