@@ -1,6 +1,7 @@
 import { lazy, StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
+import { uiClick } from "./audio/polish";
 import { unlockAudio } from "./audio/sound";
 import { refreshBalance } from "./balance";
 import { refreshCustomMaps } from "./customMapsClient";
@@ -13,6 +14,7 @@ const root = document.getElementById("root");
 if (!root) throw new Error("#root 없음");
 // 브라우저는 사람이 누른 뒤에만 소리를 낼 수 있음
 for (const ev of ["pointerdown", "keydown"]) window.addEventListener(ev, unlockAudio, { passive: true });
+window.addEventListener("click", uiClick, { passive: true });
 // Ctrl+S(맥은 Cmd+S)를 눌러도 브라우저 '저장' 창이 뜨지 않게
 window.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.code === "KeyS") e.preventDefault();

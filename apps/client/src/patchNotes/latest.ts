@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.39",
+    date: "2026-11-12",
+    items: {
+      ko: [
+        "소리 전체를 약 2배 크게 (효과음·음악 모두 · 설정의 소리 크기로 조절) — 여러 소리가 겹쳐도 찢어지지 않게 마지막에 한 번 눌러 줌",
+        "무기에 맞는 공격 소리: 검 · 단검 · 망치/도끼 · 창 · 주먹 · 활 · 던지는 무기 · 총 · 지팡이(마법) · 폭탄이 저마다 다른 소리 (전용 소리가 있는 캐릭터는 그대로)",
+        "빠져 있던 소리 추가: 대시 · 체력 회복 · 방을 정리해 문이 열릴 때 · 체력이 25% 이하일 때 심장 소리 · 메뉴 버튼",
+        "음악: 3층부터 하이햇, 5층부터 북이 붙고, 보스전은 북·낮은 현·금관 화음이 겹침. 7층 라스트 보스는 합창·팀파니·심벌까지 더해 가장 웅장하게",
+        "피해 출처: 파수꾼 '반격의 방패' 충격파가 '캐릭터 특징'이 아니라 그 패시브 줄로 나옴",
+      ],
+      en: [
+        "All audio is about twice as loud (sound effects and music · still adjustable in Settings) — a final limiter keeps overlapping sounds from distorting",
+        "Weapon-matched attack sounds: swords · daggers · hammers/axes · spears · fists · bows · thrown weapons · guns · staves (magic) · bombs each sound different (characters with their own sounds are unchanged)",
+        "Added missing sounds: dash · healing · the doors unlocking when a room is cleared · a heartbeat at 25% health or less · menu buttons",
+        "Music: hi-hats from floor 3 and drums from floor 5; boss fights layer drums, low strings and brass chords. The floor 7 last boss adds choir, timpani and cymbals for the grandest sound",
+        "Damage sources: the Warden's 'Counter Shield' shockwave is now listed under that passive instead of 'Character trait'",
+      ],
+      ja: [
+        "音全体を約2倍の大きさに（効果音・音楽とも · 設定の音量で調整可能）— 重なっても割れないよう最後にリミッターをかけています",
+        "武器に合った攻撃音：剣 · 短剣 · ハンマー/斧 · 槍 · 拳 · 弓 · 投げ武器 · 銃 · 杖（魔法） · 爆弾がそれぞれ別の音に（専用の音があるキャラはそのまま）",
+        "足りなかった音を追加：ダッシュ · 体力回復 · 部屋を片付けて扉が開くとき · 体力25%以下で心臓の音 · メニューボタン",
+        "音楽：3階からハイハット、5階から太鼓が加わり、ボス戦は太鼓・低い弦・金管の和音が重なります。7階のラストボスは合唱・ティンパニ・シンバルまで加わり最も壮大に",
+        "ダメージの出どころ：番人の「反撃の盾」の衝撃波が「キャラ特性」ではなくそのパッシブの行に表示",
+      ],
+    },
+  },
+  {
     version: "0.52.38",
     date: "2026-11-12",
     items: {

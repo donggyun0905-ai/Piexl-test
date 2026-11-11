@@ -8,7 +8,7 @@ import { addEffect, hasPerk } from "./util";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { hiddenHurt, hiddenTick } from "./hiddenPerks";
 import { pilgrimTick } from "./pilgrim";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const blastAt = srcFn("origin", () => blastAt_);
 
 const R = {
@@ -66,7 +66,7 @@ export function readyCounter(s: RunState, taken: number): void {
   hiddenHurt(s, taken);
   const guard = hasPerk(p, "counterGuard");
   if (p.characterId === "warden" || guard) p.counterTicks = R.counterTicks;
-  if (guard) blastAt(s, p.x, p.y, PERKS.counterGuard.radius, p.stats.damage * PERKS.counterGuard.damage, { push: PERKS.counterGuard.push });
+  if (guard) srcRun(s, "counterGuard", () => blastAt(s, p.x, p.y, PERKS.counterGuard.radius, p.stats.damage * PERKS.counterGuard.damage, { push: PERKS.counterGuard.push }));
 }
 
 /** 틱마다 준비 시간 줄이기 · 히든 아이템 · 순례자 */

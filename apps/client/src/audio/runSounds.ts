@@ -11,6 +11,7 @@ import { altarMusic } from "./altarSound";
 import { vaultCues, vaultMusic, vaultSeen, type VaultSeen } from "./vaultSound";
 import { setTigerMusic } from "./tigerSound";
 import { setSummerMusic } from "./summerSound";
+import { polish } from "./polish";
 
 interface Seen {
   kills: number;
@@ -32,7 +33,7 @@ interface Seen {
   over: boolean;
   parried: number;
   guards: number;
-  /** 공격 횟수 (탄·휘두르기 효과가 없는 캐릭터도 공격 소리가 나게) */
+  /** 공격 횟수 (탄·휘두르기 효과 없는 캐릭터용) */
   attacks: number;
   tick: number;
   /** 추적자: 암습 저격 남은 발 · 강력한 한방 모으는 중 */
@@ -287,7 +288,7 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         fx.push(run.won ? "clear" : "fall");
         stopMusic();
       }
-      for (const f of fx) play(f);
+      for (const f of polish(run, fx)) play(f);
       seen = now;
     },
     dispose(): void {

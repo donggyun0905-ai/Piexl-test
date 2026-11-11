@@ -14,6 +14,8 @@ import { BINGSEOL_SOUNDS, type BingseolSfx } from "./bingseolSounds";
 import { ASURA_SOUNDS, type AsuraSfx } from "./asuraSounds";
 import { BAEKINJANG_SOUNDS, type BaekinjangSfx } from "./baekinjangSounds";
 import { HONRYEONG_SOUNDS, type HonryeongSfx } from "./honryeongSounds";
+import { POLISH_SOUNDS, type PolishSfx } from "./sfxPolish";
+import { musicLayers } from "./musicLayers";
 
 export type Sfx =
   | "swing"
@@ -74,7 +76,8 @@ export type Sfx =
   | BingseolSfx
   | AsuraSfx
   | BaekinjangSfx
-  | HonryeongSfx;
+  | HonryeongSfx
+  | PolishSfx;
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;
@@ -95,15 +98,23 @@ export function unlockAudio(): void {
   const comp = ctx.createDynamicsCompressor();
   comp.threshold.value = -16;
   comp.ratio.value = 4;
-  sfxGain.connect(comp).connect(ctx.destination);
-  musicGain.connect(ctx.destination);
+  // 압축기 뒤에서 키우고(2026-11-12 전체 소리 2배), 맨 끝 제한기가 찢어지지 않게 막음
+  const boost = ctx.createGain();
+  boost.gain.value = 2.2;
+  const limit = ctx.createDynamicsCompressor();
+  limit.threshold.value = -2;
+  limit.knee.value = 0;
+  limit.ratio.value = 20;
+  limit.attack.value = 0.002;
+  sfxGain.connect(comp).connect(boost).connect(limit).connect(ctx.destination);
+  musicGain.connect(limit);
   applyVolume();
 }
 
 export function applyVolume(): void {
   const s = getSettings();
   if (sfxGain) sfxGain.gain.value = s.sfx * 0.5;
-  if (musicGain) musicGain.gain.value = s.music * 0.25;
+  if (musicGain) musicGain.gain.value = s.music * 0.5;
 }
 
 interface Tone {
@@ -189,6 +200,7 @@ const SOUNDS: Record<Sfx, () => void> = {
   ...ASURA_SOUNDS,
   ...BAEKINJANG_SOUNDS,
   ...HONRYEONG_SOUNDS,
+  ...POLISH_SOUNDS,
   blink: () => {
     tone({ type: "sine", from: 900, to: 120, dur: 0.12, vol: 0.12 });
     noise(0.1, 0.2, 1800);
@@ -231,6 +243,7 @@ let musicTimer = 0;
 let musicStep = 0;
 let musicRoot = 110;
 let bossMode = false;
+let musicFloor = 0;
 /** 다른 곡 (한정 스킨 전용 음악 등): 한 박마다 부름, 박 길이(ms). 없으면 기본 곡 */
 let customBeat: { beat: (step: number, boss: boolean) => void; ms: number } | null = null;
 
@@ -252,6 +265,7 @@ export const sfxOn = () => !!ctx && getSettings().sfx > 0;
 export function startMusic(floor: number, boss: boolean): void {
   musicRoot = 110 * (floor % 2 === 0 ? 1.122 : 1);
   bossMode = boss;
+  musicFloor = floor;
   if (musicTimer || !ctx) return;
   const custom = customBeat;
   const beat = () => {
@@ -265,6 +279,8 @@ export function startMusic(floor: number, boss: boolean): void {
     const semis = (n: number) => musicRoot * 2 ** (n / 12);
     if (step % 2 === 0) tone({ type: "triangle", from: semis(BASS[(step >> 2) % BASS.length]!), dur: 0.22 * fast, vol: 0.5 }, musicGain);
     if (step % 4 !== 3) tone({ type: "square", from: semis(LEAD[step % LEAD.length]! + (bossMode ? 1 : 0)), dur: 0.1, vol: 0.12 }, musicGain);
+    // 층이 깊을수록·보스전일수록 겹치는 층 (7층 라스트 보스가 가장 웅장)
+    musicLayers(step, semis, bossMode ? (musicFloor >= 7 ? 2 : 1) : 0, musicFloor, BASS[(step >> 2) % BASS.length]!, LEAD[step % LEAD.length]!, musicGain);
   };
   musicTimer = window.setInterval(beat, custom ? custom.ms : 180);
 }
