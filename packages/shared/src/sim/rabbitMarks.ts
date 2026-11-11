@@ -65,7 +65,7 @@ function sendWaves(s: RunState, x: number, y: number): void {
   }
 }
 
-/** 틱마다: 파동이 나아가며 때림 (맵 끝에 닿으면 여진) · 바닥 것 */
+/** 틱마다: 파동이 쿵·쿵·쿵 한 칸씩 찍으며 나아가 때림 (맵 끝에 닿으면 여진) · 바닥 것 */
 export function marksTick(s: RunState): void {
   const p = s.player;
   if (p.rbWaves?.length) p.rbWaves = p.rbWaves.filter((w) => waveStep(s, w));
@@ -74,22 +74,24 @@ export function marksTick(s: RunState): void {
 
 function waveStep(s: RunState, w: NonNullable<RunState["player"]["rbWaves"]>[number]): boolean {
   w.age++;
-  if (w.age < 0) return true;
-  w.x += w.dx * H.waveSpeed;
-  w.y += w.dy * H.waveSpeed;
+  // 다 커진 뒤(그림 1~4칸)부터 waveEvery 틱마다 한 번씩 앞으로 쿵 (그 사이에는 그 자리에 머묾)
+  if (w.age < 0 || w.age % H.waveEvery !== 0) return true;
+  if (w.end) return false;
+  w.x += w.dx * H.waveStep * w.r;
+  w.y += w.dy * H.waveStep * w.r;
+  const out = w.x < ROOM_MIN_X || w.x > ROOM_MAX_X || w.y < ROOM_MIN_Y || w.y > ROOM_MAX_Y;
+  // 맵 끝을 넘으면 끝에서 마지막으로 찍음
+  w.x = Math.min(ROOM_MAX_X, Math.max(ROOM_MIN_X, w.x));
+  w.y = Math.min(ROOM_MAX_Y, Math.max(ROOM_MIN_Y, w.y));
   for (const e of s.enemies) {
     if (!alive(e) || w.hit.includes(e.id) || (e.x - w.x) ** 2 + (e.y - w.y) ** 2 > (w.r + e.r) ** 2) continue;
     w.hit.push(e.id);
     damageEnemyLite(s, e, w.dmg, w.dx, w.dy);
   }
-  const out = w.x < ROOM_MIN_X || w.x > ROOM_MAX_X || w.y < ROOM_MIN_Y || w.y > ROOM_MAX_Y;
   if (!out) return true;
-  if (hasPerk(s.player, "rbAfter")) {
-    const x = Math.min(ROOM_MAX_X, Math.max(ROOM_MIN_X, w.x));
-    const y = Math.min(ROOM_MAX_Y, Math.max(ROOM_MIN_Y, w.y));
-    rbArea(s, x, y, K.rbAfter.r * hammerSize(s.player), s.player.stats.damage * K.rbAfter.mul, "rbAfter");
-  }
-  return false;
+  w.end = true;
+  if (hasPerk(s.player, "rbAfter")) rbArea(s, w.x, w.y, K.rbAfter.r * hammerSize(s.player), s.player.stats.damage * K.rbAfter.mul, "rbAfter");
+  return true;
 }
 
 function markStep(s: RunState, m: NonNullable<RunState["player"]["rbMarks"]>[number]): boolean {

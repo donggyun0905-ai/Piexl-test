@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.14",
+    date: "2026-11-11",
+    items: {
+      ko: ["래빗 땅울림·세 갈래 땅울림: 파동이 미끄러지듯 가지 않고, 땅울림이 1→4칸 그림으로 다 커진 뒤 4번째 칸 그림이 쿵·쿵·쿵 한 칸씩 찍으며 맵 끝까지 나아감 (찍을 때마다 번쩍임·작은 쿵 소리, 맵 끝에서 마지막으로 한 번 찍음)"],
+      en: ["Rabbit Ground Quake / Triple Quake: instead of sliding, the quake grows through frames 1→4, then the full ring stamps forward thump-thump-thump to the map edge (a flash and a small thud on each stamp, with a last stamp at the edge)"],
+      ja: ["ラビットの地響き・三つ又の地響き：波が滑るように進むのではなく、地響きが1→4コマで広がった後、4コマ目の絵がドン・ドン・ドンと一歩ずつ叩きつけながらマップの端まで進む（叩くたびに光・小さなドン音、端で最後にもう一度）"],
+    },
+  },
+  {
     version: "0.52.13",
     date: "2026-11-11",
     items: {

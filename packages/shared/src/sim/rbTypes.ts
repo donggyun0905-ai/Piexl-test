@@ -11,6 +11,8 @@ export interface RabbitWave {
   /** 지나온 틱 (그림) · 이미 때린 적 */
   age: number;
   hit: number[];
+  /** 맵 끝에서 마지막으로 찍음 (다음 쿵 때 사라짐) */
+  end?: boolean;
 }
 
 /** 바닥에 놓인 것: 0 토끼인장(터지기 전) · 1 유령 망치(떨어지기 전) · 2 갈라진 땅 */

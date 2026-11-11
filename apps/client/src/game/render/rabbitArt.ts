@@ -1,6 +1,6 @@
 // 래빗 그리기: 바닥(땅울림 파동·토끼인장·유령 망치 그림자·갈라진 땅) · 초거대 망치(슈퍼 럭키, 맵을 가리는 크기)
 // 그림 sprites/rabbitFx.png (256칸 4×3: 0줄 땅울림 4 · 1줄 토끼인장 4 · 2줄 초거대 망치 4) — scripts/art/rabbit.py
-import { RABBIT_ULT, rabbitUltX, ROOM_CY, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, type RunState } from "@pixel-rogue/shared";
+import { RABBIT_HAMMER, RABBIT_ULT, rabbitUltX, ROOM_CY, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, type RunState } from "@pixel-rogue/shared";
 import { img } from "./lunaticFx";
 import type { Snap } from "./palette";
 import { additive, alpha as fade, glow, type Ctx } from "./pwFxBits";
@@ -69,10 +69,15 @@ export function drawRabbitGround(ctx: Ctx, s: RunState, _a: number, snap: Snap):
       rbPic(ctx, 2, 0, x, y - (1 - f) * 70 - 8, m.r * 1.6, 0.55, -0.5 + f * 0.5);
     }
   }
+  // 땅울림 파동: 그림 4번째 칸이 쿵·쿵·쿵 한 칸씩 찍힘 (찍는 순간 크게 번쩍 → 그 자리에서 옅어짐)
   for (const w of p.rbWaves ?? []) {
     if (w.age < 0) continue;
-    const a = Math.min(1, 0.6 + Math.sin(w.age * 0.6) * 0.2);
-    quakeRing(ctx, 3, snap(w.x), snap(w.y), w.r, a);
+    const k = (w.age % RABBIT_HAMMER.waveEvery) / RABBIT_HAMMER.waveEvery;
+    const x = snap(w.x);
+    const y = snap(w.y);
+    const pop = k < 0.2 ? 1.12 - k * 0.6 : 1;
+    if (k < 0.35) additive(ctx, () => glow(ctx, x, y, w.r * 0.8, RB.green, (0.35 - k) * 2));
+    quakeRing(ctx, 3, x, y, w.r * pop, 1 - k * 0.65);
   }
 }
 

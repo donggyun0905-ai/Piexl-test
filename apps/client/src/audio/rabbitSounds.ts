@@ -1,6 +1,6 @@
-// 래빗 효과음: 망치 쿵 · 홈런 딱! · 맵 밖으로 날아가는 휘파람+반짝 · 토끼 뿅 · 방울 · 별사탕 · 여진
+// 래빗 효과음: 망치 쿵 · 땅울림 파동 쿵쿵 · 홈런 딱! · 맵 밖으로 날아가는 휘파람+반짝 · 토끼 뿅 · 방울 · 별사탕 · 여진
 // 슈퍼 럭키: 시작 팡파르 · 슬로우 동안 나눠 맞을 때마다 점점 높아지는 다단 타격음(최대 30번) · 다 가린 뒤 휘둘러 나갈 때 쾅
-import { RABBIT_ULT, type RunState } from "@pixel-rogue/shared";
+import { RABBIT_HAMMER, RABBIT_ULT, type RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
 
 /** 지금 몇 번째 나눠 맞음인지 (다단 타격음 높이) */
@@ -33,6 +33,11 @@ export const RABBIT_SOUNDS = {
   rbBell: () => {
     tone({ type: "sine", from: 1760, dur: 0.45, vol: 0.18 });
     tone({ type: "sine", from: 2637, dur: 0.35, vol: 0.1, delay: 0.03 });
+  },
+  /** 땅울림 파동이 한 칸 쿵 (작게) */
+  rbStomp: () => {
+    tone({ type: "sine", from: 110, to: 50, dur: 0.1, vol: 0.2 });
+    noise(0.06, 0.12, 600);
   },
   rbStar: () => tone({ type: "triangle", from: 2000, to: 3200, dur: 0.07, vol: 0.08 }),
   rbAfter: () => {
@@ -77,6 +82,8 @@ export function rabbitSounds(run: RunState, out: Sfx[], onShake: (power: number)
     else if (e.kind === "rbAfter" || e.kind === "rbBunny") onShake(0.6);
     else if (e.kind === "rbUltHit") onShake(0.5);
   }
+  // 땅울림 파동이 쿵 찍는 틱 (여러 갈래여도 한 번)
+  if (p.rbWaves?.some((w) => w.age > 0 && w.age % RABBIT_HAMMER.waveEvery === 0) && !out.includes("rbStomp")) out.push("rbStomp");
   const u = p.rbUlt;
   if (!u) {
     ultStep = 0;
