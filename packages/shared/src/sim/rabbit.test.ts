@@ -21,6 +21,16 @@ function rb(foes: [number, number, number?][] = [[110, 100]], ...perks: string[]
   return s;
 }
 const hit = { ...EMPTY_INPUT, attack: true, aimX: 100, aimY: 0 };
+/** 확률 효과를 늘 나오게 하고 fn 실행 (끝나면 되돌림) */
+function sure(keys: ("rbSeal" | "rbTriple" | "rbBell" | "rbHeavy")[], fn: () => void): void {
+  const old = keys.map((k) => K[k].chance);
+  for (const k of keys) K[k].chance = 1;
+  try {
+    fn();
+  } finally {
+    keys.forEach((k, i) => (K[k].chance = old[i]!));
+  }
+}
 const idle = (s: RunState, n: number) => {
   for (let i = 0; i < n; i++) stepSim(s, { ...EMPTY_INPUT, aimX: 100 });
 };
@@ -50,12 +60,14 @@ describe("래빗", () => {
     idle(s, 160);
     expect(s.enemies[0]!.hp).toBeLessThan(99999);
     expect(s.player.rbWaves!.length).toBe(0);
-    const t = rb([], "rbQuake", "rbTriple");
-    stepSim(t, hit);
-    expect(t.player.rbWaves!.length).toBe(3);
+    sure(["rbTriple"], () => {
+      const t = rb([], "rbQuake", "rbTriple");
+      stepSim(t, hit);
+      expect(t.player.rbWaves!.length).toBe(3);
+    });
   });
 
-  it("토끼인장: 찍은 자리에 토끼가 나와 잠시 뒤 터짐 (파동에서는 안 나옴)", () => {
+  it("토끼인장: 확률로 찍은 자리에 토끼가 나와 잠시 뒤 터짐 (파동에서는 안 나옴)", () => sure(["rbSeal"], () => {
     const s = rb([[80 + H.reach, 100]], "rbSeal", "rbQuake");
     stepSim(s, hit);
     expect(s.player.rbMarks!.filter((m) => m.kind === 0).length).toBe(1);
@@ -64,6 +76,24 @@ describe("래빗", () => {
     expect(s.enemies[0]!.hp).toBeLessThan(hp);
     expect(s.effects.some((f) => f.kind === "rbBunny")).toBe(true);
     expect(s.player.rbMarks!.length).toBe(0);
+  }));
+
+  it("세 갈래·토끼인장·묵직한 망치·방울은 확률 (늘 나오지 않음)", () => {
+    const s = rb([[80 + H.reach, 100]], "rbSeal", "rbTriple");
+    let seals = 0;
+    let triples = 0;
+    for (let i = 0; i < 40; i++) {
+      s.player.rbMarks = [];
+      s.player.rbWaves = [];
+      stepSim(s, hit);
+      seals += s.player.rbMarks.filter((m) => m.kind === 0).length;
+      triples += s.player.rbWaves.length === 3 ? 1 : 0;
+      idle(s, H.cd);
+    }
+    expect(seals).toBeGreaterThan(0);
+    expect(seals).toBeLessThan(40);
+    expect(triples).toBeGreaterThan(0);
+    expect(triples).toBeLessThan(40);
   });
 
   it("홈런: 크게 휘둘러 3배로 밀고, 확률로 맵 밖으로 날려 버림 (보스는 안 됨)", () => {
@@ -91,7 +121,7 @@ describe("래빗", () => {
     expect(canUlt(s)).toBe(false);
   });
 
-  it("슈퍼 럭키: 왼쪽 밖에서 나와 1/5에서 느려지고 다 가린 뒤 오른쪽 밖으로 · 느린 동안 적이 쉬고 30번 나눠 맞음", () => {
+  it("슈퍼 럭키: 왼쪽 밖에서 나와 1/5에서 느려지고 다 가린 뒤 오른쪽 밖으로 · 느린 동안 적이 쉬고 60번 나눠 맞음", () => {
     expect(rabbitUltX(0)).toBeLessThan(ROOM_MIN_X);
     expect(rabbitUltX(U.enter + U.slow)).toBeCloseTo((ROOM_MIN_X + ROOM_MAX_X) / 2);
     expect(rabbitUltX(U.enter + U.slow + U.swing) - (ROOM_MAX_X - ROOM_MIN_X) / 2).toBeGreaterThan(ROOM_MAX_X);
@@ -107,7 +137,7 @@ describe("래빗", () => {
     expect(timeSlowed(s, false)).toBe(false);
   });
 
-  it("폭신한 솜털: 받는 피해 감소 · 방울: 세 번째마다 둘레 묶음", () => {
+  it("폭신한 솜털: 받는 피해 감소 · 방울: 확률로 둘레 묶음", () => sure(["rbBell"], () => {
     const s = rb([], "rbFluff");
     expect(classTaken(s, 10)).toBeLessThan(classTaken(rb([]), 10));
     const b = rb([[80 + H.reach, 100], [60, 100]], "rbBell");
@@ -116,7 +146,7 @@ describe("래빗", () => {
       idle(b, H.cd);
     }
     expect(b.effects.some((f) => f.kind === "rbBell") || b.enemies[1]!.hp < 99999).toBe(true);
-  });
+  }));
 
   it("같은 시드 = 같은 결과 (홈런·별사탕·유령 망치 확률)", () => {
     const go = () => {

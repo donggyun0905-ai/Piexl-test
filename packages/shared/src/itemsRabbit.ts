@@ -50,8 +50,10 @@ export const RABBIT_PASSIVES = {
 
 /** 전용 아이템 수치 (피해 배율은 공격력 ×, 시간은 틱, 거리는 픽셀, 확률은 0~1) */
 export const RABBIT_PERKS = {
-  /** 토끼인장: 터지기까지 틱 · 반지름 · 피해 배율 */
-  rbSeal: { delay: 28, r: 38, mul: 1.6 },
+  /** 토끼인장: 나올 확률 · 터지기까지 틱 · 반지름 · 피해 배율 */
+  rbSeal: { chance: 0.35, delay: 28, r: 38, mul: 1.6 },
+  /** 세 갈래 땅울림: 세 갈래로 나갈 확률 (안 나오면 땅울림이 있을 때 한 갈래) */
+  rbTriple: { chance: 0.35 },
   /** 홈런: 확률 · 망치 크기 배율 · 피해 배율 · 밀치는 배수(보통 밀림의 몇 배) · 맵 밖으로 날아갈 확률 */
   rbHomerun: { chance: 0.1, size: 2, mul: 2, knock: 3, fly: 0.3 },
   /** 슈퍼 럭키: 필요한 래빗 전용 아이템 수 · 확률 · 쿨타임 틱 */
@@ -64,12 +66,12 @@ export const RABBIT_PERKS = {
   rbHop: { mul: 1, size: 1.2 },
   /** 네잎클로버: 확률 배율 */
   rbClover: { mul: 1.5 },
-  /** 방울: 몇 번째마다 · 반지름 · 묶는 틱 · 피해 배율 */
-  rbBell: { every: 3, r: 60, stun: 40, mul: 0.6 },
+  /** 방울: 찍을 때 울릴 확률 · 반지름 · 묶는 틱 · 피해 배율 */
+  rbBell: { chance: 0.3, r: 60, stun: 40, mul: 0.6 },
   /** 유령 망치: 확률 · 떨어지기까지 틱 · 반지름 · 피해 배율 · 찾는 거리 */
   rbGhost: { chance: 0.3, delay: 16, r: 26, mul: 1, dist: 220 },
-  /** 묵직한 망치: 기절 틱 */
-  rbHeavy: { stun: 20 },
+  /** 묵직한 망치: 맞은 적마다 기절할 확률 · 기절 틱 */
+  rbHeavy: { chance: 0.3, stun: 20 },
   /** 쿵쿵쿵: 한 번마다 오르는 피해 · 가장 많이 쌓이는 수 · 이 틱 동안 안 찍으면 처음부터 */
   rbStomp: { add: 0.1, max: 6, keep: 90 },
   /** 여진: 반지름 · 피해 배율 */

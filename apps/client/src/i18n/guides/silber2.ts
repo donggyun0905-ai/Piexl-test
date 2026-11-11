@@ -14,7 +14,7 @@ export const GUIDE_KO_SILBER2: Guide = {
     "실베르 · 래빗 '망치를 든 유령 소녀' · 체력 95 · 공격력 9 · 이동 1.2 · 행운 2 · 처음엔 약하지만 패시브를 먹을수록 강해짐 (진영 특징: 패시브 하나마다 능력치가 더 오름)",
     "토끼 망치: 누르면 바라보는 쪽 앞(거리 30)에 망치를 내리찍어 반지름 24 땅울림 · 공격력의 125% · 맞은 적은 뒤로 밀려남 (0.5초마다, 공격 속도가 빠를수록 자주 · 사거리 증가만큼 멀리·크게)",
     "전용 아이템 20 (모두 새 기술·능력 + 능력치): 땅울림(맵 끝까지 나아가는 파동) · 세 갈래 땅울림 · 토끼인장 · 홈런!(10% 확률 큰 휘두르기 · 3배 밀침 · 30% 확률로 맵 밖으로, 보스 빼고) · 슈퍼 럭키!(전용 아이템 7개부터 · 공격할 때 3% 확률 초거대 망치 · 30초 쿨타임) · 당근 간식 · 긴 귀 · 깡총 뛰기 · 네잎클로버 · 방울 · 유령 망치 · 묵직한 망치 · 쿵쿵쿵 · 여진 · 갈라진 땅 · 달토끼 · 폭신한 솜털 · 왕망치 · 럭키 피버 · 별사탕",
-    "슈퍼 럭키!: 맵을 가릴 만큼 큰 망치가 왼쪽에서 빠르게 나와 맵 1/5쯤에서 슬로우 모션 → 그동안 방 안 적 모두가 피해를 나눠 최대 30번 맞음 (나는 무적) → 망치가 맵을 다 가리면 오른쪽 밖으로 빠르게 휘둘러짐",
+    "슈퍼 럭키!: 맵을 가릴 만큼 큰 망치가 왼쪽에서 빠르게 나와 맵 1/5쯤에서 슬로우 모션 → 그동안 방 안 적 모두가 피해를 나눠 최대 60번 빠르게 맞음 (나는 무적) → 망치가 맵을 다 가리면 오른쪽 밖으로 빠르게 휘둘러짐",
   ],
 };
 
@@ -29,7 +29,7 @@ export const GUIDE_EN_SILBER2: Guide = {
     "Silber · Rabbit, the hammer-wielding ghost girl · HP 95 · damage 9 · move 1.2 · luck 2 · starts weak but grows with every passive (faction trait: each passive raises stats further)",
     "Bunny Hammer: slam the hammer in front of you (30 ahead) for a radius-24 quake · 125% of damage · knocks foes back (every 0.5s, faster with attack speed · range increases reach farther and wider)",
     "20 exclusive items (each a new skill or ability + stats): Ground Quake (a wave that rolls to the map edge) · Triple Quake · Bunny Seal · Home Run! (10% giant swing · 3x knockback · 30% chance to send foes off the map, not bosses) · Super Lucky! (from 7 Rabbit items · 3% per swing for the colossal hammer · 30s cooldown) · Carrot Snack · Long Ears · Bunny Hop · Four-Leaf Clover · Little Bell · Ghost Hammer · Heavy Hammer · Thump Thump · Aftershock · Cracked Ground · Moon Rabbit · Fluffy Fur · Mega Hammer · Lucky Fever · Star Candy",
-    "Super Lucky!: a hammer big enough to cover the map rushes in from the left and drops into slow motion about 1/5 of the way in → every foe in the room takes up to 30 split hits (you are invincible) → once it covers the map it swings off to the right",
+    "Super Lucky!: a hammer big enough to cover the map rushes in from the left and drops into slow motion about 1/5 of the way in → every foe in the room takes up to 60 rapid split hits (you are invincible) → once it covers the map it swings off to the right",
   ],
 };
 
@@ -44,6 +44,6 @@ export const GUIDE_JA_SILBER2: Guide = {
     "シルベル・ラビット「ハンマーを持つ幽霊の少女」・体力95・攻撃力9・移動1.2・幸運2・最初は弱いがパッシブを取るほど強くなる（陣営の特徴：パッシブひとつごとに能力値がさらに上がる）",
     "うさぎハンマー：押すと向いている方向の前（距離30）にハンマーを叩きつけ半径24の地響き・攻撃力の125%・当たった敵は後ろへ飛ばされる（0.5秒ごと、攻撃速度が速いほど頻繁・射程増加の分だけ遠く大きく）",
     "専用アイテム20（すべて新しい技・能力＋能力値）：地響き（マップの端まで進む波）・三つ又の地響き・うさぎの印・ホームラン！（10%で大振り・3倍吹き飛ばし・30%でマップの外へ、ボス以外）・スーパーラッキー！（専用アイテム7個から・攻撃時3%で超巨大ハンマー・30秒クールタイム）・にんじんおやつ・長い耳・ぴょんぴょん・四つ葉のクローバー・鈴・幽霊ハンマー・ずっしりハンマー・ドンドンドン・余震・ひび割れた地面・月うさぎ・ふわふわの毛・特大ハンマー・ラッキーフィーバー・金平糖",
-    "スーパーラッキー！：マップを覆うほどのハンマーが左から素早く現れ、マップの1/5ほどでスローモーション→その間、部屋の敵全員がダメージを分けて最大30回受ける（自分は無敵）→ハンマーがマップを覆うと右の外へ素早く振り抜かれる",
+    "スーパーラッキー！：マップを覆うほどのハンマーが左から素早く現れ、マップの1/5ほどでスローモーション→その間、部屋の敵全員がダメージを分けて最大60回素早く受ける（自分は無敵）→ハンマーがマップを覆うと右の外へ素早く振り抜かれる",
   ],
 };

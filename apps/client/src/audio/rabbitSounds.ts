@@ -1,5 +1,5 @@
 // 래빗 효과음: 망치 쿵 · 땅울림 파동 쿵쿵 · 홈런 딱! · 맵 밖으로 날아가는 휘파람+반짝 · 토끼 뿅 · 방울 · 별사탕 · 여진
-// 슈퍼 럭키: 시작 팡파르 · 슬로우 동안 나눠 맞을 때마다 점점 높아지는 다단 타격음(최대 30번) · 다 가린 뒤 휘둘러 나갈 때 쾅
+// 슈퍼 럭키: 시작 팡파르 · 슬로우 동안 나눠 맞을 때마다 점점 높아지는 다단 타격음(최대 60번) · 다 가린 뒤 휘둘러 나갈 때 쾅
 import { RABBIT_HAMMER, RABBIT_ULT, type RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
 
@@ -52,7 +52,7 @@ export const RABBIT_SOUNDS = {
   },
   rbUltHit: () => {
     // 맞을 때마다 반음씩 높아지는 탁! (마지막 몇 번은 더 세게)
-    const f = 330 * 2 ** (Math.min(30, ultStep) / 12);
+    const f = 330 * 2 ** ((Math.min(RABBIT_ULT.hits, ultStep) * 30) / RABBIT_ULT.hits / 12);
     const last = ultStep >= RABBIT_ULT.hits - 2;
     noise(0.05, last ? 0.6 : 0.42, 4200);
     tone({ type: "square", from: f, to: f / 2, dur: 0.05, vol: last ? 0.24 : 0.16 });

@@ -1,5 +1,5 @@
 // 래빗 슈퍼 럭키!(초거대 망치): 맵을 가릴 만큼 큰 망치가 왼쪽 밖에서 빠르게 나와 맵 1/5쯤에서 슬로우 모션이 되고
-// 느린 동안 방 안 적 모두가 피해를 나눠 여러 번(최대 30번) 맞음 · 망치가 맵을 다 가리면 슬로우가 끝나고 오른쪽 밖으로 빠르게 휘둘러짐
+// 느린 동안 방 안 적 모두가 피해를 나눠 여러 번(최대 60번, 빠르게) 맞음 · 망치가 맵을 다 가리면 슬로우가 끝나고 오른쪽 밖으로 빠르게 휘둘러짐
 // 망치 자리는 지난 틱(t)으로 화면이 똑같이 계산 (rabbitUltX). 느린 동안 적은 쉬고(sim/rabbit.rabbitSlowed) 적 탄도 느려짐
 import { RABBIT_PERKS as K } from "../itemsRabbit";
 import { ENEMIES } from "../enemyDefs";
@@ -43,7 +43,7 @@ export function ultTick(s: RunState): void {
   const slowEnd = U.enter + U.slow;
   if (u.t >= U.enter && u.t < slowEnd) {
     p.rbFrozen = slowShots(s, p.rbFrozen, U.shotSlow);
-    const due = Math.min(U.hits, Math.floor(((u.t - U.enter) * U.hits) / U.slow) + 1);
+    const due = Math.min(U.hits, Math.floor(((u.t - U.enter) * U.hits) / Math.min(U.slow, U.hitTicks)) + 1);
     while (u.hits < due) hitAll(s, ++u.hits);
   }
   if (u.t === slowEnd) {

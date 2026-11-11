@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.15",
+    date: "2026-11-11",
+    items: {
+      ko: [
+        "래빗: 토끼인장(35%)·세 갈래 땅울림(35%, 안 나오면 땅울림 한 갈래)·묵직한 망치 기절(맞은 적마다 30%)·방울(찍을 때 30%)이 늘 나오지 않고 확률로 나옴 (네잎클로버로 확률 1.5배)",
+        "슈퍼 럭키!: 나눠 때리는 수 30번 → 60번, 1초 동안 훨씬 빠르게 다다닥 맞음 · 모두 합친 피해는 그대로라 한 번 피해는 절반",
+      ],
+      en: [
+        "Rabbit: Bunny Seal (35%), Triple Quake (35%, otherwise a single quake), Heavy Hammer stun (30% per foe hit) and Little Bell (30% per slam) now trigger by chance instead of every time (Four-Leaf Clover boosts the odds 1.5x)",
+        "Super Lucky!: split hits raised from 30 to 60, landing much faster over one second · total damage unchanged, so each hit deals half as much",
+      ],
+      ja: [
+        "ラビット：うさぎの印（35%）・三つ又の地響き（35%、出なければ地響き一本）・ずっしりハンマーの気絶（当たった敵ごとに30%）・鈴（叩くたび30%）が毎回ではなく確率で発動（四つ葉のクローバーで確率1.5倍）",
+        "スーパーラッキー！：分けて当たる回数30回→60回、1秒間ずっと速くダダダッと当たる・合計ダメージはそのままなので1回のダメージは半分",
+      ],
+    },
+  },
+  {
     version: "0.52.14",
     date: "2026-11-11",
     items: {

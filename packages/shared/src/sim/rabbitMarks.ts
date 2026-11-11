@@ -14,9 +14,10 @@ export function slamExtras(s: RunState, x: number, y: number, hit: EnemyState[])
   const p = s.player;
   const size = hammerSize(p);
   const rng = createRng(deriveSeed(s.seed, "rbExtra", s.tick, p.attackCount));
-  if (hasPerk(p, "rbQuake") || hasPerk(p, "rbTriple")) sendWaves(s, x, y);
+  const triple = hasPerk(p, "rbTriple") && rng.nextFloat() < K.rbTriple.chance * luckMul(p);
+  if (triple || hasPerk(p, "rbQuake")) sendWaves(s, x, y, triple);
   const marks = (p.rbMarks ??= []);
-  if (hasPerk(p, "rbSeal")) marks.push({ x, y, kind: 0, age: 0, life: K.rbSeal.delay, r: K.rbSeal.r * size, dmg: p.stats.damage * K.rbSeal.mul });
+  if (hasPerk(p, "rbSeal") && rng.nextFloat() < K.rbSeal.chance * luckMul(p)) marks.push({ x, y, kind: 0, age: 0, life: K.rbSeal.delay, r: K.rbSeal.r * size, dmg: p.stats.damage * K.rbSeal.mul });
   if (hasPerk(p, "rbCrack")) marks.push({ x, y, kind: 2, age: 0, life: K.rbCrack.ticks, r: H.slamR * size * K.rbCrack.size, dmg: p.stats.damage * K.rbCrack.mul });
   if (hasPerk(p, "rbGhost") && rng.nextFloat() < K.rbGhost.chance * luckMul(p)) {
     const e = farFoe(s, x, y, hit.map((h) => h.id));
@@ -52,10 +53,10 @@ function stars(s: RunState, x: number, y: number): void {
 }
 
 /** 땅울림 파동 내보내기 (세 갈래면 바라보는 쪽 ± 각도) */
-function sendWaves(s: RunState, x: number, y: number): void {
+function sendWaves(s: RunState, x: number, y: number, triple: boolean): void {
   const p = s.player;
   const list = (p.rbWaves ??= []);
-  const angles = hasPerk(p, "rbTriple") ? [-H.waveSpread, 0, H.waveSpread] : [0];
+  const angles = triple ? [-H.waveSpread, 0, H.waveSpread] : [0];
   for (const a of angles) {
     if (list.length >= H.waveMax) return;
     const [c, n] = rot(a);

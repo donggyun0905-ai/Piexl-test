@@ -40,7 +40,7 @@ export function slam(s: RunState, x: number, y: number, opt: { size?: number; ho
     const hp = e.hp;
     damageEnemyLite(s, e, dmg, d[0], d[1]);
     if (e.hp < hp) knockBy(e, d, opt.homer ? K.rbHomerun.knock : 1);
-    if (hasPerk(p, "rbHeavy")) e.stunTicks = Math.max(e.stunTicks ?? 0, K.rbHeavy.stun);
+    if (hasPerk(p, "rbHeavy") && createRng(deriveSeed(s.seed, "rbHeavy", s.tick, e.id)).nextFloat() < K.rbHeavy.chance * luckMul(p)) e.stunTicks = Math.max(e.stunTicks ?? 0, K.rbHeavy.stun);
     if (opt.homer && e.hp > 0 && flyable(e) && !s.pvp && !s.pw && createRng(deriveSeed(s.seed, "rbFly", s.tick, e.id)).nextFloat() < K.rbHomerun.fly) {
       e.hp = 0;
       addEffect(s, { kind: "rbFly", x: e.x, y: e.y, dirX: d[0], dirY: d[1], size: e.r, from: e.kind, maxTicks: 48 });
@@ -82,7 +82,7 @@ function swing(s: RunState, speed: number): void {
   const hit = slam(s, x, y, { homer, origin: true });
   if (hasPerk(p, "rbStomp")) p.rbStack = Math.min(K.rbStomp.max, (p.rbStack ?? 0) + 1);
   slamExtras(s, x, y, hit);
-  if (hasPerk(p, "rbBell") && (p.rbSwings ?? 0) % K.rbBell.every === 0) {
+  if (hasPerk(p, "rbBell") && roll(s, "rbBell") < K.rbBell.chance * luckMul(p)) {
     rbArea(s, p.x, p.y, K.rbBell.r * hammerSize(p), p.stats.damage * K.rbBell.mul, "rbBell", { stun: K.rbBell.stun });
   }
   if (canUlt(s) && roll(s, "rbLucky") < K.rbLucky.chance * luckMul(p)) startUlt(s);
