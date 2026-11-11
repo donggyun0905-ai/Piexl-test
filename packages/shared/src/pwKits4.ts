@@ -1,4 +1,4 @@
-// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전 · 크루세이더) + 실베르 조커·쉐도잉·인형술사·래빗·백령·빙설 — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
+// 패왕전 스킬 표 4: 새벽의 성흔 (블래스트 · 네일러 · 시저스 · 헬피스트 · 실버불렛 · 블루 플레임 · 루나틱 · 인시전 · 크루세이더) + 실베르 조커·쉐도잉·인형술사·래빗·백령·빙설·아수라 — pwKits3이 커서 나눔. 피해는 PW.skillDmg의 배율
 import { kit, SEC, sk } from "./pwKitKit";
 import type { PwKits } from "./pwSkillTypes";
 
@@ -98,5 +98,12 @@ export const PW_KITS_4: PwKits = {
     sk("rbHammer", "line", 9, "#a8ff6a", { range: 190, hit: { dmg: 1.4, stun: 1 * SEC } }),
     sk("rbHammer", "dash", 8, "#ff8ac8", { range: 110, speed: 10, hit: { dmg: 1 } }),
     sk("rbHammer", "point", 60, "#ff4aa8", { range: 160, radius: 110, delay: 30, fx: "pillar", hit: { dmg: 3, push: 16 } }),
+  ),
+  // 실베르 아수라: 귀신 주먹 · 부채꼴 파동 · 귀신 걸음 · 아수라 각성 4타
+  asura: kit(1,
+    sk("asFist", "cone", 4, "#4a6aff", { radius: 58, arc: 1.0, fx: "slash", hit: { dmg: 1.2 } }),
+    sk("asFist", "cone", 9, "#7a8aff", { radius: 110, arc: 0.8, fx: "slash", hit: { dmg: 1.4, push: 8 } }),
+    sk("asFist", "dash", 8, "#2a3aa8", { range: 110, speed: 10, hit: { dmg: 1 } }),
+    sk("asFist", "point", 60, "#3a5aff", { range: 150, radius: 110, delay: 30, fx: "pillar", hit: { dmg: 3, stun: 1.5 * SEC } }),
   ),
 };

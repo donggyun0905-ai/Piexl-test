@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.25",
+    date: "2026-11-11",
+    items: {
+      ko: [
+        "새 캐릭터 아수라 (실베르): 등 뒤 귀신 주먹 6개와 자기 주먹으로 싸우는 싸움꾼 · 무기는 맨손 하나 (앞을 넓게 치지만 피해는 약함)",
+        "아수라 전용 패시브 20: 분쇄(주먹 피해를 6번으로 나눠 한 틱에 한 대씩) · 귀진(남색 영역 · 안의 적 다이아 표식 · 방어력 -5) · 파동(모든 공격 끝에 부채꼴) · 아수라(필살기: 3% 각성 10초 · 1·2타 → 1·2타 → 3타 바닥 연속 강타 → 4타 1.5초 기절) · 연발(연속 펀치 15연타) · 악귀(때릴 때마다 붉게 터지며 추가 피해) · 철권 · 귀수 확장 · 수라장 · 귀문 개방 · 육도 · 천근추 · 귀압 · 업화 · 분노의 팔 · 귀갑 · 마수 연타 · 육비 난무 · 혼백 흡수 · 귀신 걸음",
+      ],
+      en: [
+        "New character Asura (Silber): a brawler who fights with six spectral fists at her back and her own · one weapon, bare hands (wide but weak punches ahead)",
+        "20 Asura passives: Pulverize (each punch split into 6 hits, one per tick) · Spirit Domain (navy domain · diamond mark on foes inside · -5 defense) · Shockwave (a fan wave after every attack) · Asura (ultimate: 3% to awaken for 10s · strike 1-2 → 1-2 → 3 ground pounding → 4 with 1.5s stun) · Flurry (15-hit flurry) · Fiend (red bursts of extra damage on hits) · Iron Fist · Spirit Reach · Carnage · Open Spirit Gate · Six Paths · Thousand-Weight · Spirit Pressure · Hellfire · Arms of Wrath · Spirit Shell · Demon Barrage · Six-Arm Frenzy · Soul Drain · Ghost Step",
+      ],
+      ja: [
+        "新キャラクター阿修羅（シルベル）：背中の鬼神の拳6本と自分の拳で戦う格闘家・武器は素手ひとつ（前を広く打つがダメージは弱い）",
+        "阿修羅専用パッシブ20：粉砕（拳のダメージを6回に分け1ティックに1発ずつ）・鬼陣（紺色の領域・中の敵にダイヤの印・防御力-5）・波動（すべての攻撃の終わりに扇形）・阿修羅（必殺技：3%で覚醒10秒・1・2打→1・2打→3打床連続強打→4打1.5秒気絶）・連発（連続パンチ15連打）・悪鬼（打つたびに赤く弾けて追加ダメージ）・鉄拳・鬼手拡張・修羅場・鬼門開放・六道・千斤墜・鬼圧・業火・憤怒の腕・鬼甲・魔手連打・六臂乱舞・魂魄吸収・鬼神歩",
+      ],
+    },
+  },
+  {
     version: "0.52.24",
     date: "2026-11-11",
     items: {

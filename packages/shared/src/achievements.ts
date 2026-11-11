@@ -178,6 +178,7 @@ export const ACHIEVEMENTS = [
   ch("clearRabbit", "rabbit"),
   ch("clearBaekryeong", "baekryeong"),
   ch("clearBingseol", "bingseol"),
+  ch("clearAsura", "asura"),
   ch("clearRen", "ren"),
   ch("clearSpiritist", "spiritist"),
   { id: "clearAll", category: "character", total: total(CHARACTER_IDS.length, (c) => Object.values(c.clearedBy).filter((n) => (n ?? 0) > 0).length) },

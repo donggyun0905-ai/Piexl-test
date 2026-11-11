@@ -95,6 +95,7 @@ export const C = {
   rabbit: "#ff7ac0",
   baekryeong: "#3ac8ff",
   bingseol: "#8ad8ff",
+  asura: "#4a6aff",
   miner: "#5ad8e8",
   voyager: "#e8b040",
   zeus: "#8ac8ff",

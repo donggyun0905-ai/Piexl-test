@@ -61,6 +61,8 @@ export { BAEK_ARM, BAEK_BLADE, BAEK_SOUL } from "./weaponsBaekryeong";
 export { BAEK_PERKS } from "./itemsBaekryeong";
 export { BINGSEOL_WEAPONS, BS_FIELD, BS_SHOT, BS_STYLE } from "./weaponsBingseol";
 export { BINGSEOL_PERKS } from "./itemsBingseol";
+export { ASURA_AWAKE, ASURA_FIST, ASURA_WEAPONS } from "./weaponsAsura";
+export { ASURA_PERKS } from "./itemsAsura";
 export { BLAST } from "./weaponsBlast";
 export * from "./factionDefs";
 export * from "./spiritDefs";

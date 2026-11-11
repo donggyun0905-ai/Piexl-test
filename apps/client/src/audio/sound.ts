@@ -11,6 +11,7 @@ import { VAULT_SOUNDS, type VaultSfx } from "./vaultSound";
 import { RABBIT_SOUNDS, type RabbitSfx } from "./rabbitSounds";
 import { BAEK_SOUNDS, type BaekSfx } from "./baekSounds";
 import { BINGSEOL_SOUNDS, type BingseolSfx } from "./bingseolSounds";
+import { ASURA_SOUNDS, type AsuraSfx } from "./asuraSounds";
 
 export type Sfx =
   | "swing"
@@ -68,7 +69,8 @@ export type Sfx =
   | VaultSfx
   | RabbitSfx
   | BaekSfx
-  | BingseolSfx;
+  | BingseolSfx
+  | AsuraSfx;
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;
@@ -180,6 +182,7 @@ const SOUNDS: Record<Sfx, () => void> = {
   ...RABBIT_SOUNDS,
   ...BAEK_SOUNDS,
   ...BINGSEOL_SOUNDS,
+  ...ASURA_SOUNDS,
   blink: () => {
     tone({ type: "sine", from: 900, to: 120, dur: 0.12, vol: 0.12 });
     noise(0.1, 0.2, 1800);

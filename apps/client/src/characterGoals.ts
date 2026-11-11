@@ -95,6 +95,7 @@ export const CHARACTER_GOALS: Partial<Record<CharacterId, CharGoal>> = {
   shadowing: { m: "moveSpeed", n: 1.6 },
   puppeteer: { m: "maxHp", n: 200 },
   rabbit: { m: "attackSpeed", n: 2.2 },
+  asura: { m: "attackSpeed", n: 2.2 },
   baekryeong: { m: "maxHp", n: 220 },
   bingseol: { m: "attackSpeed", n: 2 },
   chronomancer: { a: "thrift" },
