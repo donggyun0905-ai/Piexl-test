@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.53",
+    date: "2026-11-12",
+    items: {
+      ko: ["느아르: 칠흑 횡베기 이펙트가 바라보는 쪽으로 제대로 나옴 (위아래·좌우가 뒤집혀 있던 것) · 피해 숫자가 뜨는 한 대마다 타다다닥 타격음 · 차원 절멸 범위·이펙트 크기를 줄임"],
+      en: ["Noir: Jet-Black Sweep now faces the right way (it was flipped up/down and left/right) · a rapid hit sound for every hit that shows a damage number · Dimension Annihilation's range and effect are smaller"],
+      ja: ["ノワール：漆黒横斬りのエフェクトが向いている方向に正しく出るように（上下・左右が逆だった）・ダメージ数字が出る一撃ごとにタタタッと打撃音・次元絶滅の範囲とエフェクトを小さく"],
+    },
+  },
+  {
     version: "0.52.52",
     date: "2026-11-12",
     items: {

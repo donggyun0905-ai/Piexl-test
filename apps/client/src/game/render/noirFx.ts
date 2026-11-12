@@ -9,7 +9,7 @@ const KINDS = new Set<string>([...Object.keys(ROW), "nrSpear", "nrBurst", "nrWav
 /** 오래 가는 기술 (첫 칸 → 가운데 두 칸을 오감 → 마지막 칸) */
 const LONG = new Set<string>(["nrFlurry", "nrSpin", "nrSever", "nrDevour", "nrOrigin", "nrRift", "nrAbyss", "nrBarrier", "nrSqueeze", "nrDrain", "nrBrand"]);
 /** 그림 크기 배율 (반지름 → 그림 너비) */
-const SCALE: Partial<Record<string, number>> = { nrSlash: 2.4, nrGrasp: 2.4, nrRush: 1.6, nrMoon: 2.4, nrEnd: 2.4, nrBrand: 2.6 };
+const SCALE: Partial<Record<string, number>> = { nrRift: 1.7, nrSlash: 2.4, nrGrasp: 2.4, nrRush: 1.6, nrMoon: 2.4, nrEnd: 2.4, nrBrand: 2.6 };
 
 export function drawNoirFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   if (!KINDS.has(fx.kind)) return false;
@@ -65,9 +65,9 @@ export function drawNoirFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       const col = fx.kind === "nrDrain" && fx.style === 1 ? 3
         : LONG.has(fx.kind) ? (f < 0.15 ? 0 : f > 0.85 ? 3 : 1 + (Math.floor(fx.ticks / 5) % 2))
         : Math.min(3, Math.floor(f * 4));
-      // 칠흑 횡베기는 바라보는 쪽으로 돌림 · 나머지는 그 자리 그대로
-      const turn = fx.kind === "nrSlash" ? (left ? ang + Math.PI : ang) + (left ? -Math.PI / 2 : Math.PI / 2) : 0;
-      nrPic(ctx, row, col, x, y, fx.size * (SCALE[fx.kind] ?? 2.2), a, turn, fx.kind === "nrSlash" && left);
+      // 칠흑 횡베기: 그림의 초승달은 아래로 볼록 → 볼록한 쪽(그림 아래)이 바라보는 쪽을 향하게 돌림 · 나머지는 그 자리 그대로
+      const turn = fx.kind === "nrSlash" ? ang - Math.PI / 2 : 0;
+      nrPic(ctx, row, col, x, y, fx.size * (SCALE[fx.kind] ?? 2.2), a, turn);
       return true;
     }
   }

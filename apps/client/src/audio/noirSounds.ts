@@ -2,6 +2,9 @@
 import type { RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
 
+/** 타격음 높이 차례 */
+let hitStep = 0;
+
 export const NOIR_SOUNDS = {
   nrSlash: () => {
     noise(0.07, 0.16, 2600);
@@ -27,6 +30,12 @@ export const NOIR_SOUNDS = {
   nrWave: () => tone({ type: "triangle", from: 260, to: 520, dur: 0.3, vol: 0.06 }),
   nrLevel: () => [0, 0.08, 0.16].forEach((d, i) => tone({ type: "triangle", from: 330 * (i + 2), to: 330 * (i + 2), dur: 0.08, vol: 0.06, delay: d })),
   nrUpOk: () => [0, 0.07, 0.14, 0.21].forEach((d, i) => tone({ type: "square", from: 440 + i * 140, to: 440 + i * 140, dur: 0.07, vol: 0.05, delay: d })),
+  /** 피해 숫자가 뜨는 한 대마다 짧은 타격음 (타다다다) · 맞은 수만큼 조금씩 높게 */
+  nrHit: () => {
+    hitStep = (hitStep + 1) % 6;
+    noise(0.025, 0.09, 2600 + hitStep * 300);
+    tone({ type: "square", from: 520 + hitStep * 60, to: 220, dur: 0.035, vol: 0.035 });
+  },
   nrUpFail: () => tone({ type: "sawtooth", from: 300, to: 120, dur: 0.25, vol: 0.05 }),
   nrRankUp: () => {
     tone({ type: "sawtooth", from: 110, to: 440, dur: 0.6, vol: 0.08 });
@@ -45,6 +54,8 @@ const SFX: Record<string, NoirSfx> = {
 
 export function noirSounds(run: RunState, out: Sfx[], onShake: (power: number) => void): void {
   if (run.player.characterId !== "noir") return;
+  // 이번 틱에 맞은 적이 있으면 (피해 숫자가 뜨는 한 대마다) 타격음
+  if (run.enemies.some((e) => e.hitFlash === 6) && !out.includes("nrHit")) out.push("nrHit");
   for (const e of run.effects) {
     if (e.ticks < e.maxTicks - 1) continue;
     const sfx = SFX[e.kind];
