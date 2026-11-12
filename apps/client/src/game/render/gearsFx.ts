@@ -43,7 +43,7 @@ export function drawGearsFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     case "geBarrage":
     case "geMirror":
     case "geWave":
-      gePic(ctx, ROW[fx.kind], four, x, y, fx.size * (fx.kind === "geWave" ? 4 : 2.6), a, turn, left);
+      gePic(ctx, ROW[fx.kind], four, x, y, fx.size * (fx.kind === "geWave" ? 1.6 : 2.6), a, turn, left);
       return true;
     case "geBoom":
       gePic(ctx, ROW.geBoom, 3, x, y, fx.size * 2.6, a);

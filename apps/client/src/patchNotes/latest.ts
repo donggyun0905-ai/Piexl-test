@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.56",
+    date: "2026-11-12",
+    items: {
+      ko: ["기어스: 마법 방패 충격파의 맞는 범위도 커진 이펙트만큼 2.5배 넓어짐", "아카이브 빌드 통계: 먼저 캐릭터 카드를 고르면 그 캐릭터 통계가 나오도록 바꾸고 화면을 새로 꾸밈 (판 수·클리어율 칸 · 1~3위 색)"],
+      en: ["Gears: Magic Shield Shockwave now hits 2.5× farther, matching its bigger effect", "Archive Build Stats: pick a character card first, then see its stats · redesigned page (runs and clear rate tiles · top 3 colors)"],
+      ja: ["ギアス：魔法盾の衝撃波の当たり範囲も大きくなったエフェクトに合わせて2.5倍に", "アーカイブのビルド統計：先にキャラカードを選ぶとそのキャラの統計が出るように変更・画面を新しくデザイン（プレイ数・クリア率の枠・1〜3位の色）"],
+    },
+  },
+  {
     version: "0.52.55",
     date: "2026-11-12",
     items: {
