@@ -59,7 +59,8 @@ describe("광야의 새벽", () => {
       play(s, TICK_RATE * 120, true);
       expect(s.swarm!.lv, c).toBeGreaterThan(1);
     }
-  }, 120000);
+    // 캐릭터가 늘어 GitHub 검사 기계에서는 2분을 넘기기도 함 → 넉넉히 5분
+  }, 300000);
 
   it("같은 시드·입력이면 결과가 같음", () => {
     const go = () => {
