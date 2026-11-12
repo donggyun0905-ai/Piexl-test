@@ -18,6 +18,7 @@ import { baekBuffs } from "./baekBuffs";
 import { bingseolBuffs } from "./bingseolBuffs";
 import { asuraBuffs } from "./asuraBuffs";
 import { honryeongBuffs } from "./honryeongBuffs";
+import { ariaBuffs } from "./ariaBuffs";
 
 export interface RoomBuff {
   key: string;
@@ -80,6 +81,7 @@ export function roomBuffs(p: PlayerState, floor: number, lang: Lang, t: (k: Text
   out.push(...bingseolBuffs(p, t));
   out.push(...asuraBuffs(p, t));
   out.push(...honryeongBuffs(p, t));
+  out.push(...ariaBuffs(p, t));
   const stats = statSummary(p, t);
   if (stats) out.push({ key: "stats", label: t("bfRoomStats"), tip: stats.text, bad: stats.bad });
   (p.altar?.got ?? []).forEach((g, i) => {

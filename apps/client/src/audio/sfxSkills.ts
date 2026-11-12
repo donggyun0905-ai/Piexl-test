@@ -28,16 +28,8 @@ import { blueFlameSounds } from "./blueFlameSounds";
 import { lunaticSounds } from "./lunaticSounds";
 import { incisionSounds } from "./incisionSounds";
 import { crusaderSounds } from "./crusaderSounds";
-import { jokerSounds } from "./jokerSounds";
-import { shadowingSounds } from "./shadowingSounds";
-import { puppetSounds } from "./puppetSounds";
-import { rabbitSounds } from "./rabbitSounds";
-import { baekSounds } from "./baekSounds";
-import { bingseolSounds } from "./bingseolSounds";
-import { asuraSounds } from "./asuraSounds";
-import { baekinjangSounds } from "./baekinjangSounds";
-import { honryeongSounds } from "./honryeongSounds";
 import { factionSounds } from "./factionSounds";
+import { silberSounds } from "./silberSounds";
 
 export const SKILL_SOUNDS = {
   // 터짐: 낮은 펑 · 떨어지는 운석: 쿵 + 우르르
@@ -271,15 +263,7 @@ export function skillSounds(run: RunState, out: Sfx[], onShake: (power: number) 
   lunaticSounds(run, out, onShake);
   incisionSounds(run, out, onShake);
   crusaderSounds(run, out, onShake);
-  jokerSounds(run, out, onShake);
-  shadowingSounds(run, out, onShake);
-  puppetSounds(run, out, onShake);
-  rabbitSounds(run, out, onShake);
-  baekSounds(run, out, onShake);
-  bingseolSounds(run, out, onShake);
-  asuraSounds(run, out, onShake);
-  baekinjangSounds(run, out, onShake);
-  honryeongSounds(run, out, onShake);
+  silberSounds(run, out, onShake);
   factionSounds(run, out, onShake);
   if (!run.pvp) return;
   const me = run.player;

@@ -7,6 +7,7 @@ import { BAEK_WEAPONS } from "./weaponsBaekryeong";
 import { BINGSEOL_WEAPONS } from "./weaponsBingseol";
 import { ASURA_WEAPONS } from "./weaponsAsura";
 import { BAEKINJANG_WEAPONS } from "./weaponsBaekinjang";
+import { ARIA_WEAPONS } from "./weaponsAria";
 import { HONRYEONG_WEAPONS } from "./weaponsHonryeong";
 
-export const SILBER_WEAPON_SET = { ...JOKER_WEAPONS, ...SHADOWING_WEAPONS, ...PUPPET_WEAPONS, ...RABBIT_WEAPONS, ...BAEK_WEAPONS, ...BINGSEOL_WEAPONS, ...ASURA_WEAPONS, ...HONRYEONG_WEAPONS, ...BAEKINJANG_WEAPONS };
+export const SILBER_WEAPON_SET = { ...JOKER_WEAPONS, ...SHADOWING_WEAPONS, ...PUPPET_WEAPONS, ...RABBIT_WEAPONS, ...BAEK_WEAPONS, ...BINGSEOL_WEAPONS, ...ASURA_WEAPONS, ...HONRYEONG_WEAPONS, ...BAEKINJANG_WEAPONS, ...ARIA_WEAPONS };

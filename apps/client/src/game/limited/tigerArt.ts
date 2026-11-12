@@ -102,6 +102,7 @@ export const ACCENT: Record<string, string> = {
   bingseol: "#bfe8ff",
   asura: "#6a7aff",
   baekinjang: "#ff5a6a",
+  aria: "#ffe08a",
   honryeong: "#c8a8ff",
   collector: "#5a8aff",
   mystic: "#ff6a8a",

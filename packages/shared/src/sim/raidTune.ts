@@ -51,6 +51,7 @@ const R: Record<string, number> = {
   /** 아수라 */
   asura: 1,
   baekinjang: 1,
+  aria: 1,
   honryeong: 1,
   /** 의사 */
   doctor: 1.25,

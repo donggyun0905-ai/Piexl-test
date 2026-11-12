@@ -25,6 +25,7 @@ import { timeSlowed } from "./punk";
 import { setActingFoe } from "./moonlight";
 import { puppetDecoy } from "./puppetFriends";
 import { hrLure } from "./hrKit";
+import { arLag } from "./arLull";
 import { bossCcGuard } from "./ccGuard";
 import { srcFn } from "./dmgSrc";
 const damagePlayer = srcFn("enemies", () => damagePlayer_), removeDead = srcFn("enemies", () => removeDead_);
@@ -177,6 +178,8 @@ export function updateEnemies(s: RunState): void {
       e.y = y0 + (e.y - y0) * haste;
       if (e.timer > 1 && furyTick(s)) e.timer--;
     }
+    // 아리아 클라리넷 둘레: 공격 준비가 늦어짐
+    arLag(s, e);
     // 둔화(자기장): 이번 틱에 움직인 거리를 줄임 (보스 제외)
     if ((e.slowTicks ?? 0) > 0 && !def.boss) {
       e.x = x0 + (e.x - x0) * R.SLOW_MUL;

@@ -10,9 +10,9 @@ export const ELEMENT_TAGS: readonly ItemTag[] = ITEM_TAGS.slice(0, 9);
 
 /** 꼬리표마다 패시브 id (빈칸으로 나눔) */
 const MEMBERS: Record<ItemTag, string> = {
-  // 불 36
+  // 불 37
   fire:
-    "asHell bzDraw bzFletch bzSplit bzEmber bzPrison bzImplode bzPillar bzTwin bzBlaze bzLinger bzSoul bzGreat wideBlast igniteTip heatBuildup armorMelt sunWarrior scorchBlade warCry unbreakable overdriveCircuit " +
+    "arEncore asHell bzDraw bzFletch bzSplit bzEmber bzPrison bzImplode bzPillar bzTwin bzBlaze bzLinger bzSoul bzGreat wideBlast igniteTip heatBuildup armorMelt sunWarrior scorchBlade warCry unbreakable overdriveCircuit " +
     "counterCoil oniHellBrand oniRedLotus oniBloodFlame phoenixFlare phoenixSun phoenixRebirth adFocus " +
     "adWarhead rdTank rdBurn bmPowder bmBurn afWide afPhoenix fgPulse fgAfter pgCampfire fkPlate fkPyre " +
     "fkLines fkRequiem clSunSword clKatana clSunStaff clRedAxe ifritClaw ecFlare ecCorona mqWarhead mqBarrage hkDoubleTap hkPowder ocFrenzy ocSpray btEmber btCore btScorch btFlare btBrand btNoon btUndying mcPowder mcWide mcFuse mcResonance blBuckshot blDragon blGore blChain jkFlame jkFirework sdFlame ppDollHood rbFever byFlame",
@@ -31,18 +31,18 @@ const MEMBERS: Record<ItemTag, string> = {
   poison:
     "venomStar footnote shorthand idLongWhip idBramble snakeVenom snakeSpit scorpTail spiderFang plRust " +
     "plContagion smVenom smMist smCloud smSilk smTang smBloom snVenom snQuiver snNumb ppWeb hrThick",
-  // 빛 65
+  // 빛 67
   light:
-    "crVerdict crHalo crSense crRain crGrave crEndless lnSense lnEndless lnFullMoon lnSlashBig lnSlashPow lnMoonRain lnCrescent bzSense bzEndless sbFocus sbEndless sbLunar hfLong hfBurst sxMoon sxCrescent sxHalo sxRemain nlMoon nlBlind nlFocus regenCharm goldPouch goddessBlessing starShower manaDrain jadeOrb lifeSiphon beautiful flashy ration " +
+    "arPiano arHarp crVerdict crHalo crSense crRain crGrave crEndless lnSense lnEndless lnFullMoon lnSlashBig lnSlashPow lnMoonRain lnCrescent bzSense bzEndless sbFocus sbEndless sbLunar hfLong hfBurst sxMoon sxCrescent sxHalo sxRemain nlMoon nlBlind nlFocus regenCharm goldPouch goddessBlessing starShower manaDrain jadeOrb lifeSiphon beautiful flashy ration " +
     "elite catNap purr woundSuture firstAid checkup prescription quickEcho eternity accumulate oasis " +
     "dragonBlood dragonEye brightStar longNight wideSky extraStar stardust zodiac parchment revision " +
     "scrapRepair chargeKnuckle idDew idGaiaGrace idFourSeasons idWorldHeart elExpand elTea rdShock " +
     "rdRepair afTattoo afInfinity fgMemory fgPillar fgMany fgShine fgCross fgHeal vyKeepFate vyQuiver " +
     "vyBlessing vyHomeward pgStarDust pgKeyring lxShard lxHalo lxGrace lxMore lxWide lxTattoo clHolySword " +
     "clStarTome dryadOrb aphroditeMirror puBook fnHalo fnStar ecDawn tkBell tkLighthouse lvSalt lvBlowhole mqPrism btVerdict btWitness btGrace btMercy iaQuill iaAbsolute iaVerse iaCall gbLight gbImmortal gbFaith gbVow snEther snMuse snNight rfHalo rfWrath rfPrayer rfLance yrPyre yrBloom yrHeaven yrOrb yrThorn yrPrayer mcPrayer mcArsenal blMoonlight blFull blHalo blLunar blSilver blRemain sdLotus sdGate sdStar ppDollPrincess rbCarrot rbMoon rbStar byCall",
-  // 어둠 43
+  // 어둠 44
   dark:
-    "bjEye asField asDemon asUlt asGate asFlying lnMarkFast lnTwinMark lnExecute bzCage bzSeal bzInner sbEngrave sbStorm sbRapid sbPure hfHold hfFeed hfMaw hfGrow hfSpread sxBind sxFear sxSpool nlCurse nlChain ambush volleyCharm strongman intimidate sharpClaws hunterInstinct shadowMark twinShadow moonlight " +
+    "arClarinet bjEye asField asDemon asUlt asGate asFlying lnMarkFast lnTwinMark lnExecute bzCage bzSeal bzInner sbEngrave sbStorm sbRapid sbPure hfHold hfFeed hfMaw hfGrow hfSpread sxBind sxFear sxSpool nlCurse nlChain ambush volleyCharm strongman intimidate sharpClaws hunterInstinct shadowMark twinShadow moonlight " +
     "assassin desertMirage desertKing soulFeast longCurse inkWell preface oniEightHeads oniAbyssDrink " +
     "oniShadowSpread snakeCoil batSwarm elLinger elStaff plMask plBloodlet eaHunger eaShade mkRegen " +
     "mkPotion cyOptics cyEcho rmStep rmVanish rmHaste rmShroud clVoidSword clVoidStaff clClaw devilBlood " +
@@ -63,9 +63,9 @@ const MEMBERS: Record<ItemTag, string> = {
   // 물 3
   water:
     "oniGreatWave oniSprayChain oniDragonPalace tkBarnacle tkWhale tkTrident lvCrest lvSpiral lvBreaker lvCurrent lvSpray lvCall lvCalf lvBaleen lvPod lvKingWhale lvDeep lvSong tlDeep tlSchool tlJaws tlBreach tlRip mqFreedom hkChain hkFreedom ocUndertow ocEcho ocFin wvSpear wvGoddess wvWhale wvBubble wvClock wvCloud wvLotus wvFlood wvBalloon wvPearl wvHands wvFountain wvSkip wvSiren wvOctopus wvEye wvEbb wvTrail wvTsunami mrRipple mrCascade mrSky mrReturn mrBreath sdScroll",
-  // 날카로움 98
+  // 날카로움 99
   sharp:
-    "bjHeat bjWane bjFlurry bjSpin bjRain bjNeedle bjSpear bjEnd asIron asReach asRapid asBarrage asFury icHeavy icWide icSwift icThrow icLeapBig icLeapPow icRampage lnSwift lnPierce lnFlurry lnWave lnEye lnDeep lnDashPow bzWide bzKnock bzWing sbQuick sbHollow sbPierce sbTriple sbBarrel sbSeek sbAgile hfKnuckle hfDouble hfCrush hfNail hfAim hfFar hfEcho sxEdge sxWide sxSnap sxTwin sxTaut sxWeave nlIron nlBarb nlSpread nlDeep nlSledge nlWide nlDrive nlEcho longGrip backQuiver steadyBreath spinCleave waveSlash echoBolt piercingBolt mach knockout focusFire " +
+    "arForte bjHeat bjWane bjFlurry bjSpin bjRain bjNeedle bjSpear bjEnd asIron asReach asRapid asBarrage asFury icHeavy icWide icSwift icThrow icLeapBig icLeapPow icRampage lnSwift lnPierce lnFlurry lnWave lnEye lnDeep lnDashPow bzWide bzKnock bzWing sbQuick sbHollow sbPierce sbTriple sbBarrel sbSeek sbAgile hfKnuckle hfDouble hfCrush hfNail hfAim hfFar hfEcho sxEdge sxWide sxSnap sxTwin sxTaut sxWeave nlIron nlBarb nlSpread nlDeep nlSledge nlWide nlDrive nlEcho longGrip backQuiver steadyBreath spinCleave waveSlash echoBolt piercingBolt mach knockout focusFire " +
     "allIn bigStar longEcho precision longWhip command duneRush farThrow spearMastery momentum dragonRage " +
     "dragonLance fallenGrail sinWeight thickNib sealStamp alleyBond tagStrike idSap idRoots idTwinStab " +
     "idBloomSwap wolfFang wolfPack eagleEye scorpPincer batEcho eleTrunk flyLonger flyDragonEye renOak " +
@@ -84,9 +84,9 @@ const MEMBERS: Record<ItemTag, string> = {
     "spRibbon spShield mkPlate mkBulk mkSpikes mkMeditate adWide adShield rdSlip rdGear bmMore bmSuit " +
     "afShield afGolem cyLeech cySkin trMark trCamo fgEcho fgBless mnHelmet mnMuscle mnCanary mnChain " +
     "zsNectar zsRetort pgPack pgSouvenir pgPostcard pgTent relicSilver relicWhite ironSkin puDisguise leArmor oxBulwark oxShard fnHowl fnVeteran ecCrown tkCoral lvShell lvFlag tlFreedom mqFlagship hkWreck hkRum ocFoam wvArmor wvMist mrScale mrParry btVow btSilver btBreaker iaLedger iaKnot gbPlate gbThorns gbIron gbBulwark gbTitan rfSteady yrBulwark yrSanct yrGuard yrVigil yrGrace yrTouch yrBaptism mcHoard blRecoil jkGuard sdChain sdThorn ppDollRibbon rbHeavy rbFluff byGuard bsWall hrBreath",
-  // 바람 81
+  // 바람 83
   wind:
-    "bjChain bjOverload bjDash bjShock asStep crQuick crRamPow crRamGain icRushPow icDouble icLeapOften icKeep lnLunge lnAfterimage lnChain nlQuick nlRain lightGloves windBoots featherTip hunterEye dashCloak heavyPlate returnFletch chaseSteps chainBurst " +
+    "arHorn arCanon bjChain bjOverload bjDash bjShock asStep crQuick crRamPow crRamGain icRushPow icDouble icLeapOften icKeep lnLunge lnAfterimage lnChain nlQuick nlRain lightGloves windBoots featherTip hunterEye dashCloak heavyPlate returnFletch chaseSteps chainBurst " +
     "overcharge mindEye yangForce cleanFreak bigger zone speedIsPower discipline rapidFire agility " +
     "overtreat doctorGown shadowRush silentStep haste clockwork mirageStep nomadSpirit cloudRide duckWalk " +
     "lastMag backAlleyRun oniTyphoonEye oniGale oniTwinWind idBreeze idPetal idSplitArrow idRootArrow " +
@@ -94,17 +94,17 @@ const MEMBERS: Record<ItemTag, string> = {
     "rdTurbo rdDrift bmWide bmFuse afCrafter afSurge cyReflex cyCloak rmSwift wdWind wdRonin wdFocus " +
     "wdBlink skFast skAgile vySandglass vySeaLegs zsCloud pgBoots pgSnack pgShortcut pgWorldLeaf fkGrip " +
     "lxSwift clWhiteBow clPistol relicBlue fallenWings quickDraw puShrink puCloud puFlute lePounce oxWings oxLanding oxQuick oxTrail fnGale ecTwilight tkSail tkGull lvSurf lvAnchorless lvAmber tlChain mqBroadside hkSwing ocSurf ocSeaWind wvSurf wvSpout wvWings wvSpiral mrSurf mrCourse btSwift iaSpool iaWeave iaSnare gbBash snSpin snWing snReach snTempo rfTail rfFeather rfEye rfRain rfReach mcTempo mcStorm blPump blFlare jkRecall jkAccel sdCrane sdWings sdSakura sdButterfly sdComet ppDollDancer ppClone rbEars rbHop byStep",
-  // 행운 53
+  // 행운 55
   luck:
-    "asSix cloverCharm resolve prajna luckyDeflect gunMaster scrapGun doubleEcho echoBurst soulHarvest " +
+    "arChord arMaestro asSix cloverCharm resolve prajna luckyDeflect gunMaster scrapGun doubleEcho echoBurst soulHarvest " +
     "twinSummon scarabCharm reboundRing longBreath lingering starfall starWard eclipse armillary " +
     "goldenFeather bigQuack quickSwap threeAsOne idClover idBreaker flyEvade flyGust renAmber renRegrow " +
     "eaGluttony eaEcho adSalvo adEcho afLucky afBlueprint trRicochet trDrum mnLamp mnVein mnGold " +
     "mnJackpot vyTwinDice vyLoadedDie pgClover pgRummage pgDoubleBag pgEcho pgStamp pgLuckyCoin clGoldBow " +
     "clGoldFist clGoldSpear godShard goldTooth puThief puBanner fnWisdom tkCompass lvWhite hkPlunder snGrace rfTwin mcDouble mcEcho jkDraw jkDouble jkSleeve jkSeven jkFullHouse sdClock ppSpool rbLucky rbClover",
-  // 소환 30
+  // 소환 31
   summon:
-    "bjFleet bjShare genesis pet supportFire extraCat packLeader fishTreat horde lash empower sacrifice returnWind " +
+    "arViolin bjFleet bjShare genesis pet supportFire extraCat packLeader fishTreat horde lash empower sacrifice returnWind " +
     "quickCatch extraDuckling loudQuack duckFamily breadSnack echoQuack braveDuckling spBond spLonger " +
     "spFury spAwaken spFarewell spHarmony adCall adFourth petFlute falseHero puClone mqRig mqSquadron hkGrapnel ocBreath ocLiberty wvButterfly wvMirror wvSchool wvRope sdDragon ppGolem ppCrown ppDance rbSeal byWisp hrWolf hrTiger hrOwl hrDecoy hrPact",
   // 피 29

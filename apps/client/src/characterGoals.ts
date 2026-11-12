@@ -98,6 +98,7 @@ export const CHARACTER_GOALS: Partial<Record<CharacterId, CharGoal>> = {
   asura: { m: "attackSpeed", n: 2.2 },
   baekinjang: { m: "attackSpeed", n: 2.2 },
   honryeong: { m: "attackSpeed", n: 2 },
+  aria: { m: "attackSpeed", n: 2 },
   baekryeong: { m: "maxHp", n: 220 },
   bingseol: { m: "attackSpeed", n: 2 },
   chronomancer: { a: "thrift" },

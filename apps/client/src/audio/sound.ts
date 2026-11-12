@@ -8,12 +8,7 @@ import { GYM_SOUNDS, type GymSfx } from "./sfxGym";
 import { TRIAL_SOUNDS, type TrialSfx } from "./trialSound";
 import { ALTAR_SOUNDS, type AltarSfx } from "./altarSound";
 import { VAULT_SOUNDS, type VaultSfx } from "./vaultSound";
-import { RABBIT_SOUNDS, type RabbitSfx } from "./rabbitSounds";
-import { BAEK_SOUNDS, type BaekSfx } from "./baekSounds";
-import { BINGSEOL_SOUNDS, type BingseolSfx } from "./bingseolSounds";
-import { ASURA_SOUNDS, type AsuraSfx } from "./asuraSounds";
-import { BAEKINJANG_SOUNDS, type BaekinjangSfx } from "./baekinjangSounds";
-import { HONRYEONG_SOUNDS, type HonryeongSfx } from "./honryeongSounds";
+import { SILBER_SOUNDS, type SilberSfx } from "./silberSounds";
 import { POLISH_SOUNDS, type PolishSfx } from "./sfxPolish";
 import { musicLayers } from "./musicLayers";
 
@@ -71,12 +66,7 @@ export type Sfx =
   | TrialSfx
   | AltarSfx
   | VaultSfx
-  | RabbitSfx
-  | BaekSfx
-  | BingseolSfx
-  | AsuraSfx
-  | BaekinjangSfx
-  | HonryeongSfx
+  | SilberSfx
   | PolishSfx;
 
 let ctx: AudioContext | null = null;
@@ -194,12 +184,7 @@ const SOUNDS: Record<Sfx, () => void> = {
   ...TRIAL_SOUNDS,
   ...ALTAR_SOUNDS,
   ...VAULT_SOUNDS,
-  ...RABBIT_SOUNDS,
-  ...BAEK_SOUNDS,
-  ...BINGSEOL_SOUNDS,
-  ...ASURA_SOUNDS,
-  ...BAEKINJANG_SOUNDS,
-  ...HONRYEONG_SOUNDS,
+  ...SILBER_SOUNDS,
   ...POLISH_SOUNDS,
   blink: () => {
     tone({ type: "sine", from: 900, to: 120, dur: 0.12, vol: 0.12 });

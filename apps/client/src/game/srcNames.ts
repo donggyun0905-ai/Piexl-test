@@ -17,6 +17,8 @@ const NAMES: Record<string, Name> = {
   apostleFields: ["일곱 죄의 장판", "Seven Sins fields", "七つの罪の領域"],
   awakenCasts: ["각성 증강 기술", "Awakening skills", "覚醒スキル"],
   beatriceSkills: SKILL,
+  arBurst: ["여덟 음표 터짐", "Octet Burst", "八音符の破裂"],
+  arFinale: ["악보 완성", "Score Complete", "楽譜完成"],
   bjVolley: ["연속 타격 기술", "Multi-hit skills", "連撃スキル"],
   buildSetFx: ["세트 효과", "Set effects", "セット効果"],
   classTaken: ["반격", "Counter", "反撃"],

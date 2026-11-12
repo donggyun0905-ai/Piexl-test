@@ -39,8 +39,7 @@ import { drawRabbitGround } from "./rabbitArt";
 import { drawBaekAir, drawBaekGround } from "./baekArt";
 import { drawBingseolAir, drawBingseolGround } from "./bingseolArt";
 import { drawAsuraGround } from "./asuraArt";
-import { drawSilberAir } from "./silberAir";
-import { drawHonryeongGround } from "./honryeongArt";
+import { drawSilberAir, drawSilberGround } from "./silberAir";
 import { drawFactionBody } from "./factionFx";
 import { drawFallenWings } from "./fallenWings";
 
@@ -110,7 +109,7 @@ export function drawForgottenBack(ctx: Ctx, s: RunState, alpha: number, snap: Sn
   drawBaekGround(ctx, s, alpha, snap);
   drawBingseolGround(ctx, s, alpha, snap);
   drawAsuraGround(ctx, s, alpha, snap);
-  drawHonryeongGround(ctx, s, alpha, snap);
+  drawSilberGround(ctx, s, alpha, snap);
   drawLeoBack(ctx, s, alpha, snap);
   drawOnyxBack(ctx, s, alpha, snap);
   drawFenrirBack(ctx, s, alpha, snap);

@@ -120,4 +120,11 @@ export const PW_KITS_4: PwKits = {
     sk("bjBlades", "dash", 8, "#c81a2a", { range: 120, speed: 11, hit: { dmg: 1.1 } }),
     sk("bjBlades", "point", 60, "#ff2a3a", { range: 160, radius: 115, delay: 30, fx: "pillar", hit: { dmg: 3.2 } }),
   ),
+  // 실베르 아리아: 음표 · 하프 선율(부채꼴) · 여덟 음표 터짐 · 악보 완성
+  aria: kit(1,
+    sk("arBaton", "line", 4, "#ffd860", { range: 220, hit: { dmg: 1.1 } }),
+    sk("arLyre", "cone", 8, "#ffe8a0", { radius: 90, arc: 0.7, fx: "slash", hit: { dmg: 1.4, slow: SEC } }),
+    sk("arDrum", "point", 10, "#ff8ad8", { range: 170, radius: 80, delay: 20, fx: "pillar", hit: { dmg: 1.9 } }),
+    sk("arCello", "point", 60, "#ffe040", { range: 170, radius: 125, delay: 30, fx: "pillar", hit: { dmg: 3.2 } }),
+  ),
 };

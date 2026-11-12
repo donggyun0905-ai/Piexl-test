@@ -14,8 +14,8 @@ import type { Snap } from "./render/palette";
 const LIFE = 30;
 const RISE = 10;
 const MAX_NUMBERS = 30;
-/** 이번 틱에 60연타 필살기(빙설 빙설창 · 래빗 슈퍼 럭키 · 혼령 혼-룡)로 맞았는지 */
-const rapidHit = (s: RunState, id: number) => (s.player.bsUlt?.hitId === id && s.player.bsUlt.hitAt === s.tick) || s.player.rbUlt?.hitAt === s.tick || s.player.hrDragon?.hitAt === s.tick;
+/** 이번 틱에 60연타 필살기(빙설 빙설창 · 래빗 슈퍼 럭키 · 혼령 혼-룡 · 아리아 악보 완성)로 맞았는지 */
+const rapidHit = (s: RunState, id: number) => (s.player.bsUlt?.hitId === id && s.player.bsUlt.hitAt === s.tick) || s.player.rbUlt?.hitAt === s.tick || s.player.hrDragon?.hitAt === s.tick || s.player.arBoomAt === s.tick;
 /** 60연타 필살기: 한 대마다 따로 띄움 (합치지 않음) · 그 적에게 남기는 수 · 전체 최대 수 */
 const RAPID_PER_ENEMY = 40;
 /** 아수라: 이번 틱에 그 적에게 준 한 대 한 대 (모두 따로 띄움, sim/asHit) */

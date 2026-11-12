@@ -17,5 +17,7 @@ export const SILBER_CHARACTERS = {
   /** 실베르: 혼령 곰방대 10개 · 연기용을 내뿜고 공격마다 방에 연기 구름 → 구름 안이면 은신 · 전용 패시브로 연기 혼령(늑대·범·부엉이·용·분신)을 부림 */
   honryeong: { id: "honryeong", maxHp: 90, damage: 8, moveSpeed: 1.2, luck: 1, startWeapon: "hrPipe" },
   baekinjang: { id: "baekinjang", maxHp: 100, damage: 9, moveSpeed: 1.25, luck: 1, startWeapon: "bjBlades" },
+  /** 실베르: 아리아 음표 무기 10 · 느리게 둥실거리며 방 끝까지 가는 음표 · 서로 다른 음표 8개가 모이면 색색으로 터짐 · 악기 넷이 다 놓이면 악보 완성 (sim/aria) */
+  aria: { id: "aria", maxHp: 85, damage: 8, moveSpeed: 1.2, luck: 1, startWeapon: "arBaton" },
   asura: { id: "asura", maxHp: 105, damage: 8, moveSpeed: 1.2, luck: 1, startWeapon: "asFist" },
 } as const;
