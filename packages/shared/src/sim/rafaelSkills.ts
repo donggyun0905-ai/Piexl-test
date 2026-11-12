@@ -5,7 +5,7 @@ import { aimAt, isMark, onRay, rfCooldown, rfHit as rfHit_ } from "./rafaelKit";
 import { inCircle, rushTick as rushTick_, startRush } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcEach, srcFn } from "./dmgSrc";
 const rfHit = srcFn("rafaelSkills", () => rfHit_), rushTick = srcFn("rafaelSkills", () => rushTick_);
 
 /** 1 바람 걸음: 뒤로 뛰며 떠난 자리에 돌풍 (밀쳐냄) · 다음 공격이 저격 */
@@ -62,7 +62,7 @@ export function stormTick(s: RunState): void {
   const p = s.player;
   const list = p.rfStorms;
   if (!list) return;
-  for (const st of list) {
+  for (const st of srcEach(list)) {
     if (--st.t > 0) continue;
     st.t = F.stormGap;
     st.n--;

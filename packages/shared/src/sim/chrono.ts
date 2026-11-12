@@ -194,13 +194,16 @@ function updateEchoes(s: RunState): void {
   if (due.length === 0) return;
   p.echoes = p.echoes.filter((e) => e.at > s.tick);
   const w = weaponOf(p);
-  for (const e of due) {
+  for (const e of srcEach(due)) {
     attack(s, e, e.mul, true);
     if (hasPerk(p, "echoBurst")) srcRun(s, "echoBurst", () => blastAt(s, e.x, e.y, CHRONO_PERKS.echoBurst.radius, p.stats.damage * CHRONO_PERKS.echoBurst.damage));
-    const again =
-      (w.chrono === "paradox" && e.depth < R.PARADOX_DEPTH) ||
-      (hasPerk(p, "doubleEcho") && createRng(deriveSeed(s.seed, "echo", s.tick, e.depth, e.x)).nextFloat() < CHRONO_PERKS.doubleEcho.chance);
-    if (again) p.echoes.push({ ...e, at: s.tick + (e.at - e.born), born: s.tick, depth: e.depth + 1 });
+    const para = w.chrono === "paradox" && e.depth < R.PARADOX_DEPTH;
+    const again = para || (hasPerk(p, "doubleEcho") && createRng(deriveSeed(s.seed, "echo", s.tick, e.depth, e.x)).nextFloat() < CHRONO_PERKS.doubleEcho.chance);
+    if (again) {
+      const o = { ...e, at: s.tick + (e.at - e.born), born: s.tick, depth: e.depth + 1 };
+      if (!para) (o as { dsrc?: string }).dsrc = "doubleEcho";
+      p.echoes.push(o);
+    }
   }
 }
 

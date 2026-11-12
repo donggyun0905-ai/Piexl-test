@@ -7,7 +7,7 @@ import { alive } from "./shadowingSpirits";
 import { ignite } from "./status";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, normalize } from "./util";
-import { srcFn, srcEach } from "./dmgSrc";
+import { srcEach, srcFn, srcRun } from "./dmgSrc";
 const damageEnemy = srcFn("asHit", () => damageEnemy_);
 
 /** 시드 확률 (굴릴 때마다 다른 값) */
@@ -41,7 +41,7 @@ function hitOnce(s: RunState, e: EnemyState, dmg: number, dx: number, dy: number
   strike(s, e, dmg, dx, dy, knock);
   if (!hasAs(p, "asDemon") || !alive(e) || asRoll(s, "asDemon") >= K.asDemon.chance) return;
   const extra = dmg * K.asDemon.mul;
-  strike(s, e, extra, dx, dy, false);
+  srcRun(s, "asDemon", () => strike(s, e, extra, dx, dy, false));
   addEffect(s, { kind: "asDemon", x: e.x, y: e.y - e.r * 0.4, dirX: dx, dirY: dy, size: e.r + 8, maxTicks: 14 });
   if (hasAs(p, "asHell")) ignite(e, extra * K.asHell.burn);
 }

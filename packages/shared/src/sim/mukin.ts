@@ -37,7 +37,7 @@ export function mukinHurt(s: RunState): void {
   p.invulnTicks = Math.min(p.invulnTicks, M.hurtTicks);
   if (!hasPerk(p, "mkSpikes") || (p.mkSpikeCd ?? 0) > 0) return;
   p.mkSpikeCd = K.mkSpikes.cd;
-  blastAt(s, p.x, p.y, K.mkSpikes.r, mukinDef(p), { push: 4 });
+  srcRun(s, "mkSpikes", () => blastAt(s, p.x, p.y, K.mkSpikes.r, mukinDef(p), { push: 4 }));
 }
 
 /** 회복약: 바로 차지 않고 천천히 (약초 주머니 +50%) */

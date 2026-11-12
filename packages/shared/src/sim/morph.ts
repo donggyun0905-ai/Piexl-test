@@ -94,7 +94,7 @@ function attack(s: RunState, dmg: number): void {
       for (const e of inLine(s, reach, M.stingWidth)) {
         strike(s, e, dmg);
         stun(e, M.stingStun);
-        if (hasPerk(p, "scorpTail")) poison(e, dmg * M.venom, M.venomTicks);
+        if (hasPerk(p, "scorpTail")) srcRun(s, "scorpTail", () => { poison(e, dmg * M.venom, M.venomTicks); });
       }
       addEffect(s, { kind: "stab", ...fx, size: reach, toX: p.x + p.faceX * reach, toY: p.y + p.faceY * reach, width: 2, maxTicks: 8 });
       return;

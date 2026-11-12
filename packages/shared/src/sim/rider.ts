@@ -8,7 +8,7 @@ import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, weaponOf } from "./util";
 import { addFlame } from "./flames";
 import { alive, fan, inCircle, inCone, inLine, shoot, startRush, rushTick as rushTick_, stun, strike as strike_ } from "./s2Kit";
-import { srcFn, srcEach } from "./dmgSrc";
+import { srcFn, srcEach, srcRun } from "./dmgSrc";
 const blastAt = srcFn("rider", () => blastAt_), damageEnemy = srcFn("rider", () => damageEnemy_), damagePlayer = srcFn("rider", () => damagePlayer_), rushTick = srcFn("rider", () => rushTick_), strike = srcFn("rider", () => strike_);
 
 const styleOf = (p: PlayerState): RideStyle => weaponOf(p).ride ?? { move: "smash", reach: 30 };
@@ -90,14 +90,14 @@ function drive(s: RunState): void {
   const d = moved(p);
   fill(s, d);
   if ((p.rdHeatT ?? 0) > 0 && --p.rdHeatT! === 0) p.rdHeat = 0;
-  if ((p.rdEcho ?? 0) > 0 && --p.rdEcho! === 0) pulse(s, K.rdDouble.mul);
+  if ((p.rdEcho ?? 0) > 0 && --p.rdEcho! === 0) srcRun(s, "rdDouble", () => pulse(s, K.rdDouble.mul));
   if (p.dashTicks > 0 && hasPerk(p, "rdDrift")) p.rdDrift = true;
   // 들이받기: 달리며 닿은 적
-  if (hasPerk(p, "rdRam") && d > 0.3 && (p.rdRamCd = (p.rdRamCd ?? 0) - 1) <= 0) {
+  if (hasPerk(p, "rdRam") && d > 0.3 && (p.rdRamCd = (p.rdRamCd ?? 0) - 1) <= 0) srcRun(s, "rdRam", () => {
     const hit = inCircle(s, p.x, p.y, p.r + 3);
     for (const e of hit) strike(s, e, p.stats.damage * K.rdRam.mul * riderSpeedMul(p), 6);
     if (hit.length) p.rdRamCd = K.rdRam.every;
-  }
+  });
   // 불꽃 자국 (불꽃 바퀴 아이템 · 화염 배기)
   const burn = hasPerk(p, "rdBurn") || styleOf(p).move === "flame";
   if (burn && d > 0.3 && (p.rdTrail = (p.rdTrail ?? 0) + d) >= K.rdBurn.every) {

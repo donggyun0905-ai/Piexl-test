@@ -170,7 +170,7 @@ export function scribeTick(s: RunState, want: boolean, speed: number): void {
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
   p.writes = (p.writes ?? 0) + 1;
-  if (hasPerk(p, "shorthand")) for (const a of [-K.shorthand.spread, K.shorthand.spread]) inkShot(s, a);
+  if (hasPerk(p, "shorthand")) srcRun(s, "shorthand", () => { for (const a of [-K.shorthand.spread, K.shorthand.spread]) inkShot(s, a); });
   else inkShot(s, 0);
   const room = `${s.floor}/${s.roomId}`;
   const first = hasPerk(p, "preface") && p.scRoom !== room;

@@ -14,7 +14,7 @@ import { passivePool } from "./loot";
 import { inCircle, isBoss, shoot, stun } from "./s2Kit";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcOpt } from "./dmgSrc";
 const blastAt = srcFn("artifacter", () => blastAt_);
 
 /** 반발 보호막 · 수호 골렘 문신: 받는 피해 (classTaken) */
@@ -104,7 +104,7 @@ export function artifacterTick(s: RunState, want: boolean, speed: number): void 
   }
   const dmg = p.stats.damage * (hasPerk(p, "afFocus") ? afv(p, "afFocus", "mul") : 1);
   const n = hasPerk(p, "afDouble") ? 2 : 1;
-  for (let i = 0; i < n; i++) shoot(s, (i - (n - 1) / 2) * 0.12, { damage: dmg, spirit: "afBlast", r: 4, range: p.stats.range });
+  for (let i = 0; i < n; i++) srcOpt(s, i > 0 && "afDouble", () => shoot(s, (i - (n - 1) / 2) * 0.12, { damage: dmg, spirit: "afBlast", r: 4, range: p.stats.range }));
   addEffect(s, { kind: "afMuzzle", x: p.x + p.faceX * 6, y: p.y - 4 + p.faceY * 6, dirX: p.faceX, dirY: p.faceY, size: 6, maxTicks: 8 });
 }
 

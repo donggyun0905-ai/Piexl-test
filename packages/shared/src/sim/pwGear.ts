@@ -11,7 +11,7 @@ import { inPlay } from "./pvpWorld";
 import { stk } from "./pwGearStat";
 import type { PlayerState, RunState } from "./types";
 import { addEffect } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const damagePlayer = srcFn("pwGear", () => damagePlayer_);
 
 const has = (p: PlayerState, id: string) => !!p.pwGear?.includes(id);
@@ -69,23 +69,23 @@ export function gearHits(s: RunState, hits: readonly { to: number; by: number; a
     if (has(a, "sylphQuiver") && ready(s, a, "sylph") && roll(s, "sylph", h.by) < F.sylphQuiver.chance) {
       Object.assign(vf, { tornUntil: s.tick + F.sylphQuiver.ticks, tornDmg: a.stats.damage * F.sylphQuiver.mul, tornBy: h.by });
     }
-    if (has(a, "gnomeHammer") && ready(s, a, "gnome", 10)) {
+    if (has(a, "gnomeHammer") && ready(s, a, "gnome", 10)) srcRun(s, "gnomeHammer", () => {
       addEffect(s, { kind: "ring", x: v.x, y: v.y, dirX: 0, dirY: 0, size: F.gnomeHammer.r, maxTicks: 12 });
       ps.forEach((q, j) => {
         if (j !== h.to && pv.seats[j]!.team !== pv.seats[h.by]!.team && (q.x - v.x) ** 2 + (q.y - v.y) ** 2 < F.gnomeHammer.r ** 2) hurtSeat(s, j, amt * F.gnomeHammer.mul, h.by);
       });
-    }
+    });
     if (has(a, "cupidSpirit")) Object.assign(vf, { cupid: Math.min(F.cupidSpirit.max, (vf.cupid ?? 0) + 1), cupidUntil: s.tick + F.cupidSpirit.ticks });
     // 맞은 쪽
     vf.hurtAt = s.tick;
     if (has(v, "relicSilver")) stack(s, v, "relicSilver", F.relicSilver.max);
     if (has(v, "relicWhite")) stack(s, v, "relicWhite", F.relicWhite.max);
     if (has(v, "godShard")) stack(s, v, "godShard", F.godShard.max);
-    if (has(v, "aphroditeMirror") && ready(s, v, "mirror") && roll(s, "mirror", h.to) < F.aphroditeMirror.chance) {
+    if (has(v, "aphroditeMirror") && ready(s, v, "mirror") && roll(s, "mirror", h.to) < F.aphroditeMirror.chance) srcRun(s, "aphroditeMirror", () => {
       addEffect(s, { kind: "beam", x: v.x, y: v.y, dirX: a.x - v.x, dirY: a.y - v.y, size: 4, maxTicks: 14 });
       hurtSeat(s, h.by, amt * F.aphroditeMirror.mul, h.to);
-    }
-    if (has(v, "blizzardLance") && ready(s, v, "lance", 30)) {
+    });
+    if (has(v, "blizzardLance") && ready(s, v, "lance", 30)) srcRun(s, "blizzardLance", () => {
       const b = F.blizzardLance;
       if (roll(s, "lance", h.to) < b.dash) hurtSeat(s, h.by, v.stats.damage * b.dashMul * 3, h.to);
       if (roll(s, "freeze", h.to) < b.freeze) {
@@ -93,7 +93,7 @@ export function gearHits(s: RunState, hits: readonly { to: number; by: number; a
         pv.seats[h.by]!.iced = s.tick + b.stun;
         hurtSeat(s, h.by, v.stats.damage * b.freezeMul * 3, h.to);
       }
-    }
+    });
     if (has(v, "aetherBomb")) {
       vf.aether = (vf.aether ?? 0) + amt;
       if (vf.aether >= v.stats.maxHp * F.aetherBomb.store) {

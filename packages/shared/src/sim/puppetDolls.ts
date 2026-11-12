@@ -32,7 +32,10 @@ export function afterStrike(s: RunState, x: number, y: number, hit: EnemyState[]
   const own = PP_DOLLS.map((id, i) => (hasPerk(p, id) ? i : -1)).filter((i) => i >= 0);
   if (own.length && hit.length) {
     const rng = createRng(deriveSeed(s.seed, "ppDoll", s.tick, hit[0]!.id));
-    if (rng.nextFloat() < H.dollChance * own.length) sendDoll(s, rng.pick(own), p.x, p.y, hasPerk(p, "ppDollDancer") ? K.ppDollDancer.bounce : 0);
+    if (rng.nextFloat() < H.dollChance * own.length) {
+      const d = rng.pick(own);
+      srcRun(s, PP_DOLLS[d]!, () => sendDoll(s, d, p.x, p.y, hasPerk(p, "ppDollDancer") ? K.ppDollDancer.bounce : 0));
+    }
   }
   if (hasPerk(p, "ppChain") && hit.length) srcRun(s, "ppChain", () => chain(s, hit));
   if (hasPerk(p, "ppWeb")) srcRun(s, "ppWeb", () => { (p.ppSpots ??= []).push({ x, y, kind: 1, age: 0, life: K.ppWeb.ticks, r: 18 }); });

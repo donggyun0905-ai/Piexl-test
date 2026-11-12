@@ -1,6 +1,7 @@
 // 인형술사 내 친구~(거대 인형 친구)와 분신
 // 인형 친구: 체력·공격력 높고 느림. 내 둘레를 돌아다니다 지키는 거리 안에 적이 들어오면 걸어가 내려침 · 쓰러지면 30초 뒤 내 곁에 다시
 // 분신: 피해를 받으면 방 어딘가에 내 분신(체력 고정)이 나타나 적이 모두 분신을 쫓음 (sim/enemies가 puppetDecoy로 목표를 바꿈) · 30초마다
+import { srcRun } from "./dmgSrc";
 import { PUPPET_PERKS as K } from "../itemsPuppet";
 import { createRng, deriveSeed } from "../rng";
 import { rot } from "./orbit";
@@ -95,7 +96,7 @@ export function puppetDecoy(s: RunState): { x: number; y: number } | null {
 /** 틱마다: 인형 친구 · 분신 */
 export function friendsTick(s: RunState, moved: boolean): void {
   const p = s.player;
-  if (hasPerk(p, "ppGolem")) golemTick(s, moved);
+  if (hasPerk(p, "ppGolem")) srcRun(s, "ppGolem", () => { golemTick(s, moved); });
   else delete p.ppGolem;
   cloneTick(s, moved);
 }

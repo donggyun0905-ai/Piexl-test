@@ -2,7 +2,7 @@
 // · 은방울 · 종이학 · 수정 · 태엽 폭탄 · 떨어진 별 · 씨앗 · 거울 조각 · 모래시계 · 열쇠 · 차원의 문)
 // 들어 본 순례자 무기는 수집 도감에 남아 한 칸마다 공격력·공격 범위가 오르고, 다섯 번째 공격마다 배낭에서 도감의 다른 수집품을 꺼내 한 번 씀
 // 수치는 weaponsPilgrim.PILGRIM, 아이템은 itemsPilgrim, 도감·땅·맞히기는 pgBag
-import { srcRun } from "./dmgSrc";
+import { srcOpt, srcRun } from "./dmgSrc";
 import { trialNoHeal } from "./trialFoes";
 import { ROOM_WIDTH, TICK_RATE } from "../constants";
 import { WEAPONS, type WeaponId } from "../content";
@@ -134,7 +134,7 @@ function rummage(s: RunState): void {
     const id = others.splice(Math.floor(pgRnd(s, "bag", i) * others.length), 1)[0]!;
     const w = WEAPONS[id] as { curio?: { mode: CurioMode; radius: number }; range: number };
     if (!w.curio) continue;
-    use(s, w.curio.mode, w.curio.radius, p.stats.damage * mul, w.range * areaMul(p));
+    srcOpt(s, i > 0 && "pgDoubleBag", () => use(s, w.curio!.mode, w.curio!.radius, p.stats.damage * mul, w.range * areaMul(p)));
     addEffect(s, { kind: "pgBag", x: p.x, y: p.y - 22, dirX: 0, dirY: 0, size: PG_IDS.indexOf(id), maxTicks: 30 });
   }
   if (n > 0 && hasPerk(p, "pgCampfire") && !trialNoHeal(s)) {

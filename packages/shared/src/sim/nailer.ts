@@ -9,7 +9,7 @@ import { inCone, roomKey, strike as strike_, stun } from "./s2Kit";
 import { isAwake, stigmaTick } from "./stigma";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const nlGain = srcFn("nailer", () => nlGain_), shotsTick = srcFn("nailer", () => shotsTick_), strike = srcFn("nailer", () => strike_);
 
 /** 망치 내려치기: 앞 부채꼴 (울리는 쇠·못 박기·머리 치기) */
@@ -48,12 +48,13 @@ export function nailerTick(s: RunState, want: boolean, speed: number): void {
   if (isAwake(p) && s.tick % 20 === 0) addEffect(s, { kind: "blMoonAura", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 26, maxTicks: 20, follow: true });
   const cd = (p.nlCd ??= [0, 0, 0, 0]);
   for (let i = 0; i < cd.length; i++) if (cd[i]! > 0) cd[i]!--;
-  if (p.trKey && p.trKey >= 1 && p.trKey <= 4) nlSkill(s, p.trKey - 1);
-  throwTick(s);
-  tieTick(s);
-  ultTick(s);
+  const key = p.trKey;
+  if (key && key >= 1 && key <= 4) srcRun(s, `k:nlSkill${key}`, () => nlSkill(s, key - 1));
+  srcRun(s, "k:nlSkill1", () => throwTick(s));
+  srcRun(s, "k:nlSkill2", () => tieTick(s));
+  srcRun(s, "k:nlSkill4", () => ultTick(s));
   shotsTick(s);
-  detTick(s);
+  srcRun(s, "k:nlSkill3", () => detTick(s));
   if (!want || p.attackCooldown > 0 || p.s2Rush || p.nlUlt) return;
   swing(s);
   p.nlLast = s.tick;

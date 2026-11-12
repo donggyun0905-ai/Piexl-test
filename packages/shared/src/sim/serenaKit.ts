@@ -1,4 +1,5 @@
 // 세레나 공용 도우미: 맞히기(빛 피해 추가 · 가시) · 가시·마비 · 도는 사슬 채찍 자리 · 받는 피해 · 처치 · 스킬 대기
+import { srcRun } from "./dmgSrc";
 import { SERENA_PERKS as K } from "../itemsSerena";
 import { SERENA as N } from "../weaponsSerena";
 import { rot } from "./orbit";
@@ -99,11 +100,13 @@ export function snFoeTaken(s: RunState, e: EnemyState): number {
 export function serenaKill(s: RunState, e: EnemyState): void {
   const p = s.player;
   if (!isSerena(p) || !hasPerk(p, "snBloom") || (e.snThorns ?? 0) < thornCap(p)) return;
-  for (const o of inCircle(s, e.x, e.y, K.snBloom.r)) {
-    if (o === e) continue;
-    strike(s, o, p.stats.damage * K.snBloom.mul, 0, "bleed");
-    addThorns(s, o, K.snBloom.thorns);
-  }
+  srcRun(s, "snBloom", () => {
+    for (const o of inCircle(s, e.x, e.y, K.snBloom.r)) {
+      if (o === e) continue;
+      strike(s, o, p.stats.damage * K.snBloom.mul, 0, "bleed");
+      addThorns(s, o, K.snBloom.thorns);
+    }
+  });
   addEffect(s, { kind: "snBloomFx", x: e.x, y: e.y, dirX: 0, dirY: 0, size: K.snBloom.r, maxTicks: 24 });
 }
 

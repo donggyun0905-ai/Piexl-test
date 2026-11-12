@@ -1,7 +1,6 @@
 // 음양사 부적: 쏠 때 붙이는 값 · 적에게 붙은 수 세기·추가 효과 · 음양사 전용 아이템 (마음가짐·옥구슬·반야·사인·영역·흡생) · 수양 도트·땅 주변 피해
 // 확률은 시드·틱·적 id로 만든 랜덤 (Math.random 없음)
-import { srcRun, srcFn } from "./dmgSrc";
-import { logDmg } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 import { ENEMIES, type CharmKind, type WeaponDef } from "../content";
 import { PERKS } from "../perks";
 import { createRng, deriveSeed } from "../rng";
@@ -147,11 +146,10 @@ export function charmHit(s: RunState, pr: ProjectileState, e: EnemyState, dx: nu
   const p = s.player;
   const kind = pr.charm!;
   // 사인: 보스·허수아비 말고 바로 쓰러짐
-  if (hasPerk(p, "deathSeal") && !ENEMIES[e.kind].boss && e.kind !== "dummy" && roll(s, "deathSeal", e.id) < R.DEATH_CHANCE) {
+  if (hasPerk(p, "deathSeal") && !ENEMIES[e.kind].boss && e.kind !== "dummy" && roll(s, "deathSeal", e.id) < R.DEATH_CHANCE) return srcRun(s, "deathSeal", () => {
     damageEnemy(s, e, e.hp, dx, dy);
     addEffect(s, { kind: "burst", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r * 3, maxTicks: 16 });
-    return;
-  }
+  });
   if (kind === "seal") {
     damageEnemy(s, e, pr.damage, dx, dy);
     const before = (e.sealTicks ?? 0) > 0 ? (e.seal ?? 0) : 0;
@@ -229,7 +227,6 @@ export function updateSeals(s: RunState): void {
     if ((e.sealTicks ?? 0) <= 0) continue;
     if (pulse && e.hp > 0 && !e.immune) {
       e.hp -= (e.sealDmg ?? 0) * (e.seal ?? 0);
-      logDmg(s, e, (e.sealDmg ?? 0) * (e.seal ?? 0));
       e.hitFlash = 3;
       markDot(s, e, "curse", (e.sealDmg ?? 0) * (e.seal ?? 0));
     }

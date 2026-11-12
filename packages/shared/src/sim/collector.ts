@@ -10,7 +10,7 @@ import { nearest } from "./brawlMoves";
 import { inCone, strike as strike_ } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, normalize } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const strike = srcFn("collector", () => strike_);
 
 export const isCollector = (p: PlayerState) => p.characterId === "collector";
@@ -41,7 +41,7 @@ function aim(s: RunState): [number, number, number] {
 /** 수집 무기 하나의 k번째 칸 (다음 칸이 있으면 예약) */
 function runArm(s: RunState, id: ClArmId, k: number): void {
   const [a, tx, ty] = aim(s);
-  const next = armMove(s, id, k, a, tx, ty);
+  const next = srcRun(s, id, () => armMove(s, id, k, a, tx, ty));
   if (next > 0) (s.player.clQueue ??= []).push({ id, k: k + 1, t: next });
 }
 

@@ -9,7 +9,7 @@ import { inSea, seaOf, sharkDmg, sharkSize, tlHit as tlHit_ } from "./tailKit";
 import type { TlShark } from "./tailTypes";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk } from "./util";
-import { srcFn, srcCb } from "./dmgSrc";
+import { srcFn, srcCb, srcRun } from "./dmgSrc";
 const tlHit = srcFn("tailSea", () => tlHit_);
 
 /** 다음 상어까지 틱 (바다 종류 · 상어 떼 · 공격 속도) */
@@ -59,7 +59,7 @@ function spawn(s: RunState, e: EnemyState, k: 0 | 1 | 2, flip: number): void {
     const dx = ux * c - uy * sn;
     const dy = ux * sn + uy * c;
     add(dx, dy, 1);
-    if (hasPerk(p, "tlRip")) add(-dx, -dy, K.tlRip.mul);
+    if (hasPerk(p, "tlRip")) srcRun(s, "tlRip", () => { add(-dx, -dy, K.tlRip.mul); });
   }
   if (list.length > 10) list.shift();
 }

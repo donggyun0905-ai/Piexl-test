@@ -10,7 +10,7 @@ import { alive, inCircle } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 import { isWall } from "./waveKit";
-import { srcFn, srcEach } from "./dmgSrc";
+import { srcFn, srcEach, srcRun } from "./dmgSrc";
 const blinkTo = srcFn("michaelaSkills", () => blinkTo_), explode = srcFn("michaelaSkills", () => explode_), mcHit = srcFn("michaelaSkills", () => mcHit_), swapTo = srcFn("michaelaSkills", () => swapTo_);
 
 /** (x,y) 둘레 반지름 r 안 아무 데나 n개 떨어뜨림 (벽은 피함, 시드로 자리 · gap 틱씩 차례로) */
@@ -88,6 +88,12 @@ export function mcWorld(s: RunState): void {
   if (p.mcChains) p.mcChains = p.mcChains.filter((c) => c.t > 0);
   if (!(p.mcUlt ?? 0)) return;
   p.mcUlt!--;
+  srcRun(s, "k:mcSkill4", () => ultRain(s));
+}
+
+/** 무한의 무기고: 틈마다 모든 적·맵 곳곳에 무기가 쏟아짐 */
+function ultRain(s: RunState): void {
+  const p = s.player;
   const every = Math.max(1, Math.round(M.ultEvery * (hasPerk(p, "mcArsenal") ? K.mcArsenal.every : 1)));
   if (s.tick % every !== 0) return;
   // 모든 적에게 한꺼번에 + 맵 곳곳에도 같이 쏟아짐
@@ -108,10 +114,10 @@ export function mcTouch(s: RunState): void {
     if (b) {
       p.dashTicks = 0;
       const v = hasPerk(p, "mcVoid");
-      blinkTo(s, b, v ? K.mcVoid.mul : 1, M.dashInv + (v ? K.mcVoid.inv : 0));
+      srcRun(s, "n:mcBlink", () => blinkTo(s, b, v ? K.mcVoid.mul : 1, M.dashInv + (v ? K.mcVoid.inv : 0)));
     }
   }
   p.mcDash = dashing;
   const b = (p.mcBlades ?? []).find((o) => Math.hypot(o.x - p.x, o.y - p.y) <= p.r + M.pickR);
-  if (b) swapTo(s, b);
+  if (b) srcRun(s, "n:mcSwap", () => swapTo(s, b));
 }

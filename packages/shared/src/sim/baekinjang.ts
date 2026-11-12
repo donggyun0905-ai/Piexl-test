@@ -1,11 +1,12 @@
 // 백인장(실베르): 누르면 앞을 X자로 벰 (혈월 쌍검격) · 전용 패시브가 있으면 이어 누를 때 적색 난무 → 선혈 회전참 → 섬광 돌진베기
 // 늘 미니 창 드론(sim/bjDrones) · 공격마다 확률 기술(sim/bjProcs) · 숫자 키 스킬(sim/bjSkills) · 나눠 때리기·상태이상(sim/bjVolley)
+import { srcRun } from "./dmgSrc";
 import { BJ_PERKS as K } from "../itemsBaekinjang";
 import { BJ_BLADES as F } from "../weaponsBaekinjang";
 import { dronesTick, resetDrones } from "./bjDrones";
 import { hasBj } from "./bjKit";
 import { bjProcs } from "./bjProcs";
-import { bjSkill } from "./bjSkills";
+import { BJ_SKILLS, bjSkill } from "./bjSkills";
 import { bjArea, bjHit, bjVolley, volleyTick } from "./bjVolley";
 import { onSegment } from "./s2Kit";
 import type { RunState } from "./types";
@@ -37,25 +38,25 @@ function attack(s: RunState): number {
     bjArea(s, x, y, r, dmg * F.mul);
     bjArea(s, x, y, r, dmg * F.mul);
     addEffect(s, { kind: "bjSlash", x, y, dirX: dx, dirY: dy, size: r, maxTicks: 14 });
-    if (hasBj(p, "bjWane")) {
+    if (hasBj(p, "bjWane")) srcRun(s, "bjWane", () => {
       // 잔월: 검격이 앞으로 날아가 줄 위의 적을 한 번 더
       const W = K.bjWane;
       const [tx, ty] = [x + dx * W.len * k, y + dy * W.len * k];
       for (const e of onSegment(s, x, y, tx, ty, W.w * k)) bjHit(s, e, dmg * W.mul);
       addEffect(s, { kind: "bjWane", x, y, dirX: dx, dirY: dy, size: r * 0.8, toX: tx, toY: ty, maxTicks: 14 });
-    }
+    });
     return F.cd;
   }
   if (st === 1) {
     const R = K.bjFlurry;
     const [x, y, r] = [p.x + dx * R.reach * k, p.y + dy * R.reach * k, R.r * k];
-    bjVolley(s, { kind: "flurry", x, y, dx, dy, r, dmg: dmg * R.mul, n: R.hits, every: R.every });
+    srcRun(s, "bjFlurry", () => bjVolley(s, { kind: "flurry", x, y, dx, dy, r, dmg: dmg * R.mul, n: R.hits, every: R.every }));
     addEffect(s, { kind: "bjFlurry", x, y, dirX: dx, dirY: dy, size: r, maxTicks: 16 });
     return R.cd;
   }
   if (st === 2) {
     const R = K.bjSpin;
-    bjVolley(s, { kind: "spin", x: p.x, y: p.y, dx, dy, r: R.r * k, dmg: dmg * R.mul, n: R.hits, every: R.every });
+    srcRun(s, "bjSpin", () => bjVolley(s, { kind: "spin", x: p.x, y: p.y, dx, dy, r: R.r * k, dmg: dmg * R.mul, n: R.hits, every: R.every }));
     addEffect(s, { kind: "bjSpin", x: p.x, y: p.y, dirX: dx, dirY: dy, size: R.r * k, maxTicks: R.hits * R.every + 4 });
     return R.cd;
   }
@@ -100,14 +101,15 @@ export function baekinjangTick(s: RunState, want: boolean, speed: number): void 
   }
   const cd = (p.bjSkillCd ??= [0, 0, 0, 0]);
   for (let i = 0; i < cd.length; i++) if (cd[i]! > 0) cd[i]!--;
-  if (p.trKey && p.trKey >= 1 && p.trKey <= 4 && !s.pvp && !s.pw) bjSkill(s, p.trKey - 1);
+  const sk = p.trKey;
+  if (sk && sk >= 1 && sk <= 4 && !s.pvp && !s.pw) srcRun(s, BJ_SKILLS[sk - 1]!, () => bjSkill(s, sk - 1));
   if ((p.bjCd ?? 0) > 0) p.bjCd = (p.bjCd ?? 0) - 1;
   if (want && (p.bjCd ?? 0) <= 0 && !p.bjRush) {
     p.attackCount++;
     p.bjCd = Math.max(6, Math.round(attack(s) / Math.max(0.3, speed * ((p.bjHaste ?? 0) > s.tick ? K.bjChain.speed : 1))));
     bjProcs(s);
   }
-  rushTick(s);
+  srcRun(s, "bjDash", () => rushTick(s));
   dronesTick(s);
   volleyTick(s);
   // 몸을 따라다니는 효과 (회전참 · 종언의 날개)

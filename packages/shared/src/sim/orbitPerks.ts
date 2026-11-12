@@ -60,7 +60,7 @@ export function pet(s: RunState, bodies: OrbBody[], dmg: number): void {
   if (!target) return;
   p.petCd = R.PET_TICKS;
   const dir = normalize(target.x - b.x, target.y - b.y) ?? [1, 0];
-  s.projectiles.push(orbShot(s, b.x, b.y, dir, 2.4, dmg * R.SIDE_MUL, "pet", { homing: true, ticksLeft: 90 }));
+  srcRun(s, "pet", () => s.projectiles.push(orbShot(s, b.x, b.y, dir, 2.4, dmg * R.SIDE_MUL, "pet", { homing: true, ticksLeft: 90 })));
 }
 
 /** 원소술사가 쏘는 탄 하나 */
@@ -80,6 +80,7 @@ export function guard(s: RunState, bodies: OrbBody[], dmg: number): void {
     if (pr.fromPlayer || !bodies.some((b) => b.tag !== "pet" && touch(b))) return true;
     if (lucky && createRng(deriveSeed(s.seed, "deflect", pr.id)).nextFloat() < R.DEFLECT_CHANCE) {
       pr.fromPlayer = true;
+      pr.src = "luckyDeflect";
       pr.vx = -pr.vx;
       pr.vy = -pr.vy;
       pr.damage = dmg;

@@ -1,6 +1,6 @@
 // 미카엘라 무기 기술 14가지 (무기마다 어떤 기술을 쓰는지는 michaelaWeaponMoves): 베기 · 내려찍기 · 휘두르기 · 회전 베기 · 찌르기 · 돌진 찌르기 · 던지기 · 세 갈래 던지기
 // X 베기 · 땅 가르기 · 올려베기 · 회오리 · 칼비 · 꿰뚫는 빛 창. 맞히면 그 무기 속성 효과 (sim/michaelaKit.mcHit) · 수치는 MICHAELA_MOVES (관리자에서 바꿈)
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcEach, srcFn, srcRun } from "./dmgSrc";
 import { MICHAELA_PERKS as K } from "../itemsMichaela";
 import { MICHAELA as M, MICHAELA_MOVES as V } from "../weaponsMichaela";
 import { MC_MOVE_IDS, type McMove } from "../michaelaWeaponMoves";
@@ -158,9 +158,9 @@ export function queueTick(s: RunState): void {
   const p = s.player;
   const q = p.mcQueue;
   if (!q?.length) return;
-  for (const it of q) it.t--;
+  for (const it of srcEach(q)) it.t--;
   const now = q.filter((it) => it.t < 0);
   p.mcQueue = q.filter((it) => it.t >= 0);
   if (!p.mcQueue.length) delete p.mcQueue;
-  for (const it of now) doMove(s, it.m, it.mul);
+  for (const it of srcEach(now)) doMove(s, it.m, it.mul);
 }

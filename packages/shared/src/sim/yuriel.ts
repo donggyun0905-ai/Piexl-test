@@ -8,7 +8,7 @@ import { maceTick, ultTick, wardTick, yrSkill } from "./yurielSkills";
 import { inCircle, inCone, roomKey } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const yrHit = srcFn("yuriel", () => yrHit_);
 
 /** 1·2타: 앞 부채꼴을 철퇴로 (k 0 · 1 반대쪽으로) */
@@ -51,10 +51,11 @@ export function yurielTick(s: RunState, want: boolean, speed: number): void {
   roomCheck(s);
   const cd = (p.yrCd ??= [0, 0, 0, 0]);
   for (let i = 0; i < cd.length; i++) if (cd[i]! > 0) cd[i]!--;
-  wardTick(s);
-  maceTick(s);
-  ultTick(s);
-  if (p.trKey && p.trKey >= 1 && p.trKey <= 4) yrSkill(s, p.trKey - 1);
+  srcRun(s, "k:yrSkill3", () => wardTick(s));
+  srcRun(s, "k:yrSkill2", () => maceTick(s));
+  srcRun(s, "k:yrSkill4", () => ultTick(s));
+  const key = p.trKey;
+  if (key && key >= 1 && key <= 4) srcRun(s, `k:yrSkill${key}`, () => yrSkill(s, key - 1));
   // 공격 대기가 끝난 뒤부터 잼 (공격 속도가 느려도 3타까지 이어지게)
   p.yrGap = (p.yrGap ?? 0) + (p.attackCooldown <= 0 ? 1 : 0);
   if (p.yrGap > Y.comboGap) p.yrStep = 0;

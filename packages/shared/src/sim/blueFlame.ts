@@ -2,6 +2,7 @@
 // 안쪽 불꽃 감옥(가둠) · 가운데 불꽃 기둥 · 바깥 화살 (범위에 적이 없으면 조준한 쪽으로 화살) · 모든 공격이 청염 상태이상 (sim/blueFlameKit)
 // 성흔이 가득 차면 열화상 각성: 몸이 사라지고(무적·고정) 누른 곳에 거대한 화살 폭격 (대시하면 풀림) · 푸른 날개(전용 아이템): 확률로 날개가 돋고 머리 위 활들이 앞쪽 바닥에 화살비
 // 수치 weaponsBlueFlame · 아이템 itemsBlueFlame
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { BLUE_FLAME_PERKS as K } from "../itemsBlueFlame";
 import { createRng, deriveSeed } from "../rng";
@@ -61,7 +62,7 @@ function fire(s: RunState): void {
   const more = zone === 2 && hasPerk(p, "bzSplit") ? K.bzSplit.add : zone === 1 && hasPerk(p, "bzTwin") ? K.bzTwin.add : 0;
   if (first && more > 0) {
     const others = alive(s).filter((e) => e !== first.e && zoneOf(Math.hypot(e.x - p.x, e.y - p.y) - e.r * 0.5, rings) === zone && Math.hypot(e.x - p.x, e.y - p.y) <= rings[2] + e.r);
-    for (const e of others.slice(0, more)) zoneHit(s, e, zone, rings[2]);
+    for (const e of others.slice(0, more)) srcRun(s, zone === 2 ? "bzSplit" : "bzTwin", () => zoneHit(s, e, zone, rings[2]));
   }
   const [dx, dy] = first ? [first.e.x - p.x, first.e.y - p.y] : [p.faceX, p.faceY];
   const n = Math.hypot(dx, dy) || 1;
@@ -87,7 +88,7 @@ function wingTick(s: RunState): void {
     const x = p.x + p.faceX * fwd - p.faceY * side;
     const y = p.y + p.faceY * fwd + p.faceX * side;
     const ox = (i - (F.rainCount - 1) / 2) * 7;
-    addStrike(p, { x0: p.x - p.faceY * ox, y0: p.y - 30 + p.faceX * ox * 0.3, x, y, t: F.rainFly, k: 3, mul: F.rainMul, r: F.rainR * rm });
+    srcRun(s, "bzWing", () => addStrike(p, { x0: p.x - p.faceY * ox, y0: p.y - 30 + p.faceX * ox * 0.3, x, y, t: F.rainFly, k: 3, mul: F.rainMul, r: F.rainR * rm }));
     p.bzRain!--;
   }
   if (--p.bzWing > 0) return;

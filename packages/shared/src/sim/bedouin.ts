@@ -14,7 +14,7 @@ import { addEffect, dist2, hasPerk, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_
 import { setDashMul } from "./buildSets";
 import { fenrirDashMul } from "./fenrirStats";
 import { accDash } from "./accStats";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const damageEnemy = srcFn("bedouin", () => damageEnemy_);
 
 const where = (s: RunState) => `${s.floor}/${s.roomId}`;
@@ -93,7 +93,7 @@ export function bedouinTick(s: RunState, want: boolean, speed: number): void {
   ghostTick(s, p.ck, (x, y, r) => ringHit(s, x, y, r, power(p) * K.whirlRing.damage));
   dashCut(s);
   danceTick(s);
-  vortexTick(s);
+  srcRun(s, "sandstorm", () => vortexTick(s));
   if (!want || p.attackCooldown > 0 || p.ckHeld === false) return;
   p.attackCooldown = Math.max(1, Math.round(TICK_RATE / speed));
   p.attackCount++;
@@ -139,7 +139,7 @@ function throwChakram(s: RunState): void {
   p.ckHeld = false;
   p.ckSpun = false;
   // 사막 환영: 양옆으로 환영 차크람 (끝에서 사라짐)
-  if (hasPerk(p, "desertMirage")) {
+  if (hasPerk(p, "desertMirage")) srcRun(s, "desertMirage", () => {
     const a = K.desertMirage.angle;
     for (const side of [-1, 1]) {
       const c = Math.cos(a);
@@ -148,7 +148,7 @@ function throwChakram(s: RunState): void {
       const dy = p.faceX * sn + p.faceY * c;
       s.projectiles.push({ id: s.nextId++, fromPlayer: true, x, y, prevX: x, prevY: y, r: 5, vx: dx * speed, vy: dy * speed, damage: power(p) * K.desertMirage.damage, ticksLeft: left, pierce: 99, hitIds: [], spirit: "chakram" });
     }
-  }
+  });
 }
 
 /** 던진 차크람 움직이기: 날아가며 지나간 적을 벰 · 벽이나 끝에서 떨어짐 · 돌아오는 중이면 나에게 */
@@ -224,7 +224,7 @@ function cut(s: RunState, c: ThrownChakram): void {
     c.hit.push(e.id);
     const d = normalize(c.vx, c.vy) ?? [p.faceX, p.faceY];
     damageEnemy(s, e, power(p) * c.mul, d[0], d[1]);
-    if (hasPerk(p, "scorchBlade")) ignite(e, power(p) * K.scorchBlade.damage);
+    if (hasPerk(p, "scorchBlade")) srcRun(s, "scorchBlade", () => { ignite(e, power(p) * K.scorchBlade.damage); });
   }
 }
 
@@ -240,10 +240,10 @@ function pickUp(s: RunState, c: ThrownChakram): void {
   addEffect(s, { kind: "sandspin", x: c.x, y: c.y, dirX: p.dashDirX, dirY: p.dashDirY, size: radius, maxTicks: 22 });
   if (hasPerk(p, "oasis")) healPlayer(s, p.stats.maxHp * K.oasis.heal);
   if (hasPerk(p, "heatHaze")) p.invulnTicks = Math.max(p.invulnTicks, K.heatHaze.ticks);
-  if (hasPerk(p, "quickCatch")) {
+  if (hasPerk(p, "quickCatch")) srcRun(s, "quickCatch", () => {
     if (dashMax(p) > 1) p.dashCharges = Math.min(dashMax(p), (p.dashCharges ?? 0) + 1);
     else p.dashCooldown = 0;
-  }
+  });
   if (storm) p.vortex = { x: c.x, y: c.y, left: K.sandstorm.ticks };
 }
 

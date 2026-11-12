@@ -67,10 +67,11 @@ export function rafaelTick(s: RunState, want: boolean, speed: number): void {
   roomCheck(s);
   timers(s);
   pickMarks(s);
-  stepTick(s);
-  stormTick(s);
-  chargeTick(s);
-  if (p.trKey && p.trKey >= 1 && p.trKey <= 4) rfSkill(s, p.trKey - 1);
+  srcRun(s, "k:rfSkill1", () => stepTick(s));
+  srcRun(s, "k:rfSkill2", () => stormTick(s));
+  srcRun(s, "k:rfSkill4", () => chargeTick(s));
+  const key = p.trKey;
+  if (key && key >= 1 && key <= 4) srcRun(s, `k:rfSkill${key}`, () => rfSkill(s, key - 1));
   // 공격 대기가 끝난 뒤부터 잼 (공격 속도가 느려도 3타까지 이어지게)
   p.rfGap = (p.rfGap ?? 0) + (p.attackCooldown <= 0 ? 1 : 0);
   if (p.rfGap > F.comboGap) p.rfStep = 0;

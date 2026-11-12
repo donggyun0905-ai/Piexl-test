@@ -1,4 +1,5 @@
 // 빙설 날아가는 것: 얼음 칼날(던지기 무기) · 얼음 창(머리 위에서 기다렸다 날아감) · 화살 · 유도 얼음(가까운 적을 쫓아 터짐) · 급속 얼음(관통) · 눈덩이(터짐)
+import { srcCb } from "./dmgSrc";
 import { BINGSEOL_PERKS as K } from "../itemsBingseol";
 import type { BsShot } from "./bsTypes";
 import { iceHit } from "./bsHit";
@@ -30,7 +31,7 @@ export function burst(s: RunState, x: number, y: number, r: number, dmg: number)
 /** 틱마다: 모두 나아가며 닿은 적을 때림 */
 export function shotsTick(s: RunState): void {
   const p = s.player;
-  if (p.bsShots?.length) p.bsShots = p.bsShots.filter((sh) => step(s, sh));
+  if (p.bsShots?.length) p.bsShots = p.bsShots.filter(srcCb((sh) => step(s, sh)));
 }
 
 /** 끝날 때 터지는 것 (유도 얼음·눈덩이) */

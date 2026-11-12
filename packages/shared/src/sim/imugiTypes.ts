@@ -10,7 +10,7 @@ export interface ImugiPlayerState {
   /** 오라(콤보 72 이상)에 들어섰는지 (들어설 때 한 번 보호막) */
   imAura?: boolean;
   /** 부른 용: 머리 높이 · 빛깔 · 이번에 맞힌 적 · 남은 지나감 수(쌍룡) · 이번 지나감 피해 배율 */
-  imUlt?: { y: number; color: string; hit: number[]; passes: number; mul: number };
+  imUlt?: { y: number; color: string; hit: number[]; passes: number; mul: number; second?: boolean };
   /** 맞힌 횟수 (승천·암룡 깨물기 순서) */
   imHits?: number;
   /** 청룡 번개: 적마다 남은 수·다음까지 틱 */

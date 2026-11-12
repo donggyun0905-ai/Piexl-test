@@ -1,5 +1,5 @@
 // 루나틱 공용 도우미: 맞힘(성흔) · 성흔 → 만월 각성 · 월광 표적(조준점) 띄우기 · 곧 들어갈 공격(달빛 베기·초승달 비·잔상 찌르기) · 월광 검기
-import { srcRun } from "./dmgSrc";
+import { srcEach, srcRun } from "./dmgSrc";
 import { createRng, deriveSeed } from "../rng";
 import { LUNATIC_PERKS as K } from "../itemsLunatic";
 import { LUNATIC as L } from "../weaponsLunatic";
@@ -132,7 +132,7 @@ export function wavesTick(s: RunState): void {
   const list = p.lnWaves;
   if (!list) return;
   const r = K.lnWave.r * reachOf(p);
-  for (const w of list) {
+  for (const w of srcEach(list)) {
     w.x += w.vx;
     w.y += w.vy;
     w.t--;

@@ -1,7 +1,6 @@
 // 레이저 (기계공학자) 핵심: 조사 간격·피해 · 빔 따라가기(벽·첫 적에서 멈춤) · 맞히기 · 전용 아이템 효과.
 // 무기마다 공격 방식은 laserWeapons, 틱마다 장치(포탑·지뢰 등) 처리는 laserGear
-import { srcRun, srcFn } from "./dmgSrc";
-import { logDmg } from "./dmgSrc";
+import { logDmg, srcFn, srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../content";
 import { blastAt as blastAt_, COMBAT_RULES } from "./combat";
@@ -184,10 +183,10 @@ export function trackTarget(s: RunState, e: EnemyState, ticks: number): number {
     p.overloadCount = 0;
   }
   p.beamLast = s.tick;
-  if (hasPerk(p, "overloadBurst") && Math.floor(p.beamTicks / R.OVERLOAD_TICKS) > (p.overloadCount ?? 0)) {
+  if (hasPerk(p, "overloadBurst") && Math.floor(p.beamTicks / R.OVERLOAD_TICKS) > (p.overloadCount ?? 0)) srcRun(s, "overloadBurst", () => {
     p.overloadCount = (p.overloadCount ?? 0) + 1;
     blastAt(s, e.x, e.y, R.OVERLOAD_RADIUS, p.stats.damage * R.OVERLOAD_MUL);
-  }
+  });
   return hasPerk(p, "focusCoil") ? 1 + Math.min(R.COIL_MAX, R.COIL_ADD * Math.floor(p.beamTicks / R.COIL_STEP)) : 1;
 }
 

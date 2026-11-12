@@ -28,7 +28,7 @@ export function checkBurst(s: RunState): void {
   const dmg = p.stats.damage * N.burstMul * styleOf(p).burst;
   for (const n of used) {
     arArea(s, n.x, n.y, r, dmg, "arBurst", n.kind, 36);
-    if (hasAr(p, "arEncore")) (p.arEchoes ??= []).push({ x: n.x, y: n.y, r, dmg: dmg * K.arEncore.mul, kind: n.kind, t: K.arEncore.delay });
+    if (hasAr(p, "arEncore")) srcRun(s, "arEncore", () => { (p.arEchoes ??= []).push({ x: n.x, y: n.y, r, dmg: dmg * K.arEncore.mul, kind: n.kind, t: K.arEncore.delay }); });
   }
   if (allInstruments(s)) startFinale(s);
 }

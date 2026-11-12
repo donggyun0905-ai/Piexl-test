@@ -1,5 +1,5 @@
 // 빙설 전용 아이템 기술: 공격할 때(궁극기·활·창·얼음가루·빙격·영역강화 얼음가루) · 틱마다(얼음가루 닿기·모여 유도/급속 얼음·활 화살·영역강화 결정)
-import { srcRun } from "./dmgSrc";
+import { srcCb, srcRun } from "./dmgSrc";
 import { ENEMIES } from "../enemyDefs";
 import { BINGSEOL_PERKS as K } from "../itemsBingseol";
 import { createRng, deriveSeed } from "../rng";
@@ -19,11 +19,11 @@ export function onAttack(s: RunState): void {
   const p = s.player;
   const rng = createRng(deriveSeed(s.seed, "bsAtk", s.tick, p.attackCount));
   if (hasPerk(p, "bsUlt") && !p.bsUlt && rng.nextFloat() < K.bsUlt.chance) srcRun(s, "bsUlt", () => startUlt(s));
-  if (hasPerk(p, "bsBow") && rng.nextFloat() < K.bsBow.chance && (p.bsBows ?? []).length < K.bsBow.max) setBow(s);
-  if (hasPerk(p, "bsLance") && rng.nextFloat() < K.bsLance.chance) lances(p, rng.int(K.bsLance.min, K.bsLance.max));
-  if (hasPerk(p, "bsDust")) addDust(p, rng.int(K.bsDust.min, K.bsDust.max), rng);
+  if (hasPerk(p, "bsBow") && rng.nextFloat() < K.bsBow.chance && (p.bsBows ?? []).length < K.bsBow.max) srcRun(s, "bsBow", () => setBow(s));
+  if (hasPerk(p, "bsLance") && rng.nextFloat() < K.bsLance.chance) srcRun(s, "bsLance", () => lances(p, rng.int(K.bsLance.min, K.bsLance.max)));
+  if (hasPerk(p, "bsDust")) srcRun(s, "bsDust", () => addDust(p, rng.int(K.bsDust.min, K.bsDust.max), rng));
   if (hasPerk(p, "bsSpike") && rng.nextFloat() < K.bsSpike.chance) srcRun(s, "bsSpike", () => spike(s));
-  if (hasPerk(p, "bsWall") && rng.nextFloat() < K.bsWall.dustChance) addDust(p, rng.int(K.bsWall.dustMin, K.bsWall.dustMax), rng);
+  if (hasPerk(p, "bsWall") && rng.nextFloat() < K.bsWall.dustChance) srcRun(s, "bsWall", () => addDust(p, rng.int(K.bsWall.dustMin, K.bsWall.dustMax), rng));
 }
 
 /** 빙설무장-활: 몸 왼쪽(처음)·오른쪽(둘째)에 세움 */
@@ -70,7 +70,7 @@ function dustTick(s: RunState): void {
   const p = s.player;
   if (!p.bsDust?.length) return;
   const dmg = K.bsDust.dmg * (hasPerk(p, "bsShatter") ? K.bsShatter.dust : 1);
-  p.bsDust = p.bsDust.filter((d) => {
+  p.bsDust = p.bsDust.filter(srcCb((d) => {
     d.age++;
     if (d.age > K.bsDust.life) return false;
     for (const e of s.enemies) {
@@ -79,7 +79,7 @@ function dustTick(s: RunState): void {
       return false;
     }
     return true;
-  });
+  }));
 }
 
 /** 얼음가루 need개를 모음 (오래된 것부터) → 모인 자리 · 없으면 null */
@@ -104,7 +104,7 @@ function fuseTick(s: RunState): void {
       p.bsMade10 = (p.bsMade10 ?? 0) - K.bsRapid.need;
       const t = nearestFoe(s, at[0], at[1]);
       const d = (t && normalize(t.x - at[0], t.y - at[1])) || [p.faceX, p.faceY];
-      pushShot(p, { x: at[0], y: at[1], dx: d[0], dy: d[1], r: K.bsRapid.r, dmg: p.stats.damage * K.bsRapid.mul, kind: 4, age: -K.bsRapid.gather, life: K.bsRapid.life, speed: K.bsRapid.speed, pierce: 999, hit: [] });
+      srcRun(s, "bsRapid", () => pushShot(p, { x: at[0], y: at[1], dx: d[0], dy: d[1], r: K.bsRapid.r, dmg: p.stats.damage * K.bsRapid.mul, kind: 4, age: -K.bsRapid.gather, life: K.bsRapid.life, speed: K.bsRapid.speed, pierce: 999, hit: [] }));
       if ((p.bsChain10 = (p.bsChain10 ?? 0) + 1) >= K.bsRapid.chain) {
         p.bsChain10 = 0;
         p.bsMade10 = 0;
@@ -117,7 +117,7 @@ function fuseTick(s: RunState): void {
     const at = gather(s, K.bsHoming.need, K.bsHoming.gather);
     if (at) {
       p.bsMade5 = (p.bsMade5 ?? 0) - K.bsHoming.need;
-      pushShot(p, { x: at[0], y: at[1], dx: p.faceX, dy: p.faceY, r: 6, dmg: p.stats.damage * K.bsHoming.mul, kind: 3, age: -K.bsHoming.gather, life: 150, speed: K.bsHoming.speed, pierce: 0, hit: [] });
+      srcRun(s, "bsHoming", () => pushShot(p, { x: at[0], y: at[1], dx: p.faceX, dy: p.faceY, r: 6, dmg: p.stats.damage * K.bsHoming.mul, kind: 3, age: -K.bsHoming.gather, life: 150, speed: K.bsHoming.speed, pierce: 0, hit: [] }));
       if ((p.bsChain5 = (p.bsChain5 ?? 0) + 1) >= K.bsHoming.chain) {
         p.bsChain5 = 0;
         p.bsMade5 = 0;
@@ -131,7 +131,7 @@ function fuseTick(s: RunState): void {
 function bowTick(s: RunState): void {
   const p = s.player;
   if (!p.bsBows?.length) return;
-  p.bsBows = p.bsBows.filter((b) => {
+  p.bsBows = p.bsBows.filter(srcCb((b) => {
     if (--b.left <= 0) return false;
     if (--b.cd > 0) return true;
     const t = nearestFoe(s, b.x, b.y);
@@ -142,7 +142,7 @@ function bowTick(s: RunState): void {
     b.ay = d[1];
     pushShot(p, { x: b.x, y: b.y, dx: d[0], dy: d[1], r: 5, dmg: p.stats.damage * K.bsBow.mul, kind: 2, age: 0, life: Math.round((K.bsBow.dist * 1.3) / K.bsBow.speed), speed: K.bsBow.speed, pierce: 0, hit: [] });
     return true;
-  });
+  }));
 }
 
 /** 영역강화 결정 자리 (영역 테두리를 천천히 돎) */

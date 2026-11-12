@@ -1,7 +1,7 @@
 // 정령사(비르디아): 본인은 매직 미사일만, 곁의 작은 정령 셋과 대정령(무기)이 싸움
 // 작은 정령은 30초마다 가장 오래된 하나가 떠나고 열두 종류 중 무작위(시드)로 새 정령이 옴. 대정령 공격은 spiritGreat
 // 수치는 weaponsSpirit.SPIRIT, 아이템은 itemsSpirit
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcCb, srcFn, srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { SPIRIT_PERKS as K } from "../itemsSpirit";
 import { createRng, deriveSeed } from "../rng";
@@ -121,13 +121,13 @@ function smallTick(s: RunState): void {
   }
   const list = p.spirits ?? [];
   const haste = weaponOf(p).great === "chronoSpire" ? P.chronoHaste : 1;
-  list.forEach((sp, i) => {
+  list.forEach(srcCb((sp, i) => {
     if (sp.cd > 0) {
       sp.cd--;
       return;
     }
     if (smallAttack(s, sp.kind, spiritSpot(p, i, list.length, s.tick))) sp.cd = Math.round(P.smallEvery * haste);
-  });
+  }));
 }
 
 /** 틱마다 (대정령을 들었을 때 player에서) */
@@ -142,6 +142,7 @@ export function spiritTick(s: RunState, want: boolean, speed: number): void {
   const n = hasPerk(p, "spMissile") ? 2 : 1;
   fan(s, n, 0.25, { damage: p.stats.damage * P.missileMul, spirit: "magicMissile", r: 2, range: p.stats.range });
   for (const pr of s.projectiles.slice(-n)) pr.homing = true;
+  if (n > 1) s.projectiles.at(-1)!.src ??= "spMissile";
 }
 
 /** 연습장 등에서 다시 시작할 때 */

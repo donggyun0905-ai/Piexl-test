@@ -8,7 +8,7 @@ import { renBlock } from "./ren";
 import { ENEMIES } from "../content";
 import { starHit } from "./ninja";
 import { echoHit } from "./chrono";
-import { setSrc } from "./dmgSrc";
+import { muteDot, setSrc, srcRun } from "./dmgSrc";
 import { blastAt, damageEnemy, damagePlayer, dotDamage, healPlayer, ignite, removeDead } from "./combat";
 import type { EnemyState, ProjectileState, RunState } from "./types";
 import { summonShot } from "./summonTypes";
@@ -90,7 +90,7 @@ export function updateProjectiles(s: RunState, frozen = false): void {
             if (pr.lance) lanceHit(s, e);
             pr.hpCut = pr.ambush = undefined;
             // 독버섯 포자: 독 피해로 보이게 (화면 표시만)
-            if (pr.spirit === "spore") markDot(s, e, "poison", before - e.hp);
+            if (pr.spirit === "spore") muteDot(() => markDot(s, e, "poison", before - e.hp));
           }
           if (pr.bleed) applyBleed(e);
           if (pr.dot) dotDamage(s, e, pr.dot, pr.damage * 0.3);
@@ -214,6 +214,8 @@ function steer(s: RunState, pr: ProjectileState): void {
 
 /** 갈라지는 촉: 맞은 자리에서 양옆 대각선으로 작은 탄 두 개 */
 function spawnSplits(s: RunState, pr: ProjectileState, hit: EnemyState, out: ProjectileState[]): void {
+  // 피해 출처: 갈래 화살 아이템이면 그 몫, 아니면 갈라진 탄의 출처 그대로
+  const src = hasPerk(s.player, "splitHead") ? "splitHead" : pr.src;
   for (const k of [1, -1]) {
     const vx = (pr.vx * R.SPLIT_DIAG - pr.vy * R.SPLIT_DIAG * k);
     const vy = (pr.vx * R.SPLIT_DIAG * k + pr.vy * R.SPLIT_DIAG);
@@ -231,6 +233,7 @@ function spawnSplits(s: RunState, pr: ProjectileState, hit: EnemyState, out: Pro
       ticksLeft: R.SPLIT_TICKS,
       hitIds: [hit.id],
       ...(pr.shooter !== undefined ? { shooter: pr.shooter } : {}),
+      ...(src ? { src } : {}),
       // 수집가 얼음 활: 갈라진 가지도 같은 얼음 화살
       ...(pr.spirit === "clShot" ? { spirit: pr.spirit, tint: pr.tint, slow: pr.slow } : {}),
     });
@@ -247,7 +250,7 @@ function explode(s: RunState, pr: ProjectileState, hit: EnemyState): void {
     push: hasPerk(p, "tempestBreath") ? PERKS.tempestBreath.push : 0,
   });
   if (hasPerk(p, "manaDrain") && hits + 1 >= PERKS.manaDrain.hits) healPlayer(s, PERKS.manaDrain.heal);
-  if (hasPerk(p, "echoBolt")) {
+  if (hasPerk(p, "echoBolt")) srcRun(s, "echoBolt", () => {
     s.pendingBlasts.push({ tick: s.tick + PERKS.echoBolt.ticks, x: pr.x, y: pr.y, radius, damage: pr.damage * PERKS.echoBolt.damage });
-  }
+  });
 }

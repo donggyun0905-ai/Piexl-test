@@ -2,7 +2,7 @@
 // 대시(무적) 중에 적 공격이 닿으면(대시가 아니었으면 맞았을 공격) 회피 성공 → 슬로우모션(적·적 탄만 느려짐)
 // 슬로우모션 안에 직접 클릭하면(자동 공격과 따로, 입력 skill) 확정 치명타 연속 베기(큰 검격, 여러 적) → 끝나면 슬로우모션 끝
 // 수치는 weaponsRemnant.REMNANT, 아이템은 itemsRemnant
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcFn, srcOpt, srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { REMNANT_PERKS as K } from "../itemsRemnant";
 import { REMNANT as R, type PhantomStyle } from "../weaponsRemnant";
@@ -131,7 +131,9 @@ function update(s: RunState): void {
     p.invulnTicks = Math.max(p.invulnTicks, 2);
     p.rmFrozen = slowShots(s, p.rmFrozen, R.shotSlow);
     if (--p.rmFlurry.t > 0) return;
-    flurryCut(s, p.rmFlurry.i, p.rmFlurry.n);
+    const f = p.rmFlurry;
+    // 겹친 칼: 원래 수보다 늘어난 베기는 그 아이템 몫
+    srcOpt(s, f.i >= (styleOf(p).cuts ?? 3) && "rmEcho", () => flurryCut(s, f.i, f.n));
     p.rmFlurry.i++;
     p.rmFlurry.t = R.cutGap;
     if (p.rmFlurry.i >= p.rmFlurry.n) endSlow(s);

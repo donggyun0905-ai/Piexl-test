@@ -7,7 +7,7 @@ import { bullet, fan, roll, shootPattern, SUPPORT_CHANCE, SUPPORT_TICKS } from "
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, DIR16, dist2, hasPerk, markDot, normalize, weaponOf } from "./util";
 import { pctHp } from "./pctHp";
-import { srcFn } from "./dmgSrc";
+import { muteDot, srcFn, srcOpt, srcRun } from "./dmgSrc";
 const damageEnemy = srcFn("gunExtras", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -86,7 +86,7 @@ export function droneStep(s: RunState): void {
     if (!t) return;
     const dir = normalize(t.x - d.x, t.y - d.y) ?? [1, 0];
     // 지원 드론 탄은 치명타 없음
-    if (d.support) bullet(s, d.x, d.y, dir[0], dir[1], p.stats.damage * R.SUPPORT_MUL, { ticksLeft: 40 }, 4, false);
+    if (d.support) srcOpt(s, hasPerk(p, "supportFire") && "supportFire", () => bullet(s, d.x, d.y, dir[0], dir[1], p.stats.damage * R.SUPPORT_MUL, { ticksLeft: 40 }, 4, false));
     else bullet(s, d.x, d.y, dir[0], dir[1], (p.stats.damage * Math.min(R.DRONE_DMG_STEPS, own + 1)) / R.DRONE_DMG_STEPS, { ticksLeft: 40 }, 4);
     cd[i] = d.support ? R.SUPPORT_EVERY : every;
     // 지원사격: 드론 무기는 본인이 쏘지 않으므로 드론이 쏠 때 지원 드론이 붙음 (지원 드론이 쏠 때는 안 붙음)
@@ -140,8 +140,9 @@ export function updateBleed(s: RunState): void {
     e.bleedTicks = (e.bleedTicks ?? 0) - 1;
     if (pulse && e.hp > 0) {
       const before = e.hp;
-      damageEnemy(s, e, (e.kind === "dummy" ? R.DUMMY_BLEED_HP : pctHp(e)) * R.BLEED_RATE, 0, 0);
-      markDot(s, e, "bleed", before - e.hp);
+      // 피해 출처는 출혈 한 줄로만 (두 번 세지 않게)
+      srcRun(s, "d:bleed", () => damageEnemy(s, e, (e.kind === "dummy" ? R.DUMMY_BLEED_HP : pctHp(e)) * R.BLEED_RATE, 0, 0));
+      muteDot(() => markDot(s, e, "bleed", before - e.hp));
     }
   }
 }

@@ -6,8 +6,8 @@ import { setShield, startWell } from "./gabrielShield";
 import { inCircle, inCone, rushTick as rushTick_, startRush, strike as strike_, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
-import { srcFn } from "./dmgSrc";
-const gbHit = srcFn("gabrielSkills", () => gbHit_), quake = srcFn("gabrielSkills", () => quake_), rushTick = srcFn("gabrielSkills", () => rushTick_), strike = srcFn("gabrielSkills", () => strike_);
+import { srcEach, srcFn } from "./dmgSrc";
+const gbHit = srcFn("gabrielSkills", () => gbHit_), rushTick = srcFn("gabrielSkills", () => rushTick_), strike = srcFn("gabrielSkills", () => strike_);
 
 /** 궁극기 영역 안 보호막 한도 */
 const ultCap = (s: RunState) => G.ultShield + (hasPerk(s.player, "gbImmortal") ? K.gbImmortal.shield : 0);
@@ -70,7 +70,7 @@ export function dropsTick(s: RunState): void {
   const p = s.player;
   const list = p.gbDrops;
   if (!list) return;
-  for (const d of list) if (--d.t === 0) quake(s, d.x, d.y, d.r, d.dmg, d.stun, d.press);
+  for (const d of srcEach(list)) if (--d.t === 0) quake_(s, d.x, d.y, d.r, d.dmg, d.stun, d.press);
   p.gbDrops = list.filter((d) => d.t > 0);
   if (p.gbDrops.length === 0) delete p.gbDrops;
 }

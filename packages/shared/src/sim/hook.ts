@@ -135,7 +135,8 @@ export function hookTick(s: RunState, want: boolean, speed: number): void {
   roomCheck(s);
   slideTick(s);
   if (p.hkTap && --p.hkTap.t <= 0) {
-    blast(s, p.hkTap.dx, p.hkTap.dy, [], K.hkDoubleTap.mul, true);
+    const tap = p.hkTap;
+    srcRun(s, "hkDoubleTap", () => blast(s, tap.dx, tap.dy, [], K.hkDoubleTap.mul, true));
     delete p.hkTap;
   }
   const h = p.hkHook;

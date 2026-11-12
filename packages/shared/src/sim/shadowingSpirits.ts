@@ -29,7 +29,9 @@ export function nearestFoe(s: RunState, x: number, y: number, skip: readonly num
 }
 
 /** 밀지 않는 피해 */
-export const damageEnemyLite = (s: RunState, e: EnemyState, dmg: number, dx: number, dy: number) => damageEnemy(s, e, dmg, dx, dy, false);
+// 다른 캐릭터(실베르)도 같이 쓰는 도우미라 파일 출처를 달지 않음 (부른 쪽 출처로 셈 · 그림 소환은 아래 inkLite)
+export const damageEnemyLite = (s: RunState, e: EnemyState, dmg: number, dx: number, dy: number) => damageEnemy_(s, e, dmg, dx, dy, false);
+const inkLite = (s: RunState, e: EnemyState, dmg: number, dx: number, dy: number) => damageEnemy(s, e, dmg, dx, dy, false);
 
 /** 범위 피해 + 그림 줄 터짐 · 묶음·불·밀기 (보스는 밀리지 않음) · 맞힌 수 */
 export function inkArea(s: RunState, x: number, y: number, r: number, dmg: number, row: number, opt: { stun?: number; burn?: number; push?: number } = {}): number {
@@ -38,7 +40,7 @@ export function inkArea(s: RunState, x: number, y: number, r: number, dmg: numbe
   for (const e of s.enemies) {
     if (!alive(e) || (e.x - x) ** 2 + (e.y - y) ** 2 > (r + e.r) ** 2) continue;
     const d = normalize(e.x - x, e.y - y) ?? [0, 0];
-    damageEnemyLite(s, e, dmg, d[0], d[1]);
+    inkLite(s, e, dmg, d[0], d[1]);
     if (opt.stun) e.stunTicks = Math.max(e.stunTicks ?? 0, opt.stun);
     if (opt.burn) ignite(e, opt.burn);
     if (opt.push && !ENEMIES[e.kind].boss) {
@@ -93,7 +95,7 @@ function moveSpirit(s: RunState, sp: InkSpirit): boolean {
     const d = normalize(sp.vx, sp.vy) ?? [0, 0];
     if (sp.burst) inkArea(s, sp.x, sp.y, sp.burst, sp.dmg, sp.row);
     else {
-      damageEnemyLite(s, e, sp.dmg, d[0], d[1]);
+      inkLite(s, e, sp.dmg, d[0], d[1]);
       addEffect(s, { kind: "sdBurst", x: e.x, y: e.y, dirX: d[0], dirY: d[1], size: sp.r * 2, style: sp.row, maxTicks: 18 });
     }
     if (sp.once) return false;

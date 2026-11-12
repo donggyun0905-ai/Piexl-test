@@ -170,7 +170,7 @@ function update(s: RunState): void {
   for (const e of s.enemies) {
     if ((e.fgRad ?? 0) <= 0 || e.hp <= 0) continue;
     e.fgRad = (e.fgRad ?? 0) - 1;
-    if (e.fgRad % TICK_RATE === 0) dotDamage(s, e, "radiance", e.fgRadDmg ?? 0);
+    if (e.fgRad % TICK_RATE === 0) srcRun(s, "fgShine", () => dotDamage(s, e, "radiance", e.fgRadDmg ?? 0));
   }
 }
 

@@ -11,7 +11,7 @@ import { alive, isBoss, stun } from "./s2Kit";
 import { statusHit as statusHit_ } from "./statusHit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid, weaponOf } from "./util";
-import { srcFn, srcEach } from "./dmgSrc";
+import { srcEach, srcFn, srcRun } from "./dmgSrc";
 const damageEnemy = srcFn("orcaMoves", () => damageEnemy_), statusHit = srcFn("orcaMoves", () => statusHit_);
 
 export const isOrca = (p: PlayerState) => p.characterId === "orca";
@@ -120,7 +120,7 @@ function burst(s: RunState, k: OcShark): void {
   const echo = hasPerk(p, "ocEcho");
   const r = O.burstR * k.size * (echo ? K.ocEcho.r : 1);
   for (const e of alive(s)) if (dist2(e, k) <= (r + e.r) ** 2) ocHit(s, e, p.stats.damage * O.burstMul * k.mul, k.x, k.y, 8, true);
-  if (echo) geyserAt(s, k.x, k.y, O.geyserR, p.stats.damage * O.geyserMul * 0.6 * k.mul);
+  if (echo) srcRun(s, "ocEcho", () => geyserAt(s, k.x, k.y, O.geyserR, p.stats.damage * O.geyserMul * 0.6 * k.mul));
   if (orcaOf(p).pool) (p.ocPools ??= []).push({ x: k.x, y: k.y, t: O.poolTicks });
   addEffect(s, { kind: "ocBurst", x: k.x, y: k.y, dirX: k.dx, dirY: k.dy, size: r, maxTicks: 22, ...tint(s) });
 }

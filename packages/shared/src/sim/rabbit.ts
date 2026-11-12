@@ -1,6 +1,6 @@
 // 래빗(실베르): 누르면 바라보는 쪽 앞에 토끼 망치를 내리찍어 땅울림(원) 피해 · 밀침
 // 전용 패시브: 땅울림 파동·토끼인장·유령 망치·갈라진 땅은 sim/rabbitMarks · 슈퍼 럭키(초거대 망치)는 sim/rabbitUlt
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcFn, srcOpt, srcRun } from "./dmgSrc";
 import { ENEMIES } from "../enemyDefs";
 import { RABBIT_PASSIVES, RABBIT_PERKS as K } from "../itemsRabbit";
 import { createRng, deriveSeed } from "../rng";
@@ -81,13 +81,13 @@ function swing(s: RunState, speed: number): void {
     p.rbHomers = (p.rbHomers ?? 0) + 1;
     if (hasPerk(p, "rbFever")) p.rbFever = K.rbFever.ticks;
   }
-  const hit = slam(s, x, y, { homer, origin: true });
+  const hit = srcOpt(s, homer && "rbHomerun", () => slam(s, x, y, { homer, origin: true }));
   if (hasPerk(p, "rbStomp")) p.rbStack = Math.min(K.rbStomp.max, (p.rbStack ?? 0) + 1);
   slamExtras(s, x, y, hit);
   if (hasPerk(p, "rbBell") && roll(s, "rbBell") < K.rbBell.chance * luckMul(p)) srcRun(s, "rbBell", () => {
     rbArea(s, p.x, p.y, K.rbBell.r * hammerSize(p), p.stats.damage * K.rbBell.mul, "rbBell", { stun: K.rbBell.stun });
   });
-  if (canUlt(s) && roll(s, "rbLucky") < K.rbLucky.chance * luckMul(p)) startUlt(s);
+  if (canUlt(s) && roll(s, "rbLucky") < K.rbLucky.chance * luckMul(p)) srcRun(s, "rbLucky", () => startUlt(s));
 }
 
 /** 슈퍼 럭키를 쓸 수 있는지 (전용 아이템 7개 · 쿨타임 · 패왕전·대결 빼고) */
@@ -114,7 +114,7 @@ export function rabbitTick(s: RunState, want: boolean, speed: number): void {
   if (p.rbDash && !dashing && hasPerk(p, "rbHop")) srcRun(s, "rbHop", () => slam(s, p.x, p.y, { size: K.rbHop.size }));
   p.rbDash = dashing;
   marksTick(s);
-  ultTick(s);
+  srcRun(s, "rbLucky", () => ultTick(s));
 }
 
 /** 받는 피해 배율 (폭신한 솜털) */

@@ -73,7 +73,7 @@ export function leoTaken(s: RunState): number {
   if (!isLeo(p) || !hasPerk(p, "leArmor")) return 1;
   if (!p.leArmorCd) {
     p.leArmorCd = K.leArmor.gap;
-    for (const e of inCircle(s, p.x, p.y, K.leArmor.r)) strike(s, e, leoPower(s) * K.leArmor.mul, 10, "shock");
+    srcRun(s, "leArmor", () => inCircle(s, p.x, p.y, K.leArmor.r).forEach((e) => strike(s, e, leoPower(s) * K.leArmor.mul, 10, "shock")));
     addEffect(s, { kind: "leSpark", x: p.x, y: p.y - 4, dirX: 0, dirY: 0, size: K.leArmor.r, maxTicks: 18, width: 1 });
   }
   return K.leArmor.taken;

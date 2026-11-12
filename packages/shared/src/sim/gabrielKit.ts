@@ -75,7 +75,7 @@ export function gabrielHurt(s: RunState, env: boolean): void {
 export function gabrielKill(s: RunState, e: EnemyState): void {
   const p = s.player;
   if (!isGabriel(p) || !hasPerk(p, "gbCrush") || !(e.gbPress ?? 0)) return;
-  quake(s, e.x, e.y, K.gbCrush.r, p.stats.maxHp * K.gbCrush.hpMul, 0, true);
+  srcRun(s, "gbCrush", () => quake(s, e.x, e.y, K.gbCrush.r, p.stats.maxHp * K.gbCrush.hpMul, 0, true));
 }
 
 /** 스킬마다 대기 틱 (아이템 반영) */

@@ -17,7 +17,7 @@ export function slamExtras(s: RunState, x: number, y: number, hit: EnemyState[])
   const size = hammerSize(p);
   const rng = createRng(deriveSeed(s.seed, "rbExtra", s.tick, p.attackCount));
   const triple = hasPerk(p, "rbTriple") && rng.nextFloat() < K.rbTriple.chance * luckMul(p);
-  if (triple || hasPerk(p, "rbQuake")) sendWaves(s, x, y, triple);
+  if (triple || hasPerk(p, "rbQuake")) srcRun(s, triple ? "rbTriple" : "rbQuake", () => sendWaves(s, x, y, triple));
   const marks = (p.rbMarks ??= []);
   if (hasPerk(p, "rbSeal") && rng.nextFloat() < K.rbSeal.chance * luckMul(p)) srcRun(s, "rbSeal", () => { marks.push({ x, y, kind: 0, age: 0, life: K.rbSeal.delay, r: K.rbSeal.r * size, dmg: p.stats.damage * K.rbSeal.mul }); });
   if (hasPerk(p, "rbCrack")) srcRun(s, "rbCrack", () => { marks.push({ x, y, kind: 2, age: 0, life: K.rbCrack.ticks, r: H.slamR * size * K.rbCrack.size, dmg: p.stats.damage * K.rbCrack.mul }); });

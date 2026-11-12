@@ -1,6 +1,6 @@
 // 풍류사 전용 아이템 효과: 축지법(순간이동 대시) · 분신술(따로 돌아다니며 공격) · 오색 구름 자국 · 먹물 웅덩이 · 풍류 피리
 // 둔갑술·의적 주머니 돈·활빈당 깃발·구름 지형 피해는 sim/pungHooks (다른 파일에 거는 갈고리)
-import { srcRun, srcFn, srcEach } from "./dmgSrc";
+import { srcCb, srcEach, srcFn, srcRun } from "./dmgSrc";
 import { PUNGRYU_PERKS as K } from "../itemsPungryu";
 import { damageEnemy as damageEnemy_ } from "./combat";
 import { letterFrom, puPower } from "./pungryuKit";
@@ -60,7 +60,7 @@ export function cloneTick(s: RunState): void {
   if (!p.puClones?.length) return;
   const n = p.puClones.length;
   const taken = new Set<number>();
-  p.puClones.forEach((c, i) => {
+  p.puClones.forEach(srcCb((c, i) => {
     c.t--;
     const e = roamStep(s, c, i, n, K.puClone, taken);
     const d = e && normalize(e.x - c.x, e.y - c.y);
@@ -68,7 +68,7 @@ export function cloneTick(s: RunState): void {
     if (--c.cd > 0 || !e || !d || dist2(e, c) > (K.puClone.range + e.r) ** 2) return;
     c.cd = K.puClone.every;
     letterFrom(s, c.x, c.y, d[0], d[1], puPower(s) * K.puClone.mul, c.k++ % 4);
-  });
+  }));
   p.puClones = p.puClones.filter((c) => c.t > 0);
 }
 

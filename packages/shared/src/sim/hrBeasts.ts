@@ -9,7 +9,7 @@ import type { HrBeast, HrDecoy } from "./hrTypes";
 import { bodyHurt, bodyStep, bringNear, foeNear } from "./puppetAllies";
 import type { RunState } from "./types";
 import { addEffect, keepInRoom, markCrit, normalize, roomGrid } from "./util";
-import { srcFn, srcCb } from "./dmgSrc";
+import { srcFn, srcCb, srcRun } from "./dmgSrc";
 const hrArea = srcFn("hrBeasts", () => hrArea_), hrHit = srcFn("hrBeasts", () => hrHit_);
 
 type P = RunState["player"];
@@ -33,11 +33,11 @@ function spawnBeast(s: RunState, kind: number, i: number): void {
 export function summonOnAttack(s: RunState): void {
   const p = s.player;
   const count = (kind: number) => (p.hrBeasts ?? []).filter((b) => b.kind === kind).length;
-  if (hasHr(p, "hrWolf") && count(0) < K.hrWolf.max && hrRoll(s, "hrWolf") < chance(p, K.hrWolf.chance)) {
+  if (hasHr(p, "hrWolf") && count(0) < K.hrWolf.max && hrRoll(s, "hrWolf") < chance(p, K.hrWolf.chance)) srcRun(s, "hrWolf", () => {
     for (let i = 0; i < K.hrWolf.n && count(0) < K.hrWolf.max; i++) spawnBeast(s, 0, i);
-  }
-  if (hasHr(p, "hrTiger") && count(1) < K.hrTiger.max && hrRoll(s, "hrTiger") < chance(p, K.hrTiger.chance)) spawnBeast(s, 1, 0);
-  if (hasHr(p, "hrDecoy") && (p.hrDecoys?.length ?? 0) < K.hrDecoy.max && hrRoll(s, "hrDecoy") < chance(p, K.hrDecoy.chance)) {
+  });
+  if (hasHr(p, "hrTiger") && count(1) < K.hrTiger.max && hrRoll(s, "hrTiger") < chance(p, K.hrTiger.chance)) srcRun(s, "hrTiger", () => { spawnBeast(s, 1, 0); });
+  if (hasHr(p, "hrDecoy") && (p.hrDecoys?.length ?? 0) < K.hrDecoy.max && hrRoll(s, "hrDecoy") < chance(p, K.hrDecoy.chance)) srcRun(s, "hrDecoy", () => {
     const hp = Math.round(K.hrDecoy.hp * petHp(p));
     const rng = hrRng(s, "hrDecoyAt");
     const x = ROOM_MIN_X + 12 + rng.nextFloat() * Math.max(1, ROOM_MAX_X - ROOM_MIN_X - 24);
@@ -48,7 +48,7 @@ export function summonOnAttack(s: RunState): void {
     d.prevY = d.y;
     (p.hrDecoys ??= []).push(d);
     addEffect(s, { kind: "hrPuff", x: d.x, y: d.y, dirX: 0, dirY: 0, size: 16, style: 1, maxTicks: 20 });
-  }
+  });
 }
 
 /** 범: 혼령사냥으로 은신 중이면 커짐 (몸·체력) · 풀리면 돌아옴 */
@@ -110,7 +110,7 @@ function beastTick(s: RunState, b: HrBeast, i: number): boolean {
 export function beastsTick(s: RunState, moved: boolean): void {
   const p = s.player;
   if (p.hrBeasts?.length) {
-    if (moved) p.hrBeasts.forEach((b, i) => bringNear(s, b, i));
+    if (moved) p.hrBeasts.forEach(srcCb((b, i) => bringNear(s, b, i)));
     p.hrBeasts = p.hrBeasts.filter(srcCb((b, i) => beastTick(s, b, i)));
   }
   if (!p.hrDecoys?.length) return;

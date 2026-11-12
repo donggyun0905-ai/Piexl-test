@@ -165,7 +165,7 @@ export function trackerTick(s: RunState, want: boolean, speed: number): void {
   const b = p.trBurst;
   if (b && --b.gap <= 0) {
     const a = (roll(s, "trBurst", b.left) - 0.5) * 2 * T.burstSpread * tuneVal(s.player, "spread");
-    srcRun(s, "f:trackerSkill", () => shoot(s, a, { damage: p.stats.damage * T.burstMul * shotMul(s, false, b.left), spirit: "trBurst", range: p.stats.range * 0.8, speed: 7, r: 2 }));
+    srcRun(s, "k:trSkill3", () => shoot(s, a, { damage: p.stats.damage * T.burstMul * shotMul(s, false, b.left), spirit: "trBurst", range: p.stats.range * 0.8, speed: 7, r: 2 }));
     p.trShot = s.tick;
     b.gap = T.burstGap;
     if (--b.left <= 0) delete p.trBurst;
@@ -175,15 +175,15 @@ export function trackerTick(s: RunState, want: boolean, speed: number): void {
   if (am) {
     am.t--;
     if (am.gap > 0) am.gap--;
-    if (am.gap <= 0 && want && p.aimDist !== undefined) ambushShot(s);
+    if (am.gap <= 0 && want && p.aimDist !== undefined) srcRun(s, "k:trSkill1", () => ambushShot(s));
     if (am.t <= 0) endAmbush(p);
   }
   // 강력한 한방: 모으는 동안 앞에 벽 (움직일 수 있음, 암습 저격과 같이 쓸 수 있음)
   if (p.trCharge) {
-    wallBlock(s);
+    srcRun(s, "k:trSkill2", () => wallBlock(s));
     if (--p.trCharge <= 0) {
       delete p.trCharge;
-      powerShot(s);
+      srcRun(s, "k:trSkill2", () => powerShot(s));
     }
   }
   // 평소 사격은 암습 저격·모으기 중에는 쉼

@@ -4,6 +4,7 @@
 // - 게임 결과에 영향을 주는 계산에는 Math.sin·cos·atan2·pow 등을 쓰지 않음 (사칙연산·sqrt만)
 //
 // 파일: types(입력·상태) · util(수치·도우미) · run(시작·한 틱 진행) · floor(층 지도) · rooms(방 이동·문·계단) · items(아이템 줍기·바꾸기·사용) · player · enemies · projectiles · combat(피해) · laser·laserGear(기계공학자 레이저·장치)
+import { srcBind, srcRun } from "./dmgSrc";
 import { START_GOLD } from "./loot";
 import { PERKS } from "../perks";
 import { petRevive } from "./lobbyPet";
@@ -143,6 +144,7 @@ export function createRun(seed: number, characterId: CharacterId, unlocks: reado
 
 /** 한 틱 진행 (상태를 직접 바꿈) · 단련의 방에서 강화한 패시브 효과 수치가 이 틱 동안 그 사람에게 적용 (sim/gymPerks) */
 export function stepSim(s: RunState, input: TickInput): void {
+  srcBind(s);
   withGymFx(s, () => stepOnce(s, input));
 }
 
@@ -209,14 +211,14 @@ export function checkDeath(s: RunState): boolean {
   const p = s.player;
   if (kingFall(s)) return false;
   const dying = p.hp <= 0;
-  if (p.hp <= 0 && !s.sudden && hasPerk(p, "secondWind")) {
+  if (p.hp <= 0 && !s.sudden && hasPerk(p, "secondWind")) srcRun(s, "secondWind", () => {
     // 두 번째 숨: 한 번 되살아나고 아이템은 사라짐
     splicePassives(p, p.passives.indexOf("secondWind"), 1);
     recalcStats(s);
     p.hp = Math.ceil(p.stats.maxHp * PERKS.secondWind.hp);
     p.invulnTicks = 120;
     addEffect(s, { kind: "burst", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 14, maxTicks: 16 });
-  }
+  });
   // 아홉 목숨(야수): 층마다 한 번 체력 1로 버팀
   // 여신의 축복: 한 번 체력 50%로 되살아남 (아이템은 남아 대시·이동 속도 효과는 그대로)
   if (p.hp <= 0 && !s.sudden && hasPerk(p, "goddessBlessing") && !p.blessUsed) {

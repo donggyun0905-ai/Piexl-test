@@ -34,10 +34,10 @@ export function renBlock(s: RunState, pr: ProjectileState): boolean {
   if (createRng(deriveSeed(s.seed, "renBlock", pr.id, s.tick)).nextFloat() >= chance) return false;
   addEffect(s, { kind: "hit", x: pr.x, y: pr.y, dirX: 0, dirY: 0, size: 5, maxTicks: 8, tint: "#c8a060" });
   if (hasPerk(p, "renRegrow")) healPlayer(s, K.renRegrow.heal);
-  if (hasPerk(p, "renReflect")) {
+  if (hasPerk(p, "renReflect")) srcRun(s, "renReflect", () => {
     // 쏜 적 쪽으로 되돌려 보냄 (내 탄이 됨)
     s.projectiles.push({ ...pr, id: s.nextId++, fromPlayer: true, vx: -pr.vx, vy: -pr.vy, damage: p.stats.damage * K.renReflect.mul, ticksLeft: 90, pierce: 0, hitIds: [] });
-  }
+  });
   return true;
 }
 

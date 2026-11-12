@@ -16,38 +16,67 @@ let dotMuted = false;
 /** 이 구간에서 준 피해는 id(패시브)의 것 · 구간 안에서 새로 생긴 내 탄·잠시 뒤 폭발에도 출처를 답 (안쪽 구간이 먼저) */
 export function srcRun<T>(s: RunState, id: string, fn: () => T): T {
   const was = cur;
-  const shots = s.projectiles;
-  const blasts = s.pendingBlasts;
-  const n = shots.length;
-  const m = blasts.length;
-  const pl = s.player as unknown as Record<string, unknown[] | undefined>;
-  const lists = LISTS.map((k) => pl[k]);
-  const lens = lists.map((l) => l?.length ?? 0);
+  const snap = snapOf((runRef = s));
   cur = id;
   try {
     return fn();
   } finally {
-    // 구간 안에서 새로 생긴 소환물·장판에도 출처를 달아 둠 (나중에 때릴 때 srcEach·srcCb가 꺼내 씀)
-    for (let k = 0; k < LISTS.length; k++) {
-      const l = pl[LISTS[k]!];
-      const old = lists[k];
-      if (!l || (l === old && l.length === lens[k])) continue;
-      const had = old && l !== old ? new Set(old) : null;
-      for (let i = l === old ? lens[k]! : 0; i < l.length; i++) {
-        const o = l[i] as Tagged | null;
-        if (o && typeof o === "object" && !had?.has(o)) o.dsrc ??= id;
-      }
-    }
-    if (s.projectiles === shots) for (let i = n; i < shots.length; i++) if (shots[i]!.fromPlayer) shots[i]!.src ??= id;
-    if (s.pendingBlasts === blasts) for (let i = m; i < blasts.length; i++) blasts[i]!.src ??= id;
+    tagNew(s, snap, id);
     cur = was;
   }
 }
 
+/** 지금 판 (srcEach·srcCb가 새로 생긴 것에 출처를 달 때 씀 · srcRun·srcBind가 정함) */
+let runRef: RunState | undefined;
+export const srcBind = (s: RunState) => void (runRef = s);
+
+interface Snap {
+  shots: RunState["projectiles"];
+  blasts: RunState["pendingBlasts"];
+  n: number;
+  m: number;
+  lists: (unknown[] | undefined)[];
+  lens: number[];
+}
+const listsOf = (s: RunState) => s.player as unknown as Record<string, unknown[] | undefined>;
+function snapOf(s: RunState): Snap {
+  const pl = listsOf(s);
+  const lists = LISTS.map((k) => pl[k]);
+  return { shots: s.projectiles, blasts: s.pendingBlasts, n: s.projectiles.length, m: s.pendingBlasts.length, lists, lens: lists.map((l) => l?.length ?? 0) };
+}
+/** 구간 안에서 새로 생긴 소환물·장판·탄·폭발에 출처를 달아 둠 (나중에 때릴 때 srcEach·srcCb가 꺼내 씀) */
+function tagNew(s: RunState, sn: Snap, id: string): void {
+  const pl = listsOf(s);
+  for (let k = 0; k < LISTS.length; k++) {
+    const l = pl[LISTS[k]!];
+    const old = sn.lists[k];
+    if (!l || (l === old && l.length === sn.lens[k])) continue;
+    const had = old && l !== old ? new Set(old) : null;
+    for (let i = l === old ? sn.lens[k]! : 0; i < l.length; i++) {
+      const o = l[i] as Tagged | null;
+      if (o && typeof o === "object" && !had?.has(o)) o.dsrc ??= id;
+    }
+  }
+  const shots = sn.shots;
+  if (s.projectiles === shots) for (let i = sn.n; i < shots.length; i++) if (shots[i]!.fromPlayer) shots[i]!.src ??= id;
+  if (s.pendingBlasts === sn.blasts) for (let i = sn.m; i < sn.blasts.length; i++) sn.blasts[i]!.src ??= id;
+}
+
+/** id가 있을 때만 그 출처로 (덤으로 한 번 더 나가는 공격: 두 번째부터 패시브 몫) */
+export function srcOpt<T>(s: RunState, id: string | false | undefined, fn: () => T): T {
+  return id ? srcRun(s, id, fn) : fn();
+}
+
 /** 계속 남는 소환물·장판·예약 공격 목록 (플레이어 상태의 이름): 패시브 구간에서 만든 것은 만든 패시브를 달고 다님 */
-const LISTS = "lnStrikes oStorms echoes bmBombs apDooms zsClouds wvBits wdMoon vyMarks tkWhirls summons stStars spirits spGas spDrops skLines shades sdZones sdSpirits sbShots sbBombs rfStorms rdFire rWyrms puFalls ppSpots ppDolls ppAllies pgMarks ocPools ocDarts oZones oSplash nlShots nlDets mqShells mnCracks mnBombs mcQueue mcFalls mcChains lvWhales lvPools lnWaves imBolts icZones icWaves iaThreads hrOwls hrDecoys hrBeasts ghosts gbDrops foresights fnWaves fnCracks flyers fgFalls ecHoles ecCuts eaQueue cyEmp crZones crCracks clQueue bzStrikes byWhirls btWaves btExecs bmFires bjVolleys bjShots awFields asWaves asSplit asRapids asFists arShots arEchoes rvUnits rvEvents apDrops allies ducklings hkSlides mnNodes mnPits mrStreams mrBlades puClones puInks rbWaves rbMarks tlSharks apFields lxQ".split(" ");
+const LISTS = "lnStrikes oStorms echoes bmBombs apDooms zsClouds wvBits wdMoon vyMarks tkWhirls summons stStars spirits spGas spDrops skLines shades sdZones sdSpirits sbShots sbBombs rfStorms rdFire rWyrms puFalls ppSpots ppDolls ppAllies pgMarks ocPools ocDarts oZones oSplash nlShots nlDets mqShells mnCracks mnBombs mcQueue mcFalls mcChains lvWhales lvPools lnWaves imBolts icZones icWaves iaThreads hrOwls hrDecoys hrBeasts ghosts gbDrops foresights fnWaves fnCracks flyers fgFalls ecHoles ecCuts eaQueue cyEmp crZones crCracks clQueue bzStrikes byWhirls btWaves btExecs bmFires bjVolleys bjShots awFields asWaves asSplit asRapids asFists arShots arEchoes rvUnits rvEvents apDrops allies ducklings hkSlides mnNodes mnPits mrStreams mrBlades puClones puInks rbWaves rbMarks tlSharks apFields lxQ vyVolley bySwords byShots jkCards bsBows bsDust bsShots".split(" ");
 interface Tagged {
   dsrc?: string;
+}
+
+/** 소환물 하나에 만든 출처를 직접 달기 (목록 밖에서 만들어 나중에 넣을 때) */
+export function srcTag<T extends object>(o: T, id: string): T {
+  (o as Tagged).dsrc ??= id;
+  return o;
 }
 
 /** 소환물 목록을 돌 때: 하나마다 그것을 만든 패시브를 출처로 (없으면 지금 출처 그대로) */
@@ -55,8 +84,13 @@ export function* srcEach<T>(list: readonly T[]): Generator<T> {
   const was = cur;
   try {
     for (const o of list) {
-      cur = (o as Tagged | null)?.dsrc ?? was;
+      const id = (o as Tagged | null)?.dsrc;
+      const s = id ? runRef : undefined;
+      const snap = s && snapOf(s);
+      cur = id ?? was;
       yield o;
+      // 그 소환물이 이번에 새로 만든 탄·소환물도 같은 출처를 달고 감
+      if (s && snap) tagNew(s, snap, id!);
     }
   } finally {
     cur = was;
@@ -67,7 +101,7 @@ export function* srcEach<T>(list: readonly T[]): Generator<T> {
 export function srcCb<T, R>(fn: (o: T, i: number) => R): (o: T, i: number) => R {
   return (o, i) => {
     const id = (o as Tagged | null)?.dsrc;
-    return id ? srcAs(id, () => fn(o, i)) : fn(o, i);
+    return id ? (runRef ? srcRun(runRef, id, () => fn(o, i)) : srcAs(id, () => fn(o, i))) : fn(o, i);
   };
 }
 

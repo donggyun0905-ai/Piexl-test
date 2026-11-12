@@ -10,7 +10,7 @@ import { blocksShot } from "./layout";
 import { alive, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid } from "./util";
-import { srcFn, srcCb, srcEach } from "./dmgSrc";
+import { srcCb, srcEach, srcFn, srcOpt } from "./dmgSrc";
 const mrHit = srcFn("miryuFlow", () => mrHit_);
 
 /** 물길이 사라질 때: 빙류는 얼음으로 깨지고, 폭포 아이템은 무너져 내림 (적마다 한 번) */
@@ -26,7 +26,7 @@ function streamEnd(s: RunState, w: MrStream): void {
     for (const e of alive(s)) {
       if (hit.includes(e.id) || dist2(e, { x, y }) > (r + e.r) ** 2) continue;
       hit.push(e.id);
-      mrHit(s, e, p.stats.damage * mul, x, y, 0, true);
+      srcOpt(s, !frost && "mrCascade", () => mrHit(s, e, p.stats.damage * mul, x, y, 0, true));
     }
     if (i % 2 === 0) addEffect(s, { kind: frost ? "mrShatter" : "mrBurst", x, y, dirX: 0, dirY: -1, size: r, maxTicks: 22 });
   });

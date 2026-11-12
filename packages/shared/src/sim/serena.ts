@@ -9,7 +9,7 @@ import { charmTick, dashTick, orbTick, snSkill, whirlTick } from "./serenaSkills
 import { inCone, roomKey } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const snHit = srcFn("serena", () => snHit_), thornTick = srcFn("serena", () => thornTick_);
 
 /** 1·2타: 앞 넓은 부채꼴을 채찍으로 (k 0 오른쪽에서 · 1 왼쪽에서) */
@@ -46,12 +46,13 @@ export function serenaTick(s: RunState, want: boolean, speed: number): void {
   const p = s.player;
   roomCheck(s);
   timers(s);
-  thornTick(s);
-  dashTick(s);
+  srcRun(s, "n:snThorn", () => thornTick(s));
+  srcRun(s, "k:snSkill1", () => dashTick(s));
   charmTick(s);
-  orbTick(s);
-  whirlTick(s);
-  if (p.trKey && p.trKey >= 1 && p.trKey <= 4) snSkill(s, p.trKey - 1);
+  srcRun(s, "n:snOrb", () => orbTick(s));
+  srcRun(s, "", () => whirlTick(s));
+  const key = p.trKey;
+  if (key && key >= 1 && key <= 4) srcRun(s, `k:snSkill${key}`, () => snSkill(s, key - 1));
   // 공격 대기가 끝난 뒤부터 잼 (공격 속도가 느려도 3타까지 이어지게)
   p.snGap = (p.snGap ?? 0) + (p.attackCooldown <= 0 ? 1 : 0);
   if (p.snGap > N.comboGap) p.snStep = 0;

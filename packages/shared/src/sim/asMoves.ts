@@ -1,5 +1,5 @@
 // 아수라 기본 펀치와 공격마다 붙는 기술: 파동(부채꼴) · 연발(연속 펀치) · 육비 난무(날아가는 주먹) · 수라장 · 아수라 각성 굴리기
-import { srcCb, srcEach } from "./dmgSrc";
+import { srcCb, srcEach, srcRun } from "./dmgSrc";
 import { ASURA_PERKS as K } from "../itemsAsura";
 import { ASURA_FIST as F } from "../weaponsAsura";
 import { asArea, asHit, asRoll } from "./asHit";
@@ -29,15 +29,15 @@ export function afterAttack(s: RunState, x: number, y: number, size: number, hit
     p.asFury = Math.min(K.asFury.max, (p.asFury ?? 0) + 1);
     p.asFuryAt = s.tick;
   }
-  if (hasAs(p, "asWave")) (p.asWaves ??= []).push({ at: s.tick + K.asWave.delay, x, y, dx: p.faceX, dy: p.faceY, size });
+  if (hasAs(p, "asWave")) srcRun(s, "asWave", () => { (p.asWaves ??= []).push({ at: s.tick + K.asWave.delay, x, y, dx: p.faceX, dy: p.faceY, size }); });
   const barrage = hasAs(p, "asBarrage");
-  if (hasAs(p, "asRapid") && asRoll(s, "asRapid") < (barrage ? K.asBarrage.chance : K.asRapid.chance)) {
+  if (hasAs(p, "asRapid") && asRoll(s, "asRapid") < (barrage ? K.asBarrage.chance : K.asRapid.chance)) srcRun(s, "asRapid", () => {
     const n = barrage ? K.asBarrage.hits : K.asRapid.hits;
     const r = K.asRapid.r * size;
     (p.asRapids ??= []).push({ x, y, dx: p.faceX, dy: p.faceY, r, dmg: p.stats.damage * K.asRapid.mul, left: n, n });
     addEffect(s, { kind: "asRapid", x, y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: n });
-  }
-  if (hasAs(p, "asFlying")) launchFist(s);
+  });
+  if (hasAs(p, "asFlying")) srcRun(s, "asFlying", () => { launchFist(s); });
   const chance = hasAs(p, "asSix") ? K.asSix.chance : K.asUlt.chance;
   if (hasAs(p, "asUlt") && !(p.asAwake ?? 0) && !s.pw && asRoll(s, "asUlt") < chance) startAwake(s);
 }

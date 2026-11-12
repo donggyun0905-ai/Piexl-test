@@ -10,7 +10,7 @@ import { alive, inCircle, inCone, poison, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
 import { pctHp } from "./pctHp";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const strike = srcFn("plague", () => strike_);
 
 const kindOf = (p: PlayerState): PlagueKind => weaponOf(p).plague ?? "swarm";
@@ -159,7 +159,7 @@ function update(s: RunState): void {
     if (e.hp > 0 && e.plague % TICK_RATE === 0) dotDamage(s, e, "rot", (e.plagueDmg ?? 0) * dotMul(p));
     if (e.hp <= 0 && !e.plSpread) {
       e.plSpread = true;
-      if (hasPerk(p, "plContagion")) for (const o of inCircle(s, e.x, e.y, K.plContagion.r)) infect(s, o);
+      if (hasPerk(p, "plContagion")) srcRun(s, "plContagion", () => { for (const o of inCircle(s, e.x, e.y, K.plContagion.r)) infect(s, o); });
     }
   }
   if (hasPerk(p, "plBloodlet"))

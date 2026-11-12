@@ -1,6 +1,7 @@
 // 미카엘라(성국, 공허의 인도자): 누르고 있으면 그 무기의 3연격 (무기마다 다른 기술 셋, michaelaWeaponMoves · 기술 계산은 sim/michaelaMoves)
 // 무기는 사용자 그림에서 잘라 낸 37개(창 21 · 검 16, michaelaWeaponList) · 무기마다 속성 8가지 중 하나 → 그 속성으로 맞힘 (sim/michaelaKit)
 // 박힌 무기에 닿거나 대시로 순간 이동해 들면 그 무기의 기술 둘이 연달아 나감 (sim/michaelaSkills·michaelaKit) · 스킬 넷은 숫자 키
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { MICHAELA as M } from "../weaponsMichaela";
 import { MC_WEAPON_MOVES } from "../michaelaWeaponMoves";
@@ -17,7 +18,7 @@ function roomCheck(s: RunState): void {
   if (p.mcRoom === key) return;
   p.mcRoom = key;
   for (const k of ["mcBlades", "mcFalls", "mcChains", "mcUlt", "mcQueue", "mcShiftT"] as const) delete p[k];
-  roomRain(s);
+  srcRun(s, "n:mcRain", () => roomRain(s));
 }
 
 /** 시간 재기: 대기 · 콤보 유지 */
@@ -39,7 +40,8 @@ export function michaelaTick(s: RunState, want: boolean, speed: number): void {
   mcWorld(s);
   mcTouch(s);
   queueTick(s);
-  if (p.trKey && p.trKey >= 1 && p.trKey <= 4) mcSkill(s, p.trKey - 1);
+  const key = p.trKey;
+  if (key && key >= 1 && key <= 4) srcRun(s, `k:mcSkill${key}`, () => mcSkill(s, key - 1));
   // 공격 대기가 끝난 뒤부터 잼 (공격 속도가 느려도 3타까지 이어지게)
   p.mcGap = (p.mcGap ?? 0) + (p.attackCooldown <= 0 ? 1 : 0);
   if (p.mcGap > M.comboGap) p.mcStep = 0;

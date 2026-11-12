@@ -10,7 +10,7 @@ import { alive, inLine, shoot, strike as strike_ } from "./s2Kit";
 import type { ProjectileState, RunState } from "./types";
 import { addEffect } from "./util";
 import { buffVal } from "./voyager";
-import { srcFn, srcEach } from "./dmgSrc";
+import { srcEach, srcFn, srcRun } from "./dmgSrc";
 const blastAt = srcFn("voyagerSkills", () => blastAt_), strike = srcFn("voyagerSkills", () => strike_);
 
 type Extra = Partial<Pick<ProjectileState, "homing" | "seek" | "bounces" | "back" | "span" | "split" | "ghost" | "pierce" | "slow">>;
@@ -47,6 +47,12 @@ export function drop(s: RunState, x: number, y: number, t: number, r: number, dm
 
 /** 다 모은 한 발 (tilt: 화살통 덤 화살의 기울기) */
 export function fireSkill(s: RunState, dmg: number, full: boolean, tilt = 0): void {
+  const f = s.player.vyFate;
+  if (full && !tilt && f) srcRun(s, `n:vyS${f.i}`, () => fireOne(s, dmg, full, tilt));
+  else fireOne(s, dmg, full, tilt);
+}
+
+function fireOne(s: RunState, dmg: number, full: boolean, tilt: number): void {
   const p = s.player;
   const fate = p.vyFate ? FATES[p.vyFate.i]! : null;
   const [kind, n] = fate?.skill ?? ["fan", 1];
@@ -134,7 +140,7 @@ export function fireSkill(s: RunState, dmg: number, full: boolean, tilt = 0): vo
 export function tickVolley(s: RunState): void {
   const p = s.player;
   if (p.vyVolley?.length) {
-    for (const v of p.vyVolley) if (--v.t === 0) arrow(s, 0, v.mul);
+    for (const v of srcEach(p.vyVolley)) if (--v.t === 0) arrow(s, 0, v.mul);
     p.vyVolley = p.vyVolley.filter((v) => v.t > 0);
   }
   if (!p.vyMarks?.length) return;

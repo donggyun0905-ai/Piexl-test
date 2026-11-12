@@ -1,5 +1,5 @@
 // 네일러 공용 도우미: 피해(각성 배율) · 성흔 → 달빛 각성 · 못 박기 · 날아가는 못 · 스킬 대기·화면용 값
-import { srcRun } from "./dmgSrc";
+import { srcEach, srcRun } from "./dmgSrc";
 import { NAILER_PERKS as K } from "../itemsNailer";
 import { NAILER as N } from "../weaponsNailer";
 import { STIGMA } from "../weaponsDawn";
@@ -62,7 +62,7 @@ export function shotsTick(s: RunState): void {
   const list = p.nlShots;
   if (!list) return;
   const foes = alive(s);
-  for (const n of list) {
+  for (const n of srcEach(list)) {
     if (n.tg !== undefined) {
       const e = foes.find((f) => f.id === n.tg);
       const d = e ? Math.hypot(e.x - n.x, e.y - n.y) : 0;

@@ -8,7 +8,7 @@ import { PRESCRIPTION_MUL } from "./items";
 import { AMB_TICKS, areaMul, GAS_LIFE, medicHit, medicPeriod, reachMul, SUTURE_TICKS } from "./medicWeapons";
 import type { Device, EnemyState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, markDot, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid, weaponOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { muteDot, srcFn, srcRun } from "./dmgSrc";
 const damageEnemy = srcFn("medicGear", () => damageEnemy_), removeDead = srcFn("medicGear", () => removeDead_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -51,10 +51,12 @@ export function updateMedicGear(s: RunState): void {
   if (hasPerk(p, "checkup")) p.fullTicks = p.hp >= p.stats.maxHp ? (p.fullTicks ?? 0) + 1 : 0;
   // 항체 반응: 보호막이 막은 피해를 모아 두었다가 0.3초에 한 번 주변에 돌려줌
   if ((p.antiStore ?? 0) > 0 && s.tick - (p.antiLast ?? -R.ANTIBODY_EVERY) >= R.ANTIBODY_EVERY) {
-    for (const e of inside(s, p.x, p.y, R.ANTIBODY_RADIUS)) {
-      const dir = normalize(e.x - p.x, e.y - p.y) ?? [0, 0];
-      damageEnemy(s, e, p.antiStore ?? 0, dir[0], dir[1]);
-    }
+    srcRun(s, "antibody", () => {
+      for (const e of inside(s, p.x, p.y, R.ANTIBODY_RADIUS)) {
+        const dir = normalize(e.x - p.x, e.y - p.y) ?? [0, 0];
+        damageEnemy(s, e, p.antiStore ?? 0, dir[0], dir[1]);
+      }
+    });
     addEffect(s, { kind: "antibody", x: p.x, y: p.y, dirX: 0, dirY: 0, size: R.ANTIBODY_RADIUS, maxTicks: 16, follow: true });
     p.antiStore = 0;
     p.antiLast = s.tick;
@@ -77,8 +79,8 @@ export function updateMedicGear(s: RunState): void {
       if (d.life <= 0) remove(s, d);
       else for (const e of inside(s, d.x, d.y, R.GAS_RADIUS * areaMul(p))) {
         const before = e.hp;
-        medicHit(s, e, perTick(R.GAS_MUL), 1, flash);
-        markDot(s, e, "poison", before - e.hp);
+        srcRun(s, "d:poison", () => medicHit(s, e, perTick(R.GAS_MUL), 1, flash));
+        muteDot(() => markDot(s, e, "poison", before - e.hp));
         e.slowTicks = 2;
       }
     } else if (d.kind === "medkit") medkitBlast(s, d);

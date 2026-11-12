@@ -83,7 +83,7 @@ export function crusaderTick(s: RunState, want: boolean, speed: number): void {
   stigmaTick(p);
   cracksTick(s);
   zonesTick(s);
-  haloTick(s);
+  srcRun(s, "crHalo", () => haloTick(s));
   ramTick(s);
   awakeTick(s);
   // 대시하면 들어 올리던 것을 내려놓음

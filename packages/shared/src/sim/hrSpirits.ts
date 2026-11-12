@@ -7,7 +7,7 @@ import { foeNear } from "./puppetAllies";
 import { alive } from "./shadowingSpirits";
 import type { RunState } from "./types";
 import { addEffect, reachOf } from "./util";
-import { srcFn, srcEach } from "./dmgSrc";
+import { srcFn, srcEach, srcRun } from "./dmgSrc";
 const hrArea = srcFn("hrSpirits", () => hrArea_), hrHit = srcFn("hrSpirits", () => hrHit_);
 
 /** 용이 지나가는 틱 (화면도 씀) */
@@ -17,10 +17,10 @@ export const dragonTicks = () => K.hrDragon.hits * K.hrDragon.every;
 export function spiritsOnAttack(s: RunState): void {
   const p = s.player;
   const pact = hasHr(p, "hrPact") ? K.hrPact.chance : 1;
-  if (hasHr(p, "hrOwl") && (p.hrOwls?.length ?? 0) < K.hrOwl.max && hrRoll(s, "hrOwl") < K.hrOwl.chance * pact) {
+  if (hasHr(p, "hrOwl") && (p.hrOwls?.length ?? 0) < K.hrOwl.max && hrRoll(s, "hrOwl") < K.hrOwl.chance * pact) srcRun(s, "hrOwl", () => {
     (p.hrOwls ??= []).push({ x: p.x, y: p.y, prevX: p.x, prevY: p.y, cd: 20, t: 0, fx: p.x, fy: p.y, tx: p.x, ty: p.y, face: p.faceX < 0 ? -1 : 1 });
     addEffect(s, { kind: "hrPuff", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 16, style: 1, maxTicks: 20 });
-  }
+  });
   if (hasHr(p, "hrDragon") && !p.hrDragon && hrRoll(s, "hrDragon") < K.hrDragon.chance) {
     p.hrDragon = { t: 0, dmg: (p.stats.damage * K.hrDragon.mul) / K.hrDragon.hits };
   }
@@ -78,5 +78,5 @@ function dragonTick(s: RunState): void {
 /** 틱마다: 부엉이 · 용 */
 export function spiritsTick(s: RunState): void {
   owlsTick(s);
-  dragonTick(s);
+  srcRun(s, "hrDragon", () => dragonTick(s));
 }

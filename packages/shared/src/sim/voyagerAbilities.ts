@@ -11,7 +11,7 @@ import type { RunState } from "./types";
 import { addEffect, keepInRoom, normalize, roomGrid } from "./util";
 import { drop } from "./voyagerSkills";
 import { raiseShield } from "./imugiMods";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const blastAt = srcFn("voyagerAbilities", () => blastAt_), strike = srcFn("voyagerAbilities", () => strike_);
 
 /** 지금 켜진 능력 값 (지금 운명 · 붙잡은 운명 중 그 종류, 없으면 null) */
@@ -154,16 +154,18 @@ export function abilityTick(s: RunState): void {
     if (kind === "lotus") for (const e of inCircle(s, p.x, p.y, 90)) e.slowTicks = Math.max(e.slowTicks ?? 0, 10);
     if (kind === "hermes" && p.dashCooldown > 0) p.dashCooldown = Math.max(0, p.dashCooldown - v);
     if (kind === "gold" && fresh > 0) addGold(s, fresh * v);
-    if (kind === "shade") for (let i = 0; i < fresh * v; i++) {
-      const [dx, dy] = rot(rnd(s, `shade${i}`) * Math.PI * 2);
-      bolt(s, p.x, p.y, dx, dy, p.stats.damage * 1.2, "vyShade", 4, 2.5, 120, { seek: true, homing: true });
-    }
+    if (kind === "shade") srcRun(s, `n:vyA${f.i}`, () => {
+      for (let i = 0; i < fresh * v; i++) {
+        const [dx, dy] = rot(rnd(s, `shade${i}`) * Math.PI * 2);
+        bolt(s, p.x, p.y, dx, dy, p.stats.damage * 1.2, "vyShade", 4, 2.5, 120, { seek: true, homing: true });
+      }
+    });
     const wait = CD[kind] ?? (kind === "gods" ? 150 : 0);
     if (!wait) continue;
     const key = f === p.vyFate ? kind : `prev:${kind}`;
     cd[key] = (cd[key] ?? Math.floor(wait / 2)) - 1;
     if (cd[key] > 0) continue;
     cd[key] = wait;
-    act(s, kind, v);
+    srcRun(s, `n:vyA${f.i}`, () => act(s, kind, v));
   }
 }

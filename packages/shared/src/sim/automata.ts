@@ -14,7 +14,7 @@ import { roamStep } from "./roam";
 import { alive, inCone, onSegment, root, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, markCrit, weaponOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcOpt, srcRun } from "./dmgSrc";
 const strike = srcFn("automata", () => strike_);
 
 const styleOf = (p: PlayerState): AutoStyle => weaponOf(p).auto ?? { beams: 1, spread: 0, width: 3 };
@@ -36,7 +36,7 @@ function count(s: RunState, e: EnemyState): void {
   if (e.hp > 0) return;
   const before = Math.floor((p.adKills ?? 0) / K.adSoul.every);
   p.adKills = (p.adKills ?? 0) + 1;
-  if (hasPerk(p, "adSoul") && Math.floor(p.adKills / K.adSoul.every) !== before) recalcStats(s);
+  if (hasPerk(p, "adSoul") && Math.floor(p.adKills / K.adSoul.every) !== before) srcRun(s, "adSoul", () => { recalcStats(s); });
 }
 
 /** (x,y)에서 방향 (dx,dy)로 len만큼 레이저 한 줄: 닿는 적 모두 (반환: 맞힌 적) */
@@ -91,7 +91,7 @@ function fire(s: RunState): void {
   const w = st.width + (hasPerk(p, "adWide") ? K.adWide.add : 0);
   const [dx, dy] = aim(s, p.x, p.y, p.stats.range);
   const times = hasPerk(p, "adEcho") && roll(s, "echo", 0) < K.adEcho.chance ? 2 : 1;
-  for (let k = 0; k < times; k++) {
+  for (let k = 0; k < times; k++) srcOpt(s, k > 0 && "adEcho", () => {
     for (let i = 0; i < st.beams; i++) {
       const a = (i - (st.beams - 1) / 2) * st.spread;
       const bx = dx * Math.cos(a) - dy * Math.sin(a);
@@ -100,7 +100,7 @@ function fire(s: RunState): void {
       for (const e of hit) if (st.bind) root(e, st.bind);
       if (st.split && hit[0]) prism(s, hit[0], st.split, dmg * A.splitMul, w);
     }
-  }
+  });
   p.adShots = (p.adShots ?? 0) + 1;
   if (st.sat && p.adShots % st.sat === 0) {
     const t = nearest(s, p.stats.range * 1.4) ?? { x: p.x + dx * 50, y: p.y + dy * 50 };

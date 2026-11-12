@@ -48,7 +48,9 @@ function flare(s: RunState, e: EnemyState): void {
   const p = s.player;
   if (e.hp > 0 || !hasPerk(p, "btFlare") || (e.btBurn ?? 0) < B.burnMax) return;
   e.btBurn = 0;
-  for (const o of inCircle(s, e.x, e.y, K.btFlare.r)) statusHit(s, o, "burn", p.stats.damage * fireCoef(p) * K.btFlare.mul, 0, 0, false);
+  srcRun(s, "btFlare", () => {
+    for (const o of inCircle(s, e.x, e.y, K.btFlare.r)) statusHit(s, o, "burn", p.stats.damage * fireCoef(p) * K.btFlare.mul, 0, 0, false);
+  });
   addEffect(s, { kind: "btFlare", x: e.x, y: e.y, dirX: 0, dirY: 0, size: K.btFlare.r, maxTicks: 22 });
 }
 
@@ -81,7 +83,7 @@ export function addEvil(s: RunState, e: EnemyState, n: number): void {
   (p.btExecs ??= []).push({ id: e.id, left: B.execN + (ex ? K.btExecutor.more : 0), gap: 0, mul: ex ? K.btExecutor.mul : 1 });
   addPurge(s, B.evilMax);
   if (hasPerk(p, "btOath")) srcRun(s, "btOath", () => heal(s, p.stats.maxHp * K.btOath.heal));
-  if (hasPerk(p, "btWitness")) for (const o of inCircle(s, e.x, e.y, K.btWitness.r)) if (o !== e) addEvil(s, o, K.btWitness.evil);
+  if (hasPerk(p, "btWitness")) srcRun(s, "btWitness", () => { for (const o of inCircle(s, e.x, e.y, K.btWitness.r)) if (o !== e) addEvil(s, o, K.btWitness.evil); });
 }
 
 /** 지운 악 더하기 (처단·처치): 심판에 필요한 만큼 모이면 심판 예고 */

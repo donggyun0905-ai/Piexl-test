@@ -124,8 +124,8 @@ export function artsTick(s: RunState): void {
   const dashing = p.dashTicks > 0;
   const start = dashing && !p.sdDash;
   p.sdDash = dashing;
-  if (start && hasPerk(p, "sdComet") && (p.sdCometCd ?? 0) <= 0) {
+  if (start && hasPerk(p, "sdComet") && (p.sdCometCd ?? 0) <= 0) srcRun(s, "sdComet", () => {
     p.sdCometCd = K.sdComet.cool;
     homing(s, p.sdBx ?? p.x, p.sdBy ?? p.y, ROW.comet, K.sdComet.speed, dmgOf(s) * K.sdComet.mul);
-  }
+  });
 }

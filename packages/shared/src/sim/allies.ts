@@ -13,7 +13,7 @@ import type { RunState, TickInput } from "./types";
 import { addEffect, keepInRoom, normalize, roomGrid } from "./util";
 import { allyGoal, allyStep, allyTerrain } from "./allyMove";
 import { laurelPlayer, laurelTick as laurelTick_ } from "./allyKit";
-import { srcFn } from "./dmgSrc";
+import { srcCb, srcFn } from "./dmgSrc";
 const damageEnemy = srcFn("allies", () => damageEnemy_), laurelTick = srcFn("allies", () => laurelTick_);
 
 const R = {
@@ -88,12 +88,12 @@ export function addAlly(s: RunState, kind: AllyState["kind"]): void {
 /** 방을 옮기면 동료가 따라옴 (곁에 다시 섬) */
 export function allyFollow(s: RunState): void {
   const p = s.player;
-  (p.allies ?? []).forEach((a, i) => {
+  (p.allies ?? []).forEach(srcCb((a, i) => {
     const b = { x: p.x + (i % 2 ? 14 : -14), y: p.y + 6, prevX: 0, prevY: 0, r: R.r };
     keepInRoom(b, roomGrid(s));
     a.x = a.prevX = b.x;
     a.y = a.prevY = b.y;
-  });
+  }));
 }
 
 /** 틱마다 (hiddenTick): 따라가기·싸우기·맞기·레벨 */

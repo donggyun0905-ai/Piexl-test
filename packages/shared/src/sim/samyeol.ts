@@ -1,5 +1,6 @@
 // 사멸(헬리오스, 사천 당가): 독침. 모든 침에 독 + 죽음(1초마다 피해)이 붙음
 // 침을 많이 던질수록 맵에 독가스가 피어남 (침 30개마다 하나, 최대 6). 수치는 weaponsSamyeol.SAMYEOL, 아이템은 itemsSamyeol
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { SAMYEOL_PERKS as K } from "../itemsSamyeol";
 import { createRng, deriveSeed } from "../rng";
@@ -36,7 +37,7 @@ function fallen(s: RunState, e: EnemyState): void {
   const p = s.player;
   if (e.hp > 0) return;
   if (hasPerk(p, "smKiss")) healPlayer(s, K.smKiss.heal);
-  if (hasPerk(p, "smBloom") && (e.poisonTicks ?? 0) > 0) gas(s, e.x, e.y, K.smBloom.r);
+  if (hasPerk(p, "smBloom") && (e.poisonTicks ?? 0) > 0) srcRun(s, "smBloom", () => { gas(s, e.x, e.y, K.smBloom.r); });
 }
 
 /** 침이 맞았을 때 (s2Hits) */

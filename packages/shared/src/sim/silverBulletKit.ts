@@ -1,4 +1,5 @@
 // 실버불렛 공용 도우미: 피해(각성·순은) · 은탄 쏘기·날아가기·맞힘(마크 · 성흔) · 성흔 → 달빛 각성(일제 사격 시작) · 성수 폭탄 · 대시로 장애물 넘기
+import { srcEach } from "./dmgSrc";
 import { SILVER_BULLET_PERKS as K } from "../itemsSilverBullet";
 import { SILVER_BULLET as B } from "../weaponsSilverBullet";
 import { STIGMA } from "../weaponsDawn";
@@ -77,7 +78,7 @@ export function shotsTick(s: RunState): void {
   const list = p.sbShots;
   if (!list) return;
   const foes = alive(s);
-  for (const b of list) {
+  for (const b of srcEach(list)) {
     if (b.turn !== undefined) steer(b, foes);
     b.x += b.vx;
     b.y += b.vy;
@@ -115,7 +116,7 @@ export function bombsTick(s: RunState): void {
   const p = s.player;
   const list = p.sbBombs;
   if (!list) return;
-  for (const b of list) {
+  for (const b of srcEach(list)) {
     if (--b.t > 0) continue;
     const r = B.bombR * reachOf(p) * (hasPerk(p, "sbFlask") ? K.sbFlask.r : 1);
     const hit = inCircle(s, b.x, b.y, r);

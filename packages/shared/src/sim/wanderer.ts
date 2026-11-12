@@ -1,7 +1,7 @@
 // 방랑객(아스칼론, 시즌 2): 카타나를 든 떠돌이 무사. 기본 예리함 25% (맞히면 확률로 방어 -25% + 출혈, baseStats)
 // 무기마다: 앞쪽 베기(사거리 안 적에게 바로 일직선 칼선) · 발도 · 무심의 원(가만히 서면 원에 들어온 적을 바로 벰, 대시하면 원 안 적이 멈추고 크게 베임) · 칼날 폭풍 · 천검란(게이지 → 방 전체 칼날 폭풍) · 달빛 일섬(2초 뒤 베임)
 // 수치는 weaponsWanderer.WANDERER, 아이템은 itemsWanderer
-import { srcRun, srcFn, srcEach } from "./dmgSrc";
+import { srcEach, srcFn, srcOpt, srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { WANDERER_PERKS as K } from "../itemsWanderer";
 import { WANDERER as W, type KatanaStyle } from "../weaponsWanderer";
@@ -89,7 +89,7 @@ function attack(s: RunState): void {
     if (more > 0) p.wdQueue = Array.from({ length: more }, (_, i) => (i + 1) * W.flurryGap);
   }
   const waves = (st.waves ?? 0) + (st.waves ? (hasPerk(p, "wdWind") ? K.wdWind.n : 0) : 0);
-  for (let i = 0; i < waves; i++) shoot(s, (i - (waves - 1) / 2) * 0.25, { damage: p.stats.damage * W.waveMul, spirit: st.mode === "storm" ? "wdStorm" : "wdWave", r: W.waveR, range: p.stats.range, speed: W.waveSpeed, pierce: 99 });
+  for (let i = 0; i < waves; i++) srcOpt(s, i >= (st.waves ?? 0) && "wdWind", () => shoot(s, (i - (waves - 1) / 2) * 0.25, { damage: p.stats.damage * W.waveMul, spirit: st.mode === "storm" ? "wdStorm" : "wdWave", r: W.waveR, range: p.stats.range, speed: W.waveSpeed, pierce: 99 }));
 }
 
 /** 무심의 원: 가만히 서면 펼쳐지고, 원 안의 적을 바로 벰 (같은 적은 잠시 뒤 다시) */

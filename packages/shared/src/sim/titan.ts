@@ -10,7 +10,7 @@ import { blastAt as blastAt_, healPlayer } from "./combat";
 import { burst, sweep, thrustLine } from "./generalMoves";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const blastAt = srcFn("titan", () => blastAt_);
 
 /** 강타에 필요한 에너지 */
@@ -26,10 +26,10 @@ export function titanHurt(s: RunState, taken: number): void {
   const p = s.player;
   if (p.characterId !== "titan" || taken <= 0) return;
   charge(p, taken * TITAN.gain * (weaponOf(p).smash === "overload" ? TITAN.coreGain : 1));
-  if (hasPerk(p, "counterCoil") && (p.tCoil ?? 0) <= 0) {
+  if (hasPerk(p, "counterCoil") && (p.tCoil ?? 0) <= 0) srcRun(s, "counterCoil", () => {
     p.tCoil = K.counterCoil.cd;
     blastAt(s, p.x, p.y, K.counterCoil.radius, p.stats.damage * K.counterCoil.mul, { still: true });
-  }
+  });
 }
 
 /** 대시 버튼 = 패링 (짧게 막는 자세). 대시 시간(틱)을 돌려줌 (움직이지 않으니 0) */
@@ -111,7 +111,7 @@ function normal(s: RunState, dmg: number): void {
     area(s, dmg, r, w.arcCos ?? -1, hasPerk(p, "aftershock") ? K.aftershock.stun : 0);
     addEffect(s, { kind: "titanSlam", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 16 });
   }
-  if (w.titan !== "heavy" && hasPerk(p, "chargeKnuckle") && hits > 0) charge(p, K.chargeKnuckle.energy);
+  if (w.titan !== "heavy" && hasPerk(p, "chargeKnuckle") && hits > 0) srcRun(s, "chargeKnuckle", () => { charge(p, K.chargeKnuckle.energy); });
 }
 
 /** 기계팔 강타 */

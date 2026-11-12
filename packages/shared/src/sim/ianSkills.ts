@@ -1,5 +1,5 @@
 // 이안 스킬 넷(1 인과의 실 · 2 그림자 걸음 · 3 기록 집행 · 4 인과율 속박) · 날아가는 실 · 인과 되돌림 (sim/ian에서 부름)
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcEach, srcRun, srcFn } from "./dmgSrc";
 import { IAN_PERKS as K } from "../itemsIan";
 import { IAN as I } from "../weaponsIan";
 import { addRec, bind, iaCooldown, iaHit as iaHit_ } from "./ianKit";
@@ -82,7 +82,7 @@ export function threadsTick(s: RunState): void {
   if (!list) return;
   const rec = hasPerk(p, "iaWeave") ? K.iaWeave.rec : I.threadRec;
   const mul = I.threadMul * (hasPerk(p, "iaSteel") ? K.iaSteel.mul : 1);
-  for (const w of list) {
+  for (const w of srcEach(list)) {
     const ax = w.x;
     const ay = w.y;
     w.x += w.dx * I.threadSpeed;

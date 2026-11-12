@@ -136,6 +136,6 @@ function allyTick(s: RunState, a: PuppetAlly): boolean {
 export function alliesTick(s: RunState, moved: boolean): void {
   const p = s.player;
   if (!p.ppAllies?.length) return;
-  if (moved) p.ppAllies.forEach((a, i) => bringNear(s, a, i));
+  if (moved) p.ppAllies.forEach(srcCb((a, i) => bringNear(s, a, i)));
   p.ppAllies = p.ppAllies.filter(srcCb((a) => allyTick(s, a)));
 }

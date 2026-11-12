@@ -9,7 +9,7 @@ import { heal } from "./heal";
 import { inCircle, onSegment, roomKey } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const btHit = srcFn("beatrice", () => btHit_), burnTick = srcFn("beatrice", () => burnTick_);
 
 /** 기본 공격이 태양 검날로 강화되었을 때 더하는 화염 몫 */
@@ -95,18 +95,19 @@ export function beatriceTick(s: RunState, want: boolean, speed: number): void {
   roomCheck(s);
   timers(s);
   burnTick(s);
-  execTick(s);
-  wavesTick(s);
-  judgeTick(s);
-  danceTick(s);
-  if (p.trKey && p.trKey >= 1 && p.trKey <= 4) btSkill(s, p.trKey - 1);
+  srcRun(s, "n:btExec", () => execTick(s));
+  srcRun(s, "k:btSkill3", () => wavesTick(s));
+  srcRun(s, "n:btJudge", () => judgeTick(s));
+  srcRun(s, "k:btSkill2", () => danceTick(s));
+  const key = p.trKey;
+  if (key && key >= 1 && key <= 4) srcRun(s, `k:btSkill${key}`, () => btSkill(s, key - 1));
   // 강화 베기가 이어지는 중
   p.btGap = (p.btGap ?? 0) + 1;
   if (p.btGap > B.comboGap) p.btStep = 0;
-  if ((p.btTwinGap ?? 0) > 0 && --p.btTwinGap! <= 0 && p.btTwin) twin(s);
+  if ((p.btTwinGap ?? 0) > 0 && --p.btTwinGap! <= 0 && p.btTwin) srcRun(s, "k:btSkill2", () => twin(s));
   if (!want || p.attackCooldown > 0 || p.s2Rush) return;
   if (p.btTwin && !p.btTwinGap) {
-    twin(s);
+    srcRun(s, "k:btSkill2", () => twin(s));
     p.attackCooldown = Math.max(1, Math.round((TICK_RATE / speed) * 0.5));
     p.attackCount++;
     return;

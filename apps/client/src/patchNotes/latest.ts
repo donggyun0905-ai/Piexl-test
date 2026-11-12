@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.46",
+    date: "2026-11-12",
+    items: {
+      ko: [
+        "피해 출처 4차: 모든 캐릭터의 피해 출처를 아리아·레이븐처럼 패시브·기술마다 따로 나눔 (전용 패시브 따로 잡히는 수 84 → 200여 개)",
+        "기본 스킬이 있는 캐릭터(가브리엘·베아트리체·이안·미카엘라·네일러·라파엘·세레나·유리엘·추적자)는 '스킬' 한 줄 대신 스킬 이름마다 한 줄 · 웨이브 기술 30·수집가 무기 30·백인장 스킬은 아이템마다 · 운명의 여행자는 운명마다 기술·능력 이름으로",
+        "확률로 나가는 추가 공격·두 번째 발·소환물·예약 공격·연쇄 공격도 만든 패시브 줄로 (예: 쌍발·쌍단검·갈래 화살·쌍룡·인형·고래 무리 등) · 소환물이 쏜 탄도 같은 출처를 달고 감",
+        "실베르 캐릭터(백령·빙설·혼령·래빗 등)의 기본 공격이 '그림 소환'으로 잘못 나오던 문제 고침 · 출혈·의사 독가스·포자·부적 저주 피해가 두 번 세어지던 문제 고침",
+      ],
+      en: [
+        "Damage sources, part 4: every character's damage sources are now split per passive and per skill like Aria and Raven (exclusive passives with their own line: 84 → 200+)",
+        "Characters with base skills (Gabriel, Beatrice, Ian, Michaela, Nailer, Rafael, Serena, Yuriel, Tracker) show one line per skill name instead of a single 'Skills' line · Wave's 30 arts, Collector's 30 weapons and Baekinjang's skills are split per item · Voyager of Fate shows each fate's art and ability by name",
+        "Chance-based extra attacks, second shots, summons, delayed strikes and chain attacks now go to the passive that made them (e.g. Double Shot, Twin Stab, Split Arrow, Twin Dragon, dolls, Whale Pod) · shots fired by summons keep the same source",
+        "Fixed Silber characters' (Baekryeong, Bingseol, Honryeong, Rabbit, etc.) basic attacks showing as 'Painted spirits' · fixed bleed, Doctor gas, spore and charm curse damage being counted twice",
+      ],
+      ja: [
+        "ダメージ内訳 第4弾：全キャラクターのダメージ内訳をアリア・レイヴンのようにパッシブ・技ごとに分けて表示（専用パッシブで個別に出る数 84 → 200以上）",
+        "基本スキルのあるキャラ（ガブリエル・ベアトリーチェ・イアン・ミカエラ・ネイラー・ラファエル・セレナ・ユリエル・追跡者）は「スキル」1行ではなくスキル名ごとに1行・ウェーブの技30・コレクターの武器30・百人長のスキルはアイテムごと・運命の旅人は運命ごとの技・能力名で表示",
+        "確率の追加攻撃・2発目・召喚物・予約攻撃・連鎖攻撃も作ったパッシブの行へ（例：双発・双短剣・分かれ矢・双竜・人形・クジラの群れなど）・召喚物が撃った弾も同じ出どころを引き継ぐ",
+        "シルベルのキャラ（白霊・氷雪・魂霊・ラビットなど）の基本攻撃が「描いた霊」と表示されていた問題を修正・出血・医者の毒ガス・胞子・護符の呪いのダメージが二重に数えられていた問題を修正",
+      ],
+    },
+  },
+  {
     version: "0.52.45",
     date: "2026-11-12",
     items: {

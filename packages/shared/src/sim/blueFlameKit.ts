@@ -1,5 +1,5 @@
 // 블루 플레임 공용 도우미: 세 겹 범위 · 청염 상태이상(걸기·틱 피해) · 맞힘(청염 색 숫자 · 성흔) · 성흔 → 열화상 각성 · 곧 들어갈 공격(감옥·기둥·화살·화살비·거대한 화살) 떨어뜨리기
-import { srcRun } from "./dmgSrc";
+import { srcEach, srcRun } from "./dmgSrc";
 import { BLUE_FLAME_PERKS as K } from "../itemsBlueFlame";
 import { BLUE_FLAME as F } from "../weaponsBlueFlame";
 import { STIGMA } from "../weaponsDawn";
@@ -84,7 +84,7 @@ export function strikesTick(s: RunState): void {
   const p = s.player;
   const list = p.bzStrikes;
   if (!list) return;
-  for (const b of list) {
+  for (const b of srcEach(list)) {
     if (b.k === 2 && b.tg !== undefined) {
       const e = alive(s).find((f) => f.id === b.tg);
       if (e) [b.x, b.y] = [e.x, e.y];

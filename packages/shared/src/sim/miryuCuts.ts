@@ -6,7 +6,7 @@ import { addStream, anchored, gain, mrHit as mrHit_, mrOf, rangeMul, reachOf, tu
 import { alive, onSegment } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcOpt } from "./dmgSrc";
 const mrHit = srcFn("miryuCuts", () => mrHit_);
 
 /** 흐르는 쪽으로 실어 보냄 (보스·허수아비는 안 움직임) */
@@ -36,7 +36,8 @@ function bend(s: RunState, tipX: number, tipY: number, hit: number[], mul: numbe
     }
     if (!best) return;
     hit.push(best.id);
-    mrHit(s, best, dmg, from.x, from.y, 3, true);
+    const b = best;
+    srcOpt(s, horn && n < K.mrHorn.more && "mrHorn", () => mrHit(s, b, dmg, from.x, from.y, 3, true));
     gain(s, M.gainBend);
     addEffect(s, { kind: "mrBend", x: from.x, y: from.y, toX: best.x, toY: best.y, dirX: p.faceX, dirY: p.faceY, size: 10, maxTicks: 16 });
     from = { x: best.x, y: best.y };

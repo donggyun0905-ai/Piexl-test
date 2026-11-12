@@ -12,7 +12,7 @@ import { inCircle, inCone, roomKey } from "./s2Kit";
 import { isAwake, stigmaTick } from "./stigma";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const addCombo = srcFn("incision", () => addCombo_), icStrike = srcFn("incision", () => icStrike_), vortexTick = srcFn("incision", () => vortexTick_), wavesTick = srcFn("incision", () => wavesTick_), zonesTick = srcFn("incision", () => zonesTick_);
 
 /** 네 박자 피해 배율 (무거운 도끼날) */
@@ -35,12 +35,12 @@ function cross(s: RunState): number {
   const hit = inCone(s, r, I.crossCos);
   for (const e of hit) icStrike(s, e, beatMul(s, I.crossMul), I.crossPush);
   addEffect(s, { kind: "icCrossFx", x: p.x + p.faceX * r * 0.5, y: p.y - 4 + p.faceY * r * 0.5, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 18 });
-  if (hasPerk(p, "icThrow")) {
+  if (hasPerk(p, "icThrow")) srcRun(s, "icThrow", () => {
     for (const a of [-K.icThrow.spread, K.icThrow.spread]) {
       const [c, sn] = rot(a);
       addWave(p, p.faceX * c - p.faceY * sn, p.faceX * sn + p.faceY * c);
     }
-  }
+  });
   return hit.length;
 }
 
@@ -82,10 +82,10 @@ function dashTick(s: RunState): void {
       n++;
     }
     addCombo(s, n);
-  } else if (!dashing && p.icDash && hasPerk(p, "icTrail")) {
+  } else if (!dashing && p.icDash && hasPerk(p, "icTrail")) srcRun(s, "icTrail", () => {
     const t = K.icTrail;
     addZone(p, { k: 0, x0: p.icDashX ?? p.x, y0: p.icDashY ?? p.y, x: p.x, y: p.y, t: t.delay, mul: t.mul, r: t.w });
-  }
+  });
   p.icDash = dashing;
 }
 
@@ -100,7 +100,7 @@ export function incisionTick(s: RunState, want: boolean, speed: number): void {
   comboTick(p);
   wavesTick(s);
   zonesTick(s);
-  vortexTick(s);
+  srcRun(s, "icVortex", () => vortexTick(s));
   dashTick(s);
   if (leapTick(s)) return;
   // 공격 대기가 끝난 뒤부터 잼 (한참 안 치면 다시 1타부터)

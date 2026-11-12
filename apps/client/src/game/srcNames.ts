@@ -1,6 +1,10 @@
 // 피해 출처 이름 (sim/dmgSrc의 "f:파일" → 결과 창·능력치 창 '피해 출처' 줄 이름, 한·영·일)
 // 여기 없는 파일(캐릭터 본체 파일 = 기본 공격 등)은 무기 줄에 합침 · 이름이 같은 파일끼리는 한 줄로 합침
+// "k:글자키" 출처(캐릭터 기본 스킬 하나하나)는 그 글자(i18n)를 이름으로 씀 (SourcePanel)
+// "n:이름" 출처는 파일이 아닌 기술 하나(파일 묶음보다 먼저 · sim에서 srcRun(s, "n:이름", …)) · 이름은 아래 표에서
 import type { Lang } from "../i18n";
+import { ABILITY_NAMES } from "../i18n/items/voyagerAbilities";
+import { SKILL_NAMES } from "../i18n/items/voyagerFates";
 
 type Name = readonly [ko: string, en: string, ja: string];
 const SKILL: Name = ["스킬", "Skills", "スキル"];
@@ -89,12 +93,22 @@ const NAMES: Record<string, Name> = {
   waveSkillsD: WATER,
   waveSkillsE: WATER,
   yurielSkills: SKILL,
+  // 기술 하나 (sim에서 srcRun(s, "n:이름", …))
+  btExec: ["처단", "Execution", "処断"],
+  btJudge: ["심판", "Judgment", "審判"],
+  imDragon: ["승천한 용", "Ascended dragon", "昇天した龍"],
+  mcBlink: ["무기로 순간 이동", "Blade blink", "武器へ瞬間移動"],
+  mcRain: ["쏟아지는 무기", "Weapon rain", "降り注ぐ武器"],
+  mcSwap: ["무기 바꿔 들기", "Weapon swap", "武器持ち替え"],
+  snOrb: ["도는 사슬 채찍", "Orbiting chain whips", "回る鎖鞭"],
+  snThorn: ["가시", "Thorns", "棘"],
 };
 const LANGS: Lang[] = ["ko", "en", "ja"];
 
 /** "f:파일" 출처의 이름 (없으면 null) */
 export function srcFileName(key: string, lang: Lang): string | null {
-  const n = key.startsWith("f:") ? NAMES[key.slice(2)] : undefined;
+  const vy = /^n:vy([SA])(\d+)$/.exec(key);
+  const n = vy ? (vy[1] === "S" ? SKILL_NAMES : ABILITY_NAMES)[Number(vy[2])] : key.startsWith("f:") || key.startsWith("n:") ? NAMES[key.slice(2)] : undefined;
   return n ? n[Math.max(0, LANGS.indexOf(lang))]! : null;
 }
 
@@ -105,9 +119,9 @@ export function srcRows(by: Record<string, number> | undefined): [string, number
   for (const [k, v] of Object.entries(by ?? {})) {
     if (!(v > 0)) continue;
     let key = k;
-    if (k.startsWith("f:")) {
+    if (k.startsWith("f:") || k.startsWith("n:")) {
       const n = NAMES[k.slice(2)];
-      key = n ? (first.get(n) ?? (first.set(n, k), k)) : "";
+      key = n ? (first.get(n) ?? (first.set(n, k), k)) : k.startsWith("n:") ? k : "";
     }
     sum.set(key, (sum.get(key) ?? 0) + v);
   }

@@ -143,7 +143,7 @@ function lineTick(s: RunState): void {
 
 /** 검은 별: 둘레 적(보스 빼고)을 별 쪽으로 끌어당김 */
 function pullTick(s: RunState, stars: StarNode[]): void {
-  for (const o of stars) {
+  for (const o of srcEach(stars)) {
     for (const e of s.enemies) {
       if (e.hp <= 0 || ENEMIES[e.kind].boss) continue;
       const d2 = dist2(e, o);

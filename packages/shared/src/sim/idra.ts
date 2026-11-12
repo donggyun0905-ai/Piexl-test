@@ -1,7 +1,7 @@
 // 이드라(비르디아, 세계수의 아이): 가이아 하나가 대시 키로 대궁 → 단검 → 방패 → 채찍 차례로 바뀜 (바꿀 때 변환 일격, 대시는 그대로)
 // 대궁: 느리고 센 관통 화살 · 단검: 아주 빠른 찌르기, 다섯 번째마다 우드브레이커 일격(묶음) · 방패: 앞쪽 반원 강타·밀침·보호막, 받는 피해 감소
 // 채찍: 앞으로 뻗는 가시 채찍(한 줄의 적 모두, 독). 수치는 weaponsIdra.IDRA, 아이템은 itemsIdra
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcFn, srcOpt, srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { IDRA_PERKS as K } from "../itemsIdra";
 import { GAIA_FORMS, IDRA as I } from "../weaponsIdra";
@@ -58,7 +58,10 @@ function attack(s: RunState, dmg: number): void {
   const reach = p.stats.range * I.form[form].reach;
   if (form === "bow") {
     const n = hasPerk(p, "idSplitArrow") ? 3 : 1;
+    const at = s.projectiles.length;
     fan(s, n, I.arrowSpread, { damage: dmg, spirit: "gaiaArrow", r: 3, pierce: I.arrowPierce, range: reach, speed: p.stats.projectileSpeed * 1.3 });
+    // 갈래 화살: 가운데 말고 양옆 화살은 그 아이템 몫
+    if (n > 1) s.projectiles.slice(at).forEach((pr, i) => i !== (n - 1) / 2 && (pr.src ??= "idSplitArrow"));
     return;
   }
   if (form === "dagger") {
@@ -67,7 +70,7 @@ function attack(s: RunState, dmg: number): void {
     const mul = big ? (hasPerk(p, "idBreaker") ? K.idBreaker.mul : I.breakMul) : 1;
     const stabs = hasPerk(p, "idTwinStab") ? 2 : 1;
     for (const e of inCone(s, reach, I.daggerArc)) {
-      for (let i = 0; i < stabs; i++) strike(s, e, dmg * mul);
+      for (let i = 0; i < stabs; i++) srcOpt(s, i > 0 && "idTwinStab", () => strike(s, e, dmg * mul));
       if (big) root(e, I.breakRoot);
     }
     addEffect(s, { kind: "thrust", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: reach, toX: p.x + p.faceX * reach, toY: p.y + p.faceY * reach, width: big ? 4 : 2, maxTicks: big ? 10 : 6, tint: big ? "#7ae05a" : "#c8e8a0" });

@@ -141,7 +141,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
   }
   keepInRoom(p, vaultGrid(s));
   // 돌진 베기: 대시로 지나간 적에게 공격력 1.5배 피해 (한 대시에 한 번씩)
-  if (p.dashTicks > 0 && hasPerk(p, "dashSlash")) {
+  if (p.dashTicks > 0 && hasPerk(p, "dashSlash")) srcRun(s, "dashSlash", () => {
     for (const e of s.enemies) {
       if (e.hp <= 0 || p.dashHitIds.includes(e.id)) continue;
       const rr = p.r + e.r + 3;
@@ -149,7 +149,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
       p.dashHitIds.push(e.id);
       damageEnemy(s, e, p.stats.damage * PERKS.dashSlash.damage, p.dashDirX, p.dashDirY);
     }
-  }
+  });
   if (wasDashing && p.dashTicks === 0) {
     readyAmbush(p);
     // 대지 흔들기: 대시가 끝나면 주변에 충격파
@@ -221,7 +221,7 @@ function attack(s: RunState): void {
       damageEnemy(s, e, dmg * mul + ambushCut(p, e, og.cut), d === 0 ? p.faceX : dx / d, d === 0 ? p.faceY : dy / d);
     }
     // 검기: 휘두를 때마다 앞으로 관통하는 파동
-    if (hasPerk(p, "waveSlash")) {
+    if (hasPerk(p, "waveSlash")) srcRun(s, "waveSlash", () => {
       const speed = 2.5;
       s.projectiles.push({
         id: s.nextId++,
@@ -238,7 +238,7 @@ function attack(s: RunState): void {
         pierce: PERKS.waveSlash.pierce,
         hitIds: [],
       });
-    }
+    });
     // 한 바퀴 휘두르기는 방향 0으로 그림 (원)
     const spin = arcCos <= -1;
     addEffect(s, { kind: "swing", x: p.x, y: p.y, dirX: spin ? 0 : p.faceX, dirY: spin ? 0 : p.faceY, size: range, maxTicks: 8 });
@@ -282,9 +282,9 @@ function attack(s: RunState): void {
     const first = s.projectiles.length;
     for (const [dx, dy] of shotDirs(p.faceX, p.faceY, shots, spread)) fire(dx, dy, 1);
     afterCharmAttack(s, first, dmg);
-    if (hasPerk(p, "backQuiver")) fire(-p.faceX, -p.faceY, PERKS.backQuiver.damage);
+    if (hasPerk(p, "backQuiver")) srcRun(s, "backQuiver", () => fire(-p.faceX, -p.faceY, PERKS.backQuiver.damage));
     // 별똥별: 몇 번째 공격마다 가까운 적 3명에게 폭발
-    if (hasPerk(p, "starShower") && p.attackCount % PERKS.starShower.every === 0) starShower(s, dmg * PERKS.starShower.damage);
+    if (hasPerk(p, "starShower") && p.attackCount % PERKS.starShower.every === 0) srcRun(s, "starShower", () => starShower(s, dmg * PERKS.starShower.damage));
   }
 }
 

@@ -1,6 +1,6 @@
 // 오니 방망이 추가 공격 (무기마다 하나, 휘두른 공격이 맞았을 때 확률로). 피해는 속성 피해(색 숫자) dotDamage
 // 스킬 공격력 = 지금 공격력 · 효과 범위는 사거리 아이템만큼 (p.oReach)
-import { srcRun } from "./dmgSrc";
+import { srcOpt, srcRun } from "./dmgSrc";
 import { ENEMIES } from "../enemyDefs";
 import { ONI_PERKS as K } from "../itemsOni";
 import { ONI, type ClubArt } from "../weaponsOni";
@@ -147,7 +147,7 @@ export function clubArt(s: RunState, art: ClubArt, e: EnemyState, hits: readonly
       const n = hasPerk(p, "oniTwinWind") ? K.oniTwinWind.count : 1;
       for (let i = 0; i < n; i++) {
         const x = e.x + (i ? -10 : 0);
-        (p.oStorms ??= []).push({ x, y: e.y, prevX: x, prevY: e.y, ticks: hasPerk(p, "oniTyphoonEye") ? K.oniTyphoonEye.ticks : ONI.wind.ticks, dmg: hp * ONI.wind.hp, cd: 0 });
+        srcOpt(s, i > 0 && "oniTwinWind", () => (p.oStorms ??= []).push({ x, y: e.y, prevX: x, prevY: e.y, ticks: hasPerk(p, "oniTyphoonEye") ? K.oniTyphoonEye.ticks : ONI.wind.ticks, dmg: hp * ONI.wind.hp, cd: 0 }));
       }
       return;
     }

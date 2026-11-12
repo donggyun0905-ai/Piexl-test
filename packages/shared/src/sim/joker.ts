@@ -12,7 +12,7 @@ import { bounceOff } from "./projectiles";
 import { ignite } from "./status";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, roomGrid } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcEach, srcFn, srcRun, srcTag } from "./dmgSrc";
 const blastAt = srcFn("joker", () => blastAt_), damageEnemy = srcFn("joker", () => damageEnemy_);
 
 type P = RunState["player"];
@@ -45,11 +45,11 @@ function trim(s: RunState): void {
   const cap = cardCap(p);
   while (list.length > cap) {
     const c = list.shift()!;
-    if (hasPerk(p, "jkFirework")) {
+    if (hasPerk(p, "jkFirework")) srcRun(s, "jkFirework", () => {
       const r = K.jkFirework.r;
       blastAt(s, c.x, c.y, r, cardDamage(p, c) * K.jkFirework.mul * cardMul(s), { still: true });
       addEffect(s, { kind: "jkFirework", x: c.x, y: c.y, dirX: 0, dirY: 0, size: r, maxTicks: 24 });
-    } else addEffect(s, { kind: "jkPop", x: c.x, y: c.y, dirX: 0, dirY: 0, size: c.r, style: c.w, maxTicks: 12 });
+    }); else addEffect(s, { kind: "jkPop", x: c.x, y: c.y, dirX: 0, dirY: 0, size: c.r, style: c.w, maxTicks: 12 });
   }
 }
 
@@ -73,7 +73,8 @@ function throwCards(s: RunState): void {
     for (const sg of [1, -1]) {
       const dx = fx * cos - fy * sin * sg;
       const dy = fy * cos + fx * sin * sg;
-      list.push(newCard(p, sx, sy, dx * sp, dy * sp, b, r, ace));
+      const card = newCard(p, sx, sy, dx * sp, dy * sp, b, r, ace);
+      list.push(sg < 0 ? srcTag(card, "jkDouble") : card);
     }
   } else list.push(newCard(p, sx, sy, fx * sp, fy * sp, b, r, ace));
   trim(s);
@@ -88,7 +89,7 @@ function recall(s: RunState): void {
   if ((p.jkRecallCd ?? 0) > 0) p.jkRecallCd = (p.jkRecallCd ?? 0) - 1;
   if (!start || !hasPerk(p, "jkRecall") || (p.jkRecallCd ?? 0) > 0) return;
   p.jkRecallCd = K.jkRecall.cool;
-  for (const c of p.jkCards ?? []) {
+  for (const c of srcEach(p.jkCards ?? [])) {
     const sp = Math.sqrt(c.vx * c.vx + c.vy * c.vy);
     c.vx = p.faceX * sp;
     c.vy = p.faceY * sp;
@@ -108,7 +109,7 @@ function onBounce(s: RunState, c: JokerCard, born: JokerCard[]): void {
   }
   if (hasPerk(p, "jkSplit") && c.n % K.jkSplit.every === 0) {
     const b = Math.max(J.base, Math.round(cardDamage(p, c) * K.jkSplit.mul));
-    born.push({ ...newCard(p, c.x, c.y, -c.vy, c.vx, b, c.r), w: c.w });
+    born.push(srcTag({ ...newCard(p, c.x, c.y, -c.vy, c.vx, b, c.r), w: c.w }, "jkSplit"));
   }
   addEffect(s, { kind: "jkBounce", x: c.x, y: c.y, dirX: 0, dirY: 0, size: cardDamage(p, c), style: c.w, maxTicks: 10 });
 }
@@ -142,7 +143,7 @@ function moveCards(s: RunState): void {
   // 풀 하우스: 판 위 카드가 한도만큼 가득이면 모든 카드가 셈
   const mul = cardMul(s) * (hasPerk(p, "jkFullHouse") && list.length >= cardCap(p) ? K.jkFullHouse.mul : 1);
   const born: JokerCard[] = [];
-  for (const c of list) {
+  for (const c of srcEach(list)) {
     const sp = Math.sqrt(c.vx * c.vx + c.vy * c.vy);
     const steps = Math.max(1, Math.ceil(sp / J.step));
     // 오래 지난 맞힘 기록은 지움
@@ -180,7 +181,7 @@ export function jokerTick(s: RunState, want: boolean, speed: number): void {
     p.jkRoom = key;
     p.jkCards = [];
   }
-  drawTick(s);
+  srcRun(s, "jkDraw", () => drawTick(s));
   recall(s);
   moveCards(s);
   if (!want || p.attackCooldown > 0) return;

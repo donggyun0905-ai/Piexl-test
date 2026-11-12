@@ -1,6 +1,7 @@
 // 아리아(실베르): 누르면 음표가 느리게 둥실둥실 앞으로 날아가 방 끝까지 감 (뚫고 지나가며 적마다 한 번씩, 무기마다 모양 weaponsAria.AR_STYLE)
 // 음표 8종 중 하나 (방에 없는 종류를 먼저 고를 때가 많음) · 방에 서로 다른 음표 8개가 모이면 터짐(sim/arBurst) → 악기 넷이 다 있으면 악보 완성(sim/arFinale)
 // 공격마다 악기 놓기·악기 연주·바이올린(sim/arInstruments) · 화음·돌림노래·포르티시모는 여기서
+import { srcRun } from "./dmgSrc";
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { ARIA_PERKS as K } from "../itemsAria";
 import { AR_NOTE as N } from "../weaponsAria";
@@ -58,12 +59,14 @@ function attack(s: RunState): void {
     launch(s, v[0], v[1], kind, 1);
   }
   if (hasAr(p, "arChord"))
-    for (let i = 0; i < K.arChord.n; i++) {
+    srcRun(s, "arChord", () => {
+      for (let i = 0; i < K.arChord.n; i++) {
       const v = rot(base + 0.18 * (i + 1));
       const kind = pickKind(s, used);
       used.push(kind);
       launch(s, v[0], v[1], kind, K.arChord.mul);
     }
+    });
 }
 
 /** 무기 속성 (맞은 적) */

@@ -67,10 +67,11 @@ export function gabrielTick(s: RunState, want: boolean, speed: number): void {
   timers(s);
   dropsTick(s);
   ultTick(s);
-  bashTick(s);
-  wellTick(s);
-  miniTick(s);
-  if (p.trKey && p.trKey >= 1 && p.trKey <= 4) gbSkill(s, p.trKey - 1);
+  srcRun(s, "k:gbSkill1", () => bashTick(s));
+  srcRun(s, "k:gbSkill2", () => wellTick(s));
+  srcRun(s, "k:gbSkill3", () => miniTick(s));
+  const key = p.trKey;
+  if (key && key >= 1 && key <= 4) srcRun(s, `k:gbSkill${key}`, () => gbSkill(s, key - 1));
   // 공격 대기가 끝난 뒤부터 잼 (공격 속도가 느려도 3타까지 이어지게)
   p.gbGap = (p.gbGap ?? 0) + (p.attackCooldown <= 0 ? 1 : 0);
   if (p.gbGap > G.comboGap) p.gbStep = 0;
@@ -78,7 +79,7 @@ export function gabrielTick(s: RunState, want: boolean, speed: number): void {
   const k = p.gbStep ?? 0;
   if (k < 2) swing(s, k);
   else slam(s);
-  ultHammer(s, k);
+  srcRun(s, "k:gbSkill4", () => ultHammer(s, k));
   p.gbLast = { k, t: s.tick };
   p.gbStep = (k + 1) % 3;
   p.gbGap = 0;

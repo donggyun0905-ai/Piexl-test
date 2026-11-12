@@ -6,7 +6,7 @@ import { rot } from "./orbit";
 import { alive, onSegment, rushTick as rushTick_, startRush } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcEach, srcFn } from "./dmgSrc";
 const btHit = srcFn("beatriceSkills", () => btHit_), rushTick = srcFn("beatriceSkills", () => rushTick_);
 
 /** 태양 검날이 켜져 있는지 (자애 중에는 늘 켜짐) */
@@ -64,7 +64,7 @@ export function wavesTick(s: RunState): void {
   const list = p.btWaves;
   if (!list) return;
   const evil = hasPerk(p, "btBrand") ? K.btBrand.evil : B.brandEvil;
-  for (const w of list) {
+  for (const w of srcEach(list)) {
     const ax = w.x;
     const ay = w.y;
     w.x += w.dx * B.brandSpeed;
@@ -87,7 +87,7 @@ export function execTick(s: RunState): void {
   const p = s.player;
   const list = p.btExecs;
   if (!list) return;
-  for (const x of list) {
+  for (const x of srcEach(list)) {
     if (--x.gap > 0) continue;
     const e = s.enemies.find((o) => o.id === x.id && o.hp > 0);
     if (!e) {

@@ -70,7 +70,7 @@ export function onyxHurt(s: RunState): void {
   if (!hasPerk(p, "oxShard") || (p.oxShardCd ?? 0) > 0) return;
   p.oxShardCd = K.oxShard.gap;
   addEffect(s, { kind: "oxShard", x: p.x, y: p.y - 8, dirX: 0, dirY: 0, size: 30, maxTicks: 22 });
-  rollGems(s, "shard", K.oxShard.chance);
+  srcRun(s, "oxShard", () => rollGems(s, "shard", K.oxShard.chance));
 }
 
 /** 칠보 광륜: 방 안 모든 적에게 빛줄기 (가까운 적부터 상한까지) · 프리즘 광륜이면 보석 하나 같이 */

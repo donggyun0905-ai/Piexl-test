@@ -65,7 +65,7 @@ export function baekTick(s: RunState, want: boolean, speed: number): void {
   if (want && (p.byCd ?? 0) <= 0) swing(s, speed);
   // 유령 걸음: 대시가 끝난 자리에 혼불이 터짐
   const dashing = p.dashTicks > 0;
-  if (p.byDash && !dashing && hasPerk(p, "byStep")) {
+  if (p.byDash && !dashing && hasPerk(p, "byStep")) srcRun(s, "byStep", () => {
     const r = K.byStep.r * bladeSize(p);
     for (const e of s.enemies) {
       if (!alive(e) || (e.x - p.x) ** 2 + (e.y - p.y) ** 2 > (r + e.r) ** 2) continue;
@@ -74,7 +74,7 @@ export function baekTick(s: RunState, want: boolean, speed: number): void {
       soulFire(p, e);
     }
     addEffect(s, { kind: "byStep", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, maxTicks: 22 });
-  }
+  });
   p.byDash = dashing;
   soulTick(s);
   shotsTick(s);

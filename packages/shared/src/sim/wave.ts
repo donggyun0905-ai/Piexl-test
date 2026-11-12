@@ -18,7 +18,7 @@ import { mistTick } from "./waveSkillsD";
 import { wingsTick } from "./waveSkillsE";
 import { WAVE_CASTS, WAVE_STEPS } from "./waveTable";
 import type { WvBit } from "./waveTypes";
-import { srcFn, srcEach } from "./dmgSrc";
+import { srcCb, srcEach, srcFn, srcRun } from "./dmgSrc";
 const burstAt = srcFn("wave", () => burstAt_), wvHit = srcFn("wave", () => wvHit_);
 
 /** 가진 기술 */
@@ -36,7 +36,7 @@ function roll(s: RunState, salt: string | number, not?: string): string | undefi
 /** 기술 하나 나감 (이름 효과) */
 function castOne(s: RunState, k: string, m: number): void {
   const p = s.player;
-  WAVE_CASTS[k]?.(s, m);
+  srcRun(s, k, () => WAVE_CASTS[k]?.(s, m));
   p.wvLast = { k, t: s.tick };
   addEffect(s, { kind: "wvCast", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: 20, maxTicks: 50, from: k });
 }
@@ -83,7 +83,7 @@ function basic(s: RunState, speed: number): void {
     const side = n > 1 && i !== (n - 1) / 2;
     crest(s, p.x, p.y, dx, dy, W.crestMul * (side ? 0.6 : 1), side ? W.sideGain : 1);
   }
-  for (const b of srcEach(p.wvBits ?? [])) if (b.k === "wvMirror") crest(s, b.x, b.y, p.faceX, p.faceY, W.crestMul * W.mirrorMul * b.mul, W.mirrorGain);
+  for (const b of srcEach(p.wvBits ?? [])) if (b.k === "wvMirror") srcRun(s, "wvMirror", () => crest(s, b.x, b.y, p.faceX, p.faceY, W.crestMul * W.mirrorMul * b.mul, W.mirrorGain));
   p.attackCooldown = Math.max(1, Math.round((TICK_RATE / speed) * W.crestTime));
   p.attackCount++;
 }
@@ -115,7 +115,7 @@ function bitsTick(s: RunState): void {
   const list = p.wvBits;
   if (!list) return;
   p.wvBits = [];
-  const keep = list.filter((b) => (b.k === "crest" ? crestStep(s, b) : (WAVE_STEPS[b.k]?.(s, b) ?? false)));
+  const keep = list.filter(srcCb((b) => (b.k === "crest" ? crestStep(s, b) : (WAVE_STEPS[b.k]?.(s, b) ?? false))));
   p.wvBits = keep.concat(p.wvBits);
   if (p.wvBits.length === 0) delete p.wvBits;
 }
@@ -161,12 +161,12 @@ export function waveTick(s: RunState, want: boolean, speed: number): void {
     if (st.length > W.stepKeep * 2) st.splice(0, st.length - W.stepKeep * 2);
   }
   bitsTick(s);
-  armorTick(s);
-  floodTick(s);
-  mistTick(s);
-  wingsTick(s);
+  srcRun(s, "wvArmor", () => armorTick(s));
+  srcRun(s, "wvFlood", () => floodTick(s));
+  srcRun(s, "wvMist", () => mistTick(s));
+  srcRun(s, "wvWings", () => wingsTick(s));
   if (p.wvSurf) {
-    surfTick(s);
+    srcRun(s, "wvSurf", () => surfTick(s));
     return;
   }
   dashCheck(s);

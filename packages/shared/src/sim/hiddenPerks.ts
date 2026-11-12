@@ -1,7 +1,6 @@
 // 히든 패시브 효과 (itemsHidden): 금기된 아티팩트 7색(처치마다 쌓임) · 이프리트의 발톱 · 실피드의 화살통 · 노움의 망치 · 드라이어드의 수정구 · 아프로디테의 거울 · 떨어진 신의 파편
 // 맞힐 때(onHitExtra) · 처치할 때(removeDead) · 맞을 때(origin.readyCounter) · 틱마다(origin.tickOrigin)
-import { srcRun, srcFn } from "./dmgSrc";
-import { logDmg } from "./dmgSrc";
+import { logDmg, srcFn, srcRun } from "./dmgSrc";
 import type { ExtraStats } from "../characters";
 import { HIDDEN_PERKS as K } from "../itemsHidden";
 import { createRng, deriveSeed } from "../rng";
@@ -50,7 +49,7 @@ export function hiddenMods(s: RunState): StatMod[] {
   const p = s.player;
   const out: StatMod[] = [];
   if (stacks(p, "relicRed")) out.push({ stat: "damage", add: stacks(p, "relicRed") * K.relicRed.per });
-  if (stacks(p, "relicBlue")) out.push({ stat: "attackSpeed", mul: 1 + stacks(p, "relicBlue") * K.relicBlue.per });
+  if (stacks(p, "relicBlue")) srcRun(s, "relicBlue", () => { out.push({ stat: "attackSpeed", mul: 1 + stacks(p, "relicBlue") * K.relicBlue.per }); });
   if (stacks(p, "relicWhite")) out.push({ stat: "maxHp", add: stacks(p, "relicWhite") * K.relicWhite.per });
   const g = K.godShard;
   const mods: (StatMod | null)[] = [{ stat: "damage", mul: g.damage }, { stat: "attackSpeed", mul: g.speed }, null, null, { stat: "moveSpeed", add: g.move }, null, null, null, { stat: "luck", add: g.luck }, { stat: "range", add: g.range }];
@@ -114,10 +113,10 @@ export function hiddenOnHit(s: RunState, e: EnemyState, dmg: number): void {
     e.burnTicks = k.ticks;
     e.burnDmg = Math.max(e.burnDmg ?? 0, p.stats.damage * k.burn * e.ifrit);
   }
-  if (hasPerk(p, "sylphQuiver") && (p.oStorms?.length ?? 0) < 4 && roll(s, "sylph", e.id) < K.sylphQuiver.chance) {
+  if (hasPerk(p, "sylphQuiver") && (p.oStorms?.length ?? 0) < 4 && roll(s, "sylph", e.id) < K.sylphQuiver.chance) srcRun(s, "sylphQuiver", () => {
     (p.oStorms ??= []).push({ x: e.x, y: e.y, prevX: e.x, prevY: e.y, ticks: K.sylphQuiver.ticks, dmg: p.stats.damage * K.sylphQuiver.mul, cd: 0 });
-  }
-  if (hasPerk(p, "blizzardLance") && s.tick >= (p.lanceAt ?? 0) && roll(s, "lance", e.id) < K.blizzardLance.chance) launchLances(s, e);
+  });
+  if (hasPerk(p, "blizzardLance") && s.tick >= (p.lanceAt ?? 0) && roll(s, "lance", e.id) < K.blizzardLance.chance) srcRun(s, "blizzardLance", () => { launchLances(s, e); });
   if (hasPerk(p, "gnomeHammer") && e.hp > 0) srcRun(s, "gnomeHammer", () => {
     blastAt(s, e.x, e.y, K.gnomeHammer.r, dmg * K.gnomeHammer.mul, { exclude: e });
     addEffect(s, { kind: "hdQuake", x: e.x, y: e.y, dirX: 0, dirY: 0, size: K.gnomeHammer.r, maxTicks: 12 });
@@ -179,10 +178,10 @@ export function hiddenTick(s: RunState): void {
   }
   if (p.characterId !== "oni" && p.oStorms) storms(s);
   // 거짓된 용사: 풋내기 동료가 없으면 (처음 얻음 · 쓰러진 뒤 다음 층) 부름
-  if (hasPerk(p, "falseHero") && p.heroFloor !== s.floor && !p.allies?.some((a) => a.kind === "hero")) {
+  if (hasPerk(p, "falseHero") && p.heroFloor !== s.floor && !p.allies?.some((a) => a.kind === "hero")) srcRun(s, "falseHero", () => {
     p.heroFloor = s.floor;
     addAlly(s, "hero");
-  }
+  });
   alliesTick(s);
   cupidTick(s);
   kingFormTick(s);

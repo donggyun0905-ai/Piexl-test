@@ -51,7 +51,7 @@ export function boom(s: RunState, x: number, y: number, r0: number, dmg0: number
   // 터져 쓰러진 적 자리의 여진
   const afterMul = hasPerk(p, "bmFinale") ? K.bmFinale.mul : B.afterMul;
   for (const e of before) if (e.hp <= 0) toss(p, { x: e.x, y: e.y, sx: e.x, sy: e.y, t: 6, dmg: p.stats.damage * afterMul, r: B.afterR, mode: "lob", after: true });
-  if (hasPerk(p, "bmEcho") && !opt.echo && roll(s, "echo", Math.round(x)) < K.bmEcho.chance) toss(p, { x, y, sx: x, sy: y, t: K.bmEcho.delay, dmg: dmg0 * K.bmEcho.mul, r: r0, mode: "lob", echo: true });
+  if (hasPerk(p, "bmEcho") && !opt.echo && roll(s, "echo", Math.round(x)) < K.bmEcho.chance) srcRun(s, "bmEcho", () => { toss(p, { x, y, sx: x, sy: y, t: K.bmEcho.delay, dmg: dmg0 * K.bmEcho.mul, r: r0, mode: "lob", echo: true }); });
 }
 
 /** 파편: 사방으로 짧게 */
@@ -186,7 +186,7 @@ function update(s: RunState): void {
     const now = p.bmBombs;
     p.bmBombs = [];
     const landed: Bomb[] = [];
-    for (const b of now) {
+    for (const b of srcEach(now)) {
       if (b.stick !== undefined) {
         const e = s.enemies.find((o) => o.id === b.stick && o.hp > 0);
         if (e) {

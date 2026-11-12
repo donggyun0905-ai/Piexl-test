@@ -10,7 +10,7 @@ import { alive, inCircle, inCone, onSegment, strike as strike_, stun } from "./s
 import type { FenrirWave } from "./fenrirTypes";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
-import { srcFn, srcEach } from "./dmgSrc";
+import { srcEach, srcFn, srcRun } from "./dmgSrc";
 const strike = srcFn("fenrir", () => strike_);
 
 export { isFenrir } from "./fenrirStats";
@@ -119,7 +119,7 @@ function waveTick(s: RunState): void {
     }
     const age = w.max - w.t;
     if (age % F.scarEvery === 0) addEffect(s, { kind: "fnScar", x: w.x, y: w.y, dirX: w.dx, dirY: w.dy, size: w.w, maxTicks: w.big ? 26 : 16, width: w.big ? 1 : 0 });
-    if (rift && w.big && age % K.fnRift.every === 0) (p.fnCracks ??= []).push({ x: w.x, y: w.y, t: K.fnRift.ticks });
+    if (rift && w.big && age % K.fnRift.every === 0) srcRun(s, "fnRift", () => (p.fnCracks ??= []).push({ x: w.x, y: w.y, t: K.fnRift.ticks }));
   }
   p.fnWaves = p.fnWaves.filter((w) => w.t > 0 && w.x > ROOM_MIN_X && w.x < ROOM_MAX_X && w.y > ROOM_MIN_Y && w.y < ROOM_MAX_Y);
 }

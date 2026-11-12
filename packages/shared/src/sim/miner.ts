@@ -12,7 +12,7 @@ import { addCrack, finish, gainOre, groundTick, hitNodes } from "./minerGround";
 import { alive, inCircle, inCone, isBoss, shoot, strike as strike_, stun } from "./s2Kit";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const blastAt = srcFn("miner", () => blastAt_), strike = srcFn("miner", () => strike_);
 
 const styleOf = (p: PlayerState): PickStyle => weaponOf(p).pick ?? { mode: "swing", reach: 30, arc: 0.1, crack: 3 };
@@ -27,11 +27,10 @@ function onHit(s: RunState, e: EnemyState, dmg: number): void {
   const p = s.player;
   const st = styleOf(p);
   gainOre(s, 1);
-  if (hasPerk(p, "mnJackpot") && !isBoss(e) && roll(s, "jack", e.id) < K.mnJackpot.chance) {
+  if (hasPerk(p, "mnJackpot") && !isBoss(e) && roll(s, "jack", e.id) < K.mnJackpot.chance) return srcRun(s, "mnJackpot", () => {
     finish(s, e);
     addEffect(s, { kind: "mnGem", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 4, maxTicks: 20, tint: "#ffd040" });
-    return;
-  }
+  });
   if (st.mode === "gem") {
     if ((e.mnGemT ?? 0) > s.tick) {
       delete e.mnGemT;

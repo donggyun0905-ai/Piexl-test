@@ -38,7 +38,7 @@ function thrustDir(s: RunState, dx: number, dy: number, mul: number): void {
   const len = lenOf(s);
   for (const e of inLine(s, len, L.thrustW * reachOf(p), dx, dy)) lnHit(s, e, mul, L.thrustPush);
   addEffect(s, { kind: "lnThrustFx", x: p.x, y: p.y - 4, dirX: dx, dirY: dy, size: len, maxTicks: 12 });
-  if (hasPerk(p, "lnWave")) addWave(p, p.x + dx * len * 0.6, p.y - 4 + dy * len * 0.6, dx, dy);
+  if (hasPerk(p, "lnWave")) srcRun(s, "lnWave", () => { addWave(p, p.x + dx * len * 0.6, p.y - 4 + dy * len * 0.6, dx, dy); });
 }
 
 /** 기본 공격: 돌진 + 찌르기 · 삼연 찌르기 · 만월 각성 중 초승달 회전 베기 */
@@ -80,10 +80,10 @@ function dashTick(s: RunState): void {
       lnHit(s, e, L.dashMul * (pow ? K.lnDashPow.mul : 1), L.dashPush);
       addEffect(s, { kind: "lnThrustFx", x: p.x, y: p.y - 4, dirX: p.faceX, dirY: p.faceY, size: 24, maxTicks: 10 });
     }
-  } else if (p.lnDash && hasPerk(p, "lnAfterimage")) {
+  } else if (p.lnDash && hasPerk(p, "lnAfterimage")) srcRun(s, "lnAfterimage", () => {
     const a = K.lnAfterimage;
     (p.lnStrikes ??= []).push({ k: 2, x0: p.lnDashX ?? p.x, y0: p.lnDashY ?? p.y, x: p.x, y: p.y, t: a.delay, mul: a.mul, r: a.w });
-  }
+  });
   p.lnDash = dashing;
 }
 

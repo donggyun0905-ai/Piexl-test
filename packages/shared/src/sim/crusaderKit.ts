@@ -1,6 +1,6 @@
 // 크루세이더 공용 도우미: 피해 · 맞힘(성흔) · 성십자가 강림 각성 · 속죄의 무게 · 버팀(받는 피해·이동) · 가시 면류관
 // 십자 균열 (마디마다 차례로 솟는 돌판 · 팔 끝 돌기둥) · 곧 터질 것 (여진 · 성묘 · 심판의 십자가 · 작은 십자가) · 가시 후광
-import { srcEach } from "./dmgSrc";
+import { srcEach, srcOpt, srcRun } from "./dmgSrc";
 import { CRUSADER_PERKS as K } from "../itemsCrusader";
 import { CRUSADER as C } from "../weaponsCrusader";
 import { STIGMA } from "../weaponsDawn";
@@ -65,7 +65,7 @@ export function crusaderHurt(s: RunState): void {
   p.crThornCd = K.crThorn.cool;
   const r = K.crThorn.r * reachOf(p);
   const hit = inCircle(s, p.x, p.y, r);
-  for (const e of hit) crStrike(s, e, K.crThorn.mul, 6);
+  srcRun(s, "crThorn", () => hit.forEach((e) => crStrike(s, e, K.crThorn.mul, 6)));
   crHits(s, hit.length);
   addEffect(s, { kind: "crThornFx", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, maxTicks: 18, follow: true });
 }
@@ -98,7 +98,7 @@ export function cracksTick(s: RunState): void {
       for (const e of inCircle(s, x, y, r)) {
         if (c.hit.includes(e.id)) continue;
         c.hit.push(e.id);
-        crStrike(s, e, end ? K.crPillar.mul : c.mul, 3);
+        srcOpt(s, end && "crPillar", () => crStrike(s, e, end ? K.crPillar.mul : c.mul, 3));
         if (end) stun(e, K.crPillar.stun);
         n++;
       }
@@ -146,7 +146,7 @@ export function zonesTick(s: RunState): void {
     }
     addEffect(s, { kind: z.k === 0 ? "crAfterFx" : "crJudgeFx", x: z.x, y: z.y, dirX: 0, dirY: 0, size: z.r, maxTicks: big ? 40 : 26, ...(big ? {} : { width: 1 }) });
     if (big) crGain(s, C.gainJudge);
-    if (big && perk(p, "crGrave")) born.push({ k: 1, x: z.x, y: z.y, t: K.crGrave.ticks, max: K.crGrave.ticks, r: K.crGrave.r * reachOf(p), mul: K.crGrave.mul, next: K.crGrave.every });
+    if (big && perk(p, "crGrave")) srcRun(s, "crGrave", () => { born.push({ k: 1, x: z.x, y: z.y, t: K.crGrave.ticks, max: K.crGrave.ticks, r: K.crGrave.r * reachOf(p), mul: K.crGrave.mul, next: K.crGrave.every }); });
   }
   p.crZones = [...p.crZones.filter((z) => z.t > 0), ...born];
   if (p.crZones.length === 0) delete p.crZones;

@@ -45,6 +45,7 @@ export function SourceBars({ rows, weapon, lang, t, title, note, max }: { rows: 
       rows={rows.slice(0, max).map(([k, v]) => {
         if (k.startsWith("d:")) return { key: k, name: t(DOT_TEXT[k.slice(2) as keyof typeof DOT_TEXT]), color: DOT_COLOR[k.slice(2) as keyof typeof DOT_COLOR], v };
         if (k === "") return { key: k, name: `${itemName("weapon", weapon, lang)} · ${t("sumSrcBase")}`, color: "#e8e4f0", v, icon: <ItemIcon item={{ kind: "weapon", id: weapon }} size={16} /> };
+        if (k.startsWith("k:")) return { key: k, name: t(k.slice(2) as TextKey), color: "#c8a0ff", v };
         const file = srcFileName(k, lang);
         if (file) return { key: k, name: file, color: "#c8a0ff", v };
         return { key: k, name: itemName("passive", k as PassiveId, lang), color: "#7ad0ff", v, icon: <ItemIcon item={{ kind: "passive", id: k as PassiveId }} size={16} /> };

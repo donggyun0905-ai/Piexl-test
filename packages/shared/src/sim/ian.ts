@@ -8,7 +8,7 @@ import { iaSkill, lawTick, stepTick, threadsTick } from "./ianSkills";
 import { inCone, inLine, roomKey } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const iaHit = srcFn("ian", () => iaHit_);
 
 /** 이번 기본 공격이 급소인지 (그림자 걸음 뒤 · 침묵의 서약) — 쓰면 지움 */
@@ -72,9 +72,10 @@ export function ianTick(s: RunState, want: boolean, speed: number): void {
   roomCheck(s);
   timers(s);
   threadsTick(s);
-  lawTick(s);
-  stepTick(s);
-  if (p.trKey && p.trKey >= 1 && p.trKey <= 4) iaSkill(s, p.trKey - 1);
+  srcRun(s, "k:iaSkill4", () => lawTick(s));
+  srcRun(s, "k:iaSkill2", () => stepTick(s));
+  const key = p.trKey;
+  if (key && key >= 1 && key <= 4) srcRun(s, `k:iaSkill${key}`, () => iaSkill(s, key - 1));
   p.iaGap = (p.iaGap ?? 0) + 1;
   if (p.iaGap > I.comboGap) p.iaStep = 0;
   if (!want || p.attackCooldown > 0 || p.s2Rush) return;

@@ -1,5 +1,5 @@
 // 리바이어 고래: 고래 대돌격(날아가는 큰 고래) · 해류 웅덩이 · 고래가 나올 때 아이템 반응 · 고래 도약
-import { srcRun, srcFn, srcEach } from "./dmgSrc";
+import { srcEach, srcFn, srcOpt, srcRun } from "./dmgSrc";
 import { LEVIA_PERKS as K } from "../itemsLevia";
 import { LEVIA as L } from "../weaponsLevia";
 import { nearest } from "./brawlMoves";
@@ -33,13 +33,13 @@ export function whaleCharge(s: RunState): void {
     const dx = p.faceX * c - p.faceY * sn;
     const dy = p.faceX * sn + p.faceY * c;
     const mul = L.chargeMul * (twin && i > 0 ? L.twinMul : 1);
-    launchWhale(s, dx, dy, {
+    srcOpt(s, i >= 1 + (twin ? 1 : 0) && "lvPod", () => launchWhale(s, dx, dy, {
       t: Math.ceil((L.chargeRange * (cur ? K.lvCurrent.range : 1)) / sp),
       sp,
       r: L.chargeR * whaleSize(p) * (cur ? K.lvCurrent.r : 1),
       dmg: whaleDmg(p, mul),
       pool: 0,
-    });
+    }));
   }
   addEffect(s, { kind: "lvCharge", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: L.chargeR * whaleSize(p), maxTicks: 18 });
 }

@@ -103,8 +103,9 @@ export function swapTo(s: RunState, b: McBlade, mul = 1): void {
   addCombo(p, 1 + (hasPerk(p, "mcDouble") ? K.mcDouble.more : 0));
   addEffect(s, { kind: "mcSwapFx", x: b.x, y: b.y, dirX: 0, dirY: 0, size: 30, style: w, maxTicks: 16 });
   const set = MC_WEAPON_MOVES[w] ?? MC_WEAPON_MOVES[0]!;
-  const list = hasPerk(p, "mcResonance") ? [...set.t, set.c[2]] : set.t;
-  p.mcQueue = list.map((m, i) => ({ t: i * M.touchGap, m, mul }));
+  const q = (p.mcQueue = set.t.map((m, i) => ({ t: i * M.touchGap, m, mul })));
+  // 공명: 3연격 마지막 기술도 이어서 (그 아이템 몫)
+  if (hasPerk(p, "mcResonance")) srcRun(s, "mcResonance", () => q.push({ t: set.t.length * M.touchGap, m: set.c[2]!, mul }));
 }
 
 /** 박힌 무기로 순간 이동해 바꿔 듦 (그 무기의 기술이 나감) */

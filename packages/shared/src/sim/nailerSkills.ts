@@ -6,7 +6,7 @@ import { addNails, nlAfter, nlCooldown, nlDmg, nlGain as nlGain_, throwNail } fr
 import { alive, inCircle, rushTick as rushTick_, startRush, strike as strike_, stun } from "./s2Kit";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, hasPerk, reachOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcEach, srcFn } from "./dmgSrc";
 const nlGain = srcFn("nailerSkills", () => nlGain_), rushTick = srcFn("nailerSkills", () => rushTick_), strike = srcFn("nailerSkills", () => strike_);
 
 const RED = "#ff2a3a";
@@ -155,7 +155,7 @@ export function detTick(s: RunState): void {
   const list = p.nlDets;
   if (!list) return;
   const per = hasPerk(p, "nlCurse") ? K.nlCurse.perNail : N.perNail;
-  for (const d of list) {
+  for (const d of srcEach(list)) {
     if (--d.t > 0) continue;
     const e = alive(s).find((f) => f.id === d.id);
     if (!e) continue;
