@@ -98,7 +98,7 @@ export function drawAriaAir(ctx: Ctx, s: RunState, a: number, snap: Snap): void 
     const x = snap(lerp(n.prevX, n.x, a));
     const y = snap(lerp(n.prevY, n.y, a));
     const born = Math.min(1, n.age / 8);
-    notePic(ctx, n.kind, x, y, n.r * 2.3 * (0.5 + 0.5 * born));
+    notePic(ctx, n.kind, x, y, n.r * 1.5 * (0.5 + 0.5 * born));
   }
   for (const sh of p.arShots ?? []) {
     const x = snap(lerp(sh.prevX, sh.x, a));
@@ -111,7 +111,7 @@ export function drawAriaAir(ctx: Ctx, s: RunState, a: number, snap: Snap): void 
       ctx.lineTo(x, y);
       ctx.stroke();
     });
-    notePic(ctx, sh.kind, x, y, 15);
+    notePic(ctx, sh.kind, x, y, 11);
   }
   if ((p.arFinale ?? 0) > 0) {
     // 악보 완성: 방 위로 떠도는 금빛 오선 다섯 줄

@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.41",
+    date: "2026-11-12",
+    items: {
+      ko: [
+        "백인장 그림이 사라지던 문제 고침",
+        "백령·빙설·아수라·혼령·백인장·아리아의 몸 크기를 다른 캐릭터와 같게 줄임",
+        "아리아 음표 크기를 작게",
+      ],
+      en: [
+        "Fixed Baekinjang's sprite disappearing",
+        "Baekryeong, Bingseol, Asura, Honryeong, Baekinjang and Aria are now drawn at the same size as the other characters",
+        "Aria's notes are smaller",
+      ],
+      ja: [
+        "百人長の絵が消えていた問題を修正",
+        "白霊・氷雪・阿修羅・魂霊・百人長・アリアの体の大きさを他のキャラと同じに",
+        "アリアの音符を小さく",
+      ],
+    },
+  },
+  {
     version: "0.52.40",
     date: "2026-11-12",
     items: {

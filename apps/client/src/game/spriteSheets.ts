@@ -115,17 +115,19 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   /** 래빗 (실베르 망치를 든 유령 소녀, 연분홍 머리 둥근 쪽머리·초록 유령 기운·분홍 토끼 망치) */
   rabbit: { size: 44, footPad: 2, src: 128, v2: true },
   /** 백령 (실베르 영혼과 대태도를 다루는 오니 소녀, 흰 긴 머리·푸른 뿔·검은 칼집 대태도) */
-  baekryeong: { size: 44, footPad: 2, src: 128, v2: true },
+  baekryeong: { size: 40, footPad: 2, src: 128, v2: true },
   /** 빙설 (실베르 얼음 칼날의 해군 소녀, 흰 긴 머리·남색 베레모·얼음 검) */
-  bingseol: { size: 44, footPad: 2, src: 128, v2: true },
+  bingseol: { size: 40, footPad: 2, src: 128, v2: true },
   /** 아수라 (실베르 귀신 주먹 6개의 싸움꾼, 금발·남색 코트·등 뒤 귀신 팔) */
-  asura: { size: 46, footPad: 2, src: 128, v2: true },
+  asura: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 백인장 (실베르 기계 날개 쌍검 기사) */
+  baekinjang: { size: 40, footPad: 2, src: 128, v2: true },
   /** 아리아 (실베르 지휘자 소녀, 은발·흰 금빛 제복·높은음자리 모자) */
-  aria: { size: 46, footPad: 2, src: 128, v2: true },
+  aria: { size: 40, footPad: 2, src: 128, v2: true },
   /** 혼령 (실베르 곰방대 연기의 여인, 은발·보랏빛 기모노) */
-  honryeong: { size: 46, footPad: 2, src: 128, v2: true },
+  honryeong: { size: 40, footPad: 2, src: 128, v2: true },
   /** 아수라 분노의 팔 (붉은 귀신 팔, scripts/art/asura.py red) */
-  asuraRed: { size: 46, footPad: 2, src: 128, v2: true },
+  asuraRed: { size: 40, footPad: 2, src: 128, v2: true },
   /** 오토마타 자매 인형 (진홍빛, 사용자 그림 2026-11-04) */
   automataDoll: { size: 32, footPad: 2, src: 128, v2: true },
   // 히든 캐릭터도 일반 캐릭터와 같은 크기 (2026-10-31) · 빛의 사도는 칸에 여백이 많아 키를 맞춘 크기(성장 모습은 단계마다 커짐) · 차원의 순례자는 소녀 키를 일반 캐릭터에 맞춤 (큰 가방은 그만큼 같이 커서 칸이 큼)
