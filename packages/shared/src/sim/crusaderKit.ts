@@ -1,5 +1,6 @@
 // 크루세이더 공용 도우미: 피해 · 맞힘(성흔) · 성십자가 강림 각성 · 속죄의 무게 · 버팀(받는 피해·이동) · 가시 면류관
 // 십자 균열 (마디마다 차례로 솟는 돌판 · 팔 끝 돌기둥) · 곧 터질 것 (여진 · 성묘 · 심판의 십자가 · 작은 십자가) · 가시 후광
+import { srcEach } from "./dmgSrc";
 import { CRUSADER_PERKS as K } from "../itemsCrusader";
 import { CRUSADER as C } from "../weaponsCrusader";
 import { STIGMA } from "../weaponsDawn";
@@ -83,7 +84,7 @@ export function cracksTick(s: RunState): void {
   if (!p.crCracks) return;
   const rm = reachOf(p);
   let n = 0;
-  for (const c of p.crCracks) {
+  for (const c of srcEach(p.crCracks)) {
     c.t++;
     if (c.t % C.segGap) continue;
     const i = c.t / C.segGap;
@@ -124,7 +125,7 @@ export function zonesTick(s: RunState): void {
   if (!p.crZones) return;
   let n = 0;
   const born: CrZone[] = [];
-  for (const z of p.crZones) {
+  for (const z of srcEach(p.crZones)) {
     z.t--;
     if (z.k === 1) {
       if (--z.next! > 0) continue;

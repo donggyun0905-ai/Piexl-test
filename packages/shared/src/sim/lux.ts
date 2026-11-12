@@ -11,7 +11,7 @@ import { alive, onSegment, strike as strike_ } from "./s2Kit";
 import type { LuxCross } from "./luxTypes";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, hasPerk } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcRun } from "./dmgSrc";
 const strike = srcFn("lux", () => strike_);
 
 export const isLux = (p: PlayerState) => p.characterId === "lux";
@@ -82,7 +82,7 @@ function strikeCross(s: RunState, c: LuxCross): void {
   // dirX: 0 '+' · 1 '×' · 2·3 붉은 검 · 4·5 평타 검(코드 그림)
   addEffect(s, { kind: "lxCross", x: c.x, y: c.y, dirX: (c.rot ? 1 : 0) + (c.red ? 2 : c.plain ? 4 : 0), dirY: luxStage(s.player), size: c.arm, maxTicks: c.plain ? 12 : 18 });
   // 꿰뚫는 빛: 같은 자리에 붉은 빛의 검이 엇갈려 한 번 더
-  if (!c.red && !c.plain && hasPerk(s.player, "lxPierce")) (s.player.lxQ ??= []).push({ ...c, at: s.tick + K.lxPierce.delay, rot: !c.rot, dmg: c.dmg * K.lxPierce.mul, red: true });
+  if (!c.red && !c.plain && hasPerk(s.player, "lxPierce")) srcRun(s, "lxPierce", () => { (s.player.lxQ ??= []).push({ ...c, at: s.tick + K.lxPierce.delay, rot: !c.rot, dmg: c.dmg * K.lxPierce.mul, red: true }); });
 }
 
 /** 직업 무기 틱 (classTicks): 기다리는 빛의 검 · 누르면 빛의 칼날 · 몇 번째마다 빛의 검 생성 */

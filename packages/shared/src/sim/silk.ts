@@ -15,7 +15,7 @@ import { inCircle, onSegment, stun, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, hasPerk, normalize, weaponOf } from "./util";
 import { baseStats } from "../content";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const strike = srcFn("silk", () => strike_);
 
 const styleOf = (p: PlayerState): SilkStyle => weaponOf(p).silk ?? { n: 1, spread: 0, stacks: 5, rendMul: 2.5, ammo: 100 };
@@ -159,7 +159,7 @@ function update(s: RunState): void {
     }
   }
   if (p.skLines?.length) {
-    for (const l of p.skLines) {
+    for (const l of srcEach(p.skLines)) {
       if (--l.t % S.lingerGap !== 0) continue;
       for (const e of onSegment(s, l.x0, l.y0, l.x1, l.y1, S.width)) strike(s, e, l.dmg * 0.5);
     }

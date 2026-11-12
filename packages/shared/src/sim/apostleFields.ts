@@ -6,7 +6,7 @@ import { damageEnemy as damageEnemy_, dotDamage, healPlayer, ignite } from "./co
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, roomGrid } from "./util";
 import { createRng, deriveSeed } from "../rng";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const damageEnemy = srcFn("apostleFields", () => damageEnemy_);
 
 const inside = (f: SinField, e: EnemyState) => e.hp > 0 && dist2(e, f) <= (f.r + e.r) ** 2;
@@ -17,7 +17,7 @@ const EVERY: Partial<Record<SinField["sin"], number>> = { gluttony: APOSTLE.glut
 export function fieldTick(s: RunState): void {
   const p = s.player;
   if (!p.apFields?.length) return;
-  for (const f of p.apFields) {
+  for (const f of srcEach(p.apFields)) {
     f.left--;
     f.t++;
     if (f.t % (EVERY[f.sin] ?? APOSTLE.fieldEvery) === 0) for (const e of [...s.enemies]) if (inside(f, e)) sinHit(s, f, e);

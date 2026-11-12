@@ -1,5 +1,6 @@
 // 백령 유령팔: 벨 때마다 머리 위 유령팔이 에너지 참격을 날림 (기본 베기보다 멀리·크게, 유령팔 크기만큼 커짐)
 // 혼령참·삼위령 망령 · 위백도 검무 소용돌이 · 이연참 · 서리 혼은 여기 · (진)대태도·랑·백은 sim/baekSword
+import { srcCb } from "./dmgSrc";
 import { BAEK_PERKS as K } from "../itemsBaekryeong";
 import { createRng, deriveSeed } from "../rng";
 import { BAEK_ARM as A } from "../weaponsBaekryeong";
@@ -60,7 +61,7 @@ export function armSwing(s: RunState): void {
 export function shotsTick(s: RunState): void {
   const p = s.player;
   if (p.byShots?.length) p.byShots = p.byShots.filter((sh) => shotStep(s, sh));
-  if (p.byWhirls?.length) p.byWhirls = p.byWhirls.filter((w) => whirlStep(s, w));
+  if (p.byWhirls?.length) p.byWhirls = p.byWhirls.filter(srcCb((w) => whirlStep(s, w)));
 }
 
 function shotStep(s: RunState, sh: BaekShot): boolean {

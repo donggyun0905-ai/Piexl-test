@@ -1,6 +1,6 @@
 // 차원의 순례자 배낭: 수집 도감(들어 본 순례자 무기 → 공격력) · 맞히기(열쇠고리·처치 효과: 기념품·차원 도장) · 땅에 놓인 것(깃발·태엽 폭탄·별·차원의 문)
 // · 탄이 맞았을 때(씨앗 회복·별 가루) · 받는 피해(우산·그림엽서) · 맞은 뒤(텐트). 수치는 weaponsPilgrim.PILGRIM, 아이템은 itemsPilgrim
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { WEAPONS, type WeaponId } from "../content";
 import { PILGRIM_PERKS as K } from "../itemsPilgrim";
 import { createRng, deriveSeed } from "../rng";
@@ -76,7 +76,7 @@ export function placeMark(s: RunState, kind: string, x: number, y: number, r: nu
 export function marksTick(s: RunState): void {
   const p = s.player;
   if (!p.pgMarks?.length) return;
-  for (const m of p.pgMarks) {
+  for (const m of srcEach(p.pgMarks)) {
     m.t--;
     const r = m.r ?? 30;
     if (m.kind === "gate") {

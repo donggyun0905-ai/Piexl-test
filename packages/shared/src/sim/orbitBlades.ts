@@ -6,7 +6,7 @@ import { blastAt as blastAt_ } from "./combat";
 import { orbHit, type OrbBody } from "./orbit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, markCrit, normalize } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const blastAt = srcFn("orbitBlades", () => blastAt_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -79,7 +79,7 @@ export function pickTarget(s: RunState, b: OrbBody): EnemyState | null {
 export function flyStrikers(s: RunState, bodies: OrbBody[], dmg: number): void {
   const p = s.player;
   const keep: Flyer[] = [];
-  for (const f of p.flyers ?? []) {
+  for (const f of srcEach(p.flyers ?? [])) {
     const b = bodies[f.i];
     if (!b?.striker) continue;
     const st = strikeOf(b.tag);

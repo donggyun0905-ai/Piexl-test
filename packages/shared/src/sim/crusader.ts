@@ -37,7 +37,7 @@ function slam(s: RunState): void {
     dropJudge(p, x + p.faceX * C.segLen * rm, y + p.faceY * C.segLen * rm);
     if (!isAwake(p)) p.crWeight = 0;
   }
-  if (hasPerk(p, "crAfter")) addZone(p, { k: 0, x, y, t: K.crAfter.delay, r: r * K.crAfter.r, mul: K.crAfter.mul * heavy });
+  if (hasPerk(p, "crAfter")) srcRun(s, "crAfter", () => { addZone(p, { k: 0, x, y, t: K.crAfter.delay, r: r * K.crAfter.r, mul: K.crAfter.mul * heavy }); });
   p.crSlams = (p.crSlams ?? 0) + 1;
   if (hasPerk(p, "crHalo") && p.crSlams % K.crHalo.every === 0 && !p.crHalo) throwHalo(p);
   p.crLast = s.tick;

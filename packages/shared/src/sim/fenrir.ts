@@ -10,7 +10,7 @@ import { alive, inCircle, inCone, onSegment, strike as strike_, stun } from "./s
 import type { FenrirWave } from "./fenrirTypes";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const strike = srcFn("fenrir", () => strike_);
 
 export { isFenrir } from "./fenrirStats";
@@ -106,7 +106,7 @@ function waveTick(s: RunState): void {
   const p = s.player;
   if (!p.fnWaves?.length) return;
   const rift = hasPerk(p, "fnRift");
-  for (const w of p.fnWaves) {
+  for (const w of srcEach(p.fnWaves)) {
     const ax = w.x;
     const ay = w.y;
     w.x += w.dx * w.sp;
@@ -128,7 +128,7 @@ function waveTick(s: RunState): void {
 function crackTick(s: RunState): void {
   const p = s.player;
   if (!p.fnCracks?.length) return;
-  for (const c of p.fnCracks) {
+  for (const c of srcEach(p.fnCracks)) {
     if (--c.t % K.fnRift.gap !== 0) continue;
     for (const e of inCircle(s, c.x, c.y, K.fnRift.r)) hit(s, e, fenrirPower(p) * K.fnRift.mul);
   }

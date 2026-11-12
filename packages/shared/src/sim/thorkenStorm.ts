@@ -7,7 +7,7 @@ import { rot } from "./orbit";
 import { alive, inCircle, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, dist2, hasPerk } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const tkHit = srcFn("thorkenStorm", () => tkHit_);
 
 /** (x, y)에 천둥 한 번 (둘레 r · 기절) */
@@ -91,7 +91,7 @@ export function stormTick(s: RunState): void {
     if (st.t <= 0) delete p.tkStorm;
   }
   if (p.tkWhirls) {
-    for (const w of p.tkWhirls) spin(s, w, T.whirlPull, T.whirlGap, p.stats.damage * T.whirlMul);
+    for (const w of srcEach(p.tkWhirls)) spin(s, w, T.whirlPull, T.whirlGap, p.stats.damage * T.whirlMul);
     p.tkWhirls = p.tkWhirls.filter((w) => w.t > 0);
     if (p.tkWhirls.length === 0) delete p.tkWhirls;
   }

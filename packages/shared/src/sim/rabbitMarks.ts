@@ -1,6 +1,6 @@
 // 래빗 내리찍은 뒤 효과와 바닥 것: 땅울림 파동(맵 끝까지, 세 갈래)·여진 · 토끼인장 · 유령 망치 · 갈라진 땅 · 별사탕
 // 파동은 내리찍은 자리에서 땅울림이 다 커진 뒤(그림 1~3번째 칸) 4번째 칸 크기로 바라보는 쪽 맵 끝까지 나아감
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcCb } from "./dmgSrc";
 import { RABBIT_PERKS as K } from "../itemsRabbit";
 import { createRng, deriveSeed } from "../rng";
 import { RABBIT_HAMMER as H } from "../weaponsRabbit";
@@ -19,8 +19,8 @@ export function slamExtras(s: RunState, x: number, y: number, hit: EnemyState[])
   const triple = hasPerk(p, "rbTriple") && rng.nextFloat() < K.rbTriple.chance * luckMul(p);
   if (triple || hasPerk(p, "rbQuake")) sendWaves(s, x, y, triple);
   const marks = (p.rbMarks ??= []);
-  if (hasPerk(p, "rbSeal") && rng.nextFloat() < K.rbSeal.chance * luckMul(p)) marks.push({ x, y, kind: 0, age: 0, life: K.rbSeal.delay, r: K.rbSeal.r * size, dmg: p.stats.damage * K.rbSeal.mul });
-  if (hasPerk(p, "rbCrack")) marks.push({ x, y, kind: 2, age: 0, life: K.rbCrack.ticks, r: H.slamR * size * K.rbCrack.size, dmg: p.stats.damage * K.rbCrack.mul });
+  if (hasPerk(p, "rbSeal") && rng.nextFloat() < K.rbSeal.chance * luckMul(p)) srcRun(s, "rbSeal", () => { marks.push({ x, y, kind: 0, age: 0, life: K.rbSeal.delay, r: K.rbSeal.r * size, dmg: p.stats.damage * K.rbSeal.mul }); });
+  if (hasPerk(p, "rbCrack")) srcRun(s, "rbCrack", () => { marks.push({ x, y, kind: 2, age: 0, life: K.rbCrack.ticks, r: H.slamR * size * K.rbCrack.size, dmg: p.stats.damage * K.rbCrack.mul }); });
   if (hasPerk(p, "rbGhost") && rng.nextFloat() < K.rbGhost.chance * luckMul(p)) srcRun(s, "rbGhost", () => {
     const e = farFoe(s, x, y, hit.map((h) => h.id));
     if (e) marks.push({ x: e.x, y: e.y, kind: 1, age: 0, life: K.rbGhost.delay, r: K.rbGhost.r * size, dmg: p.stats.damage * H.mul * K.rbGhost.mul * megaMul(p) });
@@ -71,8 +71,8 @@ function sendWaves(s: RunState, x: number, y: number, triple: boolean): void {
 /** 틱마다: 파동이 쿵·쿵·쿵 한 칸씩 찍으며 나아가 때림 (맵 끝에 닿으면 여진) · 바닥 것 */
 export function marksTick(s: RunState): void {
   const p = s.player;
-  if (p.rbWaves?.length) p.rbWaves = p.rbWaves.filter((w) => waveStep(s, w));
-  if (p.rbMarks?.length) p.rbMarks = p.rbMarks.filter((m) => markStep(s, m));
+  if (p.rbWaves?.length) p.rbWaves = p.rbWaves.filter(srcCb((w) => waveStep(s, w)));
+  if (p.rbMarks?.length) p.rbMarks = p.rbMarks.filter(srcCb((m) => markStep(s, m)));
 }
 
 function waveStep(s: RunState, w: NonNullable<RunState["player"]["rbWaves"]>[number]): boolean {

@@ -9,7 +9,7 @@ import type { HrBeast, HrDecoy } from "./hrTypes";
 import { bodyHurt, bodyStep, bringNear, foeNear } from "./puppetAllies";
 import type { RunState } from "./types";
 import { addEffect, keepInRoom, markCrit, normalize, roomGrid } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcCb } from "./dmgSrc";
 const hrArea = srcFn("hrBeasts", () => hrArea_), hrHit = srcFn("hrBeasts", () => hrHit_);
 
 type P = RunState["player"];
@@ -111,13 +111,13 @@ export function beastsTick(s: RunState, moved: boolean): void {
   const p = s.player;
   if (p.hrBeasts?.length) {
     if (moved) p.hrBeasts.forEach((b, i) => bringNear(s, b, i));
-    p.hrBeasts = p.hrBeasts.filter((b, i) => beastTick(s, b, i));
+    p.hrBeasts = p.hrBeasts.filter(srcCb((b, i) => beastTick(s, b, i)));
   }
   if (!p.hrDecoys?.length) return;
-  p.hrDecoys = p.hrDecoys.filter((d) => {
+  p.hrDecoys = p.hrDecoys.filter(srcCb((d) => {
     if (--d.left > 0 && !bodyHurt(s, d)) return true;
     // 쓰러지면(또는 시간이 다하면) 연기가 터짐
     hrArea(s, d.x, d.y, K.hrDecoy.r, p.stats.damage * K.hrDecoy.mul * petMul(p), "hrPop");
     return false;
-  });
+  }));
 }

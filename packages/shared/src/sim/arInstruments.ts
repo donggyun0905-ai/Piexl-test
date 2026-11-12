@@ -5,7 +5,7 @@ import { ARIA_PERKS as K } from "../itemsAria";
 import { AR_NOTE as N } from "../weaponsAria";
 import { arAlive, arArea, arHit, arNearest, arRng, arRoll, arSpot, hasAr } from "./arKit";
 import type { ArInst, ArShot } from "./arTypes";
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcEach } from "./dmgSrc";
 import { rot } from "./orbit";
 import type { RunState } from "./types";
 import { addEffect, normalize } from "./util";
@@ -100,7 +100,7 @@ function play(s: RunState, i: ArInst): void {
 function shotsTick(s: RunState): void {
   const p = s.player;
   const keep: ArShot[] = [];
-  for (const sh of p.arShots ?? []) {
+  for (const sh of srcEach(p.arShots ?? [])) {
     sh.prevX = sh.x;
     sh.prevY = sh.y;
     const t = s.enemies.find((e) => e.id === sh.tgt && arAlive(e));

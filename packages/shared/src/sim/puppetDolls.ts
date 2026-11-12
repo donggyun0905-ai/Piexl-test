@@ -1,6 +1,6 @@
 // 인형술사 실 내리치기 뒤 효과와 바닥 것: 미니 인형 8종(때릴 때 확률로 내 쪽에서 나와 적에게 달려가 터짐) · 금사슬 · 거미줄 · 검은 실 · 시체 인형
 // 미니 인형 종류(doll)는 itemsPuppet.PP_DOLLS 차례 = 그림 칸 (render/puppetArt)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcCb } from "./dmgSrc";
 import { ENEMIES } from "../enemyDefs";
 import { PP_DOLLS, PUPPET_PERKS as K } from "../itemsPuppet";
 import { createRng, deriveSeed } from "../rng";
@@ -35,7 +35,7 @@ export function afterStrike(s: RunState, x: number, y: number, hit: EnemyState[]
     if (rng.nextFloat() < H.dollChance * own.length) sendDoll(s, rng.pick(own), p.x, p.y, hasPerk(p, "ppDollDancer") ? K.ppDollDancer.bounce : 0);
   }
   if (hasPerk(p, "ppChain") && hit.length) srcRun(s, "ppChain", () => chain(s, hit));
-  if (hasPerk(p, "ppWeb")) (p.ppSpots ??= []).push({ x, y, kind: 1, age: 0, life: K.ppWeb.ticks, r: 18 });
+  if (hasPerk(p, "ppWeb")) srcRun(s, "ppWeb", () => { (p.ppSpots ??= []).push({ x, y, kind: 1, age: 0, life: K.ppWeb.ticks, r: 18 }); });
 }
 
 /** 금사슬: 맞힌 적에서 가까운 다른 적 둘에게 이어서 튐 */
@@ -164,7 +164,7 @@ function spotTick(s: RunState, o: { x: number; y: number; kind: number; age: num
 /** 틱마다: 미니 인형 · 바닥 것 · 검은 실 */
 export function dollsTick(s: RunState): void {
   const p = s.player;
-  if (p.ppDolls?.length) p.ppDolls = p.ppDolls.filter((dl) => moveDoll(s, dl));
-  if (p.ppSpots?.length) p.ppSpots = p.ppSpots.filter((o) => spotTick(s, o));
+  if (p.ppDolls?.length) p.ppDolls = p.ppDolls.filter(srcCb((dl) => moveDoll(s, dl)));
+  if (p.ppSpots?.length) p.ppSpots = p.ppSpots.filter(srcCb((o) => spotTick(s, o)));
   if (hasPerk(p, "ppBlack")) srcRun(s, "ppBlack", () => blackTick(s));
 }

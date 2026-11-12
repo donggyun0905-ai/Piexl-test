@@ -10,7 +10,7 @@ import { alive, inLine, shoot, strike as strike_ } from "./s2Kit";
 import type { ProjectileState, RunState } from "./types";
 import { addEffect } from "./util";
 import { buffVal } from "./voyager";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const blastAt = srcFn("voyagerSkills", () => blastAt_), strike = srcFn("voyagerSkills", () => strike_);
 
 type Extra = Partial<Pick<ProjectileState, "homing" | "seek" | "bounces" | "back" | "span" | "split" | "ghost" | "pierce" | "slow">>;
@@ -139,7 +139,7 @@ export function tickVolley(s: RunState): void {
   }
   if (!p.vyMarks?.length) return;
   const keep = [];
-  for (const m of p.vyMarks) {
+  for (const m of srcEach(p.vyMarks)) {
     if (--m.t > 0) {
       keep.push(m);
       continue;

@@ -11,7 +11,7 @@ import { recalcStats } from "./items";
 import { createRng, deriveSeed } from "../rng";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const damageEnemy = srcFn("oni", () => damageEnemy_);
 
 /** 방망이 휘두르기: 앞 부채꼴 안 적에게 공격력만큼 · 맞은 적 (가까운 순) */
@@ -53,7 +53,7 @@ function gauge(s: RunState): void {
 function zones(s: RunState): void {
   const p = s.player;
   const echo = hasPerk(p, "oniSpiritEcho");
-  for (const z of p.oZones ?? []) z.ticks--;
+  for (const z of srcEach(p.oZones ?? [])) z.ticks--;
   p.oZones = (p.oZones ?? []).filter((z) => z.ticks > 0);
   if (p.oZones.length === 0) delete p.oZones;
   for (const e of s.enemies) {
@@ -87,7 +87,7 @@ export function storms(s: RunState): void {
   if (!p.oStorms) return;
   const gale = hasPerk(p, "oniGale");
   const r = ONI.wind.r * (p.oReach ?? 1);
-  for (const st of p.oStorms) {
+  for (const st of srcEach(p.oStorms)) {
     st.prevX = st.x;
     st.prevY = st.y;
     st.ticks--;
@@ -113,7 +113,7 @@ export function storms(s: RunState): void {
 function splashes(s: RunState): void {
   const p = s.player;
   if (!p.oSplash) return;
-  for (const sp of p.oSplash) {
+  for (const sp of srcEach(p.oSplash)) {
     if (--sp.wait > 0) continue;
     sp.wait = ONI.tide.gap;
     sp.left--;

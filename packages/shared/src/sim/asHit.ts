@@ -7,7 +7,7 @@ import { alive } from "./shadowingSpirits";
 import { ignite } from "./status";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, normalize } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const damageEnemy = srcFn("asHit", () => damageEnemy_);
 
 /** 시드 확률 (굴릴 때마다 다른 값) */
@@ -62,7 +62,7 @@ export function asHit(s: RunState, e: EnemyState, dmg: number, dx: number, dy: n
 export function splitTick(s: RunState): void {
   const p = s.player;
   if (!p.asSplit?.length) return;
-  for (const h of p.asSplit) {
+  for (const h of srcEach(p.asSplit)) {
     const e = s.enemies.find((x) => x.id === h.id);
     if (e && alive(e)) hitOnce(s, e, h.dmg, h.dx, h.dy, false);
     h.left = e && alive(e) ? h.left - 1 : 0;

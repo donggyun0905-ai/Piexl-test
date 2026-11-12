@@ -7,7 +7,7 @@ import { foeNear } from "./puppetAllies";
 import { alive } from "./shadowingSpirits";
 import type { RunState } from "./types";
 import { addEffect, reachOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const hrArea = srcFn("hrSpirits", () => hrArea_), hrHit = srcFn("hrSpirits", () => hrHit_);
 
 /** 용이 지나가는 틱 (화면도 씀) */
@@ -30,7 +30,7 @@ function owlsTick(s: RunState): void {
   const p = s.player;
   const O = K.hrOwl;
   const hunt = hasHr(p, "hrHunt");
-  for (const o of p.hrOwls ?? []) {
+  for (const o of srcEach(p.hrOwls ?? [])) {
     o.prevX = o.x;
     o.prevY = o.y;
     if (o.t > 0) {

@@ -1,4 +1,5 @@
 // 미류 공용 도우미: 대태도 종류 · 해류 게이지 · 맞히기 · 물길 놓기 · 받는 피해 · 이동 배율
+import { srcEach } from "./dmgSrc";
 import { MIRYU_PERKS as K } from "../itemsMiryu";
 import { MIRYU as M, type MiryuStyle } from "../weaponsMiryu";
 import { damageEnemy } from "./combat";
@@ -60,7 +61,7 @@ export function addStream(s: RunState, pts: [number, number][], ring?: [number, 
 
 /** 내가 물길 위에 있는지 */
 export function onStream(p: PlayerState): boolean {
-  for (const w of p.mrStreams ?? []) if (nearStream(w, p.x, p.y, w.w + p.r)) return true;
+  for (const w of srcEach(p.mrStreams ?? [])) if (nearStream(w, p.x, p.y, w.w + p.r)) return true;
   return false;
 }
 

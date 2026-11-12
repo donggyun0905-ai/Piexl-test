@@ -10,7 +10,7 @@ import { blocksShot } from "./layout";
 import { alive, stun } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcCb, srcEach } from "./dmgSrc";
 const mrHit = srcFn("miryuFlow", () => mrHit_);
 
 /** 물길이 사라질 때: 빙류는 얼음으로 깨지고, 폭포 아이템은 무너져 내림 (적마다 한 번) */
@@ -39,7 +39,7 @@ function streamsTick(s: RunState): void {
   const st = mrOf(p);
   const bite = s.tick % Math.max(1, Math.round(M.streamEvery * (st.every ?? 1))) === 0;
   const push = M.carry * (st.carry ?? 1);
-  for (const w of p.mrStreams) w.t--;
+  for (const w of srcEach(p.mrStreams)) w.t--;
   for (const e of alive(s)) {
     let dir: [number, number] | null = null;
     let w: MrStream | undefined;
@@ -64,7 +64,7 @@ function streamsTick(s: RunState): void {
     mrHit(s, e, p.stats.damage * M.streamMul, e.x - dir[0] * 4, e.y - dir[1] * 4, 0, true);
     gain(s, M.gainStream);
   }
-  for (const w of p.mrStreams) if (w.t <= 0) streamEnd(s, w);
+  for (const w of srcEach(p.mrStreams)) if (w.t <= 0) streamEnd(s, w);
   p.mrStreams = p.mrStreams.filter((w) => w.t > 0);
   if (p.mrStreams.length === 0) delete p.mrStreams;
 }
@@ -101,7 +101,7 @@ function bladesTick(s: RunState): void {
   const p = s.player;
   if (!p.mrBlades) return;
   const g = roomGrid(s);
-  p.mrBlades = p.mrBlades.filter((b) => {
+  p.mrBlades = p.mrBlades.filter(srcCb((b) => {
     if (b.seek) {
       let near: { x: number; y: number } | undefined;
       for (const e of alive(s)) if (!b.hit.includes(e.id) && dist2(e, b) < 160 ** 2 && (!near || dist2(e, b) < dist2(near, b))) near = e;
@@ -120,7 +120,7 @@ function bladesTick(s: RunState): void {
     }
     const wall = b.x < ROOM_MIN_X || b.x > ROOM_MAX_X || b.y < ROOM_MIN_Y || b.y > ROOM_MAX_Y || (g !== null && blocksShot(g, b.x, b.y));
     return b.left > 0 && !wall;
-  });
+  }));
   if (p.mrBlades.length === 0) delete p.mrBlades;
 }
 
@@ -162,7 +162,7 @@ function waterfall(s: RunState, x: number, y: number): void {
     stun(e, M.fallStun);
   }
   const hit: number[] = [];
-  for (const w of p.mrStreams ?? []) {
+  for (const w of srcEach(p.mrStreams ?? [])) {
     w.pts.forEach(([px, py], i) => {
       for (const e of alive(s)) {
         if (hit.includes(e.id) || dist2(e, { x: px, y: py }) > (w.w * 1.8 + e.r) ** 2) continue;

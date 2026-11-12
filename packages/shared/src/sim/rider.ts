@@ -8,7 +8,7 @@ import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, weaponOf } from "./util";
 import { addFlame } from "./flames";
 import { alive, fan, inCircle, inCone, inLine, shoot, startRush, rushTick as rushTick_, stun, strike as strike_ } from "./s2Kit";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const blastAt = srcFn("rider", () => blastAt_), damageEnemy = srcFn("rider", () => damageEnemy_), damagePlayer = srcFn("rider", () => damagePlayer_), rushTick = srcFn("rider", () => rushTick_), strike = srcFn("rider", () => strike_);
 
 const styleOf = (p: PlayerState): RideStyle => weaponOf(p).ride ?? { move: "smash", reach: 30 };
@@ -106,7 +106,7 @@ function drive(s: RunState): void {
   }
   if (p.rdFire?.length) {
     const blue = styleOf(p).move === "flame";
-    for (const f of p.rdFire) {
+    for (const f of srcEach(p.rdFire)) {
       if (--f.t % 30 !== 0) continue;
       // 점화는 0.5초마다 넣은 값의 25% → 불꽃 자국 피해가 그대로 들어가게 4배로
       for (const e of inCircle(s, f.x, f.y, R.fireR)) ignite(e, f.dmg * 4 * (blue ? addFlame(s, e) : 1));

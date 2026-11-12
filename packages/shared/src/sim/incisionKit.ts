@@ -1,6 +1,6 @@
 // 인시전 공용 도우미: 도륙 콤보 (단계 · 끊김 · 맞으면 잃음 · 도약 준비 · 도륙 폭발) · 맞힘(성흔·회복) · 광란 각성 · 학살
 // 날아가는 초승달 · 피의 길·갈라진 땅 · 피의 소용돌이 (도약은 sim/incisionLeap)
-import { srcRun } from "./dmgSrc";
+import { srcRun, srcEach } from "./dmgSrc";
 import { INCISION_PERKS as K } from "../itemsIncision";
 import { INCISION as I } from "../weaponsIncision";
 import { STIGMA } from "../weaponsDawn";
@@ -108,7 +108,7 @@ export function wavesTick(s: RunState): void {
   if (!p.icWaves) return;
   const r = K.icThrow.r * reachOf(p);
   let n = 0;
-  for (const w of p.icWaves) {
+  for (const w of srcEach(p.icWaves)) {
     w.x += w.vx;
     w.y += w.vy;
     w.t--;
@@ -129,7 +129,7 @@ export function zonesTick(s: RunState): void {
   const p = s.player;
   if (!p.icZones) return;
   let n = 0;
-  for (const z of p.icZones) {
+  for (const z of srcEach(p.icZones)) {
     z.t--;
     if (z.k === 0) {
       if (z.t > 0) continue;

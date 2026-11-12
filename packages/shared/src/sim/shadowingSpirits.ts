@@ -7,7 +7,7 @@ import type { InkSpirit, InkZone } from "./sdTypes";
 import { ignite } from "./status";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, keepInRoom, normalize, roomGrid } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcCb } from "./dmgSrc";
 const damageEnemy = srcFn("shadowingSpirits", () => damageEnemy_);
 
 /** 맞힐 수 있는 적인지 */
@@ -128,6 +128,6 @@ function zoneTick(s: RunState, z: InkZone): boolean {
 /** 틱마다: 날아가는 것·바닥 자리 */
 export function spiritsTick(s: RunState): void {
   const p = s.player;
-  if (p.sdSpirits?.length) p.sdSpirits = p.sdSpirits.filter((sp) => moveSpirit(s, sp));
-  if (p.sdZones?.length) p.sdZones = p.sdZones.filter((z) => zoneTick(s, z));
+  if (p.sdSpirits?.length) p.sdSpirits = p.sdSpirits.filter(srcCb((sp) => moveSpirit(s, sp)));
+  if (p.sdZones?.length) p.sdZones = p.sdZones.filter(srcCb((z) => zoneTick(s, z)));
 }

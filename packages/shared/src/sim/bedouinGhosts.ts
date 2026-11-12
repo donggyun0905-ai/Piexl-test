@@ -1,4 +1,5 @@
 // 베두인 잔상 고리: 날아가는 차크람이 지나간 자리에 잔상을 남기고, 잔상은 3초 동안 돌며 닿은 적을 계속 벰
+import { srcEach } from "./dmgSrc";
 import { BEDOUIN_PERKS as K } from "../itemsBedouin";
 import type { ThrownChakram } from "./bedouinTypes";
 import type { RunState } from "./types";
@@ -11,7 +12,7 @@ export function ghostTick(s: RunState, c: ThrownChakram | undefined, hit: (x: nu
     (p.ghosts ??= []).push({ x: c.x, y: c.y, r: c.r, left: K.whirlRing.ticks });
   }
   if (!p.ghosts) return;
-  for (const g of p.ghosts) {
+  for (const g of srcEach(p.ghosts)) {
     g.left--;
     if (g.left % 30 === 0) hit(g.x, g.y, g.r);
   }

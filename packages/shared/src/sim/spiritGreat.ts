@@ -6,7 +6,7 @@ import { blastAt as blastAt_, healPlayer } from "./combat";
 import { alive, inCircle, inLine, onSegment, poison, root, stun, strike as strike_ } from "./s2Kit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const blastAt = srcFn("spiritGreat", () => blastAt_), strike = srcFn("spiritGreat", () => strike_);
 
 /** 대정령 순번 (그리기: 효과 dirX) */
@@ -56,7 +56,7 @@ function pendingTick(s: RunState): void {
     if (!p.spDrops.length) delete p.spDrops;
   }
   if (p.spGas?.length) {
-    for (const g of p.spGas) {
+    for (const g of srcEach(p.spGas)) {
       g.t--;
       if (g.t % P.gasEvery !== 0) continue;
       for (const t of inCircle(s, g.x, g.y, g.r)) {

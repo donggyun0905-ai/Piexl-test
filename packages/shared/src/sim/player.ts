@@ -29,7 +29,7 @@ import { classMoveMul, classSpeedMul, foeHeld, foeMoveMul, foeNoAttack, onyxDash
 import type { EnemyState, PlayerState, RunState, TickInput } from "./types";
 import { addEffect, shotDirs, DASH_COOLDOWN, DASH_SPEED_MUL, DASH_TICKS, dist2, hasPerk, keepInRoom, normalize, STILL_TICKS, weaponOf } from "./util";
 import { readAim } from "./tracker";
-import { tabooUp } from "./taboo"; import { blastSlideMul } from "./blastMag"; import { vaultGrid } from "./silverBulletKit";
+import { srcRun } from "./dmgSrc"; import { tabooUp } from "./taboo"; import { blastSlideMul } from "./blastMag"; import { vaultGrid } from "./silverBulletKit";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -153,7 +153,7 @@ export function updatePlayer(s: RunState, raw: TickInput): void {
   if (wasDashing && p.dashTicks === 0) {
     readyAmbush(p);
     // 대지 흔들기: 대시가 끝나면 주변에 충격파
-    if (hasPerk(p, "earthshaker")) blastAt(s, p.x, p.y, PERKS.earthshaker.radius, p.stats.damage * PERKS.earthshaker.damage, { push: PERKS.earthshaker.push });
+    if (hasPerk(p, "earthshaker")) srcRun(s, "earthshaker", () => { blastAt(s, p.x, p.y, PERKS.earthshaker.radius, p.stats.damage * PERKS.earthshaker.damage, { push: PERKS.earthshaker.push }); });
   }
   p.stillTicks = mlen > 0 || p.dashTicks > 0 ? 0 : p.stillTicks + 1;
 

@@ -1,5 +1,5 @@
 // 백인장 때리기: 한 대 · 범위 · 나눠 때리는 기술(난무·회전참·폭우·침격·감옥·팔연참·종언)을 틱마다 한 대씩 · 출혈·죽음 상태이상
-import { logDmg, srcFn } from "./dmgSrc";
+import { logDmg, srcFn, srcEach } from "./dmgSrc";
 import { BJ_PERKS as K } from "../itemsBaekinjang";
 import { ENEMIES } from "../content";
 import { bjAlive, bjNearest } from "./bjKit";
@@ -100,7 +100,7 @@ function finish(s: RunState, v: BjVolley): void {
 function endTick(s: RunState): void {
   const p = s.player;
   if (p.bjShots?.length) {
-    for (const h of p.bjShots) {
+    for (const h of srcEach(p.bjShots)) {
       if (h.at > s.tick) continue;
       const e = s.enemies.find((x) => x.id === h.id);
       if (!e || !bjAlive(e)) continue;
@@ -126,7 +126,7 @@ function endTick(s: RunState): void {
 export function volleyTick(s: RunState): void {
   const p = s.player;
   if (p.bjVolleys?.length) {
-    for (const v of p.bjVolleys) {
+    for (const v of srcEach(p.bjVolleys)) {
       if (v.next > s.tick) continue;
       once(s, v);
       v.next = s.tick + v.every;

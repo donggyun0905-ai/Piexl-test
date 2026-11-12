@@ -1,5 +1,5 @@
 // 소환수 움직임·공격: 달려가 치기(해골·늑대·박쥐·골렘) · 거리를 두고 쏘기(임프·궁수·용) · 자폭(불꽃 정령) · 제자리(독버섯) · 내 둘레(요정)
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { ENEMIES } from "../content";
 import { SUMMON_PERKS } from "../itemsSummon";
 import { SUMMON_STATS, type SummonStat } from "../weaponsSummon";
@@ -67,7 +67,7 @@ export function updateSummons(s: RunState): void {
   const base = p.stats.damage * (hasPerk(p, "empower") ? SUMMON_PERKS.empower.damage : 1);
   const fast = (p.lashTicks ?? 0) > 0 ? 1 + SUMMON_PERKS.lash.speed : 1;
   const gone: Summoned[] = [];
-  for (const m of p.summons) {
+  for (const m of srcEach(p.summons)) {
     m.prevX = m.x;
     m.prevY = m.y;
     const st = SUMMON_STATS[m.kind];

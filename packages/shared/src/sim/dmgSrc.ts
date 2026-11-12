@@ -20,14 +20,55 @@ export function srcRun<T>(s: RunState, id: string, fn: () => T): T {
   const blasts = s.pendingBlasts;
   const n = shots.length;
   const m = blasts.length;
+  const pl = s.player as unknown as Record<string, unknown[] | undefined>;
+  const lists = LISTS.map((k) => pl[k]);
+  const lens = lists.map((l) => l?.length ?? 0);
   cur = id;
   try {
     return fn();
   } finally {
+    // 구간 안에서 새로 생긴 소환물·장판에도 출처를 달아 둠 (나중에 때릴 때 srcEach·srcCb가 꺼내 씀)
+    for (let k = 0; k < LISTS.length; k++) {
+      const l = pl[LISTS[k]!];
+      const old = lists[k];
+      if (!l || (l === old && l.length === lens[k])) continue;
+      const had = old && l !== old ? new Set(old) : null;
+      for (let i = l === old ? lens[k]! : 0; i < l.length; i++) {
+        const o = l[i] as Tagged | null;
+        if (o && typeof o === "object" && !had?.has(o)) o.dsrc ??= id;
+      }
+    }
     if (s.projectiles === shots) for (let i = n; i < shots.length; i++) if (shots[i]!.fromPlayer) shots[i]!.src ??= id;
     if (s.pendingBlasts === blasts) for (let i = m; i < blasts.length; i++) blasts[i]!.src ??= id;
     cur = was;
   }
+}
+
+/** 계속 남는 소환물·장판·예약 공격 목록 (플레이어 상태의 이름): 패시브 구간에서 만든 것은 만든 패시브를 달고 다님 */
+const LISTS = "lnStrikes oStorms echoes bmBombs apDooms zsClouds wvBits wdMoon vyMarks tkWhirls summons stStars spirits spGas spDrops skLines shades sdZones sdSpirits sbShots sbBombs rfStorms rdFire rWyrms puFalls ppSpots ppDolls ppAllies pgMarks ocPools ocDarts oZones oSplash nlShots nlDets mqShells mnCracks mnBombs mcQueue mcFalls mcChains lvWhales lvPools lnWaves imBolts icZones icWaves iaThreads hrOwls hrDecoys hrBeasts ghosts gbDrops foresights fnWaves fnCracks flyers fgFalls ecHoles ecCuts eaQueue cyEmp crZones crCracks clQueue bzStrikes byWhirls btWaves btExecs bmFires bjVolleys bjShots awFields asWaves asSplit asRapids asFists arShots arEchoes apDrops allies ducklings hkSlides mnNodes mnPits mrStreams mrBlades puClones puInks rbWaves rbMarks tlSharks apFields lxQ".split(" ");
+interface Tagged {
+  dsrc?: string;
+}
+
+/** 소환물 목록을 돌 때: 하나마다 그것을 만든 패시브를 출처로 (없으면 지금 출처 그대로) */
+export function* srcEach<T>(list: readonly T[]): Generator<T> {
+  const was = cur;
+  try {
+    for (const o of list) {
+      cur = (o as Tagged | null)?.dsrc ?? was;
+      yield o;
+    }
+  } finally {
+    cur = was;
+  }
+}
+
+/** filter·forEach에 넘기는 함수용: 그 소환물을 만든 패시브를 출처로 */
+export function srcCb<T, R>(fn: (o: T, i: number) => R): (o: T, i: number) => R {
+  return (o, i) => {
+    const id = (o as Tagged | null)?.dsrc;
+    return id ? srcAs(id, () => fn(o, i)) : fn(o, i);
+  };
 }
 
 /** 이 파일에서 부르는 피해 함수 묶기: 패시브 구간 밖이면 "f:파일"로 (get: 순환 가져오기라도 안전하게 부를 때 꺼냄) */

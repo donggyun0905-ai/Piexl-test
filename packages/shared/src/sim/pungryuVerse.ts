@@ -8,7 +8,7 @@ import { ignite } from "./status";
 import { damageEnemy as damageEnemy_ } from "./combat";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, normalize } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const damageEnemy = srcFn("pungryuVerse", () => damageEnemy_);
 
 /** 풍류사 공격 한 번 (서리 맞은 적은 더 아픔) */
@@ -167,7 +167,7 @@ export function orbSpots(s: RunState): { x: number; y: number; r: number }[] {
 export function verseTick(s: RunState): void {
   const p = s.player;
   if (p.puFalls?.length) {
-    for (const f of p.puFalls) {
+    for (const f of srcEach(p.puFalls)) {
       if (--f.t > 0) continue;
       for (const e of inCircle(s, f.x, f.y, f.r)) puHit(s, e, f.dmg);
       addEffect(s, { kind: "puPillar", x: f.x, y: f.y, dirX: 0, dirY: 0, size: f.r, maxTicks: 18, tint: f.earth ? "earth" : "sky" });

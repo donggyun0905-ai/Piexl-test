@@ -1,5 +1,5 @@
 // 이클립스 틱마다 도는 것: 맞힘(게이지) · 날아가는 검격 · 블랙홀 · 그림자 돌진 · 영역(이글거리는 영역 + 치유의 빛 / 죽음의 영역)
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { ECLIPSE_PERKS as K } from "../itemsEclipse";
 import { ECLIPSE as E } from "../weaponsEclipse";
 import { heal } from "./heal";
@@ -28,7 +28,7 @@ export function ecHit(s: RunState, e: EnemyState, dmg: number, push = 0, gain = 
 function cutTick(s: RunState): void {
   const p = s.player;
   if (!p.ecCuts?.length) return;
-  for (const c of p.ecCuts) {
+  for (const c of srcEach(p.ecCuts)) {
     const ax = c.x;
     const ay = c.y;
     c.x += c.dx * c.sp;
@@ -48,7 +48,7 @@ function holeTick(s: RunState): void {
   const p = s.player;
   if (!p.ecHoles?.length) return;
   const g = roomGrid(s);
-  for (const h of p.ecHoles) {
+  for (const h of srcEach(p.ecHoles)) {
     h.t--;
     const hitNow = h.t % E.holeEvery === 0;
     for (const e of alive(s)) {

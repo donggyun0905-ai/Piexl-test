@@ -10,7 +10,7 @@ import { alive, inCircle } from "./s2Kit";
 import type { RunState } from "./types";
 import { addEffect, hasPerk, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "./util";
 import { isWall } from "./waveKit";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const blinkTo = srcFn("michaelaSkills", () => blinkTo_), explode = srcFn("michaelaSkills", () => explode_), mcHit = srcFn("michaelaSkills", () => mcHit_), swapTo = srcFn("michaelaSkills", () => swapTo_);
 
 /** (x,y) 둘레 반지름 r 안 아무 데나 n개 떨어뜨림 (벽은 피함, 시드로 자리 · gap 틱씩 차례로) */
@@ -78,13 +78,13 @@ export function mcSkill(s: RunState, i: number): void {
 /** 떨어지는 무기·연쇄·무기고 한 틱 */
 export function mcWorld(s: RunState): void {
   const p = s.player;
-  for (const f of p.mcFalls ?? []) {
+  for (const f of srcEach(p.mcFalls ?? [])) {
     if (--f.t > 0) continue;
     for (const e of inCircle(s, f.x, f.y, M.fallR)) mcHit(s, e, f.mul, 4, f.v);
     plant(s, f.x, f.y, f.w);
   }
   if (p.mcFalls) p.mcFalls = p.mcFalls.filter((f) => f.t > 0);
-  for (const c of p.mcChains ?? []) if (--c.t <= 0) explode(s, c.x, c.y, M.blastR, c.mul, c.v);
+  for (const c of srcEach(p.mcChains ?? [])) if (--c.t <= 0) explode(s, c.x, c.y, M.blastR, c.mul, c.v);
   if (p.mcChains) p.mcChains = p.mcChains.filter((c) => c.t > 0);
   if (!(p.mcUlt ?? 0)) return;
   p.mcUlt!--;

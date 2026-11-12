@@ -1,7 +1,7 @@
 // 펑크(테라코어, 시즌 2): 네온과 크롬으로 몸을 바꾼 여자. 사이버 무기 10 + 몸에 심는 능력(전용 아이템) 10
 // 신경 가속: 맞힐 때마다 게이지가 차고, 가득 차면 다음 대시에 켜짐 → 둘레의 시간이 느려지고(적·적 탄) 내 공격이 빨라지며 잔상이 남음
 // 수치는 weaponsPunk.PUNK, 아이템은 itemsPunk
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { blastSlowed } from "./blastMag";
 import { rabbitSlowed } from "./rabbit";
 import { bsSlowed } from "./bsUlt";
@@ -184,7 +184,7 @@ function emps(s: RunState): void {
   const p = s.player;
   if (!p.cyEmp?.length) return;
   const st = styleOf(p);
-  for (const g of p.cyEmp) {
+  for (const g of srcEach(p.cyEmp)) {
     if (--g.t > 0) continue;
     const list = inCircle(s, g.x, g.y, st.reach);
     blastAt(s, g.x, g.y, st.reach, g.dmg, { still: true });

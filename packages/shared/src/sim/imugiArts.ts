@@ -9,7 +9,7 @@ import { addEffect, hasPerk, keepInRoom, normalize, roomGrid } from "./util";
 import { createRng, deriveSeed } from "../rng";
 import { raiseShield } from "./imugiMods";
 import { pctHp } from "./pctHp";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const blastAt = srcFn("imugiArts", () => blastAt_), damageEnemy = srcFn("imugiArts", () => damageEnemy_), statusHit = srcFn("imugiArts", () => statusHit_);
 
 const roll = (s: RunState, e: EnemyState) => createRng(deriveSeed(s.seed, "skyDragon", s.tick, e.id)).nextFloat();
@@ -107,7 +107,7 @@ export function pearlStrike(s: RunState, dmg: number): void {
 export function dragonDots(s: RunState, dmg: number): void {
   const p = s.player;
   if (p.imBolts?.length) {
-    for (const b of p.imBolts) {
+    for (const b of srcEach(p.imBolts)) {
       if (--b.wait > 0) continue;
       const e = s.enemies.find((x) => x.id === b.id && x.hp > 0);
       b.left = e ? b.left - 1 : 0;

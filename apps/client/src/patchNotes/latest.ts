@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.43",
+    date: "2026-11-12",
+    items: {
+      ko: [
+        "피해 출처 3차: 패시브가 만든 소환물·장판·예약 공격이 나중에 준 피해가 묶음 이름(예: 그림 소환) 대신 그것을 만든 패시브 줄로 나옴 — 모든 캐릭터의 소환물 목록 100여 종에 적용",
+        "패시브 조건 바로 뒤에 이어지는 추가 타격 17곳도 그 패시브 줄로 (예: 별 그림·달 그림·지진·여진·거미줄 등)",
+      ],
+      en: [
+        "Damage sources, stage 3: damage dealt later by summons, zones and delayed attacks that a passive created is now listed under that passive instead of a group name (e.g. Painted spirits) — applied to about 100 summon lists across all characters",
+        "17 extra hits that directly follow a passive check are also credited to that passive (e.g. star and moon drawings, quakes, aftershocks, webs)",
+      ],
+      ja: [
+        "ダメージの出どころ 第3弾：パッシブが作った召喚物・領域・予約攻撃が後から与えたダメージが、まとめ名（例：描いた霊）ではなくそれを作ったパッシブの行に表示 — 全キャラの召喚物リスト約100種に適用",
+        "パッシブ条件の直後に続く追加攻撃17か所もそのパッシブの行に（例：星の絵・月の絵・地震・余震・クモの巣など）",
+      ],
+    },
+  },
+  {
     version: "0.52.42",
     date: "2026-11-12",
     items: {

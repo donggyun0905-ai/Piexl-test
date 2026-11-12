@@ -120,6 +120,19 @@ describe("쉐도잉", () => {
     expect((s.player.sdZones ?? []).some((z) => z.row === 9)).toBe(true);
   });
 
+  it("피해 출처: 패시브가 그린 그림(학·용)이 나중에 준 피해는 '그림 소환'이 아니라 그 패시브 것", () => {
+    const s = sd([[200, 40]], "sdCrane", "sdDragon");
+    drawLine(s, 110, 60, 200, 60, 30);
+    drawLine(s, 200, 60, 110, 160, 40);
+    drawLine(s, 110, 160, 200, 160, 30);
+    release(s);
+    expect((s.player.sdSpirits ?? []).every((x) => (x as { dsrc?: string }).dsrc)).toBe(true);
+    release(s, 200);
+    const by = s.player.dmgBy ?? {};
+    expect((by.sdCrane ?? 0) + (by.sdDragon ?? 0)).toBeGreaterThan(0);
+    expect(by["f:shadowingSpirits"] ?? 0).toBe(0);
+  });
+
   it("날개: 대시한 길을 따라 잉크 없이 획", () => {
     const s = sd([], "sdWings");
     for (let i = 0; i < 10; i++) stepSim(s, { ...EMPTY_INPUT, moveX: 100, dash: i === 0 });

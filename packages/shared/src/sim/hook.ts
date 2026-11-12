@@ -1,5 +1,6 @@
 // 훅(탈라시아, 해적): 누르면 빛 갈고리를 던짐 → 지나가며 적을 걸고(최대 3) 감아 와 내 앞에 모음 → 더블배럴 산탄총 초근접 발사 (sim/hookShot)
 // 아무 적도 안 걸린 채 벽에 박히면 밧줄을 타고 벽으로 날아가 내리며 쏨 · 보스에 걸리면 내가 보스에게 끌려가 쏘고 원래 자리로 튕겨 돌아옴
+import { srcRun } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { HOOK_PERKS as K } from "../itemsHook";
 import { HOOK as H } from "../weaponsHook";
@@ -113,7 +114,7 @@ function ride(s: RunState, h: HkHook): boolean {
     return true;
   }
   // 벽에 내림: 밧줄 그네는 둘레 충격파 · 내리며 바라보는 쪽으로 산탄
-  if (hasPerk(p, "hkSwing")) for (const e of alive(s)) if (dist2(e, p) <= (K.hkSwing.r + e.r) ** 2) hkHit(s, e, p.stats.damage * K.hkSwing.mul, p.x, p.y);
+  if (hasPerk(p, "hkSwing")) srcRun(s, "hkSwing", () => { for (const e of alive(s)) if (dist2(e, p) <= (K.hkSwing.r + e.r) ** 2) hkHit(s, e, p.stats.damage * K.hkSwing.mul, p.x, p.y); });
   addEffect(s, { kind: "hkLand", x: p.x, y: p.y, dirX: h.dx, dirY: h.dy, size: hasPerk(p, "hkSwing") ? K.hkSwing.r : 20, maxTicks: 20 });
   blast(s, -h.dx, -h.dy, []);
   return false;

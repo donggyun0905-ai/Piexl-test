@@ -1,6 +1,6 @@
 // 붐버(테라코어, 시즌 2): "폭발은 예술이다". 던지고·붙이고·깔고·쏘아 올려 터뜨림
 // 예술 연쇄: 1초 안에 또 터지면 한 칸씩 쌓여 폭발이 커짐 · 터져 쓰러진 적 자리에 여진. 수치는 weaponsBomber.BOMBER, 아이템은 itemsBomber
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { PW_PASSIVE } from "../paewangPassive";
 import { manualAim } from "./pwBasic";
 import { TICK_RATE } from "../constants";
@@ -202,7 +202,7 @@ function update(s: RunState): void {
   }
   updateMines(s, (x, y, r, dmg) => boom(s, x, y, r, dmg));
   if (p.bmFires?.length) {
-    for (const f of p.bmFires) {
+    for (const f of srcEach(p.bmFires)) {
       if (--f.t % 30 !== 0) continue;
       for (const e of inCircle(s, f.x, f.y, B.fireR)) ignite(e, f.dmg * 4 * addFlame(s, e));
     }

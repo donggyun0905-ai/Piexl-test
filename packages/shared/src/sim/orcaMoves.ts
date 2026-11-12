@@ -11,7 +11,7 @@ import { alive, isBoss, stun } from "./s2Kit";
 import { statusHit as statusHit_ } from "./statusHit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid, weaponOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const damageEnemy = srcFn("orcaMoves", () => damageEnemy_), statusHit = srcFn("orcaMoves", () => statusHit_);
 
 export const isOrca = (p: PlayerState) => p.characterId === "orca";
@@ -175,7 +175,7 @@ export function sharksTick(s: RunState): void {
     if (p.ocSharks.length === 0) delete p.ocSharks;
   }
   if (!p.ocPools) return;
-  for (const w of p.ocPools) {
+  for (const w of srcEach(p.ocPools)) {
     w.t--;
     for (const e of alive(s)) {
       if (dist2(e, w) > (O.poolR + e.r) ** 2) continue;

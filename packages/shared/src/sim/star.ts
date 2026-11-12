@@ -1,5 +1,5 @@
 // 별지기(히든): 공격하면 그 자리에 별을 박음 · 가까운 별끼리 빛줄기로 이어져 닿는 적을 태움 · 별이 가득 차면 별자리 완성, 모든 별이 터짐
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../enemyDefs";
 import { STAR_PERKS as K } from "../itemsStar";
@@ -161,7 +161,7 @@ function burst(s: RunState): void {
   const st = styleOf(p);
   const r = st === "nova" ? STAR.nova.burstR : STAR.burstR;
   const mul = (st === "nova" ? STAR.nova.burstMul : STAR.burstMul) * (p.stZodiac ? K.zodiac.mul : 1);
-  for (const o of p.stStars ?? []) {
+  for (const o of srcEach(p.stStars ?? [])) {
     if (hasPerk(p, "eclipse") || st === "sun")
       for (const e of s.enemies) {
         if (e.hp <= 0 || dist2(e, o) > (r + e.r) * (r + e.r)) continue;

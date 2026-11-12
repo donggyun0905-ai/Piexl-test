@@ -4,7 +4,7 @@ import { ARIA_PERKS as K } from "../itemsAria";
 import { AR_NOTE as N } from "../weaponsAria";
 import { startFinale } from "./arFinale";
 import { arArea as arArea_, hasAr, styleOf } from "./arKit";
-import { srcFn, srcRun } from "./dmgSrc";
+import { srcFn, srcRun, srcEach } from "./dmgSrc";
 import type { RunState } from "./types";
 import { reachOf } from "./util";
 
@@ -37,6 +37,6 @@ export function checkBurst(s: RunState): void {
 export function burstTick(s: RunState): void {
   const p = s.player;
   if (!p.arEchoes?.length) return;
-  for (const e of p.arEchoes) if (--e.t <= 0) srcRun(s, "arEncore", () => arArea_(s, e.x, e.y, e.r, e.dmg, "arEncore", e.kind, 30));
+  for (const e of srcEach(p.arEchoes)) if (--e.t <= 0) srcRun(s, "arEncore", () => arArea_(s, e.x, e.y, e.r, e.dmg, "arEncore", e.kind, 30));
   p.arEchoes = p.arEchoes.filter((e) => e.t > 0);
 }

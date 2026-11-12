@@ -1,6 +1,6 @@
 // 에테르 광부 땅 위의 것들: 원석 모으기 · 광산 붕괴 바위 · 에테르 결정(깨면 파편) · 땅 갈라짐 · 다이너마이트 · 구덩이
 // 수치는 weaponsMiner.MINER, 아이템은 itemsMiner
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { MINER_PERKS as K } from "../itemsMiner";
 import { MINER as M } from "../weaponsMiner";
 import { createRng, deriveSeed } from "../rng";
@@ -84,7 +84,7 @@ export function hitNodes(s: RunState, x: number, y: number, r: number): void {
   if (!p.mnNodes?.length) return;
   const keep: GroundMark[] = [];
   const broke: GroundMark[] = [];
-  for (const n of p.mnNodes) (Math.hypot(n.x - x, n.y - y) <= r + 6 ? broke : keep).push(n);
+  for (const n of srcEach(p.mnNodes)) (Math.hypot(n.x - x, n.y - y) <= r + 6 ? broke : keep).push(n);
   p.mnNodes = keep;
   for (const n of broke) shatter(s, n);
 }
@@ -140,7 +140,7 @@ function hitNodesOnLine(s: RunState, c: GroundMark): void {
   const vx = (c.tx ?? c.x) - c.x;
   const vy = (c.ty ?? c.y) - c.y;
   const l2 = vx * vx + vy * vy || 1;
-  for (const n of p.mnNodes ?? []) {
+  for (const n of srcEach(p.mnNodes ?? [])) {
     const t = Math.max(0, Math.min(1, ((n.x - c.x) * vx + (n.y - c.y) * vy) / l2));
     (Math.hypot(n.x - c.x - vx * t, n.y - c.y - vy * t) <= M.crackWidth + 6 ? broke : keep).push(n);
   }
@@ -153,7 +153,7 @@ function pits(s: RunState): void {
   const p = s.player;
   if (!p.mnPits?.length) return;
   p.mnPits = due(p.mnPits)[1];
-  for (const pit of p.mnPits) {
+  for (const pit of srcEach(p.mnPits)) {
     for (const e of inCircle(s, pit.x, pit.y, M.pitR - 4)) {
       if (!isBoss(e)) {
         finish(s, e);

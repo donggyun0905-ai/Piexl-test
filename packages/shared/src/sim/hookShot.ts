@@ -1,6 +1,6 @@
 // 훅 더블배럴 산탄총 (sim/hook가 씀): 초근접 부채꼴 발사 · 끌려온 적은 걸린 자리 쯤으로 튕겨 날아감 · 벽에 부딪히면 난파
 // 공용 도우미: 갈고리 종류 · 거리 · 걸리는 수 · 맞히기 · 받는 피해
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcCb } from "./dmgSrc";
 import { HOOK_PERKS as K } from "../itemsHook";
 import { HOOK as H, type HookStyle } from "../weaponsHook";
 import { damageEnemy as damageEnemy_, healPlayer } from "./combat";
@@ -94,7 +94,7 @@ export function slideTick(s: RunState): void {
   const p = s.player;
   if (!p.hkSlides) return;
   const g = roomGrid(s);
-  p.hkSlides = p.hkSlides.filter((w) => {
+  p.hkSlides = p.hkSlides.filter(srcCb((w) => {
     const e = s.enemies.find((o) => o.id === w.id && o.hp > 0);
     if (!e) return false;
     const nx = e.x + w.vx;
@@ -110,7 +110,7 @@ export function slideTick(s: RunState): void {
     e.y = ny;
     e.stunTicks = Math.max(e.stunTicks ?? 0, 2);
     return --w.t > 0;
-  });
+  }));
   if (p.hkSlides.length === 0) delete p.hkSlides;
 }
 

@@ -1,4 +1,5 @@
 // 아수라 기본 펀치와 공격마다 붙는 기술: 파동(부채꼴) · 연발(연속 펀치) · 육비 난무(날아가는 주먹) · 수라장 · 아수라 각성 굴리기
+import { srcCb, srcEach } from "./dmgSrc";
 import { ASURA_PERKS as K } from "../itemsAsura";
 import { ASURA_FIST as F } from "../weaponsAsura";
 import { asArea, asHit, asRoll } from "./asHit";
@@ -60,7 +61,7 @@ function launchFist(s: RunState): void {
 export function movesTick(s: RunState): void {
   const p = s.player;
   if (p.asWaves?.length) {
-    for (const w of p.asWaves) {
+    for (const w of srcEach(p.asWaves)) {
       if (w.at > s.tick) continue;
       const press = hasAs(p, "asPress");
       const r = K.asWave.r * w.size;
@@ -70,7 +71,7 @@ export function movesTick(s: RunState): void {
     p.asWaves = p.asWaves.filter((w) => w.at > s.tick);
   }
   if (p.asRapids?.length) {
-    for (const r of p.asRapids) {
+    for (const r of srcEach(p.asRapids)) {
       asArea(s, r.x, r.y, r.r, r.dmg, { dx: r.dx, dy: r.dy });
       r.left--;
     }
@@ -78,7 +79,7 @@ export function movesTick(s: RunState): void {
   }
   if (p.asFists?.length) {
     const F2 = K.asFlying;
-    p.asFists = p.asFists.filter((f) => {
+    p.asFists = p.asFists.filter(srcCb((f) => {
       f.x += f.dx * F2.speed;
       f.y += f.dy * F2.speed;
       f.age++;
@@ -89,6 +90,6 @@ export function movesTick(s: RunState): void {
         return false;
       }
       return f.age < F2.life;
-    });
+    }));
   }
 }

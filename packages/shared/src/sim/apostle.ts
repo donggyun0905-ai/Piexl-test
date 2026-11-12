@@ -1,5 +1,5 @@
 // 악의 사도: 하늘에서 뒤집힌 십자가 (짓누르기 · 일곱 죄는 장판) · 사탄의 가면 · 역천의 베드로 · 쓰러진 적의 영혼을 먹어 회복 (회복약은 오히려 피해)
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { manualAim } from "./pwBasic";
 import { TICK_RATE } from "../constants";
 import { CHARACTERS } from "../content";
@@ -85,7 +85,7 @@ const crushR = (p: PlayerState) => APOSTLE.crushR * area(p);
 function dropTick(s: RunState): void {
   const p = s.player;
   if (!p.apDrops?.length) return;
-  for (const d of p.apDrops) {
+  for (const d of srcEach(p.apDrops)) {
     if (--d.left > 0) continue;
     if (d.sin === "cross") {
       for (const e of [...s.enemies]) if (e.hp > 0 && dist2(e, d) <= (crushR(p) + e.r) ** 2) hitAndSoul(s, e, d.dmg);
@@ -145,7 +145,7 @@ function eatSoul(s: RunState, x: number, y: number, light?: boolean): void {
 export function doomTick(s: RunState): void {
   const p = s.player;
   if (!p.apDooms?.length) return;
-  for (const d of p.apDooms) {
+  for (const d of srcEach(p.apDooms)) {
     if (--d.left > 0) continue;
     const e = s.enemies.find((x) => x.id === d.id && x.hp > 0);
     if (!e) continue;

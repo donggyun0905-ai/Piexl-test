@@ -1,4 +1,5 @@
 // 혼령 공용 도우미 (sim/honryeong·hrBeasts·hrSpirits가 같이 씀): 무기 모양·시드 확률·은신·피해·범위 피해·구름 놓기·적이 쫓을 자리
+import { srcEach } from "./dmgSrc";
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { HONRYEONG_PERKS as K } from "../itemsHonryeong";
 import { createRng, deriveSeed } from "../rng";
@@ -90,7 +91,7 @@ export function hrLure(s: RunState, e: EnemyState): { x: number; y: number } | n
   if (!isHonryeong(p) || s.party) return null;
   let best: { x: number; y: number } | null = null;
   let bd = Infinity;
-  for (const d of p.hrDecoys ?? []) {
+  for (const d of srcEach(p.hrDecoys ?? [])) {
     const dd = (d.x - e.x) ** 2 + (d.y - e.y) ** 2;
     if (dd < bd) {
       bd = dd;

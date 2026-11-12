@@ -6,7 +6,7 @@ import { alive, onSegment, stun } from "./s2Kit";
 import { statusHit as statusHit_ } from "./statusHit";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcCb } from "./dmgSrc";
 const statusHit = srcFn("orcaFree", () => statusHit_);
 
 export const isFree = (p: PlayerState) => (p.ocFree ?? 0) > 0;
@@ -51,7 +51,7 @@ export function freeTick(s: RunState): void {
   if (p.ocFree && --p.ocFree <= 0) delete p.ocFree;
   if (p.ocDarts) {
     const g = roomGrid(s);
-    p.ocDarts = p.ocDarts.filter((d) => {
+    p.ocDarts = p.ocDarts.filter(srcCb((d) => {
       d.x += d.dx * O.dartSpeed;
       d.y += d.dy * O.dartSpeed;
       d.left -= O.dartSpeed;
@@ -64,7 +64,7 @@ export function freeTick(s: RunState): void {
       }
       const wall = d.x < ROOM_MIN_X || d.x > ROOM_MAX_X || d.y < ROOM_MIN_Y || d.y > ROOM_MAX_Y || (g !== null && blocksShot(g, d.x, d.y));
       return d.left > 0 && !wall;
-    });
+    }));
     if (p.ocDarts.length === 0) delete p.ocDarts;
   }
   boltTick(s);

@@ -1,7 +1,7 @@
 // 이터(헬리오스): 이빨 달린 그림자. 누를 때마다 열 가지 공격 중 하나가 확률로 나옴 (넓고 세지만 느림)
 // 쓰러뜨린 적은 '먹은' 것으로 세고, 먹을 때마다 재생력 +0.1 (상한 20, 10초마다 그만큼 회복)
 // 수치는 weaponsEater.EATER, 아이템은 itemsEater
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { EATER_PERKS as K } from "../itemsEater";
 import { createRng, deriveSeed } from "../rng";
@@ -56,7 +56,7 @@ function bite(s: RunState, e: EnemyState, dmg: number, swallow: boolean): void {
   const before = e.hp;
   strike(s, e, dmg * (hasPerk(p, "eaFang") ? K.eaFang.mul : 1), 4);
   const below = hasPerk(p, "eaDevour") ? K.eaDevour.below : E.swallow;
-  if ((swallow || hasPerk(p, "eaDevour")) && e.hp > 0 && !isBoss(e) && e.kind !== "dummy" && e.hp <= e.maxHp * below) strike(s, e, e.hp + 1);
+  if ((swallow || hasPerk(p, "eaDevour")) && e.hp > 0 && !isBoss(e) && e.kind !== "dummy" && e.hp <= e.maxHp * below) srcRun(s, "eaDevour", () => { strike(s, e, e.hp + 1); });
   eaterOnHit(s, e, before);
 }
 function hit(s: RunState, e: EnemyState, dmg: number, push = 4): void {
@@ -160,7 +160,7 @@ export function mawMove(s: RunState, move: MawMove): void {
 function drainQueue(s: RunState): void {
   const p = s.player;
   if (!p.eaQueue?.length) return;
-  for (const q of p.eaQueue) {
+  for (const q of srcEach(p.eaQueue)) {
     if (--q.t > 0) continue;
     // 그 적 자리(없으면 처음 자리) 둘레를 함께 물어뜯음
     const at = s.enemies.find((x) => x.id === q.id && x.hp > 0) ?? q;

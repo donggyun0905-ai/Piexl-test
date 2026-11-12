@@ -90,7 +90,7 @@ function attack(s: RunState, dmg: number): void {
       return;
     }
     case "scorpion": {
-      if (hasPerk(p, "scorpPincer")) for (const e of inCone(s, K.scorpPincer.reach, 0.3)) strike(s, e, dmg * K.scorpPincer.mul);
+      if (hasPerk(p, "scorpPincer")) srcRun(s, "scorpPincer", () => { for (const e of inCone(s, K.scorpPincer.reach, 0.3)) strike(s, e, dmg * K.scorpPincer.mul); });
       for (const e of inLine(s, reach, M.stingWidth)) {
         strike(s, e, dmg);
         stun(e, M.stingStun);
@@ -107,7 +107,7 @@ function attack(s: RunState, dmg: number): void {
       }
       leech(s, dealt);
       addEffect(s, { kind: "quack", ...fx, size: reach, width: M.sonicArc, maxTicks: 12, tint: "#c08aff" });
-      if (hasPerk(p, "batEcho")) s.pendingBlasts.push({ tick: s.tick + K.batEcho.delay, x: p.x + p.faceX * reach * 0.7, y: p.y + p.faceY * reach * 0.7, radius: K.batEcho.r, damage: dmg });
+      if (hasPerk(p, "batEcho")) srcRun(s, "batEcho", () => { s.pendingBlasts.push({ tick: s.tick + K.batEcho.delay, x: p.x + p.faceX * reach * 0.7, y: p.y + p.faceY * reach * 0.7, radius: K.batEcho.r, damage: dmg }); });
       if (hasPerk(p, "batSwarm") && every(p, K.batSwarm.every)) srcRun(s, "batSwarm", () => fan(s, K.batSwarm.bats, 0.4, { damage: dmg * K.batSwarm.mul, spirit: "batling", range: reach * 2, speed: 2.6 }));
       return;
     }
@@ -118,7 +118,7 @@ function attack(s: RunState, dmg: number): void {
         stun(e, M.stompStun);
       }
       addEffect(s, { kind: "slam", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, maxTicks: 16 });
-      if (hasPerk(p, "eleTrunk")) for (const e of inCone(s, r * 1.2, 0.5)) strike(s, e, 0, K.eleTrunk.push);
+      if (hasPerk(p, "eleTrunk")) srcRun(s, "eleTrunk", () => { for (const e of inCone(s, r * 1.2, 0.5)) strike(s, e, 0, K.eleTrunk.push); });
       return;
     }
     case "spider": {
@@ -151,7 +151,7 @@ export function morphShotHit(s: RunState, pr: ProjectileState, e: EnemyState): v
   if (pr.spirit === "venomSpit") poison(e, pr.damage * M.venom * (hasPerk(p, "snakeVenom") ? K.snakeVenom.mul : 1), M.venomTicks);
   else if (pr.spirit === "batling") leech(s, pr.damage);
   else if (pr.spirit === "web") {
-    if (hasPerk(p, "spiderFang") && (e.slowTicks ?? 0) > 0) damageEnemy(s, e, pr.damage * K.spiderFang.mul, 0, 0, false);
+    if (hasPerk(p, "spiderFang") && (e.slowTicks ?? 0) > 0) srcRun(s, "spiderFang", () => { damageEnemy(s, e, pr.damage * K.spiderFang.mul, 0, 0, false); });
     if (hasPerk(p, "spiderNest")) {
       for (const t of inCircle(s, e.x, e.y, K.spiderNest.r)) t.slowTicks = Math.max(t.slowTicks ?? 0, M.webSlow);
       addEffect(s, { kind: "ring", x: e.x, y: e.y, dirX: 0, dirY: 0, size: K.spiderNest.r, maxTicks: 18, width: 1 });

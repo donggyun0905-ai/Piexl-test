@@ -18,7 +18,7 @@ import { mistTick } from "./waveSkillsD";
 import { wingsTick } from "./waveSkillsE";
 import { WAVE_CASTS, WAVE_STEPS } from "./waveTable";
 import type { WvBit } from "./waveTypes";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const burstAt = srcFn("wave", () => burstAt_), wvHit = srcFn("wave", () => wvHit_);
 
 /** 가진 기술 */
@@ -83,7 +83,7 @@ function basic(s: RunState, speed: number): void {
     const side = n > 1 && i !== (n - 1) / 2;
     crest(s, p.x, p.y, dx, dy, W.crestMul * (side ? 0.6 : 1), side ? W.sideGain : 1);
   }
-  for (const b of p.wvBits ?? []) if (b.k === "wvMirror") crest(s, b.x, b.y, p.faceX, p.faceY, W.crestMul * W.mirrorMul * b.mul, W.mirrorGain);
+  for (const b of srcEach(p.wvBits ?? [])) if (b.k === "wvMirror") crest(s, b.x, b.y, p.faceX, p.faceY, W.crestMul * W.mirrorMul * b.mul, W.mirrorGain);
   p.attackCooldown = Math.max(1, Math.round((TICK_RATE / speed) * W.crestTime));
   p.attackCount++;
 }

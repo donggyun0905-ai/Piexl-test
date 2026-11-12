@@ -1,4 +1,5 @@
 // 블루 플레임 공용 도우미: 세 겹 범위 · 청염 상태이상(걸기·틱 피해) · 맞힘(청염 색 숫자 · 성흔) · 성흔 → 열화상 각성 · 곧 들어갈 공격(감옥·기둥·화살·화살비·거대한 화살) 떨어뜨리기
+import { srcRun } from "./dmgSrc";
 import { BLUE_FLAME_PERKS as K } from "../itemsBlueFlame";
 import { BLUE_FLAME as F } from "../weaponsBlueFlame";
 import { STIGMA } from "../weaponsDawn";
@@ -63,7 +64,7 @@ function land(s: RunState, b: BzStrike): void {
   if (b.k === 2) {
     const e = alive(s).find((f) => f.id === b.tg && (f.x - b.x) ** 2 + (f.y - b.y) ** 2 <= (f.r + b.r) ** 2) ?? inCircle(s, b.x, b.y, b.r)[0];
     if (e) bzHit(s, e, b.mul);
-    if (hasPerk(p, "bzEmber")) for (const f of inCircle(s, b.x, b.y, K.bzEmber.r * reachOf(p))) if (f !== e) bzHit(s, f, b.mul * K.bzEmber.mul);
+    if (hasPerk(p, "bzEmber")) srcRun(s, "bzEmber", () => { for (const f of inCircle(s, b.x, b.y, K.bzEmber.r * reachOf(p))) if (f !== e) bzHit(s, f, b.mul * K.bzEmber.mul); });
     addEffect(s, { kind: "bzArrowFx", x: b.x, y: b.y, dirX: Math.sign(b.x - b.x0), dirY: Math.sign(b.y - b.y0), size: 10, maxTicks: 18 });
     return;
   }

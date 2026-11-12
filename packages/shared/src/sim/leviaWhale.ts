@@ -1,5 +1,5 @@
 // 리바이어 고래: 고래 대돌격(날아가는 큰 고래) · 해류 웅덩이 · 고래가 나올 때 아이템 반응 · 고래 도약
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { LEVIA_PERKS as K } from "../itemsLevia";
 import { LEVIA as L } from "../weaponsLevia";
 import { nearest } from "./brawlMoves";
@@ -127,7 +127,7 @@ export function whaleTick(s: RunState): void {
   const p = s.player;
   if (p.lvHaste) p.lvHaste--;
   if (p.lvWhales) {
-    for (const w of p.lvWhales) {
+    for (const w of srcEach(p.lvWhales)) {
       whaleStep(s, w);
       if (w.t <= 0 && w.hit.length >= K.lvAmber.need && hasPerk(p, "lvAmber")) p.lvHaste = K.lvAmber.ticks;
     }
@@ -135,7 +135,7 @@ export function whaleTick(s: RunState): void {
     if (p.lvWhales.length === 0) delete p.lvWhales;
   }
   if (p.lvPools) {
-    for (const o of p.lvPools) {
+    for (const o of srcEach(p.lvPools)) {
       o.t--;
       for (const e of inCircle(s, o.x, o.y, o.r)) {
         if (isBoss(e) || e.kind === "dummy") continue;

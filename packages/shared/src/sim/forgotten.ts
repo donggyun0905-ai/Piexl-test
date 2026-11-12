@@ -1,7 +1,7 @@
 // 잊혀진 자(아스칼론, 시즌 2): 옛 신의 마지막 후손, 반신. 빛으로 싸움 (무기 10: 빛 탄·빛줄기·터짐·떨어지는 빛 십자가·빛 베기)
 // 적을 맞힐 때마다 빛의 고리가 차고(맞으면 깎임), 가득 차면 10초 동안 신족: 공격 속도 2배 + 둘레 적을 빛기둥이 저절로 침 (공격력 30%)
 // 수치는 weaponsForgotten.FORGOTTEN, 아이템은 itemsForgotten
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { PW_PASSIVE } from "../paewangPassive";
 import { TICK_RATE } from "../constants";
 import { FORGOTTEN_PERKS as K } from "../itemsForgotten";
@@ -160,7 +160,7 @@ function update(s: RunState): void {
     });
   }
   if (p.fgFalls?.length) {
-    for (const f of p.fgFalls) {
+    for (const f of srcEach(p.fgFalls)) {
       if (--f.t > 0) continue;
       for (const e of inCircle(s, f.x, f.y, f.r)) hit(s, e, f.dmg, f.slow);
       addEffect(s, { kind: "fgFlash", x: f.x, y: f.y, dirX: 0, dirY: 0, size: f.r, maxTicks: 14 });

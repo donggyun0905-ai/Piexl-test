@@ -7,7 +7,7 @@ import type { MqShell, MqTurret } from "./madQueenTypes";
 import { alive, stun } from "./s2Kit";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcCb } from "./dmgSrc";
 const explode = srcFn("madQueenArms", () => explode_);
 
 /** 포탄 하나를 쏨 (땅 위 x,y에서 dx,dy 쪽 · 그림은 높이 h의 포구에서 나옴) */
@@ -89,7 +89,7 @@ export function armsTick(s: RunState, speed: number): void {
   if (p.mqSalvo) p.mqSalvo--;
   for (const u of p.mqTurrets ?? []) turretStep(s, u, speed);
   if (p.mqShells) {
-    p.mqShells = p.mqShells.filter((w) => shellStep(s, w));
+    p.mqShells = p.mqShells.filter(srcCb((w) => shellStep(s, w)));
     if (p.mqShells.length === 0) delete p.mqShells;
   }
 }

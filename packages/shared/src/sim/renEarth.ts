@@ -7,7 +7,7 @@ import { REN_EARTH as E } from "../weaponsRen";
 import { alive, inCircle, inCone, onSegment, strike as strike_, stun } from "./s2Kit";
 import type { PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const strike = srcFn("renEarth", () => strike_);
 
 /** 열린 단계 수: 렌 전용 아이템 3개마다 하나 */
@@ -81,7 +81,7 @@ function crush(s: RunState, x: number, y: number): void {
 export function earthTick(s: RunState): void {
   const p = s.player;
   if (p.rWyrms?.length) {
-    for (const w of p.rWyrms) {
+    for (const w of srcEach(p.rWyrms)) {
       const nx = w.x + w.dx * E.wyrmSpeed;
       const ny = w.y + w.dy * E.wyrmSpeed;
       for (const e of onSegment(s, w.x, w.y, nx, ny, E.wyrmR)) {

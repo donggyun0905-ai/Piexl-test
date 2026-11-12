@@ -1,6 +1,6 @@
 // 닌자 그림자: 표식이 다 차면 그 적의 그림자에서 분신이 튀어나와 벰. 무기마다 모양이 다름 (뒤에서 베기 · X자 · 땅 가시 · 환영진 9점 돌진)
 // 환영진: 표식이 찬 적을 가운데로, 내 공격 범위(사거리)의 절반만 한 원 위 9곳에 그림자가 생겨 가운데로 돌진 (지나가며 베고 가운데를 내려침)
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { ENEMIES } from "../content";
 import { NINJA_PERKS } from "../itemsNinja";
 import { damageEnemy as damageEnemy_ } from "./combat";
@@ -120,7 +120,7 @@ function around(s: RunState, x: number, y: number, r: number): EnemyState[] {
 export function updateShades(s: RunState): void {
   const p = s.player;
   if (!p.shades?.length) return;
-  for (const sh of p.shades) {
+  for (const sh of srcEach(p.shades)) {
     sh.t++;
     const target = sh.target ? s.enemies.find((e) => e.id === sh.target && e.hp > 0) : undefined;
     if (sh.kind === "dash") {

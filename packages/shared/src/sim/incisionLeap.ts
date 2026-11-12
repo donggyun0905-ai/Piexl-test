@@ -46,7 +46,7 @@ function land(s: RunState): void {
     stun(e, I.leapStun);
   }
   addEffect(s, { kind: "icLandFx", tint: "#ff2a2a", x: p.x, y: p.y, dirX: 0, dirY: 0, size: r, maxTicks: 30 });
-  if (hasPerk(p, "icQuake")) addZone(p, { k: 1, x0: p.x, y0: p.y, x: p.x, y: p.y, t: K.icQuake.ticks, mul: K.icQuake.mul, r, next: K.icQuake.every });
+  if (hasPerk(p, "icQuake")) srcRun(s, "icQuake", () => { addZone(p, { k: 1, x0: p.x, y0: p.y, x: p.x, y: p.y, t: K.icQuake.ticks, mul: K.icQuake.mul, r, next: K.icQuake.every }); });
   addCombo(s, hit.length);
   icGain(s, I.gainLeap);
   if (l.second || !hasPerk(p, "icDouble")) return; return srcRun(s, "icDouble", () => {

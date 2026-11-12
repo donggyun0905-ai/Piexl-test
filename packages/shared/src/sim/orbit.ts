@@ -1,6 +1,6 @@
 // 원소술사 회전체: 도는 자리 계산(삼각함수 없이 사칙연산만) · 닿으면 때리기 · 원소·행성 효과 · 날아가 때리는 검·별 · 은하수 장판·중력 둔화
 // 공격 키로 쓰는 것(강철 총알·트리거·중력 내려찍기·갓 핸드)은 orbitAttack, 전깃줄·펫·탄 막기는 orbitPerks
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { createRng, deriveSeed } from "../rng";
 import { blastAt as blastAt_, damageEnemy as damageEnemy_, ignite } from "./combat";
@@ -153,7 +153,7 @@ export function orbBodies(p: PlayerState, cx: number, cy: number, tick: number):
       break;
   }
   // 날아가는 검·별: 별은 제자리에서 노리는 적까지 갔다가 돌아옴 · 검은 자유롭게 날아다니는 자리 (orbitBlades)
-  for (const f of p.flyers ?? []) {
+  for (const f of srcEach(p.flyers ?? [])) {
     const b = out[f.i];
     if (!b?.striker) continue;
     b.homeX = b.x;

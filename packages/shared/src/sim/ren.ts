@@ -57,7 +57,7 @@ function slam(s: RunState, move: RenMove, x: number, y: number, mulAll = 1): voi
     }
   }
   addEffect(s, { kind: "renSlam", x, y, dirX: REN_MOVES.indexOf(move), dirY: 0, size: r, maxTicks: 20 });
-  if (hasPerk(p, "renQuake")) s.pendingBlasts.push({ tick: s.tick + K.renQuake.delay, x, y, radius: r * 0.8, damage: base * K.renQuake.mul });
+  if (hasPerk(p, "renQuake")) srcRun(s, "renQuake", () => { s.pendingBlasts.push({ tick: s.tick + K.renQuake.delay, x, y, radius: r * 0.8, damage: base * K.renQuake.mul }); });
 }
 
 /** 토목이 떨어질 자리: 사거리 안 가장 가까운 적, 없으면 바라보는 쪽 */

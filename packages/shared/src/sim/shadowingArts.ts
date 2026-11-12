@@ -72,11 +72,11 @@ export function onFinish(s: RunState, k: InkStroke): void {
   const lx = k.pts[k.pts.length - 2]!;
   const ly = k.pts[k.pts.length - 1]!;
   if (hasPerk(p, "sdCrane") && strokeLen(k.pts) >= K.sdCrane.minLen) srcRun(s, "sdCrane", () => homing(s, lx, ly, ROW.crane, K.sdCrane.speed, dmg * K.sdCrane.mul, K.sdCrane.r));
-  if (hasPerk(p, "sdMoon") && (p.sdDone ?? 0) % K.sdMoon.every === 0) {
+  if (hasPerk(p, "sdMoon") && (p.sdDone ?? 0) % K.sdMoon.every === 0) srcRun(s, "sdMoon", () => {
     const c = centerOf(k.pts);
     addZone(s, { x: c.x, y: c.y, r: K.sdMoon.r, row: ROW.moon, life: K.sdMoon.delay, dmg: dmg * K.sdMoon.mul });
-  }
-  if (hasPerk(p, "sdStar")) for (const [x, y] of cornersOf(k.pts, K.sdStar.bend, K.sdStar.max)) inkArea(s, x, y, K.sdStar.r, dmg * K.sdStar.mul, ROW.star);
+  });
+  if (hasPerk(p, "sdStar")) srcRun(s, "sdStar", () => { for (const [x, y] of cornersOf(k.pts, K.sdStar.bend, K.sdStar.max)) inkArea(s, x, y, K.sdStar.r, dmg * K.sdStar.mul, ROW.star); });
   if (hasPerk(p, "sdDragon") && k.ink >= K.sdDragon.ink) srcRun(s, "sdDragon", () => addSpirit(s, { x: k.pts[0]!, y: k.pts[1]!, vx: 0, vy: 0, t: 999, dmg: dmg * K.sdDragon.mul, r: 14, row: ROW.dragon, path: [...k.pts], at: 0 }));
 }
 

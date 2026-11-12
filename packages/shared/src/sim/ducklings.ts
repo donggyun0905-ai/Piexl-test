@@ -4,7 +4,7 @@ import { DUCK_PERKS as K } from "../itemsDuck";
 import { damageEnemy as damageEnemy_, healPlayer } from "./combat";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, keepInRoom, normalize, roomGrid, weaponOf } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcEach } from "./dmgSrc";
 const damageEnemy = srcFn("ducklings", () => damageEnemy_);
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
@@ -81,7 +81,7 @@ export function echoQuack(s: RunState, dmg: number): void {
   const loud = hasPerk(p, "echoQuack");
   const mul = loud ? K.echoQuack.echo : DUCK.chick.echo;
   const range = DUCK.chick.echoRange * (loud ? K.echoQuack.range : 1);
-  for (const d of p.ducklings ?? []) {
+  for (const d of srcEach(p.ducklings ?? [])) {
     let best: EnemyState | null = null;
     for (const e of s.enemies) {
       if (e.hp <= 0 || e.immune || dist2(e, d) > (range + e.r) ** 2) continue;

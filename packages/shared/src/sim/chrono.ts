@@ -1,6 +1,6 @@
 // 시간술사: 본인 공격은 약하고(70%), 잠시 뒤(1초) 공격한 그 자리에서 반투명한 잔상이 더 세게(120%) 한 번 더 함.
 // 움직이며 싸우면 지나온 자리마다 공격이 다시 터짐. 무기마다 공격 방식이 다름 (weaponsChrono)
-import { srcRun, srcFn } from "./dmgSrc";
+import { srcRun, srcFn, srcEach } from "./dmgSrc";
 import { TICK_RATE } from "../constants";
 import { ENEMIES } from "../content";
 import { CHRONO_PERKS } from "../itemsChrono";
@@ -208,7 +208,7 @@ function updateEchoes(s: RunState): void {
 function updateForesights(s: RunState): void {
   const p = s.player;
   if (!p.foresights?.length) return;
-  for (const f of p.foresights) {
+  for (const f of srcEach(p.foresights)) {
     const t = s.enemies.find((e) => e.id === f.target && e.hp > 0);
     if (t) {
       f.x = t.x;

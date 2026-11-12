@@ -1,6 +1,7 @@
 // 인형술사 왕관 쓴 아군 (p.ppAllies): 조종을 마친 적이 적 목록에서 빠져 아군이 됨 (원래 그림 + 머리 위 나무 왕관)
 // 내 둘레를 따라다니다 보는 거리 안 적에게 걸어가 때림 (피해 = 내 공격력 × 배율). 적 몸에 닿으면 그 적의 몸 피해를 받음 · 방을 옮기면 같이 옴
 // 공용 몸 움직임(bodyStep·bodyHurt)은 인형 친구·분신(puppetFriends)도 씀
+import { srcCb, srcRun } from "./dmgSrc";
 import { ENEMIES } from "../enemyDefs";
 import { PUPPET_PERKS as K } from "../itemsPuppet";
 import { PUPPET_HAND as H } from "../weaponsPuppet";
@@ -126,7 +127,7 @@ function allyTick(s: RunState, a: PuppetAlly): boolean {
   } else if ((p.x - a.x) ** 2 + (p.y - a.y) ** 2 > H.allyFollow ** 2) bodyStep(s, a, p.x, p.y, speed);
   if (!bodyHurt(s, a)) return true;
   // 마지막 인사: 쓰러진 자리에서 터짐
-  if (hasPerk(p, "ppBow")) ppArea(s, a.x, a.y, K.ppBow.r, p.stats.damage * K.ppBow.mul, "ppCorpsePop", 1, { push: 8 });
+  if (hasPerk(p, "ppBow")) srcRun(s, "ppBow", () => { ppArea(s, a.x, a.y, K.ppBow.r, p.stats.damage * K.ppBow.mul, "ppCorpsePop", 1, { push: 8 }); });
   else addEffect(s, { kind: "ppCrown", x: a.x, y: a.y, dirX: 0, dirY: 0, size: a.r, style: 1, maxTicks: 30 });
   return false;
 }
@@ -136,5 +137,5 @@ export function alliesTick(s: RunState, moved: boolean): void {
   const p = s.player;
   if (!p.ppAllies?.length) return;
   if (moved) p.ppAllies.forEach((a, i) => bringNear(s, a, i));
-  p.ppAllies = p.ppAllies.filter((a) => allyTick(s, a));
+  p.ppAllies = p.ppAllies.filter(srcCb((a) => allyTick(s, a)));
 }

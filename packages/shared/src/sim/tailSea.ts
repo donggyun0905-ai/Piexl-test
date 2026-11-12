@@ -9,7 +9,7 @@ import { inSea, seaOf, sharkDmg, sharkSize, tlHit as tlHit_ } from "./tailKit";
 import type { TlShark } from "./tailTypes";
 import type { EnemyState, RunState } from "./types";
 import { addEffect, dist2, hasPerk } from "./util";
-import { srcFn } from "./dmgSrc";
+import { srcFn, srcCb } from "./dmgSrc";
 const tlHit = srcFn("tailSea", () => tlHit_);
 
 /** 다음 상어까지 틱 (바다 종류 · 상어 떼 · 공격 속도) */
@@ -129,7 +129,7 @@ function seaField(s: RunState, near: EnemyState[]): void {
 export function seaTick(s: RunState, speed: number): void {
   const p = s.player;
   if (p.tlSharks) {
-    p.tlSharks = p.tlSharks.filter((w) => sharkStep(s, w));
+    p.tlSharks = p.tlSharks.filter(srcCb((w) => sharkStep(s, w)));
     if (p.tlSharks.length === 0) delete p.tlSharks;
   }
   const near = inSea(s);
