@@ -2,6 +2,7 @@
 // 무기 그림은 사용자가 준 검·창 그림에서 잘라 낸 sprites/michaela_weapons (weapon) · blade는 그림을 읽기 전 대신 쓰는 코드 그림
 import { MC_WEAPON_ELEM } from "@pixel-rogue/shared";
 import { additive, alpha, glow, type Ctx } from "./pwFxBits";
+import { lazyImg } from "../lazyImage";
 
 export const MC = { silver: "#e8ecf8", steel: "#9aa4b8", gold: "#f2c14e", light: "#fff6c0", void: "#7a58d8", deep: "#2a1a58", violet: "#c8b0ff", orange: "#ff9a40" };
 
@@ -22,8 +23,7 @@ export const palOf = (v: number | undefined) => MC_PAL[(v ?? 0) % MC_PAL.length]
 /** 사용자 그림에서 잘라 낸 무기 37개 (scripts/art/michaela_weapons.py → sprites/michaela_weapons: 칸 24×72, 날 끝이 위) */
 const CW = 24;
 const CH = 72;
-const img = new Image();
-img.src = `${import.meta.env.BASE_URL}sprites/michaela_weapons.png`;
+const img = lazyImg(`${import.meta.env.BASE_URL}sprites/michaela_weapons.png`);
 export const WEAPON_N = MC_WEAPON_ELEM.length;
 /** 그림 무기 번호 → 속성 색 묶음 */
 export const palW = (w: number | undefined) => palOf(MC_WEAPON_ELEM[w ?? 0]);

@@ -4,11 +4,11 @@ import type { EffectState } from "@pixel-rogue/shared";
 import { additive, alpha, beam, cone, crescent, easeOut, glow, rnd, shock, sparks, type Ctx } from "./pwFxBits";
 import { drawShatter } from "./hellfistCrack";
 import type { Snap } from "./palette";
+import { lazyImg } from "../lazyImage";
 
 export const HF = { red: "#ff2a2a", deep: "#8a0a12", black: "#1a0608", ember: "#ff8a3a", white: "#ffffff" };
 const HF_FX = new Set(["hfJabFx", "hfSmashFx", "hfShatterFx", "hfClawFx", "hfAwakeFx"]);
-const XSHEET = new Image();
-XSHEET.src = `${import.meta.env.BASE_URL}sprites/hellfist_x.png`;
+const XSHEET = lazyImg(`${import.meta.env.BASE_URL}sprites/hellfist_x.png`);
 
 /** 후리기: 주먹이 부채꼴을 따라 옆으로 크게 휘둘러지며 붉은 궤적 · 끝에서 충격 */
 function jab(ctx: Ctx, fx: EffectState, x: number, y: number, f: number): void {

@@ -2,10 +2,10 @@
 // 금 모양은 생긴 틱(씨앗)으로 정해 남아 있는 금과 깨지는 금이 같음 · 내려찍기 부채꼴(폭발 범위) 전체에 좌우로 넓게 퍼짐
 import type { EffectState, HfCrack } from "@pixel-rogue/shared";
 import { additive, alpha, easeOut, glow, rnd, type Ctx } from "./pwFxBits";
+import { lazyImg } from "../lazyImage";
 
 const RED = "#ff2a2a";
-const SHEET = new Image();
-SHEET.src = `${import.meta.env.BASE_URL}sprites/hellfist_shatter.png`;
+const SHEET = lazyImg(`${import.meta.env.BASE_URL}sprites/hellfist_shatter.png`);
 type Pt = [number, number];
 
 /** 금 줄들: 부채꼴 폭 전체에 굵은 금 + 곁가지 (지그재그) */

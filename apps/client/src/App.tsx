@@ -3,15 +3,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ProfileScreen } from "./ProfileScreen";
 import { takeRoomFromUrl } from "./battle/invite";
 import { CharacterSelect } from "./CharacterSelect";
-import { DailyGame } from "./daily/DailyGame";
 import { DailyScreen, type DailyMode, type DailyStart } from "./daily/DailyScreen";
-import { GameScreen } from "./game/GameScreen";
-import { SoloGame } from "./game/SoloGame";
 import { ADMIN_PRACTICE, ADMIN_TD } from "./balance";
 import { useLang } from "./i18n";
 import { loadSavedRun, newSeedText, seedFromUrl, soloUnlocks } from "./records";
 import { TitleScreen } from "./TitleScreen";
-import { ArenaBoard, BattleScreen, BuildScreen, CoopScreen, HallOfFame, PwFlow, RaidFlow, ShopScreen, StoryScreen, SwarmGame, SwarmMaps, TdGame, TdScreen, TierScreen } from "./lazyScreens";
+import { ArenaBoard, BattleScreen, BuildScreen, CoopScreen, DailyGame, GameScreen, HallOfFame, PwFlow, RaidFlow, ShopScreen, SoloGame, StoryScreen, SwarmGame, SwarmMaps, TdGame, TdScreen, TierScreen } from "./lazyScreens";
 
 type Screen =
   | { name: "title" }

@@ -4,6 +4,7 @@ import type { EffectState, ProjectileState } from "@pixel-rogue/shared";
 import { additive, alpha, beam, crescent, easeOut, glow, rnd, shock, sparks, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
 import { blastSprite as blueSprite } from "./hookArt";
+import { lazyImg } from "../lazyImage";
 
 const FIRE = "#ffb84a";
 const MOON = "#ffffff";
@@ -11,8 +12,7 @@ const MOON_BLUE = "#c8d8ff";
 const BLOOD = "#a01a2a";
 const BL_FX = new Set(["blShotFx", "blBurstFx", "blAwakeFx", "blMoonAura"]);
 const CELL = 128;
-const sheet = new Image();
-sheet.src = `${import.meta.env.BASE_URL}sprites/blast_fx.png`;
+const sheet = lazyImg(`${import.meta.env.BASE_URL}sprites/blast_fx.png`);
 
 /** 발사 폭발 그림 한 칸 (row 0 큰 발사 · 1 첫 발 · frame 0~3) · 총구 x,y에서 a 방향으로 · 폭 w (검은 연기가 보이게 보통 덧칠) */
 function blastSprite(ctx: Ctx, row: number, frame: number, x: number, y: number, a: number, w: number, al: number): void {

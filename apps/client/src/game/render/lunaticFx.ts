@@ -5,14 +5,12 @@ import type { EffectState } from "@pixel-rogue/shared";
 import { crosshair, LN } from "./lunaticBody";
 import { additive, beam, crescent, easeOut, glow, shock, sparks, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
+import { spriteImg } from "../lazyImage";
 
 const LN_FX = new Set(["lnThrustFx", "lnSlashFx", "lnDashFx", "lnAwakeFx", "lnCrescentFx", "lnRainFx", "lnAfterFx", "lnMarkFx"]);
 
-export const img = (name: string) => {
-  const i = new Image();
-  i.src = `${import.meta.env.BASE_URL}sprites/${name}.png`;
-  return i;
-};
+/** 그림 (처음 그릴 때 받음, lazyImage) */
+export const img = (name: string) => spriteImg(name);
 const THRUST = img("lunatic_thrust");
 const SLASH = img("lunatic_slash");
 const ready = (i: HTMLImageElement) => i.complete && i.naturalWidth > 0;

@@ -3,11 +3,11 @@
 import { luxStage, type RunState } from "@pixel-rogue/shared";
 import { lightSword } from "./lux";
 import { additive, glow } from "./pwFxBits";
+import { lazyImg } from "../lazyImage";
 
 type Ctx = CanvasRenderingContext2D;
 const LEN = 120;
-const img = new Image();
-img.src = `${import.meta.env.BASE_URL}sprites/illust/lux_face.webp`;
+const img = lazyImg(`${import.meta.env.BASE_URL}sprites/illust/lux_face.webp`);
 let seen = 0;
 let from = -1;
 let lastTick = 0;

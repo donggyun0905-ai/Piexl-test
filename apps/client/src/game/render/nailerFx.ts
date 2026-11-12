@@ -4,11 +4,11 @@ import type { EffectState } from "@pixel-rogue/shared";
 import { additive, alpha, easeOut, glow, rnd, shock, sparks, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
 import { drop, nail, NL } from "./nailerArt";
+import { lazyImg } from "../lazyImage";
 
 const NL_FX = new Set(["nlSwingFx", "nlStickFx", "nlSmashFx", "nlAnchorFx", "nlPinFx", "nlCurseFx", "nlUltFx"]);
 /** 피 폭발 그림 (사용자 그림 · scripts/art/nailer_blood.py): 칸 128 × 4장면 (튐 → 퍼짐 → 크게 터짐 → 웅덩이) · 바닥은 칸 3/4 높이 */
-const BLOOD = new Image();
-BLOOD.src = `${import.meta.env.BASE_URL}sprites/nailer_blood.png`;
+const BLOOD = lazyImg(`${import.meta.env.BASE_URL}sprites/nailer_blood.png`);
 const CELL = 128;
 
 /** 피 폭발 그림 한 장면 (바닥 x, y · 폭 w · f 0~1로 4장면을 차례로) */

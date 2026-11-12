@@ -1,6 +1,11 @@
 // 처음 화면에 필요 없는 화면은 들어갈 때 받음 (첫 접속 파일 크기 줄이기). 감싸는 Suspense는 main.tsx
 import { lazy } from "react";
 
+// 게임 화면 (그리기·게임 계산이 커서 판에 들어갈 때 받음)
+export const GameScreen = lazy(() => import("./game/GameScreen").then((m) => ({ default: m.GameScreen })));
+export const SoloGame = lazy(() => import("./game/SoloGame").then((m) => ({ default: m.SoloGame })));
+export const DailyGame = lazy(() => import("./daily/DailyGame").then((m) => ({ default: m.DailyGame })));
+
 export const BattleScreen = lazy(() => import("./battle/BattleScreen").then((m) => ({ default: m.BattleScreen })));
 export const CoopScreen = lazy(() => import("./coop/CoopScreen").then((m) => ({ default: m.CoopScreen })));
 export const HallOfFame = lazy(() => import("./daily/HallOfFame").then((m) => ({ default: m.HallOfFame })));

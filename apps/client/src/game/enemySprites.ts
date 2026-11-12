@@ -2,6 +2,7 @@
 // ENEMY_SRC: 2배 촘촘한 그림 (칸이 두 배 · 게임에서는 원래 크기로 줄여 그림, 4칸 = 걷기 2 · 공격 준비 · 공격)
 import { mipFor, screenScale } from "./mipmap";
 import { draftSrc } from "./customArt";
+import { imageLoader } from "./lazyImage";
 
 /** 몬스터 그림 (public/sprites/enemies/{종류}.png, 오른쪽을 봄, 움직임 칸을 가로로) */
 export const ENEMY_SPRITES: readonly string[] = [
@@ -20,12 +21,8 @@ export const ENEMY_SPRITES: readonly string[] = [
   // 시즌 3 라스트 보스 아스모데우스의 화신체 욕망·검은 해·강철 군주 (scripts/art/asmodeus: 5칸)
   "asmodeus", "asmovoid", "asmolord",
 ];
-const enemyImages = new Map<string, HTMLImageElement>();
-for (const name of ENEMY_SPRITES) {
-  const img = new Image();
-  img.src = draftSrc(`enemy:${name}`) ?? `${import.meta.env.BASE_URL}sprites/enemies/${name}.png`;
-  img.onload = () => enemyImages.set(name, img);
-}
+/** 몬스터 그림: 처음 그릴 때 받음 (목록에 없는 종류는 안 받음) */
+const enemyImage = imageLoader((name) => (ENEMY_SPRITES.includes(name) ? draftSrc(`enemy:${name}`) ?? `${import.meta.env.BASE_URL}sprites/enemies/${name}.png` : null));
 
 /** 색을 입힌 그림 (맞음 흰색 · 기절 푸른빛 · 공격 준비 노란빛) */
 const tinted = new Map<string, HTMLCanvasElement>();
@@ -50,7 +47,7 @@ function tintOf(name: string, img: HTMLImageElement, color: string, amount: numb
 /** 몬스터 그림 모양만 한 가지 색으로 꽉 채운 그림 (테두리·명암 없음, 이무기의 기로 된 용) · 아직 못 불러왔으면 undefined */
 const shapes = new Map<string, HTMLCanvasElement>();
 export function shapeSprite(kind: string, color: string): HTMLCanvasElement | undefined {
-  const img = enemyImages.get(kind);
+  const img = enemyImage(kind);
   if (!img) return undefined;
   const key = `${kind}|${color}`;
   let cv = shapes.get(key);
@@ -78,18 +75,18 @@ export const ENEMY_SRC: Readonly<Record<string, number>> = { highorc: 2, hulk: 2
 
 /** 몬스터 그림 한 칸 크기 (게임 크기, 아직 못 불러왔으면 undefined) */
 export const enemyCell = (kind: string): number | undefined => {
-  const h = enemyImages.get(kind)?.height;
+  const h = enemyImage(kind)?.height;
   return h && h / (ENEMY_SRC[kind] ?? 1);
 };
 /** 몬스터 그림 칸 수 (고해상도 보스는 4칸: 걷기 2 · 공격 준비 · 공격) */
 export const enemyFrames = (kind: string): number => {
-  const img = enemyImages.get(kind);
+  const img = enemyImage(kind);
   return img ? Math.max(1, Math.floor(img.width / img.height)) : 0;
 };
 
 /** 몬스터 그림이 있으면 (x, y) 가운데로 그리고 true. tint: [색, 세기] · scale: 원래 크기보다 크거나 작을 때 (타워 디펜스 보스 등) */
 export function drawEnemySprite(ctx: CanvasRenderingContext2D, kind: string, x: number, y: number, frame: number, flip: boolean, tint?: readonly [string, number], scale = 1): boolean {
-  const img = enemyImages.get(kind);
+  const img = enemyImage(kind);
   if (!img) return false;
   const cell = img.height;
   const hd = ENEMY_SRC[kind] ?? 1;

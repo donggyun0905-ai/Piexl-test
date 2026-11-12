@@ -3,6 +3,7 @@
 import { isSilverBullet, SILVER_BULLET, type RunState } from "@pixel-rogue/shared";
 import { lerp, type Snap } from "./palette";
 import { additive, alpha, glow, type Ctx } from "./pwFxBits";
+import { lazyImg } from "../lazyImage";
 
 export const SB = { silver: "#d8e0ec", light: "#f4f8ff", holy: "#8ad0ff", moon: "#cfe0ff", gold: "#e8c860", dark: "#1a1e28" };
 
@@ -22,8 +23,7 @@ function mark(ctx: Ctx, x: number, y: number, n: number, need: boolean): void {
   ctx.fillText(`×${n}`, x + 1, y + 1);
 }
 
-const BOW = new Image();
-BOW.src = `${import.meta.env.BASE_URL}sprites/silverBullet_bow.png`;
+const BOW = lazyImg(`${import.meta.env.BASE_URL}sprites/silverBullet_bow.png`);
 /** 활 세로 반 길이 (계산의 SILVER_BULLET.ultSide와 같게: 양끝 유도탄이 활 끝에서 나감) · 몸에서 앞으로 */
 const BOW_HALF = SILVER_BULLET.ultSide;
 const BOW_FWD = 14;

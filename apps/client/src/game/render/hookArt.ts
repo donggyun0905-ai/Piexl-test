@@ -1,13 +1,13 @@
 // 훅 그림 공용: 빛 갈고리(큰 C자 날 + 톱니 자루 + 구멍) · 밧줄 · 더블배럴 산탄총 · 발사 그림(sprites/hook_fx: 줄 0 큰 발사 · 줄 1 둘째 총열)
 // 갈고리는 사용자가 준 참고 그림의 모양만 따서 코드로 새로 그림 (시원한 물빛 · 흰 속)
 import { additive, alpha, crescent, glow, type Ctx } from "./pwFxBits";
+import { lazyImg } from "../lazyImage";
 
 export const HK_AQUA = "#5ae8ff";
 export const HK_DEEP = "#1a78d8";
 export const HK_FOAM = "#f0fcff";
 const CELL = 128;
-const fx = new Image();
-fx.src = `${import.meta.env.BASE_URL}sprites/hook_fx.png`;
+const fx = lazyImg(`${import.meta.env.BASE_URL}sprites/hook_fx.png`);
 
 /** 빛 갈고리 (머리 x,y · a 나가는 방향 · s 크기 배율 · al 투명도): 앞쪽 큰 C자 날이 뒤로 휘고, 자루에 톱니 */
 export function hookShape(ctx: Ctx, x: number, y: number, a: number, s: number, al: number): void {

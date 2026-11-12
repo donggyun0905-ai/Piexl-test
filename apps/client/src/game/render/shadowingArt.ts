@@ -4,10 +4,10 @@ import { inkOf, SD_ROW, SHADOW_INK, type InkSpirit, type InkStroke, type InkZone
 import { additive, alpha as fade, glow, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
 import { img } from "./lunaticFx";
+import { lazyImg } from "../lazyImage";
 
 export const SD = { ink: "#1c1a2e", navy: "#1a2560", soul: "#7a9aff", pale: "#d8e4ff", lilac: "#c8a0ff", gold: "#ffd27a" };
-const FX = new Image();
-FX.src = `${import.meta.env.BASE_URL}sprites/shadowingFx.webp`;
+const FX = lazyImg(`${import.meta.env.BASE_URL}sprites/shadowingFx.webp`);
 const BRUSH = img("shadowingBrush");
 const ready = (i: HTMLImageElement) => i.complete && i.naturalWidth > 0;
 const CELL = 192;

@@ -5,14 +5,11 @@ import { BLUE_FLAME, bzRings, isBlueFlame, type RunState } from "@pixel-rogue/sh
 import { ringCells } from "../aimMark";
 import { lerp, type Snap } from "./palette";
 import { additive, alpha, glow, type Ctx } from "./pwFxBits";
+import { spriteImg } from "../lazyImage";
 
 export const BZ = { deep: "#1238d8", blue: "#2a7aff", light: "#7ac8ff", pale: "#c8f0ff", dark: "#06091a" };
 
-const img = (name: string) => {
-  const i = new Image();
-  i.src = `${import.meta.env.BASE_URL}sprites/${name}.png`;
-  return i;
-};
+const img = (name: string) => spriteImg(name);
 export const BZ_IMG = { bow: img("blueFlame_bow"), prison: img("blueFlame_prison"), pillar: img("blueFlame_pillar"), bomb: img("blueFlame_bomb"), bigBow: img("blueFlame_bigBow"), arrow: img("blueFlame_bigArrow"), wing: img("blueFlame_wing") };
 export const ready = (i: HTMLImageElement) => i.complete && i.naturalWidth > 0;
 

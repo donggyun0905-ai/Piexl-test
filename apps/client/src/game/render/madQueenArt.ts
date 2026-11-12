@@ -1,10 +1,10 @@
 // 매드퀸 그림 공용: 무기 그림(sprites/madQueen_arms: 줄 0 대포 · 1 터렛 · 2 날개 / 칸 = 함대 빛깔) · 빛깔 · 포탄 구슬
 // 원본 그림은 모두 왼쪽을 봄 → 오른쪽을 볼 때는 뒤집어 그림 (scripts/art/madqueen_arms.py)
 import { alpha, glow, type Ctx } from "./pwFxBits";
+import { lazyImg } from "../lazyImage";
 
 const CELL = 64;
-const sheet = new Image();
-sheet.src = `${import.meta.env.BASE_URL}sprites/madQueen_arms.png`;
+const sheet = lazyImg(`${import.meta.env.BASE_URL}sprites/madQueen_arms.png`);
 
 /** 함대 빛깔: 하늘 · 빨강 · 노랑 · 초록 (그림의 빛나는 부분과 같은 색) · 흰 거품 */
 export const MQ_COLORS = ["#5af0ff", "#ff4a5a", "#ffe04a", "#5aff7a"] as const;

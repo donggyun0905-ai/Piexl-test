@@ -5,17 +5,18 @@ import { mipFor, screenScale } from "./mipmap";
 import type { CharacterId } from "@pixel-rogue/shared";
 import { equippedSkin } from "../shop/wallet";
 import { draftSrc, mySkinSrc } from "./customArt";
+import { imageLoader } from "./lazyImage";
 
 /** 넣은 그림 이름 (확장자 빼고). 예: "warden", "crawler" */
 const SPRITE_FILES: readonly string[] = ["blacksmith"];
 
-const images = new Map<string, HTMLImageElement>();
-
-for (const name of SPRITE_FILES) {
-  const img = new Image();
-  img.src = `${import.meta.env.BASE_URL}sprites/${name}.png`;
-  img.onload = () => images.set(name, img);
-}
+const BASE = import.meta.env.BASE_URL;
+/** 넣은 그림·캐릭터 방향 시트 (처음 그릴 때 받음, 스킨 폴더 그림은 skinImage로) */
+const images = imageLoader((name) => {
+  if (SPRITE_FILES.includes(name)) return `${BASE}sprites/${name}.png`;
+  if (!CHARACTER_SHEETS[name] || name.includes("_")) return null;
+  return draftSrc(name) ?? `${BASE}sprites/${name}.png`;
+});
 
 export * from "./enemySprites";
 
@@ -25,7 +26,7 @@ export * from "./enemySprites";
  * 가로로 여러 칸이 이어진 그림이면 frame 번째 칸 (한 칸은 세로 길이와 같은 정사각형)
  */
 export function drawSprite(ctx: CanvasRenderingContext2D, name: string, x: number, y: number, frame = 0, flip = false): boolean {
-  const img = images.get(name);
+  const img = images(name);
   if (!img) return false;
   const size = img.height;
   const frames = Math.max(1, Math.floor(img.width / size));
@@ -46,13 +47,6 @@ export function drawSprite(ctx: CanvasRenderingContext2D, name: string, x: numbe
 
 // ── 캐릭터 방향 시트 ──
 
-for (const name of Object.keys(CHARACTER_SHEETS)) {
-  if (name.includes("_")) continue; // 스킨 폴더 그림은 skinImage로
-  const img = new Image();
-  img.src = draftSrc(name) ?? `${import.meta.env.BASE_URL}sprites/${name}.png`;
-  img.onload = () => images.set(name, img);
-}
-
 /** 캐릭터 그림 이름: 입은 스킨이 있으면 스킨, 풋내기는 5레벨마다 옷이 바뀜 (5·10·15·20) */
 /** member: 버려진 자들의 지금 아이 (0 P1 · 1 P2 · 2 P3, 그림 abandoned·abandoned2·abandoned3, 스킨은 뒤에 _p2·_p3) */
 export function sheetFor(id: string, lv = 1, member = 0): string {
@@ -71,16 +65,7 @@ export const bigSheet = (name: string) => name.startsWith("titan") || name.start
 /** 거인·오니·묵인 스킨도 게임에서는 파수꾼과 같은 크기 (2026-11-01) */
 const TITAN_SKIN_SHEET = { size: 32, footPad: 2 };
 export const sheetCell = (name: string): number | undefined => CHARACTER_SHEETS[name]?.src ?? CHARACTER_SHEETS[name]?.size; // 그림 파일 한 칸 (편집기)
-const skinImages = new Map<string, HTMLImageElement | null>();
-export function skinImage(name: string): HTMLImageElement | undefined {
-  if (!skinImages.has(name)) {
-    skinImages.set(name, null);
-    const img = new Image();
-    img.src = mySkinSrc(name) ?? draftSrc(name) ?? `${import.meta.env.BASE_URL}sprites/skins/${name}.png`;
-    img.onload = () => skinImages.set(name, img);
-  }
-  return skinImages.get(name) ?? undefined;
-}
+export const skinImage = imageLoader((name) => mySkinSrc(name) ?? draftSrc(name) ?? `${BASE}sprites/skins/${name}.png`);
 
 const CAST_TICKS = 10; // 공격하면 몇 틱 동안 마법 쓰는 모습
 let lastAttackCount = 0;
@@ -108,7 +93,7 @@ export function isHurt(key: string, tick: number, hp: number): boolean {
 
 /** 새 시트(v2: 맞음·쓰러짐·대시 그림이 있음)인지 */
 export function hasV2(name: string): boolean {
-  return !!CHARACTER_SHEETS[name]?.v2 && (images.has(name) || skinImages.get(name) != null);
+  return !!CHARACTER_SHEETS[name]?.v2 && !!(name.includes("_") ? skinImage(name) : images(name));
 }
 
 export interface CharacterPose {
@@ -143,21 +128,12 @@ function v2Cell(pose: CharacterPose, standWalk?: boolean): [number, number, numb
  * 그림이 없으면 false (도형으로 그리기)
  */
 /** 오니 방망이 그림 (public/sprites/oni_clubs/{무기}.png: 위 4줄 = 몸 뒤 · 아래 4줄 = 몸 앞, scripts/art/oni_clubs.py) */
-const clubImages = new Map<string, HTMLImageElement | null>();
-function clubImage(id: string): HTMLImageElement | undefined {
-  if (!clubImages.has(id)) {
-    clubImages.set(id, null);
-    const img = new Image();
-    img.src = `${import.meta.env.BASE_URL}sprites/oni_clubs/${id}.png`;
-    img.onload = () => clubImages.set(id, img);
-  }
-  return clubImages.get(id) ?? undefined;
-}
+const clubImage = imageLoader((id) => `${BASE}sprites/oni_clubs/${id}.png`);
 
 /** club: 오니가 든 방망이 무기 (없으면 명뢰봉, null이면 빈손) */
 export function drawCharacter(ctx: CanvasRenderingContext2D, name: string, x: number, y: number, r: number, pose: CharacterPose, club?: string | null): boolean {
   const sheet = CHARACTER_SHEETS[name] ?? (name.includes("_") ? (bigSheet(name) ? TITAN_SKIN_SHEET : SKIN_SHEET) : undefined);
-  const img = sheet && name.includes("_") ? skinImage(name) : images.get(name);
+  const img = sheet && name.includes("_") ? skinImage(name) : images(name);
   if (!sheet || !img) return false;
   const { size, footPad } = sheet;
   const ss = Math.round(img.width / 4); // 그림 한 칸 (4칸 시트: 2배·4배 촘촘한 그림·스킨도 자동)

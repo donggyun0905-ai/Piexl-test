@@ -2,12 +2,12 @@
 // · 찌르기 칼선 · 얼음 가시 · 발톱 · 레이저 · 충격·먼지. render/collector가 무기마다 골라 씀
 import { CL_ARM_IDS, type ClArmId } from "@pixel-rogue/shared";
 import { alpha, crescent, glow } from "./pwFxBits";
+import { lazyImg } from "../lazyImage";
 
 type Ctx = CanvasRenderingContext2D;
 const CELL = 48;
 
-const sheet = new Image();
-sheet.src = `${import.meta.env.BASE_URL}sprites/collector_arms.png`;
+const sheet = lazyImg(`${import.meta.env.BASE_URL}sprites/collector_arms.png`);
 
 /** 수집 무기 그림 하나 (가운데 x,y · 크기 size · 기울기 rot · 투명도 a) */
 export function armSprite(ctx: Ctx, id: string, x: number, y: number, size: number, rot = 0, a = 1): void {

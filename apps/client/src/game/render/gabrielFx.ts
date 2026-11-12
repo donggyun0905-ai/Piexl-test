@@ -4,14 +4,14 @@ import type { EffectState } from "@pixel-rogue/shared";
 import { additive, alpha, crescent, easeOut, glow, rune, shock, sparks, type Ctx } from "./pwFxBits";
 import type { Snap } from "./palette";
 import { lightHammer, lightShield } from "./gabrielArt";
+import { lazyImg } from "../lazyImage";
 
 /** 가브리엘 색: 금 · 밝은 빛 · 흰 빛 · 중력 보라 · 짙은 보라 · 갈라진 땅 */
 export const GB = { gold: "#f2c14e", light: "#ffe68a", white: "#fff8e0", grav: "#7a4aff", deep: "#1e1040", stone: "#5a4a3a" } as const;
 const GB_FX = new Set(["gbSwing", "gbSlam", "gbHammer", "gbBash", "gbWell", "gbWall", "gbUlt", "gbThorn", "gbLightSwing", "gbSmite", "gbBurst", "gbMiniHit"]);
 /** 궁극기 빛의 망치 휘두르는 각 (시작 · 끝, 바라보는 쪽 기준): 1타 내려찍기 · 2타 휘두르기 · 3타 대지 강타 */
 const ARC: readonly (readonly [number, number])[] = [[-1.6, 0.1], [1.4, -1.4], [-1.9, 0.15]];
-const img = new Image();
-img.src = `${import.meta.env.BASE_URL}sprites/gabriel_fx.png`;
+const img = lazyImg(`${import.meta.env.BASE_URL}sprites/gabriel_fx.png`);
 
 /** 빛의 망치 그림 (아래 가운데 = 땅에 닿는 자리 x,y · h 높이 · al 투명도 · top: 위에서부터 그릴 몫, 떨어지는 동안은 땅 고리를 빼고 망치만) */
 export function hammerImage(ctx: Ctx, x: number, y: number, h: number, al: number, top = 1): void {
