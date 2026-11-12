@@ -1,6 +1,6 @@
-// 아리아 효과: 여덟 음표 터짐(음표 색 폭죽 4칸 · 큰 빛) · 악보 완성 폭죽 · 앙코르 · 작은 북 울림 · 음표 맞음 불똥 · 바이올린 활 휘감기 · 악기 놓임 · 악보 완성 시작(8색 고리)
+// 아리아 효과: 여덟 음표 터짐(빛 폭죽: 번쩍 → 빛 줄기 퍼짐 → 반짝이 흩어짐) · 악보 완성 폭죽 · 앙코르 · 작은 북 울림 · 음표 맞음 불똥 · 바이올린 활 휘감기 · 악기 놓임 · 악보 완성 시작(8색 고리)
 import type { EffectState } from "@pixel-rogue/shared";
-import { AR, AR_COLORS, boomPic } from "./ariaArt";
+import { AR, AR_COLORS } from "./ariaArt";
 import type { Snap } from "./palette";
 import { additive, alpha, crescent, easeOut, glow, ring, shock, sparks, type Ctx } from "./pwFxBits";
 
@@ -16,14 +16,16 @@ export function drawAriaFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     case "arBurst":
     case "arBoom":
     case "arEncore": {
-      // 폭죽: 반짝임 → 퍼짐 → 활짝 → 흩어짐 (4칸)
-      const big = fx.kind === "arBurst" ? 2.7 : fx.kind === "arBoom" ? 2.4 : 2.2;
-      const frame = Math.min(3, Math.floor(f * 4.4));
-      const a = f > 0.75 ? (1 - f) / 0.25 : 1;
-      additive(ctx, () => glow(ctx, x, y, fx.size * (0.6 + f * 0.6), col, (fx.kind === "arBoom" ? 0.3 : 0.5) * (1 - f), 0.3));
-      boomPic(ctx, fx.style ?? 0, frame, x, y, fx.size * big * (0.85 + easeOut(f) * 0.25), a);
-      if (fx.kind === "arBurst" && f < 0.5) shock(ctx, x, y, fx.size * easeOut(f * 2), col, 1 - f * 2, 3);
-      if (fx.kind === "arEncore") ring(ctx, x, y, fx.size * (0.5 + f * 0.6), alpha(AR.pale, 0.6 * (1 - f)), 1.5);
+      // 빛 폭죽 (그림 없이 빛만 · 맞는 범위만큼): 번쩍 → 빛 줄기가 퍼짐 → 반짝이가 흩어지며 사라짐
+      const r = fx.size * (fx.kind === "arBoom" ? 0.9 : 1);
+      const seed = fx.x * 7 + fx.y * 3;
+      additive(ctx, () => {
+        if (f < 0.35) glow(ctx, x, y, r * (0.3 + f), col, 0.7 * (1 - f / 0.35), 0.6);
+        sparks(ctx, x, y, 14, r, f, col, seed, 0.95);
+        if (f > 0.3) sparks(ctx, x, y + (f - 0.3) * 8, 8, r * 1.1, (f - 0.3) / 0.7, AR.pale, seed + 1, 0.7);
+      });
+      if (fx.kind === "arBurst" && f < 0.5) shock(ctx, x, y, r * easeOut(f * 2), col, 0.6 * (1 - f * 2), 2);
+      if (fx.kind === "arEncore") ring(ctx, x, y, r * (0.5 + f * 0.5), alpha(AR.pale, 0.5 * (1 - f)), 1.5);
       return true;
     }
     case "arEcho": {

@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.47",
+    date: "2026-11-12",
+    items: {
+      ko: [
+        "실베르 진영 특징 '성장' 약하게: 이제 전용 패시브만 셈 (공용 패시브는 먹어도 오르지 않음) · 전용 패시브 하나마다 공격력·공격 속도 +2% → +1%",
+        "백령: 유령팔(손) 크기는 그대로, 손이 커질 때 공격 크기가 따라 커지는 정도를 절반으로 (가장 큰 손 2배일 때 공격 2배 → 1.5배)",
+        "백인장: 붉은 날개 폭우 크기 절반",
+        "아리아: 악보 완성 폭죽 크기 줄임 (반지름 46 → 34) · 폭죽 효과를 그림 대신 빛으로 바꿔 화면을 덜 가리게 (맞는 범위만큼만 그려짐)",
+        "아수라: 각성 공격(1·2타·3타·4타) 범위 1.5배 줄임",
+      ],
+      en: [
+        "Silber faction trait 'Growth' weakened: only exclusive passives count now (shared passives no longer raise it) · per exclusive passive damage and attack speed +2% → +1%",
+        "Baekryeong: the ghost arm (hand) size is unchanged, but attacks grow only half as much as the hand (at the largest 2x hand, attacks 2x → 1.5x)",
+        "Baekinjang: Red Wing Downpour size halved",
+        "Aria: Score Complete fireworks are smaller (radius 46 → 34) · firework effects are now drawn with light instead of images so they cover less of the screen (drawn only as big as the hit area)",
+        "Asura: awakened attacks (hits 1-2, 3 and 4) have 1.5x smaller range",
+      ],
+      ja: [
+        "シルベル陣営の特徴「成長」を弱体化：専用パッシブのみ数えるように（共通パッシブでは上がらない）・専用パッシブ1つごとの攻撃力・攻撃速度 +2% → +1%",
+        "白霊：幽霊腕（手）の大きさはそのまま、手が大きくなるときに攻撃が大きくなる割合を半分に（最大2倍の手で攻撃 2倍 → 1.5倍）",
+        "百人長：赤い翼の豪雨の大きさを半分に",
+        "アリア：楽譜完成の花火を小さく（半径 46 → 34）・花火の効果を画像ではなく光で描き、画面を隠しにくく（当たる範囲の大きさだけ描画）",
+        "阿修羅：覚醒攻撃（1・2打・3打・4打）の範囲を1.5分の1に",
+      ],
+    },
+  },
+  {
     version: "0.52.46",
     date: "2026-11-12",
     items: {

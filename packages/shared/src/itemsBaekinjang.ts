@@ -57,7 +57,7 @@ export const BJ_PERKS = {
   /** 섬광 돌진베기: 한 틱에 가는 거리 · 가는 틱 · 피해 배율 · 맞히는 너비 · 다시 누르기까지 틱 */
   bjDash: { step: 9, ticks: 10, mul: 3, w: 14, cd: 30 },
   /** 붉은 날개 폭우: 공격마다 확률 · 닿는 거리 · 부채꼴 너비(코사인) · 한 번 피해 배율 · 때리는 수 · 간격 틱 */
-  bjRain: { chance: 0.12, len: 150, arc: 0.8, mul: 0.2, hits: 15, every: 2 },
+  bjRain: { chance: 0.12, len: 75, arc: 0.8, mul: 0.2, hits: 15, every: 2 },
   /** 추적 침격: 공격마다 확률 · 찾는 거리 · 한 번 피해 배율 · 때리는 수 · 간격 틱 */
   bjNeedle: { chance: 0.15, dist: 240, mul: 0.22, hits: 15, every: 3 },
   /** 관통 나선창: 공격마다 확률 · 길이 · 맞히는 너비 · 피해 배율 */

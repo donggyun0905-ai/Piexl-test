@@ -75,7 +75,7 @@ export const AR_FINALE = {
   ticks: 600,
   every: 4,
   n: 2,
-  r: 46,
+  r: 34,
   mul: 0.75,
   aim: 0.6,
   rest: 300,

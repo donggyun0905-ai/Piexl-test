@@ -1,17 +1,15 @@
 // 아리아 그리기: 바닥(놓인 피아노·하프·호른) · 몸 위(둥실거리는 음표 · 악기 음표 · 클라리넷 · 영혼의 바이올린 · 악보 완성 빛) · 빛 꼬리·지휘봉 궤적·음파는 ariaGlam
 // 그림 sprites/ariaFx.png (256칸 4×5: 0·1줄 음표 8종 · 2줄 바이올린 서기(앞·뒤·왼·오) · 3줄 바이올린 공격 4칸 · 4줄 피아노·하프·호른·클라리넷)
-// sprites/ariaBoom.png (192칸 4×8: 줄 = 음표 색, 칸 = 폭죽 터짐 차례) — scripts/art/aria.py
 import { ARIA_PERKS, type ArInst, type RunState } from "@pixel-rogue/shared";
 import { img } from "./lunaticFx";
 import { lerp, type Snap } from "./palette";
 import { batonSwing, instGlam, noteTrails, staffHalo } from "./ariaGlam";
 import { additive, alpha, glow, type Ctx } from "./pwFxBits";
 
-/** 음표 종류마다 색 (ariaBoom 줄 차례와 같음) */
+/** 음표 종류마다 색 */
 export const AR_COLORS = ["#ffb040", "#ff4a5a", "#4a8aff", "#4aff7a", "#ff4ad8", "#ffe84a", "#a05aff", "#4ae8ff"];
 export const AR = { gold: "#ffd860", pale: "#fff4c8", soul: "#ffe8a0" };
 const FX = img("ariaFx");
-const BOOM = img("ariaBoom");
 const ok = (im: HTMLImageElement) => im.complete && im.naturalWidth > 0;
 /** 악기 그림 너비 (피아노·하프·호른·클라리넷) */
 const INST_W = [38, 34, 30, 28];
@@ -26,18 +24,6 @@ export function arPic(ctx: Ctx, row: number, col: number, x: number, y: number, 
   ctx.imageSmoothingEnabled = true;
   ctx.drawImage(FX, col * 256, row * 256, 256, 256, -w / 2, -w / 2, w, w);
   ctx.restore();
-}
-
-/** 폭죽 한 칸 (kind 색, frame 0~3) — 빛이라 더해 그림 */
-export function boomPic(ctx: Ctx, kind: number, frame: number, x: number, y: number, w: number, a = 1): void {
-  if (!ok(BOOM) || a <= 0) return;
-  additive(ctx, () => {
-    ctx.save();
-    ctx.globalAlpha *= Math.min(1, a);
-    ctx.imageSmoothingEnabled = true;
-    ctx.drawImage(BOOM, frame * 192, (kind & 7) * 192, 192, 192, x - w / 2, y - w / 2, w, w);
-    ctx.restore();
-  });
 }
 
 /** 음표 그림 하나 (종류 색 빛을 깔고) */

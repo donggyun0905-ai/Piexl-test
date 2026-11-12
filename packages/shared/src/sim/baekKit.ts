@@ -26,6 +26,12 @@ export function armScale(p: P): number {
   return Math.min(S.maxScale, 1 + (lv - S.armLv) * S.grow);
 }
 
+/** 공격 크기 (유령팔이 없으면 0): 유령팔 크기가 커지는 만큼의 hitGrow 비율로만 커짐 */
+export function hitScale(p: P): number {
+  const a = armScale(p);
+  return a <= 0 ? 0 : 1 + (a - 1) * S.hitGrow;
+}
+
 /** 영혼을 n 쌓음 (가장 큰 크기가 되면 더 쌓지 않음) · 새로 찬 칸 수 */
 export function addSouls(p: P, n: number): number {
   let up = 0;

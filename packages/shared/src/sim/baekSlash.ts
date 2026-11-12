@@ -4,7 +4,7 @@ import { srcCb, srcRun } from "./dmgSrc";
 import { BAEK_PERKS as K } from "../itemsBaekryeong";
 import { createRng, deriveSeed } from "../rng";
 import { BAEK_ARM as A } from "../weaponsBaekryeong";
-import { armScale, hauntMul, soulFire } from "./baekKit";
+import { armScale, hauntMul, hitScale, soulFire } from "./baekKit";
 import { armSwords } from "./baekSword";
 import { rot } from "./orbit";
 import { alive, damageEnemyLite } from "./shadowingSpirits";
@@ -15,7 +15,7 @@ import { addEffect, hasPerk, reachOf } from "./util";
 type P = RunState["player"];
 
 /** 참격 크기 배율 (유령팔 크기 · 사거리 증가 · 넓은 참격) */
-export const slashSize = (p: P) => armScale(p) * reachOf(p) * (hasPerk(p, "byWide") ? K.byWide.size : 1);
+export const slashSize = (p: P) => hitScale(p) * reachOf(p) * (hasPerk(p, "byWide") ? K.byWide.size : 1);
 
 /** 바라보는 쪽을 a(라디안)만큼 돌린 방향 */
 function turn(p: P, a: number): [number, number] {
@@ -83,7 +83,7 @@ function shotStep(s: RunState, sh: BaekShot): boolean {
     if (hasPerk(p, "byFrost")) e.slowTicks = Math.max(e.slowTicks ?? 0, K.byFrost.slow);
     // 위백도: 망령에 닿은 적에게 검무 소용돌이 (추가 피해 3번)
     if (sh.kind === 1 && hasPerk(p, "byWhirl") && !(p.byWhirls ?? []).some((w) => w.id === e.id)) srcRun(s, "byWhirl", () => {
-      const w: BaekWhirl = { id: e.id, x: e.x, y: e.y, left: K.byWhirl.hits, age: 0, r: K.byWhirl.r * Math.max(1, armScale(p)), dmg: p.stats.damage * K.byWhirl.mul * hauntMul(p) };
+      const w: BaekWhirl = { id: e.id, x: e.x, y: e.y, left: K.byWhirl.hits, age: 0, r: K.byWhirl.r * Math.max(1, hitScale(p)), dmg: p.stats.damage * K.byWhirl.mul * hauntMul(p) };
       (p.byWhirls ??= []).push(w);
       // 소용돌이 그림은 한 번만: 추가 피해가 다 끝날 때까지 1→4칸을 차례로 재생
       addEffect(s, { kind: "byWhirl", x: e.x, y: e.y, dirX: 0, dirY: 0, size: w.r, maxTicks: K.byWhirl.hits * K.byWhirl.every + 6 });

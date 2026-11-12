@@ -4,7 +4,7 @@
 import { srcCb, srcRun } from "./dmgSrc";
 import { BAEK_PERKS as K } from "../itemsBaekryeong";
 import { BAEK_BLADE as B } from "../weaponsBaekryeong";
-import { armScale, hauntMul, soulFire } from "./baekKit";
+import { hauntMul, hitScale, soulFire } from "./baekKit";
 import { alive, damageEnemyLite } from "./shadowingSpirits";
 import type { BaekSword } from "./byTypes";
 import type { EnemyState, RunState } from "./types";
@@ -32,7 +32,7 @@ function frontFoe(s: RunState, dist: number): EnemyState | null {
 /** 유령팔이 벨 때: (진)대태도 · (진)대태도-백 (r1·r2 = 확률 굴림) */
 export function armSwords(s: RunState, r1: number, r2: number): void {
   const p = s.player;
-  const size = Math.max(1, armScale(p)) * reachOf(p);
+  const size = Math.max(1, hitScale(p)) * reachOf(p);
   if (hasPerk(p, "byGreat") && r1 < K.byGreat.chance) srcRun(s, "byGreat", () => {
     const e = frontFoe(s, 180 * size);
     const x = e ? e.x : p.x + p.faceX * 70 * size;

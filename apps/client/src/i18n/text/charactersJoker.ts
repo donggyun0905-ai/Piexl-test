@@ -5,11 +5,11 @@ export const CHARACTER_TEXT_JOKER = {
   tfSilber: { ko: "처음엔 약하지만 패시브를 먹을 때마다 능력치가 더 오름", en: "Weak at first, but every passive grants extra stats", ja: "最初は弱いが、パッシブを得るたびに能力値がさらに上がる" },
   ftSilber: { ko: "성장", en: "Growth", ja: "成長" },
   ftSilberTip: {
-    ko: "실베르: 몬스터가 강해지기 전부터 강대한 몬스터가 살던 북부를 지켜 온 나라. 처음엔 약하지만 패시브(공용·전용 모두)를 하나 가질 때마다 최대 체력 +3, 공격력·공격 속도·투사체 속도 +2%, 이동 속도 +1%가 더 오름 (30개까지)",
-    en: "Silber: the nation that has long guarded the North, home of mighty monsters even before monsters grew strong. Weak at first, but each passive you hold (shared or exclusive) grants +3 max HP, +2% damage, attack speed and projectile speed, and +1% move speed (up to 30)",
-    ja: "シルベル：魔物が強くなる前から強大な魔物が棲む北部を守り続けてきた国。最初は弱いが、パッシブ（共通・専用とも）を1つ持つごとに最大体力+3、攻撃力・攻撃速度・弾速+2%、移動速度+1%がさらに上がる（30個まで）",
+    ko: "실베르: 몬스터가 강해지기 전부터 강대한 몬스터가 살던 북부를 지켜 온 나라. 처음엔 약하지만 전용 패시브(공용 패시브는 세지 않음)를 하나 가질 때마다 최대 체력 +3, 공격력·공격 속도 +1%, 투사체 속도 +2%, 이동 속도 +1%가 더 오름 (30개까지)",
+    en: "Silber: the nation that has long guarded the North, home of mighty monsters even before monsters grew strong. Weak at first, but each exclusive passive you hold (shared passives don't count) grants +3 max HP, +1% damage and attack speed, +2% projectile speed, and +1% move speed (up to 30)",
+    ja: "シルベル：魔物が強くなる前から強大な魔物が棲む北部を守り続けてきた国。最初は弱いが、専用パッシブ（共通パッシブは数えない）を1つ持つごとに最大体力+3、攻撃力・攻撃速度+1%、弾速+2%、移動速度+1%がさらに上がる（30個まで）",
   },
-  bfFtSilber: { ko: "성장 · 패시브 {n}개 · 능력치 +{p}%", en: "Growth · {n} passives · stats +{p}%", ja: "成長・パッシブ{n}個・能力値+{p}%" },
+  bfFtSilber: { ko: "성장 · 전용 패시브 {n}개 · 공격력·공격 속도 +{p}%", en: "Growth · {n} exclusive passives · damage & attack speed +{p}%", ja: "成長・専用パッシブ{n}個・攻撃力・攻撃速度+{p}%" },
   joker: { ko: "조커", en: "Joker", ja: "ジョーカー" },
   jokerCard: { ko: "튕기는 카드", en: "Bouncing Cards", ja: "跳ねるカード" },
   jokerDesc: {

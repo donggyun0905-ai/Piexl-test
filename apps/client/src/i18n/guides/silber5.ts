@@ -5,7 +5,7 @@ type Guide = Partial<Record<CharacterId, readonly string[]>>;
 
 export const GUIDE_KO_SILBER5: Guide = {
   baekinjang: [
-    "실베르 · 백인장 '기계 날개와 미니 창 드론을 부리는 쌍검의 기사' · 체력 100 · 공격력 9 · 이동 1.25 · 행운 1 · 처음엔 약하지만 패시브를 먹을수록 강해짐 (진영 특징: 패시브 하나마다 능력치가 더 오름)",
+    "실베르 · 백인장 '기계 날개와 미니 창 드론을 부리는 쌍검의 기사' · 체력 100 · 공격력 9 · 이동 1.25 · 행운 1 · 처음엔 약하지만 패시브를 먹을수록 강해짐 (진영 특징: 전용 패시브 하나마다 능력치가 더 오름)",
     "무기 1 (혈월 쌍검): 누르면 앞을 붉은 초승달 검격 둘로 X자로 벰 (검격 하나 공격력의 55% · 2번 맞음 · 사거리 증가만큼 넓어짐)",
     "기본 패시브: 미니 창 드론 5기가 늘 붉은 레이저를 남기며 가까운 적을 쫓아가 찌르고(한 번 12%), 곧게 지나갔다가 돌아와 다시 찌름 · 적이 없으면 몸 곁에 떠 있음",
     "콤보 (전용 패시브): 기본 공격 → 적색 난무(2타) → 선혈 회전참(둘레 4타) → 섬광 돌진베기(길게 돌진·크게 1타·돌진 중 무적) · 이어서 눌러야 다음 기술 · 없는 기술은 건너뜀",
@@ -17,7 +17,7 @@ export const GUIDE_KO_SILBER5: Guide = {
 
 export const GUIDE_EN_SILBER5: Guide = {
   baekinjang: [
-    "Silber · Baekinjang, the twin-blade knight with mech wings and mini lance drones · HP 100 · damage 9 · move 1.25 · luck 1 · weak at first but stronger with every passive (faction trait: each passive raises stats further)",
+    "Silber · Baekinjang, the twin-blade knight with mech wings and mini lance drones · HP 100 · damage 9 · move 1.25 · luck 1 · weak at first but stronger with every passive (faction trait: each exclusive passive raises stats further)",
     "Weapon 1 (Blood Moon Twin Blades): press to carve an X ahead with two red crescent slashes (55% of damage each · hits twice · wider with range)",
     "Base passive: five mini lance drones always chase nearby foes trailing red lasers, stab (12% each), fly straight past and return to stab again · they hover beside you when no foe is near",
     "Combo (exclusive passives): basic attack → Crimson Flurry (2 hits) → Bloodspin Slash (4 hits around you) → Flash Rush Slash (long rush · one heavy hit · invulnerable while rushing) · keep pressing to chain · steps you lack are skipped",
@@ -29,7 +29,7 @@ export const GUIDE_EN_SILBER5: Guide = {
 
 export const GUIDE_JA_SILBER5: Guide = {
   baekinjang: [
-    "シルベル・百人長「機械の翼とミニ槍ドローンを操る双剣の騎士」・体力100・攻撃力9・移動1.25・幸運1・最初は弱いがパッシブを取るほど強くなる（陣営の特徴：パッシブ1つごとに能力値がさらに上がる）",
+    "シルベル・百人長「機械の翼とミニ槍ドローンを操る双剣の騎士」・体力100・攻撃力9・移動1.25・幸運1・最初は弱いがパッシブを取るほど強くなる（陣営の特徴：専用パッシブ1つごとに能力値がさらに上がる）",
     "武器1（血月の双剣）：押すと前を赤い三日月の斬撃2つでX字に斬る（斬撃1つ攻撃力の55%・2回当たる・射程増加の分だけ広がる）",
     "基本パッシブ：ミニ槍ドローン5機が常に赤いレーザーを残して近くの敵を追い、刺して（1回12%）まっすぐ通り過ぎ、戻ってまた刺す・敵がいなければ体のそばに浮かぶ",
     "コンボ（専用パッシブ）：通常攻撃→赤色乱舞（2打）→鮮血回転斬（周囲4打）→閃光突進斬り（長く突進・大きく1打・突進中は無敵）・続けて押すと次の技・持っていない技は飛ばす",

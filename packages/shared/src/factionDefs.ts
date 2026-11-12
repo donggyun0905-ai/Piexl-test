@@ -15,13 +15,13 @@ export const FACTION_MEMBERS: Record<FactionTrait, readonly CharacterId[]> = {
   seongguk: ["beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela"],
 };
 
-/** 실베르 성장: 패시브(공용·전용 모두)를 하나 가질 때마다 능력치가 더 오름 (sim/factionGrowth) */
+/** 실베르 성장: 전용 패시브(공용은 세지 않음)를 하나 가질 때마다 능력치가 더 오름 (sim/factionGrowth) */
 export const FACTION_GROWTH = {
   /** 패시브 하나당 최대 체력 더함 */
   hp: 3,
-  /** 패시브 하나당 공격력·공격 속도·이동 속도·투사체 속도 증가 (0.02 = +2%) */
-  dmg: 0.02,
-  atkSpd: 0.02,
+  /** 패시브 하나당 공격력·공격 속도·이동 속도·투사체 속도 증가 (0.01 = +1%) */
+  dmg: 0.01,
+  atkSpd: 0.01,
   move: 0.01,
   shot: 0.02,
   /** 이만큼 넘는 패시브는 더 세지 않음 */
