@@ -67,6 +67,8 @@ export { BAEKINJANG_WEAPONS, BJ_BLADES, BJ_DRONE } from "./weaponsBaekinjang";
 export { BJ_PERKS } from "./itemsBaekinjang";
 export { AR_FINALE, AR_NOTE, AR_STYLE, ARIA_WEAPONS } from "./weaponsAria";
 export { ARIA_PERKS } from "./itemsAria";
+export { RAVEN_WEAPONS, RV_ATTACK, RV_CHECK } from "./weaponsRaven";
+export { RV_PERKS } from "./itemsRaven";
 export { HONRYEONG_WEAPONS, HR_CLOUD, HR_STYLE } from "./weaponsHonryeong";
 export { HONRYEONG_PERKS } from "./itemsHonryeong";
 export { BLAST } from "./weaponsBlast";

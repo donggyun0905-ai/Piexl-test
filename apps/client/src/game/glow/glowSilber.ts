@@ -1,9 +1,13 @@
 // 빛 층: 크루세이더 뒤 실베르 캐릭터 효과 빛 (효과 색·세기는 silberFxKinds) + 늘 켜진 빛 (아수라 각성·날아가는 주먹·표식 · 빙설 궁극기 기 모으기 · 조커 카드 · 쉐도잉 영혼 · 백령 검기)
-import { asMarked, BINGSEOL_PERKS, ULT_LIFT, type RunState } from "@pixel-rogue/shared";
+import { asMarked, BINGSEOL_PERKS, RV_ATTACK, rvChecked, ULT_LIFT, type RunState } from "@pixel-rogue/shared";
 import type { GlowCues } from "./glowCanvas";
 import { FxSeen } from "./fxSeen";
 import type { GlowParts } from "./glowParts";
 import { SILBER_FX, SILBER_GLOW as G } from "./silberFxKinds";
+
+/** 아리아 음표 종류마다 빛 색 (render/ariaArt AR_COLORS와 같은 차례) */
+const AR_GLOW = [0xffb040, 0xff4a5a, 0x4a8aff, 0x4aff7a, 0xff4ad8, 0xffe84a, 0xa05aff, 0x4ae8ff];
+const AR_TINTED = new Set(["arBurst", "arBoom", "arPop", "arEncore"]);
 
 /** 늘 켜진 빛을 한 화면에 놓는 가장 많은 수 */
 const MAX_STEADY = 40;
@@ -19,7 +23,8 @@ export class GlowSilber {
       if (!k) continue;
       const [blue, power] = k;
       // 아수라 분노의 팔: 빛도 붉게
-      const color = fx.kind.startsWith("as") && s.player.passives.includes("asRage" as never) ? G.crimson : blue;
+      // 아리아 폭죽·음표: 음표 색 그대로
+      const color = AR_TINTED.has(fx.kind) ? AR_GLOW[(fx.style ?? 0) & 7]! : fx.kind.startsWith("as") && s.player.passives.includes("asRage" as never) ? G.crimson : blue;
       const size = Math.max(5, Math.min(90, fx.size || 10));
       // 홈런 내리찍기는 크게
       const p = fx.kind === "rbSlam" && fx.style === 1 ? 3 : power;
@@ -88,6 +93,25 @@ export class GlowSilber {
       case "rabbit":
         for (const w of p.rbWaves ?? []) put(w.x, w.y, w.r * 1.2, G.green, 0.3);
         return;
+      case "chessRaven": {
+        // 킹(보라)·퀸(상아) 은은한 빛 · 움직이는 기물 금빛 · 체크된 적 머리 위 왕관 빛
+        const side = RV_ATTACK.side;
+        put(p.x - side, p.y - 10, 16, G.ivory, 0.22);
+        put(p.x + side, p.y - 10, 16, G.royal, 0.22);
+        for (const u of p.rvUnits ?? []) put(u.x, u.y - 6, u.kind === "rook" ? 30 : u.kind === "promo" ? 14 + Math.min(16, u.age * 0.3) : 12, u.kind === "rook" ? G.royal : G.gold, 0.45);
+        for (const e of s.enemies) if (e.hp > 0 && rvChecked(s, e)) put(e.x, e.y - e.r - 12, 10, G.gold, 0.5);
+        if ((p.rvGrandEnd ?? 0) > s.tick) put(p.x, p.y, 60, G.gold, 0.12);
+        return;
+      }
+      case "aria": {
+        // 음표마다 제 색 빛 · 악기 금빛 · 바이올린 상아빛 · 악보 완성 동안 몸 둘레 금빛
+        for (const nt of p.arNotes ?? []) put(nt.x, nt.y, 8 + nt.r, AR_GLOW[nt.kind & 7]!, 0.4);
+        for (const sh of p.arShots ?? []) put(sh.x, sh.y, 10, AR_GLOW[sh.kind & 7]!, 0.45);
+        for (const i of p.arInst ?? []) put(i.x, i.y - 4, 26, G.gold, 0.18);
+        if (p.arViolin) put(p.arViolin.x, p.arViolin.y, 22, G.ivory, 0.3);
+        if ((p.arFinale ?? 0) > 0) put(p.x, p.y - 10, 50 + 8 * Math.sin(s.tick * 0.2), G.gold, 0.25);
+        return;
+      }
     }
   }
 }

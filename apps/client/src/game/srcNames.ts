@@ -20,6 +20,7 @@ const NAMES: Record<string, Name> = {
   arBurst: ["여덟 음표 터짐", "Octet Burst", "八音符の破裂"],
   arFinale: ["악보 완성", "Score Complete", "楽譜完成"],
   bjVolley: ["연속 타격 기술", "Multi-hit skills", "連撃スキル"],
+  rvCheck: ["체크메이트 (체크)", "Checkmate (Check)", "チェックメイト（チェック）"],
   buildSetFx: ["세트 효과", "Set effects", "セット効果"],
   classTaken: ["반격", "Counter", "反撃"],
   collectorMoves: ["수집 무기", "Collected weapons", "収集武器"],

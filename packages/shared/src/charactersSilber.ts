@@ -19,5 +19,7 @@ export const SILBER_CHARACTERS = {
   baekinjang: { id: "baekinjang", maxHp: 100, damage: 9, moveSpeed: 1.25, luck: 1, startWeapon: "bjBlades" },
   /** 실베르: 아리아 음표 무기 10 · 느리게 둥실거리며 방 끝까지 가는 음표 · 서로 다른 음표 8개가 모이면 색색으로 터짐 · 악기 넷이 다 놓이면 악보 완성 (sim/aria) */
   aria: { id: "aria", maxHp: 85, damage: 8, moveSpeed: 1.2, luck: 1, startWeapon: "arBaton" },
+  /** 실베르: 레이븐 왕국의 창 하나 · 몸 옆 킹·퀸이 번갈아 내려찍기·빛기둥 · 체크 → 체크메이트 · 전용 패시브 20 (기물 공격 8·스킬 4, sim/raven) */
+  chessRaven: { id: "chessRaven", maxHp: 95, damage: 9, moveSpeed: 1.2, luck: 1, startWeapon: "rvLance" },
   asura: { id: "asura", maxHp: 105, damage: 8, moveSpeed: 1.2, luck: 1, startWeapon: "asFist" },
 } as const;

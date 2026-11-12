@@ -44,7 +44,7 @@ import { resetMiryu } from "./miryu";
 import { resetBeatrice } from "./beatrice";
 import { resetIan } from "./ian";
 import { resetGabriel } from "./gabriel";
-import { resetBaekinjang } from "./baekinjang"; import { resetAria } from "./aria"; import { resetJoker } from "./joker"; import { resetShadowing } from "./shadowing"; import { resetPuppet } from "./puppet"; import { resetRabbit } from "./rabbit"; import { resetBaek } from "./baekryeong"; import { resetBingseol } from "./bingseol"; import { resetAsura } from "./asura"; import { resetHonryeong } from "./honryeong"; import { resetSerena } from "./serena"; import { resetRafael } from "./rafael"; import { resetYuriel } from "./yuriel"; import { resetMichaela } from "./michaela"; import { resetNailer } from "./nailer"; import { resetScissors } from "./scissors"; import { resetHellfist } from "./hellfist"; import { resetSilverBullet } from "./silverBullet"; import { resetBlueFlame } from "./blueFlame"; import { resetLunatic } from "./lunatic"; import { resetIncision } from "./incision"; import { resetCrusader } from "./crusader"; import { resetBlast } from "./blast";
+import { resetBaekinjang } from "./baekinjang"; import { resetAria } from "./aria"; import { resetRaven } from "./raven"; import { resetJoker } from "./joker"; import { resetShadowing } from "./shadowing"; import { resetPuppet } from "./puppet"; import { resetRabbit } from "./rabbit"; import { resetBaek } from "./baekryeong"; import { resetBingseol } from "./bingseol"; import { resetAsura } from "./asura"; import { resetHonryeong } from "./honryeong"; import { resetSerena } from "./serena"; import { resetRafael } from "./rafael"; import { resetYuriel } from "./yuriel"; import { resetMichaela } from "./michaela"; import { resetNailer } from "./nailer"; import { resetScissors } from "./scissors"; import { resetHellfist } from "./hellfist"; import { resetSilverBullet } from "./silverBullet"; import { resetBlueFlame } from "./blueFlame"; import { resetLunatic } from "./lunatic"; import { resetIncision } from "./incision"; import { resetCrusader } from "./crusader"; import { resetBlast } from "./blast";
 import { resetCollector } from "./collector";
 import { resetMiner } from "./miner";
 import { resetVoyager } from "./voyager";
@@ -262,7 +262,7 @@ export function practiceReset(s: RunState): void {
   resetIan(p);
   resetGabriel(p);
   resetSerena(p);
-  resetRafael(p); resetYuriel(p); resetMichaela(p); resetNailer(p); resetScissors(p); resetHellfist(p); resetSilverBullet(p); resetBlueFlame(p); resetLunatic(p); resetIncision(p); resetCrusader(p); resetBlast(p); resetJoker(p); resetShadowing(p); resetPuppet(p); resetRabbit(p); resetBaek(p); resetBingseol(p); resetAsura(p); resetBaekinjang(p); resetAria(p); resetHonryeong(p);
+  resetRafael(p); resetYuriel(p); resetMichaela(p); resetNailer(p); resetScissors(p); resetHellfist(p); resetSilverBullet(p); resetBlueFlame(p); resetLunatic(p); resetIncision(p); resetCrusader(p); resetBlast(p); resetJoker(p); resetShadowing(p); resetPuppet(p); resetRabbit(p); resetBaek(p); resetBingseol(p); resetAsura(p); resetBaekinjang(p); resetAria(p); resetRaven(p); resetHonryeong(p);
   resetCollector(p);
   resetMiner(p);
   resetVoyager(p);

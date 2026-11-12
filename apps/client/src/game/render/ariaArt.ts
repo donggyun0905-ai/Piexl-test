@@ -1,9 +1,10 @@
-// 아리아 그리기: 바닥(놓인 피아노·하프·호른) · 몸 위(둥실거리는 음표 · 악기 음표 · 클라리넷 · 영혼의 바이올린 · 악보 완성 빛)
+// 아리아 그리기: 바닥(놓인 피아노·하프·호른) · 몸 위(둥실거리는 음표 · 악기 음표 · 클라리넷 · 영혼의 바이올린 · 악보 완성 빛) · 빛 꼬리·지휘봉 궤적·음파는 ariaGlam
 // 그림 sprites/ariaFx.png (256칸 4×5: 0·1줄 음표 8종 · 2줄 바이올린 서기(앞·뒤·왼·오) · 3줄 바이올린 공격 4칸 · 4줄 피아노·하프·호른·클라리넷)
 // sprites/ariaBoom.png (192칸 4×8: 줄 = 음표 색, 칸 = 폭죽 터짐 차례) — scripts/art/aria.py
 import { ARIA_PERKS, type ArInst, type RunState } from "@pixel-rogue/shared";
 import { img } from "./lunaticFx";
 import { lerp, type Snap } from "./palette";
+import { batonSwing, instGlam, noteTrails, staffHalo } from "./ariaGlam";
 import { additive, alpha, glow, type Ctx } from "./pwFxBits";
 
 /** 음표 종류마다 색 (ariaBoom 줄 차례와 같음) */
@@ -57,6 +58,7 @@ function drawInst(ctx: Ctx, i: ArInst, x: number, y: number, s: RunState): void 
   ctx.beginPath();
   ctx.ellipse(x, y + w * 0.36, w * 0.32, w * 0.08, 0, 0, Math.PI * 2);
   ctx.fill();
+  instGlam(ctx, i, x, y, s, w);
   additive(ctx, () => glow(ctx, x, y, w * 0.55, AR.gold, 0.18 + 0.3 * play));
   arPic(ctx, 4, i.kind, x, y + bob - (i.kind === 3 ? 6 : 0), w, born * blink, i.face < 0);
 }
@@ -72,6 +74,8 @@ export function drawAriaGround(ctx: Ctx, s: RunState, _alpha: number, snap: Snap
 export function drawAriaAir(ctx: Ctx, s: RunState, a: number, snap: Snap): void {
   const p = s.player;
   if (p.characterId !== "aria") return;
+  staffHalo(ctx, s, a, snap);
+  batonSwing(ctx, s, snap(lerp(p.prevX, p.x, a)), snap(lerp(p.prevY, p.y, a)));
   for (const i of p.arInst ?? []) {
     if (i.kind !== 3) continue;
     const x = snap(lerp(i.prevX, i.x, a));
@@ -94,6 +98,7 @@ export function drawAriaAir(ctx: Ctx, s: RunState, a: number, snap: Snap): void 
     if (swing < 20) arPic(ctx, 3, Math.min(3, Math.floor(swing / 5)), x, y, 40);
     else arPic(ctx, 2, p.faceY < -0.7 ? 1 : p.faceX < -0.3 ? 2 : p.faceX > 0.3 ? 3 : 0, x, y, 28, 0.95);
   }
+  noteTrails(ctx, s, snap);
   for (const n of p.arNotes ?? []) {
     const x = snap(lerp(n.prevX, n.x, a));
     const y = snap(lerp(n.prevY, n.y, a));

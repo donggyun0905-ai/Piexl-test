@@ -7,6 +7,7 @@ export const SILBER_GLOW = {
   soul: 0x7a9aff, lilac: 0xc8a0ff, red: 0xff3a5a, crimson: 0xff2a3a,
   green: 0x7dff4a, pink: 0xff7ac0, sky: 0x3ac8ff, bolt: 0xbfe8ff,
   ice: 0x8ad8ff, frost: 0xdff4ff, blue: 0x4a6aff, light: 0xa8c0ff,
+  amber: 0xffb040, royal: 0xb08aff, ivory: 0xfff2b8,
 };
 const G = SILBER_GLOW;
 
@@ -27,5 +28,10 @@ export const SILBER_FX: Record<string, readonly [number, 1 | 2 | 3 | 4]> = {
   // 아수라: 기본 펀치 · 연속 펀치 · 파동 · 악귀 · 각성 1·2타 · 3타 · 4타 · 육비 난무
   // 백인장: 쌍검격 · 난무 · 회전참 · 돌진베기 · 폭우 · 나선창 · 충격파 · 표식 · 감옥 · 팔연참 · 종언 · 붉은 십자
   bjSlash: [G.crimson, 1], bjFlurry: [G.crimson, 2], bjSpin: [G.crimson, 2], bjDash: [G.red, 2], bjRain: [G.crimson, 2], bjSpear: [G.red, 3], bjShock: [G.crimson, 3], bjEye: [G.red, 2], bjPrison: [G.crimson, 2], bjReaper: [G.crimson, 3], bjEnd: [G.red, 4], bjCross: [G.red, 4], bjWane: [G.crimson, 1],
+  // 레이븐: 킹 내려찍기 · 퀸 빛기둥 · 체크메이트 · 체크 · 나이트 착지 · 비숍 대각선 · 퀸 칙령 · 킹 심판 · 승격 · 체스판 기둥 · 포위 한 대 · 캐슬링 · 룩 충격파 · 그랜드 기물 · 십자 빛 · 그랜드 시작 · 폰 맞음
+  rvSlam: [G.gold, 2], rvPillar: [G.ivory, 2], rvMatePop: [G.gold, 3], rvCheck: [G.gold, 1], rvKnightLand: [G.gold, 3], rvBeam: [G.gold, 2], rvDecree: [G.ivory, 2], rvJudge: [G.royal, 3], rvPromo: [G.gold, 3],
+  rvBoardHit: [G.gold, 1], rvMateHit: [G.gold, 1], rvCastle: [G.gold, 3], rvRookShock: [G.royal, 2], rvGrandPiece: [G.gold, 2], rvCross: [G.ivory, 4], rvGrand: [G.gold, 4], rvPawnHit: [G.gold, 1],
+  // 아리아: 여덟 음표 터짐 · 악보 완성 폭죽 · 앙코르 · 작은 북 울림 · 음표 맞음 · 바이올린 · 악기 놓임 · 악보 완성 시작
+  arBurst: [G.gold, 2], arBoom: [G.pink, 1], arEncore: [G.amber, 2], arEcho: [G.gold, 1], arPop: [G.ivory, 1], arSweep: [G.ivory, 1], arPlace: [G.gold, 2], arFinale: [G.gold, 4],
   asPunch: [G.blue, 1], asRapid: [G.blue, 1], asWave: [G.light, 2], asDemon: [G.crimson, 2], asAwk12: [G.blue, 2], asAwk3: [G.blue, 2], asAwk4: [G.light, 3], asFistHit: [G.blue, 1],
 };

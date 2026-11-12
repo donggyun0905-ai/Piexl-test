@@ -124,6 +124,8 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   baekinjang: { size: 40, footPad: 2, src: 128, v2: true },
   /** 아리아 (실베르 지휘자 소녀, 은발·흰 금빛 제복·높은음자리 모자) */
   aria: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 레이븐 (실베르 체스 왕국 창기사, 은발·흑백 금빛 갑옷·왕관) */
+  chessRaven: { size: 40, footPad: 2, src: 128, v2: true },
   /** 혼령 (실베르 곰방대 연기의 여인, 은발·보랏빛 기모노) */
   honryeong: { size: 40, footPad: 2, src: 128, v2: true },
   /** 아수라 분노의 팔 (붉은 귀신 팔, scripts/art/asura.py red) */

@@ -15,7 +15,7 @@ DARK = 42
 # 어두운 옷 캐릭터: 배경(완전한 검정)만 지우게 기준을 낮춤
 DARK_BY = {"plague": 12}
 # 검은 머리·옷이 많은 캐릭터: 바깥 테두리에서 이어진 거의 완전한 검정(밝기 FLOOD 이하)만 배경으로 지움 (몸 안 검은 머리가 지워지지 않게)
-FLOOD_BG = {"levia", "tail", "madQueen", "hook", "orca", "wave", "miryu", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "blast", "nailer", "scissors", "hellfist", "hellfistDemon", "silverBullet", "blueFlame", "lunatic", "incision", "crusader", "joker", "shadowing", "puppeteer", "rabbit", "baekryeong", "bingseol", "asura", "honryeong", "baekinjang", "aria", "thorken", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "pungryu", "duck", "fallenKing", "lux", "lux2", "lux3", "lux4", "wanderer", "eater", "slayer", "slayer_rage", "summoner", "mukin", "plague", "ren", "tracker", "remnant"}
+FLOOD_BG = {"levia", "tail", "madQueen", "hook", "orca", "wave", "miryu", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "blast", "nailer", "scissors", "hellfist", "hellfistDemon", "silverBullet", "blueFlame", "lunatic", "incision", "crusader", "joker", "shadowing", "puppeteer", "rabbit", "baekryeong", "bingseol", "asura", "honryeong", "baekinjang", "aria", "chessRaven", "thorken", "leo", "onyx", "fenrir", "eclipse", "eclipseNight", "pungryu", "duck", "fallenKing", "lux", "lux2", "lux3", "lux4", "wanderer", "eater", "slayer", "slayer_rage", "summoner", "mukin", "plague", "ren", "tracker", "remnant"}
 FLOOD = 8
 PURE = 3
 POCKET = 300
@@ -63,7 +63,7 @@ DASH_FLIP = {"morph-bear"}
 # 옅은 색이 많아 작게 줄이면 흐린 캐릭터: 시트 전체 대비·채도를 더 올림 (배율)
 CRISP: dict = {}  # 이클립스는 원본 색 그대로 (2026-11-05 사용자)
 # 다 맞춘 뒤에도 왼·오가 반대인 줄: 그 줄의 왼쪽·오른쪽 칸을 서로 바꿈 (1 공격 · 2 걷기 왼발 · 3 걷기 오른발, 오른쪽 그림 확인 2026-10-31)
-ROW_SWAP = {"nailer": (1, 2, 3), "joker": (4,), "shadowing": (4,), "scissors": (2, 3), "hellfistDemon": (0, 2, 3), "morph-snake": (1, 3), "morph-bat": (1, 3), "morph-boar-evo": (3,), "morph-snake-evo": (3,), "morph-wolf-evo": (1,), **{n: (4,) for n in ("pungryu", "collector", "samyeol", "silk", "voyager", "forgotten", "remnant", "tracker", "punk", "miner",
+ROW_SWAP = {"chessRaven": (4,), "nailer": (1, 2, 3), "joker": (4,), "shadowing": (4,), "scissors": (2, 3), "hellfistDemon": (0, 2, 3), "morph-snake": (1, 3), "morph-bat": (1, 3), "morph-boar-evo": (3,), "morph-snake-evo": (3,), "morph-wolf-evo": (1,), **{n: (4,) for n in ("pungryu", "collector", "samyeol", "silk", "voyager", "forgotten", "remnant", "tracker", "punk", "miner",
                                        "rider", "mukin", "wanderer", "bomber", "artifacter", "automata", "eater", "zeus", "slayer", "slayer_rage", "tail")}}
 # 왼·오 칸이 둘 다 왼쪽을 보는 줄: 오른쪽은 왼쪽을 뒤집어 씀
 ROW_MIRROR = {"morph-spider": (2, 3), "hook": (2,)}

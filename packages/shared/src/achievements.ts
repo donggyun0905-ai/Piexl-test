@@ -181,6 +181,7 @@ export const ACHIEVEMENTS = [
   ch("clearAsura", "asura"),
   ch("clearBaekinjang", "baekinjang"),
   ch("clearAria", "aria"),
+  ch("clearRaven", "chessRaven"),
   ch("clearHonryeong", "honryeong"),
   ch("clearRen", "ren"),
   ch("clearSpiritist", "spiritist"),

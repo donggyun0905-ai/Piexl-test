@@ -41,7 +41,7 @@ import { snFoeTaken } from "./serenaKit";
 import { yrFoeTaken, yurielTaken } from "./yurielKit";
 import { evilTaken } from "./beatriceKit";
 /** 적이 받는 피해 배율 (베아트리스 악 · 이안 속박 · 가브리엘 압박 · 세레나 마비, combat.damageEnemy) */
-export const foeTaken = (s: RunState, e: EnemyState) => evilTaken(s, e) * ianTaken(s, e) * gbFoeTaken(s, e) * snFoeTaken(s, e) * yrFoeTaken(s, e) * factionDmgMul(s) * gateTaken(e) * levTaken(s, e) * asmoTaken(s, e) * darkTaken(s, e) * lucGuardTaken(s, e) * asuraTaken(s, e) * bjTaken(s, e) * arTaken(s, e);
+export const foeTaken = (s: RunState, e: EnemyState) => evilTaken(s, e) * ianTaken(s, e) * gbFoeTaken(s, e) * snFoeTaken(s, e) * yrFoeTaken(s, e) * factionDmgMul(s) * gateTaken(e) * levTaken(s, e) * asmoTaken(s, e) * darkTaken(s, e) * lucGuardTaken(s, e) * asuraTaken(s, e) * bjTaken(s, e) * arTaken(s, e) * rvTaken(s, e);
 import { leoTaken } from "./leoPerks";
 import { gateTaken } from "./bossGatekeeper";
 import { levTaken } from "./bossLevKing";
@@ -58,6 +58,7 @@ import { rabbitTaken } from "./rabbit";
 import { baekTaken } from "./baekryeong";
 import { asuraHurtMul, asuraTaken } from "./asKit";
 import { bjHurtMul, bjTaken } from "./bjKit";
+import { rvHurtMul, rvTaken } from "./rvKit";
 import { arTaken } from "./arLull";
 export { cloudEnv } from "./pungHooks";
 import type { EnemyState, RunState } from "./types";
@@ -69,7 +70,7 @@ export function classTaken(s: RunState, taken: number): number {
   const p = s.player;
   idraHurt(s);
   puppetHurt(s);
-  return disguise(s, mukinTaken(p, taken * asuraHurtMul(p) * bjHurtMul(p) * rabbitTaken(p) * baekTaken(p) * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p, !!s.pvp) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p) * leoTaken(s) * onyxTaken(p) * thorkenTaken(p) * leviaTaken(p) * tailTaken(p) * madQueenTaken(p) * hookTaken(p) * orcaTaken(p) * waveTaken(p) * miryuTaken(p) * beaTaken(p) * gabrielTaken(p, !!s.pvp) * yurielTaken(p, !!s.pvp) * crusaderTaken(p) * jokerTaken(p) * shadowingTaken(p) * foeTakenMul(p) * factionTaken(s) * lucP2Taken(s) * accTaken(s)));
+  return disguise(s, mukinTaken(p, taken * asuraHurtMul(p) * bjHurtMul(p) * rvHurtMul(p) * rabbitTaken(p) * baekTaken(p) * eaterTaken(p) * samyeolTaken(p) * automataTaken(p) * riderTaken(p) * bomberTaken(p) * artifacterTaken(p) * punkTaken(p) * forgottenTaken(p) * silkTaken(p) * slayerTaken(p) * abandonedTaken(p) * titanTaken(p) * oniTaken(p) * idraTaken(p) * morphTaken(p, !!s.pvp) * elderTaken(p) * spiritTaken(p) * plagueTaken(p) * petTaken(s) * zeusTaken(p) * pilgrimTaken(p) * fallenKingTaken(p) * leoTaken(s) * onyxTaken(p) * thorkenTaken(p) * leviaTaken(p) * tailTaken(p) * madQueenTaken(p) * hookTaken(p) * orcaTaken(p) * waveTaken(p) * miryuTaken(p) * beaTaken(p) * gabrielTaken(p, !!s.pvp) * yurielTaken(p, !!s.pvp) * crusaderTaken(p) * jokerTaken(p) * shadowingTaken(p) * foeTakenMul(p) * factionTaken(s) * lucP2Taken(s) * accTaken(s)));
 }
 
 /** 맞은 뒤 무적: 용 염옥·갓이터 패링 궁극기 동안은 없음 · 묵인은 아주 짧게 · 때린 적의 상태이상 (foeStatus) */

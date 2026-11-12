@@ -98,6 +98,7 @@ export const C = {
   asura: "#4a6aff",
   baekinjang: "#ff2a3a",
   aria: "#ffd860",
+  chessRaven: "#e8d8a0",
   honryeong: "#b48aff",
   miner: "#5ad8e8",
   voyager: "#e8b040",

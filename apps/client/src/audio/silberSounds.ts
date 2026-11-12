@@ -9,12 +9,13 @@ import { HONRYEONG_SOUNDS, honryeongSounds, type HonryeongSfx } from "./honryeon
 import { jokerSounds } from "./jokerSounds";
 import { puppetSounds } from "./puppetSounds";
 import { RABBIT_SOUNDS, rabbitSounds, type RabbitSfx } from "./rabbitSounds";
+import { RAVEN_SOUNDS, ravenSounds, type RavenSfx } from "./ravenSounds";
 import { shadowingSounds } from "./shadowingSounds";
 import type { Sfx } from "./sound";
 
-export const SILBER_SOUNDS = { ...RABBIT_SOUNDS, ...BAEK_SOUNDS, ...BINGSEOL_SOUNDS, ...ASURA_SOUNDS, ...BAEKINJANG_SOUNDS, ...HONRYEONG_SOUNDS, ...ARIA_SOUNDS };
-export type SilberSfx = RabbitSfx | BaekSfx | BingseolSfx | AsuraSfx | BaekinjangSfx | HonryeongSfx | AriaSfx;
+export const SILBER_SOUNDS = { ...RABBIT_SOUNDS, ...BAEK_SOUNDS, ...BINGSEOL_SOUNDS, ...ASURA_SOUNDS, ...BAEKINJANG_SOUNDS, ...HONRYEONG_SOUNDS, ...ARIA_SOUNDS, ...RAVEN_SOUNDS };
+export type SilberSfx = RabbitSfx | BaekSfx | BingseolSfx | AsuraSfx | BaekinjangSfx | HonryeongSfx | AriaSfx | RavenSfx;
 
 export function silberSounds(run: RunState, out: Sfx[], onShake: (power: number) => void): void {
-  for (const f of [jokerSounds, shadowingSounds, puppetSounds, rabbitSounds, baekSounds, bingseolSounds, asuraSounds, baekinjangSounds, honryeongSounds, ariaSounds]) f(run, out, onShake);
+  for (const f of [jokerSounds, shadowingSounds, puppetSounds, rabbitSounds, baekSounds, bingseolSounds, asuraSounds, baekinjangSounds, honryeongSounds, ariaSounds, ravenSounds]) f(run, out, onShake);
 }

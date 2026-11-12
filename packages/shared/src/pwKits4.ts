@@ -127,4 +127,11 @@ export const PW_KITS_4: PwKits = {
     sk("arDrum", "point", 10, "#ff8ad8", { range: 170, radius: 80, delay: 20, fx: "pillar", hit: { dmg: 1.9 } }),
     sk("arCello", "point", 60, "#ffe040", { range: 170, radius: 125, delay: 30, fx: "pillar", hit: { dmg: 3.2 } }),
   ),
+  // 실베르 레이븐: 킹 내려찍기 · 비숍 대각선 · 캐슬링 · 그랜드 체크메이트
+  chessRaven: kit(1,
+    sk("rvLance", "cone", 4, "#ffd860", { radius: 64, arc: 0.9, fx: "slash", hit: { dmg: 1.2, stun: 0.3 * SEC } }),
+    sk("rvLance", "line", 8, "#fff0b0", { range: 230, hit: { dmg: 1.7 } }),
+    sk("rvLance", "dash", 9, "#e8e0ff", { range: 110, speed: 10, hit: { dmg: 1 } }),
+    sk("rvLance", "point", 60, "#ffd040", { range: 170, radius: 125, delay: 30, fx: "pillar", hit: { dmg: 3.3, stun: SEC } }),
+  ),
 };

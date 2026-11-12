@@ -29,6 +29,7 @@ export const ASCALON_ACHIEVEMENTS = {
   clearLunatic: n(["월광의 리더", "Leader of the Moonlight", "月光の指導者"], ["루나틱으로 클리어", "Clear as Lunatic", "ルナティックでクリア"]),
   clearIncision: n(["도살자", "The Butcher", "屠殺者"], ["인시전으로 클리어", "Clear as Incision", "インシジョンでクリア"]),
   clearHonryeong: n(["연기 속의 사냥", "The Hunt in the Smoke", "煙の中の狩り"], ["혼령으로 클리어", "Clear as Honryeong", "魂霊でクリア"]),
+  clearRaven: n(["왕국의 체크메이트", "The Kingdom's Checkmate", "王国のチェックメイト"], ["레이븐으로 클리어", "Clear as Raven", "レイヴンでクリア"]),
   clearAria: n(["악보 완성의 밤", "A Night of the Finished Score", "楽譜完成の夜"], ["아리아로 클리어", "Clear as Aria", "アリアでクリア"]),
   clearBaekinjang: n(["붉은 날개의 종언", "The End on Red Wings", "赤い翼の終焉"], ["백인장으로 클리어", "Clear as Baekinjang", "百人長でクリア"]),
   clearAsura: n(["여섯 팔의 수라", "Six-Armed Asura", "六臂の修羅"], ["아수라로 클리어", "Clear as Asura", "阿修羅でクリア"]),
