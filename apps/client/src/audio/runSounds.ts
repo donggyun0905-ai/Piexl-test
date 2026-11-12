@@ -4,6 +4,7 @@ import { getSettings } from "../settings";
 import { wornLimited, wornVictory } from "../game/limited/limited";
 import { setVictoryMusic } from "./victorySound";
 import { skillSounds } from "./sfxSkills";
+import { hitCounter } from "./hitCount";
 import { play, setMusicBoss, startMusic, stopMusic, type Sfx } from "./sound";
 import { TRIAL_MUSIC } from "./trialSound";
 import { setRoomMusic } from "./roomMusic";
@@ -134,11 +135,10 @@ function snapshot(s: RunState): Seen {
     lxShards: s.player.passives.filter((id) => id === "lxShard").length,
   };
 }
-
 export function createRunSounds(run: RunState, onShake: (power: number) => void) {
   let seen = snapshot(run);
-  // 원소술사 회전체가 때릴 때 휘두르는 소리 (너무 잦지 않게)
-  let orbSound = 0;
+  let orbSound = 0; // 원소술사 회전체가 때릴 때 휘두르는 소리 (너무 잦지 않게)
+  const hitsNow = hitCounter(); // 피해 숫자가 뜨는 타격마다 타격음
   // 한정 스킨(범 풍류·여름 파도)을 입었으면 전용 음악
   const limited = wornLimited(run.player.characterId);
   setTigerMusic(limited === "tiger");
@@ -149,12 +149,12 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
     /** 틱을 진행한 프레임마다 */
     update(): void {
       const now = snapshot(run);
-      const fx: Sfx[] = [];
+      const [fx, struck]: [Sfx[], number] = [[], hitsNow(run)];
       if (now.bossKills > seen.bossKills) fx.push("bossDown");
       else if (now.kills > seen.kills) fx.push("kill");
       // 치명타는 크게 "챙!" (연속이면 음이 올라감, 처치 소리와도 같이)
       if (now.crits > seen.crits) fx.push("crit");
-      else if (now.bossKills === seen.bossKills && now.kills === seen.kills && now.hits > 0 && now.hits !== seen.hits) fx.push("hit");
+      else if (struck > 0 && now.bossKills === seen.bossKills && now.kills === seen.kills) fx.push("hit");
       if (now.hp < seen.hp - 0.5) {
         fx.push("hurt");
         const s = getSettings();
@@ -167,7 +167,7 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
       if (now.slots < seen.slots) fx.push("use");
       if (now.shots > seen.shots || (now.beaming && !seen.beaming)) fx.push("shot");
       if (now.swings > seen.swings) fx.push("swing");
-      // 전용 효과만 쓰는 캐릭터: 공격할 때마다 소리 (이번에 탄·휘두르기 소리가 없었으면)
+      // 전용 효과만 쓰는 캐릭터: 공격마다 소리
       const c = run.player.characterId;
       if (c === "tracker") {
         // 추적자: 총성마다 다르게, 암습 저격·강력한 한방은 화면이 크게 흔들림
@@ -264,7 +264,7 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
       // 예리함이 터지면 (어느 캐릭터든) 맑은 쇳소리
       if (now.sharps > seen.sharps) fx.push("sharp");
       if (now.parried > seen.parried) fx.push("parry");
-      // 특수용병 보호막 성공: 1콤보 뒤 팅 · 2콤보 뒤 탕 · 3콤보(와 마무리) 뒤 펑
+      // 특수용병 보호막: 팅 · 탕 · 펑
       if (now.guards > seen.guards) fx.push((["guard3", "guard1", "guard2", "guard3"] as const)[run.player.mercGuardStep ?? 0]!);
       skillSounds(run, fx, onShake);
       if (now.floor !== seen.floor) {
@@ -276,7 +276,7 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
         setMusicBoss(true);
       }
       if (!now.boss && seen.boss) setMusicBoss(false);
-      // 시련의 방: 비석이 깨어남·벌칙·상자 쏟아짐·열림 소리 · 시련 중 웅장한 곡
+      // 시련의 방 소리 · 시련 중 곡
       for (const [k, sfx] of [["trWake", "trialWake"], ["trCurse", "trialCurse"], ["trChest", "trialSpill"], ["trOpen", "trialOpen"]] as const) if (now.trFx.includes(k)) fx.push(sfx);
       if (now.music !== seen.music) {
         setRoomMusic(now.music === "trial" ? TRIAL_MUSIC : (vaultMusic(now.music) ?? (now.music ? altarMusic(now.music as AltarId) : null)));

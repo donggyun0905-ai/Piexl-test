@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.54",
+    date: "2026-11-12",
+    items: {
+      ko: ["모든 캐릭터: 피해 숫자가 뜨는 타격마다 타격음이 남 — 같은 적을 연달아 때릴 때·상태이상(독·출혈 등)·몇몇 기술처럼 소리가 빠지던 타격도 이제 타다다닥 소리가 남"],
+      en: ["All characters: every hit that shows a damage number now plays a hit sound — rapid hits on the same foe, status damage (poison, bleed, etc.) and some skills used to be silent"],
+      ja: ["全キャラ：ダメージ数字が出る打撃ごとに打撃音が鳴るように — 同じ敵への連続攻撃・状態異常（毒・出血など）・一部の技で鳴らなかった打撃もタタタッと鳴る"],
+    },
+  },
+  {
     version: "0.52.53",
     date: "2026-11-12",
     items: {
