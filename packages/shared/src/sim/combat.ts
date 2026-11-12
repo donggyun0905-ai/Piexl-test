@@ -43,7 +43,7 @@ import { addEffect, dist2, hasPerk, HIT_INVULN_TICKS, keepInRoom, markCrit, norm
 import { raiseShield } from "./imugiMods";
 import { devilMul } from "./devilPerks";
 import { setDmgMul } from "./buildSets"; import { factionKill } from "./faction"; import { raidGuard } from "./lucCover";
-import { raidDmgMul } from "./raidTune";
+import { raidDmgMul } from "./raidTune"; import { finalBossExtra } from "./finalBossHit";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -129,6 +129,8 @@ export function damagePlayer(s: RunState, dmg: number, from?: EnemyKind): void {
   }
   // 금기 취약 · 광야의 새벽 · 무한 7층부터·시련 점수 · 달빛 걸린 적이면 약함
   dmg *= moonOut() * endlessPow(s) * (envHit ? 1 : lateDmg(s)) * trialFoeDmg(p, s, from) * tabooUp(s, "frail") * (s.swarm ? SWARM.taken * (SWARM_LEVELS[s.swarm.level ?? 0]?.taken ?? 1) : 1);
+  // 최종보스 전투: 최대 체력 비례 피해 (finalBossHit)
+  if (!envHit) dmg += finalBossExtra(s);
   // 방패 자세: 가만히 서 있으면 받는 피해 절반
   let taken = hasPerk(p, "bulwarkStance") && p.stillTicks >= STILL_TICKS ? dmg * PERKS.bulwarkStance.taken : dmg;
   // 버티기(가라테): 받는 피해 절반, 받은 만큼 모아 되받아침

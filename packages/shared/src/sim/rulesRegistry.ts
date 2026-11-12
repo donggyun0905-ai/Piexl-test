@@ -81,6 +81,7 @@ import { CHRONO_RULES } from "./chrono";
 import { RUNE_RULES } from "./rune";
 import { MORPH_XP_RULES } from "./morphXp";
 import { COMBAT_RULES } from "./combat";
+import { FINAL_BOSS_HIT_RULES } from "./finalBossHit";
 import { CRITTERS_RULES } from "./critters";
 import { STALKERS_RULES } from "./stalkers";
 import { NEW_FOES_RULES } from "./newFoes";
@@ -229,6 +230,7 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   RUNE_RULES,
   MORPH_XP_RULES,
   COMBAT_RULES,
+  FINAL_BOSS_HIT_RULES,
   CRITTERS_RULES,
   STALKERS_RULES,
   NEW_FOES_RULES,

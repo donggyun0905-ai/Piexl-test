@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.50",
+    date: "2026-11-12",
+    items: {
+      ko: ["최종보스(시즌 1~3 라스트 보스·레이드 루시퍼)와 싸우는 동안 맞으면 피해에 내 최대 체력의 5%가 더해짐 — 체력이 많은 캐릭터도 버티기만 할 수 없게 (지형·장판처럼 계속 닳는 피해는 제외)"],
+      en: ["While fighting a final boss (Season 1–3 last bosses · raid Lucifer), each hit you take also deals 5% of your max HP — high-HP characters can no longer just tank it (lingering terrain and zone damage excluded)"],
+      ja: ["最終ボス（シーズン1〜3のラストボス・レイドのルシファー）との戦闘中は、被ダメージに自分の最大HPの5%が追加 — HPの多いキャラも耐えるだけではしのげない（地形・床のような継続ダメージは除く）"],
+    },
+  },
+  {
     version: "0.52.49",
     date: "2026-11-12",
     items: {

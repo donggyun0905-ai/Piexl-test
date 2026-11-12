@@ -7,6 +7,7 @@ import { updateHazards } from "./hazards";
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
 import { continueToLastFloor } from "./rooms";
 import { makeEnemy } from "./util";
+import { FINAL_BOSS_HIT_RULES } from "./finalBossHit";
 
 /** 7층 큰 방에 갓이터 하나 (무적 플레이어) */
 function hades(hp = 5000): RunState {
@@ -140,7 +141,7 @@ describe("갓이터", () => {
       r.player.dashTicks = dash ? 5 : 0;
       const hp = r.player.hp;
       updateZones(r, e);
-      expect(hp - r.player.hp).toBeCloseTo(dash ? 0 : ZONE_DAMAGE * lateDmg(r));
+      expect(hp - r.player.hp).toBeCloseTo(dash ? 0 : ZONE_DAMAGE * lateDmg(r) + r.player.stats.maxHp * FINAL_BOSS_HIT_RULES.MAX_HP_PCT);
       expect((r.player.blindTicks ?? 0) > 0).toBe(!dash);
     }
   });
