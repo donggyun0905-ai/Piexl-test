@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.49",
+    date: "2026-11-12",
+    items: {
+      ko: [
+        "기어스: 몸 크기를 다른 캐릭터와 비슷하게 줄임 (큰 얼굴·양쪽 방패 때문에 커 보이던 것)",
+        "기어스 대시 구체를 2.5배 크게 — 그림과 함께 벽·적에 부딪히는 판정도 커짐 (맞는 판정은 몸 그대로)",
+        "기어스 구체가 벽이나 적에게 튕길 때마다 12%씩 빨라짐 (최대 10번 · 구체를 풀면 처음부터)",
+      ],
+      en: [
+        "Gears: body size reduced to match other characters (the large face and twin shields made her look bigger)",
+        "Gears' dash orb is 2.5× larger — its wall and enemy collision grows with the art (your own hitbox stays the body)",
+        "Gears' orb gets 12% faster every time it bounces off a wall or an enemy (up to 10 times · resets when you leave orb form)",
+      ],
+      ja: [
+        "ギアーズ：体の大きさを他のキャラに合わせて縮小（大きな顔と両側の盾で大きく見えていた）",
+        "ギアーズのダッシュ球体を2.5倍に — 絵と一緒に壁・敵への衝突判定も大きく（被弾判定は体のまま）",
+        "ギアーズの球体が壁や敵に跳ね返るたびに12%ずつ速く（最大10回 · 球体を解くとリセット）",
+      ],
+    },
+  },
+  {
     version: "0.52.48",
     date: "2026-11-12",
     items: {

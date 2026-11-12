@@ -1,6 +1,6 @@
 // 기어스 그리기: 몸 위 (대시 구체 · 구체 앞 방패 충격파 · 천상의 수호자 방패 · 위성 방패 · 던진 방패 · 보호막 돔 · 육각 방벽)
 // 그림 sprites/gearsFx.png (192칸 4×11, 줄 차례는 ROW) · gearsShield.png · gearsOrb.png — scripts/art/gears.py
-import { GE_PERKS, geOrbitAt, type RunState } from "@pixel-rogue/shared";
+import { GE_BALL, GE_PERKS, geOrbitAt, type RunState } from "@pixel-rogue/shared";
 import { img } from "./lunaticFx";
 import { lerp, type Snap } from "./palette";
 import { additive, glow, type Ctx } from "./pwFxBits";
@@ -56,9 +56,11 @@ export function drawGearsAir(ctx: Ctx, s: RunState, alpha: number, snap: Snap): 
   if ((p.shieldPts ?? 0) > 0) gePic(ctx, ROW.geHex, 3, x, y - 4, p.r * 3.6, 0.35 + 0.1 * Math.sin(t * 0.15));
   // 대시 구체: 굴러가는 쪽으로 빙글 · 앞에 방패 충격파
   if (p.geBall) {
-    additive(ctx, () => glow(ctx, x, y, p.r * 2, GE.blue, 0.45, 0.3));
-    geOne(ctx, "orb", x, y, p.r * 2.6, (t - (p.geBallAt ?? 0)) * 0.25 * (left ? -1 : 1));
-    if (p.passives.includes("geWave" as never)) gePic(ctx, ROW.geWave, Math.floor(t / 5) % 2, x + p.faceX * p.r * 1.6, y + p.faceY * p.r * 1.6, p.r * 2.6, 0.7, left ? ang + Math.PI : ang, left);
+    // 구체 반지름 = 몸 × GE_BALL.size (계산의 부딪힘 판정과 같은 크기)
+    const br = p.r * GE_BALL.size;
+    additive(ctx, () => glow(ctx, x, y, br * 1.5, GE.blue, 0.45, 0.3));
+    geOne(ctx, "orb", x, y, br * 2, ((t - (p.geBallAt ?? 0)) * 0.25 * (left ? -1 : 1)) / 2.5);
+    if (p.passives.includes("geWave" as never)) gePic(ctx, ROW.geWave, Math.floor(t / 5) % 2, x + p.faceX * br * 1.2, y + p.faceY * br * 1.2, br * 2, 0.7, left ? ang + Math.PI : ang, left);
   }
   // 천상의 수호자: 앞에 든 거대한 방패 (마지막 칸)
   if ((p.geGuard ?? 0) > 0) {

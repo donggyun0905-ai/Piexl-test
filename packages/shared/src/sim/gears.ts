@@ -78,5 +78,5 @@ export function gearsHurt(s: RunState): void {
 
 /** 연습장 등에서 다시 시작할 때 */
 export function resetGears(p: P): void {
-  for (const k of ["geCd", "geRoom", "geAtkAt", "geHits", "geRolls", "geBall", "geBallDx", "geBallDy", "geBallAt", "geToggle", "geDashKey", "geSpin", "geBumpAt", "geWaveCd", "geSeqs", "geThrows", "geGuard", "geGuardAt", "geRage", "geShieldPrev", "geLog", "geLogT"] as const) delete p[k];
+  for (const k of ["geCd", "geRoom", "geAtkAt", "geHits", "geRolls", "geBall", "geBallDx", "geBallDy", "geBallAt", "geToggle", "geDashKey", "geSpin", "geBounce", "geBumpAt", "geWaveCd", "geSeqs", "geThrows", "geGuard", "geGuardAt", "geRage", "geShieldPrev", "geLog", "geLogT"] as const) delete p[k];
 }

@@ -47,6 +47,8 @@ export interface GearsPlayerState {
   geToggle?: number;
   geDashKey?: boolean;
   geSpin?: number;
+  /** 구체가 튕긴 수 (튕길수록 빨라짐, 풀면 0) */
+  geBounce?: number;
   geBumpAt?: number;
   /** 구체 충격파 다시 쓰기까지 */
   geWaveCd?: number;

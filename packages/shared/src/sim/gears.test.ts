@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { GEARS_PASSIVES, GE_PERKS as K } from "../itemsGears";
-import { GE_ATTACK as A } from "../weaponsGears";
+import { GE_ATTACK as A, GE_BALL } from "../weaponsGears";
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
 import { recalcStats } from "./items";
 import { classTaken } from "./classTaken";
@@ -77,12 +77,40 @@ describe("기어스", () => {
     expect(s.player.geBall).toBe(false);
   });
 
+  it("구체: 몸보다 크게 부딪힘 · 튕길수록 빨라짐 · 풀면 처음부터", () => {
+    const s = ge([]);
+    stepSim(s, { ...EMPTY_INPUT, dash: true, moveX: -100 });
+    const x0 = s.player.x;
+    stepSim(s, EMPTY_INPUT);
+    const slow = Math.abs(s.player.x - x0);
+    for (let i = 0; i < 400 && (s.player.geBounce ?? 0) < 3; i++) stepSim(s, EMPTY_INPUT);
+    expect(s.player.geBounce).toBeGreaterThanOrEqual(3);
+    let fast = 0;
+    for (let i = 0; i < 6; i++) {
+      const [px, py] = [s.player.x, s.player.y];
+      stepSim(s, EMPTY_INPUT);
+      fast = Math.max(fast, Math.hypot(s.player.x - px, s.player.y - py));
+    }
+    expect(fast).toBeGreaterThan(slow * 1.2);
+    for (let i = 0; i < 12; i++) stepSim(s, EMPTY_INPUT);
+    stepSim(s, { ...EMPTY_INPUT, dash: true });
+    expect(s.player.geBounce).toBe(0);
+    const far = ge([[80 + s.player.r * GE_BALL.size + 6, 100]]);
+    stepSim(far, { ...EMPTY_INPUT, dash: true, moveX: 100 });
+    stepSim(far, EMPTY_INPUT);
+    expect(lost(far)).toBeGreaterThan(0);
+  });
+
   it("구체가 적에게 부딪히면 적도 피해", () => {
     const s = ge([[120, 100]]);
     stepSim(s, { ...EMPTY_INPUT, dash: true, moveX: 100 });
-    for (let i = 0; i < 20; i++) stepSim(s, EMPTY_INPUT);
+    let bump = false;
+    for (let i = 0; i < 20; i++) {
+      stepSim(s, EMPTY_INPUT);
+      bump ||= s.effects.some((f) => f.kind === "geBump");
+    }
     expect(lost(s)).toBeGreaterThan(0);
-    expect(s.effects.some((f) => f.kind === "geBump")).toBe(true);
+    expect(bump).toBe(true);
   });
 
   it("천상의 수호자: 방패에 부딪힌 적이 60번 맞음 (한 대마다 기록)", () => {
