@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.55",
+    date: "2026-11-12",
+    items: {
+      ko: ["기어스: 마법 방패 충격파 이펙트를 2.5배 크게"],
+      en: ["Gears: the Magic Shield Shockwave effect is 2.5× bigger"],
+      ja: ["ギアス：魔法盾の衝撃波のエフェクトを2.5倍に"],
+    },
+  },
+  {
     version: "0.52.54",
     date: "2026-11-12",
     items: {
