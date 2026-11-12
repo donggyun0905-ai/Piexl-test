@@ -1,4 +1,4 @@
-// 빛 층: 크루세이더 뒤 실베르 캐릭터(조커·쉐도잉·인형술사·래빗·백령·빙설·아수라) 효과마다 빛 색·세기 (glowSilber가 씀)
+// 빛 층: 크루세이더 뒤 실베르 캐릭터(조커·쉐도잉·인형술사·래빗·백령·빙설·아수라·기어스) 효과마다 빛 색·세기 (glowSilber가 씀)
 // 세기 1 작은 빛(맞힘·튕김) · 2 빛 + 고리 + 불티 · 3 큰 기술(크게) · 4 필살기(빛기둥 + 화면 살짝 번쩍)
 
 /** 진한 원색 (빛 층은 더하기라 어두운 색은 안 보임) */
@@ -7,7 +7,7 @@ export const SILBER_GLOW = {
   soul: 0x7a9aff, lilac: 0xc8a0ff, red: 0xff3a5a, crimson: 0xff2a3a,
   green: 0x7dff4a, pink: 0xff7ac0, sky: 0x3ac8ff, bolt: 0xbfe8ff,
   ice: 0x8ad8ff, frost: 0xdff4ff, blue: 0x4a6aff, light: 0xa8c0ff,
-  amber: 0xffb040, royal: 0xb08aff, ivory: 0xfff2b8,
+  amber: 0xffb040, royal: 0xb08aff, ivory: 0xfff2b8, azure: 0x3a8aff,
 };
 const G = SILBER_GLOW;
 
@@ -33,5 +33,8 @@ export const SILBER_FX: Record<string, readonly [number, 1 | 2 | 3 | 4]> = {
   rvBoardHit: [G.gold, 1], rvMateHit: [G.gold, 1], rvCastle: [G.gold, 3], rvRookShock: [G.royal, 2], rvGrandPiece: [G.gold, 2], rvCross: [G.ivory, 4], rvGrand: [G.gold, 4], rvPawnHit: [G.gold, 1],
   // 아리아: 여덟 음표 터짐 · 악보 완성 폭죽 · 앙코르 · 작은 북 울림 · 음표 맞음 · 바이올린 · 악기 놓임 · 악보 완성 시작
   arBurst: [G.gold, 2], arBoom: [G.pink, 1], arEncore: [G.amber, 2], arEcho: [G.gold, 1], arPop: [G.ivory, 1], arSweep: [G.ivory, 1], arPlace: [G.gold, 2], arFinale: [G.gold, 4],
+  // 기어스: 쌍방패 강타 · 쌍성 방패 · 연속 방패타 · 거울 반격 · 보호막 돔 · 대지 분쇄 · 충격파 · 육각 방벽 · 던진 방패 터짐 · 수호자 한 대 · 청뢰 폭풍 · 구체 퉁 · 육각 결정 · 반동 · 메아리
+  geSlam: [G.azure, 1], geTwin: [G.azure, 2], geBarrage: [G.azure, 1], geMirror: [G.frost, 2], geDome: [G.azure, 2], geQuake: [G.azure, 3], geWave: [G.light, 2], geHex: [G.azure, 2], geBoom: [G.azure, 2],
+  geGuardHit: [G.frost, 1], geStorm: [G.bolt, 4], geBump: [G.frost, 1], geCrystal: [G.ice, 3], geRebound: [G.azure, 1], geEcho: [G.azure, 1],
   asPunch: [G.blue, 1], asRapid: [G.blue, 1], asWave: [G.light, 2], asDemon: [G.crimson, 2], asAwk12: [G.blue, 2], asAwk3: [G.blue, 2], asAwk4: [G.light, 3], asFistHit: [G.blue, 1],
 };

@@ -69,6 +69,8 @@ export { AR_FINALE, AR_NOTE, AR_STYLE, ARIA_WEAPONS } from "./weaponsAria";
 export { ARIA_PERKS } from "./itemsAria";
 export { RAVEN_WEAPONS, RV_ATTACK, RV_CHECK } from "./weaponsRaven";
 export { RV_PERKS } from "./itemsRaven";
+export { GEARS_WEAPONS, GE_ATTACK, GE_BALL } from "./weaponsGears";
+export { GE_PERKS } from "./itemsGears";
 export { HONRYEONG_WEAPONS, HR_CLOUD, HR_STYLE } from "./weaponsHonryeong";
 export { HONRYEONG_PERKS } from "./itemsHonryeong";
 export { BLAST } from "./weaponsBlast";

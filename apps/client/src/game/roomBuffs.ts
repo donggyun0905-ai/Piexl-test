@@ -17,6 +17,7 @@ import { rabbitBuffs } from "./rabbitBuffs";
 import { baekBuffs } from "./baekBuffs";
 import { bingseolBuffs } from "./bingseolBuffs";
 import { asuraBuffs } from "./asuraBuffs";
+import { gearsBuffs } from "./gearsBuffs";
 import { honryeongBuffs } from "./honryeongBuffs";
 import { ariaBuffs } from "./ariaBuffs";
 
@@ -80,6 +81,7 @@ export function roomBuffs(p: PlayerState, floor: number, lang: Lang, t: (k: Text
   out.push(...baekBuffs(p, t));
   out.push(...bingseolBuffs(p, t));
   out.push(...asuraBuffs(p, t));
+  out.push(...gearsBuffs(p, t));
   out.push(...honryeongBuffs(p, t));
   out.push(...ariaBuffs(p, t));
   const stats = statSummary(p, t);

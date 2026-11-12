@@ -33,6 +33,7 @@ import { mukinPotion } from "./mukin"; import { spendUse } from "./raidPrep";
 import { swarmMods } from "./swarmMods";
 import { goldLocked, noUseItems, oniConvert } from "./oniRules";
 import { buildSetMods } from "./buildSets"; import { growthMods } from "./factionGrowth"; import { bagOpen, bagStore } from "./spiritPack"; import { coinEat } from "./spiritCoin";
+import { gearsHalf } from "./geKit";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -55,7 +56,7 @@ export function recalcStats(s: RunState): void {
   const p = s.player;
   const oldMax = p.stats.maxHp;
   // 풋내기·도감·왕 영혼·세트·실베르 성장도 능력치로 · 오니는 oniRules
-  p.mods = oniConvert(p, [...p.passives.flatMap((id): StatMod[] => [...PASSIVES[id].mods]), ...noviceMods(p), ...imugiMods(p), ...apostleMods(p), ...tabooMods(s), ...swarmMods(p), ...morphMods(p), ...eaterMods(p), ...automataMods(p), ...petMods(s), ...stationMods(s), ...secretMods(p), ...buildSetMods(s), ...growthMods(s)]);
+  p.mods = gearsHalf(p, oniConvert(p, [...p.passives.flatMap((id): StatMod[] => [...PASSIVES[id].mods]), ...noviceMods(p), ...imugiMods(p), ...apostleMods(p), ...tabooMods(s), ...swarmMods(p), ...morphMods(p), ...eaterMods(p), ...automataMods(p), ...petMods(s), ...stationMods(s), ...secretMods(p), ...buildSetMods(s), ...growthMods(s)]));
   p.stats = kingStats(p) ?? computeStats(baseStats(p.characterId, p.weaponId), p.mods);
   // 거너: 최대 체력 고정
   const fixed = p.curseHp ?? (CHARACTERS[p.characterId] as CharacterDef).fixedHp;
@@ -162,7 +163,7 @@ export function updateItems(s: RunState, input: TickInput): void {
         if (pk.kind !== "reroll") s.purchases++;
         s.buys.push({ floor: s.floor, roomId: s.roomId, kind: pk.kind, itemId: pk.itemId, price: pk.price });
         if (pk.kind === "reroll") {
-          // 새로고침은 사도 남아 있고 다음 가격이 오름 (산 물건 수에는 넣지 않음)
+          // 새로고침은 사도 남고 다음 가격이 오름
           rerollShop(s, pk);
           continue;
         }
@@ -244,7 +245,7 @@ function take(s: RunState, pk: Pickup): void {
       // 보상 묶음은 하나만 고를 수 있음
       remove((x) => x.id === pk.id || (pk.group > 0 && x.group === pk.group && x.owner === pk.owner));
     }
-    // 한 번만 먹는 패시브: 같은 것이 둘 놓여 있었으면(상점 두 자리 등) 나머지도 치움
+    // 한 번만 먹는 패시브: 같은 것이 또 놓여 있었으면 치움
     if ((PASSIVES[pk.itemId as PassiveId] as PassiveDef | undefined)?.effect) remove((x) => x.kind === "passive" && x.itemId === pk.itemId && x.owner === pk.owner);
   }
   addEffect(s, { kind: "hit", x: pk.x, y: pk.y, dirX: 0, dirY: 0, size: 5, maxTicks: 8 });

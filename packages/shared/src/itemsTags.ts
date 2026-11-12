@@ -21,9 +21,9 @@ const MEMBERS: Record<ItemTag, string> = {
     "coolingSystem overloadBurst timeSlow warpField oniFrostMail oniPermafrost oniSpiritEcho spiderNest " +
     "spiderBrood afDouble afSingularity skMore skTangle skHaste skShield clIceSword clIceBow clIceSpear " +
     "blizzardLance jkFrost sdFrost ppDollCat byFrost bsUlt bsBow bsLance bsDust bsHoming bsRapid bsSpike bsStorm bsShatter",
-  // 번개 31
+  // 번개 32
   bolt:
-    "beamSplitter refractPrism electronic shadowChain spinMaster mirageDouble ascension thunderCry " +
+    "geStorm beamSplitter refractPrism electronic shadowChain spinMaster mirageDouble ascension thunderCry " +
     "bigCapacitor gyroStabilizer oniThunderCloud oniJudgment oniChainBolt flyKeen flyFrenzy elSage " +
     "elMaster adCore adSoul bmShrapnel bmArtist afPush afOverdrive cyCharge cyOverclock zsConductor " +
     "zsOverload zsWrath zsStep pgBadge pgJournal leMane leSky leChain leStorm leRoar oxPrism tkPearl mqOverclock wvJelly rfThunder ppChain rbBell byGreatWhite",
@@ -31,9 +31,9 @@ const MEMBERS: Record<ItemTag, string> = {
   poison:
     "venomStar footnote shorthand idLongWhip idBramble snakeVenom snakeSpit scorpTail spiderFang plRust " +
     "plContagion smVenom smMist smCloud smSilk smTang smBloom snVenom snQuiver snNumb ppWeb hrThick",
-  // 빛 72
+  // 빛 78
   light:
-    "rvBishop rvQueen rvBoard rvRadiance rvGrand arPiano arHarp crVerdict crHalo crSense crRain crGrave crEndless lnSense lnEndless lnFullMoon lnSlashBig lnSlashPow lnMoonRain lnCrescent bzSense bzEndless sbFocus sbEndless sbLunar hfLong hfBurst sxMoon sxCrescent sxHalo sxRemain nlMoon nlBlind nlFocus regenCharm goldPouch goddessBlessing starShower manaDrain jadeOrb lifeSiphon beautiful flashy ration " +
+    "geMirror geDome geHex geCrystal geGuardian geWave rvBishop rvQueen rvBoard rvRadiance rvGrand arPiano arHarp crVerdict crHalo crSense crRain crGrave crEndless lnSense lnEndless lnFullMoon lnSlashBig lnSlashPow lnMoonRain lnCrescent bzSense bzEndless sbFocus sbEndless sbLunar hfLong hfBurst sxMoon sxCrescent sxHalo sxRemain nlMoon nlBlind nlFocus regenCharm goldPouch goddessBlessing starShower manaDrain jadeOrb lifeSiphon beautiful flashy ration " +
     "elite catNap purr woundSuture firstAid checkup prescription quickEcho eternity accumulate oasis " +
     "dragonBlood dragonEye brightStar longNight wideSky extraStar stardust zodiac parchment revision " +
     "scrapRepair chargeKnuckle idDew idGaiaGrace idFourSeasons idWorldHeart elExpand elTea rdShock " +
@@ -54,18 +54,18 @@ const MEMBERS: Record<ItemTag, string> = {
     "flyHunt renPrisonDmg renCrushStun plGland plBurrow plBlackDeath plReaper slBerserk slCrimson slHound " +
     "slLastBreath eaDevour eaFeast smReaper smKiss trSilencer trHeadshot rmExecute rmFrenzy fkHarvest " +
     "fkCross fkMajesty clScythe devilMask devilReaper ecTotality btExecutor iaSeal iaReaper iaEcho gbCrush snFatal snBloom rfHunt rfBrand yrStigma ppCorpse ppBow rbHomerun byFeast byDrain byReaper",
-  // 대지 37
+  // 대지 40
   earth:
-    "asCrush asWave asPress asWeight crHeavy crLong crAfter crPillar crRamSlam crRamWall whetstone dashSlash earthshaker perfectCircle steadfast surgery antibody sandstorm sandVeil redHare " +
+    "geQuake geRebound geMomentum asCrush asWave asPress asWeight crHeavy crLong crAfter crPillar crRamSlam crRamWall whetstone dashSlash earthshaker perfectCircle steadfast surgery antibody sandstorm sandVeil redHare " +
     "warBanner hydraulicJoint aftershock bearQuake boarTusk boarStampede boarMud eleMammoth renSoil " +
     "renQuake renBindLong renEarth renBigger renCollapse mkMomentum mkShock mkTrample mkIron rdDouble " +
     "rdRam bmEcho bmFinale mnMole mnExpert clVineStaff clStoneHammer clCrescent fnRift ecMoonAxe gbQuake gbStun gbAfter gbWeight sdMeteor ppDollHat rbQuake rbTriple rbStomp rbAfter rbCrack",
   // 물 3
   water:
     "oniGreatWave oniSprayChain oniDragonPalace tkBarnacle tkWhale tkTrident lvCrest lvSpiral lvBreaker lvCurrent lvSpray lvCall lvCalf lvBaleen lvPod lvKingWhale lvDeep lvSong tlDeep tlSchool tlJaws tlBreach tlRip mqFreedom hkChain hkFreedom ocUndertow ocEcho ocFin wvSpear wvGoddess wvWhale wvBubble wvClock wvCloud wvLotus wvFlood wvBalloon wvPearl wvHands wvFountain wvSkip wvSiren wvOctopus wvEye wvEbb wvTrail wvTsunami mrRipple mrCascade mrSky mrReturn mrBreath sdScroll",
-  // 날카로움 102
+  // 날카로움 106
   sharp:
-    "rvPawn rvKnight rvEnPassant arForte bjHeat bjWane bjFlurry bjSpin bjRain bjNeedle bjSpear bjEnd asIron asReach asRapid asBarrage asFury icHeavy icWide icSwift icThrow icLeapBig icLeapPow icRampage lnSwift lnPierce lnFlurry lnWave lnEye lnDeep lnDashPow bzWide bzKnock bzWing sbQuick sbHollow sbPierce sbTriple sbBarrel sbSeek sbAgile hfKnuckle hfDouble hfCrush hfNail hfAim hfFar hfEcho sxEdge sxWide sxSnap sxTwin sxTaut sxWeave nlIron nlBarb nlSpread nlDeep nlSledge nlWide nlDrive nlEcho longGrip backQuiver steadyBreath spinCleave waveSlash echoBolt piercingBolt mach knockout focusFire " +
+    "geThrow geBarrage geTwin geEcho rvPawn rvKnight rvEnPassant arForte bjHeat bjWane bjFlurry bjSpin bjRain bjNeedle bjSpear bjEnd asIron asReach asRapid asBarrage asFury icHeavy icWide icSwift icThrow icLeapBig icLeapPow icRampage lnSwift lnPierce lnFlurry lnWave lnEye lnDeep lnDashPow bzWide bzKnock bzWing sbQuick sbHollow sbPierce sbTriple sbBarrel sbSeek sbAgile hfKnuckle hfDouble hfCrush hfNail hfAim hfFar hfEcho sxEdge sxWide sxSnap sxTwin sxTaut sxWeave nlIron nlBarb nlSpread nlDeep nlSledge nlWide nlDrive nlEcho longGrip backQuiver steadyBreath spinCleave waveSlash echoBolt piercingBolt mach knockout focusFire " +
     "allIn bigStar longEcho precision longWhip command duneRush farThrow spearMastery momentum dragonRage " +
     "dragonLance fallenGrail sinWeight thickNib sealStamp alleyBond tagStrike idSap idRoots idTwinStab " +
     "idBloomSwap wolfFang wolfPack eagleEye scorpPincer batEcho eleTrunk flyLonger flyDragonEye renOak " +
@@ -74,9 +74,9 @@ const MEMBERS: Record<ItemTag, string> = {
     "wdCalm wdSheath wdGauge skEdge skRend vyString vyLaurel zsKing zsSkyEye zsGiant pgLens fkCrest " +
     "fkReach lxReach lxQuick lxPierce lxJudge clEyeTome clBlueSpear clBlueAxe relicRed relicGold " +
     "relicPrism relicGreen sylphQuiver gnomeHammer puDog leFang lePride leKing oxPolish oxCrown oxResonance fnFang fnMoon ecSunspot tlFin mqTwin mrHorn iaVital iaNeedle iaSteel iaClause gbForge gbAegis gbGrav snEdge snBarb snThorn snLash snChain rfScope rfPierce rfHead rfSpotter rfShard yrHeavy yrNoMercy yrVerdict yrWrist yrChain mcSword mcLance mcJavelin mcHeavy mcShrapnel blSlug blChoke blShred blSpread jkEdge jkAce sdSword ppDollJester ppLong rbMega byHorn byWide byTwin byWhirl byGreat byGreatWolf hrHunt",
-  // 단단함 84
+  // 단단함 89
   tough:
-    "rvRook rvCastle rvStale rvIron bjSteel asShell crBrace crPenance crThorn crGiant crRamWide sbSplash hfIron hfQuake sxLong sxGiant sxFull nlStun nlBind nlFuse sturdyHeart furySeal secondWind ricochet splitHead counterGuard bulwarkStance arcaneShield " +
+    "geArmor geFortress geResolve geHeavy geCounter rvRook rvCastle rvStale rvIron bjSteel asShell crBrace crPenance crThorn crGiant crRamWide sbSplash hfIron hfQuake sxLong sxGiant sxFull nlStun nlBind nlFuse sturdyHeart furySeal secondWind ricochet splitHead counterGuard bulwarkStance arcaneShield " +
     "tempestBreath barrier domain highLens energyRecycle balance ironBody nineLives wildRoar healthCare " +
     "robust smokeVeil oldPact bondShield hiddenPower ironWall scaleArmor scaleGuard blackMass apostate " +
     "featherShield eldestShield streetScars armorPlate titanHull idSprout idAcorn idThornShield " +
@@ -102,9 +102,9 @@ const MEMBERS: Record<ItemTag, string> = {
     "eaGluttony eaEcho adSalvo adEcho afLucky afBlueprint trRicochet trDrum mnLamp mnVein mnGold " +
     "mnJackpot vyTwinDice vyLoadedDie pgClover pgRummage pgDoubleBag pgEcho pgStamp pgLuckyCoin clGoldBow " +
     "clGoldFist clGoldSpear godShard goldTooth puThief puBanner fnWisdom tkCompass lvWhite hkPlunder snGrace rfTwin mcDouble mcEcho jkDraw jkDouble jkSleeve jkSeven jkFullHouse sdClock ppSpool rbLucky rbClover",
-  // 소환 34
+  // 소환 35
   summon:
-    "rvPromote rvAssault rvGuard arViolin bjFleet bjShare genesis pet supportFire extraCat packLeader fishTreat horde lash empower sacrifice returnWind " +
+    "geOrbit rvPromote rvAssault rvGuard arViolin bjFleet bjShare genesis pet supportFire extraCat packLeader fishTreat horde lash empower sacrifice returnWind " +
     "quickCatch extraDuckling loudQuack duckFamily breadSnack echoQuack braveDuckling spBond spLonger " +
     "spFury spAwaken spFarewell spHarmony adCall adFourth petFlute falseHero puClone mqRig mqSquadron hkGrapnel ocBreath ocLiberty wvButterfly wvMirror wvSchool wvRope sdDragon ppGolem ppCrown ppDance rbSeal byWisp hrWolf hrTiger hrOwl hrDecoy hrPact",
   // 피 29

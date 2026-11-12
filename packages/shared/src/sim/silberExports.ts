@@ -12,6 +12,7 @@ export { bjHasSkill, bjMarked, bjSkills, isBaekinjang } from "./baekinjang";
 export type { BjDrone, BjVolley } from "./bjTypes";
 export { isAria } from "./aria";
 export { isRaven, rvChecked, rvHasSkill, rvSkills } from "./raven";
+export { geOrbitAt, isGears } from "./gears";
 export { boardHalf, inBoard } from "./rvKit";
 export type { RvEvent, RvUnit } from "./rvTypes";
 export { allInstruments } from "./arBurst";

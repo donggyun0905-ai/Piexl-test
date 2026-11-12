@@ -134,4 +134,11 @@ export const PW_KITS_4: PwKits = {
     sk("rvLance", "dash", 9, "#e8e0ff", { range: 110, speed: 10, hit: { dmg: 1 } }),
     sk("rvLance", "point", 60, "#ffd040", { range: 170, radius: 125, delay: 30, fx: "pillar", hit: { dmg: 3.3, stun: SEC } }),
   ),
+  // 실베르 기어스: 쌍방패 강타 · 방패 던지기 · 구체 돌진 · 청뢰 방패 폭풍
+  gears: kit(1,
+    sk("geShields", "cone", 4, "#8ac8ff", { radius: 60, arc: 0.8, fx: "slash", hit: { dmg: 1.1, stun: 0.3 * SEC } }),
+    sk("geShields", "line", 8, "#b0e0ff", { range: 220, hit: { dmg: 1.6 } }),
+    sk("geShields", "dash", 9, "#e0f0ff", { range: 120, speed: 10, hit: { dmg: 1.1 } }),
+    sk("geShields", "point", 60, "#4a9aff", { range: 0, radius: 120, delay: 20, fx: "pillar", hit: { dmg: 3.2, stun: SEC } }),
+  ),
 };

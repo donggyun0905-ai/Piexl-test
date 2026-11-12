@@ -103,6 +103,12 @@ export class GlowSilber {
         if ((p.rvGrandEnd ?? 0) > s.tick) put(p.x, p.y, 60, G.gold, 0.12);
         return;
       }
+      case "gears":
+        // 구체·천상의 수호자 방패 · 위성 방패는 푸른 빛
+        if (p.geBall) put(p.x, p.y, 30, G.azure, 0.35);
+        if ((p.geGuard ?? 0) > 0) put(p.x + p.faceX * 28, p.y + p.faceY * 28 - 4, 40 + 6 * Math.sin(s.tick * 0.2), G.azure, 0.3);
+        for (const t of p.geThrows ?? []) put(t.x, t.y, 18, G.azure, 0.45);
+        return;
       case "aria": {
         // 음표마다 제 색 빛 · 악기 금빛 · 바이올린 상아빛 · 악보 완성 동안 몸 둘레 금빛
         for (const nt of p.arNotes ?? []) put(nt.x, nt.y, 8 + nt.r, AR_GLOW[nt.kind & 7]!, 0.4);

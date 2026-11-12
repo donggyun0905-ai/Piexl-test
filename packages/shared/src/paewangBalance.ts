@@ -90,6 +90,7 @@ export const PW_CHAR: Partial<Record<CharacterId, PwCharTune>> = {
   baekinjang: { hp: 1, dmg: 1, taken: 1 },
   aria: { hp: 1, dmg: 1, taken: 1 },
   chessRaven: { hp: 1, dmg: 1, taken: 1 },
+  gears: { hp: 1, dmg: 1, taken: 1 },
   honryeong: { hp: 1, dmg: 1, taken: 1 },
   slayer: { hp: 0.52, dmg: 0.5, taken: 0.23 },
   spiritist: { hp: 0.84, dmg: 0.92, taken: 0.66 },

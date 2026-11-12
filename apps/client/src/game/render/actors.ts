@@ -140,7 +140,7 @@ function drawDown(ctx: CanvasRenderingContext2D, p: PlayerState, snap: Snap): vo
 }
 
 /** 플레이어 (맞은 뒤 무적이면 깜빡임). 협동은 사람마다 그 자리를 꺼내 놓고 부름 */
-/** hideBody: 몸을 그리지 않음 (범 풍류 대기 때 백호 위에 누운 모습을 따로 그림) */
+/** hideBody: 몸을 그리지 않음 (범 풍류 대기 모습은 따로) */
 export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: Snap, showHitbox: boolean, hideBody = false): void {
   const p = s.player;
   // 패왕전: 경기장에 없는 사람(대기·쓰러짐)은 그리지 않음
@@ -174,7 +174,7 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     if (!hideBody) drawAimMark(ctx, x, y, p.r, p.faceX, p.faceY);
     // 혼돈의 영혼이 있으면 몸이 흐림
     if (s.enemies.some((e) => e.kind === "soul" && e.aux === 1 && e.hp > 0)) ctx.globalAlpha = 0.12;
-    // 베두인: 차크람을 던지면 _bare 그림 (v2 시트는 빈손 그림이 없어 그대로)
+    // 베두인: 차크람을 던지면 _bare 그림 (v2 시트는 그대로)
     // 모습이 바뀌는 캐릭터 (오니 신인족 · 헬피스트 악마화 등): playerSheet
     const sheet = playerSheet(p);
     // 베두인 무희의 춤: 대시하는 동안 몸이 한 바퀴 빙글 돎
@@ -196,10 +196,11 @@ export function drawPlayer(ctx: CanvasRenderingContext2D, s: RunState, alpha: nu
     const look = [p.characterId, x, y - fenrirLift(p) - eclipseLift(p), p.r, morphPose(p, pose), moving ? Math.floor(s.tick / 8) : 0, body, club] as const;
     // 패왕전: 편 색 외곽선
     if (s.pw && inBush(s.pw.arena, x, y)) ctx.globalAlpha *= 0.5;
-    if (!hideBody && !p.mRaid) footShadow(ctx, x, y, p.r);
+    const gone = !!p.mRaid || !!p.geBall; // 기어스 구체는 gearsArt
+    if (!hideBody && !gone) footShadow(ctx, x, y, p.r);
     giantBody(ctx, p, x, y + p.r, () => {
-      if (!hideBody && !p.mRaid && s.pvp) drawPwBody(ctx, s, ...look);
-      else if (!hideBody && !p.mRaid) breathe(ctx, x, y + p.r, s.tick, !moving && !pose.casting, () => drawBody(ctx, ...look));
+      if (!hideBody && !gone && s.pvp) drawPwBody(ctx, s, ...look);
+      else if (!hideBody && !gone) breathe(ctx, x, y + p.r, s.tick, !moving && !pose.casting, () => drawBody(ctx, ...look));
     });
     if (twirl) ctx.restore();
     ctx.filter = "none";

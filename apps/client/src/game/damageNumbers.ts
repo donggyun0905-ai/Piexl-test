@@ -18,8 +18,8 @@ const MAX_NUMBERS = 30;
 const rapidHit = (s: RunState, id: number) => (s.player.bsUlt?.hitId === id && s.player.bsUlt.hitAt === s.tick) || s.player.rbUlt?.hitAt === s.tick || s.player.hrDragon?.hitAt === s.tick || s.player.arBoomAt === s.tick;
 /** 60연타 필살기: 한 대마다 따로 띄움 (합치지 않음) · 그 적에게 남기는 수 · 전체 최대 수 */
 const RAPID_PER_ENEMY = 40;
-/** 아수라: 이번 틱에 그 적에게 준 한 대 한 대 (모두 따로 띄움, sim/asHit) */
-const asuraHits = (s: RunState, id: number) => (s.player.asLogT === s.tick ? (s.player.asLog ?? []).filter((h) => h.id === id) : []);
+/** 아수라·기어스: 이번 틱에 그 적에게 준 한 대 한 대 (모두 따로 띄움, sim/asHit·geHit — 천상의 수호자 60타·청뢰 방패 폭풍 30타도 다 뜸) */
+const asuraHits = (s: RunState, id: number) => [...(s.player.asLogT === s.tick ? (s.player.asLog ?? []) : []), ...(s.player.geLogT === s.tick ? (s.player.geLog ?? []) : [])].filter((h) => h.id === id);
 const RAPID_MAX = 80;
 const PER_ENEMY = 3;
 /** 숫자가 뜬 뒤 이만큼(틱) 안에 같은 적이 또 맞으면 합침 (한꺼번에 맞은 빔·폭발 등이 겹치지 않게) */

@@ -120,6 +120,8 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   bingseol: { size: 40, footPad: 2, src: 128, v2: true },
   /** 아수라 (실베르 귀신 주먹 6개의 싸움꾼, 금발·남색 코트·등 뒤 귀신 팔) */
   asura: { size: 40, footPad: 2, src: 128, v2: true },
+  /** 기어스 (실베르 은빛 쌍방패 기사 메이드) */
+  gears: { size: 40, footPad: 2, src: 128, v2: true },
   /** 백인장 (실베르 기계 날개 쌍검 기사) */
   baekinjang: { size: 40, footPad: 2, src: 128, v2: true },
   /** 아리아 (실베르 지휘자 소녀, 은발·흰 금빛 제복·높은음자리 모자) */

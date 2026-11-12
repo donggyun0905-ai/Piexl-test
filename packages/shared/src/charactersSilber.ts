@@ -21,5 +21,7 @@ export const SILBER_CHARACTERS = {
   aria: { id: "aria", maxHp: 85, damage: 8, moveSpeed: 1.2, luck: 1, startWeapon: "arBaton" },
   /** 실베르: 레이븐 왕국의 창 하나 · 몸 옆 킹·퀸이 번갈아 내려찍기·빛기둥 · 체크 → 체크메이트 · 전용 패시브 20 (기물 공격 8·스킬 4, sim/raven) */
   chessRaven: { id: "chessRaven", maxHp: 95, damage: 9, moveSpeed: 1.2, luck: 1, startWeapon: "rvLance" },
+  /** 실베르: 기어스 쌍방패 하나 · 앞을 두 방패로 강타(약하지만 여러 번) · 대시는 굴러가며 튕기는 구체 · 공격력 아이템 반만 · 방어력 높음 · 전용 패시브 20 (sim/gears) */
+  gears: { id: "gears", maxHp: 130, damage: 5, moveSpeed: 1.15, luck: 1, startWeapon: "geShields" },
   asura: { id: "asura", maxHp: 105, damage: 8, moveSpeed: 1.2, luck: 1, startWeapon: "asFist" },
 } as const;

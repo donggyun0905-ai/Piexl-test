@@ -31,6 +31,7 @@ const PREFIX: [RegExp, string][] = [
   [/^AF_BENCH/, "artifacter"],
   [/^TUNE$/, "tracker"],
   [/^RUNE/, "mage"],
+  [/^GE_/, "gears"],
 ];
 
 /** 계산 파일 이름 → 분류 이름 (캐릭터가 아닌 것) */

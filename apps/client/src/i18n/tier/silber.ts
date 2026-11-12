@@ -5,6 +5,7 @@ type Reasons = Partial<Record<CharacterId, string>>;
 
 export const TIER_KO_SILBER: Reasons = {
   chessRaven: "실베르의 체스 왕국 창기사. 킹 내려찍기와 퀸 빛기둥을 번갈아 쓰며 체크 → 체크메이트로 한 적을 크게 깎음. 처음엔 평범하지만 확률 기물 공격 8종이 모이면 폰·나이트·비숍·룩·퀸·킹이 방을 휩쓸고, 숫자 키 스킬 넷(체스판·체크메이트·캐슬링·그랜드 체크메이트)이 열릴수록 강해짐 (새 캐릭터, 평가 전)",
+  gears: "실베르의 은빛 쌍방패 기사. 공격력은 아주 낮고 공격력 아이템도 반만 받지만, 방어력이 높고 여러 번 나눠 때림. 구체로 굴러다니며 부딪히고, 천상의 수호자·청뢰 방패 폭풍으로 60·30타를 쏟아 냄 (새 캐릭터, 평가 전)",
   aria: "실베르의 지휘자 소녀. 음표는 느리게 둥실거리며 방 끝까지 가서 적을 뚫지만 한 발은 약함. 서로 다른 음표 8개가 모일 때마다 8색으로 크게 터지고, 피아노·하프·호른·클라리넷이 다 놓이면 악보 완성으로 10초 동안 방 전체가 폭죽으로 덮임. 악기가 갖춰지기 전까지는 버티기 힘듦.",
   baekinjang: "실베르의 기계 날개 기사. 쌍검 기본 공격은 평범하지만 미니 창 드론 5기가 늘 알아서 적을 찔러 처음부터 안정적. 콤보 패시브 셋이 모이면 난무·회전참·돌진베기가 이어지고, 확률 원거리 기술과 숫자 키 스킬 넷(표식·감옥·팔연참·궁극기)이 열릴수록 방 전체를 쓸어 담음 (새 캐릭터, 아직 순위 없음)",
   honryeong: "실베르의 곰방대 연기로 싸우는 여인. 공격할수록 방에 연기 구름이 깔려 그 안에서 은신하면 적이 정확히 겨누지 못해 잘 버팀. 처음엔 연기용 하나뿐이라 약하지만 혼령 늑대·범·부엉이·분신이 쌓이고 혼령사냥을 먹으면 은신한 채 소환수로 사냥함. 혼-룡은 방 전체를 60번 때림.",
@@ -14,6 +15,7 @@ export const TIER_KO_SILBER: Reasons = {
 
 export const TIER_EN_SILBER: Reasons = {
   chessRaven: "Silber's lancer of the chess kingdom. She alternates the King's slam and the Queen's pillar, turning Check into Checkmate for big single-target damage. Plain at first, but once the eight chance-based piece attacks gather, pawns, knights, bishops, rooks, queens and kings sweep the room, and she grows stronger as the four number-key skills (Board, Checkmate, Castling, Grand Checkmate) unlock (new character, not yet rated)",
+  gears: "Silber's silver twin-shield knight. Very low damage, and damage items only count half, but high defense and many split hits. Rolls around as an orb to ram foes, and pours out 60 and 30 hits with Celestial Guardian and Azure Thunder Shield Storm (new character, not yet rated)",
   aria: "Silber's young conductor. Her notes float slowly to the room's edge and pierce foes, but each one is weak. Whenever eight different notes gather they burst in eight colors, and once a piano, harp, horn and clarinet are all placed, Score Complete covers the whole room in fireworks for 10s. Hard going until the instruments are in place.",
   baekinjang: "Silber's mech-winged knight. The twin-blade basic attack is plain, but five mini lance drones keep stabbing foes on their own, so she is steady from the start. With all three combo passives the flurry, spin and rush chain together, and as the chance-based ranged skills and four number-key skills (mark, prison, eightfold slash, ultimate) unlock she sweeps whole rooms (new character, not ranked yet)",
   honryeong: "Silber's lady who fights with pipe smoke. Her attacks fill the room with smoke clouds; hiding inside them keeps foes from aiming precisely, so she survives well. She starts weak with only the smoke dragon, but spirit wolves, tiger, owls and shades pile up, and with Spirit Hunt she hunts through her summons while hidden. Spirit: Dragon hits the whole room 60 times.",
@@ -23,6 +25,7 @@ export const TIER_EN_SILBER: Reasons = {
 
 export const TIER_JA_SILBER: Reasons = {
   chessRaven: "シルベルのチェス王国の槍騎士。キングの叩きつけとクイーンの光の柱を交互に使い、チェック→チェックメイトで1体を大きく削る。最初は普通だが確率の駒攻撃8種がそろうとポーン・ナイト・ビショップ・ルーク・クイーン・キングが部屋を席巻し、数字キースキル4つ（盤・チェックメイト・キャスリング・グランドチェックメイト）が開くほど強くなる（新キャラ、評価前）",
+  gears: "シルベルの銀の双盾騎士。攻撃力はとても低く攻撃力アイテムも半分しか受けないが、防御力が高く何度も分けて打つ。球体で転がってぶつかり、天上の守護者・青雷盾嵐で60・30ヒットを浴びせる（新キャラ、評価前）",
   aria: "シルベルの指揮者の少女。音符はゆっくりふわふわと部屋の端まで進み敵を貫くが、一発は弱い。違う音符が8個集まるたびに8色で大きく弾け、ピアノ・ハープ・ホルン・クラリネットがそろうと楽譜完成で10秒間部屋全体が花火で覆われる。楽器がそろうまでは耐えるのが大変。",
   baekinjang: "シルベルの機械翼の騎士。双剣の通常攻撃は普通だが、ミニ槍ドローン5機が常に自動で敵を刺すので最初から安定。コンボのパッシブ3つが揃うと乱舞・回転斬・突進斬りが繋がり、確率発動の遠距離技と数字キースキル4つ（刻印・牢獄・八連斬・究極技）が解放されるほど部屋全体を一掃する（新キャラ、まだ順位なし）",
   honryeong: "シルベルのキセルの煙で戦う女性。攻撃するほど部屋に煙の雲が広がり、その中に隠れると敵が正確に狙えずよく耐える。最初は煙の龍だけで弱いが、魂霊の狼・虎・フクロウ・分身が重なり、魂霊狩りを取ると隠れたまま召喚獣で狩る。魂・龍は部屋全体を60回攻撃する。",

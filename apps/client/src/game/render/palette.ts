@@ -96,6 +96,7 @@ export const C = {
   baekryeong: "#3ac8ff",
   bingseol: "#8ad8ff",
   asura: "#4a6aff",
+  gears: "#8ac8ff",
   baekinjang: "#ff2a3a",
   aria: "#ffd860",
   chessRaven: "#e8d8a0",

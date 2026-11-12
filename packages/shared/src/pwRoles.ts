@@ -5,7 +5,7 @@ export const PW_ROLE_IDS = ["warrior", "ranged", "mage", "assassin", "support"] 
 export type PwRoleId = (typeof PW_ROLE_IDS)[number];
 
 const MEMBERS: Record<PwRoleId, readonly CharacterId[]> = {
-  warrior: ["chessRaven", "baekinjang", "asura", "baekryeong", "rabbit", "crusader", "incision", "hellfist", "nailer", "blast", "gabriel", "beatrice", "levia", "thorken", "eclipse", "warden", "novice", "general", "imugi", "titan", "oni", "byeonhui", "mukin", "collector", "leo", "onyx"],
+  warrior: ["gears", "chessRaven", "baekinjang", "asura", "baekryeong", "rabbit", "crusader", "incision", "hellfist", "nailer", "blast", "gabriel", "beatrice", "levia", "thorken", "eclipse", "warden", "novice", "general", "imugi", "titan", "oni", "byeonhui", "mukin", "collector", "leo", "onyx"],
   ranged: ["joker", "blueFlame", "silverBullet", "rafael", "drifter", "engineer", "gunner", "ninja", "chronomancer", "idra", "samyeol", "automata", "tracker", "madQueen"],
   mage: ["aria", "honryeong", "bingseol", "shadowing", "wave", "mage", "elementalist", "summoner", "puppeteer", "pungryu", "elder", "ren", "plague", "bomber", "spiritist"],
   assassin: ["lunatic", "scissors", "michaela", "serena", "ian", "tail", "hook", "orca", "miryu", "brawler", "beast", "fly", "slayer", "eater", "bedouin", "abandoned", "rider", "punk", "remnant", "wanderer", "silk", "fenrir"],
