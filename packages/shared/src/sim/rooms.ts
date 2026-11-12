@@ -1,4 +1,5 @@
 // 방·층 이동: 방 들어가기(적 배치), 출구 잠김·억지로 나가기, 쉼터, 계단
+import { noirBlocksRoom } from "./nrAdapt";
 import { cerbArena } from "./cerbKit";
 import { eliteWave, spawnEnemies } from "./roomSpawn";
 export { spawnEnemies } from "./roomSpawn";
@@ -139,7 +140,8 @@ function enterRoom(s: RunState, roomId: number): void {
       if (info.type === "start" && s.lastBoss && s.floor === lastFloorOf(s)) spawnBlessing(s, roomId);
       // 큰 보스방(7층·영웅의 길·무한 11층~) 처음 들어가면 체력 가득
       if (exit && big && !s.arenaLv) s.player.hp = s.player.stats.maxHp;
-      if (info.type === "rest") healPlayer(s, s.player.stats.maxHp * REST_HEAL * tabooDown(s, "dryWell"));
+      // 느아르 제약: 쉼터 회복 없음
+      if (info.type === "rest" && !noirBlocksRoom(s, "rest")) healPlayer(s, s.player.stats.maxHp * REST_HEAL * tabooDown(s, "dryWell"));
     });
     // 레이드 시간은 라스트 보스방에 처음 들어간 때부터
     if (big) s.raidStart = s.tick;

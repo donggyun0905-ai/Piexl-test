@@ -25,6 +25,7 @@ import { fenrirDodged, fenrirExtras } from "./fenrirStats";
 import { eclipseExtras } from "./eclipseStats";
 import { waveExtras } from "./wave";
 import { accExtras, accOnHit, accTick } from "./accStats";
+import { noirExtras, noirRegenMul } from "./nrAdapt";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -65,9 +66,11 @@ export function extraOf(p: PlayerState): ExtraStats {
   const acc = accExtras(p);
   // 빙설 영역강화 방어력 (sim/bsKit)
   const ice = bsExtras(p);
-  if (!add && !grow && !lux && !gym && !boon && !devil && !set && !fen && !ecl && !wv && !acc && !ice) return base;
+  // 느아르 적응력 레벨·승격 방어력·재생력 (sim/nrAdapt)
+  const nr = noirExtras(p);
+  if (!add && !grow && !lux && !gym && !boon && !devil && !set && !fen && !ecl && !wv && !acc && !ice && !nr) return base;
   const out = { ...base };
-  for (const a of [add, grow, lux, gym, boon, devil, set, fen, ecl, wv, acc, ice]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
+  for (const a of [add, grow, lux, gym, boon, devil, set, fen, ecl, wv, acc, ice, nr]) for (const k of Object.keys(a ?? {}) as (keyof ExtraStats)[]) out[k] += a![k] ?? 0;
   return out;
 }
 
@@ -121,7 +124,8 @@ export const goldMul = (p: PlayerState) => 1 + extraOf(p).goldGain;
 export function extraTick(s: RunState): void {
   const p = s.player;
   const ex = extraOf(p);
-  if (ex.regen > 0 && s.tick % R.REGEN_EVERY === 0 && p.hp > 0) healPlayer(s, (ex.regen / 10) * (R.REGEN_EVERY / 60));
+  // 느아르 제약의 재생 가속: 더 빨리 참
+  if (ex.regen > 0 && s.tick % R.REGEN_EVERY === 0 && p.hp > 0) healPlayer(s, (ex.regen / 10) * (R.REGEN_EVERY / 60) * noirRegenMul(p));
   const bleeds = ex.sharpness > 0 || weaponOf(p).kind === "gun";
   if (ex.sharpness > 0 && weaponOf(p).kind !== "gun") updateBleed(s);
   setTick(s, bleeds);

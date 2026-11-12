@@ -17,6 +17,7 @@ import { equipWeapon, recalcStats } from "./items";
 import { PLAIN_SHAPE } from "./layout";
 import { addPickup, weaponPool } from "./loot";
 import { spendStat } from "./novice";
+import { nrUpgrade } from "./nrAdapt";
 import { lucCutting, spawnLucifer } from "./lucifer";
 import { raidBotInput } from "./raidBot";
 import { spawnChest } from "./raidReward";
@@ -90,6 +91,7 @@ export function createRaid(seed: number, boss: RaidEventBoss, humans: readonly R
     p.useSlots = [null, null];
     s.gold = R.GOLD;
     if (p.characterId === "novice") noviceLevel(s, !!s.raidBoss!.ai[i]);
+    if (p.characterId === "noir") noirLevel(s, !!s.raidBoss!.ai[i]);
     if (s.raidBoss!.ai[i]) aiKit(s, createRng(deriveSeed(seed, "raidAi", i)));
     recalcStats(s);
     p.hp = p.stats.maxHp;
@@ -107,6 +109,17 @@ function noviceLevel(s: RunState, ai: boolean): void {
   p.points = R.NOVICE_LV - 1;
   const rng = createRng(deriveSeed(s.seed, "raidNovice", s.seat ?? 0));
   if (ai) for (let n = p.points ?? 0; n > 0; n--) spendStat(s, rng.int(1, 9));
+  recalcStats(s);
+}
+
+/** 느아르: 풋내기와 같은 레벨 → 그만큼 강화 횟수 (AI는 시드로 누름) · 단련 포인트는 모자란 패시브 30개만큼 (raidGymPts) */
+function noirLevel(s: RunState, ai: boolean): void {
+  const p = s.player;
+  p.nrLv = R.NOVICE_LV;
+  p.nrExp = 0;
+  p.nrPts = R.NOVICE_LV - 1;
+  const rng = createRng(deriveSeed(s.seed, "raidNoir", s.seat ?? 0));
+  if (ai) for (let n = 0; n < 200 && (p.nrPts ?? 0) > 0; n++) nrUpgrade(s, rng.int(1, 7));
   recalcStats(s);
 }
 

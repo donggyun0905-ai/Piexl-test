@@ -5,6 +5,7 @@ import { drawBaekinjangAir } from "./baekinjangArt";
 import { drawAriaAir, drawAriaGround } from "./ariaArt";
 import { drawRavenAir, drawRavenGround } from "./ravenArt";
 import { drawGearsAir } from "./gearsArt";
+import { drawNoirBack } from "./noirArt";
 import { drawHonryeongAir, drawHonryeongGround } from "./honryeongArt";
 import type { Snap } from "./palette";
 import type { Ctx } from "./pwFxBits";
@@ -20,6 +21,8 @@ export function drawSilberAir(ctx: Ctx, s: RunState, alpha: number, snap: Snap):
 
 /** 바닥 (혼령 분신·짐승 · 아리아 악기) */
 export function drawSilberGround(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
+  // 느아르 등 뒤 악마 계급 마크 (몸보다 먼저)
+  drawNoirBack(ctx, s, alpha, snap);
   drawHonryeongGround(ctx, s, alpha, snap);
   drawAriaGround(ctx, s, alpha, snap);
   drawRavenGround(ctx, s, alpha, snap);

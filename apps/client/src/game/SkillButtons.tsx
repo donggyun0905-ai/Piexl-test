@@ -5,14 +5,16 @@ import { keyLabel, useSettings } from "../settings";
 
 // 칸이 셋이면 추적자, 넷이면 베아트리스 · set "ia"면 이안 · "gb"면 가브리엘 · "sn"면 세레나 · "rf"면 라파엘 · "yr"면 유리엘 · "mc"면 미카엘라 · "nl"면 네일러 · "bj"면 백인장 · "rv"면 레이븐 (전용 패시브로 열린 칸만 밝음)
 const NAMES: Record<string, TextKey[]> = { 3: ["trSkill1", "trSkill2", "trSkill3"], 4: ["btSkill1", "btSkill2", "btSkill3", "btSkill4"], ia: ["iaSkill1", "iaSkill2", "iaSkill3", "iaSkill4"], gb: ["gbSkill1", "gbSkill2", "gbSkill3", "gbSkill4"], sn: ["snSkill1", "snSkill2", "snSkill3", "snSkill4"], rf: ["rfSkill1", "rfSkill2", "rfSkill3", "rfSkill4"], yr: ["yrSkill1", "yrSkill2", "yrSkill3", "yrSkill4"], mc: ["mcSkill1", "mcSkill2", "mcSkill3", "mcSkill4"], nl: ["nlSkill1", "nlSkill2", "nlSkill3", "nlSkill4"], bj: ["bjSkill1", "bjSkill2", "bjSkill3", "bjSkill4"], rv: ["rvSkill1", "rvSkill2", "rvSkill3", "rvSkill4"] };
-const GLYPH: Record<string, string[]> = { 3: ["◎", "⚡", "⋯"], 4: ["☀", "◐", "✕", "♥"], ia: ["〰", "◗", "執", "∞"], gb: ["⛨", "◉", "▣", "✦"], sn: ["❦", "✿", "†", "❀"], rf: ["↶", "☔", "◎", "➶"], yr: ["✚", "⚒", "◯", "✟"], mc: ["⇣", "⇄", "✸", "∞"], nl: ["⟂", "⥅", "✷", "⫶"], bj: ["◉", "♜", "✴", "✝"], rv: ["▦", "♚", "♜", "♛"] };
+const GLYPH: Record<string, string[]> = { 3: ["◎", "⚡", "⋯"], 4: ["☀", "◐", "✕", "♥"], ia: ["〰", "◗", "執", "∞"], gb: ["⛨", "◉", "▣", "✦"], sn: ["❦", "✿", "†", "❀"], rf: ["↶", "☔", "◎", "➶"], yr: ["✚", "⚒", "◯", "✟"], mc: ["⇣", "⇄", "✸", "∞"], nl: ["⟂", "⥅", "✷", "⫶"], bj: ["◉", "♜", "✴", "✝"], rv: ["▦", "♚", "♜", "♛"], nr: ["➶", "◉", "✺", "☾"] };
 /** 마우스를 올리면 칸 위에 뜨는 설명 */
 const TIPS: Record<string, TextKey[]> = { 3: ["trSkillTip1", "trSkillTip2", "trSkillTip3"], 4: ["btSkillTip1", "btSkillTip2", "btSkillTip3", "btSkillTip4"], ia: ["iaSkillTip1", "iaSkillTip2", "iaSkillTip3", "iaSkillTip4"], gb: ["gbSkillTip1", "gbSkillTip2", "gbSkillTip3", "gbSkillTip4"], sn: ["snSkillTip1", "snSkillTip2", "snSkillTip3", "snSkillTip4"], rf: ["rfSkillTip1", "rfSkillTip2", "rfSkillTip3", "rfSkillTip4"], yr: ["yrSkillTip1", "yrSkillTip2", "yrSkillTip3", "yrSkillTip4"], mc: ["mcSkillTip1", "mcSkillTip2", "mcSkillTip3", "mcSkillTip4"], nl: ["nlSkillTip1", "nlSkillTip2", "nlSkillTip3", "nlSkillTip4"], bj: ["bjSkillTip1", "bjSkillTip2", "bjSkillTip3", "bjSkillTip4"], rv: ["rvSkillTip1", "rvSkillTip2", "rvSkillTip3", "rvSkillTip4"] };
 
 /** core: 성국 핵심 스킬이 각성했으면 그 칸 (금빛으로 빛남) · stages: 여러 번 누르는 스킬의 다음 단계 (칸 구석에 숫자, 네일러) */
-export function SkillButtons({ skills, set, core, stages, t, controls }: { skills: number[]; set?: string; core?: number; stages?: number[]; t: (k: TextKey) => string; controls: () => Controls | null }) {
+/** names·tips: 칸마다 이름·설명을 따로 줄 때 (느아르: 강화판이면 강화 이름) */
+export function SkillButtons({ skills, set, core, stages, names, tips, t, controls }: { skills: number[]; set?: string; core?: number; stages?: number[]; names?: TextKey[]; tips?: TextKey[]; t: (k: TextKey) => string; controls: () => Controls | null }) {
   const keys = useSettings().skillKeys;
-  const k = set ?? skills.length;
+  // 느아르 (이름은 names로): 그림 글자만
+  const k = names ? "nr" : (set ?? skills.length);
   return (
     <span className="skill-buttons">
       {skills.map((cd, i) => (
@@ -29,10 +31,10 @@ export function SkillButtons({ skills, set, core, stages, t, controls }: { skill
             <kbd>{keyLabel(keys[i] ?? String(i + 1))}</kbd>
             <b aria-hidden>{GLYPH[k]?.[i]}</b>
             {(stages?.[i] ?? 0) > 0 && <i className="skill-stage">{stages![i]}</i>}
-            <small>{t(NAMES[k]?.[i] ?? "trSkill1")}</small>
+            <small>{t(names?.[i] ?? NAMES[k]?.[i] ?? "trSkill1")}</small>
           </button>
           <span className="skill-tip">
-            <b>{t(NAMES[k]?.[i] ?? "trSkill1")}</b> {t(TIPS[k]?.[i] ?? "trSkillTip1")}
+            <b>{t(names?.[i] ?? NAMES[k]?.[i] ?? "trSkill1")}</b> {t(tips?.[i] ?? TIPS[k]?.[i] ?? "trSkillTip1")}
           </span>
         </span>
       ))}

@@ -99,6 +99,7 @@ const DEMO_WEAPONS: Record<CharacterId, [WeaponId, WeaponId] | null> = {
   baekinjang: null,
   chessRaven: null,
   gears: null,
+  noir: null,
   aria: ["arBaton", "arTrumpet"],
   honryeong: ["hrPipe", "hrLong"],
   miner: ["mnTnt", "mnPit"],

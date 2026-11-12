@@ -71,6 +71,15 @@ export const FACTION_TEXT: Record<FactionId, { name: L; tag: L; desc: L }> = {
       "果てしない海と海岸を抱く自由と解放の国。誰の旗の下にも縛られない船乗りたちが、波と嵐を友に生きる。",
     ),
   },
+  ashvar: {
+    name: c("아슈바르", "Ashvar", "アシュヴァル"),
+    tag: c("태초의 색채 악마 7원색 군단", "Primordial Chromatic Demon Legion of Seven Colors", "太初の色彩悪魔七原色軍団"),
+    desc: c(
+      "세상에 색이 생기기 전부터 있던 일곱 악마의 군단. 그중 검정은 빛과 색을 삼키는 공허. 처음엔 아무것도 받지 못하지만 싸울수록 스스로를 고쳐 쓰며 계급을 오른다.",
+      "A legion of seven demons that existed before the world had color. Their Black is the void that swallows light and hue. It is given nothing at first, but rewrites itself with every fight and climbs the ranks.",
+      "世界に色が生まれる前から存在した七悪魔の軍団。その黒は光と色を呑む虚無。最初は何も与えられないが、戦うほど自らを書き換え、位階を上っていく。",
+    ),
+  },
   silber: {
     name: c("실베르", "Silber", "シルベル"),
     tag: c("북부 수호국", "Warden of the North", "北部守護国"),

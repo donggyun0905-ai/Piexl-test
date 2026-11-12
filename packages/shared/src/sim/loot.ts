@@ -1,4 +1,5 @@
 // 방에 아이템 놓기: 얻을 수 있는 아이템 목록 · 보물방 · 방 정리 보상(돈·사용 아이템·층 보상)
+import { noirBlocksPickup } from "./nrAdapt";
 import { spiritRoomClear } from "./factionSpirit";
 import { NATIVE_KIND } from "./nativeKind";
 import { PERKS } from "../perks";
@@ -90,6 +91,8 @@ export function addPickup(
   group = 0,
   price = 0,
 ): void {
+  // 느아르 제약: 일반 방에는 아이템·패시브를 놓지 않음 (sim/nrAdapt)
+  if (noirBlocksPickup(s, roomId, kind)) return;
   const pk: Pickup = { id: s.nextId++, kind, itemId, x, y, group, armed: true, price };
   // 협동: 지금 자리 사람의 것 (남의 것은 보이지 않고 못 주움)
   if (s.party) pk.owner = seatNo(s);

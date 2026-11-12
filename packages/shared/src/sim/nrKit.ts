@@ -1,0 +1,63 @@
+// 느아르 공용 도우미 (sim/noir·nrVolley·nrSkills·nrAdapt가 같이 씀): 굴림 · 한 대 · 범위 · 빨아들이기
+import { createRng, deriveSeed } from "../rng";
+import { damageEnemy as damageEnemy_ } from "./combat";
+import { srcFn } from "./dmgSrc";
+import type { EnemyState, RunState } from "./types";
+import { normalize } from "./util";
+import { bjAlive as nrAlive } from "./bjKit";
+import { bjBoss as nrBoss } from "./bjVolley";
+
+type P = RunState["player"];
+const damageEnemy = srcFn("noir", () => damageEnemy_);
+
+export const isNoir = (p: P) => p.characterId === "noir";
+// 살아 있는 적 · 보스(허수아비 포함) · 가장 가까운 적은 백인장과 같은 도우미
+export { bjAlive as nrAlive, bjNearest as nrNearest } from "./bjKit";
+export { bjBoss as nrBoss } from "./bjVolley";
+
+/** 시드 확률 (굴릴 때마다 다른 값) */
+export function nrRoll(s: RunState, tag: string): number {
+  const p = s.player;
+  p.nrRolls = (p.nrRolls ?? 0) + 1;
+  return createRng(deriveSeed(s.seed, tag, s.tick, p.nrRolls)).nextFloat();
+}
+
+/** 한 대 (밀지 않음: 연타가 많아서) · 준 피해 */
+export function nrHit(s: RunState, e: EnemyState, dmg: number): number {
+  if (!nrAlive(e)) return 0;
+  const p = s.player;
+  const d = normalize(e.x - p.x, e.y - p.y) ?? [p.faceX, p.faceY];
+  const hp = e.hp;
+  damageEnemy(s, e, dmg, d[0], d[1], false);
+  return hp - Math.max(0, e.hp);
+}
+
+/** 범위 안 적 모두 때림 (arc가 있으면 dx·dy 쪽 부채꼴만) · 준 피해 합 */
+export function nrArea(s: RunState, x: number, y: number, r: number, dmg: number, arc?: { at: number; dx: number; dy: number }): number {
+  let sum = 0;
+  for (const e of s.enemies) {
+    if (!nrAlive(e)) continue;
+    const ex = e.x - x;
+    const ey = e.y - y;
+    const d = Math.sqrt(ex * ex + ey * ey);
+    if (d > r + e.r) continue;
+    if (arc && d > e.r && (ex * arc.dx + ey * arc.dy) / d < arc.at) continue;
+    sum += nrHit(s, e, dmg);
+  }
+  return sum;
+}
+
+/** (x, y) 둘레 r 안의 적을 가운데로 빨아들임 (보스·허수아비 빼고) */
+export function nrPull(s: RunState, x: number, y: number, r: number, pull: number): void {
+  if (pull <= 0) return;
+  for (const e of s.enemies) {
+    if (!nrAlive(e) || nrBoss(e)) continue;
+    const dx = x - e.x;
+    const dy = y - e.y;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    if (d < 2 || d > r + e.r + 30) continue;
+    const m = Math.min(pull, d - 1) / d;
+    e.x += dx * m;
+    e.y += dy * m;
+  }
+}

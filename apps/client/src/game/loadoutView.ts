@@ -5,6 +5,7 @@ import type { SpiritView } from "./SpiritWindows";
 import { pwSkillView } from "./pwSkillView";
 import { sellCodes } from "./SellBar";
 import { stationView } from "./stationView";
+import { noirView } from "./noirView";
 import type { AltarResultView } from "./altar/AltarResult";
 
 /** 제단 결과 창: 증강·바꾸기·패시브를 빼앗긴 벌칙만, 고른 뒤 10초 */
@@ -53,6 +54,8 @@ export function loadoutView(run: RunState, armed: Parameters<typeof pwSkillView>
     ...(p.augments?.length ? { augs: p.augments.map((a) => ({ passive: a.passive, skills: [...a.skills] })) } : {}),
     ...(p.characterId === "novice" && !run.pvp ? { novice: { lv: p.lv ?? 1, exp: p.exp ?? 0, need: expToNext(p.lv ?? 1), points: p.points ?? 0 } } : {}),
     // 추적자 스킬 대기 (5% 단위로만 바뀌게)
+    // 느아르 적응력·스킬 (game/noirView)
+    ...noirView(run),
     ...(p.characterId === "tracker" ? { skills: trackerSkills(p).map((v) => Math.ceil(v * 20) / 20) } : {}),
     ...(p.characterId === "beatrice" && !run.pvp ? { skills: beatriceSkills(p).map((v) => Math.ceil(v * 20) / 20) } : {}),
     ...(p.characterId === "ian" && !run.pvp ? { skills: ianSkills(p).map((v) => Math.ceil(v * 20) / 20), skillSet: "ia" as const } : {}),

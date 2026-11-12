@@ -18,6 +18,7 @@ import { PW_PASSIVE } from "../paewangPassive";
 import { bjCritAdd } from "./bjKit";
 import { eclipseNoCrit } from "./eclipseStats";
 import { serenaCrit } from "./serenaCrit";
+import { noirMods, nrGain, nrUpgrade } from "./nrAdapt";
 
 /** 이 파일의 수치 (관리자 페이지에서 바꿀 수 있음, rulesRegistry) */
 const R = {
@@ -59,6 +60,8 @@ export const expToNext = (level: number) => 10 + 6 * (level - 1);
 /** 쓰러뜨린 적의 경험치 받기 (풋내기만) */
 export function gainExp(s: RunState, e: EnemyState): void {
   const p = s.player;
+  // 느아르: 흑 게이지 (sim/nrAdapt)
+  nrGain(s, e);
   // 패왕전은 레벨업 대신 마지막 버팀 (pvpFlow)
   if (p.characterId !== "novice" || s.pvp) return;
   p.lv ??= 1;
@@ -77,6 +80,8 @@ export function gainExp(s: RunState, e: EnemyState): void {
 /** 스탯 포인트 하나를 찍음 (k = 1~7, NOVICE_STATS 순서) */
 export function spendStat(s: RunState, k: number): void {
   const p = s.player;
+  // 느아르: 같은 입력으로 적응력 강화 (sim/nrAdapt)
+  if (p.characterId === "noir") return nrUpgrade(s, k);
   const stat = NOVICE_STATS[k - 1];
   if (!stat || (p.points ?? 0) <= 0) return;
   p.points = (p.points ?? 0) - 1;
@@ -86,6 +91,8 @@ export function spendStat(s: RunState, k: number): void {
 
 /** 레벨로 저절로 오른 것 + 찍은 스탯 → 능력치 변화 */
 export function noviceMods(p: PlayerState): StatMod[] {
+  // 느아르: 레벨·승격 능력치 (sim/nrAdapt)
+  if (p.characterId === "noir") return noirMods(p);
   const grown = (p.lv ?? 1) - 1;
   const growth: StatMod[] = grown > 0 ? [{ stat: "maxHp", add: NOVICE_GROWTH.maxHp * grown }, { stat: "damage", mul: 1 + NOVICE_GROWTH.damage * grown }] : [];
   if (!p.alloc) return growth;

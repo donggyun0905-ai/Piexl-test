@@ -1,0 +1,39 @@
+/* 느아르 적응력 창 (game/NoirPanel): 흑 막대 · 악마 계급 이름 · 강화 버튼(단계·확률) · 방금 결과 */
+.noir-exp span {
+  background: linear-gradient(90deg, #2a1a3a, #a05aff);
+}
+.noir-rank {
+  color: #c8b8e8;
+  font-size: 12px;
+  font-weight: 700;
+  text-shadow: 0 0 4px #000;
+}
+.noir-rank.r1 { color: #d88aff; }
+.noir-rank.r2 { color: #ff6a9a; }
+.noir-rank.r3 { color: #ff3a5a; text-shadow: 0 0 6px #ff3a5a; }
+.noir-pick {
+  border-color: #a05aff;
+  background: rgba(14, 8, 22, 0.92);
+}
+.noir-pick button {
+  border-color: #6a4a9a;
+}
+.noir-pick button:disabled {
+  opacity: 0.5;
+}
+.noir-pick i {
+  color: #c8b8e8;
+  font-style: normal;
+  font-size: 11px;
+}
+.noir-msg {
+  font-size: 12px;
+  font-weight: 700;
+  animation: noir-pop 0.3s ease-out;
+}
+.noir-msg.ok { color: #d8b8ff; }
+.noir-msg.fail { color: #9a9aaa; }
+@keyframes noir-pop {
+  from { transform: scale(1.4); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

@@ -19,6 +19,7 @@
 .cs-tabs button.seongguk { border-bottom-color: #ffd84a; }
 .cs-tabs button.dawn { border-bottom-color: #ffffff; }
 .cs-tabs button.silber { border-bottom-color: #7ad0ff; }
+.cs-tabs button.ashvar { border-bottom-color: #0a0a10; background: #24202c; }
 .cs-tabs button.akashic { border-bottom-color: #b89aff; }
 .cs-tabs button.outsider { border-bottom-color: #5ae0d0; }
 .cs-tabs button.archive { border-bottom-color: #ffb84a; }
@@ -41,6 +42,7 @@
 .cs-trait.thalassia { --trait: #4a86ff; }
 .cs-trait.silber { --trait: #7ad0ff; }
 .cs-trait.seongguk { --trait: #ffd84a; }
+.cs-trait.ashvar { --trait: #b8a8d8; }
 /* 아카식 레코드·이방인·서고의 감시자: 제 색 그대로 은은하게 빛남 */
 .cs-tabs button.akashic { --glow: #b89aff; animation: cs-glow 2.4s ease-in-out infinite; }
 .cs-tabs button.outsider { --glow: #5ae0d0; animation: cs-glow 2.4s ease-in-out infinite; }

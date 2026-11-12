@@ -1,5 +1,6 @@
 import { UseCd } from "./UseCd";
 import { NovicePanel, type NoviceView } from "./NovicePanel";
+import { NoirPanel, type NoirView } from "./NoirPanel";
 import { SkillButtons } from "./SkillButtons";
 import { StigmaGauge } from "./StigmaGauge";
 import { FactionGauge } from "./FactionGauge";
@@ -38,6 +39,10 @@ export interface LoadoutView {
   augs?: { passive: PassiveId; skills: string[] }[];
   /** 풋내기 레벨·경험치·스탯 포인트 */
   novice?: NoviceView;
+  /** 느아르 적응력 (game/noirView) · 스킬 칸 이름·설명 (강화판이면 강화 이름) */
+  noir?: NoirView;
+  skillNames?: TextKey[];
+  skillTips?: TextKey[];
   /** 스킬이 있는 캐릭터(추적자): 스킬마다 남은 대기 0~1 */
   skills?: number[];
   /** 스킬 이름 묶음 (없으면 칸 수로: 셋 추적자 · 넷 베아트리스) */
@@ -66,7 +71,7 @@ export interface LoadoutView {
 
 /** 화면 바뀜 판단용 */
 export function loadoutKey(v: LoadoutView): string {
-  const n = v.novice ? `|${v.novice.lv},${v.novice.exp},${v.novice.points}` : "";
+  const n = (v.novice ? `|${v.novice.lv},${v.novice.exp},${v.novice.points}` : "") + (v.noir ? `|${JSON.stringify(v.noir)}${v.skillNames?.join("") ?? ""}` : "");
   const pw = v.pw ? `|${v.pw.cds.join(",")}|${v.pw.armed}|${v.pw.silenced}` : "";
   return `${v.weaponId}${v.forge ? JSON.stringify(v.forge) : ""}${v.tags?.join(",") ?? ""}|${v.slots.join(",")}${v.useOff ? "x" : ""}${v.cds?.join(";") ?? ""}|${v.passives.join(",")}|${v.augs?.map((a) => a.passive + a.skills.join("+")).join(",") ?? ""}${n}|${v.skills?.join(",") ?? ""}${v.stages?.join("") ?? ""}${v.stigma ? `|${v.stigma.v}${v.stigma.awake ? "a" : ""}${JSON.stringify(v.stigma.slide ?? "")}` : ""}${v.faction ? `|${JSON.stringify(v.faction)}` : ""}|${v.sell?.join(",") ?? ""}${pw}|${v.station ? JSON.stringify(v.station) : ""}|${v.hdPick ?? ""}|${v.spirit ? JSON.stringify(v.spirit) : ""}|${v.altarRes?.tick ?? ""}`;
 }
@@ -119,12 +124,13 @@ export function Loadout({ view, character, lang, t, touchMode, controls }: Props
   return (
     <div className="loadout">
       {view.novice && <NovicePanel view={view.novice} t={t} controls={controls} />}
+      {view.noir && <NoirPanel view={view.noir} t={t} controls={controls} />}
       {view.sell && <SellBar view={view} lang={lang} t={t} controls={controls} />}
       {view.station && <StationWindow view={view.station} lang={lang} t={t} controls={controls} />}
       {view.altarRes && <AltarResult res={view.altarRes} lang={lang} t={t} />}
       {view.hdPick && <HiddenPicker pick={view.hdPick} lang={lang} t={t} controls={controls} />}
       {view.spirit && <SpiritWindows view={view.spirit} lang={lang} t={t} controls={controls} />}
-      {view.skills && <SkillButtons skills={view.skills} set={view.skillSet} stages={view.stages} core={view.faction?.on ? view.faction.core : undefined} t={t} controls={controls} />}
+      {view.skills && <SkillButtons skills={view.skills} set={view.skillSet} names={view.skillNames} tips={view.skillTips} stages={view.stages} core={view.faction?.on ? view.faction.core : undefined} t={t} controls={controls} />}
       {view.stigma && <StigmaGauge v={view.stigma.v} awake={view.stigma.awake} hell={view.stigma.hell} slide={view.stigma.slide} t={t} />}
       {view.faction && <FactionGauge view={view.faction} t={t} />}
       {view.pw && <PwSkillBar view={view.pw} t={t} touchMode={touchMode} controls={controls} />}

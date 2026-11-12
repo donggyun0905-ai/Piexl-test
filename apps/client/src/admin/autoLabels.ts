@@ -32,6 +32,7 @@ const PREFIX: [RegExp, string][] = [
   [/^TUNE$/, "tracker"],
   [/^RUNE/, "mage"],
   [/^GE_/, "gears"],
+  [/^NR_/, "noir"],
 ];
 
 /** 계산 파일 이름 → 분류 이름 (캐릭터가 아닌 것) */

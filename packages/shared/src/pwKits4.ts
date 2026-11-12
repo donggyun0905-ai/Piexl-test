@@ -141,4 +141,11 @@ export const PW_KITS_4: PwKits = {
     sk("geShields", "dash", 9, "#e0f0ff", { range: 120, speed: 10, hit: { dmg: 1.1 } }),
     sk("geShields", "point", 60, "#4a9aff", { range: 0, radius: 120, delay: 20, fx: "pillar", hit: { dmg: 3.2, stun: SEC } }),
   ),
+  // 아슈바르 느아르: 칠흑 횡베기 · 공허의 낙인 창 · 흑영 돌진 · 흑월 강림
+  noir: kit(1,
+    sk("nrBlade", "cone", 4, "#7a4aff", { radius: 64, arc: 0.9, fx: "slash", hit: { dmg: 1.2 } }),
+    sk("nrBlade", "line", 8, "#ff3a5a", { range: 230, hit: { dmg: 1.7 } }),
+    sk("nrBlade", "dash", 9, "#2a1a3a", { range: 130, speed: 11, hit: { dmg: 1.1 } }),
+    sk("nrBlade", "point", 60, "#a05aff", { range: 0, radius: 130, delay: 24, fx: "pillar", hit: { dmg: 3.3, stun: SEC } }),
+  ),
 };
