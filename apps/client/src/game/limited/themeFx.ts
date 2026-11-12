@@ -91,9 +91,9 @@ export class ThemeFx extends TigerFx {
     if (!t) return;
     for (const [i, c] of t.colors.entries()) this.ringAt(x, y, 22 + i * 10, c);
     this.burst(t, t.hit.bits, x, y, 26, 2.4, 30);
-    this.add({ kind: "text", x, y: y - 18, vx: 0, vy: -0.25, life: 60, size: 1, rot: 0, color: t.colors[0], text: this.hooks.powerText });
-    // 승리(한정 스킨): 범 풍류처럼 금빛 기둥 + 큰 고리 + 팡파르
+    // 승리(한정 스킨): 범 풍류처럼 글자 + 금빛 기둥 + 큰 고리 + 팡파르 (다른 테마 효과는 글자 없이 고리·조각만)
     if (t.id === "victory") {
+      this.add({ kind: "text", x, y: y - 18, vx: 0, vy: -0.25, life: 60, size: 1, rot: 0, color: t.colors[0], text: this.hooks.powerText });
       this.add({ kind: "pillar", x, y, vx: 0, vy: 0, life: 40, size: 16, rot: 0, color: t.colors[0] });
       this.ringAt(x, y, 46, t.colors[1]);
       this.hooks.roar(true);

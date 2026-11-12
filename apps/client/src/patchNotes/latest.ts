@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.45",
+    date: "2026-11-12",
+    items: {
+      ko: ["이벤트 상점의 테마 타격 효과를 장착하면 무기·패시브를 얻을 때 '범의 기운!' 글자가 뜨던 문제 고침 (범 효과·범 풍류 스킨일 때만 뜸)"],
+      en: ["Fixed 'Tiger's Might!' text appearing on weapon or passive pickups when an event-shop theme hit effect was equipped (it now shows only with the tiger effect or the tiger limited skin)"],
+      ja: ["イベントショップのテーマ打撃エフェクトを装着すると、武器・パッシブ入手時に「虎の気！」の文字が出ていた問題を修正（虎エフェクト・虎の限定スキンのときだけ表示）"],
+    },
+  },
+  {
     version: "0.52.44",
     date: "2026-11-12",
     items: {

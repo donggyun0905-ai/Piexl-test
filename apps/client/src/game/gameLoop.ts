@@ -112,7 +112,7 @@ export function startGameLoop(o: LoopOptions): () => void {
   const summer = wornLimited(run.player.characterId) === "summer";
   const fx = activeFx(wornLimited(run.player.characterId) ?? (wornVictory(run.player.characterId) ? "victory" : null));
   const victory = !wornLimited(run.player.characterId) && wornVictory(run.player.characterId);
-  const hooks = { powerText: t(victory ? "victoryPower" : summer ? "summerPower" : "tigerPower"), roar: fx.rest ? (summer ? splash : roar) : () => {}, on: fx };
+  const hooks = { powerText: t(victory || fx.themes.hit?.id === "victory" ? "victoryPower" : summer ? "summerPower" : "tigerPower"), roar: fx.rest ? (summer ? splash : roar) : () => {}, on: fx };
   const tiger = fx.hit || fx.idle || fx.walk ? (summer ? new SummerFx(hooks) : new TigerFx(hooks)) : null;
   // 이벤트 상점 테마 효과 (칸마다 다른 세트)
   const th = fx.themes;
