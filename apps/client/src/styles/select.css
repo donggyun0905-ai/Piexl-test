@@ -11,14 +11,14 @@
   padding: 6px 14px;
   border-bottom-width: 3px;
 }
-.cs-tabs button.ascalon { border-bottom-color: #4a8aff; }
-.cs-tabs button.terracore { border-bottom-color: #a8723c; }
+.cs-tabs button.ascalon { border-bottom-color: #e8641a; }
+.cs-tabs button.terracore { border-bottom-color: #6b3e1f; }
 .cs-tabs button.virdia { border-bottom-color: #4ac86a; }
 .cs-tabs button.helios { border-bottom-color: #c83a4a; }
-.cs-tabs button.thalassia { border-bottom-color: #6ad4ff; }
+.cs-tabs button.thalassia { border-bottom-color: #2a6aff; }
 .cs-tabs button.seongguk { border-bottom-color: #ffd84a; }
 .cs-tabs button.dawn { border-bottom-color: #ffffff; }
-.cs-tabs button.silber { border-bottom-color: #c86bff; }
+.cs-tabs button.silber { border-bottom-color: #7ad0ff; }
 .cs-tabs button.akashic { border-bottom-color: #b89aff; }
 .cs-tabs button.outsider { border-bottom-color: #5ae0d0; }
 .cs-tabs button.archive { border-bottom-color: #ffb84a; }
@@ -34,15 +34,16 @@
   line-height: 1.5;
 }
 .cs-trait b { color: var(--trait, #ffffff); margin-right: 6px; }
-.cs-trait.ascalon { --trait: #6aa0ff; }
-.cs-trait.terracore { --trait: #ff9a3a; }
+.cs-trait.ascalon { --trait: #ff7a2a; }
+.cs-trait.terracore { --trait: #a8683a; }
 .cs-trait.virdia { --trait: #6ae07a; }
 .cs-trait.helios { --trait: #ff4a5a; }
-.cs-trait.thalassia { --trait: #6ad4ff; }
-.cs-trait.silber { --trait: #c86bff; }
+.cs-trait.thalassia { --trait: #4a86ff; }
+.cs-trait.silber { --trait: #7ad0ff; }
 .cs-trait.seongguk { --trait: #ffd84a; }
-/* 아카식 레코드·서고의 감시자: 제 색 그대로 은은하게 빛남 */
+/* 아카식 레코드·이방인·서고의 감시자: 제 색 그대로 은은하게 빛남 */
 .cs-tabs button.akashic { --glow: #b89aff; animation: cs-glow 2.4s ease-in-out infinite; }
+.cs-tabs button.outsider { --glow: #5ae0d0; animation: cs-glow 2.4s ease-in-out infinite; }
 .cs-tabs button.archive { --glow: #ffb84a; animation: cs-glow 2.4s ease-in-out infinite; }
 @keyframes cs-glow {
   0%, 100% { box-shadow: 0 3px 6px -2px var(--glow); text-shadow: 0 0 3px var(--glow); }

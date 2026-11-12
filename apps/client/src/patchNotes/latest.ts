@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.51",
+    date: "2026-11-12",
+    items: {
+      ko: ["캐릭터 선택창·스토리 진영 색 변경: 아스칼론 진한 주황 · 테라코어 진한 갈색 · 탈라시아 파랑 · 실베르 하늘색 · 이방인 탭도 아카식 레코드처럼 테두리가 은은하게 빛남"],
+      en: ["Faction colors changed in character select and story: Ascalon deep orange · Terracore deep brown · Thalassia blue · Silber sky blue · the Outsider tab now glows softly like Akashic Records"],
+      ja: ["キャラ選択・ストーリーの陣営カラー変更：アスカロン 濃いオレンジ · テラコア 濃い茶色 · タラシア 青 · シルバー 空色 · 異邦人タブもアカシックレコードのように縁がほのかに光る"],
+    },
+  },
+  {
     version: "0.52.50",
     date: "2026-11-12",
     items: {

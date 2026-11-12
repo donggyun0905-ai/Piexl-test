@@ -33,16 +33,16 @@ export type FactionId = "ascalon" | "terracore" | "helios" | "virdia" | "thalass
 
 /** 진영 색 · 소속 (게임 규칙 factionDefs.FACTION_MEMBERS를 씀 · 그림 이름: 버려진 자들은 세 아이 따로) */
 export const FACTIONS: readonly { id: FactionId; color: string; members: readonly Speaker[] }[] = [
-  { id: "ascalon", color: "#4a8aff", members: M.ascalon },
-  { id: "terracore", color: "#a8723c", members: M.terracore },
+  { id: "ascalon", color: "#e8641a", members: M.ascalon },
+  { id: "terracore", color: "#6b3e1f", members: M.terracore },
   { id: "helios", color: "#c83a4a", members: M.helios.flatMap((c): Speaker[] => (c === "abandoned" ? ["raven", "cain", "jade"] : [c])) },
   { id: "virdia", color: "#4ac86a", members: M.virdia },
-  { id: "thalassia", color: "#6ad4ff", members: M.thalassia },
+  { id: "thalassia", color: "#2a6aff", members: M.thalassia },
   { id: "seongguk", color: "#ffd84a", members: M.seongguk },
   /** 새벽의 성흔: 악마 사냥꾼 (성흔 = 달빛의 힘, 게이지형) */
   { id: "dawn", color: "#ffffff", members: ["blast", "nailer", "scissors", "hellfist", "silverBullet", "blueFlame", "lunatic", "incision", "crusader"] },
   /** 실베르: 강대한 몬스터가 살던 북부를 지켜 온 나라 (처음엔 약하지만 패시브마다 성장) */
-  { id: "silber", color: "#c86bff", members: M.silber },
+  { id: "silber", color: "#7ad0ff", members: M.silber },
   { id: "akashic", color: "#b89aff", members: ["scribe", "duck", "stargazer", "miner", "voyager", "zeus"] },
   /** 이방인: 세계의 틀을 벗어난 자들 */
   { id: "outsider", color: "#5ae0d0", members: ["pilgrim", "fallenKing"] },
