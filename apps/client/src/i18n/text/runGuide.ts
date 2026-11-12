@@ -29,4 +29,6 @@ export const RUN_GUIDE_TEXT = {
   fxOthers: l("다른 사람·AI 공격 이펙트 진하기 (%)", "Others' & AI attack effects opacity (%)", "他の人・AIの攻撃エフェクトの濃さ (%)"),
   glowFx: l("빛 효과 (처치 폭발·불티·탄 빛)", "Glow effects (kill bursts, sparks, shot trails)", "光のエフェクト（撃破の爆発・火花・弾の光）"),
   showGoal: l("지금 할 일 안내", "Show current goal", "今やることを表示"),
+  setHeartbeat: l("체력 낮을 때 심장 소리", "Low-health heartbeat", "体力が少ないとき心臓の音"),
+  setUiSound: l("메뉴 버튼 소리", "Menu button sound", "メニューボタンの音"),
 };

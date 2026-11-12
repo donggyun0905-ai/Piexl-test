@@ -39,6 +39,9 @@ export interface Settings {
   /** 공격 이펙트 진하기 0~1: 내 것 · 다른 사람(협동·레이드 동료·AI) 것 (보스 공격·위험 표시는 그대로, render/fxFade) */
   myFx: number;
   otherFx: number;
+  /** 체력이 낮을 때 심장 소리 · 메뉴 버튼 소리 */
+  heartbeat: boolean;
+  uiSound: boolean;
 }
 
 /** 모바일 버튼 (TouchButtons의 data-act) */
@@ -65,6 +68,8 @@ const DEFAULTS: Settings = {
   showGoal: true,
   myFx: 1,
   otherFx: 1,
+  heartbeat: true,
+  uiSound: true,
 };
 /** 처음 하는 기기: 간단한 화면 · 능력치 칸 끄고 시작 (피해 숫자는 타격감에 필요해 켬) */
 const FIRST: Settings = { ...DEFAULTS, simpleView: true, showStats: false };

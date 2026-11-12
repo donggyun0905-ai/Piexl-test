@@ -10,7 +10,7 @@ import { ALTAR_SOUNDS, type AltarSfx } from "./altarSound";
 import { VAULT_SOUNDS, type VaultSfx } from "./vaultSound";
 import { SILBER_SOUNDS, type SilberSfx } from "./silberSounds";
 import { POLISH_SOUNDS, type PolishSfx } from "./sfxPolish";
-import { musicLayers } from "./musicLayers";
+import { defaultBeat } from "./musicLayers";
 
 export type Sfx =
   | "swing"
@@ -222,8 +222,6 @@ export function play(name: Sfx): void {
 
 // ───────── 음악: 짧은 8마디를 반복하는 단순한 칩튠 (층이 바뀌면 음높이가 바뀜) ─────────
 
-const BASS = [0, 0, 7, 7, 5, 5, 3, 3];
-const LEAD = [12, 15, 19, 15, 17, 15, 12, 10, 12, 15, 19, 22, 19, 17, 15, 12];
 let musicTimer = 0;
 let musicStep = 0;
 let musicRoot = 110;
@@ -259,13 +257,7 @@ export function startMusic(floor: number, boss: boolean): void {
       custom.beat(musicStep++, bossMode);
       return;
     }
-    const fast = bossMode ? 0.75 : 1;
-    const step = musicStep++;
-    const semis = (n: number) => musicRoot * 2 ** (n / 12);
-    if (step % 2 === 0) tone({ type: "triangle", from: semis(BASS[(step >> 2) % BASS.length]!), dur: 0.22 * fast, vol: 0.5 }, musicGain);
-    if (step % 4 !== 3) tone({ type: "square", from: semis(LEAD[step % LEAD.length]! + (bossMode ? 1 : 0)), dur: 0.1, vol: 0.12 }, musicGain);
-    // 층이 깊을수록·보스전일수록 겹치는 층 (7층 라스트 보스가 가장 웅장)
-    musicLayers(step, semis, bossMode ? (musicFloor >= 7 ? 2 : 1) : 0, musicFloor, BASS[(step >> 2) % BASS.length]!, LEAD[step % LEAD.length]!, musicGain);
+    defaultBeat(musicStep++, bossMode, musicFloor, musicRoot, musicGain);
   };
   musicTimer = window.setInterval(beat, custom ? custom.ms : 180);
 }

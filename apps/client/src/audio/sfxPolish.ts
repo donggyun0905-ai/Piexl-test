@@ -75,6 +75,42 @@ export const POLISH_SOUNDS = {
     tone({ type: "sine", from: 70, to: 50, dur: 0.1, vol: 0.5 });
     tone({ type: "sine", from: 64, to: 46, dur: 0.12, vol: 0.4, delay: 0.16 });
   },
+  // 맞힘 (무기 종류마다): 베임 "촥" · 둔기 "쿵" · 찔림 "푹" · 마법 "파직"
+  hitSlash: () => {
+    noise(0.07, 0.3, 5500);
+    tone({ type: "sawtooth", from: 1400, to: 500, dur: 0.06, vol: 0.08 });
+    tone({ type: "sine", from: 170, to: 70, dur: 0.07, vol: 0.2 });
+  },
+  hitBlunt: () => {
+    tone({ type: "sine", from: 130, to: 40, dur: 0.14, vol: 0.45 });
+    noise(0.08, 0.3, 900);
+    tone({ type: "square", from: 180, to: 90, dur: 0.05, vol: 0.1 });
+  },
+  hitPierce: () => {
+    noise(0.03, 0.3, 7000);
+    tone({ type: "square", from: 700, to: 200, dur: 0.05, vol: 0.12 });
+    tone({ type: "sine", from: 200, to: 80, dur: 0.06, vol: 0.2 });
+  },
+  hitMagic: () => {
+    tone({ type: "triangle", from: 1500, to: 600, dur: 0.1, vol: 0.14 });
+    tone({ type: "sine", from: 2400, dur: 0.08, vol: 0.06, delay: 0.03 });
+    noise(0.06, 0.2, 3000);
+    tone({ type: "sine", from: 160, to: 70, dur: 0.08, vol: 0.18 });
+  },
+  // 적이 쏨: 낮고 탁한 "퓽" (내 탄 소리와 구분되게)
+  foeShot: () => {
+    tone({ type: "sawtooth", from: 420, to: 160, dur: 0.09, vol: 0.09 });
+    noise(0.04, 0.1, 2200);
+  },
+  // 적 기술 예고: 짧은 경고음 두 번
+  foeWarn: () => [0, 0.09].forEach((d) => tone({ type: "square", from: 660, dur: 0.05, vol: 0.07, delay: d })),
+  // 보스 큰 기술 예고: 낮게 깔리는 울림 + 올라가는 경고음
+  bossWarn: () => {
+    tone({ type: "sawtooth", from: 82, to: 110, dur: 0.4, vol: 0.2 });
+    tone({ type: "square", from: 440, to: 660, dur: 0.22, vol: 0.09 });
+    tone({ type: "square", from: 660, to: 880, dur: 0.16, vol: 0.08, delay: 0.16 });
+    noise(0.3, 0.12, 500);
+  },
   // 메뉴 버튼: 작은 "톡"
   uiClick: () => {
     tone({ type: "square", from: 880, dur: 0.03, vol: 0.07 });

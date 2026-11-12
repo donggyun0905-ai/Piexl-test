@@ -78,6 +78,7 @@ const NAMES: Record<string, Name> = {
   spiritGreat: ["대정령", "Great spirit", "大精霊"],
   tailSea: ["물 상어", "Water sharks", "水のサメ"],
   talisman: ["부적 효과", "Charm effects", "護符効果"],
+  trackerSkill: SKILL,
   thorkenBall: ["철구공", "Iron ball", "鉄球"],
   thorkenStorm: ["태풍·천둥", "Typhoon & thunder", "台風・雷"],
   voyagerAbilities: ["운명의 힘", "Fate's aid", "運命の力"],

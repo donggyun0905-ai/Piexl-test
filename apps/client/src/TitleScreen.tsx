@@ -1,7 +1,8 @@
 import { GAME_VERSION } from "@pixel-rogue/shared";
 import { CodexPanel } from "./codex/CodexPanel";
 import { LobbyStage } from "./lobby/LobbyStage";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { setMenuMusic } from "./audio/calmMusic";
 import { AchievementList } from "./AchievementList";
 import { RecordsPanel } from "./RecordsPanel";
 import type { Lang, TextKey } from "./i18n";
@@ -52,6 +53,8 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   const status = useServerStatus();
   const [lobby, setLobby] = useState(false);
   const close = () => setPopup("none");
+  // 메인 화면 곡 (나가면 끔)
+  useEffect(() => (setMenuMusic(true), () => setMenuMusic(false)), []);
 
   const startNew = (endless = false, arena = false, hero = false) => {
     // 이어할 판이 있으면 지워진다고 확인

@@ -12,7 +12,8 @@ import { alive, inLine, isBoss, shoot, strike as strike_ } from "./s2Kit";
 import { AIM_DIST_STEP, type TickInput } from "./inputTypes";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, normalize, weaponOf } from "./util";
-const strike = srcFn("tracker", () => strike_);
+/** 스킬(암습 저격·강력한 한방·연발사격)은 피해 출처에서 '스킬' 줄로 */
+const skillStrike = srcFn("trackerSkill", () => strike_);
 
 /** 입력 중 이 틱에 쓰는 것을 담아 둠: 누른 곳까지 거리(레이저·의사·거너·저격) · 누른 스킬 키 (player에서 부름) */
 export function readAim(p: PlayerState, input: TickInput): void {
@@ -83,7 +84,7 @@ function ambushShot(s: RunState): void {
   a.gap = T.ambushGap;
   p.trShot = s.tick;
   if (best) {
-    strike(s, best, p.stats.damage * T.ambushMul * shotMul(s, false, s.tick));
+    skillStrike(s, best, p.stats.damage * T.ambushMul * shotMul(s, false, s.tick));
     marked(p, best);
   }
   addEffect(s, { kind: "trSnipe", x, y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: 14, width: best ? 1 : 0 });
@@ -104,7 +105,7 @@ function powerShot(s: RunState): void {
   const len = 420;
   for (const e of inLine(s, len, T.powerWidth)) {
     const hp = e.maxHp * T.powerHp * (isBoss(e) ? T.powerBoss : 1);
-    strike(s, e, p.stats.damage * T.powerMul * shotMul(s, false, e.id) + hp, 16);
+    skillStrike(s, e, p.stats.damage * T.powerMul * shotMul(s, false, e.id) + hp, 16);
     marked(p, e);
   }
   addEffect(s, { kind: "trBeam", x: p.x, y: p.y - 3, dirX: p.faceX, dirY: p.faceY, size: T.powerWidth, toX: p.x + p.faceX * len, toY: p.y - 3 + p.faceY * len, maxTicks: 30 });
@@ -164,7 +165,7 @@ export function trackerTick(s: RunState, want: boolean, speed: number): void {
   const b = p.trBurst;
   if (b && --b.gap <= 0) {
     const a = (roll(s, "trBurst", b.left) - 0.5) * 2 * T.burstSpread * tuneVal(s.player, "spread");
-    shoot(s, a, { damage: p.stats.damage * T.burstMul * shotMul(s, false, b.left), spirit: "trBurst", range: p.stats.range * 0.8, speed: 7, r: 2 });
+    srcRun(s, "f:trackerSkill", () => shoot(s, a, { damage: p.stats.damage * T.burstMul * shotMul(s, false, b.left), spirit: "trBurst", range: p.stats.range * 0.8, speed: 7, r: 2 }));
     p.trShot = s.tick;
     b.gap = T.burstGap;
     if (--b.left <= 0) delete p.trBurst;

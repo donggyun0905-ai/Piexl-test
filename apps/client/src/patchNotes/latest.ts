@@ -4,6 +4,36 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.42",
+    date: "2026-11-12",
+    items: {
+      ko: [
+        "맞는 소리가 무기에 따라 달라짐: 베임 · 둔기 · 찔림 · 마법 (전용 소리가 있는 캐릭터는 그대로)",
+        "적 쪽 소리 추가: 적이 탄을 쏠 때 · 적 기술 예고 · 보스의 큰 기술 예고(낮게 깔리는 경고음)",
+        "음악: 층마다 가락이 바뀜(4가지) · 보스마다 다른 보스 가락(4가지, 같은 보스는 늘 같은 가락) · 라스트 보스와 아레나 마지막 방도 가장 웅장한 편성",
+        "새 곡: 메인 화면 · 상점 방 · 쉼터 방",
+        "설정에 '체력 낮을 때 심장 소리' · '메뉴 버튼 소리' 끄기 추가",
+        "피해 출처: 추적자의 스킬(암습 저격·강력한 한방·연발사격)이 '스킬' 줄로 따로 나옴",
+      ],
+      en: [
+        "Hit sounds now depend on your weapon: slash · blunt · pierce · magic (characters with their own sounds are unchanged)",
+        "Enemy sounds added: enemy shots · enemy attack warnings · a low rising alarm when a boss telegraphs a big attack",
+        "Music: a different melody per floor (4) · a different boss melody per boss (4, the same boss always gets the same one) · last bosses and the final arena room get the grandest arrangement",
+        "New tracks: main menu · shop room · rest room",
+        "Settings: new toggles for 'Low-health heartbeat' and 'Menu button sound'",
+        "Damage sources: the Tracker's skills (Ambush Snipe, Power Shot, Burst Fire) are listed in their own 'Skills' row",
+      ],
+      ja: [
+        "当たった音が武器によって変化：斬撃 · 打撃 · 刺突 · 魔法（専用の音があるキャラはそのまま）",
+        "敵側の音を追加：敵が弾を撃つとき · 敵の技の予告 · ボスの大技の予告（低く響く警告音）",
+        "音楽：階ごとにメロディが変化（4種） · ボスごとに違うボス曲（4種、同じボスはいつも同じ曲） · ラストボスとアリーナ最後の部屋も最も壮大な編成に",
+        "新しい曲：メイン画面 · ショップの部屋 · 休憩所の部屋",
+        "設定に「体力が少ないとき心臓の音」「メニューボタンの音」のオン・オフを追加",
+        "ダメージの出どころ：追跡者のスキル（奇襲狙撃・強力な一発・連発射撃）が「スキル」の行に分かれて表示",
+      ],
+    },
+  },
+  {
     version: "0.52.41",
     date: "2026-11-12",
     items: {
