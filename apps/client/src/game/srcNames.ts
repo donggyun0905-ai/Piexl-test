@@ -25,7 +25,7 @@ const NAMES: Record<string, Name> = {
   arFinale: ["악보 완성", "Score Complete", "楽譜完成"],
   bjVolley: ["연속 타격 기술", "Multi-hit skills", "連撃スキル"],
   geBall: ["구체 부딪힘", "Orb ram", "球体の衝突"],
-  noir: ["공허의 검", "Void Blade", "虚無の剣"],
+  noir: ["공허의 손톱", "Void Claw", "虚無の爪"],
   rvCheck: ["체크메이트 (체크)", "Checkmate (Check)", "チェックメイト（チェック）"],
   buildSetFx: ["세트 효과", "Set effects", "セット効果"],
   classTaken: ["반격", "Counter", "反撃"],

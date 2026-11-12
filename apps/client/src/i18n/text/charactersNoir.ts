@@ -1,11 +1,11 @@
 // 화면 글자: 아슈바르 느아르 이름·설명 · 아슈바르 진영 탭·특징(적응력) · 강화 창(확률·승격·악마 계급) · 패왕전 스킬 이름 · 해금 (공격·스킬 이름은 noirAttacks)
 export const CHARACTER_TEXT_NOIR = {
   noir: { ko: "느아르", en: "Noir", ja: "ノワール" },
-  voidBlade: { ko: "공허의 검", en: "Void Blade", ja: "虚無の剣" },
+  voidBlade: { ko: "공허의 손톱", en: "Void Claw", ja: "虚無の爪" },
   noirDesc: {
-    ko: "아슈바르, 태초의 색채 악마 7원색 군단의 검정 · 공허를 베는 검 하나로 싸움 · 패시브 없음 · 적응력: 적을 쓰러뜨리면 흑이 차고, 가득 차면 레벨업(공격력+1·체력+10·방어력+1·재생력+1)과 강화 한 번 → 기본 공격·추가 공격(4단계)·스킬(강화판)·승격(하위→중위→고위→대악마)을 확률로 강화 · 제약: 일반 방에서는 아이템·패시브를 얻을 수 없고(비밀방·시련의 방은 됨) 대장장이·성좌의 방·쉼터 회복을 못 씀 · 대신 재생력이 빨리 참",
-    en: "Ashvar, the Black of the Primordial Chromatic Demon Legion of Seven Colors · fights with a single blade that cuts the void · no passives · Adaptation: kills fill your Black gauge; when full you level up (+1 damage · +10 HP · +1 defense · +1 regen) and get one upgrade roll → raise basic attack · extra attack (4 stages) · skills (empowered) · rank (Lesser → Middle → Greater → Archdemon) by chance · Restriction: no items or passives from normal rooms (secret rooms and trial rooms are fine), no blacksmith, constellation room or rest healing · in return, regeneration fills faster",
-    ja: "アシュヴァル、太初の色彩悪魔七原色軍団の黒・虚無を斬る剣ひとつで戦う・パッシブなし・適応力：敵を倒すと黒が溜まり、満タンでレベルアップ（攻撃力+1・体力+10・防御力+1・再生力+1）と強化1回 → 基本攻撃・追加攻撃（4段階）・スキル（強化版）・昇格（下位→中位→高位→大悪魔）を確率で強化・制約：通常の部屋ではアイテム・パッシブを得られない（秘密の部屋・試練の部屋はOK）、鍛冶屋・星座の部屋・休憩所の回復も使えない・代わりに再生力が早く溜まる",
+    ko: "아슈바르, 태초의 색채 악마 7원색 군단의 검정 · 공허를 찢는 손톱 하나로 싸움 · 패시브 없음 · 적응력: 적을 쓰러뜨리면 흑이 차고, 가득 차면 레벨업(공격력+1·체력+10·방어력+1·재생력+1)과 강화 한 번 → 기본 공격·추가 공격(4단계)·스킬(강화판)·승격(하위→중위→고위→대악마)을 확률로 강화 · 제약: 일반 방에서는 아이템·패시브를 얻을 수 없고(비밀방·시련의 방은 됨) 대장장이·성좌의 방·쉼터 회복을 못 씀 · 대신 재생력이 빨리 참",
+    en: "Ashvar, the Black of the Primordial Chromatic Demon Legion of Seven Colors · fights with a single claw that tears the void · no passives · Adaptation: kills fill your Black gauge; when full you level up (+1 damage · +10 HP · +1 defense · +1 regen) and get one upgrade roll → raise basic attack · extra attack (4 stages) · skills (empowered) · rank (Lesser → Middle → Greater → Archdemon) by chance · Restriction: no items or passives from normal rooms (secret rooms and trial rooms are fine), no blacksmith, constellation room or rest healing · in return, regeneration fills faster",
+    ja: "アシュヴァル、太初の色彩悪魔七原色軍団の黒・虚無を裂く爪ひとつで戦う・パッシブなし・適応力：敵を倒すと黒が溜まり、満タンでレベルアップ（攻撃力+1・体力+10・防御力+1・再生力+1）と強化1回 → 基本攻撃・追加攻撃（4段階）・スキル（強化版）・昇格（下位→中位→高位→大悪魔）を確率で強化・制約：通常の部屋ではアイテム・パッシブを得られない（秘密の部屋・試練の部屋はOK）、鍛冶屋・星座の部屋・休憩所の回復も使えない・代わりに再生力が早く溜まる",
   },
   csAshvar: { ko: "아슈바르", en: "Ashvar", ja: "アシュヴァル" },
   csTrait_ashvar: { ko: "적응력", en: "Adaptation", ja: "適応力" },

@@ -3,5 +3,5 @@ import type { WeaponId } from "@pixel-rogue/shared";
 import type { Names } from "./names";
 
 export const NR_WEAPON_NAMES: Record<"nrBlade" & WeaponId, Names> = {
-  nrBlade: { ko: "공허의 검", en: "Void Blade", ja: "虚無の剣" },
+  nrBlade: { ko: "공허의 손톱", en: "Void Claw", ja: "虚無の爪" },
 };

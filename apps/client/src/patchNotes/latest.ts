@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.57",
+    date: "2026-11-12",
+    items: {
+      ko: ["느아르: 무기 이름을 '공허의 검'에서 '공허의 손톱'으로 바꾸고 아이콘도 검은 손톱 모양으로"],
+      en: ["Noir: the weapon is renamed from Void Blade to Void Claw, with a new black-claw icon"],
+      ja: ["ノワール：武器名を「虚無の剣」から「虚無の爪」に変更・アイコンも黒い爪の形に"],
+    },
+  },
+  {
     version: "0.52.56",
     date: "2026-11-12",
     items: {

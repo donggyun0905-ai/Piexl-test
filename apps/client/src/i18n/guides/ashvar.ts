@@ -5,7 +5,7 @@ type Guide = Partial<Record<CharacterId, readonly string[]>>;
 
 export const GUIDE_KO_ASHVAR: Guide = {
   noir: [
-    "아슈바르 · 느아르 '태초의 색채 악마 7원색 군단의 검정' · 체력 110 · 공격력 9 · 이동 1.3 · 무기는 공허의 검 하나 · 패시브 없음 · 로비 칩 45만 개로 열기",
+    "아슈바르 · 느아르 '태초의 색채 악마 7원색 군단의 검정' · 체력 110 · 공격력 9 · 이동 1.3 · 무기는 공허의 손톱 하나 · 패시브 없음 · 로비 칩 45만 개로 열기",
     "적응력: 적을 쓰러뜨리면 흑이 차고(풋내기 경험치와 같은 양) 가득 차면 레벨업 → 공격력+1·체력+10·방어력+1·재생력+1, 강화 한 번",
     "강화: 기본공격·추가공격 4단계(2단계 75% · 3단계 50% · 4단계 20%) · 스킬공격은 스킬 4개 중 하나를 골라 강화판으로(50%) · 실패하면 다음 확률 +5%, 성공하면 처음 확률로",
     "승격: 하위악마 → 중위(50%, 공격력+5·체력+40·방어력+5·재생력+5) → 고위(25%, 공격력+3%·체력+5%·방어력+5·재생력+5) → 대악마(10%, 공격력+25%·체력+25%·방어력+15·재생력+15, 기본·추가 3단계 이상) · 계급마다 등 뒤 마크가 바뀜",
@@ -17,7 +17,7 @@ export const GUIDE_KO_ASHVAR: Guide = {
 
 export const GUIDE_EN_ASHVAR: Guide = {
   noir: [
-    "Ashvar · Noir, the Black of the Primordial Chromatic Demon Legion · HP 110 · damage 9 · move 1.3 · one weapon, the Void Blade · no passives · unlock with 450,000 lobby chips",
+    "Ashvar · Noir, the Black of the Primordial Chromatic Demon Legion · HP 110 · damage 9 · move 1.3 · one weapon, the Void Claw · no passives · unlock with 450,000 lobby chips",
     "Adaptation: kills fill the Black gauge (same amount as the Novice's EXP); when full you level up → +1 damage · +10 HP · +1 defense · +1 regen, and one upgrade roll",
     "Upgrades: Basic and Extra attacks have 4 stages (stage 2 75% · stage 3 50% · stage 4 20%) · Skills: pick one of 4 skills to empower (50%) · each failure adds +5% to the next try, success resets it",
     "Promotion: Lesser Demon → Middle (50%, +5 damage · +40 HP · +5 defense · +5 regen) → Greater (25%, +3% damage · +5% HP · +5 defense · +5 regen) → Archdemon (10%, +25% damage · +25% HP · +15 defense · +15 regen, needs Basic & Extra stage 3+) · the mark behind Noir changes with rank",
@@ -29,7 +29,7 @@ export const GUIDE_EN_ASHVAR: Guide = {
 
 export const GUIDE_JA_ASHVAR: Guide = {
   noir: [
-    "アシュヴァル・ノワール「太初の色彩悪魔七原色軍団の黒」・体力110・攻撃力9・移動1.3・武器は虚無の剣ひとつ・パッシブなし・ロビーチップ45万枚で解放",
+    "アシュヴァル・ノワール「太初の色彩悪魔七原色軍団の黒」・体力110・攻撃力9・移動1.3・武器は虚無の爪ひとつ・パッシブなし・ロビーチップ45万枚で解放",
     "適応力：敵を倒すと黒が溜まり（ルーキーの経験値と同じ量）、満タンでレベルアップ → 攻撃力+1・体力+10・防御力+1・再生力+1、強化1回",
     "強化：基本攻撃・追加攻撃は4段階（2段階75%・3段階50%・4段階20%）・スキル攻撃は4つのうち1つを選んで強化版に（50%）・失敗すると次の確率+5%、成功すると元に戻る",
     "昇格：下位悪魔 → 中位（50%、攻撃力+5・体力+40・防御力+5・再生力+5）→ 高位（25%、攻撃力+3%・体力+5%・防御力+5・再生力+5）→ 大悪魔（10%、攻撃力+25%・体力+25%・防御力+15・再生力+15、基本・追加3段階以上）・位階ごとに背中の紋章が変わる",
