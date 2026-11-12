@@ -86,13 +86,13 @@
 .build-panel h4 {
   margin: 2px 0 6px;
 }
-.build-row.r1 .build-rank {
+.build-row.top.r1 .build-rank {
   color: #ffd75a;
 }
-.build-row.r2 .build-rank {
+.build-row.top.r2 .build-rank {
   color: #d8dee8;
 }
-.build-row.r3 .build-rank {
+.build-row.top.r3 .build-rank {
   color: #e0a070;
 }
 .build-body h3 small,
