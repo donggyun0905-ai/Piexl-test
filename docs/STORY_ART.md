@@ -200,6 +200,46 @@ Use the first reference image ONLY as the art style guide: match its exact style
 11. `Scene: the Dragon of Ruin opens its jaws and an unbearable white-hot light gathers, forming a purgatory of flame across the sky. The Great Sage plants his staff, now grown to colossal size, as a wall in front of the elites, shattering every attack. Behind it, the elites and the Demigod activate glowing teleport loaders that Automata (silver hair, white and blue mechanical dress) secretly placed, disappearing one by one in pillars of blue light. Desperate, heroic escape mood.`
 12. `Scene: twilight over the desert. The Great Sage stands alone on the sand with his staff on his shoulder, grinning defiantly at the dark shadowy figure with faint purple flame before him. Behind them the ancient ruins of Celestia are crumbling and sinking into the earth amid tremors and dust, under a blood-orange setting sun. Lonely, heroic, tragic mood.`
 
+## 덤: 아직 예전 도트인 보스 그림 (스토리 그림 만들 때 같이)
+
+> 2026-11-14 확인: 아래 보스는 아직 처음의 작은 코드 도트 그림 (새 그림이 들어간 보스: 무리 여왕·멸망의 용·쌍둥이·지옥문 수문장·달을 삼키는 자·켈베로스·레비아탄·아스모데우스 등)
+> 결과 PNG는 `scripts/art/src/boss-{영문 이름}.png`로 올리면 Claude가 `import_boss.py`로 게임에 넣음 (2×2 네 모습 → 게임 시트)
+
+**첫 메시지에 같이 붙일 보스 규칙** (화풍 기준 = 무리 여왕 `scripts/art/src/boss-brood.png` 첨부, 정사각형 1:1 · 2k):
+
+```
+Boss sprite sheet rules (for "Boss:" requests): square 1:1 image, pure black background (#000000), no floor shadow, no text, no grid lines, no border. A 2x2 grid of the SAME boss in 4 poses, all facing right: top-left = walk 1, top-right = walk 2 (other foot), bottom-left = attack wind-up, bottom-right = attack. Each pose fills most of its quarter but never crosses into another quarter (wings, tails, weapons and attack effects included). Same size, same face, colors and gear in all 4; feet on the same line (floating bosses: body centers at the same height). Match the first reference image's pixel art style: bold dark outlines, saturated colors, clear shading, crisp square pixels, no blur. Big readable color shapes for a dark game floor. Majestic and menacing; female bosses beautiful but not revealing. Original design.
+```
+
+컷과 섞지 않게 보스는 한 장씩 따로: `Boss: {영어 문장}` 으로 보냄. 지금 게임 그림(`apps/client/public/sprites/enemies/{영문}.png`)을 같이 올리면 모양을 이어 받음
+
+| 영문 파일 | 보스 | 보낼 문장 |
+| --- | --- | --- |
+| knight | 검은 기사 | `Boss: Black Knight — horned helmet with glowing red eye slit, black plate armor, red cape, huge greatsword. Wind-up = sword raised overhead · attack = downward slash.` |
+| archer | 얍삽한 활잡이 | `Boss: Sly Archer — green hooded cloak, glowing green eyes inside the hood, big bow and quiver. Wind-up = drawing the bowstring · attack = arrow released.` |
+| siren | 세이렌 | `Boss: Siren — mermaid with long pink hair and a sky-blue tail, floating music notes. Wind-up = gathering a song · attack = shooting music notes.` |
+| centaur | 켄타우로스 | `Boss: Centaur — bull-horned helmet and plate-armored upper body, brown horse body with red barding, long lance. Wind-up = rearing with lance pulled back · attack = charging thrust.` |
+| plant | 하드플랜트 | `Boss: Hard Plant — layered crimson petals, a mouth full of teeth in the center, thorny stem and leaves. Wind-up = petals closing · attack = mouth opened wide.` |
+| reaper | 데스 | `Boss: Death — goddess of death with silver hair and a pale face, black and purple dress, huge scythe. Wind-up = scythe pulled back · attack = full spinning slash.` |
+| swordgod | 검신 | `Boss: Sword God — white-haired goddess of blades, white and gold armored dress with a blue sash, many swords floating behind her. Wind-up = swords glowing · attack = sword waves flying.` |
+| archangel | 천사장 | `Boss: Archangel — six-winged angel, white robes with gold ornaments, golden halo, spear of light. Wind-up = gathering light · attack = pillar of light.` (이어서 `Boss: Archangel's Tower — white and gold pillar tower, one normal and one glowing version side by side.`) |
+| godeater | 갓이터 | `Boss: Godeater — towering shadow king in a tattered dark purple cloak, golden crown, glowing red eyes, red gem on the chest, clawed hands. Wind-up = both arms spread · attack = smashing down.` (이어서 `Boss: Ruin Blade — a giant crimson greatsword, 4 poses floating and spinning` · `Boss: Chaos Blade — a giant violet greatsword, 4 poses floating and spinning`) |
+| plight | 태초의 빛 | `Boss: Primeval Light — a radiant white and gold sun-like being with a calm face and rays of light, 4 poses pulsing and flaring.` |
+| pdark | 태초의 어둠 | `Boss: Primeval Darkness — a black sphere wrapped in violet tentacle-like aura with glowing purple eyes, 4 poses pulsing and lashing.` |
+| toad | 늪의 두꺼비 왕 | `Boss: Swamp Toad King — giant green toad wearing a golden crown. Wind-up = crouching low · attack = leaping slam.` |
+| salamander | 불도롱뇽 | `Boss: Fire Salamander — burning orange salamander with lava patterns on its back. Wind-up = flames rising · attack = fiery charge.` |
+| jelly | 번개 해파리 | `Boss: Thunder Jellyfish — huge sky-blue jellyfish with electric tentacles. Wind-up = sparks gathering · attack = lightning burst.` |
+| captain | 유령선 선장 | `Boss: Ghost Ship Captain — wide captain hat, teal ghostly skin, long navy coat, cutlass and anchor. Wind-up = anchor swung back · attack = anchor thrown.` |
+| umbra | 검은 잔영 | `Boss: Black Remnant — a black wraith with red eyes and a flowing shadow body, 4 poses drifting and lunging.` |
+| sandworm | 데스웜 | `Boss: Death Worm — giant sand worm with a round mouth full of teeth. Wind-up = rising out of the sand · attack = lunging bite.` (이어서 검은 모습: `Boss: Death Worm, dark corrupted version, black body with red glow`) |
+| scorpion | 거대 전갈 | `Boss: Giant Scorpion — huge scorpion with red armored shell and a venom stinger tail. Wind-up = tail raised · attack = sting.` (이어서 검은 모습) |
+| roc | 거대 매 | `Boss: Giant Hawk — huge hawk with brown feathers. Wind-up = wings spread · attack = diving claw strike.` (이어서 검은 모습) |
+| demigod | 괴력난신 | `Boss: Demigod of Wild Might — tall muscular demigod man, long white hair, golden horns, bandaged bare fists, red war markings on the bare chest, red belt, black baggy pants. Wind-up = raising both hands gathering power · attack = straight punch.` |
+| sage | 제천대성 | `Boss: Great Sage — original golden-furred monkey demigod, golden circlet with two tall feathers, golden scale armor, red cape, long red staff with gold ends, riding a small golden cloud. Wind-up = staff raised · attack = staff swing.` (이어서 `Boss: the golden cloud alone, 4 poses drifting`) |
+
+- 스토리에 나오는 보스(갓이터·태초·괴력난신·제천대성·검신·천사장·데스)부터 하면 스토리 그림과 모습이 같아짐
+- 장면 그림을 만들 때, 먼저 만든 새 보스 그림을 참고 그림으로 올리면 장면 속 모습도 맞춰짐
+
 ## 7~9장
 
 🔸 2장처럼 장마다 컷 목록·프롬프트를 이어서 씀 (그 전에는 장 하나에 임시 배경 하나)
