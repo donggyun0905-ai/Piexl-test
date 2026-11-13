@@ -15,7 +15,8 @@ export function drawBleuFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const f = 1 - fx.ticks / fx.maxTicks;
   const x = snap(fx.x);
   const y = snap(fx.y);
-  const a = f > 0.85 ? (1 - f) / 0.15 : 1;
+  // 맨 끝 5틱만 흐려짐 (마지막 그림이 다 보이게)
+  const a = Math.min(1, fx.ticks / 5);
   const ang = Math.atan2(fx.dirY, fx.dirX);
   const left = fx.dirX < 0;
   const w = fx.size * (SCALE[fx.kind] ?? 2.2);

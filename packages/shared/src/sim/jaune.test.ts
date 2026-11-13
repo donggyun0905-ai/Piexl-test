@@ -5,6 +5,7 @@ import { recalcStats } from "./items";
 import { addPickup } from "./loot";
 import { NR_UP, noirRegenMul, nrUpgrade } from "./nrAdapt";
 import { enemy } from "./perkTestUtil";
+import { practiceAshLevel } from "./practiceFaction";
 
 /** 존 (80, 100) 오른쪽을 봄 · 적은 묶어 둠 */
 function jn(foes: [number, number][] = [[105, 100]]): RunState {
@@ -138,6 +139,19 @@ describe("존", () => {
     addPickup(s, room, "passive", "vigor", 100, 100);
     expect(s.rooms[room]!.pickups.length).toBe(before);
     expect(noirRegenMul(s.player)).toBe(1);
+  });
+
+  it("연습장 레벨업: 누를 때마다 레벨 +1 · 강화 횟수 +1 · 공격력 오름 (아슈바르가 아니면 아무것도 안 함)", () => {
+    const s = jn();
+    const d = s.player.stats.damage;
+    practiceAshLevel(s);
+    practiceAshLevel(s);
+    expect(s.player.nrLv).toBe(3);
+    expect(s.player.nrPts).toBe(2);
+    expect(s.player.stats.damage).toBeGreaterThan(d);
+    const m = createRun(7, "mage");
+    practiceAshLevel(m);
+    expect(m.player.nrLv).toBeUndefined();
   });
 
   it("모든 단계·강화판으로 오래 싸워도 오류 없이 결정적으로 같음", () => {

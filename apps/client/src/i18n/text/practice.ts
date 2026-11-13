@@ -80,6 +80,8 @@ export const PRACTICE_TEXT = {
   practiceDesc: { ko: "아이템·적을 마음대로 불러 연습", en: "Spawn items and enemies freely", ja: "アイテム・敵を自由に呼んで練習" },
   practiceFaction: { ko: "진영", en: "Faction", ja: "陣営" },
   pfSkillReset: { ko: "스킬 대기 초기화", en: "Reset skill cooldowns", ja: "スキル待ち時間リセット" },
+  pfAshLevel: { ko: "레벨업 (흑 가득)", en: "Level up (fill Black)", ja: "レベルアップ（黒満タン）" },
+  pfAshLevelTip: { ko: "흑을 채워 바로 레벨업 한 번: 능력치 오름 · 강화 횟수 +1", en: "Fill the Black gauge for one instant level-up: stats rise · +1 upgrade roll", ja: "黒を満たしてすぐ1回レベルアップ：能力値上昇・強化回数+1" },
   pfFill: { ko: "진영 게이지 가득", en: "Fill faction gauge", ja: "陣営ゲージ満タン" },
   pfFillTip: { ko: "물결 콤보·타락·에너지·영광·핵심 스킬 각성 · 블래스트는 성흔 각성(달빛) · 구미호 바꾸기 가득 · 코인 점수 +100", en: "Tide combo, Taint, Energy, Glory, Core Skill · Blast awakens (Moonlight) · Fox rerolls full · Coin +100", ja: "波コンボ・堕落・エネルギー・栄光・核心スキル覚醒・ブラストは聖痕覚醒（月光）・九尾の入れ替え満タン・コイン+100" },
   pfDrop: { ko: "바닥에 아이템 놓기", en: "Drop items on the floor", ja: "床にアイテムを置く" },

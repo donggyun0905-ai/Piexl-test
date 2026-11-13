@@ -12,7 +12,10 @@ const KINDS = new Set<string>([...Object.keys(ROW), "jnPop", "jnZap"]);
 const LOOP: Partial<Record<string, readonly Frame[]>> = {
   jnOrb: [[3, false], [3, true]],
   jnStep: [[1, false], [2, false], [3, false], [2, false]],
-  jnEnd: [[2, false], [3, false], [3, true], [2, true]],
+  jnEnd: [[2, false], [2, true]],
+  jnHand: [[2, false], [3, false]],
+  // 빔은 좌우 반전하면 뒤로 향하므로 다 뻗은 칸 하나로 유지
+  jnBeam: [[2, false]],
   jnFrenzy: [[2, false], [3, false], [2, true], [3, true]],
 };
 /** 바라보는 쪽으로 돌려 그리는 그림 (원본이 오른쪽을 봄) */
@@ -25,7 +28,8 @@ export function drawJauneFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const f = 1 - fx.ticks / fx.maxTicks;
   const x = snap(fx.x);
   const y = snap(fx.y);
-  const a = f > 0.85 ? (1 - f) / 0.15 : 1;
+  // 맨 끝 5틱만 흐려짐 (마지막 그림이 다 보이게)
+  const a = Math.min(1, fx.ticks / 5);
   if (fx.kind === "jnPop") {
     additive(ctx, () => {
       glow(ctx, x, y, fx.size * (0.6 + f * 0.5), JN.gold, 0.7 * (1 - f), 0.45);

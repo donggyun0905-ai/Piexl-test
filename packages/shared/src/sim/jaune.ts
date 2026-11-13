@@ -25,7 +25,7 @@ export function jnLine(s: RunState, kind: "jnFlash" | "jnFist" | "jnZig" | "jnBe
   const p = s.player;
   const [dx, dy] = [p.faceX, p.faceY];
   nrVolley(s, { kind, x: p.x, y: p.y, r: R.w, dmg: 0, dmgs, n: dmgs.length, every: R.every, fin, on: ZAP, line: { dx, dy, len: R.len, w: R.w } });
-  addEffect(s, { kind, x: p.x + dx * R.len * 0.5, y: p.y + dy * R.len * 0.5, dirX: dx, dirY: dy, size: R.len * 0.5, maxTicks: dmgs.length * R.every + 14 });
+  addEffect(s, { kind, x: p.x + dx * R.len * 0.5, y: p.y + dy * R.len * 0.5, dirX: dx, dirY: dy, size: R.len * 0.5, maxTicks: fxLen(dmgs.length, R.every) });
 }
 
 /** 몸 바로 앞 원 (n타 + 끝 한 방) · 원 자리 */
@@ -33,8 +33,11 @@ export function jnAhead(s: RunState, kind: "jnRapid" | "jnClone" | "jnHand" | "j
   const p = s.player;
   const [x, y] = [p.x + p.faceX * ahead, p.y + p.faceY * ahead];
   nrVolley(s, { kind, x, y, r, dmg: 0, dmgs, n: dmgs.length, every, fin, pull, on: ZAP });
-  addEffect(s, { kind, x, y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: dmgs.length * every + 14 });
+  addEffect(s, { kind, x, y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: fxLen(dmgs.length, every) });
 }
+
+/** 효과 길이: 마지막 한 대(첫 대는 0틱) 바로 뒤부터 마지막 그림이 잠시 보이고 끝나게 (화면 sheetLoop OUTRO 10틱 · docs/FX_FRAMES.md) */
+export const fxLen = (n: number, every: number, delay = 0) => delay + (n - 1) * every + 12;
 
 /** 같은 피해 n번 */
 export const reps = (n: number, d: number) => Array.from({ length: n }, () => d);
@@ -74,7 +77,7 @@ function extra(s: RunState): void {
     const R = X.bind;
     for (const e of s.enemies) if (nrAlive(e) && (e.x - x) ** 2 + (e.y - y) ** 2 <= (R.r + e.r) ** 2) root(e, R.root);
     nrVolley(s, { kind: "jnBind", x, y, r: R.r, dmg: 0, dmgs: reps(R.hits, D * L.weak), n: R.hits, every: R.every, fin: D * L.strong, on: ZAP });
-    addEffect(s, { kind: "jnBind", x, y, dirX: 0, dirY: 0, size: R.r, maxTicks: R.hits * R.every + 14 });
+    addEffect(s, { kind: "jnBind", x, y, dirX: 0, dirY: 0, size: R.r, maxTicks: fxLen(R.hits + 1, R.every) });
   });
 }
 

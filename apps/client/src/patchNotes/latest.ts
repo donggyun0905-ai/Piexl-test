@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.72",
+    date: "2026-11-13",
+    items: {
+      ko: ["연습장 진영 탭: 아슈바르(느아르·루주·블뢰·존)는 '레벨업 (흑 가득)' 버튼으로 바로 레벨업", "존: 황금 번개 주먹·초월 벽력일섬·광란의 천뢰·뇌신의 손아귀 범위·이펙트 절반, 지그재그 뇌격·초월 벽력일섬은 1/3 · 광란의 천뢰·뇌신의 손아귀·종언의 황천뢰(낙뢰 부분)가 끊기지 않고 반복 · 종언의 황천뢰 강한 1타가 맨 마지막에", "블뢰·존: 효과 그림이 겹쳐 넘어갈 때 어두워지며 깜빡이던 것 고침 · 마지막 그림이 끝까지 보임"],
+      en: ["Practice faction tab: Ashvar characters (Noir, Rouge, Bleu, Jaune) can level up instantly with 'Level up (fill Black)'", "Jaune: Golden Lightning Fist, Transcendent Thunderclap Flash, Frenzied Heaven Thunder and Grasp of the Thunder God have half the range and effect size; Zigzag Bolt and Transcendent Thunderclap Flash a third · Frenzied Heaven Thunder, Grasp of the Thunder God and the falling bolts of Golden Heaven Thunder of the End now loop without breaks · its strong hit now lands last", "Bleu & Jaune: effect frames no longer dim and flicker while blending · the last frame stays fully visible"],
+      ja: ["練習場の陣営タブ：アシュヴァル（ノワール・ルージュ・ブルー・ジョーヌ）は「レベルアップ（黒満タン）」ですぐレベルアップ", "ジョーヌ：黄金雷拳・超越霹靂一閃・狂乱の天雷・雷神の掌握の範囲・エフェクトが半分、ジグザグ雷撃・超越霹靂一閃は1/3・狂乱の天雷・雷神の掌握・終焉の黄天雷（落雷部分）が途切れず繰り返す・終焉の黄天雷の強い1ヒットが最後に", "ブルー・ジョーヌ：エフェクトのコマが重なって切り替わる時に暗くなってちらつくのを修正・最後のコマが最後まで見える"],
+    },
+  },
+  {
     version: "0.52.71",
     date: "2026-11-13",
     items: {

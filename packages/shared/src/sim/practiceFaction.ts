@@ -1,4 +1,6 @@
 // 연습장 진영 도구 (화면 game/practice/PracticeFaction): 공생 정령 카드 다시 뽑기(무작위)·바로 고르기·자람 단계 · 진영 게이지 가득 · 스킬 대기 초기화 · 바닥에 아이템 놓기(구미호·코인 정령 시험)
+import { isAshvar } from "./nrKit";
+import { nrAddExp, nrNeed } from "./nrAdapt";
 import { FACTION_CORE, FACTION_HEAT, FACTION_OATH, FACTION_TAINT, FACTION_TIDE } from "../factionDefs";
 import { createRng, deriveSeed } from "../rng";
 import { SPIRIT_COIN, SPIRIT_GROW, SPIRIT_IDS, SPIRIT_PACK, type SpiritId } from "../spiritDefs";
@@ -77,4 +79,11 @@ export function practiceDropItems(s: RunState): void {
   if (b) addPickup(s, s.roomId, "passive", b, p.x - 12, y);
   addPickup(s, s.roomId, "use", rng.pick(usePool(s, true)), p.x + 12, y);
   if (c) addPickup(s, s.roomId, "passive", c, p.x + 36, y, 0, 20);
+}
+
+/** 아슈바르: 흑을 채워 바로 레벨업 한 번 (강화 횟수 +1 · 연습장 시험용) */
+export function practiceAshLevel(s: RunState): void {
+  const p = s.player;
+  if (!isAshvar(p)) return;
+  nrAddExp(s, nrNeed(p.nrLv ?? 1) - (p.nrExp ?? 0));
 }

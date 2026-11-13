@@ -1,5 +1,5 @@
-// 연습장 진영 탭 (sim/practiceFaction): 스킬 대기 초기화 · 진영 게이지 가득 · 바닥에 아이템 놓기 · 비르디아는 공생 정령 카드 다시 뽑기·바로 고르기·자람 단계
-import { factionOfCharacter, practiceDropItems, practiceFactionFill, practiceSkillReset, practiceSpirit, practiceSpiritCards, practiceSpiritStage, SPIRIT_IDS, type CharacterId, type RunState } from "@pixel-rogue/shared";
+// 연습장 진영 탭 (sim/practiceFaction): 스킬 대기 초기화 · 진영 게이지 가득 · 바닥에 아이템 놓기 · 아슈바르 레벨업 · 비르디아는 공생 정령 카드 다시 뽑기·바로 고르기·자람 단계
+import { factionOfCharacter, isAshvar, practiceAshLevel, practiceDropItems, practiceFactionFill, practiceSkillReset, practiceSpirit, practiceSpiritCards, practiceSpiritStage, SPIRIT_IDS, type CharacterId, type RunState } from "@pixel-rogue/shared";
 import type { TextKey } from "../../i18n";
 
 interface Props {
@@ -28,6 +28,11 @@ export function PracticeFaction({ run, characterId, t }: Props) {
         <button type="button" onClick={go(practiceDropItems)}>
           {t("pfDrop")}
         </button>
+        {isAshvar({ characterId }) && (
+          <button type="button" title={t("pfAshLevelTip")} onClick={go(practiceAshLevel)}>
+            {t("pfAshLevel")}
+          </button>
+        )}
       </div>
       {!faction && characterId !== "blast" && characterId !== "nailer" && characterId !== "scissors" && characterId !== "hellfist" && characterId !== "silverBullet" && characterId !== "blueFlame" && characterId !== "lunatic" && characterId !== "incision" && characterId !== "crusader" && <small>{t("pfNoFaction")}</small>}
       {faction === "virdia" && (

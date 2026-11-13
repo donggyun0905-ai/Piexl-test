@@ -2,7 +2,7 @@
 // 1 황금 뇌구 / 광란의 천뢰 · 2 혼돈의 낙뢰 / 초월 벽력일섬 · 3 뇌신의 손아귀 / 황뢰 천수 · 4 천둥의 발자취 / 종언의 황천뢰
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { JN_BASE as B, JN_LV as L, JN_SKILLS as K } from "../itemsJaune";
-import { jnAhead, jnLine, reps, ZAP } from "./jaune";
+import { fxLen, jnAhead, jnLine, reps, ZAP } from "./jaune";
 import { nrAim, nrAlive, nrHit } from "./nrKit";
 import { nrVolley } from "./nrVolley";
 import type { RunState } from "./types";
@@ -21,7 +21,7 @@ export const jnSkills = (p: P): number[] => JN_SKILL_IDS.map((ids, i) => Math.mi
 function orb(s: RunState, kind: "jnOrb" | "jnFrenzy", r: number, speed: number, every: number, dmgs: number[]): void {
   const p = s.player;
   nrVolley(s, { kind, x: p.x, y: p.y, r, dmg: 0, dmgs, n: dmgs.length, every, on: ZAP, vel: [p.faceX * speed, p.faceY * speed] });
-  addEffect(s, { kind, x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: dmgs.length * every + 12 });
+  addEffect(s, { kind, x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: fxLen(dmgs.length, every) });
 }
 
 /** 천둥의 발자취 그림(시트 둘째 칸)의 지그재그 꺾이는 자리: 그림 너비에 대한 비율 (앞 쪽 u · 옆 v, 그림 가운데 0) */
@@ -103,7 +103,7 @@ export function jnBoltTick(s: RunState): void {
     const dmgs = [...reps(7, D * L.weak), ...reps(7, D * L.mid), D * L.strong];
     nrVolley(s, { kind: "jnEnd", x: e.x, y: e.y, r: R.boom, dmg: 0, dmgs, n: dmgs.length, every: R.every, on: ZAP }, R.every);
     nrVolley(s, { kind: "jnEnd", x: e.x, y: e.y, r: R.boom, dmg: D * L.tiny, n: R.tail, every: 1, on: ZAP }, R.every);
-    addEffect(s, { kind: "jnEnd", x: e.x, y: e.y, dirX: 0, dirY: 0, size: R.boom, maxTicks: Math.max(dmgs.length * R.every, R.tail) + 16 });
+    addEffect(s, { kind: "jnEnd", x: e.x, y: e.y, dirX: 0, dirY: 0, size: R.boom, maxTicks: fxLen(dmgs.length, R.every, R.every) });
   }
   p.jnBolts = p.jnBolts.filter((b) => b.left > 0);
 }

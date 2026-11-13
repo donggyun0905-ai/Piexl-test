@@ -25,8 +25,14 @@ export const nrNeed = (lv: number) => Math.round(expToNext(lv) * A.expMul);
 export function nrGain(s: RunState, e: EnemyState): void {
   const p = s.player;
   if (!isAshvar(p) || s.pvp) return;
+  nrAddExp(s, expOf(e) * (s.swarm ? SWARM.limits.noviceExp : 1));
+}
+
+/** 흑 더하기 · 가득 차면 레벨업(강화 횟수 +1) */
+export function nrAddExp(s: RunState, amt: number): void {
+  const p = s.player;
   p.nrLv ??= 1;
-  p.nrExp = (p.nrExp ?? 0) + expOf(e) * (s.swarm ? SWARM.limits.noviceExp : 1);
+  p.nrExp = (p.nrExp ?? 0) + amt;
   let up = false;
   while (p.nrExp >= nrNeed(p.nrLv)) {
     p.nrExp -= nrNeed(p.nrLv);
