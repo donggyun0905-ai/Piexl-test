@@ -3,6 +3,7 @@
 // 무늬는 지도 전체 픽셀 좌표로 정해서 칸·덩어리 경계에서 끊기지 않음
 import { tileAt, WTILE, type WorldMap } from "./worldMap";
 import { WT } from "./worldTiles";
+import { sampleTex, texOf } from "./worldTex";
 
 type Rgb = readonly [number, number, number];
 interface Ground {
@@ -18,20 +19,22 @@ interface Ground {
   rim: number;
   /** 경계 순위 (0 = 섞지 않음: 벽·바닥 같은 만든 것) */
   pri: number;
+  /** 땅 결 그림 이름 (public/world/tex, 있으면 코드 무늬 대신) */
+  tex?: string;
 }
 
-const GRASS: Ground = { lo: [70, 136, 62], hi: [104, 172, 82], size: 14, stretch: 1, fleck: [[128, 192, 96], [56, 112, 52]], rim: 0.86, pri: 7 };
+const GRASS: Ground = { lo: [70, 136, 62], hi: [104, 172, 82], size: 14, stretch: 1, fleck: [[128, 192, 96], [56, 112, 52]], rim: 0.86, pri: 7, tex: "grass" };
 const G: Partial<Record<number, Ground>> = {
   [WT.grass]: GRASS,
-  [WT.path]: { lo: [178, 140, 90], hi: [208, 172, 118], size: 11, stretch: 1, fleck: [[226, 196, 146], [150, 114, 72]], rim: 0.8, pri: 4 },
-  [WT.sand]: { lo: [214, 192, 128], hi: [236, 218, 160], size: 12, stretch: 1, fleck: [[246, 232, 186], [196, 170, 108]], rim: 0.88, pri: 3 },
-  [WT.water]: { lo: [48, 112, 200], hi: [72, 140, 222], size: 9, stretch: 3, fleck: [[120, 180, 240], [40, 96, 180]], rim: 1.7, pri: 2 },
-  [WT.deep]: { lo: [30, 66, 150], hi: [44, 86, 172], size: 12, stretch: 3, fleck: [[64, 110, 196], [24, 52, 128]], rim: 1.25, pri: 1 },
-  [WT.snow]: { lo: [214, 226, 242], hi: [244, 248, 255], size: 14, stretch: 1, fleck: [[255, 255, 255], [196, 210, 232]], rim: 0.9, pri: 6 },
-  [WT.field]: { lo: [184, 150, 56], hi: [214, 184, 76], size: 10, stretch: 1, fleck: [[232, 206, 104], [156, 124, 40]], rim: 0.82, pri: 5 },
-  [WT.floor]: { lo: [150, 138, 124], hi: [176, 164, 150], size: 8, stretch: 1, fleck: [[190, 180, 166], [128, 116, 104]], rim: 1, pri: 0 },
-  [WT.wall]: { lo: [104, 98, 116], hi: [128, 120, 140], size: 8, stretch: 1, fleck: [[140, 132, 152], [88, 82, 98]], rim: 1, pri: 0 },
-  [WT.bridge]: { lo: [48, 112, 200], hi: [72, 140, 222], size: 9, stretch: 3, fleck: [[120, 180, 240], [40, 96, 180]], rim: 1, pri: 0 },
+  [WT.path]: { lo: [178, 140, 90], hi: [208, 172, 118], size: 11, stretch: 1, fleck: [[226, 196, 146], [150, 114, 72]], rim: 0.8, pri: 4, tex: "path" },
+  [WT.sand]: { lo: [214, 192, 128], hi: [236, 218, 160], size: 12, stretch: 1, fleck: [[246, 232, 186], [196, 170, 108]], rim: 0.88, pri: 3, tex: "sand" },
+  [WT.water]: { lo: [48, 112, 200], hi: [72, 140, 222], size: 9, stretch: 3, fleck: [[120, 180, 240], [40, 96, 180]], rim: 1.7, pri: 2, tex: "water" },
+  [WT.deep]: { lo: [30, 66, 150], hi: [44, 86, 172], size: 12, stretch: 3, fleck: [[64, 110, 196], [24, 52, 128]], rim: 1.25, pri: 1, tex: "deep" },
+  [WT.snow]: { lo: [214, 226, 242], hi: [244, 248, 255], size: 14, stretch: 1, fleck: [[255, 255, 255], [196, 210, 232]], rim: 0.9, pri: 6, tex: "snow" },
+  [WT.field]: { lo: [184, 150, 56], hi: [214, 184, 76], size: 10, stretch: 1, fleck: [[232, 206, 104], [156, 124, 40]], rim: 0.82, pri: 5, tex: "field" },
+  [WT.floor]: { lo: [150, 138, 124], hi: [176, 164, 150], size: 8, stretch: 1, fleck: [[190, 180, 166], [128, 116, 104]], rim: 1, pri: 0, tex: "floor" },
+  [WT.wall]: { lo: [104, 98, 116], hi: [128, 120, 140], size: 8, stretch: 1, fleck: [[140, 132, 152], [88, 82, 98]], rim: 1, pri: 0, tex: "wallTop" },
+  [WT.bridge]: { lo: [48, 112, 200], hi: [72, 140, 222], size: 9, stretch: 3, fleck: [[120, 180, 240], [40, 96, 180]], rim: 1, pri: 0, tex: "water" },
 };
 const NONE: Ground = { lo: [12, 10, 18], hi: [12, 10, 18], size: 8, stretch: 1, fleck: [[12, 10, 18], [12, 10, 18]], rim: 1, pri: 0 };
 
@@ -114,14 +117,16 @@ function cover(m: WorldMap, cx: number, cy: number, lx: number, ly: number, gx: 
   return { d: best, rim: rim && !best, lip };
 }
 
-/** 덩어리 하나의 땅 바탕 (x0, y0 = 덩어리 왼쪽 위 칸, n = 한 변 칸 수) */
-export function paintGround(m: WorldMap, x0: number, y0: number, n: number): ImageData {
-  const W = n * WTILE;
+/** 덩어리 하나의 땅 바탕 (x0, y0 = 덩어리 왼쪽 위 칸, n = 한 변 칸 수, dens = 지도 1픽셀당 그림 픽셀)
+ * 경계·테두리는 지도 픽셀마다 계산하고, 결은 땅 결 그림이 있으면 그림 픽셀마다 */
+export function paintGround(m: WorldMap, x0: number, y0: number, n: number, dens = 1): ImageData {
+  const N = n * WTILE;
+  const W = N * dens;
   const img = new ImageData(W, W);
   const px = img.data;
   const c = [0, 0, 0];
-  for (let y = 0; y < W; y++) {
-    for (let x = 0; x < W; x++) {
+  for (let y = 0; y < N; y++) {
+    for (let x = 0; x < N; x++) {
       const gx = x0 * WTILE + x;
       const gy = y0 * WTILE + y;
       const cx = Math.floor(gx / WTILE);
@@ -129,14 +134,23 @@ export function paintGround(m: WorldMap, x0: number, y0: number, n: number): Ima
       const me = gdef(tileAt(m, cx, cy));
       const cv = me.pri ? cover(m, cx, cy, gx - cx * WTILE, gy - cy * WTILE, gx, gy, me) : null;
       const d = cv?.d ?? me;
-      texel(d, gx, gy, c);
       let f = 1;
       if (cv?.lip) f = 0.9;
       else if (cv?.rim) f = me.rim;
-      const i = (y * W + x) * 4;
-      for (let k = 0; k < 3; k++) px[i + k] = Math.min(255, f > 1 ? c[k]! + (255 - c[k]!) * (f - 1) * 0.6 : c[k]! * f);
-      px[i + 3] = 255;
+      const t = dens > 1 ? texOf(d.tex) : undefined;
+      if (!t) texel(d, gx, gy, c);
+      for (let sy = 0; sy < dens; sy++) {
+        for (let sx = 0; sx < dens; sx++) {
+          if (t) sampleTex(t, gx * dens + sx, gy * dens + sy, c);
+          const i = ((y * dens + sy) * W + x * dens + sx) * 4;
+          for (let k = 0; k < 3; k++) px[i + k] = Math.min(255, f > 1 ? c[k]! + (255 - c[k]!) * (f - 1) * 0.6 : c[k]! * f);
+          px[i + 3] = 255;
+        }
+      }
     }
   }
   return img;
 }
+
+/** 이 땅의 결 그림 이름 (꾸밈 코드가 결 그림이 있으면 코드 무늬를 건너뛸 때) */
+export const texNameOf = (t: number): string | undefined => gdef(t).tex;

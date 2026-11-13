@@ -9,6 +9,7 @@ import { canStandWorld, loadWorldMap, WTILE, type WorldMap } from "./worldMap";
 import { shadow } from "./worldArt";
 import { drawButterflies, drawCloudShadows, drawVignette, drawWaterFx } from "./worldFx";
 import { drawPlace, drawPlaceLabel } from "./worldPlaceArt";
+import { loadWorldArt } from "./worldTex";
 import { pushTrees, type Drawable } from "./worldTrees";
 import { hitsNpc, nearPlace, placeXY, type Place, type Region } from "./worldPlaces";
 
@@ -57,8 +58,10 @@ export function WorldStage({ regionId, region, color, label, paused, onNear, onU
     let chunks: ReturnType<typeof createChunkCache> | null = null;
     let near: Place | null = null;
     let alive = true;
-    loadWorldMap(`${import.meta.env.BASE_URL}${region.map}`).then(
-      (m) => {
+    const base = import.meta.env.BASE_URL;
+    // 지도 그림 + 땅 결·물건 그림(B안, 없으면 코드 그림)을 같이 받은 뒤 덩어리 만들기
+    Promise.all([loadWorldMap(`${base}${region.map}`), loadWorldArt(base)]).then(
+      ([m]) => {
         if (!alive) return;
         map = m;
         chunks = createChunkCache(m);

@@ -4,6 +4,10 @@ import { hash2, vnoise } from "./worldGround";
 import { tileAt, WTILE, type WorldMap } from "./worldMap";
 import { WT } from "./worldTiles";
 import type { View } from "../lobby/walker";
+import { ART_DENS, objOf } from "./worldTex";
+
+/** 나무 그림 파일 (있으면 코드 그림 대신, 같은 자리 차례: 둥근 2 · 뾰족 2) */
+const TREE_ART = ["tree_oak", "tree_oak2", "tree_pine", "tree_pine2"] as const;
 
 const TW = 30;
 const TH = 36;
@@ -113,12 +117,30 @@ export function pushTrees(ctx: CanvasRenderingContext2D, m: WorldMap, v: View, t
       const h = hash2(cx, cy);
       // 숲 속(둘레가 다 나무)은 뾰족 나무가 많게
       const deep = tileAt(m, cx, cy - 1) === WT.tree && tileAt(m, cx - 1, cy) === WT.tree && tileAt(m, cx + 1, cy) === WT.tree;
-      const s = sp[((deep ? h % 3 !== 0 : h % 4 === 0) ? 2 : 0) + ((h >>> 5) & 1)]!;
+      const kind = ((deep ? h % 3 !== 0 : h % 4 === 0) ? 2 : 0) + ((h >>> 5) & 1);
+      const s = sp[kind]!;
+      const img = objOf(TREE_ART[kind]!) ?? objOf(TREE_ART[kind ^ 1]!);
       const fx = (cx + 0.5) * WTILE + ((h >>> 9) % 5) - 2;
       const fy = (cy + 1) * WTILE - 2 - ((h >>> 13) % 3);
       const sway = Math.round(Math.sin(t * 1.3 + (h % 628) / 100) * 0.8);
       const left = Math.round(fx - FOOT_X);
       const top = Math.round(fy - FOOT_Y);
+      if (img) {
+        // 그림 파일: 아래 30%(줄기)는 그대로, 위는 흔들림
+        const w = img.naturalWidth / ART_DENS;
+        const hh = img.naturalHeight / ART_DENS;
+        const cut = Math.round(img.naturalHeight * 0.7);
+        const l = Math.round(fx - w / 2);
+        const tp = Math.round(fy - hh);
+        out.push({
+          y: fy,
+          draw: () => {
+            ctx.drawImage(img, 0, cut, img.naturalWidth, img.naturalHeight - cut, l, tp + cut / ART_DENS, w, hh - cut / ART_DENS);
+            ctx.drawImage(img, 0, 0, img.naturalWidth, cut, l + sway, tp, w, cut / ART_DENS);
+          },
+        });
+        continue;
+      }
       out.push({
         y: fy,
         draw: () => {

@@ -1,0 +1,107 @@
+// 세계 지도 그림 파일 (B안, docs/WORLD_ART.md): public/world/art.json 목록에 있는 것만 받음
+// tex = 땅 결(빈틈없이 반복, 256픽셀 = 4칸) · obj = 물건 그림(나무·바위·집·동굴 등, 아래 가운데 = 발)
+// 목록이 없거나 그림을 못 받으면 비어 있음 → 지금 코드 그림으로 그림 (그림 하나씩 따로 대신함)
+
+/** 그림 파일 1픽셀 = 지도 1/4픽셀 (캐릭터 그림과 같은 선명도) */
+export const ART_DENS = 4;
+
+export interface Tex {
+  w: number;
+  h: number;
+  /** RGBA (땅 바탕 픽셀 계산용) */
+  data: Uint8ClampedArray;
+  img: HTMLCanvasElement;
+}
+
+interface WorldArt {
+  tex: Map<string, Tex>;
+  obj: Map<string, HTMLImageElement>;
+}
+
+const art: WorldArt = { tex: new Map(), obj: new Map() };
+let loading: Promise<void> | null = null;
+
+export const texOf = (name: string | undefined): Tex | undefined => (name ? art.tex.get(name) : undefined);
+export const objOf = (name: string): HTMLImageElement | undefined => art.obj.get(name);
+/** 땅 결이 하나라도 있으면 4배 해상도로 그림 */
+export const artDens = (): number => (art.tex.size ? ART_DENS : 1);
+
+function image(url: string): Promise<HTMLImageElement | null> {
+  return new Promise((ok) => {
+    const img = new Image();
+    img.onload = () => ok(img);
+    img.onerror = () => ok(null);
+    img.src = url;
+  });
+}
+
+function toTex(img: HTMLImageElement): Tex {
+  const c = document.createElement("canvas");
+  c.width = img.naturalWidth;
+  c.height = img.naturalHeight;
+  const g = c.getContext("2d", { willReadFrequently: true })!;
+  g.drawImage(img, 0, 0);
+  return { w: c.width, h: c.height, data: g.getImageData(0, 0, c.width, c.height).data, img: c };
+}
+
+/** 한 번만 받음 (실패해도 그냥 끝남) */
+export function loadWorldArt(base: string): Promise<void> {
+  loading ??= (async () => {
+    try {
+      const res = await fetch(`${base}world/art.json`, { cache: "no-cache" });
+      if (!res.ok) return;
+      const list = (await res.json()) as { tex?: string[]; obj?: string[] };
+      await Promise.all([
+        ...(list.tex ?? []).map(async (n) => {
+          const img = await image(`${base}world/tex/${n}.png`);
+          if (img) art.tex.set(n, toTex(img));
+        }),
+        ...(list.obj ?? []).map(async (n) => {
+          const img = await image(`${base}world/obj/${n}.png`);
+          if (img) art.obj.set(n, img);
+        }),
+      ]);
+    } catch {
+      // 목록 없음 = 코드 그림
+    }
+  })();
+  return loading;
+}
+
+/** 땅 결 한 점 (그림 픽셀 좌표, 반복) → out RGB */
+export function sampleTex(t: Tex, hx: number, hy: number, out: number[]): void {
+  const x = ((hx % t.w) + t.w) % t.w;
+  const y = ((hy % t.h) + t.h) % t.h;
+  const i = (y * t.w + x) * 4;
+  out[0] = t.data[i]!;
+  out[1] = t.data[i + 1]!;
+  out[2] = t.data[i + 2]!;
+}
+
+/** 지금 그리는 덩어리의 왼쪽 위 지도 좌표·해상도 (땅 결 무늬를 지도 전체에 이어지게) */
+const origin = { x: 0, y: 0, dens: 1 };
+export function setChunkOrigin(x: number, y: number, dens: number): void {
+  [origin.x, origin.y, origin.dens] = [x, y, dens];
+}
+
+/** 덩어리 캔버스(지도 좌표로 늘린 상태)에 땅 결 그림을 반복해 채움 · 그림이 없거나 코드 해상도면 false (코드로 그림) */
+export function fillTex(g: CanvasRenderingContext2D, name: string, x: number, y: number, w: number, h: number): boolean {
+  const t = origin.dens > 1 ? art.tex.get(name) : undefined;
+  const p = t && g.createPattern(t.img, "repeat");
+  if (!p) return false;
+  p.setTransform(new DOMMatrix().translate(-origin.x, -origin.y).scale(1 / origin.dens));
+  g.fillStyle = p;
+  g.fillRect(x, y, w, h);
+  return true;
+}
+
+/** 4배 해상도로 그리는 중이고 이 이름의 그림이 있음 */
+export const hasTex = (name: string | undefined): boolean => origin.dens > 1 && !!name && art.tex.has(name);
+export const obj = (name: string): HTMLImageElement | undefined => (origin.dens > 1 ? art.obj.get(name) : undefined);
+
+/** 물건 그림을 발(아래 가운데) 기준으로, 지도 크기로 (1/dens) */
+export function drawObj(g: CanvasRenderingContext2D, img: HTMLImageElement, footX: number, footY: number, scale = 1): void {
+  const w = (img.naturalWidth / ART_DENS) * scale;
+  const h = (img.naturalHeight / ART_DENS) * scale;
+  g.drawImage(img, Math.round(footX - w / 2), Math.round(footY - h), w, h);
+}

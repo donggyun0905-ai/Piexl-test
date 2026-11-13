@@ -2,6 +2,7 @@
 import { drawBody } from "../game/render/actors";
 import { shadow } from "./worldArt";
 import { placeXY, type Place } from "./worldPlaces";
+import { drawObj, objOf } from "./worldTex";
 
 /** 주민 몸 반지름 (플레이어와 같음) */
 const NPC_R = 5;
@@ -13,7 +14,20 @@ export function drawPlace(ctx: CanvasRenderingContext2D, p: Place, t: number, co
     // 발 = 칸 가운데보다 조금 아래 · 아래를 봄
     shadow(ctx, x, y + 5, 6, 2.2, 0.32);
     drawBody(ctx, p.who, x, y + 4 - NPC_R, NPC_R, { faceX: 0, faceY: 1, moving: false, casting: false, step: 0 }, 0);
-  } else if (p.kind === "dungeon") drawCave(ctx, x, y, t);
+  } else if (p.kind === "dungeon") {
+    const img = objOf("cave");
+    if (!img) drawCave(ctx, x, y, t);
+    else {
+      shadow(ctx, x, y + 3, 18, 4, 0.35);
+      drawObj(ctx, img, x, y + 5);
+      // 굴 안 붉은 기운 (그림 위에 숨 쉬듯)
+      const g = ctx.createRadialGradient(x, y - 4, 0, x, y - 4, 12);
+      g.addColorStop(0, `rgba(255,90,50,${0.18 + Math.sin(t * 2) * 0.06})`);
+      g.addColorStop(1, "rgba(255,90,50,0)");
+      ctx.fillStyle = g;
+      ctx.fillRect(x - 12, y - 16, 24, 24);
+    }
+  }
   else if (p.kind === "town") {
     shadow(ctx, x + 2, y + 2, 6, 2, 0.3);
     box(ctx, "#6e6680", x - 3, y - 1, 7, 3);
@@ -28,6 +42,9 @@ export function drawPlace(ctx: CanvasRenderingContext2D, p: Place, t: number, co
       box(ctx, "rgba(0,0,0,0.25)", x + 2 + i, y - 16 + dy - Math.floor(i / 6), 1, 1);
     }
     box(ctx, "#ffffff", x + 6, y - 21 + Math.round(Math.sin(t * 4 - 3) * 0.5), 3, 3);
+  } else if (objOf("sign")) {
+    shadow(ctx, x, y + 2, 7, 2, 0.3);
+    drawObj(ctx, objOf("sign")!, x, y + 3);
   } else {
     shadow(ctx, x, y + 2, 7, 2, 0.3);
     box(ctx, "#3a2414", x - 1, y - 6, 3, 8);

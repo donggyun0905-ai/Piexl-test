@@ -2,6 +2,7 @@
 import { hash2 } from "./worldGround";
 import { tileAt, WTILE, type WorldMap } from "./worldMap";
 import { WT } from "./worldTiles";
+import { ART_DENS, drawObj, fillTex, hasTex, obj } from "./worldTex";
 
 const S = WTILE;
 type Ctx = CanvasRenderingContext2D;
@@ -37,10 +38,12 @@ function wall(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: numbe
   const w = (dx: number, dy: number) => tileAt(m, cx + dx, cy + dy) === WT.wall;
   const face = !w(0, 1);
   const capH = face ? 6 : S;
-  // 위 (성벽 위 걷는 길)
-  box(g, "#a49cb2", px, py, S, capH);
-  for (let y = 0; y < capH; y += 5) box(g, "#8e86a0", px, py + y + 4, S, 1);
-  box(g, "#8e86a0", px + ((cy & 1) * 8 + 3), py, 1, capH);
+  // 위 (성벽 위 걷는 길, 그림이 있으면 그 결)
+  if (!fillTex(g, "wallTop", px, py, S, capH)) {
+    box(g, "#a49cb2", px, py, S, capH);
+    for (let y = 0; y < capH; y += 5) box(g, "#8e86a0", px, py + y + 4, S, 1);
+    box(g, "#8e86a0", px + ((cy & 1) * 8 + 3), py, 1, capH);
+  }
   if (!w(-1, 0)) box(g, "#4a4458", px, py, 2, capH);
   if (!w(1, 0)) box(g, "#4a4458", px + S - 2, py, 2, capH);
   if (!w(0, -1)) {
@@ -53,7 +56,7 @@ function wall(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: numbe
   }
   if (face) {
     box(g, "#3e384a", px, py + capH - 1, S, 1);
-    bricks(g, px, py, capH, cx, cy);
+    if (!fillTex(g, "wallFace", px, py + capH, S, S - capH)) bricks(g, px, py, capH, cx, cy);
     box(g, "rgba(20,16,30,0.35)", px, py + S - 2, S, 2);
   }
 }
@@ -87,6 +90,15 @@ function house(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: numb
   let y1 = cy;
   while (isH(x1 + 1, cy)) x1++;
   while (isH(cx, y1 + 1)) y1++;
+  // 집 그림이 있으면 덩어리 왼쪽 위 칸에서 한 번에 (덩어리 폭에 맞춤, 지붕은 위 칸으로 조금 올라감)
+  const art = obj(hash2(x0, y0) & 1 ? "house_red" : "house_blue") ?? obj("house_red") ?? obj("house_blue");
+  if (art) {
+    if (cx === x0 && cy === y0) {
+      const w = (x1 - x0 + 1) * S;
+      drawObj(g, art, px + w / 2, py + (y1 - y0 + 1) * S, w / (art.naturalWidth / ART_DENS));
+    }
+    return;
+  }
   const [roof, dark, lite] = ROOFS[hash2(x0, y0) % ROOFS.length]!;
   const front = cy === y1;
   const roofBot = front ? 4 : S;
@@ -130,7 +142,7 @@ export function drawBuilding(g: Ctx, m: WorldMap, t: number, cx: number, cy: num
   if (t === WT.wall) wall(g, m, cx, cy, px, py);
   else if (t === WT.house) house(g, m, cx, cy, px, py);
   else if (t === WT.floor) {
-    floorTile(g, cx, cy, px, py);
+    if (!hasTex("floor")) floorTile(g, cx, cy, px, py);
     return false;
   } else return false;
   return true;

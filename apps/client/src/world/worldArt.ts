@@ -1,9 +1,12 @@
 // 세계 지도 칸 꾸밈 (땅 바탕 worldGround 위, 덩어리 캔버스에 한 번만): 풀숲·꽃·밭·물결·바위·다리·울타리·그림자
 // 건물(성벽·바닥·집)은 worldBuild · 나무는 사람과 앞뒤를 맞춰야 해서 worldTrees(매 장면)
-import { hash2 } from "./worldGround";
+import { hash2, texNameOf } from "./worldGround";
 import { tileAt, WTILE, type WorldMap } from "./worldMap";
 import { drawBuilding } from "./worldBuild";
 import { WT } from "./worldTiles";
+import { drawObj, fillTex, hasTex, obj } from "./worldTex";
+
+export { setChunkOrigin } from "./worldTex";
 
 const S = WTILE;
 type Ctx = CanvasRenderingContext2D;
@@ -49,6 +52,12 @@ function flower(g: Ctx, x: number, y: number, h: number): void {
 /** 둥근 바위 (줄마다 폭을 원 모양으로 · 위 왼쪽 밝게) · 옆이 바위면 크게 해서 산처럼 이어짐 */
 function rock(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: number, h: number): void {
   const mass = [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(([dx, dy]) => tileAt(m, cx + dx!, cy + dy!) === WT.rock).length;
+  const img = obj(mass >= 2 || h % 3 !== 0 ? "rock_big" : "rock_small");
+  if (img) {
+    shadow(g, px + 9, py + 15, mass >= 2 ? 10 : 7, 2.5, 0.3);
+    drawObj(g, img, px + 8 + ((h >>> 3) % 3) - 1, py + 16, mass >= 2 ? 1.15 : 1);
+    return;
+  }
   const w = mass >= 2 ? 18 + (h % 3) : 11 + (h % 4);
   const hh = Math.round(w * 0.8);
   const ox = px + 8 + ((h >>> 3) % 3) - 1;
@@ -103,12 +112,15 @@ export function drawTile(g: Ctx, m: WorldMap, cx: number, cy: number, px: number
   if ((up === WT.wall || up === WT.house) && t !== WT.wall && t !== WT.house && t !== WT.none) {
     for (let i = 0; i < 5; i++) box(g, `rgba(20,16,30,${0.32 - i * 0.06})`, px, py + i, S, 1);
   }
+  // 땅 결 그림이 있으면 코드 잔무늬(풀숲·자갈·이삭·물결)는 건너뜀
+  const plain = !hasTex(texNameOf(t));
   switch (t) {
     case WT.grass:
     case WT.flower:
     case WT.tree:
       if (t === WT.tree) shadow(g, px + 8 + ((h % 5) - 2), py + 13, 9, 3.5, 0.32);
-      else if (h % 3 === 0) tuft(g, px + 2 + (h >>> 4) % 9, py + 3 + (h >>> 8) % 9, h);
+      else if (t === WT.grass && h % 37 === 0 && obj("bush")) drawObj(g, obj("bush")!, px + 8, py + 14);
+      else if (plain && h % 3 === 0) tuft(g, px + 2 + (h >>> 4) % 9, py + 3 + (h >>> 8) % 9, h);
       if (t === WT.flower) for (let i = 0; i < 3 + (h % 3); i++) {
         const v = hash2(cx * 5 + i, cy * 3 - i);
         flower(g, px + 1 + (v % 12), py + 2 + ((v >>> 6) % 11), v >>> 11);
@@ -117,7 +129,7 @@ export function drawTile(g: Ctx, m: WorldMap, cx: number, cy: number, px: number
       break;
     case WT.path:
     case WT.sand:
-      if (h % 4 === 0) {
+      if (plain && h % 4 === 0) {
         const x = px + 2 + (h >>> 4) % 11;
         const y = py + 2 + (h >>> 8) % 11;
         box(g, t === WT.path ? "#8a6a44" : "#b49a64", x, y + 1, 3, 1);
@@ -125,6 +137,7 @@ export function drawTile(g: Ctx, m: WorldMap, cx: number, cy: number, px: number
       }
       break;
     case WT.field: {
+      if (!plain) break;
       // 이삭 줄: 아래 그림자 · 위 이삭 알갱이 (밭이 아닌 옆쪽은 3픽셀 비움 → 풀 경계가 보임)
       const fl = (dx: number, dy: number) => tileAt(m, cx + dx, cy + dy) === WT.field;
       const xa = fl(-1, 0) ? 0 : 3;
@@ -142,7 +155,7 @@ export function drawTile(g: Ctx, m: WorldMap, cx: number, cy: number, px: number
     }
     case WT.water:
     case WT.deep:
-      if (h % 2 === 0) {
+      if (plain && h % 2 === 0) {
         const x = px + 2 + (h >>> 3) % 9;
         const y = py + 3 + (h >>> 7) % 10;
         box(g, t === WT.water ? "#7ab4ee" : "#4a74c4", x, y, 4, 1);
@@ -157,8 +170,8 @@ export function drawTile(g: Ctx, m: WorldMap, cx: number, cy: number, px: number
       break;
     case WT.bridge: {
       const side = (dx: number) => tileAt(m, cx + dx, cy) !== WT.bridge;
-      // 판자는 걷는 방향(가로)에 수직
-      for (let i = 0; i < 4; i++) {
+      // 판자는 걷는 방향(가로)에 수직 (판자 그림이 있으면 그것으로)
+      if (!fillTex(g, "bridge", px, py, S, S)) for (let i = 0; i < 4; i++) {
         const x = px + i * 4;
         box(g, "#5a3a1e", x + 3, py, 1, S);
         box(g, hash2(cx * 4 + i, cy) & 1 ? "#a8743e" : "#9a6a36", x, py, 3, S);

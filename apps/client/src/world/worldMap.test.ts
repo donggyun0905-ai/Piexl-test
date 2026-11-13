@@ -5,6 +5,7 @@ import { chunksInView, CHUNK } from "./worldChunks";
 import { canStandWorld, parseMap, tileAt, WTILE } from "./worldMap";
 import { hitsNpc, REGIONS } from "./worldPlaces";
 import { TILE_DEFS, tileFromRgb, WT } from "./worldTiles";
+import { sampleTex } from "./worldTex";
 
 const rgba = (keys: number[]) => keys.flatMap((t) => [...TILE_DEFS[t]!.key, 255]);
 
@@ -42,5 +43,18 @@ describe("세계 지도", () => {
   });
   it("장소는 지도 안", () => {
     for (const r of Object.values(REGIONS)) for (const p of r!.places) expect(p.tx >= 0 && p.ty >= 0).toBe(true);
+  });
+  it("땅 결 그림은 지도 전체에 반복 (음수 좌표도)", () => {
+    const data = new Uint8ClampedArray([10, 0, 0, 255, 20, 0, 0, 255, 30, 0, 0, 255, 40, 0, 0, 255]);
+    const t = { w: 2, h: 2, data, img: null as unknown as HTMLCanvasElement };
+    const c = [0, 0, 0];
+    sampleTex(t, 3, 1, c);
+    expect(c[0]).toBe(40);
+    sampleTex(t, -2, -1, c);
+    expect(c[0]).toBe(30);
+  });
+  it("덩어리 크기를 바꿔도 보이는 덩어리 계산", () => {
+    const m = parseMap(rgba(new Array(64 * 40).fill(WT.grass)), 64, 40);
+    expect(chunksInView(m, { x: 250, y: 0, w: 300, h: 180 }, 16)).toEqual([[0, 0], [1, 0], [2, 0]]);
   });
 });
