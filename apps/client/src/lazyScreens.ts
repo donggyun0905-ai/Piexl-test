@@ -20,5 +20,6 @@ export const RaidFlow = lazy(() => import("./event/RaidFlow").then((m) => ({ def
 export const StoryScreen = lazy(() => import("./story/StoryScreen").then((m) => ({ default: m.StoryScreen })));
 export const BuildScreen = lazy(() => import("./archive/BuildScreen").then((m) => ({ default: m.BuildScreen })));
 export const TierScreen = lazy(() => import("./archive/TierScreen").then((m) => ({ default: m.TierScreen })));
+export const WorldMode = lazy(() => import("./world/WorldMode").then((m) => ({ default: m.WorldMode })));
 export const LobbyMode = lazy(() => import("./lobby/LobbyMode").then((m) => ({ default: m.LobbyMode })));
 export const PatchNotesList = lazy(() => import("./menu/PatchNotesList").then((m) => ({ default: m.PatchNotesList })));

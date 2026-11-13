@@ -4,6 +4,7 @@ import type { TextKey } from "../i18n";
 import { isTutorialDone, loadFloorBest, type SavedRun } from "../records";
 import { Icon, type IconName } from "./Icon";
 import { featureOpen } from "../progress/storyStage";
+import { TEST_OPEN } from "../testFlags";
 
 interface Props {
   t: (key: TextKey) => string;
@@ -16,6 +17,8 @@ interface Props {
   onTowerDefense: () => void;
   onPractice: () => void;
   onTutorial: () => void;
+  /** 세계 지도 (시험 서버·내 컴퓨터에서만, docs/WORLD_MAP.md W2~) */
+  onWorld: () => void;
   onClose: () => void;
 }
 
@@ -34,7 +37,7 @@ export function Choice({ icon, title, desc, onClick }: { icon: IconName; title: 
   );
 }
 
-export function SoloChooser({ t, saved, onContinue, onNewRun, onHero, onEndless, onArena, onTowerDefense, onPractice, onTutorial, onClose }: Props) {
+export function SoloChooser({ t, saved, onContinue, onNewRun, onHero, onEndless, onArena, onTowerDefense, onPractice, onTutorial, onWorld, onClose }: Props) {
   const endlessBest = loadFloorBest("endlessBest");
   const heroBest = loadFloorBest("heroBest");
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -54,6 +57,7 @@ export function SoloChooser({ t, saved, onContinue, onNewRun, onHero, onEndless,
             />
           )}
           <Choice icon="sword" title={t("soloRun")} desc={t("newRunDesc")} onClick={onNewRun} />
+          {TEST_OPEN && <Choice icon="book" title={t("worldMap")} desc={t("worldMapDesc")} onClick={onWorld} />}
           {featureOpen("hero") && <Choice
             icon="crown"
             title={t("heroRun")}

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.79",
+    date: "2026-11-13",
+    items: {
+      ko: ["세계 지도 준비 (시험 서버에서만 보임): 혼자 하기 › 세계 지도에서 아스칼론 필드를 걸어 다님 · 성·밭·바위산·강과 다리·국경 숲 · 던전 입구에서 F로 혼자 하기 시작 · 표지판 읽기 · 마지막 자리 기억 · 로비와 같은 조작"],
+      en: ["World map preview (test server only): walk the Ascalon field from Play Solo › World Map · castle, fields, rocky hills, river and bridge, border forest · press F at the dungeon entrance to start a run · read signs · remembers where you left off · same controls as the lobby"],
+      ja: ["世界地図の準備（テストサーバーのみ）：ひとりで遊ぶ › 世界地図でアスカロンのフィールドを歩ける・城・畑・岩山・川と橋・国境の森・ダンジョンの入口でFを押すとひとりで遊ぶを開始・看板を読む・最後の位置を記憶・ロビーと同じ操作"],
+    },
+  },
+  {
     version: "0.52.78",
     date: "2026-11-13",
     items: {

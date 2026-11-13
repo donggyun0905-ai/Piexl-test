@@ -182,3 +182,27 @@
   opacity: 0.8;
   line-height: 1.4;
 }
+
+/* 세계 지도 (world/WorldMode): 나라 이름 · 불러오는 중 · 표지판·마을 글 창 */
+.world-region {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  margin: 0;
+  padding: 4px 12px;
+  font-weight: bold;
+  background: rgba(20, 18, 28, 0.75);
+  text-shadow: 0 1px 0 #000;
+}
+.world-loading {
+  position: fixed;
+  inset: 45% 0 auto;
+  z-index: 2;
+  text-align: center;
+  color: var(--muted);
+}
+.world-note p {
+  line-height: 1.6;
+}

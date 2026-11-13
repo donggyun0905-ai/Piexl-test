@@ -10,6 +10,7 @@ import { loadExhibits, type ExhibitId } from "./exhibits";
 import { drawHall } from "./hallArt";
 import { canStandHall, HALL_DOOR, HALL_H, HALL_START, HALL_W, LOBBY_BACK, LOBBY_DOOR, nearExhibit, type HallSpot } from "./hallMap";
 import type { LobbyTheme } from "./lobbyThemes";
+import { bindWalkInput, clampView as clamp, createWalker, fitCanvas, stepWalker } from "./walker";
 
 const SPEED = 64;
 const R = 5;
@@ -42,8 +43,7 @@ export function LobbyStage({ play, onGame, onNear, paused, onRoom, onExhibit, on
     if (!canvas) return;
     const ctx = canvas.getContext("2d")!;
     const glow = createLobbyGlow(canvas);
-    const me = { x: START.x, y: START.y, fx: 0, fy: -1, moving: false, step: 0, tx: -1, ty: -1 };
-    const keys = new Set<string>();
+    const me = createWalker(START.x, START.y);
     let near: GameId | null = null;
     /** 지금 전시장 안인지 · 놓인 전시물 · 가까운 전시물 */
     let hall = false;
@@ -62,44 +62,23 @@ export function LobbyStage({ play, onGame, onNear, paused, onRoom, onExhibit, on
     let raf = 0;
     const theme = lobbyTheme() as LobbyTheme;
 
-    const down = (e: KeyboardEvent) => {
-      if (!play || cb.current.paused) return;
-      keys.add(e.code);
-      if (e.code === "KeyF" || e.code === "Space" || e.code === "Enter") {
-        if (near) cb.current.onGame?.(near);
-        else if (nearEx) cb.current.onRead?.();
-      }
-    };
-    const up = (e: KeyboardEvent) => keys.delete(e.code);
-    const tap = (e: PointerEvent) => {
-      if (!play || cb.current.paused) return;
-      const rc = canvas.getBoundingClientRect();
-      const k = rc.width / view.w;
-      me.tx = view.x + (e.clientX - rc.left) / k;
-      me.ty = view.y + (e.clientY - rc.top) / k;
-    };
     const view = { x: 0, y: 0, w: LOBBY_W, h: LOBBY_H };
-    window.addEventListener("keydown", down);
-    window.addEventListener("keyup", up);
-    canvas.addEventListener("pointerdown", tap);
+    const input = bindWalkInput(canvas, me, view, () => play && !cb.current.paused, () => {
+      if (near) cb.current.onGame?.(near);
+      else if (nearEx) cb.current.onRead?.();
+    });
 
     const frame = (now: number) => {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       const t = now / 1000;
-      const dpr = window.devicePixelRatio || 1;
-      const cw = canvas.clientWidth;
-      const ch = canvas.clientHeight;
-      if (canvas.width !== Math.round(cw * dpr) || canvas.height !== Math.round(ch * dpr)) {
-        canvas.width = Math.round(cw * dpr);
-        canvas.height = Math.round(ch * dpr);
-      }
+      const { cw, ch, dpr } = fitCanvas(canvas);
       // 보는 크기: 배경은 방의 70% 정도를 꽉 채워 천천히 훑고, 돌아다닐 때는 15×9칸쯤이 보이게
       const scale = play ? Math.max(cw / 260, ch / 160) : Math.max(cw / (LOBBY_W * 0.7), ch / (LOBBY_H * 0.7));
       view.w = cw / scale;
       view.h = ch / scale;
       if (play) {
-        if (!cb.current.paused) move(dt);
+        if (!cb.current.paused) stepWalker(me, input.keys, dt, SPEED, stand);
         // 로비 위 문 ↔ 전시장 아래 문
         if (!hall && me.y <= WALL_TOP + 4 + R + 1 && Math.abs(me.x - LOBBY_DOOR.x) < LOBBY_DOOR.w / 2) go(true);
         else if (hall && me.y >= HALL_H - 4 - R - 1 && Math.abs(me.x - HALL_DOOR.x) < HALL_DOOR.w / 2) go(false);
@@ -133,42 +112,13 @@ export function LobbyStage({ play, onGame, onNear, paused, onRoom, onExhibit, on
       raf = requestAnimationFrame(frame);
     };
 
-    const move = (dt: number) => {
-      let mx = (keys.has("KeyD") || keys.has("ArrowRight") ? 1 : 0) - (keys.has("KeyA") || keys.has("ArrowLeft") ? 1 : 0);
-      let my = (keys.has("KeyS") || keys.has("ArrowDown") ? 1 : 0) - (keys.has("KeyW") || keys.has("ArrowUp") ? 1 : 0);
-      if (mx || my) me.tx = -1;
-      else if (me.tx >= 0) {
-        const dx = me.tx - me.x;
-        const dy = me.ty - me.y;
-        const d = Math.hypot(dx, dy);
-        if (d < 2) me.tx = -1;
-        else [mx, my] = [dx / d, dy / d];
-      }
-      const len = Math.hypot(mx, my);
-      me.moving = len > 0;
-      if (!len) return;
-      mx /= len;
-      my /= len;
-      me.fx = mx;
-      me.fy = my;
-      me.step = Math.floor(performance.now() / 120);
-      const nx = me.x + mx * SPEED * dt;
-      const ny = me.y + my * SPEED * dt;
-      if (stand(nx, me.y)) me.x = nx;
-      if (stand(me.x, ny)) me.y = ny;
-    };
-
     raf = requestAnimationFrame(frame);
     return () => {
       cancelAnimationFrame(raf);
       glow.destroy();
-      window.removeEventListener("keydown", down);
-      window.removeEventListener("keyup", up);
-      canvas.removeEventListener("pointerdown", tap);
+      input.dispose();
     };
   }, [play]);
 
   return <canvas ref={ref} className={play ? "lobby-canvas play" : "lobby-canvas"} aria-hidden={!play} />;
 }
-
-const clamp = (v: number, max: number) => Math.max(0, Math.min(max, v));

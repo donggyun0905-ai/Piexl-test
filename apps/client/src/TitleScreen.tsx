@@ -15,7 +15,7 @@ import { SoloChooser } from "./menu/SoloChooser";
 import { EventChooser } from "./menu/EventChooser";
 import { ArchiveChooser } from "./menu/ArchiveChooser";
 import { TopBar } from "./menu/TopBar";
-import { LobbyMode, PatchNotesList } from "./lazyScreens";
+import { LobbyMode, PatchNotesList, WorldMode } from "./lazyScreens";
 import { loadBest, loadSavedRun } from "./records";
 import { useServerStatus } from "./serverStatus";
 import { featureOpen, storyStage } from "./progress/storyStage";
@@ -55,6 +55,7 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   const [best] = useState(loadBest);
   const status = useServerStatus();
   const [lobby, setLobby] = useState(false);
+  const [world, setWorld] = useState(false);
   const close = () => setPopup("none");
   // 메인 화면 곡 (나가면 끔)
   useEffect(() => (setMenuMusic(true), () => setMenuMusic(false)), []);
@@ -72,6 +73,13 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   const open = (f: Parameters<typeof featureOpen>[0]) => featureOpen(f, stage);
   // 로비: 메인 글자·목록을 감추고 파수꾼으로 돌아다님
   if (lobby) return <LobbyMode t={t} onExit={() => setLobby(false)} />;
+  // 세계 지도 (시험 중): 던전 입구 → 혼자 하기
+  if (world)
+    return (
+      <Suspense fallback={null}>
+        <WorldMode t={t} lang={lang} onExit={() => setWorld(false)} onDungeon={() => (setWorld(false), startNew())} />
+      </Suspense>
+    );
 
   return (
     <>
@@ -167,6 +175,10 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
           t={t}
           saved={saved}
           onContinue={onContinue}
+          onWorld={() => {
+            close();
+            setWorld(true);
+          }}
           onNewRun={() => {
             close();
             startNew();
