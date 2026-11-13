@@ -1,5 +1,6 @@
 // 달빛 상태이상 (새벽의 성흔): 성흔 각성 중 모든 공격에 확정으로 1스택 (최대 5스택: 초승달 → 상현달 → 반달 → 하현달 → 보름달, 맞을 때마다 지속 시간 다시)
 // 걸린 적: 맞을 때 스택만큼 확률로 약점 공격 (루나틱은 달빛 없이도 기본 확률)(받은 피해의 50%를 한 번 더, 흰 숫자·초승달 표시) · 주는 피해 약화(확률 없이, 몸 닿기·쏜 탄·장판·직접 공격)
+import { BC_SKILLS } from "../itemsBlanc";
 import { createRng, deriveSeed } from "../rng";
 import type { EnemyState, PlayerState, RunState } from "./types";
 import { isAwake, stigmaGauge } from "./stigma";
@@ -37,7 +38,8 @@ export const setActingFoe = (e: EnemyState | null) => {
 export const actingFoe = () => acting;
 
 /** 이 적이 주는 피해 배율 (달빛이 걸려 있으면 약화) */
-export const moonOut = (e: EnemyState | null | undefined = acting) => ((e?.moon ?? 0) > 0 ? R.WEAKEN : 1);
+/** 정화의 역설(블랑)이 걸려 있으면 더 약화 */
+export const moonOut = (e: EnemyState | null | undefined = acting) => ((e?.moon ?? 0) > 0 ? R.WEAKEN : 1) * ((e?.bcWeak ?? 0) > 0 ? BC_SKILLS.paradox.out : 1);
 
 /** 달빛 걸기 (n스택) */
 export function applyMoon(e: EnemyState, n = 1): void {

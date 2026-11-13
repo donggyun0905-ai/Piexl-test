@@ -144,5 +144,5 @@ export function noirTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 (적응력 단계는 연습장 도구가 따로 정함) */
 export function resetNoir(p: P): void {
-  for (const k of ["nrCd", "nrRoom", "nrAtkAt", "nrVolleys", "nrLaters", "nrWaves", "nrRush", "nrSkillCd", "nrRolls", "rgRoses", "buFlakes", "buBolts", "buEndAt", "jnZaps", "jnBolts", "mzScents", "mzBrands", "mzEndAt", "vtPlants", "vtThralls", "vtCorpses", "vtSeen"] as const) delete p[k];
+  for (const k of ["nrCd", "nrRoom", "nrAtkAt", "nrVolleys", "nrLaters", "nrWaves", "nrRush", "nrSkillCd", "nrRolls", "rgRoses", "buFlakes", "buBolts", "buEndAt", "jnZaps", "jnBolts", "mzScents", "mzBrands", "mzEndAt", "vtPlants", "vtThralls", "vtCorpses", "vtSeen", "bcPick", "bcHost", "bcHostAt", "bcHostUntil", "bcHops", "bcChain", "bcClones", "bcLaters", "bcEyes", "bcMirror", "bcCd"] as const) delete p[k];
 }

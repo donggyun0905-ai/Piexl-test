@@ -94,4 +94,11 @@ export const PW_KITS_1: PwKits = {
     sk("vtScythe", "point", 12, "#3aa82a", { range: 160, radius: 70, delay: 20, fx: "pillar", hit: { dmg: 1.2, stun: SEC } }),
     sk("vtScythe", "point", 60, "#8aff5a", { range: 160, radius: 125, delay: 28, fx: "pillar", hit: { dmg: 3.3, stun: SEC } }),
   ),
+  // 아슈바르 블랑: 순백의 부채무 · 고해의 속삭임 · 백색 성역의 기만 · 종언의 무구한 지배
+  blanc: kit(1,
+    sk("bcFan", "cone", 5, "#f4f0ff", { radius: 80, arc: 0.3, fx: "slash", hit: { dmg: 1.2 } }),
+    sk("bcFan", "point", 9, "#d8c8ff", { range: 160, radius: 70, delay: 16, fx: "pillar", hit: { dmg: 1, stun: SEC } }),
+    sk("bcFan", "point", 14, "#b89aff", { range: 160, radius: 90, delay: 20, fx: "pillar", hit: { dmg: 1, stun: 2 * SEC } }),
+    sk("bcFan", "point", 60, "#ffffff", { range: 160, radius: 125, delay: 28, fx: "pillar", hit: { dmg: 3.3, stun: SEC } }),
+  ),
 };

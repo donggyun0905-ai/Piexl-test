@@ -13,4 +13,6 @@ export const ASHVAR_CHARACTERS = {
   magenta: { id: "magenta", maxHp: 100, damage: 9, moveSpeed: 1.3, luck: 0, startWeapon: "mzFan" },
   /** 베르 (아슈바르): 덩굴 쌍낫 · 녹독(빠르고 세지는 독·씨앗 발아) · 설치·되살리기 (sim/vert) */
   vert: { id: "vert", maxHp: 105, damage: 9, moveSpeed: 1.35, luck: 0, startWeapon: "vtScythe" },
+  /** 블랑 (아슈바르): 순백의 부채 · 백무(대시 → 빙의: 방향키로 고른 적 몸속에서 조종) · 정신 지배·분신 (sim/blanc) */
+  blanc: { id: "blanc", maxHp: 100, damage: 8, moveSpeed: 1.35, luck: 0, startWeapon: "bcFan" },
 } as const;

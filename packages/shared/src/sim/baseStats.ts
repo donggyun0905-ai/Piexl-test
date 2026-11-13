@@ -1,6 +1,7 @@
 // 모든 캐릭터 공통 추가 기본 스탯 (캐릭터 표 CHARACTERS에 있음, 관리자 '캐릭터'에서 캐릭터마다 바꿈. 처음 값은 지금 게임과 같게 0 · 치명타 피해 150%)
 // 치명타 확률·치명타 피해 · 방어력(받는 피해 100/(100+방어력)) · 피해 감소(%) · 회피(확률) · 재생력(10초마다 회복) · 흡혈(준 피해의 %)
 // 예리함(맞힐 때 확률로 적 방어 -25%(받는 피해 +25%) + 출혈) · 상태이상 강화(상태이상 피해 +%) · 돈 획득(+%)
+import { bcMirrored } from "./bcMinds";
 import { HOOK } from "../weaponsHook";
 import { gymExtras } from "./gym";
 import { boonExtras } from "./boons";
@@ -78,6 +79,7 @@ const roll = (s: RunState, tag: string, n: number) => createRng(deriveSeed(s.see
 
 /** 회피: 확률로 피해를 받지 않음 */
 export function dodged(s: RunState): boolean {
+  if (bcMirrored(s)) return true;
   const d = extraOf(s.player).dodge;
   if (d <= 0 || roll(s, "dodge", 0) >= d) return false;
   addEffect(s, { kind: "ring", x: s.player.x, y: s.player.y, dirX: 0, dirY: 0, size: 10, maxTicks: 10 });

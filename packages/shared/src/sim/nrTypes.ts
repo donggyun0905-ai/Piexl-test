@@ -1,6 +1,8 @@
 // 느아르 상태 타입 (sim/noir·nrKit·nrVolley·nrSkills·nrAdapt). 모두 선택 값 (예전 저장에는 없음)
 
-export type NrVolleyKind = "flurry" | "spin" | "sever" | "squeeze" | "drain" | "devour" | "origin" | "rift" | "barrier" | "abyss" | RgVolleyKind | BuVolleyKind | JnVolleyKind | MzVolleyKind | VtVolleyKind;
+export type NrVolleyKind = "flurry" | "spin" | "sever" | "squeeze" | "drain" | "devour" | "origin" | "rift" | "barrier" | "abyss" | RgVolleyKind | BuVolleyKind | JnVolleyKind | MzVolleyKind | VtVolleyKind | BcVolleyKind;
+/** 블랑 기술 (sim/blanc·bcSkills) */
+export type BcVolleyKind = "bcFan" | "bcBless" | "bcPuppet" | "bcMirror" | "bcRift" | "bcSeize" | "bcCrusade" | "bcPhantom" | "bcWhisper" | "bcRedeem" | "bcParadox" | "bcSanctum" | "bcTransfer";
 /** 베르 기술 (sim/vert·vtSkills) */
 export type VtVolleyKind = "vtSlash" | "vtSpin" | "vtFrenzy" | "vtWhip" | "vtGarden" | "vtForest" | "vtDance";
 /** 마젠타 기술 (sim/magenta·mzSkills) */
@@ -25,6 +27,8 @@ export interface HitOn {
   charm?: boolean;
   /** (베르) 독·출혈·화상·부식·느려짐 + 씨앗 (있으면 베르 한 대) */
   vt?: import("./vtTypes").VtOn;
+  /** (블랑) 조종·기절·약화·영혼의 틈 (있으면 블랑 한 대) */
+  bc?: import("./bcTypes").BcOn;
 }
 
 /** 나눠 때리는 기술 하나: 종류 · 자리 · 반지름 · 한 대 피해 · 한 대마다 더하는 피해 · 남은 수 · 처음 수 · 간격 · 다음 틱 · 빨아들이는 힘 · 끝 한 방 피해 · 몸을 따라감 · 적마다 때린 피해 합(공허 포식) */

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.96",
+    date: "2026-11-14",
+    items: {
+      ko: ["새 캐릭터 블랑 (아슈바르, 태초의 하양): 순백의 부채 하나 · 패시브 없음 · 적응력·강화·승격·제약은 느아르와 같음 · 로비 칩 45만 개로 열기 · 백무(빙의): 대시하면 3초 동안 화면이 회색이 되고 모든 움직임이 느려짐 → 둘레 적(보스 빼고) 머리 위 방향키를 그대로 누르면 그 적 몸속에 들어가 조종(무적·최대 10초, 3초 뒤 다른 적으로 옮겨 탈 수 있고 그때마다 방향키 +1 · 나올 때 그 적에게 큰 한 방 · 틀리면 그냥 대시, 다음 빙의까지 10초) · 공격 16종(순백의 부채무·거짓된 축복·성흔 인형극·백색 거울궁 · 추가 공격 영혼의 틈·백령 빙의·강제 성전·허수의 분신 · 고해의 속삭임/반전된 구원·정화의 역설/백색 성역의 기만·천사의 거짓 날개/천개의 거짓 눈·영혼 전이/종언의 무구한 지배)"],
+      en: ["New character Blanc (Ashvar, the Primordial White): one weapon, the Pure White Fan · no passives · Adaptation, upgrades, ranks and Restraint like Noir · unlock with 450,000 lobby chips · White Dance (possession): dashing turns the screen gray and slows everything for 3s → enter the arrow keys shown over a nearby foe (not bosses) to slip inside and control it (invulnerable, up to 10s; hop to another foe after 3s, +1 key each hop · a big hit on that foe when you leave · a mistake is just a dash, next try in 10s) · 16 attacks (Pure White Fan Dance, False Blessing, Stigmata Puppet Show, White Mirror Palace · extra attacks Soul Rift, White Spirit Possession, Forced Crusade, Imaginary Double · Whisper of Confession/Inverted Salvation, Paradox of Purification/Deceit of the White Sanctuary, False Wings of the Angel/Thousand False Eyes, Soul Transfer/Final Immaculate Dominion)"],
+      ja: ["新キャラクター ブラン（アシュヴァル、太初の白）：武器は純白の扇ひとつ・パッシブなし・適応力・強化・昇格・制約はノワールと同じ・ロビーチップ45万枚で解放・白舞（憑依）：ダッシュすると3秒間画面が灰色になりすべての動きが遅くなる → 周りの敵（ボス以外）の頭上の方向キーをその通り押すとその敵の体内に入って操る（無敵・最大10秒、3秒後に別の敵へ乗り移れ、そのたびに方向キー+1・抜ける時その敵に大きな一撃・間違えるとただのダッシュ、次の憑依まで10秒）・攻撃16種（純白の扇舞・偽りの祝福・聖痕の人形劇・白き鏡宮・追加攻撃 魂の隙間・白霊憑依・強制聖戦・虚数の分身・告解の囁き／反転した救済・浄化の逆説／白き聖域の欺瞞・天使の偽りの翼／千の偽りの眼・魂の転移／終焉の無垢なる支配）"],
+    },
+  },
+  {
     version: "0.52.95",
     date: "2026-11-14",
     items: {

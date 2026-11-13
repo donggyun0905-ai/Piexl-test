@@ -17,6 +17,7 @@ import { blastAt as blastAt_, dotDamage, healPlayer } from "./combat";
 import { alive, fan, inCircle, inCone, inLine, shoot, strike as strike_, stun } from "./s2Kit";
 import type { EnemyState, PlayerState, ProjectileState, RunState } from "./types";
 import { addEffect, dist2, hasPerk, markCrit, weaponOf } from "./util";
+import { bcSlowed } from "./bcPossess";
 const blastAt = srcFn("punk", () => blastAt_), strike = srcFn("punk", () => strike_);
 
 const styleOf = (p: PlayerState): CyberStyle => weaponOf(p).cyber ?? { move: "slash", reach: 30 };
@@ -146,7 +147,7 @@ export function punkMoveMul(p: PlayerState): number {
 
 /** 신경 가속 중(·잔영 회피 슬로우모션 중): 적이 이번 틱을 쉬는지 (일반 적은 네 틱 중 세 틱, 보스는 두 틱 중 한 틱 쉼) */
 export function timeSlowed(s: RunState, boss: boolean): boolean {
-  if (remnantSlowed(s, boss) || blastSlowed(s, boss) || rabbitSlowed(s, boss) || bsSlowed(s, boss)) return true;
+  if (remnantSlowed(s, boss) || blastSlowed(s, boss) || rabbitSlowed(s, boss) || bsSlowed(s, boss) || bcSlowed(s)) return true;
   if (!punkAccel(s.player)) return false;
   return s.tick % (boss ? P.bossEvery : P.slowEvery) !== 0;
 }

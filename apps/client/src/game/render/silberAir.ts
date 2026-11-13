@@ -11,6 +11,7 @@ import { drawBleuAir, drawBleuGround } from "./bleuArt";
 import { drawJauneAir } from "./jauneArt";
 import { drawMagentaAir, drawMagentaFloor } from "./magentaArt";
 import { drawVertAir, drawVertFloor } from "./vertArt";
+import { drawBlancAir } from "./blancArt";
 import { drawHonryeongAir, drawHonryeongGround } from "./honryeongArt";
 import type { Snap } from "./palette";
 import type { Ctx } from "./pwFxBits";
@@ -26,11 +27,13 @@ export function drawSilberAir(ctx: Ctx, s: RunState, alpha: number, snap: Snap):
   drawJauneAir(ctx, s, alpha, snap);
   drawMagentaAir(ctx, s, alpha, snap);
   drawVertAir(ctx, s, alpha, snap);
+  // 블랑: 분신 · 조종 실 · 빙의 고르기(회색 화면 + 방향키, 맨 마지막)
+  drawBlancAir(ctx, s, alpha, snap);
 }
 
 /** 바닥 (혼령 분신·짐승 · 아리아 악기) */
 export function drawSilberGround(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
-  // 느아르·루주·블뢰·존·마젠타·베르 등 뒤 악마 계급 마크 (몸보다 먼저)
+  // 느아르·루주·블뢰·존·마젠타·베르·블랑 등 뒤 악마 계급 마크 (몸보다 먼저)
   drawNoirBack(ctx, s, alpha, snap);
   // 루주 바닥의 혈장미
   drawRougeGround(ctx, s, alpha, snap);

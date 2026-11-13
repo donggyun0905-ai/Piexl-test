@@ -189,6 +189,7 @@ export const ACHIEVEMENTS = [
   ch("clearJaune", "jaune"),
   ch("clearMagenta", "magenta"),
   ch("clearVert", "vert"),
+  ch("clearBlanc", "blanc"),
   ch("clearHonryeong", "honryeong"),
   ch("clearRen", "ren"),
   ch("clearSpiritist", "spiritist"),
