@@ -22,6 +22,8 @@ export const bcHostOf = (s: RunState): EnemyState | null => {
 /** 빙의할 수 있는 적 (보스·구조물·허수아비·하늘·움직이지 않는 적 빼고) */
 export const canHost = (e: EnemyState) => nrAlive(e) && !nrBoss(e) && e.kind !== "dummy" && ENEMIES[e.kind].speed > 0 && !e.air && !e.pw && !e.svBox;
 /** 이 적에게 눌러야 할 방향키 수 (영혼의 틈이면 고정 · 날개로 줄어듦 · 옮겨 탈 때마다 늘어남) */
+/** 백무 대기 (0~1, 대기 칸 표시용) */
+export const bcDanceCd = (p: P) => ((p.bcCd ?? 0) > 0 ? Math.min(1, (p.bcCd ?? 0) / (p.bcCdMax ?? P0.cdFail)) : 0);
 export const keysFor = (p: P, e: EnemyState) => Math.max(0, (e.bcRift ? P0.riftKeys : P0.keys) + (p.bcHops ?? 0) * P0.hopKeys - (e.bcCut ?? 0));
 
 /** 고르는 동안 세상이 느려짐 (punk.timeSlowed가 부름): 네 틱에 세 틱 쉼 */
@@ -71,7 +73,7 @@ function endPick(s: RunState, ok: boolean): void {
   if (!k) return;
   restoreShots(s, k.frozen, 1 / SLOW);
   delete p.bcPick;
-  p.bcCd = ok ? P0.cdOk : P0.cdFail;
+  p.bcCd = p.bcCdMax = ok ? P0.cdOk : P0.cdFail;
 }
 
 /** 대시를 막 눌렀을 때: 공격 범위 안 적들에게 방향키 (0개인 적은 바로 큰 한 방) */
@@ -91,7 +93,7 @@ function startPick(s: RunState): void {
     cands.push([e.id, Array.from({ length: n }, () => rng.int(0, 3))]);
   }
   if (!cands.length) return;
-  p.bcPick = { until: s.tick + P0.pick, cands, at: 0, last: -1, frozen: slowShots(s, undefined, 1 / SLOW) };
+  p.bcPick = { until: s.tick + P0.pick, cands, at: 0, last: -1, fresh: true, frozen: slowShots(s, undefined, 1 / SLOW) };
 }
 
 /** 고르는 동안 (bossBinds.bindInput이 부름): 이동 대신 방향 누르기 (새로 누른 방향만) · 틀린 적은 빠짐 · 다 누른 적 몸속으로 */
@@ -104,7 +106,11 @@ export function bcInput(s: RunState, input: TickInput): TickInput {
   }
   k.frozen = slowShots(s, k.frozen, 1 / SLOW);
   const d = dirOf(input.moveX / 100, input.moveY / 100);
-  if (d >= 0 && d !== k.last) {
+  if (k.fresh) {
+    // 대시 때 누르고 있던 방향은 손을 뗄 때까지 셈하지 않음
+    if (d < 0) delete k.fresh;
+    k.last = d;
+  } else if (d >= 0 && d !== k.last) {
     k.cands = k.cands.filter(([, seq]) => seq[k.at] === d);
     k.at++;
     const done = k.cands.find(([, seq]) => seq.length <= k.at);

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.98",
+    date: "2026-11-14",
+    items: {
+      ko: ["베르: 가시숲 강림·대지 부식·사령화 조종의 범위와 이펙트 크기를 줄임", "블랑: 순백의 부채무 이펙트가 바라보는 쪽으로 펼쳐짐(부채 끝이 캐릭터 쪽) · 빙의 방향키를 → 모양 화살표로 · 스킬 칸 옆에 백무(빙의) 대기 칸 · 대시할 때 누르고 있던 방향키는 손을 뗄 때까지 세지 않음(바로 실패하지 않게) · 반전된 구원·백색 성역의 기만·천개의 거짓 눈의 범위와 이펙트 크기를 줄임"],
+      en: ["Vert: smaller range and effects for Thornwood Descent, Earth Corrosion and Puppetry of the Dead", "Blanc: Pure White Fan Dance now opens toward where you face (fan tip at the character) · possession keys shown as → style arrows · a White Dance (possession) cooldown slot next to the skills · a direction held while dashing no longer counts until released (no instant miss) · smaller range and effects for Inverted Salvation, Deceit of the White Sanctuary and Thousand False Eyes"],
+      ja: ["ヴェール：棘森降臨・大地腐食・死霊化操縦の範囲とエフェクトを小さく", "ブラン：純白の扇舞が向いている方へ開く（扇の要がキャラ側）・憑依の方向キーを→型の矢印に・スキル欄の横に白舞（憑依）の待ち時間欄・ダッシュ時に押していた方向は離すまで数えない（すぐ失敗しない）・反転した救済・白き聖域の欺瞞・千の偽りの眼の範囲とエフェクトを小さく"],
+    },
+  },
+  {
     version: "0.52.97",
     date: "2026-11-14",
     items: {

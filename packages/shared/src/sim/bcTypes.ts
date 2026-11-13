@@ -15,6 +15,8 @@ export interface BcPick {
   cands: [number, number[]][];
   at: number;
   last: number;
+  /** 막 시작함: 대시 때 누르고 있던 방향은 손을 뗄 때까지 셈하지 않음 */
+  fresh?: boolean;
   frozen: number[];
 }
 
@@ -70,6 +72,8 @@ export interface BlancPlayerState {
   bcHops?: number;
   /** 다음 빙의 고르기까지 대기 · 조종 공격 대기 · 지난 틱 대시 중이었는지 */
   bcCd?: number;
+  /** 지금 대기의 처음 값 (대기 칸 표시용) */
+  bcCdMax?: number;
   bcDashWas?: boolean;
   bcChain?: BcChain;
   bcClones?: BcClone[];

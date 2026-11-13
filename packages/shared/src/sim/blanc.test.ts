@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { BC_BASE as B, BC_EXTRA as X, BC_LV as L, BC_POSSESS as P0, BC_SKILLS as K } from "../itemsBlanc";
-import { keysFor } from "./bcPossess";
+import { bcDanceCd, keysFor } from "./bcPossess";
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
 import { enemy } from "./perkTestUtil";
 
@@ -34,7 +34,10 @@ function odds(extra: number, fn: () => void): void {
   }
 }
 /** 대시 → 고르기 시작 */
-const dash = (s: RunState) => stepSim(s, { ...EMPTY_INPUT, dash: true, aimX: 100 });
+const dash = (s: RunState) => {
+  stepSim(s, { ...EMPTY_INPUT, dash: true, aimX: 100 });
+  stepSim(s, EMPTY_INPUT);
+};
 
 describe("블랑", () => {
   it("순백의 부채 하나 · 패시브 없음 · 아슈바르 · 1단계 순백의 부채무: 앞 약한 3타", () => {
@@ -73,6 +76,19 @@ describe("블랑", () => {
     expect(s.player.bcPick).toBeUndefined();
     expect(s.player.bcHost).toBeUndefined();
     expect(s.player.bcCd).toBeGreaterThan(P0.cdFail - 10);
+  });
+
+  it("대시할 때 누르고 있던 방향은 손을 뗄 때까지 세지 않음 · 대기 칸", () => {
+    const s = bn();
+    stepSim(s, { ...EMPTY_INPUT, dash: true, moveX: 100 });
+    const seq = s.player.bcPick!.cands[0]![1];
+    stepSim(s, { ...EMPTY_INPUT, moveX: 100 });
+    stepSim(s, { ...EMPTY_INPUT, moveX: 100 });
+    expect(s.player.bcPick?.at).toBe(0);
+    stepSim(s, EMPTY_INPUT);
+    for (const d of seq) press(s, d);
+    expect(s.player.bcHost).toBe(1);
+    expect(bcDanceCd(s.player)).toBeGreaterThan(0.9);
   });
 
   it("몸속에서 공격하면 그 몬스터 공격으로 다른 적을 때림 · 스킬은 못 씀", () => {

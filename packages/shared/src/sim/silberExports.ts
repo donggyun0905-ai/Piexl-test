@@ -32,7 +32,7 @@ export { VT_SKILL_IDS } from "./vtSkills";
 export type { VtCorpse, VtPlant, VtThrall } from "./vtTypes";
 export { isBlanc, bcSkills } from "./blanc";
 export { BC_SKILL_IDS } from "./bcSkills";
-export { bcHostOf, keysFor } from "./bcPossess";
+export { bcDanceCd, bcHostOf, keysFor } from "./bcPossess";
 export type { BcClone, BcEyes, BcPick } from "./bcTypes";
 export { NR_SKILL_IDS } from "./nrSkills";
 export { NR_UP, nrChance, nrNeed } from "./nrAdapt";

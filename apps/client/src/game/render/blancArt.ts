@@ -15,20 +15,23 @@ export const ROW = {
 } as const;
 export const bcPic = sheetPic(img("blancFx"));
 
-/** 방향키 하나 (0 위 · 1 오른쪽 · 2 아래 · 3 왼쪽) */
+/** 방향키 하나 → 모양 (0 위 · 1 오른쪽 · 2 아래 · 3 왼쪽): 검은 칸 위 흰 화살표 · 누른 것은 보라 */
 function arrow(ctx: Ctx, x: number, y: number, d: number, done: boolean): void {
   ctx.save();
   ctx.translate(x, y);
-  ctx.rotate((d * Math.PI) / 2);
   ctx.fillStyle = done ? BC.violet : "#000";
-  ctx.fillRect(-4, -4, 8, 8);
-  ctx.fillStyle = done ? "#3a2a5a" : BC.light;
+  ctx.fillRect(-5, -5, 10, 10);
+  ctx.rotate(((d - 1) * Math.PI) / 2);
+  ctx.strokeStyle = done ? "#3a2a5a" : BC.light;
+  ctx.lineWidth = 1.5;
+  ctx.lineCap = "round";
   ctx.beginPath();
-  ctx.moveTo(0, -3);
-  ctx.lineTo(3, 2);
-  ctx.lineTo(-3, 2);
-  ctx.closePath();
-  ctx.fill();
+  ctx.moveTo(-3.5, 0);
+  ctx.lineTo(3.5, 0);
+  ctx.moveTo(0.5, -3);
+  ctx.lineTo(3.5, 0);
+  ctx.lineTo(0.5, 3);
+  ctx.stroke();
   ctx.restore();
 }
 
@@ -81,7 +84,7 @@ export function drawBlancAir(ctx: Ctx, s: RunState, alpha: number, snap: Snap): 
     const e = s.enemies.find((f) => f.id === id);
     if (!e) continue;
     const y = snap(e.y - e.r - 14);
-    const x0 = snap(e.x) - ((seq.length - 1) * 10) / 2;
-    seq.forEach((d, i) => arrow(ctx, x0 + i * 10, y, d, i < k.at));
+    const x0 = snap(e.x) - ((seq.length - 1) * 12) / 2;
+    seq.forEach((d, i) => arrow(ctx, x0 + i * 12, y, d, i < k.at));
   }
 }

@@ -8,6 +8,7 @@ export const CHARACTER_TEXT_BLANC = {
     ja: "アシュヴァル、太初の色彩悪魔七原色軍団の白・純白の扇で精神を支配する偽りの天使・パッシブなし・適応力（ノワールと同じ）・白舞：ダッシュすると3秒間世界が遅くなり周りの敵の頭上に方向キー → 正しく押すとその敵の体内に入り操る（最大10秒、抜ける時に大きな一撃）",
   },
   bcDanceName: { ko: "백무", en: "White Dance", ja: "白舞" },
+  bcDanceTip: { ko: "대시하면 빙의: 적 머리 위 방향키를 그대로 누르면 그 적 몸속으로 · 다음 빙의까지 대기 (성공 3초 · 실패 10초)", en: "Dash to possess: enter the arrow keys over a foe to slip inside it · wait until the next possession (3s on success · 10s on a miss)", ja: "ダッシュで憑依：敵の頭上の方向キーをその通り押すとその敵の体内へ・次の憑依までの待ち時間（成功3秒・失敗10秒）" },
   pwSk_blanc1: { ko: "순백의 부채무", en: "Pure White Fan Dance", ja: "純白の扇舞" },
   pwSk_blanc2: { ko: "고해의 속삭임", en: "Whisper of Confession", ja: "告解の囁き" },
   pwSk_blanc3: { ko: "백색 성역의 기만", en: "Deceit of the White Sanctuary", ja: "白き聖域の欺瞞" },

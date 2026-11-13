@@ -15,8 +15,8 @@ const LOOP: Partial<Record<string, readonly Frame[]>> = {
   bcRedeem: [[2, false], [3, false]],
   bcEnd: [[2, false], [3, false]],
 };
-/** 바라보는 쪽으로 돌려 그리는 그림 (원본이 오른쪽을 봄) */
-const TURN = new Set<string>(["bcFan"]);
+/** 바라보는 쪽으로 돌려 그리는 그림: 부채무는 원본이 위로 펼쳐짐 → 부채 끝(뾰족한 사북)이 캐릭터 쪽, 펼친 쪽이 바라보는 쪽 */
+const FAN = new Set<string>(["bcFan"]);
 /** 그림 크기 배율 (반지름 → 그림 너비) */
 const SCALE: Partial<Record<string, number>> = { bcFan: 2.4, bcEnd: 1.6, bcEyes: 2, bcWings: 2.2, bcRift: 2.6, bcSeize: 2.4 };
 
@@ -53,10 +53,8 @@ export function drawBlancFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   }
   // 맨 끝 5틱만 흐려짐 (마지막 그림이 다 보이게)
   const a = Math.min(1, fx.ticks / 5);
-  const left = fx.dirX < 0;
-  const ang = Math.atan2(fx.dirY, fx.dirX);
   const w = fx.size * (SCALE[fx.kind] ?? 2.2);
-  const rot = TURN.has(fx.kind) ? (left ? ang + Math.PI : ang) : 0;
-  sheetLoop(ctx, bcPic, ROW[fx.kind as keyof typeof ROW], fx.ticks, fx.maxTicks, x, y, w, a, rot, TURN.has(fx.kind) && left, LOOP[fx.kind]);
+  const rot = FAN.has(fx.kind) ? Math.atan2(fx.dirY, fx.dirX) + Math.PI / 2 : 0;
+  sheetLoop(ctx, bcPic, ROW[fx.kind as keyof typeof ROW], fx.ticks, fx.maxTicks, x, y, w, a, rot, false, LOOP[fx.kind]);
   return true;
 }

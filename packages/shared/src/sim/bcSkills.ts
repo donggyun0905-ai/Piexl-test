@@ -65,7 +65,7 @@ export function bcSkill(s: RunState, i: number): void {
     // 천개의 거짓 눈: 내 자리에 눈이 떠서 레이저 100발 (sim/bcMinds)
     const R = K.eyes;
     p.bcEyes = { x: p.x, y: p.y, left: R.n, next: s.tick + 24 };
-    addEffect(s, { kind: "bcEyes", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 110, maxTicks: 24 + R.n * R.every });
+    addEffect(s, { kind: "bcEyes", x: p.x, y: p.y, dirX: 0, dirY: 0, size: R.size, maxTicks: 24 + R.n * R.every });
   } else if (id === "transfer") {
     // 영혼 전이: 맞은 적들에게 차례로 빙의
     const R = K.transfer;
