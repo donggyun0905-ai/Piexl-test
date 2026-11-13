@@ -8,7 +8,7 @@ import type { StatMod } from "../stats";
 import type { RoomType } from "./floor";
 import { recalcStats } from "./items";
 import { expOf, expToNext } from "./novice";
-import { isAshvar, nrRoll } from "./nrKit";
+import { isAshvar, isNoir, nrRoll } from "./nrKit";
 import { pilgrimRoom } from "./pilgrim";
 import type { EnemyState, PickupKind, RunState } from "./types";
 import { addEffect } from "./util";
@@ -112,7 +112,8 @@ export function noirExtras(p: P): Partial<ExtraStats> | null {
 }
 
 /** 재생 가속: 재생력 회복 배율 */
-export const noirRegenMul = (p: P) => (isAshvar(p) ? NR_LIMIT.regenMul : 1);
+/** 재생 가속은 느아르만 (루주는 없음) */
+export const noirRegenMul = (p: P) => (isNoir(p) ? NR_LIMIT.regenMul : 1);
 
 /** 제약: 아이템·패시브를 얻을 수 있는 방 (비밀방·히든 상점·시련의 방) */
 const OPEN: readonly RoomType[] = ["trial", "devil", "gamble", "auction", "hidden"];

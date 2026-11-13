@@ -3,7 +3,7 @@ import { RG_BASE as B, RG_EXTRA as X, RG_ROSE as R, RG_SKILLS as K } from "../it
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
 import { recalcStats } from "./items";
 import { addPickup } from "./loot";
-import { NR_UP, nrUpgrade } from "./nrAdapt";
+import { NR_UP, noirRegenMul, nrUpgrade } from "./nrAdapt";
 import { rgPlant } from "./rgRose";
 import { enemy } from "./perkTestUtil";
 
@@ -141,6 +141,8 @@ describe("루주", () => {
     const before = s.rooms[room]!.pickups.length;
     addPickup(s, room, "passive", "vigor", 100, 100);
     expect(s.rooms[room]!.pickups.length).toBe(before);
+    // 재생 가속은 느아르만
+    expect(noirRegenMul(s.player)).toBe(1);
   });
 
   it("모든 단계·강화판으로 오래 싸워도 오류 없이 결정적으로 같음", () => {
