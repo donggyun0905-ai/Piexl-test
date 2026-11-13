@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.88",
+    date: "2026-11-14",
+    items: {
+      ko: ["스토리 2장 장면 일러스트 5장 추가: 테라코어의 경고 · 헬리오스로 떠나는 장수와 풋내기 · 황금빛 연회 · 달빛 공터의 갓이터 · 테라코어의 난입"],
+      en: ["5 new Chapter 2 scene illustrations: Terracore's warning · the General and the Novice set out for Helios · the golden banquet · the God Eater in the moonlit clearing · Terracore breaks in"],
+      ja: ["ストーリー2章のシーンイラスト5枚追加：テラコアの警告・ヘリオスへ発つ武将と見習い・黄金の宴・月明かりの空き地のゴッドイーター・テラコアの乱入"],
+    },
+  },
+  {
     version: "0.52.87",
     date: "2026-11-13",
     items: {
