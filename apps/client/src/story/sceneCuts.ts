@@ -53,8 +53,19 @@ export const SCENE_CUTS: Record<ChapterId, readonly SceneCut[]> = {
     { at: 48, bg: "dawn" }, // 7 돌아온 사멸·역병의사·피투성이 학살자
     { at: 52, bg: "night" }, // 8 아카식 레코드의 세 관찰자
   ],
-  // 5~9장 컷은 그림 목록을 쓰면서 채움 (그 전에는 장 하나에 배경 하나)
-  ch5: [{ at: 0, bg: "castle" }],
+  ch5: [
+    { at: 0, bg: "castle" }, // 1 세 왕의 원탁·패왕전을 앞당기자는 테라코어 왕
+    { at: 10, bg: "castle" }, // 2 망설이는 비르디아 왕·장로의 사념
+    { at: 20, bg: "forest" }, // 3 세계수 아래 비르디아 왕과 장로
+    { at: 23, bg: "city" }, // 4 테라코어 거리의 패왕전 외침·로브 쓴 사람
+    { at: 29, bg: "room" }, // 5 아스칼론 대기실
+    { at: 43, bg: "city" }, // 6 패왕전 개막·룰렛·사냥
+    { at: 52, bg: "forest" }, // 7 숲에 내려선 세 진영
+    { at: 67, bg: "forest" }, // 8 하늘에서 떨어진 괴력난신
+    { at: 78, bg: "castle" }, // 9 세 왕의 외침·검은 불꽃 천 조각
+    { at: 93, bg: "dawn" }, // 10 연합 선언·같은 깃발 아래
+  ],
+  // 6~9장 컷은 그림 목록을 쓰면서 채움 (그 전에는 장 하나에 배경 하나)
   ch6: [{ at: 0, bg: "abyss" }],
   ch7: [{ at: 0, bg: "night" }],
   ch8: [{ at: 0, bg: "temple" }],

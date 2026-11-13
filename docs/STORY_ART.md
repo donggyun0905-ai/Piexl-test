@@ -135,6 +135,37 @@ Use the first reference image ONLY as the art style guide: match its exact style
 7. `Scene: morning light in the ruined clearing. Samyeol and the Plague Doctor return calmly through drifting green smoke, and behind them the Slayer, battered and covered in dust and red stains (no gore), laughs wildly with her scythe on her shoulder, thrilled by the fight. The Apostle of Malice greets them with a pleased smile, the recovered Eater crouching at his feet. Villainous, triumphant mood.`
 8. `Scene: somewhere inside the Akashic Record, an endless cosmic library of floating glowing books, star maps and golden threads of fate. Three mysterious watchers seen only as tall cloaked silhouettes with their faces hidden in shadow stand on a floating platform, looking down through a window of light at a falling black flame. Mystical, solemn, ominous mood.`
 
-## 5~9장
+## 5장 「원군」 (10컷, `art/스토리/5장/`)
+
+참고 그림(`art/캐릭터/…-1.png`): 장로 `장로` · 추적자 `추적자` · 방랑객 `방랑객` · 영사 `영사` · 잔영 `잔영` · 장수 `장수` · 풋내기 `풋내기` · 비르디아 `이드라`·`변희`·`플라이`·`렌`·`정령사` · 테라코어 `오토마타`·`라이더`·`붐버`·`아티팩터`·`펑크` · 괴력난신 `public/sprites/enemies/demigod.png`
+세 왕은 게임 그림이 없음 → 아래 생김새 문장으로 그리고, 처음 나온 컷 1 그림을 뒤 컷(9·10)에 참고 그림으로 같이 올려 얼굴을 맞춤
+
+| 컷 | 문단 | 참고 그림 | 장면 |
+| --- | --- | --- | --- |
+| 1 | 1~10 | — | 거대한 왕홀의 둥근 탁자, 세 나라 왕, 패왕전을 앞당기자는 테라코어 왕 |
+| 2 | 11~20 | 장로 + 컷 1 | 망설이는 비르디아 왕의 머릿속으로 흘러드는 장로의 사념 |
+| 3 | 21~23 | 장로 + 컷 1 | 상처 입은 세계수 아래, 정예를 불러 모으라는 비르디아 왕 |
+| 4 | 24~29 | — | 테라코어 거리, 패왕전을 외치는 시민들 사이를 지나가는 로브 쓴 사람 |
+| 5 | 30~43 | 장수·추적자·방랑객·영사·잔영·풋내기 | 아스칼론 대기실, 투닥이는 장수와 방랑객, 벽에 기댄 로브 쓴 사람 |
+| 6 | 44~52 | 장수·풋내기 | 패왕전 개막, 거대한 화면의 룰렛 '사냥', 환호하는 관중석 |
+| 7 | 53~67 | 비르디아 다섯·테라코어 다섯 (많으면 나눠서 대표만) | 우거진 숲 곳곳에 내려서는 세 진영 정예 |
+| 8 | 68~78 | 괴력난신·방랑객·장수·풋내기 | 숲 한가운데 떨어진 거대한 구덩이, 팔짱 낀 괴력난신 |
+| 9 | 79~93 | 괴력난신 + 컷 1 | 귀빈석 앞 괴력난신, 테라코어 왕이 내민 검은 불꽃이 일렁이는 천 조각 |
+| 10 | 94~97 | 괴력난신 + 컷 1 | 세 나라가 처음으로 같은 깃발 아래 모인 연합 |
+
+### 5장 컷별 장면 (영어, [공통] 뒤에 붙임)
+
+1. `Scene: a vast royal hall with towering pillars, a huge round stone table in the center under a high dome. Three kings sit around it: the King of Terracore (older man, grey beard, bronze mechanical crown with gears, brown and bronze robe with brass ornaments), the King of Ascalon (stern middle-aged man, short dark red hair, golden crown, crimson and gold armor-robe, sword at his side) and the King of Virdia (slender man with long pale green hair, crown of living leaves and white flowers, flowing green and white robe). The King of Terracore leans forward, proposing something serious; the other two sit in cold, tense silence. Heavy political mood.`
+2. `Scene: the same royal round table. Close on the King of Virdia (long pale green hair, leaf crown, green and white robe) frowning deep in thought, while a glowing green thread of telepathic light flows into his mind from a faint ghostly image of the Elder (long white hair and beard tied up, green robe, wooden staff with a green gem) appearing beside him like a vision. The other two kings blurred in the background. Quiet, mystical, decisive mood.`
+3. `Scene: the Virdia kingdom under the giant World Tree at evening, its trunk bearing a huge dark burned scar. The King of Virdia (leaf crown, green and white robe) gives an order to the Elder (white hair and beard, green robe, staff), who bows. Glowing leaves drift down, roots and small spirit lights around. Somber, hopeful mood.`
+4. `Scene: a bustling street of the machine nation Terracore, brass buildings, pipes, steam and glowing signs. A town crier waves a poster shouting about the King's Tournament, citizens gather and argue. Through the crowd walks a silent mysterious figure in a deep hooded robe, face hidden in shadow. Lively but mysterious mood.`
+5. `Scene: the Ascalon waiting room at the tournament arena, wooden benches, weapons racks, banners. The General (long brown hair, crimson armor with a red hooded cape, spear) argues comically with the Wanderer (wide straw hat, navy kimono-like coat, red sash, katana). The Tracker (wavy brown hair, green hooded cloak, rifle) smiles calmly, Silk (long wavy crimson hair, elegant black and red dress, threads of magic) laughs, the Remnant (purple hood, silver hair, black mask, twin daggers) rolls his eyes, and the Novice (light brown hair, beige clothes, bandaged fists) tries to calm everyone. In the far left corner, a mysterious figure in a deep hooded robe leans silently against the wall. Comedic yet mysterious mood.`
+6. `Scene: a giant open-air tournament arena packed with roaring crowds, banners of three nations. A huge floating screen shows a spinning roulette landing on a hunting symbol (a bow and a forest icon, no letters). An energetic referee shouts into a magic megaphone. In a box seat the General (crimson armor, red hooded cape) and the Novice look worried. Exciting, festive mood.`
+7. `Scene: a dense, lush forest arena seen from above at the moment the contestants land. Virdia's elites: Idra (long leafy green hair with flowers, nature dress), Byeonhui (wild red hair, tribal outfit), Fly (blue hair, large translucent blue insect wings), Ren (green hooded robe, floating stones) and the Spiritist (long navy hair, white and navy robe, small spirits). Terracore's elites: Automata (silver hair, white and blue mechanical dress), Rider (black hair, goggles, blue motorcycle), Bomber (spiky red hair, goggles, orange scarf), Artifacter (silver hair, dark coat, glowing gauntlets) and Punk (pink and blue hair, punk outfit, claws). They drop into different clearings, ready to hunt. Dynamic, competitive mood.`
+8. `Scene: the forest arena just after a huge impact: a massive crater with dust billowing everywhere, trees bent outward. In the center stands the Demigod with arms crossed and a wild grin: a muscular giant man with long flowing white hair, golden horns, bare chest with red war paint markings, red belt with a gold buckle, black baggy pants. At the crater's edge the Wanderer draws his katana angrily, the General grips his spear, and the Novice, wide-eyed, points and warns that he is an ancient god. Explosive, awe-struck mood.`
+9. `Scene: the royal box of the arena. The Demigod (long white hair, golden horns, muscular bare chest with red markings) has leapt up and stands before the three kings. The King of Terracore (grey beard, bronze gear crown) holds out a scrap of black cloth whose edge burns with a faint, unquenchable black flame. The Demigod stares down at it with a suddenly serious face; the Kings of Ascalon and Virdia look at Terracore's king in shock. The crowd below frozen. Tense, grave mood.`
+10. `Scene: sunrise over the arena and forest. For the first time, the banners of Ascalon (crimson), Virdia (green) and Terracore (bronze) are bound together under one new alliance flag raised high. The Demigod stands at the front with arms crossed, the three kings behind him, and the gathered champions of all three nations below look up at the flag. Hopeful, solemn, epic mood.`
+
+## 6~9장
 
 🔸 2장처럼 장마다 컷 목록·프롬프트를 이어서 씀 (그 전에는 장 하나에 임시 배경 하나)
