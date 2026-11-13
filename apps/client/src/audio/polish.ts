@@ -1,6 +1,7 @@
-// 소리 다듬기 (runSounds가 낼 소리 목록을 마지막에 손봄): 기본 휘두름·탄 소리를 든 무기에 맞는 소리로 바꾸고, 대시·회복·방 정리·위험 체력 소리를 더함 · 상태이상 소리(statusSounds)
+// 소리 다듬기 (runSounds가 낼 소리 목록을 마지막에 손봄): 기본 휘두름·탄 소리를 든 무기에 맞는 소리로 바꾸고, 대시·회복·방 정리·위험 체력 소리를 더함 · 상태이상 소리(statusSounds) · 문·상자·아이템·벽·버프 등 알림(runCues)
 import { ENEMIES, WEAPONS, type RunState } from "@pixel-rogue/shared";
 import { getSettings } from "../settings";
+import { runCues } from "./runCues";
 import { statusSounds } from "./statusSounds";
 import { REST_MUSIC, SHOP_MUSIC } from "./calmMusic";
 import { foeSounds } from "./foeSounds";
@@ -83,6 +84,7 @@ export function polish(run: RunState, fx: Sfx[]): Sfx[] {
     now.beat = run.tick;
     fx.push("lowHp");
   }
+  runCues(run, fx);
   return fx;
 }
 

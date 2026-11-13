@@ -57,7 +57,7 @@ export type { AuctionLot, AuctionState } from "./vaultTypes";
 export { runSkill } from "./swarmEvo";
 export * from "./customRooms";
 export { characterWeapons } from "./loot";
-export { distanceField, ROOM_SHAPES, shapeGrid, tileAt, TILE_FLOOR, TILE_PILLAR, TILE_PIT, TILE_WALL, walkToward, type RoomShape, type TileGrid } from "./layout";
+export { blocksShot, distanceField, ROOM_SHAPES, shapeGrid, tileAt, TILE_FLOOR, TILE_PILLAR, TILE_PIT, TILE_WALL, walkToward, type RoomShape, type TileGrid } from "./layout";
 export { ARENA_LEVELS, arenaCleared } from "./arena";
 export { HERO_FLOORS } from "./hero";
 export { createTd, startRound, stepTd } from "./td";

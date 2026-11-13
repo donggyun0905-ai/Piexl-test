@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.63",
+    date: "2026-11-13",
+    items: {
+      ko: [
+        "게임 중 알림 소리: 안 깬 방에 들어가면 문 잠김(쿵·철컥) · 방을 정리하면 돌문 열림 · 보상이 한꺼번에 나오면 상자 열림 · 바닥 아이템 떨어짐(동전 짤랑·무기 챙그랑·패시브 반짝·사용 아이템 유리병) · 적이 새로 나타남",
+        "내 탄이 벽에 맞음 · 보호막 깨짐(내 보호막이 남은 채 꺼질 때·적 방패) · 적 방패·받아 넘김에 막힌 타격 · 버프 끝 · 체력이 꽉 참 · 3초 넘게 기다린 스킬이 다시 준비됨",
+      ],
+      en: [
+        "In-game cue sounds: door locks (thud and clank) when entering an uncleared room · stone door opens when the room is cleared · chest opening when several rewards appear at once · item drops (coin jingle, weapon clang, passive sparkle, potion clink) · new enemies appearing",
+        "Your shots hitting walls · shield breaking (your shield ending early or an enemy shield) · blocked hits on enemy shields and parries · buff ending · HP full · a skill with a 3s+ cooldown ready again",
+      ],
+      ja: [
+        "ゲーム中のお知らせ音：未クリアの部屋に入ると扉が閉まる（ドン・ガチャン）・部屋をクリアすると石の扉が開く・報酬がまとめて出ると宝箱が開く・床にアイテムが落ちる（コイン・武器・パッシブ・使用アイテムの瓶）・敵が新しく現れる",
+        "自分の弾が壁に当たる・シールドが割れる（自分のシールドが途中で消えたとき・敵の盾）・敵の盾や受け流しで防がれた攻撃・バフ終了・HPが満タン・3秒以上待ったスキルが再び使える",
+      ],
+    },
+  },
+  {
     version: "0.52.62",
     date: "2026-11-13",
     items: {

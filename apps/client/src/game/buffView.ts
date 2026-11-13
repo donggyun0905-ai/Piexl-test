@@ -4,7 +4,7 @@ import type { TextKey } from "../i18n";
 
 type Kind = "buff" | "debuff" | "cd";
 /** [상태 이름, 글자 키, 버프/상태이상/대기] */
-const TABLE: readonly [string, TextKey, Kind][] = [
+export const BUFF_TABLE: readonly [string, TextKey, Kind][] = [
   ["lureTicks", "dbCharm", "debuff"],
   ["poison", "dbPoison", "debuff"],
   ["corrode", "dbHealCut", "debuff"],
@@ -55,7 +55,7 @@ export interface BuffRow {
 /** 지금 켜진 버프·대기 (max: 상태마다 본 값 중 가장 큰 값, 새로 켜지면 다시 잼) */
 export function buffRows(p: PlayerState, max: Map<string, number>): BuffRow[] {
   const out: BuffRow[] = [];
-  for (const [field, key, kind] of TABLE) {
+  for (const [field, key, kind] of BUFF_TABLE) {
     // 끌려감은 세이렌 매혹일 때만 (어둠의 블랙홀은 lureId가 있음)
     const v = field === "lureTicks" && p.lureId !== undefined ? 0 : (p as unknown as Record<string, unknown>)[field];
     if (typeof v !== "number" || v <= 0) {
