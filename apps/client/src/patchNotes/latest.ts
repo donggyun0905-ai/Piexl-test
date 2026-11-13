@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.92",
+    date: "2026-11-14",
+    items: {
+      ko: ["스토리 3장 장면 일러스트 10장 추가: 테라코어 뒷골목의 세 아이부터 사막 신전의 태초 강림, 세계수 통로, 잿빛 새벽의 후퇴까지 (3장 10컷 모두 완성)"],
+      en: ["10 new Chapter 3 scene illustrations: from three children in a Terracore back alley to the Primeval awakening in the desert temple, the World Tree passage and the retreat at an ashen dawn (all 10 Chapter 3 scenes done)"],
+      ja: ["ストーリー3章のシーンイラスト10枚追加：テラコアの裏路地の三人の子どもから、砂漠の神殿での太初の降臨、世界樹の通路、灰色の夜明けの撤退まで（3章の10カットすべて完成）"],
+    },
+  },
+  {
     version: "0.52.91",
     date: "2026-11-14",
     items: {
