@@ -4,11 +4,9 @@ import type { EffectState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
 import { additive, easeOut, glow, shock, sparks, type Ctx } from "./pwFxBits";
 import { BU, buPic, ROW, snowflake } from "./bleuArt";
-import { sheetPlay } from "./noirArt";
+import { sheetLoop } from "./sheetLoop";
 
 const KINDS = new Set<string>([...Object.keys(ROW), "buPop", "buFlake"]);
-/** 네 칸을 다 보여 주는 데 드는 틱 (효과가 이보다 길면 마지막 칸에서 머묾) */
-const PLAY = 36;
 /** 그림 크기 배율 (반지름 → 그림 너비) */
 const SCALE: Partial<Record<string, number>> = { buBolt: 2.6, buHowl: 3.4, buWolf: 2.2, buHawk: 2.2, buRain: 2.3, buPrison: 2.3, buStop: 2.4, buEnd: 2.4 };
 
@@ -45,7 +43,7 @@ export function drawBleuFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     }
     default: {
       const turn = fx.kind === "buHowl";
-      sheetPlay(ctx, buPic, ROW[fx.kind as keyof typeof ROW], fx.ticks, fx.maxTicks, PLAY, x, y, w, a, turn ? (left ? ang + Math.PI : ang) : 0, turn && left);
+      sheetLoop(ctx, buPic, ROW[fx.kind as keyof typeof ROW], fx.ticks, fx.maxTicks, x, y, w, a, turn ? (left ? ang + Math.PI : ang) : 0, turn && left);
       return true;
     }
   }

@@ -24,6 +24,22 @@ function orb(s: RunState, kind: "jnOrb" | "jnFrenzy", r: number, speed: number, 
   addEffect(s, { kind, x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: dmgs.length * every + 12 });
 }
 
+/** 천둥의 발자취 그림(시트 둘째 칸)의 지그재그 꺾이는 자리: 그림 너비에 대한 비율 (앞 쪽 u · 옆 v, 그림 가운데 0) */
+const ZIG: readonly [number, number][] = [[-0.326, 0.003], [-0.24, -0.2], [-0.144, 0.134], [0.017, -0.231], [0.142, 0.212], [0.273, -0.111]];
+
+/** 지그재그 길: 첫 자리가 (x, y)가 되게 그림 가운데를 정함 → 그림 가운데 · 지나갈 자리들 (방 안으로) */
+export function zigPath(x: number, y: number, fx: number, fy: number, size: number): [number, number, [number, number][]] {
+  // 그림 아래쪽 = 바라보는 쪽, 그림 오른쪽 = (fy, -fx) (화면 render/jauneFx와 같은 회전)
+  const at = ([u, v]: readonly [number, number]): [number, number] => [(u * fx + v * fy) * size, (u * fy - v * fx) * size];
+  const [ox, oy] = at(ZIG[0]!);
+  const [cx, cy] = [x - ox, y - oy];
+  const path = ZIG.slice(1).map((z): [number, number] => {
+    const [dx, dy] = at(z);
+    return [Math.max(ROOM_MIN_X + 12, Math.min(ROOM_MAX_X - 12, cx + dx)), Math.max(ROOM_MIN_Y + 12, Math.min(ROOM_MAX_Y - 12, cy + dy))];
+  });
+  return [cx, cy, path];
+}
+
 /** 스킬 i(0~3) 쓰기 */
 export function jnSkill(s: RunState, i: number): void {
   const p = s.player;
@@ -44,7 +60,7 @@ export function jnSkill(s: RunState, i: number): void {
     const [x, y] = nrAim(s, B.aim);
     const dmgs = [...reps(R.hits, D * L.weak), ...reps(R.fin, D * L.strong)];
     nrVolley(s, { kind: "jnChaos", x, y, r: R.r, dmg: 0, dmgs, n: dmgs.length, every: R.every, on: ZAP });
-    addEffect(s, { kind: "jnChaos", x, y, dirX: 0, dirY: 0, size: R.r, maxTicks: dmgs.length * R.every + 14 });
+    addEffect(s, { kind: "jnChaos", x, y, dirX: 0, dirY: 0, size: R.r, style: R.hits * R.every, maxTicks: dmgs.length * R.every + 24 });
   } else if (id === "beam") {
     jnLine(s, "jnBeam", K.beam, reps(K.beam.hits, D * L.mid), D * L.strong);
   } else if (id === "hand") {
@@ -54,12 +70,13 @@ export function jnSkill(s: RunState, i: number): void {
     const R = K.thousand;
     jnAhead(s, "jnThousand", R.ahead, R.r, R.every, [...reps(R.mid, D * L.mid), ...reps(R.weak, D * L.weak), ...reps(R.vweak, D * L.vweak)], D * L.strong);
   } else if (id === "step") {
-    // 천둥의 발자취: 앞으로 돌진(닿은 적 약한 1타, 무적) + 몸 둘레 약한 6타 · 매우 약한 70타
+    // 천둥의 발자취: 이펙트 그림의 지그재그 길을 따라 돌진(닿은 적 약한 1타, 무적) + 돌진 중 몸 둘레 약한 6타 · 지나간 길에 매우 약한 70타
     const R = K.step;
-    p.nrRush = { dx: p.faceX, dy: p.faceY, t: R.ticks, step: R.step, dmg: D * L.weak, hit: [], sx: p.x, sy: p.y, fx: "jnPop", on: ZAP };
+    const [cx, cy, path] = zigPath(p.x, p.y, p.faceX, p.faceY, R.size);
+    p.nrRush = { dx: p.faceX, dy: p.faceY, t: 90, step: R.step, dmg: D * L.weak, hit: [], sx: p.x, sy: p.y, fx: "jnPop", on: ZAP, path };
     nrVolley(s, { kind: "jnStep", x: p.x, y: p.y, r: R.r, dmg: D * L.weak, n: R.hits - 1, every: R.every, follow: true, on: ZAP });
-    nrVolley(s, { kind: "jnStep", x: p.x, y: p.y, r: R.r, dmg: D * L.vweak, n: R.tail, every: 1, follow: true, on: ZAP });
-    addEffect(s, { kind: "jnStep", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: R.r, maxTicks: R.tail + 10 });
+    nrVolley(s, { kind: "jnStep", x: cx, y: cy, r: R.tailR, dmg: D * L.vweak, n: R.tail, every: 1, on: ZAP });
+    addEffect(s, { kind: "jnStep", x: cx, y: cy, dirX: p.faceX, dirY: p.faceY, size: R.size, maxTicks: R.tail + 12 });
   } else {
     // 종언의 황천뢰: 구체를 쏨 → 처음 닿은 적 자리에서 (jnBoltTick)
     const R = K.end;

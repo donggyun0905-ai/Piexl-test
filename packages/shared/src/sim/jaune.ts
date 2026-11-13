@@ -91,9 +91,8 @@ export function jauneTick(s: RunState, want: boolean, speed: number): void {
   ashTick(s, want, speed, KIT);
   const p = s.player;
   for (const f of s.effects) {
-    // 몸을 따라다니는 효과 (천둥의 발자취) · 날아가는 구체를 따라가는 효과 (황금 뇌구 · 광란의 천뢰)
-    if (f.kind === "jnStep") [f.x, f.y] = [p.x, p.y];
-    else if (f.kind === "jnOrb" || f.kind === "jnFrenzy") {
+    // 날아가는 구체를 따라가는 효과 (황금 뇌구 · 광란의 천뢰)
+    if (f.kind === "jnOrb" || f.kind === "jnFrenzy") {
       const v = p.nrVolleys?.find((o) => o.kind === f.kind);
       if (v) [f.x, f.y] = [v.x, v.y];
     }

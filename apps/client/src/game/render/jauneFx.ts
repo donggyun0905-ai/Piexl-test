@@ -4,15 +4,21 @@ import type { EffectState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
 import { additive, easeOut, glow, shock, sparks, type Ctx } from "./pwFxBits";
 import { JN, jnPic, ROW } from "./jauneArt";
-import { sheetPlay } from "./noirArt";
+import { JN_SKILLS } from "@pixel-rogue/shared";
+import { sheetLoop, type Frame } from "./sheetLoop";
 
 const KINDS = new Set<string>([...Object.keys(ROW), "jnPop", "jnZap"]);
-/** 네 칸을 다 보여 주는 데 드는 틱 (효과가 이보다 길면 마지막 칸에서 머묾) */
-const PLAY = 30;
+/** 반복 칸 (없으면 가운데 두 칸): 황금 뇌구는 마지막 칸과 그 좌우 반전 · 천둥의 발자취는 지그재그 길 → 연쇄 폭발 */
+const LOOP: Partial<Record<string, readonly Frame[]>> = {
+  jnOrb: [[3, false], [3, true]],
+  jnStep: [[1, false], [2, false], [3, false], [2, false]],
+  jnEnd: [[2, false], [3, false], [3, true], [2, true]],
+  jnFrenzy: [[2, false], [3, false], [2, true], [3, true]],
+};
 /** 바라보는 쪽으로 돌려 그리는 그림 (원본이 오른쪽을 봄) */
 const TURN = new Set<string>(["jnClaw", "jnFlash", "jnFist", "jnZig", "jnClone", "jnBeam", "jnHand", "jnThousand"]);
 /** 그림 크기 배율 (반지름 → 그림 너비) */
-const SCALE: Partial<Record<string, number>> = { jnFlash: 2.3, jnFist: 2.3, jnZig: 2.3, jnBeam: 2.4, jnClaw: 2.6, jnStep: 2.6, jnEnd: 2.4 };
+const SCALE: Partial<Record<string, number>> = { jnFlash: 2.3, jnFist: 2.3, jnZig: 2.3, jnBeam: 2.4, jnClaw: 2.6, jnStep: 1, jnEnd: 2.4 };
 
 export function drawJauneFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   if (!KINDS.has(fx.kind)) return false;
@@ -33,9 +39,33 @@ export function drawJauneFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     return true;
   }
   const left = fx.dirX < 0;
-  const turn = TURN.has(fx.kind);
   const ang = Math.atan2(fx.dirY, fx.dirX);
   const w = fx.size * (SCALE[fx.kind] ?? 2.2);
-  sheetPlay(ctx, jnPic, ROW[fx.kind as keyof typeof ROW], fx.ticks, fx.maxTicks, PLAY, x, y, w, a, turn ? (left ? ang + Math.PI : ang) : 0, turn && left);
+  if (fx.kind === "jnChaos") return chaos(ctx, fx, x, y, w), true;
+  // 천둥의 발자취: 그림 아래쪽(지그재그가 나아가는 쪽)을 돌진 방향으로 (sim/jnSkills zigPath와 같은 회전)
+  const spin = fx.kind === "jnOrb" ? (fx.maxTicks - fx.ticks) * 0.04 : 0;
+  const rot = spin + (fx.kind === "jnStep" ? ang - Math.PI / 2 : TURN.has(fx.kind) ? (left ? ang + Math.PI : ang) : 0);
+  sheetLoop(ctx, jnPic, ROW[fx.kind as keyof typeof ROW], fx.ticks, fx.maxTicks, x, y, w, a, rot, TURN.has(fx.kind) && left, LOOP[fx.kind], fx.kind === "jnOrb" ? 5 : 7);
   return true;
+}
+
+/** 혼돈의 낙뢰: 한 대마다 낙뢰가 2→3→4칸으로 내려치고 자리·좌우가 바뀜 · 마지막 강타 3번은 크게 · 끝나면 마지막 칸을 잠시 보여 주고 사라짐 */
+function chaos(ctx: Ctx, fx: EffectState, x: number, y: number, w: number): void {
+  const every = JN_SKILLS.chaos.every;
+  const e = fx.maxTicks - fx.ticks;
+  const strong = fx.style ?? 0;
+  const end = strong + JN_SKILLS.chaos.fin * every;
+  const k = Math.floor(e / every);
+  const within = (e % every) / every;
+  const fade = fx.ticks < 10 ? fx.ticks / 10 : 1;
+  // 바닥의 예고 고리 (첫 칸)는 내내 은은하게
+  jnPic(ctx, ROW.jnChaos, 0, x, y, w, 0.45 * fade);
+  if (e >= end) return jnPic(ctx, ROW.jnChaos, 3, x, y, w * 1.25, fade);
+  const big = e >= strong;
+  const j = big ? 0.08 : 0.22;
+  const ox = ((((k * 37) % 7) - 3) / 3) * fx.size * j;
+  const oy = ((((k * 53) % 5) - 2) / 2) * fx.size * j * 0.6;
+  const col = big ? 3 : 1 + Math.min(2, Math.floor(within * 3));
+  jnPic(ctx, ROW.jnChaos, col, x + ox, y + oy, w * (big ? 1.25 : 1), 1, 0, k % 2 === 1);
+  if (big) additive(ctx, () => glow(ctx, x, y, fx.size, JN.light, 0.7 * (1 - within), 0.4));
 }

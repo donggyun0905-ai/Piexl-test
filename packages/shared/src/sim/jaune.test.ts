@@ -94,12 +94,20 @@ describe("존", () => {
     expect(lost(s)).toBeGreaterThan(0);
   });
 
-  it("천둥의 발자취: 앞으로 돌진 (그동안 무적)", () => {
-    const s = jn([[300, 100]]);
+  it("천둥의 발자취: 이펙트의 지그재그 길을 따라 돌진 (옆으로 꺾이며 앞으로 · 그동안 무적)", () => {
+    const s = jn([[300, 30]]);
+    s.player.x = s.player.prevX = 60;
+    s.player.y = s.player.prevY = 110;
     stepSim(s, { ...EMPTY_INPUT, aimX: 100, skill: 4 });
     expect(s.player.invulnTicks).toBeGreaterThan(0);
-    idle(s, K.step.ticks + 2);
-    expect(s.player.x).toBeGreaterThan(80 + K.step.step * (K.step.ticks - 2));
+    const ys: number[] = [];
+    for (let i = 0; i < 40; i++) {
+      idle(s, 1);
+      ys.push(s.player.y);
+    }
+    expect(s.player.nrRush).toBeUndefined();
+    expect(s.player.x).toBeGreaterThan(60 + K.step.size * 0.5);
+    expect(Math.max(...ys) - Math.min(...ys)).toBeGreaterThan(K.step.size * 0.3);
   });
 
   it("종언의 황천뢰: 구체가 처음 닿은 적 자리에서 이어서 때림 · 닿지 않으면 사라짐", () => {

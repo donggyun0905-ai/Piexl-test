@@ -35,16 +35,6 @@ export function sheetPic(sheet: HTMLImageElement) {
 }
 export const nrPic = sheetPic(FX);
 
-/** 네 칸을 정해진 틱(play 이하) 동안 이어서(다음 칸과 겹쳐 부드럽게) 보여 주고, 끝나면 마지막 칸에서 머묾 (블뢰·존) */
-export function sheetPlay(ctx: Ctx, pic: ReturnType<typeof sheetPic>, row: number, ticks: number, maxTicks: number, playMax: number, x: number, y: number, w: number, a: number, rot = 0, flip = false): void {
-  const play = Math.max(8, Math.min(playMax, maxTicks * 0.7));
-  const pos = Math.min(3, ((maxTicks - ticks) / play) * 3);
-  const col = Math.floor(pos);
-  const mix = pos - col;
-  pic(ctx, row, col, x, y, w, a * (col < 3 ? 1 - mix : 1), rot, flip);
-  if (col < 3 && mix > 0) pic(ctx, row, col + 1, x, y, w, a * mix, rot, flip);
-}
-
 /** 등 뒤 (몸보다 먼저, 느아르·루주): 악마 계급 마크 · 계급이 오를수록 크고 진하게, 은은히 숨 쉬듯 빛남 */
 export function drawNoirBack(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const p = s.player;

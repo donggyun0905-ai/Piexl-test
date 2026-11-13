@@ -79,8 +79,20 @@ export function nrRushTick(s: RunState): void {
   const r = p.nrRush;
   if (!r) return;
   const [ax, ay] = [p.x, p.y];
-  p.x += r.dx * r.step;
-  p.y += r.dy * r.step;
+  if (r.path) {
+    // 정해진 자리들을 차례로 (다 지나면 끝)
+    const [tx, ty] = r.path[0] ?? [p.x, p.y];
+    const [vx, vy] = [tx - p.x, ty - p.y];
+    const d = Math.sqrt(vx * vx + vy * vy);
+    if (d <= r.step) {
+      [p.x, p.y] = [tx, ty];
+      r.path.shift();
+    } else [p.x, p.y] = [p.x + (vx / d) * r.step, p.y + (vy / d) * r.step];
+    if (!r.path.length) r.t = 1;
+  } else {
+    p.x += r.dx * r.step;
+    p.y += r.dy * r.step;
+  }
   keepInRoom(p, roomGrid(s));
   p.invulnTicks = Math.max(p.invulnTicks, 2);
   for (const e of onSegment(s, ax, ay, p.x, p.y, p.r + K.dash.w)) {

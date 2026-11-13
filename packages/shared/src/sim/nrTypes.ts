@@ -78,8 +78,9 @@ export interface NrRush {
   sy: number;
   /** 끝날 때 효과 (루주 혈영 돌진) */
   fx?: "rgRush" | "jnPop";
-  /** 맞은 적에게 붙는 것 (존 번개) */
+  /** 맞은 적에게 붙는 것 (존 번개) · 곧게 가지 않고 이 자리들을 차례로 지나감 (존 지그재그) */
   on?: HitOn;
+  path?: [number, number][];
 }
 
 export interface NoirPlayerState {

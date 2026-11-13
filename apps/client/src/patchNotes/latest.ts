@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.71",
+    date: "2026-11-13",
+    items: {
+      ko: ["블뢰·존: 오래 가는 효과가 마지막 그림에서 멈추지 않고 가운데 그림들을 부드럽게 반복 (느아르·루주처럼)", "존: 황금 뇌구는 마지막 그림과 좌우 반전 그림을 번갈아 돌며 회전 · 혼돈의 낙뢰는 한 대마다 낙뢰가 다시 내려치고 마지막 강타 3번은 크게 · 천둥의 발자취는 이펙트의 지그재그 번개 길을 따라 캐릭터가 꺾이며 돌진하고 이펙트가 돌진 방향으로 돌아감"],
+      en: ["Bleu & Jaune: long effects no longer freeze on the last frame; they loop their middle frames smoothly (like Noir and Rouge)", "Jaune: Golden Thunder Orb alternates its last frame with a mirrored copy while spinning · Chaos Thunderfall strikes again with every hit, with the last 3 strong hits drawn larger · Footsteps of Thunder now dashes along the effect's zigzag lightning path, and the effect turns to the dash direction"],
+      ja: ["ブルー・ジョーヌ：長いエフェクトが最後のコマで止まらず、中間のコマを滑らかに繰り返す（ノワール・ルージュと同じ）", "ジョーヌ：黄金雷球は最後のコマと左右反転のコマを交互に回転しながら表示・混沌の落雷は一撃ごとに落雷が落ち直し、最後の強撃3回は大きく・雷鳴の足跡はエフェクトのジグザグの雷の道に沿って曲がりながら突進し、エフェクトも突進方向に回る"],
+    },
+  },
+  {
     version: "0.52.70",
     date: "2026-11-13",
     items: {
