@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.94",
+    date: "2026-11-14",
+    items: {
+      ko: ["스토리 4장 장면 일러스트 8장 추가: 빛 없는 의식의 방, 사도의 세 수하, 응접실의 귓속말, 묶인 이터와 황금 깃털, 갓이터의 강림, 새벽의 이터, 돌아온 수하들, 아카식 레코드의 관찰자 (4장 8컷 모두 완성)"],
+      en: ["8 new Chapter 4 scene illustrations: the lightless ritual chamber, the Apostle's three servants, a whisper at the reception, the chained Eater and the golden feather, the God Eater's descent, the Eater at dawn, the servants' return and the watchers of the Akashic Record (all 8 Chapter 4 scenes done)"],
+      ja: ["ストーリー4章のシーンイラスト8枚追加：光なき儀式の間、使徒の三人の配下、応接間のささやき、鎖につながれたイーターと黄金の羽、ゴッドイーターの降臨、夜明けのイーター、戻った配下たち、アカシックレコードの観察者（4章の8カットすべて完成）"],
+    },
+  },
+  {
     version: "0.52.93",
     date: "2026-11-14",
     items: {
