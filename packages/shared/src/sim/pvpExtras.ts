@@ -35,8 +35,10 @@ export function updateDrops(s: RunState): void {
     const x = (c + 0.5) * TILE_SIZE;
     const y = (r + 0.5) * TILE_SIZE;
     if (rng.nextFloat() < 0.5) {
+      // 지금 자리가 느아르 쪽(제약: 아이템 안 놓음)이면 안 놓일 수 있음 → 놓였을 때만 주인 지우기
+      const n = room.pickups.length;
       addPickup(s, s.roomId, "use", rng.pick(DROP_USES), x, y);
-      delete room.pickups[room.pickups.length - 1]!.owner;
+      if (room.pickups.length > n) delete room.pickups[n]!.owner;
     } else orbs.push({ id: s.nextId++, kind: Math.floor(rng.nextFloat() * 3) as 0 | 1 | 2, x, y });
     addEffect(s, { kind: "burst", x, y, dirX: 0, dirY: 0, size: 16, maxTicks: 20 });
     return;
