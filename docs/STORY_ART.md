@@ -79,6 +79,36 @@ Use the first reference image ONLY as the art style guide: match its exact style
 7. `Scene: chaos in the moonlit clearing, the Godeater overwhelming the battle as broken turrets burn. The Chronomancer forces out a glowing astral rod with blood at the corner of his mouth. The Gunner's grenade explodes, pushing back the Godeater and the Apostle. The General (crimson armor, red plume) sprints away carrying the Novice under his arm. Behind them the red-haired Brawler grabs the Novice's leg, but it is an illusion dissolving into golden sand. Explosive, dramatic escape mood.`
 8. `Scene: dawn on a grassy border hill. The Novice (light brown hair, beige clothes, bandaged fists) looks back over his shoulder at the distant golden city of Helios, whose sky looks perfectly peaceful as if nothing happened. The wounded General (crimson armor, red plume) stands beside him. Soft pink and gold morning light, wind in the grass. Quiet, bittersweet, foreboding mood.`
 
-## 3~9장
+## 3장 「버려진 자들」 (10컷, `art/스토리/3장/`)
+
+글이 124문단으로 길어 10컷. 참고 그림: 제이드 `버려진 자들/abandoned-1.png` · 레이븐 `abandoned2-1.png` · 카인 `abandoned3-1.png` (지금 그림은 힘을 얻은 뒤 모습 → 컷 1~7은 같은 머리·눈색의 누더기 차림 아이로), 태초의 빛과 어둠 `public/sprites/enemies/plight.png`·`pdark.png`
+
+| 컷 | 문단 | 참고 그림 | 장면 |
+| --- | --- | --- | --- |
+| 1 | 1~9 | 버려진 자들 셋 | 테라코어 뒷골목, 패거리에게 당하고 웅크린 세 아이, 제국으로 가자는 카인 |
+| 2 | 10~21 | 버려진 자들·닌자 | 검은 천을 두른 여자(닌자)가 제국패를 보이며 빵과 물을 건넴 |
+| 3 | 22~27 | 버려진 자들·닌자 | 바렌트 사막을 걷는 닌자와 아이들, 멀리 모래언덕 위 투명한 그림자 |
+| 4 | 28~45 | 닌자·의사·거인·버려진 자들 | 주사기를 던지는 의사, 기계팔로 내려치는 거인, 아이들을 안고 뛰어오른 닌자 |
+| 5 | 46~59 | 베두인·소환술사·오니·거인·닌자 | 거대한 회전체를 기계팔로 막는 거인, 베두인 등장, 소환수와 함께 선 소환술사, 달려드는 오니 |
+| 6 | 60~72 | 버려진 자들·닌자·의사 | 사막 신전으로 달려가는 아이들, 떠오르는 몸을 감싸는 빛과 어둠, 씨익 웃는 닌자 |
+| 7 | 73~81 | 거인·오니·베두인 | 피해 축적기를 푼 거인이 던진 빛나는 바위, 방망이로 막다 튕겨 나가는 오니, 무너지는 신전 |
+| 8 | 82~97 | 닌자·버려진 자들·태초 | 신전 바닥에서 드러난 빛과 어둠의 구체, 현현한 태초, 혼돈의 기운에 휩싸인 아이들 |
+| 9 | 98~118 | 소환술사·의사·거인·음양사·이무기·야수·원소술사·태초 | 풀피리 소리에 하늘에 열린 세계수 통로, 쏟아져 나오는 비르디아 전력 |
+| 10 | 119~124 | 소환술사·음양사·의사·거인 | 잿빛 바람 속 흉악들, 후퇴하는 테라코어·비르디아, 흉터 난 세계수 위로 밝아 오는 새벽 |
+
+### 3장 컷별 장면 (영어, [공통] 뒤에 붙임)
+
+1. `Scene: a dirty back alley of the machine nation Terracore at dusk, rusty pipes, steam vents and distant glowing factory towers above. Three ragged orphan children in patched, torn clothes huddle against a wall after being beaten by a street gang: Jade (messy black hair with a white streak, one amber and one purple eye, holding a scrap-metal shield), Raven (long silver-white hair, red eyes) and Cain (black hair with white streaks, amber and violet eyes, clenched fist). Cain stands up, shouting that they should go to the Empire. Bruises (no blood), stolen bread crumbs. Sad but determined mood.`
+2. `Scene: the same Terracore back alley. A mysterious woman wrapped entirely in black cloth like a living shadow, red eyes, black face mask, red headband ribbons fluttering (the Ninja), crouches before the three ragged orphans and holds up a golden imperial token. With a playful smile in her eyes she hands them a big basket of bread and a water flask. The starving children stare, half afraid, half hopeful. Warm light on the bread, cold shadows around her. Sweet but ominous mood.`
+3. `Scene: the vast Barent desert under a blazing sky, endless golden dunes. The black-clad Ninja walks ahead, the three ragged orphans follow carrying bread and water, looking up at her as she asks if they want revenge. Far behind on a dune, a faint transparent shimmering silhouette (invisible pursuers) watches them. Heat haze, long shadows. Quiet, uneasy mood.`
+4. `Scene: a desert ambush. The Doctor of Terracore (feminine-looking young man with dark bob hair, red eyes, white coat with red crosses, medicine bottles) throws a fan of glinting syringes. The Titan (muscular man with spiky brown hair and stubble, brown vest, a giant steel mechanical arm) smashes the sand with his huge mechanical fist, sending up a massive sand explosion, his shimmering cloaking field fading. The Ninja leaps high into the air holding the three shocked orphans in her arms. Explosive, chaotic action mood.`
+5. `Scene: the desert battle grows. A giant golden spinning ring-blade screams through the air; the Titan blocks it with his mechanical arm, sparks flying. The Bedouin of Helios (tanned woman, long brown hair with ornaments, red tattered scarf, navy skirt) catches her golden chakram ring with a smirk. Beside them the Summoner (long green hair, green eyes, dark green ragged coat with vines and a whip) stands with summoned desert beasts, and the Oni (huge red-skinned horned brute with a spiked wooden club, prayer beads) charges in laughing. The Ninja shields the children. Wild, crowded battle mood.`
+6. `Scene: an ancient sandstone temple half buried in the desert, carved sun and moon symbols on its gate. The three ragged orphans run hand in hand into the temple, Cain pulling the others. Inside, their bodies begin to float in the air, wrapped by swirling black darkness and golden light. In the foreground the black-clad Ninja grins; behind, the Doctor reaches out shouting no. Mystical, dreadful mood.`
+7. `Scene: the Titan (giant steel mechanical arm glowing with stored energy) hurls a huge boulder charged with blazing orange energy at the temple. The Oni leaps up and blocks it with his spiked club but is blasted away. The boulder crashes into the temple; stone pillars collapse and the floating children and wisps of light and dark spirit energy are thrown out of the blast. The Bedouin screams in the dust. Massive impact, debris, dramatic mood.`
+8. `Scene: inside the broken temple, two glowing spheres rise from the cracked floor: a radiant golden sun orb with a calm face and a pitch-black moon orb with a dark aura, the Primeval Light and Darkness, awakening as a huge shockwave knocks everyone down. The Ninja kneels before them in reverence. Behind her the three orphans now stand surrounded by violent chaotic red-black and white energy, eyes glowing, gaining terrible power. Awe-inspiring, ominous mood.`
+9. `Scene: the desert at night, the Primeval sun and moon orbs hovering over the ruined temple. The Summoner blows a grass whistle; the sky tears open into a glowing green tunnel of World Tree magic with giant roots and leaves. From it pour the forces of Virdia: the Mystic (long black hair, red and white shrine maiden robes, paper talismans), the Imugi (long dark hair, teal scaled armor, spear), the Beast (orange wild hair, fur and claws, a small tiger cat) and the Elementalist (long blue hair, blue robes, orbs of fire, water, earth and wind). The Doctor and the Titan, wounded, look up in surprise. Epic, hopeful-yet-dangerous mood.`
+10. `Scene: dawn over a wasteland of ash. Monstrous primeval horrors loom in grey wind: a giant sword-stained war god, a floating void eye, a skeletal Death with a scythe and a dark archangel. The Mystic orders a retreat; archers' arrows and glowing spirits hold the line while the Summoner, the Doctor and the Titan fall back with wounded soldiers. In the distance the great World Tree bears a burning scar. Pale gold dawn breaking through the ash clouds. Grim, tragic, epic mood.`
+
+## 4~9장
 
 🔸 2장처럼 장마다 컷 목록·프롬프트를 이어서 씀 (그 전에는 장 하나에 임시 배경 하나)
