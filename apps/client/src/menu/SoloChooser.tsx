@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import type { TextKey } from "../i18n";
 import { isTutorialDone, loadFloorBest, type SavedRun } from "../records";
 import { Icon, type IconName } from "./Icon";
+import { featureOpen } from "../progress/storyStage";
 
 interface Props {
   t: (key: TextKey) => string;
@@ -53,20 +54,20 @@ export function SoloChooser({ t, saved, onContinue, onNewRun, onHero, onEndless,
             />
           )}
           <Choice icon="sword" title={t("soloRun")} desc={t("newRunDesc")} onClick={onNewRun} />
-          <Choice
+          {featureOpen("hero") && <Choice
             icon="crown"
             title={t("heroRun")}
             desc={heroBest > 0 ? `${t("heroDesc")} · ${t("heroBest").replace("{n}", String(heroBest))}` : t("heroDesc")}
             onClick={onHero}
-          />
-          <Choice
+          />}
+          {featureOpen("endless") && <Choice
             icon="infinity"
             title={t("endlessRun")}
             desc={endlessBest > 0 ? `${t("endlessDesc")} · ${t("endlessBest").replace("{floor}", String(endlessBest))}` : t("endlessDesc")}
             onClick={onEndless}
-          />
-          <Choice icon="trophy" title={t("arenaRun")} desc={t("arenaDesc")} onClick={onArena} />
-          <Choice icon="castle" title={t("tdRun")} desc={t("tdDesc")} onClick={onTowerDefense} />
+          />}
+          {featureOpen("arena") && <Choice icon="trophy" title={t("arenaRun")} desc={t("arenaDesc")} onClick={onArena} />}
+          {featureOpen("td") && <Choice icon="castle" title={t("tdRun")} desc={t("tdDesc")} onClick={onTowerDefense} />}
           <Choice
             icon="book"
             title={t("tutorial")}

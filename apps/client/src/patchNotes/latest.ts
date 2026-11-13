@@ -4,81 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.78",
+    date: "2026-11-13",
+    items: {
+      ko: [
+        "스토리 진행: 처음 온 사람은 아스칼론 진영과 혼자 하기부터 시작하고, 혼자 하기 기록으로 스토리 장이 하나씩 열림 (1층 보스 → 1장 · 3층 보스 → 2장 · 첫 클리어 → 3장 · 라스트 보스 → 4장 · 영웅의 길 3단계 → 5장 · 무한 모드 10층 → 6장 · 클리어 5·8·12번 → 7~9장)",
+        "장이 열릴 때마다 진영(1장 비르디아 · 2장 테라코어 · 3장 헬리오스 · 6장 아카식 레코드·이방인 · 7장 새벽의 성흔·아슈바르 · 8장 성국 · 9장 탈라시아·실베르)과 모드(1장 일일 도전 · 2장 함께 하기·협동 · 3장 이벤트·타워 디펜스·상점·로비 · 4장 영웅의 길 · 5장 무한 모드 · 6장 레이드 아레나·레이드 · 7장 패왕전 · 9장 금기의 서)가 열림 · 메인 화면에 새 장 알림·다음 장 조건",
+        "이미 하던 분은 지금처럼 모두 열린 채로 그대로",
+      ],
+      en: [
+        "Story progress: newcomers start with the Ascalon faction and Solo, and story chapters unlock one by one from Solo records (floor 1 boss → Ch.1 · floor 3 boss → Ch.2 · first clear → Ch.3 · Last Boss → Ch.4 · Hero's Path stage 3 → Ch.5 · Endless Mode floor 10 → Ch.6 · 5/8/12 clears → Ch.7–9)",
+        "Each chapter opens factions (Ch.1 Virdia · Ch.2 Terracore · Ch.3 Helios · Ch.6 Akashic Records/Outsiders · Ch.7 Dawn Stigmata/Ashvar · Ch.8 Holy Kingdom · Ch.9 Thalassia/Silber) and modes (Ch.1 Daily Challenge · Ch.2 Play Together/Co-op · Ch.3 Events/Tower Defense/Shop/Lobby · Ch.4 Hero's Path · Ch.5 Endless Mode · Ch.6 Raid Arena/Raid · Ch.7 Champion Clash · Ch.9 Book of Taboos) · the main screen shows new chapters and the next goal",
+        "Existing players keep everything unlocked as before",
+      ],
+      ja: [
+        "ストーリー進行：初めての方はアスカロン陣営と「ひとりで遊ぶ」から始まり、「ひとりで遊ぶ」の記録でストーリーの章が一つずつ開く（1階ボス→1章・3階ボス→2章・初クリア→3章・ラストボス→4章・英雄の道ステージ3→5章・エンドレスモード10階→6章・クリア5・8・12回→7～9章）",
+        "章が開くたびに陣営（1章ヴィルディア・2章テラコア・3章ヘリオス・6章アカシックレコード・異邦人・7章暁の聖痕・アシュヴァル・8章聖国・9章タラシア・シルベル）とモード（1章デイリーチャレンジ・2章みんなで遊ぶ・協力プレイ・3章イベント・タワーディフェンス・ショップ・ロビー・4章英雄の道・5章エンドレスモード・6章レイドアリーナ・レイド・7章覇王戦・9章禁忌の書）が開く・メイン画面に新しい章の通知と次の章の条件",
+        "すでに遊んでいた方はこれまで通りすべて開いたまま",
+      ],
+    },
+  },
+  {
     version: "0.52.77",
     date: "2026-11-13",
     items: {
       ko: ["마젠타: 궁극기(4번)를 빼고 공격 범위·이펙트를 줄이고 피해를 조금 줄임 · 특히 2번(악몽의 꽃밭·영혼 유린)·3번(유혹의 소용돌이·매혹의 강우) 스킬이 작아짐 (꽃밭 24타 · 영혼 유린 14타 · 소용돌이 30타 · 강우 8타 · 꽃감옥 6타 · 꽃가루 5타 · 환영분신 4타)"],
       en: ["Magenta: smaller areas and effects and slightly less damage on everything except the ultimate (skill 4) · skills 2 (Garden of Nightmares, Soul Ravage) and 3 (Vortex of Temptation, Rain of Allure) shrink the most (Garden 24 hits · Soul Ravage 14 · Vortex 30 · Rain 8 · Prison 6 · Pollen 5 · Clones 4)"],
       ja: ["マゼンタ：必殺技（4番）以外の攻撃範囲・エフェクトを小さくし、ダメージを少し下げた・特に2番（悪夢の花畑・魂の蹂躙）・3番（誘惑の渦・魅惑の降雨）スキルが小さくなった（花畑24ヒット・魂の蹂躙14・渦30・降雨8・花獄6・花粉5・幻影分身4）"],
-    },
-  },
-  {
-    version: "0.52.76",
-    date: "2026-11-13",
-    items: {
-      ko: [
-        "새 캐릭터 마젠타 (아슈바르, 태초의 색채 악마 7원색 군단의 자홍): 욕망의 부채 하나 · 패시브 없음 · 적응력·강화·승격·제약은 느아르와 같음 · 로비 칩 45만 개로 열기",
-        "마젠타 저주: 맞을 때마다 저주가 쌓여(최대 10겹) 0.5초마다 겹 수만큼 저주 피해 · 낙인·환영 붕괴·종언의 푸시아 성역이 한꺼번에 터뜨림",
-        "마젠타 매료의 향기: 맞은 적이 확률로 매혹(새 상태이상 · 분홍 하트 피해 숫자 · 느려지고 끌려옴 · 받는 피해 +10%) · 공격할 때 확률로 방에 흐릿한 향기 연기(안의 적 받는 피해 +10% 더) · 관리자 상태이상 표에 매혹 추가",
-        "마젠타 공격 16종: 자홍 저주비 · 푸시아 만개 · 환영 꽃잎 파동 · 저주의 꽃가루 · 매혹의 시선 · 푸시아 환영분신 · 자홍 화산파 · 저주의 낙인 · 환상의 꽃감옥/환영 붕괴 · 악몽의 꽃밭/영혼 유린 · 유혹의 소용돌이/매혹의 강우 · 독화 침식/종언의 푸시아 성역",
-      ],
-      en: [
-        "New character Magenta (Ashvar, the Magenta of the Primordial Chromatic Demon Legion of Seven Colors): one weapon, the Fan of Desire · no passives · Adaptation, upgrades, ranks and Restraint like Noir · unlock with 450,000 lobby chips",
-        "Magenta's Curse: every hit adds a curse stack (max 10) dealing Curse damage per stack every 0.5s · Brand of Curse, Phantom Collapse and Fuchsia Sanctum of the End burst them all at once",
-        "Magenta's Scent of Allure: hit enemies may be Charmed (new status · pink heart damage numbers · slowed and drawn in · +10% damage taken) · attacks may leave faint scent clouds in the room (+10% more damage taken inside) · Charm added to the admin status table",
-        "Magenta's 16 attacks: Magenta Curse Rain · Fuchsia Full Bloom · Phantom Petal Wave · Cursed Pollen · Gaze of Allure · Fuchsia Phantom Clones · Magenta Eruption · Brand of Curse · Prison of Illusory Flowers/Phantom Collapse · Garden of Nightmares/Soul Ravage · Vortex of Temptation/Rain of Allure · Venom Bloom Erosion/Fuchsia Sanctum of the End",
-      ],
-      ja: [
-        "新キャラクター マゼンタ（アシュヴァル、太初の色彩悪魔七原色軍団の紅紫）：武器は欲望の扇ひとつ・パッシブなし・適応力・強化・昇格・制約はノワールと同じ・ロビーチップ45万枚で解放",
-        "マゼンタの呪い：当たるたびに呪いが重なり（最大10重）0.5秒ごとに重ねた数だけ呪いダメージ・呪いの烙印・幻影崩壊・終焉のフクシア聖域がまとめて炸裂させる",
-        "マゼンタの魅了の香り：当たった敵は確率で魅了（新しい状態異常・ピンクのハートのダメージ数字・遅くなり引き寄せられる・被ダメージ+10%）・攻撃時に確率で部屋にかすかな香りの煙（中の敵はさらに被ダメージ+10%）・管理者の状態異常表に魅了を追加",
-        "マゼンタの攻撃16種：紅紫の呪雨・フクシア満開・幻影花弁の波動・呪いの花粉・魅惑の視線・フクシア幻影分身・紅紫の火山波・呪いの烙印・幻想の花獄/幻影崩壊・悪夢の花畑/魂の蹂躙・誘惑の渦/魅惑の降雨・毒花侵食/終焉のフクシア聖域",
-      ],
-    },
-  },
-  {
-    version: "0.52.75",
-    date: "2026-11-13",
-    items: {
-      ko: ["블뢰: 종언의 영구동토 이펙트 크기 1/4"],
-      en: ["Bleu: Permafrost of the End effect is a quarter of the size"],
-      ja: ["ブルー：終焉の永久凍土のエフェクトの大きさが4分の1"],
-    },
-  },
-  {
-    version: "0.52.74",
-    date: "2026-11-13",
-    items: {
-      ko: ["블뢰: 추가 공격 1~4단계(영혼 늑대·매·사슴·군단)와 월광 백랑의 포효·종언의 영구동토 효과를 예전처럼 (차례대로 보여 주고 마지막 그림에서 머묾)", "존: 황뢰 천수 이펙트 크기 절반"],
-      en: ["Bleu: Extra attack stages 1–4 (Spirit Wolf, Hawk, Stag, Legion), Roar of the Moonlit White Wolf and Permafrost of the End play as before (frames in order, holding on the last)", "Jaune: Thousand Golden Thunder Hands effect is half the size"],
-      ja: ["ブルー：追加攻撃1〜4段階（霊狼・霊鷹・霊鹿・霊軍団）と月光白狼の咆哮・終焉の永久凍土のエフェクトを以前の形に（順に見せて最後のコマで止まる）", "ジョーヌ：黄雷千手のエフェクトの大きさが半分"],
-    },
-  },
-  {
-    version: "0.52.73",
-    date: "2026-11-13",
-    items: {
-      ko: ["느아르·루주·블뢰·존: 다른 캐릭터처럼 빛 효과가 붙음 (기술마다 보라·붉은·하늘·금빛 빛과 고리·불티, 궁극기는 빛기둥과 번쩍임 · 등 뒤 악마 계급 빛 · 혈장미·눈결정·결정탄·뇌구 등은 은은하게 빛남 · 한정 스킨 색)", "블뢰: 효과 길이를 마지막 한 대에 맞춤 (마지막 그림이 마지막 한 대 때 뜨고 끝남)"],
-      en: ["Noir, Rouge, Bleu & Jaune: now get light effects like other characters (violet, red, sky-blue and golden glows, rings and sparks per skill; light pillars and flashes for ultimates · a glow of the demon rank behind them · Blood Roses, snowflakes, crystal shots and thunder orbs softly glow · limited-skin accent colors)", "Bleu: effect lengths now match the last hit (the final frame appears with the last hit)"],
-      ja: ["ノワール・ルージュ・ブルー・ジョーヌ：他のキャラクターと同じく光の効果が付く（技ごとに紫・赤・空色・金色の光と輪・火花、必殺技は光の柱と閃光・背中に悪魔の位階の光・血薔薇・雪の結晶・結晶弾・雷球などがほのかに光る・限定スキンの色）", "ブルー：エフェクトの長さを最後の一撃に合わせた（最後のコマが最後の一撃で出て終わる）"],
-    },
-  },
-  {
-    version: "0.52.72",
-    date: "2026-11-13",
-    items: {
-      ko: ["연습장 진영 탭: 아슈바르(느아르·루주·블뢰·존)는 '레벨업 (흑 가득)' 버튼으로 바로 레벨업", "존: 황금 번개 주먹·초월 벽력일섬·광란의 천뢰·뇌신의 손아귀 범위·이펙트 절반, 지그재그 뇌격·초월 벽력일섬은 1/3 · 광란의 천뢰·뇌신의 손아귀·종언의 황천뢰(낙뢰 부분)가 끊기지 않고 반복 · 종언의 황천뢰 강한 1타가 맨 마지막에", "블뢰·존: 효과 그림이 겹쳐 넘어갈 때 어두워지며 깜빡이던 것 고침 · 마지막 그림이 끝까지 보임"],
-      en: ["Practice faction tab: Ashvar characters (Noir, Rouge, Bleu, Jaune) can level up instantly with 'Level up (fill Black)'", "Jaune: Golden Lightning Fist, Transcendent Thunderclap Flash, Frenzied Heaven Thunder and Grasp of the Thunder God have half the range and effect size; Zigzag Bolt and Transcendent Thunderclap Flash a third · Frenzied Heaven Thunder, Grasp of the Thunder God and the falling bolts of Golden Heaven Thunder of the End now loop without breaks · its strong hit now lands last", "Bleu & Jaune: effect frames no longer dim and flicker while blending · the last frame stays fully visible"],
-      ja: ["練習場の陣営タブ：アシュヴァル（ノワール・ルージュ・ブルー・ジョーヌ）は「レベルアップ（黒満タン）」ですぐレベルアップ", "ジョーヌ：黄金雷拳・超越霹靂一閃・狂乱の天雷・雷神の掌握の範囲・エフェクトが半分、ジグザグ雷撃・超越霹靂一閃は1/3・狂乱の天雷・雷神の掌握・終焉の黄天雷（落雷部分）が途切れず繰り返す・終焉の黄天雷の強い1ヒットが最後に", "ブルー・ジョーヌ：エフェクトのコマが重なって切り替わる時に暗くなってちらつくのを修正・最後のコマが最後まで見える"],
-    },
-  },
-  {
-    version: "0.52.71",
-    date: "2026-11-13",
-    items: {
-      ko: ["블뢰·존: 오래 가는 효과가 마지막 그림에서 멈추지 않고 가운데 그림들을 부드럽게 반복 (느아르·루주처럼)", "존: 황금 뇌구는 마지막 그림과 좌우 반전 그림을 번갈아 돌며 회전 · 혼돈의 낙뢰는 한 대마다 낙뢰가 다시 내려치고 마지막 강타 3번은 크게 · 천둥의 발자취는 이펙트의 지그재그 번개 길을 따라 캐릭터가 꺾이며 돌진하고 이펙트가 돌진 방향으로 돌아감"],
-      en: ["Bleu & Jaune: long effects no longer freeze on the last frame; they loop their middle frames smoothly (like Noir and Rouge)", "Jaune: Golden Thunder Orb alternates its last frame with a mirrored copy while spinning · Chaos Thunderfall strikes again with every hit, with the last 3 strong hits drawn larger · Footsteps of Thunder now dashes along the effect's zigzag lightning path, and the effect turns to the dash direction"],
-      ja: ["ブルー・ジョーヌ：長いエフェクトが最後のコマで止まらず、中間のコマを滑らかに繰り返す（ノワール・ルージュと同じ）", "ジョーヌ：黄金雷球は最後のコマと左右反転のコマを交互に回転しながら表示・混沌の落雷は一撃ごとに落雷が落ち直し、最後の強撃3回は大きく・雷鳴の足跡はエフェクトのジグザグの雷の道に沿って曲がりながら突進し、エフェクトも突進方向に回る"],
     },
   },
 ];

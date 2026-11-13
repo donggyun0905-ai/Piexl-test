@@ -3,6 +3,7 @@
 import { CHARACTER_IDS, type CharacterId } from "@pixel-rogue/shared";
 import { useState } from "react";
 import { characterOpen } from "../characterGoals";
+import { charInStory } from "../progress/storyStage";
 import type { TextKey } from "../i18n";
 import { factionOf, SELECT_TABS } from "../select/factions";
 import { SkinPreview } from "../shop/SkinPreview";
@@ -18,8 +19,8 @@ export function LobbyCharPicker({ t, picked, onPick }: Props) {
   const [find, setFind] = useState("");
   const [tab, setTab] = useState<FactionId | null>(null);
   const q = find.trim().toLowerCase();
-  const list = CHARACTER_IDS.filter((c) => (!tab || factionOf(c) === tab) && (!q || t(c).toLowerCase().includes(q) || c.includes(q)));
-  const tabs = SELECT_TABS.filter((x) => CHARACTER_IDS.some((c) => factionOf(c) === x.id));
+  const list = CHARACTER_IDS.filter((c) => charInStory(c) && (!tab || factionOf(c) === tab) && (!q || t(c).toLowerCase().includes(q) || c.includes(q)));
+  const tabs = SELECT_TABS.filter((x) => CHARACTER_IDS.some((c) => charInStory(c) && factionOf(c) === x.id));
   const pickedTab = picked ? SELECT_TABS.find((x) => x.id === factionOf(picked)) : undefined;
   return (
     <section className="room-pick">

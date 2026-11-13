@@ -8,6 +8,7 @@ import { pwWins } from "./event/pwRecords";
 import { ownedPets } from "./lobby/petStore";
 import { loadAchievements, loadTotals } from "./records";
 import { TEST_OPEN } from "./testFlags";
+import { charInStory } from "./progress/storyStage";
 import { unlockStats, type CountKey, type FlagKey, type MaxKey } from "./unlock/unlockStats";
 
 /** 테스트 중: 전부 열림 (testFlags) */
@@ -146,6 +147,8 @@ const factionMembers = (f: FactionId): CharacterId[] => (FACTIONS.find((x) => x.
 
 /** 이 캐릭터를 고를 수 있는지 */
 export function characterOpen(c: CharacterId, achieved: readonly string[] = loadAchievements()): boolean {
+  // 스토리로 아직 안 연 진영은 닫힘 (progress/storyStage)
+  if (!charInStory(c)) return false;
   const goal = CHARACTER_GOALS[c];
   if (TEST_ALL_CHARACTERS || !goal) return true;
   const p = goalProgress(c, goal, achieved);

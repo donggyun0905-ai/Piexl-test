@@ -4,6 +4,7 @@ import { formatTime } from "../game/hudText";
 import type { TextKey } from "../i18n";
 import { loadSwarmBest } from "../event/swarmRecords";
 import { Choice } from "./SoloChooser";
+import { featureOpen } from "../progress/storyStage";
 
 interface Props {
   t: (key: TextKey) => string;
@@ -22,14 +23,14 @@ export function EventChooser({ t, onSwarm, onPaewang, onRaid, onClose }: Props) 
       <div className="modal chooser" role="dialog" aria-modal="true" aria-label={t("events")} onClick={(e) => e.stopPropagation()}>
         <h2>{t("events")}</h2>
         <div className="choices">
-          <Choice
+          {featureOpen("swarm") && <Choice
             icon="dawn"
             title={t("swarm")}
             desc={best ? `${t("swarmDesc")} · ${t("swarmBest").replace("{time}", formatTime(best.ticks)).replace("{lv}", String(best.lv))}` : t("swarmDesc")}
             onClick={onSwarm}
-          />
-          <Choice icon="crown" title={t("paewang")} desc={t("paewangDesc")} onClick={onPaewang} />
-          <Choice icon="castle" title={t("raidEvent")} desc={t("raidEventDesc")} onClick={onRaid} />
+          />}
+          {featureOpen("paewang") && <Choice icon="crown" title={t("paewang")} desc={t("paewangDesc")} onClick={onPaewang} />}
+          {featureOpen("raid") && <Choice icon="castle" title={t("raidEvent")} desc={t("raidEventDesc")} onClick={onRaid} />}
         </div>
         <button ref={closeRef} type="button" className="ghost" onClick={onClose}>
           {t("close")}

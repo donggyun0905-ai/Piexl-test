@@ -11,6 +11,7 @@ import { SkinChooser } from "./shop/SkinChooser";
 import { equippedSkin } from "./shop/wallet";
 import { CardMedals } from "./medals/CardMedals";
 import { TabooButton } from "./taboo/TabooButton";
+import { charInStory, factionOpen, featureOpen } from "./progress/storyStage";
 import { setRandomKit } from "./taboo/tabooStore";
 import { TEST_OPEN } from "./testFlags";
 import { hallUnlocked } from "./lobby/exhibits";
@@ -43,7 +44,7 @@ const HIDDEN_ROLL: readonly CharacterId[] = ["stargazer", "duck", "scribe", "min
 
 /** 무작위 캐릭터 고르기 (꾸밈 선택이라 브라우저 랜덤). withHidden이면 낮은 확률로 숨은 캐릭터 */
 function rollCharacter(withHidden: boolean): { id: CharacterId; hidden: boolean } | null {
-  const pool = HIDDEN_ROLL.filter((c) => HIDDEN_CHARACTERS.includes(c));
+  const pool = HIDDEN_ROLL.filter((c) => HIDDEN_CHARACTERS.includes(c) && charInStory(c));
   if (withHidden && pool.length && Math.random() < HIDDEN_CHANCE) return { id: pool[Math.floor(Math.random() * pool.length)]!, hidden: true };
   const open = CHARACTER_IDS.filter((c) => characterOpen(c));
   const id = open[Math.floor(Math.random() * open.length)];
@@ -78,12 +79,12 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
   };
   // 연습장은 숨은 캐릭터 전부 · 혼자 하기는 테스트 중에만 숨은 캐릭터 전부 (아카식 레코드 탭) · 그 밖에는 전시장에서 연 숨은 캐릭터
   // 한정 캐릭터(서고의 감시자): 가졌으면 기록이 남지 않는 곳에서 마음껏 (패왕전·일일 도전은 빼고)
-  const all = [...new Set<CharacterId>(showHidden || (taboo && TEST_OPEN) ? ALL_CHARACTER_IDS : [...CHARACTER_IDS, ...hallUnlocked(), ...ownedLimited()])].filter((c) => !noLimited || !LIMITED_CHARACTERS.includes(c));
+  const all = [...new Set<CharacterId>(showHidden || (taboo && TEST_OPEN) ? ALL_CHARACTER_IDS : [...CHARACTER_IDS, ...hallUnlocked(), ...ownedLimited()])].filter((c) => (!noLimited || !LIMITED_CHARACTERS.includes(c)) && charInStory(c));
   const q = find.trim().toLowerCase();
   const found = all.filter((c) => (!tab || factionOf(c) === tab) && (!q || t(c as TextKey).toLowerCase().includes(q)));
   const list = !tab && !q ? recommendedFirst(found) : found;
   // 서고의 감시자(한정 캐릭터) 탭은 아직 비어 있어도 늘 보임
-  const tabs = SELECT_TABS.filter((x) => x.id === "archive" || all.some((c) => factionOf(c) === x.id));
+  const tabs = SELECT_TABS.filter((x) => (x.id === "archive" && factionOpen("archive")) || all.some((c) => factionOf(c) === x.id));
   return (
     <div className="select-screen">
       <h2>{t("chooseCharacter")}</h2>
@@ -91,7 +92,7 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
         <button type="button" className="primary random-char" onClick={pickRandom}>
           🎲 {t("randomCharacter")}
         </button>
-        {taboo && <TabooButton t={t} lang={lang} />}
+        {taboo && featureOpen("taboo") && <TabooButton t={t} lang={lang} />}
       </div>
       <div className="cs-tabs">
         <button type="button" className={!tab ? "on" : ""} onClick={() => setTab(null)}>

@@ -7,6 +7,7 @@ import { BOSS_STORY, CHAPTER_SUMMARY, CHAPTER_TITLE, FACTION_TEXT } from "../i18
 import { CharGuides } from "./CharGuides";
 import { StoryFace, speakerName } from "./StoryFace";
 import { CHAPTERS, FACTIONS, PARAS_PER_PAGE, STORY_BOSSES, type ChapterId } from "./storyData";
+import { factionOpen, storyStage } from "../progress/storyStage";
 
 type Tab = "factions" | "bosses" | "akashic" | "chars";
 const TABS: { id: Tab; label: TextKey }[] = [
@@ -25,6 +26,11 @@ interface Props {
 export function StoryScreen({ lang, t, onBack }: Props) {
   const [tab, setTab] = useState<Tab>("factions");
   const [reading, setReading] = useState<ChapterId | null>(null);
+  // 연 장까지만 (1장은 처음부터 읽을 수 있음) · 진영도 연 것만 (progress/storyStage)
+  const stage = storyStage();
+  const chapters = CHAPTERS.slice(0, Math.max(1, stage));
+  const season = chapters[chapters.length - 1]!.season;
+  const bosses = STORY_BOSSES.filter((b) => b.season <= season);
   return (
     <main className="story-screen">
       <header className="story-head">
@@ -44,7 +50,7 @@ export function StoryScreen({ lang, t, onBack }: Props) {
           </nav>
           {tab === "factions" && (
             <div className="story-cards">
-              {FACTIONS.map((f) => (
+              {FACTIONS.filter((f) => factionOpen(f.id, stage)).map((f) => (
                 <section key={f.id} className={`story-card story-faction ${f.id}`} style={{ borderColor: f.color, ["--fc" as string]: f.color }}>
                   <h3 style={{ color: f.color }}>
                     {FACTION_TEXT[f.id].name[lang]} <small>{FACTION_TEXT[f.id].tag[lang]}</small>
@@ -64,9 +70,9 @@ export function StoryScreen({ lang, t, onBack }: Props) {
           )}
           {tab === "bosses" && (
             <div className="story-cards">
-              {STORY_BOSSES.map((b, i) => (
+              {bosses.map((b, i) => (
                 <Fragment key={b.id}>
-                  {(i === 0 || STORY_BOSSES[i - 1]!.season !== b.season) && <h4 className="story-season">{t(`storyS${b.season}` as TextKey)}</h4>}
+                  {(i === 0 || bosses[i - 1]!.season !== b.season) && <h4 className="story-season">{t(`storyS${b.season}` as TextKey)}</h4>}
                   <section className="story-card story-boss">
                     <EnemyPortrait kind={b.kind} size={72} />
                     <div>
@@ -80,9 +86,9 @@ export function StoryScreen({ lang, t, onBack }: Props) {
           )}
           {tab === "akashic" && (
             <div className="story-cards">
-              {CHAPTERS.map((ch, i) => (
+              {chapters.map((ch, i) => (
                 <Fragment key={ch.id}>
-                  {(i === 0 || CHAPTERS[i - 1]!.season !== ch.season) && <h4 className="story-season">{t(`storyS${ch.season}` as TextKey)}</h4>}
+                  {(i === 0 || chapters[i - 1]!.season !== ch.season) && <h4 className="story-season">{t(`storyS${ch.season}` as TextKey)}</h4>}
                   <section className="story-card story-chapter">
                     <span className="story-chapter-no">{i + 1}</span>
                     <h3>

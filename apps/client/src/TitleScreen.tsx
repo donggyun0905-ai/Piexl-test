@@ -18,6 +18,8 @@ import { TopBar } from "./menu/TopBar";
 import { LobbyMode, PatchNotesList } from "./lazyScreens";
 import { loadBest, loadSavedRun } from "./records";
 import { useServerStatus } from "./serverStatus";
+import { featureOpen, storyStage } from "./progress/storyStage";
+import { StageNotice } from "./progress/StageNotice";
 
 interface Props {
   lang: Lang;
@@ -65,15 +67,20 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
     onStartSolo(endless, arena, hero);
   };
 
+  // 스토리로 연 장까지의 모드만 보임 (progress/storyStage)
+  const stage = storyStage();
+  const open = (f: Parameters<typeof featureOpen>[0]) => featureOpen(f, stage);
   // 로비: 메인 글자·목록을 감추고 파수꾼으로 돌아다님
   if (lobby) return <LobbyMode t={t} onExit={() => setLobby(false)} />;
 
   return (
     <>
       <LobbyStage play={false} />
-      <button type="button" className="secondary lobby-button" onClick={() => setLobby(true)}>
-        <Icon name="users" /> {t("lobby")}
-      </button>
+      {open("lobby") && (
+        <button type="button" className="secondary lobby-button" onClick={() => setLobby(true)}>
+          <Icon name="users" /> {t("lobby")}
+        </button>
+      )}
       <TopBar lang={lang} setLang={setLang} t={t} />
       <InstallButton t={t} />
       <main className="title-screen">
@@ -92,31 +99,42 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
               {t("playSolo")}
               {saved && <span className="menu-badge">{t("continueRun")}</span>}
             </button>
-            <button type="button" className="secondary big" onClick={onDaily}>
-              <Icon name="crown" />
-              {t("daily")}
-            </button>
-            <button type="button" className="secondary big" onClick={onBattle}>
-              <Icon name="users" />
-              {t("playTogether")}
-            </button>
-            <button type="button" className="secondary big" onClick={onCoop}>
-              <Icon name="users" />
-              {t("coop")}
-            </button>
-            <button type="button" className="secondary big" onClick={() => setPopup("events")}>
-              <Icon name="star" />
-              {t("events")}
-            </button>
+            {open("daily") && (
+              <button type="button" className="secondary big" onClick={onDaily}>
+                <Icon name="crown" />
+                {t("daily")}
+              </button>
+            )}
+            {open("battle") && (
+              <button type="button" className="secondary big" onClick={onBattle}>
+                <Icon name="users" />
+                {t("playTogether")}
+              </button>
+            )}
+            {open("coop") && (
+              <button type="button" className="secondary big" onClick={onCoop}>
+                <Icon name="users" />
+                {t("coop")}
+              </button>
+            )}
+            {open("events") && (
+              <button type="button" className="secondary big" onClick={() => setPopup("events")}>
+                <Icon name="star" />
+                {t("events")}
+              </button>
+            )}
             <button type="button" className="secondary big" onClick={() => setPopup("archive")}>
               <Icon name="book" />
               {t("archive")}
             </button>
-            <button type="button" className="secondary big" onClick={onShop}>
-              <Icon name="bag" />
-              {t("shop")}
-            </button>
+            {open("shop") && (
+              <button type="button" className="secondary big" onClick={onShop}>
+                <Icon name="bag" />
+                {t("shop")}
+              </button>
+            )}
           </div>
+          <StageNotice t={t} lang={lang} stage={stage} />
         </div>
 
         <nav className="menu-links">

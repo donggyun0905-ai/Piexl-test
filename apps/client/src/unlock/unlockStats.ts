@@ -5,9 +5,9 @@ import { loadText, saveText } from "../storage";
 /** 누적 횟수 */
 export type CountKey = "skelarcher" | "venom" | "bombs" | "rests" | "altars" | "eliteRooms" | "traps" | "duelStreak" | "duelBest";
 /** 가장 높았던 값 */
-export type MaxKey = "defense" | "maxHp" | "attackSpeed" | "moveSpeed" | "endlessFloor";
+export type MaxKey = "defense" | "maxHp" | "attackSpeed" | "moveSpeed" | "endlessFloor" | "soloFloor";
 /** 한 번이라도 한 것 */
-export type FlagKey = "trial1000" | "heroClear" | "heroDoctor" | "heroApostle" | "dragonClear" | "arenaClear" | "swarmClear" | "tdFive" | "cupid" | "clear7" | "noShopClear";
+export type FlagKey = "trial1000" | "heroClear" | "heroDoctor" | "heroApostle" | "dragonClear" | "arenaClear" | "swarmClear" | "tdFive" | "cupid" | "clear7" | "noShopClear" | "lastBossClear";
 
 export interface UnlockStats {
   count: Partial<Record<CountKey, number>>;

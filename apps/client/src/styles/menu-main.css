@@ -136,3 +136,27 @@
     padding: 7px 10px;
   }
 }
+
+/* 스토리 진행: 새 장 열림 알림 · 다음 장 조건 (progress/StageNotice) */
+.stage-notice {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+.stage-notice.fresh {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 10px;
+  border: 1px solid #ffd84a;
+  border-radius: 6px;
+  background: rgba(255, 216, 74, 0.1);
+  color: var(--text, #fff);
+  font-size: 14px;
+}
+.stage-notice.fresh small {
+  color: var(--muted);
+  font-size: 12px;
+}

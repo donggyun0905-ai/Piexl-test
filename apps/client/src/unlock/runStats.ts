@@ -63,6 +63,8 @@ export function createUnlockRun(run: RunState) {
       if (p.useSlots.includes("cupidSpirit")) mark("cupid");
       if ((p.trial?.total ?? 0) >= 1000) mark("trial1000");
       if (run.endless) raise("endlessFloor", run.floor);
+      // 스토리 장 열기 (progress/storyStage): 혼자 하기 도착한 가장 깊은 층
+      else if (!run.hero && !run.arenaLv) raise("soloFloor", run.floor);
     },
     finish(): void {
       if (!on) return;
@@ -76,6 +78,7 @@ export function createUnlockRun(run: RunState) {
         }
         if (run.arenaLv) mark("arenaClear");
         if (run.lastBoss === "dragon") mark("dragonClear");
+        if (run.lastBoss && !run.hero && !run.arenaLv && !run.endless) mark("lastBossClear");
         if (!run.hero && !run.arenaLv && !run.endless && run.tick <= 7 * 60 * TICK_RATE) mark("clear7");
       }
       flushUnlockStats();
