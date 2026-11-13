@@ -4,13 +4,13 @@
 import { srcRun } from "./dmgSrc";
 import { RG_BASE as B, RG_EXTRA as X } from "../itemsRouge";
 import { ashTick, type AshKit } from "./noir";
-import { nrArea, nrNearest } from "./nrKit";
+import { ASH_REACH, nrArea, nrNearest } from "./nrKit";
 import { nrVolley } from "./nrVolley";
 import { rgBleedTick } from "./rgBleed";
 import { rgMaybePlant, rgPlant, rgRoseTick } from "./rgRose";
 import { rgRushTrail, rgSkill, rgSkillSrc } from "./rgSkills";
 import type { RunState } from "./types";
-import { addEffect, reachOf } from "./util";
+import { addEffect } from "./util";
 
 type P = RunState["player"];
 
@@ -22,7 +22,7 @@ const BLEED = { bleed: 1 };
 /** 기본 공격 한 번 (지금 단계) · 다시 누르기까지 틱 · 확률로 혈장미 */
 function attack(s: RunState): number {
   const p = s.player;
-  const k = reachOf(p);
+  const k = ASH_REACH;
   const [dx, dy] = [p.faceX, p.faceY];
   const D = p.stats.damage;
   const st = p.nrBase ?? 1;
@@ -47,7 +47,7 @@ function attack(s: RunState): number {
 /** 추가 공격 (지금 단계): 가까운 적 자리에 */
 function extra(s: RunState): void {
   const p = s.player;
-  const k = reachOf(p);
+  const k = ASH_REACH;
   const e = nrNearest(s, p.x, p.y, X.dist * k, p.faceX, p.faceY);
   if (!e) return;
   const D = p.stats.damage;

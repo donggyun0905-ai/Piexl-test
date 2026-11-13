@@ -13,7 +13,8 @@ import type { RunState } from "./types";
 export const trialFloor = (floor: number) => floor >= TRIAL_RULES.FROM_FLOOR;
 
 /** 시련 중 · 아직 카드를 고르지 않은 제단: 방이 잠기고 잠긴 출구로도 못 나감 (rooms.checkCleared·updateRoom) */
-export const roomLocked = (s: RunState) => trialBusy(s) || altarPending(s) || hiddenBusy(s);
+/** 방이 잠김 (아슈바르는 성좌를 못 쓰니 성좌의 방도 안 잠김) */
+export const roomLocked = (s: RunState) => trialBusy(s) || (altarPending(s) && !noirBlocksRoom(s, "altar")) || hiddenBusy(s);
 
 /** 특별한 방 하나: 가운데 칸(2칸째 ~ 쉼터 앞) 중 아무 칸의 전투방 하나 (그 칸에 전투방이 없으면 다른 칸) */
 export function setSpecial(byLayer: RoomInfo[][], rng: Rng, middle: number, type: RoomType): void {
@@ -30,7 +31,7 @@ export function setSpecial(byLayer: RoomInfo[][], rng: Rng, middle: number, type
 
 /** 처음 들어간 방에 물건 놓기 (협동은 사람마다) */
 export function spawnSpecialRoom(s: RunState, type: RoomType, roomId: number): void {
-  // 느아르 제약: 대장장이·성좌의 방은 쓸 수 없음 (빈 방)
+  // 아슈바르 제약: 대장장이·성좌·단련의 방은 쓸 수 없음 (빈 방)
   if (noirBlocksRoom(s, type)) return;
   if (type === "gym") spawnGym(s, roomId);
   else if (type === "trial") spawnTrial(s, roomId);

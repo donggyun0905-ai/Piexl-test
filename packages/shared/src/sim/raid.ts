@@ -69,6 +69,8 @@ export function raidOwnPassives(c: CharacterId): PassiveId[] {
  *  풋내기는 보충 없음: 레벨업 스탯 포인트가 패시브 대신 (2026-11-10 사용자 요청, 둘 다 받으면 너무 셈) */
 export function raidGymPts(c: CharacterId): number {
   if (c === "novice") return R.GYM_PTS;
+  // 아슈바르: 단련 못 씀 (2026-11-13)
+  if (c === "noir" || c === "rouge") return 0;
   return R.GYM_PTS + Math.max(0, R.PASSIVE_CAP - raidOwnPassives(c).length) * R.PER_PASSIVE;
 }
 

@@ -1,5 +1,5 @@
 // 장비 줄에 보낼 아슈바르(느아르·루주) 값: 적응력(레벨·흑·강화 횟수·단계·계급·확률·방금 결과) · 스킬 대기와 이름(강화판이면 강화 이름)
-import { expToNext, isAshvar, isRouge, nrChance, nrSkills, rgSkills, type RunState } from "@pixel-rogue/shared";
+import { isAshvar, isRouge, nrChance, nrNeed, nrSkills, rgSkills, type RunState } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 import type { NoirView } from "./NoirPanel";
 
@@ -18,7 +18,7 @@ export function noirView(run: RunState): { noir?: NoirView; skills?: number[]; s
       who: rg ? "rouge" : "noir",
       lv: p.nrLv ?? 1,
       exp: p.nrExp ?? 0,
-      need: expToNext(p.nrLv ?? 1),
+      need: nrNeed(p.nrLv ?? 1),
       pts: p.nrPts ?? 0,
       base: p.nrBase ?? 1,
       extra: p.nrExtra ?? 1,

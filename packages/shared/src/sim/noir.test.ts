@@ -3,7 +3,9 @@ import { NR_ADAPT as A, NR_BASE as B, NR_EXTRA as X, NR_SKILLS as K } from "../i
 import { createRun, EMPTY_INPUT, stepSim, type RunState } from "./index";
 import { recalcStats } from "./items";
 import { addPickup } from "./loot";
-import { NR_UP, nrChance, nrUpgrade } from "./nrAdapt";
+import { NR_UP, nrChance, nrNeed, nrUpgrade } from "./nrAdapt";
+import { expToNext } from "./novice";
+import { roomLocked, spawnSpecialRoom } from "./specialRooms";
 import { extraOf } from "./baseStats";
 import { enemy } from "./perkTestUtil";
 
@@ -116,17 +118,18 @@ describe("느아르", () => {
     expect(lost(t)).toBeCloseTo(t.player.stats.damage * K.end.waveMul * 3, 0);
   });
 
-  it("적응력: 흑이 차면 레벨업 → 공격력+1 · 체력+10 · 방어력·재생력+1 · 강화 한 번", () => {
+  it("적응력: 흑이 차면 레벨업 → 공격력+1 · 체력+10 · 재생력+1 · 강화 한 번", () => {
     const s = nr([[100, 100], [105, 95], [105, 105], [110, 100]]);
     const [d0, h0] = [s.player.stats.damage, s.player.stats.maxHp];
     for (const e of s.enemies) e.hp = 1;
+    s.player.nrExp = nrNeed(1) - 1;
     extraOdds(0, () => stepSim(s, hit));
     idle(s, 2);
     expect(s.player.nrLv).toBeGreaterThan(1);
     const lv = s.player.nrLv! - 1;
     expect(s.player.stats.damage).toBeCloseTo(d0 + lv * A.lvDmg, 5);
     expect(s.player.stats.maxHp).toBeCloseTo(h0 + lv * A.lvHp, 5);
-    expect(extraOf(s.player).defense).toBe(lv * A.lvDef);
+    expect(extraOf(s.player).defense).toBe(0);
     expect(s.player.nrPts).toBe(lv);
   });
 
@@ -154,18 +157,35 @@ describe("느아르", () => {
     p.nrExtra = 2;
     expect(nrChance(p, NR_UP.rank)).toBeNull();
     p.nrExtra = 3;
-    expect(nrChance(p, NR_UP.rank)).toBeCloseTo(0.1 + (p.nrFail?.[6] ?? 0) * A.failAdd, 5);
+    p.nrFail = [0, 0, 0, 0, 0, 0, 5];
+    // 승격은 실패해도 확률이 오르지 않음
+    expect(nrChance(p, NR_UP.rank)).toBe(0.1);
     expect(fails).toBeGreaterThanOrEqual(0);
   });
 
-  it("승격: 중위악마 공격력+5 · 체력+40 · 방어력·재생력+5", () => {
+  it("승격: 중위악마 공격력+5 · 체력+40 · 재생력+5 (방어력 없음)", () => {
     const s = nr();
     const [d0, h0, def0] = [s.player.stats.damage, s.player.stats.maxHp, extraOf(s.player).defense];
     s.player.nrRank = 1;
     recalcStats(s);
     expect(s.player.stats.damage).toBeCloseTo(d0 + 5, 5);
     expect(s.player.stats.maxHp).toBeCloseTo(h0 + 40, 5);
-    expect(extraOf(s.player).defense).toBe(def0 + 5);
+    expect(extraOf(s.player).defense).toBe(def0);
+    expect(extraOf(s.player).regen).toBeGreaterThan(0);
+  });
+
+  it("흑 필요량은 풋내기의 2배 · 성좌의 방은 안 잠김 · 단련의 방은 비어 있음 · 사거리 증가는 공격에 안 들어감", () => {
+    expect(nrNeed(3)).toBe(Math.round(expToNext(3) * A.expMul));
+    const s = nr();
+    s.map.rooms[s.roomId]!.type = "altar";
+    expect(roomLocked(s)).toBe(false);
+    const before = s.rooms[s.roomId]!.pickups.length;
+    spawnSpecialRoom(s, "gym", s.roomId);
+    expect(s.rooms[s.roomId]!.pickups.length).toBe(before);
+    const t = nr([[130, 100]]);
+    t.player.stats.range *= 3;
+    extraOdds(0, () => stepSim(t, hit));
+    expect(t.effects.find((f) => f.kind === "nrSlash")!.size).toBe(B.s1.r);
   });
 
   it("제약: 일반 방에는 아이템이 안 놓이고, 비밀방(악마의 방)에는 놓임", () => {

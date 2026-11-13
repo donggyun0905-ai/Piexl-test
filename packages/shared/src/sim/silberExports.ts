@@ -19,7 +19,7 @@ export { isRouge, rgSkills } from "./rouge";
 export { RG_SKILL_IDS } from "./rgSkills";
 export type { RgRose } from "./rgTypes";
 export { NR_SKILL_IDS } from "./nrSkills";
-export { NR_UP, nrChance } from "./nrAdapt";
+export { NR_UP, nrChance, nrNeed } from "./nrAdapt";
 export type { NrVolley, NrWave } from "./nrTypes";
 export { boardHalf, inBoard } from "./rvKit";
 export type { RvEvent, RvUnit } from "./rvTypes";

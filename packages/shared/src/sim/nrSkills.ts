@@ -1,12 +1,12 @@
 // 느아르 스킬(숫자 키 1~4, 처음부터 열림 · 적응력 강화에 성공하면 강화판)
 // 1 흑영 돌진 / 시초의 공허 · 2 공허의 낙인 / 차원 절멸 · 3 결계 붕괴 / 무한 심연 · 4 흑월 강림 / 태초의 종언
 import { NR_SKILLS as K } from "../itemsNoir";
-import { nrBoss, nrHit, nrNearest } from "./nrKit";
+import { ASH_REACH, nrBoss, nrHit, nrNearest } from "./nrKit";
 import { nrLater, nrVolley, nrWaves } from "./nrVolley";
 import { pctHp } from "./pctHp";
 import { dotDamage } from "./status";
 import type { RunState } from "./types";
-import { addEffect, keepInRoom, reachOf, roomGrid } from "./util";
+import { addEffect, keepInRoom, roomGrid } from "./util";
 import { onSegment } from "./s2Kit";
 
 type P = RunState["player"];
@@ -25,7 +25,7 @@ export function nrSkill(s: RunState, i: number): void {
   const ids = NR_SKILL_IDS[i];
   if (!ids || (cd[i] ?? 0) > 0) return;
   const id = ids[p.nrSkillUp?.[i] ? 1 : 0];
-  const k = reachOf(p);
+  const k = ASH_REACH;
   const D = p.stats.damage;
   const [fx, fy] = [p.faceX, p.faceY];
   // 겨눌 적이 있어야 나가는 스킬 (없으면 대기 시간도 안 씀)

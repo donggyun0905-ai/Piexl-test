@@ -1,11 +1,11 @@
 // 루주 스킬(숫자 키 1~4, 처음부터 열림 · 적응력 강화에 성공하면 강화판)
 // 1 혈영 돌진 / 혈화 만개 · 2 장미 낙인 / 광란의 혈검무 · 3 쌍검 혈월참 / 붉은 장미의 장례 · 4 진홍의 폭우 / 종언의 혈장미
 import { RG_ROSE, RG_SKILLS as K } from "../itemsRouge";
-import { nrAlive, nrNearest } from "./nrKit";
+import { ASH_REACH, nrAlive, nrNearest } from "./nrKit";
 import { nrLater, nrVolley } from "./nrVolley";
 import { rgGather, rgPlant } from "./rgRose";
 import type { RunState } from "./types";
-import { addEffect, reachOf } from "./util";
+import { addEffect } from "./util";
 
 type P = RunState["player"];
 
@@ -26,7 +26,7 @@ export function rgSkill(s: RunState, i: number): void {
   const ids = RG_SKILL_IDS[i];
   if (!ids || (cd[i] ?? 0) > 0) return;
   const id = ids[p.nrSkillUp?.[i] ? 1 : 0];
-  const k = reachOf(p);
+  const k = ASH_REACH;
   const D = p.stats.damage;
   const [fx, fy] = [p.faceX, p.faceY];
   // 겨눌 적이 있어야 나가는 스킬 (없으면 대기 시간도 안 씀)

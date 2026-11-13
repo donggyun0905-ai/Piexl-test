@@ -18,6 +18,9 @@ type P = RunState["player"];
 /** 강화 칸 (statPick 번호) */
 export const NR_UP = { base: 1, extra: 2, rank: 3, skill: 4 } as const;
 
+/** 이 레벨에서 다음 레벨까지 흑 필요량 (풋내기 경험치 × 배율) */
+export const nrNeed = (lv: number) => Math.round(expToNext(lv) * A.expMul);
+
 /** 쓰러뜨린 적의 흑 받기 (느아르만 · 패왕전 빼고) */
 export function nrGain(s: RunState, e: EnemyState): void {
   const p = s.player;
@@ -25,8 +28,8 @@ export function nrGain(s: RunState, e: EnemyState): void {
   p.nrLv ??= 1;
   p.nrExp = (p.nrExp ?? 0) + expOf(e) * (s.swarm ? SWARM.limits.noviceExp : 1);
   let up = false;
-  while (p.nrExp >= expToNext(p.nrLv)) {
-    p.nrExp -= expToNext(p.nrLv);
+  while (p.nrExp >= nrNeed(p.nrLv)) {
+    p.nrExp -= nrNeed(p.nrLv);
     p.nrLv++;
     p.nrPts = (p.nrPts ?? 0) + 1;
     up = true;
@@ -47,7 +50,8 @@ export function nrChance(p: P, what: number): number | null {
     const rk = p.nrRank ?? 0;
     if (rk >= 3) return null;
     if (rk === 2 && ((p.nrBase ?? 1) < A.archNeed || (p.nrExtra ?? 1) < A.archNeed)) return null;
-    return Math.min(1, A.rank[rk]! + fail(6));
+    // 승격은 실패해도 확률이 오르지 않음 (2026-11-13)
+    return A.rank[rk]!;
   }
   const i = what - NR_UP.skill;
   if (i < 0 || i > 3 || p.nrSkillUp?.[i]) return null;
@@ -99,12 +103,12 @@ export function noirMods(p: P): StatMod[] {
   return out;
 }
 
-/** 레벨·승격으로 오른 방어력·재생력 (sim/baseStats.extraOf) */
+/** 레벨·승격으로 오른 재생력 (방어력은 없음) (sim/baseStats.extraOf) */
 export function noirExtras(p: P): Partial<ExtraStats> | null {
   if (!isAshvar(p) || ((p.nrLv ?? 1) <= 1 && !p.nrRank)) return null;
   const lv = (p.nrLv ?? 1) - 1;
   const ranks = rankRows(p);
-  return { defense: A.lvDef * lv + ranks.reduce((a, r) => a + r.def, 0), regen: A.lvRegen * lv + ranks.reduce((a, r) => a + r.regen, 0) };
+  return { regen: A.lvRegen * lv + ranks.reduce((a, r) => a + r.regen, 0) };
 }
 
 /** 재생 가속: 재생력 회복 배율 */
@@ -120,5 +124,5 @@ export function noirBlocksPickup(s: RunState, roomId: number, kind: PickupKind):
   return !(type && OPEN.includes(type)) && roomId !== pilgrimRoom(s);
 }
 
-/** 제약: 대장장이·성좌의 방은 비어 있음 · 쉼터(보스 앞 회복의 방) 회복 없음 */
-export const noirBlocksRoom = (s: RunState, type: RoomType) => isAshvar(s.player) && (type === "forge" || type === "altar" || type === "rest");
+/** 제약: 대장장이·성좌·단련의 방은 비어 있음 · 쉼터(보스 앞 회복의 방) 회복 없음 */
+export const noirBlocksRoom = (s: RunState, type: RoomType) => isAshvar(s.player) && (type === "forge" || type === "altar" || type === "gym" || type === "rest");

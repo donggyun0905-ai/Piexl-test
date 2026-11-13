@@ -8,8 +8,8 @@ import { NR, nrPic, ROW } from "./noirArt";
 const KINDS = new Set<string>([...Object.keys(ROW), "nrSpear", "nrBurst", "nrWave", "nrLevel", "nrUpOk", "nrUpFail", "nrRankUp"]);
 /** 오래 가는 기술 (첫 칸 → 가운데 두 칸을 오감 → 마지막 칸) */
 const LONG = new Set<string>(["nrFlurry", "nrSpin", "nrSever", "nrDevour", "nrOrigin", "nrRift", "nrAbyss", "nrBarrier", "nrSqueeze", "nrDrain", "nrBrand"]);
-/** 그림 크기 배율 (반지름 → 그림 너비) */
-const SCALE: Partial<Record<string, number>> = { nrRift: 1.7, nrSlash: 2.4, nrGrasp: 2.4, nrRush: 1.6, nrMoon: 2.4, nrEnd: 2.4, nrBrand: 2.6 };
+/** 그림 크기 배율 (반지름 → 그림 너비) · 결계 붕괴는 반으로 (2026-11-13) */
+const SCALE: Partial<Record<string, number>> = { nrRift: 1.7, nrSlash: 2.4, nrGrasp: 2.4, nrRush: 1.6, nrMoon: 2.4, nrEnd: 2.4, nrBrand: 2.6, nrBarrier: 1.1 };
 
 export function drawNoirFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   if (!KINDS.has(fx.kind)) return false;

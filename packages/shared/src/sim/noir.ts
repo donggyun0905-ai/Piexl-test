@@ -3,11 +3,11 @@
 // 나눠 때리기·충격파(sim/nrVolley) · 적응력·제약(sim/nrAdapt)
 import { srcRun } from "./dmgSrc";
 import { NR_BASE as B, NR_EXTRA as X } from "../itemsNoir";
-import { nrArea, nrHit, nrNearest, nrRoll } from "./nrKit";
+import { ASH_REACH, nrArea, nrHit, nrNearest, nrRoll } from "./nrKit";
 import { nrRushTick, nrSkill, nrSkillSrc } from "./nrSkills";
 import { nrVolley, nrVolleyTick } from "./nrVolley";
 import type { RunState } from "./types";
-import { addEffect, reachOf } from "./util";
+import { addEffect } from "./util";
 
 type P = RunState["player"];
 
@@ -19,7 +19,7 @@ const roomKey = (s: RunState) => s.floor * 1000 + s.roomId;
 /** 기본 공격 한 번 (지금 단계) · 다시 누르기까지 틱 */
 function attack(s: RunState): number {
   const p = s.player;
-  const k = reachOf(p);
+  const k = ASH_REACH;
   const [dx, dy] = [p.faceX, p.faceY];
   const D = p.stats.damage;
   const st = p.nrBase ?? 1;
@@ -52,7 +52,7 @@ function attack(s: RunState): number {
 /** 추가 공격 (지금 단계): 가까운 적 자리에 */
 function extra(s: RunState): void {
   const p = s.player;
-  const k = reachOf(p);
+  const k = ASH_REACH;
   const e = nrNearest(s, p.x, p.y, X.dist * k, p.faceX, p.faceY);
   if (!e) return;
   const D = p.stats.damage;
