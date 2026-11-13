@@ -15,6 +15,8 @@ export const STORY_TEXT = {
   storyPrev: { ko: "◀ 이전", en: "◀ Prev", ja: "◀ 前へ" },
   storyNext: { ko: "다음 ▶", en: "Next ▶", ja: "次へ ▶" },
   sceneBook: { ko: "📖 책으로 보기", en: "📖 Read as book", ja: "📖 本で読む" },
+  sceneFull: { ko: "⛶ 전체 화면", en: "⛶ Fullscreen", ja: "⛶ 全画面" },
+  sceneFullExit: { ko: "⛶ 전체 화면 끄기", en: "⛶ Exit fullscreen", ja: "⛶ 全画面を終了" },
   sceneSkip: { ko: "건너뛰기 ✕", en: "Skip ✕", ja: "スキップ ✕" },
   sceneHint: { ko: "누르기·Space 다음 · ← 이전 · Esc 닫기", en: "Tap / Space next · ← back · Esc close", ja: "タップ・Space 次へ・← 戻る・Esc 閉じる" },
   storyToList: { ko: "목록으로", en: "Back to chapters", ja: "目次へ" },

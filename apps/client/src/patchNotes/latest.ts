@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.87",
+    date: "2026-11-13",
+    items: {
+      ko: ["스토리 장면을 화면 가득: 그림이 화면 전체를 채우고 대사 상자는 아래에 반투명하게 겹침 (세로 휴대폰은 그림 전체가 보이게) · '⛶ 전체 화면' 버튼으로 브라우저 전체 화면 (장면을 닫으면 자동으로 꺼짐)"],
+      en: ["Story scenes now fill the screen: the illustration covers the whole view with a translucent dialogue box at the bottom (portrait phones show the full picture) · '⛶ Fullscreen' button for browser fullscreen (turns off when the scene closes)"],
+      ja: ["ストーリーのシーンを画面いっぱいに：イラストが画面全体を覆い、台詞ボックスは下に半透明で重なる（縦向きスマホは絵全体を表示）・「⛶ 全画面」ボタンでブラウザ全画面（シーンを閉じると自動で解除）"],
+    },
+  },
+  {
     version: "0.52.86",
     date: "2026-11-13",
     items: {
