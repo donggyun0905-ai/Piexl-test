@@ -166,6 +166,40 @@ Use the first reference image ONLY as the art style guide: match its exact style
 9. `Scene: the royal box of the arena. The Demigod (long white hair, golden horns, muscular bare chest with red markings) has leapt up and stands before the three kings. The King of Terracore (grey beard, bronze gear crown) holds out a scrap of black cloth whose edge burns with a faint, unquenchable black flame. The Demigod stares down at it with a suddenly serious face; the Kings of Ascalon and Virdia look at Terracore's king in shock. The crowd below frozen. Tense, grave mood.`
 10. `Scene: sunrise over the arena and forest. For the first time, the banners of Ascalon (crimson), Virdia (green) and Terracore (bronze) are bound together under one new alliance flag raised high. The Demigod stands at the front with arms crossed, the three kings behind him, and the gathered champions of all three nations below look up at the flag. Hopeful, solemn, epic mood.`
 
-## 6~9장
+## 6장 「황혼의 종언」 (12컷, `art/스토리/6장/`)
+
+151문단이라 12컷. 참고 그림: 5장 사람들(`art/캐릭터/…-1.png`) + 잊혀진 자 `잊혀진 자/forgotten-1.png` · 제천대성 `public/sprites/enemies/sage.png` · 검신 `swordgod.png` · 파멸의 용 `art/최종보스/멸망의 용/boss-dragon.png` · 갓이터 `godeater.png` · 태초 `plight.png`·`pdark.png` · 색욕의 대악마(검은 인영) `asmodeus.png` (얼굴은 어둠에 가림)
+
+| 컷 | 문단 | 참고 그림 | 장면 |
+| --- | --- | --- | --- |
+| 1 | 1~11 | 괴력난신·추적자·이드라·아티팩터 + 5장 컷 10 | 연합 본진에 모인 세 나라 정예, 떨어져 선 로브 쓴 사람 |
+| 2 | 12~18 | 괴력난신·펑크 | 모래에 반쯤 묻힌 고대 왕국 세레스티아, 바닥에 주먹을 쏟아붓는 괴력난신 |
+| 3 | 19~36 | 괴력난신·제천대성 | 구멍에서 솟구친 거대한 봉, 괴력난신과 제천대성의 싸움, 물러나 지켜보는 정예 |
+| 4 | 37~45 | 제천대성·잊혀진 자 | 로브가 벗겨지며 드러난 빛을 머금은 공주 에스텔 |
+| 5 | 46~48 | 제천대성·잊혀진 자 | 부서진 성문 안, 빛나는 성물 '원초의 진금'을 건네받는 에스텔 |
+| 6 | 49~70 | 갓이터·태초·파멸의 용·검은 인영·제천대성·괴력난신 | 모래 언덕 너머 일행을 에워싼 그림자들, 손을 든 검은 인영 |
+| 7 | 71~86 | 방랑객·추적자·영사·잔영·잊혀진 자·갓이터 | 아스칼론 대 갓이터, 손짓 하나로 대검의 마법을 멈춘 잊혀진 자 |
+| 8 | 87~102 | 변희·이드라·플라이·태초·검신 | 비르디아 대 태초, 몰려드는 몬스터, 플라이를 노리는 검신 |
+| 9 | 103~114 | 장로·렌·정령사·이드라·태초 | 진법의 문에서 뛰어나온 렌·정령사, 부서진 태초의 허상, 하늘의 진짜 태초 |
+| 10 | 115~135 | 펑크·라이더·붐버·아티팩터·파멸의 용 | 테라코어 대 파멸의 용, 거대한 방패로 브레스를 막는 펑크, 폭격 |
+| 11 | 136~145 | 괴력난신·제천대성·오토마타·파멸의 용 | 연옥 같은 브레스, 로더 빛 속에 사라지는 정예들, 앞을 막는 거대한 봉 |
+| 12 | 146~151 | 제천대성·검은 인영 | 모래 위 홀로 남은 제천대성, 황혼 속 사라져 가는 땅 |
+
+### 6장 컷별 장면 (영어, [공통] 뒤에 붙임)
+
+1. `Scene: the courtyard of the new alliance headquarters, banners of Ascalon (crimson), Virdia (green) and Terracore (bronze) side by side. The Demigod (muscular giant, long white hair, golden horns, bare chest with red markings) shouts orders. Before him stand the elites: the Tracker, the Wanderer, Silk and the Remnant of Ascalon; Idra, Byeonhui, Fly, the Elder, Ren and the Spiritist of Virdia; Artifacter, Punk, Automata, Rider and Bomber of Terracore. A little apart stands a silent figure in a deep hooded robe. Determined, gathering-before-the-journey mood.`
+2. `Scene: a vast desert where the ruins of an ancient kingdom, Celestia, lie half buried in sand: broken white towers, colossal statues, a sunken throne hall. The Demigod pounds the sandy floor with a storm of fists, sand exploding upward in waves, a deep hole opening. Punk and the other elites shield their eyes from the blast at a distance. Epic, adventurous mood.`
+3. `Scene: from the hole in the sand a giant red-and-gold staff shoots out like a pillar. Out leaps the Great Sage, an original monkey warrior in golden armor and a red cape riding a small golden cloud, wielding a long red staff with golden ends. He and the Demigod clash in mid-air with grinning faces, shockwaves blasting sand in rings, while the elites watch from far away, stunned. Wild, joyful battle mood.`
+4. `Scene: in the ruined throne hall, the hooded figure's robe falls away, revealing Estelle, the Forgotten One: a gentle young woman with very long wavy silver-white hair, golden eyes, a golden laurel circlet with a blue gem, white and gold ancient princess dress, her face glowing with soft light. The Great Sage (monkey warrior, golden armor, red cape, red staff) stares at her in shock; the Demigod raises his eyebrows. Moving, revelatory mood.`
+5. `Scene: the Great Sage smashes open a massive ancient sealed gate with his staff. Inside, on an altar, floats a radiant sacred relic, the Primordial True Gold Core, a glowing golden crystal heart with orbiting runes. Estelle (silver-white hair, golden laurel circlet, white and gold dress) receives it in her hands, bowing in gratitude. Golden light fills the dusty hall. Sacred, hopeful mood.`
+6. `Scene: a sudden rumble; over the desert dunes enemy shadows surround the group: the Godeater (towering dark cloaked giant with a golden crown, red eyes and floating greatswords), the Primeval Light and Darkness (a radiant sun orb and a black moon orb in the sky), the Dragon of Ruin (huge crimson spiked dragon, eyes pained) and in the center a mysterious dark humanoid figure wrapped in shadow and faint purple flame, face hidden, slowly raising one hand. The Great Sage, the Demigod and the elites draw their weapons back to back. Overwhelming, ominous mood.`
+7. `Scene: Ascalon's battle against the Godeater in the desert. Floating greatswords slash through the air; the Wanderer's katana strikes are blocked by thick armor, the Tracker fires a huge glowing bullet, Silk binds the swords with shining invisible threads, and the Remnant appears behind the Godeater's neck. In front, Estelle holding the glowing True Gold Core raises one hand calmly, and the greatswords' magic stops, the blades falling and stabbing into the sand. Intense, turning-point mood.`
+8. `Scene: Virdia's battle against the Primeval Light and Darkness in a sea of swarming monsters. Byeonhui shifts between a wolf, a bear and an eagle tearing through monsters; Idra draws a giant bow of living wood shooting a huge arrow of nature magic; the Primeval's white and black beams erase it. Fly (blue hair, translucent wings) dives at the Primeval's back but is blocked by the Sword God (a tall white-robed swordsman with a blue sash and many floating blades). Chaotic, desperate mood.`
+9. `Scene: the Elder (white hair and beard, green robe, staff) opens glowing circular magic formation gates on both sides of the Primeval; Ren (green hooded robe, floating boulders) and the Spiritist (long navy hair, small spirits) leap out and strike with a huge earth spike and spirit blasts. The struck Primeval shatters like glass, revealing it was only an illusion; high above in the sky the real sun and moon orbs gather a gigantic compressed sphere of white and black energy. Idra looks up in horror. Shocking, dramatic mood.`
+10. `Scene: Terracore's battle against the Dragon of Ruin. The crimson dragon breathes a massive fiery breath; Punk (pink and blue hair, punk outfit) holds up a giant glowing pulse shield blocking it head on. Rider (black hair, goggles) blasts under the dragon's belly on his blue motorcycle with a huge impact, Bomber (spiky red hair, goggles, orange scarf) rains down a carpet of explosive bombs as the dragon takes off, and Artifacter (silver hair, glowing gauntlets) shouts directions. Explosive, heroic action mood.`
+11. `Scene: the Dragon of Ruin opens its jaws and an unbearable white-hot light gathers, forming a purgatory of flame across the sky. The Great Sage plants his staff, now grown to colossal size, as a wall in front of the elites, shattering every attack. Behind it, the elites and the Demigod activate glowing teleport loaders that Automata (silver hair, white and blue mechanical dress) secretly placed, disappearing one by one in pillars of blue light. Desperate, heroic escape mood.`
+12. `Scene: twilight over the desert. The Great Sage stands alone on the sand with his staff on his shoulder, grinning defiantly at the dark shadowy figure with faint purple flame before him. Behind them the ancient ruins of Celestia are crumbling and sinking into the earth amid tremors and dust, under a blood-orange setting sun. Lonely, heroic, tragic mood.`
+
+## 7~9장
 
 🔸 2장처럼 장마다 컷 목록·프롬프트를 이어서 씀 (그 전에는 장 하나에 임시 배경 하나)

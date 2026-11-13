@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.99",
+    date: "2026-11-14",
+    items: {
+      ko: ["스토리 6장을 장면 12개로 나눔 (일러스트는 차례로 추가, 그 전에는 장면마다 임시 배경)"],
+      en: ["Story Chapter 6 split into 12 scenes (illustrations coming; placeholder backgrounds until then)"],
+      ja: ["ストーリー6章を12のシーンに分割（イラストは順次追加、それまではシーンごとの仮背景）"],
+    },
+  },
+  {
     version: "0.52.98",
     date: "2026-11-14",
     items: {
