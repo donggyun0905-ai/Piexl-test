@@ -15,14 +15,15 @@
 
 1. Claude 채팅·Cowork의 Higgsfield에서 **Nano Banana Pro · 16:9 · 2k** (Claude Code에서는 무제한 생성이 막혀 크레딧이 듦)
 2. 참고 그림 1번 = 그 캐릭터의 **원본 그림** (아래 각 캐릭터의 '참고 그림', 모두 `art/캐릭터/` 안)
-3. 참고 그림 2번 = **화풍 기준 그림**: 처음 한 장(파수꾼 추천)을 마음에 들 때까지 만든 뒤, 그 결과를 다음 캐릭터부터 2번으로 같이 올림 (연작처럼 같은 화풍)
+3. 참고 그림 마지막 = **화풍 기준 그림**: 처음 한 장(파수꾼 추천)을 마음에 들 때까지 만든 뒤, 그 결과를 다음 캐릭터부터 맨 뒤에 같이 올림 (연작처럼 같은 화풍)
+   - **100명을 한 번에 만들려면 `docs/CHAR_ART_BATCH.md`의 글을 통째로 붙여 넣기** (참고 그림은 Higgsfield에 미리 올려 둠)
 4. 프롬프트 = 아래 **[공통]** + 캐릭터별 영어 프롬프트
 5. 위아래 검은 띠가 생기면 Claude가 잘라서 넣음
 
 ### [공통] — 모든 캐릭터 앞에
 
 ```
-Use the first reference image ONLY as the character design sheet (it is small chibi game art): keep this character's hair color and style, eye color, outfit, colors, accessories, weapon and gender exactly, but do NOT copy the chibi proportions. If there is a second reference image that is a finished illustration, use it ONLY as the art style guide and do not copy its character or background. Style: beautiful high-detail pixel art illustration for a game character select screen, visible crisp pixels, clean dark pixel outlines, rich saturated colors, dramatic rim lighting, no blur, no painterly smudge, no photo texture. Body: realistic anime proportions (about 7 heads tall; children, animals and creatures keep their natural size), attractive detailed face, confident dynamic full-body pose. Composition: 16:9, the WHOLE character from head to feet (including weapon, wings and tail) is visible and centered, filling about 75% of the image height, with a small margin above the head and below the feet, nothing important cut off. The character stands in front of a detailed background scene that fits them; the background is slightly darker and less detailed than the character so the character stands out. Full-bleed image, no black bars, no letterboxing, no border, no frame, no text, no letters, no logo, no watermark, no signature, no UI. Original design; do not imitate any other game or anime.
+Reference images: the character design sheet(s) come first; if the LAST reference image is a finished illustration (not a sprite sheet), use it ONLY as the art style guide and do not copy its character or background. Use the character design sheet (small chibi game art) to keep this character's hair color and style, eye color, outfit, colors, accessories, weapon and gender exactly, but do NOT copy the chibi proportions. The sheet shows the same character several times in different directions and poses; draw that character only ONCE (one single figure, unless the prompt asks for several characters), and ignore the sheet's plain black or bright green background. Style: beautiful high-detail pixel art illustration for a game character select screen, visible crisp pixels, clean dark pixel outlines, rich saturated colors, dramatic rim lighting, no blur, no painterly smudge, no photo texture. Body: realistic anime proportions (about 7 heads tall; children, animals and creatures keep their natural size), attractive detailed face, confident dynamic full-body pose. Composition: 16:9, the WHOLE character from head to feet (including weapon, wings and tail) is visible and centered, filling about 75% of the image height, with a small margin above the head and below the feet, nothing important cut off. The character stands in front of a detailed background scene that fits them; the background is slightly darker and less detailed than the character so the character stands out. Full-bleed image, no black bars, no letterboxing, no border, no frame, no text, no letters, no logo, no watermark, no signature, no UI. Original design; do not imitate any other game or anime.
 ```
 
 ## 진영별 배경 느낌
@@ -418,7 +419,7 @@ A female ninja with messy black hair, a long red headband trailing in the wind, 
 - 컨셉: 버려진 세 아이, 사막 신전에서 빛과 어둠을 받음
 - 배경: 사막 신전 바닥에서 떠오르는 빛과 어둠의 구체
 ```
-Three children who grew up together, standing side by side, all in black clothes with bodies marked by both light (golden eyes, white streaks) and darkness (purple eyes, purple streaks): in front a boy with black hair holding a large green shield, on the left a girl with long white hair streaked red holding a red gun, on the right a boy holding a blue sword. All three full bodies visible. Background: the floor of an ancient desert temple, a sphere of light and darkness rising behind them. Fateful, determined mood.
+The three reference sheets are three different children; draw all three together in one picture. Three children who grew up together, standing side by side, all in black clothes with bodies marked by both light (golden eyes, white streaks) and darkness (purple eyes, purple streaks): in front a boy with black hair holding a large green shield, on the left a girl with long white hair streaked red holding a red gun, on the right a boy holding a blue sword. All three full bodies visible. Background: the floor of an ancient desert temple, a sphere of light and darkness rising behind them. Fateful, determined mood.
 ```
 
 ### 오니 (oni)
@@ -481,7 +482,7 @@ A female hidden-weapon assassin with black hair in an elegant updo pierced with 
 - 컨셉: 헬리오스의 태양인 그녀와, 그 뒷면 일식의 밤의 주인인 그
 - 배경: 황금 궁전 위 하늘, 개기일식
 ```
-A girl with long cream-white hair, a golden sun crown with flowers, a white and gold dress, holding a sun scepter. Behind her looms a huge eclipsed sun with a glowing corona, and within the dark disc the faint face of a young man, the lord of the night. Background: the sky above a golden imperial palace during a total solar eclipse, half the scene in daylight gold and half in night. Radiant yet ominous mood.
+The reference shows the girl with a man's face inside the sun disc behind her: the man is not a separate person standing, only a giant face in the eclipsed sun. A girl with long cream-white hair, a golden sun crown with flowers, a white and gold dress, holding a sun scepter. Behind her looms a huge eclipsed sun with a glowing corona, and within the dark disc the faint face of a young man, the lord of the night. Background: the sky above a golden imperial palace during a total solar eclipse, half the scene in daylight gold and half in night. Radiant yet ominous mood.
 ```
 
 ## 탈라시아
@@ -824,7 +825,7 @@ A knight maid with long silver hair and blue eyes, a maid headdress with blue ri
 - 컨셉: 태초의 색채 악마 7원색 군단의 검정, 빛과 색을 삼키는 공허
 - 배경: 모든 색이 빨려 들어가는 검은 공허
 ```
-A demon with black hair and red eyes, a long black coat with a high collar, black void energy forming huge claws around his hand. Background: a black void where all color and light is being swallowed, fragments of a colorful world dissolving into darkness. Absolute, chilling mood.
+The reference sheet has a bright green chroma-key background: ignore it completely, no green in the image. A demon with black hair and red eyes, a long black coat with a high collar, black void energy forming huge claws around his hand. Background: a black void where all color and light is being swallowed, fragments of a colorful world dissolving into darkness. Absolute, chilling mood.
 ```
 
 ### 루주 (rouge)
@@ -833,7 +834,7 @@ A demon with black hair and red eyes, a long black coat with a high collar, blac
 - 컨셉: 7원색의 빨강, 피와 장미로 물든 광란
 - 배경: 붉은 장미가 가득한 핏빛 정원
 ```
-A demon swordswoman with very long crimson hair and blue eyes, black leather armor, twin rose-themed swords trailing red petals. Background: a blood-red garden overflowing with red roses and thorns under a crimson sky. Frenzied, beautiful mood.
+The reference sheet has a bright green chroma-key background: ignore it completely, no green in the image. A demon swordswoman with very long crimson hair and blue eyes, black leather armor, twin rose-themed swords trailing red petals. Background: a blood-red garden overflowing with red roses and thorns under a crimson sky. Frenzied, beautiful mood.
 ```
 
 ### 블뢰 (bleu)
@@ -842,7 +843,7 @@ A demon swordswoman with very long crimson hair and blue eyes, black leather arm
 - 컨셉: 7원색의 파랑, 시간마저 얼리는 겨울
 - 배경: 시간이 멈춘 얼음 궁전
 ```
-A demon with long wavy pale lavender-white hair, pointed ears, black curved horns with an ice crystal crown, dark armor and a blue cape, holding an open white grimoire glowing blue. Background: an ice palace where time has frozen, snowflakes hanging still in the air. Cold, eternal mood.
+The reference sheet has a bright green chroma-key background: ignore it completely, no green in the image. A demon with long wavy pale lavender-white hair, pointed ears, black curved horns with an ice crystal crown, dark armor and a blue cape, holding an open white grimoire glowing blue. Background: an ice palace where time has frozen, snowflakes hanging still in the air. Cold, eternal mood.
 ```
 
 ### 존 (jaune)
@@ -851,7 +852,7 @@ A demon with long wavy pale lavender-white hair, pointed ears, black curved horn
 - 컨셉: 7원색의 노랑, 하늘을 찢는 황금 번개
 - 배경: 황금 번개가 쏟아지는 하늘
 ```
-A demon with messy white hair, golden eyes, pointed ears, a white and gold coat with lightning patterns, a golden gauntlet crackling with lightning. Background: a sky torn open by golden lightning bolts over dark clouds. Wild, electric mood.
+The reference sheet has a bright green chroma-key background: ignore it completely, no green in the image. A demon with messy white hair, golden eyes, pointed ears, a white and gold coat with lightning patterns, a golden gauntlet crackling with lightning. Background: a sky torn open by golden lightning bolts over dark clouds. Wild, electric mood.
 ```
 
 ### 마젠타 (magenta)
@@ -860,7 +861,7 @@ A demon with messy white hair, golden eyes, pointed ears, a white and gold coat 
 - 컨셉: 7원색의 자홍, 저주의 꽃으로 홀리는 욕망
 - 배경: 자홍빛 저주의 꽃밭
 ```
-A demon girl with long wavy hair fading from plum to hot pink, pink eyes, pointed ears, an off-shoulder white blouse and short denim shorts, holding a folding fan. Background: a field of glowing magenta cursed flowers releasing sweet hazy pollen. Tempting, dangerous mood.
+The reference sheet has a bright green chroma-key background: ignore it completely, no green in the image. A demon girl with long wavy hair fading from plum to hot pink, pink eyes, pointed ears, an off-shoulder white blouse and short denim shorts, holding a folding fan. Background: a field of glowing magenta cursed flowers releasing sweet hazy pollen. Tempting, dangerous mood.
 ```
 
 ### 베르 (vert)
@@ -869,7 +870,7 @@ A demon girl with long wavy hair fading from plum to hot pink, pink eyes, pointe
 - 컨셉: 7원색의 초록
 - 배경: 덩굴에 삼켜진 폐허 숲
 ```
-A demon with silver-white hair and green eyes, a hood made of leaves and vines, a ragged dark green cloak, twin sickles made of thorny vines. Background: a ruined forest swallowed by enormous vines, green light through the overgrowth. Creeping, quiet mood.
+The reference sheet has a bright green chroma-key background: ignore it completely, no green in the image. A demon with silver-white hair and green eyes, a hood made of leaves and vines, a ragged dark green cloak, twin sickles made of thorny vines. Background: a ruined forest swallowed by enormous vines, green light through the overgrowth. Creeping, quiet mood.
 ```
 
 ### 블랑 (blanc)
@@ -878,7 +879,7 @@ A demon with silver-white hair and green eyes, a hood made of leaves and vines, 
 - 컨셉: 7원색의 하양
 - 배경: 모든 것이 하얗게 바랜 빛의 세계
 ```
-A demon with extremely long white hair, pink eyes, sunglasses pushed up on her head, a black crop top under loose white clothes, holding a pure white fan. Background: a world bleached completely white by light, faint outlines of buildings fading away. Carefree, eerie mood.
+The reference sheet has a bright green chroma-key background: ignore it completely, no green in the image. A demon with extremely long white hair, pink eyes, sunglasses pushed up on her head, a black crop top under loose white clothes, holding a pure white fan. Background: a world bleached completely white by light, faint outlines of buildings fading away. Carefree, eerie mood.
 ```
 
 ## 아카식 레코드 (숨은 캐릭터)
