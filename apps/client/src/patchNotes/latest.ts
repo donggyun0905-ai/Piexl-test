@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.83",
+    date: "2026-11-13",
+    items: {
+      ko: ["스토리 1장 장면 일러스트 추가: 깊은 숲에서 새끼 용을 지키는 야수와 원소술사"],
+      en: ["New Chapter 1 scene illustration: the Beastkin and the Elementalist protecting a young dragon in the deep forest"],
+      ja: ["ストーリー1章のシーンイラスト追加：深い森で子竜を守る獣人と元素術師"],
+    },
+  },
+  {
     version: "0.52.82",
     date: "2026-11-13",
     items: {
