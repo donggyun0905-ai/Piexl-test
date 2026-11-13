@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.60",
+    date: "2026-11-13",
+    items: {
+      ko: ["아슈바르(느아르·루주): 재생 가속을 절반으로 (재생력 회복 2.5배 → 1.25배)"],
+      en: ["Ashvar (Noir · Rouge): Regen Boost halved (regeneration 2.5× → 1.25×)"],
+      ja: ["アシュヴァル（ノワール・ルージュ）：再生加速を半分に（再生力の回復 2.5倍 → 1.25倍）"],
+    },
+  },
+  {
     version: "0.52.59",
     date: "2026-11-13",
     items: {
