@@ -34,6 +34,7 @@ export const ASCALON_ACHIEVEMENTS = {
   clearBaekinjang: n(["붉은 날개의 종언", "The End on Red Wings", "赤い翼の終焉"], ["백인장으로 클리어", "Clear as Baekinjang", "百人長でクリア"]),
   clearNoir: n(["태초의 검정", "The Primordial Black", "太初の黒"], ["느아르로 클리어", "Clear as Noir", "ノワールでクリア"]),
   clearBleu: n(["태초의 파랑", "The Primordial Blue", "太初の青"], ["블뢰로 클리어", "Clear as Bleu", "ブルーでクリア"]),
+  clearMagenta: n(["태초의 자홍", "The Primordial Magenta", "太初の紅紫"], ["마젠타로 클리어", "Clear as Magenta", "マゼンタでクリア"]),
   clearJaune: n(["태초의 노랑", "The Primordial Yellow", "太初の黄"], ["존으로 클리어", "Clear as Jaune", "ジョーヌでクリア"]),
   clearRouge: n(["태초의 빨강", "The Primordial Red", "太初の赤"], ["루주로 클리어", "Clear as Rouge", "ルージュでクリア"]),
   clearGears: n(["무너지지 않는 쌍방패", "Unbreakable Twin Shields", "崩れぬ双盾"], ["기어스로 클리어", "Clear as Gears", "ギアーズでクリア"]),

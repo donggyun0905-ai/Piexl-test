@@ -33,6 +33,7 @@ export const SUMMARY_TEXT = {
   sumDotVoid: { ko: "공허탄", en: "Void bolt", ja: "虚空弾" },
   sumDotMoon: { ko: "달빛", en: "Moonlight", ja: "月光" },
   sumDotBlueflame: { ko: "청염", en: "Blue flame", ja: "青炎" },
+  sumDotCharm: { ko: "매혹", en: "Charm", ja: "魅了" },
   sumTaken: { ko: "받은 피해", en: "Damage taken", ja: "受けたダメージ" },
   sumGold: { ko: "번 돈 / 쓴 돈", en: "Gold earned / spent", ja: "稼いだお金 / 使ったお金" },
   sumBosses: { ko: "보스 처치 (무피해)", en: "Bosses (flawless)", ja: "ボス撃破（無傷）" },

@@ -36,6 +36,7 @@ const PREFIX: [RegExp, string][] = [
   [/^RG_/, "rouge"],
   [/^BU_/, "bleu"],
   [/^JN_/, "jaune"],
+  [/^MZ_/, "magenta"],
 ];
 
 /** 계산 파일 이름 → 분류 이름 (캐릭터가 아닌 것) */

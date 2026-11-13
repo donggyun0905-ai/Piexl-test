@@ -169,4 +169,11 @@ export const PW_KITS_4: PwKits = {
     sk("jnGrip", "dash", 9, "#ffd020", { range: 130, speed: 11, hit: { dmg: 1 } }),
     sk("jnGrip", "point", 60, "#ffb800", { range: 170, radius: 125, delay: 26, fx: "pillar", hit: { dmg: 3.3, stun: SEC } }),
   ),
+  // 아슈바르 마젠타: 환영 꽃잎 파동 · 자홍 저주비 · 환상의 꽃감옥 · 종언의 푸시아 성역
+  magenta: kit(1,
+    sk("mzFan", "cone", 5, "#ff5ac8", { radius: 90, arc: 0.4, fx: "slash", hit: { dmg: 1.3 } }),
+    sk("mzFan", "point", 8, "#ff8ae0", { range: 170, radius: 60, delay: 16, fx: "pillar", hit: { dmg: 1.5 } }),
+    sk("mzFan", "point", 12, "#d83aa8", { range: 170, radius: 70, delay: 20, fx: "pillar", hit: { dmg: 1.2, stun: SEC } }),
+    sk("mzFan", "point", 60, "#ff3ab8", { range: 170, radius: 125, delay: 28, fx: "pillar", hit: { dmg: 3.3, stun: SEC } }),
+  ),
 };

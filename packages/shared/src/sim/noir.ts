@@ -108,6 +108,9 @@ export function ashTick(s: RunState, want: boolean, speed: number, kit: AshKit):
     delete p.buEndAt;
     p.jnZaps = [];
     p.jnBolts = [];
+    p.mzScents = [];
+    p.mzBrands = [];
+    delete p.mzEndAt;
     delete p.nrRush;
   }
   const cd = (p.nrSkillCd ??= [0, 0, 0, 0]);
@@ -137,5 +140,5 @@ export function noirTick(s: RunState, want: boolean, speed: number): void {
 
 /** 연습장 등에서 다시 시작할 때 (적응력 단계는 연습장 도구가 따로 정함) */
 export function resetNoir(p: P): void {
-  for (const k of ["nrCd", "nrRoom", "nrAtkAt", "nrVolleys", "nrLaters", "nrWaves", "nrRush", "nrSkillCd", "nrRolls", "rgRoses", "buFlakes", "buBolts", "buEndAt", "jnZaps", "jnBolts"] as const) delete p[k];
+  for (const k of ["nrCd", "nrRoom", "nrAtkAt", "nrVolleys", "nrLaters", "nrWaves", "nrRush", "nrSkillCd", "nrRolls", "rgRoses", "buFlakes", "buBolts", "buEndAt", "jnZaps", "jnBolts", "mzScents", "mzBrands", "mzEndAt"] as const) delete p[k];
 }

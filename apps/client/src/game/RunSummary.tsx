@@ -28,7 +28,7 @@ const ROOM_KEY: Record<RoomType, TextKey> = {
   golden: "sumRoomGolden",
 };
 /** 피해 상세 줄: 종류마다 글자 · 막대 색 (보통 공격 · 치명타 · 상태이상 전부) */
-export const DOT_TEXT: Record<NumKind, TextKey> = { hit: "sumHit", crit: "sumCrit", bleed: "sumBleed", burn: "sumBurn", poison: "sumPoison", curse: "sumCurse", storm: "sumDotStorm", rot: "sumDotRot", death: "sumDotDeath", hellfire: "sumDotHellfire", shock: "sumDotShock", frost: "sumDotFrost", tide: "sumDotTide", gold: "sumDotGold", radiance: "sumDotRadiance", voidbolt: "sumDotVoid", moon: "sumDotMoon", blueflame: "sumDotBlueflame" };
+export const DOT_TEXT: Record<NumKind, TextKey> = { hit: "sumHit", crit: "sumCrit", bleed: "sumBleed", burn: "sumBurn", poison: "sumPoison", curse: "sumCurse", storm: "sumDotStorm", rot: "sumDotRot", death: "sumDotDeath", hellfire: "sumDotHellfire", shock: "sumDotShock", frost: "sumDotFrost", tide: "sumDotTide", gold: "sumDotGold", radiance: "sumDotRadiance", voidbolt: "sumDotVoid", moon: "sumDotMoon", blueflame: "sumDotBlueflame", charm: "sumDotCharm" };
 const KIND_COLOR: Record<NumKind, string> = { ...DOT_COLOR, hit: "#e8e4f0", crit: "#ffd060", death: "#8a7a9a" };
 const num = (v: number) => Math.round(v).toLocaleString();
 

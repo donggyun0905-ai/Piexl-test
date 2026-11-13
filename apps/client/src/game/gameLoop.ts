@@ -34,7 +34,7 @@ import { skinGlow } from "./glow/glowSkin";
 import { setBrushCursor } from "./shadowingBuffs";
 
 /** 숫자 키 스킬이 있는 캐릭터 */
-const SKILL_CHARS = new Set(["tracker", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "nailer", "baekinjang", "chessRaven", "noir", "rouge", "bleu", "jaune"]);
+const SKILL_CHARS = new Set(["tracker", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "nailer", "baekinjang", "chessRaven", "noir", "rouge", "bleu", "jaune", "magenta"]);
 
 /** 한 번에 따라잡는 최대 틱 수 (탭을 오래 비웠다 돌아올 때 멈춤 방지) */
 const MAX_CATCH_UP = 10;
@@ -79,8 +79,7 @@ export function startGameLoop(o: LoopOptions): () => void {
   const texts = frameTexts(t, lang);
   // 쓰러질 때 느린 다시 보기·쓰러지는 몸 (혼자 하기 던전)
   const cam = new DeathCam(!run.pvp && !run.party && !o.practice, drawPlayer);
-  // 추적자는 숫자 1·2·3, 성국(베아트리스·이안·가브리엘·세레나·라파엘·유리엘·미카엘라)은 1~4가 스킬 (아이템은 Q·E)
-  // 패왕전은 숫자 1~4가 스킬 (조준 모드)
+  // 추적자는 숫자 1·2·3, 성국·아슈바르 등은 1~4가 스킬 (아이템은 Q·E) · 패왕전도 1~4 (조준 모드)
   controls.skillKeys = SKILL_CHARS.has(run.player.characterId) || !!run.pvp;
   controls.clickSkill = run.player.characterId === "remnant" && !run.pvp && !run.pw;
   controls.arm.on = !!run.pvp;

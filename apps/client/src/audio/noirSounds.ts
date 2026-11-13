@@ -1,4 +1,4 @@
-// 아슈바르 효과음 (느아르·루주·블뢰·존 같이 씀, 루주는 장미 피어남·불꽃 · 블뢰는 얼음 소리·결정탄 · 존은 번개 지직·낙뢰 더함): 검은 베기 쉭 · 난무·회전참 사각사각 · 빨아들임 우웅 · 터짐 쾅 · 낙인 창 푹 · 흑월 강림·태초의 종언 쿠웅 · 충격파 · 레벨업 · 강화 성공·실패 · 승격
+// 아슈바르 효과음 (느아르·루주·블뢰·존·마젠타 같이 씀, 루주는 장미 피어남·불꽃 · 블뢰는 얼음 소리·결정탄 · 존은 번개 지직·낙뢰 더함 · 마젠타는 장미 피어남을 같이 씀): 검은 베기 쉭 · 난무·회전참 사각사각 · 빨아들임 우웅 · 터짐 쾅 · 낙인 창 푹 · 흑월 강림·태초의 종언 쿠웅 · 충격파 · 레벨업 · 강화 성공·실패 · 승격
 import { crackle, hiss, wobble } from "./synth";
 import { isAshvar, type RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
@@ -62,6 +62,8 @@ const SFX: Record<string, NoirSfx> = {
   buField: "nrPull", buClock: "nrMulti", buHowl: "nrUlt", buZero: "nrPull", buPrison: "nrMulti", buStop: "nrUlt", buEnd: "nrUlt", buRain: "nrMulti", buPop: "nrBurst",
   jnClaw: "jnZap", jnFlash: "jnBolt", jnRapid: "jnZap", jnFist: "jnBolt", jnZig: "jnBolt", jnFall: "jnBolt", jnClone: "jnZap", jnBind: "nrPull",
   jnOrb: "jnBolt", jnChaos: "nrMulti", jnHand: "nrPull", jnStep: "nrUlt", jnFrenzy: "jnBolt", jnBeam: "nrUlt", jnThousand: "nrMulti", jnEnd: "nrUlt", jnPop: "nrBurst", jnZap: "jnZap",
+  mzRain: "rgBloom", mzBloom: "rgBloom", mzWave: "nrSlash", mzPollen: "nrPull", mzGaze: "nrSpear", mzClone: "nrMulti", mzVolcano: "nrBurst", mzBrand: "nrSpear",
+  mzPrison: "nrPull", mzGarden: "rgBloom", mzVortex: "nrPull", mzErode: "nrUlt", mzCollapse: "nrBurst", mzSoul: "nrPull", mzStorm: "nrMulti", mzEnd: "nrUlt", mzPop: "nrBurst",
   rgBloom: "rgBloom", rgBloomBig: "rgBloom", rgFuneral: "nrPull", rgMark: "nrSpear", rgMarkBoom: "nrBurst", rgBurst: "nrBurst", rgBlaze: "rgFire", rgRain: "nrUlt", rgEnd: "nrUlt",
 };
 
@@ -71,7 +73,7 @@ export function noirSounds(run: RunState, out: Sfx[], onShake: (power: number) =
     if (e.ticks < e.maxTicks - 1) continue;
     const sfx = SFX[e.kind];
     if (sfx && !out.includes(sfx)) out.push(sfx);
-    if (e.kind === "nrMoon" || e.kind === "nrEnd" || e.kind === "rgRain" || e.kind === "rgEnd" || e.kind === "buStop" || e.kind === "buEnd" || e.kind === "jnStep" || e.kind === "jnEnd") onShake(0.5);
+    if (e.kind === "nrMoon" || e.kind === "nrEnd" || e.kind === "rgRain" || e.kind === "rgEnd" || e.kind === "buStop" || e.kind === "buEnd" || e.kind === "jnStep" || e.kind === "jnEnd" || e.kind === "mzErode" || e.kind === "mzEnd") onShake(0.5);
     else if (e.kind === "nrBurst" || e.kind === "nrSpear" || e.kind === "rgBurst" || e.kind === "rgMarkBoom") onShake(0.2);
   }
 }

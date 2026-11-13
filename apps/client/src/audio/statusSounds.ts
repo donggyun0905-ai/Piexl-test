@@ -6,7 +6,7 @@ import type { Sfx } from "./sound";
 const DOT: Record<DotKind, Sfx> = {
   burn: "stBurn", hellfire: "stHellfire", blueflame: "stBlueflame", bleed: "stBleed", poison: "stPoison", rot: "stRot",
   shock: "stShock", storm: "stStorm", frost: "stFrost", tide: "stTide", curse: "stCurse", death: "stDeath",
-  voidbolt: "stVoidbolt", gold: "stGold", radiance: "stRadiance", moon: "stMoon",
+  voidbolt: "stVoidbolt", gold: "stGold", radiance: "stRadiance", moon: "stMoon", charm: "stCharm",
 };
 /** 같은 소리 사이 최소 틱 (0.25초) · 냉기 뒤 이 틱 안에 경직되면 빙결 */
 const GAP = 15;

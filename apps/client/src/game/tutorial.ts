@@ -103,6 +103,7 @@ const DEMO_WEAPONS: Record<CharacterId, [WeaponId, WeaponId] | null> = {
   rouge: null,
   bleu: null,
   jaune: null,
+  magenta: null,
   aria: ["arBaton", "arTrumpet"],
   honryeong: ["hrPipe", "hrLong"],
   miner: ["mnTnt", "mnPit"],

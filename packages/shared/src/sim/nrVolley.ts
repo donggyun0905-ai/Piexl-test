@@ -58,7 +58,7 @@ function finish(s: RunState, v: NrVolley): void {
     if (e && sum > 0) nrHit(s, e, sum);
   }
   if (v.kind === "drain") nrLater(s, { kind: "drain", x: v.x, y: v.y, r: v.r, dmg: v.fin * (X.s3.laterMul / X.s3.mul), at: s.tick + X.s3.later });
-  if (v.fin > 0 || v.kind === "devour" || v.kind === "squeeze" || v.kind === "drain") addEffect(s, { kind: v.kind.startsWith("rg") ? "rgBurst" : v.kind.startsWith("bu") ? "buPop" : v.kind.startsWith("jn") ? "jnPop" : "nrBurst", x: v.x, y: v.y, dirX: 0, dirY: 0, size: v.r * 1.15, maxTicks: 18 });
+  if (v.fin > 0 || v.kind === "devour" || v.kind === "squeeze" || v.kind === "drain") addEffect(s, { kind: v.kind.startsWith("rg") ? "rgBurst" : v.kind.startsWith("bu") ? "buPop" : v.kind.startsWith("jn") ? "jnPop" : v.kind.startsWith("mz") ? "mzPop" : "nrBurst", x: v.x, y: v.y, dirX: 0, dirY: 0, size: v.r * 1.15, maxTicks: 18 });
 }
 
 /** 늦게 오는 한 방: 낙인 창·장미 낙인은 그 적만 · 장례는 그 적 자리 범위 · 마력 소멸은 그 자리 범위 */

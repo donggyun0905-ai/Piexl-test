@@ -83,7 +83,7 @@ export interface PlayerState extends Body, LaserPlayerState, OrbitPlayerState, B
   hurt?: number;
 }
 
-/** 적 행동 단계 (보스 volley 탄·summon 부르기·blink 순간이동, 가디언 swing 휘두르기) */
+/** 적 행동 단계 (보스 volley 탄·summon 부르기·blink 순간이동, 가디언 swing) */
 export type ChargerPhase = "walk" | "windup" | "charge" | "volley" | "summon" | "blink" | "swing" | "act";
 
 export interface EnemyState extends Body, LaserEnemyState, OrbitEnemyState, BrawlEnemyState, MedicEnemyState, GunEnemyState, BossEnemyState, TdEnemyState, NinjaEnemyState, ImugiEnemyState, ApostleEnemyState, SwarmEnemyState, OniEnemyState, ScribeEnemyState, S2EnemyState, H2EnemyState, ChronoEnemyState, AscalonEnemyState, PwEnemyState, LuxEnemyState {
@@ -215,7 +215,7 @@ export interface BuyLogEntry {
   price: number;
 }
 /** 상태이상 피해 종류 (admin/statusInfo) */
-export type DotKind = "bleed" | "burn" | "poison" | "curse" | "storm" | "rot" | "death" | "hellfire" | "shock" | "frost" | "tide" | "gold" | "radiance" | "voidbolt" | "moon" | "blueflame";
+export type DotKind = "bleed" | "burn" | "poison" | "curse" | "storm" | "rot" | "death" | "hellfire" | "shock" | "frost" | "tide" | "gold" | "radiance" | "voidbolt" | "moon" | "blueflame" | "charm";
 
 export interface RunState extends RaidRunState, ArenaRunState, SwarmRunState, PetRunState, PwRunState, TerrainRunState, HiddenRunState, RoomRunState {
   seed: number;

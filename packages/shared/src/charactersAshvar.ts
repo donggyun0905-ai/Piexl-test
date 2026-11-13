@@ -9,4 +9,6 @@ export const ASHVAR_CHARACTERS = {
   bleu: { id: "bleu", maxHp: 100, damage: 9, moveSpeed: 1.3, luck: 0, startWeapon: "buTome" },
   /** 존 (아슈바르): 금빛 손아귀 · 황금 번개 · 공격력은 매우 낮고 타수가 많음 (sim/jaune) */
   jaune: { id: "jaune", maxHp: 100, damage: 6, moveSpeed: 1.35, luck: 0, startWeapon: "jnGrip" },
+  /** 마젠타 (아슈바르): 욕망의 부채 · 저주를 쌓고 매혹·향기 연기로 받는 피해를 늘림 · 설치기가 많음 (sim/magenta) */
+  magenta: { id: "magenta", maxHp: 100, damage: 9, moveSpeed: 1.3, luck: 0, startWeapon: "mzFan" },
 } as const;

@@ -22,6 +22,11 @@ export const STATUS_SOUNDS = {
     crackle(0.18, 3, 0.12, 5000);
     bell(1320, 0.18, 0.04, 2.01, 1);
   },
+  // 매혹: 달콤하게 울리는 두 음 (위로 미끄러짐)
+  stCharm: () => {
+    bell(988, 0.22, 0.05, 2, 1);
+    tone({ type: "sine", from: 660, to: 990, dur: 0.2, vol: 0.06 });
+  },
   // 출혈: 축축하게 찢기는 "츄악" + 떨어지는 방울
   stBleed: () => {
     hiss(0.08, 0.2, { freq: 1400, to: 500, q: 3, attack: 0.004 });

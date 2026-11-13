@@ -4,6 +4,30 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.76",
+    date: "2026-11-13",
+    items: {
+      ko: [
+        "새 캐릭터 마젠타 (아슈바르, 태초의 색채 악마 7원색 군단의 자홍): 욕망의 부채 하나 · 패시브 없음 · 적응력·강화·승격·제약은 느아르와 같음 · 로비 칩 45만 개로 열기",
+        "마젠타 저주: 맞을 때마다 저주가 쌓여(최대 10겹) 0.5초마다 겹 수만큼 저주 피해 · 낙인·환영 붕괴·종언의 푸시아 성역이 한꺼번에 터뜨림",
+        "마젠타 매료의 향기: 맞은 적이 확률로 매혹(새 상태이상 · 분홍 하트 피해 숫자 · 느려지고 끌려옴 · 받는 피해 +10%) · 공격할 때 확률로 방에 흐릿한 향기 연기(안의 적 받는 피해 +10% 더) · 관리자 상태이상 표에 매혹 추가",
+        "마젠타 공격 16종: 자홍 저주비 · 푸시아 만개 · 환영 꽃잎 파동 · 저주의 꽃가루 · 매혹의 시선 · 푸시아 환영분신 · 자홍 화산파 · 저주의 낙인 · 환상의 꽃감옥/환영 붕괴 · 악몽의 꽃밭/영혼 유린 · 유혹의 소용돌이/매혹의 강우 · 독화 침식/종언의 푸시아 성역",
+      ],
+      en: [
+        "New character Magenta (Ashvar, the Magenta of the Primordial Chromatic Demon Legion of Seven Colors): one weapon, the Fan of Desire · no passives · Adaptation, upgrades, ranks and Restraint like Noir · unlock with 450,000 lobby chips",
+        "Magenta's Curse: every hit adds a curse stack (max 10) dealing Curse damage per stack every 0.5s · Brand of Curse, Phantom Collapse and Fuchsia Sanctum of the End burst them all at once",
+        "Magenta's Scent of Allure: hit enemies may be Charmed (new status · pink heart damage numbers · slowed and drawn in · +10% damage taken) · attacks may leave faint scent clouds in the room (+10% more damage taken inside) · Charm added to the admin status table",
+        "Magenta's 16 attacks: Magenta Curse Rain · Fuchsia Full Bloom · Phantom Petal Wave · Cursed Pollen · Gaze of Allure · Fuchsia Phantom Clones · Magenta Eruption · Brand of Curse · Prison of Illusory Flowers/Phantom Collapse · Garden of Nightmares/Soul Ravage · Vortex of Temptation/Rain of Allure · Venom Bloom Erosion/Fuchsia Sanctum of the End",
+      ],
+      ja: [
+        "新キャラクター マゼンタ（アシュヴァル、太初の色彩悪魔七原色軍団の紅紫）：武器は欲望の扇ひとつ・パッシブなし・適応力・強化・昇格・制約はノワールと同じ・ロビーチップ45万枚で解放",
+        "マゼンタの呪い：当たるたびに呪いが重なり（最大10重）0.5秒ごとに重ねた数だけ呪いダメージ・呪いの烙印・幻影崩壊・終焉のフクシア聖域がまとめて炸裂させる",
+        "マゼンタの魅了の香り：当たった敵は確率で魅了（新しい状態異常・ピンクのハートのダメージ数字・遅くなり引き寄せられる・被ダメージ+10%）・攻撃時に確率で部屋にかすかな香りの煙（中の敵はさらに被ダメージ+10%）・管理者の状態異常表に魅了を追加",
+        "マゼンタの攻撃16種：紅紫の呪雨・フクシア満開・幻影花弁の波動・呪いの花粉・魅惑の視線・フクシア幻影分身・紅紫の火山波・呪いの烙印・幻想の花獄/幻影崩壊・悪夢の花畑/魂の蹂躙・誘惑の渦/魅惑の降雨・毒花侵食/終焉のフクシア聖域",
+      ],
+    },
+  },
+  {
     version: "0.52.75",
     date: "2026-11-13",
     items: {

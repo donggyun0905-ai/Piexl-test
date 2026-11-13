@@ -48,7 +48,7 @@ import { COLLECTOR_WEAPONS } from "./weaponsCollector";
 import { PUNGRYU_WEAPONS, type ScriptStyle } from "./weaponsPungryu";
 import { LEO_WEAPONS } from "./weaponsLeo";
 import { ONYX_WEAPONS } from "./weaponsOnyx";
-import { SEONGGUK_WEAPON_SET } from "./weaponsSeongguk"; import { DAWN_WEAPON_SET } from "./weaponsDawn"; import { SILBER_WEAPON_SET } from "./weaponsSilber"; import { NOIR_WEAPONS } from "./weaponsNoir"; import { ROUGE_WEAPONS } from "./weaponsRouge"; import { BLEU_WEAPONS } from "./weaponsBleu"; import { JAUNE_WEAPONS } from "./weaponsJaune"; import { FENRIR_WEAPONS } from "./weaponsFenrir"; import { ECLIPSE_WEAPONS } from "./weaponsEclipse"; import { THORKEN_WEAPONS, type FlailStyle } from "./weaponsThorken"; import { LEVIA_WEAPONS, type GemStyle } from "./weaponsLevia"; import { TAIL_WEAPONS, type SeaStyle } from "./weaponsTail"; import { MADQUEEN_WEAPONS, type FleetStyle } from "./weaponsMadQueen"; import { HOOK_WEAPONS, type HookStyle } from "./weaponsHook"; import { ORCA_WEAPONS, type OrcaStyle } from "./weaponsOrca"; import { WAVE_WEAPONS, type WaveStyle } from "./weaponsWave"; import { MIRYU_WEAPONS, type MiryuStyle } from "./weaponsMiryu";
+import { SEONGGUK_WEAPON_SET } from "./weaponsSeongguk"; import { DAWN_WEAPON_SET } from "./weaponsDawn"; import { SILBER_WEAPON_SET } from "./weaponsSilber"; import { NOIR_WEAPONS } from "./weaponsNoir"; import { ROUGE_WEAPONS } from "./weaponsRouge"; import { BLEU_WEAPONS } from "./weaponsBleu"; import { JAUNE_WEAPONS } from "./weaponsJaune"; import { MAGENTA_WEAPONS } from "./weaponsMagenta"; import { FENRIR_WEAPONS } from "./weaponsFenrir"; import { ECLIPSE_WEAPONS } from "./weaponsEclipse"; import { THORKEN_WEAPONS, type FlailStyle } from "./weaponsThorken"; import { LEVIA_WEAPONS, type GemStyle } from "./weaponsLevia"; import { TAIL_WEAPONS, type SeaStyle } from "./weaponsTail"; import { MADQUEEN_WEAPONS, type FleetStyle } from "./weaponsMadQueen"; import { HOOK_WEAPONS, type HookStyle } from "./weaponsHook"; import { ORCA_WEAPONS, type OrcaStyle } from "./weaponsOrca"; import { WAVE_WEAPONS, type WaveStyle } from "./weaponsWave"; import { MIRYU_WEAPONS, type MiryuStyle } from "./weaponsMiryu";
 import { MINER_WEAPONS, type PickStyle } from "./weaponsMiner";
 import { VOYAGER_WEAPONS } from "./weaponsVoyager";
 import { ZEUS_WEAPONS, type ThunderStyle } from "./weaponsZeus";
@@ -262,7 +262,7 @@ export const WEAPONS = {
   ...WANDERER_WEAPONS,
   ...SILK_WEAPONS,
   ...COLLECTOR_WEAPONS,
-  ...PUNGRYU_WEAPONS, ...LEO_WEAPONS, ...ONYX_WEAPONS, ...FENRIR_WEAPONS, ...ECLIPSE_WEAPONS, ...THORKEN_WEAPONS, ...LEVIA_WEAPONS, ...TAIL_WEAPONS, ...MADQUEEN_WEAPONS, ...HOOK_WEAPONS, ...ORCA_WEAPONS, ...WAVE_WEAPONS, ...MIRYU_WEAPONS, ...SEONGGUK_WEAPON_SET, ...DAWN_WEAPON_SET, ...SILBER_WEAPON_SET, ...NOIR_WEAPONS, ...ROUGE_WEAPONS, ...BLEU_WEAPONS, ...JAUNE_WEAPONS,
+  ...PUNGRYU_WEAPONS, ...LEO_WEAPONS, ...ONYX_WEAPONS, ...FENRIR_WEAPONS, ...ECLIPSE_WEAPONS, ...THORKEN_WEAPONS, ...LEVIA_WEAPONS, ...TAIL_WEAPONS, ...MADQUEEN_WEAPONS, ...HOOK_WEAPONS, ...ORCA_WEAPONS, ...WAVE_WEAPONS, ...MIRYU_WEAPONS, ...SEONGGUK_WEAPON_SET, ...DAWN_WEAPON_SET, ...SILBER_WEAPON_SET, ...NOIR_WEAPONS, ...ROUGE_WEAPONS, ...BLEU_WEAPONS, ...JAUNE_WEAPONS, ...MAGENTA_WEAPONS,
   ...MINER_WEAPONS,
   ...VOYAGER_WEAPONS,
   ...ZEUS_WEAPONS,

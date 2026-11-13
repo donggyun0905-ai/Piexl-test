@@ -105,6 +105,8 @@ export const CHARACTER_GOALS: Partial<Record<CharacterId, CharGoal>> = {
   bleu: { buy: 450000 },
   // 존: 느아르와 같은 값 (로비 칩)
   jaune: { buy: 450000 },
+  // 마젠타: 느아르와 같은 값 (로비 칩)
+  magenta: { buy: 450000 },
   baekinjang: { m: "attackSpeed", n: 2.2 },
   honryeong: { m: "attackSpeed", n: 2 },
   aria: { m: "attackSpeed", n: 2 },
