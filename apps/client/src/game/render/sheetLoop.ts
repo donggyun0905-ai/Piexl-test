@@ -44,3 +44,13 @@ function blend(draw: (f: Frame, k: number) => unknown, a: Frame, b: Frame, m: nu
   draw(a, Math.min(1, 2 * (1 - m)));
   draw(b, Math.min(1, 2 * m));
 }
+
+/** 예전 방식(0.52.67~0.52.70): 네 칸을 정해진 틱(play 이하) 동안 이어서(다음 칸과 겹쳐) 보여 주고, 끝나면 마지막 칸에서 머묾 · 사용자가 이쪽이 더 낫다고 한 효과에 씀 */
+export function sheetPlay(ctx: Ctx, pic: Pic, row: number, ticks: number, maxTicks: number, playMax: number, x: number, y: number, w: number, a: number, rot = 0, flip = false): void {
+  const play = Math.max(8, Math.min(playMax, maxTicks * 0.7));
+  const pos = Math.min(3, ((maxTicks - ticks) / play) * 3);
+  const col = Math.floor(pos);
+  const mix = pos - col;
+  pic(ctx, row, col, x, y, w, a * (col < 3 ? 1 - mix : 1), rot, flip);
+  if (col < 3 && mix > 0) pic(ctx, row, col + 1, x, y, w, a * mix, rot, flip);
+}

@@ -4,7 +4,12 @@ import type { EffectState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
 import { additive, easeOut, glow, shock, sparks, type Ctx } from "./pwFxBits";
 import { BU, buPic, ROW, snowflake } from "./bleuArt";
-import { sheetLoop } from "./sheetLoop";
+import { sheetLoop, sheetPlay } from "./sheetLoop";
+
+/** 예전 방식(차례대로 보여 주고 마지막 칸에서 머묾 · 끝 15% 동안 흐려짐)이 더 낫다고 한 효과 (2026-11-13 사용자): 추가 공격 1~4단계 · 2번·4번 강화 */
+const OLD = new Set<string>(["buWolf", "buHawk", "buDeer", "buLegion", "buHowl", "buEnd"]);
+/** 예전 방식에서 네 칸을 다 보여 주는 틱 */
+const PLAY = 36;
 
 const KINDS = new Set<string>([...Object.keys(ROW), "buPop", "buFlake"]);
 /** 그림 크기 배율 (반지름 → 그림 너비) */
@@ -16,7 +21,7 @@ export function drawBleuFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   const x = snap(fx.x);
   const y = snap(fx.y);
   // 맨 끝 5틱만 흐려짐 (마지막 그림이 다 보이게)
-  const a = Math.min(1, fx.ticks / 5);
+  const a = OLD.has(fx.kind) ? (f > 0.85 ? (1 - f) / 0.15 : 1) : Math.min(1, fx.ticks / 5);
   const ang = Math.atan2(fx.dirY, fx.dirX);
   const left = fx.dirX < 0;
   const w = fx.size * (SCALE[fx.kind] ?? 2.2);
@@ -44,6 +49,7 @@ export function drawBleuFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
     }
     default: {
       const turn = fx.kind === "buHowl";
+      if (OLD.has(fx.kind)) return sheetPlay(ctx, buPic, ROW[fx.kind as keyof typeof ROW], fx.ticks, fx.maxTicks, PLAY, x, y, w, a, turn ? (left ? ang + Math.PI : ang) : 0, turn && left), true;
       sheetLoop(ctx, buPic, ROW[fx.kind as keyof typeof ROW], fx.ticks, fx.maxTicks, x, y, w, a, turn ? (left ? ang + Math.PI : ang) : 0, turn && left);
       return true;
     }

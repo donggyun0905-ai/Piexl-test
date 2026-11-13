@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.74",
+    date: "2026-11-13",
+    items: {
+      ko: ["블뢰: 추가 공격 1~4단계(영혼 늑대·매·사슴·군단)와 월광 백랑의 포효·종언의 영구동토 효과를 예전처럼 (차례대로 보여 주고 마지막 그림에서 머묾)", "존: 황뢰 천수 이펙트 크기 절반"],
+      en: ["Bleu: Extra attack stages 1–4 (Spirit Wolf, Hawk, Stag, Legion), Roar of the Moonlit White Wolf and Permafrost of the End play as before (frames in order, holding on the last)", "Jaune: Thousand Golden Thunder Hands effect is half the size"],
+      ja: ["ブルー：追加攻撃1〜4段階（霊狼・霊鷹・霊鹿・霊軍団）と月光白狼の咆哮・終焉の永久凍土のエフェクトを以前の形に（順に見せて最後のコマで止まる）", "ジョーヌ：黄雷千手のエフェクトの大きさが半分"],
+    },
+  },
+  {
     version: "0.52.73",
     date: "2026-11-13",
     items: {

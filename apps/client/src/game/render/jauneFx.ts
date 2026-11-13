@@ -21,7 +21,7 @@ const LOOP: Partial<Record<string, readonly Frame[]>> = {
 /** 바라보는 쪽으로 돌려 그리는 그림 (원본이 오른쪽을 봄) */
 const TURN = new Set<string>(["jnClaw", "jnFlash", "jnFist", "jnZig", "jnClone", "jnBeam", "jnHand", "jnThousand"]);
 /** 그림 크기 배율 (반지름 → 그림 너비) */
-const SCALE: Partial<Record<string, number>> = { jnFlash: 2.3, jnFist: 2.3, jnZig: 2.3, jnBeam: 2.4, jnClaw: 2.6, jnStep: 1, jnEnd: 2.4 };
+const SCALE: Partial<Record<string, number>> = { jnFlash: 2.3, jnFist: 2.3, jnZig: 2.3, jnBeam: 2.4, jnClaw: 2.6, jnStep: 1, jnEnd: 2.4, jnThousand: 1.1 };
 
 export function drawJauneFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   if (!KINDS.has(fx.kind)) return false;
