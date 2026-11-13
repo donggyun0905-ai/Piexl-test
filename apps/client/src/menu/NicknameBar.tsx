@@ -1,4 +1,5 @@
 // 닉네임 줄: 이름 + 수정. 수정을 누르면 그 자리에서 바꾼다 (메인 · 일일 도전 · 함께 하기 입장 화면)
+import { uiSfx } from "../audio/uiSounds";
 import { NICKNAME_MAX } from "@pixel-rogue/shared";
 import { useState } from "react";
 import type { TextKey } from "../i18n";
@@ -36,6 +37,7 @@ export function NicknameBar({ t, disabled, onChange }: Props) {
         if (!draft.trim()) return;
         const clean = saveNickname(draft);
         setNickname(clean);
+        uiSfx("uiSave");
         setDraft(null);
         onChange?.(clean);
       }}
@@ -50,7 +52,7 @@ export function NicknameBar({ t, disabled, onChange }: Props) {
         onChange={(e) => setDraft(e.target.value)}
         onKeyDown={(e) => e.key === "Escape" && setDraft(null)}
       />
-      <button type="submit" className="small primary" disabled={!draft.trim()}>
+      <button type="submit" className="small primary" data-sfx="none" disabled={!draft.trim()}>
         {t("save")}
       </button>
     </form>

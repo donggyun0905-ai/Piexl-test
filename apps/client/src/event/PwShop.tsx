@@ -1,6 +1,7 @@
 // 패왕전 집 상점 창 (쟁탈전 · 전쟁의 서막, B · Esc로 닫음): 맨 위 추천 장비(역할군마다 여섯 중 안 가진 셋) · 내 장비 팔기 · 사용 아이템 · 기본 장비 · 전설 장비
 // 전설 장비를 누르면 재료 창(PwShopDetail, body에 그려 보고 있는 화면 가운데): 재료 하나씩 사거나 한 번에 완성 · 집에 있거나 쓰러져 기다리는 동안 살 수 있음
 // 누른 것은 controls.queueMenu → 입력 menu → sim/pwGrow.growMenu
+import { uiSfx } from "../audio/uiSounds";
 import { atHome, buyPlan, fullCost, GROW_MENU, inPlay, PW_BASIC, PW_LEGEND, PW_SHOP_IDS, PW_SHOP_USES, useSeat as takeSeat, type RunState } from "@pixel-rogue/shared";
 import { useState } from "react";
 import { createPortal } from "react-dom";
@@ -36,7 +37,10 @@ export function PwShop({ run, me, lang, t, controls, onClose }: Props) {
   const [detail, setDetail] = useState<string | null>(null);
   const v = shopView(run, me);
   const send = (code: number) => controls()?.queueMenu(code);
-  const buy = (id: string) => send(GROW_MENU.buy + PW_SHOP_IDS.indexOf(id));
+  const buy = (id: string) => {
+    uiSfx("uiBuy");
+    send(GROW_MENU.buy + PW_SHOP_IDS.indexOf(id));
+  };
   const card = (id: string) => {
     const use = PW_SHOP_USES[id as keyof typeof PW_SHOP_USES] !== undefined;
     const legend = !!PW_LEGEND[id];
@@ -44,7 +48,7 @@ export function PwShop({ run, me, lang, t, controls, onClose }: Props) {
     const cost = plan?.cost ?? fullCost(id);
     const ok = v.open && !!plan && v.gold >= cost;
     return (
-      <button key={id} type="button" className={`pw-shop-item${legend ? " legend" : ""}${ok ? "" : " dim"}`} onClick={() => (legend ? setDetail(id) : ok && buy(id))}>
+      <button key={id} type="button" className={`pw-shop-item${legend ? " legend" : ""}${ok ? "" : " dim"}`} data-sfx={legend ? undefined : "none"} onClick={() => (legend ? setDetail(id) : ok ? buy(id) : uiSfx("uiDeny"))}>
         <ItemIcon item={use ? ({ kind: "use", id } as never) : gearItem(id, lang)} size={40} />
         <span>
           <b>{use ? itemName("use", id, lang) : gearName(id, lang)}</b>

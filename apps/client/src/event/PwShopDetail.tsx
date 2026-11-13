@@ -1,4 +1,5 @@
 // 패왕전 상점 전설 장비 재료 창: 완성 장비 능력치·효과 · 재료마다 (가짐 ✓ / 값, 누르면 그 재료를 삼) · 한 번에 완성하기
+import { uiSfx } from "../audio/uiSounds";
 import { PW_BASIC, PW_LEGEND } from "@pixel-rogue/shared";
 import { ItemIcon } from "../game/itemIcon";
 import type { Lang, TextKey } from "../i18n";
@@ -43,7 +44,7 @@ export function PwShopDetail({ id, view, lang, t, onBuy, onClose }: Props) {
           const cost = PW_BASIC[m]!.cost;
           const ok = !own && !!view.plans.get(m) && can(cost);
           return (
-            <button key={`${m}${k}`} type="button" className={`pw-shop-item${own ? " own" : ok ? "" : " dim"}`} onClick={() => ok && onBuy(m)}>
+            <button key={`${m}${k}`} type="button" className={`pw-shop-item${own ? " own" : ok ? "" : " dim"}`} data-sfx="none" onClick={() => (ok ? onBuy(m) : uiSfx("uiDeny"))}>
               <ItemIcon item={gearItem(m, lang)} size={40} />
               <span>
                 <b>{gearName(m, lang)}</b>

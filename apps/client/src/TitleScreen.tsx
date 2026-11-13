@@ -1,3 +1,4 @@
+import { uiSfxSoon } from "./audio/uiSounds";
 import { GAME_VERSION } from "@pixel-rogue/shared";
 import { CodexPanel } from "./codex/CodexPanel";
 import { LobbyStage } from "./lobby/LobbyStage";
@@ -55,6 +56,8 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   const close = () => setPopup("none");
   // 메인 화면 곡 (나가면 끔)
   useEffect(() => (setMenuMusic(true), () => setMenuMusic(false)), []);
+  // 메인 로고 소리 (첫 터치 전이면 첫 입력 때)
+  useEffect(() => uiSfxSoon("uiLogo"), []);
 
   const startNew = (endless = false, arena = false, hero = false) => {
     // 이어할 판이 있으면 지워진다고 확인

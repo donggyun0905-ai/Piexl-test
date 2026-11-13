@@ -1,3 +1,4 @@
+import { uiSfx } from "../audio/uiSounds";
 import { currentBalance, packInputs, summarize, type CharacterId, type RunState, type TickInput } from "@pixel-rogue/shared";
 import { useRef, useState } from "react";
 import { getPlayerId, loadNickname } from "../player";
@@ -39,7 +40,11 @@ export function DailyGame({ start, characterId, lang, t, onExit }: Props) {
         balance: currentBalance().hash,
       },
     );
-    if (res.ok && res.data) setSubmit({ state: "done", ...res.data });
+    if (res.ok && res.data) {
+      setSubmit({ state: "done", ...res.data });
+      // 기록이 올랐으면 순위 오름 소리 (3위 안이면 팡파르)
+      if (res.data.improved) uiSfx(res.data.best && res.data.best.rank <= 3 ? "uiTop3" : "uiRankUp");
+    }
     else setSubmit({ state: "error", error: res.error === "offline" ? t("errOffline") : `${t("submitRejected")} (${res.error})` });
   };
 

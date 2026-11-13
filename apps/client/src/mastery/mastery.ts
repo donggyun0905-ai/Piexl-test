@@ -1,5 +1,6 @@
 // 캐릭터 숙련도: 게임을 시작한 판 수 → Lv 0~7 · 고른 테두리(숙련도 레벨까지) · 카드 꾸밈(시즌 3 레이드 보상).
 // 이 기기 저장 "mastery" (cloudSave 백업 칸). 꾸밈이라 브라우저 저장만
+import { uiSfx } from "../audio/uiSounds";
 import type { CharacterId } from "@pixel-rogue/shared";
 import { onCloudApplied } from "../cloudSave";
 import { loadText, saveText } from "../storage";
@@ -57,7 +58,9 @@ export function toNext(n: number): number | null {
 /** 이 캐릭터로 게임을 시작함 */
 export function addPlay(c: CharacterId): void {
   const m = load();
-  save({ ...m, plays: { ...m.plays, [c]: (m.plays[c] ?? 0) + 1 } });
+  const n = (m.plays[c] ?? 0) + 1;
+  save({ ...m, plays: { ...m.plays, [c]: n } });
+  if (masteryLevel(n) > masteryLevel(n - 1)) uiSfx("uiLevelUp");
 }
 
 /** 보이는 테두리 레벨 (고른 것, 없으면 지금 레벨 · 지금 레벨보다 높게는 못 씀) */

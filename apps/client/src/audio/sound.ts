@@ -14,6 +14,7 @@ import { POLISH_SOUNDS, type PolishSfx } from "./sfxPolish";
 import { STATUS_SOUNDS, type StatusSfx } from "./sfxStatus";
 import { UI_SOUNDS, type UiSfx } from "./sfxUi";
 import { RUN_SOUNDS, type RunSfx } from "./sfxRun";
+import { MENU_SOUNDS, type MenuSfx } from "./sfxMenu";
 import { defaultBeat } from "./musicLayers";
 
 export type Sfx =
@@ -72,9 +73,7 @@ export type Sfx =
   | VaultSfx
   | SilberSfx
   | PolishSfx
-  | StatusSfx
-  | UiSfx
-  | RunSfx;
+  | StatusSfx | UiSfx | RunSfx | MenuSfx;
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;
@@ -207,6 +206,7 @@ const SOUNDS: Record<Sfx, () => void> = {
   ...STATUS_SOUNDS,
   ...UI_SOUNDS,
   ...RUN_SOUNDS,
+  ...MENU_SOUNDS,
   blink: () => {
     tone({ type: "sine", from: 900, to: 120, dur: 0.12, vol: 0.12 });
     noise(0.1, 0.2, 1800);

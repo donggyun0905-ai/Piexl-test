@@ -1,4 +1,5 @@
 // 상점 미션 탭: 오늘의 일일 미션 3개 (진행 막대 · 받기) · 업적으로 받은 쿠폰
+import { uiSfx } from "../audio/uiSounds";
 import { useState } from "react";
 import type { TextKey } from "../i18n";
 import { claim, loadProgress, MISSION_BONUS, MISSION_COUPONS, todayMissions, type MissionKind } from "./missions";
@@ -34,8 +35,10 @@ export function MissionTab({ t, onChange }: { t: (k: TextKey) => string; onChang
               type="button"
               className={done && !claimed ? "primary" : "secondary"}
               disabled={!done || claimed}
+              data-sfx="none"
               onClick={() => {
                 claim(m.kind);
+                uiSfx("uiReward");
                 redraw((n) => n + 1);
                 onChange();
               }}

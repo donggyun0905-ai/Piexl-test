@@ -1,4 +1,5 @@
 // 닉네임 · 기기 연동 (가입·로그인 없음)
+import { uiSfx } from "./audio/uiSounds";
 import { LINK_CODE_LENGTH, NICKNAME_MAX } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 import { apiPost } from "./api";
@@ -37,7 +38,9 @@ export function ProfileScreen({ t, onBack }: Props) {
         <button
           type="button"
           className="small"
+          data-sfx="none"
           onClick={() => {
+            uiSfx("uiSave");
             setNickname(saveNickname(nickname));
             setNickSaved(true);
           }}

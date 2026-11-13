@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.65",
+    date: "2026-11-13",
+    items: {
+      ko: [
+        "캐릭터 선택: 캐릭터를 누르면 그 캐릭터만의 짧은 소리 (진영마다 음색이 다르고, 캐릭터마다 가락이 다름)",
+        "화면 소리: 업적 창 넘기기(책장) · 숙련도 레벨업 · 일일 도전 기록이 오르면 순위 오름 소리(3위 안이면 팡파르) · 닉네임 저장 · 일일 미션 보상 받기 · 패왕전 상점에서 사기(살 수 없으면 안 됨 소리) · 메인 화면 로고",
+      ],
+      en: [
+        "Character select: tapping a character plays a short sound of its own (each faction has its own tone, each character its own melody)",
+        "Screen sounds: flipping achievement tabs (page turn) · mastery level up · a rank-up sound when your daily challenge record improves (fanfare for top 3) · saving your nickname · claiming daily mission rewards · buying in the Paewang shop (denied sound if you can't) · main title logo",
+      ],
+      ja: [
+        "キャラクター選択：キャラクターを押すとそのキャラクターだけの短い音（陣営ごとに音色、キャラクターごとに旋律が違う）",
+        "画面の音：実績タブをめくる（ページ）・熟練度レベルアップ・デイリーチャレンジの記録が上がると順位アップ音（3位以内はファンファーレ）・ニックネーム保存・デイリーミッション報酬の受け取り・覇王戦ショップでの購入（買えないときの音）・メイン画面のロゴ",
+      ],
+    },
+  },
+  {
     version: "0.52.64",
     date: "2026-11-13",
     items: {

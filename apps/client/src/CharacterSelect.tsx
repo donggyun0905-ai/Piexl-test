@@ -1,3 +1,4 @@
+import { uiVoice } from "./audio/uiSounds";
 import { ALL_CHARACTER_IDS, CHARACTER_IDS, HIDDEN_CHARACTERS, LIMITED_CHARACTERS, type CharacterId } from "@pixel-rogue/shared";
 import { charDifficulty, diffStars, recommended, recommendedFirst } from "./charDifficulty";
 import { ownedLimited } from "./shop/limitedChars";
@@ -118,7 +119,10 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
           return (
             <div key={id} className="character-item">
               <div className={`cs-frame frame-${frameOf(id)}`}>
-                <button type="button" className={`character-card ${id}${card ? ` card-skin-${card}` : ""}${open ? "" : " locked"}`} onClick={() => setPicking(id)}>
+                <button type="button" className={`character-card ${id}${card ? ` card-skin-${card}` : ""}${open ? "" : " locked"}`} data-sfx="none" onClick={() => {
+                  setPicking(id);
+                  uiVoice(id, factionOf(id));
+                }}>
                   <span className="character-look">
                     <SkinPreview sheet={equippedSkin(id) ?? id} size={112} still />
                   </span>

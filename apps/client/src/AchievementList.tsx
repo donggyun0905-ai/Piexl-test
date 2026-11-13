@@ -36,6 +36,7 @@ export function AchievementList({ lang, t }: { lang: Lang; t: (key: TextKey) => 
               key={f}
               type="button"
               role="tab"
+              data-sfx="uiPage"
               aria-selected={filter === f}
               className={`small${filter === f ? " active" : ""}${got === list.length ? " complete" : ""}`}
               onClick={() => setFilter(f)}
