@@ -4,6 +4,7 @@ import type { EffectState } from "@pixel-rogue/shared";
 import type { Snap } from "./palette";
 import { additive, easeOut, glow, shock, sparks, type Ctx } from "./pwFxBits";
 import { BU, buPic, ROW, snowflake } from "./bleuArt";
+import { sheetPlay } from "./noirArt";
 
 const KINDS = new Set<string>([...Object.keys(ROW), "buPop", "buFlake"]);
 /** 네 칸을 다 보여 주는 데 드는 틱 (효과가 이보다 길면 마지막 칸에서 머묾) */
@@ -43,16 +44,8 @@ export function drawBleuFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       return true;
     }
     default: {
-      // 네 칸을 정해진 틱 동안 이어서(다음 칸과 겹쳐 부드럽게) 보여 주고, 끝나면 마지막 칸에서 머묾
-      const row = ROW[fx.kind as keyof typeof ROW];
-      const play = Math.max(8, Math.min(PLAY, fx.maxTicks * 0.7));
-      const pos = Math.min(3, ((fx.maxTicks - fx.ticks) / play) * 3);
-      const col = Math.floor(pos);
-      const mix = pos - col;
       const turn = fx.kind === "buHowl";
-      const rot = turn ? (left ? ang + Math.PI : ang) : 0;
-      buPic(ctx, row, col, x, y, w, a * (col < 3 ? 1 - mix : 1), rot, turn && left);
-      if (col < 3 && mix > 0) buPic(ctx, row, col + 1, x, y, w, a * mix, rot, turn && left);
+      sheetPlay(ctx, buPic, ROW[fx.kind as keyof typeof ROW], fx.ticks, fx.maxTicks, PLAY, x, y, w, a, turn ? (left ? ang + Math.PI : ang) : 0, turn && left);
       return true;
     }
   }

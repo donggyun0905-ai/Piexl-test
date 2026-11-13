@@ -86,7 +86,7 @@ export function nrRushTick(s: RunState): void {
   for (const e of onSegment(s, ax, ay, p.x, p.y, p.r + K.dash.w)) {
     if (r.hit.includes(e.id)) continue;
     r.hit.push(e.id);
-    nrHit(s, e, r.dmg);
+    nrHit(s, e, r.dmg, r.on);
   }
   if (--r.t > 0) return;
   addEffect(s, { kind: r.fx ?? "nrRush", x: r.sx, y: r.sy, dirX: r.dx, dirY: r.dy, size: 22, toX: p.x, toY: p.y, maxTicks: 20 });

@@ -86,6 +86,7 @@ import { gearsTick } from "./gears";
 import { noirTick } from "./noir";
 import { rougeTick } from "./rouge";
 import { bleuTick } from "./bleu";
+import { jauneTick } from "./jaune";
 import { ariaTick } from "./aria";
 import { honryeongTick } from "./honryeong";
 import type { RunState } from "./types";
@@ -182,6 +183,7 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   voidBlade: noirTick,
   roseBlades: rougeTick,
   whiteTome: bleuTick,
+  goldGrip: jauneTick,
   songNote: ariaTick,
   smokePipe: honryeongTick,
 };

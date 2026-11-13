@@ -2,7 +2,9 @@
 // 빨아들이기 · 점점 세짐 · 끝 한 방 · 늦게 오는 한 방(마력 소멸·낙인 창) · 방을 휩쓰는 충격파(흑월 강림·태초의 종언)
 import { srcEach } from "./dmgSrc";
 import { NR_EXTRA as X } from "../itemsNoir";
-import { nrAlive, nrArea, nrHit, nrPull } from "./nrKit";
+import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
+import { nrAlive, nrArea, nrHit, nrLine, nrPull } from "./nrKit";
+import type { HitOn } from "./nrTypes";
 import type { NrLater, NrVolley } from "./nrTypes";
 import type { RunState } from "./types";
 import { addEffect } from "./util";
@@ -20,6 +22,10 @@ export function nrWaves(s: RunState, x: number, y: number, n: number, dmg: numbe
   for (let i = 0; i < n; i++) (s.player.nrWaves ??= []).push({ x, y, r: 0, speed, dmg, hit: [], at: s.tick + i * gap });
 }
 
+/** 범위 한 번 (존: 직선이면 직선 위) */
+const zone = (s: RunState, v: NrVolley, dmg: number, on?: HitOn) =>
+  v.line ? nrLine(s, v.x, v.y, v.line.dx, v.line.dy, v.line.len, v.line.w, dmg, on) : nrArea(s, v.x, v.y, v.r, dmg, undefined, on);
+
 /** 기술 한 대: 빨아들이며 (몸을 따라가면 지금 자리) 범위를 때림 · 무형의 난무는 1 → 3 → 5타 묶음 사이를 비움 */
 function once(s: RunState, v: NrVolley): void {
   const p = s.player;
@@ -31,7 +37,7 @@ function once(s: RunState, v: NrVolley): void {
   if (v.kind === "flurry" && (i === 1 || i === 5)) return;
   const dmg = v.dmgs ? (v.dmgs[i] ?? 0) : v.dmg + v.ramp * i;
   if (dmg <= 0) return;
-  if (v.kind !== "devour") return void nrArea(s, v.x, v.y, v.r, dmg, undefined, v.on);
+  if (v.kind !== "devour") return void zone(s, v, dmg, v.on);
   // 공허 포식: 적마다 때린 피해를 모아 둠
   const sums = (v.sums ??= {});
   for (const e of s.enemies) {
@@ -42,14 +48,14 @@ function once(s: RunState, v: NrVolley): void {
 
 /** 기술이 끝날 때: 끝 한 방 · 공허 포식은 때린 만큼 한 번 더 · 마력 소멸은 3초 뒤 한 방 */
 function finish(s: RunState, v: NrVolley): void {
-  if (v.fin > 0) nrArea(s, v.x, v.y, v.r, v.fin, undefined, v.finBurn ? { ...v.on, burn: true } : v.on);
+  if (v.fin > 0) zone(s, v, v.fin, v.finBurn ? { ...v.on, burn: true } : v.on);
   // 공허 포식: 살아 있는 적에게 그 적이 맞은 만큼 한 번 더
   for (const [id, sum] of Object.entries(v.sums ?? {})) {
     const e = s.enemies.find((x) => x.id === Number(id));
     if (e && sum > 0) nrHit(s, e, sum);
   }
   if (v.kind === "drain") nrLater(s, { kind: "drain", x: v.x, y: v.y, r: v.r, dmg: v.fin * (X.s3.laterMul / X.s3.mul), at: s.tick + X.s3.later });
-  if (v.fin > 0 || v.kind === "devour" || v.kind === "squeeze" || v.kind === "drain") addEffect(s, { kind: v.kind.startsWith("rg") ? "rgBurst" : v.kind.startsWith("bu") ? "buPop" : "nrBurst", x: v.x, y: v.y, dirX: 0, dirY: 0, size: v.r * 1.15, maxTicks: 18 });
+  if (v.fin > 0 || v.kind === "devour" || v.kind === "squeeze" || v.kind === "drain") addEffect(s, { kind: v.kind.startsWith("rg") ? "rgBurst" : v.kind.startsWith("bu") ? "buPop" : v.kind.startsWith("jn") ? "jnPop" : "nrBurst", x: v.x, y: v.y, dirX: 0, dirY: 0, size: v.r * 1.15, maxTicks: 18 });
 }
 
 /** 늦게 오는 한 방: 낙인 창·장미 낙인은 그 적만 · 장례는 그 적 자리 범위 · 마력 소멸은 그 자리 범위 */
@@ -104,6 +110,8 @@ export function nrVolleyTick(s: RunState): void {
   if (p.nrVolleys?.length) {
     for (const v of srcEach(p.nrVolleys)) {
       if (v.follow) [v.x, v.y] = [p.x, p.y];
+      // 날아가는 기술 (존 뇌구): 벽 앞에서 멈춤
+      if (v.vel) [v.x, v.y] = [Math.max(ROOM_MIN_X, Math.min(ROOM_MAX_X, v.x + v.vel[0])), Math.max(ROOM_MIN_Y, Math.min(ROOM_MAX_Y, v.y + v.vel[1]))];
       nrPull(s, v.x, v.y, v.r, v.pull);
       if (v.next > s.tick) continue;
       once(s, v);

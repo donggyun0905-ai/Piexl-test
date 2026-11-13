@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.70",
+    date: "2026-11-13",
+    items: {
+      ko: [
+        "새 캐릭터 존 (아슈바르의 노랑, 로비 칩 45만): 금빛 손아귀 하나 · 패시브 없음 · 공격력은 매우 낮지만 타수가 아주 많음 · 적응력(흑 게이지·레벨업·강화·승격)과 제약은 느아르와 같음",
+        "존 황금 번개: 모든 공격이 번개(감전) 피해 · 번개가 맞을 때마다 같은 적에게 추가 타격 3번 (100% · 70% · 30%)",
+        "존 공격: 황뢰 할퀴기 · 벽력일섬 · 뇌광 연속격 · 황금 번개 주먹 · 추가 공격 지그재그 뇌격 · 황뢰 낙하 · 번개 분신 · 뇌전 구속 · 스킬 황금 뇌구/광란의 천뢰 · 혼돈의 낙뢰/초월 벽력일섬 · 뇌신의 손아귀/황뢰 천수 · 궁극기 천둥의 발자취/종언의 황천뢰",
+      ],
+      en: [
+        "New character Jaune (Ashvar's Yellow, 450,000 lobby chips): one Golden Grip · no passives · very low damage but a huge number of hits · Adaptation (Black gauge, level-ups, upgrades, promotion) and restriction work like Noir's",
+        "Jaune's Golden Lightning: every attack deals Lightning (Shock) damage · each Lightning hit is followed by 3 extra strikes on the same foe (100% · 70% · 30%)",
+        "Jaune's attacks: Golden Thunder Claw · Thunderclap Flash · Lightning Flurry · Golden Lightning Fist · extra attacks Zigzag Bolt · Golden Thunderfall · Lightning Doppelgangers · Thunder Bind · skills Golden Thunder Orb/Frenzied Heaven Thunder · Chaos Thunderfall/Transcendent Thunderclap Flash · Grasp of the Thunder God/Thousand Golden Thunder Hands · ultimate Footsteps of Thunder/Golden Heaven Thunder of the End",
+      ],
+      ja: [
+        "新キャラクター ジョーヌ（アシュヴァルの黄、ロビーチップ45万）：金色の掌握ひとつ・パッシブなし・攻撃力はとても低いがヒット数が非常に多い・適応力（黒ゲージ・レベルアップ・強化・昇格）と制約はノワールと同じ",
+        "ジョーヌの黄金の雷：すべての攻撃が雷（感電）ダメージ・雷が当たるたびに同じ敵へ追加打撃3回（100%・70%・30%）",
+        "ジョーヌの攻撃：黄雷の引っ掻き・霹靂一閃・雷光連続撃・黄金雷拳・追加攻撃 ジグザグ雷撃・黄雷落下・雷の分身・雷電拘束・スキル 黄金雷球/狂乱の天雷・混沌の落雷/超越霹靂一閃・雷神の掌握/黄雷千手・必殺技 雷鳴の足跡/終焉の黄天雷",
+      ],
+    },
+  },
+  {
     version: "0.52.69",
     date: "2026-11-13",
     items: {

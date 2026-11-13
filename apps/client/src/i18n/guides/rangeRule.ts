@@ -7,7 +7,7 @@ type L3 = Record<Lang, string>;
 const c = (ko: string, en: string, ja: string): L3 => ({ ko, en, ja });
 
 /** 사거리 증가를 먹어도 공격 범위가 늘지 않는 캐릭터 */
-const NO = new Set<CharacterId>(["brawler", "remnant", "orca", "fenrir", "ian", "gabriel", "wave", "rafael", "blast", "onyx", "noir", "rouge", "bleu"]);
+const NO = new Set<CharacterId>(["brawler", "remnant", "orca", "fenrir", "ian", "gabriel", "wave", "rafael", "blast", "onyx", "noir", "rouge", "bleu", "jaune"]);
 /** 일부만 늘어나는 캐릭터: 늘어나는 것 */
 const PART: Partial<Record<CharacterId, L3>> = {
   thorken: c("철구슬만 (닻으로 때리는 공격은 그대로)", "the iron ball only (anchor strikes stay the same)", "鉄球のみ（錨で殴る攻撃はそのまま）"),

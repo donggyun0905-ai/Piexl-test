@@ -2,7 +2,7 @@
 // 눈결정: 기본 공격 때 확률로 방의 아무 자리에 → 닿은 적은 느려짐 · 종언의 영구동토가 수를 셈
 import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
 import { BU_BASE as B, BU_SNOW as W } from "../itemsBleu";
-import { nrAlive, nrArea, nrNearest, nrRoll } from "./nrKit";
+import { nrAim, nrAlive, nrArea, nrRoll } from "./nrKit";
 import type { HitOn } from "./nrTypes";
 import type { RunState } from "./types";
 import { addEffect } from "./util";
@@ -35,16 +35,8 @@ export function buFlakeTick(s: RunState): void {
   }
 }
 
-/** 공격 범위 안 마우스 자리 (마우스가 없으면 가까운 적, 없으면 앞 절반) */
-export function buAim(s: RunState): [number, number] {
-  const p = s.player;
-  if (p.aimDist !== undefined) {
-    const d = Math.min(p.aimDist, B.aim);
-    return [p.x + p.faceX * d, p.y + p.faceY * d];
-  }
-  const e = nrNearest(s, p.x, p.y, B.aim, p.faceX, p.faceY);
-  return e ? [e.x, e.y] : [p.x + p.faceX * B.aim * 0.5, p.y + p.faceY * B.aim * 0.5];
-}
+/** 공격 범위 안 마우스 자리 (nrAim) */
+export const buAim = (s: RunState) => nrAim(s, B.aim);
 
 /** 서리 결정탄 쏘기 (바라보는 쪽) */
 export function buShoot(s: RunState, dmg: number): void {

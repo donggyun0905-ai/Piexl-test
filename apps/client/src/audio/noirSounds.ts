@@ -1,4 +1,4 @@
-// 아슈바르 효과음 (느아르·루주·블뢰 같이 씀, 루주는 장미 피어남·불꽃 · 블뢰는 얼음 소리·결정탄 더함): 검은 베기 쉭 · 난무·회전참 사각사각 · 빨아들임 우웅 · 터짐 쾅 · 낙인 창 푹 · 흑월 강림·태초의 종언 쿠웅 · 충격파 · 레벨업 · 강화 성공·실패 · 승격
+// 아슈바르 효과음 (느아르·루주·블뢰·존 같이 씀, 루주는 장미 피어남·불꽃 · 블뢰는 얼음 소리·결정탄 · 존은 번개 지직·낙뢰 더함): 검은 베기 쉭 · 난무·회전참 사각사각 · 빨아들임 우웅 · 터짐 쾅 · 낙인 창 푹 · 흑월 강림·태초의 종언 쿠웅 · 충격파 · 레벨업 · 강화 성공·실패 · 승격
 import { crackle, hiss, wobble } from "./synth";
 import { isAshvar, type RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
@@ -35,6 +35,11 @@ export const NOIR_SOUNDS = {
     tone({ type: "sawtooth", from: 180, to: 70, dur: 0.3, vol: 0.06 });
   },
   buIce: () => [0, 0.04, 0.09].forEach((d, i) => tone({ type: "sine", from: 1600 + i * 400, to: 2400 + i * 300, dur: 0.1, vol: 0.035, delay: d })),
+  jnZap: () => crackle(0.12, 6, 0.08, 3800),
+  jnBolt: () => {
+    crackle(0.2, 10, 0.14, 2600);
+    tone({ type: "square", from: 1400, to: 180, dur: 0.18, vol: 0.05 });
+  },
   buShot: () => {
     hiss(0.18, 0.06, { freq: 3000, to: 1200, q: 2, attack: 0.02 });
     tone({ type: "triangle", from: 1200, to: 500, dur: 0.15, vol: 0.04 });
@@ -55,6 +60,8 @@ const SFX: Record<string, NoirSfx> = {
   rgX: "nrSlash", rgRush: "nrSlash", rgThorn: "nrSlash", rgMoon: "nrSlash", rgFlame: "nrMulti", rgSpin: "nrMulti", rgPetal: "nrMulti", rgForest: "nrMulti", rgDance: "nrMulti",
   buBolt: "buShot", buWave: "buIce", buBurst: "buIce", buWall: "buIce", buWolf: "nrSlash", buHawk: "nrSlash", buDeer: "buIce", buLegion: "nrUlt",
   buField: "nrPull", buClock: "nrMulti", buHowl: "nrUlt", buZero: "nrPull", buPrison: "nrMulti", buStop: "nrUlt", buEnd: "nrUlt", buRain: "nrMulti", buPop: "nrBurst",
+  jnClaw: "jnZap", jnFlash: "jnBolt", jnRapid: "jnZap", jnFist: "jnBolt", jnZig: "jnBolt", jnFall: "jnBolt", jnClone: "jnZap", jnBind: "nrPull",
+  jnOrb: "jnBolt", jnChaos: "nrMulti", jnHand: "nrPull", jnStep: "nrUlt", jnFrenzy: "jnBolt", jnBeam: "nrUlt", jnThousand: "nrMulti", jnEnd: "nrUlt", jnPop: "nrBurst", jnZap: "jnZap",
   rgBloom: "rgBloom", rgBloomBig: "rgBloom", rgFuneral: "nrPull", rgMark: "nrSpear", rgMarkBoom: "nrBurst", rgBurst: "nrBurst", rgBlaze: "rgFire", rgRain: "nrUlt", rgEnd: "nrUlt",
 };
 
@@ -64,7 +71,7 @@ export function noirSounds(run: RunState, out: Sfx[], onShake: (power: number) =
     if (e.ticks < e.maxTicks - 1) continue;
     const sfx = SFX[e.kind];
     if (sfx && !out.includes(sfx)) out.push(sfx);
-    if (e.kind === "nrMoon" || e.kind === "nrEnd" || e.kind === "rgRain" || e.kind === "rgEnd" || e.kind === "buStop" || e.kind === "buEnd") onShake(0.5);
+    if (e.kind === "nrMoon" || e.kind === "nrEnd" || e.kind === "rgRain" || e.kind === "rgEnd" || e.kind === "buStop" || e.kind === "buEnd" || e.kind === "jnStep" || e.kind === "jnEnd") onShake(0.5);
     else if (e.kind === "nrBurst" || e.kind === "nrSpear" || e.kind === "rgBurst" || e.kind === "rgMarkBoom") onShake(0.2);
   }
 }

@@ -7,4 +7,6 @@ export const ASHVAR_CHARACTERS = {
   rouge: { id: "rouge", maxHp: 105, damage: 9, moveSpeed: 1.35, luck: 0, startWeapon: "rgBlades" },
   /** 블뢰 (아슈바르): 하얀 마도서 · 얼음마녀 (sim/bleu) */
   bleu: { id: "bleu", maxHp: 100, damage: 9, moveSpeed: 1.3, luck: 0, startWeapon: "buTome" },
+  /** 존 (아슈바르): 금빛 손아귀 · 황금 번개 · 공격력은 매우 낮고 타수가 많음 (sim/jaune) */
+  jaune: { id: "jaune", maxHp: 100, damage: 6, moveSpeed: 1.35, luck: 0, startWeapon: "jnGrip" },
 } as const;

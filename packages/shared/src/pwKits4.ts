@@ -162,4 +162,11 @@ export const PW_KITS_4: PwKits = {
     sk("buTome", "dash", 9, "#e8f8ff", { range: 120, speed: 10, hit: { dmg: 1 } }),
     sk("buTome", "point", 60, "#3a8aff", { range: 170, radius: 120, delay: 30, fx: "pillar", hit: { dmg: 3.2, stun: SEC } }),
   ),
+  // 아슈바르 존: 황뢰 할퀴기 · 벽력일섬 · 황뢰 낙하 · 천둥의 발자취
+  jaune: kit(1,
+    sk("jnGrip", "line", 4, "#ffe04a", { range: 200, hit: { dmg: 1.1 } }),
+    sk("jnGrip", "point", 8, "#fff09a", { range: 170, radius: 60, delay: 14, fx: "pillar", hit: { dmg: 1.6, stun: SEC / 2 } }),
+    sk("jnGrip", "dash", 9, "#ffd020", { range: 130, speed: 11, hit: { dmg: 1 } }),
+    sk("jnGrip", "point", 60, "#ffb800", { range: 170, radius: 125, delay: 26, fx: "pillar", hit: { dmg: 3.3, stun: SEC } }),
+  ),
 };

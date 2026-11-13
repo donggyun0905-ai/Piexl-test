@@ -3,11 +3,12 @@ import { createRng, deriveSeed } from "../rng";
 import { damageEnemy as damageEnemy_ } from "./combat";
 import { srcFn } from "./dmgSrc";
 import { buFrostHit } from "./buFrost";
+import { jnZapHit } from "./jnZap";
 import type { HitOn } from "./nrTypes";
 import { rgAfflict } from "./rgBleed";
 import type { EnemyState, RunState } from "./types";
 import { normalize } from "./util";
-import { bjAlive as nrAlive } from "./bjKit";
+import { bjAlive as nrAlive, bjNearest } from "./bjKit";
 import { bjBoss as nrBoss } from "./bjVolley";
 
 type P = RunState["player"];
@@ -16,8 +17,8 @@ const damageEnemy = srcFn("noir", () => damageEnemy_);
 export const isNoir = (p: P) => p.characterId === "noir";
 /** 아슈바르는 사거리 증가를 공격에 쓰지 않음: 범위·이펙트 크기 고정 (2026-11-13 사용자 지시, i18n/guides/rangeRule에 적음) */
 export const ASH_REACH = 1;
-/** 아슈바르 (적응력·제약을 같이 씀): 느아르 · 루주 · 블뢰 */
-export const isAshvar = (p: P) => p.characterId === "noir" || p.characterId === "rouge" || p.characterId === "bleu";
+/** 아슈바르 (적응력·제약을 같이 씀): 느아르 · 루주 · 블뢰 · 존 */
+export const isAshvar = (p: P) => p.characterId === "noir" || p.characterId === "rouge" || p.characterId === "bleu" || p.characterId === "jaune";
 // 살아 있는 적 · 보스(허수아비 포함) · 가장 가까운 적은 백인장과 같은 도우미
 export { bjAlive as nrAlive, bjNearest as nrNearest } from "./bjKit";
 export { bjBoss as nrBoss } from "./bjVolley";
@@ -29,10 +30,11 @@ export function nrRoll(s: RunState, tag: string): number {
   return createRng(deriveSeed(s.seed, tag, s.tick, p.nrRolls)).nextFloat();
 }
 
-/** 한 대 (밀지 않음: 연타가 많아서) · 출혈·화상(루주) · 빙결(블뢰, 서리 피해) · 준 피해 */
+/** 한 대 (밀지 않음: 연타가 많아서) · 출혈·화상(루주) · 빙결(블뢰, 서리 피해) · 번개(존, 감전 피해) · 준 피해 */
 export function nrHit(s: RunState, e: EnemyState, dmg: number, on?: HitOn): number {
   if (!nrAlive(e)) return 0;
   if (on?.frost) return buFrostHit(s, e, dmg, on);
+  if (on?.zap) return jnZapHit(s, e, dmg);
   const p = s.player;
   const d = normalize(e.x - p.x, e.y - p.y) ?? [p.faceX, p.faceY];
   const hp = e.hp;
@@ -54,6 +56,29 @@ export function nrArea(s: RunState, x: number, y: number, r: number, dmg: number
     sum += nrHit(s, e, dmg, on);
   }
   return sum;
+}
+
+/** (x, y)에서 dx·dy 쪽 직선(길이 len · 너비 w) 위의 적 모두 때림 · 준 피해 합 */
+export function nrLine(s: RunState, x: number, y: number, dx: number, dy: number, len: number, w: number, dmg: number, on?: HitOn): number {
+  let sum = 0;
+  for (const e of s.enemies) {
+    if (!nrAlive(e)) continue;
+    const t = Math.max(0, Math.min(len, (e.x - x) * dx + (e.y - y) * dy));
+    if ((e.x - x - dx * t) ** 2 + (e.y - y - dy * t) ** 2 > (w + e.r) ** 2) continue;
+    sum += nrHit(s, e, dmg, on);
+  }
+  return sum;
+}
+
+/** 공격 범위(range) 안 마우스 자리 (마우스가 없으면 가까운 적, 없으면 앞 절반) */
+export function nrAim(s: RunState, range: number): [number, number] {
+  const p = s.player;
+  if (p.aimDist !== undefined) {
+    const d = Math.min(p.aimDist, range);
+    return [p.x + p.faceX * d, p.y + p.faceY * d];
+  }
+  const e = bjNearest(s, p.x, p.y, range, p.faceX, p.faceY);
+  return e ? [e.x, e.y] : [p.x + p.faceX * range * 0.5, p.y + p.faceY * range * 0.5];
 }
 
 /** (x, y) 둘레 r 안의 적을 가운데로 빨아들임 (보스·허수아비 빼고) */

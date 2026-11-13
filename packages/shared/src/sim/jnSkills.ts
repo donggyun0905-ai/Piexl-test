@@ -1,0 +1,92 @@
+// 존 스킬(숫자 키 1~4, 처음부터 열림 · 적응력 강화에 성공하면 강화판)
+// 1 황금 뇌구 / 광란의 천뢰 · 2 혼돈의 낙뢰 / 초월 벽력일섬 · 3 뇌신의 손아귀 / 황뢰 천수 · 4 천둥의 발자취 / 종언의 황천뢰
+import { ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y } from "../constants";
+import { JN_BASE as B, JN_LV as L, JN_SKILLS as K } from "../itemsJaune";
+import { jnAhead, jnLine, reps, ZAP } from "./jaune";
+import { nrAim, nrAlive, nrHit } from "./nrKit";
+import { nrVolley } from "./nrVolley";
+import type { RunState } from "./types";
+import { addEffect } from "./util";
+
+type P = RunState["player"];
+
+/** 스킬 칸 차례의 수치 이름 (보통 · 강화) · 피해 출처 (화면 글자 키) */
+export const JN_SKILL_IDS = [["orb", "frenzy"], ["chaos", "beam"], ["hand", "thousand"], ["step", "end"]] as const;
+export const jnSkillSrc = (p: P, i: number) => (p.nrSkillUp?.[i] ? `k:jnSkillUp${i + 1}` : `k:jnSkill${i + 1}`);
+
+/** 스킬 칸 넷의 남은 대기 (0~1) */
+export const jnSkills = (p: P): number[] => JN_SKILL_IDS.map((ids, i) => Math.min(1, (p.nrSkillCd?.[i] ?? 0) / K[ids[p.nrSkillUp?.[i] ? 1 : 0]].cd));
+
+/** 앞으로 날아가는 번개 구체 (둘레를 나눠 때림) */
+function orb(s: RunState, kind: "jnOrb" | "jnFrenzy", r: number, speed: number, every: number, dmgs: number[]): void {
+  const p = s.player;
+  nrVolley(s, { kind, x: p.x, y: p.y, r, dmg: 0, dmgs, n: dmgs.length, every, on: ZAP, vel: [p.faceX * speed, p.faceY * speed] });
+  addEffect(s, { kind, x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: r, maxTicks: dmgs.length * every + 12 });
+}
+
+/** 스킬 i(0~3) 쓰기 */
+export function jnSkill(s: RunState, i: number): void {
+  const p = s.player;
+  const cd = (p.nrSkillCd ??= [0, 0, 0, 0]);
+  const ids = JN_SKILL_IDS[i];
+  if (!ids || (cd[i] ?? 0) > 0) return;
+  const id = ids[p.nrSkillUp?.[i] ? 1 : 0];
+  cd[i] = K[id].cd;
+  const D = p.stats.damage;
+  if (id === "orb") {
+    const R = K.orb;
+    orb(s, "jnOrb", R.r, R.speed, R.every, [...reps(R.hits, D * L.weak), ...reps(R.tail, D * L.vweak)]);
+  } else if (id === "frenzy") {
+    const R = K.frenzy;
+    orb(s, "jnFrenzy", R.r, R.speed, R.every, [D * L.strong, ...reps(R.hits, D * L.weak)]);
+  } else if (id === "chaos") {
+    const R = K.chaos;
+    const [x, y] = nrAim(s, B.aim);
+    const dmgs = [...reps(R.hits, D * L.weak), ...reps(R.fin, D * L.strong)];
+    nrVolley(s, { kind: "jnChaos", x, y, r: R.r, dmg: 0, dmgs, n: dmgs.length, every: R.every, on: ZAP });
+    addEffect(s, { kind: "jnChaos", x, y, dirX: 0, dirY: 0, size: R.r, maxTicks: dmgs.length * R.every + 14 });
+  } else if (id === "beam") {
+    jnLine(s, "jnBeam", K.beam, reps(K.beam.hits, D * L.mid), D * L.strong);
+  } else if (id === "hand") {
+    const R = K.hand;
+    jnAhead(s, "jnHand", R.ahead, R.r, R.every, reps(R.hits, D * L.weak), D * L.strong, R.pull);
+  } else if (id === "thousand") {
+    const R = K.thousand;
+    jnAhead(s, "jnThousand", R.ahead, R.r, R.every, [...reps(R.mid, D * L.mid), ...reps(R.weak, D * L.weak), ...reps(R.vweak, D * L.vweak)], D * L.strong);
+  } else if (id === "step") {
+    // 천둥의 발자취: 앞으로 돌진(닿은 적 약한 1타, 무적) + 몸 둘레 약한 6타 · 매우 약한 70타
+    const R = K.step;
+    p.nrRush = { dx: p.faceX, dy: p.faceY, t: R.ticks, step: R.step, dmg: D * L.weak, hit: [], sx: p.x, sy: p.y, fx: "jnPop", on: ZAP };
+    nrVolley(s, { kind: "jnStep", x: p.x, y: p.y, r: R.r, dmg: D * L.weak, n: R.hits - 1, every: R.every, follow: true, on: ZAP });
+    nrVolley(s, { kind: "jnStep", x: p.x, y: p.y, r: R.r, dmg: D * L.vweak, n: R.tail, every: 1, follow: true, on: ZAP });
+    addEffect(s, { kind: "jnStep", x: p.x, y: p.y, dirX: p.faceX, dirY: p.faceY, size: R.r, maxTicks: R.tail + 10 });
+  } else {
+    // 종언의 황천뢰: 구체를 쏨 → 처음 닿은 적 자리에서 (jnBoltTick)
+    const R = K.end;
+    (p.jnBolts ??= []).push({ x: p.x + p.faceX * 10, y: p.y + p.faceY * 10, dx: p.faceX, dy: p.faceY, left: R.range });
+  }
+}
+
+/** 틱마다: 종언의 구체가 날아가 처음 닿은 적에게 번개 1타 → 그 자리에서 약한 7 · 보통 7 · 강한 1 + 매우매우 약한 70타 · 벽·거리 끝에서 사라짐 */
+export function jnBoltTick(s: RunState): void {
+  const p = s.player;
+  if (!p.jnBolts?.length) return;
+  const R = K.end;
+  const D = p.stats.damage;
+  for (const b of p.jnBolts) {
+    b.x += b.dx * R.speed;
+    b.y += b.dy * R.speed;
+    b.left -= R.speed;
+    const e = s.enemies.find((f) => nrAlive(f) && (f.x - b.x) ** 2 + (f.y - b.y) ** 2 <= (R.r + f.r) ** 2);
+    const wall = b.x < ROOM_MIN_X || b.x > ROOM_MAX_X || b.y < ROOM_MIN_Y || b.y > ROOM_MAX_Y;
+    if (!e && !wall && b.left > 0) continue;
+    b.left = 0;
+    if (!e) continue;
+    nrHit(s, e, D * L.mid, ZAP);
+    const dmgs = [...reps(7, D * L.weak), ...reps(7, D * L.mid), D * L.strong];
+    nrVolley(s, { kind: "jnEnd", x: e.x, y: e.y, r: R.boom, dmg: 0, dmgs, n: dmgs.length, every: R.every, on: ZAP }, R.every);
+    nrVolley(s, { kind: "jnEnd", x: e.x, y: e.y, r: R.boom, dmg: D * L.tiny, n: R.tail, every: 1, on: ZAP }, R.every);
+    addEffect(s, { kind: "jnEnd", x: e.x, y: e.y, dirX: 0, dirY: 0, size: R.boom, maxTicks: Math.max(dmgs.length * R.every, R.tail) + 16 });
+  }
+  p.jnBolts = p.jnBolts.filter((b) => b.left > 0);
+}
