@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.81",
+    date: "2026-11-13",
+    items: {
+      ko: ["스토리를 장면으로: 위에는 장면 그림, 아래에는 한 문단씩 넘기는 대사 상자(말하는 캐릭터 얼굴·이름) · 누르기·Space로 다음, ←로 이전, Esc로 닫기 · '책으로 보기'로 예전처럼 읽기 · 아카이브 › 스토리와 세계 지도 이야기 모두 · 장면 일러스트는 차례로 채우는 중 (그 전에는 임시 배경 + 말하는 캐릭터)"],
+      en: ["Story as scenes: an illustration on top and a dialogue box below that advances one paragraph at a time (speaker face and name) · tap/Space for next, ← to go back, Esc to close · 'Read as book' for the old view · in both Archive › Story and the world map · scene illustrations are being added (until then, a placeholder background with the speaking character)"],
+      ja: ["ストーリーをシーンで：上にシーンの絵、下に一段落ずつ進む台詞ボックス（話す人の顔・名前）・タップ・Spaceで次、←で前、Escで閉じる・「本で読む」で以前の形式・アーカイブ › ストーリーと世界地図の物語の両方・シーンのイラストは順次追加中（それまでは仮の背景と話すキャラクター）"],
+    },
+  },
+  {
     version: "0.52.80",
     date: "2026-11-13",
     items: {

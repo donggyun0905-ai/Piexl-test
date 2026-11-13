@@ -4,7 +4,7 @@ import type { Lang, TextKey } from "../i18n";
 import { EnemyPortrait } from "../codex/EnemyPortrait";
 import { BOSS_STORY, CHAPTER_SUMMARY, CHAPTER_TITLE, FACTION_TEXT } from "../i18n/story/world";
 import { CharGuides } from "./CharGuides";
-import { StoryReader } from "./StoryReader";
+import { SceneView } from "./SceneView";
 import { StoryFace, speakerName } from "./StoryFace";
 import { CHAPTERS, FACTIONS, STORY_BOSSES, type ChapterId } from "./storyData";
 import { factionOpen, storyStage } from "../progress/storyStage";
@@ -38,7 +38,7 @@ export function StoryScreen({ lang, t, onBack }: Props) {
         <span>{t("storySeason1")}</span>
       </header>
       {reading ? (
-        <StoryReader id={reading} lang={lang} t={t} onClose={() => setReading(null)} />
+        <SceneView id={reading} lang={lang} t={t} onClose={() => setReading(null)} />
       ) : (
         <>
           <nav className="shop-tabs">

@@ -1,5 +1,5 @@
 // 세계 지도 화면 (아스칼론 필드): 캔버스 + 나가기 · 나라 이름 · 장소 앞 버튼(모바일) · 글 창(표지판·마을·주민 말, Esc로 닫힘)
-// 이야기 장면: 처음 오면 1장 · 장군에게 말 걸면 지금 연 장 (StoryReader) · 던전 입구 → 혼자 하기(끝나면 지도로, worldReturn)
+// 이야기 장면(SceneView, 일러스트 + 대사): 처음 오면 1장 · 장군에게 말 걸면 지금 연 장 · 던전 입구 → 혼자 하기(끝나면 지도로, worldReturn)
 // 세계 지도(줌 아웃)·빠른 이동은 W4
 import { useEffect, useState } from "react";
 import type { Lang, TextKey } from "../i18n";
@@ -7,7 +7,7 @@ import { FACTION_TEXT } from "../i18n/story/world";
 import { storyStage } from "../progress/storyStage";
 import { loadText, saveText } from "../storage";
 import { StoryFace } from "../story/StoryFace";
-import { StoryReader } from "../story/StoryReader";
+import { SceneView } from "../story/SceneView";
 import { CHAPTERS, FACTIONS, type ChapterId } from "../story/storyData";
 import { WorldStage } from "./WorldStage";
 import { REGIONS, type Place } from "./worldPlaces";
@@ -42,11 +42,12 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
     else setReading(p);
   };
   useEffect(() => {
-    if (!reading && !scene) return;
-    const esc = (e: KeyboardEvent) => e.key === "Escape" && (scene ? closeScene() : setReading(null));
+    // 이야기 장면의 Esc는 SceneView가 받음
+    if (!reading) return;
+    const esc = (e: KeyboardEvent) => e.key === "Escape" && setReading(null);
     window.addEventListener("keydown", esc);
     return () => window.removeEventListener("keydown", esc);
-  }, [reading, scene]);
+  }, [reading]);
   const body = (p: Place): TextKey => p.line ?? (p.kind === "town" ? "wpAscalonCastleText" : (`${p.name}Text` as TextKey));
   return (
     <div className="lobby-mode world-mode">
@@ -80,7 +81,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
       )}
       {scene && (
         <div className="world-scene">
-          <StoryReader id={scene} lang={lang} t={t} onClose={closeScene} done="close" />
+          <SceneView id={scene} lang={lang} t={t} onClose={closeScene} />
         </div>
       )}
     </div>
