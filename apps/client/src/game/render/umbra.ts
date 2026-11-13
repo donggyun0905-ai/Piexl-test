@@ -58,36 +58,20 @@ function drawWorm(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, x: 
   ctx.restore();
 }
 
-/** 머리(이빨 입)만: 그림 아래쪽 몸통은 잘라 냄 · lift만큼 떠 있음 */
+/** 필살기(모래지옥 가운데): 솟은 데스웜 그림 · lift만큼 떠 있음 */
 function wormHead(ctx: CanvasRenderingContext2D, name: string, x: number, y: number, frame: number, tint: readonly [string, number] | undefined, lift: number): void {
-  ctx.save();
-  ctx.beginPath();
-  ctx.rect(x - 90, y - lift - 60, 180, 100);
-  ctx.clip();
-  drawEnemySprite(ctx, name, x, y - lift + 27, frame, false, tint, BIG);
-  ctx.restore();
+  drawEnemySprite(ctx, name, x, y - lift - 20, frame, false, tint, BIG);
 }
 
-/** 공중을 나는 긴 몸: 꼬리부터 마디를 그리고 머리는 맨 위 (솟은 자리·박힐 자리 사이 가운데가 가장 높음) */
-function wormFlight(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, path: number[], frame: number, tint?: readonly [string, number]): void {
+/** 공중을 나는 데스웜: 땅을 완전히 빠져나온 온몸 그림 (뛰어오름 → 꼭대기 → 내려꽂기 → 박힘 네 칸, 솟은 자리·박힐 자리 사이 가운데가 가장 높음) */
+function wormFlight(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, path: number[], _frame: number, tint?: readonly [string, number]): void {
   const [sx, sy, lx, ly, u] = path as [number, number, number, number, number];
   const len = Math.hypot(lx - sx, ly - sy) || 1;
   const height = (px: number, py: number) => Math.sin((Math.PI * Math.min(len, Math.hypot(px - sx, py - sy))) / len) * 22;
   const body = wormBody(path, 9);
+  // 그림자: 지금 공중에 있는 몸 길이만큼
   ctx.fillStyle = "rgba(40, 24, 10, 0.35)";
   for (const [bx, by] of body) ctx.fillRect(Math.round(bx - 12), Math.round(by - 3), 24, 7);
-  body.forEach(([bx, by], i) => {
-    const h = height(bx, by);
-    ctx.fillStyle = e.dark ? (i % 2 ? "#16141c" : "#24202c") : i % 2 ? "#9a6a3a" : "#b8844c";
-    ctx.beginPath();
-    ctx.arc(bx, by - h, 20, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = e.dark ? "#000000" : "#5a3818";
-    ctx.lineWidth = 1;
-    glowStroke(ctx);
-    ctx.fillStyle = e.dark ? "#4a4458" : "#e0b880";
-    ctx.fillRect(Math.round(bx - 8), Math.round(by - h - 14), 9, 4);
-  });
   // 솟은 자리·박힌 자리 모래 구멍
   ctx.fillStyle = "rgba(60, 36, 16, 0.6)";
   for (const [hx, hy] of [[sx, sy], [lx, ly]] as const) {
@@ -95,7 +79,14 @@ function wormFlight(ctx: CanvasRenderingContext2D, s: RunState, e: EnemyState, p
     ctx.ellipse(hx, hy + 9, 27, 10, 0, 0, Math.PI * 2);
     ctx.fill();
   }
-  if (u <= len) wormHead(ctx, look(e), e.x, e.y, frame, tint, height(e.x, e.y) + 4 + Math.sin(s.tick / 6));
+  if (body.length === 0) return;
+  const [mx, my] = body[Math.floor(body.length / 2)]!;
+  const [tx, ty] = body[0]!;
+  const [hx, hy] = body[body.length - 1]!;
+  const span = Math.hypot(hx - tx, hy - ty);
+  const f = Math.min(3, Math.floor((Math.min(u, len) / len) * 4));
+  const scale = Math.max(1.3, Math.min(2.6, span / 80));
+  drawEnemySprite(ctx, `sandworm_jump${e.dark ? "_dark" : ""}`, mx, my - height(mx, my) - 24 + Math.sin(s.tick / 6), f, lx < sx, tint, scale);
 }
 
 /** 전갈: 모래 밑을 기면 붉은 표시가 따라다님 · 나오면 바라보는 쪽으로 몸을 돌림 */

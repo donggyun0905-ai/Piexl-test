@@ -8,7 +8,7 @@ import { imageLoader } from "./lazyImage";
 export const ENEMY_SPRITES: readonly string[] = [
   "dummy", "crawler", "spitter", "mortar", "charger", "gnat", "guardian", "paladin", "tower", "soul", "ghost",
   "hulk", "brood", "seer", "knight", "archer", "siren", "centaur", "plant", "reaper", "swordgod", "archangel", "toad", "salamander", "jelly", "captain",
-  "godeater", "ruinblade", "chaosblade", "plight", "pdark", "dragon", "umbra", "sandworm", "scorpion", "roc", "sandworm_dark", "scorpion_dark", "roc_dark", "demigod", "sage", "sage_cloud",
+  "godeater", "ruinblade", "chaosblade", "plight", "pdark", "dragon", "umbra", "sandworm", "scorpion", "roc", "sandworm_dark", "scorpion_dark", "roc_dark", "demigod", "sage", "sage_cloud", "sandworm_jump", "sandworm_jump_dark",
   "slime", "runner", "bat", "beetle", "golem", "shaman", "eggsac", "wisp", "doppel", "venom", "landfish", "lurker", "bombbug", "skelarcher", "chainward", "highorc",
   // 서큐버스(무리 여왕)가 부른 졸개
   "incubus",
@@ -70,8 +70,10 @@ export function shapeSprite(kind: string, color: string): HTMLCanvasElement | un
 const HD2 = "crawler spitter mortar charger gnat guardian paladin slime runner bat beetle golem shaman eggsac wisp venom landfish lurker soul doppel bombbug skelarcher chainward".split(" ");
 /** 시즌 3 단계별 보스·소품은 4배 (scripts/art/s3_bosses) */
 const S3 = "gatekeeper twinlu twinre mooneater hellgate imp moonphase shadowhand moonaltar cerberus cerbfist cerbflame cerbblade leviathan levwhale levking asmodeus asmovoid asmolord".split(" ");
+/** 생성 AI로 다시 그린 보스는 4배 (scripts/art/import_boss · 제천대성 import_sage, 2026-11-14) */
+const BOSS4 = "godeater ruinblade chaosblade plight pdark demigod sage sage_cloud swordgod archangel reaper knight archer siren centaur plant toad salamander jelly captain umbra sandworm sandworm_dark sandworm_jump sandworm_jump_dark scorpion scorpion_dark roc roc_dark".split(" ");
 /** 하이오크는 큰 도트 48칸의 2배 (scripts/art/highorc_sprite, 칸: 걷기 2 · 도끼 치켜듦) */
-export const ENEMY_SRC: Readonly<Record<string, number>> = { highorc: 2, hulk: 2, seer: 2, tower: 2, brood: 4, dragon: 4, ...Object.fromEntries(S3.map((k) => [k, 4])), ...Object.fromEntries(HD2.map((k) => [k, 2])) };
+export const ENEMY_SRC: Readonly<Record<string, number>> = { highorc: 2, hulk: 2, seer: 2, tower: 2, brood: 4, dragon: 4, ...Object.fromEntries([...S3, ...BOSS4].map((k) => [k, 4])), ...Object.fromEntries(HD2.map((k) => [k, 2])) };
 
 /** 몬스터 그림 한 칸 크기 (게임 크기, 아직 못 불러왔으면 undefined) */
 export const enemyCell = (kind: string): number | undefined => {

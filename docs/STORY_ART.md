@@ -202,7 +202,8 @@ Use the first reference image ONLY as the art style guide: match its exact style
 
 ## 덤: 아직 예전 도트인 보스 그림 (스토리 그림 만들 때 같이)
 
-> 2026-11-14 확인: 아래 보스는 아직 처음의 작은 코드 도트 그림 (새 그림이 들어간 보스: 무리 여왕·멸망의 용·쌍둥이·지옥문 수문장·달을 삼키는 자·켈베로스·레비아탄·아스모데우스 등)
+> ✅ 2026-11-14 21종 모두 새 그림으로 바꿈 (0.52.101, 원본 `scripts/art/src/boss-{영문}.png` · 제천대성은 `import_sage.py` · 검은 짐승은 `dark_beasts.py` · 데스웜 공중 온몸 `boss-sandworm_jump.png`). 아래는 다시 만들 때 쓰는 문장
+> (처음 확인 2026-11-14: 아래 보스는 아직 처음의 작은 코드 도트 그림 (새 그림이 들어간 보스: 무리 여왕·멸망의 용·쌍둥이·지옥문 수문장·달을 삼키는 자·켈베로스·레비아탄·아스모데우스 등))
 > 결과 PNG는 `scripts/art/src/boss-{영문 이름}.png`로 올리면 Claude가 `import_boss.py`로 게임에 넣음 (2×2 네 모습 → 게임 시트)
 
 **첫 메시지에 같이 붙일 보스 규칙** (화풍 기준 = 무리 여왕 `scripts/art/src/boss-brood.png` 첨부, 정사각형 1:1 · 2k):
