@@ -43,6 +43,42 @@
 - 문단 번호는 1장 본문의 순서 (게임 화면 아래 '몇 / 41'과 같음)
 - 컷을 더 나누거나 합치고 싶으면 말씀해 주시면 `sceneCuts.ts`를 같이 고침
 
-## 2~9장
+## Higgsfield로 만들 때 (2026-11-13~, 1장 8컷 완성)
 
-🔸 1장 화풍이 정해지면 장마다 컷 목록·프롬프트를 이어서 씀 (그 전에는 장 하나에 임시 배경 하나)
+- Claude 채팅·Cowork의 Higgsfield에서 **Nano Banana Pro · 16:9 · 2k** (Claude Code에서는 무제한 생성이 막혀 크레딧이 듦)
+- 참고 그림 1번 = **1장 컷 3 그림**(`art/스토리/1장/3.png`, 화풍 기준) + 그 컷에 나오는 캐릭터 그림 (`art/캐릭터/{이름}/…-1.png`)
+- 프롬프트 = 아래 [공통] + 컷별 장면. 위아래 검은 띠가 생기면 Claude가 잘라서 넣음
+
+### [공통] — 모든 컷 앞에
+
+```
+Use the first reference image ONLY as the art style guide: match its exact style — cute chibi-leaning anime pixel art, large expressive eyes, clean bold pixel outlines, soft rounded shapes, rich saturated colors, same pixel density and shading. Do not copy its scene or characters. Other reference images are character designs: keep each character's hair color, outfit, colors, weapon and gender. Full-bleed 16:9 image, no black bars, no letterboxing, no border, no text, no letters, no captions, no signature. Keep the important subjects inside the central 80% vertically. Original design.
+```
+
+## 2장 「슬며시 차오르는 악」 (8컷, `art/스토리/2장/`)
+
+| 컷 | 문단 | 참고 그림 | 장면 |
+| --- | --- | --- | --- |
+| 1 | 1~3 | 거너·시간술사·기계공학자 | 아스칼론 옛 장수들의 회의장, 테라코어 세 사람이 헬리오스의 악을 경고 |
+| 2 | 4~7 | 장수·풋내기 | 아스칼론 성문, 헬리오스로 떠나는 장수들과 가방 멘 풋내기 |
+| 3 | 8~11 | 악의 사도 | 헬리오스 황금빛 연회장, 말 없는 왕, 웃으며 술을 따르는 흰 옷의 사도 |
+| 4 | 12~17 | 장수·풋내기·악의 사도 + 갓이터(`public/sprites/enemies/godeater.png`) | 달빛 공터, 떠 있는 두 대검과 갓이터, 쓰러진 두 장수, 뒤에서 웃는 사도 |
+| 5 | 18~28 | 거너·기계공학자·시간술사·장수·풋내기 | 총소리와 함께 나타난 테라코어 셋(포탑·드론), 풋내기를 밀어 보내는 장수 |
+| 6 | 29~40 | 풋내기·격투가 | 달아나던 풋내기 앞의 격투가, 먼저 날린 주먹, 하늘을 뒤덮은 드론·포탑 |
+| 7 | 41~48 | 시간술사·거너·장수·풋내기·격투가 | 아스트랄 로드를 끌어내는 시간술사, 수류탄 폭발, 풋내기를 안고 달리는 장수, 모래로 흩어지는 환영 |
+| 8 | 49~50 | 풋내기·장수 | 새벽 국경 언덕, 평온한 제국의 하늘을 돌아보는 풋내기 |
+
+### 2장 컷별 장면 (영어, [공통] 뒤에 붙임)
+
+1. `Scene: the grand council hall of the old generals of Ascalon, a stone hall with red banners, a long table and stern elderly generals in armor. Three strangers from the machine nation Terracore stand before them: the Gunner (dark red and black coat, wide-brimmed black hat, rifle), the Chronomancer (silver-white hair, navy and white robe with golden clock ornaments) and the Engineer (messy brown hair, orange and dark mechanical outfit, gadgets). The Gunner speaks gravely; the Chronomancer looks worried. Doubtful faces on the generals. Serious, uneasy mood.`
+2. `Scene: the great gate of the castle city of Ascalon in morning light. Three armored generals mount up to travel to the Helios Empire. Among them the General (dark crimson armor, helmet with a tall red plume, spear) turns to his young apprentice, the Novice (light brown hair, simple beige clothes, bandaged fists), who hurriedly carries a huge travel bag and salutes nervously. Lighthearted departure mood with a hint of unease.`
+3. `Scene: a dazzling golden banquet hall in the desert empire of Helios, sandstone pillars, gold ornaments, endless tables of food. Three Ascalon generals in armor and the young Novice are treated as honored heroes. On a high throne sits a quiet, expressionless king with empty eyes like a puppet. A smiling apostle in white and red ornate robes with long white hair (the Apostle of Malice) pours wine into their cups. Warm on the surface, subtly sinister mood.`
+4. `Scene: a moonlit clearing at deep night. A towering dark figure stands in the center: the Godeater, a giant shadowy being in a tattered dark purple cloak with a golden crown, glowing red eyes and a red gem on its chest. Two enormous greatswords float by themselves beside it. At its feet two Ascalon generals lie fallen, defeated (no gore). Behind it the white-robed Apostle smiles coldly. In the foreground the General (crimson armor, red plume) and the Novice freeze in terror, unable to move. Overwhelming, terrifying mood.`
+5. `Scene: the same moonlit clearing. With a gunshot cutting the night sky, the three from Terracore burst in: the Gunner firing his rifle, the Engineer deploying laser turrets and a swarm of drones, the Chronomancer with a glowing clock-magic circle. The General (crimson armor, red plume) pushes the young Novice away toward safety with a firm hand, telling him to run. The giant crowned Godeater and its floating greatswords loom in the background. Desperate, heroic mood.`
+6. `Scene: night, a rocky path outside the city. The fleeing Novice (light brown hair, beige clothes, bandaged fists) is blocked by the Brawler of Helios (spiky red hair, red fighter outfit, cocky grin). Gritting his teeth, the Novice throws the first punch, grazing the Brawler's cheek; the Brawler looks surprised and amused. Above them the sky is filled with drones and laser turrets flying in, explosions lighting the clouds. Tense, brave mood.`
+7. `Scene: chaos in the moonlit clearing, the Godeater overwhelming the battle as broken turrets burn. The Chronomancer forces out a glowing astral rod with blood at the corner of his mouth. The Gunner's grenade explodes, pushing back the Godeater and the Apostle. The General (crimson armor, red plume) sprints away carrying the Novice under his arm. Behind them the red-haired Brawler grabs the Novice's leg, but it is an illusion dissolving into golden sand. Explosive, dramatic escape mood.`
+8. `Scene: dawn on a grassy border hill. The Novice (light brown hair, beige clothes, bandaged fists) looks back over his shoulder at the distant golden city of Helios, whose sky looks perfectly peaceful as if nothing happened. The wounded General (crimson armor, red plume) stands beside him. Soft pink and gold morning light, wind in the grass. Quiet, bittersweet, foreboding mood.`
+
+## 3~9장
+
+🔸 2장처럼 장마다 컷 목록·프롬프트를 이어서 씀 (그 전에는 장 하나에 임시 배경 하나)

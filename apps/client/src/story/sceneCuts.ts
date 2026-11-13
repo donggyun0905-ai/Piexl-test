@@ -21,8 +21,17 @@ export const SCENE_CUTS: Record<ChapterId, readonly SceneCut[]> = {
     { at: 29, bg: "night" }, // 7 그림자 속 누군가와 검은 약
     { at: 34, bg: "dawn" }, // 8 어미 용의 작별·세계수의 씨앗
   ],
-  // 2~9장 컷은 그림 목록을 쓰면서 채움 (그 전에는 장 하나에 배경 하나)
-  ch2: [{ at: 0, bg: "city" }],
+  ch2: [
+    { at: 0, bg: "castle" }, // 1 테라코어 세 사람의 경고
+    { at: 3, bg: "castle" }, // 2 헬리오스로 떠나는 장수와 풋내기
+    { at: 7, bg: "city" }, // 3 황금빛 연회장·악의 사도
+    { at: 11, bg: "night" }, // 4 달빛 공터의 갓이터
+    { at: 17, bg: "night" }, // 5 테라코어의 난입·풋내기를 보내는 장수
+    { at: 28, bg: "night" }, // 6 풋내기와 격투가
+    { at: 40, bg: "fire" }, // 7 아스트랄 로드·탈출
+    { at: 48, bg: "dawn" }, // 8 국경 언덕의 새벽
+  ],
+  // 3~9장 컷은 그림 목록을 쓰면서 채움 (그 전에는 장 하나에 배경 하나)
   ch3: [{ at: 0, bg: "night" }],
   ch4: [{ at: 0, bg: "fire" }],
   ch5: [{ at: 0, bg: "castle" }],
