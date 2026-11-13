@@ -107,6 +107,22 @@ describe("블뢰", () => {
     expect(s.player.shieldPts).toBe(X.deer.shield);
   });
 
+  it("가디언 방패: 빙결도 맞을 때마다 한 칸씩 깨고, 다 깨져야 피해 · 피해 출처는 기술마다", () => {
+    const s = bu([[100, 100]]);
+    s.player.nrBase = 4;
+    s.enemies[0]!.shield = 3;
+    odds(0, 0, () => {
+      stepSim(s, hit);
+      idle(s, 3 * B.s4.every - 1);
+      expect(s.enemies[0]!.shield).toBe(0);
+      expect(lost(s)).toBe(0);
+      idle(s, 60);
+    });
+    expect(lost(s)).toBeGreaterThan(0);
+    expect(s.player.dmgBy?.["k:buBase4"]).toBeCloseTo(lost(s), 3);
+    expect(s.player.dmgBy?.["d:frost"] ?? 0).toBe(0);
+  });
+
   it("시간 동결: 얼음 시계(사용 아이템과 같은 길이) + 방 전체 15타", () => {
     const s = bu([[100, 100], [500, 300]]);
     stepSim(s, { ...EMPTY_INPUT, aimX: 100, skill: 3 });

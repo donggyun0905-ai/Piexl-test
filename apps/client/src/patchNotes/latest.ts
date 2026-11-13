@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.68",
+    date: "2026-11-13",
+    items: {
+      ko: ["블뢰: 빙결 피해가 가디언 방패를 무시하던 것 고침 (맞을 때마다 한 칸씩 깨지고 다 깨져야 피해) · 결과 창 피해 출처를 '서리' 하나가 아니라 기본 공격·추가 공격·스킬마다 나눠 보여 줌"],
+      en: ["Bleu: Freeze damage no longer ignores Guardian shields (each hit breaks one layer; damage only after all break) · the result screen now splits damage sources by basic attack, extra attack and skill instead of a single 'Frost'"],
+      ja: ["ブルー：凍結ダメージがガーディアンの盾を無視していたのを修正（当たるたびに1枚ずつ割れ、全部割れてからダメージ）・結果画面のダメージ出所を「霜」ひとつではなく基本攻撃・追加攻撃・スキルごとに分けて表示"],
+    },
+  },
+  {
     version: "0.52.67",
     date: "2026-11-13",
     items: {
