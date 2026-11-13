@@ -2,6 +2,7 @@
 import { createRng, deriveSeed } from "../rng";
 import { damageEnemy as damageEnemy_ } from "./combat";
 import { srcFn } from "./dmgSrc";
+import { buFrostHit } from "./buFrost";
 import type { HitOn } from "./nrTypes";
 import { rgAfflict } from "./rgBleed";
 import type { EnemyState, RunState } from "./types";
@@ -15,8 +16,8 @@ const damageEnemy = srcFn("noir", () => damageEnemy_);
 export const isNoir = (p: P) => p.characterId === "noir";
 /** 아슈바르는 사거리 증가를 공격에 쓰지 않음: 범위·이펙트 크기 고정 (2026-11-13 사용자 지시, i18n/guides/rangeRule에 적음) */
 export const ASH_REACH = 1;
-/** 아슈바르 (적응력·제약을 같이 씀): 느아르 · 루주 */
-export const isAshvar = (p: P) => p.characterId === "noir" || p.characterId === "rouge";
+/** 아슈바르 (적응력·제약을 같이 씀): 느아르 · 루주 · 블뢰 */
+export const isAshvar = (p: P) => p.characterId === "noir" || p.characterId === "rouge" || p.characterId === "bleu";
 // 살아 있는 적 · 보스(허수아비 포함) · 가장 가까운 적은 백인장과 같은 도우미
 export { bjAlive as nrAlive, bjNearest as nrNearest } from "./bjKit";
 export { bjBoss as nrBoss } from "./bjVolley";
@@ -28,9 +29,10 @@ export function nrRoll(s: RunState, tag: string): number {
   return createRng(deriveSeed(s.seed, tag, s.tick, p.nrRolls)).nextFloat();
 }
 
-/** 한 대 (밀지 않음: 연타가 많아서) · 출혈·화상(루주) · 준 피해 */
+/** 한 대 (밀지 않음: 연타가 많아서) · 출혈·화상(루주) · 빙결(블뢰, 서리 피해) · 준 피해 */
 export function nrHit(s: RunState, e: EnemyState, dmg: number, on?: HitOn): number {
   if (!nrAlive(e)) return 0;
+  if (on?.frost) return buFrostHit(s, e, dmg, on);
   const p = s.player;
   const d = normalize(e.x - p.x, e.y - p.y) ?? [p.faceX, p.faceY];
   const hp = e.hp;

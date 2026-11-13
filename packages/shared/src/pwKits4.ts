@@ -155,4 +155,11 @@ export const PW_KITS_4: PwKits = {
     sk("rgBlades", "dash", 9, "#8a0a1a", { range: 130, speed: 11, hit: { dmg: 1.1 } }),
     sk("rgBlades", "point", 60, "#ff3a4a", { range: 0, radius: 135, delay: 24, fx: "pillar", hit: { dmg: 3.3, stun: SEC } }),
   ),
+  // 아슈바르 블뢰: 서리 결정탄 · 빙결의 파동 · 월광의 영혼 늑대 · 빙창의 폭우
+  bleu: kit(1,
+    sk("buTome", "line", 4, "#8ad8ff", { range: 220, hit: { dmg: 1.2, slow: 1 * SEC } }),
+    sk("buTome", "point", 8, "#c8f0ff", { range: 170, radius: 70, delay: 18, fx: "pillar", hit: { dmg: 1.5, slow: 2 * SEC } }),
+    sk("buTome", "dash", 9, "#e8f8ff", { range: 120, speed: 10, hit: { dmg: 1 } }),
+    sk("buTome", "point", 60, "#3a8aff", { range: 170, radius: 120, delay: 30, fx: "pillar", hit: { dmg: 3.2, stun: SEC } }),
+  ),
 };

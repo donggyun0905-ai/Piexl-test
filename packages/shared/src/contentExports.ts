@@ -74,6 +74,8 @@ export { GE_PERKS } from "./itemsGears";
 export { NOIR_WEAPONS } from "./weaponsNoir";
 export { ROUGE_WEAPONS } from "./weaponsRouge";
 export { RG_BASE, RG_EXTRA, RG_ROSE, RG_SKILLS } from "./itemsRouge";
+export { BLEU_WEAPONS } from "./weaponsBleu";
+export { BU_BASE, BU_EXTRA, BU_SKILLS, BU_SNOW } from "./itemsBleu";
 export { NR_ADAPT, NR_BASE, NR_EXTRA, NR_LIMIT, NR_RANKS, NR_SKILLS } from "./itemsNoir";
 export { HONRYEONG_WEAPONS, HR_CLOUD, HR_STYLE } from "./weaponsHonryeong";
 export { HONRYEONG_PERKS } from "./itemsHonryeong";

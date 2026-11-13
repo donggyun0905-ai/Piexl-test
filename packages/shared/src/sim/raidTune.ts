@@ -56,6 +56,7 @@ const R: Record<string, number> = {
   gears: 1,
   noir: 1,
   rouge: 1,
+  bleu: 1,
   honryeong: 1,
   /** 의사 */
   doctor: 1.25,

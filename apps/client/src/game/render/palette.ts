@@ -99,6 +99,7 @@ export const C = {
   gears: "#8ac8ff",
   noir: "#6a4a9a",
   rouge: "#c8243a",
+  bleu: "#5ab4ff",
   baekinjang: "#ff2a3a",
   aria: "#ffd860",
   chessRaven: "#e8d8a0",

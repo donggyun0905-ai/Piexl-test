@@ -7,7 +7,7 @@ import type { Controls } from "./controls";
 
 export interface NoirView {
   /** 아슈바르 누구인지 (이름·스킬 글자 키 앞: 느아르 nr · 루주 rg) */
-  who: "noir" | "rouge";
+  who: "noir" | "rouge" | "bleu";
   lv: number;
   exp: number;
   need: number;
@@ -46,7 +46,7 @@ export function NoirPanel({ view, t, controls }: { view: NoirView; t: (key: Text
     );
   };
   const stage = (n: number) => t("nrStage").replace("{n}", String(n));
-  const pre = view.who === "rouge" ? "rg" : "nr";
+  const pre = view.who === "rouge" ? "rg" : view.who === "bleu" ? "bu" : "nr";
   const rankLocked = view.rank === 2 && view.ch[NR_UP.rank - 1] === null;
   return (
     <div className="novice-bar noir-bar">

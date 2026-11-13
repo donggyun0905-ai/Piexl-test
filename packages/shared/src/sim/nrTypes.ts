@@ -1,13 +1,17 @@
 // 느아르 상태 타입 (sim/noir·nrKit·nrVolley·nrSkills·nrAdapt). 모두 선택 값 (예전 저장에는 없음)
 
-export type NrVolleyKind = "flurry" | "spin" | "sever" | "squeeze" | "drain" | "devour" | "origin" | "rift" | "barrier" | "abyss" | RgVolleyKind;
+export type NrVolleyKind = "flurry" | "spin" | "sever" | "squeeze" | "drain" | "devour" | "origin" | "rift" | "barrier" | "abyss" | RgVolleyKind | BuVolleyKind;
 /** 루주 기술 (sim/rouge·rgSkills): 쌍검격 · 난무 · 회전참 · 가시 찌르기 · 꽃잎 폭풍 · 가시숲 · 혈화 만개 · 혈검무 · 혈월참 · 폭우 · 종언 */
 export type RgVolleyKind = "rgX" | "rgFlame" | "rgSpin" | "rgThorn" | "rgPetal" | "rgForest" | "rgBloom" | "rgDance" | "rgMoon" | "rgRain" | "rgEnd";
+/** 블뢰 기술 (sim/bleu·buSkills): 빙결의 파동 · 빙정 폭발 · 영구빙벽 · 영혼 늑대·매 · 빙시계의 태엽 · 절대 영도 · 시간 동결 · 시간감옥 · 빙창의 폭우 · 종언의 영구동토 */
+export type BuVolleyKind = "buWave" | "buBurst" | "buWall" | "buWolf" | "buHawk" | "buClock" | "buZero" | "buStop" | "buPrison" | "buRain" | "buEnd";
 
-/** 맞은 적에게 붙는 것 (루주): 출혈 스택 · 화상 */
+/** 맞은 적에게 붙는 것 (루주): 출혈 스택 · 화상 · (블뢰) 서리 피해로 들어감 · 얼리는 틱 */
 export interface HitOn {
   bleed?: number;
   burn?: boolean;
+  frost?: boolean;
+  freeze?: number;
 }
 
 /** 나눠 때리는 기술 하나: 종류 · 자리 · 반지름 · 한 대 피해 · 한 대마다 더하는 피해 · 남은 수 · 처음 수 · 간격 · 다음 틱 · 빨아들이는 힘 · 끝 한 방 피해 · 몸을 따라감 · 적마다 때린 피해 합(공허 포식) */

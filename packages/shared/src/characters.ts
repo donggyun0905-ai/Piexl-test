@@ -4,6 +4,7 @@ import { THALASSIA_CHARACTERS } from "./charactersThalassia";
 import { SEONGGUK_CHARACTERS } from "./charactersSeongguk";
 import { DAWN_CHARACTERS } from "./charactersDawn";
 import { SILBER_CHARACTERS } from "./charactersSilber";
+import { ASHVAR_CHARACTERS } from "./charactersAshvar";
 
 /** 전용 무기·아이템을 가질 수 있는 캐릭터 (content.WeaponDef.exclusive · items.PassiveDef.exclusive) */
 export type { ExclusiveId } from "./characterIds";
@@ -120,10 +121,7 @@ export const CHARACTERS = {
   ...SEONGGUK_CHARACTERS,
   ...DAWN_CHARACTERS,
   ...SILBER_CHARACTERS,
-  /** 느아르 (아슈바르): 공허의 검 · 패시브 없음 · 적응력·제약 (sim/noir) */
-  noir: { id: "noir", maxHp: 110, damage: 9, moveSpeed: 1.3, luck: 0, startWeapon: "nrBlade" },
-  /** 루주 (아슈바르): 장미쌍검 · 혈장미 (sim/rouge) */
-  rouge: { id: "rouge", maxHp: 105, damage: 9, moveSpeed: 1.35, luck: 0, startWeapon: "rgBlades" },
+  ...ASHVAR_CHARACTERS,
   /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 대시는 땅굴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },
   /** 운명의 여행자 (히든, 시즌 2): 모아 쏘는 활 · 모래시계 주사위 운명 (sim/voyager) */
