@@ -64,7 +64,7 @@ export function buSkill(s: RunState, i: number): void {
     const R = K.stop;
     iceClock(s);
     nrVolley(s, { kind: "buStop", x: p.x, y: p.y, r: ALL, dmg: D * R.mul, n: R.hits, every: R.every, on: ice(R.freeze) });
-    addEffect(s, { kind: "buStop", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 110, maxTicks: USE_ITEMS.frost.ticks });
+    addEffect(s, { kind: "buStop", x: p.x, y: p.y, dirX: 0, dirY: 0, size: R.size, maxTicks: USE_ITEMS.frost.ticks });
   } else if (id === "prison" || id === "rain") {
     const R = K[id];
     const [x, y] = buAim(s);

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.67",
+    date: "2026-11-13",
+    items: {
+      ko: ["블뢰: 효과 그림이 칸마다 뚝뚝 끊기지 않고 부드럽게 넘어가고, 짧으면 마지막 그림에서 잠시 머묾 · 스킬 1~3번(강화판 포함) 범위·이펙트 크기 절반 (궁극기는 그대로)"],
+      en: ["Bleu: effect frames now blend smoothly instead of snapping, holding on the last frame · skills 1–3 (and empowered versions) have half the range and effect size (ultimate unchanged)"],
+      ja: ["ブルー：エフェクトのコマがカクカクせず滑らかにつながり、最後のコマで少し止まる・スキル1〜3（強化版も）の範囲・エフェクトの大きさが半分（必殺技はそのまま）"],
+    },
+  },
+  {
     version: "0.52.66",
     date: "2026-11-13",
     items: {

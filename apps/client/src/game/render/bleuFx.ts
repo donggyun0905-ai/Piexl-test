@@ -6,8 +6,8 @@ import { additive, easeOut, glow, shock, sparks, type Ctx } from "./pwFxBits";
 import { BU, buPic, ROW, snowflake } from "./bleuArt";
 
 const KINDS = new Set<string>([...Object.keys(ROW), "buPop", "buFlake"]);
-/** 차례대로 한 번 보여 주는 그림 (나머지는 자라서 마지막 칸에 머묾) */
-const ONCE = new Set<string>(["buBolt", "buHowl"]);
+/** 네 칸을 다 보여 주는 데 드는 틱 (효과가 이보다 길면 마지막 칸에서 머묾) */
+const PLAY = 36;
 /** 그림 크기 배율 (반지름 → 그림 너비) */
 const SCALE: Partial<Record<string, number>> = { buBolt: 2.6, buHowl: 3.4, buWolf: 2.2, buHawk: 2.2, buRain: 2.3, buPrison: 2.3, buStop: 2.4, buEnd: 2.4 };
 
@@ -43,10 +43,16 @@ export function drawBleuFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
       return true;
     }
     default: {
+      // 네 칸을 정해진 틱 동안 이어서(다음 칸과 겹쳐 부드럽게) 보여 주고, 끝나면 마지막 칸에서 머묾
       const row = ROW[fx.kind as keyof typeof ROW];
-      const col = ONCE.has(fx.kind) ? Math.min(3, Math.floor(f * 4)) : Math.min(3, Math.floor(f * 4.5));
+      const play = Math.max(8, Math.min(PLAY, fx.maxTicks * 0.7));
+      const pos = Math.min(3, ((fx.maxTicks - fx.ticks) / play) * 3);
+      const col = Math.floor(pos);
+      const mix = pos - col;
       const turn = fx.kind === "buHowl";
-      buPic(ctx, row, col, x, y, w, a, turn ? (left ? ang + Math.PI : ang) : 0, turn && left);
+      const rot = turn ? (left ? ang + Math.PI : ang) : 0;
+      buPic(ctx, row, col, x, y, w, a * (col < 3 ? 1 - mix : 1), rot, turn && left);
+      if (col < 3 && mix > 0) buPic(ctx, row, col + 1, x, y, w, a * mix, rot, turn && left);
       return true;
     }
   }
