@@ -6,7 +6,7 @@ import { BU_BASE as B, BU_EXTRA as X } from "../itemsBleu";
 import { ashTick, type AshKit } from "./noir";
 import { nrArea, nrNearest } from "./nrKit";
 import type { HitOn } from "./nrTypes";
-import { nrVolley } from "./nrVolley";
+import { ashFxLen, nrVolley } from "./nrVolley";
 import { buEndTick, buSkill, buSkillSrc } from "./buSkills";
 import { buAim, buBoltTick, buFlakeTick, buMaybeFlake, buShoot } from "./buSnow";
 import type { EnemyState, RunState } from "./types";
@@ -34,18 +34,18 @@ function attack(s: RunState): number {
   if (st === 2) {
     const R = B.s2;
     srcRun(s, id, () => nrVolley(s, { kind: "buWave", x, y, r: R.r, dmg: 0, dmgs: R.muls.map((m) => D * m), n: R.muls.length, every: R.every, on: ice(R.freeze) }));
-    addEffect(s, { kind: "buWave", x, y, dirX: 0, dirY: 0, size: R.r, maxTicks: R.muls.length * R.every + 12 });
+    addEffect(s, { kind: "buWave", x, y, dirX: 0, dirY: 0, size: R.r, maxTicks: ashFxLen(R.muls.length, R.every) });
     return R.cd;
   }
   if (st === 3) {
     const R = B.s3;
     srcRun(s, id, () => nrVolley(s, { kind: "buBurst", x, y, r: R.r, dmg: 0, dmgs: [D * R.mul, 0], n: 2, every: R.delay, fin: D * R.fin, on: ice(R.freeze) }));
-    addEffect(s, { kind: "buBurst", x, y, dirX: 0, dirY: 0, size: R.r, maxTicks: R.delay + 16 });
+    addEffect(s, { kind: "buBurst", x, y, dirX: 0, dirY: 0, size: R.r, maxTicks: ashFxLen(2, R.delay) });
     return R.cd;
   }
   const R = B.s4;
   srcRun(s, id, () => nrVolley(s, { kind: "buWall", x, y, r: R.r, dmg: D * R.mul, n: R.hits, every: R.every, on: ice(R.freeze) }));
-  addEffect(s, { kind: "buWall", x, y, dirX: 0, dirY: 0, size: R.r, maxTicks: R.hits * R.every + 14 });
+  addEffect(s, { kind: "buWall", x, y, dirX: 0, dirY: 0, size: R.r, maxTicks: ashFxLen(R.hits, R.every) });
   return R.cd;
 }
 

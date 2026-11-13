@@ -6,7 +6,7 @@ import { buFreeze } from "./buFrost";
 import { buAim, buFlakeCount } from "./buSnow";
 import { nrAlive, nrArea } from "./nrKit";
 import type { HitOn } from "./nrTypes";
-import { nrVolley } from "./nrVolley";
+import { ashFxLen, nrVolley } from "./nrVolley";
 import type { RunState } from "./types";
 import { addEffect } from "./util";
 
@@ -39,7 +39,7 @@ export function buSkill(s: RunState, i: number): void {
   if (id === "clock") {
     const R = K.clock;
     nrVolley(s, { kind: "buClock", x: p.x, y: p.y, r: R.r, dmg: D * R.mul, n: R.hits, every: R.every, follow: true, on: ice(R.freeze) });
-    addEffect(s, { kind: "buClock", x: p.x, y: p.y, dirX: 0, dirY: 0, size: R.r, maxTicks: R.hits * R.every + 14 });
+    addEffect(s, { kind: "buClock", x: p.x, y: p.y, dirX: 0, dirY: 0, size: R.r, maxTicks: ashFxLen(R.hits, R.every) });
   } else if (id === "field") {
     // 범위 안 적에게만 얼음 시계: 멈춤 (보스는 못 멈춤, 그림만)
     const R = K.field;
@@ -54,7 +54,7 @@ export function buSkill(s: RunState, i: number): void {
     const R = K.zero;
     for (const e of s.enemies) if (nrAlive(e) && (e.x - p.x) ** 2 + (e.y - p.y) ** 2 <= (R.r + e.r) ** 2) e.slowTicks = Math.max(e.slowTicks ?? 0, R.delay);
     nrVolley(s, { kind: "buZero", x: p.x, y: p.y, r: R.r, dmg: 0, n: 1, every: 1, fin: D * R.mul, on: ice(R.freeze) }, R.delay);
-    addEffect(s, { kind: "buZero", x: p.x, y: p.y, dirX: 0, dirY: 0, size: R.r, maxTicks: R.delay + 16 });
+    addEffect(s, { kind: "buZero", x: p.x, y: p.y, dirX: 0, dirY: 0, size: R.r, maxTicks: ashFxLen(1, 1, R.delay) });
   } else if (id === "howl") {
     const R = K.howl;
     nrArea(s, p.x, p.y, R.r, D * R.mul, { at: R.arc, dx: fx, dy: fy }, ice(R.freeze));
@@ -70,7 +70,7 @@ export function buSkill(s: RunState, i: number): void {
     const [x, y] = buAim(s);
     const kind = id === "prison" ? "buPrison" : "buRain";
     nrVolley(s, { kind, x, y, r: R.r, dmg: D * R.mul, n: R.hits, every: R.every, on: ice(R.freeze) });
-    addEffect(s, { kind, x, y, dirX: 0, dirY: 0, size: R.r, maxTicks: R.hits * R.every + 14 });
+    addEffect(s, { kind, x, y, dirX: 0, dirY: 0, size: R.r, maxTicks: ashFxLen(R.hits, R.every) });
   } else {
     // 종언의 영구동토: 방 전체 얼음 시계 + 영혼 군단(빙결 1타 + 강한 빙결 1타 + 얼림 + 보호막) → 얼음 시계가 끝나면 눈결정 수만큼
     const R = K.end;

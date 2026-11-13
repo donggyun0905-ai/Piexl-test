@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.73",
+    date: "2026-11-13",
+    items: {
+      ko: ["느아르·루주·블뢰·존: 다른 캐릭터처럼 빛 효과가 붙음 (기술마다 보라·붉은·하늘·금빛 빛과 고리·불티, 궁극기는 빛기둥과 번쩍임 · 등 뒤 악마 계급 빛 · 혈장미·눈결정·결정탄·뇌구 등은 은은하게 빛남 · 한정 스킨 색)", "블뢰: 효과 길이를 마지막 한 대에 맞춤 (마지막 그림이 마지막 한 대 때 뜨고 끝남)"],
+      en: ["Noir, Rouge, Bleu & Jaune: now get light effects like other characters (violet, red, sky-blue and golden glows, rings and sparks per skill; light pillars and flashes for ultimates · a glow of the demon rank behind them · Blood Roses, snowflakes, crystal shots and thunder orbs softly glow · limited-skin accent colors)", "Bleu: effect lengths now match the last hit (the final frame appears with the last hit)"],
+      ja: ["ノワール・ルージュ・ブルー・ジョーヌ：他のキャラクターと同じく光の効果が付く（技ごとに紫・赤・空色・金色の光と輪・火花、必殺技は光の柱と閃光・背中に悪魔の位階の光・血薔薇・雪の結晶・結晶弾・雷球などがほのかに光る・限定スキンの色）", "ブルー：エフェクトの長さを最後の一撃に合わせた（最後のコマが最後の一撃で出て終わる）"],
+    },
+  },
+  {
     version: "0.52.72",
     date: "2026-11-13",
     items: {

@@ -9,6 +9,9 @@ import type { NrLater, NrVolley } from "./nrTypes";
 import type { RunState } from "./types";
 import { addEffect } from "./util";
 
+/** 효과 길이: n대(첫 대 0틱 · 간격 every · 처음 지연 delay)의 마지막 한 대 바로 뒤부터 마지막 그림이 잠시 보이고 끝나게 (화면 render/sheetLoop OUTRO 10틱 · docs/FX_FRAMES.md) */
+export const ashFxLen = (n: number, every: number, delay = 0) => delay + (n - 1) * every + 12;
+
 /** 나눠 때리는 기술 시작 (첫 대는 이번 틱) */
 export function nrVolley(s: RunState, v: Omit<NrVolley, "left" | "next" | "ramp" | "pull" | "fin"> & Partial<Pick<NrVolley, "ramp" | "pull" | "fin">>, delay = 0): void {
   (s.player.nrVolleys ??= []).push({ ramp: 0, pull: 0, fin: 0, ...v, left: v.n, next: s.tick + delay });

@@ -1,9 +1,13 @@
-// 빛 층: 크루세이더 뒤 실베르 캐릭터 효과 빛 (효과 색·세기는 silberFxKinds) + 늘 켜진 빛 (아수라 각성·날아가는 주먹·표식 · 빙설 궁극기 기 모으기 · 조커 카드 · 쉐도잉 영혼 · 백령 검기)
+// 빛 층: 크루세이더 뒤 실베르 캐릭터·아슈바르 효과 빛 (효과 색·세기는 silberFxKinds·ashvarFxKinds) + 늘 켜진 빛 (아수라 각성·날아가는 주먹·표식 · 빙설 궁극기 기 모으기 · 조커 카드 · 쉐도잉 영혼 · 백령 검기)
 import { asMarked, BINGSEOL_PERKS, RV_ATTACK, rvChecked, ULT_LIFT, type RunState } from "@pixel-rogue/shared";
 import type { GlowCues } from "./glowCanvas";
 import { FxSeen } from "./fxSeen";
 import type { GlowParts } from "./glowParts";
 import { SILBER_FX, SILBER_GLOW as G } from "./silberFxKinds";
+import { ASHVAR_FX } from "./ashvarFxKinds";
+import { ashvarSteady } from "./glowAshvar";
+
+const FX = { ...SILBER_FX, ...ASHVAR_FX };
 
 /** 아리아 음표 종류마다 빛 색 (render/ariaArt AR_COLORS와 같은 차례) */
 const AR_GLOW = [0xffb040, 0xff4a5a, 0x4a8aff, 0x4aff7a, 0xff4ad8, 0xffe84a, 0xa05aff, 0x4ae8ff];
@@ -19,7 +23,7 @@ export class GlowSilber {
 
   observe(s: RunState, parts: GlowParts, cues: GlowCues): void {
     for (const fx of this.seen.fresh(s)) {
-      const k = SILBER_FX[fx.kind];
+      const k = FX[fx.kind];
       if (!k) continue;
       const [blue, power] = k;
       // 아수라 분노의 팔: 빛도 붉게
@@ -118,6 +122,8 @@ export class GlowSilber {
         if ((p.arFinale ?? 0) > 0) put(p.x, p.y - 10, 50 + 8 * Math.sin(s.tick * 0.2), G.gold, 0.25);
         return;
       }
+      default:
+        ashvarSteady(s, put);
     }
   }
 }
