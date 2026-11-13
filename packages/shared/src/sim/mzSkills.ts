@@ -64,7 +64,7 @@ export function mzSkill(s: RunState, i: number): void {
     const R = K.rain;
     for (const e of inside(s, p.x, p.y, ALL)) mzCharm(s, e);
     nrVolley(s, { kind: "mzStorm", x: p.x, y: p.y, r: ALL, dmg: 0, dmgs: reps(R.hits, D * L.weak), n: R.hits, every: R.every, on: hex() });
-    addEffect(s, { kind: "mzStorm", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 150, maxTicks: ashFxLen(R.hits, R.every) });
+    addEffect(s, { kind: "mzStorm", x: p.x, y: p.y, dirX: 0, dirY: 0, size: 90, maxTicks: ashFxLen(R.hits, R.every) });
   } else if (id === "erode") {
     // 독화 침식: 세 겹이 차례로 퍼짐 (저주 2겹씩)
     const R = K.erode;

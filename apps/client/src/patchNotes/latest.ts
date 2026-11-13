@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.77",
+    date: "2026-11-13",
+    items: {
+      ko: ["마젠타: 궁극기(4번)를 빼고 공격 범위·이펙트를 줄이고 피해를 조금 줄임 · 특히 2번(악몽의 꽃밭·영혼 유린)·3번(유혹의 소용돌이·매혹의 강우) 스킬이 작아짐 (꽃밭 24타 · 영혼 유린 14타 · 소용돌이 30타 · 강우 8타 · 꽃감옥 6타 · 꽃가루 5타 · 환영분신 4타)"],
+      en: ["Magenta: smaller areas and effects and slightly less damage on everything except the ultimate (skill 4) · skills 2 (Garden of Nightmares, Soul Ravage) and 3 (Vortex of Temptation, Rain of Allure) shrink the most (Garden 24 hits · Soul Ravage 14 · Vortex 30 · Rain 8 · Prison 6 · Pollen 5 · Clones 4)"],
+      ja: ["マゼンタ：必殺技（4番）以外の攻撃範囲・エフェクトを小さくし、ダメージを少し下げた・特に2番（悪夢の花畑・魂の蹂躙）・3番（誘惑の渦・魅惑の降雨）スキルが小さくなった（花畑24ヒット・魂の蹂躙14・渦30・降雨8・花獄6・花粉5・幻影分身4）"],
+    },
+  },
+  {
     version: "0.52.76",
     date: "2026-11-13",
     items: {
