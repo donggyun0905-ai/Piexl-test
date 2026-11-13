@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.89",
+    date: "2026-11-14",
+    items: {
+      ko: ["스토리 2장 장면 일러스트 3장 추가: 풋내기와 격투가 · 아스트랄 로드와 탈출 · 국경 언덕의 새벽 (2장 8컷 모두 완성)"],
+      en: ["3 new Chapter 2 scene illustrations: the Novice and the Brawler · the astral rod and the escape · dawn on the border hill (all 8 Chapter 2 scenes done)"],
+      ja: ["ストーリー2章のシーンイラスト3枚追加：見習いと格闘家・アストラルロッドと脱出・国境の丘の夜明け（2章の8カットすべて完成）"],
+    },
+  },
+  {
     version: "0.52.88",
     date: "2026-11-14",
     items: {
