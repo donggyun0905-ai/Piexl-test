@@ -2,6 +2,7 @@
 // 오래 안 쓴 덩어리는 버림 (휴대폰 메모리 아끼기) → 지도가 아무리 커도 같은 속도
 import type { View } from "../lobby/walker";
 import { drawTile } from "./worldArt";
+import { paintGround } from "./worldGround";
 import { WTILE, type WorldMap } from "./worldMap";
 
 /** 덩어리 한 변 칸 수 */
@@ -25,7 +26,9 @@ export function createChunkCache(m: WorldMap, max = 16) {
     const c = document.createElement("canvas");
     c.width = c.height = CPX;
     const g = c.getContext("2d")!;
-    for (let y = 0; y < CHUNK; y++) for (let x = 0; x < CHUNK; x++) drawTile(g, m, kx * CHUNK + x, ky * CHUNK + y, x * WTILE, y * WTILE);
+    // 땅 바탕(픽셀마다) → 꾸밈 (옆 덩어리 칸 꾸밈이 넘어오는 것까지 한 칸 더)
+    g.putImageData(paintGround(m, kx * CHUNK, ky * CHUNK, CHUNK), 0, 0);
+    for (let y = -1; y <= CHUNK; y++) for (let x = -1; x <= CHUNK; x++) drawTile(g, m, kx * CHUNK + x, ky * CHUNK + y, x * WTILE, y * WTILE);
     return c;
   };
   return {

@@ -6,7 +6,10 @@ import { bindWalkInput, clampView, createWalker, fitCanvas, stepWalker } from ".
 import { loadText, saveText } from "../storage";
 import { createChunkCache } from "./worldChunks";
 import { canStandWorld, loadWorldMap, WTILE, type WorldMap } from "./worldMap";
+import { shadow } from "./worldArt";
+import { drawButterflies, drawCloudShadows, drawVignette, drawWaterFx } from "./worldFx";
 import { drawPlace, drawPlaceLabel } from "./worldPlaceArt";
+import { pushTrees, type Drawable } from "./worldTrees";
 import { hitsNpc, nearPlace, placeXY, type Place, type Region } from "./worldPlaces";
 
 /** 걷는 속도 (로비보다 조금 빠름: 필드가 넓어서) */
@@ -96,20 +99,30 @@ export function WorldStage({ regionId, region, color, label, paused, onNear, onU
         ctx.setTransform(scale * dpr, 0, 0, scale * dpr, -Math.round(view.x * scale * dpr), -Math.round(view.y * scale * dpr));
         ctx.imageSmoothingEnabled = false;
         chunks.draw(ctx, view);
-        // 장소·나: 아래(발 y)가 큰 것을 나중에
-        const items: { y: number; draw: () => void }[] = region.places.map((p) => ({ y: placeXY(p)[1] + (p.kind === "npc" ? 4 : 0), draw: () => drawPlace(ctx, p, t, color) }));
+        drawWaterFx(ctx, m, view, t);
+        // 장소·나무·나: 아래(발 y)가 큰 것을 나중에
+        const items: Drawable[] = region.places.map((p) => ({ y: placeXY(p)[1] + (p.kind === "npc" ? 4 : 0), draw: () => drawPlace(ctx, p, t, color) }));
+        pushTrees(ctx, m, view, t, items);
+        items.push({
+          y: me.y,
+          draw: () => shadow(ctx, Math.round(me.x), Math.round(me.y) + 1, 6, 2.2, 0.32),
+        });
         items.push({
           y: me.y,
           draw: () => drawBody(ctx, "warden", Math.round(me.x), Math.round(me.y - R), R, { faceX: me.fx, faceY: me.fy, moving: me.moving, casting: false, step: me.step }, me.moving ? Math.floor(t * 8) : 0),
         });
         items.sort((a, b) => a.y - b.y);
         for (const it of items) it.draw();
+        drawButterflies(ctx, m, view, t);
+        drawCloudShadows(ctx, view, t);
         if (near) drawPlaceLabel(ctx, near, cb.current.label(near));
         // 2초마다 자리 저장 (움직였을 때만)
         if (now - saved > 2000 && me.moving) {
           saved = now;
           saveText(POS_KEY, JSON.stringify({ r: regionId, x: Math.round(me.x), y: Math.round(me.y) }));
         }
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        drawVignette(ctx, canvas.width, canvas.height);
       }
       raf = requestAnimationFrame(frame);
     };

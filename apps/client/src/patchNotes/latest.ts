@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.100",
+    date: "2026-11-14",
+    items: {
+      ko: ["세계 지도(시험 중) 그림을 새로 다듬음: 땅끼리 경계가 자연스럽게 섞이고 풀·흙·물에 결 무늬 · 나무 4종이 겹쳐 숲이 되고 바람에 흔들림(캐릭터와 앞뒤도 맞음) · 둥근 바위·풀숲·꽃·울타리 밭·연못 · 성벽 톱니·벽돌, 돌 바닥, 지붕과 문·창이 있는 집 · 판자 다리·던전 굴 입구·펄럭이는 깃발 · 그림자·물 반짝임·나비·구름 그림자 · 아스칼론 필드 길을 구불구불하게"],
+      en: ["World Map (testing) art refresh: terrain edges blend naturally, with textured grass, dirt and water · four tree types overlap into forests and sway in the wind (correctly in front of/behind characters) · round boulders, grass tufts, flowers, a fenced field and a pond · castle battlements and bricks, stone paving, houses with roofs, doors and windows · plank bridge, dungeon cave entrance and a waving flag · shadows, water sparkles, butterflies and drifting cloud shadows · winding roads in the Ascalon field"],
+      ja: ["世界地図（テスト中）の絵を作り直し：地面の境目が自然に混ざり、草・土・水に質感 · 4種類の木が重なって森になり風に揺れる（キャラとの前後も正しく）· 丸い岩・草むら・花・柵の畑・池 · 城壁の狭間と煉瓦、石畳、屋根と扉・窓のある家 · 板の橋・ダンジョンの洞窟入口・はためく旗 · 影・水のきらめき・蝶・流れる雲の影 · アスカロン平原の道を曲がりくねらせた"],
+    },
+  },
+  {
     version: "0.52.99",
     date: "2026-11-14",
     items: {
