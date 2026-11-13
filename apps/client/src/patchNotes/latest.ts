@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.84",
+    date: "2026-11-13",
+    items: {
+      ko: ["스토리 1장 장면 일러스트 4장 추가: 폭풍 속 용과의 싸움 · 치유소 앞의 갈라섬 · 그림자 속 검은 약 · 새벽의 작별"],
+      en: ["4 new Chapter 1 scene illustrations: the battle with the dragon in the storm · the split before the healing hut · the black potion in the shadows · the farewell at dawn"],
+      ja: ["ストーリー1章のシーンイラスト4枚追加：嵐の中の竜との戦い・治療所の前の決裂・影の中の黒い薬・夜明けの別れ"],
+    },
+  },
+  {
     version: "0.52.83",
     date: "2026-11-13",
     items: {
