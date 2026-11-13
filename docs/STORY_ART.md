@@ -109,6 +109,32 @@ Use the first reference image ONLY as the art style guide: match its exact style
 9. `Scene: the desert at night, the Primeval sun and moon orbs hovering over the ruined temple. The Summoner blows a grass whistle; the sky tears open into a glowing green tunnel of World Tree magic with giant roots and leaves. From it pour the forces of Virdia: the Mystic (long black hair, red and white shrine maiden robes, paper talismans), the Imugi (long dark hair, teal scaled armor, spear), the Beast (orange wild hair, fur and claws, a small tiger cat) and the Elementalist (long blue hair, blue robes, orbs of fire, water, earth and wind). The Doctor and the Titan, wounded, look up in surprise. Epic, hopeful-yet-dangerous mood.`
 10. `Scene: dawn over a wasteland of ash. Monstrous primeval horrors loom in grey wind: a giant sword-stained war god, a floating void eye, a skeletal Death with a scythe and a dark archangel. The Mystic orders a retreat; archers' arrows and glowing spirits hold the line while the Summoner, the Doctor and the Titan fall back with wounded soldiers. In the distance the great World Tree bears a burning scar. Pale gold dawn breaking through the ash clouds. Grim, tragic, epic mood.`
 
-## 4~9장
+## 4장 「뒷면」 (8컷, `art/스토리/4장/`)
+
+참고 그림: 악의 사도 `악의 사도/apostle-1.png` · 역병의사 `역병의사/plague-1.png` · 학살자 `학살자/slayer-1.png` · 사멸 `사멸/samyeol-1.png` · 이터 `이터/eater-1.png` · 장수 `장수/general-1.png` · 풋내기 `풋내기/novice-1.png` · 갓이터 `public/sprites/enemies/godeater.png`
+
+| 컷 | 문단 | 참고 그림 | 장면 |
+| --- | --- | --- | --- |
+| 1 | 1~5 | 악의 사도 | 빛 없는 의식의 방, 무릎 꿇은 사도, 한꺼번에 흔들리는 촛불, 정체 모를 목소리 |
+| 2 | 6~14 | 악의 사도·역병의사·학살자·사멸 | 명을 내리는 사도 앞의 세 사람, 콧노래 부르며 달려 나가는 학살자 |
+| 3 | 15~23 | 장수·풋내기·사멸·악의 사도 | 응접실 연회, 웃으며 잔을 드는 장수, 사멸에게 귓속말하는 사도 |
+| 4 | 24~29 | 이터·악의 사도 | 쇠사슬에 묶여 몸부림치는 이터, 천장에서 내려앉는 황금 깃털 |
+| 5 | 30~39 | 이터·악의 사도·장수 + 갓이터 | 이터를 찢고 일어선 거대한 검은 잔영(갓이터), 연기 속 대검에 꽂힌 두 장군 |
+| 6 | 40~48 | 악의 사도·이터 | 새벽 빈 공터, 잔해 아래 꿈틀거리는 이터, 잠깐 사람의 눈빛 |
+| 7 | 49~52 | 사멸·역병의사·학살자·악의 사도 | 돌아온 사멸·역병의사, 피투성이로 웃는 학살자, 만족한 사도 |
+| 8 | 53~60 | — | 아카식 레코드의 어딘가, 얼굴이 보이지 않는 세 관찰자가 떨어지는 검은 불꽃을 내려다봄 |
+
+### 4장 컷별 장면 (영어, [공통] 뒤에 붙임)
+
+1. `Scene: a lightless ritual chamber deep inside the desert empire of Helios, black stone walls carved with forbidden runes, a circle of tall candles. The Apostle of Malice (long silver-white hair, red eyes, white and red ornate nun-like robes with crosses, holding a red cross staff) kneels in worship before an empty dark altar. A shapeless, distorted presence like glitching black static fills the air above the altar, and every candle flame bends at once toward it. Dark, sacred, eerie mood.`
+2. `Scene: a grand corridor of the Helios palace outside the ritual chamber, golden sandstone pillars in deep shadow. The Apostle of Malice gives orders to three servants: the Plague Doctor (bird-beak mask with green glass eyes, wide black hat, tattered black coat, swinging censer leaking green smoke), the Slayer (long dark hair with red streaks, black gothic dress, red rose, huge scythe, wild grin) and Samyeol (black hair in an elegant updo, purple eyes, purple dress, green-tipped poison claw needles). The Slayer is already running off cheerfully, humming. Cold, conspiratorial mood.`
+3. `Scene: a lavish golden reception room in Helios at night, cushions, lanterns and wine. The General of Ascalon (dark crimson armor, helmet with a tall red plume) laughs loudly, raising his cup with two other armored generals; the young Novice (light brown hair, simple beige clothes, bandaged fists) sits awkwardly at the end. Samyeol in her purple dress smiles politely as hostess, while behind her the Apostle of Malice leans in to whisper secretly into her ear. Warm on the surface, hidden menace underneath.`
+4. `Scene: the ritual chamber at midnight. The Eater, a hulking black shadow beast with claws, bone-white spikes and glowing red eyes, is bound by heavy iron chains to the floor, thrashing and screaming. The Apostle of Malice watches with a satisfied smile. From a crack in the closed ceiling a single radiant golden feather, divine and out of place, drifts slowly down into the dark, lighting the room. Ominous, holy-yet-horrifying mood.`
+5. `Scene: an explosion of black smoke as a colossal dark figure rises, tearing out of the Eater's body: the Godeater, a towering shadow with a tattered dark purple cloak, a golden crown, glowing red eyes and a red gem on its chest. The Apostle of Malice laughs with arms spread wide. Through the thick smoke two Ascalon generals in armor who rushed in are struck by enormous greatswords appearing in a flash of light (no gore, dramatic silhouettes). Terrifying, climactic mood.`
+6. `Scene: grey dawn over an empty, ruined clearing littered with broken stone and scorched ground. The Apostle of Malice looks around with a disappointed frown, then notices movement under the rubble: the Eater, a battered black shadow creature, crawls out, and for one moment a faint, sorrowful human gaze flickers in its eyes before turning red again. Quiet, tragic, chilling mood.`
+7. `Scene: morning light in the ruined clearing. Samyeol and the Plague Doctor return calmly through drifting green smoke, and behind them the Slayer, battered and covered in dust and red stains (no gore), laughs wildly with her scythe on her shoulder, thrilled by the fight. The Apostle of Malice greets them with a pleased smile, the recovered Eater crouching at his feet. Villainous, triumphant mood.`
+8. `Scene: somewhere inside the Akashic Record, an endless cosmic library of floating glowing books, star maps and golden threads of fate. Three mysterious watchers seen only as tall cloaked silhouettes with their faces hidden in shadow stand on a floating platform, looking down through a window of light at a falling black flame. Mystical, solemn, ominous mood.`
+
+## 5~9장
 
 🔸 2장처럼 장마다 컷 목록·프롬프트를 이어서 씀 (그 전에는 장 하나에 임시 배경 하나)
