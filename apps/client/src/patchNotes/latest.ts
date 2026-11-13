@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.80",
+    date: "2026-11-13",
+    items: {
+      ko: ["세계 지도 (시험 서버에서만): 아스칼론 성 안 마을(집·분수·주민 마법사·떠돌이·풋내기와 대화) · 장군에게 말 걸면 지금까지 열린 스토리 장을 책으로 · 처음 들어오면 1장 이야기부터 · 던전에 다녀오면 메인 화면 대신 지도로 돌아옴"],
+      en: ["World map (test server only): the town inside Ascalon Castle (houses, fountain, talk with the Mage, Drifter and Novice) · talk to the General to read the latest unlocked story chapter · first visit starts with Chapter 1 · after a dungeon run you return to the map instead of the menu"],
+      ja: ["世界地図（テストサーバーのみ）：アスカロン城の城下町（家・噴水・魔法使い・流れ者・見習いと会話）・将軍に話しかけるとここまで開いたストーリーの章を本で読める・初めて入ると1章から・ダンジョンから戻るとメイン画面ではなく地図へ"],
+    },
+  },
+  {
     version: "0.52.79",
     date: "2026-11-13",
     items: {

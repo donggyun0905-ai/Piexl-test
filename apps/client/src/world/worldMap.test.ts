@@ -3,7 +3,7 @@ import py from "../../../../scripts/art/world_map.py?raw";
 import { describe, expect, it } from "vitest";
 import { chunksInView, CHUNK } from "./worldChunks";
 import { canStandWorld, parseMap, tileAt, WTILE } from "./worldMap";
-import { REGIONS } from "./worldPlaces";
+import { hitsNpc, REGIONS } from "./worldPlaces";
 import { TILE_DEFS, tileFromRgb, WT } from "./worldTiles";
 
 const rgba = (keys: number[]) => keys.flatMap((t) => [...TILE_DEFS[t]!.key, 255]);
@@ -32,6 +32,13 @@ describe("세계 지도", () => {
     const edge = CHUNK * WTILE - 10;
     expect(chunksInView(m, { x: edge, y: edge, w: 300, h: 180 })).toHaveLength(4);
     expect(chunksInView(m, { x: 99999, y: 0, w: 300, h: 180 })).toEqual([]);
+  });
+  it("주민과는 부딪힘 · 멀면 안 부딪힘", () => {
+    const r = REGIONS.ascalon!;
+    const g = r.places.find((p) => p.kind === "npc")!;
+    const [x, y] = [(g.tx + 0.5) * WTILE, (g.ty + 0.5) * WTILE + 4];
+    expect(hitsNpc(r, x + 6, y, 5)).toBe(true);
+    expect(hitsNpc(r, x + 40, y, 5)).toBe(false);
   });
   it("장소는 지도 안", () => {
     for (const r of Object.values(REGIONS)) for (const p of r!.places) expect(p.tx >= 0 && p.ty >= 0).toBe(true);

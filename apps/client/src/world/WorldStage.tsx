@@ -7,7 +7,7 @@ import { loadText, saveText } from "../storage";
 import { createChunkCache } from "./worldChunks";
 import { canStandWorld, loadWorldMap, WTILE, type WorldMap } from "./worldMap";
 import { drawPlace, drawPlaceLabel } from "./worldPlaceArt";
-import { nearPlace, placeXY, type Place, type Region } from "./worldPlaces";
+import { hitsNpc, nearPlace, placeXY, type Place, type Region } from "./worldPlaces";
 
 /** 걷는 속도 (로비보다 조금 빠름: 필드가 넓어서) */
 const SPEED = 80;
@@ -82,7 +82,7 @@ export function WorldStage({ regionId, region, color, label, paused, onNear, onU
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       if (map && chunks) {
         const m = map;
-        if (!cb.current.paused) stepWalker(me, input.keys, dt, SPEED, (x, y) => canStandWorld(m, x, y, R));
+        if (!cb.current.paused) stepWalker(me, input.keys, dt, SPEED, (x, y) => canStandWorld(m, x, y, R) && !hitsNpc(region, x, y, R));
         const n = nearPlace(region, me.x, me.y);
         if (n !== near) {
           near = n;
@@ -97,7 +97,7 @@ export function WorldStage({ regionId, region, color, label, paused, onNear, onU
         ctx.imageSmoothingEnabled = false;
         chunks.draw(ctx, view);
         // 장소·나: 아래(발 y)가 큰 것을 나중에
-        const items: { y: number; draw: () => void }[] = region.places.map((p) => ({ y: placeXY(p)[1], draw: () => drawPlace(ctx, p, t, color) }));
+        const items: { y: number; draw: () => void }[] = region.places.map((p) => ({ y: placeXY(p)[1] + (p.kind === "npc" ? 4 : 0), draw: () => drawPlace(ctx, p, t, color) }));
         items.push({
           y: me.y,
           draw: () => drawBody(ctx, "warden", Math.round(me.x), Math.round(me.y - R), R, { faceX: me.fx, faceY: me.fy, moving: me.moving, casting: false, step: me.step }, me.moving ? Math.floor(t * 8) : 0),

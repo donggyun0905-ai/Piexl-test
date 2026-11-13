@@ -1,10 +1,17 @@
-// 나라 필드 장소 그림: 던전 입구(어두운 굴·횃불) · 마을 깃발 · 표지판 · 가까우면 위에 이름표 (사람과 함께 y 순서로 그림)
+// 나라 필드 장소 그림: 던전 입구(어두운 굴·횃불) · 마을 깃발 · 표지판 · 주민(캐릭터 그림) · 가까우면 위에 이름표 (사람과 함께 y 순서로 그림)
+import { drawBody } from "../game/render/actors";
 import { placeXY, type Place } from "./worldPlaces";
+
+/** 주민 몸 반지름 (플레이어와 같음) */
+const NPC_R = 5;
 
 /** 장소 하나 (t = 초, 횃불 깜박임) */
 export function drawPlace(ctx: CanvasRenderingContext2D, p: Place, t: number, color: string): void {
   const [x, y] = placeXY(p).map(Math.round) as [number, number];
-  if (p.kind === "dungeon") {
+  if (p.kind === "npc" && p.who) {
+    // 발 = 칸 가운데보다 조금 아래 · 아래를 봄
+    drawBody(ctx, p.who, x, y + 4 - NPC_R, NPC_R, { faceX: 0, faceY: 1, moving: false, casting: false, step: 0 }, 0);
+  } else if (p.kind === "dungeon") {
     ctx.fillStyle = "#3a3038";
     ctx.fillRect(x - 11, y - 14, 22, 18);
     ctx.fillStyle = "#08060c";
@@ -41,7 +48,7 @@ export function drawPlaceLabel(ctx: CanvasRenderingContext2D, p: Place, text: st
   const [x, y] = placeXY(p);
   ctx.font = "7px sans-serif";
   const w = Math.ceil(ctx.measureText(text).width) + 6;
-  const top = y - (p.kind === "town" ? 34 : 24);
+  const top = y - (p.kind === "town" ? 34 : p.kind === "npc" ? 30 : 24);
   ctx.fillStyle = "rgba(12,10,18,0.8)";
   ctx.fillRect(Math.round(x - w / 2), top, w, 10);
   ctx.fillStyle = "#ffe9a8";

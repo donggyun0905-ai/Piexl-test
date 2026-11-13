@@ -1,12 +1,12 @@
 // 스토리 (시즌 1~3): 탭 넷 — 진영 · 최종 보스 · 아카식 레코드(장 목록 → 책처럼 쪽 넘기며 읽기) · 캐릭터(자세한 설명, CharGuides)
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { EnemyPortrait } from "../codex/EnemyPortrait";
-import { CHAPTER_TEXT } from "../i18n/story";
 import { BOSS_STORY, CHAPTER_SUMMARY, CHAPTER_TITLE, FACTION_TEXT } from "../i18n/story/world";
 import { CharGuides } from "./CharGuides";
+import { StoryReader } from "./StoryReader";
 import { StoryFace, speakerName } from "./StoryFace";
-import { CHAPTERS, FACTIONS, PARAS_PER_PAGE, STORY_BOSSES, type ChapterId } from "./storyData";
+import { CHAPTERS, FACTIONS, STORY_BOSSES, type ChapterId } from "./storyData";
 import { factionOpen, storyStage } from "../progress/storyStage";
 
 type Tab = "factions" | "bosses" | "akashic" | "chars";
@@ -115,72 +115,5 @@ export function StoryScreen({ lang, t, onBack }: Props) {
         </>
       )}
     </main>
-  );
-}
-
-/** 책 읽기: 한 쪽에 몇 줄씩, 대사는 얼굴 + 이름 + 말풍선 */
-function StoryReader({ id, lang, t, onClose }: { id: ChapterId; lang: Lang; t: (k: TextKey) => string; onClose: () => void }) {
-  const [page, setPage] = useState(0);
-  const paras = CHAPTER_TEXT[id][lang];
-  const pages = Math.ceil(paras.length / PARAS_PER_PAGE);
-  const n = CHAPTERS.findIndex((c) => c.id === id) + 1;
-  // ← → 키로 쪽 넘기기
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight") setPage((p) => Math.min(pages - 1, p + 1));
-      if (e.key === "ArrowLeft") setPage((p) => Math.max(0, p - 1));
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [pages]);
-  return (
-    <article className="story-book">
-      <header className="story-book-head">
-        <small>{t("storyAkashic")}</small>
-        <h3>
-          {t("storyChapterN").replace("{n}", String(n))} · {CHAPTER_TITLE[id][lang]}
-        </h3>
-        <div className="story-progress" aria-hidden="true">
-          <span style={{ width: `${((page + 1) / pages) * 100}%` }} />
-        </div>
-      </header>
-      <div className="story-page" key={page}>
-        {paras.slice(page * PARAS_PER_PAGE, (page + 1) * PARAS_PER_PAGE).map((p, i) =>
-          typeof p === "string" ? (
-            <p key={i} className="story-narration">
-              {p}
-            </p>
-          ) : (
-            <div key={i} className="story-line">
-              <StoryFace who={p[0]} size={40} />
-              <div>
-                <b>{speakerName(p[0], lang, t)}</b>
-                <p>{p[1]}</p>
-              </div>
-            </div>
-          ),
-        )}
-      </div>
-      <footer className="story-pager">
-        <button type="button" className="secondary" disabled={page === 0} onClick={() => setPage(page - 1)}>
-          {t("storyPrev")}
-        </button>
-        <span>
-          {page + 1} / {pages}
-        </span>
-        {page + 1 < pages ? (
-          <button type="button" className="primary" onClick={() => setPage(page + 1)}>
-            {t("storyNext")}
-          </button>
-        ) : (
-          <button type="button" className="primary" onClick={onClose}>
-            {t("storyToList")}
-          </button>
-        )}
-      </footer>
-      <button type="button" className="link-button" onClick={onClose}>
-        {t("storyToList")}
-      </button>
-    </article>
   );
 }

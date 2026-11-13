@@ -20,6 +20,7 @@ import { loadBest, loadSavedRun } from "./records";
 import { useServerStatus } from "./serverStatus";
 import { featureOpen, storyStage } from "./progress/storyStage";
 import { StageNotice } from "./progress/StageNotice";
+import { markWorldReturn, takeWorldReturn } from "./world/worldReturn";
 
 interface Props {
   lang: Lang;
@@ -55,7 +56,8 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   const [best] = useState(loadBest);
   const status = useServerStatus();
   const [lobby, setLobby] = useState(false);
-  const [world, setWorld] = useState(false);
+  // 지도에서 던전으로 갔다 오면 다시 지도 (worldReturn)
+  const [world, setWorld] = useState(takeWorldReturn);
   const close = () => setPopup("none");
   // 메인 화면 곡 (나가면 끔)
   useEffect(() => (setMenuMusic(true), () => setMenuMusic(false)), []);
@@ -77,7 +79,7 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   if (world)
     return (
       <Suspense fallback={null}>
-        <WorldMode t={t} lang={lang} onExit={() => setWorld(false)} onDungeon={() => (setWorld(false), startNew())} />
+        <WorldMode t={t} lang={lang} onExit={() => setWorld(false)} onDungeon={() => (markWorldReturn(), setWorld(false), startNew())} />
       </Suspense>
     );
 
