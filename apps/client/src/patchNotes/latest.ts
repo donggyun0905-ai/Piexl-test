@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.85",
+    date: "2026-11-13",
+    items: {
+      ko: ["스토리 1장 컷 1·2 일러스트: 잠든 어린 용을 겨누는 사냥꾼 · 아스칼론을 습격하는 어미 용 (1장 8컷 모두 그림으로)"],
+      en: ["Chapter 1 cuts 1 and 2 illustrated: a hunter aiming at a sleeping young dragon · the mother dragon attacking Ascalon (all 8 Chapter 1 cuts now illustrated)"],
+      ja: ["ストーリー1章カット1・2のイラスト：眠る幼い竜を狙う狩人・アスカロンを襲う母竜（1章の8カットすべてイラストに）"],
+    },
+  },
+  {
     version: "0.52.84",
     date: "2026-11-13",
     items: {
