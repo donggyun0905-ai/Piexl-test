@@ -58,13 +58,16 @@ describe("게임 중 알림 소리", () => {
     p.nrSkillCd = 0;
     expect(step(run)).toEqual(expect.arrayContaining(["buffEnd", "shieldBreak", "hpFull", "cdReady"]));
   });
-  it("적 방패가 깨질 때 · 마지막 칸이면 보호막 깨짐", () => {
+  it("방패를 때리면 보호막 소리 · 다 깨지면 깨짐 · 무적인 적은 막힌 소리", () => {
     const run = start();
-    run.enemies.push({ ...foe(1), shield: 2 });
+    const e = { ...foe(1), shield: 2 };
+    run.enemies.push(e);
     step(run);
-    run.enemies[0]!.shield = 1;
-    expect(step(run)).toContain("hitBlock");
-    run.enemies[0]!.shield = 0;
+    e.shield = 1;
+    expect(step(run)).toContain("hitShield");
+    e.shield = 0;
     expect(step(run)).toContain("shieldBreak");
+    e.blockTick = run.tick;
+    expect(step(run)).toContain("hitImmune");
   });
 });

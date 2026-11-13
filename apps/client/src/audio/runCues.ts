@@ -1,14 +1,14 @@
 // 게임 중 알림 소리를 언제 낼지 (화면 전용, 게임 계산에는 영향 없음 · 소리는 audio/sfxRun)
 // 문: 안 깬 방에 적이 있으면 잠김, 방을 정리하면 열림 · 바닥 아이템이 새로 생기면 종류별(한꺼번에 둘 이상이면 상자 열림) · 같은 방에 적이 새로 나타남
-// 내 탄이 벽에 막혀 사라짐 · 적 방패·받아 넘김에 막힘 · 버프 끝(보호막이 남은 채 끝나면 깨짐) · 체력 꽉 참 · 3초 넘게 기다린 스킬이 다시 준비됨
+// 내 탄이 벽에 막혀 사라짐 · 무적인 적(레이드 보스 등)에 막힘 · 방패·흰 보호막을 때림 · 받아 넘김 · 버프 끝(보호막이 남은 채 끝나면 깨짐) · 체력 꽉 참 · 3초 넘게 기다린 스킬이 다시 준비됨
 import { blocksShot, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, roomGrid, type Pickup, type RunState } from "@pixel-rogue/shared";
 import { BUFF_TABLE } from "../game/buffView";
 import type { Sfx } from "./sound";
 
 /** 같은 소리 사이 최소 틱 · 스킬 준비 소리를 낼 만큼 긴 대기(틱) · 짧게 켜졌다 끝난 버프는 조용히 */
 const GAP = 8;
-/** 자주 나는 소리는 더 띄움 (벽 0.3초 · 적 나타남 0.3초) */
-const SLOW: Partial<Record<Sfx, number>> = { wallHit: 18, foeSpawn: 18 };
+/** 자주 나는 소리는 더 띄움 (벽·적 나타남 0.3초 · 무적 0.25초 · 보호막 0.17초) */
+const SLOW: Partial<Record<Sfx, number>> = { wallHit: 18, foeSpawn: 18, hitImmune: 15, hitShield: 10 };
 const LONG_CD = 180;
 const LONG_BUFF = 60;
 /** 쿨타임이 아닌데 이름만 비슷한 칸 */
@@ -23,6 +23,8 @@ interface Seen {
   picks: Set<number>;
   shots: Map<number, Shot>;
   shields: Map<number, number>;
+  /** 적마다 [막힌 틱, 흰 보호막 양] */
+  blocks: Map<number, [number, number]>;
   /** 칸 이름 → [지난 값, 켜진 동안 가장 큰 값] */
   vals: Map<string, [number, number]>;
   full: boolean;
@@ -54,6 +56,7 @@ export function runCues(run: RunState, fx: Sfx[]): void {
     picks: new Set(picks.map((k) => k.id)),
     shots: new Map(run.projectiles.filter((s) => s.fromPlayer).map((s) => [s.id, { x: s.x, y: s.y, vx: s.vx, vy: s.vy, left: s.ticksLeft, ghost: !!s.ghost }])),
     shields: new Map(run.enemies.map((e) => [e.id, e.shield ?? 0])),
+    blocks: new Map(run.enemies.map((e) => [e.id, [e.blockTick ?? -1, e.ward ?? 0]])),
     vals: new Map(),
     full: p.hp >= p.stats.maxHp - 0.01,
     last: was?.last ?? new Map(),
@@ -106,8 +109,12 @@ export function runCues(run: RunState, fx: Sfx[]): void {
     }
   }
   for (const e of run.enemies) {
-    const before = was.shields.get(e.id) ?? 0;
-    if ((e.shield ?? 0) < before) add(e.shield === 0 ? "shieldBreak" : "hitBlock");
+    const [bt, ward] = was.blocks.get(e.id) ?? [-1, 0];
+    const shield = (e.shield ?? 0) < (was.shields.get(e.id) ?? 0);
+    const barrier = (e.ward ?? 0) < ward;
+    if ((shield && e.shield === 0) || (barrier && (e.ward ?? 0) <= 0)) add("shieldBreak");
+    else if (shield || barrier) add("hitShield");
+    if ((e.blockTick ?? -1) !== bt) add("hitImmune");
   }
   if (!fx.includes("parry") && run.effects.some((f) => f.kind === "parry" && f.ticks >= f.maxTicks - 1)) add("hitBlock");
 }

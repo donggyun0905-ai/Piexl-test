@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.64",
+    date: "2026-11-13",
+    items: {
+      ko: ["무적인 적(레이드 보스·차례가 아닌 탑 등)을 때리면 피해가 안 들어간다는 \"텅\" 소리 · 방패·흰 보호막이 있는 적을 때리면 보호막 맞는 소리, 다 깨지면 깨지는 소리"],
+      en: ["Hitting an invulnerable enemy (raid bosses, towers not on their turn, etc.) plays a hollow \"clonk\" so you know no damage got through · hitting an enemy's shield or white barrier plays a shield-hit sound, and a break sound when it is gone"],
+      ja: ["無敵の敵（レイドボス・順番でない塔など）を攻撃するとダメージが入らないことが分かる「カーン」という音・盾や白いシールドを持つ敵を攻撃するとシールドに当たる音、壊れると割れる音"],
+    },
+  },
+  {
     version: "0.52.63",
     date: "2026-11-13",
     items: {

@@ -56,6 +56,8 @@ export interface BossEnemyState extends S3BossEnemyState {
   dark?: boolean;
   /** 흰 보호막: 체력보다 먼저 깎임 (거대 전갈) */
   ward?: number;
+  /** 무적이라 막힌 틱 (화면 표시용: 막힌 소리, sim/combat) */
+  blockTick?: number;
   /** 검은 잔영: 지금 하는 말 (0 처음 · 1~3 짐승을 하나 잡을 때마다) · 말을 시작한 틱 */
   say?: number;
   sayAt?: number;

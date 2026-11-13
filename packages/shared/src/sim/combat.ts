@@ -61,8 +61,8 @@ const R = {
 export { R as COMBAT_RULES };
 
 export function damageEnemy(s: RunState, e: EnemyState, dmg: number, dirX: number, dirY: number, knock = true): void {
-  // 차례가 아닌 천사장 탑: 맞지 않음
-  if (e.immune || (e.pwNoSkill && s.pvp?.src)) return;
+  // 무적(차례가 아닌 탑 등): 맞지 않음
+  if (e.immune || (e.pwNoSkill && s.pvp?.src)) return void (e.blockTick = s.tick);
   dmg *= raidDmgMul(s); // 레이드 캐릭터 배율
   // 받아 넘기기 (갓이터·대검): 확률로 피해 없음
   const parry = ENEMIES[e.kind].parry;
