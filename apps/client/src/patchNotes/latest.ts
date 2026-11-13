@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.82",
+    date: "2026-11-13",
+    items: {
+      ko: ["스토리 1장 장면 일러스트 첫 장: 의료소에서 맹세하는 세 아이 (나머지 컷은 차례로 추가)"],
+      en: ["First Chapter 1 scene illustration: three children swearing an oath in the infirmary (more cuts coming)"],
+      ja: ["ストーリー1章のシーンイラスト1枚目：療養所で誓う三人の子ども（ほかのカットも順次追加）"],
+    },
+  },
+  {
     version: "0.52.81",
     date: "2026-11-13",
     items: {
