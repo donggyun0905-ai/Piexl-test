@@ -9,6 +9,7 @@ import { drawRougeFx } from "../src/game/render/rougeFx";
 import { drawBleuFx } from "../src/game/render/bleuFx";
 import { drawJauneFx } from "../src/game/render/jauneFx";
 import { drawMagentaFx } from "../src/game/render/magentaFx";
+import { drawVertFx } from "../src/game/render/vertFx";
 
 const q = new URLSearchParams(location.search);
 const kinds: string[] = JSON.parse(q.get("kinds") ?? "[]");
@@ -22,7 +23,7 @@ cv.height = H;
 cv.style.width = `${cv.width}px`;
 cv.style.height = `${H}px`;
 const ctx = cv.getContext("2d")!;
-const DRAW = [drawNoirFx, drawRougeFx, drawBleuFx, drawJauneFx, drawMagentaFx];
+const DRAW = [drawNoirFx, drawRougeFx, drawBleuFx, drawJauneFx, drawMagentaFx, drawVertFx];
 const MAX = 40;
 const fx = kinds.map((kind, i) => ({ kind, x: CW * (i + 1.5), y: H / 2, dirX: 1, dirY: 0, size, ticks: MAX * 0.6, maxTicks: MAX }) as unknown as EffectState);
 // 첫 칸: 늘 켜진 빛 (계급 3 · 구체·장미·눈결정)

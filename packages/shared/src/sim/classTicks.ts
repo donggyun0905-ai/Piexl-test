@@ -88,6 +88,7 @@ import { rougeTick } from "./rouge";
 import { bleuTick } from "./bleu";
 import { jauneTick } from "./jaune";
 import { magentaTick } from "./magenta";
+import { vertTick } from "./vert";
 import { ariaTick } from "./aria";
 import { honryeongTick } from "./honryeong";
 import type { RunState } from "./types";
@@ -186,6 +187,7 @@ export const CLASS_TICKS: Partial<Record<WeaponKind, ClassTick>> = {
   whiteTome: bleuTick,
   goldGrip: jauneTick,
   desireFan: magentaTick,
+  rotScythe: vertTick,
   songNote: ariaTick,
   smokePipe: honryeongTick,
 };

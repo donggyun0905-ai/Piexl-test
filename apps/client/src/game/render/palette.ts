@@ -102,6 +102,7 @@ export const C = {
   bleu: "#5ab4ff",
   jaune: "#ffd020",
   magenta: "#ff3ab8",
+  vert: "#6ad83a",
   baekinjang: "#ff2a3a",
   aria: "#ffd860",
   chessRaven: "#e8d8a0",

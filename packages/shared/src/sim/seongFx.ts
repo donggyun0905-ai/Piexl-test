@@ -31,7 +31,8 @@ import type { RougeFx } from "./rgTypes";
 import type { BleuFx } from "./buTypes";
 import type { JauneFx } from "./jnTypes";
 import type { MagentaFx } from "./mzTypes";
+import type { VertFx } from "./vtTypes";
 import type { HonryeongFx } from "./hrTypes";
 import type { FactionFx } from "./factionTypes";
 
-export type SeongFx = BeatriceFx | IanFx | GabrielFx | SerenaFx | RafaelFx | YurielFx | MichaelaFx | DawnFx | NailerFx | ScissorsFx | HellfistFx | SilverBulletFx | BlueFlameFx | LunaticFx | IncisionFx | CrusaderFx | JokerFx | ShadowingFx | PuppetFx | RabbitFx | BaekFx | BingseolFx | AsuraFx | BaekinjangFx | AriaFx | RavenFx | GearsFx | HonryeongFx | FactionFx | NoirFx | RougeFx | BleuFx | JauneFx | MagentaFx;
+export type SeongFx = BeatriceFx | IanFx | GabrielFx | SerenaFx | RafaelFx | YurielFx | MichaelaFx | DawnFx | NailerFx | ScissorsFx | HellfistFx | SilverBulletFx | BlueFlameFx | LunaticFx | IncisionFx | CrusaderFx | JokerFx | ShadowingFx | PuppetFx | RabbitFx | BaekFx | BingseolFx | AsuraFx | BaekinjangFx | AriaFx | RavenFx | GearsFx | HonryeongFx | FactionFx | NoirFx | RougeFx | BleuFx | JauneFx | MagentaFx | VertFx;

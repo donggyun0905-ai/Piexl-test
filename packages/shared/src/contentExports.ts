@@ -80,6 +80,8 @@ export { JAUNE_WEAPONS } from "./weaponsJaune";
 export { JN_BASE, JN_EXTRA, JN_LV, JN_SKILLS, JN_ZAP } from "./itemsJaune";
 export { MAGENTA_WEAPONS } from "./weaponsMagenta";
 export { MZ_BASE, MZ_CHARM, MZ_EXTRA, MZ_HEX, MZ_LV, MZ_SCENT, MZ_SKILLS } from "./itemsMagenta";
+export { VERT_WEAPONS } from "./weaponsVert";
+export { VT_BASE, VT_DOTS, VT_EXTRA, VT_LV, VT_POISON, VT_SEED, VT_SKILLS } from "./itemsVert";
 export { NR_ADAPT, NR_BASE, NR_EXTRA, NR_LIMIT, NR_RANKS, NR_SKILLS } from "./itemsNoir";
 export { HONRYEONG_WEAPONS, HR_CLOUD, HR_STYLE } from "./weaponsHonryeong";
 export { HONRYEONG_PERKS } from "./itemsHonryeong";

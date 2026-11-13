@@ -87,4 +87,11 @@ export const PW_KITS_1: PwKits = {
     sk("fists", "point", 15, "#8aff8a", { range: 140, radius: 40, delay: 24, fx: "heal", heal: 0.15 }),
     sk("club", "self", 50, "#ffd060", { radius: 30, fx: "aura", buff: { ticks: 5 * SEC, dmg: 1.5, rate: 1.5 } }),
   ),
+  // 아슈바르 베르: 녹식 쌍낫격 · 맹독 덩굴채찍 · 부패의 꽃밭 · 종언의 생명수확
+  vert: kit(1,
+    sk("vtScythe", "cone", 5, "#7ae05a", { radius: 80, arc: 0.3, fx: "slash", hit: { dmg: 1.3 } }),
+    sk("vtScythe", "point", 8, "#5ad83a", { range: 160, radius: 60, delay: 16, fx: "pillar", hit: { dmg: 1.5 } }),
+    sk("vtScythe", "point", 12, "#3aa82a", { range: 160, radius: 70, delay: 20, fx: "pillar", hit: { dmg: 1.2, stun: SEC } }),
+    sk("vtScythe", "point", 60, "#8aff5a", { range: 160, radius: 125, delay: 28, fx: "pillar", hit: { dmg: 3.3, stun: SEC } }),
+  ),
 };

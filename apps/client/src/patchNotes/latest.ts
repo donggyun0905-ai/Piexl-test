@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.91",
+    date: "2026-11-14",
+    items: {
+      ko: ["새 캐릭터 베르 (아슈바르, 태초의 초록): 덩굴 쌍낫 하나 · 패시브 없음 · 적응력·강화·승격·제약은 느아르와 같음 · 로비 칩 45만 개로 열기 · 녹독: 독이 2배 빨리 들어가고 들어갈수록 세짐 · 맞을 때마다 확률로 몸속에 씨앗 → 독을 45번 받으면 발아(겹마다 큰 한 방 + 출혈·독·화상) · 공격 16종: 녹식 쌍낫격·가시 회전무·부패의 난무·맹독 덩굴채찍 · 추가 공격(씨앗 바로 발아) 기생 씨앗·체내 개화(독가스 꽃)·생명 착취(회복)·시든 육신(씨앗을 뿌리며 늘어나는 덩굴) · 스킬 부패의 꽃밭/사령화 조종(쓰러진 적을 덩굴 인형으로)·가시숲 강림/만개의 포식자(무는 꽃 설치)·대지 부식/천륜 가시무·기생 덩굴 감옥/종언의 생명수확"],
+      en: ["New character Vert (Ashvar, the Primordial Green): one weapon, the Twin Vine Scythes · no passives · Adaptation, upgrades, ranks and Restraint like Noir · unlock with 450,000 lobby chips · Verdant Venom: poison ticks twice as fast and grows stronger · hits may plant seeds inside foes → after 45 poison ticks they sprout (big hit per seed + bleed, poison, burn) · 16 attacks: Verdant Twin Slash, Thorn Whirl, Frenzy of Decay, Venom Vine Whip · extra attacks (instant sprout) Parasitic Seed, Inner Bloom (gas flower), Life Siphon (heal), Withered Husk (spreading seed vines) · skills Garden of Decay/Puppetry of the Dead (raise fallen foes as vine puppets), Thornwood Descent/Full-Bloom Devourer (biting flowers), Earth Corrosion/Heavenwheel Thorn Dance, Parasite Vine Prison/Final Harvest of Life"],
+      ja: ["新キャラクター ヴェール（アシュヴァル、太初の緑）：武器は蔓の双鎌ひとつ・パッシブなし・適応力・強化・昇格・制約はノワールと同じ・ロビーチップ45万枚で解放・緑毒：毒が2倍速く入り、入るほど強くなる・ヒットごとに確率で体内に種 → 毒を45回受けると発芽（1重ごとに大ダメージ＋出血・毒・火傷）・攻撃16種：緑蝕双鎌撃・棘の回転舞・腐敗の乱舞・猛毒の蔓鞭・追加攻撃（種をすぐ発芽）寄生の種・体内開花（毒ガスの花）・生命搾取（回復）・枯れた肉体（種をまいて増える蔓）・スキル 腐敗の花畑／死霊化操縦（倒れた敵を蔓の人形に）・棘森降臨／満開の捕食者（噛みつく花を設置）・大地腐食／天輪棘舞・寄生蔓の牢獄／終焉の生命収穫"],
+    },
+  },
+  {
     version: "0.52.90",
     date: "2026-11-14",
     items: {

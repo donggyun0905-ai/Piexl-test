@@ -7,6 +7,7 @@ import { drawRougeFx } from "../src/game/render/rougeFx";
 import { drawBleuFx } from "../src/game/render/bleuFx";
 import { drawJauneFx } from "../src/game/render/jauneFx";
 import { drawMagentaFx } from "../src/game/render/magentaFx";
+import { drawVertFx } from "../src/game/render/vertFx";
 
 type Row = { kind: string; max: number; size: number; dir?: [number, number]; style?: number; zig?: boolean };
 const q = new URLSearchParams(location.search);
@@ -15,7 +16,7 @@ const byTick: number[] | null = q.get("ticks") ? JSON.parse(q.get("ticks")!) : n
 const cols: number[] = byTick ?? JSON.parse(q.get("cols") ?? "[0.1,0.3,0.5,0.7,0.9]");
 const CW = Number(q.get("w") ?? 260);
 const CH = Number(q.get("h") ?? 220);
-const DRAW = [drawNoirFx, drawRougeFx, drawBleuFx, drawJauneFx, drawMagentaFx];
+const DRAW = [drawNoirFx, drawRougeFx, drawBleuFx, drawJauneFx, drawMagentaFx, drawVertFx];
 const cv = document.getElementById("c") as HTMLCanvasElement;
 cv.width = CW * cols.length;
 cv.height = CH * rows.length;

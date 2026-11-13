@@ -5,6 +5,7 @@ import { srcFn } from "./dmgSrc";
 import { buFrostHit } from "./buFrost";
 import { jnZapHit } from "./jnZap";
 import { mzHit } from "./mzHex";
+import { vtHit } from "./vtRot";
 import type { HitOn } from "./nrTypes";
 import { rgAfflict } from "./rgBleed";
 import type { EnemyState, RunState } from "./types";
@@ -18,8 +19,8 @@ const damageEnemy = srcFn("noir", () => damageEnemy_);
 export const isNoir = (p: P) => p.characterId === "noir";
 /** 아슈바르는 사거리 증가를 공격에 쓰지 않음: 범위·이펙트 크기 고정 (2026-11-13 사용자 지시, i18n/guides/rangeRule에 적음) */
 export const ASH_REACH = 1;
-/** 아슈바르 (적응력·제약을 같이 씀): 느아르 · 루주 · 블뢰 · 존 · 마젠타 */
-export const ASHVAR_IDS: readonly string[] = ["noir", "rouge", "bleu", "jaune", "magenta"];
+/** 아슈바르 (적응력·제약을 같이 씀): 느아르 · 루주 · 블뢰 · 존 · 마젠타 · 베르 */
+export const ASHVAR_IDS: readonly string[] = ["noir", "rouge", "bleu", "jaune", "magenta", "vert"];
 export const isAshvar = (p: Pick<P, "characterId">) => ASHVAR_IDS.includes(p.characterId);
 // 살아 있는 적 · 보스(허수아비 포함) · 가장 가까운 적은 백인장과 같은 도우미
 export { bjAlive as nrAlive, bjNearest as nrNearest } from "./bjKit";
@@ -37,6 +38,7 @@ export function nrHit(s: RunState, e: EnemyState, dmg: number, on?: HitOn): numb
   if (!nrAlive(e)) return 0;
   if (on?.frost) return buFrostHit(s, e, dmg, on);
   if (on?.zap) return jnZapHit(s, e, dmg);
+  if (on?.vt) return vtHit(s, e, dmg, on.vt);
   if (on?.hex !== undefined) return mzHit(s, e, dmg, { hex: on.hex, charm: on.charm });
   const p = s.player;
   const d = normalize(e.x - p.x, e.y - p.y) ?? [p.faceX, p.faceY];

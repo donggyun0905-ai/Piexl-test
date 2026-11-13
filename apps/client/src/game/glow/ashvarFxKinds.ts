@@ -1,10 +1,10 @@
-// 빛 층: 아슈바르(느아르·루주·블뢰·존·마젠타) 효과마다 빛 색·세기 (silberFxKinds와 같은 방식, glowSilber가 같이 씀)
+// 빛 층: 아슈바르(느아르·루주·블뢰·존·마젠타·베르) 효과마다 빛 색·세기 (silberFxKinds와 같은 방식, glowSilber가 같이 씀)
 // 세기 1 작은 빛(맞힘·연타) · 2 빛 + 고리 + 불티 · 3 큰 기술 · 4 필살기(빛기둥 + 화면 살짝 번쩍)
 
 /** 진한 원색 (빛 층은 더하기라 어두운 색은 안 보임: 느아르 검정은 보라 빛으로) */
 export const ASHVAR_GLOW = {
   violet: 0xb05aff, void: 0x8a3aff, mist: 0xd8b8ff, red: 0xff3a5a, rose: 0xff5a8a, ember: 0xff8a3a,
-  pink: 0xff3ab8, orchid: 0xff8ae0, ice: 0x8ad8ff, frost: 0xdff4ff, azure: 0x3a8aff, gold: 0xffd020, spark: 0xfff6b0, amber: 0xffa000,
+  pink: 0xff3ab8, orchid: 0xff8ae0, leaf: 0x7ae05a, lime: 0xc8ff5a, ice: 0x8ad8ff, frost: 0xdff4ff, azure: 0x3a8aff, gold: 0xffd020, spark: 0xfff6b0, amber: 0xffa000,
 };
 const G = ASHVAR_GLOW;
 
@@ -28,4 +28,7 @@ export const ASHVAR_FX: Record<string, readonly [number, 1 | 2 | 3 | 4]> = {
   // 마젠타: 저주비 · 만개 · 꽃잎 파동 · 꽃가루 · 시선 · 분신 · 화산파 · 낙인 · 꽃감옥 · 꽃밭 · 소용돌이 · 독화 · 환영 붕괴 · 영혼 유린 · 강우 · 성역 · 저주 터짐
   mzRain: [G.pink, 1], mzBloom: [G.orchid, 2], mzWave: [G.pink, 2], mzPollen: [G.violet, 2], mzGaze: [G.pink, 2], mzClone: [G.orchid, 2], mzVolcano: [G.pink, 3], mzBrand: [G.violet, 2],
   mzPrison: [G.pink, 3], mzGarden: [G.violet, 3], mzVortex: [G.orchid, 3], mzErode: [G.violet, 4], mzCollapse: [G.pink, 3], mzSoul: [G.violet, 3], mzStorm: [G.pink, 4], mzEnd: [G.pink, 4], mzPop: [G.orchid, 2],
+  // 베르: 쌍낫격 · 회전무 · 난무 · 채찍 · 기생 씨앗 · 체내 개화 · 생명 착취 · 시든 육신 · 꽃밭 · 가시숲 · 대지 부식 · 덩굴 감옥 · 사령화 · 포식자 · 천륜 가시무 · 종언 · 터짐 · 발아
+  vtSlash: [G.leaf, 1], vtSpin: [G.leaf, 2], vtFrenzy: [G.lime, 2], vtWhip: [G.leaf, 2], vtSeed: [G.lime, 2], vtBloom: [G.leaf, 2], vtDrain: [G.lime, 3], vtWither: [G.leaf, 2],
+  vtGarden: [G.leaf, 3], vtForest: [G.lime, 3], vtErode: [G.leaf, 3], vtPrison: [G.lime, 3], vtThrall: [G.leaf, 3], vtMaw: [G.lime, 3], vtDance: [G.lime, 4], vtEnd: [G.lime, 4], vtPop: [G.leaf, 2], vtSprout: [G.lime, 2],
 };

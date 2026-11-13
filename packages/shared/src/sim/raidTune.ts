@@ -59,6 +59,7 @@ const R: Record<string, number> = {
   bleu: 1,
   jaune: 1,
   magenta: 1,
+  vert: 1,
   honryeong: 1,
   /** 의사 */
   doctor: 1.25,

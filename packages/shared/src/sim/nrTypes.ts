@@ -1,6 +1,8 @@
 // 느아르 상태 타입 (sim/noir·nrKit·nrVolley·nrSkills·nrAdapt). 모두 선택 값 (예전 저장에는 없음)
 
-export type NrVolleyKind = "flurry" | "spin" | "sever" | "squeeze" | "drain" | "devour" | "origin" | "rift" | "barrier" | "abyss" | RgVolleyKind | BuVolleyKind | JnVolleyKind | MzVolleyKind;
+export type NrVolleyKind = "flurry" | "spin" | "sever" | "squeeze" | "drain" | "devour" | "origin" | "rift" | "barrier" | "abyss" | RgVolleyKind | BuVolleyKind | JnVolleyKind | MzVolleyKind | VtVolleyKind;
+/** 베르 기술 (sim/vert·vtSkills) */
+export type VtVolleyKind = "vtSlash" | "vtSpin" | "vtFrenzy" | "vtWhip" | "vtGarden" | "vtForest" | "vtDance";
 /** 마젠타 기술 (sim/magenta·mzSkills) */
 export type MzVolleyKind = "mzRain" | "mzBloom" | "mzPollen" | "mzClone" | "mzPrison" | "mzGarden" | "mzSoul" | "mzVortex" | "mzStorm" | "mzErode" | "mzEnd";
 /** 루주 기술 (sim/rouge·rgSkills): 쌍검격 · 난무 · 회전참 · 가시 찌르기 · 꽃잎 폭풍 · 가시숲 · 혈화 만개 · 혈검무 · 혈월참 · 폭우 · 종언 */
@@ -21,6 +23,8 @@ export interface HitOn {
   /** (마젠타) 쌓을 저주 겹 (있으면 마젠타 한 대) · 반드시 매혹 */
   hex?: number;
   charm?: boolean;
+  /** (베르) 독·출혈·화상·부식·느려짐 + 씨앗 (있으면 베르 한 대) */
+  vt?: import("./vtTypes").VtOn;
 }
 
 /** 나눠 때리는 기술 하나: 종류 · 자리 · 반지름 · 한 대 피해 · 한 대마다 더하는 피해 · 남은 수 · 처음 수 · 간격 · 다음 틱 · 빨아들이는 힘 · 끝 한 방 피해 · 몸을 따라감 · 적마다 때린 피해 합(공허 포식) */
@@ -46,6 +50,8 @@ export interface NrVolley {
   /** (존) 원 대신 (x, y)에서 dx·dy 쪽 직선(길이 · 너비)을 때림 · 틱마다 움직임(벽에서 멈춤) */
   line?: { dx: number; dy: number; len: number; w: number };
   vel?: [number, number];
+  /** (베르) 원 대신 dx·dy 쪽 부채꼴만 */
+  arc?: { at: number; dx: number; dy: number };
 }
 
 /** 늦게 오는 한 방 (마력 소멸 3초 뒤 · 공허의 낙인 창): 자리 · 반지름 · 피해 · 틱 · 겨눈 적(있으면 그 적만) */
@@ -82,7 +88,7 @@ export interface NrRush {
   sx: number;
   sy: number;
   /** 끝날 때 효과 (루주 혈영 돌진) */
-  fx?: "rgRush" | "jnPop";
+  fx?: "rgRush" | "jnPop" | "vtPop";
   /** 맞은 적에게 붙는 것 (존 번개) · 곧게 가지 않고 이 자리들을 차례로 지나감 (존 지그재그) */
   on?: HitOn;
   path?: [number, number][];

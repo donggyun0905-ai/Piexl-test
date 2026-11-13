@@ -10,6 +10,7 @@ import { drawRougeGround } from "./rougeArt";
 import { drawBleuAir, drawBleuGround } from "./bleuArt";
 import { drawJauneAir } from "./jauneArt";
 import { drawMagentaAir, drawMagentaFloor } from "./magentaArt";
+import { drawVertAir, drawVertFloor } from "./vertArt";
 import { drawHonryeongAir, drawHonryeongGround } from "./honryeongArt";
 import type { Snap } from "./palette";
 import type { Ctx } from "./pwFxBits";
@@ -24,11 +25,12 @@ export function drawSilberAir(ctx: Ctx, s: RunState, alpha: number, snap: Snap):
   drawBleuAir(ctx, s, alpha, snap);
   drawJauneAir(ctx, s, alpha, snap);
   drawMagentaAir(ctx, s, alpha, snap);
+  drawVertAir(ctx, s, alpha, snap);
 }
 
 /** 바닥 (혼령 분신·짐승 · 아리아 악기) */
 export function drawSilberGround(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
-  // 느아르·루주·블뢰·존·마젠타 등 뒤 악마 계급 마크 (몸보다 먼저)
+  // 느아르·루주·블뢰·존·마젠타·베르 등 뒤 악마 계급 마크 (몸보다 먼저)
   drawNoirBack(ctx, s, alpha, snap);
   // 루주 바닥의 혈장미
   drawRougeGround(ctx, s, alpha, snap);
@@ -36,6 +38,8 @@ export function drawSilberGround(ctx: Ctx, s: RunState, alpha: number, snap: Sna
   drawBleuGround(ctx, s, alpha, snap);
   // 마젠타 향기 연기
   drawMagentaFloor(ctx, s, snap);
+  // 베르 꽃·덩굴·포식자
+  drawVertFloor(ctx, s, snap);
   drawHonryeongGround(ctx, s, alpha, snap);
   drawAriaGround(ctx, s, alpha, snap);
   drawRavenGround(ctx, s, alpha, snap);

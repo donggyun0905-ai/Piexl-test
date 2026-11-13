@@ -107,6 +107,7 @@ export const ACCENT: Record<string, string> = {
   bleu: "#8ad8ff",
   jaune: "#ffd020",
   magenta: "#ff3ab8",
+  vert: "#8aff5a",
   baekinjang: "#ff5a6a",
   aria: "#ffe08a",
   chessRaven: "#f0e0b0",

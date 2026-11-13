@@ -44,7 +44,7 @@ export const FACTIONS: readonly { id: FactionId; color: string; members: readonl
   /** 실베르: 강대한 몬스터가 살던 북부를 지켜 온 나라 (처음엔 약하지만 패시브마다 성장) */
   { id: "silber", color: "#7ad0ff", members: M.silber },
   // 아슈바르: 태초의 색채 악마 7원색 군단 (검정 느아르 · 빨강 루주 · 파랑 블뢰 · 노랑 존 · 자홍 마젠타)
-  { id: "ashvar", color: "#2a2a34", members: ["noir", "rouge", "bleu", "jaune", "magenta"] },
+  { id: "ashvar", color: "#2a2a34", members: ["noir", "rouge", "bleu", "jaune", "magenta", "vert"] },
   { id: "akashic", color: "#b89aff", members: ["scribe", "duck", "stargazer", "miner", "voyager", "zeus"] },
   /** 이방인: 세계의 틀을 벗어난 자들 */
   { id: "outsider", color: "#5ae0d0", members: ["pilgrim", "fallenKing"] },

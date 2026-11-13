@@ -30,6 +30,7 @@ const NAMES: Record<string, Name> = {
   bleu: ["하얀 마도서", "White Grimoire", "白の魔導書"],
   jaune: ["금빛 손아귀", "Golden Grip", "金色の掌握"],
   magenta: ["욕망의 부채", "Fan of Desire", "欲望の扇"],
+  vert: ["덩굴 쌍낫", "Twin Vine Scythes", "蔓の双鎌"],
   rvCheck: ["체크메이트 (체크)", "Checkmate (Check)", "チェックメイト（チェック）"],
   buildSetFx: ["세트 효과", "Set effects", "セット効果"],
   classTaken: ["반격", "Counter", "反撃"],
