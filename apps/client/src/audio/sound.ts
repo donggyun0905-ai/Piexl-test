@@ -238,7 +238,8 @@ export function play(name: Sfx): void {
   const now = ctx.currentTime;
   if (now - (lastPlayed.get(name) ?? -1) < 0.04) return;
   lastPlayed.set(name, now);
-  SOUNDS[name]();
+  // 없는 소리(불러오는 순서가 꼬여 빠진 것 등)는 건너뜀: 소리 하나 때문에 화면이 멈추지 않게
+  SOUNDS[name]?.();
 }
 
 // ───────── 음악: 짧은 8마디를 반복하는 단순한 칩튠 (층이 바뀌면 음높이가 바뀜) ─────────

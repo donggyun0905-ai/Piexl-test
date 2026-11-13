@@ -39,6 +39,13 @@ export function rgRoseTick(s: RunState): void {
     if (!nrAlive(e) || e.immune || (e.rgRoseAt ?? -1e9) + R.every > s.tick) continue;
     if (!p.rgRoses.some((r) => (r.x - e.x) ** 2 + (r.y - e.y) ** 2 <= (R.r + e.r) ** 2)) continue;
     e.rgRoseAt = s.tick;
+    // 가디언 방패: 한 칸 깨고 끝 (다 깨져야 피해·출혈)
+    if ((e.shield ?? 0) > 0) {
+      e.shield = (e.shield ?? 0) - 1;
+      e.hitFlash = 3;
+      addEffect(s, { kind: "hit", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.shield === 0 ? 7 : 3, maxTicks: 8 });
+      continue;
+    }
     e.hp -= R.dmg;
     e.hitFlash = 3;
     markDot(s, e, "bleed", R.dmg);

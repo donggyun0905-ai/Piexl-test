@@ -84,6 +84,18 @@ describe("루주", () => {
     expect(t.enemies[0]!.rgBleed).toBe(1);
   });
 
+  it("혈장미: 가디언 방패가 있으면 한 칸씩 깨고, 다 깨져야 피해", () => {
+    const t = rg([[200, 200]]);
+    t.enemies[0]!.shield = 1;
+    idle(t, 1);
+    t.player.rgRoses = [{ x: 200, y: 200, until: t.tick + 999 }];
+    idle(t, 1);
+    expect(t.enemies[0]!.shield).toBe(0);
+    expect(lost(t)).toBe(0);
+    idle(t, R.every + 1);
+    expect(lost(t)).toBeGreaterThanOrEqual(R.dmg);
+  });
+
   it("추가 공격 업화의 장미: 강한 1타 + 출혈 + 화상", () => {
     const s = rg([[140, 100]]);
     s.player.nrExtra = 4;

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.69",
+    date: "2026-11-13",
+    items: {
+      ko: ["연습장·로그 던전 등에서 나가면 화면이 검은색으로 멈추던 것 고침 (메뉴 소리를 불러오는 순서 문제)", "루주: 혈장미 고정 피해가 가디언 방패를 무시하던 것 고침 (한 칸씩 깨지고 다 깨져야 피해)"],
+      en: ["Fixed the screen freezing black when leaving Practice, the log dungeon and other modes (menu sound loading order)", "Rouge: Blood Rose fixed damage no longer ignores Guardian shields (each touch breaks one layer)"],
+      ja: ["練習場・ログダンジョンなどから出ると画面が黒いまま止まっていたのを修正（メニュー音の読み込み順の問題）", "ルージュ：血薔薇の固定ダメージがガーディアンの盾を無視していたのを修正（1枚ずつ割れ、全部割れてからダメージ）"],
+    },
+  },
+  {
     version: "0.52.68",
     date: "2026-11-13",
     items: {

@@ -1,8 +1,9 @@
 // 메뉴 소리를 언제 낼지 (2026-11-13): 화면 아무 곳의 버튼을 누르면 종류에 맞는 소리 (설정의 '메뉴 소리'를 끄면 안 남, 모바일 조작 버튼·뽑기 카드는 빼고)
 // 버튼에 data-sfx가 있으면 그 소리 · 확인(primary) 토독 · 닫기(ghost·닫기 글자) 툭 · 탭 샥 · 켜고 끄기 딸깍 · 그 밖 톡 · 상점·뽑기는 uiSfx로 직접 부름
 import { getSettings } from "../settings";
-import { charVoice, type MenuSfx } from "./sfxMenu";
+// sound를 sfxMenu보다 먼저 불러옴: sfxMenu가 먼저 읽히면 sound가 MENU_SOUNDS를 만들기 전에 펼쳐 화면이 멈춤 (서로 불러오는 순환)
 import { play, sfxOn } from "./sound";
+import { charVoice, type MenuSfx } from "./sfxMenu";
 import type { UiSfx } from "./sfxUi";
 
 /** 메뉴 소리를 켰을 때만 냄 */
