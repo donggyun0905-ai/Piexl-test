@@ -40,11 +40,11 @@ export const CHARACTERS = {
   /** 야수(고양이 수인): 고양이를 데리고 다니며 같이 싸움 · 발이 아주 빠름 */
   beast: { id: "beast", maxHp: 95, damage: 10, moveSpeed: 1.4, luck: 1, startWeapon: "claws" },
   gunner: { id: "gunner", maxHp: 40, damage: 10, moveSpeed: 1.3, luck: 0, startWeapon: "pistol", fixedHp: 40 },
-  /** 닌자: 수리검으로 표식을 쌓으면 적의 그림자에서 분신이 튀어나와 벰 · 발이 빠르고 행운 조금 */
+  /** 닌자: 표식을 쌓으면 그림자에서 분신이 벰 · 발이 빠름 */
   ninja: { id: "ninja", maxHp: 85, damage: 10, moveSpeed: 1.4, luck: 1, startWeapon: "shuriken" },
   /** 시간술사: 모든 공격을 1초 뒤 그 자리에서 잔상이 한 번 더 함 · 체력 보통 */
   chronomancer: { id: "chronomancer", maxHp: 90, damage: 10, moveSpeed: 1.3, luck: 0, startWeapon: "pocketwatch" },
-  /** 소환술사: 근접 채찍으로 쳐서 모은 힘으로 소환수를 부름 (무기마다 다른 소환수) */
+  /** 소환술사: 채찍으로 모은 힘으로 소환수를 부름 */
   summoner: { id: "summoner", maxHp: 95, damage: 10, moveSpeed: 1.25, luck: 0, startWeapon: "leatherwhip" },
   /** 풋내기: 맨손으로 시작, 공용 무기·공용 패시브만. 경험치로 레벨이 오르면 스탯을 직접 찍음 */
   novice: { id: "novice", maxHp: 100, damage: 10, moveSpeed: 1.3, luck: 0, startWeapon: "fists" },
@@ -122,6 +122,8 @@ export const CHARACTERS = {
   ...SILBER_CHARACTERS,
   /** 느아르 (아슈바르): 공허의 검 · 패시브 없음 · 적응력·제약 (sim/noir) */
   noir: { id: "noir", maxHp: 110, damage: 9, moveSpeed: 1.3, luck: 0, startWeapon: "nrBlade" },
+  /** 루주 (아슈바르): 장미쌍검 · 혈장미 (sim/rouge) */
+  rouge: { id: "rouge", maxHp: 105, damage: 9, moveSpeed: 1.35, luck: 0, startWeapon: "rgBlades" },
   /** 에테르 광부 (히든, 시즌 2): 곡괭이로 적을 캐서 원석 · 대시는 땅굴 (sim/miner) */
   miner: { id: "miner", maxHp: 125, damage: 12, moveSpeed: 1.25, luck: 2, startWeapon: "mnPick", defense: 10 },
   /** 운명의 여행자 (히든, 시즌 2): 모아 쏘는 활 · 모래시계 주사위 운명 (sim/voyager) */

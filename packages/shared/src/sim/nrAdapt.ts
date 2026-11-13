@@ -1,4 +1,4 @@
-// 느아르 적응력(아슈바르 진영 특징): 적을 쓰러뜨리면 흑이 참(풋내기 경험치와 같은 양) → 가득 차면 레벨업(공격력·체력·방어력·재생력) + 강화 한 번
+// 아슈바르(느아르·루주) 적응력(진영 특징): 적을 쓰러뜨리면 흑이 참(풋내기 경험치와 같은 양) → 가득 차면 레벨업(공격력·체력·방어력·재생력) + 강화 한 번
 // 강화(입력 statPick): 1 기본 공격 · 2 추가 공격 · 3 승격 · 4~7 스킬 1~4 · 확률로 성공, 실패하면 다음 확률 +5% (성공하면 처음 확률)
 // 제약(기본 패시브): 일반 방에서는 아이템·패시브를 못 얻음 (비밀방·시련의 방은 됨) · 대장장이·성좌·쉼터 회복 못 씀 · 재생 가속
 import { NR_ADAPT as A, NR_LIMIT, NR_RANKS } from "../itemsNoir";
@@ -8,7 +8,7 @@ import type { StatMod } from "../stats";
 import type { RoomType } from "./floor";
 import { recalcStats } from "./items";
 import { expOf, expToNext } from "./novice";
-import { isNoir, nrRoll } from "./nrKit";
+import { isAshvar, nrRoll } from "./nrKit";
 import { pilgrimRoom } from "./pilgrim";
 import type { EnemyState, PickupKind, RunState } from "./types";
 import { addEffect } from "./util";
@@ -21,7 +21,7 @@ export const NR_UP = { base: 1, extra: 2, rank: 3, skill: 4 } as const;
 /** 쓰러뜨린 적의 흑 받기 (느아르만 · 패왕전 빼고) */
 export function nrGain(s: RunState, e: EnemyState): void {
   const p = s.player;
-  if (!isNoir(p) || s.pvp) return;
+  if (!isAshvar(p) || s.pvp) return;
   p.nrLv ??= 1;
   p.nrExp = (p.nrExp ?? 0) + expOf(e) * (s.swarm ? SWARM.limits.noviceExp : 1);
   let up = false;
@@ -57,7 +57,7 @@ export function nrChance(p: P, what: number): number | null {
 /** 강화 한 번 (남은 횟수를 하나 씀) */
 export function nrUpgrade(s: RunState, what: number): void {
   const p = s.player;
-  if (!isNoir(p) || (p.nrPts ?? 0) <= 0) return;
+  if (!isAshvar(p) || (p.nrPts ?? 0) <= 0) return;
   const c = nrChance(p, what);
   if (c === null) return;
   p.nrPts = (p.nrPts ?? 0) - 1;
@@ -85,7 +85,7 @@ const rankRows = (p: P): RankRow[] => Object.values(NR_RANKS).slice(0, p.nrRank 
 
 /** 레벨·승격으로 오른 공격력·최대 체력 (능력치 계산 items.recalcStats) */
 export function noirMods(p: P): StatMod[] {
-  if (!isNoir(p)) return [];
+  if (!isAshvar(p)) return [];
   const lv = (p.nrLv ?? 1) - 1;
   const ranks = rankRows(p);
   const sum = (f: (r: RankRow) => number) => ranks.reduce((a, r) => a + f(r), 0);
@@ -101,24 +101,24 @@ export function noirMods(p: P): StatMod[] {
 
 /** 레벨·승격으로 오른 방어력·재생력 (sim/baseStats.extraOf) */
 export function noirExtras(p: P): Partial<ExtraStats> | null {
-  if (!isNoir(p) || ((p.nrLv ?? 1) <= 1 && !p.nrRank)) return null;
+  if (!isAshvar(p) || ((p.nrLv ?? 1) <= 1 && !p.nrRank)) return null;
   const lv = (p.nrLv ?? 1) - 1;
   const ranks = rankRows(p);
   return { defense: A.lvDef * lv + ranks.reduce((a, r) => a + r.def, 0), regen: A.lvRegen * lv + ranks.reduce((a, r) => a + r.regen, 0) };
 }
 
 /** 재생 가속: 재생력 회복 배율 */
-export const noirRegenMul = (p: P) => (isNoir(p) ? NR_LIMIT.regenMul : 1);
+export const noirRegenMul = (p: P) => (isAshvar(p) ? NR_LIMIT.regenMul : 1);
 
 /** 제약: 아이템·패시브를 얻을 수 있는 방 (비밀방·히든 상점·시련의 방) */
 const OPEN: readonly RoomType[] = ["trial", "devil", "gamble", "auction", "hidden"];
 
 /** 제약: 이 방에 무기·사용 아이템·패시브를 놓지 않음 */
 export function noirBlocksPickup(s: RunState, roomId: number, kind: PickupKind): boolean {
-  if (!isNoir(s.player) || (kind !== "weapon" && kind !== "use" && kind !== "passive")) return false;
+  if (!isAshvar(s.player) || (kind !== "weapon" && kind !== "use" && kind !== "passive")) return false;
   const type = s.map.rooms[roomId]?.type;
   return !(type && OPEN.includes(type)) && roomId !== pilgrimRoom(s);
 }
 
 /** 제약: 대장장이·성좌의 방은 비어 있음 · 쉼터(보스 앞 회복의 방) 회복 없음 */
-export const noirBlocksRoom = (s: RunState, type: RoomType) => isNoir(s.player) && (type === "forge" || type === "altar" || type === "rest");
+export const noirBlocksRoom = (s: RunState, type: RoomType) => isAshvar(s.player) && (type === "forge" || type === "altar" || type === "rest");

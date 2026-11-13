@@ -18,6 +18,7 @@ import { PLAIN_SHAPE } from "./layout";
 import { addPickup, weaponPool } from "./loot";
 import { spendStat } from "./novice";
 import { nrUpgrade } from "./nrAdapt";
+import { isAshvar } from "./nrKit";
 import { lucCutting, spawnLucifer } from "./lucifer";
 import { raidBotInput } from "./raidBot";
 import { spawnChest } from "./raidReward";
@@ -91,7 +92,7 @@ export function createRaid(seed: number, boss: RaidEventBoss, humans: readonly R
     p.useSlots = [null, null];
     s.gold = R.GOLD;
     if (p.characterId === "novice") noviceLevel(s, !!s.raidBoss!.ai[i]);
-    if (p.characterId === "noir") noirLevel(s, !!s.raidBoss!.ai[i]);
+    if (isAshvar(p)) noirLevel(s, !!s.raidBoss!.ai[i]);
     if (s.raidBoss!.ai[i]) aiKit(s, createRng(deriveSeed(seed, "raidAi", i)));
     recalcStats(s);
     p.hp = p.stats.maxHp;

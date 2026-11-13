@@ -89,6 +89,6 @@ export function nrRushTick(s: RunState): void {
     nrHit(s, e, r.dmg);
   }
   if (--r.t > 0) return;
-  addEffect(s, { kind: "nrRush", x: r.sx, y: r.sy, dirX: r.dx, dirY: r.dy, size: 22, toX: p.x, toY: p.y, maxTicks: 20 });
+  addEffect(s, { kind: r.fx ?? "nrRush", x: r.sx, y: r.sy, dirX: r.dx, dirY: r.dy, size: 22, toX: p.x, toY: p.y, maxTicks: 20 });
   delete p.nrRush;
 }

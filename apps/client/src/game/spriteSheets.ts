@@ -124,6 +124,8 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   gears: { size: 34, footPad: 2, src: 128, v2: true },
   /** 느아르 (아슈바르 태초의 색채 악마 검정) */
   noir: { size: 34, footPad: 2, src: 128, v2: true },
+  /** 루주 (아슈바르 태초의 색채 악마 빨강) */
+  rouge: { size: 34, footPad: 2, src: 128, v2: true },
   /** 백인장 (실베르 기계 날개 쌍검 기사) */
   baekinjang: { size: 40, footPad: 2, src: 128, v2: true },
   /** 아리아 (실베르 지휘자 소녀, 은발·흰 금빛 제복·높은음자리 모자) */

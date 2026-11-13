@@ -83,8 +83,18 @@ function extra(s: RunState): void {
   });
 }
 
-/** 틱마다 (공허의 검을 들었을 때 player에서) */
-export function noirTick(s: RunState, want: boolean, speed: number): void {
+/** 아슈바르 캐릭터마다 다른 것: 기본 공격(다시 누르기까지 틱) · 추가 공격과 확률 · 스킬 · 스킬 피해 출처 · 틱마다 더 할 것 */
+export interface AshKit {
+  attack: (s: RunState) => number;
+  extra: (s: RunState) => void;
+  chance: () => number;
+  skill: (s: RunState, i: number) => void;
+  skillSrc: (p: P, i: number) => string;
+  more?: (s: RunState) => void;
+}
+
+/** 아슈바르 공용 틱 (느아르·루주): 방 바뀌면 정리 · 스킬 대기 · 숫자 키 스킬 · 기본 공격 + 확률 추가 공격 · 돌진 · 나눠 때리기 */
+export function ashTick(s: RunState, want: boolean, speed: number, kit: AshKit): void {
   const p = s.player;
   const key = roomKey(s);
   if (p.nrRoom !== key) {
@@ -92,26 +102,35 @@ export function noirTick(s: RunState, want: boolean, speed: number): void {
     p.nrVolleys = [];
     p.nrLaters = [];
     p.nrWaves = [];
+    p.rgRoses = [];
     delete p.nrRush;
   }
   const cd = (p.nrSkillCd ??= [0, 0, 0, 0]);
   for (let i = 0; i < cd.length; i++) if (cd[i]! > 0) cd[i]!--;
   const sk = p.trKey;
-  if (sk && sk >= 1 && sk <= 4 && !s.pvp && !s.pw) srcRun(s, nrSkillSrc(p, sk - 1), () => nrSkill(s, sk - 1));
+  if (sk && sk >= 1 && sk <= 4 && !s.pvp && !s.pw) srcRun(s, kit.skillSrc(p, sk - 1), () => kit.skill(s, sk - 1));
   if ((p.nrCd ?? 0) > 0) p.nrCd = (p.nrCd ?? 0) - 1;
   if (want && (p.nrCd ?? 0) <= 0 && !p.nrRush) {
     p.attackCount++;
     p.nrAtkAt = s.tick;
-    p.nrCd = Math.max(6, Math.round(attack(s) / Math.max(0.3, speed)));
-    if (nrRoll(s, "nrExtra") < X.chance) extra(s);
+    p.nrCd = Math.max(6, Math.round(kit.attack(s) / Math.max(0.3, speed)));
+    if (nrRoll(s, "nrExtra") < kit.chance()) kit.extra(s);
   }
-  srcRun(s, "k:nrSkill1", () => nrRushTick(s));
+  srcRun(s, kit.skillSrc(p, 0), () => nrRushTick(s));
   nrVolleyTick(s);
+  kit.more?.(s);
+}
+
+const KIT: AshKit = { attack, extra, chance: () => X.chance, skill: nrSkill, skillSrc: nrSkillSrc };
+
+/** 틱마다 (공허의 손톱을 들었을 때 player에서) */
+export function noirTick(s: RunState, want: boolean, speed: number): void {
+  ashTick(s, want, speed, KIT);
   // 몸을 따라다니는 효과 (회전참 · 시초의 공허)
-  for (const f of s.effects) if (f.kind === "nrSpin" || f.kind === "nrOrigin") [f.x, f.y] = [p.x, p.y];
+  for (const f of s.effects) if (f.kind === "nrSpin" || f.kind === "nrOrigin") [f.x, f.y] = [s.player.x, s.player.y];
 }
 
 /** 연습장 등에서 다시 시작할 때 (적응력 단계는 연습장 도구가 따로 정함) */
 export function resetNoir(p: P): void {
-  for (const k of ["nrCd", "nrRoom", "nrAtkAt", "nrVolleys", "nrLaters", "nrWaves", "nrRush", "nrSkillCd", "nrRolls"] as const) delete p[k];
+  for (const k of ["nrCd", "nrRoom", "nrAtkAt", "nrVolleys", "nrLaters", "nrWaves", "nrRush", "nrSkillCd", "nrRolls", "rgRoses"] as const) delete p[k];
 }

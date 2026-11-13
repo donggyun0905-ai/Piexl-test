@@ -72,6 +72,8 @@ export { RV_PERKS } from "./itemsRaven";
 export { GEARS_WEAPONS, GE_ATTACK, GE_BALL } from "./weaponsGears";
 export { GE_PERKS } from "./itemsGears";
 export { NOIR_WEAPONS } from "./weaponsNoir";
+export { ROUGE_WEAPONS } from "./weaponsRouge";
+export { RG_BASE, RG_EXTRA, RG_ROSE, RG_SKILLS } from "./itemsRouge";
 export { NR_ADAPT, NR_BASE, NR_EXTRA, NR_LIMIT, NR_RANKS, NR_SKILLS } from "./itemsNoir";
 export { HONRYEONG_WEAPONS, HR_CLOUD, HR_STYLE } from "./weaponsHonryeong";
 export { HONRYEONG_PERKS } from "./itemsHonryeong";

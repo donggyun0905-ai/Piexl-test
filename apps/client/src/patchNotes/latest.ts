@@ -4,6 +4,27 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.58",
+    date: "2026-11-13",
+    items: {
+      ko: [
+        "새 캐릭터 루주 (아슈바르의 빨강, 로비 칩 45만): 장미쌍검 하나 · 패시브 없음 · 적응력(흑 게이지·레벨업·강화·승격)과 제약은 느아르와 같음",
+        "루주 혈장미: 공격할 때 확률로 바닥에 작은 장미 → 닿은 적은 고정 피해 1 + 출혈 · 루주의 출혈은 2배 빠르고 5스택까지",
+        "루주 공격: 적장미 쌍검격 · 혈염 난무 · 광란의 회전참 · 장미 가시 찌르기 · 추가 공격 혈화 개화 · 장미꽃잎 폭풍 · 선혈 가시숲 · 업화의 장미 · 스킬 혈영 돌진/혈화 만개 · 장미 낙인/광란의 혈검무 · 쌍검 혈월참/붉은 장미의 장례 · 진홍의 폭우/종언의 혈장미(방의 장미를 모아 터뜨림)",
+      ],
+      en: [
+        "New character Rouge (the Red of Ashvar, 450,000 lobby chips): one pair of Twin Rose Blades · no passives · Adaptation (Black gauge, level-ups, upgrades, promotion) and the restriction work like Noir's",
+        "Rouge's Blood Rose: attacks sometimes bloom small roses on the floor → foes touching them take 1 fixed damage + Bleed · Rouge's Bleed ticks twice as fast and stacks up to 5",
+        "Rouge attacks: Crimson Rose Cross · Blood Flame Frenzy · Frenzied Spin Slash · Rose Thorn Thrust · extra attacks Blood Blossom · Rose Petal Storm · Crimson Thorn Forest · Hellfire Rose · skills Blood Shadow Rush/Full Blood Bloom · Rose Brand/Frenzied Blood Dance · Twin Blood Moon/Funeral of Red Roses · Crimson Downpour/Final Blood Rose (gathers every rose in the room)",
+      ],
+      ja: [
+        "新キャラ ルージュ（アシュヴァルの赤、ロビーチップ45万）：薔薇の双剣ひとつ・パッシブなし・適応力（黒ゲージ・レベルアップ・強化・昇格）と制約はノワールと同じ",
+        "ルージュの血薔薇：攻撃時に確率で床に小さな薔薇 → 触れた敵に固定ダメージ1＋出血・ルージュの出血は2倍速く、5スタックまで",
+        "ルージュの攻撃：赤薔薇双剣撃・血炎乱舞・狂乱の回転斬・薔薇の棘突き・追加攻撃 血花開花・薔薇の花びらの嵐・鮮血の棘森・業火の薔薇・スキル 血影突進/血花満開・薔薇の烙印/狂乱の血剣舞・双剣血月斬/赤薔薇の葬礼・真紅の豪雨/終焉の血薔薇（部屋の薔薇を集めて弾けさせる）",
+      ],
+    },
+  },
+  {
     version: "0.52.57",
     date: "2026-11-12",
     items: {

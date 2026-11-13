@@ -33,6 +33,7 @@ export const ASCALON_ACHIEVEMENTS = {
   clearAria: n(["악보 완성의 밤", "A Night of the Finished Score", "楽譜完成の夜"], ["아리아로 클리어", "Clear as Aria", "アリアでクリア"]),
   clearBaekinjang: n(["붉은 날개의 종언", "The End on Red Wings", "赤い翼の終焉"], ["백인장으로 클리어", "Clear as Baekinjang", "百人長でクリア"]),
   clearNoir: n(["태초의 검정", "The Primordial Black", "太初の黒"], ["느아르로 클리어", "Clear as Noir", "ノワールでクリア"]),
+  clearRouge: n(["태초의 빨강", "The Primordial Red", "太初の赤"], ["루주로 클리어", "Clear as Rouge", "ルージュでクリア"]),
   clearGears: n(["무너지지 않는 쌍방패", "Unbreakable Twin Shields", "崩れぬ双盾"], ["기어스로 클리어", "Clear as Gears", "ギアーズでクリア"]),
   clearAsura: n(["여섯 팔의 수라", "Six-Armed Asura", "六臂の修羅"], ["아수라로 클리어", "Clear as Asura", "阿修羅でクリア"]),
   clearBingseol: n(["눈꽃이 지나간 자리", "Where the Snowflakes Passed", "雪花の通った跡"], ["빙설로 클리어", "Clear as Bingseol", "氷雪でクリア"]),

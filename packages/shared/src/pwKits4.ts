@@ -148,4 +148,11 @@ export const PW_KITS_4: PwKits = {
     sk("nrBlade", "dash", 9, "#2a1a3a", { range: 130, speed: 11, hit: { dmg: 1.1 } }),
     sk("nrBlade", "point", 60, "#a05aff", { range: 0, radius: 130, delay: 24, fx: "pillar", hit: { dmg: 3.3, stun: SEC } }),
   ),
+  // 아슈바르 루주: 적장미 쌍검격 · 장미 낙인 · 혈영 돌진 · 진홍의 폭우
+  rouge: kit(1,
+    sk("rgBlades", "cone", 4, "#ff2a3a", { radius: 62, arc: 0.85, fx: "slash", hit: { dmg: 1.2 } }),
+    sk("rgBlades", "line", 8, "#ff6a7a", { range: 220, hit: { dmg: 1.7 } }),
+    sk("rgBlades", "dash", 9, "#8a0a1a", { range: 130, speed: 11, hit: { dmg: 1.1 } }),
+    sk("rgBlades", "point", 60, "#ff3a4a", { range: 0, radius: 135, delay: 24, fx: "pillar", hit: { dmg: 3.3, stun: SEC } }),
+  ),
 };

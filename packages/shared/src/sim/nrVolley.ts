@@ -29,8 +29,9 @@ function once(s: RunState, v: NrVolley): void {
   if (v.kind === "squeeze" || v.kind === "drain") return;
   // 무형의 난무: 1·3·5타 묶음 (사이 한 칸은 쉼), 마지막 큰 한방은 finish
   if (v.kind === "flurry" && (i === 1 || i === 5)) return;
-  const dmg = v.dmg + v.ramp * i;
-  if (v.kind !== "devour") return void nrArea(s, v.x, v.y, v.r, dmg);
+  const dmg = v.dmgs ? (v.dmgs[i] ?? 0) : v.dmg + v.ramp * i;
+  if (dmg <= 0) return;
+  if (v.kind !== "devour") return void nrArea(s, v.x, v.y, v.r, dmg, undefined, v.on);
   // 공허 포식: 적마다 때린 피해를 모아 둠
   const sums = (v.sums ??= {});
   for (const e of s.enemies) {
@@ -41,28 +42,34 @@ function once(s: RunState, v: NrVolley): void {
 
 /** 기술이 끝날 때: 끝 한 방 · 공허 포식은 때린 만큼 한 번 더 · 마력 소멸은 3초 뒤 한 방 */
 function finish(s: RunState, v: NrVolley): void {
-  if (v.fin > 0) nrArea(s, v.x, v.y, v.r, v.fin);
+  if (v.fin > 0) nrArea(s, v.x, v.y, v.r, v.fin, undefined, v.finBurn ? { ...v.on, burn: true } : v.on);
   // 공허 포식: 살아 있는 적에게 그 적이 맞은 만큼 한 번 더
   for (const [id, sum] of Object.entries(v.sums ?? {})) {
     const e = s.enemies.find((x) => x.id === Number(id));
     if (e && sum > 0) nrHit(s, e, sum);
   }
   if (v.kind === "drain") nrLater(s, { kind: "drain", x: v.x, y: v.y, r: v.r, dmg: v.fin * (X.s3.laterMul / X.s3.mul), at: s.tick + X.s3.later });
-  if (v.fin > 0 || v.kind === "devour" || v.kind === "squeeze" || v.kind === "drain") addEffect(s, { kind: "nrBurst", x: v.x, y: v.y, dirX: 0, dirY: 0, size: v.r * 1.15, maxTicks: 18 });
+  if (v.fin > 0 || v.kind === "devour" || v.kind === "squeeze" || v.kind === "drain") addEffect(s, { kind: v.kind.startsWith("rg") ? "rgBurst" : "nrBurst", x: v.x, y: v.y, dirX: 0, dirY: 0, size: v.r * 1.15, maxTicks: 18 });
 }
 
-/** 늦게 오는 한 방: 낙인 창은 그 적만 · 마력 소멸은 그 자리 범위 */
+/** 늦게 오는 한 방: 낙인 창·장미 낙인은 그 적만 · 장례는 그 적 자리 범위 · 마력 소멸은 그 자리 범위 */
 function laterTick(s: RunState): void {
   const p = s.player;
   if (!p.nrLaters?.length) return;
   for (const l of srcEach(p.nrLaters)) {
     if (l.at !== s.tick) continue;
-    if (l.kind === "brand") {
+    if (l.kind === "brand" || l.kind === "rgMark") {
       const e = s.enemies.find((x) => x.id === l.id);
       if (!e || !nrAlive(e)) continue;
       delete e.nrBrand;
-      addEffect(s, { kind: "nrSpear", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 30, maxTicks: 22 });
-      nrHit(s, e, l.dmg);
+      delete e.rgMark;
+      addEffect(s, { kind: l.kind === "brand" ? "nrSpear" : "rgMarkBoom", x: e.x, y: e.y, dirX: 0, dirY: 0, size: e.r + 30, maxTicks: 22 });
+      nrHit(s, e, l.dmg, l.on);
+    } else if (l.kind === "rgFuneral") {
+      const e = s.enemies.find((x) => x.id === l.id && nrAlive(x));
+      const [x, y] = e ? [e.x, e.y] : [l.x, l.y];
+      addEffect(s, { kind: "rgBurst", x, y, dirX: 0, dirY: 0, size: l.r * 1.2, style: 1, maxTicks: 24 });
+      nrArea(s, x, y, l.r, l.dmg, undefined, l.on);
     } else {
       addEffect(s, { kind: "nrDrain", x: l.x, y: l.y, dirX: 0, dirY: 0, size: l.r, style: 1, maxTicks: 20 });
       nrArea(s, l.x, l.y, l.r, l.dmg);

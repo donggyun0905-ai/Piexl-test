@@ -2,6 +2,8 @@
 import { createRng, deriveSeed } from "../rng";
 import { damageEnemy as damageEnemy_ } from "./combat";
 import { srcFn } from "./dmgSrc";
+import type { HitOn } from "./nrTypes";
+import { rgAfflict } from "./rgBleed";
 import type { EnemyState, RunState } from "./types";
 import { normalize } from "./util";
 import { bjAlive as nrAlive } from "./bjKit";
@@ -11,6 +13,8 @@ type P = RunState["player"];
 const damageEnemy = srcFn("noir", () => damageEnemy_);
 
 export const isNoir = (p: P) => p.characterId === "noir";
+/** 아슈바르 (적응력·제약을 같이 씀): 느아르 · 루주 */
+export const isAshvar = (p: P) => p.characterId === "noir" || p.characterId === "rouge";
 // 살아 있는 적 · 보스(허수아비 포함) · 가장 가까운 적은 백인장과 같은 도우미
 export { bjAlive as nrAlive, bjNearest as nrNearest } from "./bjKit";
 export { bjBoss as nrBoss } from "./bjVolley";
@@ -22,18 +26,19 @@ export function nrRoll(s: RunState, tag: string): number {
   return createRng(deriveSeed(s.seed, tag, s.tick, p.nrRolls)).nextFloat();
 }
 
-/** 한 대 (밀지 않음: 연타가 많아서) · 준 피해 */
-export function nrHit(s: RunState, e: EnemyState, dmg: number): number {
+/** 한 대 (밀지 않음: 연타가 많아서) · 출혈·화상(루주) · 준 피해 */
+export function nrHit(s: RunState, e: EnemyState, dmg: number, on?: HitOn): number {
   if (!nrAlive(e)) return 0;
   const p = s.player;
   const d = normalize(e.x - p.x, e.y - p.y) ?? [p.faceX, p.faceY];
   const hp = e.hp;
   damageEnemy(s, e, dmg, d[0], d[1], false);
+  if (on) rgAfflict(s, e, on);
   return hp - Math.max(0, e.hp);
 }
 
 /** 범위 안 적 모두 때림 (arc가 있으면 dx·dy 쪽 부채꼴만) · 준 피해 합 */
-export function nrArea(s: RunState, x: number, y: number, r: number, dmg: number, arc?: { at: number; dx: number; dy: number }): number {
+export function nrArea(s: RunState, x: number, y: number, r: number, dmg: number, arc?: { at: number; dx: number; dy: number }, on?: HitOn): number {
   let sum = 0;
   for (const e of s.enemies) {
     if (!nrAlive(e)) continue;
@@ -42,7 +47,7 @@ export function nrArea(s: RunState, x: number, y: number, r: number, dmg: number
     const d = Math.sqrt(ex * ex + ey * ey);
     if (d > r + e.r) continue;
     if (arc && d > e.r && (ex * arc.dx + ey * arc.dy) / d < arc.at) continue;
-    sum += nrHit(s, e, dmg);
+    sum += nrHit(s, e, dmg, on);
   }
   return sum;
 }

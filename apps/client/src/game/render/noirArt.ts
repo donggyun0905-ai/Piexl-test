@@ -1,6 +1,6 @@
 // 느아르 그리기: 등 뒤 악마 계급 마크 (하위·중위·고위·대악마) · 효과 시트 그림 한 칸
 // 그림 sprites/noirFx.png (192칸 4×16, 줄 차례는 ROW) · noirMarks.png (160칸 4×1) — scripts/art/noir.py
-import type { RunState } from "@pixel-rogue/shared";
+import { isAshvar, type RunState } from "@pixel-rogue/shared";
 import { img } from "./lunaticFx";
 import { lerp, type Snap } from "./palette";
 import { additive, glow, type Ctx } from "./pwFxBits";
@@ -17,25 +17,28 @@ const C = 192;
 const M = 160;
 const ok = (i: HTMLImageElement) => i.complete && i.naturalWidth > 0;
 
-/** 빛 그림 한 칸 (row 줄, col 칸) → (x, y) 가운데, 너비 w, 각도 (더해 그림) · flip = 좌우 뒤집기 */
-export function nrPic(ctx: Ctx, row: number, col: number, x: number, y: number, w: number, a = 1, angle = 0, flip = false): void {
-  if (!ok(FX) || a <= 0) return;
-  additive(ctx, () => {
-    ctx.save();
-    ctx.globalAlpha *= Math.min(1, a);
-    ctx.translate(x, y);
-    if (angle) ctx.rotate(angle);
-    if (flip) ctx.scale(-1, 1);
-    ctx.imageSmoothingEnabled = true;
-    ctx.drawImage(FX, col * C, row * C, C, C, -w / 2, -w / 2, w, w);
-    ctx.restore();
-  });
+/** 효과 시트(192칸) 한 장 → 빛 그림 한 칸 그리는 함수 (row 줄, col 칸) → (x, y) 가운데, 너비 w, 각도 (더해 그림) · flip = 좌우 뒤집기 · 루주도 같이 씀 */
+export function sheetPic(sheet: HTMLImageElement) {
+  return (ctx: Ctx, row: number, col: number, x: number, y: number, w: number, a = 1, angle = 0, flip = false): void => {
+    if (!ok(sheet) || a <= 0) return;
+    additive(ctx, () => {
+      ctx.save();
+      ctx.globalAlpha *= Math.min(1, a);
+      ctx.translate(x, y);
+      if (angle) ctx.rotate(angle);
+      if (flip) ctx.scale(-1, 1);
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(sheet, col * C, row * C, C, C, -w / 2, -w / 2, w, w);
+      ctx.restore();
+    });
+  };
 }
+export const nrPic = sheetPic(FX);
 
-/** 등 뒤 (몸보다 먼저): 악마 계급 마크 · 계급이 오를수록 크고 진하게, 은은히 숨 쉬듯 빛남 */
+/** 등 뒤 (몸보다 먼저, 느아르·루주): 악마 계급 마크 · 계급이 오를수록 크고 진하게, 은은히 숨 쉬듯 빛남 */
 export function drawNoirBack(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const p = s.player;
-  if (p.characterId !== "noir" || !ok(MARKS)) return;
+  if (!isAshvar(p) || !ok(MARKS)) return;
   const rk = Math.max(0, Math.min(3, p.nrRank ?? 0));
   const x = snap(lerp(p.prevX, p.x, alpha));
   const y = snap(lerp(p.prevY, p.y, alpha)) - p.r - 4;

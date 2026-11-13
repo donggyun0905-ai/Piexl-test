@@ -1,6 +1,14 @@
 // 느아르 상태 타입 (sim/noir·nrKit·nrVolley·nrSkills·nrAdapt). 모두 선택 값 (예전 저장에는 없음)
 
-export type NrVolleyKind = "flurry" | "spin" | "sever" | "squeeze" | "drain" | "devour" | "origin" | "rift" | "barrier" | "abyss";
+export type NrVolleyKind = "flurry" | "spin" | "sever" | "squeeze" | "drain" | "devour" | "origin" | "rift" | "barrier" | "abyss" | RgVolleyKind;
+/** 루주 기술 (sim/rouge·rgSkills): 쌍검격 · 난무 · 회전참 · 가시 찌르기 · 꽃잎 폭풍 · 가시숲 · 혈화 만개 · 혈검무 · 혈월참 · 폭우 · 종언 */
+export type RgVolleyKind = "rgX" | "rgFlame" | "rgSpin" | "rgThorn" | "rgPetal" | "rgForest" | "rgBloom" | "rgDance" | "rgMoon" | "rgRain" | "rgEnd";
+
+/** 맞은 적에게 붙는 것 (루주): 출혈 스택 · 화상 */
+export interface HitOn {
+  bleed?: number;
+  burn?: boolean;
+}
 
 /** 나눠 때리는 기술 하나: 종류 · 자리 · 반지름 · 한 대 피해 · 한 대마다 더하는 피해 · 남은 수 · 처음 수 · 간격 · 다음 틱 · 빨아들이는 힘 · 끝 한 방 피해 · 몸을 따라감 · 적마다 때린 피해 합(공허 포식) */
 export interface NrVolley {
@@ -18,6 +26,10 @@ export interface NrVolley {
   fin: number;
   follow?: boolean;
   sums?: Record<number, number>;
+  /** 한 대마다 피해 (있으면 dmg·ramp 대신) · 맞은 적에게 붙는 것 · 끝 한 방에만 화상 */
+  dmgs?: number[];
+  on?: HitOn;
+  finBurn?: boolean;
 }
 
 /** 늦게 오는 한 방 (마력 소멸 3초 뒤 · 공허의 낙인 창): 자리 · 반지름 · 피해 · 틱 · 겨눈 적(있으면 그 적만) */
@@ -28,7 +40,8 @@ export interface NrLater {
   dmg: number;
   at: number;
   id?: number;
-  kind: "drain" | "brand";
+  kind: "drain" | "brand" | "rgMark" | "rgFuneral";
+  on?: HitOn;
 }
 
 /** 방을 휩쓰는 충격파: 처음 자리 · 지금 반지름 · 빠르기 · 피해 · 맞힌 적 · 시작 틱 */
@@ -52,6 +65,8 @@ export interface NrRush {
   hit: number[];
   sx: number;
   sy: number;
+  /** 끝날 때 효과 (루주 혈영 돌진) */
+  fx?: "rgRush";
 }
 
 export interface NoirPlayerState {

@@ -1,4 +1,4 @@
-// 느아르 적응력: 장비 줄 위 레벨·흑 막대·악마 계급 · 강화 횟수가 있으면 강화 버튼 4개 (기본공격·추가공격·스킬공격·승격, 확률이 버튼에)
+// 아슈바르(느아르·루주) 적응력: 장비 줄 위 레벨·흑 막대·악마 계급 · 강화 횟수가 있으면 강화 버튼 4개 (기본공격·추가공격·스킬공격·승격, 확률이 버튼에)
 // 스킬공격을 누르면 스킬 4개 버튼 (Esc·뒤로로 닫힘) · 누르면 입력 statPick으로 기록 (1 기본 · 2 추가 · 3 승격 · 4~7 스킬, sim/nrAdapt)
 import { useEffect, useState } from "react";
 import { NR_UP } from "@pixel-rogue/shared";
@@ -6,6 +6,8 @@ import type { TextKey } from "../i18n";
 import type { Controls } from "./controls";
 
 export interface NoirView {
+  /** 아슈바르 누구인지 (이름·스킬 글자 키 앞: 느아르 nr · 루주 rg) */
+  who: "noir" | "rouge";
   lv: number;
   exp: number;
   need: number;
@@ -44,12 +46,13 @@ export function NoirPanel({ view, t, controls }: { view: NoirView; t: (key: Text
     );
   };
   const stage = (n: number) => t("nrStage").replace("{n}", String(n));
+  const pre = view.who === "rouge" ? "rg" : "nr";
   const rankLocked = view.rank === 2 && view.ch[NR_UP.rank - 1] === null;
   return (
     <div className="novice-bar noir-bar">
       <span className="novice-lv">{t("nrLevel").replace("{n}", String(view.lv))}</span>
       <span className={`noir-rank r${view.rank}`} title={t("nrRankTip")}>
-        {t("noir")} · {t(RANKS[view.rank] ?? "nrRank0")}
+        {t(view.who)} · {t(RANKS[view.rank] ?? "nrRank0")}
       </span>
       <span className="novice-exp noir-exp" aria-label={`${t("nrGauge")} ${view.exp} / ${view.need}`}>
         <span style={{ width: `${Math.min(100, (view.exp / view.need) * 100)}%` }} />
@@ -75,7 +78,7 @@ export function NoirPanel({ view, t, controls }: { view: NoirView; t: (key: Text
             </>
           ) : (
             <>
-              {[0, 1, 2, 3].map((i) => btn(NR_UP.skill + i, t(`nrSkill${i + 1}` as TextKey), `→ ${t(`nrSkillUp${i + 1}` as TextKey)}`))}
+              {[0, 1, 2, 3].map((i) => btn(NR_UP.skill + i, t(`${pre}Skill${i + 1}` as TextKey), `→ ${t(`${pre}SkillUp${i + 1}` as TextKey)}`))}
               <button type="button" onClick={() => setSkills(false)}>
                 {t("nrUpBack")}
               </button>

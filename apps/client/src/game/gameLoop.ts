@@ -33,8 +33,8 @@ import { createGlowLayer } from "./glow/glowLayer";
 import { skinGlow } from "./glow/glowSkin";
 import { setBrushCursor } from "./shadowingBuffs";
 
-/** 숫자 키 스킬이 있는 캐릭터 (추적자 · 성국 · 네일러) */
-const SKILL_CHARS = new Set(["tracker", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "nailer", "baekinjang", "chessRaven", "noir"]);
+/** 숫자 키 스킬이 있는 캐릭터 */
+const SKILL_CHARS = new Set(["tracker", "beatrice", "ian", "gabriel", "serena", "rafael", "yuriel", "michaela", "nailer", "baekinjang", "chessRaven", "noir", "rouge"]);
 
 /** 한 번에 따라잡는 최대 틱 수 (탭을 오래 비웠다 돌아올 때 멈춤 방지) */
 const MAX_CATCH_UP = 10;
