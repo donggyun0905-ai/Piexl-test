@@ -1,4 +1,5 @@
 // 백령 효과음: 대태도 베기 쉭 · 유령팔 참격 휘잉 · 망령 우우 · 소용돌이 · 대태도 쾅 · 번개 · 혼불 · 영혼 게이지 한 칸 참(맑은 종)
+import { hiss, wobble } from "./synth";
 import type { RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
 
@@ -32,7 +33,7 @@ export const BAEK_SOUNDS = {
     tone({ type: "sine", from: 300, to: 900, dur: 0.12, vol: 0.12 });
     noise(0.12, 0.2, 2000);
   },
-  byWisp: () => tone({ type: "sine", from: 900, to: 1500, dur: 0.1, vol: 0.06 }),
+  byWisp: () => { wobble("sine", 900, 1500, 0.14, 0.06, 18, 40); hiss(0.1, 0.03, { type: "highpass", freq: 5000, attack: 0.03 }); },
   byLevel: () => {
     [988, 1319, 1976].forEach((f, i) => tone({ type: "sine", from: f, dur: 0.35, vol: 0.1, delay: i * 0.06 }));
   },

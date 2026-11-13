@@ -1,11 +1,12 @@
-// 소리 다듬기 (runSounds가 낼 소리 목록을 마지막에 손봄): 기본 휘두름·탄 소리를 든 무기에 맞는 소리로 바꾸고, 대시·회복·방 정리·위험 체력 소리를 더함
+// 소리 다듬기 (runSounds가 낼 소리 목록을 마지막에 손봄): 기본 휘두름·탄 소리를 든 무기에 맞는 소리로 바꾸고, 대시·회복·방 정리·위험 체력 소리를 더함 · 상태이상 소리(statusSounds)
 import { ENEMIES, WEAPONS, type RunState } from "@pixel-rogue/shared";
 import { getSettings } from "../settings";
+import { statusSounds } from "./statusSounds";
 import { REST_MUSIC, SHOP_MUSIC } from "./calmMusic";
 import { foeSounds } from "./foeSounds";
 import { setBossTune } from "./musicLayers";
 import { setRoomMusic } from "./roomMusic";
-import { play, type Sfx } from "./sound";
+import type { Sfx } from "./sound";
 import { vaultMusic } from "./vaultSound";
 
 /** 공격 소리 → 맞는 소리 (없으면 기본 "퍽") */
@@ -58,6 +59,7 @@ export function polish(run: RunState, fx: Sfx[]): Sfx[] {
     else if (fx[i] === "hit" && hit) fx[i] = hit;
   }
   foeSounds(run, fx);
+  statusSounds(run, fx);
   // 상점·쉼터 방은 잔잔한 곡 · 보스가 나오면 그 보스의 가락 (마지막 보스는 가장 웅장하게)
   const type = run.map.rooms[run.roomId]?.type ?? "";
   const calm = type === "shop" || type === "rest" ? type : "";
@@ -84,8 +86,3 @@ export function polish(run: RunState, fx: Sfx[]): Sfx[] {
   return fx;
 }
 
-/** 메뉴 버튼을 누르면 작은 소리 (모바일 조작 버튼은 빼고) */
-export function uiClick(e: Event): void {
-  const el = e.target instanceof Element ? e.target.closest("button") : null;
-  if (el && getSettings().uiSound && !el.closest(".touch-buttons")) play("uiClick");
-}

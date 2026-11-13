@@ -1,4 +1,5 @@
 // 만능 쿠폰 · 가진 스킨 · 입은 스킨 (이 기기에 저장). 쿠폰 = 업적 보상 + 일일 미션 보상 - 쓴 것
+import { uiSfx } from "../audio/uiSounds";
 import { ACHIEVEMENTS, type AchievementCategory, type CharacterId } from "@pixel-rogue/shared";
 import { loadAchievements } from "../records";
 import { onCloudApplied } from "../cloudSave";
@@ -118,6 +119,7 @@ export function buySkin(id: string): boolean {
   w.spent += price;
   w.owned.push(id);
   save(w);
+  uiSfx("uiBuy");
   return true;
 }
 
@@ -127,6 +129,7 @@ export function equipSkin(c: CharacterId, id: string | null): void {
   if (id === null) delete w.equipped[c];
   else if (ownedSkins().includes(id)) w.equipped[c] = id;
   save(w);
+  uiSfx("uiEquip");
 }
 
 /** 뽑기 결과 하나: 한정 테마(모든 캐릭터) · 이벤트 코인 · 쿠폰. dup이면 이미 있어서 refund장을 돌려받음 */
@@ -181,6 +184,7 @@ export function buyLobby(theme: string, price: number): boolean {
   w.spent += price;
   w.lobbyOwned.push(theme);
   save(w);
+  uiSfx("uiBuy");
   return true;
 }
 
@@ -188,4 +192,5 @@ export function setLobbyTheme(theme: string): void {
   const w = load();
   if (theme === "arcade" || w.lobbyOwned.includes(theme)) w.lobby = theme;
   save(w);
+  uiSfx("uiEquip");
 }

@@ -4,6 +4,33 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.62",
+    date: "2026-11-13",
+    items: {
+      ko: [
+        "상태이상 효과음: 지속 피해 16종마다 다른 소리 (화상 지글지글 · 업화·청염 화르륵 · 출혈 찢김 · 독·부패 보글보글 · 감전·폭풍 지지직 · 냉기 얼음 금 · 해일 촤 · 저주·죽음·공허 웅웅 · 황금·광휘·달빛 종소리)",
+        "빙결(냉기 뒤 경직)·얼음 시계는 얼어붙는 소리, 풀리면 얼음 깨지는 소리 · 경직 띠잉 · 느려짐 · 속박 · 공포 걸릴 때도 소리",
+        "메뉴 소리: 확인·닫기·탭·켜고 끄기·창 열기마다 다른 소리 · 상점에서 사기(동전 짤랑)·입기 · 쿠폰이 모자라면 안 됨 소리",
+        "뽑기 소리: 봉투 찢는 소리 · 뜯김 · 카드 깔림 · 뒤집힘 · 결과마다 다른 등장 소리 (한정 스킨은 큰 팡파르)",
+        "효과음 다듬기: 삑 튀던 소리를 부드럽게 · 단순했던 소리 25개를 결 있는 소리로 바꿈",
+      ],
+      en: [
+        "Status sounds: each of the 16 damage-over-time types has its own sound (burn sizzle · hellfire/blue flame roar · bleed tear · poison/rot bubbles · shock/storm crackle · frost ice crack · tide splash · curse/death/void hum · gold/radiance/moon chimes)",
+        "Freeze (stun right after frost) and the Ice Clock play a freezing sound, then an ice-shatter sound when they end · stun, slow, root and fear also have sounds",
+        "Menu sounds: different sounds for confirm, close, tabs, toggles and opening windows · buying (coin jingle) and equipping in shops · a denied sound when you lack coupons",
+        "Gacha sounds: envelope tearing · rip open · cards dealt · card flip · a different reveal sound per result (big fanfare for limited skins)",
+        "Sound polish: harsh beeps are softer · 25 plain sounds were remade with more texture",
+      ],
+      ja: [
+        "状態異常の効果音：継続ダメージ16種それぞれに別の音（火傷ジュウジュウ・業火/青炎ゴォッ・出血の裂ける音・毒/腐敗ブクブク・感電/嵐バチバチ・冷気の氷のひび・津波ザバッ・呪い/死/虚無ウォン・黄金/光輝/月光の鐘）",
+        "凍結（冷気の直後の硬直）と氷の時計は凍りつく音、解けると氷が割れる音・硬直・鈍化・束縛・恐怖にも音",
+        "メニューの音：決定・閉じる・タブ・オンオフ・ウィンドウを開くでそれぞれ違う音・ショップの購入（コインの音）と装備・クーポン不足のときの音",
+        "ガチャの音：袋を破る音・開封・カードが並ぶ・めくる・結果ごとに違う登場音（限定スキンは大きなファンファーレ）",
+        "効果音の調整：耳に刺さるピー音をやわらかく・単純だった25個の音を厚みのある音に作り直し",
+      ],
+    },
+  },
+  {
     version: "0.52.61",
     date: "2026-11-13",
     items: {

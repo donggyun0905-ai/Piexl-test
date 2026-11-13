@@ -1,4 +1,5 @@
 // 빙설 효과음: 얼음 베기 쨍 · 찌르기 · 얼음 터짐 · 빙각 솟음 · 활 세움 · 결정이 탄 막음 · 궁극기(기 모으기 웅 · 60연타 짧은 쨍 · 발사)
+import { bell, crackle } from "./synth";
 import { BINGSEOL_PERKS, type RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
 
@@ -21,7 +22,7 @@ export const BINGSEOL_SOUNDS = {
     tone({ type: "triangle", from: 2600, to: 1800, dur: 0.1, vol: 0.05, delay: 0.03 });
   },
   bsBowSet: () => [988, 1480].forEach((f, i) => tone({ type: "sine", from: f, dur: 0.22, vol: 0.07, delay: i * 0.05 })),
-  bsBlock: () => tone({ type: "triangle", from: 3200, to: 2400, dur: 0.05, vol: 0.05 }),
+  bsBlock: () => { bell(3200, 0.1, 0.05, 2.76, 1); crackle(0.04, 3, 0.1, 7000); },
   bsUltCharge: () => {
     tone({ type: "sine", from: 220, to: 660, dur: 1.2, vol: 0.12 });
     tone({ type: "triangle", from: 880, to: 1760, dur: 1.2, vol: 0.04, delay: 0.2 });

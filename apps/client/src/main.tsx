@@ -1,7 +1,7 @@
 import { lazy, StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
-import { uiClick } from "./audio/polish";
+import { uiClick } from "./audio/uiSounds";
 import { unlockAudio } from "./audio/sound";
 import { refreshBalance } from "./balance";
 import { refreshCustomMaps } from "./customMapsClient";

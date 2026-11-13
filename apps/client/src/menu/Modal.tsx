@@ -1,5 +1,6 @@
 // 가운데 뜨는 창 (바깥을 누르거나 Esc면 닫힘)
 import { useEffect, type ReactNode } from "react";
+import { uiSfx } from "../audio/uiSounds";
 import type { TextKey } from "../i18n";
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export function Modal({ title, t, onClose, children, className }: Props) {
+  useEffect(() => uiSfx("uiOpen"), []);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);

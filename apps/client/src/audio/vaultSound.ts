@@ -1,5 +1,6 @@
 // 비밀의 방 소리: 벽 무너짐(돌 구르는 굉음) · 악마 거래(낮은 울림 + 비명 같은 미끄럼)·거절 · 절규(짧은 파열) · 야바위 섞기(탁탁)·당첨(금화 쏟아짐)·꽝(낮은 부웅)
 // · 경매 입찰(띠링)·낙찰(망치 쾅 + 종)·돈 날림(바스락) · 방 곡: 악마(어두운 오르간) · 도박꾼(흥겨운 스윙) · 경매장(점잖은 왈츠)
+import { hiss } from "./synth";
 import { GAMBLE, gambleNow, gambleTrick, type RunState } from "@pixel-rogue/shared";
 import { beatOf, type Song } from "./altarSound";
 import { noise, tone } from "./sound";
@@ -15,7 +16,7 @@ export const VAULT_SOUNDS = {
     tone({ type: "sawtooth", from: 880, to: 220, dur: 0.9, vol: 0.05, delay: 0.1 });
     noise(1, 0.12, 900);
   },
-  vaultRefuse: () => tone({ type: "square", from: 160, to: 110, dur: 0.25, vol: 0.1 }),
+  vaultRefuse: () => { tone({ type: "square", from: 160, to: 110, dur: 0.25, vol: 0.08 }); hiss(0.2, 0.08, { type: "lowpass", freq: 500, attack: 0.01 }); },
   vaultScream: () => {
     tone({ type: "sawtooth", from: 700, to: 300, dur: 0.12, vol: 0.04 });
     noise(0.08, 0.05, 3000);
@@ -46,7 +47,7 @@ export const VAULT_SOUNDS = {
     for (let i = 0; i < 6; i++) tone({ type: "square", from: 2400 + (i % 3) * 400, dur: 0.03, vol: 0.03, delay: i * 0.07 });
   },
   // 야바위 방해: 연막 · 카드 뿌리기 · 금화 폭죽
-  vaultSmoke: () => noise(0.7, 0.3, 400),
+  vaultSmoke: () => hiss(0.7, 0.3, { type: "lowpass", freq: 400, to: 900, attack: 0.2 }),
   vaultCards: () => {
     noise(0.4, 0.14, 3000);
     for (let i = 0; i < 6; i++) tone({ type: "square", from: 900, to: 500, dur: 0.03, vol: 0.05, delay: i * 0.06 });

@@ -1,4 +1,5 @@
 // 펫 상점 기억 (이 기기): 산 펫 · 데리고 갈 펫. 사면 로비 칩이 줄어듦
+import { uiSfx } from "../audio/uiSounds";
 import { LOBBY_PETS, type LobbyPetId } from "@pixel-rogue/shared";
 import { loadText, saveText } from "../storage";
 import { addChips, loadChips } from "./chips";
@@ -49,6 +50,7 @@ export function buyPet(id: LobbyPetId): boolean {
   s.owned.push(id);
   s.equipped = id;
   save(s);
+  uiSfx("uiBuy");
   return true;
 }
 
@@ -57,4 +59,5 @@ export function equipPet(id: LobbyPetId | null): void {
   const s = load();
   s.equipped = id && s.owned.includes(id) ? id : null;
   save(s);
+  uiSfx("uiEquip");
 }

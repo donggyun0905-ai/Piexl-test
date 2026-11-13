@@ -1,4 +1,5 @@
 // 효과음·음악: 파일 없이 브라우저에서 바로 만든 소리 (저작권 걱정 없음). 그림처럼 나중에 직접 만든 소리로 바꿀 수 있음
+import { bell, crackle } from "./synth";
 import { getSettings } from "../settings";
 import { ASCALON_SOUNDS } from "./sfxAscalon";
 import { CORE_SOUNDS } from "./sfxCore";
@@ -10,6 +11,8 @@ import { ALTAR_SOUNDS, type AltarSfx } from "./altarSound";
 import { VAULT_SOUNDS, type VaultSfx } from "./vaultSound";
 import { SILBER_SOUNDS, type SilberSfx } from "./silberSounds";
 import { POLISH_SOUNDS, type PolishSfx } from "./sfxPolish";
+import { STATUS_SOUNDS, type StatusSfx } from "./sfxStatus";
+import { UI_SOUNDS, type UiSfx } from "./sfxUi";
 import { defaultBeat } from "./musicLayers";
 
 export type Sfx =
@@ -67,7 +70,9 @@ export type Sfx =
   | AltarSfx
   | VaultSfx
   | SilberSfx
-  | PolishSfx;
+  | PolishSfx
+  | StatusSfx
+  | UiSfx;
 
 let ctx: AudioContext | null = null;
 let sfxGain: GainNode | null = null;
@@ -124,12 +129,23 @@ export function tone(t: Tone, out: GainNode | null = sfxGain): void {
   osc.type = t.type;
   osc.frequency.setValueAtTime(t.from, start);
   if (t.to) osc.frequency.exponentialRampToValueAtTime(t.to, start + t.dur);
-  g.gain.setValueAtTime(t.vol ?? 0.3, start);
+  // 시작을 아주 짧게 키워 "딱" 튀는 소리를 없앰 (2026-11-13)
+  g.gain.setValueAtTime(0.0001, start);
+  g.gain.linearRampToValueAtTime(t.vol ?? 0.3, start + Math.min(0.006, t.dur / 4));
   g.gain.exponentialRampToValueAtTime(0.001, start + t.dur);
-  osc.connect(g).connect(out);
+  // 네모·톱니 파형은 높은 쇳소리를 깎아 "삑" 대신 따뜻하게 (2026-11-13)
+  if (t.type === "square" || t.type === "sawtooth") {
+    const soft = ctx.createBiquadFilter();
+    soft.type = "lowpass";
+    soft.frequency.value = Math.min(12000, Math.max(t.from, t.to ?? 0) * 5);
+    osc.connect(soft).connect(g).connect(out);
+  } else osc.connect(g).connect(out);
   osc.start(start);
   osc.stop(start + t.dur + 0.02);
 }
+
+/** 효과음 출력 (audio/synth 도우미가 씀, 준비 전이면 null) */
+export const sfxNode = () => (ctx && sfxGain ? { ctx, out: sfxGain } : null);
 
 /** 짧은 잡음 (폭발·맞음) */
 export function noise(dur: number, vol: number, freq = 1200, out: GainNode | null = sfxGain): void {
@@ -186,6 +202,8 @@ const SOUNDS: Record<Sfx, () => void> = {
   ...VAULT_SOUNDS,
   ...SILBER_SOUNDS,
   ...POLISH_SOUNDS,
+  ...STATUS_SOUNDS,
+  ...UI_SOUNDS,
   blink: () => {
     tone({ type: "sine", from: 900, to: 120, dur: 0.12, vol: 0.12 });
     noise(0.1, 0.2, 1800);
@@ -198,7 +216,7 @@ const SOUNDS: Record<Sfx, () => void> = {
     tone({ type: "triangle", from: 3136, dur: 0.25, vol: 0.12, delay: 0.07 });
   },
   // 특수용병 보호막 성공: 팅(맑은 쇳소리) · 탕(총소리) · 펑(폭발)
-  guard1: () => tone({ type: "triangle", from: 2637, to: 2400, dur: 0.12, vol: 0.35 }),
+  guard1: () => { bell(2637, 0.25, 0.2, 2.76, 1.2); crackle(0.03, 2, 0.15, 6000); },
   guard2: () => {
     noise(0.08, 0.35, 5000);
     tone({ type: "square", from: 900, to: 260, dur: 0.1, vol: 0.18 });

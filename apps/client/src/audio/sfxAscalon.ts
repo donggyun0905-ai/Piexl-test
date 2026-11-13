@@ -1,4 +1,5 @@
 // 아스칼론 캐릭터 효과음 (sound의 효과음 표에 합쳐짐): 추적자 · 잊혀진 자 · 잔영 · 방랑객
+import { bell, hiss } from "./synth";
 import { noise, tone } from "./sound";
 
 export const ASCALON_SOUNDS = {
@@ -30,7 +31,7 @@ export const ASCALON_SOUNDS = {
     noise(0.5, 0.12, 6000);
   },
   // 잔영: 단검 (짧고 높은 쉭) · 순간이동 (낮게 빨려 들어가는 소리 + 칼 울림)
-  slice: () => noise(0.04, 0.18, 7000),
+  slice: () => { hiss(0.05, 0.18, { type: "highpass", freq: 5000, to: 9000, attack: 0.003 }); tone({ type: "triangle", from: 2800, to: 1800, dur: 0.04, vol: 0.03 }); },
   // 방랑객: 카타나 (묵직한 바람 가르는 소리) · 예리함 (맑고 날카로운 쇳소리 "칭") · 천검란 (칼바람 여러 겹)
   katana: () => {
     noise(0.1, 0.3, 2600);
@@ -52,7 +53,7 @@ export const ASCALON_SOUNDS = {
     tone({ type: "triangle", from: 2800, to: 2600, dur: 0.3, vol: 0.08 });
   },
   // 영사: 실 (아주 작고 높게 튕기는 소리) · 찢기 ("띵" 울리는 현 + 빠르게 풀리는 실) · 장전 (실 감는 소리)
-  string: () => tone({ type: "sine", from: 2600, to: 2500, dur: 0.04, vol: 0.04 }),
+  string: () => { tone({ type: "triangle", from: 2600, to: 2500, dur: 0.05, vol: 0.03 }); bell(2600, 0.08, 0.02, 1, 0.4); },
   ting: () => {
     tone({ type: "triangle", from: 1568, to: 1560, dur: 0.5, vol: 0.14 });
     tone({ type: "sine", from: 3136, to: 3130, dur: 0.35, vol: 0.06 });

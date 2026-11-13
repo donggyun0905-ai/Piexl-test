@@ -1,4 +1,5 @@
 // 아리아 효과음: 음표 한 음(종류마다 다른 높이 · 도레미파솔라시도) · 여덟 음표 터짐(화음 + 펑) · 폭죽 · 앙코르 · 작은 북 · 바이올린 활 · 악기 놓임 · 악보 완성 팡파르
+import { bell } from "./synth";
 import type { RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
 
@@ -28,7 +29,7 @@ export const ARIA_SOUNDS = {
     [4, 7].forEach((k, i) => note(k, 0.05, i * 0.05));
     noise(0.2, 0.12, 2600);
   },
-  arEcho: () => tone({ type: "sine", from: 120, to: 70, dur: 0.12, vol: 0.14 }),
+  arEcho: () => { tone({ type: "sine", from: 120, to: 70, dur: 0.12, vol: 0.14 }); bell(240, 0.25, 0.04, 1.5, 1); },
   arSweep: () => {
     tone({ type: "sawtooth", from: 440, to: 660, dur: 0.22, vol: 0.04 });
     tone({ type: "triangle", from: 880, to: 990, dur: 0.22, vol: 0.03 });

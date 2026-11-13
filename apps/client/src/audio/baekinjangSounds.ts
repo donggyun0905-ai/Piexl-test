@@ -1,4 +1,5 @@
 // 백인장 효과음: 쌍검 베기 · 난무 · 회전참 · 돌진베기 · 날개 폭우 · 드릴 침 · 나선창 · 충격파 · 표식 · 감옥 · 팔연참 · 종언(날개 펼침) · 붉은 십자
+import { hiss } from "./synth";
 import type { RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
 
@@ -19,7 +20,7 @@ export const BAEKINJANG_SOUNDS = {
     tone({ type: "sawtooth", from: 1200, to: 200, dur: 0.16, vol: 0.06 });
   },
   bjRain: () => [0, 0.05, 0.1, 0.15, 0.2, 0.25].forEach((d) => setTimeout(() => noise(0.04, 0.1, 4000 + d * 4000), d * 1000)),
-  bjNeedle: () => tone({ type: "square", from: 1500, to: 900, dur: 0.05, vol: 0.04 }),
+  bjNeedle: () => { hiss(0.03, 0.08, { type: "highpass", freq: 6000, attack: 0.002 }); tone({ type: "triangle", from: 1500, to: 900, dur: 0.05, vol: 0.04 }); },
   bjSpear: () => {
     tone({ type: "sawtooth", from: 200, to: 1400, dur: 0.2, vol: 0.08 });
     setTimeout(() => noise(0.18, 0.22, 3000), 80);

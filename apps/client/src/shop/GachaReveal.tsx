@@ -1,6 +1,7 @@
 // 뽑기 연출 (화면 전체): 봉투를 뜯음(GachaPack) → 카드가 뒷면으로 깔림 (1번은 큰 카드 1장, 10번은 5장씩 2줄 + 덤 1장)
 // → 카드를 누르면 결과 색으로 빛나며 뒤집힘 (한정 스킨 무지개 · 스킨 금빛 · 쿠폰 보라 · 이벤트 코인 흰빛)
 import { useEffect, useRef, useState } from "react";
+import { uiSfx } from "../audio/uiSounds";
 import type { TextKey } from "../i18n";
 import { GachaPack } from "./GachaPack";
 import { useGachaGlow } from "./gachaGlow";
@@ -10,6 +11,8 @@ import type { GachaPrize } from "./wallet";
 /** 빛난 뒤 뒤집히기까지 · 모두 뒤집기 카드 사이 간격 */
 const GLOW_MS = 420;
 const FLIP_GAP_MS = 140;
+/** 뒤집혀 나온 결과 색마다 소리 (한정 스킨 무지개 · 이벤트 코인 초록 · 그 밖 보라) */
+const GLOW_SFX = { rainbow: "gachaRainbow", green: "gachaGreen", purple: "gachaPurple" } as const;
 /** 한 줄 카드 수 */
 const ROW = 5;
 
@@ -49,9 +52,13 @@ export function GachaReveal({ prizes, t, onClose }: { prizes: GachaPrize[]; t: (
   const pick = (i: number, wait = 0) => {
     later(wait, () => {
       set(i, "glow");
+      uiSfx("gachaFlip");
       burst(stage.current?.querySelector(`[data-card="${i}"]`) ?? null, prizeGlow(prizes[i]!));
     });
-    later(wait + GLOW_MS, () => set(i, "front"));
+    later(wait + GLOW_MS, () => {
+      set(i, "front");
+      uiSfx(GLOW_SFX[prizeGlow(prizes[i]!)]);
+    });
   };
   const flipAll = () => {
     let n = 0;
@@ -71,6 +78,7 @@ export function GachaReveal({ prizes, t, onClose }: { prizes: GachaPrize[]; t: (
         <GachaPack fancy={!big} count={prizes.length} t={t} onOpen={() => {
             burst(null, "open");
             setOpened(true);
+            prizes.forEach((_, i) => window.setTimeout(() => uiSfx("gachaDeal"), 200 + i * 70));
           }} />
       ) : (
         <div className="gacha-table">

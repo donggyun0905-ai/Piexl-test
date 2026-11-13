@@ -1,6 +1,7 @@
 // 상점 뽑기 탭: 한정 테마 배너 · 1번 · 10번(1번 덤). 뽑으면 봉투 뜯기·카드 뒤집기 연출(GachaReveal)
 import type { CharacterId } from "@pixel-rogue/shared";
 import { useState } from "react";
+import { uiSfx } from "../audio/uiSounds";
 import type { TextKey } from "../i18n";
 import { GachaReveal } from "./GachaReveal";
 import { SkinPreview } from "./SkinPreview";
@@ -19,7 +20,7 @@ export function GachaTab({ t, onChange }: { t: (k: TextKey) => string; onChange:
     if (r) {
       setResult(r);
       setPulls((k) => k + 1);
-    }
+    } else uiSfx("uiDeny");
     onChange();
   };
   return (

@@ -1,5 +1,6 @@
 // 이벤트 상점: 이벤트 코인으로 사는 효과 (스킨과 따로 장착, 이 기기에 저장). 칸 넷: 타격 · 대기 · 걸음 · 피해 숫자(데미지 스킨)
 // 범 풍류 효과는 한정 스킨에서 떼어 와 낱개로 팜. 산 효과의 그림은 도트 편집 /pixel/?fx=1 에서 고칠 수 있음 (game/customArt)
+import { uiSfx } from "../audio/uiSounds";
 import { loadText, saveText } from "../storage";
 import { TEST_OPEN } from "../testFlags";
 import { spendEventCoins } from "../event/eventCoins";
@@ -68,6 +69,7 @@ export function buyFx(id: string): boolean {
   s.owned.push(id);
   s.equipped[item.slot] = id;
   save(s);
+  uiSfx("uiBuy");
   return true;
 }
 
@@ -95,6 +97,7 @@ export function equipFx(slot: FxSlot, id: string | null): void {
   if (id === null) delete s.equipped[slot];
   else if (ownedFx().includes(id)) s.equipped[slot] = id;
   save(s);
+  uiSfx("uiEquip");
 }
 
 /** 판 시작 때: 켜진 효과 (한정 스킨 범 풍류를 입었으면 전부 범) */

@@ -1,6 +1,7 @@
 // 뽑기 봉투: 카드 위쪽을 옆으로 쓸면(마우스·손가락) 지나간 만큼 절취선이 빛나고, 충분히 쓸면 윗부분이 뜯겨 날아감
 // fancy: 10번 뽑기용 화려한 금박 봉투
 import { useRef, useState, type PointerEvent } from "react";
+import { uiSfx } from "../audio/uiSounds";
 import type { TextKey } from "../i18n";
 
 /** 가로로 이만큼(봉투 폭 비율) 쓸면 뜯김 · 뜯긴 윗부분이 날아가는 시간 */
@@ -16,6 +17,7 @@ export function GachaPack({ fancy, count, t, onOpen }: { fancy: boolean; count: 
   const open = () => {
     if (torn) return;
     setTorn(true);
+    uiSfx("gachaOpen");
     setTear({ from: 0, to: 1 });
     window.setTimeout(onOpen, FLY_MS);
   };
@@ -35,6 +37,8 @@ export function GachaPack({ fancy, count, t, onOpen }: { fancy: boolean; count: 
     const x = at(e);
     sp.min = Math.min(sp.min, x);
     sp.max = Math.max(sp.max, x);
+    // 절취선이 봉투 폭의 8%씩 더 갈 때마다 찢기는 소리
+    if (Math.floor((sp.max - sp.min) / 0.08) > Math.floor((tear.to - tear.from) / 0.08)) uiSfx("gachaRip");
     setTear({ from: sp.min, to: sp.max });
     if (sp.max - sp.min >= TEAR_AT) open();
   };

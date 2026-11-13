@@ -1,4 +1,5 @@
 // 아슈바르 효과음 (느아르·루주 같이 씀, 루주는 장미 피어남·불꽃 더함): 검은 베기 쉭 · 난무·회전참 사각사각 · 빨아들임 우웅 · 터짐 쾅 · 낙인 창 푹 · 흑월 강림·태초의 종언 쿠웅 · 충격파 · 레벨업 · 강화 성공·실패 · 승격
+import { crackle, hiss, wobble } from "./synth";
 import { isAshvar, type RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
 
@@ -11,7 +12,7 @@ export const NOIR_SOUNDS = {
     noise(0.12, 0.08, 3200);
     [0, 0.05, 0.1].forEach((d) => tone({ type: "sawtooth", from: 700, to: 250, dur: 0.04, vol: 0.03, delay: d }));
   },
-  nrPull: () => tone({ type: "sine", from: 90, to: 220, dur: 0.35, vol: 0.1 }),
+  nrPull: () => { wobble("sine", 90, 220, 0.35, 0.1, 10, 10); hiss(0.35, 0.06, { type: "lowpass", freq: 300, to: 1800, attack: 0.15 }); },
   nrBurst: () => {
     noise(0.12, 0.2, 1400);
     tone({ type: "sine", from: 220, to: 60, dur: 0.18, vol: 0.14 });
@@ -24,10 +25,10 @@ export const NOIR_SOUNDS = {
     tone({ type: "sine", from: 140, to: 30, dur: 0.6, vol: 0.24 });
     noise(0.4, 0.2, 700);
   },
-  nrWave: () => tone({ type: "triangle", from: 260, to: 520, dur: 0.3, vol: 0.06 }),
+  nrWave: () => { hiss(0.3, 0.08, { freq: 400, to: 1600, q: 1.5, attack: 0.05 }); tone({ type: "triangle", from: 260, to: 520, dur: 0.3, vol: 0.05 }); },
   nrLevel: () => [0, 0.08, 0.16].forEach((d, i) => tone({ type: "triangle", from: 330 * (i + 2), to: 330 * (i + 2), dur: 0.08, vol: 0.06, delay: d })),
   nrUpOk: () => [0, 0.07, 0.14, 0.21].forEach((d, i) => tone({ type: "square", from: 440 + i * 140, to: 440 + i * 140, dur: 0.07, vol: 0.05, delay: d })),
-  nrUpFail: () => tone({ type: "sawtooth", from: 300, to: 120, dur: 0.25, vol: 0.05 }),
+  nrUpFail: () => { tone({ type: "sawtooth", from: 300, to: 120, dur: 0.25, vol: 0.05 }); crackle(0.15, 5, 0.12, 2500); tone({ type: "sine", from: 90, to: 50, dur: 0.15, vol: 0.12, delay: 0.05 }); },
   rgBloom: () => [0, 0.05].forEach((d, i) => tone({ type: "triangle", from: 880 + i * 220, to: 1320 + i * 220, dur: 0.12, vol: 0.04, delay: d })),
   rgFire: () => {
     noise(0.25, 0.14, 900);

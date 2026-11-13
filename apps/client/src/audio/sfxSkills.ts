@@ -1,4 +1,5 @@
 // 패왕전 스킬 효과음 (sound의 효과음 표에 합쳐짐): 스킬 그림 모양마다 하나 · 예고 · 궁극기 외침
+import { bell, hiss, wobble } from "./synth";
 import type { RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
 import { fenrirSounds } from "./fenrirSounds";
@@ -51,8 +52,8 @@ export const SKILL_SOUNDS = {
     for (let i = 0; i < 3; i++) tone({ type: "triangle", from: 1800, to: 900, dur: 0.04, vol: 0.04, delay: i * 0.06 });
   },
   // 빔: 위로 올라가는 윙 · 파도(부채꼴): 쏴아 · 베기: 날카로운 쉭
-  pwBeam: () => tone({ type: "sawtooth", from: 300, to: 1200, dur: 0.22, vol: 0.1 }),
-  pwWave: () => noise(0.3, 0.3, 1500),
+  pwBeam: () => { tone({ type: "sawtooth", from: 300, to: 1200, dur: 0.22, vol: 0.08 }); hiss(0.22, 0.08, { freq: 800, to: 4000, q: 2, attack: 0.03 }); },
+  pwWave: () => { hiss(0.3, 0.26, { type: "lowpass", freq: 1500, to: 400, attack: 0.01 }); tone({ type: "sine", from: 120, to: 60, dur: 0.25, vol: 0.16 }); },
   pwSlash: () => {
     noise(0.08, 0.3, 4500);
     tone({ type: "triangle", from: 2200, to: 1600, dur: 0.07, vol: 0.06 });
@@ -62,7 +63,7 @@ export const SKILL_SOUNDS = {
     tone({ type: "triangle", from: 500, to: 900, dur: 0.2, vol: 0.05 });
   },
   // 돌진: 바람 · 순간이동: 빨려 드는 소리
-  pwDash: () => noise(0.2, 0.28, 1200),
+  pwDash: () => { hiss(0.2, 0.24, { freq: 600, to: 2400, q: 1.2, attack: 0.03 }); tone({ type: "sine", from: 260, to: 700, dur: 0.1, vol: 0.06 }); },
   // 고래 울음 (리바이어): 낮게 올라갔다 내려오는 긴 노래 + 물보라
   lvWhale: () => {
     noise(0.35, 0.22, 900);
@@ -157,7 +158,7 @@ export const SKILL_SOUNDS = {
     tone({ type: "sine", from: 500, to: 1400, dur: 0.06, vol: 0.1 });
     noise(0.04, 0.12, 3200);
   },
-  wvPlip: () => tone({ type: "sine", from: 1600, to: 700, dur: 0.07, vol: 0.06 }),
+  wvPlip: () => { tone({ type: "sine", from: 1600, to: 700, dur: 0.07, vol: 0.06 }); hiss(0.04, 0.04, { freq: 2500, q: 4, attack: 0.002, delay: 0.03 }); },
   wvDeep: () => {
     noise(0.6, 0.35, 420);
     tone({ type: "sine", from: 90, to: 45, dur: 0.6, vol: 0.2 });
@@ -212,13 +213,13 @@ export const SKILL_SOUNDS = {
     tone({ type: "square", from: 300, to: 900, dur: 0.1, vol: 0.08 });
     noise(0.15, 0.2, 1800);
   },
-  pwField: () => tone({ type: "sine", from: 140, to: 120, dur: 0.3, vol: 0.12 }),
+  pwField: () => wobble("sine", 140, 120, 0.3, 0.12, 5, 8),
   pwNet: () => {
     tone({ type: "triangle", from: 600, to: 300, dur: 0.12, vol: 0.08 });
     noise(0.08, 0.15, 2000);
   },
   // 예고 (곧 터짐): 짧게 높은 삐
-  pwWarn: () => tone({ type: "square", from: 1500, to: 1500, dur: 0.05, vol: 0.05 }),
+  pwWarn: () => { bell(1500, 0.08, 0.05, 2, 0.5); bell(1500, 0.08, 0.04, 2, 0.5, 0.09); },
   // 궁극기: 낮은 북 + 오르는 금관 화음
   pwUlt: () => {
     noise(0.4, 0.5, 700);

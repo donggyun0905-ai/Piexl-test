@@ -1,4 +1,5 @@
 // 혼령 효과음: 연기용 내뿜기 후우 · 소환 연기 · 늑대 물기 · 범 할퀴기 · 부엉이 낙하 · 분신 터짐 · 공포 · 혼-룡(낮은 울음 · 지나가며 짧은 타격음)
+import { hiss, wobble } from "./synth";
 import type { RunState } from "@pixel-rogue/shared";
 import { noise, tone, type Sfx } from "./sound";
 
@@ -27,7 +28,7 @@ export const HONRYEONG_SOUNDS = {
     tone({ type: "sine", from: 160, to: 50, dur: 0.22, vol: 0.22 });
     noise(0.22, 0.26, 1200);
   },
-  hrFear: () => tone({ type: "triangle", from: 700, to: 1100, dur: 0.1, vol: 0.04 }),
+  hrFear: () => { wobble("sine", 700, 1100, 0.18, 0.04, 8, 30); hiss(0.15, 0.02, { freq: 900, q: 3, attack: 0.06 }); },
   hrDragon: () => {
     tone({ type: "sawtooth", from: 70, to: 150, dur: 1.4, vol: 0.14 });
     tone({ type: "sine", from: 220, to: 440, dur: 1.4, vol: 0.06, delay: 0.1 });

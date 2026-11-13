@@ -1,4 +1,4 @@
-// 다듬기 효과음 (2026-11-12): 무기 종류에 맞는 공격 소리 · 대시 · 회복 · 방 정리 · 위험 체력 · 메뉴 버튼 (언제 내는지는 audio/polish)
+// 다듬기 효과음 (2026-11-12): 무기 종류에 맞는 공격 소리 · 대시 · 회복 · 방 정리 · 위험 체력 (언제 내는지는 audio/polish, 메뉴 버튼은 sfxUi)
 import { noise, tone } from "./sound";
 
 export const POLISH_SOUNDS = {
@@ -110,11 +110,6 @@ export const POLISH_SOUNDS = {
     tone({ type: "square", from: 440, to: 660, dur: 0.22, vol: 0.09 });
     tone({ type: "square", from: 660, to: 880, dur: 0.16, vol: 0.08, delay: 0.16 });
     noise(0.3, 0.12, 500);
-  },
-  // 메뉴 버튼: 작은 "톡"
-  uiClick: () => {
-    tone({ type: "square", from: 880, dur: 0.03, vol: 0.07 });
-    tone({ type: "triangle", from: 1320, dur: 0.05, vol: 0.06, delay: 0.02 });
   },
 };
 export type PolishSfx = keyof typeof POLISH_SOUNDS;
