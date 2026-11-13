@@ -13,7 +13,7 @@ const PLAY = 36;
 
 const KINDS = new Set<string>([...Object.keys(ROW), "buPop", "buFlake"]);
 /** 그림 크기 배율 (반지름 → 그림 너비) */
-const SCALE: Partial<Record<string, number>> = { buBolt: 2.6, buHowl: 3.4, buWolf: 2.2, buHawk: 2.2, buRain: 2.3, buPrison: 2.3, buStop: 2.4, buEnd: 2.4 };
+const SCALE: Partial<Record<string, number>> = { buBolt: 2.6, buHowl: 3.4, buWolf: 2.2, buHawk: 2.2, buRain: 2.3, buPrison: 2.3, buStop: 2.4, buEnd: 0.6 };
 
 export function drawBleuFx(ctx: Ctx, fx: EffectState, snap: Snap): boolean {
   if (!KINDS.has(fx.kind)) return false;
