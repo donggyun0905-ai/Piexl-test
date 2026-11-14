@@ -1,6 +1,6 @@
 import type { Lang } from "../index";
 
-// 화면 글자: 세계 지도 아스칼론 시설 (world/places/ascalonField·ascalonInside · 순간 이동석 world/WarpMenu) · 표지판 글은 `{이름 키}Text`
+// 화면 글자: 세계 지도 아스칼론 시설 (world/places/ascalonField·ascalonInside) · 표지판 글은 `{이름 키}Text`
 export const WORLD_TOWN_TEXT = {
   wpWeaponShop: { ko: "무기점", en: "Weapon Shop", ja: "武器屋" },
   wpArmorShop: { ko: "방어구점", en: "Armor Shop", ja: "防具屋" },
@@ -27,8 +27,6 @@ export const WORLD_TOWN_TEXT = {
   wpWarpHarbor: { ko: "항구 이동석", en: "Harbor warp stone", ja: "港の転移石" },
   wpWarpEast: { ko: "동쪽 갈림길 이동석", en: "East crossroads warp stone", ja: "東の分かれ道の転移石" },
   wpWarpUse: { ko: "순간 이동", en: "Warp", ja: "転移" },
-  wpWarpTitle: { ko: "어디로 갈까요?", en: "Where to?", ja: "どこへ行きますか？" },
-  wpWarpNone: { ko: "아직 만져 본 다른 이동석이 없어요. 다른 이동석을 한 번 만지면 여기서 갈 수 있어요.", en: "You haven't touched any other warp stones yet. Touch one once and you can travel there from here.", ja: "まだ他の転移石に触れていません。一度触れるとここから行けるようになります。" },
   wnTracker: { ko: "자세가 흐트러지면 허수아비한테도 진다. 던전 가기 전에 몸부터 풀고 가라.", en: "Sloppy stance and you'll lose to a dummy. Warm up before you head into the dungeon.", ja: "構えが崩れたらかかしにも負けるぞ。ダンジョンの前に体をほぐしていけ。" },
   wnWanderer: { ko: "이 바다 끝까지 가 본 사람은 없다지. 언젠가 큰 배가 오면 나도 떠나 볼 생각이야.", en: "They say no one's sailed to the end of this sea. When a big ship comes someday, I might set out too.", ja: "この海の果てまで行った者はいないそうだ。いつか大きな船が来たら、俺も旅立ってみるつもりさ。" },
   wnLeo: { ko: "어서 와! 칼이든 창이든 손에 맞는 게 제일이야. 천천히 둘러봐.", en: "Welcome! Sword or spear, what fits your hand is best. Take your time.", ja: "いらっしゃい！剣でも槍でも、手になじむのが一番だよ。ゆっくり見ていって。" },

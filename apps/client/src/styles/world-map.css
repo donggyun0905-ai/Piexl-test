@@ -1,0 +1,21 @@
+/* 세계 지도 지도 창 (M · 이동석 F) · 전체 세계 지도 (world/WorldMapView · WorldAtlas) */
+.modal.wm-modal { width: min(960px, 96vw); max-width: none; }
+.wm-map { position: relative; width: min(100%, calc((100vh - 340px) * 1.6)); margin: 0 auto; }
+.wm-map canvas { display: block; width: 100%; height: 100%; border-radius: 6px; image-rendering: pixelated; }
+.wm-mark { position: absolute; width: 22px; height: 22px; padding: 0; transform: translate(-50%, -50%); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 50%; background: rgba(10, 10, 20, 0.7); font-size: 12px; line-height: 1; cursor: default; }
+.wm-mark.warp { opacity: 0.4; filter: grayscale(1); }
+.wm-mark.warp.on { opacity: 1; filter: none; cursor: pointer; border-color: #ffd84a; box-shadow: 0 0 8px #ffd84a; }
+.wm-mark.warp.on:hover { transform: translate(-50%, -50%) scale(1.25); }
+.wm-me { position: absolute; width: 10px; height: 10px; transform: translate(-50%, -50%); border: 2px solid #fff; border-radius: 50%; background: #ff4a4a; pointer-events: none; z-index: 1; animation: wm-blink 0.8s infinite alternate; }
+@keyframes wm-blink { to { opacity: 0.4; } }
+.wm-hint { margin: 6px 0 0; font-size: 12px; opacity: 0.8; }
+.wm-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.wm-head h3 { margin: 0; }
+.wa-map { position: relative; width: min(100%, calc((100vh - 340px) * 1.687)); margin: 0 auto; border-radius: 8px; background: radial-gradient(ellipse at 40% 50%, #2c5a8c, #163052); overflow: hidden; }
+.wa-land { position: absolute; padding: 0; border: 2px solid transparent; border-radius: 4px; background: none; cursor: pointer; transition: border-color 0.1s, transform 0.1s; }
+.wa-land canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; border-radius: 2px; }
+.wa-land:hover:not(:disabled) { border-color: #fff; box-shadow: 0 0 10px rgba(255, 255, 255, 0.7); z-index: 2; }
+.wa-land.locked { cursor: default; filter: brightness(0.3) grayscale(0.7); }
+.wa-land.here { border-color: rgba(255, 216, 74, 0.7); }
+.wa-name { position: absolute; left: 50%; bottom: 4%; transform: translateX(-50%); padding: 1px 6px; border-radius: 6px; background: rgba(0, 0, 0, 0.6); color: #fff; font-size: 12px; white-space: nowrap; pointer-events: none; }
+.wa-here { position: absolute; top: 4%; right: 4%; font-size: 14px; pointer-events: none; }

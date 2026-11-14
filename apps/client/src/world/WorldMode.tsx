@@ -1,8 +1,8 @@
 // 세계 지도 화면 (나라 필드 · 건물 안, 마지막에 있던 나라에서 시작): 캔버스 + 나가기 · 나라 이름 · 장소 앞 버튼(모바일) · 글 창(표지판·마을·주민 말, Esc로 닫힘)
 // 이야기 장면(SceneView, 일러스트 + 대사): 처음 오면 1장 · 장군에게 말 걸면 지금 연 장 · 던전 입구 → 혼자 하기(끝나면 지도로, worldReturn)
-// 건물 문 → 건물 안 지도(검게 사라졌다 나타남) · 나가는 문 → 들어온 문 앞 · 순간 이동석(만진 돌끼리, WarpMenu) · 세계 지도(줌 아웃)는 W4
+// 건물 문 → 건물 안 지도(검게 사라졌다 나타남) · 나가는 문 → 들어온 문 앞 · 순간 이동석(F = 지도 창, 만진 돌로 이동 · 전체 지도에서 다른 지역 돌로도)
 // 국경 통로 → 옆 나라 필드 (그 나라가 스토리에서 열렸을 때만, 아니면 막혔다는 글) · 기억의 탑·콜로세움 → 모드 고르기
-// 가게 주인 → 게임 상점 · 대장장이 → 레이드 장신구 · B 장비창(왼쪽 나라 지도) · M 나라 지도(만진 이동석으로 순간 이동) · C 걸어 다닐 캐릭터 고르기 · 위에 내 투력 (WorldPanels)
+// 가게 주인 → 게임 상점 · 대장장이 → 레이드 장신구 · B 장비창(끼고 빼기만) · M 지도(만진 이동석으로 순간 이동 · 전체 지도 보기) · C 걸어 다닐 캐릭터 고르기 · 위에 내 투력 (WorldPanels)
 import { useEffect, useState } from "react";
 import { setWorldMusic } from "../audio/worldMusic";
 import { worldSfx } from "../audio/worldSounds";
@@ -13,12 +13,11 @@ import { loadText, saveText } from "../storage";
 import { StoryFace } from "../story/StoryFace";
 import { SceneView } from "../story/SceneView";
 import { CHAPTERS, FACTIONS, type ChapterId } from "../story/storyData";
-import { WarpMenu } from "./WarpMenu";
 import { WorldRide } from "./WorldRide";
 import { WorldPanels, type WorldPanel, type WorldRun } from "./WorldPanels";
 import { loadWorldChar, myPower, saveWorldChar } from "./worldPlayer";
 import { WorldStage } from "./WorldStage";
-import { touchWarp, warpTargets } from "./worldWarps";
+import { touchWarp } from "./worldWarps";
 import { fieldOpen, isField, placeXY, REGIONS, type Place } from "./worldPlaces";
 
 interface Props {
@@ -43,7 +42,6 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
   // 지금 지역 (나라 필드 또는 건물 안) · 들어온 문 앞 자리(나갈 때 돌아갈 곳)
   // n: 같은 지역 안 순간 이동 때 캔버스를 새로 만들려고 올림
   const [cur, setCur] = useState<{ id: string; spawn: readonly [number, number] | null; n?: number }>(() => ({ id: startField(), spawn: null }));
-  const [warp, setWarp] = useState<Place | null>(null);
   const [panel, setPanel] = useState<WorldPanel | null>(null);
   const [who, setWho] = useState(loadWorldChar);
   const [power, setPower] = useState(myPower);
@@ -61,7 +59,12 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
   // 나라 곡 (건물 안이면 들어온 나라) · 지도를 나가면 메인 화면 곡
   useEffect(() => setWorldMusic(field), [field]);
   useEffect(() => () => setWorldMusic(null), []);
-  const fieldName = fr.area ? t(fr.area.name) : FACTION_TEXT[faction].name[lang];
+  /** 필드 이름 (나라 이름 · 지역 이름) */
+  const nameOf = (id: string): string => {
+    const r = REGIONS[id]!;
+    return r.area ? t(r.area.name) : FACTION_TEXT[r.faction ?? "ascalon"].name[lang];
+  };
+  const fieldName = nameOf(field);
   useEffect(() => {
     if (isField(region)) saveText(FIELD_KEY, cur.id);
   }, [cur.id, region]);
@@ -90,7 +93,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
       setPanel(p.menu === "smith" ? { k: "smith" } : { k: "shop", tab: p.menu.slice(5) as never });
     } else if (p.kind === "warp") {
       touchWarp(cur.id, p);
-      setWarp(p);
+      setPanel({ k: "map", warp: true });
     } else if (p.kind === "pass" && p.to && p.land) {
       if (!fieldOpen(REGIONS[p.to])) return setReading(p);
       setCur({ id: p.to, spawn: [(p.land[0] + 0.5) * 16, (p.land[1] + 0.5) * 16] });
@@ -101,7 +104,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
     else if (p.scene) setScene(latestChapter());
     else setReading(p);
   };
-  const busy = !!reading || !!scene || !!warp || !!panel;
+  const busy = !!reading || !!scene || !!panel;
   useEffect(() => {
     // B 장비창 · C 캐릭터 고르기 (다른 창이 없을 때)
     if (busy) return;
@@ -121,13 +124,12 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
     window.addEventListener("keydown", esc);
     return () => window.removeEventListener("keydown", esc);
   }, [reading]);
-  // 이동석 창·지도에서 순간 이동 (건물 안이면 나라 필드로 나감)
-  const warpTo = (p: Place) => {
+  // 지도에서 순간 이동 (건물 안이면 나라 필드로 나감 · 다른 지역 돌이면 그 지역으로)
+  const warpTo = (p: Place, to: string) => {
     worldSfx("warp");
     const [x, y] = placeXY(p);
-    setCur({ id: field, spawn: [x, y + 12], n: (cur.n ?? 0) + 1 });
+    setCur({ id: to, spawn: [x, y + 12], n: (cur.n ?? 0) + 1 });
     setBack(null);
-    setWarp(null);
     setPanel(null);
     setNear(null);
   };
@@ -186,7 +188,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
           lang={lang}
           onClose={closePanel}
           onRun={onDungeon}
-          map={{ regionId: field, region: REGIONS[field]!, title: fieldName, me: isField(region) ? null : (back?.spawn ?? null), onGo: warpTo }}
+          map={{ regionId: field, nameOf, me: isField(region) ? null : (back?.spawn ?? null), onGo: warpTo }}
           onChar={(c) => {
             saveWorldChar(c);
             setWho(c);
@@ -194,7 +196,6 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
           }}
         />
       )}
-      {warp && <WarpMenu t={t} targets={warpTargets(cur.id, region, warp)} onGo={warpTo} onClose={() => setWarp(null)} />}
       {scene && (
         <div className="world-scene">
           <SceneView id={scene} lang={lang} t={t} onClose={closeScene} />

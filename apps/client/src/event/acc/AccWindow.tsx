@@ -1,7 +1,7 @@
 // 장비창 (시험 서버는 accTest로 모두 채움) (레이드 창의 '장비창' 버튼): 반지 3·목걸이·귀걸이·브로치 칸(점선, 무엇을 끼는 칸인지 글자) · 가진 장신구 · 자세히 · 합계 · 세트
-// 위쪽 승급·강화·재설정 버튼 → AccForge 창. Esc·바깥 누르면 닫힘
+// 위쪽 승급·강화·재설정 버튼 → AccForge 창 (세계 지도 B 장비창은 버튼 없음, 대장간에서만). Esc·바깥 누르면 닫힘
 import { ACC_SLOTS, accOf, accTotals, canEquip, equip, equipped, isEquipped, setCounts, type AccItem } from "@pixel-rogue/shared";
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import type { TextKey } from "../../i18n";
 import { loadChips } from "../../lobby/chips";
 import { AccForge, type ForgeMode } from "./AccForge";
@@ -13,8 +13,8 @@ import { TEST_OPEN } from "../../testFlags";
 type T = (key: TextKey) => string;
 const order = (a: AccItem, b: AccItem) => (b.legend !== undefined ? 1 : 0) - (a.legend !== undefined ? 1 : 0) || b.star - a.star || b.lv - a.lv || a.kind.localeCompare(b.kind) || a.set - b.set;
 
-/** side: 장비창 왼쪽에 붙는 창 (세계 지도에서 나라 지도) */
-export function AccWindow({ t, onClose, side }: { t: T; onClose: () => void; side?: ReactNode }) {
+/** forge: 승급·강화·재설정 버튼 (false = 세계 지도 B 장비창, 대장장이 앞에서만 할 수 있음) */
+export function AccWindow({ t, onClose, forge: canForge = true }: { t: T; onClose: () => void; forge?: boolean }) {
   useState(testFillOnce);
   const [bag, change] = useBag();
   const [pick, setPick] = useState<number | null>(null);
@@ -47,8 +47,7 @@ export function AccWindow({ t, onClose, side }: { t: T; onClose: () => void; sid
   const legSet = (set: number) => it && change((b) => (accOf(b, it.uid)!.legSet = set));
 
   return (
-    <div className={side ? "acc-back with-side" : "acc-back"} onClick={onClose}>
-      {side}
+    <div className="acc-back" onClick={onClose}>
       <div className="acc-win" role="dialog" aria-label={t("accGear")} onClick={(e) => e.stopPropagation()}>
         <header className="acc-top">
           <div>
@@ -57,15 +56,19 @@ export function AccWindow({ t, onClose, side }: { t: T; onClose: () => void; sid
           </div>
           <div className="acc-tools">
             <span className="acc-chips">🪙 {t("accChips").replace("{n}", loadChips().toLocaleString())}</span>
-            <button type="button" className="acc-tool promote" onClick={() => setForge("promote")}>
-              ⬆ {t("accPromote")}
-            </button>
-            <button type="button" className="acc-tool enhance" onClick={() => setForge("enhance")}>
-              ✦ {t("accEnhance")}
-            </button>
-            <button type="button" className="acc-tool reroll" onClick={() => setForge("reroll")}>
-              ⟳ {t("accReroll")}
-            </button>
+            {canForge && (
+              <>
+                <button type="button" className="acc-tool promote" onClick={() => setForge("promote")}>
+                  ⬆ {t("accPromote")}
+                </button>
+                <button type="button" className="acc-tool enhance" onClick={() => setForge("enhance")}>
+                  ✦ {t("accEnhance")}
+                </button>
+                <button type="button" className="acc-tool reroll" onClick={() => setForge("reroll")}>
+                  ⟳ {t("accReroll")}
+                </button>
+              </>
+            )}
             {TEST_OPEN && (
               <button type="button" className="acc-tool" onClick={() => change(fillAll)}>
                 {t("accTestFill")}
