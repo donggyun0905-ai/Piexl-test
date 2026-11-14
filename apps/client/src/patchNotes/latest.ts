@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.108",
+    date: "2026-11-14",
+    items: {
+      ko: ["스토리 9장 「교류」 컷 1~12 일러스트 추가 (탈라시아 회의장 · 은빛 탄환 · 연합국 진지 · 영물들의 도착 · 동굴의 백랑 · 교류의 장)"],
+      en: ["Added illustrations for Story Chapter 9 \"Exchange\" cuts 1–12 (the Thalassia council hall, silver bullets, the alliance camp, the divine beasts arrive, the white wolf in the cave, the Forum of Exchange)"],
+      ja: ["ストーリー第9章「交流」カット1〜12のイラストを追加（タラシアの会議場・銀の弾丸・連合国の陣地・霊獣たちの到着・洞窟の白狼・交流の場）"],
+    },
+  },
+  {
     version: "0.52.107",
     date: "2026-11-14",
     items: {
