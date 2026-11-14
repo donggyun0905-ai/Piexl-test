@@ -5,6 +5,7 @@ import { CHARACTER_GOALS, goalProgress } from "../characterGoals";
 import type { TextKey } from "../i18n";
 import { addChips, loadChips } from "../lobby/chips";
 import { addBought } from "../unlock/unlockStats";
+import { askCharCheck } from "./charArt";
 
 const fmt = (v: number) => (Number.isInteger(v) ? v.toLocaleString() : String(Math.round(v * 100) / 100));
 
@@ -22,6 +23,7 @@ export function GoalLine({ t, c, onOpen }: { t: (k: TextKey) => string; c: Chara
     addChips(-goal.buy);
     addBought(c);
     onOpen();
+    askCharCheck();
   };
   return (
     <div className="character-lock cs-goal">

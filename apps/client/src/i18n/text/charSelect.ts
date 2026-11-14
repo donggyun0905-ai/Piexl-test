@@ -28,6 +28,8 @@ export const CHAR_SELECT_TEXT = {
   csEmpty: l("찾는 캐릭터가 없습니다", "No characters found", "キャラクターが見つかりません"),
   csCancel: l("취소", "Cancel", "キャンセル"),
   csGo: l("진행하기", "Start", "進む"),
+  charArtNew: l("✦ 새 캐릭터 획득! ✦", "✦ New Character! ✦", "✦ 新キャラクター獲得！ ✦"),
+  charArtHint: l("빈 곳을 누르면 닫힙니다", "Click outside to close", "空いている所を押すと閉じます"),
   csStats: l("능력치", "Stats", "能力値"),
   masteryLv: l("숙련도 Lv.{n}", "Mastery Lv.{n}", "熟練度 Lv.{n}"),
   masteryNext: l("다음 레벨까지 {n}판", "{n} more runs to next level", "次のレベルまであと{n}回"),

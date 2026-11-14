@@ -1,6 +1,7 @@
 import { lazy, StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
+import { CharArtWatch } from "./select/CharArtWatch";
 import { uiClick } from "./audio/uiSounds";
 import { unlockAudio } from "./audio/sound";
 import { refreshBalance } from "./balance";
@@ -38,6 +39,7 @@ createRoot(root).render(
   <StrictMode>
     <Suspense fallback={null}>
       {tierPlay ? <TierPlay /> : <App />}
+      {!tierPlay && <CharArtWatch />}
     </Suspense>
   </StrictMode>,
 );

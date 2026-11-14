@@ -16,6 +16,7 @@ import { setRandomKit } from "./taboo/tabooStore";
 import { TEST_OPEN } from "./testFlags";
 import { hallUnlocked } from "./lobby/exhibits";
 import { CharPickDialog, skinName } from "./select/CharPickDialog";
+import { charCardSrc } from "./select/charArt";
 import { FACTION_TRAIT, factionOf, SELECT_TABS } from "./select/factions";
 import type { FactionId } from "./story/storyData";
 import { addPlay, cardOf, frameOf, masteryLevel, playsOf } from "./mastery/mastery";
@@ -117,6 +118,7 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
           const open = characterOpen(id);
           const card = cardOf(id);
           const lv = masteryLevel(playsOf(id));
+          const art = charCardSrc(id);
           return (
             <div key={id} className="character-item">
               <div className={`cs-frame frame-${frameOf(id)}`}>
@@ -124,9 +126,15 @@ export function CharacterSelect({ t, onSelect, onBack, showSeed = true, initialS
                   setPicking(id);
                   uiVoice(id, factionOf(id));
                 }}>
-                  <span className="character-look">
-                    <SkinPreview sheet={equippedSkin(id) ?? id} size={112} still />
-                  </span>
+                  {art ? (
+                    <span className="character-look art">
+                      <img src={art} alt="" loading="lazy" draggable={false} />
+                    </span>
+                  ) : (
+                    <span className="character-look">
+                      <SkinPreview sheet={equippedSkin(id) ?? id} size={112} still />
+                    </span>
+                  )}
                   <strong>{t(id as TextKey)}</strong>
                   <small className="cs-skin">{skinName(t, id)}</small>
                   {lv > 0 && <span className={`cs-lv-badge lv-${lv}`}>Lv.{lv}</span>}

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.8",
+    date: "2026-11-15",
+    items: {
+      ko: ["캐릭터 일러스트: 캐릭터 선택 창 카드 그림을 일러스트로 · 새 캐릭터를 얻으면 메인·선택 화면에 일러스트가 크게 떠오름(빈 곳을 누르면 닫힘) · 91명부터, 나머지는 그림이 오는 대로"],
+      en: ["Character illustrations: character select cards now show illustrations · getting a new character pops up its illustration on the main/select screen (click outside to close) · 91 characters for now, more as the art arrives"],
+      ja: ["キャラクターイラスト：キャラクター選択のカードの絵をイラストに・新キャラクターを手に入れるとメイン・選択画面にイラストが大きく表示（空いている所を押すと閉じる）・まず91人、残りは絵ができ次第"],
+    },
+  },
+  {
     version: "0.53.7",
     date: "2026-11-15",
     items: {

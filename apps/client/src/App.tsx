@@ -1,5 +1,6 @@
 import { CHARACTER_IDS, TD_MAPS, type CharacterId, type RunState, type SwarmMapId, type TdMapId } from "@pixel-rogue/shared";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { noteScreen, screenNow } from "./select/CharArtWatch";
 import { ProfileScreen } from "./ProfileScreen";
 import { takeRoomFromUrl } from "./battle/invite";
 import { CharacterSelect } from "./CharacterSelect";
@@ -88,6 +89,9 @@ export function App() {
 
   const screenRef = useRef(screen);
   screenRef.current = screen;
+  // 새로 얻은 캐릭터 일러스트를 띄워도 되는 화면인지 알림 (select/CharArtWatch)
+  screenNow(screen.name);
+  useEffect(() => void noteScreen(screen.name), [screen.name]);
   useEffect(() => {
     if (screen.name !== "title") setScreen(screen);
     // 처음 한 번만 (초대 링크·시드 링크로 바로 들어온 경우)
