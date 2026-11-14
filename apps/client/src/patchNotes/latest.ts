@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.109",
+    date: "2026-11-14",
+    items: {
+      ko: ["스토리 9장 컷 10 다시 그림: 이드라의 등을 미는 괴력난신이 제 모습으로 나오게"],
+      en: ["Redrew Story Chapter 9 cut 10: the Demigod pushing Idra forward now appears correctly"],
+      ja: ["ストーリー第9章カット10を描き直し：イドラの背中を押す怪力乱神が正しい姿で登場するように"],
+    },
+  },
+  {
     version: "0.52.108",
     date: "2026-11-14",
     items: {
