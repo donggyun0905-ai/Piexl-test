@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.107",
+    date: "2026-11-14",
+    items: {
+      ko: ["스토리 8장 컷 5 다시 그림: 배경을 지하 통로로"],
+      en: ["Redrew Story Chapter 8 cut 5: the background is now the underground tunnel"],
+      ja: ["ストーリー第8章カット5を描き直し：背景を地下通路に"],
+    },
+  },
+  {
     version: "0.52.106",
     date: "2026-11-14",
     items: {
