@@ -15,7 +15,8 @@ export const VIRDIA_FIELD: Region = {
   start: { tx: 7, ty: 56 },
   faction: "virdia",
   // 낙엽 땅 길 · 맑은 샘물 · 엘프 성(밑은 풀밭) · 깊은 숲에 빛나는 버드나무
-  skin: { path: "leafPath", water: "spring", floor: "grass", keep_art: "elf_castle", tree_pine2: "willow" },
+  skin: { path: "leafPath", water: "spring", floor: "grass", keep_art: "elf_castle", tree_pine2: "willow", marble: "elfStone" },
+  mini: { 28: "#dce4d4" },
   places: [
     // 세계수 광장 · 성채 · 약초 가게 · 정령의 샘
     { id: "virdiaTown", kind: "town", tx: 118, ty: 58, name: "wpVirdiaCity" },

@@ -75,6 +75,8 @@ export function groundOf(t: number): number {
   return t;
 }
 const gdef = (t: number): Ground => G[groundOf(t)] ?? NONE;
+/** 이 칸 땅 그림 이름 (발소리가 재질을 고를 때) */
+export const groundTex = (t: number): string | undefined => gdef(t).tex;
 
 /** 좌표 → 정해진 수 */
 export const hash2 = (x: number, y: number): number => {

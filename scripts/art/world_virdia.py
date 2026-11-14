@@ -8,6 +8,7 @@ import math
 import re
 from pathlib import Path
 
+from world_lands import pave
 from world_map import Grid
 
 W, H = 256, 160
@@ -66,6 +67,8 @@ def virdia():
         m.blob(cx, cy, r, "path", only=SOFT)
     # 국경 뒤는 숲으로 막힘 (길 끝만 남김)
     m.rect(0, 50, 0, 62, "tree")
+    # 숲속 성 안 풀밭은 흰 잎무늬 돌 (marble 칸 + skin elfStone) · 성 안 양쪽 정원만 풀밭과 꽃
+    pave(m, (99, 25, 157, 83), "marble", gardens=[(100, 60, 118, 82), (138, 60, 156, 82)])
     return m.g
 
 

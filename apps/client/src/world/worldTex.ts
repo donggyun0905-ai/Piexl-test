@@ -26,6 +26,8 @@ let skin: Readonly<Record<string, string>> = {};
 export function setArtSkin(s: Readonly<Record<string, string>> | undefined): void {
   skin = s ?? {};
 }
+/** 지역 그림 바꿔 끼운 뒤 이름 */
+export const skinName = (name: string): string => skin[name] || name;
 const pick = <T>(m: Map<string, T>, name: string): T | undefined => {
   const alt = skin[name];
   if (alt === "") return undefined;

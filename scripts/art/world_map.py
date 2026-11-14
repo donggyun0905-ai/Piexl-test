@@ -208,6 +208,9 @@ if __name__ == "__main__":
     from world_lands import check_doors
 
     check_doors(grids)
+    import world_props
+
+    world_props.write(grids)
     save("church", world_rooms.church())
     save("sea_train", world_rooms.sea_train())
     save("dawn_hideout", world_rooms.dawn_hideout())

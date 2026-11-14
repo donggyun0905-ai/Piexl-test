@@ -9,6 +9,7 @@ import math
 import re
 from pathlib import Path
 
+from world_lands import pave
 from world_map import Grid
 
 W, H = 256, 160
@@ -99,6 +100,8 @@ def ascalon():
     m.rect(231, 50, 233, 54, "path")
     # 동쪽 국경 뒤는 숲으로 막힘
     m.rect(250, 50, 255, 62, "tree")
+    # 성벽 안 풀밭은 돌길 바닥 (snowStone 칸 + skin tileRoad) · 동북 공원·서쪽 정원만 풀밭과 꽃
+    pave(m, (49, 19, 151, 87), "snowStone", gardens=[(124, 20, 150, 45), (50, 76, 60, 86)])
     return m.g
 
 

@@ -8,6 +8,7 @@ import math
 import re
 from pathlib import Path
 
+from world_lands import pave
 from world_map import Grid
 
 W, H = 256, 160
@@ -67,6 +68,8 @@ def helios():
     for x in (118, 136):
         m.rect(x, 146, x + 2, 155, "bridge", only=("water", "deep", "sand"))
     m.rect(110, 143, 146, 145, "redBrick")
+    # 성벽 안 풀밭은 누런 돌 포장 (snowStone 칸 + skin pilgrimRoad) · 북동 뒷골목 숲과 궁전 옆 정원만 풀밭과 꽃
+    pave(m, (61, 23, 195, 111), "snowStone", gardens=[(160, 26, 192, 58), (62, 102, 74, 110), (182, 102, 194, 110)])
     return m.g
 
 

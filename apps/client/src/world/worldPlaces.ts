@@ -22,6 +22,7 @@ import { SEONGGUK_FIELD, SEONGGUK_INSIDE } from "./places/seonggukField";
 import { UNDERSEA_FIELD, UNDERSEA_INSIDE } from "./places/underseaField";
 import { WINDTOWN_FIELD, WINDTOWN_INSIDE } from "./places/windtownField";
 import { CHAPELS_INSIDE, HOUSES_INSIDE } from "./places/interiors";
+import { PROPS } from "./places/propsLayout";
 import { DECO_R, type DecoArt } from "./worldDeco";
 import { WTILE } from "./worldMap";
 import type { Mood } from "./worldMood";
@@ -84,30 +85,33 @@ export interface Region {
 }
 export const skinOf = (r: Region): Readonly<Record<string, string>> | undefined => (r.indoor ? { ...INDOOR_SKIN, ...r.skin } : r.skin);
 
+/** 나라 필드에 길가 가로등·집 앞 소품 더하기 (생성기 world_props가 쓴 표) */
+const withProps = (id: string, r: Region): Region => ({ ...r, places: [...r.places, ...(PROPS[id] ?? []).map(([art, tx, ty], i): Place => ({ id: `street${i}`, kind: "deco", tx, ty, name: r.places[0]!.name, art }))] });
+
 /** 나라 필드 · 건물 안 (장소 표는 places/ 나라마다) */
 export const REGIONS: Record<string, Region> = {
-  ascalon: ASCALON_FIELD,
+  ascalon: withProps("ascalon", ASCALON_FIELD),
   ...ASCALON_INSIDE,
-  terracore: TERRA_FIELD,
+  terracore: withProps("terracore", TERRA_FIELD),
   ...TERRA_INSIDE,
-  virdia: VIRDIA_FIELD,
+  virdia: withProps("virdia", VIRDIA_FIELD),
   ...VIRDIA_INSIDE,
-  helios: HELIOS_FIELD,
+  helios: withProps("helios", HELIOS_FIELD),
   ...HELIOS_INSIDE,
   desert: DESERT_FIELD,
-  silber: SILBER_FIELD,
+  silber: withProps("silber", SILBER_FIELD),
   ...SILBER_INSIDE,
-  thalassia: THAL_FIELD,
+  thalassia: withProps("thalassia", THAL_FIELD),
   ...THAL_INSIDE,
   ...DAWN_INSIDE,
   hell: HELL_FIELD,
-  undersea: UNDERSEA_FIELD,
+  undersea: withProps("undersea", UNDERSEA_FIELD),
   ...UNDERSEA_INSIDE,
-  cyber: CYBER_FIELD,
+  cyber: withProps("cyber", CYBER_FIELD),
   ...CYBER_INSIDE,
-  windtown: WINDTOWN_FIELD,
+  windtown: withProps("windtown", WINDTOWN_FIELD),
   ...WINDTOWN_INSIDE,
-  seongguk: SEONGGUK_FIELD,
+  seongguk: withProps("seongguk", SEONGGUK_FIELD),
   ...SEONGGUK_INSIDE,
   ...HOUSES_INSIDE,
   ...CHAPELS_INSIDE,

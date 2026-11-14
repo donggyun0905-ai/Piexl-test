@@ -8,6 +8,9 @@ export const SILBER_FIELD: Region = {
   map: "world/silber.png",
   start: { tx: 128, ty: 152 },
   faction: "silber",
+  // 성벽 안 바닥 (생성기 world_lands.pave가 깐 칸에 나라 그림)
+  skin: { floor: "tileRoad" },
+  mini: { 8: "#9aa0a8" },
   places: [
     // 수호성 광장 · 성채 · 무기고 · 민가
     { id: "silberTown", kind: "town", tx: 120, ty: 90, name: "wpSilberFort" },

@@ -4,6 +4,7 @@
 - 북서 지하 묘지 던전 · 남서 성스러운 호수 · 꽃 정원
 """
 from world_lands import check as check_places, edge_noise, houses, write_layout as write_ts
+from world_lands import pave
 from world_map import Grid
 
 W, H = 256, 160
@@ -33,6 +34,8 @@ def seongguk():
     m.road([(64, 80), (40, 60), (46, 30)], only=SOFT)
     m.road([(102, 120), (80, 132), (52, 128)], only=SOFT)
     m.blob(46, 28, 3.2, "floor", only=SOFT)
+    # 성도 안은 흰 대리석 (snowStone 칸 + skin marble) · 수도원 앞뜰 둘만 풀밭과 꽃
+    pave(m, (65, 41, 139, 119), "snowStone", gardens=[(66, 42, 86, 58), (118, 42, 138, 58)])
     return m.g
 
 

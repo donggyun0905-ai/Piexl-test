@@ -12,8 +12,8 @@ export const HELIOS_FIELD: Region = {
   start: { tx: 128, ty: 12 },
   faction: "helios",
   // 술집 = 창고 칸에 술집 겉모습 그림
-  skin: { warehouse_t: "tavern_outside", wetStone: "redBrick" },
-  mini: { 50: "#a85a3a" },
+  skin: { warehouse_t: "tavern_outside", wetStone: "redBrick", snowStone: "pilgrimRoad" },
+  mini: { 50: "#a85a3a", 42: "#c8b88c" },
   places: [
     // 대리석 광장 · 황제 석상(레이드 아레나) · 분수 · 깃발
     { id: "heliosTown", kind: "town", tx: 120, ty: 56, name: "wpHeliosCity" },
@@ -27,6 +27,8 @@ export const HELIOS_FIELD: Region = {
     { id: "gateSouth", kind: "deco", tx: 128, ty: 112, name: "wpHeliosCity", art: "cityGate" },
     { id: "chapelDoor", kind: "door", tx: 112, ty: 106, name: "wpChapel", to: "heliosChapel" },
     { id: "palaceDoor", kind: "door", tx: 128, ty: 39, name: "wpPalace", to: "heliosPalace" },
+    // 궁전 문 수문장 (왕좌는 비워 둠 — 꼭두각시 왕 그림이 오면 그 자리에)
+    { id: "heliosEclipse", kind: "npc", tx: 126, ty: 40, name: "eclipse", who: "eclipse", line: "wnEclipse" },
     { id: "heliosSlayer", kind: "npc", tx: 122, ty: 42, name: "slayer", who: "slayer", line: "wnSlayer" },
     deco("palaceBannerL", 104, 44, "banner", "wpPalace"),
     deco("palaceBannerR", 152, 44, "banner", "wpPalace"),
@@ -65,7 +67,7 @@ export const HELIOS_FIELD: Region = {
 
 const inner = (id: string, tx: number, ty: number, name: Place["name"], art: Place["art"]): Place => ({ id, kind: "deco", tx, ty, name, art });
 
-/** 궁전 안 (아스칼론 성채와 같은 안 지도, 이클립스) · 시장(베두인 = 뽑기) · 재봉소(닌자 = 스킨) · 술집(여관 안 지도, 사멸) */
+/** 궁전 안 (아스칼론 성채와 같은 안 지도, 빈 왕좌 · 이클립스는 궁전 문 앞 수문장) · 시장(베두인 = 뽑기) · 재봉소(닌자 = 스킨) · 술집(여관 안 지도, 사멸) */
 export const HELIOS_INSIDE: Record<string, Region> = {
   heliosPalace: {
     map: "world/ascalon_keep.png",
@@ -75,7 +77,6 @@ export const HELIOS_INSIDE: Record<string, Region> = {
     skin: { ...HALL_SKIN, floor: "marble" },
     places: [
       { id: "keepExit", kind: "exit", tx: 9, ty: 11, name: "wpGoOut" },
-      { id: "heliosEclipse", kind: "npc", tx: 9, ty: 4, name: "eclipse", who: "eclipse", line: "wnEclipse" },
       inner("throne", 9, 2, "wpPalace", "throne"),
       ...[4, 14].flatMap((x) => [4, 8].map((y) => inner(`pillar${x}${y}`, x, y, "wpPalace", "pillar"))),
       inner("bannerL", 2, 3, "wpPalace", "banner"),

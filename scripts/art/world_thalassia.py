@@ -8,6 +8,7 @@ import math
 import re
 from pathlib import Path
 
+from world_lands import pave
 from world_map import Grid
 
 W, H = 256, 160
@@ -60,6 +61,8 @@ def thalassia():
     m.road([(150, 122), (190, 132), (210, 140)], only=SOFT)
     for (cx, cy, r) in [(166, 15, 2.6), (8, 92, 2.4), (210, 140, 3.0)]:
         m.blob(cx, cy, r, "path", only=SOFT)
+    # 항구 도시 안 풀밭은 돌길 바닥 (snowStone 칸 + skin tileRoad)
+    pave(m, (72, 44, 168, 122), "snowStone", gardens=[(150, 110, 162, 120)])
     return m.g
 
 

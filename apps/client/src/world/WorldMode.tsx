@@ -4,6 +4,8 @@
 // 국경 통로 → 옆 나라 필드 (그 나라가 스토리에서 열렸을 때만, 아니면 막혔다는 글) · 기억의 탑·콜로세움 → 모드 고르기
 // 가게 주인 → 게임 상점 · 대장장이 → 레이드 장신구 · B 장비창(왼쪽 나라 지도) · M 나라 지도(만진 이동석으로 순간 이동) · C 걸어 다닐 캐릭터 고르기 · 위에 내 투력 (WorldPanels)
 import { useEffect, useState } from "react";
+import { setWorldMusic } from "../audio/worldMusic";
+import { worldSfx } from "../audio/worldSounds";
 import type { Lang, TextKey } from "../i18n";
 import { FACTION_TEXT } from "../i18n/story/world";
 import { factionOpen, storyStage } from "../progress/storyStage";
@@ -56,6 +58,9 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
   const fr = REGIONS[field]!;
   const faction = fr.faction ?? "ascalon";
   const color = fr.area?.color ?? FACTIONS.find((f) => f.id === faction)?.color ?? "#ffffff";
+  // 나라 곡 (건물 안이면 들어온 나라) · 지도를 나가면 메인 화면 곡
+  useEffect(() => setWorldMusic(field), [field]);
+  useEffect(() => () => setWorldMusic(null), []);
   const fieldName = fr.area ? t(fr.area.name) : FACTION_TEXT[faction].name[lang];
   useEffect(() => {
     if (isField(region)) saveText(FIELD_KEY, cur.id);
@@ -70,6 +75,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
     setScene(null);
   };
   const use = (p: Place) => {
+    worldSfx(p.kind === "door" ? (p.open && !factionOpen(p.open) ? "locked" : "door") : p.kind === "exit" ? "exit" : p.kind === "pass" ? (fieldOpen(REGIONS[p.to ?? ""]) ? "pass" : "locked") : p.kind === "sign" ? "read" : p.kind === "npc" ? "talk" : "read");
     if (p.kind === "door" && p.open && !factionOpen(p.open)) setReading(p);
     else if (p.kind === "door" && p.to && REGIONS[p.to]) {
       const [x, y] = placeXY(p);
@@ -117,6 +123,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
   }, [reading]);
   // 이동석 창·지도에서 순간 이동 (건물 안이면 나라 필드로 나감)
   const warpTo = (p: Place) => {
+    worldSfx("warp");
     const [x, y] = placeXY(p);
     setCur({ id: field, spawn: [x, y + 12], n: (cur.n ?? 0) + 1 });
     setBack(null);

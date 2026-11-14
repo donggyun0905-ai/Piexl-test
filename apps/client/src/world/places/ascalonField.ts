@@ -9,6 +9,9 @@ export const ASCALON_FIELD: Region = {
   map: "world/ascalon.png",
   start: { tx: 100, ty: 67 },
   faction: "ascalon",
+  // 성벽 안 바닥 (생성기 world_lands.pave가 깐 칸에 나라 그림)
+  skin: { snowStone: "tileRoad" },
+  mini: { 42: "#a8a8a0" },
   places: [
     // 광장 · 성채
     { id: "ascalonCastle", kind: "town", tx: 94, ty: 61, name: "wpAscalonCastle" },

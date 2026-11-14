@@ -82,3 +82,19 @@ def check_doors(grids):
                 bad.append((name, x, y, x0, x1))
     assert not bad, f"건물 가운데가 아닌 문: {bad}"
     print("문 가운데 검사 OK")
+
+
+def pave(m, rect, k, gardens=(), soft=("grass", "flower")):
+    """도시 안 바닥: rect(x0, y0, x1, y1) 안 풀·꽃 칸을 포장 칸 k로 (그림은 Region.skin) · gardens 안은 풀밭으로 두고 가장자리에 꽃"""
+    x0, y0, x1, y1 = rect
+    inside = lambda x, y: any(a <= x <= c and b <= y <= d for (a, b, c, d) in gardens)
+    for y in range(y0, y1 + 1):
+        for x in range(x0, x1 + 1):
+            if m.get(x, y) in soft and not inside(x, y):
+                m.put(x, y, k)
+    for (a, b, c, d) in gardens:
+        for y in range(b, d + 1):
+            for x in range(a, c + 1):
+                if m.get(x, y) in ("grass", "flower"):
+                    edge = x in (a, c) or y in (b, d)
+                    m.put(x, y, "flower" if edge or m.rnd.random() < 0.12 else "grass")

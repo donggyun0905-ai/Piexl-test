@@ -7,6 +7,7 @@
 import re
 from pathlib import Path
 
+from world_lands import pave
 from world_map import Grid
 
 W, H = 256, 160
@@ -60,6 +61,8 @@ def silber():
     for (x, y, r) in [(208, 24, 2.6), (214, 94, 6.0), (126, 150, 3.0)]:
         m.blob(x, y, r, "frozenMud", only=SOFT)
     decorate(m)
+    # 요새 안 눈밭은 돌 바닥 (floor 칸 + skin tileRoad), 길은 눈 덮인 돌 그대로
+    pave(m, (89, 58, 167, 111), "floor", soft=("snow",))
     return m.g
 
 

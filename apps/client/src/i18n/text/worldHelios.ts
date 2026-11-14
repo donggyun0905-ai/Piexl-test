@@ -39,6 +39,6 @@ export const WORLD_HELIOS_TEXT = {
   wnOni: { ko: "밭일엔 방망이가 제격이지! 흙 고르기도, 멧돼지 쫓기도!", en: "A club's perfect for farm work! Leveling soil, chasing off boars!", ja: "畑仕事には金棒が一番だ！土ならしにも、猪よけにもな！" },
   wnEater: { ko: "수로 아래에서 배고픈 것들이 기어 나와. 내 그림자도 배가 고프대.", en: "Hungry things crawl up from under the aqueduct. My shadow says it's hungry too.", ja: "水路の下から腹を空かせたものが這い出てくる。俺の影も腹ペコだってさ。" },
   wnPlague: { ko: "바닷바람이 좋군. 병은 습한 곳을 좋아하지… 아, 걱정 마시오. 나는 의사요.", en: "Fine sea breeze. Sickness loves damp places… Oh, don't worry. I'm a doctor.", ja: "いい潮風だ。病は湿った場所を好む…ああ、心配はいらない。私は医者だ。" },
-  wnEclipse: { ko: "제국의 태양이 그대를 맞이한다. 낮이 밝을수록 밤도 깊으니, 두 얼굴 모두 기억해 두어라.", en: "The Sun of the Empire greets you. The brighter the day, the deeper the night. Remember both faces.", ja: "帝国の太陽が汝を迎えよう。昼が明るいほど夜も深い。二つの顔をどちらも覚えておけ。" },
+  wnEclipse: { ko: "황궁 문은 내가 지킨다. 낮이 밝을수록 밤도 깊은 법, 안으로 들어가려거든 두 얼굴 모두 기억해 두어라.", en: "I guard the gates of the palace. The brighter the day, the deeper the night. If you would enter, remember both faces.", ja: "皇宮の門は我が守る。昼が明るいほど夜も深い。中へ入るなら、二つの顔をどちらも覚えておけ。" },
   wnSamyeol: { ko: "뭘 마실래? …아래층? 무슨 소린지 모르겠는데. 여긴 그냥 술집이야.", en: "What'll you drink? …Downstairs? No idea what you mean. This is just a tavern.", ja: "何を飲む？…地下？何のことだかわからないな。ここはただの酒場だ。" },
 } satisfies Record<string, Record<Lang, string>>;

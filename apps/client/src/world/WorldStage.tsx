@@ -6,13 +6,16 @@ import { drawBody } from "../game/render/actors";
 import { bindWalkInput, clampView, createWalker, fitCanvas, stepWalker } from "../lobby/walker";
 import { loadText, saveText } from "../storage";
 import { createChunkCache } from "./worldChunks";
-import { canStandWorld, loadWorldMap, WTILE, type WorldMap } from "./worldMap";
+import { canStandWorld, loadWorldMap, tileAt, WTILE, type WorldMap } from "./worldMap";
 import { shadow } from "./worldArt";
 import { drawButterflies, drawCloudShadows, drawVignette, drawWaterFx } from "./worldFx";
 import { drawPlace, drawPlaceLabel } from "./worldPlaceArt";
 import { loadWorldArt, setArtSkin } from "./worldTex";
 import { drawMood } from "./worldMood";
 import { drawWeather, setLook } from "./worldWeather";
+import { ambient, footstep } from "../audio/worldSounds";
+import { groundTex } from "./worldGround";
+import { skinName } from "./worldTex";
 import { here } from "./worldWarps";
 import { pushTrees, type Drawable } from "./worldTrees";
 import { hitsNpc, nearPlace, placeXY, skinOf, type Place, type Region } from "./worldPlaces";
@@ -86,6 +89,8 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
     let last = performance.now();
     let raf = 0;
     let saved = 0;
+    // 발소리 다음 때 (걸을 때만, 0.32초마다)
+    let nextStep = 0;
 
     const frame = (now: number) => {
       const dt = Math.min(0.05, (now - last) / 1000);
@@ -101,6 +106,12 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       if (map && chunks) {
         const m = map;
         if (!cb.current.paused) stepWalker(me, input.keys, dt, SPEED, (x, y) => canStandWorld(m, x, y, R) && !hitsNpc(region, x, y, R));
+        if (me.moving && t >= nextStep) {
+          nextStep = t + 0.32;
+          const g = groundTex(tileAt(m, Math.floor(me.x / WTILE), Math.floor(me.y / WTILE)));
+          footstep(g && skinName(g));
+        }
+        ambient(regionId, !!region.indoor, t);
         [here.r, here.x, here.y] = [regionId, me.x, me.y];
         const n = nearPlace(region, me.x, me.y);
         if (n !== near) {

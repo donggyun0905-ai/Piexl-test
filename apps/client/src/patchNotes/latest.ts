@@ -4,6 +4,24 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.5",
+    date: "2026-11-15",
+    items: {
+      ko: [
+        "세계 지도(시험 중): 성벽 안 풀밭을 나라마다 포장 바닥으로(아스칼론·탈라시아 돌길 · 헬리오스 누런 돌 · 성국 흰 대리석 · 비르디아 성 흰 잎무늬 돌 · 실베르 돌 바닥), 공원·정원만 풀밭과 꽃 · 길가에 가로등·금빛 화로·화로·촛대, 집 앞에 통·상자·화분 · 이클립스는 왕좌가 아닌 헬리오스 궁전 문 앞 수문장으로",
+        "세계 지도 소리: 발밑 땅에 따라 풀·눈·얼음·쇠·나무·돌·모래 발소리 · 문 여는 소리·나가는 소리·순간 이동·표지판·말 걸기·잠긴 문 · 나라마다 환경음(산들바람·새소리·눈보라·파도·용암·물속·비·기계·성가 울림, 건물 안은 불 타닥) · 나라마다 다른 곡 열두 개(건물 안은 들어온 나라 곡)",
+      ],
+      en: [
+        "World Map (testing): grass inside city walls is now paved for each nation (stone streets in Ascalon and Thalassia · sandstone in Helios · white marble in Seongguk · leaf-carved white stone in Virdia's castle · stone yards in Silber), with only parks and gardens left green with flowers · lamp posts, golden braziers, braziers and candle stands along streets, barrels, crates and potted plants by doors · Eclipse now guards the Helios palace gate instead of sitting on the throne",
+        "World Map sounds: footsteps change with the ground (grass, snow, ice, metal, wood, stone, sand) · door creaks, leaving, warps, signs, talking and locked doors · ambience for each nation (breeze, birds, blizzard, waves, lava, underwater, rain, machines, chapel echoes, crackling fires indoors) · twelve nation themes (interiors use the theme of the nation you entered from)",
+      ],
+      ja: [
+        "世界地図（テスト中）：城壁の中の草地を国ごとに舗装（アスカロン・タラシアは石畳・ヘリオスは砂岩・聖国は白い大理石・ヴィルディアの城は葉模様の白い石・シルベルは石の床）、公園と庭だけ草地と花に・道沿いに街灯・金の火鉢・火鉢・燭台、家の前に樽・木箱・植木鉢・エクリプスは玉座ではなくヘリオス宮殿の門の門番に",
+        "世界地図の音：足元の地面で草・雪・氷・鉄・木・石・砂の足音・扉のきしみ・外に出る音・転移・看板・会話・鍵のかかった扉・国ごとの環境音（そよ風・鳥・吹雪・波・溶岩・水中・雨・機械・聖歌の響き、建物の中は火のはぜる音）・国ごとに違う曲12曲（建物の中は入ってきた国の曲）",
+      ],
+    },
+  },
+  {
     version: "0.53.4",
     date: "2026-11-15",
     items: {

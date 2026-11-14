@@ -11,9 +11,9 @@ export const SEONGGUK_FIELD: Region = {
   map: "world/seongguk.png",
   start: { tx: 248, ty: 80 },
   faction: "seongguk",
-  skin: { grass: "garden", path: "pilgrimRoad", floor: "holyStone", wallTop: "holyStone", house_red: "monastery", house_blue: "monastery", keep_art: "cathedral", cave: "stairs_down" },
+  skin: { grass: "garden", path: "pilgrimRoad", floor: "holyStone", wallTop: "holyStone", house_red: "monastery", house_blue: "monastery", keep_art: "cathedral", cave: "stairs_down", snowStone: "marble" },
   mood: "holy",
-  mini: { 1: "#7ad05a", 2: "#d8d0c0", 7: "#e8e4dc", 8: "#f4f0e4", 15: "#c87a4a", 16: "#f8f4e8" },
+  mini: { 1: "#7ad05a", 2: "#d8d0c0", 7: "#e8e4dc", 8: "#f4f0e4", 15: "#c87a4a", 16: "#f8f4e8", 42: "#ece6da" },
   places: [
     // 동쪽 끝 순례길 (대사막으로)
     { id: "toDesert", kind: "pass", tx: 253, ty: 80, name: "wpDesertRoad", to: "desert", land: [7, 132] },
