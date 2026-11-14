@@ -7,15 +7,17 @@
 ## 정한 것
 
 - **16:9 가로 · 2k** (스토리 그림과 같은 크기)
-- **배경 앞에 머리부터 발끝까지 전신이 다 보이는 인물, 가운데** (그림 높이의 75% 정도, 무기·날개·꼬리까지 잘리지 않게). 획득 연출·스킨 보기에도 그대로 쓸 수 있게
+- **상징 배경 앞에 머리부터 발끝까지 전신이 다 보이는 인물, 가운데** (그림 높이의 75~80%, 무기·날개·꼬리까지 잘리지 않게). 획득 연출·스킨 보기에도 그대로 쓸 수 있게
 - 화풍: **고급 픽셀아트, 실제 비율**(꼬마 체형 아님, 7등신 정도). 게임 그림(꼬마 체형)의 색·옷·무기·성별은 그대로 지키고 몸 비율만 키움
-- 배경은 캐릭터보다 조금 어둡고 덜 자세하게 → 인물이 또렷하게 보이게
+- **배경은 풍경이 아니라 상징 무늬** (2026-11-15 사용자 결정): 밝은 흰 바탕 위에 그 캐릭터를 나타내는 무늬(아치 창·금빛 고리·리본·상징 소품·깃털·별 조각 등)가 인물 뒤로 반투명하게 겹쳐 떠 있는 키아트 구성. 캐릭터별 '배경' 줄의 장소·소재를 이 무늬로 바꿔 씀
+- **몸은 사람 비율** (SD·꼬마 체형 금지, 머리 작게·7~7.5등신·긴 다리, 어린이·동물·괴물은 제 크기)
+- 기준 그림: `art/선택일러스트/파수꾼.png` (2026-11-15 확정)
 
 ## 쓰는 법 (Higgsfield)
 
 1. Claude 채팅·Cowork의 Higgsfield에서 **Nano Banana Pro · 16:9 · 2k** (Claude Code에서는 무제한 생성이 막혀 크레딧이 듦)
 2. 참고 그림 1번 = 그 캐릭터의 **원본 그림** (아래 각 캐릭터의 '참고 그림', 모두 `art/캐릭터/` 안)
-3. 참고 그림 마지막 = **화풍 기준 그림**: 처음 한 장(파수꾼 추천)을 마음에 들 때까지 만든 뒤, 그 결과를 다음 캐릭터부터 맨 뒤에 같이 올림 (연작처럼 같은 화풍)
+3. 참고 그림 마지막 = **화풍 기준 그림 `art/선택일러스트/파수꾼.png`** (2026-11-15 확정, 몸 비율·화풍·상징 배경 구성의 기준. 파수꾼의 캐릭터·무늬 자체는 따라 하지 않음)
    - **100명을 한 번에 만들려면 `docs/CHAR_ART_BATCH.md`의 글을 통째로 붙여 넣기** (참고 그림은 Higgsfield에 미리 올려 둠)
 4. 프롬프트 = 아래 **[공통]** + 캐릭터별 영어 프롬프트
 5. 위아래 검은 띠가 생기면 Claude가 잘라서 넣음
@@ -23,7 +25,7 @@
 ### [공통] — 모든 캐릭터 앞에
 
 ```
-Reference images: the character design sheet(s) come first; if the LAST reference image is a finished illustration (not a sprite sheet), use it ONLY as the art style guide and do not copy its character or background. Use the character design sheet (small chibi game art) to keep this character's hair color and style, eye color, outfit, colors, accessories, weapon and gender exactly, but do NOT copy the chibi proportions. The sheet shows the same character several times in different directions and poses; draw that character only ONCE (one single figure, unless the prompt asks for several characters), and ignore the sheet's plain black or bright green background. Style: beautiful high-detail pixel art illustration for a game character select screen, visible crisp pixels, clean dark pixel outlines, rich saturated colors, dramatic rim lighting, no blur, no painterly smudge, no photo texture. Body: realistic anime proportions (about 7 heads tall; children, animals and creatures keep their natural size), attractive detailed face, confident dynamic full-body pose. Composition: 16:9, the WHOLE character from head to feet (including weapon, wings and tail) is visible and centered, filling about 75% of the image height, with a small margin above the head and below the feet, nothing important cut off. The character stands in front of a detailed background scene that fits them; the background is slightly darker and less detailed than the character so the character stands out. Full-bleed image, no black bars, no letterboxing, no border, no frame, no text, no letters, no logo, no watermark, no signature, no UI. Original design; do not imitate any other game or anime.
+Reference images: the character design sheet(s) come first; the LAST reference image is a finished illustration of a different knight character: use it ONLY as the guide for art style, adult body proportions and the kind of symbolic backdrop layout, and do NOT copy its character, colors or motifs. Use the character design sheet (small chibi game art) to keep this character's hair color and style, eye color, outfit, colors, accessories, weapon and gender exactly, but do NOT copy the chibi proportions. The sheet shows the same character several times in different directions and poses; draw that character only ONCE (one single figure, unless the prompt asks for several characters), and ignore the sheet's plain black or bright green background. Body: a real human look, NOT super-deformed, NOT chibi: small head, about 7 to 7.5 heads tall, long legs, realistic torso and limbs, attractive detailed face with normal-size eyes (children, animals and creatures keep their natural size and shape). Confident, elegant dynamic full-body pose. Style: beautiful high-detail pixel art illustration for a game character select screen, visible crisp pixels, clean dark pixel outlines, rich saturated colors, rim lighting, no blur, no painterly smudge, no photo texture. Background: NO realistic landscape or scenery. A bright, airy, mostly white / very pale background with a layered decorative symbolic backdrop floating behind the character like key-art: large thin golden or colored circular rings and arcs, a frame or arch shape related to the character's place, long flowing ribbons in the character's colors, pale translucent silhouettes of objects that symbolize the character (from the "Background" line below, turned into floating motifs), small sparkles and light fragments. The motifs are semi-transparent, softer and paler than the character, in the character's own color palette, with plenty of white space, so the character clearly stands out. Composition: 16:9, the WHOLE character from head to feet (including weapon, wings and tail) is visible and centered, filling about 75-80% of the image height, nothing important cut off. Full-bleed image, no black bars, no letterboxing, no border, no frame, no text, no letters, no logo, no watermark, no signature, no UI. Original design; do not imitate any other game, anime or artist.
 ```
 
 ## 진영별 배경 느낌
