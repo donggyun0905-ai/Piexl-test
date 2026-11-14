@@ -4,7 +4,7 @@ import { shadow } from "./worldArt";
 import { drawDeco } from "./worldDeco";
 import { placeXY, type Place } from "./worldPlaces";
 import { drawObj, objOf } from "./worldTex";
-import { drawShopIcon, drawTower, drawWarp } from "./worldPlaceSigns";
+import { drawColosseumGate, drawShopIcon, drawTower, drawWarp } from "./worldPlaceSigns";
 
 /** 주민 몸 반지름 (플레이어와 같음) */
 const NPC_R = 5;
@@ -27,6 +27,10 @@ export function drawPlace(ctx: CanvasRenderingContext2D, p: Place, t: number, co
       box(ctx, "#ffe9a8", x - 3, y + 1 + a, 6, 1);
       box(ctx, "#ffe9a8", x - 2, y + 2 + a, 4, 1);
     }
+    return;
+  }
+  if (p.gate === "colosseum") {
+    drawColosseumGate(ctx, x, y, t);
     return;
   }
   if (p.gate === "tower") {
@@ -124,7 +128,7 @@ export function drawPlaceLabel(ctx: CanvasRenderingContext2D, p: Place, text: st
   const [x, y] = placeXY(p);
   ctx.font = "7px sans-serif";
   const w = Math.ceil(ctx.measureText(text).width) + 6;
-  const top = y - (p.kind === "town" ? 34 : p.kind === "npc" ? 30 : p.kind === "door" ? 28 : p.kind === "exit" ? 16 : p.kind === "warp" ? 30 : p.gate === "tower" ? 40 : 24);
+  const top = y - (p.kind === "town" ? 34 : p.kind === "npc" ? 30 : p.kind === "door" ? 28 : p.kind === "exit" ? 16 : p.kind === "warp" ? 30 : p.gate === "tower" ? 40 : p.gate === "colosseum" ? 44 : 24);
   ctx.fillStyle = "rgba(12,10,18,0.8)";
   ctx.fillRect(Math.round(x - w / 2), top, w, 10);
   ctx.fillStyle = "#ffe9a8";

@@ -1,11 +1,12 @@
-// 세계 지도 화면 (아스칼론 필드): 캔버스 + 나가기 · 나라 이름 · 장소 앞 버튼(모바일) · 글 창(표지판·마을·주민 말, Esc로 닫힘)
+// 세계 지도 화면 (나라 필드 · 건물 안, 마지막에 있던 나라에서 시작): 캔버스 + 나가기 · 나라 이름 · 장소 앞 버튼(모바일) · 글 창(표지판·마을·주민 말, Esc로 닫힘)
 // 이야기 장면(SceneView, 일러스트 + 대사): 처음 오면 1장 · 장군에게 말 걸면 지금 연 장 · 던전 입구 → 혼자 하기(끝나면 지도로, worldReturn)
 // 건물 문 → 건물 안 지도(검게 사라졌다 나타남) · 나가는 문 → 들어온 문 앞 · 순간 이동석(만진 돌끼리, WarpMenu) · 세계 지도(줌 아웃)는 W4
+// 국경 통로 → 옆 나라 필드 (그 나라가 스토리에서 열렸을 때만, 아니면 막혔다는 글) · 기억의 탑·콜로세움 → 모드 고르기
 // 가게 주인 → 게임 상점 · 대장장이 → 레이드 장신구 · B 장비창 · C 걸어 다닐 캐릭터 고르기 · 위에 내 투력 (WorldPanels)
 import { useEffect, useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { FACTION_TEXT } from "../i18n/story/world";
-import { storyStage } from "../progress/storyStage";
+import { factionOpen, storyStage } from "../progress/storyStage";
 import { loadText, saveText } from "../storage";
 import { StoryFace } from "../story/StoryFace";
 import { SceneView } from "../story/SceneView";
@@ -25,15 +26,21 @@ interface Props {
   onDungeon: (m: WorldRun) => void;
 }
 
-const REGION = "ascalon" as const;
+const HOME = "ascalon";
 const INTRO_KEY = "worldIntro";
+const FIELD_KEY = "worldRegion";
+/** 마지막에 있던 나라 필드 (스토리에서 안 열렸으면 아스칼론) */
+function startField(): string {
+  const f = REGIONS[loadText(FIELD_KEY) ?? ""]?.faction;
+  return f && factionOpen(f) ? loadText(FIELD_KEY)! : HOME;
+}
 /** 지금 연 장 중 마지막 (1장은 처음부터) */
 const latestChapter = (): ChapterId => CHAPTERS[Math.max(1, storyStage()) - 1]!.id;
 
 export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
   // 지금 지역 (나라 필드 또는 건물 안) · 들어온 문 앞 자리(나갈 때 돌아갈 곳)
   // n: 같은 지역 안 순간 이동 때 캔버스를 새로 만들려고 올림
-  const [cur, setCur] = useState<{ id: string; spawn: readonly [number, number] | null; n?: number }>({ id: REGION, spawn: null });
+  const [cur, setCur] = useState<{ id: string; spawn: readonly [number, number] | null; n?: number }>(() => ({ id: startField(), spawn: null }));
   const [warp, setWarp] = useState<Place | null>(null);
   const [panel, setPanel] = useState<WorldPanel | null>(null);
   const [who, setWho] = useState(loadWorldChar);
@@ -44,7 +51,13 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
   };
   const [back, setBack] = useState<{ id: string; spawn: readonly [number, number] } | null>(null);
   const region = REGIONS[cur.id]!;
-  const color = FACTIONS.find((f) => f.id === REGION)?.color ?? "#ffffff";
+  // 지금 나라 (건물 안이면 들어오기 전 필드)
+  const field = region.faction ? cur.id : (back?.id ?? HOME);
+  const faction = REGIONS[field]?.faction ?? "ascalon";
+  const color = FACTIONS.find((f) => f.id === faction)?.color ?? "#ffffff";
+  useEffect(() => {
+    if (region.faction) saveText(FIELD_KEY, cur.id);
+  }, [cur.id, region.faction]);
   const [near, setNear] = useState<Place | null>(null);
   const [reading, setReading] = useState<Place | null>(null);
   // 처음 온 사람: 1장 이야기부터
@@ -61,7 +74,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
       setCur({ id: p.to, spawn: null });
       setNear(null);
     } else if (p.kind === "exit") {
-      setCur(back ?? { id: REGION, spawn: null });
+      setCur(back ?? { id: field, spawn: null });
       setBack(null);
       setNear(null);
     } else if (p.menu) {
@@ -69,7 +82,13 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
     } else if (p.kind === "warp") {
       touchWarp(cur.id, p);
       setWarp(p);
-    } else if (p.gate === "tower") setPanel({ k: "tower" });
+    } else if (p.kind === "pass" && p.to && p.land) {
+      const f = REGIONS[p.to]?.faction;
+      if (!f || !factionOpen(f)) return setReading(p);
+      setCur({ id: p.to, spawn: [(p.land[0] + 0.5) * 16, (p.land[1] + 0.5) * 16] });
+      setBack(null);
+      setNear(null);
+    } else if (p.gate) setPanel({ k: "gate", gate: p.gate });
     else if (p.kind === "dungeon") onDungeon("solo");
     else if (p.scene) setScene(latestChapter());
     else setReading(p);
@@ -99,7 +118,10 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
     setWarp(null);
     setNear(null);
   };
-  const body = (p: Place): TextKey => p.line ?? (p.kind === "town" ? "wpAscalonCastleText" : (`${p.name}Text` as TextKey));
+  const body = (p: Place): TextKey => p.line ?? (`${p.name}Text` as TextKey);
+  /** 장소 앞 버튼 글자 */
+  const action = (p: Place): string =>
+    p.gate === "tower" ? `🗼 ${t("wpGoIn")}` : p.gate === "colosseum" ? `🏟 ${t("wpGoIn")}` : p.kind === "dungeon" ? `⚔ ${t("wpEnter")}` : p.kind === "npc" ? `💬 ${t("wpTalk")}` : p.kind === "door" ? `🚪 ${t("wpGoIn")}` : p.kind === "exit" ? `🚪 ${t("wpGoOut")}` : p.kind === "warp" ? `✨ ${t("wpWarpUse")}` : p.kind === "pass" ? `🚶 ${t("wpCross")}` : `📜 ${t("wpRead")}`;
   return (
     <div className="lobby-mode world-mode">
       <WorldStage key={`${cur.id}-${cur.n ?? 0}`} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} who={who} paused={busy} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} />
@@ -107,7 +129,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
         {t("lobbyExit")}
       </button>
       <p className="world-region" style={{ color }}>
-        {region.title ? t(region.title) : FACTION_TEXT[REGION].name[lang]}
+        {region.title ? t(region.title) : FACTION_TEXT[faction].name[lang]}
       </p>
       <p className="lobby-help">{t("worldHelp")}</p>
       <div className="world-hud">
@@ -123,7 +145,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
       {state !== "ok" && <p className="world-loading">{t(state === "fail" ? "worldFail" : "worldLoading")}</p>}
       {near && !busy && (
         <button type="button" className="primary lobby-enter" onClick={() => use(near)}>
-          {near.gate === "tower" ? `🗼 ${t("wpGoIn")}` : near.kind === "dungeon" ? `⚔ ${t("wpEnter")}` : near.kind === "npc" ? `💬 ${t("wpTalk")}` : near.kind === "door" ? `🚪 ${t("wpGoIn")}` : near.kind === "exit" ? `🚪 ${t("wpGoOut")}` : near.kind === "warp" ? `✨ ${t("wpWarpUse")}` : `📜 ${t("wpRead")}`} · F
+          {action(near)} · F
         </button>
       )}
       {reading && (

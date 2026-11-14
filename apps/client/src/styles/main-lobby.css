@@ -273,3 +273,8 @@
   overflow: auto;
   background: var(--bg, #0c0a12);
 }
+/* 세계 지도: 조작 안내는 오른쪽 아래 (위 가운데 나라 이름과 겹치지 않게) */
+.world-mode .lobby-help {
+  top: auto;
+  bottom: max(12px, env(safe-area-inset-bottom));
+}

@@ -8,6 +8,7 @@ const shop = (id: string, at: readonly [number, number], name: Place["name"], to
 export const ASCALON_FIELD: Region = {
   map: "world/ascalon.png",
   start: { tx: 100, ty: 67 },
+  faction: "ascalon",
   places: [
     // 광장 · 성채
     { id: "ascalonCastle", kind: "town", tx: 94, ty: 61, name: "wpAscalonCastle" },
@@ -42,6 +43,7 @@ export const ASCALON_FIELD: Region = {
     { id: "forestDungeon", kind: "dungeon", tx: 24, ty: 30, name: "wpForestDungeon" },
     { id: "ascalonSign", kind: "sign", tx: 217, ty: 52, name: "wpSignAscalon" },
     { id: "terraSign", kind: "sign", tx: 246, ty: 53, name: "wpSignTerra" },
+    { id: "toTerra", kind: "pass", tx: 248, ty: 56, name: "wpToTerra", to: "terracore", land: [7, 56] },
     // 기억의 탑 (무한 모드·영웅의 길 고르기)
     { id: "memoryTower", kind: "dungeon", tx: 232, ty: 49, name: "wpTower", gate: "tower" },
     // 순간 이동석 (한 번 만지면 다른 이동석에서 골라 갈 수 있음)

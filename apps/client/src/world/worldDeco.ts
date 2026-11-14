@@ -23,6 +23,8 @@ export function drawDeco(g: Ctx, art: DecoArt, x: number, y: number, t: number):
     case "rack":
     case "potions":
     case "dummy":
+    case "gear":
+    case "smoke":
       drawShopDeco(g, art, x, b, t);
       break;
     case "bed":

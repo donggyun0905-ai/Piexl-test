@@ -1,11 +1,12 @@
 // 가게·대장간·훈련장 소품 (장소 표의 장식 deco, worldDeco가 부름): 계산대 · 모루 · 화덕(불 깜박임·빛) · 무기 걸이 · 물약 선반 · 허수아비
+// 테라코어: 도는 톱니 기념물 · 굴뚝 연기(부딪히지 않음, 굴뚝 칸에 둠)
 // (x, b) = 칸 가운데 x · 아래 끝 y
 import { shadow } from "./worldArt";
 
-export type ShopDeco = "counter" | "anvil" | "forge" | "rack" | "potions" | "dummy";
+export type ShopDeco = "counter" | "anvil" | "forge" | "rack" | "potions" | "dummy" | "gear" | "smoke";
 
 /** 부딪힘 반지름 (픽셀) */
-export const SHOP_DECO_R: Record<ShopDeco, number> = { counter: 8, anvil: 6, forge: 9, rack: 7, potions: 8, dummy: 5 };
+export const SHOP_DECO_R: Record<ShopDeco, number> = { counter: 8, anvil: 6, forge: 9, rack: 7, potions: 8, dummy: 5, gear: 14, smoke: -99 };
 
 type Ctx = CanvasRenderingContext2D;
 const box = (g: Ctx, c: string, x: number, y: number, w: number, h: number) => {
@@ -68,6 +69,40 @@ export function drawShopDeco(g: Ctx, art: ShopDeco, x: number, b: number, t: num
           box(g, c, x - 6 + i * 3, b - 17 + r * 6, 2, 3);
           box(g, "#f0f0f0", x - 6 + i * 3, b - 18 + r * 6, 2, 1);
         }
+      }
+      break;
+    case "gear": {
+      // 받침돌 위 큰 톱니 (천천히 돎) · 가운데 축
+      shadow(g, x, b, 14, 4, 0.35);
+      box(g, "#6e6680", x - 12, b - 6, 24, 6);
+      box(g, "#a49cb2", x - 12, b - 6, 24, 1);
+      const cy = b - 24;
+      const a0 = t * 0.6;
+      for (let i = 0; i < 10; i++) {
+        const a = a0 + (i * Math.PI) / 5;
+        box(g, "#a8803a", Math.round(x + Math.cos(a) * 15) - 2, Math.round(cy + Math.sin(a) * 15) - 2, 5, 5);
+      }
+      g.fillStyle = "#c89a48";
+      g.beginPath();
+      g.arc(x, cy, 13, 0, Math.PI * 2);
+      g.fill();
+      g.fillStyle = "#8a6a2a";
+      g.beginPath();
+      g.arc(x, cy, 6, 0, Math.PI * 2);
+      g.fill();
+      box(g, "#4a525c", x - 2, cy - 2, 4, 4);
+      box(g, "#5a5468", x - 2, cy + 6, 4, b - 6 - cy - 6);
+      break;
+    }
+    case "smoke":
+      // 굴뚝 위로 피어오르는 연기 셋 (위로 갈수록 커지고 옅어짐)
+      for (let i = 0; i < 3; i++) {
+        const k = (t * 0.35 + i / 3) % 1;
+        const r = 3 + k * 7;
+        g.fillStyle = `rgba(200,200,210,${0.5 * (1 - k)})`;
+        g.beginPath();
+        g.arc(x + Math.sin(t + i * 2) * 2 + k * 6, b - 40 - k * 34, r, 0, Math.PI * 2);
+        g.fill();
       }
       break;
     case "dummy": {

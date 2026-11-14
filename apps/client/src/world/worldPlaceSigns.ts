@@ -114,3 +114,23 @@ export function drawTower(g: Ctx, x: number, y: number, t: number): void {
   box(g, "#a49cb2", x - 7, b - 17, 1, 17);
   box(g, "#a49cb2", x + 6, b - 17, 1, 17);
 }
+
+/** 콜로세움 입구: 큰 돌 아치 · 양옆 깃발(펄럭임) · 위 월계 문장 (x, y = 입구 칸 가운데) */
+export function drawColosseumGate(g: Ctx, x: number, y: number, t: number): void {
+  const b = y + 6;
+  box(g, "#b8a888", x - 20, b - 30, 9, 30);
+  box(g, "#b8a888", x + 11, b - 30, 9, 30);
+  box(g, "#cfc2a4", x - 20, b - 30, 40, 7);
+  box(g, "#e6dcc4", x - 20, b - 30, 40, 1);
+  box(g, "#8e7e62", x - 11, b - 23, 22, 1);
+  for (const sx of [-20, 11]) for (let r = 0; r < 30; r += 5) box(g, "#9a8a6c", x + sx, b - 30 + r, 9, 1);
+  // 월계 문장
+  box(g, "#d8a838", x - 5, b - 29, 10, 5);
+  box(g, "#4e7a3a", x - 8, b - 28, 3, 3);
+  box(g, "#4e7a3a", x + 5, b - 28, 3, 3);
+  // 깃발
+  for (const [sx, c] of [[-16, "#c84a3a"], [15, "#3e5e9e"]] as const) {
+    box(g, "#3a2414", x + sx, b - 46, 1, 16);
+    for (let i = 0; i < 8; i++) box(g, c, x + sx + 1 + i, b - 45 + Math.round(Math.sin(t * 4 - i * 0.7) * (i / 7)), 1, 7);
+  }
+}

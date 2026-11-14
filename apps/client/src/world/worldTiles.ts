@@ -27,6 +27,12 @@ export const WT = {
   woodFloor: 17,
   innerWall: 18,
   carpet: 19,
+  /** 테라코어: 철판 바닥 · 철길(걸을 수 있음) · 공장(막힘, 굴뚝) · 파이프(막힘) · 콜로세움 돌벽(막힘) */
+  metal: 20,
+  rail: 21,
+  factory: 22,
+  pipe: 23,
+  arena: 24,
 } as const;
 export type WorldTile = (typeof WT)[keyof typeof WT];
 
@@ -59,6 +65,11 @@ export const TILE_DEFS: readonly TileDef[] = [
   { key: [184, 136, 88], solid: false },
   { key: [56, 44, 64], solid: true },
   { key: [168, 32, 48], solid: false },
+  { key: [140, 150, 160], solid: false },
+  { key: [90, 70, 60], solid: false },
+  { key: [180, 90, 40], solid: true },
+  { key: [60, 140, 140], solid: true },
+  { key: [210, 190, 150], solid: true },
 ];
 
 /** 픽셀 색 → 땅 종류 (딱 맞는 색이 없으면 가장 가까운 색) */

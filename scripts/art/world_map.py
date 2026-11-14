@@ -13,6 +13,7 @@ KEY = {
     "rock": (104, 88, 72), "bridge": (152, 104, 56), "snow": (240, 244, 252), "flower": (232, 120, 168),
     "field": (216, 192, 72), "fence": (168, 72, 40), "house": (200, 64, 120),
     "keep": (96, 96, 168), "woodFloor": (184, 136, 88), "innerWall": (56, 44, 64), "carpet": (168, 32, 48),
+    "metal": (140, 150, 160), "rail": (90, 70, 60), "factory": (180, 90, 40), "pipe": (60, 140, 140), "arena": (210, 190, 150),
 }
 OUT = Path(__file__).resolve().parents[2] / "apps/client/public/world"
 
@@ -147,6 +148,12 @@ if __name__ == "__main__":
     write_layout()
     check(field)
     save("ascalon", field)
+    from world_terra import check as check_terra, terra, write_layout as terra_layout
+
+    tf = terra()
+    terra_layout()
+    check_terra(tf)
+    save("terracore", tf)
     save("ascalon_shop", ascalon_shop())
     save("ascalon_smithy", ascalon_smithy())
     save("ascalon_inn", ascalon_inn())

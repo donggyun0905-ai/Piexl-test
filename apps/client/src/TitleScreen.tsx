@@ -79,7 +79,7 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   if (world)
     return (
       <Suspense fallback={null}>
-        <WorldMode t={t} lang={lang} onExit={() => setWorld(false)} onDungeon={(m) => (markWorldReturn(), setWorld(false), startNew(m === "endless", false, m === "hero"))} />
+        <WorldMode t={t} lang={lang} onExit={() => setWorld(false)} onDungeon={(m) => (markWorldReturn(), setWorld(false), m === "paewang" ? onPaewang() : startNew(m === "endless", false, m === "hero"))} />
       </Suspense>
     );
 

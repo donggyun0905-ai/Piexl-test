@@ -3,14 +3,16 @@
 // 지도 그림을 고치면 places/ 좌표도 같이 맞춤
 import type { CharacterId } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
+import type { FactionId } from "../story/storyData";
 import type { ShopTab } from "../shop/ShopScreen";
 import { ASCALON_FIELD } from "./places/ascalonField";
 import { ASCALON_INSIDE } from "./places/ascalonInside";
+import { TERRA_FIELD, TERRA_INSIDE } from "./places/terraField";
 import { DECO_R, type DecoArt } from "./worldDeco";
 import { WTILE } from "./worldMap";
 
-/** npc = 말 거는 사람 (부딪힘) · door = 건물 문(들어가기) · exit = 건물 안 나가는 문 · deco = 가구 (부딪힘, 말 못 검) · warp = 순간 이동석 */
-export type PlaceKind = "dungeon" | "town" | "sign" | "npc" | "door" | "exit" | "deco" | "warp";
+/** npc = 말 거는 사람 (부딪힘) · door = 건물 문(들어가기) · exit = 건물 안 나가는 문 · deco = 가구 (부딪힘, 말 못 검) · warp = 순간 이동석 · pass = 국경 통로(다른 나라 필드로, 그 나라가 스토리에서 열렸을 때만) */
+export type PlaceKind = "dungeon" | "town" | "sign" | "npc" | "door" | "exit" | "deco" | "warp" | "pass";
 /** 말 걸면 여는 창: 게임 상점(처음 탭) · 대장간(레이드 장신구 장비창·승급·강화·재설정) */
 export type WorldMenu = `shop:${ShopTab}` | "smith";
 /** 가게 문 위 간판 그림 */
@@ -30,8 +32,10 @@ export interface Place {
   /** door: 들어갈 건물 안 Region 이름 · deco: 가구 그림 */
   to?: string;
   art?: DecoArt;
-  /** dungeon: tower = 기억의 탑 (무한 모드·영웅의 길 고르는 창, 없으면 기본 혼자 하기) */
-  gate?: "tower";
+  /** dungeon: tower = 기억의 탑 (무한 모드·영웅의 길 고르는 창) · colosseum = 콜로세움 (패왕전) · 없으면 기본 혼자 하기 */
+  gate?: "tower" | "colosseum";
+  /** pass: 건너간 나라에서 설 칸 */
+  land?: readonly [number, number];
   /** npc: 말 걸면 여는 창 (대사 대신) */
   menu?: WorldMenu;
   /** door: 가게 간판 */
@@ -43,6 +47,8 @@ export interface Region {
   map: string;
   start: { tx: number; ty: number };
   places: readonly Place[];
+  /** 나라 필드: 진영 (이름·깃발 색·국경 통로가 열리는 장) */
+  faction?: FactionId;
   /** 건물 안: 이름(나라 이름 대신) · 구름·나비 없음 */
   title?: TextKey;
   indoor?: boolean;
@@ -52,6 +58,8 @@ export interface Region {
 export const REGIONS: Record<string, Region> = {
   ascalon: ASCALON_FIELD,
   ...ASCALON_INSIDE,
+  terracore: TERRA_FIELD,
+  ...TERRA_INSIDE,
 };
 
 /** 장소 가운데(픽셀) */

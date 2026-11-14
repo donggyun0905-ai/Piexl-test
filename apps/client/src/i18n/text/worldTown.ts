@@ -20,7 +20,7 @@ export const WORLD_TOWN_TEXT = {
   wpSignDesertText: { ko: "이 앞은 사막. 모래 아래에는 옛 나라 세레스티아가 묻혀 있다고 한다. 지금은 길이 막혀 있다.", en: "Desert lies ahead. They say the old kingdom of Celestia lies buried beneath the sand. The way is closed for now.", ja: "この先は砂漠。砂の下には古の国セレスティアが眠っているという。今は道がふさがっている。" },
   wpForestDungeon: { ko: "숲 던전 입구", en: "Forest dungeon entrance", ja: "森のダンジョンの入口" },
   wpSignTerra: { ko: "국경 표지판", en: "Border sign", ja: "国境の看板" },
-  wpSignTerraText: { ko: "이 숲 너머는 테라코어. 지금은 길이 막혀 있다.", en: "Beyond this forest lies Terracore. The way is blocked for now.", ja: "この森の向こうはテラコア。今は道がふさがっている。" },
+  wpSignTerraText: { ko: "동쪽 숲길을 지나면 테라코어. 국경이 열리면 걸어서 건너갈 수 있다.", en: "Through the eastern forest road lies Terracore. Once the border opens, you can walk across.", ja: "東の森の道を抜けるとテラコア。国境が開けば歩いて越えられる。" },
   wpWarpPlaza: { ko: "광장 이동석", en: "Square warp stone", ja: "広場の転移石" },
   wpWarpFarm: { ko: "농촌 이동석", en: "Farm warp stone", ja: "農村の転移石" },
   wpWarpDungeon: { ko: "던전 앞 이동석", en: "Dungeon warp stone", ja: "ダンジョン前の転移石" },
