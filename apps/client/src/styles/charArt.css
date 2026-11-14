@@ -102,3 +102,58 @@
     text-shadow: 0 0 4px #000, 0 0 16px #ffcc33, 0 0 28px #ffaa00;
   }
 }
+/* 스토리 대화 초상화 (select/charArt의 face 그림) */
+.story-portrait {
+  flex: none;
+  border: 2px solid #c8a050;
+  border-radius: 4px;
+  background: #f4f6fb;
+  object-fit: cover;
+}
+/* 판 결과 창 옆 캐릭터 일러스트 (깼으면 빛나고, 졌으면 어둡게) */
+.result-with-art {
+  gap: 0;
+}
+.result-art {
+  width: min(58vw, 820px);
+  max-height: 86vh;
+  object-fit: contain;
+  margin-right: -40px;
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 70%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 70%, transparent 100%);
+  animation: char-art-in 0.6s ease-out;
+  user-select: none;
+  pointer-events: none;
+}
+.result-art.lost {
+  filter: grayscale(0.75) brightness(0.6);
+}
+.result-art.won {
+  filter: drop-shadow(0 0 18px rgba(255, 210, 90, 0.55));
+}
+.result-with-art .modal {
+  position: relative;
+  max-height: 92vh;
+  overflow-y: auto;
+}
+@media (max-width: 760px) {
+  .result-with-art {
+    flex-direction: column;
+  }
+  .result-art {
+    width: min(100%, 520px);
+    max-height: 30vh;
+    margin: 0 0 -24px;
+  }
+}
+/* 캐릭터 설명 창(I) 위쪽 일러스트 */
+.ci-art {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1376 / 768;
+  margin-bottom: 8px;
+  border: 2px solid #3a3150;
+  border-radius: 4px;
+  object-fit: cover;
+  background: #f4f6fb;
+}

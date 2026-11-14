@@ -5,6 +5,7 @@ import type { CharacterId } from "@pixel-rogue/shared";
 import { onCloudApplied } from "../cloudSave";
 import { loadText, saveText } from "../storage";
 import { TEST_OPEN } from "../testFlags";
+import { noteMasteryUp } from "../select/charArt";
 
 /** 레벨 n에 필요한 판 수 (Lv.1 = 1판 … Lv.7 = 80판) */
 export const MASTERY_AT = [1, 3, 7, 15, 30, 50, 80] as const;
@@ -60,7 +61,10 @@ export function addPlay(c: CharacterId): void {
   const m = load();
   const n = (m.plays[c] ?? 0) + 1;
   save({ ...m, plays: { ...m.plays, [c]: n } });
-  if (masteryLevel(n) > masteryLevel(n - 1)) uiSfx("uiLevelUp");
+  if (masteryLevel(n) > masteryLevel(n - 1)) {
+    uiSfx("uiLevelUp");
+    noteMasteryUp(c, masteryLevel(n));
+  }
 }
 
 /** 보이는 테두리 레벨 (고른 것, 없으면 지금 레벨 · 지금 레벨보다 높게는 못 씀) */

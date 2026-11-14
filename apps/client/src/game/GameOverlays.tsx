@@ -1,4 +1,5 @@
-import type { ScoreBreakdown } from "@pixel-rogue/shared";
+import type { CharacterId, ScoreBreakdown } from "@pixel-rogue/shared";
+import { charArtSrc } from "../select/charArt";
 import { SettingsPanel } from "../SettingsPanel";
 import { useState, type ReactNode } from "react";
 import type { Lang, TextKey } from "../i18n";
@@ -47,6 +48,8 @@ interface Props {
   extra?: ReactNode;
   /** 멈추지 않는 판(협동·레이드): 일시정지 대신 '설정' 창 */
   live?: boolean;
+  /** 결과 창 옆에 크게 띄울 캐릭터 일러스트 */
+  character?: CharacterId;
 }
 
 /** 시드 표시 + 공유 (모바일은 공유 창, PC는 주소 복사) */
@@ -77,11 +80,13 @@ export function SeedLine({ seedText, t }: { seedText: string; t: (key: TextKey) 
 }
 
 /** 일시정지 · 나가기 확인 · 결과 창 */
-export function GameOverlays({ overlay, result, time, seedText, lang, t, onClose, onExit, onRetry, extra, live }: Props) {
+export function GameOverlays({ overlay, result, time, seedText, lang, t, onClose, onExit, onRetry, extra, live, character }: Props) {
   if (result) {
     const s = result.score;
+    const art = character ? charArtSrc(character) : null;
     return (
-      <div className="game-overlay">
+      <div className={`game-overlay${art ? " result-with-art" : ""}`}>
+        {art && <img className={`result-art${result.won ? " won" : " lost"}`} src={art} alt="" draggable={false} />}
         <div className="modal">
           <h2>{t(result.won ? "cleared" : "defeated")}</h2>
           {/* 깼으면 걸린 시간을 크게 */}

@@ -1,4 +1,4 @@
-// 캐릭터 선택 일러스트: 그림 주소 · 새로 얻은 캐릭터 찾기 (얻은 순간 CharArtReveal로 크게 보여 줌)
+// 캐릭터 선택 일러스트: 그림 주소 · 새로 얻은 캐릭터·오른 숙련도 찾기 (CharArtWatch가 CharArtReveal로 크게 보여 줌)
 import { ALL_CHARACTER_IDS, CHARACTER_IDS, type CharacterId } from "@pixel-rogue/shared";
 import { characterOpen } from "../characterGoals";
 import { hallUnlocked } from "../lobby/exhibits";
@@ -9,6 +9,8 @@ import { CHAR_ART } from "./charArtList";
 
 /** 일러스트 주소 (그림이 없으면 null) · 그림은 scripts/art/char_art.py로 넣음 */
 export const charArtSrc = (c: CharacterId): string | null => (CHAR_ART.has(c) ? `${import.meta.env.BASE_URL}sprites/charArt/${c}.webp` : null);
+/** 스토리 대화 초상화용 (머리·가슴, 256px) */
+export const charFaceSrc = (c: string): string | null => (CHAR_ART.has(c) ? `${import.meta.env.BASE_URL}sprites/charArt/face/${c}.webp` : null);
 /** 선택 창 카드용 (가운데 정사각형 400px) */
 export const charCardSrc = (c: CharacterId): string | null => (CHAR_ART.has(c) ? `${import.meta.env.BASE_URL}sprites/charArt/card/${c}.webp` : null);
 
@@ -33,4 +35,20 @@ export function takeNewChars(): CharacterId[] {
   const fresh = raw ? now.filter((c) => !seen.has(c)) : [];
   if (!raw || fresh.length) saveText(KEY, JSON.stringify([...seen, ...fresh]));
   return fresh.filter((c) => CHAR_ART.has(c));
+}
+
+/** 숙련도가 오른 캐릭터 (판을 시작할 때 오르므로 적어 두었다가 판이 끝나고 메인·선택 화면에서 보여 줌) */
+const UPS = "charArtUps";
+type MasteryUp = { c: CharacterId; lv: number };
+export function noteMasteryUp(c: CharacterId, lv: number): void {
+  if (!CHAR_ART.has(c)) return;
+  const raw = loadText(UPS);
+  const list = (raw ? (JSON.parse(raw) as MasteryUp[]) : []).filter((u) => u.c !== c);
+  saveText(UPS, JSON.stringify([...list, { c, lv }]));
+}
+export function takeMasteryUps(): MasteryUp[] {
+  const raw = loadText(UPS);
+  if (!raw) return [];
+  saveText(UPS, "[]");
+  return JSON.parse(raw) as MasteryUp[];
 }

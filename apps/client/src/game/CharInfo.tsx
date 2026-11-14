@@ -7,6 +7,7 @@ import { itemDesc, itemName } from "../i18n/items";
 import { GameScreen } from "./GameScreen";
 import { ItemIcon } from "./itemIcon";
 import { RichText } from "./RichText";
+import { charArtSrc } from "../select/charArt";
 
 interface Props {
   character: CharacterId;
@@ -46,6 +47,7 @@ export default function CharInfo({ character, lang, t, onClose }: Props) {
       </header>
       <div className="ci-body">
         <section className="ci-left">
+          {charArtSrc(character) && <img className="ci-art" src={charArtSrc(character)!} alt="" draggable={false} />}
           <ul className="ci-guide">
             {charGuide(character, lang).map((line) => (
               <li key={line}>

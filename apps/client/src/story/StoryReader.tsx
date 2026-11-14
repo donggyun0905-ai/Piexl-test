@@ -40,7 +40,7 @@ export function StoryReader({ id, lang, t, onClose, done = "storyToList" }: { id
             </p>
           ) : (
             <div key={i} className="story-line">
-              <StoryFace who={p[0]} size={40} />
+              <StoryFace who={p[0]} size={56} art />
               <div>
                 <b>{speakerName(p[0], lang, t)}</b>
                 <p>{p[1]}</p>

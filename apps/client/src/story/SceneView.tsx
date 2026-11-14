@@ -7,6 +7,7 @@ import { CHAPTER_TITLE } from "../i18n/story/world";
 import { drawSceneBg, SCENE_H, SCENE_W } from "./sceneBg";
 import { cutImage, cutIndex, SCENE_CUTS } from "./sceneCuts";
 import { StoryFace, speakerName } from "./StoryFace";
+import { charFaceSrc } from "../select/charArt";
 import { CHAPTERS, speakerSheet, type ChapterId } from "./storyData";
 import { StoryReader } from "./StoryReader";
 import { canFull, useFullscreen } from "./useFullscreen";
@@ -104,7 +105,7 @@ export function SceneView({ id, lang, t, onClose }: Props) {
       </div>
       <div className="scene-bottom">
         <div className={`scene-box${who ? "" : " narration"}`} key={i}>
-          {who && <StoryFace who={who} size={48} />}
+          {who && <StoryFace who={who} size={charFaceSrc(who) ? 96 : 48} art />}
           <div>
             {who && <b>{speakerName(who, lang, t)}</b>}
             <p>{typeof p === "string" ? p : p[1]}</p>

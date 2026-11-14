@@ -291,6 +291,7 @@ export function GameScreen(props: GameScreenProps) {
           extra={canChallenge ? <LastBossChoice t={t} onChoose={challenge} /> : props.resultExtra}
           time={result ? formatTime(result.ticks) : ""}
           live={!canPause}
+          character={characterId}
         />
       )}
     </div>

@@ -1,9 +1,9 @@
-// 캐릭터를 새로 얻으면 일러스트를 띄움: 메인·캐릭터 선택 화면에 올 때(App이 noteScreen으로 알림)·칩으로 산 직후(askCharCheck) 찾아봄 · 여럿이면 하나씩
+// 캐릭터를 새로 얻거나 숙련도가 오르면 일러스트를 띄움: 메인·캐릭터 선택 화면에 올 때(App이 noteScreen으로 알림)·칩으로 산 직후(askCharCheck) 찾아봄 · 여럿이면 하나씩
 import type { CharacterId } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 import { detectLang, type TextKey } from "../i18n";
 import { TEXT } from "../i18n/text";
-import { CHAR_CHECK, takeNewChars } from "./charArt";
+import { CHAR_CHECK, takeMasteryUps, takeNewChars } from "./charArt";
 import { CharArtReveal } from "./CharArtReveal";
 
 /** 일러스트를 띄워도 되는 화면 (게임·대결 중에는 띄우지 않음) */
@@ -20,7 +20,7 @@ const t = (k: TextKey): string => TEXT[k][detectLang()];
 
 export function CharArtWatch() {
   const [calm, setCalm] = useState(() => CALM.has(current));
-  const [queue, setQueue] = useState<CharacterId[]>([]);
+  const [queue, setQueue] = useState<{ c: CharacterId; title: string }[]>([]);
   useEffect(() => {
     const onScreen = (e: Event) => setCalm(CALM.has((e as CustomEvent<string>).detail));
     window.addEventListener(SCREEN, onScreen);
@@ -29,13 +29,14 @@ export function CharArtWatch() {
   useEffect(() => {
     if (!calm) return;
     const check = () => {
-      const fresh = takeNewChars();
-      if (fresh.length) setQueue((q) => [...q, ...fresh.filter((c) => !q.includes(c))]);
+      const fresh = takeNewChars().map((c) => ({ c, title: t("charArtNew") }));
+      const ups = takeMasteryUps().map(({ c, lv }) => ({ c, title: `✦ ${t("masteryLv").replace("{n}", String(lv))} ✦` }));
+      if (fresh.length || ups.length) setQueue((q) => [...q, ...fresh, ...ups]);
     };
     check();
     window.addEventListener(CHAR_CHECK, check);
     return () => window.removeEventListener(CHAR_CHECK, check);
   }, [calm]);
-  const c = calm ? queue[0] : undefined;
-  return c ? <CharArtReveal t={t} c={c} fresh onClose={() => setQueue((q) => q.slice(1))} /> : null;
+  const top = calm ? queue[0] : undefined;
+  return top ? <CharArtReveal key={queue.length} t={t} c={top.c} title={top.title} onClose={() => setQueue((q) => q.slice(1))} /> : null;
 }

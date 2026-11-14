@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.9",
+    date: "2026-11-15",
+    items: {
+      ko: ["캐릭터 일러스트를 더 많은 곳에: 판 결과 창 옆에 크게(깨면 빛나고, 쓰러지면 어둡게) · 스토리 대화의 말하는 사람 초상화 · 숙련도가 오르면 판이 끝난 뒤 일러스트와 함께 알림 · 캐릭터 설명 창(I) 위쪽 그림"],
+      en: ["Character illustrations in more places: shown large beside the run result (glowing on a clear, dimmed on a defeat) · speaker portraits in story scenes · a mastery level-up is announced with the illustration after the run · on top of the character guide (I)"],
+      ja: ["キャラクターイラストをさらに多くの場所に：結果画面の横に大きく（クリアで輝き、倒れると暗く）・ストーリー会話の話し手の肖像・熟練度が上がるとプレイ後にイラスト付きでお知らせ・キャラクター説明（I）の上部"],
+    },
+  },
+  {
     version: "0.53.8",
     date: "2026-11-15",
     items: {
