@@ -4,6 +4,21 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.104",
+    date: "2026-11-14",
+    items: {
+      ko: [
+        "스토리 7장 「시작」 컷 1~8 일러스트 추가 (지하 감옥의 악마 · 새벽의 성흔 · 황금 결계와 천의 사도)",
+      ],
+      en: [
+        "Added illustrations for Story Chapter 7 \"Beginning\" cuts 1–8 (the demon in the underground prison, the Dawn Stigmata, the golden barrier and the Apostle of Heaven)",
+      ],
+      ja: [
+        "ストーリー第7章「始まり」カット1〜8のイラストを追加（地下牢の悪魔・暁の聖痕・黄金の結界と天の使徒）",
+      ],
+    },
+  },
+  {
     version: "0.52.103",
     date: "2026-11-14",
     items: {
