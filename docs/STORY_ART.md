@@ -292,6 +292,40 @@ Boss sprite sheet rules (for "Boss:" requests): square 1:1 image, pure black bac
 6. `Scene: the tunnel ceiling is split open from above as the Slayer (pale woman with long black hair streaked blood-red, red rose in her hair, red eyes, black gothic corset dress) drops in and blocks a wave of burning sword slashes from the purple night lord with her giant scythe. She tosses a small glowing glass vial of holy water, which falls into Yuriel's arms. Gabriel's shield is cracked; the holy warriors turn to flee down the tunnel. Chaotic, fiery mood with red and purple light.`
 7. `Scene: high above a vast imperial plaza at dusk, the Apostle of Evil (long silver hair, red eyes, black and crimson clergy hood and robes with crosses, inverted cross staff) looks down with a cold smile. Below, the plaza is full of people with empty purple-glowing eyes. In the center of the plaza the stone floor slowly cracks open into a deep glowing abyss passage leading downward, purple light rising. Ominous, foreboding mood.`
 
-## 9장
+## 9장 「교류」 (12컷, `art/스토리/9장/`)
 
-🔸 2장처럼 장마다 컷 목록·프롬프트를 이어서 씀 (그 전에는 장 하나에 임시 배경 하나)
+ch9a+ch9b 합쳐 102문단이라 12컷. 참고 그림: 탈라시아(`art/캐릭터/{미류·매드퀸·훅·리바이어·웨이브·테일·토르켄}/`, 걷기 시트) · 실버불렛 `실버불릿/은빛 사냥꾼 걷기 애니메이션 시트.png` · 장수·의사·떠돌이·아티팩터·이드라 (`…-1.png`) · 영물 레오 `레오/leo-1.png` · 오닉스 `오닉스/onyx-1.png` · 펜리르 `펜리르/보석 장검을 문 백색 늑대 보행 세트.png` · 풍류사 `풍류사/구름을 탄 화공 소년 스프라이트 시트.png` · 수집가 `수집가/푸른 머리 무기 수집가 스프라이트 시트.png` · 괴력난신 `public/sprites/enemies/demigod.png` · 아스모데우스 `art/최종보스/아스모데우스의 화신체/보랏빛 화염의 악마 마법사 5연속 컷.png` · 악의 사도 `악의 사도/apostle-1.png`
+
+| 컷 | 문단 | 참고 그림 | 장면 |
+| --- | --- | --- | --- |
+| 1 | 1~17 | 미류·매드퀸·훅·리바이어·웨이브·테일 | 탈라시아 항구 회의장, 투닥이는 매드퀸과 훅, 상석의 미류 |
+| 2 | 18~26 | 미류·테일 + 토르켄 | 손을 아무도 안 들고 웃는 사람들, 문밖에서 우당탕 달아나는 토르켄 |
+| 3 | 27~32 | 훅·웨이브·토르켄·리바이어 | 제국 쪽 길, 벽처럼 몰려든 몬스터 떼를 뚫는 넷 |
+| 4 | 33~40 | 실버불렛·웨이브 등 넷 | 은빛 탄환으로 몬스터 떼를 꿰뚫고 권총을 돌리며 걸어 나온 실버불렛 |
+| 5 | 41~50 | 토르켄·장수·실버불렛 등 | 산 중턱 연합국 진지 문 앞, 창을 겨누는 장수와 손을 든 토르켄 |
+| 6 | 51~57 | 의사·토르켄·웨이브 등 | 막사 안 네 나라 회의, 지도를 펼친 탁자 |
+| 7 | 58~64 | 레오·풍류사·떠돌이·의사 | 천둥과 함께 막사에 고개를 들이민 뇌전의 사자와 구름 탄 풍류사 |
+| 8 | 65~71 | 오닉스·수집가·아티팩터·괴력난신·이드라 | 일곱 빛기둥과 함께 내려앉은 광석 영물, 들어서는 괴력난신이 이드라를 가리킴 |
+| 9 | 72~77 | 괴력난신·이드라 | 비르디아 변두리 무덤가, 비석을 번쩍 든 괴력난신, 땅이 갈라져 열린 통로 |
+| 10 | 78~90 | 펜리르·이드라·괴력난신 | 거대한 동굴, 대검을 문 늙은 백랑과 겁먹은 채 마주한 이드라 |
+| 11 | 91~95 | 펜리르·실버불렛·떠돌이 + 탈라시아 넷 | 며칠 뒤 연합국 '교류의 장', 한쪽에 엎드린 백랑, 함께 어울리는 네 나라와 성흔 |
+| 12 | 96~102 | 아스모데우스·악의 사도·괴력난신 | 먼 어둠 속 화신체 앞에 고개 숙인 사도 / 연합국에서 조용히 주먹을 쥔 괴력난신 |
+
+### 9장 컷별 장면 (영어, [공통] 뒤에 붙임)
+
+1. `Scene: a grand council hall in a sea nation's harbor, big windows showing ships and blue sea, a round wooden table with nautical maps. Miryu (sea-dragon swordswoman, long white hair with teal tips, teal dragon antlers, teal and white robe) sits at the head, sighing. Mad Queen (silver-haired admiral, white admiral cap with gold anchor, white and gold coat) and Hook (blond pirate, navy tricorn hat with white plume, white-navy-gold coat) argue face to face across the table. Levia (long pale-blue hair, wave crown, trident), Wave (cream-white ponytail, goggles, white hoodie) and Tail (shark-girl, navy hair with cyan streak, shark hoodie and tail) watch, amused. Lively, comic mood.`
+2. `Scene: the same harbor council hall. Everyone laughs warmly and nobody raises a hand; Miryu looks surprised and touched. Through the half-open door, Thorken (huge mane of teal hair, feathered headband, tanned skin, bronze armor, giant golden anchor) is caught eavesdropping and stumbles away in a clumsy crash, while Tail points at the door smirking. Warm, funny mood.`
+3. `Scene: a rough road toward a dark empire under gloomy skies. A wall of monsters blocks the way. Hook slashes with his crescent hook blade, Thorken swings his anchor and chained iron ball, Levia thrusts her trident with sea water spiraling, Wave rides a surge of water on her surfboard. Action, smashing impact effects.`
+4. `Scene: silver bullets pierce through the monster horde in bright streaks. Through the falling monsters walks Silver Bullet (long silver braid, lavender eyes, wide-brimmed black hat with gold cross and white feather, black and gold hunter coat), spinning twin silver pistols with a cocky smile. Wave and the sea crew turn in surprise. Cool, stylish mood.`
+5. `Scene: a fortified alliance camp on a mountainside with wooden palisades and banners of three kingdoms (crimson, green, bronze). At the gate the General (dark crimson lamellar armor, red tassel helmet, long spear) points his spear warily; Thorken raises a hand with a friendly grin, with Hook, Wave, Levia and Silver Bullet behind him. Daylight, mountain view.`
+6. `Scene: inside a large command tent, a map spread on a table. The Doctor (short black hair, white nurse cap with red cross, white coat) explains with a serious face to Thorken and the sea crew, while soldiers and elites of three kingdoms listen around. Lantern light, tense but hopeful mood.`
+7. `Scene: thunder splits the sky outside the command tent. A giant sacred lion with a golden mane and a blue jewel in its forehead, blue lightning sparking from its mane, pokes its huge head into the tent. Beside it Pungryu (young scholar-outlaw, black wide-brim horsehair hat, jade-green robe, giant brush) floats on a small lavender cloud and waves cheerfully. The Drifter (chestnut hair, teal scarf, crossbow) jumps up in surprise. Dramatic yet funny mood.`
+8. `Scene: pillars of seven-colored light shoot into the sky over the camp. A huge sacred mineral creature of bronze and gold ore with seven glowing jewels and a purple core lands, shaking the ground. The Collector (fluffy blue hair, navy and gold coat, bundle of weapons on his back) arrives with it, greeted by the Artifacter (white hair, glowing blue tattooed arms). The Demigod (muscular giant, long white hair, golden horns, bare chest with red markings) strides in and points at Idra (small girl with leaf-green hair and a flower, leaf dress), who points at herself in shock. Grand, lively mood.`
+9. `Scene: a lonely nameless graveyard at the edge of a forest at dusk, old mossy tombstones. The Demigod lifts a huge old tombstone overhead with one hand, revealing a hidden button; the ground splits open into a dark stairway leading down. Idra hides behind him, scared. Eerie, mysterious mood.`
+10. `Scene: a vast dark cave lit by faint glowing crystals. A giant old white wolf with long white and pale lavender fur and a golden halo crown with blue jewels stands growling, a huge blue greatsword held in its mouth. Small Idra stands before it trembling, looking up into its eyes, pushed forward by the Demigod behind her. Solemn, sad mood.`
+11. `Scene: a few days later, the alliance camp at sunset, a festive gathering: sea crew, soldiers of three kingdoms and Silver Bullet eating and laughing around campfires. At the edge of the camp the old white wolf lies silently with its greatsword set down beside it. The Drifter and Silver Bullet clink cups. Warm, peaceful mood.`
+12. `Scene: split composition. Left: a distant dark realm of purple fire, where the Avatar of Asmodeus (purple-skinned horned demon) sits on a throne and the Apostle of Evil kneels before him with head bowed. Right: at the alliance camp under the night sky, the Demigod stands alone and quietly clenches his fist, looking toward the far horizon. Ominous, foreboding mood.`
+
+## 다음
+
+🔸 1~9장 컷 목록·프롬프트 다 씀. 10장 이후가 생기면 같은 방식으로 이어서 씀
