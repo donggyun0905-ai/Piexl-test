@@ -11,7 +11,7 @@ import { StoryFace } from "../story/StoryFace";
 import { SceneView } from "../story/SceneView";
 import { CHAPTERS, FACTIONS, type ChapterId } from "../story/storyData";
 import { WarpMenu } from "./WarpMenu";
-import { WorldPanels, type WorldPanel } from "./WorldPanels";
+import { WorldPanels, type WorldPanel, type WorldRun } from "./WorldPanels";
 import { loadWorldChar, myPower, saveWorldChar } from "./worldPlayer";
 import { WorldStage } from "./WorldStage";
 import { touchWarp, warpTargets } from "./worldWarps";
@@ -21,7 +21,8 @@ interface Props {
   t: (k: TextKey) => string;
   lang: Lang;
   onExit: () => void;
-  onDungeon: () => void;
+  /** 던전 입구 = 혼자 하기 · 기억의 탑 = 무한 모드·영웅의 길 */
+  onDungeon: (m: WorldRun) => void;
 }
 
 const REGION = "ascalon" as const;
@@ -68,7 +69,8 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
     } else if (p.kind === "warp") {
       touchWarp(cur.id, p);
       setWarp(p);
-    } else if (p.kind === "dungeon") onDungeon();
+    } else if (p.gate === "tower") setPanel({ k: "tower" });
+    else if (p.kind === "dungeon") onDungeon("solo");
     else if (p.scene) setScene(latestChapter());
     else setReading(p);
   };
@@ -121,7 +123,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
       {state !== "ok" && <p className="world-loading">{t(state === "fail" ? "worldFail" : "worldLoading")}</p>}
       {near && !busy && (
         <button type="button" className="primary lobby-enter" onClick={() => use(near)}>
-          {near.kind === "dungeon" ? `⚔ ${t("wpEnter")}` : near.kind === "npc" ? `💬 ${t("wpTalk")}` : near.kind === "door" ? `🚪 ${t("wpGoIn")}` : near.kind === "exit" ? `🚪 ${t("wpGoOut")}` : near.kind === "warp" ? `✨ ${t("wpWarpUse")}` : `📜 ${t("wpRead")}`} · F
+          {near.gate === "tower" ? `🗼 ${t("wpGoIn")}` : near.kind === "dungeon" ? `⚔ ${t("wpEnter")}` : near.kind === "npc" ? `💬 ${t("wpTalk")}` : near.kind === "door" ? `🚪 ${t("wpGoIn")}` : near.kind === "exit" ? `🚪 ${t("wpGoOut")}` : near.kind === "warp" ? `✨ ${t("wpWarpUse")}` : `📜 ${t("wpRead")}`} · F
         </button>
       )}
       {reading && (
@@ -144,6 +146,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
           t={t}
           lang={lang}
           onClose={closePanel}
+          onRun={onDungeon}
           onChar={(c) => {
             saveWorldChar(c);
             setWho(c);

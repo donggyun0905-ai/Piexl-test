@@ -73,3 +73,44 @@ export function drawWarp(g: Ctx, x: number, y: number, t: number): void {
     box(g, `rgba(200,240,255,${1 - k})`, x - 6 + i * 6, Math.round(y - 4 - k * 26), 1, 2);
   }
 }
+
+/** 기억의 탑: 높은 돌탑 · 층마다 창(빛) · 꼭대기 떠 있는 기억 결정(숨 쉬듯) · 아래 가운데 아치 문 (x, y = 문 앞 칸 가운데) */
+export function drawTower(g: Ctx, x: number, y: number, t: number): void {
+  const b = y - 2;
+  const a = 0.55 + Math.sin(t * 1.8) * 0.2;
+  shadow(g, x + 3, b + 2, 20, 5, 0.38);
+  // 몸통 (아래 넓고 위로 좁아짐)
+  box(g, "#4a4458", x - 15, b - 30, 30, 30);
+  box(g, "#5a5468", x - 13, b - 62, 26, 32);
+  box(g, "#6a6278", x - 11, b - 88, 22, 26);
+  for (const [w, top] of [[15, 30], [13, 62], [11, 88]] as const) {
+    box(g, "#8c8498", x - w - 1, b - top - 2, w * 2 + 2, 3);
+    box(g, "#a49cb2", x - w - 1, b - top - 2, w * 2 + 2, 1);
+  }
+  // 돌 줄
+  for (let r = 4; r < 88; r += 6) box(g, "rgba(20,16,30,0.25)", x - (r < 30 ? 15 : r < 62 ? 13 : 11), b - r, (r < 30 ? 30 : r < 62 ? 26 : 22), 1);
+  box(g, "rgba(255,255,255,0.08)", x - 15, b - 88, 5, 88);
+  // 창 (기억의 빛)
+  for (const [wx, wy] of [[-6, 44], [5, 44], [0, 74]] as const) {
+    box(g, "#1a1424", wx + x - 2, b - wy - 5, 5, 7);
+    box(g, `rgba(150,200,255,${a})`, wx + x - 1, b - wy - 4, 3, 5);
+  }
+  // 지붕 · 꼭대기 결정
+  box(g, "#3e4a78", x - 9, b - 96, 18, 8);
+  box(g, "#3e4a78", x - 5, b - 102, 10, 6);
+  box(g, "#5a6ab0", x - 9, b - 96, 18, 1);
+  const fy = Math.round(Math.sin(t * 2) * 2);
+  const glow = g.createRadialGradient(x, b - 112 + fy, 0, x, b - 112 + fy, 18);
+  glow.addColorStop(0, `rgba(140,210,255,${a * 0.6})`);
+  glow.addColorStop(1, "rgba(140,210,255,0)");
+  g.fillStyle = glow;
+  g.fillRect(x - 18, b - 130 + fy, 36, 36);
+  box(g, "#bfe6ff", x - 2, b - 116 + fy, 4, 8);
+  box(g, "#ffffff", x - 1, b - 115 + fy, 1, 3);
+  // 문 (아치)
+  box(g, "#2a2236", x - 6, b - 16, 12, 16);
+  box(g, "#2a2236", x - 4, b - 18, 8, 2);
+  box(g, `rgba(120,180,255,${a * 0.5})`, x - 5, b - 12, 10, 12);
+  box(g, "#a49cb2", x - 7, b - 17, 1, 17);
+  box(g, "#a49cb2", x + 6, b - 17, 1, 17);
+}

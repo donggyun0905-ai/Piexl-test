@@ -30,6 +30,8 @@ export interface Place {
   /** door: 들어갈 건물 안 Region 이름 · deco: 가구 그림 */
   to?: string;
   art?: DecoArt;
+  /** dungeon: tower = 기억의 탑 (무한 모드·영웅의 길 고르는 창, 없으면 기본 혼자 하기) */
+  gate?: "tower";
   /** npc: 말 걸면 여는 창 (대사 대신) */
   menu?: WorldMenu;
   /** door: 가게 간판 */
@@ -62,6 +64,7 @@ export const PLACE_NEAR = 20;
 export function hitsNpc(r: Region, x: number, y: number, rad: number): boolean {
   return r.places.some((p) => {
     if (p.kind === "npc") return Math.hypot(placeXY(p)[0] - x, placeXY(p)[1] + 4 - y) < rad + 8;
+    if (p.gate === "tower") return Math.abs(placeXY(p)[0] - x) < rad + 14 && y < placeXY(p)[1] + rad + 4 && y > placeXY(p)[1] - 40;
     if (p.kind !== "deco" || !p.art) return false;
     return Math.hypot(placeXY(p)[0] - x, placeXY(p)[1] + 2 - y) < rad + DECO_R[p.art];
   });

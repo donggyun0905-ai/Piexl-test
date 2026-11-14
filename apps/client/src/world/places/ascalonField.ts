@@ -1,5 +1,5 @@
 // 아스칼론 필드 장소 (256×160칸, 지도 모양 scripts/art/world_ascalon.py — 지도를 고치면 좌표도 같이, 생성기가 걸을 수 있는 칸인지 검사)
-// 성벽 도시(광장·성채·상점가·장인 거리·주거지·훈련장) · 강가 · 항구 · 농촌 · 던전 둘 · 순간 이동석 다섯 · 국경 표지판
+// 성벽 도시(광장·성채·상점가·장인 거리·주거지·훈련장) · 강가 · 항구 · 농촌 · 던전 둘(혼자 하기) · 기억의 탑(무한·영웅) · 순간 이동석 여섯 · 국경 표지판
 import type { Place, Region } from "../worldPlaces";
 import { ASCALON_HOUSE_DOORS, ASCALON_SHOP_DOORS as S } from "./ascalonLayout";
 
@@ -42,11 +42,14 @@ export const ASCALON_FIELD: Region = {
     { id: "forestDungeon", kind: "dungeon", tx: 24, ty: 30, name: "wpForestDungeon" },
     { id: "ascalonSign", kind: "sign", tx: 217, ty: 52, name: "wpSignAscalon" },
     { id: "terraSign", kind: "sign", tx: 246, ty: 53, name: "wpSignTerra" },
+    // 기억의 탑 (무한 모드·영웅의 길 고르기)
+    { id: "memoryTower", kind: "dungeon", tx: 232, ty: 49, name: "wpTower", gate: "tower" },
     // 순간 이동석 (한 번 만지면 다른 이동석에서 골라 갈 수 있음)
     { id: "warpPlaza", kind: "warp", tx: 106, ty: 61, name: "wpWarpPlaza" },
     { id: "warpFarm", kind: "warp", tx: 104, ty: 119, name: "wpWarpFarm" },
     { id: "warpDungeon", kind: "warp", tx: 180, ty: 19, name: "wpWarpDungeon" },
     { id: "warpHarbor", kind: "warp", tx: 16, ty: 88, name: "wpWarpHarbor" },
     { id: "warpEast", kind: "warp", tx: 214, ty: 60, name: "wpWarpEast" },
+    { id: "warpTower", kind: "warp", tx: 236, ty: 52, name: "wpWarpTower" },
   ],
 };

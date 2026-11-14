@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.114",
+    date: "2026-11-14",
+    items: {
+      ko: ["세계 지도(시험 중): 아스칼론 동쪽 국경 숲가에 기억의 탑 — 문 앞에서 F를 누르면 무한 모드·영웅의 길 중 골라 들어감 (스토리에서 연 뒤에만) · 탑 앞 순간 이동석", "던전 입구 둘은 기본 혼자 하기 그대로"],
+      en: ["World Map (testing): the Tower of Memory stands by the forest on Ascalon's eastern border — press F at its door to choose Endless Mode or Hero's Path (once unlocked in the story) · a warp stone by the tower", "The two dungeon entrances still start a regular solo run"],
+      ja: ["世界地図（テスト中）：アスカロン東の国境の森のそばに記憶の塔 — 扉の前でFを押すと無限モード・英雄の道から選んで入る（ストーリーで解放後のみ）・塔の前に転移石", "ダンジョンの入口2か所は通常のソロプレイのまま"],
+    },
+  },
+  {
     version: "0.52.113",
     date: "2026-11-14",
     items: {

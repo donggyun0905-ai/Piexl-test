@@ -39,4 +39,8 @@ export const WORLD_TOWN_TEXT = {
   wpPower: { ko: "투력 {n}", en: "Power {n}", ja: "戦力 {n}" },
   wpChar: { ko: "캐릭터", en: "Character", ja: "キャラクター" },
   wpSmithMenu: { ko: "레이드 장신구를 끼고 빼거나, 승급·강화·재설정할 수 있다. 장신구가 좋아지면 투력이 오른다.", en: "Equip raid accessories, or promote, enhance and reroll them. Better accessories raise your Power.", ja: "レイドアクセサリーの装着や、昇級・強化・再設定ができる。アクセサリーが良くなると戦力が上がる。" },
+  wpTower: { ko: "기억의 탑", en: "Tower of Memory", ja: "記憶の塔" },
+  wpTowerText: { ko: "끝없이 이어지는 층과, 영웅의 길의 기억이 잠든 탑. 어느 기억으로 들어갈까?", en: "A tower holding endless floors and the memories of the paths heroes walked. Which memory will you enter?", ja: "果てしなく続く階と、英雄たちが歩んだ道の記憶が眠る塔。どの記憶に入る？" },
+  wpTowerLocked: { ko: "{n}장에서 열림", en: "Opens in Chapter {n}", ja: "第{n}章で解放" },
+  wpWarpTower: { ko: "기억의 탑 이동석", en: "Tower warp stone", ja: "記憶の塔の転移石" },
 } satisfies Record<string, Record<Lang, string>>;
