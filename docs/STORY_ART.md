@@ -267,6 +267,31 @@ Boss sprite sheet rules (for "Boss:" requests): square 1:1 image, pure black bac
 7. `Scene: the Brawler (wild red hair, red headband, short martial arts outfit, bandaged fists) blocks the demon's purple-clawed hand with her bare fist, wincing in pain, then hoists the wounded Lunatic over her shoulder and dashes into a tunnel. The purple-skinned horned demon ignores them and stares with a slow, interested smile at the Apostle of Heaven in white and gold robes behind the golden barrier.`
 8. `Scene: the Apostle of Heaven (long silver hair, white and gold priest robe) clutches his chest and falls to his knees as a thin thread of purple aura slips into his mouth; his red eyes widen in fear. The golden barrier is fading and the demon has already vanished, leaving only purple sparks. From the corridor, imperial soldiers with torches run toward him shouting. A faint dark shadow begins to spread from his feet, foreshadowing his fall. Ominous, tragic mood.`
 
-## 8~9장
+## 8장 「심연」 (7컷, `art/스토리/8장/`)
+
+54문단이라 7컷. 참고 그림: 성국(`art/캐릭터/{유리엘·세레나·가브리엘·미카엘라·베아트리스·이안}/`, 걷기 시트) · 루나틱·네일러(걷기 시트) · 이클립스 낮 `이클립스/eclipse-1.png`(크림빛 머리 소녀) · 밤 `이클립스/eclipseNight-1.png`(**흰 머리 사내·금 월계·보라 눈·검보라 옷·초승달 도끼, 뒤 검은 해 속 그녀의 얼굴**) · 학살자 `학살자/slayer-1.png` · 악의 사도 `악의 사도/apostle-1.png`(이제 검은·붉은 옷)
+※ 7장 컷 6·7에서 천의 사도가 금발 여자로 나옴 → 이번 장 악의 사도는 **은발·붉은 눈**이 되게 참고 그림을 꼭 붙임
+
+| 컷 | 문단 | 참고 그림 | 장면 |
+| --- | --- | --- | --- |
+| 1 | 1~13 | 유리엘·루나틱·네일러 | 성국 성화의 대성당, 타오르는 성화 앞에서 말다툼하는 유리엘과 루나틱, 팔짱 낀 네일러 |
+| 2 | 14~19 | 베아트리스·이안·루나틱·유리엘 | 문을 벌컥 열고 들어온 베아트리스, 한숨 쉬는 이안, 명단을 건네는 루나틱 |
+| 3 | 20~25 | 유리엘·세레나·가브리엘·미카엘라·이클립스(낮) | 헬리오스 지하 통로 출구에 홀로 선 이클립스, 무기를 드는 네 사람 |
+| 4 | 26~31 | 이클립스(밤)·가브리엘·세레나·미카엘라·유리엘 | 보랏빛 거대한 밤의 주인의 도끼를 방패로 받아 내는 가브리엘, 사슬 비수와 날아드는 무기들 |
+| 5 | 32~38 | 유리엘·이클립스(낮) | 유리엘의 수정구 빛으로 성흔이 새겨져 잠시 제정신이 돌아와 괴로워하는 이클립스 |
+| 6 | 39~48 | 학살자·이클립스(밤)·유리엘·가브리엘 | 통로 천장을 갈라 뛰어든 학살자가 대낫으로 열기의 검격을 막음, 유리엘 품에 떨어지는 성수병 |
+| 7 | 49~54 | 악의 사도 | 제국 광장을 내려다보는 악의 사도, 광장 아래 천천히 열리는 심연의 통로 |
+
+### 8장 컷별 장면 (영어, [공통] 뒤에 붙임)
+
+1. `Scene: inside the grand Cathedral of the Sacred Flame in the Holy Kingdom, a huge golden flame burning in a brazier at the altar, tall white pillars and stained glass with abstract patterns. Yuriel (long golden hair, white veil with a gold cross, golden halo, white and blue holy robes, crystal orb) argues earnestly with Lunatic (long lavender-silver ponytail, crescent moon ornament, white and navy armored dress, rapier at her hip), who looks away coldly. Nailer (long silver hair, eyes bandaged, halo of thorns, dark gray robes, giant nail and hammer) leans on a pillar with arms crossed. Tense, quiet mood.`
+2. `Scene: the cathedral doors burst open. Beatrice (long wavy golden hair braided into a crown, spiked golden halo, white and gold armor, red cape, greatsword on her shoulder) strides in shouting with a grin, while Ian (old man, long silver hair, glasses, white and gold robes, purple lantern) sighs behind her. Lunatic hands a folded list to Yuriel, who takes it with determination. Golden light from the sacred flame. Lively but serious mood.`
+3. `Scene: the dark exit of a hidden underground tunnel beneath the closed gates of an imperial city. Four holy warriors arrive: Yuriel (golden hair, white veil, crystal orb, chain flail), Serena (long wavy platinum hair, golden sun halo with a white lily, gold and white dancer outfit, steel thorn whips), Gabriel (blond man, spiked golden halo, golden armor, blue cape, tower shield and hammer) and Michaela (long wavy platinum hair, golden halo, floating ring of small spears and swords). At the tunnel exit stands Eclipse alone (girl with long cream-white hair, golden sun crown, white and gold dress, sun scepter with a crescent blade), silent, her eyes empty. The four raise their weapons. Uneasy mood.`
+4. `Scene: in the narrow tunnel, Eclipse has transformed into the lord of the night: a tall white-haired man with a gold laurel, glowing purple eyes, black, purple and gold robes, swinging a huge crescent axe, behind him a black eclipsed sun with a woman's face in it and a purple corona. Gabriel leaps forward and blocks the axe with his tower shield, sparks flying. Serena's chain daggers and a storm of Michaela's floating spears and swords fly at him, while Yuriel stands behind. Violent, purple and gold light.`
+5. `Scene: Yuriel raises her glowing crystal orb; holy light burns a shining stigma mark onto Eclipse's body. Eclipse, back in her girl form (long cream-white hair, golden sun crown, white and gold dress), clutches her head in pain, tears in her eyes, struggling to speak, purple corruption crawling over her. The other three holy warriors watch, weapons ready. Sorrowful, desperate mood.`
+6. `Scene: the tunnel ceiling is split open from above as the Slayer (pale woman with long black hair streaked blood-red, red rose in her hair, red eyes, black gothic corset dress) drops in and blocks a wave of burning sword slashes from the purple night lord with her giant scythe. She tosses a small glowing glass vial of holy water, which falls into Yuriel's arms. Gabriel's shield is cracked; the holy warriors turn to flee down the tunnel. Chaotic, fiery mood with red and purple light.`
+7. `Scene: high above a vast imperial plaza at dusk, the Apostle of Evil (long silver hair, red eyes, black and crimson clergy hood and robes with crosses, inverted cross staff) looks down with a cold smile. Below, the plaza is full of people with empty purple-glowing eyes. In the center of the plaza the stone floor slowly cracks open into a deep glowing abyss passage leading downward, purple light rising. Ominous, foreboding mood.`
+
+## 9장
 
 🔸 2장처럼 장마다 컷 목록·프롬프트를 이어서 씀 (그 전에는 장 하나에 임시 배경 하나)
