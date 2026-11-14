@@ -34,6 +34,8 @@ export const TERRA_FIELD: Region = {
     { id: "toAscalon", kind: "pass", tx: 2, ty: 56, name: "wpToAscalon", to: "ascalon", land: [244, 56] },
     // 역 · 철길
     { id: "stationSign", kind: "sign", tx: 106, ty: 102, name: "wpStation" },
+    // 해저 열차 → 5분 뒤 사이버펑크 역 (9장)
+    { id: "boardTrain", kind: "pass", tx: 97, ty: 103, name: "wpTrainToCyber", to: "seaTrainEast", land: [3, 5] },
     { id: "terraRider", kind: "npc", tx: 92, ty: 102, name: "rider", who: "rider", line: "wnRider" },
     // 콜로세움 (패왕전)
     { id: "colosseum", kind: "dungeon", tx: 150, ty: 138, name: "wpColosseum", gate: "colosseum" },

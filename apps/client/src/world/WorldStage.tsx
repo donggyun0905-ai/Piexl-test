@@ -11,6 +11,7 @@ import { shadow } from "./worldArt";
 import { drawButterflies, drawCloudShadows, drawVignette, drawWaterFx } from "./worldFx";
 import { drawPlace, drawPlaceLabel } from "./worldPlaceArt";
 import { loadWorldArt, setArtSkin } from "./worldTex";
+import { drawMood } from "./worldMood";
 import { here } from "./worldWarps";
 import { pushTrees, type Drawable } from "./worldTrees";
 import { hitsNpc, nearPlace, placeXY, skinOf, type Place, type Region } from "./worldPlaces";
@@ -112,7 +113,7 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         ctx.setTransform(scale * dpr, 0, 0, scale * dpr, -Math.round(view.x * scale * dpr), -Math.round(view.y * scale * dpr));
         ctx.imageSmoothingEnabled = false;
         chunks.draw(ctx, view);
-        drawWaterFx(ctx, m, view, t);
+        if (region.mood !== "embers") drawWaterFx(ctx, m, view, t);
         // 장소·나무·나: 아래(발 y)가 큰 것을 나중에
         // 발판(문)은 늘 아래 · 가구는 아래쪽 끝 기준
         const foot = (p: Place) => (p.kind === "npc" ? 4 : p.kind === "deco" ? 6 : p.kind === "door" || p.kind === "exit" ? -16 : 0);
@@ -130,8 +131,12 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         });
         items.sort((a, b) => a.y - b.y);
         for (const it of items) it.draw();
-        drawButterflies(ctx, m, view, t);
-        if (!region.indoor) drawCloudShadows(ctx, view, t);
+        const mc = region.moodCenter;
+        if (region.mood) drawMood(ctx, region.mood, view, t, mc && [(mc[0] + 0.5) * WTILE, (mc[1] + 0.5) * WTILE]);
+        else {
+          drawButterflies(ctx, m, view, t);
+          if (!region.indoor) drawCloudShadows(ctx, view, t);
+        }
         if (near) drawPlaceLabel(ctx, near, cb.current.label(near));
         // 2초마다 자리 저장 (움직였을 때만)
         if (now - saved > 2000 && me.moving) {

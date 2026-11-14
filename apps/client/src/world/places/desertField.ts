@@ -12,6 +12,7 @@ export const DESERT_FIELD: Region = {
     { id: "toAscalon", kind: "pass", tx: 100, ty: 2, name: "wpToAscalon", to: "ascalon", land: [103, 152] },
     { id: "toTerra", kind: "pass", tx: 200, ty: 2, name: "wpToTerra", to: "terracore", land: [100, 152] },
     { id: "toHelios", kind: "pass", tx: 128, ty: 157, name: "wpDesertRoad", to: "helios", land: [128, 10] },
+    { id: "toSeongguk", kind: "pass", tx: 4, ty: 132, name: "wpPilgrimRoad", to: "seongguk", land: [248, 80] },
     { id: "toThalassia", kind: "pass", tx: 252, ty: 92, name: "wpToThalassia", to: "thalassia", land: [8, 92] },
     { id: "heliosSign", kind: "sign", tx: 124, ty: 152, name: "wpSignHelios" },
     // 오아시스 · 대상 천막

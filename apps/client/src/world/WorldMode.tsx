@@ -6,12 +6,13 @@
 import { useEffect, useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { FACTION_TEXT } from "../i18n/story/world";
-import { storyStage } from "../progress/storyStage";
+import { factionOpen, storyStage } from "../progress/storyStage";
 import { loadText, saveText } from "../storage";
 import { StoryFace } from "../story/StoryFace";
 import { SceneView } from "../story/SceneView";
 import { CHAPTERS, FACTIONS, type ChapterId } from "../story/storyData";
 import { WarpMenu } from "./WarpMenu";
+import { WorldRide } from "./WorldRide";
 import { WorldPanels, type WorldPanel, type WorldRun } from "./WorldPanels";
 import { loadWorldChar, myPower, saveWorldChar } from "./worldPlayer";
 import { WorldStage } from "./WorldStage";
@@ -69,7 +70,8 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
     setScene(null);
   };
   const use = (p: Place) => {
-    if (p.kind === "door" && p.to && REGIONS[p.to]) {
+    if (p.kind === "door" && p.open && !factionOpen(p.open)) setReading(p);
+    else if (p.kind === "door" && p.to && REGIONS[p.to]) {
       const [x, y] = placeXY(p);
       setBack({ id: cur.id, spawn: [x, y + 4] });
       setCur({ id: p.to, spawn: null });
@@ -149,6 +151,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
         </button>
       </div>
       <div key={`fade-${cur.id}-${cur.n ?? 0}`} className="world-fade" />
+      {region.ride && <WorldRide key={cur.id} t={t} ride={region.ride} onArrive={(to, [x, y]) => setCur({ id: to, spawn: [(x + 0.5) * 16, (y + 0.5) * 16] })} />}
       {state !== "ok" && <p className="world-loading">{t(state === "fail" ? "worldFail" : "worldLoading")}</p>}
       {near && !busy && (
         <button type="button" className="primary lobby-enter" onClick={() => use(near)}>

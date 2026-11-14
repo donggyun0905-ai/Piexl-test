@@ -20,13 +20,13 @@ const MINI = [
 const cache = new Map<string, Promise<WorldMap>>();
 
 /** 지도 그림 → 작은 캔버스 (한 칸 = 한 픽셀, CSS로 키움) */
-function paint(c: HTMLCanvasElement, m: WorldMap): void {
+function paint(c: HTMLCanvasElement, m: WorldMap, mini: Region["mini"]): void {
   c.width = m.cols;
   c.height = m.rows;
   const g = c.getContext("2d")!;
   const img = g.createImageData(m.cols, m.rows);
   for (let i = 0; i < m.tiles.length; i++) {
-    const h = MINI[m.tiles[i]!] ?? MINI[0]!;
+    const h = mini?.[m.tiles[i]!] ?? MINI[m.tiles[i]!] ?? MINI[0]!;
     for (let k = 0; k < 3; k++) img.data[i * 4 + k] = parseInt(h.slice(1 + k * 2, 3 + k * 2), 16);
     img.data[i * 4 + 3] = 255;
   }
@@ -57,8 +57,8 @@ export function WorldMapView({ t, regionId, region, me, onGo }: Props) {
     };
   }, [region.map]);
   useEffect(() => {
-    if (map && ref.current) paint(ref.current, map);
-  }, [map]);
+    if (map && ref.current) paint(ref.current, map, region.mini);
+  }, [map, region.mini]);
   const pos = me ?? (here.r === regionId ? ([here.x, here.y] as const) : null);
   const pct = (tx: number, ty: number) => (map ? { left: `${((tx + 0.5) / map.cols) * 100}%`, top: `${((ty + 0.5) / map.rows) * 100}%` } : {});
   const marks = region.places.filter((p) => MARK[p.kind] || p.gate);

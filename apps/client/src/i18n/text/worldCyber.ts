@@ -1,0 +1,30 @@
+import type { Lang } from "../index";
+
+// 화면 글자: 세계 지도 사이버펑크 도시 (world/places/cyberField) · 해저 열차 (WorldRide) · 표지판 글은 `{이름 키}Text`
+export const WORLD_CYBER_TEXT = {
+  wpCyber: { ko: "네온 시티", en: "Neon City", ja: "ネオンシティ" },
+  wpSeaTrain: { ko: "해저 열차", en: "Undersea Train", ja: "海底列車" },
+  wpRideLeft: { ko: "다음 역까지 {t}", en: "Next station in {t}", ja: "次の駅まで {t}" },
+  wpTrainToCyber: { ko: "해저 열차 (네온 시티행)", en: "Undersea Train (to Neon City)", ja: "海底列車（ネオンシティ行き）" },
+  wpTrainToCyberText: { ko: "바다 밑 굴을 지나 먼 도시로 가는 열차. 아직 다니지 않는다. (스토리 9장에서 열림)", en: "A train that runs through a tunnel under the sea to a distant city. Not running yet. (Opens in Chapter 9)", ja: "海の底のトンネルを抜けて遠い都市へ行く列車。まだ走っていない。（ストーリー第9章で解放）" },
+  wpTrainToTerra: { ko: "해저 열차 (테라코어행)", en: "Undersea Train (to Terracore)", ja: "海底列車（テラコア行き）" },
+  wpTrainToTerraText: { ko: "테라코어 역으로 돌아가는 열차.", en: "The train back to Terracore Station.", ja: "テラコア駅へ戻る列車。" },
+  wpCyberStation: { ko: "네온 시티 역", en: "Neon City Station", ja: "ネオンシティ駅" },
+  wpCyberStationText: { ko: "해저 열차의 종착역. 서쪽은 낮은 빌딩의 현대 도시, 동쪽으로 갈수록 비에 젖은 네온 거리가 이어진다.", en: "The undersea train's last stop. Low office towers to the west, and rain-soaked neon streets the farther east you go.", ja: "海底列車の終着駅。西は低いビルの現代都市、東へ行くほど雨に濡れたネオン街が続く。" },
+  wpCyberPlaza: { ko: "중앙 광장", en: "Central Plaza", ja: "中央広場" },
+  wpCyberPlazaText: { ko: "홀로그램 기둥이 빛나는 광장. 비가 그친 적이 없다.", en: "A plaza lit by hologram pillars. The rain has never stopped.", ja: "ホログラムの柱が光る広場。雨がやんだことはない。" },
+  wpNeonStreet: { ko: "네온 거리", en: "Neon Street", ja: "ネオン街" },
+  wpNeonStreetText: { ko: "글자 없는 간판이 분홍·하늘빛으로 깜박이는 거리. 젖은 바닥에 빛이 번진다.", en: "Signs without letters blink pink and cyan. The light smears across the wet street.", ja: "文字のない看板がピンクと水色に瞬く通り。濡れた地面に光がにじむ。" },
+  wpCornerStore: { ko: "편의점", en: "Corner store", ja: "コンビニ" },
+  wpDataCenter: { ko: "지하 데이터 센터 (던전)", en: "Underground Data Center (dungeon)", ja: "地下データセンター（ダンジョン）" },
+  wpWarpCyberStation: { ko: "네온 시티 역 이동석", en: "Neon City Station warp stone", ja: "ネオンシティ駅の転移石" },
+  wpWarpCyberPlaza: { ko: "중앙 광장 이동석", en: "Central Plaza warp stone", ja: "中央広場の転移石" },
+  wpWarpNeon: { ko: "네온 거리 이동석", en: "Neon Street warp stone", ja: "ネオン街の転移石" },
+  wpWarpCyberNorth: { ko: "북쪽 빌딩가 이동석", en: "North towers warp stone", ja: "北のビル街の転移石" },
+  wpWarpDataCenter: { ko: "데이터 센터 이동석", en: "Data Center warp stone", ja: "データセンターの転移石" },
+  wnCyberOnyx: { ko: "여긴 기계가 사람보다 많아. 그래도 비 냄새는 테라코어보다 낫지.", en: "There are more machines than people here. Still, the rain smells better than Terracore.", ja: "ここは人より機械が多い。それでも雨の匂いはテラコアよりましだ。" },
+  wnCyberChrono: { ko: "이 거리는 시간이 이상하게 흘러. 네온이 깜박일 때마다 1초씩 어긋나지.", en: "Time flows strangely on this street. Every blink of neon slips it by a second.", ja: "この通りは時間の流れがおかしい。ネオンが瞬くたびに1秒ずつずれる。" },
+  wnCyberDoctor: { ko: "비 맞고 다니다 감기 걸리지 마. 여긴 약값이 비싸거든.", en: "Don't catch a cold walking in the rain. Medicine's expensive here.", ja: "雨に濡れて風邪をひくなよ。ここは薬が高いんだ。" },
+  wnCyberStore: { ko: "어서 와. 로비를 꾸밀 물건은 다 있어. 밤새 열려 있지.", en: "Welcome. Everything for decorating your lobby. Open all night.", ja: "いらっしゃい。ロビーを飾る物は何でもある。夜通し開いてるよ。" },
+  wnTrainRider: { ko: "창밖 좀 봐. 바다 밑을 달리는 열차라니. 도착까지 5분쯤 걸려.", en: "Look out the window. A train running under the sea! About five minutes to arrival.", ja: "窓の外を見て。海の底を走る列車だなんて。到着まで5分ほどだよ。" },
+} satisfies Record<string, Record<Lang, string>>;

@@ -25,7 +25,11 @@ def src_of(kind, name):
 
 TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge", "marble", "redBrick", "goldStone", "metalFloor", "forestFloor", "dune", "gravel", "cracked", "oasis", "buriedRoad", "deepSnow", "ice", "snowStone", "thickWall", "wetStone", "dockPlank", "beach", "sea", "ocean",
        # 0.52.123: 나라마다 바꿔 끼우는 땅 결(Region.skin) · 건물 안 바닥
-       "cobbleOil", "brickRed", "moss", "leafPath", "elfStone", "spring", "tavernWood", "woodFloor", "stoneFloor", "carpet", "metalFloorIn", "frozenMud"]
+       "cobbleOil", "brickRed", "moss", "leafPath", "elfStone", "spring", "tavernWood", "woodFloor", "stoneFloor", "carpet", "metalFloorIn", "frozenMud",
+       # 0.53.0: 지옥 · 해저 · 사이버펑크 · 바람골 · 성국 · 새벽의 성흔 아지트
+       "basalt", "lava", "ash", "obsidian", "bloodRock", "seabed", "coral", "kelpBed", "pearlRoad", "trench",
+       "asphalt", "sidewalk", "neonTile", "wetStreet", "plaza", "tileRoad", "bambooGround", "stream", "yard", "petalPath",
+       "holyStone", "pilgrimRoad", "garden", "cellarStone"]
 TEX_PX = 256
 # 벽 앞면: 한 칸(64픽셀)에 그림 전체, 가로로만 이어지게 → 실내 벽 앞면 칸마다
 WALL = ["innerWall", "stoneWallIn"]
@@ -44,37 +48,7 @@ def tone(img, sat_bri):
     if a is not None:
         rgb.putalpha(a)
     return rgb
-# 묶음 → (이름, 기준, 픽셀) 왼쪽부터 · 기준 h = 높이, w = 폭 (그림 픽셀, 지도 1픽셀 = 4)
-SHEETS = {
-    "trees": [("tree_oak", "h", 152), ("tree_oak2", "h", 140), ("tree_pine", "h", 160), ("tree_pine2", "h", 148)],
-    "rocks": [("rock_big", "w", 68), ("rock_small", "w", 48), ("bush", "w", 52)],
-    "houses": [("house_red", "w", 192), ("house_blue", "w", 192)],
-    "places": [("cave", "w", 176), ("sign", "h", 72)],
-    # 큰 건물은 게임에서 건물 덩어리 폭에 맞춰 늘림 (여기 크기는 해상도)
-    # 이름이 None인 것은 아직 지도에 쓸 곳이 없어 만들지 않음 (게임이 받지 않게)
-    "palace": [("palace", "w", 1024), ("villa_helios", "w", 320), (None, "h", 256)],
-    "giantTrees": [("giant_tree", "w", 704), ("willow", "h", 176), (None, "w", 176)],
-    "elfCastle": [("elf_castle", "w", 1024), ("treehouse", "w", 192)],
-    "desertPlants": [("palm", "h", 176), ("palm2", "h", 152), ("cactus", "h", 112), ("tumbleweed", "w", 48)],
-    "ruins": [("column", "h", 120), ("stone_head", "w", 112), ("ribcage", "w", 140), ("tent", "w", 128)],
-    "northTrees": [("snow_pine", "h", 160), ("snow_pine2", "h", 136), ("dead_tree", "h", 140)],
-    "defense": [("watchtower", "h", 200), ("barricade", "w", 96), ("catapult", "w", 120), ("brazier", "h", 72)],
-    "battleScars": [("monster_skull", "w", 128), ("spear_pile", "w", 80), ("ice_crystal", "h", 96), ("army_tent", "w", 136)],
-    "ships": [("ship_big", "w", 224), ("boat", "w", 80), ("pirate_ship", "w", 224)],
-    "harbor": [("crane", "h", 192), ("cargo", "w", 96), ("warehouse_t", "w", 640), ("lighthouse", "h", 240)],
-    "portProps": [("mooring", "h", 48), ("fish_net", "w", 80), ("anchor", "h", 72), ("fish_stall", "w", 112)],
-    "factories": [("factory", "w", 448), (None, "h", 320), (None, "w", 320)],
-    # 0.52.123: 건물 안 가구·헬리오스 소품·술집·테라코어·비르디아 장식 (장식 deco 그림, worldDecoArt)
-    "homeFurniture": [("bed", "w", 72), ("dining_table", "w", 76), ("bookshelf", "w", 64), ("fireplace", "w", 76)],
-    "shopFurniture": [("shop_counter", "w", 80), ("potion_shelf", "w", 68), ("crates", "w", 60), ("potted_plant", "h", 64)],
-    "hallFurniture": [("throne", "w", 76), ("long_table", "w", 128), ("armor_stand", "h", 100), ("pillar", "h", 124)],
-    "tavernProps": [("barrels", "w", 52), ("bar_counter", "w", 80), ("round_table", "w", 60), ("fireplace_stone", "w", 72)],
-    "hideoutProps": [("weapon_rack", "w", 72), ("dummy", "h", 92), (None, "w", 96), (None, "w", 96)],
-    "imperialProps": [("fountain_gold", "w", 128), ("ruler_statue", "h", 184), (None, "h", 120), ("black_altar", "w", 60)],
-    "machines": [("gear_machine", "w", 112), ("yard_crane", "h", 140), ("steam_tank", "h", 104), ("guard_robot", "h", 68)],
-    "cityProps": [("gas_lamp", "h", 104), ("pipe_bundle", "w", 72), ("crate_stack", "w", 76), ("train_car", "w", 124)],
-    "forestProps": [("glow_mushroom", "w", 68), ("fern", "w", 60), ("flower_bush", "w", 60), ("lantern_post", "h", 96)],
-}
+from world_art_sheets import SHEETS  # noqa: E402 (묶음 표는 따로: 이름·기준·크기)
 
 
 def quantize(img, colors):
@@ -179,6 +153,10 @@ def make_sheet(sheet, items):
             continue
         cx = (c[0] + c[2]) / 2
         k = min(main, key=lambda b: abs((b[0] + b[2]) / 2 - cx))
+        # 물건에서 멀리 떨어진 작은 얼룩은 버림 (그림 생성기가 남긴 티)
+        gap = max(k[0] - c[2], c[0] - k[2], k[1] - c[3], c[1] - k[3])
+        if c[4] < big * 0.01 and gap > 24:
+            continue
         k[0], k[1], k[2], k[3] = min(k[0], c[0]), min(k[1], c[1]), max(k[2], c[2]), max(k[3], c[3])
     if len(main) != len(items):
         print(f"  ! {sheet}: 물건 {len(main)}개를 찾음 (기대 {len(items)}개) — 왼쪽부터 앞의 것만 씀", file=sys.stderr)

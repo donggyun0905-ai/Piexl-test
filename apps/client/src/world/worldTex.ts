@@ -21,13 +21,14 @@ interface WorldArt {
 const art: WorldArt = { tex: new Map(), obj: new Map() };
 let loading: Promise<void> | null = null;
 
-/** 지역마다 바꿔 끼우는 그림 (Region.skin: 기본 이름 → 그 지역 그림 이름, 그림이 없으면 기본 그림) */
+/** 지역마다 바꿔 끼우는 그림 (Region.skin: 기본 이름 → 그 지역 그림 이름, 그림이 없으면 기본 그림 · 빈 글자면 안 그림) */
 let skin: Readonly<Record<string, string>> = {};
 export function setArtSkin(s: Readonly<Record<string, string>> | undefined): void {
   skin = s ?? {};
 }
 const pick = <T>(m: Map<string, T>, name: string): T | undefined => {
   const alt = skin[name];
+  if (alt === "") return undefined;
   return (alt !== undefined && m.get(alt)) || m.get(name);
 };
 

@@ -2,14 +2,16 @@
 // 그림(public/world/obj, 손질 scripts/art/world_art.py)이 있으면 그 그림 · 지역마다 다른 그림은 Region.skin (술집 탁자·공방 상자 등)
 // (x, b) = 칸 가운데 x · 아래 끝 y
 import { shadow } from "./worldArt";
+import { drawTrainWindow, LAND_DECO, type LandDeco } from "./worldDecoLand";
 import { drawObj, objOf } from "./worldTex";
 
 /** 그림으로만 그리는 새 장식 (그림이 없으면 작은 상자) */
-export type ArtDeco = "longTable" | "crates" | "lamp" | "gearMachine" | "steamTank" | "yardCrane" | "robot" | "pipes" | "crateStack" | "trainCar" | "mushroom" | "fern" | "flowerBush" | "lantern";
+export type ArtDeco = "longTable" | "crates" | "lamp" | "gearMachine" | "steamTank" | "yardCrane" | "robot" | "pipes" | "crateStack" | "trainCar" | "mushroom" | "fern" | "flowerBush" | "lantern" | LandDeco;
 
 /** 부딪힘 반지름 (픽셀) */
 export const ART_DECO_R: Record<ArtDeco, number> = {
   longTable: 14, crates: 7, lamp: 2, gearMachine: 12, steamTank: 10, yardCrane: 10, robot: 6, pipes: 8, crateStack: 8, trainCar: 14, mushroom: 6, fern: 6, flowerBush: 6, lantern: 3,
+  ...(Object.fromEntries(Object.entries(LAND_DECO).map(([k, v]) => [k, v[1]])) as Record<LandDeco, number>),
 };
 
 /** 장식 → 그림 이름 (코드 그림이 있는 가구도 그림이 있으면 그림으로) */
@@ -18,18 +20,25 @@ const IMG: Record<string, string> = {
   counter: "shop_counter", potions: "potion_shelf", rack: "weapon_rack", dummy: "dummy", fountainGold: "fountain_gold", altar: "black_altar",
   longTable: "long_table", crates: "crates", lamp: "gas_lamp", gearMachine: "gear_machine", steamTank: "steam_tank", yardCrane: "yard_crane", robot: "guard_robot",
   pipes: "pipe_bundle", crateStack: "crate_stack", trainCar: "train_car", mushroom: "glow_mushroom", fern: "fern", flowerBush: "flower_bush", lantern: "lantern_post",
+  ...Object.fromEntries(Object.entries(LAND_DECO).map(([k, v]) => [k, v[0]])),
 };
 /** 불·빛이 나는 것: 그림 위에 깜박이는 빛 (색, 빛 높이) */
 const GLOW: Record<string, readonly [string, number]> = {
   fireplace: ["255,170,80", 5], lamp: ["255,214,140", 22], mushroom: ["120,190,255", 6], lantern: ["140,255,170", 15], altar: ["190,110,255", 13],
+  ...Object.fromEntries(Object.entries(LAND_DECO).flatMap(([k, v]) => ("2" in v ? [[k, v[2]]] : []))),
 };
 
 /** 그림이 있으면 그리고 true (없으면 false → 코드 그림) */
 export function drawArtDeco(g: CanvasRenderingContext2D, art: string, x: number, b: number, t: number, r: number): boolean {
+  if (art === "trainWindow") {
+    drawTrainWindow(g, x, b, t);
+    return true;
+  }
   const name = IMG[art];
   const img = name ? objOf(name) : undefined;
   if (!img) {
     if (!(art in ART_DECO_R)) return false;
+    r = Math.max(4, r);
     // 그림을 못 받았을 때: 작은 상자
     shadow(g, x, b, r + 2, 2.5, 0.3);
     g.fillStyle = "#6a5a4a";

@@ -97,6 +97,9 @@ export const HELIOS_INSIDE: Record<string, Region> = {
       inner("table3", 13, 6, "wpTavern", "table"),
       inner("barrel1", 14, 9, "wpTavern", "barrel"),
       inner("barrel2", 1, 9, "wpTavern", "barrel"),
+      // 구석 지하 계단 → 새벽의 성흔 아지트 (7장)
+      inner("cellarStairs", 15, 7, "wpDawnStairs", "stairsDown"),
+      { id: "dawnStairs", kind: "door", tx: 15, ty: 7, name: "wpDawnStairs", to: "dawnHideout", open: "dawn" },
     ],
   },
 };

@@ -1,0 +1,5 @@
+// 생성됨: scripts/art/world_hell.py (손으로 고치지 않음) · 집 문·장식 자리 (칸)
+import type { DecoArt } from "../worldDeco";
+
+export const HELL_HOUSE_DOORS: readonly (readonly [number, number])[] = [];
+export const HELL_DECO_SPOTS: readonly (readonly [DecoArt, number, number])[] = [["skullPillar", 124, 12], ["skullPillar", 132, 12], ["skullPillar", 124, 24], ["skullPillar", 132, 24], ["skullPillar", 124, 50], ["skullPillar", 132, 50], ["twistedTower", 94, 50], ["twistedTower", 162, 50], ["twistedTower", 94, 110], ["twistedTower", 162, 110], ["firePit", 114, 64], ["firePit", 142, 64], ["firePit", 114, 96], ["firePit", 142, 96], ["firePit", 120, 140], ["firePit", 136, 140], ["firePit", 28, 76], ["firePit", 228, 76], ["chainPost", 124, 108], ["chainPost", 132, 108], ["chainPost", 96, 78], ["chainPost", 96, 84], ["chainPost", 160, 78], ["chainPost", 160, 84], ["skullPillar", 22, 74], ["skullPillar", 34, 74], ["skullPillar", 222, 74], ["skullPillar", 234, 74], ["spikyRock", 70, 100], ["spikyRock", 186, 64], ["spikyRock", 150, 140], ["spikyRock", 80, 20]];

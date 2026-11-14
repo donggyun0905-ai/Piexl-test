@@ -19,6 +19,8 @@ export const SILBER_FIELD: Region = {
     // 북문 · 싸움터 · 악마의 문 (경비원 = 타워 디펜스)
     { id: "silberRaven", kind: "npc", tx: 122, ty: 52, name: "chessRaven", who: "chessRaven", line: "wnChessRaven" },
     { id: "battleSign", kind: "sign", tx: 134, ty: 40, name: "wpBattlefield" },
+    // 악마의 문 너머 → 지옥 (9장)
+    { id: "toHell", kind: "pass", tx: 128, ty: 15, name: "wpToHell", to: "hell", land: [128, 6] },
     { id: "gateGuard", kind: "npc", tx: 128, ty: 21, name: "asura", who: "asura", line: "wnAsura", gate: "td" },
     // 얼어붙은 호수 · 동쪽 망루 초소 · 얼음 동굴
     { id: "lakeSign", kind: "sign", tx: 64, ty: 82, name: "wpFrozenLake" },

@@ -42,6 +42,8 @@ export const VIRDIA_FIELD: Region = {
     { id: "deepForest", kind: "dungeon", tx: 210, ty: 16, name: "wpDeepForest" },
     { id: "virdiaRen", kind: "npc", tx: 207, ty: 19, name: "ren", who: "ren", line: "wnRen" },
     { id: "virdiaFly", kind: "npc", tx: 230, ty: 59, name: "fly", who: "fly", line: "wnFly" },
+    // 동쪽 해안 나루 → 바람골 (9장)
+    { id: "toWindtown", kind: "pass", tx: 237, ty: 61, name: "wpFerryWindtown", to: "windtown", land: [6, 80] },
     // 순간 이동석
     { id: "warpVirdiaPlaza", kind: "warp", tx: 140, ty: 58, name: "wpWarpVirdiaPlaza" },
     { id: "warpVirdiaWest", kind: "warp", tx: 9, ty: 60, name: "wpWarpVirdiaWest" },

@@ -1,0 +1,5 @@
+// 생성됨: scripts/art/world_seongguk.py (손으로 고치지 않음) · 집 문·장식 자리 (칸)
+import type { DecoArt } from "../worldDeco";
+
+export const HOLY_HOUSE_DOORS: readonly (readonly [number, number])[] = [[73, 76], [79, 76], [85, 76], [73, 84], [79, 84], [85, 84], [73, 92], [79, 92], [85, 92], [73, 100], [79, 100], [85, 100], [73, 108], [79, 108], [85, 108], [119, 76], [125, 76], [131, 76], [119, 84], [125, 84], [131, 84], [119, 92], [125, 92], [131, 92], [119, 100], [125, 100], [131, 100], [119, 108], [125, 108], [131, 108]];
+export const HOLY_DECO_SPOTS: readonly (readonly [DecoArt, number, number])[] = [["bellTower", 88, 60], ["bellTower", 116, 60], ["holyBrazier", 96, 68], ["holyBrazier", 108, 68], ["holyBrazier", 102, 116], ["holyBrazier", 146, 76], ["holyBrazier", 146, 84], ["angel", 92, 76], ["angel", 112, 76], ["angel", 92, 100], ["angel", 112, 100], ["candles", 98, 86], ["candles", 106, 86], ["candles", 40, 34], ["candles", 52, 34], ["whiteBanner", 68, 44], ["whiteBanner", 136, 44], ["whiteBanner", 68, 116], ["whiteBanner", 136, 116], ["whiteBanner", 170, 78], ["whiteBanner", 210, 78]];

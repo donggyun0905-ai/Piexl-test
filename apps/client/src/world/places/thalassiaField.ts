@@ -18,6 +18,8 @@ export const THAL_FIELD: Region = {
     { id: "thalTail", kind: "npc", tx: 104, ty: 66, name: "tail", who: "tail", line: "wnTail" },
     // 부두 · 잔교 · 월계선 선착장
     { id: "pierSign", kind: "sign", tx: 198, ty: 93, name: "wpPier" },
+    // 잔교 끝 잠수 종 → 해저 도시 (9장)
+    { id: "toUndersea", kind: "pass", tx: 226, ty: 91, name: "wpDivingBell", to: "undersea", land: [128, 6] },
     { id: "thalThorken", kind: "npc", tx: 190, ty: 74, name: "thorken", who: "thorken", line: "wnThorken" },
     { id: "thalWave", kind: "npc", tx: 220, ty: 91, name: "wave", who: "wave", line: "wnWave" },
     { id: "thalMadQueen", kind: "npc", tx: 220, ty: 71, name: "madQueen", who: "madQueen", line: "wnMadQueen" },

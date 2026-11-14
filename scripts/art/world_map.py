@@ -189,6 +189,21 @@ if __name__ == "__main__":
     thal_layout()
     check_thal(tf2)
     save("thalassia", tf2)
+    # 0.53.0 새 지역 (있는 칸 + Region.skin 그림) · 안 지도 (해저 열차·새벽의 성흔 아지트)
+    import world_cyber
+    import world_hell
+    import world_rooms
+    import world_seongguk
+    import world_undersea
+    import world_windtown
+
+    for mod, name in [(world_hell, "hell"), (world_undersea, "undersea"), (world_cyber, "cyber"), (world_windtown, "windtown"), (world_seongguk, "seongguk")]:
+        g = getattr(mod, name)()
+        mod.write_layout()
+        mod.check(g)
+        save(name, g)
+    save("sea_train", world_rooms.sea_train())
+    save("dawn_hideout", world_rooms.dawn_hideout())
     save("ascalon_shop", ascalon_shop())
     save("ascalon_smithy", ascalon_smithy())
     save("ascalon_inn", ascalon_inn())

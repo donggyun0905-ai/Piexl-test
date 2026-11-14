@@ -15,8 +15,15 @@ import { THAL_FIELD, THAL_INSIDE } from "./places/thalassiaField";
 import { TERRA_FIELD, TERRA_INSIDE } from "./places/terraField";
 import { VIRDIA_FIELD, VIRDIA_INSIDE } from "./places/virdiaField";
 import { INDOOR_SKIN } from "./places/skins";
+import { CYBER_FIELD, CYBER_INSIDE } from "./places/cyberField";
+import { DAWN_INSIDE } from "./places/dawnHideout";
+import { HELL_FIELD } from "./places/hellField";
+import { SEONGGUK_FIELD, SEONGGUK_INSIDE } from "./places/seonggukField";
+import { UNDERSEA_FIELD, UNDERSEA_INSIDE } from "./places/underseaField";
+import { WINDTOWN_FIELD, WINDTOWN_INSIDE } from "./places/windtownField";
 import { DECO_R, type DecoArt } from "./worldDeco";
 import { WTILE } from "./worldMap";
+import type { Mood } from "./worldMood";
 
 /** npc = 말 거는 사람 (부딪힘) · door = 건물 문(들어가기) · exit = 건물 안 나가는 문 · deco = 가구 (부딪힘, 말 못 검) · warp = 순간 이동석 · pass = 국경 통로(다른 나라 필드로, 그 나라가 스토리에서 열렸을 때만) */
 export type PlaceKind = "dungeon" | "town" | "sign" | "npc" | "door" | "exit" | "deco" | "warp" | "pass";
@@ -47,6 +54,8 @@ export interface Place {
   menu?: WorldMenu;
   /** door: 가게 간판 */
   icon?: ShopIcon;
+  /** door: 이 진영이 스토리에서 열려야 들어감 (아니면 `{name}Text` 글) */
+  open?: FactionId;
 }
 
 export interface Region {
@@ -63,6 +72,14 @@ export interface Region {
   indoor?: boolean;
   /** 이 지역에서 바꿔 끼우는 그림 (기본 이름 → 그림 이름, worldTex.setArtSkin) · 건물 안은 INDOOR_SKIN 위에 덧씀 */
   skin?: Readonly<Record<string, string>>;
+  /** 분위기 효과 (worldMood: 불씨·거품·비·꽃잎·금빛) · 없으면 나비·구름 그림자 */
+  mood?: Mood;
+  /** 지옥 불씨가 초록이 되는 가운데 칸 */
+  moodCenter?: readonly [number, number];
+  /** 나라 지도(M) 색 바꾸기: 땅 종류 번호 → 색 */
+  mini?: Readonly<Partial<Record<number, string>>>;
+  /** 타고 가는 곳(열차 안): secs초 뒤 to 지역의 land 칸에 내림 */
+  ride?: { to: string; land: readonly [number, number]; secs: number };
 }
 export const skinOf = (r: Region): Readonly<Record<string, string>> | undefined => (r.indoor ? { ...INDOOR_SKIN, ...r.skin } : r.skin);
 
@@ -81,6 +98,16 @@ export const REGIONS: Record<string, Region> = {
   ...SILBER_INSIDE,
   thalassia: THAL_FIELD,
   ...THAL_INSIDE,
+  ...DAWN_INSIDE,
+  hell: HELL_FIELD,
+  undersea: UNDERSEA_FIELD,
+  ...UNDERSEA_INSIDE,
+  cyber: CYBER_FIELD,
+  ...CYBER_INSIDE,
+  windtown: WINDTOWN_FIELD,
+  ...WINDTOWN_INSIDE,
+  seongguk: SEONGGUK_FIELD,
+  ...SEONGGUK_INSIDE,
 };
 
 /** 나라·지역 필드인지 (건물 안이 아님) */

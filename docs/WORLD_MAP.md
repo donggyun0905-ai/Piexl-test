@@ -77,6 +77,15 @@
 - 새 땅: 젖은 돌·나무 부두(물 위도)·해변(걸음) · 얕은 바다·깊은 바다·창고(막힘) — `apps/client/src/world/worldSea.ts` · 장식 `worldDecoSea.ts` (자리는 생성기가 `thalassiaLayout.ts`로)
 - 지도 모양 `scripts/art/world_thalassia.py` · 장소 `apps/client/src/world/places/thalassiaField.ts`
 
+### 새 지역 여섯 (0.53.0, 그림 적용 · 있는 칸에 지역 그림을 끼움 `Region.skin`)
+
+- **지옥** (실베르 악마의 문 너머, 9장) — 흑요석 성채(네 문) 안 악마의 문 = 지옥 던전 · 용암 강 둘(현무암 둑길)·호수 · 해골 기둥 초소 · 불 구덩이 벌판 · 불씨는 성채에 가까울수록 초록 · `world_hell.py` · `places/hellField.ts`
+- **해저 도시** (탈라시아 잔교 끝 잠수 종, 9장) — 진주 돌길 광장·조개 집·공기 방울 돔 · 해저 신전(안 지도) · 남쪽 심연 해구 던전 · `world_undersea.py` · `places/underseaField.ts`
+- **네온 시티(사이버펑크)** (테라코어 역 해저 열차, 9장) — 열차 칸 안 지도에서 5분 뒤 서쪽 끝 역에 내림(`Region.ride`, 돌아가는 열차도 같음, 열차 안 할 일은 추후) · 빌딩가·광장 홀로그램·동쪽 네온 거리 · 편의점(로비 꾸밈 상점) · 지하 데이터 센터 던전 · `world_cyber.py`·`world_rooms.py` · `places/cyberField.ts`
+- **바람골** (비르디아 동쪽 해안 나룻배, 9장) — 꽃잎 길·개울·기와 마을·큰 기와집(안 지도) · 풍차 언덕 · 대나무숲 · 바람 골짜기 던전 · `world_windtown.py` · `places/windtownField.ts`
+- **성국** (대사막 서남쪽 순례길, 8장) — 흰 성벽 성도 · 대성당(안 지도: 제단·긴 의자·오르간) · 수도원 · 지하 묘지 던전 · 성스러운 호수 · `world_seongguk.py` · `places/seonggukField.ts`
+- **새벽의 성흔 아지트** (헬리오스 술집 구석 지하 계단, 7장 · 문 `open`) — 무기고·작전실·훈련장·감옥 · `world_rooms.py` · `places/dawnHideout.ts`
+
 ### 지도에서 모드 들어가는 곳 (2026-11-14 20:01 사용자 결정)
 
 장신구는 지도 몬스터에만 적용, 아래 모드는 모두 **장신구 없이 지금과 같은 모드** 그대로 (메인 화면에서 들어간 것과 같음)

@@ -1,0 +1,15 @@
+/* 세계 지도 열차 안 (WorldRide) */
+/* 열차 안: 다음 역까지 남은 시간 */
+.world-ride {
+  position: fixed;
+  top: calc(max(12px, env(safe-area-inset-top)) + 40px);
+  left: 50%;
+  z-index: 2;
+  margin: 0;
+  padding: 4px 14px;
+  border-radius: 8px;
+  transform: translateX(-50%);
+  font-weight: bold;
+  color: #9ae6ff;
+  background: rgba(8, 20, 40, 0.85);
+}
