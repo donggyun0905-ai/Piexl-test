@@ -65,7 +65,7 @@ const NONE: Ground = { lo: [12, 10, 18], hi: [12, 10, 18], size: 8, stretch: 1, 
 /** 나무·꽃·바위·울타리 밑은 풀 · 집 밑은 바닥 */
 export function groundOf(t: number): number {
   if (t === WT.tree || t === WT.flower || t === WT.rock || t === WT.fence) return WT.grass;
-  if (t === WT.house || t === WT.keep) return WT.floor;
+  if (t === WT.house || t === WT.keep || t === WT.chapel) return WT.floor;
   if (t === WT.factory || t === WT.pipe || t === WT.arena) return WT.metal;
   if (t === WT.bigTree || t === WT.hedge) return WT.moss;
   if (t === WT.palace || t === WT.villa) return WT.marble;

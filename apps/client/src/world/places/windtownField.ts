@@ -1,6 +1,6 @@
-// 바람골 필드 장소 (256×160칸, 지도 모양 scripts/art/world_windtown.py — 지도를 고치면 좌표도 같이, 생성기가 걸을 수 있는 칸인지 검사)
+// 비연 필드 장소 (256×160칸, 지도 모양 scripts/art/world_windtown.py — 지도를 고치면 좌표도 같이, 생성기가 걸을 수 있는 칸인지 검사)
 // 비르디아 동쪽 해안에서 나룻배 (9장) · 꽃잎 길 · 개울 · 기와 마을(큰 기와집 안 지도) · 풍차 언덕 · 대나무숲 · 바람 골짜기 던전 · 순간 이동석 다섯
-// 그림은 있는 칸에 바람골 그림을 끼움 (skin) · 날리는 꽃잎·바람 줄기 (worldMood)
+// 그림은 있는 칸에 비연 그림을 끼움 (skin) · 날리는 꽃잎·바람 줄기 (worldMood)
 import type { Place, Region } from "../worldPlaces";
 import { WIND_DECO_SPOTS, WIND_HOUSE_DOORS } from "./windtownLayout";
 
@@ -21,7 +21,7 @@ export const WINDTOWN_FIELD: Region = {
     // 기와 마을 · 큰 기와집
     { id: "windTown", kind: "town", tx: 150, ty: 70, name: "wpWindVillage" },
     { id: "manorDoor", kind: "door", tx: 150, ty: 37, name: "wpWindManor", to: "windManor" },
-    ...WIND_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "ascalonHouse" })),
+    ...WIND_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "houseBiyeon" })),
     { id: "windSummoner", kind: "npc", tx: 144, ty: 84, name: "summoner", who: "summoner", line: "wnWindSummoner" },
     { id: "windPuppeteer", kind: "npc", tx: 60, ty: 40, name: "puppeteer", who: "puppeteer", line: "wnWindPuppeteer" },
     { id: "windShadowing", kind: "npc", tx: 200, ty: 128, name: "shadowing", who: "shadowing", line: "wnWindShadowing" },

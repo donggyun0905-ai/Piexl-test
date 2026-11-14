@@ -12,8 +12,8 @@ export const THAL_FIELD: Region = {
     // 광장 · 무역 상회 · 민가 · 창고
     { id: "thalTown", kind: "town", tx: 138, ty: 88, name: "wpThalPort" },
     { id: "tradeDoor", kind: "door", tx: TD[0], ty: TD[1], name: "wpTradeHouse", to: "thalTrade", icon: "bag" },
-    ...THAL_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "ascalonHouse" })),
-    ...THAL_WAREHOUSE_DOORS.map(([tx, ty]): Place => ({ id: `ware${tx}_${ty}`, kind: "door", tx, ty, name: "wpWarehouse", to: "ascalonHouse" })),
+    ...THAL_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "houseThal" })),
+    ...THAL_WAREHOUSE_DOORS.map(([tx, ty]): Place => ({ id: `ware${tx}_${ty}`, kind: "door", tx, ty, name: "wpWarehouse", to: "houseThalWare" })),
     { id: "thalLevia", kind: "npc", tx: 142, ty: 100, name: "levia", who: "levia", line: "wnLevia" },
     { id: "thalTail", kind: "npc", tx: 104, ty: 66, name: "tail", who: "tail", line: "wnTail" },
     // 부두 · 잔교 · 월계선 선착장
@@ -43,5 +43,5 @@ export const THAL_FIELD: Region = {
 
 /** 무역 상회 (가게 안 지도, 훅 = 게임 상점 뽑기) */
 export const THAL_INSIDE: Record<string, Region> = {
-  thalTrade: { ...shop("wpTradeHouse", "hook", "wnHook", "shop:gacha", "shelf", "barrel"), skin: { barrels: "crates" } },
+  thalTrade: { ...shop("wpTradeHouse", "hook", "wnHook", "shop:gacha", "shelf", "barrel"), skin: { woodFloor: "dockPlank", barrels: "crates" } },
 };

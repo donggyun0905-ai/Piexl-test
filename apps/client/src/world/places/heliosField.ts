@@ -20,6 +20,7 @@ export const HELIOS_FIELD: Region = {
     ...[108, 148].flatMap((tx) => [54, 81].map((ty) => deco(`banner${tx}_${ty}`, tx, ty, "banner"))),
     { id: "heliosBrawler", kind: "npc", tx: 136, ty: 56, name: "brawler", who: "brawler", line: "wnBrawler" },
     // 황금 궁전 · 근위
+    { id: "chapelDoor", kind: "door", tx: 112, ty: 106, name: "wpChapel", to: "heliosChapel" },
     { id: "palaceDoor", kind: "door", tx: 128, ty: 39, name: "wpPalace", to: "heliosPalace" },
     { id: "heliosSlayer", kind: "npc", tx: 122, ty: 42, name: "slayer", who: "slayer", line: "wnSlayer" },
     deco("palaceBannerL", 104, 44, "banner", "wpPalace"),
@@ -33,7 +34,7 @@ export const HELIOS_FIELD: Region = {
     { id: "altarSign", kind: "sign", tx: 171, ty: 45, name: "wpAltar" },
     { id: "heliosApostle", kind: "npc", tx: 177, ty: 45, name: "apostle", who: "apostle", line: "wnApostle" },
     // 주거지 (모두 같은 민가 안)
-    ...HELIOS_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "ascalonHouse" })),
+    ...HELIOS_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "houseHelios" })),
     { id: "heliosMukin", kind: "npc", tx: 62, ty: 63, name: "mukin", who: "mukin", line: "wnMukin" },
     // 북문 · 사막 길
     { id: "heliosBedouin", kind: "npc", tx: 124, ty: 8, name: "bedouin", who: "bedouin", line: "wnBedouin" },
@@ -66,7 +67,7 @@ export const HELIOS_INSIDE: Record<string, Region> = {
     start: { tx: 9, ty: 10 },
     title: "wpPalace",
     indoor: true,
-    skin: HALL_SKIN,
+    skin: { ...HALL_SKIN, floor: "marble" },
     places: [
       { id: "keepExit", kind: "exit", tx: 9, ty: 11, name: "wpGoOut" },
       { id: "heliosEclipse", kind: "npc", tx: 9, ty: 4, name: "eclipse", who: "eclipse", line: "wnEclipse" },
@@ -76,8 +77,8 @@ export const HELIOS_INSIDE: Record<string, Region> = {
       inner("bannerR", 16, 3, "wpPalace", "banner"),
     ],
   },
-  heliosMarket: shop("wpMarket", "bedouin", "wnBedouinShop", "shop:gacha", "rack", "barrel"),
-  heliosTailor: shop("wpTailor", "ninja", "wnNinja", "shop:skins", "armor", "armor"),
+  heliosMarket: { ...shop("wpMarket", "bedouin", "wnBedouinShop", "shop:gacha", "rack", "barrel"), skin: { woodFloor: "marble" } },
+  heliosTailor: { ...shop("wpTailor", "ninja", "wnNinja", "shop:skins", "armor", "armor"), skin: { woodFloor: "marble" } },
   heliosTavern: {
     map: "world/ascalon_inn.png",
     start: { tx: 8, ty: 8 },

@@ -24,10 +24,10 @@ function extent(m: WorldMap, t: number, cx: number, cy: number): [number, number
 }
 
 /** 성채: 위 줄 = 푸른 슬레이트 지붕(양 끝 탑) · 맨 아래 줄 = 돌벽 앞면 + 가운데 큰 아치 문 · 양옆 창 */
-export function keep(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: number): void {
-  const b = extent(m, WT.keep, cx, cy);
-  // 성채 그림이 있는 지역(비르디아 엘프 성: Region.skin keep_art)은 그림
-  if (blockObj(g, "keep_art", b, cx, cy, px, py, S)) return;
+export function keep(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: number, t: number = WT.keep, art = "keep_art"): void {
+  const b = extent(m, t, cx, cy);
+  // 성채 그림이 있는 지역(비르디아 엘프 성: Region.skin keep_art)·교회(대성당 그림)는 그림
+  if (blockObj(g, art, b, cx, cy, px, py, S)) return;
   const [x0, y0, x1, y1] = b;
   const mid = Math.floor((x0 + x1) / 2);
   const tower = cx === x0 || cx === x1;

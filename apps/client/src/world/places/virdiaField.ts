@@ -27,7 +27,7 @@ export const VIRDIA_FIELD: Region = {
     ...VIRDIA_PROPS.map(([art, tx, ty], i): Place => ({ id: `prop${i}`, kind: "deco", tx, ty, name: "wpVirdiaCity", art })),
     { id: "virdiaIdra", kind: "npc", tx: 138, ty: 46, name: "idra", who: "idra", line: "wnIdra" },
     // 나무 집 (마을·성 안, 모두 같은 민가 안)
-    ...VIRDIA_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "ascalonHouse" })),
+    ...VIRDIA_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "houseVirdia" })),
     { id: "villageSign", kind: "sign", tx: 60, ty: 60, name: "wpVillage" },
     { id: "virdiaByeonhui", kind: "npc", tx: 58, ty: 93, name: "byeonhui", who: "byeonhui", line: "wnByeonhui" },
     // 서문 · 테라코어 국경 통로
@@ -42,7 +42,7 @@ export const VIRDIA_FIELD: Region = {
     { id: "deepForest", kind: "dungeon", tx: 210, ty: 16, name: "wpDeepForest" },
     { id: "virdiaRen", kind: "npc", tx: 207, ty: 19, name: "ren", who: "ren", line: "wnRen" },
     { id: "virdiaFly", kind: "npc", tx: 230, ty: 59, name: "fly", who: "fly", line: "wnFly" },
-    // 동쪽 해안 나루 → 바람골 (9장)
+    // 동쪽 해안 나루 → 비연 (9장)
     { id: "toWindtown", kind: "pass", tx: 237, ty: 61, name: "wpFerryWindtown", to: "windtown", land: [6, 80] },
     // 순간 이동석
     { id: "warpVirdiaPlaza", kind: "warp", tx: 140, ty: 58, name: "wpWarpVirdiaPlaza" },

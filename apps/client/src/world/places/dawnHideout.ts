@@ -15,8 +15,7 @@ export const DAWN_INSIDE: Record<string, Region> = {
     skin: { ...HALL_SKIN, floor: "cellarStone" },
     mood: "cellar",
     places: [
-      { id: "stairsUp", kind: "exit", tx: 18, ty: 2, name: "wpGoOut" },
-      deco("stairsArt", 18, 2, "stairsUp"),
+      { id: "stairsUp", kind: "exit", tx: 18, ty: 2, name: "wpGoOut", art: "stairsUp" },
       // 무기고
       ...[3, 6, 9].map((x) => deco(`rack${x}`, x, 2, "rack")),
       deco("armCrates", 2, 11, "crates"),

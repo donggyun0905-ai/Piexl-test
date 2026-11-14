@@ -12,6 +12,7 @@ export const ASCALON_FIELD: Region = {
   places: [
     // 광장 · 성채
     { id: "ascalonCastle", kind: "town", tx: 94, ty: 61, name: "wpAscalonCastle" },
+    { id: "chapelDoor", kind: "door", tx: 145, ty: 51, name: "wpChapel", to: "ascalonChapel" },
     { id: "ascalonKeepDoor", kind: "door", tx: 100, ty: 27, name: "wpAscalonKeep", to: "ascalonKeep" },
     { id: "ascalonMage", kind: "npc", tx: 110, ty: 50, name: "mage", who: "mage", line: "wnMage" },
     // 상점가 · 장인 거리

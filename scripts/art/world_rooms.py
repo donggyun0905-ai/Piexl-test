@@ -1,4 +1,4 @@
-"""0.53.0 안 지도 (world_map.room 틀): 해저 열차 칸 · 새벽의 성흔 아지트 (헬리오스 술집 지하)
+"""안 지도 (world_map.room 틀): 해저 열차 칸 · 새벽의 성흔 아지트 (헬리오스 술집 지하) · 교회 (0.53.1)
 가구·사람·창문은 장소 표 (places/cyberField.ts SEA_TRAIN · places/dawnHideout.ts)
 """
 from world_map import room
@@ -23,5 +23,14 @@ def dawn_hideout():
             g[13][x] = "innerWall"
     for y in range(3, 7):
         for x in range(16, 20):
+            g[y][x] = "carpet"
+    return g
+
+
+def church():
+    """교회 안 17×14 (아스칼론·헬리오스 교회, places/interiors.church): 돌 바닥 · 문(8,12)에서 제단 앞까지 가운데 카펫 통로"""
+    g = room(17, 14, "floor")
+    for y in range(3, 13):
+        for x in range(7, 10):
             g[y][x] = "carpet"
     return g

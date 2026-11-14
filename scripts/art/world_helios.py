@@ -14,12 +14,14 @@ W, H = 256, 160
 ROOT = Path(__file__).resolve().parents[2]
 PLACES = ROOT / "apps/client/src/world/places"
 SOFT = ("grass", "flower", "tree", "rock")
-SOLID = {"water", "deep", "tree", "wall", "rock", "fence", "house", "keep", "innerWall", "palace", "villa"}
+SOLID = {"water", "deep", "tree", "wall", "rock", "fence", "house", "keep", "innerWall", "palace", "villa", "chapel"}
 
 CITY = (60, 22, 196, 112)
 # 제국 집 (3×4: 위 세 줄 지붕 · 아래 줄 앞벽, 문은 가운데 아래 칸)
 VILLAS = [(x, y) for y in (75, 85, 95) for x in (66, 72, 78, 84, 90, 96, 156, 162, 168, 174, 180, 186)]
 SHOPS = {"market": (70, 34), "tavern": (86, 34), "armor": (70, 46)}
+# 교회 (x0, y0, 폭, 높이): 남쪽 큰길 서쪽 · 문 (112, 106)에서 큰길까지 벽돌길
+CHAPEL = (110, 102, 5, 4)
 RIVER = [(254, 28), (230, 40), (214, 70), (210, 100), (196, 124), (168, 142), (150, 152)]
 
 
@@ -111,6 +113,9 @@ def city(m):
         m.rect(152, y, x1 - 2, y, "redBrick")
     for (x, y) in VILLAS:
         m.rect(x, y, x + 2, y + 3, "villa")
+    x, y, w, h = CHAPEL
+    m.rect(x, y, x + w - 1, y + h - 1, "chapel")
+    m.rect(x + w // 2, y + h, 125, y + h + 1, "redBrick")
     # 성 안 정원 나무
     for (x, y) in [(64, 28), (192, 104), (64, 104), (104, 60), (152, 60), (104, 76), (152, 76)]:
         m.put(x, y, "tree")
@@ -132,8 +137,8 @@ def check(g):
     src = (PLACES / "heliosField.ts").read_text(encoding="utf-8").split("HELIOS_INSIDE")[0]
     pts = [(int(a), int(b)) for a, b in re.findall(r"tx: (\d+), ty: (\d+)", src)]
     bad = [p for p in pts if g[p[1]][p[0]] in SOLID]
-    for (x, y) in [(x + 1, y + 4) for (x, y) in VILLAS + list(SHOPS.values())] + [(128, 39)]:
-        if g[y][x] in SOLID or g[y - 1][x] not in ("villa", "palace"):
+    for (x, y) in [(x + 1, y + 4) for (x, y) in VILLAS + list(SHOPS.values())] + [(128, 39), (CHAPEL[0] + 2, CHAPEL[1] + 4)]:
+        if g[y][x] in SOLID or g[y - 1][x] not in ("villa", "palace", "chapel"):
             bad.append((x, y))
     assert not bad, f"걸을 수 없는 장소 자리: {bad}"
     print("헬리오스 장소", len(pts), "곳 OK")

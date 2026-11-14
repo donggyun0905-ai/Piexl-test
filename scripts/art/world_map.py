@@ -19,6 +19,7 @@ KEY = {
     "dune": (226, 196, 120), "gravel": (170, 130, 100), "cracked": (200, 140, 90), "buriedRoad": (190, 170, 130), "oasis": (60, 200, 190), "temple": (160, 110, 60),
     "deepSnow": (226, 236, 248), "ice": (150, 210, 236), "frozenMud": (120, 110, 104), "snowStone": (176, 184, 196), "thickWall": (70, 76, 92), "snowPine": (40, 80, 70),
     "wetStone": (90, 96, 100), "dockPlank": (140, 110, 80), "beach": (240, 228, 190), "sea": (70, 200, 220), "ocean": (20, 60, 120), "warehouse": (120, 90, 60),
+    "chapel": (236, 236, 250),
 }
 OUT = Path(__file__).resolve().parents[2] / "apps/client/public/world"
 
@@ -197,11 +198,17 @@ if __name__ == "__main__":
     import world_undersea
     import world_windtown
 
+    grids = {"ascalon": field, "terracore": tf, "virdia": vf, "helios": hf, "desert": df, "silber": sf, "thalassia": tf2}
     for mod, name in [(world_hell, "hell"), (world_undersea, "undersea"), (world_cyber, "cyber"), (world_windtown, "windtown"), (world_seongguk, "seongguk")]:
         g = getattr(mod, name)()
         mod.write_layout()
         mod.check(g)
         save(name, g)
+        grids[name] = g
+    from world_lands import check_doors
+
+    check_doors(grids)
+    save("church", world_rooms.church())
     save("sea_train", world_rooms.sea_train())
     save("dawn_hideout", world_rooms.dawn_hideout())
     save("ascalon_shop", ascalon_shop())

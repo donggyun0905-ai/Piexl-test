@@ -9,8 +9,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 PLACES = ROOT / "apps/client/src/world/places"
 SOLID = {"water", "deep", "tree", "wall", "rock", "fence", "house", "keep", "innerWall", "factory", "pipe", "arena", "bigTree", "hedge",
-         "palace", "villa", "oasis", "temple", "thickWall", "snowPine", "sea", "ocean", "warehouse"}
-BUILDING = {"house", "keep", "palace", "villa", "warehouse"}
+         "palace", "villa", "oasis", "temple", "thickWall", "snowPine", "sea", "ocean", "warehouse", "chapel"}
+BUILDING = {"house", "keep", "palace", "villa", "warehouse", "chapel"}
 
 
 def check(g, field, decos, doors, label):
@@ -51,3 +51,34 @@ def houses(m, spots, w=3, h=2, k="house"):
     for (x, y) in spots:
         m.rect(x, y, x + w - 1, y + h - 1, k)
     return [(x + w // 2, y + h) for (x, y) in spots]
+
+
+def check_doors(grids):
+    """모든 나라 필드: 문은 건물 앞 아래 가운데 (덩어리 폭이 짝수면 가운데 두 칸 중 하나) · grids = {지도 이름: 칸}
+    문 자리 = places/*Field.ts의 문(door) 숫자 좌표 + *Layout.ts의 *DOORS 표"""
+    bad = []
+    for f in sorted(PLACES.glob("*Field.ts")):
+        src = f.read_text(encoding="utf-8").split("_INSIDE")[0]
+        name = re.search(r'map: "world/(\w+)\.png"', src).group(1)
+        g = grids.get(name)
+        if g is None:
+            continue
+        pts = [(int(a), int(b)) for a, b in re.findall(r'kind: "door", tx: (\d+), ty: (\d+)', src)]
+        lay = PLACES / f.name.replace("Field", "Layout")
+        if lay.exists():
+            for line in lay.read_text(encoding="utf-8").splitlines():
+                if "DOORS" in line:
+                    pts += [(int(a), int(b)) for a, b in re.findall(r"\[(\d+), (\d+)\]", line)]
+        for (x, y) in pts:
+            k = g[y - 1][x]
+            if k not in BUILDING:
+                continue
+            x0, x1 = x, x
+            while g[y - 1][x0 - 1] == k:
+                x0 -= 1
+            while g[y - 1][x1 + 1] == k:
+                x1 += 1
+            if x not in ((x0 + x1) // 2, (x0 + x1 + 1) // 2):
+                bad.append((name, x, y, x0, x1))
+    assert not bad, f"건물 가운데가 아닌 문: {bad}"
+    print("문 가운데 검사 OK")

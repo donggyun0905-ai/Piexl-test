@@ -1,4 +1,4 @@
-// 아스칼론 건물 안 (지도 모양 scripts/art/world_map.py): 성채 · 민가 · 가게 넷(같은 안 지도, 진열대·주인만 다름, 주인 = 게임 상점 탭: 무기점 뽑기·방어구점 스킨·물약점 이벤트 효과·잡화점 로비 꾸밈) · 대장간(대장장이 = 레이드 장신구) · 여관
+// 아스칼론 건물 안 (지도 모양 scripts/art/world_map.py): 성채 · 가게 넷(같은 안 지도, 진열대·주인만 다름, 주인 = 게임 상점 탭: 무기점 뽑기·방어구점 스킨·물약점 이벤트 효과·잡화점 로비 꾸밈) · 대장간(대장장이 = 레이드 장신구) · 여관 · 민가는 places/interiors
 import type { CharacterId } from "@pixel-rogue/shared";
 import type { TextKey } from "../../i18n";
 import type { DecoArt } from "../worldDeco";
@@ -44,22 +44,6 @@ export const ASCALON_INSIDE: Record<string, Region> = {
       deco("keepArmorR", 16, 2, "wpAscalonKeep", "armor"),
       deco("keepBarrel", 16, 10, "wpAscalonKeep", "barrel"),
       deco("keepTable", 2, 10, "wpAscalonKeep", "longTable"),
-    ],
-  },
-  // 민가 안 (주거지·농촌 집이 모두 같은 안 지도)
-  ascalonHouse: {
-    map: "world/ascalon_house.png",
-    start: { tx: 5, ty: 6 },
-    title: "wpHouse",
-    indoor: true,
-    places: [
-      { id: "houseExit", kind: "exit", tx: 5, ty: 7, name: "wpGoOut" },
-      deco("houseBed", 2, 3, "wpHouse", "bed"),
-      deco("houseFire", 6, 2, "wpHouse", "fireplace"),
-      deco("houseShelf", 9, 2, "wpHouse", "shelf"),
-      deco("houseTable", 8, 5, "wpHouse", "table"),
-      deco("housePlant", 10, 7, "wpHouse", "plant"),
-      deco("houseBarrel", 1, 7, "wpHouse", "barrel"),
     ],
   },
   ascalonWeapon: shop("wpWeaponShop", "leo", "wnLeo", "shop:gacha", "rack", "barrel"),

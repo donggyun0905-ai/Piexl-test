@@ -1,5 +1,5 @@
 // 0.53.0 새 지역 장식 표 (worldDecoArt가 씀): 장식 이름 → [그림 이름, 부딪힘 반지름(-99 = 없음), 빛(색, 높이)]
-// 지옥 · 해저 도시 · 사이버펑크 · 바람골 · 성국 · 새벽의 성흔 아지트 · 해저 열차 (그림 손질 scripts/art/world_art_sheets.py)
+// 지옥 · 해저 도시 · 사이버펑크 · 비연 · 성국 · 새벽의 성흔 아지트 · 해저 열차 (그림 손질 scripts/art/world_art_sheets.py)
 type Glow = readonly [string, number];
 type Row = readonly [string, number, Glow?];
 
@@ -25,7 +25,7 @@ export const LAND_DECO = {
   trashBin: ["trash_bin", 4],
   neonSign: ["neon_sign", 9, ["255,90,200", 8]],
   utilityPole: ["utility_pole", 3],
-  // 바람골
+  // 비연
   windmill: ["windmill", 12],
   pinwheel: ["pinwheel", 2],
   clothBanner: ["cloth_banner", 2],

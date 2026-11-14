@@ -1,13 +1,13 @@
 import type { Lang } from "../index";
 
-// 화면 글자: 세계 지도 바람골 (world/places/windtownField) · 성국 (seonggukField) · 표지판 글은 `{이름 키}Text`
+// 화면 글자: 세계 지도 비연 (world/places/windtownField) · 성국 (seonggukField) · 아스칼론·헬리오스 교회 (places/interiors) · 표지판 글은 `{이름 키}Text`
 export const WORLD_WIND_TEXT = {
-  wpWindtown: { ko: "바람골", en: "Windvale", ja: "風の谷" },
-  wpFerryWindtown: { ko: "바람골 나룻배", en: "Ferry to Windvale", ja: "風の谷への渡し舟" },
+  wpWindtown: { ko: "비연", en: "Biyeon", ja: "ビヨン" },
+  wpFerryWindtown: { ko: "비연 나룻배", en: "Ferry to Biyeon", ja: "ビヨンへの渡し舟" },
   wpFerryWindtownText: { ko: "동쪽 바다 건너 바람이 시원한 기와 도시로 가는 나룻배. 아직 다니지 않는다. (스토리 9장에서 열림)", en: "A ferry across the eastern sea to a breezy tiled-roof town. Not running yet. (Opens in Chapter 9)", ja: "東の海を越え、風の涼しい瓦の町へ行く渡し舟。まだ出ていない。（ストーリー第9章で解放）" },
   wpFerryVirdia: { ko: "비르디아 나룻배", en: "Ferry to Virdia", ja: "ヴィルディアへの渡し舟" },
   wpFerryVirdiaText: { ko: "비르디아 동쪽 해안으로 돌아가는 나룻배.", en: "The ferry back to Virdia's eastern coast.", ja: "ヴィルディア東の海岸へ戻る渡し舟。" },
-  wpWindFerry: { ko: "바람골 나루", en: "Windvale Ferry Landing", ja: "風の谷の渡し場" },
+  wpWindFerry: { ko: "비연 나루", en: "Biyeon Ferry Landing", ja: "ビヨンの渡し場" },
   wpWindFerryText: { ko: "꽃잎이 날리는 길이 개울 건너 기와 마을까지 이어진다. 북쪽 언덕에는 풍차가 돈다.", en: "A petal-strewn road leads across the stream to the tiled-roof village. Windmills turn on the northern hill.", ja: "花びらの舞う道が小川を越えて瓦の村まで続く。北の丘では風車が回る。" },
   wpWindVillage: { ko: "기와 마을", en: "Tiled-Roof Village", ja: "瓦の村" },
   wpWindVillageText: { ko: "흙 마당과 돌길 사이로 기와집이 늘어선 마을. 북쪽 끝 큰 기와집에 마을 어른이 산다.", en: "Tiled-roof houses line dirt yards and stone roads. The village elder lives in the large manor at the north end.", ja: "土の庭と石畳の間に瓦屋根の家が並ぶ村。北の端の大きな屋敷に村の長老が住む。" },
@@ -45,4 +45,7 @@ export const WORLD_WIND_TEXT = {
   wnHolyRafael: { ko: "이 호수 물로 씻으면 상처가 빨리 아물어. 나도 매일 와.", en: "Wash in this lake and your wounds heal faster. I come every day.", ja: "この湖の水で洗うと傷の治りが早い。私も毎日来るんだ。" },
   wnHolyYuriel: { ko: "성벽이 하얀 건 매일 닦기 때문이에요. 제 담당이죠!", en: "The walls are white because we scrub them every day. That's my job!", ja: "城壁が白いのは毎日磨いているからです。私の担当なんですよ！" },
   wnHolyMichaela: { ko: "지하 묘지엔 잠들지 못한 것들이 있다. 들어간다면 각오해.", en: "Things that cannot rest dwell in the catacombs. Go in prepared.", ja: "地下墓地には眠れぬものがいる。入るなら覚悟しろ。" },
+  wpChapel: { ko: "교회", en: "Church", ja: "教会" },
+  wnChapelLux: { ko: "빛은 누구에게나 똑같이 내려요. 잠시 쉬어 가세요.", en: "The light falls on everyone alike. Rest here a while.", ja: "光は誰にでも等しく降り注ぎます。少し休んでいきなさい。" },
+  wnChapelPilgrim: { ko: "여러 세계를 걸었지만, 기도하는 자리는 어디나 조용하더군.", en: "I've walked many worlds, but places of prayer are quiet everywhere.", ja: "多くの世界を歩いたが、祈りの場所はどこも静かだったよ。" },
 } satisfies Record<string, Record<Lang, string>>;

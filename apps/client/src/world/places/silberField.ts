@@ -13,7 +13,7 @@ export const SILBER_FIELD: Region = {
     { id: "silberTown", kind: "town", tx: 120, ty: 90, name: "wpSilberFort" },
     { id: "silberKeepDoor", kind: "door", tx: 128, ty: 67, name: "wpSilberKeep", to: "silberKeep" },
     { id: "armoryDoor", kind: "door", tx: AD[0], ty: AD[1], name: "wpArmory", to: "silberArmory", icon: "hammer" },
-    ...SILBER_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "ascalonHouse" })),
+    ...SILBER_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "houseSilber" })),
     { id: "silberJoker", kind: "npc", tx: 136, ty: 88, name: "joker", who: "joker", line: "wnJoker" },
     { id: "silberRabbit", kind: "npc", tx: 158, ty: 79, name: "rabbit", who: "rabbit", line: "wnRabbit" },
     // 북문 · 싸움터 · 악마의 문 (경비원 = 타워 디펜스)

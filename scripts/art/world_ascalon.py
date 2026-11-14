@@ -23,6 +23,8 @@ WEST_COLS = [50, 56, 66, 72, 78, 84]
 HOUSES = [(x, y) for y in (45, 50, 60) for x in WEST_COLS] + [(x, y) for y in (67, 74, 81) for x in WEST_COLS + [90]]
 HOUSES += [(x, y) for y in (72, 79) for x in range(106, 146, 6)]
 FARM_HOUSES = [(90, 110), (106, 110), (90, 128), (106, 128)]
+# 교회 (x0, y0, 폭, 높이): 상점가 동쪽 빈터 · 문에서 큰길까지 돌길
+CHAPEL = (143, 47, 5, 4)
 
 
 def door(x0, y0, w, h):
@@ -133,6 +135,10 @@ def city(m):
         m.rect(dx - 1, dy, dx + 1, dy + (54 - dy if dy < 55 else 0), "floor")
     for (x, y) in HOUSES:
         m.rect(x, y, x + 2, y + 1, "house")
+    cx0, cy0, cw, chh = CHAPEL
+    m.rect(cx0, cy0, cx0 + cw - 1, cy0 + chh - 1, "chapel")
+    cdx, cdy = door(*CHAPEL)
+    m.rect(cdx, cdy, cdx, 54, "floor")
     # 동북 공원 (연못·나무)
     m.blob(138, 32, 3.2, "water")
     m.blob(138, 32, 1.2, "deep")
@@ -154,7 +160,7 @@ def farm(m):
         m.rect(x, y, x + 2, y + 1, "house")
 
 
-SOLID = {"water", "deep", "tree", "wall", "rock", "fence", "house", "keep", "innerWall"}
+SOLID = {"water", "deep", "tree", "wall", "rock", "fence", "house", "keep", "innerWall", "chapel"}
 
 
 def write_layout():
@@ -180,5 +186,8 @@ def check(g):
             bad.append((x, y))
     if g[27][100] in SOLID or g[26][100] != "keep":
         bad.append((100, 27))
+    cdx, cdy = door(*CHAPEL)
+    if g[cdy][cdx] in SOLID or g[cdy - 1][cdx] != "chapel":
+        bad.append((cdx, cdy))
     assert not bad, f"걸을 수 없는 장소 자리: {bad}"
     print("장소", len(pts), "곳 · 문", len(HOUSES) + len(FARM_HOUSES) + len(SHOPS), "곳 OK")

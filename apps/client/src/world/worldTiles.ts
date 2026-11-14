@@ -65,6 +65,8 @@ export const WT = {
   sea: 48,
   ocean: 49,
   warehouse: 50,
+  /** 교회 (막힘, 아스칼론·헬리오스): 대성당 그림 · 앞 가운데 문 → 교회 안 */
+  chapel: 51,
 } as const;
 export type WorldTile = (typeof WT)[keyof typeof WT];
 
@@ -128,6 +130,7 @@ export const TILE_DEFS: readonly TileDef[] = [
   { key: [70, 200, 220], solid: true },
   { key: [20, 60, 120], solid: true },
   { key: [120, 90, 60], solid: true },
+  { key: [236, 236, 250], solid: true },
 ];
 
 /** 픽셀 색 → 땅 종류 (딱 맞는 색이 없으면 가장 가까운 색) */

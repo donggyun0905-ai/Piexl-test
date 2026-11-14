@@ -51,5 +51,5 @@ SHEETS = {
     "churchFurniture": [("church_altar", "w", 80), ("pew", "w", 76), ("candle_tall", "h", 100), ("organ", "w", 76)],
     # 새벽의 성흔 아지트 (술집 지하) · 계단
     "tavernOutside": [(None, "w", 192), ("cellar_stairs", "w", 72)],
-    "doorMat": [(None, "w", 72), ("stairs_down", "w", 72), ("stairs_up", "w", 64)],
+    "doorMat": [("inner_door", "w", 72), ("stairs_down", "w", 72), ("stairs_up", "w", 64)],
 }

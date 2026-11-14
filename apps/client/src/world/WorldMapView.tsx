@@ -15,7 +15,7 @@ const MINI = [
   "#e8e2d4", "#963228", "#c8b478", "#e6b428", "#c86e5a",
   "#e2c478", "#aa8264", "#c88c5a", "#beaa82", "#3cc8be", "#a06e3c",
   "#e2ecf8", "#96d2ec", "#786e68", "#b0b8c4", "#464c5c", "#285046",
-  "#5a6064", "#8c6e50", "#f0e4be", "#46c8dc", "#143c78", "#785a3c",
+  "#5a6064", "#8c6e50", "#f0e4be", "#46c8dc", "#143c78", "#785a3c", "#ecece4",
 ];
 const cache = new Map<string, Promise<WorldMap>>();
 

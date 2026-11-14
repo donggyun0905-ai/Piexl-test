@@ -4,6 +4,21 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.1",
+    date: "2026-11-15",
+    items: {
+      ko: [
+        "세계 지도(시험 중): 건물 안 — 나라마다 민가 안이 달라짐(테라코어 철판·파이프 · 비르디아 고사리·버섯 · 헬리오스 대리석 · 실베르 돌바닥·화로 · 탈라시아 부두 판자·닻, 창고는 상자와 화물 · 해저 산호·조개 · 비연 항아리·바람개비 · 성국 수도원) · 아스칼론(상점가 동쪽)·헬리오스(남쪽 큰길 옆)에 교회(가운데 카펫 통로 끝 제단 · 긴 의자 · 촛대 · 오르간 · 성직자) · 건물 안 나가는 곳에 안쪽 문 그림 · 헬리오스 궁전·가게 대리석 바닥 · 바람골 이름이 비연으로",
+      ],
+      en: [
+        "World Map (testing): interiors — each nation's houses now look different inside (Terracore steel floors and pipes · Virdia ferns and mushrooms · Helios marble · Silber stone floors and braziers · Thalassia dock planks and anchors, warehouses full of crates and cargo · Undersea coral and clams · Biyeon jars and pinwheels · Seongguk monasteries) · new churches in Ascalon (east of the shopping street) and Helios (by the south road) with an altar at the end of a carpeted aisle, pews, candle stands, an organ and a priest · interior exits now show an inner door · marble floors in the Helios palace and shops · Windvale is renamed Biyeon",
+      ],
+      ja: [
+        "世界地図（テスト中）：建物の中 — 国ごとに民家の中が変わりました（テラコア鉄板・パイプ・ヴィルディアのシダ・キノコ・ヘリオスの大理石・シルベルの石床・火鉢・タラシアの桟橋板・錨、倉庫は木箱と荷物・海底のサンゴ・貝・ビヨンの壺・風車・聖国の修道院）・アスカロン（商店街の東）とヘリオス（南の大通りの横）に教会（中央のじゅうたんの通路の先に祭壇・長椅子・燭台・オルガン・聖職者）・建物の出口に内側の扉の絵・ヘリオスの宮殿と店の床が大理石に・風の谷の名前がビヨンに",
+      ],
+    },
+  },
+  {
     version: "0.53.0",
     date: "2026-11-15",
     items: {

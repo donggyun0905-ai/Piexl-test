@@ -21,6 +21,7 @@ import { HELL_FIELD } from "./places/hellField";
 import { SEONGGUK_FIELD, SEONGGUK_INSIDE } from "./places/seonggukField";
 import { UNDERSEA_FIELD, UNDERSEA_INSIDE } from "./places/underseaField";
 import { WINDTOWN_FIELD, WINDTOWN_INSIDE } from "./places/windtownField";
+import { CHAPELS_INSIDE, HOUSES_INSIDE } from "./places/interiors";
 import { DECO_R, type DecoArt } from "./worldDeco";
 import { WTILE } from "./worldMap";
 import type { Mood } from "./worldMood";
@@ -43,7 +44,7 @@ export interface Place {
   who?: CharacterId;
   line?: TextKey;
   scene?: boolean;
-  /** door: 들어갈 건물 안 Region 이름 · deco: 가구 그림 */
+  /** door: 들어갈 건물 안 Region 이름 · deco: 가구 그림 · exit: 안쪽 문 대신 그릴 그림(계단) */
   to?: string;
   art?: DecoArt;
   /** dungeon: tower = 기억의 탑 (무한 모드·영웅의 길 고르는 창) · colosseum = 콜로세움 (패왕전) · arena = 헬리오스 광장 황제 석상 (레이드 아레나) · swarm = 사막 태초의 신전 (광야의 새벽) · td = 실베르 악마의 문 경비원 (타워 디펜스, 주민에게 붙임) · 없으면 기본 혼자 하기 */
@@ -108,6 +109,8 @@ export const REGIONS: Record<string, Region> = {
   ...WINDTOWN_INSIDE,
   seongguk: SEONGGUK_FIELD,
   ...SEONGGUK_INSIDE,
+  ...HOUSES_INSIDE,
+  ...CHAPELS_INSIDE,
 };
 
 /** 나라·지역 필드인지 (건물 안이 아님) */

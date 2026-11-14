@@ -27,7 +27,7 @@ export const TERRA_FIELD: Region = {
     ...TERRA_CHIMNEYS.map(([tx, ty]): Place => ({ id: `smoke${tx}_${ty}`, kind: "deco", tx, ty, name: "wpTerraCity", art: "smoke" })),
     { id: "factorySign", kind: "sign", tx: 100, ty: 41, name: "wpFactory" },
     // 주거지 (모두 같은 민가 안)
-    ...TERRA_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "ascalonHouse" })),
+    ...TERRA_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "houseTerra" })),
     { id: "terraPunk", kind: "npc", tx: 101, ty: 74, name: "punk", who: "punk", line: "wnPunk" },
     // 서문 · 아스칼론 국경 통로
     { id: "terraAutomata", kind: "npc", tx: 66, ty: 53, name: "automata", who: "automata", line: "wnAutomata" },

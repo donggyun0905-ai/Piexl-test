@@ -1,7 +1,8 @@
-// 나라 필드 장소 그림: 던전 입구(어두운 굴·횃불) · 마을 깃발 · 표지판 · 주민(캐릭터 그림) · 문 발판·가게 간판·순간 이동석(worldPlaceSigns) · 가까우면 위에 이름표 (사람과 함께 y 순서로 그림)
+// 나라 필드 장소 그림: 던전 입구(어두운 굴·횃불) · 마을 깃발 · 표지판 · 주민(캐릭터 그림) · 건물 안 나가는 문(안쪽 문·계단) · 문 발판·가게 간판·순간 이동석(worldPlaceSigns) · 가까우면 위에 이름표 (사람과 함께 y 순서로 그림)
 import { drawBody } from "../game/render/actors";
 import { shadow } from "./worldArt";
 import { drawDeco } from "./worldDeco";
+import { WTILE } from "./worldMap";
 import { placeXY, type Place } from "./worldPlaces";
 import { drawObj, objOf } from "./worldTex";
 import { drawStatue } from "./worldDecoEmpire";
@@ -16,6 +17,14 @@ export function drawPlace(ctx: CanvasRenderingContext2D, p: Place, t: number, co
   if (p.kind === "deco") {
     if (p.art) drawDeco(ctx, p.art, x, y, t);
     return;
+  }
+  if (p.kind === "exit") {
+    // 나가는 문: 계단 등 그림이 정해져 있으면 그 그림, 아니면 아래 벽에 안쪽 문(발 = 벽 칸 아래)
+    if (p.art) drawDeco(ctx, p.art, x, y, t);
+    else {
+      const door = objOf("inner_door");
+      if (door) drawObj(ctx, door, x, y + WTILE * 1.5);
+    }
   }
   if (p.kind === "door" || p.kind === "exit") {
     // 문 앞 발판 · 나가는 문은 아래 화살표가 숨 쉬듯

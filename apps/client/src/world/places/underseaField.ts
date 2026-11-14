@@ -23,7 +23,7 @@ export const UNDERSEA_FIELD: Region = {
     // 광장 · 조개 집 마을 · 해저 신전
     { id: "seaTown", kind: "town", tx: 128, ty: 66, name: "wpSeaCity" },
     { id: "templeDoor", kind: "door", tx: 128, ty: 46, name: "wpSeaTemple", to: "seaTemple" },
-    ...SEA_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "ascalonHouse" })),
+    ...SEA_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "houseSea" })),
     { id: "seaDuck", kind: "npc", tx: 122, ty: 74, name: "duck", who: "duck", line: "wnSeaDuck" },
     { id: "seaCollector", kind: "npc", tx: 60, ty: 68, name: "collector", who: "collector", line: "wnSeaCollector" },
     // 깊은 해구 (심연 던전)

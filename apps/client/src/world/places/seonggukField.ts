@@ -21,7 +21,7 @@ export const SEONGGUK_FIELD: Region = {
     // 성도 · 대성당 · 수도원
     { id: "holyTown", kind: "town", tx: 102, ty: 80, name: "wpHolyCity" },
     { id: "cathedralDoor", kind: "door", tx: 102, ty: 64, name: "wpCathedral", to: "seonggukCathedral" },
-    ...HOLY_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpMonastery", to: "ascalonHouse" })),
+    ...HOLY_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpMonastery", to: "houseHoly" })),
     { id: "holyIan", kind: "npc", tx: 150, ty: 82, name: "ian", who: "ian", line: "wnHolyIan" },
     { id: "holyGabriel", kind: "npc", tx: 96, ty: 72, name: "gabriel", who: "gabriel", line: "wnHolyGabriel" },
     { id: "holySerena", kind: "npc", tx: 108, ty: 96, name: "serena", who: "serena", line: "wnHolySerena" },
