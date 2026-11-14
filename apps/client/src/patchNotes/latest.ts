@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.116",
+    date: "2026-11-14",
+    items: {
+      ko: ["세계 지도(시험 중): 비르디아 지도 (256×160칸) — 생울타리 성벽의 숲속 성(빛나는 세계수 광장 · 장로가 있는 성채 · 정령의 샘 · 약초 가게) · 서문 밖 거대 나무 집 마을 · 동쪽 바다로 흐르는 강과 다리 · 정령의 숲터 · 남서 늪 · 북동 깊은 숲 던전 · 동쪽 해안 · 순간 이동석 여섯", "테라코어 동쪽 끝 ↔ 비르디아 서쪽 끝 국경 통로 · 비르디아 주민(야수·이드라·변희·이무기·정령사·렌·플라이·장로) 대화 · 약초 가게 주인 = 게임 상점 이벤트 효과 탭"],
+      en: ["World Map (testing): Virdia map (256×160 tiles) — a forest castle ringed by living hedges (the glowing World Tree plaza · the Elder's keep · the Spirit Spring · an herb shop) · a village of giant treehouses beyond the west gate · a river flowing to the eastern sea with bridges · the Spirit Grove · a southwest marsh · a Deep Forest dungeon to the northeast · the east coast · six warp stones", "Border crossing between Terracore's east end and Virdia's west end · talk with Virdia's people (Beastkin, Idra, Byeonhui, Imugi, Spiritist, Ren, Fly, Elder) · the herb shop keeper opens the game shop's event effects tab"],
+      ja: ["世界地図（テスト中）：ヴィルディアの地図（256×160マス） — 生け垣の城壁に囲まれた森の城（光る世界樹の広場・長老のいる城館・精霊の泉・薬草屋）・西門の外に巨大な木の家の村・東の海へ流れる川と橋・精霊の森・南西の沼・北東の深い森のダンジョン・東の海岸・転移石6か所", "テラコア東端 ↔ ヴィルディア西端の国境の道・ヴィルディアの住人（獣人・イドラ・ビョンヒ・イムギ・精霊使い・レン・フライ・長老）との会話・薬草屋の主人 = ゲーム商店のイベント効果タブ"],
+    },
+  },
+  {
     version: "0.52.115",
     date: "2026-11-14",
     items: {

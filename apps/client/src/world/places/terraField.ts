@@ -1,5 +1,5 @@
 // 테라코어 필드 장소 (256×160칸, 지도 모양 scripts/art/world_terra.py — 지도를 고치면 좌표도 같이, 생성기가 걸을 수 있는 칸인지 검사)
-// 쇠 성벽 도시(광장 톱니 기념물·공장 굴뚝 연기·공방·주거지) · 역과 철길 · 콜로세움(패왕전) · 광산 던전 · 아스칼론 국경 통로 · 비르디아 국경 · 순간 이동석 다섯
+// 쇠 성벽 도시(광장 톱니 기념물·공장 굴뚝 연기·공방·주거지) · 역과 철길 · 콜로세움(패왕전) · 광산 던전 · 아스칼론 국경 통로 · 비르디아 국경 통로 · 순간 이동석 다섯
 import type { Place, Region } from "../worldPlaces";
 import { TERRA_CHIMNEYS, TERRA_HOUSE_DOORS, TERRA_WORKSHOP_DOOR as WD } from "./terraLayout";
 
@@ -33,6 +33,7 @@ export const TERRA_FIELD: Region = {
     { id: "terraBomber", kind: "npc", tx: 201, ty: 18, name: "bomber", who: "bomber", line: "wnBomber" },
     // 비르디아 국경
     { id: "virdiaSign", kind: "sign", tx: 247, ty: 53, name: "wpSignVirdia" },
+    { id: "toVirdia", kind: "pass", tx: 250, ty: 56, name: "wpToVirdia", to: "virdia", land: [7, 56] },
     // 순간 이동석
     { id: "warpTerraPlaza", kind: "warp", tx: 135, ty: 61, name: "wpWarpTerraPlaza" },
     { id: "warpTerraWest", kind: "warp", tx: 9, ty: 60, name: "wpWarpTerraWest" },

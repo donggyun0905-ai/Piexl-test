@@ -33,6 +33,10 @@ export const WT = {
   factory: 22,
   pipe: 23,
   arena: 24,
+  /** 비르디아: 이끼 숲 바닥(걸음) · 거대 나무(막힘, 3칸 폭이면 나무 집 문) · 생울타리 성벽(막힘) */
+  moss: 25,
+  bigTree: 26,
+  hedge: 27,
 } as const;
 export type WorldTile = (typeof WT)[keyof typeof WT];
 
@@ -70,6 +74,9 @@ export const TILE_DEFS: readonly TileDef[] = [
   { key: [180, 90, 40], solid: true },
   { key: [60, 140, 140], solid: true },
   { key: [210, 190, 150], solid: true },
+  { key: [60, 110, 70], solid: false },
+  { key: [110, 70, 40], solid: true },
+  { key: [40, 130, 90], solid: true },
 ];
 
 /** 픽셀 색 → 땅 종류 (딱 맞는 색이 없으면 가장 가까운 색) */

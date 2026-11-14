@@ -8,6 +8,7 @@ import type { ShopTab } from "../shop/ShopScreen";
 import { ASCALON_FIELD } from "./places/ascalonField";
 import { ASCALON_INSIDE } from "./places/ascalonInside";
 import { TERRA_FIELD, TERRA_INSIDE } from "./places/terraField";
+import { VIRDIA_FIELD, VIRDIA_INSIDE } from "./places/virdiaField";
 import { DECO_R, type DecoArt } from "./worldDeco";
 import { WTILE } from "./worldMap";
 
@@ -60,6 +61,8 @@ export const REGIONS: Record<string, Region> = {
   ...ASCALON_INSIDE,
   terracore: TERRA_FIELD,
   ...TERRA_INSIDE,
+  virdia: VIRDIA_FIELD,
+  ...VIRDIA_INSIDE,
 };
 
 /** 장소 가운데(픽셀) */

@@ -18,7 +18,7 @@ export const WORLD_TERRA_TEXT = {
   wpColosseumText: { ko: "여러 나라의 강자들이 모여 겨루는 원형 경기장. 들어가면 패왕전이 시작된다.", en: "A round arena where champions of many nations gather to fight. Enter to begin the Champion Clash.", ja: "各国の強者が集まって競う円形闘技場。入ると覇王戦が始まる。" },
   wpMine: { ko: "광산 던전 입구", en: "Mine dungeon entrance", ja: "鉱山ダンジョンの入口" },
   wpSignVirdia: { ko: "국경 표지판", en: "Border sign", ja: "国境の看板" },
-  wpSignVirdiaText: { ko: "이 숲 너머는 비르디아. 지금은 길이 막혀 있다.", en: "Beyond this forest lies Virdia. The way is blocked for now.", ja: "この森の向こうはヴィルディア。今は道がふさがっている。" },
+  wpSignVirdiaText: { ko: "이 숲 너머는 비르디아. 동쪽 길 끝에서 국경을 넘을 수 있다.", en: "Beyond this forest lies Virdia. You can cross the border at the end of the east road.", ja: "この森の向こうはヴィルディア。東の道の先で国境を越えられる。" },
   wpWarpTerraPlaza: { ko: "테라코어 광장 이동석", en: "Terracore square warp stone", ja: "テラコア広場の転移石" },
   wpWarpTerraWest: { ko: "서쪽 국경 이동석", en: "West border warp stone", ja: "西の国境の転移石" },
   wpWarpStation: { ko: "역 이동석", en: "Station warp stone", ja: "駅の転移石" },

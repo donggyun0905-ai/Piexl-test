@@ -8,7 +8,7 @@ const deco = (id: string, tx: number, ty: number, name: TextKey, art: DecoArt): 
 const out = (tx: number, ty: number): Place => ({ id: "exit", kind: "exit", tx, ty, name: "wpGoOut" });
 
 /** 가게 안 13×9: 주인(6,3) 양옆 계산대 · 뒤 벽 진열 · 나가는 문 (6,7) */
-function shop(title: TextKey, who: CharacterId, line: TextKey, menu: WorldMenu, wall: DecoArt, side: DecoArt): Region {
+export function shop(title: TextKey, who: CharacterId, line: TextKey, menu: WorldMenu, wall: DecoArt, side: DecoArt): Region {
   return {
     map: "world/ascalon_shop.png",
     start: { tx: 6, ty: 6 },
