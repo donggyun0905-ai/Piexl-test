@@ -25,12 +25,8 @@ def src_of(kind, name):
 
 TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge", "marble", "redBrick", "goldStone", "metalFloor", "forestFloor", "dune", "gravel", "cracked", "oasis", "buriedRoad", "deepSnow", "ice", "snowStone", "thickWall", "wetStone", "dockPlank", "beach", "sea", "ocean",
        # 0.52.123: 나라마다 바꿔 끼우는 땅 결(Region.skin) · 건물 안 바닥
-       "cobbleOil", "brickRed", "moss", "leafPath", "elfStone", "spring", "tavernWood", "woodFloor", "stoneFloor", "carpet", "metalFloorIn"]  # frozenMud: 반복 무늬가 티 나서 뺌 (다시 만들면 넣기)
+       "cobbleOil", "brickRed", "moss", "leafPath", "elfStone", "spring", "tavernWood", "woodFloor", "stoneFloor", "carpet", "metalFloorIn", "frozenMud"]
 TEX_PX = 256
-# 그림 하나처럼 나온 땅 결은 고른 부분만 잘라 씀 (원본 비율 x0, y0, x1, y1)
-CROP = {"carpet": (0.2, 0.2, 0.8, 0.8)}
-# 세로 띠로 나온 땅 결: 고른 띠(원본 비율 x0, x1)를 원래 축척으로 가로로 이어 붙여 정사각형으로
-STRIP = {"leafPath": (0.0, 0.31)}
 # 벽 앞면: 한 칸(64픽셀)에 그림 전체, 가로로만 이어지게 → 실내 벽 앞면 칸마다
 WALL = ["innerWall", "stoneWallIn"]
 WALL_PX = 64
@@ -105,18 +101,6 @@ def make_tex(name):
     if not src.exists():
         return False
     img = Image.open(src).convert("RGB")
-    if name in CROP:
-        c = CROP[name]
-        img = img.crop((round(c[0] * img.width), round(c[1] * img.height), round(c[2] * img.width), round(c[3] * img.height)))
-    if name in STRIP:
-        x0, x1 = STRIP[name]
-        band = img.crop((round(x0 * img.width), 0, round(x1 * img.width), img.height))
-        bw = max(8, round(band.width * TEX_PX / img.height))
-        band = seamless(band.resize((bw, bw), Image.Resampling.LANCZOS), only_x=True).resize((bw, TEX_PX), Image.Resampling.LANCZOS)
-        full = Image.new("RGB", (bw * -(-TEX_PX // bw), TEX_PX))
-        for i in range(0, full.width, bw):
-            full.paste(band, (i, 0))
-        img = full.resize((TEX_PX, TEX_PX), Image.Resampling.LANCZOS)
     s = min(img.size)
     img = img.crop(((img.width - s) // 2, (img.height - s) // 2, (img.width + s) // 2, (img.height + s) // 2))
     wall = name in WALL
@@ -128,13 +112,13 @@ def make_tex(name):
 
 
 def make_rail():
-    """철길 한 줄: 테라코어 rail.png 가운데 철길(침목 3개 주기)만 잘라 한 칸(64픽셀) 세로 철길 → tex/railTrack (가로는 게임이 돌려 그림)"""
+    """철길 한 줄: 테라코어 rail.png(가운데 선로 한 줄, 침목 256픽셀 주기) 가운데만 침목 3개 높이로 잘라 한 칸(64픽셀) 세로 철길 → tex/railTrack (가로는 게임이 돌려 그림)"""
     src = src_of("땅", "rail")
     if not src.exists():
         return False
     img = Image.open(src).convert("RGB")
     k = img.width / 2048
-    img = img.crop((round(640 * k), 0, round(1400 * k), round(768 * k))).resize((WALL_PX, WALL_PX), Image.Resampling.LANCZOS)
+    img = img.crop((round(576 * k), 0, round(1472 * k), round(768 * k))).resize((WALL_PX, WALL_PX), Image.Resampling.LANCZOS)
     quantize(tone(img, TONE_TEX).convert("RGBA"), 48).save(PUB / "tex" / "railTrack.png", optimize=True)
     return True
 
