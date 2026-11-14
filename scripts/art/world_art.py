@@ -23,7 +23,7 @@ def src_of(kind, name):
     return SRC / "ascalon" / kind / f"{name}.png"
 
 
-TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge", "marble", "redBrick", "goldStone", "metalFloor", "forestFloor", "dune", "gravel", "cracked", "oasis", "buriedRoad", "deepSnow", "ice", "snowStone", "thickWall"]  # frozenMud: 반복 무늬가 티 나서 뺌 (다시 만들면 넣기)
+TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge", "marble", "redBrick", "goldStone", "metalFloor", "forestFloor", "dune", "gravel", "cracked", "oasis", "buriedRoad", "deepSnow", "ice", "snowStone", "thickWall", "wetStone", "dockPlank", "beach", "sea", "ocean"]  # frozenMud: 반복 무늬가 티 나서 뺌 (다시 만들면 넣기)
 TEX_PX = 256
 # 캐릭터 그림과 어울리게 색 맞춤 (채도·밝기 배율): 땅은 배경이라 더 차분하게
 TONE_TEX = (0.62, 0.92)
@@ -53,6 +53,9 @@ SHEETS = {
     "northTrees": [("snow_pine", "h", 160), ("snow_pine2", "h", 136), ("dead_tree", "h", 140)],
     "defense": [("watchtower", "h", 200), ("barricade", "w", 96), ("catapult", "w", 120), ("brazier", "h", 72)],
     "battleScars": [("monster_skull", "w", 128), ("spear_pile", "w", 80), ("ice_crystal", "h", 96), ("army_tent", "w", 136)],
+    "ships": [("ship_big", "w", 224), ("boat", "w", 80), ("pirate_ship", "w", 224)],
+    "harbor": [("crane", "h", 192), ("cargo", "w", 96), ("warehouse_t", "w", 640), ("lighthouse", "h", 240)],
+    "portProps": [("mooring", "h", 48), ("fish_net", "w", 80), ("anchor", "h", 72), ("fish_stall", "w", 112)],
     "factories": [("factory", "w", 448), (None, "h", 320), (None, "w", 320)],
 }
 

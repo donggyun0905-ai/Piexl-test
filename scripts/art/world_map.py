@@ -18,6 +18,7 @@ KEY = {
     "marble": (236, 232, 220), "redBrick": (150, 50, 40), "goldStone": (200, 180, 120), "palace": (230, 180, 40), "villa": (210, 120, 100),
     "dune": (226, 196, 120), "gravel": (170, 130, 100), "cracked": (200, 140, 90), "buriedRoad": (190, 170, 130), "oasis": (60, 200, 190), "temple": (160, 110, 60),
     "deepSnow": (226, 236, 248), "ice": (150, 210, 236), "frozenMud": (120, 110, 104), "snowStone": (176, 184, 196), "thickWall": (70, 76, 92), "snowPine": (40, 80, 70),
+    "wetStone": (90, 96, 100), "dockPlank": (140, 110, 80), "beach": (240, 228, 190), "sea": (70, 200, 220), "ocean": (20, 60, 120), "warehouse": (120, 90, 60),
 }
 OUT = Path(__file__).resolve().parents[2] / "apps/client/public/world"
 
@@ -182,6 +183,12 @@ if __name__ == "__main__":
     silber_layout()
     check_silber(sf)
     save("silber", sf)
+    from world_thalassia import check as check_thal, thalassia, write_layout as thal_layout
+
+    tf2 = thalassia()
+    thal_layout()
+    check_thal(tf2)
+    save("thalassia", tf2)
     save("ascalon_shop", ascalon_shop())
     save("ascalon_smithy", ascalon_smithy())
     save("ascalon_inn", ascalon_inn())

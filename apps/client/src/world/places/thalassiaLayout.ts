@@ -1,0 +1,7 @@
+// 생성됨: scripts/art/world_thalassia.py (손으로 고치지 않음) · 탈라시아 필드 집·창고 문·장식 자리 (칸)
+import type { SeaDeco } from "../worldDecoSea";
+
+export const THAL_HOUSE_DOORS: readonly (readonly [number, number])[] = [[77, 90], [83, 90], [89, 90], [95, 90], [101, 90], [107, 90], [77, 96], [83, 96], [89, 96], [95, 96], [101, 96], [107, 96], [77, 102], [83, 102], [89, 102], [95, 102], [101, 102], [107, 102], [77, 108], [83, 108], [89, 108], [95, 108], [101, 108], [107, 108], [77, 114], [83, 114], [89, 114], [95, 114], [101, 114], [107, 114], [113, 50], [119, 50], [125, 50], [113, 56], [119, 56], [125, 56]];
+export const THAL_WAREHOUSE_DOORS: readonly (readonly [number, number])[] = [[162, 49], [170, 49], [178, 49], [162, 105], [170, 105], [178, 105], [162, 117], [170, 117], [178, 117]];
+export const THAL_TRADE_DOOR = [138, 111] as const;
+export const THAL_DECO_SPOTS: readonly (readonly [SeaDeco, number, number])[] = [["pirateShip", 236, 68], ["ship", 236, 90], ["ship", 238, 112], ["boat", 212, 78], ["boat", 214, 100], ["boat", 210, 122], ["lighthouse", 214, 140], ["crane", 194, 60], ["crane", 194, 106], ["cargo", 190, 66], ["cargo", 190, 96], ["cargo", 190, 120], ["fishStall", 120, 90], ["fishStall", 128, 90], ["fishStall", 120, 102], ["anchor", 146, 104], ["net", 188, 84], ["net", 186, 128], ["mooring", 225, 70], ["mooring", 225, 72], ["mooring", 225, 90], ["mooring", 225, 92], ["mooring", 225, 110], ["mooring", 225, 112]];

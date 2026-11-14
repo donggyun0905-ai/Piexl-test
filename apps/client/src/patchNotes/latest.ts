@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.122",
+    date: "2026-11-14",
+    items: {
+      ko: ["세계 지도(시험 중): 탈라시아 지도 (256×160칸, 대륙 동쪽 끝 무역항) — 강 하구를 낀 항구 도시(젖은 돌 거리 · 생선 노점 광장 · 무역 상회 · 민가 · 창고 아홉 · 다리) · 부두와 바다로 뻗은 잔교 셋(큰 범선·해적선·작은 배가 물결에 흔들림 · 크레인·화물·닻·그물) · 남동 곶 등대(도는 불빛) · 북쪽 해식 동굴 던전 · 순간 이동석 여섯", "대사막 동쪽 끝 ↔ 탈라시아 서쪽 땅길 (9장부터) · 무역 상회 주인 훅 = 게임 상점 뽑기 · 탈라시아 주민 대화 · 부두 판자·젖은 돌·해변·바다·배·창고·등대 등 그림 적용"],
+      en: ["World Map (testing): Thalassia map (256×160 tiles, the trading port at the continent's eastern end) — a harbor city on the river mouth (wet stone streets · fish-stall plaza · Trading House · homes · nine warehouses · bridges) · docks with three piers out to sea (a great sailing ship, a pirate ship and small boats bobbing on the waves · cranes, cargo, anchors, nets) · a lighthouse with a turning beam on the southeastern cape · the Sea Cave dungeon to the north · six warp stones", "Land route between the Great Desert's eastern edge and western Thalassia (from Chapter 9) · Trading House keeper Hook opens the game shop gacha · talk with the people of Thalassia · art for dock planks, wet stone, beaches, sea, ships, warehouses, the lighthouse and more"],
+      ja: ["世界地図（テスト中）：タラシアの地図（256×160マス、大陸東端の貿易港） — 河口に面した港町（濡れた石の通り・魚の屋台の広場・貿易商会・民家・倉庫9棟・橋）・埠頭と海へ伸びる桟橋3本（大きな帆船・海賊船・小舟が波に揺れる・クレーン・荷物・錨・網）・南東の岬の灯台（回る光）・北の海食洞のダンジョン・転移石6か所", "大砂漠の東端 ↔ タラシア西の陸路（第9章から）・貿易商会の主人フック = ゲームの商店ガチャ・タラシアの住人との会話・埠頭の板・濡れた石・浜辺・海・船・倉庫・灯台などの絵を適用"],
+    },
+  },
+  {
     version: "0.52.121",
     date: "2026-11-14",
     items: {

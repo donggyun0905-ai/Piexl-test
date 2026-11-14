@@ -58,6 +58,13 @@ export const WT = {
   thickWall: 43,
   /** 눈 덮인 나무 (막힘, 밑은 눈밭 · 그림은 worldTrees) */
   snowPine: 44,
+  /** 탈라시아: 젖은 돌 부두 · 나무 부두(물 위에도) · 해변 모래(걸음) · 얕은 바다 · 깊은 바다 · 항구 창고(막힘) */
+  wetStone: 45,
+  dockPlank: 46,
+  beach: 47,
+  sea: 48,
+  ocean: 49,
+  warehouse: 50,
 } as const;
 export type WorldTile = (typeof WT)[keyof typeof WT];
 
@@ -115,6 +122,12 @@ export const TILE_DEFS: readonly TileDef[] = [
   { key: [176, 184, 196], solid: false },
   { key: [70, 76, 92], solid: true },
   { key: [40, 80, 70], solid: true },
+  { key: [90, 96, 100], solid: false },
+  { key: [140, 110, 80], solid: false },
+  { key: [240, 228, 190], solid: false },
+  { key: [70, 200, 220], solid: true },
+  { key: [20, 60, 120], solid: true },
+  { key: [120, 90, 60], solid: true },
 ];
 
 /** 픽셀 색 → 땅 종류 (딱 맞는 색이 없으면 가장 가까운 색) */

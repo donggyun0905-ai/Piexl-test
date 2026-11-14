@@ -51,6 +51,7 @@ def desert():
     m.road([(150, 92), (140, 120), (128, 158)], **road)
     m.road([(162, 84), (190, 100), (204, 111)], **road)
     m.road([(136, 80), (100, 86), (84, 88)], **road)
+    m.road([(216, 112), (236, 98), (254, 92)], k="buriedRoad", only=SOFT + ("rock",))
     m.rect(0, 0, W - 1, 0, "rock")
     m.rect(0, H - 1, W - 1, H - 1, "rock")
     decorate(m)

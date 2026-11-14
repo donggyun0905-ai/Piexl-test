@@ -11,6 +11,7 @@ import { ASCALON_INSIDE } from "./places/ascalonInside";
 import { HELIOS_FIELD, HELIOS_INSIDE } from "./places/heliosField";
 import { DESERT_FIELD } from "./places/desertField";
 import { SILBER_FIELD, SILBER_INSIDE } from "./places/silberField";
+import { THAL_FIELD, THAL_INSIDE } from "./places/thalassiaField";
 import { TERRA_FIELD, TERRA_INSIDE } from "./places/terraField";
 import { VIRDIA_FIELD, VIRDIA_INSIDE } from "./places/virdiaField";
 import { DECO_R, type DecoArt } from "./worldDeco";
@@ -74,6 +75,8 @@ export const REGIONS: Record<string, Region> = {
   desert: DESERT_FIELD,
   silber: SILBER_FIELD,
   ...SILBER_INSIDE,
+  thalassia: THAL_FIELD,
+  ...THAL_INSIDE,
 };
 
 /** 나라·지역 필드인지 (건물 안이 아님) */
