@@ -82,15 +82,6 @@ export function grantFx(reward: "league"): boolean {
   return add.length > 0;
 }
 
-/** 한정 추가 효과권 (기간토마키아 상점 물건): 아직 없는 효과 하나 (보상 전용 빼고) · 받은 id */
-export function grantRandomFx(): string | null {
-  const s = load();
-  const id = FX_ITEMS.find((x) => !x.reward && !s.owned.includes(x.id))?.id ?? null;
-  if (id) s.owned.push(id);
-  save(s);
-  return id;
-}
-
 /** 장착 (null이면 그 칸 비우기) */
 export function equipFx(slot: FxSlot, id: string | null): void {
   const s = load();

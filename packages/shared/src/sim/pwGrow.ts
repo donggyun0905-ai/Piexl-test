@@ -19,7 +19,7 @@ import { addEffect } from "./util";
 /** 성장 대결 판인지 */
 export const isGrow = (s: RunState): boolean => {
   const r = s.pvp && PW_MODE[s.pvp.mode].rule;
-  return r === "contest" || r === "war" || r === "giganto";
+  return r === "contest" || r === "war";
 };
 
 /** 상점 입력 번호: 사기(목록 자리) · 팔기(장비 칸) · 증강 고르기(셋 중) */

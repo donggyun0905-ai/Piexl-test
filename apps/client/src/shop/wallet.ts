@@ -70,16 +70,6 @@ export function coupons(): number {
 export const ownedSkins = (): string[] => (TEST_ALL_SKINS ? [...ALL_SKINS, ...CHARACTER_IDS.map(mySkinId)] : load().owned);
 export const equippedSkin = (c: CharacterId): string | undefined => (cache ?? load()).equipped[c];
 
-/** 한정 스킨권 (기간토마키아 상점 물건): 아직 다 갖지 않은 한정 테마 하나의 스킨을 모두 · 다 가졌으면 쿠폰. 받은 테마 (없으면 null) */
-export function grantLimitedSkin(): string | null {
-  const w = load();
-  const theme = LIMITED_THEMES.find((th) => limitedSkins(th).some((id) => !w.owned.includes(id)));
-  if (theme) w.owned.push(...limitedSkins(theme).filter((id) => !w.owned.includes(id)));
-  else w.refund += LIMITED_REFUND;
-  save(w);
-  return theme ?? null;
-}
-
 /** 월드 워 리그 우승: '승리' 한정 스킨 (5명). 새로 받은 게 있으면 true */
 export function grantVictorySkins(): boolean {
   const w = load();

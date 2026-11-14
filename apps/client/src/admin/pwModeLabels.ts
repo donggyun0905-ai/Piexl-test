@@ -49,7 +49,6 @@ const ROW: Record<string, string> = {
   PW_CONTEST: "쟁탈전 (점령 시간)",
   PW_WAR: "전쟁의 서막 (체크포인트·큰 보스·강화)",
   PW_CAP: "점령전",
-  PW_GIGA: "기간토마키아 (거인·상자·자기장·출구·AI)",
   PW_SHOP_USES: "집 상점 사용 아이템 값",
 };
 

@@ -275,8 +275,7 @@ function useSlot(s: RunState, slot: number, input: TickInput): void {
     else s.freezeTicks = USE_ITEMS.frost.ticks;
   } else if (item === "bomb") {
     const b = itemVal(!!s.pvp, "bomb");
-    // 기간토마키아는 폭탄이 더 아픔 (PW_ITEMS.bomb.giga)
-    const [damage, radius] = [s.pvp?.mode === "giganto" ? b.giga : b.damage, b.radius];
+    const [damage, radius] = [b.damage, b.radius];
     for (const e of s.enemies) {
       const dx = e.x - p.x;
       const dy = e.y - p.y;

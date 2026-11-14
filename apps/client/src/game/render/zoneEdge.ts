@@ -1,6 +1,6 @@
 // 위험한 곳에 들어가면 화면 테두리 안쪽으로 그 색이 번지며 깜박임 (화면 정보, 계산과 상관없음)
 // 독가스 연두 · 용암 주황 · 솟은 가시 붉은빛 · 감전된 물 노란빛 · 패왕전 자기장 밖 보라 · 진흙·물(느려짐)은 옅게
-import { pvpZone, spikeState, terrainIdle, zonePos, type RunState } from "@pixel-rogue/shared";
+import { pvpZone, spikeState, terrainIdle, type RunState } from "@pixel-rogue/shared";
 
 type Zone = "gas" | "lava" | "spike" | "shock" | "zone" | "mud" | "water";
 const COLOR: Record<Zone, [number, number, number]> = {
@@ -23,8 +23,7 @@ function zoneOf(s: RunState): Zone | null {
   if (p.hp <= 0) return null;
   const z = s.pvp ? pvpZone(s) : undefined;
   if (z) {
-    const [px, py] = zonePos(s, p.x, p.y);
-    if (Math.hypot(px - z.x, py - z.y) > z.r) return "zone";
+    if (Math.hypot(p.x - z.x, p.y - z.y) > z.r) return "zone";
   }
   const t = s.terrain;
   if (!t || (!s.pvp && (t.room !== s.roomId || terrainIdle(s)))) return null;

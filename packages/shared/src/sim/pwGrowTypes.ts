@@ -1,7 +1,7 @@
 // 패왕전 성장 대결 상태 (쟁탈전 · 전쟁의 서막): 병사·포탑·보스 · 점령 · 사람마다 레벨·장비·증강·중첩 (계산은 pwGrow·pwLane·pwGear·pwContest)
 import type { EnemyState } from "./types";
 
-export type PwUnitKind = "minion" | "archer" | "tower" | "boss" | "jungle" | "elite" | "dragon" | "godeater" | "giantRed" | "giantBlue" | "giantWhite" | "goblin";
+export type PwUnitKind = "minion" | "archer" | "tower" | "boss" | "jungle" | "elite" | "dragon" | "godeater";
 
 /** 병사·포탑·보스·정글 몬스터 하나 (맞는 몸 body는 상대 편 s.enemies에 들어가 맞음, pvpWorld.assignFoes) */
 export interface PwUnit {
@@ -30,23 +30,6 @@ export interface PwUnit {
   lastHp?: number;
   /** 사람에게 마지막으로 맞은 틱 (3초 지나면 회복, 화면에 흰 막대) */
   hurtAt?: number;
-  /** 기간토마키아 뿔 거인 기술 (sim/gigaGiants): 쓰는 중인 기술 · 다음 기술까지 틱 */
-  sk?: GiantSkill;
-  skCd?: number;
-}
-
-/** 거인 기술: 흰 뿔 돌 던지기 · 푸른 뿔 돌진 · 붉은 뿔 레이저 · 붉은 뿔 내려찍기. 시작 틱 · 터지는 틱 · 끝 틱 · 시작 자리 · 노리는 자리 */
-export interface GiantSkill {
-  k: "rock" | "charge" | "laser" | "quake";
-  at: number;
-  fire: number;
-  end: number;
-  x: number;
-  y: number;
-  tx: number;
-  ty: number;
-  /** 이미 맞은 자리 (돌진은 한 번씩만) */
-  hit?: number[];
 }
 
 export interface PwGrowState {
@@ -64,10 +47,6 @@ export interface PwGrowState {
   news?: { kind: "dragon" | "godeater"; team: number; at: number };
   /** 핑 (sim/pwPing): 같은 편에게만 보임 */
   pings?: PwPing[];
-  /** 기간토마키아: 바닥의 상자·떨어진 배낭 · 임시 출구 · 나간 자리 */
-  loot?: PwLoot[];
-  exits?: { x: number; y: number }[];
-  out?: number[];
 }
 
 /** 핑 하나: 찍은 편·자리 · 곳 · 찍은 틱 · 종류(모여 · 위험 · 공격 · 큰 보스 잡자) · 큰 보스 종류 */
@@ -79,16 +58,6 @@ export interface PwPing {
   at: number;
   kind: "go" | "danger" | "attack" | "boss";
   boss?: "dragon" | "godeater";
-}
-
-/** 바닥 물건: 닫힌 상자(chest) 또는 쓰러진 사람이 떨군 배낭 · 든 돈과 물건 */
-export interface PwLoot {
-  id: number;
-  x: number;
-  y: number;
-  chest: boolean;
-  gold: number;
-  items: string[];
 }
 
 /** 사람마다 (s.player에 붙음) */
@@ -103,12 +72,6 @@ export interface PwGrowPlayer {
   pwStk?: Record<string, [number, number]>;
   pwFx?: Record<string, number>;
   pwDashCut?: number;
-  /** 기간토마키아: 배낭(장비·사용 아이템 u:·상점 물건 g:) · 금고 한 칸 · 제작 중(전설 id·끝 틱) */
-  pwBag?: string[];
-  pwVault?: string;
-  pwCraft?: { id: string; end: number };
-  /** 기간토마키아: 열어 둔 상자·배낭 (바닥 물건 id, 화면이 창을 띄움) */
-  pwOpen?: number;
   /** AI 벽 비켜 가기 (sim/botAvoid): 확인한 자리·틱 · 돌아가는 방향과 끝 틱 */
   bkX?: number;
   bkY?: number;

@@ -3,7 +3,6 @@ import { PW, PW_MODE, PW_TIERS } from "../paewangDefs";
 import { capWinner } from "./pwCapture";
 import { contestWinner } from "./pwContest";
 import { warWinner } from "./pwWar";
-import { gigaDeath, gigaWinner } from "./pwGiga";
 import { gearSave } from "./pwGear";
 import { homeOf, isGrow, respawnTicks, reward } from "./pwGrow";
 import { PW_ARENAS } from "../paewangMaps";
@@ -105,10 +104,9 @@ export function settleDeaths(s: RunState): void {
         helped.push(by);
       }
     }
-    if (i === 0 && (pv.mode === "brawl" || pv.mode === "giganto")) pv.place = pv.seats.filter((x, j) => j !== i && inPlay(s, j)).length + 1;
+    if (i === 0 && pv.mode === "brawl") pv.place = pv.seats.filter((x, j) => j !== i && inPlay(s, j)).length + 1;
     // 점령전: 잠시 뒤 집에서 다시
-    if (PW_MODE[pv.mode].rule === "giganto") gigaDeath(s);
-    else if (PW_MODE[pv.mode].rule) seat.back = s.tick + respawnTicks(s);
+    if (PW_MODE[pv.mode].rule) seat.back = s.tick + respawnTicks(s);
     if (isGrow(s)) reward(s, seat.by, "hero", s.player.x, s.player.y, seat.team, s.player.pwLv, helped);
     else if (pv.mode === "gungame") {
       seat.back = s.tick + PW.respawn;
@@ -190,11 +188,6 @@ export function decide(s: RunState): void {
   if (PW_MODE[pv.mode].rule === "capture") pv.winner ??= capWinner(s);
   else if (PW_MODE[pv.mode].rule === "contest") pv.winner ??= contestWinner(s);
   else if (PW_MODE[pv.mode].rule === "war") pv.winner ??= warWinner(s);
-  else if (PW_MODE[pv.mode].rule === "giganto") {
-    pv.winner ??= gigaWinner(s);
-    // 내가 출구로 나가면 내 판은 끝 (다른 사람은 계속하지만 화면은 결과로)
-    if (pv.grow?.out?.includes(s.seat ?? 0)) s.over = true;
-  }
   else if (pv.winner === undefined) lastTeam(s);
   if (pv.winner === undefined) return;
   s.over = true;

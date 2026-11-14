@@ -27,8 +27,6 @@ import { updateZone, zoneSteer } from "./pvpZone";
 import { capInput, capSteer, capTick } from "./pwCapture";
 import { growInit, growMenu, growStats, isGrow } from "./pwGrow";
 import { growSteer } from "./pwGrowBot";
-import { gigaInit, gigaInput, gigaMenu, isGiga } from "./pwGiga";
-import { gigaSteer } from "./pwGigaBot";
 import { pingMenu } from "./pwPing";
 import { growTick } from "./pwGrowTick";
 import { applyRoom } from "./rooms";
@@ -90,7 +88,6 @@ export function createPvp(seed: number, mode: PwMode, humans: readonly (PwHuman 
   useSeat(s, 0);
   makeProxies(s);
   if (isGrow(s)) growInit(s);
-  if (isGiga(s)) gigaInit(s);
   return s;
 }
 
@@ -124,7 +121,7 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
     // 수풀에 숨은 상대는 가까이 가야 보임 (자동 조준·유도탄·AI가 못 노림)
     markHidden(s);
     // 사람은 자동 공격 없이 직접 조준만 (AI는 그대로)
-    let input = seat.human ? { ...(inputs[i] ?? EMPTY_INPUT), autoAim: false } : pv.practice ? dummyInput(pv.practice, botInput(s)) : gigaSteer(s, growSteer(s, capSteer(s, zoneSteer(s, botInput(s)))));
+    let input = seat.human ? { ...(inputs[i] ?? EMPTY_INPUT), autoAim: false } : pv.practice ? dummyInput(pv.practice, botInput(s)) : growSteer(s, capSteer(s, zoneSteer(s, botInput(s))));
     // 기절: 아무것도 못 함 · 묶임: 못 움직임 · 느려짐: 반만
     if (seat.stun > 0) input = EMPTY_INPUT;
     else if (seat.root > 0) input = { ...input, moveX: 0, moveY: 0, dash: false };
@@ -133,9 +130,7 @@ export function stepPvp(s: RunState, inputs: readonly TickInput[]): void {
     // 점령전: 점프대 · 버프 자리
     input = capInput(s, input);
     // 성장 대결: 상점·증강 (작업대 입력과 따로)
-    if (input.menu && (pingMenu(s, input.menu) || gigaMenu(s, input.menu) || growMenu(s, input.menu))) input = { ...input, menu: 0 };
-    // 기간토마키아: 제작 · 상자·배낭·출구
-    input = gigaInput(s, input);
+    if (input.menu && (pingMenu(s, input.menu) || growMenu(s, input.menu))) input = { ...input, menu: 0 };
     if (!pv.seats[i]!.on) return;
     // 스킬 1~4 · 돌진 · 장판 · 소환한 것
     input = pwSkillTick(s, input);

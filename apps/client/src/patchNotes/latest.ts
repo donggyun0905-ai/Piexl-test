@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.7",
+    date: "2026-11-15",
+    items: {
+      ko: ["패왕전: 기간토마키아(30명 생존) 대결을 없앴습니다"],
+      en: ["Paewang: removed the Gigantomachia (30-player survival) match type"],
+      ja: ["覇王戦：ギガントマキア（30人サバイバル）を削除しました"],
+    },
+  },
+  {
     version: "0.53.6",
     date: "2026-11-15",
     items: {

@@ -9,7 +9,6 @@ export const PW_GROUP_LABEL = { pwRoles: "역할군", pwChars: "캐릭터 능력
   pwUnits: "병사·포탑·집 보스·몬스터",
   pwGrow: "쟁탈전·전쟁의 서막 (성장·증강)",
   pwCapture: "점령전",
-  pwGiga: "기간토마키아",
   pwShop: "집 상점 장비",
 } as const;
 

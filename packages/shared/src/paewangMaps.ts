@@ -6,7 +6,6 @@ import { BIG_ARENAS } from "./paewangMapsBig";
 import { SMALL_ARENAS } from "./paewangMapsSmall";
 import { CAPTURE_ARENAS } from "./paewangMapsCapture";
 import { GROW_ARENAS } from "./paewangMapsGrow";
-import { GIGA_ARENAS } from "./paewangMapsGiga";
 
 export type { PwArenaDef } from "./paewangMapKit";
 
@@ -134,7 +133,7 @@ const DUEL_SCALE = 1.5;
 const DUEL_IDS = ["small", "dLava", "dMarsh", "dGarden", "dSpike"] as const;
 
 /** 모든 경기장 (처음 5개 + 작은·중간 + 큰 + 점령전) */
-const ALL_ARENAS = { ...BASE_ARENAS, ...SMALL_ARENAS, ...BIG_ARENAS, ...CAPTURE_ARENAS, ...GROW_ARENAS, ...GIGA_ARENAS };
+const ALL_ARENAS = { ...BASE_ARENAS, ...SMALL_ARENAS, ...BIG_ARENAS, ...CAPTURE_ARENAS, ...GROW_ARENAS };
 export type PwArenaId = keyof typeof ALL_ARENAS;
 export const PW_ARENAS: Record<PwArenaId, PwArenaDef> = { ...ALL_ARENAS };
 for (const id of DUEL_IDS) PW_ARENAS[id] = scaleArena(ALL_ARENAS[id], DUEL_SCALE);
@@ -150,5 +149,4 @@ export const PW_MAP_SETS = {
   capture: ["cHall", "cCliff", "cRing"],
   contest: ["gContest"],
   war: ["gWar"],
-  giganto: ["gGiga"],
 } as const satisfies Record<string, readonly PwArenaId[]>;

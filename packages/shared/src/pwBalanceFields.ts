@@ -10,7 +10,7 @@ import { PW_ROLE_IDS, PW_ROLE_TABLE } from "./pwRoles";
 import { PW_BASIC_RULES } from "./sim/pwBasic";
 import { PW_PASSIVE } from "./paewangPassive";
 import { PW_ITEMS } from "./pwItems";
-import { PW_AUGS, PW_CAP, PW_CONTEST, PW_GIGA, PW_GROW, PW_UNIT, PW_WAR } from "./pwRules";
+import { PW_AUGS, PW_CAP, PW_CONTEST, PW_GROW, PW_UNIT, PW_WAR } from "./pwRules";
 import { PW_BASIC, PW_GEAR_FX, PW_LEGEND, PW_SHOP_USES } from "./pwShop";
 
 const table = (t: object) => t as Record<string, Record<string, unknown>>;
@@ -37,6 +37,5 @@ export const PW_BALANCE_GROUPS: readonly BalanceGroup[] = [
   autoGroup("pwUnits", rowsOf(PW_UNIT)),
   autoGroup("pwGrow", { PW_GROW, PW_CONTEST, PW_WAR, ...prefixed("aug_", PW_AUGS) }, { skip: (k) => FIXED.has(k) }),
   autoGroup("pwCapture", { PW_CAP }),
-  autoGroup("pwGiga", { PW_GIGA }, { skip: (k) => FIXED.has(k) }),
   autoGroup("pwShop", { PW_SHOP_USES, ...PW_BASIC, ...PW_LEGEND, ...prefixed("fx_", PW_GEAR_FX) }),
 ];

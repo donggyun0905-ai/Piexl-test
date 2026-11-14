@@ -1,5 +1,5 @@
 // 패왕전 자기장 그리기: 원 밖은 옅은 푸른 막(눈 안 아프게 낮은 진하기) · 지금 원은 부드러운 흰 테두리 · 다음 원은 가는 흰 점선 (어디까지 줄어드는지)
-import { pvpZone, PW_ARENAS, ROOM_HEIGHT, ROOM_WIDTH, TILE_SIZE, type RunState } from "@pixel-rogue/shared";
+import { pvpZone, ROOM_HEIGHT, ROOM_WIDTH, type RunState } from "@pixel-rogue/shared";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -7,13 +7,6 @@ export function drawPwZone(ctx: Ctx, s: RunState): void {
   const z = pvpZone(s);
   if (!z) return;
   ctx.save();
-  // 기간토마키아: 들판만 (오른쪽 실내 구역엔 그리지 않음, 건물 안은 문 자리로 셈)
-  const out = PW_ARENAS[s.pvp!.arena].outCols;
-  if (out) {
-    ctx.beginPath();
-    ctx.rect(-200, -200, out * TILE_SIZE + 200, ROOM_HEIGHT + 400);
-    ctx.clip();
-  }
   // 원 밖 막: 바깥 큰 사각형에서 원을 뺀 곳 (evenodd)
   ctx.beginPath();
   ctx.rect(-200, -200, ROOM_WIDTH + 400, ROOM_HEIGHT + 400);

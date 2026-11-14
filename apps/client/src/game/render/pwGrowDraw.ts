@@ -1,9 +1,7 @@
 // 패왕전 성장 대결 그리기: 집(깃발 둘레 원) · 쟁탈전 가운데 점령지(가진 편 색) · 병사·포탑·보스(던전 몬스터 그림 + 편 고리 + 체력 줄) · 포탑·원거리 병사 공격 빛줄기
-import { drawGigaBuildings, drawGigaFloors } from "./gigaBuildings";
-import { allPlayers, BASE_R, capCenter, ENEMIES, fogAt, portalOf, PW_ARENAS, PW_GIGA, PW_GROW, PW_UNIT, PW_WAR, spotXY, TILE_SIZE, type EnemyKind, type PwUnit, type RunState } from "@pixel-rogue/shared";
+import { BASE_R, capCenter, ENEMIES, fogAt, portalOf, PW_ARENAS, PW_GROW, PW_UNIT, PW_WAR, spotXY, TILE_SIZE, type EnemyKind, type PwUnit, type RunState } from "@pixel-rogue/shared";
 import { drawEnemySprite } from "../sprites";
 import { drawTurret } from "./pwGrowTheme";
-import { drawGiant, drawGiantSkill, drawGiantTag, giantTop, isGiant } from "./gigaGiants";
 
 type Ctx = CanvasRenderingContext2D;
 const T = TILE_SIZE;
@@ -63,22 +61,6 @@ export function drawGrowGround(ctx: Ctx, s: RunState): void {
     }
     ctx.lineWidth = 1;
   }
-  // 기간토마키아 제작 중: 망치질하듯 튀는 불꽃 + 금빛 막대
-  allPlayers(s).forEach((p) => {
-    const cr = p.pwCraft;
-    if (!cr) return;
-    const k = 1 - Math.max(0, cr.end - s.tick) / PW_GIGA.craftHold;
-    const hit = s.tick % 20 < 4;
-    ctx.fillStyle = hit ? "#fff0a0" : "#e8b030";
-    for (let n = 0; n < (hit ? 6 : 2); n++) {
-      const a2 = (n / 6) * Math.PI * 2 + s.tick / 7;
-      ctx.fillRect(p.x + Math.cos(a2) * (6 + (s.tick % 20)), p.y - 4 + Math.sin(a2) * 4 - (s.tick % 20) / 3, 2, 2);
-    }
-    ctx.fillStyle = "#0a0810";
-    ctx.fillRect(p.x - 11, p.y + 10, 22, 4);
-    ctx.fillStyle = "#f2d040";
-    ctx.fillRect(p.x - 10, p.y + 11, Math.round(20 * k), 2);
-  });
   // 가운데 점령지
   if (a.zone?.rect) {
     const [c, r, w, h] = a.zone.rect;
@@ -127,7 +109,6 @@ export function drawGrowUnits(ctx: Ctx, s: RunState): void {
   const g = pv?.grow;
   if (!pv || !g) return;
   const mine = pv.seats[s.seat ?? 0]!.team;
-  drawGigaGround(ctx, s);
   const myFog = fogAt(pv.arena, s.player.x, s.player.y);
   for (const u of g.units) {
     const b = u.body;
@@ -164,14 +145,6 @@ export function drawGrowUnits(ctx: Ctx, s: RunState): void {
         ctx.fillRect(b.x - b.r, b.y - b.r, b.r * 2, b.r * 2);
       }
     };
-    // 기간토마키아 뿔 거인: 기술 예고 · 꾸민 몸 · 난이도 표시 (render/gigaGiants)
-    if (isGiant(u)) {
-      drawGiantSkill(ctx, s, u);
-      drawGiant(ctx, s, u, plain);
-      drawBar(ctx, u, col, s.tick, giantTop(u));
-      drawGiantTag(ctx, s, u);
-      continue;
-    }
     plain();
     drawBar(ctx, u, col, s.tick);
   }
@@ -197,41 +170,4 @@ export function drawWarFog(ctx: Ctx, s: RunState): void {
       ctx.fill();
     });
   });
-}
-
-/** 기간토마키아: 닫힌 상자 · 떨어진 배낭 · 임시 출구 */
-function drawGigaGround(ctx: Ctx, s: RunState): void {
-  const g = s.pvp?.grow;
-  if (!g?.loot) return;
-  drawGigaFloors(ctx, s);
-  drawGigaBuildings(ctx, s);
-  for (const l of g.loot) {
-    if (l.chest) {
-      ctx.fillStyle = "#6a4422";
-      ctx.fillRect(l.x - 6, l.y - 5, 12, 9);
-      ctx.fillStyle = "#e0b040";
-      ctx.fillRect(l.x - 6, l.y - 2, 12, 2);
-      ctx.fillRect(l.x - 1, l.y - 3, 2, 4);
-    } else {
-      ctx.fillStyle = "#8a6a4a";
-      ctx.beginPath();
-      ctx.arc(l.x, l.y, 5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#c8a070";
-      ctx.fillRect(l.x - 2, l.y - 7, 4, 3);
-    }
-  }
-  for (const e of g.exits ?? []) {
-    const k = (s.tick % 60) / 60;
-    ctx.strokeStyle = "#6af0a0";
-    ctx.lineWidth = 2;
-    for (const r of [8, 13, 18]) {
-      ctx.globalAlpha = 1 - ((r / 18 + k) % 1) * 0.7;
-      ctx.beginPath();
-      ctx.arc(e.x, e.y, r, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-    ctx.lineWidth = 1;
-  }
 }

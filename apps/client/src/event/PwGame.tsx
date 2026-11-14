@@ -1,14 +1,12 @@
 // 이벤트 '패왕전' 혼자 한 판 (나 + AI): 게임 화면(GameScreen)에 진행을 맡기고 위에 정보(PwHud)·점수판(PwBoard) · 끝나면 결과와 보상 칩
 import { usePwBalanceRun } from "../balance";
-import { createPvp, isGiga, stepPvp, type CharacterId, type PwLoadout, type PwMode } from "@pixel-rogue/shared";
+import { createPvp, stepPvp, type CharacterId, type PwLoadout, type PwMode } from "@pixel-rogue/shared";
 import { useEffect, useState } from "react";
 import { GameScreen } from "../game/GameScreen";
 import type { Lang, TextKey } from "../i18n";
 import { PwBoard, useBoard } from "./PwBoard";
 import { StatsPanel } from "../game/GameHud";
 import { statRows } from "../game/statsView";
-import { PwGigaHud } from "./PwGigaHud";
-import { claimGoods } from "./pwGigaStore";
 import { PwGrowHud } from "./PwGrowHud";
 import { PwHud } from "./PwHud";
 import type { PwMapPick } from "./PwMaps";
@@ -31,7 +29,7 @@ interface Props {
   /** 월드 워 리그: AI끼리 관전(내 자리도 AI · 보상 없음) · 끝나면 0번 자리 편이 이겼는지 */
   watch?: boolean;
   onEnd?: (won: boolean) => void;
-  /** 기간토마키아: 밴된 캐릭터(AI에서 뺌) · 이어하기 판 */
+  /** 밴된 캐릭터 (AI에서 뺌) */
   bans?: readonly CharacterId[];
 }
 
@@ -46,14 +44,9 @@ export function PwGame({ mode, map, characterId, picks, loadout, lang, t, onExit
   const [, refresh] = useState(0);
   const [chips, setChips] = useState<number | null>(null);
   const [board, toggleBoard] = useBoard();
-  const [goods, setGoods] = useState<string[]>([]);
   useEffect(() => {
     const id = window.setInterval(() => refresh((n) => n + 1), HUD_MS);
-    return () => {
-      window.clearInterval(id);
-      // 기간토마키아는 이어하기 없음: 판 중간에 나가면 그대로 끝 (금고 물건만 받음)
-      if (isGiga(run) && !run.over && run.player.pwVault) claimGoods([run.player.pwVault]);
-    };
+    return () => window.clearInterval(id);
   }, [run]);
   const ended = chips !== null;
   return (
@@ -73,22 +66,11 @@ export function PwGame({ mode, map, characterId, picks, loadout, lang, t, onExit
         }}
         onRunEnd={(end) => {
           setChips(watch ? 0 : savePwResult(mode, end.won));
-          // 기간토마키아: 이기거나 출구로 나가면 배낭 전부, 쓰러졌으면 금고만 가져감
-          if (isGiga(run)) {
-            const p = run.player;
-            const out = end.won || !!run.pvp?.grow?.out?.includes(0);
-            setGoods(claimGoods([...(out ? (p.pwBag ?? []) : []), ...(p.pwVault ? [p.pwVault] : [])]));
-          }
           onEnd?.(end.won);
         }}
-        afterRun={ended ? <PwResult run={run} me={0} lang={lang} t={t} onExit={onExit} onRetry={onRetry} extra={goods.length > 0 && <p className="pw-chips">🎁 {goods.map((g) => t(`pwGoods_${g.slice(2)}` as TextKey)).join(" · ")}</p>} /> : undefined}
+        afterRun={ended ? <PwResult run={run} me={0} lang={lang} t={t} onExit={onExit} onRetry={onRetry} /> : undefined}
         withControls={(controls) =>
-          !ended && (
-            <>
-              <PwGrowHud run={run} me={0} lang={lang} t={t} controls={controls} />
-              <PwGigaHud run={run} me={0} lang={lang} t={t} controls={controls} />
-            </>
-          )
+          !ended && <PwGrowHud run={run} me={0} lang={lang} t={t} controls={controls} />
         }
       />
       {!ended && <PwWatch run={run} me={0} watching={watch} t={t} />}

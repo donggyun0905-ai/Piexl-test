@@ -37,18 +37,6 @@ export interface PwArenaDef {
   points?: readonly { at: Spot; lane: number }[];
   fogs?: readonly (readonly Rect[])[];
   camps?: readonly { kind: "jungle" | "elite" | "dragon" | "godeater"; at: Spot }[];
-  /** 기간토마키아 (paewangMapsGigaRooms): 들판 칸 수(오른쪽은 실내 구역) · 건물(밖 네모 · 실내 상자 자리) · 문(at에서 F → to, 건물 번호) */
-  outCols?: number;
-  buildings?: readonly GigaBuilding[];
-  portals?: readonly { at: Spot; to: Spot; kind: "in" | "out" | "up" | "down"; b: number }[];
-}
-
-export interface GigaBuilding {
-  kind: "house" | "apt" | "school";
-  /** 들판에 선 건물 네모 · 실내 바닥 네모들(층마다) · 실내 상자 자리 */
-  out: Rect;
-  inside: readonly Rect[];
-  chests: readonly Spot[];
 }
 
 export const NONE: readonly never[] = [];

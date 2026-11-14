@@ -7,7 +7,7 @@ export const PW_ITEMS = {
   /** 명약: 최대 체력의 이 비율 회복 */
   elixir: { healRatio: 1 },
   /** 폭탄: 주변 상대에게 피해 · 범위 (던전 45보다 약하게) · 기간토마키아 피해 */
-  bomb: { damage: 20, radius: 44, giga: 45 },
+  bomb: { damage: 20, radius: 44 },
   /** 수호부: 피해를 받지 않는 시간 (틱, 60 = 1초) */
   ward: { ticks: 180 },
 };

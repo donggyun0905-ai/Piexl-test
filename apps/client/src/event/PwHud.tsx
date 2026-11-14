@@ -15,20 +15,20 @@ interface Props {
   onBoard: () => void;
 }
 
-const GOAL: Record<string, TextKey> = { tourney: "pwGoalTourney", brawl: "pwGoalBrawl", gungame: "pwGoalGun", capture: "pwGoalCapture", contest: "pwGoalContest", war: "pwGoalWar", giganto: "pwGoalGiga" };
+const GOAL: Record<string, TextKey> = { tourney: "pwGoalTourney", brawl: "pwGoalBrawl", gungame: "pwGoalGun", capture: "pwGoalCapture", contest: "pwGoalContest", war: "pwGoalWar" };
 
 export function PwHud({ run, me, names, t, onBoard }: Props) {
   const pv = run.pvp!;
   const mine = pv.seats[me]!;
   const n = (k: TextKey, v: number) => t(k).replace("{n}", String(v));
   const live = pv.seats.map((_, i) => inPlay(run, i));
-  const ffa = pv.mode === "brawl" || pv.mode === "gungame" || pv.mode === "giganto";
+  const ffa = pv.mode === "brawl" || pv.mode === "gungame";
   const bo3 = PW_MODE[pv.mode].rounds > 1;
   let line = "";
   if (pv.mode === "gungame") {
     const top = Math.max(...pv.seats.map((x) => x.lv));
     line = `${t("pwLevel").replace("{lv}", String(mine.lv))} · ${t("pwTop").replace("{lv}", String(top))}`;
-  } else if (pv.mode === "brawl" || pv.mode === "giganto") line = n("pwAlive", live.filter(Boolean).length);
+  } else if (pv.mode === "brawl") line = n("pwAlive", live.filter(Boolean).length);
   // 편 대결: 우리 편·상대 편 처치 합과 사람마다 점(살아 있음·기다림·쓰러짐)
   const side = (ours: boolean) => {
     const list = pv.seats.map((x, i) => ({ x, i })).filter(({ x }) => (x.team === mine.team) === ours);

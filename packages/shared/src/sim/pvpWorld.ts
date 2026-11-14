@@ -3,7 +3,6 @@
 // 틱 끝에 그림자 적이 받은 피해·기절·느려짐을 그 사람에게 옮김 (보호막·회피·무적은 damagePlayer가 처리)
 import { PW_CHAR } from "../paewangBalance";
 import { PW, PW_MODE } from "../paewangDefs";
-import { PW_GIGA } from "../pwRules";
 import { warEarly, warRole } from "./pwWarBot";
 import { damagePlayer as damagePlayer_, removeDead as removeDead_ } from "./combat";
 import { updatePending as updatePending_ } from "./pending";
@@ -45,20 +44,16 @@ export function assignFoes(s: RunState): void {
     // 상대 쪽 사람 + 상대가 소환한 것 (부술 수 있음)
     const mins = (pv.mins ?? []).filter((m) => m.body && m.body.hp > 0 && m.t > 0 && pv.seats[m.seat]!.team !== team).map((m) => m.body!);
     // 성장 대결: 상대 편·중립 병사·포탑·보스
-    // 중립(정글·거인·도깨비)은 가까이 있을 때만 (큰 맵에서 계산을 줄임)
+    // 중립(정글)은 가까이 있을 때만 (큰 맵에서 계산을 줄임)
     const p = s.player;
-    // 기간토마키아 AI: 레벨이 되는 거인만 · 가까운 상대 캐릭터만
-    const giga = PW_MODE[pv.mode].rule === "giganto" && !pv.seats[i]!.human;
     const near = (e: { x: number; y: number }, r: number) => (e.x - p.x) ** 2 + (e.y - p.y) ** 2 < r * r;
     // 전쟁의 서막 10분 전: 길에 선 AI(정글 빼고)는 자기를 쫓는 정글 몬스터만 (길을 벗어나 정글로 새지 않게)
     const laner = PW_MODE[pv.mode].rule === "war" && !pv.seats[i]!.human && warEarly(s) && warRole(s, i) !== "jungle";
-    const units = (pv.grow?.units ?? []).filter((u) => u.team !== team && u.body.hp > 0 && (u.team !== 2 || (near(u.body, 500) && (!laner || u.foe === i) && (!giga || (p.pwLv ?? 1) >= (PW_GIGA.botLv[u.kind] ?? 1))))).map((u) => u.body);
-    // 처음 botCalm 동안은 맞았을 때만 싸움 (먼저 흩어져 파밍), 그 뒤로는 보이는 상대와 싸움 (도망은 pwGiga.gigaSteer)
-    const calm = giga && s.tick - (pv.readyAt ?? 0) < PW_GIGA.botCalm;
+    const units = (pv.grow?.units ?? []).filter((u) => u.team !== team && u.body.hp > 0 && (u.team !== 2 || (near(u.body, 500) && (!laner || u.foe === i)))).map((u) => u.body);
     s.enemies = live
       .filter((e) => {
         const j = pv.proxies.indexOf(e);
-        return pv.seats[j]!.team !== team && (!giga || (near(e, PW_GIGA.botSight) && (!calm || pv.seats[i]!.by === j)));
+        return pv.seats[j]!.team !== team;
       })
       .concat(mins, units);
   });

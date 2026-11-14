@@ -9,7 +9,6 @@ import { spotXY } from "./paewangGrid";
 import { allPlayers, seatNo, useSeat } from "./party";
 import { inPlay } from "./pvpWorld";
 import { recapEnv } from "./pvpRecap";
-import { giantSkill } from "./gigaGiants";
 import type { PwUnit, PwUnitKind } from "./pwGrowTypes";
 import type { RunState } from "./types";
 import { addEffect, makeEnemy } from "./util";
@@ -17,7 +16,7 @@ import { srcFn } from "./dmgSrc";
 const damagePlayer = srcFn("pwLane", () => damagePlayer_);
 
 /** 그림 (던전 몬스터 그림을 씀) */
-const LOOK: Record<PwUnitKind, string> = { minion: "paladin", archer: "spitter", tower: "tower", boss: "hulk", jungle: "charger", elite: "knight", dragon: "dragon", godeater: "godeater", giantRed: "hulk", giantBlue: "hulk", giantWhite: "hulk", goblin: "charger" };
+const LOOK: Record<PwUnitKind, string> = { minion: "paladin", archer: "spitter", tower: "tower", boss: "hulk", jungle: "charger", elite: "knight", dragon: "dragon", godeater: "godeater" };
 
 export function makeUnit(s: RunState, kind: PwUnitKind, team: number, x: number, y: number, mul = 1, lane = 0, wp = 0): PwUnit {
   const d = PW_UNIT[kind];
@@ -149,8 +148,6 @@ export function laneTick(s: RunState): void {
     if (u.team === 2) neutralGuard(s, u);
     const leash = PW_UNIT.leash;
     const t = u.team === 2 ? jungleFoe(s, u, home) : u.kind === "tower" ? nearest(s, u, d.range, true) : nearest(s, u, Math.max(PW_UNIT.aggro, d.range), u.kind !== "boss");
-    // 기간토마키아 뿔 거인 기술 (쓰는 동안은 보통 공격·걷기 없음)
-    if (giantSkill(s, u, t, hitSeat)) continue;
     const reach = t ? Math.hypot(t.x - b.x, t.y - b.y) - t.r - b.r : Infinity;
     if (t && reach <= d.range) {
       if (u.cd === 0) attack(s, u, t);

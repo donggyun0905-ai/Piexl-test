@@ -3,7 +3,6 @@ import { PW_MODE } from "../paewangDefs";
 import { PW_UNIT } from "../pwRules";
 import { contestTick } from "./pwContest";
 import { campDown, warTick } from "./pwWar";
-import { gigaDrop, gigaTick } from "./pwGiga";
 import { gearTick } from "./pwGear";
 import { growEconomy, isGrow, reward, waveMul } from "./pwGrow";
 import { botShop } from "./pwGrowBot";
@@ -34,7 +33,6 @@ export function growTick(s: RunState): void {
   unitDeaths(s);
   if (PW_MODE[pv.mode].rule === "contest") contestTick(s);
   if (PW_MODE[pv.mode].rule === "war") warTick(s);
-  if (PW_MODE[pv.mode].rule === "giganto") gigaTick(s);
   botShop(s);
 }
 
@@ -48,11 +46,10 @@ function unitDeaths(s: RunState): void {
       continue;
     }
     addEffect(s, { kind: "burst", x: u.body.x, y: u.body.y, dirX: 0, dirY: 0, size: u.body.r * 2, maxTicks: 16 });
-    const kind = u.kind === "archer" ? "minion" : u.kind === "elite" ? "tower" : u.kind === "dragon" || u.kind === "godeater" || u.kind === "giantRed" || u.kind === "giantBlue" || u.kind === "giantWhite" ? "boss" : u.kind === "goblin" ? "tower" : u.kind;
+    const kind = u.kind === "archer" ? "minion" : u.kind === "elite" ? "tower" : u.kind === "dragon" || u.kind === "godeater" ? "boss" : u.kind;
     reward(s, u.body.lastHit, kind, u.body.x, u.body.y, u.team);
     if (u.kind === "boss") g.bossDown[u.team] = true;
     campDown(s, u);
-    if (g.loot) gigaDrop(s, u.kind, u.body.x, u.body.y, u.id);
   }
   g.units = keep;
 }

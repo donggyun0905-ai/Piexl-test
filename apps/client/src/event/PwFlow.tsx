@@ -58,9 +58,7 @@ export function PwFlow({ lang, setLang, t, onExit }: { lang: Lang; setLang: (l: 
   }
   if (step.name === "draft") {
     const { mode, map } = step;
-    // 기간토마키아: 1대1처럼 밴 하나씩 · 내 캐릭터 고르기 (나머지 AI 29명은 밴을 빼고 무작위)
-    const giga = mode === "giganto";
-    return <PwDraftSolo key={step.key} mode={giga ? "duel" : mode} t={t} onBack={() => toMaps(mode)} onDone={(picks, bans) => setStep({ name: "prep", mode, map, characterId: picks[0]!, picks: giga ? [picks[0]!] : picks, bans })} />;
+    return <PwDraftSolo key={step.key} mode={mode} t={t} onBack={() => toMaps(mode)} onDone={(picks, bans) => setStep({ name: "prep", mode, map, characterId: picks[0]!, picks, bans })} />;
   }
   if (step.name === "prep") {
     const { mode, map, characterId, picks, bans } = step;

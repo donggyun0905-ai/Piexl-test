@@ -1,10 +1,9 @@
 // 이벤트 '패왕전': AI 캐릭터들과 겨루는 일곱 가지 대결 수치 (계산은 sim/paewang·paewangAi, 맵은 paewangMaps)
 import type { CharacterId } from "./characters";
 import { PW_MAP_SETS, type PwArenaId } from "./paewangMaps";
-import { PW_GIGA } from "./pwRules";
 
-export type PwMode = "duel" | "pair" | "trio" | "squad" | "tourney" | "brawl" | "gungame" | "capture" | "contest" | "war" | "giganto";
-export const PW_MODES: readonly PwMode[] = ["duel", "pair", "trio", "squad", "tourney", "brawl", "gungame", "capture", "contest", "war", "giganto"];
+export type PwMode = "duel" | "pair" | "trio" | "squad" | "tourney" | "brawl" | "gungame" | "capture" | "contest" | "war";
+export const PW_MODES: readonly PwMode[] = ["duel", "pair", "trio", "squad", "tourney", "brawl", "gungame", "capture", "contest", "war"];
 
 /** AI 보정: 체력 · 피해 · 공격 빠르기 · 조준 정확도(0~1) · 이동 빠르기 · 피하기(대시) 확률 */
 export interface PwDiff {
@@ -40,9 +39,7 @@ export interface PwModeDef {
   timeSec: number;
   zone?: boolean;
   /** 특별 규칙 (docs/PW_MODES.md): 점령전(점령도 100% 승리 · 쓰러지면 집에서 다시, sim/pwCapture) */
-  rule?: "capture" | "contest" | "war" | "giganto";
-  /** 자기장 단계 길이 틱 · 다음 원 배율 · 가장 작은 반지름 (없으면 PW.zone · 1분) */
-  zoneTune?: { every: number; shrink: number; minR: number };
+  rule?: "capture" | "contest" | "war";
 }
 
 export const PW_MODE: Record<PwMode, PwModeDef> = {
@@ -66,8 +63,6 @@ export const PW_MODE: Record<PwMode, PwModeDef> = {
   contest: { maps: PW_MAP_SETS.contest, rounds: 1, allies: 4, foes: 5, ffa: false, reward: 8000, diff: HARD, prep: true, timeSec: 1500, rule: "contest" },
   /** 전쟁의 서막: 5대5 · 길 셋 · 체크포인트 순간이동 · 물가 · 안개 지역(큰 보스 둘) · 포탑을 다 부수고 상대 집을 점령하면 승리 · 단판 */
   war: { maps: PW_MAP_SETS.war, rounds: 1, allies: 4, foes: 5, ffa: false, reward: 10000, diff: HARD, prep: true, timeSec: 1800, rule: "war" },
-  /** 기간토마키아: 나 + AI 29명 · 큰 맵 · 뿔 거인·도깨비·상자로 성장 · 제작 · 자기장 · 마지막 1명 승리 (또는 임시 출구로 나감) · 단판 */
-  giganto: { maps: PW_MAP_SETS.giganto, rounds: 1, allies: 0, foes: 29, ffa: true, reward: PW_GIGA.winChips, diff: NORMAL, prep: true, timeSec: 1900, zone: true, rule: "giganto", zoneTune: PW_GIGA.zone },
 };
 
 /** 데스매치 레벨별 캐릭터: 1레벨이 가장 센 티어, 21레벨이 가장 약한 캐릭터 (관리자가 바꿔 가며 조정) */

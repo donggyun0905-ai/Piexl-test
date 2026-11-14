@@ -86,7 +86,7 @@ describe("패왕전", () => {
       expect(hp(a), mode).toEqual(hp(b));
       expect(a.pvp!.seats.map((x) => x.kills), mode).toEqual(b.pvp!.seats.map((x) => x.kills));
       // 누군가는 피해를 입음 (서로 싸움) · 기간토마키아는 처음엔 AI가 파밍만 함 · 전쟁의 서막은 넓어 20초 안엔 아직 각자 길로 가는 중
-      if (mode !== "giganto" && mode !== "war") expect(a.pvp!.seats.some((x) => (x.taken ?? 0) > 0), mode).toBe(true);
+      if (mode !== "war") expect(a.pvp!.seats.some((x) => (x.taken ?? 0) > 0), mode).toBe(true);
     }
   }, 120000);
 

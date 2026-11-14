@@ -65,11 +65,6 @@ export const PW_UNIT = {
   elite: { hp: 1600, dmg: 24, every: 70, range: 30, speed: 0.6, r: 11 },
   dragon: { hp: 5200, dmg: 40, every: 80, range: 60, speed: 0.5, r: 16 },
   godeater: { hp: 5200, dmg: 40, every: 80, range: 60, speed: 0.5, r: 16 },
-  /** 기간토마키아: 뿔 거인 (붉은 뿔 어려움 · 푸른 뿔 보통 · 흰 뿔 쉬움) · 도깨비 */
-  giantRed: { hp: 4200, dmg: 38, every: 70, range: 40, speed: 0.55, r: 15 },
-  giantBlue: { hp: 2200, dmg: 26, every: 70, range: 34, speed: 0.55, r: 13 },
-  giantWhite: { hp: 1000, dmg: 16, every: 70, range: 28, speed: 0.55, r: 11 },
-  goblin: { hp: 240, dmg: 8, every: 50, range: 18, speed: 0.7, r: 7 },
   /** 병사 한 무리: 근접 · 원거리 수 · 나오는 간격 틱 · 시간이 갈수록 강해짐(1분마다 체력·공격 배율) · 가운데를 점령한 편 병사 배율 */
   wave: { melee: 3, ranged: 2, every: 28 * TICK_RATE, grow: 0.04, center: 1.4 },
   /** 병사가 상대를 찾는 거리 · 보스·정글 몬스터가 집에서 벗어나는 최대 거리 */
@@ -134,56 +129,3 @@ export const PW_AUGS = {
   rush: { dashCut: 0.2, move: 0.06 },
 } as const;
 export type PwAugId = keyof typeof PW_AUGS;
-
-/** 기간토마키아 (sim/pwGiga): 30명 생존 + 성장 · 나 + AI 29명 (서버 없이 화면에서만 계산) */
-export const PW_GIGA = {
-  /** 들판: 라스트 보스 방(29×17)의 가로·세로 12배 (0.48.255부터 1.5배) · 오른쪽 바깥 실내 구역 너비 (건물 안 방들, 담으로 막혀 문으로만 드나듦) */
-  cols: 348,
-  rows: 204,
-  inW: 66,
-  giants: { giantRed: 5, giantBlue: 9, giantWhite: 16 },
-  goblins: 60,
-  chests: 260,
-  /** 배낭 칸 (그중 한 칸은 금고) */
-  bag: 10,
-  /** 닿는 거리 (상자·떨어진 배낭·출구·건물 문) · 제작하며 가만히 있는 틱 */
-  reach: 22,
-  craftHold: 3 * TICK_RATE,
-  /** 자기장: 단계 길이 틱 · 다음 원 배율 · 가장 작은 반지름 */
-  zone: { every: 150 * TICK_RATE, shrink: 0.75, minR: 40 },
-  /** 임시 출구가 생기는 때 (틱) */
-  exitAt: [9 * 60 * TICK_RATE, 17 * 60 * TICK_RATE],
-  /** 상자 하나: 돈 범위 · 조합 장비 확률 · 사용 아이템 확률 · 상점 물건 확률 */
-  chest: { gold: [40, 160], gear: 0.55, use: 0.45, goods: 0.06 },
-  /** 건물 안 상자 (더 좋음): 돈 범위 · 조합 장비 확률 · 전설 장비 확률 · 사용 아이템 확률 · 상점 물건 확률 */
-  inChest: { gold: [100, 280], gear: 0.95, legend: 0.12, use: 0.6, goods: 0.12 },
-  /** 뿔 거인 보상: 돈 · 장비 수 · 전설 장비 확률 · 상점 물건 확률 */
-  drop: {
-    giantRed: { gold: 900, gear: 4, legend: 0.6, goods: 0.5 },
-    giantBlue: { gold: 450, gear: 3, legend: 0.25, goods: 0.2 },
-    giantWhite: { gold: 200, gear: 2, legend: 0, goods: 0.06 },
-    goblin: { gold: 40, gear: 0, legend: 0, goods: 0.01 },
-  } as Record<string, { gold: number; gear: number; legend: number; goods: number }>,
-  /** 뿔 거인 기술 (맞아서 화가 났을 때만): 간격 틱 · 쓰는 거리 · 준비 틱 · 피해 배율(거인 공격력의) · 범위
-   *  흰 뿔 돌 던지기(날아가는 틱) · 푸른 뿔 돌진(달리는 틱·빠르기) · 붉은 뿔 레이저(빛 틱·길이·굵기) · 붉은 뿔 내려찍기 */
-  skill: {
-    rock: { every: 4 * TICK_RATE, range: 150, wind: 12, fly: 36, mul: 1.1, r: 20 },
-    charge: { every: 5 * TICK_RATE, range: 170, wind: 30, dash: 20, speed: 6, mul: 1.4, r: 16 },
-    laser: { every: 6 * TICK_RATE, range: 230, wind: 45, beam: 14, len: 260, w: 10, mul: 1.6 },
-    quake: { every: 9 * TICK_RATE / 2, range: 70, wind: 36, mul: 1.2, r: 64 },
-  },
-  /** 상점 물건 (배낭에 넣고 나가면 가져감) */
-  goods: ["g:ticket", "g:ecoin", "g:chips", "g:skin", "g:fx"],
-  /** 우승 칩 */
-  winChips: 50000,
-  /** AI: 이 레벨이 되어야 그 거인을 노림 · 상대 캐릭터를 알아채는 거리(px) */
-  botLv: { giantRed: 14, giantBlue: 9, giantWhite: 5, goblin: 1 } as Record<string, number>,
-  botSight: 170,
-  /** AI: 판 시작 뒤 이 틱까지는 맞았을 때만 싸움 (먼저 흩어져 파밍) · 체력이 이 비율 아래이거나 상대가 이만큼 레벨이 높으면 도망 */
-  botCalm: 90 * TICK_RATE,
-  botFlee: 0.35,
-  botFleeLv: 3,
-  /** 도깨비 다시 나오기: 간격 틱 · 한 번에 */
-  goblinEvery: 45 * TICK_RATE,
-  goblinWave: 8,
-};
