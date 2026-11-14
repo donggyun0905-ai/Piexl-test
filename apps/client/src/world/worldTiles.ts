@@ -50,6 +50,14 @@ export const WT = {
   buriedRoad: 36,
   oasis: 37,
   temple: 38,
+  /** 실베르: 깊은 눈밭 · 얼음 · 얼어붙은 진흙 · 눈 덮인 돌바닥(걸음) · 두꺼운 요새 성벽(막힘) */
+  deepSnow: 39,
+  ice: 40,
+  frozenMud: 41,
+  snowStone: 42,
+  thickWall: 43,
+  /** 눈 덮인 나무 (막힘, 밑은 눈밭 · 그림은 worldTrees) */
+  snowPine: 44,
 } as const;
 export type WorldTile = (typeof WT)[keyof typeof WT];
 
@@ -101,6 +109,12 @@ export const TILE_DEFS: readonly TileDef[] = [
   { key: [190, 170, 130], solid: false },
   { key: [60, 200, 190], solid: true },
   { key: [160, 110, 60], solid: true },
+  { key: [226, 236, 248], solid: false },
+  { key: [150, 210, 236], solid: false },
+  { key: [120, 110, 104], solid: false },
+  { key: [176, 184, 196], solid: false },
+  { key: [70, 76, 92], solid: true },
+  { key: [40, 80, 70], solid: true },
 ];
 
 /** 픽셀 색 → 땅 종류 (딱 맞는 색이 없으면 가장 가까운 색) */

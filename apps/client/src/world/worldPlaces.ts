@@ -10,6 +10,7 @@ import { ASCALON_FIELD } from "./places/ascalonField";
 import { ASCALON_INSIDE } from "./places/ascalonInside";
 import { HELIOS_FIELD, HELIOS_INSIDE } from "./places/heliosField";
 import { DESERT_FIELD } from "./places/desertField";
+import { SILBER_FIELD, SILBER_INSIDE } from "./places/silberField";
 import { TERRA_FIELD, TERRA_INSIDE } from "./places/terraField";
 import { VIRDIA_FIELD, VIRDIA_INSIDE } from "./places/virdiaField";
 import { DECO_R, type DecoArt } from "./worldDeco";
@@ -36,8 +37,8 @@ export interface Place {
   /** door: 들어갈 건물 안 Region 이름 · deco: 가구 그림 */
   to?: string;
   art?: DecoArt;
-  /** dungeon: tower = 기억의 탑 (무한 모드·영웅의 길 고르는 창) · colosseum = 콜로세움 (패왕전) · arena = 헬리오스 광장 황제 석상 (레이드 아레나) · swarm = 사막 태초의 신전 (광야의 새벽) · 없으면 기본 혼자 하기 */
-  gate?: "tower" | "colosseum" | "arena" | "swarm";
+  /** dungeon: tower = 기억의 탑 (무한 모드·영웅의 길 고르는 창) · colosseum = 콜로세움 (패왕전) · arena = 헬리오스 광장 황제 석상 (레이드 아레나) · swarm = 사막 태초의 신전 (광야의 새벽) · td = 실베르 악마의 문 경비원 (타워 디펜스, 주민에게 붙임) · 없으면 기본 혼자 하기 */
+  gate?: "tower" | "colosseum" | "arena" | "swarm" | "td";
   /** pass: 건너간 나라에서 설 칸 */
   land?: readonly [number, number];
   /** npc: 말 걸면 여는 창 (대사 대신) */
@@ -71,6 +72,8 @@ export const REGIONS: Record<string, Region> = {
   helios: HELIOS_FIELD,
   ...HELIOS_INSIDE,
   desert: DESERT_FIELD,
+  silber: SILBER_FIELD,
+  ...SILBER_INSIDE,
 };
 
 /** 나라·지역 필드인지 (건물 안이 아님) */

@@ -1,0 +1,33 @@
+import type { Lang } from "../index";
+
+// 화면 글자: 세계 지도 실베르 (world/places/silberField) · 표지판 글은 `{이름 키}Text`
+export const WORLD_SILBER_TEXT = {
+  wpToSilber: { ko: "북쪽 산길", en: "Northern mountain pass", ja: "北の山道" },
+  wpToSilberText: { ko: "눈 덮인 산을 넘어 북부 수호국 실베르로 가는 길. 아직 지나갈 수 없다. (스토리 9장에서 열림)", en: "A road over the snowy mountains to Silber, guardian of the north. You can't pass yet. (Opens in Story Chapter 9)", ja: "雪の山を越えて北の守護国シルベルへ向かう道。まだ通れない。（ストーリー第9章で解放）" },
+  wpSilberFort: { ko: "북부 수호성", en: "Northern Bastion", ja: "北部守護城" },
+  wpSilberFortText: { ko: "두꺼운 성벽으로 북쪽을 막아 선 실베르의 수호성. 북문 밖은 끝나지 않는 싸움터, 그 끝에는 악마들이 몰려오는 문이 있다.", en: "Silber's bastion, its thick walls barring the north. Beyond the north gate lies an endless battlefield, and at its end, the gate from which demons pour.", ja: "厚い城壁で北を塞ぐシルベルの守護城。北門の外は終わらない戦場、その果てには悪魔が押し寄せる門がある。" },
+  wpSilberKeep: { ko: "수호성 성채", en: "Bastion Keep", ja: "守護城の城館" },
+  wpArmory: { ko: "무기고", en: "Armory", ja: "武器庫" },
+  wpBattlefield: { ko: "얼어붙은 싸움터", en: "Frozen battlefield", ja: "凍てついた戦場" },
+  wpBattlefieldText: { ko: "마물의 뼈와 부러진 창이 눈 속에 박혀 있다. 이곳에서 싸움이 멈춘 날은 없다.", en: "Monster bones and broken spears lie frozen in the snow. Not a day has passed here without battle.", ja: "魔物の骨と折れた槍が雪に埋もれている。ここで戦いが止んだ日はない。" },
+  wpDemonGate: { ko: "악마의 문", en: "Demon Gate", ja: "悪魔の門" },
+  wpDemonGateText: { ko: "북쪽 끝의 검은 문. 밤마다 붉은 빛과 함께 악마들이 몰려나온다. 문 앞을 지키는 경비원과 함께 막아 내자.", en: "A black gate at the northern edge. Every night, demons pour out in a red glare. Hold the line with the guard at the gate.", ja: "北の果ての黒い門。夜ごと赤い光とともに悪魔が押し寄せる。門を守る衛兵と共に食い止めよう。" },
+  wpFrozenLake: { ko: "얼어붙은 호수", en: "Frozen lake", ja: "凍った湖" },
+  wpFrozenLakeText: { ko: "한겨울에도 녹지 않는 호수. 얼음 구멍 아래로 차가운 물이 검게 흐른다.", en: "A lake that never thaws, even in deep winter. Black water runs cold beneath the ice holes.", ja: "真冬でも溶けない湖。氷の穴の下を冷たい水が黒く流れる。" },
+  wpFrostCave: { ko: "얼음 동굴 던전 입구", en: "Frost Cave dungeon entrance", ja: "氷の洞窟のダンジョン入口" },
+  wpWarpSilberSouth: { ko: "남쪽 입구 이동석", en: "South entrance warp stone", ja: "南の入口の転移石" },
+  wpWarpSilberFort: { ko: "수호성 이동석", en: "Bastion warp stone", ja: "守護城の転移石" },
+  wpWarpBattlefield: { ko: "싸움터 이동석", en: "Battlefield warp stone", ja: "戦場の転移石" },
+  wpWarpLake: { ko: "호수 이동석", en: "Lake warp stone", ja: "湖の転移石" },
+  wpWarpOutpost: { ko: "망루 초소 이동석", en: "Watch post warp stone", ja: "見張り台の転移石" },
+  wpWarpFrostCave: { ko: "얼음 동굴 이동석", en: "Frost Cave warp stone", ja: "氷の洞窟の転移石" },
+  wnJoker: { ko: "카드 한 장 뽑아 볼래? …에이, 여기선 악마가 언제 올지 맞히는 게 더 재밌지.", en: "Want to draw a card? …Nah, around here guessing when the demons come is more fun.", ja: "カードを一枚引いてみる？…いや、ここじゃ悪魔がいつ来るか当てる方が面白いか。" },
+  wnRabbit: { ko: "막사는 춥지만 다들 따뜻해. 내 망치도 오늘 밤 일할 준비 됐어!", en: "The barracks are cold, but everyone's warm. My hammer's ready for tonight too!", ja: "兵舎は寒いけどみんなあったかいよ。私のハンマーも今夜の準備はできてる！" },
+  wnChessRaven: { ko: "북문 너머는 체스판과 같다. 한 칸이라도 내주면 끝이지.", en: "Beyond the north gate is a chessboard. Give up a single square and it's over.", ja: "北門の向こうはチェス盤と同じだ。一マスでも明け渡せば終わりだ。" },
+  wnAsura: { ko: "또 몰려온다. 같이 막을 거면 말해. 혼자 막는 것보단 낫겠지.", en: "Here they come again. Say the word if you'll hold the line with me. Better than holding it alone.", ja: "また押し寄せてくる。一緒に食い止めるなら言え。一人で止めるよりはましだろう。" },
+  wnBingseol: { ko: "얼음 위에선 내가 제일 빨라! 호수 건너편까지 미끄러져 가 볼래?", en: "Nobody's faster than me on the ice! Want to slide across the lake?", ja: "氷の上なら私が一番速いよ！湖の向こうまで滑っていってみる？" },
+  wnBaekryeong: { ko: "망루에서 보면 산 너머까지 다 보여. 영혼들도 오늘은 조용하구나.", en: "From the watchtower you can see past the mountains. Even the spirits are quiet today.", ja: "見張り台からは山の向こうまで見える。魂たちも今日は静かだね。" },
+  wnHonryeong: { ko: "아스칼론에서 왔나. …후우, 여기 연기는 금방 얼어붙지. 몸 조심하게.", en: "Come from Ascalon? …Phew, smoke freezes fast up here. Take care of yourself.", ja: "アスカロンから来たのかい。…ふう、ここじゃ煙もすぐ凍るよ。体に気をつけな。" },
+  wnBaekinjang: { ko: "수호성은 무너지지 않는다. 우리가 서 있는 한. 북부에 온 것을 환영한다.", en: "The Bastion will not fall, not while we stand. Welcome to the north.", ja: "守護城は崩れない。我らが立っている限り。北部へようこそ。" },
+  wnGears: { ko: "방패든 장신구든 맡겨 주세요. 무기고 정리는 메이드의 기본이니까요.", en: "Shields or accessories, leave them to me. Keeping the armory in order is a maid's basic duty.", ja: "盾でもアクセサリーでもお任せください。武器庫の整理はメイドの基本ですから。" },
+} satisfies Record<string, Record<Lang, string>>;

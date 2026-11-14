@@ -12,15 +12,16 @@ import { ShopScreen, type ShopTab } from "../shop/ShopScreen";
 import { WorldMapModal, WorldMapView } from "./WorldMapView";
 import type { Place, Region } from "./worldPlaces";
 
-export type WorldPanel = { k: "shop"; tab: ShopTab } | { k: "smith" } | { k: "gear" } | { k: "map" } | { k: "char" } | { k: "gate"; gate: "tower" | "colosseum" | "arena" | "swarm" };
+export type WorldPanel = { k: "shop"; tab: ShopTab } | { k: "smith" } | { k: "gear" } | { k: "map" } | { k: "char" } | { k: "gate"; gate: "tower" | "colosseum" | "arena" | "swarm" | "td" };
 /** 지도에서 들어가는 혼자 하기 종류 (장신구 없음, 메인 화면에서 들어간 것과 같음) */
-export type WorldRun = "solo" | "endless" | "hero" | "paewang" | "arena" | "swarm";
+export type WorldRun = "solo" | "endless" | "hero" | "paewang" | "arena" | "swarm" | "td";
 
-/** 모드 고르는 곳: 기억의 탑(무한 모드·영웅의 길) · 콜로세움(패왕전) · 헬리오스 황제 석상(레이드 아레나) · 사막 태초의 신전(광야의 새벽) — 스토리에서 아직 안 열린 모드는 누를 수 없음 */
+/** 모드 고르는 곳: 기억의 탑(무한 모드·영웅의 길) · 콜로세움(패왕전) · 헬리오스 황제 석상(레이드 아레나) · 사막 태초의 신전(광야의 새벽) · 실베르 악마의 문 경비원(타워 디펜스) — 스토리에서 아직 안 열린 모드는 누를 수 없음 */
 const GATES = {
   tower: { icon: "🗼", name: "wpTower", text: "wpTowerText", modes: [{ m: "endless", f: "endless", label: "endlessRun" }, { m: "hero", f: "hero", label: "heroRun" }] },
   colosseum: { icon: "🏟", name: "wpColosseum", text: "wpColosseumText", modes: [{ m: "paewang", f: "paewang", label: "paewang" }] },
   swarm: { icon: "🏜", name: "wpTemple", text: "wpTempleText", modes: [{ m: "swarm", f: "swarm", label: "swarm" }] },
+  td: { icon: "🛡", name: "wpDemonGate", text: "wpDemonGateText", modes: [{ m: "td", f: "td", label: "tdRun" }] },
   arena: { icon: "👑", name: "wpStatue", text: "wpStatueText", modes: [{ m: "arena", f: "arena", label: "arenaRun" }] },
 } as const;
 

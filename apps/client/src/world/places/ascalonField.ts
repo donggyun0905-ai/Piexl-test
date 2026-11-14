@@ -44,6 +44,7 @@ export const ASCALON_FIELD: Region = {
     { id: "forestDungeon", kind: "dungeon", tx: 24, ty: 30, name: "wpForestDungeon" },
     { id: "ascalonSign", kind: "sign", tx: 217, ty: 52, name: "wpSignAscalon" },
     { id: "terraSign", kind: "sign", tx: 246, ty: 53, name: "wpSignTerra" },
+    { id: "toSilber", kind: "pass", tx: 150, ty: 3, name: "wpToSilber", to: "silber", land: [128, 152] },
     { id: "toTerra", kind: "pass", tx: 248, ty: 56, name: "wpToTerra", to: "terracore", land: [7, 56] },
     // 기억의 탑 (무한 모드·영웅의 길 고르기)
     { id: "memoryTower", kind: "dungeon", tx: 232, ty: 49, name: "wpTower", gate: "tower" },

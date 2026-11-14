@@ -48,6 +48,11 @@ const G: Partial<Record<number, Ground>> = {
   [WT.cracked]: { lo: [196, 140, 92], hi: [216, 162, 110], size: 10, stretch: 1, fleck: [[150, 100, 64], [226, 180, 132]], rim: 0.86, pri: 6, tex: "cracked" },
   [WT.buriedRoad]: { lo: [184, 164, 126], hi: [204, 184, 146], size: 8, stretch: 1, fleck: [[222, 204, 160], [160, 140, 104]], rim: 1, pri: 0, tex: "buriedRoad" },
   [WT.oasis]: { lo: [52, 176, 170], hi: [80, 204, 196], size: 9, stretch: 3, fleck: [[150, 230, 220], [40, 150, 150]], rim: 1.7, pri: 2, tex: "oasis" },
+  [WT.deepSnow]: { lo: [210, 222, 240], hi: [240, 246, 255], size: 14, stretch: 2, fleck: [[255, 255, 255], [176, 192, 216]], rim: 0.9, pri: 6, tex: "deepSnow" },
+  [WT.ice]: { lo: [140, 200, 228], hi: [176, 222, 242], size: 10, stretch: 1, fleck: [[236, 250, 255], [110, 170, 206]], rim: 1.3, pri: 2, tex: "ice" },
+  [WT.frozenMud]: { lo: [108, 98, 94], hi: [136, 128, 124], size: 7, stretch: 1, fleck: [[214, 220, 232], [80, 72, 68]], rim: 0.85, pri: 4, tex: "frozenMud" },
+  [WT.snowStone]: { lo: [164, 172, 184], hi: [190, 198, 210], size: 8, stretch: 1, fleck: [[236, 242, 250], [136, 144, 156]], rim: 1, pri: 0, tex: "snowStone" },
+  [WT.thickWall]: { lo: [64, 70, 84], hi: [84, 90, 106], size: 8, stretch: 1, fleck: [[214, 224, 238], [50, 54, 66]], rim: 1, pri: 0 },
   [WT.bridge]: { lo: [48, 112, 200], hi: [72, 140, 222], size: 9, stretch: 3, fleck: [[120, 180, 240], [40, 96, 180]], rim: 1, pri: 0, tex: "water" },
 };
 const NONE: Ground = { lo: [12, 10, 18], hi: [12, 10, 18], size: 8, stretch: 1, fleck: [[12, 10, 18], [12, 10, 18]], rim: 1, pri: 0 };
@@ -60,6 +65,7 @@ export function groundOf(t: number): number {
   if (t === WT.bigTree || t === WT.hedge) return WT.moss;
   if (t === WT.palace || t === WT.villa) return WT.marble;
   if (t === WT.temple) return WT.buriedRoad;
+  if (t === WT.snowPine) return WT.deepSnow;
   return t;
 }
 const gdef = (t: number): Ground => G[groundOf(t)] ?? NONE;

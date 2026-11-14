@@ -14,6 +14,7 @@ const MINI = [
   "#a04a2a", "#b4605a", "#606ca8", "#a87c50", "#38303e", "#a02838", "#8c96a0", "#5a463c", "#a8602e", "#3c8c8c", "#c8b896", "#3a6e44", "#6a4426", "#2a7a4a",
   "#e8e2d4", "#963228", "#c8b478", "#e6b428", "#c86e5a",
   "#e2c478", "#aa8264", "#c88c5a", "#beaa82", "#3cc8be", "#a06e3c",
+  "#e2ecf8", "#96d2ec", "#786e68", "#b0b8c4", "#464c5c", "#285046",
 ];
 const cache = new Map<string, Promise<WorldMap>>();
 
@@ -70,7 +71,7 @@ export function WorldMapView({ t, regionId, region, me, onGo }: Props) {
             const ok = warp && warpTouched(regionId, p);
             return (
               <button key={p.id} type="button" className={`wm-mark${warp ? " warp" : ""}${ok ? " on" : ""}`} style={pct(p.tx, p.ty)} title={t(p.name)} disabled={!ok} onClick={() => ok && onGo(p)}>
-                {p.gate === "tower" ? "🗼" : p.gate === "colosseum" ? "🏟" : p.gate === "arena" ? "👑" : p.gate === "swarm" ? "🏜" : MARK[p.kind]}
+                {p.gate === "tower" ? "🗼" : p.gate === "colosseum" ? "🏟" : p.gate === "arena" ? "👑" : p.gate === "swarm" ? "🏜" : p.gate === "td" ? "🛡" : MARK[p.kind]}
               </button>
             );
           })}

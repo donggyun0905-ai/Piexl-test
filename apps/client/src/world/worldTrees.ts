@@ -8,6 +8,8 @@ import { ART_DENS, objOf } from "./worldTex";
 
 /** 나무 그림 파일 (있으면 코드 그림 대신, 같은 자리 차례: 둥근 2 · 뾰족 2) */
 const TREE_ART = ["tree_oak", "tree_oak2", "tree_pine", "tree_pine2"] as const;
+/** 실베르 눈 덮인 나무 칸 (눈 침엽수 둘 · 눈 침엽수 · 얼어 죽은 나무) */
+const SNOW_ART = ["snow_pine", "dead_tree", "snow_pine", "snow_pine2"] as const;
 
 const TW = 30;
 const TH = 36;
@@ -113,13 +115,15 @@ export function pushTrees(ctx: CanvasRenderingContext2D, m: WorldMap, v: View, t
   const y1 = Math.min(m.rows - 1, Math.ceil((v.y + v.h) / WTILE) + 2);
   for (let cy = y0; cy <= y1; cy++) {
     for (let cx = x0; cx <= x1; cx++) {
-      if (tileAt(m, cx, cy) !== WT.tree) continue;
+      const tt = tileAt(m, cx, cy);
+      if (tt !== WT.tree && tt !== WT.snowPine) continue;
+      const art = tt === WT.snowPine ? SNOW_ART : TREE_ART;
       const h = hash2(cx, cy);
       // 숲 속(둘레가 다 나무)은 뾰족 나무가 많게
-      const deep = tileAt(m, cx, cy - 1) === WT.tree && tileAt(m, cx - 1, cy) === WT.tree && tileAt(m, cx + 1, cy) === WT.tree;
+      const deep = tileAt(m, cx, cy - 1) === tt && tileAt(m, cx - 1, cy) === tt && tileAt(m, cx + 1, cy) === tt;
       const kind = ((deep ? h % 3 !== 0 : h % 4 === 0) ? 2 : 0) + ((h >>> 5) & 1);
       const s = sp[kind]!;
-      const img = objOf(TREE_ART[kind]!) ?? objOf(TREE_ART[kind ^ 1]!);
+      const img = objOf(art[kind]!) ?? objOf(art[kind ^ 1]!);
       const fx = (cx + 0.5) * WTILE + ((h >>> 9) % 5) - 2;
       const fy = (cy + 1) * WTILE - 2 - ((h >>> 13) % 3);
       const sway = Math.round(Math.sin(t * 1.3 + (h % 628) / 100) * 0.8);

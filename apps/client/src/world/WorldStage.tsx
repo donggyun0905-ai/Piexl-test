@@ -115,7 +115,9 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         // 장소·나무·나: 아래(발 y)가 큰 것을 나중에
         // 발판(문)은 늘 아래 · 가구는 아래쪽 끝 기준
         const foot = (p: Place) => (p.kind === "npc" ? 4 : p.kind === "deco" ? 6 : p.kind === "door" || p.kind === "exit" ? -16 : 0);
-        const items: Drawable[] = region.places.map((p) => ({ y: placeXY(p)[1] + foot(p), draw: () => drawPlace(ctx, p, t, color) }));
+        // 화면 근처 장소만 (장식이 많은 지도)
+        const near2 = (p: Place) => Math.abs(placeXY(p)[0] - (view.x + view.w / 2)) < view.w / 2 + 64 && Math.abs(placeXY(p)[1] - (view.y + view.h / 2)) < view.h / 2 + 96;
+        const items: Drawable[] = region.places.filter(near2).map((p) => ({ y: placeXY(p)[1] + foot(p), draw: () => drawPlace(ctx, p, t, color) }));
         pushTrees(ctx, m, view, t, items);
         items.push({
           y: me.y,

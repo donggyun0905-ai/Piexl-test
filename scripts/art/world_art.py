@@ -23,7 +23,7 @@ def src_of(kind, name):
     return SRC / "ascalon" / kind / f"{name}.png"
 
 
-TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge", "marble", "redBrick", "goldStone", "metalFloor", "forestFloor", "dune", "gravel", "cracked", "oasis", "buriedRoad"]
+TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge", "marble", "redBrick", "goldStone", "metalFloor", "forestFloor", "dune", "gravel", "cracked", "oasis", "buriedRoad", "deepSnow", "ice", "snowStone", "thickWall"]  # frozenMud: 반복 무늬가 티 나서 뺌 (다시 만들면 넣기)
 TEX_PX = 256
 # 캐릭터 그림과 어울리게 색 맞춤 (채도·밝기 배율): 땅은 배경이라 더 차분하게
 TONE_TEX = (0.62, 0.92)
@@ -50,6 +50,9 @@ SHEETS = {
     "elfCastle": [(None, "w", 1024), ("treehouse", "w", 192)],
     "desertPlants": [("palm", "h", 176), ("palm2", "h", 152), ("cactus", "h", 112), ("tumbleweed", "w", 48)],
     "ruins": [("column", "h", 120), ("stone_head", "w", 112), ("ribcage", "w", 140), ("tent", "w", 128)],
+    "northTrees": [("snow_pine", "h", 160), ("snow_pine2", "h", 136), ("dead_tree", "h", 140)],
+    "defense": [("watchtower", "h", 200), ("barricade", "w", 96), ("catapult", "w", 120), ("brazier", "h", 72)],
+    "battleScars": [("monster_skull", "w", 128), ("spear_pile", "w", 80), ("ice_crystal", "h", 96), ("army_tent", "w", 136)],
     "factories": [("factory", "w", 448), (None, "h", 320), (None, "w", 320)],
 }
 
