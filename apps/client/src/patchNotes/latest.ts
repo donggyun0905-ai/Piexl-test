@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.106",
+    date: "2026-11-14",
+    items: {
+      ko: ["스토리 8장 「심연」 컷 1~7 일러스트 추가 (성화의 대성당 · 지하 통로의 이클립스 · 학살자의 난입 · 광장 아래 열리는 심연)"],
+      en: ["Added illustrations for Story Chapter 8 \"The Abyss\" cuts 1–7 (the Cathedral of the Sacred Flame, Eclipse in the underground tunnel, the Slayer's arrival, the abyss opening beneath the plaza)"],
+      ja: ["ストーリー第8章「深淵」カット1〜7のイラストを追加（聖火の大聖堂・地下通路のエクリプス・虐殺者の乱入・広場の下に開く深淵）"],
+    },
+  },
+  {
     version: "0.52.105",
     date: "2026-11-14",
     items: {
