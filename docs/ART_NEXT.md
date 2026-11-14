@@ -1,5 +1,9 @@
 # 다음에 만들 그림 전체 (2026-11-15)
 
+> **화면 확인 결과 (2026-11-15)**: 지금 만들 것은 완성 프롬프트로 `docs/ART_NOW.md`에 모음 (세계 지도 · 로비 오락실·게임기·펫 · 큰길·테두리·화분 · 꼭두각시 황제·근위병 셋 · 실베르·탈라시아·테라코어 집 · 이동석·간판·기억의 탑 · 시장·마을 소품·기사 동상·제국 소품·요새 소품)
+> - ⏸ 보류: 꽃의 나라 8(나라 정할 때) · 로비 테마 8벌(오락실 빼고) · `laurelShip`·`soulShard`·`hallDoor`·`hallProps`(전시장은 거의 안 들어감, 지금 그림도 괜찮음) · `merchant`·`sailor`·`flowerGuard` · `desert/houses` · `harborProps`·`streetProps`·`hideoutMore` · `colosseumGate` · `harborAvenue`·`holyAvenue`·`rootPath`
+> - ✕ 빼기: `townStone`·`sandPaving`·`harborCobble`·`frostFlag`(큰길·테두리로 충분) · `fences` · `hallFloor`·`hallWall` · `flowerBed`
+
 > 세계 지도 한 장 · 지도 바닥·꽃 · 꽃의 나라 · 사람 · 나라 집 · 바닥 · 코드 그림 대체 · 거리 소품 · 로비(아지트) 테마 9벌 + 공용
 > 각 줄의 **붙여 넣을 프롬프트** = 위 "앞 문장" + 표의 프롬프트 + "공통 끝 문장" (아래에 묶음별로 다 이어 붙여 둠)
 > 배경: 보통 **마젠타 #FF00FF** · 분홍·보라 물건이 있는 묶음은 **초록 #00FF00** (표에 🟩 표시) — 배경 지울 때 물건 색이 같이 지워지지 않게
