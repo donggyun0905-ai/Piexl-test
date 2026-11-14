@@ -1,5 +1,6 @@
 // 나라 필드 캔버스: 지도 그림을 받아 덩어리로 그리기 · 걷기(로비와 같은 walker) · 카메라가 따라감(지도 끝에서 멈춤) · 장소 앞에서 F
 // 마지막 자리는 이 기기에 저장 (다시 들어오면 그 자리)
+import type { CharacterId } from "@pixel-rogue/shared";
 import { useEffect, useRef } from "react";
 import { drawBody } from "../game/render/actors";
 import { bindWalkInput, clampView, createWalker, fitCanvas, stepWalker } from "../lobby/walker";
@@ -23,6 +24,8 @@ interface Props {
   region: Region;
   /** 진영 색 (마을 깃발) */
   color: string;
+  /** 걸어 다니는 내 캐릭터 */
+  who: CharacterId;
   /** 장소 이름표 글자 */
   label: (p: Place) => string;
   paused: boolean;
@@ -42,13 +45,13 @@ function loadPos(regionId: string): [number, number] | null {
   }
 }
 
-export function WorldStage({ regionId, region, color, label, paused, onNear, onUse, onLoaded, spawn }: Props) {
+export function WorldStage({ regionId, region, color, who, label, paused, onNear, onUse, onLoaded, spawn }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
-  const cb = useRef({ label, paused, onNear, onUse, onLoaded });
+  const cb = useRef({ who, label, paused, onNear, onUse, onLoaded });
   // 들어온 자리(spawn)는 처음 그릴 때만 씀 (지역이 바뀌면 key로 새로 만듦)
   const spawnAt = useRef(spawn);
   useEffect(() => {
-    cb.current = { label, paused, onNear, onUse, onLoaded };
+    cb.current = { who, label, paused, onNear, onUse, onLoaded };
   });
 
   useEffect(() => {
@@ -118,7 +121,7 @@ export function WorldStage({ regionId, region, color, label, paused, onNear, onU
         });
         items.push({
           y: me.y,
-          draw: () => drawBody(ctx, "warden", Math.round(me.x), Math.round(me.y - R), R, { faceX: me.fx, faceY: me.fy, moving: me.moving, casting: false, step: me.step }, me.moving ? Math.floor(t * 8) : 0),
+          draw: () => drawBody(ctx, cb.current.who, Math.round(me.x), Math.round(me.y - R), R, { faceX: me.fx, faceY: me.fy, moving: me.moving, casting: false, step: me.step }, me.moving ? Math.floor(t * 8) : 0),
         });
         items.sort((a, b) => a.y - b.y);
         for (const it of items) it.draw();

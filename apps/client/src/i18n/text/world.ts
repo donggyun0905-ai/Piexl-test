@@ -4,7 +4,7 @@ import type { Lang } from "../index";
 export const WORLD_TEXT = {
   worldMap: { ko: "세계 지도 (시험 중)", en: "World Map (testing)", ja: "世界地図（テスト中）" },
   worldMapDesc: { ko: "스토리 나라를 걸어 다니는 지도 · 지금은 아스칼론만 (성벽 도시·상점가·항구·농촌·던전 둘·순간 이동석)", en: "Walk the nations of the story · Ascalon only for now (walled city, market, harbor, farms, two dungeons, warp stones)", ja: "物語の国々を歩く地図・今はアスカロンだけ（城壁都市・商店街・港・農村・ダンジョン二つ・転移石）" },
-  worldHelp: { ko: "WASD·방향키·누르기로 이동 · F 들어가기·읽기·말 걸기", en: "WASD / arrows / tap to move · F to enter, read or talk", ja: "WASD・矢印キー・タップで移動・Fで入る・読む・話す" },
+  worldHelp: { ko: "WASD·방향키·누르기로 이동 · F 들어가기·읽기·말 걸기 · B 장비 · C 캐릭터", en: "WASD / arrows / tap to move · F to enter, read or talk · B gear · C character", ja: "WASD・矢印キー・タップで移動・Fで入る・読む・話す・B装備・Cキャラクター" },
   worldLoading: { ko: "지도 불러오는 중…", en: "Loading map…", ja: "地図を読み込み中…" },
   worldFail: { ko: "지도를 불러오지 못했어요", en: "Couldn't load the map", ja: "地図を読み込めませんでした" },
   wpEnter: { ko: "던전 들어가기", en: "Enter dungeon", ja: "ダンジョンに入る" },

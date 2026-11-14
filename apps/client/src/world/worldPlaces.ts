@@ -3,6 +3,7 @@
 // 지도 그림을 고치면 places/ 좌표도 같이 맞춤
 import type { CharacterId } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
+import type { ShopTab } from "../shop/ShopScreen";
 import { ASCALON_FIELD } from "./places/ascalonField";
 import { ASCALON_INSIDE } from "./places/ascalonInside";
 import { DECO_R, type DecoArt } from "./worldDeco";
@@ -10,6 +11,8 @@ import { WTILE } from "./worldMap";
 
 /** npc = 말 거는 사람 (부딪힘) · door = 건물 문(들어가기) · exit = 건물 안 나가는 문 · deco = 가구 (부딪힘, 말 못 검) · warp = 순간 이동석 */
 export type PlaceKind = "dungeon" | "town" | "sign" | "npc" | "door" | "exit" | "deco" | "warp";
+/** 말 걸면 여는 창: 게임 상점(처음 탭) · 대장간(레이드 장신구 장비창·승급·강화·재설정) */
+export type WorldMenu = `shop:${ShopTab}` | "smith";
 /** 가게 문 위 간판 그림 */
 export type ShopIcon = "sword" | "shield" | "potion" | "bag" | "hammer" | "bed";
 export interface Place {
@@ -27,6 +30,8 @@ export interface Place {
   /** door: 들어갈 건물 안 Region 이름 · deco: 가구 그림 */
   to?: string;
   art?: DecoArt;
+  /** npc: 말 걸면 여는 창 (대사 대신) */
+  menu?: WorldMenu;
   /** door: 가게 간판 */
   icon?: ShopIcon;
 }

@@ -243,3 +243,33 @@
   from { opacity: 1; }
   to { opacity: 0; }
 }
+/* 세계 지도: 왼쪽 위 투력·장비·캐릭터 버튼 · 상점·캐릭터 고르기를 지도 위에 가득 */
+.world-hud {
+  position: fixed;
+  top: calc(max(12px, env(safe-area-inset-top)) + 44px);
+  left: 12px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.world-hud button {
+  padding: 4px 10px;
+  font-size: 13px;
+  background: rgba(20, 18, 28, 0.85);
+}
+.world-power {
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #ffd84a;
+  background: rgba(12, 10, 18, 0.8);
+}
+.world-cover {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  overflow: auto;
+  background: var(--bg, #0c0a12);
+}

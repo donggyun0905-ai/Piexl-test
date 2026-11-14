@@ -11,8 +11,8 @@ import { coupons } from "./wallet";
 import { eventCoins } from "../event/eventCoins";
 import { EcoinIcon } from "../event/EcoinIcon";
 
-type Tab = "skins" | "lobby" | "gacha" | "archive" | "event" | "missions";
-const TABS: { id: Tab; label: TextKey }[] = [
+export type ShopTab = "skins" | "lobby" | "gacha" | "archive" | "event" | "missions";
+const TABS: { id: ShopTab; label: TextKey }[] = [
   { id: "skins", label: "shopSkins" },
   { id: "lobby", label: "shopLobby" },
   { id: "gacha", label: "shopGacha" },
@@ -21,8 +21,9 @@ const TABS: { id: Tab; label: TextKey }[] = [
   { id: "missions", label: "shopMissions" },
 ];
 
-export function ShopScreen({ lang, t, onBack }: { lang: Lang; t: (k: TextKey) => string; onBack: () => void }) {
-  const [tab, setTab] = useState<Tab>("skins");
+/** start: 처음 열 탭 (세계 지도 가게마다 다름) */
+export function ShopScreen({ lang, t, onBack, start = "skins" }: { lang: Lang; t: (k: TextKey) => string; onBack: () => void; start?: ShopTab }) {
+  const [tab, setTab] = useState<ShopTab>(start);
   const [money, setMoney] = useState(coupons);
   const [ecoins, setEcoins] = useState(eventCoins);
   const refresh = () => {

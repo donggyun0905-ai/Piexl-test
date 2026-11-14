@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.113",
+    date: "2026-11-14",
+    items: {
+      ko: ["세계 지도(시험 중): 가게 주인에게 말 걸면 게임 상점이 열림 (무기점 뽑기 · 방어구점 스킨 · 물약점 이벤트 효과 · 잡화점 로비 꾸밈) · 대장장이에게 말 걸면 레이드 장신구 장비창·승급·강화·재설정", "세계 지도에서 B로 장비창, C로 걸어 다닐 캐릭터 고르기 (파수꾼 말고도 연 캐릭터 누구나)", "투력: 낀 레이드 장신구로 정해지는 숫자, 지도 왼쪽 위에 보임 — 나중에 지역마다 권장 투력이 생김"],
+      en: ["World Map (testing): talk to shopkeepers to open the game shop (weapon shop: gacha · armor shop: skins · potion shop: event effects · general store: lobby decor) · talk to the smith for raid accessory gear, promote, enhance and reroll", "On the World Map, press B for your gear and C to choose which character walks around (any unlocked character, not just the Warden)", "Power: a number set by your equipped raid accessories, shown at the top left of the map — regions will get recommended Power later"],
+      ja: ["世界地図（テスト中）：店の主人に話しかけるとゲームの商店が開く（武器屋：ガチャ・防具屋：スキン・薬屋：イベント効果・雑貨屋：ロビー飾り）・鍛冶屋に話しかけるとレイドアクセサリーの装備・昇級・強化・再設定", "世界地図でBで装備画面、Cで歩き回るキャラクターを選べる（ワーデン以外も、解放したキャラなら誰でも）", "戦力：装備したレイドアクセサリーで決まる数値、地図の左上に表示 — のちに地域ごとの推奨戦力が付く"],
+    },
+  },
+  {
     version: "0.52.112",
     date: "2026-11-14",
     items: {

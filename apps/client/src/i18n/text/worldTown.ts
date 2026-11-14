@@ -36,4 +36,7 @@ export const WORLD_TOWN_TEXT = {
   wnSilk: { ko: "빨간 건 상처에, 파란 건 지친 몸에. 섞어 마시면… 책임은 못 져요.", en: "Red for wounds, blue for weariness. Mix them and… I take no responsibility.", ja: "赤は傷に、青は疲れに。混ぜて飲んだら…責任は持てませんよ。" },
   wnPungryu: { ko: "밧줄, 등불, 지도, 피리 한 자루까지. 여행에 필요한 건 다 있다네.", en: "Rope, lanterns, maps, even a flute. Everything a journey needs.", ja: "縄に灯り、地図に笛一本まで。旅に要るものは何でもあるよ。" },
   wnForgotten: { ko: "…쇠는 두드린 만큼 단단해진다. 사람도 그렇겠지.", en: "…Steel grows harder the more you strike it. People too, I suppose.", ja: "…鉄は打つほど硬くなる。人もそうだろう。" },
+  wpPower: { ko: "투력 {n}", en: "Power {n}", ja: "戦力 {n}" },
+  wpChar: { ko: "캐릭터", en: "Character", ja: "キャラクター" },
+  wpSmithMenu: { ko: "레이드 장신구를 끼고 빼거나, 승급·강화·재설정할 수 있다. 장신구가 좋아지면 투력이 오른다.", en: "Equip raid accessories, or promote, enhance and reroll them. Better accessories raise your Power.", ja: "レイドアクセサリーの装着や、昇級・強化・再設定ができる。アクセサリーが良くなると戦力が上がる。" },
 } satisfies Record<string, Record<Lang, string>>;

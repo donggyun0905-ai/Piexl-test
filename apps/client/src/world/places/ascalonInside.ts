@@ -1,14 +1,14 @@
-// 아스칼론 건물 안 (지도 모양 scripts/art/world_map.py): 성채 · 민가 · 가게 넷(같은 안 지도, 진열대·주인만 다름) · 대장간 · 여관
+// 아스칼론 건물 안 (지도 모양 scripts/art/world_map.py): 성채 · 민가 · 가게 넷(같은 안 지도, 진열대·주인만 다름, 주인 = 게임 상점 탭: 무기점 뽑기·방어구점 스킨·물약점 이벤트 효과·잡화점 로비 꾸밈) · 대장간(대장장이 = 레이드 장신구) · 여관
 import type { CharacterId } from "@pixel-rogue/shared";
 import type { TextKey } from "../../i18n";
 import type { DecoArt } from "../worldDeco";
-import type { Place, Region } from "../worldPlaces";
+import type { Place, Region, WorldMenu } from "../worldPlaces";
 
 const deco = (id: string, tx: number, ty: number, name: TextKey, art: DecoArt): Place => ({ id, kind: "deco", tx, ty, name, art });
 const out = (tx: number, ty: number): Place => ({ id: "exit", kind: "exit", tx, ty, name: "wpGoOut" });
 
 /** 가게 안 13×9: 주인(6,3) 양옆 계산대 · 뒤 벽 진열 · 나가는 문 (6,7) */
-function shop(title: TextKey, who: CharacterId, line: TextKey, wall: DecoArt, side: DecoArt): Region {
+function shop(title: TextKey, who: CharacterId, line: TextKey, menu: WorldMenu, wall: DecoArt, side: DecoArt): Region {
   return {
     map: "world/ascalon_shop.png",
     start: { tx: 6, ty: 6 },
@@ -16,7 +16,7 @@ function shop(title: TextKey, who: CharacterId, line: TextKey, wall: DecoArt, si
     indoor: true,
     places: [
       out(6, 7),
-      { id: "keeper", kind: "npc", tx: 6, ty: 3, name: who, who, line },
+      { id: "keeper", kind: "npc", tx: 6, ty: 3, name: who, who, line, menu },
       deco("counterL", 4, 3, title, "counter"),
       deco("counterR", 8, 3, title, "counter"),
       ...[2, 10].map((x) => deco(`wall${x}`, x, 2, title, wall)),
@@ -59,10 +59,10 @@ export const ASCALON_INSIDE: Record<string, Region> = {
       deco("houseBarrel", 1, 7, "wpHouse", "barrel"),
     ],
   },
-  ascalonWeapon: shop("wpWeaponShop", "leo", "wnLeo", "rack", "barrel"),
-  ascalonArmor: shop("wpArmorShop", "remnant", "wnRemnant", "armor", "armor"),
-  ascalonPotion: shop("wpPotionShop", "silk", "wnSilk", "potions", "plant"),
-  ascalonGoods: shop("wpGoodsShop", "pungryu", "wnPungryu", "shelf", "barrel"),
+  ascalonWeapon: shop("wpWeaponShop", "leo", "wnLeo", "shop:gacha", "rack", "barrel"),
+  ascalonArmor: shop("wpArmorShop", "remnant", "wnRemnant", "shop:skins", "armor", "armor"),
+  ascalonPotion: shop("wpPotionShop", "silk", "wnSilk", "shop:event", "potions", "plant"),
+  ascalonGoods: shop("wpGoodsShop", "pungryu", "wnPungryu", "shop:lobby", "shelf", "barrel"),
   // 대장간 13×9: 화덕·모루·무기 걸이 · 대장장이
   ascalonSmithy: {
     map: "world/ascalon_smithy.png",
@@ -71,7 +71,7 @@ export const ASCALON_INSIDE: Record<string, Region> = {
     indoor: true,
     places: [
       out(6, 7),
-      { id: "smith", kind: "npc", tx: 7, ty: 3, name: "forgotten", who: "forgotten", line: "wnForgotten" },
+      { id: "smith", kind: "npc", tx: 7, ty: 3, name: "forgotten", who: "forgotten", line: "wnForgotten", menu: "smith" },
       deco("forge", 3, 2, "wpSmithy", "forge"),
       deco("anvil", 5, 4, "wpSmithy", "anvil"),
       deco("rack1", 9, 2, "wpSmithy", "rack"),
