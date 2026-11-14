@@ -109,7 +109,7 @@ export function drawTile(g: Ctx, m: WorldMap, cx: number, cy: number, px: number
   if (drawBuilding(g, m, t, cx, cy, px, py)) return;
   // 벽·집 바로 아래 땅에는 그림자
   const up = tileAt(m, cx, cy - 1);
-  if ((up === WT.wall || up === WT.house) && t !== WT.wall && t !== WT.house && t !== WT.none) {
+  if ((up === WT.wall || up === WT.house || up === WT.keep) && t !== WT.wall && t !== WT.house && t !== WT.keep && t !== WT.none) {
     for (let i = 0; i < 5; i++) box(g, `rgba(20,16,30,${0.32 - i * 0.06})`, px, py + i, S, 1);
   }
   // 땅 결 그림이 있으면 코드 잔무늬(풀숲·자갈·이삭·물결)는 건너뜀

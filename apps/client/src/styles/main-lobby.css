@@ -224,3 +224,16 @@
   max-width: 860px;
   margin: 0 auto;
 }
+
+/* 세계 지도: 문으로 들어가고 나올 때 검게 사라졌다 나타남 */
+.world-fade {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  pointer-events: none;
+  animation: world-fade 0.45s ease-out forwards;
+}
+@keyframes world-fade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}

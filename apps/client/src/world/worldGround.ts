@@ -34,6 +34,9 @@ const G: Partial<Record<number, Ground>> = {
   [WT.field]: { lo: [184, 150, 56], hi: [214, 184, 76], size: 10, stretch: 1, fleck: [[232, 206, 104], [156, 124, 40]], rim: 0.82, pri: 5, tex: "field" },
   [WT.floor]: { lo: [150, 138, 124], hi: [176, 164, 150], size: 8, stretch: 1, fleck: [[190, 180, 166], [128, 116, 104]], rim: 1, pri: 0, tex: "floor" },
   [WT.wall]: { lo: [104, 98, 116], hi: [128, 120, 140], size: 8, stretch: 1, fleck: [[140, 132, 152], [88, 82, 98]], rim: 1, pri: 0, tex: "wallTop" },
+  [WT.woodFloor]: { lo: [150, 104, 62], hi: [178, 128, 80], size: 6, stretch: 4, fleck: [[196, 146, 96], [128, 88, 52]], rim: 1, pri: 0, tex: "woodFloor" },
+  [WT.carpet]: { lo: [140, 28, 40], hi: [164, 40, 52], size: 5, stretch: 1, fleck: [[184, 56, 64], [120, 22, 34]], rim: 1, pri: 0, tex: "carpet" },
+  [WT.innerWall]: { lo: [44, 34, 52], hi: [56, 44, 64], size: 8, stretch: 1, fleck: [[64, 52, 74], [36, 28, 44]], rim: 1, pri: 0 },
   [WT.bridge]: { lo: [48, 112, 200], hi: [72, 140, 222], size: 9, stretch: 3, fleck: [[120, 180, 240], [40, 96, 180]], rim: 1, pri: 0, tex: "water" },
 };
 const NONE: Ground = { lo: [12, 10, 18], hi: [12, 10, 18], size: 8, stretch: 1, fleck: [[12, 10, 18], [12, 10, 18]], rim: 1, pri: 0 };
@@ -41,7 +44,7 @@ const NONE: Ground = { lo: [12, 10, 18], hi: [12, 10, 18], size: 8, stretch: 1, 
 /** 나무·꽃·바위·울타리 밑은 풀 · 집 밑은 바닥 */
 export function groundOf(t: number): number {
   if (t === WT.tree || t === WT.flower || t === WT.rock || t === WT.fence) return WT.grass;
-  if (t === WT.house) return WT.floor;
+  if (t === WT.house || t === WT.keep) return WT.floor;
   return t;
 }
 const gdef = (t: number): Ground => G[groundOf(t)] ?? NONE;

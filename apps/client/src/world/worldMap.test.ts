@@ -41,8 +41,19 @@ describe("세계 지도", () => {
     expect(hitsNpc(r, x + 6, y, 5)).toBe(true);
     expect(hitsNpc(r, x + 40, y, 5)).toBe(false);
   });
+  it("문은 있는 건물 안으로 · 건물 안에는 나가는 문", () => {
+    for (const r of Object.values(REGIONS)) {
+      for (const p of r.places) if (p.kind === "door") expect(REGIONS[p.to ?? ""], p.id).toBeDefined();
+      if (r.indoor) expect(r.places.some((p) => p.kind === "exit")).toBe(true);
+    }
+  });
+  it("가구와는 부딪힘", () => {
+    const r = REGIONS.ascalonHouse!;
+    const bed = r.places.find((p) => p.art === "bed")!;
+    expect(hitsNpc(r, (bed.tx + 0.5) * WTILE, (bed.ty + 0.5) * WTILE, 5)).toBe(true);
+  });
   it("장소는 지도 안", () => {
-    for (const r of Object.values(REGIONS)) for (const p of r!.places) expect(p.tx >= 0 && p.ty >= 0).toBe(true);
+    for (const r of Object.values(REGIONS)) for (const p of r.places) expect(p.tx >= 0 && p.ty >= 0).toBe(true);
   });
   it("땅 결 그림은 지도 전체에 반복 (음수 좌표도)", () => {
     const data = new Uint8ClampedArray([10, 0, 0, 255, 20, 0, 0, 255, 30, 0, 0, 255, 40, 0, 0, 255]);

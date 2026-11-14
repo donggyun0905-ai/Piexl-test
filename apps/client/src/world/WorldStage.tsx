@@ -29,6 +29,8 @@ interface Props {
   onNear: (p: Place | null) => void;
   onUse: (p: Place) => void;
   onLoaded?: (ok: boolean) => void;
+  /** 문으로 들어오고 나갈 때 설 자리 (픽셀, 없으면 저장된 자리 → 처음 자리) */
+  spawn?: readonly [number, number] | null;
 }
 
 function loadPos(regionId: string): [number, number] | null {
@@ -40,9 +42,11 @@ function loadPos(regionId: string): [number, number] | null {
   }
 }
 
-export function WorldStage({ regionId, region, color, label, paused, onNear, onUse, onLoaded }: Props) {
+export function WorldStage({ regionId, region, color, label, paused, onNear, onUse, onLoaded, spawn }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
   const cb = useRef({ label, paused, onNear, onUse, onLoaded });
+  // 들어온 자리(spawn)는 처음 그릴 때만 씀 (지역이 바뀌면 key로 새로 만듦)
+  const spawnAt = useRef(spawn);
   useEffect(() => {
     cb.current = { label, paused, onNear, onUse, onLoaded };
   });
@@ -51,7 +55,7 @@ export function WorldStage({ regionId, region, color, label, paused, onNear, onU
     const canvas = ref.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d")!;
-    const [sx, sy] = loadPos(regionId) ?? [(region.start.tx + 0.5) * WTILE, (region.start.ty + 0.5) * WTILE];
+    const [sx, sy] = spawnAt.current ?? loadPos(regionId) ?? [(region.start.tx + 0.5) * WTILE, (region.start.ty + 0.5) * WTILE];
     const me = createWalker(sx, sy);
     const view = { x: 0, y: 0, w: 320, h: 200 };
     let map: WorldMap | null = null;
@@ -104,7 +108,9 @@ export function WorldStage({ regionId, region, color, label, paused, onNear, onU
         chunks.draw(ctx, view);
         drawWaterFx(ctx, m, view, t);
         // 장소·나무·나: 아래(발 y)가 큰 것을 나중에
-        const items: Drawable[] = region.places.map((p) => ({ y: placeXY(p)[1] + (p.kind === "npc" ? 4 : 0), draw: () => drawPlace(ctx, p, t, color) }));
+        // 발판(문)은 늘 아래 · 가구는 아래쪽 끝 기준
+        const foot = (p: Place) => (p.kind === "npc" ? 4 : p.kind === "deco" ? 6 : p.kind === "door" || p.kind === "exit" ? -16 : 0);
+        const items: Drawable[] = region.places.map((p) => ({ y: placeXY(p)[1] + foot(p), draw: () => drawPlace(ctx, p, t, color) }));
         pushTrees(ctx, m, view, t, items);
         items.push({
           y: me.y,
@@ -117,7 +123,7 @@ export function WorldStage({ regionId, region, color, label, paused, onNear, onU
         items.sort((a, b) => a.y - b.y);
         for (const it of items) it.draw();
         drawButterflies(ctx, m, view, t);
-        drawCloudShadows(ctx, view, t);
+        if (!region.indoor) drawCloudShadows(ctx, view, t);
         if (near) drawPlaceLabel(ctx, near, cb.current.label(near));
         // 2초마다 자리 저장 (움직였을 때만)
         if (now - saved > 2000 && me.moving) {

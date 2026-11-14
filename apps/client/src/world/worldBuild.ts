@@ -1,7 +1,8 @@
-// 세계 지도 만든 것 그리기 (덩어리 캔버스): 성벽(위가 걷는 길·앞이 벽돌·톱니) · 돌 바닥 · 집(이어진 덩어리 = 지붕 + 앞벽·문·창)
+// 세계 지도 만든 것 그리기 (덩어리 캔버스): 성벽(위가 걷는 길·앞이 벽돌·톱니) · 돌 바닥 · 집(이어진 덩어리 = 지붕 + 앞벽·문·창) · 성채·실내는 worldInside
 import { hash2 } from "./worldGround";
 import { tileAt, WTILE, type WorldMap } from "./worldMap";
 import { WT } from "./worldTiles";
+import { carpetEdge, innerWall, keep, woodPlanks } from "./worldInside";
 import { ART_DENS, drawObj, fillTex, hasTex, obj } from "./worldTex";
 
 const S = WTILE;
@@ -141,7 +142,13 @@ function house(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: numb
 export function drawBuilding(g: Ctx, m: WorldMap, t: number, cx: number, cy: number, px: number, py: number): boolean {
   if (t === WT.wall) wall(g, m, cx, cy, px, py);
   else if (t === WT.house) house(g, m, cx, cy, px, py);
-  else if (t === WT.floor) {
+  else if (t === WT.keep) keep(g, m, cx, cy, px, py);
+  else if (t === WT.innerWall) innerWall(g, m, cx, cy, px, py);
+  else if (t === WT.woodFloor || t === WT.carpet) {
+    if (t === WT.woodFloor) woodPlanks(g, m, cx, cy, px, py);
+    else carpetEdge(g, m, cx, cy, px, py);
+    return false;
+  } else if (t === WT.floor) {
     if (!hasTex("floor")) floorTile(g, cx, cy, px, py);
     return false;
   } else return false;

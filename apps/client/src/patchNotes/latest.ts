@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.110",
+    date: "2026-11-14",
+    items: {
+      ko: ["세계 지도(시험 중): 건물 안으로 들어갈 수 있음 — 아스칼론 성 안에 큰 성채가 생기고 장군은 성채 안 왕좌 앞으로 · 집 넷도 문으로 들어가면 민가 안(침대·벽난로·책장) · 문 앞에서 F, 안에서는 아래 문으로 나감"],
+      en: ["World Map (testing): you can now go inside buildings — a great keep stands in Ascalon Castle with the General inside before the throne · the four houses open into a home interior (bed, fireplace, bookshelf) · press F at a door, leave through the door at the bottom"],
+      ja: ["世界地図（テスト中）：建物の中に入れるように — アスカロン城に大きな城館ができ、将軍は城館の玉座の前に · 4軒の家も扉から民家の中へ（ベッド・暖炉・本棚） · 扉の前でF、中では下の扉から出る"],
+    },
+  },
+  {
     version: "0.52.109",
     date: "2026-11-14",
     items: {

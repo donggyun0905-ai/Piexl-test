@@ -11,6 +11,7 @@ KEY = {
     "sand": (232, 216, 152), "tree": (24, 96, 40), "wall": (120, 112, 128), "floor": (176, 160, 144),
     "rock": (104, 88, 72), "bridge": (152, 104, 56), "snow": (240, 244, 252), "flower": (232, 120, 168),
     "field": (216, 192, 72), "fence": (168, 72, 40), "house": (200, 64, 120),
+    "keep": (96, 96, 168), "woodFloor": (184, 136, 88), "innerWall": (56, 44, 64), "carpet": (168, 32, 48),
 }
 OUT = Path(__file__).resolve().parents[2] / "apps/client/public/world"
 
@@ -99,6 +100,8 @@ def ascalon():
     # 성 안 마을: 집 넷 · 꽃밭에 둘러싸인 분수 · 위쪽 장군 자리
     for (hx, hy) in [(10, 14), (22, 14), (10, 24), (22, 24)]:
         rect(hx, hy, hx + 2, hy + 1, "house")
+    # 성채 (위 가운데, 앞 가운데 문 17,15 · 문 앞 17,16) — 장군은 안에
+    rect(14, 13, 20, 15, "keep")
     rect(15, 17, 19, 20, "flower")
     rect(16, 18, 18, 19, "water")
     # 길: 성문 → 남쪽 → 동쪽 → 북쪽 던전 앞 마당 · 갈림길에서 동쪽 다리 → 국경
@@ -112,9 +115,37 @@ def ascalon():
     # 국경 표지판 앞까지 길, 그 뒤는 숲으로 막힘
     rect(61, 16, 63, 23, "tree")
     # 장소 자리는 비워 둠 (worldPlaces.ts 좌표)
-    for (x, y) in [(14, 22), (36, 9), (38, 30), (58, 19), (17, 30), (17, 14), (11, 18), (23, 21), (20, 26)]:
+    for (x, y) in [(14, 22), (36, 9), (38, 30), (58, 19), (17, 30), (17, 16), (11, 16), (23, 16), (11, 26), (23, 26), (11, 18), (23, 21), (20, 26)]:
         if g[y][x] not in ("path", "floor", "grass"):
             put(x, y, "path" if g[y][x] != "flower" else "grass")
+    return g
+
+
+def room(W, H, floor):
+    """실내 틀: 위 두 줄 벽(아래 줄이 앞면) · 양옆·아래 한 줄 벽 · 안은 바닥"""
+    g = [[floor] * W for _ in range(H)]
+    for y in range(H):
+        for x in range(W):
+            if y < 2 or y == H - 1 or x == 0 or x == W - 1:
+                g[y][x] = "innerWall"
+    return g
+
+
+def ascalon_house():
+    """민가 안 12×9: 나무 바닥 · 가운데 카펫 · 아래 가운데(5,7)가 나가는 문 (가구는 worldPlaces 장식)"""
+    g = room(12, 9, "woodFloor")
+    for y in range(4, 7):
+        for x in range(4, 8):
+            g[y][x] = "carpet"
+    return g
+
+
+def ascalon_keep():
+    """성채 안 19×13: 돌 바닥 · 문(9,11)에서 왕좌(9,2)까지 붉은 카펫"""
+    g = room(19, 13, "floor")
+    for y in range(3, 12):
+        for x in range(8, 11):
+            g[y][x] = "carpet"
     return g
 
 
@@ -128,3 +159,5 @@ def save(name, g):
 
 if __name__ == "__main__":
     save("ascalon", ascalon())
+    save("ascalon_house", ascalon_house())
+    save("ascalon_keep", ascalon_keep())

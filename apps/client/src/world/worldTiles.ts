@@ -21,6 +21,12 @@ export const WT = {
   fence: 14,
   /** 집 (막힘): 이어진 덩어리를 지붕·앞벽으로 그림 */
   house: 15,
+  /** 성채 (막힘): 돌로 지은 큰 건물, 앞 가운데 큰 문 → 안 지도 */
+  keep: 16,
+  /** 실내: 나무 바닥 · 벽(막힘, 아래가 바닥이면 앞면) · 카펫 */
+  woodFloor: 17,
+  innerWall: 18,
+  carpet: 19,
 } as const;
 export type WorldTile = (typeof WT)[keyof typeof WT];
 
@@ -49,6 +55,10 @@ export const TILE_DEFS: readonly TileDef[] = [
   { key: [216, 192, 72], solid: false },
   { key: [168, 72, 40], solid: true },
   { key: [200, 64, 120], solid: true },
+  { key: [96, 96, 168], solid: true },
+  { key: [184, 136, 88], solid: false },
+  { key: [56, 44, 64], solid: true },
+  { key: [168, 32, 48], solid: false },
 ];
 
 /** 픽셀 색 → 땅 종류 (딱 맞는 색이 없으면 가장 가까운 색) */
