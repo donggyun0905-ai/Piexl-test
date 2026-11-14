@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.117",
+    date: "2026-11-14",
+    items: {
+      ko: ["세계 지도(시험 중): 나라 지도 — M 키(또는 위 지도 버튼)로 열고 닫음 · B 장비창 왼쪽에도 함께 보임 · 내 자리 · 던전·모드 입구·국경 통로 표시", "지도 위 순간 이동석(✨)을 누르면 그곳으로 바로 이동 (한 번 만진 이동석만, 안 만진 돌은 흐리게 · 건물 안에서도 됨)"],
+      en: ["World Map (testing): nation map — open and close with M (or the Map button at the top) · also shown to the left of the B gear window · shows where you are, dungeons, mode entrances and border crossings", "Tap a warp stone (✨) on the map to teleport there (only stones you've touched; untouched ones are dimmed · works from inside buildings too)"],
+      ja: ["世界地図（テスト中）：国の地図 — Mキー（または上の地図ボタン）で開閉・B装備画面の左にも表示・現在地・ダンジョン・モードの入口・国境の道を表示", "地図の転移石（✨）を押すとそこへすぐ移動（一度触れた転移石のみ、未接触の石は薄く表示・建物の中からも可）"],
+    },
+  },
+  {
     version: "0.52.116",
     date: "2026-11-14",
     items: {

@@ -2,7 +2,7 @@
 // 이야기 장면(SceneView, 일러스트 + 대사): 처음 오면 1장 · 장군에게 말 걸면 지금 연 장 · 던전 입구 → 혼자 하기(끝나면 지도로, worldReturn)
 // 건물 문 → 건물 안 지도(검게 사라졌다 나타남) · 나가는 문 → 들어온 문 앞 · 순간 이동석(만진 돌끼리, WarpMenu) · 세계 지도(줌 아웃)는 W4
 // 국경 통로 → 옆 나라 필드 (그 나라가 스토리에서 열렸을 때만, 아니면 막혔다는 글) · 기억의 탑·콜로세움 → 모드 고르기
-// 가게 주인 → 게임 상점 · 대장장이 → 레이드 장신구 · B 장비창 · C 걸어 다닐 캐릭터 고르기 · 위에 내 투력 (WorldPanels)
+// 가게 주인 → 게임 상점 · 대장장이 → 레이드 장신구 · B 장비창(왼쪽 나라 지도) · M 나라 지도(만진 이동석으로 순간 이동) · C 걸어 다닐 캐릭터 고르기 · 위에 내 투력 (WorldPanels)
 import { useEffect, useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { FACTION_TEXT } from "../i18n/story/world";
@@ -101,6 +101,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
       if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
       if (e.code === "KeyB") setPanel({ k: "gear" });
       else if (e.code === "KeyC") setPanel({ k: "char" });
+      else if (e.code === "KeyM") setPanel({ k: "map" });
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
@@ -112,10 +113,13 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
     window.addEventListener("keydown", esc);
     return () => window.removeEventListener("keydown", esc);
   }, [reading]);
+  // 이동석 창·지도에서 순간 이동 (건물 안이면 나라 필드로 나감)
   const warpTo = (p: Place) => {
     const [x, y] = placeXY(p);
-    setCur({ id: cur.id, spawn: [x, y + 12], n: (cur.n ?? 0) + 1 });
+    setCur({ id: field, spawn: [x, y + 12], n: (cur.n ?? 0) + 1 });
+    setBack(null);
     setWarp(null);
+    setPanel(null);
     setNear(null);
   };
   const body = (p: Place): TextKey => p.line ?? (`${p.name}Text` as TextKey);
@@ -139,6 +143,9 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
         </button>
         <button type="button" className="secondary" onClick={() => setPanel({ k: "char" })}>
           👤 {t("wpChar")} · C
+        </button>
+        <button type="button" className="secondary" onClick={() => setPanel({ k: "map" })}>
+          🗺 {t("wmTitle")} · M
         </button>
       </div>
       <div key={`fade-${cur.id}-${cur.n ?? 0}`} className="world-fade" />
@@ -169,6 +176,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
           lang={lang}
           onClose={closePanel}
           onRun={onDungeon}
+          map={{ regionId: field, region: REGIONS[field]!, title: FACTION_TEXT[faction].name[lang], me: region.faction ? null : (back?.spawn ?? null), onGo: warpTo }}
           onChar={(c) => {
             saveWorldChar(c);
             setWho(c);

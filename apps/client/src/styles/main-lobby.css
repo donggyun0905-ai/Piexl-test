@@ -278,3 +278,19 @@
   top: auto;
   bottom: max(12px, env(safe-area-inset-bottom));
 }
+/* 나라 지도 (M 창 · B 장비창 왼쪽) */
+.acc-back.with-side { gap: 12px; }
+.acc-back.with-side .acc-win { flex: 1; min-width: 0; }
+.wm-side { flex: 0 0 320px; align-self: center; max-height: 100%; overflow: auto; padding: 10px 12px; border: 2px solid #4a8a5a; border-radius: 14px; background: #121a16; color: #e6f2e8; }
+.wm-side h3 { margin: 0 0 8px; }
+@media (max-width: 900px) { .wm-side { display: none; } }
+.modal.wm-modal { width: min(960px, 96vw); max-width: none; }
+.wm-map { position: relative; width: 100%; }
+.wm-map canvas { display: block; width: 100%; height: 100%; border-radius: 6px; image-rendering: pixelated; }
+.wm-mark { position: absolute; width: 22px; height: 22px; padding: 0; transform: translate(-50%, -50%); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 50%; background: rgba(10, 10, 20, 0.7); font-size: 12px; line-height: 1; cursor: default; }
+.wm-mark.warp { opacity: 0.4; filter: grayscale(1); }
+.wm-mark.warp.on { opacity: 1; filter: none; cursor: pointer; border-color: #ffd84a; box-shadow: 0 0 8px #ffd84a; }
+.wm-mark.warp.on:hover { transform: translate(-50%, -50%) scale(1.25); }
+.wm-me { position: absolute; width: 10px; height: 10px; transform: translate(-50%, -50%); border: 2px solid #fff; border-radius: 50%; background: #ff4a4a; pointer-events: none; z-index: 1; animation: wm-blink 0.8s infinite alternate; }
+@keyframes wm-blink { to { opacity: 0.4; } }
+.wm-hint { margin: 6px 0 0; font-size: 12px; opacity: 0.8; }

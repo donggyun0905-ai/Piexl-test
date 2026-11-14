@@ -13,6 +13,9 @@ function load(): string[] {
   }
 }
 
+/** 지금 내 자리 (WorldStage가 매 장면 적음, 지도 창이 읽음) */
+export const here = { r: "", x: 0, y: 0 };
+
 /** 만진 돌 기록 (지역 + 돌 id) */
 export function touchWarp(regionId: string, p: Place): void {
   const id = `${regionId}:${p.id}`;
@@ -24,4 +27,9 @@ export function touchWarp(regionId: string, p: Place): void {
 export function warpTargets(regionId: string, r: Region, from: Place): Place[] {
   const all = new Set(load());
   return r.places.filter((p) => p.kind === "warp" && p.id !== from.id && all.has(`${regionId}:${p.id}`));
+}
+
+/** 이 지역에서 만진 돌인지 */
+export function warpTouched(regionId: string, p: Place): boolean {
+  return load().includes(`${regionId}:${p.id}`);
 }

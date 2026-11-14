@@ -11,6 +11,7 @@ import { shadow } from "./worldArt";
 import { drawButterflies, drawCloudShadows, drawVignette, drawWaterFx } from "./worldFx";
 import { drawPlace, drawPlaceLabel } from "./worldPlaceArt";
 import { loadWorldArt } from "./worldTex";
+import { here } from "./worldWarps";
 import { pushTrees, type Drawable } from "./worldTrees";
 import { hitsNpc, nearPlace, placeXY, type Place, type Region } from "./worldPlaces";
 
@@ -96,6 +97,7 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       if (map && chunks) {
         const m = map;
         if (!cb.current.paused) stepWalker(me, input.keys, dt, SPEED, (x, y) => canStandWorld(m, x, y, R) && !hitsNpc(region, x, y, R));
+        [here.r, here.x, here.y] = [regionId, me.x, me.y];
         const n = nearPlace(region, me.x, me.y);
         if (n !== near) {
           near = n;
