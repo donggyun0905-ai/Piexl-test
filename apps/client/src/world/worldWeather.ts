@@ -17,10 +17,10 @@ interface Look {
 /** 나라·지역 필드마다 (건물 안은 바람·그림자 없음) */
 const LOOKS: Record<string, Look> = {
   ascalon: { wind: 1 },
-  terracore: { wind: 0.6, grade: "rgba(90,70,50,0.10)", weather: "soot" },
-  virdia: { wind: 0.8, grade: "rgba(40,110,60,0.08)", weather: "fireflies" },
+  terracore: { wind: 0.6, grade: "rgba(90,70,50,0.04)", weather: "soot" },
+  virdia: { wind: 0.8, grade: "rgba(30,50,45,0.12)", weather: "fireflies" },
   helios: { wind: 0.7, grade: "rgba(255,200,110,0.07)" },
-  desert: { wind: 1.4, grade: "rgba(255,170,70,0.10)", weather: "dust" },
+  desert: { wind: 1.4, grade: "rgba(255,200,150,0.05)", weather: "dust" },
   silber: { wind: 1.3, grade: "rgba(150,190,255,0.12)", weather: "snow" },
   thalassia: { wind: 1.2, grade: "rgba(90,170,220,0.06)" },
   windtown: { wind: 2 },
@@ -60,32 +60,34 @@ export function drawSway(g: Ctx, img: CanvasImageSource & { naturalHeight?: numb
   }
 }
 
-/** 그림 모양 그대로 검게 만든 것 (그림자용, 그림마다 한 번) */
-const sil = new WeakMap<object, HTMLCanvasElement>();
-function silhouette(img: HTMLImageElement | HTMLCanvasElement): HTMLCanvasElement {
-  let c = sil.get(img);
-  if (!c) {
-    c = document.createElement("canvas");
-    c.width = img.width;
-    c.height = img.height;
-    const g = c.getContext("2d")!;
-    g.drawImage(img, 0, 0);
-    g.globalCompositeOperation = "source-in";
-    g.fillStyle = "#101810";
-    g.fillRect(0, 0, c.width, c.height);
-    sil.set(img, c);
-  }
+/** 그림마다 한 번: 모양 그대로 검게 · 오른쪽 아래로 눕혀 미리 그려 둔 그림자 (발 = 왼쪽 위에서 w/2, 0) */
+const cache = new WeakMap<object, { c: HTMLCanvasElement; w: number; h: number }>();
+const SKEW = 0.55;
+const FLAT = 0.32;
+function shadowSprite(img: HTMLImageElement | HTMLCanvasElement, w: number, h: number, a: number): HTMLCanvasElement {
+  const hit = cache.get(img);
+  if (hit && hit.w === w && hit.h === h) return hit.c;
+  const K = 2;
+  const c = document.createElement("canvas");
+  c.width = Math.ceil((w + SKEW * h) * K) + 1;
+  c.height = Math.ceil(FLAT * h * K) + 1;
+  const g = c.getContext("2d")!;
+  g.imageSmoothingEnabled = false;
+  g.setTransform(K, 0, -SKEW * K, -FLAT * K, (w / 2) * K, 0);
+  g.drawImage(img, -w / 2, -h, w, h);
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.globalCompositeOperation = "source-in";
+  g.fillStyle = `rgba(16,24,16,${a})`;
+  g.fillRect(0, 0, c.width, c.height);
+  cache.set(img, { c, w, h });
   return c;
 }
 
 /** 한 방향 그림자: 발(footX, footY)에서 오른쪽 아래로 눕힘 (w, h = 그림을 그린 크기) · 건물 안은 안 그림 */
 export function castShadow(g: Ctx, img: HTMLImageElement | HTMLCanvasElement, footX: number, footY: number, w: number, h: number, a = 0.22): void {
   if (!outdoor || !img.width) return;
-  g.save();
-  g.globalAlpha = a;
-  g.transform(1, 0, -0.55, -0.32, footX, footY);
-  g.drawImage(silhouette(img), -w / 2, -h, w, h);
-  g.restore();
+  const c = shadowSprite(img, w, h, a);
+  g.drawImage(c, footX - w / 2, footY, c.width / 2, c.height / 2);
 }
 
 /** 정해진 수 0~1 */

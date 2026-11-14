@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.4",
+    date: "2026-11-15",
+    items: {
+      ko: ["세계 지도(시험 중): 처음 받는 지도 그림이 11MB에서 4.6MB로 줄어 더 빨리 열림(그림은 그대로) · 그림자를 미리 그려 두고 다시 써서 가벼워짐 · 탈라시아 젖은 돌·테라코어 돌길을 밝게, 사막·비르디아·테라코어 색 보정을 옅게 해 나라끼리 색이 고르게"],
+      en: ["World Map (testing): the map art downloaded on first visit shrank from 11MB to 4.6MB, so it opens faster (the art looks the same) · shadows are prepared once and reused for smoother play · brighter wet stone in Thalassia and cobblestones in Terracore, and softer color grading in the desert, Virdia and Terracore so the nations look more even"],
+      ja: ["世界地図（テスト中）：最初に受け取る地図の絵が11MBから4.6MBに減り、早く開くように（絵はそのまま）・影を一度作って使い回し軽く・タラシアの濡れた石とテラコアの石畳を明るく、砂漠・ヴィルディア・テラコアの色補正を薄くして国ごとの色をそろえました"],
+    },
+  },
+  {
     version: "0.53.3",
     date: "2026-11-15",
     items: {

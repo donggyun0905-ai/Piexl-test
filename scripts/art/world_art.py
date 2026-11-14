@@ -1,5 +1,5 @@
 """세계 지도 그림(B안, docs/WORLD_ART.md) 손질 → 게임에 넣기
-- 땅 결: art/지도/ascalon/땅/{이름}.png (예전 자리 art/지도/땅/도 읽음) → public/world/tex/{이름}.png (256×256 = 지도 4칸, 이어 붙여도 이음매 없게, 색 48개)
+- 땅 결: art/지도/ascalon/땅/{이름}.png (예전 자리 art/지도/땅/도 읽음) → public/world/tex/{이름}.png (256×256 = 지도 4칸, 이어 붙여도 이음매 없게, 색 48개, 팔레트 PNG)
 - 물건 묶음: art/지도/ascalon/물건/{묶음}.png (마젠타 배경 위 한 줄로 여러 개) → 배경 지우고 왼쪽부터 하나씩 잘라
   public/world/obj/{이름}.png (크기 = 지도 크기 × 4, 아래 가운데가 발)
 - 다 하면 public/world/art.json 목록을 새로 씀 (게임은 목록에 있는 그림만 받음, 없는 것은 코드 그림)
@@ -38,7 +38,7 @@ WALL_PX = 64
 TONE_TEX = (0.62, 0.92)
 TONE_OBJ = (0.9, 1.0)
 # 땅 결마다 따로 맞춤 (너무 어두운 것)
-TONE_ONE = {"cobbleOil": (0.7, 1.6)}
+TONE_ONE = {"cobbleOil": (0.7, 2.0), "wetStone": (0.62, 1.35)}
 
 
 def tone(img, sat_bri):
@@ -57,6 +57,23 @@ def quantize(img, colors):
     q = img.convert("RGB").quantize(colors=colors, method=Image.Quantize.MEDIANCUT).convert("RGB")
     q.putalpha(a)
     return q
+
+
+def save_png(img, path):
+    """색이 256개 이하면 팔레트 PNG로 (픽셀은 그대로, 용량 약 1/4 · 투명 칸의 색은 0으로 모음) · 넘으면 그냥 RGBA"""
+    a = np.array(img.convert("RGBA"))
+    a[a[..., 3] == 0] = 0
+    flat = a.reshape(-1, 4)
+    uniq, inv = np.unique(flat, axis=0, return_inverse=True)
+    if len(uniq) > 256:
+        Image.fromarray(a, "RGBA").save(path, optimize=True)
+        return
+    p = Image.fromarray(inv.reshape(a.shape[:2]).astype(np.uint8), "P")
+    p.putpalette(uniq[:, :3].astype(np.uint8).flatten().tolist())
+    if (uniq[:, 3] < 255).any():
+        p.save(path, optimize=True, transparency=bytes(uniq[:, 3].astype(np.uint8).tolist()))
+    else:
+        p.save(path, optimize=True)
 
 
 def seamless(img, only_x=False):
@@ -81,7 +98,7 @@ def make_tex(name):
     px = WALL_PX if wall else TEX_PX
     img = tone(seamless(img.resize((px, px), Image.Resampling.LANCZOS), only_x=wall), TONE_ONE.get(name, TONE_TEX))
     img = img.convert("RGBA")
-    quantize(img, 48).save(PUB / "tex" / f"{name}.png", optimize=True)
+    save_png(quantize(img, 48), PUB / "tex" / f"{name}.png")
     return True
 
 
@@ -93,7 +110,7 @@ def make_rail():
     img = Image.open(src).convert("RGB")
     k = img.width / 2048
     img = img.crop((round(576 * k), 0, round(1472 * k), round(768 * k))).resize((WALL_PX, WALL_PX), Image.Resampling.LANCZOS)
-    quantize(tone(img, TONE_TEX).convert("RGBA"), 48).save(PUB / "tex" / "railTrack.png", optimize=True)
+    save_png(quantize(tone(img, TONE_TEX).convert("RGBA"), 48), PUB / "tex" / "railTrack.png")
     return True
 
 
@@ -171,7 +188,7 @@ def make_sheet(sheet, items):
         bb = part.getbbox()
         if bb:
             part = part.crop(bb)
-        part.save(PUB / "obj" / f"{name}.png", optimize=True)
+        save_png(part, PUB / "obj" / f"{name}.png")
         done.append(name)
         print(f"  {name} {part.size}")
     return done
