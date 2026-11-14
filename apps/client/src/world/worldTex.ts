@@ -21,8 +21,18 @@ interface WorldArt {
 const art: WorldArt = { tex: new Map(), obj: new Map() };
 let loading: Promise<void> | null = null;
 
-export const texOf = (name: string | undefined): Tex | undefined => (name ? art.tex.get(name) : undefined);
-export const objOf = (name: string): HTMLImageElement | undefined => art.obj.get(name);
+/** 지역마다 바꿔 끼우는 그림 (Region.skin: 기본 이름 → 그 지역 그림 이름, 그림이 없으면 기본 그림) */
+let skin: Readonly<Record<string, string>> = {};
+export function setArtSkin(s: Readonly<Record<string, string>> | undefined): void {
+  skin = s ?? {};
+}
+const pick = <T>(m: Map<string, T>, name: string): T | undefined => {
+  const alt = skin[name];
+  return (alt !== undefined && m.get(alt)) || m.get(name);
+};
+
+export const texOf = (name: string | undefined): Tex | undefined => (name ? pick(art.tex, name) : undefined);
+export const objOf = (name: string): HTMLImageElement | undefined => pick(art.obj, name);
 /** 땅 결이 하나라도 있으면 4배 해상도로 그림 */
 export const artDens = (): number => (art.tex.size ? ART_DENS : 1);
 
@@ -86,7 +96,7 @@ export function setChunkOrigin(x: number, y: number, dens: number): void {
 
 /** 덩어리 캔버스(지도 좌표로 늘린 상태)에 땅 결 그림을 반복해 채움 · 그림이 없거나 코드 해상도면 false (코드로 그림) */
 export function fillTex(g: CanvasRenderingContext2D, name: string, x: number, y: number, w: number, h: number): boolean {
-  const t = origin.dens > 1 ? art.tex.get(name) : undefined;
+  const t = origin.dens > 1 ? texOf(name) : undefined;
   const p = t && g.createPattern(t.img, "repeat");
   if (!p) return false;
   p.setTransform(new DOMMatrix().translate(-origin.x, -origin.y).scale(1 / origin.dens));
@@ -96,8 +106,23 @@ export function fillTex(g: CanvasRenderingContext2D, name: string, x: number, y:
 }
 
 /** 4배 해상도로 그리는 중이고 이 이름의 그림이 있음 */
-export const hasTex = (name: string | undefined): boolean => origin.dens > 1 && !!name && art.tex.has(name);
-export const obj = (name: string): HTMLImageElement | undefined => (origin.dens > 1 ? art.obj.get(name) : undefined);
+export const hasTex = (name: string | undefined): boolean => origin.dens > 1 && !!texOf(name);
+export const obj = (name: string): HTMLImageElement | undefined => (origin.dens > 1 ? objOf(name) : undefined);
+
+/** 한 칸(64픽셀) 그림을 칸에 맞춰 그림 (벽 앞면·철길) · turn = 90도 돌림 (가로 철길) · 그림이 없으면 false */
+export function tileTex(g: CanvasRenderingContext2D, name: string, x: number, y: number, w: number, h: number, turn = false): boolean {
+  const t = origin.dens > 1 ? texOf(name) : undefined;
+  if (!t) return false;
+  if (!turn) g.drawImage(t.img, 0, 0, t.w, (t.h * h) / w, x, y, w, h);
+  else {
+    g.save();
+    g.translate(x + w / 2, y + h / 2);
+    g.rotate(Math.PI / 2);
+    g.drawImage(t.img, -h / 2, -w / 2, h, w);
+    g.restore();
+  }
+  return true;
+}
 
 /** 물건 그림을 발(아래 가운데) 기준으로, 지도 크기로 (1/dens) */
 export function drawObj(g: CanvasRenderingContext2D, img: HTMLImageElement, footX: number, footY: number, scale = 1): void {

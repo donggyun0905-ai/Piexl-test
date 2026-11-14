@@ -10,10 +10,10 @@ import { canStandWorld, loadWorldMap, WTILE, type WorldMap } from "./worldMap";
 import { shadow } from "./worldArt";
 import { drawButterflies, drawCloudShadows, drawVignette, drawWaterFx } from "./worldFx";
 import { drawPlace, drawPlaceLabel } from "./worldPlaceArt";
-import { loadWorldArt } from "./worldTex";
+import { loadWorldArt, setArtSkin } from "./worldTex";
 import { here } from "./worldWarps";
 import { pushTrees, type Drawable } from "./worldTrees";
-import { hitsNpc, nearPlace, placeXY, type Place, type Region } from "./worldPlaces";
+import { hitsNpc, nearPlace, placeXY, skinOf, type Place, type Region } from "./worldPlaces";
 
 /** 걷는 속도 (로비보다 조금 빠름: 필드가 넓어서) */
 const SPEED = 80;
@@ -72,6 +72,7 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       ([m]) => {
         if (!alive) return;
         map = m;
+        setArtSkin(skinOf(region));
         chunks = createChunkCache(m);
         if (!canStandWorld(m, me.x, me.y, R)) [me.x, me.y] = [(region.start.tx + 0.5) * WTILE, (region.start.ty + 0.5) * WTILE];
         cb.current.onLoaded?.(true);

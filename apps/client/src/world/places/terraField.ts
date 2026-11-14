@@ -3,14 +3,24 @@
 import type { Place, Region } from "../worldPlaces";
 import { TERRA_CHIMNEYS, TERRA_HOUSE_DOORS, TERRA_WORKSHOP_DOOR as WD } from "./terraLayout";
 
+const TERRA_PROPS: readonly (readonly [Place["art"], number, number])[] = [
+  ["lamp", 116, 46], ["lamp", 140, 46], ["lamp", 116, 66], ["lamp", 140, 66], ["lamp", 91, 101], ["lamp", 109, 101],
+  ["gearMachine", 100, 44], ["steamTank", 106, 44], ["pipes", 111, 50], ["yardCrane", 150, 44], ["crateStack", 146, 50], ["robot", 113, 56],
+  ["robot", 143, 56], ["pipes", 104, 62], ["crateStack", 150, 62], ["steamTank", 100, 62], ["trainCar", 88, 105], ["crates", 104, 102],
+];
+
 export const TERRA_FIELD: Region = {
   map: "world/terracore.png",
   start: { tx: 6, ty: 56 },
   faction: "terracore",
+  // 도시 바닥 = 기름 묻은 돌길 · 바깥 길 = 붉은 벽돌
+  skin: { floor: "cobbleOil", path: "brickRed" },
   places: [
     // 광장
     { id: "terraTown", kind: "town", tx: 121, ty: 61, name: "wpTerraCity" },
     { id: "terraGear", kind: "deco", tx: 128, ty: 51, name: "wpTerraCity", art: "gear" },
+    // 광장 가로등 · 공장 마당 기계·파이프·상자 · 역 열차 칸 (그림 장식)
+    ...TERRA_PROPS.map(([art, tx, ty], i): Place => ({ id: `prop${i}`, kind: "deco", tx, ty, name: "wpTerraCity", art })),
     { id: "terraGunner", kind: "npc", tx: 123, ty: 48, name: "gunner", who: "gunner", line: "wnGunner" },
     // 공장 지대 · 공방 · 굴뚝 연기
     { id: "workshopDoor", kind: "door", tx: WD[0], ty: WD[1], name: "wpWorkshop", to: "terraWorkshop", icon: "hammer" },
@@ -52,6 +62,7 @@ export const TERRA_INSIDE: Record<string, Region> = {
     start: { tx: 6, ty: 6 },
     title: "wpWorkshop",
     indoor: true,
+    skin: { woodFloor: "metalFloorIn", barrels: "crates" },
     places: [
       { id: "exit", kind: "exit", tx: 6, ty: 7, name: "wpGoOut" },
       { id: "engineer", kind: "npc", tx: 6, ty: 3, name: "engineer", who: "engineer", line: "wnEngineer", menu: "smith" },

@@ -2,6 +2,7 @@
 // 제국 도시(대리석 광장 황제 석상 = 레이드 아레나 · 황금 분수·깃발 · 황금 궁전 · 시장·재봉소·술집 · 뒷골목 검은 제단 · 주거지) · 농장 · 버려진 수로 던전 · 항구 · 사막 길(테라코어) · 순간 이동석 여섯
 import { shop } from "./ascalonInside";
 import type { Place, Region } from "../worldPlaces";
+import { HALL_SKIN } from "./skins";
 import { HELIOS_HOUSE_DOORS, HELIOS_SHOP_DOORS as D } from "./heliosLayout";
 
 const deco = (id: string, tx: number, ty: number, art: Place["art"], name: Place["name"] = "wpHeliosCity"): Place => ({ id, kind: "deco", tx, ty, name, art });
@@ -65,6 +66,7 @@ export const HELIOS_INSIDE: Record<string, Region> = {
     start: { tx: 9, ty: 10 },
     title: "wpPalace",
     indoor: true,
+    skin: HALL_SKIN,
     places: [
       { id: "keepExit", kind: "exit", tx: 9, ty: 11, name: "wpGoOut" },
       { id: "heliosEclipse", kind: "npc", tx: 9, ty: 4, name: "eclipse", who: "eclipse", line: "wnEclipse" },
@@ -81,6 +83,8 @@ export const HELIOS_INSIDE: Record<string, Region> = {
     start: { tx: 8, ty: 8 },
     title: "wpTavern",
     indoor: true,
+    // 새벽의 성흔 술집 그림: 술집 나무 바닥 · 둥근 탁자 · 바 카운터 · 돌 벽난로
+    skin: { woodFloor: "tavernWood", dining_table: "round_table", shop_counter: "bar_counter", fireplace: "fireplace_stone" },
     places: [
       { id: "exit", kind: "exit", tx: 8, ty: 9, name: "wpGoOut" },
       { id: "tavernKeeper", kind: "npc", tx: 8, ty: 3, name: "samyeol", who: "samyeol", line: "wnSamyeol" },

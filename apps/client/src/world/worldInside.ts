@@ -3,6 +3,7 @@
 import { hash2 } from "./worldGround";
 import { tileAt, WTILE, type WorldMap } from "./worldMap";
 import { isSolid, WT } from "./worldTiles";
+import { blockObj, hasTex, tileTex } from "./worldTex";
 
 const S = WTILE;
 type Ctx = CanvasRenderingContext2D;
@@ -24,7 +25,10 @@ function extent(m: WorldMap, t: number, cx: number, cy: number): [number, number
 
 /** 성채: 위 줄 = 푸른 슬레이트 지붕(양 끝 탑) · 맨 아래 줄 = 돌벽 앞면 + 가운데 큰 아치 문 · 양옆 창 */
 export function keep(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: number): void {
-  const [x0, y0, x1, y1] = extent(m, WT.keep, cx, cy);
+  const b = extent(m, WT.keep, cx, cy);
+  // 성채 그림이 있는 지역(비르디아 엘프 성: Region.skin keep_art)은 그림
+  if (blockObj(g, "keep_art", b, cx, cy, px, py, S)) return;
+  const [x0, y0, x1, y1] = b;
   const mid = Math.floor((x0 + x1) / 2);
   const tower = cx === x0 || cx === x1;
   const front = cy === y1;
@@ -79,6 +83,11 @@ export function keep(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py
 export function innerWall(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: number): void {
   const below = tileAt(m, cx, cy + 1);
   if (below !== WT.none && !isSolid(below)) {
+    // 벽 앞면 그림 (한 칸에 그림 전체, 성채·궁전은 Region.skin으로 돌벽)
+    if (tileTex(g, "innerWall", px, py, S, S)) {
+      box(g, "rgba(20,12,24,0.5)", px, py + S - 1, S, 1);
+      return;
+    }
     box(g, "#e6d8bc", px, py, S, 9);
     box(g, "#d2c2a2", px, py + 8, S, 1);
     box(g, "#7a5634", px, py + 9, S, 6);
@@ -99,7 +108,7 @@ export function innerWall(g: Ctx, m: WorldMap, cx: number, cy: number, px: numbe
 
 /** 나무 바닥 판자 줄 (땅 바탕 위에) · 벽 바로 아래는 그림자 */
 export function woodPlanks(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: number): void {
-  for (let r = 0; r < 4; r++) {
+  if (!hasTex("woodFloor")) for (let r = 0; r < 4; r++) {
     box(g, "rgba(70,40,20,0.35)", px, py + r * 4 + 3, S, 1);
     const off = (hash2(cx, cy * 4 + r) % 4) * 4;
     box(g, "rgba(70,40,20,0.3)", px + off, py + r * 4, 1, 3);

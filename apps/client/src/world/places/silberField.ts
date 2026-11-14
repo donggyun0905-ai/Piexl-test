@@ -1,6 +1,7 @@
 // 실베르 필드 장소 (256×160칸, 지도 모양 scripts/art/world_silber.py — 지도를 고치면 좌표도 같이, 생성기가 걸을 수 있는 칸인지 검사)
 // 수호성(성채·무기고·민가·막사·화로) · 북쪽 싸움터와 악마의 문(경비원 → 타워 디펜스) · 얼어붙은 호수 · 동쪽 망루 초소 · 얼음 동굴 던전 · 아스칼론 산길 · 순간 이동석 여섯 · 장식은 생성기가 자리를 정함
 import type { Place, Region } from "../worldPlaces";
+import { HALL_SKIN } from "./skins";
 import { SILBER_ARMORY_DOOR as AD, SILBER_DECO_SPOTS, SILBER_HOUSE_DOORS } from "./silberLayout";
 
 export const SILBER_FIELD: Region = {
@@ -48,6 +49,7 @@ export const SILBER_INSIDE: Record<string, Region> = {
     start: { tx: 9, ty: 10 },
     title: "wpSilberKeep",
     indoor: true,
+    skin: HALL_SKIN,
     places: [
       { id: "keepExit", kind: "exit", tx: 9, ty: 11, name: "wpGoOut" },
       { id: "silberCommander", kind: "npc", tx: 9, ty: 4, name: "baekinjang", who: "baekinjang", line: "wnBaekinjang" },
@@ -64,6 +66,7 @@ export const SILBER_INSIDE: Record<string, Region> = {
     start: { tx: 6, ty: 6 },
     title: "wpArmory",
     indoor: true,
+    skin: { ...HALL_SKIN, woodFloor: "stoneFloor" },
     places: [
       { id: "exit", kind: "exit", tx: 6, ty: 7, name: "wpGoOut" },
       { id: "armorer", kind: "npc", tx: 6, ty: 3, name: "gears", who: "gears", line: "wnGears", menu: "smith" },

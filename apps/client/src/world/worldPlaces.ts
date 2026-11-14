@@ -14,6 +14,7 @@ import { SILBER_FIELD, SILBER_INSIDE } from "./places/silberField";
 import { THAL_FIELD, THAL_INSIDE } from "./places/thalassiaField";
 import { TERRA_FIELD, TERRA_INSIDE } from "./places/terraField";
 import { VIRDIA_FIELD, VIRDIA_INSIDE } from "./places/virdiaField";
+import { INDOOR_SKIN } from "./places/skins";
 import { DECO_R, type DecoArt } from "./worldDeco";
 import { WTILE } from "./worldMap";
 
@@ -60,7 +61,10 @@ export interface Region {
   /** 건물 안: 이름(나라 이름 대신) · 구름·나비 없음 */
   title?: TextKey;
   indoor?: boolean;
+  /** 이 지역에서 바꿔 끼우는 그림 (기본 이름 → 그림 이름, worldTex.setArtSkin) · 건물 안은 INDOOR_SKIN 위에 덧씀 */
+  skin?: Readonly<Record<string, string>>;
 }
+export const skinOf = (r: Region): Readonly<Record<string, string>> | undefined => (r.indoor ? { ...INDOOR_SKIN, ...r.skin } : r.skin);
 
 /** 나라 필드 · 건물 안 (장소 표는 places/ 나라마다) */
 export const REGIONS: Record<string, Region> = {

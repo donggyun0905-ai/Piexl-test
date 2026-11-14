@@ -3,6 +3,7 @@ import type { CharacterId } from "@pixel-rogue/shared";
 import type { TextKey } from "../../i18n";
 import type { DecoArt } from "../worldDeco";
 import type { Place, Region, WorldMenu } from "../worldPlaces";
+import { HALL_SKIN } from "./skins";
 
 const deco = (id: string, tx: number, ty: number, name: TextKey, art: DecoArt): Place => ({ id, kind: "deco", tx, ty, name, art });
 const out = (tx: number, ty: number): Place => ({ id: "exit", kind: "exit", tx, ty, name: "wpGoOut" });
@@ -33,6 +34,7 @@ export const ASCALON_INSIDE: Record<string, Region> = {
     start: { tx: 9, ty: 10 },
     title: "wpAscalonKeep",
     indoor: true,
+    skin: HALL_SKIN,
     places: [
       { id: "keepExit", kind: "exit", tx: 9, ty: 11, name: "wpGoOut" },
       { id: "ascalonGeneral", kind: "npc", tx: 9, ty: 4, name: "general", who: "general", scene: true },
@@ -41,6 +43,7 @@ export const ASCALON_INSIDE: Record<string, Region> = {
       deco("keepArmorL", 2, 2, "wpAscalonKeep", "armor"),
       deco("keepArmorR", 16, 2, "wpAscalonKeep", "armor"),
       deco("keepBarrel", 16, 10, "wpAscalonKeep", "barrel"),
+      deco("keepTable", 2, 10, "wpAscalonKeep", "longTable"),
     ],
   },
   // 민가 안 (주거지·농촌 집이 모두 같은 안 지도)

@@ -2,7 +2,7 @@
 import { hash2 } from "./worldGround";
 import { tileAt, WTILE, type WorldMap } from "./worldMap";
 import { WT } from "./worldTiles";
-import { blockObj, hasTex } from "./worldTex";
+import { blockObj, hasTex, tileTex } from "./worldTex";
 
 const S = WTILE;
 type Ctx = CanvasRenderingContext2D;
@@ -39,6 +39,8 @@ function metal(g: Ctx, cx: number, cy: number, px: number, py: number): void {
 function rail(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: number): void {
   const r = (dx: number, dy: number) => tileAt(m, cx + dx, cy + dy) === WT.rail;
   const across = r(-1, 0) || r(1, 0) || !(r(0, -1) || r(0, 1));
+  // 철길 그림 (세로 한 칸, 가로 철길은 돌려서)
+  if (tileTex(g, "railTrack", px, py, S, S, across)) return;
   // 자갈 · 침목 · 레일 두 줄 (가로 철길이 세로로 두 칸이면 위·아래 칸에 한 줄씩)
   for (let i = 0; i < 6; i++) box(g, "#7e6e5e", px + ((hash2(cx * 7 + i, cy) >>> 3) % 15), py + ((hash2(cx, cy * 7 + i) >>> 3) % 15), 1, 1);
   if (across) {

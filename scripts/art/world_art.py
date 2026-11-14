@@ -23,11 +23,22 @@ def src_of(kind, name):
     return SRC / "ascalon" / kind / f"{name}.png"
 
 
-TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge", "marble", "redBrick", "goldStone", "metalFloor", "forestFloor", "dune", "gravel", "cracked", "oasis", "buriedRoad", "deepSnow", "ice", "snowStone", "thickWall", "wetStone", "dockPlank", "beach", "sea", "ocean"]  # frozenMud: 반복 무늬가 티 나서 뺌 (다시 만들면 넣기)
+TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge", "marble", "redBrick", "goldStone", "metalFloor", "forestFloor", "dune", "gravel", "cracked", "oasis", "buriedRoad", "deepSnow", "ice", "snowStone", "thickWall", "wetStone", "dockPlank", "beach", "sea", "ocean",
+       # 0.52.123: 나라마다 바꿔 끼우는 땅 결(Region.skin) · 건물 안 바닥
+       "cobbleOil", "brickRed", "moss", "leafPath", "elfStone", "spring", "tavernWood", "woodFloor", "stoneFloor", "carpet", "metalFloorIn"]  # frozenMud: 반복 무늬가 티 나서 뺌 (다시 만들면 넣기)
 TEX_PX = 256
+# 그림 하나처럼 나온 땅 결은 고른 부분만 잘라 씀 (원본 비율 x0, y0, x1, y1)
+CROP = {"carpet": (0.2, 0.2, 0.8, 0.8)}
+# 세로 띠로 나온 땅 결: 고른 띠(원본 비율 x0, x1)를 원래 축척으로 가로로 이어 붙여 정사각형으로
+STRIP = {"leafPath": (0.0, 0.31)}
+# 벽 앞면: 한 칸(64픽셀)에 그림 전체, 가로로만 이어지게 → 실내 벽 앞면 칸마다
+WALL = ["innerWall", "stoneWallIn"]
+WALL_PX = 64
 # 캐릭터 그림과 어울리게 색 맞춤 (채도·밝기 배율): 땅은 배경이라 더 차분하게
 TONE_TEX = (0.62, 0.92)
 TONE_OBJ = (0.9, 1.0)
+# 땅 결마다 따로 맞춤 (너무 어두운 것)
+TONE_ONE = {"cobbleOil": (0.7, 1.6)}
 
 
 def tone(img, sat_bri):
@@ -46,8 +57,8 @@ SHEETS = {
     # 큰 건물은 게임에서 건물 덩어리 폭에 맞춰 늘림 (여기 크기는 해상도)
     # 이름이 None인 것은 아직 지도에 쓸 곳이 없어 만들지 않음 (게임이 받지 않게)
     "palace": [("palace", "w", 1024), ("villa_helios", "w", 320), (None, "h", 256)],
-    "giantTrees": [("giant_tree", "w", 704), (None, "h", 480), (None, "w", 320)],
-    "elfCastle": [(None, "w", 1024), ("treehouse", "w", 192)],
+    "giantTrees": [("giant_tree", "w", 704), ("willow", "h", 176), (None, "w", 176)],
+    "elfCastle": [("elf_castle", "w", 1024), ("treehouse", "w", 192)],
     "desertPlants": [("palm", "h", 176), ("palm2", "h", 152), ("cactus", "h", 112), ("tumbleweed", "w", 48)],
     "ruins": [("column", "h", 120), ("stone_head", "w", 112), ("ribcage", "w", 140), ("tent", "w", 128)],
     "northTrees": [("snow_pine", "h", 160), ("snow_pine2", "h", 136), ("dead_tree", "h", 140)],
@@ -57,6 +68,16 @@ SHEETS = {
     "harbor": [("crane", "h", 192), ("cargo", "w", 96), ("warehouse_t", "w", 640), ("lighthouse", "h", 240)],
     "portProps": [("mooring", "h", 48), ("fish_net", "w", 80), ("anchor", "h", 72), ("fish_stall", "w", 112)],
     "factories": [("factory", "w", 448), (None, "h", 320), (None, "w", 320)],
+    # 0.52.123: 건물 안 가구·헬리오스 소품·술집·테라코어·비르디아 장식 (장식 deco 그림, worldDecoArt)
+    "homeFurniture": [("bed", "w", 72), ("dining_table", "w", 76), ("bookshelf", "w", 64), ("fireplace", "w", 76)],
+    "shopFurniture": [("shop_counter", "w", 80), ("potion_shelf", "w", 68), ("crates", "w", 60), ("potted_plant", "h", 64)],
+    "hallFurniture": [("throne", "w", 76), ("long_table", "w", 128), ("armor_stand", "h", 100), ("pillar", "h", 124)],
+    "tavernProps": [("barrels", "w", 52), ("bar_counter", "w", 80), ("round_table", "w", 60), ("fireplace_stone", "w", 72)],
+    "hideoutProps": [("weapon_rack", "w", 72), ("dummy", "h", 92), (None, "w", 96), (None, "w", 96)],
+    "imperialProps": [("fountain_gold", "w", 128), ("ruler_statue", "h", 184), (None, "h", 120), ("black_altar", "w", 60)],
+    "machines": [("gear_machine", "w", 112), ("yard_crane", "h", 140), ("steam_tank", "h", 104), ("guard_robot", "h", 68)],
+    "cityProps": [("gas_lamp", "h", 104), ("pipe_bundle", "w", 72), ("crate_stack", "w", 76), ("train_car", "w", 124)],
+    "forestProps": [("glow_mushroom", "w", 68), ("fern", "w", 60), ("flower_bush", "w", 60), ("lantern_post", "h", 96)],
 }
 
 
@@ -68,14 +89,14 @@ def quantize(img, colors):
     return q
 
 
-def seamless(img):
-    """가운데로 반 칸 옮긴 그림과 섞어 가장자리 이음매를 없앰 (가장자리는 옮긴 그림, 가운데는 원래 그림)"""
+def seamless(img, only_x=False):
+    """가운데로 반 칸 옮긴 그림과 섞어 가장자리 이음매를 없앰 (가장자리는 옮긴 그림, 가운데는 원래 그림) · only_x = 가로로만"""
     a = np.asarray(img, dtype=np.float32)
     n = a.shape[0]
-    b = np.roll(a, (n // 2, n // 2), axis=(0, 1))
+    b = np.roll(a, (0 if only_x else n // 2, n // 2), axis=(0, 1))
     d = np.minimum(np.arange(n), n - 1 - np.arange(n)) / (n * 0.25)
     w1 = np.clip(d, 0, 1)
-    w = np.minimum(w1[:, None], w1[None, :])[..., None]
+    w = (np.ones(n)[:, None] * w1[None, :] if only_x else np.minimum(w1[:, None], w1[None, :]))[..., None]
     return Image.fromarray((a * w + b * (1 - w)).astype(np.uint8))
 
 
@@ -84,11 +105,37 @@ def make_tex(name):
     if not src.exists():
         return False
     img = Image.open(src).convert("RGB")
+    if name in CROP:
+        c = CROP[name]
+        img = img.crop((round(c[0] * img.width), round(c[1] * img.height), round(c[2] * img.width), round(c[3] * img.height)))
+    if name in STRIP:
+        x0, x1 = STRIP[name]
+        band = img.crop((round(x0 * img.width), 0, round(x1 * img.width), img.height))
+        bw = max(8, round(band.width * TEX_PX / img.height))
+        band = seamless(band.resize((bw, bw), Image.Resampling.LANCZOS), only_x=True).resize((bw, TEX_PX), Image.Resampling.LANCZOS)
+        full = Image.new("RGB", (bw * -(-TEX_PX // bw), TEX_PX))
+        for i in range(0, full.width, bw):
+            full.paste(band, (i, 0))
+        img = full.resize((TEX_PX, TEX_PX), Image.Resampling.LANCZOS)
     s = min(img.size)
     img = img.crop(((img.width - s) // 2, (img.height - s) // 2, (img.width + s) // 2, (img.height + s) // 2))
-    img = tone(seamless(img.resize((TEX_PX, TEX_PX), Image.Resampling.LANCZOS)), TONE_TEX)
+    wall = name in WALL
+    px = WALL_PX if wall else TEX_PX
+    img = tone(seamless(img.resize((px, px), Image.Resampling.LANCZOS), only_x=wall), TONE_ONE.get(name, TONE_TEX))
     img = img.convert("RGBA")
     quantize(img, 48).save(PUB / "tex" / f"{name}.png", optimize=True)
+    return True
+
+
+def make_rail():
+    """철길 한 줄: 테라코어 rail.png 가운데 철길(침목 3개 주기)만 잘라 한 칸(64픽셀) 세로 철길 → tex/railTrack (가로는 게임이 돌려 그림)"""
+    src = src_of("땅", "rail")
+    if not src.exists():
+        return False
+    img = Image.open(src).convert("RGB")
+    k = img.width / 2048
+    img = img.crop((round(640 * k), 0, round(1400 * k), round(768 * k))).resize((WALL_PX, WALL_PX), Image.Resampling.LANCZOS)
+    quantize(tone(img, TONE_TEX).convert("RGBA"), 48).save(PUB / "tex" / "railTrack.png", optimize=True)
     return True
 
 
@@ -182,6 +229,11 @@ if __name__ == "__main__":
     for t in TEX:
         if (not only or t in only) and make_tex(t):
             print(f"  땅 결 {t}")
+    for t in WALL:
+        if (not only or t in only) and make_tex(t):
+            print(f"  벽 앞면 {t}")
+    if (not only or "rail" in only) and make_rail():
+        print("  철길 railTrack")
     for s, items in SHEETS.items():
         if not only or s in only:
             make_sheet(s, items)

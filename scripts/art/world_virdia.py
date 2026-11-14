@@ -91,7 +91,7 @@ def castle(m):
     m.scatter(x0 + 2, y0 + 2, x1 - 2, y1 - 2, "flower", 10, (2, 5), only=("grass",))
     m.ring(x0, y0, x1, y1, "hedge")
     m.rect(x0 + 1, y0 + 2, x1 - 1, y0 + 9, "moss")
-    m.rect(118, 28, 138, 33, "keep")
+    m.rect(123, 26, 133, 33, "keep")
     m.rect(127, 34, 129, 40, "woodFloor")
     m.rect(120, 40, 136, 53, "woodFloor")
     m.blob(128, 47, 7.6, "moss")

@@ -6,11 +6,12 @@ import { drawNorthDeco, NORTH_DECO_R, type NorthDeco } from "./worldDecoNorth";
 import { drawDesertDeco, DESERT_DECO_R, type DesertDeco } from "./worldDecoDesert";
 import { drawEmpireDeco, EMPIRE_DECO_R, type EmpireDeco } from "./worldDecoEmpire";
 import { drawShopDeco, SHOP_DECO_R, type ShopDeco } from "./worldDecoShop";
+import { ART_DECO_R, drawArtDeco, type ArtDeco } from "./worldDecoArt";
 
-export type DecoArt = "bed" | "table" | "shelf" | "fireplace" | "throne" | "pillar" | "armor" | "barrel" | "plant" | ShopDeco | EmpireDeco | DesertDeco | NorthDeco | SeaDeco;
+export type DecoArt = "bed" | "table" | "shelf" | "fireplace" | "throne" | "pillar" | "armor" | "barrel" | "plant" | ShopDeco | EmpireDeco | DesertDeco | NorthDeco | SeaDeco | ArtDeco;
 
 /** 부딪힘 반지름 (픽셀) */
-export const DECO_R: Record<DecoArt, number> = { bed: 9, table: 9, shelf: 8, fireplace: 8, throne: 9, pillar: 6, armor: 5, barrel: 5, plant: 4, ...SHOP_DECO_R, ...EMPIRE_DECO_R, ...DESERT_DECO_R, ...NORTH_DECO_R, ...SEA_DECO_R };
+export const DECO_R: Record<DecoArt, number> = { bed: 9, table: 9, shelf: 8, fireplace: 8, throne: 9, pillar: 6, armor: 5, barrel: 5, plant: 4, ...SHOP_DECO_R, ...EMPIRE_DECO_R, ...DESERT_DECO_R, ...NORTH_DECO_R, ...SEA_DECO_R, ...ART_DECO_R };
 
 type Ctx = CanvasRenderingContext2D;
 const box = (g: Ctx, c: string, x: number, y: number, w: number, h: number) => {
@@ -20,6 +21,8 @@ const box = (g: Ctx, c: string, x: number, y: number, w: number, h: number) => {
 
 export function drawDeco(g: Ctx, art: DecoArt, x: number, y: number, t: number): void {
   const b = y + 7;
+  // 그림 파일이 있는 가구·소품은 그림으로 (worldDecoArt)
+  if (drawArtDeco(g, art, x, b, t, DECO_R[art])) return;
   switch (art) {
     case "counter":
     case "anvil":

@@ -41,5 +41,5 @@ export const THAL_FIELD: Region = {
 
 /** 무역 상회 (가게 안 지도, 훅 = 게임 상점 뽑기) */
 export const THAL_INSIDE: Record<string, Region> = {
-  thalTrade: shop("wpTradeHouse", "hook", "wnHook", "shop:gacha", "shelf", "barrel"),
+  thalTrade: { ...shop("wpTradeHouse", "hook", "wnHook", "shop:gacha", "shelf", "barrel"), skin: { barrels: "crates" } },
 };
