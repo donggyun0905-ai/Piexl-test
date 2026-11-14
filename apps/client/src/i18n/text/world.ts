@@ -3,7 +3,7 @@ import type { Lang } from "../index";
 // 화면 글자: 세계 지도 (world/WorldMode · 장소 이름 world/worldPlaces) · 표지판 글은 `{이름 키}Text`
 export const WORLD_TEXT = {
   worldMap: { ko: "세계 지도 (시험 중)", en: "World Map (testing)", ja: "世界地図（テスト中）" },
-  worldMapDesc: { ko: "스토리 나라를 걸어 다니는 지도 · 지금은 아스칼론·테라코어·비르디아·헬리오스 (M 나라 지도·순간 이동석)", en: "Walk the nations of the story · Ascalon, Terracore, Virdia and Helios for now (M nation map, warp stones)", ja: "物語の国々を歩く地図・今はアスカロン・テラコア・ヴィルディア・ヘリオス（M国の地図・転移石）" },
+  worldMapDesc: { ko: "스토리 나라를 걸어 다니는 지도 · 지금은 아스칼론·테라코어·비르디아·헬리오스·대사막 (M 나라 지도·순간 이동석)", en: "Walk the nations of the story · Ascalon, Terracore, Virdia, Helios and the Great Desert for now (M nation map, warp stones)", ja: "物語の国々を歩く地図・今はアスカロン・テラコア・ヴィルディア・ヘリオス・大砂漠（M国の地図・転移石）" },
   worldHelp: { ko: "WASD·방향키·누르기로 이동 · F 들어가기·읽기·말 걸기 · B 장비 · C 캐릭터 · M 지도", en: "WASD / arrows / tap to move · F to enter, read or talk · B gear · C character · M map", ja: "WASD・矢印キー・タップで移動・Fで入る・読む・話す・B装備・Cキャラクター・M地図" },
   wmTitle: { ko: "지도", en: "Map", ja: "地図" },
   wmHint: { ko: "만진 이동석(✨)을 누르면 그곳으로 순간 이동 · 흐린 돌은 아직 안 만진 곳", en: "Tap a warp stone you've touched (✨) to teleport there · dim stones haven't been touched yet", ja: "触れた転移石（✨）を押すとそこへ瞬間移動・薄い石はまだ触れていない場所" },

@@ -16,6 +16,7 @@ KEY = {
     "metal": (140, 150, 160), "rail": (90, 70, 60), "factory": (180, 90, 40), "pipe": (60, 140, 140), "arena": (210, 190, 150),
     "moss": (60, 110, 70), "bigTree": (110, 70, 40), "hedge": (40, 130, 90),
     "marble": (236, 232, 220), "redBrick": (150, 50, 40), "goldStone": (200, 180, 120), "palace": (230, 180, 40), "villa": (210, 120, 100),
+    "dune": (226, 196, 120), "gravel": (170, 130, 100), "cracked": (200, 140, 90), "buriedRoad": (190, 170, 130), "oasis": (60, 200, 190), "temple": (160, 110, 60),
 }
 OUT = Path(__file__).resolve().parents[2] / "apps/client/public/world"
 
@@ -168,6 +169,12 @@ if __name__ == "__main__":
     helios_layout()
     check_helios(hf)
     save("helios", hf)
+    from world_desert import check as check_desert, desert, write_layout as desert_layout
+
+    df = desert()
+    desert_layout(df)
+    check_desert(df)
+    save("desert", df)
     save("ascalon_shop", ascalon_shop())
     save("ascalon_smithy", ascalon_smithy())
     save("ascalon_inn", ascalon_inn())

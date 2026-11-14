@@ -6,7 +6,7 @@
 import { useEffect, useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { FACTION_TEXT } from "../i18n/story/world";
-import { factionOpen, storyStage } from "../progress/storyStage";
+import { storyStage } from "../progress/storyStage";
 import { loadText, saveText } from "../storage";
 import { StoryFace } from "../story/StoryFace";
 import { SceneView } from "../story/SceneView";
@@ -16,7 +16,7 @@ import { WorldPanels, type WorldPanel, type WorldRun } from "./WorldPanels";
 import { loadWorldChar, myPower, saveWorldChar } from "./worldPlayer";
 import { WorldStage } from "./WorldStage";
 import { touchWarp, warpTargets } from "./worldWarps";
-import { placeXY, REGIONS, type Place } from "./worldPlaces";
+import { fieldOpen, isField, placeXY, REGIONS, type Place } from "./worldPlaces";
 
 interface Props {
   t: (k: TextKey) => string;
@@ -31,8 +31,7 @@ const INTRO_KEY = "worldIntro";
 const FIELD_KEY = "worldRegion";
 /** 마지막에 있던 나라 필드 (스토리에서 안 열렸으면 아스칼론) */
 function startField(): string {
-  const f = REGIONS[loadText(FIELD_KEY) ?? ""]?.faction;
-  return f && factionOpen(f) ? loadText(FIELD_KEY)! : HOME;
+  return fieldOpen(REGIONS[loadText(FIELD_KEY) ?? ""]) ? loadText(FIELD_KEY)! : HOME;
 }
 /** 지금 연 장 중 마지막 (1장은 처음부터) */
 const latestChapter = (): ChapterId => CHAPTERS[Math.max(1, storyStage()) - 1]!.id;
@@ -52,12 +51,14 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
   const [back, setBack] = useState<{ id: string; spawn: readonly [number, number] } | null>(null);
   const region = REGIONS[cur.id]!;
   // 지금 나라 (건물 안이면 들어오기 전 필드)
-  const field = region.faction ? cur.id : (back?.id ?? HOME);
-  const faction = REGIONS[field]?.faction ?? "ascalon";
-  const color = FACTIONS.find((f) => f.id === faction)?.color ?? "#ffffff";
+  const field = isField(region) ? cur.id : (back?.id ?? HOME);
+  const fr = REGIONS[field]!;
+  const faction = fr.faction ?? "ascalon";
+  const color = fr.area?.color ?? FACTIONS.find((f) => f.id === faction)?.color ?? "#ffffff";
+  const fieldName = fr.area ? t(fr.area.name) : FACTION_TEXT[faction].name[lang];
   useEffect(() => {
-    if (region.faction) saveText(FIELD_KEY, cur.id);
-  }, [cur.id, region.faction]);
+    if (isField(region)) saveText(FIELD_KEY, cur.id);
+  }, [cur.id, region]);
   const [near, setNear] = useState<Place | null>(null);
   const [reading, setReading] = useState<Place | null>(null);
   // 처음 온 사람: 1장 이야기부터
@@ -83,8 +84,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
       touchWarp(cur.id, p);
       setWarp(p);
     } else if (p.kind === "pass" && p.to && p.land) {
-      const f = REGIONS[p.to]?.faction;
-      if (!f || !factionOpen(f)) return setReading(p);
+      if (!fieldOpen(REGIONS[p.to])) return setReading(p);
       setCur({ id: p.to, spawn: [(p.land[0] + 0.5) * 16, (p.land[1] + 0.5) * 16] });
       setBack(null);
       setNear(null);
@@ -125,7 +125,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
   const body = (p: Place): TextKey => p.line ?? (`${p.name}Text` as TextKey);
   /** 장소 앞 버튼 글자 */
   const action = (p: Place): string =>
-    p.gate === "tower" ? `🗼 ${t("wpGoIn")}` : p.gate === "colosseum" ? `🏟 ${t("wpGoIn")}` : p.gate === "arena" ? `👑 ${t("wpGoIn")}` : p.kind === "dungeon" ? `⚔ ${t("wpEnter")}` : p.kind === "npc" ? `💬 ${t("wpTalk")}` : p.kind === "door" ? `🚪 ${t("wpGoIn")}` : p.kind === "exit" ? `🚪 ${t("wpGoOut")}` : p.kind === "warp" ? `✨ ${t("wpWarpUse")}` : p.kind === "pass" ? `🚶 ${t("wpCross")}` : `📜 ${t("wpRead")}`;
+    p.gate === "tower" ? `🗼 ${t("wpGoIn")}` : p.gate === "colosseum" ? `🏟 ${t("wpGoIn")}` : p.gate === "arena" ? `👑 ${t("wpGoIn")}` : p.gate === "swarm" ? `🏜 ${t("wpGoIn")}` : p.kind === "dungeon" ? `⚔ ${t("wpEnter")}` : p.kind === "npc" ? `💬 ${t("wpTalk")}` : p.kind === "door" ? `🚪 ${t("wpGoIn")}` : p.kind === "exit" ? `🚪 ${t("wpGoOut")}` : p.kind === "warp" ? `✨ ${t("wpWarpUse")}` : p.kind === "pass" ? `🚶 ${t("wpCross")}` : `📜 ${t("wpRead")}`;
   return (
     <div className="lobby-mode world-mode">
       <WorldStage key={`${cur.id}-${cur.n ?? 0}`} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} who={who} paused={busy} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} />
@@ -133,7 +133,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
         {t("lobbyExit")}
       </button>
       <p className="world-region" style={{ color }}>
-        {region.title ? t(region.title) : FACTION_TEXT[faction].name[lang]}
+        {region.title ? t(region.title) : fieldName}
       </p>
       <p className="lobby-help">{t("worldHelp")}</p>
       <div className="world-hud">
@@ -176,7 +176,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
           lang={lang}
           onClose={closePanel}
           onRun={onDungeon}
-          map={{ regionId: field, region: REGIONS[field]!, title: FACTION_TEXT[faction].name[lang], me: region.faction ? null : (back?.spawn ?? null), onGo: warpTo }}
+          map={{ regionId: field, region: REGIONS[field]!, title: fieldName, me: isField(region) ? null : (back?.spawn ?? null), onGo: warpTo }}
           onChar={(c) => {
             saveWorldChar(c);
             setWho(c);

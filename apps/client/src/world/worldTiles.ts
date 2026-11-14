@@ -43,6 +43,13 @@ export const WT = {
   goldStone: 30,
   palace: 31,
   villa: 32,
+  /** 사막: 모래 언덕 · 자갈 · 갈라진 땅 · 묻힌 돌길(걸음) · 오아시스 물 · 사암 신전·옛 성벽(막힘) */
+  dune: 33,
+  gravel: 34,
+  cracked: 35,
+  buriedRoad: 36,
+  oasis: 37,
+  temple: 38,
 } as const;
 export type WorldTile = (typeof WT)[keyof typeof WT];
 
@@ -88,6 +95,12 @@ export const TILE_DEFS: readonly TileDef[] = [
   { key: [200, 180, 120], solid: false },
   { key: [230, 180, 40], solid: true },
   { key: [210, 120, 100], solid: true },
+  { key: [226, 196, 120], solid: false },
+  { key: [170, 130, 100], solid: false },
+  { key: [200, 140, 90], solid: false },
+  { key: [190, 170, 130], solid: false },
+  { key: [60, 200, 190], solid: true },
+  { key: [160, 110, 60], solid: true },
 ];
 
 /** 픽셀 색 → 땅 종류 (딱 맞는 색이 없으면 가장 가까운 색) */

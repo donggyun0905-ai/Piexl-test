@@ -34,6 +34,8 @@ export function drawPlace(ctx: CanvasRenderingContext2D, p: Place, t: number, co
     drawColosseumGate(ctx, x, y, t);
     return;
   }
+  // 신전 입구는 건물 그림(어두운 문)에 있음
+  if (p.gate === "swarm") return;
   if (p.gate === "arena") {
     drawStatue(ctx, x, y, t);
     return;

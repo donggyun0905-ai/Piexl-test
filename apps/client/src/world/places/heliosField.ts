@@ -34,9 +34,9 @@ export const HELIOS_FIELD: Region = {
     // 주거지 (모두 같은 민가 안)
     ...HELIOS_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "ascalonHouse" })),
     { id: "heliosMukin", kind: "npc", tx: 62, ty: 63, name: "mukin", who: "mukin", line: "wnMukin" },
-    // 북문 · 사막 길 (테라코어)
+    // 북문 · 사막 길
     { id: "heliosBedouin", kind: "npc", tx: 124, ty: 8, name: "bedouin", who: "bedouin", line: "wnBedouin" },
-    { id: "toTerra", kind: "pass", tx: 128, ty: 3, name: "wpDesertRoad", to: "terracore", land: [100, 152] },
+    { id: "toDesert", kind: "pass", tx: 128, ty: 3, name: "wpDesertRoad", to: "desert", land: [128, 153] },
     // 농장 · 버려진 수로 던전
     { id: "farmSign", kind: "sign", tx: 44, ty: 64, name: "wpHeliosFarm" },
     { id: "heliosOni", kind: "npc", tx: 24, ty: 65, name: "oni", who: "oni", line: "wnOni" },

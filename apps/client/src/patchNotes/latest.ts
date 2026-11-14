@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.120",
+    date: "2026-11-14",
+    items: {
+      ko: ["세계 지도(시험 중): 대사막 지도 (256×160칸) — 아스칼론·테라코어(북쪽)와 헬리오스(남쪽)를 잇는 묻힌 돌길 · 야자수 오아시스와 대상 천막 · 태초의 신전 → 광야의 새벽 (스토리에서 연 뒤) · 모래에 묻힌 옛 도시 세레스티아(무너진 성벽·기둥·석상)와 옛 왕묘 던전 · 자갈 벌판·갈라진 땅·선인장·짐승 뼈 · 순간 이동석 여섯", "사막 땅·물건 그림 적용 (모래 언덕·자갈·갈라진 땅·묻힌 돌길·오아시스 · 야자수·선인장·덤불·기둥·석상·뼈·천막) · 테라코어↔헬리오스 임시 사막 길은 대사막을 지나도록 바뀜 (3장부터)"],
+      en: ["World Map (testing): Great Desert map (256×160 tiles) — buried stone roads linking Ascalon and Terracore (north) with Helios (south) · a palm oasis and caravan tents · the Temple of the Beginning → Dawn of the Wilds (once unlocked in the story) · Celestia, an old city buried in sand (broken walls, columns, statues) with the Royal Tomb dungeon · gravel plains, cracked earth, cacti and bones · six warp stones", "Desert ground and object art (dunes, gravel, cracked earth, buried road, oasis · palms, cacti, tumbleweeds, columns, statues, bones, tents) · the temporary Terracore↔Helios desert road now passes through the Great Desert (from Chapter 3)"],
+      ja: ["世界地図（テスト中）：大砂漠の地図（256×160マス） — アスカロン・テラコア（北）とヘリオス（南）を結ぶ埋もれた石の道・ヤシのオアシスと隊商の天幕・太初の神殿 → 荒野の夜明け（ストーリーで解放後）・砂に埋もれた旧都セレスティア（崩れた城壁・柱・石像）と古の王墓のダンジョン・砂利の平原・ひび割れた大地・サボテン・獣の骨・転移石6か所", "砂漠の地面・物の絵を適用（砂丘・砂利・ひび割れた大地・埋もれた道・オアシス・ヤシ・サボテン・枯れ草・柱・石像・骨・天幕）・テラコア↔ヘリオスの仮の砂漠の道は大砂漠を通るように変更（第3章から）"],
+    },
+  },
+  {
     version: "0.52.119",
     date: "2026-11-14",
     items: {

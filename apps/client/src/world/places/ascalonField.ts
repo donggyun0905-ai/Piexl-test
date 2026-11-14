@@ -38,6 +38,7 @@ export const ASCALON_FIELD: Region = {
     // 농촌 · 사막 쪽
     { id: "ascalonNovice", kind: "npc", tx: 96, ty: 119, name: "novice", who: "novice", line: "wnNovice" },
     { id: "desertSign", kind: "sign", tx: 103, ty: 150, name: "wpSignDesert" },
+    { id: "toDesert", kind: "pass", tx: 103, ty: 155, name: "wpDesertRoad", to: "desert", land: [100, 6] },
     // 던전 · 동쪽 갈림길 · 국경
     { id: "ascalonDungeon", kind: "dungeon", tx: 176, ty: 14, name: "wpDungeon" },
     { id: "forestDungeon", kind: "dungeon", tx: 24, ty: 30, name: "wpForestDungeon" },

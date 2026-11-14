@@ -34,7 +34,7 @@ export const TERRA_FIELD: Region = {
     // 비르디아 국경
     { id: "virdiaSign", kind: "sign", tx: 247, ty: 53, name: "wpSignVirdia" },
     { id: "helioSign", kind: "sign", tx: 104, ty: 153, name: "wpSignHelios" },
-    { id: "toHelios", kind: "pass", tx: 100, ty: 155, name: "wpDesertRoad", to: "helios", land: [128, 10] },
+    { id: "toDesert", kind: "pass", tx: 100, ty: 155, name: "wpDesertRoad", to: "desert", land: [200, 6] },
     { id: "toVirdia", kind: "pass", tx: 250, ty: 56, name: "wpToVirdia", to: "virdia", land: [7, 56] },
     // 순간 이동석
     { id: "warpTerraPlaza", kind: "warp", tx: 135, ty: 61, name: "wpWarpTerraPlaza" },

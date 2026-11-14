@@ -2,6 +2,7 @@
 import { hash2 } from "./worldGround";
 import { tileAt, WTILE, type WorldMap } from "./worldMap";
 import { WT } from "./worldTiles";
+import { drawDesert } from "./worldDesert";
 import { drawEmpire } from "./worldEmpire";
 import { drawForest } from "./worldForest";
 import { carpetEdge, innerWall, keep, woodPlanks } from "./worldInside";
@@ -143,6 +144,7 @@ function house(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: numb
 
 /** 성벽·바닥·집이면 그리고 true */
 export function drawBuilding(g: Ctx, m: WorldMap, t: number, cx: number, cy: number, px: number, py: number): boolean {
+  if (t >= WT.dune) return drawDesert(g, m, t, cx, cy, px, py);
   if (t >= WT.marble) return drawEmpire(g, m, t, cx, cy, px, py);
   if (t >= WT.moss) return drawForest(g, m, t, cx, cy, px, py);
   if (t >= WT.metal) return drawMachine(g, m, t, cx, cy, px, py);

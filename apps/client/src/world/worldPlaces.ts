@@ -4,10 +4,12 @@
 import type { CharacterId } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 import type { FactionId } from "../story/storyData";
+import { factionOpen } from "../progress/storyStage";
 import type { ShopTab } from "../shop/ShopScreen";
 import { ASCALON_FIELD } from "./places/ascalonField";
 import { ASCALON_INSIDE } from "./places/ascalonInside";
 import { HELIOS_FIELD, HELIOS_INSIDE } from "./places/heliosField";
+import { DESERT_FIELD } from "./places/desertField";
 import { TERRA_FIELD, TERRA_INSIDE } from "./places/terraField";
 import { VIRDIA_FIELD, VIRDIA_INSIDE } from "./places/virdiaField";
 import { DECO_R, type DecoArt } from "./worldDeco";
@@ -34,8 +36,8 @@ export interface Place {
   /** door: 들어갈 건물 안 Region 이름 · deco: 가구 그림 */
   to?: string;
   art?: DecoArt;
-  /** dungeon: tower = 기억의 탑 (무한 모드·영웅의 길 고르는 창) · colosseum = 콜로세움 (패왕전) · arena = 헬리오스 광장 황제 석상 (레이드 아레나) · 없으면 기본 혼자 하기 */
-  gate?: "tower" | "colosseum" | "arena";
+  /** dungeon: tower = 기억의 탑 (무한 모드·영웅의 길 고르는 창) · colosseum = 콜로세움 (패왕전) · arena = 헬리오스 광장 황제 석상 (레이드 아레나) · swarm = 사막 태초의 신전 (광야의 새벽) · 없으면 기본 혼자 하기 */
+  gate?: "tower" | "colosseum" | "arena" | "swarm";
   /** pass: 건너간 나라에서 설 칸 */
   land?: readonly [number, number];
   /** npc: 말 걸면 여는 창 (대사 대신) */
@@ -51,6 +53,8 @@ export interface Region {
   places: readonly Place[];
   /** 나라 필드: 진영 (이름·깃발 색·국경 통로가 열리는 장) */
   faction?: FactionId;
+  /** 나라가 아닌 필드(사막 등): 이름 · 색 · 이 진영이 스토리에서 열리면 들어갈 수 있음 */
+  area?: { name: TextKey; color: string; open: FactionId };
   /** 건물 안: 이름(나라 이름 대신) · 구름·나비 없음 */
   title?: TextKey;
   indoor?: boolean;
@@ -66,6 +70,15 @@ export const REGIONS: Record<string, Region> = {
   ...VIRDIA_INSIDE,
   helios: HELIOS_FIELD,
   ...HELIOS_INSIDE,
+  desert: DESERT_FIELD,
+};
+
+/** 나라·지역 필드인지 (건물 안이 아님) */
+export const isField = (r: Region | undefined): boolean => !!(r?.faction || r?.area);
+/** 그 필드가 스토리에서 열렸는지 */
+export const fieldOpen = (r: Region | undefined): boolean => {
+  const f = r?.faction ?? r?.area?.open;
+  return !!f && factionOpen(f);
 };
 
 /** 장소 가운데(픽셀) */

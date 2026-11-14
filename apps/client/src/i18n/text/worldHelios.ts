@@ -3,7 +3,7 @@ import type { Lang } from "../index";
 // 화면 글자: 세계 지도 헬리오스 (world/places/heliosField) · 사막 길 · 표지판 글은 `{이름 키}Text`
 export const WORLD_HELIOS_TEXT = {
   wpDesertRoad: { ko: "사막 길", en: "Desert road", ja: "砂漠の道" },
-  wpDesertRoadText: { ko: "모래 언덕 너머로 이어진 길. 아직 지나갈 수 없다. (테라코어는 스토리 2장, 헬리오스는 3장에서 열림)", en: "A road that runs over the dunes. You can't pass yet. (Terracore opens in Story Chapter 2, Helios in Chapter 3)", ja: "砂丘の向こうへ続く道。まだ通れない。（テラコアはストーリー第2章、ヘリオスは第3章で解放）" },
+  wpDesertRoadText: { ko: "모래 언덕 너머로 이어진 길. 아직 지나갈 수 없다. (스토리 3장에서 열림)", en: "A road that runs over the dunes. You can't pass yet. (Opens in Story Chapter 3)", ja: "砂丘の向こうへ続く道。まだ通れない。（ストーリー第3章で解放）" },
   wpSignHelios: { ko: "사막 표지판", en: "Desert sign", ja: "砂漠の看板" },
   wpSignHeliosText: { ko: "남쪽 사막을 뚫고 가면 헬리오스 제국. 테라코어는 제국을 늘 지켜보고 있다.", en: "Cross the southern desert to reach the Helios Empire. Terracore always keeps an eye on the empire.", ja: "南の砂漠を越えるとヘリオス帝国。テラコアはいつも帝国を見張っている。" },
   wpHeliosCity: { ko: "제국 대광장", en: "Imperial Grand Plaza", ja: "帝国大広場" },

@@ -23,7 +23,7 @@ def src_of(kind, name):
     return SRC / "ascalon" / kind / f"{name}.png"
 
 
-TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge", "marble", "redBrick", "goldStone", "metalFloor", "forestFloor"]
+TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge", "marble", "redBrick", "goldStone", "metalFloor", "forestFloor", "dune", "gravel", "cracked", "oasis", "buriedRoad"]
 TEX_PX = 256
 # 캐릭터 그림과 어울리게 색 맞춤 (채도·밝기 배율): 땅은 배경이라 더 차분하게
 TONE_TEX = (0.62, 0.92)
@@ -48,6 +48,8 @@ SHEETS = {
     "palace": [("palace", "w", 1024), ("villa_helios", "w", 320), (None, "h", 256)],
     "giantTrees": [("giant_tree", "w", 704), (None, "h", 480), (None, "w", 320)],
     "elfCastle": [(None, "w", 1024), ("treehouse", "w", 192)],
+    "desertPlants": [("palm", "h", 176), ("palm2", "h", 152), ("cactus", "h", 112), ("tumbleweed", "w", 48)],
+    "ruins": [("column", "h", 120), ("stone_head", "w", 112), ("ribcage", "w", 140), ("tent", "w", 128)],
     "factories": [("factory", "w", 448), (None, "h", 320), (None, "w", 320)],
 }
 
