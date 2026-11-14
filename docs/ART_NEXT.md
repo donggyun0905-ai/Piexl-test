@@ -204,6 +204,18 @@ Each object is small and simple enough to read clearly at 24 pixels tall in-game
 | `hallWall.png` | E | `Grand museum hall wall of pale stone with tall arched windows letting in soft light, purple banners and a thin gold band along the top.` |
 | `hallProps.png` 🟩 | B🟩 | `Four objects: 1) a tall white stone pillar with gold trim, 2) an empty marble display pedestal, 3) a glass dome display case on a pedestal (empty inside), 4) a large open record book on a wooden lectern.` |
 
+### 로비 펫 · 전시물 · 전시장 문 — `art/로비/common/`
+
+펫은 **오른쪽을 보는 옆모습 한 장**이면 됨 (왼쪽은 코드가 뒤집음 · 걷는 흔들림·하트는 코드). 로비를 돌아다니는 펫·펫 상점·게임 속 따라다니는 펫이 같은 그림을 씀.
+
+| 파일 | 앞 문장 | 프롬프트 |
+| --- | --- | --- |
+| `pets1.png` 🟩 | B🟩 | `Four tiny cute chibi pets, each seen from the side facing right, standing, round and simple: 1) an orange tabby kitten, 2) a small cream puppy with floppy ears, 3) a bouncy blue jelly slime with shiny highlight and dot eyes, 4) a baby dragon with small wings, mint scales and a cream belly.` |
+| `pets2.png` 🟩 | B🟩 | `Four tiny cute chibi pets, each seen from the side facing right, standing, round and simple: 1) a white bunny with long ears, 2) a fluffy yellow chick, 3) a baby phoenix with red-orange flame feathers and a golden tail, 4) a small green turtle with a rounded shell.` |
+| `laurelShip.png` | B | `One object: a huge wooden ark ship resting on a wooden dry-dock cradle, round hull with neat plank lines and gold bands, round porthole windows, a laurel wreath crest on the bow, a cabin at the stern with lit windows, three masts each with two square sails, the big middle sail marked with a laurel leaf, a bowsprit with ropes.` |
+| `soulShard.png` 🟩 | B🟩 | `Two objects: 1) a glowing lime-green crystal fragment floating inside a glass dome on a small marble pedestal, faint crumbling edges, 2) the same glass dome pedestal empty.` |
+| `hallDoor.png` | B | `One object: a grand arched double door of dark wood with gold trim and a purple banner above it, set in a pale stone frame, seen from the front.` |
+
 ---
 
 ## 몇 장인지
@@ -219,6 +231,7 @@ Each object is small and simple enough to read clearly at 24 pixels tall in-game
 | 거리 소품 (아지트 추가 1 포함) | 8 |
 | 로비 테마 9 × 3 | 27 |
 | 로비 공용 | 5 |
-| **합계** | **76** |
+| 로비 펫·전시물·전시장 문 | 5 |
+| **합계** | **81** |
 
 추천 순서: 세계 지도 → 로비 오락실(기본) 3장 + 게임기 2장 → 큰길·테두리·화분 → 나라 집 → 나머지
