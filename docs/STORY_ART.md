@@ -241,6 +241,32 @@ Boss sprite sheet rules (for "Boss:" requests): square 1:1 image, pure black bac
 - 스토리에 나오는 보스(갓이터·태초·괴력난신·제천대성·검신·천사장·데스)부터 하면 스토리 그림과 모습이 같아짐
 - 장면 그림을 만들 때, 먼저 만든 새 보스 그림을 참고 그림으로 올리면 장면 속 모습도 맞춰짐
 
-## 7~9장
+## 7장 「시작」 (8컷, `art/스토리/7장/`)
+
+72문단이라 8컷. 시대는 과거(악의 사도가 아직 '천의 사도'였던 때). 참고 그림: 새벽의 성흔(`art/캐릭터/{블루플레임·헬피스트·인시전·크루세이더·블래스트·루나틱}/`, 걷기 시트) · 격투가 `격투가/brawler-1.png` · 천의 사도 = 악의 사도 `악의 사도/apostle-1.png`(**옷은 흰·금 사제복으로 바꿔 그림**) · 아스모데우스의 화신체 `art/최종보스/아스모데우스의 화신체/보랏빛 화염의 악마 마법사 5연속 컷.png`(보라 피부·뿔)
+
+| 컷 | 문단 | 참고 그림 | 장면 |
+| --- | --- | --- | --- |
+| 1 | 1~8 | 아스모데우스 | 빛 없는 지하 감옥, 쇠사슬에 묶여 매달린 악마, 철창 밖 사냥꾼들의 그림자 |
+| 2 | 9~21 | 블루 플레임·헬피스트·아스모데우스 | 가장 깊은 감방을 지키는 두 사람, 푸른 불꽃에 비친 보랏빛 기운, 터지는 굉음 |
+| 3 | 22~32 | 인시전·크루세이더·블래스트·블루 플레임·헬피스트 | 끊어진 사슬과 무너진 벽, 쓰러진 두 사람에게 달려온 세 사냥꾼 |
+| 4 | 33~38 | 인시전·아스모데우스 | 등 뒤에서 심장을 노린 보랏빛 건틀릿을 쌍도끼로 쳐 내는 인시전 |
+| 5 | 39~49 | 루나틱·아스모데우스·크루세이더·블래스트·인시전 | 달빛 궤적으로 내리꽂힌 레이피어, 옷자락을 벗어 던진 화신체, 퇴각하는 대원들 |
+| 6 | 50~59 | 루나틱·아스모데우스·악의 사도(흰 옷) | 지친 루나틱 앞을 가른 황금 결계, 흰 사제복의 천의 사도 |
+| 7 | 60~65 | 격투가·루나틱·아스모데우스·악의 사도(흰 옷) | 맨주먹으로 화신체의 손을 받아 낸 격투가가 루나틱을 메고 달아남, 사도를 바라보는 화신체 |
+| 8 | 66~72 | 악의 사도(흰 옷) | 입가로 스며드는 보랏빛 오라, 심장을 움켜쥐고 무릎 꿇은 사도, 달려오는 병사들 |
+
+### 7장 컷별 장면 (영어, [공통] 뒤에 붙임)
+
+1. `Scene: a lightless underground prison deep beneath the edge of an empire. A demon hangs from the ceiling, bound tightly in heavy iron chains: purple skin, curved horns, head lowered, a faint purple glow leaking from it. Beyond the iron bars, the long shadows of demon hunters holding weapons and a cold silver light from their crescent-moon stigmata marks. Damp stone, dripping water, oppressive dark mood.`
+2. `Scene: the deepest cell of the hunters' prison. Two guards stand before the chained demon: Blue Flame (messy dark navy hair, blindfold, black and blue robes, blue flames flickering around him) and Hellfist (messy silver hair, red eyes, open black coat, his bandaged left arm hidden behind his back, a demonic red arm under the bandage). In Blue Flame's blue fire the chained demon glows a strange purple. Suddenly the back wall bursts with a loud explosion of dust and purple light; both turn in shock.`
+3. `Scene: a ruined prison corridor: broken chains on the floor, a collapsed wall, dust in the air. Blue Flame and Hellfist lie wounded and bloody on the ground. Three hunters rush in from the corridor: Incision (wild cream-white hair with red ribbons, black fur-collared armor, red cape, twin axes), Crusader (giant armored knight with a spiked crown helmet, white fur, red cape, a huge cross as a weapon) and Blast (long white ponytail streaked red, orange goggles, red and black coat, shotgun). Shocked, urgent mood.`
+4. `Scene: in the dark corridor, a hand in a purple gauntlet appears silently behind Incision, aiming at her heart. Incision (wild cream-white hair with red ribbons, red eyes, black armor, twin axes) spins and knocks it away with her axes in a burst of sparks, her face tense, realizing she is outmatched. Behind the gauntlet, only the shadowy shape of the demon with purple eyes. Violent, dangerous mood.`
+5. `Scene: from above, Lunatic (long lavender-silver hair in a ponytail, crescent moon hair ornament, white and navy armored dress) dives down with a white rapier, leaving a moonlight-like silver trail, piercing through the purple gauntlet. The demon's avatar throws off its cloak, revealing purple skin, horns and a grinning face. In the background Crusader carries the two wounded on his back while Blast and Incision guard the retreat into a tunnel. Dramatic, heroic mood.`
+6. `Scene: a battered prison hall after a long fight. Lunatic kneels, exhausted and wounded, gripping her rapier. The purple-skinned horned demon raises its hand to finish her, but a wall of golden barrier light slams down between them. Beyond the barrier stands the Apostle of Heaven: long silver hair, red eyes, wearing a pure white and gold priest robe with a gold cross (not black), holding a staff, calm and serious. Holy golden light against purple darkness.`
+7. `Scene: the Brawler (wild red hair, red headband, short martial arts outfit, bandaged fists) blocks the demon's purple-clawed hand with her bare fist, wincing in pain, then hoists the wounded Lunatic over her shoulder and dashes into a tunnel. The purple-skinned horned demon ignores them and stares with a slow, interested smile at the Apostle of Heaven in white and gold robes behind the golden barrier.`
+8. `Scene: the Apostle of Heaven (long silver hair, white and gold priest robe) clutches his chest and falls to his knees as a thin thread of purple aura slips into his mouth; his red eyes widen in fear. The golden barrier is fading and the demon has already vanished, leaving only purple sparks. From the corridor, imperial soldiers with torches run toward him shouting. A faint dark shadow begins to spread from his feet, foreshadowing his fall. Ominous, tragic mood.`
+
+## 8~9장
 
 🔸 2장처럼 장마다 컷 목록·프롬프트를 이어서 씀 (그 전에는 장 하나에 임시 배경 하나)
