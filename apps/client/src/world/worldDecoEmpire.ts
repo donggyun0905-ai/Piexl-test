@@ -1,7 +1,9 @@
 // 헬리오스 소품 (장소 표의 장식 deco, worldDeco가 부름): 황금 분수(물 솟음) · 붉은 깃발 기둥(펄럭임) · 검은 의식 제단(보랏빛 촛불)
 // 광장 황제 석상 = 레이드 아레나 입구 (worldPlaceArt가 부름) · (x, b) = 칸 가운데 x · 아래 끝 y
 import { shadow } from "./worldArt";
-import { drawObj, objOf } from "./worldTex";
+import { drawProp } from "./worldDecoArt";
+import { windNow } from "./worldWeather";
+import { objOf } from "./worldTex";
 
 export type EmpireDeco = "fountainGold" | "banner" | "altar";
 
@@ -38,12 +40,12 @@ export function drawEmpireDeco(g: Ctx, art: EmpireDeco, x: number, b: number, t:
       break;
     }
     case "banner":
-      // 긴 붉은 깃발 (세로 줄마다 조금씩 출렁임)
+      // 긴 붉은 깃발 (세로 줄마다 조금씩 출렁임, 바람 세기만큼)
       shadow(g, x, b, 3, 1.5, 0.3);
       box(g, "#3a2414", x - 1, b - 34, 2, 34);
       box(g, "#ffd84a", x - 2, b - 36, 4, 2);
       for (let i = 0; i < 7; i++) {
-        const s = Math.round(Math.sin(t * 3 - i * 0.6) * (i / 6) * 1.5);
+        const s = Math.round(Math.sin(t * 3 - i * 0.6) * (i / 6) * (0.6 + windNow()));
         box(g, i === 0 ? "#d84a3a" : "#a82a2a", x + 1 + i, b - 32 + s, 1, 18);
       }
       box(g, "#ffd84a", x + 3, b - 26, 2, 3);
@@ -73,7 +75,7 @@ export function drawStatue(g: Ctx, x: number, y: number, t: number): void {
   shadow(g, x, b, 12, 3.5, 0.35);
   const img = objOf("ruler_statue");
   if (img) {
-    drawObj(g, img, x, b + 1);
+    drawProp(g, "ruler_statue", img, x, b, t, 12);
     return;
   }
   box(g, "#a49cb2", x - 10, b - 8, 20, 8);

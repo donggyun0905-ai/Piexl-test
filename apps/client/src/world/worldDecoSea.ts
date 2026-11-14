@@ -1,7 +1,8 @@
 // 탈라시아 소품 (장소 표의 장식 deco, worldDeco가 부름): 큰 범선 · 작은 배 · 해적선(물 위에서 흔들림) · 크레인 · 화물 더미 · 등대(빛 돎) · 밧줄 말뚝 · 그물 · 닻 · 생선 노점
 // 그림 파일(public/world/obj/{이름}.png)이 있으면 그 그림, 없으면 코드 그림 · (x, b) = 칸 가운데 x · 아래 끝 y
 import { shadow } from "./worldArt";
-import { drawObj, objOf } from "./worldTex";
+import { drawProp } from "./worldDecoArt";
+import { objOf } from "./worldTex";
 
 export type SeaDeco = "ship" | "boat" | "pirateShip" | "crane" | "cargo" | "lighthouse" | "mooring" | "net" | "anchor" | "fishStall";
 /** 배는 물 위 (부딪힘 없음, 물이 막음) */
@@ -22,7 +23,7 @@ export function drawSeaDeco(g: Ctx, art: SeaDeco, x: number, b0: number, t: numb
   const b = float ? b0 + Math.round(Math.sin(t * 1.6 + x * 0.1) * 1.5) : b0;
   if (!float) shadow(g, x, b, Math.max(4, SEA_DECO_R[art] + 2), 2.5, 0.3);
   const img = objOf(ART[art]);
-  if (img) drawObj(g, img, x, b + 1);
+  if (img) drawProp(g, ART[art], img, x, b, t, float ? -1 : SEA_DECO_R[art]);
   else {
     switch (art) {
       case "ship":

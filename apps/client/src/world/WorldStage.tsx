@@ -12,6 +12,7 @@ import { drawButterflies, drawCloudShadows, drawVignette, drawWaterFx } from "./
 import { drawPlace, drawPlaceLabel } from "./worldPlaceArt";
 import { loadWorldArt, setArtSkin } from "./worldTex";
 import { drawMood } from "./worldMood";
+import { drawWeather, setLook } from "./worldWeather";
 import { here } from "./worldWarps";
 import { pushTrees, type Drawable } from "./worldTrees";
 import { hitsNpc, nearPlace, placeXY, skinOf, type Place, type Region } from "./worldPlaces";
@@ -74,6 +75,7 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         if (!alive) return;
         map = m;
         setArtSkin(skinOf(region));
+        setLook(regionId, !!region.indoor);
         chunks = createChunkCache(m);
         if (!canStandWorld(m, me.x, me.y, R)) [me.x, me.y] = [(region.start.tx + 0.5) * WTILE, (region.start.ty + 0.5) * WTILE];
         cb.current.onLoaded?.(true);
@@ -120,7 +122,9 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         // 화면 근처 장소만 (장식이 많은 지도)
         const near2 = (p: Place) => Math.abs(placeXY(p)[0] - (view.x + view.w / 2)) < view.w / 2 + 64 && Math.abs(placeXY(p)[1] - (view.y + view.h / 2)) < view.h / 2 + 96;
         const items: Drawable[] = region.places.filter(near2).map((p) => ({ y: placeXY(p)[1] + foot(p), draw: () => drawPlace(ctx, p, t, color) }));
-        pushTrees(ctx, m, view, t, items);
+        const shadows: (() => void)[] = [];
+        pushTrees(ctx, m, view, t, items, shadows);
+        for (const s of shadows) s();
         items.push({
           y: me.y,
           draw: () => shadow(ctx, Math.round(me.x), Math.round(me.y) + 1, 6, 2.2, 0.32),
@@ -132,6 +136,7 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         items.sort((a, b) => a.y - b.y);
         for (const it of items) it.draw();
         const mc = region.moodCenter;
+        drawWeather(ctx, view, t);
         if (region.mood) drawMood(ctx, region.mood, view, t, mc && [(mc[0] + 0.5) * WTILE, (mc[1] + 0.5) * WTILE]);
         else {
           drawButterflies(ctx, m, view, t);

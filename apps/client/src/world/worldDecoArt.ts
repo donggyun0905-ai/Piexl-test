@@ -3,7 +3,8 @@
 // (x, b) = 칸 가운데 x · 아래 끝 y
 import { shadow } from "./worldArt";
 import { drawTrainWindow, LAND_DECO, type LandDeco } from "./worldDecoLand";
-import { drawObj, objOf } from "./worldTex";
+import { ART_DENS, objOf } from "./worldTex";
+import { castShadow, drawSway, gust } from "./worldWeather";
 
 /** 그림으로만 그리는 새 장식 (그림이 없으면 작은 상자) */
 export type ArtDeco = "longTable" | "crates" | "lamp" | "gearMachine" | "steamTank" | "yardCrane" | "robot" | "pipes" | "crateStack" | "trainCar" | "mushroom" | "fern" | "flowerBush" | "lantern" | LandDeco;
@@ -46,7 +47,8 @@ export function drawArtDeco(g: CanvasRenderingContext2D, art: string, x: number,
     return true;
   }
   if (r > 0) shadow(g, x, b, r + 2, 2.5, 0.3);
-  drawObj(g, img, x, b + 1);
+  if (art === "kite") drawKite(g, img, x, b, t);
+  else drawProp(g, name ?? art, img, x, b, t, r);
   const gl = GLOW[art];
   if (gl) {
     const k = 0.22 + Math.sin(t * 7 + x) * 0.05;
@@ -58,4 +60,39 @@ export function drawArtDeco(g: CanvasRenderingContext2D, art: string, x: number,
     g.fillRect(x - 20, y - 20, 40, 40);
   }
   return true;
+}
+
+/** 바람에 윗부분이 흔들리는 그림 (대나무·해초·천 깃발·야자수·꽃나무) */
+const SWAY = new Set(["bamboo", "kelp_tall", "cloth_banner", "white_banner", "palm", "palm2", "blossom_tree", "willow"]);
+
+/** 물건 그림 하나 (발 = x, b): 부딪히는 것은 한 방향 그림자 · 흔들리는 그림은 띠마다 기울임 */
+export function drawProp(g: CanvasRenderingContext2D, name: string, img: HTMLImageElement, x: number, b: number, t: number, r: number): void {
+  const w = img.naturalWidth / ART_DENS;
+  const h = img.naturalHeight / ART_DENS;
+  if (r > 0) castShadow(g, img, x, b + 1, w, h);
+  g.drawImage(img, 0, 0, 0, 0);
+  if (SWAY.has(name)) drawSway(g, img, Math.round(x - w / 2), Math.round(b + 1 - h), w, h, t, name === "kelp_tall" ? 3 : 1.5);
+  else g.drawImage(img, Math.round(x - w / 2), Math.round(b + 1 - h), w, h);
+}
+
+/** 비연 연: 땅에 박은 말뚝에서 줄이 올라가 하늘에서 바람 따라 오르내림 */
+function drawKite(g: CanvasRenderingContext2D, img: HTMLImageElement, x: number, b: number, t: number): void {
+  const s = gust(t, x);
+  const kx = x + 14 + s * 6;
+  const ky = b - 52 + Math.sin(t * 1.7 + x) * 4 - s * 3;
+  g.fillStyle = "#6a4a2a";
+  g.fillRect(x - 1, b - 4, 2, 4);
+  g.strokeStyle = "rgba(240,240,230,0.7)";
+  g.lineWidth = 0.5;
+  g.beginPath();
+  g.moveTo(x, b - 4);
+  g.quadraticCurveTo(x + 4 + s * 4, b - 20, kx, ky);
+  g.stroke();
+  const w = img.naturalWidth / ART_DENS;
+  const h = img.naturalHeight / ART_DENS;
+  g.save();
+  g.translate(kx, ky);
+  g.rotate(Math.sin(t * 2.3 + x) * 0.12 + s * 0.05);
+  g.drawImage(img, -w / 2, -h / 2, w, h);
+  g.restore();
 }

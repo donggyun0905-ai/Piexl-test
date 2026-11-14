@@ -1,7 +1,8 @@
 // 실베르 소품 (장소 표의 장식 deco, worldDeco가 부름): 망루 · 바리케이드 · 투석기 · 화로(불빛) · 마물 뼈 · 부러진 창 무더기 · 얼음 결정 · 막사 · 악마의 문(붉은 소용돌이)
 // 그림 파일(public/world/obj/{이름}.png)이 있으면 그 그림, 없으면 코드 그림 · 악마의 문은 코드 그림만 · (x, b) = 칸 가운데 x · 아래 끝 y
 import { shadow } from "./worldArt";
-import { drawObj, objOf } from "./worldTex";
+import { drawProp } from "./worldDecoArt";
+import { objOf } from "./worldTex";
 
 export type NorthDeco = "watchtower" | "barricade" | "catapult" | "brazier" | "skull" | "spears" | "iceCrystal" | "armyTent" | "demonGate";
 export const NORTH_DECOS: readonly NorthDeco[] = ["watchtower", "barricade", "catapult", "brazier", "skull", "spears", "iceCrystal", "armyTent", "demonGate"];
@@ -49,7 +50,7 @@ export function drawNorthDeco(g: Ctx, art: NorthDeco, x: number, b: number, t: n
   if (art === "demonGate") return demonGate(g, x, b, t);
   shadow(g, x, b, Math.max(4, NORTH_DECO_R[art] + 2), 2.5, 0.3);
   const img = objOf(ART[art]!);
-  if (img) drawObj(g, img, x, b + 1);
+  if (img) drawProp(g, ART[art]!, img, x, b, t, NORTH_DECO_R[art]);
   else {
     switch (art) {
       case "watchtower":

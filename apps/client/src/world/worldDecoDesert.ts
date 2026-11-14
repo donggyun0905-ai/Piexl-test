@@ -1,7 +1,8 @@
 // 사막 소품 (장소 표의 장식 deco, worldDeco가 부름): 야자수 둘 · 선인장 · 마른 덤불 · 무너진 기둥 · 반쯤 묻힌 석상 · 짐승 뼈 · 천막
 // 그림 파일(public/world/obj/{이름}.png)이 있으면 그 그림, 없으면 코드 그림 · (x, b) = 칸 가운데 x · 아래 끝 y
 import { shadow } from "./worldArt";
-import { drawObj, objOf } from "./worldTex";
+import { drawProp } from "./worldDecoArt";
+import { objOf } from "./worldTex";
 
 export type DesertDeco = "palm" | "palm2" | "cactus" | "tumbleweed" | "column" | "stoneHead" | "ribcage" | "tent";
 export const DESERT_DECOS: readonly DesertDeco[] = ["palm", "palm2", "cactus", "tumbleweed", "column", "stoneHead", "ribcage", "tent"];
@@ -22,7 +23,7 @@ export function drawDesertDeco(g: Ctx, art: DesertDeco, x: number, b: number, t:
   shadow(g, x, b, Math.max(4, r + 2), 2.5, 0.3);
   const img = objOf(ART[art]);
   if (img) {
-    drawObj(g, img, x, b + 1);
+    drawProp(g, ART[art], img, x, b, t, DESERT_DECO_R[art]);
     return;
   }
   switch (art) {

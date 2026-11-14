@@ -53,6 +53,8 @@ export const LAND_DECO = {
   cityGate: ["city_gate", -99],
   rootArch: ["root_arch", -99],
   chimney: ["chimney_tower", 6],
+  // 0.53.3 비연 연 (하늘에서 바람 따라, worldDecoArt.drawKite)
+  kite: ["kite", -99],
   // 해저 열차: 창문은 코드 그림(지나가는 바다)
   trainWindow: ["", -99],
 } as const satisfies Record<string, Row>;

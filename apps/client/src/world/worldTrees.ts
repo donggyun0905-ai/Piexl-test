@@ -1,10 +1,11 @@
 // 세계 지도 나무: 그림 몇 장을 처음에 코드로 만들어 두고(둥근 나무·뾰족 나무 × 색 2) 매 장면 사람과 발 y 순서로 그림
-// 칸보다 커서 옆 나무와 겹쳐 숲이 됨 · 윗부분이 바람에 살짝 흔들림 · 그림자는 땅에(worldArt)
+// 칸보다 커서 옆 나무와 겹쳐 숲이 됨 · 윗부분이 바람에 흔들림(worldWeather, 지역마다 세기) · 발밑 그림자는 땅에(worldArt), 한 방향 그림자는 사람보다 먼저
 import { hash2, vnoise } from "./worldGround";
 import { tileAt, WTILE, type WorldMap } from "./worldMap";
 import { WT } from "./worldTiles";
 import type { View } from "../lobby/walker";
 import { ART_DENS, objOf } from "./worldTex";
+import { castShadow, drawSway, gust } from "./worldWeather";
 
 /** 나무 그림 파일 (있으면 코드 그림 대신, 같은 자리 차례: 둥근 2 · 뾰족 2) */
 const TREE_ART = ["tree_oak", "tree_oak2", "tree_pine", "tree_pine2"] as const;
@@ -106,8 +107,8 @@ export interface Drawable {
   draw: () => void;
 }
 
-/** 화면에 걸친 나무들 (아래로 삐져나온 것까지) → 앞뒤 순서 목록에 넣음 */
-export function pushTrees(ctx: CanvasRenderingContext2D, m: WorldMap, v: View, t: number, out: Drawable[]): void {
+/** 화면에 걸친 나무들 (아래로 삐져나온 것까지) → 앞뒤 순서 목록에 넣음 · 한 방향 그림자는 shadows (모든 것보다 먼저 그림) */
+export function pushTrees(ctx: CanvasRenderingContext2D, m: WorldMap, v: View, t: number, out: Drawable[], shadows: (() => void)[]): void {
   const sp = treeSprites();
   const x0 = Math.max(0, Math.floor(v.x / WTILE) - 1);
   const x1 = Math.min(m.cols - 1, Math.ceil((v.x + v.w) / WTILE) + 1);
@@ -126,25 +127,20 @@ export function pushTrees(ctx: CanvasRenderingContext2D, m: WorldMap, v: View, t
       const img = objOf(art[kind]!) ?? objOf(art[kind ^ 1]!);
       const fx = (cx + 0.5) * WTILE + ((h >>> 9) % 5) - 2;
       const fy = (cy + 1) * WTILE - 2 - ((h >>> 13) % 3);
-      const sway = Math.round(Math.sin(t * 1.3 + (h % 628) / 100) * 0.8);
+      const sway = Math.round(gust(t, fx) * 0.8);
       const left = Math.round(fx - FOOT_X);
       const top = Math.round(fy - FOOT_Y);
       if (img) {
-        // 그림 파일: 아래 30%(줄기)는 그대로, 위는 흔들림
+        // 그림 파일: 아래 30%(줄기)는 그대로, 위는 띠마다 흔들림
         const w = img.naturalWidth / ART_DENS;
         const hh = img.naturalHeight / ART_DENS;
-        const cut = Math.round(img.naturalHeight * 0.7);
         const l = Math.round(fx - w / 2);
         const tp = Math.round(fy - hh);
-        out.push({
-          y: fy,
-          draw: () => {
-            ctx.drawImage(img, 0, cut, img.naturalWidth, img.naturalHeight - cut, l, tp + cut / ART_DENS, w, hh - cut / ART_DENS);
-            ctx.drawImage(img, 0, 0, img.naturalWidth, cut, l + sway, tp, w, cut / ART_DENS);
-          },
-        });
+        shadows.push(() => castShadow(ctx, img, fx, fy, w, hh));
+        out.push({ y: fy, draw: () => drawSway(ctx, img, l, tp, w, hh, t, 1.6) });
         continue;
       }
+      shadows.push(() => castShadow(ctx, s, fx, fy, TW, TH));
       out.push({
         y: fy,
         draw: () => {

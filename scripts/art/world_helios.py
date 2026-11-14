@@ -14,7 +14,7 @@ W, H = 256, 160
 ROOT = Path(__file__).resolve().parents[2]
 PLACES = ROOT / "apps/client/src/world/places"
 SOFT = ("grass", "flower", "tree", "rock")
-SOLID = {"water", "deep", "tree", "wall", "rock", "fence", "house", "keep", "innerWall", "palace", "villa", "chapel"}
+SOLID = {"water", "deep", "tree", "wall", "rock", "fence", "house", "keep", "innerWall", "palace", "villa", "chapel", "warehouse"}
 
 CITY = (60, 22, 196, 112)
 # 제국 집 (3×4: 위 세 줄 지붕 · 아래 줄 앞벽, 문은 가운데 아래 칸)
@@ -106,8 +106,9 @@ def city(m):
         m.put(cx, cy, "tree")
     # 시장 거리 (북서) · 뒷골목 (북동, 나무와 어두운 돌바닥)
     m.rect(x0 + 2, 40, 104, 42, "redBrick")
-    for (x, y) in SHOPS.values():
-        m.rect(x, y, x + 2, y + 3, "villa")
+    for (k, (x, y)) in SHOPS.items():
+        # 술집은 창고 칸 + skin(술집 겉모습 그림 tavern_outside)
+        m.rect(x, y, x + 2, y + 3, "warehouse" if k == "tavern" else "villa")
         m.rect(x + 1, y + 4, x + 1, 40 if y < 40 else y + 4, "redBrick")
     m.scatter(160, 26, 192, 58, "tree", 10, (2, 5))
     m.rect(170, 40, 178, 46, "floor")
@@ -142,7 +143,7 @@ def check(g):
     pts = [(int(a), int(b)) for a, b in re.findall(r"tx: (\d+), ty: (\d+)", src)]
     bad = [p for p in pts if g[p[1]][p[0]] in SOLID]
     for (x, y) in [(x + 1, y + 4) for (x, y) in VILLAS + list(SHOPS.values())] + [(128, 39), (CHAPEL[0] + 2, CHAPEL[1] + 4)]:
-        if g[y][x] in SOLID or g[y - 1][x] not in ("villa", "palace", "chapel"):
+        if g[y][x] in SOLID or g[y - 1][x] not in ("villa", "palace", "chapel", "warehouse"):
             bad.append((x, y))
     assert not bad, f"걸을 수 없는 장소 자리: {bad}"
     print("헬리오스 장소", len(pts), "곳 OK")

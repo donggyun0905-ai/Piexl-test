@@ -11,6 +11,9 @@ export const HELIOS_FIELD: Region = {
   map: "world/helios.png",
   start: { tx: 128, ty: 12 },
   faction: "helios",
+  // 술집 = 창고 칸에 술집 겉모습 그림
+  skin: { warehouse_t: "tavern_outside", wetStone: "redBrick" },
+  mini: { 50: "#a85a3a" },
   places: [
     // 대리석 광장 · 황제 석상(레이드 아레나) · 분수 · 깃발
     { id: "heliosTown", kind: "town", tx: 120, ty: 56, name: "wpHeliosCity" },

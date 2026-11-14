@@ -30,6 +30,8 @@ export const WINDTOWN_FIELD: Region = {
     { id: "windValley", kind: "dungeon", tx: 210, ty: 10, name: "wpWindValley" },
     // 장식 (풍차·바람개비·천 깃발·정자·장독대·돌담·꽃나무)
     ...WIND_DECO_SPOTS.map(([art, tx, ty], i): Place => ({ id: `d${i}`, kind: "deco", tx, ty, name: "wpWindtown", art })),
+    // 풍차 언덕 연 둘 · 마을 앞 연 하나 (줄 말뚝 자리, 연은 하늘에)
+    ...([[48, 22], [64, 28], [146, 76]] as const).map(([tx, ty]): Place => ({ id: `kite${tx}_${ty}`, kind: "deco", tx, ty, name: "wpWindtown", art: "kite" })),
     // 순간 이동석
     { id: "warpWindFerry", kind: "warp", tx: 10, ty: 84, name: "wpWarpWindFerry" },
     { id: "warpWindVillage", kind: "warp", tx: 154, ty: 70, name: "wpWarpWindVillage" },

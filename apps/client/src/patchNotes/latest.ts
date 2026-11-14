@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.3",
+    date: "2026-11-15",
+    items: {
+      ko: ["세계 지도(시험 중): 나라마다 바람 세기가 달라 나무·대나무·해초·천 깃발·야자수·꽃나무 윗부분이 위로 갈수록 더 휘며 흔들림(비연이 가장 셈, 건물 안은 잔잔) · 나무와 물건에 오른쪽 아래로 눕는 그림자 · 나라별 색 보정과 날씨(실베르 눈 · 비르디아 반딧불 · 사막 모래바람 · 테라코어 그을음) · 헬리오스 붉은 깃발이 바람 세기만큼 출렁임 · 헬리오스 술집 겉모습 그림 · 비연 풍차 언덕과 마을 앞에 하늘을 나는 연"],
+      en: ["World Map (testing): each nation has its own wind, so trees, bamboo, kelp, cloth banners, palms and blossom trees bend more toward the top as they sway (strongest in Biyeon, calm indoors) · trees and props cast shadows toward the lower right · per-nation color grading and weather (snow in Silber · fireflies in Virdia · blowing sand in the desert · soot in Terracore) · Helios's red banners ripple with the wind · art for the Helios tavern front · kites flying over Biyeon's windmill hill and village"],
+      ja: ["世界地図（テスト中）：国ごとに風の強さが違い、木・竹・海藻・布の旗・ヤシ・花の木が上ほど大きくしなって揺れる（ビヨンが一番強く、建物の中は静か）・木や物に右下へ伸びる影・国ごとの色補正と天気（シルベルの雪・ヴィルディアの蛍・砂漠の砂嵐・テラコアの煤）・ヘリオスの赤い旗が風の強さに合わせてはためく・ヘリオスの酒場の外観の絵・ビヨンの風車の丘と村の前に空を舞う凧"],
+    },
+  },
+  {
     version: "0.53.2",
     date: "2026-11-15",
     items: {
