@@ -40,6 +40,9 @@ const G: Partial<Record<number, Ground>> = {
   [WT.metal]: { lo: [118, 126, 136], hi: [140, 148, 158], size: 6, stretch: 1, fleck: [[164, 172, 182], [96, 102, 112]], rim: 1, pri: 0 },
   [WT.rail]: { lo: [112, 96, 80], hi: [132, 114, 96], size: 6, stretch: 1, fleck: [[150, 132, 112], [88, 74, 60]], rim: 1, pri: 0 },
   [WT.moss]: { lo: [46, 92, 56], hi: [66, 120, 70], size: 12, stretch: 1, fleck: [[118, 168, 96], [34, 70, 44]], rim: 0.84, pri: 8 },
+  [WT.marble]: { lo: [214, 210, 200], hi: [236, 232, 222], size: 9, stretch: 1, fleck: [[248, 246, 240], [190, 184, 172]], rim: 1, pri: 0, tex: "marble" },
+  [WT.redBrick]: { lo: [140, 52, 42], hi: [166, 70, 54], size: 5, stretch: 1, fleck: [[186, 96, 76], [112, 40, 32]], rim: 1, pri: 0, tex: "redBrick" },
+  [WT.goldStone]: { lo: [196, 178, 136], hi: [218, 200, 156], size: 10, stretch: 1, fleck: [[232, 216, 176], [172, 152, 112]], rim: 1, pri: 0, tex: "goldStone" },
   [WT.bridge]: { lo: [48, 112, 200], hi: [72, 140, 222], size: 9, stretch: 3, fleck: [[120, 180, 240], [40, 96, 180]], rim: 1, pri: 0, tex: "water" },
 };
 const NONE: Ground = { lo: [12, 10, 18], hi: [12, 10, 18], size: 8, stretch: 1, fleck: [[12, 10, 18], [12, 10, 18]], rim: 1, pri: 0 };
@@ -50,6 +53,7 @@ export function groundOf(t: number): number {
   if (t === WT.house || t === WT.keep) return WT.floor;
   if (t === WT.factory || t === WT.pipe || t === WT.arena) return WT.metal;
   if (t === WT.bigTree || t === WT.hedge) return WT.moss;
+  if (t === WT.palace || t === WT.villa) return WT.marble;
   return t;
 }
 const gdef = (t: number): Ground => G[groundOf(t)] ?? NONE;

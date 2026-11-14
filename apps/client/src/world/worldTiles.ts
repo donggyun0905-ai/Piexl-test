@@ -37,6 +37,12 @@ export const WT = {
   moss: 25,
   bigTree: 26,
   hedge: 27,
+  /** 헬리오스: 대리석 광장 · 붉은 벽돌길 · 금빛 테 돌바닥(걸음) · 황금 궁전 · 제국 집(막힘, 앞 가운데 문) */
+  marble: 28,
+  redBrick: 29,
+  goldStone: 30,
+  palace: 31,
+  villa: 32,
 } as const;
 export type WorldTile = (typeof WT)[keyof typeof WT];
 
@@ -77,6 +83,11 @@ export const TILE_DEFS: readonly TileDef[] = [
   { key: [60, 110, 70], solid: false },
   { key: [110, 70, 40], solid: true },
   { key: [40, 130, 90], solid: true },
+  { key: [236, 232, 220], solid: false },
+  { key: [150, 50, 40], solid: false },
+  { key: [200, 180, 120], solid: false },
+  { key: [230, 180, 40], solid: true },
+  { key: [210, 120, 100], solid: true },
 ];
 
 /** 픽셀 색 → 땅 종류 (딱 맞는 색이 없으면 가장 가까운 색) */

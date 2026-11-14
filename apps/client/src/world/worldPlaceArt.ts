@@ -4,6 +4,7 @@ import { shadow } from "./worldArt";
 import { drawDeco } from "./worldDeco";
 import { placeXY, type Place } from "./worldPlaces";
 import { drawObj, objOf } from "./worldTex";
+import { drawStatue } from "./worldDecoEmpire";
 import { drawColosseumGate, drawShopIcon, drawTower, drawWarp } from "./worldPlaceSigns";
 
 /** 주민 몸 반지름 (플레이어와 같음) */
@@ -31,6 +32,10 @@ export function drawPlace(ctx: CanvasRenderingContext2D, p: Place, t: number, co
   }
   if (p.gate === "colosseum") {
     drawColosseumGate(ctx, x, y, t);
+    return;
+  }
+  if (p.gate === "arena") {
+    drawStatue(ctx, x, y, t);
     return;
   }
   if (p.gate === "tower") {

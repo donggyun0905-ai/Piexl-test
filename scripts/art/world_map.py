@@ -15,6 +15,7 @@ KEY = {
     "keep": (96, 96, 168), "woodFloor": (184, 136, 88), "innerWall": (56, 44, 64), "carpet": (168, 32, 48),
     "metal": (140, 150, 160), "rail": (90, 70, 60), "factory": (180, 90, 40), "pipe": (60, 140, 140), "arena": (210, 190, 150),
     "moss": (60, 110, 70), "bigTree": (110, 70, 40), "hedge": (40, 130, 90),
+    "marble": (236, 232, 220), "redBrick": (150, 50, 40), "goldStone": (200, 180, 120), "palace": (230, 180, 40), "villa": (210, 120, 100),
 }
 OUT = Path(__file__).resolve().parents[2] / "apps/client/public/world"
 
@@ -161,6 +162,12 @@ if __name__ == "__main__":
     virdia_layout()
     check_virdia(vf)
     save("virdia", vf)
+    from world_helios import check as check_helios, helios, write_layout as helios_layout
+
+    hf = helios()
+    helios_layout()
+    check_helios(hf)
+    save("helios", hf)
     save("ascalon_shop", ascalon_shop())
     save("ascalon_smithy", ascalon_smithy())
     save("ascalon_inn", ascalon_inn())

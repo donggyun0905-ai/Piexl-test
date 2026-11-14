@@ -7,6 +7,7 @@ import type { FactionId } from "../story/storyData";
 import type { ShopTab } from "../shop/ShopScreen";
 import { ASCALON_FIELD } from "./places/ascalonField";
 import { ASCALON_INSIDE } from "./places/ascalonInside";
+import { HELIOS_FIELD, HELIOS_INSIDE } from "./places/heliosField";
 import { TERRA_FIELD, TERRA_INSIDE } from "./places/terraField";
 import { VIRDIA_FIELD, VIRDIA_INSIDE } from "./places/virdiaField";
 import { DECO_R, type DecoArt } from "./worldDeco";
@@ -33,8 +34,8 @@ export interface Place {
   /** door: 들어갈 건물 안 Region 이름 · deco: 가구 그림 */
   to?: string;
   art?: DecoArt;
-  /** dungeon: tower = 기억의 탑 (무한 모드·영웅의 길 고르는 창) · colosseum = 콜로세움 (패왕전) · 없으면 기본 혼자 하기 */
-  gate?: "tower" | "colosseum";
+  /** dungeon: tower = 기억의 탑 (무한 모드·영웅의 길 고르는 창) · colosseum = 콜로세움 (패왕전) · arena = 헬리오스 광장 황제 석상 (레이드 아레나) · 없으면 기본 혼자 하기 */
+  gate?: "tower" | "colosseum" | "arena";
   /** pass: 건너간 나라에서 설 칸 */
   land?: readonly [number, number];
   /** npc: 말 걸면 여는 창 (대사 대신) */
@@ -63,6 +64,8 @@ export const REGIONS: Record<string, Region> = {
   ...TERRA_INSIDE,
   virdia: VIRDIA_FIELD,
   ...VIRDIA_INSIDE,
+  helios: HELIOS_FIELD,
+  ...HELIOS_INSIDE,
 };
 
 /** 장소 가운데(픽셀) */

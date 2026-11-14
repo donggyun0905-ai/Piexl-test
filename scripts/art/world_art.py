@@ -3,7 +3,7 @@
 - 물건 묶음: art/지도/ascalon/물건/{묶음}.png (마젠타 배경 위 한 줄로 여러 개) → 배경 지우고 왼쪽부터 하나씩 잘라
   public/world/obj/{이름}.png (크기 = 지도 크기 × 4, 아래 가운데가 발)
 - 다 하면 public/world/art.json 목록을 새로 씀 (게임은 목록에 있는 그림만 받음, 없는 것은 코드 그림)
-실행: python3 scripts/art/world_art.py   (있는 원본만 손질)
+실행: python3 scripts/art/world_art.py   (있는 원본만 손질) · 이름을 주면 그것만: python3 scripts/art/world_art.py marble redBrick
 """
 from pathlib import Path
 import json
@@ -15,14 +15,15 @@ ROOT = Path(__file__).resolve().parents[2]
 SRC = ROOT / "art" / "지도"
 PUB = ROOT / "apps/client/public/world"
 def src_of(kind, name):
-    """나라 폴더(art/지도/ascalon/땅) 먼저, 없으면 예전 자리(art/지도/땅)"""
-    for d in (SRC / "ascalon" / kind, SRC / kind):
+    """나라 폴더(art/지도/ascalon/땅) 먼저, 그다음 다른 나라 폴더, 없으면 예전 자리(art/지도/땅)"""
+    others = sorted(p / kind for p in SRC.iterdir() if p.is_dir() and p.name not in ("ascalon", kind))
+    for d in (SRC / "ascalon" / kind, *others, SRC / kind):
         if (d / f"{name}.png").exists():
             return d / f"{name}.png"
     return SRC / "ascalon" / kind / f"{name}.png"
 
 
-TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge"]
+TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge", "marble", "redBrick", "goldStone"]
 TEX_PX = 256
 # 캐릭터 그림과 어울리게 색 맞춤 (채도·밝기 배율): 땅은 배경이라 더 차분하게
 TONE_TEX = (0.62, 0.92)
@@ -159,9 +160,11 @@ def manifest():
 if __name__ == "__main__":
     (PUB / "tex").mkdir(parents=True, exist_ok=True)
     (PUB / "obj").mkdir(parents=True, exist_ok=True)
+    only = set(sys.argv[1:])
     for t in TEX:
-        if make_tex(t):
+        if (not only or t in only) and make_tex(t):
             print(f"  땅 결 {t}")
     for s, items in SHEETS.items():
-        make_sheet(s, items)
+        if not only or s in only:
+            make_sheet(s, items)
     manifest()
