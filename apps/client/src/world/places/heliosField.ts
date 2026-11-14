@@ -20,6 +20,8 @@ export const HELIOS_FIELD: Region = {
     ...[108, 148].flatMap((tx) => [54, 81].map((ty) => deco(`banner${tx}_${ty}`, tx, ty, "banner"))),
     { id: "heliosBrawler", kind: "npc", tx: 136, ty: 56, name: "brawler", who: "brawler", line: "wnBrawler" },
     // 황금 궁전 · 근위
+    { id: "gateNorth", kind: "deco", tx: 128, ty: 22, name: "wpHeliosCity", art: "cityGate" },
+    { id: "gateSouth", kind: "deco", tx: 128, ty: 112, name: "wpHeliosCity", art: "cityGate" },
     { id: "chapelDoor", kind: "door", tx: 112, ty: 106, name: "wpChapel", to: "heliosChapel" },
     { id: "palaceDoor", kind: "door", tx: 128, ty: 39, name: "wpPalace", to: "heliosPalace" },
     { id: "heliosSlayer", kind: "npc", tx: 122, ty: 42, name: "slayer", who: "slayer", line: "wnSlayer" },

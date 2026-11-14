@@ -9,8 +9,8 @@ SHEETS = {
     "places": [("cave", "w", 176), ("sign", "h", 72)],
     # 큰 건물은 게임에서 건물 덩어리 폭에 맞춰 늘림 (여기 크기는 해상도)
     # 이름이 None인 것은 아직 지도에 쓸 곳이 없어 만들지 않음 (게임이 받지 않게)
-    "palace": [("palace", "w", 1024), ("villa_helios", "w", 320), (None, "h", 256)],
-    "giantTrees": [("giant_tree", "w", 704), ("willow", "h", 176), (None, "w", 176)],
+    "palace": [("palace", "w", 1024), ("villa_helios", "w", 320), ("city_gate", "w", 512)],
+    "giantTrees": [("giant_tree", "w", 704), ("willow", "h", 176), ("root_arch", "w", 256)],
     "elfCastle": [("elf_castle", "w", 1024), ("treehouse", "w", 192)],
     "desertPlants": [("palm", "h", 176), ("palm2", "h", 152), ("cactus", "h", 112), ("tumbleweed", "w", 48)],
     "ruins": [("column", "h", 120), ("stone_head", "w", 112), ("ribcage", "w", 140), ("tent", "w", 128)],
@@ -20,7 +20,7 @@ SHEETS = {
     "ships": [("ship_big", "w", 224), ("boat", "w", 80), ("pirate_ship", "w", 224)],
     "harbor": [("crane", "h", 192), ("cargo", "w", 96), ("warehouse_t", "w", 640), ("lighthouse", "h", 240)],
     "portProps": [("mooring", "h", 48), ("fish_net", "w", 80), ("anchor", "h", 72), ("fish_stall", "w", 112)],
-    "factories": [("factory", "w", 448), (None, "h", 320), (None, "w", 320)],
+    "factories": [("factory", "w", 448), ("chimney_tower", "h", 320), ("warehouse_metal", "w", 320)],
     # 0.52.123: 건물 안 가구·헬리오스 소품·술집·테라코어·비르디아 장식 (장식 deco 그림, worldDecoArt)
     "homeFurniture": [("bed", "w", 72), ("dining_table", "w", 76), ("bookshelf", "w", 64), ("fireplace", "w", 76)],
     "shopFurniture": [("shop_counter", "w", 80), ("potion_shelf", "w", 68), ("crates", "w", 60), ("potted_plant", "h", 64)],

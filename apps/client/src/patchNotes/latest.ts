@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.2",
+    date: "2026-11-15",
+    items: {
+      ko: ["세계 지도(시험 중): 헬리오스 북문·남문에 탑이 둘 달린 높은 성문 · 비르디아 깊은 숲 길과 정령의 숲 들머리에 뿌리 아치 · 테라코어 공장 지대에 굴뚝 탑과 쇠 창고(역 옆에도 하나) · 공장 지대·광장 바닥에 배수 격자"],
+      en: ["World Map (testing): tall twin-towered gates on Helios's north and south entrances · root arches on Virdia's deep forest path and at the Spirit Grove entrance · chimney towers and steel warehouses in Terracore's factory district (plus one by the station) · drainage grates on the factory and square floors"],
+      ja: ["世界地図（テスト中）：ヘリオスの北門・南門に塔が二つある高い城門・ヴィルディアの深い森の道と精霊の森の入口に根のアーチ・テラコアの工場地帯に煙突塔と鉄の倉庫（駅の横にも一つ）・工場地帯と広場の床に排水格子"],
+    },
+  },
+  {
     version: "0.53.1",
     date: "2026-11-15",
     items: {

@@ -1,7 +1,7 @@
 // 테라코어 필드 장소 (256×160칸, 지도 모양 scripts/art/world_terra.py — 지도를 고치면 좌표도 같이, 생성기가 걸을 수 있는 칸인지 검사)
 // 쇠 성벽 도시(광장 톱니 기념물·공장 굴뚝 연기·공방·주거지) · 역과 철길 · 콜로세움(패왕전) · 광산 던전 · 아스칼론 국경 통로 · 비르디아 국경 통로 · 순간 이동석 다섯
 import type { Place, Region } from "../worldPlaces";
-import { TERRA_CHIMNEYS, TERRA_HOUSE_DOORS, TERRA_WORKSHOP_DOOR as WD } from "./terraLayout";
+import { TERRA_CHIMNEYS, TERRA_STACKS, TERRA_HOUSE_DOORS, TERRA_WORKSHOP_DOOR as WD } from "./terraLayout";
 
 const TERRA_PROPS: readonly (readonly [Place["art"], number, number])[] = [
   ["lamp", 116, 46], ["lamp", 140, 46], ["lamp", 116, 66], ["lamp", 140, 66], ["lamp", 91, 101], ["lamp", 109, 101],
@@ -14,7 +14,8 @@ export const TERRA_FIELD: Region = {
   start: { tx: 6, ty: 56 },
   faction: "terracore",
   // 도시 바닥 = 기름 묻은 돌길 · 바깥 길 = 붉은 벽돌
-  skin: { floor: "cobbleOil", path: "brickRed" },
+  skin: { floor: "cobbleOil", path: "brickRed", warehouse_t: "warehouse_metal", wetStone: "cobbleOil", gravel: "grate" },
+  mini: { 34: "#4a4e56", 50: "#8c96a0" },
   places: [
     // 광장
     { id: "terraTown", kind: "town", tx: 121, ty: 61, name: "wpTerraCity" },
@@ -24,6 +25,7 @@ export const TERRA_FIELD: Region = {
     { id: "terraGunner", kind: "npc", tx: 123, ty: 48, name: "gunner", who: "gunner", line: "wnGunner" },
     // 공장 지대 · 공방 · 굴뚝 연기
     { id: "workshopDoor", kind: "door", tx: WD[0], ty: WD[1], name: "wpWorkshop", to: "terraWorkshop", icon: "hammer" },
+    ...TERRA_STACKS.map(([tx, ty]): Place => ({ id: `stack${tx}_${ty}`, kind: "deco", tx, ty, name: "wpTerraCity", art: "chimney" })),
     ...TERRA_CHIMNEYS.map(([tx, ty]): Place => ({ id: `smoke${tx}_${ty}`, kind: "deco", tx, ty, name: "wpTerraCity", art: "smoke" })),
     { id: "factorySign", kind: "sign", tx: 100, ty: 41, name: "wpFactory" },
     // 주거지 (모두 같은 민가 안)

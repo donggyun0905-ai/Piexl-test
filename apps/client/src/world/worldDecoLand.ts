@@ -49,6 +49,10 @@ export const LAND_DECO = {
   cell: ["prison_cell", 11],
   stairsDown: ["cellar_stairs", -99],
   stairsUp: ["stairs_up", -99],
+  // 0.53.2 안 쓰던 그림: 헬리오스 높은 문(북문·남문 위, 지나감) · 비르디아 뿌리 아치(숲길, 지나감) · 테라코어 굴뚝 탑
+  cityGate: ["city_gate", -99],
+  rootArch: ["root_arch", -99],
+  chimney: ["chimney_tower", 6],
   // 해저 열차: 창문은 코드 그림(지나가는 바다)
   trainWindow: ["", -99],
 } as const satisfies Record<string, Row>;

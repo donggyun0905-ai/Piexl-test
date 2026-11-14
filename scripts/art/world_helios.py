@@ -89,6 +89,10 @@ def city(m):
     m.ring(x0, y0, x1, y1, "wall")
     # 큰길 (성문 넷) · 광장 · 궁전 앞뜰
     m.rect(126, y0, 130, y1, "redBrick")
+    # 북문·남문은 3칸 (높은 문 그림 city_gate가 얹힘, 장소 표 장식)
+    for y in (y0, y1):
+        m.put(126, y, "wall")
+        m.put(130, y, "wall")
     m.rect(x0, 65, x1, 69, "redBrick")
     m.rect(106, 52, 150, 82, "marble")
     m.rect(100, 24, 156, 46, "goldStone")

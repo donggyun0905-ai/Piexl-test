@@ -14,12 +14,17 @@ W, H = 256, 160
 ROOT = Path(__file__).resolve().parents[2]
 PLACES = ROOT / "apps/client/src/world/places"
 SOFT = ("grass", "flower", "tree", "rock")
-SOLID = {"water", "deep", "tree", "wall", "rock", "fence", "house", "keep", "innerWall", "factory", "pipe", "arena"}
+SOLID = {"water", "deep", "tree", "wall", "rock", "fence", "house", "keep", "innerWall", "factory", "pipe", "arena", "warehouse"}
 
 # 공장 (왼쪽 위, 7×5) — 첫째는 공방 (문 있음)
 FACTORIES = [(x, 25) for x in (76, 86, 96, 106, 148, 158, 168, 178)]
 HOUSES = [(x, y) for y in (70, 77, 84) for x in [74, 80, 86, 92, 98, 104, 110, 134, 140, 146, 152, 158, 164, 170, 176]]
-COLO = (150, 126, 17, 10)  # 가운데 x, y · 반지름 가로·세로
+COLO = (150, 126, 17, 10)
+# 쇠 창고 (왼쪽 위, 5×3, 문 없음 · 창고 칸 warehouse에 테라코어 그림 warehouse_metal) · 배수 격자 자리 (왼쪽 위, 3×2 · gravel 칸에 그림 grate)
+WAREHOUSES = [(116, 26), (134, 26), (140, 26), (84, 97)]
+GRATES = [(80, 34), (100, 34), (152, 34), (172, 34), (117, 60), (137, 60), (117, 49), (137, 49)]
+# 굴뚝 탑 (장식 자리 = 공장 사이 틈)
+STACKS = [(84, 29), (104, 29), (156, 29), (176, 29)]  # 가운데 x, y · 반지름 가로·세로
 
 
 def terra():
@@ -90,6 +95,10 @@ def city(m):
     # 주거지 집
     for (x, y) in HOUSES:
         m.rect(x, y, x + 2, y + 1, "house")
+    for (x, y) in WAREHOUSES:
+        m.rect(x, y, x + 4, y + 2, "warehouse")
+    for (x, y) in GRATES:
+        m.rect(x, y, x + 2, y + 1, "gravel")
     # 성 안 작은 화단·나무
     for (x, y) in [(74, 90), (182, 90), (182, 46), (74, 46), (120, 90), (136, 90)]:
         m.put(x, y, "tree")
@@ -115,6 +124,7 @@ def write_layout():
         "// 생성됨: scripts/art/world_terra.py (손으로 고치지 않음) · 테라코어 필드 문·굴뚝 자리 (칸)",
         "export const TERRA_HOUSE_DOORS: readonly (readonly [number, number])[] = [" + ", ".join(f"[{x}, {y}]" for x, y in doors) + "];",
         f"export const TERRA_WORKSHOP_DOOR = [{w[0] + 3}, {w[1] + 5}] as const;",
+        "export const TERRA_STACKS: readonly (readonly [number, number])[] = [" + ", ".join(f"[{x}, {y}]" for x, y in STACKS) + "];",
         "export const TERRA_CHIMNEYS: readonly (readonly [number, number])[] = [" + ", ".join(f"[{x + 1}, {y}]" for x, y in FACTORIES + [(96, 97)]) + "];",
         "",
     ]

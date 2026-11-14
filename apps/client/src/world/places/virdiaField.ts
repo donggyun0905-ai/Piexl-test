@@ -39,6 +39,8 @@ export const VIRDIA_FIELD: Region = {
     { id: "spiritGrove", kind: "sign", tx: 128, ty: 138, name: "wpSpiritGrove" },
     { id: "virdiaSpiritist", kind: "npc", tx: 124, ty: 139, name: "spiritist", who: "spiritist", line: "wnSpiritist" },
     // 깊은 숲 던전 (혼자 하기) · 동쪽 해안
+    { id: "archDeep", kind: "deco", tx: 210, ty: 26, name: "wpDeepForest", art: "rootArch" },
+    { id: "archGrove", kind: "deco", tx: 128, ty: 132, name: "wpSpiritGrove", art: "rootArch" },
     { id: "deepForest", kind: "dungeon", tx: 210, ty: 16, name: "wpDeepForest" },
     { id: "virdiaRen", kind: "npc", tx: 207, ty: 19, name: "ren", who: "ren", line: "wnRen" },
     { id: "virdiaFly", kind: "npc", tx: 230, ty: 59, name: "fly", who: "fly", line: "wnFly" },
