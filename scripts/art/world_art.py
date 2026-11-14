@@ -1,6 +1,6 @@
 """세계 지도 그림(B안, docs/WORLD_ART.md) 손질 → 게임에 넣기
-- 땅 결: art/지도/땅/{이름}.png → public/world/tex/{이름}.png (256×256 = 지도 4칸, 이어 붙여도 이음매 없게, 색 48개)
-- 물건 묶음: art/지도/물건/{묶음}.png (마젠타 배경 위 한 줄로 여러 개) → 배경 지우고 왼쪽부터 하나씩 잘라
+- 땅 결: art/지도/ascalon/땅/{이름}.png (예전 자리 art/지도/땅/도 읽음) → public/world/tex/{이름}.png (256×256 = 지도 4칸, 이어 붙여도 이음매 없게, 색 48개)
+- 물건 묶음: art/지도/ascalon/물건/{묶음}.png (마젠타 배경 위 한 줄로 여러 개) → 배경 지우고 왼쪽부터 하나씩 잘라
   public/world/obj/{이름}.png (크기 = 지도 크기 × 4, 아래 가운데가 발)
 - 다 하면 public/world/art.json 목록을 새로 씀 (게임은 목록에 있는 그림만 받음, 없는 것은 코드 그림)
 실행: python3 scripts/art/world_art.py   (있는 원본만 손질)
@@ -9,13 +9,33 @@ from pathlib import Path
 import json
 import sys
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageEnhance
 
 ROOT = Path(__file__).resolve().parents[2]
 SRC = ROOT / "art" / "지도"
 PUB = ROOT / "apps/client/public/world"
+def src_of(kind, name):
+    """나라 폴더(art/지도/ascalon/땅) 먼저, 없으면 예전 자리(art/지도/땅)"""
+    for d in (SRC / "ascalon" / kind, SRC / kind):
+        if (d / f"{name}.png").exists():
+            return d / f"{name}.png"
+    return SRC / "ascalon" / kind / f"{name}.png"
+
+
 TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge"]
 TEX_PX = 256
+# 캐릭터 그림과 어울리게 색 맞춤 (채도·밝기 배율): 땅은 배경이라 더 차분하게
+TONE_TEX = (0.62, 0.92)
+TONE_OBJ = (0.9, 1.0)
+
+
+def tone(img, sat_bri):
+    """채도·밝기를 줄여 캐릭터보다 덜 튀게 (투명은 그대로)"""
+    a = img.getchannel("A") if img.mode == "RGBA" else None
+    rgb = ImageEnhance.Brightness(ImageEnhance.Color(img.convert("RGB")).enhance(sat_bri[0])).enhance(sat_bri[1])
+    if a is not None:
+        rgb.putalpha(a)
+    return rgb
 # 묶음 → (이름, 기준, 픽셀) 왼쪽부터 · 기준 h = 높이, w = 폭 (그림 픽셀, 지도 1픽셀 = 4)
 SHEETS = {
     "trees": [("tree_oak", "h", 152), ("tree_oak2", "h", 140), ("tree_pine", "h", 160), ("tree_pine2", "h", 148)],
@@ -45,13 +65,13 @@ def seamless(img):
 
 
 def make_tex(name):
-    src = SRC / "땅" / f"{name}.png"
+    src = src_of("땅", name)
     if not src.exists():
         return False
     img = Image.open(src).convert("RGB")
     s = min(img.size)
     img = img.crop(((img.width - s) // 2, (img.height - s) // 2, (img.width + s) // 2, (img.height + s) // 2))
-    img = seamless(img.resize((TEX_PX, TEX_PX), Image.Resampling.LANCZOS))
+    img = tone(seamless(img.resize((TEX_PX, TEX_PX), Image.Resampling.LANCZOS)), TONE_TEX)
     img = img.convert("RGBA")
     quantize(img, 48).save(PUB / "tex" / f"{name}.png", optimize=True)
     return True
@@ -96,7 +116,7 @@ def components(alpha, step=4):
 
 
 def make_sheet(sheet, items):
-    src = SRC / "물건" / f"{sheet}.png"
+    src = src_of("물건", sheet)
     if not src.exists():
         return []
     img = cut_background(Image.open(src))
@@ -119,7 +139,7 @@ def make_sheet(sheet, items):
         part = img.crop((b[0], b[1], b[2], b[3]))
         r = px / (part.height if axis == "h" else part.width)
         size = (max(1, round(part.width * r)), max(1, round(part.height * r)))
-        part = quantize(part.resize(size, Image.Resampling.LANCZOS), 64)
+        part = quantize(tone(part.resize(size, Image.Resampling.LANCZOS), TONE_OBJ), 64)
         bb = part.getbbox()
         if bb:
             part = part.crop(bb)

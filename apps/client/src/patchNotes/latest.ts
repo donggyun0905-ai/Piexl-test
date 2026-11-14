@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.111",
+    date: "2026-11-14",
+    items: {
+      ko: ["세계 지도(시험 중): 아스칼론 풀밭과 나무(둥근 나무 둘·뾰족 나무 둘)를 새 그림으로 — 캐릭터가 잘 보이게 풀밭 색은 차분하게"],
+      en: ["World Map (testing): new artwork for Ascalon's grass and trees (two round, two pine) — the grass is toned down so characters stand out"],
+      ja: ["世界地図（テスト中）：アスカロンの草原と木（丸い木2・とがった木2）を新しい絵に — キャラクターが見やすいよう草原の色は落ち着いた色に"],
+    },
+  },
+  {
     version: "0.52.110",
     date: "2026-11-14",
     items: {
