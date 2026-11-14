@@ -52,6 +52,10 @@ describe("세계 지도", () => {
     const bed = r.places.find((p) => p.art === "bed")!;
     expect(hitsNpc(r, (bed.tx + 0.5) * WTILE, (bed.ty + 0.5) * WTILE, 5)).toBe(true);
   });
+  it("장소 id는 지역 안에서 겹치지 않음 · 아스칼론 순간 이동석 여러 곳", () => {
+    for (const [name, r] of Object.entries(REGIONS)) expect(new Set(r.places.map((p) => p.id)).size, name).toBe(r.places.length);
+    expect(REGIONS.ascalon!.places.filter((p) => p.kind === "warp").length).toBeGreaterThan(1);
+  });
   it("장소는 지도 안", () => {
     for (const r of Object.values(REGIONS)) for (const p of r.places) expect(p.tx >= 0 && p.ty >= 0).toBe(true);
   });

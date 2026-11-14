@@ -206,6 +206,12 @@
 .world-note p {
   line-height: 1.6;
 }
+.world-warps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0;
+}
 .world-note h3 {
   display: flex;
   align-items: center;

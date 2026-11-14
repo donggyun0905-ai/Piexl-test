@@ -1,11 +1,12 @@
-// 건물 안 가구 (장소 표의 장식 deco): 침대·탁자·책장·벽난로·왕좌·기둥·갑옷·술통·화분 — 코드 그림, 사람과 y 순서로 그림
+// 가구·소품 (장소 표의 장식 deco): 침대·탁자·책장·벽난로·왕좌·기둥·갑옷·술통·화분 · 계산대·모루·화덕·무기 걸이·물약 선반·허수아비(worldDecoShop) — 코드 그림, 사람과 y 순서로 그림
 // (x, y) = 칸 가운데 · 그림은 발(아래) 쪽이 칸 아래쪽에 닿게
 import { shadow } from "./worldArt";
+import { drawShopDeco, SHOP_DECO_R, type ShopDeco } from "./worldDecoShop";
 
-export type DecoArt = "bed" | "table" | "shelf" | "fireplace" | "throne" | "pillar" | "armor" | "barrel" | "plant";
+export type DecoArt = "bed" | "table" | "shelf" | "fireplace" | "throne" | "pillar" | "armor" | "barrel" | "plant" | ShopDeco;
 
 /** 부딪힘 반지름 (픽셀) */
-export const DECO_R: Record<DecoArt, number> = { bed: 9, table: 9, shelf: 8, fireplace: 8, throne: 9, pillar: 6, armor: 5, barrel: 5, plant: 4 };
+export const DECO_R: Record<DecoArt, number> = { bed: 9, table: 9, shelf: 8, fireplace: 8, throne: 9, pillar: 6, armor: 5, barrel: 5, plant: 4, ...SHOP_DECO_R };
 
 type Ctx = CanvasRenderingContext2D;
 const box = (g: Ctx, c: string, x: number, y: number, w: number, h: number) => {
@@ -16,6 +17,14 @@ const box = (g: Ctx, c: string, x: number, y: number, w: number, h: number) => {
 export function drawDeco(g: Ctx, art: DecoArt, x: number, y: number, t: number): void {
   const b = y + 7;
   switch (art) {
+    case "counter":
+    case "anvil":
+    case "forge":
+    case "rack":
+    case "potions":
+    case "dummy":
+      drawShopDeco(g, art, x, b, t);
+      break;
     case "bed":
       shadow(g, x, b, 10, 3, 0.3);
       box(g, "#5a3a20", x - 9, b - 18, 18, 18);

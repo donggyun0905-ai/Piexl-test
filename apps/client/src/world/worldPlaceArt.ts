@@ -1,9 +1,10 @@
-// 나라 필드 장소 그림: 던전 입구(어두운 굴·횃불) · 마을 깃발 · 표지판 · 주민(캐릭터 그림) · 가까우면 위에 이름표 (사람과 함께 y 순서로 그림)
+// 나라 필드 장소 그림: 던전 입구(어두운 굴·횃불) · 마을 깃발 · 표지판 · 주민(캐릭터 그림) · 문 발판·가게 간판·순간 이동석(worldPlaceSigns) · 가까우면 위에 이름표 (사람과 함께 y 순서로 그림)
 import { drawBody } from "../game/render/actors";
 import { shadow } from "./worldArt";
 import { drawDeco } from "./worldDeco";
 import { placeXY, type Place } from "./worldPlaces";
 import { drawObj, objOf } from "./worldTex";
+import { drawShopIcon, drawWarp } from "./worldPlaceSigns";
 
 /** 주민 몸 반지름 (플레이어와 같음) */
 const NPC_R = 5;
@@ -19,12 +20,17 @@ export function drawPlace(ctx: CanvasRenderingContext2D, p: Place, t: number, co
     // 문 앞 발판 · 나가는 문은 아래 화살표가 숨 쉬듯
     box(ctx, "#6a3a24", x - 6, y - 3, 12, 6);
     box(ctx, "#a8583a", x - 5, y - 2, 10, 4);
+    if (p.icon) drawShopIcon(ctx, p.icon, x, y);
     if (p.kind === "exit") {
       const a = Math.round(Math.sin(t * 4) * 1.5);
       box(ctx, "#ffe9a8", x - 1, y - 2 + a, 2, 3);
       box(ctx, "#ffe9a8", x - 3, y + 1 + a, 6, 1);
       box(ctx, "#ffe9a8", x - 2, y + 2 + a, 4, 1);
     }
+    return;
+  }
+  if (p.kind === "warp") {
+    drawWarp(ctx, x, y, t);
     return;
   }
   if (p.kind === "npc" && p.who) {
@@ -114,7 +120,7 @@ export function drawPlaceLabel(ctx: CanvasRenderingContext2D, p: Place, text: st
   const [x, y] = placeXY(p);
   ctx.font = "7px sans-serif";
   const w = Math.ceil(ctx.measureText(text).width) + 6;
-  const top = y - (p.kind === "town" ? 34 : p.kind === "npc" ? 30 : p.kind === "door" ? 28 : p.kind === "exit" ? 16 : 24);
+  const top = y - (p.kind === "town" ? 34 : p.kind === "npc" ? 30 : p.kind === "door" ? 28 : p.kind === "exit" ? 16 : p.kind === "warp" ? 30 : 24);
   ctx.fillStyle = "rgba(12,10,18,0.8)";
   ctx.fillRect(Math.round(x - w / 2), top, w, 10);
   ctx.fillStyle = "#ffe9a8";

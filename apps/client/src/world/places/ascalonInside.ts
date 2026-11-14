@@ -1,0 +1,103 @@
+// 아스칼론 건물 안 (지도 모양 scripts/art/world_map.py): 성채 · 민가 · 가게 넷(같은 안 지도, 진열대·주인만 다름) · 대장간 · 여관
+import type { CharacterId } from "@pixel-rogue/shared";
+import type { TextKey } from "../../i18n";
+import type { DecoArt } from "../worldDeco";
+import type { Place, Region } from "../worldPlaces";
+
+const deco = (id: string, tx: number, ty: number, name: TextKey, art: DecoArt): Place => ({ id, kind: "deco", tx, ty, name, art });
+const out = (tx: number, ty: number): Place => ({ id: "exit", kind: "exit", tx, ty, name: "wpGoOut" });
+
+/** 가게 안 13×9: 주인(6,3) 양옆 계산대 · 뒤 벽 진열 · 나가는 문 (6,7) */
+function shop(title: TextKey, who: CharacterId, line: TextKey, wall: DecoArt, side: DecoArt): Region {
+  return {
+    map: "world/ascalon_shop.png",
+    start: { tx: 6, ty: 6 },
+    title,
+    indoor: true,
+    places: [
+      out(6, 7),
+      { id: "keeper", kind: "npc", tx: 6, ty: 3, name: who, who, line },
+      deco("counterL", 4, 3, title, "counter"),
+      deco("counterR", 8, 3, title, "counter"),
+      ...[2, 10].map((x) => deco(`wall${x}`, x, 2, title, wall)),
+      deco("side1", 1, 6, title, side),
+      deco("side2", 11, 6, title, side),
+    ],
+  };
+}
+
+export const ASCALON_INSIDE: Record<string, Region> = {
+  // 성채 안: 문(9,11)에서 카펫 따라 왕좌 · 장군 = 지금 연 장 이야기
+  ascalonKeep: {
+    map: "world/ascalon_keep.png",
+    start: { tx: 9, ty: 10 },
+    title: "wpAscalonKeep",
+    indoor: true,
+    places: [
+      { id: "keepExit", kind: "exit", tx: 9, ty: 11, name: "wpGoOut" },
+      { id: "ascalonGeneral", kind: "npc", tx: 9, ty: 4, name: "general", who: "general", scene: true },
+      deco("keepThrone", 9, 2, "wpAscalonKeep", "throne"),
+      ...[4, 14].flatMap((x) => [4, 8].map((y) => deco(`keepPillar${x}${y}`, x, y, "wpAscalonKeep", "pillar"))),
+      deco("keepArmorL", 2, 2, "wpAscalonKeep", "armor"),
+      deco("keepArmorR", 16, 2, "wpAscalonKeep", "armor"),
+      deco("keepBarrel", 16, 10, "wpAscalonKeep", "barrel"),
+    ],
+  },
+  // 민가 안 (주거지·농촌 집이 모두 같은 안 지도)
+  ascalonHouse: {
+    map: "world/ascalon_house.png",
+    start: { tx: 5, ty: 6 },
+    title: "wpHouse",
+    indoor: true,
+    places: [
+      { id: "houseExit", kind: "exit", tx: 5, ty: 7, name: "wpGoOut" },
+      deco("houseBed", 2, 3, "wpHouse", "bed"),
+      deco("houseFire", 6, 2, "wpHouse", "fireplace"),
+      deco("houseShelf", 9, 2, "wpHouse", "shelf"),
+      deco("houseTable", 8, 5, "wpHouse", "table"),
+      deco("housePlant", 10, 7, "wpHouse", "plant"),
+      deco("houseBarrel", 1, 7, "wpHouse", "barrel"),
+    ],
+  },
+  ascalonWeapon: shop("wpWeaponShop", "leo", "wnLeo", "rack", "barrel"),
+  ascalonArmor: shop("wpArmorShop", "remnant", "wnRemnant", "armor", "armor"),
+  ascalonPotion: shop("wpPotionShop", "silk", "wnSilk", "potions", "plant"),
+  ascalonGoods: shop("wpGoodsShop", "pungryu", "wnPungryu", "shelf", "barrel"),
+  // 대장간 13×9: 화덕·모루·무기 걸이 · 대장장이
+  ascalonSmithy: {
+    map: "world/ascalon_smithy.png",
+    start: { tx: 6, ty: 6 },
+    title: "wpSmithy",
+    indoor: true,
+    places: [
+      out(6, 7),
+      { id: "smith", kind: "npc", tx: 7, ty: 3, name: "forgotten", who: "forgotten", line: "wnForgotten" },
+      deco("forge", 3, 2, "wpSmithy", "forge"),
+      deco("anvil", 5, 4, "wpSmithy", "anvil"),
+      deco("rack1", 9, 2, "wpSmithy", "rack"),
+      deco("rack2", 11, 2, "wpSmithy", "rack"),
+      deco("barrel", 11, 6, "wpSmithy", "barrel"),
+    ],
+  },
+  // 여관 17×11: 주인 떠돌이(8,3) 양옆 계산대 · 벽난로 · 탁자 · 침대 · 나가는 문 (8,9)
+  ascalonInn: {
+    map: "world/ascalon_inn.png",
+    start: { tx: 8, ty: 8 },
+    title: "wpInn",
+    indoor: true,
+    places: [
+      out(8, 9),
+      { id: "innkeeper", kind: "npc", tx: 8, ty: 3, name: "drifter", who: "drifter", line: "wnDrifter" },
+      deco("innCounterL", 6, 3, "wpInn", "counter"),
+      deco("innCounterR", 10, 3, "wpInn", "counter"),
+      deco("innFire", 3, 2, "wpInn", "fireplace"),
+      deco("innShelf", 13, 2, "wpInn", "shelf"),
+      deco("innTable1", 3, 6, "wpInn", "table"),
+      deco("innTable2", 4, 8, "wpInn", "table"),
+      deco("innBed1", 14, 5, "wpInn", "bed"),
+      deco("innBed2", 14, 8, "wpInn", "bed"),
+      deco("innBarrel", 1, 9, "wpInn", "barrel"),
+      deco("innPlant", 11, 9, "wpInn", "plant"),
+    ],
+  },
+};

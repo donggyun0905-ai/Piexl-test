@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.112",
+    date: "2026-11-14",
+    items: {
+      ko: ["세계 지도(시험 중): 아스칼론이 16배 넓어짐 (256×160칸) — 성벽 도시(광장·분수·안쪽 성과 성채·훈련장·주거지) · 상점가(무기점·방어구점·물약점·잡화점) · 장인 거리(대장간·여관) · 성 남쪽 강과 강가 길 · 서쪽 항구 부두 · 강 건너 농촌과 밭 · 남쪽 사막 끝 · 북쪽 바위산 던전과 서쪽 숲 던전 · 동쪽 테라코어 국경", "순간 이동석 다섯 곳(광장·농촌·던전 앞·항구·동쪽 갈림길): 한 번 만진 돌끼리 바로 이동", "가게·대장간·여관 안으로 들어가 주인과 이야기할 수 있음 (사고팔기는 아직 없음)"],
+      en: ["World Map (testing): Ascalon is now 16 times larger (256×160 tiles) — walled city (square, fountain, inner castle and keep, training ground, homes) · market street (weapons, armor, potions, general store) · craft street (smithy, inn) · river and bank path south of the castle · western harbor pier · farms across the river · the edge of the southern desert · a mountain dungeon to the north and a forest dungeon to the west · the Terracore border to the east", "Five warp stones (square, farm, dungeon, harbor, east crossroads): travel instantly between stones you've touched", "Step inside the shops, smithy and inn to chat with their keepers (no buying or selling yet)"],
+      ja: ["世界地図（テスト中）：アスカロンが16倍の広さに（256×160マス） — 城壁都市（広場・噴水・内城と城館・訓練場・住宅地） · 商店街（武器屋・防具屋・薬屋・雑貨屋） · 職人通り（鍛冶屋・宿屋） · 城の南の川と土手道 · 西の港の桟橋 · 川向こうの農村と畑 · 南の砂漠のはずれ · 北の岩山のダンジョンと西の森のダンジョン · 東のテラコア国境", "転移石5か所（広場・農村・ダンジョン前・港・東の分かれ道）：一度触れた石どうしならすぐ移動", "店・鍛冶屋・宿屋の中に入って主人と話せるように（売り買いはまだなし）"],
+    },
+  },
+  {
     version: "0.52.111",
     date: "2026-11-14",
     items: {

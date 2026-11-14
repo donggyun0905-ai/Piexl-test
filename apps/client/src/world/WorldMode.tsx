@@ -1,6 +1,6 @@
 // 세계 지도 화면 (아스칼론 필드): 캔버스 + 나가기 · 나라 이름 · 장소 앞 버튼(모바일) · 글 창(표지판·마을·주민 말, Esc로 닫힘)
 // 이야기 장면(SceneView, 일러스트 + 대사): 처음 오면 1장 · 장군에게 말 걸면 지금 연 장 · 던전 입구 → 혼자 하기(끝나면 지도로, worldReturn)
-// 건물 문 → 건물 안 지도(검게 사라졌다 나타남) · 나가는 문 → 들어온 문 앞 · 세계 지도(줌 아웃)·빠른 이동은 W4
+// 건물 문 → 건물 안 지도(검게 사라졌다 나타남) · 나가는 문 → 들어온 문 앞 · 순간 이동석(만진 돌끼리, WarpMenu) · 세계 지도(줌 아웃)는 W4
 import { useEffect, useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { FACTION_TEXT } from "../i18n/story/world";
@@ -9,7 +9,9 @@ import { loadText, saveText } from "../storage";
 import { StoryFace } from "../story/StoryFace";
 import { SceneView } from "../story/SceneView";
 import { CHAPTERS, FACTIONS, type ChapterId } from "../story/storyData";
+import { WarpMenu } from "./WarpMenu";
 import { WorldStage } from "./WorldStage";
+import { touchWarp, warpTargets } from "./worldWarps";
 import { placeXY, REGIONS, type Place } from "./worldPlaces";
 
 interface Props {
@@ -26,7 +28,9 @@ const latestChapter = (): ChapterId => CHAPTERS[Math.max(1, storyStage()) - 1]!.
 
 export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
   // 지금 지역 (나라 필드 또는 건물 안) · 들어온 문 앞 자리(나갈 때 돌아갈 곳)
-  const [cur, setCur] = useState<{ id: string; spawn: readonly [number, number] | null }>({ id: REGION, spawn: null });
+  // n: 같은 지역 안 순간 이동 때 캔버스를 새로 만들려고 올림
+  const [cur, setCur] = useState<{ id: string; spawn: readonly [number, number] | null; n?: number }>({ id: REGION, spawn: null });
+  const [warp, setWarp] = useState<Place | null>(null);
   const [back, setBack] = useState<{ id: string; spawn: readonly [number, number] } | null>(null);
   const region = REGIONS[cur.id]!;
   const color = FACTIONS.find((f) => f.id === REGION)?.color ?? "#ffffff";
@@ -49,6 +53,9 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
       setCur(back ?? { id: REGION, spawn: null });
       setBack(null);
       setNear(null);
+    } else if (p.kind === "warp") {
+      touchWarp(cur.id, p);
+      setWarp(p);
     } else if (p.kind === "dungeon") onDungeon();
     else if (p.scene) setScene(latestChapter());
     else setReading(p);
@@ -60,10 +67,16 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
     window.addEventListener("keydown", esc);
     return () => window.removeEventListener("keydown", esc);
   }, [reading]);
+  const warpTo = (p: Place) => {
+    const [x, y] = placeXY(p);
+    setCur({ id: cur.id, spawn: [x, y + 12], n: (cur.n ?? 0) + 1 });
+    setWarp(null);
+    setNear(null);
+  };
   const body = (p: Place): TextKey => p.line ?? (p.kind === "town" ? "wpAscalonCastleText" : (`${p.name}Text` as TextKey));
   return (
     <div className="lobby-mode world-mode">
-      <WorldStage key={cur.id} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} paused={!!reading || !!scene} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} />
+      <WorldStage key={`${cur.id}-${cur.n ?? 0}`} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} paused={!!reading || !!scene || !!warp} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} />
       <button type="button" className="secondary lobby-exit" onClick={onExit}>
         {t("lobbyExit")}
       </button>
@@ -71,11 +84,11 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
         {region.title ? t(region.title) : FACTION_TEXT[REGION].name[lang]}
       </p>
       <p className="lobby-help">{t("worldHelp")}</p>
-      <div key={`fade-${cur.id}`} className="world-fade" />
+      <div key={`fade-${cur.id}-${cur.n ?? 0}`} className="world-fade" />
       {state !== "ok" && <p className="world-loading">{t(state === "fail" ? "worldFail" : "worldLoading")}</p>}
-      {near && !reading && !scene && (
+      {near && !reading && !scene && !warp && (
         <button type="button" className="primary lobby-enter" onClick={() => use(near)}>
-          {near.kind === "dungeon" ? `⚔ ${t("wpEnter")}` : near.kind === "npc" ? `💬 ${t("wpTalk")}` : near.kind === "door" ? `🚪 ${t("wpGoIn")}` : near.kind === "exit" ? `🚪 ${t("wpGoOut")}` : `📜 ${t("wpRead")}`} · F
+          {near.kind === "dungeon" ? `⚔ ${t("wpEnter")}` : near.kind === "npc" ? `💬 ${t("wpTalk")}` : near.kind === "door" ? `🚪 ${t("wpGoIn")}` : near.kind === "exit" ? `🚪 ${t("wpGoOut")}` : near.kind === "warp" ? `✨ ${t("wpWarpUse")}` : `📜 ${t("wpRead")}`} · F
         </button>
       )}
       {reading && (
@@ -92,6 +105,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
           </div>
         </div>
       )}
+      {warp && <WarpMenu t={t} targets={warpTargets(cur.id, region, warp)} onGo={warpTo} onClose={() => setWarp(null)} />}
       {scene && (
         <div className="world-scene">
           <SceneView id={scene} lang={lang} t={t} onClose={closeScene} />
