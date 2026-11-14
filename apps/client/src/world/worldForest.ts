@@ -2,6 +2,7 @@
 import { hash2 } from "./worldGround";
 import { tileAt, WTILE, type WorldMap } from "./worldMap";
 import { WT } from "./worldTiles";
+import { blockObj } from "./worldTex";
 
 const S = WTILE;
 type Ctx = CanvasRenderingContext2D;
@@ -63,8 +64,11 @@ function leaves(g: Ctx, x: number, y: number, r: number, h: number): void {
 }
 
 function bigTree(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: number): void {
-  const [x0, y0, x1, y1] = extent(m, WT.bigTree, cx, cy);
+  const b = extent(m, WT.bigTree, cx, cy);
+  const [x0, y0, x1, y1] = b;
   const w = x1 - x0 + 1;
+  // 그림이 있으면: 3칸 폭 = 나무 집, 넓으면 세계수(거대한 나무)
+  if (blockObj(g, w <= 3 ? "treehouse" : "giant_tree", b, cx, cy, px, py, S)) return;
   const h = hash2(cx, cy);
   const edgeL = cx === x0;
   const edgeR = cx === x1;

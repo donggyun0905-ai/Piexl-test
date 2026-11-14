@@ -17,8 +17,8 @@ SOFT = ("grass", "flower", "tree", "rock")
 SOLID = {"water", "deep", "tree", "wall", "rock", "fence", "house", "keep", "innerWall", "palace", "villa"}
 
 CITY = (60, 22, 196, 112)
-# 제국 집 (5×3: 위 두 줄 지붕 · 아래 줄 앞벽, 문은 가운데 아래 칸)
-VILLAS = [(x, y) for y in (76, 86, 96) for x in (66, 74, 82, 90, 98, 154, 162, 170, 178, 186)]
+# 제국 집 (3×4: 위 세 줄 지붕 · 아래 줄 앞벽, 문은 가운데 아래 칸)
+VILLAS = [(x, y) for y in (75, 85, 95) for x in (66, 72, 78, 84, 90, 96, 156, 162, 168, 174, 180, 186)]
 SHOPS = {"market": (70, 34), "tavern": (86, 34), "armor": (70, 46)}
 RIVER = [(254, 28), (230, 40), (214, 70), (210, 100), (196, 124), (168, 142), (150, 152)]
 
@@ -90,7 +90,10 @@ def city(m):
     m.rect(x0, 65, x1, 69, "redBrick")
     m.rect(106, 52, 150, 82, "marble")
     m.rect(100, 24, 156, 46, "goldStone")
-    m.rect(108, 28, 148, 38, "palace")
+    m.rect(121, 28, 135, 38, "palace")
+    for (x, y) in [(106, 30), (110, 34), (146, 30), (150, 34), (104, 40), (152, 40)]:
+        m.blob(x, y, 1.6, "flower")
+        m.put(x, y, "tree")
     # 광장 화단 넷 (꽃·가운데 나무)
     for (cx, cy) in [(114, 60), (142, 60), (114, 78), (142, 78)]:
         m.blob(cx, cy, 2.4, "flower")
@@ -98,8 +101,8 @@ def city(m):
     # 시장 거리 (북서) · 뒷골목 (북동, 나무와 어두운 돌바닥)
     m.rect(x0 + 2, 40, 104, 42, "redBrick")
     for (x, y) in SHOPS.values():
-        m.rect(x, y, x + 4, y + 2, "villa")
-        m.rect(x + 2, y + 3, x + 2, 40 if y < 40 else y + 3, "redBrick")
+        m.rect(x, y, x + 2, y + 3, "villa")
+        m.rect(x + 1, y + 4, x + 1, 40 if y < 40 else y + 4, "redBrick")
     m.scatter(160, 26, 192, 58, "tree", 10, (2, 5))
     m.rect(170, 40, 178, 46, "floor")
     # 주거지 집 · 앞 골목
@@ -107,17 +110,17 @@ def city(m):
         m.rect(x0 + 2, y, 104, y, "redBrick")
         m.rect(152, y, x1 - 2, y, "redBrick")
     for (x, y) in VILLAS:
-        m.rect(x, y, x + 4, y + 2, "villa")
+        m.rect(x, y, x + 2, y + 3, "villa")
     # 성 안 정원 나무
     for (x, y) in [(64, 28), (192, 104), (64, 104), (104, 60), (152, 60), (104, 76), (152, 76)]:
         m.put(x, y, "tree")
 
 
 def write_layout():
-    shops = ", ".join(f"{k}: [{x + 2}, {y + 3}]" for k, (x, y) in SHOPS.items())
+    shops = ", ".join(f"{k}: [{x + 1}, {y + 4}]" for k, (x, y) in SHOPS.items())
     lines = [
         "// 생성됨: scripts/art/world_helios.py (손으로 고치지 않음) · 헬리오스 필드 집·가게 문 자리 (칸)",
-        "export const HELIOS_HOUSE_DOORS: readonly (readonly [number, number])[] = [" + ", ".join(f"[{x + 2}, {y + 3}]" for x, y in VILLAS) + "];",
+        "export const HELIOS_HOUSE_DOORS: readonly (readonly [number, number])[] = [" + ", ".join(f"[{x + 1}, {y + 4}]" for x, y in VILLAS) + "];",
         f"export const HELIOS_SHOP_DOORS = {{ {shops} }} as const;",
         "",
     ]
@@ -129,7 +132,7 @@ def check(g):
     src = (PLACES / "heliosField.ts").read_text(encoding="utf-8").split("HELIOS_INSIDE")[0]
     pts = [(int(a), int(b)) for a, b in re.findall(r"tx: (\d+), ty: (\d+)", src)]
     bad = [p for p in pts if g[p[1]][p[0]] in SOLID]
-    for (x, y) in [(x + 2, y + 3) for (x, y) in VILLAS + list(SHOPS.values())] + [(128, 39)]:
+    for (x, y) in [(x + 1, y + 4) for (x, y) in VILLAS + list(SHOPS.values())] + [(128, 39)]:
         if g[y][x] in SOLID or g[y - 1][x] not in ("villa", "palace"):
             bad.append((x, y))
     assert not bad, f"걸을 수 없는 장소 자리: {bad}"

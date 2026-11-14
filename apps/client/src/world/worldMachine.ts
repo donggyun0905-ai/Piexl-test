@@ -2,6 +2,7 @@
 import { hash2 } from "./worldGround";
 import { tileAt, WTILE, type WorldMap } from "./worldMap";
 import { WT } from "./worldTiles";
+import { blockObj, hasTex } from "./worldTex";
 
 const S = WTILE;
 type Ctx = CanvasRenderingContext2D;
@@ -53,7 +54,9 @@ function rail(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: numbe
 }
 
 function factory(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: number): void {
-  const [x0, y0, x1, y1] = extent(m, WT.factory, cx, cy);
+  const b = extent(m, WT.factory, cx, cy);
+  if (blockObj(g, "factory", b, cx, cy, px, py, S)) return;
+  const [x0, y0, x1, y1] = b;
   const front = cy === y1;
   const top = cy === y0 ? -6 : 0;
   if (!front) {
@@ -129,7 +132,9 @@ function arena(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: numb
 
 /** 테라코어 칸이면 그림. 건물(공장·파이프·콜로세움 벽)은 true, 바닥(철판·철길)은 무늬만 그리고 false */
 export function drawMachine(g: Ctx, m: WorldMap, t: number, cx: number, cy: number, px: number, py: number): boolean {
-  if (t === WT.metal) metal(g, cx, cy, px, py);
+  if (t === WT.metal) {
+    if (!hasTex("metalFloor")) metal(g, cx, cy, px, py);
+  }
   else if (t === WT.rail) rail(g, m, cx, cy, px, py);
   else if (t === WT.factory) factory(g, m, cx, cy, px, py);
   else if (t === WT.pipe) pipe(g, m, cx, cy, px, py);

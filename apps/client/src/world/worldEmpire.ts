@@ -3,7 +3,7 @@
 import { hash2 } from "./worldGround";
 import { tileAt, WTILE, type WorldMap } from "./worldMap";
 import { WT } from "./worldTiles";
-import { hasTex } from "./worldTex";
+import { blockObj, hasTex } from "./worldTex";
 
 const S = WTILE;
 type Ctx = CanvasRenderingContext2D;
@@ -49,7 +49,9 @@ function goldStone(g: Ctx, cx: number, cy: number, px: number, py: number): void
 }
 
 function palace(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: number): void {
-  const [x0, y0, x1, y1] = extent(m, WT.palace, cx, cy);
+  const b = extent(m, WT.palace, cx, cy);
+  if (blockObj(g, "palace", b, cx, cy, px, py, S)) return;
+  const [x0, y0, x1, y1] = b;
   const mid = Math.floor((x0 + x1) / 2);
   if (cy < y1) {
     // 금 지붕 (가로 골) · 위 줄에 둥근 지붕(가운데·양 끝) · 양 끝 어둡게
@@ -100,7 +102,9 @@ function palace(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: num
 }
 
 function villa(g: Ctx, m: WorldMap, cx: number, cy: number, px: number, py: number): void {
-  const [x0, y0, x1, y1] = extent(m, WT.villa, cx, cy);
+  const b = extent(m, WT.villa, cx, cy);
+  if (blockObj(g, "villa_helios", b, cx, cy, px, py, S)) return;
+  const [x0, y0, x1, y1] = b;
   if (cy < y1) {
     // 붉은 기와 지붕 (반원 기와 줄) · 위 끝 금 테
     const top = cy === y0 ? -5 : 0;

@@ -16,8 +16,8 @@ PLACES = ROOT / "apps/client/src/world/places"
 SOFT = ("grass", "flower", "tree", "rock")
 SOLID = {"water", "deep", "tree", "wall", "rock", "fence", "house", "keep", "innerWall", "factory", "pipe", "arena"}
 
-# 공장 (왼쪽 위, 7×4) — 첫째는 공방 (문 있음)
-FACTORIES = [(x, 26) for x in (76, 86, 96, 106, 148, 158, 168, 178)]
+# 공장 (왼쪽 위, 7×5) — 첫째는 공방 (문 있음)
+FACTORIES = [(x, 25) for x in (76, 86, 96, 106, 148, 158, 168, 178)]
 HOUSES = [(x, y) for y in (70, 77, 84) for x in [74, 80, 86, 92, 98, 104, 110, 134, 140, 146, 152, 158, 164, 170, 176]]
 COLO = (150, 126, 17, 10)  # 가운데 x, y · 반지름 가로·세로
 
@@ -81,8 +81,8 @@ def city(m):
     m.rect(116, 46, 140, 66, "floor")
     # 공장 · 문 앞 길
     for (x, y) in FACTORIES:
-        m.rect(x, y, x + 6, y + 3, "factory")
-        m.rect(x + 2, y + 4, x + 4, 37, "floor")
+        m.rect(x, y, x + 6, y + 4, "factory")
+        m.rect(x + 2, y + 5, x + 4, 37, "floor")
     # 파이프 (공장 지대와 아래 사이, 길·문 앞 길 자리는 비움)
     for x in range(72, 185):
         if m.get(x, 33) == "metal":
@@ -114,7 +114,7 @@ def write_layout():
     lines = [
         "// 생성됨: scripts/art/world_terra.py (손으로 고치지 않음) · 테라코어 필드 문·굴뚝 자리 (칸)",
         "export const TERRA_HOUSE_DOORS: readonly (readonly [number, number])[] = [" + ", ".join(f"[{x}, {y}]" for x, y in doors) + "];",
-        f"export const TERRA_WORKSHOP_DOOR = [{w[0] + 3}, {w[1] + 4}] as const;",
+        f"export const TERRA_WORKSHOP_DOOR = [{w[0] + 3}, {w[1] + 5}] as const;",
         "export const TERRA_CHIMNEYS: readonly (readonly [number, number])[] = [" + ", ".join(f"[{x + 1}, {y}]" for x, y in FACTORIES + [(96, 97)]) + "];",
         "",
     ]
@@ -126,7 +126,7 @@ def check(g):
     src = (PLACES / "terraField.ts").read_text(encoding="utf-8").split("TERRA_INSIDE")[0]
     pts = [(int(a), int(b)) for a, b in re.findall(r"tx: (\d+), ty: (\d+)", src)]
     bad = [p for p in pts if g[p[1]][p[0]] in SOLID]
-    for (x, y) in [(x + 1, y + 2) for (x, y) in HOUSES] + [(FACTORIES[0][0] + 3, FACTORIES[0][1] + 4)]:
+    for (x, y) in [(x + 1, y + 2) for (x, y) in HOUSES] + [(FACTORIES[0][0] + 3, FACTORIES[0][1] + 5)]:
         if g[y][x] in SOLID or g[y - 1][x] not in ("house", "factory"):
             bad.append((x, y))
     assert not bad, f"걸을 수 없는 장소 자리: {bad}"

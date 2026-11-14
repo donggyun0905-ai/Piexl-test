@@ -105,3 +105,22 @@ export function drawObj(g: CanvasRenderingContext2D, img: HTMLImageElement, foot
   const h = (img.naturalHeight / ART_DENS) * scale;
   g.drawImage(img, Math.round(footX - w / 2), Math.round(footY - h), w, h);
 }
+
+/** 건물 덩어리(x0~x1, y0~y1 칸)를 물건 그림 한 장으로 (덩어리 폭에 맞춤·너무 높으면 눌러 담음, 발 = 덩어리 아래, 위로 넘치는 지붕은 맨 위 칸이 그림)
+ * 칸마다 자기 몫만 잘라 그려서 큰 건물이 덩어리 경계에 걸려도 끊기지 않음 · 그림이 없으면 false (코드 그림) */
+export function blockObj(g: CanvasRenderingContext2D, name: string, b: readonly [number, number, number, number], cx: number, cy: number, px: number, py: number, S: number): boolean {
+  const img = obj(name);
+  if (!img) return false;
+  const [x0, y0, x1, y1] = b;
+  // 폭은 덩어리에 맞추고, 너무 높으면 덩어리 높이의 1.5배로 눌러 담음
+  const kx = img.naturalWidth / ((x1 - x0 + 1) * S);
+  const hb = (y1 + 1 - y0) * S;
+  const ky = Math.max(kx, img.naturalHeight / (hb * 1.5));
+  const imgTop = hb - img.naturalHeight / ky;
+  const lx = (cx - x0) * S;
+  const row = (cy - y0) * S;
+  const top = Math.max(cy === y0 ? Math.min(imgTop, 0) : row, imgTop);
+  const bot = row + S;
+  if (bot > top) g.drawImage(img, lx * kx, (top - imgTop) * ky, S * kx, (bot - top) * ky, px, py + top - row, S, bot - top);
+  return true;
+}

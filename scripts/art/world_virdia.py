@@ -94,6 +94,7 @@ def castle(m):
     m.rect(118, 28, 138, 33, "keep")
     m.rect(127, 34, 129, 40, "woodFloor")
     m.rect(120, 40, 136, 53, "woodFloor")
+    m.blob(128, 47, 7.6, "moss")
     m.rect(123, 43, 133, 50, "bigTree")
     m.rect(x0, 55, x1, 57, "woodFloor")
     m.rect(127, 62, 129, y1, "woodFloor")

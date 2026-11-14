@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.119",
+    date: "2026-11-14",
+    items: {
+      ko: ["세계 지도(시험 중): 땅·건물 그림 적용 — 아스칼론(길·모래·물·밭·돌바닥·눈·성벽·다리 · 바위·수풀·집·동굴·표지판) · 테라코어(철판 바닥·공장) · 비르디아(숲 바닥·세계수·나무 집) · 헬리오스(대리석·붉은 벽돌·금빛 돌바닥·황금 궁전·제국 집)", "그림 비율에 맞춰 건물 크기 조정: 헬리오스 궁전·제국 집 · 테라코어 공장 · 비르디아 세계수 둘레 숲 바닥"],
+      en: ["World Map (testing): ground and building art — Ascalon (roads, sand, water, fields, paving, snow, walls, bridges · rocks, bushes, houses, caves, signs) · Terracore (steel floor, factories) · Virdia (forest floor, World Tree, treehouses) · Helios (marble, red brick, gold-trimmed paving, Golden Palace, imperial homes)", "Building sizes adjusted to fit the art: Helios palace and homes · Terracore factories · forest floor around Virdia's World Tree"],
+      ja: ["世界地図（テスト中）：地面・建物の絵を適用 — アスカロン（道・砂・水・畑・石畳・雪・城壁・橋・岩・茂み・家・洞窟・看板）・テラコア（鉄板の床・工場）・ヴィルディア（森の床・世界樹・木の家）・ヘリオス（大理石・赤レンガ・金縁の石畳・黄金宮殿・帝国の家）", "絵の比率に合わせて建物の大きさを調整：ヘリオスの宮殿・帝国の家・テラコアの工場・ヴィルディアの世界樹まわりの森の床"],
+    },
+  },
+  {
     version: "0.52.118",
     date: "2026-11-14",
     items: {

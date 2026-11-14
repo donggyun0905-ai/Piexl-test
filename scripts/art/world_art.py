@@ -23,7 +23,7 @@ def src_of(kind, name):
     return SRC / "ascalon" / kind / f"{name}.png"
 
 
-TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge", "marble", "redBrick", "goldStone"]
+TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wallTop", "wallFace", "bridge", "marble", "redBrick", "goldStone", "metalFloor", "forestFloor"]
 TEX_PX = 256
 # 캐릭터 그림과 어울리게 색 맞춤 (채도·밝기 배율): 땅은 배경이라 더 차분하게
 TONE_TEX = (0.62, 0.92)
@@ -43,6 +43,12 @@ SHEETS = {
     "rocks": [("rock_big", "w", 68), ("rock_small", "w", 48), ("bush", "w", 52)],
     "houses": [("house_red", "w", 192), ("house_blue", "w", 192)],
     "places": [("cave", "w", 176), ("sign", "h", 72)],
+    # 큰 건물은 게임에서 건물 덩어리 폭에 맞춰 늘림 (여기 크기는 해상도)
+    # 이름이 None인 것은 아직 지도에 쓸 곳이 없어 만들지 않음 (게임이 받지 않게)
+    "palace": [("palace", "w", 1024), ("villa_helios", "w", 320), (None, "h", 256)],
+    "giantTrees": [("giant_tree", "w", 704), (None, "h", 480), (None, "w", 320)],
+    "elfCastle": [(None, "w", 1024), ("treehouse", "w", 192)],
+    "factories": [("factory", "w", 448), (None, "h", 320), (None, "w", 320)],
 }
 
 
@@ -84,7 +90,9 @@ def cut_background(img):
     edge = np.concatenate([a[0], a[-1], a[:, 0], a[:, -1]])
     bg = np.median(edge, axis=0)
     dist = np.sqrt(((a - bg) ** 2).sum(axis=2))
-    alpha = np.where(dist < 90, 0, 255).astype(np.uint8)
+    # 배경(마젠타)과 가깝거나, 빨강·파랑이 초록보다 훨씬 큰 분홍 테두리 픽셀은 지움
+    pink = (a[..., 0] - a[..., 1] > 70) & (a[..., 2] - a[..., 1] > 70)
+    alpha = np.where((dist < 90) | pink, 0, 255).astype(np.uint8)
     out = np.dstack([a.astype(np.uint8), alpha])
     return Image.fromarray(out, "RGBA")
 
@@ -137,6 +145,8 @@ def make_sheet(sheet, items):
         print(f"  ! {sheet}: 물건 {len(main)}개를 찾음 (기대 {len(items)}개) — 왼쪽부터 앞의 것만 씀", file=sys.stderr)
     done = []
     for (name, axis, px), b in zip(items, main):
+        if name is None:
+            continue
         part = img.crop((b[0], b[1], b[2], b[3]))
         r = px / (part.height if axis == "h" else part.width)
         size = (max(1, round(part.width * r)), max(1, round(part.height * r)))
