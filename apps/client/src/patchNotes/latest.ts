@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.52.105",
+    date: "2026-11-14",
+    items: {
+      ko: ["스토리 7장 컷 6~8 다시 그림: 천의 사도를 악의 사도와 같은 모습(은발·꽃 두건·십자가 지팡이)에 흰·금 사제복으로"],
+      en: ["Redrew Story Chapter 7 cuts 6–8: the Apostle of Heaven now matches the Apostle of Malice (silver hair, flowered hood, cross staff) in white and gold robes"],
+      ja: ["ストーリー第7章カット6〜8を描き直し：天の使徒を悪の使徒と同じ姿（銀髪・花のフード・十字架の杖）に白と金の法衣で"],
+    },
+  },
+  {
     version: "0.52.104",
     date: "2026-11-14",
     items: {
