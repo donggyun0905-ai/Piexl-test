@@ -2,13 +2,10 @@
 export const WORLD_HUNT_TEXT = {
   hgSlime: { ko: "슬라임 풀밭", en: "Slime Meadow", ja: "スライムの草原" },
   hgSlimeText: { ko: "말랑한 슬라임이 모여 사는 풀밭. 던전에 들어가기 전에 몸을 풀기 좋다. (J 휘두르기 · Shift 대시)", en: "A meadow where squishy slimes gather. A good warm-up before the dungeon. (J Swing · Shift Dash)", ja: "ぷにぷにのスライムが集まる草原。ダンジョンの前の腕慣らしにちょうどいい。（J 攻撃・Shift ダッシュ）" },
-  hgSlimeMob: { ko: "슬라임", en: "slimes", ja: "スライム" },
   hgOrc: { ko: "오크 부락", en: "Orc Camp", ja: "オークの集落" },
   hgOrcText: { ko: "모래바람 사이로 북소리가 울린다. 도끼를 든 하이오크들이 길목을 차지하고 있다. (J 휘두르기 · Shift 대시)", en: "Drums echo through the sandstorm. Axe-wielding high orcs hold the road. (J Swing · Shift Dash)", ja: "砂嵐の向こうで太鼓が鳴る。斧を持つハイオークが道をふさいでいる。（J 攻撃・Shift ダッシュ）" },
-  hgOrcMob: { ko: "하이오크", en: "high orcs", ja: "ハイオーク" },
   hgBone: { ko: "해골 전장", en: "Field of Bones", ja: "骸骨の戦場" },
   hgBoneText: { ko: "옛 싸움에서 쓰러진 병사들이 아직도 서성인다. 얼어붙은 뼈가 달그락거린다. (J 휘두르기 · Shift 대시)", en: "Soldiers fallen in an old battle still wander here, frozen bones rattling. (J Swing · Shift Dash)", ja: "昔の戦で倒れた兵士がいまもさまよう。凍った骨がカタカタと鳴る。（J 攻撃・Shift ダッシュ）" },
-  hgBoneMob: { ko: "해골 병사", en: "skeleton soldiers", ja: "骸骨兵" },
   qcHunt: { ko: "{place}에서 {mob} 잡기 {k}/{n}", en: "Defeat {mob} at {place} {k}/{n}", ja: "{place}で{mob}を倒す {k}/{n}" },
   qh1Title: { ko: "풀밭의 말랑이", en: "Squishies in the Meadow", ja: "草原のぷにぷに" },
   qh1Done: { ko: "슬라임 몇 마리에 진땀을 뺐다고? 괜찮아. 영웅들도 처음엔 다 그랬어. …아, 이건 적지 말아 달라고 했던가.", en: "A few slimes made you sweat? That's fine. Every hero started out that way. …Oh, they asked me not to write that down.", ja: "スライム数匹に冷や汗？大丈夫、英雄たちも最初はみんなそうだった。…あ、これは書かないでって言われてたっけ。" },

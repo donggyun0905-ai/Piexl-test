@@ -1,4 +1,4 @@
-import { CHARACTER_IDS, TD_MAPS, type CharacterId, type RunState, type SwarmMapId, type TdMapId } from "@pixel-rogue/shared";
+import { CHARACTER_IDS, TD_MAPS, type CharacterId, type LastBossKind, type RunState, type SwarmMapId, type TdMapId } from "@pixel-rogue/shared";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { noteScreen, screenNow } from "./select/CharArtWatch";
 import { ProfileScreen } from "./ProfileScreen";
@@ -9,10 +9,10 @@ import { ADMIN_PRACTICE, ADMIN_TD } from "./balance";
 import { useLang } from "./i18n";
 import { loadSavedRun, newSeedText, seedFromUrl, soloUnlocks } from "./records";
 import { TitleScreen } from "./TitleScreen";
-import { ArenaBoard, BattleScreen, BuildScreen, CoopScreen, DailyGame, GameScreen, HallOfFame, PwFlow, RaidFlow, ShopScreen, SoloGame, StoryScreen, SwarmGame, SwarmMaps, TdGame, TdScreen, TierScreen } from "./lazyScreens";
+import { ArenaBoard, BattleScreen, BuildScreen, CoopScreen, DailyGame, GameScreen, HallOfFame, BossTry, PwFlow, RaidFlow, ShopScreen, SoloGame, StoryScreen, SwarmGame, SwarmMaps, TdGame, TdScreen, TierScreen } from "./lazyScreens";
 
 type Screen =
-  | { name: "title" }
+  | { name: "title" } | { name: "bossTry"; boss: LastBossKind }
   | { name: "select"; endless?: boolean; arena?: boolean; hero?: boolean }
   | { name: "profile"; back: "title" | "daily" }
   | { name: "daily"; mode?: DailyMode }
@@ -48,7 +48,7 @@ const isCharacterId = (id: string): id is CharacterId => CHARACTER_IDS.includes(
 /** 브라우저 뒤로가기로 돌아갈 화면 (null = 게임 중이라 무시, 게임 안 메뉴로 나감) */
 function parentOf(screen: Screen): Screen | null {
   switch (screen.name) {
-    case "game":
+    case "game": case "bossTry":
     case "swarm":
     case "td":
     case "practice":
@@ -153,6 +153,7 @@ export function App() {
   if (screen.name === "swarmSelect") return <CharacterSelect t={lang.t} showSeed={false} onBack={toTitle} onSelect={(characterId) => setScreen({ name: "swarmMap", characterId })} />;
   if (screen.name === "swarmMap") return <SwarmMaps t={lang.t} onPick={(map, level) => setScreen({ name: "swarm", characterId: screen.characterId, map, level, runKey: 0 })} onBack={() => setScreen({ name: "swarmSelect" })} />;
   if (screen.name === "paewang") return <PwFlow lang={lang.lang} setLang={lang.setLang} t={lang.t} onExit={toTitle} />;
+  if (screen.name === "bossTry") return <BossTry boss={screen.boss} lang={lang.lang} t={lang.t} onExit={toTitle} />;
   if (screen.name === "raid") return <RaidFlow lang={lang.lang} setLang={lang.setLang} t={lang.t} onExit={toTitle} />;
   if (screen.name === "swarm") {
     const retry = () => setScreen({ ...screen, runKey: screen.runKey + 1 });
@@ -275,7 +276,7 @@ export function App() {
   return (
     <TitleScreen
       {...lang}
-      onStartSolo={(endless, arena, hero) => setScreen({ name: "select", endless, arena, hero })}
+      onStartSolo={(endless, arena, hero) => setScreen({ name: "select", endless, arena, hero })} onBossTry={(boss) => setScreen({ name: "bossTry", boss })}
       onDaily={() => setScreen({ name: "daily" })}
       onBattle={() => setScreen({ name: "battle" })}
       onCoop={() => setScreen({ name: "coop" })}

@@ -1,5 +1,5 @@
 import { uiSfxSoon } from "./audio/uiSounds";
-import { GAME_VERSION } from "@pixel-rogue/shared";
+import { GAME_VERSION, type LastBossKind } from "@pixel-rogue/shared";
 import { CodexPanel } from "./codex/CodexPanel";
 import { LobbyStage } from "./lobby/LobbyStage";
 import { Suspense, useEffect, useState } from "react";
@@ -31,6 +31,8 @@ interface Props {
   setLang: (lang: Lang) => void;
   t: (key: TextKey) => string;
   onStartSolo: (endless?: boolean, arena?: boolean, hero?: boolean) => void;
+  /** 지도 최종보스 입구 → 보스방 바로 (world/BossTry) */
+  onBossTry: (boss: LastBossKind) => void;
   onContinue: () => void;
   onDaily: () => void;
   onBattle: () => void;
@@ -54,7 +56,7 @@ interface Props {
 type Popup = "none" | "solo" | "events" | "archive" | "notes" | "achievements" | "records" | "codex";
 
 /** 메인 화면: 로고 · 닉네임 · 버튼 3개(플레이 · 아카이브 · 상점) · 위쪽 설정 · 기록·업적·도감·패치 노트·기기 연동은 아카이브 창 */
-export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily, onBattle, onCoop, onPractice, onTutorial, onTowerDefense, onProfile, onShop, onSwarm, onPaewang, onRaid, onStory, onTierList, onBuilds }: Props) {
+export function TitleScreen({ lang, setLang, t, onStartSolo, onBossTry, onContinue, onDaily, onBattle, onCoop, onPractice, onTutorial, onTowerDefense, onProfile, onShop, onSwarm, onPaewang, onRaid, onStory, onTierList, onBuilds }: Props) {
   const [popup, setPopup] = useState<Popup>("none");
   const [saved] = useState(loadSavedRun);
   const [best] = useState(loadBest);
@@ -90,6 +92,7 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
     else if (m === "battle") onBattle();
     else if (m === "coop") onCoop();
     else if (m === "events") setPopup("events");
+    else if (m.startsWith("boss:")) onBossTry(m.slice(5) as LastBossKind);
     else startNew(m === "endless", m === "arena", m === "hero");
   };
   if (prologue) return <Prologue t={t} onDone={() => (setPrologue(false), setFresh(true), TEST_OPEN ? setWorld(true) : setPopup("solo"))} />;

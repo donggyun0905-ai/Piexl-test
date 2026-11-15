@@ -23,3 +23,4 @@ export const TierScreen = lazy(() => import("./archive/TierScreen").then((m) => 
 export const WorldMode = lazy(() => import("./world/WorldMode").then((m) => ({ default: m.WorldMode })));
 export const LobbyMode = lazy(() => import("./lobby/LobbyMode").then((m) => ({ default: m.LobbyMode })));
 export const PatchNotesList = lazy(() => import("./menu/PatchNotesList").then((m) => ({ default: m.PatchNotesList })));
+export const BossTry = lazy(() => import("./world/BossTry").then((m) => ({ default: m.BossTry })));

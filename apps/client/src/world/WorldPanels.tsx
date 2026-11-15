@@ -1,6 +1,7 @@
 // 세계 지도 위에 뜨는 큰 창: 게임 상점(가게 주인) · 대장간 메뉴(레이드 장신구 장비창·승급·강화·재설정) · 장비창(B, 끼고 빼기만 · 승급·강화·재설정은 대장간에서) · 지도(M · 순간 이동석, 전체 지도 보기) · 캐릭터 고르기(C) · 모드 고르기(기억의 탑 무한 모드·영웅의 길, 콜로세움 패왕전)
 // 모두 Esc로 닫힘 (안쪽에 작은 창이 떠 있으면 그 창만 닫힘)
-import type { CharacterId } from "@pixel-rogue/shared";
+import type { CharacterId, LastBossKind } from "@pixel-rogue/shared";
+import { BossPanel } from "./BossPanel";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { CharacterSelect } from "../CharacterSelect";
 import { AccForge, type ForgeMode } from "../event/acc/AccForge";
@@ -13,9 +14,9 @@ import { ShopScreen, type ShopTab } from "../shop/ShopScreen";
 import { WorldMapModal } from "./WorldMapView";
 import type { Place } from "./worldPlaces";
 
-export type WorldPanel = { k: "shop"; tab: ShopTab } | { k: "smith" } | { k: "gear" } | { k: "map"; warp?: boolean } | { k: "char" } | { k: "gate"; gate: "tower" | "colosseum" | "arena" | "swarm" | "td" | "board" | "guild" };
+export type WorldPanel = { k: "shop"; tab: ShopTab } | { k: "smith" } | { k: "gear" } | { k: "map"; warp?: boolean } | { k: "char" } | { k: "gate"; gate: "tower" | "colosseum" | "arena" | "swarm" | "td" | "board" | "guild" } | { k: "boss"; boss: LastBossKind };
 /** 지도에서 들어가는 혼자 하기 종류 (장신구 없음, 메인 화면에서 들어간 것과 같음) */
-export type WorldRun = "solo" | "endless" | "hero" | "paewang" | "arena" | "swarm" | "td" | "daily" | "events" | "battle" | "coop";
+export type WorldRun = "solo" | "endless" | "hero" | "paewang" | "arena" | "swarm" | "td" | "daily" | "events" | "battle" | "coop" | `boss:${LastBossKind}`;
 
 /** 모드 고르는 곳: 기억의 탑(무한 모드·영웅의 길) · 콜로세움(패왕전) · 헬리오스 황제 석상(레이드 아레나) · 사막 태초의 신전(광야의 새벽) · 실베르 악마의 문 경비원(타워 디펜스) — 스토리에서 아직 안 열린 모드는 누를 수 없음 */
 const GATES = {
@@ -119,6 +120,7 @@ function GateMenu({ t, gate, onClose, onRun }: { t: (k: TextKey) => string; gate
 }
 
 export function WorldPanels({ panel, t, lang, onClose, onChar, onRun, map }: Props) {
+  if (panel.k === "boss") return <BossPanel t={t} boss={panel.boss} onClose={onClose} onGo={() => onRun(`boss:${panel.boss}`)} />;
   if (panel.k === "gate") return <GateMenu t={t} gate={panel.gate} onClose={onClose} onRun={onRun} />;
   if (panel.k === "map") return <WorldMapModal t={t} warp={panel.warp} onClose={onClose} {...map} />;
   if (panel.k === "gear") return <AccWindow t={t} onClose={onClose} forge={false} />;

@@ -11,7 +11,7 @@ import { here, warpTouched } from "./worldWarps";
 
 type T = (k: TextKey) => string;
 const MARK: Partial<Record<Place["kind"], string>> = { dungeon: "⚔", pass: "🚶", warp: "✨" };
-const GATE_MARK = { tower: "🗼", colosseum: "🏟", arena: "👑", swarm: "🏜", td: "🛡", board: "📋", guild: "⚔" } as const;
+const GATE_MARK = { tower: "🗼", colosseum: "🏟", arena: "👑", swarm: "🏜", td: "🛡", board: "📋", guild: "⚔", boss: "💀" } as const;
 
 interface ViewProps {
   t: T;

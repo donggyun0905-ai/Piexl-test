@@ -10,12 +10,16 @@ import type { TickInput } from "@pixel-rogue/shared";
 import type { DamageTracker } from "./damageNumbers";
 import { buildSummary, TakenTracker } from "./runSummary";
 import { noteRun } from "../codex/codexStore";
+import { isBossTry } from "./bossTryRuns";
 import { recordMedal } from "../medals/medals";
 import { recordModeMedal } from "../medals/modeMedals";
 import { createUnlockRun } from "../unlock/runStats";
 
 /** coop: 협동 인원 (같이 낸 기록을 최근 기록에 남김, 최고 기록·이어하기는 혼자 하기만) */
-export function createRunTracker(solo: boolean, seedText: string, run: RunState, onAchievement: (id: string) => void, coop = 0) {
+export function createRunTracker(soloRun: boolean, seedText: string, run: RunState, onAchievement: (id: string) => void, coop = 0) {
+  // 지도 최종보스 도전(game/bossTryRuns): 기록·업적·해금·일일 미션·누적에 넣지 않음 (보상은 world/BossTry)
+  const off = isBossTry(run);
+  const solo = soloRun && !off;
   const known = new Set(loadAchievements());
   /** 이 판 전까지의 누적 기록 (누적 업적은 이것 + 이번 판) */
   const career = loadCareer();
@@ -43,10 +47,10 @@ export function createRunTracker(solo: boolean, seedText: string, run: RunState,
     /** 틱을 진행한 프레임마다 */
     advance(): void {
       taken.observe(run);
-      unlock.observe();
+      if (!off) unlock.observe();
       noteRun(run);
       // 레이드 이벤트는 업적을 주지 않음 (999원·전용 패시브를 받고 시작함)
-      for (const id of run.raidBoss ? [] : achievedIn(run, career)) {
+      for (const id of run.raidBoss || off ? [] : achievedIn(run, career)) {
         if (known.has(id)) continue;
         known.add(id);
         earned.push(id);
@@ -68,9 +72,9 @@ export function createRunTracker(solo: boolean, seedText: string, run: RunState,
         finished = true;
         // 일일 미션 (혼자 하기·일일 도전)
         if (solo || run.sudden) recordRun(run);
-        unlock.finish();
+        if (!off) unlock.finish();
         // 레이드 아레나·패왕전은 누적 기록·최고 기록에 넣지 않음 (순위표는 따로)
-        if (!run.arenaLv && !run.pw && !run.pvp) addCareer(run);
+        if (!run.arenaLv && !run.pw && !run.pvp && !off) addCareer(run);
       }
       const score = computeScore(run);
       let newBest = false;

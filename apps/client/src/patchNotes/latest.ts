@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.55.0",
+    date: "2026-11-15",
+    items: {
+      ko: ["세계 지도(시험 중) 사냥터 24곳 (몬스터 종류마다 한 곳, 나라마다 둘) · 나라마다 던전 보스가 지키는 필드 보스 12곳 (5분 뒤 다시 나타남) · 뒤쪽 나라일수록 권장 투력과 몬스터가 강해짐 · 최종보스 입구 9곳 (스토리 자리: 아스칼론 파멸의 용 · 사막 신전 옆 태초의 빛과 어둠 · 사막 검은 잔영 · 헬리오스 갓이터 · 테라코어 괴력난신 · 성국 제천대성 · 해저 도시 레비아탄 · 지옥 켈베로스·아스모데우스의 화신체): F → 지도의 영웅과 낀 장신구로 7층 보스방에 바로 · 기록·순위에는 안 남고 잡으면 로비 칩 3,000과 1~2성 장신구 1~2개 · 퀘스트 종류: 메인 · 서브(사냥터·필드 보스·최종보스마다, 받으면 칩) · 긴급(하루 3개: 사냥 또는 나무 베기) · 나무 앞에서 F로 나무 베기 (3번 치면 1개, 잠시 그루터기) · 기록서에 메인·서브·긴급 탭 · Tab 창에 최종보스 입구 · 지도를 나갈 때 나던 오류 고침"],
+      en: ["World Map (testing): 24 hunting grounds (one per monster type, two per country) · 12 field bosses guarded by dungeon bosses (return after 5 minutes) · Recommended power and monster strength rise in later countries · 9 final boss gates at story locations (Dragon of Ruin in Ascalon, Primeval Light and Dark by the desert temple, Black Remnant in the desert, God Eater in Helios, Demigod of Wild Might in Terracore, Great Sage in Seongguk, Leviathan in the undersea city, Cerberus and the Avatar of Asmodeus in Hell): press F to go straight into the floor 7 boss chamber with your map hero and equipped trinkets · No records or rankings; a win gives 3,000 lobby chips and 1-2 trinkets (1-2 stars) · Quest types: Main · Side (one per hunting ground, field boss and final boss; claim chips) · Urgent (3 per day: hunting or tree chopping) · Press F in front of a tree to chop it (3 hits for 1 wood; leaves a stump for a while) · Main / Side / Urgent tabs in the Book of Records · Final boss gates in the Tab window · Fixed an error when leaving the map"],
+      ja: ["世界地図（テスト中）狩り場24か所（モンスターの種類ごとに1か所、国ごとに2つ）・ダンジョンのボスが守るフィールドボス12か所（5分後に再出現）・奥の国ほど推奨戦力とモンスターが強くなる・最終ボスの入口9か所（物語の場所：アスカロンに滅亡の竜・砂漠の神殿の横に太初の光と闇・砂漠に黒き残影・ヘリオスにゴッドイーター・テラコアに怪力乱神・聖国に斉天大聖・海底都市にリヴァイアサン・地獄にケルベロスとアスモデウスの化身）：Fで地図の英雄と装着中の装身具のまま7階のボス部屋へ・記録や順位には残らず、倒すとロビーチップ3,000と1〜2つ星の装身具1〜2個・クエストの種類：メイン・サブ（狩り場・フィールドボス・最終ボスごと、受け取るとチップ）・緊急（1日3つ：狩りか木こり）・木の前でFで木を切る（3回で1本、しばらく切り株）・記録書にメイン・サブ・緊急タブ・Tab画面に最終ボスの入口・地図を出るときのエラーを修正"],
+    },
+  },
+  {
     version: "0.54.1",
     date: "2026-11-15",
     items: {
@@ -19,78 +28,6 @@ export const NOTES: PatchNote[] = [
       ko: ["세계 지도(시험 중) 사냥터: 아스칼론 '슬라임 풀밭' · 대사막 '오크 부락' · 실베르 '해골 전장'에 몬스터가 모여 있음 (잡으면 15~30초 뒤 다시 나타남) · 지도에서 J 휘두르기 · Shift 대시 · 낀 레이드 장신구 능력치(공격·체력·방어·공격 속도·치명타·흡혈 등)가 그대로 들어감 · 쓰러지면 잠시 뒤 그 나라 처음 자리에서 일어남 · 사냥 퀘스트 3개가 메인 퀘스트 사이에 들어감 (이미 끝낸 퀘스트·연 모드는 그대로) · Tab 창에 사냥터와 권장 투력"],
       en: ["World Map (testing) hunting grounds: monsters gather at Ascalon's 'Slime Meadow', the Great Desert's 'Orc Camp' and Silber's 'Field of Bones' (they return 15-30 seconds after being defeated) · J to swing and Shift to dash on the map · Your equipped raid accessory stats (attack, HP, defense, attack speed, crits, lifesteal and more) apply as-is · If you fall, you get back up at the country's starting point after a moment · Three hunting quests now sit between the main quests (quests you've finished and modes you've opened stay as they are) · Hunting grounds and recommended power in the Tab window"],
       ja: ["世界地図（テスト中）狩り場：アスカロン『スライムの草原』・大砂漠『オークの集落』・シルベール『骸骨の戦場』にモンスターが集まる（倒すと15〜30秒後に再出現）・地図でJ 攻撃・Shift ダッシュ・装備中のレイドアクセサリーの能力（攻撃・体力・防御・攻撃速度・会心・吸血など）がそのまま適用・倒れると少しして、その国の最初の場所で起き上がる・狩りクエスト3つがメインクエストの間に追加（終えたクエストや開いたモードはそのまま）・Tab画面に狩り場と推奨戦力"],
-    },
-  },
-  {
-    version: "0.53.21",
-    date: "2026-11-15",
-    items: {
-      ko: ["세계 지도(시험 중): 사람에게 말 거는 거리를 조금 넓힘 · 할 일 장소가 다른 나라에 있으면 몇 나라를 건너도 그쪽 국경 길·문을 화살표로 안내 (예: 실베르에서 무한 모드 → 아스칼론 기억의 탑 쪽 길) · 지도가 있는 곳에서는 메인 화면의 '○장이 열렸습니다' 알림을 띄우지 않음 (이야기는 지도에서 보여 줌) · Tab: 한눈에 보기 창 (지금 퀘스트·진행·콘텐츠마다 열림/잠김과 있는 곳·갈 수 있는 나라·조작 키)"],
-      en: ["World Map (testing): slightly longer reach for talking to people · When your goal is in another country, the arrow now points to the right border road or door even several countries away (e.g. from Silber to Ascalon's Tower of Memory for Endless Mode) · Where the map is available, the 'Chapter N unlocked' notice no longer appears on the main screen (the story is shown on the map) · Tab: an Overview window (current quest, progress, each content's open/locked state and location, countries you can visit, controls)"],
-      ja: ["世界地図（テスト中）：人に話しかけられる距離を少し広げた・目的の場所が別の国なら、いくつ国をまたいでもその方向の国境の道や扉を矢印で案内（例：シルベールからエンドレスモード→アスカロンの記憶の塔への道）・地図がある所ではメイン画面の『第N章が開きました』通知を出さない（物語は地図で表示）・Tab：ひと目で見る画面（いまのクエスト・進行・コンテンツごとの開放/ロックと場所・行ける国・操作キー）"],
-    },
-  },
-  {
-    version: "0.53.20",
-    date: "2026-11-15",
-    items: {
-      ko: ["퀘스트 진행·프롤로그·아지트 안내를 서버에도 백업 (기기 연동·브라우저 저장소를 지워도 남음) · 세계 지도: 가야 할 곳이 화면 밖이면 화면 가장자리에 금빛 화살표 · 다른 나라·건물이면 그쪽으로 가는 국경 길·문을 가리킴 · 아지트 물건 앞 버튼 글자(영웅 고르기·열기·펼치기·들어가기) · 퀘스트를 끝낸 뒤 이야기 장면 위에 로딩 화면이 겹쳐 보이던 문제 고침"],
-      en: ["Quest progress, the prologue and the hideout guide are now backed up to the server too (kept across linked devices and cleared browser storage) · World map: a golden arrow at the screen edge when your destination is off-screen · Points to the border road or door leading there when it's in another country or building · Clearer button labels on hideout objects (Choose a hero, Open, Read, Enter) · Fixed the loading screen overlapping the story scene after finishing a quest"],
-      ja: ["クエスト進行・プロローグ・アジト案内をサーバーにもバックアップ（端末連携やブラウザの保存データを消しても残る）・世界地図：行き先が画面外なら画面の端に金色の矢印・別の国や建物ならそこへ向かう国境の道や扉を指す・アジトの物の前のボタン表記（英雄を選ぶ・開ける・開く・入る）・クエスト完了後に物語の場面へロード画面が重なって見える問題を修正"],
-    },
-  },
-  {
-    version: "0.53.19",
-    date: "2026-11-15",
-    items: {
-      ko: ["세계 지도(시험 중) 아스칼론에 광장 게시판(일일 도전·이벤트)과 모험가 집합소(함께 하기·협동) · 퀘스트 '날마다 적히는 이야기'는 게시판에 가면 끝남 · 지도가 있는 곳에서는 플레이 창의 일일·함께·협동·이벤트·로비가 지도 속 장소로 옮겨감"],
-      en: ["World Map (testing): a plaza notice board (Daily Challenge, Events) and the Adventurers' Guild (Play Together, Co-op) in Ascalon · The quest 'A Story Written Daily' completes at the board · Where the map is available, Daily, Play Together, Co-op, Events and Lobby move from the Play window to places on the map"],
-      ja: ["世界地図（テスト中）アスカロンに広場の掲示板（デイリーチャレンジ・イベント）と冒険者ギルド（みんなで遊ぶ・協力プレイ）・クエスト『日々綴られる物語』は掲示板へ行くと完了・地図がある所ではプレイ画面のデイリー・みんなで・協力・イベント・ロビーが地図の場所へ移動"],
-    },
-  },
-  {
-    version: "0.53.18",
-    date: "2026-11-15",
-    items: {
-      ko: ["세계 지도(시험 중) 메인 퀘스트: 퀘스트를 하나씩 끝내며 이야기 장과 모드가 차례로 열림 (로그 시작 → 영웅의 길 → 무한 모드 → 레이드 아레나 → 타워 디펜스 → 일일 도전·이벤트 → 광야의 새벽 → 패왕전) · 오른쪽 위 지금 할 일 · 가야 할 곳에 금빛 화살표 · 끝내면 '기록됨' 도장과 서기관 한마디, 새 장이면 그 장 이야기 · 아지트 기록서에서 퀘스트 목록·이야기 다시 보기 · 이미 하던 사람은 모든 모드가 열린 채로 이야기만 진행"],
-      en: ["World Map (testing) main quests: finish quests one by one to open story chapters and modes in order (Dungeon → Hero's Path → Endless Mode → Raid Arena → Tower Defense → Daily Challenge & Events → Dawn of the Wilds → Champion Clash) · Current goal at top right · Golden arrow over where to go · A 'Recorded' stamp and a word from the Scribe when done, plus the new chapter's story · Quest list and story replay in the hideout's Book of Records · Existing players keep every mode open and just follow the story"],
-      ja: ["世界地図（テスト中）メインクエスト：クエストをひとつずつ終えると物語の章とモードが順に開く（ダンジョン→英雄の道→エンドレスモード→レイドアリーナ→タワーディフェンス→デイリーチャレンジ・イベント→荒野の夜明け→覇王戦）・右上にいまの目標・行き先に金色の矢印・終えると『記録済み』の判子と書記官のひとこと、新しい章ならその物語・アジトの記録書でクエスト一覧と物語の読み返し・既存プレイヤーはすべてのモードが開いたまま物語だけ進行"],
-    },
-  },
-  {
-    version: "0.53.17",
-    date: "2026-11-15",
-    items: {
-      ko: ["세계 지도(시험 중) 새 아지트 '기록의 다락방': 프롤로그가 끝나면 여기서 눈뜸 · 서기관이 거울(캐릭터 고르기)·장비 상자·기록서(이야기 다시 보기)·오락실 문·나가는 문을 화살표로 하나씩 안내 · 나가면 마지막에 있던 나라로 · 지도 위 '아지트' 버튼으로 언제든 돌아옴 · 다시 들어오면 마지막에 있던 곳에서 시작"],
-      en: ["World Map (testing) new hideout, the Attic of Records: you wake up here after the prologue · The Scribe guides you with arrows to the mirror (choose a hero), gear chest, Book of Records (reread the story), arcade door and exit · Leaving takes you to the last country you were in · Return anytime with the 'Hideout' button · Coming back resumes where you last were"],
-      ja: ["世界地図（テスト中）新しいアジト『記録の屋根裏部屋』：プロローグの後ここで目覚める・書記官が鏡（英雄選び）・装備の箱・記録書（物語を読み返す）・ゲームセンターの扉・出口を矢印でひとつずつ案内・出ると最後にいた国へ・地図の『アジト』ボタンでいつでも戻れる・再び入ると最後にいた場所から"],
-    },
-  },
-  {
-    version: "0.53.16",
-    date: "2026-11-15",
-    items: {
-      ko: ["프롤로그: 처음 플레이를 누르면 검은 화면에서 서기관이 이야기를 들려주고 이름을 물어봄 (닉네임으로 저장) · 세계 지도 들어갈 때 새 로딩 화면"],
-      en: ["Prologue: the first time you press Play, the Scribe speaks to you in the dark and asks your name (saved as your nickname) · New loading screen when entering the world map"],
-      ja: ["プロローグ：初めてプレイを押すと、暗闇の中で書記官が語りかけ名前を尋ねる（ニックネームとして保存）・世界地図に入るときの新しいロード画面"],
-    },
-  },
-  {
-    version: "0.53.15",
-    date: "2026-11-15",
-    items: {
-      ko: ["메인 화면 정리: 버튼은 플레이 · 아카이브 · 상점 셋만 · 기록·업적·도감·패치 노트·기기 연동은 아카이브 창으로 · 일일 도전·함께 하기·협동·이벤트·로비는 플레이 창 안으로 (세계 지도 장소가 생기면 옮길 예정)"],
-      en: ["Cleaner main screen: only Play, Archive and Shop · Records, Achievements, Codex, Patch Notes and Link devices moved into the Archive window · Daily Challenge, Play Together, Co-op, Events and Lobby moved into the Play window (they will move to places on the world map later)"],
-      ja: ["メイン画面を整理：ボタンはプレイ・アーカイブ・ショップの3つだけ・記録・実績・図鑑・パッチノート・端末連携はアーカイブ画面へ・デイリーチャレンジ・みんなで遊ぶ・協力プレイ・イベント・ロビーはプレイ画面の中へ（後で世界地図の場所へ移す予定）"],
-    },
-  },
-  {
-    version: "0.53.14",
-    date: "2026-11-15",
-    items: {
-      ko: ["범 풍류 스킨 새 그림 (파수꾼·떠돌이·마법사·음양사·기계공학자·원소술사·격투가·의사): 한복·백호 옷의 새 걷기·공격·맞음·쓰러짐·대시 그림 · 입으면 캐릭터 선택 카드와 정보 창에 스킨 일러스트"],
-      en: ["New Tiger Revelry skin art (Warden, Drifter, Mage, Talisman Master, Engineer, Elementalist, Brawler, Doctor): new hanbok and white-tiger outfits with walk, attack, hit, down and dash frames · wearing one shows its skin illustration on the character select card and info window"],
-      ja: ["虎の風流スキンの新しい絵（番人・流れ者・魔法使い・陰陽師・エンジニア・元素術師・格闘家・医者）：韓服と白虎の衣装で歩き・攻撃・被弾・ダウン・ダッシュの新しい絵・着るとキャラクター選択カードと情報ウィンドウにスキンのイラスト"],
     },
   },
 ];

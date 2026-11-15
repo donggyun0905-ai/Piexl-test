@@ -91,3 +91,55 @@
   width: 100%;
   margin-top: 6px;
 }
+/* 기록서 탭 (메인·서브·긴급, world/QuestTabs) */
+.quest-tabs {
+  display: flex;
+  gap: 6px;
+}
+.quest-tabs button {
+  flex: 1;
+  padding: 6px 8px;
+}
+.quest-subs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 46vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.quest-subs li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 6px;
+  border-left: 2px solid #4a4062;
+}
+.quest-subs li.now {
+  border-left-color: #8fe08f;
+}
+.quest-subs li.done {
+  opacity: 0.55;
+}
+.quest-subs small.met {
+  color: #8fe08f;
+}
+.q-reward {
+  flex: none;
+  font-size: 12px;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+/* 최종보스 입구 창 (world/BossPanel) · 보스 도전 결과 (world/BossTry) */
+.boss-gate p.ok,
+.boss-result .ok {
+  color: var(--ok);
+}
+.boss-gate p.bad {
+  color: var(--bad);
+}

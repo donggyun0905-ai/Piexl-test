@@ -108,7 +108,8 @@ export interface Drawable {
 }
 
 /** 화면에 걸친 나무들 (아래로 삐져나온 것까지) → 앞뒤 순서 목록에 넣음 · 한 방향 그림자는 shadows (모든 것보다 먼저 그림) */
-export function pushTrees(ctx: CanvasRenderingContext2D, m: WorldMap, v: View, t: number, out: Drawable[], shadows: (() => void)[]): void {
+/** stump: 벤 나무(그루터기로 그림) · shake: 맞은 나무 흔들림(초) (woodcut) */
+export function pushTrees(ctx: CanvasRenderingContext2D, m: WorldMap, v: View, t: number, out: Drawable[], shadows: (() => void)[], stump?: (cx: number, cy: number) => boolean, shake?: (cx: number, cy: number) => number): void {
   const sp = treeSprites();
   const x0 = Math.max(0, Math.floor(v.x / WTILE) - 1);
   const x1 = Math.min(m.cols - 1, Math.ceil((v.x + v.w) / WTILE) + 1);
@@ -118,6 +119,10 @@ export function pushTrees(ctx: CanvasRenderingContext2D, m: WorldMap, v: View, t
     for (let cx = x0; cx <= x1; cx++) {
       const tt = tileAt(m, cx, cy);
       if (tt !== WT.tree && tt !== WT.snowPine) continue;
+      if (stump?.(cx, cy)) {
+        out.push({ y: (cy + 1) * WTILE - 2, draw: () => drawStump(ctx, (cx + 0.5) * WTILE, (cy + 1) * WTILE - 3) });
+        continue;
+      }
       const art = tt === WT.snowPine ? SNOW_ART : TREE_ART;
       const h = hash2(cx, cy);
       // 숲 속(둘레가 다 나무)은 뾰족 나무가 많게
@@ -127,14 +132,15 @@ export function pushTrees(ctx: CanvasRenderingContext2D, m: WorldMap, v: View, t
       const img = objOf(art[kind]!) ?? objOf(art[kind ^ 1]!);
       const fx = (cx + 0.5) * WTILE + ((h >>> 9) % 5) - 2;
       const fy = (cy + 1) * WTILE - 2 - ((h >>> 13) % 3);
-      const sway = Math.round(gust(t, fx) * 0.8);
+      const hit = shake?.(cx, cy) ?? 0;
+      const sway = Math.round(gust(t, fx) * 0.8 + (hit > 0 ? Math.sin(hit * 80) * 2 : 0));
       const left = Math.round(fx - FOOT_X);
       const top = Math.round(fy - FOOT_Y);
       if (img) {
         // 그림 파일: 아래 30%(줄기)는 그대로, 위는 띠마다 흔들림
         const w = img.naturalWidth / ART_DENS;
         const hh = img.naturalHeight / ART_DENS;
-        const l = Math.round(fx - w / 2);
+        const l = Math.round(fx - w / 2 + (hit > 0 ? Math.sin(hit * 80) * 2 : 0));
         const tp = Math.round(fy - hh);
         shadows.push(() => castShadow(ctx, img, fx, fy, w, hh));
         out.push({ y: fy, draw: () => drawSway(ctx, img, l, tp, w, hh, t, 1.6) });
@@ -150,4 +156,14 @@ export function pushTrees(ctx: CanvasRenderingContext2D, m: WorldMap, v: View, t
       });
     }
   }
+}
+
+/** 그루터기 (벤 나무) */
+function drawStump(ctx: CanvasRenderingContext2D, x: number, y: number): void {
+  ctx.fillStyle = "rgba(0,0,0,0.25)";
+  ctx.fillRect(Math.round(x - 6), Math.round(y), 12, 2);
+  ctx.fillStyle = "#6b4426";
+  ctx.fillRect(Math.round(x - 4), Math.round(y - 4), 8, 5);
+  ctx.fillStyle = "#c79a5a";
+  ctx.fillRect(Math.round(x - 3), Math.round(y - 5), 6, 2);
 }

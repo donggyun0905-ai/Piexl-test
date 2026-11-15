@@ -1,9 +1,11 @@
 // 세계 지도 퀘스트 화면 (docs/QUEST.md 5절, 표 progress/quests): 오른쪽 위 지금 할 일 한 줄 · 가야 할 곳 화살표(questMark) · 끝내면 '기록됨' 도장 + 서기관 한마디
-// 기록서(아지트 책상): 끝낸 퀘스트 · 지금 퀘스트 · 지금까지의 이야기 다시 보기 (Esc로 닫힘)
-import { useEffect } from "react";
+// 기록서(아지트 책상): 탭 메인(끝낸 퀘스트 · 지금 퀘스트) · 서브 · 긴급(world/QuestTabs) · 지금까지의 이야기 다시 보기 (Esc로 닫힘)
+import { useEffect, useState } from "react";
+import { DailyList, SubList } from "./QuestTabs";
 import type { TextKey } from "../i18n";
 import { activeQuest, condMet, killsAt, questIds, questMode, questOpening } from "../progress/quest";
 import { groundById } from "./hunt/huntGrounds";
+import { mobName } from "./hunt/huntNames";
 import { FEATURE_STAGE, type Feature } from "../progress/storyStage";
 import { QUESTS, type QuestCond } from "../progress/quests";
 import { StoryFace } from "../story/StoryFace";
@@ -40,7 +42,7 @@ export function condText(t: T, c: QuestCond, cur: string, regionName: (id: strin
   if ("leave" in c) return t("qcLeave");
   if ("hunt" in c) {
     const g = groundById(c.hunt);
-    return t("qcHunt").replace("{place}", g ? t(g.name) : "?").replace("{mob}", g ? t(g.mob) : "?").replace("{k}", String(Math.min(c.n, killsAt(c.hunt)))).replace("{n}", String(c.n));
+    return t("qcHunt").replace("{place}", g ? t(g.name) : "?").replace("{mob}", g ? mobName(g) : "?").replace("{k}", String(Math.min(c.n, killsAt(c.hunt)))).replace("{n}", String(c.n));
   }
   if ("lastBoss" in c) return t("qcLastBoss");
   const [k, n] = "floor" in c ? (["qcFloor", c.floor] as const) : "wins" in c ? (["qcWins", c.wins] as const) : "hero" in c ? (["qcHero", c.hero] as const) : (["qcEndless", c.endless] as const);
@@ -107,11 +109,21 @@ export function QuestBook({ t, cur, regionName, onStory, onClose }: { t: T; cur:
   });
   const done = questIds();
   const i = activeQuest();
+  const [tab, setTab] = useState<"main" | "sub" | "daily">("main");
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal quest-book" role="dialog" aria-modal="true" aria-label={t("wpAtticDesk")} onClick={(e) => e.stopPropagation()}>
         <h2>{t("wpAtticDesk")}</h2>
-        <ol>
+        <div className="quest-tabs">
+          {(["main", "sub", "daily"] as const).map((k) => (
+            <button key={k} type="button" className={tab === k ? "selected" : ""} onClick={() => setTab(k)}>
+              {t(k === "main" ? "qTabMain" : k === "sub" ? "qTabSub" : "qTabDaily")}
+            </button>
+          ))}
+        </div>
+        {tab === "sub" && <SubList t={t} regionName={regionName} />}
+        {tab === "daily" && <DailyList t={t} />}
+        {tab === "main" && <ol>
           {QUESTS.map((q, k) =>
             done.includes(q.id) ? (
               <li key={q.id} className="done">
@@ -133,7 +145,7 @@ export function QuestBook({ t, cur, regionName, onStory, onClose }: { t: T; cur:
           ) : (
             <li className="now">{t("qBookAll")}</li>
           )}
-        </ol>
+        </ol>}
         <button type="button" className="primary" onClick={onStory}>
           {t("qBookStory")}
         </button>

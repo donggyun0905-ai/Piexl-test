@@ -47,7 +47,16 @@ function load(): QState {
   const ids = [...new Set([...(v.ids ?? []), ...old.map(String)])];
   return { ids, fin: v.fin, visits: v.visits ?? [], flags: v.flags ?? [], kills: v.kills ?? {}, done: firstOpen(ids) };
 }
-const save = (s: QState) => saveText(KEY, JSON.stringify({ ids: s.ids, ...(s.fin ? { fin: s.fin } : {}), visits: s.visits, flags: s.flags, kills: s.kills }));
+/** 저장본 그대로 (다른 묶음 side: progress/sideQuests가 같이 씀 → 저장할 때 지우지 않음) */
+export function rawQuests(): Record<string, unknown> {
+  try {
+    return (JSON.parse(loadText(KEY) ?? "null") as Record<string, unknown> | null) ?? {};
+  } catch {
+    return {};
+  }
+}
+export const saveQuestPart = (k: string, v: unknown) => saveText(KEY, JSON.stringify({ ...rawQuests(), [k]: v }));
+const save = (s: QState) => saveText(KEY, JSON.stringify({ ...rawQuests(), ids: s.ids, ...(s.fin ? { fin: s.fin } : {}), visits: s.visits, flags: s.flags, kills: s.kills }));
 
 export const hasFlag = (f: string): boolean => load().flags.includes(f);
 export function setFlag(f: string): void {

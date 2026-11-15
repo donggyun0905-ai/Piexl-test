@@ -1,7 +1,7 @@
 // 장소 표의 틀: 지도 그림 파일 · 처음 서는 자리 · 마을·던전 입구·표지판·문·가구·순간 이동석 (칸 좌표) — 지도 모양은 scripts/art/world_map.py
 // 문(door) → 건물 안 지도(같은 표의 다른 Region) · 나가는 문(exit) → 들어온 문 앞으로 · 나라마다 장소는 places/
 // 지도 그림을 고치면 places/ 좌표도 같이 맞춤
-import type { CharacterId } from "@pixel-rogue/shared";
+import type { CharacterId, LastBossKind } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 import type { FactionId } from "../story/storyData";
 import { factionOpen } from "../progress/storyStage";
@@ -29,6 +29,8 @@ import { PROPS } from "./places/propsLayout";
 import { DECO_R, type DecoArt } from "./worldDeco";
 import { WTILE } from "./worldMap";
 import { groundsIn } from "./hunt/huntGrounds";
+import { gatesIn } from "./bossGates";
+import { BOSS_TEXT } from "../i18n/enemies";
 import type { Mood } from "./worldMood";
 
 /** npc = 말 거는 사람 (부딪힘) · door = 건물 문(들어가기) · exit = 건물 안 나가는 문 · deco = 가구 (부딪힘, 말 못 검) · warp = 순간 이동석 · pass = 국경 통로(다른 나라 필드로, 그 나라가 스토리에서 열렸을 때만) */
@@ -55,7 +57,9 @@ export interface Place {
   to?: string;
   art?: DecoArt;
   /** dungeon: tower = 기억의 탑 (무한 모드·영웅의 길 고르는 창) · colosseum = 콜로세움 (패왕전) · arena = 헬리오스 광장 황제 석상 (레이드 아레나) · swarm = 사막 태초의 신전 (광야의 새벽) · td = 실베르 악마의 문 경비원 (타워 디펜스, 주민에게 붙임) · 없으면 기본 혼자 하기 */
-  gate?: "tower" | "colosseum" | "arena" | "swarm" | "td" | "board" | "guild";
+  gate?: "tower" | "colosseum" | "arena" | "swarm" | "td" | "board" | "guild" | "boss";
+  /** gate boss: 지도 최종보스 입구 (world/bossGates) */
+  boss?: LastBossKind;
   /** pass: 건너간 나라에서 설 칸 */
   land?: readonly [number, number];
   /** npc: 말 걸면 여는 창 (대사 대신) */
@@ -94,10 +98,10 @@ export interface Region {
 export const skinOf = (r: Region): Readonly<Record<string, string>> | undefined => (r.indoor ? { ...INDOOR_SKIN, ...r.skin } : r.skin);
 
 /** 나라 필드에 길가 가로등·집 앞 소품 더하기 (생성기 world_props가 쓴 표) */
-/** + 사냥터 표지판 (사냥터 서쪽 끝, id = 사냥터 id · 퀘스트 화살표 목적지, world/hunt/huntGrounds) */
+/** + 사냥터 표지판 (사냥터 서쪽 끝, id = 사냥터 id · 퀘스트 화살표 목적지, world/hunt/huntGrounds) · 최종보스 입구 (world/bossGates) */
 const withProps = (id: string, r: Region): Region => ({
   ...r,
-  places: [...r.places, ...(PROPS[id] ?? []).map(([art, tx, ty], i): Place => ({ id: `street${i}`, kind: "deco", tx, ty, name: r.places[0]!.name, art })), ...groundsIn(id).map((g): Place => ({ id: g.id, kind: "sign", tx: g.tx - g.rad - 1, ty: g.ty, name: g.name }))],
+  places: [...r.places, ...(PROPS[id] ?? []).map(([art, tx, ty], i): Place => ({ id: `street${i}`, kind: "deco", tx, ty, name: r.places[0]!.name, art })), ...groundsIn(id).map((g): Place => ({ id: g.id, kind: "sign", tx: g.tx - g.rad - 1, ty: g.ty, name: g.name, ...(g.line ? { line: g.line } : {}) })), ...gatesIn(id).map((g): Place => ({ id: `boss_${g.boss}`, kind: "dungeon", tx: g.tx, ty: g.ty, name: BOSS_TEXT[g.boss] as TextKey, gate: "boss", boss: g.boss }))],
 });
 
 /** 나라 필드 · 건물 안 (장소 표는 places/ 나라마다) */
@@ -116,7 +120,7 @@ export const REGIONS: Record<string, Region> = {
   thalassia: withProps("thalassia", THAL_FIELD),
   ...THAL_INSIDE,
   ...DAWN_INSIDE,
-  hell: HELL_FIELD,
+  hell: withProps("hell", HELL_FIELD),
   undersea: withProps("undersea", UNDERSEA_FIELD),
   ...UNDERSEA_INSIDE,
   cyber: withProps("cyber", CYBER_FIELD),

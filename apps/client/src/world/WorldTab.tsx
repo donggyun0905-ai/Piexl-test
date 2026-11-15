@@ -8,6 +8,10 @@ import { featureOpen, LAST_STAGE, storyStage, type Feature } from "../progress/s
 import { condText, lockText, questTitle } from "./QuestHud";
 import { fieldOpen, isField, REGIONS } from "./worldPlaces";
 import { HUNT_GROUNDS } from "./hunt/huntGrounds";
+import { mobName } from "./hunt/huntNames";
+import { BOSS_GATES } from "./bossGates";
+import { BOSS_TEXT } from "../i18n/enemies";
+import { bossWon } from "../progress/subQuests";
 
 type T = (k: TextKey) => string;
 /** 콘텐츠: 이름 · 있는 곳(장소 이름·지역) */
@@ -84,8 +88,25 @@ export function WorldTab({ t, cur, regionName, onClose }: { t: T; cur: string; r
           <ul className="world-tab-modes">
             {HUNT_GROUNDS.map((g) => (
               <li key={g.id} className={fieldOpen(REGIONS[g.region]) ? "open" : "locked"}>
-                <b>{t(g.name)}</b>
-                <small>{t("tabHuntRow").replace("{region}", regionName(g.region)).replace("{mob}", t(g.mob)).replace("{n}", String(g.power))}</small>
+                <b>
+                  {g.boss ? "👑 " : ""}
+                  {t(g.name)}
+                </b>
+                <small>{t("tabHuntRow").replace("{region}", regionName(g.region)).replace("{mob}", mobName(g)).replace("{n}", g.power.toLocaleString())}</small>
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section>
+          <h3>💀 {t("tabBoss")}</h3>
+          <ul className="world-tab-modes">
+            {BOSS_GATES.map((g) => (
+              <li key={g.boss} className={fieldOpen(REGIONS[g.region]) ? "open" : "locked"}>
+                <b>
+                  {bossWon(g.boss) ? "✓ " : ""}
+                  {t(BOSS_TEXT[g.boss] as TextKey)}
+                </b>
+                <small>{t("tabHuntRow").replace("{region}", regionName(g.region)).replace("{mob}", "💀").replace("{n}", g.power.toLocaleString())}</small>
               </li>
             ))}
           </ul>

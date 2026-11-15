@@ -20,6 +20,7 @@ import { here } from "./worldWarps";
 import { pushTrees, type Drawable } from "./worldTrees";
 import { hitsNpc, nearPlace, placeXY, skinOf, type Place, type Region } from "./worldPlaces";
 import { createHuntLayer } from "./hunt/huntLayer";
+import { createWoodcut } from "./woodcut";
 
 /** 걷는 속도 (로비보다 조금 빠름: 필드가 넓어서) */
 const SPEED = 80;
@@ -45,6 +46,8 @@ interface Props {
   mark?: string | null;
   /** 사냥터 몬스터를 잡음 (사냥터 id) */
   onKill?: (g: string) => void;
+  /** 나무를 하나 벰 (woodcut) */
+  onWood?: () => void;
 }
 
 function loadPos(regionId: string): [number, number] | null {
@@ -56,13 +59,13 @@ function loadPos(regionId: string): [number, number] | null {
   }
 }
 
-export function WorldStage({ regionId, region, color, who, label, paused, onNear, onUse, onLoaded, spawn, mark, onKill }: Props) {
+export function WorldStage({ regionId, region, color, who, label, paused, onNear, onUse, onLoaded, spawn, mark, onKill, onWood }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
-  const cb = useRef({ who, label, paused, onNear, onUse, onLoaded, mark, onKill });
+  const cb = useRef({ who, label, paused, onNear, onUse, onLoaded, mark, onKill, onWood });
   // 들어온 자리(spawn)는 처음 그릴 때만 씀 (지역이 바뀌면 key로 새로 만듦)
   const spawnAt = useRef(spawn);
   useEffect(() => {
-    cb.current = { who, label, paused, onNear, onUse, onLoaded, mark, onKill };
+    cb.current = { who, label, paused, onNear, onUse, onLoaded, mark, onKill, onWood };
   });
 
   useEffect(() => {
@@ -90,7 +93,13 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       },
       () => alive && cb.current.onLoaded?.(false),
     );
-    const input = bindWalkInput(canvas, me, view, () => !!map && !cb.current.paused, () => near && cb.current.onUse(near));
+    // F: 장소가 가까우면 쓰기, 아니면 (필드에서) 나무 베기
+    const wood = region.indoor ? null : createWoodcut();
+    const useOrChop = () => {
+      if (near) return cb.current.onUse(near);
+      if (map && wood?.chop(map, me.x, me.y, me.fx, me.fy, performance.now()) === "got") cb.current.onWood?.();
+    };
+    const input = bindWalkInput(canvas, me, view, () => !!map && !cb.current.paused, useOrChop);
     // 사냥터 (J 휘두르기 · Shift·K 대시)
     const hunt = createHuntLayer(regionId, me, input.keys, () => cb.current.who, () => !!map && !cb.current.paused, (g) => cb.current.onKill?.(g));
     let last = performance.now();
@@ -104,6 +113,11 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       last = now;
       const t = now / 1000;
       const { cw, ch, dpr } = fitCanvas(canvas);
+      // 화면에서 빠지는 중(크기 0)이면 그리지 않음 (0으로 나누면 좌표가 NaN)
+      if (cw <= 0 || ch <= 0) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
       const scale = Math.max(cw / 300, ch / 180);
       view.w = cw / scale;
       view.h = ch / scale;
@@ -144,7 +158,7 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         const near2 = (p: Place) => Math.abs(placeXY(p)[0] - (view.x + view.w / 2)) < view.w / 2 + 64 && Math.abs(placeXY(p)[1] - (view.y + view.h / 2)) < view.h / 2 + 96;
         const items: Drawable[] = region.places.filter(near2).map((p) => ({ y: placeXY(p)[1] + foot(p), draw: () => drawPlace(ctx, p, t, color) }));
         const shadows: (() => void)[] = [];
-        pushTrees(ctx, m, view, t, items, shadows);
+        pushTrees(ctx, m, view, t, items, shadows, wood ? (cx, cy) => wood.stump(cx, cy, now) : undefined, wood ? (cx, cy) => wood.shake(cx, cy, now) : undefined);
         hunt?.push(ctx, t, items, (x, y) => Math.abs(x - (view.x + view.w / 2)) < view.w / 2 + 32 && Math.abs(y - (view.y + view.h / 2)) < view.h / 2 + 32);
         for (const s of shadows) s();
         items.push({
@@ -166,6 +180,7 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
           if (!region.indoor) drawCloudShadows(ctx, view, t);
         }
         hunt?.top(ctx, me);
+        wood?.top(ctx, m, me.x, me.y, me.fx, me.fy, now, !near && !cb.current.paused);
         if (near) drawPlaceLabel(ctx, near, cb.current.label(near));
         const mk = cb.current.mark && region.places.find((p) => p.id === cb.current.mark);
         if (mk) drawMark(ctx, mk, t);

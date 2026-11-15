@@ -7,9 +7,13 @@ import { WorldLoading } from "./WorldLoading";
 import { AtticGuide, useAtticGuide } from "./AtticGuide";
 import { QuestBook, QuestDone, QuestHud, questMark } from "./QuestHud";
 import { WorldTab } from "./WorldTab";
+import { WorldHud, WorldNote } from "./WorldHud";
 import { placeAction } from "./worldAction";
 import { advanceQuests, LEAVE_MARK, noteKill, noteVisit } from "../progress/quest";
 import { grantStarterKit } from "../progress/starterKit";
+import { setHuntLang } from "./hunt/huntNames";
+import { noteDailyKill, noteDailyWood } from "../progress/dailyQuests";
+import { noteWood } from "../progress/subQuests";
 import { QUESTS } from "../progress/quests";
 import { ATTIC_ID } from "./places/attic";
 import { featureOpen } from "../progress/storyStage";
@@ -20,7 +24,6 @@ import type { Lang, TextKey } from "../i18n";
 import { FACTION_TEXT } from "../i18n/story/world";
 import { factionOpen, storyStage } from "../progress/storyStage";
 import { loadText, saveText } from "../storage";
-import { StoryFace } from "../story/StoryFace";
 import { SceneView } from "../story/SceneView";
 import { CHAPTERS, FACTIONS, type ChapterId } from "../story/storyData";
 import { WorldRide } from "./WorldRide";
@@ -54,6 +57,7 @@ function startField(): string {
 const latestChapter = (): ChapterId => CHAPTERS[Math.max(1, storyStage()) - 1]!.id;
 
 export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props) {
+  setHuntLang(lang);
   // 지금 지역 (나라 필드 또는 건물 안) · 들어온 문 앞 자리(나갈 때 돌아갈 곳)
   // n: 같은 지역 안 순간 이동 때 캔버스를 새로 만들려고 올림
   const [cur, setCur] = useState<{ id: string; spawn: readonly [number, number] | null; n?: number }>(() => ({ id: fresh || loadText(LAST_KEY) === ATTIC_ID ? ATTIC_ID : startField(), spawn: null }));
@@ -99,7 +103,14 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
   /** 사냥터 몬스터를 잡음 → 사냥 퀘스트 숫자 */
   const onKill = (g: string) => {
     noteKill(g);
+    noteDailyKill(g);
     checkQuests();
+  };
+  /** 나무를 벰 → 긴급 퀘스트 · 모은 나무 */
+  const onWood = () => {
+    noteWood();
+    noteDailyWood();
+    setQv((v) => v + 1);
   };
   const closeDone = () => {
     const st = QUESTS[doneQ[0]!]?.stage;
@@ -155,7 +166,8 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
       setCur({ id: p.to, spawn: [(p.land[0] + 0.5) * 16, (p.land[1] + 0.5) * 16] });
       setBack(null);
       setNear(null);
-    } else if (p.gate) setPanel({ k: "gate", gate: p.gate });
+    } else if (p.gate === "boss" && p.boss) setPanel({ k: "boss", boss: p.boss });
+    else if (p.gate && p.gate !== "boss") setPanel({ k: "gate", gate: p.gate });
     else if (p.kind === "dungeon") {
       if (featureOpen("solo")) onDungeon("solo");
       else setReading({ ...p, line: "qLockSolo" });
@@ -181,13 +193,6 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   }, [busy]);
-  useEffect(() => {
-    // 이야기 장면의 Esc는 SceneView가 받음
-    if (!reading) return;
-    const esc = (e: KeyboardEvent) => e.key === "Escape" && setReading(null);
-    window.addEventListener("keydown", esc);
-    return () => window.removeEventListener("keydown", esc);
-  }, [reading]);
   // 지도에서 순간 이동 (건물 안이면 나라 필드로 나감 · 다른 지역 돌이면 그 지역으로)
   const warpTo = (p: Place, to: string) => {
     worldSfx("warp");
@@ -197,10 +202,9 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
     setPanel(null);
     setNear(null);
   };
-  const body = (p: Place): TextKey => p.line ?? (`${p.name}Text` as TextKey);
   return (
     <div className="lobby-mode world-mode">
-      <WorldStage key={`${cur.id}-${cur.n ?? 0}`} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} who={who} paused={busy} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} mark={guide.mark ?? questMark(cur.id)} onKill={onKill} />
+      <WorldStage key={`${cur.id}-${cur.n ?? 0}`} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} who={who} paused={busy} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} mark={guide.mark ?? questMark(cur.id)} onKill={onKill} onWood={onWood} />
       <button type="button" className="secondary lobby-exit" onClick={onExit}>
         {t("lobbyExit")}
       </button>
@@ -208,26 +212,7 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
         {region.title ? t(region.title) : fieldName}
       </p>
       <p className="lobby-help">{t("worldHelp")}</p>
-      <div className="world-hud">
-        <span className="world-power">⚔ {t("wpPower").replace("{n}", power.toLocaleString())}</span>
-        <button type="button" className="secondary" onClick={() => setPanel({ k: "gear" })}>
-          🎒 {t("accGear")} · B
-        </button>
-        <button type="button" className="secondary" onClick={() => setPanel({ k: "char" })}>
-          👤 {t("wpChar")} · C
-        </button>
-        <button type="button" className="secondary" onClick={() => setPanel({ k: "map" })}>
-          🗺 {t("wmTitle")} · M
-        </button>
-        <button type="button" className="secondary" onClick={() => setTab(true)}>
-          📋 {t("tabOverview")} · Tab
-        </button>
-        {cur.id !== ATTIC_ID && (
-          <button type="button" className="secondary" onClick={() => (setCur({ id: ATTIC_ID, spawn: null }), setBack(null), setNear(null))}>
-            🏠 {t("wpHome")}
-          </button>
-        )}
-      </div>
+      <WorldHud t={t} power={power} home={cur.id !== ATTIC_ID} onGear={() => setPanel({ k: "gear" })} onChar={() => setPanel({ k: "char" })} onMap={() => setPanel({ k: "map" })} onTab={() => setTab(true)} onHome={() => (setCur({ id: ATTIC_ID, spawn: null }), setBack(null), setNear(null))} />
       <div key={`fade-${cur.id}-${cur.n ?? 0}`} className="world-fade" />
       {region.ride && <WorldRide key={cur.id} t={t} ride={region.ride} onArrive={(to, [x, y]) => setCur({ id: to, spawn: [(x + 0.5) * 16, (y + 0.5) * 16] })} />}
       <WorldLoading key={`load${loadN}`} t={t} state={state} place={cur.id === ATTIC_ID ? t("wpAttic") : fieldName} />
@@ -241,20 +226,7 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
           {placeAction(t, near)} · F
         </button>
       )}
-      {reading && (
-        <div className="modal-backdrop" onClick={() => setReading(null)}>
-          <div className="modal world-note" role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()}>
-            <h3>
-              {reading.who && <StoryFace who={reading.who} size={40} />}
-              {t(reading.name)}
-            </h3>
-            <p>{t(body(reading))}</p>
-            <button type="button" className="ghost" onClick={() => setReading(null)}>
-              {t("close")}
-            </button>
-          </div>
-        </div>
-      )}
+      {reading && <WorldNote t={t} p={reading} onClose={() => setReading(null)} />}
       {panel && (
         <WorldPanels
           panel={panel}

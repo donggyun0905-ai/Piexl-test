@@ -1,5 +1,6 @@
 // 지도 사냥 그리기: 몬스터(던전 그림 그대로, 맞으면 흰빛·예고면 붉게 깜빡) · 체력 줄 · 휘두른 궤적 · 피해 숫자 · 내 체력 줄·쓰러짐
-import { drawEnemySprite } from "../../game/enemySprites";
+import { drawEnemySprite, enemyFrames } from "../../game/enemySprites";
+import { mobName } from "./huntNames";
 import { shadow } from "../worldArt";
 import type { Drawable } from "../worldTrees";
 import type { Walker } from "../../lobby/walker";
@@ -21,13 +22,22 @@ function drawMob(ctx: Ctx, m: Mob, t: number): void {
   shadow(ctx, x, y + m.g.r - 1, m.g.r, m.g.r * 0.4, 0.3);
   const blink = m.st === "windup" && Math.floor(t * 10) % 2 === 0;
   const tint: readonly [string, number] | undefined = m.flash > 0 ? ["#ffffff", 0.8] : blink ? ["#ff3a3a", 0.55] : undefined;
-  // 하이오크: 걷기 2칸 · 예고면 도끼 치켜듦(2)
-  const frame = m.g.kind === "highorc" && m.st === "windup" ? 2 : Math.floor(t * 5) % 2;
+  // 하이오크·보스(4칸 그림): 걷기 2칸 · 예고면 공격 준비(2)
+  const frame = (m.g.kind === "highorc" || enemyFrames(m.g.kind) >= 4) && m.st === "windup" ? 2 : Math.floor(t * 5) % 2;
   if (!drawEnemySprite(ctx, m.g.kind, x, y, frame, m.left, tint)) {
     ctx.fillStyle = tint?.[0] ?? "#7a9a5a";
     ctx.fillRect(x - m.g.r, y - m.g.r, m.g.r * 2, m.g.r * 2);
   }
-  if (m.hp < m.g.hp) bar(ctx, x, y - m.g.r - 6, m.g.r * 2 + 2, m.hp / m.g.hp, "#e0606a");
+  if (m.g.boss) {
+    // 필드 보스: 늘 이름 · 긴 체력 줄
+    bar(ctx, x, y - m.g.r - 12, 44, m.hp / m.g.hp, "#e0606a");
+    ctx.font = "bold 7px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#000";
+    ctx.fillText(mobName(m.g), x + 0.5, y - m.g.r - 15.5);
+    ctx.fillStyle = "#ffb04a";
+    ctx.fillText(mobName(m.g), x, y - m.g.r - 16);
+  } else if (m.hp < m.g.hp) bar(ctx, x, y - m.g.r - 6, m.g.r * 2 + 2, m.hp / m.g.hp, "#e0606a");
 }
 
 /** 몬스터를 깊이 순서 목록에 넣음 (발 y 기준) */
