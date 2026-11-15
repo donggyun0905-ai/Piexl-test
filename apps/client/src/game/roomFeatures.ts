@@ -7,6 +7,7 @@ import { drawAltarRoom } from "./render/altarDraw";
 import { drawForgeRoom } from "./render/forgeDraw";
 import { drawCrack, drawDevilRoom, drawGambleTable } from "./render/vaultDraw";
 import { drawAuctionHall } from "./render/auctionDraw";
+import { drawDObj } from "./render/dungeonObj";
 
 const C = {
   doorOpen: "#1c1926",
@@ -33,6 +34,7 @@ function drawGoddess(ctx: CanvasRenderingContext2D, s: RunState, x: number, y: n
   ctx.beginPath();
   ctx.arc(x, y - 4, 22, 0, Math.PI * 2);
   ctx.fill();
+  if (drawDObj(ctx, "goddess", x, y + 15, 34)) return;
   ctx.fillStyle = "#6a6478";
   ctx.fillRect(x - 10, y + 10, 20, 5);
   ctx.fillStyle = "#d8d4e4";
@@ -58,8 +60,11 @@ export function drawRoomFeatures(ctx: CanvasRenderingContext2D, s: RunState): vo
   if (room.layer > 0) {
     const x = Math.floor(ROOM_COLS / 2) * TILE_SIZE;
     const y = (ROOM_ROWS - 1) * TILE_SIZE;
-    ctx.fillStyle = C.entry;
-    ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+    // 그림이 있으면 입구 발판 위에 빗장 (닫혀서 되돌아갈 수 없음)
+    if (!drawDObj(ctx, "entryMat", x + TILE_SIZE / 2, y + TILE_SIZE, 0, TILE_SIZE)) {
+      ctx.fillStyle = C.entry;
+      ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+    }
     ctx.fillStyle = C.entryBar;
     for (let i = 0; i < 3; i++) ctx.fillRect(x + 2 + i * 5, y + 1, 2, TILE_SIZE - 2);
   }
@@ -70,8 +75,11 @@ export function drawRoomFeatures(ctx: CanvasRenderingContext2D, s: RunState): vo
     if (next < 0) return;
     const x = EXIT_X[lane]! - TILE_SIZE / 2;
     const y = 0;
-    ctx.fillStyle = C.doorOpen;
-    ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+    // 출구 아치 그림 (깬 방은 푸른 빛) · 없으면 어두운 칸
+    if (!drawDObj(ctx, cleared ? "exitGlow" : "exitArch", x + TILE_SIZE / 2, TILE_SIZE, 0, TILE_SIZE + 6)) {
+      ctx.fillStyle = C.doorOpen;
+      ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+    }
     if (!cleared) {
       ctx.fillStyle = C.doorLocked;
       for (let i = 0; i < 3; i++) ctx.fillRect(x + 1, y + 2 + i * 5, TILE_SIZE - 2, 2);
@@ -91,10 +99,12 @@ export function drawRoomFeatures(ctx: CanvasRenderingContext2D, s: RunState): vo
   const cy = ROOM_HEIGHT / 2;
   if (room.type === "exit") {
     ctx.globalAlpha = cleared ? 1 : 0.35;
-    ctx.fillStyle = C.stairs;
-    ctx.fillRect(cx - 8, cy - 8, 16, 16);
-    ctx.fillStyle = C.stairsStep;
-    for (let i = 0; i < 4; i++) ctx.fillRect(cx - 7 + i * 2, cy - 6 + i * 3, 14 - i * 4, 2);
+    if (!drawDObj(ctx, "stairsDown", cx, cy + 9, 20)) {
+      ctx.fillStyle = C.stairs;
+      ctx.fillRect(cx - 8, cy - 8, 16, 16);
+      ctx.fillStyle = C.stairsStep;
+      for (let i = 0; i < 4; i++) ctx.fillRect(cx - 7 + i * 2, cy - 6 + i * 3, 14 - i * 4, 2);
+    }
     ctx.globalAlpha = 1;
   } else if (room.heaven || room.type === "golden") {
     drawHeavenRoom(ctx, s, cx, cy, room.type === "golden");
@@ -110,11 +120,15 @@ export function drawRoomFeatures(ctx: CanvasRenderingContext2D, s: RunState): vo
     drawGambleTable(ctx, s, cx);
   } else if (room.type === "auction") {
     drawAuctionHall(ctx, s, cx, cy);
+  } else if (room.type === "shop" && drawDObj(ctx, "shopRug", cx, cy + 12, 0, 100)) {
+    // 상인 깔개 그림
   } else if (room.type === "shop") {
     ctx.fillStyle = C.shopEdge;
     ctx.fillRect(cx - 56, cy - 22, 112, 30);
     ctx.fillStyle = C.shopMat;
     ctx.fillRect(cx - 55, cy - 21, 110, 28);
+  } else if (room.type === "treasure" && drawDObj(ctx, "chestOpen", cx, cy + 6, 18)) {
+    // 열린 상자 그림
   } else if (room.type === "treasure") {
     // 열린 상자 (보물은 양옆에 놓임)
     ctx.fillStyle = C.chestLid;
@@ -125,6 +139,8 @@ export function drawRoomFeatures(ctx: CanvasRenderingContext2D, s: RunState): vo
     ctx.fillRect(cx - 1, cy - 4, 2, 4);
   } else if (room.type === "start" && s.lastBoss) {
     drawGoddess(ctx, s, cx, cy - 14);
+  } else if (room.type === "rest" && drawDObj(ctx, "spring", cx, cy + 9, 24)) {
+    // 샘 그림
   } else if (room.type === "rest") {
     // 샘: 들어오면 체력이 회복됨
     ctx.fillStyle = C.springEdge;

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.13",
+    date: "2026-11-15",
+    items: {
+      ko: ["던전 방 물건 새 그림: 출구 아치(깨면 푸른 빛)·입구 발판·내려가는 계단 · 쉼터 샘·보물 상자·상인 깔개·여신상 · 단련 기구 셋 · 대장간 화덕·연장 걸이·무기 걸이 · 돌 층의 기둥·안쪽 벽·구덩이 · 광야의 새벽 상자·경험치 보석·고기·자석·폭탄·금화·황금 상자"],
+      en: ["New dungeon room art: exit arches (glowing blue once cleared), entrance mat and stairs down · rest spring, treasure chest, merchant rug and goddess statue · the three training machines · forge furnace, tool rack and weapon rack · pillars, inner walls and pits on stone floors · Wildland Dawn crates, XP gems, meat, magnet, bomb, gold and golden chest"],
+      ja: ["ダンジョンの部屋の新しい絵：出口のアーチ（クリアで青く光る）・入口の敷石・下り階段・休憩の泉・宝箱・商人の敷物・女神像・鍛錬器具3つ・鍛冶場の炉・道具掛け・武器掛け・石の階の柱・内壁・穴・荒野の夜明けの木箱・経験値の宝石・肉・磁石・爆弾・金貨・黄金の箱"],
+    },
+  },
+  {
     version: "0.53.12",
     date: "2026-11-15",
     items: {

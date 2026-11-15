@@ -2,6 +2,10 @@
 // 층 테마 색(floorThemes)을 그대로 쓰고 밝기만 덧칠 · 칸마다 고정된 무늬(spot)라 프레임마다 흔들리지 않음
 import { TILE_PILLAR, TILE_PIT, TILE_SIZE, TILE_WALL, tileAt } from "@pixel-rogue/shared";
 import type { FloorTheme } from "./floorThemes";
+import { drawDObj } from "./dungeonObj";
+
+/** 회색 돌 테마: 기둥·안쪽 벽·외딴 구덩이를 그림으로 (다른 색 테마는 테마 색 코드 그림) */
+const STONE = new Set(["base", "knight", "reaper", "demigod"]);
 
 type Ctx = CanvasRenderingContext2D;
 const T = TILE_SIZE;
@@ -10,6 +14,7 @@ const dark = (a: number) => `rgba(0,0,0,${a})`;
 const light = (a: number) => `rgba(255,255,255,${a})`;
 
 function wall(ctx: Ctx, g: Uint8Array, th: FloorTheme, col: number, row: number, x: number, y: number): void {
+  if (STONE.has(th.tex ?? "") && drawDObj(ctx, "innerWall", x + T / 2, y + T, 0, T)) return;
   ctx.fillStyle = th.wall;
   ctx.fillRect(x, y, T, T);
   // 벽돌 줄 (한 줄씩 엇갈림)
@@ -35,6 +40,7 @@ function wall(ctx: Ctx, g: Uint8Array, th: FloorTheme, col: number, row: number,
 }
 
 function pillar(ctx: Ctx, th: FloorTheme, x: number, y: number): void {
+  if (STONE.has(th.tex ?? "") && drawDObj(ctx, "pillar", x + T / 2, y + T, 0, T)) return;
   // 바닥 그림자 · 받침
   ctx.fillStyle = dark(0.35);
   ctx.beginPath();
@@ -75,6 +81,7 @@ function pit(ctx: Ctx, g: Uint8Array, th: FloorTheme, col: number, row: number, 
   const down = tileAt(g, col, row + 1) === TILE_PIT;
   const left = tileAt(g, col - 1, row) === TILE_PIT;
   const right = tileAt(g, col + 1, row) === TILE_PIT;
+  if (!up && !down && !left && !right && STONE.has(th.tex ?? "") && drawDObj(ctx, "pit", x + T / 2, y + T, 0, T)) return;
   ctx.fillStyle = th.pit;
   ctx.fillRect(x, y, T, T);
   // 위쪽 턱에서 멀수록 깊고 어두움

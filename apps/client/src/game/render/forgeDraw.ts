@@ -1,5 +1,6 @@
 // 대장간 그림 (sim/forge): 방 꾸밈(왼쪽 벽 화덕·불꽃·굴뚝 불빛 · 연장 걸이 · 무기 걸이 · 숯 더미 · 물통 · 바닥 불빛 · 떠오르는 불티)
 // · 가운데 모루 + 그 옆 대장장이: 사용자 그림 sprites/blacksmith.png (64×64 6장, 원본 art/대장장이) · 못 불러오면 코드로 그린 대장장이·모루
+import { drawDObj } from "./dungeonObj";
 import { ROOM_MAX_X, ROOM_MIN_X, ROOM_WIDTH, type Pickup, type RunState } from "@pixel-rogue/shared";
 import { drawSprite } from "../sprites";
 import { additive, alpha, glow, rnd, sparks, type Ctx } from "./pwFxBits";
@@ -40,6 +41,7 @@ export function drawForgeRoom(ctx: Ctx, s: RunState, cx: number, cy: number): vo
 
 /** 벽돌 화덕: 아치 속 불꽃 · 숯 · 위 굴뚝 */
 function hearth(ctx: Ctx, x: number, y: number, t: number): void {
+  if (drawDObj(ctx, "furnace", x, y + 22, 58)) return;
   // 벽돌 몸
   ctx.fillStyle = "#4a2c22";
   ctx.fillRect(x - 32, y - 18, 64, 40);
@@ -81,6 +83,7 @@ function hearth(ctx: Ctx, x: number, y: number, t: number): void {
 
 /** 연장 걸이: 망치·집게·줄 */
 function toolRack(ctx: Ctx, x: number, y: number): void {
+  if (drawDObj(ctx, "toolRack", x, y + 20, 0, 46)) return;
   ctx.fillStyle = "#5a3a22";
   ctx.fillRect(x - 22, y - 2, 44, 3);
   // 망치
@@ -106,6 +109,7 @@ function toolRack(ctx: Ctx, x: number, y: number): void {
 
 /** 무기 걸이: 칼 셋 */
 function weaponRack(ctx: Ctx, x: number, y: number): void {
+  if (drawDObj(ctx, "swordRack", x, y + 22, 30)) return;
   ctx.fillStyle = "#4a2e1c";
   ctx.fillRect(x - 16, y + 18, 32, 4);
   for (let k = 0; k < 3; k++) {

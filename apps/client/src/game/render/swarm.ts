@@ -12,6 +12,7 @@ import { drawPets } from "./pets";
 import { drawEffects, drawProjectiles } from "./shots";
 import { drawSummons } from "./summon";
 import { drawSwarmEvent } from "./swarmMap";
+import { drawDObj } from "./dungeonObj";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -19,6 +20,7 @@ type Ctx = CanvasRenderingContext2D;
 export function drawCrate(ctx: Ctx, x: number, y: number, e: EnemyState): void {
   ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
   ctx.fillRect(x - 5, y + 3, 10, 2);
+  if (e.hitFlash <= 0 && drawDObj(ctx, "swCrate", x, y + 5, 11)) return;
   ctx.fillStyle = e.hitFlash > 0 ? "#fff" : "#8a5a2a";
   ctx.fillRect(x - 5, y - 4.5, 10, 9);
   ctx.fillStyle = "#c08a4a";
@@ -66,12 +68,17 @@ const DROP_ART: Record<SwarmDrop["kind"], { rows: readonly string[]; colors: Rec
   },
 };
 
+/** 바닥 아이템 그림 이름 (render/dungeonObj) */
+const DROP_IMG: Record<SwarmDrop["kind"], string> = { heal: "swMeat", magnet: "swMagnet", bomb: "swBomb", gold: "swGold", chest: "swChest" };
+
 /** 모드 맨 위 그리기 (GameScreen overlay): 보석·바닥 아이템·그림자 공격자·각성 기운 */
 export function drawSwarm(ctx: Ctx, s: RunState, alpha: number, snap: Snap): void {
   const sw = s.swarm;
   if (!sw) return;
   for (const g of sw.gems) {
     const big = g.v >= 10;
+    // 그림 보석 (큰 것일수록 크게)
+    if (drawDObj(ctx, "swGem", snap(g.x), snap(g.y) + (big ? 4 : 3), big ? 8 : g.v >= 3 ? 6 : 5)) continue;
     ctx.fillStyle = big ? "#ff6ad8" : g.v >= 3 ? "#5ad8ff" : "#6ae88a";
     const x = snap(g.x);
     const y = snap(g.y);
@@ -85,7 +92,7 @@ export function drawSwarm(ctx: Ctx, s: RunState, alpha: number, snap: Snap): voi
     // 반짝이는 테두리 빛 (어떤 아이템인지 멀리서도 보이게)
     ctx.fillStyle = d.kind === "chest" ? "rgba(255, 216, 90, 0.35)" : "rgba(255, 255, 255, 0.18)";
     ctx.fillRect(x - 5, y - 5, 10, 10);
-    dots(ctx, x, y, art.rows, art.colors);
+    if (!drawDObj(ctx, DROP_IMG[d.kind], x, y + 5, d.kind === "chest" ? 11 : 9)) dots(ctx, x, y, art.rows, art.colors);
     if (d.kind === "bomb" && (s.tick >> 2) % 2) {
       ctx.fillStyle = "#fff4a0";
       ctx.fillRect(x + 1, y - 4, 1, 1);

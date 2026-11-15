@@ -1,5 +1,7 @@
 // 단련의 방 바닥 기구 그림 (drawPickup이 부름): 0 샌드백(매달린 가죽 자루·쇠사슬·받침대) · 1 랫풀다운(높은 틀·위 도르래·가로 막대·추 더미) · 2 벤치 프레스(벤치·받침대·원판 끼운 바벨)
 // 아직 안 쓴 방이면 기구 위에 F 빛이 깜박임 · 창을 열면(open) 더 밝게
+import { drawDObj } from "./dungeonObj";
+
 type Ctx = CanvasRenderingContext2D;
 
 function r(ctx: Ctx, c: string, x: number, y: number, w: number, h: number): void {
@@ -9,7 +11,12 @@ function r(ctx: Ctx, c: string, x: number, y: number, w: number, h: number): voi
 
 export function drawGym(ctx: Ctx, device: number, x: number, y: number, tick: number, open: boolean, ready: boolean): void {
   r(ctx, "rgba(0,0,0,0.4)", x - 14, y + 9, 28, 3);
-  if (device === 0) sandbag(ctx, x, y, tick);
+  // 그림이 있으면 그림 (샌드백은 살짝 흔들림)
+  const art = (["gymBag", "gymLat", "gymBench"] as const)[Math.min(2, device)]!;
+  const sway = device === 0 ? Math.sin(tick * 0.08) * 0.6 : 0;
+  if (drawDObj(ctx, art, x + sway, y + 11, device === 2 ? 22 : 34)) {
+    /* 그림 */
+  } else if (device === 0) sandbag(ctx, x, y, tick);
   else if (device === 1) latPull(ctx, x, y, tick);
   else bench(ctx, x, y);
   if (!ready) return;
