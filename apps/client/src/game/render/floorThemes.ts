@@ -23,6 +23,8 @@ export interface FloorTheme {
   /** 꾸밈 두 가지 [종류, 색] · 꾸밈이 나오는 칸 비율 */
   deco: readonly (readonly [Deco, string])[];
   density: number;
+  /** 바닥·벽 그림 이름 (render/dungeonTex, 없으면 색으로) */
+  tex?: string;
 }
 
 const T = (floorA: string, floorB: string, wall: string, wallTop: string, pillar: string, pillarTop: string, pit: string, pitEdge: string, deco: FloorTheme["deco"], density = 0.34): FloorTheme => ({
@@ -39,7 +41,7 @@ const T = (floorA: string, floorB: string, wall: string, wallTop: string, pillar
   density,
 });
 
-const BASE: FloorTheme = { ...C, deco: [], density: 0 };
+const BASE: FloorTheme = { ...C, deco: [], density: 0, tex: "base" };
 /** 천상의 방 (여신의 선물·천상의 상점): 하얀 대리석 바닥 · 연보라 벽 · 금빛 별·하얀 깃털 */
 /** 시련의 방: 새빨간 바닥 · 핏빛 벽 · 붉은 금·불씨 */
 const TRIAL = T("#3a0e14", "#320c12", "#5a141c", "#ff3a3a", "#4a1018", "#7a2028", "#140408", "#ff2a3a", [["crack", "#ff2a3a"], ["ember", "#ff7a3a"]], 0.14);
@@ -114,6 +116,9 @@ const THEMES: Record<string, FloorTheme> = {
   sage: T("#3a3848", "#423f52", "#6a5a3a", "#9a8250", "#7a6a4a", "#b8a070", "#141220", "#2a2638", [["petal", "#ffd860"], ["feather", "#f4f0ff"]], 0.26),
   umbra: T("#6a5234", "#735a39", "#8a6a40", "#b08a52", "#9a7646", "#c09a5e", "#2a1a0a", "#4a3018", [["sand", "#a8844c"], ["bone", "#d8ccb0"]], 0.3),
 };
+
+// 보스 테마는 이름이 곧 바닥·벽 그림 이름
+for (const [k, th] of Object.entries(THEMES)) th.tex = k;
 
 /** 패왕전 경기장 → 테마 */
 const PW_THEME: Record<PwArenaId, string> = {

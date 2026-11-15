@@ -10,6 +10,7 @@ import { drawRoomFeatures } from "../roomFeatures";
 import { C, type Snap } from "./palette";
 import { drawDeco, themeFor, type FloorTheme } from "./floorThemes";
 import { drawShapeTiles } from "./obstacles";
+import { drawFloorTex, drawWallTex } from "./dungeonTex";
 import { isNewbie, recRate } from "../../archive/buildData";
 
 /** 보이는 칸 범위 (화면 밖 칸은 그리지 않음: 큰 경기장) · view = [왼쪽 x, 위 y, 너비, 높이] (게임 픽셀) */
@@ -30,9 +31,13 @@ export function drawRoom(ctx: CanvasRenderingContext2D, s: RunState, view?: View
       const wall = row === 0 || (side && !THIN_WALLS);
       const x = col * TILE_SIZE;
       const y = row * TILE_SIZE;
-      ctx.fillStyle = wall ? th.wall : (row + col) % 2 === 0 ? th.floorA : th.floorB;
-      ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-      if (!wall && (!grid || tileAt(grid, col, row) === TILE_FLOOR)) drawDeco(ctx, th, col, row, x, y, TILE_SIZE, s.floor * 31 + s.roomId);
+      // 그림이 있으면 그림, 없으면 색 (그림 바닥은 꾸밈을 따로 얹지 않음)
+      const tex = wall ? drawWallTex(ctx, th.tex, col, x, y) : drawFloorTex(ctx, th.tex, col, row, x, y);
+      if (!tex) {
+        ctx.fillStyle = wall ? th.wall : (row + col) % 2 === 0 ? th.floorA : th.floorB;
+        ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+      }
+      if (!tex && !wall && (!grid || tileAt(grid, col, row) === TILE_FLOOR)) drawDeco(ctx, th, col, row, x, y, TILE_SIZE, s.floor * 31 + s.roomId);
       if (side && THIN_WALLS && row > 0) drawThinWall(ctx, th, x, y, col === 0, col === ROOM_COLS - 1, row === ROOM_ROWS - 1);
     }
   }

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.10",
+    date: "2026-11-15",
+    items: {
+      ko: ["던전 바닥·벽을 새 그림으로: 기본 방과 보스 27종 층마다 그 보스에 어울리는 바닥·벽 그림"],
+      en: ["New dungeon floor and wall art: the basic rooms and every floor of the 27 bosses now use painted floors and walls matching that boss"],
+      ja: ["ダンジョンの床・壁を新しい絵に：基本の部屋とボス27種の階ごとに、そのボスに合う床・壁の絵"],
+    },
+  },
+  {
     version: "0.53.9",
     date: "2026-11-15",
     items: {
