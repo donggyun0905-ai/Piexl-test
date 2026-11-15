@@ -17,6 +17,7 @@ export { createRun, stepSim } from "./run";
 export * from "./types";
 export { DASH_TICKS, DOOR_HALF, EXIT_X, FLEE_COST, makeEnemy, PLAYER_RADIUS, roomGrid } from "./util";
 export { foeHpMul } from "./roomSpawn";
+export { bossHpMul } from "./bosses";
 export { WANDER_RULES, wanderMul } from "./fieldWander";
 export { beamDirs } from "./bossLight";
 export { DARK_DEATH } from "./bossPrimeval";

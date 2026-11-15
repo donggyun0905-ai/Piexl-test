@@ -1,10 +1,11 @@
 // 지도 전투(C안, docs/WORLD_MAP.md): 지도 조각을 본편 방으로 만들어 본편 계산(stepSim)으로 싸움 · 무기·스킬·대시·이펙트·장신구가 본편과 같음
 // 화면 전용 (기록·순위·서버 없음) · 시드는 지역 + 몇 번째 싸움 · 방 크기는 본편 전체가 같이 쓰는 값이라 돌릴 때·그릴 때마다 applyRoom
-import { applyRoom, createRun, deriveSeed, foeHpMul, makeEnemy, recalcStats, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, stepSim, TICK_MS, type EnemyKind, type RunState, type TickInput, type CharacterId } from "@pixel-rogue/shared";
+import { applyRoom, bossHpMul, createRun, deriveSeed, foeHpMul, makeEnemy, recalcStats, ROOM_MAX_X, ROOM_MAX_Y, ROOM_MIN_X, ROOM_MIN_Y, stepSim, TICK_MS, type EnemyKind, type RunState, type TickInput, type CharacterId } from "@pixel-rogue/shared";
 import { myAccTotals } from "../../event/acc/accStore";
 import { loadAchievements } from "../../records";
 import { WTILE } from "../worldMap";
 import type { Mob } from "../hunt/huntSim";
+import { HUNT_RULES } from "../hunt/huntGrounds";
 import type { BattleRoom } from "./battleRoom";
 
 /** 판 밖으로 미는 동안 이 틱 수(1초)가 지나면 도망 · 한 번에 따라잡는 최대 틱 */
@@ -47,7 +48,9 @@ export function startBattle(room: BattleRoom, who: CharacterId, seed: number, me
   const map = new Map<number, Mob>();
   s.enemies = [];
   for (const m of mobs) {
-    const e = makeEnemy(s, m.g.kind as EnemyKind, m.x - room.ox * WTILE, m.y - room.oy * WTILE, foeHpMul(s.floor) * Math.max(0.05, m.hp / m.g.hp), 20);
+    // 필드 보스는 던전 보스 체력 배율 × 지도 보스 배율 (HUNT_RULES.bossHp)
+    const mul = m.g.boss ? bossHpMul(s.floor) * HUNT_RULES.bossHp : foeHpMul(s.floor);
+    const e = makeEnemy(s, m.g.kind as EnemyKind, m.x - room.ox * WTILE, m.y - room.oy * WTILE, mul * Math.max(0.05, m.hp / m.g.hp), 20);
     s.enemies.push(e);
     map.set(e.id, m);
   }

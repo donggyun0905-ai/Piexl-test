@@ -1,5 +1,5 @@
-// 지도 전투(C안) 층: 사냥 층(hunt/huntLayer)이 부름 · 시험은 BATTLE_GROUNDS 사냥터만 (나머지는 옛 지도 전투)
-// 그 사냥터 몬스터가 나를 쫓기 시작하면 → 주변 지도 조각으로 본편 판을 열고, 판 안 몬스터를 본편 적으로 · 끝나면 지도로 돌려보냄
+// 지도 전투(C안) 층: 사냥 층(hunt/huntLayer)이 부름 · 모든 사냥터·들판 무리·필드 보스
+// 몬스터가 나를 쫓기 시작하면 → 주변 지도 조각으로 본편 판을 열고, 판 안 몬스터를 본편 적으로 · 끝나면 지도로 돌려보냄
 import { setRoomSize, type CharacterId } from "@pixel-rogue/shared";
 import { createRunSounds } from "../../audio/runSounds";
 import { DamageTracker } from "../../game/damageNumbers";
@@ -16,8 +16,6 @@ import { sliceRoom } from "./battleRoom";
 import { newPad, readPad } from "./battleInput";
 import { battleResult, startBattle, stepBattle, type FieldBattle } from "./fieldBattle";
 
-/** 새 방식으로 싸우는 사냥터 (C안 1단계 시험: 아스칼론 슬라임 · 들판 슬라임 무리도) */
-export const BATTLE_GROUNDS: ReadonlySet<string> = new Set(["slimeMeadow"]);
 
 type Ctx = CanvasRenderingContext2D;
 const FLEE_COOL = 3;
@@ -50,12 +48,13 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
     tryStart(m: WorldMap, me: Walker, dt: number): void {
       cool -= dt;
       if (b || h.me.down > 0 || cool > 0) return;
-      const foe = h.mobs.find((x) => BATTLE_GROUNDS.has(x.g.from ?? x.g.id) && (x.st === "chase" || x.st === "windup"));
+      const foe = h.mobs.find((x) => x.st === "chase" || x.st === "windup");
       if (!foe) return;
       // 판 가운데는 내 쪽에 가깝게 (몬스터 쪽으로 조금)
       const room = sliceRoom(m, (me.x + (foe.x - me.x) * 0.3) / WTILE, (me.y + (foe.y - me.y) * 0.3) / WTILE);
       const [x0, y0, x1, y1] = [(room.ox + 1) * WTILE, (room.oy + 1.5) * WTILE, (room.ox + room.cols - 1) * WTILE, (room.oy + room.rows - 1) * WTILE];
-      const inside = h.mobs.filter((x) => x.g.id === foe.g.id && x.st !== "dead" && x.x > x0 && x.x < x1 && x.y > y0 && x.y < y1);
+      // 판 안에 있는 몬스터는 무리가 달라도 모두 (필드 보스 포함)
+      const inside = h.mobs.filter((x) => x.st !== "dead" && x.x > x0 && x.x < x1 && x.y > y0 && x.y < y1);
       b = startBattle(room, who(), n++ * 7919 + region.length, [me.x, me.y], h.me.hp / h.me.st.maxHp, inside, foe.g.power);
       // 판 안 몬스터는 지도에서 감춤 (끝나면 돌려보냄)
       for (const x of inside) [x.st, x.t] = ["dead", 1e9];

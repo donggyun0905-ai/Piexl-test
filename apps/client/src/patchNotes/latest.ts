@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.55.5",
+    date: "2026-11-16",
+    items: {
+      ko: ["세계 지도(시험 중) 새 지도 전투를 모든 곳으로: 사냥터 24곳 · 들판 몬스터 무리 · 필드 보스 12곳 모두 몬스터가 쫓아오면 주변 지도가 전투판이 되고 던전과 같은 계산으로 싸움 · 판 안에 있는 몬스터는 무리가 달라도 함께 싸움 · 필드 보스는 던전 보스 행동·보스 체력 줄 그대로 · 싸우는 동안 위쪽 나라 이름은 숨김"],
+      en: ["World Map (testing) the new field combat everywhere: at all 24 hunting grounds, roaming packs and all 12 field bosses, the map around you becomes the battlefield when monsters chase you, using the same rules as the dungeon · Every monster inside the battlefield joins in, even from other packs · Field bosses keep their dungeon boss moves and boss health bar · The country name at the top hides during battle"],
+      ja: ["世界地図（テスト中）新しいフィールド戦闘をすべての場所に：狩り場24か所・フィールドの群れ・フィールドボス12体すべてで、モンスターに追われると周りの地図が戦場になりダンジョンと同じ計算で戦う・戦場の中のモンスターは群れが違っても一緒に戦う・フィールドボスはダンジョンのボスの動きとボスの体力バーのまま・戦闘中は上の国名を隠す"],
+    },
+  },
+  {
     version: "0.55.4",
     date: "2026-11-16",
     items: {

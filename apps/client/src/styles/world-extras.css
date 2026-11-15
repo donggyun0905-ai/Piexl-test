@@ -93,3 +93,8 @@
 @keyframes world-toast-in {
   from { transform: translateX(20px); opacity: 0; }
 }
+
+/* 지도 전투 중: 위쪽 나라 이름표 숨김 (본편 보스 체력 줄과 겹치지 않게) */
+.world-fighting .world-region {
+  visibility: hidden;
+}

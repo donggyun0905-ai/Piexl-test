@@ -203,6 +203,8 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         for (const s of shadows) s();
         // 지도 전투 중에는 내 몸·적·효과를 본편 판이 그림
         const fighting = !!hunt?.fighting();
+        // 싸우는 동안: 위쪽 나라 이름표를 숨김 (본편 보스 체력 줄 자리)
+        if (canvas.parentElement && canvas.parentElement.classList.contains("world-fighting") !== fighting) canvas.parentElement.classList.toggle("world-fighting", fighting);
         if (!fighting) items.push({ y: me.y, draw: () => shadow(ctx, Math.round(me.x), Math.round(me.y) + 1, 6, 2.2, 0.32) });
         if (hunt) items.push({ y: me.y - 0.1, draw: () => hunt.under(ctx, me) });
         if (!fighting)

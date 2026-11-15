@@ -48,4 +48,20 @@ describe("지도 전투 (본편 판)", () => {
     setRoomSize();
     expect(ROOM_COLS).not.toBe(BATTLE_COLS);
   });
+  it("사냥터 24곳·필드 보스 12곳 몬스터 모두 본편 판에서 10초 돌아감 (오류 없음)", () => {
+    const m = parseMap(rgba(new Array(40 * 30).fill(WT.grass)), 40, 30);
+    const room = sliceRoom(m, 20, 15);
+    const me: [number, number] = [20 * WTILE, 17 * WTILE];
+    for (const g of HUNT_GROUNDS) {
+      const mob: Mob = { g, x: me[0], y: me[1] - 60, hp: g.hp, st: "chase", t: 0, cd: 0, wx: 0, wy: 0, left: false, flash: 0 };
+      const b = startBattle(room, "warden", 3, me, 1, [mob], g.power);
+      const pad = newPad();
+      pad.attack = true;
+      let end = null;
+      for (let i = 0; i < 600 && !end; i++) end = stepBattle(b, 1000 / 60, () => readPad(pad, new Set(), [0, -1]), () => {}, () => {});
+      expect(b.run.player.x, g.id).toBeGreaterThan(0);
+    }
+    setRoomSize();
+  });
 });
+
