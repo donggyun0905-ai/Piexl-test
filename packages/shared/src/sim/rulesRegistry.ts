@@ -2,6 +2,7 @@
 import { ABANDONED_KIDS_RULES } from "./abandonedKids";
 import { ABANDONED_SHOW_RULES } from "./abandonedShow";
 import { ARENA_RULES } from "./arena";
+import { WANDER_RULES } from "./fieldWander";
 import { RAID_RULES } from "./raid";
 import { LUC_RULES } from "./lucKit";
 import { LUC_ATTACK_RULES } from "./lucAttacks";
@@ -295,4 +296,5 @@ export const SIM_RULES: Record<string, Record<string, number>> = {
   TD_WAVES_RULES,
   UTIL_RULES,
   WORM_ULT_RULES,
+  WANDER_RULES,
 };

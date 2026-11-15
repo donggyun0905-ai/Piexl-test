@@ -16,7 +16,7 @@ import { sliceRoom } from "./battleRoom";
 import { newPad, readPad } from "./battleInput";
 import { battleResult, startBattle, stepBattle, type FieldBattle } from "./fieldBattle";
 
-/** 새 방식으로 싸우는 사냥터 (C안 1단계 시험: 아스칼론 슬라임) */
+/** 새 방식으로 싸우는 사냥터 (C안 1단계 시험: 아스칼론 슬라임 · 들판 슬라임 무리도) */
 export const BATTLE_GROUNDS: ReadonlySet<string> = new Set(["slimeMeadow"]);
 
 type Ctx = CanvasRenderingContext2D;
@@ -50,7 +50,7 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
     tryStart(m: WorldMap, me: Walker, dt: number): void {
       cool -= dt;
       if (b || h.me.down > 0 || cool > 0) return;
-      const foe = h.mobs.find((x) => BATTLE_GROUNDS.has(x.g.id) && (x.st === "chase" || x.st === "windup"));
+      const foe = h.mobs.find((x) => BATTLE_GROUNDS.has(x.g.from ?? x.g.id) && (x.st === "chase" || x.st === "windup"));
       if (!foe) return;
       // 판 가운데는 내 쪽에 가깝게 (몬스터 쪽으로 조금)
       const room = sliceRoom(m, (me.x + (foe.x - me.x) * 0.3) / WTILE, (me.y + (foe.y - me.y) * 0.3) / WTILE);
@@ -70,7 +70,7 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
       const read = () => readPad(pad, keys, [mx - (p.x + b!.room.ox * WTILE), my - (p.y + b!.room.oy * WTILE)]);
       const why = stepBattle(b, dt * 1000, read, (m: Mob) => {
         [m.st, m.t] = ["dead", m.g.respawn];
-        onKill(m.g.id);
+        onKill(m.g.from ?? m.g.id);
       }, (s) => damage.observe(s));
       sounds?.update();
       [me.x, me.y] = [p.x + b.room.ox * WTILE, p.y + b.room.oy * WTILE];

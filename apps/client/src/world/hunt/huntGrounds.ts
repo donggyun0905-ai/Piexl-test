@@ -31,6 +31,8 @@ export interface HuntGround {
   r: number;
   /** 권장 투력 (표지판·Tab 창에 보임) */
   power: number;
+  /** 들판 떠돌이 무리(huntWander)면 원래 사냥터 id (잡은 수는 그 사냥터 퀘스트로 셈) */
+  from?: string;
 }
 
 /** 처음 만든 세 곳 (수치를 따로 정함) */

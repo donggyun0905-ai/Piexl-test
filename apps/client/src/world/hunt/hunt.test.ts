@@ -64,3 +64,29 @@ describe("지도 사냥", () => {
     expect(dailyList("2026-11-15")).toEqual(dailyList("2026-11-15"));
   });
 });
+
+describe("들판 떠돌이 무리", () => {
+  it("나라마다 시드로 같은 자리 · 길·장소 둘레는 비움 · 멀수록 셈 · 잡은 수는 원래 사냥터로", async () => {
+    const { wanderPacks } = await import("./huntWander");
+    const { parseMap } = await import("../worldMap");
+    const { TILE_DEFS, WT } = await import("../worldTiles");
+    const { REGIONS } = await import("../worldPlaces");
+    const { WANDER_RULES } = await import("@pixel-rogue/shared");
+    const [cols, rows] = [120, 80];
+    const tiles = Array.from({ length: cols * rows }, (_, i) => (i % cols === 60 ? WT.path : WT.grass));
+    const m = parseMap(tiles.flatMap((t) => [...TILE_DEFS[t]!.key, 255]), cols, rows);
+    const r = { ...REGIONS.ascalon!, places: [{ id: "town", kind: "town" as const, tx: 10, ty: 10, name: REGIONS.ascalon!.places[0]!.name }], start: { tx: 10, ty: 10 } };
+    const a = wanderPacks("ascalon", r, m);
+    expect(a.length).toBeGreaterThan(3);
+    expect(wanderPacks("ascalon", r, m)).toEqual(a);
+    for (const g of a) {
+      expect(g.tx).not.toBe(60);
+      expect(Math.abs(g.tx - 10) + Math.abs(g.ty - 10)).toBeGreaterThanOrEqual(WANDER_RULES.SAFE_TILES);
+      expect(g.from && g.id.startsWith(`${g.from}~`)).toBe(true);
+    }
+    const near = a.reduce((x, y) => (Math.hypot(x.tx - 10, x.ty - 10) < Math.hypot(y.tx - 10, y.ty - 10) ? x : y));
+    const far = a.reduce((x, y) => (Math.hypot(x.tx - 10, x.ty - 10) > Math.hypot(y.tx - 10, y.ty - 10) ? x : y));
+    if (near.from === far.from) expect(far.hp).toBeGreaterThan(near.hp);
+    expect(wanderPacks("attic", { ...r, indoor: true }, m)).toEqual([]);
+  });
+});

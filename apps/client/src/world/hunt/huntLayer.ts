@@ -7,7 +7,9 @@ import { createBattleLayer } from "../battle/battleLayer";
 import type { Drawable } from "../worldTrees";
 import { groundsIn } from "./huntGrounds";
 import { drawDashTrail, drawHuntHud, drawHuntTop, drawMobTip, pushMobs } from "./huntDraw";
-import { createHunt, dash, stepHunt, swing, type Mob } from "./huntSim";
+import { createHunt, dash, mobsOf, stepHunt, swing, type Mob } from "./huntSim";
+import { wanderPacks } from "./huntWander";
+import { REGIONS } from "../worldPlaces";
 import { huntStats } from "./huntStats";
 
 type Ctx = CanvasRenderingContext2D;
@@ -39,6 +41,8 @@ export function createHuntLayer(region: string, outdoor: boolean, me: Walker, ke
   const h = createHunt(region, who());
   const fight = createBattleLayer(region, h, keys, who, mouse, onKill);
   let refresh = 0;
+  // 들판 떠돌이 무리는 지도를 받은 뒤 (첫 장면)
+  let packed = false;
   const key = (e: KeyboardEvent) => {
     if (!on() || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
     if (fight.key(e.code)) return;
@@ -54,6 +58,11 @@ export function createHuntLayer(region: string, outdoor: boolean, me: Walker, ke
     fighting: fight.active,
     battle: (ctx, view, k, t, now) => fight.draw(ctx, view, k, t, now),
     step: (w, dt, stand, map) => {
+      if (!packed) {
+        packed = true;
+        const r = REGIONS[region];
+        if (r && outdoor) h.mobs.push(...mobsOf(wanderPacks(region, r, map)));
+      }
       refresh -= dt;
       if (refresh <= 0) {
         refresh = 1;

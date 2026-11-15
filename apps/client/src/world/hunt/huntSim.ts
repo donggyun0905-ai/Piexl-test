@@ -1,6 +1,6 @@
 // 지도 사냥 계산 (화면에서만, 순위·서버와 상관없음): 몬스터 나기·돌아다니기·쫓기·예고 뒤 때리기·다시 나기 · 내 휘두르기·대시·체력·쓰러짐
 // 몬스터 자리·돌아다니기는 시드 랜덤(지역마다) · 각도는 sim/orbit 대신 atan2 비교만 (그림·판정 모두 화면 전용)
-import { createRng, deriveSeed, type CharacterId } from "@pixel-rogue/shared";
+import { createRng, deriveSeed, WANDER_RULES, type CharacterId } from "@pixel-rogue/shared";
 import type { Walker } from "../../lobby/walker";
 import { WTILE } from "../worldMap";
 import { groundsIn, HUNT_RULES as R, type HuntGround } from "./huntGrounds";
@@ -61,9 +61,12 @@ export function createHunt(region: string, who: CharacterId): Hunt & { rnd: () =
   const rng = createRng(deriveSeed(7, "hunt", region));
   const rnd = () => rng.nextFloat();
   const st = huntStats(who);
-  const mobs: Mob[] = groundsIn(region).flatMap((g) => Array.from({ length: g.count }, (): Mob => ({ g, x: cx(g), y: cy(g), hp: 0, st: "dead", t: 0, cd: 0, wx: cx(g), wy: cy(g), left: false, flash: 0 })));
+  const mobs: Mob[] = mobsOf(groundsIn(region));
   return { mobs, pops: [], rnd, me: { hp: st.maxHp, st, swingCd: 0, swingT: 0, sx: 0, sy: 1, dashT: 0, dashCd: 0, dx: 0, dy: 0, calm: 99, down: 0 } };
 }
+
+/** 사냥터마다 몬스터 (처음엔 쓰러진 상태라 곧 그 안 빈자리에 남) */
+export const mobsOf = (gs: readonly HuntGround[]): Mob[] => gs.flatMap((g) => Array.from({ length: g.count }, (): Mob => ({ g, x: cx(g), y: cy(g), hp: 0, st: "dead", t: 0, cd: 0, wx: cx(g), wy: cy(g), left: false, flash: 0 })));
 
 /** 사냥터 안 아무 서 있을 수 있는 자리 */
 function spot(g: HuntGround, rnd: () => number, stand: Stand, rad = g.rad): [number, number] {
@@ -133,9 +136,13 @@ export function stepHunt(h: Hunt & { rnd: () => number }, me: Walker, dt: number
   for (const m of h.mobs) {
     if (m.st === "dead" || m.hp > 0) continue;
     [m.st, m.t] = ["dead", m.g.respawn];
-    onKill(m.g.id);
+    onKill(m.g.from ?? m.g.id);
   }
+  // 나에게서 먼 몬스터는 멈춤 (들판 떠돌이가 많아서)
+  const range = WANDER_RULES.ACTIVE_TILES * WTILE;
+  const act = (m: Mob) => Math.abs(m.x - me.x) < range && Math.abs(m.y - me.y) < range;
   for (const m of h.mobs) {
+    if (!act(m) && m.st !== "dead") continue;
     m.flash -= dt;
     m.t -= dt;
     m.cd -= dt;
@@ -175,7 +182,7 @@ export function stepHunt(h: Hunt & { rnd: () => number }, me: Walker, dt: number
     move(m, m.wx, m.wy, m.g.speed * 0.5 * dt, stand);
   }
   // 몬스터끼리 겹치지 않게 조금씩 밀어냄
-  const live = h.mobs.filter((m) => m.st !== "dead");
+  const live = h.mobs.filter((m) => m.st !== "dead" && act(m));
   for (let i = 0; i < live.length; i++)
     for (let j = i + 1; j < live.length; j++) {
       const a = live[i]!;

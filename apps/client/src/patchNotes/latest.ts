@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.55.4",
+    date: "2026-11-16",
+    items: {
+      ko: ["세계 지도(시험 중) 들판에 몬스터 무리가 떠돎: 나라마다 그 나라 사냥터 몬스터가 2~5마리씩 무리 지어 들판 곳곳에 (마을·길·장소 둘레는 비움) · 그 나라 처음 자리에서 멀수록 강해짐 (최대 1.6배, 권장 투력도 같이) · 잡으면 40초 뒤 다시 나타남 · 잡은 수는 그 몬스터 사냥터 퀘스트로 셈 · 슬라임 무리는 새 지도 전투(던전과 같은 계산)로 싸움 · 수치는 관리자 페이지 '규칙 수치'에서 바꿀 수 있음"],
+      en: ["World Map (testing) monster packs roam the fields: in each country, packs of 2-5 of that country's hunting-ground monsters wander the fields (towns, roads and places stay clear) · The farther from the country's starting point, the stronger they get (up to 1.6x, recommended power too) · They return 40 seconds after being defeated · Kills count toward that monster's hunting-ground quest · Slime packs use the new field combat (same as the dungeon)"],
+      ja: ["世界地図（テスト中）フィールドをモンスターの群れがうろつく：国ごとにその国の狩り場のモンスターが2〜5匹ずつ群れでフィールドのあちこちに（町・道・施設の周りは空ける）・その国の最初の場所から遠いほど強くなる（最大1.6倍、推奨戦力も）・倒すと40秒後に再出現・倒した数はそのモンスターの狩り場クエストに数える・スライムの群れは新しいフィールド戦闘（ダンジョンと同じ計算）で戦う"],
+    },
+  },
+  {
     version: "0.55.3",
     date: "2026-11-16",
     items: {
