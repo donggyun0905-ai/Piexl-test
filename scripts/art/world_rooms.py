@@ -1,4 +1,4 @@
-"""안 지도 (world_map.room 틀): 해저 열차 칸 · 새벽의 성흔 아지트 (헬리오스 술집 지하) · 교회 (0.53.1)
+"""안 지도 (world_map.room 틀): 해저 열차 칸 · 새벽의 성흔 아지트 (헬리오스 술집 지하) · 교회 (0.53.1) · 주인공 아지트 기록의 다락방 (docs/QUEST.md 3절)
 가구·사람·창문은 장소 표 (places/cyberField.ts SEA_TRAIN · places/dawnHideout.ts)
 """
 from world_map import room
@@ -32,5 +32,14 @@ def church():
     g = room(17, 14, "floor")
     for y in range(3, 13):
         for x in range(7, 10):
+            g[y][x] = "carpet"
+    return g
+
+
+def record_attic():
+    """기록의 다락방 18×12 (주인공 아지트, places/attic.ts): 나무 바닥 · 가운데 카펫 · 아래 가운데(9,10)가 나가는 문"""
+    g = room(18, 12, "woodFloor")
+    for y in range(4, 10):
+        for x in range(6, 12):
             g[y][x] = "carpet"
     return g

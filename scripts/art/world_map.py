@@ -214,6 +214,7 @@ if __name__ == "__main__":
     save("church", world_rooms.church())
     save("sea_train", world_rooms.sea_train())
     save("dawn_hideout", world_rooms.dawn_hideout())
+    save("record_attic", world_rooms.record_attic())
     save("ascalon_shop", ascalon_shop())
     save("ascalon_smithy", ascalon_smithy())
     save("ascalon_inn", ascalon_inn())

@@ -14,7 +14,7 @@ const NPC_R = 5;
 /** 장소 하나 (t = 초, 횃불 깜박임) */
 export function drawPlace(ctx: CanvasRenderingContext2D, p: Place, t: number, color: string): void {
   const [x, y] = placeXY(p).map(Math.round) as [number, number];
-  if (p.kind === "deco") {
+  if (p.kind === "deco" || (p.kind === "sign" && p.art)) {
     if (p.art) drawDeco(ctx, p.art, x, y, t);
     return;
   }
@@ -156,4 +156,16 @@ export function drawPlaceLabel(ctx: CanvasRenderingContext2D, p: Place, text: st
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText(text, x, top + 5.5);
+}
+
+/** 가야 할 곳 표시 (아지트 안내 · 퀘스트): 장소 위에서 통통 튀는 금빛 화살표 */
+export function drawMark(ctx: CanvasRenderingContext2D, p: Place, t: number): void {
+  const [x, y] = placeXY(p).map(Math.round) as [number, number];
+  const top = y - 38 + Math.round(Math.abs(Math.sin(t * 4)) * -4);
+  box(ctx, "#3a2a08", x - 4, top - 1, 9, 4);
+  box(ctx, "#3a2a08", x - 3, top + 3, 7, 2);
+  box(ctx, "#3a2a08", x - 1, top + 5, 3, 2);
+  box(ctx, "#ffd84a", x - 3, top, 7, 3);
+  box(ctx, "#ffd84a", x - 2, top + 3, 5, 1);
+  box(ctx, "#ffd84a", x, top + 4, 1, 2);
 }

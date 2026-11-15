@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.17",
+    date: "2026-11-15",
+    items: {
+      ko: ["세계 지도(시험 중) 새 아지트 '기록의 다락방': 프롤로그가 끝나면 여기서 눈뜸 · 서기관이 거울(캐릭터 고르기)·장비 상자·기록서(이야기 다시 보기)·오락실 문·나가는 문을 화살표로 하나씩 안내 · 나가면 마지막에 있던 나라로 · 지도 위 '아지트' 버튼으로 언제든 돌아옴 · 다시 들어오면 마지막에 있던 곳에서 시작"],
+      en: ["World Map (testing) new hideout, the Attic of Records: you wake up here after the prologue · The Scribe guides you with arrows to the mirror (choose a hero), gear chest, Book of Records (reread the story), arcade door and exit · Leaving takes you to the last country you were in · Return anytime with the 'Hideout' button · Coming back resumes where you last were"],
+      ja: ["世界地図（テスト中）新しいアジト『記録の屋根裏部屋』：プロローグの後ここで目覚める・書記官が鏡（英雄選び）・装備の箱・記録書（物語を読み返す）・ゲームセンターの扉・出口を矢印でひとつずつ案内・出ると最後にいた国へ・地図の『アジト』ボタンでいつでも戻れる・再び入ると最後にいた場所から"],
+    },
+  },
+  {
     version: "0.53.16",
     date: "2026-11-15",
     items: {

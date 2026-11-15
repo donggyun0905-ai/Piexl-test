@@ -9,7 +9,7 @@ import { createChunkCache } from "./worldChunks";
 import { canStandWorld, loadWorldMap, tileAt, WTILE, type WorldMap } from "./worldMap";
 import { shadow } from "./worldArt";
 import { drawButterflies, drawCloudShadows, drawVignette, drawWaterFx } from "./worldFx";
-import { drawPlace, drawPlaceLabel } from "./worldPlaceArt";
+import { drawMark, drawPlace, drawPlaceLabel } from "./worldPlaceArt";
 import { loadWorldArt, setArtSkin } from "./worldTex";
 import { drawMood } from "./worldMood";
 import { drawWeather, setLook } from "./worldWeather";
@@ -40,6 +40,8 @@ interface Props {
   onLoaded?: (ok: boolean) => void;
   /** 문으로 들어오고 나갈 때 설 자리 (픽셀, 없으면 저장된 자리 → 처음 자리) */
   spawn?: readonly [number, number] | null;
+  /** 화살표로 표시할 장소 id (아지트 안내 · 퀘스트) */
+  mark?: string | null;
 }
 
 function loadPos(regionId: string): [number, number] | null {
@@ -51,13 +53,13 @@ function loadPos(regionId: string): [number, number] | null {
   }
 }
 
-export function WorldStage({ regionId, region, color, who, label, paused, onNear, onUse, onLoaded, spawn }: Props) {
+export function WorldStage({ regionId, region, color, who, label, paused, onNear, onUse, onLoaded, spawn, mark }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
-  const cb = useRef({ who, label, paused, onNear, onUse, onLoaded });
+  const cb = useRef({ who, label, paused, onNear, onUse, onLoaded, mark });
   // 들어온 자리(spawn)는 처음 그릴 때만 씀 (지역이 바뀌면 key로 새로 만듦)
   const spawnAt = useRef(spawn);
   useEffect(() => {
-    cb.current = { who, label, paused, onNear, onUse, onLoaded };
+    cb.current = { who, label, paused, onNear, onUse, onLoaded, mark };
   });
 
   useEffect(() => {
@@ -154,6 +156,8 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
           if (!region.indoor) drawCloudShadows(ctx, view, t);
         }
         if (near) drawPlaceLabel(ctx, near, cb.current.label(near));
+        const mk = cb.current.mark && region.places.find((p) => p.id === cb.current.mark);
+        if (mk) drawMark(ctx, mk, t);
         // 2초마다 자리 저장 (움직였을 때만)
         if (now - saved > 2000 && me.moving) {
           saved = now;

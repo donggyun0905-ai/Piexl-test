@@ -63,6 +63,8 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   const [world, setWorld] = useState(takeWorldReturn);
   // 처음 '플레이' → 프롤로그(서기관·이름) → 지도 (지도가 아직 시험 중인 라이브는 플레이 창)
   const [prologue, setPrologue] = useState(false);
+  // 프롤로그를 막 끝냄 → 지도는 아지트에서 시작
+  const [fresh, setFresh] = useState(false);
   const close = () => setPopup("none");
   // 메인 화면 곡 (나가면 끔)
   useEffect(() => (setMenuMusic(true), () => setMenuMusic(false)), []);
@@ -76,14 +78,14 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   };
 
   const stage = storyStage();
-  if (prologue) return <Prologue t={t} onDone={() => (setPrologue(false), TEST_OPEN ? setWorld(true) : setPopup("solo"))} />;
+  if (prologue) return <Prologue t={t} onDone={() => (setPrologue(false), setFresh(true), TEST_OPEN ? setWorld(true) : setPopup("solo"))} />;
   // 로비: 메인 글자·목록을 감추고 파수꾼으로 돌아다님
   if (lobby) return <LobbyMode t={t} onExit={() => setLobby(false)} />;
   // 세계 지도 (시험 중): 던전 입구 → 혼자 하기
   if (world)
     return (
       <Suspense fallback={null}>
-        <WorldMode t={t} lang={lang} onExit={() => setWorld(false)} onDungeon={(m) => (markWorldReturn(), setWorld(false), m === "paewang" ? onPaewang() : m === "swarm" ? onSwarm() : m === "td" ? onTowerDefense() : startNew(m === "endless", m === "arena", m === "hero"))} />
+        <WorldMode t={t} lang={lang} fresh={fresh} onLobby={() => (setWorld(false), setLobby(true))} onExit={() => setWorld(false)} onDungeon={(m) => (markWorldReturn(), setWorld(false), m === "paewang" ? onPaewang() : m === "swarm" ? onSwarm() : m === "td" ? onTowerDefense() : startNew(m === "endless", m === "arena", m === "hero"))} />
       </Suspense>
     );
 

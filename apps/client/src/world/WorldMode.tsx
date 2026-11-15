@@ -4,6 +4,9 @@
 // 국경 통로 → 옆 나라 필드 (그 나라가 스토리에서 열렸을 때만, 아니면 막혔다는 글) · 기억의 탑·콜로세움 → 모드 고르기
 // 가게 주인 → 게임 상점 · 대장장이 → 레이드 장신구 · B 장비창(끼고 빼기만) · M 지도(만진 이동석으로 순간 이동 · 전체 지도 보기) · C 걸어 다닐 캐릭터 고르기 · 위에 내 투력 (WorldPanels)
 import { WorldLoading } from "./WorldLoading";
+import { AtticGuide, useAtticGuide } from "./AtticGuide";
+import { ATTIC_ID } from "./places/attic";
+import { featureOpen } from "../progress/storyStage";
 import { useEffect, useState } from "react";
 import { setWorldMusic } from "../audio/worldMusic";
 import { worldSfx } from "../audio/worldSounds";
@@ -27,11 +30,17 @@ interface Props {
   onExit: () => void;
   /** 던전 입구 = 혼자 하기 · 기억의 탑 = 무한 모드·영웅의 길 */
   onDungeon: (m: WorldRun) => void;
+  /** 프롤로그를 막 끝냄: 아지트에서 눈뜸 */
+  fresh?: boolean;
+  /** 아지트 오락실 문 → 로비 */
+  onLobby: () => void;
 }
 
 const HOME = "ascalon";
 const INTRO_KEY = "worldIntro";
 const FIELD_KEY = "worldRegion";
+/** 마지막에 아지트에 있었는지 (플레이 → 마지막 자리) */
+const LAST_KEY = "worldLast";
 /** 마지막에 있던 나라 필드 (스토리에서 안 열렸으면 아스칼론) */
 function startField(): string {
   return fieldOpen(REGIONS[loadText(FIELD_KEY) ?? ""]) ? loadText(FIELD_KEY)! : HOME;
@@ -39,10 +48,10 @@ function startField(): string {
 /** 지금 연 장 중 마지막 (1장은 처음부터) */
 const latestChapter = (): ChapterId => CHAPTERS[Math.max(1, storyStage()) - 1]!.id;
 
-export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
+export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props) {
   // 지금 지역 (나라 필드 또는 건물 안) · 들어온 문 앞 자리(나갈 때 돌아갈 곳)
   // n: 같은 지역 안 순간 이동 때 캔버스를 새로 만들려고 올림
-  const [cur, setCur] = useState<{ id: string; spawn: readonly [number, number] | null; n?: number }>(() => ({ id: startField(), spawn: null }));
+  const [cur, setCur] = useState<{ id: string; spawn: readonly [number, number] | null; n?: number }>(() => ({ id: fresh || loadText(LAST_KEY) === ATTIC_ID ? ATTIC_ID : startField(), spawn: null }));
   const [panel, setPanel] = useState<WorldPanel | null>(null);
   const [who, setWho] = useState(loadWorldChar);
   const [power, setPower] = useState(myPower);
@@ -66,16 +75,24 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
     return r.area ? t(r.area.name) : FACTION_TEXT[r.faction ?? "ascalon"].name[lang];
   };
   const fieldName = nameOf(field);
+  const [picked, setScene] = useState<ChapterId | null>(null);
+  // 처음 나라 필드에 오면 1장 이야기부터 (아지트에서는 안내가 먼저)
+  const [introDone, setIntroDone] = useState(() => !!loadText(INTRO_KEY));
+  const scene = picked ?? (isField(region) && !introDone ? CHAPTERS[0]!.id : null);
   useEffect(() => {
     if (isField(region)) saveText(FIELD_KEY, cur.id);
+    saveText(LAST_KEY, cur.id === ATTIC_ID ? ATTIC_ID : "");
   }, [cur.id, region]);
   const [near, setNear] = useState<Place | null>(null);
   const [reading, setReading] = useState<Place | null>(null);
   // 처음 온 사람: 1장 이야기부터
-  const [scene, setScene] = useState<ChapterId | null>(() => (loadText(INTRO_KEY) ? null : CHAPTERS[0]!.id));
+  // 아지트를 나가면 로딩 화면을 다시 (key)
+  const [loadN, setLoadN] = useState(0);
   const [state, setState] = useState<"loading" | "ok" | "fail">("loading");
+  const guide = useAtticGuide(cur.id === ATTIC_ID && state === "ok", near);
   const closeScene = () => {
     saveText(INTRO_KEY, "1");
+    setIntroDone(true);
     setScene(null);
   };
   const use = (p: Place) => {
@@ -86,10 +103,19 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
       setBack({ id: cur.id, spawn: [x, y + 4] });
       setCur({ id: p.to, spawn: null });
       setNear(null);
+    } else if (p.kind === "exit" && cur.id === ATTIC_ID) {
+      setCur({ id: startField(), spawn: null });
+      setLoadN((n) => n + 1);
+      setNear(null);
     } else if (p.kind === "exit") {
       setCur(back ?? { id: field, spawn: null });
       setBack(null);
       setNear(null);
+    } else if (p.use === "char" || p.use === "gear") {
+      setPanel({ k: p.use });
+    } else if (p.use === "lobby") {
+      if (featureOpen("lobby")) onLobby();
+      else setReading(p);
     } else if (p.menu) {
       setPanel(p.menu === "smith" ? { k: "smith" } : { k: "shop", tab: p.menu.slice(5) as never });
     } else if (p.kind === "warp") {
@@ -105,7 +131,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
     else if (p.scene) setScene(latestChapter());
     else setReading(p);
   };
-  const busy = !!reading || !!scene || !!panel;
+  const busy = !!reading || !!scene || !!panel || guide.talk !== null;
   useEffect(() => {
     // B 장비창 · C 캐릭터 고르기 (다른 창이 없을 때)
     if (busy) return;
@@ -140,7 +166,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
     p.gate === "tower" ? `🗼 ${t("wpGoIn")}` : p.gate === "colosseum" ? `🏟 ${t("wpGoIn")}` : p.gate === "arena" ? `👑 ${t("wpGoIn")}` : p.gate === "swarm" ? `🏜 ${t("wpGoIn")}` : p.kind === "dungeon" ? `⚔ ${t("wpEnter")}` : p.kind === "npc" ? `💬 ${t("wpTalk")}` : p.kind === "door" ? `🚪 ${t("wpGoIn")}` : p.kind === "exit" ? `🚪 ${t("wpGoOut")}` : p.kind === "warp" ? `✨ ${t("wpWarpUse")}` : p.kind === "pass" ? `🚶 ${t("wpCross")}` : `📜 ${t("wpRead")}`;
   return (
     <div className="lobby-mode world-mode">
-      <WorldStage key={`${cur.id}-${cur.n ?? 0}`} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} who={who} paused={busy} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} />
+      <WorldStage key={`${cur.id}-${cur.n ?? 0}`} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} who={who} paused={busy} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} mark={guide.mark} />
       <button type="button" className="secondary lobby-exit" onClick={onExit}>
         {t("lobbyExit")}
       </button>
@@ -159,10 +185,16 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
         <button type="button" className="secondary" onClick={() => setPanel({ k: "map" })}>
           🗺 {t("wmTitle")} · M
         </button>
+        {cur.id !== ATTIC_ID && (
+          <button type="button" className="secondary" onClick={() => (setCur({ id: ATTIC_ID, spawn: null }), setBack(null), setNear(null))}>
+            🏠 {t("wpHome")}
+          </button>
+        )}
       </div>
       <div key={`fade-${cur.id}-${cur.n ?? 0}`} className="world-fade" />
       {region.ride && <WorldRide key={cur.id} t={t} ride={region.ride} onArrive={(to, [x, y]) => setCur({ id: to, spawn: [(x + 0.5) * 16, (y + 0.5) * 16] })} />}
-      <WorldLoading t={t} state={state} place={fieldName} />
+      <WorldLoading key={loadN} t={t} state={state} place={cur.id === ATTIC_ID ? t("wpAttic") : fieldName} />
+      <AtticGuide t={t} g={guide} />
       {near && !busy && (
         <button type="button" className="primary lobby-enter" onClick={() => use(near)}>
           {action(near)} · F

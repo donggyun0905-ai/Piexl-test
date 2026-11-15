@@ -108,3 +108,40 @@
   from { background-position: 100% 0; }
   to { background-position: -100% 0; }
 }
+
+/* 아지트 서기관 안내 (world/AtticGuide): 위쪽 할 일 한 줄 · 아래 대사 상자 */
+.attic-hint {
+  position: fixed;
+  top: max(52px, calc(env(safe-area-inset-top) + 44px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  margin: 0;
+  padding: 6px 14px;
+  border: 1px solid #8a72c8;
+  background: rgba(14, 12, 20, 0.85);
+  color: #f6ecd4;
+  font-size: 14px;
+  white-space: nowrap;
+  animation: attic-hint 1.6s ease-in-out infinite;
+}
+@keyframes attic-hint {
+  50% { border-color: #ffd84a; }
+}
+.attic-talk {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 6;
+  width: min(720px, calc(100% - 32px));
+  margin: 0 auto;
+  cursor: pointer;
+}
+.attic-talk .scene-box {
+  background: rgba(14, 12, 20, 0.92);
+  border-color: #8a72c8;
+}
+.attic-talk button {
+  margin-top: 8px;
+}

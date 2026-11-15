@@ -17,6 +17,7 @@ import { VIRDIA_FIELD, VIRDIA_INSIDE } from "./places/virdiaField";
 import { INDOOR_SKIN } from "./places/skins";
 import { CYBER_FIELD, CYBER_INSIDE } from "./places/cyberField";
 import { DAWN_INSIDE } from "./places/dawnHideout";
+import { ATTIC } from "./places/attic";
 import { HELL_FIELD } from "./places/hellField";
 import { SEONGGUK_FIELD, SEONGGUK_INSIDE } from "./places/seonggukField";
 import { UNDERSEA_FIELD, UNDERSEA_INSIDE } from "./places/underseaField";
@@ -60,6 +61,8 @@ export interface Place {
   icon?: ShopIcon;
   /** door: 이 진영이 스토리에서 열려야 들어감 (아니면 `{name}Text` 글) */
   open?: FactionId;
+  /** 아지트 물건 (sign + art = 그림으로 그림·부딪힘, 쓰면): char = 캐릭터 고르기 · gear = 장비창 · lobby = 오락실(로비) */
+  use?: "char" | "gear" | "lobby";
 }
 
 export interface Region {
@@ -117,6 +120,7 @@ export const REGIONS: Record<string, Region> = {
   ...SEONGGUK_INSIDE,
   ...HOUSES_INSIDE,
   ...CHAPELS_INSIDE,
+  ...ATTIC,
 };
 
 /** 나라·지역 필드인지 (건물 안이 아님) */
@@ -138,7 +142,7 @@ export function hitsNpc(r: Region, x: number, y: number, rad: number): boolean {
   return r.places.some((p) => {
     if (p.kind === "npc") return Math.hypot(placeXY(p)[0] - x, placeXY(p)[1] + 4 - y) < rad + 8;
     if (p.gate === "tower") return Math.abs(placeXY(p)[0] - x) < rad + 14 && y < placeXY(p)[1] + rad + 4 && y > placeXY(p)[1] - 40;
-    if (p.kind !== "deco" || !p.art) return false;
+    if ((p.kind !== "deco" && p.kind !== "sign") || !p.art) return false;
     return Math.hypot(placeXY(p)[0] - x, placeXY(p)[1] + 2 - y) < rad + DECO_R[p.art];
   });
 }

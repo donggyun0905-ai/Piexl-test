@@ -7,11 +7,12 @@ import { drawDesertDeco, DESERT_DECO_R, type DesertDeco } from "./worldDecoDeser
 import { drawEmpireDeco, EMPIRE_DECO_R, type EmpireDeco } from "./worldDecoEmpire";
 import { drawShopDeco, SHOP_DECO_R, type ShopDeco } from "./worldDecoShop";
 import { ART_DECO_R, drawArtDeco, type ArtDeco } from "./worldDecoArt";
+import { ATTIC_DECO_R, drawAtticDeco, type AtticDeco } from "./worldDecoAttic";
 
-export type DecoArt = "bed" | "table" | "shelf" | "fireplace" | "throne" | "pillar" | "armor" | "barrel" | "plant" | ShopDeco | EmpireDeco | DesertDeco | NorthDeco | SeaDeco | ArtDeco;
+export type DecoArt = "bed" | "table" | "shelf" | "fireplace" | "throne" | "pillar" | "armor" | "barrel" | "plant" | ShopDeco | EmpireDeco | DesertDeco | NorthDeco | SeaDeco | ArtDeco | AtticDeco;
 
 /** 부딪힘 반지름 (픽셀) */
-export const DECO_R: Record<DecoArt, number> = { bed: 9, table: 9, shelf: 8, fireplace: 8, throne: 9, pillar: 6, armor: 5, barrel: 5, plant: 4, ...SHOP_DECO_R, ...EMPIRE_DECO_R, ...DESERT_DECO_R, ...NORTH_DECO_R, ...SEA_DECO_R, ...ART_DECO_R };
+export const DECO_R: Record<DecoArt, number> = { bed: 9, table: 9, shelf: 8, fireplace: 8, throne: 9, pillar: 6, armor: 5, barrel: 5, plant: 4, ...SHOP_DECO_R, ...EMPIRE_DECO_R, ...DESERT_DECO_R, ...NORTH_DECO_R, ...SEA_DECO_R, ...ART_DECO_R, ...ATTIC_DECO_R };
 
 type Ctx = CanvasRenderingContext2D;
 const box = (g: Ctx, c: string, x: number, y: number, w: number, h: number) => {
@@ -71,6 +72,12 @@ export function drawDeco(g: Ctx, art: DecoArt, x: number, y: number, t: number):
     case "anchor":
     case "fishStall":
       drawSeaDeco(g, art, x, b, t);
+      break;
+    case "mirror":
+    case "chest":
+    case "desk":
+    case "arcadeDoor":
+      drawAtticDeco(g, art, x, b, t);
       break;
     case "bed":
       shadow(g, x, b, 10, 3, 0.3);
