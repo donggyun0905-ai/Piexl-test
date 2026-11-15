@@ -44,7 +44,7 @@ SHEETS = {
     # 바람골
     "hanokHouses": [("hanok", "w", 192), ("hanok_big", "w", 512), ("pavilion", "w", 148)],
     "windProps": [("windmill", "h", 196), ("pinwheel", "h", 104), ("cloth_banner", "h", 136), ("bamboo", "h", 168)],
-    "townProps": [("stone_wall", "w", 76), ("jars", "w", 72), ("kite", "h", 92), ("blossom_tree", "h", 156)],
+    "windtown/townProps": [("stone_wall", "w", 76), ("jars", "w", 72), ("kite", "h", 92), ("blossom_tree", "h", 156)],
     # 성국
     "cathedral": [("cathedral", "w", 1024), ("bell_tower", "h", 256), ("monastery", "w", 192)],
     "holyProps": [("sacred_brazier", "h", 96), ("angel_statue", "h", 120), ("candle_stand", "h", 100), ("white_banner", "h", 120)],
@@ -52,4 +52,17 @@ SHEETS = {
     # 새벽의 성흔 아지트 (술집 지하) · 계단
     "tavernOutside": [("tavern_outside", "w", 192), ("cellar_stairs", "w", 72)],
     "doorMat": [("inner_door", "w", 72), ("stairs_down", "w", 72), ("stairs_up", "w", 64)],
+    # 0.53.11 (docs/ART_NOW.md 11·16~26): 나라 집 · 이동석 · 간판 · 기억의 탑 · 마을 소품
+    "silber/houses": [("house_silber", "w", 192), ("house_silber2", "w", 192)],
+    "thalassia/houses": [("house_thal", "w", 192), ("house_thal2", "w", 192)],
+    "terracore/houses": [("house_terra", "w", 192), ("house_terra2", "w", 192)],
+    "warpStones": [("warp_stone", "h", 112), (None, "h", 104)],
+    "shopSigns": [("sign_sword", "h", 56), ("sign_shield", "h", 56), ("sign_potion", "h", 56), ("sign_bag", "h", 56), ("sign_hammer", "h", 56), ("sign_bed", "h", 56)],
+    "towerMemory": [("tower_memory", "h", 520)],
+    "market": [("stall_fruit", "w", 128), ("stall_cloth", "w", 128), ("stall_weapon", "w", 128), ("stall_bread", "w", 128)],
+    "common/townProps": [("well", "w", 84), ("bench", "w", 72), ("hand_cart", "w", 84), ("notice_board", "w", 68)],
+    "knightStatue": [("knight_statue", "h", 184), ("lion_fountain", "w", 124)],
+    "empireProps": [("sun_lamp", "h", 104), ("palm_planter", "h", 96), ("carriage", "w", 132), ("marble_bench", "w", 76)],
+    "fortProps": [("firewood", "w", 72), ("supply_sled", "w", 88), ("alarm_bell", "h", 104), ("archery_target", "h", 84)],
+    "flowerPots": [("planter_box", "w", 68), ("clay_pot", "h", 52), (None, "h", 56), (None, "w", 60)],
 }

@@ -38,6 +38,8 @@ export const ASCALON_INSIDE: Record<string, Region> = {
     places: [
       { id: "keepExit", kind: "exit", tx: 9, ty: 11, name: "wpGoOut" },
       { id: "ascalonGeneral", kind: "npc", tx: 9, ty: 4, name: "general", who: "general", scene: true },
+      { id: "keepGuardL", kind: "npc", tx: 7, ty: 10, name: "wpGuardAscalon", sprite: "npc_guardAscalon", line: "wnGuard" },
+      { id: "keepGuardR", kind: "npc", tx: 11, ty: 10, name: "wpGuardAscalon", sprite: "npc_guardAscalon", line: "wnGuard" },
       deco("keepThrone", 9, 2, "wpAscalonKeep", "throne"),
       ...[4, 14].flatMap((x) => [4, 8].map((y) => deco(`keepPillar${x}${y}`, x, y, "wpAscalonKeep", "pillar"))),
       deco("keepArmorL", 2, 2, "wpAscalonKeep", "armor"),

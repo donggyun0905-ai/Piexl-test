@@ -55,6 +55,27 @@ export const LAND_DECO = {
   chimney: ["chimney_tower", 6],
   // 0.53.3 비연 연 (하늘에서 바람 따라, worldDecoArt.drawKite)
   kite: ["kite", -99],
+  // 0.53.11 마을 소품 (docs/ART_NOW.md 11·22~26, 길가·집 앞 자동 배치 world_props.py)
+  stallFruit: ["stall_fruit", 13],
+  stallCloth: ["stall_cloth", 13],
+  stallWeapon: ["stall_weapon", 13],
+  stallBread: ["stall_bread", 13],
+  well: ["well", 9],
+  bench: ["bench", 7],
+  handCart: ["hand_cart", 9],
+  noticeBoard: ["notice_board", 6],
+  knightStatue: ["knight_statue", 8],
+  lionFountain: ["lion_fountain", 14],
+  sunLamp: ["sun_lamp", 2, ["255,214,120", 22]],
+  palmPlanter: ["palm_planter", 6],
+  carriage: ["carriage", 14],
+  marbleBench: ["marble_bench", 8],
+  firewood: ["firewood", 8],
+  supplySled: ["supply_sled", 9],
+  alarmBell: ["alarm_bell", 7],
+  archeryTarget: ["archery_target", 6],
+  planterBox: ["planter_box", 7],
+  clayPot: ["clay_pot", 5],
   // 해저 열차: 창문은 코드 그림(지나가는 바다)
   trainWindow: ["", -99],
 } as const satisfies Record<string, Row>;

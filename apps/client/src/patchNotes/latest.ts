@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.11",
+    date: "2026-11-15",
+    items: {
+      ko: ["세계 지도(시험 중) 새 그림: 전체 지도가 그려진 세계 지도 위에서 지역 고르기 · 아스칼론 성 안 큰길 포장 · 실베르·탈라시아·테라코어 나라 집 · 순간 이동석·가게 간판·기억의 탑 · 길가 노점·우물·기사 동상·사자 분수·마차·장작·경보 종 등 · 성채·궁전·요새 경비병과 헬리오스 궁전의 꼭두각시 황제"],
+      en: ["World Map (testing) new art: pick regions on a painted world map · Ascalon's main avenue paving · houses for Silber, Thalassia and Terracore · warp stones, shop signs and the Tower of Memory · street stalls, wells, a knight statue, a lion fountain, carriages, firewood, alarm bells and more · guards in the keeps and the Puppet Emperor in the Helios palace"],
+      ja: ["世界地図（テスト中）新しい絵：描かれた世界地図の上で地域を選択・アスカロン城内の大通り舗装・シルベル・タラシア・テラコアの家・転移石・店の看板・記憶の塔・露店・井戸・騎士像・獅子の噴水・馬車・薪・警鐘など・城砦・宮殿・砦の衛兵とヘリオス宮殿の傀儡の皇帝"],
+    },
+  },
+  {
     version: "0.53.10",
     date: "2026-11-15",
     items: {

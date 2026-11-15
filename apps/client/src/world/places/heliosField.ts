@@ -78,6 +78,9 @@ export const HELIOS_INSIDE: Record<string, Region> = {
     places: [
       { id: "keepExit", kind: "exit", tx: 9, ty: 11, name: "wpGoOut" },
       inner("throne", 9, 2, "wpPalace", "throne"),
+      { id: "puppetKing", kind: "npc", tx: 9, ty: 4, name: "wpPuppetKing", sprite: "npc_puppetKing", line: "wnPuppetKing" },
+      { id: "palaceGuardL", kind: "npc", tx: 7, ty: 10, name: "wpGuardHelios", sprite: "npc_guardHelios", line: "wnGuardHelios" },
+      { id: "palaceGuardR", kind: "npc", tx: 11, ty: 10, name: "wpGuardHelios", sprite: "npc_guardHelios", line: "wnGuardHelios" },
       ...[4, 14].flatMap((x) => [4, 8].map((y) => inner(`pillar${x}${y}`, x, y, "wpPalace", "pillar"))),
       inner("bannerL", 2, 3, "wpPalace", "banner"),
       inner("bannerR", 16, 3, "wpPalace", "banner"),

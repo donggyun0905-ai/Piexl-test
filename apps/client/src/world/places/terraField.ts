@@ -14,7 +14,7 @@ export const TERRA_FIELD: Region = {
   start: { tx: 6, ty: 56 },
   faction: "terracore",
   // 도시 바닥 = 기름 묻은 돌길 · 바깥 길 = 붉은 벽돌
-  skin: { floor: "cobbleOil", path: "brickRed", warehouse_t: "warehouse_metal", wetStone: "cobbleOil", gravel: "grate" },
+  skin: { floor: "cobbleOil", path: "brickRed", warehouse_t: "warehouse_metal", wetStone: "cobbleOil", gravel: "grate", house_red: "house_terra", house_blue: "house_terra2" },
   mini: { 34: "#4a4e56", 50: "#8c96a0" },
   places: [
     // 광장

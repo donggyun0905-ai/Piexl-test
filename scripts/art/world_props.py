@@ -9,18 +9,22 @@ import re
 
 from world_lands import PLACES, SOLID
 
-# 지도 이름 → (필드 파일, 도시 범위 또는 None(전체), 길 칸, 가로등, 집 앞 소품)
+# 지도 이름 → (필드 파일, 도시 범위 또는 None(전체), 길 칸, 가로등, 집 앞 소품, 큰길 옆 큰 소품(노점·우물·동상 등, 서로 멀리) 또는 None)
 NATIONS = {
-    "ascalon": ("ascalonField", (49, 19, 151, 87), {"floor"}, "lamp", ["barrel", "crates", "plant", "flowerBush"]),
-    "helios": ("heliosField", (61, 23, 195, 111), {"redBrick"}, "holyBrazier", ["plant", "flowerBush", "barrel"]),
-    "thalassia": ("thalassiaField", (72, 44, 168, 122), {"wetStone"}, "lamp", ["barrel", "crates", "net", "anchor", "cargo"]),
-    "silber": ("silberField", (89, 58, 167, 111), {"snowStone"}, "brazier", ["barrel", "crates", "spears"]),
-    "terracore": ("terraField", (71, 23, 185, 93), {"floor"}, "lamp", ["crates", "barrel", "pipes"]),
-    "virdia": ("virdiaField", (99, 25, 157, 83), {"woodFloor"}, "lantern", ["mushroom", "fern", "flowerBush"]),
-    "seongguk": ("seonggukField", (65, 41, 139, 119), {"floor", "path"}, "candles", ["plant", "flowerBush"]),
-    "windtown": ("windtownField", None, {"path"}, None, ["jars", "plant", "pinwheel"]),
-    "undersea": ("underseaField", None, {"path"}, None, ["coral", "clam", "kelp"]),
-    "cyber": ("cyberField", None, {"path"}, "streetLamp", ["trashBin", "vending"]),
+    "ascalon": ("ascalonField", (49, 19, 151, 87), {"floor"}, "lamp", ["barrel", "crates", "plant", "flowerBush", "planterBox", "clayPot"],
+                ["knightStatue", "stallFruit", "lionFountain", "stallCloth", "well", "stallWeapon", "stallBread", "noticeBoard"]),
+    "helios": ("heliosField", (61, 23, 195, 111), {"redBrick"}, "sunLamp", ["plant", "flowerBush", "barrel", "palmPlanter", "marbleBench"],
+               ["carriage", "stallCloth", "stallFruit", "palmPlanter", "marbleBench", "holyBrazier"]),
+    "thalassia": ("thalassiaField", (72, 44, 168, 122), {"wetStone"}, "lamp", ["barrel", "crates", "net", "anchor", "cargo", "clayPot"],
+                  ["stallFruit", "stallBread", "well", "bench"]),
+    "silber": ("silberField", (89, 58, 167, 111), {"snowStone"}, "brazier", ["barrel", "crates", "spears", "firewood", "supplySled"],
+               ["alarmBell", "archeryTarget", "firewood", "supplySled", "well"]),
+    "terracore": ("terraField", (71, 23, 185, 93), {"floor"}, "lamp", ["crates", "barrel", "pipes"], ["noticeBoard", "handCart", "stallWeapon", "bench"]),
+    "virdia": ("virdiaField", (99, 25, 157, 83), {"woodFloor"}, "lantern", ["mushroom", "fern", "flowerBush"], None),
+    "seongguk": ("seonggukField", (65, 41, 139, 119), {"floor", "path"}, "candles", ["plant", "flowerBush", "planterBox"], ["bench", "well"]),
+    "windtown": ("windtownField", None, {"path"}, None, ["jars", "plant", "pinwheel"], None),
+    "undersea": ("underseaField", None, {"path"}, None, ["coral", "clam", "kelp"], None),
+    "cyber": ("cyberField", None, {"path"}, "streetLamp", ["trashBin", "vending"], None),
 }
 WATER = {"water", "deep", "sea", "ocean", "lava"}
 
@@ -42,7 +46,7 @@ def places_of(field):
 
 
 def props(name, g):
-    field, rect, road, lamp, near = NATIONS[name]
+    field, rect, road, lamp, near, big = NATIONS[name]
     rnd = random.Random(name)
     H, W = len(g), len(g[0])
     x0, y0, x1, y1 = rect or (2, 2, W - 3, H - 3)
@@ -73,6 +77,19 @@ def props(name, g):
                 for (dx, dy) in ((0, -1), (0, 1), (-1, 0), (1, 0)):
                     if free(x + dx, y + dy, 8 if rect else 12):
                         used.append((lamp, x + dx, y + dy))
+                        break
+    if big:
+        # 큰 소품: 길 옆 빈 칸에 차례로 (가로등과 다른 칸 · 서로 10칸 넘게) · 둘레 한 칸도 비어 있어야 함
+        k = 0
+        for y in range(y0, y1 + 1):
+            for x in range(x0, x1 + 1):
+                if g[y][x] not in road or (x * 5 + y * 11) % 7:
+                    continue
+                for (dx, dy) in ((0, 2), (0, -2), (2, 0), (-2, 0), (0, 3), (0, -3)):
+                    cx, cy = x + dx, y + dy
+                    if free(cx, cy, 10) and free(cx - 1, cy, 0) and free(cx + 1, cy, 0):
+                        used.append((big[k % len(big)], cx, cy))
+                        k += 1
                         break
     for (dx, dy) in doors:
         if not (x0 <= dx <= x1 and y0 <= dy <= y1) or rnd.random() < 0.45:

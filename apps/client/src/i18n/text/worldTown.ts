@@ -41,4 +41,13 @@ export const WORLD_TOWN_TEXT = {
   wpTowerText: { ko: "끝없이 이어지는 층과, 영웅의 길의 기억이 잠든 탑. 어느 기억으로 들어갈까?", en: "A tower holding endless floors and the memories of the paths heroes walked. Which memory will you enter?", ja: "果てしなく続く階と、英雄たちが歩んだ道の記憶が眠る塔。どの記憶に入る？" },
   wpTowerLocked: { ko: "{n}장에서 열림", en: "Opens in Chapter {n}", ja: "第{n}章で解放" },
   wpWarpTower: { ko: "기억의 탑 이동석", en: "Tower warp stone", ja: "記憶の塔の転移石" },
+  // 0.53.11 이름 없는 사람 (world/places 성채·궁전·요새 안)
+  wpGuardAscalon: { ko: "왕국 경비병", en: "Royal Guard", ja: "王国の衛兵" },
+  wpGuardHelios: { ko: "궁전 근위병", en: "Palace Guard", ja: "宮殿の近衛兵" },
+  wpGuardSilber: { ko: "요새 병사", en: "Fortress Soldier", ja: "砦の兵士" },
+  wpPuppetKing: { ko: "꼭두각시 황제", en: "Puppet Emperor", ja: "傀儡の皇帝" },
+  wnGuard: { ko: "이상 없음! 성 안에서는 조용히 다니시오.", en: "All clear! Keep it quiet inside the castle.", ja: "異常なし！城内では静かに。" },
+  wnGuardHelios: { ko: "황제 폐하 앞이다. 고개를 숙여라.", en: "You stand before His Majesty. Bow your head.", ja: "皇帝陛下の御前だ。頭を下げよ。" },
+  wnGuardSilber: { ko: "북쪽 문 너머는 악마의 땅이다. 몸조심해라.", en: "Beyond the north gate lies demon land. Watch yourself.", ja: "北門の向こうは悪魔の地だ。気をつけろ。" },
+  wnPuppetKing: { ko: "……짐은… 황제… 이니라…… (보이지 않는 실이 손목을 당긴다)", en: "...I... am... the emperor... (invisible strings tug at his wrists)", ja: "……朕は……皇帝……である……（見えない糸が手首を引く）" },
 } satisfies Record<string, Record<Lang, string>>;

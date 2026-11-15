@@ -9,7 +9,7 @@ export const SILBER_FIELD: Region = {
   start: { tx: 128, ty: 152 },
   faction: "silber",
   // 성벽 안 바닥 (생성기 world_lands.pave가 깐 칸에 나라 그림)
-  skin: { floor: "tileRoad" },
+  skin: { floor: "tileRoad", house_red: "house_silber", house_blue: "house_silber2" },
   mini: { 8: "#9aa0a8" },
   places: [
     // 수호성 광장 · 성채 · 무기고 · 민가
@@ -58,6 +58,8 @@ export const SILBER_INSIDE: Record<string, Region> = {
     places: [
       { id: "keepExit", kind: "exit", tx: 9, ty: 11, name: "wpGoOut" },
       { id: "silberCommander", kind: "npc", tx: 9, ty: 4, name: "baekinjang", who: "baekinjang", line: "wnBaekinjang" },
+      { id: "fortGuardL", kind: "npc", tx: 7, ty: 10, name: "wpGuardSilber", sprite: "npc_guardSilber", line: "wnGuardSilber" },
+      { id: "fortGuardR", kind: "npc", tx: 11, ty: 10, name: "wpGuardSilber", sprite: "npc_guardSilber", line: "wnGuardSilber" },
       inner("throne", 9, 2, "wpSilberKeep", "throne"),
       ...[4, 14].flatMap((x) => [4, 8].map((y) => inner(`pillar${x}${y}`, x, y, "wpSilberKeep", "pillar"))),
       inner("armorL", 2, 2, "wpSilberKeep", "armor"),

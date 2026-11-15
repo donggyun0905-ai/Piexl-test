@@ -29,7 +29,9 @@ TEX = ["grass", "path", "sand", "water", "deep", "field", "floor", "snow", "wall
        # 0.53.0: 지옥 · 해저 · 사이버펑크 · 바람골 · 성국 · 새벽의 성흔 아지트
        "basalt", "lava", "ash", "obsidian", "bloodRock", "seabed", "coral", "kelpBed", "pearlRoad", "trench",
        "asphalt", "sidewalk", "neonTile", "wetStreet", "plaza", "tileRoad", "bambooGround", "stream", "yard", "petalPath",
-       "holyStone", "pilgrimRoad", "garden", "cellarStone"]
+       "holyStone", "pilgrimRoad", "garden", "cellarStone",
+       # 0.53.11: 아스칼론 성 안 큰길 (ART_NOW)
+       "avenue"]
 TEX_PX = 256
 # 벽 앞면: 한 칸(64픽셀)에 그림 전체, 가로로만 이어지게 → 실내 벽 앞면 칸마다
 WALL = ["innerWall", "stoneWallIn"]
@@ -120,8 +122,9 @@ def cut_background(img):
     edge = np.concatenate([a[0], a[-1], a[:, 0], a[:, -1]])
     bg = np.median(edge, axis=0)
     dist = np.sqrt(((a - bg) ** 2).sum(axis=2))
-    # 배경(마젠타)과 가깝거나, 빨강·파랑이 초록보다 훨씬 큰 분홍 테두리 픽셀은 지움
-    pink = (a[..., 0] - a[..., 1] > 70) & (a[..., 2] - a[..., 1] > 70)
+    # 배경(마젠타)과 가깝거나, 빨강·파랑이 초록보다 훨씬 큰 분홍 테두리 픽셀은 지움 (초록 배경 그림은 분홍 물건이 있을 수 있어 빼지 않음)
+    magenta = bg[0] > 150 and bg[2] > 150 and bg[1] < 100
+    pink = (a[..., 0] - a[..., 1] > 70) & (a[..., 2] - a[..., 1] > 70) & magenta
     alpha = np.where((dist < 90) | pink, 0, 255).astype(np.uint8)
     out = np.dstack([a.astype(np.uint8), alpha])
     return Image.fromarray(out, "RGBA")
@@ -155,7 +158,8 @@ def components(alpha, step=4):
 
 
 def make_sheet(sheet, items):
-    src = src_of("물건", sheet)
+    # "나라/묶음"은 그 나라 폴더의 그림만 (같은 이름 묶음이 여러 나라에 있을 때)
+    src = SRC / sheet.split("/")[0] / "물건" / f"{sheet.split('/')[1]}.png" if "/" in sheet else src_of("물건", sheet)
     if not src.exists():
         return []
     img = cut_background(Image.open(src))
@@ -194,6 +198,25 @@ def make_sheet(sheet, items):
     return done
 
 
+# 사람 한 장 그림 (art/지도/npc/{이름}.png, 마젠타 배경 앞모습) → obj/npc_{이름}.png (높이 NPC_PX = 지도 30픽셀)
+NPC_PX = 120
+
+
+def make_npcs():
+    done = []
+    for src in sorted((SRC / "npc").glob("*.png")):
+        img = cut_background(Image.open(src))
+        bb = img.getbbox()
+        if not bb:
+            continue
+        part = img.crop(bb)
+        r = NPC_PX / part.height
+        part = quantize(tone(part.resize((max(1, round(part.width * r)), NPC_PX), Image.Resampling.LANCZOS), TONE_OBJ), 64)
+        save_png(part, PUB / "obj" / f"npc_{src.stem}.png")
+        done.append(src.stem)
+    print("  사람", ", ".join(done))
+
+
 def manifest():
     tex = sorted(p.stem for p in (PUB / "tex").glob("*.png"))
     obj = sorted(p.stem for p in (PUB / "obj").glob("*.png"))
@@ -216,4 +239,6 @@ if __name__ == "__main__":
     for s, items in SHEETS.items():
         if not only or s in only:
             make_sheet(s, items)
+    if not only or "npc" in only:
+        make_npcs()
     manifest()

@@ -9,7 +9,7 @@ export const THAL_FIELD: Region = {
   start: { tx: 8, ty: 92 },
   faction: "thalassia",
   // 성벽 안 바닥 (생성기 world_lands.pave가 깐 칸에 나라 그림)
-  skin: { snowStone: "tileRoad" },
+  skin: { snowStone: "tileRoad", house_red: "house_thal", house_blue: "house_thal2" },
   mini: { 42: "#a0a49c" },
   places: [
     // 광장 · 무역 상회 · 민가 · 창고

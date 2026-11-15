@@ -43,6 +43,8 @@ export interface Place {
   name: TextKey;
   /** npc: 그림(캐릭터) · 하는 말 · scene이면 말 걸 때 지금 연 스토리 장을 보여 줌 */
   who?: CharacterId;
+  /** npc: 캐릭터가 아닌 사람 그림 (public/world/obj, 예: npc_guardAscalon) · 있으면 who 대신 이 그림 */
+  sprite?: string;
   line?: TextKey;
   scene?: boolean;
   /** door: 들어갈 건물 안 Region 이름 · deco: 가구 그림 · exit: 안쪽 문 대신 그릴 그림(계단) */

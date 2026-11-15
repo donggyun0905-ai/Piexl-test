@@ -1,6 +1,8 @@
-// 장소 그림 더하기: 가게 문 위 간판(칼·방패·물약·주머니·망치·침대) · 순간 이동석(푸른 돌기둥, 빛이 숨 쉬듯·위로 오르는 빛 알갱이)
+// 장소 그림 더하기: 가게 문 위 간판(칼·방패·물약·주머니·망치·침대) · 순간 이동석(푸른 돌기둥, 빛이 숨 쉬듯·위로 오르는 빛 알갱이) · 기억의 탑
+// 그림(public/world/obj sign_*·warp_stone·tower_memory, docs/ART_NOW.md 19~21)이 있으면 그림, 없으면 아래 코드 그림
 import { shadow } from "./worldArt";
 import type { ShopIcon } from "./worldPlaces";
+import { drawObj, objOf } from "./worldTex";
 
 type Ctx = CanvasRenderingContext2D;
 const box = (g: Ctx, c: string, x: number, y: number, w: number, h: number) => {
@@ -10,6 +12,8 @@ const box = (g: Ctx, c: string, x: number, y: number, w: number, h: number) => {
 
 /** 간판: 문(x, y = 문 앞 발판 가운데) 왼쪽 위 벽에 걸린 나무 판 + 그림 */
 export function drawShopIcon(g: Ctx, icon: ShopIcon, x: number, y: number): void {
+  const img = objOf(`sign_${icon}`);
+  if (img) return drawObj(g, img, x - 8, y - 12);
   const sx = x - 15;
   const sy = y - 24;
   box(g, "#3a2414", sx + 4, sy - 3, 1, 3);
@@ -60,6 +64,11 @@ export function drawWarp(g: Ctx, x: number, y: number, t: number): void {
   g.fillStyle = glow;
   g.fillRect(x - 22, y - 32, 44, 44);
   shadow(g, x, y + 4, 9, 3, 0.35);
+  const img = objOf("warp_stone");
+  if (img) {
+    drawObj(g, img, x, y + 5);
+    return rising(g, x, y, t);
+  }
   box(g, "#6e6680", x - 8, y, 16, 4);
   box(g, "#a49cb2", x - 8, y, 16, 1);
   box(g, "#3e4a78", x - 4, y - 20, 8, 20);
@@ -67,7 +76,11 @@ export function drawWarp(g: Ctx, x: number, y: number, t: number): void {
   box(g, "#3e4a78", x - 2, y - 23, 4, 3);
   box(g, `rgba(170,230,255,${a + 0.2})`, x - 1, y - 16, 2, 10);
   box(g, `rgba(220,245,255,${a})`, x - 2, y - 12, 4, 2);
-  // 위로 오르는 빛 알갱이 셋
+  rising(g, x, y, t);
+}
+
+/** 이동석 위로 오르는 빛 알갱이 셋 */
+function rising(g: Ctx, x: number, y: number, t: number): void {
   for (let i = 0; i < 3; i++) {
     const k = (t * 0.6 + i / 3) % 1;
     box(g, `rgba(200,240,255,${1 - k})`, x - 6 + i * 6, Math.round(y - 4 - k * 26), 1, 2);
@@ -79,6 +92,8 @@ export function drawTower(g: Ctx, x: number, y: number, t: number): void {
   const b = y - 2;
   const a = 0.55 + Math.sin(t * 1.8) * 0.2;
   shadow(g, x + 3, b + 2, 20, 5, 0.38);
+  const img = objOf("tower_memory");
+  if (img) return drawObj(g, img, x, b + 3);
   // 몸통 (아래 넓고 위로 좁아짐)
   box(g, "#4a4458", x - 15, b - 30, 30, 30);
   box(g, "#5a5468", x - 13, b - 62, 26, 32);

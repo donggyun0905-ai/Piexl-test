@@ -57,7 +57,12 @@ export function drawPlace(ctx: CanvasRenderingContext2D, p: Place, t: number, co
     drawWarp(ctx, x, y, t);
     return;
   }
-  if (p.kind === "npc" && p.who) {
+  const npcImg = p.kind === "npc" && p.sprite ? objOf(p.sprite) : undefined;
+  if (npcImg) {
+    // 사람 한 장 그림: 숨 쉬듯 살짝 위아래
+    shadow(ctx, x, y + 5, 6, 2.2, 0.32);
+    drawObj(ctx, npcImg, x, y + 6 + (Math.sin(t * 2 + x) > 0.6 ? -0.5 : 0));
+  } else if (p.kind === "npc" && p.who) {
     // 발 = 칸 가운데보다 조금 아래 · 아래를 봄
     shadow(ctx, x, y + 5, 6, 2.2, 0.32);
     drawBody(ctx, p.who, x, y + 4 - NPC_R, NPC_R, { faceX: 0, faceY: 1, moving: false, casting: false, step: 0 }, 0);
