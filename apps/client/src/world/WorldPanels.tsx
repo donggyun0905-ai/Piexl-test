@@ -7,7 +7,8 @@ import { AccForge, type ForgeMode } from "../event/acc/AccForge";
 import { AccWindow } from "../event/acc/AccWindow";
 import { useAccEsc } from "../event/acc/accStore";
 import type { Lang, TextKey } from "../i18n";
-import { FEATURE_STAGE, featureOpen } from "../progress/storyStage";
+import { featureOpen } from "../progress/storyStage";
+import { lockText } from "./QuestHud";
 import { ShopScreen, type ShopTab } from "../shop/ShopScreen";
 import { WorldMapModal } from "./WorldMapView";
 import type { Place } from "./worldPlaces";
@@ -103,7 +104,7 @@ function GateMenu({ t, gate, onClose, onRun }: { t: (k: TextKey) => string; gate
           {g.modes.map((x) => (
             <button key={x.m} type="button" className="primary" disabled={!featureOpen(x.f)} onClick={() => onRun(x.m)}>
               {t(x.label)}
-              {!featureOpen(x.f) && ` · ${t("wpTowerLocked").replace("{n}", String(FEATURE_STAGE[x.f]))}`}
+              {!featureOpen(x.f) && ` · ${lockText(t, x.f)}`}
             </button>
           ))}
         </div>

@@ -5,6 +5,9 @@
 // 가게 주인 → 게임 상점 · 대장장이 → 레이드 장신구 · B 장비창(끼고 빼기만) · M 지도(만진 이동석으로 순간 이동 · 전체 지도 보기) · C 걸어 다닐 캐릭터 고르기 · 위에 내 투력 (WorldPanels)
 import { WorldLoading } from "./WorldLoading";
 import { AtticGuide, useAtticGuide } from "./AtticGuide";
+import { QuestBook, QuestDone, QuestHud, questMark } from "./QuestHud";
+import { advanceQuests, LEAVE_MARK, noteVisit } from "../progress/quest";
+import { QUESTS } from "../progress/quests";
 import { ATTIC_ID } from "./places/attic";
 import { featureOpen } from "../progress/storyStage";
 import { useEffect, useState } from "react";
@@ -37,7 +40,6 @@ interface Props {
 }
 
 const HOME = "ascalon";
-const INTRO_KEY = "worldIntro";
 const FIELD_KEY = "worldRegion";
 /** 마지막에 아지트에 있었는지 (플레이 → 마지막 자리) */
 const LAST_KEY = "worldLast";
@@ -75,28 +77,42 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
     return r.area ? t(r.area.name) : FACTION_TEXT[r.faction ?? "ascalon"].name[lang];
   };
   const fieldName = nameOf(field);
-  const [picked, setScene] = useState<ChapterId | null>(null);
-  // 처음 나라 필드에 오면 1장 이야기부터 (아지트에서는 안내가 먼저)
-  const [introDone, setIntroDone] = useState(() => !!loadText(INTRO_KEY));
-  const scene = picked ?? (isField(region) && !introDone ? CHAPTERS[0]!.id : null);
+  const [scene, setScene] = useState<ChapterId | null>(null);
+  /** 지역 이름 (건물 안은 그 건물 이름) */
+  const regionName = (id: string): string => (REGIONS[id]?.title ? t(REGIONS[id]!.title!) : nameOf(id));
+  // 퀘스트: 막 끝낸 것(도장·서기관 → 장이 열리면 그 장 이야기) · 기록서 · 화면 다시 그리기(qv)
+  // 던전에서 돌아오면 기록으로 끝난 퀘스트부터
+  const [doneQ, setDoneQ] = useState<number[]>(advanceQuests);
+  const [book, setBook] = useState(false);
+  const [, setQv] = useState(0);
+  /** 할 일을 다시 판정 · 새로 끝낸 게 있으면 true */
+  const checkQuests = (): boolean => {
+    const fresh = advanceQuests();
+    if (fresh.length) setDoneQ((q) => [...q, ...fresh]);
+    setQv((v) => v + 1);
+    return fresh.length > 0;
+  };
+  const closeDone = () => {
+    const st = QUESTS[doneQ[0]!]?.stage;
+    setDoneQ((q) => q.slice(1));
+    if (st) setScene(CHAPTERS[st - 1]!.id);
+  };
   useEffect(() => {
     if (isField(region)) saveText(FIELD_KEY, cur.id);
     saveText(LAST_KEY, cur.id === ATTIC_ID ? ATTIC_ID : "");
   }, [cur.id, region]);
   const [near, setNear] = useState<Place | null>(null);
   const [reading, setReading] = useState<Place | null>(null);
-  // 처음 온 사람: 1장 이야기부터
   // 아지트를 나가면 로딩 화면을 다시 (key)
   const [loadN, setLoadN] = useState(0);
   const [state, setState] = useState<"loading" | "ok" | "fail">("loading");
   const guide = useAtticGuide(cur.id === ATTIC_ID && state === "ok", near);
-  const closeScene = () => {
-    saveText(INTRO_KEY, "1");
-    setIntroDone(true);
-    setScene(null);
-  };
+  const closeScene = () => setScene(null);
   const use = (p: Place) => {
     worldSfx(p.kind === "door" ? (p.open && !factionOpen(p.open) ? "locked" : "door") : p.kind === "exit" ? "exit" : p.kind === "pass" ? (fieldOpen(REGIONS[p.to ?? ""]) ? "pass" : "locked") : p.kind === "sign" ? "read" : p.kind === "npc" ? "talk" : "read");
+    // 퀘스트 장소면 가 본 것으로 · 그걸로 퀘스트가 끝나면 도장부터
+    noteVisit(p.id);
+    if (checkQuests()) return;
     if (p.kind === "door" && p.open && !factionOpen(p.open)) setReading(p);
     else if (p.kind === "door" && p.to && REGIONS[p.to]) {
       const [x, y] = placeXY(p);
@@ -107,12 +123,16 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
       setCur({ id: startField(), spawn: null });
       setLoadN((n) => n + 1);
       setNear(null);
+      noteVisit(LEAVE_MARK);
+      checkQuests();
     } else if (p.kind === "exit") {
       setCur(back ?? { id: field, spawn: null });
       setBack(null);
       setNear(null);
     } else if (p.use === "char" || p.use === "gear") {
       setPanel({ k: p.use });
+    } else if (p.use === "book") {
+      setBook(true);
     } else if (p.use === "lobby") {
       if (featureOpen("lobby")) onLobby();
       else setReading(p);
@@ -127,11 +147,14 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
       setBack(null);
       setNear(null);
     } else if (p.gate) setPanel({ k: "gate", gate: p.gate });
-    else if (p.kind === "dungeon") onDungeon("solo");
+    else if (p.kind === "dungeon") {
+      if (featureOpen("solo")) onDungeon("solo");
+      else setReading({ ...p, line: "qLockSolo" });
+    }
     else if (p.scene) setScene(latestChapter());
     else setReading(p);
   };
-  const busy = !!reading || !!scene || !!panel || guide.talk !== null;
+  const busy = !!reading || !!scene || !!panel || guide.talk !== null || doneQ.length > 0 || book;
   useEffect(() => {
     // B 장비창 · C 캐릭터 고르기 (다른 창이 없을 때)
     if (busy) return;
@@ -166,7 +189,7 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
     p.gate === "tower" ? `🗼 ${t("wpGoIn")}` : p.gate === "colosseum" ? `🏟 ${t("wpGoIn")}` : p.gate === "arena" ? `👑 ${t("wpGoIn")}` : p.gate === "swarm" ? `🏜 ${t("wpGoIn")}` : p.kind === "dungeon" ? `⚔ ${t("wpEnter")}` : p.kind === "npc" ? `💬 ${t("wpTalk")}` : p.kind === "door" ? `🚪 ${t("wpGoIn")}` : p.kind === "exit" ? `🚪 ${t("wpGoOut")}` : p.kind === "warp" ? `✨ ${t("wpWarpUse")}` : p.kind === "pass" ? `🚶 ${t("wpCross")}` : `📜 ${t("wpRead")}`;
   return (
     <div className="lobby-mode world-mode">
-      <WorldStage key={`${cur.id}-${cur.n ?? 0}`} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} who={who} paused={busy} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} mark={guide.mark} />
+      <WorldStage key={`${cur.id}-${cur.n ?? 0}`} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} who={who} paused={busy} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} mark={guide.mark ?? questMark(cur.id)} />
       <button type="button" className="secondary lobby-exit" onClick={onExit}>
         {t("lobbyExit")}
       </button>
@@ -195,6 +218,9 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
       {region.ride && <WorldRide key={cur.id} t={t} ride={region.ride} onArrive={(to, [x, y]) => setCur({ id: to, spawn: [(x + 0.5) * 16, (y + 0.5) * 16] })} />}
       <WorldLoading key={loadN} t={t} state={state} place={cur.id === ATTIC_ID ? t("wpAttic") : fieldName} />
       <AtticGuide t={t} g={guide} />
+      {state === "ok" && !guide.mark && guide.talk === null && <QuestHud t={t} cur={cur.id} regionName={regionName} onBook={() => setBook(true)} />}
+      {doneQ.length > 0 && !scene && <QuestDone key={doneQ[0]} t={t} n={doneQ[0]!} onClose={closeDone} />}
+      {book && <QuestBook t={t} cur={cur.id} regionName={regionName} onStory={() => (setBook(false), setScene(latestChapter()))} onClose={() => setBook(false)} />}
       {near && !busy && (
         <button type="button" className="primary lobby-enter" onClick={() => use(near)}>
           {action(near)} · F

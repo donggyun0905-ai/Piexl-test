@@ -62,7 +62,7 @@ export function SoloChooser({ t, saved, onContinue, onNewRun, onHero, onEndless,
               onClick={onContinue}
             />
           )}
-          <Choice icon="sword" title={t("soloRun")} desc={t("newRunDesc")} onClick={onNewRun} />
+          {featureOpen("solo") && <Choice icon="sword" title={t("soloRun")} desc={t("newRunDesc")} onClick={onNewRun} />}
           {TEST_OPEN && <Choice icon="book" title={t("worldMap")} desc={t("worldMapDesc")} onClick={onWorld} />}
           {featureOpen("hero") && <Choice
             icon="crown"

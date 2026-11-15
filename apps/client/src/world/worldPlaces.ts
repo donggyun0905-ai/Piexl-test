@@ -5,6 +5,7 @@ import type { CharacterId } from "@pixel-rogue/shared";
 import type { TextKey } from "../i18n";
 import type { FactionId } from "../story/storyData";
 import { factionOpen } from "../progress/storyStage";
+import { questField } from "../progress/quest";
 import type { ShopTab } from "../shop/ShopScreen";
 import { ASCALON_FIELD } from "./places/ascalonField";
 import { ASCALON_INSIDE } from "./places/ascalonInside";
@@ -61,8 +62,8 @@ export interface Place {
   icon?: ShopIcon;
   /** door: 이 진영이 스토리에서 열려야 들어감 (아니면 `{name}Text` 글) */
   open?: FactionId;
-  /** 아지트 물건 (sign + art = 그림으로 그림·부딪힘, 쓰면): char = 캐릭터 고르기 · gear = 장비창 · lobby = 오락실(로비) */
-  use?: "char" | "gear" | "lobby";
+  /** 아지트 물건 (sign + art = 그림으로 그림·부딪힘, 쓰면): char = 캐릭터 고르기 · gear = 장비창 · lobby = 오락실(로비) · book = 기록서(퀘스트·이야기) */
+  use?: "char" | "gear" | "lobby" | "book";
 }
 
 export interface Region {
@@ -126,9 +127,12 @@ export const REGIONS: Record<string, Region> = {
 /** 나라·지역 필드인지 (건물 안이 아님) */
 export const isField = (r: Region | undefined): boolean => !!(r?.faction || r?.area);
 /** 그 필드가 스토리에서 열렸는지 */
+/** 들어갈 수 있는 필드인지: 그 진영이 장으로 열렸거나, 퀘스트가 길을 열어 줌 (progress/quests fields) */
 export const fieldOpen = (r: Region | undefined): boolean => {
   const f = r?.faction ?? r?.area?.open;
-  return !!f && factionOpen(f);
+  if (f && factionOpen(f)) return true;
+  const id = r && Object.keys(REGIONS).find((k) => REGIONS[k] === r);
+  return !!id && questField(id);
 };
 
 /** 장소 가운데(픽셀) */

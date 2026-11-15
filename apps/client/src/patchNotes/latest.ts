@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.18",
+    date: "2026-11-15",
+    items: {
+      ko: ["세계 지도(시험 중) 메인 퀘스트: 퀘스트를 하나씩 끝내며 이야기 장과 모드가 차례로 열림 (로그 시작 → 영웅의 길 → 무한 모드 → 레이드 아레나 → 타워 디펜스 → 일일 도전·이벤트 → 광야의 새벽 → 패왕전) · 오른쪽 위 지금 할 일 · 가야 할 곳에 금빛 화살표 · 끝내면 '기록됨' 도장과 서기관 한마디, 새 장이면 그 장 이야기 · 아지트 기록서에서 퀘스트 목록·이야기 다시 보기 · 이미 하던 사람은 모든 모드가 열린 채로 이야기만 진행"],
+      en: ["World Map (testing) main quests: finish quests one by one to open story chapters and modes in order (Dungeon → Hero's Path → Endless Mode → Raid Arena → Tower Defense → Daily Challenge & Events → Dawn of the Wilds → Champion Clash) · Current goal at top right · Golden arrow over where to go · A 'Recorded' stamp and a word from the Scribe when done, plus the new chapter's story · Quest list and story replay in the hideout's Book of Records · Existing players keep every mode open and just follow the story"],
+      ja: ["世界地図（テスト中）メインクエスト：クエストをひとつずつ終えると物語の章とモードが順に開く（ダンジョン→英雄の道→エンドレスモード→レイドアリーナ→タワーディフェンス→デイリーチャレンジ・イベント→荒野の夜明け→覇王戦）・右上にいまの目標・行き先に金色の矢印・終えると『記録済み』の判子と書記官のひとこと、新しい章ならその物語・アジトの記録書でクエスト一覧と物語の読み返し・既存プレイヤーはすべてのモードが開いたまま物語だけ進行"],
+    },
+  },
+  {
     version: "0.53.17",
     date: "2026-11-15",
     items: {

@@ -4,6 +4,7 @@ import type { Lang, TextKey } from "../i18n";
 import { CHAPTER_TITLE } from "../i18n/story/world";
 import { CHAPTERS } from "../story/storyData";
 import { LAST_STAGE, markStageSeen, unseenStage } from "./storyStage";
+import { activeQuest, questMode } from "./quest";
 
 interface Props {
   t: (k: TextKey) => string;
@@ -27,6 +28,11 @@ export function StageNotice({ t, lang, stage }: Props) {
         </button>
       </div>
     );
+  }
+  // 퀘스트로 여는 곳: 지금 퀘스트 이름 (할 일은 지도에서)
+  if (questMode() && stage < LAST_STAGE) {
+    const q = activeQuest();
+    return q === null ? null : <p className="stage-notice">📜 {t("qNow")} · {t(`q${q}Title` as TextKey)}</p>;
   }
   if (stage >= LAST_STAGE) return null;
   return (

@@ -1,9 +1,11 @@
 // 스토리 진행 단계 (docs/WORLD_MAP.md W1): 혼자 하기 기록으로 장이 하나씩 열리고, 연 장까지의 진영·모드만 화면에 보임
-// 기록이 있던 사람(이 기능 전부터 하던 사람)은 처음 한 번 '모두 열림'으로 저장. 세계 지도가 생기면 장 여는 조건을 나라 던전 보스로 바꿀 예정
+// 기록이 있던 사람(이 기능 전부터 하던 사람)은 처음 한 번 '모두 열림'으로 저장
+// 세계 지도가 있는 곳(시험 서버)은 퀘스트로 장·모드가 열림 (progress/quest, docs/QUEST.md) · 장 번호를 직접 넘기면 예전처럼 장으로 판정
 import type { CharacterId } from "@pixel-rogue/shared";
 import { factionOf } from "../select/factions";
 import type { FactionId } from "../story/storyData";
-import { loadAchievements, loadFloorBest, loadTotals } from "../records";
+import { loadAchievements, loadTotals } from "../records";
+import { questFeature, questMode, questStage, recordMet } from "./quest";
 import { loadText, saveText } from "../storage";
 import { TEST_OPEN } from "../testFlags";
 import { unlockStats } from "../unlock/unlockStats";
@@ -33,8 +35,9 @@ export const STAGE_GOALS: readonly StageGoal[] = [
 ];
 
 /** 장으로 여는 모드 (몇 장부터) */
-export type Feature = "daily" | "battle" | "coop" | "events" | "swarm" | "td" | "shop" | "lobby" | "hero" | "endless" | "arena" | "raid" | "paewang" | "taboo";
+export type Feature = "solo" | "daily" | "battle" | "coop" | "events" | "swarm" | "td" | "shop" | "lobby" | "hero" | "endless" | "arena" | "raid" | "paewang" | "taboo";
 export const FEATURE_STAGE: Record<Feature, number> = {
+  solo: 0,
   daily: 1,
   battle: 2,
   coop: 2,
@@ -92,14 +95,7 @@ function loadSaved(): Saved {
   return v;
 }
 
-function goalMet(g: StageGoal): boolean {
-  const s = unlockStats();
-  if ("floor" in g) return (s.max.soloFloor ?? 0) >= g.floor;
-  if ("wins" in g) return loadTotals().wins >= g.wins;
-  if ("lastBoss" in g) return !!s.flag.lastBossClear;
-  if ("hero" in g) return loadFloorBest("heroBest") >= g.hero;
-  return (s.max.endlessFloor ?? 0) >= g.endless;
-}
+const goalMet = (g: StageGoal): boolean => recordMet(g);
 
 /** 시험 서버·내 컴퓨터에서만: 주소 ?story=0~9 로 그 장인 척 보기 (저장 안 함) */
 function testOverride(): number | null {
@@ -114,12 +110,18 @@ export function storyStage(): number {
   const o = testOverride();
   if (o !== null) return o;
   if (loadSaved().all) return LAST_STAGE;
+  if (questMode()) return questStage();
   let n = 0;
   while (n < STAGE_GOALS.length && goalMet(STAGE_GOALS[n]!)) n++;
   return n;
 }
 
-export const featureOpen = (f: Feature, stage = storyStage()): boolean => stage >= FEATURE_STAGE[f];
+/** 모드가 열렸는지 (퀘스트로 여는 곳은 그 퀘스트를 끝냈는지 · 상점은 처음부터 · stage를 넘기면 장으로) */
+export function featureOpen(f: Feature, stage?: number): boolean {
+  if (stage !== undefined) return stage >= FEATURE_STAGE[f];
+  if (testOverride() === null && !loadSaved().all && questMode()) return f === "shop" || questFeature(f);
+  return storyStage() >= FEATURE_STAGE[f];
+}
 export const factionOpen = (id: FactionId, stage = storyStage()): boolean => stage >= FACTION_STAGE[id];
 /** 이 캐릭터의 진영이 열렸는지 (안 열렸으면 선택 화면에 아예 안 보임) */
 export const charInStory = (c: CharacterId, stage = storyStage()): boolean => factionOpen(factionOf(c), stage);
