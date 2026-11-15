@@ -21,6 +21,9 @@ import { useServerStatus } from "./serverStatus";
 import { storyStage } from "./progress/storyStage";
 import { StageNotice } from "./progress/StageNotice";
 import { markWorldReturn, takeWorldReturn } from "./world/worldReturn";
+import { Prologue } from "./prologue/Prologue";
+import { prologueSeen } from "./progress/prologue";
+import { TEST_OPEN } from "./testFlags";
 
 interface Props {
   lang: Lang;
@@ -58,6 +61,8 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   const [lobby, setLobby] = useState(false);
   // 지도에서 던전으로 갔다 오면 다시 지도 (worldReturn)
   const [world, setWorld] = useState(takeWorldReturn);
+  // 처음 '플레이' → 프롤로그(서기관·이름) → 지도 (지도가 아직 시험 중인 라이브는 플레이 창)
+  const [prologue, setPrologue] = useState(false);
   const close = () => setPopup("none");
   // 메인 화면 곡 (나가면 끔)
   useEffect(() => (setMenuMusic(true), () => setMenuMusic(false)), []);
@@ -71,6 +76,7 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   };
 
   const stage = storyStage();
+  if (prologue) return <Prologue t={t} onDone={() => (setPrologue(false), TEST_OPEN ? setWorld(true) : setPopup("solo"))} />;
   // 로비: 메인 글자·목록을 감추고 파수꾼으로 돌아다님
   if (lobby) return <LobbyMode t={t} onExit={() => setLobby(false)} />;
   // 세계 지도 (시험 중): 던전 입구 → 혼자 하기
@@ -98,7 +104,7 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
           {/* 메인 버튼은 플레이 · 아카이브 · 상점 셋만 (docs/QUEST.md Q1) */}
           <div className="menu-buttons">
             <NicknameBar t={t} />
-            <button type="button" className="primary big" onClick={() => setPopup("solo")}>
+            <button type="button" className="primary big" onClick={() => (prologueSeen() ? setPopup("solo") : setPrologue(true))}>
               <Icon name="sword" />
               {t("mainPlay")}
               {saved && <span className="menu-badge">{t("continueRun")}</span>}

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.16",
+    date: "2026-11-15",
+    items: {
+      ko: ["프롤로그: 처음 플레이를 누르면 검은 화면에서 서기관이 이야기를 들려주고 이름을 물어봄 (닉네임으로 저장) · 세계 지도 들어갈 때 새 로딩 화면"],
+      en: ["Prologue: the first time you press Play, the Scribe speaks to you in the dark and asks your name (saved as your nickname) · New loading screen when entering the world map"],
+      ja: ["プロローグ：初めてプレイを押すと、暗闇の中で書記官が語りかけ名前を尋ねる（ニックネームとして保存）・世界地図に入るときの新しいロード画面"],
+    },
+  },
+  {
     version: "0.53.15",
     date: "2026-11-15",
     items: {

@@ -3,6 +3,7 @@
 // 건물 문 → 건물 안 지도(검게 사라졌다 나타남) · 나가는 문 → 들어온 문 앞 · 순간 이동석(F = 지도 창, 만진 돌로 이동 · 전체 지도에서 다른 지역 돌로도)
 // 국경 통로 → 옆 나라 필드 (그 나라가 스토리에서 열렸을 때만, 아니면 막혔다는 글) · 기억의 탑·콜로세움 → 모드 고르기
 // 가게 주인 → 게임 상점 · 대장장이 → 레이드 장신구 · B 장비창(끼고 빼기만) · M 지도(만진 이동석으로 순간 이동 · 전체 지도 보기) · C 걸어 다닐 캐릭터 고르기 · 위에 내 투력 (WorldPanels)
+import { WorldLoading } from "./WorldLoading";
 import { useEffect, useState } from "react";
 import { setWorldMusic } from "../audio/worldMusic";
 import { worldSfx } from "../audio/worldSounds";
@@ -161,7 +162,7 @@ export function WorldMode({ t, lang, onExit, onDungeon }: Props) {
       </div>
       <div key={`fade-${cur.id}-${cur.n ?? 0}`} className="world-fade" />
       {region.ride && <WorldRide key={cur.id} t={t} ride={region.ride} onArrive={(to, [x, y]) => setCur({ id: to, spawn: [(x + 0.5) * 16, (y + 0.5) * 16] })} />}
-      {state !== "ok" && <p className="world-loading">{t(state === "fail" ? "worldFail" : "worldLoading")}</p>}
+      <WorldLoading t={t} state={state} place={fieldName} />
       {near && !busy && (
         <button type="button" className="primary lobby-enter" onClick={() => use(near)}>
           {action(near)} · F

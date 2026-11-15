@@ -183,13 +183,6 @@
   background: rgba(20, 18, 28, 0.75);
   text-shadow: 0 1px 0 #000;
 }
-.world-loading {
-  position: fixed;
-  inset: 45% 0 auto;
-  z-index: 2;
-  text-align: center;
-  color: var(--muted);
-}
 .world-note p {
   line-height: 1.6;
 }

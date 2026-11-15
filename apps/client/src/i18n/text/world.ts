@@ -12,7 +12,6 @@ export const WORLD_TEXT = {
   wmWorld: { ko: "세계 지도", en: "World Map", ja: "世界地図" },
   wmAtlasHint: { ko: "지역에 마우스를 올리고 누르면 그 지역 지도 · 그 지역에서 만진 이동석으로 순간 이동 · 어두운 곳은 아직 갈 수 없음", en: "Hover and click a region to open its map · teleport to warp stones you've touched there · dark regions aren't open yet", ja: "地域にカーソルを合わせて押すとその地域の地図・そこで触れた転移石へ瞬間移動・暗い所はまだ行けません" },
   wmLocked: { ko: "아직 갈 수 없는 곳", en: "Not open yet", ja: "まだ行けない場所" },
-  worldLoading: { ko: "지도 불러오는 중…", en: "Loading map…", ja: "地図を読み込み中…" },
   worldFail: { ko: "지도를 불러오지 못했어요", en: "Couldn't load the map", ja: "地図を読み込めませんでした" },
   wpEnter: { ko: "던전 들어가기", en: "Enter dungeon", ja: "ダンジョンに入る" },
   wpTalk: { ko: "말 걸기", en: "Talk", ja: "話しかける" },
