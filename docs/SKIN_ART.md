@@ -255,7 +255,7 @@ Skin: Dark swim trunks with the red waist cloth, an open short-sleeve shirt, the
 #### 2-11. 사멸 (samyeol) — 보랏빛 리조트
 - 일러스트 참고: `art/선택일러스트/사멸.png` · 시트 참고: `art/캐릭터/` 안 `사멸/samyeol-1.png`
 ```
-Skin: A purple one-piece swimsuit with a high collar and jade trims, a silk sarong, silver needle hair sticks, a tropical drink with tiny paper umbrellas.
+Skin: A purple halter bikini with jade trims and a high mandarin-collar neck strap, a silk sarong tied at the hip, silver needle hair sticks, a tropical drink with tiny paper umbrellas.
 ```
 
 #### 2-12. 오토마타 (automata) — 방수 기계 인형
@@ -303,7 +303,7 @@ Skin: A khaki sporty bikini with a hooded beach poncho and cargo board shorts, t
 #### 2-19. 잊혀진 자 (forgotten) — 여신의 수영복
 - 일러스트 참고: `art/선택일러스트/잊혀진 자.png` · 시트 참고: `art/캐릭터/` 안 `잊혀진 자/forgotten-1.png`
 ```
-Skin: A white and gold goddess one-piece swimsuit with gold laurel straps, a sheer flowing white pareo, the golden laurel crown.
+Skin: A white and gold goddess bikini with gold laurel straps and gold rings, a sheer flowing white pareo, the golden laurel crown.
 ```
 
 #### 2-20. 잔영 (remnant) — 그림자 래시가드
