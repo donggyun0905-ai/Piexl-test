@@ -1,4 +1,4 @@
-// 메인 화면 메뉴 아래: 새 장이 열리면 한 번 알림(확인 누르면 사라짐) · 그 밖에는 다음 장을 여는 조건 한 줄 (progress/storyStage)
+// 메인 화면 메뉴 아래: 새 장이 열리면 한 번 알림(확인 누르면 사라짐, 퀘스트 모드는 없음) · 그 밖에는 다음 장을 여는 조건 한 줄 (progress/storyStage)
 import { useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { CHAPTER_TITLE } from "../i18n/story/world";
@@ -13,7 +13,13 @@ interface Props {
 }
 
 export function StageNotice({ t, lang, stage }: Props) {
-  const [fresh, setFresh] = useState(unseenStage);
+  // 퀘스트로 여는 곳(지도)은 이야기를 지도에서 이미 보여 주므로 알림 없음 (본 것으로 적음)
+  const [fresh, setFresh] = useState(() => {
+    const n = unseenStage();
+    if (n === null || !questMode()) return n;
+    markStageSeen(n);
+    return null;
+  });
   if (fresh !== null) {
     const ch = CHAPTERS[fresh - 1];
     return (

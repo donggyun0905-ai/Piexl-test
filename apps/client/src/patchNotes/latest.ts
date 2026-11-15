@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.21",
+    date: "2026-11-15",
+    items: {
+      ko: ["세계 지도(시험 중): 사람에게 말 거는 거리를 조금 넓힘 · 할 일 장소가 다른 나라에 있으면 몇 나라를 건너도 그쪽 국경 길·문을 화살표로 안내 (예: 실베르에서 무한 모드 → 아스칼론 기억의 탑 쪽 길) · 지도가 있는 곳에서는 메인 화면의 '○장이 열렸습니다' 알림을 띄우지 않음 (이야기는 지도에서 보여 줌) · Tab: 한눈에 보기 창 (지금 퀘스트·진행·콘텐츠마다 열림/잠김과 있는 곳·갈 수 있는 나라·조작 키)"],
+      en: ["World Map (testing): slightly longer reach for talking to people · When your goal is in another country, the arrow now points to the right border road or door even several countries away (e.g. from Silber to Ascalon's Tower of Memory for Endless Mode) · Where the map is available, the 'Chapter N unlocked' notice no longer appears on the main screen (the story is shown on the map) · Tab: an Overview window (current quest, progress, each content's open/locked state and location, countries you can visit, controls)"],
+      ja: ["世界地図（テスト中）：人に話しかけられる距離を少し広げた・目的の場所が別の国なら、いくつ国をまたいでもその方向の国境の道や扉を矢印で案内（例：シルベールからエンドレスモード→アスカロンの記憶の塔への道）・地図がある所ではメイン画面の『第N章が開きました』通知を出さない（物語は地図で表示）・Tab：ひと目で見る画面（いまのクエスト・進行・コンテンツごとの開放/ロックと場所・行ける国・操作キー）"],
+    },
+  },
+  {
     version: "0.53.20",
     date: "2026-11-15",
     items: {

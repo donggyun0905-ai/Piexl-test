@@ -140,8 +140,9 @@ export const fieldOpen = (r: Region | undefined): boolean => {
 /** 장소 가운데(픽셀) */
 export const placeXY = (p: Place): [number, number] => [(p.tx + 0.5) * WTILE, (p.ty + 0.5) * WTILE];
 
-/** 이 거리 안이면 F로 들어감·읽음 */
+/** 이 거리 안이면 F로 들어감·읽음 · 사람(npc)은 부딪혀 멈추는 거리보다 조금 넓게 */
 export const PLACE_NEAR = 20;
+export const NPC_NEAR = 30;
 
 /** 사람(npc)·가구(deco)와 부딪히는지 */
 export function hitsNpc(r: Region, x: number, y: number, rad: number): boolean {
@@ -155,12 +156,12 @@ export function hitsNpc(r: Region, x: number, y: number, rad: number): boolean {
 
 export function nearPlace(r: Region, x: number, y: number): Place | null {
   let best: Place | null = null;
-  let bd = PLACE_NEAR;
+  let bd = Infinity;
   for (const p of r.places) {
     if (p.kind === "deco") continue;
     const [px, py] = placeXY(p);
     const d = Math.hypot(px - x, py + 6 - y);
-    if (d < bd) [best, bd] = [p, d];
+    if (d < (p.kind === "npc" ? NPC_NEAR : PLACE_NEAR) && d < bd) [best, bd] = [p, d];
   }
   return best;
 }

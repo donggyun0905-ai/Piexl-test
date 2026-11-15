@@ -7,6 +7,7 @@ import { FEATURE_STAGE, type Feature } from "../progress/storyStage";
 import { QUESTS, type QuestCond } from "../progress/quests";
 import { StoryFace } from "../story/StoryFace";
 import { REGIONS } from "./worldPlaces";
+import { regionOfPlace, wayTo } from "./worldRoute";
 
 type T = (k: TextKey) => string;
 /** 던전 기록 할 일이면 가면 좋은 곳 (그 지역에 있을 때 화살표) */
@@ -17,22 +18,18 @@ const nextCond = (): QuestCond | null => {
   return i === null ? null : (QUESTS[i]!.need.find((c) => !condMet(c)) ?? null);
 };
 
-/** 지금 지역에서 화살표를 띄울 장소 id: 그 장소 · 그 건물로 들어가는 문 · 그 나라로 가는 국경 길 · 던전 입구·기억의 탑 (건물 안이면 나가는 문) */
+/** 지금 지역에서 화살표를 띄울 장소 id: 그 장소 · 그쪽으로 가는 문·국경 길·나가는 문 (worldRoute, 몇 나라 건너도) · 던전 기록이면 던전 입구·기억의 탑 */
 export function questMark(cur: string): string | null {
   const c = nextCond();
   if (!c) return null;
   const places = REGIONS[cur]?.places ?? [];
   if ("leave" in c) return places.find((p) => p.kind === "exit")?.id ?? null;
-  if ("visit" in c) {
-    if (c.region === cur) return c.visit;
-    const way = places.find((p) => (p.kind === "door" || p.kind === "pass") && p.to === c.region) ?? places.find((p) => p.kind === "pass" && p.to && REGIONS[p.to]?.places.some((q) => q.kind === "pass" && q.to === c.region));
-    if (way) return way.id;
-  } else {
-    const at = RUN_AT(c);
-    if (at && places.some((p) => p.id === at)) return at;
-  }
-  // 건물 안이면 일단 밖으로
-  return REGIONS[cur]?.indoor ? (places.find((p) => p.kind === "exit")?.id ?? null) : null;
+  const goal = "visit" in c ? c.visit : RUN_AT(c);
+  const at = "visit" in c ? c.region : goal && regionOfPlace(goal);
+  if (!goal || !at) return null;
+  if (at === cur) return goal;
+  // 길을 못 찾으면(아지트 등) 건물 안에서는 일단 밖으로
+  return wayTo(cur, at) ?? (REGIONS[cur]?.indoor ? (places.find((p) => p.kind === "exit")?.id ?? null) : null);
 }
 
 /** 할 일 한 줄 */

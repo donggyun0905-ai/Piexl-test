@@ -6,6 +6,8 @@
 import { WorldLoading } from "./WorldLoading";
 import { AtticGuide, useAtticGuide } from "./AtticGuide";
 import { QuestBook, QuestDone, QuestHud, questMark } from "./QuestHud";
+import { WorldTab } from "./WorldTab";
+import { placeAction } from "./worldAction";
 import { advanceQuests, LEAVE_MARK, noteVisit } from "../progress/quest";
 import { QUESTS } from "../progress/quests";
 import { ATTIC_ID } from "./places/attic";
@@ -154,15 +156,20 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
     else if (p.scene) setScene(latestChapter());
     else setReading(p);
   };
-  const busy = !!reading || !!scene || !!panel || guide.talk !== null || doneQ.length > 0 || book;
+  const [tab, setTab] = useState(false);
+  const busy = !!reading || !!scene || !!panel || guide.talk !== null || doneQ.length > 0 || book || tab;
   useEffect(() => {
-    // B 장비창 · C 캐릭터 고르기 (다른 창이 없을 때)
+    // B 장비창 · C 캐릭터 고르기 · M 지도 · Tab 한눈에 보기 (다른 창이 없을 때)
     if (busy) return;
     const key = (e: KeyboardEvent) => {
       if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
       if (e.code === "KeyB") setPanel({ k: "gear" });
       else if (e.code === "KeyC") setPanel({ k: "char" });
       else if (e.code === "KeyM") setPanel({ k: "map" });
+      else if (e.key === "Tab") {
+        e.preventDefault();
+        setTab(true);
+      }
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
@@ -184,9 +191,6 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
     setNear(null);
   };
   const body = (p: Place): TextKey => p.line ?? (`${p.name}Text` as TextKey);
-  /** 장소 앞 버튼 글자 */
-  const action = (p: Place): string =>
-    p.use === "char" ? `👤 ${t("wpUseMirror")}` : p.use === "gear" ? `🎒 ${t("wpUseChest")}` : p.use === "book" ? `📖 ${t("wpUseBook")}` : p.use === "lobby" ? `🚪 ${t("wpGoIn")}` : p.gate === "tower" ? `🗼 ${t("wpGoIn")}` : p.gate === "colosseum" ? `🏟 ${t("wpGoIn")}` : p.gate === "arena" ? `👑 ${t("wpGoIn")}` : p.gate === "swarm" ? `🏜 ${t("wpGoIn")}` : p.kind === "dungeon" ? `⚔ ${t("wpEnter")}` : p.kind === "npc" ? `💬 ${t("wpTalk")}` : p.kind === "door" ? `🚪 ${t("wpGoIn")}` : p.kind === "exit" ? `🚪 ${t("wpGoOut")}` : p.kind === "warp" ? `✨ ${t("wpWarpUse")}` : p.kind === "pass" ? `🚶 ${t("wpCross")}` : `📜 ${t("wpRead")}`;
   return (
     <div className="lobby-mode world-mode">
       <WorldStage key={`${cur.id}-${cur.n ?? 0}`} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} who={who} paused={busy} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} mark={guide.mark ?? questMark(cur.id)} />
@@ -208,6 +212,9 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
         <button type="button" className="secondary" onClick={() => setPanel({ k: "map" })}>
           🗺 {t("wmTitle")} · M
         </button>
+        <button type="button" className="secondary" onClick={() => setTab(true)}>
+          📋 {t("tabOverview")} · Tab
+        </button>
         {cur.id !== ATTIC_ID && (
           <button type="button" className="secondary" onClick={() => (setCur({ id: ATTIC_ID, spawn: null }), setBack(null), setNear(null))}>
             🏠 {t("wpHome")}
@@ -220,10 +227,11 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
       <AtticGuide t={t} g={guide} />
       {state === "ok" && !guide.mark && guide.talk === null && <QuestHud t={t} cur={cur.id} regionName={regionName} onBook={() => setBook(true)} />}
       {doneQ.length > 0 && !scene && <QuestDone key={`done${doneQ[0]}`} t={t} n={doneQ[0]!} onClose={closeDone} />}
+      {tab && <WorldTab t={t} cur={cur.id} regionName={regionName} onClose={() => setTab(false)} />}
       {book && <QuestBook t={t} cur={cur.id} regionName={regionName} onStory={() => (setBook(false), setScene(latestChapter()))} onClose={() => setBook(false)} />}
       {near && !busy && (
         <button type="button" className="primary lobby-enter" onClick={() => use(near)}>
-          {action(near)} · F
+          {placeAction(t, near)} · F
         </button>
       )}
       {reading && (

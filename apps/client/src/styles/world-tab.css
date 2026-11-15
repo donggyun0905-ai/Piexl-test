@@ -1,0 +1,75 @@
+/* 세계 지도 TAB 한눈에 보기 (world/WorldTab): 검정 반투명 덮개 위 */
+.world-tab {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.72);
+  color: #f6ecd4;
+}
+.world-tab-body {
+  width: min(760px, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.world-tab h2 {
+  margin: 0;
+  color: #ffd84a;
+  text-align: center;
+}
+.world-tab h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: #c8a050;
+}
+.world-tab section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.world-tab section p,
+.world-tab-progress {
+  margin: 0;
+  font-size: 13px;
+}
+.world-tab-progress {
+  text-align: center;
+  opacity: 0.8;
+}
+.world-tab small.met {
+  color: #8fe08f;
+}
+.world-tab-modes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 4px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.world-tab-modes li {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 8px;
+  border-left: 2px solid #8fe08f;
+}
+.world-tab-modes li.locked {
+  border-left-color: #666;
+  opacity: 0.6;
+}
+.world-tab-modes small {
+  font-size: 11px;
+  opacity: 0.85;
+}
+.world-tab-keys {
+  margin: 4px 0 0;
+  font-size: 12px;
+  text-align: center;
+  opacity: 0.7;
+}
