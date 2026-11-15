@@ -18,7 +18,7 @@ import { TopBar } from "./menu/TopBar";
 import { LobbyMode, PatchNotesList, WorldMode } from "./lazyScreens";
 import { loadBest, loadSavedRun } from "./records";
 import { useServerStatus } from "./serverStatus";
-import { featureOpen, storyStage } from "./progress/storyStage";
+import { storyStage } from "./progress/storyStage";
 import { StageNotice } from "./progress/StageNotice";
 import { markWorldReturn, takeWorldReturn } from "./world/worldReturn";
 
@@ -49,7 +49,7 @@ interface Props {
 
 type Popup = "none" | "solo" | "events" | "archive" | "notes" | "achievements" | "records" | "codex";
 
-/** 메인 화면: 로고 · 닉네임 · 큰 버튼 3개(혼자 하기 · 일일 도전 · 함께 하기) · 아래 링크 · 위쪽 설정 */
+/** 메인 화면: 로고 · 닉네임 · 버튼 3개(플레이 · 아카이브 · 상점) · 위쪽 설정 · 기록·업적·도감·패치 노트·기기 연동은 아카이브 창 */
 export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily, onBattle, onCoop, onPractice, onTutorial, onTowerDefense, onProfile, onShop, onSwarm, onPaewang, onRaid, onStory, onTierList, onBuilds }: Props) {
   const [popup, setPopup] = useState<Popup>("none");
   const [saved] = useState(loadSavedRun);
@@ -70,9 +70,7 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
     onStartSolo(endless, arena, hero);
   };
 
-  // 스토리로 연 장까지의 모드만 보임 (progress/storyStage)
   const stage = storyStage();
-  const open = (f: Parameters<typeof featureOpen>[0]) => featureOpen(f, stage);
   // 로비: 메인 글자·목록을 감추고 파수꾼으로 돌아다님
   if (lobby) return <LobbyMode t={t} onExit={() => setLobby(false)} />;
   // 세계 지도 (시험 중): 던전 입구 → 혼자 하기
@@ -86,11 +84,6 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   return (
     <>
       <LobbyStage play={false} />
-      {open("lobby") && (
-        <button type="button" className="secondary lobby-button" onClick={() => setLobby(true)}>
-          <Icon name="users" /> {t("lobby")}
-        </button>
-      )}
       <TopBar lang={lang} setLang={setLang} t={t} />
       <InstallButton t={t} />
       <main className="title-screen">
@@ -102,73 +95,33 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
               {t("bestScore")} {best.score.toLocaleString()} · {t("floor")} {best.floor}
             </p>
           )}
+          {/* 메인 버튼은 플레이 · 아카이브 · 상점 셋만 (docs/QUEST.md Q1) */}
           <div className="menu-buttons">
             <NicknameBar t={t} />
             <button type="button" className="primary big" onClick={() => setPopup("solo")}>
-              <Icon name="user" />
-              {t("playSolo")}
+              <Icon name="sword" />
+              {t("mainPlay")}
               {saved && <span className="menu-badge">{t("continueRun")}</span>}
             </button>
-            {open("daily") && (
-              <button type="button" className="secondary big" onClick={onDaily}>
-                <Icon name="crown" />
-                {t("daily")}
+            <div className="menu-pair">
+              <button type="button" className="secondary big" onClick={() => setPopup("archive")}>
+                <Icon name="book" />
+                {t("archive")}
               </button>
-            )}
-            {open("battle") && (
-              <button type="button" className="secondary big" onClick={onBattle}>
-                <Icon name="users" />
-                {t("playTogether")}
-              </button>
-            )}
-            {open("coop") && (
-              <button type="button" className="secondary big" onClick={onCoop}>
-                <Icon name="users" />
-                {t("coop")}
-              </button>
-            )}
-            {open("events") && (
-              <button type="button" className="secondary big" onClick={() => setPopup("events")}>
-                <Icon name="star" />
-                {t("events")}
-              </button>
-            )}
-            <button type="button" className="secondary big" onClick={() => setPopup("archive")}>
-              <Icon name="book" />
-              {t("archive")}
-            </button>
-            {open("shop") && (
               <button type="button" className="secondary big" onClick={onShop}>
                 <Icon name="bag" />
                 {t("shop")}
               </button>
-            )}
+            </div>
           </div>
           <StageNotice t={t} lang={lang} stage={stage} />
         </div>
-
-        <nav className="menu-links">
-          <button type="button" className="link-button" onClick={() => setPopup("records")}>
-            <Icon name="trophy" /> {t("records")}
-          </button>
-          <button type="button" className="link-button" onClick={() => setPopup("achievements")}>
-            <Icon name="star" /> {t("achievements")}
-          </button>
-          <button type="button" className="link-button" onClick={() => setPopup("codex")}>
-            <Icon name="book" /> {t("codex")}
-          </button>
-          <button type="button" className="link-button" onClick={() => setPopup("notes")}>
-            <Icon name="note" /> {t("patchNotes")} <small>{GAME_VERSION}</small>
-          </button>
-          <button type="button" className="link-button" onClick={onProfile}>
-            <Icon name="link" /> {t("linkTitle")}
-          </button>
-        </nav>
 
         <footer className="title-footer">
           <span className={`status ${status}`}>
             {t("server")}: {t(status)}
           </span>
+          <small className="title-version">v{GAME_VERSION}</small>
         </footer>
       </main>
 
@@ -198,13 +151,18 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
             startNew(false, true);
           }}
           onTowerDefense={onTowerDefense}
+          onDaily={onDaily}
+          onBattle={onBattle}
+          onCoop={onCoop}
+          onEvents={() => setPopup("events")}
+          onLobby={() => (close(), setLobby(true))}
           onPractice={onPractice}
           onTutorial={onTutorial}
           onClose={close}
         />
       )}
       {popup === "events" && <EventChooser t={t} onSwarm={onSwarm} onPaewang={onPaewang} onRaid={onRaid} onClose={close} />}
-      {popup === "archive" && <ArchiveChooser t={t} onStory={onStory} onTierList={onTierList} onBuilds={onBuilds} onClose={close} />}
+      {popup === "archive" && <ArchiveChooser t={t} onStory={onStory} onTierList={onTierList} onBuilds={onBuilds} onPanel={setPopup} onProfile={onProfile} onClose={close} />}
       {popup === "notes" && (
         <Modal title={t("patchNotes")} t={t} onClose={close}>
           <Suspense fallback={null}>

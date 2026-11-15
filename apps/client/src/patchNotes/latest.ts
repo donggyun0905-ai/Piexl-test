@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.15",
+    date: "2026-11-15",
+    items: {
+      ko: ["메인 화면 정리: 버튼은 플레이 · 아카이브 · 상점 셋만 · 기록·업적·도감·패치 노트·기기 연동은 아카이브 창으로 · 일일 도전·함께 하기·협동·이벤트·로비는 플레이 창 안으로 (세계 지도 장소가 생기면 옮길 예정)"],
+      en: ["Cleaner main screen: only Play, Archive and Shop · Records, Achievements, Codex, Patch Notes and Link devices moved into the Archive window · Daily Challenge, Play Together, Co-op, Events and Lobby moved into the Play window (they will move to places on the world map later)"],
+      ja: ["メイン画面を整理：ボタンはプレイ・アーカイブ・ショップの3つだけ・記録・実績・図鑑・パッチノート・端末連携はアーカイブ画面へ・デイリーチャレンジ・みんなで遊ぶ・協力プレイ・イベント・ロビーはプレイ画面の中へ（後で世界地図の場所へ移す予定）"],
+    },
+  },
+  {
     version: "0.53.14",
     date: "2026-11-15",
     items: {
