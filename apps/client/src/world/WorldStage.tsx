@@ -111,9 +111,11 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       if (near) return cb.current.onUse(near);
       if (map && wood?.chop(map, me.x, me.y, me.fx, me.fy, performance.now()) === "got") cb.current.onWood?.();
     };
+    // 마우스 자리 (몬스터 이름표) · 지도 좌표
+    const mouse = { x: -1e9, y: 0 };
     const input = bindWalkInput(canvas, me, view, () => !!map && !cb.current.paused, useOrChop, (b, x, y, touch) => hunt?.point(b, x, y, touch) ?? false);
     // 사냥 (J·좌클릭 휘두르기 · K·우클릭 대시)
-    const hunt = createHuntLayer(regionId, !region.indoor, me, input.keys, () => cb.current.who, () => !!map && !cb.current.paused, (g) => cb.current.onKill?.(g));
+    const hunt = createHuntLayer(regionId, !region.indoor, me, input.keys, () => cb.current.who, () => !!map && !cb.current.paused, (g) => cb.current.onKill?.(g), () => [mouse.x, mouse.y]);
     // 마우스 휠: 확대·축소
     const wheel = (e: WheelEvent) => {
       e.preventDefault();
@@ -121,8 +123,6 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       setWorldPrefs({ zoom: Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, z)) });
     };
     canvas.addEventListener("wheel", wheel, { passive: false });
-    // 마우스 자리 (몬스터 이름표) · 지도 좌표
-    const mouse = { x: -1e9, y: 0 };
     const hover = (e: PointerEvent) => {
       const rc = canvas.getBoundingClientRect();
       const k = rc.width / view.w;
@@ -165,11 +165,11 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         const arrived = walk.step(me);
         if (arrived) cb.current.onAuto?.(arrived);
         const run = input.keys.has("ShiftLeft") || input.keys.has("ShiftRight") ? RUN : 1;
-        if (!cb.current.paused && !hunt?.down()) stepWalker(me, input.keys, dt, SPEED * run, stand);
+        if (!cb.current.paused && !hunt?.down() && !hunt?.fighting()) stepWalker(me, input.keys, dt, SPEED * run, stand);
         // 창이 떠 멈추거나 쓰러지면 걷는 중이 아님 (발소리·걷는 그림이 계속 나던 문제)
         else me.moving = false;
         // 쓰러졌다 일어나면 가장 가까운 만진 순간 이동석 앞 (없으면 처음 자리)
-        if (!cb.current.paused && hunt?.step(me, dt, stand)) [me.x, me.y] = reviveAt(region, regionId, me.x, me.y);
+        if (!cb.current.paused && hunt?.step(me, dt, stand, m)) [me.x, me.y] = reviveAt(region, regionId, me.x, me.y);
         if (me.moving && t >= nextStep) {
           nextStep = t + 0.32 / run;
           const g = groundTex(tileAt(m, Math.floor(me.x / WTILE), Math.floor(me.y / WTILE)));
@@ -201,17 +201,18 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         pushTrees(ctx, m, view, t, items, shadows, wood ? (cx, cy) => wood.stump(cx, cy, now) : undefined, wood ? (cx, cy) => wood.shake(cx, cy, now) : undefined);
         hunt?.push(ctx, t, items, (x, y) => Math.abs(x - (view.x + view.w / 2)) < view.w / 2 + 32 && Math.abs(y - (view.y + view.h / 2)) < view.h / 2 + 32);
         for (const s of shadows) s();
-        items.push({
-          y: me.y,
-          draw: () => shadow(ctx, Math.round(me.x), Math.round(me.y) + 1, 6, 2.2, 0.32),
-        });
+        // 지도 전투 중에는 내 몸·적·효과를 본편 판이 그림
+        const fighting = !!hunt?.fighting();
+        if (!fighting) items.push({ y: me.y, draw: () => shadow(ctx, Math.round(me.x), Math.round(me.y) + 1, 6, 2.2, 0.32) });
         if (hunt) items.push({ y: me.y - 0.1, draw: () => hunt.under(ctx, me) });
-        items.push({
-          y: me.y,
-          draw: () => drawBody(ctx, cb.current.who, Math.round(me.x), Math.round(me.y - R), R, { faceX: me.fx, faceY: me.fy, moving: me.moving, casting: false, step: me.step }, me.moving ? Math.floor(t * 8) : 0),
-        });
+        if (!fighting)
+          items.push({
+            y: me.y,
+            draw: () => drawBody(ctx, cb.current.who, Math.round(me.x), Math.round(me.y - R), R, { faceX: me.fx, faceY: me.fy, moving: me.moving, casting: false, step: me.step }, me.moving ? Math.floor(t * 8) : 0),
+          });
         items.sort((a, b) => a.y - b.y);
         for (const it of items) it.draw();
+        if (fighting) hunt!.battle(ctx, view, scale * dpr, cb.current.tx, now);
         const mc = region.moodCenter;
         drawWeather(ctx, view, t);
         if (region.mood) drawMood(ctx, region.mood, view, t, mc && [(mc[0] + 0.5) * WTILE, (mc[1] + 0.5) * WTILE]);

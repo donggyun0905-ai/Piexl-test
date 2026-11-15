@@ -5,4 +5,5 @@ import type { HuntGround } from "./huntGrounds";
 
 let lang: Lang = "ko";
 export const setHuntLang = (l: Lang): void => void (lang = l);
+export const huntLang = (): Lang => lang;
 export const mobName = (g: HuntGround): string => enemyName(g.kind, lang);

@@ -1,5 +1,6 @@
 // 한 프레임 그리기: 방 → 위험 → 궁극기 바닥 → 사거리 → 예고선 → 장치(포탑·지뢰) → 의사 바닥(가스·알약·봉합 실) → 원소술사 장판 → 악의 사도 장판·영혼 → 적 → 플레이어(+드론·보호막·회전체·고양이·덮치기 호랑이·닌자 그림자·시간술사 잔상·베두인 차크람·이무기 오라) → 의사 공중(탄·키트·구급차) → 투사체 → 효과 → 라스트 보스 어둠·궁극기 → 이무기 용·브레스 → 피해 숫자 → 보스 막대 → 조준점 (이 순서가 겹침 순서)
-import { applyRoom, tailShark, useSeat, withGymFx, type RunState, type TagSpecialKind } from "@pixel-rogue/shared";
+import { applyRoom, tailShark, withGymFx, type RunState, type TagSpecialKind } from "@pixel-rogue/shared";
+import { cursorWorld, eachPerson } from "./scenePeople";
 import { cameraFor } from "../camera";
 import { drawRangeRing } from "../rangeRing";
 import { drawEnemies, drawPlayer } from "./actors";
@@ -79,6 +80,7 @@ import { drawS3Dark, drawS3Ground } from "./s3Bosses";
 import { withFade } from "./fxFade";
 
 export interface DrawOptions {
+  bare?: { x: number; y: number; k: number }; /** 지도 전투(world/battle): 벽·바닥 없이, 카메라·배율은 지도가 */
   /** 0~1: 이전 틱과 이번 틱 사이 위치 */
   alpha: number;
   showReticle: boolean;
@@ -132,29 +134,6 @@ export interface DrawOptions {
 
 export type DrawOverlay = (ctx: CanvasRenderingContext2D, s: RunState, alpha: number, snap: (v: number) => number) => void;
 
-/** 사람마다 그 자리를 꺼내 놓고 그림 (협동은 다른 사람 먼저, 나는 맨 위). me: 내 자리 */
-/** 패왕전: 쓰러진 사람·수풀에 숨은 상대는 몸·장치·효과를 하나도 그리지 않음 */
-function eachPerson(s: RunState, fn: (me: boolean) => void): void {
-  const party = s.party;
-  if (!party) return fn(true);
-  const mine = s.seat ?? 0;
-  for (let i = 0; i < party.length; i++) {
-    if (i === mine || (s.pvp && !pwShown(s, i))) continue;
-    useSeat(s, i);
-    fn(false);
-  }
-  useSeat(s, mine);
-  if (!s.pvp || pwShown(s, mine)) fn(true);
-}
-
-/** 마우스 자리 → 게임 좌표 */
-function cursorWorld(ctx: CanvasRenderingContext2D, opt: DrawOptions, k: number, camX: number, camY: number): { x: number; y: number } | null {
-  const m = opt.cursor?.();
-  if (!m) return null;
-  const r = ctx.canvas.getBoundingClientRect();
-  return { x: ((m.x - r.left) * (ctx.canvas.width / r.width)) / k + camX, y: ((m.y - r.top) * (ctx.canvas.height / r.height)) / k + camY };
-}
-
 /** 한 장면 그리기 · 단련한 패시브 효과도 그 사람 기준 크기로 (sim/gymPerks) */
 export function drawFrame(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions): void {
   withGymFx(s, () => drawScene(ctx, s, opt));
@@ -165,18 +144,18 @@ function drawScene(ctx: CanvasRenderingContext2D, s: RunState, opt: DrawOptions)
   // 지금 방 크기 (라스트 보스방은 큼)
   applyRoom(s);
   // 화면 해상도로 그림: 움직이는 것은 게임 픽셀이 아니라 화면 픽셀 단위로 맞춰서 부드럽게 보이게
-  const cam = cameraFor(s, opt.zoom, alpha);
-  const k = opt.pixelScale * opt.zoom;
+  const cam = opt.bare ?? cameraFor(s, opt.zoom, alpha);
+  const k = opt.bare?.k ?? opt.pixelScale * opt.zoom;
   const snap = (v: number) => Math.round(v * k) / k;
   const camX = snap(cam.x);
   const camY = snap(cam.y);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = themeFor(s).wall;
-  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  if (!opt.bare) ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   ctx.setTransform(k, 0, 0, k, -camX * k, -camY * k);
   ctx.imageSmoothingEnabled = false;
 
-  drawRoom(ctx, s, [camX, camY, ctx.canvas.width / k, ctx.canvas.height / k]);
+  if (!opt.bare) drawRoom(ctx, s, [camX, camY, ctx.canvas.width / k, ctx.canvas.height / k]);
   drawTerrain(ctx, s, snap);
   drawSwarmGround(ctx, s, snap);
   drawPwGround(ctx, s);

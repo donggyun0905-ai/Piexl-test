@@ -23,7 +23,7 @@ export function WorldHud({ t, power, home, onGear, onChar, onMap, onTab, onKeys,
         📋 {t("tabOverview")} · Tab
       </button>
       <button type="button" className="secondary" onClick={onKeys}>
-        ⌨ {t("wkTitle")} · H
+        🎮 {t("wkTitle")} · H
       </button>
       {home && (
         <button type="button" className="secondary" onClick={onHome}>

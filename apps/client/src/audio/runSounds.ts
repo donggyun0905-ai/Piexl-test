@@ -135,7 +135,7 @@ function snapshot(s: RunState): Seen {
     lxShards: s.player.passives.filter((id) => id === "lxShard").length,
   };
 }
-export function createRunSounds(run: RunState, onShake: (power: number) => void) {
+export function createRunSounds(run: RunState, onShake: (power: number) => void, music = true) {
   let seen = snapshot(run);
   let orbSound = 0; // 원소술사 회전체가 때릴 때 휘두르는 소리 (너무 잦지 않게)
   const hitsNow = hitCounter(); // 피해 숫자가 뜨는 타격마다 타격음
@@ -144,7 +144,7 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
   setTigerMusic(limited === "tiger");
   setSummerMusic(limited === "summer");
   setVictoryMusic(!limited && wornVictory(run.player.characterId));
-  startMusic(run.floor, seen.boss);
+  if (music) startMusic(run.floor, seen.boss);
   return {
     /** 틱을 진행한 프레임마다 */
     update(): void {
@@ -286,13 +286,13 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void)
       fx.push(...vaultCues(now.vault, seen.vault)); // 비밀의 방 (audio/vaultSound)
       if (now.over && !seen.over) {
         fx.push(run.won ? "clear" : "fall");
-        stopMusic();
+        if (music) stopMusic();
       }
       for (const f of polish(run, fx)) play(f);
       seen = now;
     },
     dispose(): void {
-      stopMusic();
+      if (music) stopMusic();
       setRoomMusic(null);
       setTigerMusic(false);
     },
