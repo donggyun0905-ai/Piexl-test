@@ -10,6 +10,8 @@ import type { BattleRoom } from "./battleRoom";
 
 /** 판 밖으로 미는 동안 이 틱 수(1초)가 지나면 도망 · 한 번에 따라잡는 최대 틱 */
 const FLEE_TICKS = 60;
+/** 적이 없고 공격·대시·스킬도 안 누른 채 이 틱 수(1.5초)가 지나면 판을 닫음 */
+const QUIET_TICKS = 90;
 const MAX_CATCH_UP = 6;
 
 export interface FieldBattle {
@@ -19,6 +21,7 @@ export interface FieldBattle {
   mobs: Map<number, Mob>;
   acc: number;
   push: number;
+  quiet: number;
 }
 
 export type BattleEnd = "won" | "fled" | "down";
@@ -55,7 +58,7 @@ export function startBattle(room: BattleRoom, who: CharacterId, seed: number, me
     map.set(e.id, m);
   }
   s.rooms[s.roomId]!.enemies = s.enemies;
-  return { run: s, room, mobs: map, acc: 0, push: 0 };
+  return { run: s, room, mobs: map, acc: 0, push: 0, quiet: 0 };
 }
 
 /** 판 끝에서 바깥쪽으로 미는지 (도망) */
@@ -84,7 +87,9 @@ export function stepBattle(b: FieldBattle, ms: number, read: () => TickInput, on
       onKill(m);
     }
     if (s.player.hp <= 0 || s.over) return "down";
-    if (!s.enemies.length) return "won";
+    // 적이 없으면: 조용히 1.5초 지나면 닫음 (다 잡았거나, 몬스터 없이 휘둘러 봄)
+    b.quiet = s.enemies.length || input.attack || input.dash || input.skill ? 0 : b.quiet + 1;
+    if (b.quiet >= QUIET_TICKS) return "won";
     if (b.push >= FLEE_TICKS) return "fled";
   }
   if (n === MAX_CATCH_UP) b.acc = 0;

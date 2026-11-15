@@ -1,5 +1,5 @@
 // 지도 전투(C안) 층: 사냥 층(hunt/huntLayer)이 부름 · 모든 사냥터·들판 무리·필드 보스
-// 몬스터가 나를 쫓기 시작하면 → 주변 지도 조각으로 본편 판을 열고, 판 안 몬스터를 본편 적으로 · 끝나면 지도로 돌려보냄
+// 몬스터가 나를 쫓기 시작하거나 내가 공격·대시·스킬을 누르면 → 주변 지도 조각으로 본편 판을 열고, 판 안 몬스터를 본편 적으로 · 끝나면 지도로 돌려보냄
 import { setRoomSize, type CharacterId } from "@pixel-rogue/shared";
 import { createRunSounds } from "../../audio/runSounds";
 import { DamageTracker } from "../../game/damageNumbers";
@@ -32,15 +32,18 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
   let n = 0;
   /** 도망친 뒤 잠깐은 다시 붙지 않음 (초) */
   let cool = 0;
+  let cdMax = 1;
   const pad = newPad();
   const end = (me: Walker, why: "won" | "fled" | "down") => {
     const r = battleResult(b!);
     [me.x, me.y, me.tx] = [r.at[0], r.at[1], -1];
     h.me.hp = h.me.st.maxHp * r.hpLeft;
     // 남은 몬스터: 사냥터로 돌아감 (도망·쓰러짐)
-    for (const [m, x, y, k] of r.alive) [m.x, m.y, m.hp, m.st, m.t, m.cd] = [x, y, Math.max(1, m.g.hp * k), "home", 1, 1];
+    for (const [m, x, y, k] of r.alive) [m.x, m.y, m.hp, m.st, m.t] = [x, y, Math.max(1, m.g.hp * k), "home", 1];
     if (why === "down") [h.me.hp, h.me.down] = [0, R.downTime];
-    cool = FLEE_COOL;
+    // 도망·쓰러짐 뒤에는 잠깐 다시 붙지 않음 · 몬스터 없이 연 판이 닫힌 뒤는 바로
+    cool = why === "won" ? 0 : FLEE_COOL;
+    h.me.calm = 0;
     sounds?.dispose();
     glow?.destroy();
     [b, sounds, glow] = [null, null, null];
@@ -48,24 +51,32 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
     setRoomSize();
     pad.attack = false;
   };
+  /** 판 열기: 가운데는 내 쪽에 가깝게 (몬스터 쪽으로 조금) · 판 안 몬스터는 무리가 달라도 모두 (필드 보스 포함) */
+  const open = (m: WorldMap, me: Walker, foe: Mob | null) => {
+    const [fx, fy] = foe ? [foe.x, foe.y] : [me.x, me.y];
+    const room = sliceRoom(m, (me.x + (fx - me.x) * 0.3) / WTILE, (me.y + (fy - me.y) * 0.3) / WTILE);
+    const [x0, y0, x1, y1] = [(room.ox + 1) * WTILE, (room.oy + 1.5) * WTILE, (room.ox + room.cols - 1) * WTILE, (room.oy + room.rows - 1) * WTILE];
+    const inside = h.mobs.filter((x) => x.st !== "dead" && x.x > x0 && x.x < x1 && x.y > y0 && x.y < y1);
+    const power = Math.max(0, ...inside.map((x) => x.g.power));
+    b = startBattle(room, who(), n++ * 7919 + region.length, [me.x, me.y], h.me.hp / h.me.st.maxHp, inside, power);
+    // 판 안 몬스터는 지도에서 감춤 (끝나면 돌려보냄)
+    for (const x of inside) [x.st, x.t] = ["dead", 1e9];
+    sounds = createRunSounds(b.run, (pw) => getSettings().shake && shake(pw), false);
+    damage = new DamageTracker();
+  };
   return {
     active: () => !!b,
-    /** 옛 지도 전투 한 장면 뒤: 시험 사냥터 몬스터가 쫓기 시작했으면 판을 엶 */
+    /** 몬스터가 쫓기 시작했으면 판을 엶 (지도 몬스터 한 장면 뒤) */
     tryStart(m: WorldMap, me: Walker, dt: number): void {
       cool -= dt;
       if (b || h.me.down > 0 || cool > 0) return;
-      const foe = h.mobs.find((x) => x.st === "chase" || x.st === "windup");
-      if (!foe) return;
-      // 판 가운데는 내 쪽에 가깝게 (몬스터 쪽으로 조금)
-      const room = sliceRoom(m, (me.x + (foe.x - me.x) * 0.3) / WTILE, (me.y + (foe.y - me.y) * 0.3) / WTILE);
-      const [x0, y0, x1, y1] = [(room.ox + 1) * WTILE, (room.oy + 1.5) * WTILE, (room.ox + room.cols - 1) * WTILE, (room.oy + room.rows - 1) * WTILE];
-      // 판 안에 있는 몬스터는 무리가 달라도 모두 (필드 보스 포함)
-      const inside = h.mobs.filter((x) => x.st !== "dead" && x.x > x0 && x.x < x1 && x.y > y0 && x.y < y1);
-      b = startBattle(room, who(), n++ * 7919 + region.length, [me.x, me.y], h.me.hp / h.me.st.maxHp, inside, foe.g.power);
-      // 판 안 몬스터는 지도에서 감춤 (끝나면 돌려보냄)
-      for (const x of inside) [x.st, x.t] = ["dead", 1e9];
-      sounds = createRunSounds(b.run, (power) => getSettings().shake && shake(power), false);
-      damage = new DamageTracker();
+      const foe = h.mobs.find((x) => x.st === "chase");
+      if (foe) open(m, me, foe);
+    },
+    /** 공격·대시·스킬을 누름: 판이 없으면 그 자리에 엶 (몬스터가 없어도, 조용하면 곧 닫힘) */
+    act(m: WorldMap | null, me: Walker): boolean {
+      if (!b && m && h.me.down <= 0) open(m, me, null);
+      return !!b;
     },
     /** 한 장면 (ms) · 내 지도 자리를 본편 자리로 */
     step(me: Walker, dt: number): void {
@@ -85,6 +96,9 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
       [me.x, me.y] = [p.x + b.room.ox * WTILE, p.y + b.room.oy * WTILE];
       [me.fx, me.fy, me.moving] = [p.faceX, p.faceY, false];
       h.me.hp = h.me.st.maxHp * Math.max(0, p.hp / p.stats.maxHp);
+      // 대시 준비: 쓴 순간 남은 시간을 최대로 (game/gameLoop와 같은 방식)
+      cdMax = p.dashCooldown === 0 ? 1 : Math.max(cdMax, p.dashCooldown);
+      h.me.dashK = 1 - p.dashCooldown / cdMax;
       if (why) end(me, why);
     },
     /** 지도 그림 위에 본편 캐릭터·적·탄·이펙트 · 판 경계 빛 (k = 지도 1픽셀의 캔버스 픽셀) */
@@ -125,13 +139,15 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
       if (b) touch = true;
       return false;
     },
-    /** 키: K 대시 · 스킬 키 */
-    key(code: string): boolean {
-      if (!b) return false;
-      if (code === "KeyK" || code === "Space") pad.dash = true;
+    /** 판에 넘길 키인지: J 공격 · K 대시 · 스킬 키 */
+    wants: (code: string): boolean => code === "KeyJ" || code === "KeyK" || skillOf(code) > 0,
+    /** 키 누름·뗌 (J는 누르고 있는 동안 공격) */
+    key(code: string, down: boolean): void {
+      if (!b) return;
+      if (code === "KeyJ") pad.attack = down;
+      else if (!down) return;
+      else if (code === "KeyK") pad.dash = true;
       else if (skillOf(code)) pad.skill = skillOf(code);
-      else return false;
-      return true;
     },
     dispose(): void {
       sounds?.dispose();

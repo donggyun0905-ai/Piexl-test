@@ -25,12 +25,25 @@ describe("지도 전투 (본편 판)", () => {
     expect(r.shape[0]![0]).toBe(".");
     expect(sliceRoom(m, 39, 29).ox).toBe(40 - BATTLE_COLS);
   });
+  it("몬스터 없이 연 판은 조용하면 닫힘 · 공격을 누르는 동안은 안 닫힘", () => {
+    const m = parseMap(rgba(new Array(40 * 30).fill(WT.grass)), 40, 30);
+    const b = startBattle(sliceRoom(m, 20, 15), "warden", 2, [20 * WTILE, 15 * WTILE], 1, [], 0);
+    const pad = newPad();
+    pad.attack = true;
+    let end = null;
+    for (let i = 0; i < 200 && !end; i++) end = stepBattle(b, 1000 / 60, () => readPad(pad, new Set(), [0, -1]), () => {}, () => {});
+    expect(end).toBeNull();
+    pad.attack = false;
+    for (let i = 0; i < 120 && !end; i++) end = stepBattle(b, 1000 / 60, () => readPad(pad, new Set(), [0, -1]), () => {}, () => {});
+    expect(end).toBe("won");
+    setRoomSize();
+  });
   it("슬라임 셋을 본편 계산으로 잡으면 won · 잡은 수만큼 onKill · 끝나면 방 크기를 되돌릴 수 있음", () => {
     const m = parseMap(rgba(new Array(40 * 30).fill(WT.grass)), 40, 30);
     const room = sliceRoom(m, 20, 15);
     const g = HUNT_GROUNDS.find((x) => x.id === "slimeMeadow")!;
     const me: [number, number] = [20 * WTILE, 15 * WTILE];
-    const mobs = [-30, 0, 30].map((dx): Mob => ({ g, x: me[0] + dx, y: me[1] - 40, hp: g.hp, st: "chase", t: 0, cd: 0, wx: 0, wy: 0, left: false, flash: 0 }));
+    const mobs = [-30, 0, 30].map((dx): Mob => ({ g, x: me[0] + dx, y: me[1] - 40, hp: g.hp, st: "chase", t: 0, wx: 0, wy: 0, left: false }));
     const b = startBattle(room, "warden", 1, me, 1, mobs, g.power);
     expect(b.run.enemies).toHaveLength(3);
     const pad = newPad();
@@ -40,6 +53,7 @@ describe("지도 전투 (본편 판)", () => {
     for (let i = 0; i < 60 * 40 && !end; i++) {
       const p = b.run.player;
       const foe = b.run.enemies[0];
+      pad.attack = !!foe;
       end = stepBattle(b, 1000 / 60, () => readPad(pad, new Set(), foe ? [foe.x - p.x, foe.y - p.y] : [0, -1]), () => kills++, () => {});
     }
     expect(end).toBe("won");
@@ -53,7 +67,7 @@ describe("지도 전투 (본편 판)", () => {
     const room = sliceRoom(m, 20, 15);
     const me: [number, number] = [20 * WTILE, 17 * WTILE];
     for (const g of HUNT_GROUNDS) {
-      const mob: Mob = { g, x: me[0], y: me[1] - 60, hp: g.hp, st: "chase", t: 0, cd: 0, wx: 0, wy: 0, left: false, flash: 0 };
+      const mob: Mob = { g, x: me[0], y: me[1] - 60, hp: g.hp, st: "chase", t: 0, wx: 0, wy: 0, left: false };
       const b = startBattle(room, "warden", 3, me, 1, [mob], g.power);
       const pad = newPad();
       pad.attack = true;

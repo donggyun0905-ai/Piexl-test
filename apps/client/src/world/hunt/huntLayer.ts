@@ -1,4 +1,4 @@
-// 지도 사냥을 WorldStage에 붙이는 층 (시험 사냥터는 본편 판으로 싸움 battle/battleLayer): 사냥터가 있는 지역 + 바깥 필드(몬스터 없이 휘두르기·대시만) · J·좌클릭 휘두르기 · K·우클릭 대시 (Shift는 달리기) (마우스는 그쪽으로) · 1초마다 능력치 다시 읽기(장비·캐릭터 바꿈) · 쓰러지면 걷기 멈춤
+// 지도 사냥을 WorldStage에 붙이는 층: 사냥터·들판 무리 몬스터(huntSim) + 싸움은 본편 판(battle/battleLayer) · 좌클릭·J 공격 · 우클릭·K 대시 · 1~4 스킬 (판이 없으면 그 자리에 엶) · Shift 달리기 · 1초마다 체력 다시 읽기(장비·캐릭터 바꿈) · 쓰러지면 걷기 멈춤
 import type { CharacterId } from "@pixel-rogue/shared";
 import type { PointHook, View, Walker } from "../../lobby/walker";
 import type { TextKey } from "../../i18n";
@@ -6,8 +6,8 @@ import type { WorldMap } from "../worldMap";
 import { createBattleLayer } from "../battle/battleLayer";
 import type { Drawable } from "../worldTrees";
 import { groundsIn } from "./huntGrounds";
-import { drawDashTrail, drawHuntHud, drawHuntTop, drawMobTip, pushMobs } from "./huntDraw";
-import { createHunt, dash, mobsOf, stepHunt, swing, type Mob } from "./huntSim";
+import { drawHuntHud, drawHuntTop, drawMobTip, pushMobs } from "./huntDraw";
+import { createHunt, mobsOf, stepHunt, type Mob } from "./huntSim";
 import { wanderPacks } from "./huntWander";
 import { REGIONS } from "../worldPlaces";
 import { huntStats } from "./huntStats";
@@ -41,23 +41,26 @@ export function createHuntLayer(region: string, outdoor: boolean, me: Walker, ke
   const h = createHunt(region, who());
   const fight = createBattleLayer(region, h, keys, who, mouse, onKill, shake);
   let refresh = 0;
-  // 들판 떠돌이 무리는 지도를 받은 뒤 (첫 장면)
+  // 들판 떠돌이 무리는 지도를 받은 뒤 (첫 장면) · 공격 키를 누르면 판을 열 지도
   let packed = false;
+  let lastMap: WorldMap | null = null;
+  // J(꾹 = 공격)·K 대시·스킬 키: 판이 없으면 그 자리에 열고 본편 입력으로
   const key = (e: KeyboardEvent) => {
     if (!on() || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
-    if (fight.key(e.code)) return;
-    if (e.code === "KeyJ") swing(h, me);
-    else if (e.code === "KeyK") dash(h, me, keys);
+    if (fight.wants(e.code) && fight.act(lastMap, me)) fight.key(e.code, true);
   };
-  // 판 안 좌클릭은 누르고 있는 동안 공격
+  const keyUp = (e: KeyboardEvent) => fight.key(e.code, false);
+  // 좌클릭은 누르고 있는 동안 공격
   const up = (e: PointerEvent) => fight.press(e.button, false);
   window.addEventListener("keydown", key);
+  window.addEventListener("keyup", keyUp);
   window.addEventListener("pointerup", up);
   return {
     down: () => h.me.down > 0,
     fighting: fight.active,
     battle: (ctx, view, k, t, now) => fight.draw(ctx, view, k, t, now),
     step: (w, dt, stand, map) => {
+      lastMap = map;
       if (!packed) {
         packed = true;
         const r = REGIONS[region];
@@ -73,27 +76,25 @@ export function createHuntLayer(region: string, outdoor: boolean, me: Walker, ke
         fight.step(w, dt);
         return false;
       }
-      const woke = stepHunt(h, w, dt, stand, onKill);
+      const woke = stepHunt(h, w, dt, stand);
       fight.tryStart(map, w, dt);
       return woke;
     },
     push: (ctx, t, items, near) => pushMobs(ctx, h, t, items, near),
-    under: (ctx, w) => !fight.active() && drawDashTrail(ctx, h, w),
+    under: () => {},
     top: (ctx, w) => !fight.active() && drawHuntTop(ctx, h, w),
     hud: (ctx, w, hh, k, dl, dt) => drawHuntHud(ctx, h, w, hh, k, dl, dt),
     tip: (ctx, x, y, text) => drawMobTip(ctx, h, x, y, text),
     point: (button, x, y, touch) => {
       if (touch) return on() && fight.tap();
       if (!on()) return false;
-      if (fight.press(button, true)) return true;
-      const aim = [x - me.x, y - (me.y - 4)] as const;
-      if (button === 0) swing(h, me, aim);
-      else if (button === 2) dash(h, me, keys, aim);
-      else return false;
-      return true;
+      // 좌클릭 공격·우클릭 대시: 판이 없으면 그 자리에 엶 (마우스 쪽 조준은 판이 읽음)
+      if (button !== 0 && button !== 2) return false;
+      return fight.act(lastMap, me) && fight.press(button, true);
     },
     dispose: () => {
       window.removeEventListener("keydown", key);
+      window.removeEventListener("keyup", keyUp);
       window.removeEventListener("pointerup", up);
       fight.dispose();
     },

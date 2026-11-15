@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.55.7",
+    date: "2026-11-16",
+    items: {
+      ko: ["세계 지도(시험 중) 지도 전투를 모두 던전 방식으로: 예전 흰 휘두르기·지도용 대시는 없어짐 · 바깥 필드 어디서든 좌클릭·J 공격, 우클릭·K 대시, 1~4 스킬을 누르면 그 자리가 바로 전투판이 되어 캐릭터 원래 기본 공격·기본 패시브·스킬로 싸움 · 적이 없고 1.5초 동안 아무것도 안 누르면 판이 닫힘 · 지도에서 걸을 때 체력도 던전과 같은 값 (장신구 포함)"],
+      en: ["World Map (testing) all field combat now works like the dungeon: the old white swing and map-only dash are gone · Anywhere outdoors, left click / J to attack, right click / K to dash or 1-4 for skills turns that spot into a battlefield and you fight with your character's real basic attack, passives and skills · With no enemies and no input for 1.5 seconds the battlefield closes · Your HP while walking the map matches the dungeon value too (trinkets included)"],
+      ja: ["世界地図（テスト中）フィールド戦闘をすべてダンジョン方式に：以前の白い斬撃と地図用ダッシュはなくなる・屋外ならどこでも左クリック・Jで攻撃、右クリック・Kでダッシュ、1〜4でスキルを押すとその場が戦場になり、キャラクター本来の基本攻撃・パッシブ・スキルで戦う・敵がいなくて1.5秒何も押さないと戦場が閉じる・地図を歩くときの体力もダンジョンと同じ値（装身具込み）"],
+    },
+  },
+  {
     version: "0.55.6",
     date: "2026-11-16",
     items: {
