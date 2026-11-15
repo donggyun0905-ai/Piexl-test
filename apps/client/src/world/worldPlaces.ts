@@ -28,6 +28,7 @@ import { CHAPELS_INSIDE, HOUSES_INSIDE } from "./places/interiors";
 import { PROPS } from "./places/propsLayout";
 import { DECO_R, type DecoArt } from "./worldDeco";
 import { WTILE } from "./worldMap";
+import { groundsIn } from "./hunt/huntGrounds";
 import type { Mood } from "./worldMood";
 
 /** npc = 말 거는 사람 (부딪힘) · door = 건물 문(들어가기) · exit = 건물 안 나가는 문 · deco = 가구 (부딪힘, 말 못 검) · warp = 순간 이동석 · pass = 국경 통로(다른 나라 필드로, 그 나라가 스토리에서 열렸을 때만) */
@@ -93,7 +94,11 @@ export interface Region {
 export const skinOf = (r: Region): Readonly<Record<string, string>> | undefined => (r.indoor ? { ...INDOOR_SKIN, ...r.skin } : r.skin);
 
 /** 나라 필드에 길가 가로등·집 앞 소품 더하기 (생성기 world_props가 쓴 표) */
-const withProps = (id: string, r: Region): Region => ({ ...r, places: [...r.places, ...(PROPS[id] ?? []).map(([art, tx, ty], i): Place => ({ id: `street${i}`, kind: "deco", tx, ty, name: r.places[0]!.name, art }))] });
+/** + 사냥터 표지판 (사냥터 서쪽 끝, id = 사냥터 id · 퀘스트 화살표 목적지, world/hunt/huntGrounds) */
+const withProps = (id: string, r: Region): Region => ({
+  ...r,
+  places: [...r.places, ...(PROPS[id] ?? []).map(([art, tx, ty], i): Place => ({ id: `street${i}`, kind: "deco", tx, ty, name: r.places[0]!.name, art })), ...groundsIn(id).map((g): Place => ({ id: g.id, kind: "sign", tx: g.tx - g.rad - 1, ty: g.ty, name: g.name }))],
+});
 
 /** 나라 필드 · 건물 안 (장소 표는 places/ 나라마다) */
 export const REGIONS: Record<string, Region> = {
@@ -105,7 +110,7 @@ export const REGIONS: Record<string, Region> = {
   ...VIRDIA_INSIDE,
   helios: withProps("helios", HELIOS_FIELD),
   ...HELIOS_INSIDE,
-  desert: DESERT_FIELD,
+  desert: withProps("desert", DESERT_FIELD),
   silber: withProps("silber", SILBER_FIELD),
   ...SILBER_INSIDE,
   thalassia: withProps("thalassia", THAL_FIELD),

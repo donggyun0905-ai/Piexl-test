@@ -12,19 +12,28 @@ const KEY = "quests";
 /** 아지트 밖으로 나간 기록 (leave 할 일) */
 export const LEAVE_MARK = "@leave";
 
-/** 저장 모양 (모두 목록) */
+/** 저장 모양 (목록은 두 기기 합집합 · 사냥 수는 숫자 합치기) */
 interface Stored {
-  /** 끝낸 퀘스트 번호 */
-  fin: number[];
+  /** 끝낸 퀘스트 id (quests의 id) · 예전 저장은 번호(fin, 0~12 = id "0"~"12") */
+  ids: string[];
+  fin?: number[];
   /** 가 본 장소 (퀘스트에 나오는 것만) */
   visits: string[];
   /** 본 것: prologue = 프롤로그 · attic = 아지트 안내 */
   flags: string[];
+  /** 사냥터마다 잡은 수 (world/hunt) */
+  kills: Record<string, number>;
 }
 interface QState extends Stored {
-  /** 끝낸 퀘스트 수 (= 지금 퀘스트 번호, 0부터 이어서 끝낸 것) */
+  /** 지금 퀘스트 번호 (QUESTS 안 차례, 끝낸 것은 건너뜀 · 다 끝났으면 QUESTS.length) */
   done: number;
 }
+
+const firstOpen = (ids: readonly string[]) => {
+  let i = 0;
+  while (i < QUESTS.length && ids.includes(QUESTS[i]!.id)) i++;
+  return i;
+};
 
 function load(): QState {
   let v: Partial<Stored> & { done?: number } = {};
@@ -33,13 +42,12 @@ function load(): QState {
   } catch {
     /* 처음 값 */
   }
-  // 예전 저장(done 숫자) → 끝낸 번호 목록
-  const fin = v.fin ?? Array.from({ length: v.done ?? 0 }, (_, i) => i);
-  let done = 0;
-  while (fin.includes(done)) done++;
-  return { fin, visits: v.visits ?? [], flags: v.flags ?? [], done };
+  // 예전 저장(done 숫자 · fin 번호) → id 목록
+  const old = v.fin ?? Array.from({ length: v.done ?? 0 }, (_, i) => i);
+  const ids = [...new Set([...(v.ids ?? []), ...old.map(String)])];
+  return { ids, fin: v.fin, visits: v.visits ?? [], flags: v.flags ?? [], kills: v.kills ?? {}, done: firstOpen(ids) };
 }
-const save = (s: QState) => saveText(KEY, JSON.stringify({ fin: s.fin, visits: s.visits, flags: s.flags }));
+const save = (s: QState) => saveText(KEY, JSON.stringify({ ids: s.ids, ...(s.fin ? { fin: s.fin } : {}), visits: s.visits, flags: s.flags, kills: s.kills }));
 
 export const hasFlag = (f: string): boolean => load().flags.includes(f);
 export function setFlag(f: string): void {
@@ -49,7 +57,10 @@ export function setFlag(f: string): void {
 
 /** 퀘스트로 장·모드를 여는지 (세계 지도가 있는 곳) */
 export const questMode = (): boolean => TEST_OPEN;
-export const questsDone = (): number => load().done;
+/** 끝낸 퀘스트 id */
+export const questIds = (): string[] => load().ids;
+/** 끝낸 퀘스트 수 */
+export const questsDone = (): number => QUESTS.filter((q) => load().ids.includes(q.id)).length;
 /** 지금 퀘스트 번호 (다 끝났으면 null) */
 export const activeQuest = (): number | null => (load().done < QUESTS.length ? load().done : null);
 
@@ -64,9 +75,17 @@ export function recordMet(c: QuestCond): boolean {
   return false;
 }
 
-export function condMet(c: QuestCond, visits: readonly string[] = load().visits): boolean {
-  if ("visit" in c) return visits.includes(c.visit);
-  if ("leave" in c) return visits.includes(LEAVE_MARK);
+/** 사냥터에서 잡은 수 */
+export const killsAt = (g: string): number => load().kills[g] ?? 0;
+export function noteKill(g: string): void {
+  const s = load();
+  save({ ...s, kills: { ...s.kills, [g]: (s.kills[g] ?? 0) + 1 } });
+}
+
+export function condMet(c: QuestCond, s: Pick<Stored, "visits" | "kills"> = load()): boolean {
+  if ("visit" in c) return s.visits.includes(c.visit);
+  if ("leave" in c) return s.visits.includes(LEAVE_MARK);
+  if ("hunt" in c) return (s.kills[c.hunt] ?? 0) >= c.n;
   return recordMet(c);
 }
 
@@ -78,19 +97,24 @@ export function noteVisit(id: string): void {
   save({ ...s, visits: [...s.visits, id] });
 }
 
-/** 할 일을 다 이룬 퀘스트를 차례로 끝냄 → 새로 끝난 번호들 */
+/** 할 일을 다 이룬 퀘스트를 차례로 끝냄 → 새로 끝난 번호들 (QUESTS 안 차례) */
 export function advanceQuests(): number[] {
   const s = load();
   const out: number[] = [];
-  while (s.done < QUESTS.length && QUESTS[s.done]!.need.every((c) => condMet(c, s.visits))) {
+  while (s.done < QUESTS.length && QUESTS[s.done]!.need.every((c) => condMet(c, s))) {
     out.push(s.done);
-    s.fin.push(s.done++);
+    s.ids.push(QUESTS[s.done]!.id);
+    s.done = firstOpen(s.ids);
   }
   if (out.length) save(s);
   return out;
 }
 
-const doneList = () => QUESTS.slice(0, load().done);
+/** 끝낸 퀘스트 (사이에 새 퀘스트가 끼어도 이미 끝낸 것은 그대로) */
+const doneList = () => {
+  const ids = load().ids;
+  return QUESTS.filter((q) => ids.includes(q.id));
+};
 /** 퀘스트로 연 장 */
 export const questStage = (): number => Math.max(0, ...doneList().map((q) => q.stage ?? 0));
 export const questFeature = (f: Feature): boolean => doneList().some((q) => q.opens?.includes(f));

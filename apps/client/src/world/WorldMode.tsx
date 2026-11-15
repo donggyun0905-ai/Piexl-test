@@ -8,7 +8,7 @@ import { AtticGuide, useAtticGuide } from "./AtticGuide";
 import { QuestBook, QuestDone, QuestHud, questMark } from "./QuestHud";
 import { WorldTab } from "./WorldTab";
 import { placeAction } from "./worldAction";
-import { advanceQuests, LEAVE_MARK, noteVisit } from "../progress/quest";
+import { advanceQuests, LEAVE_MARK, noteKill, noteVisit } from "../progress/quest";
 import { QUESTS } from "../progress/quests";
 import { ATTIC_ID } from "./places/attic";
 import { featureOpen } from "../progress/storyStage";
@@ -93,6 +93,11 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
     if (fresh.length) setDoneQ((q) => [...q, ...fresh]);
     setQv((v) => v + 1);
     return fresh.length > 0;
+  };
+  /** 사냥터 몬스터를 잡음 → 사냥 퀘스트 숫자 */
+  const onKill = (g: string) => {
+    noteKill(g);
+    checkQuests();
   };
   const closeDone = () => {
     const st = QUESTS[doneQ[0]!]?.stage;
@@ -193,7 +198,7 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
   const body = (p: Place): TextKey => p.line ?? (`${p.name}Text` as TextKey);
   return (
     <div className="lobby-mode world-mode">
-      <WorldStage key={`${cur.id}-${cur.n ?? 0}`} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} who={who} paused={busy} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} mark={guide.mark ?? questMark(cur.id)} />
+      <WorldStage key={`${cur.id}-${cur.n ?? 0}`} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} who={who} paused={busy} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} mark={guide.mark ?? questMark(cur.id)} onKill={onKill} />
       <button type="button" className="secondary lobby-exit" onClick={onExit}>
         {t("lobbyExit")}
       </button>

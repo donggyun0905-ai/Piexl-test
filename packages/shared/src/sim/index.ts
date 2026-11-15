@@ -233,3 +233,4 @@ export type { AsmoBlock, AsmoWall } from "./asmoTypes";
 export { BOSS_CERB_KIT_RULES, breathing, cellRect, erupting, fallTick, FLOOR_COLS, FLOOR_ROWS, swelling } from "./cerbKit";
 export { BOSS_TWINS_RULES } from "./bossTwins";
 export { BOSS_MOON_EATER_RULES } from "./bossMoonEater";
+export { accDash, accExtras, accMods } from "./accStats";

@@ -1,12 +1,13 @@
-// 세계 지도 TAB 한눈에 보기 (docs/QUEST.md 다음 할 일 4): 화면을 검정 반투명으로 덮고 지금 퀘스트·진행·콘텐츠(열림/잠김·있는 곳)·갈 수 있는 나라·조작 키
+// 세계 지도 TAB 한눈에 보기 (docs/QUEST.md 다음 할 일 4): 화면을 검정 반투명으로 덮고 지금 퀘스트·진행·콘텐츠(열림/잠김·있는 곳)·사냥터(권장 투력)·갈 수 있는 나라·조작 키
 // Tab·Esc·바깥 누르기로 닫힘 · 여는 키는 WorldMode (다른 창이 없을 때)
 import { useEffect } from "react";
 import type { TextKey } from "../i18n";
 import { activeQuest, condMet, questsDone } from "../progress/quest";
 import { QUESTS } from "../progress/quests";
 import { featureOpen, LAST_STAGE, storyStage, type Feature } from "../progress/storyStage";
-import { condText, lockText } from "./QuestHud";
+import { condText, lockText, questTitle } from "./QuestHud";
 import { fieldOpen, isField, REGIONS } from "./worldPlaces";
+import { HUNT_GROUNDS } from "./hunt/huntGrounds";
 
 type T = (k: TextKey) => string;
 /** 콘텐츠: 이름 · 있는 곳(장소 이름·지역) */
@@ -38,7 +39,8 @@ export function WorldTab({ t, cur, regionName, onClose }: { t: T; cur: string; r
     return () => window.removeEventListener("keydown", key);
   });
   const i = activeQuest();
-  const lands = Object.keys(REGIONS).filter((k) => isField(REGIONS[k]) && fieldOpen(REGIONS[k]));
+  // 타고 가는 곳(열차 안)은 빼고, 같은 이름은 한 번
+  const lands = [...new Set(Object.keys(REGIONS).filter((k) => isField(REGIONS[k]) && !REGIONS[k]!.ride && fieldOpen(REGIONS[k])).map(regionName))];
   return (
     <div className="world-tab" role="dialog" aria-modal="true" aria-label={t("tabTitle")} onClick={onClose}>
       <div className="world-tab-body" onClick={(e) => e.stopPropagation()}>
@@ -52,7 +54,7 @@ export function WorldTab({ t, cur, regionName, onClose }: { t: T; cur: string; r
             <p>{t("qBookAll")}</p>
           ) : (
             <>
-              <b>{t(`q${i}Title` as TextKey)}</b>
+              <b>{questTitle(t, i)}</b>
               {QUESTS[i]!.need.map((c, k) => (
                 <small key={k} className={condMet(c) ? "met" : ""}>
                   {condMet(c) ? "✓" : "·"} {condText(t, c, cur, regionName)}
@@ -78,8 +80,19 @@ export function WorldTab({ t, cur, regionName, onClose }: { t: T; cur: string; r
           </ul>
         </section>
         <section>
+          <h3>🗡 {t("tabHunt")}</h3>
+          <ul className="world-tab-modes">
+            {HUNT_GROUNDS.map((g) => (
+              <li key={g.id} className={fieldOpen(REGIONS[g.region]) ? "open" : "locked"}>
+                <b>{t(g.name)}</b>
+                <small>{t("tabHuntRow").replace("{region}", regionName(g.region)).replace("{mob}", t(g.mob)).replace("{n}", String(g.power))}</small>
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section>
           <h3>🗺 {t("tabLands")}</h3>
-          <p>{lands.map(regionName).join(" · ")}</p>
+          <p>{lands.join(" · ")}</p>
         </section>
         <p className="world-tab-keys">{t("tabKeys")}</p>
       </div>

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.54.0",
+    date: "2026-11-15",
+    items: {
+      ko: ["세계 지도(시험 중) 사냥터: 아스칼론 '슬라임 풀밭' · 대사막 '오크 부락' · 실베르 '해골 전장'에 몬스터가 모여 있음 (잡으면 15~30초 뒤 다시 나타남) · 지도에서 J 휘두르기 · Shift 대시 · 낀 레이드 장신구 능력치(공격·체력·방어·공격 속도·치명타·흡혈 등)가 그대로 들어감 · 쓰러지면 잠시 뒤 그 나라 처음 자리에서 일어남 · 사냥 퀘스트 3개가 메인 퀘스트 사이에 들어감 (이미 끝낸 퀘스트·연 모드는 그대로) · Tab 창에 사냥터와 권장 투력"],
+      en: ["World Map (testing) hunting grounds: monsters gather at Ascalon's 'Slime Meadow', the Great Desert's 'Orc Camp' and Silber's 'Field of Bones' (they return 15-30 seconds after being defeated) · J to swing and Shift to dash on the map · Your equipped raid accessory stats (attack, HP, defense, attack speed, crits, lifesteal and more) apply as-is · If you fall, you get back up at the country's starting point after a moment · Three hunting quests now sit between the main quests (quests you've finished and modes you've opened stay as they are) · Hunting grounds and recommended power in the Tab window"],
+      ja: ["世界地図（テスト中）狩り場：アスカロン『スライムの草原』・大砂漠『オークの集落』・シルベール『骸骨の戦場』にモンスターが集まる（倒すと15〜30秒後に再出現）・地図でJ 攻撃・Shift ダッシュ・装備中のレイドアクセサリーの能力（攻撃・体力・防御・攻撃速度・会心・吸血など）がそのまま適用・倒れると少しして、その国の最初の場所で起き上がる・狩りクエスト3つがメインクエストの間に追加（終えたクエストや開いたモードはそのまま）・Tab画面に狩り場と推奨戦力"],
+    },
+  },
+  {
     version: "0.53.21",
     date: "2026-11-15",
     items: {

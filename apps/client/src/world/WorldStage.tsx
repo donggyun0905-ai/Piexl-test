@@ -1,4 +1,4 @@
-// 나라 필드 캔버스: 지도 그림을 받아 덩어리로 그리기 · 걷기(로비와 같은 walker) · 카메라가 따라감(지도 끝에서 멈춤) · 장소 앞에서 F
+// 나라 필드 캔버스: 지도 그림을 받아 덩어리로 그리기 · 걷기(로비와 같은 walker) · 카메라가 따라감(지도 끝에서 멈춤) · 장소 앞에서 F · 사냥터 몬스터(hunt/huntLayer)
 // 마지막 자리는 이 기기에 저장 (다시 들어오면 그 자리)
 import type { CharacterId } from "@pixel-rogue/shared";
 import { useEffect, useRef } from "react";
@@ -19,6 +19,7 @@ import { skinName } from "./worldTex";
 import { here } from "./worldWarps";
 import { pushTrees, type Drawable } from "./worldTrees";
 import { hitsNpc, nearPlace, placeXY, skinOf, type Place, type Region } from "./worldPlaces";
+import { createHuntLayer } from "./hunt/huntLayer";
 
 /** 걷는 속도 (로비보다 조금 빠름: 필드가 넓어서) */
 const SPEED = 80;
@@ -42,6 +43,8 @@ interface Props {
   spawn?: readonly [number, number] | null;
   /** 화살표로 표시할 장소 id (아지트 안내 · 퀘스트) */
   mark?: string | null;
+  /** 사냥터 몬스터를 잡음 (사냥터 id) */
+  onKill?: (g: string) => void;
 }
 
 function loadPos(regionId: string): [number, number] | null {
@@ -53,13 +56,13 @@ function loadPos(regionId: string): [number, number] | null {
   }
 }
 
-export function WorldStage({ regionId, region, color, who, label, paused, onNear, onUse, onLoaded, spawn, mark }: Props) {
+export function WorldStage({ regionId, region, color, who, label, paused, onNear, onUse, onLoaded, spawn, mark, onKill }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
-  const cb = useRef({ who, label, paused, onNear, onUse, onLoaded, mark });
+  const cb = useRef({ who, label, paused, onNear, onUse, onLoaded, mark, onKill });
   // 들어온 자리(spawn)는 처음 그릴 때만 씀 (지역이 바뀌면 key로 새로 만듦)
   const spawnAt = useRef(spawn);
   useEffect(() => {
-    cb.current = { who, label, paused, onNear, onUse, onLoaded, mark };
+    cb.current = { who, label, paused, onNear, onUse, onLoaded, mark, onKill };
   });
 
   useEffect(() => {
@@ -88,6 +91,8 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       () => alive && cb.current.onLoaded?.(false),
     );
     const input = bindWalkInput(canvas, me, view, () => !!map && !cb.current.paused, () => near && cb.current.onUse(near));
+    // 사냥터 (J 휘두르기 · Shift·K 대시)
+    const hunt = createHuntLayer(regionId, me, input.keys, () => cb.current.who, () => !!map && !cb.current.paused, (g) => cb.current.onKill?.(g));
     let last = performance.now();
     let raf = 0;
     let saved = 0;
@@ -107,7 +112,10 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       if (map && chunks) {
         const m = map;
-        if (!cb.current.paused) stepWalker(me, input.keys, dt, SPEED, (x, y) => canStandWorld(m, x, y, R) && !hitsNpc(region, x, y, R));
+        const stand = (x: number, y: number) => canStandWorld(m, x, y, R) && !hitsNpc(region, x, y, R);
+        if (!cb.current.paused && !hunt?.down()) stepWalker(me, input.keys, dt, SPEED, stand);
+        // 쓰러졌다 일어나면 처음 자리로
+        if (!cb.current.paused && hunt?.step(me, dt, stand)) [me.x, me.y] = [(region.start.tx + 0.5) * WTILE, (region.start.ty + 0.5) * WTILE];
         if (me.moving && t >= nextStep) {
           nextStep = t + 0.32;
           const g = groundTex(tileAt(m, Math.floor(me.x / WTILE), Math.floor(me.y / WTILE)));
@@ -137,11 +145,13 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         const items: Drawable[] = region.places.filter(near2).map((p) => ({ y: placeXY(p)[1] + foot(p), draw: () => drawPlace(ctx, p, t, color) }));
         const shadows: (() => void)[] = [];
         pushTrees(ctx, m, view, t, items, shadows);
+        hunt?.push(ctx, t, items, (x, y) => Math.abs(x - (view.x + view.w / 2)) < view.w / 2 + 32 && Math.abs(y - (view.y + view.h / 2)) < view.h / 2 + 32);
         for (const s of shadows) s();
         items.push({
           y: me.y,
           draw: () => shadow(ctx, Math.round(me.x), Math.round(me.y) + 1, 6, 2.2, 0.32),
         });
+        if (hunt) items.push({ y: me.y - 0.1, draw: () => hunt.under(ctx, me) });
         items.push({
           y: me.y,
           draw: () => drawBody(ctx, cb.current.who, Math.round(me.x), Math.round(me.y - R), R, { faceX: me.fx, faceY: me.fy, moving: me.moving, casting: false, step: me.step }, me.moving ? Math.floor(t * 8) : 0),
@@ -155,6 +165,7 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
           drawButterflies(ctx, m, view, t);
           if (!region.indoor) drawCloudShadows(ctx, view, t);
         }
+        hunt?.top(ctx, me);
         if (near) drawPlaceLabel(ctx, near, cb.current.label(near));
         const mk = cb.current.mark && region.places.find((p) => p.id === cb.current.mark);
         if (mk) drawMark(ctx, mk, t);
@@ -174,6 +185,7 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       alive = false;
       cancelAnimationFrame(raf);
       input.dispose();
+      hunt?.dispose();
       saveText(POS_KEY, JSON.stringify({ r: regionId, x: Math.round(me.x), y: Math.round(me.y) }));
     };
   }, [regionId, region, color]);

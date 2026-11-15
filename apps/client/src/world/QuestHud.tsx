@@ -2,7 +2,8 @@
 // 기록서(아지트 책상): 끝낸 퀘스트 · 지금 퀘스트 · 지금까지의 이야기 다시 보기 (Esc로 닫힘)
 import { useEffect } from "react";
 import type { TextKey } from "../i18n";
-import { activeQuest, condMet, questMode, questOpening, questsDone } from "../progress/quest";
+import { activeQuest, condMet, killsAt, questIds, questMode, questOpening } from "../progress/quest";
+import { groundById } from "./hunt/huntGrounds";
 import { FEATURE_STAGE, type Feature } from "../progress/storyStage";
 import { QUESTS, type QuestCond } from "../progress/quests";
 import { StoryFace } from "../story/StoryFace";
@@ -24,7 +25,8 @@ export function questMark(cur: string): string | null {
   if (!c) return null;
   const places = REGIONS[cur]?.places ?? [];
   if ("leave" in c) return places.find((p) => p.kind === "exit")?.id ?? null;
-  const goal = "visit" in c ? c.visit : RUN_AT(c);
+  // 사냥터는 그 표지판(id = 사냥터 id)
+  const goal = "visit" in c ? c.visit : "hunt" in c ? c.hunt : RUN_AT(c);
   const at = "visit" in c ? c.region : goal && regionOfPlace(goal);
   if (!goal || !at) return null;
   if (at === cur) return goal;
@@ -36,18 +38,23 @@ export function questMark(cur: string): string | null {
 export function condText(t: T, c: QuestCond, cur: string, regionName: (id: string) => string): string {
   if ("visit" in c) return c.region === cur ? t("qcVisit").replace("{place}", t(c.name)) : t("qcVisitIn").replace("{region}", regionName(c.region)).replace("{place}", t(c.name));
   if ("leave" in c) return t("qcLeave");
+  if ("hunt" in c) {
+    const g = groundById(c.hunt);
+    return t("qcHunt").replace("{place}", g ? t(g.name) : "?").replace("{mob}", g ? t(g.mob) : "?").replace("{k}", String(Math.min(c.n, killsAt(c.hunt)))).replace("{n}", String(c.n));
+  }
   if ("lastBoss" in c) return t("qcLastBoss");
   const [k, n] = "floor" in c ? (["qcFloor", c.floor] as const) : "wins" in c ? (["qcWins", c.wins] as const) : "hero" in c ? (["qcHero", c.hero] as const) : (["qcEndless", c.endless] as const);
   return t(k).replace("{n}", String(n));
 }
 
-const title = (t: T, i: number) => t(`q${i}Title` as TextKey);
+/** 퀘스트 이름 (QUESTS 안 차례 → 글자 q{id}Title) */
+export const questTitle = (t: T, i: number) => t(`q${QUESTS[i]!.id}Title` as TextKey);
 
 /** 잠긴 모드 옆 글: 퀘스트로 여는 곳은 그 퀘스트 이름 · 아니면 몇 장 */
 export function lockText(t: T, f: Feature): string {
   if (!questMode()) return t("wpTowerLocked").replace("{n}", String(FEATURE_STAGE[f]));
   const q = questOpening(f);
-  return q === null ? t("qLockNone") : t("qLockAt").replace("{q}", title(t, q));
+  return q === null ? t("qLockNone") : t("qLockAt").replace("{q}", questTitle(t, q));
 }
 
 export function QuestHud({ t, cur, regionName, onBook }: { t: T; cur: string; regionName: (id: string) => string; onBook: () => void }) {
@@ -56,7 +63,7 @@ export function QuestHud({ t, cur, regionName, onBook }: { t: T; cur: string; re
   if (i === null || !c) return null;
   return (
     <button type="button" className="quest-hud" onClick={onBook}>
-      <small>📜 {title(t, i)}</small>
+      <small>📜 {questTitle(t, i)}</small>
       <span>{condText(t, c, cur, regionName)}</span>
     </button>
   );
@@ -78,13 +85,13 @@ export function QuestDone({ t, n, onClose }: { t: T; n: number; onClose: () => v
     <div className="quest-done" onClick={onClose}>
       <div className="quest-stamp">
         <b>{t("qStamp")}</b>
-        <span>{title(t, n)}</span>
+        <span>{questTitle(t, n)}</span>
       </div>
       <div className="scene-box">
         <StoryFace who="scribe" size={72} art />
         <div>
           <b>{t("scribe")}</b>
-          <p>{t(`q${n}Done` as TextKey)}</p>
+          <p>{t(`q${QUESTS[n]!.id}Done` as TextKey)}</p>
         </div>
       </div>
     </div>
@@ -98,22 +105,24 @@ export function QuestBook({ t, cur, regionName, onStory, onClose }: { t: T; cur:
     window.addEventListener("keydown", esc);
     return () => window.removeEventListener("keydown", esc);
   });
-  const done = questsDone();
+  const done = questIds();
   const i = activeQuest();
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal quest-book" role="dialog" aria-modal="true" aria-label={t("wpAtticDesk")} onClick={(e) => e.stopPropagation()}>
         <h2>{t("wpAtticDesk")}</h2>
         <ol>
-          {QUESTS.slice(0, done).map((_, k) => (
-            <li key={k} className="done">
-              ✓ {title(t, k)}
-            </li>
-          ))}
+          {QUESTS.map((q, k) =>
+            done.includes(q.id) ? (
+              <li key={q.id} className="done">
+                ✓ {questTitle(t, k)}
+              </li>
+            ) : null,
+          )}
           {i !== null ? (
             <li className="now">
               <b>
-                {t("qNow")} · {title(t, i)}
+                {t("qNow")} · {questTitle(t, i)}
               </b>
               {QUESTS[i]!.need.map((c, k) => (
                 <small key={k} className={condMet(c) ? "met" : ""}>
