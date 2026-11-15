@@ -18,6 +18,7 @@
 - **스프라이트 시트** (원본 시트와 같은 비율): 참고 그림 = 원본 시트 하나. 프롬프트 = **[공통 시트]** + **[시즌 시트]** + 캐릭터 줄
 - 올릴 곳: `art/스킨/S{시즌}/{이름}-일러.png` · `art/스킨/S{시즌}/{이름}-시트.png` (예: `art/스킨/S1/파수꾼-일러.png`)
 - 캐릭터 줄의 영어 문장 하나를 일러스트·시트 둘 다에 그대로 씀
+- 게임에 넣기 (Claude): `scripts/art/season_skins.py`의 `IDS`에 이름 → id 추가 후 `cd scripts/art && python3 season_skins.py` → 시트는 `skins/{id}_{테마}.png`(4×5, 칸 규칙은 기본 캐릭터 것), 일러스트는 `charArt/skin/` · 그리기 표 `game/spriteSheets.ts`의 `V2_SKINS`에도 추가 · 시즌 1 = 테마 `tiger`(범 풍류) · 2026-11-15 시즌 1 첫 8명(파수꾼~의사) 넣음
 
 ### [공통 일러스트]
 

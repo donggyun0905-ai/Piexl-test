@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.14",
+    date: "2026-11-15",
+    items: {
+      ko: ["범 풍류 스킨 새 그림 (파수꾼·떠돌이·마법사·음양사·기계공학자·원소술사·격투가·의사): 한복·백호 옷의 새 걷기·공격·맞음·쓰러짐·대시 그림 · 입으면 캐릭터 선택 카드와 정보 창에 스킨 일러스트"],
+      en: ["New Tiger Revelry skin art (Warden, Drifter, Mage, Talisman Master, Engineer, Elementalist, Brawler, Doctor): new hanbok and white-tiger outfits with walk, attack, hit, down and dash frames · wearing one shows its skin illustration on the character select card and info window"],
+      ja: ["虎の風流スキンの新しい絵（番人・流れ者・魔法使い・陰陽師・エンジニア・元素術師・格闘家・医者）：韓服と白虎の衣装で歩き・攻撃・被弾・ダウン・ダッシュの新しい絵・着るとキャラクター選択カードと情報ウィンドウにスキンのイラスト"],
+    },
+  },
+  {
     version: "0.53.13",
     date: "2026-11-15",
     items: {

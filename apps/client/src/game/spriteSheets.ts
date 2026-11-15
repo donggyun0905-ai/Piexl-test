@@ -1,6 +1,8 @@
 // 캐릭터 그림 시트 표 (game/sprites가 씀): 이름 → 한 칸 크기·발 아래 여백 등
 // 한 칸 크기 정사각형, 4줄 × 4칸: 1줄 앞(아래), 2줄 뒤(위), 3줄 옆(오른쪽, 왼쪽은 뒤집음), 4줄 마법 쓰기
 // 테두리가 잘리지 않게 칸 둘레에 여백을 둠
+/** 시즌 스킨 그림을 새 시트(v2)로 바꾼 스킨 (docs/SKIN_ART.md, 올라온 캐릭터부터) */
+export const V2_SKINS: readonly string[] = ["warden", "drifter", "mage", "mystic", "engineer", "elementalist", "brawler", "doctor"].map((c) => `${c}_tiger`);
 /** 방향 시트로 넣은 캐릭터 그림: 이름 → 한 칸 크기, 발 아래 여백 */
 /** src: 그림 파일의 한 칸 크기가 다를 때 (빛의 사도 성장 그림 2배 촘촘 · 몰락한 왕 96칸 → 보통 크기로 줄여 그림) */
 /** v2: 새 시트 4칸 × 5줄 (칸 = 앞·뒤·왼·오): 1줄 서기 · 2줄 공격 · 3줄 걷기(왼발) · 4줄 걷기(오른발) · 5줄 맞음·쓰러짐·대시 오른쪽·대시 왼쪽 (scripts/art/import_v2.py) */
@@ -166,6 +168,8 @@ export const CHARACTER_SHEETS: Readonly<Record<string, { size: number; footPad: 
   novice10: { size: 32, footPad: 2, src: 128, v2: true },
   novice15: { size: 32, footPad: 2, src: 128, v2: true },
   novice20: { size: 32, footPad: 2, src: 128, v2: true },
+  // 시즌 스킨 새 그림 (skins/{캐릭터}_tiger.png, scripts/art/season_skins.py): 기본 캐릭터와 같은 4×5
+  ...Object.fromEntries(V2_SKINS.map((s) => [s, { size: 32, footPad: 2, src: 128, v2: true as const }])),
   // 야수 변신 백호 (render/beastTiger)
   beasttiger: { size: 56, footPad: 3, src: 128, v2: true },
 };

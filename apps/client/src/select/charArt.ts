@@ -5,14 +5,21 @@ import { hallUnlocked } from "../lobby/exhibits";
 import { ownedLimited } from "../shop/limitedChars";
 import { loadAchievements } from "../records";
 import { loadText, saveText } from "../storage";
+import { equippedSkin } from "../shop/wallet";
 import { CHAR_ART } from "./charArtList";
+import { SKIN_ART } from "./skinArtList";
 
-/** 일러스트 주소 (그림이 없으면 null) · 그림은 scripts/art/char_art.py로 넣음 */
-export const charArtSrc = (c: CharacterId): string | null => (CHAR_ART.has(c) ? `${import.meta.env.BASE_URL}sprites/charArt/${c}.webp` : null);
+/** 입은 스킨의 일러스트 (scripts/art/season_skins.py, 없으면 null) */
+const skinArt = (c: CharacterId, dir: string): string | null => {
+  const s = equippedSkin(c);
+  return s && SKIN_ART.has(s) ? `${import.meta.env.BASE_URL}sprites/charArt/skin/${dir}${s}.webp` : null;
+};
+/** 일러스트 주소 (입은 스킨 일러스트가 먼저, 그림이 없으면 null) · 그림은 scripts/art/char_art.py로 넣음 */
+export const charArtSrc = (c: CharacterId): string | null => skinArt(c, "") ?? (CHAR_ART.has(c) ? `${import.meta.env.BASE_URL}sprites/charArt/${c}.webp` : null);
 /** 스토리 대화 초상화용 (머리·가슴, 256px) */
 export const charFaceSrc = (c: string): string | null => (CHAR_ART.has(c) ? `${import.meta.env.BASE_URL}sprites/charArt/face/${c}.webp` : null);
 /** 선택 창 카드용 (가운데 정사각형 400px) */
-export const charCardSrc = (c: CharacterId): string | null => (CHAR_ART.has(c) ? `${import.meta.env.BASE_URL}sprites/charArt/card/${c}.webp` : null);
+export const charCardSrc = (c: CharacterId): string | null => skinArt(c, "card/") ?? (CHAR_ART.has(c) ? `${import.meta.env.BASE_URL}sprites/charArt/card/${c}.webp` : null);
 
 /** 이미 보여 준(또는 처음부터 가진) 캐릭터 기록 */
 const KEY = "charArtSeen";
