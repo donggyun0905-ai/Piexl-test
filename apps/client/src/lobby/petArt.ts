@@ -1,8 +1,11 @@
 // 펫 그림 (로비를 돌아다니는 펫 · 펫 상점 · 게임 속 따라다니는 펫이 같이 씀)
 import { ell, r } from "./lobbyItems";
+import { drawLobbyImg, lobbyImg } from "./lobbyImg";
 
 type Ctx = CanvasRenderingContext2D;
 export type PetKind = "cat" | "dog" | "slime" | "dragon" | "bunny" | "chick" | "phoenix" | "turtle";
+/** 그림 펫 높이 (픽셀) */
+const PET_H: Record<PetKind, number> = { cat: 10, dog: 11, slime: 8, dragon: 13, bunny: 12, chick: 8, phoenix: 13, turtle: 7 };
 
 const shadow = (ctx: Ctx, x: number, y: number, w: number) => ell(ctx, x, y, w, 1, "rgba(0,0,0,0.3)");
 const eye = (ctx: Ctx, x: number, y: number) => r(ctx, x, y, 1, 1, "#1a1420");
@@ -10,6 +13,12 @@ const eye = (ctx: Ctx, x: number, y: number) => r(ctx, x, y, 1, 1, "#1a1420");
 /** 펫 하나 (x, y = 발, f = 바라보는 쪽 ±1, t = 초) */
 export function drawPetArt(ctx: Ctx, kind: PetKind, x: number, y: number, f: number, t: number): void {
   const step = Math.floor(t * 8) % 2;
+  // 그림이 있으면 그림 (오른쪽을 보는 그림 · 걸음마다 살짝 통통)
+  if (lobbyImg(`pet_${kind}`)) {
+    shadow(ctx, x, y, 4);
+    drawLobbyImg(ctx, `pet_${kind}`, x, y - step * 0.5, PET_H[kind], f < 0);
+    return;
+  }
   switch (kind) {
     case "cat": {
       shadow(ctx, x, y, 4);

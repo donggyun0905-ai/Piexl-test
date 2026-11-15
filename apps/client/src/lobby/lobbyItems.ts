@@ -1,4 +1,5 @@
 // 로비 꾸밈 물건 그리기 (x, y = 물건 아래 가운데, t = 초 · 움직이는 물건용). 모두 1픽셀 사각형으로 찍음
+import { drawLobbyImg } from "./lobbyImg";
 export type DecorKind =
   | "fountain" | "sofa" | "bench" | "deckchair" | "plant" | "vending"
   | "palm" | "umbrella" | "crab" | "shell" | "towel" | "ball"
@@ -286,6 +287,11 @@ const DRAW: Record<DecorKind, (ctx: Ctx, x: number, y: number, t: number) => voi
   },
 };
 
+/** 그림이 있는 꾸밈 → 높이 (로비 픽셀) */
+const IMG_H: Partial<Record<DecorKind, number>> = { fountain: 22, sofa: 14, plant: 16, vending: 24 };
+
 export function drawDecor(ctx: Ctx, kind: DecorKind, x: number, y: number, t: number): void {
+  const h = IMG_H[kind];
+  if (h && drawLobbyImg(ctx, kind, x, y + 1, h)) return;
   DRAW[kind](ctx, x, y, t);
 }

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.12",
+    date: "2026-11-15",
+    items: {
+      ko: ["메인 로비 새 그림: 오락실 바닥·네온 벽 · 분수·소파·화분·자판기 · 게임기 8대와 펫 상점 · 펫 8종 (게임 속 따라다니는 펫도)"],
+      en: ["New main lobby art: arcade carpet and neon wall · fountain, sofa, plants and vending machine · all 8 game cabinets and the pet shop · all 8 pets (including the pet that follows you in a run)"],
+      ja: ["メインロビーの新しい絵：ゲームセンターの床・ネオンの壁・噴水・ソファ・鉢植え・自販機・ゲーム機8台とペットショップ・ペット8種（プレイ中についてくるペットも）"],
+    },
+  },
+  {
     version: "0.53.11",
     date: "2026-11-15",
     items: {

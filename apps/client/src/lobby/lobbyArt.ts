@@ -6,6 +6,7 @@ import { npcDrawers } from "./npcs";
 import { drawFloorLights, drawPartyTop } from "./party";
 import { petDrawers } from "./pets";
 import { THEME_LOOK, type LobbyTheme, type ThemeLook } from "./lobbyThemes";
+import { drawLobbyImg, lobbyImg } from "./lobbyImg";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -99,19 +100,32 @@ function wall(ctx: Ctx, L: ThemeLook): void {
   }
 }
 
+/** 오락실 그림 바닥·벽: 바닥 그림 한 장 = 4×4칸 · 벽 그림 한 장 = 가로 6칸 × 벽 높이 */
+function arcadeArt(ctx: Ctx, floor: HTMLImageElement, top: HTMLImageElement): void {
+  for (let y = 0; y < LOBBY_H; y += TILE * 4) for (let x = 0; x < LOBBY_W; x += TILE * 4) ctx.drawImage(floor, x, y, TILE * 4, TILE * 4);
+  for (let x = 0; x < LOBBY_W; x += TILE * 6) ctx.drawImage(top, x, 0, TILE * 6, WALL_TOP);
+  r(ctx, 0, WALL_TOP - 2, LOBBY_W, 2, "rgba(0,0,0,0.35)");
+}
+
 function roomCanvas(theme: LobbyTheme): HTMLCanvasElement {
   const hit = roomCache.get(theme);
   if (hit) return hit;
+  const floor = theme === "arcade" ? lobbyImg("floor") : undefined;
+  const top = theme === "arcade" ? lobbyImg("wall") : undefined;
   const cv = document.createElement("canvas");
   cv.width = LOBBY_W;
   cv.height = LOBBY_H;
   const ctx = cv.getContext("2d")!;
   const L = THEME_LOOK[theme];
-  for (let row = 0; row < LOBBY_ROWS; row++) for (let c = 0; c < LOBBY_COLS; c++) floorTile(ctx, L, c, row);
-  wall(ctx, L);
+  if (floor && top) arcadeArt(ctx, floor, top);
+  else {
+    for (let row = 0; row < LOBBY_ROWS; row++) for (let c = 0; c < LOBBY_COLS; c++) floorTile(ctx, L, c, row);
+    wall(ctx, L);
+  }
   // 아래 가운데 들어오는 문
   r(ctx, LOBBY_W / 2 - 16, LOBBY_H - 3, 32, 3, L.glow);
-  roomCache.set(theme, cv);
+  // 오락실 그림을 아직 받는 중이면 다음에 다시 그림
+  if (theme !== "arcade" || (floor && top)) roomCache.set(theme, cv);
   return cv;
 }
 
@@ -177,6 +191,20 @@ function machine(ctx: Ctx, m: Machine, t: number, near: boolean): void {
   const y = Math.round(m.y);
   const w = MACHINE_W;
   const h = MACHINE_H;
+  const art = lobbyImg(`m_${m.game}`);
+  if (art) {
+    // 그림 게임기 (펫 상점은 조금 크게) · 가까이 오면 흰 빛
+    const ih = m.game === "pets" ? h + 4 : h + 2;
+    ell(ctx, x, y, (art.width * ih) / art.height / 2, 2, "rgba(0,0,0,0.35)");
+    ctx.save();
+    if (near) {
+      ctx.shadowColor = "#ffffff";
+      ctx.shadowBlur = 6;
+    }
+    drawLobbyImg(ctx, `m_${m.game}`, x, y + 1, ih);
+    ctx.restore();
+    return;
+  }
   ell(ctx, x, y, w / 2 + 1, 2, "rgba(0,0,0,0.35)");
   r(ctx, x - w / 2, y - h, w, h, "#2a2438");
   r(ctx, x - w / 2 + 1, y - h + 1, w - 2, 5, m.color);
