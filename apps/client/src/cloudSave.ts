@@ -1,4 +1,4 @@
-// 상점 쪽 저장(쿠폰·스킨·이벤트 코인·효과·펫·칩·미션)을 서버에도 백업: 브라우저 저장소를 지워도·기기 연동해도 남게.
+// 상점 쪽 저장(쿠폰·스킨·이벤트 코인·효과·펫·칩·미션·퀘스트 진행)을 서버에도 백업: 브라우저 저장소를 지워도·기기 연동해도 남게.
 // 바뀌면 몇 초 모아 한 번 올림 (요청 수 = 비용). 열 때 한 번 받아 맞춤. 서버는 차례 번호(rev)가 맞을 때만 받고,
 // 다른 기기가 먼저 올렸으면 받은 값과 합쳐(cloudMerge) 다시 올림
 import { apiPost } from "./api";
@@ -7,7 +7,7 @@ import { getPlayerId } from "./player";
 import { SERVER_URL } from "./serverStatus";
 import { loadText, saveText, watchSaves } from "./storage";
 
-export const CLOUD_KEYS = ["wallet", "eventCoins", "fxShop", "lobbyPets", "chips", "missions", "mastery", "archiveChars"] as const;
+export const CLOUD_KEYS = ["wallet", "eventCoins", "fxShop", "lobbyPets", "chips", "missions", "mastery", "archiveChars", "quests"] as const;
 const UPLOAD_MS = 4000;
 
 type Blob = Record<string, Json>;

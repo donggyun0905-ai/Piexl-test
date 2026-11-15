@@ -9,7 +9,7 @@ import { createChunkCache } from "./worldChunks";
 import { canStandWorld, loadWorldMap, tileAt, WTILE, type WorldMap } from "./worldMap";
 import { shadow } from "./worldArt";
 import { drawButterflies, drawCloudShadows, drawVignette, drawWaterFx } from "./worldFx";
-import { drawMark, drawPlace, drawPlaceLabel } from "./worldPlaceArt";
+import { drawEdgeMark, drawMark, drawPlace, drawPlaceLabel } from "./worldPlaceArt";
 import { loadWorldArt, setArtSkin } from "./worldTex";
 import { drawMood } from "./worldMood";
 import { drawWeather, setLook } from "./worldWeather";
@@ -158,6 +158,7 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         if (near) drawPlaceLabel(ctx, near, cb.current.label(near));
         const mk = cb.current.mark && region.places.find((p) => p.id === cb.current.mark);
         if (mk) drawMark(ctx, mk, t);
+        if (mk) drawEdgeMark(ctx, mk, view, t);
         // 2초마다 자리 저장 (움직였을 때만)
         if (now - saved > 2000 && me.moving) {
           saved = now;

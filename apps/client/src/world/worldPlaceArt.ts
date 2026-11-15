@@ -169,3 +169,40 @@ export function drawMark(ctx: CanvasRenderingContext2D, p: Place, t: number): vo
   box(ctx, "#ffd84a", x - 2, top + 3, 5, 1);
   box(ctx, "#ffd84a", x, top + 4, 1, 2);
 }
+
+/** 가야 할 곳이 화면 밖이면 화면 가장자리에 그쪽을 가리키는 금빛 화살표 (view = 지금 보이는 곳, 지도 좌표) */
+export function drawEdgeMark(ctx: CanvasRenderingContext2D, p: Place, view: { x: number; y: number; w: number; h: number }, t: number): void {
+  const [px, py] = placeXY(p);
+  const pad = 14;
+  // 위쪽은 지역 이름·할 일 글자, 왼쪽은 버튼 줄을 피해 더 안쪽
+  const top = 30;
+  const left = 30;
+  const ty = py - 12;
+  if (px > view.x + pad && px < view.x + view.w - pad && ty > view.y + pad && ty < view.y + view.h - pad) return;
+  const cx = view.x + (view.w + left - pad) / 2;
+  const cy = view.y + (view.h + top - pad) / 2;
+  const a = Math.atan2(ty - cy, px - cx);
+  // 화면 가운데에서 그쪽으로 뻗은 줄이 가장자리(안쪽 pad)에 닿는 곳
+  const k = Math.min(((view.w - left - pad) / 2) / Math.max(1e-6, Math.abs(Math.cos(a))), ((view.h - top - pad) / 2) / Math.max(1e-6, Math.abs(Math.sin(a))));
+  const bob = Math.abs(Math.sin(t * 4)) * 2;
+  const x = cx + Math.cos(a) * (k - bob);
+  const y = cy + Math.sin(a) * (k - bob);
+  ctx.save();
+  ctx.translate(Math.round(x), Math.round(y));
+  ctx.rotate(a);
+  ctx.fillStyle = "#3a2a08";
+  ctx.beginPath();
+  ctx.moveTo(8, 0);
+  ctx.lineTo(-5, -7);
+  ctx.lineTo(-5, 7);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle = "#ffd84a";
+  ctx.beginPath();
+  ctx.moveTo(6, 0);
+  ctx.lineTo(-4, -5);
+  ctx.lineTo(-4, 5);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}

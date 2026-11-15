@@ -17,15 +17,22 @@ const nextCond = (): QuestCond | null => {
   return i === null ? null : (QUESTS[i]!.need.find((c) => !condMet(c)) ?? null);
 };
 
-/** 지금 지역에서 화살표를 띄울 장소 id: 그 장소 · 그 건물로 들어가는 문 · 던전 입구·기억의 탑 */
+/** 지금 지역에서 화살표를 띄울 장소 id: 그 장소 · 그 건물로 들어가는 문 · 그 나라로 가는 국경 길 · 던전 입구·기억의 탑 (건물 안이면 나가는 문) */
 export function questMark(cur: string): string | null {
   const c = nextCond();
   if (!c) return null;
   const places = REGIONS[cur]?.places ?? [];
   if ("leave" in c) return places.find((p) => p.kind === "exit")?.id ?? null;
-  if ("visit" in c) return c.region === cur ? c.visit : (places.find((p) => p.kind === "door" && p.to === c.region)?.id ?? null);
-  const at = RUN_AT(c);
-  return at && places.some((p) => p.id === at) ? at : null;
+  if ("visit" in c) {
+    if (c.region === cur) return c.visit;
+    const way = places.find((p) => (p.kind === "door" || p.kind === "pass") && p.to === c.region) ?? places.find((p) => p.kind === "pass" && p.to && REGIONS[p.to]?.places.some((q) => q.kind === "pass" && q.to === c.region));
+    if (way) return way.id;
+  } else {
+    const at = RUN_AT(c);
+    if (at && places.some((p) => p.id === at)) return at;
+  }
+  // 건물 안이면 일단 밖으로
+  return REGIONS[cur]?.indoor ? (places.find((p) => p.kind === "exit")?.id ?? null) : null;
 }
 
 /** 할 일 한 줄 */

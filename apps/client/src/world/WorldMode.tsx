@@ -186,7 +186,7 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
   const body = (p: Place): TextKey => p.line ?? (`${p.name}Text` as TextKey);
   /** 장소 앞 버튼 글자 */
   const action = (p: Place): string =>
-    p.gate === "tower" ? `🗼 ${t("wpGoIn")}` : p.gate === "colosseum" ? `🏟 ${t("wpGoIn")}` : p.gate === "arena" ? `👑 ${t("wpGoIn")}` : p.gate === "swarm" ? `🏜 ${t("wpGoIn")}` : p.kind === "dungeon" ? `⚔ ${t("wpEnter")}` : p.kind === "npc" ? `💬 ${t("wpTalk")}` : p.kind === "door" ? `🚪 ${t("wpGoIn")}` : p.kind === "exit" ? `🚪 ${t("wpGoOut")}` : p.kind === "warp" ? `✨ ${t("wpWarpUse")}` : p.kind === "pass" ? `🚶 ${t("wpCross")}` : `📜 ${t("wpRead")}`;
+    p.use === "char" ? `👤 ${t("wpUseMirror")}` : p.use === "gear" ? `🎒 ${t("wpUseChest")}` : p.use === "book" ? `📖 ${t("wpUseBook")}` : p.use === "lobby" ? `🚪 ${t("wpGoIn")}` : p.gate === "tower" ? `🗼 ${t("wpGoIn")}` : p.gate === "colosseum" ? `🏟 ${t("wpGoIn")}` : p.gate === "arena" ? `👑 ${t("wpGoIn")}` : p.gate === "swarm" ? `🏜 ${t("wpGoIn")}` : p.kind === "dungeon" ? `⚔ ${t("wpEnter")}` : p.kind === "npc" ? `💬 ${t("wpTalk")}` : p.kind === "door" ? `🚪 ${t("wpGoIn")}` : p.kind === "exit" ? `🚪 ${t("wpGoOut")}` : p.kind === "warp" ? `✨ ${t("wpWarpUse")}` : p.kind === "pass" ? `🚶 ${t("wpCross")}` : `📜 ${t("wpRead")}`;
   return (
     <div className="lobby-mode world-mode">
       <WorldStage key={`${cur.id}-${cur.n ?? 0}`} regionId={cur.id} region={region} spawn={cur.spawn} color={color} label={(p) => t(p.name)} who={who} paused={busy} onNear={setNear} onUse={use} onLoaded={(ok) => setState(ok ? "ok" : "fail")} mark={guide.mark ?? questMark(cur.id)} />
@@ -216,10 +216,10 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
       </div>
       <div key={`fade-${cur.id}-${cur.n ?? 0}`} className="world-fade" />
       {region.ride && <WorldRide key={cur.id} t={t} ride={region.ride} onArrive={(to, [x, y]) => setCur({ id: to, spawn: [(x + 0.5) * 16, (y + 0.5) * 16] })} />}
-      <WorldLoading key={loadN} t={t} state={state} place={cur.id === ATTIC_ID ? t("wpAttic") : fieldName} />
+      <WorldLoading key={`load${loadN}`} t={t} state={state} place={cur.id === ATTIC_ID ? t("wpAttic") : fieldName} />
       <AtticGuide t={t} g={guide} />
       {state === "ok" && !guide.mark && guide.talk === null && <QuestHud t={t} cur={cur.id} regionName={regionName} onBook={() => setBook(true)} />}
-      {doneQ.length > 0 && !scene && <QuestDone key={doneQ[0]} t={t} n={doneQ[0]!} onClose={closeDone} />}
+      {doneQ.length > 0 && !scene && <QuestDone key={`done${doneQ[0]}`} t={t} n={doneQ[0]!} onClose={closeDone} />}
       {book && <QuestBook t={t} cur={cur.id} regionName={regionName} onStory={() => (setBook(false), setScene(latestChapter()))} onClose={() => setBook(false)} />}
       {near && !busy && (
         <button type="button" className="primary lobby-enter" onClick={() => use(near)}>

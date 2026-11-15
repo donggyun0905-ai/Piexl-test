@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { TextKey } from "../i18n";
 import { loadText, saveText } from "../storage";
+import { hasFlag, setFlag } from "../progress/quest";
 import { StoryFace } from "../story/StoryFace";
 import type { Place } from "./worldPlaces";
 
@@ -20,7 +21,7 @@ export interface AtticGuideState {
 }
 
 export function useAtticGuide(active: boolean, near: Place | null): AtticGuideState {
-  const [step, setStep] = useState(() => Number(loadText(KEY) ?? 0) || 0);
+  const [step, setStep] = useState(() => (hasFlag("attic") ? STEPS.length : Number(loadText(KEY) ?? 0) || 0));
   const live = active && step < STEPS.length;
   // 들어오자마자(0) 또는 가야 할 물건 앞에 오면 말함
   const talk = live && (step === 0 || near?.id === STEPS[step]) ? step : null;
@@ -28,6 +29,7 @@ export function useAtticGuide(active: boolean, near: Place | null): AtticGuideSt
     const n = step + 1;
     setStep(n);
     saveText(KEY, String(n));
+    if (n >= STEPS.length) setFlag("attic");
   };
   return { mark: live && step > 0 ? STEPS[step]! : null, talk, step, close };
 }

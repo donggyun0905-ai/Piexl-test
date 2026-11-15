@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.20",
+    date: "2026-11-15",
+    items: {
+      ko: ["퀘스트 진행·프롤로그·아지트 안내를 서버에도 백업 (기기 연동·브라우저 저장소를 지워도 남음) · 세계 지도: 가야 할 곳이 화면 밖이면 화면 가장자리에 금빛 화살표 · 다른 나라·건물이면 그쪽으로 가는 국경 길·문을 가리킴 · 아지트 물건 앞 버튼 글자(영웅 고르기·열기·펼치기·들어가기) · 퀘스트를 끝낸 뒤 이야기 장면 위에 로딩 화면이 겹쳐 보이던 문제 고침"],
+      en: ["Quest progress, the prologue and the hideout guide are now backed up to the server too (kept across linked devices and cleared browser storage) · World map: a golden arrow at the screen edge when your destination is off-screen · Points to the border road or door leading there when it's in another country or building · Clearer button labels on hideout objects (Choose a hero, Open, Read, Enter) · Fixed the loading screen overlapping the story scene after finishing a quest"],
+      ja: ["クエスト進行・プロローグ・アジト案内をサーバーにもバックアップ（端末連携やブラウザの保存データを消しても残る）・世界地図：行き先が画面外なら画面の端に金色の矢印・別の国や建物ならそこへ向かう国境の道や扉を指す・アジトの物の前のボタン表記（英雄を選ぶ・開ける・開く・入る）・クエスト完了後に物語の場面へロード画面が重なって見える問題を修正"],
+    },
+  },
+  {
     version: "0.53.19",
     date: "2026-11-15",
     items: {

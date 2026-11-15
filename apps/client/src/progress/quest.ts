@@ -1,6 +1,6 @@
 // 퀘스트 진행 저장·판정 (docs/QUEST.md 5·6절, 표는 progress/quests): 끝낸 수 · 가 본 장소 · 던전 기록으로 할 일 판정
 // 퀘스트로 장·모드를 여는 곳은 세계 지도가 있는 곳(시험 서버·내 컴퓨터)만 · 라이브는 지금처럼 기록으로 장이 열림 (storyStage)
-// 화면에서만 판정 (게임 계산·서버 검사·순위와 상관없음)
+// 화면에서만 판정 (게임 계산·서버 검사·순위와 상관없음) · 서버 백업(cloudSave "quests"): 목록만 써서 두 기기 값을 합치면 합집합
 import { loadFloorBest, loadTotals } from "../records";
 import { loadText, saveText } from "../storage";
 import { TEST_OPEN } from "../testFlags";
@@ -12,23 +12,40 @@ const KEY = "quests";
 /** 아지트 밖으로 나간 기록 (leave 할 일) */
 export const LEAVE_MARK = "@leave";
 
-interface QState {
-  /** 끝낸 퀘스트 수 (= 지금 퀘스트 번호) */
-  done: number;
+/** 저장 모양 (모두 목록) */
+interface Stored {
+  /** 끝낸 퀘스트 번호 */
+  fin: number[];
   /** 가 본 장소 (퀘스트에 나오는 것만) */
   visits: string[];
+  /** 본 것: prologue = 프롤로그 · attic = 아지트 안내 */
+  flags: string[];
+}
+interface QState extends Stored {
+  /** 끝낸 퀘스트 수 (= 지금 퀘스트 번호, 0부터 이어서 끝낸 것) */
+  done: number;
 }
 
 function load(): QState {
+  let v: Partial<Stored> & { done?: number } = {};
   try {
-    const v = JSON.parse(loadText(KEY) ?? "null") as QState | null;
-    if (v && typeof v.done === "number") return { done: v.done, visits: v.visits ?? [] };
+    v = (JSON.parse(loadText(KEY) ?? "null") as typeof v | null) ?? {};
   } catch {
-    /* 아래 처음 값 */
+    /* 처음 값 */
   }
-  return { done: 0, visits: [] };
+  // 예전 저장(done 숫자) → 끝낸 번호 목록
+  const fin = v.fin ?? Array.from({ length: v.done ?? 0 }, (_, i) => i);
+  let done = 0;
+  while (fin.includes(done)) done++;
+  return { fin, visits: v.visits ?? [], flags: v.flags ?? [], done };
 }
-const save = (s: QState) => saveText(KEY, JSON.stringify(s));
+const save = (s: QState) => saveText(KEY, JSON.stringify({ fin: s.fin, visits: s.visits, flags: s.flags }));
+
+export const hasFlag = (f: string): boolean => load().flags.includes(f);
+export function setFlag(f: string): void {
+  const s = load();
+  if (!s.flags.includes(f)) save({ ...s, flags: [...s.flags, f] });
+}
 
 /** 퀘스트로 장·모드를 여는지 (세계 지도가 있는 곳) */
 export const questMode = (): boolean => TEST_OPEN;
@@ -65,7 +82,10 @@ export function noteVisit(id: string): void {
 export function advanceQuests(): number[] {
   const s = load();
   const out: number[] = [];
-  while (s.done < QUESTS.length && QUESTS[s.done]!.need.every((c) => condMet(c, s.visits))) out.push(s.done++);
+  while (s.done < QUESTS.length && QUESTS[s.done]!.need.every((c) => condMet(c, s.visits))) {
+    out.push(s.done);
+    s.fin.push(s.done++);
+  }
   if (out.length) save(s);
   return out;
 }
