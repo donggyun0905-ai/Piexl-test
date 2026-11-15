@@ -2,6 +2,7 @@
 // 성벽 도시(광장·성채·상점가·장인 거리·주거지·훈련장) · 강가 · 항구 · 농촌 · 던전 둘(혼자 하기) · 기억의 탑(무한·영웅) · 순간 이동석 여섯 · 국경 표지판
 import type { Place, Region } from "../worldPlaces";
 import { ASCALON_HOUSE_DOORS, ASCALON_SHOP_DOORS as S } from "./ascalonLayout";
+import { GUILD_DOOR } from "./ascalonGuild";
 
 const shop = (id: string, at: readonly [number, number], name: Place["name"], to: string, icon: Place["icon"]): Place => ({ id, kind: "door", tx: at[0], ty: at[1], name, to, icon });
 
@@ -18,6 +19,9 @@ export const ASCALON_FIELD: Region = {
     { id: "chapelDoor", kind: "door", tx: 145, ty: 51, name: "wpChapel", to: "ascalonChapel" },
     { id: "ascalonKeepDoor", kind: "door", tx: 100, ty: 27, name: "wpAscalonKeep", to: "ascalonKeep" },
     { id: "ascalonMage", kind: "npc", tx: 110, ty: 50, name: "mage", who: "mage", line: "wnMage" },
+    // 광장 게시판 (일일 도전 · 이벤트) · 모험가 집합소 (함께 하기 · 협동, 주거지 문 하나)
+    { id: "questBoard", kind: "sign", tx: 110, ty: 61, name: "wpBoard", art: "board", gate: "board" },
+    { id: "guildDoor", kind: "door", tx: GUILD_DOOR[0], ty: GUILD_DOOR[1], name: "wpGuild", to: "ascalonGuild", icon: "sword" },
     // 상점가 · 장인 거리
     shop("shopWeapon", S.weapon, "wpWeaponShop", "ascalonWeapon", "sword"),
     shop("shopArmor", S.armor, "wpArmorShop", "ascalonArmor", "shield"),
@@ -26,7 +30,7 @@ export const ASCALON_FIELD: Region = {
     shop("shopSmithy", S.smithy, "wpSmithy", "ascalonSmithy", "hammer"),
     shop("shopInn", S.inn, "wpInn", "ascalonInn", "bed"),
     // 주거지 · 농촌 민가 (모두 같은 민가 안)
-    ...ASCALON_HOUSE_DOORS.map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "ascalonHouse" })),
+    ...ASCALON_HOUSE_DOORS.filter(([x, y]) => x !== GUILD_DOOR[0] || y !== GUILD_DOOR[1]).map(([tx, ty]): Place => ({ id: `house${tx}_${ty}`, kind: "door", tx, ty, name: "wpHouse", to: "ascalonHouse" })),
     // 훈련장 (허수아비·무기 걸이)
     { id: "trainingSign", kind: "sign", tx: 60, ty: 42, name: "wpTraining" },
     { id: "ascalonTracker", kind: "npc", tx: 63, ty: 33, name: "tracker", who: "tracker", line: "wnTracker" },

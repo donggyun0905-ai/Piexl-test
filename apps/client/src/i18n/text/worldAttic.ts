@@ -1,4 +1,4 @@
-// 화면 글자: 주인공 아지트 '기록의 다락방' (world/places/attic) · 서기관 안내 (world/AtticGuide, docs/QUEST.md 3절)
+// 화면 글자: 주인공 아지트 '기록의 다락방' (world/places/attic) · 서기관 안내 (world/AtticGuide, docs/QUEST.md 3절) · 아스칼론 게시판·모험가 집합소 (places/ascalonGuild)
 export const WORLD_ATTIC_TEXT = {
   wpAttic: { ko: "기록의 다락방", en: "Attic of Records", ja: "記録の屋根裏部屋" },
   wpAtticDoor: { ko: "바깥으로 나가는 문", en: "Door to the outside", ja: "外への扉" },
@@ -20,5 +20,12 @@ export const WORLD_ATTIC_TEXT = {
   agTalk4: { ko: "저 문은… 아직 비밀이야. 네가 첫 흉수를 쓰러뜨리면 열어 줄게.", en: "That door is… still a secret. I'll open it once you've felled your first beast.", ja: "あの扉は…まだ秘密。君が最初の凶獣を倒したら開けてあげよう。" },
   agHint5: { ko: "아래 문으로 가 보자", en: "Go to the door below", ja: "下の扉へ行こう" },
   agTalk5: { ko: "준비가 되면 저 문을 열어. 첫 페이지가 기다리고 있어. 나는 늘 여기 있을게.", en: "When you're ready, open that door. The first page is waiting. I'll always be here.", ja: "準備ができたらあの扉を開けて。最初のページが待っている。私はいつもここにいるよ。" },
+  wpBoard: { ko: "광장 게시판", en: "Plaza notice board", ja: "広場の掲示板" },
+  wpBoardText: { ko: "날마다 새 도전장과 소식이 붙는 게시판. 모든 모험가가 같은 길로 도전하는 일일 도전과, 기간 한정 이벤트가 적혀 있다.", en: "A board where new challenges and news are posted every day. It lists the Daily Challenge, where every adventurer takes the same road, and limited-time events.", ja: "毎日新しい挑戦状と知らせが貼られる掲示板。すべての冒険者が同じ道に挑むデイリーチャレンジと、期間限定イベントが書かれている。" },
+  wpGuild: { ko: "모험가 집합소", en: "Adventurers' Guild", ja: "冒険者ギルド" },
+  wpGuildText: { ko: "모험가들이 모여 파티를 짜는 곳. 다른 기록자와 실력을 겨루거나, 함께 던전에 들어갈 수 있다.", en: "Where adventurers gather to form parties. Test yourself against other record-keepers, or enter the dungeon together.", ja: "冒険者が集まりパーティを組む場所。他の記録者と腕を競ったり、一緒にダンジョンへ入ったりできる。" },
+  wpGuildMaster: { ko: "접수대의 파수꾼", en: "Warden at the desk", ja: "受付の番人" },
+  wnGuildDrifter: { ko: "혼자 다니는 것도 좋지만, 가끔은 등을 맡길 사람이 있으면 든든하지.", en: "Traveling alone is fine, but now and then it's good to have someone at your back.", ja: "一人旅もいいけど、たまには背中を預けられる相手がいると心強いさ。" },
+  wnGuildGunner: { ko: "여기 게시판에 붙은 의뢰는 다 내가 해치울 거야. …아마도.", en: "I'm going to clear every request on this board. …Probably.", ja: "この掲示板の依頼は全部俺が片づける。…たぶんな。" },
   agOk: { ko: "알겠어", en: "Got it", ja: "わかった" },
 };

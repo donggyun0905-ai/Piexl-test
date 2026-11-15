@@ -5,6 +5,7 @@ import type { TextKey } from "../i18n";
 import { isTutorialDone, loadFloorBest, type SavedRun } from "../records";
 import { Icon, type IconName } from "./Icon";
 import { featureOpen } from "../progress/storyStage";
+import { questMode } from "../progress/quest";
 import { TEST_OPEN } from "../testFlags";
 
 interface Props {
@@ -45,6 +46,8 @@ export function Choice({ icon, title, desc, onClick }: { icon: IconName; title: 
 
 export function SoloChooser({ t, saved, onContinue, onNewRun, onHero, onEndless, onArena, onTowerDefense, onPractice, onTutorial, onWorld, onDaily, onBattle, onCoop, onEvents, onLobby, onClose }: Props) {
   const endlessBest = loadFloorBest("endlessBest");
+  // 지도가 있는 곳(퀘스트)은 일일·함께·협동·이벤트가 게시판·모험가 집합소, 로비는 아지트 오락실 문
+  const inMenu = !questMode();
   const heroBest = loadFloorBest("heroBest");
   const closeRef = useRef<HTMLButtonElement>(null);
   useEffect(() => closeRef.current?.focus(), []);
@@ -78,11 +81,11 @@ export function SoloChooser({ t, saved, onContinue, onNewRun, onHero, onEndless,
           />}
           {featureOpen("arena") && <Choice icon="trophy" title={t("arenaRun")} desc={t("arenaDesc")} onClick={onArena} />}
           {featureOpen("td") && <Choice icon="castle" title={t("tdRun")} desc={t("tdDesc")} onClick={onTowerDefense} />}
-          {featureOpen("daily") && <Choice icon="crown" title={t("daily")} desc={t("playDailyDesc")} onClick={onDaily} />}
-          {featureOpen("battle") && <Choice icon="users" title={t("playTogether")} desc={t("playTogetherDesc")} onClick={onBattle} />}
-          {featureOpen("coop") && <Choice icon="users" title={t("coop")} desc={t("playCoopDesc")} onClick={onCoop} />}
-          {featureOpen("events") && <Choice icon="star" title={t("events")} desc={t("eventsDesc")} onClick={onEvents} />}
-          {featureOpen("lobby") && <Choice icon="users" title={t("lobby")} desc={t("playLobbyDesc")} onClick={onLobby} />}
+          {inMenu && featureOpen("daily") && <Choice icon="crown" title={t("daily")} desc={t("playDailyDesc")} onClick={onDaily} />}
+          {inMenu && featureOpen("battle") && <Choice icon="users" title={t("playTogether")} desc={t("playTogetherDesc")} onClick={onBattle} />}
+          {inMenu && featureOpen("coop") && <Choice icon="users" title={t("coop")} desc={t("playCoopDesc")} onClick={onCoop} />}
+          {inMenu && featureOpen("events") && <Choice icon="star" title={t("events")} desc={t("eventsDesc")} onClick={onEvents} />}
+          {inMenu && featureOpen("lobby") && <Choice icon="users" title={t("lobby")} desc={t("playLobbyDesc")} onClick={onLobby} />}
           <Choice
             icon="book"
             title={t("tutorial")}

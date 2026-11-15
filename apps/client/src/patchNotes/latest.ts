@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.53.19",
+    date: "2026-11-15",
+    items: {
+      ko: ["세계 지도(시험 중) 아스칼론에 광장 게시판(일일 도전·이벤트)과 모험가 집합소(함께 하기·협동) · 퀘스트 '날마다 적히는 이야기'는 게시판에 가면 끝남 · 지도가 있는 곳에서는 플레이 창의 일일·함께·협동·이벤트·로비가 지도 속 장소로 옮겨감"],
+      en: ["World Map (testing): a plaza notice board (Daily Challenge, Events) and the Adventurers' Guild (Play Together, Co-op) in Ascalon · The quest 'A Story Written Daily' completes at the board · Where the map is available, Daily, Play Together, Co-op, Events and Lobby move from the Play window to places on the map"],
+      ja: ["世界地図（テスト中）アスカロンに広場の掲示板（デイリーチャレンジ・イベント）と冒険者ギルド（みんなで遊ぶ・協力プレイ）・クエスト『日々綴られる物語』は掲示板へ行くと完了・地図がある所ではプレイ画面のデイリー・みんなで・協力・イベント・ロビーが地図の場所へ移動"],
+    },
+  },
+  {
     version: "0.53.18",
     date: "2026-11-15",
     items: {

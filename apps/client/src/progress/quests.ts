@@ -38,8 +38,8 @@ export const QUESTS: readonly Quest[] = [
   { need: [{ wins: 1 }, { visit: "heliosStatue", region: "helios", name: "wpStatue" }], stage: 3, opens: ["arena"], fields: ["silber"] },
   /** 6 북쪽의 문: 무한 모드 10층 + 실베르 문 앞 아수라 → 4장 · 타워 디펜스 */
   { need: [{ endless: 10 }, { visit: "gateGuard", region: "silber", name: "asura" }], stage: 4, opens: ["td"] },
-  /** 7 날마다 적히는 이야기: (게시판은 Q5에서) → 일일 도전 · 이벤트 */
-  { need: [{ wins: 2 }], opens: ["daily", "events"] },
+  /** 7 날마다 적히는 이야기: 아스칼론 광장 게시판 → 일일 도전 · 이벤트 */
+  { need: [{ visit: "questBoard", region: "ascalon", name: "wpBoard" }], opens: ["daily", "events"] },
   /** 8 모래 밑의 신전: 라스트 보스 + 태초의 신전 → 5장 · 광야의 새벽 */
   { need: [{ lastBoss: true }, { visit: "temple", region: "desert", name: "wpTemple" }], stage: 5, opens: ["swarm"] },
   /** 9 왕들의 싸움: 영웅의 길 3단계 + 테라코어 콜로세움 → 6장 · 패왕전 */

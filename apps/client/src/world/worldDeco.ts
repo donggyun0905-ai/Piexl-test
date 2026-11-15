@@ -77,6 +77,7 @@ export function drawDeco(g: Ctx, art: DecoArt, x: number, y: number, t: number):
     case "chest":
     case "desk":
     case "arcadeDoor":
+    case "board":
       drawAtticDeco(g, art, x, b, t);
       break;
     case "bed":

@@ -1,10 +1,10 @@
-// 기록의 다락방 물건 (places/attic, worldDeco가 부름): 거울(캐릭터 고르기) · 장비 상자 · 기록서 책상(펜·잉크) · 오락실 문(네온) — 코드 그림
+// 기록의 다락방 물건 (places/attic, worldDeco가 부름): 거울(캐릭터 고르기) · 장비 상자 · 기록서 책상(펜·잉크) · 오락실 문(네온) · 아스칼론 광장 게시판(일일 도전) — 코드 그림
 // (x, b) = 칸 가운데 x · 아래 끝 y · 거울·기록서·오락실 문은 은은히 빛남
 import { shadow } from "./worldArt";
 
-export type AtticDeco = "mirror" | "chest" | "desk" | "arcadeDoor";
+export type AtticDeco = "mirror" | "chest" | "desk" | "arcadeDoor" | "board";
 /** 부딪힘 반지름 (픽셀) */
-export const ATTIC_DECO_R: Record<AtticDeco, number> = { mirror: 6, chest: 7, desk: 9, arcadeDoor: 7 };
+export const ATTIC_DECO_R: Record<AtticDeco, number> = { mirror: 6, chest: 7, desk: 9, arcadeDoor: 7, board: 8 };
 
 type Ctx = CanvasRenderingContext2D;
 const box = (g: Ctx, c: string, x: number, y: number, w: number, h: number) => {
@@ -76,9 +76,27 @@ function arcadeDoor(g: Ctx, x: number, b: number, t: number): void {
   if (on) glow(g, x, b - 14, 16, "rgba(255,106,208,0.16)");
 }
 
+function board(g: Ctx, x: number, b: number, t: number): void {
+  // 나무 게시판: 기둥 둘 · 지붕 · 붙은 종이들 (맨 위 종이가 바람에 살짝 들썩)
+  shadow(g, x, b, 11, 2.4, 0.35);
+  box(g, "#4a2c18", x - 10, b - 22, 2, 22);
+  box(g, "#4a2c18", x + 8, b - 22, 2, 22);
+  box(g, "#5a3418", x - 12, b - 26, 24, 3);
+  box(g, "#7a4a24", x - 11, b - 28, 22, 2);
+  box(g, "#8a5a2c", x - 9, b - 22, 18, 12);
+  box(g, "#f2e6c8", x - 8, b - 21, 6, 5);
+  box(g, "#e6d6b0", x - 1, b - 20, 5, 6);
+  box(g, "#f6ecd4", x + 5, b - 21, 3, 4);
+  box(g, "#e04a3a", x - 6, b - 20, 2, 1);
+  box(g, "#6a5a8a", x, b - 18, 3, 1);
+  const lift = Math.sin(t * 3) > 0.5 ? 1 : 0;
+  box(g, "#fff6dc", x - 4, b - 15 - lift, 6, 4 + lift);
+}
+
 export function drawAtticDeco(g: Ctx, art: AtticDeco, x: number, b: number, t: number): void {
   if (art === "mirror") mirror(g, x, b, t);
   else if (art === "chest") chest(g, x, b);
   else if (art === "desk") desk(g, x, b, t);
+  else if (art === "board") board(g, x, b, t);
   else arcadeDoor(g, x, b, t);
 }

@@ -19,6 +19,7 @@ import { INDOOR_SKIN } from "./places/skins";
 import { CYBER_FIELD, CYBER_INSIDE } from "./places/cyberField";
 import { DAWN_INSIDE } from "./places/dawnHideout";
 import { ATTIC } from "./places/attic";
+import { ASCALON_GUILD } from "./places/ascalonGuild";
 import { HELL_FIELD } from "./places/hellField";
 import { SEONGGUK_FIELD, SEONGGUK_INSIDE } from "./places/seonggukField";
 import { UNDERSEA_FIELD, UNDERSEA_INSIDE } from "./places/underseaField";
@@ -53,7 +54,7 @@ export interface Place {
   to?: string;
   art?: DecoArt;
   /** dungeon: tower = 기억의 탑 (무한 모드·영웅의 길 고르는 창) · colosseum = 콜로세움 (패왕전) · arena = 헬리오스 광장 황제 석상 (레이드 아레나) · swarm = 사막 태초의 신전 (광야의 새벽) · td = 실베르 악마의 문 경비원 (타워 디펜스, 주민에게 붙임) · 없으면 기본 혼자 하기 */
-  gate?: "tower" | "colosseum" | "arena" | "swarm" | "td";
+  gate?: "tower" | "colosseum" | "arena" | "swarm" | "td" | "board" | "guild";
   /** pass: 건너간 나라에서 설 칸 */
   land?: readonly [number, number];
   /** npc: 말 걸면 여는 창 (대사 대신) */
@@ -122,6 +123,7 @@ export const REGIONS: Record<string, Region> = {
   ...HOUSES_INSIDE,
   ...CHAPELS_INSIDE,
   ...ATTIC,
+  ...ASCALON_GUILD,
 };
 
 /** 나라·지역 필드인지 (건물 안이 아님) */

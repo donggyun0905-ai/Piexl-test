@@ -21,6 +21,7 @@ import { useServerStatus } from "./serverStatus";
 import { storyStage } from "./progress/storyStage";
 import { StageNotice } from "./progress/StageNotice";
 import { markWorldReturn, takeWorldReturn } from "./world/worldReturn";
+import type { WorldRun } from "./world/WorldPanels";
 import { Prologue } from "./prologue/Prologue";
 import { prologueSeen } from "./progress/prologue";
 import { TEST_OPEN } from "./testFlags";
@@ -78,6 +79,19 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   };
 
   const stage = storyStage();
+  /** 지도에서 고른 모드 (끝나면 지도로 돌아옴, worldReturn) · 게시판 이벤트는 메인의 이벤트 창 */
+  const runFromWorld = (m: WorldRun) => {
+    markWorldReturn();
+    setWorld(false);
+    if (m === "paewang") onPaewang();
+    else if (m === "swarm") onSwarm();
+    else if (m === "td") onTowerDefense();
+    else if (m === "daily") onDaily();
+    else if (m === "battle") onBattle();
+    else if (m === "coop") onCoop();
+    else if (m === "events") setPopup("events");
+    else startNew(m === "endless", m === "arena", m === "hero");
+  };
   if (prologue) return <Prologue t={t} onDone={() => (setPrologue(false), setFresh(true), TEST_OPEN ? setWorld(true) : setPopup("solo"))} />;
   // 로비: 메인 글자·목록을 감추고 파수꾼으로 돌아다님
   if (lobby) return <LobbyMode t={t} onExit={() => setLobby(false)} />;
@@ -85,7 +99,7 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onContinue, onDaily
   if (world)
     return (
       <Suspense fallback={null}>
-        <WorldMode t={t} lang={lang} fresh={fresh} onLobby={() => (setWorld(false), setLobby(true))} onExit={() => setWorld(false)} onDungeon={(m) => (markWorldReturn(), setWorld(false), m === "paewang" ? onPaewang() : m === "swarm" ? onSwarm() : m === "td" ? onTowerDefense() : startNew(m === "endless", m === "arena", m === "hero"))} />
+        <WorldMode t={t} lang={lang} fresh={fresh} onLobby={() => (setWorld(false), setLobby(true))} onExit={() => setWorld(false)} onDungeon={runFromWorld} />
       </Suspense>
     );
 
