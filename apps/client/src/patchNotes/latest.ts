@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.55.6",
+    date: "2026-11-16",
+    items: {
+      ko: ["세계 지도(시험 중) 지도 전투에 빛 효과(던전과 같은 빛나는 탄·폭발 빛)와 화면 흔들림(설정을 따름) · 휴대폰: 전투판 안에서 누른 곳으로 걷고 공격은 자동 (가까운 적)"],
+      en: ["World Map (testing) field combat now has glow effects (the same glowing shots and blasts as the dungeon) and screen shake (follows your settings) · Phones: inside the battlefield, tap to walk there and attacks are automatic (nearest enemy)"],
+      ja: ["世界地図（テスト中）フィールド戦闘に光のエフェクト（ダンジョンと同じ光る弾・爆発の光）と画面の揺れ（設定に従う）・スマホ：戦場の中では押した場所へ歩き、攻撃は自動（近くの敵）"],
+    },
+  },
+  {
     version: "0.55.5",
     date: "2026-11-16",
     items: {

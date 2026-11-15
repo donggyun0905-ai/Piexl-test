@@ -98,3 +98,9 @@
 .world-fighting .world-region {
   visibility: hidden;
 }
+
+/* 지도 전투 빛 효과 층 (game/glow): 화면 가득 깔린 지도 캔버스 위에 */
+.world-mode .glow-layer {
+  position: fixed;
+  z-index: 0;
+}

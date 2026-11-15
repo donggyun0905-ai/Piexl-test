@@ -23,6 +23,7 @@ import { pushTrees, type Drawable } from "./worldTrees";
 import { hitsNpc, nearPlace, placeXY, skinOf, type Place, type Region } from "./worldPlaces";
 import { createHuntLayer } from "./hunt/huntLayer";
 import { createWoodcut } from "./woodcut";
+import { createShaker } from "../game/screenHooks";
 import { setWorldPrefs, worldPrefs, ZOOM_MAX, ZOOM_MIN } from "./worldPrefs";
 import { createAutoWalk } from "./worldPath";
 
@@ -115,7 +116,7 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
     const mouse = { x: -1e9, y: 0 };
     const input = bindWalkInput(canvas, me, view, () => !!map && !cb.current.paused, useOrChop, (b, x, y, touch) => hunt?.point(b, x, y, touch) ?? false);
     // 사냥 (J·좌클릭 휘두르기 · K·우클릭 대시)
-    const hunt = createHuntLayer(regionId, !region.indoor, me, input.keys, () => cb.current.who, () => !!map && !cb.current.paused, (g) => cb.current.onKill?.(g), () => [mouse.x, mouse.y]);
+    const hunt = createHuntLayer(regionId, !region.indoor, me, input.keys, () => cb.current.who, () => !!map && !cb.current.paused, (g) => cb.current.onKill?.(g), () => [mouse.x, mouse.y], createShaker(canvas));
     // 마우스 휠: 확대·축소
     const wheel = (e: WheelEvent) => {
       e.preventDefault();

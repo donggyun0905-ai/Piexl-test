@@ -36,10 +36,10 @@ export interface HuntLayer {
 }
 
 /** 사냥터가 없는 건물 안이면 null */
-export function createHuntLayer(region: string, outdoor: boolean, me: Walker, keys: ReadonlySet<string>, who: () => CharacterId, on: () => boolean, onKill: (g: string) => void, mouse: () => readonly [number, number]): HuntLayer | null {
+export function createHuntLayer(region: string, outdoor: boolean, me: Walker, keys: ReadonlySet<string>, who: () => CharacterId, on: () => boolean, onKill: (g: string) => void, mouse: () => readonly [number, number], shake: (power: number) => void): HuntLayer | null {
   if (!outdoor && !groundsIn(region).length) return null;
   const h = createHunt(region, who());
-  const fight = createBattleLayer(region, h, keys, who, mouse, onKill);
+  const fight = createBattleLayer(region, h, keys, who, mouse, onKill, shake);
   let refresh = 0;
   // 들판 떠돌이 무리는 지도를 받은 뒤 (첫 장면)
   let packed = false;
@@ -83,7 +83,8 @@ export function createHuntLayer(region: string, outdoor: boolean, me: Walker, ke
     hud: (ctx, w, hh, k, dl, dt) => drawHuntHud(ctx, h, w, hh, k, dl, dt),
     tip: (ctx, x, y, text) => drawMobTip(ctx, h, x, y, text),
     point: (button, x, y, touch) => {
-      if (touch || !on()) return false;
+      if (touch) return on() && fight.tap();
+      if (!on()) return false;
       if (fight.press(button, true)) return true;
       const aim = [x - me.x, y - (me.y - 4)] as const;
       if (button === 0) swing(h, me, aim);

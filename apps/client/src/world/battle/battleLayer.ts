@@ -4,6 +4,7 @@ import { setRoomSize, type CharacterId } from "@pixel-rogue/shared";
 import { createRunSounds } from "../../audio/runSounds";
 import { DamageTracker } from "../../game/damageNumbers";
 import { frameTexts } from "../../game/frameTexts";
+import { createGlowLayer, type GlowLayer } from "../../game/glow/glowLayer";
 import { drawFrame } from "../../game/render";
 import type { TextKey } from "../../i18n";
 import type { Walker, View } from "../../lobby/walker";
@@ -20,8 +21,12 @@ import { battleResult, startBattle, stepBattle, type FieldBattle } from "./field
 type Ctx = CanvasRenderingContext2D;
 const FLEE_COOL = 3;
 
-export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<string>, who: () => CharacterId, mouse: () => readonly [number, number], onKill: (g: string) => void) {
+export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<string>, who: () => CharacterId, mouse: () => readonly [number, number], onKill: (g: string) => void, shake: (power: number) => void) {
   let b: FieldBattle | null = null;
+  /** 빛 효과 층 (본편 game/glow, 판이 열려 있는 동안만) */
+  let glow: GlowLayer | null = null;
+  /** 터치로 싸우는 중 (누른 곳으로 걷기 + 자동 공격) */
+  let touch = false;
   let sounds: ReturnType<typeof createRunSounds> | null = null;
   let damage = new DamageTracker();
   let n = 0;
@@ -37,7 +42,8 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
     if (why === "down") [h.me.hp, h.me.down] = [0, R.downTime];
     cool = FLEE_COOL;
     sounds?.dispose();
-    [b, sounds] = [null, null];
+    glow?.destroy();
+    [b, sounds, glow] = [null, null, null];
     // 본편 전체가 같이 쓰는 방 크기를 보통 방으로 되돌림
     setRoomSize();
     pad.attack = false;
@@ -58,7 +64,7 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
       b = startBattle(room, who(), n++ * 7919 + region.length, [me.x, me.y], h.me.hp / h.me.st.maxHp, inside, foe.g.power);
       // 판 안 몬스터는 지도에서 감춤 (끝나면 돌려보냄)
       for (const x of inside) [x.st, x.t] = ["dead", 1e9];
-      sounds = createRunSounds(b.run, () => {}, false);
+      sounds = createRunSounds(b.run, (power) => getSettings().shake && shake(power), false);
       damage = new DamageTracker();
     },
     /** 한 장면 (ms) · 내 지도 자리를 본편 자리로 */
@@ -66,7 +72,11 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
       if (!b) return;
       const p = b.run.player;
       const [mx, my] = mouse();
-      const read = () => readPad(pad, keys, [mx - (p.x + b!.room.ox * WTILE), my - (p.y + b!.room.oy * WTILE)]);
+      // 터치: 누른 곳(walker가 적은 me.tx)까지 · 닿으면 지움
+      const [wx, wy] = [p.x + b.room.ox * WTILE, p.y + b.room.oy * WTILE];
+      if (me.tx >= 0 && Math.hypot(me.tx - wx, me.ty - wy) < 5) me.tx = -1;
+      const walk: readonly [number, number] | null = touch ? (me.tx >= 0 ? [me.tx - wx, me.ty - wy] : [0, 0]) : null;
+      const read = () => readPad(pad, keys, [mx - (p.x + b!.room.ox * WTILE), my - (p.y + b!.room.oy * WTILE)], walk);
       const why = stepBattle(b, dt * 1000, read, (m: Mob) => {
         [m.st, m.t] = ["dead", m.g.respawn];
         onKill(m.g.from ?? m.g.id);
@@ -94,6 +104,10 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
         overlay: (c, snap) => getSettings().showDamage && damage.draw(c, run.tick, snap, 1),
       });
       ctx.restore();
+      // 빛 효과: 지도 카메라 그대로 (f = 지도 1픽셀의 CSS 크기)
+      glow ??= createGlowLayer(ctx.canvas);
+      const css = k / (ctx.canvas.width / Math.max(1, ctx.canvas.clientWidth));
+      glow.frame(run, 1, b.acc / (1000 / 60), false, { x: view.x - room.ox * WTILE, y: view.y - room.oy * WTILE, f: css });
       ctx.strokeStyle = `rgba(255,236,170,${0.35 + 0.2 * Math.sin(now / 300)})`;
       ctx.lineWidth = 2;
       ctx.strokeRect(room.ox * WTILE + 1, (room.oy + 1) * WTILE + 1, room.cols * WTILE - 2, (room.rows - 1) * WTILE - 2);
@@ -101,9 +115,15 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
     /** 마우스: 판 안이면 좌클릭 꾹 = 공격 · 우클릭 = 대시 (true면 옛 휘두르기·걷기 안 함) */
     press(button: number, down: boolean): boolean {
       if (!b) return false;
+      touch = false;
       if (button === 0) pad.attack = down;
       else if (button === 2 && down) pad.dash = true;
       return true;
+    },
+    /** 판 안을 손가락으로 누름: 그곳으로 걷기 (false: walker가 누른 곳을 적게 둠) */
+    tap(): boolean {
+      if (b) touch = true;
+      return false;
     },
     /** 키: K 대시 · 스킬 키 */
     key(code: string): boolean {
@@ -115,6 +135,7 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
     },
     dispose(): void {
       sounds?.dispose();
+      glow?.destroy();
     },
   };
 }

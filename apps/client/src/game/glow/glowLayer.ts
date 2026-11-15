@@ -16,7 +16,8 @@ export type GlowWatcher = (s: RunState, parts: GlowParts, cues: GlowCues) => voi
 
 export interface GlowLayer {
   /** 한 화면 그리기 (게임 화면을 그린 바로 뒤). stopped: 멈춤 중이면 효과도 멈춤 */
-  frame(view: RunState, zoom: number, alpha: number, stopped: boolean): void;
+  /** fixed: 카메라를 밖에서 정함 (지도 전투 world/battle: 보이는 곳 왼쪽 위 x·y, f = 게임 1픽셀의 CSS 크기) */
+  frame(view: RunState, zoom: number, alpha: number, stopped: boolean, fixed?: { x: number; y: number; f: number }): void;
   /** 상태 보기 더하기 (한정 스킨·상점 효과) */
   addWatch(w: GlowWatcher): void;
   destroy(): void;
@@ -29,7 +30,7 @@ export function createGlowLayer(game: HTMLCanvasElement): GlowLayer {
   const silber = new GlowSilber();
   const extra: GlowWatcher[] = [];
   return {
-    frame(view, zoom, alpha, stopped) {
+    frame(view, zoom, alpha, stopped, fixed) {
       const dt = glow.tick(stopped);
       const on = glow.ready() && !!glow.parts;
       setGlowActive(on);
@@ -41,8 +42,8 @@ export function createGlowLayer(game: HTMLCanvasElement): GlowLayer {
         silber.observe(view, glow.parts, glow.cues);
         for (const x of extra) x(view, glow.parts, glow.cues);
       }
-      const cam = cameraFor(view, zoom, alpha);
-      const f = (zoom * w) / viewW();
+      const cam = fixed ?? cameraFor(view, zoom, alpha);
+      const f = fixed?.f ?? (zoom * w) / viewW();
       // 그리는 쪽이 남긴 빛 (shadowBlur 대신, glowHints): 캔버스 픽셀 → 게임 좌표
       const k = f * (game.width / Math.max(1, w));
       // 멈춤 중에는 조각이 줄지 않으니 새로 놓지 않음 (지난 빛이 그대로 남아 보임)
