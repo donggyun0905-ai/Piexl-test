@@ -5,7 +5,8 @@
   font-size: 13px;
   margin: 8px 0;
   padding: 8px;
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
   background: rgba(0, 0, 0, 0.2);
 }
 .run-summary summary {
@@ -172,7 +173,8 @@
   margin-top: 8px;
   padding: 8px;
   background: rgba(0, 0, 0, 0.25);
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
   text-align: left;
 }
 .codex-detail p {

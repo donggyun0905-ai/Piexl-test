@@ -32,7 +32,9 @@
   padding: 4px 8px;
   font-size: 12px;
   color: var(--muted);
-  background: rgba(20, 18, 28, 0.7);
+  background: rgba(20, 18, 28, 0.8);
+  border: 2px solid var(--px-dark);
+  box-shadow: inset 0 0 0 1px #3a3350;
 }
 .lobby-enter {
   position: fixed;
@@ -180,8 +182,10 @@
   margin: 0;
   padding: 4px 12px;
   font-weight: bold;
-  background: rgba(20, 18, 28, 0.75);
-  text-shadow: 0 1px 0 #000;
+  background: rgba(20, 18, 28, 0.85);
+  border: 2px solid var(--px-dark);
+  box-shadow: inset 0 0 0 1px #8a6d3b, 3px 3px 0 rgb(0 0 0 / 0.45);
+  text-shadow: 2px 2px 0 #000;
 }
 .world-note p {
   line-height: 1.6;
@@ -241,10 +245,11 @@
 }
 .world-power {
   padding: 3px 10px;
-  border-radius: 6px;
   font-weight: bold;
   color: #ffd84a;
-  background: rgba(12, 10, 18, 0.8);
+  background: rgba(12, 10, 18, 0.85);
+  border: 2px solid var(--px-dark);
+  box-shadow: inset 0 0 0 1px #8a6d3b;
 }
 .world-cover {
   position: fixed;

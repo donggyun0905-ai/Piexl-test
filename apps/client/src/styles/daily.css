@@ -42,7 +42,8 @@
   font: inherit;
   color: var(--text);
   background: var(--panel);
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-inset);
   padding: 6px 10px;
   -webkit-user-select: text;
   user-select: text;

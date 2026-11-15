@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.54.1",
+    date: "2026-11-15",
+    items: {
+      ko: ["세계 지도(시험 중) 첫 장비: 처음 한 번 1성 장신구 6개(반지 3·목걸이·귀걸이·브로치, 추가 능력치 공격%·방어·체력)를 장비 상자에 넣고 바로 끼워 줌 · 화면 디자인: 버튼·창을 픽셀 RPG 테두리로 (어두운 바깥선·밝은 안쪽선·위 밝음·아래 그늘 · 창은 금빛 안쪽선과 모서리 점·그림자 · 입력칸은 들어간 모양 · 누르면 살짝 눌림)"],
+      en: ["World Map (testing) starter gear: once, six 1-star trinkets (3 rings, necklace, earring, brooch, with Attack%, Defense and HP lines) go into the gear chest and are equipped for you · Screen design: buttons and windows get pixel RPG frames (dark outer line, light inner line, bevel highlights and shade · windows with a golden inner line, corner studs and shadow · inset input fields · buttons press down when clicked)"],
+      ja: ["世界地図（テスト中）最初の装備：一度だけ1つ星の装身具6つ（指輪3・首飾り・耳飾り・ブローチ、追加能力は攻撃%・防御・体力）を装備の箱に入れてすぐ装着・画面デザイン：ボタンと窓をピクセルRPG風の枠に（暗い外線・明るい内線・上の光と下の影・窓は金色の内線と角の飾り・影・入力欄はへこんだ形・押すと少し沈む）"],
+    },
+  },
+  {
     version: "0.54.0",
     date: "2026-11-15",
     items: {

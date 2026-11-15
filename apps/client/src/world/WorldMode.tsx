@@ -9,6 +9,7 @@ import { QuestBook, QuestDone, QuestHud, questMark } from "./QuestHud";
 import { WorldTab } from "./WorldTab";
 import { placeAction } from "./worldAction";
 import { advanceQuests, LEAVE_MARK, noteKill, noteVisit } from "../progress/quest";
+import { grantStarterKit } from "../progress/starterKit";
 import { QUESTS } from "../progress/quests";
 import { ATTIC_ID } from "./places/attic";
 import { featureOpen } from "../progress/storyStage";
@@ -58,7 +59,8 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
   const [cur, setCur] = useState<{ id: string; spawn: readonly [number, number] | null; n?: number }>(() => ({ id: fresh || loadText(LAST_KEY) === ATTIC_ID ? ATTIC_ID : startField(), spawn: null }));
   const [panel, setPanel] = useState<WorldPanel | null>(null);
   const [who, setWho] = useState(loadWorldChar);
-  const [power, setPower] = useState(myPower);
+  // 퀘스트 모드 처음: 1성 장신구 6개 (progress/starterKit)
+  const [power, setPower] = useState(() => (grantStarterKit(), myPower()));
   const closePanel = () => {
     setPanel(null);
     setPower(myPower());

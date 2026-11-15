@@ -45,7 +45,8 @@
   flex-direction: column;
   gap: 8px;
   padding: 10px 14px;
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
   background: var(--panel);
   text-align: left;
 }
@@ -81,7 +82,8 @@
   text-align: center;
   color: var(--text);
   background: var(--panel);
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-inset);
   padding: 8px;
 }
 /* 스킬 키 바꾸기: 키를 기다리는 칸은 밝게 */

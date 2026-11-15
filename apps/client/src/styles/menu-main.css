@@ -116,7 +116,8 @@
   display: grid;
   place-items: center;
   background: var(--bg);
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
   color: var(--accent);
 }
 .choice-icon .icon {

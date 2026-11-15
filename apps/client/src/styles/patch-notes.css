@@ -4,24 +4,27 @@
   inset: 0;
   /* 메인 목록(.title-screen)·로비 버튼보다 위 */
   z-index: 8;
-  background: rgb(0 0 0 / 0.6);
+  background: rgb(0 0 0 / 0.66);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px;
 }
 .modal {
-  background: var(--panel);
-  border: 2px solid var(--line);
+  background: var(--px-rivets), var(--panel);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-panel);
   width: min(480px, 100%);
   max-height: 80vh;
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  padding: 18px;
   gap: 12px;
 }
 .modal h2 {
   margin: 0;
+  color: var(--accent);
+  text-shadow: 2px 2px 0 var(--px-dark);
 }
 .modal-body {
   overflow-y: auto;

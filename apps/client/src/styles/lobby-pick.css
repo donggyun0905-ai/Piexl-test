@@ -36,7 +36,8 @@
   column-gap: 14px;
   padding: 8px 14px;
   background: var(--panel);
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
   border-radius: 12px;
 }
 .room-code .field-label {
@@ -81,7 +82,8 @@
   justify-content: center;
   min-height: 240px;
   background: var(--panel);
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
   border-radius: 12px;
 }
 .room-picked {
@@ -90,7 +92,8 @@
   align-items: center;
   padding: 8px 14px 8px 8px;
   background: linear-gradient(90deg, #2a2340, var(--panel));
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
   border-radius: 12px;
 }
 .room-picked-art {

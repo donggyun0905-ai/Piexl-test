@@ -168,7 +168,8 @@ button.tile.sel {
   flex-direction: column;
   gap: 4px;
   padding: 6px;
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
   background: var(--panel);
   font-size: 13px;
 }

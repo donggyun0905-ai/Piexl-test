@@ -5,7 +5,8 @@ button.small {
   margin-left: 8px;
 }
 button.primary {
-  border-color: var(--accent);
+  border-color: var(--px-dark);
+  box-shadow: var(--px-btn-hot);
 }
 button.wide {
   width: 100%;
@@ -56,7 +57,8 @@ button.wide {
   font: inherit;
   color: var(--text);
   background: var(--panel);
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-inset);
   padding: 6px 10px;
   width: 200px;
   letter-spacing: 1px;
@@ -134,7 +136,8 @@ button.wide {
   gap: 10px;
   align-items: flex-start;
   padding: 8px 10px;
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
   background: rgb(0 0 0 / 0.15);
   color: var(--muted);
 }
@@ -154,7 +157,8 @@ button.wide {
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
   background: var(--bg);
   color: var(--line);
 }

@@ -22,7 +22,8 @@
   align-items: center;
   padding: 8px 10px;
   text-align: left;
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
 }
 .rank-card-text {
   display: flex;

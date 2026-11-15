@@ -16,7 +16,7 @@ export const WORLD_ATTIC_TEXT = {
   agHint1: { ko: "거울로 가 보자", en: "Go to the mirror", ja: "鏡のところへ行こう" },
   agTalk1: { ko: "이 거울에는 네가 지켜볼 영웅이 비쳐. 여기서 함께할 영웅을 고를 수 있어. (C 키로도 열려)", en: "This mirror shows the hero you'll be watching over. You can choose your hero here. (Also opens with C)", ja: "この鏡には君が見守る英雄が映る。ここで一緒に行く英雄を選べるよ。（Cキーでも開く）" },
   agHint2: { ko: "장비 상자로 가 보자", en: "Go to the gear chest", ja: "装備の箱へ行こう" },
-  agTalk2: { ko: "영웅에게 건넬 장신구를 넣어 두는 상자야. 레이드에서 얻은 장신구를 끼우면 투력이 올라. (B 키로도 열려)", en: "This chest holds the trinkets you give your heroes. Equip trinkets from raids to raise your power. (Also opens with B)", ja: "英雄に渡す装身具をしまっておく箱だよ。レイドで手に入れた装身具をつけると闘力が上がる。（Bキーでも開く）" },
+  agTalk2: { ko: "영웅에게 건넬 장신구를 넣어 두는 상자야. 처음 쓸 1성 장신구 6개를 넣어서 벌써 끼워 뒀어. 레이드에서 더 좋은 걸 얻으면 바꿔 끼워. (B 키로도 열려)", en: "This chest holds the trinkets you give your heroes. I put six 1-star trinkets in it and already equipped them for you. Swap in better ones from raids later. (Also opens with B)", ja: "英雄に渡す装身具をしまっておく箱だよ。最初の1つ星の装身具を6つ入れて、もう着けておいたよ。レイドでもっといい物を手に入れたら付け替えてね。（Bキーでも開く）" },
   agHint3: { ko: "책상 위 기록서로 가 보자", en: "Go to the book on the desk", ja: "机の上の記録書へ行こう" },
   agTalk3: { ko: "지금까지 적힌 이야기가 이 기록서에 모여. 다시 읽고 싶을 때 펼쳐 봐. 앞으로 해야 할 일도 여기에 적어 둘게.", en: "Every story written so far is gathered in this book. Open it whenever you want to read again. I'll note what to do next here too.", ja: "これまでに書かれた物語はこの記録書に集まる。読み返したくなったら開いてごらん。これからやることもここに書いておくよ。" },
   agHint4: { ko: "반짝이는 문으로 가 보자", en: "Go to the glowing door", ja: "光る扉へ行こう" },

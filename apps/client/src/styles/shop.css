@@ -60,7 +60,8 @@
   gap: 6px;
   padding: 10px 8px;
   background: var(--panel);
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
   text-align: center;
   font-size: 13px;
 }
@@ -104,7 +105,8 @@
   gap: 10px;
   padding: 10px;
   background: var(--panel);
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
 }
 .mission.claimed {
   opacity: 0.6;

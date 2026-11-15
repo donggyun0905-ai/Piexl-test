@@ -152,7 +152,8 @@
   gap: 6px;
   padding: 8px;
   background: var(--panel);
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
 }
 @media (max-width: 900px) {
   .lobby-chat-log {

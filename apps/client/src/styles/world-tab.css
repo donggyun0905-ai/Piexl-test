@@ -11,8 +11,12 @@
   color: #f6ecd4;
 }
 .world-tab-body {
-  width: min(760px, 100%);
+  width: min(780px, 100%);
   max-height: 100%;
+  padding: 18px 20px;
+  background: var(--px-rivets), rgb(26 22 36 / 0.94);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-panel);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -22,6 +26,7 @@
   margin: 0;
   color: #ffd84a;
   text-align: center;
+  text-shadow: 2px 2px 0 var(--px-dark);
 }
 .world-tab h3 {
   margin: 0 0 4px;

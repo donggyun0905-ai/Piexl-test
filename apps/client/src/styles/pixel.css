@@ -23,7 +23,8 @@
 .px-file {
   cursor: pointer;
   padding: 6px 10px;
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
 }
 .px-help {
   color: var(--muted);
@@ -65,7 +66,8 @@
 }
 .px-card {
   padding: 8px;
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
   background: var(--panel);
 }
 .px-row,
@@ -139,7 +141,8 @@
   max-width: min(100%, 92vw);
   max-height: 72vh;
   overflow: auto;
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
 }
 .px-tools {
   display: flex;

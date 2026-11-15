@@ -135,7 +135,8 @@
   width: 196px;
   height: 196px;
   padding: 0;
-  border: 2px solid var(--line);
+  border: 2px solid var(--px-dark);
+  box-shadow: var(--px-btn);
   background: var(--panel);
 }
 .cs-pick-info {
