@@ -42,14 +42,21 @@ export function createChunkCache(m: WorldMap) {
   };
   return {
     draw(ctx: CanvasRenderingContext2D, v: View): void {
+      // 덩어리 경계를 화면 픽셀에 맞춰 붙임 (배율이 소수일 때 덩어리 사이에 생기는 가는 틈 없앰)
+      const t = ctx.getTransform();
+      const px = (x: number) => Math.round(t.a * x + t.e);
+      const py = (y: number) => Math.round(t.d * y + t.f);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       for (const [kx, ky] of chunksInView(m, v, size)) {
         const id = `${kx},${ky}`;
         let c = cache.get(id);
         if (c) cache.delete(id);
         else c = build(kx, ky);
         cache.set(id, c);
-        ctx.drawImage(c, kx * cpx, ky * cpx, cpx, cpx);
+        const [x0, y0] = [px(kx * cpx), py(ky * cpx)];
+        ctx.drawImage(c, x0, y0, px((kx + 1) * cpx) - x0, py((ky + 1) * cpx) - y0);
       }
+      ctx.setTransform(t);
       // 가장 오래 안 쓴 것부터 버림 (Map은 넣은 차례)
       while (cache.size > max) cache.delete(cache.keys().next().value!);
     },

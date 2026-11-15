@@ -48,12 +48,33 @@ function image(url: string): Promise<HTMLImageElement | null> {
   });
 }
 
-function toTex(img: HTMLImageElement): Tex {
+/** 끝과 처음이 안 이어지는 바닥 결 (2026-11-16 이음매 검사) → [가로로 뒤집어 붙임, 세로로 뒤집어 붙임] · 벽면 그림은 위아래가 원래 달라서 뺌 */
+const SEAM: Readonly<Record<string, readonly [boolean, boolean]>> = {
+  plaza: [false, true],
+  floor: [true, true],
+  dockPlank: [true, true],
+  cellarStone: [false, true],
+  metalFloor: [false, true],
+  deepSnow: [false, true],
+  woodFloor: [true, false],
+  buriedRoad: [true, false],
+};
+
+function toTex(img: HTMLImageElement, name = ""): Tex {
+  const [mx, my] = SEAM[name] ?? [false, false];
+  const [w, h] = [img.naturalWidth, img.naturalHeight];
   const c = document.createElement("canvas");
-  c.width = img.naturalWidth;
-  c.height = img.naturalHeight;
+  c.width = w * (mx ? 2 : 1);
+  c.height = h * (my ? 2 : 1);
   const g = c.getContext("2d", { willReadFrequently: true })!;
-  g.drawImage(img, 0, 0);
+  // 거울로 이어 붙이면 경계가 늘 맞음
+  for (const [fx, fy] of [[false, false], [mx, false], [false, my], [mx, my]] as const) {
+    g.save();
+    g.translate(fx ? 2 * w : 0, fy ? 2 * h : 0);
+    g.scale(fx ? -1 : 1, fy ? -1 : 1);
+    g.drawImage(img, 0, 0);
+    g.restore();
+  }
   return { w: c.width, h: c.height, data: g.getImageData(0, 0, c.width, c.height).data, img: c };
 }
 
@@ -67,7 +88,7 @@ export function loadWorldArt(base: string): Promise<void> {
       await Promise.all([
         ...(list.tex ?? []).map(async (n) => {
           const img = await image(`${base}world/tex/${n}.png`);
-          if (img) art.tex.set(n, toTex(img));
+          if (img) art.tex.set(n, toTex(img, n));
         }),
         ...(list.obj ?? []).map(async (n) => {
           const img = await image(`${base}world/obj/${n}.png`);
