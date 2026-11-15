@@ -16,6 +16,7 @@ import type { Hunt, Mob } from "../hunt/huntSim";
 import { sliceRoom } from "./battleRoom";
 import { newPad, readPad } from "./battleInput";
 import { battleResult, startBattle, stepBattle, type FieldBattle } from "./fieldBattle";
+import { carryFor, keepCarry, setLive } from "./fieldCarry";
 
 
 type Ctx = CanvasRenderingContext2D;
@@ -44,6 +45,9 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
     // 도망·쓰러짐 뒤에는 잠깐 다시 붙지 않음 · 몬스터 없이 연 판이 닫힌 뒤는 바로
     cool = why === "won" ? 0 : FLEE_COOL;
     h.me.calm = 0;
+    // 다음 판에 이어 줄 상태 (쓰러지면 버림)
+    keepCarry(b!.run, why === "down");
+    setLive(null);
     sounds?.dispose();
     glow?.destroy();
     [b, sounds, glow] = [null, null, null];
@@ -58,7 +62,8 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
     const [x0, y0, x1, y1] = [(room.ox + 1) * WTILE, (room.oy + 1.5) * WTILE, (room.ox + room.cols - 1) * WTILE, (room.oy + room.rows - 1) * WTILE];
     const inside = h.mobs.filter((x) => x.st !== "dead" && x.x > x0 && x.x < x1 && x.y > y0 && x.y < y1);
     const power = Math.max(0, ...inside.map((x) => x.g.power));
-    b = startBattle(room, who(), n++ * 7919 + region.length, [me.x, me.y], h.me.hp / h.me.st.maxHp, inside, power);
+    b = startBattle(room, who(), n++ * 7919 + region.length, [me.x, me.y], h.me.hp / h.me.st.maxHp, inside, power, carryFor(who()));
+    setLive({ pad, run: b.run });
     // 판 안 몬스터는 지도에서 감춤 (끝나면 돌려보냄)
     for (const x of inside) [x.st, x.t] = ["dead", 1e9];
     sounds = createRunSounds(b.run, (pw) => getSettings().shake && shake(pw), false);
@@ -150,6 +155,7 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
       else if (skillOf(code)) pad.skill = skillOf(code);
     },
     dispose(): void {
+      setLive(null);
       sounds?.dispose();
       glow?.destroy();
     },

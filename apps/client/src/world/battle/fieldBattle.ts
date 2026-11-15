@@ -7,9 +7,12 @@ import { WTILE } from "../worldMap";
 import type { Mob } from "../hunt/huntSim";
 import { HUNT_RULES } from "../hunt/huntGrounds";
 import type { BattleRoom } from "./battleRoom";
+import { applyCarry } from "./fieldCarry";
 
-/** 판 밖으로 미는 동안 이 틱 수(1초)가 지나면 도망 · 한 번에 따라잡는 최대 틱 */
+/** 판 밖으로 미는 동안 이 틱 수(1초)가 지나면 도망 · 가까이(FLEE_NEAR 픽셀) 적이 있으면 2초 (뒷걸음질하다 실수로 도망치지 않게) · 한 번에 따라잡는 최대 틱 */
 const FLEE_TICKS = 60;
+const FLEE_TICKS_NEAR = 120;
+const FLEE_NEAR = 80;
 /** 적이 없고 공격·대시·스킬도 안 누른 채 이 틱 수(1.5초)가 지나면 판을 닫음 */
 const QUIET_TICKS = 90;
 const MAX_CATCH_UP = 6;
@@ -30,7 +33,7 @@ export type BattleEnd = "won" | "fled" | "down";
 export const floorFor = (power: number): number => Math.max(1, Math.min(6, Math.round(1 + (power - 1500) / 1000)));
 
 /** 판 만들기: 나는 지도 자리 그대로 · 몬스터는 판 안에 있는 것만 (hpLeft: 지도 체력 몫 0~1) */
-export function startBattle(room: BattleRoom, who: CharacterId, seed: number, me: readonly [number, number], hpLeft: number, mobs: readonly Mob[], power: number): FieldBattle {
+export function startBattle(room: BattleRoom, who: CharacterId, seed: number, me: readonly [number, number], hpLeft: number, mobs: readonly Mob[], power: number, carry: RunState | null = null): FieldBattle {
   const s = createRun(deriveSeed(seed, "fieldBattle"), who, loadAchievements());
   s.floor = floorFor(power);
   const info = s.map.rooms[s.roomId]!;
@@ -41,6 +44,8 @@ export function startBattle(room: BattleRoom, who: CharacterId, seed: number, me
   s.roomRows = room.rows;
   applyRoom(s);
   s.rooms[s.roomId]!.pickups = [];
+  // 지난 지도 전투에서 키운 것 이어 받기 (battle/fieldCarry)
+  if (carry) applyCarry(s, carry);
   // 레이드처럼 낀 장신구 능력치 (sim/accStats)
   s.player.acc = myAccTotals();
   recalcStats(s);
@@ -90,7 +95,8 @@ export function stepBattle(b: FieldBattle, ms: number, read: () => TickInput, on
     // 적이 없으면: 조용히 1.5초 지나면 닫음 (다 잡았거나, 몬스터 없이 휘둘러 봄)
     b.quiet = s.enemies.length || input.attack || input.dash || input.skill ? 0 : b.quiet + 1;
     if (b.quiet >= QUIET_TICKS) return "won";
-    if (b.push >= FLEE_TICKS) return "fled";
+    const near = s.enemies.some((e) => Math.hypot(e.x - s.player.x, e.y - s.player.y) < FLEE_NEAR);
+    if (b.push >= (near ? FLEE_TICKS_NEAR : FLEE_TICKS)) return "fled";
   }
   if (n === MAX_CATCH_UP) b.acc = 0;
   return null;

@@ -1,4 +1,4 @@
-// 세계 지도 편의 기능 묶음 (WorldMode에서 뗌): Esc 설정 · H 조작키 · G 자동 걷기 · 구석 미니맵 · 획득 알림
+// 세계 지도 편의 기능 묶음 (WorldMode에서 뗌): Esc 설정 · H 조작키 · G 자동 걷기 · 구석 미니맵 · 획득 알림 · 레벨업 능력치 찍기
 import { useCallback, useState } from "react";
 import type { Lang, TextKey } from "../i18n";
 import { AutoWalk } from "./QuestHud";
@@ -8,6 +8,7 @@ import { WorldMenu } from "./WorldMenu";
 import type { AutoState } from "./worldPath";
 import { worldPrefs } from "./worldPrefs";
 import { WorldToasts } from "./WorldToasts";
+import { FieldStats } from "./battle/FieldStats";
 
 /** 창 상태 · 자동 걷기 요청 번호 (지역이 바뀌면 자동 걷기 표시는 처음부터) */
 export function useWorldExtras(region: string) {
@@ -55,6 +56,7 @@ export function WorldExtras({ t, lang, x, regionId, ready, busy, field, mark, on
       {ready && !busy && mark && <AutoWalk t={t} state={x.autoSt} onGo={x.go} />}
       {ready && field && worldPrefs().mini && <WorldCornerMini key={regionId} t={t} regionId={regionId} mark={mark} onOpen={onMap} />}
       <WorldToasts />
+      {ready && field && !busy && <FieldStats t={t} />}
       {x.keys && <WorldKeys t={t} onClose={() => x.setKeys(false)} />}
       {x.menu && <WorldMenu t={t} lang={lang} onClose={() => x.setMenu(false)} onExit={onExit} />}
     </>

@@ -77,5 +77,43 @@ describe("지도 전투 (본편 판)", () => {
     }
     setRoomSize();
   });
+  it("판 사이에 키운 것이 이어짐 (이무기 콤보·거짓된 용사 레벨) · 판 밖에서 능력치 찍기 · 쓰러지면 처음부터", async () => {
+    const { carryFor, keepCarry, pickStat, setLive } = await import("./fieldCarry");
+    const m = parseMap(rgba(new Array(40 * 30).fill(WT.grass)), 40, 30);
+    const g = HUNT_GROUNDS.find((x) => x.id === "slimeMeadow")!;
+    const me: [number, number] = [20 * WTILE, 17 * WTILE];
+    const play = (who: "imugi" | "novice", seed: number) => {
+      const mobs = [-30, 0, 30].map((dx): Mob => ({ g, x: me[0] + dx, y: me[1] - 50, hp: g.hp, st: "chase", t: 0, wx: 0, wy: 0, left: false }));
+      const b = startBattle(sliceRoom(m, 20, 15), who, seed, me, 1, mobs, g.power, carryFor(who));
+      const pad = newPad();
+      let end = null;
+      for (let i = 0; i < 60 * 30 && !end; i++) {
+        const p = b.run.player;
+        const foe = b.run.enemies[0];
+        pad.attack = !!foe;
+        end = stepBattle(b, 1000 / 60, () => readPad(pad, new Set(), foe ? [foe.x - p.x, foe.y - p.y] : [0, -1]), () => {}, () => {});
+      }
+      keepCarry(b.run, end === "down");
+      return b.run;
+    };
+    const a = play("imugi", 1);
+    const first = a.player.imCombo ?? 0;
+    expect(first).toBeGreaterThan(0);
+    const c = play("imugi", 2);
+    expect(c.player.imCombo ?? 0).toBeGreaterThan(first);
+    expect(c.tick).toBeGreaterThan(a.tick);
+    // 다른 캐릭터면 이어 받지 않음 · 거짓된 용사 점수는 판 밖에서 찍힘
+    expect(carryFor("novice")).toBeNull();
+    let n = play("novice", 3);
+    for (let k = 4; (n.player.points ?? 0) === 0 && k < 12; k++) n = play("novice", k);
+    const pts = n.player.points ?? 0;
+    expect(pts).toBeGreaterThan(0);
+    setLive(null);
+    pickStat(1);
+    expect(carryFor("novice")!.player.points).toBe(pts - 1);
+    keepCarry(n, true);
+    expect(carryFor("novice")).toBeNull();
+    setRoomSize();
+  });
 });
 

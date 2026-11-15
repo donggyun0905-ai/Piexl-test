@@ -104,3 +104,16 @@
   position: fixed;
   z-index: 0;
 }
+
+/* 지도 레벨업 능력치 (world/battle/FieldStats) · 화면 아래 체력 줄 위 */
+.world-stats {
+  position: fixed;
+  left: 50%;
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 150px);
+  transform: translateX(-50%);
+  z-index: 3;
+  width: min(560px, 92vw);
+  padding: 6px 10px;
+  background: rgba(12, 10, 18, 0.85);
+  border: 2px solid var(--px-dark);
+}

@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.55.9",
+    date: "2026-11-16",
+    items: {
+      ko: ["세계 지도(시험 중) 지도 전투에서 키운 것이 다음 싸움으로 이어짐: 이무기 콤보, 풋내기·아슈바르 레벨과 경험치, 악의 사도·이터·몰락한 왕·백령의 영혼, 에테르 광부 원석, 별지기의 별, 아티팩터 제작 게이지 등 (같은 캐릭터일 때 · 쓰러지면 처음부터) · 풋내기·아슈바르는 지도 화면 아래에서 레벨업 능력치를 찍을 수 있음 · 근처에 적이 있으면 판 끝에서 2초를 밀어야 도망 (뒷걸음질하다 실수로 도망치지 않게)"],
+      en: ["World Map (testing) what you build up in field combat now carries into the next fight: Imugi's combo, the levels and EXP of the Novice and the Ashvar, the souls of the Apostle of Malice, Eater, Fallen King and Baekryeong, the Ether Miner's ore, the Stargazer's stars, the Artifacter's crafting gauge and more (same character only; it resets if you fall) · The Novice and the Ashvar can spend level-up points at the bottom of the map screen · With an enemy nearby you must push against the edge for 2 seconds to flee (so you don't flee by accident while backing off)"],
+      ja: ["世界地図（テスト中）フィールド戦闘で育てたものが次の戦いに引き継がれる：イムギのコンボ、見習い・アシュヴァルのレベルと経験値、悪の使徒・イーター・堕ちた王・白霊の魂、エーテル鉱夫の原石、星守りの星、アーティファクターの製作ゲージなど（同じキャラクターのとき・倒れると最初から）・見習い・アシュヴァルは地図画面の下でレベルアップの能力を振れる・近くに敵がいると端で2秒押さないと逃げられない（後ずさりしてうっかり逃げないように）"],
+    },
+  },
+  {
     version: "0.55.8",
     date: "2026-11-16",
     items: {

@@ -77,7 +77,7 @@ export { RING_TICKS, STRIKE_WAIT } from "./shades";
 export { CLONE_GAP } from "./ninja";
 export type { Shade } from "./ninjaTypes";
 export type { Echo } from "./chronoTypes";
-export { critNow, expOf, expToNext, NOVICE_STATS, NOVICE_STEP, noviceCrit, type NoviceStat } from "./novice";
+export { critNow, expOf, expToNext, NOVICE_STATS, NOVICE_STEP, noviceCrit, spendStat, type NoviceStat } from "./novice";
 export { dashMax } from "./bedouin";
 export { LEGENDS } from "./generalLegends";
 export { heroBosses } from "./hero";
