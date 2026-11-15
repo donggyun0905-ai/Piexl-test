@@ -7,7 +7,7 @@ import { WorldAtlas } from "./WorldAtlas";
 import { WTILE } from "./worldMap";
 import { paintMini, useWorldMap } from "./worldMini";
 import { REGIONS, type Place } from "./worldPlaces";
-import { here, warpTouched } from "./worldWarps";
+import { here, touchedWarps, warpTouched } from "./worldWarps";
 
 type T = (k: TextKey) => string;
 const MARK: Partial<Record<Place["kind"], string>> = { dungeon: "⚔", pass: "🚶", warp: "✨" };
@@ -92,10 +92,30 @@ export function WorldMapModal({ nameOf, warp, onClose, ...p }: ModalProps) {
         ) : (
           <WorldMapView key={sel} {...p} regionId={sel} me={sel === p.regionId ? p.me : null} />
         )}
+        <WarpList t={p.t} nameOf={nameOf} onGo={p.onGo} />
         <button type="button" className="ghost" onClick={onClose}>
           {p.t("close")}
         </button>
       </div>
+    </div>
+  );
+}
+
+/** 만진 순간 이동석 바로 가기 (모든 지역, 누르면 바로 이동) */
+function WarpList({ t, nameOf, onGo }: { t: T; nameOf: (id: string) => string; onGo: (p: Place, regionId: string) => void }) {
+  const list = touchedWarps().flatMap(([r, id]) => {
+    const p = REGIONS[r]?.places.find((x) => x.id === id);
+    return p ? [[r, p] as const] : [];
+  });
+  if (!list.length) return null;
+  return (
+    <div className="wm-warps">
+      <small>✨ {t("wkWarps")}</small>
+      {list.map(([r, p]) => (
+        <button key={`${r}:${p.id}`} type="button" className="small secondary" onClick={() => onGo(p, r)}>
+          {nameOf(r)} · {t(p.name)}
+        </button>
+      ))}
     </div>
   );
 }

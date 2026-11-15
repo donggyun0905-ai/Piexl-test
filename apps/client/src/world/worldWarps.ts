@@ -1,6 +1,7 @@
 // 순간 이동석: 한 번 만진 돌만 다른 돌에서 골라 갈 수 있음 (이 기기에 저장, 서버 안 씀)
 import { loadText, saveText } from "../storage";
-import type { Place } from "./worldPlaces";
+import { WTILE } from "./worldMap";
+import { placeXY, type Place, type Region } from "./worldPlaces";
 
 const KEY = "worldWarps";
 
@@ -27,3 +28,20 @@ export function touchWarp(regionId: string, p: Place): void {
 export function warpTouched(regionId: string, p: Place): boolean {
   return load().includes(`${regionId}:${p.id}`);
 }
+
+/** 만진 돌 전부 [지역, 돌 id] (지도 창의 바로 가기 목록) */
+export const touchedWarps = (): [string, string][] => load().map((s) => s.split(":") as [string, string]).filter((v) => v.length === 2);
+
+/** 일어날 자리: 가장 가까운 만진 순간 이동석 아래 (없으면 지역 처음 자리) */
+export function reviveAt(region: Region, regionId: string, x: number, y: number): [number, number] {
+  let best: [number, number] = [(region.start.tx + 0.5) * WTILE, (region.start.ty + 0.5) * WTILE];
+  let d = Infinity;
+  for (const p of region.places) {
+    if (p.kind !== "warp" || !warpTouched(regionId, p)) continue;
+    const [px, py] = placeXY(p);
+    const k = Math.hypot(px - x, py - y);
+    if (k < d) [d, best] = [k, [px, py + 12]];
+  }
+  return best;
+}
+

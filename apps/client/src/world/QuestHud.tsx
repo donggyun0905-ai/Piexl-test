@@ -156,3 +156,13 @@ export function QuestBook({ t, cur, regionName, onStory, onClose }: { t: T; cur:
     </div>
   );
 }
+
+/** 퀘스트 한 줄 아래: 목적지까지 자동 걷기 (G) · 가는 중·길 없음 표시 */
+export function AutoWalk({ t, state, onGo }: { t: T; state: "go" | "done" | "stop" | "fail" | null; onGo: () => void }) {
+  if (state === "go") return <p className="quest-auto">{t("wkGoing")}</p>;
+  return (
+    <button type="button" className="quest-auto secondary" onClick={onGo}>
+      {state === "fail" ? t("wkNoPath") : t("wkGo")} · G
+    </button>
+  );
+}

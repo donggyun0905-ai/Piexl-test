@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.55.2",
+    date: "2026-11-15",
+    items: {
+      ko: ["세계 지도(시험 중) 편의 기능: H 조작키 안내 창 · 왼쪽 아래 미니맵 (내 자리·퀘스트 목적지·사냥터·필드 보스·최종보스 입구·만진 순간 이동석, 누르면 지도) · G 퀘스트 목적지까지 자동으로 걷기 (이동 키를 누르면 멈춤) · Shift를 누르고 있으면 달리기 (대시는 우클릭·K) · 화면 아래 체력·대시 줄 · 쓰러지면 남은 시간을 보여 주고 가장 가까운 만진 순간 이동석에서 일어남 · 장소 이름표 늘 보기 (설정) · 글 창은 아무 데나 누르거나 Space·Enter·F로 넘김 · 지도 창에 만진 순간 이동석 바로 가기 목록 (다른 지역 돌도) · 나무·몬스터 처치 알림 · 마우스 휠로 확대·축소 (설정에서도) · 몬스터에 마우스를 올리면 이름·권장 투력"],
+      en: ["World Map (testing) quality of life: H opens a controls guide · Minimap in the bottom left (you, quest goal, hunting grounds, field bosses, final boss gates and waystones you touched; click to open the map) · G walks you to the quest goal (a move key stops it) · Hold Shift to run (dash is right click / K) · HP and dash bars at the bottom of the screen · When you fall, a countdown shows and you rise at the nearest waystone you touched · Option to always show place names · Text windows close on any click or Space / Enter / F · Shortcut list of touched waystones in the map window (other regions too) · Pop-ups for wood and defeated monsters · Mouse wheel zoom (also in settings) · Hover a monster to see its name and recommended power"],
+      ja: ["世界地図（テスト中）便利機能：Hで操作キーの案内・左下にミニマップ（自分・クエストの目的地・狩り場・フィールドボス・最終ボスの入口・触れた転移石、押すと地図）・Gでクエストの目的地まで自動で歩く（移動キーで止まる）・Shiftを押している間は走る（ダッシュは右クリック・K）・画面下に体力・ダッシュのバー・倒れると残り時間を表示し、近くの触れた転移石で起き上がる・場所の名札を常に表示（設定）・文章の画面はどこを押しても、Space・Enter・Fでも進む・地図の画面に触れた転移石のショートカット一覧（ほかの地域の石も）・木材とモンスター撃破のお知らせ・マウスホイールで拡大・縮小（設定でも）・モンスターにマウスを乗せると名前と推奨戦力"],
+    },
+  },
+  {
     version: "0.55.1",
     date: "2026-11-15",
     items: {

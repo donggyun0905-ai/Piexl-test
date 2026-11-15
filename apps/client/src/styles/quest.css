@@ -143,3 +143,19 @@
 .boss-gate p.bad {
   color: var(--bad);
 }
+
+/* 자동 걷기 버튼 (QuestHud AutoWalk) · 퀘스트 한 줄 아래 */
+.quest-auto {
+  position: fixed;
+  top: calc(max(12px, env(safe-area-inset-top)) + 64px);
+  right: max(12px, env(safe-area-inset-right));
+  z-index: 3;
+  margin: 0;
+  padding: 4px 10px;
+  font-size: 12px;
+  background: rgba(20, 18, 28, 0.85);
+}
+p.quest-auto {
+  color: #ffd84a;
+  border: 2px solid var(--px-dark);
+}

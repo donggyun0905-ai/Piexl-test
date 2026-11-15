@@ -1,0 +1,95 @@
+/* 세계 지도 편의 기능 (world/WorldExtras): 조작키 안내 · 구석 미니맵 · 획득 알림 */
+
+/* 지도 조작키 안내 (world/WorldKeys) */
+.world-keys {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+.world-keys div {
+  display: grid;
+  grid-template-columns: 9em 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.world-keys dt {
+  font-weight: bold;
+  color: #ffd84a;
+  text-align: right;
+}
+.world-keys dd {
+  margin: 0;
+}
+
+/* 구석 미니맵 (world/WorldCornerMini) · 왼쪽 아래 (퀘스트 줄·조작 안내와 겹치지 않게) */
+.world-mini {
+  position: fixed;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  left: max(12px, env(safe-area-inset-left));
+  z-index: 2;
+  width: min(170px, 30vw);
+  padding: 0;
+  overflow: hidden;
+  background: #0c0a12;
+  border: 2px solid var(--px-dark);
+  box-shadow: inset 0 0 0 1px #8a6d3b, 3px 3px 0 rgb(0 0 0 / 0.45);
+  opacity: 0.9;
+}
+.world-mini canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+.world-mini i {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  transform: translate(-50%, -50%);
+  border: 1px solid #000;
+}
+.world-mini .me {
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+}
+.world-mini .hunt { background: #e0606a; }
+.world-mini .boss { background: #ff9a3a; }
+.world-mini .gate { background: #b060e0; }
+.world-mini .warp { background: #6ad0ff; }
+.world-mini .goal {
+  width: 7px;
+  height: 7px;
+  background: #ffd84a;
+  animation: world-mini-blink 0.8s steps(2) infinite;
+}
+@keyframes world-mini-blink {
+  50% { opacity: 0.3; }
+}
+
+/* 획득 알림 (world/WorldToasts) */
+.world-toasts {
+  position: fixed;
+  top: 40%;
+  right: max(12px, env(safe-area-inset-right));
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  pointer-events: none;
+}
+.world-toasts p {
+  margin: 0;
+  padding: 3px 10px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #ffe9a8;
+  background: rgba(12, 10, 18, 0.85);
+  border: 2px solid var(--px-dark);
+  animation: world-toast-in 0.2s ease-out;
+}
+@keyframes world-toast-in {
+  from { transform: translateX(20px); opacity: 0; }
+}

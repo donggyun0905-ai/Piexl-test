@@ -221,7 +221,7 @@ export function swing(h: Hunt & { rnd: () => number }, me: Walker, aim?: readonl
   }
 }
 
-/** 대시 (Shift·K·우클릭): 우클릭이면 마우스 쪽 · 아니면 걷는 쪽(없으면 바라보는 쪽)으로 짧게 · 그동안 안 맞음 */
+/** 대시 (K·우클릭): 우클릭이면 마우스 쪽 · 아니면 걷는 쪽(없으면 바라보는 쪽)으로 짧게 · 그동안 안 맞음 */
 export function dash(h: Hunt, me: Walker, keys: ReadonlySet<string>, aim?: readonly [number, number]): void {
   const s = h.me;
   if (s.dashCd > 0 || s.down > 0) return;

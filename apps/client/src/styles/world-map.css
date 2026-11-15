@@ -19,3 +19,16 @@
 .wa-land.here { border-color: rgba(255, 216, 74, 0.7); }
 .wa-name { position: absolute; left: 50%; bottom: 4%; transform: translateX(-50%); padding: 1px 6px; border-radius: 6px; background: rgba(0, 0, 0, 0.6); color: #fff; font-size: 12px; white-space: nowrap; pointer-events: none; }
 .wa-here { position: absolute; top: 4%; right: 4%; font-size: 14px; pointer-events: none; }
+
+/* 지도 창: 만진 순간 이동석 바로 가기 */
+.wm-warps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  margin: 6px 0;
+}
+.wm-warps small {
+  width: 100%;
+  opacity: 0.8;
+}

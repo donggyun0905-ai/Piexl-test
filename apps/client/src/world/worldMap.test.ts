@@ -73,3 +73,17 @@ describe("세계 지도", () => {
     expect(chunksInView(m, { x: 250, y: 0, w: 300, h: 180 }, 16)).toEqual([[0, 0], [1, 0], [2, 0]]);
   });
 });
+
+describe("자동 걷기 길찾기", () => {
+  it("벽을 돌아 목적지 2칸 안까지 · 막히면 null", async () => {
+    const { findPath, simplify } = await import("./worldPath");
+    // 5×3, 가운데 세로 벽(아래만 뚫림)
+    const wall = new Set(["2,0", "2,1"]);
+    const stand = (x: number, y: number) => !wall.has(`${x},${y}`);
+    const p = findPath(5, 3, stand, [0, 0], [4, 0]);
+    expect(p).not.toBeNull();
+    expect(p!.some(([, y]) => y === 2.5 * WTILE)).toBe(true);
+    expect(simplify(p!, [0.5 * WTILE, 0.5 * WTILE]).length).toBeLessThan(p!.length);
+    expect(findPath(5, 3, (x) => x !== 2, [0, 0], [4, 0])).toBeNull();
+  });
+});

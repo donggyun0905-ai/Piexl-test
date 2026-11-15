@@ -90,3 +90,53 @@ export function drawDashTrail(ctx: Ctx, h: Hunt, me: Walker): void {
     ctx.fill();
   }
 }
+
+/** 화면 아래 가운데 (화면 픽셀): 체력 줄 · 대시 준비 칸 · 쓰러짐 남은 시간 (글자는 WorldStage가 넘김) */
+export function drawHuntHud(ctx: Ctx, h: Hunt, w: number, hgt: number, k: number, dashLabel: string, downText: (n: number) => string): void {
+  const s = h.me;
+  const bw = 160 * k;
+  const x = (w - bw) / 2;
+  const y = hgt - 96 * k;
+  ctx.fillStyle = "rgba(0,0,0,0.7)";
+  ctx.fillRect(x - 2 * k, y - 2 * k, bw + 4 * k, 12 * k);
+  ctx.fillStyle = s.down > 0 ? "#888" : "#d84a4a";
+  ctx.fillRect(x, y, bw * Math.max(0, s.hp / s.st.maxHp), 8 * k);
+  ctx.font = `bold ${8 * k}px sans-serif`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = "#fff";
+  ctx.fillText(`${Math.ceil(s.hp)} / ${Math.round(s.st.maxHp)}`, w / 2, y + 4 * k);
+  // 대시: 차오르는 칸
+  const full = s.dashCd <= 0 ? 1 : 1 - s.dashCd / (R.dashGap * s.st.dashMul);
+  const dw = 60 * k;
+  ctx.fillStyle = "rgba(0,0,0,0.7)";
+  ctx.fillRect((w - dw) / 2 - k, y + 12 * k, dw + 2 * k, 7 * k);
+  ctx.fillStyle = full >= 1 ? "#6ad0ff" : "#3a6a8a";
+  ctx.fillRect((w - dw) / 2, y + 13 * k, dw * Math.max(0, Math.min(1, full)), 5 * k);
+  ctx.font = `bold ${6 * k}px sans-serif`;
+  ctx.fillStyle = "#fff";
+  ctx.fillText(dashLabel, w / 2, y + 15.5 * k);
+  if (s.down > 0) {
+    ctx.font = `bold ${10 * k}px sans-serif`;
+    ctx.fillStyle = "#000";
+    ctx.fillText(downText(Math.ceil(s.down)), w / 2 + k, hgt / 2 - 30 * k + k);
+    ctx.fillStyle = "#ff8a8a";
+    ctx.fillText(downText(Math.ceil(s.down)), w / 2, hgt / 2 - 30 * k);
+  }
+}
+
+/** 마우스를 올린 몬스터: 이름 · 권장 투력 (지도 좌표) */
+export function drawMobTip(ctx: Ctx, h: Hunt, x: number, y: number, tip: (m: Mob) => string): void {
+  const m = h.mobs.find((v) => v.st !== "dead" && Math.hypot(v.x - x, v.y - y) < v.g.r + 4);
+  if (!m) return;
+  const text = tip(m);
+  ctx.font = "7px sans-serif";
+  const tw = Math.ceil(ctx.measureText(text).width) + 6;
+  const top = Math.round(m.y - m.g.r - (m.g.boss ? 34 : 18));
+  ctx.fillStyle = "rgba(12,10,18,0.85)";
+  ctx.fillRect(Math.round(m.x - tw / 2), top, tw, 10);
+  ctx.fillStyle = "#ffe9a8";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text, m.x, top + 5.5);
+}

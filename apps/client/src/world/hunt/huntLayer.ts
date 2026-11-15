@@ -1,10 +1,10 @@
-// 지도 사냥을 WorldStage에 붙이는 층: 사냥터가 있는 지역 + 바깥 필드(몬스터 없이 휘두르기·대시만) · J·좌클릭 휘두르기 · Shift·K·우클릭 대시 (마우스는 그쪽으로) · 1초마다 능력치 다시 읽기(장비·캐릭터 바꿈) · 쓰러지면 걷기 멈춤
+// 지도 사냥을 WorldStage에 붙이는 층: 사냥터가 있는 지역 + 바깥 필드(몬스터 없이 휘두르기·대시만) · J·좌클릭 휘두르기 · K·우클릭 대시 (Shift는 달리기) (마우스는 그쪽으로) · 1초마다 능력치 다시 읽기(장비·캐릭터 바꿈) · 쓰러지면 걷기 멈춤
 import type { CharacterId } from "@pixel-rogue/shared";
 import type { PointHook, Walker } from "../../lobby/walker";
 import type { Drawable } from "../worldTrees";
 import { groundsIn } from "./huntGrounds";
-import { drawDashTrail, drawHuntTop, pushMobs } from "./huntDraw";
-import { createHunt, dash, stepHunt, swing } from "./huntSim";
+import { drawDashTrail, drawHuntHud, drawHuntTop, drawMobTip, pushMobs } from "./huntDraw";
+import { createHunt, dash, stepHunt, swing, type Mob } from "./huntSim";
 import { huntStats } from "./huntStats";
 
 type Ctx = CanvasRenderingContext2D;
@@ -17,6 +17,10 @@ export interface HuntLayer {
   push: (ctx: Ctx, t: number, items: Drawable[], near: (x: number, y: number) => boolean) => void;
   under: (ctx: Ctx, me: Walker) => void;
   top: (ctx: Ctx, me: Walker) => void;
+  /** 화면 아래 체력·대시 줄 (화면 픽셀, k = 글자 배율) */
+  hud: (ctx: Ctx, w: number, h: number, k: number, dashLabel: string, downText: (n: number) => string) => void;
+  /** 마우스를 올린 몬스터 이름표 (지도 좌표) */
+  tip: (ctx: Ctx, x: number, y: number, text: (m: Mob) => string) => void;
   /** 마우스 누름 (터치는 걷기 그대로) */
   point: PointHook;
   dispose: () => void;
@@ -30,7 +34,7 @@ export function createHuntLayer(region: string, outdoor: boolean, me: Walker, ke
   const key = (e: KeyboardEvent) => {
     if (!on() || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.code === "KeyJ") swing(h, me);
-    else if (e.code === "KeyK" || e.code === "ShiftLeft" || e.code === "ShiftRight") dash(h, me, keys);
+    else if (e.code === "KeyK") dash(h, me, keys);
   };
   window.addEventListener("keydown", key);
   return {
@@ -47,6 +51,8 @@ export function createHuntLayer(region: string, outdoor: boolean, me: Walker, ke
     push: (ctx, t, items, near) => pushMobs(ctx, h, t, items, near),
     under: (ctx, w) => drawDashTrail(ctx, h, w),
     top: (ctx, w) => drawHuntTop(ctx, h, w),
+    hud: (ctx, w, hh, k, dl, dt) => drawHuntHud(ctx, h, w, hh, k, dl, dt),
+    tip: (ctx, x, y, text) => drawMobTip(ctx, h, x, y, text),
     point: (button, x, y, touch) => {
       if (touch || !on()) return false;
       const aim = [x - me.x, y - (me.y - 4)] as const;

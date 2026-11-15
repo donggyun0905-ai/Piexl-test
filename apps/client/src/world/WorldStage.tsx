@@ -16,14 +16,21 @@ import { drawWeather, setLook } from "./worldWeather";
 import { ambient, footstep } from "../audio/worldSounds";
 import { groundTex } from "./worldGround";
 import { skinName } from "./worldTex";
-import { here } from "./worldWarps";
+import { here, reviveAt } from "./worldWarps";
+import { mobName } from "./hunt/huntNames";
+import type { TextKey } from "../i18n";
 import { pushTrees, type Drawable } from "./worldTrees";
 import { hitsNpc, nearPlace, placeXY, skinOf, type Place, type Region } from "./worldPlaces";
 import { createHuntLayer } from "./hunt/huntLayer";
 import { createWoodcut } from "./woodcut";
+import { setWorldPrefs, worldPrefs, ZOOM_MAX, ZOOM_MIN } from "./worldPrefs";
+import { createAutoWalk } from "./worldPath";
 
-/** 걷는 속도 (로비보다 조금 빠름: 필드가 넓어서) */
+/** 걷는 속도 (로비보다 조금 빠름: 필드가 넓어서) · Shift를 누르고 있으면 달리기 배율 */
 const SPEED = 80;
+const RUN = 1.6;
+/** 이름표를 늘 띄울 장소 (장식 빼고) */
+const NAMED = new Set(["town", "dungeon", "npc", "door", "exit", "warp", "pass", "sign"]);
 const R = 5;
 const POS_KEY = "worldPos";
 
@@ -48,6 +55,11 @@ interface Props {
   onKill?: (g: string) => void;
   /** 나무를 하나 벰 (woodcut) */
   onWood?: () => void;
+  /** 바뀔 때마다 mark 장소까지 자동 걷기 시작 (worldPath) · 결과 알림 */
+  auto?: number;
+  onAuto?: (s: "go" | "done" | "stop" | "fail") => void;
+  /** 화면 글자 (사냥 HUD·몬스터 이름표) */
+  t: (k: TextKey) => string;
 }
 
 function loadPos(regionId: string): [number, number] | null {
@@ -59,13 +71,13 @@ function loadPos(regionId: string): [number, number] | null {
   }
 }
 
-export function WorldStage({ regionId, region, color, who, label, paused, onNear, onUse, onLoaded, spawn, mark, onKill, onWood }: Props) {
+export function WorldStage({ regionId, region, color, who, label, paused, onNear, onUse, onLoaded, spawn, mark, onKill, onWood, auto, onAuto, t: tx }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
-  const cb = useRef({ who, label, paused, onNear, onUse, onLoaded, mark, onKill, onWood });
+  const cb = useRef({ who, label, paused, onNear, onUse, onLoaded, mark, onKill, onWood, auto, onAuto, tx });
   // 들어온 자리(spawn)는 처음 그릴 때만 씀 (지역이 바뀌면 key로 새로 만듦)
   const spawnAt = useRef(spawn);
   useEffect(() => {
-    cb.current = { who, label, paused, onNear, onUse, onLoaded, mark, onKill, onWood };
+    cb.current = { who, label, paused, onNear, onUse, onLoaded, mark, onKill, onWood, auto, onAuto, tx };
   });
 
   useEffect(() => {
@@ -100,8 +112,26 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       if (map && wood?.chop(map, me.x, me.y, me.fx, me.fy, performance.now()) === "got") cb.current.onWood?.();
     };
     const input = bindWalkInput(canvas, me, view, () => !!map && !cb.current.paused, useOrChop, (b, x, y, touch) => hunt?.point(b, x, y, touch) ?? false);
-    // 사냥 (J·좌클릭 휘두르기 · Shift·K·우클릭 대시)
+    // 사냥 (J·좌클릭 휘두르기 · K·우클릭 대시)
     const hunt = createHuntLayer(regionId, !region.indoor, me, input.keys, () => cb.current.who, () => !!map && !cb.current.paused, (g) => cb.current.onKill?.(g));
+    // 마우스 휠: 확대·축소
+    const wheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const z = worldPrefs().zoom * (e.deltaY < 0 ? 1.1 : 1 / 1.1);
+      setWorldPrefs({ zoom: Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, z)) });
+    };
+    canvas.addEventListener("wheel", wheel, { passive: false });
+    // 마우스 자리 (몬스터 이름표) · 지도 좌표
+    const mouse = { x: -1e9, y: 0 };
+    const hover = (e: PointerEvent) => {
+      const rc = canvas.getBoundingClientRect();
+      const k = rc.width / view.w;
+      [mouse.x, mouse.y] = [view.x + (e.clientX - rc.left) / k, view.y + (e.clientY - rc.top) / k];
+    };
+    canvas.addEventListener("pointermove", hover);
+    // 자동 걷기 · 마지막으로 받은 요청 번호
+    const walk = createAutoWalk();
+    let autoN = cb.current.auto ?? 0;
     let last = performance.now();
     let raf = 0;
     let saved = 0;
@@ -118,7 +148,7 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         raf = requestAnimationFrame(frame);
         return;
       }
-      const scale = Math.max(cw / 300, ch / 180);
+      const scale = Math.max(cw / 300, ch / 180) * worldPrefs().zoom;
       view.w = cw / scale;
       view.h = ch / scale;
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -127,13 +157,21 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       if (map && chunks) {
         const m = map;
         const stand = (x: number, y: number) => canStandWorld(m, x, y, R) && !hitsNpc(region, x, y, R);
-        if (!cb.current.paused && !hunt?.down()) stepWalker(me, input.keys, dt, SPEED, stand);
+        if ((cb.current.auto ?? 0) !== autoN) {
+          autoN = cb.current.auto ?? 0;
+          const goal = cb.current.mark ? region.places.find((p) => p.id === cb.current.mark) : undefined;
+          cb.current.onAuto?.(walk.start(m, stand, me, goal));
+        }
+        const arrived = walk.step(me);
+        if (arrived) cb.current.onAuto?.(arrived);
+        const run = input.keys.has("ShiftLeft") || input.keys.has("ShiftRight") ? RUN : 1;
+        if (!cb.current.paused && !hunt?.down()) stepWalker(me, input.keys, dt, SPEED * run, stand);
         // 창이 떠 멈추거나 쓰러지면 걷는 중이 아님 (발소리·걷는 그림이 계속 나던 문제)
         else me.moving = false;
-        // 쓰러졌다 일어나면 처음 자리로
-        if (!cb.current.paused && hunt?.step(me, dt, stand)) [me.x, me.y] = [(region.start.tx + 0.5) * WTILE, (region.start.ty + 0.5) * WTILE];
+        // 쓰러졌다 일어나면 가장 가까운 만진 순간 이동석 앞 (없으면 처음 자리)
+        if (!cb.current.paused && hunt?.step(me, dt, stand)) [me.x, me.y] = reviveAt(region, regionId, me.x, me.y);
         if (me.moving && t >= nextStep) {
-          nextStep = t + 0.32;
+          nextStep = t + 0.32 / run;
           const g = groundTex(tileAt(m, Math.floor(me.x / WTILE), Math.floor(me.y / WTILE)));
           footstep(g && skinName(g));
         }
@@ -182,7 +220,9 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
           if (!region.indoor) drawCloudShadows(ctx, view, t);
         }
         hunt?.top(ctx, me);
+        if (!cb.current.paused) hunt?.tip(ctx, mouse.x, mouse.y, (mb) => `${mobName(mb.g)} · ${cb.current.tx("wkMobInfo").replace("{n}", mb.g.power.toLocaleString())}`);
         wood?.top(ctx, m, me.x, me.y, me.fx, me.fy, now, !near && !cb.current.paused);
+        if (worldPrefs().names) for (const p of region.places) if (p !== near && NAMED.has(p.kind) && near2(p)) drawPlaceLabel(ctx, p, cb.current.label(p));
         if (near) drawPlaceLabel(ctx, near, cb.current.label(near));
         const mk = cb.current.mark && region.places.find((p) => p.id === cb.current.mark);
         if (mk) drawMark(ctx, mk, t);
@@ -194,6 +234,7 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         }
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         drawVignette(ctx, canvas.width, canvas.height);
+        hunt?.hud(ctx, canvas.width, canvas.height, dpr * Math.min(1.6, Math.max(1, cw / 640)), cb.current.tx("wkDashReady"), (k) => cb.current.tx("wkDown").replace("{n}", String(k)));
       }
       raf = requestAnimationFrame(frame);
     };
@@ -203,6 +244,8 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       cancelAnimationFrame(raf);
       input.dispose();
       hunt?.dispose();
+      canvas.removeEventListener("wheel", wheel);
+      canvas.removeEventListener("pointermove", hover);
       saveText(POS_KEY, JSON.stringify({ r: regionId, x: Math.round(me.x), y: Math.round(me.y) }));
     };
   }, [regionId, region, color]);
