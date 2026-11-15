@@ -41,7 +41,8 @@ const R = {
 };
 export { R as ROOMS_RULES };
 /** 보스 시작 자리 (방 위쪽 가운데) */
-const BOSS_START_Y = ROOM_MIN_Y + 20;
+/** 보스 시작 높이 (쓸 때 계산: 파일을 읽는 순서에 따라 ROOM_MIN_Y가 아직 없을 수 있음) */
+const bossStartY = () => ROOM_MIN_Y + 20;
 /** 쉼터에 처음 들어가면 회복하는 체력 (최대 체력 비율) */
 export const REST_HEAL = 0.3;
 /** 라스트 보스방 크기 (칸 수, 보통 방 21×13보다 큼 · 화면이 플레이어를 따라감) */
@@ -164,7 +165,7 @@ function placeBossFight(s: RunState): void {
   s.enemies.forEach((e, i) => {
     // 보스가 여럿이면 (태초의 빛과 어둠 · 레이드 아레나) 나란히
     e.x = e.prevX = CX + (i - (s.enemies.length - 1) / 2) * R.BOSS_SPREAD;
-    e.y = e.prevY = BOSS_START_Y;
+    e.y = e.prevY = bossStartY();
     e.phase = "walk";
     e.timer = Math.max(e.timer, R.BOSS_ENTRY_DELAY);
   });
