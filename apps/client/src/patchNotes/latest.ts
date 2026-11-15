@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.55.1",
+    date: "2026-11-15",
+    items: {
+      ko: ["세계 지도(시험 중) 조작: 좌클릭 공격 · 우클릭 대시 (마우스 쪽으로, J·Shift도 그대로) · 사냥터가 없는 필드에서도 공격·대시 · 베기 그림을 더 크고 잘 보이게 · Esc로 설정 창 (소리·화면 등, 계속하기·메인으로) · 최종보스 입구 자리: 검은 잔영은 새벽의 성흔 아지트로, 제천대성은 대사막 세레스티아로 · 대화·창이 떠 멈췄을 때 발소리가 계속 나던 문제 고침"],
+      en: ["World Map (testing) controls: left click to attack, right click to dash (toward the mouse; J and Shift still work) · Attack and dash also work in fields without hunting grounds · Bigger, clearer slash effect · Esc opens settings (sound, screen and more; Resume / Menu) · Final boss gates moved: Black Remnant to the Dawn's Stigmata hideout, Great Sage to Celestia in the Great Desert · Fixed footsteps that kept playing while a dialog or window was open"],
+      ja: ["世界地図（テスト中）操作：左クリックで攻撃・右クリックでダッシュ（マウスの方へ、J・Shiftもそのまま）・狩り場のないフィールドでも攻撃・ダッシュ・斬撃の絵を大きく見やすく・Escで設定画面（音・画面など、再開・メインへ）・最終ボスの入口：黒き残影は暁の聖痕のアジトへ、斉天大聖は大砂漠のセレスティアへ・会話や画面が開いて止まったときに足音が鳴り続けていた問題を修正"],
+    },
+  },
+  {
     version: "0.55.0",
     date: "2026-11-15",
     items: {

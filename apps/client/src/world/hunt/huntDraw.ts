@@ -5,7 +5,7 @@ import { shadow } from "../worldArt";
 import type { Drawable } from "../worldTrees";
 import type { Walker } from "../../lobby/walker";
 import { HUNT_RULES as R } from "./huntGrounds";
-import type { Hunt, Mob } from "./huntSim";
+import { SWING_SHOW, type Hunt, type Mob } from "./huntSim";
 
 type Ctx = CanvasRenderingContext2D;
 
@@ -49,12 +49,22 @@ export function pushMobs(ctx: Ctx, h: Hunt, t: number, items: Drawable[], near: 
 export function drawHuntTop(ctx: Ctx, h: Hunt, me: Walker): void {
   const s = h.me;
   if (s.swingT > 0) {
+    // 초승달 모양 베기: 처음엔 굵고 밝게, 쓸고 지나가며 옅어짐
     const reach = R.swingReach * s.st.reachMul;
     const face = Math.atan2(s.sy, s.sx);
-    ctx.strokeStyle = `rgba(255,255,255,${Math.min(1, s.swingT / 0.14)})`;
+    const k = s.swingT / SWING_SHOW;
+    const sweep = face - R.swingArc + R.swingArc * 2 * Math.min(1, (1 - k) * 2.2);
+    const [x, y] = [me.x, me.y - 3];
+    ctx.fillStyle = `rgba(255,244,214,${0.55 * k})`;
+    ctx.beginPath();
+    ctx.arc(x, y, reach, face - R.swingArc, sweep);
+    ctx.arc(x, y, reach * 0.55, sweep, face - R.swingArc, true);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = `rgba(255,255,255,${k})`;
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(me.x, me.y - 3, reach * 0.8, face - R.swingArc, face + R.swingArc);
+    ctx.arc(x, y, reach, face - R.swingArc, sweep);
     ctx.stroke();
   }
   ctx.font = "bold 7px sans-serif";

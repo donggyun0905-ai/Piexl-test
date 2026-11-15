@@ -99,9 +99,9 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
       if (near) return cb.current.onUse(near);
       if (map && wood?.chop(map, me.x, me.y, me.fx, me.fy, performance.now()) === "got") cb.current.onWood?.();
     };
-    const input = bindWalkInput(canvas, me, view, () => !!map && !cb.current.paused, useOrChop);
-    // 사냥터 (J 휘두르기 · Shift·K 대시)
-    const hunt = createHuntLayer(regionId, me, input.keys, () => cb.current.who, () => !!map && !cb.current.paused, (g) => cb.current.onKill?.(g));
+    const input = bindWalkInput(canvas, me, view, () => !!map && !cb.current.paused, useOrChop, (b, x, y, touch) => hunt?.point(b, x, y, touch) ?? false);
+    // 사냥 (J·좌클릭 휘두르기 · Shift·K·우클릭 대시)
+    const hunt = createHuntLayer(regionId, !region.indoor, me, input.keys, () => cb.current.who, () => !!map && !cb.current.paused, (g) => cb.current.onKill?.(g));
     let last = performance.now();
     let raf = 0;
     let saved = 0;
@@ -128,6 +128,8 @@ export function WorldStage({ regionId, region, color, who, label, paused, onNear
         const m = map;
         const stand = (x: number, y: number) => canStandWorld(m, x, y, R) && !hitsNpc(region, x, y, R);
         if (!cb.current.paused && !hunt?.down()) stepWalker(me, input.keys, dt, SPEED, stand);
+        // 창이 떠 멈추거나 쓰러지면 걷는 중이 아님 (발소리·걷는 그림이 계속 나던 문제)
+        else me.moving = false;
         // 쓰러졌다 일어나면 처음 자리로
         if (!cb.current.paused && hunt?.step(me, dt, stand)) [me.x, me.y] = [(region.start.tx + 0.5) * WTILE, (region.start.ty + 0.5) * WTILE];
         if (me.moving && t >= nextStep) {

@@ -4,7 +4,7 @@ import type { Lang } from "../index";
 export const WORLD_TEXT = {
   worldMap: { ko: "세계 지도 (시험 중)", en: "World Map (testing)", ja: "世界地図（テスト中）" },
   worldMapDesc: { ko: "스토리 나라를 걸어 다니는 지도 · 지금은 아스칼론·테라코어·비르디아·헬리오스·대사막·실베르·탈라시아 (M 나라 지도·순간 이동석)", en: "Walk the nations of the story · Ascalon, Terracore, Virdia, Helios, the Great Desert, Silber and Thalassia for now (M nation map, warp stones)", ja: "物語の国々を歩く地図・今はアスカロン・テラコア・ヴィルディア・ヘリオス・大砂漠・シルベル・タラシア（M国の地図・転移石）" },
-  worldHelp: { ko: "WASD·방향키·누르기로 이동 · F 들어가기·읽기·말 걸기 · B 장비 · C 캐릭터 · M 지도 · J 휘두르기 · Shift 대시 · Tab 한눈에", en: "WASD / arrows / tap to move · F to enter, read or talk · B gear · C character · M map · J swing · Shift dash · Tab overview", ja: "WASD・矢印キー・タップで移動・Fで入る・読む・話す・B装備・Cキャラクター・M地図・J攻撃・Shiftダッシュ・Tabひと目で" },
+  worldHelp: { ko: "WASD·방향키·누르기로 이동 · F 들어가기·읽기·말 걸기 · B 장비 · C 캐릭터 · M 지도 · 좌클릭·J 공격 · 우클릭·Shift 대시 · Tab 한눈에 · Esc 설정", en: "WASD / arrows / tap to move · F to enter, read or talk · B gear · C character · M map · Left click/J attack · Right click/Shift dash · Tab overview · Esc settings", ja: "WASD・矢印キー・タップで移動・Fで入る・読む・話す・B装備・Cキャラクター・M地図・左クリック・J攻撃・右クリック・Shiftダッシュ・Tabひと目で・Esc設定" },
   wmTitle: { ko: "지도", en: "Map", ja: "地図" },
   wmHint: { ko: "만진 이동석(✨)을 누르면 그곳으로 순간 이동 · 흐린 돌은 아직 안 만진 곳", en: "Tap a warp stone you've touched (✨) to teleport there · dim stones haven't been touched yet", ja: "触れた転移石（✨）を押すとそこへ瞬間移動・薄い石はまだ触れていない場所" },
   wmMe: { ko: "지금 있는 곳", en: "You are here", ja: "現在地" },

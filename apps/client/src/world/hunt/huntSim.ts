@@ -52,6 +52,8 @@ export interface Hunt {
 }
 
 type Stand = (x: number, y: number) => boolean;
+/** 휘두른 그림이 보이는 시간 (초) */
+export const SWING_SHOW = 0.22;
 const cx = (g: HuntGround) => (g.tx + 0.5) * WTILE;
 const cy = (g: HuntGround) => (g.ty + 0.5) * WTILE;
 
@@ -189,13 +191,14 @@ export function stepHunt(h: Hunt & { rnd: () => number }, me: Walker, dt: number
   return woke;
 }
 
-/** 휘두르기 (J): 바라보는 쪽 부채꼴 안 몬스터 */
-export function swing(h: Hunt & { rnd: () => number }, me: Walker): void {
+/** 휘두르기 (J·좌클릭): 바라보는 쪽(좌클릭이면 마우스 쪽) 부채꼴 안 몬스터 */
+export function swing(h: Hunt & { rnd: () => number }, me: Walker, aim?: readonly [number, number]): void {
   const s = h.me;
   if (s.swingCd > 0 || s.down > 0) return;
+  if (aim) [me.fx, me.fy] = aim;
   const len = Math.hypot(me.fx, me.fy) || 1;
   [s.sx, s.sy] = [me.fx / len, me.fy / len || (me.fx ? 0 : 1)];
-  [s.swingCd, s.swingT] = [R.swingGap * s.st.gapMul, 0.14];
+  [s.swingCd, s.swingT] = [R.swingGap * s.st.gapMul, SWING_SHOW];
   const reach = R.swingReach * s.st.reachMul;
   const face = Math.atan2(s.sy, s.sx);
   for (const m of h.mobs) {
@@ -218,12 +221,13 @@ export function swing(h: Hunt & { rnd: () => number }, me: Walker): void {
   }
 }
 
-/** 대시 (Shift·K): 걷는 쪽(없으면 바라보는 쪽)으로 짧게 · 그동안 안 맞음 */
-export function dash(h: Hunt, me: Walker, keys: ReadonlySet<string>): void {
+/** 대시 (Shift·K·우클릭): 우클릭이면 마우스 쪽 · 아니면 걷는 쪽(없으면 바라보는 쪽)으로 짧게 · 그동안 안 맞음 */
+export function dash(h: Hunt, me: Walker, keys: ReadonlySet<string>, aim?: readonly [number, number]): void {
   const s = h.me;
   if (s.dashCd > 0 || s.down > 0) return;
   let x = (keys.has("KeyD") || keys.has("ArrowRight") ? 1 : 0) - (keys.has("KeyA") || keys.has("ArrowLeft") ? 1 : 0);
   let y = (keys.has("KeyS") || keys.has("ArrowDown") ? 1 : 0) - (keys.has("KeyW") || keys.has("ArrowUp") ? 1 : 0);
+  if (aim) [x, y] = aim;
   if (!x && !y) [x, y] = [me.fx, me.fy];
   const len = Math.hypot(x, y) || 1;
   [s.dx, s.dy, s.dashT, s.dashCd] = [x / len, y / len, R.dashTime, R.dashGap * s.st.dashMul];

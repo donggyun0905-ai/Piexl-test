@@ -16,14 +16,14 @@ export const BOSS_GATES: readonly BossGate[] = [
   { boss: "dragon", region: "ascalon", tx: 70, ty: 11, power: 4000 },
   /** 태초의 빛과 어둠: 대사막 태초의 신전에 봉인되어 있던 둘 (신전 옆 봉인의 문) */
   { boss: "plight", region: "desert", tx: 210, ty: 113, power: 5000 },
-  /** 검은 잔영: 모래벌레·전갈·괴조를 부르는 그림자 (대사막 북쪽) */
-  { boss: "umbra", region: "desert", tx: 126, ty: 9, power: 5500 },
+  /** 검은 잔영: 새벽의 성흔이 쫓는 그림자 (헬리오스 술집 지하 아지트, 감옥 옆) */
+  { boss: "umbra", region: "dawnHideout", tx: 10, ty: 19, power: 5500 },
   /** 갓이터: 헬리오스 */
   { boss: "godeater", region: "helios", tx: 104, ty: 8, power: 4500 },
   /** 괴력난신: 싸움을 좋아하는 반신 (테라코어 콜로세움 옆) */
   { boss: "demigod", region: "terracore", tx: 150, ty: 132, power: 6000 },
-  /** 제천대성: 성국 */
-  { boss: "sage", region: "seongguk", tx: 57, ty: 6, power: 6500 },
+  /** 제천대성: 이미 멸망한 대사막 세레스티아 (옛 도시 터) */
+  { boss: "sage", region: "desert", tx: 60, ty: 84, power: 6500 },
   /** 레비아탄: 해저 도시 */
   { boss: "leviathan", region: "undersea", tx: 85, ty: 8, power: 7000 },
   /** 켈베로스 · 아스모데우스의 화신체: 지옥 */

@@ -24,8 +24,11 @@ export interface View {
   h: number;
 }
 
+/** 마우스로 누름 (월드 좌표) · true면 그 자리로 걷지 않음 (지도 사냥: 좌클릭 공격·우클릭 대시) */
+export type PointHook = (button: number, x: number, y: number, touch: boolean) => boolean;
+
 /** 키·누르기 받기. on()이 false면 무시 · onUse = F/Space/Enter. 돌려준 함수로 해제 */
-export function bindWalkInput(canvas: HTMLCanvasElement, me: Walker, view: View, on: () => boolean, onUse: () => void) {
+export function bindWalkInput(canvas: HTMLCanvasElement, me: Walker, view: View, on: () => boolean, onUse: () => void, onPoint?: PointHook) {
   const keys = new Set<string>();
   const down = (e: KeyboardEvent) => {
     if (!on()) return;
@@ -37,13 +40,19 @@ export function bindWalkInput(canvas: HTMLCanvasElement, me: Walker, view: View,
     if (!on()) return;
     const rc = canvas.getBoundingClientRect();
     const k = rc.width / view.w;
-    me.tx = view.x + (e.clientX - rc.left) / k;
-    me.ty = view.y + (e.clientY - rc.top) / k;
+    const x = view.x + (e.clientX - rc.left) / k;
+    const y = view.y + (e.clientY - rc.top) / k;
+    if (onPoint?.(e.button, x, y, e.pointerType === "touch")) return;
+    if (e.button !== 0) return;
+    [me.tx, me.ty] = [x, y];
   };
+  const menu = (e: Event) => onPoint && e.preventDefault();
   window.addEventListener("keydown", down);
   window.addEventListener("keyup", up);
   canvas.addEventListener("pointerdown", tap);
+  canvas.addEventListener("contextmenu", menu);
   const dispose = () => {
+    canvas.removeEventListener("contextmenu", menu);
     window.removeEventListener("keydown", down);
     window.removeEventListener("keyup", up);
     canvas.removeEventListener("pointerdown", tap);

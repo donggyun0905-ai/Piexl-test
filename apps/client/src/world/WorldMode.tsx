@@ -18,6 +18,7 @@ import { QUESTS } from "../progress/quests";
 import { ATTIC_ID } from "./places/attic";
 import { featureOpen } from "../progress/storyStage";
 import { useEffect, useState } from "react";
+import { WorldMenu } from "./WorldMenu";
 import { setWorldMusic } from "../audio/worldMusic";
 import { worldSfx } from "../audio/worldSounds";
 import type { Lang, TextKey } from "../i18n";
@@ -176,15 +177,17 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
     else setReading(p);
   };
   const [tab, setTab] = useState(false);
-  const busy = !!reading || !!scene || !!panel || guide.talk !== null || doneQ.length > 0 || book || tab;
+  const [menu, setMenu] = useState(false);
+  const busy = !!reading || !!scene || !!panel || guide.talk !== null || doneQ.length > 0 || book || tab || menu;
   useEffect(() => {
-    // B 장비창 · C 캐릭터 고르기 · M 지도 · Tab 한눈에 보기 (다른 창이 없을 때)
+    // B 장비창 · C 캐릭터 고르기 · M 지도 · Tab 한눈에 보기 · Esc 설정 (다른 창이 없을 때)
     if (busy) return;
     const key = (e: KeyboardEvent) => {
       if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
       if (e.code === "KeyB") setPanel({ k: "gear" });
       else if (e.code === "KeyC") setPanel({ k: "char" });
       else if (e.code === "KeyM") setPanel({ k: "map" });
+      else if (e.key === "Escape") setMenu(true);
       else if (e.key === "Tab") {
         e.preventDefault();
         setTab(true);
@@ -226,6 +229,7 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
           {placeAction(t, near)} · F
         </button>
       )}
+      {menu && <WorldMenu t={t} lang={lang} onClose={() => setMenu(false)} onExit={onExit} />}
       {reading && <WorldNote t={t} p={reading} onClose={() => setReading(null)} />}
       {panel && (
         <WorldPanels

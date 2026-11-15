@@ -119,7 +119,7 @@ export const REGIONS: Record<string, Region> = {
   ...SILBER_INSIDE,
   thalassia: withProps("thalassia", THAL_FIELD),
   ...THAL_INSIDE,
-  ...DAWN_INSIDE,
+  dawnHideout: withProps("dawnHideout", DAWN_INSIDE.dawnHideout!),
   hell: withProps("hell", HELL_FIELD),
   undersea: withProps("undersea", UNDERSEA_FIELD),
   ...UNDERSEA_INSIDE,
@@ -143,6 +143,9 @@ export const fieldOpen = (r: Region | undefined): boolean => {
   const f = r?.faction ?? r?.area?.open;
   if (f && factionOpen(f)) return true;
   const id = r && Object.keys(REGIONS).find((k) => REGIONS[k] === r);
+  // 건물 안(새벽의 성흔 아지트 등): 들어가는 문이 열리는 진영
+  const door = id && r.indoor ? Object.values(REGIONS).flatMap((x) => x.places).find((p) => p.to === id && p.open) : undefined;
+  if (door?.open) return factionOpen(door.open);
   return !!id && questField(id);
 };
 
