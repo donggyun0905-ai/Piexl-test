@@ -1,8 +1,8 @@
 # 한정 스킨 만들 때 체크리스트
 
-마지막 수정: 2026-10-30 (한국 시간)
+마지막 수정: 2026-11-16 (한국 시간, 시즌 3 네온 펄스 · 테마 묶음 limitedKit)
 
-한정 스킨(범 풍류 `tiger` · 여름 파도 `summer` · 승리 `victory`)을 새로 만들 때 빠뜨리지 않도록 정리한 목록. 같은 시즌의 다른 한정 스킨(그림·효과)을 먼저 보고 그대로 따라 만든다 (CLAUDE.md 규칙).
+한정 스킨(범 풍류 `tiger` · 여름 파도 `summer` · 네온 펄스 `cyber` · 승리 `victory`)을 새로 만들 때 빠뜨리지 않도록 정리한 목록. 같은 시즌의 다른 한정 스킨(그림·효과)을 먼저 보고 그대로 따라 만든다 (CLAUDE.md 규칙).
 
 ## 1. 그림 (시트)
 
@@ -14,24 +14,24 @@
 
 ## 2. 효과 (입었을 때)
 
-| 때 | 범 풍류 | 여름 파도 | 승리 |
-| --- | --- | --- | --- |
-| 맞힘 (타격) | 발톱 · 고리 · 도장 · 기둥 | 물보라 | 금빛 훈장 별 |
-| 처치 | 큰 고리 · 기둥 | 큰 물보라 | 별 터짐 |
-| 가만히 (대기) | 범 기운 · 다 차면 울음 | 파도 · 갈매기 | 승리의 별이 떠오름 |
-| 걸음 | 발자국 | 물 발자국 | 금빛 별 자국 |
-| 강해짐 (패시브·무기 얻음) | 금빛 기둥 + "범의 기운!" + 울음 | "파도의 힘!" + 파도 소리 | 금빛 기둥 + "승리의 기운!" + 팡파르 |
-| 쏘기·휘두르기 | 금빛 섬광 | 물빛 섬광 | 금빛 섬광 |
-| 피해 숫자 | 범 숫자 (`tigerNumber`) | 여름 숫자 (`summerNumber`) | 훈장 숫자 (테마 `dmg`) |
+| 때 | 범 풍류 | 여름 파도 | 네온 펄스 | 승리 |
+| --- | --- | --- | --- | --- |
+| 맞힘 (타격) | 발톱 · 고리 · 도장 · 기둥 | 물보라 | 글리치 막대 · 네온 섬광 · 전기 불꽃 | 금빛 훈장 별 |
+| 처치 | 큰 고리 · 기둥 | 큰 물보라 | 픽셀로 흩어짐 · 육각 파동 (보스 DELETED) | 별 터짐 |
+| 가만히 (대기) | 범 기운 · 다 차면 울음 | 파도 · 갈매기 | 네온 격자 · 홀로그램 고리 · 드론 · CHARGED | 승리의 별이 떠오름 |
+| 걸음 | 발자국 | 물 발자국 | 청록·분홍 네온 발자국 | 금빛 별 자국 |
+| 강해짐 (패시브·무기 얻음) | 금빛 기둥 + "범의 기운!" + 울음 | "파도의 힘!" + 파도 소리 | 데이터 기둥 + "오버클럭!" + 신스 | 금빛 기둥 + "승리의 기운!" + 팡파르 |
+| 쏘기·휘두르기 | 금빛 섬광 | 물빛 섬광 | 네온 베기 · 전기 불꽃 | 금빛 섬광 |
+| 피해 숫자 | 범 숫자 (`tigerNumber`) | 여름 숫자 (`summerNumber`) | 네온 숫자 (`cyberNumber`) | 훈장 숫자 (테마 `dmg`) |
 
-- [ ] 효과 만드는 곳: `game/limited/` (범 `tigerFx`·`tigerDraw`·`tigerRest`, 여름 `summerFx`·`summerDraw`·`summerRest`, 테마 세트 `themeFx`·`themeDraw`·`themeShapes`)
+- [ ] 효과 만드는 곳: `game/limited/` (범 `tigerFx`·`tigerDraw`·`tigerRest`, 여름 `summerFx`·`summerDraw`·`summerRest`, 네온 `cyberFx`·`cyberDraw`·`cyberRest`, 테마 묶음 `limitedKit`에 한 줄, 테마 세트 `themeFx`·`themeDraw`·`themeShapes`)
 - [ ] 강해짐 글자: `i18n/text/game.ts` (`tigerPower`·`summerPower`·`victoryPower`) · 한·영·일
 - [ ] 입었는지: `game/limited/limited.ts` (`wornLimited` · `wornVictory`) → `game/gameLoop.ts`가 효과를 켬 · `shop/effects.activeFx`
 - [ ] 내 자리에서만 (관전 중에는 그리지 않음, gameLoop `onMe`)
 
 ## 3. 소리
 
-- [ ] 전용 음악: `audio/tigerSound`·`summerSound`·`victorySound` (`setMusicBeat`, 파일 없이 브라우저에서 만든 곡) → `audio/runSounds.ts`에서 켬
+- [ ] 전용 음악: `audio/tigerSound`·`summerSound`·`cyberSound`·`victorySound` (`setMusicBeat`, 파일 없이 브라우저에서 만든 곡) → `audio/limitedMusic.ts`에 한 줄 (runSounds가 부름)
 - [ ] 강해질 때·대기 다 찼을 때 소리 (울음 · 파도 · 팡파르)
 
 ## 4. 상점·얻는 방법

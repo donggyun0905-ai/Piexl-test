@@ -11,7 +11,7 @@ import { setRoomMusic } from "./roomMusic";
 import { altarMusic } from "./altarSound";
 import { vaultCues, vaultMusic, vaultSeen, type VaultSeen } from "./vaultSound";
 import { setTigerMusic } from "./tigerSound";
-import { setSummerMusic } from "./summerSound";
+import { setLimitedMusic } from "./limitedMusic";
 import { polish } from "./polish";
 
 interface Seen {
@@ -139,10 +139,9 @@ export function createRunSounds(run: RunState, onShake: (power: number) => void,
   let seen = snapshot(run);
   let orbSound = 0; // 원소술사 회전체가 때릴 때 휘두르는 소리 (너무 잦지 않게)
   const hitsNow = hitCounter(); // 피해 숫자가 뜨는 타격마다 타격음
-  // 한정 스킨(범 풍류·여름 파도)을 입었으면 전용 음악
+  // 한정 스킨(범 풍류·여름 파도·네온 펄스)을 입었으면 전용 음악
   const limited = wornLimited(run.player.characterId);
-  setTigerMusic(limited === "tiger");
-  setSummerMusic(limited === "summer");
+  setLimitedMusic(limited);
   setVictoryMusic(!limited && wornVictory(run.player.characterId));
   if (music) startMusic(run.floor, seen.boss);
   return {

@@ -33,7 +33,7 @@ function frame(ctx: CanvasRenderingContext2D, item: FxItem, tick: number, fx: Th
     ctx.textAlign = "center";
     ctx.textBaseline = "bottom";
     if (item.dmg === "tiger") drawTigerNumber(ctx, crit ? "248" : "36", W / 4, H / 4 + 6 - age * 0.15, age, crit);
-    else if (item.dmg && item.dmg !== "summer") drawSkinNumber(ctx, item.dmg, crit ? "248" : "36", W / 4, H / 4 + 6 - age * 0.15, age, crit);
+    else if (item.dmg && item.dmg !== "summer" && item.dmg !== "cyber") drawSkinNumber(ctx, item.dmg, crit ? "248" : "36", W / 4, H / 4 + 6 - age * 0.15, age, crit);
     return;
   }
   ctx.save();

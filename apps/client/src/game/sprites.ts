@@ -6,6 +6,7 @@ import type { CharacterId } from "@pixel-rogue/shared";
 import { equippedSkin } from "../shop/wallet";
 import { draftSrc, mySkinSrc } from "./customArt";
 import { imageLoader } from "./lazyImage";
+import { SKIN_SHEETS } from "../select/skinArtList";
 
 /** 넣은 그림 이름 (확장자 빼고). 예: "warden", "crawler" */
 const SPRITE_FILES: readonly string[] = ["blacksmith"];
@@ -52,10 +53,16 @@ export function drawSprite(ctx: CanvasRenderingContext2D, name: string, x: numbe
 export function sheetFor(id: string, lv = 1, member = 0): string {
   const skin = equippedSkin(id as CharacterId);
   if (id === "abandoned" && member > 0) return skin ? `${skin}_p${member + 1}` : `abandoned${member + 1}`;
-  if (skin) return skin;
-  if (id !== "novice") return id;
-  const tier = Math.min(20, Math.floor(lv / 5) * 5);
+  const tier = id === "novice" ? Math.min(20, Math.floor(lv / 5) * 5) : 0;
+  // 풋내기 스킨: 10·15·20레벨 모습 그림이 있으면 그것 (시즌 스킨, select/skinArtList)
+  if (skin) return tier >= 10 && SKIN_SHEETS.has(`${skin}_lv${tier}`) ? `${skin}_lv${tier}` : skin;
   return tier >= 5 ? `novice${tier}` : id;
+}
+
+/** 변신 모습: 입은 스킨에 그 모습 그림(뒤에 _rage·_doll·_night)이 있으면 스킨 그림, 없으면 기본 변신 그림 */
+export function skinForm(c: CharacterId, base: string, tail: string): string {
+  const skin = equippedSkin(c);
+  return skin && SKIN_SHEETS.has(`${skin}_${tail}`) ? `${skin}_${tail}` : base;
 }
 
 /** 스킨 그림 (public/sprites/skins/): 처음 쓸 때 불러옴 (다 불러오기 전에는 기본 그림) */

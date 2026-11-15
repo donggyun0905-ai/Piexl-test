@@ -2,11 +2,14 @@
 // 상점 테마 스킨 9종(수영복·크리스마스 등)은 2026-10-31에 없앰 (사용자 지시)
 import { CHARACTER_IDS as PLAYABLE, type CharacterId } from "@pixel-rogue/shared";
 import { TEST_OPEN } from "../testFlags";
+import { SKIN_SHEETS } from "../select/skinArtList";
 
-/** 뽑기 한정 테마: 한 번 나오면 모든 캐릭터에 생김. 입으면 공격·처치·대기·발자국·강화 효과와 전용 음악 (game/limited) */
-export const LIMITED_THEMES = ["tiger", "summer"] as const;
-/** 시즌 2 캐릭터(비르디아·헬리오스·테라코어): 범 풍류 대신 여름 파도 한정 스킨 */
-export const SEASON2_SKIN_CHARS: readonly CharacterId[] = ["idra", "byeonhui", "fly", "elder", "ren", "spiritist", "plague", "slayer", "eater", "mukin", "samyeol", "automata", "rider", "bomber", "artifacter", "punk", "tracker", "forgotten", "remnant", "wanderer", "silk"];
+/** 뽑기 한정 테마 (범 풍류 시즌 1 · 여름 파도 시즌 2 · 사이버펑크 시즌 3): 한 번 나오면 모든 캐릭터에 생김. 입으면 공격·처치·대기·발자국·강화 효과와 전용 음악 (game/limited) */
+export const LIMITED_THEMES = ["tiger", "summer", "cyber"] as const;
+/** 시즌 2 캐릭터(비르디아·헬리오스·테라코어): 범 풍류 대신 여름 파도 한정 스킨 · 수집가는 2026-11-16 시즌 2 그림이 올라와 더함(범 풍류도 그대로) · 영사는 전부터 있던 여름 파도를 그대로 둠 */
+export const SEASON2_SKIN_CHARS: readonly CharacterId[] = ["idra", "byeonhui", "fly", "elder", "ren", "spiritist", "plague", "slayer", "eater", "mukin", "samyeol", "automata", "rider", "bomber", "artifacter", "punk", "tracker", "forgotten", "remnant", "wanderer", "silk", "collector"];
+/** 범 풍류를 계속 갖는 시즌 2 캐릭터 (전에 범 풍류였음) */
+const TIGER_TOO: readonly CharacterId[] = ["collector"];
 export type LimitedTheme = (typeof LIMITED_THEMES)[number];
 /** 보상 한정 테마: 뽑기에 안 나오고 보상으로만 (월드 워 리그 우승 '승리') */
 export const VICTORY_THEME = "victory" as const;
@@ -31,7 +34,9 @@ export const TEST_ALL_SKINS = TEST_OPEN;
 
 /** 뽑기로만 얻는 한정 스킨 · 승리 스킨 · 전부 */
 /** 이 캐릭터에 그 한정 테마가 있는지 (여름 파도는 시즌 2만, 범 풍류는 시즌 2 빼고) */
-export const hasLimited = (theme: LimitedTheme, c: CharacterId) => (theme === "summer") === SEASON2_SKIN_CHARS.includes(c);
+/** 사이버펑크(시즌 3)는 그림이 올라온 캐릭터만 (select/skinArtList SKIN_SHEETS) */
+export const hasLimited = (theme: LimitedTheme, c: CharacterId) =>
+  theme === "cyber" ? SKIN_SHEETS.has(`${c}_cyber`) : theme === "summer" ? SEASON2_SKIN_CHARS.includes(c) : !SEASON2_SKIN_CHARS.includes(c) || TIGER_TOO.includes(c);
 export const limitedSkins = (theme: LimitedTheme) => CHARACTER_IDS.filter((c) => hasLimited(theme, c)).map((c) => skinId(c, theme));
 export const GACHA_ONLY: readonly string[] = LIMITED_THEMES.flatMap(limitedSkins);
 export const VICTORY_SKINS: readonly string[] = VICTORY_CHARS.map((c) => skinId(c, VICTORY_THEME));

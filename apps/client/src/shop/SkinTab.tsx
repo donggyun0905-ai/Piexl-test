@@ -10,6 +10,7 @@ import { equippedSkin, equipSkin, ownedSkins } from "./wallet";
 export const THEME_KEY: Record<SkinTheme, TextKey> = {
   tiger: "skinTiger",
   summer: "skinSummer",
+  cyber: "skinCyber",
   victory: "skinVictory",
   my: "skinMy",
 };

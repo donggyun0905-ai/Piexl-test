@@ -1,8 +1,9 @@
 // 캐릭터 그림 시트 표 (game/sprites가 씀): 이름 → 한 칸 크기·발 아래 여백 등
 // 한 칸 크기 정사각형, 4줄 × 4칸: 1줄 앞(아래), 2줄 뒤(위), 3줄 옆(오른쪽, 왼쪽은 뒤집음), 4줄 마법 쓰기
 // 테두리가 잘리지 않게 칸 둘레에 여백을 둠
-/** 시즌 스킨 그림을 새 시트(v2)로 바꾼 스킨 (docs/SKIN_ART.md, 올라온 캐릭터부터) */
-export const V2_SKINS: readonly string[] = ["warden", "drifter", "mage", "mystic", "engineer", "elementalist", "brawler", "doctor"].map((c) => `${c}_tiger`);
+import { SKIN_SHEETS } from "../select/skinArtList";
+/** 시즌 스킨(사용자 그림, v2 4×5) 목록은 scripts/art/season_skins.py가 만듦 (select/skinArtList SKIN_SHEETS) */
+export const V2_SKINS: readonly string[] = [...SKIN_SHEETS];
 /** 방향 시트로 넣은 캐릭터 그림: 이름 → 한 칸 크기, 발 아래 여백 */
 /** src: 그림 파일의 한 칸 크기가 다를 때 (빛의 사도 성장 그림 2배 촘촘 · 몰락한 왕 96칸 → 보통 크기로 줄여 그림) */
 /** v2: 새 시트 4칸 × 5줄 (칸 = 앞·뒤·왼·오): 1줄 서기 · 2줄 공격 · 3줄 걷기(왼발) · 4줄 걷기(오른발) · 5줄 맞음·쓰러짐·대시 오른쪽·대시 왼쪽 (scripts/art/import_v2.py) */

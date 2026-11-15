@@ -6,6 +6,7 @@ import { EC_ALPHA } from "./eclipse";
 import { holeDust, moonTrail, riseMotes, zoneFlair } from "./eclipseFlair";
 import { additive, alpha, glow, rnd, type Ctx } from "./pwFxBits";
 import { lerp, type Snap } from "./palette";
+import { sheetFor, skinForm } from "../sprites";
 
 export { eclipseLift } from "./eclipseBits";
 
@@ -16,7 +17,8 @@ const shiftU = (p: PlayerState) => (p.ecShift ? 1 - p.ecShift / ECLIPSE.shiftTic
 export function eclipseSheet(p: PlayerState): string | undefined {
   if (!isEclipse(p)) return undefined;
   const night = p.ecShift && shiftU(p) > 0.5 ? !p.ecNight : !!p.ecNight;
-  return night ? "eclipseNight" : "eclipse";
+  // 스킨을 입었으면 낮은 스킨, 밤은 스킨 밤 모습(있으면)
+  return night ? skinForm("eclipse", "eclipseNight", "night") : sheetFor("eclipse");
 }
 
 /** 바닥 영역: 속은 옅게 물들이고 테 한 줄 · 테를 따라 작은 불꽃/넋이 천천히 피어오름 */
@@ -59,7 +61,7 @@ export function drawEclipseBack(ctx: Ctx, s: RunState, a: number, snap: Snap): v
   if (!isEclipse(p)) return;
   const x = snap(lerp(p.prevX, p.x, a));
   const y = snap(lerp(p.prevY, p.y, a) + p.r);
-  const night = eclipseSheet(p) === "eclipseNight";
+  const night = /night/i.test(eclipseSheet(p) ?? "");
   zone(ctx, x, y, eclipseZoneR({ ...p, ecNight: night }), night, s.tick);
   for (const h of p.ecHoles ?? []) {
     const life = h.t / h.max;

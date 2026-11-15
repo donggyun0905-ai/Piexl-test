@@ -4,7 +4,7 @@ import { themeOf } from "../shop/fxThemes";
 import { drawShape } from "./limited/themeShapes";
 
 /** 맞힘·치명타 숫자를 그 스킨으로 그림 (font·정렬은 부르는 쪽에서 맞춰 둠) */
-export function drawSkinNumber(ctx: CanvasRenderingContext2D, style: Exclude<DmgStyle, "tiger" | "summer">, text: string, x: number, y: number, age: number, crit: boolean): void {
+export function drawSkinNumber(ctx: CanvasRenderingContext2D, style: Exclude<DmgStyle, "tiger" | "summer" | "cyber">, text: string, x: number, y: number, age: number, crit: boolean): void {
   const pop = 1 + (crit ? 0.7 : 0.3) * Math.max(0, 1 - age / (crit ? 8 : 5));
   ctx.save();
   ctx.translate(x, y);

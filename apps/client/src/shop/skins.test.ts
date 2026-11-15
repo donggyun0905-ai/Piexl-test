@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { SKIN_SHEETS } from "../select/skinArtList";
 import { ALL_SKINS, CHARACTER_IDS, GACHA_COUPONS, GACHA_ECOIN_ODDS, GACHA_LIMITED_ODDS, GACHA_ONLY, isKnownSkin, LIMITED_THEMES, limitedSkins, VICTORY_SKINS } from "./skins";
 
 describe("스킨·뽑기 표", () => {
@@ -8,10 +9,16 @@ describe("스킨·뽑기 표", () => {
     expect(Math.max(...GACHA_COUPONS.map(([n]) => n))).toBeLessThanOrEqual(5);
   });
 
-  it("한정 테마: 범 풍류는 시즌 2 빼고, 여름 파도는 시즌 2만 (모든 캐릭터에 하나씩)", () => {
-    expect(LIMITED_THEMES.reduce((n, th) => n + limitedSkins(th).length, 0)).toBe(CHARACTER_IDS.length);
-    expect(limitedSkins("summer")).toContain("fly_summer");
-    expect(limitedSkins("tiger")).not.toContain("fly_tiger");
+  it("한정 테마: 범 풍류는 시즌 2 빼고(수집가는 둘 다), 여름 파도는 시즌 2만, 네온 펄스는 그림이 올라온 시즌 3만", () => {
+    const [tiger, summer] = [limitedSkins("tiger"), limitedSkins("summer")];
+    expect(tiger.length + summer.length).toBe(CHARACTER_IDS.length + 1);
+    expect(summer).toContain("fly_summer");
+    expect(summer).toContain("collector_summer");
+    expect(tiger).toContain("collector_tiger");
+    expect(tiger).not.toContain("fly_tiger");
+    expect(limitedSkins("cyber")).toContain("leo_cyber");
+    expect(limitedSkins("cyber")).not.toContain("warden_cyber");
+    for (const id of limitedSkins("cyber")) expect(SKIN_SHEETS.has(id)).toBe(true);
     for (const th of LIMITED_THEMES) for (const id of limitedSkins(th)) expect(GACHA_ONLY).toContain(id);
   });
 
@@ -20,6 +27,7 @@ describe("스킨·뽑기 표", () => {
     expect(isKnownSkin("mage_victory")).toBe(false);
     expect(isKnownSkin("mage_swim")).toBe(false);
     expect(isKnownSkin("mage_tiger")).toBe(true);
+    expect(isKnownSkin("leo_cyber")).toBe(true);
     expect(isKnownSkin("mage_my")).toBe(true);
     expect(ALL_SKINS.some((id) => id.endsWith("_xmas"))).toBe(false);
   });

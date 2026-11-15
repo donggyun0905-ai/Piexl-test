@@ -2,7 +2,7 @@
 // 라이더는 render/rider
 import { DOLL_TINTS, type EffectState, type ProjectileState, type RunState } from "@pixel-rogue/shared";
 import { glowEdge } from "./pwFxBits";
-import { drawCharacter } from "../sprites";
+import { drawCharacter, skinForm } from "../sprites";
 import { type Snap } from "./palette";
 import { drawRiderAura, drawRiderFx, drawRiderGround, drawRiderShot } from "./rider";
 
@@ -10,7 +10,8 @@ type Ctx = CanvasRenderingContext2D;
 const LZ = "#8ae8ff";
 const LZW = "#ffffff";
 /** 자매 인형 그림: 진홍빛 자매 인형 (발밑 빛은 DOLL_TINTS 색으로 인형마다 구분) */
-const DOLL_SHEET = "automataDoll";
+/** 인형 그림 (스킨에 인형 모습이 있으면 그것) */
+const dollSheet = () => skinForm("automata", "automataDoll", "doll");
 const HOT = "#ffd040";
 
 /** 탄: 유도 미사일(뒤로 연기) · 에너지탄 · 톱날 */
@@ -140,7 +141,7 @@ export function drawTerraAura(ctx: Ctx, s: RunState, alpha: number, snap: Snap):
     ctx.ellipse(x, y + 6, 5, 1.5, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.globalAlpha = 1;
-    if (!drawCharacter(ctx, DOLL_SHEET, x, y, 6, { faceX: p.faceX, faceY: p.faceY, moving: true, casting: d.cd > 40, step: Math.floor(s.tick / 8 + i) })) {
+    if (!drawCharacter(ctx, dollSheet(), x, y, 6, { faceX: p.faceX, faceY: p.faceY, moving: true, casting: d.cd > 40, step: Math.floor(s.tick / 8 + i) })) {
       ctx.fillStyle = tint;
       ctx.fillRect(x - 2, y - 8, 4, 8);
     }

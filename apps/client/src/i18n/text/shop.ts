@@ -49,6 +49,7 @@ export const SHOP_TEXT = {
   skinUsa: { ko: "미국풍", en: "American", ja: "アメリカ風" },
   skinTiger: { ko: "범 풍류", en: "Tiger Revelry", ja: "虎の風流" },
   skinSummer: { ko: "여름 파도", en: "Summer Splash", ja: "真夏のしぶき" },
+  skinCyber: { ko: "네온 펄스", en: "Neon Pulse", ja: "ネオンパルス" },
   skinVictory: { ko: "승리", en: "Victory", ja: "勝利" },
   skinMy: { ko: "나만의 스킨", en: "My Own Skin", ja: "マイスキン" },
   shopMyDesc: {
@@ -64,9 +65,9 @@ export const SHOP_TEXT = {
   shopMyDraw: { ko: "✏️ 그리기", en: "✏️ Draw", ja: "✏️ 描く" },
   shopLimited: { ko: "한정", en: "Limited", ja: "限定" },
   shopLimitedDesc: {
-    ko: "뽑기에서만 나옵니다. 한 번 나오면 해당 캐릭터 모두에게 생기고(범 풍류는 시즌 1, 여름 파도는 시즌 2 캐릭터), 입으면 공격·처치·대기·발자국·강해질 때 전용 효과와 전용 음악이 나옵니다",
-    en: "Gacha only. Unlocks for all its characters at once (Tiger Revelry: Season 1, Summer Splash: Season 2). Wearing it adds special attack, K.O., idle, footstep and power-up effects plus its own music",
-    ja: "ガチャ限定。1回出ると対象キャラ全員に付きます（虎の風流はシーズン1、真夏のしぶきはシーズン2）。着ると攻撃・撃破・待機・足跡・強化の専用エフェクトと専用音楽",
+    ko: "뽑기에서만 나옵니다. 한 번 나오면 해당 캐릭터 모두에게 생기고(범 풍류는 시즌 1, 여름 파도는 시즌 2, 네온 펄스는 시즌 3 캐릭터), 입으면 공격·처치·대기·발자국·강해질 때 전용 효과와 전용 음악이 나옵니다",
+    en: "Gacha only. Unlocks for all its characters at once (Tiger Revelry: Season 1, Summer Splash: Season 2, Neon Pulse: Season 3). Wearing it adds special attack, K.O., idle, footstep and power-up effects plus its own music",
+    ja: "ガチャ限定。1回出ると対象キャラ全員に付きます（虎の風流はシーズン1、真夏のしぶきはシーズン2、ネオンパルスはシーズン3）。着ると攻撃・撃破・待機・足跡・強化の専用エフェクトと専用音楽",
   },
   shopLimitedLock: { ko: "뽑기 한정", en: "Gacha only", ja: "ガチャ限定" },
   shopAllChars: { ko: "해당 캐릭터 모두에게!", en: "For all its characters!", ja: "対象キャラ全員に！" },

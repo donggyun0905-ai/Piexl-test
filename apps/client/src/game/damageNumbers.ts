@@ -5,6 +5,7 @@ import { TICK_RATE, type DotKind, type EnemyState, type RunState } from "@pixel-
 import { dotIconWidth, drawDotIcon } from "./dotIcons";
 import { drawTigerNumber } from "./limited/tigerNumber";
 import { drawSummerNumber } from "./limited/summerNumber";
+import { drawCyberNumber } from "./limited/cyberNumber";
 import { drawSkinNumber } from "./dmgSkins";
 import { drawCrit } from "./critNumber";
 import type { DmgStyle } from "../shop/effects";
@@ -227,6 +228,7 @@ export class DamageTracker {
       if (this.style && (n.kind === "hit" || n.kind === "crit")) {
         if (this.style === "tiger") drawTigerNumber(ctx, text, x, y, tick - n.born, n.kind === "crit");
         else if (this.style === "summer") drawSummerNumber(ctx, text, x, y, tick - n.born, n.kind === "crit");
+        else if (this.style === "cyber") drawCyberNumber(ctx, text, x, y, tick - n.born, n.kind === "crit");
         else drawSkinNumber(ctx, this.style, text, x, y, tick - n.born, n.kind === "crit");
         ctx.strokeStyle = "#1a1622";
         ctx.lineWidth = 2;

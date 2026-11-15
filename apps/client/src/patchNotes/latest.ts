@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.56.0",
+    date: "2026-11-16",
+    items: {
+      ko: ["시즌 스킨 그림: 범 풍류(시즌 1) 21명·여름 파도(시즌 2) 20명의 스킨 그림과 캐릭터 선택 일러스트를 새로 그린 그림으로 바꿈 · 풋내기 10·15·20레벨, 버려진 자들 세 아이, 학살자 피의 학살, 오토마타 인형, 이클립스 밤 모습도 스킨을 입으면 스킨 그림으로 · 새 한정 스킨 '네온 펄스'(시즌 3 사이버펑크): 영사·풍류사·레오·오닉스·펜리르·이클립스·토르켄·리바이어·테일·매드퀸 (나머지 시즌 3 캐릭터는 그림이 들어오는 대로) · 입으면 글리치 타격·픽셀로 흩어지는 처치(보스 DELETED)·네온 발자국·홀로그램 대기 장면과 드론·데이터 기둥 '오버클럭!'·색이 갈라진 피해 숫자·전용 신스웨이브 음악 · 뽑기 한정 (수집가는 여름 파도도 생김)"],
+      en: ["Season skin art: the Tiger Revelry (Season 1, 21 characters) and Summer Splash (Season 2, 20 characters) skins and their character select illustrations now use newly drawn art · The Novice at levels 10/15/20, all three Abandoned children, the Slayer's Blood Massacre form, the Automata doll and Eclipse's night form also show the skin art when skinned · New limited skin 'Neon Pulse' (Season 3 cyberpunk): Silk, Pungryu, Leo, Onyx, Fenrir, Eclipse, Thorken, Levia, Tail and Mad Queen (more Season 3 characters as their art arrives) · Wearing it adds glitch hits, pixel-dissolve K.O.s (DELETED on bosses), neon footprints, a hologram idle scene with a drone, an 'Overclock!' data pillar, chromatic damage numbers and its own synthwave music · Gacha only (the Collector also gets Summer Splash)"],
+      ja: ["シーズンスキンの絵：虎の風流（シーズン1、21人）と真夏のしぶき（シーズン2、20人）のスキンとキャラクター選択イラストを新しく描いた絵に・見習いのレベル10・15・20、捨てられた者たちの3人、虐殺者の血の虐殺、オートマタの人形、エクリプスの夜の姿もスキンを着るとスキンの絵に・新しい限定スキン「ネオンパルス」（シーズン3サイバーパンク）：影糸使い・風流士・レオ・オニキス・フェンリル・エクリプス・トルケン・リヴァイア・テイル・マッドクイーン（ほかのシーズン3キャラは絵が入りしだい）・着るとグリッチ打撃・ピクセルに散る撃破（ボスはDELETED）・ネオンの足跡・ホログラムの待機シーンとドローン・データの柱「オーバークロック！」・色ずれダメージ数字・専用シンセウェーブ曲・ガチャ限定（コレクターには真夏のしぶきも）"],
+    },
+  },
+  {
     version: "0.55.9",
     date: "2026-11-16",
     items: {

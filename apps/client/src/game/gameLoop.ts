@@ -18,14 +18,9 @@ import { gymStatRows, type StatRow } from "./statsView";
 import { DamageTracker } from "./damageNumbers";
 import { PwInfoNumbers } from "./pwInfoNumbers";
 import { wornLimited, wornVictory } from "./limited/limited";
-import { drawTigerOver, drawTigerUnder, tigerResting } from "./limited/tigerDraw";
-import { TigerFx } from "./limited/tigerFx";
 import { drawThemeOver, drawThemeUnder } from "./limited/themeDraw";
 import { ThemeFx } from "./limited/themeFx";
-import { SummerFx } from "./limited/summerFx";
-import { drawSummerOver, drawSummerUnder, summerResting } from "./limited/summerDraw";
-import { splash } from "../audio/summerSound";
-import { roar } from "../audio/tigerSound";
+import { limitedKit } from "./limited/limitedKit";
 import { fanfare } from "../audio/victorySound";
 import { activeFx } from "../shop/effects";
 import { watchingSeat } from "./camera";
@@ -108,11 +103,12 @@ export function startGameLoop(o: LoopOptions): () => void {
   const pwInfo = new PwInfoNumbers(t);
   // 한정 스킨(범 풍류) 효과: 입었을 때만
   // 범 풍류: 한정 스킨이면 전부, 아니면 이벤트 상점에서 장착한 효과만 (울음소리는 한정 스킨만)
-  const summer = wornLimited(run.player.characterId) === "summer";
+  // 테마마다 효과·그리기·소리 (범 풍류 · 여름 파도 · 네온 펄스, limited/limitedKit)
+  const kit = limitedKit(wornLimited(run.player.characterId));
   const fx = activeFx(wornLimited(run.player.characterId) ?? (wornVictory(run.player.characterId) ? "victory" : null));
   const victory = !wornLimited(run.player.characterId) && wornVictory(run.player.characterId);
-  const hooks = { powerText: t(victory || fx.themes.hit?.id === "victory" ? "victoryPower" : summer ? "summerPower" : "tigerPower"), roar: fx.rest ? (summer ? splash : roar) : () => {}, on: fx };
-  const tiger = fx.hit || fx.idle || fx.walk ? (summer ? new SummerFx(hooks) : new TigerFx(hooks)) : null;
+  const hooks = { powerText: t(victory || fx.themes.hit?.id === "victory" ? "victoryPower" : kit.power), roar: fx.rest ? kit.sound : () => {}, on: fx };
+  const tiger = fx.hit || fx.idle || fx.walk ? kit.make(hooks) : null;
   // 이벤트 상점 테마 효과 (칸마다 다른 세트)
   const th = fx.themes;
   const theme = th.hit || th.idle || th.walk ? new ThemeFx({ ...hooks, roar: victory ? fanfare : () => {}, on: { hit: !!th.hit, idle: !!th.idle, walk: !!th.walk, rest: false } }, th) : null;
@@ -122,7 +118,7 @@ export function startGameLoop(o: LoopOptions): () => void {
   let mySeat: number | undefined;
   // 패왕전에서 쓰러져 관전 중이면 내 스킨 효과(대기 장면 포함)를 아예 그리지 않음
   const onMe = () => ((mySeat ??= run.seat) === undefined || run.seat === mySeat) && (!run.pvp || inPlay(run, run.seat ?? 0));
-  const [under, over, resting] = summer ? [drawSummerUnder, drawSummerOver, summerResting] : [drawTigerUnder, drawTigerOver, tigerResting];
+  const { under, over, resting } = kit;
   damage.style = fx.dmg;
   const dummyLabels = [t("dummyAvg"), t("dummyDps"), t("dummyLast"), t("dummyTotal")];
 
