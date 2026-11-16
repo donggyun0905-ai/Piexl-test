@@ -16,9 +16,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 SKIN_SRC = os.path.join(ROOT, "art", "스킨")
 ART_OUT = os.path.join(ROOT, "apps", "client", "public", "sprites", "charArt", "skin")
 LIST = os.path.join(ROOT, "apps", "client", "src", "select", "skinArtList.ts")
-# 시즌 폴더 → 스킨 테마 (shop/skins의 테마 이름: 범 풍류 · 여름 파도 · 사이버펑크)
-THEME = {"S1": "tiger", "S2": "summer", "S3": "cyber"}
-# 이름 → 캐릭터 id (docs/SKIN_ART.md 시즌 1·2·3 · 그림이 없으면 건너뜀)
+# 시즌 폴더 → 스킨 테마 (shop/skins의 테마 이름: 범 풍류 · 여름 파도 · 네온 펄스 · 성탄 눈꽃 · 벨벳 티타임)
+THEME = {"S1": "tiger", "S2": "summer", "S3": "cyber", "S4": "noel", "S5": "maid"}
+# 이름 → 캐릭터 id (docs/SKIN_ART.md 시즌 1~5 · 그림이 없으면 건너뜀)
 IDS = {
     "파수꾼": "warden", "떠돌이": "drifter", "마법사": "mage", "음양사": "mystic", "기계공학자": "engineer", "원소술사": "elementalist", "격투가": "brawler",
     "의사": "doctor", "야수": "beast", "거너": "gunner", "닌자": "ninja", "시간술사": "chronomancer", "소환술사": "summoner", "풋내기": "novice",
@@ -29,6 +29,10 @@ IDS = {
     "영사": "silk", "풍류사": "pungryu", "레오": "leo", "오닉스": "onyx", "펜리르": "fenrir", "이클립스": "eclipse", "토르켄": "thorken",
     "리바이어": "levia", "테일": "tail", "매드퀸": "madQueen", "훅": "hook", "오르카": "orca", "웨이브": "wave", "미류": "miryu",
     "베아트리스": "beatrice", "이안": "ian", "가브리엘": "gabriel", "세레나": "serena", "미카엘라": "michaela", "유리엘": "yuriel", "라파엘": "rafael",
+    "블래스트": "blast", "네일러": "nailer", "시저스": "scissors", "헬피스트": "hellfist", "실버불렛": "silverBullet", "블루 플레임": "blueFlame", "루나틱": "lunatic",
+    "인시전": "incision", "크루세이더": "crusader", "조커": "joker", "쉐도잉": "shadowing", "인형술사": "puppeteer", "래빗": "rabbit", "백령": "baekryeong",
+    "빙설": "bingseol", "혼령": "honryeong", "백인장": "baekinjang", "아리아": "aria", "레이븐": "chessRaven", "기어스": "gears", "아수라": "asura",
+    "느아르": "noir", "루주": "rouge", "블뢰": "bleu", "존": "jaune", "마젠타": "magenta", "베르": "vert", "블랑": "blanc",
 }
 # 변신 모습 (그림 파일 이름 → 캐릭터 · 기본 그림 규칙 이름(import_v2) · 스킨 이름 뒤 꼬리, 게임은 game/sprites skinForm)
 FORMS = {

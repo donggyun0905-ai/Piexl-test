@@ -3,9 +3,7 @@
 // 연습장 허수아비는 평균·초당·직전·총 피해를 세어 허수아비 아래에 그림 (몇 초 안 때리면 처음부터)
 import { TICK_RATE, type DotKind, type EnemyState, type RunState } from "@pixel-rogue/shared";
 import { dotIconWidth, drawDotIcon } from "./dotIcons";
-import { drawTigerNumber } from "./limited/tigerNumber";
-import { drawSummerNumber } from "./limited/summerNumber";
-import { drawCyberNumber } from "./limited/cyberNumber";
+import { drawLimitedNumber } from "./limited/limitedNumber";
 import { drawSkinNumber } from "./dmgSkins";
 import { drawCrit } from "./critNumber";
 import type { DmgStyle } from "../shop/effects";
@@ -226,10 +224,7 @@ export class DamageTracker {
       const y = snap(n.y - 2 + n.oy * ease - RISE * age) / k;
       ctx.globalAlpha = Math.min(1, 2 - age * 2) * (old ? 0.45 : 1);
       if (this.style && (n.kind === "hit" || n.kind === "crit")) {
-        if (this.style === "tiger") drawTigerNumber(ctx, text, x, y, tick - n.born, n.kind === "crit");
-        else if (this.style === "summer") drawSummerNumber(ctx, text, x, y, tick - n.born, n.kind === "crit");
-        else if (this.style === "cyber") drawCyberNumber(ctx, text, x, y, tick - n.born, n.kind === "crit");
-        else drawSkinNumber(ctx, this.style, text, x, y, tick - n.born, n.kind === "crit");
+        if (!drawLimitedNumber(ctx, this.style, text, x, y, tick - n.born, n.kind === "crit")) drawSkinNumber(ctx, this.style, text, x, y, tick - n.born, n.kind === "crit");
         ctx.strokeStyle = "#1a1622";
         ctx.lineWidth = 2;
         continue;

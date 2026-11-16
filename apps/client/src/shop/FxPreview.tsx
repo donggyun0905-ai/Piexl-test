@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { drawSkinNumber } from "../game/dmgSkins";
 import { drawMap, GOLD, PAW } from "../game/limited/tigerArt";
-import { drawTigerNumber } from "../game/limited/tigerNumber";
+import { drawLimitedNumber } from "../game/limited/limitedNumber";
 import { drawTigerSprite } from "../game/limited/tigerSprites";
 import type { FxItem } from "./effects";
 import { drawThemePreview } from "../game/limited/themeDraw";
@@ -32,8 +32,7 @@ function frame(ctx: CanvasRenderingContext2D, item: FxItem, tick: number, fx: Th
     ctx.font = "bold 6px monospace";
     ctx.textAlign = "center";
     ctx.textBaseline = "bottom";
-    if (item.dmg === "tiger") drawTigerNumber(ctx, crit ? "248" : "36", W / 4, H / 4 + 6 - age * 0.15, age, crit);
-    else if (item.dmg && item.dmg !== "summer" && item.dmg !== "cyber") drawSkinNumber(ctx, item.dmg, crit ? "248" : "36", W / 4, H / 4 + 6 - age * 0.15, age, crit);
+    if (item.dmg && !drawLimitedNumber(ctx, item.dmg, crit ? "248" : "36", W / 4, H / 4 + 6 - age * 0.15, age, crit)) drawSkinNumber(ctx, item.dmg, crit ? "248" : "36", W / 4, H / 4 + 6 - age * 0.15, age, crit);
     return;
   }
   ctx.save();

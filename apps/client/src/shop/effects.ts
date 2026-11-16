@@ -5,10 +5,11 @@ import { loadText, saveText } from "../storage";
 import { TEST_OPEN } from "../testFlags";
 import { spendEventCoins } from "../event/eventCoins";
 import { FX_THEMES, themeOf, type FxTheme, type FxThemeId } from "./fxThemes";
+import type { LimitedTheme } from "./skins";
 
 export type FxSlot = "hit" | "idle" | "walk" | "dmg";
 /** 피해 숫자 모양 (damageNumbers.style): 범·여름 · 황금·네온 · 테마 세트 (shop/fxThemes) */
-export type DmgStyle = "tiger" | "summer" | "cyber" | "gold" | "neon" | FxThemeId;
+export type DmgStyle = LimitedTheme | "gold" | "neon" | FxThemeId;
 
 export interface FxItem {
   id: string;
@@ -94,7 +95,7 @@ export function equipFx(slot: FxSlot, id: string | null): void {
 /** 판 시작 때: 켜진 효과 (한정 스킨 범 풍류를 입었으면 전부 범) */
 /** limited: 입은 한정 스킨 테마 (범 풍류·여름 파도면 효과 전부) */
 /** 범 효과는 hit·idle·walk (범 항목만), 테마 세트 효과는 themes (칸마다 다른 세트) */
-export function activeFx(limited: "tiger" | "summer" | "cyber" | "victory" | null): { hit: boolean; idle: boolean; walk: boolean; rest: boolean; dmg: DmgStyle | null; themes: Partial<Record<"hit" | "idle" | "walk", FxTheme>> } {
+export function activeFx(limited: LimitedTheme | "victory" | null): { hit: boolean; idle: boolean; walk: boolean; rest: boolean; dmg: DmgStyle | null; themes: Partial<Record<"hit" | "idle" | "walk", FxTheme>> } {
   // 승리 한정 스킨: 승리 효과 세트 넷을 모두
   if (limited === "victory") {
     const v = themeOf("victory")!;

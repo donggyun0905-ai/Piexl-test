@@ -18,7 +18,10 @@ describe("스킨·뽑기 표", () => {
     expect(tiger).not.toContain("fly_tiger");
     expect(limitedSkins("cyber")).toContain("leo_cyber");
     expect(limitedSkins("cyber")).not.toContain("warden_cyber");
-    for (const id of limitedSkins("cyber")) expect(SKIN_SHEETS.has(id)).toBe(true);
+    for (const th of ["cyber", "noel", "maid"] as const) for (const id of limitedSkins(th)) expect(SKIN_SHEETS.has(id)).toBe(true);
+    expect(limitedSkins("noel")).toContain("lunatic_noel");
+    expect(limitedSkins("maid")).toContain("noir_maid");
+    expect(limitedSkins("maid")).not.toContain("lunatic_maid");
     for (const th of LIMITED_THEMES) for (const id of limitedSkins(th)) expect(GACHA_ONLY).toContain(id);
   });
 

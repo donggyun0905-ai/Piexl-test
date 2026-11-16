@@ -11,6 +11,8 @@ export const THEME_KEY: Record<SkinTheme, TextKey> = {
   tiger: "skinTiger",
   summer: "skinSummer",
   cyber: "skinCyber",
+  noel: "skinSnowbell",
+  maid: "skinVelvet",
   victory: "skinVictory",
   my: "skinMy",
 };

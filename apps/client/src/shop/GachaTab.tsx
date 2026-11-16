@@ -10,7 +10,7 @@ import { ALL_SKINS, GACHA10_PRICE, GACHA_PRICE, LIMITED_REFUND, LIMITED_THEMES, 
 import { coupons, gacha, ownedSkins, type GachaPrize } from "./wallet";
 
 /** 배너에 보여 줄 캐릭터 (테마마다) */
-const SHOWCASE: Record<LimitedTheme, readonly CharacterId[]> = { tiger: ["mage", "warden", "beast", "gunner", "ninja"], summer: ["slayer", "samyeol", "byeonhui", "fly", "ren"], cyber: ["leo", "eclipse", "silk", "fenrir", "madQueen"] };
+const SHOWCASE: Record<LimitedTheme, readonly CharacterId[]> = { tiger: ["mage", "warden", "beast", "gunner", "ninja"], summer: ["slayer", "samyeol", "byeonhui", "fly", "ren"], cyber: ["leo", "eclipse", "silk", "fenrir", "madQueen"], noel: ["lunatic", "crusader", "joker", "rabbit", "gears"], maid: ["noir", "rouge", "bleu", "magenta", "blanc"] };
 
 export function GachaTab({ t, onChange }: { t: (k: TextKey) => string; onChange: () => void }) {
   const [result, setResult] = useState<GachaPrize[]>([]);
