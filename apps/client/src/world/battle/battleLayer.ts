@@ -13,9 +13,9 @@ import { WTILE, type WorldMap } from "../worldMap";
 import { HUNT_RULES as R } from "../hunt/huntGrounds";
 import { huntLang } from "../hunt/huntNames";
 import type { Hunt, Mob } from "../hunt/huntSim";
-import { sliceRoom } from "./battleRoom";
+import { JOIN_DIST, sliceRoom, type BattleRoom } from "./battleRoom";
 import { newPad, readPad } from "./battleInput";
-import { battleResult, startBattle, stepBattle, type FieldBattle } from "./fieldBattle";
+import { battleResult, joinMob, startBattle, stepBattle, type FieldBattle } from "./fieldBattle";
 import { carryFor, keepCarry, setLive } from "./fieldCarry";
 
 
@@ -35,6 +35,10 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
   let cool = 0;
   let cdMax = 1;
   const pad = newPad();
+  /** 판 안쪽(테두리 벽 빼고)에 있는 지도 몬스터인지 */
+  const inRoom = (r: BattleRoom, x: Mob) => x.x > (r.ox + 1) * WTILE && x.x < (r.ox + r.cols - 1) * WTILE && x.y > (r.oy + 1.5) * WTILE && x.y < (r.oy + r.rows - 1) * WTILE;
+  /** 내 둘레(화면 안팎)에 있는 지도 몬스터인지 */
+  const near = (x: Mob, me: Walker) => Math.hypot(x.x - me.x, x.y - me.y) < JOIN_DIST;
   const end = (me: Walker, why: "won" | "fled" | "down") => {
     const r = battleResult(b!);
     [me.x, me.y, me.tx] = [r.at[0], r.at[1], -1];
@@ -59,8 +63,7 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
   const open = (m: WorldMap, me: Walker, foe: Mob | null) => {
     const [fx, fy] = foe ? [foe.x, foe.y] : [me.x, me.y];
     const room = sliceRoom(m, (me.x + (fx - me.x) * 0.3) / WTILE, (me.y + (fy - me.y) * 0.3) / WTILE);
-    const [x0, y0, x1, y1] = [(room.ox + 1) * WTILE, (room.oy + 1.5) * WTILE, (room.ox + room.cols - 1) * WTILE, (room.oy + room.rows - 1) * WTILE];
-    const inside = h.mobs.filter((x) => x.st !== "dead" && x.x > x0 && x.x < x1 && x.y > y0 && x.y < y1);
+    const inside = h.mobs.filter((x) => x.st !== "dead" && inRoom(room, x) && (x.st === "chase" || near(x, me)));
     const power = Math.max(0, ...inside.map((x) => x.g.power));
     b = startBattle(room, who(), n++ * 7919 + region.length, [me.x, me.y], h.me.hp / h.me.st.maxHp, inside, power, carryFor(who()));
     setLive({ pad, run: b.run });
@@ -78,9 +81,9 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
       const foe = h.mobs.find((x) => x.st === "chase");
       if (foe) open(m, me, foe);
     },
-    /** 공격·대시·스킬을 누름: 판이 없으면 그 자리에 엶 (몬스터가 없어도, 조용하면 곧 닫힘) */
-    act(m: WorldMap | null, me: Walker): boolean {
-      if (!b && m && h.me.down <= 0) open(m, me, null);
+    /** 공격·대시·스킬을 누름: 판이 없으면 그 자리에 엶 (몬스터가 없어도, 조용하면 곧 닫힘) · 대시만 누른 것(dash)은 둘레에 몬스터가 있을 때만 */
+    act(m: WorldMap | null, me: Walker, dash = false): boolean {
+      if (!b && m && h.me.down <= 0 && (!dash || h.mobs.some((x) => x.st !== "dead" && near(x, me)))) open(m, me, null);
       return !!b;
     },
     /** 한 장면 (ms) · 내 지도 자리를 본편 자리로 */
@@ -100,14 +103,22 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
       sounds?.update();
       [me.x, me.y] = [p.x + b.room.ox * WTILE, p.y + b.room.oy * WTILE];
       [me.fx, me.fy, me.moving] = [p.faceX, p.faceY, false];
+      // 판을 열 때 멀리 있던 몬스터: 내가 다가가면 판에 들어옴
+      if (!why) {
+        for (const x of h.mobs) {
+          if (x.st === "dead" || !near(x, me) || !inRoom(b.room, x)) continue;
+          joinMob(b, x);
+          [x.st, x.t] = ["dead", 1e9];
+        }
+      }
       h.me.hp = h.me.st.maxHp * Math.max(0, p.hp / p.stats.maxHp);
       // 대시 준비: 쓴 순간 남은 시간을 최대로 (game/gameLoop와 같은 방식)
       cdMax = p.dashCooldown === 0 ? 1 : Math.max(cdMax, p.dashCooldown);
       h.me.dashK = 1 - p.dashCooldown / cdMax;
       if (why) end(me, why);
     },
-    /** 지도 그림 위에 본편 캐릭터·적·탄·이펙트 · 판 경계 빛 (k = 지도 1픽셀의 캔버스 픽셀) */
-    draw(ctx: Ctx, view: View, k: number, t: (key: TextKey) => string, now: number): void {
+    /** 지도 그림 위에 본편 캐릭터·적·탄·이펙트 (판 경계는 안 그림: 판이 화면보다 훨씬 넓음 · k = 지도 1픽셀의 캔버스 픽셀) */
+    draw(ctx: Ctx, view: View, k: number, t: (key: TextKey) => string): void {
       if (!b) return;
       const { room, run } = b;
       ctx.save();
@@ -127,9 +138,6 @@ export function createBattleLayer(region: string, h: Hunt, keys: ReadonlySet<str
       glow ??= createGlowLayer(ctx.canvas);
       const css = k / (ctx.canvas.width / Math.max(1, ctx.canvas.clientWidth));
       glow.frame(run, 1, b.acc / (1000 / 60), false, { x: view.x - room.ox * WTILE, y: view.y - room.oy * WTILE, f: css });
-      ctx.strokeStyle = `rgba(255,236,170,${0.35 + 0.2 * Math.sin(now / 300)})`;
-      ctx.lineWidth = 2;
-      ctx.strokeRect(room.ox * WTILE + 1, (room.oy + 1) * WTILE + 1, room.cols * WTILE - 2, (room.rows - 1) * WTILE - 2);
     },
     /** 마우스: 판 안이면 좌클릭 꾹 = 공격 · 우클릭 = 대시 (true면 옛 휘두르기·걷기 안 함) */
     press(button: number, down: boolean): boolean {

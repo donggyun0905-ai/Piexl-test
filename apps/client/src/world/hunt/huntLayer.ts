@@ -47,7 +47,7 @@ export function createHuntLayer(region: string, outdoor: boolean, me: Walker, ke
   // J(꾹 = 공격)·K 대시·스킬 키: 판이 없으면 그 자리에 열고 본편 입력으로
   const key = (e: KeyboardEvent) => {
     if (!on() || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
-    if (fight.wants(e.code) && fight.act(lastMap, me)) fight.key(e.code, true);
+    if (fight.wants(e.code) && fight.act(lastMap, me, e.code === "KeyK")) fight.key(e.code, true);
   };
   const keyUp = (e: KeyboardEvent) => fight.key(e.code, false);
   // 좌클릭은 누르고 있는 동안 공격
@@ -58,7 +58,7 @@ export function createHuntLayer(region: string, outdoor: boolean, me: Walker, ke
   return {
     down: () => h.me.down > 0,
     fighting: fight.active,
-    battle: (ctx, view, k, t, now) => fight.draw(ctx, view, k, t, now),
+    battle: (ctx, view, k, t) => fight.draw(ctx, view, k, t),
     step: (w, dt, stand, map) => {
       lastMap = map;
       if (!packed) {
@@ -90,7 +90,7 @@ export function createHuntLayer(region: string, outdoor: boolean, me: Walker, ke
       if (!on()) return false;
       // 좌클릭 공격·우클릭 대시: 판이 없으면 그 자리에 엶 (마우스 쪽 조준은 판이 읽음)
       if (button !== 0 && button !== 2) return false;
-      return fight.act(lastMap, me) && fight.press(button, true);
+      return fight.act(lastMap, me, button === 2) && fight.press(button, true);
     },
     dispose: () => {
       window.removeEventListener("keydown", key);

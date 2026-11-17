@@ -13,17 +13,17 @@ const rgba = (keys: number[]) => keys.flatMap((t) => [...TILE_DEFS[t]!.key, 255]
 
 describe("지도 전투 (본편 판)", () => {
   it("조각: 나무는 벽 · 물은 구덩이 · 지도 끝에서는 안쪽으로", () => {
-    const tiles = new Array(40 * 30).fill(WT.grass);
-    tiles[5 * 40 + 3] = WT.tree;
-    tiles[5 * 40 + 4] = WT.water;
-    const m = parseMap(rgba(tiles), 40, 30);
+    const tiles = new Array(100 * 60).fill(WT.grass);
+    tiles[5 * 100 + 3] = WT.tree;
+    tiles[5 * 100 + 4] = WT.water;
+    const m = parseMap(rgba(tiles), 100, 60);
     const r = sliceRoom(m, 2, 2);
     expect([r.ox, r.oy, r.cols, r.rows]).toEqual([0, 0, BATTLE_COLS, BATTLE_ROWS]);
     expect(r.shape).toHaveLength(BATTLE_ROWS - 1);
     expect(r.shape[4]![2]).toBe("#");
     expect(r.shape[4]![3]).toBe("~");
     expect(r.shape[0]![0]).toBe(".");
-    expect(sliceRoom(m, 39, 29).ox).toBe(40 - BATTLE_COLS);
+    expect(sliceRoom(m, 99, 59).ox).toBe(100 - BATTLE_COLS);
   });
   it("몬스터 없이 연 판은 조용하면 닫힘 · 공격을 누르는 동안은 안 닫힘", () => {
     const m = parseMap(rgba(new Array(40 * 30).fill(WT.grass)), 40, 30);

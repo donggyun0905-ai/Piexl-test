@@ -9,9 +9,9 @@ import { HUNT_RULES } from "../hunt/huntGrounds";
 import type { BattleRoom } from "./battleRoom";
 import { applyCarry } from "./fieldCarry";
 
-/** 판 밖으로 미는 동안 이 틱 수(1초)가 지나면 도망 · 가까이(FLEE_NEAR 픽셀) 적이 있으면 2초 (뒷걸음질하다 실수로 도망치지 않게) · 한 번에 따라잡는 최대 틱 */
-const FLEE_TICKS = 60;
-const FLEE_TICKS_NEAR = 120;
+/** 판 끝에서 바깥쪽으로 밀면 바로 도망 (판이 넓어 끝까지 갔으면 달아난 것) · 가까이(FLEE_NEAR 픽셀) 적이 있으면 1/3초 (뒷걸음질하다 실수로 도망치지 않게) · 한 번에 따라잡는 최대 틱 */
+const FLEE_TICKS = 1;
+const FLEE_TICKS_NEAR = 20;
 const FLEE_NEAR = 80;
 /** 적이 없고 공격·대시·스킬도 안 누른 채 이 틱 수(1.5초)가 지나면 판을 닫음 */
 const QUIET_TICKS = 90;
@@ -53,17 +53,21 @@ export function startBattle(room: BattleRoom, who: CharacterId, seed: number, me
   p.hp = Math.max(1, p.stats.maxHp * hpLeft);
   [p.x, p.y] = [me[0] - room.ox * WTILE, me[1] - room.oy * WTILE];
   [p.prevX, p.prevY] = [p.x, p.y];
-  const map = new Map<number, Mob>();
   s.enemies = [];
-  for (const m of mobs) {
-    // 필드 보스는 던전 보스 체력 배율 × 지도 보스 배율 (HUNT_RULES.bossHp)
-    const mul = m.g.boss ? bossHpMul(s.floor) * HUNT_RULES.bossHp : foeHpMul(s.floor);
-    const e = makeEnemy(s, m.g.kind as EnemyKind, m.x - room.ox * WTILE, m.y - room.oy * WTILE, mul * Math.max(0.05, m.hp / m.g.hp), 20);
-    s.enemies.push(e);
-    map.set(e.id, m);
-  }
+  const b: FieldBattle = { run: s, room, mobs: new Map(), acc: 0, push: 0, quiet: 0 };
+  for (const m of mobs) joinMob(b, m);
   s.rooms[s.roomId]!.enemies = s.enemies;
-  return { run: s, room, mobs: map, acc: 0, push: 0, quiet: 0 };
+  return b;
+}
+
+/** 지도 몬스터 하나를 판의 본편 적으로 (처음 열 때 · 싸우는 중 내가 다가간 몬스터) */
+export function joinMob(b: FieldBattle, m: Mob): void {
+  const { run: s, room } = b;
+  // 필드 보스는 던전 보스 체력 배율 × 지도 보스 배율 (HUNT_RULES.bossHp)
+  const mul = m.g.boss ? bossHpMul(s.floor) * HUNT_RULES.bossHp : foeHpMul(s.floor);
+  const e = makeEnemy(s, m.g.kind as EnemyKind, m.x - room.ox * WTILE, m.y - room.oy * WTILE, mul * Math.max(0.05, m.hp / m.g.hp), 20);
+  s.enemies.push(e);
+  b.mobs.set(e.id, m);
 }
 
 /** 판 끝에서 바깥쪽으로 미는지 (도망) */
@@ -96,7 +100,8 @@ export function stepBattle(b: FieldBattle, ms: number, read: () => TickInput, on
     b.quiet = s.enemies.length || input.attack || input.dash || input.skill ? 0 : b.quiet + 1;
     if (b.quiet >= QUIET_TICKS) return "won";
     const near = s.enemies.some((e) => Math.hypot(e.x - s.player.x, e.y - s.player.y) < FLEE_NEAR);
-    if (b.push >= (near ? FLEE_TICKS_NEAR : FLEE_TICKS)) return "fled";
+    // 적 없이 판 끝을 지나가면 그냥 닫음 (도망 뒤 쉬는 시간 없이)
+    if (b.push >= (near ? FLEE_TICKS_NEAR : FLEE_TICKS)) return s.enemies.length ? "fled" : "won";
   }
   if (n === MAX_CATCH_UP) b.acc = 0;
   return null;

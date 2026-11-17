@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.57.1",
+    date: "2026-11-17",
+    items: {
+      ko: ["세계 지도(시험 중) 전투: 싸움이 열릴 때 생기던 네모난 빛 테두리가 길을 막던 것 고침 → 전투 판을 화면의 세 배쯤으로 넓히고 테두리를 없앰 · 판 끝까지 가면 기다리지 않고 바로 빠져나감 · 화면 근처 몬스터만 싸움에 들어오고 멀리 있던 몬스터는 다가가면 합류 · 둘레에 몬스터가 없을 때 대시만 눌러서는 전투가 열리지 않음"],
+      en: ["World Map (testing) battles: the glowing square border that appeared when a fight started no longer blocks your way; the battle area is now about three times the screen and the border is gone · Reaching the edge lets you leave at once · Only monsters near the screen join the fight, and those farther away join as you approach · Dashing alone no longer starts a battle when no monsters are around"],
+      ja: ["世界地図（テスト中）の戦闘：戦いが始まると出ていた四角い光の枠が道をふさいでいたのを修正 → 戦闘エリアを画面の約3倍に広げ、枠をなくしました・エリアの端まで行くと待たずにすぐ抜けられます・画面の近くのモンスターだけが戦いに入り、遠くのモンスターは近づくと合流・まわりにモンスターがいないとき、ダッシュだけでは戦闘が始まりません"],
+    },
+  },
+  {
     version: "0.57.0",
     date: "2026-11-16",
     items: {

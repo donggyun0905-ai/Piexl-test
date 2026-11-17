@@ -3,9 +3,11 @@
 import { TILE_DEFS, WT } from "../worldTiles";
 import { tileAt, type WorldMap } from "../worldMap";
 
-/** 전투 판 크기 (칸) · 화면(약 19×11칸)보다 조금 큼 */
-export const BATTLE_COLS = 24;
-export const BATTLE_ROWS = 15;
+/** 전투 판 크기 (칸) · 화면(약 19×11칸)의 세 배쯤이라 걸어 다니다 판 끝에 닿는 일이 드묾 */
+export const BATTLE_COLS = 64;
+export const BATTLE_ROWS = 40;
+/** 내 둘레 이 거리(픽셀, 화면을 다 덮음) 안의 몬스터만 판에 들어옴 · 더 먼 몬스터는 내가 다가가면 들어옴 (battleLayer) */
+export const JOIN_DIST = 200;
 
 export interface BattleRoom {
   /** 판 왼쪽 위 칸 (지도 칸) */
