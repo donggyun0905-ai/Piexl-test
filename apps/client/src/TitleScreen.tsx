@@ -64,7 +64,7 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onBossTry, onContin
   const [lobby, setLobby] = useState(false);
   // 지도에서 던전으로 갔다 오면 다시 지도 (worldReturn)
   const [world, setWorld] = useState(takeWorldReturn);
-  // 처음 '플레이' → 프롤로그(서기관·이름) → 지도 (지도가 아직 시험 중인 라이브는 플레이 창)
+  // '플레이' → 바로 지도 (모드는 지도의 Tab 콘텐츠 모음에서) · 처음이면 프롤로그(서기관·이름) 먼저 · 지도가 아직 시험 중인 라이브는 플레이 창
   const [prologue, setPrologue] = useState(false);
   // 프롤로그를 막 끝냄 → 지도는 아지트에서 시작
   const [fresh, setFresh] = useState(false);
@@ -85,7 +85,10 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onBossTry, onContin
   const runFromWorld = (m: WorldRun) => {
     markWorldReturn();
     setWorld(false);
-    if (m === "paewang") onPaewang();
+    if (m === "continue") onContinue();
+    else if (m === "practice") onPractice();
+    else if (m === "tutorial") onTutorial();
+    else if (m === "paewang") onPaewang();
     else if (m === "swarm") onSwarm();
     else if (m === "td") onTowerDefense();
     else if (m === "daily") onDaily();
@@ -123,7 +126,7 @@ export function TitleScreen({ lang, setLang, t, onStartSolo, onBossTry, onContin
           {/* 메인 버튼은 플레이 · 아카이브 · 상점 셋만 (docs/QUEST.md Q1) */}
           <div className="menu-buttons">
             <NicknameBar t={t} />
-            <button type="button" className="primary big" onClick={() => (prologueSeen() ? setPopup("solo") : setPrologue(true))}>
+            <button type="button" className="primary big" onClick={() => (!prologueSeen() ? setPrologue(true) : TEST_OPEN ? setWorld(true) : setPopup("solo"))}>
               <Icon name="sword" />
               {t("mainPlay")}
               {saved && <span className="menu-badge">{t("continueRun")}</span>}

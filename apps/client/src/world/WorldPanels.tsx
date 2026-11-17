@@ -16,7 +16,7 @@ import type { Place } from "./worldPlaces";
 
 export type WorldPanel = { k: "shop"; tab: ShopTab } | { k: "smith" } | { k: "gear" } | { k: "map"; warp?: boolean } | { k: "char" } | { k: "gate"; gate: "tower" | "colosseum" | "arena" | "swarm" | "td" | "board" | "guild" } | { k: "boss"; boss: LastBossKind };
 /** 지도에서 들어가는 혼자 하기 종류 (장신구 없음, 메인 화면에서 들어간 것과 같음) */
-export type WorldRun = "solo" | "endless" | "hero" | "paewang" | "arena" | "swarm" | "td" | "daily" | "events" | "battle" | "coop" | `boss:${LastBossKind}`;
+export type WorldRun = "continue" | "practice" | "tutorial" | "solo" | "endless" | "hero" | "paewang" | "arena" | "swarm" | "td" | "daily" | "events" | "battle" | "coop" | `boss:${LastBossKind}`;
 
 /** 모드 고르는 곳: 기억의 탑(무한 모드·영웅의 길) · 콜로세움(패왕전) · 헬리오스 황제 석상(레이드 아레나) · 사막 태초의 신전(광야의 새벽) · 실베르 악마의 문 경비원(타워 디펜스) — 스토리에서 아직 안 열린 모드는 누를 수 없음 */
 const GATES = {

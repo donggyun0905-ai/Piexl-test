@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.57.2",
+    date: "2026-11-17",
+    items: {
+      ko: ["세계 지도(시험 중): 메인 화면의 '플레이'를 누르면 바로 세계 지도로 들어감 · 지도에서 Tab을 누르면 '콘텐츠 모음' 창 — 혼자 하기 · 함께·겨루기 · 이벤트·그 밖으로 묶은 카드를 누르면 그 콘텐츠로 바로 들어감(이어하기·튜토리얼·연습장 포함, 잠긴 것은 여는 조건 표시) · 사냥터·최종보스·갈 수 있는 곳 정보는 아래에 접어 둠"],
+      en: ["World Map (testing): pressing Play on the main screen now goes straight to the World Map · Press Tab on the map for the new Content Hub: cards grouped into Solo, Together & Versus, and Events & More take you straight into that mode (including Continue, Tutorial and Practice; locked ones show how to unlock) · Hunting grounds, final bosses and reachable places are folded away at the bottom"],
+      ja: ["世界地図（テスト中）：メイン画面の「プレイ」を押すとすぐ世界地図に入ります・地図でTabを押すと「コンテンツ一覧」— ひとりで・いっしょに/対戦・イベント/その他にまとめたカードを押すと、そのコンテンツにすぐ入れます（続きから・チュートリアル・練習場も、ロック中は開放条件を表示）・狩り場・最終ボス・行ける場所の情報は下に折りたたみ"],
+    },
+  },
+  {
     version: "0.57.1",
     date: "2026-11-17",
     items: {

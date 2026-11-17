@@ -78,3 +78,56 @@
   text-align: center;
   opacity: 0.7;
 }
+/* 콘텐츠 카드 (누르면 들어감) */
+.world-tab-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px;
+}
+.world-tab-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  background: rgb(255 255 255 / 0.06);
+  border: 2px solid var(--px-dark);
+  cursor: pointer;
+}
+.world-tab-card:hover:not(:disabled),
+.world-tab-card:focus-visible {
+  background: rgb(255 216 74 / 0.16);
+  border-color: #ffd84a;
+}
+.world-tab-card:disabled {
+  cursor: default;
+}
+.world-tab-card.locked {
+  opacity: 0.5;
+}
+.world-tab-card > span:last-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.world-tab-card small {
+  font-size: 11px;
+  opacity: 0.8;
+}
+.world-tab-icon {
+  font-size: 20px;
+  width: 26px;
+  text-align: center;
+}
+.world-tab-info summary {
+  font-size: 13px;
+  color: #c8a050;
+  cursor: pointer;
+}
+.world-tab-info[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

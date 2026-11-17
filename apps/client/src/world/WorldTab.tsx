@@ -1,4 +1,4 @@
-// 세계 지도 TAB 한눈에 보기 (docs/QUEST.md 다음 할 일 4): 화면을 검정 반투명으로 덮고 지금 퀘스트·진행·콘텐츠(열림/잠김·있는 곳)·사냥터(권장 투력)·갈 수 있는 나라·조작 키
+// 세계 지도 TAB 콘텐츠 모음: 화면을 검정 반투명으로 덮고 들어갈 수 있는 콘텐츠를 묶음별 카드로 (열린 것은 누르면 바로 들어감, 잠긴 것은 여는 조건) · 위에 지금 퀘스트 · 아래 접힌 정보(사냥터·최종보스·갈 수 있는 곳)
 // Tab·Esc·바깥 누르기로 닫힘 · 여는 키는 WorldMode (다른 창이 없을 때)
 import { useEffect } from "react";
 import type { TextKey } from "../i18n";
@@ -12,27 +12,48 @@ import { mobName } from "./hunt/huntNames";
 import { BOSS_GATES } from "./bossGates";
 import { BOSS_TEXT } from "../i18n/enemies";
 import { bossWon } from "../progress/subQuests";
+import { loadSavedRun } from "../records";
+import type { WorldRun } from "./WorldPanels";
 
 type T = (k: TextKey) => string;
-/** 콘텐츠: 이름 · 있는 곳(장소 이름·지역) */
-const MODES: readonly [Feature, TextKey, TextKey | null, string | null][] = [
-  ["solo", "soloRun", "wpDungeon", "ascalon"],
-  ["battle", "playTogether", "wpGuild", "ascalon"],
-  ["coop", "coop", "wpGuild", "ascalon"],
-  ["lobby", "lobby", "wpAtticArcade", "attic"],
-  ["hero", "heroRun", "wpTower", "ascalon"],
-  ["endless", "endlessRun", "wpTower", "ascalon"],
-  ["arena", "arenaRun", "wpStatue", "helios"],
-  ["td", "tdRun", "asura", "silber"],
-  ["daily", "daily", "wpBoard", "ascalon"],
-  ["events", "events", "wpBoard", "ascalon"],
-  ["swarm", "swarm", "wpTemple", "desert"],
-  ["paewang", "paewang", "wpColosseum", "terracore"],
-  ["raid", "raidEvent", null, null],
-  ["taboo", "tabooBook", null, null],
+/** 콘텐츠 카드: 여는 조건 · 그림 글자 · 이름 · 있는 곳(장소 이름·지역) · 누르면 들어갈 곳 (lobby는 로비, null이면 안내만) */
+type Row = readonly [Feature, string, TextKey, TextKey | null, string | null, WorldRun | "lobby" | null];
+const GROUPS: readonly [TextKey, readonly Row[]][] = [
+  ["tabSolo", [
+    ["solo", "⚔", "soloRun", "wpDungeon", "ascalon", "solo"],
+    ["hero", "👑", "heroRun", "wpTower", "ascalon", "hero"],
+    ["endless", "♾", "endlessRun", "wpTower", "ascalon", "endless"],
+    ["arena", "🏆", "arenaRun", "wpStatue", "helios", "arena"],
+    ["td", "🏰", "tdRun", "asura", "silber", "td"],
+    ["swarm", "🏜", "swarm", "wpTemple", "desert", "swarm"],
+  ]],
+  ["tabTogether", [
+    ["battle", "🤝", "playTogether", "wpGuild", "ascalon", "battle"],
+    ["coop", "🛡", "coop", "wpGuild", "ascalon", "coop"],
+    ["paewang", "🏟", "paewang", "wpColosseum", "terracore", "paewang"],
+    ["daily", "📅", "daily", "wpBoard", "ascalon", "daily"],
+  ]],
+  ["tabMore", [
+    ["events", "⭐", "events", "wpBoard", "ascalon", "events"],
+    ["raid", "🐉", "raidEvent", null, null, "events"],
+    ["taboo", "📕", "tabooBook", null, null, null],
+    ["lobby", "🎮", "lobby", "wpAtticArcade", "attic", "lobby"],
+  ]],
 ];
 
-export function WorldTab({ t, cur, regionName, onClose }: { t: T; cur: string; regionName: (id: string) => string; onClose: () => void }) {
+function Card({ icon, name, desc, locked, onClick }: { icon: string; name: string; desc: string; locked?: boolean; onClick?: () => void }) {
+  return (
+    <button type="button" className={`world-tab-card${locked ? " locked" : ""}`} disabled={locked || !onClick} onClick={onClick}>
+      <span className="world-tab-icon">{locked ? "🔒" : icon}</span>
+      <span>
+        <b>{name}</b>
+        <small>{desc}</small>
+      </span>
+    </button>
+  );
+}
+
+export function WorldTab({ t, cur, regionName, onClose, onRun, onLobby }: { t: T; cur: string; regionName: (id: string) => string; onClose: () => void; onRun: (m: WorldRun) => void; onLobby: () => void }) {
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (e.key !== "Escape" && e.key !== "Tab") return;
@@ -43,6 +64,8 @@ export function WorldTab({ t, cur, regionName, onClose }: { t: T; cur: string; r
     return () => window.removeEventListener("keydown", key);
   });
   const i = activeQuest();
+  const saved = loadSavedRun();
+  const go = (m: WorldRun | "lobby") => (onClose(), m === "lobby" ? onLobby() : onRun(m));
   // 타고 가는 곳(열차 안)은 빼고, 같은 이름은 한 번
   const lands = [...new Set(Object.keys(REGIONS).filter((k) => isField(REGIONS[k]) && !REGIONS[k]!.ride && fieldOpen(REGIONS[k])).map(regionName))];
   return (
@@ -67,22 +90,23 @@ export function WorldTab({ t, cur, regionName, onClose }: { t: T; cur: string; r
             </>
           )}
         </section>
-        <section>
-          <h3>⚔ {t("tabModes")}</h3>
-          <ul className="world-tab-modes">
-            {MODES.map(([f, name, place, region]) => {
-              const open = featureOpen(f);
-              return (
-                <li key={f} className={open ? "open" : "locked"}>
-                  <b>
-                    {open ? "✓" : "🔒"} {t(name)}
-                  </b>
-                  <small>{open ? (place && region ? `${regionName(region)} · ${t(place)}` : t("tabOpen")) : lockText(t, f)}</small>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
+        {GROUPS.map(([title, rows], n) => (
+          <section key={title}>
+            <h3>{t(title)}</h3>
+            <div className="world-tab-cards">
+              {n === 0 && saved && <Card icon="▶" name={t("continueRun")} desc={t("tabContinue")} onClick={() => go("continue")} />}
+              {rows.map(([f, icon, name, place, region, run]) => {
+                const open = featureOpen(f);
+                const desc = open ? (place && region ? `${regionName(region)} · ${t(place)}` : t("tabOpen")) : lockText(t, f);
+                return <Card key={f} icon={icon} name={t(name)} desc={desc} locked={!open} onClick={run ? () => go(run) : undefined} />;
+              })}
+              {n === 2 && <Card icon="📖" name={t("tutorial")} desc={t("tutorialDesc")} onClick={() => go("tutorial")} />}
+              {n === 2 && <Card icon="🎯" name={t("practice")} desc={t("practiceDesc")} onClick={() => go("practice")} />}
+            </div>
+          </section>
+        ))}
+        <details className="world-tab-info">
+          <summary>{t("tabInfo")}</summary>
         <section>
           <h3>🗡 {t("tabHunt")}</h3>
           <ul className="world-tab-modes">
@@ -115,6 +139,7 @@ export function WorldTab({ t, cur, regionName, onClose }: { t: T; cur: string; r
           <h3>🗺 {t("tabLands")}</h3>
           <p>{lands.join(" · ")}</p>
         </section>
+        </details>
         <p className="world-tab-keys">{t("tabKeys")}</p>
       </div>
     </div>

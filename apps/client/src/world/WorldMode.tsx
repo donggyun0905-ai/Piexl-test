@@ -187,7 +187,7 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
   const exKey = ex.key;
   const busy = !!reading || !!scene || !!panel || guide.talk !== null || doneQ.length > 0 || book || tab || ex.open;
   useEffect(() => {
-    // B 장비창 · C 캐릭터 고르기 · M 지도 · Tab 한눈에 보기 · Esc 설정·H 조작키·G 자동 걷기 (다른 창이 없을 때)
+    // B 장비창 · C 캐릭터 고르기 · M 지도 · Tab 콘텐츠 모음 · Esc 설정·H 조작키·G 자동 걷기 (다른 창이 없을 때)
     if (busy) return;
     const key = (e: KeyboardEvent) => {
       if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
@@ -229,7 +229,7 @@ export function WorldMode({ t, lang, onExit, onDungeon, fresh, onLobby }: Props)
       {state === "ok" && !guide.mark && guide.talk === null && <QuestHud t={t} cur={cur.id} regionName={regionName} onBook={() => setBook(true)} />}
       {!scene && <WorldExtras t={t} lang={lang} x={ex} regionId={cur.id} ready={state === "ok"} busy={busy} field={isField(region)} mark={guide.mark ?? questMark(cur.id)} onMap={() => setPanel({ k: "map" })} onExit={onExit} />}
       {doneQ.length > 0 && !scene && <QuestDone key={`done${doneQ[0]}`} t={t} n={doneQ[0]!} onClose={closeDone} />}
-      {tab && <WorldTab t={t} cur={cur.id} regionName={regionName} onClose={() => setTab(false)} />}
+      {tab && <WorldTab t={t} cur={cur.id} regionName={regionName} onClose={() => setTab(false)} onRun={onDungeon} onLobby={onLobby} />}
       {book && <QuestBook t={t} cur={cur.id} regionName={regionName} onStory={() => (setBook(false), setScene(latestChapter()))} onClose={() => setBook(false)} />}
       {near && !busy && (
         <button type="button" className="primary lobby-enter" onClick={() => use(near)}>
