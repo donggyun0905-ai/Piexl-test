@@ -4,6 +4,15 @@ import type { PatchNote } from "./types";
 // 이 파일이 12KB를 넘으면 오래된 버전을 새 묶음 파일로 옮기고 index.ts에 이어 붙임
 export const NOTES: PatchNote[] = [
   {
+    version: "0.57.3",
+    date: "2026-11-17",
+    items: {
+      ko: ["관리자 페이지: 'AI 측정' 추가 — 봇이 캐릭터마다(히든 제외) 로그 1~6층과 최종보스(아스모데우스의 화신체)를 돌고 클리어 시간·쓰러진 횟수·준 피해·받은 피해·회복·보스 잡은 시간 평가표를 냄 (밸런스 조정용, 게임 플레이는 그대로)"],
+      en: ["Admin page: added 'AI Benchmark' — a bot plays floors 1-6 and the final boss (Avatar of Asmodeus) with each character (hidden ones excluded) and produces a table of clear time, deaths, damage dealt and taken, healing and boss kill time (for balancing; gameplay is unchanged)"],
+      ja: ["管理ページ：「AI測定」を追加 — ボットがキャラごと（隠しキャラを除く）にローグ1〜6階と最終ボス（アスモデウスの化身）をプレイし、クリア時間・倒れた回数・与ダメージ・被ダメージ・回復・ボス撃破時間の評価表を出します（バランス調整用、ゲームプレイはそのまま）"],
+    },
+  },
+  {
     version: "0.57.2",
     date: "2026-11-17",
     items: {

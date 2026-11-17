@@ -1,0 +1,54 @@
+/* 관리자 AI 측정 (admin/AiBench): 위 조작 줄 · 캐릭터 고르기 · 평가표 */
+.admin-bench-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+.admin-bench-prog {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.admin-bench-chars {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 2px 8px;
+  margin-bottom: 8px;
+}
+.admin-bench table {
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.admin-bench th,
+.admin-bench td {
+  padding: 3px 10px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.12);
+  text-align: right;
+  white-space: nowrap;
+}
+.admin-bench th {
+  cursor: pointer;
+  position: sticky;
+  top: 0;
+  background: #1a1624;
+}
+.admin-bench th.sorted {
+  color: #ffd84a;
+}
+.admin-bench td:nth-child(2),
+.admin-bench th:nth-child(2) {
+  text-align: left;
+}
+.admin-bench tr.grade-S td:nth-child(3) {
+  color: #ffd84a;
+  font-weight: bold;
+}
+.admin-bench tr.grade-A td:nth-child(3) {
+  color: #8fe08f;
+}
+.admin-bench tr.grade-C td:nth-child(3),
+.admin-bench tr.grade-D td:nth-child(3) {
+  color: #ff8a7a;
+}

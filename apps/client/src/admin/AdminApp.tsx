@@ -2,6 +2,7 @@
 // 위쪽에서 던전 수치 / 타워 디펜스 수치 / 패왕전 수치를 고름 (주소 /admin/?td · ?pw). 세 수치는 서버에도 따로 저장
 import { useCallback, useEffect, useState } from "react";
 import { homeServer, logout, session, type ServerInfo, type SetKind } from "./adminApi";
+import { AiBench } from "./AiBench";
 import { BalanceAdmin } from "./BalanceAdmin";
 import { ClearStats } from "./ClearStats";
 import { TierAdmin } from "./TierAdmin";
@@ -18,14 +19,14 @@ function kindFromUrl(): SetKind {
 }
 
 const KIND_NAME: Record<SetKind, string> = { dungeon: "던전 수치", td: "타워 디펜스 수치", pw: "패왕전 수치" };
-const PAGE_NAME = { clears: "클리어 시간", tier: "티어 플레잉", maps: "맵 만들기" } as const;
+const PAGE_NAME = { clears: "클리어 시간", tier: "티어 플레잉", bench: "AI 측정", maps: "맵 만들기" } as const;
 
 export function AdminApp() {
   // 이 주소의 서버만 다룸 (라이브는 pixel-toybox.pages.dev/admin/, 디벨롭은 develop…, 테스트는 test…)
   const [server] = useState<ServerInfo>(homeServer);
   const [kind, setKind] = useState<SetKind>(kindFromUrl);
-  /** 수치 대신: 캐릭터별 클리어 시간 · 티어 플레잉(티어표·캐릭터 차례로 해 본 기록) · 맵 만들기 */
-  const [page, setPage] = useState<"" | "clears" | "tier" | "maps">("");
+  /** 수치 대신: 캐릭터별 클리어 시간 · 티어 플레잉(티어표·캐릭터 차례로 해 본 기록) · AI 측정(봇이 캐릭터마다 돌고 평가표) · 맵 만들기 */
+  const [page, setPage] = useState<"" | "clears" | "tier" | "bench" | "maps">("");
   /** 로그인·로그아웃하면 늘려서 다시 확인 */
   const [reload, setReload] = useState(0);
   const loggedIn = reload >= 0 && session(server) !== "";
@@ -51,7 +52,7 @@ export function AdminApp() {
               {KIND_NAME[k]}
             </button>
           ))}
-          {(["clears", "tier", "maps"] as const).map((p) => (
+          {(["clears", "tier", "bench", "maps"] as const).map((p) => (
             <button key={p} type="button" className={page === p ? "active" : undefined} onClick={() => setPage(p)}>
               {PAGE_NAME[p]}
             </button>
@@ -79,6 +80,7 @@ export function AdminApp() {
       {!loggedIn && <Login server={server} onDone={again} />}
       {loggedIn && page === "clears" && <ClearStats server={server} />}
       {loggedIn && page === "tier" && <TierAdmin server={server} />}
+      {loggedIn && page === "bench" && <AiBench />}
       {loggedIn && page === "maps" && <MapEditor server={server} />}
       {loggedIn && !page && <BalanceAdmin key={`${kind}:${reload}`} server={server} kind={kind} onLoggedOut={again} />}
     </div>

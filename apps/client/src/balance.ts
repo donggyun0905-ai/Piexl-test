@@ -88,6 +88,13 @@ export function usePwBalanceRun(): void {
   useEffect(() => () => pwBalance.end(), []);
 }
 
+/** 관리자 AI 측정: 서버의 지금 던전 수치를 받아 넣고 돎 · 돌려준 함수를 끝나면 부름 */
+export async function benchBalance(): Promise<() => void> {
+  await dungeon.refresh().catch(() => undefined);
+  dungeon.begin();
+  return () => dungeon.end();
+}
+
 /** 서버에서 지금 수치 받기 (던전·타워 디펜스·패왕전) */
 export async function refreshBalance(): Promise<void> {
   await Promise.all([dungeon.refresh(), tdBalance.refresh(), pwBalance.refresh()]);
